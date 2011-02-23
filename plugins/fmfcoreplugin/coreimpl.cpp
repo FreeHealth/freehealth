@@ -103,7 +103,7 @@ CoreImpl::CoreImpl(QObject *parent) :
     m_Translators->addNewTranslator(Trans::Constants::CONSTANTS_TRANSLATOR_NAME);
     m_Translators->addNewTranslator("utils");
     m_Translators->addNewTranslator("medicalutils");
-    m_Translators->addNewTranslator("fmf    coreplugin");
+    m_Translators->addNewTranslator("fmfcoreplugin");
 
     if (logChrono)
         Utils::Log::logTimeElapsed(chrono, "Core", "translators");

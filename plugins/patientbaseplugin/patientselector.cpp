@@ -26,7 +26,8 @@
  ***************************************************************************/
 /**
   \class Patients::PatientSelector
-  \brief Selector Widget for the recorded patients
+  \brief Selector Widget for the recorded patients.
+  Allow user to search and select patient from the complete database.
 */
 
 #include "patientselector.h"
@@ -43,12 +44,17 @@
 #include <coreplugin/actionmanager/actionmanager.h>
 #include <coreplugin/ipatient.h>
 #include <coreplugin/constants_icons.h>
+#include <coreplugin/constants_menus.h>
+
+#include <translationutils/constanttranslations.h>
 
 #include <QToolButton>
 
 #include <QDebug>
 
 using namespace Patients;
+using namespace Trans::ConstantTranslations;
+
 
 /**
   \todo Two modes of searching : small db --> update on typing, big db --> update on validation
@@ -105,6 +111,18 @@ public:
             l.at(id)->trigger();
             l.at(id)->setChecked(true);
         }
+
+        // add action to the navigation button
+        m_NavigationToolButton = new QToolButton(ui->searchLine);   // parent object will be redefined
+        m_NavigationToolButton->setPopupMode(QToolButton::InstantPopup);
+        m_NavigationToolButton->setIcon(theme()->icon(Core::Constants::ICONPATIENT));
+        m_NavigationMenu = new QMenu(m_NavigationToolButton);
+        cmd = actionManager()->command(Core::Constants::A_PATIENT_NEW);
+        m_NavigationMenu->addAction(cmd->action());
+        m_NavigationToolButton->setMenu(m_NavigationMenu);
+
+        // add buttons to search line
+        ui->searchLine->setRightButton(m_NavigationToolButton);
     }
 
     void saveSettings()
@@ -117,7 +135,8 @@ public:
     Ui::PatientSelector *ui;
     PatientModel *m_Model;
     PatientSelector::FieldsToShow m_Fields;
-    QToolButton *m_SearchToolButton;
+    QToolButton *m_SearchToolButton, *m_NavigationToolButton;
+    QMenu *m_NavigationMenu;
     int m_SearchMethod;
 
 private:
@@ -167,9 +186,27 @@ PatientSelector::~PatientSelector()
     }
 }
 
+/** \brief Initialize view and actions. */
 void PatientSelector::init()
 {
     d->createSearchToolButtons();
+    // connect navigationButton pressed -> update navigation actions
+    connect(d->m_NavigationToolButton->menu(), SIGNAL(aboutToShow()), this, SLOT(updateNavigationButton()));
+}
+
+void PatientSelector::updateNavigationButton()
+{
+    // remove all actions from the second
+    for(int i = 1; i < d->m_NavigationToolButton->actions().count(); ++i) {
+        d->m_NavigationMenu->removeAction(d->m_NavigationMenu->actions().at(i));
+    }
+    // add navigation actions
+    Core::ActionContainer *navMenu = actionManager()->actionContainer(Core::Constants::M_PATIENTS_NAVIGATION);
+    if (!navMenu)
+        return;
+    for(int i = 0; i < navMenu->menu()->actions().count(); ++i) {
+        d->m_NavigationMenu->addAction(navMenu->menu()->actions().at(i));
+    }
 }
 
 /** \brief Define the search mode of the selector. */
@@ -229,20 +266,27 @@ void PatientSelector::setFieldsToShow(const FieldsToShow fields)
     d->ui->tableView->showColumn(Core::IPatient::PractitionnerLkID);
 }
 
-/** \brief New patient is selected. */
+/**
+  \todo code this and connect to Core::IPatient signal
+  \brief Define the selected patient (use this if patient was selected from outside the selector).
+*/
 void PatientSelector::setSelectedPatient(const QModelIndex &index)
 {
+    if (d->ui->tableView->selectionModel()->hasSelection()) {
+        QModelIndex actual = d->ui->tableView->selectionModel()->currentIndex();
+        QString uuid = d->m_Model->index(actual.row(), Core::IPatient::Uid).data().toString();
+    }
     d->ui->tableView->setCurrentIndex(index);
 }
 
-/** \brief Inform the IdentityWidget of the new identity to show. */
+/** \brief Update the IdentityWidget with the new current identity. */
 void PatientSelector::changeIdentity(const QModelIndex &current, const QModelIndex &previous)
 {
     Q_UNUSED(previous);
     d->ui->identity->setCurrentIndex(current);
 }
 
-/** \brief Refresh the search filter of the PatientModel */
+/** \brief Refresh the search filter of the Patient::PatientModel */
 void PatientSelector::refreshFilter(const QString &)
 {
     if (!d->m_Model)
@@ -259,23 +303,15 @@ void PatientSelector::refreshFilter(const QString &)
     d->ui->numberOfPatients->setText(QString::number(d->m_Model->numberOfFilteredPatients()));
 }
 
+/** \brief Slot activated when the user select a patient from the selector. */
 void PatientSelector::onPatientSelected(const QModelIndex &index)
 {
     // Inform Core::IPatient model wrapper
-    PatientModel::activeModel()->setCurrentPatient(index);
+    if (!d->m_Model)
+        PatientModel::activeModel()->setCurrentPatient(index);
+    else
+        d->m_Model->setCurrentPatient(index);
 }
-
-//void PatientSelector::changeEvent(QEvent *e)
-//{
-//    QWidget::changeEvent(e);
-//    switch (e->type()) {
-//    case QEvent::LanguageChange:
-//        d->ui->retranslateUi(this);
-//        break;
-//    default:
-//        break;
-//    }
-//}
 
 bool PatientSelector::event(QEvent *event)
 {

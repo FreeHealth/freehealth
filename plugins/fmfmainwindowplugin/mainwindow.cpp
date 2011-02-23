@@ -274,6 +274,8 @@ void MainWindow::postCoreInitialization()
 
     // Open Last Opened Forms is necessary
     openPatientFormsFile();
+    // Create the patient navigation menu (needed in Patient::PatientSelector)
+    aboutToShowRecentPatients();
 
     // TEST
     Patients::PatientWidgetManager::instance()->postCoreInitialization();

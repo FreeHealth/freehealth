@@ -328,7 +328,7 @@ void MainWindowActionHandler::createGeneralActions(const int actions)
         a->setObjectName("aGeneralPatientNew");
         a->setIcon(theme()->icon(Constants::ICONPATIENTS));
         cmd = actionManager()->registerAction(a, Constants::A_PATIENT_NEW, ctx);
-        cmd->setTranslations(Trans::Constants::PATIENT);
+        cmd->setTranslations(Trans::Constants::PATIENTNEW_TEXT);
         newmenu->addAction(cmd, Constants::G_GENERAL_NEW);
     }
     // Patient's identity

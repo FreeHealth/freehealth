@@ -168,12 +168,14 @@ const char * const  ICONDELETEUSER    = "deleteuser.png";
 const char * const  ICONNEWUSER       = "adduser.png";
 
 // patients icons --> MediumSize / BigSize
+const char * const  ICONPATIENT       = "patient.png";
 const char * const  ICONPATIENTS      = "patientsearch.png";
 const char * const  ICONMALE          = "male.png";
 const char * const  ICONFEMALE        = "female.png";
 const char * const  ICONHERMAPHRODISM = "";
 const char * const  ICONPATIENTFILES  = "patientfiles.png";
 const char * const  ICONPATIENTHISTORY= "patienthistory.png";
+const char * const  ICONCHROMOSOME    = "chromosome.png";
 
 
 }  // end Constants

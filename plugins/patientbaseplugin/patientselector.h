@@ -91,6 +91,7 @@ public:
 //    void patientSelected(const QModelIndex &index);
 
 private Q_SLOTS:
+    void updateNavigationButton();
     void changeIdentity(const QModelIndex &current, const QModelIndex &previous);
     void refreshFilter(const QString &);
     void onPatientSelected(const QModelIndex &index);
