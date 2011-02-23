@@ -225,7 +225,8 @@ void PatientSelector::setPatientModel(PatientModel *m)
     d->ui->tableView->resizeColumnsToContents();
     d->ui->numberOfPatients->setText(QString::number(m->numberOfFilteredPatients()));
     d->ui->identity->setCurrentPatientModel(m);
-    /** \todo Patient Selector should be autoconnected to patient model and current changed sa MainWindow::setCurrentPatient()*/
+
+    connect(m, SIGNAL(patientChanged(QModelIndex)), this, SLOT(setSelectedPatient(QModelIndex)));
 }
 
 /** \brief Define the fields to show using the FieldsToShow flag */
@@ -266,17 +267,10 @@ void PatientSelector::setFieldsToShow(const FieldsToShow fields)
     d->ui->tableView->showColumn(Core::IPatient::PractitionnerLkID);
 }
 
-/**
-  \todo code this and connect to Core::IPatient signal
-  \brief Define the selected patient (use this if patient was selected from outside the selector).
-*/
+/** \brief Define the selected patient (use this if patient was selected from outside the selector). */
 void PatientSelector::setSelectedPatient(const QModelIndex &index)
 {
-    if (d->ui->tableView->selectionModel()->hasSelection()) {
-        QModelIndex actual = d->ui->tableView->selectionModel()->currentIndex();
-        QString uuid = d->m_Model->index(actual.row(), Core::IPatient::Uid).data().toString();
-    }
-    d->ui->tableView->setCurrentIndex(index);
+    d->ui->tableView->selectRow(index.row());
 }
 
 /** \brief Update the IdentityWidget with the new current identity. */
@@ -303,7 +297,7 @@ void PatientSelector::refreshFilter(const QString &)
     d->ui->numberOfPatients->setText(QString::number(d->m_Model->numberOfFilteredPatients()));
 }
 
-/** \brief Slot activated when the user select a patient from the selector. */
+/** \brief Slot activated when the user select a patient from the selector. \sa setSelectedPatient()*/
 void PatientSelector::onPatientSelected(const QModelIndex &index)
 {
     // Inform Core::IPatient model wrapper

@@ -83,8 +83,9 @@ public:
     void setSearchMode(const int search);
     void setPatientModel(PatientModel *m);
     void setFieldsToShow(const FieldsToShow fields);
-    void setSelectedPatient(const QModelIndex &index);
 
+public Q_SLOTS:
+    void setSelectedPatient(const QModelIndex &index);
 
 //Q_SIGNALS:
 //    void patientSelected(const QString &uuid);

@@ -299,8 +299,9 @@ void PatientModel::setCurrentPatient(const QModelIndex &index)
         return;
     }
     m_CurrentPatient = index;
-    Q_EMIT patientChanged(this->index(index.row(), Core::IPatient::Uid).data().toString());
     LOG("setCurrentPatient: " + this->index(index.row(), Core::IPatient::Uid).data().toString());
+    Q_EMIT patientChanged(this->index(index.row(), Core::IPatient::Uid).data().toString());
+    Q_EMIT patientChanged(index);
 }
 
 int PatientModel::rowCount(const QModelIndex &) const

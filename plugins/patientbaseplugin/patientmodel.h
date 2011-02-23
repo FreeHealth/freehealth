@@ -105,6 +105,7 @@ Q_SIGNALS:
     void patientAboutToBeDeleted(const QString &uuid);
     void patientAboutToBeCreated(const QString &uuid);
 
+    void patientChanged(const QModelIndex &index);
     void patientChanged(const QString &uuid);
     void patientDeleted(const QString &uuid);
     void patientCreated(const QString &uuid);
