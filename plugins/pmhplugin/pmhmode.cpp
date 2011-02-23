@@ -113,6 +113,9 @@ PmhModeWidget::~PmhModeWidget()
 
 void PmhModeWidget::currentChanged(const QModelIndex &current, const QModelIndex &previous)
 {
+    if (!current.isValid())
+        return;
+
     if (!pmhCore()->pmhCategoryModel()->isCategory(current))
         ui->pmhViewer->setPmhData(pmhCore()->pmhCategoryModel()->pmhDataforIndex(current));
 }

@@ -117,6 +117,16 @@
       <item row="2" column="1">
        <widget class="QLineEdit" name="passwordConfirm"/>
       </item>
+      <item row="3" column="0">
+       <widget class="QLabel" name="label_4">
+        <property name="text">
+         <string>Themed icon</string>
+        </property>
+       </widget>
+      </item>
+      <item row="3" column="1">
+       <widget class="QLineEdit" name="themedIcon"/>
+      </item>
      </layout>
     </widget>
    </item>

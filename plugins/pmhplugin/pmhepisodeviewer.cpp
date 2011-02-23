@@ -107,6 +107,11 @@ void PmhEpisodeViewer::setPmhData(Internal::PmhData *pmh)
     ui->tableView->horizontalHeader()->setResizeMode(PmhEpisodeModel::DateStart, QHeaderView::Stretch);
 }
 
+void PmhEpisodeViewer::clear()
+{
+    ui->tableView->setModel(0);
+}
+
 void PmhEpisodeViewer::itemActivated(const QModelIndex &item)
 {
     if (item.column()==PmhEpisodeModel::IcdCodeList) {

@@ -72,6 +72,9 @@ public:
     void setParent(CategoryItem *parent);
     CategoryItem *parent() const;
     void addChild(CategoryItem *child);
+    void insertChild(CategoryItem *child, int row);
+    void updateChildrenSortId();
+
     CategoryItem *child(int number) const;
     QList<CategoryItem *> children() const;
     int childCount() const;

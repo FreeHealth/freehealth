@@ -85,7 +85,7 @@ public:
     Category::CategoryItem *categoryForIndex(const QModelIndex &item) const;
     QModelIndex indexForCategory(const Category::CategoryItem *category) const;
 
-    void addCategory(Category::CategoryItem *category);
+    void addCategory(Category::CategoryItem *category, int row, const QModelIndex &parentCategory);
     void updateCategory(Category::CategoryItem *category);
 
     virtual QString mime() const;

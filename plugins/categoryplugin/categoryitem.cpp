@@ -118,6 +118,20 @@ void CategoryItem::addChild(CategoryItem *child)
     d->m_Children.append(child);
 }
 
+/** \brief Insert a CategoryItem tree \e child to the list of children at index \e row. Warning, adding an item to the children list will not redefine the parent of the \e child. \sa setParent()*/
+void CategoryItem::insertChild(CategoryItem *child, int row)
+{
+    d->m_Children.insert(row, child);
+}
+
+/** \brief Recalculate the SortId of each item according to the actual children list. */
+void CategoryItem::updateChildrenSortId()
+{
+    for(int i=0; i < d->m_Children.count(); ++i) {
+        d->m_Children[i]->setData(CategoryItem::SortId, i+1);
+    }
+}
+
 /** \brief Returns the child number \e number. */
 CategoryItem *CategoryItem::child(int number) const
 {

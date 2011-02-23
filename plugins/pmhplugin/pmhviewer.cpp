@@ -116,6 +116,14 @@ public:
         m_Pmh->setData(PmhData::CategoryId, cat.data().toInt());
     }
 
+    void clearUi()
+    {
+        ui->personalLabel->clear();
+        ui->typeCombo->clear();
+        ui->statusCombo->clear();
+        ui->categoryTreeView->setModel(0);
+        ui->episodeViewer->clear();
+    }
 
 public:
     Internal::Ui::PmhViewer *ui;
@@ -184,6 +192,9 @@ void PmhViewer::setEditMode(EditMode mode)
 /** \brief Define the PMH::Internal::PmhData pointer to use in the view. */
 void PmhViewer::setPmhData(Internal::PmhData *pmh)
 {
+    if (!pmh) {
+        d->m_Pmh = 0;
+    }
     if (d->m_Pmh) {
         if (d->m_Pmh == pmh)
             return;

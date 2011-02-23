@@ -167,6 +167,18 @@ namespace {
         //        return item2->isTemplate();
         //    }
 
+        void warn(int indent = 0)
+        {
+            QString sp;
+            if (indent)
+                sp.fill(' ', indent);
+            qWarning() << sp + label();
+            for(int i = 0; i < m_Children.count(); ++i) {
+                m_Children.at(i)->warn(indent+2);
+            }
+        }
+
+
     private:
         TreeItem *m_Parent;
         QList<TreeItem*> m_Children;
@@ -211,6 +223,8 @@ public:
         }
         m_Root = new TreeItem;
         m_Root->setLabel("ROOT CATEGORY");
+        Category::CategoryItem *cat = new Category::CategoryItem;
+        m_Root->setPmhCategory(cat);
 
     }
 
@@ -298,6 +312,7 @@ public:
         }
         // Recreate the category tree
         foreach(Category::CategoryItem *cat, base()->createCategoryTree(m_Cats)) {
+            m_Root->pmhCategory()->addChild(cat);
             categoryToItem(cat, new TreeItem(m_Root));
         }
     }
@@ -426,6 +441,8 @@ QVariant PmhCategoryModel::data(const QModelIndex &index, int role) const
     case Qt::DisplayRole :
         {
             if (index.column()==Label) {
+                if (it->isCategory())
+                    return it->label() + " " + QString::number(it->pmhCategory()->sortId());
                 return it->label();
             } else if (index.column()==Id) {
                 if (it->isCategory()) {
@@ -546,6 +563,8 @@ Qt::ItemFlags PmhCategoryModel::flags(const QModelIndex &index) const
 /** \brief Remove PMHx or Categories. */
 bool PmhCategoryModel::removeRows(int row, int count, const QModelIndex &parent)
 {
+    qWarning() << "beforeRemoveRows";
+    d->m_Root->warn();
     int max = row+count;
     TreeItem *parentItem = 0;
 
@@ -609,6 +628,8 @@ bool PmhCategoryModel::removeRows(int row, int count, const QModelIndex &parent)
             endRemoveRows();
         }
     }
+    qWarning() << "afterRemoveRows";
+    d->m_Root->warn();
     return true;
 }
 
@@ -731,15 +752,39 @@ QModelIndex PmhCategoryModel::indexForCategory(const Category::CategoryItem *cat
   \brief Add or modify a Category::CategoryItem in the model and in the database.
   \sa PMH::PmhCore::saveCategory(), PMH::PmhBase::savePmhCategory()
 */
-void PmhCategoryModel::addCategory(Category::CategoryItem *cat)
+void PmhCategoryModel::addCategory(Category::CategoryItem *cat, int row, const QModelIndex &parentCategory)
 {
     if (d->m_Cats.contains(cat)) {
         updateCategory(cat);
     } else {
+        TreeItem *parent = d->getItem(parentCategory);
+        if (!parent || !parent->isCategory()) {
+            parent = d->m_Root;
+        }
+        if (parent->isCategory()) {
+            Category::CategoryItem *parentCat = parent->pmhCategory();
+            // get the category row
+            int catRow = -1;
+            for(int i = 0; i < row; ++i) {
+                if (this->isCategory(this->index(i,0,parentCategory)))
+                    ++catRow;
+            }
+            parentCat->insertChild(cat, catRow+1);
+            cat->setData(Category::CategoryItem::DbOnly_ParentId, parentCat->id());
+            parentCat->updateChildrenSortId();
+        }
+        TreeItem *item = new TreeItem(parent);
+        item->setPmhCategory(cat);
+        parent->removeChild(item);
+        parent->insertChild(row, item);
         // save the category to database
         base()->savePmhCategory(cat);
-        // insert the pmh to the model
-        d->categoryToItem(cat, new TreeItem(d->m_Root));
+        if (parent->isCategory()) {
+            // save sortIds
+            for(int i=0; i < parent->pmhCategory()->childCount(); ++i) {
+                base()->savePmhCategory(parent->pmhCategory()->child(i));
+            }
+        }
         Q_EMIT layoutChanged();
 //        reset();
     }

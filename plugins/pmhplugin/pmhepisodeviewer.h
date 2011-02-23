@@ -49,6 +49,7 @@ public:
     ~PmhEpisodeViewer();
 
     void setPmhData(Internal::PmhData *pmh);
+    void clear();
 
 private Q_SLOTS:
     void itemActivated(const QModelIndex &item);

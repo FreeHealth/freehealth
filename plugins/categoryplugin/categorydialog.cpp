@@ -30,17 +30,24 @@
 #include "categorylabelsmodel.h"
 #include "categoryonlyproxymodel.h"
 
+#include <coreplugin/icore.h>
+#include <coreplugin/itheme.h>
+#include <coreplugin/constants_icons.h>
+
 #include <listviewplugin/languagecombobox.h>
 #include <listviewplugin/languagecomboboxdelegate.h>
+
+#include <utils/log.h>
 
 #include "ui_categorydialog.h"
 
 #include <QGridLayout>
 #include <QDebug>
 
-
 using namespace Category;
 using namespace Internal;
+
+static inline Core::ITheme *theme() {return Core::ICore::instance()->theme();}
 
 namespace Category {
 namespace Internal {
@@ -56,6 +63,33 @@ public:
         if (m_CatLabelsModel)
             delete m_CatLabelsModel;
         m_CatLabelsModel = 0;
+    }
+
+    void populateCategoryWithUi()
+    {
+        CategoryItem *cat = 0;
+        if (!m_CatLabelsModel) {
+            LOG_ERROR_FOR("CategoryDialog", "No valid model");
+            return;
+        }
+        m_CatLabelsModel->submit();
+        cat = m_CatLabelsModel->categoryItem();
+        cat->setData(CategoryItem::ThemedIcon, ui->themedIcon->text());
+//        cat->setData(CategoryItem::Password, ui->password->text());
+        m_Model->updateCategory(cat);
+    }
+
+    void populateUiWithCategory()
+    {
+        CategoryItem *cat = 0;
+        if (!m_CatLabelsModel) {
+            LOG_ERROR_FOR("CategoryDialog", "No valid model");
+            return;
+        }
+        cat = m_CatLabelsModel->categoryItem();
+        ui->tableView->setModel(m_CatLabelsModel);
+        ui->tableView->horizontalHeader()->setStretchLastSection(true);
+        ui->themedIcon->setText(cat->iconName());
     }
 
 public:
@@ -75,6 +109,8 @@ CategoryDialog::CategoryDialog(QWidget *parent) :
 {
     d->ui = new Ui::CategoryDialog;
     d->ui->setupUi(this);
+    setWindowTitle(tr("Category manager"));
+    setWindowIcon(theme()->icon(Core::Constants::ICONCATEGORY_MANAGER));
     d->ui->treeView->header()->hide();
     d->ui->treeView->header()->setStretchLastSection(true);
     connect(d->ui->buttonBox, SIGNAL(accepted()), this, SLOT(accept()));
@@ -104,11 +140,7 @@ void CategoryDialog::editItem(const QModelIndex &current, const QModelIndex &pre
     Q_UNUSED(previous);
 
     // autosave
-    if (d->m_CatLabelsModel) {
-        d->m_CatLabelsModel->submit();
-        CategoryItem *cat = d->m_CatLabelsModel->categoryItem();
-        d->m_Model->updateCategory(cat);
-    }
+    d->populateCategoryWithUi();
 
     // get the categoryData pointer from the pmhCategoryModel
     QModelIndex sourceItem = d->m_CategoryModel->mapToSource(current);
@@ -122,9 +154,8 @@ void CategoryDialog::editItem(const QModelIndex &current, const QModelIndex &pre
     }
 
     d->m_CatLabelsModel->setCategoryItem(cat);
-    d->ui->tableView->setModel(d->m_CatLabelsModel);
+    d->populateUiWithCategory();
     d->ui->tableView->setItemDelegateForColumn(CategoryLabelsModel::Lang, new Views::LanguageComboBoxDelegate(this));
-    d->ui->tableView->horizontalHeader()->setStretchLastSection(true);
 }
 
 void CategoryDialog::done(int r)

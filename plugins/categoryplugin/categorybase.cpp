@@ -342,6 +342,8 @@ bool CategoryBase::updateCategory(CategoryItem *category)
         return saveCategory(category);
     }
     // update episode
+    if (!category->isDirty())
+        return true;
     QSqlQuery query(database());
     QHash<int, QString> where;
     where.insert(Constants::CATEGORY_ID, QString("=%1").arg(category->id()));
@@ -387,17 +389,28 @@ bool CategoryBase::saveCategoryLabels(CategoryItem *category)
     // delete all labels related to this LabelId
     QHash<int, QString> where;
     where.clear();
-    where.insert(Constants::CATEGORYLABEL_LABEL_ID, QString("=%1").arg(labelId));
     QSqlQuery query(database());
     query.exec(prepareDeleteQuery(Constants::Table_CATEGORY_LABEL, where));
     // save labels
     foreach(const QString &lang, category->allLanguagesForLabel()) {
-        query.prepare(prepareInsertQuery(Constants::Table_CATEGORY_LABEL));
-        query.bindValue(Constants::CATEGORYLABEL_ID, QVariant());
-        query.bindValue(Constants::CATEGORYLABEL_LABEL_ID, labelId);
-        query.bindValue(Constants::CATEGORYLABEL_LANG, lang);
-        query.bindValue(Constants::CATEGORYLABEL_VALUE, category->label(lang));
-        query.bindValue(Constants::CATEGORYLABEL_ISVALID, 1);
+        where.clear();
+        where.insert(Constants::CATEGORYLABEL_LABEL_ID, QString("=%1").arg(labelId));
+        where.insert(Constants::CATEGORYLABEL_LANG, QString("='%1'").arg(lang));
+        bool update = count(Constants::Table_CATEGORY_LABEL, Constants::CATEGORYLABEL_ID, getWhereClause(Constants::Table_CATEGORY_LABEL, where));
+        if (update) {
+            query.prepare(prepareUpdateQuery(Constants::Table_CATEGORY_LABEL, QList<int>()
+                                             << Constants::CATEGORYLABEL_VALUE
+                                             << Constants::CATEGORYLABEL_ISVALID, where));
+            query.bindValue(0, category->label(lang));
+            query.bindValue(1, 1);
+        } else {
+            query.prepare(prepareInsertQuery(Constants::Table_CATEGORY_LABEL));
+            query.bindValue(Constants::CATEGORYLABEL_ID, QVariant());
+            query.bindValue(Constants::CATEGORYLABEL_LABEL_ID, labelId);
+            query.bindValue(Constants::CATEGORYLABEL_LANG, lang);
+            query.bindValue(Constants::CATEGORYLABEL_VALUE, category->label(lang));
+            query.bindValue(Constants::CATEGORYLABEL_ISVALID, 1);
+        }
         if (!query.exec()) {
             LOG_QUERY_ERROR(query);
             return false;

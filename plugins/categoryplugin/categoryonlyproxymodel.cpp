@@ -62,6 +62,9 @@ CategoryOnlyProxyModel::CategoryOnlyProxyModel(ICategoryModelHelper *parent) :
     updateModel();
     connect(parent, SIGNAL(modelReset()), this, SLOT(updateModel()));
     connect(parent, SIGNAL(layoutChanged()), this, SLOT(updateModel()));
+    connect(parent, SIGNAL(rowsRemoved(QModelIndex,int,int)), this, SLOT(updateModel()));
+    connect(parent, SIGNAL(rowsInserted(QModelIndex,int,int)), this, SLOT(updateModel()));
+    connect(parent, SIGNAL(rowsMoved(QModelIndex,int,int,QModelIndex,int)), this, SLOT(updateModel()));
 }
 
 CategoryOnlyProxyModel::~CategoryOnlyProxyModel()
@@ -184,7 +187,7 @@ bool CategoryOnlyProxyModel::insertRows(int row, int count, const QModelIndex &p
         Category::CategoryItem *cat = new Category::CategoryItem;
         cat->setParent(d->m_Model->categoryForIndex(mapToSource(parent)));
         cat->setData(CategoryItem::DbOnly_Mime, d->m_Model->mime());
-        d->m_Model->addCategory(cat);
+        d->m_Model->addCategory(cat, row+i, parent);
     }
     return true;
 }
