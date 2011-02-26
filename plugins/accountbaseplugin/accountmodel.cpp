@@ -281,3 +281,7 @@ void AccountModel::fetchMore ( const QModelIndex & parent ) {
     d->m_SqlTable->canFetchMore ( parent  );
 }
 
+void AccountModel::setFilter(const QString & filter){
+    d->m_SqlTable->setFilter(filter);
+    d->m_SqlTable->select();
+}

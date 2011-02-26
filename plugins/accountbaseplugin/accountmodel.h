@@ -81,6 +81,7 @@ public:
     QSqlError lastError();
     bool canFetchMore(const QModelIndex &parent = QModelIndex()) const;
     void fetchMore(const QModelIndex &parent = QModelIndex());
+    void setFilter(const QString & filter);
 
     // Filter fucntions
     void setUserUuid(const QString &uuid);
