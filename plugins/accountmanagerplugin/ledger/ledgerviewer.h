@@ -42,6 +42,8 @@ class LedgerViewer : public QWidget {
         QAction * m_monthlyAndTypeMovementsAnalysis;
         QAction * m_yearlyAndTypeMovementsAnalysis;
         QAction * m_ledgerActionShow;
+        
+        QString m_currency;
         Ui::LedgerViewerWidget * ui;
 
 };

@@ -3,14 +3,28 @@
 ######################################################################
 
 TEMPLATE = app
-TARGET = 
+TARGET = movements
+DESTDIR = $${PWD}/../../../bin
 DEPENDPATH += .
-INCLUDEPATH += .
 MOC_DIR += moc
 OBJECTS_DIR += o
 UI_HEADERS_DIR += ui_h
+LIBS *= -L"/home/pmddeb/Desktop/freemedforms-project/bin/plugins" -lAggregation_debug -lExtensionSystem_debug -lTranslationUtils_debug -lUtils_debug -lquazip_debug -lCore_debug -lAccountBase_debug -lMedicalUtils_debug
 
+QT *= sql \
+      network \
+      xml
+      
+include( $${PWD}/../../accountbaseplugin/basemovements.pri)
+include( $${PWD}/../../coreplugin/core.pri )
+include( $${PWD}/../../../libs/extensionsystem.pri )
+include( $${PWD}/../../../libs/translationutils.pri )
+include( $${PWD}/../../../libs/utils.pri )
+include( $${PWD}/../../../contrib/quazip/quazip.pri)
+      
 # Input
-HEADERS += movementsviewer.h
+HEADERS += movementsviewer.h movementsIO.h movementsmanager.h
 FORMS += movementsviewer.ui
-SOURCES += main.cpp movementsviewer.cpp
+SOURCES += main.cpp movementsviewer.cpp movementsIO.cpp movementsmanager.cpp
+
+CONFIG += no_lflags_merge

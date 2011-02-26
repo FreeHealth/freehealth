@@ -22,6 +22,6 @@ include( $${PWD}/../../../libs/translationutils.pri )
 include( $${PWD}/../../../libs/utils.pri )
 include( $${PWD}/../../../contrib/quazip/quazip.pri)
 # Input
-HEADERS += ledgerIO.h ledgermanager.h ledgerviewer.h
-FORMS += ledgerviewer.ui
-SOURCES += ledgerIO.cpp ledgermanager.cpp ledgerviewer.cpp main.cpp
+HEADERS += ledgerIO.h ledgermanager.h ledgerviewer.h ledgeredit.h mythread.h
+FORMS += ledgerviewer.ui ledgeredit.ui
+SOURCES += ledgerIO.cpp ledgermanager.cpp ledgerviewer.cpp ledgeredit.cpp mythread.cpp main.cpp
