@@ -174,10 +174,10 @@ QVariant Patient::data(const QModelIndex &index, int role) const
                 if (has(ref) && (!d->m_Values.value(ref).isNull()))
                     return d->m_Values.value(ref);
                 // If we can not retreive it from command line --> calculate it
-                if (IPatient::data(YearsOld).toInt()>0) {
+                if (data(YearsOld).toInt()>0) {
                     if (has(Creatinine) && has(Gender) && has(Weight)) {
                         bool isMale = d->m_Values.value(Gender).toString().startsWith("M");
-                        return MedicalUtils::clearanceCreatinin(IPatient::data(YearsOld).toInt(),
+                        return MedicalUtils::clearanceCreatinin(data(YearsOld).toInt(),
                                                                 d->m_Values.value(Weight).toDouble(),
                                                                 d->m_Values.value(Creatinine).toDouble(),
                                                                 isMale);
@@ -248,6 +248,12 @@ QVariant Patient::data(const QModelIndex &index, int role) const
         }
     }
     return QVariant();
+}
+
+QVariant Patient::data(int column) const
+{
+    QModelIndex idx = index(0, column);
+    return data(idx);
 }
 
 /** \brief Defines a value of the patient according to the enumerator Patient::Reference. */
