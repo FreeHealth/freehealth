@@ -936,6 +936,62 @@ QString Database::select(const FieldList &select, const JoinList &joins, const F
 }
 
 /**
+  \brief Create a complex SELECT command with jointures and conditions.
+  Jointures must be ordered as needed in the SQL command.
+*/
+QString Database::select(const int tableref, const JoinList &joins, const FieldList &conditions) const
+{
+    FieldList fields;
+    for(int i = 0; i < d->m_Fields.value(tableref).count(); ++i) {
+        fields << Field(tableref, i);
+    }
+    return this->select(fields, joins, conditions);
+}
+
+QString Database::select(const int tableref, const Join &join, const Field &condition) const
+{
+    JoinList joins;
+    joins << join;
+    FieldList cond;
+    cond << condition;
+    return this->select(tableref, joins, cond);
+}
+
+QString Database::select(const int tableref, const Join &join, const FieldList &conditions) const
+{
+    JoinList joins;
+    joins << join;
+    return this->select(tableref, joins, conditions);
+}
+
+QString Database::select(const Field &select, const JoinList &joins, const Field &conditions) const
+{
+    FieldList get;
+    get << select;
+    FieldList cond;
+    cond << conditions;
+    return this->select(get, joins, cond);
+}
+
+QString Database::select(const FieldList &select, const Join &join, const Field &condition) const
+{
+    JoinList joins;
+    joins << join;
+    FieldList cond;
+    cond << condition;
+    return this->select(select, joins, cond);
+}
+
+QString Database::select(const Field &select, const Join &join, const FieldList &conditions) const
+{
+    JoinList joins;
+    joins << join;
+    FieldList get;
+    get << select;
+    return this->select(get, joins, conditions);
+}
+
+/**
   \brief Return a SELECT SQL structured field equality.
   \code
   // output is like:

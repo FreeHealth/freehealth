@@ -253,6 +253,12 @@ public:
     virtual QString selectDistinct(const int &tableref, const int &fieldref) const;
 
     virtual QString select(const FieldList &select, const JoinList &joins, const FieldList &conditions) const;
+    virtual QString select(const int tableref, const JoinList &joins, const FieldList &conditions) const;
+    virtual QString select(const int tableref, const Join &join, const Field &condition) const;
+    virtual QString select(const int tableref, const Join &join, const FieldList &conditions) const;
+    virtual QString select(const Field &select, const JoinList &joins, const Field &condition) const;
+    virtual QString select(const FieldList &select, const Join &join, const Field &condition) const;
+    virtual QString select(const Field &select, const Join &join, const FieldList &conditions) const;
 
     virtual QString fieldEquality(const int tableRef1, const int fieldRef1, const int tableRef2, const int fieldRef2) const;
 
