@@ -256,6 +256,12 @@ QVariant Patient::data(int column) const
     return data(idx);
 }
 
+bool Patient::setValue(int ref, const QVariant &value)
+{
+    QModelIndex idx = index(0, ref);
+    return setData(idx, value);
+}
+
 /** \brief Defines a value of the patient according to the enumerator Patient::Reference. */
 bool Patient::setData(const QModelIndex &index, const QVariant &value, int role)
 {
