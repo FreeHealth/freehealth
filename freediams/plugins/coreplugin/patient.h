@@ -51,8 +51,15 @@ public:
     void clear();
     bool has(const int ref) const;
 
+    QModelIndex currentPatientIndex() const {return QModelIndex();}
+
     bool setData(const QModelIndex &index, const QVariant &value, int role = Qt::EditRole);
     QVariant data(const QModelIndex &index, int role = Qt::DisplayRole) const;
+    /** \todo improve this */
+    QVariant data(int column) const {return QVariant();}
+
+    /** \todo remove this and use setData instead **/
+    virtual bool setValue(int ref, const QVariant &value) {return false;}
 
     QString toXml() const;
     bool fromXml(const QString &xml);

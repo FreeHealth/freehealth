@@ -33,6 +33,7 @@ public:
 
     void clear();
     bool has(const int ref) const;
+    virtual bool hasCurrentUser() const {return true;}
 
     QVariant value(const int ref) const;
     bool setValue(const int ref, const QVariant &value);
