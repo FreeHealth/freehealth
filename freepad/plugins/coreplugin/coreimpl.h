@@ -28,6 +28,7 @@
 
 #include <coreplugin/icore.h>
 #include <coreplugin/ipatient.h>
+#include <coreplugin/ipadtools.h>
 
 /**
  * \file coreimpl.h
@@ -83,7 +84,7 @@ public:
 
     Utils::UpdateChecker *updateChecker() const;
 
-	IPadTools *padTools() const { return 0; }
+	IPadTools *padTools() const { return m_padTools; }
 
     // Patient's datas wrapper
     IPatient *patient() const {return 0;}
@@ -104,6 +105,7 @@ private:
 //    CommandLine *m_CommandLine;
     Patient *m_Patient;
     IUser *m_User;
+	IPadTools *m_padTools;
     Utils::UpdateChecker *m_UpdateChecker;
     Core::FileManager *m_FileManager;
 };

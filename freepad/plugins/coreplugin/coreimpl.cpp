@@ -44,6 +44,7 @@
 #include <utils/log.h>
 #include <utils/global.h>
 #include <utils/updatechecker.h>
+#include <extensionsystem/pluginmanager.h>
 
 #include <QtCore/QDir>
 #include <QtCore/QCoreApplication>
@@ -115,6 +116,9 @@ CoreImpl::CoreImpl(QObject *parent) :
     m_UpdateChecker = new Utils::UpdateChecker(this);
 
     Utils::Log::addMessage( "Core" , tkTr(Trans::Constants::STARTING_APPLICATION_AT_1).arg( QDateTime::currentDateTime().toString() ) );
+
+	// pad
+	m_padTools = ExtensionSystem::PluginManager::instance()->getObject<IPadTools>();
 
     // initialize the settings
     m_Theme->messageSplashScreen(tkTr(Trans::Constants::LOADING_SETTINGS));
