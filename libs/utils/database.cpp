@@ -722,11 +722,11 @@ QString Database::getWhereClause(const FieldList &fields) const
   \brief Create a join statement on \e join.field1.tableName using fields equality.
   \code
     Join join(t1, f1, t2, f2, joinType);
-    QString sqlJoin = db.join(join);
+    QString sqlJoin = db.joinToSql(join);
     // will return: JOIN T1NAME ON T1NAME.F1NAME=T2NAME.F2NAME
   \endcode
 */
-QString Database::join(const Join &join) const
+QString Database::joinToSql(const Join &join) const
 {
     QString s;
     switch (join.type) {
@@ -896,37 +896,112 @@ QString Database::selectDistinct(const int & tableref, const int & fieldref) con
     return select(tableref, fieldref).replace("SELECT", "SELECT DISTINCT");
 }
 
+QString Database::select(const FieldList &select, const JoinList &joins) const
+{
+    FieldList get;
+    JoinList jns;
+    QString fields, from;
+    QStringList tables;
+    // check fields and joins on fieldName and tableName
+    for(int i=0; i < select.count(); ++i) {
+        get << select.at(i);
+        if (get.at(i).tableName.isEmpty() || get.at(i).fieldName.isEmpty()) {
+            get[i].tableName = table(select.at(i).table);
+            get[i].fieldName = fieldName(select.at(i).table, select.at(i).field);
+        }
+    }
+    for(int i=0; i < joins.count(); ++i) {
+        Field f1 = field(joins.at(i).field1.table, joins.at(i).field1.field);
+        Field f2 = field(joins.at(i).field2.table, joins.at(i).field2.field);
+        jns << Join(f1, f2);
+    }
+
+    // calculate fields
+    for(int i=0; i < get.count(); ++i) {
+        fields += QString("`%1`.`%2`, ").arg(get.at(i).tableName).arg(get.at(i).fieldName);
+        tables << get.at(i).tableName;
+    }
+    tables.removeDuplicates();
+
+    if (fields.isEmpty())
+        return QString();
+    fields.chop(2);
+
+    // Calculate joins
+    QString j;
+    for(int i=0; i < jns.count(); ++i) {
+        j += joinToSql(jns.at(i)) + "\n";
+        tables.removeAll(jns.at(i).field1.tableName);
+    }
+    tables.removeDuplicates();
+
+    // Add tables
+    foreach(const QString &tab, tables) {
+        from += QString("`%1`, ").arg(tab);
+    }
+    from.chop(2);
+
+    return QString("SELECT %1 FROM %2 \n %3").arg(fields, from, j);
+}
+
 /**
   \brief Create a complex SELECT command with jointures and conditions.
   Jointures must be ordered as needed in the SQL command.
 */
 QString Database::select(const FieldList &select, const JoinList &joins, const FieldList &conditions) const
 {
+    FieldList get, cond;
+    JoinList jns;
     QString fields, from;
     QStringList tables;
-    // calculate fields
+    // check fields and joins on fieldName and tableName
     for(int i=0; i < select.count(); ++i) {
-        fields += QString("`%1`.`%2`, ").arg(select.at(i).tableName).arg(select.at(i).fieldName);
-        tables << select.at(i).tableName;
+        get << select.at(i);
+        if (get.at(i).tableName.isEmpty() || get.at(i).fieldName.isEmpty()) {
+            get[i].tableName = table(select.at(i).table);
+            get[i].fieldName = fieldName(select.at(i).table, select.at(i).field);
+        }
     }
-    if (fields.isEmpty())
-        return fields;
-    fields.chop(2);
+    for(int i=0; i < conditions.count(); ++i) {
+        cond << conditions.at(i);
+        if (cond.at(i).tableName.isEmpty() || cond.at(i).fieldName.isEmpty()) {
+            cond[i].tableName = table(cond.at(i).table);
+            cond[i].fieldName = fieldName(cond.at(i).table, cond.at(i).field);
+        }
+    }
+    for(int i=0; i < joins.count(); ++i) {
+        Field f1 = field(joins.at(i).field1.table, joins.at(i).field1.field);
+        Field f2 = field(joins.at(i).field2.table, joins.at(i).field2.field);
+        jns << Join(f1, f2);
+    }
+
+    // calculate fields
+    for(int i=0; i < get.count(); ++i) {
+        fields += QString("`%1`.`%2`, ").arg(get.at(i).tableName).arg(get.at(i).fieldName);
+        tables << get.at(i).tableName;
+    }
     tables.removeDuplicates();
 
+    if (fields.isEmpty())
+        return QString();
+    fields.chop(2);
+
     // Calculate conditions
-    QString w = getWhereClause(conditions);
-    for(int i=0; i < conditions.count(); ++i) {
-        tables.removeAll(conditions.at(i).tableName);
+    QString w = getWhereClause(cond);
+    for(int i=0; i < cond.count(); ++i) {
+        tables << cond.at(i).tableName;
     }
+    tables.removeDuplicates();
 
     // Calculate joins
     QString j;
-    for(int i=0; i < joins.count(); ++i) {
-        j += join(joins.at(i)) + "\n";
-        tables.removeAll(joins.at(i).field1.tableName);
+    for(int i=0; i < jns.count(); ++i) {
+        j += joinToSql(jns.at(i)) + "\n";
+        tables.removeAll(jns.at(i).field1.tableName);
     }
+    tables.removeDuplicates();
 
+    // Add tables
     foreach(const QString &tab, tables) {
         from += QString("`%1`, ").arg(tab);
     }
@@ -942,7 +1017,7 @@ QString Database::select(const FieldList &select, const JoinList &joins, const F
 QString Database::select(const int tableref, const JoinList &joins, const FieldList &conditions) const
 {
     FieldList fields;
-    for(int i = 0; i < d->m_Fields.value(tableref).count(); ++i) {
+    for(int i = 0; i < (d->m_Fields.value(tableref).count() - 1); ++i) {
         fields << Field(tableref, i);
     }
     return this->select(fields, joins, conditions);

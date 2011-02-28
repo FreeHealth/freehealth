@@ -241,7 +241,7 @@ public:
     virtual QString getWhereClause(const int &tableref, const QHash<int, QString> &conditions) const;
     virtual QString getWhereClause(const FieldList &fields) const;
 
-    virtual QString join(const Join &join) const;
+    virtual QString joinToSql(const Join &join) const;
 
     virtual QString select(const int &tableref, const int &fieldref, const QHash<int, QString> &conditions) const;
     virtual QString select(const int &tableref, const QList<int> &fieldsref, const QHash<int, QString> &conditions) const;
@@ -252,6 +252,7 @@ public:
     virtual QString selectDistinct(const int &tableref, const int &fieldref, const QHash<int, QString> &conditions) const;
     virtual QString selectDistinct(const int &tableref, const int &fieldref) const;
 
+    virtual QString select(const FieldList &select, const JoinList &joins) const;
     virtual QString select(const FieldList &select, const JoinList &joins, const FieldList &conditions) const;
     virtual QString select(const int tableref, const JoinList &joins, const FieldList &conditions) const;
     virtual QString select(const int tableref, const Join &join, const Field &condition) const;
