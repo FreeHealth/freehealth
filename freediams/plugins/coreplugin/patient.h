@@ -61,7 +61,7 @@ public:
     QVariant data(int column) const;
 
     /** \todo remove this and use setData instead **/
-    bool setValue(int ref, const QVariant &value) {return false;}
+    bool setValue(int ref, const QVariant &value);
 
     QString toXml() const;
     bool fromXml(const QString &xml);
