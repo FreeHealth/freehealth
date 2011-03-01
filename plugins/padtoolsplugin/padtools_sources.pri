@@ -4,16 +4,18 @@ include($${PWD}/../fmf_plugins.pri)
 include($${PWD}/padtoolsplugin_dependencies.pri )
 
 HEADERS +=  \
+    $${PWD}/padtoolsplugin.h \
     $${PWD}/padtools_exporter.h \
     $${PWD}/pad_analyzer.h \
     $${PWD}/padtoolsimpl.h \
     $${PWD}/pad_highlighter.h \
-	$${PWD}/pad.h \
-	$${PWD}/pad_fragment.h \
-	$${PWD}/pad_string.h \
-	$${PWD}/pad_core.h
+    $${PWD}/pad.h \
+    $${PWD}/pad_fragment.h \
+    $${PWD}/pad_string.h \
+    $${PWD}/pad_core.h
 
 SOURCES += \
+    $${PWD}/padtoolsplugin.cpp \
     $${PWD}/pad_analyzer.cpp \
     $${PWD}/padtoolsimpl.cpp \
     $${PWD}/pad_highlighter.cpp \
