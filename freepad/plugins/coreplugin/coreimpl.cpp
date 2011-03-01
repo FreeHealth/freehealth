@@ -117,11 +117,11 @@ CoreImpl::CoreImpl(QObject *parent) :
 
     Utils::Log::addMessage( "Core" , tkTr(Trans::Constants::STARTING_APPLICATION_AT_1).arg( QDateTime::currentDateTime().toString() ) );
 
-	// pad
-	m_padTools = ExtensionSystem::PluginManager::instance()->getObject<IPadTools>();
-
     // initialize the settings
     m_Theme->messageSplashScreen(tkTr(Trans::Constants::LOADING_SETTINGS));
+
+	// pad
+	m_padTools = ExtensionSystem::PluginManager::instance()->getObject<IPadTools>();
 
     // WINE compatibility (only for testing under ubuntu when crosscompiling)
 //#ifdef Q_OS_WIN

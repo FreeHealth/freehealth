@@ -33,6 +33,7 @@
 #include <coreplugin/translators.h>
 #include <coreplugin/itheme.h>
 #include <coreplugin/filemanager.h>
+#include <coreplugin/ipadtools.h>
 
 #include <coreplugin/actionmanager/mainwindowactions.h>
 #include <coreplugin/actionmanager/mainwindowactionhandler.h>
@@ -60,6 +61,7 @@
 #include <QDir>
 #include <QStatusBar>
 #include <QFileDialog>
+#include <QLabel>
 
 using namespace MainWin;
 using namespace MainWin::Internal;
@@ -247,6 +249,9 @@ void MainWindow::extensionsInitialized()
 
     // Connect post core initialization
     connect(Core::ICore::instance(), SIGNAL(coreOpened()), this, SLOT(postCoreInitialization()));
+
+	Core::IPadTools *padTools = ExtensionSystem::PluginManager::instance()->getObject<Core::IPadTools>();
+	padTools->createSyntaxHighlighter(m_ui->padTextEdit, m_tokens);
 }
 
 MainWindow::~MainWindow()
@@ -261,6 +266,7 @@ void MainWindow::postCoreInitialization()
 
     setWindowTitle(qApp->applicationName() + " - " + qApp->applicationVersion());
     setWindowIcon(theme()->icon(Core::Constants::ICONFREEPAD));
+
 //    refreshPatient();
 //    updateIconBadgeOnMacOs();
 
@@ -410,12 +416,14 @@ bool MainWindow::applicationPreferences()
 /** \brief Change the font of the viewing widget */
 void MainWindow::changeFontTo( const QFont &font )
 {
+	Q_UNUSED(font);
 }
 
 bool MainWindow::saveAsFile()
 {
     /** \todo save filename */
 //    return saveIcdCollection();
+	return false;
 }
 
 bool MainWindow::saveFile()
@@ -441,6 +449,7 @@ bool MainWindow::openFile()
 
 void MainWindow::readFile(const QString &file)
 {
+	Q_UNUSED(file);
 //    m_ui->widget->openFile(file);
 //    patient()->fromXml(datas);
 //    refreshPatient();

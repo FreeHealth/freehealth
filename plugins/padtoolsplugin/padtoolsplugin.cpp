@@ -41,6 +41,7 @@
 */
 
 #include "padtoolsplugin.h"
+#include "padtoolsimpl.h"
 
 #include <utils/log.h>
 
@@ -65,6 +66,7 @@ PadToolsPlugin::~PadToolsPlugin()
 
 bool PadToolsPlugin::initialize(const QStringList &arguments, QString *errorString)
 {
+	qDebug("PadToolsPlugin::initialize");
     if (Utils::Log::warnPluginsCreation())
         qWarning() << "PadToolsPlugin::initialize";
     Q_UNUSED(arguments);
@@ -73,11 +75,14 @@ bool PadToolsPlugin::initialize(const QStringList &arguments, QString *errorStri
     // Add Translator to the Application
     Core::ICore::instance()->translators()->addNewTranslator("padtoolsplugin");
 
+	addAutoReleasedObject(new PadToolsImpl());
+
     return true;
 }
 
 void PadToolsPlugin::extensionsInitialized()
 {
+	qDebug("PadToolsPlugin::extensionsInitialized");
     if (Utils::Log::warnPluginsCreation())
         qWarning() << "PadToolsPlugin::extensionsInitialized";
 

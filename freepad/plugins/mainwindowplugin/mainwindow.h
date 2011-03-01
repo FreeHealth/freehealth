@@ -102,6 +102,9 @@ protected:
 public:
     Internal::Ui::MainWindow *m_ui;
     Internal::MainWinPrivate *d;
+
+private:
+	QMap<QString,QVariant> m_tokens;
 };
 
 } // End Core

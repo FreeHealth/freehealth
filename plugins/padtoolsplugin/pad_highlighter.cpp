@@ -33,8 +33,10 @@ void PadHighlighter::highlightBlock(const QString &text)
 
 void PadHighlighter::init()
 {
+	qDebug("before");
 	_padFormat.setForeground(Qt::darkRed);
 	_padFormat.setFontWeight(QFont::Bold);
 	_coreFormat.setForeground(Qt::darkBlue);
 	_coreFormat.setFontWeight(QFont::Bold);
+	qDebug("after");
 }

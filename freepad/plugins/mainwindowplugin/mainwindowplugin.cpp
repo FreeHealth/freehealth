@@ -51,6 +51,7 @@ MainWinPlugin::~MainWinPlugin()
 
 bool MainWinPlugin::initialize(const QStringList &arguments, QString *errorString)
 {
+	qDebug("Mainwindow::initialize");
     if (Utils::Log::warnPluginsCreation())
         qWarning() << "MainWinPlugin::initialize";
     Q_UNUSED(arguments);
@@ -63,6 +64,7 @@ bool MainWinPlugin::initialize(const QStringList &arguments, QString *errorStrin
 
 void MainWinPlugin::extensionsInitialized()
 {
+	qDebug("Mainwindow::extensionsInitialized");
     if (Utils::Log::warnPluginsCreation())
         qWarning() << "MainWinPlugin::extensionsInitialized";
 
