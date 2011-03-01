@@ -1017,7 +1017,7 @@ QString Database::select(const FieldList &select, const JoinList &joins, const F
 QString Database::select(const int tableref, const JoinList &joins, const FieldList &conditions) const
 {
     FieldList fields;
-    for(int i = 0; i < (d->m_Fields.value(tableref).count() - 1); ++i) {
+    for(int i = 0; i < (d->m_Tables_Fields.values(tableref).count() - 1); ++i) {
         fields << Field(tableref, i);
     }
     return this->select(fields, joins, conditions);
