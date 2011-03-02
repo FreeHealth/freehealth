@@ -100,28 +100,33 @@ PadString *PadAnalyzer::nextString()
 
 	padString->setStart(_curPos);
 
-	// TODO manage '\' escape char
-/*	while (!atEnd()){
-		if (text[_curPos] == '$' || text[_curPos] == '[' || text[_curPos] == ']'){
-			if (specialMode){
+	while (!atEnd()){
+		if (specialMode){
+			if (text[_curPos] == '$' || text[_curPos] == '[' || text[_curPos] == ']'){
 				str += text[_curPos];
 				specialMode = false;
-			} else
+			} else{
+				str += '\\';
+				if (text[_curPos] != '\\'){
+					specialMode = false;
+					str += text[_curPos];
+				}
+			}
+		} else{
+			if (text[_curPos] == '$' || text[_curPos] == '[' || text[_curPos] == ']')
 				break;
+			else if (text[_curPos] == '\\')
+				specialMode = true;
+			else
+				str += text[_curPos];
 		}
-		if (!specialMode && text[_curPos] == '\\'){
-			specialMode = true;
-			_curPos++;
-		}
-
-
-//		if (specialMode && text[
-}*/
-
-	while (!atEnd() && text[_curPos] != '$' && text[_curPos] != '[' && text[_curPos] != ']'){
-		str += text[_curPos];
 		_curPos++;
 	}
+
+	if (specialMode){ // a remaining '\'?
+		str += '\\';
+	}
+
 	padString->setValue(str);
 
 	if (!atEnd()){
