@@ -172,15 +172,16 @@ QVariant Patient::data(const QModelIndex &index, int role) const
                 if (has(ref) && (!d->m_Values.value(ref).isNull()))
                     return d->m_Values.value(ref);
                 // If we can not retreive it from command line --> calculate it
-                if (IPatient::data(YearsOld).toInt()>0) {
-                    if (has(Creatinine) && has(Gender) && has(Weight)) {
-                        bool isMale = d->m_Values.value(Gender).toString().startsWith("M");
-                        return MedicalUtils::clearanceCreatinin(IPatient::data(YearsOld).toInt(),
-                                                                d->m_Values.value(Weight).toDouble(),
-                                                                d->m_Values.value(Creatinine).toDouble(),
-                                                                isMale);
-                    }
-                }
+                /** \todo code here */
+//                if (IPatient::data(YearsOld).toInt()>0) {
+//                    if (has(Creatinine) && has(Gender) && has(Weight)) {
+//                        bool isMale = d->m_Values.value(Gender).toString().startsWith("M");
+//                        return MedicalUtils::clearanceCreatinin(IPatient::data(YearsOld).toInt(),
+//                                                                d->m_Values.value(Weight).toDouble(),
+//                                                                d->m_Values.value(Creatinine).toDouble(),
+//                                                                isMale);
+//                    }
+//                }
                 break;
             }
         case FullName:
@@ -247,6 +248,13 @@ QVariant Patient::data(const QModelIndex &index, int role) const
     }
     return QVariant();
 }
+
+/** \todo wrong code here */
+QVariant Patient::data(int column) const {return QVariant();}
+
+/** \todo remove this and use setData instead **/
+bool Patient::setValue(int ref, const QVariant &value) {return false;}
+
 
 /** \brief Defines a value of the patient according to the enumerator Patient::Reference. */
 bool Patient::setData(const QModelIndex &index, const QVariant &value, int role)
