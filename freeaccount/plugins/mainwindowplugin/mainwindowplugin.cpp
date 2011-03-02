@@ -58,6 +58,7 @@ MainWinPlugin::MainWinPlugin() :
 
 MainWinPlugin::~MainWinPlugin()
 {
+    qWarning() << "MainWinPlugin::~MainWinPlugin()";
     if (m_MainWindow)
         delete m_MainWindow;
     if (prefPage) {

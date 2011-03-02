@@ -45,6 +45,7 @@ TextEditorPlugin::TextEditorPlugin()
 
 TextEditorPlugin::~TextEditorPlugin()
 {
+    qWarning() << "TextEditorPlugin::~TextEditorPlugin()";
 }
 
 bool TextEditorPlugin::initialize(const QStringList &arguments, QString *errorString)
