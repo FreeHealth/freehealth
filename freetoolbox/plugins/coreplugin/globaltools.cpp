@@ -280,6 +280,7 @@ bool executeSqlFile(const QString &connectionName, const QString &fileName, QPro
     req.replace("\n\n", "\n");
     req.replace("\n\n", "\n");
     req.replace("\n\n", "\n");
+    req.remove("AUTO_INCREMENT"); // SQLite compatibility
 
     QStringList list = req.split("\n");
     QSqlDatabase DB = QSqlDatabase::database(connectionName);
