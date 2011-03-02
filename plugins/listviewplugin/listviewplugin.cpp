@@ -41,6 +41,7 @@ ListViewPlugin::ListViewPlugin()
 
 ListViewPlugin::~ListViewPlugin()
 {
+    qWarning() << "ListViewPlugin::~ListViewPlugin()";
 }
 
 bool ListViewPlugin::initialize(const QStringList &arguments, QString *errorString)
