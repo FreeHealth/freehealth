@@ -25,6 +25,8 @@
  ***************************************************************************/
 #include "mainwindow.h"
 
+#include <accountplugin/constants.h>
+
 #include <translationutils/constanttranslations.h>
 #include <utils/log.h>
 #include <utils/global.h>
@@ -39,6 +41,7 @@
 #include <coreplugin/iuser.h>
 #include <coreplugin/filemanager.h>
 #include <coreplugin/constants_icons.h>
+#include <coreplugin/constants_menus.h>
 #include <coreplugin/actionmanager/mainwindowactions.h>
 #include <coreplugin/actionmanager/mainwindowactionhandler.h>
 #include <coreplugin/actionmanager/actionmanager.h>
@@ -116,17 +119,9 @@ bool MainWindow::initialize(const QStringList &arguments, QString *errorString)
     Q_UNUSED(arguments);
     Q_UNUSED(errorString);
     // create menus
-//    createGeneralMenu();
     createFileMenu();
-    Core::ActionContainer *fmenu = actionManager()->actionContainer(Core::Constants::M_FILE);
-//    Core::ActionContainer *fmenu = actionManager()->actionContainer(Core::Constants::M_GENERAL);
+    Core::ActionContainer *fmenu = actionManager()->createMenu(Core::Constants::M_FILE_RECENTFILES);
     connect(fmenu->menu(), SIGNAL(aboutToShow()),this, SLOT(aboutToShowRecentFiles()));
-//    Core::ActionContainer *pmenu = actionManager()->actionContainer(Core::Constants::MENUBAR);
-//    pmenu->appendGroup(DrugsWidget::Constants::G_PLUGINS_MODES);
-//    pmenu->appendGroup(DrugsWidget::Constants::G_PLUGINS_SEARCH);
-//    pmenu->appendGroup(DrugsWidget::Constants::G_PLUGINS_DRUGS);
-//    pmenu->setTranslations(DrugsWidget::Constants::DRUGSMENU_TEXT);
-//    createTemplatesMenu();
     createConfigurationMenu();
     createHelpMenu();
 
@@ -158,10 +153,6 @@ bool MainWindow::initialize(const QStringList &arguments, QString *errorString)
     connectFileActions();
     connectConfigurationActions();
     connectHelpActions();
-
-    actionManager()->retranslateMenusAndActions();
-
-    contextManager()->updateContext();
 
     return true;
 }
@@ -218,8 +209,6 @@ void MainWindow::extensionsInitialized()
 //        }
     }
 
-    raise();
-
     // Start the update checker
     if (updateChecker()->needsUpdateChecking(settings()->getQSettings())) {
         messageSplash(tkTr(Trans::Constants::CHECKING_UPDATES));
@@ -247,15 +236,24 @@ void MainWindow::extensionsInitialized()
     userChanged();
 
     createDockWindows();
-    finishSplash(this);
     readSettings();
 
     setWindowIcon(theme()->icon(Core::Constants::ICONFREEACCOUNT));
-    show();
+
+    connect(Core::ICore::instance(), SIGNAL(coreOpened()), this, SLOT(postCoreOpened()));
 }
 
 MainWindow::~MainWindow()
 {
+}
+
+void MainWindow::postCoreOpened()
+{
+    finishSplash(this);
+    actionManager()->retranslateMenusAndActions();
+    contextManager()->updateContext();
+    raise();
+    show();
 }
 
 /**

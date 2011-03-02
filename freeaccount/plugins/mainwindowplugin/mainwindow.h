@@ -97,6 +97,9 @@ protected:
     void closeEvent( QCloseEvent *event );
     void changeEvent(QEvent *event);
 
+private Q_SLOTS:
+    void postCoreOpened();
+
 public:
     Internal::Ui::MainWindow *m_ui;
 };

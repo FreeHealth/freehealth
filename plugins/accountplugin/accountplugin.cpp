@@ -33,6 +33,7 @@
  *   POSSIBILITY OF SUCH DAMAGE.                                           *
  ***************************************************************************/
 #include "accountplugin.h"
+#include "accountwidgetmanager.h"
 
 #include "preferences/accountpreferences.h"
 #include "preferences/bankdetailspage.h"
@@ -72,6 +73,10 @@ bool AccountPlugin::initialize(const QStringList &arguments, QString *errorStrin
         qWarning() << "AccountPlugin::initialize";
     Q_UNUSED(arguments);
     Q_UNUSED(errorString);
+
+    // Create instance of WidgetManager and ActionHandler
+    Account::AccountWidgetManager::instance();
+
     return true;
 }
 

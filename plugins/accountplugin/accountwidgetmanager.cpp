@@ -58,6 +58,7 @@ using namespace Account::Internal;
 using namespace Trans::ConstantTranslations;
 
 inline static Core::ActionManager *actionManager() {return Core::ICore::instance()->actionManager();}
+static inline Core::ContextManager *contextManager() { return Core::ICore::instance()->contextManager(); }
 
 ///////////////////////////////////////////////////////////////////////////////////////////////////////////
 /////////////////////////////////////////      MANAGER      ///////////////////////////////////////////////
@@ -142,16 +143,17 @@ AccountActionHandler::AccountActionHandler(QObject *parent) :
     QList<int> global = QList<int>() << Core::Constants::C_GLOBAL_ID;
 
     Core::ActionContainer *menu = actionManager()->actionContainer(Account::Constants::M_PLUGINS_ACCOUNT);
+    qWarning() << "xxxxxxxxxxxxxxxxxxxxxxxxxxx" << menu;
     if (!menu) {
         menu = actionManager()->createMenu(Account::Constants::M_PLUGINS_ACCOUNT);
         menu->appendGroup(Constants::G_ACCOUNT_APPS);
         menu->appendGroup(Constants::G_ACCOUNT_SEARCH);
         menu->appendGroup(Constants::G_ACCOUNT_MODES);
-        menu->setTranslations(Account::Constants::ACCOUNTMENU_TEXT);
+        menu->setTranslations(Account::Constants::ACCOUNTMENU_TEXT, Account::Constants::ACCOUNT_TR_CONTEXT);
     }
     Q_ASSERT(menu);
 #ifdef FREEACCOUNT
-    actionManager()->actionContainer(Core::Constants::MENUBAR)->addMenu(menu, Constants::G_PLUGINS_ACCOUNT);
+    actionManager()->actionContainer(Core::Constants::MENUBAR)->addMenu(menu, Core::Constants::G_PLUGINS);
 #else
     actionManager()->actionContainer(Core::Constants::M_PLUGINS)->addMenu(menu, Core::Constants::G_PLUGINS_ACCOUNT);
 #endif
@@ -197,6 +199,7 @@ AccountActionHandler::AccountActionHandler(QObject *parent) :
     menu->addAction(cmd, Constants::G_ACCOUNT_APPS);
     connect(a, SIGNAL(triggered()), this, SLOT(assets()));
 
+    contextManager()->updateContext();
     actionManager()->retranslateMenusAndActions();
 }
 
