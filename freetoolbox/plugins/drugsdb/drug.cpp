@@ -76,6 +76,8 @@ bool Drug::setData(const int ref, const QVariant &value, const QString &lang)
     switch (ref) {
     case Routes:
         {
+            d->m_Content[Drug::Routes].insertMulti(lang, value);
+            // calculate RIDs
             QList<QVariant> rids;
             foreach(const QString &route, value.toStringList()) {
                 QSqlDatabase db = QSqlDatabase::database(Core::Constants::MASTER_DATABASE_NAME);
@@ -100,7 +102,6 @@ bool Drug::setData(const int ref, const QVariant &value, const QString &lang)
                     continue;
                 }
             }
-
             break;
         }
     case Forms: /** \todo manage drugs forms ? */  break;
@@ -165,7 +166,7 @@ bool Drug::toDatabase(const QString &dbConnection,
     // Drugs
     req = QString("INSERT INTO `DRUGS` ("
             "DID,SID,NAME,ATC_ID,STRENGTH,AID_MASTER_LID,VALID,MARKETED,LINK_SPC,EXTRA_XML) VALUES ("
-            "%1  ,%2,'%3',  %4,   '%5',     %6,      %7,        %8,     '%9',   '%10')")
+            "%1  ,%2,'%3',  %4,   '%5',        %6,         %7,     %8,   '%9'  ,  '%10')")
                   .arg(data(DID, lang).toString())
                   .arg(data(SID, lang).toString())
                   .arg(data(Name, lang).toString().replace("'","''"))
@@ -197,7 +198,7 @@ bool Drug::toDatabase(const QString &dbConnection,
                       "DID, MID, STRENGTH, STRENGTH_NID, DOSE_REF, DOSE_REF_NID, NATURE, LK_NATURE) VALUES ("
                       "%1  ,%2,   '%3',       %4,          '%5',     %6         , '%7',   %8)")
                 .arg(data(DID).toString())
-                .arg(mids.key(compo->data(Component::Name).toString().toUpper().replace("'","''")))
+                .arg(mids.key(compo->data(Component::Name).toString().toUpper()))
                 .arg(compo->data(Component::Strength).toString().replace("'","''"))
                 .arg("NULL")
                 .arg(compo->data(Component::Dose).toString().replace("'","''"))
@@ -269,6 +270,8 @@ bool Drug::saveDrugsIntoDatabase(const QString &connection, QVector<Drug *> drug
     Core::Tools::executeSqlQuery(QString("DELETE FROM MASTER WHERE SID=%1;").arg(sid), connection);
     Core::Tools::executeSqlQuery(QString("DELETE FROM DRUGS WHERE SID=%1;").arg(sid), connection);
 //    Core::Tools::executeSqlQuery(QString("DELETE FROM COMPOSITION WHERE SID=%1;").arg(sid), connection);
+//    Core::Tools::executeSqlQuery(QString("DELETE FROM DRUG_ROUTES WHERE SID=%1;").arg(sid), connection);
+//    Core::Tools::executeSqlQuery(QString("DELETE FROM DRUG_FORMS WHERE SID=%1;").arg(sid), connection);
     Core::Tools::executeSqlQuery(QString("DELETE FROM MOLS WHERE SID=%1;").arg(sid), connection);
     Core::Tools::executeSqlQuery(QString("DELETE FROM LK_MOL_ATC WHERE SID=%1;").arg(sid), connection);
     Core::Tools::executeSqlQuery(QString("DELETE FROM PACKAGING WHERE SID=%1;").arg(sid), connection);
