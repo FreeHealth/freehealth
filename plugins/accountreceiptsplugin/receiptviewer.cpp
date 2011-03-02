@@ -1,27 +1,27 @@
 /***************************************************************************
- *   Copyright (C) 2009 by Docteur Pierre-Marie Desombre, GP               *
- *   pm.desombre@medsyn.fr                                                 *
- *                                                                         *
- *   This program is free software; you can redistribute it and/or modify  *
- *   it under the terms of the GNU Library General Public License as       *
- *   published by the Free Software Foundation; either version 3 of the    *
- *   License, or (at your option) any later version.                       *
- *                                                                         *
- *   This program is distributed in the hope that it will be useful,       *
- *   but WITHOUT ANY WARRANTY; without even the implied warranty of        *
- *   MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the         *
- *   GNU General Public License for more details.                          *
- *                                                                         *
- *   You should have received a copy of the GNU Library General Public     *
- *   License along with this program; if not, write to the                 *
- *   Free Software Foundation, Inc.,                                       *
- *   59 Temple Place - Suite 330, Boston, MA  02111-1307, USA.             *
+ *  Copyright (C) 2009 by Docteur Pierre-Marie Desombre, GP               *
+ *  pm.desombre@medsyn.fr                                                 *
+ *                                                                        *
+ *  This program is free software; you can redistribute it and/or modify  *
+ *  it under the terms of the GNU Library General Public License as       *
+ *  published by the Free Software Foundation; either version 3 of the    *
+ *  License, or (at your option) any later version.                       *
+ *                                                                        *
+ *  This program is distributed in the hope that it will be useful,       *
+ *  but WITHOUT ANY WARRANTY; without even the implied warranty of        *
+ *  MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the         *
+ *  GNU General Public License for more details.                          *
+ *                                                                        *
+ *  You should have received a copy of the GNU Library General Public     *
+ *  License along with this program; if not, write to the                 *
+ *  Free Software Foundation, Inc.,                                       *
+ *  59 Temple Place - Suite 330, Boston, MA  02111-1307, USA.             *
  ***************************************************************************/
 /***************************************************************************
- *   Main Developper : Eric MAEKER, <eric.maeker@free.fr>                  *
- *   Contributors :                                                        *
- *       Pierre-Marie DESOMBRE <pm.desombre@medsyn.fr>                     *
- *       NAME <MAIL@ADRESS>                                                *
+ *  Main Developper : Eric MAEKER, <eric.maeker@free.fr>                  *
+ *  Contributors :                                                        *
+ *      Pierre-Marie DESOMBRE <pm.desombre@medsyn.fr>                     *
+ *      NAME <MAIL@ADRESS>                                                *
  ***************************************************************************/
 #include "receiptviewer.h"
 #include "receiptsmanager.h"	
@@ -41,6 +41,8 @@
 #include <coreplugin/iuser.h>
 #include <coreplugin/ipatient.h>
 
+#include <utils/widgets/spinboxdelegate.h>
+
 #include <QAbstractItemModel>
 #include <QDebug>
 #include <QMessageBox>
@@ -51,14 +53,131 @@
 #include <QBrush>
 #include <QColor>
 
-using namespace Core;
 static inline Core::IUser *user() { return Core::ICore::instance()->user(); }
 static inline Core::IPatient *patient() { return Core::ICore::instance()->patient(); }
+
 using namespace ReceiptsConstants;
-using namespace InternalAmount;
 using namespace Constants;
 
-treeViewsActions::treeViewsActions(QWidget * parent){
+namespace Internal {
+
+    class AmountModel : public QAbstractTableModel
+    {
+    public:
+        enum ColumnRepresentation {
+            Col_Value = 0,
+            Col_Currency,  // Devise monétaire
+            ColCount
+        };
+
+        enum RowRepresentation {
+            Row_Cash = 0,
+            Row_Cheque,
+            Row_Visa,
+            Row_Banking,  // Virement banquaire
+            Row_Other,
+            Row_Du,
+            RowCount
+        };
+
+        AmountModel(QObject *parent = 0) : QAbstractTableModel(parent)
+        {
+            for(int i=0; i < rowCount(); ++i)
+                m_Values.append(0.0);
+        }
+
+        int rowCount(const QModelIndex &parent = QModelIndex()) const {return RowCount;}
+        int columnCount(const QModelIndex &parent = QModelIndex()) const {return ColCount;}
+
+        bool submit(){
+            if (!submit()) {
+               return false;
+            }
+          return true;
+        }
+
+
+        QVariant data(const QModelIndex &index, int role = Qt::DisplayRole) const
+        {
+            if (!index.isValid())
+                return QVariant();
+
+            if (role==Qt::EditRole || role==Qt::DisplayRole) {
+                switch (index.column()) {
+                case Col_Value:
+                    return m_Values[index.row()];
+                    break;
+                default: return QVariant();
+                }
+            }
+            return QVariant();
+        }
+
+        bool setData(const QModelIndex &index, const QVariant &value, int role = Qt::EditRole)
+        {
+            if (!index.isValid())
+                return false;
+
+            if (role==Qt::EditRole) {
+                switch (index.column()) {
+                case Col_Value:
+                    {
+                        m_Values[index.row()] = value.toFloat();
+                        Q_EMIT dataChanged(index, index);
+                        return true;
+                    }
+                }
+            }
+            return false;
+        }
+
+        QVariant headerData(int section, Qt::Orientation orientation, int role = Qt::DisplayRole) const
+        {
+            if (role==Qt::DisplayRole) {
+                if (orientation==Qt::Vertical) {
+                    switch (section) {
+                    case Row_Cash: return tr("Cash");
+                    case Row_Visa: return "Visa";
+                    case Row_Cheque: return "Cheque";
+                    case Row_Banking: return "Banking";
+                    case Row_Other: return "Other";
+                    case Row_Du: return "Du";
+                    }
+                } else if (orientation==Qt::Horizontal) {
+                    switch (section) {
+                    case Col_Value: return "Value";
+                    case Col_Currency : return "Currency";
+                    }
+                }
+            }
+            return QVariant();
+        }
+
+        QSqlError lastError(){
+            return lastError();
+            }
+
+        Qt::ItemFlags flags(const QModelIndex &index) const
+        {
+            if (index.column()==Col_Value) {
+                return Qt::ItemIsEnabled | Qt::ItemIsEditable | Qt::ItemIsSelectable;
+            } else {
+                return Qt::ItemIsEnabled | Qt::ItemIsSelectable;
+            }
+        }
+
+
+    private:
+        QList<float> m_Values;
+    };
+
+}  // End namespace Internal
+
+
+
+
+
+treeViewsActions::treeViewsActions(QWidget *parent){
     m_deleteThesaurusValue = new QAction(trUtf8("Delete this value."),this);
     m_choosePreferedValue = new QAction(trUtf8("Choose this value like the prefered."),this);
     connect(m_choosePreferedValue,SIGNAL(triggered(bool)),this,SLOT(choosePreferedValue(bool)));
@@ -67,7 +186,7 @@ treeViewsActions::treeViewsActions(QWidget * parent){
     
 treeViewsActions::~treeViewsActions(){}
 
-void treeViewsActions::mousePressEvent(QMouseEvent * event){
+void treeViewsActions::mousePressEvent(QMouseEvent *event){
     if(event->button() == Qt::RightButton){
         if(isChildOfThesaurus()){
             blockSignals(true);
@@ -123,7 +242,7 @@ void treeViewsActions::choosePreferedValue(bool b){
             }
 } 
 
-bool treeViewsActions::addPreferedItem(QModelIndex & index){
+bool treeViewsActions::addPreferedItem(QModelIndex &index){
     bool ret = true;
     QString data = index.data().toString();
     receiptsEngine r;
@@ -140,8 +259,8 @@ bool treeViewsActions::addPreferedItem(QModelIndex & index){
 bool treeViewsActions::isChildOfThesaurus(){
     bool ret = true;
     QModelIndex current = currentIndex();
-    QModelIndex indexParent = m_actionsTreeModel->parent(current);
-    QString dataParent = m_actionsTreeModel->data(indexParent).toString();
+    QModelIndex indexParent = treeModel()->parent(current);
+    QString dataParent = treeModel()->data(indexParent).toString();
     qDebug() << __FILE__ << QString::number(__LINE__) << " dataParent =" << dataParent ;
     if (dataParent != "Thesaurus")
     {
@@ -150,7 +269,8 @@ bool treeViewsActions::isChildOfThesaurus(){
     return ret;
 }
 
-void treeViewsActions::fillActionTreeView(){
+void treeViewsActions::fillActionTreeView()
+{
     m_actionsTreeModel = new QStandardItemModel;
     QStringList listOfMainActions;
     QMap<QString,QString> parametersMap;
@@ -204,10 +324,10 @@ void treeViewsActions::fillActionTreeView(){
         	       }
             }
     }
-    QStandardItem *parentItem = m_actionsTreeModel->invisibleRootItem();
+    QStandardItem *parentItem = treeModel()->invisibleRootItem();
     QString strMainActions;
     foreach(strMainActions,listOfMainActions){
-        QStandardItem * actionItem = new QStandardItem(strMainActions);
+        QStandardItem *actionItem = new QStandardItem(strMainActions);
         //treeViewsActions colors
         if (strMainActions == "Debtor")
         {
@@ -253,7 +373,7 @@ void treeViewsActions::fillActionTreeView(){
         listSubActions = mapSubItems.values(strMainActions);
         QString strSubActions;
         foreach(strSubActions,listSubActions){
-            QStandardItem * subActionItem = new QStandardItem(strSubActions);
+            QStandardItem *subActionItem = new QStandardItem(strSubActions);
             actionItem->appendRow(subActionItem);
         }
     }
@@ -261,11 +381,11 @@ void treeViewsActions::fillActionTreeView(){
     setHeaderHidden(true);
     setStyleSheet("background-color: rgb(201, 201, 201)");
    // actionsTreeView->setStyleSheet("foreground-color: red");
-    setModel(m_actionsTreeModel);
+    setModel(treeModel());
     qDebug() << __FILE__ << QString::number(__LINE__)  ;
 }
 
-bool treeViewsActions::deleteItemFromThesaurus(QModelIndex & index){
+bool treeViewsActions::deleteItemFromThesaurus(QModelIndex &index){
     bool ret = true;
     QString data = index.data().toString();
     receiptsEngine r;
@@ -290,7 +410,7 @@ ReceiptViewer::ReceiptViewer(QWidget *parent) :
     m_userUuid = user()->value(Core::IUser::Uuid).toString();
     m_kilometers = 0.00 ;
     m_distanceRuleValue = 0.00;
-    m_model = new InternalAmount::AmountModel(this);
+    m_model = new ::Internal::AmountModel(this);
     ui->setupUi(this);
     ui->amountsView->verticalHeader()->setResizeMode(QHeaderView::ResizeToContents);
     ui->amountsView->horizontalHeader()->setResizeMode(QHeaderView::ResizeToContents);
@@ -370,7 +490,7 @@ void ReceiptViewer::deleteLine()
 
 
 
-void ReceiptViewer::actionsOfTreeView(const QModelIndex & index){
+void ReceiptViewer::actionsOfTreeView(const QModelIndex &index){
     QString data = index.data(Qt::DisplayRole).toString();
     qDebug() << __FILE__ << QString::number(__LINE__) << " data =" << data;
     receiptsManager manager;
@@ -378,7 +498,7 @@ void ReceiptViewer::actionsOfTreeView(const QModelIndex & index){
     int typeOfPayment = ReceiptsConstants::Cash;
     double percentage = 100.00;
     if(data == "Values"){
-        findReceiptsValues * rv = new findReceiptsValues(this);
+        findReceiptsValues *rv = new findReceiptsValues(this);
         if(rv->exec() == QDialog::Accepted){
             hashOfValues = rv -> getChoosenValues();
             choiceDialog choice(rv);
@@ -425,7 +545,7 @@ void ReceiptViewer::actionsOfTreeView(const QModelIndex & index){
     	  if (dist.exec()== QDialog::Accepted)
     	  {
     	          m_kilometers = dist.getDistanceNumber();
-    	          double value = m_kilometers * m_distanceRuleValue;
+                  double value = m_kilometers *m_distanceRuleValue;
     	          typeOfPayment = dist.returnDistanceDialog();
     	          percentage = dist.m_percentValue;
     	  	  hashOfValues.insertMulti("DistPrice",QString::number(value));
@@ -467,7 +587,7 @@ void ReceiptViewer::actionsOfTreeView(const QModelIndex & index){
         //actionTreeView->reset();
 }
 
-void ReceiptViewer::fillModel(QHash<QString,QString> & hashOfValues, int typeOfPayment, double percentage){
+void ReceiptViewer::fillModel(QHash<QString,QString> &hashOfValues, int typeOfPayment, double percentage){
     double value = 0.00;
     QHashIterator<QString,QString> it(hashOfValues);
     while(it.hasNext()){
@@ -476,13 +596,15 @@ void ReceiptViewer::fillModel(QHash<QString,QString> & hashOfValues, int typeOfP
     }
     value = value*percentage/100.00;
     qDebug() << __FILE__ << QString::number(__LINE__) << " values =" << QString::number(value);
-    const QModelIndex index = m_model->index(typeOfPayment,AmountModel::Col_Value);
+    const QModelIndex index = m_model->index(typeOfPayment, ::Internal::AmountModel::Col_Value);
     double lastValue = m_model->data(index).toDouble();
     value += lastValue;
     m_model->setData(index, value, Qt::EditRole);
 }
 
-void ReceiptViewer::save(){
+void ReceiptViewer::save()
+{
+    using namespace ::Internal;
     QString textOfListOfActs = m_listOfValues.join("+");
     double cash = m_model->data(m_model->index(AmountModel::Row_Cash,AmountModel::Col_Value)).toDouble();
     double cheque = m_model->data(m_model->index(AmountModel::Row_Cheque,AmountModel::Col_Value)).toDouble();
@@ -524,12 +646,13 @@ void ReceiptViewer::save(){
     }
 }
 
-void ReceiptViewer::saveAndQuit(){
+void ReceiptViewer::saveAndQuit()
+{
     save();
     close();
 }
 
-void ReceiptViewer::mousePressEvent(QMouseEvent * event){
+void ReceiptViewer::mousePressEvent(QMouseEvent *event){
   if(event->button() == Qt::RightButton){
     qDebug() << "in right clic" << __FILE__ << QString::number(__LINE__) ;
     m_menu         = new QMenu(this);
@@ -549,23 +672,23 @@ void ReceiptViewer::saveInThesaurus(){
     actionTreeView->fillActionTreeView();
 }
 
-void ReceiptViewer::clearAll(bool b){
+void ReceiptViewer::clearAll(bool b)
+{
     qDebug() << __FILE__ << QString::number(__LINE__) << " in clearAll ";
-    if (b==false)
-    {
-    	  qWarning() << __FILE__ << QString::number(__LINE__) << "Clear all is uncheckable." ;
-        }
+    if (b==false) {
+        qWarning() << __FILE__ << QString::number(__LINE__) << "Clear all is uncheckable." ;
+    }
     m_listOfValues.clear();
     m_modelReturnedList->removeRows(0,m_modelReturnedList->rowCount(),QModelIndex());
     //clear accountmodel
-    for (int i = 0; i < AmountModel::RowCount; i += 1)
-    {
+    for (int i = 0; i < ::Internal::AmountModel::RowCount; i += 1) {
         double value = 0.00;
-    	m_model->setData(m_model->index(i,AmountModel::Col_Value), value, Qt::EditRole);
+        m_model->setData(m_model->index(i, ::Internal::AmountModel::Col_Value), value, Qt::EditRole);
     }
 }
 
-QVariant ReceiptViewer::firstItemChoosenAsPreferential(QString & item){
+QVariant ReceiptViewer::firstItemChoosenAsPreferential(QString &item)
+{
     QVariant variantValue;
     receiptsManager manager;
     if (manager.getDistanceRules().keys().contains(item))
