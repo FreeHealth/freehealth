@@ -42,15 +42,22 @@
 #include "constants.h"
 #include "accountcontextualwidget.h"
 
-#include <utils/log.h>
-#include <translationutils/constanttranslations.h>
+#include <accountreceiptsplugin/receiptviewer.h>
+
+#include <accountmanagerplugin/assets/assetsViewer.h>
+#include <accountmanagerplugin/ledger/ledgerviewer.h>
+#include <accountmanagerplugin/movements/movementsviewer.h>
 
 #include <coreplugin/constants.h>
 #include <coreplugin/icore.h>
 #include <coreplugin/itheme.h>
+#include <coreplugin/imainwindow.h>
 #include <coreplugin/contextmanager/contextmanager.h>
 #include <coreplugin/actionmanager/actionmanager.h>
 #include <coreplugin/uniqueidmanager.h>
+
+#include <utils/log.h>
+#include <translationutils/constanttranslations.h>
 
 using namespace Account::Constants;
 using namespace Account;
@@ -59,6 +66,7 @@ using namespace Trans::ConstantTranslations;
 
 inline static Core::ActionManager *actionManager() {return Core::ICore::instance()->actionManager();}
 static inline Core::ContextManager *contextManager() { return Core::ICore::instance()->contextManager(); }
+static inline Core::IMainWindow *mainWindow() { return Core::ICore::instance()->mainWindow(); }
 
 ///////////////////////////////////////////////////////////////////////////////////////////////////////////
 /////////////////////////////////////////      MANAGER      ///////////////////////////////////////////////
@@ -143,7 +151,6 @@ AccountActionHandler::AccountActionHandler(QObject *parent) :
     QList<int> global = QList<int>() << Core::Constants::C_GLOBAL_ID;
 
     Core::ActionContainer *menu = actionManager()->actionContainer(Account::Constants::M_PLUGINS_ACCOUNT);
-    qWarning() << "xxxxxxxxxxxxxxxxxxxxxxxxxxx" << menu;
     if (!menu) {
         menu = actionManager()->createMenu(Account::Constants::M_PLUGINS_ACCOUNT);
         menu->appendGroup(Constants::G_ACCOUNT_APPS);
@@ -242,20 +249,37 @@ void AccountActionHandler::updateActions()
 
 void AccountActionHandler::addReceipts()
 {
+
 }
 
 void AccountActionHandler::receipts()
 {
+    QWidget *w = mainWindow()->centralWidget();
+    delete w;
+    w = 0;
+    mainWindow()->setCentralWidget(new ReceiptViewer(mainWindow()));
 }
 
 void AccountActionHandler::ledger()
 {
+    QWidget *w = mainWindow()->centralWidget();
+    delete w;
+    w = 0;
+    mainWindow()->setCentralWidget(new LedgerViewer(mainWindow()));
 }
 
 void AccountActionHandler::movements()
 {
+    QWidget *w = mainWindow()->centralWidget();
+    delete w;
+    w = 0;
+    mainWindow()->setCentralWidget(new MovementsViewer(mainWindow()));
 }
 
 void AccountActionHandler::assets()
 {
+    QWidget *w = mainWindow()->centralWidget();
+    delete w;
+    w = 0;
+    mainWindow()->setCentralWidget(new AssetsViewer(mainWindow()));
 }

@@ -91,6 +91,9 @@ protected:
     QAction *aAssets;
 
     QPointer<AccountContextualWidget> m_CurrentView;
+
+    /** \todo to remove. This is provided only for testing purpose of FreeAccount */
+    QVector<AccountContextualWidget *> m_OpenedViews;
 };
 
 }  // End Internal
