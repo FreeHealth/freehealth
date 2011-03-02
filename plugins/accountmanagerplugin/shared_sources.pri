@@ -12,6 +12,9 @@ SOURCES += $${PWD}/accountmanagerplugin.cpp \
 
 FORMS += $${PWD}/accountmanager.ui
 
+include($${PWD}/assets/assets.pri)
+include($${PWD}/ledger/ledger.pri)
+include($${PWD}/movements/movements.pri)
 
 TRANSLATIONS += $${SOURCES_TRANSLATIONS}/accountmanagerplugin_fr.ts \
     $${SOURCES_TRANSLATIONS}/accountmanagerplugin_de.ts \

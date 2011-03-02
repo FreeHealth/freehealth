@@ -42,10 +42,13 @@ using namespace Core::Internal;
 
 CorePlugin::CorePlugin() : m_CoreImpl(new CoreImpl(this))
 {
+    if (Utils::Log::warnPluginsCreation())
+        qWarning() << "Creating CorePlugin";
 }
 
 CorePlugin::~CorePlugin()
 {
+    qWarning() << "CorePlugin::~CorePlugin()";
 }
 
 bool CorePlugin::initialize(const QStringList &arguments, QString *errorMessage)
