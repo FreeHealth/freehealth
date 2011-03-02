@@ -101,7 +101,7 @@ PadString *PadAnalyzer::nextString()
 	padString->setStart(_curPos);
 
 	// TODO manage '\' escape char
-	while (!atEnd()){
+/*	while (!atEnd()){
 		if (text[_curPos] == '$' || text[_curPos] == '[' || text[_curPos] == ']'){
 			if (specialMode){
 				str += text[_curPos];
@@ -116,7 +116,7 @@ PadString *PadAnalyzer::nextString()
 
 
 //		if (specialMode && text[
-	}
+}*/
 
 	while (!atEnd() && text[_curPos] != '$' && text[_curPos] != '[' && text[_curPos] != ']'){
 		str += text[_curPos];
