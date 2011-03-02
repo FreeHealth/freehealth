@@ -126,14 +126,7 @@ MainWindowActionHandler::~MainWindowActionHandler()
 void MainWindowActionHandler::createGeneralMenu()
 {
     // creates menu bar
-    ActionContainer *menubar = actionManager()->actionContainer(Constants::MENUBAR);
-    if (!menubar) {
-        menubar = actionManager()->createMenuBar(Constants::MENUBAR);
-#ifndef Q_WS_MAC
-        setMenuBar(menubar->menuBar());
-#endif
-    }
-    menubar->appendGroup(Constants::G_GENERAL);
+    ActionContainer *menubar = menubarContainer(true);
 
     // Create menu
     ActionContainer *menu = actionManager()->createMenu(Constants::M_GENERAL);
@@ -503,14 +496,24 @@ void MainWindowActionHandler::connectGeneralActions()
 Core::ActionContainer *MainWindowActionHandler::menubarContainer(bool createIfNotExist)
 {
     // creates menu bar
-    ActionContainer *menubar = actionManager()->actionContainer(Constants::MENUBAR);
-    if (createIfNotExist && !menubar) {
-        menubar = actionManager()->createMenuBar(Constants::MENUBAR);
+    ActionContainer *mb = actionManager()->actionContainer(Constants::MENUBAR);
+    if (createIfNotExist && !mb) {
+        mb = actionManager()->createMenuBar(Constants::MENUBAR);
+        mb->appendGroup(Core::Constants::G_GENERAL);
+        mb->appendGroup(Core::Constants::G_FILE);
+        mb->appendGroup(Core::Constants::G_EDIT);
+        mb->appendGroup(Core::Constants::G_FORMAT);
+        mb->appendGroup(Core::Constants::G_PLUGINS);
+        mb->appendGroup(Core::Constants::G_TEMPLATES);
+        mb->appendGroup(Core::Constants::G_PATIENTS);
+        mb->appendGroup(Core::Constants::G_CONFIGURATION);
+        mb->appendGroup(Core::Constants::G_HELP);
+        mb->appendGroup(Core::Constants::G_UPDATE);
 #ifndef Q_WS_MAC
-        setMenuBar(menubar->menuBar());
+        setMenuBar(mb->menuBar());
 #endif
     }
-    return menubar;
+    return mb;
 }
 
 /** \brief Menu is created in the global context \sa Constants::C_GLOBAL_ID. Menu bar is automaticcaly created if necessary. */
@@ -518,7 +521,6 @@ void MainWindowActionHandler::createFileMenu()
 {
     // creates menu bar
     ActionContainer *menubar = menubarContainer(true);
-    menubar->appendGroup(Constants::G_FILE);
 
     // Create menu
     ActionContainer *filemenu = actionManager()->createMenu(Constants::M_FILE);
@@ -542,7 +544,6 @@ void MainWindowActionHandler::createTemplatesMenu()
 {
     ActionContainer *menubar = menubarContainer();
     Q_ASSERT(menubar);
-    menubar->appendGroup(Constants::G_TEMPLATES);
 
     // Create menu
     ActionContainer *menu = actionManager()->createMenu(Constants::M_TEMPLATES);
@@ -560,7 +561,6 @@ void MainWindowActionHandler::createEditMenu()
 {
     ActionContainer *menubar = menubarContainer();
     Q_ASSERT(menubar);
-    menubar->appendGroup(Constants::G_EDIT);
 
     // Edit Menu groups
     ActionContainer *editmenu = actionManager()->createMenu(Constants::M_EDIT);
@@ -582,7 +582,6 @@ void MainWindowActionHandler::createPatientMenu()
 {
     ActionContainer *menubar = menubarContainer();
     Q_ASSERT(menubar);
-    menubar->appendGroup(Constants::G_PATIENTS);
 
     ActionContainer *menu = actionManager()->createMenu(Constants::M_PATIENTS);
     menu->appendGroup(Core::Constants::G_PATIENTS);
@@ -602,7 +601,7 @@ void MainWindowActionHandler::createFormatMenu()
 {
     ActionContainer *menubar = menubarContainer();
     Q_ASSERT(menubar);
-    menubar->appendGroup(Constants::G_FORMAT);
+
     ActionContainer *formatmenu = actionManager()->createMenu(Constants::M_FORMAT);
     menubar->addMenu(formatmenu, Constants::G_FORMAT);
     formatmenu->setTranslations(Trans::Constants::M_FORMAT_TEXT);
@@ -617,7 +616,6 @@ void MainWindowActionHandler::createPluginsMenu()
 {
     ActionContainer *menubar = menubarContainer(true);
     Q_ASSERT(menubar);
-    menubar->appendGroup(Constants::G_PLUGINS);
 
     ActionContainer *confmenu = actionManager()->createMenu(Constants::M_PLUGINS);
     //    confmenu->setEmptyAction(ActionContainer::EA_Hide);
@@ -635,7 +633,6 @@ void MainWindowActionHandler::createConfigurationMenu()
 {
     ActionContainer *menubar = menubarContainer(true);
     Q_ASSERT(menubar);
-    menubar->appendGroup(Constants::G_CONFIGURATION);
 
     ActionContainer *confmenu = actionManager()->createMenu(Constants::M_CONFIGURATION);
     //    confmenu->setEmptyAction(ActionContainer::EA_Hide);
@@ -652,7 +649,6 @@ void MainWindowActionHandler::createHelpMenu()
 {
     ActionContainer *menubar = menubarContainer(true);
     Q_ASSERT(menubar);
-    menubar->appendGroup(Constants::G_HELP);
 
     ActionContainer *m = actionManager()->createMenu(Constants::M_HELP);
     menubar->addMenu(m, Constants::G_HELP);
@@ -675,7 +671,6 @@ void MainWindowActionHandler::createUpdateMenu()
 {
     ActionContainer *menubar = menubarContainer(true);
     Q_ASSERT(menubar);
-    menubar->appendGroup(Constants::G_UPDATE);
 
     // Upadate Menu groups
     ActionContainer *upmenu = actionManager()->createMenu(Constants::M_UPDATE);
