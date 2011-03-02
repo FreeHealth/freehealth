@@ -63,7 +63,7 @@
 using namespace DrugsDbCreator;
 
 const char* const  FRENCH_URL                  = "http://afssaps-prd.afssaps.fr/php/ecodex/telecharger/fic_cis_cip.zip";
-const char* const  FR_DRUGS_DATABASE_NAME      = "AFSSAPS_FR";
+const char* const  FR_DRUGS_DATABASE_NAME      = "FR_AFSSAPS";
 
 
 static inline Core::IMainWindow *mainwindow() {return Core::ICore::instance()->mainWindow();}
@@ -208,18 +208,18 @@ bool FrDrugDatatabaseStep::populateDatabase()
         return false;
 
     // check files
-    if (!QFile::exists(workingPath() + "CIS_processed.txt")) {
-        Utils::Log::addError(this, QString("Missing CIS_processed.txt file. FrenchDrugsDatabaseWidget::populateDatabase()"), __FILE__, __LINE__);
+    if (!QFile::exists(workingPath() + "CIS.txt")) {
+        LOG_ERROR(QString("Missing CIS.txt file."));
         return false;
     }
 
-//    if (!QFile::exists(workingPath() + "CIS_CIP_processed.txt")) {
-//        Utils::Log::addError(this, QString("Missing CIS_CIP_processed.txt file. FrenchDrugsDatabaseWidget::populateDatabase()"), __FILE__, __LINE__);
+//    if (!QFile::exists(workingPath() + "CIS_CIP.txt")) {
+//        LOG_ERROR(QString("Missing CIS_CIP.txt file."));
 //        return false;
 //    }
 
-    if (!QFile::exists(workingPath() + "COMPO_processed.txt")) {
-        Utils::Log::addError(this, QString("Missing COMPO_processed.txt file. FrenchDrugsDatabaseWidget::populateDatabase()"), __FILE__, __LINE__);
+    if (!QFile::exists(workingPath() + "COMPO.txt")) {
+        LOG_ERROR(QString("Missing COMPO.txt file."));
         return false;
     }
 
@@ -228,7 +228,7 @@ bool FrDrugDatatabaseStep::populateDatabase()
 
     QFile file(workingPath() + "CIS.txt");
     if (!file.open(QIODevice::ReadOnly | QIODevice::Text)) {
-        Utils::Log::addError(this, QString("ERROR : Enable to open CIS.txt : %1.").arg(file.errorString()), __FILE__, __LINE__);
+        LOG_ERROR(QString("ERROR : Enable to open CIS.txt : %1.").arg(file.errorString()));
         return false;
     }
     Q_EMIT progressLabelChanged(tr("Reading drugs raw source"));
@@ -236,13 +236,13 @@ bool FrDrugDatatabaseStep::populateDatabase()
     Q_EMIT progress(0);
 
     QTextStream in(&file);
-    in.setCodec("ISO 8859-1");
+    in.setCodec("ISO 8859-15");
     int pos = 0;
     while (!in.atEnd()) {
         QString l = in.readLine();
         pos += l.length();
         QStringList line = l.split("\t");
-        //68586203	17 B ESTRADIOL BESINS-ISCOVESCO 0,06 POUR CENT, gel pour application cutane en tube	(2)gel pour application	(3)transdermique	(4)AMM active	(5)Procdure nationale	(6)Non commercialise (7)SPC
+        //68586203	17 B ESTRADIOL BESINS-ISCOVESCO 0,06 POUR CENT, gel pour application cutanée en tube	(2)gel pour application	(3)transdermique	(4)AMM active	(5)Procdure nationale	(6)Non commercialise (7)SPC
         Drug *drug = new Drug;
         drug->setData(Drug::Uid1, line.at(0));
         drug->setData(Drug::Name, line.at(1));
@@ -254,8 +254,9 @@ bool FrDrugDatatabaseStep::populateDatabase()
         drug->setData(Drug::Valid, 1);
         drug->setData(Drug::SID, 1);
         drugs.insert(line.at(0).toInt(), drug);
-        if (drugs.count() % 10 == 0)
+        if (drugs.count() % 10 == 0) {
             Q_EMIT progress(pos);
+        }
     }
     file.close();
 
@@ -265,6 +266,7 @@ bool FrDrugDatatabaseStep::populateDatabase()
         return false;
     }
     in.setDevice(&file);
+    in.setCodec("ISO 8859-15");
     Q_EMIT progressLabelChanged(tr("Reading composition raw source"));
     Q_EMIT progressRangeChanged(0, file.size());
     Q_EMIT progress(0);
@@ -273,6 +275,7 @@ bool FrDrugDatatabaseStep::populateDatabase()
         QString l = in.readLine();
         pos += l.length();
         QStringList line = l.split("\t");
+
 //        if (!drugs.keys().contains(line.at(0).toInt()))
 //            continue;
 
@@ -284,8 +287,9 @@ bool FrDrugDatatabaseStep::populateDatabase()
         compo->setData(Component::Nature, line.at(6));
         compo->setData(Component::NatureLink, line.at(7));
         compos.insertMulti(line.at(0).toInt(), compo);
-        if (compos.count() % 10 == 0)
+        if (compos.count() % 10 == 0) {
             Q_EMIT progress(pos);
+        }
     }
     file.close();
 
