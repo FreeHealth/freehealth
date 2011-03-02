@@ -1,6 +1,6 @@
 #include "assetsIO.h"
-#include "assetmodel.h
 
+#include <accountbaseplugin/assetmodel.h>
 #include <accountbaseplugin/constants.h>
 
 #include <QDebug>
@@ -11,7 +11,7 @@ using namespace AccountDB;
 using namespace Constants;
 
 AssetsIO::AssetsIO(QObject *parent) :
-    QObject(parent), m_assetModel(new AssetModel(this))
+        QObject(parent), m_assetModel(new AccountDB::AssetModel(this))
 {
 }
 

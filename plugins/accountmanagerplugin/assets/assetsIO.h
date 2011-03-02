@@ -23,12 +23,12 @@ public:
     AssetsIO(QObject *parent);
     ~AssetsIO();
 
-    AssetModel *getModelAssets();
+    AccountDB::AssetModel *getModelAssets();
     bool insertIntoAssets(QHash<int,QVariant> &hashValues);
     bool deleteAsset(int row);
 
 private:
-    AssetModel *m_assetModel;  // ça compilera sans problème
+    AccountDB::AssetModel *m_assetModel;  // ça compilera sans problème
 };
 
 
