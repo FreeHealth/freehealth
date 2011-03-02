@@ -58,13 +58,15 @@ namespace Constants {
 
     // Menu and action for ActionManager
     const char * const  DRUGCONSTANTS_TR_CONTEXT = "Account";
-    const char * const  M_PLUGINS_DRUGS         =  "Acc.menuDrugs";
+    const char * const  M_PLUGINS_ACCOUNT       =  "Acc.menuAccount";
     const char * const  M_PLUGINS_SEARCH        =  "Acc.menuSearch";
     const char * const  M_PLUGINS_MODES         =  "Acc.menuModes";
 
-    const char * const  G_PLUGINS_DRUGS         =  "Acc.groupDrugs";
-    const char * const  G_PLUGINS_SEARCH        =  "Acc.groupSearch";
-    const char * const  G_PLUGINS_MODES         =  "Acc.groupModes";
+    const char * const  C_ACCOUNT               =  "ContextAccount";
+
+    const char * const  G_ACCOUNT_APPS          =  "Acc.groupApps";
+    const char * const  G_ACCOUNT_SEARCH        =  "Acc.groupSearch";
+    const char * const  G_ACCOUNT_MODES         =  "Acc.groupModes";
 
     const char * const  C_DRUGS_PLUGINS         =  "Acc.ContextDrugs";
     const char * const  C_DRUGS_SEARCH          =  "Acc.ContextSearch";
@@ -72,11 +74,23 @@ namespace Constants {
     const char* const   A_ACCOUNT_BOOK          = "a.Acc.AccBook";
     const char* const   A_REVENUES              = "a.Acc.Revenues";
     const char* const   A_EXPENSES              = "a.Acc.Expenses";
+    const char* const   A_ADDRECEIPTS           = "a.Acc.AddReceipts";
+    const char* const   A_RECEIPTS              = "a.Acc.Receipts";
+    const char* const   A_LEDGER                = "a.Acc.Ledger";
+    const char* const   A_MOVEMENTS             = "a.Acc.Movements";
+    const char* const   A_ASSETS                = "a.Acc.Assets";
 
+    // Translations
+    const char* const   ACCOUNT_TR_CONTEXT      = "Account";
+    const char* const   ACCOUNTMENU_TEXT        = QT_TRANSLATE_NOOP("Account", "Account");
+    const char* const   RECEIPTS                = QT_TRANSLATE_NOOP("Account", "Receipts");
+    const char* const   ADD_RECEIPTS            = QT_TRANSLATE_NOOP("Account", "Add receipts");
     const char* const   ACCOUNTBOOK_TEXT        = QT_TRANSLATE_NOOP("Account", "Account book");
     const char* const   REVENUES_TEXT           = QT_TRANSLATE_NOOP("Account", "Revenues");
     const char* const   EXPENSES_TEXT           = QT_TRANSLATE_NOOP("Account", "Expenses");
-
+    const char* const   LEDGER                  = QT_TRANSLATE_NOOP("Account", "Ledger");
+    const char* const   ASSETS                  = QT_TRANSLATE_NOOP("Account", "Assets");
+    const char* const   MOVEMENTS               = QT_TRANSLATE_NOOP("Account", "Movements");
 
 //    approche par les dépenses   n f spending-based approach
 //    calendrier des dépenses   n m spending schedule

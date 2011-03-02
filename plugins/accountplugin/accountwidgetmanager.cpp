@@ -40,6 +40,7 @@
  ***************************************************************************/
 #include "accountwidgetmanager.h"
 #include "constants.h"
+#include "accountcontextualwidget.h"
 
 #include <utils/log.h>
 #include <translationutils/constanttranslations.h>
@@ -84,134 +85,122 @@ void AccountWidgetManager::updateContext(Core::IContext *object)
 //    if (object)
 //        qWarning() << "AccountManager::updateContext(Core::IContext *object)" << object->widget();
 
-//    AccountCentralWidget *view = 0;
-//    do {
-//        if (!object) {
-//            if (!m_CurrentView)
-//                return;
-//
-////            m_CurrentView = 0;  // keep trace of the last active view (we need it in dialogs)
-//            break;
-//        }
-//        view = qobject_cast<AccountCentralWidget *>(object->widget());
-//        if (!view) {
-//            if (!m_CurrentView)
-//                return;
-//
-////            m_CurrentView = 0;   // keep trace of the last active view (we need it in dialogs)
-//            break;
-//        }
-//
-//        if (view == m_CurrentView) {
-//            return;
-//        }
-//
-//    } while (false);
-//    if (view) {
-//        AccountActionHandler::setCurrentView(view);
-//    }
+    AccountContextualWidget *view = 0;
+    do {
+        if (!object) {
+            if (!m_CurrentView)
+                return;
+
+//            m_CurrentView = 0;  // keep trace of the last active view (we need it in dialogs)
+            break;
+        }
+        view = qobject_cast<AccountContextualWidget *>(object->widget());
+        if (!view) {
+            if (!m_CurrentView)
+                return;
+
+//            m_CurrentView = 0;   // keep trace of the last active view (we need it in dialogs)
+            break;
+        }
+
+        if (view == m_CurrentView) {
+            return;
+        }
+
+    } while (false);
+    if (view) {
+        AccountActionHandler::setCurrentView(view);
+    }
 }
 
-//AccountCentralWidget *AccountWidgetManager::currentView() const
-//{
-//    return AccountActionHandler::m_CurrentView;
-//}
+AccountContextualWidget *AccountWidgetManager::currentView() const
+{
+    return AccountActionHandler::m_CurrentView;
+}
 
 ///////////////////////////////////////////////////////////////////////////////////////////////////////////
 /////////////////////////////////////////  ACTION HANDLER   ///////////////////////////////////////////////
 ///////////////////////////////////////////////////////////////////////////////////////////////////////////
 AccountActionHandler::AccountActionHandler(QObject *parent) :
         QObject(parent),
-        aAddRow(0),
-        aRemoveRow(0),
-        aDown(0),
-        aUp(0),
-        aSort(0),
-        aEdit(0),
-        aClear(0),
-        aViewInteractions(0),
-        gSearchMethod(0),
-        aSearchCommercial(0),
-        aSearchMolecules(0),
-        aSearchInn(0),
-        aPrintPrescription(0),
-        aPrintPreview(0),
-        aToggleTestingDrugs(0),
-        aChangeDuration(0),
-        aToTemplate(0),
-        aDatabaseInformations(0),
-        gModes(0),
-        aPrescriberMode(0),
-        aSelectOnlyMode(0)
-//        m_CurrentView(0)
+        aAddReceipts(0),
+        aReceipts(0),
+        aLegder(0),
+        aMovements(0),
+        aAssets(0),
+        m_CurrentView(0)
 {
     setObjectName("AccountActionHandler");
     Utils::Log::addMessage(this, "Instance created");
 
-//    Core::UniqueIDManager *uid = Core::ICore::instance()->uniqueIDManager();
-//    Core::ITheme *th = Core::ICore::instance()->theme();
+    Core::UniqueIDManager *uid = Core::ICore::instance()->uniqueIDManager();
+    Core::ITheme *th = Core::ICore::instance()->theme();
 
-//    QAction *a = 0;
-//    Core::Command *cmd = 0;
-//    QList<int> ctx = QList<int>() << uid->uniqueIdentifier(Account::Constants::C_ACCOUNT_PLUGINS);
-//
-//    Core::ActionContainer *menu = actionManager()->actionContainer(Account::Constants::M_PLUGINS_ACCOUNT);
-//    if (!menu) {
-//        menu = actionManager()->createMenu(Account::Constants::M_PLUGINS_ACCOUNT);
-//        menu->appendGroup(DrugsWidget::Constants::G_PLUGINS_MODES);
-//        menu->appendGroup(DrugsWidget::Constants::G_PLUGINS_SEARCH);
-//        menu->appendGroup(DrugsWidget::Constants::G_PLUGINS_DRUGS);
-//        menu->setTranslations(Account::Constants::ACCOUNTMENU_TEXT);
-//    }
-//    Q_ASSERT(menu);
-//#ifdef FREEDIAMS
-//    actionManager()->actionContainer(Core::Constants::MENUBAR)->addMenu(menu, DrugsWidget::Constants::G_PLUGINS_DRUGS);
-//#else
-//    actionManager()->actionContainer(Core::Constants::M_PLUGINS)->addMenu(menu, Core::Constants::G_PLUGINS_DRUGS);
-//#endif
+    QAction *a = 0;
+    Core::Command *cmd = 0;
+    QList<int> ctx = QList<int>() << uid->uniqueIdentifier(Account::Constants::C_ACCOUNT);
+    QList<int> global = QList<int>() << Core::Constants::C_GLOBAL_ID;
+
+    Core::ActionContainer *menu = actionManager()->actionContainer(Account::Constants::M_PLUGINS_ACCOUNT);
+    if (!menu) {
+        menu = actionManager()->createMenu(Account::Constants::M_PLUGINS_ACCOUNT);
+        menu->appendGroup(Constants::G_ACCOUNT_APPS);
+        menu->appendGroup(Constants::G_ACCOUNT_SEARCH);
+        menu->appendGroup(Constants::G_ACCOUNT_MODES);
+        menu->setTranslations(Account::Constants::ACCOUNTMENU_TEXT);
+    }
+    Q_ASSERT(menu);
+#ifdef FREEACCOUNT
+    actionManager()->actionContainer(Core::Constants::MENUBAR)->addMenu(menu, Constants::G_PLUGINS_ACCOUNT);
+#else
+    actionManager()->actionContainer(Core::Constants::M_PLUGINS)->addMenu(menu, Core::Constants::G_PLUGINS_ACCOUNT);
+#endif
 
     // Create local actions
-//    QAction *a = aClear = new QAction(this);
-//    a->setIcon(th->icon(Core::Constants::ICONCLEAR));
-//    Core::Command *cmd = actionManager()->registerAction(a, Core::Constants::A_LIST_CLEAR, ctx);
-//    cmd->setTranslations(Trans::Constants::LISTCLEAR_TEXT);
-////    menu->addAction(cmd, DrugsWidget::Constants::G_PLUGINS_DRUGS);
-//    connect(a, SIGNAL(triggered()), this, SLOT(clear()));
+    a = aAddReceipts = new QAction(this);
+    a->setObjectName("aAddReceipts");
+    a->setIcon(th->icon(Core::Constants::ICONHELP));
+    cmd = actionManager()->registerAction(a, Constants::A_ADDRECEIPTS, global);
+    cmd->setTranslations(Constants::ADD_RECEIPTS, Constants::ADD_RECEIPTS, Constants::ACCOUNT_TR_CONTEXT);
+    menu->addAction(cmd, Constants::G_ACCOUNT_APPS);
+    connect(a, SIGNAL(triggered()), this, SLOT(addReceipts()));
 
-//    a = aToggleTestingDrugs = new QAction(this);
-//    a->setIcon(th->icon(DrugsWidget::Constants::I_TOGGLETESTINGDRUGS));
-//    a->setCheckable(true);
-//    a->setChecked(true);
-//    cmd = actionManager()->registerAction(a, DrugsWidget::Constants::A_TOGGLE_TESTINGDRUGS, ctx);
-//    cmd->setTranslations(DrugsWidget::Constants::TOGGLETESTINGDRUGS_TEXT);
-//    menu->addAction(cmd, DrugsWidget::Constants::G_PLUGINS_DRUGS);
-//    connect(a, SIGNAL(triggered()), this, SLOT(toggleTestingDrugs()));
-//
-//    // Search method menu
-//    Core::ActionContainer *searchmenu = actionManager()->actionContainer(DrugsWidget::Constants::M_PLUGINS_SEARCH);
-//    if (!searchmenu) {
-//        searchmenu = actionManager()->createMenu(DrugsWidget::Constants::M_PLUGINS_SEARCH);
-//        searchmenu->appendGroup(DrugsWidget::Constants::G_PLUGINS_SEARCH);
-//        searchmenu->setTranslations(DrugsWidget::Constants::SEARCHMENU_TEXT, DRUGCONSTANTS_TR_CONTEXT);
-//        menu->addMenu(searchmenu, DrugsWidget::Constants::G_PLUGINS_SEARCH);
-//    }
-//    Q_ASSERT(searchmenu);
-//
-//    gSearchMethod = new QActionGroup(this);
-//    a = aSearchCommercial = new QAction(this);
-//    a->setCheckable(true);
-//    a->setChecked(false);
-//    a->setIcon(th->icon(DrugsDB::Constants::I_SEARCHCOMMERCIAL));
-//    cmd = actionManager()->registerAction(a, DrugsWidget::Constants::A_SEARCH_COMMERCIAL, ctx);
-//    cmd->setTranslations(DrugsWidget::Constants::SEARCHCOMMERCIAL_TEXT, "", DRUGCONSTANTS_TR_CONTEXT);
-//    searchmenu->addAction(cmd, DrugsWidget::Constants::G_PLUGINS_SEARCH);
-//    gSearchMethod->addAction(a);
+    a = aReceipts = new QAction(this);
+    a->setObjectName("aReceipts");
+    a->setIcon(th->icon(Core::Constants::ICONHELP));
+    cmd = actionManager()->registerAction(a, Constants::A_RECEIPTS, global);
+    cmd->setTranslations(Constants::RECEIPTS, Constants::RECEIPTS, Constants::ACCOUNT_TR_CONTEXT);
+    menu->addAction(cmd, Constants::G_ACCOUNT_APPS);
+    connect(a, SIGNAL(triggered()), this, SLOT(receipts()));
+
+    a = aLegder = new QAction(this);
+    a->setObjectName("aLegder");
+    a->setIcon(th->icon(Core::Constants::ICONHELP));
+    cmd = actionManager()->registerAction(a, Constants::A_LEDGER, global);
+    cmd->setTranslations(Constants::LEDGER, Constants::LEDGER, Constants::ACCOUNT_TR_CONTEXT);
+    menu->addAction(cmd, Constants::G_ACCOUNT_APPS);
+    connect(a, SIGNAL(triggered()), this, SLOT(ledger()));
+
+    a = aMovements = new QAction(this);
+    a->setObjectName("aMovements");
+    a->setIcon(th->icon(Core::Constants::ICONHELP));
+    cmd = actionManager()->registerAction(a, Constants::A_MOVEMENTS, global);
+    cmd->setTranslations(Constants::MOVEMENTS, Constants::MOVEMENTS, Constants::ACCOUNT_TR_CONTEXT);
+    menu->addAction(cmd, Constants::G_ACCOUNT_APPS);
+    connect(a, SIGNAL(triggered()), this, SLOT(movements()));
+
+    a = aAssets = new QAction(this);
+    a->setObjectName("aAssets");
+    a->setIcon(th->icon(Core::Constants::ICONHELP));
+    cmd = actionManager()->registerAction(a, Constants::A_ASSETS, global);
+    cmd->setTranslations(Constants::ASSETS, Constants::ASSETS, Constants::ACCOUNT_TR_CONTEXT);
+    menu->addAction(cmd, Constants::G_ACCOUNT_APPS);
+    connect(a, SIGNAL(triggered()), this, SLOT(assets()));
 
     actionManager()->retranslateMenusAndActions();
 }
 
-//void AccountActionHandler::setCurrentView(AccountCentralWidget *view)
-        void AccountActionHandler::setCurrentView(QWidget *view)
+void AccountActionHandler::setCurrentView(AccountContextualWidget *view)
 {
     Q_ASSERT(view);
     if (!view) { // this should never be the case
@@ -246,7 +235,24 @@ AccountActionHandler::AccountActionHandler(QObject *parent) :
 
 void AccountActionHandler::updateActions()
 {
-//    listViewItemChanged();
-//    drugsModelChanged();
 }
 
+void AccountActionHandler::addReceipts()
+{
+}
+
+void AccountActionHandler::receipts()
+{
+}
+
+void AccountActionHandler::ledger()
+{
+}
+
+void AccountActionHandler::movements()
+{
+}
+
+void AccountActionHandler::assets()
+{
+}

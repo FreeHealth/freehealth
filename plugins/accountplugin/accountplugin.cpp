@@ -63,6 +63,7 @@ AccountPlugin::AccountPlugin()
 
 AccountPlugin::~AccountPlugin()
 {
+    qWarning() << "AccountPlugin::~AccountPlugin()";
 }
 
 bool AccountPlugin::initialize(const QStringList &arguments, QString *errorString)

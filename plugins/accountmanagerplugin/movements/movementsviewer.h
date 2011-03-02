@@ -6,18 +6,19 @@ namespace Ui{
     class MovementsViewerWidget;
 }
 
-class movementsViewer:public QWidget{
+class MovementsViewer : public QWidget
+{
     Q_OBJECT
-    public :
-        movementsViewer(QWidget * parent = 0);
-        ~movementsViewer();
-    private slots :
+    public:
+        MovementsViewer(QWidget * parent = 0);
+        ~MovementsViewer();
+    private Q_SLOTS:
         void showMovements();
         void recordMovement();
         void deleteMovement();
         void validMovement();
         void validAndRecord();
-    private :
+    private:
         Ui::MovementsViewerWidget * ui;
         void fillMovementsComboBox();
         void fillYearComboBox();

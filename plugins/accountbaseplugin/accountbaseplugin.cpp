@@ -54,6 +54,7 @@ AccountBasePlugin::AccountBasePlugin()
 
 AccountBasePlugin::~AccountBasePlugin()
 {
+    qWarning() << "AccountBasePlugin::~AccountBasePlugin()";
 }
 
 bool AccountBasePlugin::initialize(const QStringList &arguments, QString *errorString)

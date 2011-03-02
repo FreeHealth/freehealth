@@ -53,6 +53,7 @@ AccountManagerPlugin::AccountManagerPlugin()
 
 AccountManagerPlugin::~AccountManagerPlugin()
 {
+    qWarning() << "AccountManagerPlugin::~AccountManagerPlugin()";
 }
 
 bool AccountManagerPlugin::initialize(const QStringList &arguments, QString *errorString)

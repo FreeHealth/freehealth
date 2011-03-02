@@ -44,6 +44,7 @@ AccountReceiptsPlugin::AccountReceiptsPlugin()
 
 AccountReceiptsPlugin::~AccountReceiptsPlugin()
 {
+    qWarning() << "AccountReceiptsPlugin::~AccountReceiptsPlugin()";
 }
 
 bool AccountReceiptsPlugin::initialize(const QStringList &arguments, QString *errorString)

@@ -148,6 +148,7 @@ const char * const G_FORMAT_OTHER        = "grFormat.Other";      /*!< \brief De
 const char * const G_PLUGINS              =   "grPlugins";
 const char * const G_PLUGINS_USERMANAGER  =   "grPlugins.usermanager";
 const char * const G_PLUGINS_DRUGS        =   "grPlugins.drugs";
+const char * const G_PLUGINS_ACCOUNT      =   "grPlugins.account";
 const char * const G_PLUGINS_CALENDAR     =   "grPlugins.calendar";
 const char * const G_PLUGINS_OTHERS       =   "grPlugins.others";
 

@@ -13,6 +13,7 @@ DEPENDPATH += $${SOURCES_ROOT_PATH}/freeaccount/plugins
 
 
 HEADERS = accountplugin.h \
+    constants.h \
     account_exporter.h \
     preferences/accountpreferences.h \
     accountwidgetmanager.h \
@@ -24,7 +25,8 @@ HEADERS = accountplugin.h \
     preferences/virtualdatabasecreator.h \
     preferences/percentagespage.h \
     preferences/distancerulespage.h \
-    accountview.h 
+    accountview.h \ 
+    accountcontextualwidget.h
 
 SOURCES = accountplugin.cpp \
     preferences/accountpreferences.cpp \
@@ -37,7 +39,8 @@ SOURCES = accountplugin.cpp \
     preferences/virtualdatabasecreator.cpp \
     preferences/percentagespage.cpp \
     preferences/distancerulespage.cpp \
-    accountview.cpp 
+    accountview.cpp \ 
+    accountcontextualwidget.cpp
 
 FORMS += preferences/accountuseroptionspage.ui \
     preferences/bankdetailspage.ui \

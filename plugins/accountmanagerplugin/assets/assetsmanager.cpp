@@ -1,27 +1,35 @@
 #include "assetsmanager.h"
-#include "../../accountbaseplugin/constants.h"//<accountbaseplugin/constants.h>
+
+#include <accountbaseplugin/constants.h>
+
+#include <QDate>
+
+#include <QDebug>
+
 
 using namespace AccountDB;
 using namespace Constants;
 
-AssetsManager::AssetsManager(){}
+AssetsManager::AssetsManager()
+{}
 
-AssetsManager::~AssetsManager(){}
+AssetsManager::~AssetsManager()
+{}
 
-QHash<int,QVariant> AssetsManager::getHashOfValues(QString & userUid,
+QHash<int,QVariant> AssetsManager::getHashOfValues(QString &userUid,
                                                    int accountId,
-                                                   QString & label,
-                                                   QString & date,
+                                                   QString &label,
+                                                   QString &date,
                                                    double duration,
                                                    int mode,
                                                    double value,
                                                    double taxActs,
                                                    double residualValue,
-                                                   QVariant & result,
-                                                   QVariant & movement,
-                                                   QString & comments,
-                                                   QVariant & trace){
-    QHash<int,QVariant> hash;
+                                                   QVariant &result,
+                                                   QVariant &movement,
+                                                   QString &comments,
+                                                   QVariant &trace){
+    QHash<int, QVariant> hash;
     hash.insert(ASSETS_USER_UID,userUid);
     hash.insert(ASSETS_ACCOUNT_ID,accountId);
     hash.insert(ASSETS_LABEL,label);
@@ -45,7 +53,7 @@ QHash<int,QString> AssetsManager::getHashForModeComboBox(){
     return hash;
 }
 
-double AssetsManager::getResidualValue(QString & dateBegin , double value,int mode,double duration){
+double AssetsManager::getResidualValue(QString &dateBegin , double value,int mode,double duration){
     double residualValue = 0.00;
     switch (mode) {
         case LINEAR_MODE :
@@ -61,7 +69,7 @@ double AssetsManager::getResidualValue(QString & dateBegin , double value,int mo
     return residualValue;
 }
 
-double AssetsManager::linearCalc(double value , double  duration , QString & date){
+double AssetsManager::linearCalc(double value , double  duration , QString &date){
   QDate currentDate = QDate::currentDate();
   int currDateYear = currentDate.year();
   QDate dateduration = QDate::fromString(date,"yyyy-MM-dd");
@@ -74,7 +82,7 @@ double AssetsManager::linearCalc(double value , double  duration , QString & dat
   return yearlyValue;
 }
 
-double AssetsManager::decreasingCalc(double  val , double  duration , QString & date){
+double AssetsManager::decreasingCalc(double  val , double  duration , QString &date){
     double     value          = val;
     double      ans             = duration;
     QDate       dateDebut       = QDate::fromString(date,"yyyy-MM-dd");
@@ -83,7 +91,7 @@ double AssetsManager::decreasingCalc(double  val , double  duration , QString & 
     
     //-----------------premiere annee----------------------------------
     double      taux            = 1.25;
-    if(ans > 4 && ans < 7){
+    if(ans > 4 &&ans < 7){
         taux                    = 1.75;
     }
     if(ans > 6){

@@ -53,6 +53,8 @@ class MovementModel : public QAbstractTableModel
 {
     Q_OBJECT
 public:
+    /** \todo define a DataRepresentation enum for MovementModel */
+
     MovementModel(QObject *parent);
     ~MovementModel();
 

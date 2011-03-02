@@ -43,8 +43,6 @@
 
 #include <accountplugin/account_exporter.h>
 
-#include <coreplugin/contextmanager/icontext.h>
-
 #include <QWidget>
 #include <QObject>
 #include <QAction>
@@ -53,27 +51,18 @@
 /**
  * \file accountwidgetmanager.h
  * \author Eric MAEKER <eric.maeker@free.fr>
- * \version 0.4.0
- * \date 20 Mar 2010
+ * \version 0.5.0
+ * \date 03 Mar 2011
  * \internal
 */
 
+namespace Core {
+class IContext;
+}
+
 namespace Account {
+class AccountContextualWidget;
 namespace Internal {
-
-class AccountContext : public Core::IContext
-{
-public:
-    AccountContext(QWidget *w) : Core::IContext(w), wgt(w) {}
-
-    void setContext(QList<int> c) { ctx = c; }
-
-    QList<int> context() const { return ctx; }
-    QWidget *widget() { return wgt; }
-private:
-    QWidget *wgt;
-    QList<int> ctx;
-};
 
 class AccountActionHandler : public QObject
 {
@@ -82,54 +71,26 @@ public:
     AccountActionHandler(QObject *parent = 0);
     virtual ~AccountActionHandler() {}
 
-    void setCurrentView(QWidget *view);
+    void setCurrentView(AccountContextualWidget *view);
 
-//private Q_SLOTS:
-//    void moveUp();
-//    void moveDown();
-//    void sortDrugs();
-//    void removeItem();
-//    void clear();
-//    void viewInteractions();
-//    void listViewItemChanged();
-//    void searchActionChanged(QAction *a);
-//    void printPrescription();
-//    void toggleTestingDrugs();
-//    void changeDuration();
-//    void createTemplate();
-//    void printPreview();
-//    void showDatabaseInformations();
-//    void modeActionChanged(QAction *a);
+private Q_SLOTS:
+    void addReceipts();
+    void receipts();
+    void ledger();
+    void movements();
+    void assets();
 
 private:
-//    bool canMoveUp();
-//    bool canMoveDown();
     void updateActions();
 
 protected:
-    QAction *aAddRow;
-    QAction *aRemoveRow;
-    QAction *aDown;
-    QAction *aUp;
-    QAction *aSort;
-    QAction *aEdit;
-    QAction *aClear;
-    QAction *aViewInteractions;
-    QActionGroup *gSearchMethod;
-    QAction *aSearchCommercial;
-    QAction *aSearchMolecules;
-    QAction *aSearchInn;
-    QAction *aPrintPrescription;
-    QAction *aPrintPreview;
-    QAction *aToggleTestingDrugs;
-    QAction *aChangeDuration;
-    QAction *aToTemplate;
-    QAction *aDatabaseInformations;
-    QActionGroup *gModes;
-    QAction *aPrescriberMode;
-    QAction *aSelectOnlyMode;
+    QAction *aAddReceipts;
+    QAction *aReceipts;
+    QAction *aLegder;
+    QAction *aMovements;
+    QAction *aAssets;
 
-//    QPointer<DrugsCentralWidget> m_CurrentView;
+    QPointer<AccountContextualWidget> m_CurrentView;
 };
 
 }  // End Internal
@@ -145,9 +106,7 @@ public:
     static AccountWidgetManager *instance();
     ~AccountWidgetManager() {}
 
-//    AccountWidget::DrugsCentralWidget  *currentView() const;
-//    DrugsDB::DrugsModel          *currentDrugsModel() const { return DrugsDB::DrugsModel::activeModel(); }
-//    DrugsDB::InteractionsManager *currentInteractionManager() const { return currentView()->currentDrugsModel()->currentInteractionManger(); }
+    Account::AccountContextualWidget *currentView() const;
 
 private Q_SLOTS:
     void updateContext(Core::IContext *object);
