@@ -117,8 +117,8 @@ public:
         }
 
         // Show drugs database search engine actions
-        const QVariant &UID = m_DosageModel->drugUID();
-        searchEngine()->setDrug(drugModel()->getDrug(UID));
+        const QVariant &drugId = m_DosageModel->drugId();
+        searchEngine()->setDrug(drugModel()->getDrug(drugId));
         foreach(const QString &label, searchEngine()->processedLabels()) {
             foreach(const QString &url, searchEngine()->processedUrls(label)) {
                 QAction *action = new QAction(label, m_HelpMenu);
@@ -243,12 +243,12 @@ DosageCreatorDialog::DosageCreatorDialog(QWidget *parent, DrugsDB::Internal::Dos
 
     d->m_InitialNumberOfRow = dosageModel->rowCount();
     // Drug informations
-    const QVariant &UID = dosageModel->drugUID();
-    drugNameLabel->setText(drugModel()->drugData(UID, Drug::Denomination).toString());
-    QString toolTip = drugModel()->drugData(UID, Interaction::ToolTip).toString();
-    interactionIconLabel->setPixmap(drugModel()->drugData(UID, Interaction::Icon).value<QIcon>().pixmap(16,16));
+    const QVariant &drugId = dosageModel->drugId();
+    drugNameLabel->setText(drugModel()->drugData(drugId, Drug::Denomination).toString());
+    QString toolTip = drugModel()->drugData(drugId, Interaction::ToolTip).toString();
+    interactionIconLabel->setPixmap(drugModel()->drugData(drugId, Interaction::Icon).value<QIcon>().pixmap(16,16));
     interactionIconLabel->setToolTip(toolTip);
-    toolTip = drugModel()->drugData(UID, Drug::CompositionString).toString();
+    toolTip = drugModel()->drugData(drugId, Drug::CompositionString).toString();
     drugNameLabel->setToolTip(toolTip);
     // Various model intializations
     dosageViewer->setDosageModel(dosageModel);
@@ -411,7 +411,7 @@ void DosageCreatorDialog::drugsInformationsRequested()
 /** \brief Add the selected drug as 'ForInteractionsTestOnly' */
 void DosageCreatorDialog::addTestOnlyRequested()
 {
-    drugModel()->setDrugData(d->m_DosageModel->drugUID(), DrugsDB::Constants::Prescription::OnlyForTest, true);
+    drugModel()->setDrugData(d->m_DosageModel->drugId(), DrugsDB::Constants::Prescription::OnlyForTest, true);
     dosageViewer->done(QDialog::Accepted);
     done(QDialog::Accepted);
 }

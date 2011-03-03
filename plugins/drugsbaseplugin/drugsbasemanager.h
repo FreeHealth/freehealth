@@ -48,8 +48,6 @@ public:
     DrugsModel *currentDrugsModel() const { return m_CurrentModel; }
     void setCurrentDrugsModel(DrugsModel *model) { m_CurrentModel = model; }
 
-    InteractionsManager *currentInteractionManager() const { return m_CurrentModel->currentInteractionManger(); }
-
 private:
     DrugsBaseManager();
     static DrugsBaseManager *m_Instance;

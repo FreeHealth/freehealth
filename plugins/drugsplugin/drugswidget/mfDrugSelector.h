@@ -44,6 +44,7 @@ QT_END_NAMESPACE
 
 namespace DrugsDB {
 class AtcTreeModel;
+class GlobalDrugsModel;
 }
 
 namespace DrugsWidget {
@@ -75,9 +76,6 @@ public:
     void connectFilter();
     void disconnectFilter();
 
-public Q_SLOTS:
-    void retranslateUi(const QString &);
-
 Q_SIGNALS:
     void drugSelected(const QVariant &drugUid);
     void drugSelected(const QModelIndex &index);
@@ -102,8 +100,7 @@ private Q_SLOTS:
 
 private:
     // models
-    QSqlTableModel *m_DrugsModel;
-    //QSqlTableModel *m_InnModel;
+    DrugsDB::GlobalDrugsModel *m_GlobalDrugsModel;
     DrugsDB::AtcTreeModel *m_InnModel;
     TreeProxyModel *m_AtcProxyModel;
 
@@ -113,7 +110,7 @@ private:
     QActionGroup *m_HistoryAct;
 
     // filter for drugs model
-    QString          m_filterModel;           // '__replaceit__' must be replaced by search text.
+    QString m_filterModel;           // '__replaceit__' must be replaced by search text.
     QString m_WinTitle;
 
     // search method and history

@@ -34,6 +34,7 @@
 #include "drugstemplateprinter.h"
 #include "drugsbase.h"
 #include "drugsdatabaseselector.h"
+#include "drugdruginteractionengine.h"
 
 #include <utils/log.h>
 
@@ -89,6 +90,7 @@ void DrugsBasePlugin::extensionsInitialized()
 
     addAutoReleasedObject(new Core::PluginAboutPage(pluginSpec(), this));
     addAutoReleasedObject(new DrugsDB::Internal::DrugsTemplatePrinter(this));
+    addAutoReleasedObject(new DrugsDB::Internal::DrugDrugInteractionEngine(this));
 }
 
 

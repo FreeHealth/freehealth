@@ -475,10 +475,11 @@ void MainWindow::refreshPatient()
 void MainWindow::updateIconBadgeOnMacOs()
 {
 #ifdef Q_OS_MAC
-    int n = drugModel()->interactionsManager()->getAllInteractionsFound().count();
-    if (n > 0) {
-        Utils::MacOs::setIconBadgeLabel(QString::number(n));
-    }
+    /** \todo code here */
+//    int n = drugModel()->interactionsManager()->getAllInteractionsFound().count();
+//    if (n > 0) {
+//        Utils::MacOs::setIconBadgeLabel(QString::number(n));
+//    }
 #endif
 }
 
@@ -857,6 +858,7 @@ void MainWindow::createDockWindows()
     d->m_PrecautionView->header()->hide();
     d->m_PrecautionView->expandAll();
     d->m_PrecautionView->setModel(DrugsDB::GlobalDrugsModel::drugsPrecautionsModel());
+    d->m_PrecautionView->setEditTriggers(QAbstractItemView::NoEditTriggers);
     dock->setWidget(d->m_PrecautionView);
     // aShowPrecautionsDock
     QAction *a = dock->toggleViewAction();

@@ -86,8 +86,8 @@ public:
 
     void setTable(const QString &) {}
 
-    virtual bool setDrugUID(const QVariant &uid);
-    QVariant drugUID();
+    virtual bool setDrugId(const QVariant &drugId);
+    QVariant drugId();
 
     QStringList isDosageValid(const int row);
     bool isDirty(const int row) const;

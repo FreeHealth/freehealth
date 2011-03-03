@@ -27,12 +27,9 @@
 #ifndef DOSAGEVIEWER_H
 #define DOSAGEVIEWER_H
 
-// include drugwidget headers
-
-// include Qt headers
 #include <QWidget>
 
-// include Ui
+/** \todo aggregate the ui in the private part */
 #include "ui_mfDosageViewer.h"
 
 /**
@@ -41,7 +38,6 @@
  * \version 0.2.1
  * \date 26 Oct 2009
 */
-
 
 namespace DrugsDB {
 namespace Internal {
@@ -64,7 +60,7 @@ public:
     ~DosageViewer();
 
     void setDosageModel(DrugsDB::Internal::DosageModel *model);
-    void useDrugsModel(const QVariant &drugUid, const int drugRow);
+    void useDrugsModel(const QVariant &drugId, const int drugRow);
 
 public Q_SLOTS:
     void done(int r);

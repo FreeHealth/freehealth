@@ -29,6 +29,8 @@
 #include <drugsbaseplugin/drugsbase.h>
 #include <drugsbaseplugin/constants.h>
 
+#include <coreplugin/translators.h>
+
 #include <utils/log.h>
 
 #include <QString>
@@ -42,6 +44,7 @@
 using namespace DrugsDB;
 
 static inline DrugsDB::Internal::DrugsBase *drugsBase() {return DrugsDB::Internal::DrugsBase::instance();}
+static inline Core::Translators *translators() {return Core::ICore::instance()->translators();}
 
 namespace DrugsDB {
 namespace Internal {
@@ -87,22 +90,9 @@ public:
     void setData(const int id, const QVariant &value) {m_Datas.insert(id, value.toString());}
 
     // Access to datas
-    QString data(const int id) const
-    {
-        if (id == AtcTreeModel::ATC_Label) {
-            QString l = QLocale().name().left(2);
-            if (l=="fr")
-                return m_Datas.value(AtcTreeModel::ATC_FrenchLabel);
-            else if (l=="de")
-                return m_Datas.value(AtcTreeModel::ATC_DeutschLabel);
-            else
-                return m_Datas.value(AtcTreeModel::ATC_EnglishLabel);
-        }
-        return m_Datas.value(id);
-    }
+    QString data(const int id) const { return m_Datas.value(id); }
+
     QString code() const {return m_Datas.value(AtcTreeModel::ATC_Code);}
-    QString english() const {return m_Datas.value(AtcTreeModel::ATC_EnglishLabel);}
-    QString french() const {return m_Datas.value(AtcTreeModel::ATC_FrenchLabel);}
 
     // For sort functions
     static bool lessThan(AtcItem *item1, AtcItem *item2)
@@ -123,37 +113,53 @@ public:
     AtcTreeModelPrivate(AtcTreeModel *parent) :
             m_Root(0), q(parent)
     {
-        m_Root = new AtcItem;
-        m_Root->setData(0, "ATC_ROOT_ITEM");
     }
 
     ~AtcTreeModelPrivate()
-    {}
+    {
+        delete m_Root;
+    }
 
     void getTree()
     {
-        QHash<int, QString> where;
-        where.insert(Constants::ATC_ID, " < 100000");
-        QString req = drugsBase()->selectInteractionsSql(Constants::Table_ATC,
-                                         QList<int>()
-                                         << Constants::ATC_CODE
-                                         << Constants::ATC_EN
-                                         << Constants::ATC_FR,
-                                         where);
-        QSqlQuery query(req, QSqlDatabase::database(Constants::DB_IAM_NAME));
+        if (m_Language==QLocale().name().left(2)) {
+            qWarning() << "atc tree not rebuilded";
+            return;
+        }
+        // ATC tree is available for en, fr and de
+        m_Language = QLocale().name().left(2);
+        if (!(m_Language=="fr" || m_Language=="de" || m_Language=="en"))
+            m_Language = "en";
+        Utils::FieldList get;
+        get     << Utils::Field(Constants::Table_ATC, Constants::ATC_CODE)
+                << Utils::Field(Constants::Table_LABELS, Constants::LABELS_LABEL);
+        Utils::JoinList joins;
+        joins   << Utils::Join(Constants::Table_ATC_LABELS, Constants::ATC_LABELS_ATCID, Constants::Table_ATC, Constants::ATC_ID)
+                << Utils::Join(Constants::Table_LABELSLINK, Constants::LABELSLINK_MASTERLID, Constants::Table_ATC_LABELS, Constants::ATC_LABELS_MASTERLID)
+                << Utils::Join(Constants::Table_LABELS, Constants::LABELS_LID, Constants::Table_LABELSLINK, Constants::LABELSLINK_LID);
+        Utils::FieldList cond;
+        cond    << Utils::Field(Constants::Table_LABELS, Constants::LABELS_LANG, QString("='%1'").arg(m_Language));
+        cond    << Utils::Field(Constants::Table_ATC, Constants::ATC_ID, " < 100000");
+        QSqlQuery query(drugsBase()->select(get, joins, cond), QSqlDatabase::database(Constants::DB_DRUGS_NAME));
         QList<AtcItem *> list;
         if (query.isActive()) {
             while (query.next()) {
                 AtcItem *item = new AtcItem();
                 item->setData(AtcTreeModel::ATC_Code, query.value(0));
-                item->setData(AtcTreeModel::ATC_EnglishLabel, query.value(1));
-                item->setData(AtcTreeModel::ATC_FrenchLabel, query.value(2));
+                item->setData(AtcTreeModel::ATC_Label, query.value(1));
                 list.append(item);
             }
         } else {
-            Utils::Log::addError(q, query.lastError().text(),__FILE__, __LINE__);
+            LOG_QUERY_ERROR_FOR(q, query);
         }
         query.finish();
+
+        if (m_Root) {
+            delete m_Root;
+            m_Root = 0;
+        }
+        m_Root = new AtcItem;
+        m_Root->setData(0, "ATC_ROOT_ITEM");
 
         AtcItem *last = 0;
         AtcItem *lastOne = 0;
@@ -195,6 +201,7 @@ public:
 
 public:
     AtcItem *m_Root;
+    QString m_Language;
 
 private:
     AtcTreeModel *q;
@@ -207,10 +214,15 @@ AtcTreeModel::AtcTreeModel(QObject *parent) :
         QAbstractItemModel(parent),
         d(new Internal::AtcTreeModelPrivate(this))
 {
+    connect(translators(), SIGNAL(languageChanged()), this, SLOT(init()));
 }
 
 AtcTreeModel::~AtcTreeModel()
-{}
+{
+    if (d)
+        delete d;
+    d = 0;
+}
 
 void AtcTreeModel::init()
 {
@@ -279,7 +291,7 @@ QVariant AtcTreeModel::data(const QModelIndex & item, int role) const
         }
     case Qt::ToolTipRole :
         {
-            return it->english();
+            return it->data(ATC_Label) + ": " + it->data(ATC_Code);
         }
     case Qt::ForegroundRole :
         {

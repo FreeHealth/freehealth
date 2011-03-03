@@ -205,6 +205,7 @@ bool DosageModel::setData(const QModelIndex &index, const QVariant &value, int r
     Q_ASSERT_X(!m_UID.isNull(), "DosageModel::setData", "before using the dosagemodel, you must specify the UID of the related drug");
     if (! index.isValid())
         return false;
+
     if (role == Qt::EditRole || role == Qt::DisplayRole) {
 
         QVariant q = data(index);
@@ -232,13 +233,14 @@ bool DosageModel::setData(const QModelIndex &index, const QVariant &value, int r
 
         if (index.column()==Dosages::Constants::Route) {
             if (value.toString().contains(QRegExp("\\D"))) {
-                // Fing the routeId
-                int routeId = drugsBase()->getRouteId(value.toString());
-                if (!QSqlTableModel::setData(index, routeId, role)) {
-                    LOG_ERROR("Can not set data to QSqlTableModel");
-                    LOG_QUERY_ERROR(query());
-                    return false;
-                }
+                // Find the routeId
+                /** \todo code here: ask the IDrug instead of the base */
+//                int routeId = drugsBase()->getRouteId(value.toString());
+//                if (!QSqlTableModel::setData(index, routeId, role)) {
+//                    LOG_ERROR("Can not set data to QSqlTableModel");
+//                    LOG_QUERY_ERROR(query());
+//                    return false;
+//                }
             }
         } else {
             if (!QSqlTableModel::setData(index, value, role)) {
@@ -314,39 +316,39 @@ bool DosageModel::insertRows(int row, int count, const QModelIndex & parent)
             Utils::Log::addError(this, tr("Model Error : unable to insert a row"),__FILE__, __LINE__);
             toReturn = false;
         } else {
-            setData(index(createdRow, Dosages::Constants::Uuid) , QUuid::createUuid().toString());
+            setData(index(createdRow, Dosages::Constants::Uuid), QUuid::createUuid().toString());
             if (drugsBase()->actualDatabaseInformations())
-                setData(index(createdRow, Dosages::Constants::DrugsDatabaseIdentifiant) , drugsBase()->actualDatabaseInformations()->identifiant);
-            setData(index(createdRow, Dosages::Constants::DrugUid_LK) , m_UID);
-            setData(index(createdRow, Dosages::Constants::INN_LK) , -1);
-            setData(index(createdRow, Dosages::Constants::InnLinkedDosage) , "");
-            setData(index(createdRow, Dosages::Constants::IntakesTo) , 1);
-            setData(index(createdRow, Dosages::Constants::IntakesFrom) , 1);
-            setData(index(createdRow, Dosages::Constants::IntakesUsesFromTo) , false);
+                setData(index(createdRow, Dosages::Constants::DrugsDatabaseIdentifiant), drugsBase()->actualDatabaseInformations()->identifiant);
+            setData(index(createdRow, Dosages::Constants::DrugUid_LK), m_UID);
+            setData(index(createdRow, Dosages::Constants::INN_LK), -1);
+            setData(index(createdRow, Dosages::Constants::InnLinkedDosage), "");
+            setData(index(createdRow, Dosages::Constants::IntakesTo), 1);
+            setData(index(createdRow, Dosages::Constants::IntakesFrom), 1);
+            setData(index(createdRow, Dosages::Constants::IntakesUsesFromTo), false);
             QString s = settings()->value(DrugsDB::Constants::S_PROTOCOL_DEFAULT_SCHEMA).toString();
             if (s.isEmpty()) {
-                setData(index(createdRow, Dosages::Constants::IntakesScheme) , m_DrugsModel->drugData(m_UID, Drug::AvailableForms).toStringList().at(0));
+                setData(index(createdRow, Dosages::Constants::IntakesScheme), m_DrugsModel->drugData(m_UID, Constants::Drug::AvailableForms).toStringList().at(0));
             } else if (s=="||") {
-                setData(index(createdRow, Dosages::Constants::IntakesScheme) , tkTr(Trans::Constants::INTAKES, 1));
+                setData(index(createdRow, Dosages::Constants::IntakesScheme), tkTr(Trans::Constants::INTAKES, 1));
             } else {
-                setData(index(createdRow, Dosages::Constants::IntakesScheme) , s);
+                setData(index(createdRow, Dosages::Constants::IntakesScheme), s);
             }
             setData(index(createdRow, Dosages::Constants::Period), 1);
-            setData(index(createdRow, Dosages::Constants::PeriodScheme) , tkTr(Trans::Constants::DAY_S));
-            setData(index(createdRow, Dosages::Constants::DurationTo) , 1);
-            setData(index(createdRow, Dosages::Constants::DurationFrom) , 1);
-            setData(index(createdRow, Dosages::Constants::DurationUsesFromTo) , false);
-            setData(index(createdRow, Dosages::Constants::DurationScheme) , tkTr(Trans::Constants::MONTH_S));
-            setData(index(createdRow, Dosages::Constants::IntakesIntervalOfTime) , 0);
-            setData(index(createdRow, Dosages::Constants::MinAge) , 0);
-            setData(index(createdRow, Dosages::Constants::MaxAge) , 0);
-            setData(index(createdRow, Dosages::Constants::MinWeight) , 0);
-            setData(index(createdRow, Dosages::Constants::MinClearance) , 0);
-            setData(index(createdRow, Dosages::Constants::MaxClearance) , 0);
-            setData(index(createdRow, Dosages::Constants::SexLimitedIndex) , 0);
-            setData(index(createdRow, Dosages::Constants::Note) , QVariant());
-            setData(index(createdRow, Dosages::Constants::CreationDate) , QDateTime::currentDateTime());
-            setData(index(createdRow, Dosages::Constants::Transmitted) , QVariant());
+            setData(index(createdRow, Dosages::Constants::PeriodScheme), tkTr(Trans::Constants::DAY_S));
+            setData(index(createdRow, Dosages::Constants::DurationTo), 1);
+            setData(index(createdRow, Dosages::Constants::DurationFrom), 1);
+            setData(index(createdRow, Dosages::Constants::DurationUsesFromTo), false);
+            setData(index(createdRow, Dosages::Constants::DurationScheme), tkTr(Trans::Constants::MONTH_S));
+            setData(index(createdRow, Dosages::Constants::IntakesIntervalOfTime), 0);
+            setData(index(createdRow, Dosages::Constants::MinAge), 0);
+            setData(index(createdRow, Dosages::Constants::MaxAge), 0);
+            setData(index(createdRow, Dosages::Constants::MinWeight), 0);
+            setData(index(createdRow, Dosages::Constants::MinClearance), 0);
+            setData(index(createdRow, Dosages::Constants::MaxClearance), 0);
+            setData(index(createdRow, Dosages::Constants::SexLimitedIndex), 0);
+            setData(index(createdRow, Dosages::Constants::Note), QVariant());
+            setData(index(createdRow, Dosages::Constants::CreationDate), QDateTime::currentDateTime());
+            setData(index(createdRow, Dosages::Constants::Transmitted), QVariant());
         }
     }
     return toReturn;
@@ -411,18 +413,18 @@ bool DosageModel::submitAll()
 }
 
 /**
-  \brief Filter the model from the drug CIS and if possible for the inn prescriptions.
+  \brief Filter the model from the drug DID and if possible for the inn prescriptions.
 */
-bool DosageModel::setDrugUID(const QVariant &drugUid)
+bool DosageModel::setDrugId(const QVariant &drugId)
 {
-    if (drugUid == m_UID)
+    if (drugId == m_UID)
         return true;
-    m_UID = drugUid;
+    m_UID = drugId;
     QString filter = QString("%1='%2'").arg(record().fieldName(Dosages::Constants::DrugUid_LK)).arg(m_UID.toString());
 
     int inn = -1;
     if (m_DrugsModel)
-        inn = m_DrugsModel->drugData(drugUid, Constants::Drug::MainInnCode).toInt();
+        inn = m_DrugsModel->drugData(drugId, Constants::Drug::MainInnCode).toInt();
 
     if (inn!=-1) {
         // add INN_LK
@@ -432,20 +434,20 @@ bool DosageModel::setDrugUID(const QVariant &drugUid)
         innFilter = QString("(%1) AND (%2='%3')")
                     .arg(innFilter)
                     .arg(record().fieldName(Dosages::Constants::InnLinkedDosage))
-                    .arg(m_DrugsModel->drugData(drugUid, Constants::Drug::MainInnDosage).toString());
+                    .arg(m_DrugsModel->drugData(drugId, Constants::Drug::MainInnDosage).toString());
         filter = QString("((%1) OR (%2))").arg(filter).arg(innFilter);
     }        
 
     if (WarnDebuggingDatas)
-        qWarning() << "DosageModel filter" << filter << __FILE__ << __LINE__;
+        LOG("DosageModel filter" + filter);
 
     setFilter(filter);
     select();
     return true;
 }
 
-/** \brief Return the actual drug's CIS */
-QVariant DosageModel::drugUID()
+/** \brief Return the actual drug's DID */
+QVariant DosageModel::drugId()
 {
     return m_UID;
 }
@@ -494,24 +496,24 @@ void DosageModel::toPrescription(const int row)
     Q_ASSERT(m_DrugsModel->containsDrug(m_UID));
     /** \todo add a mutext ? */
     QHash<int,int> prescr_dosage;
-    prescr_dosage.insert(Constants::Prescription::UsedDosage ,           Dosages::Constants::Uuid);
-    prescr_dosage.insert(Constants::Prescription::IntakesFrom ,          Dosages::Constants::IntakesFrom);
-    prescr_dosage.insert(Constants::Prescription::IntakesTo ,            Dosages::Constants::IntakesTo);
-    prescr_dosage.insert(Constants::Prescription::IntakesUsesFromTo ,    Dosages::Constants::IntakesUsesFromTo);
-    prescr_dosage.insert(Constants::Prescription::IntakesScheme ,        Dosages::Constants::IntakesScheme);
-    prescr_dosage.insert(Constants::Prescription::Route ,                Dosages::Constants::Route);
-    prescr_dosage.insert(Constants::Prescription::Period ,               Dosages::Constants::Period);
-    prescr_dosage.insert(Constants::Prescription::PeriodScheme ,         Dosages::Constants::PeriodScheme);
-    prescr_dosage.insert(Constants::Prescription::DurationFrom ,         Dosages::Constants::DurationFrom);
-    prescr_dosage.insert(Constants::Prescription::DurationTo ,           Dosages::Constants::DurationTo);
+    prescr_dosage.insert(Constants::Prescription::UsedDosage,           Dosages::Constants::Uuid);
+    prescr_dosage.insert(Constants::Prescription::IntakesFrom,          Dosages::Constants::IntakesFrom);
+    prescr_dosage.insert(Constants::Prescription::IntakesTo,            Dosages::Constants::IntakesTo);
+    prescr_dosage.insert(Constants::Prescription::IntakesUsesFromTo,    Dosages::Constants::IntakesUsesFromTo);
+    prescr_dosage.insert(Constants::Prescription::IntakesScheme,        Dosages::Constants::IntakesScheme);
+    prescr_dosage.insert(Constants::Prescription::Route,                Dosages::Constants::Route);
+    prescr_dosage.insert(Constants::Prescription::Period,               Dosages::Constants::Period);
+    prescr_dosage.insert(Constants::Prescription::PeriodScheme,         Dosages::Constants::PeriodScheme);
+    prescr_dosage.insert(Constants::Prescription::DurationFrom,         Dosages::Constants::DurationFrom);
+    prescr_dosage.insert(Constants::Prescription::DurationTo,           Dosages::Constants::DurationTo);
     prescr_dosage.insert(Constants::Prescription::DurationUsesFromTo,    Dosages::Constants::DurationUsesFromTo);
-    prescr_dosage.insert(Constants::Prescription::DurationScheme ,       Dosages::Constants::DurationScheme);
-    prescr_dosage.insert(Constants::Prescription::IntakesIntervalOfTime ,Dosages::Constants::IntakesIntervalOfTime);
-    prescr_dosage.insert(Constants::Prescription::IntakesIntervalScheme ,Dosages::Constants::IntakesIntervalScheme);
-    prescr_dosage.insert(Constants::Prescription::Note ,                 Dosages::Constants::Note);
-    prescr_dosage.insert(Constants::Prescription::DailyScheme ,          Dosages::Constants::DailyScheme);
-    prescr_dosage.insert(Constants::Prescription::MealTimeSchemeIndex ,  Dosages::Constants::MealScheme);
-    prescr_dosage.insert(Constants::Prescription::IsALD ,                Dosages::Constants::IsALD);
+    prescr_dosage.insert(Constants::Prescription::DurationScheme,       Dosages::Constants::DurationScheme);
+    prescr_dosage.insert(Constants::Prescription::IntakesIntervalOfTime,Dosages::Constants::IntakesIntervalOfTime);
+    prescr_dosage.insert(Constants::Prescription::IntakesIntervalScheme,Dosages::Constants::IntakesIntervalScheme);
+    prescr_dosage.insert(Constants::Prescription::Note,                 Dosages::Constants::Note);
+    prescr_dosage.insert(Constants::Prescription::DailyScheme,          Dosages::Constants::DailyScheme);
+    prescr_dosage.insert(Constants::Prescription::MealTimeSchemeIndex,  Dosages::Constants::MealScheme);
+    prescr_dosage.insert(Constants::Prescription::IsALD,                Dosages::Constants::IsALD);
     foreach(const int i, prescr_dosage.keys()) {
         m_DrugsModel->setDrugData(m_UID, i, data(index(row, prescr_dosage.value(i))));
     }

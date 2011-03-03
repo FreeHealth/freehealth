@@ -139,7 +139,8 @@ void DrugsCentralWidget::setCurrentSearchMethod(int method)
 
 void DrugsCentralWidget::createConnections()
 {
-    connect(m_ui->m_DrugSelector, SIGNAL(drugSelected(QVariant)), this, SLOT(selector_drugSelected(QVariant)));
+    connect(m_ui->m_DrugSelector, SIGNAL(drugSelected(QVariant)),
+            this, SLOT(onSelectorDrugSelected(QVariant)));
     connect(prescriptionListView(), SIGNAL(activated(const QModelIndex &)),
             m_ui->m_PrescriptionView, SLOT(showDosageDialog(const QModelIndex&)));
 }
@@ -149,7 +150,7 @@ void DrugsCentralWidget::disconnect()
     prescriptionListView()->disconnect( prescriptionListView(), SIGNAL(activated(const QModelIndex &)),
              m_ui->m_PrescriptionView, SLOT(showDosageDialog(const QModelIndex&)));
     m_ui->m_DrugSelector->disconnect(m_ui->m_DrugSelector, SIGNAL(drugSelected(QVariant)),
-                                     this, SLOT(selector_drugSelected(QVariant)));
+                                     this, SLOT(onSelectorDrugSelected(QVariant)));
 }
 
 void DrugsCentralWidget::focusInEvent(QFocusEvent *event)
@@ -163,48 +164,49 @@ void DrugsCentralWidget::focusInEvent(QFocusEvent *event)
   Verify that the drug isn't already prescribed (if it is warn user and stop). \n
   Add the drug to the DrugsModel and open the DosageCreatorDialog\n
 */
-void DrugsCentralWidget::selector_drugSelected(const QVariant &drugUid)
+void DrugsCentralWidget::onSelectorDrugSelected(const QVariant &drugId)
 {
     // If drug already in prescription --> Stop
-    if (m_CurrentDrugModel->containsDrug(drugUid)) {
+    if (m_CurrentDrugModel->containsDrug(drugId)) {
         Utils::warningMessageBox(tr("Can not add this drug to your prescription."),
-                                    tr("Prescription can not contains twice the sample pharmaceutical drug.\n"
-                                       "Drug %1 is already in your prescription")
-                                    .arg(m_CurrentDrugModel->drugData(drugUid, DrugsDB::Constants::Drug::Denomination).toString()),
-                                    tr("If you want to change the dosage of this drug please double-click on it in the prescription box."));
+                                 tr("Prescription can not contains twice the sample pharmaceutical drug.\n"
+                                    "Drug %1 is already in your prescription")
+                                 .arg(m_CurrentDrugModel->drugData(drugId, DrugsDB::Constants::Drug::Denomination).toString()),
+                                 tr("If you want to change the dosage of this drug please double-click on it in the prescription box."));
         return;
     }
 //    int drugPrescriptionRow = m_CurrentDrugModel->addDrug(uid);
 
     // Add drug to the model
-    m_CurrentDrugModel->addDrug(drugUid);
+    m_CurrentDrugModel->addDrug(drugId);
 
     // Test for interaction and alert user as setted in settings
     if (settings()->value(Constants::S_DYNAMICALERTS, true).toBool()) {
         // Check the desired level of warning
-        DrugsDB::Constants::Interaction::TypesOfIAM flag = DrugsDB::Constants::Interaction::TypesOfIAM(m_CurrentDrugModel->drugData(drugUid, DrugsDB::Constants::Drug::MaximumLevelOfInteraction).toInt());
-        if (flag != DrugsDB::Constants::Interaction::noIAM) {
-            DrugsDB::Constants::Interaction::TypesOfIAM minLevel = DrugsDB::Constants::Interaction::TypesOfIAM(settings()->value(Constants::S_DYNAMICALERTS_LEVEL, DrugsDB::Constants::Interaction::Deconseille).toInt());
-            if (flag >= minLevel) {
-//                QPixmap icon = m_CurrentDrugModel->drugData(drugUid, DrugsDB::Constants::Interaction::MediumPixmap).value<QPixmap>();
-//                icon = icon.scaled(32,32, Qt::KeepAspectRatio, Qt::SmoothTransformation);
-                QPixmap icon = m_CurrentDrugModel->interactionsManager()->interactionIcon(flag, 0, true).pixmap(64,64);
-                bool yes = Utils::yesNoMessageBox(tr("Interaction found. Do you to continue anyway ?"),
-                                            m_CurrentDrugModel->drugData(drugUid, DrugsDB::Constants::Drug::OwnInteractionsSynthesis).toString(),
-                                            m_CurrentDrugModel->drugData(drugUid, DrugsDB::Constants::Interaction::FullSynthesis).toString(),
-                                            tr("Dynamic interactions alert"),
-                                            icon);
-                if (!yes) {
-                    m_CurrentDrugModel->removeLastInsertedDrug();
-                    return;
-                }
-            }
-        }
+        /** \todo code dynamic alerts */
+//        DrugsDB::Constants::Interaction::TypesOfIAM flag = DrugsDB::Constants::Interaction::TypesOfIAM(m_CurrentDrugModel->drugData(drugUid, DrugsDB::Constants::Drug::MaximumLevelOfInteraction).toInt());
+//        if (flag != DrugsDB::Constants::Interaction::noIAM) {
+//            DrugsDB::Constants::Interaction::TypesOfIAM minLevel = DrugsDB::Constants::Interaction::TypesOfIAM(settings()->value(Constants::S_DYNAMICALERTS_LEVEL, DrugsDB::Constants::Interaction::Deconseille).toInt());
+//            if (flag >= minLevel) {
+////                QPixmap icon = m_CurrentDrugModel->drugData(drugUid, DrugsDB::Constants::Interaction::MediumPixmap).value<QPixmap>();
+////                icon = icon.scaled(32,32, Qt::KeepAspectRatio, Qt::SmoothTransformation);
+//                QPixmap icon = m_CurrentDrugModel->interactionsManager()->interactionIcon(flag, 0, true).pixmap(64,64);
+//                bool yes = Utils::yesNoMessageBox(tr("Interaction found. Do you to continue anyway ?"),
+//                                            m_CurrentDrugModel->drugData(drugUid, DrugsDB::Constants::Drug::OwnInteractionsSynthesis).toString(),
+//                                            m_CurrentDrugModel->drugData(drugUid, DrugsDB::Constants::Interaction::FullSynthesis).toString(),
+//                                            tr("Dynamic interactions alert"),
+//                                            icon);
+//                if (!yes) {
+//                    m_CurrentDrugModel->removeLastInsertedDrug();
+//                    return;
+//                }
+//            }
+//        }
     }
 
 //    if (DrugsWidgetManager::instance()->editMode()==DrugsWidgetManager::Prescriber) {
     if (!m_CurrentDrugModel->isSelectionOnlyMode()) {
-        Internal::DosageCreatorDialog dlg(this, m_CurrentDrugModel->dosageModel(drugUid));
+        Internal::DosageCreatorDialog dlg(this, m_CurrentDrugModel->dosageModel(drugId));
         if (dlg.exec()==QDialog::Rejected) {
             m_CurrentDrugModel->removeLastInsertedDrug();
         }
@@ -277,20 +279,6 @@ void DrugsCentralWidget::showDosagesDatabaseInformations()
     tree.setColumnCount(2);
     tree.header()->hide();
     DrugsDB::Internal::DrugsBase::instance()->setConnectionName(Dosages::Constants::DB_DOSAGES_NAME);
-    DrugsDB::Internal::DrugsBase::instance()->toTreeWidget(&tree);
-    lay.addWidget(&tree);
-    Utils::resizeAndCenter(&dlg);
-    dlg.exec();
-}
-
-void DrugsCentralWidget::showInteractionsDatabaseInformations()
-{
-    QDialog dlg(this, Qt::Window | Qt::CustomizeWindowHint | Qt::WindowSystemMenuHint | Qt::WindowCloseButtonHint | Qt::WindowMinMaxButtonsHint);
-    QGridLayout lay(&dlg);
-    QTreeWidget tree(&dlg);
-    tree.setColumnCount(2);
-    tree.header()->hide();
-    DrugsDB::Internal::DrugsBase::instance()->setConnectionName(DrugsDB::Constants::DB_IAM_NAME);
     DrugsDB::Internal::DrugsBase::instance()->toTreeWidget(&tree);
     lay.addWidget(&tree);
     Utils::resizeAndCenter(&dlg);

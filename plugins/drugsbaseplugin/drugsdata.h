@@ -28,9 +28,8 @@
 #define DRUGSDATA_H
 
 #include <drugsbaseplugin/drugsbase_exporter.h>
-#include <drugsbaseplugin/constants.h>
+#include <drugsbaseplugin/idrug.h>
 
-// include Qt headers
 #include <QObject>
 #include <QVariant>
 #include <QStringList>
@@ -41,56 +40,17 @@
 /**
  * \file drugdata.h
  * \author Eric MAEKER <eric.maeker@free.fr>
- * \version 0.5.0
- * \date 23 Sept 2010
+ * \version 0.6.0
+ * \date 25 Feb 2011
 */
-
-/** \todo Some parts should not be Internals */
-
 
 namespace DrugsDB {
 namespace Internal {
 class DrugsDataPrivate;
-class DrugCompositionPrivate;
 class DrugsBase;
 class DrugsBasePrivate;
 
-class DrugComposition
-{
-public:
-    DrugComposition();
-    ~DrugComposition();
-
-    void setValue(const int fieldref, const QVariant &value);
-    void setLinkedSubstance(DrugComposition *link);
-    void setInnCode(const int code);
-    int linkId() const;
-    bool isLinkedWith(DrugComposition *link) const;
-    bool isTheActiveSubstance() const;
-    int codeMolecule() const;
-    int innCode() const;
-
-    QString innName() const;
-    QStringList iamClasses() const;
-    QString innDosage() const;
-    QString dosage() const;
-    QString form() const;
-    QString moleculeName() const;
-    QString nature() const;
-    int lkNature() const;
-    QString warnText() const;
-
-public:
-    DrugCompositionPrivate *d;
-    DrugComposition *m_Link;
-    QString m_InnName;
-    mutable QString m_Dosage;
-};
-
-
-using namespace DrugsDB::Constants;
-
-class DRUGSBASE_EXPORT DrugsData
+class DRUGSBASE_EXPORT DrugsData : public IDrug
 {
     friend class DrugsBase;
     friend class DrugsBasePrivate;
@@ -99,72 +59,15 @@ public:
      DrugsData();
      ~DrugsData();
 
-     // setters
-     void setPrescriptionValue( const int fieldref, const QVariant &value );
+     bool hasPrescription() const;
+     void setPrescriptionValue(const int fieldref, const QVariant &value);
+     QVariant prescriptionValue(const int filedref) const;
 
-     // getters
-     QVariant          UID() const                { return value(Table_DRUGS, DRUGS_UID);  }
-     QList<QVariant>   CIPs() const;
-     QStringList       CIPsDenominations() const;
-     QString           denomination() const;
-     QString           ATC() const                { return value( Table_DRUGS, DRUGS_ATC ).toString(); }
-     QString           form() const               { return value( Table_DRUGS, DRUGS_FORM ).toString(); }
-//     QString           route() const              { return value( Table_DRUGS, DRUGS_ROUTE ).toString(); }
-     QString           strength() const           { return value( Table_DRUGS, DRUGS_STRENGTH ).toString(); }
-
-     QStringList routes() const;
-
-     int               numberOfCodeMolecules() const { return listOfMolecules().count(); }
-     QStringList       listOfMolecules() const;
-     QList<int>        listOfCodeMolecules() const;
-
-     QStringList       listOfInn() const;
-     int               numberOfInn() const;
-     QStringList       listOfInnClasses() const;
-     QSet<int>         allInnAndIamClasses() const;
-     QSet<int>         allSevenCharsAtcIds() const;
-     QStringList       allSevenCharsAtcCodes() const;
-     QSet<int>         allAtcIds() const;
-     QStringList       allAtcCodes() const;
-     int               mainInnCode() const;
-     QString           mainInnName() const;
-     QString           mainInnDosage() const;
-     QString           innComposition() const;
-
-     QString           linkToSCP() const;
-
-     QStringList       dosageOfMolecules() const;
-     bool              hasPrescription() const;
-     bool              isScoredTablet() const;
-
-     QVariant          prescriptionValue(const int filedref) const;
-
-     QString           compositionToXml();
-
-     // this need to be rewritten because there is N CIP for 1 drug
-     //const int CIP()                    { return value( mfDrugsTables::PACK_CIP ).toInt(); }
-
-     // viewers
-     QString toHtml() const;
-     static QString drugsListToHtml( const QList<DrugsData*> & list );
-
-     void warn() const;
-     QString warnText() const;
      void smallDrugWarn() const;
-
-     // sorters
-     static bool lessThan(const DrugsData *drug1, const DrugsData *drug2);
 
 protected:
      // setters
-     void setValue(const int tableref, const int fieldref, const QVariant & value);
-     void addInnAndIamClasses(const QSet<int> &codes);
-     void addCIP(const int CIP, const QString & denomination, QDate date = QDate());
-     void addComposition(DrugComposition *compo);
      void addRoute(const int routeId, const QString &lang, const QString &label);
-
-     // getters
-     QVariant value( const int tableref, const int fieldref ) const;
 
 private:
      DrugsDataPrivate *d;

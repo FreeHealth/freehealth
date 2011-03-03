@@ -37,7 +37,6 @@
 #include <drugsbaseplugin/drugsdata.h>
 #include <drugsbaseplugin/drugsmodel.h>
 #include <drugsbaseplugin/interactionsmanager.h>
-#include <drugsbaseplugin/interactionsbase.h>
 
 #include <coreplugin/constants_menus.h>
 #include <coreplugin/icore.h>
@@ -256,7 +255,7 @@ void PrescriptionViewer::showDosageDialog(const QModelIndex &item)
     if (row < 0)
         return;
 
-    const QVariant &drugUid = drugModel()->index(row, DrugsDB::Constants::Drug::UID).data();
+    const QVariant &drugUid = drugModel()->index(row, DrugsDB::Constants::Drug::DrugId).data();
     bool isTextual = drugModel()->index(row, DrugsDB::Constants::Prescription::IsTextualOnly).data().toBool();
     if (drugUid.toInt()!=-1) {
         Internal::DosageDialog dlg(this);

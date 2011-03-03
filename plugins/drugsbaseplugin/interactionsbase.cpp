@@ -109,28 +109,6 @@ public:
         }
     }
 
-    // UNUSED
-    void getAtcLabels()
-    {
-        QString lang = QLocale().name().left(2);
-        QList<int> fields;
-        if (lang=="fr") {
-             fields << ATC_ID << ATC_FR;
-        } else {
-            fields << ATC_ID << ATC_EN;
-        }
-        QString req = m_DB->select(Table_ATC, fields);
-
-        QSqlQuery query(req , QSqlDatabase::database(Constants::DB_IAM_NAME));
-        if (query.isActive()) {
-            while (query.next())
-                m_IamDenominations.insert(query.value(0).toInt(), query.value(1).toString());
-        } else {
-            Utils::Log::addQueryError("DrugsBase", query, __FILE__, __LINE__);
-        }
-    }
-    // END UNUSED
-
     // Link tables
     /**
       \brief Retrieve many values into cached lists.
@@ -192,7 +170,6 @@ public:
     bool m_initialized;
 
     // These variables are used or speed improvments and database protection
-    QHash<int, QString> m_IamDenominations;       /*!< INN and class denominations */
     QMultiHash<int, int> m_AtcToMol;   /*!< Link Iam_Id to Code_Subst */
     QMultiHash<int, int> m_ClassToAtcs;   /*!< Link ClassIam_Id to Iam_Id */
     QCache<int, AtcLabel> m_AtcLabelCache;
@@ -495,7 +472,7 @@ bool InteractionsBase::init(bool refreshCache)
     QSqlQuery q(req , di->m_DB->database());
     if (q.isActive())
         while (q.next())
-            di->m_InteractionsIDs.insertMulti( q.value(0).toInt(), q.value(1).toInt());
+            di->m_InteractionsIDs.insertMulti(q.value(0).toInt(), q.value(1).toInt());
 
     // retreive links tables for speed improvements
     if (refreshCache) {
@@ -536,248 +513,247 @@ QString InteractionsBase::selectInteractionsSql(const int &tableref, const QList
     return di->m_DB->select(tableref, fieldsref, conditions);
 }
 
-/**
-  \brief Return the Inn code linked to the molecule code. Returns -1 if no inn is linked to that molecule.
-  \todo this should return a list of integer not an unique integer
-*/
-int InteractionsBase::getInnCodeForCodeMolecule(const int molecule_code) const
-{
-    if (di->m_AtcToMol.values().contains(molecule_code))
-        return di->m_AtcToMol.key(molecule_code);
-    return -1;
-}
+///**
+//  \brief Return the Inn code linked to the molecule code. Returns -1 if no inn is linked to that molecule.
+//  \todo this should return a list of integer not an unique integer
+//*/
+//int InteractionsBase::getAtcCodeForMoleculeId(const int molId) const
+//{
+//    if (di->m_AtcToMol.values().contains(molId))
+//        return di->m_AtcToMol.key(molId);
+//    return -1;
+//}
 
-QString InteractionsBase::getAtcLabel(const int inncode) const
-{
-    if (inncode==-1)
-        return QString();
+//QString InteractionsBase::getAtcLabel(const int atcId) const
+//{
+//    if (inncode==-1)
+//        return QString();
 
-    const QString &lang = QLocale().name().left(2);
-    if (di->m_AtcLabelCache.contains(inncode)) {
-        const AtcLabel *lbl = di->m_AtcLabelCache[inncode];
-        if (lbl->lang==lang) {
-            return lbl->label;
-        }
-    }
+//    const QString &lang = QLocale().name().left(2);
+//    if (di->m_AtcLabelCache.contains(inncode)) {
+//        const AtcLabel *lbl = di->m_AtcLabelCache[inncode];
+//        if (lbl->lang==lang) {
+//            return lbl->label;
+//        }
+//    }
 
-    int field;
-    if (lang=="fr") {
-        field = ATC_FR;
-    } else if (lang=="de") {
-        field = ATC_DE;
-    } else {
-        field = ATC_EN;
-    }
-    QString toReturn;
-    QString code;
-    QHash<int, QString> where;
-    where.insert(Constants::ATC_ID, QString("=%1").arg(inncode));
-    QSqlQuery query(QSqlDatabase::database(Constants::DB_IAM_NAME));
-    if (!query.exec(di->m_DB->select(Constants::Table_ATC, QList<int>() << field << Constants::ATC_CODE, where))) {
-        Utils::Log::addQueryError("InteractionBase", query, __FILE__, __LINE__);
-    } else {
-        if (query.next()) {
-            toReturn = query.value(0).toString();
-            code = query.value(1).toString();
-        } else {
-            Utils::Log::addQueryError("InteractionsBase", query, __FILE__, __LINE__);
-        }
-    }
-    AtcLabel *lbl = new AtcLabel;
-    lbl->id = inncode;
-    lbl->label = toReturn;
-    lbl->lang = lang;
-    lbl->code = code;
-    di->m_AtcLabelCache.insert(inncode, lbl);
-    return toReturn;
-}
+//    int field;
+//    if (lang=="fr") {
+//        field = ATC_FR;
+//    } else if (lang=="de") {
+//        field = ATC_DE;
+//    } else {
+//        field = ATC_EN;
+//    }
+//    QString toReturn;
+//    QString code;
+//    QHash<int, QString> where;
+//    where.insert(Constants::ATC_ID, QString("=%1").arg(inncode));
+//    QSqlQuery query(QSqlDatabase::database(Constants::DB_IAM_NAME));
+//    if (!query.exec(di->m_DB->select(Constants::Table_ATC, QList<int>() << field << Constants::ATC_CODE, where))) {
+//        Utils::Log::addQueryError("InteractionBase", query, __FILE__, __LINE__);
+//    } else {
+//        if (query.next()) {
+//            toReturn = query.value(0).toString();
+//            code = query.value(1).toString();
+//        } else {
+//            Utils::Log::addQueryError("InteractionsBase", query, __FILE__, __LINE__);
+//        }
+//    }
+//    AtcLabel *lbl = new AtcLabel;
+//    lbl->id = inncode;
+//    lbl->label = toReturn;
+//    lbl->lang = lang;
+//    lbl->code = code;
+//    di->m_AtcLabelCache.insert(inncode, lbl);
+//    return toReturn;
+//}
 
-QString InteractionsBase::getAtcLabel(const QString &code) const
-{
-    const QString &lang = QLocale().name().left(2);
-    foreach(int k, di->m_AtcLabelCache.keys()) {
-        AtcLabel *lbl = di->m_AtcLabelCache[k];
-        if (lbl->code.toLower() == code.toLower()) {
-            if (lbl->lang==lang) {
-                return lbl->label;
-            }
-        }
-    }
+//QString InteractionsBase::getAtcLabel(const QString &code) const
+//{
+//    const QString &lang = QLocale().name().left(2);
+//    foreach(int k, di->m_AtcLabelCache.keys()) {
+//        AtcLabel *lbl = di->m_AtcLabelCache[k];
+//        if (lbl->code.toLower() == code.toLower()) {
+//            if (lbl->lang==lang) {
+//                return lbl->label;
+//            }
+//        }
+//    }
 
-    int field;
-    if (lang=="fr") {
-        field = ATC_FR;
-    } else if (lang=="de") {
-        field = ATC_DE;
-    } else {
-        field = ATC_EN;
-    }
-    QString toReturn;
-    int id;
-    QHash<int, QString> where;
-    where.insert(Constants::ATC_CODE, QString("='%1'").arg(code));
-    QSqlQuery query(QSqlDatabase::database(Constants::DB_IAM_NAME));
-    if (!query.exec(di->m_DB->select(Constants::Table_ATC, QList<int>() << field << Constants::ATC_ID, where))) {
-        Utils::Log::addQueryError("InteractionBase", query, __FILE__, __LINE__);
-    } else {
-        if (query.next()) {
-            toReturn = query.value(0).toString();
-            id = query.value(1).toInt();
-        }
-    }
-    AtcLabel *lbl = new AtcLabel;
-    lbl->id = id;
-    lbl->label = toReturn;
-    lbl->lang = lang;
-    lbl->code = code;
-    di->m_AtcLabelCache.insert(id, lbl);
-    return toReturn;
-}
+//    int field;
+//    if (lang=="fr") {
+//        field = ATC_FR;
+//    } else if (lang=="de") {
+//        field = ATC_DE;
+//    } else {
+//        field = ATC_EN;
+//    }
+//    QString toReturn;
+//    int id;
+//    QHash<int, QString> where;
+//    where.insert(Constants::ATC_CODE, QString("='%1'").arg(code));
+//    QSqlQuery query(QSqlDatabase::database(Constants::DB_IAM_NAME));
+//    if (!query.exec(di->m_DB->select(Constants::Table_ATC, QList<int>() << field << Constants::ATC_ID, where))) {
+//        Utils::Log::addQueryError("InteractionBase", query, __FILE__, __LINE__);
+//    } else {
+//        if (query.next()) {
+//            toReturn = query.value(0).toString();
+//            id = query.value(1).toInt();
+//        }
+//    }
+//    AtcLabel *lbl = new AtcLabel;
+//    lbl->id = id;
+//    lbl->label = toReturn;
+//    lbl->lang = lang;
+//    lbl->code = code;
+//    di->m_AtcLabelCache.insert(id, lbl);
+//    return toReturn;
+//}
 
-QString InteractionsBase::getAtcCode(const int atc_id) const
-{
-    if (atc_id==-1)
-        return QString();
+//QString InteractionsBase::getAtcCode(const int atcId) const
+//{
+//    if (atc_id==-1)
+//        return QString();
 
-    if (di->m_AtcCodeCache.contains(atc_id)) {
-        return *di->m_AtcCodeCache[atc_id];
-    }
+//    if (di->m_AtcCodeCache.contains(atc_id)) {
+//        return *di->m_AtcCodeCache[atc_id];
+//    }
 
-    QString toReturn;
-    QHash<int, QString> where;
-    where.insert(Constants::ATC_ID, QString("=%1").arg(atc_id));
-    QSqlQuery query(QSqlDatabase::database(Constants::DB_IAM_NAME));
-    if (!query.exec(di->m_DB->select(Constants::Table_ATC, Constants::ATC_CODE, where))) {
-        Utils::Log::addQueryError("InteractionBase", query, __FILE__, __LINE__);
-        return QString();
-    } else {
-        if (query.next())
-            toReturn = query.value(0).toString();
-    }
-    di->m_AtcCodeCache.insert(atc_id, new QString(toReturn));
-    return toReturn;
-}
+//    QString toReturn;
+//    QHash<int, QString> where;
+//    where.insert(Constants::ATC_ID, QString("=%1").arg(atc_id));
+//    QSqlQuery query(QSqlDatabase::database(Constants::DB_IAM_NAME));
+//    if (!query.exec(di->m_DB->select(Constants::Table_ATC, Constants::ATC_CODE, where))) {
+//        Utils::Log::addQueryError("InteractionBase", query, __FILE__, __LINE__);
+//        return QString();
+//    } else {
+//        if (query.next())
+//            toReturn = query.value(0).toString();
+//    }
+//    di->m_AtcCodeCache.insert(atc_id, new QString(toReturn));
+//    return toReturn;
+//}
 
-/** \brief Returns the name of the INN for the substance code \e code_subst. */
-QString InteractionsBase::getInnDenominationFromSubstanceCode(const int molecule_code) const
-{
-     // if molecule is not associated with a dci exit
-     if (!di->m_AtcToMol.values().contains(molecule_code))
-          return QString::null;
-     return getAtcLabel(di->m_AtcToMol.key(molecule_code));
-//     return di->m_IamDenominations.value(di->m_AtcToMol.key(molecule_code));
-}
+///** \brief Returns the name of the INN for the substance code \e code_subst. */
+//QString InteractionsBase::getInnDenominationFromSubstanceCode(const int molecule_code) const
+//{
+//     // if molecule is not associated with a dci exit
+//     if (!di->m_AtcToMol.values().contains(molecule_code))
+//          return QString::null;
+//     return getAtcLabel(di->m_AtcToMol.key(molecule_code));
+//}
 
-/** \brief Returns the name of the INN for the substance code \e code_subst. */
-QStringList InteractionsBase::getIamClassDenomination(const int &molecule_code)
-{
-     // if molecule is not associated with a dci exit
-     if (!di->m_AtcToMol.values().contains(molecule_code))
-          return QStringList();
+///** \brief Returns the name of the INN for the substance code \e code_subst. */
+//QStringList InteractionsBase::getIamClassDenomination(const int &molecule_code)
+//{
+//     // if molecule is not associated with a dci exit
+//     if (!di->m_AtcToMol.values().contains(molecule_code))
+//          return QStringList();
 
-     // if molecule is not associated with a class exit
-     QList<int> list = di->m_ClassToAtcs.keys(di->m_AtcToMol.key(molecule_code));
-     if (list.isEmpty())
-          return QStringList();
-     QStringList toReturn;
-     foreach(int i, list)
-         toReturn << getAtcLabel(i);
-     return toReturn;
-}
+//     // if molecule is not associated with a class exit
+//     QList<int> list = di->m_ClassToAtcs.keys(di->m_AtcToMol.key(molecule_code));
+//     if (list.isEmpty())
+//          return QStringList();
+//     QStringList toReturn;
+//     foreach(int i, list)
+//         toReturn << getAtcLabel(i);
+//     return toReturn;
+//}
 
-/**
-  \brief Returns all INN and IAM classes of MOLECULE \e code_subst.
-  \sa getDrugByUID()
-*/
-QSet<int> InteractionsBase::getAllInnAndIamClassesIndex(const int molecule_code)
-{
-    QSet<int> toReturn;
+///**
+//  \brief Returns all INN and IAM classes of MOLECULE \e code_subst.
+//  \sa getDrugByUID()
+//*/
+//QSet<int> InteractionsBase::getAllInnAndIamClassesIndex(const int molecule_code)
+//{
+//    QSet<int> toReturn;
 
-//    if (di->m_AtcToMol.keys(molecule_code).count()>1)
-//        Utils::Log::addError("InteractionBase", "Molecule got multiATC " + QString::number(molecule_code), __FILE__, __LINE__);
+////    if (di->m_AtcToMol.keys(molecule_code).count()>1)
+////        Utils::Log::addError("InteractionBase", "Molecule got multiATC " + QString::number(molecule_code), __FILE__, __LINE__);
 
-    foreach(int id, di->m_AtcToMol.keys(molecule_code)) {
-        toReturn = di->m_ClassToAtcs.keys(id).toSet();
-    }
-    if (di->m_AtcToMol.values().contains(molecule_code))
-        toReturn << di->m_AtcToMol.key(molecule_code);
+//    foreach(int id, di->m_AtcToMol.keys(molecule_code)) {
+//        toReturn = di->m_ClassToAtcs.keys(id).toSet();
+//    }
+//    if (di->m_AtcToMol.values().contains(molecule_code))
+//        toReturn << di->m_AtcToMol.key(molecule_code);
 
-//    qWarning() << Q_FUNC_INFO << molecule_code << toReturn;
-    return toReturn;
-}
+////    qWarning() << Q_FUNC_INFO << molecule_code << toReturn;
+//    return toReturn;
+//}
 
-/** \brief Return the list of the code of the substances linked to the INN code \e code_iam. */
-QList<int> InteractionsBase::getLinkedMoleculeCodes(QList<int> &atc_ids) const
-{
-    QList<int> toReturn;
-    foreach(int i, atc_ids)
-        toReturn << di->m_AtcToMol.values(i);
-    return toReturn;
-}
+///** \brief Return the list of the code of the substances linked to the INN code \e code_iam. */
+//QList<int> InteractionsBase::getLinkedMoleculeCodes(QList<int> &atc_ids) const
+//{
+//    QList<int> toReturn;
+//    foreach(int i, atc_ids)
+//        toReturn << di->m_AtcToMol.values(i);
+//    return toReturn;
+//}
 
-/** \brief Return the list of the code of the substances linked to the INN code \e code_iam. */
-QList<int> InteractionsBase::getLinkedMoleculeCodes(const int atc_id) const
-{
-    return di->m_AtcToMol.values(atc_id);
-}
+///** \brief Return the list of the code of the substances linked to the INN code \e code_iam. */
+//QList<int> InteractionsBase::getLinkedMoleculeCodes(const int atc_id) const
+//{
+//    return di->m_AtcToMol.values(atc_id);
+//}
 
-/** \brief Retreive from database the Molecules Codes where denomination of the INN is like 'iamDenomination%' */
-QList<int> InteractionsBase::getLinkedMoleculeCodes(const QString &iamDenomination) const
-{
-     QSqlDatabase DB = di->m_DB->database();
-     if (!DB.isOpen())
-          DB.open();
+///** \brief Retreive from database the Molecules Codes where denomination of the INN is like 'iamDenomination%' */
+//QList<int> InteractionsBase::getLinkedMoleculeCodes(const QString &iamDenomination) const
+//{
+//     QSqlDatabase DB = di->m_DB->database();
+//     if (!DB.isOpen())
+//          DB.open();
 
-     // get iamSubstCode
-     QString tmp = iamDenomination;
-     const QString &lang = QLocale().name().left(2);
-     QHash<int, QString> where;
-     if (lang=="fr")
-         where.insert(ATC_FR, QString("LIKE '%1%'").arg(tmp.replace("'", "?")));
-     else if (lang=="de")
-         where.insert(ATC_DE, QString("LIKE '%1%'").arg(tmp.replace("'", "?")));
-     else
-         where.insert(ATC_EN, QString("LIKE '%1%'").arg(tmp.replace("'", "?")));
-     QList<int> atcIds;
-     QString req = di->m_DB->select(Table_ATC, ATC_ID, where);
-     QSqlQuery q(req , di->m_DB->database());
-     if (q.isActive())
-         while (q.next())
-             atcIds << q.value(0).toInt();
-     return getLinkedMoleculeCodes(atcIds);
-}
+//     // get iamSubstCode
+//     QString tmp = iamDenomination;
+//     const QString &lang = QLocale().name().left(2);
+//     QHash<int, QString> where;
+//     if (lang=="fr")
+//         where.insert(ATC_FR, QString("LIKE '%1%'").arg(tmp.replace("'", "?")));
+//     else if (lang=="de")
+//         where.insert(ATC_DE, QString("LIKE '%1%'").arg(tmp.replace("'", "?")));
+//     else
+//         where.insert(ATC_EN, QString("LIKE '%1%'").arg(tmp.replace("'", "?")));
+//     QList<int> atcIds;
+//     QString req = di->m_DB->select(Table_ATC, ATC_ID, where);
+//     QSqlQuery q(req , di->m_DB->database());
+//     if (q.isActive())
+//         while (q.next())
+//             atcIds << q.value(0).toInt();
+//     return getLinkedMoleculeCodes(atcIds);
+//}
 
-/** \brief Return the list of the INN code linked to the substances code \e code_subst. */
-QList<int> InteractionsBase::getLinkedAtcIds(const QList<int> &molecule_codes) const
-{
-    QList<int> toReturn;
-    foreach(int i, molecule_codes)
-        toReturn << di->m_AtcToMol.keys(i);
-    return toReturn;
-}
+///** \brief Return the list of the INN code linked to the substances code \e code_subst. */
+//QList<int> InteractionsBase::getLinkedAtcIds(const QList<int> &molecule_codes) const
+//{
+//    QList<int> toReturn;
+//    foreach(int i, molecule_codes)
+//        toReturn << di->m_AtcToMol.keys(i);
+//    return toReturn;
+//}
 
-/** \brief Return the list of the INN code linked to the molecule code \e code_subst. */
-QList<int> InteractionsBase::getLinkedAtcIds(const int molecule_code) const
-{
-    return di->m_AtcToMol.keys(molecule_code);
-}
+///** \brief Return the list of the INN code linked to the molecule code \e code_subst. */
+//QList<int> InteractionsBase::getLinkedAtcIds(const int molecule_code) const
+//{
+//    return di->m_AtcToMol.keys(molecule_code);
+//}
 
-QList<int> InteractionsBase::getAllMoleculeCodeWithAtcStartingWith(const QString &code) const
-{
-    QSqlDatabase DB = di->m_DB->database();
-    if (!DB.isOpen())
-         DB.open();
+//QList<int> InteractionsBase::getAllMoleculeCodeWithAtcStartingWith(const QString &code) const
+//{
+//    QSqlDatabase DB = di->m_DB->database();
+//    if (!DB.isOpen())
+//         DB.open();
 
-    QHash<int, QString> where;
-    where.insert(ATC_CODE, QString("LIKE '%1%'").arg(code));
-    QList<int> atcIds;
-    QString req = di->m_DB->select(Table_ATC, ATC_ID, where);
-    QSqlQuery q(req , di->m_DB->database());
-    if (q.isActive())
-        while (q.next())
-            atcIds << q.value(0).toInt();
-    return getLinkedMoleculeCodes(atcIds);
-}
+//    QHash<int, QString> where;
+//    where.insert(ATC_CODE, QString("LIKE '%1%'").arg(code));
+//    QList<int> atcIds;
+//    QString req = di->m_DB->select(Table_ATC, ATC_ID, where);
+//    QSqlQuery q(req , di->m_DB->database());
+//    if (q.isActive())
+//        while (q.next())
+//            atcIds << q.value(0).toInt();
+//    return getLinkedMoleculeCodes(atcIds);
+//}
 
 QVector<MedicalUtils::EbmData *> InteractionsBase::getAllSourcesFromTree(const QList<int> &allInnAndIamClassIds)
 {

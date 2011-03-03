@@ -98,7 +98,7 @@ public:
 //            qWarning() << "dosage" << Dosages::Constants::IntakesUsesFromTo << m_Mapper->currentIndex() <<  m_DosageModel->data(m_DosageModel->index(m_Mapper->currentIndex(), index));
         } else {
 //            qWarning() << "drug";
-            drugModel()->setDrugData(m_DrugUid, index, qtCheckState==Qt::Checked);
+            drugModel()->setDrugData(m_DrugId, index, qtCheckState==Qt::Checked);
         }
     }
 
@@ -231,14 +231,14 @@ public:
 
             // Intakes
             q->intakesCombo->setCurrentIndex(-1);
-            q->intakesCombo->setEditText(drugModel()->drugData(m_DrugUid, Prescription::IntakesScheme).toString());
+            q->intakesCombo->setEditText(drugModel()->drugData(m_DrugId, Prescription::IntakesScheme).toString());
             // Period
-            q->periodSpin->setValue(drugModel()->drugData(m_DrugUid, Prescription::Period).toDouble());
-            q->periodSchemeCombo->setEditText(drugModel()->drugData(m_DrugUid, Prescription::PeriodScheme).toString());
+            q->periodSpin->setValue(drugModel()->drugData(m_DrugId, Prescription::Period).toDouble());
+            q->periodSchemeCombo->setEditText(drugModel()->drugData(m_DrugId, Prescription::PeriodScheme).toString());
             // Duration
-            q->durationCombo->setEditText(drugModel()->drugData(m_DrugUid, Prescription::DurationScheme).toString());
+            q->durationCombo->setEditText(drugModel()->drugData(m_DrugId, Prescription::DurationScheme).toString());
             // Interval
-            q->minIntervalIntakesSpin->setValue(drugModel()->drugData(m_DrugUid, Prescription::IntakesIntervalOfTime).toDouble());
+            q->minIntervalIntakesSpin->setValue(drugModel()->drugData(m_DrugId, Prescription::IntakesIntervalOfTime).toDouble());
 
             bool intakeRange = drugModel()->index(row, Prescription::IntakesUsesFromTo).data().toBool();
             q->fromToIntakesCheck->setChecked(intakeRange);
@@ -250,18 +250,18 @@ public:
             q->durationToLabel->setVisible(durationRange);
             q->durationToSpin->setVisible(durationRange);
 
-            q->aldCheck->setChecked(drugModel()->drugData(m_DrugUid, Prescription::IsALD).toBool());
+            q->aldCheck->setChecked(drugModel()->drugData(m_DrugId, Prescription::IsALD).toBool());
             // populate DailSchemeModel
             DrugsDB::DailySchemeModel *daily = q->dailyScheme->model();
             Q_ASSERT(daily);
-            daily->setSerializedContent(drugModel()->drugData(m_DrugUid, Prescription::DailyScheme).toString());
+            daily->setSerializedContent(drugModel()->drugData(m_DrugId, Prescription::DailyScheme).toString());
 //            q->dailySchemeView->resizeColumnsToContents();
         }
 
         // Link to French RCP
-        if (!drugModel()->drugData(m_DrugUid, DrugsDB::Constants::Drug::LinkToSCP).isNull()) {
+        if (!drugModel()->drugData(m_DrugId, DrugsDB::Constants::Drug::LinkToSCP).isNull()) {
             q->monographButton->setEnabled(true);
-            q->monographButton->setToolTip(drugModel()->drugData(m_DrugUid, DrugsDB::Constants::Drug::LinkToSCP).toString());
+            q->monographButton->setToolTip(drugModel()->drugData(m_DrugId, DrugsDB::Constants::Drug::LinkToSCP).toString());
         } else {
             q->monographButton->setEnabled(false);
         }
@@ -281,11 +281,11 @@ public:
     void fillDrugsData()
     {
         Q_ASSERT(q);
-        q->labelOfDosageLabel->setToolTip(drugModel()->drugData(m_DrugUid, DrugsDB::Constants::Drug::AvailableDosages).toString());
-        q->drugNameLabel->setText(drugModel()->drugData(m_DrugUid, DrugsDB::Constants::Drug::Denomination).toString());
-        q->drugNameLabel->setToolTip(drugModel()->drugData(m_DrugUid, DrugsDB::Constants::Drug::CompositionString).toString());
-        q->interactionLabel->setPixmap(drugModel()->drugData(m_DrugUid, DrugsDB::Constants::Interaction::Icon).value<QIcon>().pixmap(16,16));
-        q->interactionLabel->setToolTip(drugModel()->drugData(m_DrugUid, DrugsDB::Constants::Interaction::ToolTip).toString());
+        q->labelOfDosageLabel->setToolTip(drugModel()->drugData(m_DrugId, DrugsDB::Constants::Drug::AvailableDosages).toString());
+        q->drugNameLabel->setText(drugModel()->drugData(m_DrugId, DrugsDB::Constants::Drug::Denomination).toString());
+        q->drugNameLabel->setToolTip(drugModel()->drugData(m_DrugId, DrugsDB::Constants::Drug::CompositionString).toString());
+        q->interactionLabel->setPixmap(drugModel()->drugData(m_DrugId, DrugsDB::Constants::Interaction::Icon).value<QIcon>().pixmap(16,16));
+        q->interactionLabel->setToolTip(drugModel()->drugData(m_DrugId, DrugsDB::Constants::Interaction::ToolTip).toString());
     }
 
     /**
@@ -317,17 +317,17 @@ public:
 
         q->routeCombo->clear();
         if (drugsBase()->isRoutesAvailable()) {
-            q->routeCombo->addItems(drugModel()->drugData(m_DrugUid, Drug::AvailableRoutes).toStringList());
+            q->routeCombo->addItems(drugModel()->drugData(m_DrugId, Drug::AvailableRoutes).toStringList());
             q->routeCombo->setCurrentIndex(0);
         }
 
         q->intakesCombo->fancyClear();
-        q->intakesCombo->fancyAddItems(drugModel()->drugData(m_DrugUid, Drug::AvailableForms).toStringList(), "Model");
+        q->intakesCombo->fancyAddItems(drugModel()->drugData(m_DrugId, Drug::AvailableForms).toStringList(), "Model");
         q->intakesCombo->fancyAddItems(settings()->value(Constants::S_USERRECORDEDFORMS).toStringList(), Constants::USERRECORDEDFORMS_COLOR);
         q->intakesCombo->setCurrentIndex(0);
 
 //        q->intakesCombo->clear();
-//        q->intakesCombo->addItems(drugModel()->drugData(m_DrugUid, Drug::AvailableForms).toStringList());
+//        q->intakesCombo->addItems(drugModel()->drugData(m_DrugId, Drug::AvailableForms).toStringList());
 //        q->intakesCombo->addItems(settings()->value(Constants::S_USERRECORDEDFORMS).toStringList());
 //        q->intakesCombo->setCurrentIndex(0);
 
@@ -342,7 +342,7 @@ public:
         q->hourlyTableWidget->verticalHeader()->hide();
         q->hourlyTableWidget->horizontalHeader()->hide();
         q->hourlyTableWidget->resizeColumnsToContents();
-        bool isScored = drugModel()->drugData(m_DrugUid, Drug::IsScoredTablet).toBool();
+        bool isScored = drugModel()->drugData(m_DrugId, Drug::IsScoredTablet).toBool();
         if (isScored) {
             q->intakesToSpin->setDecimals(2);
             q->intakesFromSpin->setDecimals(2);
@@ -388,8 +388,8 @@ public:
     bool dosageCanLinkWithInn()
     {
         if (m_DosageModel) {
-            return ((drugModel()->drugData(m_DrugUid, DrugsDB::Constants::Drug::MainInnCode).toInt()!=-1) &&
-                    (drugModel()->drugData(m_DrugUid, DrugsDB::Constants::Drug::AllInnsKnown).toBool()));
+            return ((drugModel()->drugData(m_DrugId, DrugsDB::Constants::Drug::MainInnCode).toInt()!=-1) &&
+                    (drugModel()->drugData(m_DrugId, DrugsDB::Constants::Drug::AllInnsKnown).toBool()));
         }
         return false;
     }
@@ -398,7 +398,7 @@ public:
     QDataWidgetMapper  *m_Mapper;
     DrugsDB::Internal::DosageModel *m_DosageModel;
     QString m_ActualDosageUuid;
-    QVariant m_DrugUid;
+    QVariant m_DrugId;
     Utils::SpinBoxDelegate *m_SpinDelegate;
 
 private:
@@ -449,10 +449,10 @@ DosageViewer::DosageViewer(QWidget *parent)
 }
 
 /** \brief Use this function to define a drugsModel behavior. */
-void DosageViewer::useDrugsModel(const QVariant &drugUid, const int drugRow)
+void DosageViewer::useDrugsModel(const QVariant &drugId, const int drugRow)
 {
-    Q_ASSERT(drugModel()->containsDrug(drugUid));
-    d->m_DrugUid = drugUid;
+    Q_ASSERT(drugModel()->containsDrug(drugId));
+    d->m_DrugId = drugId;
     d->m_DosageModel = 0;
     d->resetUiToDefaults();
     d->fillDrugsData();
@@ -465,7 +465,7 @@ void DosageViewer::setDosageModel(DrugsDB::Internal::DosageModel *model)
 {
     Q_ASSERT(model);
     d->m_DosageModel = model;
-    d->m_DrugUid = model->drugUID();
+    d->m_DrugId = model->drugId();
     d->resetUiToDefaults();
     d->fillDrugsData();
     d->createDosageMapper();
@@ -498,7 +498,7 @@ void DosageViewer::changeCurrentRow(const int dosageRow)
     d->m_Mapper->setCurrentIndex(dosageRow);
     d->changeNonMappedDataFromModelToUi(dosageRow);
     d->recalculateDailySchemeMaximum();
-    qWarning() << QString("MAIN INN %1 = UID %2").arg(drugModel()->drugData(d->m_DrugUid, DrugsDB::Constants::Drug::MainInnName).toString().toUpper()).arg(d->m_DrugUid.toString())<<__FILE__<<__LINE__;
+    qWarning() << QString("MAIN INN %1 = UID %2").arg(drugModel()->drugData(d->m_DrugId, DrugsDB::Constants::Drug::MainInnName).toString().toUpper()).arg(d->m_DrugId.toString())<<__FILE__<<__LINE__;
 }
 
 /** \brief Only provided because of focus bug */
@@ -516,9 +516,9 @@ void DosageViewer::commitToModel()
 //        d->m_DosageModel->setData(d->m_DosageModel->index(d->m_Mapper->currentIndex(), Dosages::Constants::Route), routeId);
     } else {
         if (daily) {
-            drugModel()->setDrugData(d->m_DrugUid, DrugsDB::Constants::Prescription::DailyScheme, daily->serializedContent());
+            drugModel()->setDrugData(d->m_DrugId, DrugsDB::Constants::Prescription::DailyScheme, daily->serializedContent());
         }
-//        drugModel()->setDrugData(d->m_DrugUid, DrugsDB::Constants::Prescription::Route, routeId);
+//        drugModel()->setDrugData(d->m_DrugId, DrugsDB::Constants::Prescription::Route, routeId);
     }
 }
 
@@ -618,7 +618,7 @@ void DosageViewer::on_userformsButton_clicked()
         if (d->m_DosageModel)
             d->m_DosageModel->setData(d->m_DosageModel->index(d->m_Mapper->currentIndex(),Dosages::Constants::IntakesScheme),a->text());
         else
-            drugModel()->setDrugData(d->m_DrugUid, DrugsDB::Constants::Prescription::IntakesScheme, a->text());
+            drugModel()->setDrugData(d->m_DrugId, DrugsDB::Constants::Prescription::IntakesScheme, a->text());
     }
 }
 
@@ -629,25 +629,25 @@ void DosageViewer::on_dosageForAllInnCheck_stateChanged(int state)
         // INN Prescription ?
         int row = d->m_Mapper->currentIndex();
             if ((dosageForAllInnCheck->isEnabled()) && (state==Qt::Checked)) {
-//                qWarning() << "INN" << drugModel()->drugData(d->m_DrugUid, DrugsDB::Constants::Drug::MainInnCode);
-                d->m_DosageModel->setData(d->m_DosageModel->index(row, Dosages::Constants::DrugUid_LK), d->m_DrugUid);
+//                qWarning() << "INN" << drugModel()->drugData(d->m_DrugId, DrugsDB::Constants::Drug::MainInnCode);
+                d->m_DosageModel->setData(d->m_DosageModel->index(row, Dosages::Constants::DrugUid_LK), d->m_DrugId);
                 d->m_DosageModel->setData(d->m_DosageModel->index(row, Dosages::Constants::CIP_LK), -1);
                 d->m_DosageModel->setData(d->m_DosageModel->index(row, Dosages::Constants::INN_LK),
-                                           drugModel()->drugData(d->m_DrugUid, DrugsDB::Constants::Drug::MainInnCode));
+                                           drugModel()->drugData(d->m_DrugId, DrugsDB::Constants::Drug::MainInnCode));
                 d->m_DosageModel->setData(d->m_DosageModel->index(row, Dosages::Constants::InnLinkedDosage),
-                                           drugModel()->drugData(d->m_DrugUid, DrugsDB::Constants::Drug::MainInnDosage));
+                                           drugModel()->drugData(d->m_DrugId, DrugsDB::Constants::Drug::MainInnDosage));
             } else {
 //                qWarning() << "not INN";
-                d->m_DosageModel->setData(d->m_DosageModel->index(row, Dosages::Constants::DrugUid_LK), d->m_DrugUid);
+                d->m_DosageModel->setData(d->m_DosageModel->index(row, Dosages::Constants::DrugUid_LK), d->m_DrugId);
                 d->m_DosageModel->setData(d->m_DosageModel->index(row, Dosages::Constants::CIP_LK), -1);
                 d->m_DosageModel->setData(d->m_DosageModel->index(row, Dosages::Constants::INN_LK), -1);
                 d->m_DosageModel->setData(d->m_DosageModel->index(row, Dosages::Constants::InnLinkedDosage), "");
             }
         innCompositionLabel->show();
         innCompositionLabel->setText(tr("Linking to : ")
-                                      + drugModel()->drugData(d->m_DrugUid, DrugsDB::Constants::Drug::MainInnName).toString() + " "
+                                      + drugModel()->drugData(d->m_DrugId, DrugsDB::Constants::Drug::MainInnName).toString() + " "
 //                                      + tr("Dosage of molecule : ")
-                                      + drugModel()->drugData(d->m_DrugUid, DrugsDB::Constants::Drug::MainInnDosage).toString());
+                                      + drugModel()->drugData(d->m_DrugId, DrugsDB::Constants::Drug::MainInnDosage).toString());
     } else
         innCompositionLabel->hide();
 }
@@ -662,7 +662,7 @@ void DosageViewer::on_aldCheck_stateChanged(int state)
 
 void DosageViewer::on_monographButton_clicked()
 {
-    QDesktopServices::openUrl(QUrl(drugModel()->drugData(d->m_DrugUid, DrugsDB::Constants::Drug::LinkToSCP).toString()));
+    QDesktopServices::openUrl(QUrl(drugModel()->drugData(d->m_DrugId, DrugsDB::Constants::Drug::LinkToSCP).toString()));
 }
 
 void DosageViewer::on_tabWidget_currentChanged(int)

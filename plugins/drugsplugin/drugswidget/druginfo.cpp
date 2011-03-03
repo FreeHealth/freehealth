@@ -33,15 +33,13 @@
 
 #include <drugsbaseplugin/drugsdata.h>
 #include <drugsbaseplugin/drugsmodel.h>
-#include <drugsbaseplugin/drugsinteraction.h>
+#include <drugsbaseplugin/idruginteraction.h>
 #include <drugsbaseplugin/drugsbase.h>
 #include <drugsbaseplugin/interactionsmanager.h>
 
 #include <drugsplugin/drugswidgetmanager.h>
 #include <drugsplugin/constants.h>
 
-
-// include Qt headers
 #include <QMessageBox>
 #include <QApplication>
 
@@ -119,7 +117,6 @@ bool DrugInfoPrivate::checkSent()
     return sendingMessage;
 }
 
-
 void DrugInfo::accept()
 {
     if (d->checkSent())
@@ -152,14 +149,13 @@ void DrugInfo::setDrug(const QVariant &drugUid)
     d->listWidgetInteractions->clear();
     QString display;
     if (drugModel()->drugData(d->m_DrugUid, Drug::Interacts).toBool()) { //mfDrugsBase::instance()->drugHaveInteraction(m_Drug)) {
-        d->m_InteractionsList = DrugsWidget::DrugsWidgetManager::instance()->currentInteractionManager()->getAllInteractionsFound();
-//        d->m_InteractionsList = mfDrugsBase::instance()->getInteractions(m->drugData(d->m_DrugUid, Drug::CIS).toInt());
+        /** \todo code here */
+//        d->m_InteractionsList = DrugsWidget::DrugsWidgetManager::instance()->currentInteractionManager()->getAllInteractionsFound();
         // populate the listwidget with founded interactions
-        foreach(DrugsDB::Internal::DrugsInteraction *di , d->m_InteractionsList) {
-            new QListWidgetItem(drugModel()->drugData(d->m_DrugUid, Interaction::Icon).value<QIcon>(), di->header(), d->listWidgetInteractions);
-        }
+//        foreach(DrugsDB::IDrugInteraction *di , d->m_InteractionsList) {
+//            new QListWidgetItem(drugModel()->drugData(d->m_DrugUid, Interaction::Icon).value<QIcon>(), di->header(), d->listWidgetInteractions);
+//        }
     }
-
 }
 
 void DrugInfoPrivate::on_listWidgetInteractions_itemSelectionChanged()
@@ -178,8 +174,8 @@ void DrugInfoPrivate::on_butIAMSend_clicked()
     // prepare message to send
     QString msg;
     msg = tr("Testing : ") + "\n";
-    foreach(DrugsDB::Internal::DrugsData * drug, drugModel()->drugsList())
-        msg += drug->denomination() + "\n";
+    foreach(DrugsDB::IDrug * drug, drugModel()->drugsList())
+        msg += drug->brandName() + "\n";
 
     // manage INN (DCI)
     if (chkAllInteractionsFound->isChecked()) {
@@ -213,9 +209,9 @@ void DrugInfoPrivate::on_butIAMSend_clicked()
         (chkAllIAMTextsOK->isChecked()) &&
         (chkAllCATTextsOK->isChecked())) {
         msg += "\n" + tr("Checked interactions : ") + "\n";
-        foreach(DrugsDB::Internal::DrugsData *drug, drugModel()->drugsList()) {
+        foreach(DrugsDB::IDrug *drug, drugModel()->drugsList()) {
             Q_UNUSED(drug);
-            foreach(QVariant code,  drugModel()->drugData(m_DrugUid,DrugsDB::Constants::Drug::CodeMoleculesList).toList())
+            foreach(QVariant code, drugModel()->drugData(m_DrugUid,DrugsDB::Constants::Drug::CodeMoleculesList).toList())
                 msg +=  code.toString() + "\n";
         }
     }

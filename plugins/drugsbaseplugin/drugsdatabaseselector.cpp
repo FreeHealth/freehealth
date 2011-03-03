@@ -47,6 +47,9 @@ using namespace DrugsDB;
 using namespace Trans::ConstantTranslations;
 
 static inline Core::ISettings *settings()  { return Core::ICore::instance()->settings(); }
+static inline DrugsDB::Internal::DrugsBase *base() {return DrugsDB::Internal::DrugsBase::instance();}
+
+
 
 namespace DrugsDB {
 namespace Internal {
@@ -292,7 +295,7 @@ void DrugsDatabaseSelector::getAllDatabaseInformations(const QStringList &paths)
                                      .arg(db.lastError().text()).arg(fi.fileName()), __FILE__, __LINE__, true);
                 continue;
             }
-            DatabaseInfos *info = DrugsDB::Internal::DrugsBase::instance()->getDatabaseInformations(fi.fileName());
+            DatabaseInfos *info = base()->getDrugSourceInformations(fi.fileName());
             if (info) {
 //                info->fileName = fi.absoluteFilePath();
 //                info->warn();

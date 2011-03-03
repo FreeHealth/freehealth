@@ -83,7 +83,6 @@ public:
 
     void showDrugsDatabaseInformations();
     void showDosagesDatabaseInformations();
-    void showInteractionsDatabaseInformations();
 
 protected:
     void createConnections();
@@ -91,7 +90,7 @@ protected:
 
 private Q_SLOTS:
     // drugs slots
-    void selector_drugSelected(const QVariant &drugUid);
+    void onSelectorDrugSelected(const QVariant &drugId);
 
 private:
     void focusInEvent(QFocusEvent *event);

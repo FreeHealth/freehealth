@@ -53,16 +53,16 @@ class DRUGSBASE_EXPORT AtcTreeModel : public QAbstractItemModel
 public:
     enum DataRepresentation {
         ATC_Label = 0,
-        ATC_Code,
-        ATC_EnglishLabel,
-        ATC_FrenchLabel,
-        ATC_DeutschLabel
+        ATC_Code
     };
 
     AtcTreeModel(QObject * parent = 0);
     ~AtcTreeModel();
+
+public Q_SLOTS:
     void init();
 
+public:
     QModelIndex index(int row, int column, const QModelIndex &parent = QModelIndex()) const;
     QModelIndex parent(const QModelIndex &index) const;
 

@@ -31,9 +31,17 @@
 #include <drugsbaseplugin/drugsbase_exporter.h>
 #include <QString>
 
+/**
+ * \file drugsearchengine.h
+ * \author Eric MAEKER <eric.maeker@free.fr>
+ * \version 0.6.0
+ * \date 23 Fev 2011
+*/
+
+
 namespace DrugsDB {
+class IDrug;
 namespace Internal {
-class DrugsData;
 class DrugSearchEnginePrivate;
 
 class DRUGSBASE_EXPORT DrugSearchEngine
@@ -47,7 +55,7 @@ public:
 
     void addNewEngine(const QString &label, const QString &url, const QString &lang = Trans::Constants::ALL_LANGUAGE);
 
-    void setDrug(const DrugsData *drug);
+    void setDrug(const IDrug *drug);
 
     QStringList processedLabels(const QString &lang = Trans::Constants::ALL_LANGUAGE) const;
     QStringList processedUrls(const QString &label, const QString &lang = Trans::Constants::ALL_LANGUAGE) const;

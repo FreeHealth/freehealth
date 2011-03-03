@@ -104,7 +104,6 @@ private Q_SLOTS:
 
     void showDrugsDatabaseInformations();
     void showDosagesDatabaseInformations();
-    void showInteractionsDatabaseInformations();
 
     void modeActionChanged(QAction *a);
     void openDosageDialog();
@@ -138,7 +137,6 @@ protected:
     QAction *aToTemplate;
     QAction *aDrugsDatabaseInformations;
     QAction *aDosagesDatabaseInformations;
-    QAction *aIamDatabaseInformations;
     QActionGroup *gModes;
     QAction *aPrescriberMode;
     QAction *aSelectOnlyMode;
@@ -166,7 +164,6 @@ public:
 
     DrugsWidget::DrugsCentralWidget  *currentView() const;
     DrugsDB::DrugsModel              *currentDrugsModel() const { return DrugsDB::DrugsModel::activeModel(); }
-    DrugsDB::InteractionsManager     *currentInteractionManager() const { return currentView()->currentDrugsModel()->currentInteractionManger(); }
 
 private Q_SLOTS:
     void updateContext(Core::IContext *object);

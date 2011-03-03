@@ -678,11 +678,12 @@ QString DrugsIO::prescriptionToXml(DrugsDB::DrugsModel *m, const QString &xmlExt
     }
     QHash<QString, QString> forXml;
     int i;
-    Internal::DrugsData * drug = 0;
+    IDrug *drug = 0;
 
     // Process each prescribed drugs
     for(i=0; i < m->rowCount() ; ++i) {
-        forXml.insert(XML_PRESCRIPTION_UID, m->index(i, Drug::UID).data().toString());
+        /** \todo code here UIDs */
+        forXml.insert(XML_PRESCRIPTION_UID, m->index(i, Drug::UIDs).data().toStringList().join(";"));
         if (m->index(i, Prescription::OnlyForTest).data().toBool()) {
             forXml.insert(instance()->d->xmlTagForPrescriptionRow(Prescription::OnlyForTest), "true");
             forXml.insert(instance()->d->xmlTagForPrescriptionRow(Drug::Denomination), m->index(i, Drug::Denomination).data().toString());
@@ -705,8 +706,8 @@ QString DrugsIO::prescriptionToXml(DrugsDB::DrugsModel *m, const QString &xmlExt
         forXml.clear();
 
         // Insert composition
-        drug = m->getDrug(m->index(i, Drug::UID).data());
-        Q_ASSERT(drug);
+        drug = m->getDrug(m->index(i, Drug::DrugId).data());
+//        Q_ASSERT(drug);
         if (drug) {
             // Process drugs composition
             QString tmp = drug->compositionToXml();

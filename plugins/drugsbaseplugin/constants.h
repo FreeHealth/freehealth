@@ -27,6 +27,8 @@
 #ifndef DRUGSBASE_CONSTANTS_H
 #define DRUGSBASE_CONSTANTS_H
 
+#include <drugsbaseplugin/constants_databaseschema.h>
+
 #include <QFlags>
 #include <QHash>
 #include <QStringList>
@@ -34,8 +36,8 @@
 /**
  * \file constants.h
  * \author Eric MAEKER <eric.maeker@free.fr>
- * \version 0.4.0
- * \date 02 Mar 2010
+ * \version 0.6.0
+ * \date 02 Mar 2011
 */
 
 namespace DrugsDB {
@@ -232,104 +234,20 @@ namespace Constants {
                               ;
 
 
-    // DATABASE
-    const char * const DB_DRUGS_NAME     = "drugs";            /*!< \brief Drugs database connection name. */
-    const char * const DB_IAM_NAME       = "iam";            /*!< \brief Drugs database connection name. */
-    const char * const DB_DEFAULT_DRUGS_FILENAME = "drugs-fr_FR.db";         /*!< \brief Drug database file name (for SQLite). */
-    const char * const DB_IAM_FILENAME   = "iam.db";         /*!< \brief Drug database file name (for SQLite). */
-    const char * const DB_DEFAULT_IDENTIFIANT  = "FR_AFSSAPS";
+    // Translations
+    const char * const  DRUGSBASE_TR_CONTEXT = "mfDrugsConstants";
+    const char * const  NATURE_OF_RISK = QT_TRANSLATE_NOOP("mfDrugsConstants", "Nature of risk");
+    const char * const  MANAGEMENT = QT_TRANSLATE_NOOP("mfDrugsConstants", "Management");
 
-    //--------------------------------------------------------------------------------------------------------
-    //------------------------------------ Enums for Database Management -------------------------------------
-    //--------------------------------------------------------------------------------------------------------
-    /** \brief Represents the tables index of drugs database */
-    enum Tables
-    {
-        Table_DRUGS=0, Table_COMPO, Table_PACKAGING, Table_LK_MOL_ATC, Table_INFORMATION,
-        Table_INTERACTIONS, Table_INTERACTION_KNOWLEDGE, Table_ATC, Table_IAM_TREE, Table_SOURCES, Table_DOSAGE,
-        Table_SEARCHENGINES, Table_DRUG_ROUTES, Table_ROUTES,
-        Table_MaxParam
+    // Some usefull enums
+    enum LevelOfInteractionWarnings {
+        MaximumLevelOfWarning = 0,
+        ModerateLevelOfWarning,
+        MinimumLevelOfWarning
     };
 
-    /** \brief Represents the fields index of drugs database table CIS */
-    enum DRUGSfields
-    { DRUGS_UID = 0, DRUGS_NAME, DRUGS_FORM, DRUGS_ROUTE, DRUGS_ATC, DRUGS_STRENGTH, DRUGS_TYPE_MP,
-      DRUGS_AUTHORIZATION, DRUGS_MARKET, DRUGS_LINK_SPC,
-      DRUGS_MaxParam
-    };
-
-    /** \brief Represents the fields index of drugs database table CIP */
-    enum PACKAGINGfields // table CIS_CIP
-    { PACK_DRUG_UID = 0, PACK_PACK_UID, PACK_LABEL, PACK_STATUS, PACK_MARKET,
-      PACK_DATE, PACK_OPTION_CODE,
-      PACK_MaxParam
-    };
-
-    /** \brief Represents the fields index of drugs database table COMPO */
-    enum COMPOSITIONfields
-    { COMPO_UID = 0,
-      COMPO_MOL_FORM,
-      COMPO_MOL_CODE, COMPO_MOL_NAME,
-      COMPO_MOL_ATC,
-      COMPO_DOSAGE, COMPO_REF_DOSAGE,
-      COMPO_NATURE, COMPO_LK_NATURE,
-      COMPO_MaxParam, COMPO_IAM_DENOMINATION, COMPO_IAM_CLASS_DENOMINATION, COMPO_VeryMaxParam
-    };
-
-    enum LINKfields {
-        LK_MOLECULECODE = 0, LK_ATC_ID, LK_MaxParam
-    };
-
-    enum INFOfields
-    { INFO_VERSION = 0, INFO_NAME, INFO_IDENTIFIANT, INFO_COMPAT_VERSION, INFO_PROVIDER, INFO_WEBLINK,
-      INFO_COMPLEMENTARY_WWW,
-      INFO_AUTHOR, INFO_LICENSE, INFO_LICENSE_TERMS, INFO_DATE, INFO_DRUG_UID_NAME, INFO_PACK_MAIN_CODE_NAME,
-      INFO_ATC, INFO_INTERACTIONS, INFO_MOLLINKCOMPLETION, INFO_AUTHOR_COMMENTS, INFO_LANGUAGE_COUNTRY, INFO_DRUGS_NAME_CONSTRUCTOR,
-      INFO_MaxParam
-    };
-
-    /** \brief Represents the fields index of drugs database table IAM_DENOMINATION */
-    enum INTERACTIONSfields
-    { IA_ID = 0, IA_ATC1, IA_ATC2, IA_IAK_ID,
-      IA_MaxParam
-    };
-
-    /** \brief Represents the fields index of drugs database table IAM_IMPORT */
-    enum INTERACTION_KNOWLEDGEfields
-    { IAK_ID = 0, IAK_TYPE, IAK_RISK_FR, IAK_MANAGEMENT_FR, IAK_RISK_EN, IAK_MANAGEMENT_EN,
-      IAK_REFERENCES_LINK,
-      IAK_MaxParam
-    };
-
-    /** \brief Represents the fields index of drugs database table ATC */
-    enum ATCfields
-    { ATC_ID = 0, ATC_CODE, ATC_EN, ATC_FR, ATC_DE,
-      ATC_MaxParam
-    };
-
-    /** \brief Represents the fields index of drugs database table ATC */
-    enum IAM_TREEfields
-    { TREE_ID_CLASS = 0, TREE_ID_ATC, TREE_SOURCE_LINK,
-      TREE_MaxParam
-    };
-
-    enum SOURCESfields {
-        SOURCES_ID = 0, SOURCES_SOURCE_LINK, SOURCES_TYPE, SOURCES_LINK,
-        SOURCES_TEXTUAL_REFERENCE, SOURCES_ABSTRACT, SOURCES_EXPLANATION,
-        SOURCES_MaxParam
-    };
-
-    enum SEARCHENGINESfields {
-        SEARCHENGINE_ID, SEARCHENGINE_LABEL, SEARCHENGINE_URL
-    };
-
-    enum ROUTESFields {
-        ROUTES_ID = 0, ROUTES_FR, ROUTES_EN, ROUTES_DE
-    };
-
-    enum DRUGSROUTESFields {
-        DRUG_ROUTES_UID, DRUG_ROUTES_ROUTE_ID
-    };
+    // Drugs engines uid
+    const char * const  DDI_ENGINE_UID = "ddiEngine";
 
     //--------------------------------------------------------------------------------------------------------
     //------------------------------------- Enums for Models Management --------------------------------------
@@ -342,7 +260,9 @@ namespace Drug
     enum Drug
     {
         Id = 1000,
-        UID,
+        UIDs,
+        OldUid,
+        DrugId,
         Pack_UID,
         Denomination,
         Form,
@@ -362,7 +282,7 @@ namespace Drug
         Administration,
         Interacts,
         OwnInteractionsSynthesis,
-        MaximumLevelOfInteraction,
+//        MaximumLevelOfInteraction,
         CompositionString,
         InnCompositionString,    // inn dose form ; inn dose form...
         AvailableForms,
@@ -428,23 +348,7 @@ namespace Interaction
         MaxParam
     };
 
-    enum TypeOfIAM
-    {
-        noIAM            = 0x0000,
-        Unknown          = 0x0001,
-        Information      = 0x0002,
-        InnDuplication   = 0x0004,
-        Precaution       = 0x0010,
-        APrendreEnCompte = 0x0020,
-        P450             = 0x0100,
-        GPG              = 0x0200,
-        Deconseille      = 0x1000,
-        ContreIndication = 0x8000
-    };
-    Q_DECLARE_FLAGS( TypesOfIAM, TypeOfIAM );
-
 }  // End namespace Drugs::Constants::Interaction
-Q_DECLARE_OPERATORS_FOR_FLAGS( Interaction::TypesOfIAM )
 
 }  // End namespace DrugsDB::Constants
 }  // End namespace DrugsDB

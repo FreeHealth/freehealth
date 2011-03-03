@@ -27,9 +27,6 @@
 #ifndef DRUGINFO_H
 #define DRUGINFO_H
 
-// include drugswidget headers
-
-// include Qt headers
 #include <QDialog>
 #include <QObject>
 

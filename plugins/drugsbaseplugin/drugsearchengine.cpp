@@ -59,7 +59,7 @@ public:
 
 public:
     QList<Engine *> m_Engines;
-    const DrugsData *m_Drug;
+    const IDrug *m_Drug;
 };
 
 DrugSearchEngine *DrugSearchEngine::m_Instance = 0;
@@ -100,7 +100,7 @@ void DrugSearchEngine::addNewEngine(const QString &label, const QString &url, co
     d->m_Engines.append(e);
 }
 
-void DrugSearchEngine::setDrug(const DrugsData *drug)
+void DrugSearchEngine::setDrug(const IDrug *drug)
 {
     d->m_Drug = drug;
     if (!drug)
@@ -115,10 +115,11 @@ void DrugSearchEngine::setDrug(const DrugsData *drug)
     // - [[DRUG_NAME]] --> exact value of the DRUGS.NAME field
     // - [[CONSTRUCTED_DRUG_NAME]] --> the constructed drug name like inform in the INFORMATIONS table
     // - [[DRUG_UID]] --> the uid of the drug
-    const QSet<int> atc_ids = d->m_Drug->allAtcIds();
+    const QVector<int> &atc_ids = d->m_Drug->allAtcIds();
     QHash<int, QString> atcCodes;
     QHash<int, QString> atcLabels;
-    foreach(int id, atc_ids) {
+    for(int i = 0; i<atc_ids.count(); ++i) {
+        int id = atc_ids.at(i);
         const QString &lbl = drugsBase()->getAtcLabel(id);
         if (atcLabels.values().contains(lbl))
             continue;
@@ -129,11 +130,12 @@ void DrugSearchEngine::setDrug(const DrugsData *drug)
     QHash<QString, QString> tokens;
     const QStringList &codes = atcCodes.values();
     const QStringList &labels = atcLabels.values();
-    tokens.insert("DRUG_ATC", d->m_Drug->ATC());
+    tokens.insert("DRUG_ATC", d->m_Drug->atcCode());
     tokens.insert("ATC_CODES", codes.join("%20"));
     tokens.insert("ATC_LABELS", labels.join("%20"));
-    tokens.insert("DRUG_NAME", d->m_Drug->denomination());
-    tokens.insert("DRUG_UID", d->m_Drug->UID().toString());
+    tokens.insert("DRUG_NAME", d->m_Drug->brandName());
+    /** \todo improve this "DRUG_UID" */
+    tokens.insert("DRUG_UID", d->m_Drug->uids().join(";"));
     tokens.insert("DRUG_LINK_SPC", d->m_Drug->linkToSCP());
 //    tokens.insert("CONSTRUCTED_DRUG_NAME", d->m_Drug->);
 

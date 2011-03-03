@@ -74,14 +74,14 @@ public:
     QString selectInteractionsSql(const int &tableref, const QList<int> &fieldsref, const QHash<int, QString> &conditions) const;
 
     // link to DrugsBase
-    int getInnCodeForCodeMolecule(const int molecule_code) const;
-    QString getAtcLabel(const int inncode) const;
-    QString getAtcLabel(const QString &code) const;
-    QString getAtcCode(const int atc_id) const;
-    QString getInnDenominationFromSubstanceCode(const int molecule_code) const;
+//    int getInnCodeForCodeMolecule(const int molecule_code) const;
+//    QString getAtcLabel(const int atcId) const;
+//    QString getAtcLabel(const QString &code) const;
+//    QString getAtcCode(const int atcId) const;
+//    QString getInnDenominationFromSubstanceCode(const int molecule_code) const;
 
-    QStringList getIamClassDenomination(const int &molecule_code);
-    QSet<int> getAllInnAndIamClassesIndex(const int molecule_code);
+//    QStringList getIamClassDenomination(const int &molecule_code);
+//    QSet<int> getAllInnAndIamClassesIndex(const int molecule_code);
 
     // Interactions base
     QList<DrugsInteraction*> calculateInteractions(const QList<DrugsData *> &drugs);

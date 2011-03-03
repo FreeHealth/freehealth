@@ -140,7 +140,6 @@ DrugsActionHandler::DrugsActionHandler(QObject *parent) :
         aToTemplate(0),
         aDrugsDatabaseInformations(0),
         aDosagesDatabaseInformations(0),
-        aIamDatabaseInformations(0),
         gModes(0),
         aPrescriberMode(0),
         aSelectOnlyMode(0),
@@ -172,7 +171,7 @@ DrugsActionHandler::DrugsActionHandler(QObject *parent) :
     }
     Q_ASSERT(menu);
 #ifdef FREEDIAMS
-    actionManager()->actionContainer(Core::Constants::MENUBAR)->addMenu(menu, DrugsWidget::Constants::G_PLUGINS_DRUGS);
+    actionManager()->actionContainer(Core::Constants::MENUBAR)->addMenu(menu, Core::Constants::G_PLUGINS);
 #else
     actionManager()->actionContainer(Core::Constants::M_PLUGINS)->addMenu(menu, Core::Constants::G_PLUGINS_DRUGS);
 #endif
@@ -355,17 +354,6 @@ DrugsActionHandler::DrugsActionHandler(QObject *parent) :
         hmenu->addAction(cmd, Core::Constants::G_HELP_DATABASES);
     }
     connect(aDosagesDatabaseInformations,SIGNAL(triggered()), this, SLOT(showDosagesDatabaseInformations()));
-
-    a = aIamDatabaseInformations = new QAction(this);
-    a->setIcon(th->icon(Core::Constants::ICONHELP));
-    cmd = actionManager()->registerAction(a, DrugsWidget::Constants::A_IAMDATABASE_INFORMATIONS, QList<int>() << Core::Constants::C_GLOBAL_ID);
-    cmd->setTranslations(Trans::Constants::INTERACTIONS_DATABASE_INFORMATIONS);
-    cmd->retranslate();
-    if (hmenu) {
-        hmenu->addAction(cmd, Core::Constants::G_HELP_DATABASES);
-    }
-    connect(aIamDatabaseInformations,SIGNAL(triggered()), this, SLOT(showInteractionsDatabaseInformations()));
-
 
     // Mode menu
     Core::ActionContainer *modemenu = actionManager()->actionContainer(DrugsWidget::Constants::M_PLUGINS_MODES);
@@ -616,13 +604,6 @@ void DrugsActionHandler::showDosagesDatabaseInformations()
 {
     if (m_CurrentView) {
         m_CurrentView->showDosagesDatabaseInformations();
-    }
-}
-
-void DrugsActionHandler::showInteractionsDatabaseInformations()
-{
-    if (m_CurrentView) {
-        m_CurrentView->showInteractionsDatabaseInformations();
     }
 }
 

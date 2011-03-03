@@ -38,13 +38,14 @@
 /**
  * \file drugsmodel.h
  * \author Eric MAEKER <eric.maeker@free.fr>
- * \version 0.4.0
- * \date 23 Fev 2010
+ * \version 0.6.0
+ * \date 26 Fev 2011
 */
 namespace DrugsDB {
 class DrugsIO;
 class InteractionsManager;
 class DosageModel;
+class IDrug;
 
 namespace Internal {
 class DrugsModelPrivate;
@@ -81,8 +82,8 @@ public:
     bool removeRows(int row, int count, const QModelIndex &parent = QModelIndex());
     bool setData(const QModelIndex &index, const QVariant &value, int role = Qt::EditRole);
     QVariant data(const QModelIndex &index, int role) const;
-    QVariant drugData(const QVariant &drugUid, const int column);
-    bool setDrugData(const QVariant &drugUid, const int column, const QVariant &value);
+    QVariant drugData(const QVariant &drugId, const int column);
+    bool setDrugData(const QVariant &drugId, const int column, const QVariant &value);
     void resetModel();
     Qt::ItemFlags flags(const QModelIndex &index) const;
 
@@ -90,16 +91,16 @@ public:
     bool prescriptionHasAllergies();
 
     // ADD / REMOVE DRUGS
-    void setDrugsList(QDrugsList &list);
-    const QDrugsList & drugsList() const;
+    void setDrugsList(QList<IDrug *> &list);
+    const QList<IDrug *> &drugsList() const;
     void clearDrugsList();
     int addTextualPrescription(const QString &drugLabel, const QString &drugNote);
-    int addDrug(Internal::DrugsData *drug, bool automaticInteractionChecking = true);
-    int addDrug(const QVariant &drugUid, bool automaticInteractionChecking = true);
-    int removeDrug(const QVariant &drugUid);
+    int addDrug(IDrug *drug, bool automaticInteractionChecking = true);
+    int addDrug(const QVariant &drugId, bool automaticInteractionChecking = true);
+    int removeDrug(const QVariant &drugId);
     int removeLastInsertedDrug();
-    bool containsDrug(const QVariant &drugUid) const;
-    Internal::DrugsData *getDrug(const QVariant &drugUid) const;
+    bool containsDrug(const QVariant &drugId) const;
+    IDrug *getDrug(const QVariant &drugId) const;
 
     // SORT / ORDER DRUGS INTO PRESCRIPTION
     void sort(int column, Qt::SortOrder order = Qt::AscendingOrder);
@@ -124,12 +125,9 @@ public:
     // FOR DOSAGE MANAGEMENT
     Internal::DosageModel *dosageModel(const QVariant &drugUid);
     Internal::DosageModel *dosageModel(const QModelIndex & drugIndex);
-    InteractionsManager *currentInteractionManger() const;
 
     // FOR PRESCRIPTION FORMATTING
-    static QString getFullPrescription(const Internal::DrugsData *drug, bool toHtml = false, const QString &mask = QString::null);
-
-    DrugsDB::InteractionsManager *interactionsManager() const;
+    static QString getFullPrescription(const IDrug *drug, bool toHtml = false, const QString &mask = QString::null);
 
     void warn();
 

@@ -24,95 +24,53 @@
  *       NAME <MAIL@ADRESS>                                                *
  *       NAME <MAIL@ADRESS>                                                *
  ***************************************************************************/
-#ifndef DRUGSINTERACTION_H
-#define DRUGSINTERACTION_H
+#ifndef DRUGSBASE_PROTOCOLSBASE_H
+#define DRUGSBASE_PROTOCOLSBASE_H
 
 #include <drugsbaseplugin/drugsbase_exporter.h>
-#include <drugsbaseplugin/constants.h>
-
-// include Qt headers
-#include <QIcon>
-#include <QVariant>
-#include <QObject>
-
-/**
- * \file drugsinteraction.h
- * \author Eric MAEKER <eric.maeker@free.fr>
- * \version 0.2.1
- * \date 25 Oct 2009
-*/
-
-/** \todo Some parts should not be Internals */
-
+#include <utils/database.h>
 
 namespace DrugsDB {
 namespace Internal {
-class DrugsData;
-class InteractionsBase;
+class ProtocolsBasePrivate;
 
-class DRUGSBASE_EXPORT DrugsInteraction
+class DRUGSBASE_EXPORT ProtocolsBase : public QObject, public Utils::Database
 {
-    friend class InteractionsBase;
-    friend class InteractionsBasePrivate;
+    Q_OBJECT
+    explicit ProtocolsBase(QObject *parent = 0);
+    bool init();
+
 public:
-    enum DataRepresentation {
-        DI_Id = 0,
-        DI_LinkId,
-        DI_Type,
-        DI_ATC1,
-        DI_ATC2,
-        DI_ATC1_Label,
-        DI_ATC2_Label,
-        DI_Risk,
-        DI_Management,
+    static ProtocolsBase *instance(QObject *parent = 0);
+    ~ProtocolsBase();
 
-        // only used for test
-        DI_RiskFr,
-        DI_RiskEn,
-        DI_ManagementFr,
-        DI_ManagementEn,
-        DI_ReferencesLink
-    };
+//    bool refreshDosageBase();
+
+//    void checkDosageDatabaseVersion();
+//    static QString dosageCreateTableSqlQuery();
+//    QHash<QString, QString> getDosageToTransmit();
+//    bool markAllDosageTransmitted(const QStringList &dosageUuids);
+//    QList<QVariant> getAllUIDThatHaveRecordedDosages() const;
+//    QMultiHash<int,QString> getAllINNThatHaveRecordedDosages() const;
 
 
-    DrugsInteraction() {}
-    ~DrugsInteraction() {}
-
-    static QString typeToString( const int t );
-
-    // getters
-    QList<DrugsData *> drugs() const;
-    QVariant value( const int fieldref ) const;
-    QString typeOfIAM( const int & t ) const;
-    Constants::Interaction::TypesOfIAM type() const;
-    QString header() const;
-    QString risk() const;
-    QString management() const;
-    QString referencesLink() const;
-
-    static bool lessThan(const DrugsInteraction *int1, const DrugsInteraction *int2);
-    static bool greaterThan(const DrugsInteraction *int1, const DrugsInteraction *int2);
-
-    // viewers
-    void warn() const;
-
-
-protected:
-    // setters
-    void setValue( const int fieldref, const QVariant & value ); // ajouter CIS1 CIS2
-    void addInteractingDrug(DrugsData *drug)
-    {
-        Q_ASSERT(drug);
-        if (!m_InteractingDrugs.contains(drug))
-            m_InteractingDrugs << drug;
-    }
-
+//private:
+//    bool createDatabase(const QString & connectionName , const QString & dbName,
+//                        const QString & pathOrHostName,
+//                        TypeOfAccess access, AvailableDrivers driver,
+//                        const QString & /*login*/, const QString & /*pass*/,
+//                        const int /*port*/,
+//                        CreationOption /*createOption*/
+//                       );
+//private Q_SLOTS:
+//    void onCoreDatabaseServerChanged();
 private:
-    QHash<int, QVariant> m_Infos;
-    QList<DrugsData *> m_InteractingDrugs;
+    ProtocolsBasePrivate *d;
+    static ProtocolsBase *m_Instance;
 };
 
-}  // End Internal
-}  // End DrugsDB
 
-#endif  // DRUGSINTERACTION_H
+}  // End namespace Internal
+}  // End namespace DrugsDB
+
+#endif // DRUGSBASE_PROTOCOLSBASE_H

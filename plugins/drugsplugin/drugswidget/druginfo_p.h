@@ -29,7 +29,6 @@
 
 #include <utils/messagesender.h>
 
-// include Qt headers
 #include <QDialog>
 #include <QObject>
 
@@ -38,16 +37,14 @@
 
 
 /**
- * \file druginfo.h
+ * \file druginfo_p.h
  * \author Eric MAEKER <eric.maeker@free.fr>
- * \version 0.5.0
- * \date 12 Oct 2010
+ * \version 0.6.0
+ * \date 26 Feb 2011
 */
 
 namespace DrugsDB {
-namespace Internal {
-class DrugsInteraction;
-}
+class IDrugInteraction;
 }
 
 
@@ -74,7 +71,7 @@ public:
      QDialog *m_Parent;
      QVariant m_DrugUid;
      Utils::MessageSender m_Sender;
-     QList<DrugsDB::Internal::DrugsInteraction *> m_InteractionsList;         // should not be deleted
+     QList<DrugsDB::IDrugInteraction *> m_InteractionsList;         // should not be deleted
      bool m_INNSent, m_InteractSent;
 };
 

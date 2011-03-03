@@ -53,9 +53,7 @@ class PrinterPreviewer;
 }
 
 namespace DrugsDB {
-namespace Internal {
-class DrugsData;
-}
+class IDrug;
 }
 
 namespace DrugsWidget {
@@ -120,7 +118,7 @@ protected:
     virtual void changeEvent(QEvent *e);
 
 private:
-    DrugsDB::Internal::DrugsData *drug;
+    DrugsDB::IDrug *drug;
 };
 
 class DrugsUserWidget : public QWidget, private Ui::DrugsUserWidget

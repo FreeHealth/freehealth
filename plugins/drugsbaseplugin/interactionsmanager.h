@@ -27,14 +27,13 @@
 #ifndef INTERACTIONSMANAGER_H
 #define INTERACTIONSMANAGER_H
 
-// include drugswidget headers
 #include <drugsbaseplugin/drugsbase_exporter.h>
 #include <drugsbaseplugin/constants.h>
 
-// include toolkit headers
+#include <coreplugin/itheme.h>
+
 #include <utils/database.h>
 
-// include Qt headers
 #include <QVariant>
 #include <QStringList>
 #include <QMap>
@@ -44,47 +43,102 @@
 /**
  * \file interactionsmanager.h
  * \author Eric MAEKER <eric.maeker@free.fr>
- * \version 0.2.1
- * \date 25 Oct 2009
+ * \version 0.6.0
+ * \date 03 Mar 2011
 */
 
-
-
 namespace DrugsDB {
+class IDrug;
+class IDrugInteraction;
+class InteractionsManager;
+
 namespace Internal {
-class DrugsData;
-class DrugsInteraction;
 class InteractionsManagerPrivate;
 }  // End Internal
+
+
+class DRUGSBASE_EXPORT DrugInteractionQuery : public QObject
+{
+    Q_OBJECT
+public:
+    DrugInteractionQuery(const QVector<IDrug *> &testDrugs, QObject *parent = 0);
+    DrugInteractionQuery(QObject *parent = 0);
+    ~DrugInteractionQuery();
+
+    void clearDrugsList();
+    void setDrugsList(const QVector<IDrug *> &list);
+    QVector<IDrug *> drugsList() const {return m_Drugs;}
+
+    void addDrug(IDrug *drug);
+    void removeDrug(IDrug *drug);
+    void removeLastInsertedDrug();
+
+    bool containsDrug(const IDrug *drug) const;
+
+    void setTestDrugDrugInteractions(bool test) {m_TestDDI = test;}
+    void setTestPatientDrugInteractions(bool test) {m_TestPDI = test;}
+
+private:
+    QVector<IDrug *> m_Drugs;
+    bool m_TestDDI, m_TestPDI;
+};
+
+
+class DRUGSBASE_EXPORT DrugInteractionResult : public QObject
+{
+    Q_OBJECT
+    friend class DrugsDB::InteractionsManager;
+
+public:
+    ~DrugInteractionResult();
+
+    QVector<IDrugInteraction *> interactions(const QString &engineUid = QString::null) const;
+    bool drugHaveInteraction(const IDrug *d, const QString &engineUid = QString::null) const;
+    QVector<IDrugInteraction *> getInteractions(const IDrug *drug, const QString &engineUid = QString::null) const;
+
+    QIcon maxLevelOfInteractionIcon(const IDrug *drug, const int levelOfWarning, const int size = Core::ITheme::SmallIcon, const QString &engineUid = QString::null);
+
+    bool isDrugDrugInteractionsTested() const {return m_DDITested;}
+    bool isPatientDrugInteractionsTested() const {return m_PDITested;}
+
+protected:
+    DrugInteractionResult(const QVector<IDrugInteraction *> &interactions, QObject *parent = 0);
+    DrugInteractionResult(QObject *parent = 0);
+
+    void setInteractions(const QVector<IDrugInteraction *> &list) {m_Interactions = list;}
+    void addInteractions(const QVector<IDrugInteraction *> &list) {m_Interactions << list;}
+    void setDDITested(const bool test) {m_DDITested = test;}
+    void setPDITested(const bool test) {m_PDITested = test;}
+
+private:
+    QVector<IDrugInteraction *> m_Interactions;
+    bool m_DDITested, m_PDITested;
+};
+
+
 
 class DRUGSBASE_EXPORT InteractionsManager : public QObject
 {
     Q_OBJECT
-public:
     InteractionsManager(QObject *parent = 0);
+public:
+    static InteractionsManager *instance(QObject *parent = 0);
     ~InteractionsManager();
 
-    void addDrug(Internal::DrugsData *drug);
-    void setDrugsList(const QList<Internal::DrugsData *> &list);
-    void removeLastDrug();
-    void clearDrugsList();
+    DrugInteractionResult *checkInteractions(const DrugInteractionQuery &query);
 
-    bool checkInteractions();            // must be called first
+//    static QIcon interactionIcon(const int level, const int levelOfWarning = 0, bool medium = false);
+//    QIcon iamIcon(const IDrug *drug, const int &levelOfWarning = 0, bool medium = false) const;
+    static QString listToHtml(const QList<IDrugInteraction *> & list, bool fullInfos);
+    static QString synthesisToHtml(const QList<IDrugInteraction *> & list, bool fullInfos);
+    static void synthesisToTreeWidget(const QList<IDrugInteraction *> &list, QTreeWidget *tree);
 
-    bool drugHaveInteraction( const Internal::DrugsData *d ) const;                      // must call first interactions()
-    DrugsDB::Constants::Interaction::TypesOfIAM getMaximumTypeOfIAM( const Internal::DrugsData *d ) const;   // must call first interactions()
-    QList<Internal::DrugsInteraction*> getInteractions( const Internal::DrugsData *d ) const;           // must call first interactions()
-    Internal::DrugsInteraction *getLastInteractionFound() const;                      // must call first interactions()
-    QList<Internal::DrugsInteraction*> getAllInteractionsFound() const;                      // must call first interactions()
-
-    static QIcon interactionIcon(const int level, const int levelOfWarning = 0, bool medium = false);
-    QIcon iamIcon(const Internal::DrugsData *drug, const int &levelOfWarning = 0, bool medium = false) const;
-    static QString listToHtml( const QList<Internal::DrugsInteraction *> & list, bool fullInfos );
-    static QString synthesisToHtml( const QList<Internal::DrugsInteraction *> & list, bool fullInfos );
-    static void synthesisToTreeWidget(const QList<Internal::DrugsInteraction *> &list, QTreeWidget *tree);
+private Q_SLOTS:
+    void onNewObjectAddedToPluginManagerPool(QObject *object);
 
 private:
     // intialization state
+    static InteractionsManager *m_Instance;
     static bool m_initialized;
     Internal::InteractionsManagerPrivate *d;
 };

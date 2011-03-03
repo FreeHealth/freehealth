@@ -29,7 +29,8 @@
 
 #include <drugsbaseplugin/drugsbase_exporter.h>
 #include <drugsbaseplugin/constants.h>
-#include <drugsbaseplugin/interactionsbase.h>
+
+#include <utils/database.h>
 
 #include <QVariant>
 #include <QStringList>
@@ -39,22 +40,24 @@
 /**
  * \file drugsbase.h
  * \author Eric MAEKER <eric.maeker@free.fr>
- * \version 0.5.0
- * \date 23 Sept 2010
+ * \version 0.6.0
+ * \date 26 Feb 2011
 */
 
-/** \todo Some parts should not be Internals */
+namespace MedicalUtils {
+class EbmData;
+}
+
 
 namespace DrugsDB {
 class DatabaseInfos;
+class IDrug;
 
 namespace Internal {
-class DrugsData;
-class DrugsInteraction;
 class DrugInfo;
 class DrugsBasePrivate;
 
-class DRUGSBASE_EXPORT DrugsBase : public QObject, public InteractionsBase, public Utils::Database
+class DRUGSBASE_EXPORT DrugsBase : public QObject, public Utils::Database
 {
     Q_OBJECT
     DrugsBase(QObject *parent = 0);
@@ -62,9 +65,7 @@ class DRUGSBASE_EXPORT DrugsBase : public QObject, public InteractionsBase, publ
 
     friend class DrugsModel;
     friend class DrugsBasePrivate;
-    friend class Drugs;
     friend class DrugInfo;
-    friend class DrugInteraction;
 
 public:
     static DrugsBase *instance();
@@ -74,21 +75,27 @@ public:
     static bool isInitialized() { return m_initialized; }
     void logChronos(bool state);
     const DatabaseInfos *actualDatabaseInformations() const;
-    DatabaseInfos *getDatabaseInformations(const QString &connectionName);
     bool isDatabaseTheDefaultOne() const;
     bool isRoutesAvailable() const;
+    DatabaseInfos *getDrugSourceInformations(const QString &drugSourceUid);
 
     bool refreshAllDatabases();
     bool refreshDrugsBase();
     bool refreshDosageBase();
 
     // Manage drugs
-    QString getDrugName(const QString &uid) const;
-    DrugsData *getDrugByCIP(const QVariant & CIP_id);
-    DrugsData *getDrugByUID(const QVariant &UID);
-    QVariant getUIDFromCIP(int CIP);
-    QStringList getDrugCompositionAtcCodes(const QVariant &uid);
-    QStringList getDrugInns(const QVariant &uid);
+    QString getDrugName(const QString &uid1, const QString &uid2 = QString::null, const QString &uid3 = QString::null) const;
+    IDrug *getDrugByUID(const QVariant &uid1, const QVariant &uid2 = QVariant(), const QVariant &uid3 = QVariant());
+    QVariantList getDrugUids(const QVariant &drugId);
+    IDrug *getDrugByDrugId(const QVariant &drugId);
+
+    // Used by the GlobalDrugsModel
+    QStringList getDrugCompositionAtcCodes(const QVariant &drugId);
+    QStringList getDrugInns(const QVariant &drugId);
+    QStringList getRouteLabels(const QVariant &drugId, const QString &lang = QString::null);
+    QStringList getFormLabels(const QVariant &drugId, const QString &lang = QString::null);
+    QHash<QString, QString> getDrugFullComposition(const QVariant &drugId, const QString &lang = QString::null);
+    QStringList getDrugMolecularComposition(const QVariant &drugId, const QString &lang = QString::null);
 
     // Manage Dosages
     void checkDosageDatabaseVersion();
@@ -97,14 +104,34 @@ public:
     bool markAllDosageTransmitted(const QStringList &dosageUuids);
     QList<QVariant> getAllUIDThatHaveRecordedDosages() const;
     QMultiHash<int,QString> getAllINNThatHaveRecordedDosages() const;
-    int getRouteId(const QString &fromLabel);
+
+    // Manage drug classification
+    int getAtcCodeForMoleculeId(const int molId) const;
+    QString getAtcLabel(const int atcId) const;
+    QString getAtcLabel(const QString &code) const;
+    QString getAtcCode(const int atcId) const;
+    QString getInnDenominationFromSubstanceCode(const int molId) const;
+
+//    QStringList getIamClassDenomination(const int molId);
+//    QVector<int> getAllInnAndIamClassesIndex(const int molId);
+
+    QVector<int> getLinkedMoleculeCodes(QVector<int> &atc_ids) const;
+    QVector<int> getLinkedMoleculeCodes(const int atc_id) const;
+    QVector<int> getLinkedMoleculeCodes(const QString &atcLabel) const;
+    QVector<int> getLinkedAtcIds(const QVector<int> &mids) const;
+    QVector<int> getLinkedAtcIds(const int mid) const;
+
+    QVector<int> getAllMoleculeCodeWithAtcStartingWith(const QString &code) const;
+
+    QVector<MedicalUtils::EbmData *> getAllSourcesFromTree(const QList<int> &allInnAndInteractingClassesIds);
+
 
 //protected:
 public:
     static const QString separator;
 
     // managins drugs
-    bool drugsINNIsKnown(const DrugsData *drug);
+//    bool drugsINNIsKnown(const IDrug *drug);
 
 Q_SIGNALS:
     void drugsBaseIsAboutToChange();

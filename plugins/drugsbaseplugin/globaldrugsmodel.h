@@ -29,43 +29,66 @@
 
 #include <drugsbaseplugin/drugsbase_exporter.h>
 
-#include <QSqlTableModel>
+#include <QSqlQueryModel>
 #include <QObject>
 class QStandardItemModel;
 
 /**
  * \file globaldrugsmodel.h
  * \author Eric MAEKER <eric.maeker@free.fr>
- * \version 0.5.0
- * \date 24 Aug 2010
+ * \version 0.6.0
+ * \date 28 Feb 2011
 */
 
 namespace DrugsDB {
+class IDrug;
+
 namespace Internal {
 class GlobalDrugsModelPrivate;
-class DrugsData;
 }  // end namespace Internal
 
 
-class DRUGSBASE_EXPORT GlobalDrugsModel : public QSqlTableModel
+class DRUGSBASE_EXPORT GlobalDrugsModel : public QSqlQueryModel
 {
     Q_OBJECT
     friend class Internal::GlobalDrugsModelPrivate;
 
 public:
-    GlobalDrugsModel(QObject * parent = 0);
+    enum DataRepresentation {
+        BrandName = 0,
+        Strength,
+        Routes,
+        Forms,
+        Marketed,
+        DrugId,
+        ColumnCount
+    };
+
+    enum SearchMode {
+        SearchByBrandName = 0,
+        SearchByMolecularName,
+        SearchByInnName
+    };
+
+    GlobalDrugsModel(const SearchMode searchMode = SearchByBrandName, QObject * parent = 0);
     ~GlobalDrugsModel();
+
+    void setSearchMode(const int searchMode);
 
     static void updateAvailableDosages();
 
-    static bool hasAllergy(const DrugsDB::Internal::DrugsData *drug);
-    static bool hasIntolerance(const DrugsDB::Internal::DrugsData *drug);
+    static bool hasAllergy(const IDrug *drug);
+    static bool hasIntolerance(const IDrug *drug);
 
     static QStandardItemModel *drugsPrecautionsModel();
+
+    int columnCount(const QModelIndex & = QModelIndex()) const { return ColumnCount; }
 
     bool setData(const QModelIndex &, const QVariant &, int = Qt::EditRole) { return false; }
     QVariant data(const QModelIndex & item, int role = Qt::DisplayRole) const;
     Qt::ItemFlags flags(const QModelIndex &index) const;
+
+    void setFilter(const QString &searchFor);
 
 public Q_SLOTS:
     void updateCachedAvailableDosage();
