@@ -1,0 +1,888 @@
+/**
+  \class DrugsDB::IComponent
+  \brief Represents a molecular component of a drug directly extracted from the drug database.
+  \sa DrugsDb::IDrug
+
+
+  \class DrugsDB::IVirtualComponent
+  \brief Represents a molecular component of a virtual drug. The virtual component is not extracted form the drug database but is constructed.
+
+*/
+
+
+/**
+  \fn DrugsDB::IComponent::IComponent(IDrug *parent)
+  Create a new component and associate it with the IDrug \e drug. When a component is associated to a IDrug,
+  the IDrug manages the deletion of the newly created IComponent.
+  \sa void DrugsDB::IDrug::addComponent()
+*/
+
+/**
+  \fn virtual void DrugsDB::IComponent::linkWithComposition(IComponent *compo)
+*/
+
+/**
+  \fn virtual QVariant DrugsDB::IComponent::data(const int ref, const QString &lang = QString::null) const
+*/
+
+/**
+  \fn QString DrugsDB::IComponent::mainInnName() const
+  Return the main INN name. This member takes care of linked components.
+*/
+
+/**
+  \fn QString DrugsDB::IComponent::mainInnDosage() const
+  Return the main INN dosage. This member takes care of linked components.
+*/
+
+/**
+  \fn QStringList DrugsDB::IComponent::interactingClasses() const
+  Return all know interacting classes for this component.
+*/
+
+/**
+  \fn QString DrugsDB::IComponent::dosage() const
+  Return the dosage of this molecular component.
+*/
+
+/**
+  \fn QString DrugsDB::IComponent::form() const
+  Return the form of this component. \sa DrugDB::IDrug::Form.
+*/
+
+/**
+  \fn QString DrugsDB::IComponent::moleculeName() const
+  Return the molecular name of this component.
+*/
+
+/**
+  \fn QString DrugsDB::IComponent::nature() const
+*/
+
+/**
+  \fn int DrugsDB::IComponent::lkNature() const
+*/
+
+/**
+  \fn QString DrugsDB::IComponent::warnText() const
+  Return the debugging text.
+*/
+
+
+
+/**
+  \fn virtual bool DrugsDB::IVirtualComponent::setData(const int ref, const QVariant &value, const QString &lang = QString::null)
+  Set the data of the virtual component.
+*/
+
+
+
+/**
+  \class DrugsDB::IDrug
+  \brief Represents a drug directly extracted from the drug database.
+  \sa DrugsDb::IDrug
+
+
+  \class DrugsDB::IVirtualDrug
+  \brief Represents a virtual drug. The virtual drug is not extracted form the drug database but is constructed.
+
+*/
+
+
+
+
+#include "idrug.h"
+
+#include <drugsbaseplugin/drugsbase.h>
+#include <drugsbaseplugin/drugsbaseinfo.h>
+
+#include <coreplugin/icore.h>
+#include <coreplugin/isettings.h>
+
+#include <translationutils/constanttranslations.h>
+#include <utils/global.h>
+
+#include <QVector>
+#include <QLocale>
+#include <QHash>
+#include <QString>
+
+using namespace DrugsDB;
+using namespace Internal;
+
+static inline DrugsDB::Internal::DrugsBase *base() {return DrugsDB::Internal::DrugsBase::instance();}
+static const char* const FRENCH_RPC_LINK = "http://afssaps-prd.afssaps.fr/php/ecodex/rcp/R%1.htm"; // 2+2+3
+static inline Core::ISettings *settings() {return Core::ICore::instance()->settings();}
+
+
+namespace DrugsDB {
+namespace Internal {
+class IComponentPrivate
+{
+public:
+    IComponentPrivate() : m_Drug(0), m_Link(0) {}
+
+    QHash<int, QMultiHash<QString, QVariant> > m_Content;
+    IDrug *m_Drug;
+    QVector<int> m_7CharAtcIds, m_InteractingClassAtcIds;
+    IComponent *m_Link;
+};
+
+class IDrugPrivate
+{
+public:
+    QHash<int, QMultiHash<QString, QVariant> > m_Content;
+    QVector<IComponent *> m_Compo;
+    QVector<int> m_7CharsAtc, m_InteractingClasses;
+    QVector<int> m_AllIds; // is the sum of m_7CharsAtc && m_InteractingClasses; provided for computation speed improvements
+    QStringList m_AllAtcCodes; // for speed improvements in allergy and intolerance computations
+    QVector<DrugRoute *> m_Routes;
+    QString m_NoLaboDenomination;
+};
+
+
+class DrugRoutePrivate
+{
+public:
+    QHash<QString, QString> m_Labels;
+    bool m_Syst;
+    IDrug *m_Drug;
+    int m_Rid;
+};
+}
+}
+
+///////////////////////////////////////////////////////////////////////////////////////////////////
+/////////////////////////////////////////  ICOMPONENT  ////////////////////////////////////////////
+///////////////////////////////////////////////////////////////////////////////////////////////////
+IComponent::IComponent(IDrug *parent) :
+        d_component(new Internal::IComponentPrivate)
+{
+    d_component->m_Drug = parent;
+    if (d_component->m_Drug)
+        d_component->m_Drug->addComponent(this);
+    setDataFromDb(IsActiveSubstance, true);
+}
+
+IComponent::~IComponent()
+{
+    if (d_component)
+        delete d_component;
+    d_component = 0;
+}
+
+/** \brief Set the linked DrugsDB::IComponent (this happens when a molecule is transform to another one which is the active one). */
+void IComponent::linkWithComposition(IComponent *link)
+{
+    Q_ASSERT(link);
+    d_component->m_Link = link;
+    if (!link->isLinkedWith(this)) {
+        link->linkWithComposition(this);
+        bool active = (data(Nature).toString()=="FT");
+        setDataFromDb(IsActiveSubstance, active);
+        link->setIsActiveSubstance(!active);
+    }
+}
+
+bool IComponent::isLinkedWith(IComponent *compo) const
+{
+    return compo==d_component->m_Link;
+}
+
+IDrug *IComponent::drug() const
+{
+    return d_component->m_Drug;
+}
+
+QVariant IComponent::data(const int ref, const QString &lang) const
+{
+    QString language;
+    if (lang.isEmpty())
+        language = QString("xx");
+    else
+        language = lang;
+
+    switch (ref)
+    {
+    case Strength:
+        {
+            QString s = d_component->m_Content.value(ref).value(language).toString();
+            s.replace(",000","");
+            s.replace(",00","");
+            return s;
+        }
+    case FullDosage:
+        {
+            QString strength = data(Strength, language).toString() + data(StrengthUnit, language).toString();
+            QString refDose = data(Dose, language).toString() + data(DoseUnit, language).toString();
+            if (!refDose.isEmpty())
+                return strength + "/" + refDose;
+            return strength;
+        }
+    case MainAtcId:
+        {
+            /** \todo can have multiple ids */
+            if (d_component->m_Link && !isActiveSubstance()) {
+                return d_component->m_Link->data(AtcId, language);
+            }
+            return data(AtcId, language);
+        }
+    case MainAtcCode:
+        {
+            /** \todo can have multiple codes */
+            if (d_component->m_Link && !isActiveSubstance()) {
+                return d_component->m_Link->data(AtcCode, language);
+            }
+            return data(AtcCode, language);
+        }
+    case MainAtcName:
+        {
+            /** \todo can have multiple names ?? */
+            if (d_component->m_Link && !isActiveSubstance()) {
+                return d_component->m_Link->data(AtcLabel, language);
+            }
+            return data(AtcLabel, language);
+        }
+    case MainAtcDosage:
+        {
+            if (isActiveSubstance()) {
+                return data(FullDosage,language);
+            } else if (d_component->m_Link) {
+                return d_component->m_Link->data(FullDosage,language);
+            }
+            break;
+        }
+    case AtcId:
+        {
+            /** \todo A component can have multiple AtcIds. */
+            if (!d_component->m_7CharAtcIds.isEmpty())
+                return d_component->m_7CharAtcIds.at(0);
+            return -1;
+        }
+    case AtcLabel:
+        {
+            if (d_component->m_7CharAtcIds.isEmpty())
+                return QString();
+            return base()->getAtcLabel(d_component->m_7CharAtcIds.at(0));
+        }
+    case InteractingClassNames:
+        {
+            QStringList names;
+            for(int i=0; i < d_component->m_InteractingClassAtcIds.count(); ++i) {
+                names << base()->getAtcLabel(d_component->m_InteractingClassAtcIds.at(i));
+            }
+            return names;
+        }
+    case DebuggingText:
+        {
+            QString tmp;
+            tmp += "IComponent: " + moleculeName()
+                   + "\n     (Form:" + form() + ";\n      INN:" + innName() + ";\n      fullDosage:" + dosage()
+                    + ";\n      nature:" + nature();
+            if (d_component->m_Link) {
+                tmp += ";\n      linkedTo" + d_component->m_Link->moleculeName();
+            }
+            tmp += ";\n      mainInnName:" + mainInnName() + ";\n      mainInnAtcId:" + QString::number(mainInnCode());
+            tmp += ";\n      mainInnDosage:" + mainInnDosage();
+            tmp += ";\n      interactingClasses:" + interactingClasses().join(",");
+            return tmp + ")\n";
+        }
+    default: return d_component->m_Content.value(ref).value(language);
+    }
+    return d_component->m_Content.value(ref).value(language);
+}
+
+QString IComponent::form() const
+{
+    return d_component->m_Drug->data(IDrug::Forms).toString();
+}
+
+QVector<int> IComponent::innAtcIds() const
+{
+    return d_component->m_7CharAtcIds;
+}
+
+QVector<int> IComponent::interactingClassAtcIds() const
+{
+    return d_component->m_InteractingClassAtcIds;
+}
+
+QString IComponent::toXml() const
+{
+    /** \todo code here */
+    return QString();
+}
+
+bool IComponent::setDataFromDb(const int ref, const QVariant &value, const QString &lang)
+{
+    d_component->m_Content[ref].insertMulti(lang, value);
+    return true;
+}
+
+void IComponent::set7CharAtcIds(const QVector<int> &atcIds)
+{
+    d_component->m_7CharAtcIds = atcIds;
+}
+
+void IComponent::setInteractingClassAtcIds(const QVector<int> &atcIds)
+{
+    d_component->m_InteractingClassAtcIds = atcIds;
+}
+
+IVirtualComponent::IVirtualComponent(IVirtualDrug *parent) :
+        IComponent(parent)
+{
+}
+
+IVirtualComponent *IVirtualComponent::fromXml(const QString &xml)
+{
+    return 0;
+}
+
+QString IVirtualComponent::toXml() const
+{
+    return QString();
+}
+
+
+///////////////////////////////////////////////////////////////////////////////////////////////////
+//////////////////////////////////////////  DRUGROUTE  ////////////////////////////////////////////
+///////////////////////////////////////////////////////////////////////////////////////////////////
+DrugRoute::DrugRoute(IDrug *drug) :
+        d(new Internal::DrugRoutePrivate)
+{
+    d->m_Drug = drug;
+    if (d->m_Drug)
+        d->m_Drug->addRoute(this);
+    d->m_Syst = false;
+}
+
+DrugRoute::~DrugRoute()
+{
+    if (d) delete d;
+    d = 0;
+}
+
+IDrug *DrugRoute::drug() const {return d->m_Drug;}
+QString DrugRoute::label(const QString &lang) const
+{
+    if (!d->m_Labels.keys().contains(lang)) {
+        QString l = QLocale().name().left(2);
+        if (d->m_Labels.keys().contains(l)) {
+            return d->m_Labels.value(l);
+        } else if (d->m_Labels.keys().contains(Trans::Constants::ALL_LANGUAGE)) {
+            return d->m_Labels.value(Trans::Constants::ALL_LANGUAGE);
+        }
+    }
+    return QString();
+}
+
+bool DrugRoute::isSystemic() const {return d->m_Syst;}
+void DrugRoute::setIsSystemic(bool systemic) {d->m_Syst = systemic;}
+
+void DrugRoute::setLabel(const QString &label, const QString &lang)
+{
+    QString l = lang;
+    if (lang.isEmpty()) {
+        l = QLocale().name().left(2);
+    }
+    d->m_Labels.insert(lang, label);
+}
+
+int DrugRoute::routeId() const
+{
+    return d->m_Rid;
+}
+
+void DrugRoute::setRouteId(const int rid)
+{
+    d->m_Rid = rid;
+}
+
+
+///////////////////////////////////////////////////////////////////////////////////////////////////
+////////////////////////////////////////////  IDRUG  //////////////////////////////////////////////
+///////////////////////////////////////////////////////////////////////////////////////////////////
+IDrug::IDrug() :
+        d_drug(new Internal::IDrugPrivate)
+{
+}
+
+IDrug::~IDrug()
+{
+    qDeleteAll(d_drug->m_Compo);
+    qDeleteAll(d_drug->m_Routes);
+    if (d_drug)
+        delete d_drug;
+    d_drug = 0;
+}
+
+QVariant IDrug::data(const int ref, const QString &lang) const
+{
+    if (ref < 0 || ref > MaxParam)
+        return QVariant();
+    switch (ref)
+    {
+    case Name:
+        {
+            if (settings()->value(Constants::S_HIDELABORATORY).toBool()) {
+                if (d_drug->m_NoLaboDenomination.isEmpty()) {
+                    d_drug->m_NoLaboDenomination = d_drug->m_Content.value(Name).value(lang).toString();
+                    foreach(const QString &name, Constants::LABOS) {
+                        if (d_drug->m_NoLaboDenomination.contains(" " + name + " ")) {
+                            d_drug->m_NoLaboDenomination.remove(" " + name + " ");
+                            return d_drug->m_NoLaboDenomination;
+                        }
+                    }
+                }
+                return d_drug->m_NoLaboDenomination;
+            }
+            break;
+        }
+    case Spc:
+        {
+            QString toReturn = d_drug->m_Content.value(Spc).value(lang).toString();
+            if (!toReturn.isEmpty()) {
+                if (base()->actualDatabaseInformations()->identifiant == Constants::DB_DEFAULT_IDENTIFIANT)
+                    toReturn = QString(FRENCH_RPC_LINK).arg(toReturn.rightJustified(7,'0'));
+            }
+            return toReturn;
+        }
+    case AllUids:
+        {
+            QStringList list;
+            list << data(Uid1).toString() << data(Uid2).toString() << data(Uid3).toString();
+            return list;
+        }
+    case AtcLabel :
+        {
+            /** \todo code here */
+        }
+    case Forms: return base()->getFormLabels(d_drug->m_Content.value(DrugID).value(lang));
+    case Routes: return base()->getRouteLabels(d_drug->m_Content.value(DrugID).value(lang));
+    case MainInnCode:
+        {
+            return mainInnCode();
+        }
+    case AllInnsKnown:
+        {
+            foreach(const IComponent *compo, d_drug->m_Compo) {
+                qWarning() << "AllInnsKnown" << compo->moleculeName() << compo->isActiveSubstance();
+                /** \todo code here manage virtual components */
+                if (compo->isActiveSubstance()) {
+                    if (compo->innAtcIds().isEmpty())
+                        return false;
+                }
+            }
+            return true;
+        }
+    case All7CharsAtcLabels :
+        {
+            QStringList toReturn;
+            foreach(IComponent *compo, d_drug->m_Compo) {
+                toReturn << compo->innName();
+            }
+            toReturn.removeDuplicates();
+            return toReturn;
+        }
+    case AllInteractingClasses:
+        {
+            QStringList names;
+            for(int i=0; i < d_drug->m_InteractingClasses.count(); ++i) {
+                names << base()->getAtcLabel(d_drug->m_InteractingClasses.at(i));
+            }
+            return names;
+        }
+    case AllMoleculeNames :
+        {
+            QStringList toReturn;
+            foreach(const IComponent *compo, d_drug->m_Compo)
+                toReturn << compo->moleculeName();
+            return toReturn;
+        }
+    case AllAtcCodes:
+        {
+            if (d_drug->m_AllAtcCodes.isEmpty()) {
+                for(int i=0; i < d_drug->m_AllIds.count(); ++i) {
+                    QString code = base()->getAtcCode(d_drug->m_AllIds.at(i));
+                    if (!d_drug->m_AllAtcCodes.contains(code))
+                        d_drug->m_AllAtcCodes << code;
+                }
+                d_drug->m_AllAtcCodes << d_drug->m_Content.value(AtcCode).value(lang).toString();
+            }
+            return d_drug->m_AllAtcCodes;
+        }
+    }
+    return d_drug->m_Content.value(ref).value(lang);
+}
+
+int IDrug::numberOfCodeMolecules() const
+{
+    return d_drug->m_Compo.count();
+}
+
+int IDrug::mainInnCode() const
+{
+    if (d_drug->m_Compo.count() > 2 || d_drug->m_Compo.isEmpty())
+        return -1;
+    int id = d_drug->m_Compo.at(0)->data(IComponent::MainAtcId).toInt();
+    if (d_drug->m_Compo.count()==2) {
+        if (d_drug->m_Compo.at(1)->data(IComponent::MainAtcId).toInt()==id)
+            return id;
+    } else {
+        return id;
+    }
+    return -1;
+}
+
+QString IDrug::mainInnName() const
+{
+    if (d_drug->m_Compo.count() > 2 || d_drug->m_Compo.isEmpty())
+        return QString();
+    QString name = d_drug->m_Compo.at(0)->innName();
+    if (d_drug->m_Compo.count()==2) {
+        if (d_drug->m_Compo.at(1)->innName()==name)
+            return name;
+    } else {
+        return name;
+    }
+    return QString();
+}
+
+QString IDrug::mainInnDosage() const
+{
+    if (d_drug->m_Compo.count() > 2 || d_drug->m_Compo.isEmpty())
+        return QString();
+    QString name = d_drug->m_Compo.at(0)->dosage();
+    if (d_drug->m_Compo.count()==2) {
+        if (d_drug->m_Compo.at(1)->dosage()==name)
+            return name;
+    } else {
+        return name;
+    }
+    return QString();
+}
+
+QString IDrug::innComposition() const
+{
+    QString toReturn;
+    QString lastInn;
+    foreach(IComponent *compo, d_drug->m_Compo) {
+        if (lastInn!=compo->innName())
+            toReturn += QString("%1 %2 + ").arg(compo->innName(), compo->dosage());
+        lastInn = compo->innName();
+    }
+    if (!toReturn.isEmpty()) {
+        toReturn.chop(3);
+        toReturn = toReturn.toUpper();
+        toReturn += " , " + forms().join(", ");
+    }
+    return toReturn;
+}
+
+QVector<DrugRoute *> IDrug::drugRoutes() const
+{
+    return d_drug->m_Routes;
+}
+
+bool IDrug::atcIdsContains(const int atcId)
+{
+    return d_drug->m_AllIds.contains(atcId);
+}
+
+namespace {
+    const char *const XML_COMPOSITION                  = "Composition";
+    const char *const XML_COMPOSITION_INN              = "inn";
+    const char *const XML_COMPOSITION_ATC              = "atc";
+    const char *const XML_COMPOSITION_FORM             = "form";
+    const char *const XML_COMPOSITION_ROUTE            = "route";
+    const char *const XML_COMPOSITION_STRENGTH         = "strenght";
+    const char *const XML_COMPOSITION_MOLECULAR        = "molecularName";
+    const char *const XML_COMPOSITION_NATURE           = "nature";
+    const char *const XML_COMPOSITION_NATURE_LK        = "natureLink";
+}
+
+/** \brief Return the composition of the drug in XML format. */
+QString IDrug::compositionToXml()
+{
+    QString tmp;
+    /** \todo add ATC to drug composition and XML_COMPOSITION_STRENGTH */
+    foreach(IComponent *compo, d_drug->m_Compo) {
+        tmp += QString("<%1").arg(::XML_COMPOSITION);
+        tmp += QString(" %1=\"%2\" ").arg(::XML_COMPOSITION_INN).arg(compo->innName());
+//        tmp += QString(" %1=\"%2\" ").arg(::XML_COMPOSITION_ATC).arg(compo);
+        tmp += QString(" %1=\"%2\" ").arg(::XML_COMPOSITION_FORM).arg(compo->form());
+        tmp += QString(" %1=\"%2\" ").arg(::XML_COMPOSITION_ROUTE).arg(routes().join(", "));
+//        tmp += QString(" %1=\"%2\" ").arg(::XML_COMPOSITION_STRENGTH).arg(compo->innDosage());
+        tmp += QString(" %1=\"%2\" ").arg(::XML_COMPOSITION_MOLECULAR).arg(compo->moleculeName());
+        tmp += QString(" %1=\"%2\" ").arg(::XML_COMPOSITION_NATURE).arg(compo->nature());
+        tmp += QString(" %1=\"%2\" ").arg(::XML_COMPOSITION_NATURE_LK).arg(compo->lkNature());
+        tmp += QString("/>\n");
+    }
+    return tmp;
+}
+
+QString IDrug::toHtml() const
+{
+    QString msg;
+
+    const QStringList &iams = this->listOfInn();
+    const QStringList &iamClass = this->listOfInteractingClasses();
+    QString textIams, textClass;
+    if (iams.isEmpty())
+        textIams = QCoreApplication::translate("DrugsData", "No INN found.");
+    else
+        textIams = iams.join("<br>");
+
+    if (iamClass.isEmpty())
+        textClass = QCoreApplication::translate("DrugsData", "No interaction class found.");
+    else
+        textClass = iamClass.join("<br>");
+
+    /** \todo code here: UIDs not UID */
+    QString uidName = "UID";
+    if (base()->actualDatabaseInformations()) {
+        if (!base()->actualDatabaseInformations()->drugsUidName.isEmpty())
+            uidName = base()->actualDatabaseInformations()->drugsUidName;
+    }
+    QString atc = atcCode();
+    if (!atc.isEmpty()) {
+        atc.prepend(" ; ATC: ");
+    }
+    QString mark;
+//    mark = value(Table_DRUGS, DRUGS_AUTHORIZATION).toString();
+//    if (!mark.isEmpty()) {
+//        mark.prepend("<br>");
+//        mark += " | " + value(Table_DRUGS, DRUGS_TYPE_MP).toString();
+//    }
+
+    msg += QString("<table border=1 cellpadding=2 cellspacing=2 width=100%>\n"
+                    " <tr>\n"
+                    "   <td colspan=2 rowspan=1 align=center>\n"
+                    "       <span style=\"font-weight: bold;\">%1</span>\n"
+                    "       %2"
+                    "   </td>\n"
+                    " </tr>\n"
+                    " <tr>\n"
+                    "   <td colspan=2 rowspan=1>\n"
+                    "       %3\n"
+                    "       <br>%4\n"
+                    "       <br>%5 %6: %7 %8\n"
+                    "   </td>\n"
+                    " </tr>\n")
+            .arg(brandName())
+            .arg(mark)
+            /** \todo code here */
+            .arg(QCoreApplication::translate("DrugsData", "Form(s): ")) //+ value(Table_DRUGS, DRUGS_FORM).toString())
+            .arg(QCoreApplication::translate("DrugsData", "Route(s): ")) //+ value(Table_DRUGS, DRUGS_ROUTE).toString())
+            .arg(QCoreApplication::translate("DrugsData", "Identifier(s): "), uidName)
+            .arg(uids().join(";"))
+            .arg(atc)
+            ;
+
+    QString tmp = "";
+    QString name;
+    foreach(IComponent *compo, d_drug->m_Compo) {
+        if (compo->innName().isEmpty()) {
+            name = compo->moleculeName();
+        } else if (compo->mainInnCode() < 200000) {
+            /** \todo check this innAtcIds ? instead of maininncode*/
+            name = compo->innName();
+        }
+        tmp += QString("<tr><td>%1</td><td>%2</td></tr>").arg(name).arg(compo->dosage());
+        name.clear();
+    }
+
+    msg += QString(" %1\n"
+                   " <tr>\n"
+                   "   <td colspan=2 rowspan=1>%2</td>\n"
+                   " </tr>\n"
+                   "</table>\n\n")
+            .arg(tmp)
+            .arg(textClass);
+    return msg;
+}
+
+QString IDrug::drugsListToHtml(const QList<IDrug*> &list)
+{
+    QString msg;
+
+    /** \todo code here */
+//    // check interactions of the drugs list
+//    InteractionsManager *im = new_im();
+//    im->setDrugsList(list);
+//    im->checkInteractions();
+
+//    // title
+//    msg = QString("<html>\n"
+//                   "<head>\n"
+//                   "<meta http-equiv=\"content-type \" content=\"text/html; charset=UTF-8\">\n"
+//                   "<title>%1</title>\n"
+//                   "<meta name=\"author\" content=\"%1\">\n"
+//                   "<meta name=\"description\" content=\"%1\">\n"
+//                   "</head>\n"
+//                   "<body>\n")
+//            .arg(qApp->applicationName());
+
+//    msg += QString("<p align=center><b>%1</b></p>\n").arg(qApp->applicationName());
+
+//    foreach(IDrug* d, list) {
+//        msg += d->toHtml() + "<br>\n\n";
+//        if (im->drugHaveInteraction(d)) {
+//            const QList<DrugsInteraction *> &listDI = im->getInteractions(d);
+//            msg.append(im->listToHtml(listDI, true));
+
+//            msg.append("<br></ul>");
+//        }
+//    }
+//    msg.append("</body>\n</html>\n");
+
+//    delete im;
+
+    return msg;
+}
+
+/** \brief Used to sort the drugs list. */
+bool IDrug::lessThan(const IDrug *drug1, const IDrug *drug2)
+{
+    bool ald1, ald2;
+    ald1 = drug1->prescriptionValue(Constants::Prescription::IsALD).toBool();
+    ald2 = drug2->prescriptionValue(Constants::Prescription::IsALD).toBool();
+//    qWarning() << "lessThan" << drug1->brandName() << drug2->brandName() << ald1 << ald2 << (drug1->brandName() < drug2->brandName());
+    // ALD First of all
+    if ((ald1)  && (!ald2)) {
+        return true;
+    } else if ((!ald1)  && (ald2)) {
+        return false;
+    }
+    return drug1->brandName() < drug2->brandName();
+}
+
+
+bool IDrug::setDataFromDb(const int ref, const QVariant &value, const QString &lang)
+{
+    d_drug->m_Content[ref].insertMulti(lang, value);
+    return true;
+}
+
+void IDrug::addComponent(IComponent *compo)
+{
+    d_drug->m_Compo.append(compo);
+}
+
+QVector<IComponent *> IDrug::components() const
+{
+    return d_drug->m_Compo;
+}
+
+void IDrug::addRoute(DrugRoute *route)
+{
+    d_drug->m_Routes << route;
+}
+
+void IDrug::setAll7CharsAtcIds(const QVector<int> &ids)
+{
+    d_drug->m_7CharsAtc = ids;
+    d_drug->m_AllIds = d_drug->m_7CharsAtc + d_drug->m_InteractingClasses;
+    d_drug->m_AllAtcCodes.clear();
+}
+
+void IDrug::setAllInteractingClassesIds(const QVector<int> &ids)
+{
+    d_drug->m_InteractingClasses = ids;
+    d_drug->m_AllIds = d_drug->m_7CharsAtc + d_drug->m_InteractingClasses;
+    d_drug->m_AllAtcCodes.clear();
+}
+
+/** Call this once all components have been added to the drug. */
+void IDrug::constructAtcIdsVectorsUsingComponents()
+{
+    d_drug->m_7CharsAtc.clear();
+    d_drug->m_InteractingClasses.clear();
+    d_drug->m_AllIds.clear();
+    foreach(IComponent *compo, d_drug->m_Compo) {
+        for(int i = 0; i < compo->innAtcIds().count(); ++i) {
+            int id = compo->innAtcIds().at(i);
+            if (!d_drug->m_7CharsAtc.contains(id))
+                d_drug->m_7CharsAtc << id;
+        }
+        for(int i = 0; i < compo->interactingClassAtcIds().count(); ++i) {
+            int id = compo->interactingClassAtcIds().at(i);
+            if (!d_drug->m_InteractingClasses.contains(id))
+                d_drug->m_InteractingClasses << id;
+        }
+    }
+    d_drug->m_AllIds << d_drug->m_7CharsAtc;
+    d_drug->m_AllIds << d_drug->m_InteractingClasses;
+}
+
+QVector<int> IDrug::allInnAndInteractingClassesIds() const
+{
+    return d_drug->m_InteractingClasses;
+}
+
+QVector<int> IDrug::allSevenCharsAtcIds() const
+{
+    return d_drug->m_7CharsAtc;
+}
+
+QVector<int> IDrug::allAtcIds() const
+{
+    return d_drug->m_AllIds;
+}
+
+QVector<int> IDrug::molsIds() const
+{
+    QVector<int> molsIds;
+    foreach(IComponent *compo, d_drug->m_Compo) {
+        molsIds << compo->data(IComponent::MID).toInt();
+    }
+    return molsIds;
+}
+
+/** \brief For debugging purpose only. Warn all values of the drug. */
+QString IDrug::warnText() const
+{
+    if (!Utils::isDebugCompilation())
+        return QString();
+
+    QString tmp;
+    tmp += QString("IDrug: %1\n     (ID:%2; Uids: %3)\n     (AtcLabel: %4;\n      Strength: %5;\n      Forms: %6;\n      Routes: %7)\n")
+           .arg(brandName()).arg(drugId().toString()).arg(uids().join(";"))
+           .arg(atcLabel()).arg(strength())
+           .arg(forms().join(","))
+           .arg(routes().join(","));
+
+    tmp += QString("     (LinkScp: %1)\n").arg(linkToSCP());
+    tmp += QString("     (NbMols: %1; NbInns: %2)\n").arg(numberOfCodeMolecules()).arg(numberOfInn());
+    tmp += QString("     (Mols: %1)\n").arg(listOfMolecules().join(";"));
+    tmp += QString("     (Inns: %1)\n").arg(listOfInn().join(";"));
+    tmp += QString("     (InteractingClasses: %1)\n").arg(listOfInteractingClasses().join(";"));
+    tmp += QString("     (MainInnName: %1; MainInnDosage: %2;\n      innComposition: %3)\n").arg(mainInnName()).arg(mainInnDosage()).arg(innComposition());
+
+    foreach(IComponent *compo, d_drug->m_Compo)
+        tmp += "  * " + compo->warnText() + "\n";
+    tmp.chop(1);
+
+//    foreach(const int i, d->m_PrescriptionValues.keys())
+//        tmp += QString("    Prescription : %1 == %2\n")
+//                           .arg(i)
+//                           .arg(d->m_PrescriptionValues[i].toString());
+    tmp += QString("~IDrug");
+    return tmp;
+}
+
+
+
+///////////////////////////////////////////////////////////////////////////////////////////////////
+/////////////////////////////////////////  IVIRTUALDRUG  //////////////////////////////////////////
+///////////////////////////////////////////////////////////////////////////////////////////////////
+IVirtualDrug *IVirtualDrug::fromXml(const QString &xml)
+{
+    return 0;
+}
+
+QString IVirtualDrug::toXml() const
+{
+    return QString();
+}
