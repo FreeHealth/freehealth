@@ -78,6 +78,8 @@ public:
     void setTestDrugDrugInteractions(bool test) {m_TestDDI = test;}
     void setTestPatientDrugInteractions(bool test) {m_TestPDI = test;}
 
+    void warn() const;
+
 private:
     QVector<IDrug *> m_Drugs;
     bool m_TestDDI, m_TestPDI;
@@ -92,6 +94,8 @@ class DRUGSBASE_EXPORT DrugInteractionResult : public QObject
 public:
     ~DrugInteractionResult();
 
+    void clear();
+
     QVector<IDrugInteraction *> interactions(const QString &engineUid = QString::null) const;
     bool drugHaveInteraction(const IDrug *d, const QString &engineUid = QString::null) const;
     QVector<IDrugInteraction *> getInteractions(const IDrug *drug, const QString &engineUid = QString::null) const;
@@ -100,6 +104,8 @@ public:
 
     bool isDrugDrugInteractionsTested() const {return m_DDITested;}
     bool isPatientDrugInteractionsTested() const {return m_PDITested;}
+
+    void warn() const;
 
 protected:
     DrugInteractionResult(const QVector<IDrugInteraction *> &interactions, QObject *parent = 0);
@@ -129,7 +135,7 @@ public:
 
 //    static QIcon interactionIcon(const int level, const int levelOfWarning = 0, bool medium = false);
 //    QIcon iamIcon(const IDrug *drug, const int &levelOfWarning = 0, bool medium = false) const;
-    static QString listToHtml(const QList<IDrugInteraction *> & list, bool fullInfos);
+    static QString listToHtml(const QVector<IDrugInteraction *> & list, bool fullInfos);
     static QString synthesisToHtml(const QList<IDrugInteraction *> & list, bool fullInfos);
     static void synthesisToTreeWidget(const QList<IDrugInteraction *> &list, QTreeWidget *tree);
 

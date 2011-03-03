@@ -50,7 +50,8 @@ using namespace DrugsDB;
 static inline Core::ITheme *theme()  { return Core::ICore::instance()->theme(); }
 static inline void messageSplash(const QString &s) {theme()->messageSplashScreen(s); }
 
-DrugsBasePlugin::DrugsBasePlugin()
+DrugsBasePlugin::DrugsBasePlugin() :
+        IPlugin(), m_DDIEngine(0)
 {
     if (Utils::Log::warnPluginsCreation()) {
 #ifdef FREEDIAMS
@@ -63,6 +64,10 @@ DrugsBasePlugin::DrugsBasePlugin()
 
 DrugsBasePlugin::~DrugsBasePlugin()
 {
+    removeObject(m_DDIEngine);
+    if (m_DDIEngine)
+        delete m_DDIEngine;
+    m_DDIEngine = 0;
 }
 
 bool DrugsBasePlugin::initialize(const QStringList &arguments, QString *errorString)
@@ -90,7 +95,10 @@ void DrugsBasePlugin::extensionsInitialized()
 
     addAutoReleasedObject(new Core::PluginAboutPage(pluginSpec(), this));
     addAutoReleasedObject(new DrugsDB::Internal::DrugsTemplatePrinter(this));
-    addAutoReleasedObject(new DrugsDB::Internal::DrugDrugInteractionEngine(this));
+
+    m_DDIEngine = new DrugsDB::Internal::DrugDrugInteractionEngine(this);
+    m_DDIEngine->init();
+    addObject(m_DDIEngine);
 }
 
 

@@ -91,7 +91,7 @@ public:
     bool prescriptionHasAllergies();
 
     // ADD / REMOVE DRUGS
-    void setDrugsList(QList<IDrug *> &list);
+    void setDrugsList(const QList<IDrug *> &list);
     const QList<IDrug *> &drugsList() const;
     void clearDrugsList();
     int addTextualPrescription(const QString &drugLabel, const QString &drugNote);
@@ -124,7 +124,7 @@ public:
 
     // FOR DOSAGE MANAGEMENT
     Internal::DosageModel *dosageModel(const QVariant &drugUid);
-    Internal::DosageModel *dosageModel(const QModelIndex & drugIndex);
+    Internal::DosageModel *dosageModel(const QModelIndex &drugIndex);
 
     // FOR PRESCRIPTION FORMATTING
     static QString getFullPrescription(const IDrug *drug, bool toHtml = false, const QString &mask = QString::null);
@@ -136,9 +136,7 @@ Q_SIGNALS:
     void numberOfRowsChanged();
 
 protected:
-    QModelIndex createIndex(int row, int column, void * ptr = 0) const;
-    QModelIndex createIndex(int row, int column, quint32 id) const;
-    virtual void checkInteractions() const;
+    void checkInteractions() const;
 
 private Q_SLOTS:
     void dosageDatabaseChanged();

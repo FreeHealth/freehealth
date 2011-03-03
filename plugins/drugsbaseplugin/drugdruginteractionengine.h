@@ -17,7 +17,6 @@ class DrugDrugInteractionEnginePrivate;
 class DrugDrugInteractionEngine : public IDrugEngine
 {
     Q_OBJECT
-
 public:
     enum TypeOfIAM
     {

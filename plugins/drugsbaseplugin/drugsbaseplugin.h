@@ -38,6 +38,9 @@
 */
 
 namespace DrugsDB {
+    namespace Internal {
+        class DrugDrugInteractionEngine;
+    }
 
 class DrugsBasePlugin : public ExtensionSystem::IPlugin
 {
@@ -48,6 +51,9 @@ public:
 
     bool initialize(const QStringList &arguments, QString *errorString);
     void extensionsInitialized();
+
+private:
+    DrugsDB::Internal::DrugDrugInteractionEngine *m_DDIEngine;
 };
 
 

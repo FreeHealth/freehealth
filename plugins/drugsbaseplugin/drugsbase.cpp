@@ -270,7 +270,8 @@ public:
                     }
                 }
                 precedent = compo;
-                qWarning() << compo->data(IComponent::DebuggingText).toString();
+                if (WarnExtractedDrugs)
+                    qWarning() << compo->data(IComponent::DebuggingText).toString();
             }
         } else {
             LOG_QUERY_ERROR_FOR(q, query);

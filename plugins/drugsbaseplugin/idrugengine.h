@@ -48,7 +48,7 @@ class IDrugEngine : public QObject
     Q_OBJECT
 
 public:
-    IDrugEngine(QObject *parent) : QObject(parent) {}
+    IDrugEngine(QObject *parent) : QObject(parent), m_IsActive(true) {}
     virtual ~IDrugEngine() {}
 
     virtual bool init() = 0;

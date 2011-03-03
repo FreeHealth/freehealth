@@ -86,10 +86,7 @@ DrugsDB::DrugsModel *DrugsDB::DrugsModel::m_ActiveModel = 0;
 
 namespace DrugsDB {
 namespace Internal {
-/**
-  \brief Private part of mfDrugsModel
-  \internal
-*/
+
 class DrugsModelPrivate
 {
 public:
@@ -262,15 +259,13 @@ public:
         case Interaction::ToolTip :
             {
                 QString display;
-                /** \todo code here */
-//                if (m_InteractionResult->drugHaveInteraction(drug)) {
-//                    const QList<IDrugInteraction *> &list = m_InteractionsManager->getInteractions(drug);
-//                    display.append(m_InteractionsManager->listToHtml(list, false));
-//                } else if (drug->data(IDrug::AllInnsKnown).toBool()) {
-//                    display = drug->listOfInn().join("<br />") + "<br />" + drug->listOfInteractingClasses().join("<br />");
-//                } else {
-//                    display = tkTr(Trans::Constants::NO_1_FOUND).arg(tkTr(Trans::Constants::INN));
-//                }
+                if (m_InteractionResult->drugHaveInteraction(drug)) {
+                    display.append(interactionManager()->listToHtml(m_InteractionResult->getInteractions(drug), false));
+                } else if (drug->data(IDrug::AllInnsKnown).toBool()) {
+                    display = drug->listOfInn().join("<br />") + "<br />" + drug->listOfInteractingClasses().join("<br />");
+                } else {
+                    display = tkTr(Trans::Constants::NO_1_FOUND).arg(tkTr(Trans::Constants::INN));
+                }
                 return display;
             }
         case Drug::OwnInteractionsSynthesis:
@@ -345,13 +340,14 @@ public:
     }
 
 public:
-    QList<IDrug *> m_DrugsList;          /*!< \brief Actual prescription drugs list */
-    QList<IDrug *> m_TestingDrugsList;  /*!< \brief Actual prescription drugs list */
-    int m_levelOfWarning;            /*!< \brief Level of warning to use (retrieve from settings). */
-    mutable QHash<int, QPointer<DosageModel> > m_DosageModelList;  /** \brief associated CIS / dosageModel */
-    IDrug *m_LastDrugRequiered; /*!< \brief Stores the last requiered drug by drugData() for speed improvments */
+    QList<IDrug *> m_DrugsList;
+    QList<IDrug *> m_TestingDrugsList;
+    int m_levelOfWarning;
+    mutable QHash<int, QPointer<DosageModel> > m_DosageModelList;
+    IDrug *m_LastDrugRequiered;
     bool m_ShowTestingDrugs, m_SelectionOnlyMode, m_IsDirty;
     DrugInteractionResult *m_InteractionResult;
+    DrugInteractionQuery *m_InteractionQuery;
 };
 }  // End Internal
 }  // End DrugsDB
@@ -370,9 +366,13 @@ DrugsModel::DrugsModel(QObject * parent)
         Utils::Log::addError(this,"Drugs database not intialized", __FILE__, __LINE__);
     d->m_DrugsList.clear();
     d->m_DosageModelList.clear();
-    // Make sure that the model always got a valid DrugInteractionResult pointer
-    DrugInteractionQuery query(this);
-    d->m_InteractionResult = interactionManager()->checkInteractions(query);
+
+    // Make sure that the model always got a valid DrugInteractionResult and DrugInteractionQuery pointer
+    d->m_InteractionQuery = new DrugInteractionQuery(this);
+    d->m_InteractionQuery->setTestDrugDrugInteractions(true);
+    d->m_InteractionQuery->setTestPatientDrugInteractions(true);
+
+    d->m_InteractionResult = interactionManager()->checkInteractions(d->m_InteractionQuery);
     connect(drugsBase(), SIGNAL(dosageBaseHasChanged()), this, SLOT(dosageDatabaseChanged()));
 }
 
@@ -401,18 +401,6 @@ QModelIndex DrugsModel::index(int row, int column, const QModelIndex &parent) co
     Q_UNUSED(parent);
     if (row < d->m_DrugsList.count())
         return createIndex(row, column);
-    return QModelIndex();
-}
-
-QModelIndex DrugsModel::createIndex(int row, int column, void *) const
-{
-    // TODO create index with mfDosageModel if necessary
-    return QAbstractItemModel::createIndex(row, column, 0);
-}
-
-QModelIndex DrugsModel::createIndex(int /*row*/, int /*column*/, quint32 /*id*/) const
-{
-    Q_ASSERT_X(false, "DrugsModel::createIndex(int, int , quint32 ) const", "You should not use this function");
     return QModelIndex();
 }
 
@@ -560,7 +548,7 @@ Qt::ItemFlags DrugsModel::flags(const QModelIndex &index) const
 }
 
 /** \brief Removes \e count drugs from the \e row. */
-bool DrugsModel::removeRows(int row, int count, const QModelIndex & parent)
+bool DrugsModel::removeRows(int row, int count, const QModelIndex &parent)
 {
     d->m_LastDrugRequiered = 0;
     beginRemoveRows(parent, row, row+count);
@@ -574,9 +562,10 @@ bool DrugsModel::removeRows(int row, int count, const QModelIndex & parent)
         IDrug *drug =  d->m_DrugsList.at(row+i);
         if ((!d->m_DrugsList.removeOne(drug)) && (!d->m_TestingDrugsList.removeOne(drug)))
             toReturn = false;
+        d->m_InteractionQuery->removeDrug(drug);
         delete drug;
+        drug = 0;
     }
-//    d->m_InteractionsManager->setDrugsList(d->m_DrugsList);
     checkInteractions();
     endRemoveRows();
     reset();
@@ -615,12 +604,12 @@ int DrugsModel::addDrug(IDrug *drug, bool automaticInteractionChecking)
     if (containsDrug(drug->uids()))
         return d->m_DrugsList.indexOf(drug);
     d->m_DrugsList << drug;
-//    d->m_InteractionsManager->addDrug(drug);
+    d->m_InteractionQuery->addDrug(drug);
     // check drugs interactions ?
     if (automaticInteractionChecking) {
-        checkInteractions();
         d->m_levelOfWarning = settings()->value(Constants::S_LEVELOFWARNING).toInt();
     }
+    checkInteractions();
     reset();
     d->m_IsDirty = true;
     Q_EMIT numberOfRowsChanged();
@@ -647,11 +636,12 @@ int DrugsModel::addDrug(const QVariant &drugId, bool automaticInteractionCheckin
 void DrugsModel::clearDrugsList()
 {
     d->m_LastDrugRequiered = 0;
-//    d->m_InteractionsManager->clearDrugsList();
     qDeleteAll(d->m_DrugsList);
     d->m_DrugsList.clear();
     qDeleteAll(d->m_TestingDrugsList);
     d->m_TestingDrugsList.clear();
+    d->m_InteractionQuery->clearDrugsList();
+    d->m_InteractionResult->clear();
     d->m_levelOfWarning = settings()->value(Constants::S_LEVELOFWARNING).toInt();
     reset();
     d->m_IsDirty = true;
@@ -662,13 +652,13 @@ void DrugsModel::clearDrugsList()
   \brief Insert a list of drugs and check interactions.
   Calling this causes a model reset.
 */
-void DrugsModel::setDrugsList(QList<IDrug *> &list)
+void DrugsModel::setDrugsList(const QList<IDrug *> &list)
 {
     clearDrugsList();
     d->m_DrugsList = list;
-//    d->m_InteractionsManager->setDrugsList(list);
-    checkInteractions();
+    d->m_InteractionQuery->setDrugsList(list.toVector());
     d->m_levelOfWarning = settings()->value(Constants::S_LEVELOFWARNING).toInt();
+    checkInteractions();
     reset();
     d->m_IsDirty = true;
     Q_EMIT numberOfRowsChanged();
@@ -776,7 +766,7 @@ void DrugsModel::showTestingDrugs(bool state)
         }
     }
     d->m_ShowTestingDrugs = state;
-//    d->m_InteractionsManager->setDrugsList(d->m_DrugsList);
+    d->m_InteractionQuery->setDrugsList(d->m_DrugsList.toVector());
     checkInteractions();
     reset();
 }
@@ -839,7 +829,7 @@ int DrugsModel::removeDrug(const QVariant &drugId)
 {
     // Take care that this function removes all occurence of the referenced drug
     d->m_LastDrugRequiered = 0;
-//    d->m_InteractionsManager->clearDrugsList();
+    d->m_InteractionQuery->clearDrugsList();
     int i = 0;
     foreach(IDrug * drug, d->m_DrugsList) {
         if (drug->drugId() == drugId) {
@@ -847,7 +837,7 @@ int DrugsModel::removeDrug(const QVariant &drugId)
             delete drug;
             ++i;
         } else {
-//            d->m_InteractionsManager->addDrug(drug);
+            d->m_InteractionQuery->addDrug(drug);
         }
     }
     checkInteractions();
@@ -864,9 +854,9 @@ int DrugsModel::removeLastInsertedDrug()
     d->m_LastDrugRequiered = 0;
     if (d->m_DrugsList.count() == 0)
         return 0;
-//    d->m_InteractionsManager->removeLastDrug();
     delete d->m_DrugsList.last();
     d->m_DrugsList.removeLast();
+    d->m_InteractionQuery->setDrugsList(d->m_DrugsList.toVector());
     checkInteractions();
     reset();
     d->m_IsDirty = true;
@@ -886,7 +876,9 @@ void DrugsModel::warn()
 /** \brief Starts the interactions checking */
 void DrugsModel::checkInteractions() const
 {
-//    d->m_InteractionsManager->checkInteractions();
+    if (d->m_InteractionResult)
+        delete d->m_InteractionResult;
+    d->m_InteractionResult = interactionManager()->checkInteractions(*d->m_InteractionQuery);
 }
 
 QString DrugsModel::getFullPrescription(const IDrug *drug, bool toHtml, const QString &mask)

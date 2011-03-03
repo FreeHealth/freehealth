@@ -107,6 +107,8 @@
 #include <QHash>
 #include <QString>
 
+#include <QDebug>
+
 using namespace DrugsDB;
 using namespace Internal;
 
@@ -467,7 +469,6 @@ QVariant IDrug::data(const int ref, const QString &lang) const
     case AllInnsKnown:
         {
             foreach(const IComponent *compo, d_drug->m_Compo) {
-                qWarning() << "AllInnsKnown" << compo->moleculeName() << compo->isActiveSubstance();
                 /** \todo code here manage virtual components */
                 if (compo->isActiveSubstance()) {
                     if (compo->innAtcIds().isEmpty())
@@ -818,7 +819,7 @@ void IDrug::constructAtcIdsVectorsUsingComponents()
 
 QVector<int> IDrug::allInnAndInteractingClassesIds() const
 {
-    return d_drug->m_InteractingClasses;
+    return d_drug->m_AllIds;
 }
 
 QVector<int> IDrug::allSevenCharsAtcIds() const

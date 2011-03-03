@@ -25,10 +25,10 @@ using namespace Trans::ConstantTranslations;
 
 namespace  {
 
-    const char* const  LIST_BASIC_INFO =
+    const char* const LIST_BASIC_INFO =
             "<tr>"
             "  <td><b>%1</b></td>\n"
-            "  <td>%2 (%3)<br>%4 (%5)</td>\n"
+            "  <td>%2<br />&nbsp;&nbsp;%3<br>%4<br />&nbsp;&nbsp;%5</td>\n"
             "</tr>\n";
     const char* const LIST_FULL_INFO =
             "<tr>\n"
@@ -95,7 +95,13 @@ public:
         }
     }
 
-    QVariant value(const int ref) {return m_Infos.value(ref);}
+    QVariant value(const int ref) const
+    {
+        switch (ref) {
+        case DI_TypeName: return typeToString(m_Infos.value(DI_TypeId).toInt());
+        }
+        return m_Infos.value(ref);
+    }
 
     // IDrugInteraction interface
     IDrugEngine *engine() const {return m_Engine;}
@@ -103,7 +109,7 @@ public:
     bool isDrugDrugInteraction() const {return true;}
     bool isPotentiallyInappropriate() const {return false;}
 
-    QString type() const {return m_Infos.value(DI_TypeName).toString();}
+    QString type() const {return value(DI_TypeName).toString();}
 
     QList<IDrug *> drugs() const {return m_InteractingDrugs;}
 
@@ -153,10 +159,10 @@ public:
         // Create the Html header
         QString tmp = QString(LIST_BASIC_INFO)
                .arg(type())
-               .arg(drugs().at(0)->brandName())
-               .arg(base()->getAtcLabel(firstDrugAtcId))
-               .arg(drugs().at(1)->brandName())
-               .arg(base()->getAtcLabel(secondDrugAtcId));
+               .arg(drugs().at(0)->brandName().replace(" ", "&nbsp;"))
+               .arg(base()->getAtcLabel(firstDrugAtcId).replace(" ", "&nbsp;"))
+               .arg(drugs().at(1)->brandName().replace(" ", "&nbsp;"))
+               .arg(base()->getAtcLabel(secondDrugAtcId).replace(" ", "&nbsp;"));
         if (detailled) {
             tmp += QString(LIST_FULL_INFO)
                    .arg(QCoreApplication::translate(Constants::DRUGSBASE_TR_CONTEXT, Constants::NATURE_OF_RISK))
@@ -208,6 +214,33 @@ public:
             m_InteractingDrugs << drug;
     }
 
+    void warn() const
+    {
+        QString n1, n2;
+        if (m_InteractingDrugs.count() == 2) {
+            n1 = m_InteractingDrugs.at(0)->brandName();
+            n2 = m_InteractingDrugs.at(1)->brandName();
+        } else if (m_InteractingDrugs.count() == 1) {
+            n1 = m_InteractingDrugs.at(0)->brandName();
+            n2 = "No drug";
+        } else {
+            n1 = "No drug";
+            n2 = "No drug";
+        }
+        QString tmp = QString("DrugsInteraction:\n"
+                              "    (ID: %1; Type: %2; ID1: %3; ID2: %4)\n"
+                              "    (Drug1:%5)\n"
+                              "    (Drug2:%6)")
+                .arg(m_Infos.value(DI_Id).toString())
+                .arg(m_Infos.value(DI_TypeId).toString())
+                .arg(m_Infos.value(DI_ATC1).toString())
+                .arg(m_Infos.value(DI_ATC2).toString())
+                .arg(n1)
+                .arg(n2)
+                ;
+        qWarning() << tmp;
+    }
+
 private:
     IDrugEngine *m_Engine;
     QHash<int, QVariant> m_Infos;
@@ -247,10 +280,14 @@ bool DrugDrugInteractionEngine::init()
     QList<int> fields;
     fields << Constants::INTERACTIONS_ATC_ID1 << Constants::INTERACTIONS_ATC_ID2;
     QString req = base()->select(Constants::Table_INTERACTIONS, fields);
-    QSqlQuery q(req , base()->database());
-    if (q.isActive())
-        while (q.next())
-            d->m_InteractionsIDs.insertMulti(q.value(0).toInt(), q.value(1).toInt());
+    QSqlQuery query(req , QSqlDatabase::database(Constants::DB_DRUGS_NAME));
+    if (query.isActive()) {
+        while (query.next()) {
+            d->m_InteractionsIDs.insertMulti(query.value(0).toInt(), query.value(1).toInt());
+        }
+    } else {
+        LOG_QUERY_ERROR(query);
+    }
     return true;
 }
 
@@ -272,8 +309,8 @@ bool DrugDrugInteractionEngine::checkDrugInteraction(IDrug *drug, const QVector<
         IDrug *drug2 = drugsList.at(i);
         if (drug2 == drug)
             continue;
-        for(int i = 0; i < drug_iams.count(); ++i) {
-            int id = drug_iams.at(i);
+        for(int j = 0; j < drug2->allInnAndInteractingClassesIds().count(); ++j) {
+            int id = drug2->allInnAndInteractingClassesIds().at(j);
             if (d_iams.contains(id))
                 continue;
             d_iams << id;
@@ -285,9 +322,11 @@ bool DrugDrugInteractionEngine::checkDrugInteraction(IDrug *drug, const QVector<
         for(int j = 0; j < drug_iams.count(); ++j)  {
             int s2 = drug_iams.at(j);
             // foreach iam subst/class test existing interactions with *drug
-            if (d->m_InteractionsIDs.keys(s).contains(s2))
-                if ((!d->m_DDIFound.contains(s2, s)) && (!d->m_DDIFound.contains(s, s2)))
+            if (d->m_InteractionsIDs.keys(s).contains(s2)) {
+                if ((!d->m_DDIFound.contains(s2, s)) && (!d->m_DDIFound.contains(s, s2))) {
                     d->m_DDIFound.insertMulti(s2, s);
+                }
+            }
 
             //             Not necessary because interactions are "mirrored" in the database
             //             if (m_InteractionsIDs.keys(s2).contains(s))
@@ -295,9 +334,11 @@ bool DrugDrugInteractionEngine::checkDrugInteraction(IDrug *drug, const QVector<
             //                     m_DDIFound.insertMulti(s, s2);
 
             // test same molecules
-            if ((s > 999) && (s2 > 999) && (s == s2))
-                if (!d->m_DDIFound.contains(s, -1))
+            if ((s > 999) && (s2 > 999) && (s == s2)) {
+                if (!d->m_DDIFound.contains(s, -1)) {
                     d->m_DDIFound.insertMulti(s, -1);
+                }
+            }
         }
     }
 
@@ -318,9 +359,9 @@ int DrugDrugInteractionEngine::calculateInteractions(const QVector<IDrug *> &dru
     d->m_DDIFound.clear();
     d->m_TestedDrugs.clear();
     d->m_Interactions.clear();
+    d->m_TestedDrugs = drugs;
     foreach(IDrug *drug, drugs)
         checkDrugInteraction(drug, drugs);
-    d->m_TestedDrugs = drugs;
     if (d->m_LogChrono)
         Utils::Log::logTimeElapsed(t, "DrugDrugInteractionEngine", QString("interactions() : %1 drugs").arg(drugs.count()));
     return d->m_DDIFound.count();
@@ -329,7 +370,7 @@ int DrugDrugInteractionEngine::calculateInteractions(const QVector<IDrug *> &dru
 QVector<IDrugInteraction *> DrugDrugInteractionEngine::getInteractionsFromDatabase(const int & _id1, const int & _id2)
 {
     int id2 = _id2;
-    QSqlDatabase DB = base()->database();
+    QSqlDatabase DB = QSqlDatabase::database(Constants::DB_DRUGS_NAME);
     QVector<IDrugInteraction *> toReturn;
     if (!DB.isOpen()) {
         if (!DB.open()) {
@@ -371,7 +412,7 @@ QVector<IDrugInteraction *> DrugDrugInteractionEngine::getInteractionsFromDataba
             << Utils::Field(Constants::Table_INTERACTIONS, Constants::INTERACTIONS_IAID);
     joins
             << Utils::Join(Constants::Table_IA_IAK, Constants::IA_IAK_IAID, Constants::Table_INTERACTIONS, Constants::INTERACTIONS_IAID)
-            << Utils::Join(Constants::Table_IA_IAK, Constants::IA_IAK_IAKID, Constants::Table_IAKNOWLEDGE, Constants::IAKNOWLEDGE_IAKID);
+            << Utils::Join(Constants::Table_IAKNOWLEDGE, Constants::IAKNOWLEDGE_IAKID, Constants::Table_IA_IAK, Constants::IA_IAK_IAKID);
     conditions
             << Utils::Field(Constants::Table_INTERACTIONS, Constants::INTERACTIONS_ATC_ID1, QString("=%1").arg(_id1))
             << Utils::Field(Constants::Table_INTERACTIONS, Constants::INTERACTIONS_ATC_ID2, QString("=%1").arg(_id2));

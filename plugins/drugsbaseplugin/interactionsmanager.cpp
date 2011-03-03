@@ -75,8 +75,12 @@ namespace  {
             "  <td colspan=2 align=center>\n"
             "   <span style=\"font-weight:bold\">%1\n</span>"
             "</td>\n"
+            "<tr>\n"
+            "  <td colspan=2 align=center>\n"
+            "   <span style=\"font-weight:bold\">%2\n</span>"
+            "</td>\n"
             "</tr>\n"
-            "%2\n"
+            "%3 \n"
             "</table>\n"
             "</span>\n";
 }
@@ -134,6 +138,22 @@ bool DrugInteractionQuery::containsDrug(const IDrug *drug) const
     return m_Drugs.contains((IDrug*)drug);
 }
 
+void DrugInteractionQuery::warn() const
+{
+    QString tmp;
+    for(int i=0; i < m_Drugs.count(); ++i) {
+        tmp += "  * " + m_Drugs.at(i)->brandName() + "\n";
+    }
+    if (tmp.isEmpty())
+        tmp = "  !! No drug\n";
+    tmp = QString("DrugInteractionQuery: testing\n%1"
+                  "  * TestDDI: %2 \n"
+                  "  * TestPDI: %3")
+          .arg(tmp)
+          .arg(m_TestDDI)
+          .arg(m_TestPDI);
+    qWarning() << tmp;
+}
 
 
 DrugInteractionResult::DrugInteractionResult(const QVector<IDrugInteraction *> &interactions, QObject *parent) :
@@ -150,6 +170,14 @@ DrugInteractionResult::~DrugInteractionResult()
 {
     qDeleteAll(m_Interactions);
     m_Interactions.clear();
+}
+
+void DrugInteractionResult::clear()
+{
+    qDeleteAll(m_Interactions);
+    m_Interactions.clear();
+    m_DDITested = false;
+    m_PDITested = false;
 }
 
 QVector<IDrugInteraction *> DrugInteractionResult::interactions(const QString &engineUid) const
@@ -199,6 +227,23 @@ QIcon DrugInteractionResult::maxLevelOfInteractionIcon(const IDrug *drug, const 
     return engine->maximumInteractingLevelIcon(dis, drug, levelOfWarning, size);
 }
 
+void DrugInteractionResult::warn() const
+{
+    // get all IDrugEngine names
+    QStringList names;
+    for(int i=0; i<m_Interactions.count();++i) {
+        if (!names.contains(m_Interactions.at(i)->engine()->name()))
+            names << m_Interactions.at(i)->engine()->name();
+    }
+    QString tmp = QString("DrugInteractionResult: %1\n"
+                          "    (DDITested: %2; PDITested: %3)\n"
+                          "    (NbOfInteractions: %4)")
+            .arg(names.join("; "))
+            .arg(m_DDITested)
+            .arg(m_PDITested)
+            .arg(m_Interactions.count());
+    qWarning() << tmp;
+}
 
 
 namespace DrugsDB {
@@ -264,13 +309,19 @@ DrugInteractionResult *InteractionsManager::checkInteractions(const DrugInteract
     DrugInteractionResult *result = new DrugInteractionResult;
     for(int i = 0; i < d->m_Engines.count(); ++i) {
         IDrugEngine *engine = d->m_Engines.at(i);
+
+        qWarning() << "DrugEngine" << engine->name() << "Compute" << (engine->isActive() && engine->canComputeInteractions()) << "nbDrugs" << query.drugsList().count();
+
         if (!engine->isActive() || !engine->canComputeInteractions())
             continue;
+
         nbInteractions += engine->calculateInteractions(query.drugsList());
+
         if (engine->isCalculatingDrugDrugInteractions())
             result->setDDITested(true);
         if (engine->isCalculatingPatientDrugInteractions())
             result->setPDITested(true);
+
         result->addInteractions(engine->getAllInteractionsFound());
 
         if (d->m_LogChrono)
@@ -329,19 +380,32 @@ DrugInteractionResult *InteractionsManager::checkInteractions(const DrugInteract
 //    return QIcon();
 //}
 
-QString InteractionsManager::listToHtml(const QList<IDrugInteraction *> &list, bool fullInfos) // static
+QString InteractionsManager::listToHtml(const QVector<IDrugInteraction *> &list, bool fullInfos) // static
 {
-    /** \todo code here */
     QString tmp, toReturn;
-//    QList<int> id_di;
-//    foreach(IDrugInteraction *di, list) {
-//        if (id_di.contains(di->value(IDrugInteraction::DI_Id).toInt()))
-//            continue;
-//        id_di << di->value(Internal::DrugsInteraction::DI_Id).toInt();
-//        tmp += di->toHtml(fullInfos);
-//    }
-//    toReturn.append(QString(LIST_MASK)
-//                    .arg(tr("Interaction(s) Found : ") , tmp));
+
+    // get all engines
+    QVector<IDrugEngine*> engines;
+    for(int i=0; i < list.count(); ++i) {
+        if (!engines.contains(list.at(i)->engine()))
+            engines << list.at(i)->engine();
+    }
+
+    // for all engine create the interaction list
+    for(int i=0; i<engines.count(); ++i) {
+        IDrugEngine *eng = engines.at(i);
+        for(int j=0; j < list.count(); ++j) {
+            IDrugInteraction *di = list.at(j);
+            if (di->engine()==eng) {
+                tmp += di->toHtml(fullInfos);
+            }
+        }
+        toReturn.append(QString(LIST_MASK)
+                        .arg(eng->name())
+                        .arg(tr("Interaction(s) Found : "))
+                        .arg(tmp));
+    }
+
     return toReturn;
 }
 
@@ -418,4 +482,5 @@ void InteractionsManager::onNewObjectAddedToPluginManagerPool(QObject *object)
     IDrugEngine *engine = qobject_cast<IDrugEngine*>(object);
     if (!engine)
         return;
+    d->m_Engines.append(engine);
 }
