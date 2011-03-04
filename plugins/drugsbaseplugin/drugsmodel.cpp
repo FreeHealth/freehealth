@@ -39,7 +39,7 @@
 #include <drugsbaseplugin/idrug.h>
 #include <drugsbaseplugin/drugsdata.h>
 #include <drugsbaseplugin/drugsio.h>
-#include <drugsbaseplugin/interactionsmanager.h>
+#include <drugsbaseplugin/interactionmanager.h>
 #include <drugsbaseplugin/constants.h>
 #include <drugsbaseplugin/dailyschememodel.h>
 #include <drugsbaseplugin/globaldrugsmodel.h>
@@ -80,7 +80,7 @@ using namespace Trans::ConstantTranslations;
 static inline Core::ISettings *settings() {return Core::ICore::instance()->settings();}
 static inline Core::ITheme *theme()  { return Core::ICore::instance()->theme(); }
 static inline DrugsDB::Internal::DrugsBase *drugsBase() {return DrugsDB::Internal::DrugsBase::instance();}
-static inline DrugsDB::InteractionsManager *interactionManager() {return DrugsDB::InteractionsManager::instance();}
+static inline DrugsDB::InteractionManager *interactionManager() {return DrugsDB::InteractionManager::instance();}
 
 DrugsDB::DrugsModel *DrugsDB::DrugsModel::m_ActiveModel = 0;
 
@@ -213,7 +213,7 @@ public:
             {
                 QStringList list;
                 list << QApplication::translate("DrugsModel","Available Dosages");
-                // TODO
+                /** \todo add Drugs available dosage */
                 return list.join("<br />");
                 break;
             }
@@ -228,6 +228,11 @@ public:
                     else return pres->brandName();
                 }
                 return ::DrugsDB::DrugsModel::getFullPrescription(drug,false);
+            }
+        case Drug::OwnInteractionsSynthesis:
+            {
+                QVector<IDrugInteraction *> list = m_InteractionResult->getInteractions(drug);
+                return interactionManager()->drugInteractionSynthesisToHtml(drug, list, false);
             }
         }
         return QVariant();
@@ -268,58 +273,24 @@ public:
                 }
                 return display;
             }
-        case Drug::OwnInteractionsSynthesis:
-            {
-                /** \todo code here */
-                QString display;
-//                QList<IDrugInteraction *> list = m_InteractionsManager->getAllInteractionsFound();
-//                QList<IDrugInteraction *> concernedInteractions;
-//                QList<IDrug *> concernedDrugs;
-//                int i = 0;
-//                display.append("<p>");
-//                foreach(IDrugInteraction *interaction, list) {
-//                    if (interaction->drugs().contains((IDrug*)drug)) {
-//                        concernedInteractions.append(interaction);
-//                        foreach(IDrug *drg, interaction->drugs()) {
-//                            if (!concernedDrugs.contains(drg))
-//                                concernedDrugs.append(drg);
-//                        }
-//                    }
-//                }
-//                foreach(IDrug *drg, concernedDrugs) {
-//                    ++i;
-//                    display.append(QString("%1&nbsp;.&nbsp;%2<br />")
-//                                   .arg(i)
-//                                   .arg(drg->brandName()));
-//                }
-//                display.append("</p><p>");
-//                if (concernedDrugs.count() > 0) {
-//                    display.append(m_InteractionsManager->synthesisToHtml(concernedInteractions, false));
-//                } else {
-//                    display = tkTr(Trans::Constants::NO_1_FOUND).arg(tkTr(Trans::Constants::INTERACTION));
-//                }
-//                display.append("</p>");
-                return display;
-            }
         case Interaction::FullSynthesis :
             {
                 QString display;
-                /** \todo code here */
-//                QList<IDrugInteraction *> list = m_InteractionsManager->getAllInteractionsFound();
-//                int i = 0;
-//                display.append("<p>");
-//                foreach(IDrug *drg, m_DrugsList) {
-//                    ++i;
-//                    display.append(QString("%1&nbsp;.&nbsp;%2<br />")
-//                                   .arg(i)
-//                                   .arg(drg->brandName()));
-//                }
-//                display.append("</p><p>");
-//                if (list.count() > 0) {
-//                    display.append(m_InteractionsManager->synthesisToHtml(list, true));
-//                } else
-//                    display = tkTr(Trans::Constants::NO_1_FOUND).arg(tkTr(Trans::Constants::INTERACTION));
-//                display.append("</p>");
+                QVector<IDrugInteraction *> list = m_InteractionResult->interactions();
+                int i = 0;
+                display.append("<p>");
+                foreach(IDrug *drg, m_DrugsList) {
+                    ++i;
+                    display.append(QString("%1&nbsp;.&nbsp;%2<br />")
+                                   .arg(i)
+                                   .arg(drg->brandName()));
+                }
+                display.append("</p><p>");
+                if (list.count() > 0) {
+                    display.append(interactionManager()->synthesisToHtml(list, true));
+                } else
+                    display = tkTr(Trans::Constants::NO_1_FOUND).arg(tkTr(Trans::Constants::INTERACTION));
+                display.append("</p>");
                 return display;
             }
         }
@@ -481,13 +452,17 @@ QVariant DrugsModel::data(const QModelIndex &index, int role) const
     }
     else if (role == Qt::DecorationRole) {
         // Show/Hide interaction icon
-        if (settings()->value(Constants::S_SHOWICONSINPRESCRIPTION).toBool()) {
-            // Manage textual drugs
-            if (drug->prescriptionValue(Constants::Prescription::IsTextualOnly).toBool()) {
-                return theme()->icon(Core::Constants::ICONPENCIL);
-            } else {
-                return d->m_InteractionResult->maxLevelOfInteractionIcon(drug, d->m_levelOfWarning);
-            }
+        if (!settings()->value(Constants::S_SHOWICONSINPRESCRIPTION).toBool())
+            return QVariant();
+
+        if (drug->prescriptionValue(Constants::Prescription::IsTextualOnly).toBool()) {
+            return theme()->icon(Core::Constants::ICONPENCIL);
+        } else if (d->m_InteractionResult->drugHaveInteraction(drug)) {
+            return d->m_InteractionResult->maxLevelOfInteractionIcon(drug, d->m_levelOfWarning);
+        } else if (drug->data(IDrug::AllInnsKnown).toBool()) {
+            return theme()->icon(Core::Constants::ICONOK);
+        } else {
+            return theme()->icon(Constants::INTERACTION_ICONUNKONW);
         }
     }
     else if (role == Qt::ToolTipRole) {
@@ -498,12 +473,11 @@ QVariant DrugsModel::data(const QModelIndex &index, int role) const
                    .arg(tr("KNOWN ALLERGY"));
         }
         display += drug->toHtml();
-        /** \todo code here */
-//        if (d->m_InteractionResult->drugHaveInteraction(drug)) {
-//            QList<IDrugInteraction *> list = d->m_InteractionResult->getInteractions(drug);
-//            display.append("<br>\n");
-//            display.append(d->m_InteractionsManager->listToHtml(list, false));
-//        }
+        if (d->m_InteractionResult->drugHaveInteraction(drug)) {
+            QVector<IDrugInteraction *> list = d->m_InteractionResult->getInteractions(drug);
+            display.append("<br>\n");
+            display.append(interactionManager()->listToHtml(list, false));
+        }
         return display;
     }
     else if (role == Qt::BackgroundRole) {

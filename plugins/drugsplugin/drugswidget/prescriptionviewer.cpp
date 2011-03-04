@@ -24,7 +24,7 @@
  *       NAME <MAIL@ADRESS>                                                *
  *       NAME <MAIL@ADRESS>                                                *
  ***************************************************************************/
-#include "mfPrescriptionViewer.h"
+#include "prescriptionviewer.h"
 
 #include <drugsplugin/constants.h>
 #include <drugsplugin/drugswidget/druginfo.h>
@@ -36,7 +36,7 @@
 
 #include <drugsbaseplugin/drugsdata.h>
 #include <drugsbaseplugin/drugsmodel.h>
-#include <drugsbaseplugin/interactionsmanager.h>
+#include <drugsbaseplugin/interactionmanager.h>
 
 #include <coreplugin/constants_menus.h>
 #include <coreplugin/icore.h>

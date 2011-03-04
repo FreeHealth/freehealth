@@ -28,11 +28,9 @@
 
 // include drugs widget headers
 #include <drugsplugin/constants.h>
-#include <drugsplugin/drugswidget/mfDrugsCentralWidget.h>
-#include <drugsplugin/drugswidget/mfPrescriptionViewer.h>
-#include <drugsplugin/drugswidget/mfDrugSelector.h>
-
-#include <drugsbaseplugin/drugsbasemanager.h>
+#include <drugsplugin/drugswidget/drugscentralwidget.h>
+#include <drugsplugin/drugswidget/prescriptionviewer.h>
+#include <drugsplugin/drugswidget/drugselector.h>
 
 #include <utils/log.h>
 #include <utils/global.h>

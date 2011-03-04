@@ -1,1 +1,1 @@
-#include <drugsbaseplugin/interactionsmanager.h>
+#include <drugsbaseplugin/interactionmanager.h>

@@ -24,26 +24,77 @@
  *       NAME <MAIL@ADRESS>                                                *
  *       NAME <MAIL@ADRESS>                                                *
  ***************************************************************************/
-#include "drugsbasemanager.h"
+#ifndef PRESCRIPTIONVIEWER_H
+#define PRESCRIPTIONVIEWER_H
 
-#include <utils/log.h>
+#include <drugsplugin/drugs_exporter.h>
 
-using namespace DrugsDB;
+#include <QWidget>
+#include <QAction>
+#include <QToolBar>
+#include <QListView>
 
-///////////////////////////////////////////////////////////////////////////////////////////////////////////
-/////////////////////////////////////////      MANAGER      ///////////////////////////////////////////////
-///////////////////////////////////////////////////////////////////////////////////////////////////////////
-DrugsBaseManager *DrugsBaseManager::m_Instance = 0;
+#include "ui_prescriptionviewer.h"
 
-DrugsBaseManager *DrugsBaseManager::instance()
-{
-    if (!m_Instance)
-        m_Instance = new DrugsBaseManager();
-    return m_Instance;
+/**
+ * \file prescriptionviewer.h
+ * \author Eric MAEKER <eric.maeker@free.fr>
+ * \version 0.4.0
+ * \date 03 Apr 2010
+*/
+
+namespace DrugsDB {
+class DrugsModel;
 }
 
-DrugsBaseManager::DrugsBaseManager() :
-    m_CurrentModel(0)
+namespace DrugsWidget {
+
+/**
+ \brief This widget is the prescription viewer. It deals data with mfDrugsModel. The model MUST BE SETTED using setModel() and setModelColumn().
+ Signals are emitted when user ask for : save (saveTriggered()) and print (printTriggered()) prescription.
+  */
+class DRUGS_EXPORT PrescriptionViewer : public QWidget, private Internal::Ui::PrescriptionViewer
 {
-    Utils::Log::addMessage("DrugsBaseManager", "Instance created");
-}
+    Q_OBJECT
+    Q_DISABLE_COPY(PrescriptionViewer)
+
+public:
+    explicit PrescriptionViewer(QWidget *parent = 0);
+    void initialize();
+    QListView *listview();
+    void setModel(DrugsDB::DrugsModel *model);
+    void setListViewPadding(const int pad);
+
+Q_SIGNALS:
+    void saveTriggered();
+    void printTriggered();
+
+protected:
+    virtual void changeEvent(QEvent *e);
+
+private:
+    void createActionsAndToolbar();
+
+public Q_SLOTS:
+    void clearTriggered();
+    void removeTriggered();
+    void moveUp();
+    void moveDown();
+    void sortDrugs();
+    void showDrugInfo(const QModelIndex &item);
+    void showDosageDialog(const QModelIndex &item = QModelIndex());
+    void viewInteractions();
+    void changeDuration();
+    void changeDurationTo();
+    void openProtocolPreferencesDialog();
+
+private Q_SLOTS:
+    void on_listView_customContextMenuRequested(const QPoint &pos);
+
+private:
+    QToolBar *m_ToolBar;
+};
+
+}  // End DrugsWidget
+
+#endif // PRESCRIPTIONVIEWER_H

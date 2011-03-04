@@ -50,10 +50,10 @@
 namespace DrugsDB {
 class IDrug;
 class IDrugInteraction;
-class InteractionsManager;
+class InteractionManager;
 
 namespace Internal {
-class InteractionsManagerPrivate;
+class InteractionManagerPrivate;
 }  // End Internal
 
 
@@ -89,7 +89,7 @@ private:
 class DRUGSBASE_EXPORT DrugInteractionResult : public QObject
 {
     Q_OBJECT
-    friend class DrugsDB::InteractionsManager;
+    friend class DrugsDB::InteractionManager;
 
 public:
     ~DrugInteractionResult();
@@ -123,20 +123,21 @@ private:
 
 
 
-class DRUGSBASE_EXPORT InteractionsManager : public QObject
+class DRUGSBASE_EXPORT InteractionManager : public QObject
 {
     Q_OBJECT
-    InteractionsManager(QObject *parent = 0);
+    InteractionManager(QObject *parent = 0);
 public:
-    static InteractionsManager *instance(QObject *parent = 0);
-    ~InteractionsManager();
+    static InteractionManager *instance(QObject *parent = 0);
+    ~InteractionManager();
 
     DrugInteractionResult *checkInteractions(const DrugInteractionQuery &query);
 
 //    static QIcon interactionIcon(const int level, const int levelOfWarning = 0, bool medium = false);
 //    QIcon iamIcon(const IDrug *drug, const int &levelOfWarning = 0, bool medium = false) const;
-    static QString listToHtml(const QVector<IDrugInteraction *> & list, bool fullInfos);
-    static QString synthesisToHtml(const QList<IDrugInteraction *> & list, bool fullInfos);
+    static QString listToHtml(const QVector<IDrugInteraction *> &list, bool fullInfos);
+    static QString drugInteractionSynthesisToHtml(const IDrug *drug, const QVector<IDrugInteraction *> &list, bool fullInfos);
+    static QString synthesisToHtml(const QVector<IDrugInteraction *> &list, bool fullInfos);
     static void synthesisToTreeWidget(const QList<IDrugInteraction *> &list, QTreeWidget *tree);
 
 private Q_SLOTS:
@@ -144,9 +145,9 @@ private Q_SLOTS:
 
 private:
     // intialization state
-    static InteractionsManager *m_Instance;
+    static InteractionManager *m_Instance;
     static bool m_initialized;
-    Internal::InteractionsManagerPrivate *d;
+    Internal::InteractionManagerPrivate *d;
 };
 
 }  // End DrugsDB

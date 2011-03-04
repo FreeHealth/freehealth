@@ -24,7 +24,7 @@
  *       NAME <MAIL@ADRESS>                                                *
  *       NAME <MAIL@ADRESS>                                                *
  ***************************************************************************/
-#include "mfDrugSelector.h"
+#include "drugselector.h"
 
 #include <drugsplugin/constants.h>
 #include <drugsplugin/drugswidgetmanager.h>

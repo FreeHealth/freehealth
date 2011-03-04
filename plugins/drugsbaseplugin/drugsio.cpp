@@ -302,9 +302,8 @@ bool DrugsIO::prescriptionFromXml(DrugsDB::DrugsModel *m, const QString &xmlCont
         xmlDbName = drugsDb.text();
     }
     if (drugsBase()->actualDatabaseInformations()->identifiant != xmlDbName) {
-        Utils::Log::addError("DrugsIO", QString("Try to load a prescription from another drugs database. Actual: %1 ; Xml: %2")
-                             .arg(drugsBase()->actualDatabaseInformations()->identifiant, xmlDbName),
-                             __FILE__, __LINE__);
+        LOG_ERROR_FOR("DrugsIO", QString("Try to load a prescription from another drugs database. Actual: %1 ; Xml: %2")
+                             .arg(drugsBase()->actualDatabaseInformations()->identifiant, xmlDbName));
         Utils::warningMessageBox(tr("Prescription specifies a different drugs database than the actual one."),
                                  tr("You are trying to load prescription that uses a different drugs database than the "
                                     "actual one. You can not read this prescription unless you change the current "
@@ -318,8 +317,7 @@ bool DrugsIO::prescriptionFromXml(DrugsDB::DrugsModel *m, const QString &xmlCont
     // retreive the prescription (inside the XML_FULLPRESCRIPTION_TAG tags)
     QDomElement fullPrescription = root.firstChildElement(XML_FULLPRESCRIPTION_TAG);
     if (fullPrescription.isNull()) {
-        Utils::Log::addError("DrugsIO", tr("Unable to load XML prescription : tag %1 is missing").arg(XML_FULLPRESCRIPTION_TAG),
-                             __FILE__, __LINE__);
+        LOG_ERROR_FOR("DrugsIO", tr("Unable to load XML prescription : tag %1 is missing").arg(XML_FULLPRESCRIPTION_TAG));
         Utils::warningMessageBox(tr("You are trying to read a corrupted XML file."),
                                  tr("Missing tag: %1").arg(XML_FULLPRESCRIPTION_TAG));
         return false;

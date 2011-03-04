@@ -327,7 +327,7 @@
   <customwidget>
    <class>DrugsWidget::DrugsCentralWidget</class>
    <extends>QWidget</extends>
-   <header location="global">drugsplugin/drugswidget/mfDrugsCentralWidget.h</header>
+   <header location="global">drugsplugin/drugswidget/drugscentralwidget.h</header>
    <container>1</container>
   </customwidget>
  </customwidgets>

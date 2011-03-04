@@ -22,7 +22,7 @@
 
 #include <drugsbaseplugin/drugsmodel.h>
 #include <drugsbaseplugin/constants.h>
-#include <drugsbaseplugin/interactionsmanager.h>
+#include <drugsbaseplugin/interactionmanager.h>
 #include <drugsbaseplugin/idruginteraction.h>
 #include <drugsbaseplugin/drugsdata.h>
 #include <drugsbaseplugin/drugsbase.h>
@@ -174,7 +174,7 @@ static void addInteractionToView(int row, QTableWidget *tw, DrugsDB::IDrugIntera
 {
     /** \todo code here */
 //    tw->insertRow(row);
-//    QTableWidgetItem *icon = new QTableWidgetItem(DrugsDB::InteractionsManager::interactionIcon(interaction->type()), "");
+//    QTableWidgetItem *icon = new QTableWidgetItem(DrugsDB::InteractionManager::interactionIcon(interaction->type()), "");
 //    icon->setData(Qt::UserRole, interactionId);
 //    QTableWidgetItem *atc1 = new QTableWidgetItem(interaction->value(DrugsDB::IDrugInteraction::DI_ATC1_Label).toString());
 //    atc1->setData(Qt::UserRole, interactionId);
@@ -332,7 +332,8 @@ void InteractionSynthesisDialog::print()
     }
     display.append("</p><p>");
     if (d->m_Interactions.count() > 0) {
-        display.append(DrugsDB::InteractionsManager::synthesisToHtml(d->m_Interactions, true));
+        /** \todo code here */
+//        display.append(DrugsDB::InteractionManager::synthesisToHtml(d->m_Interactions, true));
     } else {
         display = tkTr(Trans::Constants::NO_1_FOUND).arg(tkTr(Trans::Constants::INTERACTION));
     }

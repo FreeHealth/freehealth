@@ -28,7 +28,7 @@ namespace  {
     const char* const LIST_BASIC_INFO =
             "<tr>"
             "  <td><b>%1</b></td>\n"
-            "  <td>%2<br />&nbsp;&nbsp;%3<br>%4<br />&nbsp;&nbsp;%5</td>\n"
+            "  <td>%2<br />&nbsp;&nbsp;&nbsp;&nbsp;%3<br>%4<br />&nbsp;&nbsp;&nbsp;&nbsp;%5</td>\n"
             "</tr>\n";
     const char* const LIST_FULL_INFO =
             "<tr>\n"

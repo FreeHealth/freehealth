@@ -44,23 +44,23 @@ FORMS += $${PWD}/drugspreferences/drugsextraoptionspage.ui \
 # DrugsWidgets
 HEADERS += $${PWD}/drugswidget/druginfo.h \
     $${PWD}/drugswidget/druginfo_p.h \
-    $${PWD}/drugswidget/mfDrugSelector.h \
-    $${PWD}/drugswidget/mfPrescriptionViewer.h \
-    $${PWD}/drugswidget/mfDrugsCentralWidget.h \
+    $${PWD}/drugswidget/drugselector.h \
+    $${PWD}/drugswidget/prescriptionviewer.h \
+    $${PWD}/drugswidget/drugscentralwidget.h \
     $${PWD}/drugswidget/textualprescriptiondialog.h \
     $${PWD}/drugswidget/dailyschemeviewer.h \
     $${PWD}/drugswidget/interactionsynthesisdialog.h
 SOURCES += $${PWD}/drugswidget/druginfo.cpp \
-    $${PWD}/drugswidget/mfDrugSelector.cpp \
-    $${PWD}/drugswidget/mfPrescriptionViewer.cpp \
-    $${PWD}/drugswidget/mfDrugsCentralWidget.cpp \
+    $${PWD}/drugswidget/drugselector.cpp \
+    $${PWD}/drugswidget/prescriptionviewer.cpp \
+    $${PWD}/drugswidget/drugscentralwidget.cpp \
     $${PWD}/drugswidget/textualprescriptiondialog.cpp \
     $${PWD}/drugswidget/dailyschemeviewer.cpp \
     $${PWD}/drugswidget/interactionsynthesisdialog.cpp
 FORMS += $${PWD}/drugswidget/druginfo.ui \
-    $${PWD}/drugswidget/mfDrugSelector.ui \
-    $${PWD}/drugswidget/mfPrescriptionViewer.ui \
-    $${PWD}/drugswidget/mfDrugsCentralWidget.ui \
+    $${PWD}/drugswidget/drugselector.ui \
+    $${PWD}/drugswidget/prescriptionviewer.ui \
+    $${PWD}/drugswidget/drugscentralwidget.ui \
     $${PWD}/drugswidget/textualprescriptiondialog.ui \
     $${PWD}/drugswidget/dailyschemeviewer.ui \
     $${PWD}/drugswidget/interactionsynthesisdialog.ui

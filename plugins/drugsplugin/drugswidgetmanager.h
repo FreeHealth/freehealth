@@ -29,7 +29,7 @@
 
 #include <drugsplugin/drugs_exporter.h>
 
-#include <drugsplugin/drugswidget/mfDrugsCentralWidget.h>
+#include <drugsplugin/drugswidget/drugscentralwidget.h>
 #include <drugsbaseplugin/drugsmodel.h>
 
 #include <coreplugin/contextmanager/icontext.h>
@@ -48,7 +48,6 @@
 */
 
 namespace DrugsWidget {
-class InteractionsManager;
 namespace Internal {
 
 class DrugsContext : public Core::IContext

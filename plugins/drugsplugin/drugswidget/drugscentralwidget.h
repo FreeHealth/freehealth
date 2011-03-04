@@ -34,12 +34,11 @@
 #include <QListView>
 
 /**
- * \file mfDrugsCentralWidget.h
+ * \file drugscentralwidget.h
  * \author Eric MAEKER <eric.maeker@free.fr>
  * \version 0.5.0
  * \date 23 Sept 2010
  * \brief Includes in the same widget : drugselector, prescriptionviewer. Connections are made easy.
-   \ingroup freediams
 */
 
 namespace DrugsDB {

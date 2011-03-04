@@ -49,7 +49,7 @@
 #include <drugsbaseplugin/drugsbase.h>
 #include <drugsbaseplugin/globaldrugsmodel.h>
 #include <drugsbaseplugin/drugsmodel.h>
-#include <drugsbaseplugin/interactionsmanager.h>
+#include <drugsbaseplugin/interactionmanager.h>
 
 #include <templatesplugin/templatesview.h>
 
@@ -475,7 +475,7 @@ void MainWindow::refreshPatient()
 void MainWindow::updateIconBadgeOnMacOs()
 {
 #ifdef Q_OS_MAC
-    /** \todo code here */
+    /** \todo code here : move this in the interactionmanager; result or alert  ? */
 //    int n = drugModel()->interactionsManager()->getAllInteractionsFound().count();
 //    if (n > 0) {
 //        Utils::MacOs::setIconBadgeLabel(QString::number(n));

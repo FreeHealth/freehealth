@@ -26,17 +26,12 @@
  ***************************************************************************/
 
 /**
-  \class InteractionsManager
-  Interactions can be managed by interactions(), drugHaveInteraction(), getMaximumTypeOfIAM(), getInteractions(),
-  getLastIAMFound() and getAllIAMFound().
-  You must always in first call interactions() with the list of drugs to test.
-  Then you can retreive interactions found using the other members.
-
-  \sa DrugsInteraction, DrugsBases
-  \ingroup freediams drugswidget
+  \class DrugsDB::InteractionManager
+  \todo write documentation
+  \sa DrugsDB::DrugsInteractionResult, DrugsDB::DrugsInteractionQuery
 */
 
-#include "interactionsmanager.h"
+#include "interactionmanager.h"
 
 #include <drugsbaseplugin/idrugengine.h>
 #include <drugsbaseplugin/idrug.h>
@@ -48,7 +43,7 @@
 #include <coreplugin/itheme.h>
 
 #include <utils/log.h>
-
+#include <translationutils/constanttranslations.h>
 #include <extensionsystem/pluginmanager.h>
 
 #include <QCoreApplication>
@@ -86,6 +81,7 @@ namespace  {
 }
 
 using namespace DrugsDB;
+using namespace Trans::ConstantTranslations;
 
 static inline ExtensionSystem::PluginManager *pluginManager() { return ExtensionSystem::PluginManager::instance(); }
 
@@ -249,15 +245,15 @@ void DrugInteractionResult::warn() const
 namespace DrugsDB {
 namespace Internal {
 
-class InteractionsManagerPrivate
+class InteractionManagerPrivate
 {
 public:
-    InteractionsManagerPrivate() :
+    InteractionManagerPrivate() :
             m_LogChrono(false)
     {
     }
 
-    ~InteractionsManagerPrivate()
+    ~InteractionManagerPrivate()
     {
     }
 
@@ -272,35 +268,35 @@ public:
 //--------------------------------------------------------------------------------------------------------
 //---------------------------------------- Managing drugs interactions -----------------------------------
 //--------------------------------------------------------------------------------------------------------
-InteractionsManager *InteractionsManager::m_Instance = 0;
+InteractionManager *InteractionManager::m_Instance = 0;
 
-InteractionsManager *InteractionsManager::instance(QObject *parent)
+InteractionManager *InteractionManager::instance(QObject *parent)
 {
     if (!m_Instance)
-        m_Instance = new InteractionsManager(parent);
+        m_Instance = new InteractionManager(parent);
     return m_Instance;
 }
 
-InteractionsManager::InteractionsManager(QObject *parent) :
+InteractionManager::InteractionManager(QObject *parent) :
         QObject(parent), d(0)
 {
     static int handler = 0;
     ++handler;
-    d = new Internal::InteractionsManagerPrivate();
-    setObjectName("InteractionsManager" + QString::number(handler));
+    d = new Internal::InteractionManagerPrivate();
+    setObjectName("InteractionManager" + QString::number(handler));
 
     // Get all engines from plugin manager
     d->m_Engines = pluginManager()->getObjects<IDrugEngine>().toVector();
     connect(pluginManager(), SIGNAL(objectAdded(QObject*)), this, SLOT(onNewObjectAddedToPluginManagerPool(QObject*)));
 }
 
-InteractionsManager::~InteractionsManager()
+InteractionManager::~InteractionManager()
 {
     if (d) delete d;
     d=0;
 }
 
-DrugInteractionResult *InteractionsManager::checkInteractions(const DrugInteractionQuery &query)
+DrugInteractionResult *InteractionManager::checkInteractions(const DrugInteractionQuery &query)
 {
     QTime t;
     t.start();
@@ -332,7 +328,7 @@ DrugInteractionResult *InteractionsManager::checkInteractions(const DrugInteract
 }
 
 ///** \todo move this */
-//QIcon InteractionsManager::interactionIcon(const int level, const int levelOfWarning, bool medium)  // static
+//QIcon InteractionManager::interactionIcon(const int level, const int levelOfWarning, bool medium)  // static
 //{
 //    using namespace DrugsDB::Constants;
 //    Core::ITheme *th = Core::ICore::instance()->theme();
@@ -361,7 +357,7 @@ DrugInteractionResult *InteractionsManager::checkInteractions(const DrugInteract
 //        return th->icon(INTERACTION_ICONUNKONW, size);
 //}
 
-//QIcon InteractionsManager::iamIcon(const IDrug *drug, const int &levelOfWarning, bool medium) const
+//QIcon InteractionManager::iamIcon(const IDrug *drug, const int &levelOfWarning, bool medium) const
 //{
 //    /** \todo code here, move this */
 ////    using namespace DrugsDB::Constants;
@@ -380,7 +376,7 @@ DrugInteractionResult *InteractionsManager::checkInteractions(const DrugInteract
 //    return QIcon();
 //}
 
-QString InteractionsManager::listToHtml(const QVector<IDrugInteraction *> &list, bool fullInfos) // static
+QString InteractionManager::listToHtml(const QVector<IDrugInteraction *> &list, bool fullInfos) // static
 {
     QString tmp, toReturn;
 
@@ -409,7 +405,58 @@ QString InteractionsManager::listToHtml(const QVector<IDrugInteraction *> &list,
     return toReturn;
 }
 
-QString InteractionsManager::synthesisToHtml(const QList<IDrugInteraction *> &list, bool fullInfos) // static
+QString InteractionManager::drugInteractionSynthesisToHtml(const IDrug *drug, const QVector<IDrugInteraction *> &list, bool fullInfos)
+{
+    QString display;
+
+    // get all engines
+    QVector<IDrugEngine*> engines;
+    for(int i=0; i < list.count(); ++i) {
+        if (!engines.contains(list.at(i)->engine()))
+            engines << list.at(i)->engine();
+    }
+
+    // for all engine create the interaction list
+    for(int j=0; j<engines.count(); ++j) {
+        IDrugEngine *eng = engines.at(j);
+        QList<IDrug *> concernedDrugs;
+        int i = 0;
+        // retrieve all tested drugs
+        for(int i=0; i < list.count(); ++i) {
+            IDrugInteraction *interaction = list.at(i);
+
+            if (interaction->engine()!=eng)
+                continue;
+
+            if (interaction->drugs().contains((IDrug*)drug)) {
+                foreach(IDrug *drg, interaction->drugs()) {
+                    if (!concernedDrugs.contains(drg))
+                        concernedDrugs.append(drg);
+                }
+            }
+        }
+
+        // add tested drug brand names
+        display.append(QString("<p><center>%1</center></p><p>").arg(eng->name()));
+        foreach(IDrug *drg, concernedDrugs) {
+            ++i;
+            display.append(QString("%1&nbsp;.&nbsp;%2<br />")
+                           .arg(i)
+                           .arg(drg->brandName()));
+        }
+        display.append("</p><p>");
+
+        if (concernedDrugs.count() > 0) {
+            display.append(synthesisToHtml(list, fullInfos));
+        } else {
+            display = tkTr(Trans::Constants::NO_1_FOUND).arg(tkTr(Trans::Constants::INTERACTION));
+        }
+        display.append("</p>");
+    }
+    return display;
+}
+
+QString InteractionManager::synthesisToHtml(const QVector<IDrugInteraction *> &list, bool fullInfos) // static
 {
     /** \todo code here */
     QString tmp, toReturn;
@@ -425,7 +472,7 @@ QString InteractionsManager::synthesisToHtml(const QList<IDrugInteraction *> &li
     return toReturn;
 }
 
-void InteractionsManager::synthesisToTreeWidget(const QList<IDrugInteraction *> &list, QTreeWidget *tree) // static
+void InteractionManager::synthesisToTreeWidget(const QList<IDrugInteraction *> &list, QTreeWidget *tree) // static
 {
     /** \todo code here */
     Q_ASSERT(tree);
@@ -477,7 +524,7 @@ void InteractionsManager::synthesisToTreeWidget(const QList<IDrugInteraction *> 
 //    }
 }
 
-void InteractionsManager::onNewObjectAddedToPluginManagerPool(QObject *object)
+void InteractionManager::onNewObjectAddedToPluginManagerPool(QObject *object)
 {
     IDrugEngine *engine = qobject_cast<IDrugEngine*>(object);
     if (!engine)

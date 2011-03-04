@@ -43,7 +43,7 @@
 */
 namespace DrugsDB {
 class DrugsIO;
-class InteractionsManager;
+class InteractionManager;
 class DosageModel;
 class IDrug;
 

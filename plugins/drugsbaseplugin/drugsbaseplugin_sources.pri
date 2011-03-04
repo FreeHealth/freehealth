@@ -5,12 +5,11 @@ HEADERS += $${PWD}/drugsbaseplugin.h \
     $${PWD}/drugsbase_exporter.h \
     $${PWD}/drugsbase.h \
     $${PWD}/drugsdata.h \
-    $${PWD}/interactionsmanager.h \
+    $${PWD}/interactionmanager.h \
     $${PWD}/constants.h \
     $${PWD}/drugsmodel.h \
     $${PWD}/dosagemodel.h \
     $${PWD}/drugsio.h \
-    $${PWD}/drugsbasemanager.h \
     $${PWD}/globaldrugsmodel.h \
     $${PWD}/dailyschememodel.h \
     $${PWD}/versionupdater.h \
@@ -34,11 +33,10 @@ HEADERS += $${PWD}/drugsbaseplugin.h \
 SOURCES += $${PWD}/drugsbaseplugin.cpp \
     $${PWD}/drugsbase.cpp \
     $${PWD}/drugsdata.cpp \
-    $${PWD}/interactionsmanager.cpp \
+    $${PWD}/interactionmanager.cpp \
     $${PWD}/drugsmodel.cpp \
     $${PWD}/dosagemodel.cpp \
     $${PWD}/drugsio.cpp \
-    $${PWD}/drugsbasemanager.cpp \
     $${PWD}/globaldrugsmodel.cpp \
     $${PWD}/dailyschememodel.cpp \
     $${PWD}/versionupdater.cpp \

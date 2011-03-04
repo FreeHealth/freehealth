@@ -24,18 +24,18 @@
  *       NAME <MAIL@ADRESS>                                                *
  *       NAME <MAIL@ADRESS>                                                *
  ***************************************************************************/
-#include "mfDrugsCentralWidget.h"
+#include "drugscentralwidget.h"
 
 // include drugs widgets headers
 #include <drugsbaseplugin/drugsbase.h>
 #include <drugsbaseplugin/drugsmodel.h>
-#include <drugsbaseplugin/interactionsmanager.h>
+#include <drugsbaseplugin/interactionmanager.h>
 #include <drugsbaseplugin/globaldrugsmodel.h>
 #include <drugsbaseplugin/drugsio.h>
 #include <drugsbaseplugin/drugsdatabaseselector.h>
 
-#include <drugsplugin/drugswidget/mfDrugSelector.h>
-#include <drugsplugin/drugswidget/mfPrescriptionViewer.h>
+#include <drugsplugin/drugswidget/drugselector.h>
+#include <drugsplugin/drugswidget/prescriptionviewer.h>
 #include <drugsplugin/dosagedialog/mfDosageCreatorDialog.h>
 #include <drugsplugin/dosagedialog/mfDosageDialog.h>
 #include <drugsplugin/drugswidgetmanager.h>
@@ -56,7 +56,7 @@
 
 #include <templatesplugin/templatescreationdialog.h>
 
-#include "ui_mfDrugsCentralWidget.h"
+#include "ui_drugscentralwidget.h"
 #include <QTreeWidget>
 
 using namespace DrugsWidget;
