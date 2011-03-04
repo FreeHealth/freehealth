@@ -606,24 +606,11 @@ Field Database::field(const int &tableref, const int &fieldref) const
 /** \brief Return all fields of a table as \e FieldList */
 FieldList Database::fields(const int tableref) const
 {
-    FieldList ret;
-    if (!d->m_Tables.contains(tableref))
-        return ret;
-    if (!d->m_Tables_Fields.keys().contains(tableref))
-        return ret;
-
-    QList<int> fieldRefs = d->m_Tables_Fields.values(tableref);
-    qSort(fieldRefs);
-    QString tableName = table(tableref);
-    foreach(int i, fieldRefs) {
-        Field f;
-        f.table = tableref;
-        f.field = i;
-        f.tableName = tableName;
-        f.fieldName = fieldName(tableref, i);
-        ret << f;
-   }
-    return ret;
+    FieldList fields;
+    for(int i = 0; i < (d->m_Tables_Fields.values(tableref).count()); ++i) {
+        fields << field(tableref, i);
+    }
+    return fields;
 }
 
 /** \brief Return all fields name of a table */
