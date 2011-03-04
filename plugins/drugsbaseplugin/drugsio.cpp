@@ -372,6 +372,7 @@ bool DrugsIO::prescriptionFromXml(DrugsDB::DrugsModel *m, const QString &xmlCont
                 }
                 row = m->addDrug(item.text(), false);
                 if (row == -1) {
+                    // Drug can not be added to the model (wrong UID)
                     QString denomination = prescr.firstChildElement(::XML_DRUG_DENOMINATION).text();
                     errorMsg += tr("  * %1 (%2) was added as a textual drug.\n").arg(denomination).arg(item.text());
                     row = m->addTextualPrescription(denomination, "");
@@ -386,6 +387,7 @@ bool DrugsIO::prescriptionFromXml(DrugsDB::DrugsModel *m, const QString &xmlCont
             if (item.tagName().compare(::XML_DRUG_DENOMINATION) != 0 &&
                 item.tagName().compare(::XML_PRESCRIPTION_UID) != 0) {
                 int column = instance()->d->xmlTagToColumnIndex(item.tagName());
+                /** \todo code here : item.text() is a stringfied QVariant... */
                 if (column != -1)
                     m->setData(m->index(row, column), item.text());
             }

@@ -59,9 +59,9 @@ public:
      DrugsData();
      ~DrugsData();
 
-     bool hasPrescription() const;
-     void setPrescriptionValue(const int fieldref, const QVariant &value);
-     QVariant prescriptionValue(const int filedref) const;
+     virtual bool hasPrescription() const;
+     virtual void setPrescriptionValue(const int fieldref, const QVariant &value);
+     virtual QVariant prescriptionValue(const int filedref) const;
 
      void smallDrugWarn() const;
 
@@ -79,6 +79,9 @@ class DRUGSBASE_EXPORT TextualDrugsData : public DrugsData
 public:
     TextualDrugsData();
     void setDenomination(const QString &denomination);
+
+    virtual void setPrescriptionValue(const int fieldref, const QVariant &value);
+    virtual QVariant prescriptionValue(const int filedref) const;
 };
 
 }  // End Internal

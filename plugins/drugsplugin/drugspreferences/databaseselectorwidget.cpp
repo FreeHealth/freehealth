@@ -55,9 +55,7 @@ using namespace Trans::ConstantTranslations;
 static inline Core::ITheme *theme()  { return Core::ICore::instance()->theme(); }
 static inline Core::ISettings *settings()  { return Core::ICore::instance()->settings(); }
 static inline DrugsDB::DrugsDatabaseSelector *selector() {return DrugsDB::DrugsDatabaseSelector::instance();}
-
-
-/** \todo How to manage drugs base changing into FreeMedForms ? */
+static inline DrugsDB::Internal::DrugsBase *base() {return DrugsDB::Internal::DrugsBase::instance();}
 
 /////////////////////////////////////////////////////////////////////////////////////////////////////
 ///////////////////////////////  DrugsDatabaseSelectorPage  /////////////////////////////////////////
@@ -126,7 +124,7 @@ namespace Internal {
 class DatabaseSelectorWidgetPrivate
 {
 public:
-    DatabaseSelectorWidgetPrivate() : m_PathModel(0) {}
+    DatabaseSelectorWidgetPrivate() {}
 
     ~DatabaseSelectorWidgetPrivate()
     {
@@ -134,8 +132,7 @@ public:
     }
 
     QVector<DrugsDB::DatabaseInfos *> m_Infos;
-    QStringListModel *m_PathModel;
-    QString m_SelectedDatabaseFileName;
+    QString m_SelectedDatabaseUid;
 };
 }  // End namespace Internal
 }  // End namespace DrugsWidget
@@ -148,28 +145,13 @@ DatabaseSelectorWidget::DatabaseSelectorWidget(QWidget *parent) :
     d(0)
 {
     d = new Internal::DatabaseSelectorWidgetPrivate;
-    d->m_SelectedDatabaseFileName = settings()->value(DrugsDB::Constants::S_SELECTED_DATABASE_FILENAME).toString();
-    if (d->m_SelectedDatabaseFileName.startsWith(Core::Constants::TAG_APPLICATION_RESOURCES_PATH)) {
-        d->m_SelectedDatabaseFileName.replace(Core::Constants::TAG_APPLICATION_RESOURCES_PATH, settings()->path(Core::ISettings::ReadOnlyDatabasesPath));
-    }
+    d->m_SelectedDatabaseUid = settings()->value(DrugsDB::Constants::S_SELECTED_DATABASE_FILENAME).toString();
+//    if (d->m_SelectedDatabaseUid.startsWith(Core::Constants::TAG_APPLICATION_RESOURCES_PATH)) {
+//        d->m_SelectedDatabaseUid.replace(Core::Constants::TAG_APPLICATION_RESOURCES_PATH, settings()->path(Core::ISettings::ReadOnlyDatabasesPath));
+//    }
 
     ui->setupUi(this);
-    ui->pathView->hide();
-    ui->addPathButton->setIcon(theme()->icon(Core::Constants::ICONADD));
-    ui->removePathButton->setIcon(theme()->icon(Core::Constants::ICONREMOVE));
-    ui->tooglePathsButton->setIcon(theme()->icon(Core::Constants::ICONEYES));
-
-    d->m_PathModel = new QStringListModel(this);
-    d->m_PathModel->setStringList(settings()->value(DrugsDB::Constants::S_DATABASE_PATHS).toStringList());
-    ui->pathView->setModel(d->m_PathModel);
-
     connect(ui->databaseList, SIGNAL(currentRowChanged(int)), this, SLOT(updateDatabaseInfos(int)));
-    connect(ui->addPathButton, SIGNAL(clicked()), this, SLOT(addPath()));
-    connect(ui->removePathButton, SIGNAL(clicked()), this, SLOT(removePath()));
-    connect(ui->tooglePathsButton, SIGNAL(clicked()), this, SLOT(tooglePaths()));
-
-    connect(d->m_PathModel, SIGNAL(dataChanged(QModelIndex,QModelIndex)), this, SLOT(getAllAvailableDatabases()));
-
     setDatasToUi();
 }
 
@@ -185,28 +167,19 @@ DatabaseSelectorWidget::~DatabaseSelectorWidget()
 void DatabaseSelectorWidget::setDatasToUi()
 {
     ui->databaseList->clear();
-    if (!selector())
-        return;
-    selector()->getAllDatabaseInformations(d->m_PathModel->stringList());
-    d->m_Infos = selector()->availableDatabases();
-    const DrugsDB::DatabaseInfos *actual = DrugsDB::Internal::DrugsBase::instance()->actualDatabaseInformations();
+    d->m_Infos = base()->getAllDrugSourceInformations();
+    qWarning() << d->m_Infos;
+    const DrugsDB::DatabaseInfos *actual = base()->actualDatabaseInformations();
     int row = 0;
     foreach(DrugsDB::DatabaseInfos *info, d->m_Infos) {
         ui->databaseList->addItem(info->translatedName());
         if (!actual)
             continue;
-        if (info->fileName == actual->fileName) {
+        if (info->drugsUidName==actual->drugsUidName) {
             ui->databaseList->setCurrentRow(row, QItemSelectionModel::Select);
         }
         ++row;
     }
-}
-
-void DatabaseSelectorWidget::getAllAvailableDatabases()
-{
-    if (!selector())
-        return;
-    selector()->getAllDatabaseInformations(d->m_PathModel->stringList());
 }
 
 void DatabaseSelectorWidget::updateDatabaseInfos(int row)
@@ -220,46 +193,17 @@ void DatabaseSelectorWidget::updateDatabaseInfos(int row)
     if (row >= d->m_Infos.count())
         return;
     d->m_Infos.at(row)->toTreeWidget(ui->infoTree);
-    d->m_SelectedDatabaseFileName = d->m_Infos.at(row)->fileName;
+    d->m_SelectedDatabaseUid = d->m_Infos.at(row)->fileName;
 }
 
-void DatabaseSelectorWidget::addPath()
-{
-    QString dir = QFileDialog::getExistingDirectory(qApp->activeWindow(), tr("Select directory"),
-                                                    QDir::homePath(),
-                                                     QFileDialog::ShowDirsOnly
-                                                     | QFileDialog::DontResolveSymlinks);
-    if (dir.isEmpty())
-        return;
-    if (d->m_PathModel->stringList().contains(dir))
-        return;
-    int row = d->m_PathModel->rowCount();
-    d->m_PathModel->insertRow(row);
-    d->m_PathModel->setData(d->m_PathModel->index(row,0), dir);
-    setDatasToUi();
-}
-
-void DatabaseSelectorWidget::removePath()
-{
-    if (!ui->pathView->selectionModel()->hasSelection())
-        return;
-    d->m_PathModel->removeRow(ui->pathView->selectionModel()->currentIndex().row());
-    setDatasToUi();
-}
-
-void DatabaseSelectorWidget::tooglePaths()
-{
-    ui->pathView->setVisible(!ui->pathView->isVisible());
-}
-
-static void changeDrugsDatabase(Core::ISettings *set, const QString &fileName)
+static void changeDrugsDatabase(Core::ISettings *set, const QString &drugBaseUid)
 {
     if (!DrugsDB::DrugsModel::activeModel()) {
-        set->setValue(DrugsDB::Constants::S_SELECTED_DATABASE_FILENAME, fileName);
+        set->setValue(DrugsDB::Constants::S_SELECTED_DATABASE_FILENAME, drugBaseUid);
         return;
     }
 
-    if (set->value(DrugsDB::Constants::S_SELECTED_DATABASE_FILENAME).toString() != fileName) {
+    if (set->value(DrugsDB::Constants::S_SELECTED_DATABASE_FILENAME).toString() != drugBaseUid) {
         if (DrugsDB::DrugsModel::activeModel()->rowCount()) {
             bool yes = Utils::yesNoMessageBox(
                     QCoreApplication::translate("DatabaseSelectorWidget", "Reset actual prescription"),
@@ -271,8 +215,8 @@ static void changeDrugsDatabase(Core::ISettings *set, const QString &fileName)
             }
             DrugsDB::DrugsModel::activeModel()->clearDrugsList();
         }
-        set->setValue(DrugsDB::Constants::S_SELECTED_DATABASE_FILENAME, fileName);
-        DrugsDB::Internal::DrugsBase::instance()->refreshDrugsBase();
+        set->setValue(DrugsDB::Constants::S_SELECTED_DATABASE_FILENAME, drugBaseUid);
+        base()->refreshDrugsBase();
     }
 }
 
@@ -294,21 +238,20 @@ void DatabaseSelectorWidget::saveToSettings(Core::ISettings *s)
     if (!set) {
         set = settings();
     }
-    set->setValue(DrugsDB::Constants::S_DATABASE_PATHS, d->m_PathModel->stringList());
 
     // 0. if selected DB is the default one --> change selected to RESOURCE_TAG
-    QString tmp = d->m_SelectedDatabaseFileName;
-    QString defaultDbFileName = set->databasePath() + QDir::separator() + QString(DrugsDB::Constants::DB_DRUGS_NAME) + QDir::separator() + QString(DrugsDB::Constants::DB_DRUGS_NAME) + ".db";
-    if (tmp == defaultDbFileName)
-        tmp = DrugsDB::Constants::DB_DEFAULT_IDENTIFIANT;
+//    QString tmp = d->m_SelectedDatabaseUid;
+//    QString defaultDbFileName = set->databasePath() + QDir::separator() + QString(DrugsDB::Constants::DB_DRUGS_NAME) + QDir::separator() + QString(DrugsDB::Constants::DB_DRUGS_NAME) + ".db";
+//    if (tmp == defaultDbFileName)
+//        tmp = DrugsDB::Constants::DB_DEFAULT_IDENTIFIANT;
 
     // 1. manage application resource path
-    if (tmp.startsWith(settings()->path(Core::ISettings::ReadOnlyDatabasesPath))) {
-        tmp.replace(settings()->path(Core::ISettings::ReadOnlyDatabasesPath), Core::Constants::TAG_APPLICATION_RESOURCES_PATH);
-    }
+//    if (tmp.startsWith(settings()->path(Core::ISettings::ReadOnlyDatabasesPath))) {
+//        tmp.replace(settings()->path(Core::ISettings::ReadOnlyDatabasesPath), Core::Constants::TAG_APPLICATION_RESOURCES_PATH);
+//    }
 
     // 2. check if user changes the database
-    changeDrugsDatabase(set, tmp);
+//    changeDrugsDatabase(set, tmp);
 }
 
 void DatabaseSelectorWidget::changeEvent(QEvent *e)

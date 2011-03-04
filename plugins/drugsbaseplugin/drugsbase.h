@@ -77,6 +77,8 @@ public:
     const DatabaseInfos *actualDatabaseInformations() const;
     bool isDatabaseTheDefaultOne() const;
     bool isRoutesAvailable() const;
+
+    QVector<DatabaseInfos *> getAllDrugSourceInformations();
     DatabaseInfos *getDrugSourceInformations(const QString &drugSourceUid);
 
     bool refreshAllDatabases();

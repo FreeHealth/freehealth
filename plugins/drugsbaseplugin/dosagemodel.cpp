@@ -327,7 +327,9 @@ bool DosageModel::insertRows(int row, int count, const QModelIndex & parent)
             setData(index(createdRow, Dosages::Constants::IntakesUsesFromTo), false);
             QString s = settings()->value(DrugsDB::Constants::S_PROTOCOL_DEFAULT_SCHEMA).toString();
             if (s.isEmpty()) {
-                setData(index(createdRow, Dosages::Constants::IntakesScheme), m_DrugsModel->drugData(m_UID, Constants::Drug::AvailableForms).toStringList().at(0));
+                QStringList list = m_DrugsModel->drugData(m_UID, Constants::Drug::AvailableForms).toStringList();
+                if (!list.isEmpty())
+                    setData(index(createdRow, Dosages::Constants::IntakesScheme), list.at(0));
             } else if (s=="||") {
                 setData(index(createdRow, Dosages::Constants::IntakesScheme), tkTr(Trans::Constants::INTAKES, 1));
             } else {

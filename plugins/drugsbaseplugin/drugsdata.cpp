@@ -196,47 +196,13 @@ DrugsData::~DrugsData()
   \brief Stores \e value of drugs' prescription source field \e fieldref.
   \sa DrugsDB::DrugsModel, DrugsDB::DosageDialog
 */
-void DrugsData::setPrescriptionValue(const int fieldref, const QVariant & value)
+void DrugsData::setPrescriptionValue(const int fieldref, const QVariant &value)
 {
     if (d->m_PrescriptionValues.value(fieldref) != value) {
         d->m_PrescriptionChanges = true;
         d->m_PrescriptionValues[fieldref] = value;
     }
 }
-
-//--------------------------------------------------------------------------------------------------------
-//------------------------------------------------ Getters -----------------------------------------------
-//--------------------------------------------------------------------------------------------------------
-///**
-//  \brief Return the drugs' value referenced by its database table and field references : \e tableref, \e fieldref.
-//  \sa DrugsDB::Constants
-//*/
-//QVariant DrugsData::value(const int tableref, const int fieldref) const
-//{
-//    switch (tableref)
-//    {
-//    case Table_DRUGS :
-//        {
-//            if (d->m_CISValues.contains(fieldref))
-//                return d->m_CISValues.value(fieldref);
-//            return QVariant();
-//        }
-//    case Table_COMPO :
-//        {
-//            if (d->m_COMPOValues.contains(fieldref)) {
-//                if (fieldref == COMPO_IAM_CLASS_DENOMINATION)
-//                    return d->m_COMPOValues.value(fieldref);
-//            }
-//            else {
-//                return d->m_COMPOValues.values(fieldref);
-//            }
-//            return QVariant();
-//        }
-//    default: Utils::Log::addError("DrugsData", "Wrong table reference parameter in DrugsData::value().",
-//                                  __FILE__, __LINE__); break;
-//    }
-//    return QVariant();
-//}
 
 /**
   \brief Return true if drugs has a prescription.
@@ -262,13 +228,13 @@ QVariant DrugsData::prescriptionValue(const int fieldref) const
     // manage some particularities
     switch (fieldref)
     {
-        case Prescription::IntakesTo :
+    case Prescription::IntakesTo :
         {
             if (!d->m_PrescriptionValues.value(Prescription::IntakesUsesFromTo,false).toBool())
                 return QVariant();
             break;
         }
-        case Prescription::DurationTo :
+    case Prescription::DurationTo :
         {
             if (!d->m_PrescriptionValues.value(Prescription::DurationUsesFromTo,false).toBool())
                 return QVariant();
@@ -282,6 +248,7 @@ QVariant DrugsData::prescriptionValue(const int fieldref) const
                 if (p.first == lang)
                     return p.second;
             }
+            break;
         }
     }
     return d->m_PrescriptionValues.value(fieldref);
@@ -657,7 +624,7 @@ void DrugsData::smallDrugWarn() const
 TextualDrugsData::TextualDrugsData() :
         DrugsData()
 {
-    setPrescriptionValue(Prescription::IsTextualOnly, true);
+//    setPrescriptionValue(Prescription::IsTextualOnly, true);
     setDataFromDb(Uid1, -1);
 }
 
@@ -666,4 +633,16 @@ void TextualDrugsData::setDenomination(const QString &denomination)
     setDataFromDb(Name, denomination);
 }
 
+void TextualDrugsData::setPrescriptionValue(const int fieldref, const QVariant &value)
+{
+    if (fieldref==Prescription::IsTextualOnly)
+        return;
+    return DrugsData::setPrescriptionValue(fieldref, value);
+}
 
+QVariant TextualDrugsData::prescriptionValue(const int fieldref) const
+{
+    if (fieldref==Prescription::IsTextualOnly)
+        return true;
+    return DrugsData::prescriptionValue(fieldref);
+}

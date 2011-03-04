@@ -188,18 +188,18 @@ public:
     {
          QStringList tmp;
          DrugDrugInteractionEngine::TypesOfIAM r = DrugDrugInteractionEngine::TypesOfIAM(t);
-         if (r & DrugDrugInteractionEngine::APrendreEnCompte)
-              tmp << tkTr(Trans::Constants::TAKE_INTO_ACCOUNT);
-         if (r & DrugDrugInteractionEngine::Deconseille)
-              tmp << tkTr(Trans::Constants::DISCOURAGED);
          if (r & DrugDrugInteractionEngine::ContreIndication)
               tmp << tkTr(Trans::Constants::CONTRAINDICATION);
-         if (r & DrugDrugInteractionEngine::Precaution)
-              tmp << tkTr(Trans::Constants::PRECAUTION_FOR_USE);
+         if (r & DrugDrugInteractionEngine::Deconseille)
+              tmp << tkTr(Trans::Constants::DISCOURAGED);
          if (r & DrugDrugInteractionEngine::P450)
               tmp << tkTr(Trans::Constants::P450_IAM);
          if (r & DrugDrugInteractionEngine::GPG)
               tmp << tkTr(Trans::Constants::GPG_IAM);
+         if (r & DrugDrugInteractionEngine::APrendreEnCompte)
+              tmp << tkTr(Trans::Constants::TAKE_INTO_ACCOUNT);
+         if (r & DrugDrugInteractionEngine::Precaution)
+              tmp << tkTr(Trans::Constants::PRECAUTION_FOR_USE);
          if (r & DrugDrugInteractionEngine::InnDuplication)
               tmp << tkTr(Trans::Constants::INN_DUPLICATION);
          if (r & DrugDrugInteractionEngine::Information)

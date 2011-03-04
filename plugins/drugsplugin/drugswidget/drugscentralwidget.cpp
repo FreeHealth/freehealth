@@ -26,7 +26,6 @@
  ***************************************************************************/
 #include "drugscentralwidget.h"
 
-// include drugs widgets headers
 #include <drugsbaseplugin/drugsbase.h>
 #include <drugsbaseplugin/drugsmodel.h>
 #include <drugsbaseplugin/interactionmanager.h>

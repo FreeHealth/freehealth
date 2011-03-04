@@ -32,6 +32,7 @@
 #include <QString>
 #include <QDate>
 #include <QStringList>
+#include <QHash>
 
 QT_BEGIN_NAMESPACE
 class QTreeWidget;
@@ -41,25 +42,30 @@ namespace DrugsDB {
 namespace Internal {
 //class DatabaseInfosPrivate;
 class DrugsDatabaseSelectorPrivate;
+class DrugsBase;
 }
 
 class DRUGSBASE_EXPORT DatabaseInfos
 {
+    friend class DrugsDB::Internal::DrugsBase;
+
 public:
     DatabaseInfos();
     void warn();
+
     QString translatedName() const;
-    QHash<QString, QString> names() const;
+
     void setDrugsNameConstructor(const QString &s);
     void toTreeWidget(QTreeWidget *tree) const;
 
-    QString name, identifiant, fileName, version, compatVersion, lang_country, connectionName;
+    QString identifiant, fileName, version, compatVersion, lang_country, connectionName;
     QString provider, author, license, drugsUidName, packUidName;
     QString drugsNameConstructor,  drugsNameConstructorSearchFilter;
     QString weblink, complementaryWebsite, authorComments, licenseTerms;
     bool atcCompatible, iamCompatible;
     QDate date;
-    int moleculeLinkCompletion;
+    int moleculeLinkCompletion;    
+    QHash<QString, QString> names;
 };
 
 
@@ -70,8 +76,8 @@ public:
     static DrugsDatabaseSelector *instance();
     ~DrugsDatabaseSelector();
 
-    void getAllDatabaseInformations(const QStringList &paths = QStringList()) const;
-    bool setCurrentDatabase(const QString &fileName);
+    void getAllDatabaseInformations() const;
+    bool setCurrentDatabase(const QString &dbUid);
     DatabaseInfos currentDatabase() const;
     QVector<DatabaseInfos *> availableDatabases() const;
 

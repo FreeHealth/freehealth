@@ -73,11 +73,7 @@ protected:
     void changeEvent(QEvent *e);
 
 private Q_SLOTS:
-    void getAllAvailableDatabases();
     void updateDatabaseInfos(int row);
-    void addPath();
-    void removePath();
-    void tooglePaths();
 
 private:
     Ui::DatabaseSelectorWidget *ui;

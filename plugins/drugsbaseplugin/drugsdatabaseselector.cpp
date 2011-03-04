@@ -67,13 +67,13 @@ public:
 
     ~DrugsDatabaseSelectorPrivate()
     {
-        qDeleteAll(m_FileName_Infos);
-        m_FileName_Infos.clear();
+        qDeleteAll(m_Infos);
+        m_Infos.clear();
         m_Current = 0;
     }
 
 public:
-    QHash<QString, DatabaseInfos *> m_FileName_Infos;
+    QVector<DatabaseInfos *> m_Infos;
     DatabaseInfos *m_Current;
 };
 
@@ -91,9 +91,9 @@ DrugsDatabaseSelector *DrugsDatabaseSelector::instance()
 }
 
 DatabaseInfos::DatabaseInfos() :
-        name(Constants::DB_DEFAULT_IDENTIFIANT),
         identifiant(Constants::DB_DEFAULT_IDENTIFIANT)
 {
+    names.insert("xx", "No drug database available");
 }
 
 void DatabaseInfos::setDrugsNameConstructor(const QString &s)
@@ -108,7 +108,6 @@ void DatabaseInfos::setDrugsNameConstructor(const QString &s)
     }
     drugsNameConstructorSearchFilter = list.join(" || ");
 }
-
 
 void DatabaseInfos::toTreeWidget(QTreeWidget *tree) const
 {
@@ -128,9 +127,9 @@ void DatabaseInfos::toTreeWidget(QTreeWidget *tree) const
                 dir.setPath(settings()->resourcesPath());
             else if (fi.absolutePath().startsWith(settings()->path(Core::ISettings::BundleResourcesPath)))
                 dir.setPath(settings()->path(Core::ISettings::BundleResourcesPath));
-            new QTreeWidgetItem(file, QStringList() << "Absolute path" << QFileInfo(fileName).absolutePath());
-            new QTreeWidgetItem(file, QStringList() << "Application relative path" << dir.relativeFilePath(QFileInfo(fileName).absoluteFilePath()));
-            new QTreeWidgetItem(file, QStringList() << "File" << QFileInfo(fileName).fileName());
+//            new QTreeWidgetItem(file, QStringList() << "Absolute path" << QFileInfo(fileName).absolutePath());
+//            new QTreeWidgetItem(file, QStringList() << "Application relative path" << dir.relativeFilePath(QFileInfo(fileName).absoluteFilePath()));
+//            new QTreeWidgetItem(file, QStringList() << "DrugBaseUid" << QFileInfo(fileName).fileName());
         }
         new QTreeWidgetItem(file, QStringList() << "Identifiant" << identifiant);
     }
@@ -143,8 +142,7 @@ void DatabaseInfos::toTreeWidget(QTreeWidget *tree) const
 
     QTreeWidgetItem *namesItem = new QTreeWidgetItem(tree, QStringList() << "Names");
     namesItem->setFont(0, bold);
-    QHash<QString,QString> langs = names();
-    foreach(const QString &k, langs.keys()) {
+    foreach(const QString &k, names.keys()) {
         QString l = k;
         if (l == "xx") {
             l.replace("xx", "All languages");
@@ -152,7 +150,7 @@ void DatabaseInfos::toTreeWidget(QTreeWidget *tree) const
             QLocale loc(k);
             l = QLocale::languageToString(loc.language());
         }
-        new QTreeWidgetItem(namesItem, QStringList() << l << langs.value(k));
+        new QTreeWidgetItem(namesItem, QStringList() << l << names.value(k));
     }
 
     QTreeWidgetItem *countryItem = new QTreeWidgetItem(tree, QStringList() << "Country");
@@ -198,7 +196,11 @@ void DatabaseInfos::toTreeWidget(QTreeWidget *tree) const
 
 void DatabaseInfos::warn()
 {
-    QString tmp = name;
+    QString tmp;
+    foreach(const QString &lang, names.keys()) {
+        tmp += QString("%1 - %2; ").arg(lang).arg(names.value(lang));
+    }
+    tmp.chop(2);
     qWarning() << "DatabaseInfos"
             << "\n  Name" << tmp.replace("\n", "   ;;   ")
             << "\n  Translated name"  << translatedName()
@@ -221,41 +223,13 @@ void DatabaseInfos::warn()
 
 QString DatabaseInfos::translatedName() const
 {
-    // 1. parse name string to a hash
-    QHash<QString, QString> langs = names();
     QString lang = QLocale().name().left(2);
-    if (langs.keys().contains(lang)) {
-        return langs.value(lang);
+    if (names.keys().contains(lang)) {
+        return names.value(lang);
     } else {
-        return langs.value("xx");
+        return names.value("xx");
     }
     return QString();
-}
-
-QHash<QString, QString> DatabaseInfos::names() const
-{
-    QHash<QString, QString> langs;
-    int l = 0;
-    foreach(const QString &line, name.split("\n", QString::SkipEmptyParts)) {
-        l++;
-        if (line.simplified().isEmpty())
-            continue;
-        QStringList lang = line.split("=");
-        if (lang.count() != 2) {
-            Utils::Log::addError("DatabaseInfos",
-                                 QString("Error while parsing name of the database, "
-                                         "line %1 contains %2 = sign instead of 2.\n"
-                                         "Database : %3 \n"
-                                         "Content : \n%4")
-                                 .arg(l)
-                                 .arg(lang.count()-1)
-                                 .arg(fileName)
-                                 .arg(name), __FILE__, __LINE__);
-            continue;
-        }
-        langs.insert(lang.at(0).simplified(), lang.at(1).simplified());
-    }
-    return langs;
 }
 
 DrugsDatabaseSelector::DrugsDatabaseSelector() : d(0)
@@ -271,50 +245,23 @@ DrugsDatabaseSelector::~DrugsDatabaseSelector()
     }
 }
 
-void DrugsDatabaseSelector::getAllDatabaseInformations(const QStringList &paths) const
+void DrugsDatabaseSelector::getAllDatabaseInformations() const
 {
-    QStringList allPaths = paths;
-
-    // Add application resources path if is was not included
-    QString appDatabases = settings()->databasePath() + QDir::separator() + DrugsDB::Constants::DB_DRUGS_NAME;
-    if (!allPaths.contains(appDatabases)) {
-        allPaths.append(appDatabases);
-    }
-
-    // check all paths
-    foreach(const QString &path, allPaths) {
-
-        // get all *.db files
-        QDir dir(path, "*.db");
-        foreach(const QFileInfo &fi, dir.entryInfoList(QDir::Files | QDir::Readable | QDir::CaseSensitive, QDir::Name | QDir::IgnoreCase)) {
-            // try to connect database with SQLite driver
-            QSqlDatabase db = QSqlDatabase::addDatabase("QSQLITE", fi.fileName());
-            db.setDatabaseName(fi.absoluteFilePath());
-            if (!db.open()) {
-                Utils::Log::addError("DrugsDatabaseSelector", QString("Error %1 when trying to open database %2")
-                                     .arg(db.lastError().text()).arg(fi.fileName()), __FILE__, __LINE__, true);
-                continue;
-            }
-            DatabaseInfos *info = base()->getDrugSourceInformations(fi.fileName());
-            if (info) {
-//                info->fileName = fi.absoluteFilePath();
-//                info->warn();
-                d->m_FileName_Infos.insert(fi.fileName(), info);
-            }
-        }
-
-        // clear all newly created Qt databases (without console warnings)
-        foreach(const QFileInfo &fi, dir.entryInfoList(QDir::Files | QDir::Readable | QDir::CaseSensitive, QDir::Name | QDir::IgnoreCase)) {
-            QSqlDatabase::removeDatabase(fi.fileName());
-        }
-    }
+    d->m_Infos.clear();
+    d->m_Infos = base()->getAllDrugSourceInformations();
 }
 
-bool DrugsDatabaseSelector::setCurrentDatabase(const QString &fileName)
+bool DrugsDatabaseSelector::setCurrentDatabase(const QString &dbUid)
 {
-    d->m_Current = d->m_FileName_Infos.value(fileName, 0);
+    for(int i=0; i < d->m_Infos.count(); ++i) {
+        DatabaseInfos *info = d->m_Infos.at(i);
+        if (info->drugsUidName == dbUid) {
+            d->m_Current = info;
+            return true;
+        }
+    }
     /** \todo reload drugs database */
-    return d->m_Current!=0;
+    return false;
 }
 
 DatabaseInfos DrugsDatabaseSelector::currentDatabase() const
@@ -328,6 +275,5 @@ DatabaseInfos DrugsDatabaseSelector::currentDatabase() const
 
 QVector<DatabaseInfos *> DrugsDatabaseSelector::availableDatabases() const
 {
-//    qWarning() << d->m_FileName_Infos << d->m_FileName_Infos.values().toVector();
-    return d->m_FileName_Infos.values().toVector();
+    return d->m_Infos;
 }

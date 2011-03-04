@@ -133,10 +133,10 @@ public:
     bool setDrugData(IDrug *drug, const int column, const QVariant &value)
     {
         Q_ASSERT(drug);
+        TextualDrugsData *textualdrug = static_cast<TextualDrugsData*>(drug);
         if (column == Constants::Drug::Denomination) {
-            TextualDrugsData *td = static_cast<TextualDrugsData*>(drug);
-            if (td) {
-                td->setDenomination(value.toString());
+            if (textualdrug) {
+                textualdrug->setDenomination(value.toString());
                 m_IsDirty = true;
                 return true;
             } else {
@@ -149,10 +149,31 @@ public:
             drug->setPrescriptionValue(column, value.toString().replace("[","{").replace("]","}"));
             m_IsDirty = true;
         } else {
+//            // Avoid modification of IsTextualOnly tag on TextualDrugs
+//            if (textualdrug && column==Constants::Prescription::IsTextualOnly) {
+//                return false;
+//            }
             drug->setPrescriptionValue(column, value);
             m_IsDirty = true;
         }
         return true;
+    }
+
+    QIcon getDrugIcon(const IDrug *drug, bool mediumSize = false) const
+    {
+        Core::ITheme::IconSize size = Core::ITheme::SmallIcon;
+        if (mediumSize)
+            size = Core::ITheme::MediumIcon;
+        if (drug->prescriptionValue(Constants::Prescription::IsTextualOnly).toBool()) {
+            return theme()->icon(Core::Constants::ICONPENCIL, size);
+        } else if (m_InteractionResult->drugHaveInteraction(drug)) {
+            return m_InteractionResult->maxLevelOfInteractionIcon(drug, m_levelOfWarning, size);
+        } else if (drug->data(IDrug::AllInnsKnown).toBool()) {
+            return theme()->icon(Core::Constants::ICONOK, size);
+        } else {
+            return theme()->icon(Constants::INTERACTION_ICONUNKONW, size);
+        }
+        return QIcon();
     }
 
     QVariant getIDrugData(const IDrug *drug, const int column) const
@@ -258,8 +279,8 @@ public:
         switch (column)
         {
         case Interaction::Id :     return QVariant();
-        case Interaction::Icon :   return m_InteractionResult->maxLevelOfInteractionIcon(drug, m_levelOfWarning);
-        case Interaction::Pixmap : return m_InteractionResult->maxLevelOfInteractionIcon(drug, m_levelOfWarning).pixmap(16,16);
+        case Interaction::Icon :   return getDrugIcon(drug);
+        case Interaction::Pixmap : return getDrugIcon(drug).pixmap(16,16);
         case Interaction::MediumPixmap : return m_InteractionResult->maxLevelOfInteractionIcon(drug, m_levelOfWarning, Core::ITheme::MediumIcon).pixmap(64,64);
         case Interaction::ToolTip :
             {
@@ -454,16 +475,7 @@ QVariant DrugsModel::data(const QModelIndex &index, int role) const
         // Show/Hide interaction icon
         if (!settings()->value(Constants::S_SHOWICONSINPRESCRIPTION).toBool())
             return QVariant();
-
-        if (drug->prescriptionValue(Constants::Prescription::IsTextualOnly).toBool()) {
-            return theme()->icon(Core::Constants::ICONPENCIL);
-        } else if (d->m_InteractionResult->drugHaveInteraction(drug)) {
-            return d->m_InteractionResult->maxLevelOfInteractionIcon(drug, d->m_levelOfWarning);
-        } else if (drug->data(IDrug::AllInnsKnown).toBool()) {
-            return theme()->icon(Core::Constants::ICONOK);
-        } else {
-            return theme()->icon(Constants::INTERACTION_ICONUNKONW);
-        }
+        return d->getDrugIcon(drug);
     }
     else if (role == Qt::ToolTipRole) {
         QString display;
