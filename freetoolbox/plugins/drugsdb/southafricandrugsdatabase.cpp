@@ -630,6 +630,7 @@ bool ZaDrugDatatabaseStep::populateDatabase()
         DrugFileParser parser(drugName, content);
         Drug *drug = parser.getDrug();
         drug->setData(Drug::Uid1, drugs_uids.value(drugName));
+        drug->setData(Drug::OldUid, drugs_uids.value(drugName));
         drugs << drug;
 
         // test contents and create an error HTML output

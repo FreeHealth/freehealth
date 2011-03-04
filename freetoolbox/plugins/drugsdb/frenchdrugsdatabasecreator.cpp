@@ -245,6 +245,7 @@ bool FrDrugDatatabaseStep::populateDatabase()
         //68586203	17 B ESTRADIOL BESINS-ISCOVESCO 0,06 POUR CENT, gel pour application cutanée en tube	(2)gel pour application	(3)transdermique	(4)AMM active	(5)Procdure nationale	(6)Non commercialise (7)SPC
         Drug *drug = new Drug;
         drug->setData(Drug::Uid1, line.at(0));
+        drug->setData(Drug::OldUid, line.at(0));
         drug->setData(Drug::Name, line.at(1));
         drug->setData(Drug::Forms, line.at(2));
         drug->setData(Drug::Routes, line.at(3));
