@@ -24,11 +24,11 @@
  *       NAME <MAIL@ADRESS>                                                *
  *       NAME <MAIL@ADRESS>                                                *
  ***************************************************************************/
-#ifndef MFDRUGSELECTOR_H
-#define MFDRUGSELECTOR_H
+#ifndef DRUGSELECTOR_H
+#define DRUGSELECTOR_H
 
 // include form headers
-#include "ui_mfDrugSelector.h"
+#include "ui_drugselector.h"
 
 QT_BEGIN_NAMESPACE
 class QSqlTableModel;
@@ -36,7 +36,7 @@ class QToolButton;
 QT_END_NAMESPACE
 
 /**
- * \file mfDrugsSelector.h
+ * \file drugselector.h
  * \author Eric MAEKER <eric.maeker@free.fr>
  * \version 0.5.0
  * \date 23 Sept 2010
@@ -121,4 +121,4 @@ private:
 }  // End DrugsWidget
 
 
-#endif // MFDRUGSELECTOR_H
+#endif // DRUGSELECTOR_H
