@@ -15,6 +15,8 @@ void PadHighlighter::highlightBlock(const QString &text)
 				if (rawValue[rawValue.count() - 1] == ']'){
 					setFormat(fragment->end(), 1, _padFormat);
 				}
+/*				if (fragment->end() - fragment->start() > 1)
+				setFormat(fragment->start() + 1, fragment->end() - fragment->start() - 1, _prefixFormat);*/
 			}
 		} else if (dynamic_cast<PadCore*>(fragment)){
 			if (rawValue.count()){
@@ -37,4 +39,5 @@ void PadHighlighter::init()
 	_padFormat.setFontWeight(QFont::Bold);
 	_coreFormat.setForeground(Qt::darkBlue);
 	_coreFormat.setFontWeight(QFont::Bold);
+	_prefixFormat.setBackground(QColor(200, 255, 255));
 }

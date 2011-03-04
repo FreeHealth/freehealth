@@ -21,6 +21,7 @@ private:
 	PadAnalyzer _padAnalyzer;
 	QTextCharFormat _padFormat;
 	QTextCharFormat _coreFormat;
+	QTextCharFormat _prefixFormat;
 
 	void init();
 };
