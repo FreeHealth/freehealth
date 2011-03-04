@@ -547,7 +547,7 @@ int addLabels(const QString &connection, const int masterLid, QMultiHash<QString
     QSqlDatabase db = QSqlDatabase::database(connection);
     if (!db.isOpen()) {
         if (!db.open()) {
-            Utils::Log::addError("Tools","Unable to connection database", __FILE__, __LINE__);
+            LOG_ERROR_FOR("Tools","Unable to connection database");
             return -1;
         }
     }
@@ -572,39 +572,37 @@ int addLabels(const QString &connection, const int masterLid, QMultiHash<QString
             QString t = value.toString();
 
             // Check is couple already exists
-            req = QString("SELECT LID FROM LABELS WHERE (LANG='%1' AND LABEL=\"%2\")")
-                  .arg(lang)
-                  .arg(t);
-            if (query.exec(req)) {
-                if (query.next()) {
-                    int lid = query.value(0).toInt();
-                    query.finish();
+            /** \todo code here: code buggy */
+//            req = QString("SELECT LID FROM LABELS WHERE (LANG='%1' AND LABEL=\"%2\")")
+//                  .arg(lang)
+//                  .arg(t);
+//            if (query.exec(req)) {
+//                if (query.next()) {
+//                    int lid = query.value(0).toInt();
+//                    query.finish();
 
-                    req = QString("INSERT INTO `LABELS_LINK` (MASTER_LID, LID) VALUES "
-                                  "(%1  ,%2)")
-                            .arg(mid)
-                            .arg(lid)
-                            ;
-                    if (!query.exec(req)) {
-                        Utils::Log::addQueryError("Drugs", query, __FILE__, __LINE__);
-                        return false;
-                    }
-                    query.finish();
-                    return mid;
-                }
-            } else {
-                Utils::Log::addQueryError("Drugs", query, __FILE__, __LINE__);
-                return -1;
-            }
-            query.finish();
+//                    req = QString("INSERT INTO `LABELS_LINK` (MASTER_LID, LID) VALUES "
+//                                  "(%1  ,%2)")
+//                            .arg(mid)
+//                            .arg(lid)
+//                            ;
+//                    if (!query.exec(req)) {
+//                        LOG_QUERY_ERROR_FRO("Drugs", query);
+//                        return false;
+//                    }
+//                    query.finish();
+//                    return mid;
+//                }
+//            } else {
+//                LOG_QUERY_ERROR_FOR("Drugs", query);
+//                return -1;
+//            }
+//            query.finish();
 
-            req = QString("INSERT INTO `LABELS` (LID,LANG,LABEL) VALUES ("
-                          "NULL,'%1','%2')")
-                    .arg(lang)
-                    .arg(t.replace("'","''"))
-                    ;
+            req = QString("INSERT INTO `LABELS` (LID,LANG,LABEL) VALUES (NULL,'%1','%2')")
+                    .arg(lang).arg(t.replace("'","''"));
             if (!query.exec(req)) {
-                Utils::Log::addQueryError("Drugs", query, __FILE__, __LINE__);
+                LOG_QUERY_ERROR_FOR("Drugs", query);
                 return -1;
             }
             int id = query.lastInsertId().toInt();
@@ -616,7 +614,7 @@ int addLabels(const QString &connection, const int masterLid, QMultiHash<QString
                     .arg(id)
                     ;
             if (!query.exec(req)) {
-                Utils::Log::addQueryError("Drugs", query, __FILE__, __LINE__);
+                LOG_QUERY_ERROR_FOR("Drugs", query);
                 return -1;
             }
             query.finish();
@@ -735,24 +733,23 @@ bool createAtc(const QString &connection, const QString &code, const QMultiHash<
     QSqlQuery query(db);
     int id = 0;
     QString req;
-    if (forceAtcId == -1)
+    if (forceAtcId==-1) {
         req = QString("INSERT INTO ATC  (ATC_ID, CODE) "
                   "VALUES (NULL, '%2') ").arg(code);
-    else
+    } else {
         req = QString("INSERT INTO ATC  (ATC_ID, CODE) "
                   "VALUES (%1, '%2') ").arg(forceAtcId).arg(code);
+    }
 
     if (query.exec(req)) {
         id = query.lastInsertId().toInt();
-        if (forceAtcId!=-1) {
-            if (forceAtcId!=id) {
-                Utils::Log::addError("Tools", QString("Wrong ATC_ID Db=%1 / Asked=%2").arg(id).arg(forceAtcId), __FILE__, __LINE__);
-                db.rollback();
-                return false;
-            }
+        if (forceAtcId!=-1 && forceAtcId!=id) {
+            LOG_ERROR_FOR("Tools", QString("Wrong ATC_ID Db=%1 / Asked=%2").arg(id).arg(forceAtcId));
+            db.rollback();
+            return false;
         }
     } else {
-        Utils::Log::addQueryError("Tools", query, __FILE__, __LINE__);
+        LOG_QUERY_ERROR_FOR("Tools", query);
     }
     query.finish();
 
@@ -766,7 +763,7 @@ bool createAtc(const QString &connection, const QString &code, const QMultiHash<
     // Create ATC_LABELS link
     req = QString("INSERT INTO ATC_LABELS (ATC_ID, MASTER_LID) VALUES (%1, %2) ").arg(id).arg(masterLid);
     if (!query.exec(req)) {
-        Utils::Log::addQueryError("Tools", query, __FILE__, __LINE__);
+        LOG_QUERY_ERROR_FOR("Tools", query);
         db.rollback();
         return false;
     }

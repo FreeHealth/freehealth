@@ -263,7 +263,7 @@ bool InteractionStep::computeModelsAndPopulateDatabase()
                 return false;
             const QStringList &list = content.split("\n", QString::SkipEmptyParts);
             foreach(const QString &s, list) {
-                QStringList values = s.split(";");
+                QStringList values = s.split("\";\"");
                 QMultiHash<QString, QVariant> labels;
                 labels.insert("en", values[1].remove("\""));
                 labels.insert("fr", values[2].remove("\""));
