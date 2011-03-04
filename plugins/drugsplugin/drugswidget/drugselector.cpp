@@ -65,7 +65,7 @@ using namespace DrugsWidget;
 using namespace DrugsWidget::Internal;
 using namespace Trans::ConstantTranslations;
 
-static inline DrugsDB::Internal::DrugsBase *drugsBase() {return DrugsDB::Internal::DrugsBase::instance();}
+static inline DrugsDB::Internal::DrugsBase *base() {return DrugsDB::Internal::DrugsBase::instance();}
 static inline Core::ISettings *settings() {return Core::ICore::instance()->settings();}
 static inline Core::ITheme *theme() {return Core::ICore::instance()->theme();}
 static inline Core::ActionManager *actionManager() { return Core::ICore::instance()->actionManager(); }
@@ -160,7 +160,7 @@ void DrugSelector::initialize()
 
     searchLine->setDelayedSignals(true);
 
-    connect(drugsBase(), SIGNAL(drugsBaseHasChanged()), this, SLOT(onDrugsBaseChanged()));
+    connect(base(), SIGNAL(drugsBaseHasChanged()), this, SLOT(onDrugsBaseChanged()));
 }
 
 /** \brief Define the \e font to use on all the views */
@@ -199,21 +199,47 @@ void DrugSelector::createToolButtons()
     // add buttons to search line
     searchLine->setLeftButton(m_SearchToolButton);
     searchLine->setRightButton(m_DrugsHistoricButton);
+
+    // Create drug database selector toolbutton
+    QAction *defaultAction = 0;
+    QVector<DrugsDB::DatabaseInfos *> list = base()->getAllDrugSourceInformations();
+    for(int i=0; i < list.count(); ++i) {
+        DrugsDB::DatabaseInfos *info = list.at(i);
+        QAction *a = new QAction(this);
+        a->setText(info->translatedName());
+        a->setToolTip(info->translatedName());
+        a->setData(info->identifiant);
+        qWarning() << "kkkkkkkkkkkkkkkkk" << info->lang_country;
+        a->setIcon(theme()->icon("/flags/"+info->lang_country.mid(3)+".png"));
+        drugsDatabaseSelectorButton->addAction(a);
+        if (info->identifiant==base()->actualDatabaseInformations()->identifiant) {
+            defaultAction = a;
+        }
+    }
+    drugsDatabaseSelectorButton->setDefaultAction(defaultAction);
+    connect(drugsDatabaseSelectorButton, SIGNAL(triggered(QAction*)), drugsDatabaseSelectorButton, SLOT(setDefaultAction(QAction*)));
+    connect(drugsDatabaseSelectorButton, SIGNAL(triggered(QAction*)), this, SLOT(changeDrugBaseUid(QAction*)));
 }
 
 /** \brief Update the views if user selected another drugs database */
 void DrugSelector::onDrugsBaseChanged()
 {
-    DrugsDB::GlobalDrugsModel *old = m_GlobalDrugsModel;
-    if (m_SearchMethod == Constants::SearchCommercial)
-        m_GlobalDrugsModel = new DrugsDB::GlobalDrugsModel(DrugsDB::GlobalDrugsModel::SearchByBrandName, this);
-    else if (m_SearchMethod == Constants::SearchMolecules)
-        m_GlobalDrugsModel = new DrugsDB::GlobalDrugsModel(DrugsDB::GlobalDrugsModel::SearchByMolecularName, this);
-    else
-        m_GlobalDrugsModel = new DrugsDB::GlobalDrugsModel(DrugsDB::GlobalDrugsModel::SearchByInnName, this);
-    createDrugModelView();
-    delete old;
-    old = 0;
+//    DrugsDB::GlobalDrugsModel *old = m_GlobalDrugsModel;
+//    if (m_SearchMethod == Constants::SearchCommercial)
+//        m_GlobalDrugsModel = new DrugsDB::GlobalDrugsModel(DrugsDB::GlobalDrugsModel::SearchByBrandName, this);
+//    else if (m_SearchMethod == Constants::SearchMolecules)
+//        m_GlobalDrugsModel = new DrugsDB::GlobalDrugsModel(DrugsDB::GlobalDrugsModel::SearchByMolecularName, this);
+//    else
+//        m_GlobalDrugsModel = new DrugsDB::GlobalDrugsModel(DrugsDB::GlobalDrugsModel::SearchByInnName, this);
+//    createDrugModelView();
+//    delete old;
+//    old = 0;
+}
+
+void DrugSelector::changeDrugBaseUid(QAction *a)
+{
+    qWarning() << Q_FUNC_INFO << a->data();
+    base()->changeCurrentDrugSourceUid(a->data());
 }
 
 void DrugSelector::createDrugModelView()
@@ -306,7 +332,7 @@ void DrugSelector::historyAct_triggered(QAction *action)
     QHashWhere where;
     where.insert(DRUGS_MARKET, "=1");
     where.insert(DRUGS_NAME , QString("= \"%1\"").arg(action->toolTip()));
-    m_GlobalDrugsModel->setFilter(drugsBase()->getWhereClause(Table_DRUGS, where));
+    m_GlobalDrugsModel->setFilter(base()->getWhereClause(Table_DRUGS, where));
 }
 
 //--------------------------------------------------------------------------------------------------------

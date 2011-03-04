@@ -37,13 +37,14 @@
  * \file idrug.h
  * \author Eric MAEKER <eric.maeker@free.fr>
  * \version 0.6.0
- * \date 24 Feb 2011
+ * \date 04 Mar 2011
 */
 
 namespace DrugsDB {
 
 class IDrug;
 class IVirtualDrug;
+class DrugsIO;
 
 
 namespace Internal {
@@ -187,6 +188,7 @@ class DRUGSBASE_EXPORT IDrug : public IDrugPrescription
     friend class DrugsDB::DrugRoute;
     friend class DrugsDB::IComponent;
     friend class DrugsDB::Internal::DrugsBase;
+    friend class DrugsDB::DrugsIO;
 
 public:
     enum References {

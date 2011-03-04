@@ -278,11 +278,12 @@ bool DrugsIO::prescriptionFromXml(DrugsDB::DrugsModel *m, const QString &xmlCont
     QString version;
     if (needUpdate) {
         version = DrugsDB::VersionUpdater::instance()->xmlVersion(xmlContent);
-        Utils::Log::addMessage("DrugsIO::prescriptionFromXml", "Reading old prescription file : version " + version);
+        LOG_FOR("DrugsIO::prescriptionFromXml", "Reading old prescription file : version " + version);
         xml = DrugsDB::VersionUpdater::instance()->updateXmlIOContent(xmlContent);
     }
 
     // Read the XML file using QDomDocument
+    // Prescription file format == Version 0.5.0
     QDomDocument doc;
     QString error;
     int line = -1;
@@ -302,18 +303,18 @@ bool DrugsIO::prescriptionFromXml(DrugsDB::DrugsModel *m, const QString &xmlCont
     if (!drugsDb.isNull()) {
         xmlDbName = drugsDb.text();
     }
-    if (drugsBase()->actualDatabaseInformations()->identifiant != xmlDbName) {
-        LOG_ERROR_FOR("DrugsIO", QString("Try to load a prescription from another drugs database. Actual: %1 ; Xml: %2")
-                             .arg(drugsBase()->actualDatabaseInformations()->identifiant, xmlDbName));
-        Utils::warningMessageBox(tr("Prescription specifies a different drugs database than the actual one."),
-                                 tr("You are trying to load prescription that uses a different drugs database than the "
-                                    "actual one. You can not read this prescription unless you change the current "
-                                    "database in the Preferences.\n"
-                                    "Actual: %1\n"
-                                    "Prescription: %2.")
-                                 .arg(drugsBase()->actualDatabaseInformations()->identifiant, xmlDbName));
-        return false;
-    }
+//    if (drugsBase()->actualDatabaseInformations()->identifiant != xmlDbName) {
+//        LOG_ERROR_FOR("DrugsIO", QString("Try to load a prescription from another drugs database. Actual: %1 ; Xml: %2")
+//                             .arg(drugsBase()->actualDatabaseInformations()->identifiant, xmlDbName));
+//        Utils::warningMessageBox(tr("Prescription specifies a different drugs database than the actual one."),
+//                                 tr("You are trying to load prescription that uses a different drugs database than the "
+//                                    "actual one. You can not read this prescription unless you change the current "
+//                                    "database in the Preferences.\n"
+//                                    "Actual: %1\n"
+//                                    "Prescription: %2.")
+//                                 .arg(drugsBase()->actualDatabaseInformations()->identifiant, xmlDbName));
+//        return false;
+//    }
 
     // retreive the prescription (inside the XML_FULLPRESCRIPTION_TAG tags)
     QDomElement fullPrescription = root.firstChildElement(XML_FULLPRESCRIPTION_TAG);
@@ -330,6 +331,8 @@ bool DrugsIO::prescriptionFromXml(DrugsDB::DrugsModel *m, const QString &xmlCont
         m->clearDrugsList();
 
     // Read prescription itself
+    QVector<IDrug *> drugs;
+    QStringList insertedOldUid;
     QList<int> rowsToUpdate;
     int row = 0;
     QString errorMsg;
@@ -337,60 +340,88 @@ bool DrugsIO::prescriptionFromXml(DrugsDB::DrugsModel *m, const QString &xmlCont
     QDomElement prescr = fullPrescription.firstChildElement(XML_PRESCRIPTION_MAINTAG);
     while (!prescr.isNull()) {
         QDomElement item = prescr.firstChildElement(XML_PRESCRIPTION_ISTEXTUAL);
+        IDrug *readingDrug = 0;
         // is textual ?
         if (item.text().compare("true",Qt::CaseInsensitive) == 0) {
-            QString denomination = prescr.firstChildElement(::XML_PRESCRIPTION_TEXTUALDRUGNAME).text();
-            row = m->addTextualPrescription(denomination, "");
+            ITextualDrug *drug = new ITextualDrug;
+            drug->setDenomination(prescr.firstChildElement(::XML_PRESCRIPTION_TEXTUALDRUGNAME).text());
+            drugs << drug;
+            readingDrug = drug;
+//            row = m->addTextualPrescription(denomination, "");
         } else {
-            // is a good UID ?
+            // is a good UID ? The UID is considered as the OLD_UID of the drug
             item = prescr.firstChildElement(::XML_PRESCRIPTION_UID);
             if (item.isNull() || item.text().isEmpty()) {
                 // no UID
-                QString denomination = prescr.firstChildElement(::XML_DRUG_DENOMINATION).text();
-                errorMsg += tr("  * %1 was added as a textual drug.\n").arg(denomination);
-                row = m->addTextualPrescription(denomination, "");
+                ITextualDrug *drug = new ITextualDrug;
+                drug->setDenomination(prescr.firstChildElement(::XML_DRUG_DENOMINATION).text());
+                drugs << drug;
+                readingDrug = drug;
+//                QString denomination = prescr.firstChildElement(::XML_DRUG_DENOMINATION).text();
+                errorMsg += tr("  * %1 was added as a textual drug.\n").arg(drug->brandName());
+//                row = m->addTextualPrescription(denomination, "");
                 hasError = true;
                 prescr = prescr.nextSiblingElement(XML_PRESCRIPTION_MAINTAG);
                 continue;
             } else {   // UID informed
                 // UID == -1 --> if denomination known add as textual else ignore
                 if (item.text()=="-1") {
-                    QString denomination = prescr.firstChildElement(::XML_DRUG_DENOMINATION).text();
-                    if (!denomination.isEmpty()) {
-                        errorMsg += tr("  * %1 was added as a textual drug.\n").arg(denomination);
+                    ITextualDrug *drug = new ITextualDrug;
+                    drug->setDenomination(prescr.firstChildElement(::XML_DRUG_DENOMINATION).text());
+                    drugs << drug;
+                    readingDrug = drug;
+//                    QString denomination = prescr.firstChildElement(::XML_DRUG_DENOMINATION).text();
+                    if (!drug->brandName().isEmpty()) {
+                        errorMsg += tr("  * %1 was added as a textual drug.\n").arg(drug->brandName());
                         hasError = true;
                     }
                     prescr = prescr.nextSiblingElement(XML_PRESCRIPTION_MAINTAG);
                     continue;
                 }
+
                 // UID already in prescription ?
-                if (m->containsDrug(item.text())) {
+//                if (m->containsDrug(item.text())) {
+                if (insertedOldUid.contains(item.text(), Qt::CaseInsensitive)) {
                     QString denomination = m->drugData(item.text(), Constants::Drug::Denomination).toString();
                     errorMsg += tr("  * %1 (%2) is already in the prescription. Drug is ignored.\n").arg(denomination).arg(item.text());
                     hasError = true;
                     prescr = prescr.nextSiblingElement(XML_PRESCRIPTION_MAINTAG);
                     continue;
                 }
-                row = m->addDrug(item.text(), false);
-                if (row == -1) {
-                    // Drug can not be added to the model (wrong UID)
-                    QString denomination = prescr.firstChildElement(::XML_DRUG_DENOMINATION).text();
-                    errorMsg += tr("  * %1 (%2) was added as a textual drug.\n").arg(denomination).arg(item.text());
-                    row = m->addTextualPrescription(denomination, "");
+                // Create a new drug
+//                row = m->addDrug(item.text(), false);
+                IDrug *drug = drugsBase()->getDrugByOldUid(item.text(), xmlDbName);
+                if (!drug) {
+                    ITextualDrug *tdrug = new ITextualDrug;
+                    tdrug->setDenomination(prescr.firstChildElement(::XML_DRUG_DENOMINATION).text());
+                    drugs << tdrug;
+                    readingDrug = tdrug;
+                    errorMsg += tr("  * %1 (%2) was added as a textual drug.\n").arg(tdrug->brandName()).arg(item.text());
                     hasError = true;
+                } else {
+                    drugs << drug;
+                    readingDrug = drug;
                 }
             }
         }
 
         // Read all prescription
         item = prescr.firstChildElement();
+        if (!readingDrug) {
+            prescr = prescr.nextSiblingElement(XML_PRESCRIPTION_MAINTAG);
+            continue;
+        }
         while (!item.isNull()) {
             if (item.tagName().compare(::XML_DRUG_DENOMINATION) != 0 &&
                 item.tagName().compare(::XML_PRESCRIPTION_UID) != 0) {
                 int column = instance()->d->xmlTagToColumnIndex(item.tagName());
                 /** \todo code here : item.text() is a stringfied QVariant... */
-                if (column != -1)
-                    m->setData(m->index(row, column), item.text());
+//                if (column >= IDrug::DrugID && column < IDrug::MaxParam) {
+//                    readingDrug->setDataFromDb(column, item.text());
+//                } else
+                if (column >= Prescription::Id && column < Prescription::MaxParam) {
+                    readingDrug->setPrescriptionValue(column, item.text());
+                }
             }
             item = item.nextSiblingElement();
         }
@@ -402,6 +433,9 @@ bool DrugsIO::prescriptionFromXml(DrugsDB::DrugsModel *m, const QString &xmlCont
 
         prescr = prescr.nextSiblingElement(XML_PRESCRIPTION_MAINTAG);
     }
+
+    // Feed model with drugs
+    m->addDrugs(drugs, false);
 
     if ((needUpdate) && (!version.isEmpty())){
         DrugsDB::VersionUpdater::instance()->updateXmlIOModel(version, m, rowsToUpdate);

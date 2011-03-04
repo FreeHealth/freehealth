@@ -83,11 +83,13 @@ public:
 
     bool refreshAllDatabases();
     bool refreshDrugsBase();
+    bool changeCurrentDrugSourceUid(const QVariant &uid);
     bool refreshDosageBase();
 
     // Manage drugs
     QString getDrugName(const QString &uid1, const QString &uid2 = QString::null, const QString &uid3 = QString::null) const;
-    IDrug *getDrugByUID(const QVariant &uid1, const QVariant &uid2 = QVariant(), const QVariant &uid3 = QVariant());
+    IDrug *getDrugByUID(const QVariant &uid1, const QVariant &uid2 = QVariant(), const QVariant &uid3 = QVariant(), const QVariant &oldUid = QVariant(), const QString &sourceUid = QString::null);
+    IDrug *getDrugByOldUid(const QVariant &oldUid, const QString &sourceUid = QString::null);
     QVariantList getDrugUids(const QVariant &drugId);
     IDrug *getDrugByDrugId(const QVariant &drugId);
 

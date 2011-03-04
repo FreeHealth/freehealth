@@ -108,8 +108,17 @@ public:
         }
     }
 
+    void getSourceFilter()
+    {
+        m_SourceFilter = QString(" `%1`.`%2`=%3 ")
+                         .arg(base()->table(Constants::Table_DRUGS))
+                         .arg(base()->fieldName(Constants::Table_DRUGS, Constants::DRUGS_SID))
+                         .arg(base()->actualDatabaseInformations()->sid);
+    }
+
     void setQueryModelSearchMode(const int searchMode)
     {
+        getSourceFilter();
         m_SearchMode = searchMode;
         switch (m_SearchMode)
         {
@@ -155,11 +164,11 @@ public:
                 break;
             }
         }
-        if (!m_Filter.isEmpty())
-            q->setQuery(m_SqlQueryWithoutWhere + "WHERE " + m_Filter, QSqlDatabase::database(Constants::DB_DRUGS_NAME));
-        else
-            q->setQuery(m_SqlQueryWithoutWhere, QSqlDatabase::database(Constants::DB_DRUGS_NAME));
-
+        if (!m_Filter.isEmpty()) {
+            q->setQuery(m_SqlQueryWithoutWhere + "WHERE " + m_SourceFilter + " AND " + m_Filter, QSqlDatabase::database(Constants::DB_DRUGS_NAME));
+        } else {
+            q->setQuery(m_SqlQueryWithoutWhere + "WHERE " + m_SourceFilter, QSqlDatabase::database(Constants::DB_DRUGS_NAME));
+        }
     }
 
     void setQueryModelFilter(const QString &searchFor)
@@ -182,10 +191,11 @@ public:
                 break;
             }
         }
-        if (!m_Filter.isEmpty())
-            q->setQuery(m_SqlQueryWithoutWhere + "WHERE " + m_Filter, QSqlDatabase::database(Constants::DB_DRUGS_NAME));
-        else
-            q->setQuery(m_SqlQueryWithoutWhere, QSqlDatabase::database(Constants::DB_DRUGS_NAME));
+        if (!m_Filter.isEmpty()) {
+            q->setQuery(m_SqlQueryWithoutWhere + "WHERE " + m_SourceFilter + " AND " + m_Filter, QSqlDatabase::database(Constants::DB_DRUGS_NAME));
+        } else {
+            q->setQuery(m_SqlQueryWithoutWhere + "WHERE " + m_SourceFilter, QSqlDatabase::database(Constants::DB_DRUGS_NAME));
+        }
     }
 
     void clearDrugAllergyCache()
@@ -520,7 +530,7 @@ public:
     // For QFuture use
 public:
     int m_SearchMode;
-    QString m_SqlQueryWithoutWhere, m_Filter;
+    QString m_SqlQueryWithoutWhere, m_Filter, m_SourceFilter;
     QVector< QFutureWatcher<QPersistentModelIndex> * > m_Watchers;
 
 public:
@@ -635,6 +645,7 @@ void GlobalDrugsModel::setSearchMode(const int searchMode)
 void GlobalDrugsModel::onDrugsDatabaseChanged()
 {
     GlobalDrugsModelPrivate::updateDrugsPrecautionsModel();
+    d->setQueryModelSearchMode(d->m_SearchMode);
 }
 
 /**

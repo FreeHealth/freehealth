@@ -678,6 +678,20 @@ bool DrugsBase::refreshDrugsBase()
     return r;
 }
 
+bool DrugsBase::changeCurrentDrugSourceUid(const QVariant &uid)
+{
+    Q_EMIT drugsBaseIsAboutToChange();
+    d->m_ActualDBInfos = getDrugSourceInformations(uid.toString());
+    if (!d->m_ActualDBInfos) {
+        LOG_ERROR(QString("No drug source uid %1.").arg(uid.toString()));
+        LOG_ERROR("Switching to the default one.");
+        d->m_ActualDBInfos = getDrugSourceInformations(Constants::DB_DEFAULT_IDENTIFIANT);
+    }
+    LOG("Changing current drug source uid to " + uid.toString());
+    Q_EMIT drugsBaseHasChanged();
+    return (d->m_ActualDBInfos);
+}
+
 bool DrugsBase::refreshDosageBase()
 {
     m_initialized = false;
@@ -697,6 +711,7 @@ QVector<DatabaseInfos *> DrugsBase::getAllDrugSourceInformations()
     if (q.isActive()) {
         while (q.next()) {
             DatabaseInfos *info = new DatabaseInfos;
+            info->sid = q.value(Constants::SOURCES_SID).toInt();
             info->version = q.value(Constants::SOURCES_VERSION).toString();
             info->names = d->getAllLabels(q.value(Constants::SOURCES_MASTERLID).toInt());
             info->identifiant = q.value(Constants::SOURCES_DBUID).toString();
@@ -740,6 +755,7 @@ DatabaseInfos *DrugsBase::getDrugSourceInformations(const QString &drugSourceUid
             LOG("Drugs database informations correctly read " + drugSourceUid);
             info = new DatabaseInfos;
             info->version = q.value(Constants::SOURCES_VERSION).toString();
+            info->sid = q.value(Constants::SOURCES_SID).toInt();
             info->names = d->getAllLabels(q.value(Constants::SOURCES_MASTERLID).toInt());
             info->identifiant = drugSourceUid;
             info->compatVersion = q.value(Constants::SOURCES_FMFCOMPAT).toString();
@@ -1182,14 +1198,21 @@ QString DrugsBase::getDrugName(const QString &uid1, const QString &uid2, const Q
 }
 
 /** \brief Retrieve and return the drug designed by the UID code \e drug_UID. */
-IDrug *DrugsBase::getDrugByUID(const QVariant &uid1, const QVariant &uid2, const QVariant &uid3)
+IDrug *DrugsBase::getDrugByUID(const QVariant &uid1, const QVariant &uid2, const QVariant &uid3, const QVariant &oldUid, const QString &srcUid)
 {
+    /** \todo add SID in args */
     if (!d->m_ActualDBInfos) {
         LOG_ERROR(tr("No drug database source selected"));
         IDrug *toReturn = new IDrug;
         toReturn->setDataFromDb(IDrug::Name, tr("No drugs database loaded."));
         return toReturn;
     }
+    // get the source uid to use
+    QString sourceUid = srcUid;
+    if (srcUid.isEmpty()) {
+        sourceUid = d->m_ActualDBInfos->identifiant;
+    }
+    // Connect database
     QSqlDatabase DB = QSqlDatabase::database(Constants::DB_DRUGS_NAME);
     if (!connectDatabase(DB, __FILE__, __LINE__))
         return 0;
@@ -1198,7 +1221,7 @@ IDrug *DrugsBase::getDrugByUID(const QVariant &uid1, const QVariant &uid2, const
     QString newUid1 = uid1.toString();
     QString newUid2 = uid2.toString();
     QString newUid3 = uid3.toString();
-    if (newUid1 == "-1" || newUid1.isEmpty()) {
+    if ((newUid1 == "-1" || newUid1.isEmpty()) && oldUid.toString().isEmpty()) {
         LOG(tr("Asking for a drug without UID"));
         QString req = select(Constants::Table_MASTER, QList<int>()
                              << Constants::MASTER_UID1
@@ -1219,24 +1242,39 @@ IDrug *DrugsBase::getDrugByUID(const QVariant &uid1, const QVariant &uid2, const
     }
 
     // prepare query
+    Utils::FieldList get;
+    get << fields(Constants::Table_DRUGS);
+    get << Utils::Field(Constants::Table_MASTER, Constants::MASTER_UID1);
+    get << Utils::Field(Constants::Table_MASTER, Constants::MASTER_UID2);
+    get << Utils::Field(Constants::Table_MASTER, Constants::MASTER_UID3);
+    get << Utils::Field(Constants::Table_MASTER, Constants::MASTER_OLDUID);
     Utils::FieldList condition;
-    condition << Utils::Field(Constants::Table_MASTER, Constants::MASTER_UID1, QString("='%1'").arg(newUid1));
-    if (!uid2.isNull())
-        condition << Utils::Field(Constants::Table_MASTER, Constants::MASTER_UID2, QString("='%1'").arg(newUid2));
-    if (!uid3.isNull())
-        condition << Utils::Field(Constants::Table_MASTER, Constants::MASTER_UID3, QString("='%1'").arg(newUid3));
-    Utils::Join j(Constants::Table_MASTER, Constants::MASTER_DID, Constants::Table_DRUGS, Constants::DRUGS_DID);
-    QString req = select(Constants::Table_DRUGS, j, condition);
+    condition << Utils::Field(Constants::Table_SOURCES, Constants::SOURCES_DBUID, QString("='%1'").arg(sourceUid));
+    if (oldUid.toString().isEmpty()) {
+        condition << Utils::Field(Constants::Table_MASTER, Constants::MASTER_UID1, QString("='%1'").arg(newUid1));
+        if (!uid2.isNull())
+            condition << Utils::Field(Constants::Table_MASTER, Constants::MASTER_UID2, QString("='%1'").arg(newUid2));
+        if (!uid3.isNull())
+            condition << Utils::Field(Constants::Table_MASTER, Constants::MASTER_UID3, QString("='%1'").arg(newUid3));
+    } else {
+        condition << Utils::Field(Constants::Table_MASTER, Constants::MASTER_OLDUID, QString("='%1'").arg(oldUid.toString()));
+    }
+    Utils::JoinList joins;
+    joins << Utils::Join(Constants::Table_MASTER, Constants::MASTER_DID, Constants::Table_DRUGS, Constants::DRUGS_DID);
+    joins << Utils::Join(Constants::Table_SOURCES, Constants::SOURCES_SID, Constants::Table_MASTER, Constants::MASTER_SID);
+
+    QString req = select(get, joins, condition);
     IDrug *toReturn = 0;
         QSqlQuery q(req , DB);
         if (q.isActive()) {
             if (q.next()) {
                 toReturn = new IDrug();
-                toReturn->setDataFromDb(IDrug::Uid1, uid1);
-                toReturn->setDataFromDb(IDrug::Uid2, uid2);
-                toReturn->setDataFromDb(IDrug::Uid3, uid3);
+                toReturn->setDataFromDb(IDrug::SourceID, q.value(Constants::DRUGS_SID));
+                toReturn->setDataFromDb(IDrug::Uid1, q.value(Constants::DRUGS_MaxParam));
+                toReturn->setDataFromDb(IDrug::Uid2, q.value(Constants::DRUGS_MaxParam + 1));
+                toReturn->setDataFromDb(IDrug::Uid3, q.value(Constants::DRUGS_MaxParam + 2));
                 /** \todo add olduid */
-                toReturn->setDataFromDb(IDrug::OldUid, QVariant());
+                toReturn->setDataFromDb(IDrug::OldUid, q.value(Constants::DRUGS_MaxParam + 3));
                 toReturn->setDataFromDb(IDrug::DrugID, q.value(Constants::DRUGS_DID));
                 toReturn->setDataFromDb(IDrug::SourceID, q.value(Constants::DRUGS_SID));
 //                toReturn->setDataFromDb(IDrug::AuthorizationID, q.value(Constants::DRUGS_AID_MASTER_LID));
@@ -1286,6 +1324,11 @@ IDrug *DrugsBase::getDrugByUID(const QVariant &uid1, const QVariant &uid2, const
         qWarning() << toReturn->warnText();
 
     return toReturn;
+}
+
+IDrug *DrugsBase::getDrugByOldUid(const QVariant &oldUid, const QString &sourceUid)
+{
+    return getDrugByUID(QVariant(), QVariant(), QVariant(), oldUid, sourceUid);
 }
 
 QVariantList DrugsBase::getDrugUids(const QVariant &drugId)

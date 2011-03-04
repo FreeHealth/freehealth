@@ -94,6 +94,7 @@ public:
     int addTextualPrescription(const QString &drugLabel, const QString &drugNote);
     int addDrug(IDrug *drug, bool automaticInteractionChecking = true);
     int addDrug(const QVariant &drugId, bool automaticInteractionChecking = true);
+    int addDrugs(const QVector<IDrug *> &drugs, bool automaticInteractionChecking = true);
     int removeDrug(const QVariant &drugId);
     int removeLastInsertedDrug();
     bool containsDrug(const QVariant &drugId) const;

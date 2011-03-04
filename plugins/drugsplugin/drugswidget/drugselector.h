@@ -97,6 +97,7 @@ private Q_SLOTS:
     void historyAct_triggered( QAction * action );
 
     void onDrugsBaseChanged();
+    void changeDrugBaseUid(QAction *a);
 
 private:
     // models

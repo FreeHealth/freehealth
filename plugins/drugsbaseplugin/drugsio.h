@@ -36,9 +36,10 @@
 /**
  * \file drugsio.h
  * \author Eric MAEKER <eric.maeker@free.fr>
- * \version 0.2.1
- * \date 25 Oct 2009
+ * \version 0.6.0
+ * \date 04 Mar 2011
 */
+
 namespace DrugsDB {
 class DrugsModel;
 namespace Internal {

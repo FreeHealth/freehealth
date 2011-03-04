@@ -64,7 +64,7 @@ public:
     QString weblink, complementaryWebsite, authorComments, licenseTerms;
     bool atcCompatible, iamCompatible;
     QDate date;
-    int moleculeLinkCompletion;    
+    int moleculeLinkCompletion, sid;
     QHash<QString, QString> names;
 };
 

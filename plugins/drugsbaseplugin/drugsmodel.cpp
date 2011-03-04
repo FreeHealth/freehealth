@@ -612,6 +612,14 @@ int DrugsModel::addDrug(const QVariant &drugId, bool automaticInteractionCheckin
     return addDrug(drugsBase()->getDrugByDrugId(drugId), automaticInteractionChecking);
 }
 
+int DrugsModel::addDrugs(const QVector<IDrug *> &drugs, bool automaticInteractionChecking)
+{
+    d->m_DrugsList << drugs.toList();
+    if (automaticInteractionChecking)
+        checkInteractions();
+    return drugs.count();
+}
+
 /**
   \brief Clear the prescription. Clear all interactions too.
   Calling this causes a model reset.
