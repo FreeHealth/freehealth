@@ -6,7 +6,7 @@ BUILD_PATH_POSTFIXE = FreeMedForms
 
 include(padtools_sources.pri)
 
-HEADERS += padtoolsplugin.h
-SOURCES += padtoolsplugin.cpp
+#HEADERS += padtoolsplugin.h
+#SOURCES += padtoolsplugin.cpp
 
 OTHER_FILES = Padtools.pluginspec
