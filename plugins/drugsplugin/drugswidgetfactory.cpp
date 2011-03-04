@@ -47,7 +47,7 @@
 #include <drugsplugin/constants.h>
 #include <drugsplugin/drugswidget/druginfo.h>
 #include <drugsplugin/drugspreferences/mfDrugsPreferences.h>
-#include <drugsplugin/drugswidget/mfDrugsCentralWidget.h>
+#include <drugsplugin/drugswidget/drugscentralwidget.h>
 
 #include <coreplugin/icore.h>
 #include <coreplugin/isettings.h>
