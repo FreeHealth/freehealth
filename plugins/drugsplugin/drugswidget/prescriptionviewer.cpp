@@ -34,7 +34,6 @@
 #include <drugsplugin/drugswidget/textualprescriptiondialog.h>
 #include <drugsplugin/drugswidget/interactionsynthesisdialog.h>
 
-#include <drugsbaseplugin/drugsdata.h>
 #include <drugsbaseplugin/drugsmodel.h>
 #include <drugsbaseplugin/interactionmanager.h>
 

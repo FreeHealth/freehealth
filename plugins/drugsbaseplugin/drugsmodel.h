@@ -27,19 +27,16 @@
 #ifndef MFDRUGSMODEL_H
 #define MFDRUGSMODEL_H
 
-// include drugswidget headers
 #include <drugsbaseplugin/drugsbase_exporter.h>
-#include <drugsbaseplugin/drugsdata.h>
 #include <drugsbaseplugin/dosagemodel.h>
 
-// include Qt headers
 #include <QAbstractTableModel>
 
 /**
  * \file drugsmodel.h
  * \author Eric MAEKER <eric.maeker@free.fr>
  * \version 0.6.0
- * \date 26 Fev 2011
+ * \date 04 Mar 2011
 */
 namespace DrugsDB {
 class DrugsIO;

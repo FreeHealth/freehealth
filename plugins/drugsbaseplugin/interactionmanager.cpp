@@ -35,7 +35,6 @@
 
 #include <drugsbaseplugin/idrugengine.h>
 #include <drugsbaseplugin/idrug.h>
-#include <drugsbaseplugin/drugsdata.h>
 #include <drugsbaseplugin/drugsbase.h>
 #include <drugsbaseplugin/idruginteraction.h>
 

@@ -40,7 +40,6 @@
 #include <drugsplugin/constants.h>
 #include <drugsplugin/drugswidgetmanager.h>
 
-#include <drugsbaseplugin/drugsdata.h>
 #include <drugsbaseplugin/dosagemodel.h>
 #include <drugsbaseplugin/drugsmodel.h>
 #include <drugsbaseplugin/globaldrugsmodel.h>

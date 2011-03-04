@@ -52,6 +52,7 @@ class IDrugPrivate;
 class DrugRoutePrivate;
 class DrugsBase;
 class DrugsBasePrivate;
+class IDrugPrescriptionPrivate;
 }
 
 class DRUGSBASE_EXPORT IComponent
@@ -165,7 +166,23 @@ private:
     Internal::DrugRoutePrivate *d;
 };
 
-class DRUGSBASE_EXPORT IDrug
+
+class DRUGSBASE_EXPORT IDrugPrescription
+{
+public:
+    IDrugPrescription();
+    virtual ~IDrugPrescription();
+
+    // Prescription values
+    virtual bool hasPrescription() const;
+    virtual void setPrescriptionValue(const int fieldref, const QVariant &value);
+    virtual QVariant prescriptionValue(const int filedref) const;
+
+private:
+    Internal::IDrugPrescriptionPrivate *d_pres;
+};
+
+class DRUGSBASE_EXPORT IDrug : public IDrugPrescription
 {
     friend class DrugsDB::DrugRoute;
     friend class DrugsDB::IComponent;
@@ -257,11 +274,6 @@ public:
 
     static bool lessThan(const IDrug *drug1, const IDrug *drug2);
 
-    // Prescription values
-    virtual bool hasPrescription() const = 0;
-    virtual void setPrescriptionValue(const int fieldref, const QVariant &value) = 0;
-    virtual QVariant prescriptionValue(const int filedref) const = 0;
-
     QVector<int> allInnAndInteractingClassesIds() const;
     QVector<int> allSevenCharsAtcIds() const;
     QVector<int> allAtcIds() const;
@@ -283,6 +295,21 @@ private:
     Internal::IDrugPrivate *d_drug;
 };
 
+class DRUGSBASE_EXPORT ITextualDrug : public IDrug
+{
+public:
+    ITextualDrug();
+    virtual ~ITextualDrug() {}
+
+    void setDenomination(const QString &denomination);
+
+    // Overwrite some prescriptions values
+    virtual void setPrescriptionValue(const int fieldref, const QVariant &value);
+    virtual QVariant prescriptionValue(const int filedref) const;
+
+    static ITextualDrug *fromXml(const QString &xml);
+    QString toXml() const;
+};
 
 class DRUGSBASE_EXPORT IVirtualDrug : public IDrug
 {

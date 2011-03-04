@@ -40,7 +40,6 @@
 #include "mfDosageViewer.h"
 
 #include <drugsbaseplugin/drugsbase.h>
-#include <drugsbaseplugin/drugsdata.h>
 #include <drugsbaseplugin/dosagemodel.h>
 #include <drugsbaseplugin/drugsmodel.h>
 #include <drugsbaseplugin/dailyschememodel.h>

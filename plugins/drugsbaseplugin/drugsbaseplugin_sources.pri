@@ -1,10 +1,11 @@
 DEFINES += DRUGSBASE_LIBRARY
+
 include($${PWD}/../fmf_plugins.pri)
 include($${PWD}/drugsbaseplugin_dependencies.pri )
+
 HEADERS += $${PWD}/drugsbaseplugin.h \
     $${PWD}/drugsbase_exporter.h \
     $${PWD}/drugsbase.h \
-    $${PWD}/drugsdata.h \
     $${PWD}/interactionmanager.h \
     $${PWD}/constants.h \
     $${PWD}/drugsmodel.h \
@@ -24,7 +25,9 @@ HEADERS += $${PWD}/drugsbaseplugin.h \
     $${PWD}/drugdruginteractionengine.h \
     $${PWD}/drugbasecore.h \
     $${PWD}/protocolsbase.h \
-    ../../../plugins/drugsbaseplugin/druginteractionquery.h
+    $${PWD}/druginteractionquery.h \
+    $${PWD}/idrugprescription.h \
+    $${PWD}/ivirtualdrug.h
 
 #    $${PWD}/interactionsbase.h \
 #    $${PWD}/drugsdatabaseaboutpage.h \
@@ -32,7 +35,6 @@ HEADERS += $${PWD}/drugsbaseplugin.h \
 
 SOURCES += $${PWD}/drugsbaseplugin.cpp \
     $${PWD}/drugsbase.cpp \
-    $${PWD}/drugsdata.cpp \
     $${PWD}/interactionmanager.cpp \
     $${PWD}/drugsmodel.cpp \
     $${PWD}/dosagemodel.cpp \

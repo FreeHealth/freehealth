@@ -95,6 +95,7 @@
 
 #include <drugsbaseplugin/drugsbase.h>
 #include <drugsbaseplugin/drugsbaseinfo.h>
+#include <drugsbaseplugin/constants.h>
 
 #include <coreplugin/icore.h>
 #include <coreplugin/isettings.h>
@@ -150,6 +151,14 @@ public:
     bool m_Syst;
     IDrug *m_Drug;
     int m_Rid;
+};
+
+class IDrugPrescriptionPrivate
+{
+public:
+    bool m_PrescriptionChanges;
+    QHash< int, QVariant> m_PrescriptionValues;
+    QMultiHash<int, QPair<QString, QString > > m_Routes;  // Pair: x = lang; y = label
 };
 }
 }
@@ -399,6 +408,75 @@ int DrugRoute::routeId() const
 void DrugRoute::setRouteId(const int rid)
 {
     d->m_Rid = rid;
+}
+
+
+
+///////////////////////////////////////////////////////////////////////////////////////////////////
+//////////////////////////////////////  IDRUGPRESCRIPTION  ////////////////////////////////////////
+///////////////////////////////////////////////////////////////////////////////////////////////////
+IDrugPrescription::IDrugPrescription() :
+        d_pres(new Internal::IDrugPrescriptionPrivate)
+{
+    d_pres->m_PrescriptionChanges = false;
+}
+
+IDrugPrescription::~IDrugPrescription()
+{
+    if (d_pres)
+        delete d_pres;
+    d_pres = 0;
+}
+
+void IDrugPrescription::setPrescriptionValue(const int fieldref, const QVariant &value)
+{
+    if (d_pres->m_PrescriptionValues.value(fieldref) != value) {
+        d_pres->m_PrescriptionChanges = true;
+        d_pres->m_PrescriptionValues[fieldref] = value;
+    }
+}
+
+bool IDrugPrescription::hasPrescription() const
+{
+    /** \todo this needs improvements ++ */
+    int i = 0;
+    foreach(const QVariant &q , d_pres->m_PrescriptionValues) {
+        if (!q.isNull())
+            i++;
+    }
+    return i > 2;
+}
+
+QVariant IDrugPrescription::prescriptionValue(const int fieldref) const
+{
+    using namespace DrugsDB::Constants;
+    switch (fieldref)
+    {
+    case Prescription::IntakesTo :
+        {
+            if (!d_pres->m_PrescriptionValues.value(Prescription::IntakesUsesFromTo,false).toBool())
+                return QVariant();
+            break;
+        }
+    case Prescription::DurationTo :
+        {
+            if (!d_pres->m_PrescriptionValues.value(Prescription::DurationUsesFromTo,false).toBool())
+                return QVariant();
+            break;
+        }
+    case Prescription::Route :
+        {
+            /** \todo code here */
+//            QString lang = QLocale().name().left(2);
+//            typedef QPair<QString, QString> pair;
+//            foreach(const pair &p, d_pres->m_Routes.values(d->m_PrescriptionValues.value(Prescription::Route,-1).toInt())) {
+//                if (p.first == lang)
+//                    return p.second;
+//            }
+            break;
+        }
+    }
+    return d_pres->m_PrescriptionValues.value(fieldref);
 }
 
 
@@ -874,6 +952,33 @@ QString IDrug::warnText() const
 }
 
 
+///////////////////////////////////////////////////////////////////////////////////////////////////
+/////////////////////////////////////////  ITEXTUALDRUG  //////////////////////////////////////////
+///////////////////////////////////////////////////////////////////////////////////////////////////
+ITextualDrug::ITextualDrug() :
+        IDrug()
+{
+    setDataFromDb(Uid1, -1);
+}
+
+void ITextualDrug::setDenomination(const QString &denomination)
+{
+    setDataFromDb(Name, denomination);
+}
+
+void ITextualDrug::setPrescriptionValue(const int fieldref, const QVariant &value)
+{
+    if (fieldref==Constants::Prescription::IsTextualOnly)
+        return;
+    return IDrug::setPrescriptionValue(fieldref, value);
+}
+
+QVariant ITextualDrug::prescriptionValue(const int fieldref) const
+{
+    if (fieldref==Constants::Prescription::IsTextualOnly)
+        return true;
+    return IDrug::prescriptionValue(fieldref);
+}
 
 ///////////////////////////////////////////////////////////////////////////////////////////////////
 /////////////////////////////////////////  IVIRTUALDRUG  //////////////////////////////////////////

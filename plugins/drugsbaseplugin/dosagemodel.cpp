@@ -49,7 +49,6 @@
 #include "dosagemodel.h"
 
 #include <drugsbaseplugin/constants.h>
-#include <drugsbaseplugin/drugsdata.h>
 #include <drugsbaseplugin/drugsmodel.h>
 #include <drugsbaseplugin/drugsbase.h>
 #include <drugsbaseplugin/drugsdatabaseselector.h>

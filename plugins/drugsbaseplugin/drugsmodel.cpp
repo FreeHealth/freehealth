@@ -37,7 +37,6 @@
 #include <drugsbaseplugin/drugsbase.h>
 #include <drugsbaseplugin/idruginteraction.h>
 #include <drugsbaseplugin/idrug.h>
-#include <drugsbaseplugin/drugsdata.h>
 #include <drugsbaseplugin/drugsio.h>
 #include <drugsbaseplugin/interactionmanager.h>
 #include <drugsbaseplugin/constants.h>
@@ -133,7 +132,7 @@ public:
     bool setDrugData(IDrug *drug, const int column, const QVariant &value)
     {
         Q_ASSERT(drug);
-        TextualDrugsData *textualdrug = static_cast<TextualDrugsData*>(drug);
+        ITextualDrug *textualdrug = static_cast<ITextualDrug*>(drug);
         if (column == Constants::Drug::Denomination) {
             if (textualdrug) {
                 textualdrug->setDenomination(value.toString());
@@ -211,7 +210,7 @@ public:
             }
         case Drug::HasPrescription :
             {
-                const DrugsData *pres = static_cast<const DrugsData*>(drug);
+                const IDrug *pres = static_cast<const IDrug*>(drug);
                 if (pres)
                     return pres->hasPrescription();
                 return false;
@@ -240,7 +239,7 @@ public:
             }
         case Drug::FullPrescription :
             {
-                const DrugsData *pres = static_cast<const DrugsData*>(drug);
+                const IDrug *pres = static_cast<const IDrug*>(drug);
                 if (!pres)
                     return QVariant();
                 if (pres->prescriptionValue(Prescription::OnlyForTest).toBool() || m_SelectionOnlyMode) {
@@ -560,17 +559,15 @@ bool DrugsModel::removeRows(int row, int count, const QModelIndex &parent)
     return toReturn;
 }
 
-
 /**
  \brief Add a textual drug to the prescription.
  \sa DrugsWidget::TextualPrescriptionDialog, DrugsWidget::Internal::DrugSelector
 */
 int DrugsModel::addTextualPrescription(const QString &drugLabel, const QString &drugNote)
 {
-    Internal::TextualDrugsData *drug = new Internal::TextualDrugsData();
+    ITextualDrug *drug = new ITextualDrug();
     drug->setDenomination(drugLabel);
     drug->setPrescriptionValue(Constants::Prescription::Note, drugNote);
-    drug->setPrescriptionValue(Constants::Prescription::IsTextualOnly, true);
     d->m_DrugsList << drug;
     reset();
     d->m_IsDirty = true;
@@ -664,7 +661,7 @@ bool DrugsModel::containsDrug(const QVariant &drugId) const
     return false;
 }
 
-/** \brief direct access to the DrugsData pointer. The pointer MUST BE DELETED. */
+/** \brief direct access to the DrugsDB::IDrug pointer. The pointer MUST BE DELETED. */
 IDrug *DrugsModel::getDrug(const QVariant &drugUid) const
 {
     return d->getDrug(drugUid);

@@ -54,8 +54,8 @@
 */
 
 #include "drugsbase.h"
+#include "idrug.h"
 
-#include <drugsbaseplugin/drugsdata.h>
 #include <drugsbaseplugin/constants.h>
 #include <drugsbaseplugin/drugsdatabaseselector.h>
 #include <drugsbaseplugin/drugsearchengine.h>
@@ -1186,7 +1186,7 @@ IDrug *DrugsBase::getDrugByUID(const QVariant &uid1, const QVariant &uid2, const
 {
     if (!d->m_ActualDBInfos) {
         LOG_ERROR(tr("No drug database source selected"));
-        DrugsData *toReturn = new DrugsData;
+        IDrug *toReturn = new IDrug;
         toReturn->setDataFromDb(IDrug::Name, tr("No drugs database loaded."));
         return toReturn;
     }
@@ -1227,11 +1227,11 @@ IDrug *DrugsBase::getDrugByUID(const QVariant &uid1, const QVariant &uid2, const
         condition << Utils::Field(Constants::Table_MASTER, Constants::MASTER_UID3, QString("='%1'").arg(newUid3));
     Utils::Join j(Constants::Table_MASTER, Constants::MASTER_DID, Constants::Table_DRUGS, Constants::DRUGS_DID);
     QString req = select(Constants::Table_DRUGS, j, condition);
-    DrugsData *toReturn = 0;
+    IDrug *toReturn = 0;
         QSqlQuery q(req , DB);
         if (q.isActive()) {
             if (q.next()) {
-                toReturn = new DrugsData();
+                toReturn = new IDrug();
                 toReturn->setDataFromDb(IDrug::Uid1, uid1);
                 toReturn->setDataFromDb(IDrug::Uid2, uid2);
                 toReturn->setDataFromDb(IDrug::Uid3, uid3);

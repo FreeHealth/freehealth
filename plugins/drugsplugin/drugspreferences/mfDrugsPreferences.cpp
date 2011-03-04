@@ -29,8 +29,8 @@
 #include <drugsplugin/constants.h>
 #include <drugsplugin/drugswidgetmanager.h>
 #include <drugsplugin/drugswidget/drugselector.h>
+#include <drugsbaseplugin/idrug.h>
 
-#include <drugsbaseplugin/drugsdata.h>
 #include <drugsbaseplugin/drugsmodel.h>
 #include <drugsbaseplugin/drugsbase.h>
 

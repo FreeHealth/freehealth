@@ -34,6 +34,7 @@
 #include "drugsio.h"
 
 #include <drugsbaseplugin/constants.h>
+#include <drugsbaseplugin/idrug.h>
 #include <drugsbaseplugin/drugsbase.h>
 #include <drugsbaseplugin/drugsmodel.h>
 #include <drugsbaseplugin/versionupdater.h>

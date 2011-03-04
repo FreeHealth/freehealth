@@ -25,8 +25,9 @@
  *       NAME <MAIL@ADRESS>                                                *
  ***************************************************************************/
 #include "drugsearchengine.h"
-#include "drugsdata.h"
 #include "drugsbase.h"
+
+#include <drugsbaseplugin/idrug.h>
 
 #include <utils/global.h>
 

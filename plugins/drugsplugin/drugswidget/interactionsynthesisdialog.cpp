@@ -24,7 +24,6 @@
 #include <drugsbaseplugin/constants.h>
 #include <drugsbaseplugin/interactionmanager.h>
 #include <drugsbaseplugin/idruginteraction.h>
-#include <drugsbaseplugin/drugsdata.h>
 #include <drugsbaseplugin/drugsbase.h>
 
 #include <coreplugin/icore.h>

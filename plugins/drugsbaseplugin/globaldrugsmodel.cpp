@@ -35,7 +35,7 @@
 
 #include <drugsbaseplugin/drugsbase.h>
 #include <drugsbaseplugin/drugsdatabaseselector.h>
-#include <drugsbaseplugin/drugsdata.h>
+#include <drugsbaseplugin/idrug.h>
 
 #include <coreplugin/icore.h>
 #include <coreplugin/isettings.h>
