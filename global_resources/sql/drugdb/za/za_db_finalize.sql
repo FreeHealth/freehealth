@@ -39,7 +39,7 @@
 
 
 UPDATE SOURCES SET
-  LANG            = "fr_FR",
+  LANG            = "en_ZA",
   WEB             ="http://home.intekom.com/pharm/",
   COPYRIGHT       ="Public domain",
   DATE            =CURRENT_DATE,
