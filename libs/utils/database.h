@@ -35,6 +35,8 @@
 #include <QVariant>
 #include <QHash>
 
+#include <QDebug>
+
 QT_BEGIN_NAMESPACE
 class QTreeWidget;
 class QProgressDialog;
@@ -44,7 +46,7 @@ QT_END_NAMESPACE
  * \file database.h
  * \author Eric MAEKER <eric.maeker@free.fr>
  * \version 0.6.0
- * \date 24 Jan 2011
+ * \date 03 Mar 2011
 */
 
 
@@ -56,17 +58,19 @@ class DatabasePrivate;
 
 
 struct Field {
-    Field() : table(-1), field(-1), type(-1) {}
+    Field() : table(-1), field(-1), type(-1), orCondition(false) {}
 
     Field(const Field &f) :
             table(f.table), field(f.field), type(f.type),
-            tableName(f.tableName), fieldName(f.fieldName), whereCondition(f.whereCondition) {}
+            tableName(f.tableName), fieldName(f.fieldName), whereCondition(f.whereCondition),
+            orCondition(f.orCondition) {}
 
     Field(const int table, const int field, const QString &tableName, const QString &fieldName) :
-            table(table), field(field), type(-1), tableName(tableName), fieldName(fieldName) {}
+            table(table), field(field), type(-1), tableName(tableName), fieldName(fieldName),
+            orCondition(false) {}
 
-    Field(const int table, const int field, const QString &where = QString::null) :
-            table(table), field(field), type(-1), whereCondition(where) {}
+    Field(const int table, const int field, const QString &where = QString::null, const bool isOrCondition = false) :
+            table(table), field(field), type(-1), whereCondition(where), orCondition(isOrCondition) {}
 
 //    Field &operator=(const Field &f) const {Field ret(f.table, f.field, f.tableName, f.fieldName); ret.type=f.type; ret.whereCondition=f.whereCondition; return ret;}
 
@@ -78,6 +82,7 @@ struct Field {
     QString tableName;
     QString fieldName;
     QString whereCondition;
+    bool orCondition;
 };
 
 typedef QList<Field> FieldList;
