@@ -28,6 +28,8 @@ account.depends += core
 account.depends += texteditor
 account.depends += printer
 account.depends += accountbase
+account.depends += receipts
+account.depends += accountmanager
 #account.depends += listview
 
 accountmanager.subdir   = accountmanagerplugin
