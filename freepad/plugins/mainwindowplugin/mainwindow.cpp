@@ -33,7 +33,6 @@
 #include <coreplugin/translators.h>
 #include <coreplugin/itheme.h>
 #include <coreplugin/filemanager.h>
-#include <coreplugin/ipadtools.h>
 
 #include <coreplugin/actionmanager/mainwindowactions.h>
 #include <coreplugin/actionmanager/mainwindowactionhandler.h>
@@ -250,8 +249,15 @@ void MainWindow::extensionsInitialized()
     // Connect post core initialization
     connect(Core::ICore::instance(), SIGNAL(coreOpened()), this, SLOT(postCoreInitialization()));
 
-	Core::IPadTools *padTools = ExtensionSystem::PluginManager::instance()->getObject<Core::IPadTools>();
-	padTools->createSyntaxHighlighter(m_ui->padTextEdit, m_tokens);
+	m_padTools = ExtensionSystem::PluginManager::instance()->getObject<Core::IPadTools>();
+	m_padTools->createSyntaxHighlighter(m_ui->padTextEdit, m_tokens);
+	connect(m_ui->padTextEdit, SIGNAL(textChanged()), this, SLOT(padTextChanged()));
+}
+
+void MainWindow::padTextChanged()
+{
+	// TODO : use a timer based on key strokes instead of realtime analysis
+	m_ui->previewTextEdit->setPlainText(m_padTools->parse(m_ui->padTextEdit->toPlainText(), m_tokens));
 }
 
 MainWindow::~MainWindow()

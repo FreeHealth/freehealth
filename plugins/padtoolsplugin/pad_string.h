@@ -15,6 +15,7 @@ public:
 
 	void print(int indent = 0) const;
 
+	QString run(QMap<QString,QVariant> &) const;
 private:
 	QString _string;
 };

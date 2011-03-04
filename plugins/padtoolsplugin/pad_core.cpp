@@ -6,3 +6,10 @@ void PadCore::print(int indent) const
 	str += "$" + _value + "$";
 	qDebug(qPrintable(str));
 }
+
+QString PadCore::run(QMap<QString,QVariant> &tokens) const
+{
+	Q_UNUSED(tokens);
+
+	return _value;
+}

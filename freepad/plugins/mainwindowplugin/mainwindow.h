@@ -28,6 +28,7 @@
 
 #include <mainwindowplugin/mainwindow_exporter.h>
 #include <coreplugin/imainwindow.h>
+#include <coreplugin/ipadtools.h>
 
 #include <utils/global.h>
 
@@ -94,6 +95,9 @@ public Q_SLOTS:
     void aboutToShowRecentFiles();
     void openRecentFile();
 
+private slots:
+	void padTextChanged();
+
 protected:
     void closeEvent( QCloseEvent *event );
     void changeEvent(QEvent *event);
@@ -105,6 +109,7 @@ public:
 
 private:
 	QMap<QString,QVariant> m_tokens;
+	Core::IPadTools *m_padTools;
 };
 
 } // End Core
