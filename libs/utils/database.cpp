@@ -705,10 +705,14 @@ QString Database::getWhereClause(const FieldList &fields) const
             f = fields.at(i).fieldName;
         }
 
-        where.append(QString(" (`%1`.`%2` %3) AND ")
-                      .arg(tab)
-                      .arg(f)
-                      .arg(fields.at(i).whereCondition));
+        if (fields.at(i).orCondition) {
+            where.chop(4);
+            where += "OR ";
+        }
+        where += QString(" (`%1`.`%2` %3) AND ")
+                 .arg(tab)
+                 .arg(f)
+                 .arg(fields.at(i).whereCondition);
     }
     where.chop(5);
     if (fields.count() > 1)
@@ -1017,7 +1021,7 @@ QString Database::select(const FieldList &select, const JoinList &joins, const F
 QString Database::select(const int tableref, const JoinList &joins, const FieldList &conditions) const
 {
     FieldList fields;
-    for(int i = 0; i < (d->m_Tables_Fields.values(tableref).count() - 1); ++i) {
+    for(int i = 0; i < (d->m_Tables_Fields.values(tableref).count()); ++i) {
         fields << Field(tableref, i);
     }
     return this->select(fields, joins, conditions);
