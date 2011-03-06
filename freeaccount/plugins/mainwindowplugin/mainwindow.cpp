@@ -55,8 +55,7 @@
 #include <accountplugin/constants.h>
 #include <accountplugin/accountview.h>
 
-//#include <accountreceiptsplugin/receipts.h>
-#include <accountreceiptsplugin/receiptviewer.h>
+#include <accountplugin/receipts/receiptviewer.h>
 
 #include <extensionsystem/pluginerrorview.h>
 #include <extensionsystem/pluginview.h>
