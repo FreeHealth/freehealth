@@ -15,7 +15,7 @@ QT *= sql \
       network \
       xml
       
-include( $${PWD}/../../accountbaseplugin/basemovements.pri)
+#include( $${PWD}/../../accountbaseplugin/basemovements.pri)
 include( $${PWD}/../../coreplugin/core.pri )
 include( $${PWD}/../../../libs/extensionsystem.pri )
 include( $${PWD}/../../../libs/translationutils.pri )

@@ -1,4 +1,4 @@
-include( $${PWD}/../../accountbaseplugin/basemovements.pri)
+#include( $${PWD}/../../accountbaseplugin/basemovements.pri)
 
 HEADERS += $${PWD}/ledgerIO.h \
     $${PWD}/ledgermanager.h \

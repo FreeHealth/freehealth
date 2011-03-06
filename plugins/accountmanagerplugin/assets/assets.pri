@@ -1,4 +1,4 @@
-include( $${PWD}/../../accountbaseplugin/basemovements.pri)
+#include( $${PWD}/../../accountbaseplugin/basemovements.pri)
 
 HEADERS += $${PWD}/assetsIO.h \
     $${PWD}/assetsmanager.h \
