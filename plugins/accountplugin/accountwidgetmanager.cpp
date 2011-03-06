@@ -42,11 +42,11 @@
 #include "constants.h"
 #include "accountcontextualwidget.h"
 
-#include <accountreceiptsplugin/receiptviewer.h>
+#include <accountplugin/receipts/receiptviewer.h>
 
-#include <accountmanagerplugin/assets/assetsViewer.h>
-#include <accountmanagerplugin/ledger/ledgerviewer.h>
-#include <accountmanagerplugin/movements/movementsviewer.h>
+#include <accountplugin/assets/assetsViewer.h>
+#include <accountplugin/ledger/ledgerviewer.h>
+#include <accountplugin/movements/movementsviewer.h>
 
 #include <coreplugin/constants.h>
 #include <coreplugin/icore.h>
