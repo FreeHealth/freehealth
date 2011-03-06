@@ -5,12 +5,10 @@ SUBDIRS = \
     mainwindow \
     accountbase \
     account \
-    accountmanager \
     printer \
     texteditor \
     listview \
-    usermanager \
-    receipts
+    usermanager
 
 core.subdir = coreplugin
 
@@ -18,28 +16,17 @@ mainwindow.subdir   = mainwindowplugin
 mainwindow.depends += core
 mainwindow.depends += printer
 mainwindow.depends += account
-mainwindow.depends += receipts
 
 accountbase.subdir   = accountbaseplugin
 accountbase.depends += core
 
+# todo change to the FreeAccount accountplugin wrapper
 account.subdir   = ../../plugins/accountplugin
 account.depends += core
 account.depends += texteditor
 account.depends += printer
 account.depends += accountbase
-account.depends += receipts
-account.depends += accountmanager
 #account.depends += listview
-
-accountmanager.subdir   = accountmanagerplugin
-accountmanager.depends += core
-accountmanager.depends += accountbase
-accountmanager.depends += receipts
-
-receipts.subdir   = ../../plugins/accountreceiptsplugin
-receipts.depends += core
-receipts.depends += accountbase
 
 printer.subdir   = printerplugin
 printer.depends += core
