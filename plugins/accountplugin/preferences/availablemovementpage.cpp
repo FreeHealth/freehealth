@@ -35,7 +35,7 @@
 /***************************************************************************
  *   Main Developper : Eric MAEKER, <eric.maeker@free.fr>                  *
  *   Contributors :                                                        *
- *       NAME <MAIL@ADRESS>                                                *
+ *       Pierre-Marie Desombre <MAIL@ADRESS>                                                *
  *       NAME <MAIL@ADRESS>                                                *
  ***************************************************************************/
 #include "availablemovementpage.h"
@@ -125,14 +125,10 @@ AvailableMovementWidget::AvailableMovementWidget(QWidget *parent) :
     m_Mapper->setSubmitPolicy(QDataWidgetMapper::AutoSubmit);
     m_Mapper->setModel(m_Model);
     m_Mapper->setCurrentModelIndex(QModelIndex());
-//    m_Mapper->addMapping(currentLabel, AccountDB::Constants::AvailableMovement_LABEL, "text");
-//    m_Mapper->addMapping(owner, AccountDB::Constants::AvailableMovement_OWNER, "text");
-//    m_Mapper->addMapping(ownerAdress, AccountDB::Constants::AvailableMovement_OWNERADRESS, "text");
-//    m_Mapper->addMapping(iban, AccountDB::Constants::AvailableMovement_IBAN, "text");
-//    m_Mapper->addMapping(number, AccountDB::Constants::AvailableMovement_ACCOUNTNUMBER, "text");
-//    m_Mapper->addMapping(balanceSpin, AccountDB::Constants::AvailableMovement_BALANCE, "value");
-//    m_Mapper->addMapping(balanceDate, AccountDB::Constants::AvailableMovement_BALANCEDATE, "date");
-//    m_Mapper->addMapping(defaultCombo, AccountDB::Constants::AvailableMovement_BALANCEDATE, "currentIndex");
+    m_Mapper->addMapping(currentLabel, AccountDB::Constants::AVAILMOV_LABEL, "text");
+    m_Mapper->addMapping(typeComboBox, AccountDB::Constants::AVAILMOV_TYPE, "text");
+    m_Mapper->addMapping(commentEdit, AccountDB::Constants::AVAILMOV_COMMENT, "text");
+    m_Mapper->addMapping(parentComboBox, AccountDB::Constants::AVAILMOV_PARENT, "text");//parent movement
     movComboBox->setModel(m_Model);
     movComboBox->setModelColumn(AccountDB::Constants::AVAILMOV_LABEL);
     setDatasToUi();
