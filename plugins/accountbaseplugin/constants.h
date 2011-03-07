@@ -195,7 +195,7 @@ namespace Constants {
     };
     enum TableAvMov_Fields {
         AVAILMOV_ID = 0,
-        AVAILMOV_PARENT_ID,
+        AVAILMOV_PARENT,
         AVAILMOV_TYPE,
         AVAILMOV_LABEL,
         AVAILMOV_COMMENT,

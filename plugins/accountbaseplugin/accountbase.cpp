@@ -370,7 +370,7 @@ AccountBase::AccountBase(QObject *parent)
 //                    "PRIMARY KEY(id_mouvement));";
 
     addField(Table_AvailableMovement,  AVAILMOV_ID,         "AVAILMOV_ID", FieldIsUniquePrimaryKey);
-    addField(Table_AvailableMovement,  AVAILMOV_PARENT_ID,  "PARENT_ID",   FieldIsLongInteger);
+    addField(Table_AvailableMovement,  AVAILMOV_PARENT,     "PARENT",      FieldIsShortText);
     addField(Table_AvailableMovement,  AVAILMOV_TYPE,       "TYPE",        FieldIsInteger);
     addField(Table_AvailableMovement,  AVAILMOV_LABEL,      "LABEL",       FieldIsShortText);
     addField(Table_AvailableMovement,  AVAILMOV_COMMENT,    "COMMENT",     FieldIsLongText);
