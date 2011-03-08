@@ -25,7 +25,7 @@ class AvailableMovementModelPrivate
 public:
     AvailableMovementModelPrivate(AvailableMovementModel *parent) : m_SqlTable(0), q(parent)
     {
-        m_SqlTable = new QSqlTableModel(q);
+        m_SqlTable = new QSqlTableModel(q,QSqlDatabase::database(Constants::DB_ACCOUNTANCY));
     }
 
     ~AvailableMovementModelPrivate () {}
@@ -46,7 +46,7 @@ AvailableMovementModel::AvailableMovementModel(QObject *parent) :
         QAbstractTableModel(parent), d(new Internal::AvailableMovementModelPrivate(this))
 {
     d->m_SqlTable->setTable(AccountBase::instance()->table(Constants::Table_AvailableMovement));
-    //    d->m_SqlTable->setEditStrategy();
+    d->m_SqlTable->setEditStrategy(QSqlTableModel::OnFieldChange);
     //    d->m_SqlTable->setFilter( user );
     d->m_SqlTable->select();
 }
@@ -87,14 +87,14 @@ QVariant AvailableMovementModel::headerData(int section, Qt::Orientation orienta
 
 bool AvailableMovementModel::insertRows(int row, int count, const QModelIndex &parent)
 {
-    bool b = true;
+    bool b = d->m_SqlTable->insertRows(row, count, parent);
     
     return b;
    }
 
 bool AvailableMovementModel::removeRows(int row, int count, const QModelIndex &parent)
 {
-    bool b = true;
+    bool b = d->m_SqlTable->removeRows(row, count, parent);
     
     return b;
 
@@ -108,5 +108,17 @@ bool AvailableMovementModel::isDirty() const
 void AvailableMovementModel::setFilter(const QString & filter){
     d->m_SqlTable->setFilter(filter);
     d->m_SqlTable->select();
+}
+
+bool AvailableMovementModel::submit()
+{
+    if (d->m_SqlTable->submitAll()) {
+        return true;
+    }
+    return false;
+}
+
+QSqlError AvailableMovementModel::lastError(){
+    return d->m_SqlTable->lastError();
 }
 

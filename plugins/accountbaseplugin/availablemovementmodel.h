@@ -8,6 +8,7 @@
 #define AVAILABLEMOVEMENTMODEL_H
 
 #include <QAbstractTableModel>
+#include <QSqlError>
 
 namespace AccountDB {
 namespace Internal {
@@ -40,7 +41,9 @@ public:
     bool removeRow(int arow, const QModelIndex &aparent = QModelIndex())        { return removeRows(arow, 1, aparent); }
     bool removeColumn(int acolumn, const QModelIndex &aparent = QModelIndex())  { return removeColumns(acolumn, 1, aparent); }
     void setFilter(const QString & filter);
+    bool submit();
     bool isDirty() const;
+    QSqlError lastError();
 
 private:
     Internal::AvailableMovementModelPrivate *d;
