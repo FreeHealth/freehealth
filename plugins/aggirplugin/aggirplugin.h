@@ -1,6 +1,6 @@
 /***************************************************************************
  *   FreeMedicalForms                                                      *
- *   (C) 2008-2010 by Eric MAEKER, MD                                      *
+ *  (C) 2008-2011 by Eric MAEKER, MD                                     *
  *   eric.maeker@free.fr                                                   *
  *   All rights reserved.                                                  *
  *                                                                         *
