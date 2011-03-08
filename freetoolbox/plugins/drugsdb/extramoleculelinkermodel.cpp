@@ -1,7 +1,7 @@
 /***************************************************************************
  *  The FreeMedForms project is a set of free, open source medical         *
  *  applications.                                                          *
- *  (C) 2008-2010 by Eric MAEKER, MD (France) <eric.maeker@free.fr>        *
+ *  (C) 2008-2011 by Eric MAEKER, MD (France) <eric.maeker@free.fr>        *
  *  All rights reserved.                                                   *
  *                                                                         *
  *  This program is free software: you can redistribute it and/or modify   *
@@ -770,6 +770,7 @@ QMultiHash<int, int> ExtraMoleculeLinkerModel::moleculeLinker
     // Try to find new associations via the COMPOSITION.LK_NATURE field
     int natureLinkerNb = 0;
     if (drugsDbUid == "_________AFSSAPS_FR_______") {
+        /** \todo code here */
         QMap<int, QMultiHash<int, int> > cis_codeMol_lk;
         QMap<int, QVector<MolLink> > cis_compo;
         {
