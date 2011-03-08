@@ -84,7 +84,7 @@ void AvailableMovementPage::resetToDefaults()
 }
 
 void AvailableMovementPage::applyChanges()
-{
+{qDebug() << __FILE__ << QString::number(__LINE__) << " applyChanges ";
     if (!m_Widget) {
         return;
     }
@@ -119,16 +119,23 @@ AvailableMovementWidget::AvailableMovementWidget(QWidget *parent) :
     setupUi(this);
     addButton->setIcon(theme()->icon(Core::Constants::ICONADD));
     removeButton->setIcon(theme()->icon(Core::Constants::ICONREMOVE));
+    QString add = trUtf8("Add");
+    QString less = trUtf8("Less");
+    typeComboBox->addItem(theme()->icon(Core::Constants::ICONADD),add);
+    typeComboBox->addItem(theme()->icon(Core::Constants::ICONADD),less);
+    QString null;
+    parentComboBox->setEditable(true);
+    parentComboBox->addItem(null);
     m_Model = new AccountDB::AvailableMovementModel(this);
     /** \todo  m_Model->setUserUuid(); */
     m_Mapper = new QDataWidgetMapper(this);
     m_Mapper->setSubmitPolicy(QDataWidgetMapper::AutoSubmit);
     m_Mapper->setModel(m_Model);
     m_Mapper->setCurrentModelIndex(QModelIndex());
-    m_Mapper->addMapping(currentLabel, AccountDB::Constants::AVAILMOV_LABEL, "text");
-    m_Mapper->addMapping(typeComboBox, AccountDB::Constants::AVAILMOV_TYPE, "text");
-    m_Mapper->addMapping(commentEdit, AccountDB::Constants::AVAILMOV_COMMENT, "text");
-    m_Mapper->addMapping(parentComboBox, AccountDB::Constants::AVAILMOV_PARENT, "text");//parent movement
+    m_Mapper->addMapping(currentLabel, AccountDB::Constants::AVAILMOV_LABEL,"text");
+    m_Mapper->addMapping(typeComboBox, AccountDB::Constants::AVAILMOV_TYPE,"currentText");
+    m_Mapper->addMapping(commentEdit, AccountDB::Constants::AVAILMOV_COMMENT,"text");
+    m_Mapper->addMapping(parentComboBox, AccountDB::Constants::AVAILMOV_PARENT,"currentText");//parent movement
     movComboBox->setModel(m_Model);
     movComboBox->setModelColumn(AccountDB::Constants::AVAILMOV_LABEL);
     setDatasToUi();
@@ -144,15 +151,17 @@ void AvailableMovementWidget::setDatasToUi()
     m_Mapper->setCurrentIndex(movComboBox->currentIndex());
 }
 
+
 void AvailableMovementWidget::saveModel()
 {
     if (m_Model->isDirty()) {
         bool yes = Utils::yesNoMessageBox(tr("Save changes ?"),
-                                          tr("You make changes into the bank account details.\n"
+                                          tr("You make changes into available movements.\n"
                                              "Do you want to save them ?"));
         if (yes) {
             if (!m_Model->submit()) {
-                Utils::Log::addError(this, tkTr(Trans::Constants::UNABLE_TO_SAVE_DATA_IN_DATABASE_1).arg(tr("bank account details")));
+                qWarning() << __FILE__ << QString::number(__LINE__) << "model error = "<< m_Model->lastError().text() ;
+                Utils::Log::addError(this, tkTr(Trans::Constants::UNABLE_TO_SAVE_DATA_IN_DATABASE_1).arg(tr("available_movement")));
             }
         } else {
             m_Model->revert();
@@ -162,14 +171,17 @@ void AvailableMovementWidget::saveModel()
 
 void AvailableMovementWidget::on_movComboBox_currentIndexChanged(int index)
 {
-    saveModel();
+    //saveModel();
     m_Mapper->setCurrentIndex(movComboBox->currentIndex());
 }
 
 void AvailableMovementWidget::on_addButton_clicked()
 {
-    m_Model->insertRow(m_Model->rowCount());
+    if (!m_Model->insertRow(m_Model->rowCount()))
+        Utils::Log::addError(this, "Unable to add row", __FILE__, __LINE__);
+    qDebug() << __FILE__ << QString::number(__LINE__) << " rowCount =" << QString::number(m_Model->rowCount()) ;
     movComboBox->setCurrentIndex(m_Model->rowCount() - 1);
+    typeComboBox->setFocus();
 }
 
 void AvailableMovementWidget::on_removeButton_clicked()
@@ -178,12 +190,13 @@ void AvailableMovementWidget::on_removeButton_clicked()
     movComboBox->setCurrentIndex(m_Model->rowCount() - 1);
 }
 
+
 void AvailableMovementWidget::saveToSettings(Core::ISettings *sets)
 {
     if (!m_Model->submit()) {
-        Utils::Log::addError(this, tkTr(Trans::Constants::UNABLE_TO_SAVE_DATA_IN_DATABASE_1).arg(tr("bank account details")));
-        Utils::warningMessageBox(tr("Can not submit bank account details to your personnal database."),
-                                 tr("An error occured during bank account details saving. Datas are corrupted."));
+        Utils::Log::addError(this, tkTr(Trans::Constants::UNABLE_TO_SAVE_DATA_IN_DATABASE_1).arg(tr("available_movement")));
+        Utils::warningMessageBox(tr("Can not submit available movements to your personnal database."),
+                                 tr("An error occured during available movements saving. Datas are corrupted."));
     }
 }
 
