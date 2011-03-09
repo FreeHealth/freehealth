@@ -1,7 +1,7 @@
 /***************************************************************************
  *  The FreeMedForms project is a set of free, open source medical         *
  *  applications.                                                          *
- *  (C) 2008-2010 by Eric MAEKER, MD (France) <eric.maeker@free.fr>        *
+ *  (C) 2008-2011 by Eric MAEKER, MD (France) <eric.maeker@free.fr>        *
  *  All rights reserved.                                                   *
  *                                                                         *
  *  This program is free software: you can redistribute it and/or modify   *
@@ -18,6 +18,11 @@
  *  along with this program (COPYING.FREEMEDFORMS file).                   *
  *  If not, see <http://www.gnu.org/licenses/>.                            *
  ***************************************************************************/
+/***************************************************************************
+ *   Main Developper : Eric MAEKER, <eric.maeker@free.fr>                  *
+ *   Contributors :                                                        *
+ *       NAME <MAIL@ADRESS>                                                *
+ ***************************************************************************/
 /**
  \class Utils::QButtonLineEdit
  \brief This widget can present inside a line edit two QToolButtons : one left, the other on the right.
@@ -25,6 +30,7 @@
     After instanciate it, define the Tools Buttons for the right and the left, or only one.
     The tooltip of the leftButton is shown in gray inside the line edit when the user does not tape in.
     To retreive the text of the QLineEdit use the function : searchText().
+    You can delay the textChanged() signal using setDelayedSignals().
  */
 
 #include "qbuttonlineedit.h"
