@@ -14,6 +14,7 @@ Pad *PadAnalyzer::analyze(const QString &text)
 	int pos;
 
 	_text = &text;
+	qDebug(qPrintable(text));
 	_length = text.count();
 	_curPos = 0;
 	_lastParseError = Error_NoError;
@@ -36,6 +37,7 @@ Pad *PadAnalyzer::analyze(const QString &text)
 			}
 			break;
 		case Lexem_PadCloseDelimiter:
+			qDebug("ok");
 			// TODO: raise an error (unexpected close delimiter)
 			break;
 		case Lexem_CoreDelimiter:
@@ -68,8 +70,10 @@ PadItem *PadAnalyzer::nextPadItem()
 	// we expect strings, pad item, core (uniq) or close delimiter
 	while ((lex = nextLexem()).type != Lexem_Null) {
 		fragment = 0;
+		qDebug("%d", (int) lex.type);
 		switch (lex.type) {
 		case Lexem_String:
+			qDebug("string");
 			padItem->addFragment(new PadString(lex.value));
 			break;
 		case Lexem_PadOpenDelimiter:
@@ -81,6 +85,7 @@ PadItem *PadAnalyzer::nextPadItem()
 			padItem->addFragment(fragment);
 			break;
 		case Lexem_PadCloseDelimiter:
+			qDebug("pouet");
 			padItem->setEnd(_curPos - 1);
 			padItem->setRawValue(text.mid(padItem->start(), padItem->end() - padItem->start() + 1));
 			return padItem;
@@ -98,6 +103,7 @@ PadItem *PadAnalyzer::nextPadItem()
 			break;
 		}
 	}
+	qDebug("??");
 	delete padItem;
 	return 0;
 }
@@ -143,7 +149,12 @@ bool PadAnalyzer::isSpecial(const QChar &c)
 PadAnalyzer::Lexem PadAnalyzer::nextLexem()
 {
 	if (atEnd()) // no more lexem to read
+	{
+		qDebug("_curPos: %d", _curPos);
+		qDebug("_length: %d", _length);
+		qDebug("at end");
 		return _lexemNull;
+	}
 
 	Lexem lexem;
 	lexem.start = _curPos;
@@ -151,22 +162,26 @@ PadAnalyzer::Lexem PadAnalyzer::nextLexem()
 
 	const QString &text = *_text;
 	if (text[_curPos] == padOpenDelimiter) {
+		qDebug("open delimiter");
 		_curPos++;
 		lexem.type = Lexem_PadOpenDelimiter;
 		lexem.rawValue = padOpenDelimiter;
 		return lexem;
 	} else if (text[_curPos] == padCloseDelimiter) {
+		qDebug("close delimiter");
 		_curPos++;
 		lexem.type = Lexem_PadCloseDelimiter;
 		lexem.rawValue = padCloseDelimiter;
 		return lexem;
 	} else if (text[_curPos] == coreDelimiter) {
+		qDebug("core delimiter");
 		_curPos++;
 		lexem.type = Lexem_CoreDelimiter;
 		lexem.rawValue = coreDelimiter;
 		return lexem;
 	}
 
+	qDebug("ok string");
 	// string?
 	lexem.type = Lexem_String;
 	while (!atEnd() && !isSpecial(text[_curPos])) {
@@ -183,5 +198,6 @@ PadAnalyzer::Lexem PadAnalyzer::nextLexem()
 			lexem.value += text[_curPos++];
 	}
 	lexem.end = _curPos - 1;
+	qDebug(qPrintable(QString(text[_curPos])));
 	return lexem;
 }

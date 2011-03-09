@@ -2,35 +2,14 @@
 
 void PadHighlighter::highlightBlock(const QString &text)
 {
-	Pad *pad = _padAnalyzer.analyze(text);
-	QString rawValue;
-
-	foreach (PadFragment *fragment, pad->getAllFragments()){
-		rawValue = fragment->rawValue();
-		if (dynamic_cast<PadItem*>(fragment)){
-			if (rawValue.count()){
-				if (rawValue[0] == '['){
-					setFormat(fragment->start(), 1, _padFormat);
-				}
-				if (rawValue[rawValue.count() - 1] == ']'){
-					setFormat(fragment->end(), 1, _padFormat);
-				}
-/*				if (fragment->end() - fragment->start() > 1)
-				setFormat(fragment->start() + 1, fragment->end() - fragment->start() - 1, _prefixFormat);*/
-			}
-		} else if (dynamic_cast<PadCore*>(fragment)){
-			if (rawValue.count()){
-				if (rawValue[0] == PadAnalyzer::coreDelimiter){
-					setFormat(fragment->start(), 1, _coreFormat);
-				}
-				if (rawValue[rawValue.count() - 1] == PadAnalyzer::coreDelimiter){
-					setFormat(fragment->end(), 1, _coreFormat);
-				}
-			}
-		}
+	for (int i = 0; i < text.count(); ++i) {
+		if (text[i] == PadAnalyzer::padOpenDelimiter)
+			setFormat(i, 1, _padFormat);
+		else if (text[i] == PadAnalyzer::padCloseDelimiter)
+			setFormat(i, 1, _padFormat);
+		else if (text[i] == PadAnalyzer::coreDelimiter)
+			setFormat(i, 1, _coreFormat);
 	}
-
-	delete pad;
 }
 
 void PadHighlighter::init()
