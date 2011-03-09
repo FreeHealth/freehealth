@@ -43,6 +43,7 @@ public:
 
     QString name() const;
     QString uid() const;
+    QIcon icon(const int size = 0) const;
 
     int calculateInteractions(const QVector<IDrug *> &drugs);
     QVector<IDrugInteraction *> getAllInteractionsFound();

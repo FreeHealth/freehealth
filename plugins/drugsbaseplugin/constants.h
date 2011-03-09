@@ -122,6 +122,8 @@ namespace Constants {
     const char * const  I_PROTOCOL_SAVE =              "protocol_save.png";
     const char * const  I_PROTOCOL_TESTONLY =          "protocol_testonly.png";
 
+    const char * const  I_DRUGDRUGINTERACTIONENGINE = "drugengine_ddi.png";
+
     // INTERACTIONS ICONS
     const char * const  INTERACTION_ICONCRITICAL =         "critical.png";      /*!< \brief Themed icon name for Interactions logo. */
     const char * const  INTERACTION_ICONDECONSEILLEE =     "deconseille.png";   /*!< \brief Themed icon name for Interactions logo. */

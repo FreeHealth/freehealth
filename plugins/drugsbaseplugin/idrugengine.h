@@ -36,7 +36,7 @@
  * \file idrugengine.h
  * \author Eric MAEKER <eric.maeker@free.fr>
  * \version 0.6.0
- * \date 04 Mar 2011
+ * \date 09 Mar 2011
 */
 
 namespace DrugsDB {
@@ -62,6 +62,7 @@ public:
 
     virtual QString name() const = 0;
     virtual QString uid() const = 0;
+    virtual QIcon icon(const int size = 0) const = 0;
 
     virtual int calculateInteractions(const QVector<IDrug *> &drugs) = 0;
     virtual QVector<IDrugInteraction *> getAllInteractionsFound() = 0;

@@ -34,17 +34,17 @@
 
 #include <utils/database.h>
 
-#include <QVariant>
-#include <QStringList>
-#include <QMap>
-#include <QMultiHash>
-#include <QMultiMap>
+#include <QVector>
+#include <QIcon>
+#include <QPointer>
 
+class QStandardItemModel;
+class QStringList;
 /**
  * \file interactionsmanager.h
  * \author Eric MAEKER <eric.maeker@free.fr>
  * \version 0.6.0
- * \date 03 Mar 2011
+ * \date 09 Mar 2011
 */
 
 namespace DrugsDB {
@@ -74,6 +74,7 @@ public:
     void removeLastInsertedDrug();
 
     bool containsDrug(const IDrug *drug) const;
+    QStandardItemModel *toStandardModel() const;
 
     void setTestDrugDrugInteractions(bool test) {m_TestDDI = test;}
     void setTestPatientDrugInteractions(bool test) {m_TestPDI = test;}
@@ -83,6 +84,7 @@ public:
 private:
     QVector<IDrug *> m_Drugs;
     bool m_TestDDI, m_TestPDI;
+    mutable QPointer<QStandardItemModel> m_StandardModel;
 };
 
 
@@ -105,6 +107,8 @@ public:
     bool isDrugDrugInteractionsTested() const {return m_DDITested;}
     bool isPatientDrugInteractionsTested() const {return m_PDITested;}
 
+    QStandardItemModel *toStandardModel() const;
+
     void warn() const;
 
 protected:
@@ -119,8 +123,8 @@ protected:
 private:
     QVector<IDrugInteraction *> m_Interactions;
     bool m_DDITested, m_PDITested;
+    mutable QPointer<QStandardItemModel> m_StandardModel;
 };
-
 
 
 class DRUGSBASE_EXPORT InteractionManager : public QObject

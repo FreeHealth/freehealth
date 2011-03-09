@@ -34,7 +34,7 @@
  * \file idruginteraction.h
  * \author Eric MAEKER <eric.maeker@free.fr>
  * \version 0.6.0
- * \date 24 Feb 2011
+ * \date 09 Mar 2011
 */
 
 namespace DrugsDB {
@@ -58,6 +58,7 @@ public:
 
     virtual QList<IDrug *> drugs() const = 0;
 
+    virtual QIcon icon(const int levelOfWarning = 0, const int iconsize = 0) const = 0;
     virtual QString header() const = 0;
     virtual QString risk(const QString &lang = QString::null) const = 0;
     virtual QString management(const QString &lang = QString::null) const = 0;

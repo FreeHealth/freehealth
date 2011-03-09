@@ -82,6 +82,11 @@ bool DrugsBasePlugin::initialize(const QStringList &arguments, QString *errorStr
     // Add Translator to the Application
     Core::ICore::instance()->translators()->addNewTranslator("drugsbaseplugin");
 
+    // Initialize the drugs engines
+    m_DDIEngine = new DrugsDB::Internal::DrugDrugInteractionEngine(this);
+    m_DDIEngine->init();
+    addObject(m_DDIEngine);
+
     // initialize DrugsBase
     Internal::DrugsBase::instance();
 
@@ -95,10 +100,6 @@ void DrugsBasePlugin::extensionsInitialized()
 
     addAutoReleasedObject(new Core::PluginAboutPage(pluginSpec(), this));
     addAutoReleasedObject(new DrugsDB::Internal::DrugsTemplatePrinter(this));
-
-    m_DDIEngine = new DrugsDB::Internal::DrugDrugInteractionEngine(this);
-    m_DDIEngine->init();
-    addObject(m_DDIEngine);
 }
 
 

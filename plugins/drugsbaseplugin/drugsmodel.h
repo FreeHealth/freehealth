@@ -36,13 +36,15 @@
  * \file drugsmodel.h
  * \author Eric MAEKER <eric.maeker@free.fr>
  * \version 0.6.0
- * \date 04 Mar 2011
+ * \date 09 Mar 2011
 */
 namespace DrugsDB {
 class DrugsIO;
 class InteractionManager;
 class DosageModel;
 class IDrug;
+class DrugInteractionQuery;
+class DrugInteractionResult;
 
 namespace Internal {
 class DrugsModelPrivate;
@@ -84,7 +86,12 @@ public:
     void resetModel();
     Qt::ItemFlags flags(const QModelIndex &index) const;
 
+    // GET INTERACTIONS SPECIFIC STRUCTURED DATAS
     bool prescriptionHasInteractions();
+    DrugInteractionQuery *drugInteractionQuery() const;
+    DrugInteractionResult *drugInteractionResult() const;
+
+    // ALLERGIES INFORMATIONS
     bool prescriptionHasAllergies();
 
     // ADD / REMOVE DRUGS
@@ -134,7 +141,7 @@ Q_SIGNALS:
     void numberOfRowsChanged();
 
 protected:
-    void checkInteractions() const;
+    void checkInteractions();
 
 private Q_SLOTS:
     void dosageDatabaseChanged();

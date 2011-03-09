@@ -61,22 +61,22 @@
 #include <QTreeWidget>
 #include <QTreeWidgetItem>
 #include <QLabel>
+#include <QStandardItemModel>
 
 namespace  {
     const char* const LIST_MASK =
             "<table border=1 cellpadding=2 cellspacing=2 width=100%>\n"
             "<tr>\n"
-            "  <td colspan=2 align=center>\n"
+            "  <td align=center>\n"
             "   <span style=\"font-weight:bold\">%1\n</span>"
-            "</td>\n"
-            "<tr>\n"
-            "  <td colspan=2 align=center>\n"
-            "   <span style=\"font-weight:bold\">%2\n</span>"
-            "</td>\n"
+            "  </td>\n"
+//            "<tr>\n"
+//            "  <td colspan=2 align=center>\n"
+//            "   <span style=\"font-weight:bold\">%2\n</span>"
+//            "</td>\n"
             "</tr>\n"
-            "%3 \n"
-            "</table>\n"
-            "</span>\n";
+            "<tr><td>%2</td></tr>\n"
+            "</table>\n";
 }
 
 using namespace DrugsDB;
@@ -86,12 +86,12 @@ static inline ExtensionSystem::PluginManager *pluginManager() { return Extension
 
 
 DrugInteractionQuery::DrugInteractionQuery(const QVector<IDrug *> &testDrugs, QObject *parent) :
-        QObject(parent), m_Drugs(testDrugs), m_TestDDI(true), m_TestPDI(true)
+        QObject(parent), m_Drugs(testDrugs), m_TestDDI(true), m_TestPDI(true), m_StandardModel(0)
 {
 }
 
 DrugInteractionQuery::DrugInteractionQuery(QObject *parent) :
-        QObject(parent), m_TestDDI(true), m_TestPDI(true)
+        QObject(parent), m_TestDDI(true), m_TestPDI(true), m_StandardModel(0)
 {
 }
 
@@ -133,6 +133,26 @@ bool DrugInteractionQuery::containsDrug(const IDrug *drug) const
     return m_Drugs.contains((IDrug*)drug);
 }
 
+QStandardItemModel *DrugInteractionQuery::toStandardModel() const
+{
+    if (!m_StandardModel) {
+        m_StandardModel = new QStandardItemModel;
+    }
+
+    // for all drugs
+    QFont bold;
+    bold.setBold(true);
+    for(int i=0; i < m_Drugs.count(); ++i) {
+        IDrug *drug = m_Drugs.at(i);
+        // add a root item
+        QStandardItem *root = new QStandardItem(drug->brandName());
+        root->setFlags(Qt::ItemIsEnabled | Qt::ItemIsSelectable);
+        m_StandardModel->appendRow(root);
+        /** \todo foreach component of the drug, append total daily dose */
+    }
+    return m_StandardModel;
+}
+
 void DrugInteractionQuery::warn() const
 {
     QString tmp;
@@ -152,12 +172,12 @@ void DrugInteractionQuery::warn() const
 
 
 DrugInteractionResult::DrugInteractionResult(const QVector<IDrugInteraction *> &interactions, QObject *parent) :
-        QObject(parent), m_Interactions(interactions), m_DDITested(false), m_PDITested(false)
+        QObject(parent), m_Interactions(interactions), m_DDITested(false), m_PDITested(false), m_StandardModel(0)
 {
 }
 
 DrugInteractionResult::DrugInteractionResult(QObject *parent) :
-        QObject(parent), m_DDITested(false), m_PDITested(false)
+        QObject(parent), m_DDITested(false), m_PDITested(false), m_StandardModel(0)
 {
 }
 
@@ -165,6 +185,8 @@ DrugInteractionResult::~DrugInteractionResult()
 {
     qDeleteAll(m_Interactions);
     m_Interactions.clear();
+    if (m_StandardModel)
+        delete m_StandardModel;
 }
 
 void DrugInteractionResult::clear()
@@ -220,6 +242,105 @@ QIcon DrugInteractionResult::maxLevelOfInteractionIcon(const IDrug *drug, const 
     }
     IDrugEngine *engine = dis.at(0)->engine();
     return engine->maximumInteractingLevelIcon(dis, drug, levelOfWarning, size);
+}
+
+QStandardItemModel *DrugInteractionResult::toStandardModel() const
+{
+    if (!m_StandardModel) {
+        m_StandardModel = new QStandardItemModel;
+    }
+    m_StandardModel->clear();
+
+    // get all engines
+    QVector<IDrugEngine *> engines;
+    for(int i=0; i < m_Interactions.count(); ++i) {
+        IDrugEngine *engine = m_Interactions.at(i)->engine();
+        if (!engines.contains(engine))
+            engines << engine;
+    }
+
+    // for all engines
+    QFont bold;
+    bold.setBold(true);
+    for(int i=0; i<engines.count();++i) {
+        // add a root item
+        IDrugEngine *engine = engines.at(i);
+        QStandardItem *root = new QStandardItem(engine->icon(Core::ITheme::MediumIcon),engine->name());
+        root->setData(-1, Qt::UserRole);
+        root->setFont(bold);
+        root->setFlags(Qt::ItemIsEnabled | Qt::ItemIsSelectable);
+        m_StandardModel->appendRow(root);
+
+        // for all interactions for this engine
+        QHash<QString, QStandardItem *> levels;
+        for(int j=0; j < m_Interactions.count(); ++j) {
+            IDrugInteraction *di = m_Interactions.at(j);
+            if (di->engine()!=engine)
+                continue;
+
+//            // No double
+//            if (id_di.contains(di->value(Internal::DrugsInteraction::DI_Id).toInt()))
+//                continue;
+//            id_di << di->value(Internal::DrugsInteraction::DI_Id).toInt();
+
+            // Get the interaction level item
+            QStandardItem *level = levels.value(di->type(), 0);
+            if (!level) {
+                level = new QStandardItem(di->type());
+                level->setIcon(di->icon());
+                level->setFont(bold);
+//                level->setForeground(QBrush(Qt::red));
+                level->setData(-1, Qt::UserRole);
+                level->setFlags(Qt::ItemIsEnabled | Qt::ItemIsSelectable);
+                root->appendRow(level);
+                levels.insert(di->type(), level);
+            }
+
+            // Include the interaction's datas
+            QString h = di->header();
+            QStringList splitters;
+            splitters << "<br>" << "<br />";
+            bool interactorsAdded = false;
+            foreach(const QString &s, splitters) {
+                if (h.contains(s)) {
+                    foreach(const QString &part, h.split(s)) {
+                        QStandardItem *interactor = new QStandardItem(part.trimmed());
+                        interactor->setData(j, Qt::UserRole);
+                        interactor->setFlags(Qt::ItemIsEnabled | Qt::ItemIsSelectable);
+                        level->appendRow(interactor);
+                        interactorsAdded = true;
+                    }
+                    break;
+                }
+            }
+            if (!interactorsAdded) {
+                QStandardItem *interactors = new QStandardItem(di->header());
+                interactors->setData(j, Qt::UserRole);
+                interactors->setFlags(Qt::ItemIsEnabled | Qt::ItemIsSelectable);
+                level->appendRow(interactors);
+            }
+
+//            QStandardItem *risk = new QStandardItem(di->risk());
+//            QLabel *riskLabel = new QLabel(QString("%1: %2")
+//                                           .arg(QCoreApplication::translate(Constants::DRUGSBASE_TR_CONTEXT, Constants::NATURE_OF_RISK))
+//                                           .arg(di->value(Internal::DrugsInteraction::DI_Risk).toString()));
+//            risk->setWordWrap(true);
+//            tree->setItemWidget(risk, 0, riskLabel);
+
+//            QStandardItem *management = new QStandardItem(di->management());
+//            QLabel *managementLabel = new QLabel(QString("%1: %2")
+//                                                 .arg(tr("Management: "))
+//                                                 .arg(di->value(Internal::DrugsInteraction::DI_Management).toString()));
+//            managementLabel->setWordWrap(true);
+//            managementLabel->setSizePolicy(QSizePolicy::Preferred, QSizePolicy::Preferred);
+//            tree->setItemWidget(management, 0, managementLabel);
+//            managementLabel->setMargin(0);
+            //        qWarning() << managementLabel << managementLabel->contentsMargins();
+//            interactors->appendRow(risk);
+//            interactors->appendRow(management);
+        }
+    }
+    return m_StandardModel;
 }
 
 void DrugInteractionResult::warn() const
@@ -392,19 +513,37 @@ QString InteractionManager::listToHtml(const QVector<IDrugInteraction *> &list, 
         for(int j=0; j < list.count(); ++j) {
             IDrugInteraction *di = list.at(j);
             if (di->engine()==eng) {
-                tmp += di->toHtml(fullInfos);
+//                tmp += di->toHtml(fullInfos);
+                tmp += "-&nbsp;" + di->type() + "<br />";
             }
         }
-        toReturn.append(QString(LIST_MASK)
-                        .arg(eng->name())
-                        .arg(tr("Interaction(s) Found : "))
-                        .arg(tmp));
+        if (!tmp.isEmpty()) {
+            tmp.chop(6);
+            toReturn.append(QString(LIST_MASK)
+                            .arg(eng->name())
+                            .arg(tmp));
+        }
     }
 
     return toReturn;
 }
 
 QString InteractionManager::drugInteractionSynthesisToHtml(const IDrug *drug, const QVector<IDrugInteraction *> &list, bool fullInfos)
+{
+    // create the interaction list
+    QVector<IDrugInteraction *> interactions;
+    for(int i=0; i < list.count(); ++i) {
+        IDrugInteraction *interaction = list.at(i);
+
+        if (interaction->drugs().contains((IDrug*)drug)) {
+            interactions << interaction;
+        }
+    }
+
+    return synthesisToHtml(interactions, fullInfos);
+}
+
+QString InteractionManager::synthesisToHtml(const QVector<IDrugInteraction *> &list, bool fullInfos) // static
 {
     QString display;
 
@@ -419,7 +558,6 @@ QString InteractionManager::drugInteractionSynthesisToHtml(const IDrug *drug, co
     for(int j=0; j<engines.count(); ++j) {
         IDrugEngine *eng = engines.at(j);
         QList<IDrug *> concernedDrugs;
-        int i = 0;
         // retrieve all tested drugs
         for(int i=0; i < list.count(); ++i) {
             IDrugInteraction *interaction = list.at(i);
@@ -427,18 +565,16 @@ QString InteractionManager::drugInteractionSynthesisToHtml(const IDrug *drug, co
             if (interaction->engine()!=eng)
                 continue;
 
-            if (interaction->drugs().contains((IDrug*)drug)) {
-                foreach(IDrug *drg, interaction->drugs()) {
-                    if (!concernedDrugs.contains(drg))
-                        concernedDrugs.append(drg);
-                }
+            foreach(IDrug *drg, interaction->drugs()) {
+                if (!concernedDrugs.contains(drg))
+                    concernedDrugs.append(drg);
             }
         }
 
         // add tested drug brand names
         display.append(QString("<p><center>%1</center></p><p>").arg(eng->name()));
-        foreach(IDrug *drg, concernedDrugs) {
-            ++i;
+        for(int i = 0; i < concernedDrugs.count(); ++i) {
+            IDrug *drg = concernedDrugs.at(i);
             display.append(QString("%1&nbsp;.&nbsp;%2<br />")
                            .arg(i)
                            .arg(drg->brandName()));
@@ -446,29 +582,14 @@ QString InteractionManager::drugInteractionSynthesisToHtml(const IDrug *drug, co
         display.append("</p><p>");
 
         if (concernedDrugs.count() > 0) {
-            display.append(synthesisToHtml(list, fullInfos));
+            for(int i=0; i<list.count(); ++i)
+                display.append(list.at(i)->toHtml(true));
         } else {
             display = tkTr(Trans::Constants::NO_1_FOUND).arg(tkTr(Trans::Constants::INTERACTION));
         }
         display.append("</p>");
     }
     return display;
-}
-
-QString InteractionManager::synthesisToHtml(const QVector<IDrugInteraction *> &list, bool fullInfos) // static
-{
-    /** \todo code here */
-    QString tmp, toReturn;
-//    QList<int> id_di;
-//    foreach(IDrugInteraction *di, list) {
-//        if (id_di.contains(di->value(Internal::DrugsInteraction::DI_Id).toInt()))
-//            continue;
-//        id_di << di->value(Internal::DrugsInteraction::DI_Id).toInt();
-//        tmp += di->toHtml();
-//    }
-//    toReturn.append(QString(LIST_MASK)
-//                    .arg(tr("Interaction(s) Found : ") , tmp));
-    return toReturn;
 }
 
 void InteractionManager::synthesisToTreeWidget(const QList<IDrugInteraction *> &list, QTreeWidget *tree) // static

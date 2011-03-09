@@ -18,6 +18,12 @@
  *  along with this program (COPYING.FREEMEDFORMS file).                   *
  *  If not, see <http://www.gnu.org/licenses/>.                            *
  ***************************************************************************/
+/***************************************************************************
+ *   Main Developper : Eric MAEKER, <eric.maeker@free.fr>                  *
+ *   Contributors :                                                        *
+ *       NAME <MAIL@ADRESS>                                                *
+ *       NAME <MAIL@ADRESS>                                                *
+ ***************************************************************************/
 #include "interactionsynthesisdialog.h"
 
 #include <drugsbaseplugin/drugsmodel.h>
@@ -25,6 +31,7 @@
 #include <drugsbaseplugin/interactionmanager.h>
 #include <drugsbaseplugin/idruginteraction.h>
 #include <drugsbaseplugin/drugsbase.h>
+#include <drugsbaseplugin/druginteractionresult.h>
 
 #include <coreplugin/icore.h>
 #include <coreplugin/itheme.h>
@@ -43,11 +50,11 @@
 #include <QToolButton>
 #include <QToolBar>
 #include <QMultiHash>
+#include <QStandardItemModel>
 
 using namespace DrugsWidget;
 using namespace Trans::ConstantTranslations;
 
-static inline DrugsDB::DrugsModel *drugModel() { return DrugsDB::DrugsModel::activeModel(); }
 static inline Core::ITheme *theme() {return Core::ICore::instance()->theme();}
 static inline Core::IDocumentPrinter *printer() {return ExtensionSystem::PluginManager::instance()->getObject<Core::IDocumentPrinter>();}
 static inline DrugsDB::Internal::DrugsBase *drugsBase() {return DrugsDB::Internal::DrugsBase::instance();}
@@ -58,236 +65,157 @@ namespace Internal {
 class InteractionSynthesisDialogPrivate
 {
 public:
+    InteractionSynthesisDialogPrivate() :
+            ui(0), m_DrugModel(0), m_InteractionModel(0),
+            m_InteractionQueryModel(0), m_InteractionResult(0)
+    {}
+
+    ~InteractionSynthesisDialogPrivate()
+    {
+        delete ui;
+        qDeleteAll(m_Biblio.values());
+        m_Biblio.clear();
+    }
+
     void populateDrugsBrowser(DrugsDB::IDrugInteraction *interaction, QTextBrowser *browser)
     {
         browser->clear();
+        ui->interactionQueryView->selectionModel()->clear();
         QString drugs;
         if (interaction->drugs().count() == 2) {
-            /** \todo code here, move this in drugsbaseplugin ? */
-//            DrugsDB::IDrug *drug1 = interaction->drugs().at(0);
-//            DrugsDB::IDrug *drug2 = interaction->drugs().at(1);
-//            int id1 = interaction->value(DrugsDB::IDrugInteraction::DI_ATC1).toInt();
-//            int id2 = interaction->value(DrugsDB::IDrugInteraction::DI_ATC2).toInt();
-//            if (!drug1->allInnAndIamClasses().contains(id1)) {
-//                qSwap(id1, id2);
-//            }
-//            drugs += QString("<p>%1<br />&nbsp;&nbsp;&nbsp;&nbsp;%2</p>")
-//                     .arg(drug1->brandName())
-//                     .arg(drugsBase()->getAtcLabel(id1));
-//            drugs += QString("<p>%1<br />&nbsp;&nbsp;&nbsp;&nbsp;%2</p>")
-//                     .arg(drug2->brandName())
-//                     .arg(drugsBase()->getAtcLabel(id2));
+            foreach(DrugsDB::IDrug *drug, interaction->drugs()) {
+                for(int i=0; i<m_InteractionQueryModel->rowCount();++i) {
+                    if (m_InteractionQueryModel->index(i, 0).data().toString()==drug->brandName()) {
+                        ui->interactionQueryView->selectionModel()->select(m_InteractionQueryModel->index(i, 0), QItemSelectionModel::Select);
+                    }
+                }
+            }
         }
-        browser->setHtml(drugs);
+        browser->setHtml(interaction->toHtml());
     }
 
 public:
-    QList<DrugsDB::IDrugInteraction *> m_Interactions;
-    QAction *aPrint;
+    Ui::InteractionSynthesisDialog *ui;
+    DrugsDB::DrugsModel *m_DrugModel;
+    QAction *aPrintAll, *aPrintOne;
     QMultiHash<DrugsDB::IDrugInteraction *, MedicalUtils::EbmData *> m_Biblio;
+    QStandardItemModel *m_InteractionModel, *m_InteractionQueryModel;
+    DrugsDB::DrugInteractionResult *m_InteractionResult;
 };
 }
 }
 
-InteractionSynthesisDialog::InteractionSynthesisDialog(QWidget *parent) :
+InteractionSynthesisDialog::InteractionSynthesisDialog(DrugsDB::DrugsModel *drugModel, QWidget *parent) :
     QDialog(parent),
-    ui(new Ui::InteractionSynthesisDialog),
     d(new Internal::InteractionSynthesisDialogPrivate)
 {
-    // get interactions
-    /** \todo code here */
-//    d->m_Interactions = drugModel()->interactionsManager()->getAllInteractionsFound();
+    Q_ASSERT(drugModel);
+    if (!drugModel)
+        return;
+    d->ui = new Ui::InteractionSynthesisDialog;
+
+    d->m_DrugModel = drugModel;
 
     // create and populate the views
-    ui->setupUi(this);
+    d->ui->setupUi(this);
     setWindowTitle(tr("Synthetic interactions") + " - " + qApp->applicationName());
     setWindowFlags(Qt::Window | Qt::CustomizeWindowHint | Qt::WindowSystemMenuHint | Qt::WindowCloseButtonHint | Qt::WindowMinMaxButtonsHint);
 
-    connect(ui->interactors, SIGNAL(itemActivated(QTableWidgetItem*)), this, SLOT(interactorsActivated(QTableWidgetItem*)));
-    connect(ui->interactors->selectionModel(), SIGNAL(currentChanged(QModelIndex,QModelIndex)), this, SLOT(interactorsActivated(QModelIndex,QModelIndex)));
+    d->m_InteractionResult = drugModel->drugInteractionResult();
+    d->m_InteractionModel = drugModel->drugInteractionResult()->toStandardModel();
+    d->m_InteractionQueryModel = drugModel->drugInteractionQuery()->toStandardModel();
 
-    ui->interactors->setAlternatingRowColors(true);
-    ui->classgroup->hide();
-    ui->bibliogroup->hide();
+    d->ui->interactionQueryView->setModel(d->m_InteractionQueryModel);
+    d->ui->interactionResultView->setModel(d->m_InteractionModel);
+    d->ui->interactionResultView->expandAll();
+
+    d->ui->classgroup->hide();
+
+    d->ui->tabWidget->setCurrentWidget(d->ui->tabInfo);
+
+    connect(d->ui->interactionResultView->selectionModel(), SIGNAL(currentChanged(QModelIndex,QModelIndex)), this, SLOT(interactionActivated(QModelIndex,QModelIndex)));
 
     QToolBar *bar = new QToolBar(this);
     bar->setIconSize(QSize(32,32));
     bar->setToolButtonStyle(Qt::ToolButtonTextUnderIcon);
-    ui->toolbarLayout->addWidget(bar);
+    d->ui->toolbarLayout->addWidget(bar);
 
-    QAction *a;
-    a = new QAction(this);
-    a->setText(tr("All interactions"));
-    a->setIcon(theme()->icon(DrugsDB::Constants::INTERACTION_ICONUNKONW, Core::ITheme::MediumIcon));
-    a->setData(0);
-    bar->addAction(a);
-    levelActivated(a);
+    d->aPrintAll = new QAction(this);
+    d->aPrintAll->setText(tr("Print all interactions"));
+    d->aPrintAll->setShortcut(QKeySequence::Print);
+    d->aPrintAll->setIcon(theme()->icon(Core::Constants::ICONPRINT, Core::ITheme::MediumIcon));
+    d->aPrintAll->setData(-1);
+    bar->addAction(d->aPrintAll);
 
-    a = new QAction(this);
-    a->setText(tkTr(Trans::Constants::CONTRAINDICATION));
-    a->setIcon(theme()->icon(DrugsDB::Constants::INTERACTION_ICONCRITICAL, Core::ITheme::MediumIcon));
-    a->setData(1);
-    bar->addAction(a);
+    d->aPrintOne = new QAction(this);
+    d->aPrintOne->setText(tr("Print selected interaction"));
+    d->aPrintOne->setShortcut(QKeySequence::Print);
+    d->aPrintOne->setIcon(theme()->icon(Core::Constants::ICONPRINT, Core::ITheme::MediumIcon));
+    d->aPrintOne->setData(-1);
+    bar->addAction(d->aPrintOne);
 
-    a = new QAction(this);
-    a->setText(tkTr(Trans::Constants::DISCOURAGED));
-    a->setIcon(theme()->icon(DrugsDB::Constants::INTERACTION_ICONDECONSEILLEE, Core::ITheme::MediumIcon));
-    a->setData(2);
-    bar->addAction(a);
-
-    a = new QAction(this);
-    a->setText(tkTr(Trans::Constants::TAKE_INTO_ACCOUNT));
-    a->setIcon(theme()->icon(DrugsDB::Constants::INTERACTION_ICONTAKEINTOACCOUNT, Core::ITheme::MediumIcon));
-    a->setData(4);
-    bar->addAction(a);
-
-    a = new QAction(this);
-    a->setText(tkTr(Trans::Constants::PRECAUTION_FOR_USE));
-    a->setIcon(theme()->icon(DrugsDB::Constants::INTERACTION_ICONPRECAUTION, Core::ITheme::MediumIcon));
-    a->setData(3);
-    bar->addAction(a);
-
-    a = new QAction(this);
-    a->setText(tkTr(Trans::Constants::INFORMATION));
-    a->setIcon(theme()->icon(DrugsDB::Constants::INTERACTION_ICONINFORMATION, Core::ITheme::MediumIcon));
-    a->setData(5);
-    bar->addAction(a);
-
-    d->aPrint = new QAction(this);
-    d->aPrint->setText(tkTr(Trans::Constants::FILEPRINT_TEXT));
-    d->aPrint->setShortcut(QKeySequence::Print);
-    d->aPrint->setIcon(theme()->icon(Core::Constants::ICONPRINT, Core::ITheme::MediumIcon));
-    d->aPrint->setData(-1);
-    bar->addAction(d->aPrint);
-
-    connect(bar, SIGNAL(actionTriggered(QAction*)), this, SLOT(levelActivated(QAction*)));
-    connect(d->aPrint, SIGNAL(triggered()), this, SLOT(print()));
+//    connect(bar, SIGNAL(actionTriggered(QAction*)), this, SLOT(levelActivated(QAction*)));
+    connect(d->aPrintAll, SIGNAL(triggered()), this, SLOT(print()));
+    connect(d->aPrintOne, SIGNAL(triggered()), this, SLOT(print()));
 }
 
 InteractionSynthesisDialog::~InteractionSynthesisDialog()
 {
-    delete ui;
-}
-
-static void addInteractionToView(int row, QTableWidget *tw, DrugsDB::IDrugInteraction *interaction, int interactionId)
-{
-    /** \todo code here */
-//    tw->insertRow(row);
-//    QTableWidgetItem *icon = new QTableWidgetItem(DrugsDB::InteractionManager::interactionIcon(interaction->type()), "");
-//    icon->setData(Qt::UserRole, interactionId);
-//    QTableWidgetItem *atc1 = new QTableWidgetItem(interaction->value(DrugsDB::IDrugInteraction::DI_ATC1_Label).toString());
-//    atc1->setData(Qt::UserRole, interactionId);
-//    QTableWidgetItem *atc2 = new QTableWidgetItem(interaction->value(DrugsDB::IDrugInteraction::DI_ATC2_Label).toString());
-//    atc2->setData(Qt::UserRole, interactionId);
-//    tw->setItem(row, 0, icon);
-//    tw->setItem(row, 1, atc1);
-//    tw->setItem(row, 2, atc2);
-}
-
-void InteractionSynthesisDialog::levelActivated(QAction *a)
-{
-    if (!a)
-        return;
-
-    int level = a->data().toInt();
-    if (level==-1)
-        return;
-
-    /** \todo code here */
-//    switch (level) {
-//    case 0: level = 0; break;
-//    case 1: level = DrugsDB::Constants::Interaction::ContreIndication; break;
-//    case 2: level = DrugsDB::Constants::Interaction::Deconseille; break;
-//    case 3: level = DrugsDB::Constants::Interaction::Precaution; break;
-//    case 4: level = DrugsDB::Constants::Interaction::APrendreEnCompte; break;
-//    case 5: level = DrugsDB::Constants::Interaction::Information; break;
-//    default: level = 0;
-//    }
-//    ui->interactors->blockSignals(true);
-//    ui->interactors->selectionModel()->blockSignals(true);
-//    ui->riskBrowser->clear();
-//    ui->managementBrowser->clear();
-//    ui->interactingDrugsBrowser->clear();
-//    ui->interactors->clear();
-//    ui->interactors->setRowCount(0);
-//    ui->interactors->setColumnCount(3);
-//    ui->interactors->horizontalHeader()->setResizeMode(0, QHeaderView::Fixed);
-//    ui->interactors->horizontalHeader()->setResizeMode(1, QHeaderView::Stretch);
-//    ui->interactors->horizontalHeader()->setResizeMode(2, QHeaderView::Stretch);
-//    ui->interactors->horizontalHeader()->hide();
-//    ui->interactors->setColumnWidth(0, 24);
-    int row = 0;
-    /** \todo code here */
-//    foreach(DrugsDB::IDrugInteraction *interaction, d->m_Interactions) {
-//        if (level == DrugsDB::Constants::Interaction::Information && interaction->type() & DrugsDB::Constants::Interaction::InnDuplication) {
-//                addInteractionToView(row, ui->interactors, interaction, d->m_Interactions.indexOf(interaction));
-//        }
-//        if ((interaction->type() & level) || (level == 0)) {
-//            addInteractionToView(row, ui->interactors, interaction, d->m_Interactions.indexOf(interaction));
-//        }
-//    }
-    ui->interactors->blockSignals(false);
-    ui->interactors->selectionModel()->blockSignals(false);
-    ui->interactors->selectRow(0);
+    if (d)
+        delete d;
+    d = 0;
 }
 
 /** \todo add class informations */
-void InteractionSynthesisDialog::interactorsActivated(QTableWidgetItem *item)
+void InteractionSynthesisDialog::interactionActivated(const QModelIndex &current, const QModelIndex &previous)
 {
-    ui->riskBrowser->clear();
-    ui->managementBrowser->clear();
-    ui->biblio->clear();
-    ui->biblioReferences->clear();
-    ui->interactingDrugsBrowser->clear();
-    int id = item->data(Qt::UserRole).toInt();
-    if (id >= d->m_Interactions.count())
-        return;
-    DrugsDB::IDrugInteraction *interaction = d->m_Interactions.at(id);
-    ui->riskBrowser->setPlainText(interaction->risk().replace("<br />","\n"));
-    ui->managementBrowser->setPlainText(interaction->management().replace("<br />","\n"));
-    ui->link->setText(QString("<a href=\"%1\">Link to reference</a>").arg(interaction->referencesLink()));
-    ui->getBiblio->setEnabled(true);
-    d->populateDrugsBrowser(interaction, ui->interactingDrugsBrowser);
-}
-
-/** \todo add class informations */
-void InteractionSynthesisDialog::interactorsActivated(const QModelIndex &current, const QModelIndex &previous)
-{
-    Q_UNUSED(current);
     Q_UNUSED(previous);
-    QTableWidgetItem *item = ui->interactors->currentItem();
-    if (!item)
+    Q_ASSERT(d->m_InteractionModel);
+    Q_ASSERT(d->m_InteractionResult);
+    if (!d->m_InteractionModel || !d->m_InteractionResult)
         return;
-    ui->riskBrowser->clear();
-    ui->managementBrowser->clear();
-    ui->biblio->clear();
-    ui->biblioReferences->clear();
-    int id = item->data(Qt::UserRole).toInt();
-    if (id >= d->m_Interactions.count())
+
+    const int id = d->m_InteractionModel->itemFromIndex(current)->data(Qt::UserRole).toInt();
+    if (id==-1)
         return;
-    DrugsDB::IDrugInteraction *interaction = d->m_Interactions.at(id);
-    ui->riskBrowser->setPlainText(interaction->risk().replace("<br />","\n"));
-    ui->managementBrowser->setPlainText(interaction->management().replace("<br />","\n"));
-    ui->link->setText(QString("<a href=\"%1\">Link to reference</a>").arg(interaction->referencesLink()));
-    ui->getBiblio->setEnabled(true);
-    d->populateDrugsBrowser(interaction, ui->interactingDrugsBrowser);
+    if (id >= d->m_InteractionResult->interactions().count())
+        return;
+
+    d->ui->riskBrowser->clear();
+    d->ui->managementBrowser->clear();
+    d->ui->biblio->clear();
+    d->ui->biblioReferences->clear();
+
+    DrugsDB::IDrugInteraction *interaction = d->m_InteractionResult->interactions().at(id);
+    d->ui->riskBrowser->setPlainText(interaction->risk().replace("<br />","\n"));
+    d->ui->managementBrowser->setPlainText(interaction->management().replace("<br />","\n"));
+    d->ui->link->setText(QString("<a href=\"%1\">Link to reference</a>").arg(interaction->referencesLink()));
+    d->ui->getBiblio->setEnabled(true);
+    d->populateDrugsBrowser(interaction, d->ui->interactingDrugsBrowser);
 }
 
 void InteractionSynthesisDialog::on_getBiblio_clicked()
 {
-    ui->getBiblio->setEnabled(false);
-    QTableWidgetItem *item = ui->interactors->currentItem();
-    if (!item)
+    Q_ASSERT(d->m_InteractionModel);
+    Q_ASSERT(d->m_InteractionResult);
+    if (!d->m_InteractionModel || !d->m_InteractionResult)
         return;
-    int id = item->data(Qt::UserRole).toInt();
-    if (id >= d->m_Interactions.count())
+
+    const int id = d->m_InteractionModel->itemFromIndex(d->ui->interactionResultView->selectionModel()->currentIndex())->data(Qt::UserRole).toInt();
+    if (id==-1)
         return;
-    DrugsDB::IDrugInteraction *interaction = d->m_Interactions.at(id);
+    if (id >= d->m_InteractionResult->interactions().count())
+        return;
+
+    d->ui->getBiblio->setEnabled(false);
+    DrugsDB::IDrugInteraction *interaction = d->m_InteractionResult->interactions().at(id);
+
     bool show = false;
     if (d->m_Biblio.values(interaction).count()==0) {
         foreach(const DrugsDB::IDrug *drug, interaction->drugs()) {
-            QVector<MedicalUtils::EbmData *> v = DrugsDB::Internal::DrugsBase::instance()->getAllSourcesFromTree(drug->allInnAndInteractingClassesIds().toList());
-            foreach(MedicalUtils::EbmData *data, v) {
+            QVector<MedicalUtils::EbmData *> v = drugsBase()->getAllSourcesFromTree(drug->allInnAndInteractingClassesIds().toList());
+            for(int i=0; i< v.count(); ++i) {
+                MedicalUtils::EbmData *data = v.at(i);
                 d->m_Biblio.insertMulti(interaction, data);
             }
         }
@@ -303,7 +231,7 @@ void InteractionSynthesisDialog::on_getBiblio_clicked()
             show = true;
             QString link = data->link();
             link.replace("http://www.ncbi.nlm.nih.gov/pubmed/", "PMID ");
-            reftable += QString("<tr><td width=70%>%1</td><td width=30%><a href='%2'>%2</a></td></tr>")
+            reftable += QString("<tr><td width=70%>%1</td><td width=30%>%2</td></tr>")
                         .arg(data->references())
                         .arg(link);
             bibtable += QString("<tr><td>%1</td></tr>")
@@ -312,27 +240,41 @@ void InteractionSynthesisDialog::on_getBiblio_clicked()
     }
     reftable += "</table>";
     bibtable += "</table>";
-    ui->biblio->setHtml(bibtable.replace("\n","<br />"));
-    ui->biblioReferences->setHtml(reftable.replace("\n","<br />"));
-    ui->bibliogroup->setVisible(show);
+    d->ui->biblio->setHtml(bibtable.replace("\n","<br />"));
+    d->ui->biblioReferences->setHtml(reftable.replace("\n","<br />"));
 }
 
 void InteractionSynthesisDialog::print()
 {
+    QVector<DrugsDB::IDrug *> drugs;
+    QVector<DrugsDB::IDrugInteraction *> interactions;
+    QString head;
+    if (sender() == d->aPrintAll) {
+        head = tr("Tested drugs");
+        drugs = d->m_DrugModel->drugsList().toVector();
+        interactions = d->m_InteractionResult->interactions();
+    } else if (sender() == d->aPrintOne) {
+        head = tr("Related to drugs");
+        const int id = d->m_InteractionModel->itemFromIndex(d->ui->interactionResultView->selectionModel()->currentIndex())->data(Qt::UserRole).toInt();
+        if (id==-1)
+            return;
+        if (id >= d->m_InteractionResult->interactions().count())
+            return;
+        interactions << d->m_InteractionResult->interactions().at(id);
+   }
     // Prepare text to print
     QString display;
     int i = 0;
-    display.append("<p>");
-    foreach(DrugsDB::IDrug *drg, DrugsDB::DrugsModel::activeModel()->drugsList()) {
-        ++i;
+    display.append("<p align=center>" + head + "</p><p>");
+    for(int i=0; i < drugs.count(); ++i) {
         display.append(QString("%1&nbsp;.&nbsp;%2<br />")
                        .arg(i)
-                       .arg(drg->brandName()));
+                       .arg(drugs.at(i)->brandName()));
     }
     display.append("</p><p>");
-    if (d->m_Interactions.count() > 0) {
-        /** \todo code here */
-//        display.append(DrugsDB::InteractionManager::synthesisToHtml(d->m_Interactions, true));
+
+    if (interactions.count() > 0) {
+        display.append(DrugsDB::InteractionManager::synthesisToHtml(interactions, true));
     } else {
         display = tkTr(Trans::Constants::NO_1_FOUND).arg(tkTr(Trans::Constants::INTERACTION));
     }
@@ -357,7 +299,7 @@ void InteractionSynthesisDialog::changeEvent(QEvent *e)
     QDialog::changeEvent(e);
     switch (e->type()) {
     case QEvent::LanguageChange:
-        ui->retranslateUi(this);
+        d->ui->retranslateUi(this);
         break;
     default:
         break;

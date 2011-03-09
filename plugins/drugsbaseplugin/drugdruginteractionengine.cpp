@@ -26,8 +26,14 @@ namespace  {
 
     const char* const LIST_BASIC_INFO =
             "<tr>"
-            "  <td><b>%1</b></td>\n"
-            "  <td>%2<br />&nbsp;&nbsp;&nbsp;&nbsp;%3<br>%4<br />&nbsp;&nbsp;&nbsp;&nbsp;%5</td>\n"
+            "  <td colspan=2><b>%1</b></td>\n"
+            "</tr>\n"
+            "<tr>"
+            "  <td rowspan=2><b>Drugs:</b></td>\n"
+            "  <td>%2<br />&nbsp;&nbsp;&nbsp;&nbsp;%3</td>"
+            "</tr>"
+            "<tr>"
+            "  <td>%4<br />&nbsp;&nbsp;&nbsp;&nbsp;%5</td>\n"
             "</tr>\n";
     const char* const LIST_FULL_INFO =
             "<tr>\n"
@@ -112,7 +118,42 @@ public:
 
     QList<IDrug *> drugs() const {return m_InteractingDrugs;}
 
-    QString header() const {return base()->getAtcLabel(m_Infos.value(DI_ATC1).toInt()) + " - " + base()->getAtcLabel(m_Infos.value(DI_ATC2).toInt());}
+    QIcon icon(const int levelOfWarning, const int iconsize) const
+    {
+        DrugDrugInteractionEngine::TypesOfIAM level = DrugDrugInteractionEngine::TypesOfIAM(m_Infos.value(DI_TypeId).toInt());
+        Core::ITheme *th = theme();
+        Core::ITheme::IconSize size = Core::ITheme::IconSize(iconsize);
+        // Minimal alerts
+        if (level & DrugDrugInteractionEngine::ContreIndication && (levelOfWarning <= Constants::MinimumLevelOfWarning))
+            return th->icon(Constants::INTERACTION_ICONCRITICAL, size);
+        else if (level & DrugDrugInteractionEngine::Deconseille && (levelOfWarning <= Constants::MinimumLevelOfWarning))
+            return th->icon(Constants::INTERACTION_ICONDECONSEILLEE, size);
+        // Moderate alerts
+        else if ((level & DrugDrugInteractionEngine::APrendreEnCompte) && (levelOfWarning <= Constants::ModerateLevelOfWarning))
+            return th->icon(Constants::INTERACTION_ICONTAKEINTOACCOUNT, size);
+        else if ((level & DrugDrugInteractionEngine::P450) && (levelOfWarning <= Constants::ModerateLevelOfWarning))
+            return th->icon(Constants::INTERACTION_ICONP450, size);
+        else if ((level & DrugDrugInteractionEngine::GPG) && (levelOfWarning <= Constants::ModerateLevelOfWarning))
+            return th->icon(Constants::INTERACTION_ICONGPG, size);
+        else if ((level & DrugDrugInteractionEngine::Precaution) && (levelOfWarning <= Constants::ModerateLevelOfWarning))
+            return th->icon(Constants::INTERACTION_ICONPRECAUTION, size);
+        // Maximum alerts
+        else if ((level & DrugDrugInteractionEngine::Information) && (levelOfWarning == Constants::MaximumLevelOfWarning))
+            return th->icon(Constants::INTERACTION_ICONINFORMATION, size);
+        else if ((level & DrugDrugInteractionEngine::InnDuplication) && (levelOfWarning == Constants::MaximumLevelOfWarning))
+            return th->icon(Constants::INTERACTION_ICONINFORMATION, size);
+        else if (level & DrugDrugInteractionEngine::NoIAM)
+            return th->icon(Constants::INTERACTION_ICONOK, size);
+        else
+            return th->icon(Constants::INTERACTION_ICONUNKONW, size);
+        return QIcon();
+    }
+
+    QString header() const
+    {
+        return base()->getAtcLabel(m_Infos.value(DI_ATC1).toInt()) + " <br> " + base()->getAtcLabel(m_Infos.value(DI_ATC2).toInt());
+    }
+
     QString risk(const QString &lang = QString::null) const
     {
         QString l = lang;
@@ -120,9 +161,9 @@ public:
             l = QLocale().name().left(2);
         QString r;
         if (l=="fr")
-            r = m_Infos.value(DI_RiskFr).toString();
+            r = base()->getLabel(m_Infos.value(DI_RiskId).toInt(), l);
         else
-            r = m_Infos.value(DI_RiskEn).toString();
+            r = base()->getLabel(m_Infos.value(DI_RiskId).toInt(), "en");
         return r.replace("<br />", "<br>");
     }
 
@@ -133,9 +174,9 @@ public:
             l = QLocale().name().left(2);
         QString r;
         if (l=="fr")
-            r = m_Infos.value(DI_ManagementFr).toString();
+            r = base()->getLabel(m_Infos.value(DI_ManagementId).toInt(), l);
         else
-            r = m_Infos.value(DI_ManagementEn).toString();
+            r = base()->getLabel(m_Infos.value(DI_ManagementId).toInt(), "en");
         return r.replace("<br />", "<br>");
     }
 
@@ -155,7 +196,7 @@ public:
             secondDrugAtcId= m_Infos.value(DI_ATC1).toInt();
             firstDrugAtcId = m_Infos.value(DI_ATC2).toInt();
         }
-        // Create the Html header
+        // Create the Html
         QString tmp = QString(LIST_BASIC_INFO)
                .arg(type())
                .arg(drugs().at(0)->brandName().replace(" ", "&nbsp;"))
@@ -163,19 +204,36 @@ public:
                .arg(drugs().at(1)->brandName().replace(" ", "&nbsp;"))
                .arg(base()->getAtcLabel(secondDrugAtcId).replace(" ", "&nbsp;"));
         if (detailled) {
-            tmp += QString(LIST_FULL_INFO)
-                   .arg(QCoreApplication::translate(Constants::DRUGSBASE_TR_CONTEXT, Constants::NATURE_OF_RISK))
-                   .arg(risk()
-                        .replace("<br>", " ")
-                        .replace("<", "&lt;")
-                        .replace(">", "&gt;"))
-                   .arg(QCoreApplication::translate(Constants::DRUGSBASE_TR_CONTEXT, Constants::MANAGEMENT))
-                   .arg(management()
-                        .replace("<br>", "__")
-                        .replace("<", "&lt;")
-                        .replace(">", "&gt;")
-                        .replace("__", "<br>"));
+            QString r = risk();
+            if (!r.isEmpty()) {
+                tmp += QString("<tr>\n"
+                               "  <td><b>%1</b></td>\n"
+                               "  <td>%2</td>\n"
+                               "</tr>\n"
+                               )
+                        .arg(QCoreApplication::translate(Constants::DRUGSBASE_TR_CONTEXT, Constants::NATURE_OF_RISK))
+                        .arg(r
+                             .replace("<br>", " ")
+                             .replace("<", "&lt;")
+                             .replace(">", "&gt;"));
+            }
+            r = management();
+            if (!r.isEmpty()) {
+                tmp += QString("<tr>\n"
+                               "  <td><b>%1</b></td>\n"
+                               "  <td>%2</td>\n"
+                               "</tr>\n"
+                               )
+                        .arg(QCoreApplication::translate(Constants::DRUGSBASE_TR_CONTEXT, Constants::MANAGEMENT))
+                        .arg(r
+                             .replace("<br>", "__")
+                             .replace("<", "&lt;")
+                             .replace(">", "&gt;")
+                             .replace("__", "<br>"));
+            }
         }
+        tmp.prepend("<table width=100% border=1>");
+        tmp.append("</table>");
         return tmp;
     }
 
@@ -293,6 +351,11 @@ bool DrugDrugInteractionEngine::init()
 QString DrugDrugInteractionEngine::name() const {return tr("Drug-drug interactions engine");}
 
 QString DrugDrugInteractionEngine::uid() const {return Constants::DDI_ENGINE_UID;}
+
+QIcon DrugDrugInteractionEngine::icon(const int size) const
+{
+    return theme()->icon(Constants::I_DRUGDRUGINTERACTIONENGINE, Core::ITheme::IconSize(size));
+}
 
 bool DrugDrugInteractionEngine::checkDrugInteraction(IDrug *drug, const QVector<IDrug *> &drugsList)
 {
@@ -435,7 +498,9 @@ QVector<IDrugInteraction *> DrugDrugInteractionEngine::getInteractionsFromDataba
         LOG_QUERY_ERROR(query);
     }
     query.finish();
+
     /** \todo get interaction bibliography */
+
     return toReturn;
 }
 

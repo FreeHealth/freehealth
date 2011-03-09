@@ -551,9 +551,8 @@ bool DrugsModel::removeRows(int row, int count, const QModelIndex &parent)
         delete drug;
         drug = 0;
     }
-    checkInteractions();
     endRemoveRows();
-    reset();
+    checkInteractions();
     d->m_IsDirty = true;
     Q_EMIT numberOfRowsChanged();
     return toReturn;
@@ -593,7 +592,6 @@ int DrugsModel::addDrug(IDrug *drug, bool automaticInteractionChecking)
         d->m_levelOfWarning = settings()->value(Constants::S_LEVELOFWARNING).toInt();
     }
     checkInteractions();
-    reset();
     d->m_IsDirty = true;
     Q_EMIT numberOfRowsChanged();
     return d->m_DrugsList.indexOf(drug);
@@ -615,6 +613,7 @@ int DrugsModel::addDrug(const QVariant &drugId, bool automaticInteractionCheckin
 int DrugsModel::addDrugs(const QVector<IDrug *> &drugs, bool automaticInteractionChecking)
 {
     d->m_DrugsList << drugs.toList();
+    d->m_InteractionQuery->setDrugsList(d->m_DrugsList.toVector());
     if (automaticInteractionChecking)
         checkInteractions();
     return drugs.count();
@@ -650,7 +649,6 @@ void DrugsModel::setDrugsList(const QList<IDrug *> &list)
     d->m_InteractionQuery->setDrugsList(list.toVector());
     d->m_levelOfWarning = settings()->value(Constants::S_LEVELOFWARNING).toInt();
     checkInteractions();
-    reset();
     d->m_IsDirty = true;
     Q_EMIT numberOfRowsChanged();
 }
@@ -679,6 +677,16 @@ IDrug *DrugsModel::getDrug(const QVariant &drugUid) const
 bool DrugsModel::prescriptionHasInteractions()
 {
     return (d->m_InteractionResult->interactions().count()>0);
+}
+
+DrugInteractionQuery *DrugsModel::drugInteractionQuery() const
+{
+    return d->m_InteractionQuery;
+}
+
+DrugInteractionResult *DrugsModel::drugInteractionResult() const
+{
+    return d->m_InteractionResult;
 }
 
 bool DrugsModel::prescriptionHasAllergies()
@@ -759,7 +767,6 @@ void DrugsModel::showTestingDrugs(bool state)
     d->m_ShowTestingDrugs = state;
     d->m_InteractionQuery->setDrugsList(d->m_DrugsList.toVector());
     checkInteractions();
-    reset();
 }
 
 bool DrugsModel::testingDrugsAreVisible() const
@@ -832,7 +839,6 @@ int DrugsModel::removeDrug(const QVariant &drugId)
         }
     }
     checkInteractions();
-    reset();
     d->m_IsDirty = true;
     Q_EMIT numberOfRowsChanged();
     return i;
@@ -849,7 +855,6 @@ int DrugsModel::removeLastInsertedDrug()
     d->m_DrugsList.removeLast();
     d->m_InteractionQuery->setDrugsList(d->m_DrugsList.toVector());
     checkInteractions();
-    reset();
     d->m_IsDirty = true;
     Q_EMIT numberOfRowsChanged();
     return 1;
@@ -865,11 +870,12 @@ void DrugsModel::warn()
 }
 
 /** \brief Starts the interactions checking */
-void DrugsModel::checkInteractions() const
+void DrugsModel::checkInteractions()
 {
     if (d->m_InteractionResult)
         delete d->m_InteractionResult;
     d->m_InteractionResult = interactionManager()->checkInteractions(*d->m_InteractionQuery);
+    reset();
 }
 
 QString DrugsModel::getFullPrescription(const IDrug *drug, bool toHtml, const QString &mask)

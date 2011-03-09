@@ -18,6 +18,12 @@
  *  along with this program (COPYING.FREEMEDFORMS file).                   *
  *  If not, see <http://www.gnu.org/licenses/>.                            *
  ***************************************************************************/
+/***************************************************************************
+ *   Main Developper : Eric MAEKER, <eric.maeker@free.fr>                  *
+ *   Contributors :                                                        *
+ *       NAME <MAIL@ADRESS>                                                *
+ *       NAME <MAIL@ADRESS>                                                *
+ ***************************************************************************/
 #ifndef INTERACTIONSYNTHESISDIALOG_H
 #define INTERACTIONSYNTHESISDIALOG_H
 
@@ -26,6 +32,17 @@ QT_BEGIN_NAMESPACE
 class QTableWidgetItem;
 class QModelIndex;
 QT_END_NAMESPACE
+
+/**
+ * \file interactionsynthesisdialog.h
+ * \author Eric MAEKER <eric.maeker@free.fr>
+ * \version 0.6.0
+ * \date 09 Mar 2011
+*/
+
+namespace DrugsDB {
+class DrugsModel;
+}
 
 namespace DrugsWidget {
 namespace Internal {
@@ -41,13 +58,13 @@ class InteractionSynthesisDialog : public QDialog
     Q_OBJECT
 
 public:
-    explicit InteractionSynthesisDialog(QWidget *parent = 0);
+    explicit InteractionSynthesisDialog(DrugsDB::DrugsModel *drugModel, QWidget *parent = 0);
     ~InteractionSynthesisDialog();
 
 protected Q_SLOTS:
-    void levelActivated(QAction *a);
-    void interactorsActivated(const QModelIndex &current, const QModelIndex &previous);
-    void interactorsActivated(QTableWidgetItem *item);
+//    void levelActivated(QAction *a);
+    void interactionActivated(const QModelIndex &current, const QModelIndex &previous);
+//    void interactorsActivated(QTableWidgetItem *item);
     void on_getBiblio_clicked();
     void print();
 
@@ -55,7 +72,6 @@ protected:
     void changeEvent(QEvent *e);
 
 private:
-    Ui::InteractionSynthesisDialog *ui;
     Internal::InteractionSynthesisDialogPrivate *d;
 };
 
