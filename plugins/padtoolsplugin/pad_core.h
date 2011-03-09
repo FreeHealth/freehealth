@@ -8,6 +8,10 @@
 class PadCore : public PadFragment
 {
 public:
+/*	enum Type {
+		Type_Value
+		};*/
+
 	PadCore(){}
 
 	const QString &value() const { return _value; }

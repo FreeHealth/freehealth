@@ -7,7 +7,7 @@ void PadHighlighter::highlightBlock(const QString &text)
 
 	foreach (PadFragment *fragment, pad->getAllFragments()){
 		rawValue = fragment->rawValue();
-		if (dynamic_cast<Pad*>(fragment)){
+		if (dynamic_cast<PadItem*>(fragment)){
 			if (rawValue.count()){
 				if (rawValue[0] == '['){
 					setFormat(fragment->start(), 1, _padFormat);
@@ -20,10 +20,10 @@ void PadHighlighter::highlightBlock(const QString &text)
 			}
 		} else if (dynamic_cast<PadCore*>(fragment)){
 			if (rawValue.count()){
-				if (rawValue[0] == '$'){
+				if (rawValue[0] == PadAnalyzer::coreDelimiter){
 					setFormat(fragment->start(), 1, _coreFormat);
 				}
-				if (rawValue[rawValue.count() - 1] == '$'){
+				if (rawValue[rawValue.count() - 1] == PadAnalyzer::coreDelimiter){
 					setFormat(fragment->end(), 1, _coreFormat);
 				}
 			}

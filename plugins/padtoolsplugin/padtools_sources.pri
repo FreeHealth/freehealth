@@ -12,7 +12,8 @@ HEADERS +=  \
     $${PWD}/pad.h \
     $${PWD}/pad_fragment.h \
     $${PWD}/pad_string.h \
-    $${PWD}/pad_core.h
+    $${PWD}/pad_core.h \
+    $${PWD}/pad_item.h
 
 SOURCES += \
     $${PWD}/padtoolsplugin.cpp \
@@ -22,7 +23,8 @@ SOURCES += \
 	$${PWD}/pad.cpp \
 	$${PWD}/pad_fragment.cpp \
 	$${PWD}/pad_string.cpp \
-	$${PWD}/pad_core.cpp
+	$${PWD}/pad_core.cpp \
+    $${PWD}/pad_item.cpp
 
 #    $${PWD}/editoractionhandler.cpp \
 #    $${PWD}/editormanager.cpp \

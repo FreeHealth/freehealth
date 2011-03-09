@@ -1,5 +1,5 @@
-#ifndef PAD_H
-#define PAD_H
+#ifndef PAD_ITEM_H
+#define PAD_ITEM_H
 
 #include <QList>
 #include <QMap>
@@ -9,14 +9,14 @@
 #include "pad_core.h"
 
 /**
- * Contains an entire pad i.e. a list of fragments
+ * Contains an entire pad item i.e. a list of fragments
  * @class
  */
-class Pad : public PadFragment
+class PadItem : public PadFragment
 {
 public:
-	Pad(){}
-	virtual ~Pad();
+	PadItem(){}
+	virtual ~PadItem();
 
 	void addFragment(PadFragment *fragment);
 
@@ -31,6 +31,9 @@ public:
 
 private:
 	QList<PadFragment*> _fragments;
+
+	// return the core of the pad (can be 0)
+	PadCore *getCore() const;
 };
 
 #endif
