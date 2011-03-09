@@ -212,6 +212,11 @@ bool MainWindow::initialize(const QStringList &arguments, QString *errorString)
     m_ui = new Internal::Ui::MainWindow();
     m_ui->setupUi(this);
 
+	resize(1024, 768);
+
+	m_ui->splitterMain->setSizes(QList<int>() << 150);
+	m_ui->splitterErrors->setSizes(QList<int>() << 0 << 100);
+
     return true;
 }
 
