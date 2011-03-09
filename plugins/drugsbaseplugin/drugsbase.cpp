@@ -156,13 +156,14 @@ public:
         query.finish();
     }
 
-    QString getLabel(const int masterLid)
+    QString getLabel(const int masterLid, const QString &lang)
     {
-        Utils::Join j(Constants::Table_LABELS, Constants::LABELS_LID, Constants::Table_LABELSLINK, Constants::LABELSLINK_LID);
-        Utils::Field f(Constants::Table_LABELSLINK, Constants::LABELSLINK_MASTERLID, QString("=%1").arg(masterLid));
+        Utils::Join join(Constants::Table_LABELS, Constants::LABELS_LID, Constants::Table_LABELSLINK, Constants::LABELSLINK_LID);
+        Utils::FieldList where;
+        where << Utils::Field(Constants::Table_LABELSLINK, Constants::LABELSLINK_MASTERLID, QString("=%1").arg(masterLid));
+        where << Utils::Field(Constants::Table_LABELS, Constants::LABELS_LANG, QString("='%1'").arg(lang));
 
-        /** \todo manage language */
-        QString req = q->select(Constants::Table_LABELS, j, f);
+        QString req = q->select(Constants::Table_LABELS, join, where);
         QSqlQuery query(QSqlDatabase::database(Constants::DB_DRUGS_NAME));
         if (query.exec(req)) {
             if (query.next())
@@ -499,7 +500,7 @@ DrugsBase::DrugsBase(QObject *parent)
 
     addField(Table_IAM_TREE, IAM_TREE_ID_CLASS, "ID_CLASS");
     addField(Table_IAM_TREE, IAM_TREE_ID_ATC, "ID_ATC");
-    addField(Table_IAM_TREE, IAM_TREE_BIBMASTERID, "ID");
+    addField(Table_IAM_TREE, IAM_TREE_BIBMASTERID, "BIB_MASTER_ID");
 
     connect(Core::ICore::instance(), SIGNAL(databaseServerChanged()), this, SLOT(onCoreDatabaseServerChanged()));
 }
@@ -1361,6 +1362,11 @@ IDrug *DrugsBase::getDrugByDrugId(const QVariant &drugId)
     return 0;
 }
 
+QString DrugsBase::getLabel(const int masterLid, const QString &lang)
+{
+    return d->getLabel(masterLid, lang);
+}
+
 QStringList DrugsBase::getDrugCompositionAtcCodes(const QVariant &drugId)
 {
     Utils::FieldList get;
@@ -1777,52 +1783,44 @@ QVector<int> DrugsBase::getAllMoleculeCodeWithAtcStartingWith(const QString &cod
 
 QVector<MedicalUtils::EbmData *> DrugsBase::getAllSourcesFromTree(const QList<int> &allInnAndInteractingClassesIds)
 {
-    /** \todo code this */
     QVector<MedicalUtils::EbmData *> ret;
-//    if (allInnAndIamClassIds.count() == 0)
-//        return ret;
+    if (allInnAndInteractingClassesIds.isEmpty())
+        return ret;
 
-//    QStringList classIds, innIds;
-//    foreach(int id, allInnAndIamClassIds) {
-//        if (id >= 200000)
-//            classIds << QString::number(id);
-//        else
-//            innIds <<QString::number(id);
-//    }
+    QStringList classIds, innIds;
+    foreach(int id, allInnAndInteractingClassesIds) {
+        if (id >= 200000)
+            classIds << QString::number(id);
+        else
+            innIds <<QString::number(id);
+    }
 
-//    // get all source_link
-////    QHash<int, QString> where;
-////    where.insert(TREE_ID_CLASS, QString("IN (%1)").arg(classIds.join(",")));
-////    where.insert(TREE_ID_ATC, QString("IN (%1)").arg(innIds.join(",")));
-//    QString req = QString("%1, %2 WHERE "
-//                          "`%2`.`%3` IN (%5) AND `%2`.`%4` IN (%6) AND %7")
-//            .arg(di->m_DB->select(Table_SOURCES))
-//            .arg(di->m_DB->table(Table_IAM_TREE))
-//            .arg(di->m_DB->fieldName(Table_IAM_TREE, TREE_ID_CLASS))
-//            .arg(di->m_DB->fieldName(Table_IAM_TREE, TREE_ID_ATC))
-//            .arg(classIds.join(","))
-//            .arg(innIds.join(","))
-//            .arg(di->m_DB->fieldEquality(Table_IAM_TREE, TREE_SOURCE_LINK,
-//                                         Table_SOURCES, SOURCES_SOURCE_LINK))
-//            ;
+    // get all source_link
+    Utils::JoinList join;
+    join << Utils::Join(Constants::Table_IAM_TREE, Constants::IAM_TREE_BIBMASTERID, Constants::Table_BIB_LINK, Constants::BIB_LINK_MASTERID);
+    join << Utils::Join(Constants::Table_BIB_LINK, Constants::BIB_LINK_BIBID, Constants::Table_BIB, Constants::BIB_BIBID);
+    Utils::FieldList where;
+    where << Utils::Field(Constants::Table_IAM_TREE, Constants::IAM_TREE_ID_ATC, QString("IN (%1)").arg(innIds.join(",")));
+    where << Utils::Field(Constants::Table_IAM_TREE, Constants::IAM_TREE_ID_CLASS, QString("IN (%1)").arg(classIds.join(",")));
 
-//    QStringList links;
-//    QSqlQuery query(req, di->m_DB->database());
-//    if (query.isActive()) {
-//        while (query.next()) {
-//            if (links.contains(query.value(SOURCES_LINK).toString()))
-//                continue;
-//            links << query.value(SOURCES_LINK).toString();
-//            MedicalUtils::EbmData *ebm = new MedicalUtils::EbmData;
-//            ebm->setId(query.value(SOURCES_ID));
-//            ebm->setLink(query.value(SOURCES_LINK).toString());
-//            ebm->setReferences(query.value(SOURCES_TEXTUAL_REFERENCE).toString());
-//            ebm->setAbstract(query.value(SOURCES_ABSTRACT).toString());
-//            ret << ebm;
-//        }
-//    } else {
-//        Utils::Log::addQueryError("InteractionBase", query, __FILE__, __LINE__);
-//    }
+    QString req = select(Constants::Table_BIB, join, where);
+    QStringList links;
+    QSqlQuery query(req, QSqlDatabase::database(Constants::DB_DRUGS_NAME));
+    if (query.isActive()) {
+        while (query.next()) {
+            if (links.contains(query.value(Constants::BIB_LINK).toString()))
+                continue;
+            links << query.value(Constants::BIB_LINK).toString();
+            MedicalUtils::EbmData *ebm = new MedicalUtils::EbmData;
+            ebm->setId(query.value(Constants::BIB_BIBID));
+            ebm->setLink(query.value(Constants::BIB_LINK).toString());
+            ebm->setReferences(query.value(Constants::BIB_TEXTREF).toString());
+            ebm->setAbstract(query.value(Constants::BIB_ABSTRACT).toString());
+            ret << ebm;
+        }
+    } else {
+        LOG_QUERY_ERROR(query);
+    }
 
     return ret;
 }

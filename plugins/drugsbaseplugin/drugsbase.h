@@ -93,6 +93,9 @@ public:
     QVariantList getDrugUids(const QVariant &drugId);
     IDrug *getDrugByDrugId(const QVariant &drugId);
 
+    // Manage labels
+    QString getLabel(const int masterLid, const QString &lang = QString::null);
+
     // Used by the GlobalDrugsModel
     QStringList getDrugCompositionAtcCodes(const QVariant &drugId);
     QStringList getDrugInns(const QVariant &drugId);
