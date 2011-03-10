@@ -60,8 +60,6 @@ private:
 	bool atEnd(); // returns true if current position is at the text end
 	PadItem *nextPadItem();
 	PadCore *nextCore(); // tries to parse a core ("~...~")
-//	Pad *nextPad(bool root = false); // tries to parse a mask ("[prefix$...$suffix]")
-//	PadString *nextString();
 
 	static bool isSpecial(const QChar &c);
 

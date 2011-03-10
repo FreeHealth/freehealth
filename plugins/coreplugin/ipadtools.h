@@ -46,6 +46,27 @@ class QTextEdit;
 
 namespace Core {
 	/**
+	   \brief Store all date relative to an analyzer error. Can be useful to reconstruct localized error string because all tokens are transmitted
+	 */
+	class PadAnalyzerError {
+	public:
+		enum Type {
+			Error_NoError
+		};
+
+		PadAnalyzerError(Type errorType, const QMap<QString,QString> &errorTokens) :
+			_errorType(errorType),
+			_errorTokens(errorTokens) {}
+
+		int errorType() const { return _errorType; }
+		const QMap<QString,QString> errorTokens() const { return _errorTokens; }
+
+	private:
+		Type _errorType;
+		QMap<QString,QString> _errorTokens;
+	};
+
+	/**
 	   \brief Use this class to avoid any plugin dependencies (other than Core), when needing to access to the \e current \e pad datas.
 	*/
 	class CORE_EXPORT IPadTools : public QObject
@@ -61,7 +82,7 @@ namespace Core {
 		/**
 		 * \brief returns a parsing result of a template against some tokens
 		 */
-		virtual QString parse(const QString &templ, QMap<QString,QVariant> &tokens) = 0;
+		virtual QString parse(const QString &templ, QMap<QString,QVariant> &tokens, QList<PadAnalyzerError> &errors) = 0;
 
 		/**
 		 * \brief returns a syntax highlighter which can be used in text editors

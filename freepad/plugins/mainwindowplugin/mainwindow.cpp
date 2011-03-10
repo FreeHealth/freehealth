@@ -261,8 +261,9 @@ void MainWindow::extensionsInitialized()
 
 void MainWindow::padTextChanged()
 {
+	QList<Core::PadAnalyzerError> errors;
 	// TODO : use a timer based on key strokes instead of realtime analysis
-	m_ui->previewTextEdit->setPlainText(m_padTools->parse(m_ui->padTextEdit->toPlainText(), m_tokens));
+	m_ui->previewTextEdit->setPlainText(m_padTools->parse(m_ui->padTextEdit->toPlainText(), m_tokens, errors));
 }
 
 MainWindow::~MainWindow()

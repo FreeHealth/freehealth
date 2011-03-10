@@ -5,9 +5,8 @@
 
 using namespace PadTools;
 
-QString PadToolsImpl::parse(const QString &templ, QMap<QString,QVariant> &tokens)
+QString PadToolsImpl::parse(const QString &templ, QMap<QString,QVariant> &tokens, QList<Core::PadAnalyzerError> &errors)
 {
-	Q_UNUSED(templ); //TMP
 	Q_UNUSED(tokens); //TMP
 
 	PadAnalyzer analyzer;

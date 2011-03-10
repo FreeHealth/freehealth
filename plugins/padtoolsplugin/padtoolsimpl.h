@@ -13,7 +13,7 @@ namespace PadTools {
 		PadToolsImpl(QObject *parent = 0) : Core::IPadTools(parent) {}
 		~PadToolsImpl() {}
 
-		QString parse(const QString &templ, QMap<QString,QVariant> &tokens);
+		QString parse(const QString &templ, QMap<QString,QVariant> &tokens, QList<Core::PadAnalyzerError> &errors);
 
 		QSyntaxHighlighter *createSyntaxHighlighter(QTextEdit *textEdit, QMap<QString,QVariant> &tokens);
 
