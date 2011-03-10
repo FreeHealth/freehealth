@@ -150,7 +150,6 @@ void DrugSelector::initialize()
         case Constants::SearchInn : a = actionManager()->command(Constants::A_SEARCH_INN)->action(); break;
     }
     if (a) {
-        /** \todo Check the action in the menu/toolbutton... */
         a->trigger();
     }
 

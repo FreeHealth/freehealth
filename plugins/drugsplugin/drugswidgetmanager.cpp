@@ -26,7 +26,6 @@
  ***************************************************************************/
 #include "drugswidgetmanager.h"
 
-// include drugs widget headers
 #include <drugsplugin/constants.h>
 #include <drugsplugin/drugswidget/drugscentralwidget.h>
 #include <drugsplugin/drugswidget/prescriptionviewer.h>
@@ -52,6 +51,7 @@ using namespace Trans::ConstantTranslations;
 
 inline static Core::ActionManager *actionManager() {return Core::ICore::instance()->actionManager();}
 static inline Core::ContextManager *contextManager() { return Core::ICore::instance()->contextManager(); }
+static inline Core::ISettings *settings() {return Core::ICore::instance()->settings();}
 
 ///////////////////////////////////////////////////////////////////////////////////////////////////////////
 /////////////////////////////////////////      MANAGER      ///////////////////////////////////////////////
@@ -253,9 +253,10 @@ DrugsActionHandler::DrugsActionHandler(QObject *parent) :
     Q_ASSERT(searchmenu);
 
     gSearchMethod = new QActionGroup(this);
+    int m = settings()->value(Constants::S_SEARCHMETHOD).toInt();
     a = aSearchCommercial = new QAction(this);
     a->setCheckable(true);
-    a->setChecked(false);
+    a->setChecked(m==Constants::SearchCommercial);
     a->setIcon(th->icon(DrugsDB::Constants::I_SEARCHCOMMERCIAL));
     cmd = actionManager()->registerAction(a, DrugsWidget::Constants::A_SEARCH_COMMERCIAL, ctx);
     cmd->setTranslations(DrugsWidget::Constants::SEARCHCOMMERCIAL_TEXT, "", DRUGCONSTANTS_TR_CONTEXT);
@@ -265,7 +266,7 @@ DrugsActionHandler::DrugsActionHandler(QObject *parent) :
 
     a = aSearchMolecules = new QAction(this);
     a->setCheckable(true);
-    a->setChecked(false);
+    a->setChecked(m==Constants::SearchMolecules);
     a->setIcon(th->icon(DrugsDB::Constants::I_SEARCHMOLS));
     cmd = actionManager()->registerAction(a, DrugsWidget::Constants::A_SEARCH_MOLECULES, ctx);
     cmd->setTranslations(DrugsWidget::Constants::SEARCHMOLECULES_TEXT, "", DRUGCONSTANTS_TR_CONTEXT);
@@ -275,7 +276,7 @@ DrugsActionHandler::DrugsActionHandler(QObject *parent) :
 
     a = aSearchInn = new QAction(this);
     a->setCheckable(true);
-    a->setChecked(false);
+    a->setChecked(m==Constants::SearchInn);
     a->setIcon(th->icon(DrugsDB::Constants::I_SEARCHINN));
     cmd = actionManager()->registerAction(a, DrugsWidget::Constants::A_SEARCH_INN, ctx);
     cmd->setTranslations(DrugsWidget::Constants::SEARCHINN_TEXT, "", DRUGCONSTANTS_TR_CONTEXT);
@@ -673,8 +674,6 @@ void DrugsActionHandler::openProtocolPreferencesDialog()
         m_CurrentView->prescriptionView()->openProtocolPreferencesDialog();
     }
 }
-
-static inline Core::ISettings *settings()  { return Core::ICore::instance()->settings(); }
 
 void DrugsActionHandler::resetPrescriptionSentenceToDefault()
 {
