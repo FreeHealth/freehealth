@@ -270,12 +270,17 @@ QStandardItemModel * AvailableMovementPage::availableMovementModelByLocale(){
         		if (!line.contains("AVAILMOV_ID"))
         		{
         			  //"AVAILMOV_ID","PARENT","TYPE","LABEL","CODE","COMMENT"
+        			  QList<QStandardItem*> listOfItemsData;
         			  QStringList listOfItems;
         			  listOfItems = line.split(separator);
         			  for (int i = 0; i < AccountDB::Constants::AVAILMOV_MaxParam; i += 1)
         			  {
-        			  	model->setData(model->index(row,i),listOfItems[i],Qt::EditRole);
+        			  	//model->setData(model->index(row,i),listOfItems[i],Qt::EditRole);
+        			  	QStandardItem * item = new QStandardItem;
+        			  	item->setData(listOfItems[i]);
+        			  	listOfItemsData << item;
         			  }
+        			model->appendRow(listOfItemsData);
         			row++;  
         		    }
         	    }
