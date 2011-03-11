@@ -36,6 +36,8 @@
 
 #include <drugsbaseplugin/drugsbase.h>
 #include <drugsbaseplugin/idruginteraction.h>
+#include <drugsbaseplugin/druginteractionquery.h>
+#include <drugsbaseplugin/druginteractionresult.h>
 #include <drugsbaseplugin/idrug.h>
 #include <drugsbaseplugin/drugsio.h>
 #include <drugsbaseplugin/interactionmanager.h>

@@ -28,103 +28,29 @@
 #define INTERACTIONSMANAGER_H
 
 #include <drugsbaseplugin/drugsbase_exporter.h>
-#include <drugsbaseplugin/constants.h>
-
-#include <coreplugin/itheme.h>
-
-#include <utils/database.h>
 
 #include <QVector>
 #include <QIcon>
-#include <QPointer>
 
-class QStandardItemModel;
-class QStringList;
+class QTreeWidget;
+
+
 /**
  * \file interactionsmanager.h
  * \author Eric MAEKER <eric.maeker@free.fr>
  * \version 0.6.0
- * \date 09 Mar 2011
+ * \date 11 Mar 2011
 */
 
 namespace DrugsDB {
 class IDrug;
 class IDrugInteraction;
-class InteractionManager;
+class DrugInteractionResult;
+class DrugInteractionQuery;
 
 namespace Internal {
 class InteractionManagerPrivate;
 }  // End Internal
-
-
-class DRUGSBASE_EXPORT DrugInteractionQuery : public QObject
-{
-    Q_OBJECT
-public:
-    DrugInteractionQuery(const QVector<IDrug *> &testDrugs, QObject *parent = 0);
-    DrugInteractionQuery(QObject *parent = 0);
-    ~DrugInteractionQuery();
-
-    void clearDrugsList();
-    void setDrugsList(const QVector<IDrug *> &list);
-    QVector<IDrug *> drugsList() const {return m_Drugs;}
-
-    void addDrug(IDrug *drug);
-    void removeDrug(IDrug *drug);
-    void removeLastInsertedDrug();
-
-    bool containsDrug(const IDrug *drug) const;
-    QStandardItemModel *toStandardModel() const;
-
-    void setTestDrugDrugInteractions(bool test) {m_TestDDI = test;}
-    void setTestPatientDrugInteractions(bool test) {m_TestPDI = test;}
-
-    void warn() const;
-
-private:
-    QVector<IDrug *> m_Drugs;
-    bool m_TestDDI, m_TestPDI;
-    mutable QPointer<QStandardItemModel> m_StandardModel;
-};
-
-
-class DRUGSBASE_EXPORT DrugInteractionResult : public QObject
-{
-    Q_OBJECT
-    friend class DrugsDB::InteractionManager;
-
-public:
-    ~DrugInteractionResult();
-
-    void clear();
-
-    QVector<IDrugInteraction *> interactions(const QString &engineUid = QString::null) const;
-    bool drugHaveInteraction(const IDrug *d, const QString &engineUid = QString::null) const;
-    QVector<IDrugInteraction *> getInteractions(const IDrug *drug, const QString &engineUid = QString::null) const;
-
-    QIcon maxLevelOfInteractionIcon(const IDrug *drug, const int levelOfWarning, const int size = Core::ITheme::SmallIcon, const QString &engineUid = QString::null);
-
-    bool isDrugDrugInteractionsTested() const {return m_DDITested;}
-    bool isPatientDrugInteractionsTested() const {return m_PDITested;}
-
-    QStandardItemModel *toStandardModel() const;
-
-    void warn() const;
-
-protected:
-    DrugInteractionResult(const QVector<IDrugInteraction *> &interactions, QObject *parent = 0);
-    DrugInteractionResult(QObject *parent = 0);
-
-    void setInteractions(const QVector<IDrugInteraction *> &list) {m_Interactions = list;}
-    void addInteractions(const QVector<IDrugInteraction *> &list) {m_Interactions << list;}
-    void setDDITested(const bool test) {m_DDITested = test;}
-    void setPDITested(const bool test) {m_PDITested = test;}
-
-private:
-    QVector<IDrugInteraction *> m_Interactions;
-    bool m_DDITested, m_PDITested;
-    mutable QPointer<QStandardItemModel> m_StandardModel;
-};
 
 
 class DRUGSBASE_EXPORT InteractionManager : public QObject

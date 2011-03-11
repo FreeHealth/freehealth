@@ -52,7 +52,9 @@ SOURCES += $${PWD}/drugsbaseplugin.cpp \
     $${PWD}/drugdruginteractionengine.cpp \
     $${PWD}/drugbasecore.cpp \
     $${PWD}/protocolsbase.cpp \
-    $${PWD}/idruginteractionalert.cpp
+    $${PWD}/idruginteractionalert.cpp \
+    $${PWD}/druginteractionquery.cpp \
+    $${PWD}/druginteractionresult.cpp
 
 #    $${PWD}/interactionsbase.cpp \
 #    $${PWD}/drugsdatabaseaboutpage.cpp \
