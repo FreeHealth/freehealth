@@ -96,6 +96,7 @@ void AvailableMovementPage::finish() { delete m_Widget; }
 void AvailableMovementPage::checkSettingsValidity()
 {
     QHash<QString, QVariant> defaultvalues;
+    QStandardItemModel * model = availableMovementModelByLocale();
 //    defaultvalues.insert(DrugsDB::Constants::S_AVAILABLEDOSAGESBACKGROUNGCOLOR, DrugsDB::Constants::S_DEF_AVAILABLEDOSAGESBACKGROUNGCOLOR);
 
     foreach(const QString &k, defaultvalues.keys()) {
@@ -221,4 +222,64 @@ void AvailableMovementWidget::changeEvent(QEvent *e)
     default:
         break;
     }
+}
+
+QStandardItemModel * AvailableMovementPage::availableMovementModelByLocale(){
+    QStandardItemModel * model = new QStandardItemModel;
+    QLocale locale;
+    QString localCountry;
+    localCountry = QLocale::countryToString(locale.country());
+    localCountry.remove("\"");
+    qDebug() << __FILE__ << QString::number(__LINE__) << " locale Country =" << localCountry ;
+    QString sqlDirPath = settings()->path(Core::ISettings::BundleResourcesPath) + "/sql/account";
+    QDir dirFreeAccountSql(sqlDirPath);
+    QStringList filters ;
+    filters << ".csv";
+    QStringList listOfFiles;
+    listOfFiles = dirFreeAccountSql.entryList(filters);
+    QString strNamesOfFiles;
+    foreach(strNamesOfFiles,listOfFiles){
+        if (strNamesOfFiles.contains(localCountry))
+        {
+        	  qWarning() << __FILE__ << QString::number(__LINE__) << "No available movements for " << localCountry ;
+            }
+        else
+        {
+        	QFile file(sqlDirPath+"/"+strNamesOfFiles);
+        	if (!file.open(QIODevice::ReadOnly))
+        	{
+        		  qWarning() << __FILE__ << QString::number(__LINE__) << strNamesOfFiles+" cannot open" ;
+        	    }
+        	QTextStream stream(&file);
+        	while (!stream.atEnd())
+        	{
+        		int row = 0;
+        		QString line = stream.readLine();
+        		line.remove("\"");
+        		line.remove("'");
+        		QStringList listOfSeparators;
+        		listOfSeparators << "," << ";" << QString("\t");
+        		QString separator;
+        		QString separatorStr;
+        		foreach(separatorStr,listOfSeparators){
+        		    if (line.contains(separatorStr))
+        		    {
+        		    	  separator = separatorStr;
+        		        }
+        		    }
+        		if (!line.contains("AVAILMOV_ID"))
+        		{
+        			  //"AVAILMOV_ID","PARENT","TYPE","LABEL","CODE","COMMENT"
+        			  QStringList listOfItems;
+        			  listOfItems = line.split(separator);
+        			  for (int i = 0; i < AccountDB::Constants::AVAILMOV_MaxParam; i += 1)
+        			  {
+        			  	model->setData(model->index(row,i),listOfItems[i],Qt::EditRole);
+        			  }
+        			row++;  
+        		    }
+        	    }
+            }
+        }
+    return model;
 }

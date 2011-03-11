@@ -46,6 +46,10 @@
 #include <QPointer>
 #include <QString>
 #include <QDataWidgetMapper>
+#include <QStandardItemModel>
+#include <QDir>
+#include <QStringList>
+
 
 #include "ui_availablemovementpage.h"
 
@@ -115,6 +119,7 @@ public:
     void checkSettingsValidity();
     void applyChanges();
     void finish();
+    QStandardItemModel * availableMovementModelByLocale();
 
     QString helpPage() {return QString();}
 
