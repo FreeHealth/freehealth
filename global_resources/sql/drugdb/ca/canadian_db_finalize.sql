@@ -55,53 +55,26 @@
 --  *  ii) the compatible version of FreeDiams
 --  */
 
-
-
--- ********************************
--- Feed INFORMATIONS (info about the drug data source)
--- ********************************
-INSERT INTO "INFORMATIONS" (
-    "VERSION",
-    "NAME",
-    "IDENTIFIANT" ,
-    "COMPAT_VERSION",
-    "PROVIDER",
-    "WEBLINK",
-    "COMPLEMENTARY_WEBSITE",
-    "AUTHOR",
-    "LICENSE",
-    "LICENSE_TERMS",
-    "DATE",
-    "DRUG_UID_NAME",
-    "PACK_MAIN_CODE_NAME",
-    "ATC",
-    "INTERACTIONS",
-    "AUTHOR_COMMENTS",
-    "LANGUAGE_COUNTRY",
-    "DRUGS_NAME_CONSTRUCTOR")
-VALUES (
-    "0.5.2",
-    "en=Canadian Drug Product Database
-    fr=Base de données thérapeutique Canadienne
-    xx=Canadian Drug Product Database
-    ",
-    "CA_HCDPD",
-    "0.5.2",
-    "HC: Health Canada Drug Product Database",
-    "http://www.hc-sc.gc.ca/dhp-mps/prodpharma/databasdon/index-eng.php",
-    "http://code.google.com/p/freemedforms/wiki/Database_ca",
-    "Jim Busser, MD (CA) & Eric Maeker, MD (FR)",
-    "(c) Her Majesty the Queen in Right of Canada",
-    "Apply: http://publications.gc.ca/helpAndInfo/cc-dac/application-e.html on a no-charge, royalty-free, non-exclusive, annual renewable basis.",
-    CURRENT_DATE,
-    "DIN",
-    "UPC",
-    1,
-    1,
-    "While the download is technically open, the data is copyright. Please report any problem to the author.",
-    "en_CA",
-    "NAME (FORM, GLOBAL_STRENGTH)"
-);
+UPDATE SOURCES SET
+  LANG            = "en_CA",
+  WEB             ="http://www.hc-sc.gc.ca/dhp-mps/prodpharma/databasdon/index-eng.php",
+  COPYRIGHT       ="(c) Her Majesty the Queen in Right of Canada",
+  DATE            =CURRENT_DATE,
+  DRUGS_VERSION   ="0.6.0",
+  AUTHORS         ="Jim Busser, MD (CA) & Eric Maeker, MD (FR)",
+  AUTHOR_COMMENT  ="While the download is technically open, the data is copyright. Please report any problem to the author. Apply: http://publications.gc.ca/helpAndInfo/cc-dac/application-e.html on a no-charge, royalty-free, non-exclusive, annual renewable basis.",
+  VERSION         ="0.6.0",
+  PROVIDER        ="HC: Health Canada Drug Product Database",
+  WEBLINK         ="http://www.hc-sc.gc.ca/dhp-mps/prodpharma/databasdon/index-eng.php",
+  DRUG_UID_NAME   ="DIN",
+  ATC             =1,
+  INTERACTIONS    =1,
+  COMPLEMENTARY_WEBSITE  ="http://code.google.com/p/freemedforms/wiki/Database_ca",
+  PACK_MAIN_CODE_NAME    ="UPC",
+  DRUGS_NAME_CONSTRUCTOR ="NAME (FORM, GLOBAL_STRENGTH)",
+  FREEMEDFORMS_COMPTA_VERSION ="0.6.0",
+  WEBPORTAL_COMPTA_VERSION    ="0.1.0"
+WHERE DATABASE_UID="CA_HCDPD";
 
 -- ***********************************************
 -- Localize "Help and Infos" button content to CA
