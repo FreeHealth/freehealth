@@ -1,11 +1,39 @@
+/***************************************************************************
+ *  The FreeMedForms project is a set of free, open source medical         *
+ *  applications.                                                          *
+ *  (C) 2008-2011 by Eric MAEKER, MD (France) <eric.maeker@free.fr>        *
+ *  All rights reserved.                                                   *
+ *                                                                         *
+ *  This program is free software: you can redistribute it and/or modify   *
+ *  it under the terms of the GNU General Public License as published by   *
+ *  the Free Software Foundation, either version 3 of the License, or      *
+ *  (at your option) any later version.                                    *
+ *                                                                         *
+ *  This program is distributed in the hope that it will be useful,        *
+ *  but WITHOUT ANY WARRANTY; without even the implied warranty of         *
+ *  MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the          *
+ *  GNU General Public License for more details.                           *
+ *                                                                         *
+ *  You should have received a copy of the GNU General Public License      *
+ *  along with this program (COPYING.FREEMEDFORMS file).                   *
+ *  If not, see <http://www.gnu.org/licenses/>.                            *
+ ***************************************************************************/
+/***************************************************************************
+ *   Main Developper : Eric MAEKER, <eric.maeker@free.fr>                  *
+ *   Contributors :                                                        *
+ *       NAME <MAIL@ADRESS>                                                *
+ *       NAME <MAIL@ADRESS>                                                *
+ ***************************************************************************/
 #include "drugdruginteractionengine.h"
+#include "idruginteractionalert.h"
 #include "drugsbase.h"
 #include "idrug.h"
 #include "idruginteraction.h"
-#include "constants_databaseschema.h"
+#include "constants.h"
 
 #include <coreplugin/icore.h>
 #include <coreplugin/itheme.h>
+#include <coreplugin/isettings.h>
 
 #include <utils/log.h>
 #include <utils/global.h>
@@ -17,6 +45,7 @@
 
 static inline DrugsDB::Internal::DrugsBase *base() {return DrugsDB::Internal::DrugsBase::instance();}
 static inline Core::ITheme *theme()  { return Core::ICore::instance()->theme(); }
+static inline Core::ISettings *settings() {return Core::ICore::instance()->settings();}
 
 using namespace DrugsDB;
 using namespace Internal;
@@ -304,6 +333,98 @@ private:
     QList<IDrug *> m_InteractingDrugs;
 };
 
+class Alert : public IDrugInteractionAlert
+{
+public:
+    Alert(DrugInteractionResult *result) :
+            IDrugInteractionAlert(result), m_Overridden(false), m_Result(result)
+    {
+    }
+
+    ~Alert() {}
+
+    QString engineUid() const {return Constants::DDI_ENGINE_UID;}
+
+    // static alert
+    QIcon icon(const IDrug *drug, const ProcessTime processTime, const int iconSize, const QString &engineUid = QString::null) const
+    {
+        Q_UNUSED(processTime);
+        if (!m_Result->testedDrugs().contains((IDrug*)drug))
+            return QIcon();
+        if (!engineUid.isEmpty() && engineUid!=Constants::DDI_ENGINE_UID) {
+            return QIcon();
+        }
+        int levelOfWarning = settings()->value(Constants::S_LEVELOFWARNING_STATICALERT).toInt();
+        DrugDrugInteractionEngine::TypesOfIAM level = getMaximumTypeOfIAM(m_Result->interactions(), drug);
+        Core::ITheme *th = theme();
+        Core::ITheme::IconSize size = Core::ITheme::IconSize(iconSize);
+        // Minimal alerts
+        if (level & DrugDrugInteractionEngine::ContreIndication && (levelOfWarning <= Constants::MinimumLevelOfWarning))
+            return th->icon(Constants::INTERACTION_ICONCRITICAL, size);
+        else if (level & DrugDrugInteractionEngine::Deconseille && (levelOfWarning <= Constants::MinimumLevelOfWarning))
+            return th->icon(Constants::INTERACTION_ICONDECONSEILLEE, size);
+        // Moderate alerts
+        else if ((level & DrugDrugInteractionEngine::APrendreEnCompte) && (levelOfWarning <= Constants::ModerateLevelOfWarning))
+            return th->icon(Constants::INTERACTION_ICONTAKEINTOACCOUNT, size);
+        else if ((level & DrugDrugInteractionEngine::P450) && (levelOfWarning <= Constants::ModerateLevelOfWarning))
+            return th->icon(Constants::INTERACTION_ICONP450, size);
+        else if ((level & DrugDrugInteractionEngine::GPG) && (levelOfWarning <= Constants::ModerateLevelOfWarning))
+            return th->icon(Constants::INTERACTION_ICONGPG, size);
+        else if ((level & DrugDrugInteractionEngine::Precaution) && (levelOfWarning <= Constants::ModerateLevelOfWarning))
+            return th->icon(Constants::INTERACTION_ICONPRECAUTION, size);
+        // Maximum alerts
+        else if ((level & DrugDrugInteractionEngine::Information) && (levelOfWarning == Constants::MaximumLevelOfWarning))
+            return th->icon(Constants::INTERACTION_ICONINFORMATION, size);
+        else if ((level & DrugDrugInteractionEngine::InnDuplication) && (levelOfWarning == Constants::MaximumLevelOfWarning))
+            return th->icon(Constants::INTERACTION_ICONINFORMATION, size);
+        else if (level & DrugDrugInteractionEngine::NoIAM)
+            return th->icon(Constants::INTERACTION_ICONOK, size);
+        else
+            return th->icon(Constants::INTERACTION_ICONUNKONW, size);
+        return QIcon();
+    }
+
+    DrugDrugInteractionEngine::TypesOfIAM getMaximumTypeOfIAM(const QVector<IDrugInteraction *> &interactions, const IDrug *drug) const
+    {
+        DrugDrugInteractionEngine::TypesOfIAM r = DrugDrugInteractionEngine::NoIAM;
+        for(int i=0; i < interactions.count(); ++i) {
+            IDrugInteraction *ddi = interactions.at(i);
+            if (ddi->engine()->uid()==Constants::DDI_ENGINE_UID) {
+                if (ddi->drugs().contains((IDrug*)drug)) {
+                    r |= DrugDrugInteractionEngine::TypesOfIAM(ddi->sortIndex());
+                }
+            }
+        }
+        return r;
+    }
+
+    QString message(const IDrug *drug, const int messageType, const ProcessTime processTime, const QString &engineUid = QString::null) const
+    {
+        if (!m_Result->testedDrugs().contains((IDrug*)drug))
+            return QString();
+        return QString();
+    }
+
+    QString message(const int messageType, const ProcessTime processTime, const QString &engineUid = QString::null) const
+    {
+        if (!m_Result->testedDrugs().isEmpty())
+            return QString();
+        return QString();
+    }
+
+    // dynamic alert
+    void executeDynamicAlert(const ProcessTime processTime)
+    {}
+
+    void setOverridden(bool overridden) {m_Overridden=overridden;}
+
+    bool wasOverridden() const {return m_Overridden;}
+
+private:
+    bool m_Overridden;
+    DrugInteractionResult *m_Result;
+};
+
 }
 
 
@@ -552,47 +673,9 @@ QVector<IDrugInteraction *> DrugDrugInteractionEngine::getAllInteractionsFound()
     return toReturn;
 }
 
-QIcon DrugDrugInteractionEngine::maximumInteractingLevelIcon(const QVector<IDrugInteraction *> &interactions, const IDrug *drug, const int levelOfWarning, const int iconsize)
+QVector<IDrugInteractionAlert *> DrugDrugInteractionEngine::getAllAlerts(DrugInteractionResult *addToResult)
 {
-    TypesOfIAM level = getMaximumTypeOfIAM(interactions, drug);
-    Core::ITheme *th = theme();
-    Core::ITheme::IconSize size = Core::ITheme::IconSize(iconsize);
-    // Minimal alerts
-    if (level & ContreIndication && (levelOfWarning <= Constants::MinimumLevelOfWarning))
-        return th->icon(Constants::INTERACTION_ICONCRITICAL, size);
-    else if (level & Deconseille && (levelOfWarning <= Constants::MinimumLevelOfWarning))
-        return th->icon(Constants::INTERACTION_ICONDECONSEILLEE, size);
-    // Moderate alerts
-    else if ((level & APrendreEnCompte) && (levelOfWarning <= Constants::ModerateLevelOfWarning))
-        return th->icon(Constants::INTERACTION_ICONTAKEINTOACCOUNT, size);
-    else if ((level & P450) && (levelOfWarning <= Constants::ModerateLevelOfWarning))
-        return th->icon(Constants::INTERACTION_ICONP450, size);
-    else if ((level & GPG) && (levelOfWarning <= Constants::ModerateLevelOfWarning))
-        return th->icon(Constants::INTERACTION_ICONGPG, size);
-    else if ((level & Precaution) && (levelOfWarning <= Constants::ModerateLevelOfWarning))
-        return th->icon(Constants::INTERACTION_ICONPRECAUTION, size);
-    // Maximum alerts
-    else if ((level & Information) && (levelOfWarning == Constants::MaximumLevelOfWarning))
-        return th->icon(Constants::INTERACTION_ICONINFORMATION, size);
-    else if ((level & InnDuplication) && (levelOfWarning == Constants::MaximumLevelOfWarning))
-        return th->icon(Constants::INTERACTION_ICONINFORMATION, size);
-    else if (level & NoIAM)
-        return th->icon(Constants::INTERACTION_ICONOK, size);
-    else
-        return th->icon(Constants::INTERACTION_ICONUNKONW, size);
-    return QIcon();
-}
-
-DrugDrugInteractionEngine::TypesOfIAM DrugDrugInteractionEngine::getMaximumTypeOfIAM(const QVector<IDrugInteraction *> &interactions, const IDrug *drug) const
-{
-    TypesOfIAM r = DrugDrugInteractionEngine::NoIAM;
-    for(int i=0; i < interactions.count(); ++i) {
-        IDrugInteraction *ddi = interactions.at(i);
-        if (ddi->engine()==this) {
-            if (ddi->drugs().contains((IDrug*)drug)) {
-                r |= DrugDrugInteractionEngine::TypesOfIAM(ddi->sortIndex());
-            }
-        }
-    }
-    return r;
+    QVector<IDrugInteractionAlert *> alerts;
+    alerts << new Alert(addToResult);
+    return alerts;
 }

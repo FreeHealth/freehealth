@@ -180,12 +180,12 @@ void DrugsCentralWidget::onSelectorDrugSelected(const QVariant &drugId)
     m_CurrentDrugModel->addDrug(drugId);
 
     // Test for interaction and alert user as setted in settings
-    if (settings()->value(Constants::S_DYNAMICALERTS, true).toBool()) {
+    if (settings()->value(DrugsDB::Constants::S_USEDYNAMICALERTS, true).toBool()) {
         // Check the desired level of warning
         /** \todo code dynamic alerts */
 //        DrugsDB::Constants::Interaction::TypesOfIAM flag = DrugsDB::Constants::Interaction::TypesOfIAM(m_CurrentDrugModel->drugData(drugUid, DrugsDB::Constants::Drug::MaximumLevelOfInteraction).toInt());
 //        if (flag != DrugsDB::Constants::Interaction::noIAM) {
-//            DrugsDB::Constants::Interaction::TypesOfIAM minLevel = DrugsDB::Constants::Interaction::TypesOfIAM(settings()->value(Constants::S_DYNAMICALERTS_LEVEL, DrugsDB::Constants::Interaction::Deconseille).toInt());
+//            DrugsDB::Constants::Interaction::TypesOfIAM minLevel = DrugsDB::Constants::Interaction::TypesOfIAM(settings()->value(Constants::S_LEVELOFWARNING_DYNAMICALERT, DrugsDB::Constants::Interaction::Deconseille).toInt());
 //            if (flag >= minLevel) {
 ////                QPixmap icon = m_CurrentDrugModel->drugData(drugUid, DrugsDB::Constants::Interaction::MediumPixmap).value<QPixmap>();
 ////                icon = icon.scaled(32,32, Qt::KeepAspectRatio, Qt::SmoothTransformation);

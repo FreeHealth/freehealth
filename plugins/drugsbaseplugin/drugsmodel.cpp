@@ -167,8 +167,8 @@ public:
             size = Core::ITheme::MediumIcon;
         if (drug->prescriptionValue(Constants::Prescription::IsTextualOnly).toBool()) {
             return theme()->icon(Core::Constants::ICONPENCIL, size);
-        } else if (m_InteractionResult->drugHaveInteraction(drug)) {
-            return m_InteractionResult->maxLevelOfInteractionIcon(drug, m_levelOfWarning, size);
+        } else if (m_InteractionResult->drugHaveInteraction(drug, Constants::DDI_ENGINE_UID)) {
+            return m_InteractionResult->icon(drug, size, Constants::DDI_ENGINE_UID);
         } else if (drug->data(IDrug::AllInnsKnown).toBool()) {
             return theme()->icon(Core::Constants::ICONOK, size);
         } else {
@@ -282,7 +282,7 @@ public:
         case Interaction::Id :     return QVariant();
         case Interaction::Icon :   return getDrugIcon(drug);
         case Interaction::Pixmap : return getDrugIcon(drug).pixmap(16,16);
-        case Interaction::MediumPixmap : return m_InteractionResult->maxLevelOfInteractionIcon(drug, m_levelOfWarning, Core::ITheme::MediumIcon).pixmap(64,64);
+        case Interaction::MediumPixmap : return m_InteractionResult->icon(drug, Core::ITheme::MediumIcon, Constants::DDI_ENGINE_UID).pixmap(64,64);
         case Interaction::ToolTip :
             {
                 QString display;
@@ -591,7 +591,7 @@ int DrugsModel::addDrug(IDrug *drug, bool automaticInteractionChecking)
     d->m_InteractionQuery->addDrug(drug);
     // check drugs interactions ?
     if (automaticInteractionChecking) {
-        d->m_levelOfWarning = settings()->value(Constants::S_LEVELOFWARNING).toInt();
+        d->m_levelOfWarning = settings()->value(Constants::S_LEVELOFWARNING_STATICALERT).toInt();
     }
     checkInteractions();
     d->m_IsDirty = true;
@@ -634,7 +634,7 @@ void DrugsModel::clearDrugsList()
     d->m_TestingDrugsList.clear();
     d->m_InteractionQuery->clearDrugsList();
     d->m_InteractionResult->clear();
-    d->m_levelOfWarning = settings()->value(Constants::S_LEVELOFWARNING).toInt();
+    d->m_levelOfWarning = settings()->value(Constants::S_LEVELOFWARNING_STATICALERT).toInt();
     reset();
     d->m_IsDirty = true;
     Q_EMIT numberOfRowsChanged();
@@ -649,7 +649,7 @@ void DrugsModel::setDrugsList(const QList<IDrug *> &list)
     clearDrugsList();
     d->m_DrugsList = list;
     d->m_InteractionQuery->setDrugsList(list.toVector());
-    d->m_levelOfWarning = settings()->value(Constants::S_LEVELOFWARNING).toInt();
+    d->m_levelOfWarning = settings()->value(Constants::S_LEVELOFWARNING_STATICALERT).toInt();
     checkInteractions();
     d->m_IsDirty = true;
     Q_EMIT numberOfRowsChanged();

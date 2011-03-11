@@ -1,6 +1,6 @@
-#include "idruginteractionalert.h"
+//#include "idruginteractionalert.h"
 
-IDrugInteractionAlert::IDrugInteractionAlert(QObject *parent) :
-    QObject(parent)
-{
-}
+//IDrugInteractionAlert::IDrugInteractionAlert(QObject *parent) :
+//    QObject(parent)
+//{
+//}

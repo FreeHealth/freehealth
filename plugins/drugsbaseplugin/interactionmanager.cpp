@@ -145,9 +145,10 @@ DrugInteractionResult *InteractionManager::checkInteractions(const DrugInteracti
 {
     QTime t;
     t.start();
-
     int nbInteractions = 0;
     DrugInteractionResult *result = new DrugInteractionResult;
+    result->setTestedDrugs(query.drugsList());
+
     for(int i = 0; i < d->m_Engines.count(); ++i) {
         IDrugEngine *engine = d->m_Engines.at(i);
 
@@ -164,6 +165,7 @@ DrugInteractionResult *InteractionManager::checkInteractions(const DrugInteracti
             result->setPDITested(true);
 
         result->addInteractions(engine->getAllInteractionsFound());
+        result->setInteractionAlert(engine->getAllAlerts(result));
 
         if (d->m_LogChrono)
             Utils::Log::logTimeElapsed(t, engine->name(), QString("calculateInteractions() : Engine %1").arg(engine->name()));
@@ -171,55 +173,6 @@ DrugInteractionResult *InteractionManager::checkInteractions(const DrugInteracti
 
     return result;
 }
-
-///** \todo move this */
-//QIcon InteractionManager::interactionIcon(const int level, const int levelOfWarning, bool medium)  // static
-//{
-//    using namespace DrugsDB::Constants;
-//    Core::ITheme *th = Core::ICore::instance()->theme();
-//    Core::ITheme::IconSize size = Core::ITheme::SmallIcon;
-//    if (medium)
-//        size = Core::ITheme::MediumIcon;
-//    if (level & Interaction::ContreIndication)
-//        return th->icon(INTERACTION_ICONCRITICAL, size);
-//    else if (level & Interaction::Deconseille)
-//        return th->icon(INTERACTION_ICONDECONSEILLEE, size);
-//    else if ((level & Interaction::APrendreEnCompte) && (levelOfWarning <= 1))
-//        return th->icon(INTERACTION_ICONTAKEINTOACCOUNT, size);
-//    else if ((level & Interaction::P450) && (levelOfWarning <= 1))
-//        return th->icon(INTERACTION_ICONP450, size);
-//    else if ((level & Interaction::GPG) && (levelOfWarning <= 1))
-//        return th->icon(INTERACTION_ICONGPG, size);
-//    else if ((level & Interaction::Precaution) && (levelOfWarning <= 1))
-//        return th->icon(INTERACTION_ICONPRECAUTION, size);
-//    else if ((level & Interaction::Information) && (levelOfWarning == 0))
-//        return th->icon(INTERACTION_ICONINFORMATION, size);
-//    else if ((level & Interaction::InnDuplication) && (levelOfWarning == 0))
-//        return th->icon(INTERACTION_ICONINFORMATION, size);
-//    else if (level & Interaction::noIAM)
-//        return th->icon(INTERACTION_ICONOK, size);
-//    else
-//        return th->icon(INTERACTION_ICONUNKONW, size);
-//}
-
-//QIcon InteractionManager::iamIcon(const IDrug *drug, const int &levelOfWarning, bool medium) const
-//{
-//    /** \todo code here, move this */
-////    using namespace DrugsDB::Constants;
-////    Core::ITheme::IconSize size = Core::ITheme::SmallIcon;
-////    if (medium)
-////        size = Core::ITheme::MediumIcon;
-////    Core::ITheme *th = Core::ICore::instance()->theme();
-////    if (drugHaveInteraction(drug)) {
-////        Interaction::TypesOfIAM r = getMaximumTypeOfIAM(drug);
-////        return interactionIcon(r, levelOfWarning);
-////    } else if (levelOfWarning <= 1) {
-////        if (!Internal::DrugsBase::instance()->drugsINNIsKnown(drug))
-////            return th->icon(INTERACTION_ICONUNKONW,size);
-////        else return th->icon(INTERACTION_ICONOK,size);
-////    }
-//    return QIcon();
-//}
 
 QString InteractionManager::listToHtml(const QVector<IDrugInteraction *> &list, bool fullInfos) // static
 {

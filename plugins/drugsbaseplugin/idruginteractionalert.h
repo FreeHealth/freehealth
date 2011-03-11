@@ -1,18 +1,45 @@
+/***************************************************************************
+ *  The FreeMedForms project is a set of free, open source medical         *
+ *  applications.                                                          *
+ *  (C) 2008-2011 by Eric MAEKER, MD (France) <eric.maeker@free.fr>        *
+ *  All rights reserved.                                                   *
+ *                                                                         *
+ *  This program is free software: you can redistribute it and/or modify   *
+ *  it under the terms of the GNU General Public License as published by   *
+ *  the Free Software Foundation, either version 3 of the License, or      *
+ *  (at your option) any later version.                                    *
+ *                                                                         *
+ *  This program is distributed in the hope that it will be useful,        *
+ *  but WITHOUT ANY WARRANTY; without even the implied warranty of         *
+ *  MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the          *
+ *  GNU General Public License for more details.                           *
+ *                                                                         *
+ *  You should have received a copy of the GNU General Public License      *
+ *  along with this program (COPYING.FREEMEDFORMS file).                   *
+ *  If not, see <http://www.gnu.org/licenses/>.                            *
+ ***************************************************************************/
+/***************************************************************************
+ *   Main Developper : Eric MAEKER, <eric.maeker@free.fr>                  *
+ *   Contributors :                                                        *
+ *       NAME <MAIL@ADRESS>                                                *
+ *       NAME <MAIL@ADRESS>                                                *
+ ***************************************************************************/
 #ifndef IDRUGINTERACTIONALERT_H
 #define IDRUGINTERACTIONALERT_H
 
-#include <QObject>
+#include <drugsbaseplugin/druginteractionresult.h>
+
+//#include <QObject>
 class QIcon;
 
 
 namespace DrugsDB {
-
 class DrugInteractionResult;
 class IDrug;
 
-class IDrugInteractionAlert : public QObject
+class IDrugInteractionAlert //: public QObject
 {
-    Q_OBJECT
+//    Q_OBJECT
 public:
     enum ProcessTime {
         BeforePrescription = 0,
@@ -21,19 +48,20 @@ public:
         BeforePrinting
     };
 
-    explicit IDrugInteractionAlert(QObject *parent = 0);
-    virtual ~IDrugInteractionAlert();
+    IDrugInteractionAlert(DrugInteractionResult *parent = 0) {}
+    virtual ~IDrugInteractionAlert() {}
 
-    virtual void connectTo(DrugInteractionResult *result) = 0;
+    virtual QString engineUid() const = 0;
 
-    virtual QIcon icon(IDrug *drug) = 0;
-    virtual QString alertMessage(IDrug *drug) = 0;
+    // static alert
+    virtual QIcon icon(const IDrug *drug, const ProcessTime processTime, const int iconSize, const QString &engineUid = QString::null) const = 0;
+    virtual QString message(const IDrug *drug, const int messageType, const ProcessTime processTime, const QString &engineUid = QString::null) const = 0;
+    virtual QString message(const int messageType, const ProcessTime processTime, const QString &engineUid = QString::null) const = 0;
 
-public Q_SLOTS:
-    virtual void process(const ProcessTime processTime) = 0;
-
-Q_SIGNALS:
-    void processDone();
+    // dynamic alert
+    virtual void executeDynamicAlert(const ProcessTime processTime) = 0;
+    virtual void setOverridden(bool overridden) = 0;
+    virtual bool wasOverridden() const = 0;
 };
 
 }  // End namespace DrugsDB

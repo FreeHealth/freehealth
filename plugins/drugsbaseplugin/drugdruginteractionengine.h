@@ -7,7 +7,7 @@
  * \file drugdruginteractionengine.h
  * \author Eric MAEKER <eric.maeker@free.fr>
  * \version 0.6.0
- * \date 23 Fev 2011
+ * \date 12 Mar 2011
 */
 
 namespace DrugsDB {
@@ -47,21 +47,19 @@ public:
 
     int calculateInteractions(const QVector<IDrug *> &drugs);
     QVector<IDrugInteraction *> getAllInteractionsFound();
-
-    QIcon maximumInteractingLevelIcon(const QVector<IDrugInteraction *> &interactions, const IDrug *drug, const int levelOfWarning, const int size);
+    QVector<IDrugInteractionAlert *> getAllAlerts(DrugInteractionResult *addToResult);
 
     // Private hidden part
     bool checkDrugInteraction(IDrug *drug, const QVector<IDrug *> &drugsList);
     QVector<IDrugInteraction *> getInteractionsFromDatabase(const int & _id1, const int & _id2);
-    TypesOfIAM getMaximumTypeOfIAM(const QVector<IDrugInteraction *> &interactions, const IDrug *drug) const;
 
 private:
     DrugDrugInteractionEnginePrivate *d;
 };
 
-
 }  // End namespace Internal
 }  // End namespace DrugsDB
+
 Q_DECLARE_OPERATORS_FOR_FLAGS(DrugsDB::Internal::DrugDrugInteractionEngine::TypesOfIAM)
 
 

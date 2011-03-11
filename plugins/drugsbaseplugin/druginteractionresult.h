@@ -40,12 +40,13 @@
  * \file druginteractionresult.h
  * \author Eric MAEKER <eric.maeker@free.fr>
  * \version 0.6.0
- * \date 11 Mar 2011
+ * \date 12 Mar 2011
 */
 
 namespace DrugsDB {
 class IDrug;
 class IDrugInteraction;
+class IDrugInteractionAlert;
 class InteractionManager;
 
 class DRUGSBASE_EXPORT DrugInteractionResult : public QObject
@@ -54,6 +55,13 @@ class DRUGSBASE_EXPORT DrugInteractionResult : public QObject
     friend class DrugsDB::InteractionManager;
 
 public:
+    enum MessageType {
+        AlertMsg_DetailledAlert = 0,
+        AlertMsg_InformationAlert,
+        AlertMsg_ShortToolTip,
+        AlertMsg_DetailledToolTip
+    };
+
     ~DrugInteractionResult();
 
     void clear();
@@ -62,10 +70,14 @@ public:
     bool drugHaveInteraction(const IDrug *d, const QString &engineUid = QString::null) const;
     QVector<IDrugInteraction *> getInteractions(const IDrug *drug, const QString &engineUid = QString::null) const;
 
-    QIcon maxLevelOfInteractionIcon(const IDrug *drug, const int levelOfWarning, const int size = Core::ITheme::SmallIcon, const QString &engineUid = QString::null);
+    // Alerts
+    QIcon icon(const IDrug *drug, const int size = Core::ITheme::SmallIcon, const QString &engineUid = QString::null);
+//    IDrugInteractionAlert *alert() const; ??
 
     bool isDrugDrugInteractionsTested() const {return m_DDITested;}
     bool isPatientDrugInteractionsTested() const {return m_PDITested;}
+
+    QVector<IDrug *> testedDrugs() {return m_TestedDrugs;}
 
     QStandardItemModel *toStandardModel() const;
 
@@ -80,10 +92,16 @@ protected:
     void setDDITested(const bool test) {m_DDITested = test;}
     void setPDITested(const bool test) {m_PDITested = test;}
 
+    void setTestedDrugs(const QVector<IDrug *> &drugs) {m_TestedDrugs = drugs;}
+    void setInteractionAlert(const QVector<IDrugInteractionAlert *> &alerts);
+    void addInteractionAlert(IDrugInteractionAlert *alert);
+
 private:
     QVector<IDrugInteraction *> m_Interactions;
+    QVector<IDrug *> m_TestedDrugs;
     bool m_DDITested, m_PDITested;
     mutable QPointer<QStandardItemModel> m_StandardModel;
+    QVector<IDrugInteractionAlert *> m_Alerts;
 };
 
 }  // End namespace DrugsDB

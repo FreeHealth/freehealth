@@ -105,12 +105,12 @@ void DrugsViewOptionsPage::checkSettingsValidity()
     defaultvalues.insert(S_DRUGHISTORY, QVariant());
     defaultvalues.insert(S_DRUGFONT,QFont());
     defaultvalues.insert(S_PRESCRIPTIONFONT,QFont());
-    defaultvalues.insert(DrugsDB::Constants::S_LEVELOFWARNING, DrugsDB::Constants::MaximumLevelOfWarning);
+    defaultvalues.insert(DrugsDB::Constants::S_LEVELOFWARNING_STATICALERT, DrugsDB::Constants::MaximumLevelOfWarning);
     defaultvalues.insert(DrugsDB::Constants::S_SHOWICONSINPRESCRIPTION,true);
     defaultvalues.insert(DrugsDB::Constants::S_MARKDRUGSWITHAVAILABLEDOSAGES,true);
     defaultvalues.insert(DrugsDB::Constants::S_AVAILABLEDOSAGESBACKGROUNGCOLOR, DrugsDB::Constants::S_DEF_AVAILABLEDOSAGESBACKGROUNGCOLOR);
-    defaultvalues.insert(S_DYNAMICALERTS, true);
-    defaultvalues.insert(S_DYNAMICALERTS_LEVEL, DrugsDB::Constants::MinimumLevelOfWarning);
+    defaultvalues.insert(DrugsDB::Constants::S_USEDYNAMICALERTS, true);
+    defaultvalues.insert(DrugsDB::Constants::S_LEVELOFWARNING_DYNAMICALERT, DrugsDB::Constants::MinimumLevelOfWarning);
     defaultvalues.insert(S_PATIENTNAMESORDER, 0);
 
     foreach(const QString &k, defaultvalues.keys()) {
@@ -437,15 +437,15 @@ void DrugsViewWidget::setDatasToUi()
 
     viewFontSizeSpin->setValue(s->value(S_VIEWFONTSIZE, 12).toInt());
     historicSizeSpin->setValue(s->value(S_HISTORYSIZE).toInt());
-    levelOfWarningCombo->setCurrentIndex(s->value(DrugsDB::Constants::S_LEVELOFWARNING).toInt());
+    levelOfWarningCombo->setCurrentIndex(s->value(DrugsDB::Constants::S_LEVELOFWARNING_STATICALERT).toInt());
 
     viewFontCombo->setCurrentFont(s->value(S_VIEWFONT).toString());
     viewFontSizeSpin->setValue(s->value(S_VIEWFONTSIZE).toInt());
     patientNameOrder->setCurrentIndex(s->value(S_PATIENTNAMESORDER, 0).toInt());
     showIconsCheck->setChecked(s->value(DrugsDB::Constants::S_SHOWICONSINPRESCRIPTION).toBool());
 
-    dynamicAlerts->setChecked(s->value(S_DYNAMICALERTS).toBool());
-    int level = s->value(S_DYNAMICALERTS_LEVEL).toInt();
+    dynamicAlerts->setChecked(s->value(DrugsDB::Constants::S_USEDYNAMICALERTS).toBool());
+    int level = s->value(DrugsDB::Constants::S_LEVELOFWARNING_DYNAMICALERT).toInt();
     switch (level)
     {
     case DrugsDB::Constants::MinimumLevelOfWarning: dynamicAlertsLevel->setCurrentIndex(2); break;
@@ -474,7 +474,7 @@ void DrugsViewWidget::saveToSettings(Core::ISettings *sets)
     // manage history size
     s->setValue(S_HISTORYSIZE, historicSizeSpin->value());
     s->setValue(S_DRUGHISTORY, QVariant());
-    s->setValue(DrugsDB::Constants::S_LEVELOFWARNING , levelOfWarningCombo->currentIndex());
+    s->setValue(DrugsDB::Constants::S_LEVELOFWARNING_STATICALERT , levelOfWarningCombo->currentIndex());
 
     s->setValue(S_VIEWFONT , viewFontCombo->currentFont());
     s->setValue(S_VIEWFONTSIZE, viewFontSizeSpin->value());
@@ -486,12 +486,12 @@ void DrugsViewWidget::saveToSettings(Core::ISettings *sets)
     s->setValue(S_PATIENTNAMESORDER, patientNameOrder->currentIndex());
     s->setValue(DrugsDB::Constants::S_SHOWICONSINPRESCRIPTION, showIconsCheck->isChecked());
 
-    s->setValue(S_DYNAMICALERTS, dynamicAlerts->isChecked());
+    s->setValue(DrugsDB::Constants::S_USEDYNAMICALERTS, dynamicAlerts->isChecked());
     switch (dynamicAlertsLevel->currentIndex())
     {
-    case 2: s->setValue(S_DYNAMICALERTS_LEVEL, DrugsDB::Constants::MinimumLevelOfWarning); break;
-    case 1: s->setValue(S_DYNAMICALERTS_LEVEL, DrugsDB::Constants::ModerateLevelOfWarning); break;
-    case 0: s->setValue(S_DYNAMICALERTS_LEVEL, DrugsDB::Constants::MaximumLevelOfWarning); break;
+    case 2: s->setValue(DrugsDB::Constants::S_LEVELOFWARNING_DYNAMICALERT, DrugsDB::Constants::MinimumLevelOfWarning); break;
+    case 1: s->setValue(DrugsDB::Constants::S_LEVELOFWARNING_DYNAMICALERT, DrugsDB::Constants::ModerateLevelOfWarning); break;
+    case 0: s->setValue(DrugsDB::Constants::S_LEVELOFWARNING_DYNAMICALERT, DrugsDB::Constants::MaximumLevelOfWarning); break;
     }
 }
 
@@ -504,10 +504,10 @@ void DrugsViewWidget::writeDefaultSettings(Core::ISettings *s)
     s->setValue(S_VIEWFONTSIZE, QFont().pointSize());
     s->setValue(S_HISTORYSIZE, 20);
     s->setValue(S_DRUGHISTORY, QVariant());
-    s->setValue(DrugsDB::Constants::S_LEVELOFWARNING , DrugsDB::Constants::MaximumLevelOfWarning);
+    s->setValue(DrugsDB::Constants::S_LEVELOFWARNING_STATICALERT , DrugsDB::Constants::MaximumLevelOfWarning);
     s->setValue(DrugsDB::Constants::S_SHOWICONSINPRESCRIPTION , true);
-    s->setValue(S_DYNAMICALERTS, true);
-    s->setValue(S_DYNAMICALERTS_LEVEL, DrugsDB::Constants::MinimumLevelOfWarning);
+    s->setValue(DrugsDB::Constants::S_USEDYNAMICALERTS, true);
+    s->setValue(DrugsDB::Constants::S_LEVELOFWARNING_DYNAMICALERT, DrugsDB::Constants::MinimumLevelOfWarning);
     s->setValue(S_PATIENTNAMESORDER, 0);
 
     s->setValue(S_DRUGFONT , QFont().toString());

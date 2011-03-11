@@ -718,7 +718,7 @@ QString DrugsIO::prescriptionToXml(DrugsDB::DrugsModel *m, const QString &xmlExt
     // Process each prescribed drugs
     for(i=0; i < m->rowCount() ; ++i) {
         /** \todo code here UIDs */
-        forXml.insert(XML_PRESCRIPTION_UID, m->index(i, Drug::UIDs).data().toStringList().join(";"));
+        forXml.insert(XML_PRESCRIPTION_UID, m->index(i, Drug::UIDs).data().toStringList().join(";").remove(";;"));
         if (m->index(i, Prescription::OnlyForTest).data().toBool()) {
             forXml.insert(instance()->d->xmlTagForPrescriptionRow(Prescription::OnlyForTest), "true");
             forXml.insert(instance()->d->xmlTagForPrescriptionRow(Drug::Denomination), m->index(i, Drug::Denomination).data().toString());

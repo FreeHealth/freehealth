@@ -36,11 +36,13 @@
  * \file idrugengine.h
  * \author Eric MAEKER <eric.maeker@free.fr>
  * \version 0.6.0
- * \date 09 Mar 2011
+ * \date 12 Mar 2011
 */
 
 namespace DrugsDB {
 class IDrugInteraction;
+class IDrugInteractionAlert;
+class DrugInteractionResult;
 class IDrug;
 
 class IDrugEngine : public QObject
@@ -66,9 +68,7 @@ public:
 
     virtual int calculateInteractions(const QVector<IDrug *> &drugs) = 0;
     virtual QVector<IDrugInteraction *> getAllInteractionsFound() = 0;
-
-    /** For size refer to Core::ITheme::IconSize. For \e levelOfWarning refer to DrugsDb::Constants::LevelOfInteractionWarnings */
-    virtual QIcon maximumInteractingLevelIcon(const QVector<IDrugInteraction *> &interactions, const IDrug *drug, const int levelOfWarning, const int size) = 0;
+    virtual QVector<IDrugInteractionAlert *> getAllAlerts(DrugInteractionResult *addToResult) = 0;
 
 private:
     bool m_IsActive;

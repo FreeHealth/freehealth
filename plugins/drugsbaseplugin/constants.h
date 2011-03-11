@@ -50,7 +50,11 @@ namespace Constants {
     const char * const S_USERRECORDEDFORMS       = "DrugsWidget/userRecordedForms";
     const char * const S_SHOWICONSINPRESCRIPTION = "DrugsWidget/view/ShowIconsInPrescription";      /*!< \brief Key for settings. */
     const char * const S_HIDELABORATORY          = "DrugsWidget/print/drug/hideLaboratory";    /*!< \brief Key for settings. */
-    const char * const S_LEVELOFWARNING          = "DrugsWidget/levelOfWarning";               /*!< \brief Key for settings. */
+
+    const char * const S_LEVELOFWARNING_STATICALERT = "DrugsWidget/levelOfWarning";               /*!< \brief Key for settings. */
+    const char * const S_USEDYNAMICALERTS           = "DrugsWidget/dynamicAlerts";
+    const char * const S_LEVELOFWARNING_DYNAMICALERT= "DrugsWidget/dynamicAlertsMinimalLevel";
+
 
     const char * const  S_USERHEADER             = "DrugsWidget/user/Header";                  /*!< \brief Key for settings. */
     const char * const  S_USERFOOTER             = "DrugsWidget/user/Footer";                  /*!< \brief Key for settings. */

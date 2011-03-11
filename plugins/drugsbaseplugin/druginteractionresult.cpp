@@ -32,6 +32,7 @@
 */
 
 #include "druginteractionresult.h"
+#include "idruginteractionalert.h"
 #include "idruginteraction.h"
 #include "idrugengine.h"
 #include "idrug.h"
@@ -55,6 +56,8 @@ DrugInteractionResult::~DrugInteractionResult()
 {
     qDeleteAll(m_Interactions);
     m_Interactions.clear();
+    qDeleteAll(m_Alerts);
+    m_Alerts.clear();
     if (m_StandardModel)
         delete m_StandardModel;
 }
@@ -104,14 +107,15 @@ QVector<IDrugInteraction *> DrugInteractionResult::getInteractions(const IDrug *
     return toReturn;
 }
 
-QIcon DrugInteractionResult::maxLevelOfInteractionIcon(const IDrug *drug, const int levelOfWarning, const int size, const QString &engineUid)
+QIcon DrugInteractionResult::icon(const IDrug *drug, const int size, const QString &engineUid)
 {
-    QVector<IDrugInteraction *> dis = getInteractions(drug, engineUid);
-    if (dis.isEmpty()) {
-        return QIcon();
+    for(int i=0; i < m_Alerts.count(); ++i) {
+        /** \todo manage processtime of alerts */
+        QIcon icon = m_Alerts.at(i)->icon(drug, IDrugInteractionAlert::BeforePrescription, size, engineUid);
+        if (!icon.isNull())
+            return icon;
     }
-    IDrugEngine *engine = dis.at(0)->engine();
-    return engine->maximumInteractingLevelIcon(dis, drug, levelOfWarning, size);
+    return QIcon();
 }
 
 QStandardItemModel *DrugInteractionResult::toStandardModel() const
@@ -211,6 +215,19 @@ QStandardItemModel *DrugInteractionResult::toStandardModel() const
         }
     }
     return m_StandardModel;
+}
+
+void DrugInteractionResult::setInteractionAlert(const QVector<IDrugInteractionAlert *> &alerts)
+{
+    qDeleteAll(m_Alerts);
+    m_Alerts.clear();
+    m_Alerts = alerts;
+}
+
+void DrugInteractionResult::addInteractionAlert(IDrugInteractionAlert *alert)
+{
+    if (!m_Alerts.contains(alert))
+        m_Alerts.append(alert);
 }
 
 void DrugInteractionResult::warn() const

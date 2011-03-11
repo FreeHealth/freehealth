@@ -115,9 +115,6 @@ namespace Constants {
     const char * const  S_HISTORYSIZE            = "DrugsWidget/historySize";                  /*!< \brief Key for settings. */
     const char * const  S_DRUGHISTORY            = "DrugsWidget/drugsHistory";                 /*!< \brief Key for settings. */
 
-    const char * const  S_DYNAMICALERTS          = "DrugsWidget/dynamicAlerts";
-    const char * const  S_DYNAMICALERTS_LEVEL    = "DrugsWidget/dynamicAlertsMinimalLevel";
-
     const char * const  S_USERRECORDEDFORMS      = "DrugsWidget/userRecordedForms";            /*!< \brief Key for settings. */
     const char * const  S_PROTOCOLCREATOR_DEFAULTBUTTON = "DrugsWidget/protocolCreator/sefautButton";            /*!< \brief Key for settings. */
     const char * const  S_PROTOCOLCREATOR_AUTOCHANGE = "DrugsWidget/protocolCreator/autoChange";            /*!< \brief Key for settings. */
