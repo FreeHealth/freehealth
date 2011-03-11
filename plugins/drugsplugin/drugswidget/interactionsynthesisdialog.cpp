@@ -32,6 +32,7 @@
 #include <drugsbaseplugin/idruginteraction.h>
 #include <drugsbaseplugin/drugsbase.h>
 #include <drugsbaseplugin/druginteractionresult.h>
+#include <drugsbaseplugin/druginteractionquery.h>
 
 #include <coreplugin/icore.h>
 #include <coreplugin/itheme.h>
@@ -264,7 +265,6 @@ void InteractionSynthesisDialog::print()
    }
     // Prepare text to print
     QString display;
-    int i = 0;
     display.append("<p align=center>" + head + "</p><p>");
     for(int i=0; i < drugs.count(); ++i) {
         display.append(QString("%1&nbsp;.&nbsp;%2<br />")
