@@ -337,7 +337,7 @@ AccountBase::AccountBase(QObject *parent)
 //                    "PRIMARY KEY(id_immob));";
 
 //    addTable(Table_Movement, "movement");
-    addField(Table_Movement,  MOV_ID,             "DEP_ID",     FieldIsUniquePrimaryKey);
+    addField(Table_Movement,  MOV_ID,             "MOV_ID",     FieldIsUniquePrimaryKey);
     addField(Table_Movement,  MOV_AV_MOVEMENT_ID, "AV_MOV_ID",  FieldIsLongInteger);
     addField(Table_Movement,  MOV_USER_UID,       "USER_UID",   FieldIsUUID);
     addField(Table_Movement,  MOV_ACCOUNT_ID,     "ACCOUNT_ID", FieldIsLongInteger);

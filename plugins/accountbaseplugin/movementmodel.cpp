@@ -43,10 +43,15 @@
 #include "constants.h"
 
 #include <utils/log.h>
+#include <coreplugin/icore.h>
+//#include <coreplugin/isettings.h>
+#include <coreplugin/iuser.h>
 
 #include <QSqlTableModel>
 
 using namespace AccountDB;
+
+static inline Core::IUser *user() { return  Core::ICore::instance()->user(); }
 
 namespace AccountDB {
 namespace Internal {
@@ -58,7 +63,6 @@ public:
     {
         m_SqlTable = new QSqlTableModel(q, QSqlDatabase::database(Constants::DB_ACCOUNTANCY));
         m_SqlTable->setTable(AccountDB::AccountBase::instance()->table(Constants::Table_Movement));
-//        m_SqlTable->setFilter(USER_UID);
     }
     ~MovementModelPrivate () {}
 
@@ -76,11 +80,14 @@ private:
 
 
 MovementModel::MovementModel(QObject *parent) :
-        QAbstractTableModel(parent), d(new Internal::MovementModelPrivate(this))
+        QAbstractTableModel(parent),
+        m_UserUid(user()->value(Core::IUser::Uuid).toString()), 
+        d(new Internal::MovementModelPrivate(this))
 {
 //    d->m_SqlTable->setEditStrategy(QSqlTableModel::OnManualSubmit);
     d->m_SqlTable->setEditStrategy(QSqlTableModel::OnFieldChange);
-    d->m_SqlTable->select();
+    setUserUuid(m_UserUid);
+    
 }
 
 MovementModel::~MovementModel()
@@ -105,8 +112,9 @@ int MovementModel::columnCount(const QModelIndex &parent) const
 void MovementModel::setUserUuid(const QString &uuid)
 {
     QHash<int, QString> where;
-    where.insert(Constants::BANKDETAILS_USER_UID, QString("='%1'").arg(uuid));
+    where.insert(Constants::MOV_USER_UID, QString("='%1'").arg(uuid));
     d->m_SqlTable->setFilter(AccountBase::instance()->getWhereClause(Constants::Table_Movement, where));
+    d->m_SqlTable->select();
 }
 
 QVariant MovementModel::data(const QModelIndex &index, int role) const
@@ -124,7 +132,16 @@ bool MovementModel::setData(const QModelIndex &index, const QVariant &value, int
 
 QVariant MovementModel::headerData(int section, Qt::Orientation orientation, int role) const
 {
-    return QVariant();
+    return d->m_SqlTable->headerData(section,orientation,role);
+}
+
+bool MovementModel::setHeaderDatasetHeaderData(int section, 
+                                               Qt::Orientation orientation, 
+                                               const QVariant & value, 
+                                               int role){
+    bool ret = true;
+    ret = d->m_SqlTable->setHeaderData(section,orientation,value,role);
+    return ret;
 }
 
 bool MovementModel::insertRows(int row, int count, const QModelIndex &parent)
@@ -139,7 +156,9 @@ bool MovementModel::insertRows(int row, int count, const QModelIndex &parent)
 bool MovementModel::removeRows(int row, int count, const QModelIndex &parent)
 {
     d->m_IsDirty = true;
-    return d->m_SqlTable->removeRows(row, count, parent);
+    bool ret = d->m_SqlTable->removeRows(row, count, parent);
+    d->m_SqlTable->submitAll();
+    return ret;
 }
 
 bool MovementModel::submit()
@@ -169,4 +188,8 @@ QSqlError MovementModel::lastError(){
 void MovementModel::setFilter(const QString & filter){
     d->m_SqlTable->setFilter(filter);
     d->m_SqlTable->select();
+}
+
+QString MovementModel::filter(){
+    return d->m_SqlTable->filter();
 }

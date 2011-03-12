@@ -66,7 +66,10 @@ public:
 
     QVariant headerData(int section, Qt::Orientation orientation,
                                 int role = Qt::DisplayRole) const;
-
+    bool setHeaderDatasetHeaderData(int section, 
+                                    Qt::Orientation orientation, 
+                                    const QVariant & value, 
+                                    int role = Qt::EditRole);                           
     bool insertRows(int row, int count, const QModelIndex &parent = QModelIndex());
     bool removeRows(int row, int count, const QModelIndex &parent = QModelIndex());
 
@@ -75,9 +78,11 @@ public:
     bool removeRow(int arow, const QModelIndex &aparent = QModelIndex())        { return removeRows(arow, 1, aparent); }
     bool removeColumn(int acolumn, const QModelIndex &aparent = QModelIndex())  { return removeColumns(acolumn, 1, aparent); }
     void setFilter(const QString & filter);
+    QString filter();
     void setUserUuid(const QString &uuid);
     bool isDirty() const;
     QSqlError lastError();
+    QString m_UserUid;
 
 public Q_SLOTS:
     bool submit();
@@ -85,6 +90,7 @@ public Q_SLOTS:
 
 private:
     Internal::MovementModelPrivate *d;
+    
 };
 
 }  // End namespace AccountDB
