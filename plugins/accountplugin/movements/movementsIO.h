@@ -24,8 +24,10 @@ public:
     bool deleteMovement(int row);
     bool validMovement(int row);
     int getAvailableMovementId(QString &movementsComboBoxText);
+    QString getUserUid();
 
 private:
+    QStringList listOfParents();
     AccountDB::MovementModel *m_modelMovements;
 };
 

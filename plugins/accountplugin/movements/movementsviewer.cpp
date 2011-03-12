@@ -3,6 +3,7 @@
 #include "movementsmanager.h"
 
 #include <accountbaseplugin/movementmodel.h>
+#include <accountbaseplugin/constants.h>
 
 //#include <coreplugin/icore.h>
 //#include <coreplugin/iuser.h>
@@ -11,6 +12,7 @@
 #include "ui_movementsviewer.h"
 
 #include <QMessageBox>
+#include <QDebug>
 
 //using namespace Core;
 //static inline Core::IUser *user() { return Core::ICore::instance()->user(); }
@@ -23,6 +25,9 @@
 //todo bank system
 /********************/
 
+using namespace AccountDB;
+using namespace Constants;
+
 MovementsViewer::MovementsViewer(QWidget * parent) :
         QWidget(parent),ui(new Ui::MovementsViewerWidget)
 {
@@ -34,6 +39,7 @@ MovementsViewer::MovementsViewer(QWidget * parent) :
     ui->dateEdit->setDate(QDate::currentDate());
     fillMovementsComboBox();
     fillYearComboBox();
+    showMovements();
     connect(ui->quitButton,SIGNAL(pressed()),this,SLOT(close()));
     connect(ui->recordButton,SIGNAL(pressed()),this,SLOT(recordMovement()));
     connect(ui->deleteButton,SIGNAL(pressed()),this,SLOT(deleteMovement()));
@@ -49,7 +55,23 @@ void MovementsViewer::showMovements()
 {
     MovementsIODb  mov(this) ;
     QString year = ui->yearComboBox->currentText();
-    ui->tableView->setModel(mov.getModelMovements(year));
+    MovementModel * model = mov.getModelMovements(year);
+    ui->tableView->setModel(model);
+    ui->tableView->setSelectionBehavior(QAbstractItemView::SelectRows);
+    ui->tableView->setSelectionMode(QAbstractItemView::SingleSelection);
+    ui->tableView->setEditTriggers(QAbstractItemView::SelectedClicked);
+    ui->tableView->setSortingEnabled(true);
+    ui->tableView->horizontalHeader()->setResizeMode(QHeaderView::Interactive);
+    ui->tableView->horizontalHeader()->setStretchLastSection ( true );
+    ui->tableView->verticalHeader()  ->setResizeMode(QHeaderView::Stretch);
+    ui->tableView->setColumnHidden(MOV_ID,true);
+    ui->tableView->setColumnHidden(MOV_AV_MOVEMENT_ID,true);
+    ui->tableView->setColumnHidden(MOV_USER_UID,true);
+    ui->tableView->setColumnHidden(MOV_ACCOUNT_ID,true);
+    ui->tableView->setColumnHidden(MOV_TYPE,true);
+    ui->tableView->setColumnHidden(MOV_TRACE,true);
+    ui->tableView->setColumnHidden(MOV_COMMENT,true);
+    qDebug() << __FILE__ << QString::number(__LINE__) << " rows =" << QString::number(ui->tableView->model()->rowCount()) ;
 }
 
 void MovementsViewer::recordMovement()
@@ -59,7 +81,7 @@ void MovementsViewer::recordMovement()
     QHash<int,QVariant>  hashValues;
     QString availableMovement = ui->movementsComboBox->currentText();
     int acMovId = mov.getAvailableMovementId(availableMovement);
-    QString userUid;//todo
+    QString userUid = mov.getUserUid();
     int bankId = 0;//todo
     int type = 0;
     QString label = availableMovement;
@@ -91,6 +113,7 @@ void MovementsViewer::recordMovement()
     } else {
         QMessageBox::information(0,trUtf8("Information"),trUtf8("Movement is inserted."),QMessageBox::Ok);
     }
+    showMovements();
 }
 
 void MovementsViewer::deleteMovement()
@@ -100,12 +123,14 @@ void MovementsViewer::deleteMovement()
         QMessageBox::warning(0,trUtf8("Error"),trUtf8("You forgot to select a line."),QMessageBox::Ok);
     }
     int row = index.row(); 
+    qDebug() << __FILE__ << QString::number(__LINE__) << " row =" << QString::number(row) ;
     MovementsIODb  mov(this) ;
     if (!mov.deleteMovement(row)) {
     	QMessageBox::warning(0,trUtf8("Error"),trUtf8("Movement is not deleted."),QMessageBox::Ok);
     }  else {
         QMessageBox::information(0,trUtf8("Information"),trUtf8("Movement is deleted."),QMessageBox::Ok);
     }
+    showMovements();
 }
 
 void MovementsViewer::validMovement()
@@ -121,6 +146,7 @@ void MovementsViewer::validMovement()
     } else {
         QMessageBox::information(0,trUtf8("Information"),trUtf8("Movement is validated."),QMessageBox::Ok);
     }
+    showMovements();
 }
 
 void MovementsViewer::validAndRecord()
