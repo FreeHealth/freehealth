@@ -174,37 +174,37 @@ DrugInteractionResult *InteractionManager::checkInteractions(const DrugInteracti
     return result;
 }
 
-QString InteractionManager::listToHtml(const QVector<IDrugInteraction *> &list, bool fullInfos) // static
-{
-    QString tmp, toReturn;
+//QString InteractionManager::listToHtml(const QVector<IDrugInteraction *> &list, bool fullInfos) // static
+//{
+//    QString tmp, toReturn;
 
-    // get all engines
-    QVector<IDrugEngine*> engines;
-    for(int i=0; i < list.count(); ++i) {
-        if (!engines.contains(list.at(i)->engine()))
-            engines << list.at(i)->engine();
-    }
+//    // get all engines
+//    QVector<IDrugEngine*> engines;
+//    for(int i=0; i < list.count(); ++i) {
+//        if (!engines.contains(list.at(i)->engine()))
+//            engines << list.at(i)->engine();
+//    }
 
-    // for all engine create the interaction list
-    for(int i=0; i<engines.count(); ++i) {
-        IDrugEngine *eng = engines.at(i);
-        for(int j=0; j < list.count(); ++j) {
-            IDrugInteraction *di = list.at(j);
-            if (di->engine()==eng) {
-//                tmp += di->toHtml(fullInfos);
-                tmp += "-&nbsp;" + di->type() + "<br />";
-            }
-        }
-        if (!tmp.isEmpty()) {
-            tmp.chop(6);
-            toReturn.append(QString(LIST_MASK)
-                            .arg(eng->name())
-                            .arg(tmp));
-        }
-    }
+//    // for all engine create the interaction list
+//    for(int i=0; i<engines.count(); ++i) {
+//        IDrugEngine *eng = engines.at(i);
+//        for(int j=0; j < list.count(); ++j) {
+//            IDrugInteraction *di = list.at(j);
+//            if (di->engine()==eng) {
+////                tmp += di->toHtml(fullInfos);
+//                tmp += "-&nbsp;" + di->type() + "<br />";
+//            }
+//        }
+//        if (!tmp.isEmpty()) {
+//            tmp.chop(6);
+//            toReturn.append(QString(LIST_MASK)
+//                            .arg(eng->name())
+//                            .arg(tmp));
+//        }
+//    }
 
-    return toReturn;
-}
+//    return toReturn;
+//}
 
 QString InteractionManager::drugInteractionSynthesisToHtml(const IDrug *drug, const QVector<IDrugInteraction *> &list, bool fullInfos)
 {
@@ -270,57 +270,57 @@ QString InteractionManager::synthesisToHtml(const QVector<IDrugInteraction *> &l
     return display;
 }
 
-void InteractionManager::synthesisToTreeWidget(const QList<IDrugInteraction *> &list, QTreeWidget *tree) // static
-{
-    /** \todo code here */
-    Q_ASSERT(tree);
-//    using namespace DrugsDB::Constants;
-//    QString tmp, toReturn;
-//    QList<int> id_di;
-//    QHash<QString, QTreeWidgetItem *> categories;
-//    QFont bold;
-//    bold.setBold(true);
+//void InteractionManager::synthesisToTreeWidget(const QList<IDrugInteraction *> &list, QTreeWidget *tree) // static
+//{
+//    /** \todo code here */
+//    Q_ASSERT(tree);
+////    using namespace DrugsDB::Constants;
+////    QString tmp, toReturn;
+////    QList<int> id_di;
+////    QHash<QString, QTreeWidgetItem *> categories;
+////    QFont bold;
+////    bold.setBold(true);
 
-//    foreach(Internal::DrugsInteraction *di, list) {
+////    foreach(Internal::DrugsInteraction *di, list) {
 
-//        // No double
-//        if (id_di.contains(di->value(Internal::DrugsInteraction::DI_Id).toInt()))
-//            continue;
-//        id_di << di->value(Internal::DrugsInteraction::DI_Id).toInt();
+////        // No double
+////        if (id_di.contains(di->value(Internal::DrugsInteraction::DI_Id).toInt()))
+////            continue;
+////        id_di << di->value(Internal::DrugsInteraction::DI_Id).toInt();
 
-//        // Get the category
-//        QTreeWidgetItem *category;
-//        const QString &catName = di->value(Internal::DrugsInteraction::DI_TypeId).toString();
-//        if (!categories.value(catName)) {
-//            category = new QTreeWidgetItem(tree, QStringList() << catName);
-//            category->setExpanded(true);
-//            category->setFont(0, bold);
-//            category->setForeground(0, QBrush(Qt::red));
-//            categories.insert(catName, category);
-//        }
+////        // Get the category
+////        QTreeWidgetItem *category;
+////        const QString &catName = di->value(Internal::DrugsInteraction::DI_TypeId).toString();
+////        if (!categories.value(catName)) {
+////            category = new QTreeWidgetItem(tree, QStringList() << catName);
+////            category->setExpanded(true);
+////            category->setFont(0, bold);
+////            category->setForeground(0, QBrush(Qt::red));
+////            categories.insert(catName, category);
+////        }
 
-//        // Include the interaction's datas
-//        QTreeWidgetItem *interactors = new QTreeWidgetItem(category, QStringList()
-//                                                           << QString("%1 <-> %2").arg(di->value(Internal::DrugsInteraction::DI_ATC1_Label).toString()).arg(di->value(Internal::DrugsInteraction::DI_ATC2_Label).toString()));
-//        interactors->setFont(0, bold);
-//        QTreeWidgetItem *risk = new QTreeWidgetItem(interactors);
-//        QLabel *riskLabel = new QLabel(QString("%1: %2")
-//                                       .arg(QCoreApplication::translate(Constants::DRUGSBASE_TR_CONTEXT, Constants::NATURE_OF_RISK))
-//                                       .arg(di->value(Internal::DrugsInteraction::DI_Risk).toString()));
-//        riskLabel->setWordWrap(true);
-//        tree->setItemWidget(risk, 0, riskLabel);
+////        // Include the interaction's datas
+////        QTreeWidgetItem *interactors = new QTreeWidgetItem(category, QStringList()
+////                                                           << QString("%1 <-> %2").arg(di->value(Internal::DrugsInteraction::DI_ATC1_Label).toString()).arg(di->value(Internal::DrugsInteraction::DI_ATC2_Label).toString()));
+////        interactors->setFont(0, bold);
+////        QTreeWidgetItem *risk = new QTreeWidgetItem(interactors);
+////        QLabel *riskLabel = new QLabel(QString("%1: %2")
+////                                       .arg(QCoreApplication::translate(Constants::DRUGSBASE_TR_CONTEXT, Constants::NATURE_OF_RISK))
+////                                       .arg(di->value(Internal::DrugsInteraction::DI_Risk).toString()));
+////        riskLabel->setWordWrap(true);
+////        tree->setItemWidget(risk, 0, riskLabel);
 
-//        QTreeWidgetItem *management = new QTreeWidgetItem(interactors);
-//        QLabel *managementLabel = new QLabel(QString("%1: %2")
-//                                             .arg(tr("Management: "))
-//                                             .arg(di->value(Internal::DrugsInteraction::DI_Management).toString()));
-//        managementLabel->setWordWrap(true);
-//        managementLabel->setSizePolicy(QSizePolicy::Preferred, QSizePolicy::Preferred);
-//        tree->setItemWidget(management, 0, managementLabel);
-//        managementLabel->setMargin(0);
-//        //        qWarning() << managementLabel << managementLabel->contentsMargins();
-//    }
-}
+////        QTreeWidgetItem *management = new QTreeWidgetItem(interactors);
+////        QLabel *managementLabel = new QLabel(QString("%1: %2")
+////                                             .arg(tr("Management: "))
+////                                             .arg(di->value(Internal::DrugsInteraction::DI_Management).toString()));
+////        managementLabel->setWordWrap(true);
+////        managementLabel->setSizePolicy(QSizePolicy::Preferred, QSizePolicy::Preferred);
+////        tree->setItemWidget(management, 0, managementLabel);
+////        managementLabel->setMargin(0);
+////        //        qWarning() << managementLabel << managementLabel->contentsMargins();
+////    }
+//}
 
 void InteractionManager::onNewObjectAddedToPluginManagerPool(QObject *object)
 {

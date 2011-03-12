@@ -24,37 +24,45 @@
  *       NAME <MAIL@ADRESS>                                                *
  *       NAME <MAIL@ADRESS>                                                *
  ***************************************************************************/
-#ifndef IDRUGINTERACTIONALERT_H
-#define IDRUGINTERACTIONALERT_H
+#ifndef DRUGINTERACTIONINFORMATIONQUERY_H
+#define DRUGINTERACTIONINFORMATIONQUERY_H
 
-#include <drugsbaseplugin/druginteractioninformationquery.h>
-
-class QIcon;
+#include <QString>
 
 namespace DrugsDB {
-class DrugInteractionResult;
-class IDrug;
 
-class IDrugInteractionAlert //: public QObject
+struct DrugInteractionInformationQuery
 {
-//    Q_OBJECT
-public:
-    IDrugInteractionAlert() {}
-    virtual ~IDrugInteractionAlert() {}
+    enum ProcessTime {
+        BeforePrescription = 0,
+        DuringPrescription,
+        AfterPrescription,
+        BeforePrinting
+    };
 
-    virtual QString engineUid() const = 0;
+    enum MessageType {
+        DetailledAlert = 0,
+        InformationAlert,
+        ShortToolTip,
+        DetailledToolTip
+    };
 
-    // static alert
-    virtual QIcon icon(const IDrug *drug, const DrugInteractionInformationQuery &query) const = 0;
-    virtual QString message(const IDrug *drug, const DrugInteractionInformationQuery &query) const = 0;
-    virtual QString message(const DrugInteractionInformationQuery &query) const = 0;
+    enum IconSize {
+        SmallSize = 0,
+        MediumSize,
+        BigSize
+    };
 
-    // dynamic alert
-    virtual void executeDynamicAlert(const DrugInteractionInformationQuery &query) = 0;
-    virtual void setOverridden(bool overridden) = 0;
-    virtual bool wasOverridden() const = 0;
+    DrugInteractionInformationQuery();
+    ~DrugInteractionInformationQuery();
+
+    int messageType;
+    int processTime;
+    int iconSize;
+    int levelOfWarningStaticAlert, levelOfWarningDynamicAlert;
+    QString engineUid;
 };
 
 }  // End namespace DrugsDB
 
-#endif // IDRUGINTERACTIONALERT_H
+#endif // DRUGINTERACTIONINFORMATIONQUERY_H

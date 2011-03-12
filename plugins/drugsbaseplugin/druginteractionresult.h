@@ -48,6 +48,7 @@ class IDrug;
 class IDrugInteraction;
 class IDrugInteractionAlert;
 class InteractionManager;
+class DrugInteractionInformationQuery;
 
 class DRUGSBASE_EXPORT DrugInteractionResult : public QObject
 {
@@ -55,13 +56,6 @@ class DRUGSBASE_EXPORT DrugInteractionResult : public QObject
     friend class DrugsDB::InteractionManager;
 
 public:
-    enum MessageType {
-        AlertMsg_DetailledAlert = 0,
-        AlertMsg_InformationAlert,
-        AlertMsg_ShortToolTip,
-        AlertMsg_DetailledToolTip
-    };
-
     ~DrugInteractionResult();
 
     void clear();
@@ -71,7 +65,9 @@ public:
     QVector<IDrugInteraction *> getInteractions(const IDrug *drug, const QString &engineUid = QString::null) const;
 
     // Alerts
-    QIcon icon(const IDrug *drug, const int size = Core::ITheme::SmallIcon, const QString &engineUid = QString::null);
+    QIcon icon(const IDrug *drug, const DrugInteractionInformationQuery &query) const;
+    QString alertMessagesToHtml(const IDrug *drug, const DrugInteractionInformationQuery &query) const;
+    QString alertMessagesToHtml(const DrugInteractionInformationQuery &query) const;
 //    IDrugInteractionAlert *alert() const; ??
 
     bool isDrugDrugInteractionsTested() const {return m_DDITested;}
@@ -95,6 +91,7 @@ protected:
     void setTestedDrugs(const QVector<IDrug *> &drugs) {m_TestedDrugs = drugs;}
     void setInteractionAlert(const QVector<IDrugInteractionAlert *> &alerts);
     void addInteractionAlert(IDrugInteractionAlert *alert);
+    void addInteractionAlerts(const QVector<IDrugInteractionAlert *> &alerts);
 
 private:
     QVector<IDrugInteraction *> m_Interactions;

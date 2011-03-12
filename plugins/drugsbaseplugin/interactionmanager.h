@@ -65,10 +65,10 @@ public:
 
 //    static QIcon interactionIcon(const int level, const int levelOfWarning = 0, bool medium = false);
 //    QIcon iamIcon(const IDrug *drug, const int &levelOfWarning = 0, bool medium = false) const;
-    static QString listToHtml(const QVector<IDrugInteraction *> &list, bool fullInfos);
+//    static QString listToHtml(const QVector<IDrugInteraction *> &list, bool fullInfos);
     static QString drugInteractionSynthesisToHtml(const IDrug *drug, const QVector<IDrugInteraction *> &list, bool fullInfos);
     static QString synthesisToHtml(const QVector<IDrugInteraction *> &list, bool fullInfos);
-    static void synthesisToTreeWidget(const QList<IDrugInteraction *> &list, QTreeWidget *tree);
+//    static void synthesisToTreeWidget(const QList<IDrugInteraction *> &list, QTreeWidget *tree);
 
 private Q_SLOTS:
     void onNewObjectAddedToPluginManagerPool(QObject *object);

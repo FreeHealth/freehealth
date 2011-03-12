@@ -24,37 +24,24 @@
  *       NAME <MAIL@ADRESS>                                                *
  *       NAME <MAIL@ADRESS>                                                *
  ***************************************************************************/
-#ifndef IDRUGINTERACTIONALERT_H
-#define IDRUGINTERACTIONALERT_H
+#include "druginteractioninformationquery.h"
 
-#include <drugsbaseplugin/druginteractioninformationquery.h>
+#include <coreplugin/icore.h>
+#include <coreplugin/isettings.h>
+#include <drugsbaseplugin/constants.h>
 
-class QIcon;
+#include <QString>
 
-namespace DrugsDB {
-class DrugInteractionResult;
-class IDrug;
+static inline Core::ISettings *settings() {return Core::ICore::instance()->settings();}
 
-class IDrugInteractionAlert //: public QObject
+using namespace DrugsDB;
+
+DrugInteractionInformationQuery::DrugInteractionInformationQuery() :
+        messageType(-1), processTime(-1), iconSize(-1)
 {
-//    Q_OBJECT
-public:
-    IDrugInteractionAlert() {}
-    virtual ~IDrugInteractionAlert() {}
+    levelOfWarningStaticAlert = settings()->value(Constants::S_LEVELOFWARNING_STATICALERT).toInt();
+    levelOfWarningDynamicAlert = settings()->value(Constants::S_LEVELOFWARNING_DYNAMICALERT).toInt();
+}
 
-    virtual QString engineUid() const = 0;
-
-    // static alert
-    virtual QIcon icon(const IDrug *drug, const DrugInteractionInformationQuery &query) const = 0;
-    virtual QString message(const IDrug *drug, const DrugInteractionInformationQuery &query) const = 0;
-    virtual QString message(const DrugInteractionInformationQuery &query) const = 0;
-
-    // dynamic alert
-    virtual void executeDynamicAlert(const DrugInteractionInformationQuery &query) = 0;
-    virtual void setOverridden(bool overridden) = 0;
-    virtual bool wasOverridden() const = 0;
-};
-
-}  // End namespace DrugsDB
-
-#endif // IDRUGINTERACTIONALERT_H
+DrugInteractionInformationQuery::~DrugInteractionInformationQuery()
+{}

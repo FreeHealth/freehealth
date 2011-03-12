@@ -26,6 +26,7 @@
  ***************************************************************************/
 #include "drugdruginteractionengine.h"
 #include "idruginteractionalert.h"
+#include "druginteractionresult.h"
 #include "drugsbase.h"
 #include "idrug.h"
 #include "idruginteraction.h"
@@ -73,6 +74,20 @@ namespace  {
             "  <td>%3</td>\n"
             "  <td>%4</td>\n"
             "</tr>\n";
+
+        const char* const LIST_MASK =
+                "<table border=1 cellpadding=2 cellspacing=2 width=100%>\n"
+                "<tr>\n"
+                "  <td align=center>\n"
+                "   <span style=\"font-weight:bold\">%1\n</span>"
+                "  </td>\n"
+    //            "<tr>\n"
+    //            "  <td colspan=2 align=center>\n"
+    //            "   <span style=\"font-weight:bold\">%2\n</span>"
+    //            "</td>\n"
+                "</tr>\n"
+                "<tr><td>%2</td></tr>\n"
+                "</table>\n";
 
 class DrugsInteraction : public IDrugInteraction
 {
@@ -178,9 +193,12 @@ public:
         return QIcon();
     }
 
-    QString header() const
+    QString header(const QString &separator = QString::null) const
     {
-        return base()->getAtcLabel(m_Infos.value(DI_ATC1).toInt()) + " <br> " + base()->getAtcLabel(m_Infos.value(DI_ATC2).toInt());
+        return QString("%1 %2 %3")
+                .arg(base()->getAtcLabel(m_Infos.value(DI_ATC1).toInt()))
+                .arg(separator)
+                .arg(base()->getAtcLabel(m_Infos.value(DI_ATC2).toInt()));
     }
 
     QString risk(const QString &lang = QString::null) const
@@ -337,7 +355,7 @@ class Alert : public IDrugInteractionAlert
 {
 public:
     Alert(DrugInteractionResult *result) :
-            IDrugInteractionAlert(result), m_Overridden(false), m_Result(result)
+            IDrugInteractionAlert(), m_Overridden(false), m_Result(result)
     {
     }
 
@@ -346,18 +364,17 @@ public:
     QString engineUid() const {return Constants::DDI_ENGINE_UID;}
 
     // static alert
-    QIcon icon(const IDrug *drug, const ProcessTime processTime, const int iconSize, const QString &engineUid = QString::null) const
+    QIcon icon(const IDrug *drug, const DrugInteractionInformationQuery &query) const
     {
-        Q_UNUSED(processTime);
         if (!m_Result->testedDrugs().contains((IDrug*)drug))
             return QIcon();
-        if (!engineUid.isEmpty() && engineUid!=Constants::DDI_ENGINE_UID) {
+        if (!query.engineUid.isEmpty() && query.engineUid!=Constants::DDI_ENGINE_UID) {
             return QIcon();
         }
-        int levelOfWarning = settings()->value(Constants::S_LEVELOFWARNING_STATICALERT).toInt();
+        int levelOfWarning = query.levelOfWarningStaticAlert;
         DrugDrugInteractionEngine::TypesOfIAM level = getMaximumTypeOfIAM(m_Result->interactions(), drug);
         Core::ITheme *th = theme();
-        Core::ITheme::IconSize size = Core::ITheme::IconSize(iconSize);
+        Core::ITheme::IconSize size = Core::ITheme::IconSize(query.iconSize);
         // Minimal alerts
         if (level & DrugDrugInteractionEngine::ContreIndication && (levelOfWarning <= Constants::MinimumLevelOfWarning))
             return th->icon(Constants::INTERACTION_ICONCRITICAL, size);
@@ -398,14 +415,92 @@ public:
         return r;
     }
 
-    QString message(const IDrug *drug, const int messageType, const ProcessTime processTime, const QString &engineUid = QString::null) const
+    QString message(const IDrug *drug, const DrugInteractionInformationQuery &query) const
     {
+        QString toReturn;
         if (!m_Result->testedDrugs().contains((IDrug*)drug))
-            return QString();
-        return QString();
+            return toReturn;
+
+        // get all interactions related to the drug
+        QVector<IDrugInteraction *> interactions = m_Result->getInteractions(drug, Constants::DDI_ENGINE_UID);
+        QString tmp;
+        switch (query.messageType)
+        {
+        case DrugInteractionInformationQuery::ShortToolTip:
+            {
+                for(int j=0; j < interactions.count(); ++j) {
+                    IDrugInteraction *di = interactions.at(j);
+                        tmp += "-&nbsp;" + di->type() + "<br />";
+                }
+                if (!tmp.isEmpty()) {
+                    tmp.chop(6);
+                    toReturn.append(QString(LIST_MASK)
+                                    .arg("lkjlkjlkjlkjlkj")
+                                    .arg(tmp));
+                }
+                break;
+            }
+        case DrugInteractionInformationQuery::DetailledToolTip:
+            {
+                QMap<int, QString> lines;
+                for(int j=0; j < interactions.count(); ++j) {
+                    IDrugInteraction *di = interactions.at(j);
+                    DrugsInteraction *ddi = static_cast<DrugsInteraction *>(di);
+                    Q_ASSERT(ddi);
+                    int typeId = -1;
+                    DrugDrugInteractionEngine::TypesOfIAM level = DrugDrugInteractionEngine::TypesOfIAM(ddi->typeId());
+                    // Minimal alerts
+                    if (level & DrugDrugInteractionEngine::ContreIndication && (query.levelOfWarningStaticAlert <= Constants::MinimumLevelOfWarning))
+                        typeId = DrugDrugInteractionEngine::ContreIndication;
+                    else if (level & DrugDrugInteractionEngine::Deconseille && (query.levelOfWarningStaticAlert <= Constants::MinimumLevelOfWarning))
+                        typeId = DrugDrugInteractionEngine::Deconseille;
+                    // Moderate alerts
+                    else if ((level & DrugDrugInteractionEngine::APrendreEnCompte) && (query.levelOfWarningStaticAlert <= Constants::ModerateLevelOfWarning))
+                        typeId = DrugDrugInteractionEngine::APrendreEnCompte;
+                    else if ((level & DrugDrugInteractionEngine::P450) && (query.levelOfWarningStaticAlert <= Constants::ModerateLevelOfWarning))
+                        typeId = DrugDrugInteractionEngine::P450;
+                    else if ((level & DrugDrugInteractionEngine::GPG) && (query.levelOfWarningStaticAlert <= Constants::ModerateLevelOfWarning))
+                        typeId = DrugDrugInteractionEngine::GPG;
+                    else if ((level & DrugDrugInteractionEngine::Precaution) && (query.levelOfWarningStaticAlert <= Constants::ModerateLevelOfWarning))
+                        typeId = DrugDrugInteractionEngine::Precaution;
+                    // Maximum alerts
+                    else if ((level & DrugDrugInteractionEngine::Information) && (query.levelOfWarningStaticAlert == Constants::MaximumLevelOfWarning))
+                        typeId = DrugDrugInteractionEngine::Information;
+                    else if ((level & DrugDrugInteractionEngine::InnDuplication) && (query.levelOfWarningStaticAlert == Constants::MaximumLevelOfWarning))
+                        typeId = DrugDrugInteractionEngine::InnDuplication;
+                    else if (level & DrugDrugInteractionEngine::NoIAM)
+                        typeId = DrugDrugInteractionEngine::NoIAM;
+                    QString &ditmp = lines[typeId];
+                    ditmp += QString("    <li>%1</li>\n")
+                                    .arg(di->header("//"));
+                }
+                QMap<int, QString>::const_iterator i = lines.constEnd();
+                --i;
+                while (true) {
+                    if (!i.value().isEmpty()) {
+                        tmp += QString("<ul compact>"
+                                       "  <li><b>%1</b></li>\n"
+                                       "  <ul>\n"
+                                       "%2"
+                                       "  </ul>\n"
+                                       "</ul>\n"
+                                       )
+                                .arg(DrugsInteraction::typeToString(i.key()))
+                                .arg(i.value());
+                    }
+                    if (i == lines.constBegin())
+                        break;
+                    --i;
+                }
+                toReturn = tmp;
+                break;
+            }
+        }
+
+        return toReturn;
     }
 
-    QString message(const int messageType, const ProcessTime processTime, const QString &engineUid = QString::null) const
+    QString message(const DrugInteractionInformationQuery &query) const
     {
         if (!m_Result->testedDrugs().isEmpty())
             return QString();
@@ -413,7 +508,7 @@ public:
     }
 
     // dynamic alert
-    void executeDynamicAlert(const ProcessTime processTime)
+    void executeDynamicAlert(const DrugInteractionInformationQuery &query)
     {}
 
     void setOverridden(bool overridden) {m_Overridden=overridden;}

@@ -44,6 +44,7 @@
 #include <drugsbaseplugin/constants.h>
 #include <drugsbaseplugin/dailyschememodel.h>
 #include <drugsbaseplugin/globaldrugsmodel.h>
+#include <drugsbaseplugin/druginteractioninformationquery.h>
 
 #include <utils/global.h>
 #include <utils/log.h>
@@ -168,7 +169,10 @@ public:
         if (drug->prescriptionValue(Constants::Prescription::IsTextualOnly).toBool()) {
             return theme()->icon(Core::Constants::ICONPENCIL, size);
         } else if (m_InteractionResult->drugHaveInteraction(drug, Constants::DDI_ENGINE_UID)) {
-            return m_InteractionResult->icon(drug, size, Constants::DDI_ENGINE_UID);
+            DrugInteractionInformationQuery query;
+            query.engineUid = Constants::DDI_ENGINE_UID;
+            query.iconSize = size;
+            return m_InteractionResult->icon(drug, query);
         } else if (drug->data(IDrug::AllInnsKnown).toBool()) {
             return theme()->icon(Core::Constants::ICONOK, size);
         } else {
@@ -282,12 +286,16 @@ public:
         case Interaction::Id :     return QVariant();
         case Interaction::Icon :   return getDrugIcon(drug);
         case Interaction::Pixmap : return getDrugIcon(drug).pixmap(16,16);
-        case Interaction::MediumPixmap : return m_InteractionResult->icon(drug, Core::ITheme::MediumIcon, Constants::DDI_ENGINE_UID).pixmap(64,64);
         case Interaction::ToolTip :
             {
+                // Get all alert messages from the DrugInteractionResult
                 QString display;
                 if (m_InteractionResult->drugHaveInteraction(drug)) {
-                    display.append(interactionManager()->listToHtml(m_InteractionResult->getInteractions(drug), false));
+                    DrugInteractionInformationQuery query;
+                    query.engineUid = Constants::DDI_ENGINE_UID;
+                    query.messageType = DrugInteractionInformationQuery::ShortToolTip;
+                    return m_InteractionResult->alertMessagesToHtml(drug, query);
+//                    display.append(interactionManager()->listToHtml(m_InteractionResult->getInteractions(drug), false));
                 } else if (drug->data(IDrug::AllInnsKnown).toBool()) {
                     display = drug->listOfInn().join("<br />") + "<br />" + drug->listOfInteractingClasses().join("<br />");
                 } else {
@@ -297,6 +305,7 @@ public:
             }
         case Interaction::FullSynthesis :
             {
+                // Get all alert messages from the DrugInteractionResult
                 QString display;
                 QVector<IDrugInteraction *> list = m_InteractionResult->interactions();
                 int i = 0;
@@ -487,9 +496,13 @@ QVariant DrugsModel::data(const QModelIndex &index, int role) const
         }
         display += drug->toHtml();
         if (d->m_InteractionResult->drugHaveInteraction(drug)) {
-            QVector<IDrugInteraction *> list = d->m_InteractionResult->getInteractions(drug);
-            display.append("<br>\n");
-            display.append(interactionManager()->listToHtml(list, false));
+            DrugInteractionInformationQuery query;
+            query.engineUid = Constants::DDI_ENGINE_UID;
+            query.messageType = DrugInteractionInformationQuery::DetailledToolTip;
+            display += d->m_InteractionResult->alertMessagesToHtml(drug, query);
+//            QVector<IDrugInteraction *> list = d->m_InteractionResult->getInteractions(drug);
+//            display.append("<br>\n");
+//            display.append(interactionManager()->listToHtml(list, false));
         }
         return display;
     }

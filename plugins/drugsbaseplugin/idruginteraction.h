@@ -59,7 +59,7 @@ public:
     virtual QList<IDrug *> drugs() const = 0;
 
     virtual QIcon icon(const int levelOfWarning = 0, const int iconsize = 0) const = 0;
-    virtual QString header() const = 0;
+    virtual QString header(const QString &separator = QString::null) const = 0;
     virtual QString risk(const QString &lang = QString::null) const = 0;
     virtual QString management(const QString &lang = QString::null) const = 0;
     virtual QString referencesLink(const QString &lang = QString::null) const = 0;

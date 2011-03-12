@@ -107,15 +107,46 @@ QVector<IDrugInteraction *> DrugInteractionResult::getInteractions(const IDrug *
     return toReturn;
 }
 
-QIcon DrugInteractionResult::icon(const IDrug *drug, const int size, const QString &engineUid)
+QIcon DrugInteractionResult::icon(const IDrug *drug, const DrugInteractionInformationQuery &query) const
 {
     for(int i=0; i < m_Alerts.count(); ++i) {
         /** \todo manage processtime of alerts */
-        QIcon icon = m_Alerts.at(i)->icon(drug, IDrugInteractionAlert::BeforePrescription, size, engineUid);
+        QIcon icon = m_Alerts.at(i)->icon(drug, query);
         if (!icon.isNull())
             return icon;
     }
     return QIcon();
+}
+
+QString DrugInteractionResult::alertMessagesToHtml(const IDrug *drug, const DrugInteractionInformationQuery &query) const
+{
+    QHash<QString,QString> msgs; // one msg per engineUid
+    for(int i=0; i < m_Alerts.count(); ++i) {
+        IDrugInteractionAlert *alert = m_Alerts.at(i);
+        if (query.engineUid.isEmpty() || alert->engineUid()==query.engineUid) {
+            QString &msg = msgs[alert->engineUid()];
+            if (drug)
+                msg += alert->message(drug, query);
+            else
+                msg += alert->message(query);
+        }
+    }
+    if (query.engineUid.isEmpty()) {
+        QString msg;
+        /** \todo add drugengine header */
+        foreach(const QString &uids, msgs) {
+            msg += msgs.value(uids);
+        }
+        return msg;
+    } else {
+        return msgs.value(query.engineUid);
+    }
+    return QString();
+}
+
+QString DrugInteractionResult::alertMessagesToHtml(const DrugInteractionInformationQuery &query) const
+{
+    return alertMessagesToHtml(0, query);
 }
 
 QStandardItemModel *DrugInteractionResult::toStandardModel() const
@@ -171,21 +202,14 @@ QStandardItemModel *DrugInteractionResult::toStandardModel() const
             }
 
             // Include the interaction's datas
-            QString h = di->header();
-            QStringList splitters;
-            splitters << "<br>" << "<br />";
+            QString h = di->header("@@");
             bool interactorsAdded = false;
-            foreach(const QString &s, splitters) {
-                if (h.contains(s)) {
-                    foreach(const QString &part, h.split(s)) {
-                        QStandardItem *interactor = new QStandardItem(part.trimmed());
-                        interactor->setData(j, Qt::UserRole);
-                        interactor->setFlags(Qt::ItemIsEnabled | Qt::ItemIsSelectable);
-                        level->appendRow(interactor);
-                        interactorsAdded = true;
-                    }
-                    break;
-                }
+            foreach(const QString &part, h.split("@@")) {
+                QStandardItem *interactor = new QStandardItem(part.trimmed());
+                interactor->setData(j, Qt::UserRole);
+                interactor->setFlags(Qt::ItemIsEnabled | Qt::ItemIsSelectable);
+                level->appendRow(interactor);
+                interactorsAdded = true;
             }
             if (!interactorsAdded) {
                 QStandardItem *interactors = new QStandardItem(di->header());
@@ -228,6 +252,12 @@ void DrugInteractionResult::addInteractionAlert(IDrugInteractionAlert *alert)
 {
     if (!m_Alerts.contains(alert))
         m_Alerts.append(alert);
+}
+
+void DrugInteractionResult::addInteractionAlerts(const QVector<IDrugInteractionAlert *> &alerts)
+{
+    for(int i=0; i < alerts.count(); ++i)
+        addInteractionAlert(alerts.at(i));
 }
 
 void DrugInteractionResult::warn() const
