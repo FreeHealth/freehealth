@@ -369,11 +369,12 @@ AccountBase::AccountBase(QObject *parent)
 //                    " detail       varchar(100)        	COLLATE utf8_unicode_ci 	NULL  				,"
 //                    "PRIMARY KEY(id_mouvement));";
 
-    addField(Table_AvailableMovement,  AVAILMOV_ID,         "AVAILMOV_ID", FieldIsUniquePrimaryKey);
-    addField(Table_AvailableMovement,  AVAILMOV_PARENT,     "PARENT",      FieldIsShortText);
-    addField(Table_AvailableMovement,  AVAILMOV_TYPE,       "TYPE",        FieldIsInteger);
-    addField(Table_AvailableMovement,  AVAILMOV_LABEL,      "LABEL",       FieldIsShortText);
-    addField(Table_AvailableMovement,  AVAILMOV_COMMENT,    "COMMENT",     FieldIsLongText);
+    addField(Table_AvailableMovement,  AVAILMOV_ID,           "AVAILMOV_ID",   FieldIsUniquePrimaryKey);
+    addField(Table_AvailableMovement,  AVAILMOV_PARENT,       "PARENT",        FieldIsShortText);
+    addField(Table_AvailableMovement,  AVAILMOV_TYPE,         "TYPE",          FieldIsInteger);
+    addField(Table_AvailableMovement,  AVAILMOV_LABEL,        "LABEL",         FieldIsShortText);
+    addField(Table_AvailableMovement,  AVAILMOV_COMMENT,      "COMMENT",       FieldIsLongText);
+    addField(Table_AvailableMovement,  AVAILMOV_DEDUCTIBILITY,"TAX_DEDUCTIBLE",FieldIsBoolean);
     /** Add user_uid, and uid */
 
 //    "CREATE TABLE 	mouvements_disponibles ("  --> available_movement

@@ -199,6 +199,7 @@ namespace Constants {
         AVAILMOV_TYPE,
         AVAILMOV_LABEL,
         AVAILMOV_COMMENT,
+        AVAILMOV_DEDUCTIBILITY,
         AVAILMOV_MaxParam
     };
     enum TableInsurance_Fields {
