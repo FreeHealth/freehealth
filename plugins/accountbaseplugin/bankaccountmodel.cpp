@@ -37,11 +37,13 @@
 #include "constants.h"
 
 #include <utils/log.h>
+#include <coreplugin/icore.h>
+#include <coreplugin/iuser.h>
 
 #include <QSqlTableModel>
 
 using namespace AccountDB;
-
+static inline Core::IUser *user() { return  Core::ICore::instance()->user(); }
 namespace AccountDB {
 namespace Internal {
 
@@ -52,7 +54,6 @@ public:
     {
         m_SqlTable = new QSqlTableModel(q, QSqlDatabase::database(Constants::DB_ACCOUNTANCY));
         m_SqlTable->setTable(AccountDB::AccountBase::instance()->table(Constants::Table_BankDetails));
-//        m_SqlTable->setFilter(USER_UID);
     }
     ~BankAccountModelPrivate () {}
 
@@ -69,12 +70,12 @@ private:
 
 
 
-BankAccountModel::BankAccountModel(QObject *parent) :
-        QAbstractTableModel(parent), d(new Internal::BankAccountModelPrivate(this))
+BankAccountModel::BankAccountModel(QObject *parent) : QAbstractTableModel(parent), 
+                                                      m_UserUid(user()->value(Core::IUser::Uuid).toString()),
+                                                      d(new Internal::BankAccountModelPrivate(this))
 {
-//    d->m_SqlTable->setEditStrategy(QSqlTableModel::OnManualSubmit);
     d->m_SqlTable->setEditStrategy(QSqlTableModel::OnFieldChange);
-    d->m_SqlTable->select();
+    setUserUuid(m_UserUid);
 }
 
 BankAccountModel::~BankAccountModel()
@@ -101,6 +102,7 @@ void BankAccountModel::setUserUuid(const QString &uuid)
     QHash<int, QString> where;
     where.insert(Constants::BANKDETAILS_USER_UID, QString("='%1'").arg(uuid));
     d->m_SqlTable->setFilter(AccountBase::instance()->getWhereClause(Constants::Table_BankDetails, where));
+    d->m_SqlTable->select();
 }
 
 QVariant BankAccountModel::data(const QModelIndex &index, int role) const
@@ -118,15 +120,13 @@ bool BankAccountModel::setData(const QModelIndex &index, const QVariant &value, 
 
 QVariant BankAccountModel::headerData(int section, Qt::Orientation orientation, int role) const
 {
-    return QVariant();
+    return d->m_SqlTable->headerData(section,orientation,role);
 }
 
 bool BankAccountModel::insertRows(int row, int count, const QModelIndex &parent)
 {
     d->m_IsDirty = true;
-//    d->m_SqlTable->setEditStrategy(QSqlTableModel::OnRowChange);
     bool ret = d->m_SqlTable->insertRows(row, count, parent);
-//    d->m_SqlTable->setEditStrategy(QSqlTableModel::OnManualSubmit);
     return ret;
 }
 
@@ -154,4 +154,9 @@ void BankAccountModel::revert()
 bool BankAccountModel::isDirty() const
 {
     return d->m_IsDirty;
+}
+
+void BankAccountModel::setFilter(const QString & filter){
+    d->m_SqlTable->setFilter(filter);
+    d->m_SqlTable->select();
 }

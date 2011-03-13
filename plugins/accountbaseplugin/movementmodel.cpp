@@ -44,7 +44,6 @@
 
 #include <utils/log.h>
 #include <coreplugin/icore.h>
-//#include <coreplugin/isettings.h>
 #include <coreplugin/iuser.h>
 
 #include <QSqlTableModel>

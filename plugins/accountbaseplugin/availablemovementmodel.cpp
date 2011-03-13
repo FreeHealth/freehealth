@@ -82,8 +82,9 @@ bool AvailableMovementModel::setData(const QModelIndex &index, const QVariant &v
 }
 
 
-QVariant AvailableMovementModel::headerData(int section, Qt::Orientation orientation, int role) const
-{return QVariant();}
+QVariant AvailableMovementModel::headerData(int section, Qt::Orientation orientation, int role) const{
+   return d->m_SqlTable->headerData(section,orientation,role);
+}
 
 bool AvailableMovementModel::insertRows(int row, int count, const QModelIndex &parent)
 {
