@@ -264,6 +264,18 @@ void MainWindow::padTextChanged()
 	QList<Core::PadAnalyzerError> errors;
 	// TODO : use a timer based on key strokes instead of realtime analysis
 	m_ui->previewTextEdit->setPlainText(m_padTools->parse(m_ui->padTextEdit->toPlainText(), m_tokens, errors));
+
+	m_ui->listWidgetErrors->clear();
+	foreach (const Core::PadAnalyzerError &error, errors) {
+		switch (error.errorType()) {
+		case Core::PadAnalyzerError::Error_UnexpectedChar:
+			m_ui->listWidgetErrors->addItem(tr("Unexpected '%1' found at line %2 and pos %3").arg(error.errorTokens()["char"].toString()).arg(error.line()).arg(error.pos()));
+			break;
+		case Core::PadAnalyzerError::Error_CoreDelimiterExpected:
+			m_ui->listWidgetErrors->addItem(tr("Expected '%1' at line %2 and pos %3").arg(error.errorTokens()["char"].toString()).arg(error.line()).arg(error.pos()));
+			break;
+		}
+	}
 }
 
 MainWindow::~MainWindow()

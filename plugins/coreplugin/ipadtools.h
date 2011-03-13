@@ -51,19 +51,26 @@ namespace Core {
 	class PadAnalyzerError {
 	public:
 		enum Type {
-			Error_NoError
+			Error_NoError,
+			Error_UnexpectedChar,
+			Error_CoreDelimiterExpected
 		};
 
-		PadAnalyzerError(Type errorType, const QMap<QString,QString> &errorTokens) :
+		PadAnalyzerError(Type errorType, int line, int pos, const QMap<QString,QVariant> &errorTokens) :
 			_errorType(errorType),
+			_line(line),
+			_pos(pos),
 			_errorTokens(errorTokens) {}
 
 		int errorType() const { return _errorType; }
-		const QMap<QString,QString> errorTokens() const { return _errorTokens; }
+		int line() const { return _line; }
+		int pos() const { return _pos; }
+		const QMap<QString,QVariant> &errorTokens() const { return _errorTokens; }
 
 	private:
 		Type _errorType;
-		QMap<QString,QString> _errorTokens;
+		int _line, _pos;
+		QMap<QString,QVariant> _errorTokens;
 	};
 
 	/**

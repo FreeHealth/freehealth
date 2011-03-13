@@ -11,6 +11,7 @@ QString PadToolsImpl::parse(const QString &templ, QMap<QString,QVariant> &tokens
 
 	PadAnalyzer analyzer;
 	Pad *pad = analyzer.analyze(templ);
+	errors = analyzer.lastErrors();
 
 	return pad->run(tokens);
 }

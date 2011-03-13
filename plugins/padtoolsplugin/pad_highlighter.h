@@ -18,10 +18,18 @@ protected:
     void highlightBlock(const QString &text);
 
 private:
+/*	enum BlockState {
+		State_Normal = 0,
+		State_Prefix,
+		State_Postfix,
+		State_Core
+		};*/
+
 	PadAnalyzer _padAnalyzer;
 	QTextCharFormat _padFormat;
 	QTextCharFormat _coreFormat;
 	QTextCharFormat _prefixFormat;
+	QTextCharFormat _coreTextFormat;
 
 	void init();
 };

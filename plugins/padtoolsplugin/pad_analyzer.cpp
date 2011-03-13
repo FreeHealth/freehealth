@@ -12,11 +12,12 @@ Pad *PadAnalyzer::analyze(const QString &text)
 	Pad *pad = new Pad;
 	PadFragment *fragment;
 	int pos;
+	QMap<QString,QVariant> errorTokens;
 
 	_text = &text;
 	_length = text.count();
 	_curPos = 0;
-	_lastParseError = Error_NoError;
+	_lastErrors.clear();
 
 	// let's extract some lexems in the stream
 	while ((lex = nextLexem()).type != Lexem_Null) {
@@ -36,7 +37,13 @@ Pad *PadAnalyzer::analyze(const QString &text)
 			}
 			break;
 		case Lexem_PadCloseDelimiter:
-			// TODO: raise an error (unexpected close delimiter)
+			// raise an error (unexpected close delimiter)
+			errorTokens.insert("char", QString(padCloseDelimiter));
+			_lastErrors << Core::PadAnalyzerError(Core::PadAnalyzerError::Error_UnexpectedChar,
+												  getLine(_curPos - 1),
+												  getPos(_curPos - 1),
+												  errorTokens);
+
 			// turn it into a string fragment
 			pos = _curPos - 1;
 			fragment = new PadString(text.mid(pos, _curPos - pos));
@@ -45,7 +52,12 @@ Pad *PadAnalyzer::analyze(const QString &text)
 			fragment->setEnd(_curPos - 1);
 			break;
 		case Lexem_CoreDelimiter:
-			// TODO: raise an error (unexpected core delimiter)
+			// raise an error (unexpected core delimiter)
+			errorTokens.insert("char", QString(coreDelimiter));
+			_lastErrors << Core::PadAnalyzerError(Core::PadAnalyzerError::Error_UnexpectedChar,
+												  getLine(_curPos - 1),
+												  getPos(_curPos - 1),
+												  errorTokens);
 			// turn it into a string fragment
 			pos = _curPos - 1;
 			fragment = new PadString(text.mid(pos, _curPos - pos));
@@ -117,6 +129,7 @@ PadCore *PadAnalyzer::nextCore()
 {
 	const QString &text = *_text;
 	Lexem lex;
+	QMap<QString,QVariant> errorTokens;
 	PadCore *core = new PadCore;
 	core->setStart(_curPos - 1);
 
@@ -129,6 +142,12 @@ PadCore *PadAnalyzer::nextCore()
 
 	// then comes the core end delimiter
 	if (lex.type != Lexem_CoreDelimiter) {
+		// raise an error (unexpected core delimiter)
+		errorTokens.insert("char", QString(coreDelimiter));
+		_lastErrors << Core::PadAnalyzerError(Core::PadAnalyzerError::Error_CoreDelimiterExpected,
+											  getLine(_curPos - 1),
+											  getPos(_curPos - 1),
+											  errorTokens);
 		delete core;
 		return 0;
 	}
@@ -191,3 +210,35 @@ PadAnalyzer::Lexem PadAnalyzer::nextLexem()
 	lexem.end = _curPos - 1;
 	return lexem;
 }
+
+int PadAnalyzer::getLine(int curPos) const
+{
+	const QString &text = *_text;
+	int line = 0;
+
+	curPos = curPos == -1 ? _curPos : curPos;
+
+	for (int i = 0; i < _length; ++i) {
+		if (i == curPos)
+			return line;
+		if (text[i] == '\n')
+			line++;
+	}
+	return line;
+}
+
+int PadAnalyzer::getPos(int curPos) const
+{
+	const QString &text = *_text;
+
+	curPos = curPos == -1 ? _curPos : curPos;
+
+	int pos = curPos;
+	while (pos >= 0) {
+		pos--;
+		if (pos >= 0 && text[pos] == '\n')
+			break;
+	}
+	return curPos - pos - 1;
+}
+

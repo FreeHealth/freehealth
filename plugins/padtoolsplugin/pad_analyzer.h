@@ -4,6 +4,8 @@
 #include <QString>
 #include <QStack>
 
+#include <coreplugin/ipadtools.h>
+
 #include "pad_fragment.h"
 #include "pad_core.h"
 #include "pad_string.h"
@@ -17,10 +19,6 @@ public:
 	static const char padOpenDelimiter = '[';
 	static const char padCloseDelimiter = ']';
 
-	enum Error {
-		Error_NoError
-	};
-
 	PadAnalyzer();
 
 	/**
@@ -28,10 +26,7 @@ public:
 	 */
 	Pad *analyze(const QString &text);
 
-	/**
-	 * Returns the last parsing error
-	 */
-	Error lastParseError() const { return _lastParseError; }
+	const QList<Core::PadAnalyzerError> lastErrors() const { return _lastErrors; }
 
 private:
 	enum LexemType {
@@ -55,11 +50,14 @@ private:
 	const QString *_text;
 	int _length;
 	int _curPos; // contains the current position in the analyzed text
-	Error _lastParseError;
+	QList<Core::PadAnalyzerError> _lastErrors;
 
 	bool atEnd(); // returns true if current position is at the text end
 	PadItem *nextPadItem();
 	PadCore *nextCore(); // tries to parse a core ("~...~")
+
+	int getLine(int curPos = -1) const;
+	int getPos(int curPos = -1) const;
 
 	static bool isSpecial(const QChar &c);
 
