@@ -232,8 +232,6 @@ public:
             mols_strength.insert(vals.at(8).simplified(), vals.at(3));
         }
 
-
-
         // Get drug brand name
         name = vals.at(7);
     }

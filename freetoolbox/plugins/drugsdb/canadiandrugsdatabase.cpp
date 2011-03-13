@@ -295,7 +295,6 @@ bool CaDrugDatatabaseStep::populateDatabase()
             continue;
         }
 
-
         if (vals.at(2).compare("Veterinary") == 0)
             continue;
 
