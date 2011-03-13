@@ -118,6 +118,8 @@ AvailableMovementWidget::AvailableMovementWidget(QWidget *parent) :
         QWidget(parent), m_Model(0), m_Mapper(0)
 {
     setupUi(this);
+    taxDeductibilityComboBox->addItem(tkTr(Trans::Constants::NO));//0
+    taxDeductibilityComboBox->addItem(tkTr(Trans::Constants::YES));//1
     addButton->setIcon(theme()->icon(Core::Constants::ICONADD));
     removeButton->setIcon(theme()->icon(Core::Constants::ICONREMOVE));
     QString add = trUtf8("Add");
@@ -137,6 +139,7 @@ AvailableMovementWidget::AvailableMovementWidget(QWidget *parent) :
     m_Mapper->addMapping(typeComboBox, AccountDB::Constants::AVAILMOV_TYPE,"currentText");
     m_Mapper->addMapping(commentEdit, AccountDB::Constants::AVAILMOV_COMMENT,"text");
     m_Mapper->addMapping(parentComboBox, AccountDB::Constants::AVAILMOV_PARENT,"currentText");//parent movement
+    m_Mapper->addMapping(taxDeductibilityComboBox,AccountDB::Constants::AVAILMOV_DEDUCTIBILITY,"currentIndex");
     movComboBox->setModel(m_Model);
     movComboBox->setModelColumn(AccountDB::Constants::AVAILMOV_LABEL);
     setDatasToUi();
@@ -182,6 +185,8 @@ void AvailableMovementWidget::on_addButton_clicked()
         Utils::Log::addError(this, "Unable to add row", __FILE__, __LINE__);
     qDebug() << __FILE__ << QString::number(__LINE__) << " rowCount =" << QString::number(m_Model->rowCount()) ;
     movComboBox->setCurrentIndex(m_Model->rowCount() - 1);
+    taxDeductibilityComboBox->setFocus();
+    taxDeductibilityComboBox->setCurrentIndex(1);
     typeComboBox->setFocus();
 }
 
