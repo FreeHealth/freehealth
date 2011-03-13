@@ -30,7 +30,8 @@ HEADERS += $${PWD}/drugsbaseplugin.h \
     $${PWD}/ivirtualdrug.h \
     $${PWD}/druginteractionresult.h \
     $${PWD}/idruginteractionalert.h \
-    $${PWD}/druginteractioninformationquery.h
+    $${PWD}/druginteractioninformationquery.h \
+    ../../../plugins/drugsbaseplugin/iprescription.h
 
 #    $${PWD}/interactionsbase.h \
 #    $${PWD}/drugsdatabaseaboutpage.h \

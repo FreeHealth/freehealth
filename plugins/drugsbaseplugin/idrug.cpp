@@ -153,7 +153,7 @@ public:
     int m_Rid;
 };
 
-class IDrugPrescriptionPrivate
+class IPrescriptionPrivate
 {
 public:
     bool m_PrescriptionChanges;
@@ -413,22 +413,22 @@ void DrugRoute::setRouteId(const int rid)
 
 
 ///////////////////////////////////////////////////////////////////////////////////////////////////
-//////////////////////////////////////  IDRUGPRESCRIPTION  ////////////////////////////////////////
+////////////////////////////////////////  IPrescription  //////////////////////////////////////////
 ///////////////////////////////////////////////////////////////////////////////////////////////////
-IDrugPrescription::IDrugPrescription() :
-        d_pres(new Internal::IDrugPrescriptionPrivate)
+IPrescription::IPrescription() :
+        d_pres(new Internal::IPrescriptionPrivate)
 {
     d_pres->m_PrescriptionChanges = false;
 }
 
-IDrugPrescription::~IDrugPrescription()
+IPrescription::~IPrescription()
 {
     if (d_pres)
         delete d_pres;
     d_pres = 0;
 }
 
-void IDrugPrescription::setPrescriptionValue(const int fieldref, const QVariant &value)
+void IPrescription::setPrescriptionValue(const int fieldref, const QVariant &value)
 {
     if (d_pres->m_PrescriptionValues.value(fieldref) != value) {
         d_pres->m_PrescriptionChanges = true;
@@ -436,7 +436,7 @@ void IDrugPrescription::setPrescriptionValue(const int fieldref, const QVariant 
     }
 }
 
-bool IDrugPrescription::hasPrescription() const
+bool IPrescription::hasPrescription() const
 {
     /** \todo this needs improvements ++ */
     int i = 0;
@@ -447,7 +447,7 @@ bool IDrugPrescription::hasPrescription() const
     return i > 2;
 }
 
-QVariant IDrugPrescription::prescriptionValue(const int fieldref) const
+QVariant IPrescription::prescriptionValue(const int fieldref) const
 {
     using namespace DrugsDB::Constants;
     switch (fieldref)
@@ -483,6 +483,7 @@ QVariant IDrugPrescription::prescriptionValue(const int fieldref) const
 ////////////////////////////////////////////  IDRUG  //////////////////////////////////////////////
 ///////////////////////////////////////////////////////////////////////////////////////////////////
 IDrug::IDrug() :
+        IPrescription(),
         d_drug(new Internal::IDrugPrivate)
 {
 }

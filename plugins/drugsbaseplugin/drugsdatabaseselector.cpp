@@ -260,7 +260,6 @@ bool DrugsDatabaseSelector::setCurrentDatabase(const QString &dbUid)
             return true;
         }
     }
-    /** \todo reload drugs database */
     return false;
 }
 

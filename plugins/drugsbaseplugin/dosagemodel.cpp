@@ -495,7 +495,6 @@ void DosageModel::toPrescription(const int row)
 {
     Q_ASSERT(m_DrugsModel);
     Q_ASSERT(m_DrugsModel->containsDrug(m_UID));
-    /** \todo add a mutext ? */
     QHash<int,int> prescr_dosage;
     prescr_dosage.insert(Constants::Prescription::UsedDosage,           Dosages::Constants::Uuid);
     prescr_dosage.insert(Constants::Prescription::IntakesFrom,          Dosages::Constants::IntakesFrom);

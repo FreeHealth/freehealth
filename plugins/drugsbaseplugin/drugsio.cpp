@@ -127,7 +127,7 @@ using namespace Trans::ConstantTranslations;
 
 namespace DrugsDB {
 namespace Internal {
-/** \brief Private part of DrugsIO \internal */
+
 class DrugsIOPrivate
 {
 public:
@@ -272,6 +272,9 @@ bool DrugsIO::prescriptionFromXml(DrugsDB::DrugsModel *m, const QString &xmlCont
 {
     Q_ASSERT(m);
     QString xml = xmlContent;
+
+    QTime time;
+    time.start();
 
     // check prescription encoding version && update XML content if needed
     bool needUpdate = (!DrugsDB::VersionUpdater::instance()->isXmlIOUpToDate(xmlContent));
@@ -450,6 +453,8 @@ bool DrugsIO::prescriptionFromXml(DrugsDB::DrugsModel *m, const QString &xmlCont
     m->checkInteractions();
     Q_EMIT m->numberOfRowsChanged();
 
+    Utils::Log::logTimeElapsed(time, "DrugsIO", "Reading prescription");
+
     // small debug information
     Utils::Log::addMessage("DrugsIO", tr("Xml prescription correctly read."));
     return true;
@@ -471,7 +476,6 @@ bool DrugsIO::loadPrescription(DrugsDB::DrugsModel *m, const QString &fileName, 
     Utils::readXml(extras, XML_EXTRADATAS_TAG, extraDatas, false);
     return true;
 }
-
 
 /**
   \brief Load a Prescription file and assumed the transmission to the DrugsModel.

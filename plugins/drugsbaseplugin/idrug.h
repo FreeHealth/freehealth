@@ -53,7 +53,7 @@ class IDrugPrivate;
 class DrugRoutePrivate;
 class DrugsBase;
 class DrugsBasePrivate;
-class IDrugPrescriptionPrivate;
+class IPrescriptionPrivate;
 }
 
 class DRUGSBASE_EXPORT IComponent
@@ -168,11 +168,11 @@ private:
 };
 
 
-class DRUGSBASE_EXPORT IDrugPrescription
+class DRUGSBASE_EXPORT IPrescription
 {
 public:
-    IDrugPrescription();
-    virtual ~IDrugPrescription();
+    IPrescription();
+    virtual ~IPrescription();
 
     // Prescription values
     virtual bool hasPrescription() const;
@@ -180,10 +180,10 @@ public:
     virtual QVariant prescriptionValue(const int filedref) const;
 
 private:
-    Internal::IDrugPrescriptionPrivate *d_pres;
+    Internal::IPrescriptionPrivate *d_pres;
 };
 
-class DRUGSBASE_EXPORT IDrug : public IDrugPrescription
+class DRUGSBASE_EXPORT IDrug : public IPrescription
 {
     friend class DrugsDB::DrugRoute;
     friend class DrugsDB::IComponent;
