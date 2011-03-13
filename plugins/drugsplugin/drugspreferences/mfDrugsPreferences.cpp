@@ -620,7 +620,6 @@ DrugsPrintWidget::DrugsPrintWidget(QWidget *parent) :
 
     // Create a virtual drug and prescription
     using namespace DrugsDB::Constants;
-    /** \todo Change the UID */
     drug = DrugsDB::Internal::DrugsBase::instance()->getDrugByUID("-1");
     if (!drug) {
         Utils::Log::addError(this, "Unable to retreive a drug from the database", __FILE__, __LINE__);
