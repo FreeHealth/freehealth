@@ -18,10 +18,12 @@ class MovementsViewer : public QWidget
         void deleteMovement();
         void validMovement();
         void validAndRecord();
+        void setMovementsComboBoxToolTips(int);
     private:
         Ui::MovementsViewerWidget * ui;
         void fillMovementsComboBox();
         void fillYearComboBox();
+        void fillBankComboBox();
         int m_valid ;
 };
 

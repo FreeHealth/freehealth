@@ -19,12 +19,16 @@ public:
     QStandardItemModel *getMovementsComboBoxModel(QObject *parent);
 
     QStringList getYearComboBoxModel();
+    QStandardItemModel *getBankComboBoxModel(QObject * parent);
 
     bool insertIntoMovements(QHash<int,QVariant> &hashValues);
     bool deleteMovement(int row);
     bool validMovement(int row);
-    int getAvailableMovementId(QString &movementsComboBoxText);
+    int getAvailableMovementId(QString & movementsComboBoxText);
+    int getTypeOfMovement(QString & movementsComboBoxText);
+    int getBankId(QString & bankComboBoxText);
     QString getUserUid();
+    QHash<QString,QString> hashChildrenAndParentsAvailableMovements();
 
 private:
     QStringList listOfParents();

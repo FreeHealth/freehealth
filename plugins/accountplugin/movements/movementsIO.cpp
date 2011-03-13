@@ -1,8 +1,8 @@
 #include "movementsIO.h"
-
 #include <accountbaseplugin/constants.h>
 #include <accountbaseplugin/availablemovementmodel.h>
 #include <accountbaseplugin/movementmodel.h>
+#include <accountbaseplugin/bankaccountmodel.h>
 #include <coreplugin/icore.h>
 #include <coreplugin/itheme.h>
 #include <coreplugin/constants_icons.h>
@@ -23,6 +23,7 @@ MovementsIODb::MovementsIODb(QObject *parent) :
     {
     	Database db;
     	QString value = db.fieldName(Constants::Table_Movement, i) ;
+    	//qDebug() << __FILE__ << QString::number(__LINE__) << " value =" << value ;
     	m_modelMovements->setHeaderData(i,Qt::Horizontal,value,Qt::EditRole);
         }
 }
@@ -49,31 +50,44 @@ QString MovementsIODb::getUserUid(){
 
 QStringList MovementsIODb::listOfParents(){
     QStringList list;
-    AvailableMovementModel *availablemodel = new AvailableMovementModel(this);
-    for (int i = 0; i < availablemodel->rowCount(); i += 1)
+    AvailableMovementModel availablemodel(this);
+    for (int i = 0; i < availablemodel.rowCount(); i += 1)
     {
-    	QString parent = availablemodel->data(availablemodel->index(i,AVAILMOV_PARENT),Qt::DisplayRole).toString();
+    	QString parent = availablemodel.data(availablemodel.index(i,AVAILMOV_PARENT),Qt::DisplayRole).toString();
     	list << parent;
         }
     return list;
 }
 
+QHash<QString,QString> MovementsIODb::hashChildrenAndParentsAvailableMovements(){
+    QHash<QString,QString> hash;
+    AvailableMovementModel availablemodel(this);
+    int rows = availablemodel.rowCount();
+    for (int i = 0; i < rows; i += 1)
+    {
+    	QString child =  availablemodel.data(availablemodel.index(i,AVAILMOV_LABEL),Qt::DisplayRole).toString();   	
+    	QString parent = availablemodel.data(availablemodel.index(i,AVAILMOV_PARENT),Qt::DisplayRole).toString();
+    	hash.insertMulti(child,parent);
+        }
+    return hash;
+}
+
 QStandardItemModel  *MovementsIODb::getMovementsComboBoxModel(QObject *parent)
 {
     QStandardItemModel *model = new QStandardItemModel(parent);
-    AvailableMovementModel *availablemodel = new AvailableMovementModel(this);
+    AvailableMovementModel availablemodel(this);
     QStringList listOfAvModelParents;
     listOfAvModelParents = listOfParents();
-    for (int i = 0; i < availablemodel->rowCount(); i += 1) {
+    for (int i = 0; i < availablemodel.rowCount(); i += 1) {
         //todo : supprimer l'affichage des parents qui seront affichés en tool tip avec les commentaires
-    	int type = availablemodel->data(availablemodel->index(i,AVAILMOV_TYPE),Qt::DisplayRole).toInt();
+    	int type = availablemodel.data(availablemodel.index(i,AVAILMOV_TYPE),Qt::DisplayRole).toInt();
     	QIcon icon;
         if (type == 1) {
             icon = QIcon(theme()->icon(Core::Constants::ICONADD));
         } else {
             icon = QIcon(theme()->icon(Core::Constants::ICONREMOVE));
     	}
-    	QString label = availablemodel->data(availablemodel->index(i,AVAILMOV_LABEL),Qt::DisplayRole).toString();
+    	QString label = availablemodel.data(availablemodel.index(i,AVAILMOV_LABEL),Qt::DisplayRole).toString();
     	QStandardItem *item = new QStandardItem(icon,label);
     	if (!listOfAvModelParents.contains(label))
     	{
@@ -96,6 +110,19 @@ QStringList MovementsIODb::getYearComboBoxModel()
     }
     listOfYears.removeDuplicates();
     return listOfYears;
+}
+
+QStandardItemModel * MovementsIODb::getBankComboBoxModel(QObject * parent){
+    QStandardItemModel *model = new QStandardItemModel(parent);
+    BankAccountModel bankmodel(this);
+    int rows = bankmodel.rowCount();
+    for (int i = 0; i < rows; i += 1)
+    {
+    	QString bankLabel = bankmodel.data(bankmodel.index(i,BANKDETAILS_LABEL),Qt::DisplayRole).toString();
+    	QStandardItem *item = new QStandardItem(bankLabel);
+    	model->appendRow(item);
+        }
+    return model;
 }
 
 bool MovementsIODb::insertIntoMovements(QHash<int,QVariant> &hashValues)
@@ -136,9 +163,35 @@ int MovementsIODb::getAvailableMovementId(QString &movementsComboBoxText)
 {
     int availableMovementId = 0;
     AvailableMovementModel  availablemodel(this);
-    availablemodel.setFilter(movementsComboBoxText);
-    
+    Database db;
+    QString field = availablemodel.headerData(AVAILMOV_LABEL,Qt::Horizontal,Qt::DisplayRole).toString() ;
+    QString filter = field +QString(" = '%1'").arg(movementsComboBoxText);
+    qDebug() << __FILE__ << QString::number(__LINE__) << " filter =" << filter ;
+    availablemodel.setFilter(filter);
+    availableMovementId = availablemodel.data(availablemodel.index(0,AVAILMOV_ID),Qt::DisplayRole).toInt();
     return availableMovementId;
+}
+
+int MovementsIODb::getBankId(QString & bankComboBoxText){
+    int bankId = 0;
+    BankAccountModel model(this);
+    Database db;
+    QString field = model.headerData(BANKDETAILS_LABEL,Qt::Horizontal,Qt::DisplayRole).toString();
+    QString filter = field +QString(" = '%1'").arg(bankComboBoxText);
+    model.setFilter(filter);
+    bankId = model.data(model.index(0,BANKDETAILS_ID),Qt::DisplayRole).toInt();
+    return bankId;
+}
+
+int MovementsIODb::getTypeOfMovement(QString & movementsComboBoxText){
+    int type = 0;
+    AvailableMovementModel  availablemodel(this);
+    QString field = availablemodel.headerData(AVAILMOV_LABEL,Qt::Horizontal,Qt::DisplayRole).toString() ;
+    QString filter = field +QString(" = '%1'").arg(movementsComboBoxText);
+    qDebug() << __FILE__ << QString::number(__LINE__) << " filter =" << filter ;
+    availablemodel.setFilter(filter);
+    type = availablemodel.data(availablemodel.index(0,AVAILMOV_TYPE),Qt::DisplayRole).toInt();
+    return type;
 }
 
 bool MovementsIODb::validMovement(int row)

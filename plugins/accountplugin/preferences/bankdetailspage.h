@@ -96,6 +96,8 @@ private:
 private:
     AccountDB::BankAccountModel *m_Model;
     QDataWidgetMapper *m_Mapper;
+    QString m_user_uid;
+    QString m_user_fullName;
 };
 
 }  // End Internal

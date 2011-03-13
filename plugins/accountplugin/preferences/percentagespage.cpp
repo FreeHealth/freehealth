@@ -127,7 +127,6 @@ PercentagesWidget::PercentagesWidget(QWidget *parent) :
     
     m_Model = new AccountDB::PercentModel(this);
         /** \todo  m_Model->setUserUuid(); */
-    m_user_uid = user()->value(Core::IUser::Uuid).toString();
     qDebug() << __FILE__ << QString::number(__LINE__) << " m_user_uid =" << m_user_uid ;
     userEditedLabel->setText(m_user_uid);
     percentUidLabel->setText("");

@@ -35,7 +35,7 @@
 /***************************************************************************
  *   Main Developper : Eric MAEKER, <eric.maeker@free.fr>                  *
  *   Contributors :                                                        *
- *       NAME <MAIL@ADRESS>                                                *
+ *       Pierre-Marie DESOMBRE <pm.desombre@medsyn.fr>                     *
  *       NAME <MAIL@ADRESS>                                                *
  ***************************************************************************/
 #include "bankdetailspage.h"
@@ -52,6 +52,7 @@
 #include <coreplugin/icore.h>
 #include <coreplugin/isettings.h>
 #include <coreplugin/itheme.h>
+#include <coreplugin/iuser.h>
 #include <coreplugin/constants_icons.h>
 
 using namespace Account;
@@ -60,6 +61,7 @@ using namespace Trans::ConstantTranslations;
 
 static inline Core::ISettings *settings() { return Core::ICore::instance()->settings(); }
 static inline Core::ITheme *theme()  { return Core::ICore::instance()->theme(); }
+static inline Core::IUser *user() { return Core::ICore::instance()->user(); }
 
 
 /////////////////////////////////////////////////////////////////////////////////////////////////////
@@ -118,16 +120,26 @@ BankDetailsWidget::BankDetailsWidget(QWidget *parent) :
         QWidget(parent), m_Model(0), m_Mapper(0)
 {
     setupUi(this);
+    balanceDate->setDate(QDate::currentDate());
+    m_user_uid = user()->value(Core::IUser::Uuid).toString();
+    m_user_fullName = user()->value(Core::IUser::FullName).toString();
+    if (m_user_fullName.isEmpty()) {
+        m_user_fullName = "Admin_Test";
+    }
+    uidLabel->setText(m_user_uid);
     defaultCombo->addItem(tkTr(Trans::Constants::NO));
     defaultCombo->addItem(tkTr(Trans::Constants::YES));
     addButton->setIcon(theme()->icon(Core::Constants::ICONADD));
-    removeButton->setIcon(theme()->icon(Core::Constants::ICONREMOVE));
+    addButton->setText("New");
+    deleteButton->setIcon(theme()->icon(Core::Constants::ICONREMOVE));
+    deleteButton->setText("Delete");
     m_Model = new AccountDB::BankAccountModel(this);
     /** \todo  m_Model->setUserUuid(); */
     m_Mapper = new QDataWidgetMapper(this);
     m_Mapper->setSubmitPolicy(QDataWidgetMapper::AutoSubmit);
     m_Mapper->setModel(m_Model);
     m_Mapper->setCurrentModelIndex(QModelIndex());
+    m_Mapper->addMapping(uidLabel,AccountDB::Constants::BANKDETAILS_USER_UID,"text");
     m_Mapper->addMapping(currentLabel, AccountDB::Constants::BANKDETAILS_LABEL, "text");
     m_Mapper->addMapping(owner, AccountDB::Constants::BANKDETAILS_OWNER, "text");
     m_Mapper->addMapping(ownerAdress, AccountDB::Constants::BANKDETAILS_OWNERADRESS, "text");
@@ -135,7 +147,7 @@ BankDetailsWidget::BankDetailsWidget(QWidget *parent) :
     m_Mapper->addMapping(number, AccountDB::Constants::BANKDETAILS_ACCOUNTNUMBER, "text");
     m_Mapper->addMapping(balanceSpin, AccountDB::Constants::BANKDETAILS_BALANCE, "value");
     m_Mapper->addMapping(balanceDate, AccountDB::Constants::BANKDETAILS_BALANCEDATE, "date");
-    m_Mapper->addMapping(defaultCombo, AccountDB::Constants::BANKDETAILS_BALANCEDATE, "currentIndex");
+    m_Mapper->addMapping(defaultCombo, AccountDB::Constants::BANKDETAILS_DEFAULT, "currentIndex");
     accountComboBox->setModel(m_Model);
     accountComboBox->setModelColumn(AccountDB::Constants::BANKDETAILS_LABEL);
     setDatasToUi();
@@ -169,7 +181,6 @@ void BankDetailsWidget::saveModel()
 
 void BankDetailsWidget::on_accountComboBox_currentIndexChanged(int index)
 {
-    saveModel();
     m_Mapper->setCurrentIndex(accountComboBox->currentIndex());
 }
 
@@ -177,6 +188,10 @@ void BankDetailsWidget::on_addButton_clicked()
 {
     m_Model->insertRow(m_Model->rowCount());
     accountComboBox->setCurrentIndex(m_Model->rowCount() - 1);
+    uidLabel->setFocus();
+    uidLabel->setText(m_user_uid);
+    owner->setFocus();
+    owner->setText(m_user_fullName);
 }
 
 void BankDetailsWidget::on_removeButton_clicked()

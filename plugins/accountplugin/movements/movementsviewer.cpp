@@ -34,17 +34,23 @@ MovementsViewer::MovementsViewer(QWidget * parent) :
     ui->setupUi(this);
     //instanciate
     m_valid = 0; //bill not received
+    ui->valueDoubleSpinBox->setRange(0.00,999999999999999.00);
     ui->percentDoubleSpinBox->setRange(0.00,100.00);
     ui->percentDoubleSpinBox->setValue(100.00);
     ui->dateEdit->setDate(QDate::currentDate());
     fillMovementsComboBox();
     fillYearComboBox();
+    fillBankComboBox();
+    ui->valAndRecButton->setShortcut(QKeySequence::InsertParagraphSeparator);
     showMovements();
     connect(ui->quitButton,SIGNAL(pressed()),this,SLOT(close()));
     connect(ui->recordButton,SIGNAL(pressed()),this,SLOT(recordMovement()));
     connect(ui->deleteButton,SIGNAL(pressed()),this,SLOT(deleteMovement()));
     connect(ui->validButton,SIGNAL(pressed()),this,SLOT(validMovement()));
     connect(ui->valAndRecButton,SIGNAL(pressed()),this,SLOT(validAndRecord()));
+    connect(ui->movementsComboBox,SIGNAL(highlighted(int)),this,
+                                  SLOT(setMovementsComboBoxToolTips(int)));
+    
 }
 
 MovementsViewer::~MovementsViewer()
@@ -71,7 +77,6 @@ void MovementsViewer::showMovements()
     ui->tableView->setColumnHidden(MOV_TYPE,true);
     ui->tableView->setColumnHidden(MOV_TRACE,true);
     ui->tableView->setColumnHidden(MOV_COMMENT,true);
-    qDebug() << __FILE__ << QString::number(__LINE__) << " rows =" << QString::number(ui->tableView->model()->rowCount()) ;
 }
 
 void MovementsViewer::recordMovement()
@@ -82,8 +87,9 @@ void MovementsViewer::recordMovement()
     QString availableMovement = ui->movementsComboBox->currentText();
     int acMovId = mov.getAvailableMovementId(availableMovement);
     QString userUid = mov.getUserUid();
-    int bankId = 0;//todo
-    int type = 0;
+    QString bank = ui->bankComboBox->currentText();
+    int bankId = mov.getBankId(bank);//todo
+    int type = mov.getTypeOfMovement(availableMovement);
     QString label = availableMovement;
     QString date = QDate::currentDate().toString("yyyy-MM-dd");
     QString dateValue = ui->dateEdit->date().toString("yyyy-MM-dd");
@@ -162,6 +168,20 @@ void MovementsViewer::fillMovementsComboBox()
     ui->movementsComboBox->setModel(mov.getMovementsComboBoxModel(this));
 }
 
+void MovementsViewer::setMovementsComboBoxToolTips(int row){
+    QHash<QString,QString> hashChildrenAndParents;
+    MovementsIODb mov(this);
+    hashChildrenAndParents = mov.hashChildrenAndParentsAvailableMovements();
+    QString text = ui->movementsComboBox->itemText(row);
+    QString parent = hashChildrenAndParents.value(text);
+    QString toolTipText = QString("Parent = %1").arg(parent);
+    QAbstractItemModel *m = new QStandardItemModel;
+    m = ui->movementsComboBox->model();
+    QStandardItemModel *model = qobject_cast<QStandardItemModel*> (m);
+    QStandardItem *i = model->item(row);
+    i->setToolTip(toolTipText);
+}
+
 void MovementsViewer::fillYearComboBox()
 {
     MovementsIODb mov(this);
@@ -171,4 +191,9 @@ void MovementsViewer::fillYearComboBox()
         listOfYears << QString::number(QDate::currentDate().year());
     }
     ui->yearComboBox->addItems(listOfYears);
+}
+
+void MovementsViewer::fillBankComboBox(){
+    MovementsIODb mov(this);
+    ui->bankComboBox->setModel(mov.getBankComboBoxModel(this));
 }
