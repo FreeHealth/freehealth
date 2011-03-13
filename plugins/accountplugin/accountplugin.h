@@ -48,10 +48,19 @@
  * \file accountplugin.h
  * \author Eric MAEKER <eric.maeker@free.fr>
  * \version 0.1.0
- * \date 18 Mar 2010
+ * \date 13 Mar 2011
 */
 
 namespace Account {
+class AccountUserOptionsPage;
+class BankDetailsPage;
+class AvailableMovementPage;
+class MedicalProcedurePage;
+class VirtualDatabaseCreatorPage;
+class SitesPage;
+class InsurancePage;
+class PercentagesPage;
+class DistanceRulesPage;
 
 class AccountPlugin : public ExtensionSystem::IPlugin
 {
@@ -62,6 +71,17 @@ public:
 
     bool initialize(const QStringList &arguments, QString *errorString);
     void extensionsInitialized();
+
+private:
+    AccountUserOptionsPage *m_UserPage;
+    BankDetailsPage *m_BankPage;
+    AvailableMovementPage *m_AvMovPage;
+    MedicalProcedurePage *m_MPPage;
+    VirtualDatabaseCreatorPage *m_VirtPage;
+    SitesPage *m_SitesPage;
+    InsurancePage *m_InsurPage;
+    PercentagesPage *m_PercentPage;
+    DistanceRulesPage *m_DistancePage;
 };
 
 

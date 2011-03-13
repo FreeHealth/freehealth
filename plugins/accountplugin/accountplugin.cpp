@@ -56,7 +56,18 @@
 
 using namespace Account;
 
-AccountPlugin::AccountPlugin()
+AccountPlugin::AccountPlugin() :
+        ExtensionSystem::IPlugin(),
+        m_UserPage(new AccountUserOptionsPage(this)),
+        m_BankPage(new BankDetailsPage(this)),
+        m_AvMovPage(new AvailableMovementPage(this)),
+        m_MPPage(new MedicalProcedurePage(this)),
+        m_VirtPage(new VirtualDatabaseCreatorPage(this)),
+        m_SitesPage(new SitesPage(this)),
+        m_InsurPage(new InsurancePage(this)),
+        m_PercentPage(new PercentagesPage(this)),
+        m_DistancePage(new DistanceRulesPage(this))
+
 {
     if (Utils::Log::warnPluginsCreation())
         qWarning() << "creating AccountPlugin";
@@ -65,6 +76,16 @@ AccountPlugin::AccountPlugin()
 AccountPlugin::~AccountPlugin()
 {
     qWarning() << "AccountPlugin::~AccountPlugin()";
+    // Remove preferences pages to plugins manager object pool
+    removeObject(m_UserPage);
+    removeObject(m_BankPage);
+    removeObject(m_AvMovPage);
+    removeObject(m_MPPage);
+    removeObject(m_VirtPage);
+    removeObject(m_SitesPage);
+    removeObject(m_InsurPage);
+    removeObject(m_PercentPage);
+    removeObject(m_DistancePage);
 }
 
 bool AccountPlugin::initialize(const QStringList &arguments, QString *errorString)
@@ -88,15 +109,28 @@ void AccountPlugin::extensionsInitialized()
     // Add Translator to the Application
     Core::ICore::instance()->translators()->addNewTranslator("accountplugin");
     addAutoReleasedObject(new Core::PluginAboutPage(pluginSpec(), this));
-    addAutoReleasedObject(new AccountUserOptionsPage(this));
-    addAutoReleasedObject(new BankDetailsPage(this));
-    addAutoReleasedObject(new AvailableMovementPage(this));
-    addAutoReleasedObject(new MedicalProcedurePage(this));
-    addAutoReleasedObject(new VirtualDatabaseCreatorPage(this));
-    addAutoReleasedObject(new SitesPage(this));
-    addAutoReleasedObject(new InsurancePage(this));
-    addAutoReleasedObject(new PercentagesPage(this));
-    addAutoReleasedObject(new DistanceRulesPage(this));
+
+    // Check settings validity
+    m_UserPage->checkSettingsValidity();
+    m_BankPage->checkSettingsValidity();
+    m_AvMovPage->checkSettingsValidity();
+    m_MPPage->checkSettingsValidity();
+    m_VirtPage->checkSettingsValidity();
+    m_SitesPage->checkSettingsValidity();
+    m_InsurPage->checkSettingsValidity();
+    m_PercentPage->checkSettingsValidity();
+    m_DistancePage->checkSettingsValidity();
+
+    // Add pages to plugins manager object pool
+    addObject(m_UserPage);
+    addObject(m_BankPage);
+    addObject(m_AvMovPage);
+    addObject(m_MPPage);
+    addObject(m_VirtPage);
+    addObject(m_SitesPage);
+    addObject(m_InsurPage);
+    addObject(m_PercentPage);
+    addObject(m_DistancePage);
 }
 
 
