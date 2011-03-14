@@ -36,8 +36,20 @@ static inline Core::ISettings *settings() {return Core::ICore::instance()->setti
 
 using namespace DrugsDB;
 
+DrugInteractionInformationQuery::DrugInteractionInformationQuery(const DrugInteractionInformationQuery &query) :
+        messageType(query.messageType),
+        processTime(query.processTime),
+        iconSize(query.iconSize),
+        levelOfWarningStaticAlert(query.levelOfWarningStaticAlert),
+        levelOfWarningDynamicAlert(query.levelOfWarningDynamicAlert),
+        engineUid(query.engineUid),
+        result(query.result),
+        relatedDrug(query.relatedDrug)
+{
+}
+
 DrugInteractionInformationQuery::DrugInteractionInformationQuery() :
-        messageType(-1), processTime(-1), iconSize(-1)
+        messageType(-1), processTime(-1), iconSize(-1), result(0), relatedDrug(0)
 {
     levelOfWarningStaticAlert = settings()->value(Constants::S_LEVELOFWARNING_STATICALERT).toInt();
     levelOfWarningDynamicAlert = settings()->value(Constants::S_LEVELOFWARNING_DYNAMICALERT).toInt();

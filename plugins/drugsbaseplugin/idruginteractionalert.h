@@ -30,6 +30,7 @@
 #include <drugsbaseplugin/druginteractioninformationquery.h>
 
 class QIcon;
+class QWidget;
 
 namespace DrugsDB {
 class DrugInteractionResult;
@@ -50,7 +51,8 @@ public:
     virtual QString message(const DrugInteractionInformationQuery &query) const = 0;
 
     // dynamic alert
-    virtual void executeDynamicAlert(const DrugInteractionInformationQuery &query) = 0;
+    virtual bool hasDynamicAlertWidget(const DrugInteractionInformationQuery &query) const = 0;
+    virtual QWidget *dynamicAlertWidget(const DrugInteractionInformationQuery &query, QWidget *parent = 0) = 0;
     virtual void setOverridden(bool overridden) = 0;
     virtual bool wasOverridden() const = 0;
 };

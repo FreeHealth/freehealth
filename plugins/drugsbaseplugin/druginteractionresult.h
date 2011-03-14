@@ -74,6 +74,7 @@ public:
     bool isPatientDrugInteractionsTested() const {return m_PDITested;}
 
     QVector<IDrug *> testedDrugs() {return m_TestedDrugs;}
+    QVector<IDrugInteractionAlert *> alerts(const DrugInteractionInformationQuery &query) const;
 
     QStandardItemModel *toStandardModel() const;
 

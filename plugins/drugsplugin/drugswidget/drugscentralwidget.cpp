@@ -32,9 +32,13 @@
 #include <drugsbaseplugin/globaldrugsmodel.h>
 #include <drugsbaseplugin/drugsio.h>
 #include <drugsbaseplugin/drugsdatabaseselector.h>
+#include <drugsbaseplugin/druginteractioninformationquery.h>
+#include <drugsbaseplugin/druginteractionresult.h>
+#include <drugsbaseplugin/idruginteractionalert.h>
 
 #include <drugsplugin/drugswidget/drugselector.h>
 #include <drugsplugin/drugswidget/prescriptionviewer.h>
+#include <drugsplugin/drugswidget/dynamicalert.h>
 #include <drugsplugin/dosagedialog/mfDosageCreatorDialog.h>
 #include <drugsplugin/dosagedialog/mfDosageDialog.h>
 #include <drugsplugin/drugswidgetmanager.h>
@@ -174,36 +178,22 @@ void DrugsCentralWidget::onSelectorDrugSelected(const QVariant &drugId)
                                  tr("If you want to change the dosage of this drug please double-click on it in the prescription box."));
         return;
     }
-//    int drugPrescriptionRow = m_CurrentDrugModel->addDrug(uid);
 
     // Add drug to the model
     m_CurrentDrugModel->addDrug(drugId);
 
-    // Test for interaction and alert user as setted in settings
-    if (settings()->value(DrugsDB::Constants::S_USEDYNAMICALERTS, true).toBool()) {
-        // Check the desired level of warning
-        /** \todo code dynamic alerts */
-//        DrugsDB::Constants::Interaction::TypesOfIAM flag = DrugsDB::Constants::Interaction::TypesOfIAM(m_CurrentDrugModel->drugData(drugUid, DrugsDB::Constants::Drug::MaximumLevelOfInteraction).toInt());
-//        if (flag != DrugsDB::Constants::Interaction::noIAM) {
-//            DrugsDB::Constants::Interaction::TypesOfIAM minLevel = DrugsDB::Constants::Interaction::TypesOfIAM(settings()->value(Constants::S_LEVELOFWARNING_DYNAMICALERT, DrugsDB::Constants::Interaction::Deconseille).toInt());
-//            if (flag >= minLevel) {
-////                QPixmap icon = m_CurrentDrugModel->drugData(drugUid, DrugsDB::Constants::Interaction::MediumPixmap).value<QPixmap>();
-////                icon = icon.scaled(32,32, Qt::KeepAspectRatio, Qt::SmoothTransformation);
-//                QPixmap icon = m_CurrentDrugModel->interactionsManager()->interactionIcon(flag, 0, true).pixmap(64,64);
-//                bool yes = Utils::yesNoMessageBox(tr("Interaction found. Do you to continue anyway ?"),
-//                                            m_CurrentDrugModel->drugData(drugUid, DrugsDB::Constants::Drug::OwnInteractionsSynthesis).toString(),
-//                                            m_CurrentDrugModel->drugData(drugUid, DrugsDB::Constants::Interaction::FullSynthesis).toString(),
-//                                            tr("Dynamic interactions alert"),
-//                                            icon);
-//                if (!yes) {
-//                    m_CurrentDrugModel->removeLastInsertedDrug();
-//                    return;
-//                }
-//            }
-//        }
+    // Start dynamicAlert (ProcessTime == BeforePrescription)
+    DrugsDB::DrugInteractionInformationQuery query;
+    query.processTime = DrugsDB::DrugInteractionInformationQuery::BeforePrescription;
+    query.result = m_CurrentDrugModel->drugInteractionResult();
+    query.relatedDrug = m_CurrentDrugModel->getDrug(drugId);
+    DynamicAlert::DialogResult result = DynamicAlert::executeDynamicAlert(query, this);
+    if (result==DynamicAlert::DynamicAlertAccepted) {
+        m_CurrentDrugModel->removeLastInsertedDrug();
+        return;
     }
 
-//    if (DrugsWidgetManager::instance()->editMode()==DrugsWidgetManager::Prescriber) {
+    // show the protocol creator/selector dialog is needed
     if (!m_CurrentDrugModel->isSelectionOnlyMode()) {
         Internal::DosageCreatorDialog dlg(this, m_CurrentDrugModel->dosageModel(drugId));
         if (dlg.exec()==QDialog::Rejected) {

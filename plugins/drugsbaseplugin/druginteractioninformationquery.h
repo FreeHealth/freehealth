@@ -30,6 +30,8 @@
 #include <QString>
 
 namespace DrugsDB {
+class DrugInteractionResult;
+class IDrug;
 
 struct DrugInteractionInformationQuery
 {
@@ -53,7 +55,9 @@ struct DrugInteractionInformationQuery
         BigSize
     };
 
+    DrugInteractionInformationQuery(const DrugInteractionInformationQuery &query);
     DrugInteractionInformationQuery();
+
     ~DrugInteractionInformationQuery();
 
     int messageType;
@@ -61,6 +65,8 @@ struct DrugInteractionInformationQuery
     int iconSize;
     int levelOfWarningStaticAlert, levelOfWarningDynamicAlert;
     QString engineUid;
+    DrugsDB::DrugInteractionResult *result;
+    DrugsDB::IDrug *relatedDrug;
 };
 
 }  // End namespace DrugsDB

@@ -229,6 +229,23 @@ public:
 
     QString referencesLink(const QString &lang = QString::null) const {return m_Infos.value(DI_ReferencesLink).toString();}
 
+    const IDrug *getInteractingDrug(const IDrug *drug)
+    {
+        int testAtcId = m_Infos.value(DI_ATC1).toInt();
+        if (drug->allAtcIds().contains(testAtcId))
+            testAtcId = m_Infos.value(DI_ATC2).toInt();
+        for(int i=0; i < m_InteractingDrugs.count(); ++i) {
+            const IDrug *dr = m_InteractingDrugs.at(i);
+            if (dr==drug)
+                continue;
+            if (dr->allAtcIds().contains(testAtcId)) {
+                return dr;
+            }
+        }
+        LOG_ERROR_FOR("DDI", "No interactor found ?");
+        return 0;
+    }
+
     QString toHtml(bool detailled = false) const
     {
         if (m_InteractingDrugs.count() != 2)
@@ -363,6 +380,36 @@ public:
 
     QString engineUid() const {return Constants::DDI_ENGINE_UID;}
 
+    static bool typeInLevel(const DrugDrugInteractionEngine::TypesOfIAM r, const int level)
+    {
+        bool ret = false;
+        switch (level) {
+        case Constants::MinimumLevelOfWarning:
+            {
+                ret = (r & DrugDrugInteractionEngine::ContreIndication ||
+                       r & DrugDrugInteractionEngine::Deconseille);
+                break;
+            }
+        case Constants::ModerateLevelOfWarning:
+            {
+                ret = (r & DrugDrugInteractionEngine::ContreIndication ||
+                       r & DrugDrugInteractionEngine::Deconseille ||
+                       r & DrugDrugInteractionEngine::GPG ||
+                       r & DrugDrugInteractionEngine::P450 ||
+                       r & DrugDrugInteractionEngine::APrendreEnCompte ||
+                       r & DrugDrugInteractionEngine::Precaution);
+                break;
+            }
+        case Constants::MaximumLevelOfWarning:
+            {
+                ret = (r != DrugDrugInteractionEngine::NoIAM &&
+                       r != DrugDrugInteractionEngine::Unknown);
+                break;
+            }
+        }
+        return ret;
+    }
+
     // static alert
     QIcon icon(const IDrug *drug, const DrugInteractionInformationQuery &query) const
     {
@@ -407,8 +454,12 @@ public:
         for(int i=0; i < interactions.count(); ++i) {
             IDrugInteraction *ddi = interactions.at(i);
             if (ddi->engine()->uid()==Constants::DDI_ENGINE_UID) {
-                if (ddi->drugs().contains((IDrug*)drug)) {
+                if (!drug) {
                     r |= DrugDrugInteractionEngine::TypesOfIAM(ddi->sortIndex());
+                } else {
+                    if (ddi->drugs().contains((IDrug*)drug)) {
+                        r |= DrugDrugInteractionEngine::TypesOfIAM(ddi->sortIndex());
+                    }
                 }
             }
         }
@@ -440,6 +491,73 @@ public:
                 }
                 break;
             }
+        case DrugInteractionInformationQuery::InformationAlert:
+            {
+            QMap<int, QString> lines;
+            for(int j=0; j < interactions.count(); ++j) {
+                IDrugInteraction *di = interactions.at(j);
+                DrugsInteraction *ddi = static_cast<DrugsInteraction *>(di);
+                Q_ASSERT(ddi);
+                int typeId = -1;
+                DrugDrugInteractionEngine::TypesOfIAM r = DrugDrugInteractionEngine::TypesOfIAM(ddi->typeId());
+                if (!typeInLevel(r, query.levelOfWarningDynamicAlert))
+                    continue;
+                // Minimal alerts
+                if (r & DrugDrugInteractionEngine::ContreIndication && (query.levelOfWarningDynamicAlert <= Constants::MinimumLevelOfWarning))
+                    typeId = DrugDrugInteractionEngine::ContreIndication;
+                else if (r & DrugDrugInteractionEngine::Deconseille && (query.levelOfWarningStaticAlert <= Constants::MinimumLevelOfWarning))
+                    typeId = DrugDrugInteractionEngine::Deconseille;
+                // Moderate alerts
+                else if ((r & DrugDrugInteractionEngine::APrendreEnCompte) && (query.levelOfWarningStaticAlert <= Constants::ModerateLevelOfWarning))
+                    typeId = DrugDrugInteractionEngine::APrendreEnCompte;
+                else if ((r & DrugDrugInteractionEngine::P450) && (query.levelOfWarningStaticAlert <= Constants::ModerateLevelOfWarning))
+                    typeId = DrugDrugInteractionEngine::P450;
+                else if ((r & DrugDrugInteractionEngine::GPG) && (query.levelOfWarningStaticAlert <= Constants::ModerateLevelOfWarning))
+                    typeId = DrugDrugInteractionEngine::GPG;
+                else if ((r & DrugDrugInteractionEngine::Precaution) && (query.levelOfWarningStaticAlert <= Constants::ModerateLevelOfWarning))
+                    typeId = DrugDrugInteractionEngine::Precaution;
+                // Maximum alerts
+                else if ((r & DrugDrugInteractionEngine::Information) && (query.levelOfWarningStaticAlert == Constants::MaximumLevelOfWarning))
+                    typeId = DrugDrugInteractionEngine::Information;
+                else if ((r & DrugDrugInteractionEngine::InnDuplication) && (query.levelOfWarningStaticAlert == Constants::MaximumLevelOfWarning))
+                    typeId = DrugDrugInteractionEngine::InnDuplication;
+                else if (query.levelOfWarningStaticAlert & DrugDrugInteractionEngine::NoIAM)
+                    typeId = DrugDrugInteractionEngine::NoIAM;
+                QString &ditmp = lines[typeId];
+                QString drug2;
+                if (ddi->drugs().at(0)->drugId()==drug->drugId()) {
+                    drug2 = ddi->drugs().at(1)->brandName();
+                } else {
+                    drug2 = ddi->drugs().at(0)->brandName();
+                }
+                ditmp += QString("<tr>\n"
+                                 "  <td width=5%>&nbsp;</td>\n"
+                                 "  <td>* %1<br>&nbsp;&nbsp;&nbsp;&nbsp;%2</td>\n"
+                                 "</tr>")
+                        .arg(ddi->getInteractingDrug(drug)->brandName())
+                        .arg(di->header("//"));
+            }
+            QMap<int, QString>::const_iterator i = lines.constEnd();
+            --i;
+            while (true) {
+                if (!i.value().isEmpty()) {
+                    tmp += QString("<table width=100%>\n"
+                                   "<tr>\n"
+                                   "  <td colspan=2><b>%1</b></td>\n<td></td>\n"
+                                   "</tr>\n"
+                                   "%2\n"
+                                   "</table>"
+                                   )
+                            .arg(DrugsInteraction::typeToString(i.key()))
+                            .arg(i.value());
+                }
+                if (i == lines.constBegin())
+                    break;
+                --i;
+            }
+            toReturn = tmp;
+            break;
+        }
         case DrugInteractionInformationQuery::DetailledToolTip:
             {
                 QMap<int, QString> lines;
@@ -508,8 +626,28 @@ public:
     }
 
     // dynamic alert
-    void executeDynamicAlert(const DrugInteractionInformationQuery &query)
-    {}
+    bool hasDynamicAlertWidget(const DrugInteractionInformationQuery &query) const
+    {
+        // No Result ?
+        if (!query.result)
+            return false;
+        QVector<IDrugInteraction *> interactions;
+        if (query.relatedDrug) {
+            interactions = query.result->getInteractions(query.relatedDrug, Constants::DDI_ENGINE_UID);
+        } else {
+            interactions = query.result->interactions(Constants::DDI_ENGINE_UID);
+        }
+        // No interactions ?
+        if (interactions.isEmpty())
+            return false;
+        DrugDrugInteractionEngine::TypesOfIAM r = getMaximumTypeOfIAM(interactions, query.relatedDrug);
+        return typeInLevel(r, query.levelOfWarningDynamicAlert);
+    }
+
+    QWidget *dynamicAlertWidget(const DrugInteractionInformationQuery &query, QWidget *parent = 0)
+    {
+        return 0;
+    }
 
     void setOverridden(bool overridden) {m_Overridden=overridden;}
 

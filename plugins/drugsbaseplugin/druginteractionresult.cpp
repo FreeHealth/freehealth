@@ -149,6 +149,13 @@ QString DrugInteractionResult::alertMessagesToHtml(const DrugInteractionInformat
     return alertMessagesToHtml(0, query);
 }
 
+QVector<IDrugInteractionAlert *> DrugInteractionResult::alerts(const DrugInteractionInformationQuery &query) const
+{
+    Q_UNUSED(query);
+    // get alerts according to the ProcessTime, RelatedDrug...
+    return m_Alerts;
+}
+
 QStandardItemModel *DrugInteractionResult::toStandardModel() const
 {
     if (!m_StandardModel) {
