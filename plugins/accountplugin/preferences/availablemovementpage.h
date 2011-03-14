@@ -82,6 +82,8 @@ public Q_SLOTS:
 private:
     void changeEvent(QEvent *e);
     void saveModel();
+    bool isAvailableModelIsEmpty();
+    QStandardItemModel * availableMovementModelByLocale();
 
 private:
     AccountDB::AvailableMovementModel *m_Model;
@@ -105,8 +107,7 @@ public:
     void checkSettingsValidity();
     void applyChanges();
     void finish();
-    QStandardItemModel * availableMovementModelByLocale();
-
+    
     QString helpPage() {return QString();}
 
     static void writeDefaultSettings(Core::ISettings *s) {Internal::AvailableMovementWidget::writeDefaultSettings(s);}

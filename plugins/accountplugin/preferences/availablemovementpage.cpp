@@ -87,8 +87,7 @@ void AvailableMovementPage::finish() { delete m_Widget; }
 void AvailableMovementPage::checkSettingsValidity()
 {
     QHash<QString, QVariant> defaultvalues;
-    QStandardItemModel * model = availableMovementModelByLocale();
-//    defaultvalues.insert(DrugsDB::Constants::S_AVAILABLEDOSAGESBACKGROUNGCOLOR, DrugsDB::Constants::S_DEF_AVAILABLEDOSAGESBACKGROUNGCOLOR);
+    //    defaultvalues.insert(DrugsDB::Constants::S_AVAILABLEDOSAGESBACKGROUNGCOLOR, DrugsDB::Constants::S_DEF_AVAILABLEDOSAGESBACKGROUNGCOLOR);
 
     foreach(const QString &k, defaultvalues.keys()) {
         if (settings()->value(k) == QVariant())
@@ -233,7 +232,7 @@ static QString getCsvDefaultFile()
     return file.fileName();
 }
 
-QStandardItemModel *AvailableMovementPage::availableMovementModelByLocale()
+QStandardItemModel *AvailableMovementWidget::availableMovementModelByLocale()
 {
     QStandardItemModel *model = new QStandardItemModel;
     QFile file(getCsvDefaultFile());
@@ -251,20 +250,57 @@ QStandardItemModel *AvailableMovementPage::availableMovementModelByLocale()
     QTextStream stream(&file);
     stream.setCodec("UTF-8");
     // skip first line
-    stream.readLine();
+    //stream.readLine();
     int row = 0;
     while (!stream.atEnd())
     {
+        int row = 0;
         QString line = stream.readLine();
-        QList<QStandardItem*> listOfItemsData;
-        QStringList listOfItems;
-        listOfItems = line.split("\";\"");
-        for (int i = 0; i < AccountDB::Constants::AVAILMOV_MaxParam; ++i) {
-            //model->setData(model->index(row,i),listOfItems[i],Qt::EditRole);
-            listOfItemsData << new QStandardItem(listOfItems[i].remove("\""));
-        }
-        model->appendRow(listOfItemsData);
-        ++row;
+        line.remove("\"");
+        line.remove("'");
+        QStringList listOfSeparators;
+        listOfSeparators << "," << ";" << QString("\t");
+        QString separator;
+        QString separatorStr;
+        foreach(separatorStr,listOfSeparators){
+            if (line.contains(separatorStr)){
+                separator = separatorStr;
+                }
+            }
+        if (!line.contains("AVAILMOV_ID")){
+            //"AVAILMOV_ID","PARENT","TYPE","LABEL","CODE","COMMENT","DEDUCTIBILITY"
+            QList<QStandardItem*> listOfItemsData;
+            QStringList listOfItems;
+            listOfItems = line.split(separator);
+            for (int i = 0; i < AccountDB::Constants::AVAILMOV_MaxParam; i += 1){
+                //model->setData(model->index(row,i),listOfItems[i],Qt::EditRole);
+        	QStandardItem * item = new QStandardItem;
+        	item->setData(listOfItems[i]);
+        	listOfItemsData << item;
+        	}
+            model->appendRow(listOfItemsData);
+            ++row;  
+            }
     }
     return model;
+}
+
+bool AvailableMovementWidget::isAvailableModelIsEmpty(){
+    bool test = true;
+    int rows = m_Model->rowCount();
+    QStandardItemModel * model = availableMovementModelByLocale();
+    if (rows < 1)
+    {
+    	  for (int i = 0; i < rows; i += 1)
+    	  {
+    	  	for (int j = 0; j < AccountDB::Constants::AVAILMOV_MaxParam; j += 1)
+    	  	{
+    	  		
+    	  		QStandardItem * item = model->itemFromIndex(model->index(i,j));
+    	  		QString value = item->text();
+    	  		m_Model->setData(m_Model->index(i,j),value,Qt::EditRole);
+    	  	    }
+    	      }
+        }
+    return test;
 }
