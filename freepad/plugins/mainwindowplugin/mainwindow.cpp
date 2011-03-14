@@ -256,7 +256,33 @@ void MainWindow::extensionsInitialized()
 
 	m_padTools = ExtensionSystem::PluginManager::instance()->getObject<Core::IPadTools>();
 	m_padTools->createSyntaxHighlighter(m_ui->padTextEdit, m_tokens);
+
+	// tmp: fill with dummy tokens
+	m_tokens.insert("DRUG", "drug");
+	m_tokens.insert("Q_FROM", "q_from");
+	m_tokens.insert("Q_TO", "q_to");
+	m_tokens.insert("Q_SCHEME", "q_scheme");
+	m_tokens.insert("REPEATED_DAILY_SCHEME", "repeated daily scheme");
+	m_tokens.insert("MEAL", "meal");
+	m_tokens.insert("PERIOD", "period");
+	m_tokens.insert("PERIOD_SCHEME", "period scheme");
+	m_tokens.insert("D_FROM", "d_from");
+	m_tokens.insert("D_TO", "d_to");
+	m_tokens.insert("D_SCHEME", "d_scheme");
+	m_tokens.insert("ROUTE", "route");
+	m_tokens.insert("DISTRIBUTED_DAILY_SCHEME", "distributed daily scheme");
+	m_tokens.insert("MIN_INTERVAL", "min interval");
+	m_tokens.insert("NOTE", "note");
+
+	m_ui->treeWidgetTokens->clear();
+	foreach (const QString &key, m_tokens.keys()) {
+		QTreeWidgetItem *item = new QTreeWidgetItem(QStringList() << key << m_tokens[key].toString());
+		item->setFlags(item->flags() | Qt::ItemIsEditable);
+		m_ui->treeWidgetTokens->addTopLevelItem(item);
+	}
+
 	connect(m_ui->padTextEdit, SIGNAL(textChanged()), this, SLOT(padTextChanged()));
+	connect(m_ui->treeWidgetTokens, SIGNAL(itemChanged(QTreeWidgetItem *, int)), this, SLOT(tokenItemChanged(QTreeWidgetItem*,int)));
 }
 
 void MainWindow::padTextChanged()
@@ -276,6 +302,19 @@ void MainWindow::padTextChanged()
 			break;
 		}
 	}
+}
+
+void MainWindow::tokenItemChanged(QTreeWidgetItem *, int) {
+	refreshTokens();
+}
+
+void MainWindow::refreshTokens() {
+	m_tokens.clear();
+	for (int i = 0; i < m_ui->treeWidgetTokens->topLevelItemCount(); ++i) {
+		QTreeWidgetItem *item = m_ui->treeWidgetTokens->topLevelItem(i);
+		m_tokens.insert(item->text(0), item->text(1));
+	}
+	padTextChanged();
 }
 
 MainWindow::~MainWindow()

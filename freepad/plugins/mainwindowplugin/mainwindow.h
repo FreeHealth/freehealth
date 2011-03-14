@@ -38,6 +38,7 @@
 QT_BEGIN_NAMESPACE
 class QAction;
 class QMenu;
+class QTreeWidgetItem;
 QT_END_NAMESPACE
 
 /**
@@ -97,6 +98,7 @@ public Q_SLOTS:
 
 private slots:
 	void padTextChanged();
+	void tokenItemChanged(QTreeWidgetItem *item, int column);
 
 protected:
     void closeEvent( QCloseEvent *event );
@@ -110,6 +112,8 @@ public:
 private:
 	QMap<QString,QVariant> m_tokens;
 	Core::IPadTools *m_padTools;
+
+	void refreshTokens();
 };
 
 } // End Core

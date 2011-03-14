@@ -9,7 +9,5 @@ void PadCore::print(int indent) const
 
 QString PadCore::run(QMap<QString,QVariant> &tokens) const
 {
-	Q_UNUSED(tokens);
-
-	return _value;
+	return tokens[_value].toString();
 }
