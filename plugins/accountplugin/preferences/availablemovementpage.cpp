@@ -39,6 +39,11 @@
 #include <coreplugin/itheme.h>
 #include <coreplugin/constants_icons.h>
 
+#include <QDir>
+#include <QFile>
+#include <QTextStream>
+
+
 using namespace Account;
 using namespace Account::Internal;
 using namespace Trans::ConstantTranslations;
@@ -215,67 +220,51 @@ void AvailableMovementWidget::changeEvent(QEvent *e)
     }
 }
 
-QStandardItemModel * AvailableMovementPage::availableMovementModelByLocale(){
-    QStandardItemModel * model = new QStandardItemModel;
-    QLocale locale;
-    QString localCountry;
-    localCountry = QLocale::countryToString(locale.country());
-    localCountry.remove("\"");
-    qDebug() << __FILE__ << QString::number(__LINE__) << " locale Country =" << localCountry ;
+static QString getCsvDefaultFile()
+{
     QString sqlDirPath = settings()->path(Core::ISettings::BundleResourcesPath) + "/sql/account";
-    QDir dirFreeAccountSql(sqlDirPath);
-    QStringList filters ;
-    filters << ".csv";
-    QStringList listOfFiles;
-    listOfFiles = dirFreeAccountSql.entryList(filters);
-    QString strNamesOfFiles;
-    foreach(strNamesOfFiles,listOfFiles){
-        if (strNamesOfFiles.contains(localCountry))
-        {
-        	  qWarning() << __FILE__ << QString::number(__LINE__) << "No available movements for " << localCountry ;
-            }
-        else
-        {
-        	QFile file(sqlDirPath+"/"+strNamesOfFiles);
-        	if (!file.open(QIODevice::ReadOnly))
-        	{
-        		  qWarning() << __FILE__ << QString::number(__LINE__) << strNamesOfFiles+" cannot open" ;
-        	    }
-        	QTextStream stream(&file);
-        	while (!stream.atEnd())
-        	{
-        		int row = 0;
-        		QString line = stream.readLine();
-        		line.remove("\"");
-        		line.remove("'");
-        		QStringList listOfSeparators;
-        		listOfSeparators << "," << ";" << QString("\t");
-        		QString separator;
-        		QString separatorStr;
-        		foreach(separatorStr,listOfSeparators){
-        		    if (line.contains(separatorStr))
-        		    {
-        		    	  separator = separatorStr;
-        		        }
-        		    }
-        		if (!line.contains("AVAILMOV_ID"))
-        		{
-        			  //"AVAILMOV_ID","PARENT","TYPE","LABEL","CODE","COMMENT"
-        			  QList<QStandardItem*> listOfItemsData;
-        			  QStringList listOfItems;
-        			  listOfItems = line.split(separator);
-        			  for (int i = 0; i < AccountDB::Constants::AVAILMOV_MaxParam; i += 1)
-        			  {
-        			  	//model->setData(model->index(row,i),listOfItems[i],Qt::EditRole);
-        			  	QStandardItem * item = new QStandardItem;
-        			  	item->setData(listOfItems[i]);
-        			  	listOfItemsData << item;
-        			  }
-        			model->appendRow(listOfItemsData);
-        			row++;  
-        		    }
-        	    }
-            }
+    QDir dir(sqlDirPath);
+    if (!dir.exists())
+        return QString();
+    QString fileName = QString("available_movements_%1.csv").arg(QLocale().name());
+    QFile file(dir.absolutePath() + QDir::separator() + fileName);
+    if (!file.exists())
+        return QString();
+    return file.fileName();
+}
+
+QStandardItemModel *AvailableMovementPage::availableMovementModelByLocale()
+{
+    QStandardItemModel *model = new QStandardItemModel;
+    QFile file(getCsvDefaultFile());
+    // some validity checking
+    if (!file.exists()) {
+        LOG_ERROR(tkTr(Trans::Constants::FILE_1_DOESNOT_EXISTS).arg(QLocale().name() + " " + tr("Available Movements")));
+        return model;
+    }
+    if (!file.open(QFile::ReadOnly | QFile::Text)) {
+        LOG_ERROR(tkTr(Trans::Constants::FILE_1_ISNOT_READABLE).arg(file.fileName()));
+        return model;
+    }
+
+    // read the content with UTF8 coding system
+    QTextStream stream(&file);
+    stream.setCodec("UTF-8");
+    // skip first line
+    stream.readLine();
+    int row = 0;
+    while (!stream.atEnd())
+    {
+        QString line = stream.readLine();
+        QList<QStandardItem*> listOfItemsData;
+        QStringList listOfItems;
+        listOfItems = line.split("\";\"");
+        for (int i = 0; i < AccountDB::Constants::AVAILMOV_MaxParam; ++i) {
+            //model->setData(model->index(row,i),listOfItems[i],Qt::EditRole);
+            listOfItemsData << new QStandardItem(listOfItems[i].remove("\""));
         }
+        model->appendRow(listOfItemsData);
+        ++row;
+    }
     return model;
 }
