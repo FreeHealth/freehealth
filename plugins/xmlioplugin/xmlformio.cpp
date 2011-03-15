@@ -35,7 +35,7 @@
 #include <coreplugin/icore.h>
 #include <coreplugin/ipatient.h>
 
-#include <formmanagerplugin/formmanager.h>
+//#include <formmanagerplugin/formmanager.h>
 #include <formmanagerplugin/iformitem.h>
 #include <formmanagerplugin/iformwidgetfactory.h>
 
@@ -70,7 +70,7 @@ namespace {
     static QHash<QString, int> m_PatientDatas;
 }
 
-inline static Form::FormManager *formManager() { return Form::FormManager::instance(); }
+//inline static Form::FormManager *formManager() { return Form::FormManager::instance(); }
 inline static ExtensionSystem::PluginManager *pluginManager() {return ExtensionSystem::PluginManager::instance();}
 
 inline static void refreshPlugsFactories()
@@ -83,17 +83,16 @@ inline static void refreshPlugsFactories()
     }
 }
 
-inline static Form::FormMain *createNewForm(const QDomElement &element, Form::FormItem *item = 0)
-{
-    QString name = element.firstChildElement(Constants::TAG_NAME).text();
-    Form::FormMain *parent = formManager()->getParent<Form::FormMain>(item);
-    return formManager()->createForm(name, parent);
-}
+//inline static Form::FormMain *createNewForm(const QDomElement &element, Form::FormItem *item = 0)
+//{
+//    QString name = element.firstChildElement(Constants::TAG_NAME).text();
+//    Form::FormMain *parent = formManager()->getParent<Form::FormMain>(item);
+//    return formManager()->createForm(name, parent);
+//}
 
 inline static bool populateValues(Form::FormItem *item, const QDomElement &root)
 {
     QDomElement element = root.firstChildElement();
-
 
     QString lang = root.attribute(Constants::ATTRIB_LANGUAGE,Trans::Constants::ALL_LANGUAGE);
     while (!element.isNull()) {
@@ -283,16 +282,29 @@ bool XmlFormIO::canReadFile() const
 
 bool XmlFormIO::readFileInformations()
 {
+    /** \todo code here */
+    Form::FormIODescription ioDesc;
     QDomElement root = m_MainDoc.documentElement();
     // get version
-    m_Version = root.firstChildElement(Constants::TAG_SPEC_VERSION).text();
-    // get author
-    m_Author = root.firstChildElement(Constants::TAG_SPEC_AUTHORS).text();
+    ioDesc.setData(Form::FormIODescription::Version, root.firstChildElement(Constants::TAG_SPEC_VERSION).text());
+    ioDesc.setData(Form::FormIODescription::Author, root.firstChildElement(Constants::TAG_SPEC_AUTHORS).text());
+    ioDesc.setData(Form::FormIODescription::CreationDate, root.firstChildElement(Constants::TAG_SPEC_CREATIONDATE).text());
+    ioDesc.setData(Form::FormIODescription::GeneralIcon, root.firstChildElement(Constants::TAG_SPEC_ICON).text());
     // get descriptions
     QDomElement desc = root.firstChildElement(Constants::TAG_SPEC_DESCRIPTION);
     while (!desc.isNull()) {
-        m_Desc.insert(desc.attribute(Constants::ATTRIB_LANGUAGE, Trans::Constants::ALL_LANGUAGE), desc.text());
+        ioDesc.setData(Form::FormIODescription::ShortDescription, desc.text(), desc.attribute(Constants::ATTRIB_LANGUAGE, Trans::Constants::ALL_LANGUAGE));
         desc = root.nextSiblingElement(Constants::TAG_SPEC_DESCRIPTION);
+    }
+    desc = root.firstChildElement(Constants::TAG_SPEC_HTMLDESCRIPTION);
+    while (!desc.isNull()) {
+        ioDesc.setData(Form::FormIODescription::HtmlDescription, desc.text(), desc.attribute(Constants::ATTRIB_LANGUAGE, Trans::Constants::ALL_LANGUAGE));
+        desc = root.nextSiblingElement(Constants::TAG_SPEC_HTMLDESCRIPTION);
+    }
+    desc = root.firstChildElement(Constants::TAG_SPEC_LICENSE);
+    while (!desc.isNull()) {
+        ioDesc.setData(Form::FormIODescription::License, desc.text(), desc.attribute(Constants::ATTRIB_LANGUAGE, Trans::Constants::ALL_LANGUAGE));
+        desc = root.nextSiblingElement(Constants::TAG_SPEC_LICENSE);
     }
     return true;
 }
@@ -328,12 +340,14 @@ void XmlFormIO::formDescriptionToTreeWidget(QTreeWidget *tree, const QString &la
     tree->resizeColumnToContents(1);
 }
 
-bool XmlFormIO::loadForm()
+Form::FormMain *XmlFormIO::loadForm()
 {
     Q_ASSERT(!m_AbsFileName.isEmpty());
     refreshPlugsFactories();
-    m_ActualForm = 0;
-    return loadForm(m_AbsFileName, m_ActualForm);
+    m_ActualForm = new Form::FormMain;
+    if (!loadForm(m_AbsFileName, m_ActualForm))
+        LOG_ERROR(m_Error.join("\n"));
+    return m_ActualForm;
 }
 
 bool XmlFormIO::loadForm(const QString &file, Form::FormMain *rootForm)
@@ -357,7 +371,7 @@ bool XmlFormIO::loadForm(const QString &file, Form::FormMain *rootForm)
         return false;
 
 //    rootForm->createDebugPage();
-    createWidgets();
+    createWidgets(rootForm);
     return true;
 }
 
@@ -470,7 +484,8 @@ bool XmlFormIO::createElement(Form::FormItem *item, QDomElement &element)
         // create a new form
         Form::FormMain *oldRootForm = m_ActualForm;
         /** \todo add Forms' parent */
-        m_ActualForm = formManager()->createForm(element.firstChildElement(Constants::TAG_NAME).text(), m_ActualForm);
+//        m_ActualForm = formManager()->createForm(element.firstChildElement(Constants::TAG_NAME).text(), m_ActualForm);
+        m_ActualForm = m_ActualForm->createChildForm(element.firstChildElement(Constants::TAG_NAME).text());
         item = m_ActualForm;
         if (item) {
             loadElement(item, element);
@@ -502,6 +517,7 @@ bool XmlFormIO::createItemWidget(Form::FormItem *item, QWidget *parent)
 {
     // does plugin was inform in the xml file ?
     if (item->spec()->pluginName().isEmpty()) {
+        qWarning() << "no plugin name for item" << item->uuid();
         item->setFormWidget(0);
         return false;
     }
@@ -542,10 +558,10 @@ bool XmlFormIO::createFormWidget(Form::FormMain *form)
     return true;
 }
 
-bool XmlFormIO::createWidgets()
+bool XmlFormIO::createWidgets(const Form::FormMain *rootForm)
 {
-    // foreach Forms in FormManager
-    foreach(Form::FormMain *form, formManager()->forms()) {
+    // foreach FormMain children
+    foreach(Form::FormMain *form, rootForm->formMainChildren()) {
         // create the form
         createFormWidget(form);
     }

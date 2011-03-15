@@ -29,21 +29,54 @@
 
 #include <formmanagerplugin/formmanager_exporter.h>
 
+#include <translationutils/multilingualclasstemplate.h>
 #include <translationutils/constanttranslations.h>
 
 #include <QObject>
 #include <QString>
 #include <QStringList>
 #include <QTreeWidget>
+#include <QHash>
+#include <QVariant>
 
 /**
  * \file iformio.h
  * \author Eric MAEKER <eric.maeker@free.fr>
- * \version 0.4.0
- * \date 08 June 2010
+ * \version 0.6.0
+ * \date 15 Mar 2011
 */
 
 namespace Form {
+class FormMain;
+
+class FORM_EXPORT FormIODescription
+{
+public:
+    enum DataRepresentation {
+        Author = 0,
+        Country,
+        AvailableLanguages,
+        Version,
+        CreationDate,
+        LastModificationDate,
+        ShortDescription,
+        HtmlDescription,
+        License,
+        GeneralIcon
+    };
+
+    FormIODescription();
+    virtual ~FormIODescription();
+
+    QVariant data(const int ref, const QString &lang = QString::null) const;
+    bool setData(const int ref, const QVariant &value, const QString &lang = QString::null);
+
+    void formDescriptionToTreeWidget(QTreeWidget *tree, const QString &lang = QString::null) const;
+
+private:
+    mutable Trans::MultiLingualClass< QHash<int, QVariant> > m_Datas;
+};
+
 
 class FORM_EXPORT IFormIO : public QObject
 {
@@ -64,13 +97,16 @@ public:
     virtual bool canReadFile() const = 0;
 
     // canReadFile() must be called first, no need to loadForm to get these informations
+//    virtual FormIODescription readFileInformations() = 0;
+    /** \todo code here, this part should be obsolete */
     virtual bool readFileInformations() = 0;
     virtual QString formAuthor() const = 0;
     virtual QString formVersion() const = 0;
     virtual QString formDescription(const QString &lang = Trans::Constants::ALL_LANGUAGE) const = 0;
     virtual void formDescriptionToTreeWidget(QTreeWidget *tree, const QString &lang = Trans::Constants::ALL_LANGUAGE) const = 0;
+    /** end */
 
-    virtual bool loadForm() = 0;
+    virtual Form::FormMain *loadForm() = 0;
     virtual bool saveForm(QObject *treeRoot) = 0;
 
     virtual QString lastError() const = 0;

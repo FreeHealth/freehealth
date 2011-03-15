@@ -49,6 +49,7 @@ const char* const TAG_SPEC_LICENSE      = "licence";
 const char* const TAG_SPEC_CREATIONDATE = "cdate";
 const char* const TAG_SPEC_BIBLIOGRAPHY = "bibliography";
 const char* const TAG_SPEC_DESCRIPTION  = "description";
+const char* const TAG_SPEC_HTMLDESCRIPTION  = "htmldescription";
 const char* const TAG_SPEC_LABEL        = "label";
 const char* const TAG_SPEC_PLUGINNAME   = "type";
 const char* const TAG_SPEC_VERSION      = "version";

@@ -75,8 +75,7 @@ public:
     QString formDescription(const QString &lang = Trans::Constants::ALL_LANGUAGE) const;
     void formDescriptionToTreeWidget(QTreeWidget *tree, const QString &lang = Trans::Constants::ALL_LANGUAGE) const;
 
-
-    bool loadForm();
+    Form::FormMain *loadForm();
     bool saveForm(QObject *treeRoot) { Q_UNUSED(treeRoot); return true; }
 
     static QString lastestXmlVersion();
@@ -89,7 +88,7 @@ private:
     bool createElement(Form::FormItem *item, QDomElement &element);
     bool createItemWidget(Form::FormItem *item, QWidget *parent = 0);
     bool createFormWidget(Form::FormMain *form);
-    bool createWidgets();
+    bool createWidgets(const Form::FormMain *rootForm);
 
 private:
      mutable QString m_AbsFileName;
