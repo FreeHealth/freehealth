@@ -466,6 +466,35 @@ public:
         return r;
     }
 
+    static QString iconPath(const int levelOfDdi, const int iconSize)
+    {
+        Core::ITheme *th = theme();
+        DrugDrugInteractionEngine::TypesOfIAM level = DrugDrugInteractionEngine::TypesOfIAM(levelOfDdi);
+        Core::ITheme::IconSize size = Core::ITheme::IconSize(iconSize);
+        // Minimal alerts
+        if (level & DrugDrugInteractionEngine::ContreIndication)
+            return th->iconFullPath(Constants::INTERACTION_ICONCRITICAL, size);
+        else if (level & DrugDrugInteractionEngine::Deconseille)
+            return th->iconFullPath(Constants::INTERACTION_ICONDECONSEILLEE, size);
+        // Moderate alerts
+        else if ((level & DrugDrugInteractionEngine::APrendreEnCompte))
+            return th->iconFullPath(Constants::INTERACTION_ICONTAKEINTOACCOUNT, size);
+        else if ((level & DrugDrugInteractionEngine::P450))
+            return th->iconFullPath(Constants::INTERACTION_ICONP450, size);
+        else if ((level & DrugDrugInteractionEngine::GPG))
+            return th->iconFullPath(Constants::INTERACTION_ICONGPG, size);
+        else if ((level & DrugDrugInteractionEngine::Precaution))
+            return th->iconFullPath(Constants::INTERACTION_ICONPRECAUTION, size);
+        // Maximum alerts
+        else if ((level & DrugDrugInteractionEngine::Information))
+            return th->iconFullPath(Constants::INTERACTION_ICONINFORMATION, size);
+        else if ((level & DrugDrugInteractionEngine::InnDuplication))
+            return th->iconFullPath(Constants::INTERACTION_ICONINFORMATION, size);
+        else if (level & DrugDrugInteractionEngine::NoIAM)
+            return th->iconFullPath(Constants::INTERACTION_ICONOK, size);
+        return th->iconFullPath(Constants::INTERACTION_ICONUNKONW, size);
+    }
+
     QString message(const IDrug *drug, const DrugInteractionInformationQuery &query) const
     {
         QString toReturn;
@@ -541,20 +570,25 @@ public:
             --i;
             while (true) {
                 if (!i.value().isEmpty()) {
-                    tmp += QString("<table width=100%>\n"
+                    const QString &drugs = i.value();
+                    tmp += QString("<table>\n"
                                    "<tr>\n"
-                                   "  <td colspan=2><b>%1</b></td>\n<td></td>\n"
+                                   "  <td rowspan=%1 width=32px valign=middle><img src=\"%2\"></td>\n"
+                                   "  <td colspan=2 width=*><b>%3</b></td>\n"
                                    "</tr>\n"
-                                   "%2\n"
-                                   "</table>"
+                                   "%4\n"
+                                   "</table>\n<br />"
                                    )
+                            .arg(drugs.count("<tr>")  + 1)
+                            .arg(iconPath(i.key(), Core::ITheme::MediumIcon))
                             .arg(DrugsInteraction::typeToString(i.key()))
-                            .arg(i.value());
+                            .arg(drugs);
                 }
                 if (i == lines.constBegin())
                     break;
                 --i;
             }
+            qWarning() << tmp;
             toReturn = tmp;
             break;
         }

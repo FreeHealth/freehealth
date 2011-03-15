@@ -29,6 +29,12 @@
 #include <drugsbaseplugin/druginteractionresult.h>
 #include <drugsbaseplugin/druginteractioninformationquery.h>
 #include <drugsbaseplugin/idruginteractionalert.h>
+#include <drugsbaseplugin/constants.h>
+
+#include <coreplugin/icore.h>
+#include <coreplugin/itheme.h>
+#include <coreplugin/constants_icons.h>
+#include <coreplugin/imainwindow.h>
 
 #include "ui_dynamicalert.h"
 
@@ -38,11 +44,17 @@
 
 using namespace DrugsWidget;
 
+static inline Core::ITheme *theme() {return Core::ICore::instance()->theme();}
+
+
 DynamicAlert::DynamicAlert(const DrugsDB::DrugInteractionInformationQuery &query, QWidget *parent) :
     QDialog(parent),
     ui(new Ui::DynamicAlert)
 {
     ui->setupUi(this);
+    setWindowTitle(tr("Drug interaction alert"));
+    setWindowModality(Qt::WindowModal);
+    ui->generalIconLabel->setPixmap(theme()->icon(DrugsDB::Constants::I_DRUGDRUGINTERACTIONENGINE, Core::ITheme::BigIcon).pixmap(64,64));
     QVector<DrugsDB::IDrugInteractionAlert *> alerts = query.result->alerts(query);
     QVector<int> alertsToUse;
     for(int i=0; i<alerts.count(); ++i) {
@@ -58,12 +70,14 @@ DynamicAlert::DynamicAlert(const DrugsDB::DrugInteractionInformationQuery &query
         // No tabwidget
         DrugsDB::IDrugInteractionAlert *alert = alerts.at(alertsToUse.at(0));
         QLabel *label = new QLabel(this);
-        label->setWordWrap(true);
         label->setTextFormat(Qt::RichText);
+        label->setSizePolicy(QSizePolicy::Preferred, QSizePolicy::Preferred);
         DrugsDB::DrugInteractionInformationQuery myQuery(query);
         myQuery.messageType = DrugsDB::DrugInteractionInformationQuery::InformationAlert;
+        myQuery.iconSize = DrugsDB::DrugInteractionInformationQuery::BigSize;
+        myQuery.levelOfWarningStaticAlert = myQuery.levelOfWarningDynamicAlert;
         label->setText(alert->message(myQuery.relatedDrug, myQuery));
-        ui->layout->addWidget(label, 0, 0);
+        ui->centralLayout->addWidget(label, 0, 0);
     } else {
         // With tabwidget
         QTabWidget *tab = new QTabWidget(this);
@@ -77,7 +91,7 @@ DynamicAlert::DynamicAlert(const DrugsDB::DrugInteractionInformationQuery &query
             label->setText(alert->message(myQuery.relatedDrug, myQuery));
             tab->addTab(label, alert->engineUid());
         }
-        ui->layout->addWidget(tab, 0, 0);
+        ui->centralLayout->addWidget(tab, 0, 0);
     }
 
     // Add buttons
@@ -86,7 +100,9 @@ DynamicAlert::DynamicAlert(const DrugsDB::DrugInteractionInformationQuery &query
     QPushButton *override = box->addButton(tr("Override alert and go on"), QDialogButtonBox::RejectRole);
     connect(box, SIGNAL(accepted()), this, SLOT(accept()));
     connect(box, SIGNAL(rejected()), this, SLOT(reject()));
-    ui->layout->addWidget(box);
+    ui->buttonLayout->addWidget(box);
+
+    adjustSize();
 }
 
 DynamicAlert::~DynamicAlert()
@@ -111,7 +127,6 @@ DynamicAlert::DialogResult DynamicAlert::executeDynamicAlert(const DrugsDB::Drug
         return NoDynamicAlert;
 
     DynamicAlert dlg(query, parent);
-    dlg.setModal(true);
     if (dlg.exec()==QDialog::Accepted) {
         return DynamicAlertAccepted;
     }
