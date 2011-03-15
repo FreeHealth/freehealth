@@ -588,7 +588,6 @@ public:
                     break;
                 --i;
             }
-            qWarning() << tmp;
             toReturn = tmp;
             break;
         }
