@@ -208,7 +208,6 @@ void DrugSelector::createToolButtons()
         a->setText(info->translatedName());
         a->setToolTip(info->translatedName());
         a->setData(info->identifiant);
-        qWarning() << "kkkkkkkkkkkkkkkkk" << info->lang_country;
         a->setIcon(theme()->icon("/flags/"+info->lang_country.mid(3)+".png"));
         drugsDatabaseSelectorButton->addAction(a);
         if (info->identifiant==base()->actualDatabaseInformations()->identifiant) {

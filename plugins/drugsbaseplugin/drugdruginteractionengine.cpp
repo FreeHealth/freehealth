@@ -560,8 +560,8 @@ public:
                     drug2 = ddi->drugs().at(0)->brandName();
                 }
                 ditmp += QString("<tr>\n"
-                                 "  <td width=5%>&nbsp;</td>\n"
-                                 "  <td>* %1<br>&nbsp;&nbsp;&nbsp;&nbsp;%2</td>\n"
+                                 "  <td width=5px></td>\n"
+                                 "  <td width=*>* %1<br>&nbsp;&nbsp;&nbsp;&nbsp;%2</td>\n"
                                  "</tr>")
                         .arg(ddi->getInteractingDrug(drug)->brandName())
                         .arg(di->header("//"));

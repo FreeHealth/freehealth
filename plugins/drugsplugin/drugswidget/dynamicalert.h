@@ -59,7 +59,6 @@ public:
         DynamicAlertOverridden,
         DynamicAlertAccepted
     };
-
     ~DynamicAlert();
 
     static DialogResult executeDynamicAlert(const DrugsDB::DrugInteractionInformationQuery &query, QWidget *parent = 0);
