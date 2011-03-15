@@ -89,16 +89,13 @@ QVariant AvailableMovementModel::headerData(int section, Qt::Orientation orienta
 bool AvailableMovementModel::insertRows(int row, int count, const QModelIndex &parent)
 {
     bool b = d->m_SqlTable->insertRows(row, count, parent);
-    
     return b;
-   }
+}
 
 bool AvailableMovementModel::removeRows(int row, int count, const QModelIndex &parent)
 {
     bool b = d->m_SqlTable->removeRows(row, count, parent);
-    
     return b;
-
 }
 
 bool AvailableMovementModel::isDirty() const

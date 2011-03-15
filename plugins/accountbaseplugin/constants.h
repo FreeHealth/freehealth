@@ -198,6 +198,7 @@ namespace Constants {
         AVAILMOV_PARENT,
         AVAILMOV_TYPE,
         AVAILMOV_LABEL,
+        AVAILMOV_CODE,
         AVAILMOV_COMMENT,
         AVAILMOV_DEDUCTIBILITY,
         AVAILMOV_MaxParam

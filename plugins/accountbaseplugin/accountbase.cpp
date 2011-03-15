@@ -373,6 +373,7 @@ AccountBase::AccountBase(QObject *parent)
     addField(Table_AvailableMovement,  AVAILMOV_PARENT,       "PARENT",        FieldIsShortText);
     addField(Table_AvailableMovement,  AVAILMOV_TYPE,         "TYPE",          FieldIsInteger);
     addField(Table_AvailableMovement,  AVAILMOV_LABEL,        "LABEL",         FieldIsShortText);
+    addField(Table_AvailableMovement,  AVAILMOV_CODE,         "CODE",         FieldIsShortText);
     addField(Table_AvailableMovement,  AVAILMOV_COMMENT,      "COMMENT",       FieldIsLongText);
     addField(Table_AvailableMovement,  AVAILMOV_DEDUCTIBILITY,"TAX_DEDUCTIBLE",FieldIsBoolean);
     /** Add user_uid, and uid */
