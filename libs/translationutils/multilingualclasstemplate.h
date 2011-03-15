@@ -33,6 +33,14 @@
 #include <QStringList>
 #include <QHash>
 
+/**
+ * \file multilingualclasstemplate.h
+ * \author Eric MAEKER <eric.maeker@free.fr>
+ * \version 0.6.0
+ * \date 15 Mar 2011
+*/
+
+
 namespace Trans {
 
 /**
@@ -70,7 +78,7 @@ public:
     }
 
     /** Use for the debugging treewidget construction */
-    virtual QString categoryForTreeWiget() const = 0;
+    QString categoryForTreeWiget() const {return QString();}
 
     /** Check if the \e lang already exists */
     bool hasLanguage(const QString &lang)
