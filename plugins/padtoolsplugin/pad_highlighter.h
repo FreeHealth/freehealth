@@ -5,6 +5,19 @@
 
 #include "pad_analyzer.h"
 
+struct BlockData : public QTextBlockUserData
+{
+	enum TokenType {
+		Token_OpenPad,
+		Token_CoreDelimiter,
+		Token_Core
+	};
+	QVector<TokenType> tokens;
+
+	void eatClosePad();
+	void eatCoreDelimiter();
+};
+
 class PadHighlighter : public QSyntaxHighlighter
 {
 	Q_OBJECT
@@ -29,6 +42,7 @@ private:
 	QTextCharFormat _padFormat;
 	QTextCharFormat _coreFormat;
 	QTextCharFormat _prefixFormat;
+	QTextCharFormat _postfixFormat;
 	QTextCharFormat _coreTextFormat;
 
 	void init();
