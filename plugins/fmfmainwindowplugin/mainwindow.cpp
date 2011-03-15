@@ -106,7 +106,7 @@ static inline Core::IPatient *patient() {return Core::ICore::instance()->patient
 static inline ExtensionSystem::PluginManager *pluginManager() { return ExtensionSystem::PluginManager::instance(); }
 
 static inline Form::FormManager *formManager() {return Form::FormManager::instance();}
-static inline Form::EpisodeModel *episodeModel() {return Form::EpisodeModel::instance();}
+//static inline Form::EpisodeModel *episodeModel() {return Form::EpisodeModel::instance();}
 
 static inline Patients::PatientModel *patientModel() {return Patients::PatientModel::activeModel();}
 
@@ -207,7 +207,6 @@ bool MainWindow::initialize(const QStringList &arguments, QString *errorString)
 {
     Q_UNUSED(arguments);
     Q_UNUSED(errorString);
-    Utils::Log::addMessage(this , tkTr(Trans::Constants::RAISING_APPLICATION));
     return true;
 }
 
@@ -279,7 +278,7 @@ void MainWindow::postCoreInitialization()
 
     // TEST
     Patients::PatientWidgetManager::instance()->postCoreInitialization();
-    formManager()->formPlaceHolder()->setEpisodeModel(episodeModel());
+//    formManager()->formPlaceHolder()->setEpisodeModel(episodeModel());
     // END TEST
 
     theme()->finishSplashScreen(this);
@@ -311,14 +310,14 @@ void MainWindow::onCurrentPatientChanged()
     m_RecentPatients->addToRecentFiles(uuid);
 
     // inform formplaceholder; episodemodel and patient model
-    episodeModel()->setCurrentPatient(uuid);
+//    episodeModel()->setCurrentPatient(uuid);
     formManager()->setCurrentPatient(uuid);
 }
 
 /** \brief Close the main window and the application */
 void MainWindow::closeEvent(QCloseEvent *event)
 {
-    Utils::Log::addMessage(this, "Closing MainWindow");
+    LOG("Closing MainWindow");
     writeSettings();
     event->accept();
 }
@@ -389,7 +388,9 @@ bool MainWindow::loadFile(const QString &filename, const QList<Form::IFormIO *> 
     if (iolist.isEmpty())
         QList<Form::IFormIO *> list = pluginManager()->getObjects<Form::IFormIO>();
 
-    if (formManager()->loadFile(filename, list)) {
+    // Get the FormMain empty root from FormManager
+    Form::FormMain *root = 0;
+    if (root = formManager()->loadFile(filename, list)) {
         fileManager()->setCurrentFile(filename);
     } else {
         return false;

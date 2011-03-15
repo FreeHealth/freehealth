@@ -33,7 +33,8 @@ SOURCES = formmanagerplugin.cpp \
     episodemodel.cpp \
     episodebase.cpp \
     formfilesselectorwidget.cpp \
-    formmanagerpreferencespage.cpp
+    formmanagerpreferencespage.cpp \
+    iformio.cpp
 OTHER_FILES = FormManager.pluginspec
 TRANSLATIONS += $${SOURCES_TRANSLATIONS}/formmanagerplugin_fr.ts \
     $${SOURCES_TRANSLATIONS}/formmanagerplugin_de.ts \

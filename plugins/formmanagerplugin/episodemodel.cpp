@@ -36,9 +36,6 @@
 #include <coreplugin/constants_tokensandsettings.h>
 #include <coreplugin/actionmanager/actionmanager.h>
 
-#include <usermanagerplugin/usermodel.h>
-#include <usermanagerplugin/constants.h>
-
 #include <formmanagerplugin/formmanager.h>
 #include <formmanagerplugin/iformitem.h>
 #include <formmanagerplugin/iformitemspec.h>
@@ -85,14 +82,14 @@ using namespace Form;
 using namespace Trans::ConstantTranslations;
 
 static inline Form::Internal::EpisodeBase *episodeBase() {return Form::Internal::EpisodeBase::instance();}
-static inline Form::FormManager *formManager() { return Form::FormManager::instance(); }
+//static inline Form::FormManager *formManager() { return Form::FormManager::instance(); }
 
-static inline UserPlugin::UserModel *userModel() {return UserPlugin::UserModel::instance();}
-static inline QString currentUserUuid() {return userModel()->currentUserData(Core::IUser::Uuid).toString();}
+static inline Core::IUser *user() {return Core::ICore::instance()->user();}
+static inline Core::IPatient *patient() {return Core::ICore::instance()->patient();}
+static inline QString currentUserUuid() {return user()->value(Core::IUser::Uuid).toString();}
 
 static inline Core::ISettings *settings()  { return Core::ICore::instance()->settings(); }
 static inline Core::ActionManager *actionManager() { return Core::ICore::instance()->actionManager(); }
-static inline Core::IPatient *patient()  { return Core::ICore::instance()->patient(); }
 
 
 namespace Form {
@@ -300,10 +297,6 @@ public:
             m_ActualEpisode(0),
             q(parent)
     {
-        m_UserUuid = currentUserUuid();
-        m_TmpFile = settings()->path(Core::ISettings::ApplicationTempPath) + "/FreeMedForms_Episodes.xml";
-        Utils::Log::addMessage(q, "Using temporary path " + m_TmpFile);
-        q->connect(userModel(), SIGNAL(userConnected(QString)), q, SLOT(setCurrentUser(QString)));
     }
 
     ~EpisodeModelPrivate ()
@@ -334,7 +327,8 @@ public:
         Utils::Log::addMessage(q, "Getting Forms");
         // create one item per form
         formsItems.clear();
-        foreach(Form::FormMain *f, formManager()->forms()) {
+        qWarning() << m_RootForm;
+        foreach(Form::FormMain *f, m_RootForm->formMainChildren()) {
             datas.clear();
             datas.insert(EpisodeModel::FormUuid, f->uuid());
             datas.insert(EpisodeModel::Label, f->spec()->label());
@@ -348,9 +342,9 @@ public:
             formsItems.insert(f, it);
         }
         // reparent items
-        foreach(Form::FormMain *f, formManager()->forms()) {
+        foreach(Form::FormMain *f, m_RootForm->formMainChildren()) {
             TreeItem *it = formsItems.value(f);
-            if (f->formParent()) {
+            if (f->formParent() != m_RootForm) {
                 it->setParent(formsItems.value(f->formParent()));
                 it->parent()->addChildren(it);
             } else {
@@ -382,7 +376,7 @@ public:
     {
         // make sure that all actual episodes are saved into database
         if (!saveEpisode(m_ActualEpisode, m_ActualEpisode_FormUid))
-            Utils::Log::addError(q, "Unable to save actual episode (refreshEpisodes())");
+            LOG_ERROR_FOR(q, "Unable to save actual episode (refreshEpisodes())");
 
         // delete old episodes
         deleteEpisodes(m_RootItem);
@@ -390,7 +384,7 @@ public:
         m_ActualEpisode_FormUid = "";
 
         // get Episodes
-        Utils::Log::addMessage(q, "Getting Episodes");
+        LOG_FOR(q, "Getting Episodes");
         QSqlQuery query(episodeBase()->database());
         QList<TreeItem *> episodes;
 
@@ -524,7 +518,7 @@ public:
         qWarning() << "saveEpisode" << item << formUid;
         // check each item --> isModified ? isNewlyCreated ?
         /** \todo isNewlyCreated */
-        FormMain *form = formManager()->form(formUid);
+        FormMain *form = m_RootForm->formMainChild(formUid);
         if (!form)
             return false;
 
@@ -740,6 +734,7 @@ public:
 //    }
 
 public:
+    FormMain *m_RootForm;
     QSqlTableModel *m_Sql;
     TreeItem *m_RootItem;
     QString m_UserUuid, m_LkIds, m_CurrentPatient, m_CurrentForm;
@@ -756,27 +751,34 @@ private:
 }
 }
 
-EpisodeModel *EpisodeModel::m_Instance = 0;
+//EpisodeModel *EpisodeModel::m_Instance = 0;
 
-EpisodeModel *EpisodeModel::instance()
-{
-    if (!m_Instance)
-        m_Instance = new EpisodeModel(qApp);
-    return m_Instance;
-}
+//EpisodeModel *EpisodeModel::instance()
+//{
+//    if (!m_Instance)
+//        m_Instance = new EpisodeModel(qApp);
+//    return m_Instance;
+//}
 
-EpisodeModel::EpisodeModel(QObject *parent) :
-        QAbstractItemModel(parent), d(0)
+EpisodeModel::EpisodeModel(FormMain *rootEmptyForm, QObject *parent) :
+        QAbstractItemModel(parent), d(new Internal::EpisodeModelPrivate(this))
 {
+    Q_ASSERT(rootEmptyForm);
     setObjectName("EpisodeModel");
+    d->m_RootForm = rootEmptyForm;
     init();
 }
 
 void EpisodeModel::init()
 {
-    d = new Internal::EpisodeModelPrivate(this);
+    d->m_UserUuid = currentUserUuid();
+    d->m_TmpFile = settings()->path(Core::ISettings::ApplicationTempPath) + "/FreeMedForms_Episodes.xml";
+    LOG("Using temporary path " + d->m_TmpFile);
+    connect(user(), SIGNAL(userChanged()), this, SLOT(onUserChanged()));
+    connect(patient(), SIGNAL(currentPatientChanged()), this, SLOT(onPatientChanged()));
+
 //    d->connectSqlPatientSignals();
-    setCurrentUser(d->m_UserUuid);
+    onUserChanged();
     d->createFormTree();
 
     // connect the save action
@@ -804,10 +806,10 @@ void EpisodeModel::onCoreDatabaseServerChanged()
     reset();
 }
 
-void EpisodeModel::setCurrentUser(const QString &uuid)
+void EpisodeModel::onUserChanged()
 {
-    d->m_UserUuid = uuid;
-    /** \todo here */
+    d->m_UserUuid = currentUserUuid();
+    /** \todo code here */
 //    QList<int> ids = episodeBase()->retreivePractionnerLkIds(uuid);
 //    d->m_LkIds.clear();
 //    foreach(int i, ids)
@@ -816,9 +818,9 @@ void EpisodeModel::setCurrentUser(const QString &uuid)
     d->refreshEpisodes();
 }
 
-void EpisodeModel::setCurrentPatient(const QString &uuid)
+void EpisodeModel::onPatientChanged()
 {
-    d->m_CurrentPatient = uuid;
+    d->m_CurrentPatient = patient()->data(Core::IPatient::Uid).toString();
     d->refreshEpisodes();
     d->getLastEpisodesAndFeedPatientModel();
     reset();
@@ -908,7 +910,7 @@ QVariant EpisodeModel::data(const QModelIndex &item, int role) const
                 return QString("<p align=\"right\">%1&nbsp;-&nbsp;%2<br /><span style=\"color:gray;font-size:9pt\">%3</span></p>")
                         .arg(it->data(Date).toDate().toString(settings()->value(Constants::S_EPISODEMODEL_DATEFORMAT, "dd MMM yyyy").toString()).replace(" ", "&nbsp;"))
                         .arg(it->data(item.column()).toString().replace(" ", "&nbsp;"))
-                        .arg(userModel()->currentUserData(Core::IUser::FullName).toString());
+                        .arg(user()->value(Core::IUser::FullName).toString());
             }
 //            if (!it->isEpisode()) {
 //                return it->data(EpisodeModel::FormToolTip);
@@ -1079,7 +1081,10 @@ bool EpisodeModel::isUniqueEpisode(const QModelIndex &index) const
     if (!index.isValid())
         return false;
     Internal::TreeItem *item = d->getItem(index);
-    return formManager()->form(item->data(FormUuid).toString())->episodePossibilities()==FormMain::UniqueEpisode;
+    FormMain *form = d->m_RootForm->formMainChild(item->data(FormUuid).toString());
+    if (form)
+        return form->episodePossibilities()==FormMain::UniqueEpisode;
+    return false;
 }
 
 bool EpisodeModel::isNoEpisode(const QModelIndex &index)
@@ -1087,7 +1092,10 @@ bool EpisodeModel::isNoEpisode(const QModelIndex &index)
     if (!index.isValid())
         return false;
     Internal::TreeItem *item = d->getItem(index);
-    return formManager()->form(item->data(FormUuid).toString())->episodePossibilities()==FormMain::NoEpisode;
+    FormMain *form = d->m_RootForm->formMainChild(item->data(FormUuid).toString());
+    if (form)
+        return form->episodePossibilities()==FormMain::NoEpisode;
+    return false;
 }
 
 void EpisodeModel::setReadOnly(const bool state)
@@ -1110,7 +1118,7 @@ bool EpisodeModel::submit()
     // save actual episode if needed
     if (d->m_ActualEpisode) {
         if (!d->saveEpisode(d->m_ActualEpisode, d->m_ActualEpisode_FormUid))
-            Utils::Log::addError(this, "Unable to save actual episode before editing a new one");
+            LOG_ERROR("Unable to save actual episode before editing a new one");
     }
     return true;
 }
@@ -1135,13 +1143,13 @@ bool EpisodeModel::activateEpisode(const QModelIndex &index, const QString &form
     d->m_ActualEpisode_FormUid = formUid;
 
     // clear actual form and fill episode datas
-    FormMain *form = formManager()->form(formUid);
+    FormMain *form = d->m_RootForm->formMainChild(formUid);
     if (!form)
         return false;
     form->clear();
     form->itemDatas()->setData(0, d->m_ActualEpisode->data(Date), IFormItemData::ID_EpisodeDate);
     form->itemDatas()->setData(0, d->m_ActualEpisode->data(Label), IFormItemData::ID_EpisodeLabel);
-    const QString &username = userModel()->currentUserData(Core::IUser::FullName).toString();
+    const QString &username = user()->value(Core::IUser::FullName).toString();
     if (username.isEmpty())
         form->itemDatas()->setData(0, tr("No user"), IFormItemData::ID_UserName);
     else

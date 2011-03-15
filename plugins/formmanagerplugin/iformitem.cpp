@@ -34,6 +34,8 @@
 
 #include <extensionsystem/pluginmanager.h>
 #include <utils/global.h>
+#include <utils/log.h>
+
 #include <translationutils/multilingualclasstemplate.h>
 #include <translationutils/constanttranslations.h>
 
@@ -42,19 +44,27 @@
 #include <QGridLayout>
 #include <QHeaderView>
 #include <QMap>
+
 #include <QDebug>
 
 using namespace Form;
 using namespace Form::Internal;
 
 inline static Form::FormManager *formManager() { return Form::FormManager::instance(); }
+static inline Core::UniqueIDManager *uuidManager() {return Core::ICore::instance()->uniqueIDManager();}
+
+#ifdef DEBUG
+enum {WarnFormCreation=true};
+#else
+enum {WarnFormCreation=false};
+#endif
 
 ////////////////////////////////////////////////////////////////////////////////////////////////////////////
 //////////////////////////////////////  FormItemIdentifiants  //////////////////////////////////////////////
 ////////////////////////////////////////////////////////////////////////////////////////////////////////////
 void FormItemIdentifiants::setUuid(const QString &uuid)
 {
-    id = formManager()->uuidManager()->uniqueIdentifier(uuid);
+    id = uuidManager()->uniqueIdentifier(uuid);
     m_Uuid=uuid;
 }
 
@@ -330,7 +340,6 @@ void FormItem::addExtraData(const QString &id, const QString &data)
     }
 }
 
-
 FormItem *FormItem::createChildItem(const QString &uuid)
 {
     Form::FormItem *i = new Form::FormItem(this);
@@ -362,12 +371,9 @@ void FormPage::languageChanged()
 ////////////////////////////////////////////////////////////////////////////////////////////////////////////
 /////////////////////////////////////////////  FormMain  ///////////////////////////////////////////////////
 ////////////////////////////////////////////////////////////////////////////////////////////////////////////
-FormPage *FormMain::createPage(const QString &uuid)
+FormMain::FormMain(QObject *parent) :
+        FormItem(parent), m_DebugPage(0), m_Episode(MultiEpisode)
 {
-    FormPage *p = new FormPage(this);
-    if (!uuid.isEmpty())
-        p->setUuid(uuid);
-    return p;
 }
 
 FormMain::~FormMain()
@@ -377,12 +383,43 @@ FormMain::~FormMain()
 //        ExtensionSystem::PluginManager::instance()->removeObject(m_DebugPage);
 }
 
+/** \brief Create and return a new FormMain as children of this FormMain. */
+FormMain *FormMain::createChildForm(const QString &uuid)
+{
+    FormMain *f = new FormMain(this);
+    if (!uuid.isEmpty())
+        f->setUuid(uuid);
+    if (WarnFormCreation)
+        LOG("FormManager Creating Form: " + uuid + " has child of " + this->uuid());
+    return f;
+}
+
+/** \brief Actually unused */
+FormPage *FormMain::createPage(const QString &uuid)
+{
+    FormPage *p = new FormPage(this);
+    if (!uuid.isEmpty())
+        p->setUuid(uuid);
+    return p;
+}
+
+void FormMain::languageChanged()
+{
+    qWarning() << "FormMain language changed" << uuid();
+}
+
 void FormMain::clear()
 {
     foreach(FormItem *it, this->formItemChildren()) {
         if (it->itemDatas())
             it->itemDatas()->clear();
     }
+}
+
+void FormMain::createDebugPage()
+{
+    m_DebugPage = new FormMainDebugPage(this, this);
+    ExtensionSystem::PluginManager::instance()->addObject(m_DebugPage);
 }
 
 inline static void itemToTree(FormItem *item, QTreeWidgetItem *tree)
@@ -412,17 +449,6 @@ void FormMain::toTreeWidget(QTreeWidget *tree)
     }
 }
 
-void FormMain::createDebugPage()
-{
-    m_DebugPage = new FormMainDebugPage(this, this);
-    ExtensionSystem::PluginManager::instance()->addObject(m_DebugPage);
-}
-
-
-void FormMain::languageChanged()
-{
-    qWarning() << "FormMain language changed" << uuid();
-}
 
 ////////////////////////////////////////////////////////////////////////////////////////////////////////////
 ///////////////////////////////////////////  FormItemSpec  /////////////////////////////////////////////////

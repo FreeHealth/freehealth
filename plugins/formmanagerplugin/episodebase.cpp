@@ -36,8 +36,6 @@
 #include <coreplugin/constants_tokensandsettings.h>
 #include <coreplugin/iuser.h>
 
-#include <usermanagerplugin/usermodel.h>
-
 #include <QCoreApplication>
 #include <QSqlDatabase>
 #include <QSqlError>
@@ -54,7 +52,7 @@ using namespace Form::Internal;
 using namespace Trans::ConstantTranslations;
 
 static inline Core::ISettings *settings()  { return Core::ICore::instance()->settings(); }
-static inline UserPlugin::UserModel *userModel() {return UserPlugin::UserModel::instance();}
+static inline Core::IUser *user() {return Core::ICore::instance()->user();}
 
 //namespace Patients {
 //namespace Internal {
@@ -259,7 +257,7 @@ void EpisodeBase::onCoreDatabaseServerChanged()
 void EpisodeBase::toTreeWidget(QTreeWidget *tree)
 {
     Database::toTreeWidget(tree);
-    QString uuid = userModel()->currentUserData(Core::IUser::Uuid).toString();
+    QString uuid = user()->value(Core::IUser::Uuid).toString();
     QHash<int, QString> where;
     where.clear();
     /** \todo here */

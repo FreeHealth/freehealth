@@ -32,6 +32,8 @@
 #include <QAbstractItemModel>
 
 namespace Form {
+class FormMain;
+
 namespace Internal {
 class EpisodeModelPrivate;
 }
@@ -60,9 +62,9 @@ public:
         MaxData
     };
 
-    EpisodeModel(QObject *parent);
+    EpisodeModel(Form::FormMain *rootEmptyForm, QObject *parent = 0);
     ~EpisodeModel();
-    static EpisodeModel *instance();
+//    static EpisodeModel *instance();
     void init();
 
     QModelIndex index(int row, int column, const QModelIndex &parent) const;
@@ -106,9 +108,11 @@ Q_SIGNALS:
     void episodeDeleted(const QModelIndex &index);
     void episodeCreated(const QModelIndex &index);
 
+private Q_SLOTS:
+    void onUserChanged();
+    void onPatientChanged();
+
 public Q_SLOTS:
-    void setCurrentUser(const QString &uuid);
-    void setCurrentPatient(const QString &uuid);
     void setCurrentFormUuid(const QString &uuid);
 
     bool activateEpisode(const QModelIndex &index, const QString &formUid); //const int id, const QString &formUid, const QString &xmlcontent);
@@ -118,7 +122,7 @@ public Q_SLOTS:
 
 private:
     Internal::EpisodeModelPrivate *d;
-    static EpisodeModel *m_Instance;
+//    static EpisodeModel *m_Instance;
 };
 
 }  // End namespace Form

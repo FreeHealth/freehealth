@@ -34,7 +34,7 @@
 #include "iformitem.h"
 #include "iformio.h"
 #include "formplaceholder.h"
-#include "episodemodel.h"
+//#include "episodemodel.h"
 
 #include <formmanagerplugin/iformwidgetfactory.h>
 #include <formmanagerplugin/iformitemdata.h>
@@ -70,7 +70,7 @@ using namespace Form::Internal;
 static inline ExtensionSystem::PluginManager *pluginManager() { return ExtensionSystem::PluginManager::instance(); }
 static inline Core::ModeManager *modeManager() { return Core::ICore::instance()->modeManager(); }
 static inline Core::ISettings *settings()  { return Core::ICore::instance()->settings(); }
-static inline Form::EpisodeModel *episodeModel() {return Form::EpisodeModel::instance();}
+//static inline Form::EpisodeModel *episodeModel() {return Form::EpisodeModel::instance();}
 
 
 namespace Form {
@@ -147,11 +147,6 @@ void FormManager::activateMode()
     d->m_Holder->formTree()->expandAll();
 }
 
-Core::UniqueIDManager *FormManager::uuidManager() const
-{
-    return d->m_UuidManager;
-}
-
 FormMain *FormManager::createForm(const QString &uuid, FormMain *parent)
 {
     FormMain *f = 0;
@@ -163,7 +158,7 @@ FormMain *FormManager::createForm(const QString &uuid, FormMain *parent)
         f->setUuid(uuid);
     d->m_HashForms.insert(d->m_UuidManager->uniqueIdentifier(f->uuid()), f);
     if (WarnFormCreation)
-        qWarning() << "FormManager Creating Form" << uuid; // << f << d->m_UuidManager->uniqueIdentifier(f->uuid());
+        LOG("FormManager Creating Form: " + uuid);
     return f;
 }
 
@@ -188,7 +183,7 @@ FormMain *FormManager::form(const QString &uuid) const
     return d->m_HashForms.value(id, 0);
 }
 
-bool FormManager::loadFile(const QString &filename, const QList<Form::IFormIO *> &iolist)
+Form::FormMain *FormManager::loadFile(const QString &filename, const QList<Form::IFormIO *> &iolist)
 {
     if (filename.isEmpty())
         return false;
@@ -202,19 +197,16 @@ bool FormManager::loadFile(const QString &filename, const QList<Form::IFormIO *>
         list = iolist;
 
     // try to read form
+    Form::FormMain *root = 0;
     foreach(Form::IFormIO *io, list) {
         if (io->setFileName(filename) && io->canReadFile()) {
-            if (io->loadForm())
-                reader = io;
+            root = io->loadForm();
+            if (root)
+                break;
         }
     }
-    if (!reader)
-        return false;
-
-    // populate FormPlaceHolder with new values
-    d->m_Holder->reset();
-
-    return true;
+    d->m_Holder->setRootForm(root);
+    return root;
 }
 
 FormPlaceHolder *FormManager::formPlaceHolder() const
@@ -225,9 +217,10 @@ FormPlaceHolder *FormManager::formPlaceHolder() const
 void FormManager::setCurrentPatient(const QString &uuid)
 {
     Q_UNUSED(uuid);
-    QString formUuid = episodeModel()->index(0, Form::EpisodeModel::FormUuid, QModelIndex()).data().toString();
+    /** \todo code here */
+//    QString formUuid = episodeModel()->index(0, Form::EpisodeModel::FormUuid, QModelIndex()).data().toString();
     d->m_Holder->formTree()->expandAll();
-    d->m_Holder->setCurrentForm(formUuid);
+//    d->m_Holder->setCurrentForm(formUuid);
 }
 
 bool FormManager::translateForms()

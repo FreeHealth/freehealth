@@ -24,6 +24,13 @@
  *       NAME <MAIL@ADRESS>                                                *
  *       NAME <MAIL@ADRESS>                                                *
  ***************************************************************************/
+/**
+  \class Form::FormPlaceHolder
+  Widget containing the Episode treeView and the forms in a QStackedLayout
+  When an episode is activated by the user, the formViewer is set to the corresponding form
+  and episode datas. Datas are automatically saved (without any user intervention).
+*/
+
 #include "formplaceholder.h"
 #include "constants_settings.h"
 
@@ -68,6 +75,7 @@ class FormPlaceHolderPrivate
 {
 public:
     FormPlaceHolderPrivate(FormPlaceHolder *parent) :
+            m_RootForm(0),
             m_EpisodeModel(0),
             m_FileTree(0),
             m_Delegate(0),
@@ -99,7 +107,9 @@ public:
         if (!m_Stack)
             return;
         clearStackLayout();
-        foreach(FormMain *form, formManager()->forms()) {
+        foreach(FormMain *form, m_RootForm->formMainChildren()) {
+            qWarning() << form << form->uuid();
+            qWarning() << form->formWidget();
             if (form->formWidget()) {
                 QWidget *w = new QWidget();
                 QVBoxLayout *vl = new QVBoxLayout(w);
@@ -132,6 +142,7 @@ private:
     }
 
 public:
+    FormMain *m_RootForm;
     EpisodeModel *m_EpisodeModel;
     QTreeView *m_FileTree;
     FormItemDelegate *m_Delegate;
@@ -255,6 +266,7 @@ FormPlaceHolder::FormPlaceHolder(QWidget *parent) :
     vertic->setObjectName("FormPlaceHolder::MiniSplitter::Vertical");
     vertic->setOrientation(Qt::Vertical);
 
+    /** \todo add the episode table view */
 //    d->m_EpisodesTable = new QTableView(this);
 //    d->m_EpisodesTable->horizontalHeader()->hide();
 //    d->m_EpisodesTable->verticalHeader()->hide();
@@ -283,17 +295,36 @@ FormPlaceHolder::FormPlaceHolder(QWidget *parent) :
 FormPlaceHolder::~FormPlaceHolder()
 {
     d->saveSettings();
+    if (d->m_RootForm) {
+        delete d->m_RootForm;
+        d->m_RootForm = 0;
+    }
     if (d) {
         delete d;
         d = 0;
     }
 }
 
-void FormPlaceHolder::setEpisodeModel(EpisodeModel *model)
+/**
+  Define the Form::FormMain root item to use for the creation of the patient files.
+  This object will manage deletion of the root item and its children.
+*/
+void FormPlaceHolder::setRootForm(Form::FormMain *rootForm)
 {
-    d->m_EpisodeModel = model;
-    d->m_Delegate->setEpisodeModel(model);
-    d->m_FileTree->setModel(model);
+    Q_ASSERT(rootForm);
+    if (d->m_EpisodeModel) {
+        delete d->m_EpisodeModel;
+        d->m_EpisodeModel = 0;
+    }
+    /** \todo before deleting -> clear stackedLayout of FormPlaceHolder ? */
+    if (d->m_RootForm) {
+        delete d->m_RootForm;
+        d->m_RootForm = 0;
+    }
+    d->m_RootForm = rootForm;
+    d->m_EpisodeModel = new EpisodeModel(rootForm, this);
+    d->m_Delegate->setEpisodeModel(d->m_EpisodeModel);
+    d->m_FileTree->setModel(d->m_EpisodeModel);
     d->m_FileTree->setSelectionMode(QAbstractItemView::SingleSelection);
     d->m_FileTree->setSelectionBehavior(QAbstractItemView::SelectRows);
     for(int i=0; i < Form::EpisodeModel::MaxData; ++i)
@@ -305,6 +336,9 @@ void FormPlaceHolder::setEpisodeModel(EpisodeModel *model)
     d->m_FileTree->header()->setResizeMode(Form::EpisodeModel::Label, QHeaderView::Stretch);
     d->m_FileTree->header()->setResizeMode(Form::EpisodeModel::EmptyColumn1, QHeaderView::Fixed);
     d->m_FileTree->header()->resizeSection(Form::EpisodeModel::EmptyColumn1, 16);
+
+    d->m_FileTree->expandAll();
+    d->populateStackLayout();
 }
 
 void FormPlaceHolder::handlePressed(const QModelIndex &index)
@@ -344,13 +378,6 @@ QStackedLayout *FormPlaceHolder::formStackLayout() const
     return d->m_Stack;
 }
 
-//void FormPlaceHolder::addTopWidget(QWidget *top)
-//{
-//    static int lastInsertedRow = 0;
-//    d->m_GeneralLayout->addWidget(top, lastInsertedRow, 0);
-//    ++lastInsertedRow;
-//}
-
 void FormPlaceHolder::addBottomWidget(QWidget *bottom)
 {
     d->m_GeneralLayout->addWidget(bottom, d->m_GeneralLayout->rowCount(), 0, 0, d->m_GeneralLayout->columnCount());
@@ -376,12 +403,12 @@ void FormPlaceHolder::setCurrentEpisode(const QModelIndex &index)
     }
 }
 
-void FormPlaceHolder::reset()
-{
-    d->m_FileTree->update();
-    d->m_FileTree->expandAll();
-    d->populateStackLayout();
-}
+//void FormPlaceHolder::reset()
+//{
+//    d->m_FileTree->update();
+//    d->m_FileTree->expandAll();
+//    d->populateStackLayout();
+//}
 
 void FormPlaceHolder::newEpisode()
 {

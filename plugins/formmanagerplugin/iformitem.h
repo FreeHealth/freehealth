@@ -91,6 +91,7 @@ public:
             m_Spec(new FormItemSpec),
             m_Scripts(new FormItemScripts),
             m_Values(new FormItemValues(this)),
+            m_FormWidget(0),
             m_ItemDatas(0),
             m_PatientData(-1)
             {}
@@ -110,9 +111,10 @@ public:
     virtual IFormWidget *formWidget() {return m_FormWidget;}
 
     // Access to the FormItem tree
+    virtual FormMain *createChildForm(const QString &uuid = QString::null) {Q_UNUSED(uuid); return 0;}
     virtual FormItem *createChildItem(const QString &uuid = QString::null);
     virtual FormPage *createPage(const QString &uuid = QString::null) {Q_UNUSED(uuid); return 0;}
-    virtual QList<FormItem*> formItemChildren() const;
+    virtual QList<FormItem *> formItemChildren() const;
 
     // FormIO extra datas
     virtual void addExtraData(const QString &id, const QString &data);
@@ -173,16 +175,18 @@ public:
         MultiEpisode,
     };
 
-    FormMain(QObject *parent=0) :
-            FormItem(parent), m_DebugPage(0), m_Episode(MultiEpisode) {}
+    FormMain(QObject *parent = 0);
     ~FormMain();
 
+    FormMain *createChildForm(const QString &uuid = QString::null);
     FormPage *createPage(const QString &uuid = QString::null);
 
     virtual void languageChanged();
     void clear();
 
     virtual FormMain *formParent() { return qobject_cast<FormMain*>(parent()); }
+    virtual QList<FormMain *> formMainChildren() const;
+    virtual FormMain *formMainChild(const QString &uuid) const;
 
     virtual void setEpisodePossibilities(const int i) {m_Episode = i;}
     virtual int episodePossibilities() const {return m_Episode;}
@@ -194,6 +198,28 @@ private:
     FormMainDebugPage *m_DebugPage;
     int m_Episode;
 };
+inline QList<Form::FormMain *> Form::FormMain::formMainChildren() const
+{
+     QList<Form::FormMain *> list;
+     foreach(QObject *o, children()) {
+          Form::FormMain *i = qobject_cast<Form::FormMain*>(o);
+          if (i) {
+              list.append(i);
+              list.append(i->formMainChildren());
+          }
+     }
+     return list;
+}
+inline Form::FormMain *Form::FormMain::formMainChild(const QString &uuid) const
+{
+    QList<FormMain *> forms = formMainChildren();
+    for(int i=0; i<forms.count(); ++i) {
+        FormMain *form = forms.at(i);
+        if (form->uuid()==uuid)
+            return form;
+    }
+    return 0;
+}
 
 class FORM_EXPORT FormMainDebugPage : public Core::IDebugPage
 {

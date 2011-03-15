@@ -67,10 +67,8 @@ public:
      static FormManager *instance();
      ~FormManager();
 
-     bool loadFile(const QString &filename, const QList<Form::IFormIO *> &iolist);
+     Form::FormMain *loadFile(const QString &filename, const QList<Form::IFormIO *> &iolist);
      void activateMode();
-
-     Core::UniqueIDManager *uuidManager() const;
 
      FormMain *createForm(const QString &uuid, FormMain *parent = 0);
      QList<FormMain*> forms() const;

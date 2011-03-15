@@ -119,6 +119,7 @@ public:
         m_NavigationMenu = new QMenu(m_NavigationToolButton);
         cmd = actionManager()->command(Core::Constants::A_PATIENT_NEW);
         m_NavigationMenu->addAction(cmd->action());
+        m_NavigationMenu->addSeparator();
         m_NavigationToolButton->setMenu(m_NavigationMenu);
 
         // add buttons to search line
@@ -197,7 +198,7 @@ void PatientSelector::init()
 void PatientSelector::updateNavigationButton()
 {
     // remove all actions from the second
-    for(int i = 1; i < d->m_NavigationToolButton->actions().count(); ++i) {
+    for(int i = 2; i < d->m_NavigationToolButton->actions().count(); ++i) {
         d->m_NavigationMenu->removeAction(d->m_NavigationMenu->actions().at(i));
     }
     // add navigation actions

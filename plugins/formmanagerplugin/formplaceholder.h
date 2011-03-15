@@ -41,6 +41,7 @@ QT_END_NAMESPACE
 
 namespace Form {
 class EpisodeModel;
+class FormMain;
 
 namespace Internal {
 
@@ -72,7 +73,7 @@ public:
     FormPlaceHolder(QWidget *parent = 0);
     ~FormPlaceHolder();
 
-    void setEpisodeModel(EpisodeModel *model);
+    void setRootForm(Form::FormMain *rootForm);
 
     QTreeView *formTree() const;
     QStackedLayout *formStackLayout() const;
@@ -87,7 +88,7 @@ public Q_SLOTS:
 protected Q_SLOTS:
     void handlePressed(const QModelIndex &index);
     void handleClicked(const QModelIndex &index);
-    void reset();
+//    void reset();
     void newEpisode();
     void removeEpisode();
     void validateEpisode();
