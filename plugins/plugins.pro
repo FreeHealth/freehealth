@@ -93,7 +93,7 @@ patientbase.depends += usermanager
 
 formmanager.subdir   = formmanagerplugin
 formmanager.depends += core
-formmanager.depends += usermanager
+#formmanager.depends += usermanager
 
 icd.subdir = icdplugin
 icd.depends += core
