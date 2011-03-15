@@ -300,9 +300,11 @@ const char * const  A_VIEWUPDATE       = "actionViewUpdate";      /*!< \brief De
 const char * const MODE_PATIENT_SEARCH   = "PatientSearch";
 const char * const MODE_PATIENT_FILE     = "PatientFile";
 const char * const MODE_PATIENT_HISTORY  = "PatientHistory";
+const char * const MODE_PATIENT_DRUGS    = "Drugs";
 const int          P_MODE_PATIENT_SEARCH = 100;
 const int          P_MODE_PATIENT_HISTORY= 80;
-const int          P_MODE_PATIENT_FILE   = 60;
+const int          P_MODE_PATIENT_DRUGS  = 60;
+const int          P_MODE_PATIENT_FILE   = 40;
 
 // Contexts
 const char* const   C_GLOBAL             = "context.global";
