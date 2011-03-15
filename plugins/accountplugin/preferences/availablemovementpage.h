@@ -82,7 +82,7 @@ public Q_SLOTS:
 private:
     void changeEvent(QEvent *e);
     void saveModel();
-    bool isAvailableModelIsEmpty();
+    bool fillEmptyAvailableModel();
     QStandardItemModel * availableMovementModelByLocale();
 
 private:

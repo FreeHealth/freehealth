@@ -120,6 +120,14 @@ AvailableMovementWidget::AvailableMovementWidget(QWidget *parent) :
     parentComboBox->setEditable(true);
     parentComboBox->addItem(null);
     m_Model = new AccountDB::AvailableMovementModel(this);
+    if (m_Model->rowCount() < 1)
+    {
+    	  if (!fillEmptyAvailableModel())
+    	  {
+    	  	  QMessageBox::warning(0,trUtf8("Warning"),trUtf8("Unable to fill availablemodel whith local .csv"),
+    	  	                       QMessageBox::Ok);
+    	      }
+        }
     /** \todo  m_Model->setUserUuid(); */
     m_Mapper = new QDataWidgetMapper(this);
     m_Mapper->setSubmitPolicy(QDataWidgetMapper::AutoSubmit);
@@ -235,6 +243,8 @@ static QString getCsvDefaultFile()
 QStandardItemModel *AvailableMovementWidget::availableMovementModelByLocale()
 {
     QStandardItemModel *model = new QStandardItemModel;
+    QString csvFileName = getCsvDefaultFile();
+    qDebug() << __FILE__ << QString::number(__LINE__) << " csvFileName =" << csvFileName ;
     QFile file(getCsvDefaultFile());
     // some validity checking
     if (!file.exists()) {
@@ -272,9 +282,10 @@ QStandardItemModel *AvailableMovementWidget::availableMovementModelByLocale()
             QList<QStandardItem*> listOfItemsData;
             QStringList listOfItems;
             listOfItems = line.split(separator);
-            for (int i = 0; i < AccountDB::Constants::AVAILMOV_MaxParam; i += 1){
+            for (int i = 0; i < AccountDB::Constants::AVAILMOV_MaxParam ; i += 1){
                 //model->setData(model->index(row,i),listOfItems[i],Qt::EditRole);
         	QStandardItem * item = new QStandardItem;
+        	//qDebug() << __FILE__ << QString::number(__LINE__) << " listOfItems[i] =" << listOfItems[i] ;
         	item->setData(listOfItems[i]);
         	listOfItemsData << item;
         	}
@@ -285,22 +296,31 @@ QStandardItemModel *AvailableMovementWidget::availableMovementModelByLocale()
     return model;
 }
 
-bool AvailableMovementWidget::isAvailableModelIsEmpty(){
-    bool test = true;
-    int rows = m_Model->rowCount();
+
+bool AvailableMovementWidget::fillEmptyAvailableModel(){
+    bool test = false;
     QStandardItemModel * model = availableMovementModelByLocale();
-    if (rows < 1)
-    {
-    	  for (int i = 0; i < rows; i += 1)
-    	  {
-    	  	for (int j = 0; j < AccountDB::Constants::AVAILMOV_MaxParam; j += 1)
-    	  	{
-    	  		
+    int availModelRows = model->rowCount();
+    qDebug() << __FILE__ << QString::number(__LINE__) << " availModelRows = " << QString::number(availModelRows) ;
+    for (int i = 0; i < availModelRows; i += 1){
+        if (!m_Model->insertRows(m_Model->rowCount(),1,QModelIndex()))
+    	  		{qWarning() << __FILE__ << QString::number(__LINE__) << QString::number(m_Model->rowCount()) ;
+    	  			  /*QMessageBox::warning(0,trUtf8("Warning"),trUtf8("Unable to insert row \n")
+    	  			  +__FILE__+QString::number(__LINE__),QMessageBox::Ok);*/
+    	  		    }
+    	  	for (int j = 0; j < AccountDB::Constants::AVAILMOV_MaxParam ; j += 1){
     	  		QStandardItem * item = model->itemFromIndex(model->index(i,j));
-    	  		QString value = item->text();
-    	  		m_Model->setData(m_Model->index(i,j),value,Qt::EditRole);
+    	  		QVariant value = item->data();
+    	  		qDebug() << __FILE__ << QString::number(__LINE__) << " value =" << value ;
+    	  		qDebug() << __FILE__ << QString::number(__LINE__) << "m_Model->rowCount() =" << QString::number(m_Model->rowCount()) ;
+    	  		if (!m_Model->setData(m_Model->index(m_Model->rowCount()-1,j),value,Qt::EditRole))
+    	  		{
+    	  			qWarning() << __FILE__ << QString::number(__LINE__) << "data not inserted !" ;  
+    	  		    }
     	  	    }
+    	      test = m_Model->submit();
     	      }
-        }
     return test;
 }
+
+
