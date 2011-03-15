@@ -16,7 +16,7 @@
    sodipodi:version="0.32"
    inkscape:version="0.48.0 r9654"
    version="1.0"
-   sodipodi:docname="ia.svg"
+   sodipodi:docname="drugengine_ddi.svg"
    inkscape:output_extension="org.inkscape.output.svg.inkscape"
    inkscape:export-filename="/Users/eric/Desktop/Programmation/freemedforms/global_resources/pixmap/svg/drugengine_ddi-64.png"
    inkscape:export-xdpi="120"
@@ -4047,7 +4047,7 @@
      pagecolor="#ffffff"
      bordercolor="#666666"
      borderopacity="1.0"
-     inkscape:pageopacity="0.0"
+     inkscape:pageopacity="0"
      inkscape:pageshadow="2"
      inkscape:zoom="5.6"
      inkscape:cx="12.279592"
@@ -4059,7 +4059,7 @@
      inkscape:window-height="752"
      inkscape:window-x="0"
      inkscape:window-y="0"
-     inkscape:window-maximized="0" />
+     inkscape:window-maximized="1" />
   <metadata
      id="metadata2463">
     <rdf:RDF>
@@ -4068,7 +4068,7 @@
         <dc:format>image/svg+xml</dc:format>
         <dc:type
            rdf:resource="http://purl.org/dc/dcmitype/StillImage" />
-        <dc:title></dc:title>
+        <dc:title />
       </cc:Work>
     </rdf:RDF>
   </metadata>
@@ -4081,8 +4081,8 @@
        id="rect3485"
        width="11.883408"
        height="31.883036"
-       x="2.1499093"
-       y="-48.601166"
+       x="2.3031318"
+       y="-45.776894"
        ry="7.039113"
        rx="5.1048422"
        transform="matrix(-0.74437412,0.66776281,-0.66776281,-0.74437412,0,0)" />
