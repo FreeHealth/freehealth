@@ -10,9 +10,14 @@ include(shared_sources.pri)
 
 # include FreeMedForms specific sources
 HEADERS += drugsplugin.h \
-    drugswidgetfactory.h
+    drugswidgetfactory.h \
+    drugsmode.h
 
 SOURCES += drugsplugin.cpp \
-    drugswidgetfactory.cpp
+    drugswidgetfactory.cpp \
+    drugsmode.cpp
 
 OTHER_FILES = Drugs.pluginspec
+
+FORMS += \
+    drugsmode.ui

@@ -41,6 +41,7 @@
 
 #ifdef FREEMEDFORMS
 #    include "drugswidgetfactory.h"
+#    include "drugsmode.h"
 #endif
 
 #include <extensionsystem/pluginmanager.h>
@@ -178,6 +179,11 @@ bool DrugsPlugin::initialize(const QStringList &arguments, QString *errorMessage
 
     // Initialize drugs database after the settings where checked
     drugsBase();
+
+#ifdef FREEMEDFORMS
+    // Add drug mode
+    addAutoReleasedObject(new DrugsMode(this));
+#endif
 
     return true;
 }
