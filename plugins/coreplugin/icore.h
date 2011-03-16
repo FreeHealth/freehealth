@@ -39,7 +39,7 @@ class QWidget;
  * \file icore.h
  * \author Eric MAEKER <eric.maeker@free.fr>
  * \version 0.5.0
- * \date 22 Aug 2010
+ * \date 16 Mar 2011
 */
 
 
@@ -135,6 +135,8 @@ Q_SIGNALS:
     void coreAboutToClose();
 
     void databaseServerChanged();
+
+    void loadPatientForms(const QString &absDirPathOrUuid);
 
 protected:
     bool m_UpdatePreferences;
