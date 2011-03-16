@@ -61,10 +61,10 @@ public:
 
     QIcon icon(const QFileInfo &info) const
     {
-        if (!m_Files.contains(info.fileName()))
+        if (!m_Files.contains(info.absoluteFilePath()))
             testFile(info);
 
-        if (m_Files.value(info.fileName()))
+        if (m_Files.value(info.absoluteFilePath()))
             return theme()->icon(Core::Constants::ICONOK);
         else
             return theme()->icon(Core::Constants::ICONHELP);
@@ -76,16 +76,14 @@ private:
     void testFile(const QFileInfo &file) const
     {
         QList<Form::IFormIO*> ios = refreshIOPlugs();
-        const QString &path = settings()->path(Core::ISettings::CompleteFormsPath);
-        const QString &fileName = file.fileName();
         foreach(Form::IFormIO *io, ios) {
             io->muteUserWarnings(true);
-            if (io->setFileName(path + QDir::separator() + fileName) && io->canReadFile()) {
-                m_Files.insert(file.fileName(), true);
+            if (io->setFileName(file.absoluteFilePath()) && io->canReadFile()) {
+                m_Files.insert(file.absoluteFilePath(), true);
                 return;
             }
         }
-        m_Files.insert(file.fileName(), false);
+        m_Files.insert(file.absoluteFilePath(), false);
     }
 
     mutable QHash<QString, bool> m_Files;
@@ -119,7 +117,9 @@ FormFilesSelectorWidget::FormFilesSelectorWidget(QWidget *parent) :
     d(new FormFilesSelectorWidgetPrivate)
 {
     d->ui->setupUi(this);
-    d->ui->actualFile->setText(settings()->value(Core::Constants::S_PATIENTFORMS_FILENAME).toString().remove(settings()->path(Core::ISettings::CompleteFormsPath)));
+    QString actual = settings()->value(Core::Constants::S_PATIENTFORMS_FILENAME).toString();
+    actual = actual.mid(settings()->path(Core::ISettings::CompleteFormsPath).length() + 1);
+    d->ui->actualFile->setText(actual);
     // get IFormIO
     d->ios = refreshIOPlugs();
     // construct filters
@@ -166,8 +166,8 @@ void FormFilesSelectorWidget::on_listView_activated(const QModelIndex &index)
     foreach(Form::IFormIO *io, d->ios) {
         if (io->setFileName(settings()->path(Core::ISettings::CompleteFormsPath) + QDir::separator() + file)) {
             if (io->canReadFile()) {
-                io->readFileInformations();
-                io->formDescriptionToTreeWidget(d->ui->treeWidget, QLocale().name().left(2));
+                Form::FormIODescription desc = io->readFileInformations();
+                desc.formDescriptionToTreeWidget(d->ui->treeWidget);
                 return;
             } else {
                 QTreeWidgetItem *item = new QTreeWidgetItem(d->ui->treeWidget, QStringList() << io->name());

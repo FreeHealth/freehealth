@@ -62,7 +62,8 @@ public:
         ShortDescription,
         HtmlDescription,
         License,
-        GeneralIcon
+        GeneralIcon,
+        MaxParam
     };
 
     FormIODescription();
@@ -71,7 +72,9 @@ public:
     QVariant data(const int ref, const QString &lang = QString::null) const;
     bool setData(const int ref, const QVariant &value, const QString &lang = QString::null);
 
-    void formDescriptionToTreeWidget(QTreeWidget *tree, const QString &lang = QString::null) const;
+    void formDescriptionToTreeWidget(QTreeWidget *tree) const;
+
+    void warn() const;
 
 private:
     mutable Trans::MultiLingualClass< QHash<int, QVariant> > m_Datas;
@@ -99,11 +102,11 @@ public:
     // canReadFile() must be called first, no need to loadForm to get these informations
 //    virtual FormIODescription readFileInformations() = 0;
     /** \todo code here, this part should be obsolete */
-    virtual bool readFileInformations() = 0;
-    virtual QString formAuthor() const = 0;
-    virtual QString formVersion() const = 0;
-    virtual QString formDescription(const QString &lang = Trans::Constants::ALL_LANGUAGE) const = 0;
-    virtual void formDescriptionToTreeWidget(QTreeWidget *tree, const QString &lang = Trans::Constants::ALL_LANGUAGE) const = 0;
+    virtual FormIODescription readFileInformations() = 0;
+//    virtual QString formAuthor() const = 0;
+//    virtual QString formVersion() const = 0;
+//    virtual QString formDescription(const QString &lang = Trans::Constants::ALL_LANGUAGE) const = 0;
+//    void formDescriptionToTreeWidget(QTreeWidget *tree, const FormIODescription &desc) const;
     /** end */
 
     virtual Form::FormMain *loadForm() = 0;

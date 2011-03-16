@@ -208,17 +208,20 @@ bool XmlFormIO::setFileName(const QString &absFileName)
     m_AbsFileName.clear();
     m_Error.clear();
     m_MainDoc.clear();
-
-    if (!QFile(absFileName).exists()) {
-        m_Error.append(tkTr(Trans::Constants::FILE_1_DOESNOT_EXISTS).arg(absFileName));
+    QString fileName = absFileName;
+    if (QFileInfo(absFileName).isDir()) {
+        // try to read central.xml
+        fileName = absFileName + "/central.xml";
+    }
+    if (!QFile(fileName).exists()) {
+        m_Error.append(tkTr(Trans::Constants::FILE_1_DOESNOT_EXISTS).arg(fileName));
         return false;
     }
-
-    if (QFileInfo(absFileName).suffix()==managedFileExtension()) {
-        m_AbsFileName = absFileName;
+    if (QFileInfo(fileName).suffix()==managedFileExtension()) {
+        m_AbsFileName = fileName;
         return true;
     } else {
-        m_Error.append(tkTr(Trans::Constants::FILE_1_ISNOT_READABLE).arg(absFileName));
+        m_Error.append(tkTr(Trans::Constants::FILE_1_ISNOT_READABLE).arg(fileName));
     }
     return false;
 }
@@ -280,9 +283,8 @@ bool XmlFormIO::canReadFile() const
     return ok;
 }
 
-bool XmlFormIO::readFileInformations()
+Form::FormIODescription XmlFormIO::readFileInformations()
 {
-    /** \todo code here */
     Form::FormIODescription ioDesc;
     QDomElement root = m_MainDoc.documentElement();
     // get version
@@ -306,39 +308,15 @@ bool XmlFormIO::readFileInformations()
         ioDesc.setData(Form::FormIODescription::License, desc.text(), desc.attribute(Constants::ATTRIB_LANGUAGE, Trans::Constants::ALL_LANGUAGE));
         desc = root.nextSiblingElement(Constants::TAG_SPEC_LICENSE);
     }
-    return true;
+    return ioDesc;
 }
 
-QString XmlFormIO::formDescription(const QString &lang) const
-{
-    if (m_Desc.value(lang).isEmpty())
-        return m_Desc.value(Trans::Constants::ALL_LANGUAGE);
-    return m_Desc.value(lang);
-}
-
-void XmlFormIO::formDescriptionToTreeWidget(QTreeWidget *tree, const QString &lang) const
-{
-    tree->clear();
-    tree->setColumnCount(2);
-    QFont bold;
-    bold.setBold(true);
-    QTreeWidgetItem *authors = new QTreeWidgetItem(tree, QStringList() << tkTr(Trans::Constants::AUTHOR));
-    authors->setFont(0, bold);
-    new QTreeWidgetItem(authors, QStringList() << tkTr(Trans::Constants::AUTHOR) << m_Author);
-    QTreeWidgetItem *version = new QTreeWidgetItem(tree, QStringList() << tkTr(Trans::Constants::VERSION));
-    version->setFont(0, bold);
-    new QTreeWidgetItem(version, QStringList() << tkTr(Trans::Constants::VERSION) << m_Version);
-    QTreeWidgetItem *desc = new QTreeWidgetItem(tree, QStringList() << tkTr(Trans::Constants::DESCRIPTION));
-    desc->setFont(0, bold);
-    QHashIterator<QString, QString> i(m_Desc);
-     while (i.hasNext()) {
-         i.next();
-         new QTreeWidgetItem(desc, QStringList() << i.key() << i.value());
-     }
-    tree->expandAll();
-    tree->resizeColumnToContents(0);
-    tree->resizeColumnToContents(1);
-}
+//QString XmlFormIO::formDescription(const QString &lang) const
+//{
+//    if (m_Desc.value(lang).isEmpty())
+//        return m_Desc.value(Trans::Constants::ALL_LANGUAGE);
+//    return m_Desc.value(lang);
+//}
 
 Form::FormMain *XmlFormIO::loadForm()
 {

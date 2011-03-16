@@ -69,11 +69,11 @@ public:
     bool canReadFile() const;
     bool setFileName(const QString &absFileName);
 
-    bool readFileInformations();
-    QString formAuthor() const {return m_Author;}
-    QString formVersion() const {return m_Version;}
-    QString formDescription(const QString &lang = Trans::Constants::ALL_LANGUAGE) const;
-    void formDescriptionToTreeWidget(QTreeWidget *tree, const QString &lang = Trans::Constants::ALL_LANGUAGE) const;
+    Form::FormIODescription readFileInformations();
+//    QString formAuthor() const {return m_Author;}
+//    QString formVersion() const {return m_Version;}
+//    QString formDescription(const QString &lang = Trans::Constants::ALL_LANGUAGE) const;
+//    void formDescriptionToTreeWidget(QTreeWidget *tree, const QString &lang = Trans::Constants::ALL_LANGUAGE) const;
 
     Form::FormMain *loadForm();
     bool saveForm(QObject *treeRoot) { Q_UNUSED(treeRoot); return true; }

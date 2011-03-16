@@ -77,9 +77,13 @@
 
 #include "iformio.h"
 
+#include <translationutils/constanttranslations.h>
+
+#include <QDate>
 #include <QDebug>
 
 using namespace Form;
+using namespace Trans::ConstantTranslations;
 
 FormIODescription::FormIODescription()
 {}
@@ -90,11 +94,25 @@ FormIODescription::~FormIODescription()
 QVariant FormIODescription::data(const int ref, const QString &lang) const
 {
     QString l = lang;
-    if (lang.isEmpty())
+    if (lang.isEmpty()) {
+        l = QLocale().name().left(2);
+        QHash<int, QVariant> *datas = m_Datas.getLanguage(l);
+        if (datas) {
+            if (!datas->value(ref).isNull())
+                return datas->value(ref);
+        }
         l = Trans::Constants::ALL_LANGUAGE;
-    QHash<int, QVariant> *datas = m_Datas.getLanguage(l);
-    if (datas)
-        return datas->value(ref);
+        datas = m_Datas.getLanguage(l);
+        if (datas) {
+            if (!datas->value(ref).isNull())
+                return datas->value(ref);
+        }
+    }
+    QHash<int, QVariant> *datas = m_Datas.getLanguage(lang);
+    if (datas) {
+        if (!datas->value(ref).isNull())
+            return datas->value(ref);
+    }
     return QVariant();
 }
 
@@ -104,13 +122,40 @@ bool FormIODescription::setData(const int ref, const QVariant &value, const QStr
     if (lang.isEmpty())
         l = Trans::Constants::ALL_LANGUAGE;
     QHash<int, QVariant> *datas = m_Datas.createLanguage(l);
-    qWarning() << datas;
-    //datas->insert(ref, value);
+    datas->insert(ref, value);
     return true;
 }
 
-void FormIODescription::formDescriptionToTreeWidget(QTreeWidget *tree, const QString &lang) const
+void FormIODescription::formDescriptionToTreeWidget(QTreeWidget *tree) const
 {
     /** \todo code here */
+    tree->clear();
+    tree->setColumnCount(2);
+    QFont bold;
+    bold.setBold(true);
+
+    QTreeWidgetItem *general = new QTreeWidgetItem(tree, QStringList() << tkTr(Trans::Constants::INFORMATIONS));
+    general->setFont(0, bold);
+    new QTreeWidgetItem(general, QStringList() << tkTr(Trans::Constants::AUTHOR) << data(FormIODescription::Author).toString());
+    new QTreeWidgetItem(general, QStringList() << QCoreApplication::translate("Forms", "License") << data(FormIODescription::License).toString());
+    new QTreeWidgetItem(general, QStringList() << tkTr(Trans::Constants::DESCRIPTION) << data(FormIODescription::ShortDescription).toString());
+
+    QTreeWidgetItem *version = new QTreeWidgetItem(tree, QStringList() << tkTr(Trans::Constants::VERSION));
+    version->setFont(0, bold);
+    new QTreeWidgetItem(version, QStringList() << tkTr(Trans::Constants::VERSION) << data(FormIODescription::Version).toString());
+    new QTreeWidgetItem(version, QStringList() << QCoreApplication::translate("Forms", "Creation date") << data(FormIODescription::CreationDate).toDate().toString(QLocale().dateFormat(QLocale::ShortFormat)));
+    new QTreeWidgetItem(version, QStringList() << QCoreApplication::translate("Forms", "Last modification date") << data(FormIODescription::LastModificationDate).toDate().toString(QLocale().dateFormat(QLocale::ShortFormat)));
+
+    tree->expandAll();
+    tree->resizeColumnToContents(0);
+    tree->resizeColumnToContents(1);
 }
 
+void FormIODescription::warn() const
+{
+    QString tmp = "FormIODescription(";
+    for(int i=0; i < MaxParam; ++i) {
+        tmp += QString("%1:%2\n").arg(i).arg(data(i).toString());
+    }
+    qWarning() << tmp;
+}
