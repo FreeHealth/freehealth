@@ -1,7 +1,7 @@
 /***************************************************************************
  *  The FreeMedForms project is a set of free, open source medical         *
  *  applications.                                                          *
- *  (C) 2008-2010 by Eric MAEKER, MD (France) <eric.maeker@free.fr>        *
+ *  (C) 2008-2011 by Eric MAEKER, MD (France) <eric.maeker@free.fr>        *
  *  All rights reserved.                                                   *
  *                                                                         *
  *  This program is free software: you can redistribute it and/or modify   *
@@ -35,7 +35,6 @@ using namespace Category;
 CategoryOnlyProxyModel *ICategoryModelHelper::categoryOnlyModel()
 {
     if (!m_Proxy) {
-        qWarning() << "new proxy";
         m_Proxy = new CategoryOnlyProxyModel(this);
     }
     return m_Proxy;

@@ -278,6 +278,7 @@ IcdActionHandler::IcdActionHandler(QObject *parent) :
     const char * const filemenuId = Core::Constants::M_FILE;
     const char * const printGroupId = Core::Constants::G_FILE_PRINT;
 #endif
+    /** \todo code here */
 //    Core::ActionContainer *fmenu = actionManager()->actionContainer(filemenuId);
 //    Q_ASSERT(fmenu);
 //    if (!fmenu)
