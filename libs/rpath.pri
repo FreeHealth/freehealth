@@ -10,9 +10,7 @@ macx {
      # rpath application to the libs path. Here the path must be an absolute path (eg:/usr/lib/appname/).
      #QMAKE_RPATHDIR += $${RPATH_LIBS_BIN}
 
-     ## todo : this MUST be improved +++
      QMAKE_RPATHDIR += /usr/$${LIBRARY_BASENAME}/$${LOWERED_APPNAME}
-     ## end todo
 
    }else{
      # rpath for interdependant libs and plugs (everyone in the same dir)
