@@ -78,6 +78,7 @@ public Q_SLOTS:
     void on_movComboBox_currentIndexChanged(int index);
     void on_addButton_clicked();
     void on_removeButton_clicked();
+    void on_parentEdit_textChanged(const QString & text);
 
 private:
     void changeEvent(QEvent *e);
@@ -85,10 +86,12 @@ private:
     bool fillEmptyAvailableModel();
     void fillParentCombo();
     QStandardItemModel * availableMovementModelByLocale();
-
+    void setCompletionList(const QString & text);
+    
 private:
     AccountDB::AvailableMovementModel *m_Model;
     QDataWidgetMapper *m_Mapper;
+    QStringList m_completionList;
 };
 
 }  // End Internal

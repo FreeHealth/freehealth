@@ -42,7 +42,7 @@
 #include <QDir>
 #include <QFile>
 #include <QTextStream>
-
+#include <QCompleter>
 
 using namespace Account;
 using namespace Account::Internal;
@@ -116,6 +116,7 @@ AvailableMovementWidget::AvailableMovementWidget(QWidget *parent) :
     QString less = trUtf8("Less");
     typeComboBox->addItem(theme()->icon(Core::Constants::ICONADD),less);
     typeComboBox->addItem(theme()->icon(Core::Constants::ICONADD),add);
+    m_completionList << trUtf8("Receipts");
     m_Model = new AccountDB::AvailableMovementModel(this);
     if (m_Model->rowCount() < 1)
     {
@@ -177,6 +178,7 @@ void AvailableMovementWidget::on_movComboBox_currentIndexChanged(int index)
     m_Mapper->setCurrentIndex(movComboBox->currentIndex());
     QString parentText = m_Model->data(m_Model->index(index,AccountDB::Constants::AVAILMOV_PARENT),Qt::DisplayRole).toString();
     parentEdit->setText(parentText);
+    m_completionList << parentText;
     QString codeText = m_Model->data(m_Model->index(index,AccountDB::Constants::AVAILMOV_CODE),Qt::DisplayRole).toString();
     codeEdit->setText(codeText);
 }
@@ -339,4 +341,13 @@ bool AvailableMovementWidget::fillEmptyAvailableModel(){
     return test;
 }
 
+void AvailableMovementWidget::setCompletionList(const QString & text){
+    m_completionList << text;
+    m_completionList.removeDuplicates();
+}
 
+void AvailableMovementWidget::on_parentEdit_textChanged(const QString & text){
+    QCompleter *c = new QCompleter(m_completionList,this);
+    c->setCaseSensitivity(Qt::CaseInsensitive);
+    parentEdit->setCompleter(c);
+}
