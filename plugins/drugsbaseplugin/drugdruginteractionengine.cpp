@@ -693,7 +693,6 @@ private:
 
 }
 
-
 namespace DrugsDB {
 namespace Internal {
 class DrugDrugInteractionEnginePrivate
@@ -711,11 +710,11 @@ public:
 DrugDrugInteractionEngine::DrugDrugInteractionEngine(QObject *parent) :
         IDrugEngine(parent), d(new DrugDrugInteractionEnginePrivate)
 {
-    if (Utils::isDebugCompilation()) {
-        d->m_LogChrono = true;
-    } else {
+//    if (Utils::isDebugCompilation()) {
+//        d->m_LogChrono = true;
+//    } else {
         d->m_LogChrono = false;
-    }
+//    }
 }
 
 bool DrugDrugInteractionEngine::init()
