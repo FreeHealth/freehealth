@@ -54,10 +54,6 @@ namespace Utils {
 class FancyTabWidget;
 }
 
-//namespace Form {
-//class EpisodeModel;
-//}
-
 namespace Core {
 class FileManager;
 }

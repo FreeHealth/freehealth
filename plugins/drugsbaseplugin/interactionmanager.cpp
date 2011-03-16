@@ -152,7 +152,7 @@ DrugInteractionResult *InteractionManager::checkInteractions(const DrugInteracti
     for(int i = 0; i < d->m_Engines.count(); ++i) {
         IDrugEngine *engine = d->m_Engines.at(i);
 
-        qWarning() << "DrugEngine" << engine->name() << "Compute" << (engine->isActive() && engine->canComputeInteractions()) << "nbDrugs" << query.drugsList().count();
+//        qWarning() << "DrugEngine" << engine->name() << "Compute" << (engine->isActive() && engine->canComputeInteractions()) << "nbDrugs" << query.drugsList().count();
 
         if (!engine->isActive() || !engine->canComputeInteractions())
             continue;

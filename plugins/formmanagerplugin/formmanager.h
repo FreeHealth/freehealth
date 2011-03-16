@@ -70,10 +70,7 @@ public:
      Form::FormMain *loadFile(const QString &filename, const QList<Form::IFormIO *> &iolist);
      void activateMode();
 
-     FormMain *createForm(const QString &uuid, FormMain *parent = 0);
-     QList<FormMain*> forms() const;
-     bool hasForm(const QString &uuid) const;
-     FormMain *form(const QString &uuid) const;
+     QList<FormMain *> forms() const;
 
      FormPlaceHolder *formPlaceHolder() const;
 

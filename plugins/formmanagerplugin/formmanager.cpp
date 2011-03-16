@@ -126,7 +126,7 @@ FormManager *FormManager::instance()
 FormManager::FormManager(QObject *parent)
         : QObject(parent), d(new Form::Internal::FormManagerPrivate(this))
 {
-    setObjectName("Form::FormManager");
+    setObjectName("FormManager");
     /** \todo Need to modify UID code to create a new private uid */
     d->m_UuidManager = Core::ICore::instance()->uniqueIDManager();
     d->m_Holder = new FormPlaceHolder;
@@ -147,42 +147,43 @@ void FormManager::activateMode()
     d->m_Holder->formTree()->expandAll();
 }
 
-FormMain *FormManager::createForm(const QString &uuid, FormMain *parent)
+//FormMain *FormManager::createForm(const QString &uuid, FormMain *parent)
+//{
+//    FormMain *f = 0;
+//    if (parent)
+//        f = new FormMain(parent);
+//    else
+//        f = new FormMain(this);
+//    if (!uuid.isEmpty())
+//        f->setUuid(uuid);
+//    d->m_HashForms.insert(d->m_UuidManager->uniqueIdentifier(f->uuid()), f);
+//    if (WarnFormCreation)
+//        LOG("FormManager Creating Form: " + uuid);
+//    return f;
+//}
+
+/** \brief Return all available forms from the PluginManager object pool. \sa Form::FormMain */
+QList<FormMain *> FormManager::forms() const
 {
-    FormMain *f = 0;
-    if (parent)
-        f = new FormMain(parent);
-    else
-        f = new FormMain(this);
-    if (!uuid.isEmpty())
-        f->setUuid(uuid);
-    d->m_HashForms.insert(d->m_UuidManager->uniqueIdentifier(f->uuid()), f);
-    if (WarnFormCreation)
-        LOG("FormManager Creating Form: " + uuid);
-    return f;
+    return pluginManager()->getObjects<FormMain>();
 }
 
-/** \brief return forms in creation order */
-QList<FormMain*> FormManager::forms() const
-{
-    return d->m_HashForms.values();
-}
+//bool FormManager::hasForm(const QString &uuid) const
+//{
+//    if (!d->m_UuidManager->hasUniqueIdentifier(uuid))
+//        return false;
+//    return true;
+//}
 
-bool FormManager::hasForm(const QString &uuid) const
-{
-    if (!d->m_UuidManager->hasUniqueIdentifier(uuid))
-        return false;
-    return true;
-}
+//FormMain *FormManager::form(const QString &uuid) const
+//{
+//    if (!hasForm(uuid))
+//        return 0;
+//    int id = d->m_UuidManager->uniqueIdentifier(uuid);
+//    return d->m_HashForms.value(id, 0);
+//}
 
-FormMain *FormManager::form(const QString &uuid) const
-{
-    if (!hasForm(uuid))
-        return 0;
-    int id = d->m_UuidManager->uniqueIdentifier(uuid);
-    return d->m_HashForms.value(id, 0);
-}
-
+/** \brief Load a form file and return the empty root Form::FormMain. */
 Form::FormMain *FormManager::loadFile(const QString &filename, const QList<Form::IFormIO *> &iolist)
 {
     if (filename.isEmpty())
@@ -209,6 +210,7 @@ Form::FormMain *FormManager::loadFile(const QString &filename, const QList<Form:
     return root;
 }
 
+/** \brief Return the unique Form::FormPlaceHolder. */
 FormPlaceHolder *FormManager::formPlaceHolder() const
 {
     return d->m_Holder;
@@ -225,6 +227,7 @@ void FormManager::setCurrentPatient(const QString &uuid)
 
 bool FormManager::translateForms()
 {
+    /** \todo code here ??? */
     // Translate the tree
 //    translateTreeItem( m_Tree->topLevelItem( 0 ) );
 //    m_Tree->resizeColumnToContents( LabelColumn );

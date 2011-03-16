@@ -67,19 +67,6 @@ class FormMain;
 class FormMainDebugPage;
 
 
-/**
- \class FormItem : bas niveau dans la définition de l'item
-- paramètres d'information (date de création, auteur, version, licence...)
-- définit en valeurs uniques ou non (par ex identité == valeurs uniques)
-- Options d'affichage et d'impression ??
-- Options de "droit" / utilisateurs autorisés
-- Scripts (OnLoad, PostLoad, CallMe)
-- Base de règles
-- Plugin associé
-- 1 QWidget vue (les widgets sont construits par les IFormIO selon leur spécificités)
-- 1 QWidget historique
-- checkValueIntegrity() qui se base sur les règles de l'item pour vérifier son exactitude
-*/
 class FORM_EXPORT FormItem : public Form::FormItemIdentifiants
 {
     Q_OBJECT

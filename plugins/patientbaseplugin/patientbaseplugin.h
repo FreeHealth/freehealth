@@ -55,10 +55,12 @@ public:
     bool initialize(const QStringList &arguments, QString *errorString);
     void extensionsInitialized();
 
+private Q_SLOTS:
+    void postCoreInitialization();
+
 private:
     Internal::PatientSearchMode *m_Mode;
     Internal::PatientBasePreferencesPage *prefpage;
-
 };
 
 

@@ -48,6 +48,8 @@
 #include <utils/widgets/minisplitter.h>
 #include <utils/log.h>
 
+#include <extensionsystem/pluginmanager.h>
+
 #include <QTreeView>
 #include <QTreeWidgetItem>
 #include <QStackedLayout>
@@ -63,6 +65,7 @@
 
 using namespace Form;
 
+static inline ExtensionSystem::PluginManager *pluginManager() { return ExtensionSystem::PluginManager::instance(); }
 static inline Form::FormManager *formManager() { return Form::FormManager::instance(); }
 static inline Core::ITheme *theme()  { return Core::ICore::instance()->theme(); }
 static inline Core::ISettings *settings()  { return Core::ICore::instance()->settings(); }
@@ -108,8 +111,6 @@ public:
             return;
         clearStackLayout();
         foreach(FormMain *form, m_RootForm->formMainChildren()) {
-            qWarning() << form << form->uuid();
-            qWarning() << form->formWidget();
             if (form->formWidget()) {
                 QWidget *w = new QWidget();
                 QVBoxLayout *vl = new QVBoxLayout(w);
@@ -230,10 +231,11 @@ FormPlaceHolder::FormPlaceHolder(QWidget *parent) :
     setLayout(d->m_GeneralLayout);
 
     // create the tree view
+    /** \todo use the Views::FancyTreeView */
     QWidget *w = new QWidget(this);
     d->m_FileTree = new QTreeView(this);
     d->m_FileTree->setObjectName("FormTree");
-    d->m_FileTree->setIndentation(10);
+//    d->m_FileTree->setIndentation(10);
     d->m_FileTree->viewport()->setAttribute(Qt::WA_Hover);
     d->m_FileTree->setItemDelegate((d->m_Delegate = new Internal::FormItemDelegate(this)));
     d->m_FileTree->setFrameStyle(QFrame::NoFrame);
@@ -296,6 +298,8 @@ FormPlaceHolder::~FormPlaceHolder()
 {
     d->saveSettings();
     if (d->m_RootForm) {
+        // Remove object from the plugin object pool
+        pluginManager()->removeObject(d->m_RootForm);
         delete d->m_RootForm;
         d->m_RootForm = 0;
     }
@@ -318,10 +322,17 @@ void FormPlaceHolder::setRootForm(Form::FormMain *rootForm)
     }
     /** \todo before deleting -> clear stackedLayout of FormPlaceHolder ? */
     if (d->m_RootForm) {
+        // Remove object from the plugin object pool
+        pluginManager()->removeObject(d->m_RootForm);
         delete d->m_RootForm;
         d->m_RootForm = 0;
     }
+
+    // Add object to the plugin object pool
     d->m_RootForm = rootForm;
+    pluginManager()->addObject(rootForm);
+
+    // Create models
     d->m_EpisodeModel = new EpisodeModel(rootForm, this);
     d->m_Delegate->setEpisodeModel(d->m_EpisodeModel);
     d->m_FileTree->setModel(d->m_EpisodeModel);

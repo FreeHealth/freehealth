@@ -118,7 +118,12 @@ void PatientBasePlugin::extensionsInitialized()
 {
     if (Utils::Log::warnPluginsCreation())
         qWarning() << "PatientBasePlugin::extensionsInitialized";
+    connect(Core::ICore::instance(), SIGNAL(coreOpened()), this, SLOT(postCoreInitialization()));
+}
 
+void PatientBasePlugin::postCoreInitialization()
+{
+    PatientWidgetManager::instance()->postCoreInitialization();
 }
 
 

@@ -332,7 +332,6 @@ public:
         Utils::Log::addMessage(q, "Getting Forms");
         // create one item per form
         formsItems.clear();
-        qWarning() << m_RootForm;
         foreach(Form::FormMain *f, m_RootForm->formMainChildren()) {
             datas.clear();
             datas.insert(EpisodeModel::FormUuid, f->uuid());
@@ -756,14 +755,6 @@ private:
 }
 }
 
-//EpisodeModel *EpisodeModel::m_Instance = 0;
-
-//EpisodeModel *EpisodeModel::instance()
-//{
-//    if (!m_Instance)
-//        m_Instance = new EpisodeModel(qApp);
-//    return m_Instance;
-//}
 
 EpisodeModel::EpisodeModel(FormMain *rootEmptyForm, QObject *parent) :
         QAbstractItemModel(parent), d(new Internal::EpisodeModelPrivate(this))
@@ -1122,8 +1113,9 @@ bool EpisodeModel::submit()
 {
     // save actual episode if needed
     if (d->m_ActualEpisode) {
-        if (!d->saveEpisode(d->m_ActualEpisode, d->m_ActualEpisode_FormUid))
+        if (!d->saveEpisode(d->m_ActualEpisode, d->m_ActualEpisode_FormUid)) {
             LOG_ERROR("Unable to save actual episode before editing a new one");
+        }
     }
     return true;
 }

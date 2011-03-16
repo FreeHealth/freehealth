@@ -119,7 +119,7 @@ inline static Form::FormManager *formManager() { return Form::FormManager::insta
 static inline Core::UniqueIDManager *uuidManager() {return Core::ICore::instance()->uniqueIDManager();}
 
 #ifdef DEBUG
-enum {WarnFormCreation=true};
+enum {WarnFormCreation=false};
 #else
 enum {WarnFormCreation=false};
 #endif

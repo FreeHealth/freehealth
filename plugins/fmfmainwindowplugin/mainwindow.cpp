@@ -106,7 +106,6 @@ static inline Core::IPatient *patient() {return Core::ICore::instance()->patient
 static inline ExtensionSystem::PluginManager *pluginManager() { return ExtensionSystem::PluginManager::instance(); }
 
 static inline Form::FormManager *formManager() {return Form::FormManager::instance();}
-//static inline Form::EpisodeModel *episodeModel() {return Form::EpisodeModel::instance();}
 
 static inline Patients::PatientModel *patientModel() {return Patients::PatientModel::activeModel();}
 
@@ -277,8 +276,7 @@ void MainWindow::postCoreInitialization()
     aboutToShowRecentPatients();
 
     // TEST
-    Patients::PatientWidgetManager::instance()->postCoreInitialization();
-//    formManager()->formPlaceHolder()->setEpisodeModel(episodeModel());
+//    Patients::PatientWidgetManager::instance()->postCoreInitialization();
     // END TEST
 
     theme()->finishSplashScreen(this);

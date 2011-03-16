@@ -64,7 +64,6 @@ public:
 
     EpisodeModel(Form::FormMain *rootEmptyForm, QObject *parent = 0);
     ~EpisodeModel();
-//    static EpisodeModel *instance();
     void init();
 
     QModelIndex index(int row, int column, const QModelIndex &parent) const;
@@ -82,11 +81,6 @@ public:
 
     bool insertRows(int row, int count, const QModelIndex &parent = QModelIndex());
     bool removeRows(int row, int count, const QModelIndex &parent = QModelIndex());
-
-//    bool insertRow(int arow, const QModelIndex &aparent = QModelIndex())        { return insertRows(arow, 1, aparent); }
-//    bool insertColumn(int acolumn, const QModelIndex &aparent = QModelIndex())  { return insertColumns(acolumn, 1, aparent); }
-//    bool removeRow(int arow, const QModelIndex &aparent = QModelIndex())        { return removeRows(arow, 1, aparent); }
-//    bool removeColumn(int acolumn, const QModelIndex &aparent = QModelIndex())  { return removeColumns(acolumn, 1, aparent); }
 
     bool isEpisode(const QModelIndex &index) const;
     bool isForm(const QModelIndex &index) const {return !isEpisode(index);}
@@ -122,7 +116,6 @@ public Q_SLOTS:
 
 private:
     Internal::EpisodeModelPrivate *d;
-//    static EpisodeModel *m_Instance;
 };
 
 }  // End namespace Form
