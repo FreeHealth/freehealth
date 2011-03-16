@@ -92,6 +92,170 @@ static inline Core::ISettings *settings()  { return Core::ICore::instance()->set
 static inline Core::ActionManager *actionManager() { return Core::ICore::instance()->actionManager(); }
 
 
+namespace {
+
+    /** \todo create an Utils::GenericTreeItem \sa Templates::TemplateModel, PMH::PmhCategoryModel */
+    class TreeItem
+    {
+    public:
+        TreeItem(const QHash<int, QVariant> &datas, TreeItem *parent = 0) :
+                m_Parent(parent),
+                m_IsEpisode(false),
+                m_IsModified(false),
+                m_Datas(datas)
+        {
+            setData(EpisodeModel::UserUuid, currentUserUuid());
+            setIsEpisode(datas.value(EpisodeModel::IsEpisode).toBool());
+        }
+        ~TreeItem() { qDeleteAll(m_Children); }
+
+        // Genealogy management
+        TreeItem *child(int number) { return m_Children.value(number); }
+        int childCount() const { return m_Children.count(); }
+        int columnCount() const { return EpisodeModel::MaxData; }
+        TreeItem *parent() { return m_Parent; }
+        void setParent(TreeItem *parent) { m_Parent = parent; }
+        bool addChildren(TreeItem *child)
+        {
+            if (!m_Children.contains(child))
+                m_Children.append(child);
+            return true;
+        }
+        bool insertChild(const int row, TreeItem *child)
+        {
+            if (row > m_Children.count())
+                return false;
+            m_Children.insert(row, child);
+            return true;
+        }
+        int childNumber() const
+        {
+            if (m_Parent)
+                return m_Parent->m_Children.indexOf(const_cast<TreeItem*>(this));
+            return 0;
+        }
+        void sortChildren()
+        {
+            qSort(m_Children.begin(), m_Children.end(), TreeItem::lessThan);
+        }
+
+        // For category only tree
+        int childCategoryCount() const
+        {
+            int n = 0;
+            foreach(TreeItem *c, this->m_Children) {
+                if (!c->isEpisode())
+                    ++n;
+            }
+            return n;
+        }
+
+        TreeItem *categoryChild(int number)
+        {
+            QList<TreeItem *> cat;
+            foreach(TreeItem *c, this->m_Children) {
+                if (!c->isEpisode())
+                    cat << c;
+            }
+            return cat.value(number);
+        }
+
+        int categoryChildNumber() const
+        {
+            if (m_Parent) {
+                QList<TreeItem *> cat;
+                foreach(TreeItem *c, m_Parent->m_Children) {
+                    if (!c->isEpisode())
+                        cat << c;
+                }
+                return cat.indexOf(const_cast<TreeItem*>(this));
+            }
+            return 0;
+        }
+
+        // For tree management
+        void setIsEpisode(bool isEpisode) {m_IsEpisode = isEpisode; setData(EpisodeModel::IsEpisode, isEpisode); }
+        bool isEpisode() const {return m_IsEpisode;}
+
+        // For database management
+        void setModified(bool state)
+        {
+            m_IsModified = state;
+            if (!state)
+                m_DirtyRows.clear();
+        }
+        bool isModified() const {return m_IsModified;}
+        void setNewlyCreated(bool state) {setData(EpisodeModel::IsNewlyCreated, state); }
+        bool isNewlyCreated() const {return data(EpisodeModel::IsNewlyCreated).toBool();}
+
+        bool removeChild(TreeItem *child)
+        {
+            if (m_Children.contains(child)) {
+                m_Children.removeAll(child);
+                return true;
+            }
+            return false;
+        }
+
+        bool removeEpisodes()
+        {
+            foreach(TreeItem *item, m_Children) {
+                if (item->isEpisode()) {
+                    m_Children.removeAll(item);
+                    delete item;
+                }
+            }
+            return true;
+        }
+
+        // For data management
+        QVariant data(const int column) const
+        {
+            return m_Datas.value(column, QVariant());
+        }
+
+        bool setData(int column, const QVariant &value)
+        {
+    //        qWarning()<< data(column) << value << (data(column)==value);
+            if (data(column)==value)
+                return true;
+            m_Datas.insert(column, value);
+            if (column==EpisodeModel::IsEpisode) {
+                m_IsEpisode=value.toBool();
+            }
+            m_IsModified = true;
+            if (!m_DirtyRows.contains(column))
+                m_DirtyRows.append(column);
+            return true;
+        }
+
+        QVector<int> dirtyRows() const
+        {
+            return m_DirtyRows;
+        }
+
+        // For sort functions
+        static bool lessThan(TreeItem *item1, TreeItem *item2)
+        {
+            // category goes first
+            // then sort by name
+            bool sameType = (((item1->isEpisode()) && (item2->isEpisode())) || ((!item1->isEpisode()) && (!item2->isEpisode())));
+            if (sameType)
+                return item1->data(EpisodeModel::Label).toString() < item2->data(EpisodeModel::Label).toString();
+            return item2->isEpisode();
+        }
+
+    private:
+        TreeItem *m_Parent;
+        QList<TreeItem*> m_Children;
+        QVector<int> m_DirtyRows;
+        bool m_IsEpisode, m_IsModified;
+        QHash<int, QVariant> m_Datas;
+    };
+
+
+}
+
 namespace Form {
 namespace Internal {
 
@@ -127,165 +291,6 @@ private:
     Form::EpisodeModel *m_Model;
 };
 
-
-/** \todo create an Utils::GenericTreeItem \sa Templates::TemplateModel, PMH::PmhCategoryModel */
-class TreeItem
-{
-public:
-    TreeItem(const QHash<int, QVariant> &datas, TreeItem *parent = 0) :
-            m_Parent(parent),
-            m_IsEpisode(false),
-            m_IsModified(false),
-            m_Datas(datas)
-    {
-        setData(EpisodeModel::UserUuid, currentUserUuid());
-        setIsEpisode(datas.value(EpisodeModel::IsEpisode).toBool());
-    }
-    ~TreeItem() { qDeleteAll(m_Children); }
-
-    // Genealogy management
-    TreeItem *child(int number) { return m_Children.value(number); }
-    int childCount() const { return m_Children.count(); }
-    int columnCount() const { return EpisodeModel::MaxData; }
-    TreeItem *parent() { return m_Parent; }
-    void setParent(TreeItem *parent) { m_Parent = parent; }
-    bool addChildren(TreeItem *child)
-    {
-        if (!m_Children.contains(child))
-            m_Children.append(child);
-        return true;
-    }
-    bool insertChild(const int row, TreeItem *child)
-    {
-        if (row > m_Children.count())
-            return false;
-        m_Children.insert(row, child);
-        return true;
-    }
-    int childNumber() const
-    {
-        if (m_Parent)
-            return m_Parent->m_Children.indexOf(const_cast<TreeItem*>(this));
-        return 0;
-    }
-    void sortChildren()
-    {
-        qSort(m_Children.begin(), m_Children.end(), TreeItem::lessThan);
-    }
-
-    // For category only tree
-    int childCategoryCount() const
-    {
-        int n = 0;
-        foreach(TreeItem *c, this->m_Children) {
-            if (!c->isEpisode())
-                ++n;
-        }
-        return n;
-    }
-
-    TreeItem *categoryChild(int number)
-    {
-        QList<TreeItem *> cat;
-        foreach(TreeItem *c, this->m_Children) {
-            if (!c->isEpisode())
-                cat << c;
-        }
-        return cat.value(number);
-    }
-
-    int categoryChildNumber() const
-    {
-        if (m_Parent) {
-            QList<TreeItem *> cat;
-            foreach(TreeItem *c, m_Parent->m_Children) {
-                if (!c->isEpisode())
-                    cat << c;
-            }
-            return cat.indexOf(const_cast<TreeItem*>(this));
-        }
-        return 0;
-    }
-
-    // For tree management
-    void setIsEpisode(bool isEpisode) {m_IsEpisode = isEpisode; setData(EpisodeModel::IsEpisode, isEpisode); }
-    bool isEpisode() const {return m_IsEpisode;}
-
-    // For database management
-    void setModified(bool state)
-    {
-        m_IsModified = state;
-        if (!state)
-            m_DirtyRows.clear();
-    }
-    bool isModified() const {return m_IsModified;}
-    void setNewlyCreated(bool state) {setData(EpisodeModel::IsNewlyCreated, state); }
-    bool isNewlyCreated() const {return data(EpisodeModel::IsNewlyCreated).toBool();}
-
-    bool removeChild(TreeItem *child)
-    {
-        if (m_Children.contains(child)) {
-            m_Children.removeAll(child);
-            return true;
-        }
-        return false;
-    }
-
-    bool removeEpisodes()
-    {
-        foreach(TreeItem *item, m_Children) {
-            if (item->isEpisode()) {
-                m_Children.removeAll(item);
-                delete item;
-            }
-        }
-        return true;
-    }
-
-    // For data management
-    QVariant data(const int column) const
-    {
-        return m_Datas.value(column, QVariant());
-    }
-
-    bool setData(int column, const QVariant &value)
-    {
-//        qWarning()<< data(column) << value << (data(column)==value);
-        if (data(column)==value)
-            return true;
-        m_Datas.insert(column, value);
-        if (column==EpisodeModel::IsEpisode) {
-            m_IsEpisode=value.toBool();
-        }
-        m_IsModified = true;
-        if (!m_DirtyRows.contains(column))
-            m_DirtyRows.append(column);
-        return true;
-    }
-
-    QVector<int> dirtyRows() const
-    {
-        return m_DirtyRows;
-    }
-
-    // For sort functions
-    static bool lessThan(TreeItem *item1, TreeItem *item2)
-    {
-        // category goes first
-        // then sort by name
-        bool sameType = (((item1->isEpisode()) && (item2->isEpisode())) || ((!item1->isEpisode()) && (!item2->isEpisode())));
-        if (sameType)
-            return item1->data(EpisodeModel::Label).toString() < item2->data(EpisodeModel::Label).toString();
-        return item2->isEpisode();
-    }
-
-private:
-    TreeItem *m_Parent;
-    QList<TreeItem*> m_Children;
-    QVector<int> m_DirtyRows;
-    bool m_IsEpisode, m_IsModified;
-    QHash<int, QVariant> m_Datas;
-};
 
 class EpisodeModelPrivate
 {
@@ -839,8 +844,8 @@ QModelIndex EpisodeModel::index(int row, int column, const QModelIndex &parent) 
 //     if (!parent.isValid())
 //         return QModelIndex();
 
-     Internal::TreeItem *parentItem = d->getItem(parent);
-     Internal::TreeItem *childItem = 0;
+     TreeItem *parentItem = d->getItem(parent);
+     TreeItem *childItem = 0;
      childItem = parentItem->child(row);
      if (childItem) { // && childItem != d->m_RootItem) {
          return createIndex(row, column, childItem);
@@ -853,8 +858,8 @@ QModelIndex EpisodeModel::parent(const QModelIndex &index) const
      if (!index.isValid())
          return QModelIndex();
 
-     Internal::TreeItem *childItem = d->getItem(index);
-     Internal::TreeItem *parentItem = childItem->parent();
+     TreeItem *childItem = d->getItem(index);
+     TreeItem *parentItem = childItem->parent();
 
      if (parentItem == d->m_RootItem)
          return QModelIndex();
@@ -864,7 +869,7 @@ QModelIndex EpisodeModel::parent(const QModelIndex &index) const
 
 int EpisodeModel::rowCount(const QModelIndex &parent) const
 {
-    Internal::TreeItem *item = d->getItem(parent);
+    TreeItem *item = d->getItem(parent);
     if (item) {
         return item->childCount();
     }
@@ -886,7 +891,7 @@ QVariant EpisodeModel::data(const QModelIndex &item, int role) const
     if (item.column() == EmptyColumn2)
         return QVariant();
 
-    Internal::TreeItem *it = d->getItem(item);
+    TreeItem *it = d->getItem(item);
 
     switch (role)
     {
@@ -978,7 +983,7 @@ bool EpisodeModel::setData(const QModelIndex &index, const QVariant &value, int 
     if (!index.isValid())
         return false;
 
-    Internal::TreeItem *it = d->getItem(index);
+    TreeItem *it = d->getItem(index);
     if ((role==Qt::EditRole) || (role==Qt::DisplayRole)) {
         it->setData(index.column(), value);
         // emit from all instances
@@ -1007,7 +1012,7 @@ bool EpisodeModel::insertRows(int row, int count, const QModelIndex &parent)
     if (!parent.isValid())
         return false;
 
-    Internal::TreeItem *parentItem = d->getItem(parent);
+    TreeItem *parentItem = d->getItem(parent);
     if (!parentItem)
         return false;
 
@@ -1022,7 +1027,7 @@ bool EpisodeModel::insertRows(int row, int count, const QModelIndex &parent)
     datas.insert(EpisodeModel::FormUuid, d->formsItems.key(parentItem)->uuid());
     datas.insert(EpisodeModel::Label, QVariant());
 
-    Internal::TreeItem *it = new Internal::TreeItem(datas, parentItem);
+    TreeItem *it = new TreeItem(datas, parentItem);
     it->setIsEpisode(true);
     it->setModified(false);
     it->setNewlyCreated(true);
@@ -1041,7 +1046,7 @@ bool EpisodeModel::removeRows(int row, int count, const QModelIndex &parent)
     if (d->m_ReadOnly)
         return false;
 
-//    Internal::TreeItem *parentItem = 0;
+//    TreeItem *parentItem = 0;
 //    if (!parent.isValid())
 //        parentItem = d->m_RootItem;
 //    else
@@ -1050,7 +1055,7 @@ bool EpisodeModel::removeRows(int row, int count, const QModelIndex &parent)
 //    beginRemoveRows(parent, row, row+count-1);
 //
 //    for(int i=0; i<count; ++i) {
-//        Internal::TreeItem *item = parentItem->child(row+i);
+//        TreeItem *item = parentItem->child(row+i);
 //        int id = item->id();
 //        if (item->isTemplate() && (!d->m_TemplatesToDelete.contains(id)))
 //            d->m_TemplatesToDelete.append(id);
@@ -1072,7 +1077,7 @@ bool EpisodeModel::isEpisode(const QModelIndex &index) const
     if (!index.isValid())
         return false;
 
-    const Internal::TreeItem *it = d->getItem(index);
+    const TreeItem *it = d->getItem(index);
     return it->isEpisode();
 }
 
@@ -1080,7 +1085,7 @@ bool EpisodeModel::isUniqueEpisode(const QModelIndex &index) const
 {
     if (!index.isValid())
         return false;
-    Internal::TreeItem *item = d->getItem(index);
+    TreeItem *item = d->getItem(index);
     FormMain *form = d->m_RootForm->formMainChild(item->data(FormUuid).toString());
     if (form)
         return form->episodePossibilities()==FormMain::UniqueEpisode;
@@ -1091,7 +1096,7 @@ bool EpisodeModel::isNoEpisode(const QModelIndex &index)
 {
     if (!index.isValid())
         return false;
-    Internal::TreeItem *item = d->getItem(index);
+    TreeItem *item = d->getItem(index);
     FormMain *form = d->m_RootForm->formMainChild(item->data(FormUuid).toString());
     if (form)
         return form->episodePossibilities()==FormMain::NoEpisode;
@@ -1134,7 +1139,7 @@ bool EpisodeModel::activateEpisode(const QModelIndex &index, const QString &form
     }
 
     // stores the actual episode id
-    Internal::TreeItem *item = d->getItem(index);
+    TreeItem *item = d->getItem(index);
     if (!item->isEpisode()) {
         d->m_ActualEpisode = 0;
         return false;
