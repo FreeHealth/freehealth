@@ -508,14 +508,20 @@ public:
         {
         case DrugInteractionInformationQuery::ShortToolTip:
             {
+                QVector<int> drugInteractionIds;
                 for(int j=0; j < interactions.count(); ++j) {
                     IDrugInteraction *di = interactions.at(j);
+                    DrugsInteraction *ddi = static_cast<DrugsInteraction *>(di);
+                    if (!ddi)
+                        continue;
+                    if (!drugInteractionIds.contains(ddi->value(DrugsInteraction::DI_Id).toInt()))
                         tmp += "-&nbsp;" + di->type() + "<br />";
+                    drugInteractionIds << ddi->value(DrugsInteraction::DI_Id).toInt();
                 }
                 if (!tmp.isEmpty()) {
                     tmp.chop(6);
                     toReturn.append(QString(LIST_MASK)
-                                    .arg("lkjlkjlkjlkjlkj")
+                                    .arg(QCoreApplication::translate(Constants::DRUGSBASE_TR_CONTEXT, Constants::DDI_TEXT))
                                     .arg(tmp));
                 }
                 break;
@@ -594,10 +600,16 @@ public:
         case DrugInteractionInformationQuery::DetailledToolTip:
             {
                 QMap<int, QString> lines;
+                QVector<int> drugInteractionIds;
                 for(int j=0; j < interactions.count(); ++j) {
                     IDrugInteraction *di = interactions.at(j);
                     DrugsInteraction *ddi = static_cast<DrugsInteraction *>(di);
                     Q_ASSERT(ddi);
+
+                    if (drugInteractionIds.contains(ddi->value(DrugsInteraction::DI_Id).toInt()))
+                        continue;
+                    drugInteractionIds << ddi->value(DrugsInteraction::DI_Id).toInt();
+
                     int typeId = -1;
                     DrugDrugInteractionEngine::TypesOfIAM level = DrugDrugInteractionEngine::TypesOfIAM(ddi->typeId());
                     // Minimal alerts
@@ -622,8 +634,10 @@ public:
                     else if (level & DrugDrugInteractionEngine::NoIAM)
                         typeId = DrugDrugInteractionEngine::NoIAM;
                     QString &ditmp = lines[typeId];
-                    ditmp += QString("    <li>%1</li>\n")
-                                    .arg(di->header("//"));
+                    if (!ditmp.contains(di->header("//"))) {
+                        ditmp += QString("    <li>%1</li>\n")
+                                 .arg(di->header("//"));
+                    }
                 }
                 QMap<int, QString>::const_iterator i = lines.constEnd();
                 --i;
@@ -636,6 +650,7 @@ public:
                                        "  </ul>\n"
                                        "</ul>\n"
                                        )
+//                                .arg(QCoreApplication::translate(Constants::DRUGSBASE_TR_CONTEXT, Constants::DDI_TEXT))
                                 .arg(DrugsInteraction::typeToString(i.key()))
                                 .arg(i.value());
                     }
@@ -643,7 +658,9 @@ public:
                         break;
                     --i;
                 }
-                toReturn = tmp;
+                toReturn = QString("<br /><table widht=100% border=1><tr><td align=center width=100%><b>%1</b></td></tr><tr><td>%2</td></tr></table>")
+                           .arg(QCoreApplication::translate(Constants::DRUGSBASE_TR_CONTEXT, Constants::DDI_TEXT))
+                           .arg(tmp);
                 break;
             }
         }
@@ -734,7 +751,7 @@ bool DrugDrugInteractionEngine::init()
     return true;
 }
 
-QString DrugDrugInteractionEngine::name() const {return tr("Drug-drug interactions engine");}
+QString DrugDrugInteractionEngine::name() const {return QCoreApplication::translate(Constants::DRUGSBASE_TR_CONTEXT, Constants::DDI_TEXT);}
 
 QString DrugDrugInteractionEngine::uid() const {return Constants::DDI_ENGINE_UID;}
 
