@@ -24,6 +24,71 @@
  *       NAME <MAIL@ADRESS>                                                *
  *       NAME <MAIL@ADRESS>                                                *
  ***************************************************************************/
+
+/**
+ \class Form::FormItem
+ This object represents one element of the patient file form.\n
+ It contains:
+  - one Form::FormItemSpec with description of the item: author, version, licence...
+  - one Form::FormItemScripts for the script management
+  - one Form::FormItemValues
+  - you can set its Form::IFormItemData for the database access
+  - you can set its Form::IFormWidget
+ If you intend to create a child of this item use the specific members:
+  - createChildForm() to create a new Form::FormMain
+  - createChildItem() to create a new Form::FormItem
+  - createPage() to create a new Form::FormPage
+ You can get all its children by calling: formItemChildren().\n
+ You can define extra-datas (options) with the addExtraData(), extraDatas() and clearExtraDatas().
+ You can define the Core::IPatient representation of this Form::FormItem with setPatientDataRepresentation(),
+ patientDataRepresentation().
+
+ \todo - Options d'affichage et d'impression ??
+ \todo - Options de "droit" / utilisateurs autorisés
+ \todo - Scripts (OnLoad, PostLoad, CallMe)
+ \todo - Base de règles
+ \todo - Plugin associé
+ \todo - 1 QWidget vue (les widgets sont construits par les IFormIO selon leur spécificités)
+ \todo - 1 QWidget historique
+ \todo - checkValueIntegrity() qui se base sur les règles de l'item pour vérifier son exactitude
+*/
+
+/**
+  \class Form::FormPage
+  Actually unused.
+*/
+
+/**
+  \class Form::FormMain
+  A Form::FormMain represents a root item of a form. Usually, the Form::FormMain are created by the
+  Form::IFormIO engines. The first item returned by the Form::IFormIO when loading files are empty and represents
+  the root of the form.\n
+  When you need to create a FormMain as child to one another use the createChildForm() member. Get all its children
+  (including sub-trees) using the formMainChildren() member or the formMainChild() if you want a specific child.\n
+  setEpisodePossibilities() and episodePossibilities() are used in the Form::EpisodeModel when creating the tree model.\n
+  When a mode creates a root Form::FormMain it should declare the main empty root object
+  it in the plugin manager object pool to allow other object to access the datas of forms (eg: PatientModelWrapper).\n
+  \code
+  ExtensionSystem::PluginManager::instance()->addObject(myRootFormMain);
+  \endcode
+*/
+
+/**
+  \class Form::FormItemSpec
+  \todo Documentation
+*/
+
+/**
+  \class Form::FormItemScripts
+  Stores the scripts associated with the Form::FormItem
+  \todo Documentation
+*/
+
+/**
+  \class Form::FormItemValues
+  \todo Documentation
+*/
+
 #include "iformitem.h"
 
 #include <coreplugin/icore.h>
