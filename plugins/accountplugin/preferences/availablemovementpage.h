@@ -83,6 +83,7 @@ private:
     void changeEvent(QEvent *e);
     void saveModel();
     bool fillEmptyAvailableModel();
+    void fillParentCombo();
     QStandardItemModel * availableMovementModelByLocale();
 
 private:

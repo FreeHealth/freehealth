@@ -108,15 +108,12 @@
       <item row="7" column="2" colspan="2">
        <widget class="QLineEdit" name="commentEdit"/>
       </item>
-      <item row="8" column="0" colspan="2">
+      <item row="10" column="0" colspan="2">
        <widget class="QLabel" name="label_5">
         <property name="text">
          <string>Parent movement</string>
         </property>
        </widget>
-      </item>
-      <item row="8" column="2" colspan="2">
-       <widget class="QComboBox" name="parentComboBox"/>
       </item>
       <item row="4" column="2">
        <widget class="QComboBox" name="typeComboBox"/>
@@ -138,15 +135,28 @@
         </property>
        </widget>
       </item>
-      <item row="9" column="0">
+      <item row="11" column="0">
        <widget class="QLabel" name="deductibilityLabel">
         <property name="text">
          <string>Tax deductibility</string>
         </property>
        </widget>
       </item>
-      <item row="9" column="2">
+      <item row="11" column="2">
        <widget class="QComboBox" name="taxDeductibilityComboBox"/>
+      </item>
+      <item row="10" column="2">
+       <widget class="QLineEdit" name="parentEdit"/>
+      </item>
+      <item row="8" column="2">
+       <widget class="QLineEdit" name="codeEdit"/>
+      </item>
+      <item row="8" column="0">
+       <widget class="QLabel" name="codeLabel">
+        <property name="text">
+         <string>Code</string>
+        </property>
+       </widget>
       </item>
      </layout>
     </widget>

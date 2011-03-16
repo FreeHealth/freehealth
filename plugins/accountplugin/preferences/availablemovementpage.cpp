@@ -114,11 +114,8 @@ AvailableMovementWidget::AvailableMovementWidget(QWidget *parent) :
     removeButton->setIcon(theme()->icon(Core::Constants::ICONREMOVE));
     QString add = trUtf8("Add");
     QString less = trUtf8("Less");
-    typeComboBox->addItem(theme()->icon(Core::Constants::ICONADD),add);
     typeComboBox->addItem(theme()->icon(Core::Constants::ICONADD),less);
-    QString null;
-    parentComboBox->setEditable(true);
-    parentComboBox->addItem(null);
+    typeComboBox->addItem(theme()->icon(Core::Constants::ICONADD),add);
     m_Model = new AccountDB::AvailableMovementModel(this);
     if (m_Model->rowCount() < 1)
     {
@@ -133,10 +130,11 @@ AvailableMovementWidget::AvailableMovementWidget(QWidget *parent) :
     m_Mapper->setSubmitPolicy(QDataWidgetMapper::AutoSubmit);
     m_Mapper->setModel(m_Model);
     m_Mapper->setCurrentModelIndex(QModelIndex());
-    m_Mapper->addMapping(currentLabel, AccountDB::Constants::AVAILMOV_LABEL,"text");
-    m_Mapper->addMapping(typeComboBox, AccountDB::Constants::AVAILMOV_TYPE,"currentText");
-    m_Mapper->addMapping(commentEdit, AccountDB::Constants::AVAILMOV_COMMENT,"text");
-    m_Mapper->addMapping(parentComboBox, AccountDB::Constants::AVAILMOV_PARENT,"currentText");//parent movement
+    m_Mapper->addMapping(currentLabel, AccountDB::Constants::AVAILMOV_LABEL);
+    m_Mapper->addMapping(typeComboBox, AccountDB::Constants::AVAILMOV_TYPE,"currentIndex");
+    m_Mapper->addMapping(commentEdit, AccountDB::Constants::AVAILMOV_COMMENT);
+    m_Mapper->addMapping(codeEdit, AccountDB::Constants::AVAILMOV_CODE,"text");
+    m_Mapper->addMapping(parentEdit, AccountDB::Constants::AVAILMOV_PARENT,"text");//parent movement
     m_Mapper->addMapping(taxDeductibilityComboBox,AccountDB::Constants::AVAILMOV_DEDUCTIBILITY,"currentIndex");
     movComboBox->setModel(m_Model);
     movComboBox->setModelColumn(AccountDB::Constants::AVAILMOV_LABEL);
@@ -153,6 +151,8 @@ void AvailableMovementWidget::setDatasToUi()
     m_Mapper->setCurrentIndex(movComboBox->currentIndex());
 }
 
+void AvailableMovementWidget::fillParentCombo(){
+}
 
 void AvailableMovementWidget::saveModel()
 {
@@ -175,6 +175,10 @@ void AvailableMovementWidget::on_movComboBox_currentIndexChanged(int index)
 {
     //saveModel();
     m_Mapper->setCurrentIndex(movComboBox->currentIndex());
+    QString parentText = m_Model->data(m_Model->index(index,AccountDB::Constants::AVAILMOV_PARENT),Qt::DisplayRole).toString();
+    parentEdit->setText(parentText);
+    QString codeText = m_Model->data(m_Model->index(index,AccountDB::Constants::AVAILMOV_CODE),Qt::DisplayRole).toString();
+    codeEdit->setText(codeText);
 }
 
 void AvailableMovementWidget::on_addButton_clicked()
@@ -261,7 +265,7 @@ QStandardItemModel *AvailableMovementWidget::availableMovementModelByLocale()
     stream.setCodec("UTF-8");
     // skip first line
     //stream.readLine();
-    int row = 0;
+    //int row = 0;
     while (!stream.atEnd())
     {
         int row = 0;
@@ -301,25 +305,37 @@ bool AvailableMovementWidget::fillEmptyAvailableModel(){
     bool test = false;
     QStandardItemModel * model = availableMovementModelByLocale();
     int availModelRows = model->rowCount();
-    qDebug() << __FILE__ << QString::number(__LINE__) << " availModelRows = " << QString::number(availModelRows) ;
+    //qDebug() << __FILE__ << QString::number(__LINE__) << " availModelRows = " << QString::number(availModelRows) ;
+    QString strList;
     for (int i = 0; i < availModelRows; i += 1){
         if (!m_Model->insertRows(m_Model->rowCount(),1,QModelIndex()))
     	  		{qWarning() << __FILE__ << QString::number(__LINE__) << QString::number(m_Model->rowCount()) ;
     	  			  /*QMessageBox::warning(0,trUtf8("Warning"),trUtf8("Unable to insert row \n")
     	  			  +__FILE__+QString::number(__LINE__),QMessageBox::Ok);*/
     	  		    }
+    	  		    QString strValues;
     	  	for (int j = 0; j < AccountDB::Constants::AVAILMOV_MaxParam ; j += 1){
     	  		QStandardItem * item = model->itemFromIndex(model->index(i,j));
     	  		QVariant value = item->data();
-    	  		qDebug() << __FILE__ << QString::number(__LINE__) << " value =" << value ;
-    	  		qDebug() << __FILE__ << QString::number(__LINE__) << "m_Model->rowCount() =" << QString::number(m_Model->rowCount()) ;
+    	  		//todo, semantics
+    	  		if (value.canConvert(QVariant::String))
+    	  		{
+    	  			  QString strValue = value.toString().replace("'","''");
+    	  			  value = QVariant::fromValue(strValue);
+    	  		    }
+    	  		    strValues += value.toString()+" ";
+    	  		//qDebug() << __FILE__ << QString::number(__LINE__) << " value =" << value ;
+    	  		//qDebug() << __FILE__ << QString::number(__LINE__) << "m_Model->rowCount() =" << QString::number(m_Model->rowCount()) ;
     	  		if (!m_Model->setData(m_Model->index(m_Model->rowCount()-1,j),value,Qt::EditRole))
     	  		{
     	  			qWarning() << __FILE__ << QString::number(__LINE__) << "data not inserted !" ;  
     	  		    }
     	  	    }
+    	  	    strList += strValues+"\n";
     	      test = m_Model->submit();
     	      }
+    	      qDebug() << __FILE__ << QString::number(__LINE__) << " values = \n" << strList;
+
     return test;
 }
 
