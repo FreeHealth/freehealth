@@ -248,7 +248,7 @@ private:
 
 PatientModel *PatientModel::m_ActiveModel = 0;
 
-static const QColor femaleColor(255, 207, 255, 90); // ffcfff
+static const QColor femaleColor(255, 207, 255, 90);  //ffcfff
 static const QColor maleColor(225, 225, 255, 90);    //e0e0ff
 static const QColor hermaColor(255, 214, 255, 90);   //ffd6ff
 
@@ -515,6 +515,7 @@ bool PatientModel::setData(const QModelIndex &index, const QVariant &value, int 
             }
         case IPatient::FullName:
             {
+                /** \todo code here */
                 return true;
             }
         case IPatient::Photo:
@@ -527,7 +528,7 @@ bool PatientModel::setData(const QModelIndex &index, const QVariant &value, int 
         if (col != -1) {
             bool ok = d->m_SqlPatient->setData(d->m_SqlPatient->index(index.row(), col), value, role);
             if (!ok)
-                Utils::Log::addQueryError(this, d->m_SqlPatient->query());
+                LOG_QUERY_ERROR(d->m_SqlPatient->query());
 //            qWarning() << d->m_SqlPatient->index(index.row(), col).data() << d->m_SqlPatient->index(index.row(), Constants::IDENTITY_UID).data();
             return ok;
         }

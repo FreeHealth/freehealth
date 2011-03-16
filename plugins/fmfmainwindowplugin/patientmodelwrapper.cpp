@@ -24,6 +24,12 @@
  *       NAME <MAIL@ADRESS>                                                *
  *       NAME <MAIL@ADRESS>                                                *
  ***************************************************************************/
+/**
+   \class MainWin::Internal::PatientModelWrapper
+   Wrapper to the Patient::PatientModel for identity and wrapper to Form::FormItem that represent
+   a patient data.
+*/
+
 #include "patientmodelwrapper.h"
 
 #include <coreplugin/icore.h>
@@ -50,15 +56,22 @@ PatientModelWrapper::~PatientModelWrapper()
 {
 }
 
+/** \brief Initialize the model */
 void PatientModelWrapper::init()
 {
 }
 
+/** \brief Return the QModelIndex of the current patient. The index is parented with the Patient::PatientModel model. */
 QModelIndex PatientModelWrapper::currentPatientIndex() const
 {
     return m_Model->currentPatient();
 }
 
+/**
+  \brief Return the Patient's Data represented by the \e index.column().
+  The wrapper model searches in the identity model (Patient::PatientModel) and if it does not found
+  value, searches in the Forms (some Form::FormItem can represent patient values).
+*/
 QVariant PatientModelWrapper::data(const QModelIndex &index, int role) const
 {
     if (!index.isValid())
@@ -69,7 +82,7 @@ QVariant PatientModelWrapper::data(const QModelIndex &index, int role) const
 
     // get datas from the model
     QModelIndex idx = m_Model->index(index.row(), index.column());
-    QVariant result = m_Model->data(idx);
+    QVariant result = idx.data();
     if (!result.isNull())
         return result;
 
@@ -87,19 +100,25 @@ QVariant PatientModelWrapper::data(const QModelIndex &index, int role) const
     return QVariant();
 }
 
+/**
+  \brief Return the Patient's Data represented by the \e column.
+  The wrapper model searches in the identity model (Patient::PatientModel) and if it does not found
+  value, searches in the Forms (some Form::FormItem can represent patient values).
+*/
 QVariant PatientModelWrapper::data(int column) const
 {
-    return m_Model->index(m_Model->currentPatient().row(), column).data();
+    QModelIndex idx = m_Model->index(m_Model->currentPatient().row(), column);
+    return this->data(idx);
 }
 
 bool PatientModelWrapper::setValue(int ref, const QVariant &value)
 {
-    return m_Model->setData(m_Model->index(m_Model->currentPatient().row(), ref), value);
+    QModelIndex idx = m_Model->index(m_Model->currentPatient().row(), ref);
+    return setData(idx, value);
 }
 
 bool PatientModelWrapper::setData(const QModelIndex &item, const QVariant &value, int role)
 {
-    qWarning() << " PatientModelWrapper::setValue" << item.column() << value;
     QModelIndex idx = m_Model->index(item.row(), item.column());
     if (m_Model->setData(idx, value, role)) {
         Q_EMIT dataChanged(idx, idx);
@@ -108,8 +127,9 @@ bool PatientModelWrapper::setData(const QModelIndex &item, const QVariant &value
     return false;
 }
 
+/** \brief Private connection to the Patient::PatientModel source. */
 void PatientModelWrapper::patientDataChanged(const QModelIndex &index)
 {
     if (m_Model->currentPatient().row() == index.row())
-        Q_EMIT this->dataChanged(index, index);
+        Q_EMIT dataChanged(index, index);
 }

@@ -102,18 +102,18 @@ public:
         // Drugs and diseases
         // Allergies
         DrugsAllergiesWithoutPrecision,
-        DrugsUidAllergies,     //  see tkSerializer --> string<->stringlist
-        DrugsAtcAllergies,     //  see tkSerializer --> string<->stringlist
-        DrugsInnAllergies,     //  see tkSerializer --> string<->stringlist
+        DrugsUidAllergies,
+        DrugsAtcAllergies,
+        DrugsInnAllergies,
         // Intolerances
         DrugsIntolerancesWithoutPrecision,
-        DrugsUidIntolerances,     //  see tkSerializer --> string<->stringlist
-        DrugsAtcIntolerances,     //  see tkSerializer --> string<->stringlist
-        DrugsInnIntolerances,     //  see tkSerializer --> string<->stringlist
-        DrugsInnAtcIntolerances,     //  see tkSerializer --> string<->stringlist
+        DrugsUidIntolerances,
+        DrugsAtcIntolerances,
+        DrugsInnIntolerances,
+        DrugsInnAtcIntolerances,
 
         DrugsChronicTherapeutics,
-        ICD10Diseases,      //  see tkSerializer --> string<->stringlist
+        ICD10Diseases,
 
         // For debugging purpose
         PractitionnerLkID,
