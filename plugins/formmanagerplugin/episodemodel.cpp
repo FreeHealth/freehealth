@@ -380,7 +380,7 @@ public:
     {
         // make sure that all actual episodes are saved into database
         if (!saveEpisode(m_ActualEpisode, m_ActualEpisode_FormUid))
-            LOG_ERROR_FOR(q, "Unable to save actual episode (refreshEpisodes())");
+            LOG_ERROR_FOR(q, "Unable to save actual episode");
 
         // delete old episodes
         deleteEpisodes(m_RootItem);
@@ -652,7 +652,7 @@ public:
         // read the xml'd content
         QHash<QString, QString> datas;
         if (!Utils::readXml(xml, Form::Constants::XML_FORM_GENERAL_TAG, datas, false)) {
-            Utils::Log::addError(q, QString("Error while reading EpisodeContent %2:%1").arg(__LINE__).arg(__FILE__));
+            LOG_ERROR_FOR(q, QString("Error while reading EpisodeContent"));
             return;
         }
 
@@ -673,8 +673,9 @@ public:
             }
             if (it->itemDatas()) {
                 it->itemDatas()->setStorableData(datas.value(it->uuid()));
-                if (feedPatientModel)
+                if (feedPatientModel) {
                     patient()->setValue(it->patientDataRepresentation(), it->itemDatas()->data(it->patientDataRepresentation(), IFormItemData::ID_ForPatientModel));
+                }
             }
             else
                 qWarning() << "FormManager::activateForm :: ERROR : no itemData :" << items.key(it);
@@ -701,14 +702,16 @@ public:
                     }
                 }
             }
-            qWarning() << "<<<<<<<<<<<< test last episode for"<<f->spec()->label() << hasPatientDatas;
+            qWarning() << "<<<<<<<<<<<< test last episode for"<< f->spec()->label() << hasPatientDatas;
             if (!hasPatientDatas)
                 continue;
 
             // get the form's XML content for the last episode, feed it with the XML code
             TreeItem *formItem = formsItems.value(f);
-            if (!formItem->childCount())
+            if (!formItem->childCount()) {
+                qWarning() << "<<<<<<<<<<<<   no episode";
                 continue;  // No episodes
+            }
 
             // get last episode
             int i = 0;

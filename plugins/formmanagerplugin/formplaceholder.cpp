@@ -131,7 +131,6 @@ public:
         settings()->setValue(Constants::S_PLACEHOLDERSPLITTER_SIZES, sizes);
     }
 
-private:
     void clearStackLayout()
     {
         /** \todo check leaks */
@@ -315,7 +314,6 @@ FormPlaceHolder::~FormPlaceHolder()
 */
 void FormPlaceHolder::setRootForm(Form::FormMain *rootForm)
 {
-    Q_ASSERT(rootForm);
     if (d->m_EpisodeModel) {
         delete d->m_EpisodeModel;
         d->m_EpisodeModel = 0;
@@ -330,6 +328,10 @@ void FormPlaceHolder::setRootForm(Form::FormMain *rootForm)
 
     // Add object to the plugin object pool
     d->m_RootForm = rootForm;
+    d->clearStackLayout();
+    if (!d->m_RootForm)
+        return;
+
     pluginManager()->addObject(rootForm);
 
     // Create models

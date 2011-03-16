@@ -76,7 +76,7 @@ private:
     void testFile(const QFileInfo &file) const
     {
         QList<Form::IFormIO*> ios = refreshIOPlugs();
-        const QString &path = settings()->path(Core::ISettings::SampleFormsPath);
+        const QString &path = settings()->path(Core::ISettings::CompleteFormsPath);
         const QString &fileName = file.fileName();
         foreach(Form::IFormIO *io, ios) {
             io->muteUserWarnings(true);
@@ -119,7 +119,7 @@ FormFilesSelectorWidget::FormFilesSelectorWidget(QWidget *parent) :
     d(new FormFilesSelectorWidgetPrivate)
 {
     d->ui->setupUi(this);
-    d->ui->actualFile->setText(settings()->value(Core::Constants::S_PATIENTFORMS_FILENAME).toString());
+    d->ui->actualFile->setText(settings()->value(Core::Constants::S_PATIENTFORMS_FILENAME).toString().remove(settings()->path(Core::ISettings::CompleteFormsPath)));
     // get IFormIO
     d->ios = refreshIOPlugs();
     // construct filters
@@ -130,13 +130,13 @@ FormFilesSelectorWidget::FormFilesSelectorWidget(QWidget *parent) :
 
     d->dirModel = new QFileSystemModel(this);
 //    d->dirModel->setReadOnly(true);
-    d->dirModel->setFilter(QDir::NoDotAndDotDot | QDir::Files);
+    d->dirModel->setFilter(QDir::NoDotAndDotDot | QDir::Dirs);
     d->dirModel->setIconProvider(d->m_IconProvider = new Internal::FormFilesIcons());
-    d->dirModel->setRootPath(settings()->path(Core::ISettings::SampleFormsPath));
+    d->dirModel->setRootPath(settings()->path(Core::ISettings::CompleteFormsPath));
 //    d->dirModel->setNameFilters(filters);
 
     d->ui->listView->setModel(d->dirModel);
-    d->ui->listView->setRootIndex(d->dirModel->index(settings()->path(Core::ISettings::SampleFormsPath)));
+    d->ui->listView->setRootIndex(d->dirModel->index(settings()->path(Core::ISettings::CompleteFormsPath)));
 
     connect(d->ui->listView, SIGNAL(activated(QModelIndex)),this, SLOT(on_listView_activated(QModelIndex)));
     connect(d->ui->useButton, SIGNAL(clicked()),this, SLOT(on_useButton_clicked()));
@@ -164,7 +164,7 @@ void FormFilesSelectorWidget::on_listView_activated(const QModelIndex &index)
     const QString &file = d->ui->listView->currentIndex().data().toString();
     // ask ios to generate description in the treeview
     foreach(Form::IFormIO *io, d->ios) {
-        if (io->setFileName(settings()->path(Core::ISettings::SampleFormsPath) + QDir::separator() + file)) {
+        if (io->setFileName(settings()->path(Core::ISettings::CompleteFormsPath) + QDir::separator() + file)) {
             if (io->canReadFile()) {
                 io->readFileInformations();
                 io->formDescriptionToTreeWidget(d->ui->treeWidget, QLocale().name().left(2));

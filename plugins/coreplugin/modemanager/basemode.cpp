@@ -87,5 +87,7 @@ BaseMode::BaseMode(QObject *parent):
 */
 BaseMode::~BaseMode()
 {
-    delete m_widget;
+    if (m_widget)
+        delete m_widget;
+    m_widget = 0;
 }

@@ -235,6 +235,9 @@ QVariant DrugsWidgetData::data(const int ref, const int role) const
             for(int i=0; i < rowCount; ++i) {
                 inns.append(model->index(i, DrugsDB::Constants::Drug::Inns).data().toStringList());
             }
+            inns.removeAll("");
+            inns.removeDuplicates();
+            qWarning() << inns;
             return inns;
             break;
         }

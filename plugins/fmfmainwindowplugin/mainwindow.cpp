@@ -266,6 +266,7 @@ void MainWindow::postCoreInitialization()
     onCurrentUserChanged();
     connect(user(), SIGNAL(userChanged()), this, SLOT(onCurrentUserChanged()));
     connect(patient(), SIGNAL(currentPatientChanged()), this, SLOT(onCurrentPatientChanged()));
+    connect(this, SIGNAL(loadPatientForms(QString)), Core::ICore::instance(), SIGNAL(loadPatientForms(QString)));
 
     contextManager()->updateContext();
     actionManager()->retranslateMenusAndActions();
@@ -350,49 +351,32 @@ void MainWindow::openPatientFormsFile()
 /** \brief Load a patient XML file into the FormManager. */
 bool MainWindow::openFile()
 {
-    // Get all IFormIO from pluginsmanager
-    QList<Form::IFormIO *> list = pluginManager()->getObjects<Form::IFormIO>();
-    // Ask list for the file filters
-    QStringList filters;
-    foreach(const Form::IFormIO *io, list) {
-        filters << io->fileFilters();
-    }
-    // Ask user for a file
-    QString file;
-    file = QFileDialog::getOpenFileName(this, tr("Choose a file"),
-                                        Core::ICore::instance()->settings()->path(Core::ISettings::SampleFormsPath),
-                                        filters.join(";"));
+    // Ask user for a patient form dir
+    QString dir;
+    dir = QFileDialog::getExistingDirectory(this, tr("Choose a patient file directory"),
+                                            settings()->path(Core::ISettings::CompleteFormsPath));
     // If one file is selected ask canReadForm()
-    if (file.isEmpty())
+    if (dir.isEmpty())
         return false;
-    if (formManager()->loadFile(file, list)) {
-        fileManager()->setCurrentFile(file);
-        fileManager()->addToRecentFiles(file);
-    } else {
-        return false;
-    }
-    return true;
+    return loadFile(dir);
 }
 
-/** \brief Load a patient XML file into the FormManager using the IFormIO objects \e iolist. */
-bool MainWindow::loadFile(const QString &filename, const QList<Form::IFormIO *> &iolist)
+/** \brief Send a signal: load a patient form file. \sa Core::ICore::loadPatientForms() */
+bool MainWindow::loadFile(const QString &absDirPath)
 {
-    if (filename.isEmpty())
+    if (absDirPath.isEmpty())
         return false;
 
-    // Get all IFormIO from pluginsmanager
-    QList<Form::IFormIO *> list = iolist;
+    // Get the PatientFile FormMain empty root from FormManager
+//    Form::FormMain *root = 0;
+//    if (root = formManager()->loadFile(filename, list)) {
+//        fileManager()->setCurrentFile(filename);
+//    } else {
+//        return false;
+//    }
 
-    if (iolist.isEmpty())
-        QList<Form::IFormIO *> list = pluginManager()->getObjects<Form::IFormIO>();
+    Q_EMIT loadPatientForms(absDirPath);
 
-    // Get the FormMain empty root from FormManager
-    Form::FormMain *root = 0;
-    if (root = formManager()->loadFile(filename, list)) {
-        fileManager()->setCurrentFile(filename);
-    } else {
-        return false;
-    }
     return true;
 }
 

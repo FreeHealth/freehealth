@@ -67,7 +67,6 @@ public:
      static FormManager *instance();
      ~FormManager();
 
-     Form::FormMain *loadFile(const QString &filename, const QList<Form::IFormIO *> &iolist);
      void activateMode();
 
      QList<FormMain *> forms() const;
@@ -91,8 +90,9 @@ public:
      }
 
 public Q_SLOTS:
-     bool translateForms();
+     Form::FormMain *loadPatientFile(const QString &absDirPath);
      void setCurrentPatient(const QString &uuid);
+     bool translateForms();
 
  private:
      Internal::FormManagerPrivate *d;

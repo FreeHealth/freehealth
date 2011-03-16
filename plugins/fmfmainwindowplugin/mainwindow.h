@@ -90,7 +90,7 @@ public Q_SLOTS:
     // Interface of MainWidowActionHandler
 //    bool newFile();
     bool openFile();
-    bool loadFile(const QString &filename, const QList<Form::IFormIO *> &iolist = QList<Form::IFormIO *>());
+    bool loadFile(const QString &absDirPath);
 //    bool saveFile();
 //    bool saveAsFile();
 //    bool print();
@@ -119,6 +119,9 @@ public Q_SLOTS:
 protected:
     void closeEvent( QCloseEvent *event );
     void changeEvent(QEvent *event);
+
+Q_SIGNALS:
+    void loadPatientForms(const QString &fileName);
 
 public:
     Utils::FancyTabWidget *m_modeStack;

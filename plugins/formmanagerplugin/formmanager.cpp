@@ -93,13 +93,10 @@ public:
             delete m_Holder;
             m_Holder = 0;
         }
-        /** \todo Delete FormItem ?? */
     }
 
 public:
     QPointer<FormPlaceHolder> m_Holder;
-    Core::UniqueIDManager *m_UuidManager;
-    QMap<int, Form::FormMain *> m_HashForms;
 
     /** \todo create a EpisodeData class */
     int m_ActualEpisode;
@@ -128,8 +125,9 @@ FormManager::FormManager(QObject *parent)
 {
     setObjectName("FormManager");
     /** \todo Need to modify UID code to create a new private uid */
-    d->m_UuidManager = Core::ICore::instance()->uniqueIDManager();
     d->m_Holder = new FormPlaceHolder;
+
+    connect(Core::ICore::instance(), SIGNAL(loadPatientForms(QString)), this, SLOT(loadPatientFile(QString)));
 }
 
 FormManager::~FormManager()
@@ -147,65 +145,34 @@ void FormManager::activateMode()
     d->m_Holder->formTree()->expandAll();
 }
 
-//FormMain *FormManager::createForm(const QString &uuid, FormMain *parent)
-//{
-//    FormMain *f = 0;
-//    if (parent)
-//        f = new FormMain(parent);
-//    else
-//        f = new FormMain(this);
-//    if (!uuid.isEmpty())
-//        f->setUuid(uuid);
-//    d->m_HashForms.insert(d->m_UuidManager->uniqueIdentifier(f->uuid()), f);
-//    if (WarnFormCreation)
-//        LOG("FormManager Creating Form: " + uuid);
-//    return f;
-//}
-
 /** \brief Return all available forms from the PluginManager object pool. \sa Form::FormMain */
 QList<FormMain *> FormManager::forms() const
 {
     return pluginManager()->getObjects<FormMain>();
 }
 
-//bool FormManager::hasForm(const QString &uuid) const
-//{
-//    if (!d->m_UuidManager->hasUniqueIdentifier(uuid))
-//        return false;
-//    return true;
-//}
-
-//FormMain *FormManager::form(const QString &uuid) const
-//{
-//    if (!hasForm(uuid))
-//        return 0;
-//    int id = d->m_UuidManager->uniqueIdentifier(uuid);
-//    return d->m_HashForms.value(id, 0);
-//}
-
 /** \brief Load a form file and return the empty root Form::FormMain. */
-Form::FormMain *FormManager::loadFile(const QString &filename, const QList<Form::IFormIO *> &iolist)
+Form::FormMain *FormManager::loadPatientFile(const QString &absDirPath)
 {
-    if (filename.isEmpty())
-        return false;
+    if (absDirPath.isEmpty())
+        return 0;
 
     // get all form readers (IFormIO)
     Form::IFormIO *reader = 0;
-    QList<Form::IFormIO *> list;
-    if (iolist.isEmpty())
-         list = pluginManager()->getObjects<Form::IFormIO>();
-    else
-        list = iolist;
+    QList<Form::IFormIO *> list = pluginManager()->getObjects<Form::IFormIO>();
 
     // try to read form
     Form::FormMain *root = 0;
     foreach(Form::IFormIO *io, list) {
-        if (io->setFileName(filename) && io->canReadFile()) {
+        if (io->setFileName(absDirPath + "/central.xml") && io->canReadFile()) {
             root = io->loadForm();
             if (root)
                 break;
         }
     }
+
+    // Tell the PlaceHolder of the FormMain to use as root item
+    // FormPlaceHolder will manage deletion of the item
     d->m_Holder->setRootForm(root);
     return root;
 }
