@@ -123,7 +123,8 @@
      - Core::ISettings::SmallPixmapPath
      - Core::ISettings::MediumPixmapPath
      - Core::ISettings::BigPixmapPath
-     - Core::ISettings::SampleFormsPath
+     - Core::ISettings::CompleteFormsPath
+     - Core::ISettings::SubFormsPath
      - Core::ISettings::DocumentationPath
 */
 
@@ -175,12 +176,12 @@
  * Defines the temporary application path.
 */
 
-/*! \var Core::ISettings::Paths Core::ISettings::FormsPath
- * Defines the users' forms path (FreeMedForms only).
+/*! \var Core::ISettings::Paths Core::ISettings::CompleteFormsPath
+ * Defines the Bundled full patient forms (used only with FreeMedForms).
 */
 
-/*! \var Core::ISettings::Paths Core::ISettings::SampleFormsPath
- * Defines the Bundled forms (used only with FreeMedForms).
+/*! \var Core::ISettings::Paths Core::ISettings::SubFormsPath
+ * Defines the Bundled sub-forms (used only with FreeMedForms).
 */
 
 /*! \var Core::ISettings::Paths Core::ISettings::DocumentationPath
@@ -391,7 +392,7 @@ QSettings *SettingsPrivate::getQSettings()
   \fn void Core::ISettings::setPath(const int type, const QString & absPath)
   \brief defines a path \e absPath with the index \e type refering to the enumarator \e Settings::Paths.
   When setting ApplicationPath, some paths are automatically recalculated : BundleRootPath, QtFrameWorksPath, FMFPlugInsPath, QtPlugInsPath.\n
-  When setting BundleResourcesPath, some paths are automatically recalculated : ReadOnlyDatabasesPath, TranslationsPath, SmallPixmapPath, MediumPixmapPath, BigPixmapPath, SampleFormsPath.\n
+  When setting BundleResourcesPath, some paths are automatically recalculated : ReadOnlyDatabasesPath, TranslationsPath, SmallPixmapPath, MediumPixmapPath, BigPixmapPath, CompleteFormsPath, SubFormsPath.\n
   When setting ResourcesPath, some paths are automatically recalculated : ReadWriteDatabasesPath.\n
 */
 void SettingsPrivate::setPath(const int type, const QString & absPath)
@@ -433,7 +434,8 @@ void SettingsPrivate::setPath(const int type, const QString & absPath)
             m_Enum_Path.insert(SmallPixmapPath, bundlePath + DEFAULTTHEME_PIXMAP + "/16x16/");
             m_Enum_Path.insert(MediumPixmapPath, bundlePath + DEFAULTTHEME_PIXMAP + "/32x32/");
             m_Enum_Path.insert(BigPixmapPath, bundlePath + DEFAULTTHEME_PIXMAP + "/64x64/");
-            m_Enum_Path.insert(SampleFormsPath, bundlePath + DEFAULTFORMS);
+            m_Enum_Path.insert(SubFormsPath, bundlePath + DEFAULTFORMS + "subforms");
+            m_Enum_Path.insert(CompleteFormsPath, bundlePath + DEFAULTFORMS + "completeforms");
             QString appname = qApp->applicationName().toLower();
             if (qApp->applicationName().contains(" ")) {
                 appname = appname.left(appname.indexOf(" "));
@@ -799,8 +801,8 @@ QTreeWidget* SettingsPrivate::getTreeWidget(QWidget *parent) const
     paths.insert(tr("BigPixmapPath"), path(BigPixmapPath));
     paths.insert(tr("SystemTempPath"), path(SystemTempPath));
     paths.insert(tr("ApplicationTempPath"), path(ApplicationTempPath));
-    paths.insert(tr("FormsPath"), path(FormsPath));
-    paths.insert(tr("SampleFormsPath"), path(SampleFormsPath));
+    paths.insert(tr("CompleteFormsPath"), path(CompleteFormsPath));
+    paths.insert(tr("SubFormsPath"), path(SubFormsPath));
     paths.insert(tr("DocumentationPath"), path(DocumentationPath));
 
     QTreeWidgetItem * absPathsItem = new QTreeWidgetItem(tree, QStringList() << tr("Absolute Paths"));
@@ -913,8 +915,8 @@ QString SettingsPrivate::toString() const
     paths.insert(tr("BigPixmapPath"), path(BigPixmapPath));
     paths.insert(tr("SystemTempPath"), path(SystemTempPath));
     paths.insert(tr("ApplicationTempPath"), path(ApplicationTempPath));
-    paths.insert(tr("FormsPath"), path(FormsPath));
-    paths.insert(tr("SampleFormsPath"), path(SampleFormsPath));
+    paths.insert(tr("FormsPath"), path(CompleteFormsPath));
+    paths.insert(tr("SampleFormsPath"), path(SubFormsPath));
     paths.insert(tr("DocumentationPath"), path(DocumentationPath));
     paths.insert(tr("WebSiteUrl"), path(WebSiteUrl));
     foreach(const QString & p, paths.keys())
