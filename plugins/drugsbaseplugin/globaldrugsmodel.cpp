@@ -656,21 +656,22 @@ void GlobalDrugsModel::refreshDrugsPrecautions(const QModelIndex &topleft, const
 {
     bool refreshModel = false;
     int ref = topleft.column();
-    if (ref & Core::IPatient::DrugsUidAllergies) {
+    if (ref == Core::IPatient::DrugsUidAllergies) {
         d->uidAllergies = patient()->data(Core::IPatient::DrugsUidAllergies).toStringList();
         d->uidAllergies.removeAll("");
         d->m_testUidAllergies = !d->uidAllergies.isEmpty();
         d->clearDrugAllergyCache();
         refreshModel = true;
     }
-    if (ref & Core::IPatient::DrugsInnAllergies) {
+    if (ref == Core::IPatient::DrugsInnAllergies) {
         d->innAllergies = patient()->data(Core::IPatient::DrugsInnAllergies).toStringList();
         d->innAllergies.removeAll("");
         d->m_testInnAllergies = !d->innAllergies.isEmpty();
         d->clearDrugAllergyCache();
+        qWarning() << "  -----> DrugsInnAllergies" << d->innAllergies;
         refreshModel = true;
     }
-    if (ref & Core::IPatient::DrugsAtcAllergies) {
+    if (ref == Core::IPatient::DrugsAtcAllergies) {
         d->fullAtcAllergies.clear();
         d->classAtcAllergies.clear();
         foreach(const QString &atc, patient()->data(Core::IPatient::DrugsAtcAllergies).toStringList()) {
@@ -685,7 +686,7 @@ void GlobalDrugsModel::refreshDrugsPrecautions(const QModelIndex &topleft, const
         d->clearDrugAllergyCache();
         refreshModel = true;
     }
-    if (ref & Core::IPatient::DrugsAtcIntolerances) {
+    if (ref == Core::IPatient::DrugsAtcIntolerances) {
         d->fullAtcIntolerances.clear();
         d->classAtcIntolerances.clear();
         foreach(const QString &atc, patient()->data(Core::IPatient::DrugsAtcIntolerances).toStringList()) {
@@ -700,14 +701,14 @@ void GlobalDrugsModel::refreshDrugsPrecautions(const QModelIndex &topleft, const
         d->clearDrugIntoleranceCache();
         refreshModel = true;
     }
-    if (ref & Core::IPatient::DrugsInnIntolerances) {
+    if (ref == Core::IPatient::DrugsInnIntolerances) {
         d->innIntolerances = patient()->data(Core::IPatient::DrugsInnIntolerances).toStringList();
         d->innIntolerances.removeAll("");
         d->m_testInnIntolerances = !d->innIntolerances.isEmpty();
         d->clearDrugIntoleranceCache();
         refreshModel = true;
     }
-    if (ref & Core::IPatient::DrugsUidIntolerances) {
+    if (ref == Core::IPatient::DrugsUidIntolerances) {
         d->uidIntolerances = patient()->data(Core::IPatient::DrugsUidIntolerances).toStringList();
         d->uidIntolerances.removeAll("");
         d->m_testUidIntolerances = !d->uidIntolerances.isEmpty();
