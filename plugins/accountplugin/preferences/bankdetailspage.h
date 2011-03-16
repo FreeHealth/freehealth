@@ -66,7 +66,6 @@ public:
     explicit BankDetailsWidget(QWidget *parent = 0);
     ~BankDetailsWidget();
     void setDatasToUi();
-
     static void writeDefaultSettings( Core::ISettings *s );
 
 public Q_SLOTS:
@@ -78,6 +77,7 @@ public Q_SLOTS:
 private:
     void changeEvent(QEvent *e);
     void saveModel();
+    bool setCashBox();
 
 private:
     AccountDB::BankAccountModel *m_Model;

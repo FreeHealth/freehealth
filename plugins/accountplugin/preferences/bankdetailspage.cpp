@@ -42,6 +42,7 @@
 #include <coreplugin/constants_icons.h>
 
 using namespace Account;
+using namespace Constants;
 using namespace Account::Internal;
 using namespace Trans::ConstantTranslations;
 
@@ -120,6 +121,13 @@ BankDetailsWidget::BankDetailsWidget(QWidget *parent) :
     deleteButton->setIcon(theme()->icon(Core::Constants::ICONREMOVE));
     deleteButton->setText("Delete");
     m_Model = new AccountDB::BankAccountModel(this);
+    if (m_Model->rowCount()<1)
+    {
+    	  if (!setCashBox())
+    	  {
+    	  	  QMessageBox::warning(0,trUtf8("Warning"),trUtf8("Unable to create cash box."),QMessageBox::Ok);
+    	      }
+        }
     /** \todo  m_Model->setUserUuid(); */
     m_Mapper = new QDataWidgetMapper(this);
     m_Mapper->setSubmitPolicy(QDataWidgetMapper::AutoSubmit);
@@ -218,4 +226,17 @@ void BankDetailsWidget::changeEvent(QEvent *e)
     default:
         break;
     }
+}
+
+bool BankDetailsWidget::setCashBox(){
+        if (!m_Model->insertRows(m_Model->rowCount(),1,QModelIndex())){
+            qWarning() << __FILE__ << QString::number(__LINE__) << QString::number(m_Model->rowCount()) ;
+            }
+        QString label = trUtf8("cash box") ;
+        QString comment = trUtf8("Your cash till");
+        m_Model->setData(m_Model->index(m_Model->rowCount()-1,AccountDB::Constants::BANKDETAILS_USER_UID),m_user_uid,Qt::EditRole);
+        m_Model->setData(m_Model->index(m_Model->rowCount()-1,AccountDB::Constants::BANKDETAILS_LABEL),label,Qt::EditRole);
+        m_Model->setData(m_Model->index(m_Model->rowCount()-1,AccountDB::Constants::BANKDETAILS_OWNER),m_user_fullName,Qt::EditRole);
+        m_Model->setData(m_Model->index(m_Model->rowCount()-1,AccountDB::Constants::BANKDETAILS_COMMENT),comment,Qt::EditRole);
+        return m_Model->submit();
 }
