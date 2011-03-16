@@ -244,6 +244,7 @@ namespace Constants {
     const char * const  DRUGSBASE_TR_CONTEXT = "mfDrugsConstants";
     const char * const  NATURE_OF_RISK = QT_TRANSLATE_NOOP("mfDrugsConstants", "Nature of risk");
     const char * const  MANAGEMENT = QT_TRANSLATE_NOOP("mfDrugsConstants", "Management");
+    const char * const  DDI_TEXT = QT_TRANSLATE_NOOP("mfDrugsConstants", "Drug-drug interactions engine");
 
     // Some usefull enums
     enum LevelOfInteractionWarnings {
