@@ -54,13 +54,8 @@ void PadHighlighter::highlightBlock(const QString &text)
 
 	bool refreshNext = blockData && blockData->tokens != newBlockData->tokens;
 	block.setUserData(newBlockData);
-/*	if (refreshNext) {
-		QTextBlock nextBlock = block.next();
-		if (nextBlock.isValid()) {
-			qDebug("re-highlight");
-//			rehighlightBlock(nextBlock);
-		}
-		}*/
+	if (refreshNext) // toggle block state is enough to re-compute the next block \o/
+		setCurrentBlockState(currentBlockState() == -1 ? 0 : -1);
 }
 
 void PadHighlighter::init()
@@ -69,7 +64,8 @@ void PadHighlighter::init()
 	_padFormat.setFontWeight(QFont::Bold);
 	_coreFormat.setForeground(Qt::darkBlue);
 	_coreFormat.setFontWeight(QFont::Bold);
-	_prefixFormat.setBackground(QColor(200, 255, 255));
-	_postfixFormat.setBackground(QColor(255, 255, 170));
+	_prefixFormat.setBackground(QColor(200, 200, 255));
+	_postfixFormat.setBackground(QColor(200, 255, 200));
 	_coreTextFormat.setBackground(QColor(255, 200, 255));
+	_coreTextFormat.setFontWeight(QFont::Bold);
 }
