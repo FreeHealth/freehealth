@@ -38,8 +38,8 @@
 /**
  * \file episodebase.h
  * \author Eric MAEKER <eric.maeker@free.fr>
- * \version 0.4.0
- * \date 27 May 2010
+ * \version 0.5.0
+ * \date 17 Mar 2011
 */
 
 namespace Form {
@@ -61,7 +61,11 @@ public:
     // initialize
     bool isInitialized() const {return m_initialized;}
 
-//private:
+    bool setGenericPatientFormFile(const QString &absPathOrUid);
+    QString getGenericFormFile();
+    QHash<QString,QString> getSubFormFiles();
+
+private:
     bool createDatabase(const QString &connectionName, const QString &dbName,
                           const QString &pathOrHostName,
                           TypeOfAccess access, AvailableDrivers driver,
@@ -69,7 +73,9 @@ public:
                           const int port,
                           CreationOption createOption
                          );
+    void populateWithDefaultValues();
 
+public:
     void toTreeWidget(QTreeWidget *tree);
 
 private Q_SLOTS:

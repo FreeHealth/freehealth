@@ -35,6 +35,7 @@
 #include <coreplugin/icore.h>
 #include <coreplugin/constants_tokensandsettings.h>
 #include <coreplugin/iuser.h>
+#include <coreplugin/ipatient.h>
 
 #include <QCoreApplication>
 #include <QSqlDatabase>
@@ -53,6 +54,20 @@ using namespace Trans::ConstantTranslations;
 
 static inline Core::ISettings *settings()  { return Core::ICore::instance()->settings(); }
 static inline Core::IUser *user() {return Core::ICore::instance()->user();}
+static inline Core::IPatient *patient() {return Core::ICore::instance()->patient();}
+
+static inline bool connectDatabase(QSqlDatabase &DB, const QString &file, const int line)
+{
+    if (!DB.isOpen()) {
+        if (!DB.open()) {
+            Utils::Log::addError("EpisodeBase", tkTr(Trans::Constants::UNABLE_TO_OPEN_DATABASE_1_ERROR_2)
+                                 .arg(DB.connectionName()).arg(DB.lastError().text()),
+                                 file, line);
+            return false;
+        }
+    }
+    return true;
+}
 
 //namespace Patients {
 //namespace Internal {
@@ -102,11 +117,24 @@ EpisodeBase::EpisodeBase(QObject *parent) :
     addField(Table_EPISODES, EPISODES_DATEOFMODIFICATION, "DATEMODIF", FieldIsDate);
     addField(Table_EPISODES, EPISODES_DATEOFVALIDATION, "DATEVALIDATION", FieldIsDate);
     addField(Table_EPISODES, EPISODES_VALIDATED, "VALIDATED", FieldIsBoolean);
+    /** \todo add a valid field for the deletion of episodes */
 
     addTable(Table_EPISODE_CONTENT, "EPISODES_CONTENT");
     addField(Table_EPISODE_CONTENT, EPISODE_CONTENT_ID, "CONTENT_ID", FieldIsUniquePrimaryKey);
     addField(Table_EPISODE_CONTENT, EPISODE_CONTENT_EPISODE_ID, "EPISODE_ID", FieldIsLongInteger);
     addField(Table_EPISODE_CONTENT, EPISODE_CONTENT_XML, "XML_CONTENT", FieldIsBlob);
+    /** \todo add a valid field for the deletion of episodes content */
+    /** \todo add index */
+
+    addTable(Table_FORM, "FORM_FILES");
+    addField(Table_FORM, FORM_ID, "ID", FieldIsUniquePrimaryKey);
+    addField(Table_FORM, FORM_VALID, "VALID", FieldIsBoolean);
+    addField(Table_FORM, FORM_GENERIC, "GENERIC", FieldIsShortText);
+    addField(Table_FORM, FORM_PATIENTUID, "PATIENT", FieldIsUUID);
+    addField(Table_FORM, FORM_FORMNAME, "NAME", FieldIsShortText);
+    addField(Table_FORM, FORM_ADDPLACE, "PLACE", FieldIsShortText);
+    /** \todo manage user access restriction */
+    /** \todo add index */
 
     // Version
     addTable(Table_VERSION, "VERSION");
@@ -235,23 +263,137 @@ bool EpisodeBase::createDatabase(const QString &connectionName , const QString &
     setConnectionName(connectionName);
 
     if (createTables()) {
-        Utils::Log::addMessage(this, tkTr(Trans::Constants::DATABASE_1_CORRECTLY_CREATED).arg(dbName));
+        LOG(tkTr(Trans::Constants::DATABASE_1_CORRECTLY_CREATED).arg(dbName));
     } else {
-        Utils::Log::addError(this, tkTr(Trans::Constants::DATABASE_1_CANNOT_BE_CREATED_ERROR_2)
-                         .arg(dbName, DB.lastError().text()));
+        LOG_ERROR(tkTr(Trans::Constants::DATABASE_1_CANNOT_BE_CREATED_ERROR_2)
+                  .arg(dbName, DB.lastError().text()));
         return false;
     }
+
+    populateWithDefaultValues();
 
     return true;
 }
 
+/** \brief Populate the database with the default value after its creation. */
+void EpisodeBase::populateWithDefaultValues()
+{
+    // set default patient FormFile
+    setGenericPatientFormFile(QString("%1/%2").arg(Core::Constants::TAG_APPLICATION_COMPLETEFORMS_PATH).arg(Core::Constants::S_DEF_PATIENTFORMS_FILENAME));
+}
+
 void EpisodeBase::onCoreDatabaseServerChanged()
 {
+    /** \todo code here */
 //    m_initialized = false;
 //    if (QSqlDatabase::connectionNames().contains(Templates::Constants::DB_TEMPLATES_NAME)) {
 //        QSqlDatabase::removeDatabase(Templates::Constants::DB_TEMPLATES_NAME);
 //    }
 //    init();
+}
+
+/**
+  \brief Store the central patient form file into the database.
+  This Form File will be used for all patient as central form. Some sub-forms can then be added.
+*/
+bool EpisodeBase::setGenericPatientFormFile(const QString &absPathOrUid)
+{
+    QSqlDatabase DB = QSqlDatabase::database(Constants::DB_NAME);
+    if (!connectDatabase(DB, __FILE__, __LINE__)) {
+        return false;
+    }
+    QHash<int, QString> where;
+    where.insert(Constants::FORM_GENERIC, QString("IS NOT NULL"));
+    if (count(Constants::Table_FORM, Constants::FORM_GENERIC, getWhereClause(Constants::Table_FORM, where))) {
+        // update
+        QSqlQuery query(DB);
+        QString req = prepareUpdateQuery(Constants::Table_FORM, Constants::FORM_GENERIC, where);
+        query.prepare(req);
+        query.bindValue(0, absPathOrUid);
+        if (!query.exec()) {
+            LOG_QUERY_ERROR(query);
+            return false;
+        }
+    } else {
+        // save
+        QSqlQuery query(DB);
+        QString req = prepareInsertQuery(Constants::Table_FORM);
+        query.prepare(req);
+        query.bindValue(Constants::FORM_ID, QVariant());
+        query.bindValue(Constants::FORM_VALID, 1);
+        query.bindValue(Constants::FORM_GENERIC, absPathOrUid);
+        query.bindValue(Constants::FORM_PATIENTUID, QVariant());
+        query.bindValue(Constants::FORM_FORMNAME, QVariant());
+        query.bindValue(Constants::FORM_ADDPLACE, QVariant());
+        if (!query.exec()) {
+            LOG_QUERY_ERROR(query);
+            return false;
+        }
+    }
+    return true;
+
+}
+
+/**
+  \brief Return the central patient form file into the database.
+  This Form File will be used for all patient as central form. Some sub-forms can then be added.
+*/
+QString EpisodeBase::getGenericFormFile()
+{
+    QSqlDatabase DB = QSqlDatabase::database(Constants::DB_NAME);
+    if (!connectDatabase(DB, __FILE__, __LINE__)) {
+        return QString();
+    }
+    QHash<int, QString> where;
+    where.insert(Constants::FORM_GENERIC, QString("IS NOT NULL"));
+    where.insert(Constants::FORM_VALID, QString("=1"));
+    QSqlQuery query(DB);
+    QString req = select(Constants::Table_FORM, Constants::FORM_GENERIC, where);
+    QString path;
+    if (query.exec(req)) {
+        if (query.next()) {
+            path = query.value(0).toString();
+        }
+    } else {
+        LOG_QUERY_ERROR(query);
+        return QString();
+    }
+    path.replace(Core::Constants::TAG_APPLICATION_COMPLETEFORMS_PATH, settings()->path(Core::ISettings::CompleteFormsPath));
+    return path;
+}
+
+/**
+  \brief Return all sub-form additions.
+  The QHash represents:
+    - Key = FormUuid place to insert the sub-form
+    - Value = SubForm file path
+*/
+QHash<QString,QString> EpisodeBase::getSubFormFiles()
+{
+    QHash<QString,QString> toReturn;
+    QSqlDatabase DB = QSqlDatabase::database(Constants::DB_NAME);
+    if (!connectDatabase(DB, __FILE__, __LINE__)) {
+        return toReturn;
+    }
+    QHash<int, QString> where;
+    where.insert(Constants::FORM_GENERIC, QString("IS NULL"));
+    where.insert(Constants::FORM_VALID, QString("=1"));
+    where.insert(Constants::FORM_PATIENTUID, QString("='%1'").arg(patient()->data(Core::IPatient::Uid).toString()));
+    QSqlQuery query(DB);
+    QString req = select(Constants::Table_FORM, QList<int>()
+                         << Constants::FORM_ADDPLACE
+                         << Constants::FORM_FORMNAME, where);
+    if (query.exec(req)) {
+        while (query.next()) {
+            QString path = query.value(1).toString();
+            path.replace(Core::Constants::TAG_APPLICATION_COMPLETEFORMS_PATH, settings()->path(Core::ISettings::CompleteFormsPath));
+            path.replace(Core::Constants::TAG_APPLICATION_SUBFORMS_PATH, settings()->path(Core::ISettings::SubFormsPath));
+            toReturn.insert(query.value(0).toString(), path);
+        }
+    } else {
+        LOG_QUERY_ERROR(query);
+    }
+    return toReturn;
 }
 
 void EpisodeBase::toTreeWidget(QTreeWidget *tree)

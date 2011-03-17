@@ -120,9 +120,6 @@ protected:
     void closeEvent( QCloseEvent *event );
     void changeEvent(QEvent *event);
 
-Q_SIGNALS:
-    void loadPatientForms(const QString &fileName);
-
 public:
     Utils::FancyTabWidget *m_modeStack;
 

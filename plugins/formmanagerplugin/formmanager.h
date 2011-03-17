@@ -90,9 +90,12 @@ public:
      }
 
 public Q_SLOTS:
-     Form::FormMain *loadPatientFile(const QString &absDirPath);
+     bool loadPatientFile();
      void setCurrentPatient(const QString &uuid);
      bool translateForms();
+
+ Q_SIGNALS:
+     void loadPatientForms(const QString &fileName);
 
  private:
      Internal::FormManagerPrivate *d;

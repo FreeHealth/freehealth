@@ -36,6 +36,7 @@
 #include <coreplugin/iuser.h>
 
 #include <formmanagerplugin/formfilesselectorwidget.h>
+#include <formmanagerplugin/episodebase.h>
 
 #include <usermanagerplugin/widgets/userwizard.h>
 #include <usermanagerplugin/widgets/userpassworddialog.h>
@@ -51,14 +52,13 @@
 #include <QLabel>
 #include <QGridLayout>
 
-
 using namespace MainWin;
 using namespace Trans::ConstantTranslations;
 
 static inline Core::ISettings *settings() { return Core::ICore::instance()->settings(); }
 static inline Core::ITheme *theme()  { return Core::ICore::instance()->theme(); }
 static inline Core::IUser *user() {return Core::ICore::instance()->user();}
-
+static inline Form::Internal::EpisodeBase *episodeBase() {return Form::Internal::EpisodeBase::instance();}
 
 AppConfigWizard::AppConfigWizard(QWidget *parent)
     : QWizard(parent)
@@ -231,7 +231,7 @@ PatientFilePage::PatientFilePage(QWidget *parent) :
 
 bool PatientFilePage::validatePage()
 {
-    return QFile(settings()->value(Core::Constants::S_PATIENTFORMS_FILENAME).toString()).exists();
+    return QFileInfo(episodeBase()->getGenericFormFile()).exists();
 }
 
 

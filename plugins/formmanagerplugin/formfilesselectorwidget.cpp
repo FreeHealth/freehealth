@@ -27,14 +27,16 @@
 #include "formfilesselectorwidget.h"
 #include "ui_formfilesselectorwidget.h"
 #include "iformio.h"
-
-#include <extensionsystem/pluginmanager.h>
+#include "episodebase.h"
 
 #include <coreplugin/icore.h>
 #include <coreplugin/isettings.h>
 #include <coreplugin/itheme.h>
+#include <coreplugin/ipatient.h>
 #include <coreplugin/constants_icons.h>
 #include <coreplugin/constants_tokensandsettings.h>
+
+#include <extensionsystem/pluginmanager.h>
 
 #include <QFileSystemModel>
 #include <QFileIconProvider>
@@ -45,11 +47,12 @@
 using namespace Form;
 using namespace Internal;
 
-//inline static Form::FormManager *formManager() { return Form::FormManager::instance(); }
 static inline Core::ISettings *settings()  { return Core::ICore::instance()->settings(); }
 static inline Core::ITheme *theme()  { return Core::ICore::instance()->theme(); }
 inline static ExtensionSystem::PluginManager *pluginManager() {return ExtensionSystem::PluginManager::instance();}
 inline static QList<Form::IFormIO*> refreshIOPlugs() {return pluginManager()->getObjects<Form::IFormIO>();}
+static inline Form::Internal::EpisodeBase *episodeBase() {return Form::Internal::EpisodeBase::instance();}
+static inline Core::IPatient *patient() {return Core::ICore::instance()->patient();}
 
 
 namespace Form {
@@ -117,7 +120,7 @@ FormFilesSelectorWidget::FormFilesSelectorWidget(QWidget *parent) :
     d(new FormFilesSelectorWidgetPrivate)
 {
     d->ui->setupUi(this);
-    QString actual = settings()->value(Core::Constants::S_PATIENTFORMS_FILENAME).toString();
+    QString actual = episodeBase()->getGenericFormFile();
     actual = actual.mid(settings()->path(Core::ISettings::CompleteFormsPath).length() + 1);
     d->ui->actualFile->setText(actual);
     // get IFormIO
@@ -152,7 +155,7 @@ void FormFilesSelectorWidget::on_useButton_clicked()
     if (!d->ui->listView->selectionModel()->hasSelection())
         return;
     QFileInfo selected = d->dirModel->fileInfo(d->ui->listView->currentIndex());
-    settings()->setValue(Core::Constants::S_PATIENTFORMS_FILENAME, selected.absoluteFilePath());
+    episodeBase()->setGenericPatientFormFile(selected.absoluteFilePath());
 }
 
 void FormFilesSelectorWidget::on_listView_activated(const QModelIndex &index)

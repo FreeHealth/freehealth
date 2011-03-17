@@ -266,19 +266,14 @@ void MainWindow::postCoreInitialization()
     onCurrentUserChanged();
     connect(user(), SIGNAL(userChanged()), this, SLOT(onCurrentUserChanged()));
     connect(patient(), SIGNAL(currentPatientChanged()), this, SLOT(onCurrentPatientChanged()));
-    connect(this, SIGNAL(loadPatientForms(QString)), Core::ICore::instance(), SIGNAL(loadPatientForms(QString)));
 
     contextManager()->updateContext();
     actionManager()->retranslateMenusAndActions();
 
     // Open Last Opened Forms is necessary
-    openPatientFormsFile();
+//    openPatientFormsFile();  /** \todo code here: remove this and all sub-member */
     // Create the patient navigation menu (needed in Patient::PatientSelector)
     aboutToShowRecentPatients();
-
-    // TEST
-//    Patients::PatientWidgetManager::instance()->postCoreInitialization();
-    // END TEST
 
     theme()->finishSplashScreen(this);
     raise();
@@ -345,7 +340,7 @@ void MainWindow::updateCheckerEnd()
 void MainWindow::openPatientFormsFile()
 {
     /** \todo Save patient forms file to database */
-    loadFile(settings()->value(Core::Constants::S_PATIENTFORMS_FILENAME).toString());
+//    loadFile(settings()->value(Core::Constants::S_PATIENTFORMS_FILENAME).toString());
 }
 
 /** \brief Load a patient XML file into the FormManager. */
@@ -375,7 +370,7 @@ bool MainWindow::loadFile(const QString &absDirPath)
 //        return false;
 //    }
 
-    Q_EMIT loadPatientForms(absDirPath);
+//    Q_EMIT loadPatientForms(absDirPath);
 
     return true;
 }

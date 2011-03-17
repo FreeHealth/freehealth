@@ -80,6 +80,8 @@ const char * const  TOKEN_USERFULLCONTACT    = "USERFULLCONTACT";
 // Some path tags
 const char * const  TAG_APPLICATION_RESOURCES_PATH = "%appResources%";
 const char * const  TAG_APPLICATION_THEME_PATH     = "%theme%";
+const char * const  TAG_APPLICATION_COMPLETEFORMS_PATH = "%completeForms%";
+const char * const  TAG_APPLICATION_SUBFORMS_PATH = "%subForms%";
 
 // Settings keys
 const char * const  S_RECENTFILES_GROUP = "RecentFiles";
@@ -93,7 +95,7 @@ const char * const  S_LASTPASSWORD      = "Login/userPassword";
 const char * const  S_DATEFORMAT        = "Dates/Format";
 const char * const  S_PREFEREDLANGUAGE  = "Core/PreferedLanguage";
 
-const char * const  S_PATIENTFORMS_FILENAME  = "Core/PatientFormsFile";
+const char * const  S_DEF_PATIENTFORMS_FILENAME  = "gp_basic1";
 
 const char * const  S_USE_EXTERNAL_DATABASE  = "ExternalDatabase/UseIt";
 const char * const  S_EXTERNAL_DATABASE_LOG  = "ExternalDatabase/Log";

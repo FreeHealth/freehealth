@@ -38,6 +38,7 @@ namespace Constants {
     enum Tables {
       Table_EPISODES = 0,
       Table_EPISODE_CONTENT,
+      Table_FORM,
       Table_VERSION
     };
 
@@ -58,6 +59,10 @@ namespace Constants {
         EPISODE_CONTENT_ID = 0,
         EPISODE_CONTENT_EPISODE_ID,
         EPISODE_CONTENT_XML
+    };
+    enum FormFields {
+        FORM_ID = 0, FORM_VALID, FORM_GENERIC, FORM_PATIENTUID, FORM_FORMNAME, FORM_ADDPLACE,
+        FORM_MaxParam
     };
     enum VersionFields {
         VERSION_TEXT = 0
