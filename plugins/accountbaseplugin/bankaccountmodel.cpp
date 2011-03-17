@@ -160,3 +160,7 @@ void BankAccountModel::setFilter(const QString & filter){
     d->m_SqlTable->setFilter(filter);
     d->m_SqlTable->select();
 }
+
+QString BankAccountModel::filter(){
+    return d->m_SqlTable->filter();
+}
