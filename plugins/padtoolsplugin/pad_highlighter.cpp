@@ -60,11 +60,12 @@ void PadHighlighter::highlightBlock(const QString &text)
 
 void PadHighlighter::init()
 {
+	// init some formats
 	_padFormat.setForeground(Qt::darkRed);
 	_padFormat.setFontWeight(QFont::Bold);
 	_coreFormat.setForeground(Qt::darkBlue);
 	_coreFormat.setFontWeight(QFont::Bold);
-	_prefixFormat.setBackground(QColor(200, 200, 255));
+	_prefixFormat.setBackground(QColor(220, 200, 255));
 	_postfixFormat.setBackground(QColor(200, 255, 200));
 	_coreTextFormat.setBackground(QColor(255, 200, 255));
 	_coreTextFormat.setFontWeight(QFont::Bold);
