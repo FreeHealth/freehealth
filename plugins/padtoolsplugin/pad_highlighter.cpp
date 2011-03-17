@@ -65,7 +65,7 @@ void PadHighlighter::init()
 	_padFormat.setFontWeight(QFont::Bold);
 	_coreFormat.setForeground(Qt::darkBlue);
 	_coreFormat.setFontWeight(QFont::Bold);
-	_prefixFormat.setBackground(QColor(220, 200, 255));
+	_prefixFormat.setBackground(QColor(220, 220, 255));
 	_postfixFormat.setBackground(QColor(200, 255, 200));
 	_coreTextFormat.setBackground(QColor(255, 200, 255));
 	_coreTextFormat.setFontWeight(QFont::Bold);
