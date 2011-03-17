@@ -39,8 +39,8 @@ private:
 		};*/
 
 	PadAnalyzer _padAnalyzer;
-	QTextCharFormat _padFormat;
-	QTextCharFormat _coreFormat;
+	QTextCharFormat _padDelimiterFormat;
+	QTextCharFormat _coreDelimiterFormat;
 	QTextCharFormat _prefixFormat;
 	QTextCharFormat _postfixFormat;
 	QTextCharFormat _coreTextFormat;

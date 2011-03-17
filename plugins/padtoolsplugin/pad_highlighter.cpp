@@ -36,13 +36,14 @@ void PadHighlighter::highlightBlock(const QString &text)
 
 	for (int i = 0; i < text.count(); ++i) {
 		if (text[i] == PadAnalyzer::padOpenDelimiter) {
-			setFormat(i, 1, _padFormat);
+			setFormat(i, 1, _padDelimiterFormat);
 			newBlockData->tokens << BlockData::Token_OpenPad;
 		} else if (text[i] == PadAnalyzer::padCloseDelimiter) {
-			setFormat(i, 1, _padFormat);
+			setFormat(i, 1, _padDelimiterFormat);
 			newBlockData->eatClosePad();
 		} else if (text[i] == PadAnalyzer::coreDelimiter) {
-			setFormat(i, 1, _coreFormat);
+			qDebug("ok");
+			setFormat(i, 1, _coreDelimiterFormat);
 			newBlockData->eatCoreDelimiter();
 		} else if (newBlockData->tokens.count() && newBlockData->tokens.last() == BlockData::Token_OpenPad)
 			setFormat(i, 1, _prefixFormat);
@@ -61,10 +62,10 @@ void PadHighlighter::highlightBlock(const QString &text)
 void PadHighlighter::init()
 {
 	// init some formats
-	_padFormat.setForeground(Qt::darkRed);
-	_padFormat.setFontWeight(QFont::Bold);
-	_coreFormat.setForeground(Qt::darkBlue);
-	_coreFormat.setFontWeight(QFont::Bold);
+	_padDelimiterFormat.setForeground(Qt::darkRed);
+	_padDelimiterFormat.setFontWeight(QFont::Bold);
+	_coreDelimiterFormat.setForeground(Qt::darkRed);
+	_coreDelimiterFormat.setFontWeight(QFont::Bold);
 	_prefixFormat.setBackground(QColor(220, 220, 255));
 	_postfixFormat.setBackground(QColor(200, 255, 200));
 	_coreTextFormat.setBackground(QColor(255, 200, 255));
