@@ -272,10 +272,9 @@ QStandardItemModel *AvailableMovementWidget::availableMovementModelByLocale()
     {
         int row = 0;
         QString line = stream.readLine();
-        line.remove("\"");
-        line.remove("'");
         QStringList listOfSeparators;
-        listOfSeparators << "," << ";" << QString("\t");
+        listOfSeparators << ",\"" << ";\"" << QString("\t\"")
+                         << ",''" << ";''" << QString("\t''");
         QString separator;
         QString separatorStr;
         foreach(separatorStr,listOfSeparators){
@@ -292,7 +291,10 @@ QStandardItemModel *AvailableMovementWidget::availableMovementModelByLocale()
                 //model->setData(model->index(row,i),listOfItems[i],Qt::EditRole);
         	QStandardItem * item = new QStandardItem;
         	//qDebug() << __FILE__ << QString::number(__LINE__) << " listOfItems[i] =" << listOfItems[i] ;
-        	item->setData(listOfItems[i]);
+        	QString itemOfList = listOfItems[i];
+        	itemOfList.remove("\"");
+        	itemOfList.remove("'");
+        	item->setData(itemOfList);
         	listOfItemsData << item;
         	}
             model->appendRow(listOfItemsData);

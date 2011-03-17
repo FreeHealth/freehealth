@@ -27,12 +27,15 @@ public:
     int getAvailableMovementId(QString & movementsComboBoxText);
     int getTypeOfMovement(QString & movementsComboBoxText);
     int getBankId(QString & bankComboBoxText);
+    QString getBankNameFromId(int id);
     QString getUserUid();
     QHash<QString,QString> hashChildrenAndParentsAvailableMovements();
 
 private:
     QStringList listOfParents();
+    bool debitOrCreditInBankBalance(const QString & bank, double & value);
     AccountDB::MovementModel *m_modelMovements;
+    QString m_user_uid;
 };
 
 #endif

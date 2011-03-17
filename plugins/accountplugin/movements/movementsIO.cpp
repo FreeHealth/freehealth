@@ -5,6 +5,7 @@
 #include <accountbaseplugin/bankaccountmodel.h>
 #include <coreplugin/icore.h>
 #include <coreplugin/itheme.h>
+#include <coreplugin/iuser.h>
 #include <coreplugin/constants_icons.h>
 #include <utils/database.h>
 #include <QMessageBox>
@@ -15,6 +16,7 @@ using namespace AccountDB;
 using namespace Constants;
 using namespace Utils;
 static inline Core::ITheme *theme()  { return Core::ICore::instance()->theme(); }
+static inline Core::IUser *user() { return  Core::ICore::instance()->user(); }
 MovementsIODb::MovementsIODb(QObject *parent) :
         QObject(parent)
 {
@@ -26,6 +28,7 @@ MovementsIODb::MovementsIODb(QObject *parent) :
     	//qDebug() << __FILE__ << QString::number(__LINE__) << " value =" << value ;
     	m_modelMovements->setHeaderData(i,Qt::Horizontal,value,Qt::EditRole);
         }
+    m_user_uid = user()->value(Core::IUser::Uuid).toString();
 }
 
 MovementsIODb::~MovementsIODb()
@@ -113,14 +116,38 @@ QStringList MovementsIODb::getYearComboBoxModel()
 }
 
 QStandardItemModel * MovementsIODb::getBankComboBoxModel(QObject * parent){
+    //todo preferentiel bank
     QStandardItemModel *model = new QStandardItemModel(parent);
     BankAccountModel bankmodel(this);
+    QString filterUserAndPrefered = QString("BD_USER_UID = '%1' AND BD_ISDEFAULT = '%2'").arg(m_user_uid,1);
+    QString filterUser = QString("BD_USER_UID = '%1'").arg(m_user_uid);
     int rows = bankmodel.rowCount();
     for (int i = 0; i < rows; i += 1)
     {
     	QString bankLabel = bankmodel.data(bankmodel.index(i,BANKDETAILS_LABEL),Qt::DisplayRole).toString();
+    	QString bankDefault = bankmodel.data(bankmodel.index(i,BANKDETAILS_DEFAULT),Qt::DisplayRole).toString();
     	QStandardItem *item = new QStandardItem(bankLabel);
-    	model->appendRow(item);
+    	QIcon icon;
+        if (bankDefault == "1") {
+            icon = QIcon(theme()->icon(Core::Constants::ICONADD));
+            item->setIcon(icon);
+            qDebug() << __FILE__ << QString::number(__LINE__) << " item def =" << item->text() ;
+            model->appendRow(item);
+            } 
+        }
+    for (int i = 0; i < rows; i += 1)
+    {
+    	QString bankLabel = bankmodel.data(bankmodel.index(i,BANKDETAILS_LABEL),Qt::DisplayRole).toString();
+    	QString bankDefault = bankmodel.data(bankmodel.index(i,BANKDETAILS_DEFAULT),Qt::DisplayRole).toString();
+    	QStandardItem *item = new QStandardItem(bankLabel);
+    	QIcon icon;   
+    	if (bankDefault != "1")
+    	{
+    	    icon = QIcon(theme()->icon(Core::Constants::ICONREMOVE));
+            item->setIcon(icon);
+            qDebug() << __FILE__ << QString::number(__LINE__) << " item def =" << item->text() ;
+            model->appendRow(item);
+    	    } 
         }
     return model;
 }
@@ -128,6 +155,9 @@ QStandardItemModel * MovementsIODb::getBankComboBoxModel(QObject * parent){
 bool MovementsIODb::insertIntoMovements(QHash<int,QVariant> &hashValues)
 {
     bool ret = true;
+    double value = 0.00;
+    int type = 2;
+    QString bank;//todo : find bank label with accountId
     int rowBefore = m_modelMovements->rowCount(QModelIndex());
     qDebug() << __FILE__ << QString::number(__LINE__) << " rowBefore = " << QString::number(rowBefore);
     if (m_modelMovements->insertRows(rowBefore,1,QModelIndex())) {
@@ -136,6 +166,20 @@ bool MovementsIODb::insertIntoMovements(QHash<int,QVariant> &hashValues)
     QVariant data;
     for(int i = 1 ; i < MOV_MaxParam ; i ++) {
         data = hashValues.value(i);
+        if (i == MOV_AMOUNT)
+        {
+        	 value = data.toDouble(); 
+            }
+        if (i == MOV_TYPE)
+        {
+        	  type = data.toInt();
+            }
+        if (i == MOV_ACCOUNT_ID)
+        {
+        	  int bankId = data.toInt();
+        	  bank = getBankNameFromId(bankId);
+        	  qDebug() << __FILE__ << QString::number(__LINE__) << " bank =" << bank ;
+            }
         qDebug() << __FILE__ << QString::number(__LINE__) << " data + i =" << data.toString()+" "+QString::number(i);
         if (!m_modelMovements-> setData(m_modelMovements->index(rowBefore,i), data ,Qt::EditRole)) {
             qWarning() << __FILE__ << QString::number(__LINE__) << " model account error = "
@@ -144,12 +188,21 @@ bool MovementsIODb::insertIntoMovements(QHash<int,QVariant> &hashValues)
     }
     m_modelMovements->submit();
     if (m_modelMovements->rowCount(QModelIndex()) == rowBefore) {
-        QMessageBox::warning(0,trUtf8("Warning ReceiptsEngine : \n"),__FILE__+QString::number(__LINE__)
+        QMessageBox::warning(0,trUtf8("Warning"),__FILE__+QString::number(__LINE__)
                              + trUtf8("\nError = ") 
                              + m_modelMovements->lastError().text(),
                              QMessageBox::Ok);
         ret = false;
     }
+    if (type == 0)
+    {
+    	  value = 0.00 - value;
+    	  qDebug() << __FILE__ << QString::number(__LINE__) << " value neg =" << QString::number(value) ;
+    	  
+        }
+    if (!debitOrCreditInBankBalance(bank,value)){
+    	  	  qWarning() << __FILE__ << QString::number(__LINE__) << "Unable to debit or credit balance !" ;
+    	}
     return ret;
 }
 
@@ -183,6 +236,17 @@ int MovementsIODb::getBankId(QString & bankComboBoxText){
     return bankId;
 }
 
+QString MovementsIODb::getBankNameFromId(int id){
+    QString bank;
+    BankAccountModel model(this);
+    QString field = model.headerData(BANKDETAILS_ID,Qt::Horizontal,Qt::DisplayRole).toString();
+    QString filter = field +QString(" = '%1'").arg(id);
+    model.setFilter(filter);
+    qDebug() << __FILE__ << QString::number(__LINE__) << " model filter =" << model.filter() ;
+    bank = model.data(model.index(0,BANKDETAILS_LABEL),Qt::DisplayRole).toString();
+    return bank;
+}
+
 int MovementsIODb::getTypeOfMovement(QString & movementsComboBoxText){
     int type = 0;
     AvailableMovementModel  availablemodel(this);
@@ -197,4 +261,41 @@ int MovementsIODb::getTypeOfMovement(QString & movementsComboBoxText){
 bool MovementsIODb::validMovement(int row)
 {
     return m_modelMovements->setData(m_modelMovements->index(row, MOV_ISVALID), 1, Qt::EditRole);
+}
+
+bool MovementsIODb::debitOrCreditInBankBalance(const QString & bank, double & value){
+    bool ret = true;
+    BankAccountModel model(this);
+    int row = 0;
+    QList<int> rowsTestList;
+    for (int i = 0; i < model.rowCount(); i += 1)
+    {
+    	QString bankLabel = model.data(model.index(i,BANKDETAILS_LABEL),Qt::DisplayRole).toString();
+    	if (bankLabel == bank)
+    	{
+    		  row = i;
+    		  rowsTestList << i;
+    	    }
+        }
+    if (rowsTestList.size()>1)
+    {
+    	  QMessageBox::warning(0,trUtf8("Warning"),
+    	             trUtf8("You have two or more records with the same bank name ! Risk of errors!"),QMessageBox::Ok);
+        }
+    double balance = model.data(model.index(row,BANKDETAILS_BALANCE),Qt::DisplayRole).toDouble();
+    double newBalance = balance + value;
+    QDate date = QDate::currentDate();
+    if (!model.setData(model.index(row,BANKDETAILS_BALANCE),newBalance,Qt::EditRole))
+    {
+    	  qWarning() << __FILE__ << QString::number(__LINE__) << "Unable to insert balance data !" ;
+        }
+    if (!model.setData(model.index(row,BANKDETAILS_BALANCEDATE),date,Qt::EditRole))
+    {
+    	  qWarning() << __FILE__ << QString::number(__LINE__) << "Unable to insert balance new date !" ;
+        }
+    if (!model.submit())
+    {
+    	  ret = false;
+        }
+    return ret;
 }
