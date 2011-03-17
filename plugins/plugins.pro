@@ -19,6 +19,7 @@ SUBDIRS = \
     icd \
     pmh \
     padtools \
+    calendar \
     category \
 #    alerts \
 
@@ -34,6 +35,9 @@ texteditor.depends += core
 
 padtools.subdir = padtoolsplugin
 padtools.depends += core
+
+calendar.subdir = calendarplugin
+calendar.depends += core
 
 saverestore.subdir   = saverestoreplugin
 saverestore.depends += core

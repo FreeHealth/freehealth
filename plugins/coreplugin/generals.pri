@@ -22,7 +22,8 @@ HEADERS += $${PWD}/core_exporter.h \
     $${PWD}/iuser.h \
     $${PWD}/idocumentprinter.h \
     $${PWD}/icommandline.h \
-	$${PWD}/ipadtools.h
+	$${PWD}/ipadtools.h \
+	$${PWD}/icalendar.h
 
 SOURCES += $${PWD}/uniqueidmanager.cpp \
     $${PWD}/icore.cpp \

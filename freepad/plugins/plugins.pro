@@ -5,7 +5,8 @@ SUBDIRS = \
     mainwindow \
     printer \
     texteditor \
-    padtools
+    padtools \
+    calendar
 
 
 core.subdir = coreplugin
@@ -24,3 +25,6 @@ texteditor.depends += core
 
 padtools.subdir   = padtoolsplugin
 padtools.depends += core
+
+calendar.subdir   = calendarplugin
+calendar.depends += core

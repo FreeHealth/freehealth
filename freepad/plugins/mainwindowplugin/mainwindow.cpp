@@ -63,6 +63,7 @@
 #include <QStatusBar>
 #include <QFileDialog>
 #include <QLabel>
+#include <QHBoxLayout>
 
 using namespace MainWin;
 using namespace MainWin::Internal;
@@ -255,7 +256,13 @@ void MainWindow::extensionsInitialized()
     connect(Core::ICore::instance(), SIGNAL(coreOpened()), this, SLOT(postCoreInitialization()));
 
 	m_padTools = ExtensionSystem::PluginManager::instance()->getObject<Core::IPadTools>();
-        m_padTools->createSyntaxHighlighter(m_ui->padTextEdit->textEdit(), m_tokens);
+	m_padTools->createSyntaxHighlighter(m_ui->padTextEdit->textEdit(), m_tokens);
+
+	m_calendarFactory = ExtensionSystem::PluginManager::instance()->getObject<Core::ICalendar>();
+	if (m_calendarFactory) {
+		QHBoxLayout *layout = new QHBoxLayout(m_ui->tabCalendar);
+		layout->addWidget(m_calendarFactory->createCalendarWidget());
+	}
 
 	// tmp: fill with dummy tokens
 	m_tokens.insert("DRUG", "drug");
