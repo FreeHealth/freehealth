@@ -42,7 +42,6 @@ void PadHighlighter::highlightBlock(const QString &text)
 			setFormat(i, 1, _padDelimiterFormat);
 			newBlockData->eatClosePad();
 		} else if (text[i] == PadAnalyzer::coreDelimiter) {
-			qDebug("ok");
 			setFormat(i, 1, _coreDelimiterFormat);
 			newBlockData->eatCoreDelimiter();
 		} else if (newBlockData->tokens.count() && newBlockData->tokens.last() == BlockData::Token_OpenPad)
