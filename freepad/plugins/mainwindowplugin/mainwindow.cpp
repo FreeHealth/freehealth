@@ -43,6 +43,8 @@
 #include <coreplugin/dialogs/helpdialog.h>
 //#include <coreplugin/idocumentprinter.h>
 
+#include <texteditorplugin/texteditor.h>
+
 #include <extensionsystem/pluginerrorview.h>
 #include <extensionsystem/pluginview.h>
 #include <extensionsystem/pluginmanager.h>
@@ -211,12 +213,10 @@ bool MainWindow::initialize(const QStringList &arguments, QString *errorString)
     // Creating MainWindow interface
     m_ui = new Internal::Ui::MainWindow();
     m_ui->setupUi(this);
-
-	resize(1024, 768);
-
-	m_ui->splitterMain->setSizes(QList<int>() << 150);
-	m_ui->splitterErrors->setSizes(QList<int>() << 0 << 100);
-
+    m_ui->padTextEdit->toogleToolbar(true);
+    resize(1024, 768);
+    m_ui->splitterMain->setSizes(QList<int>() << 150);
+    m_ui->splitterErrors->setSizes(QList<int>() << 0 << 100);
     return true;
 }
 
@@ -255,7 +255,7 @@ void MainWindow::extensionsInitialized()
     connect(Core::ICore::instance(), SIGNAL(coreOpened()), this, SLOT(postCoreInitialization()));
 
 	m_padTools = ExtensionSystem::PluginManager::instance()->getObject<Core::IPadTools>();
-	m_padTools->createSyntaxHighlighter(m_ui->padTextEdit, m_tokens);
+        m_padTools->createSyntaxHighlighter(m_ui->padTextEdit->textEdit(), m_tokens);
 
 	// tmp: fill with dummy tokens
 	m_tokens.insert("DRUG", "drug");
@@ -289,7 +289,7 @@ void MainWindow::padTextChanged()
 {
 	QList<Core::PadAnalyzerError> errors;
 	// TODO : use a timer based on key strokes instead of realtime analysis
-	m_ui->previewTextEdit->setPlainText(m_padTools->parse(m_ui->padTextEdit->toPlainText(), m_tokens, errors));
+        m_ui->previewTextEdit->setPlainText(m_padTools->parse(m_ui->padTextEdit->textEdit()->toPlainText(), m_tokens, errors));
 
 	m_ui->listWidgetErrors->clear();
 	foreach (const Core::PadAnalyzerError &error, errors) {
@@ -319,6 +319,7 @@ void MainWindow::refreshTokens() {
 
 MainWindow::~MainWindow()
 {
+    delete m_ui->padTextEdit;
     delete m_ui;
 }
 

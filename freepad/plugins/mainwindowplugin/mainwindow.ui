@@ -101,7 +101,7 @@
            <property name="orientation">
             <enum>Qt::Horizontal</enum>
            </property>
-           <widget class="QTextEdit" name="padTextEdit">
+           <widget class="Editor::TextEditor" name="padTextEdit">
             <property name="sizePolicy">
              <sizepolicy hsizetype="Expanding" vsizetype="Expanding">
               <horstretch>0</horstretch>
@@ -141,6 +141,13 @@ p, li { white-space: pre-wrap; }
    </layout>
   </widget>
  </widget>
+ <customwidgets>
+  <customwidget>
+   <class>Editor::TextEditor</class>
+   <extends>QTextEdit</extends>
+   <header location="global">texteditorplugin/texteditor.h</header>
+  </customwidget>
+ </customwidgets>
  <resources/>
  <connections/>
 </ui>
