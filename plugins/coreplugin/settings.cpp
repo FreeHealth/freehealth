@@ -342,9 +342,9 @@ SettingsPrivate::SettingsPrivate(QObject *parent, const QString &appName, const 
         // DEBUG BUILD
         QString res;
         if (Utils::isRunningOnMac())
-            res = qApp->applicationDirPath() + "/../../../../global_resources";
+            res = qApp->applicationDirPath() + "/../../../../../global_resources";
         else
-            res = qApp->applicationDirPath() + "/../global_resources";
+            res = qApp->applicationDirPath() + "/../../global_resources";
 
         res = QDir::cleanPath(res);
         resourcesPath = res + "/";

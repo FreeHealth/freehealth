@@ -54,7 +54,7 @@ message(Building into path $${SOURCES_BUILD_PATH})
 #}
 
 # define some paths related to application sources
-BUILD_BINARY_PATH         = $${SOURCES_ROOT_PATH}/bin
+BUILD_BINARY_PATH         = $${SOURCES_ROOT_PATH}/bin/$${LOWERED_APPNAME}
 BUILD_LIB_PATH            = $${BUILD_BINARY_PATH}/plugins
 BUILD_PLUGIN_PATH         = $${BUILD_LIB_PATH}
 
