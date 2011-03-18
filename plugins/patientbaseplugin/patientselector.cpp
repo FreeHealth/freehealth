@@ -84,7 +84,7 @@ public:
 
     void createSearchToolButtons()
     {
-        m_SearchToolButton = new QToolButton(ui->searchLine);   // parent object will be redefined
+        m_SearchToolButton = new QToolButton(q);   // parent object will be redefined
         m_SearchToolButton->setPopupMode(QToolButton::InstantPopup);
         m_SearchToolButton->setIcon(theme()->icon(Core::Constants::ICONSEARCH));
 
@@ -112,8 +112,8 @@ public:
             l.at(id)->setChecked(true);
         }
 
-        // add action to the navigation button
-        m_NavigationToolButton = new QToolButton(ui->searchLine);   // parent object will be redefined
+//        // add action to the navigation button
+        m_NavigationToolButton = new QToolButton(q);   // parent object will be redefined
         m_NavigationToolButton->setPopupMode(QToolButton::InstantPopup);
         m_NavigationToolButton->setIcon(theme()->icon(Core::Constants::ICONPATIENT));
         m_NavigationMenu = new QMenu(m_NavigationToolButton);
@@ -122,7 +122,7 @@ public:
         m_NavigationMenu->addSeparator();
         m_NavigationToolButton->setMenu(m_NavigationMenu);
 
-        // add buttons to search line
+//        // add buttons to search line
         ui->searchLine->setRightButton(m_NavigationToolButton);
     }
 
@@ -172,7 +172,10 @@ PatientSelector::PatientSelector(QWidget *parent, const FieldsToShow fields) :
         setPatientModel(PatientModel::activeModel());
     }
 
+    d->createSearchToolButtons();
+
     // Some connections
+    connect(d->m_NavigationToolButton->menu(), SIGNAL(aboutToShow()), this, SLOT(updateNavigationButton()));
     connect(d->ui->searchLine, SIGNAL(textChanged(QString)), this, SLOT(refreshFilter(QString)));
     connect(d->ui->tableView->selectionModel(), SIGNAL(currentChanged(QModelIndex,QModelIndex)), this, SLOT(changeIdentity(QModelIndex,QModelIndex)));
     connect(d->ui->tableView, SIGNAL(activated(QModelIndex)), this, SLOT(onPatientSelected(QModelIndex)));
@@ -190,9 +193,6 @@ PatientSelector::~PatientSelector()
 /** \brief Initialize view and actions. */
 void PatientSelector::init()
 {
-    d->createSearchToolButtons();
-    // connect navigationButton pressed -> update navigation actions
-    connect(d->m_NavigationToolButton->menu(), SIGNAL(aboutToShow()), this, SLOT(updateNavigationButton()));
 }
 
 void PatientSelector::updateNavigationButton()
