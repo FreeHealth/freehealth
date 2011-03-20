@@ -1,13 +1,15 @@
 #ifndef MONTH_VIEW_H
 #define MONTH_VIEW_H
 
-#include <QGraphicsView>
+#include "view.h"
 
-class MonthView : public QGraphicsView
-{
-	Q_OBJECT
-public:
-	MonthView(QWidget *parent = 0) : QGraphicsView(parent) {}
-};
+namespace Calendar {
+	class MonthView : public View
+	{
+	public:
+		virtual int topHeaderHeight() const;
+		virtual int leftHeaderWidth() const;
+	};
+}
 
 #endif
