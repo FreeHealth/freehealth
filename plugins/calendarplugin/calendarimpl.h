@@ -8,7 +8,6 @@ namespace Calendar {
 	class CalendarImpl : public Core::ICalendar
 	{
 		Q_OBJECT
-
 	public:
 		CalendarImpl(QObject *parent = 0) : Core::ICalendar(parent) {}
 		~CalendarImpl() {}

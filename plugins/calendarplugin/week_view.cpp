@@ -8,6 +8,11 @@ namespace Calendar {
 	int WeekView::m_leftScaleWidth = 60;
 	int WeekView::m_hourHeight = 40;
 
+	void WeekHeader::paintEvent(QPaintEvent *event) {
+		QPainter painter(this);
+		painter.fillRect(rect(), Qt::red);
+	}
+
 	WeekView::WeekView(QWidget *parent) :
 		View(parent) {
 		resize(10, 24 * m_hourHeight);
@@ -73,5 +78,11 @@ namespace Calendar {
 		painter.fillRect(rect(), Qt::white);
 		paintBody(&painter, rect());
 	}
+
+	QWidget *WeekView::createHeaderWidget(QWidget *parent) {
+		QWidget *widget = new WeekHeader(parent);
+		return widget;
+	}
+
 }
 

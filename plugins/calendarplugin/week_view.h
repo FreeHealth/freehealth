@@ -4,8 +4,19 @@
 #include "view.h"
 
 namespace Calendar {
+
+	class WeekHeader : public QWidget {
+		Q_OBJECT
+	public:
+		WeekHeader(QWidget *parent = 0) : QWidget(parent) {}
+
+	protected:
+		void paintEvent(QPaintEvent *event);
+	};
+
 	class WeekView : public View
 	{
+		Q_OBJECT
 	public:
 		WeekView(QWidget *parent = 0);
 
@@ -15,6 +26,8 @@ namespace Calendar {
 		virtual void paintTopHeader(QPainter *painter);
 		virtual void paintLeftHeader(QPainter *painter);
 		virtual void paintBody(QPainter *painter, const QRect &visibleRect);
+
+		virtual QWidget *createHeaderWidget(QWidget *parent = 0);
 
 	protected:
 		virtual void paintEvent(QPaintEvent *event);

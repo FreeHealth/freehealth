@@ -2,6 +2,7 @@
 #include <QPaintEvent>
 #include <QRect>
 #include <QScrollBar>
+#include <QPushButton>
 
 #include "calendar_widget.h"
 #include "day_view.h"
@@ -12,8 +13,8 @@ using namespace Calendar;
 
 CalendarWidget::CalendarWidget(QWidget *parent) : QScrollArea(parent), m_view(0) {
 	setViewType(View_Week);
-//	setWidgetResizable(true);
 	setVerticalScrollBarPolicy(Qt::ScrollBarAsNeeded);
+	setViewportMargins(0, 20, 0, 0);
 }
 
 void CalendarWidget::setViewType(ViewType value) {
@@ -41,8 +42,11 @@ void CalendarWidget::setViewType(ViewType value) {
 	}
 
 	setWidget(m_view);
+//	QWidget *headerW = m_view->createHeaderWidget(this);
 }
 
 void CalendarWidget::resizeEvent(QResizeEvent *event) {
 	widget()->resize(event->size().width(), widget()->height());
+
+	QScrollArea::resizeEvent(event);
 }

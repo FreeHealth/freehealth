@@ -17,10 +17,10 @@ SOURCES += \
     $${PWD}/calendarplugin.cpp \
     $${PWD}/calendarimpl.cpp \
     $${PWD}/calendar_widget.cpp \
+	$${PWD}/view.cpp \
     $${PWD}/day_view.cpp \
     $${PWD}/week_view.cpp \
-    $${PWD}/month_view.cpp \
-	$${PWD}/view.cpp
+    $${PWD}/month_view.cpp
 
 TRANSLATIONS += $${SOURCES_TRANSLATIONS}/calendarplugin_fr.ts \
                 $${SOURCES_TRANSLATIONS}/calendarplugin_de.ts \

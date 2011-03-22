@@ -12,6 +12,7 @@ namespace Calendar {
 	 */
 	class View : public QWidget
 	{
+		Q_OBJECT
 	public:
 		View(QWidget *parent = 0) : QWidget(parent) {}
 
@@ -23,6 +24,8 @@ namespace Calendar {
 		virtual void paintTopHeader(QPainter *painter) {};
 		virtual void paintLeftHeader(QPainter *painter) {};
 		virtual void paintBody(QPainter *painter, const QRect &visibleRect) {};
+
+		virtual QWidget *createHeaderWidget(QWidget *parent = 0) { return 0; }
 	};
 }
 
