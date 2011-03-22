@@ -10,27 +10,10 @@
 
 using namespace Calendar;
 
-CalendarWidget::CalendarWidget(QWidget *parent) : QAbstractScrollArea(parent), m_view(0) {
+CalendarWidget::CalendarWidget(QWidget *parent) : QScrollArea(parent), m_view(0) {
 	setViewType(View_Week);
-}
-
-void CalendarWidget::paintEvent(QPaintEvent *event) {
-	QPainter painter(viewport());
-//	painter.setRenderHint(QPainter::Antialiasing);
-	QRect r = viewport()->rect();
-
-	painter.translate(QPoint(-horizontalScrollBar()->value(), -verticalScrollBar()->value()));
-	m_view->paintBody(&painter, r);
-}
-
-void CalendarWidget::resizeEvent(QResizeEvent *event) {
-	computeGeometries();
-}
-
-void CalendarWidget::computeGeometries() {
-	setViewportMargins(m_view->leftHeaderWidth(), m_view->topHeaderHeight(), 0, 0);
-	verticalScrollBar()->setRange(0, 100);
-//	horizontalScrollBar()->setRange(0, 100);
+//	setWidgetResizable(true);
+	setVerticalScrollBarPolicy(Qt::ScrollBarAsNeeded);
 }
 
 void CalendarWidget::setViewType(ViewType value) {
@@ -57,5 +40,9 @@ void CalendarWidget::setViewType(ViewType value) {
 		Q_ASSERT(true); // should never happend :)
 	}
 
-	computeGeometries();
+	setWidget(m_view);
+}
+
+void CalendarWidget::resizeEvent(QResizeEvent *event) {
+	widget()->resize(event->size().width(), widget()->height());
 }

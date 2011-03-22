@@ -1,12 +1,12 @@
 #ifndef CALENDAR_WIDGET_H
 #define CALENDAR_WIDGET_H
 
-#include <QAbstractScrollArea>
+#include <QScrollArea>
 
 #include "view.h"
 
 namespace Calendar {
-	class CalendarWidget : public QAbstractScrollArea
+	class CalendarWidget : public QScrollArea
 	{
 		Q_OBJECT
 	public:
@@ -22,14 +22,11 @@ namespace Calendar {
 		void setViewType(ViewType value);
 
 	protected:
-		virtual void paintEvent(QPaintEvent *event);
-		virtual void resizeEvent(QResizeEvent *event);
+		void resizeEvent(QResizeEvent *event);
 
 	private:
 		ViewType m_viewType;
 		View *m_view;
-
-		void computeGeometries();
 	};
 }
 

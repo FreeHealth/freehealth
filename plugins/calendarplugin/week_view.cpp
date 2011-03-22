@@ -6,7 +6,12 @@
 namespace Calendar {
 
 	int WeekView::m_leftScaleWidth = 60;
-	int WeekView::m_hourHeight = 50;
+	int WeekView::m_hourHeight = 40;
+
+	WeekView::WeekView(QWidget *parent) :
+		View(parent) {
+		resize(10, 24 * m_hourHeight);
+	}
 
 	int WeekView::topHeaderHeight() const {
 		return 40;
@@ -27,6 +32,7 @@ namespace Calendar {
 	void WeekView::paintBody(QPainter *painter, const QRect &visibleRect) {
 		QPen pen = painter->pen();
 		pen.setColor(QColor(200, 200, 200));
+		pen.setCapStyle(Qt::FlatCap);
 		painter->setPen(pen);
 		int containWidth = visibleRect.width() - m_leftScaleWidth;
 		// vertical lines
@@ -43,14 +49,29 @@ namespace Calendar {
 
 		// half-hours
 		QPen oldPen = pen;
-		pen.setDashPattern(QVector<qreal>() << 1 << 2);
-//		pen.setStyle(Qt::DotLine);
+		pen.setDashPattern(QVector<qreal>() << 1 << 1);
 		painter->setPen(pen);
 		for (int i = 0; i < 24; ++i) {
 			painter->drawLine(m_leftScaleWidth, i * m_hourHeight + m_hourHeight / 2,
 							  visibleRect.width() - 1, i * m_hourHeight + m_hourHeight / 2);
 		}
 		painter->setPen(oldPen);
+
+		pen = painter->pen();
+		pen.setColor(QColor(120, 120, 120));
+		painter->setPen(pen);
+		for (int i = 0; i < 24; ++i) {
+			QRect scaleRect(0, i * m_hourHeight + 1,
+							m_leftScaleWidth - 3, (i + 1) * m_hourHeight - 1);
+			painter->drawText(scaleRect, Qt::AlignRight, QString("%1:00").arg(i));
+		}
+
+	}
+
+	void WeekView::paintEvent(QPaintEvent *event) {
+		QPainter painter(this);
+		painter.fillRect(rect(), Qt::white);
+		paintBody(&painter, rect());
+	}
 }
 
-}
