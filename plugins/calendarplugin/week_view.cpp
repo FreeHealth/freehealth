@@ -13,8 +13,8 @@ namespace Calendar {
 		QPainter painter(this);
 		painter.fillRect(rect(), QColor(220, 220, 255));
 		QPen pen = painter.pen();
-		pen.setColor(Qt::blue);
-		painter.setPen(QColor(150, 150, 255));
+		pen.setColor(QColor(150, 150, 255));
+		painter.setPen(pen);
 		QRect r = rect();
 		r.adjust(0, 0, -1, 1);
 		painter.drawLine(0, r.bottom(), r.right(), r.bottom());
@@ -22,11 +22,25 @@ namespace Calendar {
 		// text
 		// vertical lines
 		int containWidth = rect().width() - 60;
-		pen = painter.pen();
-		pen.setColor(Qt::red);
+		QPen oldPen = painter.pen();
+		QFont oldFont = painter.font();
+//		pen.setColor(Qt::red);
+//		painter.setPen(pen);
+		QDate now = QDate::currentDate();
 		for (int i = 0; i < 7; ++i) {
 			QRect r(QPoint(60 + (i * containWidth) / 7, 0), QPoint(60 + ((i + 1) * containWidth) / 7 - 1, rect().height()));
+			if (now.dayOfWeek() == i + 1){
+				painter.fillRect(r, QColor(200,200,255));
+				QPen pen = painter.pen();;
+				pen.setColor(QColor(0, 0, 255));
+				painter.setPen(pen);
+				QFont font = painter.font();
+				font.setBold(true);
+				painter.setFont(font);
+			}
 			painter.drawText(r, Qt::AlignCenter | Qt::AlignTop, QDate::shortDayName(i + 1));
+			painter.setPen(oldPen);
+			painter.setFont(oldFont);
 		}
 	}
 
