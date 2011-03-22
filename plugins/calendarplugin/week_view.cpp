@@ -63,7 +63,7 @@ namespace Calendar {
 		for (int i = 0; i < 24; ++i) {
 			QRect scaleRect(0, i * m_hourHeight + 1,
 							m_leftScaleWidth - 3, (i + 1) * m_hourHeight - 1);
-			painter->drawText(scaleRect, Qt::AlignRight, QString("%1:00").arg(i));
+			painter->drawText(scaleRect, Qt::AlignRight, QString("%1:00").arg(i, 2, 10, QChar('0')));
 		}
 
 	}
