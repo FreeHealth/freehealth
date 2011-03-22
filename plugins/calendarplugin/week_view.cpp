@@ -10,7 +10,13 @@ namespace Calendar {
 
 	void WeekHeader::paintEvent(QPaintEvent *event) {
 		QPainter painter(this);
-		painter.fillRect(rect(), Qt::red);
+		painter.fillRect(rect(), QColor(220, 220, 255));
+		QPen pen = painter.pen();
+		pen.setColor(Qt::blue);
+		painter.setPen(QColor(150, 150, 255));
+		QRect r = rect();
+		r.adjust(0, 0, -1, 1);
+		painter.drawLine(0, r.bottom(), r.right(), r.bottom());
 	}
 
 	WeekView::WeekView(QWidget *parent) :

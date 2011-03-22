@@ -27,6 +27,7 @@ namespace Calendar {
 	private:
 		ViewType m_viewType;
 		View *m_view;
+		QWidget *m_header;
 	};
 }
 

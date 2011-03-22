@@ -11,10 +11,10 @@
 
 using namespace Calendar;
 
-CalendarWidget::CalendarWidget(QWidget *parent) : QScrollArea(parent), m_view(0) {
+CalendarWidget::CalendarWidget(QWidget *parent) : QScrollArea(parent), m_view(0), m_header(0) {
 	setViewType(View_Week);
 	setVerticalScrollBarPolicy(Qt::ScrollBarAsNeeded);
-	setViewportMargins(0, 20, 0, 0);
+	setViewportMargins(0, 40, 0, 0);
 }
 
 void CalendarWidget::setViewType(ViewType value) {
@@ -42,11 +42,18 @@ void CalendarWidget::setViewType(ViewType value) {
 	}
 
 	setWidget(m_view);
-//	QWidget *headerW = m_view->createHeaderWidget(this);
+	if (m_header)
+		delete m_header;
+	m_header = m_view->createHeaderWidget(this);
 }
 
 void CalendarWidget::resizeEvent(QResizeEvent *event) {
 	widget()->resize(event->size().width(), widget()->height());
+
+	QMargins margins = contentsMargins();
+	m_header->resize(event->size().width(), 40 - margins.top() + 2);
+	m_header->move(margins.left(), margins.top());
+	qDebug("%d, %d", contentsMargins().left(), contentsMargins().top());
 
 	QScrollArea::resizeEvent(event);
 }
