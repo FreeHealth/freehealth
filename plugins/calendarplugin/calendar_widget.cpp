@@ -53,7 +53,6 @@ void CalendarWidget::resizeEvent(QResizeEvent *event) {
 	QMargins margins = contentsMargins();
 	m_header->resize(event->size().width(), 40 - margins.top() + 2);
 	m_header->move(margins.left(), margins.top());
-	qDebug("%d, %d", contentsMargins().left(), contentsMargins().top());
 
 	QScrollArea::resizeEvent(event);
 }

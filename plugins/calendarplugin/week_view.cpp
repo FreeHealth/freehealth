@@ -1,5 +1,6 @@
 #include <QRect>
 #include <QPainter>
+#include <QDate>
 
 #include "week_view.h"
 
@@ -17,6 +18,16 @@ namespace Calendar {
 		QRect r = rect();
 		r.adjust(0, 0, -1, 1);
 		painter.drawLine(0, r.bottom(), r.right(), r.bottom());
+
+		// text
+		// vertical lines
+		int containWidth = rect().width() - 60;
+		pen = painter.pen();
+		pen.setColor(Qt::red);
+		for (int i = 0; i < 7; ++i) {
+			QRect r(QPoint(60 + (i * containWidth) / 7, 0), QPoint(60 + ((i + 1) * containWidth) / 7 - 1, rect().height()));
+			painter.drawText(r, Qt::AlignCenter | Qt::AlignTop, QDate::shortDayName(i + 1));
+		}
 	}
 
 	WeekView::WeekView(QWidget *parent) :
@@ -72,8 +83,8 @@ namespace Calendar {
 		pen.setColor(QColor(120, 120, 120));
 		painter->setPen(pen);
 		for (int i = 0; i < 24; ++i) {
-			QRect scaleRect(0, i * m_hourHeight + 1,
-							m_leftScaleWidth - 3, (i + 1) * m_hourHeight - 1);
+			QRect scaleRect(QPoint(0, i * m_hourHeight + 1),
+							QPoint(m_leftScaleWidth - 3, (i + 1) * m_hourHeight - 1));
 			painter->drawText(scaleRect, Qt::AlignRight, QString("%1:00").arg(i, 2, 10, QChar('0')));
 		}
 
