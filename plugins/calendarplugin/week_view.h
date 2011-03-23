@@ -37,10 +37,14 @@ namespace Calendar {
 
 	protected:
 		virtual void paintEvent(QPaintEvent *event);
+		virtual void resizeEvent(QResizeEvent *event);
 
 	private:
 		static int m_leftScaleWidth;
 		static int m_hourHeight;
+		bool m_refreshGrid;
+
+		QPixmap generatePixmap();
 	};
 }
 

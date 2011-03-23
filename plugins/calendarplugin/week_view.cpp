@@ -1,6 +1,7 @@
 #include <QRect>
 #include <QPainter>
 #include <QDate>
+#include <QPixmapCache>
 
 #include "week_view.h"
 
@@ -34,7 +35,7 @@ namespace Calendar {
 				pen.setColor(QColor(0, 0, 255));
 				painter.setPen(pen);
 			}
-			painter.drawText(r, Qt::AlignCenter | Qt::AlignTop, date.toString("ddd. d/M").toLower());
+			painter.drawText(r, Qt::AlignCenter | Qt::AlignTop, date.toString("ddd d/M").toLower());
 			painter.setPen(oldPen);
 			painter.setFont(oldFont);
 			date = date.addDays(1);
@@ -52,7 +53,8 @@ namespace Calendar {
 	/////////////////////////////////////////////////////////////////
 
 	WeekView::WeekView(QWidget *parent) :
-		View(parent) {
+		View(parent),
+		m_refreshGrid(false) {
 		resize(10, 24 * m_hourHeight);
 
 		QDate date = QDate::currentDate();
@@ -78,6 +80,7 @@ namespace Calendar {
 	}
 
 	void WeekView::paintBody(QPainter *painter, const QRect &visibleRect) {
+		painter->fillRect(visibleRect, Qt::white);
 		QPen pen = painter->pen();
 		pen.setColor(QColor(200, 200, 200));
 		pen.setCapStyle(Qt::FlatCap);
@@ -116,10 +119,28 @@ namespace Calendar {
 
 	}
 
-	void WeekView::paintEvent(QPaintEvent *event) {
-		QPainter painter(this);
-		painter.fillRect(rect(), Qt::white);
+	QPixmap WeekView::generatePixmap() {
+		QPixmap pixmap(width(), height());
+        QPainter painter(&pixmap);
 		paintBody(&painter, rect());
+		return pixmap;
+	}
+
+	void WeekView::paintEvent(QPaintEvent *event) {
+		QPixmap pixmap;
+		QString key = "grid";
+
+        if (!QPixmapCache::find(key, pixmap) || m_refreshGrid) {
+            pixmap = generatePixmap();
+            QPixmapCache::insert(key, pixmap);
+			m_refreshGrid = false;
+        }
+		QPainter painter(this);
+		painter.drawPixmap(0, 0, pixmap);
+	}
+
+	void WeekView::resizeEvent(QResizeEvent *event) {
+		m_refreshGrid = true;
 	}
 
 	QWidget *WeekView::createHeaderWidget(QWidget *parent) {
@@ -127,6 +148,5 @@ namespace Calendar {
 		widget->setFirstDate(m_firstDate);
 		return widget;
 	}
-
 }
 
