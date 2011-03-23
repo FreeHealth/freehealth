@@ -2,6 +2,7 @@
 #define VIEW_H
 
 #include <QWidget>
+#include <QDate>
 
 class QPainter;
 class QRect;
@@ -26,6 +27,14 @@ namespace Calendar {
 		virtual void paintBody(QPainter *painter, const QRect &visibleRect) {};
 
 		virtual QWidget *createHeaderWidget(QWidget *parent = 0) { return 0; }
+
+		void setFirstDate(const QDate &date);
+
+	signals:
+		void firstDateChanged();
+
+	protected:
+		QDate m_firstDate;
 	};
 }
 

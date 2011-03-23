@@ -8,10 +8,10 @@ HEADERS +=  \
     $${PWD}/calendar_exporter.h \
     $${PWD}/calendarimpl.h \
     $${PWD}/calendar_widget.h \
+	$${PWD}/view.h \
     $${PWD}/day_view.h \
     $${PWD}/week_view.h \
-    $${PWD}/month_view.h \
-	$${PWD}/view.h
+    $${PWD}/month_view.h
 
 SOURCES += \
     $${PWD}/calendarplugin.cpp \

@@ -10,8 +10,14 @@ namespace Calendar {
 	public:
 		WeekHeader(QWidget *parent = 0) : QWidget(parent) {}
 
+		const QDate &firstDate() const { return m_firstDate; }
+		void setFirstDate(const QDate &date);
+
 	protected:
 		void paintEvent(QPaintEvent *event);
+
+	private:
+		QDate m_firstDate;
 	};
 
 	class WeekView : public View

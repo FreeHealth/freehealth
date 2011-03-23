@@ -24,29 +24,41 @@ namespace Calendar {
 		int containWidth = rect().width() - 60;
 		QPen oldPen = painter.pen();
 		QFont oldFont = painter.font();
-//		pen.setColor(Qt::red);
-//		painter.setPen(pen);
+		QDate date = m_firstDate;
 		QDate now = QDate::currentDate();
 		for (int i = 0; i < 7; ++i) {
 			QRect r(QPoint(60 + (i * containWidth) / 7, 0), QPoint(60 + ((i + 1) * containWidth) / 7 - 1, rect().height()));
-			if (now.dayOfWeek() == i + 1){
+			if (date == now){
 				painter.fillRect(r, QColor(200,200,255));
 				QPen pen = painter.pen();;
 				pen.setColor(QColor(0, 0, 255));
 				painter.setPen(pen);
-				QFont font = painter.font();
-				font.setBold(true);
-				painter.setFont(font);
 			}
-			painter.drawText(r, Qt::AlignCenter | Qt::AlignTop, QDate::shortDayName(i + 1));
+			painter.drawText(r, Qt::AlignCenter | Qt::AlignTop, date.toString("ddd. d/M").toLower());
 			painter.setPen(oldPen);
 			painter.setFont(oldFont);
+			date = date.addDays(1);
 		}
 	}
+
+	void WeekHeader::setFirstDate(const QDate &date) {
+		if (date == m_firstDate)
+			return;
+
+		m_firstDate = date;
+		update();
+	}
+
+	/////////////////////////////////////////////////////////////////
 
 	WeekView::WeekView(QWidget *parent) :
 		View(parent) {
 		resize(10, 24 * m_hourHeight);
+
+		QDate date = QDate::currentDate();
+		if (date.dayOfWeek() > 1)
+			date = date.addDays(-(date.dayOfWeek() - 1));
+		setFirstDate(date);
 	}
 
 	int WeekView::topHeaderHeight() const {
@@ -111,7 +123,8 @@ namespace Calendar {
 	}
 
 	QWidget *WeekView::createHeaderWidget(QWidget *parent) {
-		QWidget *widget = new WeekHeader(parent);
+		WeekHeader *widget = new WeekHeader(parent);
+		widget->setFirstDate(m_firstDate);
 		return widget;
 	}
 
