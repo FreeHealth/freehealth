@@ -103,14 +103,15 @@ public:
             l << cmd->action();
         }
 
-        // add buttons to search line
-        ui->searchLine->setLeftButton(m_SearchToolButton);
-
         int id = settings()->value(Constants::S_SEARCHMETHOD, 0).toInt();
         if (id < l.count() && id >= 0) {
             l.at(id)->trigger();
             l.at(id)->setChecked(true);
+            m_SearchToolButton->setDefaultAction(l.at(id));
         }
+
+        // add buttons to search line
+        ui->searchLine->setLeftButton(m_SearchToolButton);
 
 //        // add action to the navigation button
         m_NavigationToolButton = new QToolButton(q);   // parent object will be redefined

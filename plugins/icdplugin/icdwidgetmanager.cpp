@@ -70,7 +70,7 @@ IcdWidgetManager::IcdWidgetManager(QObject *parent) : IcdActionHandler(parent)
     connect(Core::ICore::instance()->contextManager(), SIGNAL(contextChanged(Core::IContext*)),
             this, SLOT(updateContext(Core::IContext*)));
     setObjectName("IcdWidgetManager");
-    Utils::Log::addMessage(this, "Instance created");
+//    Utils::Log::addMessage(this, "Instance created");
 }
 
 void IcdWidgetManager::updateContext(Core::IContext *object)
@@ -125,7 +125,7 @@ IcdActionHandler::IcdActionHandler(QObject *parent) :
         m_CurrentView(0)
 {
     setObjectName("IcdActionHandler");
-    Utils::Log::addMessage(this, "Instance created");
+//    Utils::Log::addMessage(this, "Instance created");
 
     Core::UniqueIDManager *uid = Core::ICore::instance()->uniqueIDManager();
     Core::ITheme *th = Core::ICore::instance()->theme();

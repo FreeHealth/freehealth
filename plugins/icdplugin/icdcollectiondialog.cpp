@@ -56,6 +56,7 @@ IcdCollectionDialog::IcdCollectionDialog(QWidget *parent) :
     lay->addWidget(buttonBox, 10, 0);
     connect(buttonBox, SIGNAL(accepted()), this, SLOT(accept()));
     connect(buttonBox, SIGNAL(rejected()), this, SLOT(reject()));
+    adjustSize();
 }
 
 IcdCollectionDialog::~IcdCollectionDialog()
