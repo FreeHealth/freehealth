@@ -64,7 +64,8 @@ class ExtendedViewPrivate
 public:
     ExtendedViewPrivate(QAbstractItemView *parent, Constants::AvailableActions actions) :
             m_Parent(parent),
-            m_Actions(actions)
+            m_Actions(actions),
+            m_DefaultSlots(true)
     {
     }
 
@@ -96,6 +97,7 @@ public:
     Constants::AvailableActions m_Actions;
     QToolBar *m_ToolBar;
     QString m_ContextName;
+    bool m_DefaultSlots;
 };
 
 }  // End Internal
@@ -151,6 +153,11 @@ void ExtendedView::setCommands(const QStringList &commandsUid)
     d->m_ToolBar->setSizePolicy(QSizePolicy::Expanding, QSizePolicy::Preferred);
 }
 
+void ExtendedView::disconnectActionsToDefaultSlots()
+{
+    d->m_DefaultSlots = false;
+}
+
 void ExtendedView::hideButtons() const
 {
     d->m_ToolBar->hide();
@@ -183,6 +190,9 @@ QMenu *ExtendedView::getContextMenu()
 */
 void ExtendedView::addItem(bool hasChildOfCurrentIndex)
 {
+    if (!d->m_DefaultSlots) {
+        return;
+    }
     if (!d->m_Parent->model())
         return;
 
@@ -218,6 +228,9 @@ void ExtendedView::addItem(bool hasChildOfCurrentIndex)
 
 void ExtendedView::removeItem()
 {
+    if (!d->m_DefaultSlots) {
+        return;
+    }
     if (!d->m_Parent->model())
         return;
     if (!d->m_Parent->selectionModel()->hasSelection())
@@ -241,6 +254,9 @@ void ExtendedView::removeItem()
 
 void ExtendedView::moveDown()
 {
+    if (!d->m_DefaultSlots) {
+        return;
+    }
 //    if (!d->canMoveDown())
 //        return;
 
@@ -269,6 +285,9 @@ void ExtendedView::moveDown()
 
 void ExtendedView::moveUp()
 {
+    if (!d->m_DefaultSlots) {
+        return;
+    }
     QModelIndex idx = d->m_Parent->currentIndex();
 //    closePersistentEditor(idx);
     bool moved = false;
@@ -295,7 +314,11 @@ void ExtendedView::moveUp()
 }
 
 void ExtendedView::on_edit_triggered()
-{}
+{
+    if (!d->m_DefaultSlots) {
+        return;
+    }
+}
 
 void ExtendedView::contextMenu(const QPoint &p)
 {

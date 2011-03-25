@@ -63,6 +63,8 @@ public:
     void addContext(const int id);
     void addContexts(const QList<int> &id);
 
+    void disconnectActionsToDefaultSlots();
+
     void hideButtons() const;
     void showButtons();
     void useContextMenu(bool state = true);
@@ -74,8 +76,14 @@ public Q_SLOTS:
     virtual void moveUp();
 
 Q_SIGNALS:
+    void aboutToAddItem();
+    void itemAdded();
     void addRequested();
+
+    void aboutToRemove();
+    void itemRemoved();
     void removeRequested();
+
     void moveUpRequested();
     void moveDownRequested();
 

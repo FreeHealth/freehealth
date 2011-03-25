@@ -136,6 +136,11 @@ void TreeView::addContexts(const QList<int> &id)
     }
 }
 
+void TreeView::disconnectActionsToDefaultSlots()
+{
+    d->m_ExtView->disconnectActionsToDefaultSlots();
+}
+
 void TreeView::hideButtons() const
 {
     d->m_ExtView->hideButtons();
@@ -153,26 +158,33 @@ void TreeView::useContextMenu(bool state)
 
 void TreeView::addItem()
 {
-    qWarning() << "TreeView::addItem()";
+    Q_EMIT addRequested();
+    Q_EMIT aboutToAddItem();
     setFocus();
     d->m_ExtView->addItem(true);
+    Q_EMIT itemAdded();
 }
 
 void TreeView::removeItem()
 {
+    Q_EMIT removeRequested();
+    Q_EMIT aboutToRemove();
     setFocus();
     d->m_ExtView->removeItem();
+    Q_EMIT itemRemoved();
 }
 
 void TreeView::moveDown()
 {
     setFocus();
     d->m_ExtView->moveDown();
+    Q_EMIT moveDownRequested();
 }
 
 void TreeView::moveUp()
 {
     setFocus();
     d->m_ExtView->moveUp();
+    Q_EMIT moveUpRequested();
 }
 
