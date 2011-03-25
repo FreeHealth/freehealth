@@ -301,7 +301,11 @@ void QButtonLineEdit::changeEvent(QEvent *e)
     switch (e->type()) {
     case QEvent::LanguageChange:
         if (styleSheet().contains("color:gray")) {
-            m_emptyString = m_leftButton->defaultAction()->text();
+            if (m_leftButton->defaultAction()) {
+                m_emptyString = m_leftButton->defaultAction()->text();
+            } else {
+                m_emptyString.clear();
+            }
             setText(emptyTextWithExtraText());
             setToolTip(emptyTextWithExtraText());
         }
