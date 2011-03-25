@@ -37,19 +37,38 @@ namespace Views {
 class LISTVIEW_EXPORT DeselectableTreeView : public QTreeView
 {
 public:
-    DeselectableTreeView(QWidget *parent) : QTreeView(parent) {}
+    DeselectableTreeView(QWidget *parent) : QTreeView(parent), m_IsDeselectable(true) {}
     virtual ~DeselectableTreeView() {}
+
+    void setDeselectable(bool deselectable) {m_IsDeselectable = deselectable;}
 
 private:
     virtual void mousePressEvent(QMouseEvent *event)
     {
-        QModelIndex item = indexAt(event->pos());
-        bool selected = selectionModel()->isSelected(indexAt(event->pos()));
-        QTreeView::mousePressEvent(event);
-        if (selected)
-            selectionModel()->select(item, QItemSelectionModel::Deselect);
+        if (m_IsDeselectable && selectionModel()) {
+            QModelIndex item = indexAt(event->pos());
+            bool selected = selectionModel()->isSelected(indexAt(event->pos()));
+            QTreeView::mousePressEvent(event);
+            if (selected) {
+                if (selectionBehavior()==QAbstractItemView::SelectItems) {
+                    selectionModel()->select(item, QItemSelectionModel::Deselect);
+                } else if (selectionBehavior()==QAbstractItemView::SelectRows) {
+                    QModelIndexList items = selectionModel()->selectedColumns(item.row());
+                    for(int i=0; i<selectionModel()->model()->columnCount(item); ++i) {
+                        selectionModel()->select(selectionModel()->model()->index(item.row(), i, item.parent()), QItemSelectionModel::Deselect);
+                    }
+                } else if (selectionBehavior()==QAbstractItemView::SelectColumns) {
+                    for(int i=0; i<selectionModel()->model()->rowCount(item); ++i) {
+                        selectionModel()->select(selectionModel()->model()->index(i, item.column(), item.parent()), QItemSelectionModel::Deselect);
+                    }
+                }
+            }
+        } else {
+            QTreeView::mousePressEvent(event);
+        }
     }
 
+    bool m_IsDeselectable;
 };
 
 }  // End namespace Views
