@@ -57,9 +57,9 @@ CategoryCore::~CategoryCore()
 {
 }
 
-QVector<CategoryItem *> CategoryCore::getCategory(const QString &mime) const
+QVector<CategoryItem *> CategoryCore::getCategories(const QString &mime) const
 {
-    return base()->getCategory(mime);
+    return base()->getCategories(mime);
 }
 
 QList<CategoryItem *> CategoryCore::createCategoryTree(const QVector<CategoryItem *> &cats) const

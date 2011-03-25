@@ -62,7 +62,7 @@ private:
                          );
 
 public:
-    QVector<CategoryItem *> getCategory(const QString &mime) const;
+    QVector<CategoryItem *> getCategories(const QString &mime) const;
     QList<CategoryItem *> createCategoryTree(const QVector<CategoryItem *> &cats) const;
     bool saveCategory(CategoryItem *category);
     bool updateCategory(CategoryItem *category);

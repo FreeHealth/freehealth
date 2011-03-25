@@ -78,7 +78,7 @@ CategoryBase::CategoryBase(QObject *parent) :
     addField(Table_CATEGORIES, CATEGORY_LABEL_ID,        "LID",        FieldIsInteger);
     addField(Table_CATEGORIES, CATEGORY_MIME,            "MIME",       FieldIsShortText);
     addField(Table_CATEGORIES, CATEGORY_PROTECTION_ID,   "PID",        FieldIsInteger);
-    addField(Table_CATEGORIES, CATEGORY_SORT_ID,         "SHORT_ID",   FieldIsInteger);
+    addField(Table_CATEGORIES, CATEGORY_SORT_ID,         "SORT_ID",    FieldIsInteger);
     addField(Table_CATEGORIES, CATEGORY_PASSWORD,        "PASSWORD",   FieldIsShortText);
     addField(Table_CATEGORIES, CATEGORY_ISVALID,         "VALID",      FieldIsBoolean, "1");
     addField(Table_CATEGORIES, CATEGORY_THEMEDICON,      "THEMED_ICON",FieldIsShortText);
@@ -130,6 +130,7 @@ bool CategoryBase::init()
                          "log", "pas", 0,
                          Utils::Database::CreateDatabase);
     }
+
 //    checkDatabaseVersion();
 
     m_initialized = true;
@@ -146,9 +147,7 @@ bool CategoryBase::createDatabase(const QString &connectionName , const QString 
 {
     if (connectionName != Constants::DB_NAME)
         return false;
-
-    Utils::Log::addMessage(this, tkTr(Trans::Constants::TRYING_TO_CREATE_1_PLACE_2)
-                           .arg(dbName).arg(pathOrHostName));
+    LOG(tkTr(Trans::Constants::TRYING_TO_CREATE_1_PLACE_2).arg(dbName).arg(pathOrHostName));
 
     // create an empty database and connect
     QSqlDatabase DB;
@@ -175,7 +174,7 @@ bool CategoryBase::createDatabase(const QString &connectionName , const QString 
             }
             QSqlQuery q(QString("CREATE DATABASE `%1`").arg(dbName), d);
             if (!q.isActive()) {
-                Utils::Log::addQueryError("Database", q);
+                LOG_QUERY_ERROR_FOR("Database", q);
                 Utils::warningMessageBox(tr("Unable to create the Templates database."),tr("Please contact dev team."));
                 return false;
             }
@@ -196,10 +195,19 @@ bool CategoryBase::createDatabase(const QString &connectionName , const QString 
     setConnectionName(connectionName);
 
     if (createTables()) {
-        Utils::Log::addMessage(this, tkTr(Trans::Constants::DATABASE_1_CORRECTLY_CREATED).arg(dbName));
+        LOG(tkTr(Trans::Constants::DATABASE_1_CORRECTLY_CREATED).arg(dbName));
     } else {
-        Utils::Log::addError(this, tkTr(Trans::Constants::DATABASE_1_CANNOT_BE_CREATED_ERROR_2)
-                         .arg(dbName, DB.lastError().text()));
+        LOG(tkTr(Trans::Constants::DATABASE_1_CANNOT_BE_CREATED_ERROR_2)
+            .arg(dbName, DB.lastError().text()));
+        return false;
+    }
+
+    // Add version number
+    QSqlQuery query(DB);
+    query.prepare(prepareInsertQuery(Constants::Table_VERSION));
+    query.bindValue(Constants::VERSION_TEXT, Constants::DB_ACTUALVERSION);
+    if (!query.exec()) {
+        LOG_QUERY_ERROR(query);
         return false;
     }
 
@@ -207,13 +215,13 @@ bool CategoryBase::createDatabase(const QString &connectionName , const QString 
 }
 
 /** \brief Return flatten list of CategoryItem extracted from database. */
-QVector<CategoryItem *> CategoryBase::getCategory(const QString &mime) const
+QVector<CategoryItem *> CategoryBase::getCategories(const QString &mime) const
 {
     QVector<CategoryItem *> cats;
     if (!database().isOpen()) {
         if (!database().open()) {
-            Utils::Log::addError(this, tkTr(Trans::Constants::UNABLE_TO_OPEN_DATABASE_1_ERROR_2)
-                                 .arg(database().connectionName()).arg(database().lastError().text()), __FILE__, __LINE__);
+            LOG_ERROR(tkTr(Trans::Constants::UNABLE_TO_OPEN_DATABASE_1_ERROR_2)
+                      .arg(database().connectionName()).arg(database().lastError().text()));
             return cats;
         }
     }
@@ -258,6 +266,7 @@ QVector<CategoryItem *> CategoryBase::getCategory(const QString &mime) const
         }
         query.finish();
     }
+    qWarning() << "getting categories" << mime << cats.count();
     return cats;
 }
 
@@ -269,16 +278,17 @@ QList<CategoryItem *> CategoryBase::createCategoryTree(const QVector<CategoryIte
     for(int i = 0; i < cats.count(); ++i) {
         CategoryItem *parent = cats.at(i);
         int id = parent->id();
+//        qWarning() << "finding all children of" << id << parent->label();
         // Find all its children
         for(int j = 0; j < cats.count(); ++j) {
             CategoryItem *child = cats.at(j);
+//            qWarning() << "  testing child" << child->label()<< "parent" << child->parentId() << "actual" << id;
             if (child->parentId() == id) {
                 if (parent->children().contains(child))
-                    break;
-                qWarning() << "reparent" << child->label() << "as child of" << parent->label();
+                    continue;
+//                qWarning() << "    reparent" << child->label() << "as child of" << parent->label();
                 parent->addChild(child);
                 child->setParent(parent);
-                break;
             }
         }
         // Find roots categories
@@ -300,6 +310,9 @@ QList<CategoryItem *> CategoryBase::createCategoryTree(const QVector<CategoryIte
 */
 bool CategoryBase::saveCategory(CategoryItem *category)
 {
+//    qWarning() << "SaveCategory" << category->isDirty();
+//    category->warn();
+
     // save or update ?
     if (!(category->data(CategoryItem::DbOnly_Id).isNull() || category->id()==-1)) {
         return updateCategory(category);
@@ -326,8 +339,6 @@ bool CategoryBase::saveCategory(CategoryItem *category)
     } else {
         LOG_QUERY_ERROR(query);
     }
-    // Save labels
-    saveCategoryLabels(category);
     category->setDirty(false);
     return false;
 }
@@ -377,19 +388,37 @@ bool CategoryBase::updateCategory(CategoryItem *category)
 /** \brief Save or update categories labels. */
 bool CategoryBase::saveCategoryLabels(CategoryItem *category)
 {
+    if (!category->isDirty())
+        return true;
     // get label_id
     int labelId = -1;
-    if (category->data(CategoryItem::DbOnly_LabelId).isNull() || category->data(CategoryItem::DbOnly_LabelId).toInt()==-1) {
-        labelId = max(Constants::Table_CATEGORY_LABEL, Constants::CATEGORYLABEL_LABEL_ID);
+    if (category->data(CategoryItem::DbOnly_LabelId).isNull() ||
+        category->data(CategoryItem::DbOnly_LabelId).toInt()==-1) {
+        labelId = max(Constants::Table_CATEGORY_LABEL, Constants::CATEGORYLABEL_LABEL_ID) ;
         ++labelId;
         category->setData(CategoryItem::DbOnly_LabelId, labelId);
+        // create an empty label using this LabelId
+        QSqlQuery query(database());
+        query.prepare(prepareInsertQuery(Constants::Table_CATEGORY_LABEL));
+        query.bindValue(Constants::CATEGORYLABEL_ID, QVariant());
+        query.bindValue(Constants::CATEGORYLABEL_LABEL_ID, labelId);
+        query.bindValue(Constants::CATEGORYLABEL_LANG, QVariant());
+        query.bindValue(Constants::CATEGORYLABEL_VALUE, QVariant());
+        query.bindValue(Constants::CATEGORYLABEL_ISVALID, 1);
+        if (!query.exec()) {
+            LOG_QUERY_ERROR(query);
+            return false;
+        }
+        query.finish();
     } else {
         labelId = category->data(CategoryItem::DbOnly_LabelId).toInt();
     }
     // delete all labels related to this LabelId
     QHash<int, QString> where;
     where.clear();
+    where.insert(Constants::CATEGORYLABEL_LABEL_ID, QString("=%1").arg(labelId));
     QSqlQuery query(database());
+    /** \todo improve this, no need to delete before adding */
     query.exec(prepareDeleteQuery(Constants::Table_CATEGORY_LABEL, where));
     // save labels
     foreach(const QString &lang, category->allLanguagesForLabel()) {

@@ -45,7 +45,7 @@ public:
     static CategoryCore *instance(QObject *parent = 0);
     virtual ~CategoryCore();
 
-    QVector<CategoryItem *> getCategory(const QString &mime) const;
+    QVector<CategoryItem *> getCategories(const QString &mime) const;
     QList<CategoryItem *> createCategoryTree(const QVector<CategoryItem *> &cats) const;
     bool linkContentItemWithCategoryItem(const QVector<Category::CategoryItem *> &cats, const QVector<Category::ICategoryContentItem *> &contents) const;
 
