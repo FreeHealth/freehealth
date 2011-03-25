@@ -63,10 +63,9 @@ namespace Calendar {
 			date = date.addDays(-(date.dayOfWeek() - 1));
 		setFirstDate(date);
 
-//		QPushButton *button = new QPushButton(this);
 		CalendarItem *item = new CalendarItem(this);
 		item->resize(100, m_hourHeight);
-		item->move(m_leftScaleWidth, 0);
+		item->move(m_leftScaleWidth + 1, 0);
 	}
 
 	int WeekView::topHeaderHeight() const {
