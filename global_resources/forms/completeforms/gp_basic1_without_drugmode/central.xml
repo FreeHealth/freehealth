@@ -109,14 +109,14 @@
 
   <MedForm>
     <type>form</type>
-    <name>precriptions_form</name>
+    <name>prescriptions_form</name>
     <label>Prescriptions</label>
     <icon>%theme%/edit.png</icon>
     <options>noepisode</options>
 
     <MedForm>
     <type>form</type>
-    <name>precriptions_text_form</name>
+    <name>prescriptions_text_form</name>
     <label lang="xx">Textual prescriptions</label>
     <label lang="fr">Prescriptions textuelles</label>
 
@@ -131,7 +131,7 @@
 
     <MedForm>
     <type>form</type>
-    <name>precriptions_drugs_form</name>
+    <name>prescriptions_drugs_form</name>
     <label lang="xx">Drugs prescriptions</label>
     <label lang="fr">Prescriptions médicamenteuses</label>
       <Item>
