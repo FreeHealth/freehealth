@@ -61,7 +61,7 @@ void CalendarWidget::resizeEvent(QResizeEvent *event) {
 	QScrollArea::resizeEvent(event);
 }
 
-void CalendarWidget::setModel(CalendarModel *model) {
+void CalendarWidget::setModel(QAbstractItemModel *model) {
 	// disconnect slots
 	if (m_model){
 		disconnect(m_model, SIGNAL(dataChanged(const QModelIndex &, const QModelIndex &)), this, SLOT(dataChanged(const QModelIndex &, const QModelIndex &)));

@@ -2,9 +2,9 @@
 #define CALENDAR_WIDGET_H
 
 #include <QScrollArea>
+#include <QAbstractItemModel>
 
 #include "view.h"
-#include "calendar_model.h"
 
 namespace Calendar {
 	class CalendarWidget : public QScrollArea
@@ -22,8 +22,8 @@ namespace Calendar {
 		ViewType viewType() const { return m_viewType; }
 		void setViewType(ViewType value);
 
-		CalendarModel *model() const { return m_model; }
-		void setModel(CalendarModel *model);
+		QAbstractItemModel *model() const { return m_model; }
+		void setModel(QAbstractItemModel *model);
 
 	protected:
 		void resizeEvent(QResizeEvent *event);
@@ -39,7 +39,7 @@ namespace Calendar {
 		ViewType m_viewType;
 		View *m_view;
 		QWidget *m_header;
-		CalendarModel *m_model;
+		QAbstractItemModel *m_model;
 	};
 }
 

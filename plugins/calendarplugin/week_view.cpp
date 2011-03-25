@@ -121,6 +121,7 @@ namespace Calendar {
 			painter->drawPixmap(m_leftScaleWidth, i * m_hourHeight + m_hourHeight / 2,
 								visibleRect.width(), 1, dashPixmap);
 		}
+
 		painter->setPen(oldPen);
 
 		pen = painter->pen();
@@ -131,7 +132,6 @@ namespace Calendar {
 							QPoint(m_leftScaleWidth - 3, (i + 1) * m_hourHeight - 1));
 			painter->drawText(scaleRect, Qt::AlignRight, QString("%1:00").arg(i, 2, 10, QChar('0')));
 		}
-
 	}
 
 	QPixmap WeekView::generatePixmap() {
