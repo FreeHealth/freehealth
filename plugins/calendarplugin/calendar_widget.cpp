@@ -11,7 +11,11 @@
 
 using namespace Calendar;
 
-CalendarWidget::CalendarWidget(QWidget *parent) : QScrollArea(parent), m_view(0), m_header(0) {
+CalendarWidget::CalendarWidget(QWidget *parent)
+	: QScrollArea(parent),
+	  m_view(0),
+	  m_header(0),
+	  m_model(0) {
 	setViewType(View_Week);
 	setVerticalScrollBarPolicy(Qt::ScrollBarAsNeeded);
 	setViewportMargins(0, 40, 0, 0);
@@ -56,3 +60,46 @@ void CalendarWidget::resizeEvent(QResizeEvent *event) {
 
 	QScrollArea::resizeEvent(event);
 }
+
+void CalendarWidget::setModel(CalendarModel *model) {
+	// disconnect slots
+	if (m_model){
+		disconnect(m_model, SIGNAL(dataChanged(const QModelIndex &, const QModelIndex &)), this, SLOT(dataChanged(const QModelIndex &, const QModelIndex &)));
+		disconnect(m_model, SIGNAL(rowsAboutToBeInserted(const QModelIndex &, int, int)), this, SLOT(rowsAboutToBeInserted(const QModelIndex &, int , int)));
+		disconnect(m_model, SIGNAL(rowsInserted(const QModelIndex &, int, int)), this, SLOT(rowsInserted(const QModelIndex &, int , int)));
+		disconnect(m_model, SIGNAL(rowsAboutToBeRemoved(const QModelIndex &, int, int)), this, SLOT(rowsAboutToBeRemoved(const QModelIndex &, int , int)));
+		disconnect(m_model, SIGNAL(rowsRemoved(const QModelIndex &, int, int)), this, SLOT(rowsRemoved(const QModelIndex &, int , int)));
+	}
+
+	m_model = model;
+
+	if (m_model) {
+		// connect slots
+		connect(m_model, SIGNAL(dataChanged(const QModelIndex &, const  QModelIndex &)), this, SLOT(dataChanged(const QModelIndex &, const QModelIndex &)));
+		connect(m_model, SIGNAL(rowsAboutToBeInserted(const QModelIndex &, int, int)), this, SLOT(rowsAboutToBeInserted(const QModelIndex &, int , int)));
+		connect(m_model, SIGNAL(rowsInserted(const QModelIndex &, int, int)), this, SLOT(rowsInserted(const QModelIndex &, int , int)));
+		connect(m_model, SIGNAL(rowsAboutToBeRemoved(const QModelIndex &, int, int)), this, SLOT(rowsAboutToBeRemoved(const QModelIndex &, int , int)));
+		connect(m_model, SIGNAL(rowsRemoved(const QModelIndex &, int, int)), this, SLOT(rowsRemoved(const QModelIndex &, int , int)));
+	}
+}
+
+void CalendarWidget::dataChanged(const QModelIndex & topLeft, const  QModelIndex & bottomRight) {
+	// TODO
+}
+
+void CalendarWidget::rowsAboutToBeRemoved(const QModelIndex & parent, int start, int end) {
+	// TODO
+}
+
+void CalendarWidget::rowsAboutToBeInserted(const QModelIndex & parent, int start, int end) {
+	// TODO
+}
+
+void CalendarWidget::rowsRemoved(const QModelIndex & parent, int start, int end) {
+	// TODO
+}
+
+void CalendarWidget::rowsInserted(const QModelIndex & parent, int start, int end) {
+	// TODO
+}
+

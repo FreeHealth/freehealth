@@ -2,9 +2,9 @@
 #include <QPainter>
 #include <QDate>
 #include <QPixmapCache>
-#include <QPushButton>
 
 #include "week_view.h"
+#include "calendar_item.h"
 
 namespace Calendar {
 
@@ -63,9 +63,10 @@ namespace Calendar {
 			date = date.addDays(-(date.dayOfWeek() - 1));
 		setFirstDate(date);
 
-		QPushButton *button = new QPushButton(this);
-		button->resize(100, m_hourHeight);
-		button->move(m_leftScaleWidth, 0);
+//		QPushButton *button = new QPushButton(this);
+		CalendarItem *item = new CalendarItem(this);
+		item->resize(100, m_hourHeight);
+		item->move(m_leftScaleWidth, 0);
 	}
 
 	int WeekView::topHeaderHeight() const {
