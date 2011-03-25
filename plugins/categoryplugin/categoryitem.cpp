@@ -164,6 +164,8 @@ int CategoryItem::childNumber() const
 /** \brief Set data \e value for the CategoryItem for \e ref. */
 bool CategoryItem::setData(const int ref, const QVariant &value)
 {
+    if (ref==CategoryItem::DbOnly_LabelId)
+        qWarning() << value;
     if (d->m_Data.value(ref)==value)
         return true;
     d->m_IsDirty = true;
@@ -270,4 +272,20 @@ QList<ICategoryContentItem *> CategoryItem::contentItems() const
 void CategoryItem::clearContentItems()
 {
     d->m_ContentChildren.clear();
+}
+
+void CategoryItem::warn() const
+{
+    QString tmp = "Category(";
+    tmp += QString("Id:%1; ").arg(data(DbOnly_Id).toString());
+    tmp += QString("LId:%1; ").arg(data(DbOnly_LabelId).toString());
+    tmp += QString("ParentId:%1; ").arg(data(DbOnly_ParentId).toString());
+    tmp += QString("IsValid:%1; ").arg(data(DbOnly_IsValid).toString());
+    tmp += QString("IsDirty:%1; ").arg(isDirty());
+    tmp += QString("Mime:%1; ").arg(data(DbOnly_Mime).toString());
+    tmp += QString("Icon:%1; ").arg(data(ThemedIcon).toString());
+    tmp += QString("SortId:%1; ").arg(data(SortId).toString());
+    tmp += QString("Password:%1; ").arg(data(Password).toString());
+    tmp.chop(2);
+    qWarning() << tmp+")";
 }

@@ -48,6 +48,8 @@ public:
 
 public Q_SLOTS:
     void editItem(const QModelIndex &current, const QModelIndex &previous);
+    void afterNewCategoryCreation();
+
     void done(int r);
 
 private:

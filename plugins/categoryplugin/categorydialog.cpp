@@ -115,6 +115,7 @@ CategoryDialog::CategoryDialog(QWidget *parent) :
     d->ui->treeView->header()->setStretchLastSection(true);
     connect(d->ui->buttonBox, SIGNAL(accepted()), this, SLOT(accept()));
     connect(d->ui->buttonBox, SIGNAL(rejected()), this, SLOT(reject()));
+    connect(d->ui->treeView, SIGNAL(itemAdded()), this, SLOT(afterNewCategoryCreation()));
 }
 
 void CategoryDialog::setCategoryModel(ICategoryModelHelper *model, const int labelColumn)
@@ -152,10 +153,16 @@ void CategoryDialog::editItem(const QModelIndex &current, const QModelIndex &pre
     if (!d->m_CatLabelsModel) {
         d->m_CatLabelsModel = new CategoryLabelsModel(this);
     }
-
     d->m_CatLabelsModel->setCategoryItem(cat);
     d->populateUiWithCategory();
     d->ui->tableView->setItemDelegateForColumn(CategoryLabelsModel::Lang, new Views::LanguageComboBoxDelegate(this));
+}
+
+void CategoryDialog::afterNewCategoryCreation()
+{
+    Q_ASSERT(d->m_CatLabelsModel);
+    // automatically create a new label
+    d->m_CatLabelsModel->insertRow(0);
 }
 
 void CategoryDialog::done(int r)

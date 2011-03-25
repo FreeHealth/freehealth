@@ -107,6 +107,8 @@ public:
     QString mime() const {return data(DbOnly_Mime).toString();}
     QString iconName() const {return data(ThemedIcon).toString();}
 
+    void warn() const;
+
 private:
     Internal::CategoryItemPrivate *d;
 };

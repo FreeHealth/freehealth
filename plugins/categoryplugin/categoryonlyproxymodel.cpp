@@ -182,12 +182,12 @@ bool CategoryOnlyProxyModel::removeRows(int row, int count, const QModelIndex &p
 
 bool CategoryOnlyProxyModel::insertRows(int row, int count, const QModelIndex &parent)
 {
-    qWarning() << Q_FUNC_INFO;
     for(int i=0; i < count; ++i) {
         Category::CategoryItem *cat = new Category::CategoryItem;
         cat->setParent(d->m_Model->categoryForIndex(mapToSource(parent)));
         cat->setData(CategoryItem::DbOnly_Mime, d->m_Model->mime());
         d->m_Model->addCategory(cat, row+i, parent);
+
     }
     return true;
 }
