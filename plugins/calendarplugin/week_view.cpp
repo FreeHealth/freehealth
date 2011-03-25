@@ -2,6 +2,7 @@
 #include <QPainter>
 #include <QDate>
 #include <QPixmapCache>
+#include <QPushButton>
 
 #include "week_view.h"
 
@@ -61,6 +62,10 @@ namespace Calendar {
 		if (date.dayOfWeek() > 1)
 			date = date.addDays(-(date.dayOfWeek() - 1));
 		setFirstDate(date);
+
+		QPushButton *button = new QPushButton(this);
+		button->resize(100, m_hourHeight);
+		button->move(m_leftScaleWidth, 0);
 	}
 
 	int WeekView::topHeaderHeight() const {
@@ -98,13 +103,23 @@ namespace Calendar {
 							  visibleRect.width() - 1, (i + 1) * m_hourHeight);
 		}
 
-		// half-hours
+		// half-hours : optimization : just draw the first dashed line and copy it with drawPixmap because dashed lines are SLOOOW with X11
 		QPen oldPen = pen;
+		QPixmap dashPixmap(visibleRect.width(), 1);
+		QPainter dashPainter(&dashPixmap);
+		dashPainter.fillRect(QRect(0, 0, visibleRect.width(), 1), Qt::white);
+		QPen dashPen = dashPainter.pen();
+		dashPen.setColor(QColor(200, 200, 200));
+		dashPen.setCapStyle(Qt::FlatCap);
+		dashPen.setDashPattern(QVector<qreal>() << 1 << 1);
+		dashPainter.setPen(dashPen);
+		dashPainter.drawLine(0, 0, visibleRect.width(), 0);
+
 		pen.setDashPattern(QVector<qreal>() << 1 << 1);
 		painter->setPen(pen);
 		for (int i = 0; i < 24; ++i) {
-			painter->drawLine(m_leftScaleWidth, i * m_hourHeight + m_hourHeight / 2,
-							  visibleRect.width() - 1, i * m_hourHeight + m_hourHeight / 2);
+			painter->drawPixmap(m_leftScaleWidth, i * m_hourHeight + m_hourHeight / 2,
+								visibleRect.width(), 1, dashPixmap);
 		}
 		painter->setPen(oldPen);
 
