@@ -149,6 +149,7 @@ const char * const  ICONCRASHRECOVER = "crashrecoverer.png";
 const char * const  ICONSOFTWAREUPDATEAVAILABLE = "updateavailable.png";
 const char * const  ICONMEDINTUX    =  "medintux.png";
 const char * const  ICONPENCIL    =  "pencil.png";
+const char * const  ICONFORMS    =  "forms.png";
 
 // date and time Icons
 const char * const  ICONDATE        =  "date.png";
