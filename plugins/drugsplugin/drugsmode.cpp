@@ -50,6 +50,7 @@ DrugsMode::DrugsMode(QObject *parent) :
         m_Holder(0)
 {
     m_Holder = new Form::FormPlaceHolder;
+    m_Holder->setObjectName("DrugsFormPlaceHolder");
     setName(tr("Drugs"));
     setIcon(theme()->icon(Core::Constants::ICONDRUGMODE, Core::ITheme::BigIcon));
     setPriority(Core::Constants::P_MODE_PATIENT_DRUGS);
@@ -67,12 +68,10 @@ DrugsMode::~DrugsMode()
 
 void DrugsMode::loadPatientFile(const QString &absDirPath)
 {
-    qWarning() << Q_FUNC_INFO << absDirPath;
     if (absDirPath.isEmpty())
         return;
 
     // get all form readers (IFormIO)
-    Form::IFormIO *reader = 0;
     QList<Form::IFormIO *> list = pluginManager()->getObjects<Form::IFormIO>();
 
     // try to read form

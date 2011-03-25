@@ -31,8 +31,16 @@
 
 #include <QObject>
 
+/**
+ * \file formmanagermode.h
+ * \author Eric MAEKER <eric.maeker@free.fr>
+ * \version 0.5.0
+ * \date 25 Mar 2011
+*/
+
 
 namespace Form {
+class FormPlaceHolder;
 namespace Internal {
 
 class FormManagerMode : public Core::BaseMode
@@ -42,6 +50,11 @@ public:
     FormManagerMode(QObject *parent);
     ~FormManagerMode();
 
+private Q_SLOTS:
+    bool loadPatientFile();
+
+private:
+    FormPlaceHolder *m_Holder;
 };
 
 }  // End namespace Internal

@@ -62,6 +62,8 @@ public:
 
     bool initialize(const QStringList &arguments, QString *errorMessage = 0);
     void extensionsInitialized();
+private Q_SLOTS:
+    void postCoreOpened();
 
 private:
     DrugsWidget::DrugsViewOptionsPage *viewPage;

@@ -180,11 +180,6 @@ bool DrugsPlugin::initialize(const QStringList &arguments, QString *errorMessage
     // Initialize drugs database after the settings where checked
     drugsBase();
 
-#ifdef FREEMEDFORMS
-    // Add drug mode
-    addAutoReleasedObject(new DrugsMode(this));
-#endif
-
     return true;
 }
 
@@ -192,6 +187,15 @@ void DrugsPlugin::extensionsInitialized()
 {
     if (Utils::Log::warnPluginsCreation())
         qWarning() << "DrugsPlugin::extensionsInitialized";
+    connect(Core::ICore::instance(), SIGNAL(coreOpened()), this, SLOT(postCoreOpened()));
+}
+
+void DrugsPlugin::postCoreOpened()
+{
+#ifdef FREEMEDFORMS
+    // Add drug mode
+    addAutoReleasedObject(new DrugsMode(this));
+#endif
 }
 
 Q_EXPORT_PLUGIN(DrugsPlugin)

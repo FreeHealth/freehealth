@@ -23,7 +23,9 @@ HEADERS = formmanagerplugin.h \
     episodebase.h \
     constants_db.h \
     formfilesselectorwidget.h \
-    formmanagerpreferencespage.h
+    formmanagerpreferencespage.h \
+    formcontextualwidget.h \
+    formfile.h
 SOURCES = formmanagerplugin.cpp \
     formmanager.cpp \
     iformitem.cpp \
@@ -34,9 +36,14 @@ SOURCES = formmanagerplugin.cpp \
     episodebase.cpp \
     formfilesselectorwidget.cpp \
     formmanagerpreferencespage.cpp \
-    iformio.cpp
+    iformio.cpp \
+    formcontextualwidget.cpp \
+    formfile.cpp
+
 OTHER_FILES = FormManager.pluginspec
+
 TRANSLATIONS += $${SOURCES_TRANSLATIONS}/formmanagerplugin_fr.ts \
     $${SOURCES_TRANSLATIONS}/formmanagerplugin_de.ts \
     $${SOURCES_TRANSLATIONS}/formmanagerplugin_es.ts
+
 FORMS += formfilesselectorwidget.ui

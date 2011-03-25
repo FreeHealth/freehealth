@@ -47,6 +47,7 @@ namespace Constants {
         EPISODES_ID = 0,
         EPISODES_PATIENT_UID,
         EPISODES_LK_TOPRACT_LKID,
+//        EPISODES_ISVALID,
         EPISODES_FORM_PAGE_UID,
         EPISODES_LABEL,
         EPISODES_DATE,
@@ -61,12 +62,26 @@ namespace Constants {
         EPISODE_CONTENT_XML
     };
     enum FormFields {
-        FORM_ID = 0, FORM_VALID, FORM_GENERIC, FORM_PATIENTUID, FORM_FORMNAME, FORM_ADDPLACE,
+        FORM_ID = 0, FORM_VALID, FORM_GENERIC, FORM_PATIENTUID,
+        FORM_RECEIVERFORMUUID, FORM_INSERTIONPOINT,
         FORM_MaxParam
     };
     enum VersionFields {
         VERSION_TEXT = 0
     };
+
+
+    // Some UI constants
+    const char * const C_FORM_PLUGINS = "cFormPlugin";
+
+    const char * const A_ADDEPISODE = "aForms.AddEpisode";
+    const char * const A_VALIDATEEPISODE = "aForms.ValidateEpisode";
+    const char * const A_ADDFORM = "aForm.AddForm";
+
+    const char * const FORM_TR_CONTEXT = "Forms";
+    const char * const ADDEPISODE_TEXT = QT_TRANSLATE_NOOP("tkConstants", "Add Episode");
+    const char * const VALIDATEEPISODE_TEXT = QT_TRANSLATE_NOOP("tkConstants", "Validate Episode");
+    const char * const ADDFORM_TEXT = QT_TRANSLATE_NOOP("tkConstants", "Add Form");
 
 }  // End namespace Form::Constants
 }  // End namespace Form

@@ -33,8 +33,8 @@
 /**
  * \file formmanager.h
  * \author Eric MAEKER <eric.maeker@free.fr>
- * \version 0.4.0
- * \date 05 Apr 2010
+ * \version 0.5.0
+ * \date 23 Mar 2011
 */
 
 QT_BEGIN_NAMESPACE
@@ -42,6 +42,7 @@ class QTreeWidget;
 class QTreeWidgetItem;
 class QWidget;
 class QStackedLayout;
+class QAction;
 QT_END_NAMESPACE
 
 namespace Core {
@@ -56,9 +57,21 @@ class FormPlaceHolder;
 
 namespace Internal {
 class FormManagerPrivate;
+class FormActionHandler : public QObject
+{
+    Q_OBJECT
+public:
+    FormActionHandler(QObject *parent = 0);
+    ~FormActionHandler();
+
+private:
+    QAction *aAddEpisode;
+    QAction *aValidateEpisode;
+    QAction *aAddForm;
+};
 }
 
-class FORM_EXPORT FormManager : public QObject
+class FORM_EXPORT FormManager : public Internal::FormActionHandler
 {
      Q_OBJECT
      FormManager(QObject *parent = 0);
@@ -70,8 +83,6 @@ public:
      void activateMode();
 
      QList<FormMain *> forms() const;
-
-     FormPlaceHolder *formPlaceHolder() const;
 
      template <class T>
      T* getParent(FormItem *item)
@@ -101,6 +112,7 @@ public Q_SLOTS:
      Internal::FormManagerPrivate *d;
      static FormManager *m_Instance;
 };
+
 
 } // End Form
 

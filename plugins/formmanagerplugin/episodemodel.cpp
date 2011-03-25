@@ -329,7 +329,7 @@ public:
         m_RootItem->setIsEpisode(false);
 
         // getting Forms
-        Utils::Log::addMessage(q, "Getting Forms");
+        LOG_FOR(q, "Getting Forms");
         // create one item per form
         formsItems.clear();
         foreach(Form::FormMain *f, m_RootForm->formMainChildren()) {
@@ -388,14 +388,13 @@ public:
         m_ActualEpisode_FormUid = "";
 
         // get Episodes
-        LOG_FOR(q, "Getting Episodes");
+        LOG_FOR(q, "Getting Episodes (refresh)");
         QSqlQuery query(episodeBase()->database());
         QList<TreeItem *> episodes;
 
         /** \todo add LIMIT to SQL command */
         QHash<int, QString> where;
         where.insert(Constants::EPISODES_PATIENT_UID, QString("='%1'").arg(m_CurrentPatient));
-
         foreach(Form::FormMain *f, formsItems.keys()) {
             TreeItem *parent = formsItems.value(f);
             where.insert(Constants::EPISODES_FORM_PAGE_UID, QString("='%1'").arg(f->uuid()));
@@ -504,8 +503,10 @@ public:
         }
         query.finish();
 
-        if (ok)
+        if (ok) {
             item->setNewlyCreated(false);
+            item->setModified(false);
+        }
 
         return ok;
     }
@@ -592,6 +593,7 @@ public:
         }
 
         saveEpisodeHeaders(form, item);
+        item->setModified(false);
 
 //        foreach(FormItem *it, form->formItemChildren()) {
 //            /** \todo check nested items */
@@ -776,9 +778,12 @@ void EpisodeModel::init()
     connect(user(), SIGNAL(userChanged()), this, SLOT(onUserChanged()));
     connect(patient(), SIGNAL(currentPatientChanged()), this, SLOT(onPatientChanged()));
 
+    d->m_CurrentPatient = patient()->data(Core::IPatient::Uid).toString();
+
+    d->createFormTree();
+
 //    d->connectSqlPatientSignals();
     onUserChanged();
-    d->createFormTree();
 
     // connect the save action
     Core::Command * cmd = actionManager()->command(Core::Constants::A_FILE_SAVE);
@@ -819,10 +824,12 @@ void EpisodeModel::onUserChanged()
 
 void EpisodeModel::onPatientChanged()
 {
+    qWarning() << Q_FUNC_INFO;
     d->m_CurrentPatient = patient()->data(Core::IPatient::Uid).toString();
     d->refreshEpisodes();
     d->getLastEpisodesAndFeedPatientModel();
     reset();
+    qWarning() << ",,,,,,,";
 }
 
 void EpisodeModel::setCurrentFormUuid(const QString &uuid)

@@ -35,6 +35,7 @@
 #include "iformio.h"
 #include "formplaceholder.h"
 #include "episodebase.h"
+#include "constants_db.h"
 
 #include <formmanagerplugin/iformwidgetfactory.h>
 #include <formmanagerplugin/iformitemdata.h>
@@ -45,7 +46,12 @@
 #include <coreplugin/uniqueidmanager.h>
 #include <coreplugin/modemanager/modemanager.h>
 #include <coreplugin/constants_menus.h>
+#include <coreplugin/constants_icons.h>
 #include <coreplugin/ipatient.h>
+#include <coreplugin/actionmanager/command.h>
+#include <coreplugin/actionmanager/actionmanager.h>
+#include <coreplugin/itheme.h>
+#include <coreplugin/contextmanager/contextmanager.h>
 
 #include <utils/global.h>
 #include <utils/log.h>
@@ -73,6 +79,8 @@ static inline Core::ModeManager *modeManager() { return Core::ICore::instance()-
 static inline Core::ISettings *settings()  { return Core::ICore::instance()->settings(); }
 static inline Form::Internal::EpisodeBase *episodeBase() {return Form::Internal::EpisodeBase::instance();}
 static inline Core::IPatient *patient() {return Core::ICore::instance()->patient();}
+static inline Core::ContextManager *contextManager() { return Core::ICore::instance()->contextManager(); }
+inline static Core::ActionManager *actionManager() {return Core::ICore::instance()->actionManager();}
 
 
 namespace Form {
@@ -85,21 +93,14 @@ class FormManagerPrivate
 {
 public:
     FormManagerPrivate(FormManager *parent) :
-            m_Holder(0), m_ActualEpisode(-1), q(parent)
+            m_ActualEpisode(-1), q(parent)
     {}
 
     ~FormManagerPrivate()
     {
-        // DO NOT DELETE m_UuidManager
-        if (m_Holder) {
-            delete m_Holder;
-            m_Holder = 0;
-        }
     }
 
 public:
-    QPointer<FormPlaceHolder> m_Holder;
-
     /** \todo create a EpisodeData class */
     int m_ActualEpisode;
     QString m_ActualEpisode_FormUid;
@@ -122,12 +123,11 @@ FormManager *FormManager::instance()
     return m_Instance;
 }
 
-FormManager::FormManager(QObject *parent)
-        : QObject(parent), d(new Form::Internal::FormManagerPrivate(this))
+FormManager::FormManager(QObject *parent) :
+        FormActionHandler(parent),
+        d(new Form::Internal::FormManagerPrivate(this))
 {
     setObjectName("FormManager");
-    /** \todo Need to modify UID code to create a new private uid */
-    d->m_Holder = new FormPlaceHolder;
 
     connect(this, SIGNAL(loadPatientForms(QString)), Core::ICore::instance(), SIGNAL(loadPatientForms(QString)));
     connect(patient(), SIGNAL(currentPatientChanged()), this, SLOT(loadPatientFile()));
@@ -145,7 +145,6 @@ FormManager::~FormManager()
 void FormManager::activateMode()
 {
     modeManager()->activateMode(Core::Constants::MODE_PATIENT_FILE);
-    d->m_Holder->formTree()->expandAll();
 }
 
 /** \brief Return all available forms from the PluginManager object pool. \sa Form::FormMain */
@@ -157,49 +156,20 @@ QList<FormMain *> FormManager::forms() const
 /**
   \brief Get the patient form from the episode database, send the load signal with the form absPath and load it.
   \sa Core::ICore::loadPatientForms()
-
 */
 bool FormManager::loadPatientFile()
 {
+    qWarning() << Q_FUNC_INFO;
     // get form general form absPath from episodeBase
     QString absDirPath = episodeBase()->getGenericFormFile();
-
-    qWarning() << Q_FUNC_INFO << absDirPath;
 
     if (absDirPath.isEmpty()) {
         /** \todo code here: manage no patient form file recorded in episodebase */
         return false;
     }
 
-    // get all form readers (IFormIO)
-    QList<Form::IFormIO *> list = pluginManager()->getObjects<Form::IFormIO>();
-
-    // try to read form
-    Form::FormMain *root = 0;
-    foreach(Form::IFormIO *io, list) {
-        if (io->setFileName(absDirPath + "/central.xml") && io->canReadFile()) {
-            root = io->loadForm();
-            if (root)
-                break;
-        }
-    }
-
-    // Tell the PlaceHolder of the FormMain to use as root item
-    // FormPlaceHolder will manage deletion of the item
-    d->m_Holder->setRootForm(root);
-
-    if (root) {
-        Q_EMIT loadPatientForms(absDirPath);
-    } else {
-        return false;
-    }
+    Q_EMIT loadPatientForms(absDirPath);
     return true;
-}
-
-/** \brief Return the unique Form::FormPlaceHolder. */
-FormPlaceHolder *FormManager::formPlaceHolder() const
-{
-    return d->m_Holder;
 }
 
 void FormManager::setCurrentPatient(const QString &uuid)
@@ -207,7 +177,7 @@ void FormManager::setCurrentPatient(const QString &uuid)
     Q_UNUSED(uuid);
     /** \todo code here */
 //    QString formUuid = episodeModel()->index(0, Form::EpisodeModel::FormUuid, QModelIndex()).data().toString();
-    d->m_Holder->formTree()->expandAll();
+//    d->m_Holder->formTree()->expandAll();
 //    d->m_Holder->setCurrentForm(formUuid);
 }
 
@@ -219,4 +189,58 @@ bool FormManager::translateForms()
 //    m_Tree->resizeColumnToContents( LabelColumn );
 //    retranslateUi();
     return true;
+}
+
+
+FormActionHandler::FormActionHandler(QObject *parent) :
+        QObject(parent),
+        aAddEpisode(0),
+        aValidateEpisode(0),
+        aAddForm(0)
+{
+    Core::ActionManager *am = actionManager();
+    Core::UniqueIDManager *uid = Core::ICore::instance()->uniqueIDManager();
+    Core::ITheme *th = Core::ICore::instance()->theme();
+    QList<int> formContext = QList<int>() << uid->uniqueIdentifier(Constants::C_FORM_PLUGINS);
+
+    // Form's Contextual Menu
+//    Core::ActionContainer *editMenu = am->actionContainer(Core::Constants::M_EDIT);
+//    Core::ActionContainer *cmenu = am->actionContainer(Core::Constants::M_EDIT_LIST);
+//    if (!cmenu) {
+//        cmenu = am->createMenu(Core::Constants::M_EDIT_LIST);
+//        cmenu->appendGroup(Core::Constants::G_EDIT_LIST);
+//        cmenu->setTranslations(Trans::Constants::M_EDIT_LIST_TEXT);
+//        if (editMenu)
+//            editMenu->addMenu(cmenu, Core::Constants::G_EDIT_LIST);
+//    }
+
+    QAction *a = aAddEpisode = new QAction(this);
+    a->setObjectName("aAddEpisode");
+    a->setIcon(th->icon(Core::Constants::ICONADD));
+    Core::Command *cmd = am->registerAction(a, Constants::A_ADDEPISODE, formContext);
+    cmd->setTranslations(Constants::ADDEPISODE_TEXT, Constants::ADDEPISODE_TEXT, Constants::FORM_TR_CONTEXT);
+//    cmenu->addAction(cmd, Core::Constants::G_EDIT_LIST);
+//    connect(a, SIGNAL(triggered()), this, SLOT(addItem()));
+
+    a = aValidateEpisode = new QAction(this);
+    a->setObjectName("aValidateEpisode");
+    a->setIcon(th->icon(Core::Constants::ICONVALIDATEDARK));
+    cmd = am->registerAction(a, Constants::A_VALIDATEEPISODE, formContext);
+    cmd->setTranslations(Constants::VALIDATEEPISODE_TEXT, Constants::VALIDATEEPISODE_TEXT, Constants::FORM_TR_CONTEXT);
+//    cmenu->addAction(cmd, Core::Constants::G_EDIT_LIST);
+//    connect(a, SIGNAL(triggered()), this, SLOT(addItem()));
+
+    a = aAddForm = new QAction(this);
+    a->setObjectName("aAddForm");
+    a->setIcon(th->icon(Core::Constants::ICONFORMS));
+    cmd = am->registerAction(a, Constants::A_ADDFORM, formContext);
+    cmd->setTranslations(Constants::ADDFORM_TEXT, Constants::ADDFORM_TEXT, Constants::FORM_TR_CONTEXT);
+//    cmenu->addAction(cmd, Core::Constants::G_EDIT_LIST);
+//    connect(a, SIGNAL(triggered()), this, SLOT(addItem()));
+
+    contextManager()->updateContext();
+}
+
+FormActionHandler::~FormActionHandler()
+{
 }

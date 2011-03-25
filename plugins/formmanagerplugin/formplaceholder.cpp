@@ -33,6 +33,7 @@
 
 #include "formplaceholder.h"
 #include "constants_settings.h"
+#include "constants_db.h"
 
 #include <formmanagerplugin/formmanager.h>
 #include <formmanagerplugin/iformitem.h>
@@ -44,6 +45,9 @@
 #include <coreplugin/isettings.h>
 #include <coreplugin/ipatient.h>
 #include <coreplugin/constants_icons.h>
+#include <coreplugin/actionmanager/actionmanager.h>
+
+#include <listviewplugin/treeview.h>
 
 #include <utils/widgets/minisplitter.h>
 #include <utils/log.h>
@@ -70,6 +74,7 @@ static inline Form::FormManager *formManager() { return Form::FormManager::insta
 static inline Core::ITheme *theme()  { return Core::ICore::instance()->theme(); }
 static inline Core::ISettings *settings()  { return Core::ICore::instance()->settings(); }
 static inline Core::IPatient *patient()  { return Core::ICore::instance()->patient(); }
+inline static Core::ActionManager *actionManager() {return Core::ICore::instance()->actionManager();}
 
 
 namespace Form {
@@ -128,7 +133,7 @@ public:
         QList<QVariant> sizes;
         foreach(int s, horizSplitter->sizes())
             sizes << s;
-        settings()->setValue(Constants::S_PLACEHOLDERSPLITTER_SIZES, sizes);
+        settings()->setValue(QString("%1/%2").arg(Constants::S_PLACEHOLDERSPLITTER_SIZES).arg(q->objectName()), sizes);
     }
 
     void clearStackLayout()
@@ -144,7 +149,8 @@ public:
 public:
     FormMain *m_RootForm;
     EpisodeModel *m_EpisodeModel;
-    QTreeView *m_FileTree;
+    Views::TreeView *m_FileTree;
+//    QTreeView *m_FileTree;
     FormItemDelegate *m_Delegate;
     QTableView *m_EpisodesTable;
     QStackedLayout *m_Stack;
@@ -220,8 +226,10 @@ void FormItemDelegate::paint(QPainter *painter, const QStyleOptionViewItem &opti
 }
 
 FormPlaceHolder::FormPlaceHolder(QWidget *parent) :
-        QWidget(parent), d(new Internal::FormPlaceHolderPrivate(this))
+        FormContextualWidget(parent),
+        d(new Internal::FormPlaceHolderPrivate(this))
 {
+    FormManager::instance();
     // create general layout
     d->m_GeneralLayout = new QGridLayout(this);
     d->m_GeneralLayout->setObjectName("FormPlaceHolder::GeneralLayout");
@@ -232,8 +240,14 @@ FormPlaceHolder::FormPlaceHolder(QWidget *parent) :
     // create the tree view
     /** \todo use the Views::FancyTreeView */
     QWidget *w = new QWidget(this);
-    d->m_FileTree = new QTreeView(this);
+//    d->m_FileTree = new QTreeView(this);
+    d->m_FileTree = new Views::TreeView(this,0);
+    d->m_FileTree->disconnectActionsToDefaultSlots();
+    d->m_FileTree->setDeselectable(false);
+    d->m_FileTree->useContextMenu(true);
     d->m_FileTree->setObjectName("FormTree");
+    d->m_FileTree->addContexts(contexts());
+    d->m_FileTree->setCommands(QStringList() << Constants::A_ADDEPISODE << Constants::A_VALIDATEEPISODE << Constants::A_ADDFORM);
 //    d->m_FileTree->setIndentation(10);
     d->m_FileTree->viewport()->setAttribute(Qt::WA_Hover);
     d->m_FileTree->setItemDelegate((d->m_Delegate = new Internal::FormItemDelegate(this)));
@@ -246,6 +260,11 @@ FormPlaceHolder::FormPlaceHolder(QWidget *parent) :
     connect(d->m_FileTree, SIGNAL(clicked(QModelIndex)), this, SLOT(handleClicked(QModelIndex)));
     connect(d->m_FileTree, SIGNAL(pressed(QModelIndex)), this, SLOT(handlePressed(QModelIndex)));
     connect(d->m_FileTree, SIGNAL(activated(QModelIndex)), this, SLOT(setCurrentEpisode(QModelIndex)));
+    connect(d->m_FileTree, SIGNAL(addRequested()), this, SLOT(newEpisode()));
+    connect(d->m_FileTree, SIGNAL(removeRequested()), this, SLOT(removeEpisode()));
+
+    Core::Command *cmd = actionManager()->command(Constants::A_ADDEPISODE);
+    connect(cmd->action(), SIGNAL(triggered()), this, SLOT(newEpisode()));
 
 //    connect(d->m_FileTree, SIGNAL(customContextMenuRequested(QPoint)),
 //            this, SLOT(contextMenuRequested(QPoint)));
@@ -278,11 +297,6 @@ FormPlaceHolder::FormPlaceHolder(QWidget *parent) :
     vertic->addWidget(d->m_Scroll);
     d->horizSplitter->addWidget(vertic);
 
-    QList<QVariant> sizesVar = settings()->value(Constants::S_PLACEHOLDERSPLITTER_SIZES).toList();
-    QList<int> sizes;
-    foreach(const QVariant &v, sizesVar)
-        sizes << v.toInt();
-    d->horizSplitter->setSizes(sizes);
 //    d->horizSplitter->setStretchFactor(0, 1);
 //    d->horizSplitter->setStretchFactor(1, 3);
 //    vertic->setStretchFactor(0, 1);
@@ -306,6 +320,17 @@ FormPlaceHolder::~FormPlaceHolder()
         delete d;
         d = 0;
     }
+}
+
+/** Overload of the QObject member used to save/load settings. */
+void FormPlaceHolder::setObjectName(const QString &name)
+{
+    QObject::setObjectName(name);
+    QList<QVariant> sizesVar = settings()->value(QString("%1/%2").arg(Constants::S_PLACEHOLDERSPLITTER_SIZES).arg(objectName())).toList();
+    QList<int> sizes;
+    foreach(const QVariant &v, sizesVar)
+        sizes << v.toInt();
+    d->horizSplitter->setSizes(sizes);
 }
 
 /**

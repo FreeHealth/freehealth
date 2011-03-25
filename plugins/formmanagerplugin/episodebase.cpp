@@ -110,6 +110,7 @@ EpisodeBase::EpisodeBase(QObject *parent) :
     addField(Table_EPISODES, EPISODES_ID, "EPISODE_ID", FieldIsUniquePrimaryKey);
     addField(Table_EPISODES, EPISODES_PATIENT_UID, "PATIENT_UID", FieldIsUUID);
     addField(Table_EPISODES, EPISODES_LK_TOPRACT_LKID, "LK_TOPRACT_LKID", FieldIsInteger);
+//    addField(Table_EPISODES, EPISODES_ISVALID, "ISVALID", FieldIsBoolean);
     addField(Table_EPISODES, EPISODES_FORM_PAGE_UID, "FORM_PAGE_UID", FieldIsUUID);
     addField(Table_EPISODES, EPISODES_LABEL, "LABEL", FieldIsShortText);
     addField(Table_EPISODES, EPISODES_DATE, "DATE", FieldIsDate);
@@ -127,12 +128,16 @@ EpisodeBase::EpisodeBase(QObject *parent) :
     /** \todo add index */
 
     addTable(Table_FORM, "FORM_FILES");
-    addField(Table_FORM, FORM_ID, "ID", FieldIsUniquePrimaryKey);
-    addField(Table_FORM, FORM_VALID, "VALID", FieldIsBoolean);
+    addField(Table_FORM, FORM_ID,      "ID", FieldIsUniquePrimaryKey);
+    addField(Table_FORM, FORM_VALID,   "VALID", FieldIsBoolean);
     addField(Table_FORM, FORM_GENERIC, "GENERIC", FieldIsShortText);
     addField(Table_FORM, FORM_PATIENTUID, "PATIENT", FieldIsUUID);
-    addField(Table_FORM, FORM_FORMNAME, "NAME", FieldIsShortText);
-    addField(Table_FORM, FORM_ADDPLACE, "PLACE", FieldIsShortText);
+
+    // Uuid of the form to insert
+    addField(Table_FORM, FORM_RECEIVERFORMUUID, "RFU", FieldIsShortText);
+    // Insertion point = formuuid where to insert the form
+    addField(Table_FORM, FORM_INSERTIONPOINT, "IP", FieldIsShortText);
+
     /** \todo manage user access restriction */
     /** \todo add index */
 
@@ -270,6 +275,15 @@ bool EpisodeBase::createDatabase(const QString &connectionName , const QString &
         return false;
     }
 
+    // Add version number
+    QSqlQuery query(DB);
+    query.prepare(prepareInsertQuery(Constants::Table_VERSION));
+    query.bindValue(Constants::VERSION_TEXT, Constants::DB_ACTUALVERSION);
+    if (!query.exec()) {
+        LOG_QUERY_ERROR(query);
+        return false;
+    }
+
     populateWithDefaultValues();
 
     return true;
@@ -323,8 +337,8 @@ bool EpisodeBase::setGenericPatientFormFile(const QString &absPathOrUid)
         query.bindValue(Constants::FORM_VALID, 1);
         query.bindValue(Constants::FORM_GENERIC, absPathOrUid);
         query.bindValue(Constants::FORM_PATIENTUID, QVariant());
-        query.bindValue(Constants::FORM_FORMNAME, QVariant());
-        query.bindValue(Constants::FORM_ADDPLACE, QVariant());
+        query.bindValue(Constants::FORM_RECEIVERFORMUUID, QVariant());
+        query.bindValue(Constants::FORM_INSERTIONPOINT, QVariant());
         if (!query.exec()) {
             LOG_QUERY_ERROR(query);
             return false;
@@ -381,8 +395,8 @@ QHash<QString,QString> EpisodeBase::getSubFormFiles()
     where.insert(Constants::FORM_PATIENTUID, QString("='%1'").arg(patient()->data(Core::IPatient::Uid).toString()));
     QSqlQuery query(DB);
     QString req = select(Constants::Table_FORM, QList<int>()
-                         << Constants::FORM_ADDPLACE
-                         << Constants::FORM_FORMNAME, where);
+                         << Constants::FORM_RECEIVERFORMUUID
+                         << Constants::FORM_INSERTIONPOINT, where);
     if (query.exec(req)) {
         while (query.next()) {
             QString path = query.value(1).toString();

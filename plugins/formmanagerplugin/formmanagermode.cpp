@@ -25,12 +25,20 @@
  *       NAME <MAIL@ADRESS>                                                *
  ***************************************************************************/
 #include "formmanagermode.h"
+#include "formplaceholder.h"
+#include "iformitem.h"
+#include "iformio.h"
+#include "episodebase.h"
+#include "constants_db.h"
 
 #include <coreplugin/icore.h>
 //#include <coreplugin/isettings.h>
 #include <coreplugin/itheme.h>
 #include <coreplugin/constants_menus.h>
 #include <coreplugin/constants_icons.h>
+#include <coreplugin/ipatient.h>
+
+#include <extensionsystem/pluginmanager.h>
 
 #include <QWidget>
 #include <QGridLayout>
@@ -39,7 +47,10 @@
 using namespace Form;
 using namespace Internal;
 
+static inline ExtensionSystem::PluginManager *pluginManager() { return ExtensionSystem::PluginManager::instance(); }
+static inline Form::Internal::EpisodeBase *episodeBase() {return Form::Internal::EpisodeBase::instance();}
 static inline Core::ITheme *theme()  { return Core::ICore::instance()->theme(); }
+static inline Core::IPatient *patient() {return Core::ICore::instance()->patient();}
 
 
 FormManagerMode::FormManagerMode(QObject *parent) :
@@ -49,13 +60,54 @@ FormManagerMode::FormManagerMode(QObject *parent) :
     setIcon(theme()->icon(Core::Constants::ICONPATIENTFILES, Core::ITheme::BigIcon));
     setPriority(Core::Constants::P_MODE_PATIENT_FILE);
     setUniqueModeName(Core::Constants::MODE_PATIENT_FILE);
+
+    m_Holder = new FormPlaceHolder;
+    m_Holder->setObjectName("EpisodesFormPlaceHolder");
+
 //    const QList<int> &context;
 //    setContext();
-//    setWidget(w);
+    setWidget(m_Holder);
+    connect(patient(), SIGNAL(currentPatientChanged()), this, SLOT(loadPatientFile()));
 }
 
 FormManagerMode::~FormManagerMode()
 {
+    // m_Holder is deleted by Core::BaseMode
 }
+
+/**
+  \brief Get the patient form from the episode database, send the load signal with the form absPath and load it.
+  \sa Core::ICore::loadPatientForms()
+*/
+bool FormManagerMode::loadPatientFile()
+{
+    qWarning() << Q_FUNC_INFO;
+    // get form general form absPath from episodeBase
+    QString absDirPath = episodeBase()->getGenericFormFile();
+
+    if (absDirPath.isEmpty()) {
+        /** \todo code here: manage no patient form file recorded in episodebase */
+        return false;
+    }
+
+    // get all form readers (IFormIO)
+    QList<Form::IFormIO *> list = pluginManager()->getObjects<Form::IFormIO>();
+
+    // try to read form
+    Form::FormMain *root = 0;
+    foreach(Form::IFormIO *io, list) {
+        if (io->setFileName(absDirPath + "/central.xml") && io->canReadFile()) {
+            root = io->loadForm();
+            if (root)
+                break;
+        }
+    }
+
+    // Tell the PlaceHolder of the FormMain to use as root item
+    // FormPlaceHolder will manage deletion of the item
+    m_Holder->setRootForm(root);
+    return (root);
+}
+
 
 

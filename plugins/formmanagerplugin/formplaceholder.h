@@ -28,6 +28,7 @@
 #define FORMPLACEHOLDER_H
 
 #include <formmanagerplugin/formmanager_exporter.h>
+#include <formmanagerplugin/formcontextualwidget.h>
 
 #include <QWidget>
 #include <QTreeView>
@@ -64,7 +65,7 @@ public:
 }  // End namespace Internal
 
 
-class FORM_EXPORT FormPlaceHolder : public QWidget
+class FORM_EXPORT FormPlaceHolder : public Form::FormContextualWidget
 {
     Q_OBJECT
     friend class FormManager;
@@ -73,6 +74,7 @@ public:
     FormPlaceHolder(QWidget *parent = 0);
     ~FormPlaceHolder();
 
+    void setObjectName(const QString &name);
     void setRootForm(Form::FormMain *rootForm);
 
     QTreeView *formTree() const;

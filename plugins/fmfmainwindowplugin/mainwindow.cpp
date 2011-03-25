@@ -304,7 +304,6 @@ void MainWindow::onCurrentPatientChanged()
     m_RecentPatients->addToRecentFiles(uuid);
 
     // inform formplaceholder; episodemodel and patient model
-//    episodeModel()->setCurrentPatient(uuid);
     formManager()->setCurrentPatient(uuid);
 }
 

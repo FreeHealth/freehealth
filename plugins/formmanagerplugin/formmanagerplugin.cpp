@@ -109,7 +109,6 @@ void FormManagerPlugin::extensionsInitialized()
     // Add mode
     FormManager::instance();
     mode = new FormManagerMode(this);
-    mode->setWidget(FormManager::instance()->formPlaceHolder());
     addObject(mode);
 }
 
