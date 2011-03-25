@@ -457,12 +457,13 @@ public:
             qWarning() << "saveModelDatas :" << start.data().toString();
 
         QSqlDatabase DB = QSqlDatabase::database(Constants::DB_TEMPLATES_NAME);
-        if (!DB.open()) {
-            Utils::Log::addError(q, tkTr(Trans::Constants::UNABLE_TO_OPEN_DATABASE_1_ERROR_2)
-                                 .arg(Constants::DB_TEMPLATES_NAME)
-                                 .arg(DB.lastError().text()),
-                                 __FILE__, __LINE__);
-            return;
+        if (!DB.isOpen()) {
+            if (!DB.open()) {
+                LOG_ERROR_FOR(q, tkTr(Trans::Constants::UNABLE_TO_OPEN_DATABASE_1_ERROR_2)
+                              .arg(Constants::DB_TEMPLATES_NAME)
+                              .arg(DB.lastError().text()));
+                return;
+            }
         }
 
         QModelIndex idx = start;
@@ -588,19 +589,20 @@ public:
         QVector<int> toReturn;
         QString req;
         QSqlDatabase DB = QSqlDatabase::database(Constants::DB_TEMPLATES_NAME);
-        if (!DB.open()) {
-            Utils::Log::addError(q, tkTr(Trans::Constants::UNABLE_TO_OPEN_DATABASE_1_ERROR_2)
-                                 .arg(Constants::DB_TEMPLATES_NAME)
-                                 .arg(DB.lastError().text()),
-                                 __FILE__, __LINE__);
-            return toReturn;
+        if (!DB.isOpen()) {
+            if (!DB.open()) {
+                LOG_ERROR_FOR(q, tkTr(Trans::Constants::UNABLE_TO_OPEN_DATABASE_1_ERROR_2)
+                              .arg(Constants::DB_TEMPLATES_NAME)
+                              .arg(DB.lastError().text()));
+                return toReturn;
+            }
         }
         QHash<int, QString> where;
         where.insert(Constants::CATEGORIES_PARENT_ID, QString("=%1").arg(idCategory));
         req = templateBase()->select(Constants::Table_Categories, Constants::CATEGORIES_ID, where);
         QSqlQuery query(req, DB);
         if (!query.isActive()) {
-            Utils::Log::addQueryError(q, query, __FILE__, __LINE__);
+            LOG_QUERY_ERROR_FOR(q, query);
         } else {
             while (query.next()) {
                 toReturn << query.value(0).toInt();
@@ -617,12 +619,13 @@ public:
             return;
 //        qWarning() << "deleteRows" << m_CategoriesToDelete << m_TemplatesToDelete;
         QSqlDatabase DB = QSqlDatabase::database(Constants::DB_TEMPLATES_NAME);
-        if (!DB.open()) {
-            Utils::Log::addError(q, tkTr(Trans::Constants::UNABLE_TO_OPEN_DATABASE_1_ERROR_2)
-                                 .arg(Constants::DB_TEMPLATES_NAME)
-                                 .arg(DB.lastError().text()),
-                                 __FILE__, __LINE__);
-            return;
+        if (!DB.isOpen()) {
+            if (!DB.open()) {
+                LOG_ERROR_FOR(q, tkTr(Trans::Constants::UNABLE_TO_OPEN_DATABASE_1_ERROR_2)
+                              .arg(Constants::DB_TEMPLATES_NAME)
+                              .arg(DB.lastError().text()));
+                return;
+            }
         }
         QString req;
 
