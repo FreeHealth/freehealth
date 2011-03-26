@@ -16,9 +16,10 @@ CalendarWidget::CalendarWidget(QWidget *parent)
 	  m_view(0),
 	  m_header(0),
 	  m_model(0) {
-	setViewType(View_Week);
 	setVerticalScrollBarPolicy(Qt::ScrollBarAsNeeded);
-	setViewportMargins(0, 40, 0, 0);
+	setViewType(View_Week);
+	setViewportMargins(0, 80, 0, 0);
+	m_navbar = new CalendarNavbar(this);
 }
 
 void CalendarWidget::setViewType(ViewType value) {
@@ -55,8 +56,14 @@ void CalendarWidget::resizeEvent(QResizeEvent *event) {
 	widget()->resize(event->size().width(), widget()->height());
 
 	QMargins margins = contentsMargins();
+
+	// navigation bar
+	m_navbar->resize(event->size().width(), m_navbar->sizeHint().height());
+	m_navbar->move(margins.left(), margins.top());
+
+	// top header
 	m_header->resize(event->size().width(), 40 - margins.top() + 2);
-	m_header->move(margins.left(), margins.top());
+	m_header->move(margins.left(), margins.top() + m_navbar->height());
 
 	QScrollArea::resizeEvent(event);
 }
@@ -83,23 +90,23 @@ void CalendarWidget::setModel(QAbstractItemModel *model) {
 	}
 }
 
-void CalendarWidget::dataChanged(const QModelIndex & topLeft, const  QModelIndex & bottomRight) {
+void CalendarWidget::dataChanged(const QModelIndex &topLeft, const  QModelIndex &bottomRight) {
 	// TODO
 }
 
-void CalendarWidget::rowsAboutToBeRemoved(const QModelIndex & parent, int start, int end) {
+void CalendarWidget::rowsAboutToBeRemoved(const QModelIndex &parent, int start, int end) {
 	// TODO
 }
 
-void CalendarWidget::rowsAboutToBeInserted(const QModelIndex & parent, int start, int end) {
+void CalendarWidget::rowsAboutToBeInserted(const QModelIndex &parent, int start, int end) {
 	// TODO
 }
 
-void CalendarWidget::rowsRemoved(const QModelIndex & parent, int start, int end) {
+void CalendarWidget::rowsRemoved(const QModelIndex &parent, int start, int end) {
 	// TODO
 }
 
-void CalendarWidget::rowsInserted(const QModelIndex & parent, int start, int end) {
+void CalendarWidget::rowsInserted(const QModelIndex &parent, int start, int end) {
 	// TODO
 }
 

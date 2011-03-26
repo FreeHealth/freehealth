@@ -22,8 +22,6 @@ namespace Calendar {
 		/** returns the left height width for the view */
 		virtual int leftHeaderWidth() const = 0;
 
-		virtual void paintTopHeader(QPainter *painter) {};
-		virtual void paintLeftHeader(QPainter *painter) {};
 		virtual void paintBody(QPainter *painter, const QRect &visibleRect) {};
 
 		virtual QWidget *createHeaderWidget(QWidget *parent = 0) { return 0; }

@@ -29,8 +29,6 @@ namespace Calendar {
 		virtual int topHeaderHeight() const;
 		virtual int leftHeaderWidth() const;
 
-		virtual void paintTopHeader(QPainter *painter);
-		virtual void paintLeftHeader(QPainter *painter);
 		virtual void paintBody(QPainter *painter, const QRect &visibleRect);
 
 		virtual QWidget *createHeaderWidget(QWidget *parent = 0);
@@ -38,6 +36,9 @@ namespace Calendar {
 	protected:
 		virtual void paintEvent(QPaintEvent *event);
 		virtual void resizeEvent(QResizeEvent *event);
+
+	private slots:
+		void firstDateChanged();
 
 	private:
 		static int m_leftScaleWidth;

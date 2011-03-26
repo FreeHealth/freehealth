@@ -5,6 +5,7 @@
 #include <QAbstractItemModel>
 
 #include "view.h"
+#include "calendar_navbar.h"
 
 namespace Calendar {
 	class CalendarWidget : public QScrollArea
@@ -36,6 +37,7 @@ namespace Calendar {
 		void rowsInserted(const QModelIndex & parent, int start, int end);
 
 	private:
+		CalendarNavbar *m_navbar;
 		ViewType m_viewType;
 		View *m_view;
 		QWidget *m_header;
