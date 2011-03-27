@@ -303,6 +303,7 @@ enum TitleInterpret {
         const char*const  INSURANCE = QT_TRANSLATE_NOOP("tkConstants", "Insurance");
         const char*const  PERCENT = QT_TRANSLATE_NOOP("tkConstants", "Percentages");
         const char*const  DISTRULES = QT_TRANSLATE_NOOP("tkConstants", "Distance rules");
+        const char*const  ASSETSRATES = QT_TRANSLATE_NOOP("tkConstants", "Assets rates");
 
         // Database related
         const char *const SQLITE_DRIVER_NOT_AVAILABLE = QT_TRANSLATE_NOOP("tkConstants", "SQLite driver is not available.");
