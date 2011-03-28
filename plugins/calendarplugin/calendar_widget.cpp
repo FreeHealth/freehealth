@@ -20,6 +20,9 @@ CalendarWidget::CalendarWidget(QWidget *parent)
 	setViewType(View_Week);
 	setViewportMargins(0, 80, 0, 0);
 	m_navbar = new CalendarNavbar(this);
+	connect(m_navbar, SIGNAL(todayPage()), this, SLOT(todayPageRequested()));
+	connect(m_navbar, SIGNAL(previousPage()), this, SLOT(previousPageRequested()));
+	connect(m_navbar, SIGNAL(nextPage()), this, SLOT(nextPageRequested()));
 }
 
 void CalendarWidget::setViewType(ViewType value) {
@@ -49,7 +52,8 @@ void CalendarWidget::setViewType(ViewType value) {
 	setWidget(m_view);
 	if (m_header)
 		delete m_header;
-	m_header = m_view->createHeaderWidget(this);
+	m_header = (WeekHeader *) m_view->createHeaderWidget(this);
+	connect(m_view, SIGNAL(firstDateChanged()), this, SLOT(firstDateChanged()));
 }
 
 void CalendarWidget::resizeEvent(QResizeEvent *event) {
@@ -108,5 +112,21 @@ void CalendarWidget::rowsRemoved(const QModelIndex &parent, int start, int end) 
 
 void CalendarWidget::rowsInserted(const QModelIndex &parent, int start, int end) {
 	// TODO
+}
+
+void CalendarWidget::previousPageRequested() {
+	m_view->previousPage();
+}
+
+void CalendarWidget::nextPageRequested() {
+	m_view->nextPage();
+}
+
+void CalendarWidget::todayPageRequested() {
+	m_view->todayPage();
+}
+
+void CalendarWidget::firstDateChanged() {
+	m_header->setFirstDate(m_view->firstDate());
 }
 

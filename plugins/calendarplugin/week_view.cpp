@@ -58,10 +58,7 @@ WeekView::WeekView(QWidget *parent) :
 	m_refreshGrid(false) {
 	resize(10, 24 * m_hourHeight);
 
-	QDate date = QDate::currentDate();
-	if (date.dayOfWeek() > 1)
-		date = date.addDays(-(date.dayOfWeek() - 1));
-	setFirstDate(date);
+	setDate(QDate::currentDate());
 
 	CalendarItem *item = new CalendarItem(this);
 	item->resize(100, m_hourHeight);
@@ -159,5 +156,16 @@ QWidget *WeekView::createHeaderWidget(QWidget *parent) {
 }
 
 void WeekView::firstDateChanged() {
-	qDebug("first date changed");
+}
+
+QDate WeekView::getFirstDateByRandomDate(const QDate &randomDate) {
+	return randomDate.addDays(-randomDate.dayOfWeek() + 1);
+}
+
+void WeekView::previousPage() {
+	setDate(m_firstDate.addDays(-7));
+}
+
+void WeekView::nextPage() {
+	setDate(m_firstDate.addDays(7));
 }

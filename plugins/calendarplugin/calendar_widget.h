@@ -5,6 +5,7 @@
 #include <QAbstractItemModel>
 
 #include "view.h"
+#include "week_view.h" // TMP, for header
 #include "calendar_navbar.h"
 
 namespace Calendar {
@@ -35,12 +36,16 @@ namespace Calendar {
 		void rowsAboutToBeInserted(const QModelIndex & parent, int start, int end);
 		void rowsRemoved(const QModelIndex & parent, int start, int end);
 		void rowsInserted(const QModelIndex & parent, int start, int end);
+		void previousPageRequested();
+		void nextPageRequested();
+		void firstDateChanged();
+		void todayPageRequested();
 
 	private:
 		CalendarNavbar *m_navbar;
 		ViewType m_viewType;
 		View *m_view;
-		QWidget *m_header;
+		WeekHeader *m_header;
 		QAbstractItemModel *m_model;
 	};
 }

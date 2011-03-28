@@ -12,6 +12,8 @@ namespace Calendar {
 
 		virtual int topHeaderHeight() const;
 		virtual int leftHeaderWidth() const;
+	protected:
+		QDate getFirstDateByRandomDate(const QDate &randomDate);
 	};
 }
 

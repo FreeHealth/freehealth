@@ -1,14 +1,15 @@
 #include "day_view.h"
 
-namespace Calendar {
+using namespace Calendar;
 
-	int DayView::topHeaderHeight() const {
-		return 0;
-	}
-
-	int DayView::leftHeaderWidth() const {
-		return 0;
-	}
-
+int DayView::topHeaderHeight() const {
+	return 0;
 }
 
+int DayView::leftHeaderWidth() const {
+	return 0;
+}
+
+QDate DayView::getFirstDateByRandomDate(const QDate &randomDate) {
+	return randomDate;
+}

@@ -1,5 +1,6 @@
 #include <QHBoxLayout>
 #include <QPushButton>
+#include <QLabel>
 
 #include "calendar_navbar.h"
 
@@ -13,14 +14,17 @@ CalendarNavbar::CalendarNavbar(QWidget *parent) :
 	this->setPalette(palette);
 
 	QHBoxLayout *layout = new QHBoxLayout(this);
-	m_todayButton = new QPushButton(tr("Today"));
-	layout->addWidget(m_todayButton);
-	m_previousPageButton = new QPushButton("<<");
-	layout->addWidget(m_previousPageButton);
-	m_nextPageButton = new QPushButton(">>");
-	layout->addWidget(m_nextPageButton);
+	layout->addWidget(m_todayButton = new QPushButton(tr("Today")));
+	layout->addWidget(m_previousPageButton = new QPushButton("<<"));
+	layout->addWidget(m_nextPageButton = new QPushButton(">>"));
+	layout->addWidget(m_dateLabel = new QLabel);
 	layout->addStretch();
 	layout->addWidget(m_dayButton = new QPushButton(tr("Day")));
 	layout->addWidget(m_weekButton = new QPushButton(tr("Week")));
 	layout->addWidget(m_monthButton = new QPushButton(tr("Month")));
+
+	// signal/slot connections
+	connect(m_todayButton, SIGNAL(clicked()), this, SIGNAL(todayPage()));
+	connect(m_previousPageButton, SIGNAL(clicked()), this, SIGNAL(previousPage()));
+	connect(m_nextPageButton, SIGNAL(clicked()), this, SIGNAL(nextPage()));
 }

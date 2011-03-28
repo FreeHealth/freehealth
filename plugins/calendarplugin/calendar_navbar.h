@@ -4,6 +4,7 @@
 #include <QWidget>
 
 class QPushButton;
+class QLabel;
 
 namespace Calendar {
 	class CalendarNavbar : public QWidget
@@ -12,6 +13,13 @@ namespace Calendar {
 	public:
 		CalendarNavbar(QWidget *parent = 0);
 
+	public slots:
+
+	signals:
+		void todayPage();
+		void previousPage();
+		void nextPage();
+
 	private:
 		QPushButton *m_todayButton;
 		QPushButton *m_previousPageButton;
@@ -19,6 +27,7 @@ namespace Calendar {
 		QPushButton *m_dayButton;
 		QPushButton *m_weekButton;
 		QPushButton *m_monthButton;
+		QLabel *m_dateLabel; 
 	};
 }
 
