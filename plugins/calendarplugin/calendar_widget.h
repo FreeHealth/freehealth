@@ -4,6 +4,7 @@
 #include <QScrollArea>
 #include <QAbstractItemModel>
 
+#include "common.h"
 #include "view.h"
 #include "week_view.h" // TMP, for header
 #include "calendar_navbar.h"
@@ -13,19 +14,13 @@ namespace Calendar {
 	{
 		Q_OBJECT
 	public:
-		enum ViewType {
-			View_Day,
-			View_Week,
-			View_Month
-		};
-
 		CalendarWidget(QWidget *parent = 0);
-
-		ViewType viewType() const { return m_viewType; }
-		void setViewType(ViewType value);
 
 		QAbstractItemModel *model() const { return m_model; }
 		void setModel(QAbstractItemModel *model);
+
+		Calendar::ViewType viewType() const { return m_navbar->viewType(); }
+		void setViewType(Calendar::ViewType viewType);
 
 	protected:
 		void resizeEvent(QResizeEvent *event);
@@ -36,10 +31,10 @@ namespace Calendar {
 		void rowsAboutToBeInserted(const QModelIndex & parent, int start, int end);
 		void rowsRemoved(const QModelIndex & parent, int start, int end);
 		void rowsInserted(const QModelIndex & parent, int start, int end);
-		void previousPageRequested();
-		void nextPageRequested();
+
+		// navigation bar slots
 		void firstDateChanged();
-		void todayPageRequested();
+		void viewTypeChanged();
 
 	private:
 		CalendarNavbar *m_navbar;

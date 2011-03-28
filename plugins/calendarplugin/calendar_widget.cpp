@@ -17,43 +17,12 @@ CalendarWidget::CalendarWidget(QWidget *parent)
 	  m_header(0),
 	  m_model(0) {
 	setVerticalScrollBarPolicy(Qt::ScrollBarAsNeeded);
-	setViewType(View_Week);
 	setViewportMargins(0, 80, 0, 0);
 	m_navbar = new CalendarNavbar(this);
-	connect(m_navbar, SIGNAL(todayPage()), this, SLOT(todayPageRequested()));
-	connect(m_navbar, SIGNAL(previousPage()), this, SLOT(previousPageRequested()));
-	connect(m_navbar, SIGNAL(nextPage()), this, SLOT(nextPageRequested()));
-}
-
-void CalendarWidget::setViewType(ViewType value) {
-	if (value == m_viewType)
-		return;
-
-	m_viewType = value;
-
-	if (m_view)
-		delete m_view;
-
-	// TODO : refresh the calendar
-	switch (m_viewType) {
-	case View_Day:
-		m_view = new DayView;
-		break;
-	case View_Week:
-		m_view = new WeekView;
-		break;
-	case View_Month:
-		m_view = new MonthView;
-		break;
-	default:
-		Q_ASSERT(true); // should never happend :)
-	}
-
-	setWidget(m_view);
-	if (m_header)
-		delete m_header;
-	m_header = (WeekHeader *) m_view->createHeaderWidget(this);
-	connect(m_view, SIGNAL(firstDateChanged()), this, SLOT(firstDateChanged()));
+	connect(m_navbar, SIGNAL(firstDateChanged()), this, SLOT(firstDateChanged()));
+	connect(m_navbar, SIGNAL(viewTypeChanged()), this, SLOT(viewTypeChanged()));
+	m_navbar->setViewType(Calendar::View_Week);
+	m_navbar->setDate(QDate::currentDate());
 }
 
 void CalendarWidget::resizeEvent(QResizeEvent *event) {
@@ -114,19 +83,34 @@ void CalendarWidget::rowsInserted(const QModelIndex &parent, int start, int end)
 	// TODO
 }
 
-void CalendarWidget::previousPageRequested() {
-	m_view->previousPage();
-}
-
-void CalendarWidget::nextPageRequested() {
-	m_view->nextPage();
-}
-
-void CalendarWidget::todayPageRequested() {
-	m_view->todayPage();
-}
-
 void CalendarWidget::firstDateChanged() {
-	m_header->setFirstDate(m_view->firstDate());
+	m_header->setFirstDate(m_navbar->firstDate());
+	m_view->setFirstDate(m_navbar->firstDate());
 }
 
+void CalendarWidget::viewTypeChanged() {
+	Calendar::ViewType viewType = m_navbar->viewType();
+	switch (viewType) {
+	case View_Day:
+		m_view = new DayView;
+		break;
+	case View_Week:
+		m_view = new WeekView;
+		break;
+	case View_Month:
+		m_view = new MonthView;
+		break;
+	default:
+		Q_ASSERT(true); // should never happend :)
+	}
+
+	setWidget(m_view);
+	if (m_header)
+		delete m_header;
+	m_header = (WeekHeader *) m_view->createHeaderWidget(this);
+	m_header->show();
+}
+
+void CalendarWidget::setViewType(Calendar::ViewType viewType) {
+	m_navbar->setViewType(viewType);
+}

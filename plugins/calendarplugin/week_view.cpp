@@ -5,6 +5,7 @@
 
 #include "week_view.h"
 #include "calendar_item.h"
+#include "common.h"
 
 using namespace Calendar;
 
@@ -58,13 +59,11 @@ WeekView::WeekView(QWidget *parent) :
 	m_refreshGrid(false) {
 	resize(10, 24 * m_hourHeight);
 
-	setDate(QDate::currentDate());
+	setFirstDate(Calendar::getFirstDateByRandomDate(Calendar::View_Week, QDate::currentDate()));
 
 	CalendarItem *item = new CalendarItem(this);
 	item->resize(100, m_hourHeight);
 	item->move(m_leftScaleWidth + 1, 0);
-
-	connect(this, SIGNAL(firstDateChanged()), this, SLOT(firstDateChanged()));
 }
 
 int WeekView::topHeaderHeight() const {
@@ -153,19 +152,4 @@ QWidget *WeekView::createHeaderWidget(QWidget *parent) {
 	WeekHeader *widget = new WeekHeader(parent);
 	widget->setFirstDate(m_firstDate);
 	return widget;
-}
-
-void WeekView::firstDateChanged() {
-}
-
-QDate WeekView::getFirstDateByRandomDate(const QDate &randomDate) {
-	return randomDate.addDays(-randomDate.dayOfWeek() + 1);
-}
-
-void WeekView::previousPage() {
-	setDate(m_firstDate.addDays(-7));
-}
-
-void WeekView::nextPage() {
-	setDate(m_firstDate.addDays(7));
 }

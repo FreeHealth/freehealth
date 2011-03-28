@@ -2,17 +2,10 @@
 
 using namespace Calendar;
 
-void View::setDate(const QDate &date) {
-	QDate firstDate = getFirstDateByRandomDate(date);
+void View::setFirstDate(const QDate &firstDate) {
 	if (m_firstDate == firstDate)
 		return;
 
 	m_firstDate = firstDate;
 	update();
-
-	emit firstDateChanged();
-}
-
-void View::todayPage() {
-	setDate(QDate::currentDate());
 }

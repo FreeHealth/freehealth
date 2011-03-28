@@ -9,7 +9,3 @@ int DayView::topHeaderHeight() const {
 int DayView::leftHeaderWidth() const {
 	return 0;
 }
-
-QDate DayView::getFirstDateByRandomDate(const QDate &randomDate) {
-	return randomDate;
-}

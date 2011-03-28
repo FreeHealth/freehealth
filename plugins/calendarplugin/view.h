@@ -27,24 +27,13 @@ namespace Calendar {
 		virtual QWidget *createHeaderWidget(QWidget *parent = 0) { return 0; }
 
 		/** sets a date for the view
-		 * The component computes the correct days interval to display this date
 		 */
-		void setDate(const QDate &date);
+		void setFirstDate(const QDate &firstDate);
 
 		const QDate &firstDate() const { return m_firstDate; }
 
-		virtual void previousPage() {}
-		virtual void nextPage() {}
-		void todayPage();
-
-	signals:
-		void firstDateChanged();
-
 	protected:
 		QDate m_firstDate;
-
-		/** this function computes the first interval date used by the view */
-		virtual QDate getFirstDateByRandomDate(const QDate &randomDate) = 0;
 	};
 }
 

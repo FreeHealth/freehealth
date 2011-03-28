@@ -33,13 +33,9 @@ namespace Calendar {
 
 		virtual QWidget *createHeaderWidget(QWidget *parent = 0);
 
-		virtual void previousPage();
-		virtual void nextPage();
-
 	protected:
 		virtual void paintEvent(QPaintEvent *event);
 		virtual void resizeEvent(QResizeEvent *event);
-		QDate getFirstDateByRandomDate(const QDate &randomDate);
 
 	private slots:
 		void firstDateChanged();

@@ -13,7 +13,8 @@ HEADERS +=  \
     $${PWD}/week_view.h \
     $${PWD}/month_view.h \
     $${PWD}/calendar_item.h \
-    $${PWD}/calendar_navbar.h
+    $${PWD}/calendar_navbar.h \
+    $${PWD}/common.h
 
 SOURCES += \
     $${PWD}/calendarplugin.cpp \
@@ -24,7 +25,8 @@ SOURCES += \
     $${PWD}/week_view.cpp \
     $${PWD}/month_view.cpp \
     $${PWD}/calendar_item.cpp \
-    $${PWD}/calendar_navbar.cpp
+    $${PWD}/calendar_navbar.cpp \
+    $${PWD}/common.cpp
 
 TRANSLATIONS += $${SOURCES_TRANSLATIONS}/calendarplugin_fr.ts \
                 $${SOURCES_TRANSLATIONS}/calendarplugin_de.ts \

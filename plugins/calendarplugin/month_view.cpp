@@ -1,4 +1,5 @@
 #include "month_view.h"
+#include "week_view.h" // TMP
 
 using namespace Calendar;
 
@@ -10,7 +11,8 @@ int MonthView::leftHeaderWidth() const {
 	return 0;
 }
 
-QDate MonthView::getFirstDateByRandomDate(const QDate &randomDate) {
-	QDate date = QDate::currentDate();
-	return date.addDays(- date.day() + 1);
+QWidget *MonthView::createHeaderWidget(QWidget *parent) {
+	WeekHeader *widget = new WeekHeader(parent);
+	widget->setFirstDate(m_firstDate);
+	return widget;
 }
