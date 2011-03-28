@@ -86,8 +86,7 @@ void CalendarNavbar::previousPage() {
 		setDate(m_firstDate.addDays(-7));
 		break;
 	case View_Month:
-		// TODO
-		setDate(m_firstDate); // WRONG
+		setDate(m_firstDate.addMonths(-1));
 		break;
 	default: // should never happend
 		break;
@@ -103,8 +102,7 @@ void CalendarNavbar::nextPage() {
 		setDate(m_firstDate.addDays(7));
 		break;
 	case View_Month:
-		// TODO
-		setDate(m_firstDate); // WRONG
+		setDate(m_firstDate.addMonths(1));
 		break;
 	default: // should never happend
 		break;
