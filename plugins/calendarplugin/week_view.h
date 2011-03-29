@@ -4,20 +4,16 @@
 #include "view.h"
 
 namespace Calendar {
-
-	class WeekHeader : public QWidget {
+	class WeekHeader : public ViewHeader
+	{
 		Q_OBJECT
 	public:
-		WeekHeader(QWidget *parent = 0) : QWidget(parent) {}
+		WeekHeader(QWidget *parent = 0) : ViewHeader(parent) {}
 
-		const QDate &firstDate() const { return m_firstDate; }
-		void setFirstDate(const QDate &date);
+		virtual QSize sizeHint() const;
 
 	protected:
 		void paintEvent(QPaintEvent *event);
-
-	private:
-		QDate m_firstDate;
 	};
 
 	class WeekView : public View

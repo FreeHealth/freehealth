@@ -1,9 +1,29 @@
 #include <QPainter>
 #include <QPixmapCache>
+#include <QResizeEvent>
 
 #include "view.h"
 
 using namespace Calendar;
+
+ViewHeader::ViewHeader(QWidget *parent) : QWidget(parent)
+{
+	setSizePolicy(QSizePolicy::Expanding, QSizePolicy::Fixed);
+}
+
+void ViewHeader::setFirstDate(const QDate &date) {
+	if (date == m_firstDate)
+		return;
+
+	m_firstDate = date;
+	update();
+}
+
+void ViewHeader::resizeEvent(QResizeEvent *event) {
+	emit resized(event->size());
+}
+
+///////////////////////////////
 
 void View::setFirstDate(const QDate &firstDate) {
 	if (m_firstDate == firstDate)

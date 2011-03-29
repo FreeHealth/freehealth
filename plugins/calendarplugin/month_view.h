@@ -4,6 +4,18 @@
 #include "view.h"
 
 namespace Calendar {
+	class MonthHeader : public ViewHeader
+	{
+		Q_OBJECT
+	public:
+		MonthHeader(QWidget *parent = 0) : ViewHeader(parent) {}
+
+		virtual QSize sizeHint() const;
+
+	protected:
+		void paintEvent(QPaintEvent *event);
+	};
+
 	class MonthView : public View
 	{
 		Q_OBJECT

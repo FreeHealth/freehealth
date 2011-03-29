@@ -6,7 +6,6 @@
 
 #include "common.h"
 #include "view.h"
-#include "week_view.h" // TMP, for header
 #include "calendar_navbar.h"
 
 namespace Calendar {
@@ -26,6 +25,7 @@ namespace Calendar {
 		void resizeEvent(QResizeEvent *event);
 
 	private slots:
+		// for model
 		void dataChanged(const QModelIndex & topLeft, const  QModelIndex & bottomRight);
 		void rowsAboutToBeRemoved(const QModelIndex & parent, int start, int end);
 		void rowsAboutToBeInserted(const QModelIndex & parent, int start, int end);
@@ -36,11 +36,14 @@ namespace Calendar {
 		void firstDateChanged();
 		void viewTypeChanged();
 
+		// header
+		void headerResized(const QSize &size);
+
 	private:
 		CalendarNavbar *m_navbar;
 		ViewType m_viewType;
 		View *m_view;
-		WeekHeader *m_header;
+		ViewHeader *m_header;
 		QAbstractItemModel *m_model;
 	};
 }

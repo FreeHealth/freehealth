@@ -1,9 +1,33 @@
 #include <QPainter>
 
 #include "month_view.h"
-#include "week_view.h" // TMP
 
 using namespace Calendar;
+
+QSize MonthHeader::sizeHint() const {
+	return QSize(0, 20);
+}
+
+void MonthHeader::paintEvent(QPaintEvent *event) {
+	QPainter painter(this);
+	painter.fillRect(rect(), QColor(220, 220, 255));
+	QPen pen = painter.pen();
+	pen.setColor(QColor(150, 150, 255));
+	painter.setPen(pen);
+	QRect r = rect();
+	r.adjust(0, 0, -1, 1);
+	painter.drawLine(0, r.bottom(), r.right(), r.bottom());
+
+	// text
+	// vertical lines
+	int containWidth = rect().width();
+	for (int i = 0; i < 7; ++i) {
+		QRect r(QPoint((i * containWidth) / 7, 0), QPoint(((i + 1) * containWidth) / 7 - 1 + 2, rect().height())); // +2 is a vertical correction to not be stucked to the top line
+		painter.drawText(r, Qt::AlignHCenter | Qt::AlignTop, QDate::shortDayName(i + 1));
+	}
+}
+
+/////////////////////////////////////////////////////////////
 
 MonthView::MonthView(QWidget *parent) : View(parent) {
 	setSizePolicy(QSizePolicy::Expanding, QSizePolicy::Expanding);
@@ -18,7 +42,7 @@ int MonthView::leftHeaderWidth() const {
 }
 
 QWidget *MonthView::createHeaderWidget(QWidget *parent) {
-	WeekHeader *widget = new WeekHeader(parent);
+	MonthHeader *widget = new MonthHeader(parent);
 	widget->setFirstDate(m_firstDate);
 	return widget;
 }

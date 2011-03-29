@@ -34,7 +34,7 @@ void CalendarWidget::resizeEvent(QResizeEvent *event) {
 	m_navbar->move(margins.left(), margins.top());
 
 	// top header
-	m_header->resize(event->size().width(), 40 - margins.top() + 2);
+	m_header->resize(event->size().width(), m_header->sizeHint().height());
 	m_header->move(margins.left(), margins.top() + m_navbar->height());
 
 	QScrollArea::resizeEvent(event);
@@ -108,9 +108,16 @@ void CalendarWidget::viewTypeChanged() {
 	if (m_header)
 		delete m_header;
 	m_header = (WeekHeader *) m_view->createHeaderWidget(this);
+	m_header->setFirstDate(m_navbar->firstDate());
+	connect(m_header, SIGNAL(resized(const QSize&)), this, SLOT(headerResized(const QSize&)));
 	m_header->show();
+	setViewportMargins(0, m_navbar->sizeHint().height() + m_header->sizeHint().height(), 0, 0);
 }
 
 void CalendarWidget::setViewType(Calendar::ViewType viewType) {
 	m_navbar->setViewType(viewType);
+}
+
+void CalendarWidget::headerResized(const QSize &size) {
+	setViewportMargins(0, m_navbar->sizeHint().height() + m_header->sizeHint().height(), 0, 0);
 }

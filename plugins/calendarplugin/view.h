@@ -8,6 +8,24 @@ class QPainter;
 class QRect;
 
 namespace Calendar {
+	class ViewHeader : public QWidget {
+		Q_OBJECT
+	public:
+		ViewHeader(QWidget *parent = 0);
+
+		const QDate &firstDate() const { return m_firstDate; }
+		void setFirstDate(const QDate &date);
+
+	signals:
+		void resized(const QSize &size);
+
+	protected:
+		virtual void resizeEvent(QResizeEvent *event);
+
+	private:
+		QDate m_firstDate;
+	};
+
 	/**
 	 * \brief a view is an abstract class which defines common things about calendar views (headers, body, etc)
 	 */

@@ -12,6 +12,10 @@ using namespace Calendar;
 int WeekView::m_leftScaleWidth = 60;
 int WeekView::m_hourHeight = 40;
 
+QSize WeekHeader::sizeHint() const {
+	return QSize(0, 40);
+}
+
 void WeekHeader::paintEvent(QPaintEvent *event) {
 	QPainter painter(this);
 	painter.fillRect(rect(), QColor(220, 220, 255));
@@ -27,29 +31,21 @@ void WeekHeader::paintEvent(QPaintEvent *event) {
 	int containWidth = rect().width() - 60;
 	QPen oldPen = painter.pen();
 	QFont oldFont = painter.font();
-	QDate date = m_firstDate;
+	QDate date = firstDate();
 	QDate now = QDate::currentDate();
 	for (int i = 0; i < 7; ++i) {
-		QRect r(QPoint(60 + (i * containWidth) / 7, 0), QPoint(60 + ((i + 1) * containWidth) / 7 - 1, rect().height()));
+		QRect r(QPoint(60 + (i * containWidth) / 7, 0), QPoint(60 + ((i + 1) * containWidth) / 7 - 1 + 2, rect().height())); // +2 is a vertical correction to not be stucked to the top line
 		if (date == now){
 			painter.fillRect(r, QColor(200,200,255));
 			QPen pen = painter.pen();;
 			pen.setColor(QColor(0, 0, 255));
 			painter.setPen(pen);
 		}
-		painter.drawText(r, Qt::AlignCenter | Qt::AlignTop, date.toString("ddd d/M").toLower());
+		painter.drawText(r, Qt::AlignHCenter | Qt::AlignTop, date.toString("ddd d/M").toLower());
 		painter.setPen(oldPen);
 		painter.setFont(oldFont);
 		date = date.addDays(1);
 	}
-}
-
-void WeekHeader::setFirstDate(const QDate &date) {
-	if (date == m_firstDate)
-		return;
-
-	m_firstDate = date;
-	update();
 }
 
 /////////////////////////////////////////////////////////////////

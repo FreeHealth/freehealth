@@ -9,6 +9,7 @@ using namespace Calendar;
 
 CalendarNavbar::CalendarNavbar(QWidget *parent) :
 	QWidget(parent) {
+	setSizePolicy(QSizePolicy::Expanding, QSizePolicy::Fixed);
 	setAutoFillBackground(true);
 	QPalette palette = this->palette();
 	palette.setColor(QPalette::Window, QColor(180, 180, 255));
