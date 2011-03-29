@@ -17,7 +17,7 @@ QSize WeekHeader::sizeHint() const {
 	return QSize(0, 40);
 }
 
-void WeekHeader::paintEvent(QPaintEvent *event) {
+void WeekHeader::paintEvent(QPaintEvent *) {
 	QPainter painter(this);
 	painter.fillRect(rect(), QColor(220, 220, 255));
 	QPen pen = painter.pen();
@@ -29,7 +29,6 @@ void WeekHeader::paintEvent(QPaintEvent *event) {
 
 	// text
 	// vertical lines
-//	int containWidth = rect().width() - 60;
 	int containWidth = m_scrollArea->viewport()->width() - 60;
 	QPen oldPen = painter.pen();
 	QFont oldFont = painter.font();
@@ -43,6 +42,7 @@ void WeekHeader::paintEvent(QPaintEvent *event) {
 			pen.setColor(QColor(0, 0, 255));
 			painter.setPen(pen);
 		}
+		r.adjust(0, 2, 0, 0);
 		painter.drawText(r, Qt::AlignHCenter | Qt::AlignTop, date.toString("ddd d/M").toLower());
 		painter.setPen(oldPen);
 		painter.setFont(oldFont);
@@ -52,8 +52,16 @@ void WeekHeader::paintEvent(QPaintEvent *event) {
 
 /////////////////////////////////////////////////////////////////
 
+void HourWidget::paintEvent(QPaintEvent *) {
+	QPainter painter(this);
+	painter.fillRect(rect(), QColor(255, 150, 150));
+}
+
+/////////////////////////////////////////////////////////////////
+
 WeekView::WeekView(QWidget *parent) :
-	View(parent) {
+	View(parent),
+	m_hourWidget(0) {
 	setSizePolicy(QSizePolicy::Expanding, QSizePolicy::Fixed);
 
 	setFirstDate(Calendar::getFirstDateByRandomDate(Calendar::View_Week, QDate::currentDate()));
@@ -82,6 +90,14 @@ void WeekView::paintBody(QPainter *painter, const QRect &visibleRect) {
 	pen.setCapStyle(Qt::FlatCap);
 	painter->setPen(pen);
 	int containWidth = visibleRect.width() - m_leftScaleWidth;
+
+	// draw current day?
+	QDate now = QDate::currentDate();
+	if (now >= m_firstDate && now <= m_firstDate.addDays(7))
+		painter->fillRect(m_leftScaleWidth + ((now.dayOfWeek() - 1) * containWidth) / 7, 0,
+						  (now.dayOfWeek() * containWidth) / 7 - ((now.dayOfWeek() - 1) * containWidth) / 7, visibleRect.height(),
+						  QColor(255, 255, 200));
+
 	// vertical lines
 	for (int i = 0; i < 7; ++i) {
 		painter->drawLine(m_leftScaleWidth + (i * containWidth) / 7, 0,
@@ -122,6 +138,26 @@ void WeekView::paintBody(QPainter *painter, const QRect &visibleRect) {
 		QRect scaleRect(QPoint(0, i * m_hourHeight + 1),
 						QPoint(m_leftScaleWidth - 3, (i + 1) * m_hourHeight - 1));
 		painter->drawText(scaleRect, Qt::AlignRight, QString("%1:00").arg(i, 2, 10, QChar('0')));
+	}
+
+	// hour widget
+	if (now >= m_firstDate && now <= m_firstDate.addDays(7)) {
+		if (!m_hourWidget)
+			m_hourWidget = new HourWidget(this);
+		// move and resize
+		m_hourWidget->resize((now.dayOfWeek() * containWidth) / 7 - ((now.dayOfWeek() - 1) * containWidth) / 7, m_hourWidget->sizeHint().height());
+
+		// compute
+		QTime nowTime = QTime::currentTime();
+		int y = (rect().height() * nowTime.hour()) / 24;
+		int minY = (((rect().height() * (nowTime.hour() + 1)) / 24 - (rect().height() * nowTime.hour()) / 24) * nowTime.minute()) / 60;
+
+		m_hourWidget->move(m_leftScaleWidth + ((now.dayOfWeek() - 1) * containWidth) / 7, y + minY);
+		m_hourWidget->show();
+
+	} else if (m_hourWidget) {
+		delete m_hourWidget;
+		m_hourWidget = 0;
 	}
 }
 

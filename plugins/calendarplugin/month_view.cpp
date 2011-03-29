@@ -62,12 +62,28 @@ void MonthView::paintBody(QPainter *painter, const QRect &visibleRect) {
 	lastDay = lastDay.addDays(7 - lastDay.dayOfWeek());
 
 	// compute week count in way to englobe all month days
+	QDate now = QDate::currentDate();
 	int weekCount = 0;
-	for (QDate date = firstDay; date <= lastDay; date = date.addDays(7))
+	int focusRow = -1;
+	for (QDate date = firstDay; date <= lastDay; date = date.addDays(7)) {
+		if (now >= date && now < date.addDays(7)) {
+			focusRow = weekCount;
+		}
 		weekCount++;
+	}
 
 	int horiAmount = visibleRect.width() - 6; // total width without lines width
 	int vertiAmount = visibleRect.height() - weekCount + 1; // total height without lines height
+
+	// draw current day?
+	if (focusRow >= 0) {
+		int i = now.dayOfWeek();
+		int j = focusRow;
+		QRect r((i * horiAmount) / 7 + i, (j * vertiAmount) / weekCount + j,
+				((i + 1) * horiAmount) / 7 - (i * horiAmount) / 7,
+				((j + 1) * vertiAmount) / weekCount - (j * vertiAmount) / weekCount);
+		painter->fillRect(r, QColor(255, 255, 200));
+	}
 
 	// vertical lines
 	for (int i = 1; i < 7; ++i)

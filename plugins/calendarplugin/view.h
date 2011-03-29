@@ -45,7 +45,7 @@ namespace Calendar {
 		/** returns the left height width for the view */
 		virtual int leftHeaderWidth() const = 0;
 
-		virtual QWidget *createHeaderWidget(QWidget *parent = 0) { return 0; }
+		virtual QWidget *createHeaderWidget(QWidget *parent = 0) { Q_UNUSED(parent); return 0; }
 
 		/** sets a date for the view
 		 */
@@ -58,7 +58,7 @@ namespace Calendar {
 
 		QPixmap generatePixmap();
 
-		virtual void paintBody(QPainter *painter, const QRect &visibleRect) {};
+		virtual void paintBody(QPainter *, const QRect &) {};
 		virtual void paintEvent(QPaintEvent *event);
 		virtual void resizeEvent(QResizeEvent *event);
 

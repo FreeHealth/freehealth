@@ -60,22 +60,36 @@ void CalendarWidget::setModel(QAbstractItemModel *model) {
 }
 
 void CalendarWidget::dataChanged(const QModelIndex &topLeft, const  QModelIndex &bottomRight) {
+	Q_UNUSED(topLeft);
+	Q_UNUSED(bottomRight);
 	// TODO
 }
 
 void CalendarWidget::rowsAboutToBeRemoved(const QModelIndex &parent, int start, int end) {
+	Q_UNUSED(parent);
+	Q_UNUSED(start);
+	Q_UNUSED(end);
 	// TODO
 }
 
 void CalendarWidget::rowsAboutToBeInserted(const QModelIndex &parent, int start, int end) {
+	Q_UNUSED(parent);
+	Q_UNUSED(start);
+	Q_UNUSED(end);
 	// TODO
 }
 
 void CalendarWidget::rowsRemoved(const QModelIndex &parent, int start, int end) {
+	Q_UNUSED(parent);
+	Q_UNUSED(start);
+	Q_UNUSED(end);
 	// TODO
 }
 
 void CalendarWidget::rowsInserted(const QModelIndex &parent, int start, int end) {
+	Q_UNUSED(parent);
+	Q_UNUSED(start);
+	Q_UNUSED(end);
 	// TODO
 }
 

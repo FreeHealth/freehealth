@@ -16,6 +16,20 @@ namespace Calendar {
 		void paintEvent(QPaintEvent *event);
 	};
 
+	class HourWidget : public QWidget
+	{
+		Q_OBJECT
+	public:
+		HourWidget(QWidget *parent = 0) : QWidget(parent) {
+			setSizePolicy(QSizePolicy::Expanding, QSizePolicy::Fixed);
+		}
+
+		virtual QSize sizeHint() const { return QSize(0, 2); }
+
+	protected:
+		void paintEvent(QPaintEvent *event);
+	};
+
 	class WeekView : public View
 	{
 		Q_OBJECT
@@ -36,6 +50,7 @@ namespace Calendar {
 		void firstDateChanged();
 
 	private:
+		HourWidget *m_hourWidget;
 		static int m_leftScaleWidth;
 		static int m_hourHeight;
 	};
