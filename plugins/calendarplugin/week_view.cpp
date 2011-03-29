@@ -2,6 +2,7 @@
 #include <QPainter>
 #include <QDate>
 #include <QPixmapCache>
+#include <QScrollArea>
 
 #include "week_view.h"
 #include "calendar_item.h"
@@ -28,13 +29,14 @@ void WeekHeader::paintEvent(QPaintEvent *event) {
 
 	// text
 	// vertical lines
-	int containWidth = rect().width() - 60;
+//	int containWidth = rect().width() - 60;
+	int containWidth = m_scrollArea->viewport()->width() - 60;
 	QPen oldPen = painter.pen();
 	QFont oldFont = painter.font();
 	QDate date = firstDate();
 	QDate now = QDate::currentDate();
 	for (int i = 0; i < 7; ++i) {
-		QRect r(QPoint(60 + (i * containWidth) / 7, 0), QPoint(60 + ((i + 1) * containWidth) / 7 - 1 + 2, rect().height())); // +2 is a vertical correction to not be stucked to the top line
+		QRect r(QPoint(60 + (i * containWidth) / 7, 0), QPoint(60 + ((i + 1) * containWidth) / 7, rect().height())); // +2 is a vertical correction to not be stucked to the top line
 		if (date == now){
 			painter.fillRect(r, QColor(200,200,255));
 			QPen pen = painter.pen();;

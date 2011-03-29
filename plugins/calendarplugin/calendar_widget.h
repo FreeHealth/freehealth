@@ -8,8 +8,10 @@
 #include "view.h"
 #include "calendar_navbar.h"
 
+class QVBoxLayout;
+
 namespace Calendar {
-	class CalendarWidget : public QScrollArea
+	class CalendarWidget : public QWidget
 	{
 		Q_OBJECT
 	public:
@@ -21,8 +23,8 @@ namespace Calendar {
 		Calendar::ViewType viewType() const { return m_navbar->viewType(); }
 		void setViewType(Calendar::ViewType viewType);
 
-	protected:
-		void resizeEvent(QResizeEvent *event);
+/*	protected:
+	void resizeEvent(QResizeEvent *event);*/
 
 	private slots:
 		// for model
@@ -37,9 +39,11 @@ namespace Calendar {
 		void viewTypeChanged();
 
 		// header
-		void headerResized(const QSize &size);
+//		void headerResized(const QSize &size);
 
 	private:
+		QVBoxLayout *m_mainLayout;
+		QScrollArea *m_scrollArea;
 		CalendarNavbar *m_navbar;
 		ViewType m_viewType;
 		View *m_view;

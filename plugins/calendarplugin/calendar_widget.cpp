@@ -1,8 +1,8 @@
 #include <QPainter>
 #include <QPaintEvent>
 #include <QRect>
-#include <QScrollBar>
 #include <QPushButton>
+#include <QVBoxLayout>
 
 #include "calendar_widget.h"
 #include "day_view.h"
@@ -12,32 +12,29 @@
 using namespace Calendar;
 
 CalendarWidget::CalendarWidget(QWidget *parent)
-	: QScrollArea(parent),
+	: QWidget(parent),
 	  m_view(0),
 	  m_header(0),
 	  m_model(0) {
-	setVerticalScrollBarPolicy(Qt::ScrollBarAsNeeded);
-	setWidgetResizable(true);
-	setViewportMargins(0, 80, 0, 0);
+	m_mainLayout = new QVBoxLayout(this);
+	m_mainLayout->setContentsMargins(0, 0, 0, 0);
+	m_mainLayout->setSpacing(0);
+
+	// scroll area
+	m_scrollArea = new QScrollArea;
+	m_scrollArea->setVerticalScrollBarPolicy(Qt::ScrollBarAsNeeded);
+	m_scrollArea->setWidgetResizable(true);
+	m_scrollArea->setFrameShape(QFrame::NoFrame);
+
+	// navigation bar
 	m_navbar = new CalendarNavbar(this);
 	connect(m_navbar, SIGNAL(firstDateChanged()), this, SLOT(firstDateChanged()));
 	connect(m_navbar, SIGNAL(viewTypeChanged()), this, SLOT(viewTypeChanged()));
 	m_navbar->setViewType(Calendar::View_Week);
 	m_navbar->setDate(QDate::currentDate());
-}
+	m_mainLayout->insertWidget(0, m_navbar);
 
-void CalendarWidget::resizeEvent(QResizeEvent *event) {
-	QMargins margins = contentsMargins();
-
-	// navigation bar
-	m_navbar->resize(event->size().width(), m_navbar->sizeHint().height());
-	m_navbar->move(margins.left(), margins.top());
-
-	// top header
-	m_header->resize(event->size().width(), m_header->sizeHint().height());
-	m_header->move(margins.left(), margins.top() + m_navbar->height());
-
-	QScrollArea::resizeEvent(event);
+	m_mainLayout->addWidget(m_scrollArea);
 }
 
 void CalendarWidget::setModel(QAbstractItemModel *model) {
@@ -103,21 +100,16 @@ void CalendarWidget::viewTypeChanged() {
 		Q_ASSERT(true); // should never happend :)
 	}
 
-	setWidget(m_view);
+	m_scrollArea->setWidget(m_view);
 	m_view->setFirstDate(m_navbar->firstDate());
 	if (m_header)
 		delete m_header;
-	m_header = (WeekHeader *) m_view->createHeaderWidget(this);
+	m_header = (WeekHeader *) m_view->createHeaderWidget();
+	m_header->setScrollArea(m_scrollArea);
 	m_header->setFirstDate(m_navbar->firstDate());
-	connect(m_header, SIGNAL(resized(const QSize&)), this, SLOT(headerResized(const QSize&)));
-	m_header->show();
-	setViewportMargins(0, m_navbar->sizeHint().height() + m_header->sizeHint().height(), 0, 0);
+	m_mainLayout->insertWidget(1, m_header);
 }
 
 void CalendarWidget::setViewType(Calendar::ViewType viewType) {
 	m_navbar->setViewType(viewType);
-}
-
-void CalendarWidget::headerResized(const QSize &size) {
-	setViewportMargins(0, m_navbar->sizeHint().height() + m_header->sizeHint().height(), 0, 0);
 }

@@ -6,6 +6,7 @@
 
 class QPainter;
 class QRect;
+class QScrollArea;
 
 namespace Calendar {
 	class ViewHeader : public QWidget {
@@ -16,10 +17,14 @@ namespace Calendar {
 		const QDate &firstDate() const { return m_firstDate; }
 		void setFirstDate(const QDate &date);
 
+		void setScrollArea(QScrollArea *scrollArea);
+
 	signals:
 		void resized(const QSize &size);
 
 	protected:
+		QScrollArea *m_scrollArea;
+
 		virtual void resizeEvent(QResizeEvent *event);
 
 	private:

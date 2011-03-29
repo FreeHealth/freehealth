@@ -1,6 +1,7 @@
 #include <QPainter>
 #include <QPixmapCache>
 #include <QResizeEvent>
+#include <QScrollArea>
 
 #include "view.h"
 
@@ -22,6 +23,11 @@ void ViewHeader::setFirstDate(const QDate &date) {
 void ViewHeader::resizeEvent(QResizeEvent *event) {
 	emit resized(event->size());
 }
+
+void ViewHeader::setScrollArea(QScrollArea *scrollArea) {
+	m_scrollArea = scrollArea;
+}
+
 
 ///////////////////////////////
 
