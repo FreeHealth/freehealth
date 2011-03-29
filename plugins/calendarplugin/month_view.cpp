@@ -30,8 +30,20 @@ void MonthView::paintBody(QPainter *painter, const QRect &visibleRect) {
 	pen.setCapStyle(Qt::FlatCap);
 	painter->setPen(pen);
 
+	// get the very first day of the grid (not necessarily the first day of the month)
+	QDate firstDay = m_firstDate.addDays(-m_firstDate.dayOfWeek() + 1);
+
+	// get the very last day of the grid (not necessarily the last day of the month)
+	QDate lastDay = m_firstDate.addDays(m_firstDate.daysInMonth() - 1);
+	lastDay = lastDay.addDays(7 - lastDay.dayOfWeek());
+
+	// compute week count in way to englobe all month days
+	int weekCount = 0;
+	for (QDate date = firstDay; date <= lastDay; date = date.addDays(7))
+		weekCount++;
+
 	int horiAmount = visibleRect.width() - 6; // total width without lines width
-	int vertiAmount = visibleRect.height() - 4; // total height without lines height
+	int vertiAmount = visibleRect.height() - weekCount + 1; // total height without lines height
 
 	// vertical lines
 	for (int i = 1; i < 7; ++i)
@@ -39,19 +51,16 @@ void MonthView::paintBody(QPainter *painter, const QRect &visibleRect) {
 						  (i * horiAmount) / 7 + i - 1, visibleRect.height());
 
 	// horizontal lines
-	for (int i = 1; i < 5; ++i)
-		painter->drawLine(0, (i * vertiAmount) / 5 + i - 1,
-						  visibleRect.width(), (i * vertiAmount) / 5 + i - 1);
-
-	// get the very first day of the grid (not necessarily the first day of the month)
-	QDate firstDay = m_firstDate.addDays(-m_firstDate.dayOfWeek() + 1);
+	for (int i = 1; i < weekCount; ++i)
+		painter->drawLine(0, (i * vertiAmount) / weekCount + i - 1,
+						  visibleRect.width(), (i * vertiAmount) / weekCount + i - 1);
 
 	// day texts
-	for (int j = 0; j < 5; ++j)
+	for (int j = 0; j < weekCount; ++j)
 		for (int i = 0; i < 7; ++i) {
-			QRect r((i * horiAmount) / 7 + i, (j * vertiAmount) / 5 + j + 2, // +2 is a correction to be not stucked to the top line
+			QRect r((i * horiAmount) / 7 + i, (j * vertiAmount) / weekCount + j + 2, // +2 is a correction to be not stucked to the top line
 					((i + 1) * horiAmount) / 7 - (i * horiAmount) / 7 - 2, // -2 is a correction to be not stucked to the right line
-					((j + 1) * vertiAmount) / 5 - (j * vertiAmount) / 5);
+					((j + 1) * vertiAmount) / weekCount - (j * vertiAmount) / weekCount);
 
 			QString text;
 			if (firstDay.day() == 1)
