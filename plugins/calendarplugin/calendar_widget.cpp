@@ -17,6 +17,7 @@ CalendarWidget::CalendarWidget(QWidget *parent)
 	  m_header(0),
 	  m_model(0) {
 	setVerticalScrollBarPolicy(Qt::ScrollBarAsNeeded);
+	setWidgetResizable(true);
 	setViewportMargins(0, 80, 0, 0);
 	m_navbar = new CalendarNavbar(this);
 	connect(m_navbar, SIGNAL(firstDateChanged()), this, SLOT(firstDateChanged()));
@@ -26,8 +27,6 @@ CalendarWidget::CalendarWidget(QWidget *parent)
 }
 
 void CalendarWidget::resizeEvent(QResizeEvent *event) {
-	widget()->resize(event->size().width(), widget()->height());
-
 	QMargins margins = contentsMargins();
 
 	// navigation bar
@@ -105,6 +104,7 @@ void CalendarWidget::viewTypeChanged() {
 	}
 
 	setWidget(m_view);
+	m_view->setFirstDate(m_navbar->firstDate());
 	if (m_header)
 		delete m_header;
 	m_header = (WeekHeader *) m_view->createHeaderWidget(this);

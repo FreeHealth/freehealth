@@ -55,15 +55,18 @@ void WeekHeader::setFirstDate(const QDate &date) {
 /////////////////////////////////////////////////////////////////
 
 WeekView::WeekView(QWidget *parent) :
-	View(parent),
-	m_refreshGrid(false) {
-	resize(10, 24 * m_hourHeight);
+	View(parent) {
+	setSizePolicy(QSizePolicy::Expanding, QSizePolicy::Fixed);
 
 	setFirstDate(Calendar::getFirstDateByRandomDate(Calendar::View_Week, QDate::currentDate()));
 
 	CalendarItem *item = new CalendarItem(this);
 	item->resize(100, m_hourHeight);
 	item->move(m_leftScaleWidth + 1, 0);
+}
+
+QSize WeekView::sizeHint() const {
+	return QSize(0, 24 * m_hourHeight);
 }
 
 int WeekView::topHeaderHeight() const {
@@ -122,30 +125,6 @@ void WeekView::paintBody(QPainter *painter, const QRect &visibleRect) {
 						QPoint(m_leftScaleWidth - 3, (i + 1) * m_hourHeight - 1));
 		painter->drawText(scaleRect, Qt::AlignRight, QString("%1:00").arg(i, 2, 10, QChar('0')));
 	}
-}
-
-QPixmap WeekView::generatePixmap() {
-	QPixmap pixmap(width(), height());
-	QPainter painter(&pixmap);
-	paintBody(&painter, rect());
-	return pixmap;
-}
-
-void WeekView::paintEvent(QPaintEvent *event) {
-	QPixmap pixmap;
-	QString key = "grid";
-
-	if (!QPixmapCache::find(key, pixmap) || m_refreshGrid) {
-		pixmap = generatePixmap();
-		QPixmapCache::insert(key, pixmap);
-		m_refreshGrid = false;
-	}
-	QPainter painter(this);
-	painter.drawPixmap(0, 0, pixmap);
-}
-
-void WeekView::resizeEvent(QResizeEvent *event) {
-	m_refreshGrid = true;
 }
 
 QWidget *WeekView::createHeaderWidget(QWidget *parent) {

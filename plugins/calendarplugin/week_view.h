@@ -29,13 +29,12 @@ namespace Calendar {
 		virtual int topHeaderHeight() const;
 		virtual int leftHeaderWidth() const;
 
-		virtual void paintBody(QPainter *painter, const QRect &visibleRect);
-
 		virtual QWidget *createHeaderWidget(QWidget *parent = 0);
 
+		virtual QSize sizeHint() const;
+
 	protected:
-		virtual void paintEvent(QPaintEvent *event);
-		virtual void resizeEvent(QResizeEvent *event);
+		virtual void paintBody(QPainter *painter, const QRect &visibleRect);
 
 	private slots:
 		void firstDateChanged();
@@ -43,9 +42,6 @@ namespace Calendar {
 	private:
 		static int m_leftScaleWidth;
 		static int m_hourHeight;
-		bool m_refreshGrid;
-
-		QPixmap generatePixmap();
 	};
 }
 

@@ -8,12 +8,15 @@ namespace Calendar {
 	{
 		Q_OBJECT
 	public:
-		MonthView(QWidget *parent = 0) : View(parent) {}
+		MonthView(QWidget *parent = 0);
 
 		virtual int topHeaderHeight() const;
 		virtual int leftHeaderWidth() const;
 
 		virtual QWidget *createHeaderWidget(QWidget *parent = 0);
+
+	protected:
+		virtual void paintBody(QPainter *painter, const QRect &visibleRect);
 	};
 }
 

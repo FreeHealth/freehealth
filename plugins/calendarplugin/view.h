@@ -15,14 +15,12 @@ namespace Calendar {
 	{
 		Q_OBJECT
 	public:
-		View(QWidget *parent = 0) : QWidget(parent) {}
+		View(QWidget *parent = 0) : QWidget(parent), m_refreshGrid(false) {}
 
 		/** returns the top header height for the view */
 		virtual int topHeaderHeight() const = 0;
 		/** returns the left height width for the view */
 		virtual int leftHeaderWidth() const = 0;
-
-		virtual void paintBody(QPainter *painter, const QRect &visibleRect) {};
 
 		virtual QWidget *createHeaderWidget(QWidget *parent = 0) { return 0; }
 
@@ -34,6 +32,15 @@ namespace Calendar {
 
 	protected:
 		QDate m_firstDate;
+
+		QPixmap generatePixmap();
+
+		virtual void paintBody(QPainter *painter, const QRect &visibleRect) {};
+		virtual void paintEvent(QPaintEvent *event);
+		virtual void resizeEvent(QResizeEvent *event);
+
+	private:
+		bool m_refreshGrid;
 	};
 }
 
