@@ -10,6 +10,7 @@ void View::setFirstDate(const QDate &firstDate) {
 		return;
 
 	m_firstDate = firstDate;
+	m_refreshGrid = true;
 	update();
 }
 

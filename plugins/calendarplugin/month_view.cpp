@@ -47,8 +47,6 @@ void MonthView::paintBody(QPainter *painter, const QRect &visibleRect) {
 	QDate firstDay = m_firstDate.addDays(-m_firstDate.dayOfWeek() + 1);
 
 	// day texts
-	pen.setColor(QColor(100, 100, 100));
-	painter->setPen(pen);
 	for (int j = 0; j < 5; ++j)
 		for (int i = 0; i < 7; ++i) {
 			QRect r((i * horiAmount) / 7 + i, (j * vertiAmount) / 5 + j + 2, // +2 is a correction to be not stucked to the top line
@@ -60,6 +58,12 @@ void MonthView::paintBody(QPainter *painter, const QRect &visibleRect) {
 				text = firstDay.toString(tr("d MMM"));
 			else
 				text = firstDay.toString(tr("d"));
+
+			if (firstDay.month() != m_firstDate.month())
+				pen.setColor(QColor(200, 200, 200));
+			else
+				pen.setColor(QColor(150, 150, 150));
+			painter->setPen(pen);
 
 			painter->drawText(r, Qt::AlignRight | Qt::AlignTop, text);
 			firstDay = firstDay.addDays(1);
