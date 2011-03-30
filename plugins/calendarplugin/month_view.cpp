@@ -80,7 +80,7 @@ void MonthView::paintBody(QPainter *painter, const QRect &visibleRect) {
 
 	// draw current day?
 	if (focusRow >= 0) {
-		int i = now.dayOfWeek();
+		int i = now.dayOfWeek() - 1;
 		int j = focusRow;
 		QRect r((i * horiAmount) / 7 + i, (j * vertiAmount) / weekCount + j,
 				((i + 1) * horiAmount) / 7 - (i * horiAmount) / 7,
