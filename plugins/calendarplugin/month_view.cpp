@@ -9,17 +9,20 @@ QSize MonthHeader::sizeHint() const {
 }
 
 void MonthHeader::paintEvent(QPaintEvent *event) {
+	// fill all in light blue
 	QPainter painter(this);
 	painter.fillRect(rect(), QColor(220, 220, 255));
+
+	// bottom line
 	QPen pen = painter.pen();
-	pen.setColor(QColor(150, 150, 255));
+	pen.setColor(QColor(200, 200, 255));
 	painter.setPen(pen);
-	QRect r = rect();
-	r.adjust(0, 0, -1, 1);
-	painter.drawLine(0, r.bottom(), r.right(), r.bottom());
+	painter.drawLine(0, rect().bottom(), rect().right(), rect().bottom());
 
 	// text
-	// vertical lines
+	pen.setColor(QColor(150, 150, 255));
+	painter.setPen(pen);
+
 	int containWidth = rect().width();
 	for (int i = 0; i < 7; ++i) {
 		QRect r(QPoint((i * containWidth) / 7, 0), QPoint(((i + 1) * containWidth) / 7 - 1 + 2, rect().height())); // +2 is a vertical correction to not be stucked to the top line

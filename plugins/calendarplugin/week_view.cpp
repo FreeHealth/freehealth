@@ -18,16 +18,20 @@ QSize WeekHeader::sizeHint() const {
 }
 
 void WeekHeader::paintEvent(QPaintEvent *) {
+	// fill all in light blue
 	QPainter painter(this);
 	painter.fillRect(rect(), QColor(220, 220, 255));
+
+	// bottom line
 	QPen pen = painter.pen();
-	pen.setColor(QColor(150, 150, 255));
+	pen.setColor(QColor(200, 200, 255));
 	painter.setPen(pen);
-	QRect r = rect();
-	r.adjust(0, 0, -1, 1);
-	painter.drawLine(0, r.bottom(), r.right(), r.bottom());
+	painter.drawLine(0, rect().bottom(), rect().right(), rect().bottom());
 
 	// text
+	pen.setColor(QColor(150, 150, 255));
+	painter.setPen(pen);
+
 	// vertical lines
 	int containWidth = m_scrollArea->viewport()->width() - 60;
 	QPen oldPen = painter.pen();
