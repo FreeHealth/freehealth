@@ -3,6 +3,7 @@
 #include <QDate>
 #include <QPixmapCache>
 #include <QScrollArea>
+#include <QMouseEvent>
 
 #include "day_range_view.h"
 #include "calendar_item.h"
@@ -77,7 +78,8 @@ void HourWidget::paintEvent(QPaintEvent *) {
 DayRangeView::DayRangeView(QWidget *parent, int rangeWidth) :
 	View(parent),
 	m_hourWidget(0),
-	m_rangeWidth(rangeWidth) {
+	m_rangeWidth(rangeWidth),
+	m_pressItem(0) {
 	setSizePolicy(QSizePolicy::Expanding, QSizePolicy::Fixed);
 
 	setFirstDate(Calendar::getFirstDateByRandomDate(Calendar::View_Week, QDate::currentDate()));
@@ -227,4 +229,66 @@ void DayRangeView::setRangeWidth(int width) {
 
 	m_rangeWidth = width;
 	forceUpdate();
+}
+
+QDateTime DayRangeView::getDateTime(const QPoint &pos) const {
+	// get day and time
+	int containWidth = rect().width() - m_leftScaleWidth;
+	int x = pos.x();
+	int y = pos.y();
+	int day = 0;
+	for (int i = 0; i < m_rangeWidth; ++i) {
+		if (x >= (i * containWidth) / m_rangeWidth + m_leftScaleWidth && x < ((i + 1) * containWidth) / m_rangeWidth + m_leftScaleWidth){
+			break;
+		}
+		day++;
+	}
+	int hour = y / m_hourHeight;
+	int remain = y - hour * m_hourHeight;
+	int minutes = (remain * 60) / m_hourHeight;
+	if (minutes < 15)
+		minutes = 0;
+	else if (minutes < 45)
+		minutes = 30;
+	else {
+		minutes = 0;
+		hour++;
+	}
+	return QDateTime(m_firstDate.addDays(day), QTime(hour, minutes));
+}
+
+void DayRangeView::mousePressEvent(QMouseEvent *event) {
+	if (event->pos().x() < m_leftScaleWidth)
+		return;
+	m_pressDateTime = getDateTime(event->pos());
+}
+
+void DayRangeView::mouseMoveEvent(QMouseEvent *event) {
+	if (!m_pressDateTime.isValid())
+		return;
+
+	QDateTime dateTime = getDateTime(event->pos());
+
+	if (dateTime != m_pressDateTime) {
+		if (!m_pressItem) {
+			m_pressItem = new CalendarItem(this);
+			m_pressItem->show();
+		}
+
+		QRect rect;
+		if (dateTime.time() > m_pressDateTime.time())
+			rect = getTimeIntervalRect(m_pressDateTime.date().dayOfWeek(), m_pressDateTime.time(), dateTime.time());
+		else
+			rect = getTimeIntervalRect(m_pressDateTime.date().dayOfWeek(), dateTime.time(), m_pressDateTime.time());
+
+		m_pressItem->move(rect.x(), rect.y());
+		m_pressItem->resize(rect.width(), rect.height());
+	}
+}
+
+void DayRangeView::mouseReleaseEvent(QMouseEvent *event) {
+	// TODO: transform into a real item
+	delete m_pressItem;
+	m_pressItem = 0;
+	m_pressDateTime = QDateTime();
 }

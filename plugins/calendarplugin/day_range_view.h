@@ -57,6 +57,9 @@ namespace Calendar {
 	protected:
 		virtual void paintBody(QPainter *painter, const QRect &visibleRect);
 		virtual void refreshItemSizeAndPosition(CalendarItem *item);
+		virtual void mousePressEvent(QMouseEvent *event);
+		virtual void mouseMoveEvent(QMouseEvent *event);
+		virtual void mouseReleaseEvent(QMouseEvent *event);
 
 	private slots:
 		void firstDateChanged();
@@ -66,8 +69,11 @@ namespace Calendar {
 		static int m_leftScaleWidth;
 		static int m_hourHeight;
 		int m_rangeWidth;
+		QDateTime m_pressDateTime;
+		CalendarItem *m_pressItem;
 
 		QRect getTimeIntervalRect(int day, const QTime &begin, const QTime &end) const;
+		QDateTime getDateTime(const QPoint &pos) const;
 	};
 }
 
