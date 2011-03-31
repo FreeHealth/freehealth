@@ -8,12 +8,19 @@ namespace Calendar {
 	{
 		Q_OBJECT
 	public:
-		DayRangeHeader(QWidget *parent = 0) : ViewHeader(parent) {}
+		DayRangeHeader(QWidget *parent = 0, int rangeWidth = 7) : ViewHeader(parent), m_rangeWidth(rangeWidth) {}
 
 		virtual QSize sizeHint() const;
 
+		/** for a week, the range width is 7 */
+		int rangeWidth() const { return m_rangeWidth; }
+		void setRangeWidth(int width);
+
 	protected:
 		void paintEvent(QPaintEvent *event);
+
+	private:
+		int m_rangeWidth;
 	};
 
 	class HourWidget : public QWidget

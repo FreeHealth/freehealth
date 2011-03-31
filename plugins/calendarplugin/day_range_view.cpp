@@ -17,6 +17,14 @@ QSize DayRangeHeader::sizeHint() const {
 	return QSize(0, 40);
 }
 
+void DayRangeHeader::setRangeWidth(int width) {
+	if (width == m_rangeWidth)
+		return;
+
+	m_rangeWidth = width;
+	update();
+}
+
 void DayRangeHeader::paintEvent(QPaintEvent *) {
 	// fill all in light blue
 	QPainter painter(this);
@@ -38,8 +46,8 @@ void DayRangeHeader::paintEvent(QPaintEvent *) {
 	QFont oldFont = painter.font();
 	QDate date = firstDate();
 	QDate now = QDate::currentDate();
-	for (int i = 0; i < 7; ++i) {
-		QRect r(QPoint(60 + (i * containWidth) / 7, 0), QPoint(60 + ((i + 1) * containWidth) / 7, rect().height()));
+	for (int i = 0; i < m_rangeWidth; ++i) {
+		QRect r(QPoint(60 + (i * containWidth) / m_rangeWidth, 0), QPoint(60 + ((i + 1) * containWidth) / m_rangeWidth, rect().height()));
 		if (date == now){
 			painter.fillRect(r, QColor(200,200,255));
 			QPen pen = painter.pen();;
@@ -47,7 +55,10 @@ void DayRangeHeader::paintEvent(QPaintEvent *) {
 			painter.setPen(pen);
 		}
 		r.adjust(0, 2, 0, 0);  // +2 is a vertical correction to not be stucked to the top line
-		painter.drawText(r, Qt::AlignHCenter | Qt::AlignTop, date.toString("ddd d/M").toLower());
+		if (m_rangeWidth == 1)
+			painter.drawText(r, Qt::AlignHCenter | Qt::AlignTop, date.toString("dddd d/M").toLower());
+		else
+			painter.drawText(r, Qt::AlignHCenter | Qt::AlignTop, date.toString("ddd d/M").toLower());
 		painter.setPen(oldPen);
 		painter.setFont(oldFont);
 		date = date.addDays(1);
@@ -182,7 +193,7 @@ void DayRangeView::paintBody(QPainter *painter, const QRect &visibleRect) {
 }
 
 ViewHeader *DayRangeView::createHeaderWidget(QWidget *parent) {
-	DayRangeHeader *widget = new DayRangeHeader(parent);
+	DayRangeHeader *widget = new DayRangeHeader(parent, m_rangeWidth);
 	widget->setFirstDate(m_firstDate);
 	return widget;
 }
