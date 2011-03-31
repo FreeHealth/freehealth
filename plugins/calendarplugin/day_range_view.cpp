@@ -39,14 +39,14 @@ void DayRangeHeader::paintEvent(QPaintEvent *) {
 	QDate date = firstDate();
 	QDate now = QDate::currentDate();
 	for (int i = 0; i < 7; ++i) {
-		QRect r(QPoint(60 + (i * containWidth) / 7, 0), QPoint(60 + ((i + 1) * containWidth) / 7, rect().height())); // +2 is a vertical correction to not be stucked to the top line
+		QRect r(QPoint(60 + (i * containWidth) / 7, 0), QPoint(60 + ((i + 1) * containWidth) / 7, rect().height()));
 		if (date == now){
 			painter.fillRect(r, QColor(200,200,255));
 			QPen pen = painter.pen();;
 			pen.setColor(QColor(0, 0, 255));
 			painter.setPen(pen);
 		}
-		r.adjust(0, 2, 0, 0);
+		r.adjust(0, 2, 0, 0);  // +2 is a vertical correction to not be stucked to the top line
 		painter.drawText(r, Qt::AlignHCenter | Qt::AlignTop, date.toString("ddd d/M").toLower());
 		painter.setPen(oldPen);
 		painter.setFont(oldFont);
@@ -63,9 +63,10 @@ void HourWidget::paintEvent(QPaintEvent *) {
 
 /////////////////////////////////////////////////////////////////
 
-DayRangeView::DayRangeView(QWidget *parent) :
+DayRangeView::DayRangeView(QWidget *parent, int rangeWidth) :
 	View(parent),
-	m_hourWidget(0) {
+	m_hourWidget(0),
+	m_rangeWidth(rangeWidth) {
 	setSizePolicy(QSizePolicy::Expanding, QSizePolicy::Fixed);
 
 	setFirstDate(Calendar::getFirstDateByRandomDate(Calendar::View_Week, QDate::currentDate()));
@@ -106,15 +107,17 @@ void DayRangeView::paintBody(QPainter *painter, const QRect &visibleRect) {
 
 	// draw current day?
 	QDate now = QDate::currentDate();
-	if (now >= m_firstDate && now <= m_firstDate.addDays(7))
-		painter->fillRect(m_leftScaleWidth + ((now.dayOfWeek() - 1) * containWidth) / 7, 0,
-						  (now.dayOfWeek() * containWidth) / 7 - ((now.dayOfWeek() - 1) * containWidth) / 7, visibleRect.height(),
+	if (now >= m_firstDate && now < m_firstDate.addDays(m_rangeWidth)){
+		int day = now.dayOfWeek() - m_firstDate.dayOfWeek();
+		painter->fillRect(m_leftScaleWidth + (day * containWidth) / m_rangeWidth, 0,
+						  ((day + 1) * containWidth) / m_rangeWidth - (day * containWidth) / m_rangeWidth, visibleRect.height(),
 						  QColor(255, 255, 200));
+	}
 
 	// vertical lines
-	for (int i = 0; i < 7; ++i) {
-		painter->drawLine(m_leftScaleWidth + (i * containWidth) / 7, 0,
-						  m_leftScaleWidth + (i * containWidth) / 7, visibleRect.height());
+	for (int i = 0; i < m_rangeWidth; ++i) {
+		painter->drawLine(m_leftScaleWidth + (i * containWidth) / m_rangeWidth, 0,
+						  m_leftScaleWidth + (i * containWidth) / m_rangeWidth, visibleRect.height());
 	}
 
 	// hours horizontal lines
@@ -154,18 +157,21 @@ void DayRangeView::paintBody(QPainter *painter, const QRect &visibleRect) {
 	}
 
 	// hour widget
-	if (now >= m_firstDate && now <= m_firstDate.addDays(7)) {
+	if (now >= m_firstDate && now < m_firstDate.addDays(m_rangeWidth)) {
 		if (!m_hourWidget)
 			m_hourWidget = new HourWidget(this);
+
+		int day = now.dayOfWeek() - m_firstDate.dayOfWeek();
+
 		// move and resize
-		m_hourWidget->resize((now.dayOfWeek() * containWidth) / 7 - ((now.dayOfWeek() - 1) * containWidth) / 7, m_hourWidget->sizeHint().height());
+		m_hourWidget->resize(((day + 1) * containWidth) / m_rangeWidth - (day * containWidth) / m_rangeWidth, m_hourWidget->sizeHint().height());
 
 		// compute
 		QTime nowTime = QTime::currentTime();
 		int y = (rect().height() * nowTime.hour()) / 24;
 		int minY = (((rect().height() * (nowTime.hour() + 1)) / 24 - (rect().height() * nowTime.hour()) / 24) * nowTime.minute()) / 60;
 
-		m_hourWidget->move(m_leftScaleWidth + ((now.dayOfWeek() - 1) * containWidth) / 7, y + minY);
+		m_hourWidget->move(m_leftScaleWidth + (day * containWidth) / m_rangeWidth, y + minY);
 		m_hourWidget->raise();
 		m_hourWidget->show();
 
@@ -198,8 +204,16 @@ QRect DayRangeView::getTimeIntervalRect(int day, const QTime &begin, const QTime
 	int height = (seconds * m_hourHeight) / 3600;
 
 	// vertical lines
-	return QRect(m_leftScaleWidth + (day * containWidth) / 7,
+	return QRect(m_leftScaleWidth + (day * containWidth) / m_rangeWidth,
 				 top,
-				 ((day + 1) * containWidth) / 7 - (day * containWidth) / 7,
+				 ((day + 1) * containWidth) / m_rangeWidth - (day * containWidth) / m_rangeWidth,
 				 height);
+}
+
+void DayRangeView::setRangeWidth(int width) {
+	if (width == m_rangeWidth)
+		return;
+
+	m_rangeWidth = width;
+	forceUpdate();
 }

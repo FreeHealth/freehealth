@@ -107,7 +107,7 @@ void CalendarWidget::viewTypeChanged() {
 	Calendar::ViewType viewType = m_navbar->viewType();
 	switch (viewType) {
 	case View_Day:
-		m_view = new DayRangeView;
+		m_view = new DayRangeView(0, 1);
 		break;
 	case View_Week:
 		m_view = new DayRangeView;

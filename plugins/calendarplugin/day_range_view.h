@@ -34,10 +34,14 @@ namespace Calendar {
 	{
 		Q_OBJECT
 	public:
-		DayRangeView(QWidget *parent = 0);
+		DayRangeView(QWidget *parent = 0, int rangeWidth = 7);
 
 		virtual int topHeaderHeight() const;
 		virtual int leftHeaderWidth() const;
+
+		/** for a week, the range width is 7 */
+		int rangeWidth() const { return m_rangeWidth; }
+		void setRangeWidth(int width);
 
 		virtual ViewHeader *createHeaderWidget(QWidget *parent = 0);
 
@@ -54,6 +58,7 @@ namespace Calendar {
 		HourWidget *m_hourWidget;
 		static int m_leftScaleWidth;
 		static int m_hourHeight;
+		int m_rangeWidth;
 
 		QRect getTimeIntervalRect(int day, const QTime &begin, const QTime &end) const;
 	};

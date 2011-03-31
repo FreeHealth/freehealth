@@ -62,11 +62,12 @@ namespace Calendar {
 		QDate m_firstDate;
 
 		QPixmap generatePixmap();
+		void forceUpdate() { m_refreshGrid = true; update(); }
 
 		virtual void paintBody(QPainter *, const QRect &) {};
 		virtual void paintEvent(QPaintEvent *event);
 		virtual void resizeEvent(QResizeEvent *event);
-		virtual void refreshItemSizeAndPosition(CalendarItem *item) {}
+		virtual void refreshItemSizeAndPosition(CalendarItem *) {}
 		virtual void refreshItemsSizesAndPositions();
 
 	private:
