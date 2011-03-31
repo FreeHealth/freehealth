@@ -47,13 +47,16 @@ namespace Calendar {
 		/** returns the left height width for the view */
 		virtual int leftHeaderWidth() const = 0;
 
-		virtual QWidget *createHeaderWidget(QWidget *parent = 0) { Q_UNUSED(parent); return 0; }
+		virtual ViewHeader *createHeaderWidget(QWidget *parent = 0) { Q_UNUSED(parent); return 0; }
 
 		/** sets a date for the view
 		 */
 		void setFirstDate(const QDate &firstDate);
 
 		const QDate &firstDate() const { return m_firstDate; }
+
+		/** used to refresh all current date time stuffs */
+		virtual void refreshCurrentDateTimeStuff();
 
 	protected:
 		QDate m_firstDate;

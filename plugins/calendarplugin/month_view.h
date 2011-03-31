@@ -25,7 +25,7 @@ namespace Calendar {
 		virtual int topHeaderHeight() const;
 		virtual int leftHeaderWidth() const;
 
-		virtual QWidget *createHeaderWidget(QWidget *parent = 0);
+		virtual ViewHeader *createHeaderWidget(QWidget *parent = 0);
 
 	protected:
 		virtual void paintBody(QPainter *painter, const QRect &visibleRect);

@@ -45,7 +45,7 @@ int MonthView::leftHeaderWidth() const {
 	return 0;
 }
 
-QWidget *MonthView::createHeaderWidget(QWidget *parent) {
+ViewHeader *MonthView::createHeaderWidget(QWidget *parent) {
 	MonthHeader *widget = new MonthHeader(parent);
 	widget->setFirstDate(m_firstDate);
 	return widget;

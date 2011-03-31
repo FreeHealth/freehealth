@@ -4,20 +4,20 @@
 #include <QPixmapCache>
 #include <QScrollArea>
 
-#include "week_view.h"
+#include "day_range_view.h"
 #include "calendar_item.h"
 #include "common.h"
 
 using namespace Calendar;
 
-int WeekView::m_leftScaleWidth = 60;
-int WeekView::m_hourHeight = 40;
+int DayRangeView::m_leftScaleWidth = 60;
+int DayRangeView::m_hourHeight = 40;
 
-QSize WeekHeader::sizeHint() const {
+QSize DayRangeHeader::sizeHint() const {
 	return QSize(0, 40);
 }
 
-void WeekHeader::paintEvent(QPaintEvent *) {
+void DayRangeHeader::paintEvent(QPaintEvent *) {
 	// fill all in light blue
 	QPainter painter(this);
 	painter.fillRect(rect(), QColor(220, 220, 255));
@@ -63,7 +63,7 @@ void HourWidget::paintEvent(QPaintEvent *) {
 
 /////////////////////////////////////////////////////////////////
 
-WeekView::WeekView(QWidget *parent) :
+DayRangeView::DayRangeView(QWidget *parent) :
 	View(parent),
 	m_hourWidget(0) {
 	setSizePolicy(QSizePolicy::Expanding, QSizePolicy::Fixed);
@@ -84,19 +84,19 @@ WeekView::WeekView(QWidget *parent) :
 	item->setEndDateTime(QDateTime(now.addDays(1), QTime(13, 15, 0)));
 }
 
-QSize WeekView::sizeHint() const {
+QSize DayRangeView::sizeHint() const {
 	return QSize(0, 24 * m_hourHeight);
 }
 
-int WeekView::topHeaderHeight() const {
+int DayRangeView::topHeaderHeight() const {
 	return 40;
 }
 
-int WeekView::leftHeaderWidth() const {
+int DayRangeView::leftHeaderWidth() const {
 	return 0;
 }
 
-void WeekView::paintBody(QPainter *painter, const QRect &visibleRect) {
+void DayRangeView::paintBody(QPainter *painter, const QRect &visibleRect) {
 	painter->fillRect(visibleRect, Qt::white);
 	QPen pen = painter->pen();
 	pen.setColor(QColor(200, 200, 200));
@@ -175,20 +175,20 @@ void WeekView::paintBody(QPainter *painter, const QRect &visibleRect) {
 	}
 }
 
-QWidget *WeekView::createHeaderWidget(QWidget *parent) {
-	WeekHeader *widget = new WeekHeader(parent);
+ViewHeader *DayRangeView::createHeaderWidget(QWidget *parent) {
+	DayRangeHeader *widget = new DayRangeHeader(parent);
 	widget->setFirstDate(m_firstDate);
 	return widget;
 }
 
-void WeekView::refreshItemSizeAndPosition(CalendarItem *item) {
+void DayRangeView::refreshItemSizeAndPosition(CalendarItem *item) {
 	// TODO if item is over many days, explodes it in several times intervals
 	QRect rect = getTimeIntervalRect(item->beginDateTime().date().dayOfWeek(), item->beginDateTime().time(), item->endDateTime().time());
 	item->move(rect.x(), rect.y());
 	item->resize(rect.width() - 8, rect.height());
 }
 
-QRect WeekView::getTimeIntervalRect(int day, const QTime &begin, const QTime &end) const {
+QRect DayRangeView::getTimeIntervalRect(int day, const QTime &begin, const QTime &end) const {
 	int containWidth = rect().width() - m_leftScaleWidth;
 
 	day--; // convert 1 -> 7 to 0 -> 6 for drawing reasons

@@ -5,11 +5,12 @@
 #include <QVBoxLayout>
 
 #include "calendar_widget.h"
-#include "day_view.h"
-#include "week_view.h"
+#include "day_range_view.h"
 #include "month_view.h"
 
 using namespace Calendar;
+
+#define REFRESH_INTERVAL 60 // in seconds
 
 CalendarWidget::CalendarWidget(QWidget *parent)
 	: QWidget(parent),
@@ -35,6 +36,10 @@ CalendarWidget::CalendarWidget(QWidget *parent)
 	m_mainLayout->insertWidget(0, m_navbar);
 
 	m_mainLayout->addWidget(m_scrollArea);
+
+	m_timer.setInterval(REFRESH_INTERVAL * 1000);
+	connect(&m_timer, SIGNAL(timeout()), this, SLOT(timeout()));
+	m_timer.start();
 }
 
 void CalendarWidget::setModel(QAbstractItemModel *model) {
@@ -102,10 +107,10 @@ void CalendarWidget::viewTypeChanged() {
 	Calendar::ViewType viewType = m_navbar->viewType();
 	switch (viewType) {
 	case View_Day:
-		m_view = new DayView;
+		m_view = new DayRangeView;
 		break;
 	case View_Week:
-		m_view = new WeekView;
+		m_view = new DayRangeView;
 		break;
 	case View_Month:
 		m_view = new MonthView;
@@ -118,7 +123,7 @@ void CalendarWidget::viewTypeChanged() {
 	m_view->setFirstDate(m_navbar->firstDate());
 	if (m_header)
 		delete m_header;
-	m_header = (WeekHeader *) m_view->createHeaderWidget();
+	m_header = m_view->createHeaderWidget();
 	m_header->setScrollArea(m_scrollArea);
 	m_header->setFirstDate(m_navbar->firstDate());
 	m_mainLayout->insertWidget(1, m_header);
@@ -126,4 +131,8 @@ void CalendarWidget::viewTypeChanged() {
 
 void CalendarWidget::setViewType(Calendar::ViewType viewType) {
 	m_navbar->setViewType(viewType);
+}
+
+void CalendarWidget::timeout() {
+	m_view->refreshCurrentDateTimeStuff();
 }

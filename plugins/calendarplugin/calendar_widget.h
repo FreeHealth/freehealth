@@ -3,6 +3,7 @@
 
 #include <QScrollArea>
 #include <QAbstractItemModel>
+#include <QTimer>
 
 #include "common.h"
 #include "view.h"
@@ -23,9 +24,6 @@ namespace Calendar {
 		Calendar::ViewType viewType() const { return m_navbar->viewType(); }
 		void setViewType(Calendar::ViewType viewType);
 
-/*	protected:
-	void resizeEvent(QResizeEvent *event);*/
-
 	private slots:
 		// for model
 		void dataChanged(const QModelIndex & topLeft, const  QModelIndex & bottomRight);
@@ -38,8 +36,8 @@ namespace Calendar {
 		void firstDateChanged();
 		void viewTypeChanged();
 
-		// header
-//		void headerResized(const QSize &size);
+		// timer
+		void timeout();
 
 	private:
 		QVBoxLayout *m_mainLayout;
@@ -49,6 +47,7 @@ namespace Calendar {
 		View *m_view;
 		ViewHeader *m_header;
 		QAbstractItemModel *m_model;
+		QTimer m_timer; // used to refresh every date/time stuffs
 	};
 }
 

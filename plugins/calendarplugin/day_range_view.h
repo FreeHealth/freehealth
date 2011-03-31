@@ -1,14 +1,14 @@
-#ifndef WEEK_VIEW_H
-#define WEEK_VIEW_H
+#ifndef DAY_RANGE_VIEW_H
+#define DAY_RANGE_VIEW_H
 
 #include "view.h"
 
 namespace Calendar {
-	class WeekHeader : public ViewHeader
+	class DayRangeHeader : public ViewHeader
 	{
 		Q_OBJECT
 	public:
-		WeekHeader(QWidget *parent = 0) : ViewHeader(parent) {}
+		DayRangeHeader(QWidget *parent = 0) : ViewHeader(parent) {}
 
 		virtual QSize sizeHint() const;
 
@@ -30,16 +30,16 @@ namespace Calendar {
 		void paintEvent(QPaintEvent *event);
 	};
 
-	class WeekView : public View
+	class DayRangeView : public View
 	{
 		Q_OBJECT
 	public:
-		WeekView(QWidget *parent = 0);
+		DayRangeView(QWidget *parent = 0);
 
 		virtual int topHeaderHeight() const;
 		virtual int leftHeaderWidth() const;
 
-		virtual QWidget *createHeaderWidget(QWidget *parent = 0);
+		virtual ViewHeader *createHeaderWidget(QWidget *parent = 0);
 
 		virtual QSize sizeHint() const;
 

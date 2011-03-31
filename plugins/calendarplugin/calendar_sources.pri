@@ -9,8 +9,7 @@ HEADERS +=  \
     $${PWD}/calendarimpl.h \
     $${PWD}/calendar_widget.h \
     $${PWD}/view.h \
-    $${PWD}/day_view.h \
-    $${PWD}/week_view.h \
+    $${PWD}/day_range_view.h \
     $${PWD}/month_view.h \
     $${PWD}/calendar_item.h \
     $${PWD}/calendar_navbar.h \
@@ -21,8 +20,7 @@ SOURCES += \
     $${PWD}/calendarimpl.cpp \
     $${PWD}/calendar_widget.cpp \
     $${PWD}/view.cpp \
-    $${PWD}/day_view.cpp \
-    $${PWD}/week_view.cpp \
+    $${PWD}/day_range_view.cpp \
     $${PWD}/month_view.cpp \
     $${PWD}/calendar_item.cpp \
     $${PWD}/calendar_navbar.cpp \

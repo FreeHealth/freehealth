@@ -77,3 +77,8 @@ void View::refreshItemsSizesAndPositions() {
 		}
 	}
 }
+
+void View::refreshCurrentDateTimeStuff() {
+	m_refreshGrid = true;
+	update();
+}
