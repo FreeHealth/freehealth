@@ -4,8 +4,8 @@
 
 using namespace Calendar;
 
-CalendarItem::CalendarItem(QWidget *parent) :
-	QWidget(parent) {
+CalendarItem::CalendarItem(QWidget *parent, bool temp) :
+	QWidget(parent), m_temp(temp) {
 }
 
 void CalendarItem::paintEvent(QPaintEvent *event) {
@@ -16,7 +16,7 @@ void CalendarItem::paintEvent(QPaintEvent *event) {
 	pen.setCapStyle(Qt::FlatCap);
 	painter.setPen(pen);
 	QBrush brush = painter.brush();
-	brush.setColor(QColor(0, 150, 0));
+	brush.setColor(QColor(0, 150, 0, m_temp ? 200 : 255));
 	brush.setStyle(Qt::SolidPattern);
 	painter.setBrush(brush);
 	painter.drawRoundedRect(rect().adjusted(0, 0, 0, 0), 5, 5);

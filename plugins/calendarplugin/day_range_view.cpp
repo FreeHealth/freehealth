@@ -271,7 +271,7 @@ void DayRangeView::mouseMoveEvent(QMouseEvent *event) {
 
 	if (dateTime != m_pressDateTime) {
 		if (!m_pressItem) {
-			m_pressItem = new CalendarItem(this);
+			m_pressItem = new CalendarItem(this, true);
 			m_pressItem->show();
 		}
 
