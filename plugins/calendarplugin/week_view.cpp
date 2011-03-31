@@ -71,8 +71,17 @@ WeekView::WeekView(QWidget *parent) :
 	setFirstDate(Calendar::getFirstDateByRandomDate(Calendar::View_Week, QDate::currentDate()));
 
 	CalendarItem *item = new CalendarItem(this);
-	item->resize(100, m_hourHeight);
-	item->move(m_leftScaleWidth + 1, 0);
+	QDate now = QDate::currentDate();
+	item->setBeginDateTime(QDateTime(now, QTime(7, 0, 0)));
+	item->setEndDateTime(QDateTime(now, QTime(8, 0, 0)));
+
+	item = new CalendarItem(this);
+	item->setBeginDateTime(QDateTime(now, QTime(10, 0, 0)));
+	item->setEndDateTime(QDateTime(now, QTime(15, 45, 0)));
+
+	item = new CalendarItem(this);
+	item->setBeginDateTime(QDateTime(now.addDays(1), QTime(2, 0, 0)));
+	item->setEndDateTime(QDateTime(now.addDays(1), QTime(13, 15, 0)));
 }
 
 QSize WeekView::sizeHint() const {
@@ -157,6 +166,7 @@ void WeekView::paintBody(QPainter *painter, const QRect &visibleRect) {
 		int minY = (((rect().height() * (nowTime.hour() + 1)) / 24 - (rect().height() * nowTime.hour()) / 24) * nowTime.minute()) / 60;
 
 		m_hourWidget->move(m_leftScaleWidth + ((now.dayOfWeek() - 1) * containWidth) / 7, y + minY);
+		m_hourWidget->raise();
 		m_hourWidget->show();
 
 	} else if (m_hourWidget) {
@@ -169,4 +179,27 @@ QWidget *WeekView::createHeaderWidget(QWidget *parent) {
 	WeekHeader *widget = new WeekHeader(parent);
 	widget->setFirstDate(m_firstDate);
 	return widget;
+}
+
+void WeekView::refreshItemSizeAndPosition(CalendarItem *item) {
+	// TODO if item is over many days, explodes it in several times intervals
+	QRect rect = getTimeIntervalRect(item->beginDateTime().date().dayOfWeek(), item->beginDateTime().time(), item->endDateTime().time());
+	item->move(rect.x(), rect.y());
+	item->resize(rect.width() - 8, rect.height());
+}
+
+QRect WeekView::getTimeIntervalRect(int day, const QTime &begin, const QTime &end) const {
+	int containWidth = rect().width() - m_leftScaleWidth;
+
+	day--; // convert 1 -> 7 to 0 -> 6 for drawing reasons
+
+	int seconds = begin.secsTo(end);
+	int top = (QTime(0, 0, 0).secsTo(begin) * m_hourHeight) / 3600;
+	int height = (seconds * m_hourHeight) / 3600;
+
+	// vertical lines
+	return QRect(m_leftScaleWidth + (day * containWidth) / 7,
+				 top,
+				 ((day + 1) * containWidth) / 7 - (day * containWidth) / 7,
+				 height);
 }

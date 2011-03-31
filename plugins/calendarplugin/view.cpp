@@ -4,6 +4,7 @@
 #include <QScrollArea>
 
 #include "view.h"
+#include "calendar_item.h"
 
 using namespace Calendar;
 
@@ -63,5 +64,16 @@ void View::paintEvent(QPaintEvent *event) {
 void View::resizeEvent(QResizeEvent *event) {
 	m_refreshGrid = true;
 
+	refreshItemsSizesAndPositions();
+
 	QWidget::resizeEvent(event);
+}
+
+void View::refreshItemsSizesAndPositions() {
+	foreach (QObject *object, children()) {
+		CalendarItem *item = qobject_cast<CalendarItem*>(object);
+		if (item) {
+			refreshItemSizeAndPosition(item);
+		}
+	}
 }

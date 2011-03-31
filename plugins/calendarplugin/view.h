@@ -4,6 +4,8 @@
 #include <QWidget>
 #include <QDate>
 
+#include "calendar_item.h"
+
 class QPainter;
 class QRect;
 class QScrollArea;
@@ -61,6 +63,8 @@ namespace Calendar {
 		virtual void paintBody(QPainter *, const QRect &) {};
 		virtual void paintEvent(QPaintEvent *event);
 		virtual void resizeEvent(QResizeEvent *event);
+		virtual void refreshItemSizeAndPosition(CalendarItem *item) {}
+		virtual void refreshItemsSizesAndPositions();
 
 	private:
 		bool m_refreshGrid;

@@ -1,5 +1,6 @@
 #include <QPainter>
 
+#include "common.h"
 #include "month_view.h"
 
 using namespace Calendar;
@@ -8,7 +9,7 @@ QSize MonthHeader::sizeHint() const {
 	return QSize(0, 20);
 }
 
-void MonthHeader::paintEvent(QPaintEvent *event) {
+void MonthHeader::paintEvent(QPaintEvent *) {
 	// fill all in light blue
 	QPainter painter(this);
 	painter.fillRect(rect(), QColor(220, 220, 255));
@@ -57,18 +58,13 @@ void MonthView::paintBody(QPainter *painter, const QRect &visibleRect) {
 	pen.setCapStyle(Qt::FlatCap);
 	painter->setPen(pen);
 
-	// get the very first day of the grid (not necessarily the first day of the month)
-	QDate firstDay = m_firstDate.addDays(-m_firstDate.dayOfWeek() + 1);
-
-	// get the very last day of the grid (not necessarily the last day of the month)
-	QDate lastDay = m_firstDate.addDays(m_firstDate.daysInMonth() - 1);
-	lastDay = lastDay.addDays(7 - lastDay.dayOfWeek());
+	QPair<QDate,QDate> boundingMonthInterval = Calendar::getBoundingMonthDaysInterval(m_firstDate);
 
 	// compute week count in way to englobe all month days
 	QDate now = QDate::currentDate();
 	int weekCount = 0;
 	int focusRow = -1;
-	for (QDate date = firstDay; date <= lastDay; date = date.addDays(7)) {
+	for (QDate date = boundingMonthInterval.first; date <= boundingMonthInterval.second; date = date.addDays(7)) {
 		if (now >= date && now < date.addDays(7)) {
 			focusRow = weekCount;
 		}
@@ -99,6 +95,7 @@ void MonthView::paintBody(QPainter *painter, const QRect &visibleRect) {
 						  visibleRect.width(), (i * vertiAmount) / weekCount + i - 1);
 
 	// day texts
+	QDate day = boundingMonthInterval.first;
 	for (int j = 0; j < weekCount; ++j)
 		for (int i = 0; i < 7; ++i) {
 			QRect r((i * horiAmount) / 7 + i, (j * vertiAmount) / weekCount + j + 2, // +2 is a correction to be not stucked to the top line
@@ -106,18 +103,18 @@ void MonthView::paintBody(QPainter *painter, const QRect &visibleRect) {
 					((j + 1) * vertiAmount) / weekCount - (j * vertiAmount) / weekCount);
 
 			QString text;
-			if (firstDay.day() == 1)
-				text = firstDay.toString(tr("d MMM"));
+			if (day.day() == 1)
+				text = day.toString(tr("d MMM"));
 			else
-				text = firstDay.toString(tr("d"));
+				text = day.toString(tr("d"));
 
-			if (firstDay.month() != m_firstDate.month())
-				pen.setColor(QColor(200, 200, 200));
+			if (day.month() != m_firstDate.month())
+				pen.setColor(QColor(180, 180, 180));
 			else
-				pen.setColor(QColor(150, 150, 150));
+				pen.setColor(QColor(100, 100, 100));
 			painter->setPen(pen);
 
 			painter->drawText(r, Qt::AlignRight | Qt::AlignTop, text);
-			firstDay = firstDay.addDays(1);
+			day = day.addDays(1);
 		}
 }

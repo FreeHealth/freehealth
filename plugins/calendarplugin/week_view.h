@@ -45,6 +45,7 @@ namespace Calendar {
 
 	protected:
 		virtual void paintBody(QPainter *painter, const QRect &visibleRect);
+		virtual void refreshItemSizeAndPosition(CalendarItem *item);
 
 	private slots:
 		void firstDateChanged();
@@ -53,6 +54,8 @@ namespace Calendar {
 		HourWidget *m_hourWidget;
 		static int m_leftScaleWidth;
 		static int m_hourHeight;
+
+		QRect getTimeIntervalRect(int day, const QTime &begin, const QTime &end) const;
 	};
 }
 
