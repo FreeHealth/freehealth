@@ -321,6 +321,7 @@ void MainWindowActionHandler::createGeneralActions(const int actions)
         a->setObjectName("aGeneralPatientNew");
         a->setIcon(theme()->icon(Constants::ICONPATIENTS));
         cmd = actionManager()->registerAction(a, Constants::A_PATIENT_NEW, ctx);
+        cmd->setDefaultKeySequence(Qt::CTRL + Qt::Key_N);
         cmd->setTranslations(Trans::Constants::PATIENTNEW_TEXT);
         newmenu->addAction(cmd, Constants::G_GENERAL_NEW);
     }
@@ -916,6 +917,7 @@ void MainWindowActionHandler::createPatientsActions(int actions)
         a->setObjectName("aPatientNew");
         a->setIcon(theme()->icon(Constants::ICONPATIENTS));
         cmd = actionManager()->registerAction(a, Constants::A_PATIENT_NEW, ctx);
+        cmd->setDefaultKeySequence(Qt::CTRL + Qt::Key_N);
         cmd->setTranslations(Trans::Constants::PATIENTNEW_TEXT);
         menu->addAction(cmd, Constants::G_PATIENTS);
     }

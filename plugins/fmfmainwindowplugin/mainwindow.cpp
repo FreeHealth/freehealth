@@ -156,7 +156,7 @@ void MainWindow::init()
     Core::MainWindowActions actions;
 
     actions.setGeneralActions(
-            Core::MainWindowActions::A_FileNew  |
+//            Core::MainWindowActions::A_FileNew  |
             Core::MainWindowActions::A_FileSave |
             Core::MainWindowActions::A_FilePrint |
             Core::MainWindowActions::A_FilePrintPreview |

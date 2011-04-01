@@ -204,7 +204,7 @@ void UserManagerPlugin::extensionsInitialized()
     a->setIcon(QIcon(Core::Constants::ICONNEWUSER));
     cmd = actionManager()->registerAction(aCreateUser, Core::Constants::A_CREATEUSER, ctx);
     Q_ASSERT(cmd);
-    cmd->setDefaultKeySequence(QKeySequence(Qt::CTRL + Qt::Key_N, Qt::CTRL + Qt::Key_U));
+    cmd->setDefaultKeySequence(QKeySequence(Qt::CTRL + Qt::SHIFT + Qt::Key_U));
     cmd->setTranslations(Trans::Constants::USER);
     newmenu->addAction(cmd, groupNew);
     cmd->retranslate();
