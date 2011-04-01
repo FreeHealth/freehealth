@@ -185,7 +185,7 @@ bool removeDir(const QString &name, QString *error)
     return true;
 }
 
-QFileInfoList getFiles(QDir fromDir, const QStringList& filters, bool recursive)
+QFileInfoList getFiles(QDir fromDir, const QStringList &filters, bool recursive)
 {
     QFileInfoList files;
     foreach (const QFileInfo & file, fromDir.entryInfoList(QDir::AllEntries | QDir::NoDotAndDotDot, QDir::DirsFirst | QDir::Name)) {
@@ -200,9 +200,24 @@ QFileInfoList getFiles(QDir fromDir, const QStringList& filters, bool recursive)
     return files;
 }
 
-QFileInfoList getFiles(QDir fromDir, const QString& filter, bool recursive)
+QFileInfoList getFiles(QDir fromDir, const QString &filter, bool recursive)
 {
     return getFiles(fromDir, filter.isEmpty() ? QStringList() : QStringList(filter), recursive);
+}
+
+QFileInfoList getDirs(QDir fromDir, const QStringList &filters, bool recursive)
+{
+    QFileInfoList dirs;
+    foreach (const QFileInfo &file, fromDir.entryInfoList(QDir::Dirs | QDir::NoDotAndDotDot, QDir::DirsFirst | QDir::IgnoreCase)) {
+        if (file.isFile() && (filters.isEmpty() || QDir::match(filters, file.fileName())))
+            dirs << file;
+        else if (file.isDir() && recursive) {
+            fromDir.cd(file.filePath());
+            dirs << getFiles(fromDir, filters);
+            fromDir.cdUp();
+        }
+    }
+    return dirs;
 }
 
 /**

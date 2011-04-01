@@ -109,9 +109,10 @@ UTILS_EXPORT QString askUser( const QString &title, const QString &question );
 
 // Working with files and dirs
 UTILS_EXPORT bool removeDir(const QString &name, QString *error);
-UTILS_EXPORT QFileInfoList getFiles( QDir fromDir, const QStringList& filters, bool recursive = true );
-UTILS_EXPORT QFileInfoList getFiles( QDir fromDir, const QString& filters = QString::null, bool recursive = true );
-UTILS_EXPORT bool checkDir( const QString & absPath, bool createIfNotExist, const QString & logDirName = QString::null );
+UTILS_EXPORT QFileInfoList getFiles(QDir fromDir, const QStringList &filters, bool recursive = true);
+UTILS_EXPORT QFileInfoList getFiles(QDir fromDir, const QString &filters = QString::null, bool recursive = true);
+UTILS_EXPORT QFileInfoList getDirs(QDir fromDir, const QStringList &filters, bool recursive = true);
+UTILS_EXPORT bool checkDir( const QString &absPath, bool createIfNotExist, const QString & logDirName = QString::null );
 UTILS_EXPORT bool saveStringToFile( const QString &toSave, const QString &toFile, IOMode mode = Overwrite, const Warn warnUser = WarnUser, QWidget *parent=0 );
 UTILS_EXPORT bool saveStringToFile( const QString &toSave,  const QString &dirPath, const QString &filters, QWidget *parent = 0 );
 UTILS_EXPORT QString readTextFile( const QString &toRead, const QString &encoder, const Warn warnUser = WarnUser, QWidget *parent = 0 );
