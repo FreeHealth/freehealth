@@ -399,17 +399,14 @@ bool CategoryBase::saveCategoryLabels(CategoryItem *category)
         category->data(CategoryItem::DbOnly_LabelId).toInt()==-1) {
         labelId = max(Constants::Table_CATEGORY_LABEL, Constants::CATEGORYLABEL_LABEL_ID) ;
         ++labelId;
-
-        qWarning() << "xxxxxxx New labelId" << category->label() << labelId;
-
         category->setData(CategoryItem::DbOnly_LabelId, labelId);
         // create an empty label using this LabelId
         QSqlQuery query(database());
         query.prepare(prepareInsertQuery(Constants::Table_CATEGORY_LABEL));
         query.bindValue(Constants::CATEGORYLABEL_ID, QVariant());
         query.bindValue(Constants::CATEGORYLABEL_LABEL_ID, labelId);
-        query.bindValue(Constants::CATEGORYLABEL_LANG, QVariant());
-        query.bindValue(Constants::CATEGORYLABEL_VALUE, QVariant());
+        query.bindValue(Constants::CATEGORYLABEL_LANG, QLocale().name().left(2));
+        query.bindValue(Constants::CATEGORYLABEL_VALUE, category->label(QLocale().name().left(2)));
         query.bindValue(Constants::CATEGORYLABEL_ISVALID, 1);
         if (!query.exec()) {
             LOG_QUERY_ERROR(query);
@@ -425,7 +422,8 @@ bool CategoryBase::saveCategoryLabels(CategoryItem *category)
     where.insert(Constants::CATEGORYLABEL_LABEL_ID, QString("=%1").arg(labelId));
     QSqlQuery query(database());
     /** \todo improve this, no need to delete before adding */
-    query.exec(prepareDeleteQuery(Constants::Table_CATEGORY_LABEL, where));
+    if (!category->allLanguagesForLabel().isEmpty())
+        query.exec(prepareDeleteQuery(Constants::Table_CATEGORY_LABEL, where));
     // save labels
     foreach(const QString &lang, category->allLanguagesForLabel()) {
         where.clear();
@@ -455,9 +453,9 @@ bool CategoryBase::saveCategoryLabels(CategoryItem *category)
     return true;
 }
 
-
 void CategoryBase::onCoreDatabaseServerChanged()
 {
+    /** \todo code here */
 //    m_initialized = false;
 //    if (QSqlDatabase::connectionNames().contains(Templates::Constants::DB_TEMPLATES_NAME)) {
 //        QSqlDatabase::removeDatabase(Templates::Constants::DB_TEMPLATES_NAME);
