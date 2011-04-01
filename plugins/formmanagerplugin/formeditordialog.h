@@ -24,85 +24,42 @@
  *       NAME <MAIL@ADRESS>                                                *
  *       NAME <MAIL@ADRESS>                                                *
  ***************************************************************************/
-#ifndef FORMMANAGERPREFERENCESPAGE_H
-#define FORMMANAGERPREFERENCESPAGE_H
+#ifndef FORMEDITORDIALOG_H
+#define FORMEDITORDIALOG_H
 
-#include <coreplugin/ioptionspage.h>
-
-#include <QPointer>
-#include <QObject>
-
-/**
- * \file formmanagerpreferencespage.h
- * \author Eric MAEKER <eric.maeker@free.fr>
- * \version 0.4.0
- * \date 09 June 2010
-*/
-
-
-namespace Core {
-class ISettings;
-}
+#include <QDialog>
 
 namespace Form {
-class FormFilesSelectorWidget;
-
-namespace Internal {
+class EpisodeModel;
 namespace Ui {
-class FormManagerPreferencesWidget;
+    class FormEditorDialog;
 }
 
-class FormManagerPreferencesWidget : public QWidget
+class FormEditorDialog : public QDialog
 {
     Q_OBJECT
-    Q_DISABLE_COPY(FormManagerPreferencesWidget)
 
 public:
-    explicit FormManagerPreferencesWidget(QWidget *parent = 0);
-    ~FormManagerPreferencesWidget();
+    enum EditionMode {
+        ViewOnly      = 0x000,
+        AllowAddition = 0x001,
+        AllowEdition  = 0x002,
+        AllowRemoval  = 0x004,
+        DefaultMode   = ViewOnly
+    };
+    Q_DECLARE_FLAGS(EditionModes, EditionMode)
 
-    static void writeDefaultSettings(Core::ISettings *) {}
-
-public Q_SLOTS:
-    void saveFormToBase();
-    void saveToSettings(Core::ISettings *);
+    explicit FormEditorDialog(EpisodeModel *model, EditionModes mode = DefaultMode, QWidget *parent = 0);
+    ~FormEditorDialog();
 
 protected:
-    virtual void changeEvent(QEvent *e);
+    void changeEvent(QEvent *e);
 
 private:
-    Ui::FormManagerPreferencesWidget *ui;
+    Ui::FormEditorDialog *ui;
 };
 
+}  // End namespace Form
+Q_DECLARE_OPERATORS_FOR_FLAGS(Form::FormEditorDialog::EditionModes);
 
-class FormManagerPreferencesPage : public Core::IOptionsPage
-{
-    Q_OBJECT
-public:
-    FormManagerPreferencesPage(QObject *parent = 0);
-    ~FormManagerPreferencesPage();
-
-    QString id() const;
-    QString name() const;
-    QString category() const;
-
-    void resetToDefaults();
-    void checkSettingsValidity();
-    void applyChanges();
-    void finish();
-
-    QString helpPage() {return "parametrer.html";}
-
-    static void writeDefaultSettings(Core::ISettings *s) {FormManagerPreferencesWidget::writeDefaultSettings(s);}
-
-    QWidget *createPage(QWidget *parent = 0);
-private:
-    QPointer<FormManagerPreferencesWidget> m_Widget;
-};
-
-
-}  // End Internal
-}  // End Form
-
-
-#endif // FORMMANAGERPREFERENCESPAGE_H
+#endif // FORMEDITORDIALOG_H

@@ -30,6 +30,7 @@
 #include <formmanagerplugin/formmanager_exporter.h>
 
 #include <QWidget>
+#include <QAbstractItemView>
 
 QT_BEGIN_NAMESPACE
 class QModelIndex;
@@ -39,27 +40,43 @@ QT_END_NAMESPACE
 /**
  * \file formfileselectorwidget.h
  * \author Eric MAEKER <eric.maeker@free.fr>
- * \version 0.4.0
- * \date 08 June 2010
+ * \version 0.5.0
+ * \date 01 Apr 2011
 */
 
 namespace Form {
+class FormIODescription;
 namespace Internal {
 class FormFilesSelectorWidgetPrivate;
 }  // End namespace Internal
 
-/** \todo add default management */
 class FORM_EXPORT FormFilesSelectorWidget : public QWidget
 {
     Q_OBJECT
 
 public:
-    FormFilesSelectorWidget(QWidget *parent = 0);
+    enum FormType {
+        AllForms = 0,
+        CompleteForms,
+        SubForms,
+        Pages
+    };
+    enum SelectionType {
+        Single = QAbstractItemView::SingleSelection,
+        Multiple = QAbstractItemView::MultiSelection
+    };
+
+    FormFilesSelectorWidget(QWidget *parent = 0, const FormType type = AllForms);
     ~FormFilesSelectorWidget();
 
+    void setFormType(FormType type);
+    void setSelectionType(SelectionType type);
+
+    QList<Form::FormIODescription *> selectedForms() const;
+
 private Q_SLOTS:
-    void on_useButton_clicked();
-    void on_listView_activated(const QModelIndex &index);
+    void on_treeView_activated(const QModelIndex &index);
+    void onFilterSelected();
 
 protected:
     void changeEvent(QEvent *e);

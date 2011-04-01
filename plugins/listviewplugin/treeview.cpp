@@ -120,6 +120,7 @@ void TreeView::setActions(Constants::AvailableActions actions)
 void TreeView::setCommands(const QStringList &commandsUid)
 {
     d->m_Actions = 0;
+    d->m_ExtView->setActions(0);
     d->calculateContext();
     d->m_ExtView->setCommands(commandsUid);
 }

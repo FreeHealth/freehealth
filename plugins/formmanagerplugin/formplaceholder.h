@@ -94,6 +94,7 @@ protected Q_SLOTS:
     void newEpisode();
     void removeEpisode();
     void validateEpisode();
+    void addForm();
 
 private:
     Internal::FormPlaceHolderPrivate *d;

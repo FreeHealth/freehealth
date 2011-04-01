@@ -27,7 +27,6 @@
 #include "formfilesselectorwidget.h"
 #include "ui_formfilesselectorwidget.h"
 #include "iformio.h"
-#include "episodebase.h"
 
 #include <coreplugin/icore.h>
 #include <coreplugin/isettings.h>
@@ -41,6 +40,9 @@
 #include <QFileSystemModel>
 #include <QFileIconProvider>
 #include <QModelIndex>
+#include <QStandardItemModel>
+#include <QAction>
+#include <QItemSelectionModel>
 
 #include <QDebug>
 
@@ -51,7 +53,6 @@ static inline Core::ISettings *settings()  { return Core::ICore::instance()->set
 static inline Core::ITheme *theme()  { return Core::ICore::instance()->theme(); }
 inline static ExtensionSystem::PluginManager *pluginManager() {return ExtensionSystem::PluginManager::instance();}
 inline static QList<Form::IFormIO*> refreshIOPlugs() {return pluginManager()->getObjects<Form::IFormIO>();}
-static inline Form::Internal::EpisodeBase *episodeBase() {return Form::Internal::EpisodeBase::instance();}
 static inline Core::IPatient *patient() {return Core::ICore::instance()->patient();}
 
 
@@ -95,19 +96,112 @@ private:
 class FormFilesSelectorWidgetPrivate
 {
 public:
-    FormFilesSelectorWidgetPrivate() : ui(new Ui::FormFilesSelectorWidget) {}
+    FormFilesSelectorWidgetPrivate() :
+            ui(new Ui::FormFilesSelectorWidget),
+            aByCategory(0), aByAuthor(0), aBySpecialties(0), aByType(0),
+            m_TreeModel(0)
+    {}
 
     ~FormFilesSelectorWidgetPrivate()
     {
+        qDeleteAll(m_FormDescr);
+        m_FormDescr.clear();
         delete ui;
-        delete m_IconProvider;
+//        delete m_IconProvider;
+        if (m_TreeModel)
+            delete m_TreeModel;
+        m_TreeModel = 0;
+    }
+
+    void createActions()
+    {
+        QAction *a = aByCategory = new QAction(ui->toolButton);
+        a->setIcon(theme()->icon(Core::Constants::ICONCATEGORY_MANAGER));
+        a->setText(QCoreApplication::translate("FormFilesSelectorWidget", "by category"));
+        a->setToolTip(QCoreApplication::translate("FormFilesSelectorWidget", "by category"));
+        ui->toolButton->addAction(a);
+
+        a = aByAuthor = new QAction(ui->toolButton);
+        a->setIcon(theme()->icon(Core::Constants::ICONUSER));
+        a->setText(QCoreApplication::translate("FormFilesSelectorWidget", "by author"));
+        a->setToolTip(QCoreApplication::translate("FormFilesSelectorWidget", "by author"));
+        ui->toolButton->addAction(a);
+
+        a = aBySpecialties = new QAction(ui->toolButton);
+        a->setIcon(theme()->icon(Core::Constants::ICONFREEMEDFORMS));
+        a->setText(QCoreApplication::translate("FormFilesSelectorWidget", "by specialty"));
+        a->setToolTip(QCoreApplication::translate("FormFilesSelectorWidget", "by specialty"));
+        ui->toolButton->addAction(a);
+
+        a = aByType = new QAction(ui->toolButton);
+        a->setIcon(theme()->icon(Core::Constants::ICONFREEMEDFORMS));
+        a->setText(QCoreApplication::translate("FormFilesSelectorWidget", "by type"));
+        a->setToolTip(QCoreApplication::translate("FormFilesSelectorWidget", "by type"));
+        ui->toolButton->addAction(a);
+
+        ui->toolButton->setDefaultAction(aByCategory);
+    }
+
+    void getDescriptions()
+    {
+        qDeleteAll(m_FormDescr);
+        m_FormDescr.clear();
+        ios = refreshIOPlugs();
+        Form::FormIOQuery query;
+        switch (m_Type) {
+        case FormFilesSelectorWidget::AllForms: break;
+        case FormFilesSelectorWidget::CompleteForms: query.setTypeOfForms(Form::FormIOQuery::CompleteForms); break;
+        case FormFilesSelectorWidget::SubForms: query.setTypeOfForms(Form::FormIOQuery::SubForms); break;
+        case FormFilesSelectorWidget::Pages: query.setTypeOfForms(Form::FormIOQuery::Pages); break;
+        }
+        foreach(Form::IFormIO *io, ios) {
+            m_FormDescr = io->getFormFileDescriptions(query);
+        }
+    }
+
+    void createTreeModel(const int treeItemReference)
+    {
+        QFont bold;
+        bold.setBold(true);
+        if (!m_TreeModel) {
+            m_TreeModel = new QStandardItemModel;
+        } else {
+            m_TreeModel->clear();
+        }
+        QStandardItem *parentItem = m_TreeModel->invisibleRootItem();
+        QHash<QString, QStandardItem *> categories;
+        for(int i=0; i < m_FormDescr.count(); ++i) {
+            Form::FormIODescription *descr = m_FormDescr.at(i);
+            const QString &cat = descr->data(treeItemReference).toString();
+            QStandardItem *catItem = 0;
+            if (!categories.contains(cat)) {
+                QString catName = descr->data(treeItemReference).toString();
+                if (catName.isEmpty()) {
+                    catName = QCoreApplication::translate("FormFilesSelectorWidget", "Default Forms");
+                }
+                catItem = new QStandardItem(catName);
+                catItem->setFont(bold);
+                categories.insert(cat, catItem);
+                parentItem->appendRow(catItem);
+            } else {
+                catItem = categories.value(cat);
+            }
+            QStandardItem *item = new QStandardItem(descr->data(FormIODescription::ShortDescription).toString());
+            item->setData(i, Qt::UserRole+1);
+            catItem->appendRow(item);
+        }
     }
 
 public:
     Ui::FormFilesSelectorWidget *ui;
-    QFileSystemModel *dirModel;
-    FormFilesIcons *m_IconProvider;
+    FormFilesSelectorWidget::FormType m_Type;
+    QAction *aByCategory, *aByAuthor, *aBySpecialties, *aByType;
+//    QFileSystemModel *dirModel;
+//    FormFilesIcons *m_IconProvider;
     QList<Form::IFormIO*> ios;
+    QList<Form::FormIODescription *> m_FormDescr;
+    QStandardItemModel *m_TreeModel;
+    int m_ActualTreeModelColumn, m_SelType;
 };
 
 }  // End namespace Internal
@@ -115,34 +209,35 @@ public:
 
 
 
-FormFilesSelectorWidget::FormFilesSelectorWidget(QWidget *parent) :
+FormFilesSelectorWidget::FormFilesSelectorWidget(QWidget *parent, const FormType type) :
     QWidget(parent),
     d(new FormFilesSelectorWidgetPrivate)
 {
+    d->m_Type = type;
+    d->m_SelType = Single;
     d->ui->setupUi(this);
-    QString actual = episodeBase()->getGenericFormFile();
-    actual = actual.mid(settings()->path(Core::ISettings::CompleteFormsPath).length() + 1);
-    d->ui->actualFile->setText(actual);
-    // get IFormIO
-    d->ios = refreshIOPlugs();
-    // construct filters
-    QStringList filters;
-    foreach(const Form::IFormIO *io, d->ios) {
-        filters.append(io->managedFileExtension());
-    }
+    d->createActions();
+    // Get current generic form file
+//    QString actual = episodeBase()->getGenericFormFile();
+//    actual = actual.mid(settings()->path(Core::ISettings::CompleteFormsPath).length() + 1);
+//    d->ui->actualFile->setText(actual);
 
-    d->dirModel = new QFileSystemModel(this);
-//    d->dirModel->setReadOnly(true);
-    d->dirModel->setFilter(QDir::NoDotAndDotDot | QDir::Dirs);
-    d->dirModel->setIconProvider(d->m_IconProvider = new Internal::FormFilesIcons());
-    d->dirModel->setRootPath(settings()->path(Core::ISettings::CompleteFormsPath));
-//    d->dirModel->setNameFilters(filters);
+    // get all Forms description
+    d->getDescriptions();
 
-    d->ui->listView->setModel(d->dirModel);
-    d->ui->listView->setRootIndex(d->dirModel->index(settings()->path(Core::ISettings::CompleteFormsPath)));
+    // prepare the first model = category tree model
+    d->m_ActualTreeModelColumn = Form::FormIODescription::Category;
+    d->createTreeModel(d->m_ActualTreeModelColumn);
+    d->ui->treeView->setModel(d->m_TreeModel);
+    d->ui->treeView->header()->hide();
+//    d->ui->treeView->setRootIndex(d->dirModel->index(settings()->path(Core::ISettings::CompleteFormsPath)));
 
-    connect(d->ui->listView, SIGNAL(activated(QModelIndex)),this, SLOT(on_listView_activated(QModelIndex)));
-    connect(d->ui->useButton, SIGNAL(clicked()),this, SLOT(on_useButton_clicked()));
+    // connect actions, buttons...
+    connect(d->ui->treeView, SIGNAL(activated(QModelIndex)),this, SLOT(on_treeView_activated(QModelIndex)));
+    connect(d->aByCategory, SIGNAL(triggered()), this, SLOT(onFilterSelected()));
+    connect(d->aByAuthor, SIGNAL(triggered()), this, SLOT(onFilterSelected()));
+    connect(d->aBySpecialties, SIGNAL(triggered()), this, SLOT(onFilterSelected()));
+    connect(d->aByType, SIGNAL(triggered()), this, SLOT(onFilterSelected()));
 }
 
 FormFilesSelectorWidget::~FormFilesSelectorWidget()
@@ -150,39 +245,68 @@ FormFilesSelectorWidget::~FormFilesSelectorWidget()
     delete d;
 }
 
-void FormFilesSelectorWidget::on_useButton_clicked()
+void FormFilesSelectorWidget::setFormType(FormType type)
 {
-    if (!d->ui->listView->selectionModel()->hasSelection())
+    if (d->m_Type==type)
         return;
-    QFileInfo selected = d->dirModel->fileInfo(d->ui->listView->currentIndex());
-    episodeBase()->setGenericPatientFormFile(selected.absoluteFilePath());
+    d->m_Type = type;
+    d->getDescriptions();
+    d->createTreeModel(d->m_ActualTreeModelColumn);
 }
 
-void FormFilesSelectorWidget::on_listView_activated(const QModelIndex &index)
+void FormFilesSelectorWidget::setSelectionType(SelectionType type)
+{
+    if (d->m_SelType==type)
+        return;
+    d->ui->treeView->clearSelection();
+    d->ui->treeView->setSelectionMode(QAbstractItemView::SelectionMode(type));
+}
+
+QList<Form::FormIODescription *> FormFilesSelectorWidget::selectedForms() const
+{
+    QList<Form::FormIODescription *> toReturn;
+    QItemSelectionModel *model = d->ui->treeView->selectionModel();
+    if (!model->hasSelection())
+        return toReturn;
+    foreach(const QModelIndex &index, model->selectedIndexes()) {
+        int id = d->ui->treeView->currentIndex().data(Qt::UserRole+1).toInt();
+        if (id >= 0 && id < d->m_FormDescr.count()) {
+            Form::FormIODescription *descr = d->m_FormDescr.at(id);
+            toReturn << descr;
+        }
+    }
+    return toReturn;
+}
+
+void FormFilesSelectorWidget::on_treeView_activated(const QModelIndex &index)
 {
     if (!index.isValid())
         return;
-    d->ui->treeWidget->clear();
-    // get the fileName
-    const QString &file = d->ui->listView->currentIndex().data().toString();
-    // ask ios to generate description in the treeview
-    foreach(Form::IFormIO *io, d->ios) {
-        if (io->setFileName(settings()->path(Core::ISettings::CompleteFormsPath) + QDir::separator() + file)) {
-            if (io->canReadFile()) {
-                Form::FormIODescription desc = io->readFileInformations();
-                desc.formDescriptionToTreeWidget(d->ui->treeWidget);
-                return;
-            } else {
-                QTreeWidgetItem *item = new QTreeWidgetItem(d->ui->treeWidget, QStringList() << io->name());
-                item->setExpanded(true);
-                QFont bold;
-                bold.setBold(true);
-                item->setFont(0, bold);
-                foreach(const QString &err, io->lastError().split("\n"))
-                    new QTreeWidgetItem(item, QStringList() << err);
-            }
-        }
+    // get the FormIODescription
+    int id = d->ui->treeView->currentIndex().data(Qt::UserRole+1).toInt();
+    if (id >= 0 && id < d->m_FormDescr.count()) {
+        Form::FormIODescription *descr = d->m_FormDescr.at(id);
+        descr->toTreeWidget(d->ui->treeWidget);
+    } else {
+        d->ui->treeWidget->clear();
     }
+}
+
+void FormFilesSelectorWidget::onFilterSelected()
+{
+    QAction *action = qobject_cast<QAction*>(sender());
+    if (!action)
+        return;
+    if (action == d->aByCategory) {
+        d->createTreeModel(Form::FormIODescription::Category);
+    } else if (action == d->aByAuthor) {
+        d->createTreeModel(Form::FormIODescription::Author);
+    } else if (action == d->aBySpecialties) {
+        d->createTreeModel(Form::FormIODescription::Specialties);
+    } else if (action == d->aByType) {
+        d->createTreeModel(Form::FormIODescription::TypeName);
+    }
+    d->ui->toolButton->setDefaultAction(action);
 }
 
 void FormFilesSelectorWidget::changeEvent(QEvent *e)

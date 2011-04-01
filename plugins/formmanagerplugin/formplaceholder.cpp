@@ -34,6 +34,7 @@
 #include "formplaceholder.h"
 #include "constants_settings.h"
 #include "constants_db.h"
+#include "formeditordialog.h"
 
 #include <formmanagerplugin/formmanager.h>
 #include <formmanagerplugin/iformitem.h>
@@ -242,12 +243,12 @@ FormPlaceHolder::FormPlaceHolder(QWidget *parent) :
     QWidget *w = new QWidget(this);
 //    d->m_FileTree = new QTreeView(this);
     d->m_FileTree = new Views::TreeView(this,0);
-    d->m_FileTree->disconnectActionsToDefaultSlots();
-    d->m_FileTree->setDeselectable(false);
-    d->m_FileTree->useContextMenu(true);
-    d->m_FileTree->setObjectName("FormTree");
-    d->m_FileTree->addContexts(contexts());
+    d->m_FileTree->setActions(0);
     d->m_FileTree->setCommands(QStringList() << Constants::A_ADDEPISODE << Constants::A_VALIDATEEPISODE << Constants::A_ADDFORM);
+    d->m_FileTree->addContexts(contexts());
+    d->m_FileTree->setDeselectable(false);
+    d->m_FileTree->disconnectActionsToDefaultSlots();
+    d->m_FileTree->setObjectName("FormTree");
 //    d->m_FileTree->setIndentation(10);
     d->m_FileTree->viewport()->setAttribute(Qt::WA_Hover);
     d->m_FileTree->setItemDelegate((d->m_Delegate = new Internal::FormItemDelegate(this)));
@@ -260,11 +261,13 @@ FormPlaceHolder::FormPlaceHolder(QWidget *parent) :
     connect(d->m_FileTree, SIGNAL(clicked(QModelIndex)), this, SLOT(handleClicked(QModelIndex)));
     connect(d->m_FileTree, SIGNAL(pressed(QModelIndex)), this, SLOT(handlePressed(QModelIndex)));
     connect(d->m_FileTree, SIGNAL(activated(QModelIndex)), this, SLOT(setCurrentEpisode(QModelIndex)));
-    connect(d->m_FileTree, SIGNAL(addRequested()), this, SLOT(newEpisode()));
-    connect(d->m_FileTree, SIGNAL(removeRequested()), this, SLOT(removeEpisode()));
+//    connect(d->m_FileTree, SIGNAL(addRequested()), this, SLOT(newEpisode()));
+//    connect(d->m_FileTree, SIGNAL(removeRequested()), this, SLOT(removeEpisode()));
 
     Core::Command *cmd = actionManager()->command(Constants::A_ADDEPISODE);
     connect(cmd->action(), SIGNAL(triggered()), this, SLOT(newEpisode()));
+    cmd = actionManager()->command(Constants::A_ADDFORM);
+    connect(cmd->action(), SIGNAL(triggered()), this, SLOT(addForm()));
 
 //    connect(d->m_FileTree, SIGNAL(customContextMenuRequested(QPoint)),
 //            this, SLOT(contextMenuRequested(QPoint)));
@@ -450,6 +453,8 @@ void FormPlaceHolder::setCurrentEpisode(const QModelIndex &index)
 
 void FormPlaceHolder::newEpisode()
 {
+    if (!d->m_FileTree->selectionModel())
+        return;
     // get the parent form
     QModelIndex index;
     if (!d->m_FileTree->selectionModel()->hasSelection())
@@ -481,10 +486,24 @@ void FormPlaceHolder::newEpisode()
 
 void FormPlaceHolder::removeEpisode()
 {
+    if (!d->m_FileTree->selectionModel())
+        return;
     /** \todo removeEpisode */
 }
 
 void FormPlaceHolder::validateEpisode()
 {
+    if (!d->m_FileTree->selectionModel())
+        return;
     /** \todo validateEpisode */
 }
+
+void FormPlaceHolder::addForm()
+{
+    if (!isVisible())
+        return;
+    // Dialog ?
+    FormEditorDialog dlg(d->m_EpisodeModel, FormEditorDialog::DefaultMode, this);
+    dlg.exec();
+}
+

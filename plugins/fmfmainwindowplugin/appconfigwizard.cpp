@@ -37,6 +37,7 @@
 
 #include <formmanagerplugin/formfilesselectorwidget.h>
 #include <formmanagerplugin/episodebase.h>
+#include <formmanagerplugin/iformio.h>
 
 #include <usermanagerplugin/widgets/userwizard.h>
 #include <usermanagerplugin/widgets/userpassworddialog.h>
@@ -223,6 +224,7 @@ PatientFilePage::PatientFilePage(QWidget *parent) :
     setSubTitle(tr("FreeMedForms allows you to define your own patient forms file. You can select it from here. All patients will have the same forms."));
 
     selector = new Form::FormFilesSelectorWidget(this);
+    selector->setFormType(Form::FormFilesSelectorWidget::CompleteForms);
 
     QGridLayout *layout = new QGridLayout(this);
     layout->addWidget(selector, 0, 0);
@@ -231,7 +233,10 @@ PatientFilePage::PatientFilePage(QWidget *parent) :
 
 bool PatientFilePage::validatePage()
 {
-    return QFileInfo(episodeBase()->getGenericFormFile()).exists();
+    if (!selector->selectedForms().count())
+        return false;
+    Form::FormIODescription *descr = selector->selectedForms().at(0);
+    return episodeBase()->setGenericPatientFormFile(descr->data(Form::FormIODescription::UuidOrAbsPath).toString());
 }
 
 

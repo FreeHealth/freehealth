@@ -57,7 +57,7 @@
   IO engine can read the file. \sa Form::IFormIO::setFileName()
 */
 
-/** \fn virtual void formDescriptionToTreeWidget(QTreeWidget *tree, const QString &lang = Trans::Constants::ALL_LANGUAGE) const;
+/** \fn virtual void toTreeWidget(QTreeWidget *tree, const QString &lang = Trans::Constants::ALL_LANGUAGE) const;
   If the file is accessible to the IO device and is readable, read its description and populate a
   QTreeWidget with it. Form::IFormIO::canReadFile() must be called first.
 */
@@ -83,50 +83,90 @@
 #include <QDebug>
 
 using namespace Form;
+using namespace Internal;
 using namespace Trans::ConstantTranslations;
 
-FormIODescription::FormIODescription()
+namespace Form {
+namespace Internal {
+class DescriptionBook
+{
+public:
+    QHash<int, QVariant> m_Datas;
+};
+
+class FormIODescriptionPrivate : public Trans::MultiLingualClass<DescriptionBook>
+{
+public:
+    FormIODescriptionPrivate() {}
+    ~FormIODescriptionPrivate() {}
+};
+}
+}
+
+FormIODescription::FormIODescription() :
+        d(new FormIODescriptionPrivate),
+        m_reader(0)
 {}
 
 FormIODescription::~FormIODescription()
-{}
+{
+    if (d)
+        delete d;
+    d = 0;
+}
 
 QVariant FormIODescription::data(const int ref, const QString &lang) const
 {
+    if (ref == TypeName) {
+        if (data(IsCompleteForm).toBool()) {
+            return QCoreApplication::translate("FormIODescription", "Complete form");
+        } else if (data(IsSubForm).toBool()) {
+            return QCoreApplication::translate("FormIODescription", "Sub-form");
+        } else if (data(IsPage).toBool()) {
+            return QCoreApplication::translate("FormIODescription", "Page only");
+        }
+        return QVariant();
+    }
     QString l = lang;
     if (lang.isEmpty()) {
         l = QLocale().name().left(2);
-        QHash<int, QVariant> *datas = m_Datas.getLanguage(l);
-        if (datas) {
-            if (!datas->value(ref).isNull())
-                return datas->value(ref);
+        DescriptionBook *book = d->getLanguage(l);
+        if (book) {
+            QVariant val = book->m_Datas.value(ref, QVariant());
+            if (!val.isNull())
+                return val;
         }
         l = Trans::Constants::ALL_LANGUAGE;
-        datas = m_Datas.getLanguage(l);
-        if (datas) {
-            if (!datas->value(ref).isNull())
-                return datas->value(ref);
+        book = d->getLanguage(l);
+        if (book) {
+            QVariant val = book->m_Datas.value(ref, QVariant());
+            if (!val.isNull())
+                return val;
         }
     }
-    QHash<int, QVariant> *datas = m_Datas.getLanguage(lang);
-    if (datas) {
-        if (!datas->value(ref).isNull())
-            return datas->value(ref);
+    DescriptionBook *book = d->getLanguage(l);
+    if (book) {
+        QVariant val = book->m_Datas.value(ref, QVariant());
+        if (!val.isNull())
+            return val;
     }
     return QVariant();
 }
 
 bool FormIODescription::setData(const int ref, const QVariant &value, const QString &lang)
 {
+//    if (ref==Category) {
+        qWarning() << ref << value << lang;
+//    }
     QString l = lang;
     if (lang.isEmpty())
         l = Trans::Constants::ALL_LANGUAGE;
-    QHash<int, QVariant> *datas = m_Datas.createLanguage(l);
-    datas->insert(ref, value);
+    DescriptionBook *book = d->createLanguage(l);
+    book->m_Datas.insert(ref, value);
     return true;
 }
 
-void FormIODescription::formDescriptionToTreeWidget(QTreeWidget *tree) const
+void FormIODescription::toTreeWidget(QTreeWidget *tree) const
 {
     /** \todo code here */
     tree->clear();
@@ -136,6 +176,7 @@ void FormIODescription::formDescriptionToTreeWidget(QTreeWidget *tree) const
 
     QTreeWidgetItem *general = new QTreeWidgetItem(tree, QStringList() << tkTr(Trans::Constants::INFORMATIONS));
     general->setFont(0, bold);
+    new QTreeWidgetItem(general, QStringList() << "Uuid" << data(FormIODescription::UuidOrAbsPath).toString());
     new QTreeWidgetItem(general, QStringList() << tkTr(Trans::Constants::AUTHOR) << data(FormIODescription::Author).toString());
     new QTreeWidgetItem(general, QStringList() << QCoreApplication::translate("Forms", "License") << data(FormIODescription::License).toString());
     new QTreeWidgetItem(general, QStringList() << tkTr(Trans::Constants::DESCRIPTION) << data(FormIODescription::ShortDescription).toString());
@@ -144,7 +185,8 @@ void FormIODescription::formDescriptionToTreeWidget(QTreeWidget *tree) const
     version->setFont(0, bold);
     new QTreeWidgetItem(version, QStringList() << tkTr(Trans::Constants::VERSION) << data(FormIODescription::Version).toString());
     new QTreeWidgetItem(version, QStringList() << QCoreApplication::translate("Forms", "Creation date") << data(FormIODescription::CreationDate).toDate().toString(QLocale().dateFormat(QLocale::ShortFormat)));
-    new QTreeWidgetItem(version, QStringList() << QCoreApplication::translate("Forms", "Last modification date") << data(FormIODescription::LastModificationDate).toDate().toString(QLocale().dateFormat(QLocale::ShortFormat)));
+    if (!data(FormIODescription::LastModificationDate).isNull())
+        new QTreeWidgetItem(version, QStringList() << QCoreApplication::translate("Forms", "Last modification date") << data(FormIODescription::LastModificationDate).toDate().toString(QLocale().dateFormat(QLocale::ShortFormat)));
 
     tree->expandAll();
     tree->resizeColumnToContents(0);
@@ -154,6 +196,8 @@ void FormIODescription::formDescriptionToTreeWidget(QTreeWidget *tree) const
 void FormIODescription::warn() const
 {
     QString tmp = "FormIODescription(";
+    if (m_reader)
+        tmp += "reader: " + m_reader->name() + "\n";
     for(int i=0; i < MaxParam; ++i) {
         tmp += QString("%1:%2\n").arg(i).arg(data(i).toString());
     }

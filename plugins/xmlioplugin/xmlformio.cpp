@@ -34,6 +34,7 @@
 
 #include <coreplugin/icore.h>
 #include <coreplugin/ipatient.h>
+#include <coreplugin/isettings.h>
 
 //#include <formmanagerplugin/formmanager.h>
 #include <formmanagerplugin/iformitem.h>
@@ -72,6 +73,7 @@ namespace {
 
 //inline static Form::FormManager *formManager() { return Form::FormManager::instance(); }
 inline static ExtensionSystem::PluginManager *pluginManager() {return ExtensionSystem::PluginManager::instance();}
+static inline Core::ISettings *settings()  { return Core::ICore::instance()->settings(); }
 
 inline static void refreshPlugsFactories()
 {
@@ -283,40 +285,104 @@ bool XmlFormIO::canReadFile() const
     return ok;
 }
 
-Form::FormIODescription XmlFormIO::readFileInformations()
+static Form::FormIODescription *readFileInformations(const QDomDocument &doc)
 {
-    Form::FormIODescription ioDesc;
-    QDomElement root = m_MainDoc.documentElement();
-    // get version
-    ioDesc.setData(Form::FormIODescription::Version, root.firstChildElement(Constants::TAG_SPEC_VERSION).text());
-    ioDesc.setData(Form::FormIODescription::Author, root.firstChildElement(Constants::TAG_SPEC_AUTHORS).text());
-    ioDesc.setData(Form::FormIODescription::CreationDate, root.firstChildElement(Constants::TAG_SPEC_CREATIONDATE).text());
-    ioDesc.setData(Form::FormIODescription::GeneralIcon, root.firstChildElement(Constants::TAG_SPEC_ICON).text());
-    // get descriptions
-    QDomElement desc = root.firstChildElement(Constants::TAG_SPEC_DESCRIPTION);
-    while (!desc.isNull()) {
-        ioDesc.setData(Form::FormIODescription::ShortDescription, desc.text(), desc.attribute(Constants::ATTRIB_LANGUAGE, Trans::Constants::ALL_LANGUAGE));
-        desc = root.nextSiblingElement(Constants::TAG_SPEC_DESCRIPTION);
+    Form::FormIODescription *ioDesc = new Form::FormIODescription;
+    QDomElement root = doc.documentElement();
+    root = root.firstChildElement(Constants::TAG_FORM_DESCRIPTION);
+    QHash<int, QString> elements;
+    // get non translatable items
+    elements.insert(Form::FormIODescription::Version, Constants::TAG_SPEC_VERSION);
+    elements.insert(Form::FormIODescription::Author, Constants::TAG_SPEC_AUTHORS);
+    elements.insert(Form::FormIODescription::CreationDate, Constants::TAG_SPEC_CREATIONDATE);
+    elements.insert(Form::FormIODescription::LastModificationDate, Constants::TAG_SPEC_LASTMODIFDATE);
+    elements.insert(Form::FormIODescription::GeneralIcon, Constants::TAG_SPEC_ICON);
+    elements.insert(Form::FormIODescription::WebLink, Constants::TAG_SPEC_WEBLINK);
+    elements.insert(Form::FormIODescription::FreeMedFormsCompatVersion, Constants::TAG_SPEC_COMPTAVERSION);
+    QHashIterator<int, QString> i(elements);
+    while (i.hasNext()) {
+        i.next();
+        ioDesc->setData(i.key(), root.firstChildElement(i.value()).text());
     }
-    desc = root.firstChildElement(Constants::TAG_SPEC_HTMLDESCRIPTION);
-    while (!desc.isNull()) {
-        ioDesc.setData(Form::FormIODescription::HtmlDescription, desc.text(), desc.attribute(Constants::ATTRIB_LANGUAGE, Trans::Constants::ALL_LANGUAGE));
-        desc = root.nextSiblingElement(Constants::TAG_SPEC_HTMLDESCRIPTION);
-    }
-    desc = root.firstChildElement(Constants::TAG_SPEC_LICENSE);
-    while (!desc.isNull()) {
-        ioDesc.setData(Form::FormIODescription::License, desc.text(), desc.attribute(Constants::ATTRIB_LANGUAGE, Trans::Constants::ALL_LANGUAGE));
-        desc = root.nextSiblingElement(Constants::TAG_SPEC_LICENSE);
+    // get translatable items
+    elements.clear();
+    elements.insert(Form::FormIODescription::Category, Constants::TAG_SPEC_CATEGORY);
+    elements.insert(Form::FormIODescription::ShortDescription, Constants::TAG_SPEC_DESCRIPTION);
+    elements.insert(Form::FormIODescription::HtmlDescription, Constants::TAG_SPEC_HTMLDESCRIPTION);
+    elements.insert(Form::FormIODescription::License, Constants::TAG_SPEC_LICENSE);
+    elements.insert(Form::FormIODescription::Specialties, Constants::TAG_SPEC_SPECIALTIES);
+    i = elements;
+    while (i.hasNext()) {
+        i.next();
+        QDomElement desc = root.firstChildElement(i.value());
+        while (!desc.isNull()) {
+            ioDesc->setData(i.key(), desc.text(), desc.attribute(Constants::ATTRIB_LANGUAGE, Trans::Constants::ALL_LANGUAGE));
+            desc = desc.nextSiblingElement(i.value());
+        }
     }
     return ioDesc;
 }
 
-//QString XmlFormIO::formDescription(const QString &lang) const
-//{
-//    if (m_Desc.value(lang).isEmpty())
-//        return m_Desc.value(Trans::Constants::ALL_LANGUAGE);
-//    return m_Desc.value(lang);
-//}
+static Form::FormIODescription *readFileInformations(const QString &absFileName)
+{
+    QDomDocument doc;
+    doc.setContent(Utils::readTextFile(absFileName));
+    Form::FormIODescription *descr = readFileInformations(doc);
+    descr->setData(Form::FormIODescription::UuidOrAbsPath, QFileInfo(absFileName).absolutePath());
+    return descr;
+}
+
+Form::FormIODescription *XmlFormIO::readFileInformations()
+{
+    Form::FormIODescription *ioDesc = ::readFileInformations(m_MainDoc);
+    ioDesc->setIoFormReader(this);
+    ioDesc->setData(Form::FormIODescription::UuidOrAbsPath, m_AbsFileName);
+    return ioDesc;
+}
+
+static void getAllFormsFromDir(const QString &absPath, QList<Form::FormIODescription *> *list)
+{
+    QDir start(absPath);
+    if (!start.exists()) {
+        LOG_ERROR_FOR("XmlFormIO", tkTr(Trans::Constants::PATH_1_DOESNOT_EXISTS).arg(absPath) +
+                  "\n" + tkTr(Trans::Constants::FILE_1_ISNOT_READABLE).arg("File Form"));
+        return;
+    }
+    // get all forms included in this path
+    foreach(const QFileInfo &file, Utils::getFiles(start, "central.xml", true)) {
+        list->append(readFileInformations(file.absoluteFilePath()));
+    }
+}
+
+QList<Form::FormIODescription *> XmlFormIO::getFormFileDescriptions(const Form::FormIOQuery &query)
+{
+    QList<Form::FormIODescription *> toReturn;
+    QString startPath;
+    if (query.typeOfForms() & Form::FormIOQuery::UserForms) {
+        /** \todo manage user forms path and default path */
+    } else {
+        /** \todo manage user forms path and default path */
+    }
+    if (query.typeOfForms() & Form::FormIOQuery::CompleteForms) {
+        startPath = settings()->path(Core::ISettings::CompleteFormsPath);
+        getAllFormsFromDir(startPath, &toReturn);
+        for(int i = 0; i < toReturn.count(); ++i) {
+            toReturn.at(i)->setData(Form::FormIODescription::IsCompleteForm, true);
+        }
+    }
+    if (query.typeOfForms() & Form::FormIOQuery::SubForms) {
+        startPath = settings()->path(Core::ISettings::SubFormsPath);
+        getAllFormsFromDir(startPath, &toReturn);
+        for(int i = 0; i < toReturn.count(); ++i) {
+            toReturn.at(i)->setData(Form::FormIODescription::IsSubForm, true);
+        }
+    }
+    /** \todo Add IFormIO to descr && check all forms for params of Query */
+    for(int i = 0; i < toReturn.count(); ++i) {
+        toReturn.at(i)->setIoFormReader(this);
+    }
+    return toReturn;
+}
 
 Form::FormMain *XmlFormIO::loadForm()
 {

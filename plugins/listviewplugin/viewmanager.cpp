@@ -53,8 +53,6 @@
 #include <QToolButton>
 #include <QToolBar>
 
-
-
 using namespace Views;
 using namespace Internal;
 using namespace Trans::ConstantTranslations;

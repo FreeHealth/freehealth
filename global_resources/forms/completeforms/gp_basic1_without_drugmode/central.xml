@@ -1,15 +1,18 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <!DOCTYPE FreeMedForms>
 <FreeMedForms>
-  <version>0.5.0~alpha</version>
-  <authors>Eric Maeker, MD</authors>
-  <description lang="fr">Dossier médical générique</description>
-  <description lang="en">Generic patient file</description>
-  <categorie lang="en">Medical files: General practitioner</categorie>
-  <categorie lang="fr">Dossier médicaux : Médecine générale</categorie>
-  <bibliography/>
-  <licence>GPLv3</licence>
-  <cdate>2011-03-15</cdate>
+
+  <formdescription>
+    <version>0.5.0~alpha</version>
+    <authors>Eric Maeker, MD</authors>
+    <description lang="fr">Dossier médical générique</description>
+    <description lang="en">Generic patient file</description>
+    <category lang="en">Medical files: General practitioner</category>
+    <category lang="fr">Dossier médicaux : Médecine générale</category>
+    <bibliography/>
+    <licence>GPLv3</licence>
+    <cdate>2011-03-15</cdate>
+  </formdescription>
 
   <MedForm>
     <name>episodeTester</name>

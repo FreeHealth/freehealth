@@ -42,8 +42,8 @@ QT_END_NAMESPACE
 /**
  * \file appconfigwizard.h
  * \author Eric MAEKER <eric.maeker@free.fr>
- * \version 0.4.0
- * \date 04 June 2010
+ * \version 0.5.0
+ * \date 01 Apr 2011
 */
 
 namespace Form {

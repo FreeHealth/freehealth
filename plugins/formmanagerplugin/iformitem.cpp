@@ -178,7 +178,8 @@ FormItemScripts::FormItemScripts(
         const QString &onDemand,
         const QString &onValChanged,
         const QString &onValRequiered,
-        const QString &onDependentValuesChanged ) : d(new FormItemScriptsPrivate)
+        const QString &onDependentValuesChanged ) :
+        d(new FormItemScriptsPrivate)
 {
     ScriptsBook *s = d->createLanguage(lang.left(2));
     s->m_Scripts.insert(Script_OnLoad, onLoad);

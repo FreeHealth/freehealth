@@ -58,7 +58,7 @@ VirtualBasePage::~VirtualBasePage()
 
 QString VirtualBasePage::id() const { return objectName(); }
 QString VirtualBasePage::name() const { return tr("Virtual databases"); }
-QString VirtualBasePage::category() const { return tr("General"); }
+QString VirtualBasePage::category() const { return tkTr(Trans::Constants::GENERAL); }
 
 void VirtualBasePage::finish() { delete m_Widget; }
 

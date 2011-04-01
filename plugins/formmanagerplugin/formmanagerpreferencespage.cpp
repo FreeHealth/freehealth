@@ -26,6 +26,8 @@
  ***************************************************************************/
 #include "formmanagerpreferencespage.h"
 #include "formfilesselectorwidget.h"
+#include "episodebase.h"
+#include "iformio.h"
 
 #include <coreplugin/icore.h>
 #include <coreplugin/isettings.h>
@@ -33,12 +35,15 @@
 
 #include <QHBoxLayout>
 
+#include <QDebug>
+
+#include "ui_formmanagerpreferenceswidget.h"
+
 using namespace Form;
 using namespace Internal;
 
-
 static inline Core::ISettings *settings() { return Core::ICore::instance()->settings(); }
-
+static inline Form::Internal::EpisodeBase *episodeBase() {return Form::Internal::EpisodeBase::instance();}
 
 FormManagerPreferencesPage::FormManagerPreferencesPage(QObject *parent) :
         IOptionsPage(parent), m_Widget(0)
@@ -92,17 +97,30 @@ QWidget *FormManagerPreferencesPage::createPage(QWidget *parent)
 
 
 FormManagerPreferencesWidget::FormManagerPreferencesWidget(QWidget *parent) :
-        QWidget(parent)
+        QWidget(parent), ui(new Ui::FormManagerPreferencesWidget)
 {
-    m_Selector = new Form::FormFilesSelectorWidget(this);
-    QHBoxLayout *l = new QHBoxLayout(this);
-    l->setMargin(0);
-    l->setSpacing(0);
-    l->addWidget(m_Selector);
+    ui->setupUi(this);
+    ui->selector->setFormType(Form::FormFilesSelectorWidget::CompleteForms);
+    connect(ui->useButton, SIGNAL(pressed()), this, SLOT(saveFormToBase()));
+}
+
+FormManagerPreferencesWidget::~FormManagerPreferencesWidget()
+{
+    delete ui;
+}
+
+void FormManagerPreferencesWidget::saveFormToBase()
+{
+    if (ui->selector->selectedForms().isEmpty())
+        return;
+    Form::FormIODescription *descr = ui->selector->selectedForms().at(0);
+    episodeBase()->setGenericPatientFormFile(descr->data(Form::FormIODescription::UuidOrAbsPath).toString());
 }
 
 void FormManagerPreferencesWidget::saveToSettings(Core::ISettings *)
-{}
+{
+}
 
 void FormManagerPreferencesWidget::changeEvent(QEvent *e)
-{}
+{
+}

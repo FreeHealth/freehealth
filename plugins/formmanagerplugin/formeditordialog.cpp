@@ -24,85 +24,46 @@
  *       NAME <MAIL@ADRESS>                                                *
  *       NAME <MAIL@ADRESS>                                                *
  ***************************************************************************/
-#ifndef FORMMANAGERPREFERENCESPAGE_H
-#define FORMMANAGERPREFERENCESPAGE_H
+#include "formeditordialog.h"
+#include "episodemodel.h"
 
-#include <coreplugin/ioptionspage.h>
+#include <QSortFilterProxyModel>
 
-#include <QPointer>
-#include <QObject>
-
-/**
- * \file formmanagerpreferencespage.h
- * \author Eric MAEKER <eric.maeker@free.fr>
- * \version 0.4.0
- * \date 09 June 2010
-*/
+#include "ui_formeditordialog.h"
 
 
-namespace Core {
-class ISettings;
+using namespace Form;
+
+FormEditorDialog::FormEditorDialog(EpisodeModel *model, EditionModes mode, QWidget *parent) :
+    QDialog(parent),
+    ui(new Ui::FormEditorDialog)
+{
+    ui->setupUi(this);
+    QSortFilterProxyModel *proxyModel = new QSortFilterProxyModel(this);
+    proxyModel->setSourceModel(model);
+    proxyModel->setFilterKeyColumn(EpisodeModel::IsEpisode);
+    proxyModel->setFilterFixedString("false");
+    ui->treeView->setModel(proxyModel);
+    ui->treeView->header()->hide();
+    for(int i = 0; i< EpisodeModel::MaxData; ++i)
+        ui->treeView->hideColumn(i);
+    ui->treeView->showColumn(EpisodeModel::Label);
+    ui->stackedWidget->setCurrentWidget(ui->formAdder);
 }
 
-namespace Form {
-class FormFilesSelectorWidget;
-
-namespace Internal {
-namespace Ui {
-class FormManagerPreferencesWidget;
+FormEditorDialog::~FormEditorDialog()
+{
+    delete ui;
 }
 
-class FormManagerPreferencesWidget : public QWidget
+void FormEditorDialog::changeEvent(QEvent *e)
 {
-    Q_OBJECT
-    Q_DISABLE_COPY(FormManagerPreferencesWidget)
-
-public:
-    explicit FormManagerPreferencesWidget(QWidget *parent = 0);
-    ~FormManagerPreferencesWidget();
-
-    static void writeDefaultSettings(Core::ISettings *) {}
-
-public Q_SLOTS:
-    void saveFormToBase();
-    void saveToSettings(Core::ISettings *);
-
-protected:
-    virtual void changeEvent(QEvent *e);
-
-private:
-    Ui::FormManagerPreferencesWidget *ui;
-};
-
-
-class FormManagerPreferencesPage : public Core::IOptionsPage
-{
-    Q_OBJECT
-public:
-    FormManagerPreferencesPage(QObject *parent = 0);
-    ~FormManagerPreferencesPage();
-
-    QString id() const;
-    QString name() const;
-    QString category() const;
-
-    void resetToDefaults();
-    void checkSettingsValidity();
-    void applyChanges();
-    void finish();
-
-    QString helpPage() {return "parametrer.html";}
-
-    static void writeDefaultSettings(Core::ISettings *s) {FormManagerPreferencesWidget::writeDefaultSettings(s);}
-
-    QWidget *createPage(QWidget *parent = 0);
-private:
-    QPointer<FormManagerPreferencesWidget> m_Widget;
-};
-
-
-}  // End Internal
-}  // End Form
-
-
-#endif // FORMMANAGERPREFERENCESPAGE_H
+    QDialog::changeEvent(e);
+    switch (e->type()) {
+    case QEvent::LanguageChange:
+        ui->retranslateUi(this);
+        break;
+    default:
+        break;
+    }
+}
