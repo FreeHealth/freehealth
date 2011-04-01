@@ -828,3 +828,13 @@ void PmhCategoryModel::patientChanged()
     }
     reset();
 }
+
+void PmhCategoryModel::updateCategoryLabel(const Category::CategoryItem *category)
+{
+    QModelIndex cat = indexForCategory(category);
+    TreeItem *item = d->getItem(cat);
+    if (!item)
+        return;
+    item->setLabel(category->label());
+    Q_EMIT dataChanged(cat, cat);
+}

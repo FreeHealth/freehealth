@@ -94,6 +94,9 @@ public Q_SLOTS:
     // Connections to Core::IPatient
     void patientChanged();
 
+private Q_SLOTS:
+    void updateCategoryLabel(const Category::CategoryItem *category);
+
 private:
     Internal::PmhCategoryModelPrivate *d;
 };
