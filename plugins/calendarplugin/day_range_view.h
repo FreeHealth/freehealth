@@ -70,8 +70,10 @@ namespace Calendar {
 		static int m_hourHeight;
 		int m_rangeWidth;
 		QDateTime m_pressDateTime;
+		QPoint m_pressPos;
 		CalendarItem *m_pressItem;
 
+		/* if end < begin, the end time will be considered as midnight */
 		QRect getTimeIntervalRect(int day, const QTime &begin, const QTime &end) const;
 		QDateTime getDateTime(const QPoint &pos) const;
 	};

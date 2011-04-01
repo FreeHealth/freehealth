@@ -212,8 +212,8 @@ QRect DayRangeView::getTimeIntervalRect(int day, const QTime &begin, const QTime
 
 	day--; // convert 1 -> 7 to 0 -> 6 for drawing reasons
 
-	int seconds = begin.secsTo(end);
-	int top = (QTime(0, 0, 0).secsTo(begin) * m_hourHeight) / 3600;
+	int seconds = end < begin ? begin.secsTo(QTime(23, 59)) + 1 : begin.secsTo(end);
+	int top = (QTime(0, 0).secsTo(begin) * m_hourHeight) / 3600;
 	int height = (seconds * m_hourHeight) / 3600;
 
 	// vertical lines
@@ -261,6 +261,7 @@ void DayRangeView::mousePressEvent(QMouseEvent *event) {
 	if (event->pos().x() < m_leftScaleWidth)
 		return;
 	m_pressDateTime = getDateTime(event->pos());
+	m_pressPos = event->pos();
 }
 
 void DayRangeView::mouseMoveEvent(QMouseEvent *event) {
@@ -276,7 +277,7 @@ void DayRangeView::mouseMoveEvent(QMouseEvent *event) {
 		}
 
 		QRect rect;
-		if (dateTime.time() > m_pressDateTime.time())
+		if (event->pos().y() > m_pressPos.y())
 			rect = getTimeIntervalRect(m_pressDateTime.date().dayOfWeek(), m_pressDateTime.time(), dateTime.time());
 		else
 			rect = getTimeIntervalRect(m_pressDateTime.date().dayOfWeek(), dateTime.time(), m_pressDateTime.time());
@@ -286,7 +287,7 @@ void DayRangeView::mouseMoveEvent(QMouseEvent *event) {
 	}
 }
 
-void DayRangeView::mouseReleaseEvent(QMouseEvent *event) {
+void DayRangeView::mouseReleaseEvent(QMouseEvent *) {
 	// TODO: transform into a real item
 	delete m_pressItem;
 	m_pressItem = 0;
