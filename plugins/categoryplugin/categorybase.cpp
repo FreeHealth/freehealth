@@ -349,6 +349,9 @@ bool CategoryBase::saveCategory(CategoryItem *category)
 */
 bool CategoryBase::updateCategory(CategoryItem *category)
 {
+//    qWarning() << "UpdateCategory" << category->isDirty();
+//    category->warn();
+
     if (category->data(CategoryItem::DbOnly_Id).isNull() || category->id()==-1) {
         return saveCategory(category);
     }
@@ -396,6 +399,9 @@ bool CategoryBase::saveCategoryLabels(CategoryItem *category)
         category->data(CategoryItem::DbOnly_LabelId).toInt()==-1) {
         labelId = max(Constants::Table_CATEGORY_LABEL, Constants::CATEGORYLABEL_LABEL_ID) ;
         ++labelId;
+
+        qWarning() << "xxxxxxx New labelId" << category->label() << labelId;
+
         category->setData(CategoryItem::DbOnly_LabelId, labelId);
         // create an empty label using this LabelId
         QSqlQuery query(database());

@@ -61,14 +61,14 @@ public:
     bool insertRows(int row, int count, const QModelIndex &parent = QModelIndex());
 
 //    Qt::ItemFlags flags(const QModelIndex &index) const;
-
-    void hidePmh(bool hide);
+//    void hidePmh(bool hide);
 
 private:
     void updateBranch(QModelIndex &rootIndex);
 
 private Q_SLOTS:
     void updateModel();
+    void emitDataChanged(const QModelIndex &left, const QModelIndex &right);
 
 private:
     Internal::CategoryOnlyProxyModelPrivate *d;

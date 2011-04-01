@@ -278,6 +278,7 @@ void CategoryItem::warn() const
 {
     QString tmp = "Category(";
     tmp += QString("Id:%1; ").arg(data(DbOnly_Id).toString());
+    tmp += QString("Label:%1; ").arg(label());
     tmp += QString("LId:%1; ").arg(data(DbOnly_LabelId).toString());
     tmp += QString("ParentId:%1; ").arg(data(DbOnly_ParentId).toString());
     tmp += QString("IsValid:%1; ").arg(data(DbOnly_IsValid).toString());

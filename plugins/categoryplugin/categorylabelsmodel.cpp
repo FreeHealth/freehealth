@@ -165,8 +165,9 @@ bool CategoryLabelsModel::setData(const QModelIndex &index, const QVariant &valu
     case Label : lang.m_label = value.toString(); break;
     case Lang : lang.setLanguage(static_cast<QLocale::Language>(value.toInt())); break;
     }
-
+    d->m_Cat->setLabel(lang.m_label, lang.m_iso);
     Q_EMIT dataChanged(index, index);
+    Q_EMIT labelChanged(d->m_Cat);
     return true;
 }
 

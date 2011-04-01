@@ -152,6 +152,12 @@ void CategoryDialog::editItem(const QModelIndex &current, const QModelIndex &pre
     // populate the labels views with the category labels
     if (!d->m_CatLabelsModel) {
         d->m_CatLabelsModel = new CategoryLabelsModel(this);
+        Category::ICategoryModelHelper *categoryModel = qobject_cast<Category::ICategoryModelHelper *>(d->m_CategoryModel->sourceModel());
+        Q_ASSERT(categoryModel);
+        if (categoryModel) {
+            connect(d->m_CatLabelsModel, SIGNAL(labelChanged(const Category::CategoryItem*)),
+                    categoryModel, SLOT(updateCategoryLabel(const Category::CategoryItem*)));
+        }
     }
     d->m_CatLabelsModel->setCategoryItem(cat);
     d->populateUiWithCategory();

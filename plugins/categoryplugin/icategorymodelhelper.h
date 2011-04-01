@@ -39,6 +39,7 @@ class CategoryOnlyProxyModel;
 
 class CATEGORY_EXPORT ICategoryModelHelper : public QAbstractItemModel
 {
+    Q_OBJECT
 public:
     ICategoryModelHelper(QObject *parent) : QAbstractItemModel(parent), m_Proxy(0) {}
     virtual ~ICategoryModelHelper() {}
@@ -54,6 +55,8 @@ public:
 
     virtual QString mime() const = 0;
 
+public Q_SLOTS:
+    virtual void updateCategoryLabel(const Category::CategoryItem *category);
 
 private:
     CategoryOnlyProxyModel *m_Proxy;

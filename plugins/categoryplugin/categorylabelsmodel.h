@@ -69,6 +69,9 @@ public:
 public Q_SLOTS:
     bool submit();
 
+Q_SIGNALS:
+    void labelChanged(const Category::CategoryItem *item);
+
 private:
     Internal::CategoryLabelsModelPrivate *d;
 };

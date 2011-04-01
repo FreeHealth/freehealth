@@ -28,11 +28,14 @@
 #include "icategorymodelhelper.h"
 #include "categoryitem.h"
 
+#include <translationutils/constanttranslations.h>
+
 #include <QItemSelectionRange>
 #include <QDebug>
 
 using namespace Category;
 using namespace Internal;
+using namespace Trans::ConstantTranslations;
 
 namespace Category {
 namespace Internal {
@@ -65,6 +68,7 @@ CategoryOnlyProxyModel::CategoryOnlyProxyModel(ICategoryModelHelper *parent) :
     connect(parent, SIGNAL(rowsRemoved(QModelIndex,int,int)), this, SLOT(updateModel()));
     connect(parent, SIGNAL(rowsInserted(QModelIndex,int,int)), this, SLOT(updateModel()));
     connect(parent, SIGNAL(rowsMoved(QModelIndex,int,int,QModelIndex,int)), this, SLOT(updateModel()));
+    connect(parent, SIGNAL(dataChanged(QModelIndex,QModelIndex)), this, SLOT(emitDataChanged(QModelIndex,QModelIndex)));
 }
 
 CategoryOnlyProxyModel::~CategoryOnlyProxyModel()
@@ -186,20 +190,20 @@ bool CategoryOnlyProxyModel::insertRows(int row, int count, const QModelIndex &p
         Category::CategoryItem *cat = new Category::CategoryItem;
         cat->setParent(d->m_Model->categoryForIndex(mapToSource(parent)));
         cat->setData(CategoryItem::DbOnly_Mime, d->m_Model->mime());
+//        cat->setLabel(tkTr(Trans::Constants::NEXT_TEXT), QLocale().name().left(2));
         d->m_Model->addCategory(cat, row+i, parent);
-
     }
     return true;
 }
 
-void CategoryOnlyProxyModel::hidePmh(bool hide)
-{
-    d->m_HidePmh = hide;
-    // Now we set up the proxy <-> source mappings
-    Q_EMIT layoutAboutToBeChanged();
-    updateModel();
-    Q_EMIT layoutChanged();
-}
+//void CategoryOnlyProxyModel::hidePmh(bool hide)
+//{
+//    d->m_HidePmh = hide;
+//    // Now we set up the proxy <-> source mappings
+//    Q_EMIT layoutAboutToBeChanged();
+//    updateModel();
+//    Q_EMIT layoutChanged();
+//}
 
 void CategoryOnlyProxyModel::updateBranch(QModelIndex &rootIndex)
 {
@@ -230,3 +234,7 @@ void CategoryOnlyProxyModel::updateModel()
     Q_EMIT layoutChanged();
 }
 
+void CategoryOnlyProxyModel::emitDataChanged(const QModelIndex &left, const QModelIndex &right)
+{
+    Q_EMIT dataChanged(mapFromSource(left), mapFromSource(right));
+}
