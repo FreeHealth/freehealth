@@ -51,7 +51,7 @@ public:
     ~FormManagerMode();
 
 private Q_SLOTS:
-    bool loadPatientFile();
+    bool getPatientForm();
 
 private:
     FormPlaceHolder *m_Holder;

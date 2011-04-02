@@ -629,7 +629,7 @@ bool UserBase::saveUser(UserData *user)
     if (!user->isModified())
         return true;
 
-    qWarning() << "save user" << user->name();
+//    qWarning() << "save user" << user->name();
 
     // connect user database
     QSqlDatabase DB = database();

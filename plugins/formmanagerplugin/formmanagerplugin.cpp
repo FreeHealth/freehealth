@@ -74,6 +74,7 @@ FormManagerPlugin::~FormManagerPlugin()
         delete mode;
         mode = 0;
     }
+    delete FormManager::instance();
 }
 
 bool FormManagerPlugin::initialize(const QStringList &arguments, QString *errorString)

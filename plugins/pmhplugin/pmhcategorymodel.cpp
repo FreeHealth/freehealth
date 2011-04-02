@@ -563,7 +563,7 @@ Qt::ItemFlags PmhCategoryModel::flags(const QModelIndex &index) const
 /** \brief Remove PMHx or Categories. */
 bool PmhCategoryModel::removeRows(int row, int count, const QModelIndex &parent)
 {
-    qWarning() << "beforeRemoveRows";
+//    qWarning() << "beforeRemoveRows";
     d->m_Root->warn();
     int max = row+count;
     TreeItem *parentItem = 0;
@@ -628,7 +628,7 @@ bool PmhCategoryModel::removeRows(int row, int count, const QModelIndex &parent)
             endRemoveRows();
         }
     }
-    qWarning() << "afterRemoveRows";
+//    qWarning() << "afterRemoveRows";
     d->m_Root->warn();
     return true;
 }

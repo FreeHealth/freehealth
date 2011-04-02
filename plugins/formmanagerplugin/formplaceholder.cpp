@@ -313,12 +313,12 @@ FormPlaceHolder::FormPlaceHolder(QWidget *parent) :
 FormPlaceHolder::~FormPlaceHolder()
 {
     d->saveSettings();
-    if (d->m_RootForm) {
-        // Remove object from the plugin object pool
-        pluginManager()->removeObject(d->m_RootForm);
-        delete d->m_RootForm;
-        d->m_RootForm = 0;
-    }
+//    if (d->m_RootForm) {
+//        // Remove object from the plugin object pool
+//        pluginManager()->removeObject(d->m_RootForm);
+//        delete d->m_RootForm;
+//        d->m_RootForm = 0;
+//    }
     if (d) {
         delete d;
         d = 0;
@@ -347,20 +347,16 @@ void FormPlaceHolder::setRootForm(Form::FormMain *rootForm)
         d->m_EpisodeModel = 0;
     }
     /** \todo before deleting -> clear stackedLayout of FormPlaceHolder ? */
-    if (d->m_RootForm) {
-        // Remove object from the plugin object pool
-        pluginManager()->removeObject(d->m_RootForm);
-        delete d->m_RootForm;
-        d->m_RootForm = 0;
-    }
+//    if (d->m_RootForm) {
+//        delete d->m_RootForm;
+//        d->m_RootForm = 0;
+//    }
 
     // Add object to the plugin object pool
     d->m_RootForm = rootForm;
     d->clearStackLayout();
     if (!d->m_RootForm)
         return;
-
-    pluginManager()->addObject(rootForm);
 
     // Create models
     d->m_EpisodeModel = new EpisodeModel(rootForm, this);

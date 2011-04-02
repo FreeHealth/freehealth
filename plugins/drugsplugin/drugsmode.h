@@ -45,9 +45,10 @@ public:
     ~DrugsMode();
 
 public Q_SLOTS:
-    void loadPatientFile(const QString &fileName);
+    void getPatientForm();
 
 private:
+    bool inPool;
     Form::FormPlaceHolder *m_Holder;
 };
 

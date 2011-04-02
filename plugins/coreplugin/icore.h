@@ -136,8 +136,6 @@ Q_SIGNALS:
 
     void databaseServerChanged();
 
-    void loadPatientForms(const QString &absDirPathOrUuid);
-
 protected:
     bool m_UpdatePreferences;
 };

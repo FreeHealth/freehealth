@@ -28,6 +28,9 @@
 #define FORMEDITORDIALOG_H
 
 #include <QDialog>
+QT_BEGIN_NAMESPACE
+class QSortFilterProxyModel;
+QT_END_NAMESPACE
 
 namespace Form {
 class EpisodeModel;
@@ -55,8 +58,12 @@ public:
 protected:
     void changeEvent(QEvent *e);
 
+private Q_SLOTS:
+    void on_addForm_clicked();
+
 private:
     Ui::FormEditorDialog *ui;
+    QSortFilterProxyModel *proxyModel;
 };
 
 }  // End namespace Form

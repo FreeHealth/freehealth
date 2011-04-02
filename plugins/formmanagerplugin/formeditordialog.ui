@@ -101,7 +101,7 @@
          <widget class="Form::FormFilesSelectorWidget" name="formSelector" native="true"/>
         </item>
         <item row="1" column="0">
-         <widget class="QPushButton" name="pushButton">
+         <widget class="QPushButton" name="addForm">
           <property name="text">
            <string>Add this form</string>
           </property>

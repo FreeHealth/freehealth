@@ -132,7 +132,6 @@ PatientActionHandler::PatientActionHandler(QObject *parent) :
         gSearchMethod(0)
 {
     setObjectName("PatientActionHandler");
-    Utils::Log::addMessage(this, "Instance created");
 
     Core::UniqueIDManager *uid = Core::ICore::instance()->uniqueIDManager();
     Core::ITheme *th = Core::ICore::instance()->theme();

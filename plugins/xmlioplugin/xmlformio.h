@@ -61,18 +61,20 @@ public:
     QString name() const {return "XmlFormIO";}
 
     void muteUserWarnings(bool state) {m_Mute = state;}
-    QStringList fileFilters() const;
+//    QStringList fileFilters() const;
 
     void warnXmlReadError(bool muteUserWarnings, const QString &file, const QString &msg, const int line = 0, const int col = 0) const;
 
-    QString managedFileExtension() const { return QString("xml"); }
-    bool canReadFile() const;
-    bool setFileName(const QString &absFileName);
+//    QString managedFileExtension() const { return QString("xml"); }
+//    bool setFileName(const QString &absFileName);
+    bool canReadForms(const QString &uuidOrAbsPath) const;
 
     Form::FormIODescription *readFileInformations();
     QList<Form::FormIODescription *> getFormFileDescriptions(const Form::FormIOQuery &query);
 
-    Form::FormMain *loadForm();
+//    Form::FormMain *loadForm();
+    QList<Form::FormMain *> loadAllRootForms(const QString &uuidOrAbsPath = QString::null);
+
     bool saveForm(QObject *treeRoot) { Q_UNUSED(treeRoot); return true; }
 
     static QString lastestXmlVersion();
@@ -80,6 +82,7 @@ public:
     QString lastError() const {return m_Error.join("\n");}
 
 private:
+    bool checkFormFileContent(const QString &absFileName) const;
     bool loadForm(const QString &file, Form::FormMain *rootForm);
     bool loadElement(Form::FormItem *item, QDomElement &rootElement);
     bool createElement(Form::FormItem *item, QDomElement &element);
@@ -91,8 +94,6 @@ private:
      mutable QString m_AbsFileName;
      mutable QStringList m_Error;
      mutable QDomDocument m_MainDoc;
-     mutable QString m_Author, m_Version;
-     mutable QHash<QString, QString> m_Desc;
      bool m_Mute;
      Form::FormMain *m_ActualForm;
 };

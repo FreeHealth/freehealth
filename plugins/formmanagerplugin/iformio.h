@@ -151,18 +151,17 @@ public:
 
     virtual void muteUserWarnings(bool state) = 0;
 
-    virtual bool setFileName(const QString &absFileName) = 0;
+//    virtual bool setFileName(const QString &absFileName) = 0;
+//    virtual QStringList fileFilters() const = 0;
+//    virtual QString managedFileExtension() const = 0;
 
-    virtual QStringList fileFilters() const = 0;
-
-    virtual QString managedFileExtension() const = 0;
-    virtual bool canReadFile() const = 0;
+    virtual bool canReadForms(const QString &uuidOrAbsPath) const = 0;
     // canReadFile() must be called first, no need to loadForm to get these informations
     virtual FormIODescription *readFileInformations() = 0;
 
     virtual QList<FormIODescription *> getFormFileDescriptions(const FormIOQuery &query) = 0;
 
-    virtual Form::FormMain *loadForm() = 0;
+    virtual QList<Form::FormMain *> loadAllRootForms(const QString &uuidOrAbsPath = QString::null) = 0;
     virtual bool saveForm(QObject *treeRoot) = 0;
 
     virtual QString lastError() const = 0;

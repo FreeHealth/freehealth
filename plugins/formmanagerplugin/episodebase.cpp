@@ -26,6 +26,7 @@
  ***************************************************************************/
 #include "episodebase.h"
 #include "constants_db.h"
+#include "iformio.h"
 
 #include <utils/global.h>
 #include <utils/log.h>
@@ -134,7 +135,7 @@ EpisodeBase::EpisodeBase(QObject *parent) :
     addField(Table_FORM, FORM_PATIENTUID, "PATIENT", FieldIsUUID);
 
     // Uuid of the form to insert
-    addField(Table_FORM, FORM_RECEIVERFORMUUID, "RFU", FieldIsShortText);
+    addField(Table_FORM, FORM_SUBFORMUID, "SUBUID", FieldIsShortText);
     // Insertion point = formuuid where to insert the form
     addField(Table_FORM, FORM_INSERTIONPOINT, "IP", FieldIsShortText);
 
@@ -337,7 +338,7 @@ bool EpisodeBase::setGenericPatientFormFile(const QString &absPathOrUid)
         query.bindValue(Constants::FORM_VALID, 1);
         query.bindValue(Constants::FORM_GENERIC, absPathOrUid);
         query.bindValue(Constants::FORM_PATIENTUID, QVariant());
-        query.bindValue(Constants::FORM_RECEIVERFORMUUID, QVariant());
+        query.bindValue(Constants::FORM_SUBFORMUID, QVariant());
         query.bindValue(Constants::FORM_INSERTIONPOINT, QVariant());
         if (!query.exec()) {
             LOG_QUERY_ERROR(query);
@@ -395,7 +396,7 @@ QHash<QString,QString> EpisodeBase::getSubFormFiles()
     where.insert(Constants::FORM_PATIENTUID, QString("='%1'").arg(patient()->data(Core::IPatient::Uid).toString()));
     QSqlQuery query(DB);
     QString req = select(Constants::Table_FORM, QList<int>()
-                         << Constants::FORM_RECEIVERFORMUUID
+                         << Constants::FORM_SUBFORMUID
                          << Constants::FORM_INSERTIONPOINT, where);
     if (query.exec(req)) {
         while (query.next()) {
@@ -409,6 +410,35 @@ QHash<QString,QString> EpisodeBase::getSubFormFiles()
     }
     return toReturn;
 }
+
+bool EpisodeBase::addSubForms(const QString &receiverUuid, const QList<Form::FormIODescription *> &subforms)
+{
+    QSqlDatabase DB = QSqlDatabase::database(Constants::DB_NAME);
+    if (!connectDatabase(DB, __FILE__, __LINE__)) {
+        return false;
+    }
+    // save
+    bool success = true;
+    QSqlQuery query(DB);
+    for(int i = 0; i < subforms.count(); ++i) {
+        Form::FormIODescription *descr = subforms.at(i);
+        query.prepare(prepareInsertQuery(Constants::Table_FORM));
+        query.bindValue(Constants::FORM_ID, QVariant());
+        query.bindValue(Constants::FORM_VALID, 1);
+        query.bindValue(Constants::FORM_GENERIC, QVariant());
+        query.bindValue(Constants::FORM_PATIENTUID, patient()->data(Core::IPatient::Uid));
+        query.bindValue(Constants::FORM_SUBFORMUID, descr->data(Form::FormIODescription::UuidOrAbsPath));
+        query.bindValue(Constants::FORM_INSERTIONPOINT, receiverUuid);
+        if (!query.exec()) {
+            LOG_QUERY_ERROR(query);
+            success = false;
+        }
+        query.finish();
+    }
+    return success;
+
+}
+
 
 void EpisodeBase::toTreeWidget(QTreeWidget *tree)
 {

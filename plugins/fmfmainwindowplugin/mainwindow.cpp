@@ -302,9 +302,6 @@ void MainWindow::onCurrentPatientChanged()
     const QString &uuid = patient()->data(Core::IPatient::Uid).toString();
     m_RecentPatients->setCurrentFile(uuid);
     m_RecentPatients->addToRecentFiles(uuid);
-
-    // inform formplaceholder; episodemodel and patient model
-    formManager()->setCurrentPatient(uuid);
 }
 
 /** \brief Close the main window and the application */

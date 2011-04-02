@@ -73,44 +73,48 @@ private:
 
 class FORM_EXPORT FormManager : public Internal::FormActionHandler
 {
-     Q_OBJECT
-     FormManager(QObject *parent = 0);
+    Q_OBJECT
+    FormManager(QObject *parent = 0);
 
 public:
-     static FormManager *instance();
-     ~FormManager();
+    static FormManager *instance();
+    ~FormManager();
 
-     void activateMode();
+    void activateMode();
 
-     QList<FormMain *> forms() const;
+    QList<FormMain *> forms() const;
+    Form::FormMain *rootForm(const char *modeUniqueName);
 
-     template <class T>
-     T* getParent(FormItem *item)
-     {
-         T* parent = 0;
-         QObject *p = item;
-         while (p) {
-             parent = qobject_cast<T*>(p);
-             if (!parent) {
-                 p = p->parent();
-             } else {
-                 break;
-             }
-         }
-         return parent;
-     }
+    template <class T>
+            T* getParent(FormItem *item)
+    {
+        T* parent = 0;
+        QObject *p = item;
+        while (p) {
+            parent = qobject_cast<T*>(p);
+            if (!parent) {
+                p = p->parent();
+            } else {
+                break;
+            }
+        }
+        return parent;
+    }
+
+private:
+    void cleanPluginManagerObjectPool();
 
 public Q_SLOTS:
-     bool loadPatientFile();
-     void setCurrentPatient(const QString &uuid);
-     bool translateForms();
+    bool loadPatientFile();
+    bool loadSubForms();
+    bool translateForms();
 
- Q_SIGNALS:
-     void loadPatientForms(const QString &fileName);
+Q_SIGNALS:
+    void patientFormsLoaded();
 
- private:
-     Internal::FormManagerPrivate *d;
-     static FormManager *m_Instance;
+private:
+    Internal::FormManagerPrivate *d;
+    static FormManager *m_Instance;
 };
 
 

@@ -165,6 +165,9 @@ public:
     FormMain(QObject *parent = 0);
     ~FormMain();
 
+    void setModeUniqueName(const QString &modeUid) {m_ModeName = modeUid;}
+    QString modeUniqueName() const {return m_ModeName;}
+
     FormMain *createChildForm(const QString &uuid = QString::null);
     FormPage *createPage(const QString &uuid = QString::null);
 
@@ -184,6 +187,7 @@ public:
 private:
     FormMainDebugPage *m_DebugPage;
     int m_Episode;
+    QString m_ModeName;
 };
 inline QList<Form::FormMain *> Form::FormMain::formMainChildren() const
 {

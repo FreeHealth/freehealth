@@ -245,7 +245,6 @@ void MainWindowActionHandler::createGeneralActions(const int actions)
         cmd->setTranslations(Trans::Constants::FILEEXIT_TEXT );
         cmd->action()->setMenuRole(QAction::QuitRole);
         menu->addAction(cmd, group);
-        connect(aQuit, SIGNAL(triggered()), this, SLOT(close()));
     }
 
 //    group = Constants::G_GENERAL_EDIT;

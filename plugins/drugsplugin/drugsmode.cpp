@@ -27,10 +27,9 @@
 #include "drugsmode.h"
 
 #include <formmanagerplugin/formplaceholder.h>
-#include <formmanagerplugin/iformio.h>
+#include <formmanagerplugin/formmanager.h>
 
 #include <coreplugin/icore.h>
-//#include <coreplugin/isettings.h>
 #include <coreplugin/itheme.h>
 #include <coreplugin/constants_menus.h>
 #include <coreplugin/constants_icons.h>
@@ -44,9 +43,11 @@ using namespace Internal;
 
 static inline ExtensionSystem::PluginManager *pluginManager() { return ExtensionSystem::PluginManager::instance(); }
 static inline Core::ITheme *theme()  { return Core::ICore::instance()->theme(); }
+static inline Form::FormManager *formManager() {return Form::FormManager::instance();}
 
 DrugsMode::DrugsMode(QObject *parent) :
         Core::BaseMode(parent),
+        inPool(false),
         m_Holder(0)
 {
     m_Holder = new Form::FormPlaceHolder;
@@ -59,34 +60,27 @@ DrugsMode::DrugsMode(QObject *parent) :
 //    setContext();
     setWidget(m_Holder);
 
-    connect(Core::ICore::instance(), SIGNAL(loadPatientForms(QString)), this, SLOT(loadPatientFile(QString)));
+    connect(formManager(), SIGNAL(patientFormsLoaded()), this, SLOT(getPatientForm()));
 }
 
 DrugsMode::~DrugsMode()
 {
+    if (inPool)
+        pluginManager()->removeObject(this);
 }
 
-void DrugsMode::loadPatientFile(const QString &absDirPath)
+void DrugsMode::getPatientForm()
 {
-    if (absDirPath.isEmpty())
-        return;
-
-    // get all form readers (IFormIO)
-    QList<Form::IFormIO *> list = pluginManager()->getObjects<Form::IFormIO>();
-
-    // try to read form
-    Form::FormMain *root = 0;
-    foreach(Form::IFormIO *io, list) {
-        if (io->setFileName(absDirPath + "/drugs.xml") && io->canReadFile()) {
-            root = io->loadForm();
-            if (root)
-                break;
-        }
+//    qWarning() << Q_FUNC_INFO;
+    Form::FormMain *root = formManager()->rootForm(Core::Constants::MODE_PATIENT_DRUGS);
+    if (!root) {
+        if (inPool)
+            pluginManager()->removeObject(this);
+        inPool = false;
+    } else {
+        if (!inPool)
+            pluginManager()->addObject(this);
+        inPool = true;
     }
-
-    // If nothing was read -> remove or inactivate the mode
-
-    // Tell the PlaceHolder of the FormMain to use as root item
-    // FormPlaceHolder will manage deletion of the item
     m_Holder->setRootForm(root);
 }

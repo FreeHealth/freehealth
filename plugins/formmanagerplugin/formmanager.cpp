@@ -98,12 +98,15 @@ public:
 
     ~FormManagerPrivate()
     {
+        qDeleteAll(m_RootForms);
+        m_RootForms.clear();
     }
 
 public:
     /** \todo create a EpisodeData class */
     int m_ActualEpisode;
     QString m_ActualEpisode_FormUid;
+    QList<Form::FormMain *> m_RootForms;
 
 
 private:
@@ -129,7 +132,7 @@ FormManager::FormManager(QObject *parent) :
 {
     setObjectName("FormManager");
 
-    connect(this, SIGNAL(loadPatientForms(QString)), Core::ICore::instance(), SIGNAL(loadPatientForms(QString)));
+//    connect(this, SIGNAL(loadPatientForms(QString)), Core::ICore::instance(), SIGNAL(loadPatientForms(QString)));
     connect(patient(), SIGNAL(currentPatientChanged()), this, SLOT(loadPatientFile()));
 }
 
@@ -153,11 +156,45 @@ QList<FormMain *> FormManager::forms() const
     return pluginManager()->getObjects<FormMain>();
 }
 
-/**
-  \brief Get the patient form from the episode database, send the load signal with the form absPath and load it.
-  \sa Core::ICore::loadPatientForms()
-*/
 bool FormManager::loadPatientFile()
+{
+    qDeleteAll(d->m_RootForms);
+    d->m_RootForms.clear();
+
+    // get all form readers (IFormIO)
+    QList<Form::IFormIO *> list = pluginManager()->getObjects<Form::IFormIO>();
+
+    // get form general form absPath from episodeBase
+    QString absDirPath = episodeBase()->getGenericFormFile();
+    if (absDirPath.isEmpty()) {
+        /** \todo code here: manage no patient form file recorded in episodebase */
+        return false;
+    }
+
+    Form::FormMain *root = 0;
+    foreach(Form::IFormIO *io, list) {
+        if (io->canReadForms(absDirPath)) {
+            d->m_RootForms << io->loadAllRootForms(absDirPath);
+        }
+    }
+
+    Q_EMIT patientFormsLoaded();
+    return true;
+}
+
+Form::FormMain *FormManager::rootForm(const char *modeUniqueName)
+{
+    // get all root form from the plugin manager
+    for(int i=0; i < d->m_RootForms.count(); ++i) {
+        FormMain *root = d->m_RootForms.at(i);
+        if (root->modeUniqueName().compare(QString(modeUniqueName), Qt::CaseInsensitive)==0) {
+            return root;
+        }
+    }
+    return 0;
+}
+
+bool FormManager::loadSubForms()
 {
     qWarning() << Q_FUNC_INFO;
     // get form general form absPath from episodeBase
@@ -168,17 +205,8 @@ bool FormManager::loadPatientFile()
         return false;
     }
 
-    Q_EMIT loadPatientForms(absDirPath);
+//    Q_EMIT loadPatientForms(absDirPath);
     return true;
-}
-
-void FormManager::setCurrentPatient(const QString &uuid)
-{
-    Q_UNUSED(uuid);
-    /** \todo code here */
-//    QString formUuid = episodeModel()->index(0, Form::EpisodeModel::FormUuid, QModelIndex()).data().toString();
-//    d->m_Holder->formTree()->expandAll();
-//    d->m_Holder->setCurrentForm(formUuid);
 }
 
 bool FormManager::translateForms()

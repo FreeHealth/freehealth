@@ -63,13 +63,15 @@ namespace Constants {
     };
     enum FormFields {
         FORM_ID = 0, FORM_VALID, FORM_GENERIC, FORM_PATIENTUID,
-        FORM_RECEIVERFORMUUID, FORM_INSERTIONPOINT,
+        FORM_SUBFORMUID, FORM_INSERTIONPOINT,
         FORM_MaxParam
     };
     enum VersionFields {
         VERSION_TEXT = 0
     };
 
+    // Some constants
+    const char * const ROOT_FORM_TAG = "__root__form__";
 
     // Some UI constants
     const char * const C_FORM_PLUGINS = "cFormPlugin";

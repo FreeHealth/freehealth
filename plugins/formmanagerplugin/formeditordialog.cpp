@@ -26,20 +26,25 @@
  ***************************************************************************/
 #include "formeditordialog.h"
 #include "episodemodel.h"
+#include "constants_db.h"
+#include "episodebase.h"
+
+#include <utils/global.h>
 
 #include <QSortFilterProxyModel>
 
 #include "ui_formeditordialog.h"
 
-
 using namespace Form;
+static inline Form::Internal::EpisodeBase *episodeBase() { return Form::Internal::EpisodeBase::instance(); }
 
 FormEditorDialog::FormEditorDialog(EpisodeModel *model, EditionModes mode, QWidget *parent) :
     QDialog(parent),
     ui(new Ui::FormEditorDialog)
 {
     ui->setupUi(this);
-    QSortFilterProxyModel *proxyModel = new QSortFilterProxyModel(this);
+//    ui->formSelector->setFormType(Form::FormFilesSelectorWidget::A);
+    proxyModel = new QSortFilterProxyModel(this);
     proxyModel->setSourceModel(model);
     proxyModel->setFilterKeyColumn(EpisodeModel::IsEpisode);
     proxyModel->setFilterFixedString("false");
@@ -54,6 +59,32 @@ FormEditorDialog::FormEditorDialog(EpisodeModel *model, EditionModes mode, QWidg
 FormEditorDialog::~FormEditorDialog()
 {
     delete ui;
+}
+
+void FormEditorDialog::on_addForm_clicked()
+{
+    QString insertTo;
+    if (!ui->treeView->selectionModel()->hasSelection()) {
+        bool yes = Utils::yesNoMessageBox(tr("Insert as root form ?"), tr("You did not selected a form, do you want to add the sub-form as root form ?"));
+        if (yes)
+            insertTo = Constants::ROOT_FORM_TAG;
+        else
+            return;
+    } else {
+        QModelIndex idx = ui->treeView->selectionModel()->currentIndex();
+        idx = proxyModel->mapToSource(idx);
+        insertTo = proxyModel->sourceModel()->index(idx.row(), EpisodeModel::FormUuid, idx.parent()).data().toString();
+    }
+
+    // Save to database
+    QList<Form::FormIODescription *> selected = ui->formSelector->selectedForms();
+    if (selected.isEmpty() || insertTo.isEmpty())
+        return;
+    episodeBase()->addSubForms(insertTo, selected);
+
+    // Re-create the patient form
+    // --->>>>>
+    //
 }
 
 void FormEditorDialog::changeEvent(QEvent *e)

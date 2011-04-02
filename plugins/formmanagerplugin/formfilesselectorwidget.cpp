@@ -58,40 +58,6 @@ static inline Core::IPatient *patient() {return Core::ICore::instance()->patient
 
 namespace Form {
 namespace Internal {
-class FormFilesIcons : public QFileIconProvider
-{
-public:
-    FormFilesIcons() : QFileIconProvider() {}
-
-    QIcon icon(const QFileInfo &info) const
-    {
-        if (!m_Files.contains(info.absoluteFilePath()))
-            testFile(info);
-
-        if (m_Files.value(info.absoluteFilePath()))
-            return theme()->icon(Core::Constants::ICONOK);
-        else
-            return theme()->icon(Core::Constants::ICONHELP);
-
-        return QIcon();
-    }
-
-private:
-    void testFile(const QFileInfo &file) const
-    {
-        QList<Form::IFormIO*> ios = refreshIOPlugs();
-        foreach(Form::IFormIO *io, ios) {
-            io->muteUserWarnings(true);
-            if (io->setFileName(file.absoluteFilePath()) && io->canReadFile()) {
-                m_Files.insert(file.absoluteFilePath(), true);
-                return;
-            }
-        }
-        m_Files.insert(file.absoluteFilePath(), false);
-    }
-
-    mutable QHash<QString, bool> m_Files;
-};
 
 class FormFilesSelectorWidgetPrivate
 {
@@ -196,8 +162,6 @@ public:
     Ui::FormFilesSelectorWidget *ui;
     FormFilesSelectorWidget::FormType m_Type;
     QAction *aByCategory, *aByAuthor, *aBySpecialties, *aByType;
-//    QFileSystemModel *dirModel;
-//    FormFilesIcons *m_IconProvider;
     QList<Form::IFormIO*> ios;
     QList<Form::FormIODescription *> m_FormDescr;
     QStandardItemModel *m_TreeModel;

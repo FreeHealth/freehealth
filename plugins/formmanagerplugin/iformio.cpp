@@ -155,9 +155,6 @@ QVariant FormIODescription::data(const int ref, const QString &lang) const
 
 bool FormIODescription::setData(const int ref, const QVariant &value, const QString &lang)
 {
-//    if (ref==Category) {
-        qWarning() << ref << value << lang;
-//    }
     QString l = lang;
     if (lang.isEmpty())
         l = Trans::Constants::ALL_LANGUAGE;

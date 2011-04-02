@@ -193,8 +193,8 @@ void DrugsPlugin::extensionsInitialized()
 void DrugsPlugin::postCoreOpened()
 {
 #ifdef FREEMEDFORMS
-    // Add drug mode
-    addAutoReleasedObject(new DrugsMode(this));
+    // Add drug mode. DrugsMode manages its inclusion in pluginManager itself.
+    DrugsMode *mode = new DrugsMode(this);
 #endif
 }
 

@@ -35,6 +35,7 @@
 #include <coreplugin/icore.h>
 #include <coreplugin/ipatient.h>
 #include <coreplugin/isettings.h>
+#include <coreplugin/constants_tokensandsettings.h>
 
 //#include <formmanagerplugin/formmanager.h>
 #include <formmanagerplugin/iformitem.h>
@@ -180,17 +181,17 @@ QString XmlFormIO::lastestXmlVersion()
     return "0.3.0";
 }
 
-QStringList XmlFormIO::fileFilters() const
-{
-    return QStringList() << tr("FreeMedForms Form File (*.%1)").arg(Constants::DOCTYPE_EXTENSION);
-}
+//QStringList XmlFormIO::fileFilters() const
+//{
+//    return QStringList() << tr("FreeMedForms Form File (*.%1)").arg(Constants::DOCTYPE_EXTENSION);
+//}
 
 void XmlFormIO::warnXmlReadError(bool muteUserWarnings, const QString &file, const QString &msg, const int line, const int col) const
 {
     QString m = Trans::ConstantTranslations::tkTr(Trans::Constants::FILE_1_ISNOT_READABLE).arg(file) + " ; " +
                   Trans::ConstantTranslations::tkTr(Trans::Constants::ERROR_1_LINE_2_COLUMN_3)
                   .arg(msg).arg(line).arg(col);
-    Utils::Log::addError(this, m);
+    LOG_ERROR(m);
     m_Error.append(Trans::ConstantTranslations::tkTr(Trans::Constants::ERROR_1_LINE_2_COLUMN_3)
                    .arg(msg).arg(line).arg(col));
 //    m_Error.append(m_MainDoc);
@@ -202,54 +203,19 @@ void XmlFormIO::warnXmlReadError(bool muteUserWarnings, const QString &file, con
             .arg(msg).arg(line).arg(col),"",qApp->applicationName());
 }
 
-bool XmlFormIO::setFileName(const QString &absFileName)
+bool XmlFormIO::checkFormFileContent(const QString &absFileName) const
 {
-    m_Author.clear();
-    m_Version.clear();
-    m_Desc.clear();
-    m_AbsFileName.clear();
-    m_Error.clear();
-    m_MainDoc.clear();
-    QString fileName = absFileName;
-    if (QFileInfo(absFileName).isDir()) {
-        // try to read central.xml
-        fileName = absFileName + "/central.xml";
-    }
-    if (!QFile(fileName).exists()) {
-        m_Error.append(tkTr(Trans::Constants::FILE_1_DOESNOT_EXISTS).arg(fileName));
-        return false;
-    }
-    if (QFileInfo(fileName).suffix()==managedFileExtension()) {
-        m_AbsFileName = fileName;
-        return true;
-    } else {
-        m_Error.append(tkTr(Trans::Constants::FILE_1_ISNOT_READABLE).arg(fileName));
-    }
-    return false;
-}
-
-bool XmlFormIO::canReadFile() const
-{
-    if (m_AbsFileName.isEmpty())
-        return false;
-
-    if (QFileInfo(m_AbsFileName).suffix()!=managedFileExtension()) {
-        return false;
-    }
-
-    // Check contents
     bool ok = true;
-    QString contents = Utils::readTextFile(m_AbsFileName, Utils::DontWarnUser);
+    QString contents = Utils::readTextFile(absFileName, Utils::DontWarnUser);
     if (contents.isEmpty()) {
-        /** \todo return a FormObject with a helptext that explains the error ? */
-        warnXmlReadError(m_Mute, m_AbsFileName, tkTr(Trans::Constants::FILE_1_ISEMPTY).arg(m_AbsFileName));
-        m_Error.append(tkTr(Trans::Constants::FILE_1_ISEMPTY).arg(m_AbsFileName));
+        warnXmlReadError(m_Mute, absFileName, tkTr(Trans::Constants::FILE_1_ISEMPTY).arg(absFileName));
+        m_Error.append(tkTr(Trans::Constants::FILE_1_ISEMPTY).arg(absFileName));
         return false;
     }
     if (contents.count("<"+QString(Constants::TAG_NEW_FORM)+">") != contents.count("</"+QString(Constants::TAG_NEW_FORM)+">")) {
         ok = false;
         m_Error.append(tr("Wrong number of tags (%1)").arg(Constants::TAG_NEW_FORM));
-        Utils::Log::addError(this, Trans::ConstantTranslations::tkTr(Trans::Constants::FILE_1_ISNOT_READABLE).arg(m_AbsFileName));
+        LOG_ERROR(Trans::ConstantTranslations::tkTr(Trans::Constants::FILE_1_ISNOT_READABLE).arg(absFileName));
     }
     if ((contents.count(QString("<%1>").arg(Constants::TAG_MAINXMLTAG)) != 1) ||
         (contents.count(QString("</%1>").arg(Constants::TAG_MAINXMLTAG)) != 1)) {
@@ -260,15 +226,17 @@ bool XmlFormIO::canReadFile() const
     // load document
     QString errorMsg;
     int errorLine, errorColumn;
-    if (!m_MainDoc.setContent(contents, &errorMsg, &errorLine, &errorColumn)) {
-        warnXmlReadError(m_Mute, m_AbsFileName, errorMsg, errorLine, errorColumn);
+    QDomDocument doc;
+    if (!doc.setContent(contents, &errorMsg, &errorLine, &errorColumn)) {
+        warnXmlReadError(m_Mute, absFileName, errorMsg, errorLine, errorColumn);
         ok = false;
     }
 
     // Check doctype name
-    if (m_MainDoc.doctype().name().compare(Constants::DOCTYPE_NAME,Qt::CaseInsensitive)!=0) {
+    if (doc.doctype().name().compare(Constants::DOCTYPE_NAME,Qt::CaseInsensitive)!=0) {
         const QString &error = tr("This file is not a FreeMedForms XML file. Document type name mismatch.");
-        warnXmlReadError(m_Mute, m_AbsFileName, error);
+        m_Error << error;
+        warnXmlReadError(m_Mute, absFileName, error);
         ok = false;
     }
 
@@ -283,6 +251,37 @@ bool XmlFormIO::canReadFile() const
 //        QString version = contents.mid(beg, end-beg).simplified();
 //    }
     return ok;
+}
+
+bool XmlFormIO::canReadForms(const QString &absFileName) const
+{
+    m_Error.clear();
+    m_AbsFileName.clear();
+    QString fileName = absFileName;
+    // replace path TAGs
+    fileName.replace(Core::Constants::TAG_APPLICATION_COMPLETEFORMS_PATH, settings()->path(Core::ISettings::CompleteFormsPath));
+    fileName.replace(Core::Constants::TAG_APPLICATION_SUBFORMS_PATH, settings()->path(Core::ISettings::SubFormsPath));
+    fileName.replace(Core::Constants::TAG_APPLICATION_RESOURCES_PATH, settings()->path(Core::ISettings::BundleResourcesPath));
+    // Correct filename ?
+    if (QFileInfo(fileName).isDir()) {
+        // try to read central.xml
+        fileName = fileName + "/central.xml";
+    }
+    if (!QFileInfo(fileName).exists()) {
+        m_Error.append(tkTr(Trans::Constants::FILE_1_DOESNOT_EXISTS).arg(fileName));
+        return false;
+    }
+    if (QFileInfo(fileName).suffix().toLower()=="xml") {
+        if (checkFormFileContent(fileName)) {
+            m_AbsFileName = fileName;
+            return true;
+        } else {
+            return false;
+        }
+    } else {
+        m_Error.append(tkTr(Trans::Constants::FILE_1_ISNOT_READABLE).arg(fileName));
+    }
+    return false;
 }
 
 static Form::FormIODescription *readFileInformations(const QDomDocument &doc)
@@ -323,12 +322,19 @@ static Form::FormIODescription *readFileInformations(const QDomDocument &doc)
     return ioDesc;
 }
 
+static void setPathToDescription(QString path, Form::FormIODescription *desc)
+{
+    path.replace(settings()->path(Core::ISettings::CompleteFormsPath), Core::Constants::TAG_APPLICATION_COMPLETEFORMS_PATH);
+    path.replace(settings()->path(Core::ISettings::SubFormsPath), Core::Constants::TAG_APPLICATION_COMPLETEFORMS_PATH);
+    desc->setData(Form::FormIODescription::UuidOrAbsPath, path);
+}
+
 static Form::FormIODescription *readFileInformations(const QString &absFileName)
 {
     QDomDocument doc;
     doc.setContent(Utils::readTextFile(absFileName));
     Form::FormIODescription *descr = readFileInformations(doc);
-    descr->setData(Form::FormIODescription::UuidOrAbsPath, QFileInfo(absFileName).absolutePath());
+    setPathToDescription(QFileInfo(absFileName).absolutePath(), descr);
     return descr;
 }
 
@@ -336,7 +342,7 @@ Form::FormIODescription *XmlFormIO::readFileInformations()
 {
     Form::FormIODescription *ioDesc = ::readFileInformations(m_MainDoc);
     ioDesc->setIoFormReader(this);
-    ioDesc->setData(Form::FormIODescription::UuidOrAbsPath, m_AbsFileName);
+    setPathToDescription(m_AbsFileName, ioDesc);
     return ioDesc;
 }
 
@@ -384,20 +390,22 @@ QList<Form::FormIODescription *> XmlFormIO::getFormFileDescriptions(const Form::
     return toReturn;
 }
 
-Form::FormMain *XmlFormIO::loadForm()
-{
-    Q_ASSERT(!m_AbsFileName.isEmpty());
-    refreshPlugsFactories();
-    m_ActualForm = new Form::FormMain;
-    if (!loadForm(m_AbsFileName, m_ActualForm))
-        LOG_ERROR(m_Error.join("\n"));
-    return m_ActualForm;
-}
+//Form::FormMain *XmlFormIO::loadForm()
+//{
+//    Q_ASSERT(!m_AbsFileName.isEmpty());
+//    refreshPlugsFactories();
+//    m_ActualForm = new Form::FormMain;
+//    if (!loadForm(m_AbsFileName, m_ActualForm))
+//        LOG_ERROR(m_Error.join("\n"));
+//    return m_ActualForm;
+//}
 
 bool XmlFormIO::loadForm(const QString &file, Form::FormMain *rootForm)
 {
     // Check root element --> must be a form type
-    QDomElement root = m_MainDoc.firstChildElement(Constants::TAG_MAINXMLTAG);
+    QDomDocument doc;
+    doc.setContent(Utils::readTextFile(file));
+    QDomElement root = doc.firstChildElement(Constants::TAG_MAINXMLTAG);
     QDomElement newForm = root.firstChildElement(Constants::TAG_NEW_FORM);
     QDomElement addFile = root.firstChildElement(Constants::TAG_ADDFILE);
 
@@ -417,6 +425,40 @@ bool XmlFormIO::loadForm(const QString &file, Form::FormMain *rootForm)
 //    rootForm->createDebugPage();
     createWidgets(rootForm);
     return true;
+}
+
+QList<Form::FormMain *> XmlFormIO::loadAllRootForms(const QString &uuidOrAbsPath)
+{
+//    qWarning() << Q_FUNC_INFO;
+    QList<Form::FormMain *> toReturn;
+    QString file = uuidOrAbsPath;
+    if (uuidOrAbsPath.isEmpty()) {
+        if (m_AbsFileName.isEmpty()) {
+            LOG_ERROR(tr("No form file name"));
+            return toReturn;
+        } else {
+            file = m_AbsFileName;
+        }
+    }
+    if (!canReadForms(file))
+        return toReturn;
+//    qWarning() << file << m_AbsFileName;
+    // now we work with m_AbsFileName which is defined by canReadForm()
+    QDir dir(QFileInfo(m_AbsFileName).absolutePath());
+//    qWarning() << "xxxxxxxxx" << dir.entryList(QStringList() << "*.xml", QDir::Files | QDir::Readable);
+    refreshPlugsFactories();
+    foreach(const QFileInfo &file, dir.entryInfoList(QStringList() << "*.xml", QDir::Files | QDir::Readable)) {
+        QString modeName = file.baseName();
+        Form::FormMain *root = m_ActualForm = new Form::FormMain;
+        root->setModeUniqueName(modeName);
+        if (!loadForm(file.filePath(), root)) {
+            LOG_ERROR(m_Error.join("\n"));
+        } else {
+            toReturn.append(root);
+        }
+//        qWarning() << "     mode" << root << root->modeUniqueName();
+    }
+    return toReturn;
 }
 
 bool XmlFormIO::loadElement(Form::FormItem *item, QDomElement &rootElement)

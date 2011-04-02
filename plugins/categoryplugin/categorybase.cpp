@@ -266,7 +266,7 @@ QVector<CategoryItem *> CategoryBase::getCategories(const QString &mime) const
         }
         query.finish();
     }
-    qWarning() << "getting categories" << mime << cats.count();
+//    qWarning() << "getting categories" << mime << cats.count();
     return cats;
 }
 
