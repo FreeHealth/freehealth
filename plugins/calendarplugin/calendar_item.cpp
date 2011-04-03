@@ -40,7 +40,7 @@ void CalendarItem::paintEvent(QPaintEvent *event) {
 	bodyPixmap.fill(Qt::transparent);
 	QPainter bodyPainter(&bodyPixmap);
 	bodyPainter.setRenderHint(QPainter::Antialiasing);
-	bodyPainter.setPen(Qt::NoPen);
+	bodyPainter.setPen(QColor(0, 100, 0, m_temp ? 200 : 255));
 	brush = bodyPainter.brush();
 	brush.setStyle(Qt::SolidPattern);
 	brush.setColor(QColor(0, 200, 0, m_temp ? 200 : 255));
