@@ -100,6 +100,10 @@ BeginConfigPage::BeginConfigPage(QWidget *parent)
     : QWizardPage(parent)
 {
     langLabel = new QLabel(this);
+    langLabel->setWordWrap(true);
+    adminPassLabel = new QLabel(this);
+    adminPassLabel->setWordWrap(true);
+    adminButton = new QPushButton(this);
     retranslate();
 
     QComboBox *cbLanguage = new QComboBox(this);
@@ -119,32 +123,43 @@ BeginConfigPage::BeginConfigPage(QWidget *parent)
     layout->setVerticalSpacing(30);
     layout->addWidget(langLabel, 2, 0);
     layout->addWidget(cbLanguage, 2, 1);
+    layout->addWidget(adminPassLabel, 3, 0);
+    layout->addWidget(adminButton, 4, 1);
     setLayout(layout);
+
+    connect(adminButton, SIGNAL(clicked()), this, SLOT(changeAdminPassword()));
 }
 
 void BeginConfigPage::retranslate()
 {
     setTitle(tr("Welcome to FreeMedForms"));
     setSubTitle(tr("<b>Welcome to FreeMedForms</b><br /><br />"
-                   "This wizard will help you to configure the base parameters of the application.<br />"
-                   "At any time, you can cancel this wizard, the default values will be activated "
+                   "This wizard will help you to configure the base parameters "
+                   "of the application.<br />"
+                   "At any time, you can cancel this wizard, the default "
+                   "values will be activated "
                    "for the undefined parameters."));
     langLabel->setText(tr("Select your language"));
+    // if user is admin && password == "admin"
+    if ((user()->value(Core::IUser::Login).toString()!=UserPlugin::Constants::DEFAULT_USER_LOGIN) ||
+        (user()->value(Core::IUser::Password).toString()!=UserPlugin::Constants::DEFAULT_USER_PASSWORD)) {
+        adminPassLabel->setText(tr("For security reason, it is highly suggested "
+                                   "to change the default administrator password"));
+    } else {
+        adminPassLabel->setText(tr("Click the button to change your password"));
+    }
+    adminButton->setText(tr("Change password"));
 }
 
-bool BeginConfigPage::validatePage()
+void BeginConfigPage::changeAdminPassword()
 {
-    // if user is admin && password == "admin"
-    if ((user()->value(Core::IUser::Login).toString()==UserPlugin::Constants::DEFAULT_USER_LOGIN) &&
-        (user()->value(Core::IUser::Password).toString()==UserPlugin::Constants::DEFAULT_USER_PASSWORD)) {
-        // ask for a new password
-        UserPlugin::UserPasswordDialog dlg(user()->value(Core::IUser::Password).toString(), this);
-        dlg.changeTitle(tr("You must redefine the default administrator's password"));
-        dlg.exec();
-        if (dlg.canGetNewPassword())
-            user()->setValue(Core::IUser::Password, dlg.cryptedPassword());
+    UserPlugin::UserPasswordDialog dlg(user()->value(Core::IUser::Password).toString(), this);
+    dlg.changeTitle(tr("Change default administrator's password"));
+    dlg.exec();
+    if (dlg.canGetNewPassword()) {
+        user()->setValue(Core::IUser::Password, dlg.cryptedPassword());
+        user()->saveChanges();
     }
-    return true;
 }
 
 

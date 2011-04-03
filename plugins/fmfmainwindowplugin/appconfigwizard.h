@@ -76,14 +76,17 @@ class BeginConfigPage: public QWizardPage
     Q_OBJECT
 public:
     BeginConfigPage(QWidget *parent = 0);
-    bool validatePage();
 
 protected:
     void retranslate();
 
+protected Q_SLOTS:
+    void changeAdminPassword();
+
 private:
     QLabel *intro;
-    QLabel *langLabel;
+    QLabel *langLabel, *adminPassLabel;
+    QPushButton *adminButton;
 };
 
 class CreateNewUserPage: public QWizardPage

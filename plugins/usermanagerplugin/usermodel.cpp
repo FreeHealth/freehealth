@@ -106,6 +106,14 @@ public:
     QString toXml() const {return QString();}
     bool fromXml(const QString &) {return true;}
 
+    bool saveChanges()
+    {
+        if (m_Model) {
+            return m_Model->submitUser(value(Core::IUser::Uuid).toString());
+        }
+        return false;
+    }
+
 private:
     UserModel *m_Model;
 };
@@ -818,7 +826,7 @@ bool UserModel::submitAll()
     return toReturn;
 }
 
-/** \brief Submit only one user changes of the model into database */
+/** \brief Submit only one user changes of the model into database according to the current user rights. */
 bool UserModel::submitUser(const QString &uuid)
 {
     bool toReturn = true;

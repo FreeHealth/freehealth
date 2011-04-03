@@ -139,6 +139,8 @@ public:
     virtual QString toXml() const = 0;
     virtual bool fromXml(const QString &xml) = 0;
 
+    virtual bool saveChanges() = 0;
+
     void replaceTokens(QString &stringWillBeModified);
 
 Q_SIGNALS:
