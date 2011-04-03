@@ -451,6 +451,7 @@ QList<Form::FormMain *> XmlFormIO::loadAllRootForms(const QString &uuidOrAbsPath
         QString modeName = file.baseName();
         Form::FormMain *root = m_ActualForm = new Form::FormMain;
         root->setModeUniqueName(modeName);
+        root->setUuid(uuidOrAbsPath);
         if (!loadForm(file.filePath(), root)) {
             LOG_ERROR(m_Error.join("\n"));
         } else {
