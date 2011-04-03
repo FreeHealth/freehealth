@@ -1,0 +1,51 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE FreeMedForms>
+
+<FreeMedForms>
+  <formdescription>
+    <!-- Non translatable values -->
+    <authors>Eric Maeker, MD</authors>
+    <version>0.5.0~alpha</version>
+    <compatversion>0.5.0</compatversion>
+    <cdate>2011-03-15</cdate>
+    <icon>geriatrics.png</icon>
+    <weblink></weblink>
+    <bibliography/>
+
+    <!-- Translatable values -->
+    <licence>GPLv3</licence>
+    <description lang="fr">Grille AGGIR</description>
+    <description lang="en">French AGGIR</description>
+    <category lang="en">Geriatrics</category>
+    <category lang="fr">Gériatrie</category>
+    <tooltip lang="fr">French tooltip</tooltip>
+    <tooltip lang="xx">All other languages tooltip</tooltip>
+    <htmldescription lang="fr"></htmldescription>
+    <htmldescription lang="xx"></htmldescription>
+    <specialties lang="fr">Gériatrie</specialties>
+    <specialties lang="xx">Geriatrics</specialties>
+
+  </formdescription>
+
+<MedForm>
+  <name>formSample</name>
+  <label>AGGIR</label>
+  <type>form</type>
+  <column>1</column>
+  <option>compact</option>
+
+  <Item>
+    <name>girwidget</name>
+    <label>Gir sample</label>
+    <type>gir</type>
+    <script>
+      <onload>{onload script}</onload>
+      <postload>{post load}</postload>
+      <ondemand>{ondemand}</ondemand>
+      <onvaluechanged>{onvaluechanged}</onvaluechanged>
+      <onvaluerequiered>{onvaluerequiered}</onvaluerequiered>
+      <ondependencieschanged>{ondependencieschanged}</ondependencieschanged>
+    </script>
+  </Item>
+</MedForm>
+</FreeMedForms>

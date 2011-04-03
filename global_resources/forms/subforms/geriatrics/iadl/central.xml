@@ -1,0 +1,129 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE FreeMedForms>
+
+<FreeMedForms>
+
+  <formdescription>
+    <!-- Non translatable values -->
+    <authors>Eric Maeker, MD</authors>
+    <version>0.5.0~alpha</version>
+    <compatversion>0.5.0</compatversion>
+    <cdate>2011-03-15</cdate>
+    <icon>geriatrics.png</icon>
+    <weblink></weblink>
+    <bibliography/>
+
+    <!-- Translatable values -->
+    <licence>GPLv3</licence>
+    <description lang="fr">IADL</description>
+    <description lang="en">IADL</description>
+    <category lang="en">Geriatrics</category>
+    <category lang="fr">Gériatrie</category>
+    <tooltip lang="fr">French tooltip</tooltip>
+    <tooltip lang="xx">All other languages tooltip</tooltip>
+    <htmldescription lang="fr"></htmldescription>
+    <htmldescription lang="xx"></htmldescription>
+    <specialties lang="fr">Gériatrie</specialties>
+    <specialties lang="xx">Geriatrics</specialties>
+
+  </formdescription>
+
+
+  <MedForm>
+    <name>iadl</name>
+    <label>IADL</label>
+    <type>form</type>
+    <option>col=2</option>
+    <script>
+        {
+        var str = "";
+        var object = thisObject;
+        if (!object.completed) return "";
+
+        /* Get sum of IADL by adding all iadl childs */
+        var sum = object.sumOfChildren;
+        str += "L'IADL est à " + sum + " sur 4.";
+
+        /* Construct dependencies sentence */
+        var dependances = object.sumOfInterpretValues( ", " );
+
+        if (dependances)
+        {  str += " Des dépendances sont repérées pour : " + dependances + ".\n";
+        }
+
+        /* Set thisObject to interperted */
+        /* This must be done 'cause we done want to get de selected values of the IADL */
+        object.interpreted = true;
+        object.allChildInterpreted();
+
+        return str;
+        }
+    </script>
+
+    <Item>
+      <name>iadlBudget</name>
+      <label>&lt;b&gt;Budget&lt;/b&gt;</label>
+      <type>radio</type>
+      <value>
+        <uuid id="0">iadlBudget0</uuid>
+        <uuid id="1">iadlBudget1</uuid>
+        <possible id="0">autonome</possible>
+        <possible id="1">dépendant</possible>
+        <script id="0"></script>
+        <script id="1">la gestion du budget</script>
+        <numerical id="0">0</numerical>
+        <numerical id="1">1</numerical>
+      </value>
+    </Item>
+
+    <Item>
+      <name>iadlTel</name>
+      <label>&lt;b&gt;Téléphone&lt;/b&gt;</label>
+      <type>radio</type>
+      <value>
+        <uuid id="0">iadlTel0</uuid>
+        <uuid id="1">iadlTel1</uuid>
+        <possible id="0">autonome</possible>
+        <possible id="1">dépendant</possible>
+        <script id="0"></script>
+        <script id="1">l'utilisation du téléphone</script>
+        <numerical id="0">0</numerical>
+        <numerical id="1">1</numerical>
+      </value>
+    </Item>
+
+    <Item>
+      <name>iadlMed</name>
+      <label>&lt;b&gt;Médicaments&lt;/b&gt;</label>
+      <type>radio</type>
+      <value>
+        <uuid id="0">iadlMed0</uuid>
+        <uuid id="1">iadlMed1</uuid>
+        <possible id="0">autonome</possible>
+        <possible id="1">dépendant</possible>
+        <script id="0"></script>
+        <script id="1">la gestion des médicaments</script>
+        <numerical id="0">0</numerical>
+        <numerical id="1">1</numerical>
+      </value>
+    </Item>
+
+    <Item>
+      <name>iadlTransport</name>
+      <label>&lt;b&gt;Transports&lt;/b&gt;</label>
+      <type>radio</type>
+      <value>
+        <uuid id="0">iadlTransport0</uuid>
+        <uuid id="1">iadlTransport1</uuid>
+        <possible id="0">autonome</possible>
+        <possible id="1">dépendant</possible>
+        <script id="0"></script>
+        <script id="1">l'utilisation des transports en commun</script>
+        <numerical id="0">0</numerical>
+        <numerical id="1">1</numerical>
+      </value>
+    </Item>
+
+ </MedForm>
+
+</FreeMedForms>

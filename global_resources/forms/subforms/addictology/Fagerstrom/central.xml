@@ -1,0 +1,119 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE FreeMedForms>
+
+<FreeMedForms>
+
+  <formdescription>
+    <!-- Non translatable values -->
+    <authors>Eric Maeker, MD</authors>
+    <version>0.5.0~alpha</version>
+    <compatversion>0.5.0</compatversion>
+    <cdate>2011-03-15</cdate>
+    <icon>addictology.png</icon>
+    <weblink></weblink>
+    <bibliography/>
+
+    <!-- Translatable values -->
+    <licence>GPLv3</licence>
+    <description lang="fr">Test de Fagerström</description>
+    <description lang="en">Fagerström test</description>
+    <category lang="en">Addictology</category>
+    <category lang="fr">Addictologie</category>
+    <tooltip lang="fr">French tooltip</tooltip>
+    <tooltip lang="xx">All other languages tooltip</tooltip>
+    <htmldescription lang="fr"></htmldescription>
+    <htmldescription lang="xx"></htmldescription>
+    <specialties lang="fr">Addictologie</specialties>
+    <specialties lang="xx">Addictology</specialties>
+
+  </formdescription>
+
+  <MedForm>
+    <name>fagerstrom</name>
+    <label>Test de Fagerstrom</label>
+    <type>form</type>
+    <option>col=2</option>
+
+    <Item>
+      <name>cig_reveil</name>
+      <label>Combien de temps après vous être réveillé, fumez-vous votre première cigarette ?</label>
+      <type>radio</type>
+      <value>
+        <uuid id="0">cig_reveil0</uuid>
+        <uuid id="1">cig_reveil1</uuid>
+        <uuid id="2">cig_reveil2</uuid>
+        <uuid id="3">cig_reveil3</uuid>
+        <possible id="0">moins de 5 minutes</possible>
+        <possible id="1">entre 6 et 30 minutes</possible>
+        <possible id="2">entre 31 et 60 minutes</possible>
+        <possible id="3">après 60 minutes</possible>
+      </value>
+    </Item>
+
+    <Item>
+      <name>fum_interdit</name>
+      <label>Trouvez-vous difficile de ne pas fumer dans les endroits interdits (ex: cinémas, bibliothèques...) ?</label>
+      <type>radio</type>
+      <value>
+        <uuid id="0">fum_interdit0</uuid>
+        <uuid id="1">fum_interdit1</uuid>
+        <possible id="0">oui</possible>
+        <possible id="1">non</possible>
+      </value>
+    </Item>
+
+    <Item>
+      <name>cig_indispensable</name>
+      <label>Quelle cigarette trouvez-vous la plus indispensable ?</label>
+      <type>radio</type>
+      <value>
+        <uuid id="0">cig_indispensable0</uuid>
+        <uuid id="1">cig_indispensable1</uuid>
+        <possible id="0">la première</possible>
+        <possible id="1">une autre</possible>
+      </value>
+    </Item>
+
+    <Item>
+      <name>cig_par_jour</name>
+      <label>Combien de cigarettes fumez-vous par jour en moyenne ?</label>
+      <type>radio</type>
+      <value>
+        <uuid id="0">cig_indispensable0</uuid>
+        <uuid id="1">cig_indispensable1</uuid>
+        <uuid id="2">cig_indispensable2</uuid>
+        <uuid id="3">cig_indispensable3</uuid>
+        <possible id="0">10 ou moins</possible>
+        <possible id="1">entre 11 et 20</possible>
+        <possible id="2">entre 21 et 30</possible>
+        <possible id="3">31 ou plus</possible>
+      </value>
+    </Item>
+
+    <Item>
+      <name>premiere_heure</name>
+      <label>Fumez-vous de façon plus rapprochée dans la première heure après le réveil que pendant le reste de la journée ?</label>
+      <type>radio</type>
+      <value>
+        <uuid id="0">premiere_heure0</uuid>
+        <uuid id="1">premiere_heure1</uuid>
+        <possible id="0">oui</possible>
+        <possible id="1">non</possible>
+      </value>
+    </Item>
+
+    <Item>
+      <name>maladie</name>
+      <label>Fumez-vous même si une maladie vous oblige à rester au lit ?</label>
+      <type>radio</type>
+      <value>
+        <uuid id="0">maladie0</uuid>
+        <uuid id="1">maladie1</uuid>
+        <possible id="0">oui</possible>
+        <possible id="1">non</possible>
+      </value>
+    </Item>
+
+  </MedForm>
+
+</FreeMedForms>
