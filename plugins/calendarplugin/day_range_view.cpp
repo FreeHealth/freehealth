@@ -273,6 +273,7 @@ void DayRangeView::mouseMoveEvent(QMouseEvent *event) {
 	if (dateTime != m_pressDateTime) {
 		if (!m_pressItem) {
 			m_pressItem = new CalendarItem(this, true);
+			m_pressItem->setBeginDateTime(m_pressDateTime);
 			m_pressItem->show();
 		}
 
@@ -282,6 +283,7 @@ void DayRangeView::mouseMoveEvent(QMouseEvent *event) {
 		else
 			rect = getTimeIntervalRect(m_pressDateTime.date().dayOfWeek(), dateTime.time(), m_pressDateTime.time());
 
+		m_pressItem->setEndDateTime(dateTime);
 		m_pressItem->move(rect.x(), rect.y());
 		m_pressItem->resize(rect.width(), rect.height());
 	}
