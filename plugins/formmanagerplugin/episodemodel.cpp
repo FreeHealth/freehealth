@@ -332,7 +332,7 @@ public:
         LOG_FOR(q, "Getting Forms");
         // create one item per form
         formsItems.clear();
-        foreach(Form::FormMain *f, m_RootForm->formMainChildren()) {
+        foreach(Form::FormMain *f, m_RootForm->flattenFormMainChildren()) {
             datas.clear();
             datas.insert(EpisodeModel::FormUuid, f->uuid());
             datas.insert(EpisodeModel::Label, f->spec()->label());
@@ -346,7 +346,7 @@ public:
             formsItems.insert(f, it);
         }
         // reparent items
-        foreach(Form::FormMain *f, m_RootForm->formMainChildren()) {
+        foreach(Form::FormMain *f, m_RootForm->flattenFormMainChildren()) {
             TreeItem *it = formsItems.value(f);
             if (f->formParent() != m_RootForm) {
                 it->setParent(formsItems.value(f->formParent()));

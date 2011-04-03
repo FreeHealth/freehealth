@@ -171,12 +171,13 @@ bool FormManager::loadPatientFile()
         return false;
     }
 
-    Form::FormMain *root = 0;
     foreach(Form::IFormIO *io, list) {
         if (io->canReadForms(absDirPath)) {
             d->m_RootForms << io->loadAllRootForms(absDirPath);
         }
     }
+
+    loadSubForms();
 
     Q_EMIT patientFormsLoaded();
     return true;
@@ -196,16 +197,57 @@ Form::FormMain *FormManager::rootForm(const char *modeUniqueName)
 
 bool FormManager::loadSubForms()
 {
-    qWarning() << Q_FUNC_INFO;
-    // get form general form absPath from episodeBase
-    QString absDirPath = episodeBase()->getGenericFormFile();
-
-    if (absDirPath.isEmpty()) {
-        /** \todo code here: manage no patient form file recorded in episodebase */
-        return false;
+    // get sub-forms from database
+    QHash<QString, QString> subs = episodeBase()->getSubFormFiles();
+    if (subs.isEmpty()) {
+        return true;
     }
 
-//    Q_EMIT loadPatientForms(absDirPath);
+    // read all sub-forms
+    QList<Form::IFormIO *> list = pluginManager()->getObjects<Form::IFormIO>();
+    QList<Form::FormMain *> subFormsRoot;
+    foreach(Form::IFormIO *io, list) {
+        QHashIterator<QString, QString> i(subs);
+        while (i.hasNext()) {
+            i.next();
+            if (io->canReadForms(i.key())) {
+                subFormsRoot << io->loadAllRootForms(i.key());
+            }
+        }
+    }
+
+    // insert sub-forms
+    for(int i=0; i < subFormsRoot.count(); ++i) {
+        FormMain *sub = subFormsRoot.at(i);
+        QString insertIntoUuid = subs.value(sub->uuid());
+//        qWarning() << "insert" << sub->uuid() << "to" << insertIntoUuid;
+        if (insertIntoUuid == Constants::ROOT_FORM_TAG) {
+            // insert into its mode root form
+            FormMain *rootMode = rootForm(sub->modeUniqueName().toAscii());
+            if (!rootMode) {
+                LOG_ERROR("unable to find the mode root form: " + sub->modeUniqueName());
+                continue;
+            }
+            foreach(Form::FormMain *form, sub->firstLevelFormMainChildren())
+                form->setParent(rootMode);
+        }
+        // find point of insertion
+        for(int j=0; j < d->m_RootForms.count(); ++j) {
+            FormMain *parent = d->m_RootForms.at(j);
+            // search inside flatten children
+            QList<Form::FormMain *> children = parent->flattenFormMainChildren();
+            for(int k=0; k < children.count(); ++k) {
+                FormMain *child = children.at(k);
+                if (child->uuid()==insertIntoUuid) {
+                    foreach(Form::FormMain *form, sub->firstLevelFormMainChildren())
+                        form->setParent(child);
+                    break;
+                }
+            }
+        }
+
+    }
+
     return true;
 }
 

@@ -29,6 +29,10 @@
 #include "constants_db.h"
 #include "episodebase.h"
 
+#include <coreplugin/icore.h>
+#include <coreplugin/itheme.h>
+#include <coreplugin/constants_icons.h>
+
 #include <utils/global.h>
 
 #include <QSortFilterProxyModel>
@@ -37,13 +41,15 @@
 
 using namespace Form;
 static inline Form::Internal::EpisodeBase *episodeBase() { return Form::Internal::EpisodeBase::instance(); }
+static inline Core::ITheme *theme()  { return Core::ICore::instance()->theme(); }
 
 FormEditorDialog::FormEditorDialog(EpisodeModel *model, EditionModes mode, QWidget *parent) :
     QDialog(parent),
     ui(new Ui::FormEditorDialog)
 {
     ui->setupUi(this);
-//    ui->formSelector->setFormType(Form::FormFilesSelectorWidget::A);
+    ui->formSelector->setFormType(Form::FormFilesSelectorWidget::AllForms);
+
     proxyModel = new QSortFilterProxyModel(this);
     proxyModel->setSourceModel(model);
     proxyModel->setFilterKeyColumn(EpisodeModel::IsEpisode);
@@ -54,6 +60,9 @@ FormEditorDialog::FormEditorDialog(EpisodeModel *model, EditionModes mode, QWidg
         ui->treeView->hideColumn(i);
     ui->treeView->showColumn(EpisodeModel::Label);
     ui->stackedWidget->setCurrentWidget(ui->formAdder);
+
+    setWindowTitle(tr("Form Editor"));
+    setWindowIcon(theme()->icon(Core::Constants::ICONFORMS));
 }
 
 FormEditorDialog::~FormEditorDialog()

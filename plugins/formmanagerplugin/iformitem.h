@@ -175,7 +175,8 @@ public:
     void clear();
 
     virtual FormMain *formParent() { return qobject_cast<FormMain*>(parent()); }
-    virtual QList<FormMain *> formMainChildren() const;
+    virtual QList<FormMain *> flattenFormMainChildren() const;
+    virtual QList<FormMain *> firstLevelFormMainChildren() const;
     virtual FormMain *formMainChild(const QString &uuid) const;
 
     virtual void setEpisodePossibilities(const int i) {m_Episode = i;}
@@ -189,21 +190,32 @@ private:
     int m_Episode;
     QString m_ModeName;
 };
-inline QList<Form::FormMain *> Form::FormMain::formMainChildren() const
+inline QList<Form::FormMain *> Form::FormMain::flattenFormMainChildren() const
 {
      QList<Form::FormMain *> list;
      foreach(QObject *o, children()) {
           Form::FormMain *i = qobject_cast<Form::FormMain*>(o);
           if (i) {
               list.append(i);
-              list.append(i->formMainChildren());
+              list.append(i->flattenFormMainChildren());
           }
      }
      return list;
 }
+inline QList<FormMain *> Form::FormMain::firstLevelFormMainChildren() const
+{
+    QList<Form::FormMain *> list;
+    foreach(QObject *o, children()) {
+         Form::FormMain *i = qobject_cast<Form::FormMain*>(o);
+         if (i) {
+             list.append(i);
+         }
+    }
+    return list;
+}
 inline Form::FormMain *Form::FormMain::formMainChild(const QString &uuid) const
 {
-    QList<FormMain *> forms = formMainChildren();
+    QList<FormMain *> forms = flattenFormMainChildren();
     for(int i=0; i<forms.count(); ++i) {
         FormMain *form = forms.at(i);
         if (form->uuid()==uuid)

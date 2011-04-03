@@ -116,7 +116,7 @@ public:
         if (!m_Stack)
             return;
         clearStackLayout();
-        foreach(FormMain *form, m_RootForm->formMainChildren()) {
+        foreach(FormMain *form, m_RootForm->flattenFormMainChildren()) {
             if (form->formWidget()) {
                 QWidget *w = new QWidget();
                 QVBoxLayout *vl = new QVBoxLayout(w);

@@ -71,6 +71,7 @@ public:
 
     void setFormType(FormType type);
     void setSelectionType(SelectionType type);
+    void expandAllItems() const;
 
     QList<Form::FormIODescription *> selectedForms() const;
 

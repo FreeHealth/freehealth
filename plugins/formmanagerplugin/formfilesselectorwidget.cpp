@@ -65,7 +65,8 @@ public:
     FormFilesSelectorWidgetPrivate() :
             ui(new Ui::FormFilesSelectorWidget),
             aByCategory(0), aByAuthor(0), aBySpecialties(0), aByType(0),
-            m_TreeModel(0)
+            m_TreeModel(0),
+            m_ActualTreeModelColumn(-1)
     {}
 
     ~FormFilesSelectorWidgetPrivate()
@@ -115,7 +116,7 @@ public:
         ios = refreshIOPlugs();
         Form::FormIOQuery query;
         switch (m_Type) {
-        case FormFilesSelectorWidget::AllForms: break;
+        case FormFilesSelectorWidget::AllForms: query.setTypeOfForms(Form::FormIOQuery::CompleteForms | Form::FormIOQuery::SubForms | Form::FormIOQuery::Pages);break;
         case FormFilesSelectorWidget::CompleteForms: query.setTypeOfForms(Form::FormIOQuery::CompleteForms); break;
         case FormFilesSelectorWidget::SubForms: query.setTypeOfForms(Form::FormIOQuery::SubForms); break;
         case FormFilesSelectorWidget::Pages: query.setTypeOfForms(Form::FormIOQuery::Pages); break;
@@ -127,6 +128,9 @@ public:
 
     void createTreeModel(const int treeItemReference)
     {
+        if (m_ActualTreeModelColumn == treeItemReference)
+            return;
+        m_ActualTreeModelColumn = treeItemReference;
         QFont bold;
         bold.setBold(true);
         if (!m_TreeModel) {
@@ -180,7 +184,14 @@ FormFilesSelectorWidget::FormFilesSelectorWidget(QWidget *parent, const FormType
     d->m_Type = type;
     d->m_SelType = Single;
     d->ui->setupUi(this);
+
+    // Create and connect actions
     d->createActions();
+    connect(d->aByCategory, SIGNAL(triggered()), this, SLOT(onFilterSelected()));
+    connect(d->aByAuthor, SIGNAL(triggered()), this, SLOT(onFilterSelected()));
+    connect(d->aBySpecialties, SIGNAL(triggered()), this, SLOT(onFilterSelected()));
+    connect(d->aByType, SIGNAL(triggered()), this, SLOT(onFilterSelected()));
+
     // Get current generic form file
 //    QString actual = episodeBase()->getGenericFormFile();
 //    actual = actual.mid(settings()->path(Core::ISettings::CompleteFormsPath).length() + 1);
@@ -190,18 +201,13 @@ FormFilesSelectorWidget::FormFilesSelectorWidget(QWidget *parent, const FormType
     d->getDescriptions();
 
     // prepare the first model = category tree model
-    d->m_ActualTreeModelColumn = Form::FormIODescription::Category;
-    d->createTreeModel(d->m_ActualTreeModelColumn);
+    d->aByCategory->trigger();
     d->ui->treeView->setModel(d->m_TreeModel);
     d->ui->treeView->header()->hide();
 //    d->ui->treeView->setRootIndex(d->dirModel->index(settings()->path(Core::ISettings::CompleteFormsPath)));
 
     // connect actions, buttons...
     connect(d->ui->treeView, SIGNAL(activated(QModelIndex)),this, SLOT(on_treeView_activated(QModelIndex)));
-    connect(d->aByCategory, SIGNAL(triggered()), this, SLOT(onFilterSelected()));
-    connect(d->aByAuthor, SIGNAL(triggered()), this, SLOT(onFilterSelected()));
-    connect(d->aBySpecialties, SIGNAL(triggered()), this, SLOT(onFilterSelected()));
-    connect(d->aByType, SIGNAL(triggered()), this, SLOT(onFilterSelected()));
 }
 
 FormFilesSelectorWidget::~FormFilesSelectorWidget()
@@ -224,6 +230,11 @@ void FormFilesSelectorWidget::setSelectionType(SelectionType type)
         return;
     d->ui->treeView->clearSelection();
     d->ui->treeView->setSelectionMode(QAbstractItemView::SelectionMode(type));
+}
+
+void FormFilesSelectorWidget::expandAllItems() const
+{
+    d->ui->treeView->expandAll();
 }
 
 QList<Form::FormIODescription *> FormFilesSelectorWidget::selectedForms() const

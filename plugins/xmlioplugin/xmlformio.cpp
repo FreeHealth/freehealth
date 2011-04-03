@@ -255,6 +255,10 @@ bool XmlFormIO::checkFormFileContent(const QString &absFileName) const
 
 bool XmlFormIO::canReadForms(const QString &absFileName) const
 {
+//    static QHash<QString, bool> results;
+//    if (results.keys().contains(absFileName)) {
+//        return results.value(absFileName);
+//    }
     m_Error.clear();
     m_AbsFileName.clear();
     QString fileName = absFileName;
@@ -262,6 +266,9 @@ bool XmlFormIO::canReadForms(const QString &absFileName) const
     fileName.replace(Core::Constants::TAG_APPLICATION_COMPLETEFORMS_PATH, settings()->path(Core::ISettings::CompleteFormsPath));
     fileName.replace(Core::Constants::TAG_APPLICATION_SUBFORMS_PATH, settings()->path(Core::ISettings::SubFormsPath));
     fileName.replace(Core::Constants::TAG_APPLICATION_RESOURCES_PATH, settings()->path(Core::ISettings::BundleResourcesPath));
+//    if (results.keys().contains(fileName)) {
+//        return results.value(fileName);
+//    }
     // Correct filename ?
     if (QFileInfo(fileName).isDir()) {
         // try to read central.xml
@@ -274,13 +281,19 @@ bool XmlFormIO::canReadForms(const QString &absFileName) const
     if (QFileInfo(fileName).suffix().toLower()=="xml") {
         if (checkFormFileContent(fileName)) {
             m_AbsFileName = fileName;
+//            results.insert(fileName, true);
+//            results.insert(absFileName, true);
             return true;
         } else {
+//            results.insert(fileName, false);
+//            results.insert(absFileName, false);
             return false;
         }
     } else {
         m_Error.append(tkTr(Trans::Constants::FILE_1_ISNOT_READABLE).arg(fileName));
     }
+//    results.insert(fileName, false);
+//    results.insert(absFileName, false);
     return false;
 }
 
@@ -325,7 +338,7 @@ static Form::FormIODescription *readFileInformations(const QDomDocument &doc)
 static void setPathToDescription(QString path, Form::FormIODescription *desc)
 {
     path.replace(settings()->path(Core::ISettings::CompleteFormsPath), Core::Constants::TAG_APPLICATION_COMPLETEFORMS_PATH);
-    path.replace(settings()->path(Core::ISettings::SubFormsPath), Core::Constants::TAG_APPLICATION_COMPLETEFORMS_PATH);
+    path.replace(settings()->path(Core::ISettings::SubFormsPath), Core::Constants::TAG_APPLICATION_SUBFORMS_PATH);
     desc->setData(Form::FormIODescription::UuidOrAbsPath, path);
 }
 
@@ -389,16 +402,6 @@ QList<Form::FormIODescription *> XmlFormIO::getFormFileDescriptions(const Form::
     }
     return toReturn;
 }
-
-//Form::FormMain *XmlFormIO::loadForm()
-//{
-//    Q_ASSERT(!m_AbsFileName.isEmpty());
-//    refreshPlugsFactories();
-//    m_ActualForm = new Form::FormMain;
-//    if (!loadForm(m_AbsFileName, m_ActualForm))
-//        LOG_ERROR(m_Error.join("\n"));
-//    return m_ActualForm;
-//}
 
 bool XmlFormIO::loadForm(const QString &file, Form::FormMain *rootForm)
 {
@@ -648,7 +651,7 @@ bool XmlFormIO::createFormWidget(Form::FormMain *form)
 bool XmlFormIO::createWidgets(const Form::FormMain *rootForm)
 {
     // foreach FormMain children
-    foreach(Form::FormMain *form, rootForm->formMainChildren()) {
+    foreach(Form::FormMain *form, rootForm->flattenFormMainChildren()) {
         // create the form
         createFormWidget(form);
     }

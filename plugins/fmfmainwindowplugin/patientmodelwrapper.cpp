@@ -88,7 +88,7 @@ QVariant PatientModelWrapper::data(const QModelIndex &index, int role) const
 
     // or in the forms widgets
     foreach(Form::FormMain *modeForms, formManager()->forms()) {
-        foreach(Form::FormMain *f, modeForms->formMainChildren()) {
+        foreach(Form::FormMain *f, modeForms->flattenFormMainChildren()) {
             foreach(Form::FormItem *item, f->formItemChildren()) {
                 if (item->itemDatas()) {
                     if (item->patientDataRepresentation() == index.column())

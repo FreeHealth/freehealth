@@ -64,7 +64,7 @@
   Form::IFormIO engines. The first item returned by the Form::IFormIO when loading files are empty and represents
   the root of the form.\n
   When you need to create a FormMain as child to one another use the createChildForm() member. Get all its children
-  (including sub-trees) using the formMainChildren() member or the formMainChild() if you want a specific child.\n
+  (including sub-trees) using the flattenFormMainChildren() member or the formMainChild() if you want a specific child.\n
   setEpisodePossibilities() and episodePossibilities() are used in the Form::EpisodeModel when creating the tree model.\n
   When a mode creates a root Form::FormMain it should declare the main empty root object
   it in the plugin manager object pool to allow other object to access the datas of forms (eg: PatientModelWrapper).\n

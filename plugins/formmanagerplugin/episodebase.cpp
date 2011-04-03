@@ -436,7 +436,6 @@ bool EpisodeBase::addSubForms(const QString &receiverUuid, const QList<Form::For
         query.finish();
     }
     return success;
-
 }
 
 

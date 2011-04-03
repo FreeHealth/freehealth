@@ -40,7 +40,7 @@
 using namespace Form;
 
 
-IFormWidget::IFormWidget(Form::FormItem *formItem, QWidget *parent )
+IFormWidget::IFormWidget(Form::FormItem *formItem, QWidget *parent)
         : QWidget(parent), m_FormItem(formItem)
 {
 }
@@ -49,10 +49,12 @@ void IFormWidget::createLabel(const QString &text, Qt::Alignment horizAlign)
 {
     m_Label = new QLabel(this);
     QLabel *l = m_Label;
-    l->setFrameStyle( IFormWidget::ItemLabelFrame );
-    l->setText( text );
-    l->setAlignment( Qt::AlignTop | horizAlign );
-    l->setSizePolicy( QSizePolicy::Expanding , QSizePolicy::Expanding );
+    l->setFrameStyle(IFormWidget::ItemLabelFrame);
+//    l->setFrameStyle(QFrame::Plain);
+//    l->setFrameShape(QFrame::Box);
+    l->setText(text);
+    l->setAlignment(Qt::AlignTop | horizAlign);
+    l->setSizePolicy(QSizePolicy::Fixed, QSizePolicy::Fixed);
     l->setWordWrap(true);
 }
 
@@ -61,18 +63,18 @@ QBoxLayout *IFormWidget::getBoxLayout(const int labelOption, const QString &text
     QBoxLayout * hb;
     m_Label = new QLabel(this);
     if (labelOption == Label_OnTop) {
-        hb = new QBoxLayout(QBoxLayout::TopToBottom, parent );
-        createLabel(text, Qt::AlignTop | Qt::AlignLeft );
-        hb->setSpacing( 0 );
+        hb = new QBoxLayout(QBoxLayout::TopToBottom, parent);
+        createLabel(text, Qt::AlignTop | Qt::AlignLeft);
+        hb->setSpacing(0);
     } else {
         /** \todo Code specific label options */
-        hb = new QBoxLayout( QBoxLayout::LeftToRight, parent );
+        hb = new QBoxLayout(QBoxLayout::LeftToRight, parent);
         if (labelOption != Label_NoLabel) {
-            createLabel(text, Qt::AlignTop | Qt::AlignRight );
+            createLabel(text, Qt::AlignTop | Qt::AlignRight);
         }
+        hb->setSpacing(5);
+        hb->setMargin(5);
     }
-    hb->setSpacing(5);
-    hb->setMargin(5);
     return hb;
 }
 
@@ -87,5 +89,5 @@ void IFormWidget::changeEvent(QEvent * event)
         event->accept();
     }
     else
-        QWidget::changeEvent( event );
+        QWidget::changeEvent(event);
 }
