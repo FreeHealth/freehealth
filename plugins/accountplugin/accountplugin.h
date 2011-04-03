@@ -20,7 +20,7 @@
  ***************************************************************************/
 /***************************************************************************
  *   Main Developper : Eric MAEKER, <eric.maeker@free.fr>                  *
- *   Contributors :                                                        *
+ *   Contributors : Pierre-Marie DESOMBRE                                  *
  *       NAME <MAIL@ADRESS>                                                *
  ***************************************************************************/
 #ifndef ACCOUNT_PLUGIN_H
@@ -47,6 +47,7 @@ class SitesPage;
 class InsurancePage;
 class PercentagesPage;
 class DistanceRulesPage;
+class AssetsRatesPage;
 
 class AccountPlugin : public ExtensionSystem::IPlugin
 {
@@ -68,6 +69,7 @@ private:
     InsurancePage *m_InsurPage;
     PercentagesPage *m_PercentPage;
     DistanceRulesPage *m_DistancePage;
+    AssetsRatesPage *m_AssetsRatesPage;
 };
 
 

@@ -37,6 +37,7 @@ HEADERS += \
     preferences/insurancepage.h \
     preferences/virtualdatabasecreator.h \
     preferences/percentagespage.h \
+    preferences/assetsratespage.h \
     preferences/distancerulespage.h
 
 SOURCES += \
@@ -48,6 +49,7 @@ SOURCES += \
     preferences/insurancepage.cpp \
     preferences/virtualdatabasecreator.cpp \
     preferences/percentagespage.cpp \
+    preferences/assetsratespage.cpp \
     preferences/distancerulespage.cpp
 
 FORMS += preferences/accountuseroptionspage.ui \
@@ -58,6 +60,7 @@ FORMS += preferences/accountuseroptionspage.ui \
     preferences/insurancepage.ui \
     preferences/virtualdatabasecreator.ui \
     preferences/percentagespage.ui \
+    preferences/assetsratespage.ui \
     preferences/distancerulespage.ui
 
 # include receipts

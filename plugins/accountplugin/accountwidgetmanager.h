@@ -64,7 +64,7 @@ private Q_SLOTS:
     void receipts();
     void ledger();
     void movements();
-    void assets();
+    void assets();    
 
 private:
     void updateActions();

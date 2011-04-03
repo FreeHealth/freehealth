@@ -1,31 +1,22 @@
 #include "movementsviewer.h"
 #include "movementsIO.h"
 #include "movementsmanager.h"
+#include "../accountwidgetmanager.h"
 
 #include <accountbaseplugin/movementmodel.h>
 #include <accountbaseplugin/constants.h>
-
-//#include <coreplugin/icore.h>
-//#include <coreplugin/iuser.h>
-//#include <coreplugin/ipatient.h>
 
 #include "ui_movementsviewer.h"
 
 #include <QMessageBox>
 #include <QDebug>
 
-//using namespace Core;
-//static inline Core::IUser *user() { return Core::ICore::instance()->user(); }
-//static inline Core::IPatient *patient() { return Core::ICore::instance()->patient(); }
-//using namespace ReceiptsConstants;
-//using namespace InternalAmount;
-//using namespace Constants;
-
 /*********************/
-//todo bank system
+//todo bank system et deposit
 /********************/
 
 using namespace AccountDB;
+using namespace Account;
 using namespace Constants;
 
 MovementsViewer::MovementsViewer(QWidget * parent) :
@@ -88,7 +79,7 @@ void MovementsViewer::recordMovement()
     int acMovId = mov.getAvailableMovementId(availableMovement);
     QString userUid = mov.getUserUid();
     QString bank = ui->bankComboBox->currentText();
-    int bankId = mov.getBankId(bank);//todo
+    int bankId = mov.getBankId(bank);
     int type = mov.getTypeOfMovement(availableMovement);
     QString label = availableMovement;
     QString date = QDate::currentDate().toString("yyyy-MM-dd");
@@ -131,6 +122,12 @@ void MovementsViewer::deleteMovement()
     int row = index.row(); 
     qDebug() << __FILE__ << QString::number(__LINE__) << " row =" << QString::number(row) ;
     MovementsIODb  mov(this) ;
+    if (mov.containsFixAsset(row))
+    {
+    	  QMessageBox::warning(0,trUtf8("Error"),trUtf8("This fixed asset cannot be deleted.\nDo it in assets."),
+    	                       QMessageBox::Ok);
+    	  return;
+        }
     if (!mov.deleteMovement(row)) {
     	QMessageBox::warning(0,trUtf8("Error"),trUtf8("Movement is not deleted."),QMessageBox::Ok);
     }  else {
@@ -197,3 +194,5 @@ void MovementsViewer::fillBankComboBox(){
     MovementsIODb mov(this);
     ui->bankComboBox->setModel(mov.getBankComboBoxModel(this));
 }
+
+

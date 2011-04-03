@@ -68,6 +68,7 @@ namespace Constants {
         Table_Account,
         Table_Acts,
         Table_Assets,
+        Table_AssetsRates,
         Table_Movement,
         Table_AvailableMovement,
         Table_Insurance,
@@ -169,12 +170,24 @@ namespace Constants {
         ASSETS_MODE,
         ASSETS_VALUE,
         ASSETS_TAXEACTS,
+        ASSETS_YEARLY_RESULT,
         ASSETS_RESIDUAL_VALUE,
-        ASSETS_RESULT,
+        ASSETS_YEARS,
+        ASSETS_RATE,
         ASSETS_MOVEMENT,
         ASSETS_COMMENT,
         ASSETS_TRACE,
         ASSETS_MaxParam
+    };
+    
+    enum TableAssetsRates_Fields {
+        ASSETSRATES_ID = 0,
+        ASSETSRATES_USER_UID,
+        ASSETSRATES_NAME,
+        ASSETSRATES_YEARS,
+        ASSETSRATES_RATES,
+        ASSETSRATES_DATE,
+        ASSETSRATES_MaxParam
     };
     enum TableMov_Fields {
         MOV_ID = 0,
@@ -280,6 +293,12 @@ namespace Constants {
         LINEAR_MODE = 1,
         DECREASING_MODE,
         MODES_MaxParam
+    };
+    
+    enum TypeOfMovements {
+        SPENDING = 0,
+        RECEIVING,
+        TYPEOFMOVEMENTS_MaxParam
     };
 
     // Menu and action for ActionManager

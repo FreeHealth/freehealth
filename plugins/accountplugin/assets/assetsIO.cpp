@@ -1,22 +1,42 @@
 #include "assetsIO.h"
 
 #include <accountbaseplugin/assetmodel.h>
+#include <accountbaseplugin/movementmodel.h>
+#include <accountbaseplugin/bankaccountmodel.h>
+#include <accountbaseplugin/assetsratesmodel.h>
 #include <accountbaseplugin/constants.h>
+#include <coreplugin/icore.h>
+#include <coreplugin/iuser.h>
+#include <coreplugin/itheme.h>
+#include <coreplugin/constants_icons.h>
 
 #include <QDebug>
 #include <QMessageBox>
-
+#include <QDate>
 
 using namespace AccountDB;
 using namespace Constants;
 
+static inline Core::IUser *user() { return  Core::ICore::instance()->user(); }
+static inline Core::ITheme *theme()  { return Core::ICore::instance()->theme(); }
+
 AssetsIO::AssetsIO(QObject *parent) :
-        QObject(parent), m_assetModel(new AccountDB::AssetModel(this))
+        QObject(parent)
 {
+    m_assetModel = new AccountDB::AssetModel(parent);
+    m_user_uid = user()->value(Core::IUser::Uuid).toString();
 }
 
 AssetsIO::~AssetsIO()
 {
+}
+
+AssetModel * AssetsIO::getModelAssets(){
+    return m_assetModel;
+}
+
+QString AssetsIO::getUserUid(){
+    return m_assetModel->m_UserUid;
 }
 
 bool AssetsIO::insertIntoAssets(QHash<int,QVariant> &hashValues)
@@ -30,7 +50,7 @@ bool AssetsIO::insertIntoAssets(QHash<int,QVariant> &hashValues)
     QVariant data;
     for(int i = 1 ; i < ASSETS_MaxParam ; i ++){
         data = hashValues.value(i);
-        qDebug() << __FILE__ << QString::number(__LINE__) << " data + i =" << data.toString()+" "+QString::number(i);
+        //qDebug() << __FILE__ << QString::number(__LINE__) << " data + i =" << data.toString()+" "+QString::number(i);
         if (!m_assetModel-> setData(m_assetModel->index(rowBefore,i), data ,Qt::EditRole)) {
             qWarning() << __FILE__ << QString::number(__LINE__) << " asset model error = "
                     << m_assetModel->lastError().text() ;
@@ -46,6 +66,154 @@ bool AssetsIO::insertIntoAssets(QHash<int,QVariant> &hashValues)
     return ret;
 }
 
+bool AssetsIO::insertIntoMovements(QHash<int,QVariant> &hashValues)
+{
+    bool ret = true;
+    MovementModel modelMovements(this);
+    double value = 0.00;
+    int type = 2;
+    QString bank;
+    int rowBefore = modelMovements.rowCount(QModelIndex());
+    qDebug() << __FILE__ << QString::number(__LINE__) << " rowBefore = " << QString::number(rowBefore);
+    if (modelMovements.insertRows(rowBefore,1,QModelIndex())) {
+        qWarning() << __FILE__ << QString::number(__LINE__) << "Row inserted !" ;
+    }
+    QVariant data;
+    for(int i = 1 ; i < MOV_MaxParam ; i ++) {
+        data = hashValues.value(i);
+        if (i == MOV_AMOUNT)
+        {
+        	 value = data.toDouble(); 
+            }
+        if (i == MOV_TYPE)
+        {
+        	  type = data.toInt();
+            }
+        if (i == MOV_ACCOUNT_ID)
+        {
+        	  int bankId = data.toInt();
+        	  bank = getBankNameFromId(bankId);
+        	  qDebug() << __FILE__ << QString::number(__LINE__) << " bank =" << bank ;
+            }
+        //qDebug() << __FILE__ << QString::number(__LINE__) << " data + i =" << data.toString()+" "+QString::number(i);
+        if (!modelMovements. setData(modelMovements.index(rowBefore,i), data ,Qt::EditRole)) {
+            qWarning() << __FILE__ << QString::number(__LINE__) << " model account error = "
+                    << modelMovements.lastError().text() ;
+        }
+    }
+    modelMovements.submit();
+    if (modelMovements.rowCount(QModelIndex()) == rowBefore) {
+        QMessageBox::warning(0,trUtf8("Warning"),__FILE__+QString::number(__LINE__)
+                             + trUtf8("\nError = ") 
+                             + modelMovements.lastError().text(),
+                             QMessageBox::Ok);
+        ret = false;
+    }
+    if (type < 1)
+    {
+    	  value = 0.00 - value;
+    	  qDebug() << __FILE__ << QString::number(__LINE__) << " value neg =" << QString::number(value) ;
+    	  
+        }
+    if (!debitOrCreditInBankBalance(bank,value)){
+    	  	  qWarning() << __FILE__ << QString::number(__LINE__) << "Unable to debit or credit balance !" ;
+    	}
+    return ret;
+}
+
+bool AssetsIO::debitOrCreditInBankBalance(const QString & bank, double & value){
+    bool ret = true;
+    BankAccountModel model(this);
+    int row = 0;
+    QList<int> rowsTestList;
+    for (int i = 0; i < model.rowCount(); i += 1)
+    {
+    	QString bankLabel = model.data(model.index(i,BANKDETAILS_LABEL),Qt::DisplayRole).toString();
+    	if (bankLabel == bank)
+    	{
+    		  row = i;
+    		  rowsTestList << i;
+    	    }
+        }
+    if (rowsTestList.size()>1)
+    {
+    	  QMessageBox::warning(0,trUtf8("Warning"),
+    	             trUtf8("You have two or more records with the same bank name ! Risk of errors!"),QMessageBox::Ok);
+        }
+    double balance = model.data(model.index(row,BANKDETAILS_BALANCE),Qt::DisplayRole).toDouble();
+    double newBalance = balance + value;
+    QDate date = QDate::currentDate();
+    if (!model.setData(model.index(row,BANKDETAILS_BALANCE),newBalance,Qt::EditRole))
+    {
+    	  qWarning() << __FILE__ << QString::number(__LINE__) << "Unable to insert balance data !" ;
+        }
+    if (!model.setData(model.index(row,BANKDETAILS_BALANCEDATE),date,Qt::EditRole))
+    {
+    	  qWarning() << __FILE__ << QString::number(__LINE__) << "Unable to insert balance new date !" ;
+        }
+    if (!model.submit())
+    {
+    	  ret = false;
+        }
+    return ret;
+}
+
+QString AssetsIO::getBankNameFromId(int id){
+    QString bank;
+    BankAccountModel model(this);
+    QString field = model.headerData(BANKDETAILS_ID,Qt::Horizontal,Qt::DisplayRole).toString();
+    QString filter = field +QString(" = '%1'").arg(id);
+    model.setFilter(filter);
+    qDebug() << __FILE__ << QString::number(__LINE__) << " model filter =" << model.filter() ;
+    bank = model.data(model.index(0,BANKDETAILS_LABEL),Qt::DisplayRole).toString();
+    return bank;
+}
+
+int AssetsIO::getIdFromBankName(const QString & bankName){
+    int id = 0;
+    BankAccountModel bankmodel(this);
+    QString filter = QString("%1 = '%2'").arg("BD_LABEL",bankName);
+    bankmodel.setFilter(filter);
+    id = bankmodel.data(bankmodel.index(0,BANKDETAILS_ID),Qt::DisplayRole).toInt();
+    return id;
+}
+
+QStandardItemModel * AssetsIO::getBankComboBoxModel(QObject * parent){
+    QStandardItemModel *model = new QStandardItemModel(parent);
+    BankAccountModel bankmodel(this);
+    QString filterUserAndPrefered = QString("BD_USER_UID = '%1' AND BD_ISDEFAULT = '%2'").arg(m_user_uid,1);
+    QString filterUser = QString("BD_USER_UID = '%1'").arg(m_user_uid);
+    int rows = bankmodel.rowCount();
+    for (int i = 0; i < rows; i += 1)
+    {
+    	QString bankLabel = bankmodel.data(bankmodel.index(i,BANKDETAILS_LABEL),Qt::DisplayRole).toString();
+    	QString bankDefault = bankmodel.data(bankmodel.index(i,BANKDETAILS_DEFAULT),Qt::DisplayRole).toString();
+    	QStandardItem *item = new QStandardItem(bankLabel);
+    	QIcon icon;
+        if (bankDefault == "1") {
+            icon = QIcon(theme()->icon(Core::Constants::ICONADD));
+            item->setIcon(icon);
+            qDebug() << __FILE__ << QString::number(__LINE__) << " item def =" << item->text() ;
+            model->appendRow(item);
+            } 
+        }
+    for (int i = 0; i < rows; i += 1)
+    {
+    	QString bankLabel = bankmodel.data(bankmodel.index(i,BANKDETAILS_LABEL),Qt::DisplayRole).toString();
+    	QString bankDefault = bankmodel.data(bankmodel.index(i,BANKDETAILS_DEFAULT),Qt::DisplayRole).toString();
+    	QStandardItem *item = new QStandardItem(bankLabel);
+    	QIcon icon;   
+    	if (bankDefault != "1")
+    	{
+    	    icon = QIcon(theme()->icon(Core::Constants::ICONREMOVE));
+            item->setIcon(icon);
+            qDebug() << __FILE__ << QString::number(__LINE__) << " item def =" << item->text() ;
+            model->appendRow(item);
+    	    } 
+        }
+    return model;
+}
+
 bool AssetsIO::deleteAsset(int row)
 {
     bool b = true;
@@ -53,4 +221,192 @@ bool AssetsIO::deleteAsset(int row)
         b = false;
     }
     return b;
+}
+
+QStandardItemModel * AssetsIO::getListsOfValuesForRefresh(QObject * parent){
+    QStandardItemModel * model = new QStandardItemModel(parent);
+    for (int i = 0; i < m_assetModel->rowCount(); i += 1)
+    {
+    	QString dateBeginStr = m_assetModel->data(m_assetModel->index(i,ASSETS_DATE),Qt::DisplayRole).toString();
+    	QString mode = m_assetModel->data(m_assetModel->index(i,ASSETS_MODE),Qt::DisplayRole).toString();
+    	QString beginValue = m_assetModel->data(m_assetModel->index(i,ASSETS_VALUE),Qt::DisplayRole).toString();
+    	QString duration = m_assetModel->data(m_assetModel->index(i,ASSETS_DURATION),Qt::DisplayRole).toString();
+    	QString yearsToRun = m_assetModel->data(m_assetModel->index(i,ASSETS_YEARS),Qt::DisplayRole).toString();
+    	QStandardItem * itemDate = new QStandardItem(dateBeginStr);
+    	QStandardItem * itemMode = new QStandardItem(mode);
+    	QStandardItem * itemValue = new QStandardItem(beginValue);
+    	QStandardItem * itemDuration = new QStandardItem(duration);
+    	QStandardItem * itemYearsToRun = new QStandardItem(yearsToRun);
+    	QList<QStandardItem*> list;
+    	list << itemDate << itemMode << itemValue << itemDuration << itemYearsToRun ;
+    	model->appendRow(list);
+        }
+    return model;
+}
+
+int AssetsIO::getLastMovementId(){
+    int lastId = -1;
+    MovementModel mov(this);
+    lastId = mov.data(mov.index(mov.rowCount()-1,MOV_ID),Qt::DisplayRole).toInt();
+    return lastId;
+}
+
+bool AssetsIO::deleteMovement(int idMovement,int idBank){
+    bool ret = true;
+    qDebug() << __FILE__ << QString::number(__LINE__) << " idMovement =" << QString::number(idMovement) ;
+    MovementModel movModel(this);
+    QString filter = QString("%1 = '%2'").arg("MOV_ID",QString::number(idMovement));
+    movModel.setFilter(filter);
+    double value = movModel.data(movModel.index(0,MOV_AMOUNT),Qt::DisplayRole).toDouble();
+    if (creditValueDeletedToBankAccount(value,idBank))
+    {
+    	  QMessageBox::information(0,trUtf8("Information"),trUtf8("Value credited = ")+QString::number(value),
+    	                           QMessageBox::Ok);
+        }
+    if (!movModel.removeRows(0,1,QModelIndex()))
+    {
+    	  QMessageBox::warning(0,trUtf8("Warning"),trUtf8("Unable to delete movement of this asset."),QMessageBox::Ok);
+    	  ret = false;
+        }
+    //todo : add value deleted to bank and delete asset without delete movement ?
+    return ret;
+}
+
+int AssetsIO::getMovementId(int row){
+    return m_assetModel->data(m_assetModel->index(row,ASSETS_MOVEMENT),Qt::DisplayRole).toInt();
+}
+
+bool AssetsIO::creditValueDeletedToBankAccount(double & value, int & idBank){
+    bool ret = true;
+    BankAccountModel bankmodel(this);
+    QString filter = QString("%1 = '%2'").arg("BD_ID",QString::number(idBank));
+    bankmodel.setFilter(filter);
+    double newvalue = bankmodel.data(bankmodel.index(0,BANKDETAILS_BALANCE),Qt::DisplayRole).toDouble() + value;
+    if (!bankmodel.setData(bankmodel.index(0,BANKDETAILS_BALANCE),newvalue,Qt::EditRole))
+    {
+    	  QMessageBox::warning(0,trUtf8("Warning"),trUtf8("Unable "),QMessageBox::Ok);
+        }    
+    return ret;
+}
+
+double AssetsIO::getResidualValueWhenRefresh(int & row){
+    double residualValue = 0.00;
+    AssetModel model(this);
+    residualValue = model.data(model.index(row,ASSETS_RESIDUAL_VALUE),Qt::DisplayRole).toDouble();
+    return residualValue;
+}
+
+bool AssetsIO::deleteOneYearToRun(int & row){
+    bool ret = true;
+    AssetModel model(this);
+    int yearsToRun = model.data(model.index(row,ASSETS_YEARS),Qt::DisplayRole).toInt();
+    yearsToRun--;
+    if (!model.setData(model.index(row,ASSETS_YEARS),yearsToRun,Qt::EditRole))
+        {
+    	    qWarning() << __FILE__ << QString::number(__LINE__) << "Error = "+model.lastError().text() ;
+            }
+    if (!model.submit())
+    {
+    	  ret = false;
+        }    
+    return ret;
+}
+
+double AssetsIO::getRate(QDate & date,double & duration){
+    double rate = 0.00;
+    QHash<QString,QDate> hashRatesDates;
+    QStringList listChosenOfRanges;
+    AssetsRatesModel model(this);
+    for (int i = 0; i < model.rowCount(); i += 1)
+    {
+    	QDate dateRequest = model.data(model.index(i,ASSETSRATES_DATE),Qt::DisplayRole).toDate();
+    	QString rangeReq = model.data(model.index(i,ASSETSRATES_YEARS),Qt::DisplayRole).toString();
+    	QString rate = model.data(model.index(i,ASSETSRATES_RATES),Qt::DisplayRole).toString();
+    	QStringList listOfRanges = rangeReq.split("_");
+    	if (int(duration) >= listOfRanges[0].toInt() && int(duration) <= listOfRanges[1].toInt())
+    	{
+    		hashRatesDates.insertMulti(rate,dateRequest) ;
+    	    }
+        }
+    QList<QDate> valuesOfDates = hashRatesDates.values();
+    qDebug() << __FILE__ << QString::number(__LINE__) << " valuesOfDates size =" << QString::number(valuesOfDates.size()) ;
+    
+    qSort(valuesOfDates.begin(),valuesOfDates.end());
+
+    QDate nearestDate = valuesOfDates.last();
+    QString nearestDateStr = nearestDate.toString("yyyy-MM-dd");
+    QString rateStr = hashRatesDates.key(nearestDate);
+    rate = rateStr.toDouble();
+    return rate;
+}
+
+QStandardItemModel * AssetsIO::getYearlyValues(const QDate & year, QObject * parent){
+    QStandardItemModel *model = new QStandardItemModel(parent);
+    QString yearStr = year.toString("yyyy");
+    QString dateBegin = yearStr+"-01-01";
+    QString dateEnd = yearStr+"-12-31" ;
+    QString filter = QString("%1 = '%2' AND %3 BETWEEN '%4' AND '%5'").arg("USER_UID",
+                                                                           m_user_uid,
+                                                                           "DATE",
+                                                                           dateBegin,
+                                                                           dateEnd);
+    AssetModel assetModel(this);
+    assetModel.setFilter(filter);
+    qDebug() << __FILE__ << QString::number(__LINE__) << " assetModel filter =" << assetModel.filter() ;
+    qDebug() << __FILE__ << QString::number(__LINE__) << "model row = " << assetModel.rowCount();
+    for (int i = 0; i < assetModel.rowCount(); i += 1)
+    {
+    	QString label = assetModel.data(assetModel.index(i,ASSETS_LABEL),Qt::DisplayRole).toString();
+    	QString value = assetModel.data(assetModel.index(i,ASSETS_VALUE),Qt::DisplayRole).toString();
+    	QString mode = assetModel.data(assetModel.index(i,ASSETS_MODE),Qt::DisplayRole).toString();
+    	QString duration = assetModel.data(assetModel.index(i,ASSETS_DURATION),Qt::DisplayRole).toString();
+    	QString date = assetModel.data(assetModel.index(i,ASSETS_DATE),Qt::DisplayRole).toString();
+    	QStandardItem * itemLabel = new QStandardItem(label);
+    	QStandardItem * itemValue = new QStandardItem(value);
+    	QStandardItem * itemMode = new QStandardItem(mode);
+    	QStandardItem * itemDuration = new QStandardItem(duration);
+    	QStandardItem * itemDate = new QStandardItem(date);
+    	QList<QStandardItem*> listOfItems;
+    	qDebug() << __FILE__ << QString::number(__LINE__);
+    	
+    	listOfItems << itemLabel << itemValue << itemMode << itemDuration << itemDate;
+    	model->appendRow(listOfItems);
+        }
+    return model;
+}
+
+double AssetsIO::getValueFromRow(int & row){
+    double value = 0.00;
+    AssetModel model(this);
+    value = model.data(model.index(row,ASSETS_VALUE),Qt::DisplayRole).toDouble();    
+    return value;
+}
+
+int AssetsIO::getModeFromRow(int & row){
+    int mode = 0;
+    AssetModel model(this);
+    mode = model.data(model.index(row,ASSETS_MODE),Qt::DisplayRole).toInt();
+    return mode;
+}
+
+double AssetsIO::getDurationFromRow(int & row){
+    double duration = 0.00;
+    AssetModel model(this);
+    duration = model.data(model.index(row,ASSETS_DURATION),Qt::DisplayRole).toDouble();
+    return duration;
+    
+}
+
+QDate AssetsIO::getDateFromRow(int & row){
+    QDate date;
+    AssetModel model(this);
+    date = model.data(model.index(row,ASSETS_DATE),Qt::DisplayRole).toDate();
+    return date;
+}
+
+QString AssetsIO::getLabelFromRow(int & row){
+    QString label;
+    AssetModel model(this);
+    label = model.data(model.index(row,ASSETS_LABEL),Qt::DisplayRole).toString();    
+    return label;
 }

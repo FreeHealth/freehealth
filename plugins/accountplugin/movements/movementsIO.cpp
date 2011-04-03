@@ -7,27 +7,19 @@
 #include <coreplugin/itheme.h>
 #include <coreplugin/iuser.h>
 #include <coreplugin/constants_icons.h>
-#include <utils/database.h>
+
 #include <QMessageBox>
 #include <QDebug>
 #include <QDate>
 
 using namespace AccountDB;
 using namespace Constants;
-using namespace Utils;
+
 static inline Core::ITheme *theme()  { return Core::ICore::instance()->theme(); }
 static inline Core::IUser *user() { return  Core::ICore::instance()->user(); }
-MovementsIODb::MovementsIODb(QObject *parent) :
-        QObject(parent)
-{
+
+MovementsIODb::MovementsIODb(QObject *parent) : QObject(parent){
     m_modelMovements = new MovementModel(parent);
-    for (int i = 0; i < Constants::MOV_MaxParam; i += 1)
-    {
-    	Database db;
-    	QString value = db.fieldName(Constants::Table_Movement, i) ;
-    	//qDebug() << __FILE__ << QString::number(__LINE__) << " value =" << value ;
-    	m_modelMovements->setHeaderData(i,Qt::Horizontal,value,Qt::EditRole);
-        }
     m_user_uid = user()->value(Core::IUser::Uuid).toString();
 }
 
@@ -82,8 +74,7 @@ QStandardItemModel  *MovementsIODb::getMovementsComboBoxModel(QObject *parent)
     QStringList listOfAvModelParents;
     listOfAvModelParents = listOfParents();
     for (int i = 0; i < availablemodel.rowCount(); i += 1) {
-        //todo : supprimer l'affichage des parents qui seront affichés en tool tip avec les commentaires
-    	int type = availablemodel.data(availablemodel.index(i,AVAILMOV_TYPE),Qt::DisplayRole).toInt();
+        int type = availablemodel.data(availablemodel.index(i,AVAILMOV_TYPE),Qt::DisplayRole).toInt();
     	QIcon icon;
         if (type == 1) {
             icon = QIcon(theme()->icon(Core::Constants::ICONADD));
@@ -116,7 +107,6 @@ QStringList MovementsIODb::getYearComboBoxModel()
 }
 
 QStandardItemModel * MovementsIODb::getBankComboBoxModel(QObject * parent){
-    //todo preferentiel bank
     QStandardItemModel *model = new QStandardItemModel(parent);
     BankAccountModel bankmodel(this);
     QString filterUserAndPrefered = QString("BD_USER_UID = '%1' AND BD_ISDEFAULT = '%2'").arg(m_user_uid,1);
@@ -157,7 +147,7 @@ bool MovementsIODb::insertIntoMovements(QHash<int,QVariant> &hashValues)
     bool ret = true;
     double value = 0.00;
     int type = 2;
-    QString bank;//todo : find bank label with accountId
+    QString bank;
     int rowBefore = m_modelMovements->rowCount(QModelIndex());
     qDebug() << __FILE__ << QString::number(__LINE__) << " rowBefore = " << QString::number(rowBefore);
     if (m_modelMovements->insertRows(rowBefore,1,QModelIndex())) {
@@ -194,7 +184,7 @@ bool MovementsIODb::insertIntoMovements(QHash<int,QVariant> &hashValues)
                              QMessageBox::Ok);
         ret = false;
     }
-    if (type == 0)
+    if (type < 1)
     {
     	  value = 0.00 - value;
     	  qDebug() << __FILE__ << QString::number(__LINE__) << " value neg =" << QString::number(value) ;
@@ -208,7 +198,16 @@ bool MovementsIODb::insertIntoMovements(QHash<int,QVariant> &hashValues)
 
 bool MovementsIODb::deleteMovement(int row)
 {qDebug() << __FILE__ << QString::number(__LINE__) << " row =" << QString::number(row) ;
-    bool b = m_modelMovements->removeRows(row,1,QModelIndex());
+    bool b = false;
+    double value = m_modelMovements->data(m_modelMovements->index(row,MOV_AMOUNT),Qt::DisplayRole).toDouble();
+    int bankId = m_modelMovements->data(m_modelMovements->index(row,MOV_ACCOUNT_ID),Qt::DisplayRole).toInt();
+    value = -value;
+    QString bank;
+    bank = getBankNameFromId(bankId);
+    b = m_modelMovements->removeRows(row,1,QModelIndex());
+    if (!debitOrCreditInBankBalance(bank,value)){
+    	  	  qWarning() << __FILE__ << QString::number(__LINE__) << "Unable to debit or credit balance !" ;
+    	}
     return b;
 }
 
@@ -216,7 +215,6 @@ int MovementsIODb::getAvailableMovementId(QString &movementsComboBoxText)
 {
     int availableMovementId = 0;
     AvailableMovementModel  availablemodel(this);
-    Database db;
     QString field = availablemodel.headerData(AVAILMOV_LABEL,Qt::Horizontal,Qt::DisplayRole).toString() ;
     QString filter = field +QString(" = '%1'").arg(movementsComboBoxText);
     qDebug() << __FILE__ << QString::number(__LINE__) << " filter =" << filter ;
@@ -228,7 +226,6 @@ int MovementsIODb::getAvailableMovementId(QString &movementsComboBoxText)
 int MovementsIODb::getBankId(QString & bankComboBoxText){
     int bankId = 0;
     BankAccountModel model(this);
-    Database db;
     QString field = model.headerData(BANKDETAILS_LABEL,Qt::Horizontal,Qt::DisplayRole).toString();
     QString filter = field +QString(" = '%1'").arg(bankComboBoxText);
     model.setFilter(filter);
@@ -296,6 +293,17 @@ bool MovementsIODb::debitOrCreditInBankBalance(const QString & bank, double & va
     if (!model.submit())
     {
     	  ret = false;
+        }
+    return ret;
+}
+
+bool MovementsIODb::containsFixAsset(int & row){
+    bool ret = false;
+    QString assetStr = m_modelMovements->data(m_modelMovements->index(row,MOV_LABEL),Qt::DisplayRole).toString();
+    if (assetStr == trUtf8("Fixed Asset"))
+    {
+    	  qWarning() << __FILE__ << QString::number(__LINE__) << "You try to delete an asset in movements !" ;
+    	  ret = true;
         }
     return ret;
 }

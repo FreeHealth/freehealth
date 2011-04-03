@@ -30,6 +30,7 @@ public:
     QString getBankNameFromId(int id);
     QString getUserUid();
     QHash<QString,QString> hashChildrenAndParentsAvailableMovements();
+    bool containsFixAsset(int & row);
 
 private:
     QStringList listOfParents();

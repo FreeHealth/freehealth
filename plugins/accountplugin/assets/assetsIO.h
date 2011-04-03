@@ -4,6 +4,7 @@
 #include <QObject>
 #include <QVariant>
 #include <QHash>
+#include <QStandardItemModel>
 
 // #include "../../accountbaseplugin/constants.h"//<accountbaseplugin/constants.h>  A eviter+++
 
@@ -22,13 +23,32 @@ class AssetsIO : public QObject
 public:
     AssetsIO(QObject *parent);
     ~AssetsIO();
-
     AccountDB::AssetModel *getModelAssets();
+    QString getUserUid();
     bool insertIntoAssets(QHash<int,QVariant> &hashValues);
+    bool insertIntoMovements(QHash<int,QVariant> &hashValues);
     bool deleteAsset(int row);
-
+    QStandardItemModel * getListsOfValuesForRefresh(QObject * parent);
+    QStandardItemModel * getBankComboBoxModel(QObject * parent);
+    int getLastMovementId();
+    bool deleteMovement(int idMovement, int idBank);    
+    int getMovementId(int row);
+    int getIdFromBankName(const QString & bankName);
+    double getResidualValueWhenRefresh(int & row);
+    bool deleteOneYearToRun(int & row);
+    double getRate(QDate & date,double & duration);
+    QStandardItemModel * getYearlyValues(const QDate & year,QObject * parent);
+    double getValueFromRow(int & row);
+    int getModeFromRow(int & row);
+    double getDurationFromRow(int & row);
+    QDate getDateFromRow(int & row);
+    QString getLabelFromRow(int & row);
 private:
-    AccountDB::AssetModel *m_assetModel;  // ça compilera sans problème
+    QString getBankNameFromId(int id);
+    bool debitOrCreditInBankBalance(const QString & bank, double & value);
+    bool creditValueDeletedToBankAccount(double & value, int & idBank);
+    AccountDB::AssetModel *m_assetModel;
+    QString m_user_uid;
 };
 
 

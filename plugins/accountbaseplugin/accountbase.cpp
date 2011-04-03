@@ -139,6 +139,7 @@ AccountBase::AccountBase(QObject *parent)
     addTable(Table_Account,           "account");
     addTable(Table_Acts,              "acts");
     addTable(Table_Assets,            "assets");
+    addTable(Table_AssetsRates,       "assets_rates");
     addTable(Table_Movement,          "movement");
     addTable(Table_AvailableMovement, "available_movement");
     addTable(Table_Insurance,         "insurance");
@@ -304,7 +305,7 @@ AccountBase::AccountBase(QObject *parent)
 //                    "PRIMARY KEY(id_hono));";
 
     // Fr == Immobilisations
-    addField(Table_Assets,  ASSETS_ID,             "DEP_ID",        FieldIsUniquePrimaryKey);
+    addField(Table_Assets,  ASSETS_ID,             "ASSETS_ID",        FieldIsUniquePrimaryKey);
     addField(Table_Assets,  ASSETS_USER_UID,       "USER_UID",      FieldIsUUID);
     addField(Table_Assets,  ASSETS_ACCOUNT_ID,     "ACCOUNT_ID",    FieldIsLongInteger);
     addField(Table_Assets,  ASSETS_LABEL,          "LABEL",         FieldIsShortText);
@@ -312,9 +313,11 @@ AccountBase::AccountBase(QObject *parent)
     addField(Table_Assets,  ASSETS_DURATION,       "DURATION",      FieldIsReal);
     addField(Table_Assets,  ASSETS_MODE,           "MODE",          FieldIsInteger);
     addField(Table_Assets,  ASSETS_VALUE,          "VALUE",         FieldIsReal);
-    addField(Table_Assets,  ASSETS_TAXEACTS,       "TAXEACTS",      FieldIsReal);
-    addField(Table_Assets,  ASSETS_RESIDUAL_VALUE, "RESIDUALVALUE", FieldIsReal);
-    addField(Table_Assets,  ASSETS_RESULT,         "RESULT",        FieldIsBlob);
+    addField(Table_Assets,  ASSETS_TAXEACTS,       "TAX ACTS",      FieldIsReal);
+    addField(Table_Assets,  ASSETS_YEARLY_RESULT,  "YEARLY VALUE",  FieldIsReal);
+    addField(Table_Assets,  ASSETS_RESIDUAL_VALUE, "RESIDUAL VALUE",FieldIsReal);
+    addField(Table_Assets,  ASSETS_YEARS,          "YEARS TO RUN",  FieldIsInteger);
+    addField(Table_Assets,  ASSETS_RATE,           "RATE",          FieldIsReal);
     addField(Table_Assets,  ASSETS_MOVEMENT,       "MOVEMENT",      FieldIsBlob);
     addField(Table_Assets,  ASSETS_COMMENT,        "COMMENT",       FieldIsLongText);
     addField(Table_Assets,  ASSETS_TRACE,          "TRACE",         FieldIsBlob);
@@ -335,7 +338,13 @@ AccountBase::AccountBase(QObject *parent)
 //                    "remarque 	text 			COLLATE utf8_unicode_ci	        NULL 				,"
 //                    "tracabilite 	blob 			 	 			NULL				,"
 //                    "PRIMARY KEY(id_immob));";
-
+    addField(Table_AssetsRates,  ASSETSRATES_ID,       "ASSETSRATES_ID", FieldIsUniquePrimaryKey);
+    addField(Table_AssetsRates,  ASSETSRATES_USER_UID, "USER_UID",       FieldIsUUID);
+    addField(Table_AssetsRates,  ASSETSRATES_NAME,     "NAME",           FieldIsShortText);
+    addField(Table_AssetsRates,  ASSETSRATES_YEARS,    "YEARS_RANGE",    FieldIsBlob);
+    addField(Table_AssetsRates,  ASSETSRATES_RATES,    "RATE",           FieldIsReal);
+    addField(Table_AssetsRates,  ASSETSRATES_DATE,     "DATE",           FieldIsDate,"CURRENT_DATE");
+    
 //    addTable(Table_Movement, "movement");
     addField(Table_Movement,  MOV_ID,             "MOV_ID",     FieldIsUniquePrimaryKey);
     addField(Table_Movement,  MOV_AV_MOVEMENT_ID, "AV_MOV_ID",  FieldIsLongInteger);
@@ -345,7 +354,7 @@ AccountBase::AccountBase(QObject *parent)
     addField(Table_Movement,  MOV_LABEL,          "LABEL",      FieldIsShortText);
     addField(Table_Movement,  MOV_DATE,           "DATE",       FieldIsDate, "CURRENT_DATE");
     addField(Table_Movement,  MOV_DATEOFVALUE,    "DATEVALUE",  FieldIsDate, "CURRENT_DATE");
-    addField(Table_Movement,  MOV_AMOUNT,         "ACTS",     FieldIsReal);
+    addField(Table_Movement,  MOV_AMOUNT,         "ACTS",       FieldIsReal);
     addField(Table_Movement,  MOV_COMMENT,        "COMMENT",    FieldIsLongText);
     addField(Table_Movement,  MOV_VALIDITY,       "VALIDITY",   FieldIsInteger);
     addField(Table_Movement,  MOV_TRACE,          "TRACE",      FieldIsBlob);

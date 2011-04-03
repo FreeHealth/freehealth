@@ -134,10 +134,10 @@ QVariant MovementModel::headerData(int section, Qt::Orientation orientation, int
     return d->m_SqlTable->headerData(section,orientation,role);
 }
 
-bool MovementModel::setHeaderDatasetHeaderData(int section, 
-                                               Qt::Orientation orientation, 
-                                               const QVariant & value, 
-                                               int role){
+bool MovementModel::setHeaderData(int section, 
+                                  Qt::Orientation orientation, 
+                                  const QVariant & value, 
+                                  int role){
     bool ret = true;
     ret = d->m_SqlTable->setHeaderData(section,orientation,value,role);
     return ret;

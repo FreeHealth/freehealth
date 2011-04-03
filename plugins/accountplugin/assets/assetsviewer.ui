@@ -6,7 +6,7 @@
    <rect>
     <x>0</x>
     <y>0</y>
-    <width>539</width>
+    <width>558</width>
     <height>380</height>
    </rect>
   </property>
@@ -27,96 +27,124 @@
        <property name="title">
         <string>Inputs</string>
        </property>
-       <widget class="QWidget" name="layoutWidget">
-        <property name="geometry">
-         <rect>
-          <x>20</x>
-          <y>31</y>
-          <width>491</width>
-          <height>131</height>
-         </rect>
-        </property>
-        <layout class="QGridLayout" name="gridLayout">
-         <item row="1" column="0">
-          <widget class="QLabel" name="valueLabel">
-           <property name="text">
-            <string>Value</string>
-           </property>
-           <property name="wordWrap">
-            <bool>true</bool>
-           </property>
-           <property name="buddy">
-            <cstring>valueDoubleSpinBox</cstring>
-           </property>
-          </widget>
-         </item>
-         <item row="1" column="1">
-          <widget class="QDoubleSpinBox" name="valueDoubleSpinBox"/>
-         </item>
-         <item row="1" column="2">
-          <widget class="QLabel" name="label">
-           <property name="text">
-            <string>Duration in years</string>
-           </property>
-           <property name="wordWrap">
-            <bool>true</bool>
-           </property>
-           <property name="buddy">
-            <cstring>durationDoubleSpinBox</cstring>
-           </property>
-          </widget>
-         </item>
-         <item row="1" column="3">
-          <widget class="QDoubleSpinBox" name="durationDoubleSpinBox"/>
-         </item>
-         <item row="3" column="2">
-          <widget class="QLabel" name="detailsLabel">
-           <property name="text">
-            <string>Details</string>
-           </property>
-          </widget>
-         </item>
-         <item row="3" column="3" colspan="2">
-          <widget class="QLineEdit" name="detailsEdit"/>
-         </item>
-         <item row="2" column="2">
-          <widget class="QLabel" name="modeLabel">
-           <property name="text">
-            <string>Mode</string>
-           </property>
-          </widget>
-         </item>
-         <item row="2" column="3" colspan="2">
-          <widget class="QComboBox" name="modeComboBox"/>
-         </item>
-         <item row="2" column="0">
-          <widget class="QLabel" name="dateLabel">
-           <property name="text">
-            <string>Date</string>
-           </property>
-           <property name="wordWrap">
-            <bool>true</bool>
-           </property>
-           <property name="buddy">
-            <cstring>dateEdit</cstring>
-           </property>
-          </widget>
-         </item>
-         <item row="2" column="1">
-          <widget class="QDateEdit" name="dateEdit"/>
-         </item>
-         <item row="3" column="0">
-          <widget class="QLabel" name="commentsLabel">
-           <property name="text">
-            <string>Comments</string>
-           </property>
-          </widget>
-         </item>
-         <item row="3" column="1">
-          <widget class="QLineEdit" name="commentsEdit"/>
-         </item>
-        </layout>
-       </widget>
+       <layout class="QGridLayout" name="gridLayout_4">
+        <item row="0" column="0">
+         <layout class="QGridLayout" name="gridLayout">
+          <item row="1" column="0">
+           <widget class="QLabel" name="valueLabel">
+            <property name="text">
+             <string>Value</string>
+            </property>
+            <property name="wordWrap">
+             <bool>true</bool>
+            </property>
+            <property name="buddy">
+             <cstring>valueDoubleSpinBox</cstring>
+            </property>
+           </widget>
+          </item>
+          <item row="1" column="1">
+           <widget class="QDoubleSpinBox" name="valueDoubleSpinBox"/>
+          </item>
+          <item row="1" column="2">
+           <widget class="QLabel" name="label">
+            <property name="text">
+             <string>Duration in years</string>
+            </property>
+            <property name="wordWrap">
+             <bool>true</bool>
+            </property>
+            <property name="buddy">
+             <cstring>durationDoubleSpinBox</cstring>
+            </property>
+           </widget>
+          </item>
+          <item row="1" column="3">
+           <widget class="QDoubleSpinBox" name="durationDoubleSpinBox"/>
+          </item>
+          <item row="2" column="2">
+           <widget class="QLabel" name="modeLabel">
+            <property name="text">
+             <string>Mode</string>
+            </property>
+           </widget>
+          </item>
+          <item row="2" column="3" colspan="2">
+           <widget class="QComboBox" name="modeComboBox"/>
+          </item>
+          <item row="2" column="0">
+           <widget class="QLabel" name="dateLabel">
+            <property name="text">
+             <string>Date</string>
+            </property>
+            <property name="wordWrap">
+             <bool>true</bool>
+            </property>
+            <property name="buddy">
+             <cstring>dateEdit</cstring>
+            </property>
+           </widget>
+          </item>
+          <item row="2" column="1">
+           <widget class="QDateEdit" name="dateEdit"/>
+          </item>
+          <item row="4" column="0">
+           <widget class="QLabel" name="detailsLabel">
+            <property name="text">
+             <string>Details</string>
+            </property>
+           </widget>
+          </item>
+          <item row="4" column="2">
+           <widget class="QLabel" name="commentsLabel">
+            <property name="text">
+             <string>Comments</string>
+            </property>
+           </widget>
+          </item>
+          <item row="4" column="3">
+           <widget class="QLineEdit" name="commentsEdit">
+            <property name="minimumSize">
+             <size>
+              <width>183</width>
+              <height>0</height>
+             </size>
+            </property>
+           </widget>
+          </item>
+          <item row="4" column="1">
+           <widget class="QLineEdit" name="detailsEdit">
+            <property name="minimumSize">
+             <size>
+              <width>0</width>
+              <height>0</height>
+             </size>
+            </property>
+           </widget>
+          </item>
+          <item row="3" column="1">
+           <widget class="QComboBox" name="bankComboBox"/>
+          </item>
+          <item row="3" column="0">
+           <widget class="QLabel" name="bankLabel">
+            <property name="text">
+             <string>Bank</string>
+            </property>
+           </widget>
+          </item>
+          <item row="3" column="2">
+           <widget class="QLabel" name="yearLabel">
+            <property name="text">
+             <string>Year</string>
+            </property>
+           </widget>
+          </item>
+          <item row="3" column="3">
+           <widget class="QDateEdit" name="yearEdit"/>
+          </item>
+         </layout>
+        </item>
+       </layout>
       </widget>
      </item>
      <item row="1" column="0" colspan="3">
@@ -160,6 +188,18 @@
    </item>
   </layout>
  </widget>
+ <tabstops>
+  <tabstop>valueDoubleSpinBox</tabstop>
+  <tabstop>durationDoubleSpinBox</tabstop>
+  <tabstop>dateEdit</tabstop>
+  <tabstop>modeComboBox</tabstop>
+  <tabstop>detailsEdit</tabstop>
+  <tabstop>commentsEdit</tabstop>
+  <tabstop>tableView</tabstop>
+  <tabstop>recordButton</tabstop>
+  <tabstop>deleteButton</tabstop>
+  <tabstop>quitButton</tabstop>
+ </tabstops>
  <resources/>
  <connections/>
 </ui>

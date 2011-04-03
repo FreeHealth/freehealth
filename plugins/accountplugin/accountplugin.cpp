@@ -30,6 +30,7 @@
 #include "preferences/insurancepage.h"
 #include "preferences/percentagespage.h"
 #include "preferences/distancerulespage.h"
+#include "preferences/assetsratespage.h"
 
 #include <utils/log.h>
 
@@ -52,7 +53,8 @@ AccountPlugin::AccountPlugin() :
         m_SitesPage(new SitesPage(this)),
         m_InsurPage(new InsurancePage(this)),
         m_PercentPage(new PercentagesPage(this)),
-        m_DistancePage(new DistanceRulesPage(this))
+        m_DistancePage(new DistanceRulesPage(this)),
+        m_AssetsRatesPage(new AssetsRatesPage(this))
 
 {
     if (Utils::Log::warnPluginsCreation())
@@ -72,6 +74,7 @@ AccountPlugin::~AccountPlugin()
     removeObject(m_InsurPage);
     removeObject(m_PercentPage);
     removeObject(m_DistancePage);
+    removeObject(m_AssetsRatesPage);
 }
 
 bool AccountPlugin::initialize(const QStringList &arguments, QString *errorString)
@@ -106,6 +109,7 @@ void AccountPlugin::extensionsInitialized()
     m_InsurPage->checkSettingsValidity();
     m_PercentPage->checkSettingsValidity();
     m_DistancePage->checkSettingsValidity();
+    m_AssetsRatesPage->checkSettingsValidity();
 
     // Add pages to plugins manager object pool
     addObject(m_UserPage);
@@ -117,6 +121,7 @@ void AccountPlugin::extensionsInitialized()
     addObject(m_InsurPage);
     addObject(m_PercentPage);
     addObject(m_DistancePage);
+    addObject(m_AssetsRatesPage);
 }
 
 

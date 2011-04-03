@@ -35,7 +35,7 @@
        <string>Types</string>
       </property>
       <property name="buddy">
-       <cstring>distancerulesComboBox</cstring>
+       <cstring>distanceRulesComboBox</cstring>
       </property>
      </widget>
     </item>

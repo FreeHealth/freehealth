@@ -24,8 +24,8 @@
  *       Pierre-Marie DESOMBRE <pm.desombre@medsyn.fr>                     *
  *       NAME <MAIL@ADRESS>                                                *
  ***************************************************************************/
-#ifndef DISTANCERULES_H
-#define DISTANCERULES_H
+#ifndef DISTANCERULESPAGE_H
+#define DISTANCERULESPAGE_H
 #include "ui_distancerulespage.h"
 #include <coreplugin/ioptionspage.h>
 #include <accountbaseplugin/distancerulesmodel.h>
