@@ -114,10 +114,11 @@ QString Translators::pathToTranslations()
   \brief change the default langage for the application and reload all translators.
   You can retreive langage using QLocale().name().left( 2 ) anywhere in the program.
 */
-void Translators::changeLanguage( const QString & lang )
+void Translators::changeLanguage(const QString &lang)
 {
     QString l = lang.left(2);
     QLocale::setDefault(l);
+    qWarning() << Q_FUNC_INFO << lang << QLocale().languageToString(QLocale().language());
 
     // load translations
 //    if (l.toLower()=="en") {
@@ -145,6 +146,11 @@ void Translators::changeLanguage( const QString & lang )
         }
 //    }
     emit languageChanged();
+}
+
+void Translators::changeLanguage(QLocale::Language lang)
+{
+    changeLanguage(QLocale(lang).name());
 }
 
 /**

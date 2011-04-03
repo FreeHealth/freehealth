@@ -26,18 +26,20 @@
 #ifndef CORETRANSLATORS_H
 #define CORETRANSLATORS_H
 
-#include <QObject>
-#include <QMap>
 #include <coreplugin/core_exporter.h>
 #include <coreplugin/icore.h>
+
+#include <QObject>
+#include <QMap>
+#include <QLocale>
 
 class QTranslator;
 
 /**
  * \file translators.h
  * \author Eric MAEKER <eric.maeker@free.fr>
- * \version 0.0.8
- * \date 09 Aug 2009
+ * \version 0.5.0
+ * \date 02 Apr 2011
 */
 
 namespace Core {
@@ -48,30 +50,31 @@ class CORE_EXPORT Translators : public QObject
 public:
     static Translators* instance( QObject * parent = 0) ;
     Translators(QObject * parent = 0);
-     ~Translators();
+    ~Translators();
 
-     bool addNewTranslator( const QString & fileName, bool fromDefaultPath = true );
-     bool addNewTranslator( const QString & path, const QString & file );
+    bool addNewTranslator( const QString & fileName, bool fromDefaultPath = true );
+    bool addNewTranslator( const QString & path, const QString & file );
 
 public Q_SLOTS:
-     void changeLanguage( const QString & lang );
+    void changeLanguage(const QString &lang);
+    void changeLanguage(QLocale::Language lang);
 
- public:
-     static bool setPathToTranslations( const QString & path );
-     static QString pathToTranslations();
+public:
+    static bool setPathToTranslations( const QString & path );
+    static QString pathToTranslations();
 
-     static QStringList availableLocales();
-     static QStringList availableLanguages();
-     static QMap<QString, QString> availableLocalesAndLanguages();
+    static QStringList availableLocales();
+    static QStringList availableLanguages();
+    static QMap<QString, QString> availableLocalesAndLanguages();
 
- Q_SIGNALS:
-     void languageChanged();
+Q_SIGNALS:
+    void languageChanged();
 
 
- private:
-     QMap<QString, QTranslator*>   m_Translators;  // String is file location and mask
-     static QString                m_PathToTranslations;
-     static Translators           *m_Instance;
+private:
+    QMap<QString, QTranslator*>   m_Translators;  // String is file location and mask
+    static QString                m_PathToTranslations;
+    static Translators           *m_Instance;
 };
 
 } // end Core
