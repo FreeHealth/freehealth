@@ -30,18 +30,19 @@
 #include <QVBoxLayout>
 #include <QSpacerItem>
 #include <QApplication>
+#include <QDate>
 
 using namespace Core;
 using namespace Core::Internal;
 
 static const char *ABOUT_TEXT = QT_TRANSLATE_NOOP("AboutDialog",
         "<p align=center><b>Welcome to FreeMedForms</b><br />"
-        "(C) 2008-2010 by Eric MAEKER, MD</p>"
+        "(C) 2008-%1 by Eric MAEKER, MD</p>"
         "<p align=left>This application is an early alpha release. This means that a lot of "
         "features are not yet implemented or may not work and that you may experiment bugs.<br />"
         "This software is release without any warranty and only for test purposal.<br />"
         "Please refer to web site for more informations.<br />"
-        "<a href=\"%1\">Web site</a>"
+        "<a href=\"%2\">Web site</a>"
         "</p>"
         );
 
@@ -67,6 +68,6 @@ QWidget *AppAboutPage::widget()
     layout->addWidget(label);
     layout->addSpacerItem(new QSpacerItem(20,20, QSizePolicy::Expanding, QSizePolicy::Expanding));
     label->clear();
-    label->setText(tr(ABOUT_TEXT).arg(qApp->organizationDomain()));
+    label->setText(tr(ABOUT_TEXT).arg(QDate::currentDate().year()).arg(qApp->organizationDomain()));
     return w;
 }
