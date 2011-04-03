@@ -1,17 +1,31 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <!DOCTYPE FreeMedForms>
+
 <FreeMedForms>
 
   <formdescription>
-    <version>0.5.0~alpha</version>
+    <!-- Non translatable values -->
     <authors>Eric Maeker, MD</authors>
+    <version>0.5.0~alpha</version>
+    <compatversion>0.5.0</compatversion>
+    <cdate>2011-03-15</cdate>
+    <icon>generalpractitioner.png</icon>
+    <weblink></weblink>
+    <bibliography/>
+
+    <!-- Translatable values -->
+    <licence>GPLv3</licence>
     <description lang="fr">Dossier médical générique</description>
     <description lang="en">Generic patient file</description>
     <category lang="en">Medical files: General practitioner</category>
     <category lang="fr">Dossier médicaux : Médecine générale</category>
-    <bibliography/>
-    <licence>GPLv3</licence>
-    <cdate>2011-03-15</cdate>
+    <tooltip lang="fr">French tooltip</tooltip>
+    <tooltip lang="xx">All other languages tooltip</tooltip>
+    <htmldescription lang="fr"></htmldescription>
+    <htmldescription lang="xx"></htmldescription>
+    <specialties lang="fr"></specialties>
+    <specialties lang="xx"></specialties>
+
   </formdescription>
 
   <MedForm>
