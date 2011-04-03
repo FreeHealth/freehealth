@@ -50,6 +50,10 @@ namespace Form {
 class FormFilesSelectorWidget;
 }
 
+namespace Views {
+class LanguageComboBox;
+}
+
 namespace Core {
 class IOptionsPage;
 }
@@ -76,34 +80,25 @@ class BeginConfigPage: public QWizardPage
     Q_OBJECT
 public:
     BeginConfigPage(QWidget *parent = 0);
+    bool validatePage();
 
 protected:
     void retranslate();
 
 protected Q_SLOTS:
     void changeAdminPassword();
+    void createNewUser();
+
+protected:
+    void changeEvent(QEvent *e);
 
 private:
     QLabel *intro;
-    QLabel *langLabel, *adminPassLabel;
-    QPushButton *adminButton;
+    QLabel *langLabel, *adminPassLabel, *createUserLabel;
+    QPushButton *adminButton, *createUserButton;
+    Views::LanguageComboBox *combo;
 };
 
-class CreateNewUserPage: public QWizardPage
-{
-    Q_OBJECT
-public:
-    CreateNewUserPage(QWidget *parent = 0);
-    bool validatePage();
-
-private Q_SLOTS:
-    void createNewUser();
-//    void redefineAdminPassword();
-
-private:
-    QLabel *newUserName;
-    bool passredefined;
-};
 
 class DatabaseConfigurationPage: public QWizardPage
 {

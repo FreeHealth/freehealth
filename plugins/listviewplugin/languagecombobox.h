@@ -66,7 +66,7 @@ private Q_SLOTS:
 
 Q_SIGNALS:
     void currentLanguageChanged(QLocale::Language country);
-    void currentLanguageNameChanged(const QString& name);
+    void currentLanguageNameChanged(const QString &name);
 
 private:
     Internal::LanguageComboBoxPrivate *d;

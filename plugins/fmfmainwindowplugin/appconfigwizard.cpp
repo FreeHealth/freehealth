@@ -43,6 +43,8 @@
 #include <usermanagerplugin/widgets/userpassworddialog.h>
 #include <usermanagerplugin/constants.h>
 
+#include <listviewplugin/languagecombobox.h>
+
 #include <utils/log.h>
 #include <utils/global.h>
 #include <utils/updatechecker.h>
@@ -65,7 +67,6 @@ AppConfigWizard::AppConfigWizard(QWidget *parent)
     : QWizard(parent)
 {
     addPage(new BeginConfigPage(this));
-    addPage(new CreateNewUserPage(this));
     addPage(new DatabaseConfigurationPage(this));
     addPage(new PatientFilePage(this));
     addPage(new VirtualDatabasePage(this));
@@ -103,31 +104,33 @@ BeginConfigPage::BeginConfigPage(QWidget *parent)
     langLabel->setWordWrap(true);
     adminPassLabel = new QLabel(this);
     adminPassLabel->setWordWrap(true);
+    createUserLabel = new QLabel(this);
+    createUserLabel->setWordWrap(true);
+
     adminButton = new QPushButton(this);
+    createUserButton = new QPushButton(this);
     retranslate();
 
-    QComboBox *cbLanguage = new QComboBox(this);
-    cbLanguage->addItems(Core::Translators::availableLocales());
-    int actual = Core::Translators::availableLocales().indexOf(QLocale().name().left(2));
-    if (actual == -1) {
-        cbLanguage->setCurrentIndex(0);
-    } else {
-        cbLanguage->setCurrentIndex(actual);
-    }
-    /** \todo connection here to retranslate (changeEvent())... */
-    connect(cbLanguage, SIGNAL(activated(QString)), Core::Translators::instance(), SLOT(changeLanguage(const QString &)));
+    combo = new Views::LanguageComboBox(this);
+    combo->setDisplayMode(Views::LanguageComboBox::AvailableTranslations);
+//    registerField("Language", combo);
 
-    registerField("Language", cbLanguage , "currentIndex");
+    /** \todo connection here to retranslate (changeEvent())... */
+    connect(combo, SIGNAL(currentLanguageChanged(QLocale::Language)), Core::Translators::instance(), SLOT(changeLanguage(QLocale::Language)));
+    combo->setCurrentLanguage(QLocale().language());
 
     QGridLayout *layout = new QGridLayout(this);
     layout->setVerticalSpacing(30);
     layout->addWidget(langLabel, 2, 0);
-    layout->addWidget(cbLanguage, 2, 1);
+    layout->addWidget(combo, 2, 1);
     layout->addWidget(adminPassLabel, 3, 0);
     layout->addWidget(adminButton, 4, 1);
+    layout->addWidget(createUserLabel, 5, 0);
+    layout->addWidget(createUserButton, 6, 1);
     setLayout(layout);
 
     connect(adminButton, SIGNAL(clicked()), this, SLOT(changeAdminPassword()));
+    connect(createUserButton, SIGNAL(clicked()), this, SLOT(createNewUser()));
 }
 
 void BeginConfigPage::retranslate()
@@ -148,6 +151,16 @@ void BeginConfigPage::retranslate()
     } else {
         adminPassLabel->setText(tr("Click the button to change your password"));
     }
+    if (user()->value(Core::IUser::Login).toString()==UserPlugin::Constants::DEFAULT_USER_LOGIN) {
+        createUserLabel->setText(tr("You are logged as the administrator, for "
+                                    "security reasons, it is highly "
+                                    "recommended to create and use a new user "
+                                    "instead of using the default administrator.\n"));
+    } else {
+        createUserLabel->setText(tr("Click the button to create a new user."));
+
+    }
+    createUserButton->setText(tr("Create a new user"));
     adminButton->setText(tr("Change password"));
 }
 
@@ -162,48 +175,42 @@ void BeginConfigPage::changeAdminPassword()
     }
 }
 
-
-CreateNewUserPage::CreateNewUserPage(QWidget *parent) :
-        QWizardPage(parent), passredefined(false)
-{
-    setTitle(tr("Create a new user and redefine admin's password."));
-    setSubTitle(tr("It is recommended to create a new user instead of using the default one.\n"
-                   "The default administrator's password must be redefined here."));
-
-    QPushButton *but = new QPushButton(tr("Click here to create a new user"), this);
-    newUserName = new QLabel(" ", this);
-    connect(but, SIGNAL(clicked()), this, SLOT(createNewUser()));
-
-    QGridLayout *layout = new QGridLayout(this);
-    layout->addWidget(but, 0, 0);
-    layout->addWidget(newUserName, 1, 0);
-    setLayout(layout);
-}
-
-void CreateNewUserPage::createNewUser()
+void BeginConfigPage::createNewUser()
 {
     UserPlugin::UserWizard wiz(this);
     wiz.createUser(true);
     if (wiz.exec()==QDialog::Accepted) {
+        /** \todo Change user atthe end of the wizard ? Possible Rights problem. */
         if (!wiz.setCreatedUserAsCurrent()) {
-            Utils::Log::addError(this, "Can not define the current user to the newly created");
-            newUserName->setText(tr("Can not define the current user to the newly created"));
-        } else {
-            newUserName->setText(tr("New user created."));
+            LOG_ERROR("Can not define the current user to the newly created");
         }
     }
 }
 
-bool CreateNewUserPage::validatePage()
+bool BeginConfigPage::validatePage()
 {
+//    setField("Language", QLocale(combo->currentLanguage()).name().left(2));
     return true;
+}
+
+void BeginConfigPage::changeEvent(QEvent *e)
+{
+    QWidget::changeEvent(e);
+    switch (e->type()) {
+    case QEvent::LanguageChange:
+        retranslate();
+        break;
+    default:
+        break;
+    }
 }
 
 DatabaseConfigurationPage::DatabaseConfigurationPage(QWidget *parent) :
         QWizardPage(parent)
 {
     setTitle(tr("Update checking and database configuration"));
-    setSubTitle(tr("By default, FreeMedForms is configured to use a local SQLite database. You can choose an external server."));
+    setSubTitle(tr("By default, FreeMedForms is configured to use a "
+                   "local SQLite database. You can choose an external server."));
 
     // get all optionpages in "general" category
     QWidget *w = 0;
@@ -236,10 +243,13 @@ PatientFilePage::PatientFilePage(QWidget *parent) :
         QWizardPage(parent)
 {
     setTitle(tr("Patients Forms File"));
-    setSubTitle(tr("FreeMedForms allows you to define your own patient forms file. You can select it from here. All patients will have the same forms."));
+    setSubTitle(tr("FreeMedForms allows you to define your own patient "
+                   "forms file. You can select it from here. All patients "
+                   "will have the same forms."));
 
     selector = new Form::FormFilesSelectorWidget(this);
     selector->setFormType(Form::FormFilesSelectorWidget::CompleteForms);
+    selector->expandAllItems();
 
     QGridLayout *layout = new QGridLayout(this);
     layout->addWidget(selector, 0, 0);
@@ -259,8 +269,10 @@ VirtualDatabasePage::VirtualDatabasePage(QWidget *parent) :
         QWizardPage(parent)
 {
     setTitle(tr("Create Virtual Patients"));
-    setSubTitle(tr("You can create some virtual patients and users in order to test FreeMedForms.\n"
-                   "Just select the number of patients/users you want to create and click on the "
+    setSubTitle(tr("You can create some virtual patients and users in order "
+                   "to test FreeMedForms.\n"
+                   "Just select the number of patients/users you want to "
+                   "create and click on the "
                    "'populate' button."));
 
     vd = new Internal::VirtualDatabasePreferences(this);
@@ -280,7 +292,11 @@ EndConfigPage::EndConfigPage(QWidget *parent) :
         QWizardPage(parent)
 {
     setTitle(tr("FreeMedForms is now configured"));
-    setSubTitle(tr("Please read the user's manual. If you have any question, you can ask them to the mailing list."));
-    QLabel *lbl = new QLabel(tr("French/english mailing list : <a href=\"mailto:freemedforms@googlegroups.com\">freemedforms@googlegroups.com</a>"), this);
+    setSubTitle(tr("Please read the user's manual. "
+                   "If you have any question, you can ask them to "
+                   "the mailing list."));
+    QLabel *lbl = new QLabel(tr("French/english mailing list : "
+                                "<a href=\"mailto:freemedforms@googlegroups.com\">"
+                                "freemedforms@googlegroups.com</a>"), this);
     lbl->setOpenExternalLinks(true);
 }
