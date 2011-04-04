@@ -4,9 +4,10 @@
 #include <QPushButton>
 #include <QVBoxLayout>
 
-#include "calendar_widget.h"
 #include "day_range_view.h"
 #include "month_view.h"
+#include "basic_calendar_model.h"
+#include "calendar_widget.h"
 
 using namespace Calendar;
 
@@ -37,34 +38,39 @@ CalendarWidget::CalendarWidget(QWidget *parent)
 
 	m_mainLayout->addWidget(m_scrollArea);
 
+	// basic model
+	setModel(new BasicCalendarModel(this));
+
 	m_timer.setInterval(REFRESH_INTERVAL * 1000);
 	connect(&m_timer, SIGNAL(timeout()), this, SLOT(timeout()));
 	m_timer.start();
 }
 
-void CalendarWidget::setModel(QAbstractItemModel *model) {
+void CalendarWidget::setModel(AbstractCalendarModel *model) {
 	// disconnect slots
 	if (m_model){
-		disconnect(m_model, SIGNAL(dataChanged(const QModelIndex &, const QModelIndex &)), this, SLOT(dataChanged(const QModelIndex &, const QModelIndex &)));
+/*		disconnect(m_model, SIGNAL(dataChanged(const QModelIndex &, const QModelIndex &)), this, SLOT(dataChanged(const QModelIndex &, const QModelIndex &)));
 		disconnect(m_model, SIGNAL(rowsAboutToBeInserted(const QModelIndex &, int, int)), this, SLOT(rowsAboutToBeInserted(const QModelIndex &, int , int)));
 		disconnect(m_model, SIGNAL(rowsInserted(const QModelIndex &, int, int)), this, SLOT(rowsInserted(const QModelIndex &, int , int)));
 		disconnect(m_model, SIGNAL(rowsAboutToBeRemoved(const QModelIndex &, int, int)), this, SLOT(rowsAboutToBeRemoved(const QModelIndex &, int , int)));
-		disconnect(m_model, SIGNAL(rowsRemoved(const QModelIndex &, int, int)), this, SLOT(rowsRemoved(const QModelIndex &, int , int)));
+		disconnect(m_model, SIGNAL(rowsRemoved(const QModelIndex &, int, int)), this, SLOT(rowsRemoved(const QModelIndex &, int , int)));*/
 	}
 
 	m_model = model;
 
 	if (m_model) {
 		// connect slots
-		connect(m_model, SIGNAL(dataChanged(const QModelIndex &, const  QModelIndex &)), this, SLOT(dataChanged(const QModelIndex &, const QModelIndex &)));
+/*		connect(m_model, SIGNAL(dataChanged(const QModelIndex &, const  QModelIndex &)), this, SLOT(dataChanged(const QModelIndex &, const QModelIndex &)));
 		connect(m_model, SIGNAL(rowsAboutToBeInserted(const QModelIndex &, int, int)), this, SLOT(rowsAboutToBeInserted(const QModelIndex &, int , int)));
 		connect(m_model, SIGNAL(rowsInserted(const QModelIndex &, int, int)), this, SLOT(rowsInserted(const QModelIndex &, int , int)));
 		connect(m_model, SIGNAL(rowsAboutToBeRemoved(const QModelIndex &, int, int)), this, SLOT(rowsAboutToBeRemoved(const QModelIndex &, int , int)));
-		connect(m_model, SIGNAL(rowsRemoved(const QModelIndex &, int, int)), this, SLOT(rowsRemoved(const QModelIndex &, int , int)));
+		connect(m_model, SIGNAL(rowsRemoved(const QModelIndex &, int, int)), this, SLOT(rowsRemoved(const QModelIndex &, int , int)));*/
 	}
+	if (m_view)
+		m_view->setModel(model);
 }
 
-void CalendarWidget::dataChanged(const QModelIndex &topLeft, const  QModelIndex &bottomRight) {
+/*void CalendarWidget::dataChanged(const QModelIndex &topLeft, const  QModelIndex &bottomRight) {
 	Q_UNUSED(topLeft);
 	Q_UNUSED(bottomRight);
 	// TODO
@@ -96,7 +102,7 @@ void CalendarWidget::rowsInserted(const QModelIndex &parent, int start, int end)
 	Q_UNUSED(start);
 	Q_UNUSED(end);
 	// TODO
-}
+	}*/
 
 void CalendarWidget::firstDateChanged() {
 	m_header->setFirstDate(m_navbar->firstDate());
@@ -127,6 +133,7 @@ void CalendarWidget::viewTypeChanged() {
 	m_header->setScrollArea(m_scrollArea);
 	m_header->setFirstDate(m_navbar->firstDate());
 	m_mainLayout->insertWidget(1, m_header);
+	m_view->setModel(m_model);
 }
 
 void CalendarWidget::setViewType(Calendar::ViewType viewType) {

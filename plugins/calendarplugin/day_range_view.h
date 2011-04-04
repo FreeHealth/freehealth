@@ -56,10 +56,14 @@ namespace Calendar {
 
 	protected:
 		virtual void paintBody(QPainter *painter, const QRect &visibleRect);
-		virtual void refreshItemSizeAndPosition(CalendarItem *item);
+		virtual void refreshItemSizeAndPosition(CalendarItemWidget *item);
 		virtual void mousePressEvent(QMouseEvent *event);
 		virtual void mouseMoveEvent(QMouseEvent *event);
 		virtual void mouseReleaseEvent(QMouseEvent *event);
+		virtual void resetItemWidgets();
+
+	protected slots:
+		void itemInserted(const CalendarItem &item);
 
 	private slots:
 		void firstDateChanged();
@@ -71,7 +75,7 @@ namespace Calendar {
 		int m_rangeWidth;
 		QDateTime m_pressDateTime;
 		QPoint m_pressPos;
-		CalendarItem *m_pressItem;
+		CalendarItemWidget *m_pressItem;
 
 		/* if end < begin, the end time will be considered as midnight */
 		QRect getTimeIntervalRect(int day, const QTime &begin, const QTime &end) const;

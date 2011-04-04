@@ -2,12 +2,12 @@
 #define CALENDAR_WIDGET_H
 
 #include <QScrollArea>
-#include <QAbstractItemModel>
 #include <QTimer>
 
 #include "common.h"
 #include "view.h"
 #include "calendar_navbar.h"
+#include "abstract_calendar_model.h"
 
 class QVBoxLayout;
 
@@ -18,19 +18,19 @@ namespace Calendar {
 	public:
 		CalendarWidget(QWidget *parent = 0);
 
-		QAbstractItemModel *model() const { return m_model; }
-		void setModel(QAbstractItemModel *model);
+		AbstractCalendarModel *model() const { return m_model; }
+		void setModel(AbstractCalendarModel *model);
 
 		Calendar::ViewType viewType() const { return m_navbar->viewType(); }
 		void setViewType(Calendar::ViewType viewType);
 
 	private slots:
 		// for model
-		void dataChanged(const QModelIndex & topLeft, const  QModelIndex & bottomRight);
+/*		void dataChanged(const QModelIndex & topLeft, const  QModelIndex & bottomRight);
 		void rowsAboutToBeRemoved(const QModelIndex & parent, int start, int end);
 		void rowsAboutToBeInserted(const QModelIndex & parent, int start, int end);
 		void rowsRemoved(const QModelIndex & parent, int start, int end);
-		void rowsInserted(const QModelIndex & parent, int start, int end);
+		void rowsInserted(const QModelIndex & parent, int start, int end);*/
 
 		// navigation bar slots
 		void firstDateChanged();
@@ -46,7 +46,7 @@ namespace Calendar {
 		ViewType m_viewType;
 		View *m_view;
 		ViewHeader *m_header;
-		QAbstractItemModel *m_model;
+		AbstractCalendarModel *m_model;
 		QTimer m_timer; // used to refresh every date/time stuffs
 	};
 }

@@ -4,7 +4,6 @@
 #include <QScrollArea>
 
 #include "view.h"
-#include "calendar_item.h"
 
 using namespace Calendar;
 
@@ -37,6 +36,7 @@ void View::setFirstDate(const QDate &firstDate) {
 		return;
 
 	m_firstDate = firstDate;
+	resetItemWidgets();
 	m_refreshGrid = true;
 	update();
 }
@@ -48,7 +48,7 @@ QPixmap View::generatePixmap() {
 	return pixmap;
 }
 
-void View::paintEvent(QPaintEvent *event) {
+void View::paintEvent(QPaintEvent *) {
 	QPixmap pixmap;
 	QString key = "grid";
 
@@ -71,9 +71,9 @@ void View::resizeEvent(QResizeEvent *event) {
 
 void View::refreshItemsSizesAndPositions() {
 	foreach (QObject *object, children()) {
-		CalendarItem *item = qobject_cast<CalendarItem*>(object);
-		if (item) {
-			refreshItemSizeAndPosition(item);
+		CalendarItemWidget *widget = qobject_cast<CalendarItemWidget*>(object);
+		if (widget) {
+			refreshItemSizeAndPosition(widget);
 		}
 	}
 }
@@ -81,4 +81,20 @@ void View::refreshItemsSizesAndPositions() {
 void View::refreshCurrentDateTimeStuff() {
 	m_refreshGrid = true;
 	update();
+}
+
+void View::setModel(AbstractCalendarModel *model) {
+	// disconnect slots
+	if (m_model){
+		disconnect(m_model, SIGNAL(itemInserted(const CalendarItem &)), this, SLOT(itemInserted(const CalendarItem &)));
+	}
+
+	m_model = model;
+
+	if (m_model) {
+		// connect slots
+		connect(m_model, SIGNAL(itemInserted(const CalendarItem &)), this, SLOT(itemInserted(const CalendarItem &)));
+	}
+
+	resetItemWidgets();
 }

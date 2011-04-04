@@ -4,7 +4,8 @@
 #include <QWidget>
 #include <QDate>
 
-#include "calendar_item.h"
+#include "calendar_item_widget.h"
+#include "abstract_calendar_model.h"
 
 class QPainter;
 class QRect;
@@ -40,7 +41,7 @@ namespace Calendar {
 	{
 		Q_OBJECT
 	public:
-		View(QWidget *parent = 0) : QWidget(parent), m_refreshGrid(false) {}
+		View(QWidget *parent = 0) : QWidget(parent), m_refreshGrid(false), m_model(0) {}
 
 		/** returns the top header height for the view */
 		virtual int topHeaderHeight() const = 0;
@@ -58,6 +59,12 @@ namespace Calendar {
 		/** used to refresh all current date time stuffs */
 		virtual void refreshCurrentDateTimeStuff();
 
+		/** returns the current model */
+		AbstractCalendarModel *model() const { return m_model; }
+
+		/** called when a new model has been defined */
+		void setModel(AbstractCalendarModel *model);
+
 	protected:
 		QDate m_firstDate;
 
@@ -67,11 +74,16 @@ namespace Calendar {
 		virtual void paintBody(QPainter *, const QRect &) {};
 		virtual void paintEvent(QPaintEvent *event);
 		virtual void resizeEvent(QResizeEvent *event);
-		virtual void refreshItemSizeAndPosition(CalendarItem *) {}
+		virtual void refreshItemSizeAndPosition(CalendarItemWidget *) {}
 		virtual void refreshItemsSizesAndPositions();
+		virtual void resetItemWidgets() {}
+
+	protected slots:
+		virtual void itemInserted(const CalendarItem &item) { Q_UNUSED(item); }
 
 	private:
 		bool m_refreshGrid;
+		AbstractCalendarModel *m_model;
 	};
 }
 

@@ -1,30 +1,33 @@
 #ifndef CALENDAR_ITEM_H
 #define CALENDAR_ITEM_H
 
-#include <QWidget>
+#include <QString>
 #include <QDateTime>
 
 namespace Calendar {
-	class CalendarItem : public QWidget
+	class CalendarItem
 	{
-		Q_OBJECT
 	public:
-		/** if temp is true, this calendar item is considered as temporary and will be drawn with transparence */
-		CalendarItem(QWidget *parent = 0, bool temp = false);
+		CalendarItem(const QDateTime &beginning, const QDateTime &ending) :
+			m_beginning(beginning), m_ending(ending) {};
 
-		const QDateTime &beginDateTime() const { return m_beginDateTime; }
-		void setBeginDateTime(const QDateTime &dateTime);
-		const QDateTime &endDateTime() const { return m_endDateTime; }
-		void setEndDateTime(const QDateTime &dateTime);
+		const QString &title() const { return m_title; }
+		void setTitle(const QString &value);
 
-	protected:
-		virtual void paintEvent(QPaintEvent *event);
+		const QDateTime &beginning() const { return m_beginning; }
+		void setBeginning(const QDateTime &value);
+
+		const QDateTime &ending() const { return m_ending; }
+		void setEnding(const QDateTime &value);
+
+		const QString &description() const { return m_description; }
+		void setDescription(const QString &value);
 
 	private:
-		// TMP : all date will probably be moved into a pure data class for events/tasks, etc
-		QDateTime m_beginDateTime;
-		QDateTime m_endDateTime;
-		bool m_temp;
+		QString m_title;
+		QDateTime m_beginning;
+		QDateTime m_ending;
+		QString m_description;
 	};
 }
 

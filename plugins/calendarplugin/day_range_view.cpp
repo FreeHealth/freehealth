@@ -5,9 +5,11 @@
 #include <QScrollArea>
 #include <QMouseEvent>
 
-#include "day_range_view.h"
-#include "calendar_item.h"
+#include "calendar_item_widget.h"
 #include "common.h"
+#include "abstract_calendar_model.h"
+#include "calendar_widget.h"
+#include "day_range_view.h"
 
 using namespace Calendar;
 
@@ -83,19 +85,6 @@ DayRangeView::DayRangeView(QWidget *parent, int rangeWidth) :
 	setSizePolicy(QSizePolicy::Expanding, QSizePolicy::Fixed);
 
 	setFirstDate(Calendar::getFirstDateByRandomDate(Calendar::View_Week, QDate::currentDate()));
-
-	CalendarItem *item = new CalendarItem(this);
-	QDate now = QDate::currentDate();
-	item->setBeginDateTime(QDateTime(now, QTime(7, 0, 0)));
-	item->setEndDateTime(QDateTime(now, QTime(8, 0, 0)));
-
-	item = new CalendarItem(this);
-	item->setBeginDateTime(QDateTime(now, QTime(10, 0, 0)));
-	item->setEndDateTime(QDateTime(now, QTime(15, 45, 0)));
-
-	item = new CalendarItem(this);
-	item->setBeginDateTime(QDateTime(now.addDays(1), QTime(2, 0, 0)));
-	item->setEndDateTime(QDateTime(now.addDays(1), QTime(13, 15, 0)));
 }
 
 QSize DayRangeView::sizeHint() const {
@@ -200,7 +189,7 @@ ViewHeader *DayRangeView::createHeaderWidget(QWidget *parent) {
 	return widget;
 }
 
-void DayRangeView::refreshItemSizeAndPosition(CalendarItem *item) {
+void DayRangeView::refreshItemSizeAndPosition(CalendarItemWidget *item) {
 	// TODO if item is over many days, explodes it in several times intervals
 	QRect rect = getTimeIntervalRect(item->beginDateTime().date().dayOfWeek(), item->beginDateTime().time(), item->endDateTime().time());
 	item->move(rect.x(), rect.y());
@@ -272,7 +261,7 @@ void DayRangeView::mouseMoveEvent(QMouseEvent *event) {
 
 	if (dateTime != m_pressDateTime) {
 		if (!m_pressItem) {
-			m_pressItem = new CalendarItem(this, true);
+			m_pressItem = new CalendarItemWidget(this, true);
 			m_pressItem->setBeginDateTime(m_pressDateTime);
 			m_pressItem->show();
 		}
@@ -295,8 +284,43 @@ void DayRangeView::mouseMoveEvent(QMouseEvent *event) {
 }
 
 void DayRangeView::mouseReleaseEvent(QMouseEvent *) {
-	// TODO: transform into a real item
+	QDateTime beginning = m_pressItem->beginDateTime();
+	QDateTime ending = m_pressItem->endDateTime();
 	delete m_pressItem;
 	m_pressItem = 0;
 	m_pressDateTime = QDateTime();
+	if (model()){
+		model()->insertItem(beginning, ending);
+	}
+}
+
+void DayRangeView::itemInserted(const CalendarItem &item) {
+	CalendarItemWidget *widget = new CalendarItemWidget(this);
+	widget->setBeginDateTime(item.beginning());
+	widget->setEndDateTime(item.ending());
+	widget->show();
+	refreshItemSizeAndPosition(widget);
+}
+
+void DayRangeView::resetItemWidgets() {
+	CalendarItemWidget *widget;
+
+	// remove old ones
+	for (int i = children().count() - 1; i >= 0; i--) {
+		QWidget *widget = qobject_cast<CalendarItemWidget*>(children()[i]);
+		if (widget)
+			delete widget;
+	}
+
+	if (!model())
+		return;
+
+	// create new ones
+	foreach (const CalendarItem &item, model()->getItemsBetween(m_firstDate, m_firstDate.addDays(m_rangeWidth - 1))) {
+		widget = new CalendarItemWidget(this);
+		widget->setBeginDateTime(item.beginning());
+		widget->setEndDateTime(item.ending());
+		widget->show();
+		refreshItemSizeAndPosition(widget);
+	}
 }
