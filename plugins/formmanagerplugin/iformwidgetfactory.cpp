@@ -54,7 +54,7 @@ void IFormWidget::createLabel(const QString &text, Qt::Alignment horizAlign)
 //    l->setFrameShape(QFrame::Box);
     l->setText(text);
     l->setAlignment(Qt::AlignTop | horizAlign);
-    l->setSizePolicy(QSizePolicy::Fixed, QSizePolicy::Fixed);
+    l->setSizePolicy(QSizePolicy::Preferred, QSizePolicy::Preferred);
     l->setWordWrap(true);
 }
 

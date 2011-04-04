@@ -522,7 +522,7 @@ BaseRadio::BaseRadio(Form::FormItem *formItem, QWidget *parent)
     QBoxLayout * hb = getBoxLayout(Label_OnTop, m_FormItem->spec()->label(), this);
 
     // Add QLabel
-    m_Label->setSizePolicy(QSizePolicy::Preferred , QSizePolicy::Preferred);
+//    m_Label->setSizePolicy(QSizePolicy::Preferred , QSizePolicy::Preferred);
     hb->addWidget(m_Label);
 
     // Add Buttons
