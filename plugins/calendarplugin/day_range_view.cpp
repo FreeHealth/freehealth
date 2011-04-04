@@ -278,12 +278,17 @@ void DayRangeView::mouseMoveEvent(QMouseEvent *event) {
 		}
 
 		QRect rect;
-		if (event->pos().y() > m_pressPos.y())
+		if (event->pos().y() > m_pressPos.y()) {
 			rect = getTimeIntervalRect(m_pressDateTime.date().dayOfWeek(), m_pressDateTime.time(), dateTime.time());
-		else
+			m_pressItem->setBeginDateTime(m_pressDateTime);
+			m_pressItem->setEndDateTime(dateTime);
+		}
+		else {
 			rect = getTimeIntervalRect(m_pressDateTime.date().dayOfWeek(), dateTime.time(), m_pressDateTime.time());
+			m_pressItem->setBeginDateTime(dateTime);
+			m_pressItem->setEndDateTime(m_pressDateTime);
+		}
 
-		m_pressItem->setEndDateTime(dateTime);
 		m_pressItem->move(rect.x(), rect.y());
 		m_pressItem->resize(rect.width(), rect.height());
 	}
