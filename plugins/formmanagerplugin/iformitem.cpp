@@ -570,20 +570,26 @@ FormItemSpec::~FormItemSpec()
 void FormItemSpec::setValue(int type, const QVariant &val, const QString &language)
 {
 //    qWarning() << "SPEC" << type << val << language;
-    SpecsBook *values = d->createLanguage(language);
+    QString l = language;
+    if (language.isEmpty())
+        l = Trans::Constants::ALL_LANGUAGE;
+    SpecsBook *values = d->createLanguage(l);
     values->m_Specs.insert(type,val);
 }
 
 QVariant FormItemSpec::value(const int type, const QString &lang) const
 {
-    SpecsBook *values = d->getLanguage(lang);
+    QString l = lang;
+    if (lang.isEmpty())
+        l = QLocale().name().left(2);
+    SpecsBook *values = d->getLanguage(l);
     if (!values)
         return QString();
     QVariant val = values->m_Specs.value(type);
-    if (val.isNull() && (lang.compare(Trans::Constants::ALL_LANGUAGE)<0)) {
+    if (val.isNull() && (l.compare(Trans::Constants::ALL_LANGUAGE)!=0)) {
         val = value(type, Trans::Constants::ALL_LANGUAGE);
     }
-    return values->m_Specs.value(type);
+    return val;
 }
 
 void FormItemSpec::toTreeWidget(QTreeWidgetItem *tree) const
