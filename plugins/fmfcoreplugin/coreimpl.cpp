@@ -60,7 +60,6 @@ using namespace Core;
 using namespace Core::Internal;
 using namespace Trans::ConstantTranslations;
 
-
 ICore* ICore::instance()
 {
     return m_instance;
@@ -109,10 +108,22 @@ CoreImpl::CoreImpl(QObject *parent) :
         Utils::Log::logTimeElapsed(chrono, "Core", "translators");
 
     m_Theme->messageSplashScreen(tkTr(Trans::Constants::STARTING_APPLICATION_AT_1).arg(QDateTime::currentDateTime().toString()));
-    Utils::Log::addMessage( "Core" , tkTr(Trans::Constants::STARTING_APPLICATION_AT_1).arg( QDateTime::currentDateTime().toString() ) );
+    LOG(tkTr(Trans::Constants::STARTING_APPLICATION_AT_1).arg( QDateTime::currentDateTime().toString()));
+
+    if (qApp->applicationVersion().contains("alpha") && !Utils::isDebugCompilation()) {
+        Utils::warningMessageBox(tr("You are running an alpha version of %1. This version "
+                                    "can be heavily buggy and is only provided for "
+                                    "testing purpose.")
+                                 .arg(qApp->applicationName() + " (" + qApp->applicationVersion() + ")"),
+                                 tr("If you found any problem with %1, please report "
+                                    "it on our mailing list: freemedforms@googlegroups.com")
+                                 .arg(qApp->applicationName()), "",
+                                 tr("Warning alpha version")
+                                 );
+    }
 
     foreach(const QString &l, QCoreApplication::libraryPaths()) {
-        Utils::Log::addMessage("Core" , tkTr(Trans::Constants::USING_LIBRARY_1).arg(l));
+        LOG(tkTr(Trans::Constants::USING_LIBRARY_1).arg(l));
     }
 
     // initialize the settings
@@ -141,9 +152,9 @@ CoreImpl::CoreImpl(QObject *parent) :
         QApplication::setAttribute(Qt::AA_DontShowIconsInMenus);
 
     // ready
-    m_Theme->messageSplashScreen(QCoreApplication::translate("Core", "Core intialization finished..."));
+    m_Theme->messageSplashScreen(tr("Core intialization finished..."));
 
-    Utils::Log::addMessage("Core" , QCoreApplication::translate("Core", "Core intialization finished..."));
+    LOG(tr("Core intialization finished..."));
     if (logChrono)
         Utils::Log::logTimeElapsed(chrono, "Core", "end of core intialization");
 
