@@ -87,7 +87,7 @@ void IFormWidget::changeEvent(QEvent * event)
         m_OldTrans = loc;
         retranslate();
         event->accept();
-    }
-    else
+    } else {
         QWidget::changeEvent(event);
+    }
 }

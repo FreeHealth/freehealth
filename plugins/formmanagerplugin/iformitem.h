@@ -54,8 +54,8 @@ QT_END_NAMESPACE
 /**
  * \file iformitem.h
  * \author Eric MAEKER <eric.maeker@free.fr>
- * \version 0.4.0
- * \date 05 Apr 2010
+ * \version 0.5.0
+ * \date 03 Apr 2011
 */
 
 namespace Form {
@@ -84,6 +84,7 @@ public:
             {}
 
     virtual ~FormItem();
+    Form::FormItem *parentFormItem() const;
 
     Form::FormItemSpec *spec() const {return m_Spec;}
     Form::FormItemScripts *scripts() const {return m_Scripts;}
@@ -134,6 +135,10 @@ inline QList<Form::FormItem*> Form::FormItem::formItemChildren() const
           }
      }
      return list;
+}
+inline Form::FormItem *Form::FormItem::parentFormItem() const
+{
+    return qobject_cast<Form::FormItem *>(parent());
 }
 
 

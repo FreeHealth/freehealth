@@ -299,7 +299,11 @@ FormItemValues::~FormItemValues()
 */
 void FormItemValues::setValue(int type, const int id, const QVariant &val, const QString &language)
 {
-    ValuesBook *values = d->createLanguage(language);
+    QString l = language;
+    if (language.isEmpty() || (type==Value_Uuid))
+        l = Trans::Constants::ALL_LANGUAGE;
+    ValuesBook *values = d->createLanguage(l);
+//    qWarning() << "SETVALUE" << l << language << values << type << id << val;
     switch (type)
     {
     case Value_Uuid :      values->m_Uuid.insert(id,val); break;
@@ -313,16 +317,28 @@ void FormItemValues::setValue(int type, const int id, const QVariant &val, const
 
 void FormItemValues::setDefaultValue(const QVariant &val, const QString &lang)
 {
-    ValuesBook *values = d->createLanguage(lang);
+    QString l = lang;
+    if (lang.isEmpty())
+        l = Trans::Constants::ALL_LANGUAGE;
+    ValuesBook *values = d->createLanguage(l);
     values->m_Default = val;
 }
 
-QVariant FormItemValues::defaultValue(const QString &lang)
+QVariant FormItemValues::defaultValue(const QString &lang) const
 {
-    ValuesBook *values = d->getLanguage(lang);
+    QString l = lang;
+    if (lang.isEmpty())
+        l = QLocale().name();
+    ValuesBook *values = d->getLanguage(l);
+    QVariant ret;
     if (values)
-        return values->m_Default;
-    return 0;
+        ret = values->m_Default;
+    if (ret.isNull() && l==QLocale().name()) {
+        values = d->getLanguage(Trans::Constants::ALL_LANGUAGE);
+        if (values)
+            return values->m_Default;
+    }
+    return QVariant();
 }
 
 //void FormItemValues::setSelectedValue(const QVariant &val)
@@ -350,18 +366,42 @@ void FormItemValues::setOptionnal(bool state)
 */
 QStringList FormItemValues::values(const int typeOfValues) const
 {
-    ValuesBook *values = d->getLanguage(Trans::Constants::ALL_LANGUAGE);
-    if (!values)
+    if (typeOfValues==Value_Uuid) {
+        // return the ALL_LANGUAGE uuids
+        ValuesBook *values = d->getLanguage(Trans::Constants::ALL_LANGUAGE);
+        if (!values)
+            return QStringList();
+        QStringList list;
+        foreach(const QVariant &uuid, values->m_Uuid.values()) {
+            list.append(uuid.toString());
+        }
+        return list;
+    } else if (typeOfValues==Value_Default) {
+        return QStringList() << defaultValue().toString();
+    } else if (typeOfValues==Value_Dependency) {
         return QStringList();
+    }
+    ValuesBook *values = d->getLanguage(QLocale().name());
     QMap<int, QVariant> map;
-    switch (typeOfValues)
-    {
-    case Value_Uuid :      map = values->m_Uuid; break;
-    case Value_Numerical : map = values->m_Numerical; break;
-    case Value_Script :    map = values->m_Script; break;
-    case Value_Possible :  map = values->m_Possible; break;
-    case Value_Default :   return QStringList() << values->m_Default.toString(); break;
-    case Value_Dependency : return QStringList();
+    if (values) {
+        switch (typeOfValues)
+        {
+        case Value_Numerical : map = values->m_Numerical; break;
+        case Value_Script :    map = values->m_Script; break;
+        case Value_Possible :  map = values->m_Possible; break;
+        }
+    }
+    if (map.isEmpty()) {
+        values = d->getLanguage(Trans::Constants::ALL_LANGUAGE);
+        if (!values) {
+            return QStringList();
+        }
+        switch (typeOfValues)
+        {
+        case Value_Numerical : map = values->m_Numerical; break;
+        case Value_Script :    map = values->m_Script; break;
+        case Value_Possible :  map = values->m_Possible; break;
+        }
     }
     QStringList list;
     foreach(int i, map.keys()) {

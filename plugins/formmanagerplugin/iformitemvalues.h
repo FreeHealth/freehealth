@@ -52,8 +52,8 @@ QT_END_NAMESPACE
 /**
  * \file iformitemvalues.h
  * \author Eric MAEKER <eric.maeker@free.fr>
- * \version 0.4.0
- * \date 05 Apr 2010
+ * \version 0.5.0
+ * \date 04 Apr 2011
 */
 
 namespace Form {
@@ -77,9 +77,9 @@ public:
     FormItemValues(QObject *parent);
     ~FormItemValues();
 
-    void setValue(int type, const int id, const QVariant &val, const QString &language = Trans::Constants::ALL_LANGUAGE);
-    void setDefaultValue(const QVariant &val, const QString &lang = Trans::Constants::ALL_LANGUAGE);
-    QVariant defaultValue(const QString &lang = Trans::Constants::ALL_LANGUAGE);
+    void setValue(int type, const int id, const QVariant &val, const QString &language = QString::null);
+    void setDefaultValue(const QVariant &val, const QString &lang = QString::null);
+    QVariant defaultValue(const QString &lang = QString::null) const;
 
     bool isOptionnal() const;
     void setOptionnal(bool state);
