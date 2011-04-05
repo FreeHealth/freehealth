@@ -35,7 +35,9 @@
 #include "baseformwidgets.h"
 
 #include <formmanagerplugin/iformitem.h>
+
 #include <utils/global.h>
+#include <utils/log.h>
 
 #include <QStringList>
 #include <QMessageBox>
@@ -299,8 +301,7 @@ void BaseForm::addWidgetToContainer(IFormWidget * widget)
 
 void BaseForm::retranslate()
 {
-    /** \todo iformitem --> one spec per language ? */
-    //     m_Label->setText(m_FormItem->spec()->label());
+    m_Header->label->setText(m_FormItem->spec()->label());
 }
 
 ////////////////////////////////////////// ItemData /////////////////////////////////////////////
@@ -416,7 +417,7 @@ void BaseGroup::addWidgetToContainer(IFormWidget * widget)
 
 void BaseGroup::retranslate()
 {
-    //     m_Group->setTitle(mfo(m_FormItem)->label());
+    m_Group->setTitle(m_FormItem->spec()->label());
 }
 
 
@@ -518,8 +519,9 @@ QVariant BaseCheckData::storableData() const
 BaseRadio::BaseRadio(Form::FormItem *formItem, QWidget *parent)
         : Form::IFormWidget(formItem,parent)
 {
+    setObjectName("BaseRadio");
     // Prepare Widget Layout and label
-    QBoxLayout * hb = getBoxLayout(Label_OnTop, m_FormItem->spec()->label(), this);
+    QBoxLayout *hb = getBoxLayout(Label_OnTop, m_FormItem->spec()->label(), this);
 
     // Add QLabel
 //    m_Label->setSizePolicy(QSizePolicy::Preferred , QSizePolicy::Preferred);
@@ -544,11 +546,19 @@ BaseRadio::BaseRadio(Form::FormItem *formItem, QWidget *parent)
 //    qWarning() << m_FormItem->valueReferences()->values(Form::FormItemValues::Value_Possible);
 //    qWarning() << m_FormItem->valueReferences()->values(Form::FormItemValues::Value_Uuid);
 
+    const QStringList &uids = m_FormItem->valueReferences()->values(Form::FormItemValues::Value_Uuid);
     foreach (const QString &v, m_FormItem->valueReferences()->values(Form::FormItemValues::Value_Possible)) {
         rb = new QRadioButton(this);
-        rb->setObjectName(m_FormItem->valueReferences()->values(Form::FormItemValues::Value_Uuid).at(i));
+        if (i < uids.count()) {
+            rb->setObjectName(uids.at(i));
+            rb->setProperty("id", uids.at(i));
+        } else {
+            if (m_FormItem->parentFormItem())
+                LOG_ERROR(QString("No uuid defined for the form item: %1 in form %2").arg(v).arg(m_FormItem->parentFormItem()->uuid()));
+            else
+                LOG_ERROR(QString("No uuid defined for the form item: %1").arg(v));
+        }
         rb->setText(v);
-        rb->setProperty("id", m_FormItem->valueReferences()->values(Form::FormItemValues::Value_Uuid).at(i));
         i++;
         radioLayout->addWidget(rb);
         m_RadioList.append(rb);
@@ -936,7 +946,7 @@ BaseCombo::BaseCombo(Form::FormItem *formItem, QWidget *parent)
         : Form::IFormWidget(formItem,parent), m_Combo(0)
 {
     // Prepare Widget Layout and label
-    QBoxLayout * hb = getBoxLayout(Label_OnLeft, m_FormItem->spec()->label(), this);
+    QBoxLayout *hb = getBoxLayout(Label_OnLeft, m_FormItem->spec()->label(), this);
     hb->addWidget(m_Label);
     //     if (!(mfo(m_FormItem)->options() & mfObjectFundamental::LabelOnTop))
     //     {
