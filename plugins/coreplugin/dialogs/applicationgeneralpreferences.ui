@@ -22,6 +22,12 @@
        <verstretch>0</verstretch>
       </sizepolicy>
      </property>
+     <property name="minimumSize">
+      <size>
+       <width>0</width>
+       <height>22</height>
+      </size>
+     </property>
      <property name="font">
       <font>
        <weight>75</weight>
@@ -38,6 +44,12 @@
    </item>
    <item row="1" column="0">
     <widget class="Line" name="line">
+     <property name="minimumSize">
+      <size>
+       <width>0</width>
+       <height>2</height>
+      </size>
+     </property>
      <property name="orientation">
       <enum>Qt::Horizontal</enum>
      </property>
@@ -51,6 +63,12 @@
      <layout class="QGridLayout" name="gridLayout_3">
       <item row="0" column="0">
        <widget class="QLabel" name="label">
+        <property name="minimumSize">
+         <size>
+          <width>0</width>
+          <height>22</height>
+         </size>
+        </property>
         <property name="text">
          <string>Update checking</string>
         </property>
@@ -102,6 +120,12 @@
      <layout class="QGridLayout" name="gridLayout">
       <item row="4" column="0">
        <widget class="QLabel" name="label_3">
+        <property name="minimumSize">
+         <size>
+          <width>0</width>
+          <height>22</height>
+         </size>
+        </property>
         <property name="text">
          <string>Host name</string>
         </property>
@@ -116,6 +140,12 @@
       </item>
       <item row="7" column="0">
        <widget class="QLabel" name="label_4">
+        <property name="minimumSize">
+         <size>
+          <width>0</width>
+          <height>22</height>
+         </size>
+        </property>
         <property name="text">
          <string>Login</string>
         </property>
@@ -130,6 +160,12 @@
       </item>
       <item row="8" column="0">
        <widget class="QLabel" name="label_5">
+        <property name="minimumSize">
+         <size>
+          <width>0</width>
+          <height>22</height>
+         </size>
+        </property>
         <property name="text">
          <string>Password</string>
         </property>
@@ -154,6 +190,12 @@
         <property name="enabled">
          <bool>false</bool>
         </property>
+        <property name="minimumSize">
+         <size>
+          <width>0</width>
+          <height>32</height>
+         </size>
+        </property>
         <property name="text">
          <string>Test connection</string>
         </property>
@@ -168,6 +210,12 @@
       </item>
       <item row="10" column="0">
        <widget class="QLabel" name="label_6">
+        <property name="minimumSize">
+         <size>
+          <width>0</width>
+          <height>22</height>
+         </size>
+        </property>
         <property name="text">
          <string>Your user uuid</string>
         </property>
@@ -175,6 +223,12 @@
       </item>
       <item row="5" column="0">
        <widget class="QLabel" name="label_7">
+        <property name="minimumSize">
+         <size>
+          <width>0</width>
+          <height>22</height>
+         </size>
+        </property>
         <property name="text">
          <string>Port</string>
         </property>
@@ -207,6 +261,12 @@
       </item>
       <item row="3" column="0">
        <widget class="QLabel" name="label_8">
+        <property name="minimumSize">
+         <size>
+          <width>0</width>
+          <height>22</height>
+         </size>
+        </property>
         <property name="text">
          <string>Server type</string>
         </property>
@@ -214,6 +274,12 @@
       </item>
       <item row="1" column="0" colspan="2">
        <widget class="QCheckBox" name="autoSave">
+        <property name="minimumSize">
+         <size>
+          <width>0</width>
+          <height>22</height>
+         </size>
+        </property>
         <property name="text">
          <string>Automatically save data without prompting users</string>
         </property>
@@ -221,6 +287,12 @@
       </item>
       <item row="2" column="0" colspan="2">
        <widget class="QCheckBox" name="useExternalDB">
+        <property name="minimumSize">
+         <size>
+          <width>0</width>
+          <height>22</height>
+         </size>
+        </property>
         <property name="text">
          <string>Use external server for my personal databases</string>
         </property>
