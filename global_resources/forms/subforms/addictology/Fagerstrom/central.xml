@@ -30,87 +30,133 @@
 
   <MedForm>
     <name>fagerstrom</name>
-    <label>Test de Fagerstrom</label>
+    <label lang="fr">Test de Fagerström</label>
+    <label lang="de">Fagerström-Test</label>
+    <label lang="xx">Fagerström test</label>
     <type>form</type>
     <option>col=2</option>
 
     <Item>
       <name>cig_reveil</name>
-      <label>Combien de temps après vous être réveillé, fumez-vous votre première cigarette ?</label>
+      <label lang="fr">Combien de temps après vous être réveillé, fumez-vous votre première cigarette ?</label>
+      <label lang="de">Wann nach dem Aufwachen rauchst du Deine erste Zigarette?</label>
+      <label lang="xx">How soon after you wake up do you have your first cigarette?</label>
       <type>radio</type>
       <value>
         <uuid id="0">cig_reveil0</uuid>
         <uuid id="1">cig_reveil1</uuid>
         <uuid id="2">cig_reveil2</uuid>
         <uuid id="3">cig_reveil3</uuid>
-        <possible id="0">moins de 5 minutes</possible>
-        <possible id="1">entre 6 et 30 minutes</possible>
-        <possible id="2">entre 31 et 60 minutes</possible>
-        <possible id="3">après 60 minutes</possible>
+        <possible id="0" lang="fr">moins de 5 minutes</possible>
+        <possible id="1" lang="fr">entre 6 et 30 minutes</possible>
+        <possible id="2" lang="fr">entre 31 et 60 minutes</possible>
+        <possible id="3" lang="fr">après 60 minutes</possible>
+        <possible id="0" lang="de">innerhalb von 5 min</possible>
+        <possible id="1" lang="de">6 ... 30 min</possible>
+        <possible id="2" lang="de">31 ... 60 min</possible>
+        <possible id="3" lang="de">nach 60 min</possible>
+        <possible id="0" lang="en">Within 5 minutes</possible>
+        <possible id="1" lang="en">6-30 minutes</possible>
+        <possible id="2" lang="en">31-60 minutes</possible>
+        <possible id="3" lang="en">After 60 minutes</possible>
       </value>
     </Item>
 
     <Item>
       <name>fum_interdit</name>
-      <label>Trouvez-vous difficile de ne pas fumer dans les endroits interdits (ex: cinémas, bibliothèques...) ?</label>
+      <label lang="fr">Trouvez-vous difficile de ne pas fumer dans les endroits interdits (ex: cinémas, bibliothèques...) ?</label>
+      <label lang="de">Findest du es schwierig, an Orten, wo das Rauchen verboten ist  (z.B. Kirche, Bücherei, Kino usw.), das Rauchen zu lassen?</label>
+      <label lang="xx">Do you find it difficult to refrain from smoking in places where it is forbidden, e.g., in church, the library, the cinema, etc?</label>
       <type>radio</type>
       <value>
         <uuid id="0">fum_interdit0</uuid>
         <uuid id="1">fum_interdit1</uuid>
-        <possible id="0">oui</possible>
-        <possible id="1">non</possible>
+        <possible id="0" lang="fr">oui</possible>
+        <possible id="1" lang="fr">non</possible>
+        <possible id="0" lang="de">ja</possible>
+        <possible id="1" lang="de">nein</possible>
+        <possible id="0" lang="en">yes</possible>
+        <possible id="1" lang="en">no</possible>
       </value>
     </Item>
 
     <Item>
       <name>cig_indispensable</name>
-      <label>Quelle cigarette trouvez-vous la plus indispensable ?</label>
+      <label lang="fr">Quelle cigarette trouvez-vous la plus indispensable ?</label>
+      <label lang="de">Auf welche Zigarette würdest du verzichten wollen?</label>
+      <label lang="xx">Which cigarette would you hate most to give up?</label>
       <type>radio</type>
       <value>
         <uuid id="0">cig_indispensable0</uuid>
         <uuid id="1">cig_indispensable1</uuid>
-        <possible id="0">la première</possible>
-        <possible id="1">une autre</possible>
+        <possible id="0" lang="fr">la première</possible>
+        <possible id="1" lang="fr">une autre</possible>
+        <possible id="0" lang="de">die erste am Morgen</possible>
+        <possible id="1" lang="de">andere</possible>
+        <possible id="0" lang="en">The first one in the morning</possible>
+        <possible id="1" lang="en">All others</possible>
       </value>
     </Item>
 
     <Item>
       <name>cig_par_jour</name>
-      <label>Combien de cigarettes fumez-vous par jour en moyenne ?</label>
+      <label lang="fr">Combien de cigarettes fumez-vous par jour en moyenne ?</label>
+      <label lang="de">Wieviel Zigaretten rauchst du im allgemeinen pro Tag?</label>
+      <label lang="xx">How many cigarettes do you smoke per day?</label>
       <type>radio</type>
       <value>
         <uuid id="0">cig_indispensable0</uuid>
         <uuid id="1">cig_indispensable1</uuid>
         <uuid id="2">cig_indispensable2</uuid>
         <uuid id="3">cig_indispensable3</uuid>
-        <possible id="0">10 ou moins</possible>
-        <possible id="1">entre 11 et 20</possible>
-        <possible id="2">entre 21 et 30</possible>
-        <possible id="3">31 ou plus</possible>
+        <possible id="0" lang="fr">10 ou moins</possible>
+        <possible id="1" lang="fr">entre 11 et 20</possible>
+        <possible id="2" lang="fr">entre 21 et 30</possible>
+        <possible id="3" lang="fr">31 ou plus</possible>
+        <possible id="0" lang="de">bis 10</possible>
+        <possible id="1" lang="de">11 ··· 20</possible>
+        <possible id="2" lang="de">21 ··· 30</possible>
+        <possible id="3" lang="de">31 und mehr</possible>
+        <possible id="0" lang="en">10 or fewer</possible>
+        <possible id="1" lang="en">11-20</possible>
+        <possible id="2" lang="en">21-30</possible>
+        <possible id="3" lang="en">31 or more</possible>
       </value>
     </Item>
 
     <Item>
       <name>premiere_heure</name>
-      <label>Fumez-vous de façon plus rapprochée dans la première heure après le réveil que pendant le reste de la journée ?</label>
+      <label lang="fr">Fumez-vous de façon plus rapprochée dans la première heure après le réveil que pendant le reste de la journée ?</label>
+      <label lang="de">Rauchst du am Morgen im allgemeinen mehr als am Rest des Tages?</label>
+      <label lang="xx">Do you smoke more often during the first hours after waking than during the rest of the day?</label>
       <type>radio</type>
       <value>
         <uuid id="0">premiere_heure0</uuid>
         <uuid id="1">premiere_heure1</uuid>
-        <possible id="0">oui</possible>
-        <possible id="1">non</possible>
+        <possible id="0" lang="fr">oui</possible>
+        <possible id="1" lang="fr">non</possible>
+        <possible id="0" lang="de">ja</possible>
+        <possible id="1" lang="de">nein</possible>
+        <possible id="0" lang="en">yes</possible>
+        <possible id="1" lang="en">no</possible>
       </value>
     </Item>
 
     <Item>
       <name>maladie</name>
-      <label>Fumez-vous même si une maladie vous oblige à rester au lit ?</label>
+      <label lang="fr">Fumez-vous même si une maladie vous oblige à rester au lit ?</label>
+      <label lang="de">Kommt es vor, dass du rauchst, wenn du krank bist und tagsüber im Bett bleiben musst?</label>
+      <label lang="xx">Do you smoke even if you are so ill that you are in bed most of the day?</label>
       <type>radio</type>
       <value>
         <uuid id="0">maladie0</uuid>
         <uuid id="1">maladie1</uuid>
-        <possible id="0">oui</possible>
-        <possible id="1">non</possible>
+        <possible id="0" lang="fr">oui</possible>
+        <possible id="1" lang="fr">non</possible>
+        <possible id="0" lang="de">ja</possible>
+        <possible id="1" lang="de">nein</possible>
+        <possible id="0" lang="en">yes</possible>
+        <possible id="1" lang="en">no</possible>
       </value>
     </Item>
 
