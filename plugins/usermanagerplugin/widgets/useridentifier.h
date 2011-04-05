@@ -24,8 +24,8 @@
  *       NAME <MAIL@ADRESS>                                                *
  *       NAME <MAIL@ADRESS>                                                *
  ***************************************************************************/
-#ifndef TKUSERIDENTIFIER_H
-#define TKUSERIDENTIFIER_H
+#ifndef USERIDENTIFIER_H
+#define USERIDENTIFIER_H
 
 #include <usermanagerplugin/usermanager_exporter.h>
 
@@ -34,8 +34,8 @@
 /**
  * \file useridentifier.h
  * \author Eric MAEKER <eric.maeker@free.fr>
- * \version 0.0.5
- * \date 17 Sept 2009
+ * \version 0.5.0
+ * \date 04 Apr 2011
 */
 namespace UserPlugin {
 namespace Internal {
@@ -51,13 +51,13 @@ class USER_EXPORT UserIdentifier : public QDialog
     enum { MaxNumberOfTries = 4 };
 
 public:
-    explicit UserIdentifier( const QStringList & informations = QStringList(), QWidget *parent = 0 );
+    explicit UserIdentifier(QWidget *parent = 0 );
 
-    QString  login();
-    QString  cryptedPassword();
+    QString login();
+    QString cryptedPassword();
 
 private:
-    void done( int result );
+    void done(int result);
 
 private:
     Ui::UserIdentifier *m_ui;
@@ -67,4 +67,4 @@ private:
 }  // End Internal
 }  // End namespace UserPlugin
 
-#endif // TKUSERIDENTIFIER_H
+#endif // USERIDENTIFIER_H

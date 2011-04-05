@@ -54,6 +54,7 @@
 #include <QComboBox>
 #include <QLabel>
 #include <QGridLayout>
+#include <QDesktopWidget>
 
 using namespace MainWin;
 using namespace Trans::ConstantTranslations;
@@ -71,7 +72,7 @@ AppConfigWizard::AppConfigWizard(QWidget *parent)
     addPage(new PatientFilePage(this));
     addPage(new VirtualDatabasePage(this));
     addPage(new EndConfigPage(this));
-    this->setWindowTitle(tr("Application Configurator Wizard"));
+    setWindowTitle(tr("Application Configurator Wizard"));
     QList<QWizard::WizardButton> layout;
     layout << QWizard::CancelButton << QWizard::Stretch << QWizard::BackButton
             << QWizard::NextButton << QWizard::FinishButton;
@@ -80,6 +81,11 @@ AppConfigWizard::AppConfigWizard(QWidget *parent)
     // Delete the login information in settings
     settings()->setValue(Core::Constants::S_LASTLOGIN, QVariant());
     settings()->setValue(Core::Constants::S_LASTPASSWORD, QVariant());
+
+    // define a minSize
+//    setMinimumSize(QSize(300,300));
+//    setMaximumSize(qApp->desktop()->availableGeometry().size());
+//    adjustSize();
 }
 
 void AppConfigWizard::done(int r)
@@ -123,9 +129,9 @@ BeginConfigPage::BeginConfigPage(QWidget *parent)
     layout->setVerticalSpacing(30);
     layout->addWidget(langLabel, 2, 0);
     layout->addWidget(combo, 2, 1);
-    layout->addWidget(adminPassLabel, 3, 0);
+    layout->addWidget(adminPassLabel, 3, 0, 1, 2);
     layout->addWidget(adminButton, 4, 1);
-    layout->addWidget(createUserLabel, 5, 0);
+    layout->addWidget(createUserLabel, 5, 0, 1, 2);
     layout->addWidget(createUserButton, 6, 1);
     setLayout(layout);
 
@@ -246,14 +252,12 @@ PatientFilePage::PatientFilePage(QWidget *parent) :
     setSubTitle(tr("FreeMedForms allows you to define your own patient "
                    "forms file. You can select it from here. All patients "
                    "will have the same forms."));
-
-    selector = new Form::FormFilesSelectorWidget(this);
-    selector->setFormType(Form::FormFilesSelectorWidget::CompleteForms);
-    selector->expandAllItems();
-
     QGridLayout *layout = new QGridLayout(this);
-    layout->addWidget(selector, 0, 0);
     setLayout(layout);
+    selector = new Form::FormFilesSelectorWidget(this, Form::FormFilesSelectorWidget::CompleteForms);
+    selector->expandAllItems();
+    layout->addWidget(selector, 0, 0);
+    selector->updateGeometry();
 }
 
 bool PatientFilePage::validatePage()

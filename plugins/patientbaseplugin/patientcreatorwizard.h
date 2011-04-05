@@ -43,6 +43,7 @@
 namespace Patients {
 class PatientModel;
 class IdentityWidget;
+class IdentityPage;
 
 class PATIENT_EXPORT PatientCreatorWizard : public QWizard
 {
@@ -57,6 +58,7 @@ protected:
     void done(int r);
 
 private:
+    IdentityPage *m_Page;
     bool m_Saved;
 };
 
@@ -67,9 +69,12 @@ public:
     IdentityPage(QWidget *parent = 0);
     bool validatePage();
 
+    QString lastInsertedUuid() const {return m_uuid;}
+
 private:
     PatientModel *m_Model;
     IdentityWidget *m_Identity;
+    QString m_uuid;
 };
 
 

@@ -126,9 +126,9 @@ public:
         }
     }
 
-    void createTreeModel(const int treeItemReference)
+    void createTreeModel(const int treeItemReference, bool forceUpdate = false)
     {
-        if (m_ActualTreeModelColumn == treeItemReference)
+        if (!forceUpdate && (m_ActualTreeModelColumn == treeItemReference))
             return;
         m_ActualTreeModelColumn = treeItemReference;
         QFont bold;
@@ -221,7 +221,7 @@ void FormFilesSelectorWidget::setFormType(FormType type)
         return;
     d->m_Type = type;
     d->getDescriptions();
-    d->createTreeModel(d->m_ActualTreeModelColumn);
+    d->createTreeModel(d->m_ActualTreeModelColumn, true);
 }
 
 void FormFilesSelectorWidget::setSelectionType(SelectionType type)

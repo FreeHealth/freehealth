@@ -80,7 +80,7 @@ public:
             editUi->setupUi(q);
             editUi->genderCombo->addItems(genders());
             editUi->titleCombo->addItems(titles());
-            editUi->dob->setDisplayFormat(QLocale().dateFormat(QLocale::LongFormat));
+//            editUi->dob->setDisplayFormat(QLocale().dateFormat(QLocale::LongFormat));
             q->connect(editUi->photoButton, SIGNAL(clicked()), q, SLOT(photoButton_clicked()));
         }
     }

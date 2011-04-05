@@ -70,7 +70,7 @@ using namespace UserPlugin::Internal;
 static inline Core::ITheme *theme() {return Core::ICore::instance()->theme();}
 static inline Core::ISettings *settings() { return Core::ICore::instance()->settings(); }
 
-UserIdentifier::UserIdentifier(const QStringList &informations, QWidget *parent) :
+UserIdentifier::UserIdentifier(QWidget *parent) :
     QDialog(parent)
 {
     // initialization
@@ -86,25 +86,18 @@ UserIdentifier::UserIdentifier(const QStringList &informations, QWidget *parent)
         splash = splash.scaled(QSize(400,200),Qt::KeepAspectRatio);
     }
     m_ui->lblAppName->setPixmap(splash);
+    m_ui->lblAppName->setMinimumSize(splash.size() + QSize(10,10));
     m_NumberOfTries = 0;
     setWindowTitle(qApp->applicationName());
-    if (!parent)
-        Utils::centerWidget(this);
-    if (informations.count()) {
-        foreach(const QString &s, informations)
-            new QListWidgetItem(s , m_ui->informationsWidget);
-    } else {
-        m_ui->groupInformations->hide();
-    }
     if (Internal::UserBase::instance()->isNewlyCreated()) {
         m_ui->newlyMessage->show();
     } else {
         m_ui->newlyMessage->hide();
     }
-
-//    m_ui->lblAppName->setText(qApp->applicationName());
     m_ui->password->toogleEchoMode();
     m_ui->login->lineEdit()->setFocus();
+    adjustSize();
+    Utils::centerWidget(this);
 }
 
 void UserIdentifier::done(int result)

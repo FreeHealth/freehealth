@@ -89,14 +89,13 @@ void PrinterPlugin::extensionsInitialized()
     addObject(docPrinter);
 
     // Check system for existing printers
-//    if (QPrinterInfo::availablePrinters().count()) {
-    if (QPrinterInfo::availablePrinters().isEmpty()) {
-        Utils::Log::addError(this, "No printer installed in this system.", __FILE__, __LINE__);
-        Utils::warningMessageBox(tr("No printer"),
-                                 tr("No printer is configured in your system. The print preview and printing will not work."),
-                                 tr("You must configure at least on printer. Please refer to your system documentation. \n"),
-                                 qApp->applicationName());
-    }
+//    if (QPrinterInfo::availablePrinters().isEmpty()) {
+//        LOG_ERROR("No printer installed in this system.");
+//        Utils::warningMessageBox(tr("No printer"),
+//                                 tr("No printer is configured in your system. The print preview and printing will not work."),
+//                                 tr("You must configure at least on printer. Please refer to your system documentation. \n"),
+//                                 qApp->applicationName());
+//    }
 }
 
 

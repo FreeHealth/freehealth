@@ -46,6 +46,7 @@
 #include <coreplugin/constants_icons.h>
 #include <coreplugin/constants_menus.h>
 
+#include <utils/global.h>
 #include <translationutils/constanttranslations.h>
 
 #include <QToolButton>
@@ -152,12 +153,10 @@ private:
 
 /** \brief Create a PatientSelector with \e fields to show. \sa PatientSelector::FieldsToShow */
 PatientSelector::PatientSelector(QWidget *parent, const FieldsToShow fields) :
-        QWidget(parent), d(0)
+        QWidget(parent), d(new Internal::PatientSelectorPrivate(this))
 {
-    d = new Internal::PatientSelectorPrivate(this);
     d->ui->setupUi(this);
     d->ui->searchLine->setDelayedSignals(true);
-
     if (fields == None) {
         d->m_Fields = FieldsToShow(settings()->value(Constants::S_SELECTOR_FIELDSTOSHOW, Default).toInt());
     } else {
@@ -224,10 +223,20 @@ void PatientSelector::setPatientModel(PatientModel *m)
     d->m_Model = m;
     d->ui->tableView->setModel(m);
     setFieldsToShow(d->m_Fields);
-    d->ui->tableView->resizeColumnsToContents();
+
+    d->ui->tableView->horizontalHeader()->setStretchLastSection(false);
+    d->ui->tableView->horizontalHeader()->setResizeMode(Core::IPatient::BirthName, QHeaderView::Stretch);
+    d->ui->tableView->horizontalHeader()->setResizeMode(Core::IPatient::SecondName, QHeaderView::Stretch);
+    d->ui->tableView->horizontalHeader()->setResizeMode(Core::IPatient::Firstname, QHeaderView::Stretch);
+    d->ui->tableView->horizontalHeader()->setResizeMode(Core::IPatient::FullName, QHeaderView::ResizeToContents);
+    d->ui->tableView->horizontalHeader()->setResizeMode(Core::IPatient::IconizedGender, QHeaderView::ResizeToContents);
+    d->ui->tableView->horizontalHeader()->setResizeMode(Core::IPatient::Title, QHeaderView::ResizeToContents);
+    d->ui->tableView->horizontalHeader()->setResizeMode(Core::IPatient::DateOfBirth, QHeaderView::ResizeToContents);
+    d->ui->tableView->horizontalHeader()->setResizeMode(Core::IPatient::FullAddress, QHeaderView::Stretch);
+    d->ui->tableView->horizontalHeader()->setResizeMode(Core::IPatient::PractitionnerLkID, QHeaderView::ResizeToContents);
+
     d->ui->numberOfPatients->setText(QString::number(m->numberOfFilteredPatients()));
     d->ui->identity->setCurrentPatientModel(m);
-
     connect(m, SIGNAL(patientChanged(QModelIndex)), this, SLOT(setSelectedPatient(QModelIndex)));
 }
 
@@ -265,8 +274,8 @@ void PatientSelector::setFieldsToShow(const FieldsToShow fields)
         d->ui->tableView->showColumn(Core::IPatient::FullAddress);
     }
 
-    // debug
-    d->ui->tableView->showColumn(Core::IPatient::PractitionnerLkID);
+    if (Utils::isDebugCompilation())
+        d->ui->tableView->showColumn(Core::IPatient::PractitionnerLkID);
 }
 
 /** \brief Define the selected patient (use this if patient was selected from outside the selector). */

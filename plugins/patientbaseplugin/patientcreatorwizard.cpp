@@ -45,12 +45,14 @@
 using namespace Patients;
 
 static inline Core::ITheme *theme() { return Core::ICore::instance()->theme(); }
+static inline Core::IPatient *patient() { return Core::ICore::instance()->patient(); }
 
 
 PatientCreatorWizard::PatientCreatorWizard(QWidget *parent) :
         QWizard(parent)
 {
-    addPage(new IdentityPage(this));
+    m_Page = new IdentityPage(this);
+    addPage(m_Page);
     setWindowTitle(tr("New Patient"));
     QList<QWizard::WizardButton> layout;
     layout << QWizard::CancelButton << QWizard::Stretch << QWizard::BackButton
@@ -78,10 +80,14 @@ void PatientCreatorWizard::done(int r)
     } else if (r==QDialog::Accepted) {
         if (!validateCurrentPage())
             return;
-
+        Patients::PatientModel *m = Patients::PatientModel::activeModel();
+        if (m) {
+            QString uid = m_Page->lastInsertedUuid();
+            qWarning() << uid;
+            m->setFilter("", "", uid, Patients::PatientModel::FilterOnUuid);
+            m->setCurrentPatient(m->index(0,0));
+        }
         QDialog::done(r);
-        if (Patients::PatientModel::activeModel())
-            Patients::PatientModel::activeModel()->refreshModel();
     }
 }
 
@@ -92,9 +98,9 @@ IdentityPage::IdentityPage(QWidget *parent)
     setTitle(tr("Please enter the patient's identity."));
     m_Identity = new IdentityWidget(this, IdentityWidget::ReadWriteMode);
     m_Model = new PatientModel(this);
-    m_Model->setFilter("", "", "", PatientModel::FilterOnUuid);
+    m_Model->setFilter("", "", "__", PatientModel::FilterOnUuid);
     m_Model->insertRow(0);
-    QString uuid = m_Model->index(0, Core::IPatient::Uid).data().toString();
+    m_uuid = m_Model->index(0, Core::IPatient::Uid).data().toString();
 
     m_Identity->setCurrentPatientModel(m_Model);
     m_Identity->setCurrentIndex(m_Model->index(0,0));
@@ -112,9 +118,9 @@ bool IdentityPage::validatePage()
         return false;
     bool ok = true;
     if (m_Identity->submit()) {
-        Utils::Log::addMessage(this, "Patient correctly created");
+        LOG("Patient correctly created");
     } else {
-        Utils::Log::addMessage(this, "Unable to create patient. IdentityPage::validatePage()");
+        LOG_ERROR("Unable to create patient. IdentityPage::validatePage()");
         ok = false;
     }
     return ok;
