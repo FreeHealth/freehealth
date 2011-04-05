@@ -96,12 +96,9 @@ inline static void refreshPlugsFactories()
 inline static bool populateValues(Form::FormItem *item, const QDomElement &root)
 {
     QDomElement element = root.firstChildElement();
-
-    QString lang = root.attribute(Constants::ATTRIB_LANGUAGE,Trans::Constants::ALL_LANGUAGE);
     while (!element.isNull()) {
-
-//        qWarning() << "Values" << root.tagName() << element.tagName();
-
+        QString lang = element.attribute(Constants::ATTRIB_LANGUAGE, Trans::Constants::ALL_LANGUAGE);
+//        qWarning() << "Values" << root.tagName() << element.tagName() << lang;
         int id = element.attribute(Constants::ATTRIB_ID, 0).toInt();
         QString val = element.text();
         int type = ::m_ValuesTypes.value(element.tagName(), -1);
