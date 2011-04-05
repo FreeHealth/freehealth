@@ -134,6 +134,7 @@ XmlFormIO::XmlFormIO(const QString &absFileName, QObject *parent) :
         IFormIO(absFileName, parent), m_AbsFileName(absFileName), m_Mute(false)
 {
     setObjectName("XmlFormIO");
+    m_DomDocFormCache.setMaxCost(20);
 
     ::m_ScriptsTypes.clear();
     ::m_ScriptsTypes.insert(Constants::TAG_SCRIPT_ONLOAD, Form::FormItemScripts::Script_OnLoad);
@@ -223,14 +224,14 @@ bool XmlFormIO::checkFormFileContent(const QString &absFileName) const
     // load document
     QString errorMsg;
     int errorLine, errorColumn;
-    QDomDocument doc;
-    if (!doc.setContent(contents, &errorMsg, &errorLine, &errorColumn)) {
+    QDomDocument *doc = new QDomDocument;
+    if (!doc->setContent(contents, &errorMsg, &errorLine, &errorColumn)) {
         warnXmlReadError(m_Mute, absFileName, errorMsg, errorLine, errorColumn);
         ok = false;
     }
 
     // Check doctype name
-    if (doc.doctype().name().compare(Constants::DOCTYPE_NAME,Qt::CaseInsensitive)!=0) {
+    if (doc->doctype().name().compare(Constants::DOCTYPE_NAME,Qt::CaseInsensitive)!=0) {
         const QString &error = tr("This file is not a FreeMedForms XML file. Document type name mismatch.");
         m_Error << error;
         warnXmlReadError(m_Mute, absFileName, error);
@@ -247,15 +248,16 @@ bool XmlFormIO::checkFormFileContent(const QString &absFileName) const
 //        int end = contents.indexOf(QString("</%1>").arg(Constants::TAG_SPEC_VERSION));
 //        QString version = contents.mid(beg, end-beg).simplified();
 //    }
+    if (ok)
+        m_DomDocFormCache.insert(absFileName, doc);
     return ok;
 }
 
 bool XmlFormIO::canReadForms(const QString &absFileName) const
 {
-//    static QHash<QString, bool> results;
-//    if (results.keys().contains(absFileName)) {
-//        return results.value(absFileName);
-//    }
+    if (m_ReadableForms.keys().contains(absFileName)) {
+        return m_ReadableForms.value(absFileName);
+    }
     m_Error.clear();
     m_AbsFileName.clear();
     QString fileName = absFileName;
@@ -263,9 +265,9 @@ bool XmlFormIO::canReadForms(const QString &absFileName) const
     fileName.replace(Core::Constants::TAG_APPLICATION_COMPLETEFORMS_PATH, settings()->path(Core::ISettings::CompleteFormsPath));
     fileName.replace(Core::Constants::TAG_APPLICATION_SUBFORMS_PATH, settings()->path(Core::ISettings::SubFormsPath));
     fileName.replace(Core::Constants::TAG_APPLICATION_RESOURCES_PATH, settings()->path(Core::ISettings::BundleResourcesPath));
-//    if (results.keys().contains(fileName)) {
-//        return results.value(fileName);
-//    }
+    if (m_ReadableForms.keys().contains(fileName)) {
+        return m_ReadableForms.value(fileName);
+    }
     // Correct filename ?
     if (QFileInfo(fileName).isDir()) {
         // try to read central.xml
@@ -278,19 +280,19 @@ bool XmlFormIO::canReadForms(const QString &absFileName) const
     if (QFileInfo(fileName).suffix().toLower()=="xml") {
         if (checkFormFileContent(fileName)) {
             m_AbsFileName = fileName;
-//            results.insert(fileName, true);
-//            results.insert(absFileName, true);
+            m_ReadableForms.insert(fileName, true);
+            m_ReadableForms.insert(absFileName, true);
             return true;
         } else {
-//            results.insert(fileName, false);
-//            results.insert(absFileName, false);
+            m_ReadableForms.insert(fileName, false);
+            m_ReadableForms.insert(absFileName, false);
             return false;
         }
     } else {
         m_Error.append(tkTr(Trans::Constants::FILE_1_ISNOT_READABLE).arg(fileName));
     }
-//    results.insert(fileName, false);
-//    results.insert(absFileName, false);
+    m_ReadableForms.insert(fileName, false);
+    m_ReadableForms.insert(absFileName, false);
     return false;
 }
 
@@ -402,10 +404,13 @@ QList<Form::FormIODescription *> XmlFormIO::getFormFileDescriptions(const Form::
 
 bool XmlFormIO::loadForm(const QString &file, Form::FormMain *rootForm)
 {
-    // Check root element --> must be a form type
-    QDomDocument doc;
-    doc.setContent(Utils::readTextFile(file));
-    QDomElement root = doc.firstChildElement(Constants::TAG_MAINXMLTAG);
+    QDomDocument *doc = 0;
+    if (!m_DomDocFormCache.keys().contains(file)) {
+        if (!canReadForms(file))
+            return false;
+    }
+    doc = m_DomDocFormCache[file];
+    QDomElement root = doc->firstChildElement(Constants::TAG_MAINXMLTAG);
     QDomElement newForm = root.firstChildElement(Constants::TAG_NEW_FORM);
     QDomElement addFile = root.firstChildElement(Constants::TAG_ADDFILE);
 

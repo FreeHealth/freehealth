@@ -31,12 +31,13 @@
 
 #include <QDomNode>
 #include <QObject>
+#include <QCache>
 
 /**
  * \file xmlformio.h
  * \author Eric MAEKER <eric.maeker@free.fr>
- * \version 0.4.0
- * \date 08 June 2010
+ * \version 0.5.0
+ * \date 04 Apr 2011
 */
 
 namespace Form {
@@ -96,6 +97,10 @@ private:
      mutable QDomDocument m_MainDoc;
      bool m_Mute;
      Form::FormMain *m_ActualForm;
+
+     // Caching some data for speed improvements
+     mutable QHash<QString, bool> m_ReadableForms;
+     mutable QCache<QString, QDomDocument> m_DomDocFormCache;
 };
 
 }  // End XmlForms
