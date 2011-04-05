@@ -128,7 +128,7 @@ INSTALLS += plugs_specs
 # Install translations
 !isEmpty(INSTALL_TRANSLATIONS_PATH):!isEmpty(SOURCES_TRANSLATIONS){
 i18n.path = $${INSTALL_TRANSLATIONS_PATH}
-i18n.files = $${SOURCES_TRANSLATIONS}/*.qm
+i18n.files = $${SOURCES_TRANSLATIONS_PATH}/*.qm
 qti18n.path = $${INSTALL_TRANSLATIONS_PATH}
 qti18n.files = $$[QT_INSTALL_TRANSLATIONS]/translations/*fr.qm \
                $$[QT_INSTALL_TRANSLATIONS]/translations/*de.qm \

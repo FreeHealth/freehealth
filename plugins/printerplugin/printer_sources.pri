@@ -26,8 +26,8 @@ FORMS = $${PWD}/printerpreviewer_p.ui \
     $${PWD}/printdialog.ui
 
 # Translators
-TRANSLATIONS += $${SOURCES_TRANSLATIONS}/printerplugin_fr.ts \
-    $${SOURCES_TRANSLATIONS}/printerplugin_de.ts \
-    $${SOURCES_TRANSLATIONS}/printerplugin_es.ts
+TRANSLATIONS += $${SOURCES_TRANSLATIONS_PATH}/printerplugin_fr.ts \
+    $${SOURCES_TRANSLATIONS_PATH}/printerplugin_de.ts \
+    $${SOURCES_TRANSLATIONS_PATH}/printerplugin_es.ts
 
 OTHER_FILES = Printer.pluginspec

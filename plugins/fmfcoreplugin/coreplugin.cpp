@@ -41,7 +41,8 @@
 
 using namespace Core::Internal;
 
-CorePlugin::CorePlugin() : m_CoreImpl(0), prefPage(0)
+CorePlugin::CorePlugin() :
+        m_CoreImpl(0), prefPage(0)
 {
     if (Utils::Log::warnPluginsCreation())
         qWarning() << "creating CorePlugin";

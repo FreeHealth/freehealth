@@ -44,9 +44,9 @@ SOURCES = formmanagerplugin.cpp \
 
 OTHER_FILES = FormManager.pluginspec
 
-TRANSLATIONS += $${SOURCES_TRANSLATIONS}/formmanagerplugin_fr.ts \
-    $${SOURCES_TRANSLATIONS}/formmanagerplugin_de.ts \
-    $${SOURCES_TRANSLATIONS}/formmanagerplugin_es.ts
+TRANSLATIONS += $${SOURCES_TRANSLATIONS_PATH}/formmanagerplugin_fr.ts \
+    $${SOURCES_TRANSLATIONS_PATH}/formmanagerplugin_de.ts \
+    $${SOURCES_TRANSLATIONS_PATH}/formmanagerplugin_es.ts
 
 FORMS += formfilesselectorwidget.ui \
     formeditordialog.ui \

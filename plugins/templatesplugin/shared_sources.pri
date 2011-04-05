@@ -34,6 +34,6 @@ FORMS += $${PWD}/templatesview.ui \
     $${PWD}/templatescreationdialog.ui
 
 # Translators
-TRANSLATIONS += $${SOURCES_TRANSLATIONS}/templatesplugin_fr.ts \
-                $${SOURCES_TRANSLATIONS}/templatesplugin_de.ts \
-                $${SOURCES_TRANSLATIONS}/templatesplugin_es.ts
+TRANSLATIONS += $${SOURCES_TRANSLATIONS_PATH}/templatesplugin_fr.ts \
+                $${SOURCES_TRANSLATIONS_PATH}/templatesplugin_de.ts \
+                $${SOURCES_TRANSLATIONS_PATH}/templatesplugin_es.ts

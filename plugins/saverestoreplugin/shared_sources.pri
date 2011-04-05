@@ -10,7 +10,7 @@ SOURCES = $${PWD}/saverestoreplugin.cpp $${PWD}/saverestorepage.cpp
 FORMS = $${PWD}/saverestorepage.ui
 
 # Translators
-TRANSLATIONS += $${SOURCES_TRANSLATIONS}/saverestoreplugin_fr.ts \
-                $${SOURCES_TRANSLATIONS}/saverestoreplugin_de.ts \
-                $${SOURCES_TRANSLATIONS}/saverestoreplugin_es.ts
+TRANSLATIONS += $${SOURCES_TRANSLATIONS_PATH}/saverestoreplugin_fr.ts \
+                $${SOURCES_TRANSLATIONS_PATH}/saverestoreplugin_de.ts \
+                $${SOURCES_TRANSLATIONS_PATH}/saverestoreplugin_es.ts
 

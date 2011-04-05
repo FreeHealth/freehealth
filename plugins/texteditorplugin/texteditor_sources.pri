@@ -24,6 +24,6 @@ FORMS += $${PWD}/tabledialog.ui \
     $${PWD}/tablepropertieswidget.ui \
     $${PWD}/tablepropertiesdialog.ui
 
-TRANSLATIONS += $${SOURCES_TRANSLATIONS}/texteditorplugin_fr.ts \
-    $${SOURCES_TRANSLATIONS}/texteditorplugin_de.ts \
-    $${SOURCES_TRANSLATIONS}/texteditorplugin_es.ts
+TRANSLATIONS += $${SOURCES_TRANSLATIONS_PATH}/texteditorplugin_fr.ts \
+    $${SOURCES_TRANSLATIONS_PATH}/texteditorplugin_de.ts \
+    $${SOURCES_TRANSLATIONS_PATH}/texteditorplugin_es.ts

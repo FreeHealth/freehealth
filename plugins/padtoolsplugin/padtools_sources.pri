@@ -36,6 +36,6 @@ SOURCES += \
 #    $${PWD}/tablepropertieswidget.ui \
 #    $${PWD}/tablepropertiesdialog.ui
 
-TRANSLATIONS += $${SOURCES_TRANSLATIONS}/padtoolsplugin_fr.ts \
-                $${SOURCES_TRANSLATIONS}/padtoolsplugin_de.ts \
-                $${SOURCES_TRANSLATIONS}/padtoolsplugin_es.ts
+TRANSLATIONS += $${SOURCES_TRANSLATIONS_PATH}/padtoolsplugin_fr.ts \
+                $${SOURCES_TRANSLATIONS_PATH}/padtoolsplugin_de.ts \
+                $${SOURCES_TRANSLATIONS_PATH}/padtoolsplugin_es.ts

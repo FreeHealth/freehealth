@@ -50,9 +50,9 @@ SOURCES = pmhplugin.cpp \
 
 OTHER_FILES = PMH.pluginspec
 
-TRANSLATIONS += $${SOURCES_TRANSLATIONS}/pmhplugin_fr.ts \
-                $${SOURCES_TRANSLATIONS}/pmhplugin_de.ts \
-                $${SOURCES_TRANSLATIONS}/pmhplugin_es.ts
+TRANSLATIONS += $${SOURCES_TRANSLATIONS_PATH}/pmhplugin_fr.ts \
+                $${SOURCES_TRANSLATIONS_PATH}/pmhplugin_de.ts \
+                $${SOURCES_TRANSLATIONS_PATH}/pmhplugin_es.ts
 
 FORMS += \
     pmhviewer.ui \

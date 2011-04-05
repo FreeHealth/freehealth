@@ -20,6 +20,6 @@ SOURCES += constanttranslations.cpp \
     googletranslator.cpp
 
 # translators
-TRANSLATIONS += $${SOURCES_TRANSLATIONS}/translationutils_fr.ts \
-                $${SOURCES_TRANSLATIONS}/translationutils_de.ts \
-                $${SOURCES_TRANSLATIONS}/translationutils_es.ts
+TRANSLATIONS += $${SOURCES_TRANSLATIONS_PATH}/translationutils_fr.ts \
+                $${SOURCES_TRANSLATIONS_PATH}/translationutils_de.ts \
+                $${SOURCES_TRANSLATIONS_PATH}/translationutils_es.ts

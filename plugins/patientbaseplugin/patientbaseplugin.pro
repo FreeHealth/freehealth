@@ -40,6 +40,6 @@ FORMS += identitywidget.ui \
     patientbar.ui \
     identityviewer.ui
 OTHER_FILES = PatientBase.pluginspec
-TRANSLATIONS += $${SOURCES_TRANSLATIONS}/patientbaseplugin_fr.ts \
-    $${SOURCES_TRANSLATIONS}/patientbaseplugin_de.ts \
-    $${SOURCES_TRANSLATIONS}/patientbaseplugin_es.ts
+TRANSLATIONS += $${SOURCES_TRANSLATIONS_PATH}/patientbaseplugin_fr.ts \
+    $${SOURCES_TRANSLATIONS_PATH}/patientbaseplugin_de.ts \
+    $${SOURCES_TRANSLATIONS_PATH}/patientbaseplugin_es.ts

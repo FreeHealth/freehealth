@@ -45,8 +45,8 @@ FORMS += $${PWD}/icdviewer.ui \
     $${PWD}/icdcentralwidget.ui
 
 
-TRANSLATIONS += $${SOURCES_TRANSLATIONS}/icdplugin_fr.ts \
-                $${SOURCES_TRANSLATIONS}/icdplugin_de.ts \
-                $${SOURCES_TRANSLATIONS}/icdplugin_es.ts
+TRANSLATIONS += $${SOURCES_TRANSLATIONS_PATH}/icdplugin_fr.ts \
+                $${SOURCES_TRANSLATIONS_PATH}/icdplugin_de.ts \
+                $${SOURCES_TRANSLATIONS_PATH}/icdplugin_es.ts
 
 OTHER_FILES += $${SOURCES_RESOURCES_SQL}/icd10.sql

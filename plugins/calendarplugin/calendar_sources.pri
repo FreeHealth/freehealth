@@ -32,6 +32,6 @@ SOURCES += \
     $${PWD}/calendar_item.cpp \
     $${PWD}/basic_calendar_model.cpp
 
-TRANSLATIONS += $${SOURCES_TRANSLATIONS}/calendarplugin_fr.ts \
-                $${SOURCES_TRANSLATIONS}/calendarplugin_de.ts \
-                $${SOURCES_TRANSLATIONS}/calendarplugin_es.ts
+TRANSLATIONS += $${SOURCES_TRANSLATIONS_PATH}/calendarplugin_fr.ts \
+                $${SOURCES_TRANSLATIONS_PATH}/calendarplugin_de.ts \
+                $${SOURCES_TRANSLATIONS_PATH}/calendarplugin_es.ts

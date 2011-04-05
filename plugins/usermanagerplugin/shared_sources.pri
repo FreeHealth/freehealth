@@ -48,6 +48,6 @@ FORMS += $${PWD}/widgets/userviewer.ui \
     $${PWD}/currentuserpreferenceswidget.ui
 
 # translators
-TRANSLATIONS += $${SOURCES_TRANSLATIONS}/usermanagerplugin_fr.ts \
-                $${SOURCES_TRANSLATIONS}/usermanagerplugin_de.ts \
-                $${SOURCES_TRANSLATIONS}/usermanagerplugin_es.ts
+TRANSLATIONS += $${SOURCES_TRANSLATIONS_PATH}/usermanagerplugin_fr.ts \
+                $${SOURCES_TRANSLATIONS_PATH}/usermanagerplugin_de.ts \
+                $${SOURCES_TRANSLATIONS_PATH}/usermanagerplugin_es.ts

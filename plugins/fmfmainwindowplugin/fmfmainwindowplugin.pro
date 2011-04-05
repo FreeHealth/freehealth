@@ -25,7 +25,9 @@ SOURCES = mainwindowplugin.cpp \
     #documentprinter.cpp
 
 FORMS = virtualbasepage.ui
-TRANSLATIONS += $${SOURCES_TRANSLATIONS}/fmfmainwindowplugin_fr.ts \
-    $${SOURCES_TRANSLATIONS}/fmfmainwindowplugin_de.ts \
-    $${SOURCES_TRANSLATIONS}/fmfmainwindowplugin_es.ts
+
+TRANSLATIONS += $${SOURCES_TRANSLATIONS_PATH}/fmfmainwindowplugin_fr.ts \
+    $${SOURCES_TRANSLATIONS_PATH}/fmfmainwindowplugin_de.ts \
+    $${SOURCES_TRANSLATIONS_PATH}/fmfmainwindowplugin_es.ts
+
 OTHER_FILES = MainWindow.pluginspec

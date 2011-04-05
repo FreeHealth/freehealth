@@ -21,7 +21,7 @@ HEADERS += coreplugin.h \
 SOURCES += coreplugin.cpp \
     coreimpl.cpp \
     appaboutpage.cpp
-TRANSLATIONS += $${SOURCES_TRANSLATIONS}/fmfcoreplugin_fr.ts \
-    $${SOURCES_TRANSLATIONS}/fmfcoreplugin_de.ts \
-    $${SOURCES_TRANSLATIONS}/fmfcoreplugin_es.ts
+TRANSLATIONS += $${SOURCES_TRANSLATIONS_PATH}/fmfcoreplugin_fr.ts \
+    $${SOURCES_TRANSLATIONS_PATH}/fmfcoreplugin_de.ts \
+    $${SOURCES_TRANSLATIONS_PATH}/fmfcoreplugin_es.ts
 OTHER_FILES = Core.pluginspec

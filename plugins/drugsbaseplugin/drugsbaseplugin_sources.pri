@@ -65,6 +65,6 @@ SOURCES += $${PWD}/drugsbaseplugin.cpp \
 
 
 # Translators
-TRANSLATIONS += $${SOURCES_TRANSLATIONS}/drugsbaseplugin_fr.ts \
-    $${SOURCES_TRANSLATIONS}/drugsbaseplugin_de.ts \
-    $${SOURCES_TRANSLATIONS}/drugsbaseplugin_es.ts
+TRANSLATIONS += $${SOURCES_TRANSLATIONS_PATH}/drugsbaseplugin_fr.ts \
+    $${SOURCES_TRANSLATIONS_PATH}/drugsbaseplugin_de.ts \
+    $${SOURCES_TRANSLATIONS_PATH}/drugsbaseplugin_es.ts
