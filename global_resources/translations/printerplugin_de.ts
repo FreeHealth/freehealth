@@ -102,12 +102,12 @@
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../../plugins/printerplugin/printdialog.cpp" line="250"/>
+        <location filename="../../plugins/printerplugin/printdialog.cpp" line="252"/>
         <source>Save File</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../../plugins/printerplugin/printdialog.cpp" line="252"/>
+        <location filename="../../plugins/printerplugin/printdialog.cpp" line="254"/>
         <source>PDF file (*.pdf)</source>
         <translation type="unfinished"></translation>
     </message>
@@ -298,25 +298,6 @@ Dies kann eine starke CPU Belastung sein.</translation>
     <message>
         <location filename="../../plugins/printerplugin/printer.cpp" line="821"/>
         <source>Print Document</source>
-        <translation type="unfinished"></translation>
-    </message>
-</context>
-<context>
-    <name>Print::PrinterPlugin</name>
-    <message>
-        <location filename="../../plugins/printerplugin/printerplugin.cpp" line="94"/>
-        <source>No printer</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <location filename="../../plugins/printerplugin/printerplugin.cpp" line="95"/>
-        <source>No printer is configured in your system. The print preview and printing will not work.</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <location filename="../../plugins/printerplugin/printerplugin.cpp" line="96"/>
-        <source>You must configure at least on printer. Please refer to your system documentation. 
-</source>
         <translation type="unfinished"></translation>
     </message>
 </context>

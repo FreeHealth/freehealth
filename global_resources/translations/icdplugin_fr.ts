@@ -149,6 +149,13 @@ Please contact the dev team.</source>
     </message>
 </context>
 <context>
+    <name>ICD::IcdPlugin</name>
+    <message>
+        <source>Initializing ICD10 plugin...</source>
+        <translation type="unfinished"></translation>
+    </message>
+</context>
+<context>
     <name>ICD::IcdViewer</name>
     <message>
         <source>Form</source>

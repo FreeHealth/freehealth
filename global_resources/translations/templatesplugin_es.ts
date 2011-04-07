@@ -171,24 +171,24 @@
 <context>
     <name>Templates::TemplateBase</name>
     <message>
-        <location filename="../../plugins/templatesplugin/templatebase.cpp" line="353"/>
+        <location filename="../../plugins/templatesplugin/templatebase.cpp" line="355"/>
         <source>Unable to connect the Templates host.</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../../plugins/templatesplugin/templatebase.cpp" line="353"/>
-        <location filename="../../plugins/templatesplugin/templatebase.cpp" line="359"/>
-        <location filename="../../plugins/templatesplugin/templatebase.cpp" line="363"/>
+        <location filename="../../plugins/templatesplugin/templatebase.cpp" line="355"/>
+        <location filename="../../plugins/templatesplugin/templatebase.cpp" line="361"/>
+        <location filename="../../plugins/templatesplugin/templatebase.cpp" line="365"/>
         <source>Please contact dev team.</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../../plugins/templatesplugin/templatebase.cpp" line="359"/>
+        <location filename="../../plugins/templatesplugin/templatebase.cpp" line="361"/>
         <source>Unable to create the Templates database.</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../../plugins/templatesplugin/templatebase.cpp" line="363"/>
+        <location filename="../../plugins/templatesplugin/templatebase.cpp" line="365"/>
         <source>Unable to connect the Templates database.</source>
         <translation type="unfinished"></translation>
     </message>
@@ -196,7 +196,7 @@
 <context>
     <name>Templates::TemplatesModel</name>
     <message>
-        <location filename="../../plugins/templatesplugin/templatesmodel.cpp" line="1021"/>
+        <location filename="../../plugins/templatesplugin/templatesmodel.cpp" line="1025"/>
         <source>New</source>
         <translation type="unfinished"></translation>
     </message>

@@ -102,12 +102,12 @@
         <translation>Crée une copie PDF dans le répertoire cache</translation>
     </message>
     <message>
-        <location filename="../../plugins/printerplugin/printdialog.cpp" line="250"/>
+        <location filename="../../plugins/printerplugin/printdialog.cpp" line="252"/>
         <source>Save File</source>
         <translation>Sauvegarder le fichier</translation>
     </message>
     <message>
-        <location filename="../../plugins/printerplugin/printdialog.cpp" line="252"/>
+        <location filename="../../plugins/printerplugin/printdialog.cpp" line="254"/>
         <source>PDF file (*.pdf)</source>
         <translation>Fichier PDF (*.pdf)</translation>
     </message>
@@ -304,26 +304,6 @@ Référez-vous à la documentation de votre système d&apos;exploitation.</trans
         <location filename="../../plugins/printerplugin/printer.cpp" line="821"/>
         <source>Print Document</source>
         <translation>Impression de document</translation>
-    </message>
-</context>
-<context>
-    <name>Print::PrinterPlugin</name>
-    <message>
-        <location filename="../../plugins/printerplugin/printerplugin.cpp" line="94"/>
-        <source>No printer</source>
-        <translation>Pas d&apos;imprimante</translation>
-    </message>
-    <message>
-        <location filename="../../plugins/printerplugin/printerplugin.cpp" line="95"/>
-        <source>No printer is configured in your system. The print preview and printing will not work.</source>
-        <translation>Aucune imprimante configurée dnas votre système. La prévisualisation de l&apos;impression et l&apos;impression ne fonctionneront pas.</translation>
-    </message>
-    <message>
-        <location filename="../../plugins/printerplugin/printerplugin.cpp" line="96"/>
-        <source>You must configure at least on printer. Please refer to your system documentation. 
-</source>
-        <translation>Vous devez configurer au moins un imprimante. Référez-vous à la documentation de votre système d&apos;exploitation.
-</translation>
     </message>
 </context>
 <context>
