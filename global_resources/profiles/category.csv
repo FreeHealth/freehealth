@@ -1,0 +1,10 @@
+[mime=PMHx]
+"xx:Personal PMHx";"fr:ATCD Personnels";"i:personal.png"
+  "xx:Medical";"fr:Médicaux"
+  "xx:Surgical";"fr:Chirurgicaux"
+  "xx:Obstetrical";"fr:Obstétricaux"
+"xx:Family PMHx";"fr:ATCD Familiaux";"i:chromosome.png"
+  "xx:Medical";"fr:Médicaux"
+  "xx:Surgical";"fr:Chirurgicaux"
+  "xx:Obstetrical";"fr:Obstétricaux"
+[mime=Templates]
