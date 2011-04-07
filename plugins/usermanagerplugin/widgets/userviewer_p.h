@@ -66,7 +66,6 @@ public:
 
 public Q_SLOTS:
     void on_modelReseted();
-    void on_languageCombo_activated( int );
     void on_but_changePassword_clicked();
     void on_but_viewHistory_clicked();
 

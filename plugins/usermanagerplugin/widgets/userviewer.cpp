@@ -70,6 +70,7 @@ UserViewer::UserViewer(QWidget *parent)
     setObjectName("UserViewer");
     d = new UserViewerPrivate(this);
     d->initialize();
+    d->languageCombo->setDisplayMode(Views::LanguageComboBox::AvailableTranslations);
     if (!parent)
         Utils::centerWidget(this);
 }
@@ -136,7 +137,6 @@ void UserViewerPrivate::initialize()
     // populate combos
     titleCombo->addItems(titles());
     genderCombo->addItems(genders());
-    languageCombo->addItems(Core::Translators::availableLocales());
     // QListView need to be managed by hand
     QStringListModel *modelspe = new QStringListModel(this);
     specialtyListView->setModel(modelspe);
@@ -150,7 +150,6 @@ void UserViewerPrivate::initialize()
     prepareMapper();
 
     // make connections
-    connect(languageCombo, SIGNAL(activated(int)), this, SLOT(on_languageCombo_activated(int)));
     connect(but_changePassword, SIGNAL(clicked()), this, SLOT(on_but_changePassword_clicked()));
     connect(but_viewHistory, SIGNAL(clicked()), this, SLOT(on_but_viewHistory_clicked()));
 
@@ -174,7 +173,7 @@ void UserViewerPrivate::prepareMapper()
     m_Mapper->addMapping(secNameLineEdit, Core::IUser::SecondName);
     m_Mapper->addMapping(firstnameLineEdit, Core::IUser::Firstname);
     m_Mapper->addMapping(lastLoginDateTimeEdit, Core::IUser::LastLogin);
-    m_Mapper->addMapping(languageCombo, Core::IUser::LanguageIndex, "currentIndex");
+    m_Mapper->addMapping(languageCombo, Core::IUser::LocaleCodedLanguage, "currentLanguage");
     m_Mapper->addMapping(adressTextEdit, Core::IUser::Adress, "plainText");
     m_Mapper->addMapping(countryLineEdit, Core::IUser::Country);
     m_Mapper->addMapping(zipcodeLineEdit, Core::IUser::Zipcode);
@@ -249,13 +248,6 @@ void UserViewerPrivate::checkUserRights()
         c->setEnabled(m_CanModify);
     foreach(QPushButton *c, findChildren<QPushButton *>())
         c->setEnabled(m_CanModify);
-}
-
-/** \brief Lang change requested by user from the ui */
-void UserViewerPrivate::on_languageCombo_activated(int)
-{
-    Core::Translators::instance()->changeLanguage(languageCombo->currentText());
-    retranslateUi(m_Parent);
 }
 
 void UserViewerPrivate::on_but_changePassword_clicked()

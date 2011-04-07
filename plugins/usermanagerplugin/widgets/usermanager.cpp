@@ -73,6 +73,8 @@
 using namespace UserPlugin::Internal;
 using namespace UserPlugin;
 
+static inline  Core::ContextManager *contextManager() {return  Core::ICore::instance()->contextManager();}
+
 namespace UserPlugin {
 namespace Internal {
 
@@ -120,7 +122,7 @@ UserManager::UserManager(QWidget * parent)
 bool UserManager::initialize()
 {
     d->m_Context = new UserManagerContext(this);
-    Core::ICore::instance()->contextManager()->addContextObject(d->m_Context);
+    contextManager()->addContextObject(d->m_Context);
     d->initialize();
     return true;
 }
@@ -154,7 +156,7 @@ UserManager::~UserManager()
 {
     if (Utils::isDebugCompilation())
         qWarning() << "~UserManager";
-    Core::ICore::instance()->contextManager()->removeContextObject(d->m_Context);
+    contextManager()->removeContextObject(d->m_Context);
     if (d) {
         delete d;
         d = 0;
@@ -226,9 +228,9 @@ bool UserManagerPrivate::initialize()
 
     analyseCurrentUserRights();
 
-    //    userTableView->hide();
     saveAct->setShortcut(QKeySequence::Save);
     createNewUserAct->setShortcut(QKeySequence::New);
+
 
     // connect slots
     connect(saveAct, SIGNAL(triggered()), this, SLOT(on_saveAct_triggered()));
@@ -401,6 +403,7 @@ void UserManagerPrivate::on_userTableView_activated(const QModelIndex & index)
 void  UserManagerPrivate::selectUserTableView(int row)
 {
     userTableView->selectRow(row);
+    userViewer->changeUserTo(row);
 }
 
 /** \brief Assume retranslation of ui. */

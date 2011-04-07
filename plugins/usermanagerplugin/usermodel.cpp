@@ -520,6 +520,7 @@ bool UserModel::setData(const QModelIndex &item, const QVariant &value, int role
                     user->setLanguage(Core::Translators::availableLocales().at(value.toInt()));
                 break;
             }
+        case Core::IUser::LocaleCodedLanguage: user->setLanguage(QLocale(QLocale::Language(value.toInt())).name().left(2)); break;
         case Core::IUser::Adress :  user->setAdress(value); break;
         case Core::IUser::Zipcode :  user->setZipcode(value); break;
         case Core::IUser::City :  user->setCity(value); break;
@@ -664,6 +665,7 @@ QVariant UserModel::data(const QModelIndex &item, int role) const
         case Core::IUser::Mail : toReturn = user->mail(); break;
         case Core::IUser::Language : toReturn = user->language(); break;
         case Core::IUser::LanguageIndex : toReturn = Core::Translators::availableLocales().indexOf(user->language()); break;
+        case Core::IUser::LocaleCodedLanguage: toReturn = QLocale(user->language()).language(); break;
         case Core::IUser::Adress : toReturn = user->adress(); break;
         case Core::IUser::Zipcode : toReturn = user->zipcode(); break;
         case Core::IUser::City : toReturn = user->city(); break;

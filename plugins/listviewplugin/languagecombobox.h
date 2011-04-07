@@ -42,6 +42,7 @@ class LanguageComboBoxPrivate;
 class LISTVIEW_EXPORT LanguageComboBox : public QComboBox
 {
     Q_OBJECT
+    Q_PROPERTY(QLocale::Language currentLanguage READ currentLanguage WRITE setCurrentLanguage NOTIFY currentLanguageChanged)
 
 public:
     explicit LanguageComboBox(QWidget* parent = 0);
@@ -57,7 +58,7 @@ public:
     QString currentLanguageName() const;
 
 public Q_SLOTS:
-    void setCurrentLanguage(const QString &languageIsoCode);
+    void setCurrentIsoLanguage(const QString &languageIsoCode);
     void setCurrentLanguage(QLocale::Language lang);
     void setDisplayMode(DisplayMode mode);
 

@@ -111,6 +111,7 @@ static inline bool identifyUser()
             pass = ident.cryptedPassword();
             settings()->setValue(Core::Constants::S_LASTLOGIN, log);
             settings()->setValue(Core::Constants::S_LASTPASSWORD, pass);
+            ask = false;
         }
     }
     return true;
@@ -127,6 +128,11 @@ UserManagerPlugin::UserManagerPlugin() :
 UserManagerPlugin::~UserManagerPlugin()
 {
     qWarning() << "UserManagerPlugin::~UserManagerPlugin()";
+    if (m_UserManager) {
+        m_UserManager->close();
+        delete m_UserManager;
+        m_UserManager = 0;
+    }
 }
 
 bool UserManagerPlugin::initialize(const QStringList &arguments, QString *errorString)

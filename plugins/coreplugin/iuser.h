@@ -66,6 +66,7 @@ public:
         LanguageIndex,  /*!< \brief Language index from Core::Translators::availableLanguages() */
 
         // ORDER CAN CHANGE
+        LocaleCodedLanguage,
         PersonalLinkId,
         FullName,
         GenderIndex, TitleIndex, Gender, Title,

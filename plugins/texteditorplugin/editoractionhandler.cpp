@@ -533,17 +533,45 @@ void EditorActionHandler::fileOpen()
 void EditorActionHandler::saveAs()
 { if (m_CurrentEditor) m_CurrentEditor->saveAs(); }
 
-    void EditorActionHandler::copy()
-{ if (m_CurrentEditor) m_CurrentEditor->textEdit()->copy(); }
-    void EditorActionHandler::cut()
-{ if (m_CurrentEditor) m_CurrentEditor->textEdit()->cut(); }
-    void EditorActionHandler::paste()
-{ if (m_CurrentEditor) m_CurrentEditor->textEdit()->paste(); }
-    void EditorActionHandler::undo()
-{ if (m_CurrentEditor) m_CurrentEditor->textEdit()->undo(); }
+void EditorActionHandler::copy()
+{
+    if (m_CurrentEditor) {
+        m_CurrentEditor->textEdit()->copy();
+        m_CurrentEditor->textEdit()->setFocus();
+    }
+}
 
-    void EditorActionHandler::redo()
-{ if (m_CurrentEditor) m_CurrentEditor->textEdit()->redo(); }
+void EditorActionHandler::cut()
+{
+    if (m_CurrentEditor) {
+        m_CurrentEditor->textEdit()->cut();
+        m_CurrentEditor->textEdit()->setFocus();
+    }
+}
+
+void EditorActionHandler::paste()
+{
+    if (m_CurrentEditor) {
+        m_CurrentEditor->textEdit()->paste();
+        m_CurrentEditor->textEdit()->setFocus();
+    }
+}
+
+void EditorActionHandler::undo()
+{
+    if (m_CurrentEditor) {
+        m_CurrentEditor->textEdit()->undo();
+        m_CurrentEditor->textEdit()->setFocus();
+    }
+}
+
+void EditorActionHandler::redo()
+{
+    if (m_CurrentEditor) {
+        m_CurrentEditor->textEdit()->redo();
+        m_CurrentEditor->textEdit()->setFocus();
+    }
+}
 
 
 void EditorActionHandler::textBold()
@@ -552,6 +580,7 @@ void EditorActionHandler::textBold()
         return;
     QAction *a = qobject_cast<QAction*>(sender());
     m_CurrentEditor->textBold(a->isChecked());
+    m_CurrentEditor->textEdit()->setFocus();
 }
 
 void EditorActionHandler::textUnderline()
@@ -560,6 +589,7 @@ void EditorActionHandler::textUnderline()
         return;
     QAction *a = qobject_cast<QAction*>(sender());
     m_CurrentEditor->textUnderline(a->isChecked());
+    m_CurrentEditor->textEdit()->setFocus();
 }
 
 void EditorActionHandler::textItalic()
@@ -568,6 +598,7 @@ void EditorActionHandler::textItalic()
         return;
     QAction *a = qobject_cast<QAction*>(sender());
     m_CurrentEditor->textItalic(a->isChecked());
+    m_CurrentEditor->textEdit()->setFocus();
 }
 
 void EditorActionHandler::textStrike()
@@ -576,26 +607,30 @@ void EditorActionHandler::textStrike()
         return;
     QAction *a = qobject_cast<QAction*>(sender());
     m_CurrentEditor->textStrike(a->isChecked());
+    m_CurrentEditor->textEdit()->setFocus();
 }
 
 void EditorActionHandler::fontBigger()
 {
     if (m_CurrentEditor)
         m_CurrentEditor->fontBigger();
+    m_CurrentEditor->textEdit()->setFocus();
 }
 
 void EditorActionHandler::fontSmaller()
 {
     if (m_CurrentEditor)
         m_CurrentEditor->fontSmaller();
+    m_CurrentEditor->textEdit()->setFocus();
 }
 
 void EditorActionHandler::textColor()
 {
     if (m_CurrentEditor) {
         m_CurrentEditor->textColor();
-        /** \todo update color in action */
+        /** \todo update color in action */        
     }
+    m_CurrentEditor->textEdit()->setFocus();
 }
 
 void EditorActionHandler::fontFormat()
@@ -607,6 +642,7 @@ void EditorActionHandler::fontFormat()
 void EditorActionHandler::textAlign()
 {
     if (m_CurrentEditor) {
+        bool focus = m_CurrentEditor->textEdit()->hasFocus();
         QAction *a = qobject_cast<QAction*>(sender());
         if ( a == aLeft )
             m_CurrentEditor->textEdit()->setAlignment( Qt::AlignLeft );
@@ -616,6 +652,8 @@ void EditorActionHandler::textAlign()
             m_CurrentEditor->textEdit()->setAlignment( Qt::AlignRight );
         else if ( a == aJustify )
             m_CurrentEditor->textEdit()->setAlignment( Qt::AlignJustify );
+        if (focus)
+            m_CurrentEditor->textEdit()->setFocus();
     }
 }
 

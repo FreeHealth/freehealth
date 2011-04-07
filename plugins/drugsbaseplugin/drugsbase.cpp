@@ -55,6 +55,7 @@
 
 #include "drugsbase.h"
 #include "idrug.h"
+#include "versionupdater.h"
 
 #include <drugsbaseplugin/constants.h>
 #include <drugsbaseplugin/drugsdatabaseselector.h>
@@ -914,20 +915,20 @@ bool DrugsBase::createDatabase(const QString &connectionName , const QString &db
 
     // The SQL scheme MUST BE synchronized with the Dosages::Constants Model Enumerator !!!
     /** \todo code here */
-//    if (executeSQL(QStringList()
-//        << dosageCreateTableSqlQuery().remove("AUTOINCREMENT")
-//        << "CREATE TABLE IF NOT EXISTS `VERSION` ("
-//           "`ACTUAL`                varchar(10)    NULL"
-//           ");"
-//        << QString("INSERT INTO `VERSION` (`ACTUAL`) VALUES('%1');").arg(VersionUpdater::instance()->lastDosageDabaseVersion())
-//        , DB)) {
-//        Utils::Log::addMessage(this, tkTr(Trans::Constants::DATABASE_1_CORRECTLY_CREATED).arg(dbName));
-//        return true;
-//    } else {
-//        Utils::Log::addError(this, tkTr(Trans::Constants::DATABASE_1_CANNOT_BE_CREATED_ERROR_2)
-//                         .arg(dbName, DB.lastError().text()),
-//                         __FILE__, __LINE__);
-//    }
+    if (executeSQL(QStringList()
+        << dosageCreateTableSqlQuery().remove("AUTOINCREMENT")
+        << "CREATE TABLE IF NOT EXISTS `VERSION` ("
+           "`ACTUAL`                varchar(10)    NULL"
+           ");"
+        << QString("INSERT INTO `VERSION` (`ACTUAL`) VALUES('%1');").arg(VersionUpdater::instance()->lastDosageDabaseVersion())
+        , DB)) {
+        Utils::Log::addMessage(this, tkTr(Trans::Constants::DATABASE_1_CORRECTLY_CREATED).arg(dbName));
+        return true;
+    } else {
+        Utils::Log::addError(this, tkTr(Trans::Constants::DATABASE_1_CANNOT_BE_CREATED_ERROR_2)
+                         .arg(dbName, DB.lastError().text()),
+                         __FILE__, __LINE__);
+    }
     return false;
 }
 

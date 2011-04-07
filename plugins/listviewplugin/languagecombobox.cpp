@@ -272,7 +272,7 @@ QString LanguageComboBox::currentLanguageName() const
     return currentText();
 }
 
-void LanguageComboBox::setCurrentLanguage(const QString &languageIsoCode)
+void LanguageComboBox::setCurrentIsoLanguage(const QString &languageIsoCode)
 {
     QLocale::Language language = QLocale(languageIsoCode).language();
     setCurrentLanguage(language);

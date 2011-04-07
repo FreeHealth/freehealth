@@ -1,28 +1,28 @@
 /***************************************************************************
- *  The FreeMedForms project is a set of free, open source medical         *
- *  applications.                                                          *
- *  (C) 2008-2011 by Eric MAEKER, MD (France) <eric.maeker@free.fr>        *
- *  All rights reserved.                                                   *
- *                                                                         *
- *  This program is free software: you can redistribute it and/or modify   *
- *  it under the terms of the GNU General Public License as published by   *
- *  the Free Software Foundation, either version 3 of the License, or      *
- *  (at your option) any later version.                                    *
- *                                                                         *
- *  This program is distributed in the hope that it will be useful,        *
- *  but WITHOUT ANY WARRANTY; without even the implied warranty of         *
- *  MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the          *
- *  GNU General Public License for more details.                           *
- *                                                                         *
- *  You should have received a copy of the GNU General Public License      *
- *  along with this program (COPYING.FREEMEDFORMS file).                   *
- *  If not, see <http://www.gnu.org/licenses/>.                            *
+ * The FreeMedForms project is a set of free, open source medical         *
+ * applications.                                                          *
+ * (C) 2008-2011 by Eric MAEKER, MD (France) <eric.maeker@free.fr>        *
+ * All rights reserved.                                                   *
+ *                                                                        *
+ * This program is free software: you can redistribute it and/or modify   *
+ * it under the terms of the GNU General Public License as published by   *
+ * the Free Software Foundation, either version 3 of the License, or      *
+ * (at your option) any later version.                                    *
+ *                                                                        *
+ * This program is distributed in the hope that it will be useful,        *
+ * but WITHOUT ANY WARRANTY; without even the implied warranty of         *
+ * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the          *
+ * GNU General Public License for more details.                           *
+ *                                                                        *
+ * You should have received a copy of the GNU General Public License      *
+ * along with this program (COPYING.FREEMEDFORMS file).                   *
+ * If not, see <http://www.gnu.org/licenses/>.                            *
  ***************************************************************************/
 /***************************************************************************
- *   Main Developper : Eric MAEKER, <eric.maeker@free.fr>                  *
- *   Contributors :                                                        *
- *       NAME <MAIL@ADRESS>                                                *
- *       NAME <MAIL@ADRESS>                                                *
+ *  Main Developper : Eric MAEKER, <eric.maeker@free.fr>                  *
+ *  Contributors :                                                        *
+ *      NAME <MAIL@ADRESS>                                                *
+ *      NAME <MAIL@ADRESS>                                                *
  ***************************************************************************/
 /**
   \class UserPlugin::UserWizard
@@ -58,12 +58,14 @@
 #include <coreplugin/iuser.h>
 #include <coreplugin/constants_icons.h>
 
+#include <usermanagerplugin/usermodel.h>
+#include <usermanagerplugin/widgets/userrightswidget.h>
+
+#include <listviewplugin/languagecombobox.h>
+
 #include <utils/log.h>
 #include <utils/global.h>
 #include <utils/widgets/lineeditechoswitcher.h>
-
-#include <usermanagerplugin/usermodel.h>
-#include <usermanagerplugin/widgets/userrightswidget.h>
 
 #include <translationutils/constanttranslations.h>
 
@@ -83,11 +85,56 @@ using namespace Trans::ConstantTranslations;
 static inline UserPlugin::UserModel *userModel() { return UserModel::instance(); }
 static inline Core::ITheme *theme()  { return Core::ICore::instance()->theme(); }
 static inline Core::ISettings *settings()  { return Core::ICore::instance()->settings(); }
+static inline QString bundlePath()  { return settings()->path(Core::ISettings::BundleResourcesPath); }
 
+static inline QString defaultPaper(const QString &profession, const QString &paper, const QString &paperType = QString::null)
+{
+    QString lang = QLocale().name().left(2);
+    QString fileName;
+    if (paperType.isEmpty()) {
+        fileName = QString(bundlePath() + "/profiles/%1/default/user_%2_%3.xml").arg(profession).arg(paper).arg(lang);
+    } else {
+        fileName = QString(bundlePath() + "/profiles/%1/default/user_%2_%3_%4.xml").arg(profession).arg(paper).arg(paperType).arg(lang);
+    }
+    if (QFileInfo(fileName).exists()) {
+        return Utils::readTextFile(fileName);
+    }
+    lang = Trans::Constants::ALL_LANGUAGE;
+    if (paperType.isEmpty()) {
+        fileName = QString(bundlePath() + "/profiles/%1/default/user_%2_%3.xml").arg(profession).arg(paper).arg(lang);
+    } else {
+        fileName = QString(bundlePath() + "/profiles/%1/default/user_%2_%3_%4.xml").arg(profession).arg(paper).arg(paperType).arg(lang);
+    }
+    if (QFileInfo(fileName).exists()) {
+        return Utils::readTextFile(fileName);
+    }
+    if (!paperType.isEmpty()) {
+        fileName = QString(bundlePath() + "/profiles/%1/default/user_%2_%3.xml").arg(profession).arg(paper).arg(lang);
+        if (QFileInfo(fileName).exists()) {
+            return Utils::readTextFile(fileName);
+        }
+    }
+    return QString();
+}
+
+static inline QString defaultHeader(const QString &profession)
+{
+    return defaultPaper(profession, "header");
+}
+
+static inline QString defaultFooter(const QString &profession)
+{
+    return defaultPaper(profession, "footer");
+}
+
+// paperType == "prescription" "administrative" "generic"
+static inline QString defaultWatermark(const QString &profession, const QString &paperType = QString::null)
+{
+    return defaultPaper(profession, "watermark", paperType);
+}
 
 QHash<int, QString> UserWizard::m_Papers;
 QHash<int, int> UserWizard::m_Rights;
-
 
 UserWizard::UserWizard(QWidget *parent)
     : QWizard(parent),
@@ -101,11 +148,11 @@ UserWizard::UserWizard(QWidget *parent)
     setPage(AdressPage, new UserAdressPage(this));
     setPage(TelsAndMailPage, new UserTelsAndMailPage(this));
     setPage(ProfilPage, new UserProfilPage(this));
-    setPage(SpecialiesQualificationsPage, new UserSpecialiesQualificationsPage(this));
     setPage(RightsPage, new UserRightsPage(this));
-    setPage(PaperGenericPage, new UserPaperPage("Generic", PaperAdministrativePage, this));
-    setPage(PaperAdministrativePage, new UserPaperPage("Administrative", PaperPrescriptionsPage, this));
-    setPage(PaperPrescriptionsPage, new UserPaperPage("Prescription", -1, this));
+    setPage(SpecialiesQualificationsPage, new UserSpecialiesQualificationsPage(this));
+//    setPage(PaperGenericPage, new UserPaperPage("Generic", PaperAdministrativePage, this));
+//    setPage(PaperAdministrativePage, new UserPaperPage("Administrative", PaperPrescriptionsPage, this));
+//    setPage(PaperPrescriptionsPage, new UserPaperPage("Prescription", -1, this));
 
     setWindowTitle(tr("User Creator Wizard"));
     QList<QWizard::WizardButton> layout;
@@ -164,7 +211,7 @@ void UserWizard::done(int r)
         userModel()->setData(idx, field("City"));
         idx = userModel()->index(m_Row, Core::IUser::Country);
         userModel()->setData(idx, field("Country"));
-        idx = userModel()->index(m_Row, Core::IUser::LanguageIndex);
+        idx = userModel()->index(m_Row, Core::IUser::LocaleCodedLanguage);
         userModel()->setData(idx, field("Language"));
 
         idx = userModel()->index(m_Row, Core::IUser::Tel1);
@@ -232,17 +279,18 @@ bool UserWizard::setCreatedUserAsCurrent() const
 }
 
 
-
 UserLanguageSelectorPage::UserLanguageSelectorPage(QWidget *parent)
     : QWizardPage(parent), lbl(0)
 {
     lbl = new QLabel(tr("Language"), this);
     retranslate();
-    QComboBox * cbLanguage = new QComboBox(this);
+    Views::LanguageComboBox *cbLanguage = new Views::LanguageComboBox(this);
+    cbLanguage->setDisplayMode(Views::LanguageComboBox::AvailableTranslations);
+    cbLanguage->setCurrentLanguage(QLocale().language());
 
-    cbLanguage->addItems(Core::Translators::availableLocales());
-    cbLanguage->setCurrentIndex(Core::Translators::availableLocales().indexOf(QLocale().name().left(2)));
-    connect(cbLanguage, SIGNAL(activated(QString)), Core::Translators::instance(), SLOT(changeLanguage(const QString &)));
+//    cbLanguage->addItems(Core::Translators::availableLocales());
+//    cbLanguage->setCurrentIndex(Core::Translators::availableLocales().indexOf(QLocale().name().left(2)));
+    connect(cbLanguage, SIGNAL(currentLanguageChanged(QLocale::Language)), Core::Translators::instance(), SLOT(changeLanguage(QLocale::Language)));
 
     registerField("Language", cbLanguage , "currentIndex");
 
@@ -272,17 +320,17 @@ UserIdentityPage::UserIdentityPage(QWidget *parent)
     : QWizardPage(parent)
 {
     setTitle(tr("Please enter your identity."));
-    QLabel * lblTitle = new QLabel(tr("Title"), this);
-    QLabel * lblName = new QLabel(tr("Name"), this);
-    QLabel * lblFirstName = new QLabel(tr("Firstname"), this);
-    QLabel * lblSecondName = new QLabel(tr("Second Name"), this);
-    QLabel * lblGender = new QLabel(tr("Gender"), this);
+    QLabel *lblTitle = new QLabel(tr("Title"), this);
+    QLabel *lblName = new QLabel(tr("Name"), this);
+    QLabel *lblFirstName = new QLabel(tr("Firstname"), this);
+    QLabel *lblSecondName = new QLabel(tr("Second Name"), this);
+    QLabel *lblGender = new QLabel(tr("Gender"), this);
 
-    QLineEdit * leName = new QLineEdit(this);
-    QLineEdit * leFirstName = new QLineEdit(this);
-    QLineEdit * leSecondName = new QLineEdit(this);
-    QComboBox * cbTitle = new QComboBox(this);
-    QComboBox * cbGender = new QComboBox(this);
+    QComboBox *cbTitle = new QComboBox(this);
+    QLineEdit *leName = new QLineEdit(this);
+    QLineEdit *leFirstName = new QLineEdit(this);
+    QLineEdit *leSecondName = new QLineEdit(this);
+    QComboBox *cbGender = new QComboBox(this);
 
     registerField("Name", leName, "text");
     registerField("Firstname", leFirstName, "text");
@@ -323,9 +371,9 @@ UserLoginPasswordPage::UserLoginPasswordPage(QWidget *parent)
     : QWizardPage(parent)
 {
     setTitle(tr("Please enter your login and password."));
-    QLabel * lblL = new QLabel(tr("Login"), this);
-    QLabel * lblP = new QLabel(tr("Password"), this);
-    QLabel * lblCP = new QLabel(tr("Confirm Password"), this);
+    QLabel *lblL = new QLabel(tr("Login"), this);
+    QLabel *lblP = new QLabel(tr("Password"), this);
+    QLabel *lblCP = new QLabel(tr("Confirm Password"), this);
 
     leLogin = new Utils::LineEditEchoSwitcher(this);
     lePassword = new Utils::LineEditEchoSwitcher(this);
@@ -382,15 +430,15 @@ UserAdressPage::UserAdressPage(QWidget *parent)
 {
     setTitle(tr("Please enter your complete adress."));
     setSubTitle(tr("This represents your professional address."));
-    QLabel * lblAdress = new QLabel(tr("Address"), this);
-    QLabel * lblCity = new QLabel(tr("City"), this);
-    QLabel * lblZipcode = new QLabel(tr("Zipcode"), this);
-    QLabel * lblCountry = new QLabel(tr("Country"), this);
+    QLabel *lblAdress = new QLabel(tr("Address"), this);
+    QLabel *lblCity = new QLabel(tr("City"), this);
+    QLabel *lblZipcode = new QLabel(tr("Zipcode"), this);
+    QLabel *lblCountry = new QLabel(tr("Country"), this);
 
-    QTextEdit * teAdress = new QTextEdit(this);
-    QLineEdit * leCity = new QLineEdit(this);
-    QLineEdit * leZipcode = new QLineEdit(this);
-    QLineEdit * leCountry = new QLineEdit(this);
+    QTextEdit *teAdress = new QTextEdit(this);
+    QLineEdit *leCity = new QLineEdit(this);
+    QLineEdit *leZipcode = new QLineEdit(this);
+    QLineEdit *leCountry = new QLineEdit(this);
 
     registerField("Adress", teAdress , "plainText");
     registerField("City", leCity , "text");
@@ -413,17 +461,17 @@ UserTelsAndMailPage::UserTelsAndMailPage(QWidget *parent)
     : QWizardPage(parent)
 {
     setTitle(tr("Please, enter tels, fax and mail adress."));
-    QLabel * lblT1 = new QLabel(tr("Tel1"), this);
-    QLabel * lblT2 = new QLabel(tr("Tel2"), this);
-    QLabel * lblT3 = new QLabel(tr("Tel3"), this);
-    QLabel * lblFax = new QLabel(tr("Fax"), this);
-    QLabel * lblMail = new QLabel(tr("Mail"), this);
+    QLabel *lblT1 = new QLabel(tr("Tel1"), this);
+    QLabel *lblT2 = new QLabel(tr("Tel2"), this);
+    QLabel *lblT3 = new QLabel(tr("Tel3"), this);
+    QLabel *lblFax = new QLabel(tr("Fax"), this);
+    QLabel *lblMail = new QLabel(tr("Mail"), this);
 
-    QLineEdit * leT1 = new QLineEdit(this);
-    QLineEdit * leT2 = new QLineEdit(this);
-    QLineEdit * leT3 = new QLineEdit(this);
-    QLineEdit * leFax = new QLineEdit(this);
-    QLineEdit * leMail = new QLineEdit(this);
+    QLineEdit *leT1 = new QLineEdit(this);
+    QLineEdit *leT2 = new QLineEdit(this);
+    QLineEdit *leT3 = new QLineEdit(this);
+    QLineEdit *leFax = new QLineEdit(this);
+    QLineEdit *leMail = new QLineEdit(this);
 
     registerField("Tel1", leT1, "text");
     registerField("Tel2", leT2, "text");
@@ -487,7 +535,7 @@ bool UserProfilPage::validatePage()
     UserWizard::setUserRights(Core::IUser::MedicalRights, Core::IUser::NoRights);
     UserWizard::setUserRights(Core::IUser::ParamedicalRights, Core::IUser::NoRights);
     UserWizard::setUserRights(Core::IUser::AdministrativeRights, Core::IUser::NoRights);
-    next = UserWizard::PaperGenericPage;
+    next = UserWizard::SpecialiesQualificationsPage;
     QStringList result = view->getCheckedStringList().toStringList();
     if (result.contains(tkTr(Trans::Constants::DOCTOR))) {
         UserWizard::setUserRights(Core::IUser::ManagerRights, Core::IUser::NoRights);
@@ -496,6 +544,18 @@ bool UserProfilPage::validatePage()
         UserWizard::setUserRights(Core::IUser::ParamedicalRights, int(Core::IUser::ReadAll | Core::IUser::Print));
         UserWizard::setUserRights(Core::IUser::AdministrativeRights, Core::IUser::NoRights);
         next = UserWizard::SpecialiesQualificationsPage;
+        // create default papers
+        UserWizard::setUserPaper(Core::IUser::GenericHeader, defaultPaper("medicals", "header"));
+        UserWizard::setUserPaper(Core::IUser::GenericFooter, defaultPaper("medicals", "footer"));
+        UserWizard::setUserPaper(Core::IUser::GenericWatermark, defaultPaper("medicals", "watermark"));
+
+        UserWizard::setUserPaper(Core::IUser::PrescriptionHeader, defaultPaper("medicals", "header", "prescriptions"));
+        UserWizard::setUserPaper(Core::IUser::PrescriptionFooter, defaultPaper("medicals", "footer", "prescriptions"));
+        UserWizard::setUserPaper(Core::IUser::PrescriptionWatermark, defaultPaper("medicals", "watermark", "prescriptions"));
+
+        UserWizard::setUserPaper(Core::IUser::AdministrativeHeader, defaultPaper("medicals", "header"));
+        UserWizard::setUserPaper(Core::IUser::AdministrativeFooter, defaultPaper("medicals", "footer"));
+        UserWizard::setUserPaper(Core::IUser::AdministrativeWatermark, defaultPaper("medicals", "watermark"));
     }
     if (result.contains(tr("Software administrator"))) {
         UserWizard::setUserRights(Core::IUser::ManagerRights, Core::IUser::AllRights);
@@ -515,14 +575,14 @@ UserSpecialiesQualificationsPage::UserSpecialiesQualificationsPage(QWidget *pare
     setSubTitle(tr("Use the context menu to add, remove, move up or down items."));
     QTabWidget *tab = new QTabWidget(this);
 
-    QStringListModel * modelspe = new QStringListModel(this);
-    Views::StringListView * speView = new Views::StringListView(this);
+    QStringListModel *modelspe = new QStringListModel(this);
+    Views::StringListView *speView = new Views::StringListView(this);
     speView->setModel(modelspe);
-    QStringListModel * modelqual = new QStringListModel(this);
-    Views::StringListView * quaView = new Views::StringListView(this);
+    QStringListModel *modelqual = new QStringListModel(this);
+    Views::StringListView *quaView = new Views::StringListView(this);
     quaView->setModel(modelqual);
-    QStringListModel * modelids = new QStringListModel(this);
-    Views::StringListView * idsView = new Views::StringListView(this);
+    QStringListModel *modelids = new QStringListModel(this);
+    Views::StringListView *idsView = new Views::StringListView(this);
     idsView->setModel(modelids);
 
     tab->addTab(speView, tr("Specialities"));
@@ -583,75 +643,65 @@ bool UserRightsPage::validatePage()
     return true;
 }
 
-static inline QString defaultHeader()
-{
-    return Utils::readTextFile(settings()->path(Core::ISettings::BundleResourcesPath) + "/textfiles/default_user_header.htm");
-}
+//UserPaperPage::UserPaperPage(const QString &paperName, int nextPage, QWidget *parent) :
+//        QWizardPage(parent), type(paperName), m_Next(nextPage)
+//{
+//    QString title;
+//    if (type=="Generic")
+//        title = tr("Generic");
+//    else if (type == "Prescription")
+//        title = tr("Prescription");
+//    else if (type == "Administrative")
+//            title = tr("Administrative");
+//    setTitle(tr("%1 headers and footers").arg(title));
 
-static inline QString defaultFooter()
-{
-    return Utils::readTextFile(settings()->path(Core::ISettings::BundleResourcesPath) + "/textfiles/default_user_footer.htm");
-}
+//    header = new Print::TextDocumentExtra;
+//    footer = new Print::TextDocumentExtra;
+//    wm = new Print::TextDocumentExtra;
+//    previewer = Print::Printer::previewer(this);
 
-UserPaperPage::UserPaperPage(const QString &paperName, int nextPage, QWidget *parent) :
-        QWizardPage(parent), type(paperName), m_Next(nextPage)
-{
-    QString title;
-    if (type=="Generic")
-        title = tr("Generic");
-    else if (type == "Prescription")
-        title = tr("Prescription");
-    else if (type == "Administrative")
-            title = tr("Administrative");
-    setTitle(tr("%1 headers and footers").arg(title));
+//    QGridLayout *layout = new QGridLayout;
+//    layout->addWidget(previewer, 0, 0);
+//    setLayout(layout);
 
-    header = new Print::TextDocumentExtra;
-    footer = new Print::TextDocumentExtra;
-    wm = new Print::TextDocumentExtra;
-    previewer = Print::Printer::previewer(this);
+//    header->setHtml(defaultHeader());
+//    footer->setHtml(defaultFooter());
 
-    QGridLayout *layout = new QGridLayout;
-    layout->addWidget(previewer, 0, 0);
-    setLayout(layout);
+//    if (type=="Prescription") {
+//        wm->setPresence(Print::Printer::DuplicataOnly);
+//    }
 
-    header->setHtml(defaultHeader());
-    footer->setHtml(defaultFooter());
+//    previewer->setHeader(header);
+//    previewer->setFooter(footer);
+//    previewer->setWatermark(wm);
+//}
 
-    if (type=="Prescription") {
-        wm->setPresence(Print::Printer::DuplicataOnly);
-    }
+//bool UserPaperPage::validatePage()
+//{
+//    Print::TextDocumentExtra *tmp = new Print::TextDocumentExtra;
+//    int header, footer, wmk;
+//    if (type=="Generic") {
+//        header = Core::IUser::GenericHeader;
+//        footer = Core::IUser::GenericFooter;
+//        wmk = Core::IUser::GenericWatermark;
+//    } else if (type == "Prescription") {
+//        header = Core::IUser::PrescriptionHeader;
+//        footer = Core::IUser::PrescriptionFooter;
+//        wmk = Core::IUser::PrescriptionWatermark;
+//    } else if (type == "Administrative") {
+//        header = Core::IUser::AdministrativeHeader;
+//        footer = Core::IUser::AdministrativeFooter;
+//        wmk = Core::IUser::AdministrativeWatermark;
+//    }
 
-    previewer->setHeader(header);
-    previewer->setFooter(footer);
-    previewer->setWatermark(wm);
-}
+//    previewer->headerToPointer(tmp);
+//    UserWizard::setUserPaper(header, tmp->toXml());
 
-bool UserPaperPage::validatePage()
-{
-    Print::TextDocumentExtra *tmp = new Print::TextDocumentExtra;
-    int header, footer, wmk;
-    if (type=="Generic") {
-        header = Core::IUser::GenericHeader;
-        footer = Core::IUser::GenericFooter;
-        wmk = Core::IUser::GenericWatermark;
-    } else if (type == "Prescription") {
-        header = Core::IUser::PrescriptionHeader;
-        footer = Core::IUser::PrescriptionFooter;
-        wmk = Core::IUser::PrescriptionWatermark;
-    } else if (type == "Administrative") {
-        header = Core::IUser::AdministrativeHeader;
-        footer = Core::IUser::AdministrativeFooter;
-        wmk = Core::IUser::AdministrativeWatermark;
-    }
+//    previewer->footerToPointer(tmp);
+//    UserWizard::setUserPaper(footer, tmp->toXml());
 
-    previewer->headerToPointer(tmp);
-    UserWizard::setUserPaper(header, tmp->toXml());
+//    previewer->watermarkToPointer(tmp);
+//    UserWizard::setUserPaper(wmk, tmp->toXml());
 
-    previewer->footerToPointer(tmp);
-    UserWizard::setUserPaper(footer, tmp->toXml());
-
-    previewer->watermarkToPointer(tmp);
-    UserWizard::setUserPaper(wmk, tmp->toXml());
-
-    return true;
-}
+//    return true;
+//}
