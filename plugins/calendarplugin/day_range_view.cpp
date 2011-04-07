@@ -284,10 +284,19 @@ void DayRangeView::mouseMoveEvent(QMouseEvent *event) {
 }
 
 void DayRangeView::mouseReleaseEvent(QMouseEvent *) {
-	QDateTime beginning = m_pressItem->beginDateTime();
-	QDateTime ending = m_pressItem->endDateTime();
-	delete m_pressItem;
-	m_pressItem = 0;
+	QDateTime beginning, ending;
+	if (!m_pressItem) {
+		// an hour by default
+		beginning = m_pressDateTime;
+		ending = m_pressDateTime.addSecs(3600);
+	} else {
+		beginning = m_pressItem->beginDateTime();
+		ending = m_pressItem->endDateTime();
+		beginning.setDate(m_pressDateTime.date());
+		ending.setDate(m_pressDateTime.date());
+		delete m_pressItem;
+		m_pressItem = 0;
+	}
 	m_pressDateTime = QDateTime();
 	if (model()){
 		model()->insertItem(beginning, ending);

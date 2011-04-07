@@ -28,6 +28,10 @@ namespace Calendar {
 		void itemInserted(const CalendarItem &newItem);
 
 	protected:
+		/** this function must be called before any item insertion */
+		void beginInsertItem();
+		/** this function must be called after any item insertion */
+		void endInsertItem(const CalendarItem &newItem);
 		/**
 		 * returns :
 		 * -1 if item is entirely before first day
@@ -35,10 +39,6 @@ namespace Calendar {
 		 * 1 if item is entirely after lastDay
 		 */
 		int intersects(const CalendarItem &item, const QDate &firstDay, const QDate &lastDay) const;
-		/** this function must be called before any item insertion */
-		void beginInsertItem();
-		/** this function must be called after any item insertion */
-		void endInsertItem(const CalendarItem &newItem);
 
 	private:
 	};

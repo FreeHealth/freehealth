@@ -7,23 +7,31 @@
 #include "abstract_calendar_model.h"
 
 namespace Calendar {
+	/**
+	 * This model offers an optimized version of <getItemsBetween()> based on dichotomy method and double lists.
+	 */
 	class BasicCalendarModel : public AbstractCalendarModel
 	{
 		Q_OBJECT
 	public:
 		BasicCalendarModel(QObject *parent = 0);
+		virtual ~BasicCalendarModel();
 
 		QList<CalendarItem> getItemsBetween(const QDate &from, const QDate &to) const;
 
-		int count() const { return m_items.count(); }
+		int count() const { return m_sortedByBeginList.count(); }
 
 		bool insertItem(const QDateTime &beginning, const QDateTime &ending);
 
 	private:
-		QList<CalendarItem> m_items;
+		QList<CalendarItem*> m_sortedByBeginList;
+		QList<CalendarItem*> m_sortedByEndList;
 
-		int firstIndexAfter(const QDate &day, const QPair<int,int> &range) const;
-		int lastIndexBefore(const QDate &day, const QPair<int,int> &range) const;
+		// returns an insertion index for a datetime in <list> from <first> to <last> (dichotomy method)
+		int getInsertionIndex(bool begin, const QDateTime &dateTime, const QList<CalendarItem*> &list, int first, int last) const;
+
+		// search for an intersected item, the first found item is enough
+		int searchForIntersectedItem(const QList<CalendarItem*> &list, const QDate &from, const QDate &to, int first, int last) const;
 	};
 }
 

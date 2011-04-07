@@ -21,7 +21,7 @@ bool AbstractCalendarModel::insertItem(const QDateTime &, const QDateTime &) {
 }
 
 void AbstractCalendarModel::beginInsertItem() {
-	// does nothing for now
+	// does nothing for now (maybe emit a signal in the future)
 }
 
 void AbstractCalendarModel::endInsertItem(const CalendarItem &newItem) {
