@@ -19,8 +19,8 @@ SUBDIRS = \
     icd \
     pmh \
     padtools \
-    calendar \
     category \
+#    calendar \
 #    alerts \
 
 # root plugin
@@ -60,6 +60,8 @@ mainwin.depends += formmanager
 xmlio.subdir   = xmlioplugin
 xmlio.depends += core
 xmlio.depends += formmanager
+xmlio.depends += category
+xmlio.depends += pmh
 
 basewidgets.subdir   = basewidgetsplugin
 basewidgets.depends += core

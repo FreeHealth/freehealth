@@ -250,16 +250,24 @@ bool FormManager::loadSubForms()
     return true;
 }
 
-bool FormManager::translateForms()
+bool FormManager::readPmhxCategories(const QString &formUuidOrAbsPath)
 {
-    /** \todo code here ??? */
-    // Translate the tree
-//    translateTreeItem( m_Tree->topLevelItem( 0 ) );
-//    m_Tree->resizeColumnToContents( LabelColumn );
-//    retranslateUi();
-    return true;
-}
+    // get all form readers (IFormIO)
+    QList<Form::IFormIO *> list = pluginManager()->getObjects<Form::IFormIO>();
 
+    // get form general form absPath from episodeBase
+    QString absDirPath = episodeBase()->getGenericFormFile();
+    if (absDirPath.isEmpty()) {
+        /** \todo code here: manage no patient form file recorded in episodebase */
+        return false;
+    }
+    foreach(Form::IFormIO *io, list) {
+        if (io->canReadForms(absDirPath)) {
+            if (io->loadPmhCategories(absDirPath))
+                break;
+        }
+    }
+}
 
 FormActionHandler::FormActionHandler(QObject *parent) :
         QObject(parent),

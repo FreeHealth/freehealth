@@ -453,6 +453,19 @@ bool CategoryBase::saveCategoryLabels(CategoryItem *category)
     return true;
 }
 
+bool CategoryBase::removeAllExistingCategories(const QString &mime)
+{
+    QSqlQuery query(database());
+    QHash<int, QString> where;
+    where.insert(Constants::CATEGORY_MIME, QString("='%1'").arg(mime));
+    query.prepare(prepareUpdateQuery(Constants::Table_CATEGORIES, Constants::CATEGORY_ISVALID, where));
+    query.bindValue(0, 0);
+    if (!query.exec()) {
+        LOG_QUERY_ERROR(query);
+    }
+    return false;
+}
+
 void CategoryBase::onCoreDatabaseServerChanged()
 {
     /** \todo code here */

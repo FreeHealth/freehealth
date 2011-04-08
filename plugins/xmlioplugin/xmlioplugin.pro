@@ -1,6 +1,5 @@
 TEMPLATE        = lib
 TARGET          = XmlIO
-PACKAGE_VERSION = 0.0.9
 
 DEFINES += XMLIO_LIBRARY
 

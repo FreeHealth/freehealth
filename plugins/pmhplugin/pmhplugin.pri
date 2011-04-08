@@ -1,7 +1,7 @@
-include(medicalhistoryplugin_dependencies.pri)
+include(pmhplugin_dependencies.pri)
 CONFIG( debug, debug|release ) {
-    unix:LIBS    *= -lMedicalHistory_debug
-    win32:LIBS   *= -lMedicalHistory_d
+    unix:LIBS    *= -lPMH_debug
+    win32:LIBS   *= -lPMH_d
 } else {
-    LIBS  *= -lMedicalHistory
+    LIBS  *= -lPMH
 }

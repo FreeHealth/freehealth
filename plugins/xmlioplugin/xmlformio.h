@@ -37,8 +37,12 @@
  * \file xmlformio.h
  * \author Eric MAEKER <eric.maeker@free.fr>
  * \version 0.5.0
- * \date 04 Apr 2011
+ * \date 08 Apr 2011
 */
+
+namespace Category {
+class CategoryItem;
+}
 
 namespace Form {
 class FormItem;
@@ -62,19 +66,16 @@ public:
     QString name() const {return "XmlFormIO";}
 
     void muteUserWarnings(bool state) {m_Mute = state;}
-//    QStringList fileFilters() const;
 
     void warnXmlReadError(bool muteUserWarnings, const QString &file, const QString &msg, const int line = 0, const int col = 0) const;
 
-//    QString managedFileExtension() const { return QString("xml"); }
-//    bool setFileName(const QString &absFileName);
     bool canReadForms(const QString &uuidOrAbsPath) const;
 
     Form::FormIODescription *readFileInformations();
     QList<Form::FormIODescription *> getFormFileDescriptions(const Form::FormIOQuery &query);
 
-//    Form::FormMain *loadForm();
     QList<Form::FormMain *> loadAllRootForms(const QString &uuidOrAbsPath = QString::null);
+    bool loadPmhCategories(const QString &uuidOrAbsPath);
 
     bool saveForm(QObject *treeRoot) { Q_UNUSED(treeRoot); return true; }
 
@@ -85,6 +86,9 @@ public:
 private:
     bool checkFormFileContent(const QString &absFileName) const;
     bool loadForm(const QString &file, Form::FormMain *rootForm);
+
+    bool createCategory(const QDomElement &element, Category::CategoryItem *parent);
+
     bool loadElement(Form::FormItem *item, QDomElement &rootElement);
     bool createElement(Form::FormItem *item, QDomElement &element);
     bool createItemWidget(Form::FormItem *item, QWidget *parent = 0);

@@ -106,7 +106,7 @@ private:
 public Q_SLOTS:
     bool loadPatientFile();
     bool loadSubForms();
-    bool translateForms();
+    bool readPmhxCategories(const QString &formUuidOrAbsPath);
 
 Q_SIGNALS:
     void patientFormsLoaded();

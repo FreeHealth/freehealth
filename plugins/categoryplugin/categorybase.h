@@ -67,6 +67,7 @@ public:
     bool saveCategory(CategoryItem *category);
     bool updateCategory(CategoryItem *category);
     bool saveCategoryLabels(CategoryItem *category);
+    bool removeAllExistingCategories(const QString &mime);
 
 private Q_SLOTS:
     void onCoreDatabaseServerChanged();

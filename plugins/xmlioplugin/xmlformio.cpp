@@ -41,6 +41,12 @@
 #include <formmanagerplugin/iformitem.h>
 #include <formmanagerplugin/iformwidgetfactory.h>
 
+#include <categoryplugin/categoryitem.h>
+#include <categoryplugin/categorycore.h>
+
+#include <pmhplugin/pmhcore.h>
+#include <pmhplugin/pmhcategorymodel.h>
+
 #include <translationutils/constanttranslations.h>
 
 #include <QApplication>
@@ -75,6 +81,9 @@ namespace {
 //inline static Form::FormManager *formManager() { return Form::FormManager::instance(); }
 inline static ExtensionSystem::PluginManager *pluginManager() {return ExtensionSystem::PluginManager::instance();}
 static inline Core::ISettings *settings()  { return Core::ICore::instance()->settings(); }
+static inline Category::CategoryCore *categoryCore() {return  Category::CategoryCore::instance();}
+static inline PMH::PmhCore *pmhCore() {return PMH::PmhCore::instance();}
+
 
 inline static void refreshPlugsFactories()
 {
@@ -475,6 +484,65 @@ QList<Form::FormMain *> XmlFormIO::loadAllRootForms(const QString &uuidOrAbsPath
 //        qWarning() << "     mode" << root << root->modeUniqueName();
     }
     return toReturn;
+}
+
+bool XmlFormIO::loadPmhCategories(const QString &uuidOrAbsPath)
+{
+    QString file = uuidOrAbsPath;
+    if (!uuidOrAbsPath.endsWith("xml", Qt::CaseInsensitive)) {
+        file.append("/pmhcategories.xml");
+    }
+    // replace path TAGs
+    file.replace(Core::Constants::TAG_APPLICATION_COMPLETEFORMS_PATH, settings()->path(Core::ISettings::CompleteFormsPath));
+    file.replace(Core::Constants::TAG_APPLICATION_SUBFORMS_PATH, settings()->path(Core::ISettings::SubFormsPath));
+    file.replace(Core::Constants::TAG_APPLICATION_RESOURCES_PATH, settings()->path(Core::ISettings::BundleResourcesPath));
+
+    QDomDocument *doc = 0;
+    if (!m_DomDocFormCache.keys().contains(file)) {
+        if (!canReadForms(file))
+            return false;
+    }
+    categoryCore()->removeAllExistingCategories("PMHx");
+    doc = m_DomDocFormCache[file];
+    QDomElement root = doc->firstChildElement(Constants::TAG_MAINXMLTAG);
+    QDomElement element = root.firstChildElement(Constants::TAG_PMHX_CATEGORIES);
+    element = element.firstChildElement(::Constants::TAG_CATEGORY);
+    while (!element.isNull()) {
+        createCategory(element, 0);
+        element = element.nextSiblingElement(::Constants::TAG_CATEGORY);
+    }
+    pmhCore()->pmhCategoryModel()->refreshFromDatabase();
+    return true;
+}
+
+bool XmlFormIO::createCategory(const QDomElement &element, Category::CategoryItem *parent)
+{
+    // create the category
+    Category::CategoryItem *item = new Category::CategoryItem;
+    item->setData(Category::CategoryItem::DbOnly_Mime, "PMHx");
+    item->setData(Category::CategoryItem::ThemedIcon, element.attribute(::Constants::ATTRIB_ICON));
+
+    // read the labels
+    QDomElement label = element.firstChildElement(::Constants::TAG_SPEC_LABEL);
+    while (!label.isNull()) {
+        item->setLabel(label.text(), label.attribute(::Constants::ATTRIB_LANGUAGE, Trans::Constants::ALL_LANGUAGE));
+        label = label.nextSiblingElement(::Constants::TAG_SPEC_LABEL);
+    }
+
+    // save to database
+    if (parent) {
+        parent->addChild(item);
+        item->setParent(parent);
+    }
+    categoryCore()->saveCategory(item);
+
+    // has children ?
+    QDomElement child = element.firstChildElement(::Constants::TAG_CATEGORY);
+    while (!child.isNull()) {
+        createCategory(child, item);
+        child = child.nextSiblingElement(::Constants::TAG_CATEGORY);
+    }
+    return true;
 }
 
 bool XmlFormIO::loadElement(Form::FormItem *item, QDomElement &rootElement)

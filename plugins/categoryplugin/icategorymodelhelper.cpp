@@ -34,7 +34,7 @@ using namespace Category;
 void ICategoryModelHelper::updateCategoryLabel(const Category::CategoryItem *category)
 {
     QModelIndex idx = indexForCategory(category);
-    qWarning() << "updateLabel" << idx;
+//    qWarning() << "updateLabel" << idx;
     Q_EMIT dataChanged(idx, idx);
 }
 

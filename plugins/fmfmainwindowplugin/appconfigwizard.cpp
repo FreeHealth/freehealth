@@ -38,6 +38,7 @@
 #include <formmanagerplugin/formfilesselectorwidget.h>
 #include <formmanagerplugin/episodebase.h>
 #include <formmanagerplugin/iformio.h>
+#include <formmanagerplugin/formmanager.h>
 
 #include <usermanagerplugin/widgets/userwizard.h>
 #include <usermanagerplugin/widgets/userpassworddialog.h>
@@ -63,6 +64,7 @@ static inline Core::ISettings *settings() { return Core::ICore::instance()->sett
 static inline Core::ITheme *theme()  { return Core::ICore::instance()->theme(); }
 static inline Core::IUser *user() {return Core::ICore::instance()->user();}
 static inline Form::Internal::EpisodeBase *episodeBase() {return Form::Internal::EpisodeBase::instance();}
+static inline Form::FormManager *formManager() {return Form::FormManager::instance();}
 
 AppConfigWizard::AppConfigWizard(QWidget *parent)
     : QWizard(parent)
@@ -265,7 +267,9 @@ bool PatientFilePage::validatePage()
     if (!selector->selectedForms().count())
         return false;
     Form::FormIODescription *descr = selector->selectedForms().at(0);
-    return episodeBase()->setGenericPatientFormFile(descr->data(Form::FormIODescription::UuidOrAbsPath).toString());
+    episodeBase()->setGenericPatientFormFile(descr->data(Form::FormIODescription::UuidOrAbsPath).toString());
+    formManager()->readPmhxCategories(descr->data(Form::FormIODescription::UuidOrAbsPath).toString());
+    return true;
 }
 
 

@@ -40,6 +40,8 @@ const char* const TAG_MAINXMLTAG   = "FreeMedForms";
 const char* const TAG_NEW_FORM     = "MedForm";
 const char* const TAG_NEW_PAGE     = "Page";
 const char* const TAG_NEW_ITEM     = "Item";
+const char* const TAG_PMHX_CATEGORIES = "PMHx";
+const char* const TAG_CATEGORY     = "Category";
 const char* const TAG_ADDFILE      = "file";
 const char* const TAG_NAME         = "name";
 
@@ -89,6 +91,7 @@ const char* const TAG_OPTIONS_NO_EPISODE        = "noepisode";
 
 const char* const ATTRIB_ID           = "id";
 const char* const ATTRIB_COMPLETION   = "completion";
+const char* const ATTRIB_ICON         = "icon";
 const char* const ATTRIB_OPTIONNAL    = "optional";
 const char* const ATTRIB_LANGUAGE     = "lang";
 

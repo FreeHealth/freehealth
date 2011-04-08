@@ -349,8 +349,6 @@ private:
 }  // End namespace PMH
 
 
-
-
 PmhCategoryModel::PmhCategoryModel(QObject *parent) :
         Category::ICategoryModelHelper(parent), d(new Internal::PmhCategoryModelPrivate(this))
 {
@@ -363,6 +361,11 @@ PmhCategoryModel::~PmhCategoryModel()
     if (d)
         delete d;
     d = 0;
+}
+
+void PmhCategoryModel::refreshFromDatabase()
+{
+    patientChanged();
 }
 
 QModelIndex PmhCategoryModel::index(int row, int column, const QModelIndex &parent) const
@@ -442,7 +445,7 @@ QVariant PmhCategoryModel::data(const QModelIndex &index, int role) const
         {
             if (index.column()==Label) {
                 if (it->isCategory())
-                    return it->label() + " " + QString::number(it->pmhCategory()->sortId());
+                    return it->label();// + " " + QString::number(it->pmhCategory()->sortId());
                 return it->label();
             } else if (index.column()==Id) {
                 if (it->isCategory()) {

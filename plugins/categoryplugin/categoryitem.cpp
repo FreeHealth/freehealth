@@ -103,6 +103,7 @@ CategoryItem::~CategoryItem()
 void CategoryItem::setParent(CategoryItem *parent)
 {
     d->m_Parent = parent;
+    setData(DbOnly_ParentId, parent->id());
     d->m_IsDirty = true;
 }
 
@@ -164,8 +165,6 @@ int CategoryItem::childNumber() const
 /** \brief Set data \e value for the CategoryItem for \e ref. */
 bool CategoryItem::setData(const int ref, const QVariant &value)
 {
-    if (ref==CategoryItem::DbOnly_LabelId)
-        qWarning() << value;
     if (d->m_Data.value(ref)==value)
         return true;
     d->m_IsDirty = true;

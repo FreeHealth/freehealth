@@ -28,6 +28,7 @@
 #include "formfilesselectorwidget.h"
 #include "episodebase.h"
 #include "iformio.h"
+#include "formmanager.h"
 
 #include <coreplugin/icore.h>
 #include <coreplugin/isettings.h>
@@ -44,6 +45,7 @@ using namespace Internal;
 
 static inline Core::ISettings *settings() { return Core::ICore::instance()->settings(); }
 static inline Form::Internal::EpisodeBase *episodeBase() {return Form::Internal::EpisodeBase::instance();}
+static inline Form::FormManager *formManager() {return Form::FormManager::instance();}
 
 FormManagerPreferencesPage::FormManagerPreferencesPage(QObject *parent) :
         IOptionsPage(parent), m_Widget(0)
@@ -115,6 +117,7 @@ void FormManagerPreferencesWidget::saveFormToBase()
         return;
     Form::FormIODescription *descr = ui->selector->selectedForms().at(0);
     episodeBase()->setGenericPatientFormFile(descr->data(Form::FormIODescription::UuidOrAbsPath).toString());
+    formManager()->readPmhxCategories(descr->data(Form::FormIODescription::UuidOrAbsPath).toString());
 }
 
 void FormManagerPreferencesWidget::saveToSettings(Core::ISettings *)

@@ -55,6 +55,8 @@ public:
     explicit PmhCategoryModel(QObject *parent = 0);
     ~PmhCategoryModel();
 
+    void refreshFromDatabase();
+
     QModelIndex index(int row, int column, const QModelIndex &parent = QModelIndex()) const;
     QModelIndex parent(const QModelIndex &index) const;
 
