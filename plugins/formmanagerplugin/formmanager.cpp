@@ -245,7 +245,6 @@ bool FormManager::loadSubForms()
                 }
             }
         }
-
     }
 
     return true;

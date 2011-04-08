@@ -85,8 +85,7 @@ public:
     QList<FormMain *> forms() const;
     Form::FormMain *rootForm(const char *modeUniqueName);
 
-    template <class T>
-            T* getParent(FormItem *item)
+    template <class T> T* getParent(FormItem *item)
     {
         T* parent = 0;
         QObject *p = item;

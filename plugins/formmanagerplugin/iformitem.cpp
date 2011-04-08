@@ -557,7 +557,6 @@ void FormMain::toTreeWidget(QTreeWidget *tree)
 
 void FormMain::emitFormLoaded()
 {
-    qWarning() << Q_FUNC_INFO << uuid();
     Q_EMIT formLoaded();
 }
 
