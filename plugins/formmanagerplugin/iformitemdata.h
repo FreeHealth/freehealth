@@ -34,14 +34,16 @@
 namespace Form {
 class FormItem;
 
-class FORM_EXPORT IFormItemData
+class FORM_EXPORT IFormItemData : public QObject
 {
+    Q_OBJECT
 public:
-    enum DataRepresentation {
-        ID_EpisodeDate = 0,
-        ID_EpisodeLabel,
-        ID_UserName,
-        ID_ForPatientModel
+    enum RoleRepresentation {
+        ID_EpisodeDate = 0,  // used by BaseFormData to set episode date
+        ID_EpisodeLabel,     // used by BaseFormData to set episode label
+        ID_UserName,         // used by BaseFormData to set episode label
+        ID_ForPatientModel,
+        ID_ForCalculations
     };
 
     IFormItemData() {}
@@ -52,11 +54,16 @@ public:
     virtual Form::FormItem *parentItem() const = 0;
     virtual bool isModified() const = 0;
 
+    // ref makes references to patient's data -> Core::IPatient
     virtual bool setData(const int ref, const QVariant &data, const int role) = 0;
     virtual QVariant data(const int ref, const int role) const = 0;
 
     virtual void setStorableData(const QVariant &data) = 0;
     virtual QVariant storableData() const = 0;
+
+Q_SIGNALS:
+    void dataChanged(const int ref);
+
 };
 } // namespace Form
 
