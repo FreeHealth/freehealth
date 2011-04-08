@@ -58,6 +58,7 @@
 
 QT_BEGIN_NAMESPACE
 class QGroupBox;
+class QButtonGroup;
 class QGridLayout;
 class QCheckBox;
 class QRadioButton;
@@ -68,6 +69,7 @@ class QComboBox;
 class QDateTimeEdit;
 class QAbstractSpinBox;
 class QPushButton;
+class QAbstractButton;
 class QStringListModel;
 QT_END_NAMESPACE
 
@@ -228,9 +230,11 @@ public:
 
 public Q_SLOTS:
     void retranslate();
+    void buttonClicked(QAbstractButton *radio);
 
 public:
     QList<QRadioButton*>  m_RadioList;
+    QButtonGroup *m_ButGroup;
 };
 
 class BaseRadioData : public Form::IFormItemData
@@ -505,6 +509,53 @@ public Q_SLOTS:
 private:
      QPushButton *m_Button;
 };
+
+//--------------------------------------------------------------------------------------------------------
+//-------------------------------------- SumWidget implementation ----------------------------------------
+//--------------------------------------------------------------------------------------------------------
+//class SumWidgetData;
+class SumWidget : public Form::IFormWidget
+{
+    Q_OBJECT
+public:
+    SumWidget(Form::FormItem *formItem, QWidget *parent = 0);
+    ~SumWidget();
+
+private Q_SLOTS:
+    void retranslate();
+    void connectFormItems();
+    void recalculate(const int modifiedRef);
+
+private:
+    QLineEdit *line;
+//    SumWidgetData *m_ItemData;
+};
+
+//class SumWidgetData : public Form::IFormItemData
+//{
+//public:
+//    BaseCheckData(Form::FormItem *item);
+//    ~BaseCheckData();
+
+//    void setCheckBox(QCheckBox *chk);
+
+//    void clear();
+
+//    Form::FormItem *parentItem() const {return m_FormItem;}
+//    bool isModified() const;
+
+//    bool setData(const int ref, const QVariant &data, const int role);
+//    QVariant data(const int ref, const int role) const;
+
+//    void setStorableData(const QVariant &data);
+//    QVariant storableData() const;
+
+//private:
+//    Form::FormItem *m_FormItem;
+//    QCheckBox *m_Check;
+//    Qt::CheckState m_OriginalValue;
+//};
+
 
 } // End BaseWidgets
 

@@ -60,6 +60,7 @@ using namespace BaseWidgets;
 //using namespace BaseWidgets::Internal;
 
 namespace {
+    // TypeEnum must be sync with the widgetsName QStringList
     enum TypeEnum {
         Type_Undefined = 0,
         Type_Form,
@@ -78,13 +79,16 @@ namespace {
         Type_Group,
         Type_Date,
         Type_Button,
+        Type_Sum,
         Type_MaxType
     };
 
+    // names must be sync with the type enum
     static const QStringList widgetsName =
             QStringList() << "undef" << "form" << "radio" << "check" << "combo"
             << "multicheck" << "uniquelist" << "multilist" << "spin" << "doublespin"
-            << "shorttext" << "longtext" << "helptext" << "file" << "group" << "date" << "button";
+            << "shorttext" << "longtext" << "helptext" << "file" << "group"
+            << "date" << "button" << "sum";
 
     const char * const  EXTRAS_KEY              = "option";
     const char * const  EXTRAS_KEY_COLUMN       = "column";
@@ -95,6 +99,7 @@ namespace {
     const char * const  EXTRAS_ALIGN_HORIZONTAL = "horizontal";
 
     const char * const  DATE_EXTRAS_KEY         = "dateformat";
+    const char * const  SUM_EXTRA_KEY           = "sumof";
 
     const char * const  SPIN_EXTRAS_KEY_MIN         = "min";
     const char * const  SPIN_EXTRAS_KEY_MAX         = "max";
@@ -208,6 +213,7 @@ Form::IFormWidget *BaseWidgetsFactory::createWidget(const QString &name, Form::F
     case ::Type_Spin : return new BaseSpin(formItem,parent);
     case ::Type_DoubleSpin : return new BaseSpin(formItem,parent,true);
     case ::Type_Button : return new BaseButton(formItem,parent);
+    case ::Type_Sum : return new SumWidget(formItem,parent);
     default: return 0;
     }
     return 0;
@@ -349,6 +355,7 @@ bool BaseFormData::setData(const int ref, const QVariant &data, const int role)
 
 QVariant BaseFormData::data(const int ref, const int role) const
 {
+    Q_UNUSED(ref);
     switch (role) {
     case ID_EpisodeDate: return m_Form->m_EpisodeDate->date(); break;
     case ID_EpisodeLabel: return m_Form->m_EpisodeLabel->text(); break;
@@ -516,8 +523,8 @@ QVariant BaseCheckData::storableData() const
 //--------------------------------------------------------------------------------------------------------
 //--------------------------------------------- BaseRadio ----------------------------------------------
 //--------------------------------------------------------------------------------------------------------
-BaseRadio::BaseRadio(Form::FormItem *formItem, QWidget *parent)
-        : Form::IFormWidget(formItem,parent)
+BaseRadio::BaseRadio(Form::FormItem *formItem, QWidget *parent) :
+        Form::IFormWidget(formItem,parent), m_ButGroup(0)
 {
     setObjectName("BaseRadio");
     // Prepare Widget Layout and label
@@ -529,6 +536,7 @@ BaseRadio::BaseRadio(Form::FormItem *formItem, QWidget *parent)
 
     // Add Buttons
     QGroupBox *gb = new QGroupBox(this);
+    m_ButGroup = new QButtonGroup(this);
     //     gb->setFlat(true);
     //     QSizePolicy sizePolicy = gb->sizePolicy();
     //     sizePolicy.setHorizontalPolicy(QSizePolicy::Fixed);
@@ -549,6 +557,7 @@ BaseRadio::BaseRadio(Form::FormItem *formItem, QWidget *parent)
     const QStringList &uids = m_FormItem->valueReferences()->values(Form::FormItemValues::Value_Uuid);
     foreach (const QString &v, m_FormItem->valueReferences()->values(Form::FormItemValues::Value_Possible)) {
         rb = new QRadioButton(this);
+        m_ButGroup->addButton(rb);
         if (i < uids.count()) {
             rb->setObjectName(uids.at(i));
             rb->setProperty("id", uids.at(i));
@@ -564,6 +573,8 @@ BaseRadio::BaseRadio(Form::FormItem *formItem, QWidget *parent)
         m_RadioList.append(rb);
     }
     hb->addWidget(gb);
+
+    connect(m_ButGroup,SIGNAL(buttonClicked(QAbstractButton*)), this, SLOT(buttonClicked(QAbstractButton*)));
 
     // create the FormItemData
     BaseRadioData *data = new BaseRadioData(m_FormItem);
@@ -597,6 +608,10 @@ void BaseRadio::retranslate()
     }
 }
 
+void BaseRadio::buttonClicked(QAbstractButton *radio)
+{
+    formItem()->itemDatas()->setData(0, radio->property("id"), Form::IFormItemData::ID_ForCalculations);
+}
 
 ////////////////////////////////////////// ItemData /////////////////////////////////////////////
 BaseRadioData::BaseRadioData(Form::FormItem *item) :
@@ -632,17 +647,31 @@ bool BaseRadioData::isModified() const
 
 bool BaseRadioData::setData(const int ref, const QVariant &data, const int role)
 {
-//    qWarning() << "BaseCheckData::setData" << data << role;
-//    if (role==Qt::EditRole || role==Qt::DisplayRole) {
-//        if (data.canConvert(QVariant::Int))  { // Tristate
-//            m_Check->setCheckState(Qt::CheckState(data.toInt()));
-//        }
-//    }
+    // receive ref=0; data=uid of activated radio; role=IFormItemData::RoleRepresentation
+    qWarning() << "BaseRadioData::setData" << data << role;
+    if (role==Form::IFormItemData::ID_ForCalculations) {
+        Q_EMIT dataChanged(ref); // just emit the dataChanged signal
+    }
     return true;
 }
 
 QVariant BaseRadioData::data(const int ref, const int role) const
 {
+    if (role==Form::IFormItemData::ID_ForCalculations) {
+        // return selected value::numerical (if exists)
+        QString selectedUid;
+        foreach(QRadioButton *but, m_Radio->m_RadioList) {
+            if (but->isChecked()) {
+                selectedUid = but->property("id").toString();
+                break;
+            }
+        }
+        int id = parentItem()->valueReferences()->values(Form::FormItemValues::Value_Uuid).indexOf(selectedUid);
+        const QStringList &vals = parentItem()->valueReferences()->values(Form::FormItemValues::Value_Numerical);
+//        qWarning() << "Radio -> DATA" << selectedUid << id << vals;
+        if (id < vals.count() && id >= 0)
+            return vals.at(id);
+    }
     return QVariant();
 }
 
@@ -659,6 +688,7 @@ void BaseRadioData::setStorableData(const QVariant &data)
         }
     }
     m_OriginalValue = id;
+    Q_EMIT dataChanged(0); // just emit the dataChanged signal
 //    qWarning() << "Radio orig" << id;
 }
 
@@ -1301,3 +1331,88 @@ void BaseButton::retranslate()
     m_Button->setText(m_FormItem->spec()->label());
 }
 
+
+//--------------------------------------------------------------------------------------------------------
+//------------------------------------------ SumWidget ---------------------------------------------------
+//--------------------------------------------------------------------------------------------------------
+SumWidget::SumWidget(Form::FormItem *formItem, QWidget *parent)
+        : Form::IFormWidget(formItem, parent), line(0)
+{
+    setObjectName("SumWidget_"+formItem->uuid());
+    // Prepare Widget Layout and label
+    QBoxLayout * hb = getBoxLayout(Label_OnLeft, m_FormItem->spec()->label(), this);
+    hb->addWidget(m_Label);
+
+    // Add LineEdit for the result
+    line = new QLineEdit(this);
+    line->setObjectName("SumWidgetLineEdit_" + m_FormItem->uuid());
+    line->setSizePolicy(QSizePolicy::Expanding , QSizePolicy::Fixed);
+    hb->addWidget(line);
+
+    // connect to parent FormMain
+    Form::FormMain *p = formItem->parentFormMain();
+    if (p) {
+        qWarning() << "parent" << p->uuid();
+        connect(p, SIGNAL(formLoaded()), this, SLOT(connectFormItems()));
+    }
+}
+
+SumWidget::~SumWidget()
+{
+}
+
+void SumWidget::retranslate()
+{
+    m_Label->setText(m_FormItem->spec()->label());
+}
+
+void SumWidget::connectFormItems()
+{
+//    qWarning() << "SUM requiered" << formItem()->extraDatas().value(::SUM_EXTRA_KEY);
+    if (!formItem()->extraDatas().value(::SUM_EXTRA_KEY).isEmpty()) {
+        QStringList uuids = formItem()->extraDatas().value(::SUM_EXTRA_KEY).split(";");
+        // get all formitems and connect to the dataChanged signal
+        Form::FormMain *p = formItem()->parentFormMain();
+        if (!p) {
+            LOG_ERROR("No FormMain parent");
+            return;
+        }
+        QList<Form::FormItem *> items = p->formItemChildren();
+        foreach(const QString &uid, uuids) {
+            for(int i = 0; i < items.count(); ++i) {
+                Form::FormItem *item = items.at(i);
+                if (item->uuid().compare(uid, Qt::CaseInsensitive)==0) {
+                    connect(item->itemDatas(), SIGNAL(dataChanged(int)), this, SLOT(recalculate(int)));
+                }
+            }
+        }
+    }
+}
+
+void SumWidget::recalculate(const int modifiedRef)
+{
+    Q_UNUSED(modifiedRef);
+//    qWarning() << "SUM recalculate" << formItem()->extraDatas().value(::SUM_EXTRA_KEY);
+    double sum = 0;
+    if (!formItem()->extraDatas().value(::SUM_EXTRA_KEY).isEmpty()) {
+        QStringList uuids = formItem()->extraDatas().value(::SUM_EXTRA_KEY).split(";");
+        // get all formitems and connect to the dataChanged signal
+        Form::FormMain *p = formItem()->parentFormMain();
+        if (!p) {
+            LOG_ERROR("No FormMain parent");
+            return;
+        }
+        QList<Form::FormItem *> items = p->formItemChildren();
+        foreach(const QString &uid, uuids) {
+            for(int i = 0; i < items.count(); ++i) {
+                Form::FormItem *item = items.at(i);
+                if (item->uuid().compare(uid, Qt::CaseInsensitive)==0) {
+                    QVariant val = item->itemDatas()->data(0, Form::IFormItemData::ID_ForCalculations);
+                    sum += val.toDouble();
+                }
+            }
+        }
+
+    }
+    line->setText(QString::number(sum));
+}
