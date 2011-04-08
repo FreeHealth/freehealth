@@ -117,11 +117,11 @@ inline static bool populateValues(Form::FormItem *item, const QDomElement &root)
 inline static bool populateScripts(Form::FormItem *item, const QDomElement &root)
 {
     QDomElement element = root.firstChildElement();
-    QString lang = root.attribute(Constants::ATTRIB_LANGUAGE,Trans::Constants::ALL_LANGUAGE).left(2);
+    QString lang = root.attribute(Constants::ATTRIB_LANGUAGE, Trans::Constants::ALL_LANGUAGE).left(2);
     while (!element.isNull()) {
         QString script = element.text();
-        int type = ::m_ScriptsTypes.value(element.tagName(),Form::FormItemScripts::Script_OnDemand);
-        item->scripts()->setScript(type,script,lang);
+        int type = ::m_ScriptsTypes.value(element.tagName(), Form::FormItemScripts::Script_OnDemand);
+        item->scripts()->setScript(type, script, lang);
         element = element.nextSiblingElement();
     }
     return true;
@@ -434,7 +434,7 @@ bool XmlFormIO::loadForm(const QString &file, Form::FormMain *rootForm)
 
 QList<Form::FormMain *> XmlFormIO::loadAllRootForms(const QString &uuidOrAbsPath)
 {
-//    qWarning() << Q_FUNC_INFO;
+//    qWarning() << Q_FUNC_INFO << uuidOrAbsPath;
     QList<Form::FormMain *> toReturn;
     QString file = uuidOrAbsPath;
     if (uuidOrAbsPath.isEmpty()) {
@@ -447,9 +447,14 @@ QList<Form::FormMain *> XmlFormIO::loadAllRootForms(const QString &uuidOrAbsPath
     }
     if (!canReadForms(file))
         return toReturn;
-//    qWarning() << file << m_AbsFileName;
+    // replace path TAGs
+    file.replace(Core::Constants::TAG_APPLICATION_COMPLETEFORMS_PATH, settings()->path(Core::ISettings::CompleteFormsPath));
+    file.replace(Core::Constants::TAG_APPLICATION_SUBFORMS_PATH, settings()->path(Core::ISettings::SubFormsPath));
+    file.replace(Core::Constants::TAG_APPLICATION_RESOURCES_PATH, settings()->path(Core::ISettings::BundleResourcesPath));
+    if (!file.endsWith("xml", Qt::CaseInsensitive))
+        file += QDir::separator();
     // now we work with m_AbsFileName which is defined by canReadForm()
-    QDir dir(QFileInfo(m_AbsFileName).absolutePath());
+    QDir dir(QFileInfo(file).absolutePath());
 //    qWarning() << "xxxxxxxxx" << dir.entryList(QStringList() << "*.xml", QDir::Files | QDir::Readable);
     refreshPlugsFactories();
     foreach(const QFileInfo &file, dir.entryInfoList(QStringList() << "*.xml", QDir::Files | QDir::Readable)) {
@@ -474,9 +479,19 @@ QList<Form::FormMain *> XmlFormIO::loadAllRootForms(const QString &uuidOrAbsPath
 
 bool XmlFormIO::loadElement(Form::FormItem *item, QDomElement &rootElement)
 {
+    bool descriptionPassed = false; // for speed improvements
     QDomElement element = rootElement.firstChildElement();
     while (!element.isNull()) {
         int i=0;
+
+        // Do not proceed form description here
+        if (!descriptionPassed) {
+            if (element.tagName().compare(::Constants::TAG_FORM_DESCRIPTION)==0) {
+                descriptionPassed = true; // speed improvements
+                element = element.nextSiblingElement();
+                continue;
+            }
+        }
 
         // Create a nem FormItem ?
         i = Constants::createTags.indexOf(element.tagName());
@@ -487,20 +502,21 @@ bool XmlFormIO::loadElement(Form::FormItem *item, QDomElement &rootElement)
         }
 
         // if there is no item defined then go nextSibling till we find a new form, item, page...
+
         if (!item) {
             element = element.nextSiblingElement();
             continue;
         }
 
         // Values ?
-        if (element.tagName() == Constants::TAG_VALUE) {
-            populateValues(item,element);
+        if (element.tagName().compare(Constants::TAG_VALUE, Qt::CaseInsensitive)==0) {
+            populateValues(item, element);
             element = element.nextSiblingElement();
             continue;
         }
 
         // Script ?
-        if (element.tagName() == Constants::TAG_SCRIPT) {
+        if (element.tagName().compare(Constants::TAG_SCRIPT, Qt::CaseInsensitive)==0) {
             populateScripts(item,element);
             element = element.nextSiblingElement();
             continue;
@@ -516,16 +532,20 @@ bool XmlFormIO::loadElement(Form::FormItem *item, QDomElement &rootElement)
         }
 
         // Name ?
-        if (element.tagName() == "name") {
+        if (element.tagName().compare("name",Qt::CaseInsensitive)==0) {
             item->setUuid(element.text());
+            element = element.nextSiblingElement();
+            continue;
         }
 
         // Patient Data Representation ?
-        if (element.tagName().compare(Constants::TAG_DATAPATIENT,Qt::CaseInsensitive)==0) {
+        if (element.tagName().compare(Constants::TAG_DATAPATIENT, Qt::CaseInsensitive)==0) {
             i = ::m_PatientDatas.value(element.text(), -1);
             if (i != -1) {
                 item->setPatientDataRepresentation(i);
             }
+            element = element.nextSiblingElement();
+            continue;
         }
 
     //             // optional?
@@ -543,6 +563,8 @@ bool XmlFormIO::loadElement(Form::FormItem *item, QDomElement &rootElement)
                 fileName.prepend(QFileInfo(m_AbsFileName).absoluteDir().absolutePath() + QDir::separator());
             fileName = QDir::cleanPath(fileName);
             loadForm(fileName,0);
+            element = element.nextSiblingElement();
+            continue;
         }
 
         // Options
@@ -556,7 +578,13 @@ bool XmlFormIO::loadElement(Form::FormItem *item, QDomElement &rootElement)
             } else {
                 item->addExtraData(element.tagName(), element.text());
             }
+            element = element.nextSiblingElement();
+            continue;
         }
+
+        // All others add them in extraData
+//        qWarning() << "XML adding other tag" << element.tagName() << element.text();
+        item->addExtraData(element.tagName(), element.text());
 
         element = element.nextSiblingElement();
     }
