@@ -54,7 +54,7 @@ void IFormWidget::createLabel(const QString &text, Qt::Alignment horizAlign)
 //    l->setFrameShape(QFrame::Box);
     l->setText(text);
     l->setAlignment(Qt::AlignTop | horizAlign);
-    l->setSizePolicy(QSizePolicy::Preferred, QSizePolicy::Preferred);
+//    l->setSizePolicy(QSizePolicy::Preferred, QSizePolicy::Preferred);
     l->setWordWrap(true);
 }
 
@@ -65,7 +65,7 @@ QBoxLayout *IFormWidget::getBoxLayout(const int labelOption, const QString &text
     if (labelOption == Label_OnTop) {
         hb = new QBoxLayout(QBoxLayout::TopToBottom, parent);
         createLabel(text, Qt::AlignTop | Qt::AlignLeft);
-        hb->setSpacing(0);
+        hb->setSpacing(5);
     } else {
         /** \todo Code specific label options */
         hb = new QBoxLayout(QBoxLayout::LeftToRight, parent);
