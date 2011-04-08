@@ -11,7 +11,7 @@
     <cdate>2011-03-15</cdate>
     <icon>addictology.png</icon>
     <weblink></weblink>
-    <bibliography/>
+    <bibliography pimd="1932883">Heatherton TF, Kozlowski LT, Frecker RC, Fagerstrom KO. The Fagerstrom Test for Nicotine Dependence : a revision of the Fagerstrom Tolerance Questionnaire. Br J Addict 1991;86(9):1119-27.</bibliography>
 
     <!-- Translatable values -->
     <licence>GPLv3</licence>
@@ -34,7 +34,7 @@
     <label lang="de">Fagerström-Test</label>
     <label lang="xx">Fagerström test</label>
     <type>form</type>
-    <option>col=2</option>
+    <options>col=2</options>
 
     <Item>
       <name>cig_reveil</name>
@@ -59,6 +59,10 @@
         <possible id="1" lang="en">6-30 minutes</possible>
         <possible id="2" lang="en">31-60 minutes</possible>
         <possible id="3" lang="en">After 60 minutes</possible>
+        <numerical id="0">3</numerical>
+        <numerical id="1">2</numerical>
+        <numerical id="2">1</numerical>
+        <numerical id="3">0</numerical>
       </value>
     </Item>
 
@@ -77,6 +81,8 @@
         <possible id="1" lang="de">nein</possible>
         <possible id="0" lang="en">yes</possible>
         <possible id="1" lang="en">no</possible>
+        <numerical id="0">1</numerical>
+        <numerical id="1">0</numerical>
       </value>
     </Item>
 
@@ -95,6 +101,8 @@
         <possible id="1" lang="de">andere</possible>
         <possible id="0" lang="en">The first one in the morning</possible>
         <possible id="1" lang="en">All others</possible>
+        <numerical id="0">1</numerical>
+        <numerical id="1">0</numerical>
       </value>
     </Item>
 
@@ -121,6 +129,10 @@
         <possible id="1" lang="en">11-20</possible>
         <possible id="2" lang="en">21-30</possible>
         <possible id="3" lang="en">31 or more</possible>
+        <numerical id="0">0</numerical>
+        <numerical id="1">1</numerical>
+        <numerical id="2">2</numerical>
+        <numerical id="3">3</numerical>
       </value>
     </Item>
 
@@ -139,6 +151,8 @@
         <possible id="1" lang="de">nein</possible>
         <possible id="0" lang="en">yes</possible>
         <possible id="1" lang="en">no</possible>
+        <numerical id="0">1</numerical>
+        <numerical id="1">0</numerical>
       </value>
     </Item>
 
@@ -157,7 +171,26 @@
         <possible id="1" lang="de">nein</possible>
         <possible id="0" lang="en">yes</possible>
         <possible id="1" lang="en">no</possible>
+        <numerical id="0">1</numerical>
+        <numerical id="1">0</numerical>
       </value>
+    </Item>
+
+    <Item>
+    <name>fagerstromScore</name>
+    <label lang="fr">Score</label>
+    <label lang="de">Gäste</label>
+    <label lang="xx">Score</label>
+    <type>sum</type>
+    <sumof>cig_reveil;fum_interdit;cig_indispensable;cig_par_jour;premiere_heure;maladie</sumof>
+    </Item>
+
+    <Item>
+    <name>fagerstromScoreInterpret</name>
+    <type>helptext</type>
+    <label lang="fr">0-2 : Très faible&lt;br />3-4 : Faible&lt;br />5 : Moyenne&lt;br />6-7 : Forte&lt;br />8-10 : Très forte&lt;br /></label>
+    <label lang="de">0-2: Sehr niedrig&lt;br /> 3-4: Niedrige&lt;br /> 5: Durchschnittliche&lt;br /> 6-7: Starke&lt;br /> 8-10: Sehr hohe&lt;br /></label>
+    <label lang="xx">0-2: Very Low&lt;br /> 3-4: Low&lt;br /> 5: Average&lt;br /> 6-7: Strong&lt;br /> 8-10: Very high&lt;br /></label>
     </Item>
 
   </MedForm>

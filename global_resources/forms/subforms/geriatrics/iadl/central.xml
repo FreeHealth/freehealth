@@ -33,32 +33,7 @@
     <name>iadl</name>
     <label>IADL</label>
     <type>form</type>
-    <option>col=2</option>
-    <script>
-        {
-        var str = "";
-        var object = thisObject;
-        if (!object.completed) return "";
-
-        /* Get sum of IADL by adding all iadl childs */
-        var sum = object.sumOfChildren;
-        str += "L'IADL est à " + sum + " sur 4.";
-
-        /* Construct dependencies sentence */
-        var dependances = object.sumOfInterpretValues( ", " );
-
-        if (dependances)
-        {  str += " Des dépendances sont repérées pour : " + dependances + ".\n";
-        }
-
-        /* Set thisObject to interperted */
-        /* This must be done 'cause we done want to get de selected values of the IADL */
-        object.interpreted = true;
-        object.allChildInterpreted();
-
-        return str;
-        }
-    </script>
+    <options>col=2</options>
 
     <Item>
       <name>iadlBudget</name>
@@ -122,6 +97,13 @@
         <numerical id="0">0</numerical>
         <numerical id="1">1</numerical>
       </value>
+    </Item>
+
+    <Item>
+      <name>iadlSum</name>
+      <label>&lt;b&gt;Résultat&lt;/b&gt;</label>
+      <type>sum</type>
+      <sumof>iadlBudget;iadlTel;iadlMed;iadlTransport</sumof>
     </Item>
 
  </MedForm>
