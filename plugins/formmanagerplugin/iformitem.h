@@ -85,6 +85,7 @@ public:
 
     virtual ~FormItem();
     Form::FormItem *parentFormItem() const;
+    Form::FormMain *parentFormMain() const;
 
     Form::FormItemSpec *spec() const {return m_Spec;}
     Form::FormItemScripts *scripts() const {return m_Scripts;}
@@ -140,6 +141,17 @@ inline Form::FormItem *Form::FormItem::parentFormItem() const
 {
     return qobject_cast<Form::FormItem *>(parent());
 }
+inline Form::FormMain *Form::FormItem::parentFormMain() const
+{
+    QObject *o = this->parent();
+    while (o) {
+        FormMain *f = qobject_cast<Form::FormMain *>(o);
+        if (f)
+            return f;
+        o = o->parent();
+    }
+    return 0;
+}
 
 
 class FORM_EXPORT FormPage : public FormItem
@@ -189,6 +201,13 @@ public:
 
     void createDebugPage();
     void toTreeWidget(QTreeWidget *tree);
+
+    void emitFormLoaded();
+
+Q_SIGNALS:
+    void formLoaded();
+//    void itemAdded(const QString &uuid);
+//    void subFormAdded(const QString &uuid);
 
 private:
     FormMainDebugPage *m_DebugPage;

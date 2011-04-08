@@ -462,6 +462,11 @@ QList<Form::FormMain *> XmlFormIO::loadAllRootForms(const QString &uuidOrAbsPath
         } else {
             toReturn.append(root);
         }
+        // Emit the formLoaded signal for all subForms loaded
+        QList<Form::FormMain *> forms = root->flattenFormMainChildren();
+        for(int i=0; i < forms.count(); ++i) {
+            forms.at(i)->emitFormLoaded();
+        }
 //        qWarning() << "     mode" << root << root->modeUniqueName();
     }
     return toReturn;
@@ -576,7 +581,6 @@ bool XmlFormIO::createElement(Form::FormItem *item, QDomElement &element)
         // create a new form
         Form::FormMain *oldRootForm = m_ActualForm;
         /** \todo add Forms' parent */
-//        m_ActualForm = formManager()->createForm(element.firstChildElement(Constants::TAG_NAME).text(), m_ActualForm);
         m_ActualForm = m_ActualForm->createChildForm(element.firstChildElement(Constants::TAG_NAME).text());
         item = m_ActualForm;
         if (item) {
