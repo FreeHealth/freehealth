@@ -225,7 +225,6 @@ public:
         m_Root->setLabel("ROOT CATEGORY");
         Category::CategoryItem *cat = new Category::CategoryItem;
         m_Root->setPmhCategory(cat);
-
     }
 
     TreeItem *getItem(const QModelIndex &index) const
@@ -365,7 +364,15 @@ PmhCategoryModel::~PmhCategoryModel()
 
 void PmhCategoryModel::refreshFromDatabase()
 {
-    patientChanged();
+    qDeleteAll(d->m_Pmhs);
+    d->m_Pmhs.clear();
+    d->m_Cat_Pmhs.clear();
+    d->m_PmhToItems.clear();
+    d->m_CategoryToItem.clear();
+    d->m_Cats.clear();
+    d->clearTree();
+    d->getDataFromDatabase();
+    reset();
 }
 
 QModelIndex PmhCategoryModel::index(int row, int column, const QModelIndex &parent) const

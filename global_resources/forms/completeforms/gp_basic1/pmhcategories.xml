@@ -2,7 +2,7 @@
 <!DOCTYPE FreeMedForms>
 <FreeMedForms>
   <PMHx>
-    <Category icon="chromosome.png">
+    <Category icon="">
       <label lang="xx">Risk factors</label>
       <label lang="fr">Facteurs de risque</label>
       <label lang="de">Risikofaktoren</label>
