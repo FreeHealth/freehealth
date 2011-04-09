@@ -52,6 +52,8 @@
        }
      </onload>
         </script>
+
+
         <Item>
             <name>optionCombo</name>
             <type>combo</type>
@@ -287,7 +289,14 @@
                     <numerical id="1">0</numerical>
                 </value>
             </Item>
+            <Item>
+              <name>orientationSubSum</name>
+              <type>sum</type>
+              <sumof>year;season;month;dayofmonth;weekday;state;city;partcity;building;floor</sumof>
+            </Item>
         </Item>
+
+
         <Item>
             <name>registration</name>
             <type>group</type>
@@ -302,7 +311,7 @@
                 <label lang="de">Der Untersucher nennt folgende drei Gegenstände und fordert den Patienten auf, die Begriffe zu wiederholen (1 Punkt für jede richtige Antwort). Der Untersucher wiederholt die Wörter solange, bis der Patient alle drei gelernt hat (höchstens 6 Wiederholungen).</label>
             </Item>
             <Item>
-                <name>year</name>
+                <name>firstWord</name>
                 <type>radio</type>
                 <option>horizontal</option>
                 <label lang="de">Auto</label>
@@ -322,7 +331,7 @@
                 </value>
             </Item>
             <Item>
-                <name>year</name>
+                <name>secondWord</name>
                 <option>horizontal</option>
                 <type>radio</type>
                 <label lang="de">Blume</label>
@@ -342,7 +351,7 @@
                 </value>
             </Item>
             <Item>
-                <name>year</name>
+                <name>thirdWord</name>
                 <option>horizontal</option>
                 <type>radio</type>
                 <label lang="de">Kerze</label>
@@ -361,7 +370,13 @@
                     <numerical id="1">0</numerical>
                 </value>
             </Item>
+            <Item>
+              <name>apprentSubSum</name>
+              <type>sum</type>
+              <sumof>firstWord;secondWord;thirdWord</sumof>
+            </Item>
         </Item>
+
         <Item>
             <name>attention</name>
             <type>group</type>
@@ -474,7 +489,14 @@
                 <label lang="de">ODER. Falls der Patient die Aufgabe nicht durchführen kann oder will, „Radio“ rückwärts buchstabieren lassen: O-I-D-A-R</label>
                 <label lang="en"/>
             </Item>
+            <Item>
+              <name>calcSubSum</name>
+              <type>sum</type>
+              <sumof>calc93;calc86;calc79;calc72;calc65</sumof>
+            </Item>
         </Item>
+
+
         <Item>
             <name>recall</name>
             <type>group</type>
@@ -548,7 +570,14 @@
                     <numerical id="1">0</numerical>
                 </value>
             </Item>
+            <Item>
+              <name>recallSubSum</name>
+              <type>sum</type>
+              <sumof>recall1;recall2;recall3</sumof>
+            </Item>
         </Item>
+
+
         <Item>
             <name>language</name>
             <type>group</type>
@@ -629,7 +658,7 @@
                 <label lang="de">Der Untersucher lässt den Patienten folgendes Kommando befolgen.</label>
             </Item>
             <Item>
-                <name>comprehension1</name>
+                <name>understanding1</name>
                 <type>radio</type>
                 <option>horizontal</option>
                 <label lang="de">„Nehmen Sie dieses Blatt in die rechte Hand“</label>
@@ -649,7 +678,7 @@
                 </value>
             </Item>
             <Item>
-                <name>comprehension2</name>
+                <name>understanding2</name>
                 <type>radio</type>
                 <option>horizontal</option>
                 <label lang="de">„Falten Sie es in der Mitte“</label>
@@ -669,7 +698,7 @@
                 </value>
             </Item>
             <Item>
-                <name>comprehension3</name>
+                <name>understanding3</name>
                 <type>radio</type>
                 <option>horizontal</option>
                 <label lang="de">„Legen Sie es auf den Boden“</label>
@@ -748,12 +777,18 @@
                     <numerical id="1">0</numerical>
                 </value>
             </Item>
+            <Item>
+                <name>score</name>
+                <type>sum</type>
+                <sumof>pen;watch;repeat;understanding1;understanding2;understanding3;reading;writing;drawing</sumof>
+            </Item>
         </Item>
         <Item>
             <name>score</name>
             <type>sum</type>
             <label>Score = </label>
-            <sumof/>
+            <sumof>year;season;month;dayofmonth;weekday;state;city;partcity;building;floor;firstWord;secondWord;thirdWord;calc93;calc86;calc79;calc72;calc65;recall1;recall2;recall3;pen;watch;repeat;understanding1;understanding2;understanding3;reading;writing;drawing</sumof>
+            <option>changeepisodelabel</option>
         </Item>
     </MedForm>
 </FreeMedForms>
