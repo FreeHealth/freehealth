@@ -177,12 +177,13 @@
     </Item>
 
     <Item>
-    <name>fagerstromScore</name>
-    <label lang="fr">Score</label>
-    <label lang="de">Gäste</label>
-    <label lang="xx">Score</label>
-    <type>sum</type>
-    <sumof>cig_reveil;fum_interdit;cig_indispensable;cig_par_jour;premiere_heure;maladie</sumof>
+      <name>fagerstromScore</name>
+      <label lang="fr">Score</label>
+      <label lang="de">Gäste</label>
+      <label lang="xx">Score</label>
+      <type>sum</type>
+      <sumof>cig_reveil;fum_interdit;cig_indispensable;cig_par_jour;premiere_heure;maladie</sumof>
+      <option>changeepisodelabel</option>
     </Item>
 
     <Item>

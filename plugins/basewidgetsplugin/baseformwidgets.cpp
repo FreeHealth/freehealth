@@ -97,6 +97,7 @@ namespace {
     const char * const  EXTRAS_GROUP_CHECKED    = "checked";
     const char * const  EXTRAS_ALIGN_VERTICAL   = "vertical";
     const char * const  EXTRAS_ALIGN_HORIZONTAL = "horizontal";
+    const char * const  CHANGE_EPISODE_LABEL    = "changeepisodelabel";
 
     const char * const  DATE_EXTRAS_KEY         = "dateformat";
     const char * const  SUM_EXTRA_KEY           = "sumof";
@@ -1368,7 +1369,7 @@ void SumWidget::retranslate()
 
 void SumWidget::connectFormItems()
 {
-//    qWarning() << "SUM requiered" << formItem()->extraDatas().value(::SUM_EXTRA_KEY);
+    qWarning() << "SUM requiered" << formItem()->extraDatas().value(::SUM_EXTRA_KEY);
     if (!formItem()->extraDatas().value(::SUM_EXTRA_KEY).isEmpty()) {
         QStringList uuids = formItem()->extraDatas().value(::SUM_EXTRA_KEY).split(";");
         // get all formitems and connect to the dataChanged signal
@@ -1377,11 +1378,13 @@ void SumWidget::connectFormItems()
             LOG_ERROR("No FormMain parent");
             return;
         }
-        QList<Form::FormItem *> items = p->formItemChildren();
+        qWarning() << "Parent = " << p->uuid();
+        QList<Form::FormItem *> items = p->flattenFormItemChildren();
         foreach(const QString &uid, uuids) {
             for(int i = 0; i < items.count(); ++i) {
                 Form::FormItem *item = items.at(i);
                 if (item->uuid().compare(uid, Qt::CaseInsensitive)==0) {
+                    qWarning() << "  connecting" << item->uuid();
                     connect(item->itemDatas(), SIGNAL(dataChanged(int)), this, SLOT(recalculate(int)));
                 }
             }
@@ -1392,17 +1395,17 @@ void SumWidget::connectFormItems()
 void SumWidget::recalculate(const int modifiedRef)
 {
     Q_UNUSED(modifiedRef);
-//    qWarning() << "SUM recalculate" << formItem()->extraDatas().value(::SUM_EXTRA_KEY);
+    qWarning() << "SUM recalculate" << formItem()->extraDatas().value(::SUM_EXTRA_KEY);
     double sum = 0;
+    Form::FormMain *p = formItem()->parentFormMain();
     if (!formItem()->extraDatas().value(::SUM_EXTRA_KEY).isEmpty()) {
         QStringList uuids = formItem()->extraDatas().value(::SUM_EXTRA_KEY).split(";");
         // get all formitems and connect to the dataChanged signal
-        Form::FormMain *p = formItem()->parentFormMain();
         if (!p) {
             LOG_ERROR("No FormMain parent");
             return;
         }
-        QList<Form::FormItem *> items = p->formItemChildren();
+        QList<Form::FormItem *> items = p->flattenFormItemChildren();
         foreach(const QString &uid, uuids) {
             for(int i = 0; i < items.count(); ++i) {
                 Form::FormItem *item = items.at(i);
@@ -1415,4 +1418,19 @@ void SumWidget::recalculate(const int modifiedRef)
 
     }
     line->setText(QString::number(sum));
+    if (formItem()->extraDatas().value(::EXTRAS_KEY).contains(::CHANGE_EPISODE_LABEL, Qt::CaseInsensitive)) {
+        QString episodeLabel = p->itemDatas()->data(0, Form::IFormItemData::ID_EpisodeLabel).toString();
+        QString add = QString("[[%1 %2]]").arg(m_Label->text()).arg(sum);
+        if (episodeLabel.contains("[[") && episodeLabel.contains("]]")) {
+            // remove this part
+            int begin = episodeLabel.indexOf("[[");
+            int end = episodeLabel.indexOf("]]") + 2;
+            episodeLabel.remove(begin, end-begin);
+            // add the new value
+            episodeLabel.insert(begin, add);
+            p->itemDatas()->setData(0, episodeLabel, Form::IFormItemData::ID_EpisodeLabel);
+        } else {
+            p->itemDatas()->setData(0, episodeLabel + "; " + add, Form::IFormItemData::ID_EpisodeLabel);
+        }
+    }
 }
