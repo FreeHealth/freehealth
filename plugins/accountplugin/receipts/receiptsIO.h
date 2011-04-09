@@ -15,7 +15,7 @@ class receiptsEngine : public QObject {
 public :
     receiptsEngine();
     ~receiptsEngine();
-    bool insertIntoAccount(QHash<int,QVariant> & hashValues);
+    bool insertIntoAccount(QHash<int,QVariant> & hashValues, QString & userUuid);
     QHash<QString,QVariant> getNamesAndValuesFromMP();
     bool insertInThesaurus(QString & listOfValuesStr,QString & userUuid);
     bool deleteFromThesaurus(QString & data );

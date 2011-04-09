@@ -65,15 +65,24 @@ class AccountModelPrivate
 public:
     AccountModelPrivate(AccountModel *parent) :
             m_SqlTable(0), m_IsDirty(false),
-            m_StartDate(QDate::currentDate()), m_EndDate(QDate::currentDate()),
+            //m_StartDate(QDate::currentDate()), m_EndDate(QDate::currentDate()),
             m_UserUid(user()->value(Core::IUser::Uuid).toString()),
             q(parent)
     {   //qDebug() << __FILE__ << QString::number(__LINE__) << " m_UserUid =  " << m_UserUid;
         m_SqlTable = new QSqlTableModel(q, QSqlDatabase::database(Constants::DB_ACCOUNTANCY));
         m_SqlTable->setTable(accountBase()->table(Constants::Table_Account));
-        refreshFilter();
+        //setFilterUserUuid();
+        //refreshFilter();
     }
     ~AccountModelPrivate () {}
+    void setFilterUserUuid()
+   {
+    QString uuid = m_UserUid;
+    qDebug() << __FILE__ << QString::number(__LINE__) << " uuid =" << uuid  ;
+    QString filter = QString("%1 = '%2'").arg("USER_UID",uuid);
+    m_SqlTable->setFilter(filter);
+    m_SqlTable->select();
+    }
 
     void refreshFilter()
     {
@@ -88,8 +97,8 @@ public:
         }
         where.insert(AccountDB::Constants::ACCOUNT_USER_UID, QString("='%1'").arg(m_UserUid));
         m_SqlTable->setFilter(accountBase()->getWhereClause(Constants::Table_Account, where));
-        if (WarnFilter)
-            qWarning() << m_SqlTable->filter() << __FILE__ << __LINE__;
+        /*if (WarnFilter)
+            qWarning() << m_SqlTable->filter() << __FILE__ << __LINE__;*/
         q->reset();
     }
 
@@ -116,7 +125,6 @@ AccountModel::AccountModel(QObject *parent) :
 
     connect(user(), SIGNAL(userChanged()), this, SLOT(userChanged()));
     userChanged();
-
     d->m_SqlTable->select();
 }
 
@@ -131,8 +139,7 @@ AccountModel::~AccountModel()
 int AccountModel::rowCount(const QModelIndex &parent) const
 {
     int rows = 0;
-    d->m_SqlTable->setFilter("");
-    d->m_SqlTable->select();
+    //d->m_SqlTable->setFilter("");
     rows = d->m_SqlTable->rowCount(parent);
     return rows;
 }
@@ -141,13 +148,6 @@ int AccountModel::columnCount(const QModelIndex &parent) const
 {
     return d->m_SqlTable->columnCount(parent);
 }
-
-void AccountModel::setUserUuid(const QString &uuid)
-{
-    d->m_UserUid = uuid;
-    d->refreshFilter();
-}
-
 
 QVariant AccountModel::data(const QModelIndex &index, int role) const
 {
@@ -284,4 +284,17 @@ void AccountModel::fetchMore ( const QModelIndex & parent ) {
 void AccountModel::setFilter(const QString & filter){
     d->m_SqlTable->setFilter(filter);
     d->m_SqlTable->select();
+}
+
+QString AccountModel::filter(){
+    return d->m_SqlTable->filter();
+}
+
+void AccountModel::select(){
+    d->m_SqlTable->select();
+}
+
+QString AccountModel::getUserUuid(){
+    QString uuid = d->m_UserUid;
+    return uuid;
 }

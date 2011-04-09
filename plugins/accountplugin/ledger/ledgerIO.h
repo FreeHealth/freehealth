@@ -14,7 +14,7 @@ using namespace Constants;
 class LedgerIO : public QObject {
     Q_OBJECT
     public :
-        LedgerIO(QObject * parent);
+        LedgerIO(QObject * parent = 0);
         ~LedgerIO();
         QStringList getListOfYears();
         AccountModel * getModelMonthlyReceiptsIO(QObject * parent,QString & month , QString & year);
@@ -34,11 +34,12 @@ class LedgerIO : public QObject {
         QStringList getListOfSumsMonthlyMovementsIO(QObject * parent,QString & dateBegin , QString & dateEnd);
         QStringList listOfReceiptsTypes();
         QStringList listOfMovementsTypes();
-        QList<QVector<QString> > getDatasReceitsInVector(QString & dateBegin,QString & dateEnd);
+        QList<QVector<QString> > getDatasReceiptsInVector(QString & dateBegin,QString & dateEnd);
         QList<QVector<QString> > getDatasMovementsInVector(QString & dateBegin,QString & dateEnd);
     private :
         AccountModel * m_accountModel;
         MovementModel * m_movementModel;
+        QString m_userUuid;
 };
 
 #endif

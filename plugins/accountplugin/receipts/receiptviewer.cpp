@@ -528,6 +528,7 @@ void ReceiptViewer::actionsOfTreeView(const QModelIndex &index){
             if (hashOfValues.size() < 1)
             {
             	  hashOfValues.insertMulti("CS","23.00");//preferential act
+            	  qWarning() << __FILE__ << QString::number(__LINE__) << "default value CS = 23 €" ;
                 }           
             m_listOfValues << hashOfValues.keys();
             m_modelReturnedList->setStringList(m_listOfValues);
@@ -605,6 +606,7 @@ void ReceiptViewer::fillModel(QHash<QString,QString> &hashOfValues, int typeOfPa
 void ReceiptViewer::save()
 {
     using namespace ::Internal;
+    QString userUuid = user()->value(Core::IUser::Uuid).toString();
     QString textOfListOfActs = m_listOfValues.join("+");
     double cash = m_model->data(m_model->index(AmountModel::Row_Cash,AmountModel::Col_Value)).toDouble();
     double cheque = m_model->data(m_model->index(AmountModel::Row_Cheque,AmountModel::Col_Value)).toDouble();
@@ -620,14 +622,24 @@ void ReceiptViewer::save()
                                                                      << QString::number(due) 
                                                                      << "site uid = "+m_siteUid.toString()
                                                                      << "insurance = "+m_insuranceUid.toString();
+    QString patientUid = patient()->data(Core::IPatient::Uid).toString();
+    if (patientUid.isEmpty())
+    {
+    	  patientUid = "no-patient-uid";
+        }
+    QString patientName = patient()->data(Core::IPatient::FullName).toString();
+    if (patientName.isEmpty())
+    {
+    	  patientName = "Patient Name";
+        }
     QHash<int,QVariant> hash;
     hash.insert(ACCOUNT_UID,"UID");
-    hash.insert(ACCOUNT_USER_UID,user()->value(Core::IUser::Uuid).toString());
-    hash.insert(ACCOUNT_PATIENT_UID,patient()->data(Core::IPatient::Uid).toString());
-    hash.insert(ACCOUNT_PATIENT_NAME,patient()->data(Core::IPatient::FullName).toString());
+    hash.insert(ACCOUNT_USER_UID,userUuid);
+    hash.insert(ACCOUNT_PATIENT_UID,patientUid);
+    hash.insert(ACCOUNT_PATIENT_NAME,patientName);
     hash.insert(ACCOUNT_SITE_ID,m_siteUid);//AccountDB::Constants::SITES_UID
     hash.insert(ACCOUNT_INSURANCE_ID,m_insuranceUid);
-    hash.insert(ACCOUNT_DATE,ui->dateExecution->date().toString("yyyy-MM-dd"));
+    hash.insert(ACCOUNT_DATE,ui->dateExecution->date()/*.toString("yyyy-MM-dd")*/);
     hash.insert(ACCOUNT_MEDICALPROCEDURE_XML, QVariant());
     hash.insert(ACCOUNT_MEDICALPROCEDURE_TEXT,textOfListOfActs);
     hash.insert(ACCOUNT_COMMENT, QVariant());
@@ -641,7 +653,7 @@ void ReceiptViewer::save()
     hash.insert(ACCOUNT_ISVALID,0);
     hash.insert(ACCOUNT_TRACE, QVariant());
     receiptsEngine r;
-    if (!r.insertIntoAccount(hash)) {
+    if (!r.insertIntoAccount(hash,userUuid)) {
         QMessageBox::warning(0,trUtf8("Warning"),trUtf8("Error inserting into AccountModel!"),QMessageBox::Ok);
     }
 }
@@ -689,7 +701,7 @@ void ReceiptViewer::clearAll(bool b)
 
 QVariant ReceiptViewer::firstItemChoosenAsPreferential(QString &item)
 {
-    QVariant variantValue;
+    QVariant variantValue = QVariant("No item");
     receiptsManager manager;
     if (manager.getDistanceRules().keys().contains(item))
     {

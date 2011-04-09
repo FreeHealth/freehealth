@@ -1,8 +1,6 @@
 #include "ledgerviewer.h"
 #include "ui_ledgerviewer.h"
 #include "ledgerIO.h"
-#include "ledgermanager.h"
-#include "ledgeredit.h"
 
 #include <QDebug>
 #include <QRect>
@@ -10,22 +8,21 @@
 
 LedgerViewer::LedgerViewer(QWidget * parent): QWidget(parent),ui(new Ui::LedgerViewerWidget){
     ui->setupUi(this);
-    m_currency = "euros";
-    LedgerManager *lm = new LedgerManager(this);
-        QStringList listOfMonths;
-    listOfMonths = lm->getListOfMonths();
+    m_currency = "euro";
+    m_lm = new LedgerManager(this);
+    m_ledgerEdit = new LedgerEdit(this);
+    QStringList listOfMonths;
+    listOfMonths = m_lm->getListOfMonths();
     ui->monthsComboBox->addItems(listOfMonths);
     QStringList listOfYears;
     QString currentDate = QDate::currentDate().toString("yyyy");
-    qDebug() << __FILE__ << QString::number(__LINE__) << " 1 ="  ;
+    qDebug() << __FILE__ << QString::number(__LINE__) << " 1 "  ;
     listOfYears << currentDate;
-    qDebug() << __FILE__ << QString::number(__LINE__) << " 2 ="  ;
-    listOfYears << lm->getListOfYears();
-    qDebug() << __FILE__ << QString::number(__LINE__) << " 3 ="  ;
+    qDebug() << __FILE__ << QString::number(__LINE__) << " 2 "  ;
+    listOfYears << m_lm->getListOfYears();
+    qDebug() << __FILE__ << QString::number(__LINE__) << " 3 "  ;
     listOfYears.removeDuplicates();
     ui->yearsComboBox->addItems(listOfYears);
-    
-
     createActions();
     createMenus();
     fillMenuBar();
@@ -94,66 +91,65 @@ void LedgerViewer::createActions(){
 }
 
 void LedgerViewer::monthlyReceiptsAnalysis(){
-    LedgerManager lm(this);
     QString month = ui->monthsComboBox->currentText();
     QString year = ui->yearsComboBox->currentText();
-    AccountModel * model = lm.getModelMonthlyReceiptsAnalysis(this,
+    AccountModel * model = m_lm->getModelMonthlyReceiptsAnalysis(this,
                                                               month,
                                                               year);
+    qDebug() << __FILE__ << QString::number(__LINE__) << " modelAccount =" << QString::number(model->rowCount()) ;
     ui->tableView->setModel(model);
-    QString labelText = "Total = "+QString::number(lm.m_sums)+" "+m_currency;
+    QString labelText = "Total = "+QString::number(m_lm->m_sums)+" "+m_currency;
     ui->sumLabel->setText(labelText);
 }
 void LedgerViewer::monthlyAndTypeReceiptsAnalysis(){
     QString month = ui->monthsComboBox->currentText();
     QString year = ui->yearsComboBox->currentText();
-    LedgerManager lm(this);
-    QSqlTableModel * model = lm.getModelMonthlyAndTypeReceiptsAnalysis(this,
+    QSqlTableModel * model = m_lm->getModelMonthlyAndTypeReceiptsAnalysis(this,
                                                                        month,
                                                                        year);
     ui->tableView->setModel(model);
-    QString labelText = "Total = "+QString::number(lm.m_sums)+" "+m_currency;
+    QString labelText = "Total = "+QString::number(m_lm->m_sums)+" "+m_currency;
     ui->sumLabel->setText(labelText);
 }
 void LedgerViewer::yearlyAndTypeReceiptsAnalysis(){
-    LedgerManager lm(this);
     QString year = ui->yearsComboBox->currentText();
-    QSqlTableModel * model = lm.getModelYearlyAndTypeReceiptsAnalysis(this,year);
+    QSqlTableModel * model = m_lm->getModelYearlyAndTypeReceiptsAnalysis(this,year);
     ui->tableView->setModel(model);
-    QString labelText = "Total = "+QString::number(lm.m_sums)+" "+m_currency;
+    QString labelText = "Total = "+QString::number(m_lm->m_sums)+" "+m_currency;
     ui->sumLabel->setText(labelText);
 }
 void LedgerViewer::monthlyMovementsAnalysis(){
     QString month = ui->monthsComboBox->currentText();
     QString year = ui->yearsComboBox->currentText();
-    LedgerManager lm(this);
-    MovementModel * model = lm.getModelMonthlyMovementsAnalysis(this,month,year);
+    MovementModel * model = m_lm->getModelMonthlyMovementsAnalysis(this,month,year);
     ui->tableView->setModel(model);
-    QString labelText = "Total = "+QString::number(lm.m_sums)+" "+m_currency;
+    QString labelText = "Total = "+QString::number(m_lm->m_sums)+" "+m_currency;
     ui->sumLabel->setText(labelText);
     
 }
 void LedgerViewer::monthlyAndTypeMovementsAnalysis(){
     QString month = ui->monthsComboBox->currentText();
     QString year = ui->yearsComboBox->currentText();
-    LedgerManager lm(this);
-    QStandardItemModel * model = lm.getModelMonthlyAndTypeMovementAnalysis(this,
+    QStandardItemModel * model = m_lm->getModelMonthlyAndTypeMovementAnalysis(this,
                                                                            month,
                                                                            year);
     ui->tableView->setModel(model);
-    QString labelText = "Total = "+QString::number(lm.m_sums)+" "+m_currency;
+    QString labelText = "Total = "+QString::number(m_lm->m_sums)+" "+m_currency;
     ui->sumLabel->setText(labelText);
 }
 void LedgerViewer::yearlyAndTypeMovementsAnalysis(){
     QString year = ui->yearsComboBox->currentText();
-    LedgerManager lm(this);
-    QStandardItemModel * model = lm.getModelYearlyAndTypeMovementAnalysis(this,year);
+    QStandardItemModel * model = m_lm->getModelYearlyAndTypeMovementAnalysis(this,year);
     ui->tableView->setModel(model);
-    QString labelText = "Total = "+QString::number(lm.m_sums)+" "+m_currency;
+    QString labelText = "Total = "+QString::number(m_lm->m_sums)+" "+m_currency;
     ui->sumLabel->setText(labelText);
 }
 void LedgerViewer::ledgerActionShow(){
     ui->sumLabel->setText("");
-    LedgerEdit * ledger = new LedgerEdit(this);
-    ledger->show();
+    m_ledgerEdit->show();
+}
+
+void LedgerViewer::resizeEvent(QResizeEvent *event){
+    ui->sumLabel->setText("");
+    m_ledgerEdit->resizeLedgerEdit(this);
 }

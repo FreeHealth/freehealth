@@ -13,6 +13,7 @@ class LedgerEdit : public QWidget {
     public :
         LedgerEdit(QWidget * parent);
         ~LedgerEdit();
+        void resizeLedgerEdit(QWidget * parent);
         
     private slots :
         void showLedger();

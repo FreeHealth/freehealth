@@ -45,19 +45,21 @@ receiptsEngine::~receiptsEngine()
 {
 }
 
-bool receiptsEngine::insertIntoAccount(QHash<int,QVariant> & hashValues)
+bool receiptsEngine::insertIntoAccount(QHash<int,QVariant> & hashValues, QString & userUuid)
 {
     // fetch all the account model
-    while (m_mpmodel->canFetchMore(QModelIndex())) {
+    /*while (m_mpmodel->canFetchMore(QModelIndex())) {
         qDebug() << __FILE__ << QString::number(__LINE__)<< " while ";
         m_mpmodel->QAbstractItemModel::fetchMore(QModelIndex());
-    }
+    }*/
 
     QSqlDatabase db = QSqlDatabase::database(Constants::DB_ACCOUNTANCY);
     QSqlDriver *driver = db.driver();
     if (driver->hasFeature(QSqlDriver::QuerySize)) {
         qDebug() << __FILE__ << QString::number(__LINE__) << "driver has feature";
     }
+    QString filterUser = QString("%1='%2'").arg("USER_UID",userUuid);
+    m_mpmodel->AccountModel::setFilter(filterUser);
     int rowBefore = m_mpmodel->AccountModel::rowCount(QModelIndex());
     qDebug() << __FILE__ << QString::number(__LINE__) << " rowBefore = " << QString::number(rowBefore);
     if (m_mpmodel->insertRows(rowBefore,1,QModelIndex()))
@@ -76,7 +78,11 @@ bool receiptsEngine::insertIntoAccount(QHash<int,QVariant> & hashValues)
                                                                     << m_mpmodel->lastError().text() ;
                 }
         }
-        m_mpmodel->submit();
+        if (!m_mpmodel->submit())
+        {
+        	  qWarning() << __FILE__ << QString::number(__LINE__) << "submit error = " 
+        	                         << m_mpmodel->lastError().text() ;
+            }
 
 
     if (m_mpmodel->rowCount(QModelIndex()) == rowBefore) {

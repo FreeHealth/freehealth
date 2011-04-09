@@ -1,9 +1,13 @@
 #include "ledgeredit.h"
 #include "ui_ledgeredit.h"
 #include "ledgerIO.h"
+#include <QDebug>
 
 LedgerEdit::LedgerEdit(QWidget * parent):QWidget(parent),ui(new Ui::LedgerEditWidget){
     ui->setupUi(this);
+    int h = parent->height();
+    int w = parent->width();
+    resize(w,h);
     setAutoFillBackground(true);
     LedgerIO lio(this);
     QStringList listOfYears;
@@ -11,6 +15,10 @@ LedgerEdit::LedgerEdit(QWidget * parent):QWidget(parent),ui(new Ui::LedgerEditWi
     listOfYears << currentDate;
     listOfYears << lio.getListOfYears();
     listOfYears.removeDuplicates();
+    for (int i = 0; i < listOfYears.size(); i += 1)
+    {
+    	qDebug() << __FILE__ << QString::number(__LINE__) << " listOfYears[i] =" << listOfYears[i] ;
+        }
     ui->yearComboBox->addItems(listOfYears);
     ui->infoLabel->setText("");
     emit choosenDate(currentDate);
@@ -19,11 +27,11 @@ LedgerEdit::LedgerEdit(QWidget * parent):QWidget(parent),ui(new Ui::LedgerEditWi
     p.setColor(QPalette::Active, QPalette::Base, QColor ("#DDDDDD"));
     ui->textEdit->setPalette(p);
     ui->textEdit->setDocument(m_doc);
-    m_myThread = new ProduceDoc(parent,m_date);
+    m_myThread = new ProduceDoc();
     connect(ui->quitButton,SIGNAL(pressed()),this,SLOT(close()));
     connect(ui->showButton,SIGNAL(pressed()),this,SLOT(showLedger()));
     connect(ui->printButton,SIGNAL(pressed()),this,SLOT(printLedger()));
-    connect(ui->yearComboBox,SIGNAL(activated(const QString &)),this,SLOT(choosenDate(const QString &)));
+    connect(ui->yearComboBox,SIGNAL(currentIndexChanged(const QString &)),this,SLOT(choosenDate(const QString &)));
     
     connect(m_myThread ,SIGNAL(outThread(const QString &)),this,       SLOT(fillInfoLabel(const QString &)));
     connect(m_myThread ,SIGNAL(started()),                 this,       SLOT(inThread()));
@@ -32,16 +40,26 @@ LedgerEdit::LedgerEdit(QWidget * parent):QWidget(parent),ui(new Ui::LedgerEditWi
 }
 
 LedgerEdit::~LedgerEdit(){
-    //delete m_doc;
+    delete m_myThread;
+    delete m_doc;
 }
 
 void LedgerEdit::showLedger(){
+    qDebug() << __FILE__ << QString::number(__LINE__) << " SHOW !!! "  ;
+    m_doc->clear();
+    m_myThread->dateChosen(m_date);
+    if (m_myThread->isRunning())
+    {
+    	  m_myThread->terminate();
+    	  qDebug() << __FILE__ << QString::number(__LINE__) << " in  m_myThread->terminate"   ;
+        }
     m_myThread->start();
 }
 
 void LedgerEdit::printLedger(){}
 
 void LedgerEdit::choosenDate(const QString & dateText){
+    qDebug() << __FILE__ << QString::number(__LINE__) << " dateText =" << dateText ;
     m_date = QDate::fromString(dateText,"yyyy");
 }
 
@@ -60,6 +78,16 @@ void LedgerEdit::getDocument(){
 }
 
 void LedgerEdit::slotDeleteThread(){
-  delete m_myThread;
-  m_myThread = new ProduceDoc(this,m_date); 
+    if (m_myThread)
+    {
+        delete m_myThread;    	  
+        }
+
+    m_myThread = new ProduceDoc(); 
+}
+
+void LedgerEdit::resizeLedgerEdit(QWidget * parent){
+    int h = parent->height();
+    int w = parent->width();
+    resize(w,h);
 }

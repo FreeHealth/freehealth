@@ -1,6 +1,8 @@
 #ifndef LEDGERVIEWER_H
 #define LEDGERVIEWER_H
 
+#include "ledgeredit.h"
+#include "ledgermanager.h"
 #include <QWidget>
 #include <QMenuBar>
 #include <QMenu>
@@ -29,7 +31,9 @@ class LedgerViewer : public QWidget {
         void fillMenuBar();
         void createMenus();
         void createActions();
-        
+        void resizeEvent(QResizeEvent *event);
+        LedgerEdit * m_ledgerEdit;
+        LedgerManager *m_lm;
         QMenuBar * m_menuBar;
         QMenu * m_menuWidgetAction;
         QMenu * m_menuAnalyze;

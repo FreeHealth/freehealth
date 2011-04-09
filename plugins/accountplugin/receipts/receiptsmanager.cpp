@@ -234,6 +234,12 @@ QHash<QString,QString> receiptsManager::getPreferentialActFromThesaurus(){
             }
         hash.insert(data,QString::number(value));
     }
+    else
+    {
+    	data = "CS";
+    	value = 23.00;
+    	hash.insert(data,QString::number(value));
+        }
     return hash;
 }
 

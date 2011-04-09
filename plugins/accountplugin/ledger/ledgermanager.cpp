@@ -1,6 +1,4 @@
 #include "ledgermanager.h"
-
-
 	
 LedgerManager::LedgerManager(QObject * parent):m_sums(0.00){}
 
@@ -9,7 +7,7 @@ LedgerManager::~LedgerManager(){}
 AccountModel * LedgerManager::getModelMonthlyReceiptsAnalysis(QObject * parent,QString & month , QString & year){
     LedgerIO lio(this);
     m_sums = 0.00;
-    AccountModel * model = lio.getModelMonthlyReceiptsIO(this,month,year);
+    AccountModel * model = lio.getModelMonthlyReceiptsIO(parent,month,year);
     for (int i = 0; i < model->rowCount(); i += 1)
     {
     	m_sums += model->data(model->index(i,ACCOUNT_CASHAMOUNT),Qt::DisplayRole).toDouble();
@@ -104,6 +102,6 @@ QStringList LedgerManager::getListOfYears(){
 
 QStringList LedgerManager::getListOfMonths(){
     QStringList list;
-    list << "O1" << "02"<< "03"<< "04"<< "05"<< "06"<< "07"<< "08"<< "09"<< "10"<< "11" << "12";
+    list << "01" << "02"<< "03"<< "04"<< "05"<< "06"<< "07"<< "08"<< "09"<< "10"<< "11" << "12";
     return list;
 }

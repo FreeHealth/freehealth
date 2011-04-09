@@ -24,6 +24,14 @@ class ProduceDoc: public QThread {
         BANKING,
         ACTS
         };
+    enum sumsEnum {
+        SUMS_SUM = 0,
+        SUMS_CASH,
+        SUMS_CHECKS,
+        SUMS_CREDITCARDS,
+        SUMS_BANKING,
+        SUMS_MaxParam
+        };
     enum vectorMovements {
         VM_DATE = 0,
         VM_LABEL,
@@ -31,8 +39,19 @@ class ProduceDoc: public QThread {
         VM_COMMENT,
         VM_DETAILS
         };
+    enum placeInVector {
+        PLACE_OF_DATE = 0,
+        PLACE_OF_PATIENT_NAME,
+        PLACE_OF_CASH        
+        };
+    enum tableColumns {
+        TABLE_DATE = 1,
+        TABLE_NAME_OF_PATIENT,
+        TABLE_SUMS,
+        TABLE_NAME_OF_ACTS
+        };
     public :
-        ProduceDoc(QObject *parent,QDate & date);
+        ProduceDoc();
         ~ProduceDoc();
         int            m_fieldsToJoin;
         QString        m_tableFormatParameters;
@@ -68,7 +87,7 @@ class ProduceDoc: public QThread {
     
     signals :
         void outThread(const QString & text);
-        void started();
+        //void started();
     private slots :
         void recupSlot(const QString & text);
 };

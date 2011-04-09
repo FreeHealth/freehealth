@@ -32,32 +32,30 @@
  *   ANY WAY OUT OF THE USE OF THIS SOFTWARE, EVEN IF ADVISED OF THE       *
  *   POSSIBILITY OF SUCH DAMAGE.                                           *
  ***************************************************************************/
-#ifndef ACCOUNTMODEL_H
-#define ACCOUNTMODEL_H
+ /***************************************************************************
+ *   Main Developper : Eric MAEKER, <eric.maeker@free.fr>                  *
+ *   Contributors :                                                        *
+ *       Pierre-Marie DESOMBRE <pm.desombre@medsyn.fr>                     *
+ *       NAME <MAIL@ADRESS>                                                *
+ ***************************************************************************/
+#ifndef ASSETSRATESMODEL_H
+#define ASSETSRATESMODEL_H
 
 #include <QAbstractTableModel>
 
-
 #include <QSqlError>
-
-
-
 
 namespace AccountDB {
 namespace Internal {
-class AccountModelPrivate;
+class AssetsRatesModelPrivate;
 }
 
-class AccountModel : public QAbstractTableModel
+class AssetsRatesModel : public QAbstractTableModel
 {
     Q_OBJECT
-    friend class Internal::AccountModelPrivate;
-
 public:
-    // Data representation is the same as the SQL table ACCOUNT
-
-    AccountModel(QObject *parent);
-    ~AccountModel();
+    AssetsRatesModel(QObject *parent);
+    ~AssetsRatesModel();
 
     int rowCount(const QModelIndex &parent = QModelIndex()) const;
     int columnCount(const QModelIndex &parent = QModelIndex()) const;
@@ -76,35 +74,22 @@ public:
     bool removeRow(int arow, const QModelIndex &aparent = QModelIndex())        { return removeRows(arow, 1, aparent); }
     bool removeColumn(int acolumn, const QModelIndex &aparent = QModelIndex())  { return removeColumns(acolumn, 1, aparent); }
 
+    void setUserUuid(const QString &uuid);
     bool isDirty() const;
-    
-    QSqlError lastError();
-    bool canFetchMore(const QModelIndex &parent = QModelIndex()) const;
-    void fetchMore(const QModelIndex &parent = QModelIndex());
     void setFilter(const QString & filter);
     QString filter();
-    void select();
-
-    // Filter fucntions
-    void setStartDate(const QDate &date);
-    void setEndDate(const QDate &date);
-    QString getUserUuid();
-
-    // Sums
-    double sum(const int &fieldRef);
+    QSqlError lastError();
+    QString m_UserUid;
 
 public Q_SLOTS:
     bool submit();
     void revert();
 
-private Q_SLOTS:
-    void userChanged();
-
 private:
-    Internal::AccountModelPrivate *d;
+    Internal::AssetsRatesModelPrivate *d;
 };
 
 }  // End namespace AccountDB
 
 
-#endif // ACCOUNTMODEL_H
+#endif // ASSETSRATESMODEL_H
