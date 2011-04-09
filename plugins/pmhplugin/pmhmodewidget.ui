@@ -41,7 +41,11 @@
         <layout class="QHBoxLayout" name="toolBarLayout"/>
        </item>
        <item>
-        <widget class="Views::TreeView" name="treeView"/>
+        <widget class="Views::TreeView" name="treeView">
+         <property name="editTriggers">
+          <set>QAbstractItemView::NoEditTriggers</set>
+         </property>
+        </widget>
        </item>
       </layout>
      </widget>

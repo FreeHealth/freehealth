@@ -136,6 +136,12 @@ void PmhModeWidget::onButtonClicked(QAbstractButton *button)
             PmhData *pmh = ui->pmhViewer->modifiedPmhData();
             // Inform the model
             pmhCore()->pmhCategoryModel()->addPmhData(pmh);
+            // Expand the first level of the PMHx
+            QModelIndex idx = pmhCore()->pmhCategoryModel()->indexForPmhData(pmh);
+            ui->treeView->expand(idx);
+//            for(int i=0; i < pmhCore()->pmhCategoryModel()->rowCount(idx);++i) {
+//                ui->treeView->expand(pmhCore()->pmhCategoryModel()->index(i,0,idx));
+//            }
             ui->pmhViewer->setEditMode(PmhViewer::ReadOnlyMode);
             ui->buttonBox->button(QDialogButtonBox::Cancel)->setEnabled(false);
             ui->buttonBox->button(QDialogButtonBox::Save)->setEnabled(false);
