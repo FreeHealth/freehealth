@@ -532,7 +532,7 @@ public:
         if (item->isNewlyCreated()) {
             saveFullEpisode(item, formUid);
         } else {
-            foreach(FormItem *it, form->formItemChildren()) {
+            foreach(FormItem *it, form->flattenFormItemChildren()) {
                 /** \todo check nested items */
                 if (it->itemDatas()) {
                     if (it->itemDatas()->isModified()) {

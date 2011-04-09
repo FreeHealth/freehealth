@@ -267,6 +267,7 @@ bool FormManager::readPmhxCategories(const QString &formUuidOrAbsPath)
                 break;
         }
     }
+    return true;
 }
 
 FormActionHandler::FormActionHandler(QObject *parent) :
