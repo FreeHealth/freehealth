@@ -251,7 +251,7 @@ public:
         }
     }
 
-    void pmhToItem(PmhData *pmh, TreeItem *item)
+    void pmhToItem(PmhData *pmh, TreeItem *item, int childNumber = -1)
     {
         // Master Item (shows user label)
         item->setPmhData(pmh);
@@ -295,13 +295,21 @@ public:
             if (m_Cats.at(i)->id()==id) {
                 // Reparent TreeItem
                 item->setParent(m_CategoryToItem.value(m_Cats.at(i)));
-                m_CategoryToItem.value(m_Cats.at(i))->addChildren(item);
+                if (childNumber==-1) {
+                    m_CategoryToItem.value(m_Cats.at(i))->addChildren(item);
+                } else {
+                    m_CategoryToItem.value(m_Cats.at(i))->insertChild(childNumber,item);
+                }
                 return;
             }
         }
         // No category found --> reparent to Root TreeItem
         item->setParent(m_Root);
-        m_Root->addChildren(item);
+        if (childNumber==-1) {
+            m_Root->addChildren(item);
+        } else {
+            m_Root->insertChild(childNumber,item);
+        }
     }
 
     void getCategories(bool getFromDatabase = false)
@@ -654,29 +662,32 @@ bool PmhCategoryModel::addPmhData(PmhData *pmh)
 {
     if (d->m_Pmhs.contains(pmh)) {
         // Update PMH
-        TreeItem *item = d->m_PmhToItems.value(pmh);
-        TreeItem *parentItem = item->parent(); //parent should be a category
+        TreeItem *oldItem = d->m_PmhToItems.value(pmh);
+        TreeItem *parentOldItem = oldItem->parent(); //parent should be a category
         // Remove the row
-        parentItem->removeChild(item);
-        delete item;
-        item = 0;
-
+        QModelIndex pmhIndex = indexForPmhData(pmh);
         // Insert the row to the right category
         for(int i=0; i < d->m_Cats.count(); ++i) {
             Category::CategoryItem *cat = d->m_Cats.at(i);
             if (cat->id() == pmh->categoryId()) {
-                parentItem = d->m_CategoryToItem.value(cat);
+                parentOldItem = d->m_CategoryToItem.value(cat);
                 break;
             }
         }
-        item = new TreeItem(parentItem);
-        d->pmhToItem(pmh, item);
+
+        beginInsertRows(pmhIndex.parent(), pmhIndex.row(), pmhIndex.row());
+        TreeItem *item = new TreeItem;
+        d->pmhToItem(pmh, item, pmhIndex.row());
+        endInsertRows();
+
+        beginRemoveRows(pmhIndex.parent(), pmhIndex.row()+1, pmhIndex.row()+1);
+        parentOldItem->removeChild(oldItem);
+        delete oldItem;
+        oldItem = 0;
+        endRemoveRows();
+
         // Send to database
         base()->savePmhData(pmh);
-        // Reset the model
-        /** \todo improve this */
-        reset();
-//        Q_EMIT layoutChanged();
 
         return true;
     } else {
@@ -699,6 +710,21 @@ Internal::PmhData *PmhCategoryModel::pmhDataforIndex(const QModelIndex &item) co
     if (it)
         return it->pmhData();
     return 0;
+}
+
+QModelIndex PmhCategoryModel::indexForPmhData(const Internal::PmhData *pmh, const QModelIndex &rootStart) const
+{
+    // get TreeItem
+    TreeItem *item = d->m_PmhToItems.value((Internal::PmhData *)pmh);
+    for(int i = 0; i < rowCount(rootStart); ++i) {
+        if (d->getItem(index(i,0,rootStart))==item) {
+            return index(i,0,rootStart);
+        }
+        QModelIndex child = indexForPmhData(pmh, index(i,0,rootStart));
+        if (child.isValid())
+            return child;
+    }
+    return QModelIndex();
 }
 
 /** \brief Call this member when you want views to update their fonts and color fore and background. */

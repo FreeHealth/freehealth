@@ -78,6 +78,7 @@ public:
     // Data
     bool addPmhData(Internal::PmhData *pmh);
     Internal::PmhData *pmhDataforIndex(const QModelIndex &item) const;
+    QModelIndex indexForPmhData(const Internal::PmhData *pmh, const QModelIndex &rootStart = QModelIndex()) const;
 
     // Helpers
     void updateFontAndColors(const QModelIndex &parent = QModelIndex());
