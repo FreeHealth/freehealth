@@ -211,6 +211,17 @@ namespace {
         // For data management
         QVariant data(const int column) const
         {
+            if (column==EpisodeModel::Label) {
+                if (!m_IsEpisode) {
+                    int nb = 0;
+                    for(int i = 0; i < m_Children.count(); ++i) {
+                        if (m_Children.at(i)->isEpisode())
+                            ++nb;
+                    }
+                    if (nb)
+                        return QString("%1 (%2)").arg(m_Datas.value(column).toString()).arg(nb);
+                }
+            }
             return m_Datas.value(column, QVariant());
         }
 
