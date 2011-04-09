@@ -118,12 +118,15 @@ public:
         clearStackLayout();
         foreach(FormMain *form, m_RootForm->flattenFormMainChildren()) {
             if (form->formWidget()) {
+				QScrollArea *sa = new QScrollArea;
+				sa->setWidgetResizable(true);
                 QWidget *w = new QWidget();
+				sa->setWidget(w);
                 QVBoxLayout *vl = new QVBoxLayout(w);
                 vl->setSpacing(0);
                 vl->setMargin(0);
                 vl->addWidget(form->formWidget());
-                int id = m_Stack->addWidget(w);
+                int id = m_Stack->addWidget(sa);
                 m_StackId_FormUuid.insert(id, form->uuid());
             }
         }
@@ -240,7 +243,7 @@ FormPlaceHolder::FormPlaceHolder(QWidget *parent) :
 
     // create the tree view
     /** \todo use the Views::FancyTreeView */
-    QWidget *w = new QWidget(this);
+    QWidget *w = new QWidget;
 //    d->m_FileTree = new QTreeView(this);
     d->m_FileTree = new Views::TreeView(this,0);
     d->m_FileTree->setActions(0);
@@ -273,8 +276,8 @@ FormPlaceHolder::FormPlaceHolder(QWidget *parent) :
 //            this, SLOT(contextMenuRequested(QPoint)));
 
     // create the central view
-    d->m_Scroll = new QScrollArea(this);
-    d->m_Scroll->setWidgetResizable(true);
+/*    d->m_Scroll = new QScrollArea;
+	  d->m_Scroll->setWidgetResizable(true);*/
     d->m_Stack = new QStackedLayout(w);
     d->m_Stack->setObjectName("FormPlaceHolder::StackedLayout");
 
@@ -297,7 +300,8 @@ FormPlaceHolder::FormPlaceHolder(QWidget *parent) :
     d->horizSplitter->addWidget(d->m_FileTree);
 //    d->horizSplitter->addWidget(wb);
 //    vertic->addWidget(d->m_EpisodesTable);
-    vertic->addWidget(d->m_Scroll);
+//    vertic->addWidget(d->m_Scroll);
+	vertic->addWidget(w);
     d->horizSplitter->addWidget(vertic);
 
 //    d->horizSplitter->setStretchFactor(0, 1);
@@ -305,7 +309,7 @@ FormPlaceHolder::FormPlaceHolder(QWidget *parent) :
 //    vertic->setStretchFactor(0, 1);
 //    vertic->setStretchFactor(1, 3);
 
-    d->m_Scroll->setWidget(w);
+//    d->m_Scroll->setWidget(w);
 
     d->m_GeneralLayout->addWidget(d->horizSplitter, 100, 0);
 }
@@ -424,7 +428,7 @@ void FormPlaceHolder::setCurrentForm(const QString &formUuid)
 {
     d->m_Stack->setCurrentIndex(d->m_StackId_FormUuid.key(formUuid));
     if (d->m_Stack->currentWidget())
-        d->m_Stack->currentWidget()->setEnabled(false);
+        qobject_cast<QScrollArea*>(d->m_Stack->currentWidget())->widget()->setEnabled(false);
 }
 
 void FormPlaceHolder::setCurrentEpisode(const QModelIndex &index)
@@ -433,7 +437,7 @@ void FormPlaceHolder::setCurrentEpisode(const QModelIndex &index)
     const QString &formUuid = d->m_EpisodeModel->index(index.row(), EpisodeModel::FormUuid, index.parent()).data().toString();
     setCurrentForm(formUuid);
     if (d->m_EpisodeModel->isEpisode(index)) {
-        d->m_Stack->currentWidget()->setEnabled(true);
+        qobject_cast<QScrollArea*>(d->m_Stack->currentWidget())->widget()->setEnabled(true);
         d->m_EpisodeModel->activateEpisode(index, formUuid);
     } else {
         d->m_EpisodeModel->activateEpisode(QModelIndex(), formUuid);
@@ -476,7 +480,7 @@ void FormPlaceHolder::newEpisode()
     d->m_FileTree->selectionModel()->setCurrentIndex(d->m_EpisodeModel->index(0,0,index), QItemSelectionModel::Select);
     const QString &formUuid = d->m_EpisodeModel->index(index.row(), Form::EpisodeModel::FormUuid, index.parent()).data().toString();
     setCurrentForm(formUuid);
-    d->m_Stack->currentWidget()->setEnabled(true);
+    qobject_cast<QScrollArea*>(d->m_Stack->currentWidget())->widget()->setEnabled(true);
     d->m_EpisodeModel->activateEpisode(d->m_EpisodeModel->index(0,0,index), formUuid);
 }
 
