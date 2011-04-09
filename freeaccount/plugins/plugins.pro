@@ -20,8 +20,7 @@ mainwindow.depends += account
 accountbase.subdir   = accountbaseplugin
 accountbase.depends += core
 
-# todo change to the FreeAccount accountplugin wrapper
-account.subdir   = ../../plugins/accountplugin
+account.subdir   = accountplugin
 account.depends += core
 account.depends += texteditor
 account.depends += printer
