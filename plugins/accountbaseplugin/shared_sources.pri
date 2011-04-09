@@ -22,7 +22,7 @@ HEADERS += $${PWD}/accountbaseplugin.h \
     $${PWD}/accountdata.h \
     $${PWD}/thesaurusmodel.h \
     $${PWD}/actsmodel.h \
-#    $${PWD}/assetsratesmodel.h \
+    $${PWD}/assetsratesmodel.h \
     $${PWD}/amountmodel.h
 
 SOURCES += $${PWD}/accountbaseplugin.cpp \
@@ -42,7 +42,7 @@ SOURCES += $${PWD}/accountbaseplugin.cpp \
     $${PWD}/accountdata.cpp \
     $${PWD}/thesaurusmodel.cpp \
     $${PWD}/actsmodel.cpp \
-#    $${PWD}/assetsratesmodel.cpp \
+    $${PWD}/assetsratesmodel.cpp \
     $${PWD}/amountmodel.cpp
 
 
