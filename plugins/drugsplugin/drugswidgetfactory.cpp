@@ -154,9 +154,10 @@ DrugsPrescriptorWidget::DrugsPrescriptorWidget(const QString &name, Form::FormIt
 
     if (formItem->extraDatas().value("options").contains(OPTION_WITHPRESCRIBING, Qt::CaseInsensitive)) {
         m_WithPrescribing = true;
-    } else if (name=="drugselector") {
+    } else if (name.compare("drugselector",Qt::CaseInsensitive)==0) {
         m_WithPrescribing = false;
-    } else if (name=="prescription" || name=="prescriptor") {
+    } else if (name.compare("prescription", Qt::CaseInsensitive)==0 ||
+               name.compare("prescriptor", Qt::CaseInsensitive)==0) {
         m_WithPrescribing = true;
     }
     // create main widget

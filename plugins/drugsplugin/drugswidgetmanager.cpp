@@ -474,8 +474,11 @@ void DrugsActionHandler::updateActions()
 
 void DrugsActionHandler::toggleDrugSelector()
 {
-    if (m_CurrentView)
-        m_CurrentView->drugSelector()->setVisible(!m_CurrentView->drugSelector()->isVisible());
+    if (m_CurrentView) {
+        bool setToVisible = !m_CurrentView->drugSelector()->isVisible();
+        m_CurrentView->setMinimumHeight(setToVisible ? 600 : 200);
+        m_CurrentView->drugSelector()->setVisible(setToVisible);
+    }
 }
 
 bool DrugsActionHandler::canMoveUp()
