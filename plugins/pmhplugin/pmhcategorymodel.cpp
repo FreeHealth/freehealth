@@ -42,6 +42,7 @@
 #include <coreplugin/iuser.h>
 #include <coreplugin/itheme.h>
 #include <coreplugin/isettings.h>
+#include <coreplugin/translators.h>
 
 #include <utils/log.h>
 #include <translationutils/constanttranslations.h>
@@ -64,6 +65,8 @@ static inline Core::IPatient *patient()  { return Core::ICore::instance()->patie
 static inline QString currentUserUuid() {return Core::ICore::instance()->user()->value(Core::IUser::Uuid).toString();}
 static inline Core::ISettings *settings() {return Core::ICore::instance()->settings();}
 static inline Core::ITheme *theme() {return Core::ICore::instance()->theme();}
+static inline Core::Translators *translators() {return Core::ICore::instance()->translators();}
+
 
 namespace {
 
@@ -353,6 +356,7 @@ PmhCategoryModel::PmhCategoryModel(QObject *parent) :
 {
     d->getCategories(true);
     connect(patient(), SIGNAL(currentPatientChanged()), this, SLOT(patientChanged()));
+    connect(translators(), SIGNAL(languageChanged()), this, SLOT(retranslate()));
 }
 
 PmhCategoryModel::~PmhCategoryModel()
@@ -847,4 +851,15 @@ void PmhCategoryModel::updateCategoryLabel(const Category::CategoryItem *categor
         return;
     item->setLabel(category->label());
     Q_EMIT dataChanged(cat, cat);
+}
+
+void PmhCategoryModel::retranslate()
+{
+    QHashIterator<Category::CategoryItem *, TreeItem *> i(d->m_CategoryToItem);
+    while (i.hasNext()) {
+        i.next();
+        i.value()->setLabel(i.key()->label());
+        QModelIndex idx = indexForCategory(i.key());
+        Q_EMIT dataChanged(idx,idx);
+    }
 }

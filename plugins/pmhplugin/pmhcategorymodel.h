@@ -98,6 +98,7 @@ public Q_SLOTS:
 
 private Q_SLOTS:
     void updateCategoryLabel(const Category::CategoryItem *category);
+    void retranslate();
 
 private:
     Internal::PmhCategoryModelPrivate *d;
