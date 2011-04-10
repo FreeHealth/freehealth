@@ -8,8 +8,11 @@ namespace Calendar {
 	class CalendarItem
 	{
 	public:
-		CalendarItem(const QDateTime &beginning, const QDateTime &ending) :
-			m_beginning(beginning), m_ending(ending) {};
+		CalendarItem(const QString &uid, const QDateTime &beginning, const QDateTime &ending) :
+			m_uid(uid), m_beginning(beginning), m_ending(ending) {};
+
+		// unicity
+		const QString &uid() const { return m_uid; }
 
 		const QString &title() const { return m_title; }
 		void setTitle(const QString &value);
@@ -24,6 +27,7 @@ namespace Calendar {
 		void setDescription(const QString &value);
 
 	private:
+		QString m_uid;
 		QString m_title;
 		QDateTime m_beginning;
 		QDateTime m_ending;

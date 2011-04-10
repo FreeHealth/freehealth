@@ -32,6 +32,10 @@ namespace Calendar {
 
 		// search for an intersected item, the first found item is enough
 		int searchForIntersectedItem(const QList<CalendarItem*> &list, const QDate &from, const QDate &to, int first, int last) const;
+
+		// create a uniq uid
+		QString createUid() const;
+		const CalendarItem *getItemByUid(const QString &uid) const;
 	};
 }
 

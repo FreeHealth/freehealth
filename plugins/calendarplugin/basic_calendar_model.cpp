@@ -78,7 +78,7 @@ bool BasicCalendarModel::insertItem(const QDateTime &beginning, const QDateTime 
 	beginInsertItem();
 
 	// create the item once but insert it in two lists
-	CalendarItem *item = new CalendarItem(beginning, ending);
+	CalendarItem *item = new CalendarItem(createUid(), beginning, ending);
 
 	m_sortedByBeginList.insert(getInsertionIndex(true, beginning, m_sortedByBeginList, 0, m_sortedByBeginList.count() - 1), item);
 	m_sortedByEndList.insert(getInsertionIndex(false, ending, m_sortedByEndList, 0, m_sortedByEndList.count() - 1), item);
@@ -127,4 +127,26 @@ int BasicCalendarModel::searchForIntersectedItem(const QList<CalendarItem*> &lis
 		return searchForIntersectedItem(list, from, to, middle + 1, last); // if an intersecting item really exists, it will be in the right part
 
 	return middle; // intersection => found!
+}
+
+QString BasicCalendarModel::createUid() const {
+	// at first, get the date
+	QString nowStr = QDate::currentDate().toString("yyyyMMdd");
+	int index = 0;
+	QString propal;
+	do {
+		if (!index)
+			propal = nowStr;
+		else
+			propal = nowStr + QString("-%1").arg(index);
+		index++;
+	} while (getItemByUid(propal));
+	return propal;
+}
+
+const CalendarItem *BasicCalendarModel::getItemByUid(const QString &uid) const {
+	foreach (CalendarItem *item, m_sortedByBeginList)
+		if (item->uid() == uid)
+			return item;
+	return 0;
 }

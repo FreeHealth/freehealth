@@ -69,6 +69,12 @@ namespace Calendar {
 		void firstDateChanged();
 
 	private:
+		enum MouseMode {
+			MouseMode_Move,
+			MouseMode_Resize,
+			MouseMode_Creation
+		};
+
 		HourWidget *m_hourWidget;
 		static int m_leftScaleWidth;
 		static int m_hourHeight;
@@ -76,6 +82,7 @@ namespace Calendar {
 		QDateTime m_pressDateTime;
 		QPoint m_pressPos;
 		CalendarItemWidget *m_pressItem;
+		MouseMode m_mouseMode;
 
 		/* if end < begin, the end time will be considered as midnight */
 		QRect getTimeIntervalRect(int day, const QTime &begin, const QTime &end) const;
