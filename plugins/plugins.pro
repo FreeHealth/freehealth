@@ -20,6 +20,8 @@ SUBDIRS = \
     pmh \
     padtools \
     category \
+    accountbase \
+    account \
 #    calendar \
 #    alerts \
 
@@ -115,3 +117,12 @@ pmh.depends += category
 category.subdir = categoryplugin
 category.depends += core
 category.depends += listview
+
+accountbase.subdir = accountbaseplugin
+accountbase.depends += core
+
+account.subdir   = accountplugin
+account.depends += core
+account.depends += texteditor
+account.depends += printer
+account.depends += accountbase

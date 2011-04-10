@@ -45,7 +45,7 @@ using namespace Account;
 
 AccountPlugin::AccountPlugin() :
         ExtensionSystem::IPlugin(),
-        m_UserPage(new AccountUserOptionsPage(this)),
+        m_UserPage(0),
         m_BankPage(new BankDetailsPage(this)),
         m_AvMovPage(new AvailableMovementPage(this)),
         m_MPPage(new MedicalProcedurePage(this)),
@@ -65,7 +65,8 @@ AccountPlugin::~AccountPlugin()
 {
     qWarning() << "AccountPlugin::~AccountPlugin()";
     // Remove preferences pages to plugins manager object pool
-    removeObject(m_UserPage);
+    if (m_UserPage)
+        removeObject(m_UserPage);
     removeObject(m_BankPage);
     removeObject(m_AvMovPage);
     removeObject(m_MPPage);
@@ -99,8 +100,14 @@ void AccountPlugin::extensionsInitialized()
     Core::ICore::instance()->translators()->addNewTranslator("accountplugin");
     addAutoReleasedObject(new Core::PluginAboutPage(pluginSpec(), this));
 
-    // Check settings validity
+    // FreeAccount specific code
+#ifdef FREEACCOUNT
+    m_UserPage = new AccountUserOptionsPage(this);
     m_UserPage->checkSettingsValidity();
+    addObject(m_UserPage);
+#endif
+
+    // Check settings validity
     m_BankPage->checkSettingsValidity();
     m_AvMovPage->checkSettingsValidity();
     m_MPPage->checkSettingsValidity();
@@ -112,7 +119,6 @@ void AccountPlugin::extensionsInitialized()
     m_AssetsRatesPage->checkSettingsValidity();
 
     // Add pages to plugins manager object pool
-    addObject(m_UserPage);
     addObject(m_BankPage);
     addObject(m_AvMovPage);
     addObject(m_MPPage);
