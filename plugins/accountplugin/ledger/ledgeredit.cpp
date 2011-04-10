@@ -33,10 +33,7 @@ LedgerEdit::LedgerEdit(QWidget * parent):QWidget(parent),ui(new Ui::LedgerEditWi
     connect(ui->printButton,SIGNAL(pressed()),this,SLOT(printLedger()));
     connect(ui->yearComboBox,SIGNAL(currentIndexChanged(const QString &)),this,SLOT(choosenDate(const QString &)));
     
-    connect(m_myThread ,SIGNAL(outThread(const QString &)),this,       SLOT(fillInfoLabel(const QString &)));
-    connect(m_myThread ,SIGNAL(started()),                 this,       SLOT(inThread()));
-    connect(m_myThread ,SIGNAL(finished()),                this,       SLOT(getDocument()));
-    connect(this       ,SIGNAL(deleteThread()),            this,       SLOT(slotDeleteThread()));
+
 }
 
 LedgerEdit::~LedgerEdit(){
@@ -54,6 +51,10 @@ void LedgerEdit::showLedger(){
     	  qDebug() << __FILE__ << QString::number(__LINE__) << " in  m_myThread->terminate"   ;
         }
     m_myThread->start();
+    connect(m_myThread ,SIGNAL(finished()),this,SLOT(getDocument()));
+    connect(m_myThread ,SIGNAL(outThread(const QString &)),this,       SLOT(fillInfoLabel(const QString &)));
+    connect(m_myThread ,SIGNAL(started()),                 this,       SLOT(inThread()));
+    connect(this       ,SIGNAL(deleteThread()),            this,       SLOT(slotDeleteThread()));
 }
 
 void LedgerEdit::printLedger(){}

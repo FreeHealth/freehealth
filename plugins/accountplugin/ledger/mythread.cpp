@@ -33,7 +33,7 @@ ProduceDoc::~ProduceDoc(){
 }
 
 void ProduceDoc::run(){
-    //qDebug() << __FILE__ << QString::number(__LINE__) << " RUN !!! "  ;
+    qDebug() << __FILE__ << QString::number(__LINE__) << " RUN !!! "  ;
     m_mutex.lock();
     m_textDocument = new QTextDocument;  
     organize();
@@ -440,7 +440,7 @@ void ProduceDoc::fillTable(QList<QVector<QString> > & tableau,
     //calculparmois(listforquery,table, un,trenteetquelque);//calcul par type recette et mois
     cursortrieinfunction  ->movePosition(QTextCursor::End,QTextCursor::MoveAnchor,1);
     }
-    //qDebug() << __FILE__ << QString::number(__LINE__) << " thread 15 "   ;
+    qDebug() << __FILE__ << QString::number(__LINE__) << " thread 15 "   ;
 }//end of fillTable
 
 void ProduceDoc::recupSlot(const QString & text){
@@ -448,6 +448,7 @@ void ProduceDoc::recupSlot(const QString & text){
 }
 
 QTextDocument *ProduceDoc::getTextDocument(){
+    qDebug() << __FILE__ << QString::number(__LINE__) << " m_textDocument =" << m_textDocument->toPlainText() ;
     return m_textDocument;
 }
 
