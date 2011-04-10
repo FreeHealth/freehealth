@@ -46,7 +46,7 @@ LedgerEdit::~LedgerEdit(){
 
 void LedgerEdit::showLedger(){
     qDebug() << __FILE__ << QString::number(__LINE__) << " SHOW !!! "  ;
-    m_doc->clear();
+    //m_doc->clear();
     m_myThread->dateChosen(m_date);
     if (m_myThread->isRunning())
     {
@@ -72,6 +72,7 @@ void LedgerEdit::inThread(){
 }
 
 void LedgerEdit::getDocument(){
+    qDebug() << __FILE__ << QString::number(__LINE__) << " getDocument " ;
     m_doc = m_myThread->getTextDocument()->clone();
     emit  deleteThread();
     ui->textEdit->setDocument(m_doc);
