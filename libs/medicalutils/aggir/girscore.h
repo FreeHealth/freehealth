@@ -92,6 +92,17 @@ public:
     void setExterieur(const QString &val);
     void setCommunication(const QString &val);
 
+    QString coherence() const;
+    QString orientation() const;
+    QString toilette() const;
+    QString habillage() const;
+    QString alimentation() const;
+    QString elimination() const;
+    QString transferts() const;
+    QString interieur() const;
+    QString exterieur() const;
+    QString communication() const;
+
     int resultingGir() const;
     QString explanations(int girScore) const;
 

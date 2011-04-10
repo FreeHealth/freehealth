@@ -1,36 +1,22 @@
 /***************************************************************************
- *   FreeMedicalForms                                                      *
- *   (C) 2008-2010 by Eric MAEKER, MD                                      *
- *   eric.maeker@free.fr                                                   *
- *   All rights reserved.                                                  *
+ *  The FreeMedForms project is a set of free, open source medical         *
+ *  applications.                                                          *
+ *  (C) 2008-2011 by Eric MAEKER, MD (France) <eric.maeker@free.fr>        *
+ *  All rights reserved.                                                   *
  *                                                                         *
- *   This program is a free and open source software.                      *
- *   It is released under the terms of the new BSD License.                *
+ *  This program is free software: you can redistribute it and/or modify   *
+ *  it under the terms of the GNU General Public License as published by   *
+ *  the Free Software Foundation, either version 3 of the License, or      *
+ *  (at your option) any later version.                                    *
  *                                                                         *
- *   Redistribution and use in source and binary forms, with or without    *
- *   modification, are permitted provided that the following conditions    *
- *   are met:                                                              *
- *   - Redistributions of source code must retain the above copyright      *
- *   notice, this list of conditions and the following disclaimer.         *
- *   - Redistributions in binary form must reproduce the above copyright   *
- *   notice, this list of conditions and the following disclaimer in the   *
- *   documentation and/or other materials provided with the distribution.  *
- *   - Neither the name of the FreeMedForms' organization nor the names of *
- *   its contributors may be used to endorse or promote products derived   *
- *   from this software without specific prior written permission.         *
+ *  This program is distributed in the hope that it will be useful,        *
+ *  but WITHOUT ANY WARRANTY; without even the implied warranty of         *
+ *  MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the          *
+ *  GNU General Public License for more details.                           *
  *                                                                         *
- *   THIS SOFTWARE IS PROVIDED BY THE COPYRIGHT HOLDERS AND CONTRIBUTORS   *
- *   "AS IS" AND ANY EXPRESS OR IMPLIED WARRANTIES, INCLUDING, BUT NOT     *
- *   LIMITED TO, THE IMPLIED WARRANTIES OF MERCHANTABILITY AND FITNESS     *
- *   FOR A PARTICULAR PURPOSE ARE DISCLAIMED. IN NO EVENT SHALL THE        *
- *   COPYRIGHT HOLDER OR CONTRIBUTORS BE LIABLE FOR ANY DIRECT, INDIRECT,  *
- *   INCIDENTAL, SPECIAL, EXEMPLARY, OR CONSEQUENTIAL DAMAGES (INCLUDING,  *
- *   BUT NOT LIMITED TO, PROCUREMENT OF SUBSTITUTE GOODS OR SERVICES;      *
- *   LOSS OF USE, DATA, OR PROFITS; OR BUSINESS INTERRUPTION) HOWEVER      *
- *   CAUSED AND ON ANY THEORY OF LIABILITY, WHETHER IN CONTRACT, STRICT    *
- *   LIABILITY, OR TORT (INCLUDING NEGLIGENCE OR OTHERWISE) ARISING IN     *
- *   ANY WAY OUT OF THE USE OF THIS SOFTWARE, EVEN IF ADVISED OF THE       *
- *   POSSIBILITY OF SUCH DAMAGE.                                           *
+ *  You should have received a copy of the GNU General Public License      *
+ *  along with this program (COPYING.FREEMEDFORMS file).                   *
+ *  If not, see <http://www.gnu.org/licenses/>.                            *
  ***************************************************************************/
 /***************************************************************************
  *   Main Developper : Eric MAEKER, <eric.maeker@free.fr>                  *
@@ -143,29 +129,83 @@ void GirUi::updateGirString(QAbstractButton *radio)
     }
 }
 
+void GirUi::setStringfiedGirScore(const QString &gir)
+{
+//    MedicalUtils::AGGIR::GirScore score;
+//    score.setValues(s[0], s[1], s.mid(2,2), s.mid(4,3), s.mid(7,2), s.mid(9,2),s[11], s[12]);
+}
+
+QString GirUi::stringfiedGirScore() const
+{
+    return QString();
+}
 
 //--------------------------------------------------------------------------------------------------------
 //---------------------------------------------- GirWidget -----------------------------------------------
 //--------------------------------------------------------------------------------------------------------
 GirWidget::GirWidget(Form::FormItem *formItem, QWidget *parent) :
-    Form::IFormWidget(formItem,parent)
+    Form::IFormWidget(formItem, parent), m_ui(0)
 {
     QBoxLayout * hb = getBoxLayout(Label_OnTop, m_FormItem->spec()->label(), this);
     m_Label->setSizePolicy(QSizePolicy::Preferred, QSizePolicy::Preferred);
     hb->addWidget(m_Label);
-    hb->addWidget(new GirUi(this));
+    m_ui = new GirUi(this);
+    hb->addWidget(m_ui);
     adjustSize();
+
+    // create FormItemData
+    GirItemData *data = new GirItemData(m_FormItem);
+    data->setGirWidget(this);
+    m_FormItem->setItemDatas(data);
 }
 
 GirWidget::~GirWidget()
 {
 }
 
-void GirWidget::setValue(const QVariant &)
+void GirWidget::setStringfiedGirScore(const QString &gir)
+{
+    m_ui->setStringfiedGirScore(gir);
+}
+
+QString GirWidget::stringfiedGirScore() const
+{
+    return m_ui->stringfiedGirScore();
+}
+
+//--------------------------------------------------------------------------------------------------------
+//-------------------------------------------- GirItemData -----------------------------------------------
+//--------------------------------------------------------------------------------------------------------
+bool GirItemData::isModified() const
+{
+    return false;
+}
+
+void GirItemData::clear()
 {
 }
 
-QVariant GirWidget::value() const
+bool GirItemData::setData(const int ref, const QVariant &data, const int role)
+{
+    return true;
+}
+
+QVariant GirItemData::data(const int ref, const int role) const
+{
+    return QVariant();
+}
+
+void GirItemData::setStorableData(const QVariant &data)
+{
+    if (data.toString().compare(m_OriginalValue,Qt::CaseInsensitive)==0) {
+        // do nothing
+        return;
+    }
+    m_OriginalValue = data.toString();
+    m_GirWidget->setStringfiedGirScore(m_OriginalValue);
+}
+
+QVariant GirItemData::storableData() const
 {
     return QVariant();
 }

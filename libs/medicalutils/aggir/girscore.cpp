@@ -63,7 +63,9 @@ public:
     m_alimentation,
     m_elimination,
     m_transferts,
-    m_interieur;
+    m_interieur,
+    m_exterieur,
+    m_communication;
     bool m_testValidity, m_valid;
 };
 
@@ -467,12 +469,84 @@ void GirScore::setExterieur(const QString &val)
 {
     Q_UNUSED(val);
     d->needNewValidityTesting();
+    d->m_exterieur= val;
 }
 
 void GirScore::setCommunication(const QString &val)
 {
     Q_UNUSED(val);
     d->needNewValidityTesting();
+    d->m_communication = val;
+}
+
+QString GirScore::coherence() const
+{
+    if (!isValid())
+        return QString();
+    return d->m_coherence;
+}
+
+QString GirScore::orientation() const
+{
+    if (!isValid())
+        return QString();
+    return d->m_orientation;
+}
+
+QString GirScore::toilette() const
+{
+    if (!isValid())
+        return QString();
+    return d->m_toilette;
+}
+
+QString GirScore::habillage() const
+{
+    if (!isValid())
+        return QString();
+    return d->m_habillage;
+}
+
+QString GirScore::alimentation() const
+{
+    if (!isValid())
+        return QString();
+    return d->m_alimentation;
+}
+
+QString GirScore::elimination() const
+{
+    if (!isValid())
+        return QString();
+    return d->m_elimination;
+}
+
+QString GirScore::transferts() const
+{
+    if (!isValid())
+        return QString();
+    return d->m_transferts;
+}
+
+QString GirScore::interieur() const
+{
+    if (!isValid())
+        return QString();
+    return d->m_interieur;
+}
+
+QString GirScore::exterieur() const
+{
+    if (!isValid())
+        return QString();
+    return d->m_exterieur;
+}
+
+QString GirScore::communication() const
+{
+    if (!isValid())
+        return QString();
+    return d->m_communication;
 }
 
 QString GirScore::getGirString() const
