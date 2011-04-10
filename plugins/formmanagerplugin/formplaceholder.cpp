@@ -91,7 +91,6 @@ public:
             m_EpisodesTable(0),
             m_Stack(0),
             m_GeneralLayout(0),
-            m_Scroll(0),
             horizSplitter(0),
             q(parent)
     {
@@ -159,7 +158,6 @@ public:
     QTableView *m_EpisodesTable;
     QStackedLayout *m_Stack;
     QGridLayout *m_GeneralLayout;
-    QScrollArea *m_Scroll;
     QHash<int, QString> m_StackId_FormUuid;
     Utils::MiniSplitter *horizSplitter;
 
@@ -276,8 +274,6 @@ FormPlaceHolder::FormPlaceHolder(QWidget *parent) :
 //            this, SLOT(contextMenuRequested(QPoint)));
 
     // create the central view
-/*    d->m_Scroll = new QScrollArea;
-	  d->m_Scroll->setWidgetResizable(true);*/
     d->m_Stack = new QStackedLayout(w);
     d->m_Stack->setObjectName("FormPlaceHolder::StackedLayout");
 
@@ -300,7 +296,6 @@ FormPlaceHolder::FormPlaceHolder(QWidget *parent) :
     d->horizSplitter->addWidget(d->m_FileTree);
 //    d->horizSplitter->addWidget(wb);
 //    vertic->addWidget(d->m_EpisodesTable);
-//    vertic->addWidget(d->m_Scroll);
 	vertic->addWidget(w);
     d->horizSplitter->addWidget(vertic);
 
@@ -308,8 +303,6 @@ FormPlaceHolder::FormPlaceHolder(QWidget *parent) :
 //    d->horizSplitter->setStretchFactor(1, 3);
 //    vertic->setStretchFactor(0, 1);
 //    vertic->setStretchFactor(1, 3);
-
-//    d->m_Scroll->setWidget(w);
 
     d->m_GeneralLayout->addWidget(d->horizSplitter, 100, 0);
 }
