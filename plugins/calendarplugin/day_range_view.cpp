@@ -353,7 +353,7 @@ void DayRangeView::resetItemWidgets() {
 
 	// create new ones
 	foreach (const CalendarItem &item, model()->getItemsBetween(m_firstDate, m_firstDate.addDays(m_rangeWidth - 1))) {
-		widget = new CalendarItemWidget(this);
+		widget = new CalendarItemWidget(this, item.uid());
 		widget->setBeginDateTime(item.beginning());
 		widget->setEndDateTime(item.ending());
 		widget->show();
