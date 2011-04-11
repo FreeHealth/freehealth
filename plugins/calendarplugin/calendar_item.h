@@ -8,8 +8,11 @@ namespace Calendar {
 	class CalendarItem
 	{
 	public:
+		CalendarItem() {}
 		CalendarItem(const QString &uid, const QDateTime &beginning, const QDateTime &ending) :
-			m_uid(uid), m_beginning(beginning), m_ending(ending) {};
+			m_uid(uid), m_beginning(beginning), m_ending(ending) {}
+
+		bool isValid() const { return m_beginning.isValid(); }
 
 		// unicity
 		const QString &uid() const { return m_uid; }

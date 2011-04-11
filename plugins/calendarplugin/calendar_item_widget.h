@@ -18,6 +18,8 @@ namespace Calendar {
 		void setBeginDateTime(const QDateTime &dateTime);
 		const QDateTime &endDateTime() const { return m_endDateTime; }
 		void setEndDateTime(const QDateTime &dateTime);
+		bool inMotion() const { return m_inMotion; }
+		void setInMotion(bool value);
 
 	protected:
 		virtual void paintEvent(QPaintEvent *event);
@@ -27,6 +29,7 @@ namespace Calendar {
 		QDateTime m_beginDateTime;
 		QDateTime m_endDateTime;
 		QString m_uid;
+		bool m_inMotion;
 	};
 }
 

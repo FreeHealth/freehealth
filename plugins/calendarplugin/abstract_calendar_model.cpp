@@ -27,3 +27,6 @@ void AbstractCalendarModel::beginInsertItem() {
 void AbstractCalendarModel::endInsertItem(const CalendarItem &newItem) {
 	emit itemInserted(newItem);
 }
+
+void AbstractCalendarModel::setItemByUid(const QString &, const CalendarItem &) {
+}

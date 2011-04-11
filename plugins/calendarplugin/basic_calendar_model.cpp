@@ -140,13 +140,35 @@ QString BasicCalendarModel::createUid() const {
 		else
 			propal = nowStr + QString("-%1").arg(index);
 		index++;
-	} while (getItemByUid(propal));
+	} while (getItemByUid(propal).isValid());
 	return propal;
 }
 
-const CalendarItem *BasicCalendarModel::getItemByUid(const QString &uid) const {
+CalendarItem BasicCalendarModel::getItemByUid(const QString &uid) const {
+	CalendarItem *item = getItemPointerByUid(uid);
+	return item ? *item : CalendarItem();
+}
+
+CalendarItem *BasicCalendarModel::getItemPointerByUid(const QString &uid) const {
+	// TODO: optimize it
 	foreach (CalendarItem *item, m_sortedByBeginList)
 		if (item->uid() == uid)
 			return item;
 	return 0;
+}
+
+void BasicCalendarModel::setItemByUid(const QString &uid, const CalendarItem &item) {
+	// remove the old item
+	CalendarItem *oldItem = getItemPointerByUid(uid);
+	if (!oldItem)
+		return;
+
+	m_sortedByBeginList.removeAt(m_sortedByBeginList.indexOf(oldItem));
+	m_sortedByEndList.removeAt(m_sortedByEndList.indexOf(oldItem));
+
+	// create the item once but insert it in two lists
+	CalendarItem *pItem = new CalendarItem(item);
+
+	m_sortedByBeginList.insert(getInsertionIndex(true, item.beginning(), m_sortedByBeginList, 0, m_sortedByBeginList.count() - 1), pItem);
+	m_sortedByEndList.insert(getInsertionIndex(false, item.ending(), m_sortedByEndList, 0, m_sortedByEndList.count() - 1), pItem);
 }

@@ -23,6 +23,10 @@ namespace Calendar {
 
 		bool insertItem(const QDateTime &beginning, const QDateTime &ending);
 
+		void setItemByUid(const QString &uid, const CalendarItem &item);
+
+		CalendarItem getItemByUid(const QString &uid) const;
+
 	private:
 		QList<CalendarItem*> m_sortedByBeginList;
 		QList<CalendarItem*> m_sortedByEndList;
@@ -35,7 +39,8 @@ namespace Calendar {
 
 		// create a uniq uid
 		QString createUid() const;
-		const CalendarItem *getItemByUid(const QString &uid) const;
+
+		CalendarItem *getItemPointerByUid(const QString &uid) const;
 	};
 }
 

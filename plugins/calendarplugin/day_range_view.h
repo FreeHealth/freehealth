@@ -81,7 +81,8 @@ namespace Calendar {
 		int m_rangeWidth;
 		QDateTime m_pressDateTime;
 		QPoint m_pressPos;
-		CalendarItemWidget *m_pressItem;
+		CalendarItemWidget *m_pressItemWidget;
+		CalendarItem m_pressItem;
 		MouseMode m_mouseMode;
 
 		/* if end < begin, the end time will be considered as midnight */

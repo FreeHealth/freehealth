@@ -13,7 +13,7 @@ namespace Calendar {
 		AbstractCalendarModel(QObject *parent = 0);
 
 		/** return an item by an uid */
-		virtual const CalendarItem *getItemByUid(const QString &uid) const = 0;
+		virtual CalendarItem getItemByUid(const QString &uid) const = 0;
 
 		/** returns all calendar items between two days */
 		virtual QList<CalendarItem> getItemsBetween(const QDate &from, const QDate &to) const = 0;
@@ -26,6 +26,11 @@ namespace Calendar {
 		 * \return false if the insertion occured
 		 */
 		virtual bool insertItem(const QDateTime &begin, const QDateTime &end);
+
+		/**
+		 * Set a new calendar item for an uid
+		 */
+		virtual void setItemByUid(const QString &uid, const CalendarItem &item);
 
 	signals:
 		void itemInserted(const CalendarItem &newItem);
