@@ -5,8 +5,8 @@
 
 using namespace Calendar;
 
-CalendarItemWidget::CalendarItemWidget(QWidget *parent, bool temp) :
-	QWidget(parent), m_temp(temp) {
+CalendarItemWidget::CalendarItemWidget(QWidget *parent, const QString &uid) :
+	QWidget(parent), m_uid(uid) {
 }
 
 void CalendarItemWidget::paintEvent(QPaintEvent *) {
@@ -18,7 +18,7 @@ void CalendarItemWidget::paintEvent(QPaintEvent *) {
 	titlePainter.setPen(Qt::NoPen);
 	QBrush brush = titlePainter.brush();
 	brush.setStyle(Qt::SolidPattern);
-	brush.setColor(QColor(0, 100, 0, m_temp ? 200 : 255));
+	brush.setColor(QColor(0, 100, 0, m_uid.isEmpty() ? 200 : 255));
 	titlePainter.setBrush(brush);
 	titlePainter.drawRoundedRect(QRect(0, 0, width(), 20), 5, 5);
 
@@ -40,10 +40,10 @@ void CalendarItemWidget::paintEvent(QPaintEvent *) {
 	bodyPixmap.fill(Qt::transparent);
 	QPainter bodyPainter(&bodyPixmap);
 	bodyPainter.setRenderHint(QPainter::Antialiasing);
-	bodyPainter.setPen(QColor(0, 100, 0, m_temp ? 200 : 255));
+	bodyPainter.setPen(QColor(0, 100, 0, m_uid.isEmpty() ? 200 : 255));
 	brush = bodyPainter.brush();
 	brush.setStyle(Qt::SolidPattern);
-	brush.setColor(QColor(0, 200, 0, m_temp ? 200 : 255));
+	brush.setColor(QColor(0, 200, 0, m_uid.isEmpty() ? 200 : 255));
 	bodyPainter.setBrush(brush);
 	bodyPainter.drawRoundedRect(QRect(0, 0, width(), height()), 5, 5);
 

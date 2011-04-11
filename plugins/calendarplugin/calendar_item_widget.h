@@ -9,9 +9,11 @@ namespace Calendar {
 	{
 		Q_OBJECT
 	public:
-		/** if temp is true, this calendar item is considered as temporary and will be drawn with transparence */
-		CalendarItemWidget(QWidget *parent = 0, bool temp = false);
+		/** if uid is empty, this calendar item is considered as temporary and will be drawn with transparence
+		 */
+		CalendarItemWidget(QWidget *parent = 0, const QString &uid = "");
 
+		const QString &uid() const { return m_uid; }
 		const QDateTime &beginDateTime() const { return m_beginDateTime; }
 		void setBeginDateTime(const QDateTime &dateTime);
 		const QDateTime &endDateTime() const { return m_endDateTime; }
@@ -24,7 +26,7 @@ namespace Calendar {
 		// TMP : all date will probably be moved into a pure data class for events/tasks, etc
 		QDateTime m_beginDateTime;
 		QDateTime m_endDateTime;
-		bool m_temp;
+		QString m_uid;
 	};
 }
 

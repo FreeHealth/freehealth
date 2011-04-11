@@ -272,7 +272,7 @@ void DayRangeView::mouseMoveEvent(QMouseEvent *event) {
 		switch (m_mouseMode) {
 		case MouseMode_Creation:
 			if (!m_pressItem) {
-				m_pressItem = new CalendarItemWidget(this, true);
+				m_pressItem = new CalendarItemWidget(this);
 				m_pressItem->setBeginDateTime(m_pressDateTime);
 				m_pressItem->show();
 			}
@@ -331,7 +331,7 @@ void DayRangeView::mouseReleaseEvent(QMouseEvent *) {
 }
 
 void DayRangeView::itemInserted(const CalendarItem &item) {
-	CalendarItemWidget *widget = new CalendarItemWidget(this);
+	CalendarItemWidget *widget = new CalendarItemWidget(this, item.uid());
 	widget->setBeginDateTime(item.beginning());
 	widget->setEndDateTime(item.ending());
 	widget->show();

@@ -12,6 +12,9 @@ namespace Calendar {
 	public:
 		AbstractCalendarModel(QObject *parent = 0);
 
+		/** return an item by an uid */
+		virtual const CalendarItem *getItemByUid(const QString &uid) const = 0;
+
 		/** returns all calendar items between two days */
 		virtual QList<CalendarItem> getItemsBetween(const QDate &from, const QDate &to) const = 0;
 
