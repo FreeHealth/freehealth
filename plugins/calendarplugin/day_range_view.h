@@ -80,6 +80,7 @@ namespace Calendar {
 		static int m_hourHeight;
 		int m_rangeWidth;
 		QDateTime m_pressDateTime;
+		QDateTime m_previousDateTime;
 		QPoint m_pressPos;
 		CalendarItemWidget *m_pressItemWidget;
 		CalendarItem m_pressItem;

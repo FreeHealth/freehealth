@@ -250,6 +250,7 @@ void DayRangeView::mousePressEvent(QMouseEvent *event) {
 	if (event->pos().x() < m_leftScaleWidth)
 		return;
 	m_pressDateTime = getDateTime(event->pos());
+	m_previousDateTime = m_pressDateTime;
 	m_pressPos = event->pos();
 
 	// item under mouse?
@@ -270,6 +271,11 @@ void DayRangeView::mouseMoveEvent(QMouseEvent *event) {
 	QRect rect;
 	int seconds, limits;
 	QDateTime beginning, ending;
+
+	if (m_previousDateTime == dateTime)
+		return;
+
+	m_previousDateTime = dateTime;
 
 	switch (m_mouseMode) {
 	case MouseMode_Creation:
