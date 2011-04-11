@@ -1,5 +1,6 @@
 #include <QPainter>
 #include <QBitmap>
+#include <QMouseEvent>
 
 #include "calendar_item_widget.h"
 
@@ -8,6 +9,7 @@ using namespace Calendar;
 CalendarItemWidget::CalendarItemWidget(QWidget *parent, const QString &uid) :
 	QWidget(parent), m_uid(uid) {
 	m_inMotion = m_uid.isEmpty();
+	setMouseTracking(true);
 }
 
 void CalendarItemWidget::paintEvent(QPaintEvent *) {
@@ -73,4 +75,13 @@ void CalendarItemWidget::setInMotion(bool value) {
 		return;
 
 	m_inMotion = value;
+}
+
+void CalendarItemWidget::mouseMoveEvent(QMouseEvent *event) {
+	if (event->pos().y() >= height() - 5 && event->pos().y() < height())
+		setCursor(Qt::SizeVerCursor);
+	else
+		setCursor(Qt::ArrowCursor);
+
+	QWidget::mouseMoveEvent(event);
 }

@@ -23,6 +23,7 @@ namespace Calendar {
 
 	protected:
 		virtual void paintEvent(QPaintEvent *event);
+		virtual void mouseMoveEvent(QMouseEvent *event);
 
 	private:
 		// TMP : all date will probably be moved into a pure data class for events/tasks, etc

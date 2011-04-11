@@ -81,7 +81,8 @@ DayRangeView::DayRangeView(QWidget *parent, int rangeWidth) :
 	View(parent),
 	m_hourWidget(0),
 	m_rangeWidth(rangeWidth),
-	m_pressItemWidget(0) {
+	m_pressItemWidget(0),
+	m_mouseMode(MouseMode_None) {
 	setSizePolicy(QSizePolicy::Expanding, QSizePolicy::Fixed);
 
 	setFirstDate(Calendar::getFirstDateByRandomDate(Calendar::View_Week, QDate::currentDate()));
@@ -257,16 +258,18 @@ void DayRangeView::mousePressEvent(QMouseEvent *event) {
 	m_pressItemWidget = qobject_cast<CalendarItemWidget*>(childAt(event->pos()));
 	if (m_pressItemWidget) {
 		m_pressItem = model()->getItemByUid(m_pressItemWidget->uid());
-		m_mouseMode = MouseMode_Move;
+
+		QPoint pos = m_pressItemWidget->mapFromParent(event->pos());
+		if (pos.y() >= m_pressItemWidget->height() - 5 && pos.y() < m_pressItemWidget->height())
+			m_mouseMode = MouseMode_Resize;
+		else
+			m_mouseMode = MouseMode_Move;
 	} else {
 		m_mouseMode = MouseMode_Creation;
 	}
 }
 
 void DayRangeView::mouseMoveEvent(QMouseEvent *event) {
-	if (!m_pressDateTime.isValid())
-		return;
-
 	QDateTime dateTime = getDateTime(event->pos());
 	QRect rect;
 	int seconds, limits;
@@ -302,6 +305,7 @@ void DayRangeView::mouseMoveEvent(QMouseEvent *event) {
 		}
 		break;
 	case MouseMode_Move:
+	case MouseMode_Resize:
 		m_pressItemWidget->setInMotion(true);
 		seconds = m_pressDateTime.time().secsTo(dateTime.time()); // seconds to add
 		if (event->pos().y() > m_pressPos.y()) {
@@ -318,17 +322,24 @@ void DayRangeView::mouseMoveEvent(QMouseEvent *event) {
 				seconds = limits;
 		}
 
-		beginning = m_pressItem.beginning().addSecs(seconds);
+		if (m_mouseMode == MouseMode_Move) {
+			beginning = m_pressItem.beginning().addSecs(seconds);
+			beginning.setDate(dateTime.date());
+		} else
+			beginning = m_pressItem.beginning();
+
 		ending = m_pressItem.ending().addSecs(seconds);
-		beginning.setDate(dateTime.date());
-		ending.setDate(dateTime.date());
-		m_pressItemWidget->setBeginDateTime(beginning);
+		if (m_mouseMode == MouseMode_Move) {
+			ending.setDate(dateTime.date());
+			m_pressItemWidget->setBeginDateTime(beginning);
+		} else {
+			if (ending <= beginning)
+				ending = beginning.addSecs(1800);
+		}
 		m_pressItemWidget->setEndDateTime(ending);
 		rect = getTimeIntervalRect(beginning.date().dayOfWeek(), beginning.time(), ending.time());
 		m_pressItemWidget->move(rect.x(), rect.y());
 		m_pressItemWidget->resize(rect.width(), rect.height());
-		break;
-	case MouseMode_Resize:
 		break;
 	default:;
 	}
@@ -356,6 +367,7 @@ void DayRangeView::mouseReleaseEvent(QMouseEvent *) {
 		}
 		break;
 	case MouseMode_Move:
+	case MouseMode_Resize:
 		newItem = m_pressItem;
 		newItem.setBeginning(m_pressItemWidget->beginDateTime());
 		newItem.setEnding(m_pressItemWidget->endDateTime());
@@ -363,13 +375,12 @@ void DayRangeView::mouseReleaseEvent(QMouseEvent *) {
 		m_pressItemWidget->setInMotion(false);
 		refreshItemSizeAndPosition(m_pressItemWidget);
 		break;
-	case MouseMode_Resize:
-		break;
 	default:;
 	}
 	m_pressDateTime = QDateTime();
 	m_pressItem = CalendarItem();
 	m_pressItemWidget = 0;
+	m_mouseMode = MouseMode_None;
 }
 
 void DayRangeView::itemInserted(const CalendarItem &item) {

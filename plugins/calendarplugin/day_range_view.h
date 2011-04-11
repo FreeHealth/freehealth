@@ -70,6 +70,7 @@ namespace Calendar {
 
 	private:
 		enum MouseMode {
+			MouseMode_None,
 			MouseMode_Move,
 			MouseMode_Resize,
 			MouseMode_Creation
