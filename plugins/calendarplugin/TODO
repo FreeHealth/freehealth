@@ -1,3 +1,4 @@
+GÉNÉRIQUE
 * Revenir sur la granularité à la demi-heure quand on retaille un item
 * placement intelligent des items qui se chevauchent
 * formulaire basique d'édition (offrir la possibilité de pouvoir le remplacer)
@@ -18,6 +19,37 @@
 - (à discuter) mettre en dessous de la date le nombre d'évènements enregistrés pour ce jour
 
 
-Orienté médical
+ORIENTÉ MÉDICAL
 * prévoir indisponibilités (vacances, heures de consulte)
 * possibilité d'attribuer une couleur différente aux RDV selon l'heure (pour les gardes par ex) et autres paramètres
+
+
+AUTRES (à classer)
+- un cal par utilisateur
+- des utilisateurs autorisés (secrétaires)
+- gestion des évènements de groupes (un groupe saisi un év et invite certains users + les users du groupe)
+- saisie simplifier de RDV patient
+- gestion des vacances/dispos/indispos
+- effectivement un truc de rappel d'évènements
+- possibilité d'extraire facilement les RDV à venir pour les mettre dans QToolButton (sorte de boutton de navigation)
+- vues essentiellement journalière mais vue semaine/mois seraient bienvenues
+- filtrage des évènements
+- recherche dans les évènements
+- un boutton: "prochain RDV dispo" qui met directement la date et heure de la prochaine plage de consultation dispo
+- drag/drop des évènements (avec échange si par exemple je drag sur un autre RDV --> propose un dialogue: switch les deux ou écrase)
+- copier coller des évènements
+- publier sur Google Calendar (cal privé)
+- envoyer un mail de rappel automatiquement en début de journée (02h avant le début des consultations) avec le planning du jour
+- un rdv de consultation c'est
+       * un patient
+       * une date/heure
+       * un lieu
+       * un médecin ou un prof de santé
+       * un motif
+               - un libellé
+               - une durée
+               - un lieu
+               - les motifs devraient être facile à saisir (avec une base de données personnelle
+       * un ou plusieurs documents scannés
+       * voir une photo
+       * et pourquoi pas un formulaire patient spécifique
