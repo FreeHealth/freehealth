@@ -65,9 +65,6 @@ namespace Calendar {
 	protected slots:
 		void itemInserted(const CalendarItem &item);
 
-	private slots:
-		void firstDateChanged();
-
 	private:
 		enum MouseMode {
 			MouseMode_None,
