@@ -53,7 +53,7 @@
 #include <utils/log.h>
 #include <utils/global.h>
 #include <utils/updatechecker.h>
-//#include <utils/iconbadgealert.h>
+#include <utils/widgets/calendar/calendar_widget.h>
 
 #include "ui_mainwindow.h"
 
@@ -258,11 +258,8 @@ void MainWindow::extensionsInitialized()
 	m_padTools = ExtensionSystem::PluginManager::instance()->getObject<Core::IPadTools>();
 	m_padTools->createSyntaxHighlighter(m_ui->padTextEdit->textEdit(), m_tokens);
 
-	m_calendarFactory = ExtensionSystem::PluginManager::instance()->getObject<Core::ICalendar>();
-	if (m_calendarFactory) {
-		QHBoxLayout *layout = new QHBoxLayout(m_ui->tabCalendar);
-		layout->addWidget(m_calendarFactory->createCalendarWidget());
-	}
+	QHBoxLayout *layout = new QHBoxLayout(m_ui->tabCalendar);
+	layout->addWidget(new Calendar::CalendarWidget());
 
 	// tmp: fill with dummy tokens
 	m_tokens.insert("DRUG", "drug");

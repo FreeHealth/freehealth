@@ -29,7 +29,6 @@
 #include <mainwindowplugin/mainwindow_exporter.h>
 #include <coreplugin/imainwindow.h>
 #include <coreplugin/ipadtools.h>
-#include <coreplugin/icalendar.h>
 
 #include <utils/global.h>
 
@@ -113,7 +112,6 @@ public:
 private:
 	QMap<QString,QVariant> m_tokens;
 	Core::IPadTools *m_padTools;
-	Core::ICalendar *m_calendarFactory;
 
 	void refreshTokens();
 };
