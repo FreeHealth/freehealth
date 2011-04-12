@@ -1,0 +1,23 @@
+* Revenir sur la granularité à la demi-heure quand on retaille un item
+* placement intelligent des items qui se chevauchent
+* formulaire basique d'édition (offrir la possibilité de pouvoir le remplacer)
+* Offrir la possibilité à l'utilisateur de pouvoir peindre un item comme il le veut
+* Représenter les items dans la vue "month"
+* Pouvoir cacher le week-end
+* Offrir une couche d'API de configuration du widget
+* Sortir le calendrier du plugin et le placer dans une lib pour pouvoir accès à toutes ses fonctionnalités
+* Pouvoir supprimer un item
+* Utiliser le système de classes privées pour nettoyer l'API
+* tooltip pour rappeler l'heure (surtout en mode semaine) quand on se promène avec la souris
+* toolbutton pour today/yesterday/tomorrow
+* possibilité de limiter l'affichage à une tranche horaire définie (par ex: 08-20h)
+* découpage des cases horaires toutes les 5-10-15 minutes (selon paramétrage)...
+
+- ajouter n° de semaine après Today... dans le header
+ * Week XX, date1 - date2
+- (à discuter) mettre en dessous de la date le nombre d'évènements enregistrés pour ce jour
+
+
+Orienté médical
+* prévoir indisponibilités (vacances, heures de consulte)
+* possibilité d'attribuer une couleur différente aux RDV selon l'heure (pour les gardes par ex) et autres paramètres
