@@ -46,14 +46,86 @@
 
 namespace MedicalUtils {
 namespace AGGIR {
-class GirScorePrivate;
+class OldGirScorePrivate;
+class NewGirScorePrivate;
 
-class MEDICALUTILS_EXPORT GirScore
+class MEDICALUTILS_EXPORT NewGirScore
+{
+public:
+    enum Item {
+        NoItemDefined = 0,
+        Transferts,
+        DeplacementsInterieurs,
+        Toilette,
+        Elimination,
+        Habillage,
+        Alimentation,
+        Orientation,
+        Coherence,  // 8
+        Cuisine,
+        Traitement,
+        Menage,
+        Alerter,
+        DeplacementsExterieurs,
+        Transports,
+        TempsLibre,
+        Achats,
+        Gestion
+    };
+    enum SubItem {
+        NoSubItem = 0,
+        Haut,
+        Moyen,
+        Bas,
+        Urinaire,
+        Fecale,
+        SeServir,
+        Manger,
+        Temps,
+        Espace,
+        Comportement,
+        Communication  // 11
+    };
+    enum Reponse {
+        AucuneReponse   = 0x0000,
+        NeFaitPas       = 0x0001,
+        Spontanement    = 0x0002,
+        Totalement      = 0x0004,
+        Habituellement  = 0x0008,
+        Correctement    = 0x0010,
+        AucunProbleme   = 0x1000
+    };
+    Q_DECLARE_FLAGS(Reponses, Reponse);
+
+    NewGirScore();
+    ~NewGirScore();
+
+    bool isNull() const;
+    bool isValid() const;
+
+    // Variables
+    void setValue(Item item, SubItem subItem, const Reponses &reponses);
+    void setValue(Item item, const Reponses &reponses);
+
+    QString getCodeGir(Item item) const;
+    QString getCodeGir(Item item, SubItem subItem) const;
+
+    int resultingGir() const;
+    QString explanations(int girScore) const;
+
+    QString serializeScore() const;
+    QString setSerializedScore(const QString &score) const;
+
+private:
+    NewGirScorePrivate *d;
+};
+
+class MEDICALUTILS_EXPORT OldGirScore
 {
 public:
 
-    GirScore();
-    ~GirScore();
+    OldGirScore();
+    ~OldGirScore();
 
     enum chaineGIR {
         GIR_coherence = 0,
@@ -110,11 +182,13 @@ public:
     QString getGirString() const;
 
 private:
-    GirScorePrivate *d;
+    OldGirScorePrivate *d;
 };
 
 } // End AGGIR
 } // End MedicalUtils
+
+Q_DECLARE_OPERATORS_FOR_FLAGS(MedicalUtils::AGGIR::NewGirScore::Reponses);
 
 #endif  // End GIRSCORE_H
 

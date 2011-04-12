@@ -41,62 +41,15 @@
 
 #include <QRegExp>
 #include <QStringList>
+#include <QVector>
 
-
-namespace MedicalUtils {
-namespace AGGIR {
-
-class GirScorePrivate
-{
-public:
-    static QStringList m_GirExplanations;
-    void needNewValidityTesting()
-    {
-        m_testValidity=true;
-        m_valid=false;
-    }
-
-    QString m_coherence,
-    m_orientation,
-    m_toilette,
-    m_habillage,
-    m_alimentation,
-    m_elimination,
-    m_transferts,
-    m_interieur,
-    m_exterieur,
-    m_communication;
-    bool m_testValidity, m_valid;
-};
-
-QStringList GirScorePrivate::m_GirExplanations = QStringList()
-        << QString("Le groupe iso-ressources 1 comprend les personnes âgées confinées au lit ou au fauteuil, "
-                   "dont les fonctions mentales sont gravement altérées et qui nécessitent une présence "
-                   "indispensable et continue d'intervenants.")
-        << QString("le groupe iso-ressources 2 concerne les personnes âgées confinées au lit ou au fauteuil, "
-                   "dont les fonctions intellectuelles ne sont pas totalement altérées et dont l'état exige une prise en "
-                   "charge pour la plupart des activités de la vie courante. Ce groupe s'adresse aussi aux personnes "
-                   "âgées dont les fonctions mentales sont altérées, mais qui ont conservé leurs capacités de se déplacer.")
-        << QString("Le groupe iso-ressources 2 concerne les personnes âgées confinées au lit ou au fauteuil, "
-                   "dont les fonctions intellectuelles ne sont pas totalement altérées et dont l'état exige une prise en "
-                   "charge pour la plupart des activités de la vie courante. Ce groupe s'adresse aussi aux personnes "
-                   "âgées dont les fonctions mentales sont altérées, mais qui ont conservé leurs capacités de se déplacer. ")
-        << QString("Le groupe iso-ressources 4 intègre les personnes âgées n'assumant pas seules leurs "
-                   "transferts mais qui, une fois levées, peuvent se déplacer à l'intérieur de leur logement. Elles doivent "
-                   "parfois être aidées pour la toilette et l'habillage. Ce groupe s'adresse également aux personnes âgées "
-                   "n'ayant pas de problèmes locomoteurs mais devant être aidées pour les activités corporelles et pour les repas.")
-        << QString("Le groupe iso-ressources 5 comporte des personnes âgées ayant seulement besoin d'une aide"
-                   "ponctuelle pour la toilette, la préparation des repas et le ménage. ")
-        << QString("Le groupe iso-ressources 6 réunit les personnes âgées n'ayant pas perdu leur autonomie"
-                   "pour les actes essentiels de la vie courante.")
-        ;
-
-}
-}
+#include <QDebug>
 
 using namespace MedicalUtils::AGGIR;
 
-
+///////////////////////////////////////////////////////////////////////////////////
+///////////////////////////////  Computations  ////////////////////////////////////
+///////////////////////////////////////////////////////////////////////////////////
 static int getRang(const int rang)
 {  int GIR_calcule;
     if (rang == 1){ GIR_calcule = 1; }
@@ -108,7 +61,6 @@ static int getRang(const int rang)
 
     return GIR_calcule;
 }
-
 
 /*! \brief Calcul le rang correspondant au données de la grille GIR préalablement formatées.
  *  \return le groupe GIR.
@@ -307,19 +259,394 @@ static int getGIR(const QString &chaine)
 
 }
 
+//Les groupes 5 et 6 :
+//En institution, l'environnement prend normalement en charge la
+//continuité de la sécurité des personnes et fournit les denrées
+//et autres produits nécessaires à la vie courante.
+//A domicile, il en est tout autrement et pour les groupes 5 et 6,
+//les variables Déplacements à l’extérieur et Alerter (utilisation
+//d'un moyen de communication à distance pour alerter en cas de
+//besoins) définissent trois sous-groupes évaluant l'isolement de la
+//personne à son domicile.
+//C : la personne a besoin d'un tiers pour que soient apportés à
+//son logement tous les produits nécessaires à la vie courante ou
+//qui ne peut pas alerter correctement son entou- rage en cas d'urgence.
+//Il s'agit d'une personne confinée à son domicile.
+//B : soit de façon intermittente (dans le temps) soit par rapport à
+//la fiabilité de sa propre sécurité ou se son approvisionnement, la
+//personne nécessite une surveillance et des actions ponctuelles.
+//A : la personne n'a pas de problème majeur et permanent sur ces deux points.
 
 
-GirScore::GirScore() : d(new GirScorePrivate)
+///////////////////////////////////////////////////////////////////////////////////
+//////////////////////////////  Private Parts  ////////////////////////////////////
+///////////////////////////////////////////////////////////////////////////////////
+namespace MedicalUtils {
+namespace AGGIR {
+    namespace {
+        // Garder dans l'ordre de construction du girString
+        // chaine = coherence + orientation + toilette + habillage + alimentation + elimination + transferts + interieur + exterieur + communication
+        const QList<int> discriminatives = QList<int>()
+                                           << NewGirScore::Coherence
+                                           << NewGirScore::Orientation
+                                           << NewGirScore::Toilette
+                                           << NewGirScore::Habillage
+                                           << NewGirScore::Alimentation
+                                           << NewGirScore::Elimination
+                                           << NewGirScore::Transferts
+                                           << NewGirScore::DeplacementsInterieurs
+                                           ;
+        const QList<int> illustratives = QList<int>()
+                                           << NewGirScore::Cuisine
+                                           << NewGirScore::Traitement
+                                           << NewGirScore::Menage
+                                           << NewGirScore::Alerter
+                                           << NewGirScore::DeplacementsExterieurs
+                                           << NewGirScore::Transports
+                                           << NewGirScore::TempsLibre
+                                           << NewGirScore::Achats
+                                           << NewGirScore::Gestion;
+        const QList<int> twoSubItem = QList<int>()
+                                      << NewGirScore::Toilette
+                                      << NewGirScore::Elimination
+                                      << NewGirScore::Alimentation
+                                      << NewGirScore::Orientation
+                                      << NewGirScore::Coherence;
+        const QList<int> threeSubItem = QList<int>()
+                                        << NewGirScore::Habillage;
+
+
+    }
+
+struct NewGirItem {
+    NewGirItem() :
+            item(NewGirScore::NoItemDefined),
+            subItem(NewGirScore::NoSubItem),
+            reponses(NewGirScore::AucuneReponse)
+    {}
+
+    bool isDiscrimative() {return ::discriminatives.contains(item);}
+    bool isIllustrative() {return ::illustratives.contains(item);}
+
+    int numberOfSubItems()
+    {
+        // subItems does not have children
+        if (subItem != NewGirScore::NoSubItem) {
+            return 0;
+        }
+        if (::twoSubItem.contains(item))
+            return 2;
+        if (::threeSubItem.contains(item))
+            return 3;
+        return 0;
+    }
+
+    NewGirScore::Item item;
+    NewGirScore::SubItem subItem;
+    NewGirScore::Reponses reponses;
+    QChar computedScore;
+};
+
+class NewGirScorePrivate
+{
+public:
+    NewGirScorePrivate() {}
+    ~NewGirScorePrivate()
+    {
+        qDeleteAll(m_Items);
+        m_Items.clear();
+    }
+
+    void needNewValidityTesting()
+    {
+        m_testValidity=true;
+        m_valid=false;
+    }
+
+    NewGirItem *girItem(NewGirScore::Item item, NewGirScore::SubItem subItem = NewGirScore::NoSubItem)
+    {
+        NewGirItem *girItem = 0;
+        for(int i=0; i < m_Items.count(); ++i) {
+            girItem = m_Items.at(i);
+            if (girItem->item == item &&
+                girItem->subItem == subItem) {
+                return girItem;
+            }
+        }
+        girItem = new NewGirItem;
+        girItem->item = item;
+        girItem->subItem = subItem;
+        m_Items.append(girItem);
+        return girItem;
+    }
+
+    // Chaque variable possède trois modalités :
+    // - A : fait seul, totalement, habituellement et correctement
+    // - B : fait partiellement, ou non habituellement ou non correctement
+    // - C : ne fait pas
+    QChar calculateItemScore(NewGirItem *item)
+    {
+        int nbSub = item->numberOfSubItems();
+        qWarning() << "  Calc: item" << item->item << "sub" << item->subItem << "nbSub" << nbSub << "rep" << item->reponses;
+        if (!nbSub) {
+            if (item->reponses == NewGirScore::AucuneReponse) {
+                item->computedScore = '?';
+                return '?';
+            }
+            if (item->reponses & NewGirScore::NeFaitPas) {
+                item->computedScore = 'C';
+                return 'C';
+            }
+            if (item->reponses & NewGirScore::AucunProbleme) {
+                item->computedScore = 'A';
+                return 'A';
+            }
+            if (item->reponses & NewGirScore::Spontanement &&
+                item->reponses & NewGirScore::Totalement &&
+                item->reponses & NewGirScore::Habituellement &&
+                item->reponses & NewGirScore::Correctement) {
+                item->computedScore = 'C';
+                return 'C';
+            }
+            item->computedScore = 'B';
+            return 'B';
+        } else {
+            QString scores;
+            for(int i=0;i < m_Items.count(); ++i) {
+                NewGirItem *sub = m_Items.at(i);
+                if (sub->item == item->item &&
+                    sub->subItem != NewGirScore::NoSubItem &&
+                    !sub->computedScore.isNull()) {
+                    scores.append(sub->computedScore);
+                }
+            }
+            if (scores.length() < nbSub)
+                return '?';
+            switch (item->item) {
+            case NewGirScore::Toilette:
+                {
+                    // Toilette AA=A CC=C autres=B
+                    if (scores.compare("AA", Qt::CaseInsensitive)==0) {
+                        return 'A';
+                    } else if (scores.compare("CC",Qt::CaseInsensitive)==0) {
+                        return 'C';
+                    }
+                    return 'B';
+                }
+            case NewGirScore::Elimination:
+                {
+                    // Elimination  AA=A  CC=C CB_BC=C AC=C  CA=C  BB=B
+                    if (scores.compare("AA", Qt::CaseInsensitive)==0) {
+                        return 'A';
+                    } else if (scores.contains("C",Qt::CaseInsensitive)) {
+                        return 'C';
+                    }
+                    return 'B';
+                }
+            case NewGirScore::Alimentation:
+                {
+                    // Alimentation  SM  AA=A CC=C BC=C  CB=C Autres=B
+                    if (scores.compare("AA", Qt::CaseInsensitive)==0) {
+                        return 'A';
+                    } else if (scores.compare("CC",Qt::CaseInsensitive)==0) {
+                        return 'C';
+                    } else if (scores.contains("C",Qt::CaseInsensitive) &&
+                               scores.contains("B",Qt::CaseInsensitive) ) {
+                        return 'C';
+                    }
+                    return 'B';
+                }
+            case NewGirScore::Orientation:
+            case NewGirScore::Coherence:
+                {
+                    // Orientation AA = A ; AB, BA, BB = B ; CC, BC, CB, AC, CA = C
+                    // Coherence   AA = A ; AB, BA, BB = B ; CC, BC, CB, AC, CA = C
+                    if (scores.compare("AA", Qt::CaseInsensitive)==0) {
+                        return 'A';
+                    } else if (scores.contains("C",Qt::CaseInsensitive)) {
+                        return 'C';
+                    }
+                    return 'B';
+                }
+            case NewGirScore::Habillage:
+                {
+                    // Habillage (Haut, Moyen, Bas) AAA=A CCC=C Autres=B
+                    if (scores.compare("AAA", Qt::CaseInsensitive)==0) {
+                        return 'A';
+                    } else if (scores.compare("CCC",Qt::CaseInsensitive)==0) {
+                        return 'C';
+                    }
+                    return 'B';
+                }
+            }
+        }
+        return QChar('?');
+    }
+
+    QVector<NewGirItem *> m_Items;
+    bool m_testValidity, m_valid;
+};
+
+
+
+class OldGirScorePrivate
+{
+public:
+    static QStringList m_GirExplanations;
+    void needNewValidityTesting()
+    {
+        m_testValidity=true;
+        m_valid=false;
+    }
+
+    QString m_coherence,
+    m_orientation,
+    m_toilette,
+    m_habillage,
+    m_alimentation,
+    m_elimination,
+    m_transferts,
+    m_interieur,
+    m_exterieur,
+    m_communication;
+    bool m_testValidity, m_valid;
+};
+
+QStringList OldGirScorePrivate::m_GirExplanations = QStringList()
+        << QString("Le groupe iso-ressources 1 comprend les personnes âgées confinées au lit ou au fauteuil, "
+                   "dont les fonctions mentales sont gravement altérées et qui nécessitent une présence "
+                   "indispensable et continue d'intervenants.")
+        << QString("le groupe iso-ressources 2 concerne les personnes âgées confinées au lit ou au fauteuil, "
+                   "dont les fonctions intellectuelles ne sont pas totalement altérées et dont l'état exige une prise en "
+                   "charge pour la plupart des activités de la vie courante. Ce groupe s'adresse aussi aux personnes "
+                   "âgées dont les fonctions mentales sont altérées, mais qui ont conservé leurs capacités de se déplacer.")
+        << QString("Le groupe iso-ressources 2 concerne les personnes âgées confinées au lit ou au fauteuil, "
+                   "dont les fonctions intellectuelles ne sont pas totalement altérées et dont l'état exige une prise en "
+                   "charge pour la plupart des activités de la vie courante. Ce groupe s'adresse aussi aux personnes "
+                   "âgées dont les fonctions mentales sont altérées, mais qui ont conservé leurs capacités de se déplacer. ")
+        << QString("Le groupe iso-ressources 4 intègre les personnes âgées n'assumant pas seules leurs "
+                   "transferts mais qui, une fois levées, peuvent se déplacer à l'intérieur de leur logement. Elles doivent "
+                   "parfois être aidées pour la toilette et l'habillage. Ce groupe s'adresse également aux personnes âgées "
+                   "n'ayant pas de problèmes locomoteurs mais devant être aidées pour les activités corporelles et pour les repas.")
+        << QString("Le groupe iso-ressources 5 comporte des personnes âgées ayant seulement besoin d'une aide"
+                   "ponctuelle pour la toilette, la préparation des repas et le ménage. ")
+        << QString("Le groupe iso-ressources 6 réunit les personnes âgées n'ayant pas perdu leur autonomie"
+                   "pour les actes essentiels de la vie courante.")
+        ;
+
+}
+}
+
+///////////////////////////////////////////////////////////////////////////////////
+///////////////////////////////  NewGirScore  /////////////////////////////////////
+///////////////////////////////////////////////////////////////////////////////////
+NewGirScore::NewGirScore() :
+        d(new NewGirScorePrivate)
+{
+}
+
+NewGirScore::~NewGirScore()
+{
+    if (d)
+        delete d;
+    d = 0;
+}
+
+bool NewGirScore::isNull() const
+{
+    return d->m_Items.isEmpty();
+}
+
+bool NewGirScore::isValid() const
+{
+    return d->m_valid;
+}
+
+// Variables
+void NewGirScore::setValue(Item item, SubItem subItem, const Reponses &reponses)
+{
+    NewGirItem *girItem = d->girItem(item, subItem);
+    qWarning() << "setValue: item" << girItem->item << "sub" << girItem->subItem << "rep" << reponses;
+    girItem->reponses = reponses;
+    girItem->computedScore = d->calculateItemScore(girItem);
+    qWarning() << "   Gir ->" << item << subItem << reponses << girItem->computedScore;
+}
+
+void NewGirScore::setValue(Item item, const Reponses &reponses)
+{
+    NewGirItem *girItem = d->girItem(item);
+    qWarning() << "setValue: item" << girItem->item << "nosub  rep" << reponses;
+    girItem->reponses = reponses;
+    girItem->computedScore = d->calculateItemScore(girItem);
+    qWarning() << "   Gir[nosub] ->" << item << reponses << girItem->computedScore;
+}
+
+QString NewGirScore::getCodeGir(Item item) const
+{
+    qWarning() << "getGirScore [nosub]";
+    NewGirItem *girItem = d->girItem(item);
+    qWarning() << "Gir ->" << girItem->computedScore;
+    girItem->computedScore = d->calculateItemScore(girItem);
+    qWarning() << "Gir(recalc) ->" << girItem->computedScore;
+    return girItem->computedScore;
+}
+
+QString NewGirScore::getCodeGir(Item item, SubItem subItem) const
+{
+    qWarning() << "getGirScore";
+    NewGirItem *girItem = 0;
+    for(int i=0; i<d->m_Items.count();++i) {
+        girItem = d->m_Items.at(i);
+        if (girItem->item == item &&
+            girItem->subItem == subItem) {
+            girItem->computedScore = d->calculateItemScore(girItem);
+            return girItem->computedScore;
+        }
+    }
+    return "?";
+}
+
+int NewGirScore::resultingGir() const
+{
+    QString chaine;
+    for(int i = 0; i < discriminatives.count(); ++i) {
+        NewGirItem *girItem = d->girItem(NewGirScore::Item(discriminatives.at(i)));
+        girItem->computedScore = d->calculateItemScore(girItem);
+        chaine += girItem->computedScore;
+    }
+    int score = getGIR(chaine);
+    qWarning() << "resultingGir chaine:" << chaine << "score" << score;
+    return score;
+}
+
+QString NewGirScore::explanations(int girScore) const
+{}
+
+QString NewGirScore::serializeScore() const
+{}
+
+QString NewGirScore::setSerializedScore(const QString &score) const
+{}
+
+
+///////////////////////////////////////////////////////////////////////////////////
+///////////////////////////////  OldGirScore  /////////////////////////////////////
+///////////////////////////////////////////////////////////////////////////////////
+OldGirScore::OldGirScore() :
+        d(new OldGirScorePrivate)
 {
     d->m_testValidity = true;
     d->m_valid = false;
 }
 
-GirScore::~GirScore()
+OldGirScore::~OldGirScore()
 {
+    if (d)
+        delete d;
+    d = 0;
 }
 
-bool GirScore::isNull() const
+bool OldGirScore::isNull() const
 {
     return d->m_coherence.isEmpty() &&
             d->m_orientation.isEmpty() &&
@@ -337,7 +664,7 @@ static bool isValidSubScore(const QString &s)
     return !s.contains(QRegExp("[^ABCabc]"));
 }
 
-bool GirScore::isValid() const
+bool OldGirScore::isValid() const
 {
     if (isNull())
         return false;
@@ -396,7 +723,7 @@ bool GirScore::isValid() const
     return true;
 }
 
-void GirScore::setValues(const QString &coherence,
+void OldGirScore::setValues(const QString &coherence,
                                 const QString &orientation,
                                 const QString &toilette,
                                 const QString &habillage,
@@ -416,140 +743,140 @@ void GirScore::setValues(const QString &coherence,
     d->m_interieur = interieur;
 }
 
-void GirScore::setCoherence(const QString &val)
+void OldGirScore::setCoherence(const QString &val)
 {
     d->needNewValidityTesting();
     d->m_coherence = val;
 }
 
-void GirScore::setOrientation(const QString &val)
+void OldGirScore::setOrientation(const QString &val)
 {
     d->needNewValidityTesting();
     d->m_orientation = val;
 }
 
-void GirScore::setToilette(const QString &val)
+void OldGirScore::setToilette(const QString &val)
 {
     d->needNewValidityTesting();
     d->m_toilette = val;
 }
 
-void GirScore::setHabillage(const QString &val)
+void OldGirScore::setHabillage(const QString &val)
 {
     d->needNewValidityTesting();
     d->m_habillage = val;
 }
 
-void GirScore::setAlimentation(const QString &val)
+void OldGirScore::setAlimentation(const QString &val)
 {
     d->needNewValidityTesting();
     d->m_alimentation = val;
 }
 
-void GirScore::setElimination(const QString &val)
+void OldGirScore::setElimination(const QString &val)
 {
     d->needNewValidityTesting();
     d->m_elimination = val;
 }
 
-void GirScore::setTransferts(const QString &val)
+void OldGirScore::setTransferts(const QString &val)
 {
     d->needNewValidityTesting();
     d->m_transferts = val;
 }
 
-void GirScore::setInterieur(const QString &val)
+void OldGirScore::setInterieur(const QString &val)
 {
     d->needNewValidityTesting();
     d->m_interieur = val;
 }
 
 // Descriptives
-void GirScore::setExterieur(const QString &val)
+void OldGirScore::setExterieur(const QString &val)
 {
     Q_UNUSED(val);
     d->needNewValidityTesting();
     d->m_exterieur= val;
 }
 
-void GirScore::setCommunication(const QString &val)
+void OldGirScore::setCommunication(const QString &val)
 {
     Q_UNUSED(val);
     d->needNewValidityTesting();
     d->m_communication = val;
 }
 
-QString GirScore::coherence() const
+QString OldGirScore::coherence() const
 {
     if (!isValid())
         return QString();
     return d->m_coherence;
 }
 
-QString GirScore::orientation() const
+QString OldGirScore::orientation() const
 {
     if (!isValid())
         return QString();
     return d->m_orientation;
 }
 
-QString GirScore::toilette() const
+QString OldGirScore::toilette() const
 {
     if (!isValid())
         return QString();
     return d->m_toilette;
 }
 
-QString GirScore::habillage() const
+QString OldGirScore::habillage() const
 {
     if (!isValid())
         return QString();
     return d->m_habillage;
 }
 
-QString GirScore::alimentation() const
+QString OldGirScore::alimentation() const
 {
     if (!isValid())
         return QString();
     return d->m_alimentation;
 }
 
-QString GirScore::elimination() const
+QString OldGirScore::elimination() const
 {
     if (!isValid())
         return QString();
     return d->m_elimination;
 }
 
-QString GirScore::transferts() const
+QString OldGirScore::transferts() const
 {
     if (!isValid())
         return QString();
     return d->m_transferts;
 }
 
-QString GirScore::interieur() const
+QString OldGirScore::interieur() const
 {
     if (!isValid())
         return QString();
     return d->m_interieur;
 }
 
-QString GirScore::exterieur() const
+QString OldGirScore::exterieur() const
 {
     if (!isValid())
         return QString();
     return d->m_exterieur;
 }
 
-QString GirScore::communication() const
+QString OldGirScore::communication() const
 {
     if (!isValid())
         return QString();
     return d->m_communication;
 }
 
-QString GirScore::getGirString() const
+QString OldGirScore::getGirString() const
 {
     if (!isValid())
         return QString::null;
@@ -604,12 +931,12 @@ QString GirScore::getGirString() const
     return chaine;
 }
 
-int GirScore::resultingGir() const
+int OldGirScore::resultingGir() const
 {
     return getGIR(getGirString());
 }
 
-QString GirScore::explanations(int girScore) const
+QString OldGirScore::explanations(int girScore) const
 {
     if ((girScore >= 1) && (girScore<=6)) {
         return d->m_GirExplanations[girScore-1];
