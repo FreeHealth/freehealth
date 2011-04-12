@@ -69,7 +69,9 @@ public:
 //--------------------------------------------------------------------------------------------------------
 namespace Ui {
 class GirWidget;
+class GirItem;
 }
+
 class GirUi : public QWidget
 {
     Q_OBJECT
@@ -85,6 +87,9 @@ public Q_SLOTS:
     void on_aButton_clicked();
     void on_bButton_clicked();
     void on_cButton_clicked();
+
+private Q_SLOTS:
+    void girCalculated(const int gir);
 
 private:
     Ui::GirWidget *m_ui;

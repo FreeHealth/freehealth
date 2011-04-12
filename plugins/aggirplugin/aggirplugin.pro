@@ -10,11 +10,13 @@ include( aggirplugin_dependencies.pri )
 HEADERS = \
     aggirplugin.h \
     aggir_exporter.h \
-    girwidget.h
+    girwidget.h \
+    girmodel.h
 
 SOURCES = \
     aggirplugin.cpp \
-    girwidget.cpp
+    girwidget.cpp \
+    girmodel.cpp
 
 OTHER_FILES = Gir.pluginspec
 

@@ -24,6 +24,7 @@
  *       NAME <MAIL@ADRESS>                                                *
  ***************************************************************************/
 #include "girwidget.h"
+#include "girmodel.h"
 #include "ui_girwidget.h"
 
 #include <formmanagerplugin/iformitem.h>
@@ -57,18 +58,40 @@ GirUi::GirUi(QWidget *parent) :
 {
     m_ui = new Ui::GirWidget();
     m_ui->setupUi(this);
+
     // connect all QButtonGroup to Gir string preparation
     foreach(QButtonGroup *gr, this->findChildren<QButtonGroup*>()) {
         connect(gr, SIGNAL(buttonClicked(QAbstractButton*)), this, SLOT(updateGirString(QAbstractButton*)));
     }
     m_GirString.fill('_',13);
     m_Gir = 0;
+
+    // TEST
+    m_ui->groupBox->hide();
+    GirModel *model = new GirModel(this);
+    m_ui->treeView->setModel(model);
+    m_ui->treeView->setAlternatingRowColors(true);
+    m_ui->treeView->header()->setStretchLastSection(false);
+    m_ui->treeView->header()->setResizeMode(0, QHeaderView::Stretch);
+    for(int i=1; i < m_ui->treeView->model()->columnCount(); ++i)
+        m_ui->treeView->header()->setResizeMode(i, QHeaderView::ResizeToContents);
+    m_ui->treeView->expandAll();
+    qWarning() << m_ui->treeView->viewport()->size() << model->data(model->index(0,0), Qt::SizeHintRole);
+//    m_ui->treeView->setFixedHeight(m_ui->treeView->maximumViewportSize().height());
+    connect(model, SIGNAL(girCalculated(int)), this, SLOT(girCalculated(int)));
+    // END TEST
 }
 
 GirUi::~GirUi()
 {
     if (m_ui) delete m_ui;
     m_ui=0;
+}
+
+void GirUi::girCalculated(const int gir)
+{
+    m_ui->girBar->setValue(gir);
+    m_ui->girLineEdit->setText(QString::number(gir));
 }
 
 inline static void allRadioOn(const QString &s, QWidget *parent)
@@ -102,7 +125,7 @@ void GirUi::on_cButton_clicked()
 
 inline static int calculateGirScore(const QString &s)
 {
-    MedicalUtils::AGGIR::GirScore score;
+    MedicalUtils::AGGIR::OldGirScore score;
     score.setValues(s[0], s[1], s.mid(2,2), s.mid(4,3), s.mid(7,2), s.mid(9,2),s[11], s[12]);
     return score.resultingGir();
 }
