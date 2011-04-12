@@ -6,7 +6,6 @@ GÉNÉRIQUE
 * Représenter les items dans la vue "month"
 * Pouvoir cacher le week-end
 * Offrir une couche d'API de configuration du widget
-* Sortir le calendrier du plugin et le placer dans une lib pour pouvoir accès à toutes ses fonctionnalités
 * Pouvoir supprimer un item
 * Utiliser le système de classes privées pour nettoyer l'API
 * tooltip pour rappeler l'heure (surtout en mode semaine) quand on se promène avec la souris
