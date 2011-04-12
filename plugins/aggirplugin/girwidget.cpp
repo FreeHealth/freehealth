@@ -68,16 +68,16 @@ GirUi::GirUi(QWidget *parent) :
 
     // TEST
     m_ui->groupBox->hide();
-    GirModel *model = new GirModel(this);
+    model = new GirModel(this);
     m_ui->treeView->setModel(model);
+    m_ui->treeView->setSizePolicy(QSizePolicy::Expanding, QSizePolicy::Fixed);
     m_ui->treeView->setAlternatingRowColors(true);
     m_ui->treeView->header()->setStretchLastSection(false);
     m_ui->treeView->header()->setResizeMode(0, QHeaderView::Stretch);
     for(int i=1; i < m_ui->treeView->model()->columnCount(); ++i)
         m_ui->treeView->header()->setResizeMode(i, QHeaderView::ResizeToContents);
     m_ui->treeView->expandAll();
-    qWarning() << m_ui->treeView->viewport()->size() << model->data(model->index(0,0), Qt::SizeHintRole);
-//    m_ui->treeView->setFixedHeight(m_ui->treeView->maximumViewportSize().height());
+    m_ui->treeView->setMinimumHeight((m_ui->treeView->visualRect(model->index(0,0)).height()) * model->rowCountWithChildren() + 6);
     connect(model, SIGNAL(girCalculated(int)), this, SLOT(girCalculated(int)));
     // END TEST
 }
@@ -174,7 +174,6 @@ GirWidget::GirWidget(Form::FormItem *formItem, QWidget *parent) :
     hb->addWidget(m_Label);
     m_ui = new GirUi(this);
     hb->addWidget(m_ui);
-    adjustSize();
 
     // create FormItemData
     GirItemData *data = new GirItemData(m_FormItem);
@@ -185,6 +184,7 @@ GirWidget::GirWidget(Form::FormItem *formItem, QWidget *parent) :
 GirWidget::~GirWidget()
 {
 }
+
 
 void GirWidget::setStringfiedGirScore(const QString &gir)
 {

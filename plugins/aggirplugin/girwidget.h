@@ -46,6 +46,8 @@ QT_END_NAMESPACE
 */
 
 namespace Gir {
+class GirModel;
+
 namespace Internal {
 
 class GirWidgetFactory : public Form::IFormWidgetFactory
@@ -95,6 +97,7 @@ private:
     Ui::GirWidget *m_ui;
     QString m_GirString;
     int m_Gir;
+    GirModel *model;
 };
 
 class GirWidget : public Form::IFormWidget
