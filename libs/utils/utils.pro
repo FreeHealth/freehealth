@@ -38,7 +38,17 @@ HEADERS += global_exporter.h \
     widgets/pathchooser.h \
     pubmeddownloader.h \
     qabstractxmltreemodel.h \
-    widgets/datetimedelegate.h
+    widgets/datetimedelegate.h \
+    widgets/calendar/abstract_calendar_model.h \
+    widgets/calendar/basic_calendar_model.h \
+    widgets/calendar/calendar_item.h \
+    widgets/calendar/calendar_item_widget.h \
+    widgets/calendar/calendar_navbar.h \
+    widgets/calendar/calendar_widget.h \
+    widgets/calendar/common.h \
+    widgets/calendar/day_range_view.h \
+    widgets/calendar/month_view.h \
+    widgets/calendar/view.h
 
 SOURCES += global.cpp \
     database.cpp \
@@ -65,7 +75,18 @@ SOURCES += global.cpp \
     widgets/pathchooser.cpp \
     pubmeddownloader.cpp \
     qabstractxmltreemodel.cpp \
-    widgets/datetimedelegate.cpp
+    widgets/datetimedelegate.cpp \
+    widgets/calendar/abstract_calendar_model.cpp \
+    widgets/calendar/basic_calendar_model.cpp \
+    widgets/calendar/calendar_item.cpp \
+    widgets/calendar/calendar_item_widget.cpp \
+    widgets/calendar/calendar_navbar.cpp \
+    widgets/calendar/calendar_widget.cpp \
+    widgets/calendar/common.cpp \
+    widgets/calendar/day_range_view.cpp \
+    widgets/calendar/month_view.cpp \
+    widgets/calendar/view.cpp
+
 
 macx {
     OBJECTIVE_SOURCES += iconbadgealert.mm
