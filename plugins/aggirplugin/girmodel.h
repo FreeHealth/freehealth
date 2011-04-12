@@ -38,6 +38,8 @@ public:
     bool setData(const QModelIndex &index, const QVariant &value, int role = Qt::EditRole);
     QVariant data(const QModelIndex &index, int role = Qt::DisplayRole) const ;
 
+    int rowCountWithChildren() const {return m_fullRowCount;}
+
 Q_SIGNALS:
     void girCalculated(const int score);
 
@@ -45,6 +47,7 @@ private:
     QMultiHash<int, GirItem> m_groups;
     QStandardItem *m_score;
     MedicalUtils::AGGIR::NewGirScore *m_GirScore;
+    int m_fullRowCount;
 };
 
 } // End namespace Gir

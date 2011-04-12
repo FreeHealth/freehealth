@@ -60,7 +60,8 @@ namespace {
 GirModel::GirModel(QObject *parent) :
         QStandardItemModel(parent),
         m_score(0),
-        m_GirScore(new MedicalUtils::AGGIR::NewGirScore)
+        m_GirScore(new MedicalUtils::AGGIR::NewGirScore),
+        m_fullRowCount(0)
 {
     // Discriminatives
     m_groups.insertMulti(1, Gir::GirItem(::TRANSFERTS,"","", NewGirScore::Transferts));
@@ -118,6 +119,7 @@ GirModel::GirModel(QObject *parent) :
                     groupItem->setFont(bold);
                 if (!item.subgroup.isEmpty()) {
                     appendRow(groupItem);
+                    ++m_fullRowCount;
                 }
             }
 
@@ -152,6 +154,7 @@ GirModel::GirModel(QObject *parent) :
             // create subitems if needed
             if (item.subgroup.isEmpty()) {
                 appendRow(QList<QStandardItem*>()<<groupItem<<nfp<<s<<t<<c<<h<<nopb<<result);
+                ++m_fullRowCount;
             } else {
                 QStandardItem *itemModel = new QStandardItem(item.subgroup);
                 itemModel->setData(item.girScoreSubItem, ::SUBITEM);
@@ -159,6 +162,7 @@ GirModel::GirModel(QObject *parent) :
                 if (isDiscriminative)
                     itemModel->setFont(bold);
                 groupItem->appendRow(QList<QStandardItem*>()<<itemModel<<nfp<<s<<t<<c<<h<<nopb<<result);
+                ++m_fullRowCount;
             }
         }
     }
@@ -173,6 +177,7 @@ GirModel::GirModel(QObject *parent) :
               << new QStandardItem()
               << m_score
               );
+    ++m_fullRowCount;
 }
 
 GirModel::~GirModel()
