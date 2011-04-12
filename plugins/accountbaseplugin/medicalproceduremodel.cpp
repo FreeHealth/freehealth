@@ -68,7 +68,7 @@ public:
     {
         m_SqlTable = new QSqlTableModel(q, QSqlDatabase::database(Constants::DB_ACCOUNTANCY));
         m_SqlTable->setTable(AccountDB::AccountBase::instance()->table(Constants::Table_MedicalProcedure));
-        refreshFilter();
+        //refreshFilter();
     }
     ~MedicalProcedureModelPrivate () {}
     
@@ -159,13 +159,13 @@ QStringList MedicalProcedureModel::distinctAvailableType() const
 void MedicalProcedureModel::setUserUuid(const QString &uuid)
 {
     QHash<int, QString> where;
-    where.insert(Constants::BANKDETAILS_USER_UID, QString("='%1'").arg(uuid));
+    where.insert(Constants::MP_USER_UID, QString("='%1'").arg(uuid));
     d->m_SqlTable->setFilter(AccountBase::instance()->getWhereClause(Constants::Table_MedicalProcedure, where));
 }
 
 QVariant MedicalProcedureModel::data(const QModelIndex &index, int role) const
 {   
-    d->refreshFilter() ;
+    //d->refreshFilter() ;
     return d->m_SqlTable->data(index, role);
 }
 
