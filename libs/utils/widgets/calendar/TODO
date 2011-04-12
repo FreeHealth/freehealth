@@ -9,7 +9,6 @@ GÉNÉRIQUE
 * Pouvoir supprimer un item
 * Utiliser le système de classes privées pour nettoyer l'API
 * tooltip pour rappeler l'heure (surtout en mode semaine) quand on se promène avec la souris
-* toolbutton pour today/yesterday/tomorrow
 * possibilité de limiter l'affichage à une tranche horaire définie (par ex: 08-20h)
 * découpage des cases horaires toutes les 5-10-15 minutes (selon paramétrage)...
 

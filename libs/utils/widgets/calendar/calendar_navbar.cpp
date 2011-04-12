@@ -1,7 +1,9 @@
 #include <QHBoxLayout>
 #include <QPushButton>
+#include <QToolButton>
 #include <QLabel>
 #include <QDate>
+#include <QMenu>
 
 #include "calendar_navbar.h"
 
@@ -16,7 +18,7 @@ CalendarNavbar::CalendarNavbar(QWidget *parent) :
 	this->setPalette(palette);
 
 	QHBoxLayout *layout = new QHBoxLayout(this);
-	layout->addWidget(m_todayButton = new QPushButton(tr("Today")));
+	layout->addWidget(m_todayButton = createTodayButton());
 	layout->addWidget(m_previousPageButton = new QPushButton("<<"));
 	layout->addWidget(m_nextPageButton = new QPushButton(">>"));
 	layout->addWidget(m_dateLabel = new QLabel);
@@ -35,6 +37,17 @@ CalendarNavbar::CalendarNavbar(QWidget *parent) :
 	connect(m_dayButton, SIGNAL(clicked()), this, SLOT(dayMode()));
 	connect(m_weekButton, SIGNAL(clicked()), this, SLOT(weekMode()));
 	connect(m_monthButton, SIGNAL(clicked()), this, SLOT(monthMode()));
+}
+
+QToolButton *CalendarNavbar::createTodayButton() {
+	QToolButton *button = new QToolButton;
+	QMenu *menu = new QMenu;
+	QAction *action = menu->addAction(tr("Today"), this, SLOT(todayPage()));
+	menu->addAction(tr("Yesterday"), this, SLOT(yesterdayPage()));
+	menu->addAction(tr("Tomorrow"), this, SLOT(tomorrowPage()));
+	button->setMenu(menu);
+	button->setDefaultAction(action);
+	return button;
 }
 
 void CalendarNavbar::setViewType(ViewType viewType) {
@@ -76,6 +89,14 @@ void CalendarNavbar::refreshInfos() {
 
 void CalendarNavbar::todayPage() {
 	setDate(QDate::currentDate());
+}
+
+void CalendarNavbar::yesterdayPage() {
+	setDate(QDate::currentDate().addDays(-1));
+}
+
+void CalendarNavbar::tomorrowPage() {
+	setDate(QDate::currentDate().addDays(1));
 }
 
 void CalendarNavbar::previousPage() {

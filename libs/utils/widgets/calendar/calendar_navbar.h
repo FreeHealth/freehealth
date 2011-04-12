@@ -7,6 +7,7 @@
 #include "common.h"
 
 class QPushButton;
+class QToolButton;
 class QLabel;
 
 namespace Calendar {
@@ -30,6 +31,8 @@ namespace Calendar {
 
 	private slots:
 		void todayPage();
+		void yesterdayPage();
+		void tomorrowPage();
 		void previousPage();
 		void nextPage();
 		void dayMode();
@@ -39,7 +42,7 @@ namespace Calendar {
 	private:
 		ViewType m_viewType;
 		QDate m_firstDate;
-		QPushButton *m_todayButton;
+		QToolButton *m_todayButton;
 		QPushButton *m_previousPageButton;
 		QPushButton *m_nextPageButton;
 		QPushButton *m_dayButton;
@@ -49,6 +52,7 @@ namespace Calendar {
 
 		void refreshInfos();
 		QString getDateIntervalString();
+		QToolButton *createTodayButton();
 	};
 }
 
