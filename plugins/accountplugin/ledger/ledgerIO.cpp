@@ -26,16 +26,16 @@ QStringList LedgerIO::getListOfYears(){
     QString filter = QString("%1='%2'").arg("USER_UID",m_userUuid);
     m_accountModel->setFilter(filter);
     int rows = m_accountModel->rowCount();
-    qDebug() << __FILE__ << QString::number(__LINE__) << " rows =" << QString::number(rows) ;
+    //qDebug() << __FILE__ << QString::number(__LINE__) << " rows =" << QString::number(rows) ;
     for (int i = 0; i < rows; i += 1)
     {
     	QString dateS = m_accountModel->data(m_accountModel->index(i,ACCOUNT_DATE),Qt::DisplayRole).toString();
-    	qDebug() << __FILE__ << QString::number(__LINE__) << " dateS =" << dateS ;
+    	//qDebug() << __FILE__ << QString::number(__LINE__) << " dateS =" << dateS ;
     	QString yearOfDate = dateS.split(" ").last();
     	list << yearOfDate;
-    	qDebug() << __FILE__ << QString::number(__LINE__) << " yearOfDate = " << yearOfDate ;
+    	//qDebug() << __FILE__ << QString::number(__LINE__) << " yearOfDate = " << yearOfDate ;
     }
-    qDebug() << __FILE__ << QString::number(__LINE__) << " listOfYears =" << QString::number(list.size()) ;
+    //qDebug() << __FILE__ << QString::number(__LINE__) << " listOfYears =" << QString::number(list.size()) ;
     list.removeDuplicates();
     return list;
 }
@@ -52,8 +52,8 @@ AccountModel * LedgerIO::getModelMonthlyReceiptsIO(QObject * parent,QString & mo
     QString dateEndStr = year+"-"+month+"-"+QString::number(dateBegin.daysTo(dateMonthAfter));
     QString filter = QString("DATE BETWEEN '%1' AND '%2'").arg(dateBeginStr,dateEndStr);
     m_accountModel->setFilter(filter);
-    qDebug() << __FILE__ << QString::number(__LINE__) << " filter  =" << m_accountModel->filter() ;
-    qDebug() << __FILE__ << QString::number(__LINE__) << " rows =" << m_accountModel->rowCount() ;
+    //qDebug() << __FILE__ << QString::number(__LINE__) << " filter  =" << m_accountModel->filter() ;
+    //qDebug() << __FILE__ << QString::number(__LINE__) << " rows =" << m_accountModel->rowCount() ;
     return m_accountModel;
 }
 
@@ -366,7 +366,7 @@ QStringList LedgerIO::listOfReceiptsTypes(){
     {
     	QString type = accountModel.data(accountModel.index(i,ACCOUNT_MEDICALPROCEDURE_TEXT),Qt::DisplayRole)
     	               .toString();
-    	qDebug() << __FILE__ << QString::number(__LINE__) << " type =" << type ;
+    	//qDebug() << __FILE__ << QString::number(__LINE__) << " type =" << type ;
     	list << type;
     }
     return list;
@@ -385,16 +385,16 @@ QStringList LedgerIO::listOfMovementsTypes(){
 }
 
 QList<QVector<QString> > LedgerIO::getDatasReceiptsInVector(QString & dateBegin,QString & dateEnd){
-    qDebug() << __FILE__ << QString::number(__LINE__) << " dateBegin =" << dateBegin ;
-    qDebug() << __FILE__ << QString::number(__LINE__) << " dateEnd =" << dateEnd ;
+    //qDebug() << __FILE__ << QString::number(__LINE__) << " dateBegin =" << dateBegin ;
+    //qDebug() << __FILE__ << QString::number(__LINE__) << " dateEnd =" << dateEnd ;
     QList<QVector<QString> > tableLedgerMonth;
     QString filter = QString("DATE BETWEEN '%1' AND '%2'").arg(dateBegin,dateEnd);
     //QString filter = "DATE BETWEEN '2011-01-01' AND '2011-01-31'";
     AccountModel accountModel(this);
     accountModel.setFilter(filter);
-    qDebug() << __FILE__ << QString::number(__LINE__) << " filter =" << accountModel.filter() ;
+    //qDebug() << __FILE__ << QString::number(__LINE__) << " filter =" << accountModel.filter() ;
     int rows = accountModel.rowCount();
-    qDebug() << __FILE__ << QString::number(__LINE__) << " rowCount =" << QString::number(rows) ;
+    //qDebug() << __FILE__ << QString::number(__LINE__) << " rowCount =" << QString::number(rows) ;
     for (int i = 0; i < rows; i += 1)
     {
     	QString vectorDate = accountModel.data(accountModel.index(i,ACCOUNT_DATE),Qt::DisplayRole).toString();
@@ -409,8 +409,8 @@ QList<QVector<QString> > LedgerIO::getDatasReceiptsInVector(QString & dateBegin,
                                                                                                          .toString();
         QString vectorActs = accountModel.data(accountModel.index(i,ACCOUNT_MEDICALPROCEDURE_TEXT),Qt::DisplayRole)
     	                                                                                         .toString();//acts
-        qDebug() << __FILE__ << QString::number(__LINE__) << " vectorDate =" << vectorDate ;
-        qDebug() << __FILE__ << QString::number(__LINE__) << " vectorPatient =" << vectorPatient ;
+        //qDebug() << __FILE__ << QString::number(__LINE__) << " vectorDate =" << vectorDate ;
+        //qDebug() << __FILE__ << QString::number(__LINE__) << " vectorPatient =" << vectorPatient ;
         QVector<QString> vector;
         vector << vectorDate 
                << vectorPatient 

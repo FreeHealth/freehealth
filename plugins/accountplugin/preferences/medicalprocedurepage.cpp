@@ -41,6 +41,9 @@
 
 #include <coreplugin/constants_icons.h>
 
+#include <QCompleter>
+#include <QDir>
+
 using namespace Account;
 using namespace Account::Internal;
 using namespace Trans::ConstantTranslations;
@@ -119,8 +122,17 @@ MedicalProcedureWidget::MedicalProcedureWidget(QWidget *parent) :
     removeButton->setText("Delete");
     ownersComboBox->addItem(m_user_fullName,QVariant());
     dateEdit->setDisplayFormat("yyyy-MM-dd");
-    //dateEdit->setDate(QDate::currentDate());
+    dateEdit->setDate(QDate::currentDate());
+    rateSpin->setRange(0.00,100.00);
     m_Model = new AccountDB::MedicalProcedureModel(this);
+    if (m_Model->rowCount() < 1)
+    {
+    	  if (!fillEmptyMPModel())
+    	  {
+    	  	  QMessageBox::warning(0,trUtf8("Warning"),trUtf8("Unable to fill medicalprocedure whith local .csv"),
+    	  	                       QMessageBox::Ok);
+    	      }
+        }
         /** \todo  m_Model->setUserUuid(); */
     QLabel *mpUidLabel = new QLabel(this);
     mpUidLabel->setText("NULL");
@@ -134,7 +146,7 @@ MedicalProcedureWidget::MedicalProcedureWidget(QWidget *parent) :
     m_Mapper->addMapping(mpUidLabel, AccountDB::Constants::MP_UID);
     m_Mapper->addMapping(userUidLabel, AccountDB::Constants::MP_USER_UID);
     m_Mapper->addMapping(name, AccountDB::Constants::MP_NAME);
-    m_Mapper->addMapping(mpComboBox, AccountDB::Constants::MP_NAME);
+    //m_Mapper->addMapping(mpComboBox, AccountDB::Constants::MP_NAME);
     m_Mapper->addMapping(abstractEdit, AccountDB::Constants::MP_ABSTRACT);
     m_Mapper->addMapping(type, AccountDB::Constants::MP_TYPE);
     m_Mapper->addMapping(amountSpin, AccountDB::Constants::MP_AMOUNT);
@@ -148,7 +160,7 @@ MedicalProcedureWidget::MedicalProcedureWidget(QWidget *parent) :
 
 MedicalProcedureWidget::~MedicalProcedureWidget()
 {
-    saveModel();
+    //saveModel();
 }
 
 void MedicalProcedureWidget::setDatasToUi()
@@ -160,11 +172,11 @@ void MedicalProcedureWidget::setDatasToUi()
 void MedicalProcedureWidget::saveModel()
 {
     qDebug() << __FILE__ << QString::number(__LINE__) << " currentIndex =" << QString::number(m_Mapper->currentIndex());
-    if (!m_Model->isDirty()) {qDebug() << __FILE__ << QString::number(__LINE__) << " is dirty ";
+    if (!m_Model->isDirty()) {
         bool yes = Utils::yesNoMessageBox(tr("Save changes ?"),
                                           tr("You make changes into the medical procedures table.\n"
                                              "Do you want to save them ?"));
-        if (yes) {qDebug() << __FILE__ << QString::number(__LINE__) << " submit =";
+        if (yes) {
             if (!m_Model->submit()) {
                 Utils::Log::addError(this, tkTr(Trans::Constants::UNABLE_TO_SAVE_DATA_IN_DATABASE_1).
                                                    arg(tr("medical_procedures")), __FILE__, __LINE__);
@@ -172,6 +184,10 @@ void MedicalProcedureWidget::saveModel()
         } else {
             m_Model->revert();
         }
+        QString typeText = type->text();
+        setCompletionList(typeText);
+        QString textAbstract = abstractEdit->text();
+        setCompletionAbstractList(textAbstract);
 //        qWarning() << __FILE__ << QString::number(__LINE__) << "error "<< m_Model->lastError().text() ;
     }
 }
@@ -189,6 +205,8 @@ void MedicalProcedureWidget::on_addButton_clicked()
         Utils::Log::addError(this, "Unable to add row", __FILE__, __LINE__);
     qDebug() << __FILE__ << QString::number(__LINE__) << " rowCount2 =" << QString::number(m_Model->rowCount());
     mpComboBox->setCurrentIndex(m_Model->rowCount()-1);
+    rateSpin->setValue(70.00);
+    rateSpin->setFocus();
     dateEdit->setDate(QDate::currentDate());
     dateEdit->setFocus();
     qDebug() << __FILE__ << QString::number(__LINE__) << " currentIndex =" << QString::number(m_Mapper->currentIndex());
@@ -213,12 +231,16 @@ void MedicalProcedureWidget::on_removeButton_clicked()
 }
 
 void MedicalProcedureWidget::saveToSettings(Core::ISettings *sets)
-{qDebug() << __FILE__ << QString::number(__LINE__) << " saveToSettings";
+{
     if (!m_Model->submit()) {
         Utils::Log::addError(this, tkTr(Trans::Constants::UNABLE_TO_SAVE_DATA_IN_DATABASE_1).arg(tr("medical_procedures")));
         Utils::warningMessageBox(tr("Can not submit medical procedure to your personnal database."),
                                  tr("An error occured during medical procedures saving. Datas are corrupted."));
     }
+        QString typeText = type->text();
+        setCompletionList(typeText);
+        QString textAbstract = abstractEdit->text();
+        setCompletionAbstractList(textAbstract);
         connect(name,SIGNAL(textEdited(const QString &)),mpComboBox,SLOT(setEditText(const QString &)));
         update();
 }
@@ -244,4 +266,136 @@ void MedicalProcedureWidget::changeEvent(QEvent *e)
     default:
         break;
     }
+}
+
+void MedicalProcedureWidget::setCompletionList(const QString & text){
+    m_completionList << text;
+    m_completionList.removeDuplicates();
+}
+
+void MedicalProcedureWidget::setCompletionAbstractList(const QString & text){
+    m_completionAbstractList << text;
+    m_completionAbstractList.removeDuplicates();
+}
+
+void MedicalProcedureWidget::on_type_textChanged(const QString & text){
+    QCompleter *c = new QCompleter(m_completionList,this);
+    c->setCaseSensitivity(Qt::CaseInsensitive);
+    type->setCompleter(c);
+}
+
+void MedicalProcedureWidget::on_abstractEdit_textChanged(const QString & text){
+    QCompleter *c = new QCompleter(m_completionAbstractList,this);
+    c->setCaseSensitivity(Qt::CaseInsensitive);
+    abstractEdit->setCompleter(c);
+}
+
+static QString getCsvDefaultFile()
+{
+    QString sqlDirPath = settings()->path(Core::ISettings::BundleResourcesPath) + "/sql/account";
+    QDir dir(sqlDirPath);
+    if (!dir.exists())
+        return QString();
+    QString fileName = QString("medical_procedure_%1.csv").arg(QLocale().name());
+    QFile file(dir.absolutePath() + QDir::separator() + fileName);
+    if (!file.exists())
+        return QString();
+    return file.fileName();
+}
+
+QStandardItemModel *MedicalProcedureWidget::MedicalProcedureModelByLocale()
+{
+    QStandardItemModel *model = new QStandardItemModel;
+    QString csvFileName = getCsvDefaultFile();
+    qDebug() << __FILE__ << QString::number(__LINE__) << " csvFileName =" << csvFileName ;
+    QFile file(getCsvDefaultFile());
+    // some validity checking
+    if (!file.exists()) {
+        LOG_ERROR(tkTr(Trans::Constants::FILE_1_DOESNOT_EXISTS).arg(QLocale().name() + " " + tr("Medical_procedure.")));
+        return model;
+    }
+    if (!file.open(QFile::ReadOnly | QFile::Text)) {
+        LOG_ERROR(tkTr(Trans::Constants::FILE_1_ISNOT_READABLE).arg(file.fileName()));
+        return model;
+    }
+
+    // read the content with UTF8 coding system
+    QTextStream stream(&file);
+    stream.setCodec("UTF-8");
+    // skip first line
+    //stream.readLine();
+    //int row = 0;
+    while (!stream.atEnd())
+    {
+        int row = 0;
+        QString line = stream.readLine();
+        QStringList listOfSeparators;
+        listOfSeparators << ",\"" << ";\"" << QString("\t\"")
+                         << ",''" << ";''" << QString("\t''");
+        QString separator;
+        QString separatorStr;
+        foreach(separatorStr,listOfSeparators){
+            if (line.contains(separatorStr)){
+                separator = separatorStr;
+                }
+            }
+        if (!line.contains("MP_UUID")){
+            //"MP_ID","MP_UUID","MP_USER_UID","NAME","ABSTRACT","TYPE","AMOUNT","REIMBOURSEMENT","DATE"
+            QList<QStandardItem*> listOfItemsData;
+            QStringList listOfItems;
+            listOfItems = line.split(separator);
+            for (int i = 0; i < AccountDB::Constants::MP_MaxParam ; i += 1){
+                //model->setData(model->index(row,i),listOfItems[i],Qt::EditRole);
+        	QStandardItem * item = new QStandardItem;
+        	//qDebug() << __FILE__ << QString::number(__LINE__) << " listOfItems[i] =" << listOfItems[i] ;
+        	QString itemOfList = listOfItems[i];
+        	itemOfList.remove("\"");
+        	itemOfList.remove("'");
+        	item->setData(itemOfList);
+        	listOfItemsData << item;
+        	}
+            model->appendRow(listOfItemsData);
+            ++row;  
+            }
+    }
+    return model;
+}
+
+
+bool MedicalProcedureWidget::fillEmptyMPModel(){
+    bool test = false;
+    QStandardItemModel * model = MedicalProcedureModelByLocale();
+    int availModelRows = model->rowCount();
+    //qDebug() << __FILE__ << QString::number(__LINE__) << " availModelRows = " << QString::number(availModelRows) ;
+    QString strList;
+    for (int i = 0; i < availModelRows; i += 1){
+        if (!m_Model->insertRows(m_Model->rowCount(),1,QModelIndex()))
+    	  		{qWarning() << __FILE__ << QString::number(__LINE__) << QString::number(m_Model->rowCount()) ;
+    	  			  /*QMessageBox::warning(0,trUtf8("Warning"),trUtf8("Unable to insert row \n")
+    	  			  +__FILE__+QString::number(__LINE__),QMessageBox::Ok);*/
+    	  		    }
+    	  		    QString strValues;
+    	  	for (int j = 0; j < AccountDB::Constants::MP_MaxParam ; j += 1){
+    	  		QStandardItem * item = model->itemFromIndex(model->index(i,j));
+    	  		QVariant value = item->data();
+    	  		//todo, semantics
+    	  		if (value.canConvert(QVariant::String))
+    	  		{
+    	  			  QString strValue = value.toString().replace("'","''");
+    	  			  value = QVariant::fromValue(strValue);
+    	  		    }
+    	  		    strValues += value.toString()+" ";
+    	  		//qDebug() << __FILE__ << QString::number(__LINE__) << " value =" << value ;
+    	  		//qDebug() << __FILE__ << QString::number(__LINE__) << "m_Model->rowCount() =" << QString::number(m_Model->rowCount()) ;
+    	  		if (!m_Model->setData(m_Model->index(m_Model->rowCount()-1,j),value,Qt::EditRole))
+    	  		{
+    	  			qWarning() << __FILE__ << QString::number(__LINE__) << "data not inserted !" ;  
+    	  		    }
+    	  	    }
+    	  	    strList += strValues+"\n";
+    	      test = m_Model->submit();
+    	      }
+    	      qDebug() << __FILE__ << QString::number(__LINE__) << " values = \n" << strList;
+
+    return test;
 }

@@ -183,7 +183,7 @@ SitesWidget::SitesWidget(QWidget *parent) :
 
 SitesWidget::~SitesWidget()
 {
-    saveModel();
+    //saveModel();
 }
 
 void SitesWidget::setDatasToUi()

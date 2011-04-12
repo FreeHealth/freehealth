@@ -151,7 +151,7 @@ AssetsRatesWidget::AssetsRatesWidget(QWidget *parent) :
 
 AssetsRatesWidget::~AssetsRatesWidget()
 {
-    saveModel();
+    //saveModel();
 }
 
 void AssetsRatesWidget::setDatasToUi()

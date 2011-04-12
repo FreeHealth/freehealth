@@ -179,7 +179,7 @@ InsuranceWidget::InsuranceWidget(QWidget *parent) :
 
 InsuranceWidget::~InsuranceWidget()
 {
-    saveModel();
+    //saveModel();
 }
 
 void InsuranceWidget::setDatasToUi()

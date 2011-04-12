@@ -149,7 +149,7 @@ BankDetailsWidget::BankDetailsWidget(QWidget *parent) :
 
 BankDetailsWidget::~BankDetailsWidget()
 {
-    saveModel();
+    //saveModel();
 }
 
 void BankDetailsWidget::setDatasToUi()

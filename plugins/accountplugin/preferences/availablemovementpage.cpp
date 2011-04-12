@@ -144,7 +144,7 @@ AvailableMovementWidget::AvailableMovementWidget(QWidget *parent) :
 
 AvailableMovementWidget::~AvailableMovementWidget()
 {
-    saveModel();
+    //saveModel();
 }
 
 void AvailableMovementWidget::setDatasToUi()

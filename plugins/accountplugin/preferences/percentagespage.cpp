@@ -149,7 +149,7 @@ PercentagesWidget::PercentagesWidget(QWidget *parent) :
 
 PercentagesWidget::~PercentagesWidget()
 {
-    saveModel();
+    //saveModel();
 }
 
 void PercentagesWidget::setDatasToUi()

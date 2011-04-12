@@ -32,6 +32,7 @@
 #include <QPointer>
 #include <QString>
 #include <QDataWidgetMapper>
+#include <QStandardItemModel>
 
 #include "ui_medicalprocedurepage.h"
 
@@ -75,17 +76,25 @@ public Q_SLOTS:
     void on_addButton_clicked();
     void on_save_clicked();
     void on_removeButton_clicked();
+    void on_type_textChanged(const QString & text);
+    void on_abstractEdit_textChanged(const QString & text);
    // void on_name_textChanged(const QString & text);
 
 private:
     void changeEvent(QEvent *e);
     void saveModel();
+    void setCompletionList(const QString & text);
+    void setCompletionAbstractList(const QString & text);
+    QStandardItemModel * MedicalProcedureModelByLocale();
+    bool fillEmptyMPModel();
 
 private:
     AccountDB::MedicalProcedureModel *m_Model;
     QDataWidgetMapper *m_Mapper;
     QString m_user_uid;
     QString m_user_fullName;
+    QStringList m_completionList;
+    QStringList m_completionAbstractList;
 };
 
 }  // End Internal

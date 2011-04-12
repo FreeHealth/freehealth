@@ -137,7 +137,7 @@ DistanceRulesWidget::DistanceRulesWidget(QWidget *parent) :
 
 DistanceRulesWidget::~DistanceRulesWidget()
 {
-    saveModel();
+    //saveModel();
 }
 
 void DistanceRulesWidget::setDatasToUi()

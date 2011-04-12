@@ -17,7 +17,7 @@ LedgerEdit::LedgerEdit(QWidget * parent):QWidget(parent),ui(new Ui::LedgerEditWi
     listOfYears.removeDuplicates();
     for (int i = 0; i < listOfYears.size(); i += 1)
     {
-    	qDebug() << __FILE__ << QString::number(__LINE__) << " listOfYears[i] =" << listOfYears[i] ;
+    	//qDebug() << __FILE__ << QString::number(__LINE__) << " listOfYears[i] =" << listOfYears[i] ;
         }
     ui->yearComboBox->addItems(listOfYears);
     ui->infoLabel->setText("");
@@ -32,8 +32,6 @@ LedgerEdit::LedgerEdit(QWidget * parent):QWidget(parent),ui(new Ui::LedgerEditWi
     connect(ui->showButton,SIGNAL(pressed()),this,SLOT(showLedger()));
     connect(ui->printButton,SIGNAL(pressed()),this,SLOT(printLedger()));
     connect(ui->yearComboBox,SIGNAL(currentIndexChanged(const QString &)),this,SLOT(choosenDate(const QString &)));
-    
-
 }
 
 LedgerEdit::~LedgerEdit(){
@@ -42,13 +40,13 @@ LedgerEdit::~LedgerEdit(){
 }
 
 void LedgerEdit::showLedger(){
-    qDebug() << __FILE__ << QString::number(__LINE__) << " SHOW !!! "  ;
+    //qDebug() << __FILE__ << QString::number(__LINE__) << " SHOW !!! "  ;
     //m_doc->clear();
     m_myThread->dateChosen(m_date);
     if (m_myThread->isRunning())
     {
     	  m_myThread->terminate();
-    	  qDebug() << __FILE__ << QString::number(__LINE__) << " in  m_myThread->terminate"   ;
+    	  //qDebug() << __FILE__ << QString::number(__LINE__) << " in  m_myThread->terminate"   ;
         }
     m_myThread->start();
     connect(m_myThread ,SIGNAL(finished()),this,SLOT(getDocument()));
@@ -60,7 +58,7 @@ void LedgerEdit::showLedger(){
 void LedgerEdit::printLedger(){}
 
 void LedgerEdit::choosenDate(const QString & dateText){
-    qDebug() << __FILE__ << QString::number(__LINE__) << " dateText =" << dateText ;
+    ////qDebug() << __FILE__ << QString::number(__LINE__) << " dateText =" << dateText ;
     m_date = QDate::fromString(dateText,"yyyy");
 }
 
@@ -73,7 +71,7 @@ void LedgerEdit::inThread(){
 }
 
 void LedgerEdit::getDocument(){
-    qDebug() << __FILE__ << QString::number(__LINE__) << " getDocument " ;
+    ////qDebug() << __FILE__ << QString::number(__LINE__) << " getDocument " ;
     m_doc = m_myThread->getTextDocument()->clone();
     emit  deleteThread();
     ui->textEdit->setDocument(m_doc);
