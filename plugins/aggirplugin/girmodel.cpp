@@ -101,13 +101,32 @@ GirModel::GirModel(QObject *parent) :
     QList<int> discriminatives;
     discriminatives << 1 << 2 << 3 << 4 << 5 << 7 << 16 << 17;
 
-    // Construct the tree model
+    QFont bold;
+    bold.setBold(true);
+
     setColumnCount(8);
+    setHeaderData(0, Qt::Horizontal, "Items et sous-items");
+    setHeaderData(1, Qt::Horizontal, "Ne fait pas");
+    setHeaderData(2, Qt::Horizontal, "S");
+    setHeaderData(3, Qt::Horizontal, "T");
+    setHeaderData(4, Qt::Horizontal, "C");
+    setHeaderData(5, Qt::Horizontal, "H");
+    setHeaderData(6, Qt::Horizontal, "Aucun problème");
+    setHeaderData(7, Qt::Horizontal, "Score");
+
+    setHeaderData(0, Qt::Horizontal, bold, Qt::FontRole);
+    setHeaderData(1, Qt::Horizontal, bold, Qt::FontRole);
+    setHeaderData(2, Qt::Horizontal, bold, Qt::FontRole);
+    setHeaderData(3, Qt::Horizontal, bold, Qt::FontRole);
+    setHeaderData(4, Qt::Horizontal, bold, Qt::FontRole);
+    setHeaderData(5, Qt::Horizontal, bold, Qt::FontRole);
+    setHeaderData(6, Qt::Horizontal, bold, Qt::FontRole);
+    setHeaderData(7, Qt::Horizontal, bold, Qt::FontRole);
+
+    // Construct the tree model
     foreach(int i, m_groups.uniqueKeys()) {
         QString gr;
         QStandardItem *groupItem = 0;
-        QFont bold;
-        bold.setBold(true);
         bool isDiscriminative = discriminatives.contains(i);
         foreach(const GirItem &item, m_groups.values(i)) {
             if (gr.isEmpty()) {
@@ -221,8 +240,8 @@ bool GirModel::setData(const QModelIndex &index, const QVariant &value, int role
         }
         // get the GirItem
         QStandardItem *item = itemFromIndex(this->index(index.row(), 0, index.parent()));
-        qWarning();
-        qWarning() << "ITEM: item" << item->data(::ITEM_KEY).toInt() << "sub" << item->data(::SUBITEM).toInt() << "rep" << rep;
+//        qWarning();
+//        qWarning() << "ITEM: item" << item->data(::ITEM_KEY).toInt() << "sub" << item->data(::SUBITEM).toInt() << "rep" << rep;
         if (!item->data(::ITEM_KEY).isValid())
             return false;
         NewGirScore::Reponses reponses = NewGirScore::Reponses(rep);

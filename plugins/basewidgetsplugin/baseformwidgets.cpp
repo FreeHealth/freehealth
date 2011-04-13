@@ -1345,7 +1345,7 @@ SumWidget::SumWidget(Form::FormItem *formItem, QWidget *parent)
     // connect to parent FormMain
     Form::FormMain *p = formItem->parentFormMain();
     if (p) {
-        qWarning() << "parent" << p->uuid();
+//        qWarning() << "parent" << p->uuid();
         connect(p, SIGNAL(formLoaded()), this, SLOT(connectFormItems()));
     }
 }
@@ -1361,7 +1361,7 @@ void SumWidget::retranslate()
 
 void SumWidget::connectFormItems()
 {
-    qWarning() << "SUM requiered" << formItem()->extraDatas().value(::SUM_EXTRA_KEY);
+//    qWarning() << "SUM requiered" << formItem()->extraDatas().value(::SUM_EXTRA_KEY);
     if (!formItem()->extraDatas().value(::SUM_EXTRA_KEY).isEmpty()) {
         QStringList uuids = formItem()->extraDatas().value(::SUM_EXTRA_KEY).split(";");
         // get all formitems and connect to the dataChanged signal
@@ -1370,13 +1370,13 @@ void SumWidget::connectFormItems()
             LOG_ERROR("No FormMain parent");
             return;
         }
-        qWarning() << "Parent = " << p->uuid();
+//        qWarning() << "Parent = " << p->uuid();
         QList<Form::FormItem *> items = p->flattenFormItemChildren();
         foreach(const QString &uid, uuids) {
             for(int i = 0; i < items.count(); ++i) {
                 Form::FormItem *item = items.at(i);
                 if (item->uuid().compare(uid, Qt::CaseInsensitive)==0) {
-                    qWarning() << "  connecting" << item->uuid();
+//                    qWarning() << "  connecting" << item->uuid();
                     connect(item->itemDatas(), SIGNAL(dataChanged(int)), this, SLOT(recalculate(int)));
                 }
             }
@@ -1387,7 +1387,7 @@ void SumWidget::connectFormItems()
 void SumWidget::recalculate(const int modifiedRef)
 {
     Q_UNUSED(modifiedRef);
-    qWarning() << "SUM recalculate" << formItem()->extraDatas().value(::SUM_EXTRA_KEY);
+//    qWarning() << "SUM recalculate" << formItem()->extraDatas().value(::SUM_EXTRA_KEY);
     double sum = 0;
     Form::FormMain *p = formItem()->parentFormMain();
     if (!formItem()->extraDatas().value(::SUM_EXTRA_KEY).isEmpty()) {

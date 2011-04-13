@@ -50,6 +50,12 @@ using namespace MedicalUtils::AGGIR;
 ///////////////////////////////////////////////////////////////////////////////////
 ///////////////////////////////  Computations  ////////////////////////////////////
 ///////////////////////////////////////////////////////////////////////////////////
+static bool isValidSubScore(const QString &s)
+{
+//    qWarning() << "test" << s << !s.contains(QRegExp("[^ABCabc]"));
+    return !s.contains(QRegExp("[^ABCabc]"));
+}
+
 static int getRang(const int rang)
 {  int GIR_calcule;
     if (rang == 1){ GIR_calcule = 1; }
@@ -387,7 +393,7 @@ public:
     QChar calculateItemScore(NewGirItem *item)
     {
         int nbSub = item->numberOfSubItems();
-        qWarning() << "  Calc: item" << item->item << "sub" << item->subItem << "nbSub" << nbSub << "rep" << item->reponses;
+//        qWarning() << "  Calc: item" << item->item << "sub" << item->subItem << "nbSub" << nbSub << "rep" << item->reponses;
         if (!nbSub) {
             if (item->reponses == NewGirScore::AucuneReponse) {
                 item->computedScore = '?';
@@ -478,6 +484,7 @@ public:
                     }
                     return 'B';
                 }
+            default: break;
             }
         }
         return QChar('?');
@@ -566,34 +573,30 @@ bool NewGirScore::isValid() const
 void NewGirScore::setValue(Item item, SubItem subItem, const Reponses &reponses)
 {
     NewGirItem *girItem = d->girItem(item, subItem);
-    qWarning() << "setValue: item" << girItem->item << "sub" << girItem->subItem << "rep" << reponses;
+//    qWarning() << "setValue: item" << girItem->item << "sub" << girItem->subItem << "rep" << reponses;
     girItem->reponses = reponses;
     girItem->computedScore = d->calculateItemScore(girItem);
-    qWarning() << "   Gir ->" << item << subItem << reponses << girItem->computedScore;
+//    qWarning() << "   Gir ->" << item << subItem << reponses << girItem->computedScore;
 }
 
 void NewGirScore::setValue(Item item, const Reponses &reponses)
 {
     NewGirItem *girItem = d->girItem(item);
-    qWarning() << "setValue: item" << girItem->item << "nosub  rep" << reponses;
+//    qWarning() << "setValue: item" << girItem->item << "nosub  rep" << reponses;
     girItem->reponses = reponses;
     girItem->computedScore = d->calculateItemScore(girItem);
-    qWarning() << "   Gir[nosub] ->" << item << reponses << girItem->computedScore;
+//    qWarning() << "   Gir[nosub] ->" << item << reponses << girItem->computedScore;
 }
 
 QString NewGirScore::getCodeGir(Item item) const
 {
-    qWarning() << "getGirScore [nosub]";
     NewGirItem *girItem = d->girItem(item);
-    qWarning() << "Gir ->" << girItem->computedScore;
     girItem->computedScore = d->calculateItemScore(girItem);
-    qWarning() << "Gir(recalc) ->" << girItem->computedScore;
     return girItem->computedScore;
 }
 
 QString NewGirScore::getCodeGir(Item item, SubItem subItem) const
 {
-    qWarning() << "getGirScore";
     NewGirItem *girItem = 0;
     for(int i=0; i<d->m_Items.count();++i) {
         girItem = d->m_Items.at(i);
@@ -614,6 +617,8 @@ int NewGirScore::resultingGir() const
         girItem->computedScore = d->calculateItemScore(girItem);
         chaine += girItem->computedScore;
     }
+    if (!isValidSubScore(chaine))
+        return 0;
     int score = getGIR(chaine);
     qWarning() << "resultingGir chaine:" << chaine << "score" << score;
     return score;
@@ -656,12 +661,6 @@ bool OldGirScore::isNull() const
             d->m_elimination.isEmpty() &&
             d->m_transferts.isEmpty() &&
             d->m_interieur.isEmpty();
-}
-
-static bool isValidSubScore(const QString &s)
-{
-//    qWarning() << "test" << s << !s.contains(QRegExp("[^ABCabc]"));
-    return !s.contains(QRegExp("[^ABCabc]"));
 }
 
 bool OldGirScore::isValid() const
