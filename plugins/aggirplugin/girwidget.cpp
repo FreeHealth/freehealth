@@ -79,6 +79,7 @@ GirUi::GirUi(QWidget *parent) :
     m_ui->treeView->expandAll();
     m_ui->treeView->setMinimumHeight((m_ui->treeView->visualRect(model->index(0,0)).height()) * model->rowCountWithChildren() + 6);
     connect(model, SIGNAL(girCalculated(int)), this, SLOT(girCalculated(int)));
+    connect(model, SIGNAL(modelReset()), m_ui->treeView, SLOT(expandAll()));
     // END TEST
 }
 
@@ -154,13 +155,12 @@ void GirUi::updateGirString(QAbstractButton *radio)
 
 void GirUi::setStringfiedGirScore(const QString &gir)
 {
-//    MedicalUtils::AGGIR::GirScore score;
-//    score.setValues(s[0], s[1], s.mid(2,2), s.mid(4,3), s.mid(7,2), s.mid(9,2),s[11], s[12]);
+    model->setStringfiedGirScore(gir);
 }
 
 QString GirUi::stringfiedGirScore() const
 {
-    return QString();
+    return model->stringfiedGirScore();
 }
 
 //--------------------------------------------------------------------------------------------------------
@@ -185,7 +185,6 @@ GirWidget::~GirWidget()
 {
 }
 
-
 void GirWidget::setStringfiedGirScore(const QString &gir)
 {
     m_ui->setStringfiedGirScore(gir);
@@ -201,11 +200,12 @@ QString GirWidget::stringfiedGirScore() const
 //--------------------------------------------------------------------------------------------------------
 bool GirItemData::isModified() const
 {
-    return false;
+    return m_OriginalValue != storableData().toString();
 }
 
 void GirItemData::clear()
 {
+    /** \todo code here */
 }
 
 bool GirItemData::setData(const int ref, const QVariant &data, const int role)
@@ -220,7 +220,7 @@ QVariant GirItemData::data(const int ref, const int role) const
 
 void GirItemData::setStorableData(const QVariant &data)
 {
-    if (data.toString().compare(m_OriginalValue,Qt::CaseInsensitive)==0) {
+    if (data.toString().compare(m_OriginalValue, Qt::CaseInsensitive)==0) {
         // do nothing
         return;
     }
@@ -230,5 +230,6 @@ void GirItemData::setStorableData(const QVariant &data)
 
 QVariant GirItemData::storableData() const
 {
-    return QVariant();
+    QString s = m_GirWidget->stringfiedGirScore();
+    return s;
 }

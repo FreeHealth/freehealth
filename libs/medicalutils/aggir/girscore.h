@@ -102,10 +102,12 @@ public:
 
     bool isNull() const;
     bool isValid() const;
+    bool isComplete() const;
 
     // Variables
     void setValue(Item item, SubItem subItem, const Reponses &reponses);
     void setValue(Item item, const Reponses &reponses);
+    Reponses reponses(Item item, SubItem subItem = NoSubItem) const;
 
     QString getCodeGir(Item item) const;
     QString getCodeGir(Item item, SubItem subItem) const;
@@ -114,7 +116,7 @@ public:
     QString explanations(int girScore) const;
 
     QString serializeScore() const;
-    QString setSerializedScore(const QString &score) const;
+    bool setSerializedScore(const QString &score) const;
 
 private:
     NewGirScorePrivate *d;

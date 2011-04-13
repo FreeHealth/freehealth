@@ -8,6 +8,19 @@ using namespace Gir;
 using namespace MedicalUtils::AGGIR;
 
 namespace {
+
+    enum Columns {
+        Column_Label = 0,
+        Column_NFP,
+        Column_S,
+        Column_T,
+        Column_C,
+        Column_H,
+        Column_PasProbleme,
+        Column_Result,
+        Column_Count
+    };
+
     // Groupes discriminatifs
     const char * const TRANSFERTS = "Transferts";
     const char * const DEP_INT = "Déplacements intérieurs";
@@ -104,24 +117,19 @@ GirModel::GirModel(QObject *parent) :
     QFont bold;
     bold.setBold(true);
 
-    setColumnCount(8);
-    setHeaderData(0, Qt::Horizontal, "Items et sous-items");
-    setHeaderData(1, Qt::Horizontal, "Ne fait pas");
-    setHeaderData(2, Qt::Horizontal, "S");
-    setHeaderData(3, Qt::Horizontal, "T");
-    setHeaderData(4, Qt::Horizontal, "C");
-    setHeaderData(5, Qt::Horizontal, "H");
-    setHeaderData(6, Qt::Horizontal, "Aucun problème");
-    setHeaderData(7, Qt::Horizontal, "Score");
+    setColumnCount(Column_Count);
+    setHeaderData(Column_Label, Qt::Horizontal, "Items et sous-items");
+    setHeaderData(Column_NFP, Qt::Horizontal, "Ne fait pas");
+    setHeaderData(Column_S, Qt::Horizontal, "S");
+    setHeaderData(Column_T, Qt::Horizontal, "T");
+    setHeaderData(Column_C, Qt::Horizontal, "C");
+    setHeaderData(Column_H, Qt::Horizontal, "H");
+    setHeaderData(Column_PasProbleme, Qt::Horizontal, "Aucun problème");
+    setHeaderData(Column_Result, Qt::Horizontal, "Score");
 
-    setHeaderData(0, Qt::Horizontal, bold, Qt::FontRole);
-    setHeaderData(1, Qt::Horizontal, bold, Qt::FontRole);
-    setHeaderData(2, Qt::Horizontal, bold, Qt::FontRole);
-    setHeaderData(3, Qt::Horizontal, bold, Qt::FontRole);
-    setHeaderData(4, Qt::Horizontal, bold, Qt::FontRole);
-    setHeaderData(5, Qt::Horizontal, bold, Qt::FontRole);
-    setHeaderData(6, Qt::Horizontal, bold, Qt::FontRole);
-    setHeaderData(7, Qt::Horizontal, bold, Qt::FontRole);
+    for(int i = 0; i < Column_Count; ++i) {
+        setHeaderData(i, Qt::Horizontal, bold, Qt::FontRole);
+    }
 
     // Construct the tree model
     foreach(int i, m_groups.uniqueKeys()) {
@@ -169,6 +177,9 @@ GirModel::GirModel(QObject *parent) :
             nopb->setToolTip(::NOPB);
 
             QStandardItem *result = new QStandardItem;
+            if (isDiscriminative) {
+                result->setFont(bold);
+            }
 
             // create subitems if needed
             if (item.subgroup.isEmpty()) {
@@ -204,70 +215,96 @@ GirModel::~GirModel()
     delete m_GirScore;
 }
 
+void GirModel::setStringfiedGirScore(const QString &score)
+{
+    if (m_GirScore) {
+        m_GirScore->setSerializedScore(score);
+        int gir = m_GirScore->resultingGir();
+        if (gir > 0)
+            Q_EMIT girCalculated(gir);
+    }
+    reset();
+}
+
+QString GirModel::stringfiedGirScore() const
+{
+    if (m_GirScore)
+        return m_GirScore->serializeScore();
+    return QString();
+}
+
 bool GirModel::setData(const QModelIndex &index, const QVariant &value, int role)
 {
     if (!index.isValid())
         return false;
+
     if (role==Qt::CheckStateRole) {
-        QStandardItemModel::setData(index,value,role);
+        if (index.column() >= Column_NFP && index.column() <= Column_PasProbleme) {
+            // get the GirItem
+            QStandardItem *item = itemFromIndex(index);
+            QStandardItem *forGirItem = itemFromIndex(this->index(index.row(), Column_Label, index.parent()));
+            if (!forGirItem->data(::ITEM_KEY).isValid())
+                return false;
 
-        // if index is NFP and value is checked -> set all other checked
-        if (index.column() == 1 && value.toInt() == Qt::Checked) {
-            for(int i = 2; i < 6; ++i) {
-                QModelIndex idx = this->index(index.row(), i, index.parent());
-                QStandardItemModel::setData(idx, Qt::Checked, role);
+            // calculate actual response
+            int rep = NewGirScore::AucuneReponse;
+            switch (index.column()) {
+            case Column_PasProbleme:
+                {
+                    rep = NewGirScore::AucunProbleme;
+                    break;
+                }
+            case Column_NFP:
+                {
+                    if (value.toInt()==Qt::Checked) {
+                        rep = NewGirScore::NeFaitPas;
+                    } else {
+                        for(int i = Column_NFP; i < Column_PasProbleme; ++i) {
+                            QModelIndex idx = this->index(index.row(), i, index.parent());
+                            QStandardItem *itemResponse = itemFromIndex(idx);
+                            if (idx.column()==index.column()) {
+                                if (value.toInt()==Qt::Checked)
+                                    rep += itemResponse->data(::RESPONSE).toInt();
+                            } else if (idx.data(role).toInt() == Qt::Checked) {
+                                rep += itemResponse->data(::RESPONSE).toInt();
+                            }
+                        }
+                    }
+                    break;
+                }
+            default:
+                {
+                    for(int i = Column_NFP; i < Column_PasProbleme; ++i) {
+                        QModelIndex idx = this->index(index.row(), i, index.parent());
+                        QStandardItem *itemResponse = itemFromIndex(idx);
+                        if (idx.column()==index.column()) {
+                            if (value.toInt()==Qt::Checked)
+                                rep += itemResponse->data(::RESPONSE).toInt();
+                        } else if (idx.data(role).toInt() == Qt::Checked) {
+                            rep += itemResponse->data(::RESPONSE).toInt();
+                        }
+                    }
+                    break;
+                }
             }
-            QModelIndex idx = this->index(index.row(), 6, index.parent());
-            QStandardItemModel::setData(idx, Qt::Unchecked, role);
-        }
-
-        // if index is NoPb and value is checked -> set all other checked
-        if (index.column() == 6 && value.toInt() == Qt::Checked) {
-            for(int i = 1; i < 6; ++i) {
-                QModelIndex idx = this->index(index.row(), i, index.parent());
-                QStandardItemModel::setData(idx, Qt::Unchecked, role);
+            NewGirScore::Reponses reponses = NewGirScore::Reponses(rep);
+            if (forGirItem->data(::SUBITEM).isValid()) {
+                m_GirScore->setValue(NewGirScore::Item(forGirItem->data(::ITEM_KEY).toInt()),
+                                     NewGirScore::SubItem(forGirItem->data(::SUBITEM).toInt()),
+                                     reponses);
+                QModelIndex master = this->index(index.parent().row(), 7, index.parent().parent());
+                Q_EMIT dataChanged(master, master);
+            } else {
+                m_GirScore->setValue(NewGirScore::Item(forGirItem->data(::ITEM_KEY).toInt()),
+                                     reponses);
             }
-        }
-
-        // Get the response
-        int rep = NewGirScore::AucuneReponse;
-        for(int i = 1; i < 7; ++i) {
-            QModelIndex idx = this->index(index.row(), i, index.parent());
-            QStandardItem *item = itemFromIndex(idx);
-            if (idx.data(role).toInt() == Qt::Checked) {
-                rep += item->data(::RESPONSE).toInt();
+            QModelIndex topLeft = this->index(index.row(), 1, index.parent());
+            QModelIndex bottomRight = this->index(index.row(), 7, index.parent());
+            Q_EMIT dataChanged(topLeft, bottomRight);
+            if (m_GirScore->isComplete()) {
+                Q_EMIT girCalculated(m_GirScore->resultingGir());
             }
-        }
-        // get the GirItem
-        QStandardItem *item = itemFromIndex(this->index(index.row(), 0, index.parent()));
-//        qWarning();
-//        qWarning() << "ITEM: item" << item->data(::ITEM_KEY).toInt() << "sub" << item->data(::SUBITEM).toInt() << "rep" << rep;
-        if (!item->data(::ITEM_KEY).isValid())
-            return false;
-        NewGirScore::Reponses reponses = NewGirScore::Reponses(rep);
-        if (item->data(::SUBITEM).isValid()) {
-            m_GirScore->setValue(NewGirScore::Item(item->data(::ITEM_KEY).toInt()),
-                                 NewGirScore::SubItem(item->data(::SUBITEM).toInt()),
-                                 reponses);
-
-            QModelIndex itemScore = this->index(index.parent().row(), 7, index.parent().parent());
-            setData(itemScore, m_GirScore->getCodeGir(NewGirScore::Item(item->data(::ITEM_KEY).toInt())));
-
-            QModelIndex subitemScore = this->index(index.row(), 7, index.parent());
-            setData(subitemScore, m_GirScore->getCodeGir(NewGirScore::Item(item->data(::ITEM_KEY).toInt()),
-                                                         NewGirScore::SubItem(item->data(::SUBITEM).toInt())));
-        } else {
-            m_GirScore->setValue(NewGirScore::Item(item->data(::ITEM_KEY).toInt()),
-                                 reponses);
-
-            QModelIndex itemScore = this->index(index.row(), 7, index.parent());
-            setData(itemScore, m_GirScore->getCodeGir(NewGirScore::Item(item->data(::ITEM_KEY).toInt())));
-        }
-        int gir = m_GirScore->resultingGir();
-        if (gir > 0) {
-            QModelIndex girIndex = this->index(rowCount()-1, 7);
-            setData(girIndex, gir);
-            Q_EMIT girCalculated(gir);
+            return true;
         }
         return true;
     }
@@ -276,8 +313,45 @@ bool GirModel::setData(const QModelIndex &index, const QVariant &value, int role
 
 QVariant GirModel::data(const QModelIndex &index, int role) const
 {
+    if (!index.isValid())
+        return QVariant();
+
+    if (role==Qt::DisplayRole) {
+        if (index.column() == Column_Result) {
+            QStandardItem *item = itemFromIndex(index);
+            if (item == m_score) {
+                if (m_GirScore->isComplete());
+                    return m_GirScore->resultingGir();
+            }
+            QStandardItem *forGirItem = itemFromIndex(this->index(index.row(), Column_Label, index.parent()));
+            if (forGirItem->data(::SUBITEM).isNull())
+                return m_GirScore->getCodeGir(NewGirScore::Item(forGirItem->data(::ITEM_KEY).toInt()));
+            else
+                return m_GirScore->getCodeGir(NewGirScore::Item(forGirItem->data(::ITEM_KEY).toInt()),
+                                              NewGirScore::SubItem(forGirItem->data(::SUBITEM).toInt()));
+        }
+        return QStandardItemModel::data(index, role);
+    }
+    if (role==Qt::CheckStateRole) {
+        if (!m_GirScore)
+            return QVariant();
+        if (index.column() >= Column_NFP && index.column() <= Column_PasProbleme) {
+            QStandardItem *item = itemFromIndex(index);
+            if (!item->isCheckable())
+                return QVariant();
+            QStandardItem *forGirItem = itemFromIndex(this->index(index.row(), Column_Label, index.parent()));
+            // Get the response
+            NewGirScore::Reponses rep = m_GirScore->reponses(NewGirScore::Item(forGirItem->data(::ITEM_KEY).toInt()), NewGirScore::SubItem(forGirItem->data(::SUBITEM).toInt()));
+            if (rep & NewGirScore::Reponses(item->data(::RESPONSE).toInt())) {
+                return Qt::Checked;
+            }
+            return Qt::Unchecked;
+        }
+        return QVariant();
+    }
+
     if (role==Qt::ToolTipRole) {
-        if (index.column() >= 2 && index.column() <= 5) {
+        if (index.column() >= Column_S && index.column() <= Column_H) {
             if (index.data(Qt::CheckStateRole).toInt()==Qt::Checked) {
                 return "Ne fait pas " + QStandardItemModel::data(index, role).toString();
             } else {

@@ -290,6 +290,11 @@ static int getGIR(const QString &chaine)
 namespace MedicalUtils {
 namespace AGGIR {
     namespace {
+        enum CreateGirItemGetter {
+            CreateGirItem = true,
+            DoNotCreateGirItem = false
+        };
+
         // Garder dans l'ordre de construction du girString
         // chaine = coherence + orientation + toilette + habillage + alimentation + elimination + transferts + interieur + exterieur + communication
         const QList<int> discriminatives = QList<int>()
@@ -321,8 +326,10 @@ namespace AGGIR {
         const QList<int> threeSubItem = QList<int>()
                                         << NewGirScore::Habillage;
 
+        static QMultiHash<int, int> subItems;
 
     }
+QMultiHash<int, int> subItems;
 
 struct NewGirItem {
     NewGirItem() :
@@ -340,11 +347,7 @@ struct NewGirItem {
         if (subItem != NewGirScore::NoSubItem) {
             return 0;
         }
-        if (::twoSubItem.contains(item))
-            return 2;
-        if (::threeSubItem.contains(item))
-            return 3;
-        return 0;
+        return ::subItems.values(item).count();
     }
 
     NewGirScore::Item item;
@@ -369,7 +372,12 @@ public:
         m_valid=false;
     }
 
-    NewGirItem *girItem(NewGirScore::Item item, NewGirScore::SubItem subItem = NewGirScore::NoSubItem)
+    NewGirItem *girItem(NewGirScore::Item item, CreateGirItemGetter createIfNotExists = CreateGirItem)
+    {
+        return girItem(item, NewGirScore::NoSubItem, createIfNotExists);
+    }
+
+    NewGirItem *girItem(NewGirScore::Item item, NewGirScore::SubItem subItem, CreateGirItemGetter createIfNotExists = CreateGirItem)
     {
         NewGirItem *girItem = 0;
         for(int i=0; i < m_Items.count(); ++i) {
@@ -379,10 +387,13 @@ public:
                 return girItem;
             }
         }
-        girItem = new NewGirItem;
-        girItem->item = item;
-        girItem->subItem = subItem;
-        m_Items.append(girItem);
+        girItem = 0;
+        if (createIfNotExists) {
+            girItem = new NewGirItem;
+            girItem->item = item;
+            girItem->subItem = subItem;
+            m_Items.append(girItem);
+        }
         return girItem;
     }
 
@@ -550,6 +561,21 @@ QStringList OldGirScorePrivate::m_GirExplanations = QStringList()
 NewGirScore::NewGirScore() :
         d(new NewGirScorePrivate)
 {
+    if (::subItems.isEmpty()) {
+        ::subItems.insertMulti(NewGirScore::Toilette, NewGirScore::Haut);
+        ::subItems.insertMulti(NewGirScore::Toilette, NewGirScore::Bas);
+        ::subItems.insertMulti(NewGirScore::Elimination, NewGirScore::Urinaire);
+        ::subItems.insertMulti(NewGirScore::Elimination, NewGirScore::Fecale);
+        ::subItems.insertMulti(NewGirScore::Habillage, NewGirScore::Haut);
+        ::subItems.insertMulti(NewGirScore::Habillage, NewGirScore::Moyen);
+        ::subItems.insertMulti(NewGirScore::Habillage, NewGirScore::Bas);
+        ::subItems.insertMulti(NewGirScore::Alimentation, NewGirScore::SeServir);
+        ::subItems.insertMulti(NewGirScore::Alimentation, NewGirScore::Manger);
+        ::subItems.insertMulti(NewGirScore::Orientation, NewGirScore::Temps);
+        ::subItems.insertMulti(NewGirScore::Orientation, NewGirScore::Espace);
+        ::subItems.insertMulti(NewGirScore::Coherence, NewGirScore::Communication);
+        ::subItems.insertMulti(NewGirScore::Coherence, NewGirScore::Comportement);
+    }
 }
 
 NewGirScore::~NewGirScore()
@@ -569,12 +595,71 @@ bool NewGirScore::isValid() const
     return d->m_valid;
 }
 
-// Variables
+bool NewGirScore::isComplete() const
+{
+    NewGirItem *girItem = 0;
+    // all discriminatives (with subItems)
+    for(int i = 0; i < ::discriminatives.count(); ++i) {
+        int itemId = discriminatives.at(i);
+        girItem = d->girItem(NewGirScore::Item(itemId), ::DoNotCreateGirItem);
+        if (!girItem)
+            return false;
+        // check subitems
+        QList<int> subs = ::subItems.values(itemId);
+        if (subs.count() > 0) {
+            for(int i = 0; i < subs.count(); ++i) {
+                girItem = d->girItem(NewGirScore::Item(itemId), NewGirScore::SubItem(subs.at(i)), ::DoNotCreateGirItem);
+                if (!girItem)
+                    return false;
+            }
+        } else {
+            girItem = d->girItem(NewGirScore::Item(itemId), ::DoNotCreateGirItem);
+            if (!girItem)
+                return false;
+        }
+    }
+
+    // all illustratives
+    for(int i = 0; i < ::illustratives.count(); ++i) {
+        int itemId = illustratives.at(i);
+        girItem = d->girItem(NewGirScore::Item(itemId), ::DoNotCreateGirItem);
+        if (!girItem)
+            return false;
+    }
+    return true;
+}
+
+static NewGirScore::Reponses correctedReponse(const NewGirScore::Reponses &rep)
+{
+    if (rep == NewGirScore::NeFaitPas) {
+        return NewGirScore::NeFaitPas | NewGirScore::Spontanement | NewGirScore::Totalement | NewGirScore::Correctement | NewGirScore::Habituellement;
+    }
+    if (rep & NewGirScore::AucunProbleme) {
+        return NewGirScore::AucunProbleme;
+    }
+    if (rep & NewGirScore::NeFaitPas) {
+        if (!(rep & NewGirScore::Spontanement) ||
+            !(rep & NewGirScore::Totalement)  ||
+            !(rep & NewGirScore::Correctement)  ||
+            !(rep & NewGirScore::Habituellement)) {
+            return rep ^ NewGirScore::NeFaitPas;
+        }
+    } else {
+        if ((rep & NewGirScore::Spontanement) &&
+            (rep & NewGirScore::Totalement) &&
+            (rep & NewGirScore::Correctement)  &&
+            (rep & NewGirScore::Habituellement)) {
+            return NewGirScore::NeFaitPas | NewGirScore::Spontanement | NewGirScore::Totalement | NewGirScore::Correctement | NewGirScore::Habituellement;
+        }
+    }
+    return rep;
+}
+
 void NewGirScore::setValue(Item item, SubItem subItem, const Reponses &reponses)
 {
     NewGirItem *girItem = d->girItem(item, subItem);
 //    qWarning() << "setValue: item" << girItem->item << "sub" << girItem->subItem << "rep" << reponses;
-    girItem->reponses = reponses;
+    girItem->reponses = correctedReponse(reponses);
     girItem->computedScore = d->calculateItemScore(girItem);
 //    qWarning() << "   Gir ->" << item << subItem << reponses << girItem->computedScore;
 }
@@ -583,9 +668,15 @@ void NewGirScore::setValue(Item item, const Reponses &reponses)
 {
     NewGirItem *girItem = d->girItem(item);
 //    qWarning() << "setValue: item" << girItem->item << "nosub  rep" << reponses;
-    girItem->reponses = reponses;
+    girItem->reponses = correctedReponse(reponses);
     girItem->computedScore = d->calculateItemScore(girItem);
 //    qWarning() << "   Gir[nosub] ->" << item << reponses << girItem->computedScore;
+}
+
+NewGirScore::Reponses NewGirScore::reponses(Item item, SubItem subItem) const
+{
+    NewGirItem *girItem = d->girItem(item, subItem);
+    return girItem->reponses;
 }
 
 QString NewGirScore::getCodeGir(Item item) const
@@ -620,18 +711,72 @@ int NewGirScore::resultingGir() const
     if (!isValidSubScore(chaine))
         return 0;
     int score = getGIR(chaine);
-    qWarning() << "resultingGir chaine:" << chaine << "score" << score;
+//    qWarning() << "resultingGir chaine:" << chaine << "score" << score;
     return score;
 }
 
 QString NewGirScore::explanations(int girScore) const
-{}
+{
+    /** \todo code here */
+}
 
 QString NewGirScore::serializeScore() const
-{}
+{
+    if (!isComplete())
+        return "IncompleteScore";
+    // Format is
+    //    item,subItem:reponses;...
+    //    item:reponses;...
+    QStringList score;
+    NewGirItem *girItem = 0;
+    // all discriminatives (with subItems)
+    for(int i = 0; i < ::discriminatives.count(); ++i) {
+        int itemId = discriminatives.at(i);
+        QList<int> subs = ::subItems.values(itemId);
+        if (subs.count() > 0) {
+            for(int i = 0; i < subs.count(); ++i) {
+                girItem = d->girItem(NewGirScore::Item(itemId), NewGirScore::SubItem(subs.at(i)), DoNotCreateGirItem);
+                score << QString("%1,%2:%3").arg(itemId).arg(subs.at(i)).arg(girItem->reponses);
+            }
+        } else {
+            girItem = d->girItem(NewGirScore::Item(itemId), ::DoNotCreateGirItem);
+            score << QString("%1:%2").arg(itemId).arg(girItem->reponses);
+        }
+    }
+    // all illustratives
+    for(int i = 0; i < ::illustratives.count(); ++i) {
+        int itemId = illustratives.at(i);
+        girItem = d->girItem(NewGirScore::Item(itemId), DoNotCreateGirItem);
+        score << QString("%1:%2").arg(itemId).arg(girItem->reponses);
+    }
+    score.sort();
+    return score.join(";");
+}
 
-QString NewGirScore::setSerializedScore(const QString &score) const
-{}
+bool NewGirScore::setSerializedScore(const QString &score) const
+{
+    QStringList lines = score.split(";");
+    NewGirItem *girItem = 0;
+    foreach(const QString &l, lines) {
+        QStringList vals = l.split(":");
+        if (!vals.count()==2)
+            return false;
+        if (l.contains(",")) {
+            // Item + subItem
+            QStringList items = vals.at(0).split(",");
+            girItem = d->girItem(NewGirScore::Item(items.at(0).toInt()),
+                                 NewGirScore::SubItem(items.at(1).toInt()));
+            girItem->reponses = NewGirScore::Reponses(vals.at(1).toInt());
+            girItem->computedScore = d->calculateItemScore(girItem);
+        } else {
+            // Item only
+            girItem = d->girItem(NewGirScore::Item(vals.at(0).toInt()));
+            girItem->reponses = NewGirScore::Reponses(vals.at(1).toInt());
+            girItem->computedScore = d->calculateItemScore(girItem);
+        }
+    }
+    return true;
+}
 
 
 ///////////////////////////////////////////////////////////////////////////////////
