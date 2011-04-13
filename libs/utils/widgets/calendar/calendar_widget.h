@@ -6,12 +6,13 @@
 
 #include "common.h"
 #include "view.h"
-#include "calendar_navbar.h"
 #include "abstract_calendar_model.h"
 
 class QVBoxLayout;
 
 namespace Calendar {
+	struct CalendarWidgetPrivate;
+
 	class CalendarWidget : public QWidget
 	{
 		Q_OBJECT
@@ -21,17 +22,10 @@ namespace Calendar {
 		AbstractCalendarModel *model() const { return m_model; }
 		void setModel(AbstractCalendarModel *model);
 
-		Calendar::ViewType viewType() const { return m_navbar->viewType(); }
+		ViewType viewType() const;
 		void setViewType(Calendar::ViewType viewType);
 
 	private slots:
-		// for model
-/*		void dataChanged(const QModelIndex & topLeft, const  QModelIndex & bottomRight);
-		void rowsAboutToBeRemoved(const QModelIndex & parent, int start, int end);
-		void rowsAboutToBeInserted(const QModelIndex & parent, int start, int end);
-		void rowsRemoved(const QModelIndex & parent, int start, int end);
-		void rowsInserted(const QModelIndex & parent, int start, int end);*/
-
 		// navigation bar slots
 		void firstDateChanged();
 		void viewTypeChanged();
@@ -40,14 +34,9 @@ namespace Calendar {
 		void timeout();
 
 	private:
-		QVBoxLayout *m_mainLayout;
-		QScrollArea *m_scrollArea;
-		CalendarNavbar *m_navbar;
+		CalendarWidgetPrivate *m_d;
 		ViewType m_viewType;
-		View *m_view;
-		ViewHeader *m_header;
 		AbstractCalendarModel *m_model;
-		QTimer m_timer; // used to refresh every date/time stuffs
 	};
 }
 
