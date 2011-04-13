@@ -178,6 +178,7 @@ const char * const  ICONPATIENTFILES  = "patientfiles.png";
 const char * const  ICONPATIENTHISTORY= "patienthistory.png";
 const char * const  ICONCHROMOSOME    = "chromosome.png";
 const char * const  ICONDRUGMODE      = "drugmode.png";
+const char * const  ICONACCOUNTMODE   = "accountancymode.png";
 
 
 }  // end Constants

@@ -34,7 +34,7 @@
  * \file accountview.h
  * \author Eric MAEKER <eric.maeker@free.fr>
  * \version 0.1.0
- * \date 03 Apr 2010
+ * \date 13 Apr 2011
 */
 
 namespace Account {
@@ -46,7 +46,7 @@ class AccountView : public QWidget
 {
     Q_OBJECT
 public:
-    AccountView(QWidget *parent);
+    AccountView(QWidget *parent = 0);
     ~AccountView();
 
 private:

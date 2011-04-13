@@ -21,6 +21,10 @@
 #include "accountplugin.h"
 #include "accountwidgetmanager.h"
 
+#ifdef FREEMEDFORMS
+#    include "accountmode.h"
+#endif
+
 #include "preferences/accountpreferences.h"
 #include "preferences/bankdetailspage.h"
 #include "preferences/availablemovementpage.h"
@@ -105,6 +109,11 @@ void AccountPlugin::extensionsInitialized()
     m_UserPage = new AccountUserOptionsPage(this);
     m_UserPage->checkSettingsValidity();
     addObject(m_UserPage);
+#endif
+
+    // FreeMedForms specific code
+#ifdef FREEMEDFORMS
+    addAutoReleasedObject(new Account::Internal::AccountMode(this));
 #endif
 
     // Check settings validity

@@ -9,3 +9,9 @@ BUILD_PATH_POSTFIXE = FreeAccount
 include(shared_sources.pri)
 
 OTHER_FILES = Account.pluginspec
+
+HEADERS += \
+    accountmode.h
+
+SOURCES += \
+    accountmode.cpp

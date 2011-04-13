@@ -43,7 +43,9 @@
 #include <coreplugin/icore.h>
 #include <coreplugin/constants.h>
 
-#include <coreplugin/commandlineparser.h>
+#ifdef FREEACOUNT
+#    include <coreplugin/commandlineparser.h>
+#endif
 
 #include <QCoreApplication>
 #include <QSqlDatabase>
@@ -560,7 +562,7 @@ bool AccountBase::init()
 
     // test driver
      if (!QSqlDatabase::isDriverAvailable("QSQLITE")) {
-         Utils::Log::addError(this, tkTr(Trans::Constants::SQLITE_DRIVER_NOT_AVAILABLE), __FILE__, __LINE__);
+         LOG_ERROR(tkTr(Trans::Constants::SQLITE_DRIVER_NOT_AVAILABLE));
          Utils::warningMessageBox(tkTr(Trans::Constants::APPLICATION_FAILURE),
                                   tkTr(Trans::Constants::SQLITE_DRIVER_NOT_AVAILABLE_DETAIL),
                                   "", qApp->applicationName());
@@ -569,8 +571,9 @@ bool AccountBase::init()
 
      // log the path of the database
      QString pathToDb = settings()->path(Core::ISettings::ReadWriteDatabasesPath);
-     Utils::Log::addMessage(this, tr("Searching databases into dir %1").arg(pathToDb));
+     LOG(tr("Searching databases into dir %1").arg(pathToDb));
 
+#ifdef FREEACCOUNT
      if (commandLine()->value(Core::CommandLine::CL_Test).toBool()) {
          // check if database exists
          bool feed = !QFile(pathToDb + QDir::separator() + QString(Constants::DB_ACCOUNTANCY) + "-test.db").exists();
@@ -580,17 +583,21 @@ bool AccountBase::init()
                           Utils::Database::ReadWrite, Utils::Database::SQLite, "", "", 0, CreateDatabase);
          if (feed) {
              // send defaults datas to DB
-             Utils::Log::addMessage(this, "feeding test database with datas");
+             LOG("feeding test database with datas");
              QString content = Utils::readTextFile(settings()->path(Core::ISettings::BundleResourcesPath) + "/textfiles/freeaccount-testing-database.sql");
              if (!executeSQL(content, database()))
-                 Utils::Log::addError(this, "can feed test database");
+                 LOG_ERROR("can feed test database");
          }
      } else {
          // Connect normal Account Database
          createConnection(Constants::DB_ACCOUNTANCY, QString(Constants::DB_ACCOUNTANCY) + ".db", pathToDb,
                           Utils::Database::ReadWrite, Utils::Database::SQLite, "", "", 0, CreateDatabase);
      }
-
+#else
+     // Connect normal Account Database
+     createConnection(Constants::DB_ACCOUNTANCY, QString(Constants::DB_ACCOUNTANCY) + ".db", pathToDb,
+                      Utils::Database::ReadWrite, Utils::Database::SQLite, "", "", 0, CreateDatabase);
+#endif
 
      if (checkDatabaseScheme())
          qWarning() << "xxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxx OK";
@@ -615,8 +622,8 @@ bool AccountBase::createDatabase(const QString &connectionName , const QString &
     qWarning() << "CREATE";
     if (connectionName != Constants::DB_ACCOUNTANCY)
         return false;
-    Utils::Log::addMessage(this, tkTr(Trans::Constants::TRYING_TO_CREATE_1_PLACE_2)
-                           .arg(dbName).arg(pathOrHostName));
+    LOG(tkTr(Trans::Constants::TRYING_TO_CREATE_1_PLACE_2)
+        .arg(dbName).arg(pathOrHostName));
     // create an empty database and connect
     QSqlDatabase DB;
     if (driver == SQLite) {
@@ -638,12 +645,12 @@ bool AccountBase::createDatabase(const QString &connectionName , const QString &
     qWarning() << "xxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxx";
 
     if (createTables()) {
-        Utils::Log::addMessage(this, tr("Database %1 %2 correctly created").arg(connectionName, dbName));
+        LOG(tr("Database %1 %2 correctly created").arg(connectionName, dbName));
         return true;
     } else {
         qDebug() << __FILE__ << QString::number(__LINE__) << " database can not be created " ;
-        Utils::Log::addError(this, tr("ERROR : database can not be created %1 %2 %3")
-                             .arg(connectionName, dbName, DB.lastError().text()));
+        LOG_ERROR(tr("ERROR : database can not be created %1 %2 %3")
+                  .arg(connectionName, dbName, DB.lastError().text()));
     }
     qWarning() << "xxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxx";
     return false;
@@ -670,12 +677,12 @@ AccountData *AccountBase::getAccountByUid(const QString &uid)
             }
             return data;
         } else {
-            Utils::Log::addError(this, "No account with an UID like " + uid, __FILE__, __LINE__);
+            LOG_ERROR("No account with an UID like " + uid);
             return 0;
         }
     } else {
-        Utils::Log::addError(this, "No account with an UID like " + uid, __FILE__, __LINE__);
-        Utils::Log::addQueryError("DrugsBase", q, __FILE__, __LINE__);
+        LOG_ERROR("No account with an UID like " + uid);
+        LOG_QUERY_ERROR(q);
         return 0;
     }
     return 0;
