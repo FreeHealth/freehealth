@@ -39,7 +39,7 @@ QString AssetsIO::getUserUid(){
     return m_assetModel->m_UserUid;
 }
 
-bool AssetsIO::insertIntoAssets(QHash<int,QVariant> &hashValues)
+bool AssetsIO::insertIntoAssets(const QHash<int,QVariant> &hashValues)
 {
     bool ret = true;
     int rowBefore = m_assetModel->rowCount(QModelIndex());
@@ -66,7 +66,7 @@ bool AssetsIO::insertIntoAssets(QHash<int,QVariant> &hashValues)
     return ret;
 }
 
-bool AssetsIO::insertIntoMovements(QHash<int,QVariant> &hashValues)
+bool AssetsIO::insertIntoMovements(const QHash<int,QVariant> &hashValues)
 {
     bool ret = true;
     MovementModel modelMovements(this);
@@ -121,7 +121,7 @@ bool AssetsIO::insertIntoMovements(QHash<int,QVariant> &hashValues)
     return ret;
 }
 
-bool AssetsIO::debitOrCreditInBankBalance(const QString & bank, double & value){
+bool AssetsIO::debitOrCreditInBankBalance(const QString &bank, double value){
     bool ret = true;
     BankAccountModel model(this);
     int row = 0;
@@ -276,7 +276,7 @@ int AssetsIO::getMovementId(int row){
     return m_assetModel->data(m_assetModel->index(row,ASSETS_MOVEMENT),Qt::DisplayRole).toInt();
 }
 
-bool AssetsIO::creditValueDeletedToBankAccount(double & value, int & idBank){
+bool AssetsIO::creditValueDeletedToBankAccount(double value, int idBank){
     bool ret = true;
     BankAccountModel bankmodel(this);
     QString filter = QString("%1 = '%2'").arg("BD_ID",QString::number(idBank));
@@ -289,14 +289,14 @@ bool AssetsIO::creditValueDeletedToBankAccount(double & value, int & idBank){
     return ret;
 }
 
-double AssetsIO::getResidualValueWhenRefresh(int & row){
+double AssetsIO::getResidualValueWhenRefresh(int row){
     double residualValue = 0.00;
     AssetModel model(this);
     residualValue = model.data(model.index(row,ASSETS_RESIDUAL_VALUE),Qt::DisplayRole).toDouble();
     return residualValue;
 }
 
-bool AssetsIO::deleteOneYearToRun(int & row){
+bool AssetsIO::deleteOneYearToRun(int row){
     bool ret = true;
     AssetModel model(this);
     int yearsToRun = model.data(model.index(row,ASSETS_YEARS),Qt::DisplayRole).toInt();
@@ -312,7 +312,7 @@ bool AssetsIO::deleteOneYearToRun(int & row){
     return ret;
 }
 
-double AssetsIO::getRate(QDate & date,double & duration){
+double AssetsIO::getRate(const QDate &date, double duration) {
     double rate = 0.00;
     QHash<QString,QDate> hashRatesDates;
     QStringList listChosenOfRanges;
@@ -375,21 +375,21 @@ QStandardItemModel * AssetsIO::getYearlyValues(const QDate & year, QObject * par
     return model;
 }
 
-double AssetsIO::getValueFromRow(int & row){
+double AssetsIO::getValueFromRow(int row){
     double value = 0.00;
     AssetModel model(this);
     value = model.data(model.index(row,ASSETS_VALUE),Qt::DisplayRole).toDouble();    
     return value;
 }
 
-int AssetsIO::getModeFromRow(int & row){
+int AssetsIO::getModeFromRow(int row){
     int mode = 0;
     AssetModel model(this);
     mode = model.data(model.index(row,ASSETS_MODE),Qt::DisplayRole).toInt();
     return mode;
 }
 
-double AssetsIO::getDurationFromRow(int & row){
+double AssetsIO::getDurationFromRow(int row){
     double duration = 0.00;
     AssetModel model(this);
     duration = model.data(model.index(row,ASSETS_DURATION),Qt::DisplayRole).toDouble();
@@ -397,14 +397,14 @@ double AssetsIO::getDurationFromRow(int & row){
     
 }
 
-QDate AssetsIO::getDateFromRow(int & row){
+QDate AssetsIO::getDateFromRow(int row){
     QDate date;
     AssetModel model(this);
     date = model.data(model.index(row,ASSETS_DATE),Qt::DisplayRole).toDate();
     return date;
 }
 
-QString AssetsIO::getLabelFromRow(int & row){
+QString AssetsIO::getLabelFromRow(int row){
     QString label;
     AssetModel model(this);
     label = model.data(model.index(row,ASSETS_LABEL),Qt::DisplayRole).toString();    

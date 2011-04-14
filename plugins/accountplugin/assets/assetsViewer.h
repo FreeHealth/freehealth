@@ -7,6 +7,8 @@
 #ifndef ASSETSVIEWER_H
 #define ASSETSVIEWER_H
 
+#include <accountplugin/account_exporter.h>
+
 #include <QWidget>
 #include <QDate>
 #include <QModelIndex>
@@ -15,7 +17,7 @@ namespace Ui {
     class AssetsViewerWidget;
 }
 
-class AssetsViewer : public QWidget
+class ACCOUNT_EXPORT AssetsViewer : public QWidget
 {
     Q_OBJECT
 public:
@@ -29,8 +31,8 @@ public:
 private Q_SLOTS:
     void recordAsset();
     void deleteAsset();
-    void yearDateChanged(const QDate& year);
-    void writeLabelByRow(const QModelIndex& index);
+    void yearDateChanged(const QDate &year);
+    void writeLabelByRow(const QModelIndex &index);
 
 private:
     void fillModeComboBox();

@@ -45,7 +45,7 @@ receiptsEngine::~receiptsEngine()
 {
 }
 
-bool receiptsEngine::insertIntoAccount(QHash<int,QVariant> & hashValues, QString & userUuid)
+bool receiptsEngine::insertIntoAccount(const QHash<int,QVariant> &hashValues, const QString &userUuid)
 {
     // fetch all the account model
     /*while (m_mpmodel->canFetchMore(QModelIndex())) {
@@ -107,7 +107,7 @@ QHash<QString,QVariant> receiptsEngine::getNamesAndValuesFromMP(){
     return hash;
 }
 
-bool receiptsEngine::insertInThesaurus(QString & listOfValuesStr,QString & userUuid){
+bool receiptsEngine::insertInThesaurus(const QString &listOfValuesStr, const QString &userUuid){
     bool ret = true;
     QUuid uuid;
     QString uuidStr = uuid.createUuid();
@@ -165,7 +165,7 @@ bool receiptsEngine::addBoolTrue(QString & data){
     	    if (!model.setData(model.index(i,THESAURUS_PREF),0,Qt::EditRole))
     	    {
     	    	  qWarning() << __FILE__ << QString::number(__LINE__) << "thesaurusModel cannot set bool to false !" ;
-    	    	  ret == false;
+                  ret = false;
     	        }
     	}
     }

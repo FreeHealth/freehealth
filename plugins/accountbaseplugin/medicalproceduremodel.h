@@ -35,6 +35,8 @@
 #ifndef MEDICALPROCEDUREMODEL_H
 #define MEDICALPROCEDUREMODEL_H
 
+#include <accountbaseplugin/accountbase_exporter.h>
+
 #include <QAbstractTableModel>
 #include <QSqlError>
 
@@ -44,7 +46,7 @@ namespace Internal {
 class MedicalProcedureModelPrivate;
 }
 
-class MedicalProcedureModel : public QAbstractTableModel
+class ACCOUNTBASE_EXPORT MedicalProcedureModel : public QAbstractTableModel
 {
     Q_OBJECT
 public:

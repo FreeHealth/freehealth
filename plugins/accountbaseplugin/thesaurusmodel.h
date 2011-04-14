@@ -1,6 +1,8 @@
 #ifndef THESAURUSMODEL_H
 #define THESAURUSMODEL_H
 
+#include <accountbaseplugin/accountbase_exporter.h>
+
 #include <QAbstractTableModel>
 
 namespace AccountDB {
@@ -8,7 +10,7 @@ namespace Internal {
 class ThesaurusModelPrivate;
 }
 
-class ThesaurusModel : public QAbstractTableModel
+class ACCOUNTBASE_EXPORT ThesaurusModel : public QAbstractTableModel
 {
 public:
     ThesaurusModel(QObject *parent);

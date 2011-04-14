@@ -87,7 +87,7 @@ QHash<int,QString> AssetsManager::getHashForModeComboBox(){
     return hash;
 }
 
-double AssetsManager::getYearlyValue(QString &dateBegin , QDate & currentDate, double value,int mode,double duration){
+double AssetsManager::getYearlyValue(const QString &dateBegin , const QDate &currentDate, double value,int mode,double duration){
     double yearlyValue = 0.00;
      switch (mode) {
         case LINEAR_MODE :
@@ -103,7 +103,7 @@ double AssetsManager::getYearlyValue(QString &dateBegin , QDate & currentDate, d
     return yearlyValue;
 }
 
-double AssetsManager::getYearlyValue(QString & year, int & row){
+double AssetsManager::getYearlyValue(const QString &year, int row){
     double yValue = 0.00;
     QString dateBegin = year+"-01-01";
     QString dateEnd = year+"-12-31" ;
@@ -122,7 +122,7 @@ double AssetsManager::getYearlyValue(QString & year, int & row){
     return yValue;
 }
 
-double AssetsManager::linearCalc(double value , double  duration , QString & beginDate, QDate & refDate){
+double AssetsManager::linearCalc(double value , double  duration , const QString &beginDate, const QDate &refDate){
     qDebug() << __FILE__ << QString::number(__LINE__) << " in linear calc " ;
     AssetsIO assetIO(this);
     QDate currentDate = refDate;
@@ -137,7 +137,7 @@ double AssetsManager::linearCalc(double value , double  duration , QString & beg
     return yearlyValue;
 }
 
-QList<double> AssetsManager::decreasingCalc(int row,double &  value , double & duration , QString & dateBegin,QDate & refDate){
+QList<double> AssetsManager::decreasingCalc(int row, double value , double duration , const QString &dateBegin, const QDate &refDate){
     qDebug() << __FILE__ << QString::number(__LINE__) << " in decreasing calc " ;
     QList<double> list;
     AssetsIO assetIO(this);
@@ -191,8 +191,7 @@ QList<double> AssetsManager::decreasingCalc(int row,double &  value , double & d
     return list;
 }
 
-double AssetsManager::getCalculatedResidualValue(double & value, 
-                                                 double & yearlyValue){
+double AssetsManager::getCalculatedResidualValue(double value, double yearlyValue){
     double result = 0.00;
     result = value - yearlyValue;
     return result;
@@ -259,7 +258,7 @@ bool AssetsManager::setRefreshedResidualValue(){
     return ret;
 }
 
-double AssetsManager::getRate(QDate & date,double & duration,int & mode){
+double AssetsManager::getRate(const QDate &date,double duration,int mode){
     double rate = 0.00;
     switch(mode){
     	    case LINEAR_MODE :
@@ -274,14 +273,14 @@ double AssetsManager::getRate(QDate & date,double & duration,int & mode){
     return rate;
 }
 
-double AssetsManager::getRateFromAssetsRates(QDate & date,double & duration){
+double AssetsManager::getRateFromAssetsRates(const QDate &date,double duration){
     double rate = 0.00;
     AssetsIO assetsIO(this);
     rate = assetsIO.getRate(date,duration);
     return rate;
 }
 
-QStandardItemModel * AssetsManager::getYearlyValues(const QDate & year){
+QStandardItemModel * AssetsManager::getYearlyValues(const QDate &year){
     QStandardItemModel *model = new QStandardItemModel(this);
     QStandardItemModel *newModel = new QStandardItemModel(this);
     QString yearStr = year.toString("yyyy");

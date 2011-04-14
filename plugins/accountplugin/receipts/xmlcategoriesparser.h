@@ -21,10 +21,14 @@
 #ifndef XMLCATEGORIESPARSER_H
 #define XMLCATEGORIESPARSER_H
 
-#include <QtCore>
-#include <QtXml>
+#include <accountplugin/account_exporter.h>
 
-class xmlCategoriesParser:public QObject{
+#include <QList>
+#include <QString>
+#include <QHash>
+
+class ACCOUNT_EXPORT xmlCategoriesParser : public QObject
+{
   Q_OBJECT
   public :
     xmlCategoriesParser();

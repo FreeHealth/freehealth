@@ -1,8 +1,16 @@
 #ifndef RECEIPTSMANAGER_H
 #define RECEIPTSMANAGER_H
+
+#include <accountplugin/account_exporter.h>
+
 #include <QtCore>
-#include <QtSql>
-class receiptsManager : public QObject {
+#include <QHash>
+#include <QVariant>
+#include <QString>
+#include <QStringList>
+
+class ACCOUNT_EXPORT receiptsManager : public QObject
+{
   Q_OBJECT
   public :
   receiptsManager();

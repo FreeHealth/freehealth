@@ -28,16 +28,17 @@
 #ifndef WORKINGPLACESMODEL_H
 #define WORKINGPLACESMODEL_H
 
+#include <accountbaseplugin/accountbase_exporter.h>
+
 #include <QAbstractTableModel>
 #include <QSqlError>
-
 
 namespace AccountDB {
 namespace Internal {
 class WorkingPlacesModelPrivate;
 }
 
-class WorkingPlacesModel : public QAbstractTableModel
+class ACCOUNTBASE_EXPORT WorkingPlacesModel : public QAbstractTableModel
 {
   
 public:

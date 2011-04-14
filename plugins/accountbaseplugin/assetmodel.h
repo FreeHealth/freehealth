@@ -35,6 +35,8 @@
 #ifndef ASSETMODEL_H
 #define ASSETMODEL_H
 
+#include <accountbaseplugin/accountbase_exporter.h>
+
 #include <QAbstractTableModel>
 #include <QSqlError>
 
@@ -43,7 +45,7 @@ namespace Internal {
 class AssetModelPrivate;
 }
 
-class AssetModel : public QAbstractTableModel
+class ACCOUNTBASE_EXPORT AssetModel : public QAbstractTableModel
 {
     Q_OBJECT
 public:

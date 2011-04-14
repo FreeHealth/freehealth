@@ -1,8 +1,11 @@
 #ifndef  FINDRECEIPTSVALUES_H
 #define  FINDRECEIPTSVALUES_H
 #include "ui_findValuesGUI.h"
-#include "xmlcategoriesparser.h"
-#include "receiptsmanager.h"
+
+#include <accountplugin/account_exporter.h>
+#include <accountplugin/receipts/receiptsmanager.h>
+#include <accountplugin/receipts/xmlcategoriesparser.h>
+
 #include <accountbaseplugin/medicalproceduremodel.h>
 #include <accountbaseplugin/thesaurusmodel.h>
 #include <accountbaseplugin/constants.h>
@@ -14,15 +17,16 @@ using namespace AccountDB;
 namespace Ui{
   class findValueDialog;
 }
-class findReceiptsValues:public QDialog{
+class ACCOUNT_EXPORT findReceiptsValues:public QDialog
+{
   Q_OBJECT
-  public :
+public:
     QHash<QString,QString> returnValuesHash();
     findReceiptsValues(QWidget * parent = 0);
     ~findReceiptsValues();
     QHash<QString,QString> getChoosenValues();
     void clear();
-  private :
+private:
     //QSqlTableModel * m_model; //  à modifier par m_mpmodel
     Ui::findValueDialog * ui;
     receiptsManager * m_rbm;
@@ -32,9 +36,11 @@ class findReceiptsValues:public QDialog{
     void initialize();
     void fillComboCategories();
     
-  private slots :
+private slots:
     void fillListViewValues(const QString & comboItem);
     void chooseValue(const QModelIndex& index);
     void supprItemChoosen(QListWidgetItem * item);
 };
+
+
 #endif

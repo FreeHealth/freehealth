@@ -1,6 +1,8 @@
 #ifndef ASSETSIO_H
 #define ASSETSIO_H
 
+#include <accountplugin/account_exporter.h>
+
 #include <QObject>
 #include <QVariant>
 #include <QHash>
@@ -17,7 +19,7 @@ namespace AccountDB {
 class AssetModel;
 }
 
-class AssetsIO : public QObject
+class ACCOUNT_EXPORT AssetsIO : public QObject
 {
     Q_OBJECT
 public:
@@ -25,28 +27,30 @@ public:
     ~AssetsIO();
     AccountDB::AssetModel *getModelAssets();
     QString getUserUid();
-    bool insertIntoAssets(QHash<int,QVariant> &hashValues);
-    bool insertIntoMovements(QHash<int,QVariant> &hashValues);
+    bool insertIntoAssets(const QHash<int,QVariant> &hashValues);
+    bool insertIntoMovements(const QHash<int,QVariant> &hashValues);
     bool deleteAsset(int row);
-    QStandardItemModel * getListsOfValuesForRefresh(QObject * parent);
-    QStandardItemModel * getBankComboBoxModel(QObject * parent);
+
+    QStandardItemModel *getListsOfValuesForRefresh(QObject *parent);
+    QStandardItemModel *getBankComboBoxModel(QObject *parent);
+
     int getLastMovementId();
     bool deleteMovement(int idMovement, int idBank);    
     int getMovementId(int row);
-    int getIdFromBankName(const QString & bankName);
-    double getResidualValueWhenRefresh(int & row);
-    bool deleteOneYearToRun(int & row);
-    double getRate(QDate & date,double & duration);
-    QStandardItemModel * getYearlyValues(const QDate & year,QObject * parent);
-    double getValueFromRow(int & row);
-    int getModeFromRow(int & row);
-    double getDurationFromRow(int & row);
-    QDate getDateFromRow(int & row);
-    QString getLabelFromRow(int & row);
+    int getIdFromBankName(const QString &bankName);
+    double getResidualValueWhenRefresh(int row);
+    bool deleteOneYearToRun(int row);
+    double getRate(const QDate &date, double duration);
+    QStandardItemModel * getYearlyValues(const QDate &year, QObject *parent);
+    double getValueFromRow(int row);
+    int getModeFromRow(int row);
+    double getDurationFromRow(int row);
+    QDate getDateFromRow(int row);
+    QString getLabelFromRow(int row);
 private:
     QString getBankNameFromId(int id);
-    bool debitOrCreditInBankBalance(const QString & bank, double & value);
-    bool creditValueDeletedToBankAccount(double & value, int & idBank);
+    bool debitOrCreditInBankBalance(const QString &bank, double value);
+    bool creditValueDeletedToBankAccount(double value, int idBank);
     AccountDB::AssetModel *m_assetModel;
     QString m_user_uid;
 };

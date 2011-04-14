@@ -1,6 +1,8 @@
 #ifndef INSURANCEMODEL_H
 #define INSURANCEMODEL_H
 
+#include <accountbaseplugin/accountbase_exporter.h>
+
 #include <QAbstractTableModel>
 #include <QSqlError>
 
@@ -10,7 +12,7 @@ namespace Internal {
 class InsuranceModelPrivate;
 }
 
-class InsuranceModel : public QAbstractTableModel
+class ACCOUNTBASE_EXPORT InsuranceModel : public QAbstractTableModel
 {
   Q_OBJECT
 public:

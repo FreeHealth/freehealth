@@ -1,6 +1,8 @@
 #ifndef RECEIPTVIEWER_H
 #define RECEIPTVIEWER_H
 
+#include <accountplugin/account_exporter.h>
+
 #include <QWidget>
 #include <QStandardItemModel>
 #include <QHash>
@@ -52,7 +54,7 @@ private:
 };
 
 
-class ReceiptViewer : public QWidget
+class ACCOUNT_EXPORT ReceiptViewer : public QWidget
 {
     Q_OBJECT
 

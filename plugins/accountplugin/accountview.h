@@ -26,6 +26,8 @@
 #ifndef ACCOUNTVIEW_H
 #define ACCOUNTVIEW_H
 
+#include <accountplugin/account_exporter.h>
+
 #include <QObject>
 #include <QWidget>
 #include <QDate>
@@ -42,7 +44,7 @@ namespace Internal {
 class AccountViewPrivate;
 }
 
-class AccountView : public QWidget
+class ACCOUNT_EXPORT AccountView : public QWidget
 {
     Q_OBJECT
 public:

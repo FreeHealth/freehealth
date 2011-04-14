@@ -35,6 +35,8 @@
 #ifndef DEPOSITMODEL_H
 #define DEPOSITMODEL_H
 
+#include <accountbaseplugin/accountbase_exporter.h>
+
 #include <QAbstractTableModel>
 
 namespace AccountDB {
@@ -42,7 +44,7 @@ namespace Internal {
 class DepositModelPrivate;
 }
 
-class DepositModel : public QAbstractTableModel
+class ACCOUNTBASE_EXPORT DepositModel : public QAbstractTableModel
 {
     Q_OBJECT
 public:

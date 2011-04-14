@@ -1,5 +1,8 @@
 #ifndef DISTANCE_H
 #define DISTANCE_H
+
+#include <accountplugin/account_exporter.h>
+
 #include <QDialog>
 #include <QTimer>
 #include <QHash>
@@ -8,7 +11,7 @@ namespace Ui{
     class ChoiceDialog;
 }
 
-class distance:public QDialog{
+class ACCOUNT_EXPORT distance:public QDialog{
     Q_OBJECT
     public :
         distance(QWidget * parent);

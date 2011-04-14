@@ -35,6 +35,8 @@
 #ifndef PERCENTMODEL_H
 #define PERCENTMODEL_H
 
+#include <accountbaseplugin/accountbase_exporter.h>
+
 #include <QAbstractTableModel>
 #include <QSqlError>
 
@@ -43,7 +45,7 @@ namespace Internal {
 class PercentModelPrivate;
 }
 
-class PercentModel : public QAbstractTableModel
+class ACCOUNTBASE_EXPORT PercentModel : public QAbstractTableModel
 {
     Q_OBJECT
 public:

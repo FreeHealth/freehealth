@@ -41,6 +41,8 @@
 #ifndef MOVEMENTMODEL_H
 #define MOVEMENTMODEL_H
 
+#include <accountbaseplugin/accountbase_exporter.h>
+
 #include <QAbstractTableModel>
 #include <QSqlError>
 
@@ -49,7 +51,7 @@ namespace Internal {
 class MovementModelPrivate;
 }
 
-class MovementModel : public QAbstractTableModel
+class ACCOUNTBASE_EXPORT MovementModel : public QAbstractTableModel
 {
     Q_OBJECT
 public:

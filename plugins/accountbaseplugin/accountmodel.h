@@ -35,20 +35,17 @@
 #ifndef ACCOUNTMODEL_H
 #define ACCOUNTMODEL_H
 
+#include <accountbaseplugin/accountbase_exporter.h>
+
 #include <QAbstractTableModel>
-
-
 #include <QSqlError>
-
-
-
 
 namespace AccountDB {
 namespace Internal {
 class AccountModelPrivate;
 }
 
-class AccountModel : public QAbstractTableModel
+class ACCOUNTBASE_EXPORT AccountModel : public QAbstractTableModel
 {
     Q_OBJECT
     friend class Internal::AccountModelPrivate;

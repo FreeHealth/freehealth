@@ -1,6 +1,8 @@
 #ifndef MOVEMENTSIO_H
 #define MOVEMENTSIO_H
 
+#include <accountplugin/account_exporter.h>
+
 #include <QStandardItemModel>
 #include <QHash>
 
@@ -8,7 +10,7 @@ namespace AccountDB {
     class MovementModel;
 }
 
-class MovementsIODb : public QObject
+class ACCOUNT_EXPORT MovementsIODb : public QObject
 {
     Q_OBJECT
 public:

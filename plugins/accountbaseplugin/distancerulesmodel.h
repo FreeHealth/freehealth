@@ -35,6 +35,8 @@
 #ifndef DISTANCERULESMODEL_H
 #define DISTANCERULESMODEL_H
 
+#include <accountbaseplugin/accountbase_exporter.h>
+
 #include <QAbstractTableModel>
 #include <QSqlError>
 
@@ -43,7 +45,7 @@ namespace Internal {
 class DistanceRulesModelPrivate;
 }
 
-class DistanceRulesModel : public QAbstractTableModel
+class ACCOUNTBASE_EXPORT DistanceRulesModel : public QAbstractTableModel
 {
     Q_OBJECT
 public:

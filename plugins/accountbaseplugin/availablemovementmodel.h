@@ -7,6 +7,8 @@
 #ifndef AVAILABLEMOVEMENTMODEL_H
 #define AVAILABLEMOVEMENTMODEL_H
 
+#include <accountbaseplugin/accountbase_exporter.h>
+
 #include <QAbstractTableModel>
 #include <QSqlError>
 
@@ -15,7 +17,7 @@ namespace Internal {
 class AvailableMovementModelPrivate;
 }
 
-class AvailableMovementModel : public QAbstractTableModel
+class ACCOUNTBASE_EXPORT AvailableMovementModel : public QAbstractTableModel
 {
 public:
     AvailableMovementModel(QObject *parent);

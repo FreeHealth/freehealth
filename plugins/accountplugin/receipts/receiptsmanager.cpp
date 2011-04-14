@@ -1,5 +1,6 @@
 #include "receiptsmanager.h"
 #include "xmlcategoriesparser.h"
+
 #include <accountbaseplugin/constants.h>
 #include <accountbaseplugin/accountmodel.h>
 #include <accountbaseplugin/amountmodel.h>
@@ -11,7 +12,13 @@
 #include <accountbaseplugin/distancerulesmodel.h>
 #include <accountbaseplugin/thesaurusmodel.h>
 #include <accountbaseplugin/medicalproceduremodel.h>
+
+#include <utils/log.h>
+
 #include <QMessageBox>
+#include <QSqlDatabase>
+#include <QSqlQuery>
+
 static  QString freeaccount = "freeaccount";
 using namespace AccountDB;
 using namespace Constants;
@@ -439,7 +446,7 @@ QStringList receiptsManager::getChoiceFromCategories(QString & categoriesItem){
         QString req = QString("SELECT %1 FROM %2 WHERE %3 = '%4'").arg("NAME","medical_procedure","TYPE",item);
         QSqlQuery q(db);
         if(!q.exec(req)){
-           qWarning()  << __FILE__ << QString::number(__LINE__) << q.lastError().text();
+           LOG_QUERY_ERROR(q);
            listOfItems << trUtf8("Error");
            }
         while(q.next()){

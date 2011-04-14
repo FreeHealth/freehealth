@@ -1,11 +1,13 @@
 #ifndef MOVEMENTSMANAGER_H
 #define MOVEMENTSMANAGER_H
 
+#include <accountplugin/account_exporter.h>
+
 #include <QObject>
 #include <QVariant>
 #include <QHash>
 
-class MovementsManager : public QObject
+class ACCOUNT_EXPORT MovementsManager : public QObject
 {
     Q_OBJECT
 public:

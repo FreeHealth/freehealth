@@ -1,11 +1,13 @@
 #ifndef ASSETSMANAGER_H
 #define ASSETSMANAGER_H
 
+#include <accountplugin/account_exporter.h>
+
 #include <QHash>
 #include <QVariant>
 #include <QStandardItemModel>
 
-class AssetsManager : public QObject
+class ACCOUNT_EXPORT AssetsManager : public QObject
 {
     Q_OBJECT
 public:
@@ -59,18 +61,17 @@ public:
                                             int isValid,
                                             QString &details);
     QHash<int,QString> getHashForModeComboBox();
-    double getYearlyValue(QString &dateBegin,QDate & currentDate, double value,int mode, double duration);
-    double getCalculatedResidualValue(double & value, 
-                                      double & yearlyValue);
+    double getYearlyValue(const QString &dateBegin, const QDate &currentDate, double value,int mode, double duration);
+    double getCalculatedResidualValue(double value, double yearlyValue);
     bool setRefreshedResidualValue();
-    double getRate(QDate & date,double & duration,int & mode);
-    double getRateFromAssetsRates(QDate & date,double & duration);
-    QStandardItemModel * getYearlyValues(const QDate & year);
-    double getYearlyValue(QString & year, int & row);
+    double getRate(const QDate &date,double duration,int mode);
+    double getRateFromAssetsRates(const QDate &date,double duration);
+    QStandardItemModel *getYearlyValues(const QDate &year);
+    double getYearlyValue(const QString &year, int row);
     QString getLabelFromRow(int & row);
 private:
-    double linearCalc(double value, double  duration, QString & beginDate, QDate & refDate);
-    QList<double> decreasingCalc(int row,double & val, double & duration, QString & dateBegin,QDate & refDate);//yearlyValue,residualValue
+    double linearCalc(double value, double  duration, const QString &beginDate, const QDate &refDate);
+    QList<double> decreasingCalc(int row, double val, double duration, const QString &dateBegin, const QDate &refDate);//yearlyValue,residualValue
     double m_rate;
 };
 

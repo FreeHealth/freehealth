@@ -35,6 +35,8 @@
 #ifndef RULESMODEL_H
 #define RULESMODEL_H
 
+#include <accountbaseplugin/accountbase_exporter.h>
+
 #include <QAbstractTableModel>
 
 namespace AccountDB {
@@ -42,7 +44,7 @@ namespace Internal {
 class RulesModelPrivate;
 }
 
-class RulesModel : public QAbstractTableModel
+class ACCOUNTBASE_EXPORT RulesModel : public QAbstractTableModel
 {
     Q_OBJECT
 public:

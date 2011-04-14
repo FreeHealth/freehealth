@@ -1,12 +1,15 @@
 #ifndef MOVEMENTSVIEWER_H
 #define MOVEMENTSVIEWER_H
+
+#include <accountplugin/account_exporter.h>
+
 #include <QWidget>
 
 namespace Ui{
     class MovementsViewerWidget;
 }
 
-class MovementsViewer : public QWidget
+class ACCOUNT_EXPORT MovementsViewer : public QWidget
 {
     Q_OBJECT
     public:

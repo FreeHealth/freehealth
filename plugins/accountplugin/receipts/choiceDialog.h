@@ -1,5 +1,8 @@
 #ifndef CHOICEDIALOG_H
 #define CHOICEDIALOG_H
+
+#include <accountplugin/account_exporter.h>
+
 #include <QDialog>
 #include <QTimer>
 #include <QHash>
@@ -7,14 +10,15 @@
 namespace Ui{
     class ChoiceDialog;
 }
-class choiceDialog : public QDialog{
+class ACCOUNT_EXPORT choiceDialog : public QDialog
+{
   Q_OBJECT
-  public:
+public:
   choiceDialog(QWidget *parent = 0);
   ~choiceDialog();
   int returnChoiceDialog();
   double m_percentValue;
-  private slots:
+private slots:
   void value(double val);
   void valueUp();
   void valueDown();
@@ -22,7 +26,7 @@ class choiceDialog : public QDialog{
   void valueDownStop();
   void quickPlus();
   void quickLess();
-  private :
+private:
   Ui::ChoiceDialog * ui;
   QTimer * m_timerUp;
   QTimer * m_timerDown;

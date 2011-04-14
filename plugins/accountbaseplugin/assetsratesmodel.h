@@ -41,8 +41,9 @@
 #ifndef ASSETSRATESMODEL_H
 #define ASSETSRATESMODEL_H
 
-#include <QAbstractTableModel>
+#include <accountbaseplugin/accountbase_exporter.h>
 
+#include <QAbstractTableModel>
 #include <QSqlError>
 
 namespace AccountDB {
@@ -50,7 +51,7 @@ namespace Internal {
 class AssetsRatesModelPrivate;
 }
 
-class AssetsRatesModel : public QAbstractTableModel
+class ACCOUNTBASE_EXPORT AssetsRatesModel : public QAbstractTableModel
 {
     Q_OBJECT
 public:

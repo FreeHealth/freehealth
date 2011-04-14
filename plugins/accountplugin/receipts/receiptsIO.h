@@ -1,27 +1,30 @@
 #ifndef RECEIPTSENGINE_H
 #define RECEIPTSENGINE_H
 
+#include <accountplugin/account_exporter.h>
 #include <accountbaseplugin/accountmodel.h>
 #include <accountbaseplugin/medicalproceduremodel.h>
 #include <accountbaseplugin/thesaurusmodel.h>
+
 #include <QHash>
 #include <QSqlDatabase>
 #include <QSqlTableModel>
 
 
 using namespace AccountDB;
-class receiptsEngine : public QObject {    
+class ACCOUNT_EXPORT receiptsEngine : public QObject
+{
     Q_OBJECT
-public :
+public:
     receiptsEngine();
     ~receiptsEngine();
-    bool insertIntoAccount(QHash<int,QVariant> & hashValues, QString & userUuid);
+    bool insertIntoAccount(const QHash<int,QVariant> &hashValues, const QString &userUuid);
     QHash<QString,QVariant> getNamesAndValuesFromMP();
-    bool insertInThesaurus(QString & listOfValuesStr,QString & userUuid);
+    bool insertInThesaurus(const QString &listOfValuesStr, const QString &userUuid);
     bool deleteFromThesaurus(QString & data );
     bool addBoolTrue(QString & data);
 
-private :
+private:
    AccountModel *m_mpmodel;
    QSqlDatabase  m_db;
 };
