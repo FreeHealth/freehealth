@@ -35,7 +35,7 @@ QList<CalendarItem> BasicCalendarModel::getItemsBetween(const QDate &from, const
 
 	// search backward...
 	for (int i = pivot - 1; i >= 0; i--) {
-		if (intersects(*m_sortedByBeginList[i], from, to))
+		if (m_sortedByBeginList[i]->intersects(from, to))
 			break;
 		list << *m_sortedByBeginList[i];
 		added.insert(m_sortedByBeginList[i], true);
@@ -43,7 +43,7 @@ QList<CalendarItem> BasicCalendarModel::getItemsBetween(const QDate &from, const
 
 	// ... and forward
 	for (int i = pivot + 1; i < m_sortedByBeginList.count(); i++) {
-		if (intersects(*m_sortedByBeginList[i], from, to))
+		if (m_sortedByBeginList[i]->intersects(from, to))
 			break;
 		list << *m_sortedByBeginList[i];
 		added.insert(m_sortedByBeginList[i], true);
@@ -56,7 +56,7 @@ QList<CalendarItem> BasicCalendarModel::getItemsBetween(const QDate &from, const
 	for (int i = pivot - 1; i >= 0; i--) {
 		if (added[m_sortedByEndList[i]])
 			continue;
-		if (intersects(*m_sortedByEndList[i], from, to))
+		if (m_sortedByEndList[i]->intersects(from, to))
 			break;
 		list << *m_sortedByEndList[i];
 	}
@@ -65,7 +65,7 @@ QList<CalendarItem> BasicCalendarModel::getItemsBetween(const QDate &from, const
 	for (int i = pivot + 1; i < m_sortedByEndList.count(); i++) {
 		if (added[m_sortedByEndList[i]])
 			continue;
-		if (intersects(*m_sortedByEndList[i], from, to))
+		if (m_sortedByEndList[i]->intersects(from, to))
 			break;
 		list << *m_sortedByEndList[i];
 	}
@@ -113,14 +113,14 @@ int BasicCalendarModel::searchForIntersectedItem(const QList<CalendarItem*> &lis
 		return 0;
 
 	if (first == last) { // only one item, left or right?
-		if (intersects(*list[first], from, to))
+		if (list[first]->intersects(from, to))
 			return -1;
 		return first;
 	}
 
 	// at least two items
 	int middle = first + (last - first) / 2;
-	int v = intersects(*list[middle], from, to);
+	int v = list[middle]->intersects(from, to);
 	if (v > 0)
 		return searchForIntersectedItem(list, from, to, first, middle); // if an intersecting item really exists, it will be in the left part
 	else if (v < 0)
@@ -163,6 +163,8 @@ void BasicCalendarModel::setItemByUid(const QString &uid, const CalendarItem &it
 	if (!oldItem)
 		return;
 
+	beginModifyItem();
+
 	m_sortedByBeginList.removeAt(m_sortedByBeginList.indexOf(oldItem));
 	m_sortedByEndList.removeAt(m_sortedByEndList.indexOf(oldItem));
 
@@ -171,4 +173,8 @@ void BasicCalendarModel::setItemByUid(const QString &uid, const CalendarItem &it
 
 	m_sortedByBeginList.insert(getInsertionIndex(true, item.beginning(), m_sortedByBeginList, 0, m_sortedByBeginList.count() - 1), pItem);
 	m_sortedByEndList.insert(getInsertionIndex(false, item.ending(), m_sortedByEndList, 0, m_sortedByEndList.count() - 1), pItem);
+
+	endModifyItem(*oldItem, *pItem);
+
+	delete oldItem;
 }

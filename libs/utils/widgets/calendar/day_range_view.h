@@ -64,6 +64,7 @@ namespace Calendar {
 
 	protected slots:
 		void itemInserted(const CalendarItem &item);
+		void itemModified(const CalendarItem &oldItem, const CalendarItem &newItem);
 
 	private:
 		enum MouseMode {
@@ -87,6 +88,9 @@ namespace Calendar {
 		/* if end < begin, the end time will be considered as midnight */
 		QRect getTimeIntervalRect(int day, const QTime &begin, const QTime &end) const;
 		QDateTime getDateTime(const QPoint &pos) const;
+
+		// refresh all widgets of a day
+		void refreshDayWidgets(const QDate &dayDate);
 	};
 }
 

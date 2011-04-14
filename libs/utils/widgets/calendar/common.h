@@ -4,6 +4,7 @@
 #include <QPair>
 
 class QDate;
+class CalendarItem;
 
 namespace Calendar {
 	enum ViewType {

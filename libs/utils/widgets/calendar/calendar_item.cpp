@@ -29,3 +29,13 @@ void CalendarItem::setDescription(const QString &value) {
 
 	m_description = value;
 }
+
+int CalendarItem::intersects(const QDate &firstDay, const QDate &lastDay) const {
+	if (m_ending.date() < firstDay ||
+		(m_ending.date() == firstDay && m_ending.time() == QTime(0, 0)))
+		return -1;
+	if (m_beginning.date() > lastDay)
+		return 1;
+
+	return 0;
+}

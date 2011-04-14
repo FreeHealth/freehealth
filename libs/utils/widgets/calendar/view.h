@@ -78,8 +78,11 @@ namespace Calendar {
 		virtual void refreshItemsSizesAndPositions();
 		virtual void resetItemWidgets() {}
 
+		CalendarItemWidget *getWidgetByUid(const QString &uid) const;
+
 	protected slots:
 		virtual void itemInserted(const CalendarItem &item) { Q_UNUSED(item); }
+		virtual void itemModified(const CalendarItem &oldItem, const CalendarItem &newItem) { Q_UNUSED(oldItem); Q_UNUSED(newItem); }
 
 	private:
 		bool m_refreshGrid;

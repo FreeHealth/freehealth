@@ -34,21 +34,17 @@ namespace Calendar {
 
 	signals:
 		void itemInserted(const CalendarItem &newItem);
+		void itemModified(const CalendarItem &oldItem, const CalendarItem &newItem);
 
 	protected:
 		/** this function must be called before any item insertion */
 		void beginInsertItem();
 		/** this function must be called after any item insertion */
 		void endInsertItem(const CalendarItem &newItem);
-		/**
-		 * returns :
-		 * -1 if item is entirely before first day
-		 * 0 if item intersects [firstDay, lastDay]
-		 * 1 if item is entirely after lastDay
-		 */
-		int intersects(const CalendarItem &item, const QDate &firstDay, const QDate &lastDay) const;
-
-	private:
+		/** this function must be called before any item modification */
+		void beginModifyItem();
+		/** this function must be called after any item modification */
+		void endModifyItem(const CalendarItem &oldItem, const CalendarItem &newItem);
 	};
 }
 

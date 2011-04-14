@@ -87,6 +87,7 @@ void View::setModel(AbstractCalendarModel *model) {
 	// disconnect slots
 	if (m_model){
 		disconnect(m_model, SIGNAL(itemInserted(const CalendarItem &)), this, SLOT(itemInserted(const CalendarItem &)));
+		disconnect(m_model, SIGNAL(itemModified(const CalendarItem &, const CalendarItem &)), this, SLOT(itemModified(const CalendarItem &, const CalendarItem &)));
 	}
 
 	m_model = model;
@@ -94,7 +95,16 @@ void View::setModel(AbstractCalendarModel *model) {
 	if (m_model) {
 		// connect slots
 		connect(m_model, SIGNAL(itemInserted(const CalendarItem &)), this, SLOT(itemInserted(const CalendarItem &)));
+		connect(m_model, SIGNAL(itemModified(const CalendarItem &, const CalendarItem &)), this, SLOT(itemModified(const CalendarItem &, const CalendarItem &)));
 	}
 
 	resetItemWidgets();
+}
+
+CalendarItemWidget *View::getWidgetByUid(const QString &uid) const {
+	foreach (QObject *object, children()) {
+		CalendarItemWidget *widget = qobject_cast<CalendarItemWidget*>(object);
+		if (widget && widget->uid() == uid)
+			return widget;
+	}
 }

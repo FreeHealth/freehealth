@@ -6,16 +6,6 @@ AbstractCalendarModel::AbstractCalendarModel(QObject *parent) :
 	QObject(parent) {
 }
 
-int AbstractCalendarModel::intersects(const CalendarItem &item, const QDate &firstDay, const QDate &lastDay) const {
-	if (item.ending().date() < firstDay ||
-		(item.ending().date() == firstDay && item.ending().time() == QTime(0, 0)))
-		return -1;
-	if (item.beginning().date() > lastDay)
-		return 1;
-
-	return 0;
-}
-
 bool AbstractCalendarModel::insertItem(const QDateTime &, const QDateTime &) {
 	return false;
 }
@@ -28,5 +18,12 @@ void AbstractCalendarModel::endInsertItem(const CalendarItem &newItem) {
 	emit itemInserted(newItem);
 }
 
-void AbstractCalendarModel::setItemByUid(const QString &, const CalendarItem &) {
+void AbstractCalendarModel::beginModifyItem() {
+	// does nothing for now (maybe emit a signal in the future)
 }
+
+void AbstractCalendarModel::endModifyItem(const CalendarItem &oldItem, const CalendarItem &newItem) {
+	emit itemModified(oldItem, newItem);
+}
+
+void AbstractCalendarModel::setItemByUid(const QString &, const CalendarItem &) {}

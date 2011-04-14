@@ -1,5 +1,6 @@
 #include <QDate>
 
+#include "calendar_item.h"
 #include "common.h"
 
 namespace Calendar {

@@ -8,11 +8,20 @@ namespace Calendar {
 	class CalendarItem
 	{
 	public:
+		/** constructs an invalid item */
 		CalendarItem() {}
 		CalendarItem(const QString &uid, const QDateTime &beginning, const QDateTime &ending) :
 			m_uid(uid), m_beginning(beginning), m_ending(ending) {}
 
 		bool isValid() const { return m_beginning.isValid(); }
+
+		/**
+		 * returns :
+		 * -1 if item is entirely before first day
+		 * 0 if item intersects [firstDay, lastDay]
+		 * 1 if item is entirely after lastDay
+		 */
+		int intersects(const QDate &firstDay, const QDate &lastDay) const;
 
 		// unicity
 		const QString &uid() const { return m_uid; }

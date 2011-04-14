@@ -258,7 +258,6 @@ void DayRangeView::mousePressEvent(QMouseEvent *event) {
 	m_pressItemWidget = qobject_cast<CalendarItemWidget*>(childAt(event->pos()));
 	if (m_pressItemWidget) {
 		m_pressItem = model()->getItemByUid(m_pressItemWidget->uid());
-
 		QPoint pos = m_pressItemWidget->mapFromParent(event->pos());
 		if (pos.y() >= m_pressItemWidget->height() - 5 && pos.y() < m_pressItemWidget->height())
 			m_mouseMode = MouseMode_Resize;
@@ -391,6 +390,24 @@ void DayRangeView::itemInserted(const CalendarItem &item) {
 	refreshItemSizeAndPosition(widget);
 }
 
+void DayRangeView::itemModified(const CalendarItem &oldItem, const CalendarItem &newItem) {
+	QList<QDate> daysToRefresh;
+	if (!oldItem.intersects(m_firstDate, m_firstDate.addDays(m_rangeWidth - 1))) { // collect all old item days
+		daysToRefresh << oldItem.beginning().date();
+		if (daysToRefresh.indexOf(oldItem.ending().date()) < 0)
+			daysToRefresh << oldItem.ending().date();
+	}
+	if (!newItem.intersects(m_firstDate, m_firstDate.addDays(m_rangeWidth - 1))) { // collect all new item days
+		if (daysToRefresh.indexOf(newItem.beginning().date()) < 0)
+			daysToRefresh << newItem.beginning().date();
+		if (daysToRefresh.indexOf(newItem.ending().date()) < 0)
+			daysToRefresh << newItem.ending().date();
+	}
+
+	foreach (const QDate &date, daysToRefresh)
+		refreshDayWidgets(date);
+}
+
 void DayRangeView::resetItemWidgets() {
 	CalendarItemWidget *widget;
 
@@ -412,4 +429,13 @@ void DayRangeView::resetItemWidgets() {
 		widget->show();
 		refreshItemSizeAndPosition(widget);
 	}
+}
+
+void DayRangeView::refreshDayWidgets(const QDate &dayDate) {
+	if (dayDate < m_firstDate || dayDate >= m_firstDate.addDays(m_rangeWidth)) // day is out of range
+		return;
+
+	// at first remove all day widgets
+
+	
 }
