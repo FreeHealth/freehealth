@@ -43,7 +43,7 @@
 #include <coreplugin/icore.h>
 #include <coreplugin/constants.h>
 
-#ifdef FREEACOUNT
+#ifdef FREEACCOUNT
 #    include <coreplugin/commandlineparser.h>
 #endif
 
