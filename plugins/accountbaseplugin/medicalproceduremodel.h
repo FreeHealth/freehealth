@@ -53,6 +53,7 @@ public:
 
     int rowCount(const QModelIndex &parent = QModelIndex()) const;
     int columnCount(const QModelIndex &parent = QModelIndex()) const;
+    int rowCountWithFilter(const QModelIndex &parent, const QString & filter);
 
     QVariant data(const QModelIndex &index, int role = Qt::DisplayRole) const;
     bool setData(const QModelIndex &index, const QVariant &value, int role = Qt::EditRole);
@@ -76,8 +77,8 @@ public:
 
     void setUserUuid(const QString &uuid);
     bool isDirty() const;
-    void setTypeFilter(const QString &filter);
-    void setNameFilter(const QString & name);
+    void setFilter(const QString & filter);
+    QString filter();
 
 public Q_SLOTS:
     bool submit();

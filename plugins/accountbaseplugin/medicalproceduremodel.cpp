@@ -130,8 +130,14 @@ int MedicalProcedureModel::rowCount(const QModelIndex &parent) const
     d->m_SqlTable->setFilter("");
     d->m_SqlTable->select();
     rows = d->m_SqlTable->rowCount(parent);
-    //qDebug() << __FILE__ << QString::number(__LINE__) << " rows = " << QString::number(rows);
+    return rows;
+}
 
+int MedicalProcedureModel::rowCountWithFilter(const QModelIndex &parent, const QString & filter) {
+    int rows = 0;
+    d->m_SqlTable->setFilter(filter);
+    d->m_SqlTable->select();
+    rows = d->m_SqlTable->rowCount(parent);
     return rows;
 }
 
@@ -179,7 +185,7 @@ bool MedicalProcedureModel::setData(const QModelIndex &index, const QVariant &va
 
 QVariant MedicalProcedureModel::headerData(int section, Qt::Orientation orientation, int role) const
 {
-    return QVariant();
+    return d->m_SqlTable->headerData(section,orientation,role);
 }
 
 bool MedicalProcedureModel::setHeaderData(int section,Qt::Orientation orientation,
@@ -240,20 +246,13 @@ bool MedicalProcedureModel::removeRows(int row, int count, const QModelIndex &pa
     return d->m_SqlTable->removeRows(row, count, parent);
 }
 
-void MedicalProcedureModel::setTypeFilter(const QString &type)
-{
-    d->m_TypeFilter = type;
-    d->refreshFilter();
+void MedicalProcedureModel::setFilter(const QString & filter){
+    d->m_SqlTable->setFilter(filter);
     d->m_SqlTable->select();
-    reset();
 }
 
-void MedicalProcedureModel::setNameFilter(const QString & name)
-{
-    d->m_nameFilter = name;
-    d->refreshFilter();
-    d->m_SqlTable->select();
-    reset();
+QString MedicalProcedureModel::filter(){
+    return d->m_SqlTable->filter();
 }
 
 bool MedicalProcedureModel::submit()
