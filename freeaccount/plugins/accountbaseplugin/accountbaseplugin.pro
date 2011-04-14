@@ -1,7 +1,7 @@
 TEMPLATE        = lib
 TARGET          = AccountBase
 
-DEFINES += FREEACCOUNT
+DEFINES *= FREEACCOUNT
 FREEACCOUNT = 1
 
 BUILD_PATH_POSTFIXE = FreeAccount

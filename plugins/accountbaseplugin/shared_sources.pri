@@ -1,4 +1,4 @@
-DEFINES += ACCOUNTBASE_LIBRARY
+DEFINES *= ACCOUNTBASE_LIBRARY
 
 include(../fmf_plugins.pri)
 include(accountbaseplugin_dependencies.pri)

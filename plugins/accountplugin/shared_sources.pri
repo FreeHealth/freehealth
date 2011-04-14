@@ -1,6 +1,8 @@
 include(../fmf_plugins.pri)
 include(accountplugin_dependencies.pri)
 
+DEFINES *= ACCOUNT_LIBRARY
+
 #include plugin structure
 HEADERS = $${PWD}/accountplugin.h \
     $${PWD}/constants.h \

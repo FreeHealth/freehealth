@@ -45,4 +45,7 @@ AccountMode::AccountMode(QObject *parent) :
 //    const QList<int> &context;
 //    setContext();
     setWidget(new Account::AccountView);
+
+    /** \todo connect actions from the account menu */
+    /** \todo connect patient changed and refresh views ? */
 }
