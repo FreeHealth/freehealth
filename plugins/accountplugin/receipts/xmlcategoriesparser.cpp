@@ -25,6 +25,7 @@
 #include <QMessageBox>
 #include <QFile>
 #include <QtXml>
+#include <QLocale>
 
 static inline Core::ISettings *settings()  { return Core::ICore::instance()->settings(); }
 
@@ -38,7 +39,7 @@ QList<QHash<QString,QString> > xmlCategoriesParser::readXmlFile()
 {
     QList<QHash<QString,QString> > xmlHashList;
     QDomDocument doc;
-    QString xmlFilePath = settings()->path(Core::ISettings::BundleResourcesPath) + "/sql/account/frenchcategories.xml";
+    QString xmlFilePath = settings()->path(Core::ISettings::BundleResourcesPath) + "/sql/account/categories_"+QLocale().name()+".xml";
 
     QFile xmlFile(xmlFilePath);
     if(xmlFile.exists() == false) {

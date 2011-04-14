@@ -72,7 +72,7 @@ public:
     }
     ~MedicalProcedureModelPrivate () {}
     
-    void refreshFilter()
+    /*void refreshFilter()
     {
         if (!m_SqlTable)
             return;
@@ -91,7 +91,7 @@ public:
             qWarning() << m_SqlTable->filter() << __FILE__ << __LINE__;
             }
         //q->reset();
-     }
+     }*/
 
 public:
     QSqlTableModel *m_SqlTable;
@@ -135,9 +135,9 @@ int MedicalProcedureModel::rowCount(const QModelIndex &parent) const
 
 int MedicalProcedureModel::rowCountWithFilter(const QModelIndex &parent, const QString & filter) {
     int rows = 0;
-    d->m_SqlTable->setFilter(filter);
-    d->m_SqlTable->select();
-    rows = d->m_SqlTable->rowCount(parent);
+    //d->m_SqlTable->setFilter(filter);
+    //d->m_SqlTable->select();
+    rows = d->m_SqlTable->rowCount();
     return rows;
 }
 

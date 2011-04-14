@@ -165,7 +165,9 @@ bool receiptsEngine::addBoolTrue(QString & data){
     	    if (!model.setData(model.index(i,THESAURUS_PREF),0,Qt::EditRole))
     	    {
     	    	  qWarning() << __FILE__ << QString::number(__LINE__) << "thesaurusModel cannot set bool to false !" ;
-                  ret = false;
+
+    	    	  ret = false;
+
     	        }
     	}
     }

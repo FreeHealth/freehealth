@@ -29,9 +29,10 @@ public:
 private:
     //QSqlTableModel * m_model; //  à modifier par m_mpmodel
     Ui::findValueDialog * ui;
-    receiptsManager * m_rbm;
+    //receiptsManager * m_rbm;
     xmlCategoriesParser * m_xmlParser;
-    MedicalProcedureModel * m_mpmodel;
+    //MedicalProcedureModel * m_mpmodel;
+    QStandardItemModel * itemModel;
     QHash<QString,QString> m_hashValuesChoosen;
     void initialize();
     void fillComboCategories();

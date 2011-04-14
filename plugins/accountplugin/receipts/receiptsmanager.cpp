@@ -234,9 +234,9 @@ QHash<QString,QString> receiptsManager::getPreferentialActFromThesaurus(){
         foreach(str,list){
             str = str.trimmed();
             qDebug() << __FILE__ << QString::number(__LINE__) << " str =" << str ;
-            MPfilter = str;
+            MPfilter = QString("%1='%2'").arg("NAME",str);
             qDebug() << __FILE__ << QString::number(__LINE__) << " MPfilter =" << MPfilter ;
-            MPmodel.setNameFilter(MPfilter);
+            MPmodel.setFilter(MPfilter);
             value += MPmodel.data(MPmodel.index(0,MP_AMOUNT)).toDouble();
             }
         hash.insert(data,QString::number(value));
