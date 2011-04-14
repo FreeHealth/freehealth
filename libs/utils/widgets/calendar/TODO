@@ -20,7 +20,17 @@ GÉNÉRIQUE
 ORIENTÉ MÉDICAL
 * prévoir indisponibilités (vacances, heures de consulte)
 * possibilité d'attribuer une couleur différente aux RDV selon l'heure (pour les gardes par ex) et autres paramètres
-
+* Si utilisateur est un délégué (sécretaire) : afficher tous les utilisateurs dont est délégué
+* Qd patient arrive : valider sa présence
+* Créer un historique avec:
+  - rdv ratés, annulés...
+  - possibilité de mettre du JavaScript pour définir des règles ?
+* Motif de consultations -> faire un thésaurus
+  - Thesaurus =
+    . label motif
+    . couleur
+    . durée
+    . lieu...
 
 AUTRES (à classer)
 - un cal par utilisateur
