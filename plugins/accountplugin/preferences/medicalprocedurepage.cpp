@@ -332,13 +332,13 @@ QStandardItemModel *MedicalProcedureWidget::MedicalProcedureModelByLocale()
         QStringList listOfSeparators;
         listOfSeparators << ",\"" << ";\"" << QString("\t\"")
                          << ",''" << ";''" << QString("\t''");
-        QString separator;
-        QString separatorStr;
+        QString separator = ";\"";
+        /*QString separatorStr;
         foreach(separatorStr,listOfSeparators){
             if (line.contains(separatorStr)){
                 separator = separatorStr;
                 }
-            }
+            }*/
         if (!line.contains("MP_UUID")){
             //"MP_ID","MP_UUID","MP_USER_UID","NAME","ABSTRACT","TYPE","AMOUNT","REIMBOURSEMENT","DATE"
             QList<QStandardItem*> listOfItemsData;
@@ -356,6 +356,7 @@ QStandardItemModel *MedicalProcedureWidget::MedicalProcedureModelByLocale()
         	}
             model->appendRow(listOfItemsData);
             ++row;  
+            qDebug() << __FILE__ << QString::number(__LINE__) << " row =" << QString::number(row) ;
             }
     }
     return model;
@@ -399,3 +400,5 @@ bool MedicalProcedureWidget::fillEmptyMPModel(){
 
     return test;
 }
+
+
