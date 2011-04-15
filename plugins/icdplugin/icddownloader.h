@@ -27,6 +27,7 @@
 #define ICDDOWNLOADER_H
 
 #include <icdplugin/icd_exporter.h>
+
 #include <QObject>
 QT_BEGIN_NAMESPACE
 class QProgressDialog;

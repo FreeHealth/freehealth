@@ -26,6 +26,8 @@
 #ifndef ICDASSOCIATION_H
 #define ICDASSOCIATION_H
 
+#include <icdplugin/icd_exporter.h>
+
 #include <QString>
 #include <QVariant>
 
@@ -33,7 +35,7 @@ namespace ICD {
 class IcdDatabase;
 namespace Internal {
 
-class IcdAssociation {
+class ICD_EXPORT IcdAssociation {
     friend class ICD::IcdDatabase;
 
 public:

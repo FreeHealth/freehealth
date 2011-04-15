@@ -27,13 +27,15 @@
 #ifndef DRUGINTERACTIONINFORMATIONQUERY_H
 #define DRUGINTERACTIONINFORMATIONQUERY_H
 
+#include <drugsbaseplugin/drugsbase_exporter.h>
+
 #include <QString>
 
 namespace DrugsDB {
 class DrugInteractionResult;
 class IDrug;
 
-struct DrugInteractionInformationQuery
+struct DRUGSBASE_EXPORT DrugInteractionInformationQuery
 {
     enum ProcessTime {
         BeforePrescription = 0,

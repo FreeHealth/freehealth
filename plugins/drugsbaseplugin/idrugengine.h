@@ -45,7 +45,7 @@ class IDrugInteractionAlert;
 class DrugInteractionResult;
 class IDrug;
 
-class IDrugEngine : public QObject
+class DRUGSBASE_EXPORT IDrugEngine : public QObject
 {
     Q_OBJECT
 

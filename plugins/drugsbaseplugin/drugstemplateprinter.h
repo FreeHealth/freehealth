@@ -35,7 +35,7 @@ class DrugsModel;
 
 namespace Internal {
 
-class DrugsTemplatePrinter : public Templates::ITemplatePrinter
+class DRUGSBASE_EXPORT DrugsTemplatePrinter : public Templates::ITemplatePrinter
 {
     Q_OBJECT
 public:

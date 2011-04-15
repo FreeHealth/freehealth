@@ -49,7 +49,7 @@ class IcdCentralWidget;
 
 namespace Internal {
 
-class ICD_EXPORT IcdActionHandler : public QObject
+class IcdActionHandler : public QObject
 {
     Q_OBJECT
 public:

@@ -35,6 +35,8 @@
 #ifndef ACCOUNTBASE_H
 #define ACCOUNTBASE_H
 
+#include <accountbaseplugin/accountbase_exporter.h>
+
 #include <utils/database.h>
 
 /**
@@ -52,7 +54,7 @@ namespace Internal {
 class AccountBasePrivate;
 } // End namespace Internal
 
-class AccountBase : public QObject, public Utils::Database
+class ACCOUNTBASE_EXPORT AccountBase : public QObject, public Utils::Database
 {
     Q_OBJECT
 

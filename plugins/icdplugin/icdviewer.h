@@ -26,6 +26,8 @@
 #ifndef ICDVIEWER_H
 #define ICDVIEWER_H
 
+#include <icdplugin/icd_exporter.h>
+
 #include <QWidget>
 
 
@@ -39,7 +41,7 @@ namespace Ui {
     class IcdViewer;
 }
 
-class IcdViewer : public QWidget
+class ICD_EXPORT IcdViewer : public QWidget
 {
     Q_OBJECT
 

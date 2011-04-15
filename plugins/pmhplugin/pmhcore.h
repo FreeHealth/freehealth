@@ -27,6 +27,8 @@
 #ifndef PMHCORE_H
 #define PMHCORE_H
 
+#include <pmhplugin/pmh_exporter.h>
+
 #include <QObject>
 
 namespace PMH {
@@ -36,7 +38,7 @@ class PmhCorePrivate;
 class PmhCategoryModel;
 
 
-class PmhCore : public QObject
+class PMH_EXPORT PmhCore : public QObject
 {
     Q_OBJECT
     explicit PmhCore(QObject *parent = 0);

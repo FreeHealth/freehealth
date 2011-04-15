@@ -26,6 +26,8 @@
 #ifndef ICDMODELS_H
 #define ICDMODELS_H
 
+#include <icdplugin/icd_exporter.h>
+
 #include <QAbstractTableModel>
 
 QT_BEGIN_NAMESPACE
@@ -38,7 +40,7 @@ class SimpleIcdModelPrivate;
 class IcdAssociation;
 }
 
-class SimpleIcdModel :public QAbstractTableModel
+class ICD_EXPORT SimpleIcdModel : public QAbstractTableModel
 {
     Q_OBJECT
 public:

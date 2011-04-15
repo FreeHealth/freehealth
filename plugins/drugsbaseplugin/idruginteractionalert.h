@@ -27,6 +27,7 @@
 #ifndef IDRUGINTERACTIONALERT_H
 #define IDRUGINTERACTIONALERT_H
 
+#include <drugsbaseplugin/drugsbase_exporter.h>
 #include <drugsbaseplugin/druginteractioninformationquery.h>
 
 class QIcon;
@@ -36,7 +37,7 @@ namespace DrugsDB {
 class DrugInteractionResult;
 class IDrug;
 
-class IDrugInteractionAlert //: public QObject
+class DRUGSBASE_EXPORT IDrugInteractionAlert //: public QObject
 {
 //    Q_OBJECT
 public:

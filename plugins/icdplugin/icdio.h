@@ -27,6 +27,7 @@
 #define ICDIO_H
 
 #include <icdplugin/icd_exporter.h>
+
 #include <QtGlobal>
 
 QT_BEGIN_NAMESPACE

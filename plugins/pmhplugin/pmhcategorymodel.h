@@ -27,6 +27,8 @@
 #ifndef PMHCATEGORYMODEL_H
 #define PMHCATEGORYMODEL_H
 
+#include <pmhplugin/pmh_exporter.h>
+
 #include <categoryplugin/icategorymodelhelper.h>
 
 #include <QAbstractItemModel>
@@ -39,7 +41,7 @@ class PmhData;
 class PmhCategory;
 }  // End namespace Internal
 
-class PmhCategoryModel : public Category::ICategoryModelHelper
+class PMH_EXPORT PmhCategoryModel : public Category::ICategoryModelHelper
 {
     Q_OBJECT
 public:

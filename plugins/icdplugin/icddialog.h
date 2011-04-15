@@ -26,6 +26,8 @@
 #ifndef ICDDIALOG_H
 #define ICDDIALOG_H
 
+#include <icdplugin/icd_exporter.h>
+
 #include <QDialog>
 
 namespace ICD {
@@ -35,7 +37,7 @@ class IcdAssociation;
 
 class IcdViewer;
 
-class IcdDialog : public QDialog
+class ICD_EXPORT IcdDialog : public QDialog
 {
     Q_OBJECT
 public:

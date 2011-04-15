@@ -26,6 +26,8 @@
 #ifndef ICDCONTEXTUALWIDGET_H
 #define ICDCONTEXTUALWIDGET_H
 
+#include <icdplugin/icd_exporter.h>
+
 #include <QWidget>
 
 /**
@@ -42,7 +44,7 @@ namespace Internal {
 class IcdContext;
 }
 
-class IcdContextualWidget : public QWidget
+class ICD_EXPORT IcdContextualWidget : public QWidget
 {
     Q_OBJECT
 public:
