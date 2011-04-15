@@ -6,6 +6,7 @@ using namespace Constants;
 findReceiptsValues::findReceiptsValues(QWidget * parent):QDialog(parent){
   ui = new Ui::findValueDialog;
   ui->setupUi(this);
+  model = new MedicalProcedureModel(parent);
   fillComboCategories();
   initialize();
   QString comboValue = ui->comboBoxCategories->currentText().trimmed();
@@ -13,6 +14,7 @@ findReceiptsValues::findReceiptsValues(QWidget * parent):QDialog(parent){
   connect(ui->comboBoxCategories,SIGNAL(activated(const QString&)),this,SLOT(fillListViewValues(const QString&)));
   connect(ui->tableViewOfValues,SIGNAL(pressed(const QModelIndex&)),this,SLOT(chooseValue(const QModelIndex&)));
   connect(ui->listChoosenWidget,SIGNAL(itemClicked(QListWidgetItem *)),this,SLOT(supprItemChoosen(QListWidgetItem *)));
+ 
 }
 
 findReceiptsValues::~findReceiptsValues(){
@@ -38,13 +40,12 @@ void findReceiptsValues::clear(){
 
 void findReceiptsValues::fillComboCategories(){
     QStringList choiceList ;
-    MedicalProcedureModel * m_mpmodel = new MedicalProcedureModel(this);
     QHash<QString,QString> hashCategories = m_xmlParser->readXmlFile()[0];
     choiceList = hashCategories.value("typesOfReceipts").split(",");
-    int MPRows = m_mpmodel->rowCount(QModelIndex());
+    int MPRows = model->rowCount(QModelIndex());
     for (int i = 0; i < MPRows; i += 1)
     {
-        QString typeData = m_mpmodel->data(m_mpmodel->index(i,MP_TYPE)).toString();
+        QString typeData = model->data(model->index(i,MP_TYPE)).toString();
         if(!choiceList.contains(typeData)){
            choiceList << typeData;
            }
@@ -55,35 +56,27 @@ void findReceiptsValues::fillComboCategories(){
 }
 
 void findReceiptsValues::fillListViewValues(const QString & comboItem){
-    QString filter = QString("%1= '%2'").arg("TYPE",comboItem);
+    QString filter = QString("%1 LIKE '%%2%'").arg("TYPE",comboItem);
     if (!((itemModel = new QStandardItemModel(this)) == NULL) )
     {
         itemModel->clear();
         }
-    for (int i = 0; i < itemModel->rowCount(); i += 1)
-    {
-    	qDebug() << __FILE__ << QString::number(__LINE__) << " data one =" << itemModel->data(itemModel->index(i,0),Qt::DisplayRole).toString();
-        }
-
-    qDebug() << __FILE__ << QString::number(__LINE__) << " filter =" << filter ;
     QVariant act = QVariant(trUtf8("Name"));
     QVariant value = QVariant(trUtf8("Value"));
-    MedicalProcedureModel * model = new MedicalProcedureModel(this);
     model->setFilter(filter);
     int count =   model->rowCountWithFilter(QModelIndex(),filter);
-    qDebug() << __FILE__ << QString::number(__LINE__) << " filtre =" << model->filter() ;
     for (int i = 0; i < count; i += 1)
     {
-    	QString name = model->data(model->index(i,MP_NAME),Qt::DisplayRole).toString();
-    	QString value = model->data(model->index(i,MP_AMOUNT),Qt::DisplayRole).toString();
-    	qDebug() << __FILE__ << QString::number(__LINE__) << " data MP =" << name;
+    	QString name = model->dataWithFilter(model->index(i,MP_NAME),Qt::DisplayRole,filter).toString();
+    	QString value = model->dataWithFilter(model->index(i,MP_AMOUNT),Qt::DisplayRole,filter).toString();
+    	qDebug() << __FILE__ << QString::number(__LINE__) << " names =" << name ;
     	QStandardItem *itemName = new QStandardItem(name);
     	QStandardItem *itemValue = new QStandardItem(value);
     	QList<QStandardItem*> list;
     	list << itemName << itemValue;
     	itemModel->appendRow(list);
         }
-    delete model;
+    model->setFilter("");
     if (!itemModel->setHeaderData(0,Qt::Horizontal,act,Qt::EditRole))
     {
     	  qWarning() << __FILE__ << QString::number(__LINE__) << "no header data available";
@@ -92,25 +85,11 @@ void findReceiptsValues::fillListViewValues(const QString & comboItem){
     {
     	  qWarning() << __FILE__ << QString::number(__LINE__) << "no header data available";
         } 
-    for (int i = 0; i < itemModel->rowCount(); i += 1)
-    {
-    	qDebug() << __FILE__ << QString::number(__LINE__) << " data=" << itemModel->data(itemModel->index(i,0),Qt::DisplayRole).toString();
-        }
     ui->tableViewOfValues->setModel(itemModel);
     ui->tableViewOfValues-> setSelectionBehavior(QAbstractItemView::SelectRows);
     ui->tableViewOfValues-> setSelectionMode(QAbstractItemView::SingleSelection);
-    //ui->tableViewOfValues->setColumnHidden(MP_ID,true);//setColumnHidden()
-    //ui->tableViewOfValues->setColumnHidden(MP_UID,true);
-    //ui->tableViewOfValues->setColumnHidden(MP_USER_UID,true);
-    //ui->tableViewOfValues->setColumnHidden(MP_ABSTRACT,true);
-    //ui->tableViewOfValues->setColumnHidden(MP_TYPE,true);
-    //ui->tableViewOfValues->setColumnHidden(6,true); //amount
-    //ui->tableViewOfValues->setColumnHidden(MP_REIMBOURSEMENT,true);
-    //ui->tableViewOfValues->setColumnHidden(MP_DATE,true);
     ui->tableViewOfValues->horizontalHeader()->setStretchLastSection ( true );
     ui->tableViewOfValues->setGridStyle(Qt::NoPen);
-    //ui->tableViewOfValues->show();
-    //update();
    
 }
 
@@ -137,4 +116,44 @@ void findReceiptsValues::supprItemChoosen(QListWidgetItem * item){
 
 QHash<QString,QString> findReceiptsValues::getChoosenValues(){
     return m_hashValuesChoosen;
+}
+
+void findReceiptsValues::on_lineEditFilter_textChanged(const QString & text){
+    if (!((itemModel = new QStandardItemModel(this)) == NULL) )
+    {
+        itemModel->clear();
+        }
+    QString comboChoice = ui->comboBoxCategories->currentText();
+    QString filterText = ""+text+"%";
+    QString filter = QString("%1 LIKE '%2' AND %3 LIKE '%4'").arg("TYPE",comboChoice,"NAME",filterText);
+    QVariant act = QVariant(trUtf8("Name"));
+    QVariant value = QVariant(trUtf8("Value"));
+    model->setFilter(filter);
+    int count =   model->rowCountWithFilter(QModelIndex(),filter);
+    for (int i = 0; i < count; i += 1)
+    {
+    	QString name = model->dataWithFilter(model->index(i,MP_NAME),Qt::DisplayRole,filter).toString();
+    	qDebug() << __FILE__ << QString::number(__LINE__) << " names =" << name ;
+    	QString value = model->dataWithFilter(model->index(i,MP_AMOUNT),Qt::DisplayRole,filter).toString();
+    	QStandardItem *itemName = new QStandardItem(name);
+    	QStandardItem *itemValue = new QStandardItem(value);
+    	QList<QStandardItem*> list;
+    	list << itemName << itemValue;
+    	itemModel->appendRow(list);
+        }
+    model->setFilter("");
+    if (!itemModel->setHeaderData(0,Qt::Horizontal,act,Qt::EditRole))
+    {
+    	  qWarning() << __FILE__ << QString::number(__LINE__) << "no header data available";
+    	  }
+    if (!itemModel->setHeaderData(1,Qt::Horizontal,value,Qt::EditRole)	)
+    {
+    	  qWarning() << __FILE__ << QString::number(__LINE__) << "no header data available";
+        } 
+    ui->tableViewOfValues->setModel(itemModel);
+    ui->tableViewOfValues-> setSelectionBehavior(QAbstractItemView::SelectRows);
+    ui->tableViewOfValues-> setSelectionMode(QAbstractItemView::SingleSelection);
+    ui->tableViewOfValues->horizontalHeader()->setStretchLastSection ( true );
+    ui->tableViewOfValues->setGridStyle(Qt::NoPen);
+
 }

@@ -67,10 +67,15 @@ public:
                                                                   q(parent)
     {
         m_SqlTable = new QSqlTableModel(q, QSqlDatabase::database(Constants::DB_ACCOUNTANCY));
-        m_SqlTable->setTable(AccountDB::AccountBase::instance()->table(Constants::Table_MedicalProcedure));
+        setTable();
         //refreshFilter();
     }
     ~MedicalProcedureModelPrivate () {}
+    
+    void setTable(){
+          m_SqlTable->setTable(AccountDB::AccountBase::instance()->table(Constants::Table_MedicalProcedure));
+
+    }
     
     /*void refreshFilter()
     {
@@ -137,7 +142,8 @@ int MedicalProcedureModel::rowCountWithFilter(const QModelIndex &parent, const Q
     int rows = 0;
     //d->m_SqlTable->setFilter(filter);
     //d->m_SqlTable->select();
-    rows = d->m_SqlTable->rowCount();
+    qDebug() << __FILE__ << QString::number(__LINE__) << "d->m_SqlTable->filter()  =" << d->m_SqlTable->filter() ;
+    rows = d->m_SqlTable->rowCount(parent);
     return rows;
 }
 
@@ -171,7 +177,12 @@ void MedicalProcedureModel::setUserUuid(const QString &uuid)
 
 QVariant MedicalProcedureModel::data(const QModelIndex &index, int role) const
 {   
-    //d->refreshFilter() ;
+    return d->m_SqlTable->data(index, role);
+}
+
+QVariant MedicalProcedureModel::dataWithFilter(const QModelIndex &index, int role , const QString & filter) const
+{   
+    d->m_SqlTable->setFilter(filter);
     return d->m_SqlTable->data(index, role);
 }
 
@@ -248,7 +259,7 @@ bool MedicalProcedureModel::removeRows(int row, int count, const QModelIndex &pa
 
 void MedicalProcedureModel::setFilter(const QString & filter){
     d->m_SqlTable->setFilter(filter);
-    d->m_SqlTable->select();
+    //d->m_SqlTable->select();
 }
 
 QString MedicalProcedureModel::filter(){
@@ -277,4 +288,8 @@ bool MedicalProcedureModel::isDirty() const
 
 QSqlError MedicalProcedureModel::lastError(){
     return d->m_SqlTable->lastError();
+}
+
+void MedicalProcedureModel::clear(){
+    d->m_SqlTable->clear();
 }

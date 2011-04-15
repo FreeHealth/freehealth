@@ -59,6 +59,7 @@ public:
 
     QVariant data(const QModelIndex &index, int role = Qt::DisplayRole) const;
     bool setData(const QModelIndex &index, const QVariant &value, int role = Qt::EditRole);
+    QVariant dataWithFilter(const QModelIndex &index, int role , const QString & filter) const;
 
     QVariant headerData(int section, Qt::Orientation orientation,
                                 int role = Qt::DisplayRole) const;
@@ -81,6 +82,7 @@ public:
     bool isDirty() const;
     void setFilter(const QString & filter);
     QString filter();
+    void clear();
 
 public Q_SLOTS:
     bool submit();

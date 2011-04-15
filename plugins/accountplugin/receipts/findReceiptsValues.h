@@ -31,7 +31,7 @@ private:
     Ui::findValueDialog * ui;
     //receiptsManager * m_rbm;
     xmlCategoriesParser * m_xmlParser;
-    //MedicalProcedureModel * m_mpmodel;
+    MedicalProcedureModel * model;
     QStandardItemModel * itemModel;
     QHash<QString,QString> m_hashValuesChoosen;
     void initialize();
@@ -41,6 +41,7 @@ private slots:
     void fillListViewValues(const QString & comboItem);
     void chooseValue(const QModelIndex& index);
     void supprItemChoosen(QListWidgetItem * item);
+    void on_lineEditFilter_textChanged(const QString & text);
 };
 
 
