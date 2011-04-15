@@ -6,6 +6,7 @@ using namespace Constants;
 findReceiptsValues::findReceiptsValues(QWidget * parent):QDialog(parent){
   ui = new Ui::findValueDialog;
   ui->setupUi(this);
+  ui->nextButton->hide();
   model = new MedicalProcedureModel(parent);
   fillComboCategories();
   initialize();
@@ -14,7 +15,7 @@ findReceiptsValues::findReceiptsValues(QWidget * parent):QDialog(parent){
   connect(ui->comboBoxCategories,SIGNAL(activated(const QString&)),this,SLOT(fillListViewValues(const QString&)));
   connect(ui->tableViewOfValues,SIGNAL(pressed(const QModelIndex&)),this,SLOT(chooseValue(const QModelIndex&)));
   connect(ui->listChoosenWidget,SIGNAL(itemClicked(QListWidgetItem *)),this,SLOT(supprItemChoosen(QListWidgetItem *)));
- 
+  connect(ui->nextButton,SIGNAL(pressed()),this,SLOT(showNext()));
 }
 
 findReceiptsValues::~findReceiptsValues(){
@@ -90,6 +91,10 @@ void findReceiptsValues::fillListViewValues(const QString & comboItem){
     ui->tableViewOfValues-> setSelectionMode(QAbstractItemView::SingleSelection);
     ui->tableViewOfValues->horizontalHeader()->setStretchLastSection ( true );
     ui->tableViewOfValues->setGridStyle(Qt::NoPen);
+    if (tableViewIsFull(ui->tableViewOfValues->model()))
+    {
+    	  enableShowNextTable();
+        }
    
 }
 
@@ -155,5 +160,65 @@ void findReceiptsValues::on_lineEditFilter_textChanged(const QString & text){
     ui->tableViewOfValues-> setSelectionMode(QAbstractItemView::SingleSelection);
     ui->tableViewOfValues->horizontalHeader()->setStretchLastSection ( true );
     ui->tableViewOfValues->setGridStyle(Qt::NoPen);
+    if (tableViewIsFull(ui->tableViewOfValues->model()))
+    {
+    	  enableShowNextTable();
+        }
+}
 
+bool findReceiptsValues::tableViewIsFull(QAbstractItemModel * model){
+    bool ret = false;
+    int count = model->rowCount();
+    if (count > 255)
+    {
+    	  qWarning() << __FILE__ << QString::number(__LINE__) << "table view is full" ;
+    	  ret = true;
+        }
+    return ret;
+}
+
+void findReceiptsValues::enableShowNextTable(){
+    qDebug() << __FILE__ << QString::number(__LINE__) << " enableshownet "   ;
+    ui->nextButton->show();
+}
+
+void findReceiptsValues::showNext(){
+    QAbstractItemModel * abModel = ui->tableViewOfValues->model();
+    int rows = abModel->rowCount();
+    qDebug() << __FILE__ << QString::number(__LINE__) << " row =" << QString::number(rows) ;
+    int numberOfLastRow = abModel->headerData(rows -1,Qt::Vertical,Qt::DisplayRole).toInt();
+    QString lastData = abModel->data(abModel->index(numberOfLastRow -1,0 ),Qt::DisplayRole).toString();
+    qDebug() << __FILE__ << QString::number(__LINE__) << " numberOfLastRow =" << QString::number(numberOfLastRow) ;
+    qDebug() << __FILE__ << QString::number(__LINE__) << " shownext data =" <<  lastData;
+    QString comboChoice = ui->comboBoxCategories->currentText();
+    QString afterSqlFilter = QString("%1 LIKE '%2' AND %3 >= '%4'").arg("TYPE",comboChoice,"NAME",lastData);
+    model->setFilter(afterSqlFilter);
+    int count =   model->rowCountWithFilter(QModelIndex(),afterSqlFilter);
+    for (int i = 0; i < count; i += 1)
+    {
+    	QString name = model->dataWithFilter(model->index(i,MP_NAME),Qt::DisplayRole,afterSqlFilter).toString();
+    	qDebug() << __FILE__ << QString::number(__LINE__) << " names =" << name ;
+    	QString value = model->dataWithFilter(model->index(i,MP_AMOUNT),Qt::DisplayRole,afterSqlFilter).toString();
+    	QStandardItem *itemName = new QStandardItem(name);
+    	QStandardItem *itemValue = new QStandardItem(value);
+    	QList<QStandardItem*> list;
+    	list << itemName << itemValue;
+    	itemModel->appendRow(list);
+        }
+    model->setFilter("");
+    QVariant act = QVariant(trUtf8("Name"));
+    QVariant value = QVariant(trUtf8("Value"));
+    if (!itemModel->setHeaderData(0,Qt::Horizontal,act,Qt::EditRole))
+    {
+    	  qWarning() << __FILE__ << QString::number(__LINE__) << "no header data available";
+    	  }
+    if (!itemModel->setHeaderData(1,Qt::Horizontal,value,Qt::EditRole)	)
+    {
+    	  qWarning() << __FILE__ << QString::number(__LINE__) << "no header data available";
+        } 
+    ui->tableViewOfValues->setModel(itemModel);
+    ui->tableViewOfValues-> setSelectionBehavior(QAbstractItemView::SelectRows);
+    ui->tableViewOfValues-> setSelectionMode(QAbstractItemView::SingleSelection);
+    ui->tableViewOfValues->horizontalHeader()->setStretchLastSection ( true );
+    ui->tableViewOfValues->setGridStyle(Qt::NoPen);
 }

@@ -36,12 +36,15 @@ private:
     QHash<QString,QString> m_hashValuesChoosen;
     void initialize();
     void fillComboCategories();
+    bool tableViewIsFull(QAbstractItemModel * model);
+    void enableShowNextTable();
     
 private slots:
     void fillListViewValues(const QString & comboItem);
     void chooseValue(const QModelIndex& index);
     void supprItemChoosen(QListWidgetItem * item);
     void on_lineEditFilter_textChanged(const QString & text);
+    void showNext();
 };
 
 
