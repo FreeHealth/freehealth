@@ -38,6 +38,8 @@ public:
     QVariant value(const int ref) const;
     bool setValue(const int ref, const QVariant &value);
 
+    bool saveChanges() {return false;}
+
     QString toXml() const ;
     bool fromXml(const QString &xml);
 
