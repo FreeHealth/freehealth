@@ -89,7 +89,7 @@ echo "*** Creating package for $BUNDLE_NAME $VERSION"
 #####################################
 echo "*** Cleaning build path..."
 cd $SOURCES_PATH
-rm -R bin/plugins
+rm -R ./bin/$PROJECT/plugins
 
 #rm -R build
 #rm -R bin
@@ -102,7 +102,7 @@ rm -R bin/plugins
    # build app
    echo "*** Building "$BUNDLE_NAME" "$VERSION
    cd $SOURCES_PATH
-   QMAKE_SPEC="-r -spec macx-g++ CONFIG+=release CONFIG-=debug_and_release"
+   QMAKE_SPEC="-r -spec macx-g++ CONFIG+=release CONFIG-=debug_and_release LOWERED_APPNAME=$PROJECT"
 
    MAKE_STEP=`$QMAKE_BIN $PROJECT_FILE $QMAKE_SPEC`
    MAKE_STEP=$?
@@ -150,6 +150,29 @@ rm -R bin/plugins
       exit 123
    fi
 
+    # Deploy MySql lib
+    ACTUAL_PATH=`pwd`
+    cd $PACKAGES_PATH/mac/$BUNDLE_NAME/$BUNDLE_NAME.app
+    MYSQL_PLUGIN="./Contents/plugins/qt/sqldrivers/libqsqlmysql.dylib"
+    FRAMEWORK_PATH="./Contents/Frameworks"
+    mysqllib=""
+    for n in `otool -LX "$MYSQL_PLUGIN" | grep mysqlclient` ; do
+        path=`echo $n | grep mysqlclient`
+        if [ $path ] ; then
+            mysqllib=$path
+            echo $path
+        fi
+    done
+#    if [ -e $mysqllib ] ; then
+#        echo "No MySql client to install"
+#    else
+        echo "Linking MySql client lib from $mysqllib to $FRAMEWORK_PATH for $BUNDLE_NAME"
+        cp $mysqllib $FRAMEWORK_PATH
+        name=`basename $mysqllib`
+        install_name_tool -change $mysqllib @executable_path/../Frameworks/$name "$MYSQL_PLUGIN"
+#    fi
+    cd $ACTUAL_PATH
+
    # clean old dmg and create new one
    echo "*** Creating DMG archive..."
    rm *.dmg
@@ -164,4 +187,4 @@ rm -R bin/plugins
    mv $BUNDLE_NAME.dmg $PACKAGES_PATH/$BUNDLE_NAME-$VERSION.dmg
 
    # nothing to do next so exit
-   exit
+   exit 0
