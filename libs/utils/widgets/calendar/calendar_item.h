@@ -15,13 +15,20 @@ namespace Calendar {
 
 		bool isValid() const { return m_beginning.isValid(); }
 
-		/**
-		 * returns :
+		/** compute an intersection value with a day range
+		 * returns:
 		 * -1 if item is entirely before first day
 		 * 0 if item intersects [firstDay, lastDay]
 		 * 1 if item is entirely after lastDay
 		 */
 		int intersects(const QDate &firstDay, const QDate &lastDay) const;
+
+		/** compute an overlap value with another item
+		 * returns:
+		 * false if items do not overlap
+		 * true if items overlap
+		 */
+		bool overlap(const CalendarItem &item) const;
 
 		// unicity
 		const QString &uid() const { return m_uid; }

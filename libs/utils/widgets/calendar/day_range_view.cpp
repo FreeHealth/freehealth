@@ -13,6 +13,30 @@
 
 using namespace Calendar;
 
+CalendarItemNode::~CalendarItemNode() {
+	// destroy recursively all the structure (siblings and children)
+	if (m_child)
+		delete m_child;
+	if (m_next)
+		delete m_next;
+}
+
+void CalendarItemNode::store(const CalendarItem &item) {
+	if (m_item.overlap(item)) { // a child?
+		if (m_child)
+			m_child->store(item);
+		else
+			m_child = new CalendarItemNode(item);
+	} else {
+		if (m_next)
+			m_next->store(item);
+		else
+			m_next = new CalendarItemNode(item);
+	}
+}
+
+// -------------------------------------
+
 int DayRangeView::m_leftScaleWidth = 60;
 int DayRangeView::m_hourHeight = 40;
 
@@ -371,8 +395,6 @@ void DayRangeView::mouseReleaseEvent(QMouseEvent *) {
 		newItem.setBeginning(m_pressItemWidget->beginDateTime());
 		newItem.setEnding(m_pressItemWidget->endDateTime());
 		model()->setItemByUid(m_pressItem.uid(), newItem);
-		m_pressItemWidget->setInMotion(false);
-		refreshItemSizeAndPosition(m_pressItemWidget);
 		break;
 	default:;
 	}
@@ -431,11 +453,49 @@ void DayRangeView::resetItemWidgets() {
 	}
 }
 
+// at first compare with begin dates. If they're equals, compare by end dates.
+bool calendarItemLessThan(const Calendar::CalendarItem &item1, const Calendar::CalendarItem &item2)
+{
+	if (item1.beginning() < item2.beginning())
+		return true;
+	else if (item1.beginning() > item2.beginning())
+		return false;
+	else if (item1.ending() < item2.ending())
+		return true;
+	else
+		return false;
+}
+
 void DayRangeView::refreshDayWidgets(const QDate &dayDate) {
 	if (dayDate < m_firstDate || dayDate >= m_firstDate.addDays(m_rangeWidth)) // day is out of range
 		return;
 
 	// at first remove all day widgets
+	qDeleteAll(getWidgetsByDate(dayDate));
 
-	
+	// re-create them
+	QList<CalendarItem> items = model()->getItemsBetween(dayDate, dayDate);
+
+	if (!items.count())
+		return;
+
+	// sorting and create the tree
+	qSort(items.begin(), items.end(), calendarItemLessThan);
+
+	CalendarItemNode node(items[0]);
+
+	for (int i = 1; i < items.count(); i++)
+		node.store(items[i]);
+
+
+}
+
+QList<CalendarItemWidget*> DayRangeView::getWidgetsByDate(const QDate &dayDate) const {
+	QList<CalendarItemWidget*> list;
+	foreach (QObject *obj, children()) {
+		CalendarItemWidget *widget = qobject_cast<CalendarItemWidget*>(obj);
+		if (widget && widget->beginDateTime().date() == dayDate)
+			list << widget;
+	}
+	return list;
 }

@@ -11,6 +11,7 @@ GÉNÉRIQUE
 * tooltip pour rappeler l'heure (surtout en mode semaine) quand on se promène avec la souris
 * possibilité de limiter l'affichage à une tranche horaire définie (par ex: 08-20h)
 * découpage des cases horaires toutes les 5-10-15 minutes (selon paramétrage)...
+* Imaginer un nouveau type de vue (TODAY/TOMORROW/...)
 
 - ajouter n° de semaine après Today... dans le header
  * Week XX, date1 - date2

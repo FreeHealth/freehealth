@@ -4,6 +4,25 @@
 #include "view.h"
 
 namespace Calendar {
+	class CalendarItemNode
+	{
+	public:
+		CalendarItemNode(const CalendarItem &item) : m_item(item), m_child(0), m_next(0) {}
+		~CalendarItemNode();
+
+		const CalendarItem &item() const { return m_item; }
+		CalendarItemNode *child() const { return m_child; }
+		CalendarItemNode *next() const { return m_next; }
+
+		// store an item at the right place with a recursive method depending on date ranges
+		void store(const CalendarItem &item);
+
+	private:
+		CalendarItem m_item;
+		CalendarItemNode *m_child;
+		CalendarItemNode *m_next;
+	};
+
 	class DayRangeHeader : public ViewHeader
 	{
 		Q_OBJECT
@@ -85,12 +104,14 @@ namespace Calendar {
 		CalendarItem m_pressItem;
 		MouseMode m_mouseMode;
 
-		/* if end < begin, the end time will be considered as midnight */
+		// if end < begin, the end time will be considered as midnight
 		QRect getTimeIntervalRect(int day, const QTime &begin, const QTime &end) const;
 		QDateTime getDateTime(const QPoint &pos) const;
 
 		// refresh all widgets of a day
 		void refreshDayWidgets(const QDate &dayDate);
+
+		QList<CalendarItemWidget*> getWidgetsByDate(const QDate &dayDate) const;
 	};
 }
 
