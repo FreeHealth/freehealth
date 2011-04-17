@@ -63,7 +63,8 @@ public:
         DbOnly_Mime,
         ThemedIcon,
         SortId,
-        Password
+        Password,
+        ExtraXml
     };
 
     CategoryItem();

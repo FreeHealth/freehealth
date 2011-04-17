@@ -529,6 +529,12 @@ bool XmlFormIO::createCategory(const QDomElement &element, Category::CategoryIte
         label = label.nextSiblingElement(::Constants::TAG_SPEC_LABEL);
     }
 
+    // get ExtraTag content -> CategoryItem::ExtraXml
+    QDomElement extra = element.firstChildElement(::Constants::TAG_SPEC_EXTRA);
+    if (!extra.isNull()) {
+        item->setData(Category::CategoryItem::ExtraXml, extra.toDocument().toString(2));
+    }
+
     // save to database
     if (parent) {
         parent->addChild(item);

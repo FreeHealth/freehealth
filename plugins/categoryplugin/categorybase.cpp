@@ -243,6 +243,7 @@ QVector<CategoryItem *> CategoryBase::getCategories(const QString &mime) const
             cat->setData(CategoryItem::ThemedIcon, query.value(Constants::CATEGORY_THEMEDICON));
             cat->setData(CategoryItem::Password, query.value(Constants::CATEGORY_PASSWORD));
             cat->setData(CategoryItem::SortId, query.value(Constants::CATEGORY_SORT_ID));
+            cat->setData(CategoryItem::ExtraXml, query.value(Constants::CATEGORY_EXTRAXML));
             cats << cat;
         }
     } else {
@@ -333,7 +334,7 @@ bool CategoryBase::saveCategory(CategoryItem *category)
     query.bindValue(Constants::CATEGORY_PASSWORD, category->cryptedPassword());
     query.bindValue(Constants::CATEGORY_ISVALID, category->data(CategoryItem::DbOnly_IsValid).toInt());
     query.bindValue(Constants::CATEGORY_THEMEDICON, category->data(CategoryItem::ThemedIcon));
-    query.bindValue(Constants::CATEGORY_EXTRAXML, QVariant());
+    query.bindValue(Constants::CATEGORY_EXTRAXML, category->data(CategoryItem::ExtraXml));
     if (query.exec()) {
         category->setData(CategoryItem::DbOnly_Id, query.lastInsertId());
     } else {
@@ -368,7 +369,8 @@ bool CategoryBase::updateCategory(CategoryItem *category)
                                      << Constants::CATEGORY_PARENT
                                      << Constants::CATEGORY_SORT_ID
                                      << Constants::CATEGORY_THEMEDICON
-                                     << Constants::CATEGORY_LABEL_ID, where));
+                                     << Constants::CATEGORY_LABEL_ID
+                                     << Constants::CATEGORY_EXTRAXML, where));
     query.bindValue(0, category->mime());
     query.bindValue(1, category->cryptedPassword());
     query.bindValue(2, category->data(CategoryItem::DbOnly_IsValid).toInt());
@@ -376,6 +378,7 @@ bool CategoryBase::updateCategory(CategoryItem *category)
     query.bindValue(4, category->data(CategoryItem::SortId));
     query.bindValue(5, category->data(CategoryItem::ThemedIcon));
     query.bindValue(6, category->data(CategoryItem::DbOnly_LabelId));
+    query.bindValue(7, category->data(CategoryItem::ExtraXml));
 
     if (!query.exec()) {
         LOG_QUERY_ERROR(query);
