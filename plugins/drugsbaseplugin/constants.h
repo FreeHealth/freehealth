@@ -318,7 +318,8 @@ namespace Prescription
         IntakesScheme,
         IntakesUsesFromTo,
         IntakesFullString,
-        Route,
+        Route,            // Textual translated route
+        RouteId,          // Route Id from drugs database
         DurationFrom,
         DurationTo,
         DurationScheme,
@@ -386,7 +387,7 @@ namespace Constants {
         IntakesScheme,           /*!< \brief Forme sélectionnée */
         IntakesIntervalOfTime,  /*!< \brief temps entre chaque prise --> int */
         IntakesIntervalScheme,  /*!< \brief schéma de temps --> int cf enum */
-        Route,
+        RouteId,
 
         DurationFrom,           /*!< \brief espacement prises  --> double */
         DurationTo,             /*!< \brief espacement prises  --> double */
@@ -424,6 +425,7 @@ namespace Constants {
         CreationDate,           /*!< \brief Date création      --> date */
         ModificationDate,       /*!< \brief Date modification  --> date */
         Transmitted,            /*!< \brief Sera utilisé pour récupérer via internet les dosages référencés en local. date */
+        Route,                  /*!< \brief Outside SQL */
         MaxParam                /*!< \brief Nombre maximum de colonnes du modèle (et de la table SQL) */
     };
 

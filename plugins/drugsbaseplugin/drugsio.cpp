@@ -96,6 +96,7 @@ namespace DrugsIOConstants {
     const char *const XML_PRESCRIPTION_DURATIONFROMTO      = "DurationFromTo";
     const char *const XML_PRESCRIPTION_PERIOD              = "Period";
     const char *const XML_PRESCRIPTION_PERIODSCHEME        = "PeriodScheme";
+    const char *const XML_PRESCRIPTION_ROUTEID             = "RouteId";
     const char *const XML_PRESCRIPTION_DAILYSCHEME         = "Daily";
     const char *const XML_PRESCRIPTION_MEALSCHEME          = "MealTime";
     const char *const XML_PRESCRIPTION_NOTE                = "Note";
@@ -151,6 +152,7 @@ public:
         m_PrescriptionXmlTags.insert(Prescription::DurationUsesFromTo, XML_PRESCRIPTION_DURATIONFROMTO);
         m_PrescriptionXmlTags.insert(Prescription::Period, XML_PRESCRIPTION_PERIOD);
         m_PrescriptionXmlTags.insert(Prescription::PeriodScheme, XML_PRESCRIPTION_PERIODSCHEME);
+        m_PrescriptionXmlTags.insert(Prescription::RouteId, XML_PRESCRIPTION_ROUTEID);
         m_PrescriptionXmlTags.insert(Prescription::DailyScheme, XML_PRESCRIPTION_DAILYSCHEME);
         m_PrescriptionXmlTags.insert(Prescription::MealTimeSchemeIndex, XML_PRESCRIPTION_MEALSCHEME);
         m_PrescriptionXmlTags.insert(Prescription::Note, XML_PRESCRIPTION_NOTE);
@@ -686,6 +688,8 @@ QString DrugsIO::prescriptionToXml(DrugsDB::DrugsModel *m, const QString &xmlExt
     } else {
         keysToSave
                 << Drug::Denomination
+//                << Drug::AvailableForms
+//                << Drug::AvailableRoutes
                 << Drug::Form
                 << Drug::Route
                 << Drug::GlobalStrength
@@ -704,6 +708,7 @@ QString DrugsIO::prescriptionToXml(DrugsDB::DrugsModel *m, const QString &xmlExt
                 << Prescription::DurationUsesFromTo
                 << Prescription::Period
                 << Prescription::PeriodScheme
+                << Prescription::RouteId
                 << Prescription::DailyScheme
                 << Prescription::MealTimeSchemeIndex
                 << Prescription::IntakesIntervalOfTime
@@ -731,10 +736,11 @@ QString DrugsIO::prescriptionToXml(DrugsDB::DrugsModel *m, const QString &xmlExt
             forXml.insert(instance()->d->xmlTagForPrescriptionRow(Drug::GlobalStrength), m->index(i, Drug::GlobalStrength).data().toString());
         } else {
             foreach(int k, keysToSave) {
-                if (m->index(i, k).data().type() == QVariant::StringList)
+                if (m->index(i, k).data().type() == QVariant::StringList) {
                     forXml.insert(instance()->d->xmlTagForPrescriptionRow(k), m->index(i, k).data().toStringList().join(";"));
-                else
+                } else {
                     forXml.insert(instance()->d->xmlTagForPrescriptionRow(k), m->index(i, k).data().toString());
+                }
             }
         }
         if (m->index(i, Prescription::IsTextualOnly).data().toBool()) {

@@ -138,6 +138,7 @@ private:
     QVariant m_UID;
     QSet<int> m_DirtyRows;
     QSet<int> m_DirtyInnLkRows;
+    mutable QString m_Route;
 };
 
 }  // End Internal

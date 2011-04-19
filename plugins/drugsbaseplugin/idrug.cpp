@@ -102,6 +102,7 @@
 
 #include <translationutils/constanttranslations.h>
 #include <utils/global.h>
+#include <utils/log.h>
 
 #include <QVector>
 #include <QLocale>
@@ -377,13 +378,19 @@ DrugRoute::~DrugRoute()
 IDrug *DrugRoute::drug() const {return d->m_Drug;}
 QString DrugRoute::label(const QString &lang) const
 {
-    if (!d->m_Labels.keys().contains(lang)) {
-        QString l = QLocale().name().left(2);
+    QString l = lang;
+    if (lang.isEmpty()) {
+        l = QLocale().name().left(2);
         if (d->m_Labels.keys().contains(l)) {
             return d->m_Labels.value(l);
-        } else if (d->m_Labels.keys().contains(Trans::Constants::ALL_LANGUAGE)) {
+        } else {
             return d->m_Labels.value(Trans::Constants::ALL_LANGUAGE);
         }
+    }
+    if (d->m_Labels.keys().contains(l)) {
+        return d->m_Labels.value(l);
+    } else if (d->m_Labels.keys().contains(Trans::Constants::ALL_LANGUAGE)) {
+        return d->m_Labels.value(Trans::Constants::ALL_LANGUAGE);
     }
     return QString();
 }
@@ -397,7 +404,7 @@ void DrugRoute::setLabel(const QString &label, const QString &lang)
     if (lang.isEmpty()) {
         l = QLocale().name().left(2);
     }
-    d->m_Labels.insert(lang, label);
+    d->m_Labels.insert(l, label);
 }
 
 int DrugRoute::routeId() const
@@ -430,10 +437,26 @@ IPrescription::~IPrescription()
 
 void IPrescription::setPrescriptionValue(const int fieldref, const QVariant &value)
 {
-    if (d_pres->m_PrescriptionValues.value(fieldref) != value) {
-        d_pres->m_PrescriptionChanges = true;
-        d_pres->m_PrescriptionValues[fieldref] = value;
+    if (d_pres->m_PrescriptionValues.value(fieldref) == value)
+        return;
+
+    if (fieldref==Constants::Prescription::RouteId) {
+        // RouteId is coherent with this drug ?
+        int routeId = value.toInt();
+        for(int i=0; i < drugRoutes().count(); ++i) {
+            if (drugRoutes().at(i)->routeId()==routeId) {
+                d_pres->m_PrescriptionValues[fieldref] = value;
+                d_pres->m_PrescriptionChanges = true;
+                setPrescriptionValue(Constants::Prescription::Route, drugRoutes().at(i)->label());
+                return;
+            }
+        }
+        // ERROR NOT FOUND
+        LOG_ERROR_FOR("IPrescription", "RouteID not found");
+        return;
     }
+    d_pres->m_PrescriptionChanges = true;
+    d_pres->m_PrescriptionValues[fieldref] = value;
 }
 
 bool IPrescription::hasPrescription() const
@@ -507,7 +530,10 @@ QVariant IDrug::data(const int ref, const QString &lang) const
         {
             if (settings()->value(Constants::S_HIDELABORATORY).toBool()) {
                 if (d_drug->m_NoLaboDenomination.isEmpty()) {
-                    d_drug->m_NoLaboDenomination = d_drug->m_Content.value(Name).value(lang).toString();
+                    if (lang.isEmpty())
+                        d_drug->m_NoLaboDenomination = d_drug->m_Content.value(Name).value(QLocale().name().left(2)).toString();
+                    if (d_drug->m_NoLaboDenomination.isEmpty() && lang.isEmpty())
+                        d_drug->m_NoLaboDenomination = d_drug->m_Content.value(Name).value(Trans::Constants::ALL_LANGUAGE).toString();
                     foreach(const QString &name, Constants::LABOS) {
                         if (d_drug->m_NoLaboDenomination.contains(" " + name + " ")) {
                             d_drug->m_NoLaboDenomination.remove(" " + name + " ");
@@ -521,7 +547,14 @@ QVariant IDrug::data(const int ref, const QString &lang) const
         }
     case Spc:
         {
-            QString toReturn = d_drug->m_Content.value(Spc).value(lang).toString();
+            QString toReturn;
+            if (lang.isEmpty()) {
+                toReturn = d_drug->m_Content.value(Spc).value(QLocale().name().left(2)).toString();
+                if (toReturn.isEmpty())
+                    toReturn = d_drug->m_Content.value(Spc).value(Trans::Constants::ALL_LANGUAGE).toString();
+            } else {
+                toReturn = d_drug->m_Content.value(Spc).value(lang).toString();
+            }
             if (!toReturn.isEmpty()) {
                 if (base()->actualDatabaseInformations()->identifiant == Constants::DB_DEFAULT_IDENTIFIANT)
                     toReturn = QString(FRENCH_RPC_LINK).arg(toReturn.rightJustified(7,'0'));
@@ -537,9 +570,18 @@ QVariant IDrug::data(const int ref, const QString &lang) const
     case AtcLabel :
         {
             /** \todo code here */
+            break;
         }
-    case Forms: return base()->getFormLabels(d_drug->m_Content.value(DrugID).value(lang));
-    case Routes: return base()->getRouteLabels(d_drug->m_Content.value(DrugID).value(lang));
+    case Forms: return base()->getFormLabels(d_drug->m_Content.value(DrugID).value(Trans::Constants::ALL_LANGUAGE));
+    case Routes:
+        {
+            QStringList routes;
+            for(int i = 0; i < d_drug->m_Routes.count(); ++i) {
+                routes << d_drug->m_Routes.at(i)->label(lang);
+            }
+//            qWarning() << "IDrug::data::Routes" << routes << base()->getRouteLabels(d_drug->m_Content.value(DrugID).value(Trans::Constants::ALL_LANGUAGE));
+            return routes;
+        }
     case MainInnCode:
         {
             return mainInnCode();
@@ -587,12 +629,15 @@ QVariant IDrug::data(const int ref, const QString &lang) const
                     if (!d_drug->m_AllAtcCodes.contains(code))
                         d_drug->m_AllAtcCodes << code;
                 }
-                d_drug->m_AllAtcCodes << d_drug->m_Content.value(AtcCode).value(lang).toString();
+                d_drug->m_AllAtcCodes << d_drug->m_Content.value(AtcCode).value(Trans::Constants::ALL_LANGUAGE).toString();
             }
             return d_drug->m_AllAtcCodes;
         }
     }
-    return d_drug->m_Content.value(ref).value(lang);
+    if (lang.isEmpty())
+        return d_drug->m_Content.value(ref).value(Trans::Constants::ALL_LANGUAGE);
+    else
+        return d_drug->m_Content.value(ref).value(lang);
 }
 
 int IDrug::numberOfCodeMolecules() const
@@ -840,7 +885,10 @@ bool IDrug::lessThan(const IDrug *drug1, const IDrug *drug2)
 
 bool IDrug::setDataFromDb(const int ref, const QVariant &value, const QString &lang)
 {
-    d_drug->m_Content[ref].insertMulti(lang, value);
+    if (lang.isEmpty())
+        d_drug->m_Content[ref].insertMulti(Trans::Constants::ALL_LANGUAGE, value);
+    else
+        d_drug->m_Content[ref].insertMulti(lang, value);
     return true;
 }
 

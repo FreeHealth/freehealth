@@ -284,7 +284,7 @@ public:
 
     void getRoutes(IDrug *drug)
     {
-        Utils::Join j(Constants::Table_DRUG_ROUTES, Constants::DRUG_ROUTES_DID, Constants::Table_ROUTES, Constants::ROUTES_RID);
+        Utils::Join j(Constants::Table_DRUG_ROUTES, Constants::DRUG_ROUTES_RID, Constants::Table_ROUTES, Constants::ROUTES_RID);
         Utils::Field cond(Constants::Table_DRUG_ROUTES, Constants::DRUG_ROUTES_DID, QString("=%1").arg(drug->data(IDrug::DrugID).toString()));
 
         QSqlQuery query(QSqlDatabase::database(Constants::DB_DRUGS_NAME));
@@ -1450,6 +1450,7 @@ QStringList DrugsBase::getRouteLabels(const QVariant &drugId, const QString &lan
     joins << Utils::Join(Constants::Table_ROUTES, Constants::ROUTES_MASTERLID, Constants::Table_LABELSLINK, Constants::LABELSLINK_MASTERLID);
     joins << Utils::Join(Constants::Table_LABELSLINK, Constants::LABELSLINK_LID, Constants::Table_LABELS, Constants::LABELS_LID);
     QString req = select(get, joins, cond);
+
     QSqlQuery query(req, DB);
     if (query.isActive()) {
         while (query.next()) {
@@ -1471,7 +1472,7 @@ QStringList DrugsBase::getFormLabels(const QVariant &drugId, const QString &lang
     // get all routes labels
     QString l = lang;
     if (l.isEmpty()) {
-        l = "xx";
+        l = Trans::Constants::ALL_LANGUAGE;
     }
     Utils::FieldList get;
     get << Utils::Field(Constants::Table_LABELS, Constants::LABELS_LABEL);

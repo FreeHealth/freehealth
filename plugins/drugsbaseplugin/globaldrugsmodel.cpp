@@ -716,7 +716,7 @@ void GlobalDrugsModel::refreshDrugsPrecautions(const QModelIndex &topleft, const
         refreshModel = true;
     }
     d->m_ProcessedUid.clear();
-    if (refreshModel)
+    if (refreshModel || !d->m_DrugsPrecautionsModel)
         d->updateDrugsPrecautionsModel();
     reset();
 }

@@ -52,6 +52,7 @@
 #include <drugsbaseplugin/drugsmodel.h>
 #include <drugsbaseplugin/drugsbase.h>
 #include <drugsbaseplugin/drugsdatabaseselector.h>
+#include <drugsbaseplugin/idrug.h>
 
 #include <utils/global.h>
 #include <utils/log.h>
@@ -231,16 +232,28 @@ bool DosageModel::setData(const QModelIndex &index, const QVariant &value, int r
 //        }
 
         if (index.column()==Dosages::Constants::Route) {
-            if (value.toString().contains(QRegExp("\\D"))) {
-                // Find the routeId
-                /** \todo code here: ask the IDrug instead of the base */
-//                int routeId = drugsBase()->getRouteId(value.toString());
-//                if (!QSqlTableModel::setData(index, routeId, role)) {
-//                    LOG_ERROR("Can not set data to QSqlTableModel");
-//                    LOG_QUERY_ERROR(query());
-//                    return false;
-//                }
+//            qWarning() << "DOSAGE -> setData Route" << value.toString();
+            m_Route = value.toString();
+            // Find the routeId
+            IDrug *drug = m_DrugsModel->getDrug(m_UID);
+            int routeId = -1;
+            for(int i = 0; i < drug->drugRoutes().count(); ++i) {
+                if (drug->drugRoutes().at(i)->label()==value.toString()) {
+                    routeId = drug->drugRoutes().at(i)->routeId();
+                    break;
+                }
             }
+//            qWarning() << "    routeId" << routeId  << drug->drugRoutes();
+            if (routeId != -1) {
+                if (!QSqlTableModel::setData(QSqlTableModel::index(index.row(), Dosages::Constants::RouteId), routeId, role)) {
+                    LOG_ERROR("Can not set data to QSqlTableModel");
+                    LOG_QUERY_ERROR(query());
+                    return false;
+                }
+            } else {
+                LOG_ERROR("Route not found: " + value.toString());
+            }
+            return true;
         } else {
             if (!QSqlTableModel::setData(index, value, role)) {
                 LOG_ERROR("Can not set data to QSqlTableModel");
@@ -283,6 +296,23 @@ QVariant DosageModel::data(const QModelIndex & item, int role) const
     case Qt::DisplayRole:
     case Qt::EditRole:
         {
+            if (item.column() == Dosages::Constants::Route) {
+//                qWarning() << "DOSAGE data Route" << m_Route;
+                if (m_Route.isEmpty()) {
+                    // get routeId
+                    int routeId = index(item.row(), Dosages::Constants::RouteId).data().toInt();
+                    // get label (from IDrug)
+                    IDrug *drug = m_DrugsModel->getDrug(m_UID);
+                    for(int i = 0; i < drug->drugRoutes().count(); ++i) {
+                        if (drug->drugRoutes().at(i)->routeId()==routeId) {
+                            m_Route = drug->drugRoutes().at(i)->label();
+                            break;
+                        }
+                    }
+//                    qWarning() << "   getting route label" << routeId << m_Route;
+                }
+                return m_Route;
+            }
             return QSqlTableModel::data(item, role);
             break;
         }
@@ -501,12 +531,12 @@ void DosageModel::toPrescription(const int row)
     prescr_dosage.insert(Constants::Prescription::IntakesTo,            Dosages::Constants::IntakesTo);
     prescr_dosage.insert(Constants::Prescription::IntakesUsesFromTo,    Dosages::Constants::IntakesUsesFromTo);
     prescr_dosage.insert(Constants::Prescription::IntakesScheme,        Dosages::Constants::IntakesScheme);
-    prescr_dosage.insert(Constants::Prescription::Route,                Dosages::Constants::Route);
+    prescr_dosage.insert(Constants::Prescription::RouteId,              Dosages::Constants::RouteId);
     prescr_dosage.insert(Constants::Prescription::Period,               Dosages::Constants::Period);
     prescr_dosage.insert(Constants::Prescription::PeriodScheme,         Dosages::Constants::PeriodScheme);
     prescr_dosage.insert(Constants::Prescription::DurationFrom,         Dosages::Constants::DurationFrom);
     prescr_dosage.insert(Constants::Prescription::DurationTo,           Dosages::Constants::DurationTo);
-    prescr_dosage.insert(Constants::Prescription::DurationUsesFromTo,    Dosages::Constants::DurationUsesFromTo);
+    prescr_dosage.insert(Constants::Prescription::DurationUsesFromTo,   Dosages::Constants::DurationUsesFromTo);
     prescr_dosage.insert(Constants::Prescription::DurationScheme,       Dosages::Constants::DurationScheme);
     prescr_dosage.insert(Constants::Prescription::IntakesIntervalOfTime,Dosages::Constants::IntakesIntervalOfTime);
     prescr_dosage.insert(Constants::Prescription::IntakesIntervalScheme,Dosages::Constants::IntakesIntervalScheme);

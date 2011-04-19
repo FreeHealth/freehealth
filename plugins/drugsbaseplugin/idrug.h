@@ -174,6 +174,11 @@ public:
     IPrescription();
     virtual ~IPrescription();
 
+    // Acces to some IDrug values
+    virtual QVariant drugId() const = 0;
+    virtual QVector<DrugRoute *> drugRoutes() const = 0;
+
+
     // Prescription values
     virtual bool hasPrescription() const;
     virtual void setPrescriptionValue(const int fieldref, const QVariant &value);
@@ -229,7 +234,7 @@ public:
     virtual ~IDrug();
 
     virtual bool isVirtual() const {return false;}
-    virtual QVariant data(const int ref, const QString &lang = "xx") const;
+    virtual QVariant data(const int ref, const QString &lang = QString::null) const;
     static inline bool lessThanOnNames(const IDrug *s1, const IDrug *s2) {return s1->data(Name).toString() < s2->data(Name).toString();}
 
     QVariant drugId() const {return data(DrugID);}
@@ -284,7 +289,7 @@ public:
     QString warnText() const;
 
 protected:
-    bool setDataFromDb(const int ref, const QVariant &value, const QString &lang = "xx");
+    bool setDataFromDb(const int ref, const QVariant &value, const QString &lang = QString::null);
     void addComponent(IComponent *compo);
     QVector<IComponent *> components() const;
     void addRoute(DrugRoute *route);
