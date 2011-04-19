@@ -248,7 +248,7 @@ bool FrDrugDatatabaseStep::populateDatabase()
         drug->setData(Drug::OldUid, line.at(0));
         drug->setData(Drug::Name, line.at(1));
         drug->setData(Drug::Forms, line.at(2));
-        drug->setData(Drug::Routes, line.at(3));
+        drug->setData(Drug::Routes, line.at(3).split(";"));
         drug->setData(Drug::Authorization, line.at(4) + " ; " + line.at(5));
         drug->setData(Drug::Marketed, line.at(6).startsWith("Comm"));
         drug->setData(Drug::Spc, line.at(7));

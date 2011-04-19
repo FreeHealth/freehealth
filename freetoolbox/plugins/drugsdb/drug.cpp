@@ -95,7 +95,7 @@ bool Drug::setData(const int ref, const QVariant &value, const QString &lang)
                         rids << query.value(0);
                     }
                 } else {
-                    Utils::Log::addQueryError("Drug", query, __FILE__, __LINE__);
+                    LOG_QUERY_ERROR_FOR("Drug", query);
                 }
                 if (rids.count()) {
                     d->m_Content[Drug::RoutesId].insertMulti(lang, rids);
