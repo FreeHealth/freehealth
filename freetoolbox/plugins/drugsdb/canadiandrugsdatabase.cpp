@@ -200,7 +200,7 @@ QMultiHash<int, QString> CaDrugDatatabaseStep::extractUidRelatedDatas(const QStr
     QMultiHash<int, QString> uid_vals;
     QFile csv(absFileName);
     if (!csv.open(QFile::ReadOnly | QFile::Text)) {
-        Utils::Log::addError(this, "Unable to read file", __FILE__, __LINE__);
+        LOG_ERROR("Unable to read file");
         return uid_vals;
     }
 
@@ -302,7 +302,7 @@ bool CaDrugDatatabaseStep::populateDatabase()
         Drug *drug = new Drug;
         int drugCode = vals.at(0).toInt();
         drug->setData(Drug::Uid1, vals.at(3));
-        drug->setData(Drug::OldUid, vals.at(0));
+        drug->setData(Drug::OldUid, vals.at(3)); // Since v0.5.4 Ca db uid is the DIN, before is was ProductN;FormId;RouteId
         drug->setData(Drug::Name, vals.at(4));
         QStringList t = uid_forms.values(drugCode);
         drug->setData(Drug::Forms, t);
