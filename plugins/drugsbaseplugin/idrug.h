@@ -54,6 +54,7 @@ class DrugRoutePrivate;
 class DrugsBase;
 class DrugsBasePrivate;
 class IPrescriptionPrivate;
+class DrugsIOPrivate;
 }
 
 class DRUGSBASE_EXPORT IComponent
@@ -194,6 +195,7 @@ class DRUGSBASE_EXPORT IDrug : public IPrescription
     friend class DrugsDB::IComponent;
     friend class DrugsDB::Internal::DrugsBase;
     friend class DrugsDB::DrugsIO;
+    friend class DrugsDB::Internal::DrugsIOPrivate;
 
 public:
     enum References {
@@ -204,6 +206,7 @@ public:
         AllUids,
         OldUid,
         SourceID,            // Source
+        SourceName,
         AuthorizationID,            // Authorization
         Name,
         AtcCode,

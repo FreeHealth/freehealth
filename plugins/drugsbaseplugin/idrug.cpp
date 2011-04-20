@@ -572,7 +572,17 @@ QVariant IDrug::data(const int ref, const QString &lang) const
             /** \todo code here */
             break;
         }
-    case Forms: return base()->getFormLabels(d_drug->m_Content.value(DrugID).value(Trans::Constants::ALL_LANGUAGE));
+    case Forms:
+        {
+            // for textual and virtual drugs, forms are setted using setDataFromDb()
+            if (d_drug->m_Content.value(ref).value(lang).isNull()) {
+                if (d_drug->m_Content.value(ref).value(Trans::Constants::ALL_LANGUAGE).isNull())
+                    return base()->getFormLabels(d_drug->m_Content.value(DrugID).value(Trans::Constants::ALL_LANGUAGE));
+                else
+                    return d_drug->m_Content.value(ref).value(Trans::Constants::ALL_LANGUAGE);
+            }
+            return d_drug->m_Content.value(ref).value(lang);
+        }
     case Routes:
         {
             QStringList routes;

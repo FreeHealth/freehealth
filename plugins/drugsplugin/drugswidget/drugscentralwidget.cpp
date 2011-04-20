@@ -212,12 +212,14 @@ void DrugsCentralWidget::changeFontTo(const QFont &font)
 
 bool DrugsCentralWidget::printPrescription()
 {
-    return DrugsDB::DrugsIO::printPrescription(m_CurrentDrugModel);
+    DrugsDB::DrugsIO io;
+    return io.printPrescription(m_CurrentDrugModel);
 }
 
 void DrugsCentralWidget::printPreview()
 {
-    return DrugsDB::DrugsIO::prescriptionPreview(m_CurrentDrugModel);
+    DrugsDB::DrugsIO io;
+    io.prescriptionPreview(m_CurrentDrugModel);
 }
 
 bool DrugsCentralWidget::createTemplate()
@@ -225,12 +227,13 @@ bool DrugsCentralWidget::createTemplate()
     if (m_CurrentDrugModel->rowCount() == 0)
         return false;
     // get the template content
-    QString content = DrugsDB::DrugsIO::prescriptionToXml(m_CurrentDrugModel, "");
+    DrugsDB::DrugsIO io;
+    QString content = io.prescriptionToXml(m_CurrentDrugModel, "");
     // create a new template with it
     Templates::TemplatesCreationDialog dlg(this);
     dlg.setTemplateContent(content);
-    dlg.setTemplateSummary(DrugsDB::DrugsIO::prescriptionToHtml(m_CurrentDrugModel, "", DrugsDB::DrugsIO::SimpleVersion));
-    dlg.setTemplateMimeTypes(DrugsDB::DrugsIO::prescriptionMimeTypes());
+    dlg.setTemplateSummary(io.prescriptionToHtml(m_CurrentDrugModel, "", DrugsDB::DrugsIO::SimpleVersion));
+    dlg.setTemplateMimeTypes(io.prescriptionMimeTypes());
     dlg.setUserUuid(user()->value(Core::IUser::Uuid).toString());
     dlg.exec();
     return true;

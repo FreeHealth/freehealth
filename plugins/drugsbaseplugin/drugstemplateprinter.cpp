@@ -57,7 +57,8 @@ bool DrugsTemplatePrinter::printTemplates(const QList<const Templates::ITemplate
     if (n > 1) {
         // Check interactions in the merged templates
         foreach(const Templates::ITemplate *t, iTemplates) {
-            DrugsIO::prescriptionFromXml(model, t->content(), DrugsIO::AppendPrescription);
+            DrugsIO io;
+            io.prescriptionFromXml(model, t->content(), DrugsIO::AppendPrescription);
         }
         bool interactions = model->prescriptionHasInteractions();
         bool allergy = model->prescriptionHasAllergies();
@@ -103,7 +104,8 @@ bool DrugsTemplatePrinter::printTemplates(const QList<const Templates::ITemplate
                                   "on a single order ?"), "",
                                QStringList() << tr("Print separately") << tr("Merge and print") << tkTr(Trans::Constants::CANCEL));
         if (r==1) {
-            bool ok = DrugsIO::printPrescription(model);
+            DrugsIO io;
+            bool ok = io.printPrescription(model);
             delete model;
             model = 0;
             return ok;
@@ -113,9 +115,10 @@ bool DrugsTemplatePrinter::printTemplates(const QList<const Templates::ITemplate
     }
 
     model->clearDrugsList();
+    DrugsIO io;
     foreach(const Templates::ITemplate *t, iTemplates) {
-        DrugsIO::prescriptionFromXml(model, t->content(), DrugsIO::ReplacePrescription);
-        DrugsIO::printPrescription(model);
+        io.prescriptionFromXml(model, t->content(), DrugsIO::ReplacePrescription);
+        io.printPrescription(model);
     }
     delete model;
     model = 0;

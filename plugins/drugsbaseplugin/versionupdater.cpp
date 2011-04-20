@@ -696,6 +696,162 @@ public:
     }
 };
 
+class IO_Update_From_050_To_060 : public DrugsDB::DrugsIOUpdateStep
+{
+public:
+    // Update XML code to the new drugs database structure
+    // Drugs == 3 uids + oldUid
+    IO_Update_From_050_To_060() : DrugsDB::DrugsIOUpdateStep() {}
+    ~IO_Update_From_050_To_060() {}
+
+    QString fromVersion() const {return "0.5.0";}
+    QString toVersion() const {return "0.6.0";}
+
+    bool updateFromXml() const {return true;}
+
+    QString extractValue(const QString &xml, const QString &tagName, int start = 0) const
+    {
+        int begin = xml.indexOf(QString("<%1").arg(tagName), start);
+        int end = xml.indexOf(QString("</%1>").arg(tagName), begin);
+        if (end == -1)
+            return QString();
+        QString ex;
+        if (begin != -1) {
+            begin = xml.indexOf(">", begin + tagName.length()) + 1;
+            ex = xml.mid(begin, end-begin);
+        }
+        return ex;
+    }
+    QString extractBlock(const QString &xml, const QString &tagName, int start = 0) const
+    {
+        int begin = xml.indexOf(QString("<%1").arg(tagName), start);
+        int end = xml.indexOf(QString("</%1>").arg(tagName), begin);
+        if (end == -1) {
+            end = xml.indexOf(QString("/>"), begin);
+            if (end == -1) {
+                return QString();
+            }
+            end += 2;
+        } else {
+            end += QString("</%1>").arg(tagName).length();
+        }
+        QString ex;
+        if (begin != -1) {
+            m_LastExtractionEnd = end;
+            ex = xml.mid(begin, end-begin);
+        }
+        return ex;
+    }
+
+    bool executeXmlUpdate(QString &xml) const
+    {
+        m_LastExtractionEnd = 0;
+        QString db = extractValue(xml, "DrugsDatabaseName");
+
+        // go to FullPrescription
+        QStringList prescriptionItems;
+        prescriptionItems
+                << "OnlyForTest"
+                << "Id"
+                << "RefDosage"
+                << "Pack_UID"
+                << "IntakeFrom"
+                << "IntakeTo"
+                << "IntakeScheme"
+                << "IntakeFromTo"
+                << "IntakeIntervalTime"
+                << "IntakeIntervalScheme"
+                << "IntakeFullString"
+                << "DurationFrom"
+                << "DurationTo"
+                << "DurationScheme"
+                << "DurationFromTo"
+                << "Period"
+                << "PeriodScheme"
+                << "Daily"
+                << "MealTime"
+                << "Note"
+                << "INN"
+                << "SpecifyForm"
+                << "SpecifyPresentation"
+                << "IsAld";
+
+        QString fullPrescription = extractBlock(xml, "FullPrescription", m_LastExtractionEnd);
+        QString prescription = extractBlock(fullPrescription, "Prescription");
+        QString newPrescription;
+        int begin = m_LastExtractionEnd;
+
+        while (!prescription.isEmpty()) {
+            // Get drug infos
+            QString oldUid = extractValue(prescription, "Drug_UID");
+            QString route = extractValue(prescription, "DrugRoute");
+            QString form = extractValue(prescription, "DrugForm");
+            QString strength = extractValue(prescription, "DrugStrength");
+            QString name = extractValue(prescription, "DrugName");
+            // Get composition
+            QString fullCompo;
+            QString composition = extractBlock(prescription, "Composition");
+            while (!composition.isEmpty()) {
+                fullCompo += composition;
+                composition = extractBlock(prescription, "Composition", m_LastExtractionEnd);
+            }
+
+            // Extract Prescription's items
+            QString presXml;
+            foreach(const QString &item, prescriptionItems) {
+                QString value = extractValue(prescription, item);
+                if (!value.isEmpty())
+                    presXml += QString(" %1=\"%2\"").arg(item).arg(value.replace("\"","&quote;"));
+            }
+
+            // Recreate the v0.6.0 block
+            QString block = QString("<Drug u1=\"\" u2=\"\" u3=\"\" old=\"%1\" db=\"%2\">\n"
+                                   "<DrugRoute>%3</DrugRoute>\n"
+                                   "<DrugForm>%4</DrugForm>\n"
+                                   "<DrugStrength>%5</DrugStrength>\n"
+                                   "<DrugName>%6</DrugName>\n"
+                                   "%7\n"
+                                   "</Drug>\n")
+                    .arg(oldUid)
+                    .arg(db)
+                    .arg(route)
+                    .arg(form)
+                    .arg(strength)
+                    .arg(name)
+                    .arg(fullCompo);
+            block += QString("<Dose %1/>\n").arg(presXml);
+
+            newPrescription += QString("<Prescription>\n%1</Prescription>\n").arg(block);
+
+            // Go to next Prescription block
+            prescription.clear();
+            prescription = extractBlock(fullPrescription, "Prescription", begin);
+            begin = m_LastExtractionEnd;
+        }
+
+        // Replace content of FullPrescription with the new prescription
+        begin = xml.indexOf("<FullPrescription", 0, Qt::CaseInsensitive);
+        int end = xml.indexOf("</FullPrescription>", begin, Qt::CaseInsensitive);
+        newPrescription.prepend("<FullPrescription version=\"0.6.0\">\n");
+        xml.replace(begin, end-begin, newPrescription);
+
+        qWarning() << xml;
+        return true;
+    }
+
+    bool updateFromModel() const {return false;}
+    bool executeUpdate(DrugsDB::DrugsModel *model, QList<int> rows) const
+    {
+        Q_UNUSED(model);
+        Q_UNUSED(rows);
+        return true;
+    }
+
+private:
+    mutable int m_LastExtractionEnd;
+};
+
+
 }  // End anonymous namespace
 
 namespace DrugsDB {
@@ -711,7 +867,7 @@ public:
     }
 
     static QStringList dosageDatabaseVersions() { return QStringList() << "0.0.8" << "0.2.0" << "0.4.0" << "0.5.0" << "0.5.4"; }
-    static QStringList xmlIoVersions() {return QStringList() << "0.0.8" << "0.2.0" << "0.4.0" << "0.5.0"; }
+    static QStringList xmlIoVersions() {return QStringList() << "0.0.8" << "0.2.0" << "0.4.0" << "0.5.0" << "0.6.0"; }
 
     QString xmlVersion(const QString &xml)
     {
@@ -780,6 +936,7 @@ VersionUpdater::VersionUpdater() : d(0)
     d->m_Updaters.append(new ::IO_Update_From_0008_To_020);
     d->m_Updaters.append(new ::IO_Update_From_020_To_040);
     d->m_Updaters.append(new ::IO_Update_From_040_To_050);
+    d->m_Updaters.append(new ::IO_Update_From_050_To_060);
 }
 
 VersionUpdater::~VersionUpdater()
@@ -872,7 +1029,7 @@ bool VersionUpdater::isXmlIOUpToDate(const QString &xmlContent) const
 
 QString VersionUpdater::updateXmlIOContent(const QString &xmlContent)
 {
-    Utils::Log::addMessage("VersionUpdater", "Updating XML IO content version");
+    LOG_FOR("VersionUpdater", "Updating XML IO content version");
     QMap<QString, DrugsIOUpdateStep *> from = d->ioSteps();
     QString version = d->xmlVersion(xmlContent);
     QString xml = xmlContent;
@@ -883,8 +1040,7 @@ QString VersionUpdater::updateXmlIOContent(const QString &xmlContent)
         if (step->updateFromXml()) {
             if (step->fromVersion() == version) {
                 if (!step->executeXmlUpdate(xml)) {
-                    Utils::Log::addError("VersionUpdater", QString("Error when updating from %1 to %2").arg(version).arg(step->toVersion()),
-                                         __FILE__, __LINE__);
+                    LOG_ERROR_FOR("VersionUpdater", QString("Error when updating from %1 to %2").arg(version).arg(step->toVersion()));
                 } else {
                     version = step->toVersion();
                 }
@@ -898,7 +1054,7 @@ QString VersionUpdater::updateXmlIOContent(const QString &xmlContent)
 
 bool VersionUpdater::updateXmlIOModel(const QString &fromVersion, DrugsDB::DrugsModel *model, const QList<int> &rowsToUpdate)
 {
-    Utils::Log::addMessage("VersionUpdater", "Updating IO model version from version " + fromVersion);
+    LOG_FOR("VersionUpdater", "Updating IO model version");
     QMap<QString, DrugsIOUpdateStep *> from = d->ioSteps();
     QString version = fromVersion;
     while (version != d->xmlIoVersions().last()) {
@@ -908,8 +1064,7 @@ bool VersionUpdater::updateXmlIOModel(const QString &fromVersion, DrugsDB::Drugs
         if (step->updateFromModel()) {
             if (step->fromVersion() == version) {
                 if (!step->executeUpdate(model, rowsToUpdate))
-                    Utils::Log::addError("VersionUpdater", QString("Error when updating from %1 to %2").arg(version).arg(step->toVersion()),
-                                         __FILE__, __LINE__);
+                    LOG_ERROR_FOR("VersionUpdater", QString("Error when updating from %1 to %2").arg(version).arg(step->toVersion()));
                 else
                     version = step->toVersion();
             }

@@ -69,16 +69,44 @@ static inline DrugsDB::DrugsModel *drugModel() { return DrugsDB::DrugsModel::act
 static inline Core::IUser *user() {return Core::ICore::instance()->user();}
 static inline Core::IDocumentPrinter *printer() {return ExtensionSystem::PluginManager::instance()->getObject<Core::IDocumentPrinter>();}
 
-
 namespace DrugsIOConstants {
-    const char *const XML_HEADER                           = "<?xml version=\"1.0\" encoding=\"UTF-8\"?>\n";
+    const char *const XML_HEADER                           = "<?xml version=\"1.0\" encoding=\"UTF-8\"?>\n<!DOCTYPE FreeMedForms>\n";
     const char *const XML_ROOT_TAG                         = "FreeDiams";
     const char *const XML_DRUGS_DATABASE_NAME              = "DrugsDatabaseName";
     const char *const XML_VERSION                          = "version";
     const char *const XML_PRESCRIPTION_MAINTAG             = "Prescription";
     const char *const XML_PRESCRIPTION_ISTEXTUAL           = "IsTextual";
     const char *const XML_PRESCRIPTION_TEXTUALDRUGNAME     = "TextualDrugName";
-    const char *const XML_PRESCRIPTION_UID                 = "Drug_UID";
+
+    const char *const XML_DRUG_ROOT         = "Drug";
+    const char *const XML_DRUG_ATTR_UID1    = "u1";
+    const char *const XML_DRUG_ATTR_UID2    = "u2";
+    const char *const XML_DRUG_ATTR_UID3    = "u3";
+    const char *const XML_DRUG_ATTR_OLDUID  = "old";
+    const char *const XML_DRUG_ATTR_DB      = "db";
+    const char *const XML_DRUG_DENOMINATION = "DrugName";
+    const char *const XML_DRUG_FORM         = "DrugForm";
+    const char *const XML_DRUG_ROUTE        = "DrugRoute";
+    const char *const XML_DRUG_STRENGTH     = "DrugStrength";
+    const char *const XML_DRUG_COMPOSITION  = "DrugComponents";
+    // Unused
+    const char *const XML_DRUG_INNS         = "DrugINN";
+    const char *const XML_DRUG_INNS_ATC     = "DrugINN_ATC";
+    const char *const XML_DRUG_ATC          = "DrugATC";
+    const char *const XML_PRESCRIPTION_UID= "qdfqsfqsf";
+
+    const char *const XML_COMPOSITION                  = "Composition";
+    const char *const XML_COMPOSITION_INN              = "inn";
+    const char *const XML_COMPOSITION_ATC              = "atc";
+    const char *const XML_COMPOSITION_FORM             = "form";
+    const char *const XML_COMPOSITION_ROUTE            = "route";
+    const char *const XML_COMPOSITION_STRENGTH         = "strength";
+    const char *const XML_COMPOSITION_MOLECULAR        = "molecularName";
+    const char *const XML_COMPOSITION_NATURE           = "nature";
+    const char *const XML_COMPOSITION_NATURE_LK        = "natureLink";
+
+    const char *const XML_PRESCRIPTION_ROOT                = "Prescription";
+    const char *const XML_PRESCRIPTION_DOSAGE              = "Dose";
     const char *const XML_PRESCRIPTION_TESTONLY            = "OnlyForTest";
     const char *const XML_PRESCRIPTION_ID                  = "Id";
     const char *const XML_PRESCRIPTION_USEDDOSAGE          = "RefDosage";
@@ -105,24 +133,17 @@ namespace DrugsIOConstants {
     const char *const XML_PRESCRIPTION_SPECIFYPRESCENTATION= "SpecifyPresentation";
     const char *const XML_PRESCRIPTION_ISALD               = "IsAld";
     const char *const XML_PRESCRIPTION_TOHTML              = "Html";
+
     const char *const XML_EXTRADATAS_TAG                   = "ExtraDatas";
     const char *const XML_FULLPRESCRIPTION_TAG             = "FullPrescription";
     const char *const XML_DATEOFGENERATION_TAG             = "DateOfGeneration";
 
-    const char *const XML_DRUG_DENOMINATION            = "DrugName";
-    const char *const XML_DRUG_INNS                    = "DrugINN";
-    const char *const XML_DRUG_INNS_ATC                = "DrugINN_ATC";
-    const char *const XML_DRUG_ATC                     = "DrugATC";
-    const char *const XML_DRUG_FORM                    = "DrugForm";
-    const char *const XML_DRUG_ROUTE                   = "DrugRoute";
-    const char *const XML_DRUG_STRENGTH                = "DrugStrength";
 }
 
 using namespace DrugsIOConstants;
 using namespace DrugsDB;
 using namespace DrugsDB::Constants;
 using namespace Trans::ConstantTranslations;
-
 
 /** \todo memory leak potential when using static functions -> who is deleting the instance singleton ? */
 
@@ -134,44 +155,50 @@ class DrugsIOPrivate
 public:
     DrugsIOPrivate()
     {
-        m_PrescriptionXmlTags.insert(Prescription::Id ,  XML_PRESCRIPTION_ID);
-        m_PrescriptionXmlTags.insert(Prescription::UsedDosage , XML_PRESCRIPTION_USEDDOSAGE);
-        m_PrescriptionXmlTags.insert(Prescription::IsTextualOnly , XML_PRESCRIPTION_ISTEXTUAL);
-        m_PrescriptionXmlTags.insert(Prescription::Pack_UID , XML_PRESCRIPTION_CIP);
-        m_PrescriptionXmlTags.insert(Prescription::OnlyForTest, XML_PRESCRIPTION_TESTONLY);
-        m_PrescriptionXmlTags.insert(Prescription::IntakesFrom , XML_PRESCRIPTION_INTAKEFROM);
-        m_PrescriptionXmlTags.insert(Prescription::IntakesTo, XML_PRESCRIPTION_INTAKETO);
-        m_PrescriptionXmlTags.insert(Prescription::IntakesScheme, XML_PRESCRIPTION_INTAKESCHEME);
-        m_PrescriptionXmlTags.insert(Prescription::IntakesUsesFromTo, XML_PRESCRIPTION_INTAKEFROMTO);
-        m_PrescriptionXmlTags.insert(Prescription::IntakesFullString, XML_PRESCRIPTION_INTAKEFULLSTRING);
-        m_PrescriptionXmlTags.insert(Prescription::IntakesIntervalOfTime, XML_PRESCRIPTION_INTAKEINTERVALTIME);
-        m_PrescriptionXmlTags.insert(Prescription::IntakesIntervalScheme, XML_PRESCRIPTION_INTAKEINTERVALSCHEME);
-        m_PrescriptionXmlTags.insert(Prescription::DurationFrom, XML_PRESCRIPTION_DURATIONFROM);
-        m_PrescriptionXmlTags.insert(Prescription::DurationTo, XML_PRESCRIPTION_DURATIONTO);
-        m_PrescriptionXmlTags.insert(Prescription::DurationScheme, XML_PRESCRIPTION_DURATIONSCHEME);
-        m_PrescriptionXmlTags.insert(Prescription::DurationUsesFromTo, XML_PRESCRIPTION_DURATIONFROMTO);
-        m_PrescriptionXmlTags.insert(Prescription::Period, XML_PRESCRIPTION_PERIOD);
-        m_PrescriptionXmlTags.insert(Prescription::PeriodScheme, XML_PRESCRIPTION_PERIODSCHEME);
-        m_PrescriptionXmlTags.insert(Prescription::RouteId, XML_PRESCRIPTION_ROUTEID);
-        m_PrescriptionXmlTags.insert(Prescription::DailyScheme, XML_PRESCRIPTION_DAILYSCHEME);
-        m_PrescriptionXmlTags.insert(Prescription::MealTimeSchemeIndex, XML_PRESCRIPTION_MEALSCHEME);
-        m_PrescriptionXmlTags.insert(Prescription::Note, XML_PRESCRIPTION_NOTE);
-        m_PrescriptionXmlTags.insert(Prescription::IsINNPrescription, XML_PRESCRIPTION_ISINN);
-        m_PrescriptionXmlTags.insert(Prescription::SpecifyForm, XML_PRESCRIPTION_SPECIFYFORM);
-        m_PrescriptionXmlTags.insert(Prescription::SpecifyPresentation, XML_PRESCRIPTION_SPECIFYPRESCENTATION);
-        m_PrescriptionXmlTags.insert(Prescription::IsALD, XML_PRESCRIPTION_ISALD);
-        m_PrescriptionXmlTags.insert(Prescription::ToHtml, XML_PRESCRIPTION_TOHTML);
-        m_PrescriptionXmlTags.insert(Drug::Denomination, XML_DRUG_DENOMINATION);
-        m_PrescriptionXmlTags.insert(Drug::Inns, XML_DRUG_INNS);
-        m_PrescriptionXmlTags.insert(Drug::InnsATCcodes, XML_DRUG_INNS_ATC);
-        m_PrescriptionXmlTags.insert(Drug::ATC, XML_DRUG_ATC);
-        m_PrescriptionXmlTags.insert(Drug::Form, XML_DRUG_FORM);
-        m_PrescriptionXmlTags.insert(Drug::Route, XML_DRUG_ROUTE);
-        m_PrescriptionXmlTags.insert(Drug::GlobalStrength, XML_DRUG_STRENGTH);
     }
 
     ~DrugsIOPrivate()
     {
+    }
+
+    void populateXmlTags()
+    {
+        if (m_PrescriptionXmlTags.isEmpty()) {
+            m_PrescriptionXmlTags.insert(Prescription::Id ,  XML_PRESCRIPTION_ID);
+            m_PrescriptionXmlTags.insert(Prescription::UsedDosage , XML_PRESCRIPTION_USEDDOSAGE);
+            m_PrescriptionXmlTags.insert(Prescription::IsTextualOnly , XML_PRESCRIPTION_ISTEXTUAL);
+            m_PrescriptionXmlTags.insert(Prescription::Pack_UID , XML_PRESCRIPTION_CIP);
+            m_PrescriptionXmlTags.insert(Prescription::OnlyForTest, XML_PRESCRIPTION_TESTONLY);
+            m_PrescriptionXmlTags.insert(Prescription::IntakesFrom , XML_PRESCRIPTION_INTAKEFROM);
+            m_PrescriptionXmlTags.insert(Prescription::IntakesTo, XML_PRESCRIPTION_INTAKETO);
+            m_PrescriptionXmlTags.insert(Prescription::IntakesScheme, XML_PRESCRIPTION_INTAKESCHEME);
+            m_PrescriptionXmlTags.insert(Prescription::IntakesUsesFromTo, XML_PRESCRIPTION_INTAKEFROMTO);
+            m_PrescriptionXmlTags.insert(Prescription::IntakesFullString, XML_PRESCRIPTION_INTAKEFULLSTRING);
+            m_PrescriptionXmlTags.insert(Prescription::IntakesIntervalOfTime, XML_PRESCRIPTION_INTAKEINTERVALTIME);
+            m_PrescriptionXmlTags.insert(Prescription::IntakesIntervalScheme, XML_PRESCRIPTION_INTAKEINTERVALSCHEME);
+            m_PrescriptionXmlTags.insert(Prescription::DurationFrom, XML_PRESCRIPTION_DURATIONFROM);
+            m_PrescriptionXmlTags.insert(Prescription::DurationTo, XML_PRESCRIPTION_DURATIONTO);
+            m_PrescriptionXmlTags.insert(Prescription::DurationScheme, XML_PRESCRIPTION_DURATIONSCHEME);
+            m_PrescriptionXmlTags.insert(Prescription::DurationUsesFromTo, XML_PRESCRIPTION_DURATIONFROMTO);
+            m_PrescriptionXmlTags.insert(Prescription::Period, XML_PRESCRIPTION_PERIOD);
+            m_PrescriptionXmlTags.insert(Prescription::PeriodScheme, XML_PRESCRIPTION_PERIODSCHEME);
+            m_PrescriptionXmlTags.insert(Prescription::RouteId, XML_PRESCRIPTION_ROUTEID);
+            m_PrescriptionXmlTags.insert(Prescription::DailyScheme, XML_PRESCRIPTION_DAILYSCHEME);
+            m_PrescriptionXmlTags.insert(Prescription::MealTimeSchemeIndex, XML_PRESCRIPTION_MEALSCHEME);
+            m_PrescriptionXmlTags.insert(Prescription::Note, XML_PRESCRIPTION_NOTE);
+            m_PrescriptionXmlTags.insert(Prescription::IsINNPrescription, XML_PRESCRIPTION_ISINN);
+            m_PrescriptionXmlTags.insert(Prescription::SpecifyForm, XML_PRESCRIPTION_SPECIFYFORM);
+            m_PrescriptionXmlTags.insert(Prescription::SpecifyPresentation, XML_PRESCRIPTION_SPECIFYPRESCENTATION);
+            m_PrescriptionXmlTags.insert(Prescription::IsALD, XML_PRESCRIPTION_ISALD);
+            m_PrescriptionXmlTags.insert(Prescription::ToHtml, XML_PRESCRIPTION_TOHTML);
+            m_PrescriptionXmlTags.insert(Drug::Denomination, XML_DRUG_DENOMINATION);
+            m_PrescriptionXmlTags.insert(Drug::Inns, XML_DRUG_INNS);
+            m_PrescriptionXmlTags.insert(Drug::InnsATCcodes, XML_DRUG_INNS_ATC);
+            m_PrescriptionXmlTags.insert(Drug::ATC, XML_DRUG_ATC);
+            m_PrescriptionXmlTags.insert(Drug::Form, XML_DRUG_FORM);
+            m_PrescriptionXmlTags.insert(Drug::Route, XML_DRUG_ROUTE);
+            m_PrescriptionXmlTags.insert(Drug::GlobalStrength, XML_DRUG_STRENGTH);
+        }
     }
 
     /** \brief For the Xml transformation of the prescription, returns the xml tag for the mfDrugsConstants::Prescription \e row */
@@ -187,34 +214,289 @@ public:
         return m_PrescriptionXmlTags.key(xmltag, -1);
     }
 
+    void drugToXml(IDrug *drug, QDomDocument &doc, QDomElement &element)
+    {
+    //    QString xml;
+    //    QDomDocument doc;
+        // add drug tag + uids
+        QDomElement drugRoot = doc.createElement(::XML_DRUG_ROOT);
+        element.appendChild(drugRoot);
+        drugRoot.setAttribute(::XML_DRUG_ATTR_UID1, drug->data(IDrug::Uid1).toString());
+        drugRoot.setAttribute(::XML_DRUG_ATTR_UID2, drug->data(IDrug::Uid2).toString());
+        drugRoot.setAttribute(::XML_DRUG_ATTR_UID3, drug->data(IDrug::Uid3).toString());
+        drugRoot.setAttribute(::XML_DRUG_ATTR_DB, drug->data(IDrug::SourceName).toString());
+        drugRoot.setAttribute(::XML_DRUG_ATTR_OLDUID, drug->data(IDrug::OldUid).toString());
+
+        QDomElement form = doc.createElement(::XML_DRUG_FORM);
+        QDomText text = doc.createTextNode(drug->forms().join(";"));
+        form.appendChild(text);
+        drugRoot.appendChild(form);
+
+        QDomElement route = doc.createElement(::XML_DRUG_ROUTE);
+        text = doc.createTextNode(drug->routes().join(";"));
+        route.appendChild(text);
+        drugRoot.appendChild(route);
+
+        QDomElement strength = doc.createElement(::XML_DRUG_STRENGTH);
+        if (!drug->strength().isEmpty()) {
+            text = doc.createTextNode(drug->strength());
+            strength.appendChild(text);
+        }
+        drugRoot.appendChild(strength);
+
+        QDomElement name = doc.createElement(::XML_DRUG_DENOMINATION);
+        text = doc.createTextNode(drug->brandName());
+        name.appendChild(text);
+        drugRoot.appendChild(name);
+
+        foreach(IComponent *compo, drug->components()) {
+            QDomElement c = doc.createElement(::XML_COMPOSITION);
+            drugRoot.appendChild(c);
+            c.setAttribute(::XML_COMPOSITION_INN, compo->innName());
+            c.setAttribute(::XML_COMPOSITION_ATC, compo->innName());
+            c.setAttribute(::XML_COMPOSITION_FORM, compo->form());
+            c.setAttribute(::XML_COMPOSITION_ROUTE, drug->routes().join(";"));
+            c.setAttribute(::XML_COMPOSITION_STRENGTH, compo->dosage());
+            c.setAttribute(::XML_COMPOSITION_MOLECULAR, compo->moleculeName());
+            c.setAttribute(::XML_COMPOSITION_NATURE, compo->nature());
+            c.setAttribute(::XML_COMPOSITION_NATURE_LK, compo->lkNature());
+        }
+    }
+
+    void drugPrescriptionToXml(IDrug *drug, QDomDocument &doc, QDomElement &fullPres)
+    {
+        QList<int> keysToSave;
+        keysToSave
+                << Prescription::IsTextualOnly
+                << Prescription::UsedDosage
+                << Prescription::Pack_UID
+                << Prescription::OnlyForTest
+                << Prescription::IntakesFrom
+                << Prescription::IntakesTo
+                << Prescription::IntakesScheme
+                << Prescription::IntakesUsesFromTo
+                << Prescription::IntakesFullString
+                << Prescription::DurationFrom
+                << Prescription::DurationTo
+                << Prescription::DurationScheme
+                << Prescription::DurationUsesFromTo
+                << Prescription::Period
+                << Prescription::PeriodScheme
+                << Prescription::RouteId
+                << Prescription::DailyScheme
+                << Prescription::MealTimeSchemeIndex
+                << Prescription::IntakesIntervalOfTime
+                << Prescription::IntakesIntervalScheme
+                << Prescription::Note
+                << Prescription::IsINNPrescription
+                << Prescription::SpecifyForm
+                << Prescription::SpecifyPresentation
+                << Prescription::IsALD
+                ;
+
+        // Process each prescribed drugs
+        QDomElement prescr = doc.createElement(::XML_PRESCRIPTION_ROOT);
+        fullPres.appendChild(prescr);
+
+        // add drug XML
+        drugToXml(drug, doc, prescr);
+
+        QDomElement item = doc.createElement(::XML_PRESCRIPTION_DOSAGE);
+        prescr.appendChild(item);
+
+        // add prescription XML
+        for(int i = Prescription::Id; i < Prescription::MaxParam; ++i) {
+            const QString &tagName = m_PrescriptionXmlTags.value(i);
+            if (tagName.isEmpty()) {
+                continue;
+            }
+            const QVariant &value = drug->prescriptionValue(i);
+            if (value.isNull())
+                continue;
+//            QDomElement element = doc.createElement(tagName);
+//            prescr.appendChild(element);
+            if (value.type() == QVariant::StringList) {
+//                QDomText text = doc.createTextNode(value.toStringList().join(";"));
+//                element.appendChild(text);
+                item.setAttribute(tagName, value.toStringList().join(";"));
+            } else {
+//                QDomText text = doc.createTextNode(value.toString());
+//                element.appendChild(text);
+                item.setAttribute(tagName, value.toString());
+            }
+
+    //        if (m->index(i, Prescription::OnlyForTest).data().toBool()) {
+    //            forXml.insert(instance()->d->xmlTagForPrescriptionRow(Prescription::OnlyForTest), "true");
+    //            forXml.insert(instance()->d->xmlTagForPrescriptionRow(Drug::Denomination), m->index(i, Drug::Denomination).data().toString());
+    //            forXml.insert(instance()->d->xmlTagForPrescriptionRow(Drug::Form), m->index(i, Drug::Form).data().toString());
+    //            forXml.insert(instance()->d->xmlTagForPrescriptionRow(Drug::Route), m->index(i, Drug::Route).data().toString());
+    //            forXml.insert(instance()->d->xmlTagForPrescriptionRow(Drug::GlobalStrength), m->index(i, Drug::GlobalStrength).data().toString());
+    //        } else {
+    //            foreach(int k, keysToSave) {
+    //                if (m->index(i, k).data().type() == QVariant::StringList) {
+    //                    forXml.insert(instance()->d->xmlTagForPrescriptionRow(k), m->index(i, k).data().toStringList().join(";"));
+    //                } else {
+    //                    forXml.insert(instance()->d->xmlTagForPrescriptionRow(k), m->index(i, k).data().toString());
+    //                }
+    //            }
+    //        }
+    //        if (m->index(i, Prescription::IsTextualOnly).data().toBool()) {
+    //            forXml.insert(XML_PRESCRIPTION_TEXTUALDRUGNAME,
+    //                          m->index(i, Drug::Denomination).data().toString());
+    //        }
+    //        xmldPrescription += Utils::createXml(XML_PRESCRIPTION_MAINTAG, forXml);
+    //        forXml.clear();
+
+    //        // Insert composition
+    //        drug = m->getDrug(m->index(i, Drug::DrugId).data());
+    //        //        Q_ASSERT(drug);
+    //        if (drug) {
+    //            // Process drugs composition
+    //            QString tmp = drug->compositionToXml();
+    //            int index = xmldPrescription.lastIndexOf(XML_PRESCRIPTION_MAINTAG) - 2;
+    //            xmldPrescription.insert(index, tmp);
+    //        }
+
+        }
+
+        // Add full prescription tag and version
+    //    xmldPrescription.prepend(QString("<%1 %2=\"%3\">\n")
+    //                             .arg(XML_FULLPRESCRIPTION_TAG)
+    //                             .arg(XML_VERSION).arg(VersionUpdater::instance()->lastXmlIOVersion()));
+
+        // Close Full prescription
+    //    xmldPrescription.append(QString("</%1>\n").arg(XML_FULLPRESCRIPTION_TAG));
+
+        // Add drugsBase informations
+        QString dbName;
+        QString dbInfoAttribs;
+        if (drugsBase()->actualDatabaseInformations()) {
+            dbName = drugsBase()->actualDatabaseInformations()->identifiant;
+            QString t = drugsBase()->actualDatabaseInformations()->version;
+            dbInfoAttribs += QString("version=\"%1\" ").arg(t.replace("\"","'"));
+            t = drugsBase()->actualDatabaseInformations()->compatVersion;
+            dbInfoAttribs += QString("compatWithFreeDiamsVersion=\"%1\" ").arg(t.replace("\"","'"));
+            t = drugsBase()->actualDatabaseInformations()->complementaryWebsite;
+            dbInfoAttribs += QString("complementaryWebSite=\"%1\" ").arg(t.replace("\"","'"));
+            dbInfoAttribs += QString("date=\"%1\" ").arg(drugsBase()->actualDatabaseInformations()->date.toString(Qt::ISODate));
+            t = drugsBase()->actualDatabaseInformations()->provider;
+            dbInfoAttribs += QString("provider=\"%1\" ").arg(t.replace("\"","'"));
+            t = drugsBase()->actualDatabaseInformations()->weblink;
+            dbInfoAttribs += QString("webLink=\"%1\" ").arg(t.replace("\"","'"));
+            t = drugsBase()->actualDatabaseInformations()->packUidName;
+            dbInfoAttribs += QString("packUidName=\"%1\" ").arg(t.replace("\"","'"));
+            t = drugsBase()->actualDatabaseInformations()->drugsUidName;
+            dbInfoAttribs += QString("drugUidName=\"%1\" ").arg(t.replace("\"","'"));
+        } else {
+            dbName = Constants::DB_DEFAULT_IDENTIFIANT;
+        }
+    //    xmldPrescription.prepend(QString("<%1 %2>%3</%1>\n")
+    //                             .arg(XML_DRUGS_DATABASE_NAME)
+    //                             .arg(dbInfoAttribs)
+    //                             .arg(dbName));
+
+        // Add the date of generation
+    //    xmldPrescription.prepend(QString("<%1>%2</%1>\n").arg(XML_DATEOFGENERATION_TAG).arg(QDateTime::currentDateTime().toString(Qt::ISODate)));
+
+        // Add the main root node and extraData
+    //    xmldPrescription.prepend(QString("<%1>\n").arg(XML_ROOT_TAG));
+    //    xmldPrescription.append(xmlExtraData);
+    //    xmldPrescription.append(QString("</%1>\n").arg(XML_ROOT_TAG));
+
+        // Add the version and the FullPrescription tags
+    //    xmldPrescription.prepend(QString("%1\n").arg(XML_HEADER));
+    }
+
+    IDrug *readDrug(const QDomElement &drugElement)
+    {
+        IDrug *readingDrug = 0;
+        // test uuids
+        const QString &uid1 = drugElement.attribute(::XML_DRUG_ATTR_UID1);
+        const QString &uid2 = drugElement.attribute(::XML_DRUG_ATTR_UID2);
+        const QString &uid3 = drugElement.attribute(::XML_DRUG_ATTR_UID3);
+        const QString &olduid = drugElement.attribute(::XML_DRUG_ATTR_OLDUID);
+        const QString &db = drugElement.attribute(::XML_DRUG_ATTR_DB);
+        if ((uid1.isEmpty() || uid1 == "-1") &&
+            (uid2.isEmpty() || uid2 == "-1") &&
+            (uid3.isEmpty() || uid3 == "-1") &&
+            (olduid.isEmpty() || olduid == "-1")) {
+            // is textual
+            ITextualDrug *drug = new ITextualDrug;
+            drug->setDenomination(drugElement.firstChildElement(::XML_DRUG_DENOMINATION).text());
+            drug->setDataFromDb(IDrug::Forms, drugElement.firstChildElement(::XML_DRUG_FORM).text());
+            drug->setDataFromDb(IDrug::Strength, drugElement.firstChildElement(::XML_DRUG_STRENGTH).text());
+            // add routes and composition
+            return drug;
+        }
+
+        // Get drug from database
+        // using oldUid only
+        if ((uid1.isEmpty() || uid1 == "-1") &&
+            (uid2.isEmpty() || uid2 == "-1") &&
+            (uid3.isEmpty() || uid3 == "-1") &&
+            (!olduid.isEmpty() || olduid != "-1")) {
+            readingDrug = drugsBase()->getDrugByOldUid(olduid, db);
+            if (readingDrug)
+                return readingDrug;
+        }
+        // using all uids
+        readingDrug = drugsBase()->getDrugByUID(uid1, uid2, uid3, olduid, db);
+        if (readingDrug)
+            return readingDrug;
+
+        // Error create a virtual drug
+        ITextualDrug *td = new ITextualDrug;
+        td->setDenomination(drugElement.firstChildElement(::XML_DRUG_DENOMINATION).text());
+        td->setDataFromDb(IDrug::Forms, drugElement.firstChildElement(::XML_DRUG_FORM).text());
+        td->setDataFromDb(IDrug::Strength, drugElement.firstChildElement(::XML_DRUG_STRENGTH).text());
+        // add routes, composition, uids
+        /** \todo code here = manage error msg */
+        return td;
+    }
+
+    void readDose(IDrug *drug, const QDomElement &doseElement)
+    {
+        if (!drug) {
+            return;
+        }
+        QDomNamedNodeMap attrib = doseElement.attributes();
+        for(int i = 0; i < attrib.count(); ++i) {
+            QDomNode at = attrib.item(i);
+            int column = xmlTagToColumnIndex(at.nodeName());
+            if (column >= Prescription::Id && column < Prescription::MaxParam) {
+                drug->setPrescriptionValue(column, at.nodeValue());
+            }
+        }
+    }
 
 public:
-    Utils::MessageSender   m_Sender;  /*!< \brief Message sender instance */
+    Utils::MessageSender m_Sender;  /*!< \brief Message sender instance */
     QHash<QString,QString> m_Datas;   /*!< \brief Dosages to transmit : key == uuid, value == xml'd dosage */
-    QHash<int,QString>     m_PrescriptionXmlTags;
+    QHash<int,QString> m_PrescriptionXmlTags;
 };
 }
 }
 
-DrugsIO *DrugsIO::m_Instance = 0;
+//DrugsIO *DrugsIO::m_Instance = 0;
 
 /** \brief Returns the unique instance of DrugsIO */
-DrugsIO *DrugsIO::instance(QObject *parent)
-{
-    if (!m_Instance) {
-        if (parent)
-            m_Instance = new DrugsIO(parent);
-        else
-            m_Instance = new DrugsIO(qApp);
-    }
-    return m_Instance;
-}
+//DrugsIO *DrugsIO::instance(QObject *parent)
+//{
+//    if (!m_Instance) {
+//        if (parent)
+//            m_Instance = new DrugsIO(parent);
+//        else
+//            m_Instance = new DrugsIO(qApp);
+//    }
+//    return m_Instance;
+//}
 
 /** \brief Private constructor */
 DrugsIO::DrugsIO(QObject *parent) : QObject(parent), d(0)
 {
     setObjectName("DrugsIO");
     d = new Internal::DrugsIOPrivate();
+    d->populateXmlTags();
 }
 
 /** \brief Destructor */
@@ -264,7 +546,7 @@ void DrugsIO::dosageTransmissionDone()
 /** \brief Return the dosage sending state */
 bool DrugsIO::isSendingDosage()
 {
-    return instance()->d->m_Sender.isSending();
+    return d->m_Sender.isSending();
 }
 
 /**
@@ -285,6 +567,7 @@ bool DrugsIO::prescriptionFromXml(DrugsDB::DrugsModel *m, const QString &xmlCont
         version = DrugsDB::VersionUpdater::instance()->xmlVersion(xmlContent);
         LOG_FOR("DrugsIO::prescriptionFromXml", "Reading old prescription file : version " + version);
         xml = DrugsDB::VersionUpdater::instance()->updateXmlIOContent(xmlContent);
+//        Utils::Log::logTimeElapsed(time, "DrugsIO", "Updating XML prescription");
     }
 
     // Read the XML file using QDomDocument
@@ -308,18 +591,6 @@ bool DrugsIO::prescriptionFromXml(DrugsDB::DrugsModel *m, const QString &xmlCont
     if (!drugsDb.isNull()) {
         xmlDbName = drugsDb.text();
     }
-//    if (drugsBase()->actualDatabaseInformations()->identifiant != xmlDbName) {
-//        LOG_ERROR_FOR("DrugsIO", QString("Try to load a prescription from another drugs database. Actual: %1 ; Xml: %2")
-//                             .arg(drugsBase()->actualDatabaseInformations()->identifiant, xmlDbName));
-//        Utils::warningMessageBox(tr("Prescription specifies a different drugs database than the actual one."),
-//                                 tr("You are trying to load prescription that uses a different drugs database than the "
-//                                    "actual one. You can not read this prescription unless you change the current "
-//                                    "database in the Preferences.\n"
-//                                    "Actual: %1\n"
-//                                    "Prescription: %2.")
-//                                 .arg(drugsBase()->actualDatabaseInformations()->identifiant, xmlDbName));
-//        return false;
-//    }
 
     // retreive the prescription (inside the XML_FULLPRESCRIPTION_TAG tags)
     QDomElement fullPrescription = root.firstChildElement(XML_FULLPRESCRIPTION_TAG);
@@ -335,112 +606,42 @@ bool DrugsIO::prescriptionFromXml(DrugsDB::DrugsModel *m, const QString &xmlCont
     if (loader==ReplacePrescription)
         m->clearDrugsList();
 
+//    Utils::Log::logTimeElapsed(time, "DrugsIO", "Checking XML prescription");
+
     // Read prescription itself
     QVector<IDrug *> drugs;
-    QStringList insertedOldUid;
     QList<int> rowsToUpdate;
     int row = 0;
     QString errorMsg;
-    bool hasError = false;
     QDomElement prescr = fullPrescription.firstChildElement(XML_PRESCRIPTION_MAINTAG);
+
+    Utils::Log::logTimeElapsed(time, "DrugsIO", "xxxxx");
+
     while (!prescr.isNull()) {
-        QDomElement item = prescr.firstChildElement(XML_PRESCRIPTION_ISTEXTUAL);
-        IDrug *readingDrug = 0;
-        // is textual ?
-        if (item.text().compare("true",Qt::CaseInsensitive) == 0) {
-            ITextualDrug *drug = new ITextualDrug;
-            drug->setDenomination(prescr.firstChildElement(::XML_PRESCRIPTION_TEXTUALDRUGNAME).text());
-            drugs << drug;
-            readingDrug = drug;
-//            row = m->addTextualPrescription(denomination, "");
-        } else {
-            // is a good UID ? The UID is considered as the OLD_UID of the drug
-            item = prescr.firstChildElement(::XML_PRESCRIPTION_UID);
-            if (item.isNull() || item.text().isEmpty()) {
-                // no UID
-                ITextualDrug *drug = new ITextualDrug;
-                drug->setDenomination(prescr.firstChildElement(::XML_DRUG_DENOMINATION).text());
-                drugs << drug;
-                readingDrug = drug;
-//                QString denomination = prescr.firstChildElement(::XML_DRUG_DENOMINATION).text();
-                errorMsg += tr("  * %1 was added as a textual drug.\n").arg(drug->brandName());
-//                row = m->addTextualPrescription(denomination, "");
-                hasError = true;
-                prescr = prescr.nextSiblingElement(XML_PRESCRIPTION_MAINTAG);
-                continue;
-            } else {   // UID informed
-                // UID == -1 --> if denomination known add as textual else ignore
-                if (item.text()=="-1") {
-                    ITextualDrug *drug = new ITextualDrug;
-                    drug->setDenomination(prescr.firstChildElement(::XML_DRUG_DENOMINATION).text());
-                    drugs << drug;
-                    readingDrug = drug;
-//                    QString denomination = prescr.firstChildElement(::XML_DRUG_DENOMINATION).text();
-                    if (!drug->brandName().isEmpty()) {
-                        errorMsg += tr("  * %1 was added as a textual drug.\n").arg(drug->brandName());
-                        hasError = true;
-                    }
-                    prescr = prescr.nextSiblingElement(XML_PRESCRIPTION_MAINTAG);
-                    continue;
-                }
+        QDomElement item = prescr.firstChildElement(::XML_DRUG_ROOT);
+        IDrug *readingDrug = d->readDrug(item);
 
-                // UID already in prescription ?
-//                if (m->containsDrug(item.text())) {
-                if (insertedOldUid.contains(item.text(), Qt::CaseInsensitive)) {
-                    QString denomination = m->drugData(item.text(), Constants::Drug::Denomination).toString();
-                    errorMsg += tr("  * %1 (%2) is already in the prescription. Drug is ignored.\n").arg(denomination).arg(item.text());
-                    hasError = true;
-                    prescr = prescr.nextSiblingElement(XML_PRESCRIPTION_MAINTAG);
-                    continue;
-                }
-                // Create a new drug
-//                row = m->addDrug(item.text(), false);
-                IDrug *drug = drugsBase()->getDrugByOldUid(item.text(), xmlDbName);
-                if (!drug) {
-                    ITextualDrug *tdrug = new ITextualDrug;
-                    tdrug->setDenomination(prescr.firstChildElement(::XML_DRUG_DENOMINATION).text());
-                    drugs << tdrug;
-                    readingDrug = tdrug;
-                    errorMsg += tr("  * %1 (%2) was added as a textual drug.\n").arg(tdrug->brandName()).arg(item.text());
-                    hasError = true;
-                } else {
-                    drugs << drug;
-                    readingDrug = drug;
-                }
-            }
-        }
+        Utils::Log::logTimeElapsed(time, "DrugsIO", "Reading drug" + readingDrug->brandName());
 
-        // Read all prescription
-        item = prescr.firstChildElement();
-        if (!readingDrug) {
-            prescr = prescr.nextSiblingElement(XML_PRESCRIPTION_MAINTAG);
-            continue;
-        }
-        while (!item.isNull()) {
-            if (item.tagName().compare(::XML_DRUG_DENOMINATION) != 0 &&
-                item.tagName().compare(::XML_PRESCRIPTION_UID) != 0) {
-                int column = instance()->d->xmlTagToColumnIndex(item.tagName());
-                /** \todo code here : item.text() is a stringfied QVariant... */
-//                if (column >= IDrug::DrugID && column < IDrug::MaxParam) {
-//                    readingDrug->setDataFromDb(column, item.text());
-//                } else
-                if (column >= Prescription::Id && column < Prescription::MaxParam) {
-                    readingDrug->setPrescriptionValue(column, item.text());
-                }
-            }
-            item = item.nextSiblingElement();
-        }
+
+        item = prescr.firstChildElement(::XML_PRESCRIPTION_DOSAGE);
+        d->readDose(readingDrug, item);
+        drugs << readingDrug;
+
+        Utils::Log::logTimeElapsed(time, "DrugsIO", "Reading dose" + readingDrug->brandName());
 
         // check Model Updaters
-        if (needUpdate) {
-            rowsToUpdate.append(row);
-        }
+//        if (needUpdate) {
+//            rowsToUpdate.append(row);
+//        }
 
         prescr = prescr.nextSiblingElement(XML_PRESCRIPTION_MAINTAG);
     }
+    Utils::Log::logTimeElapsed(time, "DrugsIO", "Reading full prescription file");
 
     // Feed model with drugs
     m->addDrugs(drugs, false);
+    Utils::Log::logTimeElapsed(time, "DrugsIO", "Adding drugs to model (no DDI checking)");
 
     if ((needUpdate) && (!version.isEmpty())){
         DrugsDB::VersionUpdater::instance()->updateXmlIOModel(version, m, rowsToUpdate);
@@ -454,11 +655,12 @@ bool DrugsIO::prescriptionFromXml(DrugsDB::DrugsModel *m, const QString &xmlCont
     // check interaction, emit final signal from model for views to update
     m->checkInteractions();
     Q_EMIT m->numberOfRowsChanged();
+    Utils::Log::logTimeElapsed(time, "DrugsIO", "DDI checking");
 
     Utils::Log::logTimeElapsed(time, "DrugsIO", "Reading prescription");
 
     // small debug information
-    Utils::Log::addMessage("DrugsIO", tr("Xml prescription correctly read."));
+    LOG_FOR("DrugsIO", tr("Xml prescription correctly read."));
     return true;
 }
 
@@ -672,148 +874,172 @@ QString DrugsIO::prescriptionToXml(DrugsDB::DrugsModel *m, const QString &xmlExt
         if (yes)
             m->showTestingDrugs(true);
     }
-    QString xmldPrescription;
-    QList<int> keysToSave;
-    if (m->isSelectionOnlyMode()) {
-        keysToSave
-                << Drug::Denomination
-                << Drug::Inns
-                << Drug::ATC
-                << Drug::InnsATCcodes
-                << Drug::Form
-                << Drug::Route
-                << Drug::GlobalStrength
-                << Prescription::Pack_UID
-                ;
-    } else {
-        keysToSave
-                << Drug::Denomination
-//                << Drug::AvailableForms
-//                << Drug::AvailableRoutes
-                << Drug::Form
-                << Drug::Route
-                << Drug::GlobalStrength
-                << Prescription::IsTextualOnly
-                << Prescription::UsedDosage
-                << Prescription::Pack_UID
-                << Prescription::OnlyForTest
-                << Prescription::IntakesFrom
-                << Prescription::IntakesTo
-                << Prescription::IntakesScheme
-                << Prescription::IntakesUsesFromTo
-                << Prescription::IntakesFullString
-                << Prescription::DurationFrom
-                << Prescription::DurationTo
-                << Prescription::DurationScheme
-                << Prescription::DurationUsesFromTo
-                << Prescription::Period
-                << Prescription::PeriodScheme
-                << Prescription::RouteId
-                << Prescription::DailyScheme
-                << Prescription::MealTimeSchemeIndex
-                << Prescription::IntakesIntervalOfTime
-                << Prescription::IntakesIntervalScheme
-                << Prescription::Note
-                << Prescription::IsINNPrescription
-                << Prescription::SpecifyForm
-                << Prescription::SpecifyPresentation
-                << Prescription::IsALD
-                ;
-    }
-    QHash<QString, QString> forXml;
-    int i;
-    IDrug *drug = 0;
 
-    // Process each prescribed drugs
-    for(i=0; i < m->rowCount() ; ++i) {
-        /** \todo code here UIDs */
-        forXml.insert(XML_PRESCRIPTION_UID, m->index(i, Drug::UIDs).data().toStringList().join(";").remove(";;"));
-        if (m->index(i, Prescription::OnlyForTest).data().toBool()) {
-            forXml.insert(instance()->d->xmlTagForPrescriptionRow(Prescription::OnlyForTest), "true");
-            forXml.insert(instance()->d->xmlTagForPrescriptionRow(Drug::Denomination), m->index(i, Drug::Denomination).data().toString());
-            forXml.insert(instance()->d->xmlTagForPrescriptionRow(Drug::Form), m->index(i, Drug::Form).data().toString());
-            forXml.insert(instance()->d->xmlTagForPrescriptionRow(Drug::Route), m->index(i, Drug::Route).data().toString());
-            forXml.insert(instance()->d->xmlTagForPrescriptionRow(Drug::GlobalStrength), m->index(i, Drug::GlobalStrength).data().toString());
-        } else {
-            foreach(int k, keysToSave) {
-                if (m->index(i, k).data().type() == QVariant::StringList) {
-                    forXml.insert(instance()->d->xmlTagForPrescriptionRow(k), m->index(i, k).data().toStringList().join(";"));
-                } else {
-                    forXml.insert(instance()->d->xmlTagForPrescriptionRow(k), m->index(i, k).data().toString());
-                }
-            }
-        }
-        if (m->index(i, Prescription::IsTextualOnly).data().toBool()) {
-            forXml.insert(XML_PRESCRIPTION_TEXTUALDRUGNAME,
-                          m->index(i, Drug::Denomination).data().toString());
-        }
-        xmldPrescription += Utils::createXml(XML_PRESCRIPTION_MAINTAG, forXml);
-        forXml.clear();
+    QDomDocument doc;
+    doc.setContent(QString(::XML_HEADER));
+    QDomElement root = doc.createElement(::XML_ROOT_TAG);
+    doc.appendChild(root);
 
-        // Insert composition
-        drug = m->getDrug(m->index(i, Drug::DrugId).data());
-//        Q_ASSERT(drug);
-        if (drug) {
-            // Process drugs composition
-            QString tmp = drug->compositionToXml();
-            int index = xmldPrescription.lastIndexOf(XML_PRESCRIPTION_MAINTAG) - 2;
-            xmldPrescription.insert(index, tmp);
-        }
+    QDomElement date = doc.createElement(::XML_DATEOFGENERATION_TAG);
+    root.appendChild(date);
+    date.setAttribute(::XML_VERSION, QDateTime::currentDateTime().toString(Qt::ISODate));
 
+    QDomElement fullPres = doc.createElement(::XML_FULLPRESCRIPTION_TAG);
+    root.appendChild(fullPres);
+    fullPres.setAttribute(::XML_VERSION, VersionUpdater::instance()->lastXmlIOVersion());
+
+    const QList<IDrug *> &drugs = m->drugsList();
+    for(int i=0; i < drugs.count(); ++i) {
+        IDrug *drug = drugs.at(i);
+        d->drugPrescriptionToXml(drug, doc, fullPres);
     }
 
-    // Add full prescription tag and version
-    xmldPrescription.prepend(QString("<%1 %2=\"%3\">\n")
-                             .arg(XML_FULLPRESCRIPTION_TAG)
-                             .arg(XML_VERSION).arg(VersionUpdater::instance()->lastXmlIOVersion()));
+    qWarning() << doc.toString(2);
 
-    // Close Full prescription
-    xmldPrescription.append(QString("</%1>\n").arg(XML_FULLPRESCRIPTION_TAG));
+    return doc.toString(2);
 
-    // Add drugsBase informations
-    QString dbName;
-    QString dbInfoAttribs;
-    if (drugsBase()->actualDatabaseInformations()) {
-        dbName = drugsBase()->actualDatabaseInformations()->identifiant;
-        QString t = drugsBase()->actualDatabaseInformations()->version;
-        dbInfoAttribs += QString("version=\"%1\" ").arg(t.replace("\"","'"));
-        t = drugsBase()->actualDatabaseInformations()->compatVersion;
-        dbInfoAttribs += QString("compatWithFreeDiamsVersion=\"%1\" ").arg(t.replace("\"","'"));
-        t = drugsBase()->actualDatabaseInformations()->complementaryWebsite;
-        dbInfoAttribs += QString("complementaryWebSite=\"%1\" ").arg(t.replace("\"","'"));
-        dbInfoAttribs += QString("date=\"%1\" ").arg(drugsBase()->actualDatabaseInformations()->date.toString(Qt::ISODate));
-        t = drugsBase()->actualDatabaseInformations()->provider;
-        dbInfoAttribs += QString("provider=\"%1\" ").arg(t.replace("\"","'"));
-        t = drugsBase()->actualDatabaseInformations()->weblink;
-        dbInfoAttribs += QString("webLink=\"%1\" ").arg(t.replace("\"","'"));
-        t = drugsBase()->actualDatabaseInformations()->packUidName;
-        dbInfoAttribs += QString("packUidName=\"%1\" ").arg(t.replace("\"","'"));
-        t = drugsBase()->actualDatabaseInformations()->drugsUidName;
-        dbInfoAttribs += QString("drugUidName=\"%1\" ").arg(t.replace("\"","'"));
-    } else {
-        dbName = Constants::DB_DEFAULT_IDENTIFIANT;
-    }
-    xmldPrescription.prepend(QString("<%1 %2>%3</%1>\n")
-                             .arg(XML_DRUGS_DATABASE_NAME)
-                             .arg(dbInfoAttribs)
-                             .arg(dbName));
+//    QString xmldPrescription;
+//    QList<int> keysToSave;
+//    if (m->isSelectionOnlyMode()) {
+//        keysToSave
+//                << Drug::Denomination
+//                << Drug::Inns
+//                << Drug::ATC
+//                << Drug::InnsATCcodes
+//                << Drug::Form
+//                << Drug::Route
+//                << Drug::GlobalStrength
+//                << Prescription::Pack_UID
+//                ;
+//    } else {
+//        keysToSave
+//                << Drug::Denomination
+////                << Drug::AvailableForms
+////                << Drug::AvailableRoutes
+//                << Drug::Form
+//                << Drug::Route
+//                << Drug::GlobalStrength
+//                << Prescription::IsTextualOnly
+//                << Prescription::UsedDosage
+//                << Prescription::Pack_UID
+//                << Prescription::OnlyForTest
+//                << Prescription::IntakesFrom
+//                << Prescription::IntakesTo
+//                << Prescription::IntakesScheme
+//                << Prescription::IntakesUsesFromTo
+//                << Prescription::IntakesFullString
+//                << Prescription::DurationFrom
+//                << Prescription::DurationTo
+//                << Prescription::DurationScheme
+//                << Prescription::DurationUsesFromTo
+//                << Prescription::Period
+//                << Prescription::PeriodScheme
+//                << Prescription::RouteId
+//                << Prescription::DailyScheme
+//                << Prescription::MealTimeSchemeIndex
+//                << Prescription::IntakesIntervalOfTime
+//                << Prescription::IntakesIntervalScheme
+//                << Prescription::Note
+//                << Prescription::IsINNPrescription
+//                << Prescription::SpecifyForm
+//                << Prescription::SpecifyPresentation
+//                << Prescription::IsALD
+//                ;
+//    }
+//    QHash<QString, QString> forXml;
+//    int i;
+//    IDrug *drug = 0;
 
-    // Add the date of generation
-    xmldPrescription.prepend(QString("<%1>%2</%1>\n").arg(XML_DATEOFGENERATION_TAG).arg(QDateTime::currentDateTime().toString(Qt::ISODate)));
+//    // Process each prescribed drugs
+//    for(i=0; i < m->rowCount() ; ++i) {
+//        /** \todo code here UIDs */
+//        forXml.insert(XML_PRESCRIPTION_UID, m->index(i, Drug::UIDs).data().toStringList().join(";").remove(";;"));
+//        if (m->index(i, Prescription::OnlyForTest).data().toBool()) {
+//            forXml.insert(instance()->d->xmlTagForPrescriptionRow(Prescription::OnlyForTest), "true");
+//            forXml.insert(instance()->d->xmlTagForPrescriptionRow(Drug::Denomination), m->index(i, Drug::Denomination).data().toString());
+//            forXml.insert(instance()->d->xmlTagForPrescriptionRow(Drug::Form), m->index(i, Drug::Form).data().toString());
+//            forXml.insert(instance()->d->xmlTagForPrescriptionRow(Drug::Route), m->index(i, Drug::Route).data().toString());
+//            forXml.insert(instance()->d->xmlTagForPrescriptionRow(Drug::GlobalStrength), m->index(i, Drug::GlobalStrength).data().toString());
+//        } else {
+//            foreach(int k, keysToSave) {
+//                if (m->index(i, k).data().type() == QVariant::StringList) {
+//                    forXml.insert(instance()->d->xmlTagForPrescriptionRow(k), m->index(i, k).data().toStringList().join(";"));
+//                } else {
+//                    forXml.insert(instance()->d->xmlTagForPrescriptionRow(k), m->index(i, k).data().toString());
+//                }
+//            }
+//        }
+//        if (m->index(i, Prescription::IsTextualOnly).data().toBool()) {
+//            forXml.insert(XML_PRESCRIPTION_TEXTUALDRUGNAME,
+//                          m->index(i, Drug::Denomination).data().toString());
+//        }
+//        xmldPrescription += Utils::createXml(XML_PRESCRIPTION_MAINTAG, forXml);
+//        forXml.clear();
 
-    // Add the main root node and extraData
-    xmldPrescription.prepend(QString("<%1>\n").arg(XML_ROOT_TAG));
-    xmldPrescription.append(xmlExtraData);
-    xmldPrescription.append(QString("</%1>\n").arg(XML_ROOT_TAG));
+//        // Insert composition
+//        drug = m->getDrug(m->index(i, Drug::DrugId).data());
+////        Q_ASSERT(drug);
+//        if (drug) {
+//            // Process drugs composition
+//            QString tmp = drug->compositionToXml();
+//            int index = xmldPrescription.lastIndexOf(XML_PRESCRIPTION_MAINTAG) - 2;
+//            xmldPrescription.insert(index, tmp);
+//        }
 
-    // Add the version and the FullPrescription tags
-    xmldPrescription.prepend(QString("%1\n").arg(XML_HEADER));
+//    }
 
-    // Beautifying the XML
-    QDomDocument root;
-    root.setContent(xmldPrescription);
+//    // Add full prescription tag and version
+//    xmldPrescription.prepend(QString("<%1 %2=\"%3\">\n")
+//                             .arg(XML_FULLPRESCRIPTION_TAG)
+//                             .arg(XML_VERSION).arg(VersionUpdater::instance()->lastXmlIOVersion()));
 
-    return root.toString(4);
+//    // Close Full prescription
+//    xmldPrescription.append(QString("</%1>\n").arg(XML_FULLPRESCRIPTION_TAG));
+
+//    // Add drugsBase informations
+//    QString dbName;
+//    QString dbInfoAttribs;
+//    if (drugsBase()->actualDatabaseInformations()) {
+//        dbName = drugsBase()->actualDatabaseInformations()->identifiant;
+//        QString t = drugsBase()->actualDatabaseInformations()->version;
+//        dbInfoAttribs += QString("version=\"%1\" ").arg(t.replace("\"","'"));
+//        t = drugsBase()->actualDatabaseInformations()->compatVersion;
+//        dbInfoAttribs += QString("compatWithFreeDiamsVersion=\"%1\" ").arg(t.replace("\"","'"));
+//        t = drugsBase()->actualDatabaseInformations()->complementaryWebsite;
+//        dbInfoAttribs += QString("complementaryWebSite=\"%1\" ").arg(t.replace("\"","'"));
+//        dbInfoAttribs += QString("date=\"%1\" ").arg(drugsBase()->actualDatabaseInformations()->date.toString(Qt::ISODate));
+//        t = drugsBase()->actualDatabaseInformations()->provider;
+//        dbInfoAttribs += QString("provider=\"%1\" ").arg(t.replace("\"","'"));
+//        t = drugsBase()->actualDatabaseInformations()->weblink;
+//        dbInfoAttribs += QString("webLink=\"%1\" ").arg(t.replace("\"","'"));
+//        t = drugsBase()->actualDatabaseInformations()->packUidName;
+//        dbInfoAttribs += QString("packUidName=\"%1\" ").arg(t.replace("\"","'"));
+//        t = drugsBase()->actualDatabaseInformations()->drugsUidName;
+//        dbInfoAttribs += QString("drugUidName=\"%1\" ").arg(t.replace("\"","'"));
+//    } else {
+//        dbName = Constants::DB_DEFAULT_IDENTIFIANT;
+//    }
+//    xmldPrescription.prepend(QString("<%1 %2>%3</%1>\n")
+//                             .arg(XML_DRUGS_DATABASE_NAME)
+//                             .arg(dbInfoAttribs)
+//                             .arg(dbName));
+
+//    // Add the date of generation
+//    xmldPrescription.prepend(QString("<%1>%2</%1>\n").arg(XML_DATEOFGENERATION_TAG).arg(QDateTime::currentDateTime().toString(Qt::ISODate)));
+
+//    // Add the main root node and extraData
+//    xmldPrescription.prepend(QString("<%1>\n").arg(XML_ROOT_TAG));
+//    xmldPrescription.append(xmlExtraData);
+//    xmldPrescription.append(QString("</%1>\n").arg(XML_ROOT_TAG));
+
+//    // Add the version and the FullPrescription tags
+//    xmldPrescription.prepend(QString("%1\n").arg(XML_HEADER));
+
+//    // Beautifying the XML
+//    QDomDocument root;
+//    root.setContent(xmldPrescription);
+
+//    return root.toString(2);
 }
 
 /**

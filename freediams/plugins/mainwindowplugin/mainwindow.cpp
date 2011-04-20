@@ -137,20 +137,21 @@ public:
             if (QFile(exfile).exists())
                 tmp = Utils::readTextFile(exfile, Utils::DontWarnUser);
             //            Utils::Log::addMessage(this, "Content of the exchange file : " + tmp);
+            DrugsDB::DrugsIO io;
             if (tmp.contains(DrugsDB::Constants::ENCODEDHTML_FREEDIAMSTAG)) {
                 int begin = tmp.indexOf(DrugsDB::Constants::ENCODEDHTML_FREEDIAMSTAG) + QString(DrugsDB::Constants::ENCODEDHTML_FREEDIAMSTAG).length();
                 int end = tmp.indexOf("\"", begin);
                 QString encoded = tmp.mid( begin, end - begin );
-                DrugsDB::DrugsIO::instance()->prescriptionFromXml(drugModel(), QByteArray::fromBase64(encoded.toAscii()));
+                io.prescriptionFromXml(drugModel(), QByteArray::fromBase64(encoded.toAscii()));
             } else if (tmp.contains("DrugsInteractionsEncodedPrescription:")) {
                 /** \todo Manage wrong file encoding */
                 int begin = tmp.indexOf("DrugsInteractionsEncodedPrescription:") + QString("DrugsInteractionsEncodedPrescription:").length();
                 int end = tmp.indexOf("\"", begin);
                 QString encoded = tmp.mid( begin, end - begin );
-                DrugsDB::DrugsIO::instance()->prescriptionFromXml(drugModel(), QByteArray::fromBase64(encoded.toAscii()));
+                io.prescriptionFromXml(drugModel(), QByteArray::fromBase64(encoded.toAscii()));
             } else if (tmp.startsWith("<?xml") && tmp.contains("<FreeDiams>", Qt::CaseInsensitive) && tmp.contains("</FreeDiams>", Qt::CaseInsensitive)) {
                 /** \todo Read patients datas ? */
-                DrugsDB::DrugsIO::instance()->prescriptionFromXml(drugModel(), tmp);
+                io.prescriptionFromXml(drugModel(), tmp);
             } else {
                 return false;
             }
@@ -210,8 +211,9 @@ private:
 static bool transmitDosage()
 {
     if (!Utils::isDebugCompilation()) {
-        Utils::Log::addMessage("Core", QCoreApplication::translate("MainWindow", "Preparing dosage transmission"));
-        DrugsDB::DrugsIO::instance()->startsDosageTransmission();
+        LOG_FOR("Core", QCoreApplication::translate("MainWindow", "Preparing dosage transmission"));
+        /** \todo code here */
+//        DrugsDB::DrugsIO::instance()->startsDosageTransmission();
     }
     return true;
 }
@@ -522,7 +524,7 @@ void MainWindow::changePatientNameLabelOrder(const int first)
 */
 void MainWindow::closeEvent(QCloseEvent *event)
 {
-    Utils::Log::addMessage(this, "Closing MainWindow");
+    LOG("Closing MainWindow");
     Core::ICore::instance()->requestSaveSettings();
 
     //    const QList<ICoreListener *> listeners =
@@ -537,9 +539,9 @@ void MainWindow::closeEvent(QCloseEvent *event)
     // Save exchange file
     QString exfile = commandLine()->value(Core::CommandLine::CL_ExchangeOutFile).toString();
     if (!exfile.isEmpty()) {
-        Utils::Log::addMessage(this, QString("Exchange File : %1 - %2")
-                               .arg(exfile)
-                               .arg(commandLine()->value(Core::CommandLine::CL_EMR_Name).toString()));
+        LOG(QString("Exchange File : %1 - %2")
+            .arg(exfile)
+            .arg(commandLine()->value(Core::CommandLine::CL_EMR_Name).toString()));
         QString format = commandLine()->value(Core::CommandLine::CL_ExchangeOutFileFormat).toString();
         QString tmp;
 
@@ -558,10 +560,11 @@ void MainWindow::closeEvent(QCloseEvent *event)
         extraDatas.prepend(QString("<DateOfCreation>%1</DateOfCreation>").arg(QDateTime::currentDateTime().toString(Qt::ISODate)));
 
         // Manage specific MedinTux output exchange file format
+        DrugsDB::DrugsIO io;
         if (commandLine()->value(Core::CommandLine::CL_MedinTux).toBool() ||
             commandLine()->value(Core::CommandLine::CL_EMR_Name).toString().compare("medintux",Qt::CaseInsensitive) == 0) {
             if (format=="html_xml" || format=="html") {
-                tmp = DrugsDB::DrugsIO::instance()->prescriptionToHtml(drugModel(), extraDatas, DrugsDB::DrugsIO::MedinTuxVersion);
+                tmp = io.prescriptionToHtml(drugModel(), extraDatas, DrugsDB::DrugsIO::MedinTuxVersion);
                 tmp.replace("font-weight:bold;", "font-weight:600;");
                 Utils::saveStringToFile(Utils::toHtmlAccent(tmp), exfile, Utils::Overwrite, Utils::DontWarnUser);
             } else if (format=="xml") {
@@ -569,7 +572,7 @@ void MainWindow::closeEvent(QCloseEvent *event)
             }
         } else {
             if (format=="html_xml" || format=="html") {
-                tmp = DrugsDB::DrugsIO::instance()->prescriptionToHtml(drugModel(), extraDatas, DrugsDB::DrugsIO::MedinTuxVersion);
+                tmp = io.prescriptionToHtml(drugModel(), extraDatas, DrugsDB::DrugsIO::MedinTuxVersion);
                 Utils::saveStringToFile(Utils::toHtmlAccent(tmp), exfile, Utils::Overwrite, Utils::DontWarnUser);
             } else if (format=="xml") {
                 savePrescription(exfile);
@@ -791,7 +794,8 @@ bool MainWindow::savePrescription(const QString &fileName)
         extraDatas.append("/>");
     }
 //    qWarning() << extraDatas;
-    return DrugsDB::DrugsIO::savePrescription(drugModel(), extraDatas, fileName);
+    DrugsDB::DrugsIO io;
+    return io.savePrescription(drugModel(), extraDatas, fileName);
 }
 
 /**
@@ -817,6 +821,7 @@ bool MainWindow::openFile()
 void MainWindow::readFile(const QString &file)
 {
     QString datas;
+    DrugsDB::DrugsIO io;
     if (drugModel()->rowCount() > 0) {
         int r = Utils::withButtonsMessageBox(
                 tr("Opening a prescription : merge or replace ?"),
@@ -824,12 +829,12 @@ void MainWindow::readFile(const QString &file)
                 QString(), QStringList() << tr("Replace prescription") << tr("Add to prescription"),
                 tr("Open a prescription") + " - " + qApp->applicationName());
         if (r == 0) {
-            DrugsDB::DrugsIO::loadPrescription(drugModel(), file, datas, DrugsDB::DrugsIO::ReplacePrescription);
+            io.loadPrescription(drugModel(), file, datas, DrugsDB::DrugsIO::ReplacePrescription);
         } else if (r==1) {
-            DrugsDB::DrugsIO::loadPrescription(drugModel(), file, datas, DrugsDB::DrugsIO::AppendPrescription);
+            io.loadPrescription(drugModel(), file, datas, DrugsDB::DrugsIO::AppendPrescription);
         }
     } else {
-        DrugsDB::DrugsIO::loadPrescription(drugModel(), file, datas, DrugsDB::DrugsIO::ReplacePrescription);
+        io.loadPrescription(drugModel(), file, datas, DrugsDB::DrugsIO::ReplacePrescription);
     }
     // Process patient's data only if not blockDatas and not using exchange-in file
     if ((!commandLine()->value(Core::CommandLine::CL_BlockPatientDatas).toBool()) &&

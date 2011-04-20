@@ -62,33 +62,32 @@ public:
         DrugsOnlyVersion
     };
 
-    static DrugsIO *instance(QObject *parent=0);
+//    static DrugsIO *instance(QObject *parent=0);
     ~DrugsIO();
 
     bool startsDosageTransmission();
-    static bool isSendingDosage();
-    static bool prescriptionFromXml(DrugsDB::DrugsModel *model, const QString &xml, Loader loader = ReplacePrescription);
+    bool isSendingDosage();
+    bool prescriptionFromXml(DrugsDB::DrugsModel *model, const QString &xml, Loader loader = ReplacePrescription);
 
-    static bool loadPrescription(DrugsDB::DrugsModel *model, const QString &fileName, QHash<QString,QString> &extraDatas, Loader loader = ReplacePrescription);
-    static bool loadPrescription(DrugsDB::DrugsModel *model, const QString &fileName, Loader loader = ReplacePrescription);
-    static bool loadPrescription(DrugsDB::DrugsModel *model, const QString &fileName, QString &xmlExtraDatas, Loader loader = ReplacePrescription);
+    bool loadPrescription(DrugsDB::DrugsModel *model, const QString &fileName, QHash<QString,QString> &extraDatas, Loader loader = ReplacePrescription);
+    bool loadPrescription(DrugsDB::DrugsModel *model, const QString &fileName, Loader loader = ReplacePrescription);
+    bool loadPrescription(DrugsDB::DrugsModel *model, const QString &fileName, QString &xmlExtraDatas, Loader loader = ReplacePrescription);
 
-    static bool savePrescription(DrugsDB::DrugsModel *model, const QHash<QString,QString> &extraDatas, const QString &toFileName = QString::null);
-    static bool savePrescription(DrugsDB::DrugsModel *model, const QString &extraDatas, const QString &toFileName = QString::null);
+    bool savePrescription(DrugsDB::DrugsModel *model, const QHash<QString,QString> &extraDatas, const QString &toFileName = QString::null);
+    bool savePrescription(DrugsDB::DrugsModel *model, const QString &extraDatas, const QString &toFileName = QString::null);
 
-    static QString prescriptionToXml(DrugsDB::DrugsModel *model, const QString &xmlExtraData = QString::null);
-    static QString prescriptionToHtml(DrugsDB::DrugsModel *model, const QString &xmlExtraDatas = QString::null, int version = MedinTuxVersion);
+    QString prescriptionToXml(DrugsDB::DrugsModel *model, const QString &xmlExtraData = QString::null);
+    QString prescriptionToHtml(DrugsDB::DrugsModel *model, const QString &xmlExtraDatas = QString::null, int version = MedinTuxVersion);
 
-    static bool printPrescription(DrugsDB::DrugsModel *model); //,
+    bool printPrescription(DrugsDB::DrugsModel *model); //,
 //                                  const QString &header, const QString &footer,
 //                                  const QString &watermark, const int watermarkPresence,
 //                                  const Qt::AlignmentFlag watermarkAlign, bool withDuplicata);
-    static void prescriptionPreview(DrugsDB::DrugsModel *model);
+    void prescriptionPreview(DrugsDB::DrugsModel *model);
 
     static QStringList prescriptionMimeTypes();
 
-private:
-    DrugsIO(QObject *parent);
+    DrugsIO(QObject *parent = 0);
 
 private Q_SLOTS:
     void dosageTransmissionDone();
@@ -97,7 +96,7 @@ Q_SIGNALS:
     void transmissionDone();
 
 private:
-    static DrugsIO *m_Instance;
+//    static DrugsIO *m_Instance;
     Internal::DrugsIOPrivate *d;
 };
 

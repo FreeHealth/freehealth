@@ -1067,7 +1067,8 @@ bool DrugsModel::dropMimeData(const QMimeData *data, Qt::DropAction action, int 
         if (model->isCategory(idx))
             continue;
         // add content to model
-        DrugsDB::DrugsIO::prescriptionFromXml(this, model->index(idx.row(), Templates::Constants::Data_Content, idx.parent()).data().toString(), DrugsDB::DrugsIO::AppendPrescription);
+        DrugsDB::DrugsIO io;
+        io.prescriptionFromXml(this, model->index(idx.row(), Templates::Constants::Data_Content, idx.parent()).data().toString(), DrugsDB::DrugsIO::AppendPrescription);
     }
 
     // never move templates but copy them
