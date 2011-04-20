@@ -227,6 +227,23 @@ public:
         LOG_FOR(q, QString("Getting %1 Drugs Search Engines").arg(searchEngine()->numberOfEngines()));
     }
 
+    void getDrugsSources()
+    {
+        m_DbUids.clear();
+        QSqlQuery sids(QSqlDatabase::database(Constants::DB_DRUGS_NAME));
+        QString req = q->select(Constants::Table_SOURCES,
+                                QList<int>()
+                                << Constants::SOURCES_DBUID
+                                << Constants::SOURCES_SID);
+        if (sids.exec(req)) {
+            while (sids.next()) {
+                m_DbUids.insert(sids.value(0).toString(), sids.value(1).toInt());
+            }
+        } else {
+            LOG_QUERY_ERROR_FOR(q, sids);
+        }
+    }
+
     void getDrugComponents(IDrug *drug)
     {
         Utils::FieldList get;
@@ -311,6 +328,7 @@ public:
     QMultiHash<int, int> m_AtcToMol;   /*!< Link Iam_Id to Code_Subst */
     QMultiHash<int, int> m_ClassToAtcs;   /*!< Link ClassIam_Id to Iam_Id */
     QCache<int, AtcLabel> m_AtcLabelCache;
+    QHash<QString, int> m_DbUids;
     /** \todo improve memory usage here */
     QCache<int, QString> m_AtcCodeCacheIdKeyed;
     QHash<QString, int> m_AtcCodeCacheCodeKeyed;
@@ -622,6 +640,7 @@ bool DrugsBase::init()
     d->retreiveLinkTables();
     d->getSearchEngine();
     d->getInteractingClassTree();
+    d->getDrugsSources();
 
     // Initialize
     m_initialized = true;
@@ -1202,6 +1221,43 @@ QString DrugsBase::getDrugName(const QString &uid1, const QString &uid2, const Q
 /** \brief Retrieve and return the drug designed by the UID code \e drug_UID. */
 IDrug *DrugsBase::getDrugByUID(const QVariant &uid1, const QVariant &uid2, const QVariant &uid3, const QVariant &oldUid, const QString &srcUid)
 {
+    // Before SID caching
+//    "Chrono - DrugsIO" "1 ms : xxxxx"
+//    "Chrono - DrugsBase" "0 ms : Reading drug"
+//    "Chrono - DrugsBase" "0 ms : Prepare query"
+//    "Chrono - DrugsBase" "60 ms : Query.next()"
+//    "Chrono - DrugsBase" "1 ms : Query.finish"
+//    "Chrono - DrugsBase" "22 ms : Get Compo"
+//    "Chrono - DrugsIO" "95 ms : Reading drug0.30% POTASSIUM CHLORIDE IN 5% DEXTROSE AND 0.45% SODIUM CHLORIDE INJECTION"
+//    "Chrono - DrugsIO" "0 ms : Reading dose0.30% POTASSIUM CHLORIDE IN 5% DEXTROSE AND 0.45% SODIUM CHLORIDE INJECTION"
+//    "Chrono - DrugsBase" "0 ms : Reading drug"
+//    "Chrono - DrugsBase" "1 ms : Prepare query"
+//    "Chrono - DrugsBase" "60 ms : Query.next()"
+//    "Chrono - DrugsBase" "0 ms : Query.finish"
+//    "Chrono - DrugsBase" "9 ms : Get Compo"
+//    "Chrono - DrugsIO" "71 ms : Reading drugALDACTAZIDE 25"
+//    "Chrono - DrugsIO" "0 ms : Reading doseALDACTAZIDE 25"
+
+    // After SID caching
+//    "Chrono - DrugsIO" "1 ms : xxxxx"
+//    "Chrono - DrugsBase" "0 ms : Reading drug"
+//    "Chrono - DrugsBase" "1 ms : Prepare query"
+//    "Chrono - DrugsBase" "20 ms : Query.next()"
+//    "Chrono - DrugsBase" "1 ms : Query.finish"
+//    "Chrono - DrugsBase" "39 ms : Get Compo"
+//    "Chrono - DrugsIO" "71 ms : Reading drug0.30% POTASSIUM CHLORIDE IN 5% DEXTROSE AND 0.45% SODIUM CHLORIDE INJECTION"
+//    "Chrono - DrugsIO" "0 ms : Reading dose0.30% POTASSIUM CHLORIDE IN 5% DEXTROSE AND 0.45% SODIUM CHLORIDE INJECTION"
+//    "Chrono - DrugsBase" "0 ms : Reading drug"
+//    "Chrono - DrugsBase" "0 ms : Prepare query"
+//    "Chrono - DrugsBase" "11 ms : Query.next()"
+//    "Chrono - DrugsBase" "0 ms : Query.finish"
+//    "Chrono - DrugsBase" "4 ms : Get Compo"
+//    "Chrono - DrugsIO" "15 ms : Reading drugALDACTAZIDE 25"
+//    "Chrono - DrugsIO" "0 ms : Reading doseALDACTAZIDE 25"
+
+//    QTime time;
+//    time.start();
+
     /** \todo add SID in args */
     if (!d->m_ActualDBInfos) {
         LOG_ERROR(tr("No drug database source selected"));
@@ -1251,7 +1307,7 @@ IDrug *DrugsBase::getDrugByUID(const QVariant &uid1, const QVariant &uid2, const
     get << Utils::Field(Constants::Table_MASTER, Constants::MASTER_UID3);
     get << Utils::Field(Constants::Table_MASTER, Constants::MASTER_OLDUID);
     Utils::FieldList condition;
-    condition << Utils::Field(Constants::Table_SOURCES, Constants::SOURCES_DBUID, QString("='%1'").arg(sourceUid));
+    condition << Utils::Field(Constants::Table_DRUGS, Constants::DRUGS_SID, QString("='%1'").arg(d->m_DbUids.value(sourceUid)));
     if (oldUid.toString().isEmpty()) {
         condition << Utils::Field(Constants::Table_MASTER, Constants::MASTER_UID1, QString("='%1'").arg(newUid1));
         if (!uid2.isNull())
@@ -1263,57 +1319,57 @@ IDrug *DrugsBase::getDrugByUID(const QVariant &uid1, const QVariant &uid2, const
     }
     Utils::JoinList joins;
     joins << Utils::Join(Constants::Table_MASTER, Constants::MASTER_DID, Constants::Table_DRUGS, Constants::DRUGS_DID);
-    joins << Utils::Join(Constants::Table_SOURCES, Constants::SOURCES_SID, Constants::Table_MASTER, Constants::MASTER_SID);
-
     QString req = select(get, joins, condition);
     IDrug *toReturn = 0;
-        QSqlQuery q(req , DB);
-        if (q.isActive()) {
-            if (q.next()) {
-                toReturn = new IDrug();
-                toReturn->setDataFromDb(IDrug::SourceID, q.value(Constants::DRUGS_SID));
-                toReturn->setDataFromDb(IDrug::Uid1, q.value(Constants::DRUGS_MaxParam));
-                toReturn->setDataFromDb(IDrug::Uid2, q.value(Constants::DRUGS_MaxParam + 1));
-                toReturn->setDataFromDb(IDrug::Uid3, q.value(Constants::DRUGS_MaxParam + 2));
-                /** \todo add olduid */
-                toReturn->setDataFromDb(IDrug::OldUid, q.value(Constants::DRUGS_MaxParam + 3));
-                toReturn->setDataFromDb(IDrug::DrugID, q.value(Constants::DRUGS_DID));
-                toReturn->setDataFromDb(IDrug::SourceID, q.value(Constants::DRUGS_SID));
-//                toReturn->setDataFromDb(IDrug::AuthorizationID, q.value(Constants::DRUGS_AID_MASTER_LID));
-                toReturn->setDataFromDb(IDrug::Name, q.value(Constants::DRUGS_NAME));
-                toReturn->setDataFromDb(IDrug::AtcId, q.value(Constants::DRUGS_ATC_ID));
-                toReturn->setDataFromDb(IDrug::AtcCode, getAtcCode(q.value(Constants::DRUGS_ATC_ID).toInt()));
-                toReturn->setDataFromDb(IDrug::Strength, q.value(Constants::DRUGS_STRENGTH));
-                toReturn->setDataFromDb(IDrug::Valid, q.value(Constants::DRUGS_VALID));
-                toReturn->setDataFromDb(IDrug::Marketed, q.value(Constants::DRUGS_MARKET));
-                toReturn->setDataFromDb(IDrug::Spc, q.value(Constants::DRUGS_LINK_SPC));
-            } else {
-                // drug not found --> break
-                LOG_QUERY_ERROR(q);
-                return toReturn;
-            }
-
-            // manage drugs denomination according to the database informations
-            QString tmp = d->m_ActualDBInfos->drugsNameConstructor;
-            if (!tmp.isEmpty()) {
-                tmp.replace(fieldName(Constants::Table_DRUGS, Constants::DRUGS_NAME), toReturn->brandName());
-                tmp.replace("FORM", toReturn->forms().join(","));
-                tmp.replace("ROUTE", toReturn->routes().join(","));
-                // limit strength to three maximum --> if > 3 do not add strength
-                if (toReturn->strength().count(";") >= 3)
-                    tmp.replace(fieldName(Constants::Table_DRUGS, Constants::DRUGS_STRENGTH), "");
-                else
-                    tmp.replace(fieldName(Constants::Table_DRUGS, Constants::DRUGS_STRENGTH), toReturn->strength());
-                toReturn->setDataFromDb(IDrug::Name, tmp);
-            }
+    QSqlQuery q(req , DB);
+    if (q.isActive()) {
+        if (q.next()) {
+//            Utils::Log::logTimeElapsed(time, "DrugsBase", "Query.next()");
+            toReturn = new IDrug();
+            toReturn->setDataFromDb(IDrug::SourceID, q.value(Constants::DRUGS_SID));
+            toReturn->setDataFromDb(IDrug::SourceName, sourceUid);
+            toReturn->setDataFromDb(IDrug::Uid1, q.value(Constants::DRUGS_MaxParam));
+            toReturn->setDataFromDb(IDrug::Uid2, q.value(Constants::DRUGS_MaxParam + 1));
+            toReturn->setDataFromDb(IDrug::Uid3, q.value(Constants::DRUGS_MaxParam + 2));
+            toReturn->setDataFromDb(IDrug::OldUid, q.value(Constants::DRUGS_MaxParam + 3));
+            toReturn->setDataFromDb(IDrug::DrugID, q.value(Constants::DRUGS_DID));
+            //                toReturn->setDataFromDb(IDrug::AuthorizationID, q.value(Constants::DRUGS_AID_MASTER_LID));
+            toReturn->setDataFromDb(IDrug::Name, q.value(Constants::DRUGS_NAME));
+            toReturn->setDataFromDb(IDrug::AtcId, q.value(Constants::DRUGS_ATC_ID));
+            toReturn->setDataFromDb(IDrug::AtcCode, getAtcCode(q.value(Constants::DRUGS_ATC_ID).toInt()));
+            toReturn->setDataFromDb(IDrug::Strength, q.value(Constants::DRUGS_STRENGTH));
+            toReturn->setDataFromDb(IDrug::Valid, q.value(Constants::DRUGS_VALID));
+            toReturn->setDataFromDb(IDrug::Marketed, q.value(Constants::DRUGS_MARKET));
+            toReturn->setDataFromDb(IDrug::Spc, q.value(Constants::DRUGS_LINK_SPC));
         } else {
+            // drug not found --> break
             LOG_QUERY_ERROR(q);
             return toReturn;
         }
+
+        // manage drugs denomination according to the database informations
+        QString tmp = d->m_ActualDBInfos->drugsNameConstructor;
+        if (!tmp.isEmpty()) {
+            tmp.replace(fieldName(Constants::Table_DRUGS, Constants::DRUGS_NAME), toReturn->brandName());
+            tmp.replace("FORM", toReturn->forms().join(","));
+            tmp.replace("ROUTE", toReturn->routes().join(","));
+            // limit strength to three maximum --> if > 3 do not add strength
+            if (toReturn->strength().count(";") >= 3)
+                tmp.replace(fieldName(Constants::Table_DRUGS, Constants::DRUGS_STRENGTH), "");
+            else
+                tmp.replace(fieldName(Constants::Table_DRUGS, Constants::DRUGS_STRENGTH), toReturn->strength());
+            toReturn->setDataFromDb(IDrug::Name, tmp);
+        }
+    } else {
+        LOG_QUERY_ERROR(q);
+        return toReturn;
+    }
     q.finish();
+//    Utils::Log::logTimeElapsed(time, "DrugsBase", "Query.finish");
 
     // get COMPO table
     d->getDrugComponents(toReturn);
+//    Utils::Log::logTimeElapsed(time, "DrugsBase", "Get Compo");
 
     toReturn->constructAtcIdsVectorsUsingComponents();
 
