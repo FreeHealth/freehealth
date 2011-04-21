@@ -683,7 +683,7 @@ void GlobalDrugsModel::refreshDrugsPrecautions(const QModelIndex &topleft, const
         d->innAllergies.removeAll("");
         d->m_testInnAllergies = !d->innAllergies.isEmpty();
         d->clearDrugAllergyCache();
-        qWarning() << "  -----> DrugsInnAllergies" << d->innAllergies;
+//        qWarning() << "  -----> DrugsInnAllergies" << d->innAllergies;
         refreshModel = true;
     }
     if (ref == Core::IPatient::DrugsAtcAllergies) {

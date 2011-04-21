@@ -236,7 +236,6 @@ void DrugSelector::onDrugsBaseChanged()
 
 void DrugSelector::changeDrugBaseUid(QAction *a)
 {
-    qWarning() << Q_FUNC_INFO << a->data();
     base()->changeCurrentDrugSourceUid(a->data());
 }
 
