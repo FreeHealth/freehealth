@@ -497,7 +497,6 @@ public:
 
     QString message(const IDrug *drug, const DrugInteractionInformationQuery &query) const
     {
-        qWarning() << Q_FUNC_INFO;
         QString toReturn;
         if (!m_Result->testedDrugs().contains((IDrug*)drug))
             return toReturn;
@@ -703,7 +702,6 @@ public:
 
     QString message(const DrugInteractionInformationQuery &query) const
     {
-        qWarning() << Q_FUNC_INFO;
         if (!m_Result->testedDrugs().isEmpty())
             return QString();
         return QString();
