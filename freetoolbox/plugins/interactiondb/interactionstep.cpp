@@ -68,21 +68,22 @@ static inline QString atcCsvFile()          {return QDir::cleanPath(settings()->
 InteractionStep::InteractionStep(QObject *parent) :
         m_UseProgressDialog(false), m_ActiveDownloadId(-1), m_Downloader(0)
 {
+    setObjectName("InteractionStep");
 }
 
 bool InteractionStep::createDir()
 {
     if (!QDir().mkpath(workingPath()))
-        Utils::Log::addError(this, "Unable to create interactions Working Path :" + workingPath(), __FILE__, __LINE__);
+        LOG_ERROR("Unable to create interactions Working Path :" + workingPath());
     else
-        Utils::Log::addMessage(this, "Tmp dir created");
+        LOG("Tmp dir created");
     // Create database output dir
     const QString &dbpath = QFileInfo(databaseAbsPath()).absolutePath();
     if (!QDir().exists(dbpath)) {
         if (!QDir().mkpath(dbpath))
-            Utils::Log::addError(this, "Unable to create interactions database output path :" + dbpath, __FILE__, __LINE__);
+            LOG_ERROR("Unable to create interactions database output path :" + dbpath);
         else
-            Utils::Log::addMessage(this, "Drugs database output dir created");
+            LOG("Drugs database output dir created");
     }
     return true;
 }
@@ -183,7 +184,7 @@ static bool setClassTreeToDatabase(const QString &iclass,
                   .arg(bibMasterId)
                   .arg(id);
             if (!query.exec(req)) {
-                Utils::Log::addQueryError("InteractionStep", query, __FILE__, __LINE__);
+                LOG_QUERY_ERROR_FOR("InteractionStep", query);
                 db.rollback();
                 return false;
             }
@@ -196,6 +197,7 @@ static bool setClassTreeToDatabase(const QString &iclass,
 //        qWarning() << iclass << inn << associatedInns.contains(inn, Qt::CaseInsensitive) << molsToAtc.values(inn.toUpper());
 //        qWarning();
 
+        req.clear();
         if (associatedInns.contains(inn, Qt::CaseInsensitive)) {
             foreach(const QString &atc, molsToAtc.values(inn.toUpper())) {
                 // One code == One ID
@@ -214,22 +216,34 @@ static bool setClassTreeToDatabase(const QString &iclass,
         } else {
             int id = molsWithoutAtc.indexOf(inn.toUpper());
 
-//            qWarning() << "id ?" << id << inn.toUpper() << molsWithoutAtc;
+//            qWarning() << "id ?" << id << inn.toUpper();
 
             if (id==-1) {
                 // one INN can have N codes --> get codes
                 QVector<int> ids = Core::Tools::getAtcIds(Core::Constants::MASTER_DATABASE_NAME, inn);
-//                qWarning() << ids;
+//                qWarning() << "  ids ->" <<ids;
                 if (ids.isEmpty()) {
                     LOG_ERROR_FOR("InteractionStep", "No ATC ID for "+inn);
                 }
                 for(int zz = 0; zz < ids.count(); ++zz) {
                     req = QString("INSERT INTO IAM_TREE (ID_CLASS, ID_ATC, BIB_MASTER_ID) VALUES "
-                                  "(%1, %2, %3);")
+                                  "(%1, %2, %3);\n")
                             .arg(insertChildrenIntoClassId)
                             .arg(ids.at(zz))
                             .arg(bibMasterId);
+
+//                    qWarning() << req;
+
+                    if (!query.exec(req)) {
+                        buggyIncludes->insertMulti(iclass, inn);
+                        LOG_QUERY_ERROR_FOR("InteractionStep", query);
+                        db.rollback();
+                        return false;
+                    }
                 }
+
+//                qWarning();
+
             } else {
                 // One code == One ID
                 req = QString("INSERT INTO IAM_TREE (ID_CLASS, ID_ATC, BIB_MASTER_ID) VALUES "
@@ -237,13 +251,15 @@ static bool setClassTreeToDatabase(const QString &iclass,
                         .arg(insertChildrenIntoClassId)
                         .arg("Z01AA" + QString::number(molsWithoutAtc.indexOf(inn.toUpper())+1).rightJustified(2, '0'))
                         .arg(bibMasterId);
-            }
 
-            if (!query.exec(req)) {
-                buggyIncludes->insertMulti(iclass, inn);
-                LOG_QUERY_ERROR_FOR("InteractionStep", query);
-                db.rollback();
-                return false;
+//                qWarning() << req;
+
+                if (!query.exec(req)) {
+                    buggyIncludes->insertMulti(iclass, inn);
+                    LOG_QUERY_ERROR_FOR("InteractionStep", query);
+                    db.rollback();
+                    return false;
+                }
             }
             query.finish();
             db.commit();
@@ -289,7 +305,7 @@ bool InteractionStep::computeModelsAndPopulateDatabase()
         // Import ATC codes to database
         QFile file(atcCsvFile());
         if (!file.open(QFile::ReadOnly | QIODevice::Text)) {
-            Utils::Log::addError(this, QString("ERROR : can not open file %1, %2.").arg(file.fileName(), file.errorString()), __FILE__, __LINE__);
+            LOG_ERROR(QString("ERROR : can not open file %1, %2.").arg(file.fileName(), file.errorString()));
         } else {
             QString content = QString::fromUtf8(file.readAll());
             if (content.isEmpty())
@@ -464,7 +480,7 @@ bool InteractionStep::computeModelsAndPopulateDatabase()
             if (!molsToAtc.uniqueKeys().contains(main)) {
                 if (!afssapsClass.contains(main)) {
                     if (!molsWithoutAtc.contains(main)) {
-                        Utils::Log::addError(this, tr("Main Interactor not found: %1").arg(main), __FILE__, __LINE__);
+                        LOG_ERROR(tr("Main Interactor not found: %1").arg(main));
                     } else {
                         int id = molsWithoutAtc.indexOf(main);
                         QString n = QString::number(id+1);
@@ -492,7 +508,7 @@ bool InteractionStep::computeModelsAndPopulateDatabase()
                 if (!molsToAtc.uniqueKeys().contains(child)) {
                     if (!afssapsClass.contains(child)) {
                         if (!molsWithoutAtc.contains(child)) {
-                            Utils::Log::addError(this, tr("Child Interactor not found: %1").arg(child), __FILE__, __LINE__);
+                            LOG_ERROR(tr("Child Interactor not found: %1").arg(child));
                         } else {
                             int id = molsWithoutAtc.indexOf(child);
                             QString n = QString::number(id+1);
@@ -627,6 +643,6 @@ void InteractionStep::downloadNextSource()
     if (m_Downloader->setFullLink(link)) {
         m_Downloader->startDownload();
     } else {
-        Utils::Log::addError(this, "Unable to download pubmed link " + link);
+        LOG_ERROR("Unable to download pubmed link " + link);
     }
 }
