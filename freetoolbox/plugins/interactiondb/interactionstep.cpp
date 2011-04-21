@@ -1,3 +1,28 @@
+/***************************************************************************
+ *  The FreeMedForms project is a set of free, open source medical         *
+ *  applications.                                                          *
+ *  (C) 2008-2011 by Eric MAEKER, MD (France) <eric.maeker@free.fr>        *
+ *  All rights reserved.                                                   *
+ *                                                                         *
+ *  This program is free software: you can redistribute it and/or modify   *
+ *  it under the terms of the GNU General Public License as published by   *
+ *  the Free Software Foundation, either version 3 of the License, or      *
+ *  (at your option) any later version.                                    *
+ *                                                                         *
+ *  This program is distributed in the hope that it will be useful,        *
+ *  but WITHOUT ANY WARRANTY; without even the implied warranty of         *
+ *  MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the          *
+ *  GNU General Public License for more details.                           *
+ *                                                                         *
+ *  You should have received a copy of the GNU General Public License      *
+ *  along with this program (COPYING.FREEMEDFORMS file).                   *
+ *  If not, see <http://www.gnu.org/licenses/>.                            *
+ ***************************************************************************/
+/***************************************************************************
+ *   Main Developper : Eric MAEKER, <eric.maeker@free.fr>                  *
+ *   Contributors :                                                        *
+ *       NAME <MAIL@ADRESS>                                                *
+ ***************************************************************************/
 #include "interactionstep.h"
 #include "afssapsintegrator.h"
 #include "interactionsdatabasepage.h"
@@ -142,13 +167,13 @@ static bool setClassTreeToDatabase(const QString &iclass,
                 bibMasterId = query.value(0).toInt() + 1;
             }
         } else {
-            Utils::Log::addQueryError("InteractionStep", query, __FILE__, __LINE__);
+            LOG_QUERY_ERROR_FOR("InteractionStep", query);
             db.rollback();
             return false;
         }
         query.finish();
         if (bibMasterId==-1) {
-            Utils::Log::addError("InteractionStep", "NO BIB MASTER", __FILE__, __LINE__);
+            LOG_ERROR_FOR("InteractionStep", "NO BIB MASTER");
             db.rollback();
             return false;
         }
@@ -166,6 +191,11 @@ static bool setClassTreeToDatabase(const QString &iclass,
         }
 
         // Insert IAM Tree + Bib link
+//        qWarning();
+//        qWarning() << "xxxxxxxxxxxxxxx";
+//        qWarning() << iclass << inn << associatedInns.contains(inn, Qt::CaseInsensitive) << molsToAtc.values(inn.toUpper());
+//        qWarning();
+
         if (associatedInns.contains(inn, Qt::CaseInsensitive)) {
             foreach(const QString &atc, molsToAtc.values(inn.toUpper())) {
                 // One code == One ID
@@ -175,7 +205,7 @@ static bool setClassTreeToDatabase(const QString &iclass,
                         .arg(atc)
                         .arg(bibMasterId);
                 if (!query.exec(req)) {
-                    Utils::Log::addQueryError("InteractionStep", query, __FILE__, __LINE__);
+                    LOG_QUERY_ERROR_FOR("InteractionStep", query);
                     db.rollback();
                     return false;
                 }
@@ -183,12 +213,15 @@ static bool setClassTreeToDatabase(const QString &iclass,
             }
         } else {
             int id = molsWithoutAtc.indexOf(inn.toUpper());
+
+//            qWarning() << "id ?" << id << inn.toUpper() << molsWithoutAtc;
+
             if (id==-1) {
-                QString i__ = inn;
                 // one INN can have N codes --> get codes
                 QVector<int> ids = Core::Tools::getAtcIds(Core::Constants::MASTER_DATABASE_NAME, inn);
+//                qWarning() << ids;
                 if (ids.isEmpty()) {
-                    Utils::Log::addError("InteractionStep", "No ATC ID for "+inn, __FILE__, __LINE__);
+                    LOG_ERROR_FOR("InteractionStep", "No ATC ID for "+inn);
                 }
                 for(int zz = 0; zz < ids.count(); ++zz) {
                     req = QString("INSERT INTO IAM_TREE (ID_CLASS, ID_ATC, BIB_MASTER_ID) VALUES "
@@ -208,7 +241,7 @@ static bool setClassTreeToDatabase(const QString &iclass,
 
             if (!query.exec(req)) {
                 buggyIncludes->insertMulti(iclass, inn);
-                Utils::Log::addQueryError("InteractionStep", query, __FILE__, __LINE__);
+                LOG_QUERY_ERROR_FOR("InteractionStep", query);
                 db.rollback();
                 return false;
             }
