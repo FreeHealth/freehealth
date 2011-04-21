@@ -497,6 +497,7 @@ public:
 
     QString message(const IDrug *drug, const DrugInteractionInformationQuery &query) const
     {
+        qWarning() << Q_FUNC_INFO;
         QString toReturn;
         if (!m_Result->testedDrugs().contains((IDrug*)drug))
             return toReturn;
@@ -529,10 +530,33 @@ public:
         case DrugInteractionInformationQuery::InformationAlert:
             {
             QMap<int, QString> lines;
+            QVector<int> drugInteractionAtcIds;
+            QVector<int> drugInteractionIds;
             for(int j=0; j < interactions.count(); ++j) {
+                // Get interaction
                 IDrugInteraction *di = interactions.at(j);
                 DrugsInteraction *ddi = static_cast<DrugsInteraction *>(di);
                 Q_ASSERT(ddi);
+                if (!ddi)
+                    continue;
+
+                // interaction with this interactor already included ?
+                int interactorAtcId = -1;
+                if (drug->allInnAndInteractingClassesIds().contains(ddi->value(DrugsInteraction::DI_ATC1).toInt())) {
+                    interactorAtcId = ddi->value(DrugsInteraction::DI_ATC2).toInt();
+                } else {
+                    interactorAtcId = ddi->value(DrugsInteraction::DI_ATC1).toInt();
+                }
+                if (drugInteractionAtcIds.contains(interactorAtcId))
+                    continue;
+                drugInteractionAtcIds << interactorAtcId;
+
+                // interaction already included ?
+                if (drugInteractionIds.contains(ddi->value(DrugsInteraction::DI_Id).toInt()))
+                    continue;
+                drugInteractionIds << ddi->value(DrugsInteraction::DI_Id).toInt();
+
+                // get the line related to the level of DDI
                 int typeId = -1;
                 DrugDrugInteractionEngine::TypesOfIAM r = DrugDrugInteractionEngine::TypesOfIAM(ddi->typeId());
                 if (!typeInLevel(r, query.levelOfWarningDynamicAlert))
@@ -558,20 +582,29 @@ public:
                     typeId = DrugDrugInteractionEngine::InnDuplication;
                 else if (query.levelOfWarningStaticAlert & DrugDrugInteractionEngine::NoIAM)
                     typeId = DrugDrugInteractionEngine::NoIAM;
-                QString &ditmp = lines[typeId];
+
+                // construct line of the alert
+                QString line;
                 QString drug2;
                 if (ddi->drugs().at(0)->drugId()==drug->drugId()) {
                     drug2 = ddi->drugs().at(1)->brandName();
                 } else {
                     drug2 = ddi->drugs().at(0)->brandName();
                 }
-                ditmp += QString("<tr>\n"
+                line = QString("<tr>\n"
                                  "  <td width=5px></td>\n"
                                  "  <td width=*>* %1<br>&nbsp;&nbsp;&nbsp;&nbsp;%2</td>\n"
                                  "</tr>")
                         .arg(ddi->getInteractingDrug(drug)->brandName())
                         .arg(di->header("//"));
+                QString &ditmp = lines[typeId];
+
+                // no double
+                if (!ditmp.contains(line))
+                    ditmp += line;
             }
+
+            // construct full message
             QMap<int, QString>::const_iterator i = lines.constEnd();
             --i;
             while (true) {
@@ -670,6 +703,7 @@ public:
 
     QString message(const DrugInteractionInformationQuery &query) const
     {
+        qWarning() << Q_FUNC_INFO;
         if (!m_Result->testedDrugs().isEmpty())
             return QString();
         return QString();
