@@ -93,6 +93,7 @@ QWidget *FdaDrugsDatabasePage::createPage(QWidget *parent)
 FdaDrugDatatabaseStep::FdaDrugDatatabaseStep(QObject *parent) :
         m_WithProgress(false)
 {
+    setObjectName("FdaDrugDatatabaseStep");
 }
 
 FdaDrugDatatabaseStep::~FdaDrugDatatabaseStep()
@@ -102,17 +103,17 @@ FdaDrugDatatabaseStep::~FdaDrugDatatabaseStep()
 bool FdaDrugDatatabaseStep::createDir()
 {
     if (!QDir().mkpath(workingPath()))
-        Utils::Log::addError(this, "Unable to create FDA Working Path :" + workingPath(), __FILE__, __LINE__);
+        LOG_ERROR("Unable to create FDA Working Path :" + workingPath());
     else
-        Utils::Log::addMessage(this, "Tmp dir created");
+        LOG("Tmp dir created");
     // Create database output dir
     const QString &dbpath = QFileInfo(databaseAbsPath()).absolutePath();
     if (!QDir().exists(dbpath)) {
         if (!QDir().mkpath(dbpath)) {
-            Utils::Log::addError(this, "Unable to create FDA database output path :" + dbpath, __FILE__, __LINE__);
+            LOG_ERROR("Unable to create FDA database output path :" + dbpath);
             m_Errors << tr("Unable to create FDA database output path :") + dbpath;
         } else {
-            Utils::Log::addMessage(this, "Drugs database output dir created");
+            LOG("Drugs database output dir created");
         }
     }
     return true;
@@ -158,12 +159,12 @@ bool FdaDrugDatatabaseStep::unzipFiles()
     // check file
     QString fileName = workingPath() + QDir::separator() + QFileInfo(FDA_URL).fileName();
     if (!QFile(fileName).exists()) {
-        Utils::Log::addError(this, QString("No files founded."), __FILE__, __LINE__);
-        Utils::Log::addError(this, QString("Please download files."), __FILE__, __LINE__);
+        LOG_ERROR(QString("No files founded."));
+        LOG_ERROR(QString("Please download files."));
         return false;
     }
 
-    Utils::Log::addMessage(this, QString("Starting unzipping FDA file %1").arg(fileName));
+    LOG(QString("Starting unzipping FDA file %1").arg(fileName));
 
     // unzip files using QProcess
     return Core::Tools::unzipFile(fileName, workingPath());
@@ -300,11 +301,11 @@ bool FdaDrugDatatabaseStep::createDatabase()
     labels.insert("de","USA therapeutischen database");
 
     if (Core::Tools::createNewDrugsSource(Core::Constants::MASTER_DATABASE_NAME, FDA_DRUGS_DATABASE_NAME, labels) == -1) {
-        Utils::Log::addError(this, "Unable to create the FDA drugs sources");
+        LOG_ERROR("Unable to create the FDA drugs sources");
         return false;
     }
 
-    Utils::Log::addMessage(this, QString("Database schema created"));
+    LOG(QString("Database schema created"));
     return true;
 }
 
@@ -325,7 +326,7 @@ bool FdaDrugDatatabaseStep::populateDatabase()
     // check files
     foreach(const QString &file, files) {
         if (!QFile::exists(workingPath() + file)) {
-            Utils::Log::addError(this, QString("Missing " + workingPath() + file + " file. prepareDatas()"), __FILE__, __LINE__);
+            LOG_ERROR(QString("Missing " + workingPath() + file + " file. prepareDatas()"));
             return false;
         }
     }
@@ -335,7 +336,7 @@ bool FdaDrugDatatabaseStep::populateDatabase()
 
     QFile file(workingPath() + "Product.txt");
     if (!file.open(QIODevice::ReadOnly | QIODevice::Text)) {
-        Utils::Log::addError(this, QString("ERROR : Enable to open Product.txt : %1.").arg(file.errorString()), __FILE__, __LINE__);
+        LOG_ERROR(QString("ERROR : Enable to open Product.txt : %1.").arg(file.errorString()));
         return false;
     }
     Q_EMIT progressLabelChanged(tr("Reading drugs raw source"));
@@ -376,10 +377,10 @@ bool FdaDrugDatatabaseStep::populateDatabase()
 
     // Run SQL commands one by one
     if (!Core::Tools::executeSqlFile(Core::Constants::MASTER_DATABASE_NAME, databaseFinalizationScript())) {
-        Utils::Log::addError(this, "Can create FDA DB.", __FILE__, __LINE__);
+        LOG_ERROR("Can create FDA DB.");
         return false;
     }
-    Utils::Log::addMessage(this, QString("Database processed"));
+    LOG(QString("Database processed"));
     Q_EMIT progress(3);
 
     return true;
@@ -419,7 +420,7 @@ bool FdaDrugDatatabaseStep::linkMolecules()
     // Get SID
     int sid = Core::Tools::getSourceId(Core::Constants::MASTER_DATABASE_NAME, FDA_DRUGS_DATABASE_NAME);
     if (sid==-1) {
-        Utils::Log::addError(this, "NO SID DEFINED", __FILE__, __LINE__);
+        LOG_ERROR("NO SID DEFINED");
         return false;
     }
 
@@ -460,7 +461,7 @@ bool FdaDrugDatatabaseStep::linkMolecules()
     // Save to links to drugs database
     Core::Tools::addComponentAtcLinks(Core::Constants::MASTER_DATABASE_NAME, mol_atc, sid);
 
-    Utils::Log::addMessage(this, QString("Database processed"));
+    LOG(QString("Database processed"));
 
     // add unfound to extralinkermodel
     Q_EMIT progressLabelChanged(tr("Updating component link XML file"));

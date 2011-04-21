@@ -78,6 +78,7 @@ QWidget *CanadianDrugsDatabasePage::createPage(QWidget *parent)
 CaDrugDatatabaseStep::CaDrugDatatabaseStep(QObject *parent) :
         m_WithProgress(false)
 {
+    setObjectName("CaDrugDatatabaseStep");
 }
 
 CaDrugDatatabaseStep::~CaDrugDatatabaseStep()
@@ -87,17 +88,17 @@ CaDrugDatatabaseStep::~CaDrugDatatabaseStep()
 bool CaDrugDatatabaseStep::createDir()
 {
     if (!QDir().mkpath(workingPath()))
-        Utils::Log::addError(this, "Unable to create Ca Working Path :" + workingPath(), __FILE__, __LINE__);
+        LOG_ERROR("Unable to create Ca Working Path :" + workingPath());
     else
-        Utils::Log::addMessage(this, "Tmp dir created");
+        LOG("Tmp dir created");
     // Create database output dir
     const QString &dbpath = QFileInfo(databaseAbsPath()).absolutePath();
     if (!QDir().exists(dbpath)) {
         if (!QDir().mkpath(dbpath)) {
-            Utils::Log::addError(this, "Unable to create Ca database output path :" + dbpath, __FILE__, __LINE__);
+            LOG_ERROR("Unable to create Ca database output path :" + dbpath);
             m_Errors << tr("Unable to create Ca database output path :") + dbpath;
         } else {
-            Utils::Log::addMessage(this, "Drugs database output dir created");
+            LOG("Drugs database output dir created");
         }
     }
     return true;
@@ -141,12 +142,12 @@ bool CaDrugDatatabaseStep::unzipFiles()
     // check file
     QString fileName = workingPath() + QDir::separator() + QFileInfo(CANADIAN_URL).fileName();
     if (!QFile(fileName).exists()) {
-        Utils::Log::addError(this, QString("No files founded."), __FILE__, __LINE__);
-        Utils::Log::addError(this, QString("Please download files."), __FILE__, __LINE__);
+        LOG_ERROR(QString("No files founded."));
+        LOG_ERROR(QString("Please download files."));
         return false;
     }
 
-    Utils::Log::addMessage(this, QString("Starting unzipping Canadian file %1").arg(fileName));
+    LOG(QString("Starting unzipping Canadian file %1").arg(fileName));
 
     // unzip downloaded using QProcess
     if (!Core::Tools::unzipFile(fileName, workingPath()))
@@ -162,7 +163,7 @@ bool CaDrugDatatabaseStep::unzipFiles()
         ++progr;
         if (info.fileName()!="allfiles.zip") {
             if (!Core::Tools::unzipFile(info.absoluteFilePath(), workingPath())) {
-                Utils::Log::addError(this, "Unable to unzip " + info.absoluteFilePath(), __FILE__, __LINE__);
+                LOG_ERROR("Unable to unzip " + info.absoluteFilePath());
                 return false;
             }
         }
@@ -186,11 +187,11 @@ bool CaDrugDatatabaseStep::createDatabase()
     labels.insert("de","Kanadierin therapeutischen database");
 
     if (Core::Tools::createNewDrugsSource(Core::Constants::MASTER_DATABASE_NAME, CA_DRUGS_DATABASE_NAME, labels) == -1) {
-        Utils::Log::addError(this, "Unable to create the Canadian drugs sources");
+        LOG_ERROR("Unable to create the Canadian drugs sources");
         return false;
     }
 
-    Utils::Log::addMessage(this, QString("Database schema created"));
+    LOG(QString("Database schema created"));
     return true;
 }
 
@@ -272,7 +273,7 @@ bool CaDrugDatatabaseStep::populateDatabase()
 
     QFile csv(workingPath() + "drug.txt");
     if (!csv.open(QFile::ReadOnly | QFile::Text)) {
-        Utils::Log::addError(this, "Unable to read file", __FILE__, __LINE__);
+        LOG_ERROR("Unable to read file");
         return false;
     }
 
@@ -335,7 +336,7 @@ bool CaDrugDatatabaseStep::populateDatabase()
     // Get components
     csv.setFileName(workingPath() + "ingred.txt");
     if (!csv.open(QFile::ReadOnly | QFile::Text)) {
-        Utils::Log::addError(this, "Unable to read file", __FILE__, __LINE__);
+        LOG_ERROR("Unable to read file");
         return false;
     }
 
@@ -417,7 +418,7 @@ bool CaDrugDatatabaseStep::populateDatabase()
     // Run SQL commands one by one
     Q_EMIT progressLabelChanged(tr("Running database finalization script"));
     if (!Core::Tools::executeSqlFile(Core::Constants::MASTER_DATABASE_NAME, databaseFinalizationScript())) {
-        Utils::Log::addError(this, "Can create Canadian DB.", __FILE__, __LINE__);
+        LOG_ERROR("Can create Canadian DB.");
         return false;
     }
     Q_EMIT progress(3);
@@ -508,7 +509,7 @@ bool CaDrugDatatabaseStep::linkMolecules()
 
     QSqlDatabase ca = QSqlDatabase::database(Core::Constants::MASTER_DATABASE_NAME);
     if (!ca.open()) {
-        Utils::Log::addError(this, "Can not connect to CA_DB db : dc_Canadian_DrugsDatabaseCreator::populateDatabase()", __FILE__, __LINE__);
+        LOG_ERROR("Can not connect to CA_DB db : dc_Canadian_DrugsDatabaseCreator::populateDatabase()");
         return false;
     }
 
@@ -522,7 +523,7 @@ bool CaDrugDatatabaseStep::linkMolecules()
     //         LIMIT 100;
 
     //        QString req;
-    //        Utils::Log::addMessage(this, "Getting Drugs with ATC and one molecule - Can take some times");
+    //        LOG("Getting Drugs with ATC and one molecule - Can take some times");
     QMultiHash<QString, QString> correctedByAtcCode;
     //        QSqlQuery drugs(ca);
     //        req = "SELECT DISTINCT composition.molecule_name, drugs.atc "
@@ -565,7 +566,7 @@ bool CaDrugDatatabaseStep::linkMolecules()
     // Get SID
     int sid = Core::Tools::getSourceId(Core::Constants::MASTER_DATABASE_NAME, CA_DRUGS_DATABASE_NAME);
     if (sid==-1) {
-        Utils::Log::addError(this, "NO SID DEFINED", __FILE__, __LINE__);
+        LOG_ERROR("NO SID DEFINED");
         return false;
     }
 
@@ -581,7 +582,7 @@ bool CaDrugDatatabaseStep::linkMolecules()
     ExtraMoleculeLinkerModel::instance()->addUnreviewedMolecules(CA_DRUGS_DATABASE_NAME, unfound);
     ExtraMoleculeLinkerModel::instance()->saveModel();
 
-    Utils::Log::addMessage(this, QString("Database processed"));
+    LOG(QString("Database processed"));
 
     return true;
 }

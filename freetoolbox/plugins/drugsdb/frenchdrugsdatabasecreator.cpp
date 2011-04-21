@@ -92,6 +92,7 @@ QWidget *FrenchDrugsDatabasePage::createPage(QWidget *parent)
 FrDrugDatatabaseStep::FrDrugDatatabaseStep(QObject *parent) :
         m_WithProgress(false)
 {
+    setObjectName("FrDrugDatatabaseStep");
 }
 
 FrDrugDatatabaseStep::~FrDrugDatatabaseStep()
@@ -101,17 +102,17 @@ FrDrugDatatabaseStep::~FrDrugDatatabaseStep()
 bool FrDrugDatatabaseStep::createDir()
 {
     if (!QDir().mkpath(workingPath()))
-        Utils::Log::addError(this, "Unable to create French Working Path :" + workingPath(), __FILE__, __LINE__);
+        LOG_ERROR("Unable to create French Working Path :" + workingPath());
     else
-        Utils::Log::addMessage(this, "Tmp dir created");
+        LOG("Tmp dir created");
     // Create database output dir
     const QString &dbpath = QFileInfo(databaseAbsPath()).absolutePath();
     if (!QDir().exists(dbpath)) {
         if (!QDir().mkpath(dbpath)) {
-            Utils::Log::addError(this, "Unable to create French database output path :" + dbpath, __FILE__, __LINE__);
+            LOG_ERROR("Unable to create French database output path :" + dbpath);
             m_Errors << tr("Unable to create French database output path :") + dbpath;
         } else {
-            Utils::Log::addMessage(this, "Drugs database output dir created");
+            LOG("Drugs database output dir created");
         }
     }
     return true;
@@ -151,8 +152,8 @@ bool FrDrugDatatabaseStep::unzipFiles()
     // check file
     QString fileName = workingPath() + QDir::separator() + QFileInfo(FRENCH_URL).fileName();
     if (!QFile(fileName).exists()) {
-        Utils::Log::addError(this, QString("No files founded."), __FILE__, __LINE__);
-        Utils::Log::addError(this, QString("Please download files."), __FILE__, __LINE__);
+        LOG_ERROR(QString("No files founded."));
+        LOG_ERROR(QString("Please download files."));
         return false;
     }
 
@@ -166,17 +167,17 @@ bool FrDrugDatatabaseStep::prepareDatas()
 {
     // check files
     if (!QFile::exists(workingPath() + "CIS.txt")) {
-        Utils::Log::addError(this, QString("Missing CIS.txt file. FrenchDrugsDatabaseWidget::populateDatabase()"), __FILE__, __LINE__);
+        LOG_ERROR(QString("Missing CIS.txt file. FrenchDrugsDatabaseWidget::populateDatabase()"));
         return false;
     }
 
     if (!QFile::exists(workingPath() + "CIS_CIP.txt")) {
-        Utils::Log::addError(this, QString("Missing CIS_CIP.txt file. FrenchDrugsDatabaseWidget::populateDatabase()"), __FILE__, __LINE__);
+        LOG_ERROR(QString("Missing CIS_CIP.txt file. FrenchDrugsDatabaseWidget::populateDatabase()"));
         return false;
     }
 
     if (!QFile::exists(workingPath() + "COMPO.txt")) {
-        Utils::Log::addError(this, QString("Missing COMPO.txt file. FrenchDrugsDatabaseWidget::populateDatabase()"), __FILE__, __LINE__);
+        LOG_ERROR(QString("Missing COMPO.txt file. FrenchDrugsDatabaseWidget::populateDatabase()"));
         return false;
     }
 
@@ -194,7 +195,7 @@ bool FrDrugDatatabaseStep::createDatabase()
     labels.insert("de","Französisch therapeutischen database");
 
     if (Core::Tools::createNewDrugsSource(Core::Constants::MASTER_DATABASE_NAME, FR_DRUGS_DATABASE_NAME, labels) == -1) {
-        Utils::Log::addError(this, "Unable to create the French drugs sources");
+        LOG_ERROR("Unable to create the French drugs sources");
         return false;
     }
 
@@ -263,7 +264,7 @@ bool FrDrugDatatabaseStep::populateDatabase()
 
     file.setFileName(workingPath() + "COMPO.txt");
     if (!file.open(QIODevice::ReadOnly | QIODevice::Text)) {
-        Utils::Log::addError(this, QString("ERROR : Enable to open CIS.txt : %1. FrenchDrugsDatabaseWidget::populateDatabase()").arg(file.errorString()), __FILE__, __LINE__);
+        LOG_ERROR(QString("ERROR : Enable to open CIS.txt : %1. FrenchDrugsDatabaseWidget::populateDatabase()").arg(file.errorString()));
         return false;
     }
     in.setDevice(&file);
@@ -313,7 +314,7 @@ bool FrDrugDatatabaseStep::populateDatabase()
     // Run SQL commands one by one
     Q_EMIT progressLabelChanged(tr("Running database finalization script"));
     if (!Core::Tools::executeSqlFile(Core::Constants::MASTER_DATABASE_NAME, databaseFinalizationScript())) {
-        Utils::Log::addError(this, "Can create French DB.", __FILE__, __LINE__);
+        LOG_ERROR("Can create French DB.");
         return false;
     }
 
@@ -402,14 +403,14 @@ bool FrDrugDatatabaseStep::linkMolecules()
 
     QSqlDatabase fr = QSqlDatabase::database(Core::Constants::MASTER_DATABASE_NAME);
     if (!fr.isOpen()) {
-        Utils::Log::addError(this, "Can not connect to French db", __FILE__, __LINE__);
+        LOG_ERROR("Can not connect to French db");
         return false;
     }
 
     // Get SID
     int sid = Core::Tools::getSourceId(Core::Constants::MASTER_DATABASE_NAME, FR_DRUGS_DATABASE_NAME);
     if (sid==-1) {
-        Utils::Log::addError(this, "NO SID DEFINED", __FILE__, __LINE__);
+        LOG_ERROR("NO SID DEFINED");
         return false;
     }
 

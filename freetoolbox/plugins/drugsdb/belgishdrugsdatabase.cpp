@@ -142,6 +142,7 @@ void BelgishDrugsDatabase::changeEvent(QEvent *e)
 BeDrugDatatabaseStep::BeDrugDatatabaseStep(QObject *parent) :
         m_WithProgress(false)
 {
+    setObjectName("BeDrugDatatabaseStep");
 }
 
 BeDrugDatatabaseStep::~BeDrugDatatabaseStep()
@@ -151,17 +152,17 @@ BeDrugDatatabaseStep::~BeDrugDatatabaseStep()
 bool BeDrugDatatabaseStep::createDir()
 {
     if (!QDir().mkpath(workingPath()))
-        Utils::Log::addError(this, "Unable to create Be Working Path :" + workingPath(), __FILE__, __LINE__);
+        LOG_ERROR("Unable to create Be Working Path :" + workingPath());
     else
-        Utils::Log::addMessage(this, "Tmp dir created");
+        LOG("Tmp dir created");
     // Create database output dir
     const QString &dbpath = QFileInfo(databaseAbsPath()).absolutePath();
     if (!QDir().exists(dbpath)) {
         if (!QDir().mkpath(dbpath)) {
-            Utils::Log::addError(this, "Unable to create Be database output path :" + dbpath, __FILE__, __LINE__);
+            LOG_ERROR("Unable to create Be database output path :" + dbpath);
             m_Errors << tr("Unable to create Be database output path :") + dbpath;
         } else {
-            Utils::Log::addMessage(this, "Drugs database (Be) output dir created");
+            LOG("Drugs database (Be) output dir created");
         }
     }
     return true;
@@ -199,14 +200,14 @@ bool BeDrugDatatabaseStep::unzipFiles()
     // check file
     QString fileName = dumpFileAbsPath();
     if (!QFile(fileName).exists()) {
-        Utils::Log::addError(this, QString("No files founded."), __FILE__, __LINE__);
-        Utils::Log::addError(this, QString("Please download files."), __FILE__, __LINE__);
+        LOG_ERROR(QString("No files founded."));
+        LOG_ERROR(QString("Please download files."));
         Utils::warningMessageBox(tr("This assistant can not dowload and prepare the raw belguish drugs database."),
                                  tr("This step (download) must be done by hand. Please refer to the user manual."));
         return false;
     }
 
-    Utils::Log::addMessage(this, QString("Starting unzipping Belguish dump file %1").arg(fileName));
+    LOG(QString("Starting unzipping Belguish dump file %1").arg(fileName));
 
     // unzip downloaded using QProcess
     if (!Core::Tools::unzipFile(fileName, workingPath()))
@@ -297,11 +298,11 @@ bool BeDrugDatatabaseStep::createDatabase()
     labels.insert("de","Belgien therapeutischen database");
 
     if (Core::Tools::createNewDrugsSource(Core::Constants::MASTER_DATABASE_NAME, BE_DRUGS_DATABASE_NAME, labels) == -1) {
-        Utils::Log::addError(this, "Unable to create the BE drugs sources");
+        LOG_ERROR("Unable to create the BE drugs sources");
         return false;
     }
 
-    Utils::Log::addMessage(this, QString("Database schema created"));
+    LOG(QString("Database schema created"));
     Q_EMIT progress(1);
     return true;
 }
@@ -324,13 +325,13 @@ bool BeDrugDatatabaseStep::populateDatabase()
     QSqlDatabase be = QSqlDatabase::database(BE_TMP_DB);
     if (!be.isOpen()) {
         if (!be.open()) {
-            Utils::Log::addError(this,"Unable to connect db", __FILE__, __LINE__);
+            LOG_ERROR("Unable to connect db");
             return false;
         }
     }
 
 //    if (!Utils::Database::executeSqlFile(BE_TMP_DB, workingPath() + "/dump_sqlite.sql")) {
-//        Utils::Log::addError(this, "Can not create BE DB.", __FILE__, __LINE__);
+//        LOG_ERROR("Can not create BE DB.");
 //        return false;
 //    }
 
@@ -348,7 +349,7 @@ bool BeDrugDatatabaseStep::populateDatabase()
             nb = query.value(0).toInt();
         }
     } else {
-        Utils::Log::addQueryError(this, query, __FILE__, __LINE__);
+        LOG_QUERY_ERROR(query);
     }
     query.finish();
 
@@ -413,12 +414,12 @@ bool BeDrugDatatabaseStep::populateDatabase()
                     drug->addComponent(compo);
                 }
             } else {
-                Utils::Log::addQueryError(this, compoQuery, __FILE__, __LINE__);
+                LOG_QUERY_ERROR(compoQuery);
             }
             compoQuery.finish();
         }
     } else {
-        Utils::Log::addQueryError(this, query, __FILE__, __LINE__);
+        LOG_QUERY_ERROR(query);
     }
 
     be.commit();
@@ -439,12 +440,12 @@ bool BeDrugDatatabaseStep::populateDatabase()
 
     // Run SQL commands one by one
     if (!Core::Tools::executeSqlFile(Core::Constants::MASTER_DATABASE_NAME, databaseFinalizationScript())) {
-        Utils::Log::addError(this, "Can create FDA DB.", __FILE__, __LINE__);
+        LOG_ERROR("Can create FDA DB.");
         return false;
     }
     Q_EMIT progress(3);
 
-    Utils::Log::addMessage(this, QString("Database processed"));
+    LOG(QString("Database processed"));
 
     return true;
 }
@@ -467,7 +468,7 @@ bool BeDrugDatatabaseStep::linkMolecules()
     // Get SID
     int sid = Core::Tools::getSourceId(Core::Constants::MASTER_DATABASE_NAME, BE_DRUGS_DATABASE_NAME);
     if (sid==-1) {
-        Utils::Log::addError(this, "NO SID DEFINED", __FILE__, __LINE__);
+        LOG_ERROR("NO SID DEFINED");
         return false;
     }
 
@@ -496,7 +497,7 @@ bool BeDrugDatatabaseStep::linkMolecules()
     // Save to links to drugs database
     Core::Tools::addComponentAtcLinks(Core::Constants::MASTER_DATABASE_NAME, mol_atc, sid);
 
-    Utils::Log::addMessage(this, QString("Database processed"));
+    LOG(QString("Database processed"));
 
     // add unfound to extralinkermodel
     Q_EMIT progressLabelChanged(tr("Updating component link XML file"));
