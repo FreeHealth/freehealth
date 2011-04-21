@@ -940,13 +940,13 @@ QVector<int> getAtcIds(const QString &connection, const QString &label)
                   "JOIN ATC_LABELS ON ATC_LABELS.ATC_ID=ATC.ATC_ID "
                   "JOIN LABELS_LINK ON LABELS_LINK.MASTER_LID=ATC_LABELS.MASTER_LID "
                   "JOIN LABELS ON LABELS_LINK.LID=LABELS.LID "
-                  "WHERE LABELS.LABEL like \"meropenem\";");
+                  "WHERE LABELS.LABEL like \"%1\";").arg(label);
     if (query.exec(req)) {
         while (query.next()) {
             ret << query.value(0).toInt();
         }
     } else {
-        Utils::Log::addQueryError("Tools", query, __FILE__, __LINE__);
+        LOG_QUERY_ERROR_FOR("Tools", query);
     }
     return ret;
 }
