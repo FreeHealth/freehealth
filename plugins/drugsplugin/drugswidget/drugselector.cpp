@@ -355,6 +355,7 @@ void DrugSelector::setSearchMethod(int method)
         m_filterModel = "";
         InnView->hide();
         m_SearchMethod = method;
+        m_GlobalDrugsModel->setSearchMode(DrugsDB::GlobalDrugsModel::SearchByMolecularName);
     }
     else if (method == Constants::SearchInn) {
 #ifdef FREEDIAMS
@@ -363,6 +364,7 @@ void DrugSelector::setSearchMethod(int method)
         m_filterModel = "";
         InnView->show();
         m_SearchMethod = method;
+        m_GlobalDrugsModel->setSearchMode(DrugsDB::GlobalDrugsModel::SearchByInnName);
     }
 
     // store search method into settings

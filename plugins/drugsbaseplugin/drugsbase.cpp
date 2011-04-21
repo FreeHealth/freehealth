@@ -1258,7 +1258,6 @@ IDrug *DrugsBase::getDrugByUID(const QVariant &uid1, const QVariant &uid2, const
 //    QTime time;
 //    time.start();
 
-    /** \todo add SID in args */
     if (!d->m_ActualDBInfos) {
         LOG_ERROR(tr("No drug database source selected"));
         IDrug *toReturn = new IDrug;

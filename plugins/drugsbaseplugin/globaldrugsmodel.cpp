@@ -141,8 +141,8 @@ public:
                 get << Utils::Field(Constants::Table_DRUGS, Constants::DRUGS_ATC_ID);
                 get << Utils::Field(Constants::Table_DRUGS, Constants::DRUGS_MARKET);
                 Utils::JoinList joins;
-                joins << Utils::Join(Constants::Table_DRUGS, Constants::DRUGS_DID, Constants::Table_COMPO, Constants::COMPO_DID);
-                joins << Utils::Join(Constants::Table_COMPO, Constants::COMPO_MID, Constants::Table_MOLS, Constants::MOLS_MID);
+                joins << Utils::Join(Constants::Table_COMPO, Constants::COMPO_DID, Constants::Table_DRUGS, Constants::DRUGS_DID);
+                joins << Utils::Join(Constants::Table_MOLS, Constants::MOLS_MID, Constants::Table_COMPO, Constants::COMPO_MID);
                 m_SqlQueryWithoutWhere = base()->select(get, joins);
                 break;
             }
@@ -164,6 +164,9 @@ public:
                 break;
             }
         }
+
+//        qWarning() << m_SqlQueryWithoutWhere + "WHERE " + m_SourceFilter + " AND " + m_Filter;
+
         if (!m_Filter.isEmpty()) {
             q->setQuery(m_SqlQueryWithoutWhere + "WHERE " + m_SourceFilter + " AND " + m_Filter, QSqlDatabase::database(Constants::DB_DRUGS_NAME));
         } else {
@@ -177,20 +180,32 @@ public:
         {
         case GlobalDrugsModel::SearchByBrandName:
             {
-                m_Filter = base()->fieldName(Constants::Table_DRUGS, Constants::DRUGS_NAME) + " LIKE '" + searchFor + "%'";
+                m_Filter = QString("`%1`.`%2` LIKE '%3%'")
+                           .arg(base()->table(Constants::Table_DRUGS))
+                           .arg(base()->fieldName(Constants::Table_DRUGS, Constants::DRUGS_NAME))
+                           .arg(searchFor);
                 break;
             }
         case GlobalDrugsModel::SearchByMolecularName:
             {
-                m_Filter = base()->fieldName(Constants::Table_MOLS, Constants::MOLS_NAME) + " LIKE '" + searchFor + "%'";
+                m_Filter = QString("`%1`.`%2` LIKE '%3%'")
+                           .arg(base()->table(Constants::Table_MOLS))
+                           .arg(base()->fieldName(Constants::Table_MOLS, Constants::MOLS_NAME))
+                           .arg(searchFor);
                 break;
             }
         case GlobalDrugsModel::SearchByInnName:
             {
-                m_Filter = base()->fieldName(Constants::Table_LABELS, Constants::LABELS_LABEL) + " LIKE '" + searchFor + "%'";
+                m_Filter = QString("`%1`.`%2` LIKE '%3%'")
+                           .arg(base()->table(Constants::Table_LABELS))
+                           .arg(base()->fieldName(Constants::Table_LABELS, Constants::LABELS_LABEL))
+                           .arg(searchFor);
                 break;
             }
         }
+
+//        qWarning() << m_SqlQueryWithoutWhere + "WHERE " + m_SourceFilter + " AND " + m_Filter;
+
         if (!m_Filter.isEmpty()) {
             q->setQuery(m_SqlQueryWithoutWhere + "WHERE " + m_SourceFilter + " AND " + m_Filter, QSqlDatabase::database(Constants::DB_DRUGS_NAME));
         } else {
