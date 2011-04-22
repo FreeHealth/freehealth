@@ -290,6 +290,7 @@ enum TitleInterpret {
         const char* const PRECAUTION_FOR_USE            = QT_TRANSLATE_NOOP("tkConstants", "Precaution for use");
         const char* const INFORMATION                   = QT_TRANSLATE_NOOP("tkConstants", "Information");
         const char* const INN_DUPLICATION               = QT_TRANSLATE_NOOP("tkConstants", "Molecule is duplicated");
+        const char* const CLASS_DUPLICATION             = QT_TRANSLATE_NOOP("tkConstants", "Class is duplicated");
 
         // PMHx
         const char* const PMHMENU_TEXT                  = QT_TRANSLATE_NOOP("tkConstants", "PMHx");

@@ -124,6 +124,8 @@ public:
             DrugDrugInteractionEngine::TypesOfIAM r = DrugDrugInteractionEngine::NoIAM;
             if (t.contains("U"))
                 r |= DrugDrugInteractionEngine::InnDuplication;
+            if (t.contains("Z"))
+                r |= DrugDrugInteractionEngine::ClassDuplication;
             if (t.contains("P"))
                 r |= DrugDrugInteractionEngine::Precaution;
             if (t.contains("C"))
@@ -184,7 +186,9 @@ public:
         // Maximum alerts
         else if ((level & DrugDrugInteractionEngine::Information) && (levelOfWarning == Constants::MaximumLevelOfWarning))
             return th->icon(Constants::INTERACTION_ICONINFORMATION, size);
-        else if ((level & DrugDrugInteractionEngine::InnDuplication) && (levelOfWarning == Constants::MaximumLevelOfWarning))
+        else if (((level & DrugDrugInteractionEngine::InnDuplication) ||
+                  (level & DrugDrugInteractionEngine::ClassDuplication)) &&
+                 (levelOfWarning == Constants::MaximumLevelOfWarning))
             return th->icon(Constants::INTERACTION_ICONINFORMATION, size);
         else if (level & DrugDrugInteractionEngine::NoIAM)
             return th->icon(Constants::INTERACTION_ICONOK, size);
@@ -323,6 +327,8 @@ public:
               tmp << tkTr(Trans::Constants::PRECAUTION_FOR_USE);
          if (r & DrugDrugInteractionEngine::InnDuplication)
               tmp << tkTr(Trans::Constants::INN_DUPLICATION);
+         if (r & DrugDrugInteractionEngine::ClassDuplication)
+              tmp << tkTr(Trans::Constants::CLASS_DUPLICATION);
          if (r & DrugDrugInteractionEngine::Information)
               tmp << tkTr(Trans::Constants::INFORMATION);
          return tmp.join(", ");
@@ -439,7 +445,9 @@ public:
         // Maximum alerts
         else if ((level & DrugDrugInteractionEngine::Information) && (levelOfWarning == Constants::MaximumLevelOfWarning))
             return th->icon(Constants::INTERACTION_ICONINFORMATION, size);
-        else if ((level & DrugDrugInteractionEngine::InnDuplication) && (levelOfWarning == Constants::MaximumLevelOfWarning))
+        else if (((level & DrugDrugInteractionEngine::InnDuplication) ||
+                  (level & DrugDrugInteractionEngine::ClassDuplication)) &&
+                 (levelOfWarning == Constants::MaximumLevelOfWarning))
             return th->icon(Constants::INTERACTION_ICONINFORMATION, size);
         else if (level & DrugDrugInteractionEngine::NoIAM)
             return th->icon(Constants::INTERACTION_ICONOK, size);
@@ -488,7 +496,8 @@ public:
         // Maximum alerts
         else if ((level & DrugDrugInteractionEngine::Information))
             return th->iconFullPath(Constants::INTERACTION_ICONINFORMATION, size);
-        else if ((level & DrugDrugInteractionEngine::InnDuplication))
+        else if ((level & DrugDrugInteractionEngine::InnDuplication) ||
+                  (level & DrugDrugInteractionEngine::ClassDuplication))
             return th->iconFullPath(Constants::INTERACTION_ICONINFORMATION, size);
         else if (level & DrugDrugInteractionEngine::NoIAM)
             return th->iconFullPath(Constants::INTERACTION_ICONOK, size);
@@ -579,6 +588,8 @@ public:
                     typeId = DrugDrugInteractionEngine::Information;
                 else if ((r & DrugDrugInteractionEngine::InnDuplication) && (query.levelOfWarningStaticAlert == Constants::MaximumLevelOfWarning))
                     typeId = DrugDrugInteractionEngine::InnDuplication;
+                else if ((r & DrugDrugInteractionEngine::ClassDuplication) && (query.levelOfWarningStaticAlert == Constants::MaximumLevelOfWarning))
+                    typeId = DrugDrugInteractionEngine::ClassDuplication;
                 else if (query.levelOfWarningStaticAlert & DrugDrugInteractionEngine::NoIAM)
                     typeId = DrugDrugInteractionEngine::NoIAM;
 
@@ -663,6 +674,8 @@ public:
                         typeId = DrugDrugInteractionEngine::Information;
                     else if ((level & DrugDrugInteractionEngine::InnDuplication) && (query.levelOfWarningStaticAlert == Constants::MaximumLevelOfWarning))
                         typeId = DrugDrugInteractionEngine::InnDuplication;
+                    else if ((level & DrugDrugInteractionEngine::ClassDuplication) && (query.levelOfWarningStaticAlert == Constants::MaximumLevelOfWarning))
+                        typeId = DrugDrugInteractionEngine::ClassDuplication;
                     else if (level & DrugDrugInteractionEngine::NoIAM)
                         typeId = DrugDrugInteractionEngine::NoIAM;
                     QString &ditmp = lines[typeId];
@@ -881,11 +894,17 @@ QVector<IDrugInteraction *> DrugDrugInteractionEngine::getInteractionsFromDataba
         /** \todo update management of DDI duplication alerts. */
         DrugsInteraction *ddi = 0;
         ddi = new ::DrugsInteraction(this);
-        ddi->setValue(DrugsInteraction::DI_TypeId , "U");
         ddi->setValue(DrugsInteraction::DI_ATC1, _id1);
         ddi->setValue(DrugsInteraction::DI_ATC2, _id1);
-        ddi->setValue(DrugsInteraction::DI_RiskFr, tkTr(Trans::Constants::INN_DUPLICATION));
-        ddi->setValue(DrugsInteraction::DI_RiskEn, Trans::Constants::INN_DUPLICATION);
+        if (_id1 >= 200000) {
+            ddi->setValue(DrugsInteraction::DI_TypeId , "Z");
+            ddi->setValue(DrugsInteraction::DI_RiskFr, tkTr(Trans::Constants::INN_DUPLICATION));
+            ddi->setValue(DrugsInteraction::DI_RiskEn, Trans::Constants::INN_DUPLICATION);
+        } else {
+            ddi->setValue(DrugsInteraction::DI_TypeId , "U");
+            ddi->setValue(DrugsInteraction::DI_RiskFr, tkTr(Trans::Constants::CLASS_DUPLICATION));
+            ddi->setValue(DrugsInteraction::DI_RiskEn, Trans::Constants::CLASS_DUPLICATION);
+        }
         ddi->setValue(DrugsInteraction::DI_ReferencesLink, QCoreApplication::translate("DrugsBase", "FreeDiams Interactions Engine"));
         id2 = _id1;
         toReturn << ddi;
