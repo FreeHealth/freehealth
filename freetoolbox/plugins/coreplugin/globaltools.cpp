@@ -724,7 +724,7 @@ QHash<int, QString> generateMids(const QStringList &molnames, const int sid, con
     return mids;
 }
 
-bool createAtc(const QString &connection, const QString &code, const QMultiHash<QString, QVariant> &trLabels, const int forceAtcId)
+bool createAtc(const QString &connection, const QString &code, const QMultiHash<QString, QVariant> &trLabels, const int forceAtcId, const bool warnDuplicates)
 {
     QSqlDatabase db = QSqlDatabase::database(connection);
     if (!db.isOpen())
@@ -734,11 +734,11 @@ bool createAtc(const QString &connection, const QString &code, const QMultiHash<
     int id = 0;
     QString req;
     if (forceAtcId==-1) {
-        req = QString("INSERT INTO ATC  (ATC_ID, CODE) "
-                  "VALUES (NULL, '%2') ").arg(code);
+        req = QString("INSERT INTO ATC  (ATC_ID, CODE, WARNDUPLICATES) "
+                  "VALUES (NULL, '%1', %2) ").arg(code).arg(warnDuplicates);
     } else {
-        req = QString("INSERT INTO ATC  (ATC_ID, CODE) "
-                  "VALUES (%1, '%2') ").arg(forceAtcId).arg(code);
+        req = QString("INSERT INTO ATC  (ATC_ID, CODE, WARNDUPLICATES) "
+                  "VALUES (%1, '%2', %3) ").arg(forceAtcId).arg(code).arg(warnDuplicates);
     }
 
     if (query.exec(req)) {
@@ -768,6 +768,7 @@ bool createAtc(const QString &connection, const QString &code, const QMultiHash<
         return false;
     }
     query.finish();
+
     db.commit();
     return true;
 }

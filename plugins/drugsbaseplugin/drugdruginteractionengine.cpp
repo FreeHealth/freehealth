@@ -764,6 +764,7 @@ public:
     QVector<IDrugInteraction *> m_Interactions;
     QMap<int, int> m_InteractionsIDs;        /*!<  All possible interactions based on ATC IDs*/
     QMultiMap<int, int> m_DDIFound;               /*!< modified by checkDrugInteraction() */
+    QVector<int> m_DoNotWarnAtcDuplicates;
     bool m_LogChrono;
 };
 }
@@ -772,6 +773,7 @@ public:
 DrugDrugInteractionEngine::DrugDrugInteractionEngine(QObject *parent) :
         IDrugEngine(parent), d(new DrugDrugInteractionEnginePrivate)
 {
+    setObjectName("DrugDrugInteractionEngine");
 //    if (Utils::isDebugCompilation()) {
 //        d->m_LogChrono = true;
 //    } else {
@@ -793,6 +795,20 @@ bool DrugDrugInteractionEngine::init()
     } else {
         LOG_QUERY_ERROR(query);
     }
+    query.finish();
+
+    d->m_DoNotWarnAtcDuplicates.clear();
+    QHash<int,QString> where;
+    where.insert(Constants::ATC_WARNDUPLICATES, "=0");
+    req = base()->select(Constants::Table_ATC, Constants::ATC_ID, where);
+    if (query.exec(req)) {
+        while (query.next()) {
+            d->m_DoNotWarnAtcDuplicates.append(query.value(0).toInt());
+        }
+    } else {
+        LOG_QUERY_ERROR(query);
+    }
+
     return true;
 }
 
@@ -890,25 +906,28 @@ QVector<IDrugInteraction *> DrugDrugInteractionEngine::getInteractionsFromDataba
     }
 
     // first test : is a duplication interaction ?
-    if (id2 == -1) {
-        /** \todo update management of DDI duplication alerts. */
-        DrugsInteraction *ddi = 0;
-        ddi = new ::DrugsInteraction(this);
-        ddi->setValue(DrugsInteraction::DI_ATC1, _id1);
-        ddi->setValue(DrugsInteraction::DI_ATC2, _id1);
-        if (_id1 >= 200000) {
-            ddi->setValue(DrugsInteraction::DI_TypeId , "Z");
-            ddi->setValue(DrugsInteraction::DI_RiskFr, tkTr(Trans::Constants::INN_DUPLICATION));
-            ddi->setValue(DrugsInteraction::DI_RiskEn, Trans::Constants::INN_DUPLICATION);
+    if ((id2 == -1)) {
+        if (!d->m_DoNotWarnAtcDuplicates.contains(_id1)) {
+            DrugsInteraction *ddi = 0;
+            ddi = new ::DrugsInteraction(this);
+            ddi->setValue(DrugsInteraction::DI_ATC1, _id1);
+            ddi->setValue(DrugsInteraction::DI_ATC2, _id1);
+            if (_id1 >= 200000) {
+                ddi->setValue(DrugsInteraction::DI_TypeId , "Z");
+                ddi->setValue(DrugsInteraction::DI_RiskFr, tkTr(Trans::Constants::INN_DUPLICATION));
+                ddi->setValue(DrugsInteraction::DI_RiskEn, Trans::Constants::INN_DUPLICATION);
+            } else {
+                ddi->setValue(DrugsInteraction::DI_TypeId , "U");
+                ddi->setValue(DrugsInteraction::DI_RiskFr, tkTr(Trans::Constants::CLASS_DUPLICATION));
+                ddi->setValue(DrugsInteraction::DI_RiskEn, Trans::Constants::CLASS_DUPLICATION);
+            }
+            ddi->setValue(DrugsInteraction::DI_ReferencesLink, QCoreApplication::translate("DrugsBase", "FreeDiams Interactions Engine"));
+            id2 = _id1;
+            toReturn << ddi;
+            return toReturn;
         } else {
-            ddi->setValue(DrugsInteraction::DI_TypeId , "U");
-            ddi->setValue(DrugsInteraction::DI_RiskFr, tkTr(Trans::Constants::CLASS_DUPLICATION));
-            ddi->setValue(DrugsInteraction::DI_RiskEn, Trans::Constants::CLASS_DUPLICATION);
+            return toReturn;
         }
-        ddi->setValue(DrugsInteraction::DI_ReferencesLink, QCoreApplication::translate("DrugsBase", "FreeDiams Interactions Engine"));
-        id2 = _id1;
-        toReturn << ddi;
-        return toReturn;
     }
 
     // else retreive INTERACTION from database
@@ -968,7 +987,7 @@ QVector<IDrugInteraction *> DrugDrugInteractionEngine::getAllInteractionsFound()
     QTime t;
     t.start();
 
-    QSqlDatabase DB = base()->database();
+    QSqlDatabase DB = QSqlDatabase::database(Constants::DB_DRUGS_NAME);
     if (!DB.isOpen()) {
         if (!DB.open()) {
             LOG_ERROR(tkTr(Trans::Constants::UNABLE_TO_OPEN_DATABASE_1_ERROR_2).arg(DB.connectionName()).arg(DB.lastError().text()));
@@ -1012,3 +1031,4 @@ QVector<IDrugInteractionAlert *> DrugDrugInteractionEngine::getAllAlerts(DrugInt
     alerts << new Alert(addToResult);
     return alerts;
 }
+

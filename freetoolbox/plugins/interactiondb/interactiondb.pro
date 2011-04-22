@@ -48,6 +48,8 @@ OTHER_FILES += \
     ../global_resources/sql/ia/thesaurus_interactions.xml \
     ../global_resources/sql/ia/afssaps_links.xml \
     ../global_resources/sql/ia/afssaps_classtree.xml \
+    ../global_resources/sql/drugdb/newdbschema.sql \
+    ../global_resources/sql/drugdb/dbschema060_queries.sql \
 
 
 OTHER_FILES += InteractionDB.pluginspec

@@ -161,7 +161,7 @@ namespace Constants {
     };
 
     enum ATCFields {
-        ATC_ID = 0, ATC_CODE,
+        ATC_ID = 0, ATC_CODE, ATC_WARNDUPLICATES,
         ATC_MaxParam
     };
 

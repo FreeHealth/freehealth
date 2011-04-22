@@ -328,7 +328,7 @@ bool InteractionStep::computeModelsAndPopulateDatabase()
     // add FreeDiams ATC specific codes
     Q_EMIT progressLabelChanged(tr("Creating interactions database (add specific ATC codes)"));
     iam.transaction();
-    QStringList molsWithoutAtc;
+    QStringList molsWithoutAtc, molsClassWithoutWarnDuplicates;
     QStringList afssapsClass, afssapsClassEn;
     QMultiHash<QString, QString> molsToAtc;
     QMultiHash<QString, QString> class_mols;
@@ -341,23 +341,40 @@ bool InteractionStep::computeModelsAndPopulateDatabase()
             molLinkModel->fetchMore(QModelIndex());
         int nb = molLinkModel->rowCount();
         for(int i = 0; i < nb; ++i) {
+            // get row informations
             const QString &mol = molLinkModel->index(i, AfssapsLinkerModel::AfssapsName).data().toString();
+            if (mol.isEmpty())
+                continue;
             const QString &molEn = molLinkModel->index(i, AfssapsLinkerModel::En_Label).data().toString();
             const QString &links = molLinkModel->index(i, AfssapsLinkerModel::AtcCodes).data().toString();
             const QString &type = molLinkModel->index(i, AfssapsLinkerModel::AffapsCategory).data().toString();
-            if (mol.isEmpty())
-                continue;
+            bool warnDuplicates = true;
+            if (molLinkModel->index(i, AfssapsLinkerModel::WarnDuplicates).data().toString()=="false")
+                warnDuplicates = false;
+
             if (type=="class") {
-                 afssapsClass << Core::Tools::noAccent(mol).toUpper();
-                 afssapsClassEn << molEn;
-             } else if (links.isEmpty()) {
-                 molsWithoutAtc << mol.toUpper();
-             } else {
-                 foreach(const QString &atcCode, links.split(",", QString::SkipEmptyParts))
-                     molsToAtc.insertMulti(mol.toUpper(), atcCode.toUpper());
-             }
-         }
+                afssapsClass << Core::Tools::noAccent(mol).toUpper();
+                afssapsClassEn << molEn;
+                if (!warnDuplicates)
+                    molsClassWithoutWarnDuplicates << Core::Tools::noAccent(mol).toUpper();
+            } else if (links.isEmpty()) {
+                molsWithoutAtc << mol.toUpper();
+                if (!warnDuplicates)
+                    molsClassWithoutWarnDuplicates << mol.toUpper();
+            } else {
+                foreach(const QString &atcCode, links.split(",", QString::SkipEmptyParts)) {
+                    molsToAtc.insertMulti(mol.toUpper(), atcCode.toUpper());
+                }
+            }
+        }
         Q_EMIT progress(2);
+
+//        qWarning() << molsClassWithoutWarnDuplicates;
+//        qWarning();
+//        qWarning() << molsWithoutAtc;
+//        qWarning();
+//        qWarning() << afssapsClass;
+
 
         // Add Interacting molecules without ATC code
         // 100 000 < ID < 199 999  == Interacting molecules without ATC code
@@ -369,7 +386,7 @@ bool InteractionStep::computeModelsAndPopulateDatabase()
             labels.insert("fr", molsWithoutAtc.at(i));
             labels.insert("en", molsWithoutAtc.at(i));
             labels.insert("de", molsWithoutAtc.at(i));
-            if (!Core::Tools::createAtc(Core::Constants::MASTER_DATABASE_NAME, "Z01AA" + n, labels, i+100000))
+            if (!Core::Tools::createAtc(Core::Constants::MASTER_DATABASE_NAME, "Z01AA" + n, labels, i+100000, !molsClassWithoutWarnDuplicates.contains(molsWithoutAtc.at(i).toUpper())))
                 return false;
         }
         Q_EMIT progress(3);
@@ -383,7 +400,7 @@ bool InteractionStep::computeModelsAndPopulateDatabase()
             labels.insert("fr", afssapsClass.at(i));
             labels.insert("en", afssapsClassEn.at(i));
             labels.insert("de", afssapsClassEn.at(i));
-            if (!Core::Tools::createAtc(Core::Constants::MASTER_DATABASE_NAME, "ZXX" + n, labels, i+200000))
+            if (!Core::Tools::createAtc(Core::Constants::MASTER_DATABASE_NAME, "ZXX" + n, labels, i+200000, !molsClassWithoutWarnDuplicates.contains(Core::Tools::noAccent(afssapsClass.at(i)).toUpper())))
                 return false;
         }
         Q_EMIT progress(4);
@@ -398,7 +415,6 @@ bool InteractionStep::computeModelsAndPopulateDatabase()
         //            }
         //        }
     }
-
 
     QMultiHash<QString, Source> class_sources;
     // Add interacting classes tree

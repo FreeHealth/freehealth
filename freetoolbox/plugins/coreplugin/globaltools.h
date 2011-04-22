@@ -73,7 +73,7 @@ CORE_EXPORT int addLabels(const QString &connection, const int masterLid, QMulti
 CORE_EXPORT bool addRoutesToDatabase(const QString &connection, const QString &absFileName);
 CORE_EXPORT QHash<int, QString> generateMids(const QStringList &molnames, const int sid, const QString &connection);
 
-CORE_EXPORT bool createAtc(const QString &connection, const QString &code, const QMultiHash<QString, QVariant> &trLabels, const int forceAtcId = -1);
+CORE_EXPORT bool createAtc(const QString &connection, const QString &code, const QMultiHash<QString, QVariant> &trLabels, const int forceAtcId = -1, const bool warnDuplicates = true);
 CORE_EXPORT bool addInteraction(const QString &connection, const QStringList &atc1, const QStringList &atc2, const QString &type, const QMultiHash<QString, QVariant> &risk, const QMultiHash<QString, QVariant> &management);
 CORE_EXPORT int addBibliography(const QString &connection, const QString &type, const QString &link, const QString &reference, const QString &abstract, const QString &explain = QString::null);
 CORE_EXPORT bool addComponentAtcLinks(const QString &connection, const QMultiHash<int, int> &mol_atc, const int sid);

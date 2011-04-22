@@ -86,6 +86,7 @@ public:
         Comments,
         Date,
         AutoFoundAtcs,
+        WarnDuplicates,
         ColumnCount
     };
 

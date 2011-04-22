@@ -243,7 +243,6 @@ public:
             LOG_QUERY_ERROR_FOR(q, sids);
         }
     }
-
     void getDrugComponents(IDrug *drug)
     {
         Utils::FieldList get;
@@ -499,6 +498,7 @@ DrugsBase::DrugsBase(QObject *parent)
     // DDI tables and fields
     addField(Table_ATC, ATC_ID, "ATC_ID");
     addField(Table_ATC, ATC_CODE, "CODE");
+    addField(Table_ATC, ATC_WARNDUPLICATES, "WARNDUPLICATES");
 
     addField(Table_INTERACTIONS, INTERACTIONS_IAID, "IAID");
     addField(Table_INTERACTIONS, INTERACTIONS_ATC_ID1, "ATC_ID1");

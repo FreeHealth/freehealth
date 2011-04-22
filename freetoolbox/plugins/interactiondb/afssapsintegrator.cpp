@@ -377,6 +377,8 @@ QVariant AfssapsLinkerModel::data(const QModelIndex &index, int role) const
             return attributeMap.namedItem("dateofreview").nodeValue();
         case AutoFoundAtcs:
             return attributeMap.namedItem("autoFound").nodeValue();
+        case WarnDuplicates:
+            return attributeMap.namedItem("warnDuplication").nodeValue();
         default:
             return QVariant();
         }
@@ -455,6 +457,9 @@ bool AfssapsLinkerModel::setData(const QModelIndex &index, const QVariant &value
             break;
         case AutoFoundAtcs:
             attributeMap.namedItem("autoFound").setNodeValue(value.toString());
+            break;
+        case WarnDuplicates:
+            attributeMap.namedItem("warnDuplication").setNodeValue(value.toString());
             break;
         default:
             return false;
