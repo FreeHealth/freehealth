@@ -41,8 +41,7 @@ updatetranslations.sh \
 buildspecs \
 doc \
 freediams \
-global_resources/databases/drugs/drugs*.db \
-global_resources/databases/drugs/iam*.db \
+global_resources/databases/drugs/master.db \
 global_resources/doc/freediams \
 global_resources/textfiles/freediams.desktop \
 global_resources/pixmap \
@@ -81,7 +80,7 @@ global_resources/package_helpers/freemedforms.url \
 global_resources/translations/*.ts \
 global_resources/translations/qt*.qm \
 global_resources/databases/icd10/icd10.db \
-global_resources/sql/icd10.sql \
+global_resources/sql/icd10/icd10.sql \
 libs \
 contrib \
 plugins/fmf_plugins.pri \
@@ -162,6 +161,7 @@ contrib \
 plugins/fmf_plugins.pri \
 plugins/coreplugin \
 plugins/accountbaseplugin \
+plugins/accountplugin \
 plugins/printerplugin \
 plugins/texteditorplugin \
 plugins/listviewplugin \
@@ -174,29 +174,43 @@ updatetranslations.sh \
 buildspecs \
 doc \
 freemedforms \
-global_resources/databases/drugs/drugs*.db \
-global_resources/databases/drugs/iam*.db \
+global_resources/databases/drugs/master.db \
+global_resources/databases/icd10/icd10.db \
 global_resources/doc/freemedforms \
-global_resources/textfiles/freemedforms.desktop \
-global_resources/pixmap \
+global_resources/forms \
 global_resources/package_helpers \
+global_resources/pixmap \
+global_resources/profiles \
+global_resources/textfiles/freemedforms.desktop \
 global_resources/translations/*.ts \
 global_resources/translations/qt*.qm \
-global_resources/sql/icd10.sql \
 libs \
 contrib \
 plugins/fmf_plugins.pri \
+plugins/aggirplugin \
+plugins/accountbaseplugin \
+plugins/accountplugin \
+plugins/basewidgetsplugin \
+plugins/calendarplugin \
+plugins/categoryplugin \
 plugins/coreplugin \
 plugins/drugsbaseplugin \
 plugins/drugsplugin \
 plugins/emptyplugin \
-plugins/fdcoreplugin \
-plugins/fdmainwindowplugin \
+plugins/fmfcoreplugin \
+plugins/fmfmainwindowplugin \
+plugins/formmanagerplugin \
+plugins/icdplugin \
 plugins/listviewplugin \
+plugins/padtoolsplugin \
+plugins/patientbaseplugin
+plugins/pmhplugin \
 plugins/printerplugin \
 plugins/saverestoreplugin \
 plugins/templatesplugin \
 plugins/texteditorplugin \
+plugins/usermanagerplugin \
+plugins/xmlioplugin \
 scripts \
 tests"
 
