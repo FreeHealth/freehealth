@@ -16,7 +16,7 @@ class ACCOUNT_EXPORT distance:public QDialog{
     public :
         distance(QWidget * parent);
         ~distance();
-        double getDistanceNumber();
+        double getDistanceNumber(const QString & data);
         int returnDistanceDialog();
         double m_percentValue;
     private slots :

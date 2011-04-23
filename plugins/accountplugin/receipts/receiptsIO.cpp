@@ -178,3 +178,13 @@ bool receiptsEngine::addBoolTrue(QString & data){
     return ret;
 }
 
+double receiptsEngine::getMinDistanceValue(const QString & data){
+    double minDistance = 0.00;
+    DistanceRulesModel model(this);
+    QString filter = QString("%1 = '%2'").arg("TYPE",data);
+    model.setFilter(filter);
+    qDebug() << __FILE__ << QString::number(__LINE__) << " filter =" << model.filter() ;
+    minDistance = model.data(model.index(0,DISTRULES_MIN_KM),Qt::DisplayRole).toDouble();
+    return minDistance;
+}
+

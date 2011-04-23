@@ -35,7 +35,7 @@
 #include <QDataWidgetMapper>
 #include <QHash>
 #include <QSpinBox>
-
+#include <QStandardItemModel>
 
 namespace Core {
 class ISettings;
@@ -74,6 +74,8 @@ private:
     void changeEvent(QEvent *e);
     void saveModel();
     QString calcDistanceRulesUid();
+    QStandardItemModel * distanceRulesModelByLocale();
+    bool fillEmptyDistanceRulesModel();
 
 private:
     AccountDB::DistanceRulesModel *m_Model;

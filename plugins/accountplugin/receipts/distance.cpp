@@ -1,6 +1,7 @@
 #include "distance.h"
 #include "constants.h"
 #include "receiptsmanager.h"
+#include "receiptsIO.h"
 #include "ui_ChoiceDialog.h"
 #include <QDebug>
 
@@ -33,9 +34,13 @@ distance::distance(QWidget * parent):QDialog(parent),ui(new Ui::ChoiceDialog){
 
 distance::~distance(){}
 
-double distance::getDistanceNumber(){
+double distance::getDistanceNumber(const QString & data){
+    qDebug() << __FILE__ << QString::number(__LINE__) << " data =" << data  ;
+    receiptsEngine recIO;
     double dist = 0.00;
-    dist = ui->distanceDoubleSpinBox->value();
+    double minDistance = recIO.getMinDistanceValue(data);
+    qDebug() << __FILE__ << QString::number(__LINE__) << " minDistance =" << QString::number(minDistance) ;
+    dist = ui->distanceDoubleSpinBox->value() - minDistance;
     return dist;
 }
 

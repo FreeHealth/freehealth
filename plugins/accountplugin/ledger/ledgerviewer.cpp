@@ -11,6 +11,7 @@ LedgerViewer::LedgerViewer(QWidget * parent): QWidget(parent),ui(new Ui::LedgerV
     m_currency = "euro";
     m_lm = new LedgerManager(this);
     m_ledgerEdit = new LedgerEdit(this);
+    m_ledgerEdit->hide();
     QStringList listOfMonths;
     listOfMonths = m_lm->getListOfMonths();
     ui->monthsComboBox->addItems(listOfMonths);
@@ -104,16 +105,17 @@ void LedgerViewer::monthlyReceiptsAnalysis(){
 void LedgerViewer::monthlyAndTypeReceiptsAnalysis(){
     QString month = ui->monthsComboBox->currentText();
     QString year = ui->yearsComboBox->currentText();
-    QSqlTableModel * model = m_lm->getModelMonthlyAndTypeReceiptsAnalysis(this,
+    QStandardItemModel * model = m_lm->getModelMonthlyAndTypeReceiptsAnalysis(this,
                                                                        month,
                                                                        year);
+    qDebug() << __FILE__ << QString::number(__LINE__) << " model->rowCount() =" << QString::number(model->rowCount()) ;
     ui->tableView->setModel(model);
     QString labelText = "Total = "+QString::number(m_lm->m_sums)+" "+m_currency;
     ui->sumLabel->setText(labelText);
 }
 void LedgerViewer::yearlyAndTypeReceiptsAnalysis(){
     QString year = ui->yearsComboBox->currentText();
-    QSqlTableModel * model = m_lm->getModelYearlyAndTypeReceiptsAnalysis(this,year);
+    QStandardItemModel * model = m_lm->getModelYearlyAndTypeReceiptsAnalysis(this,year);
     ui->tableView->setModel(model);
     QString labelText = "Total = "+QString::number(m_lm->m_sums)+" "+m_currency;
     ui->sumLabel->setText(labelText);

@@ -35,7 +35,7 @@
 #include <QDataWidgetMapper>
 #include <QHash>
 #include <QSpinBox>
-
+#include <QStandardItemModel>
 
 namespace Core {
 class ISettings;
@@ -79,6 +79,8 @@ private:
     QStringList listOfCountries();
     QString findCityFromZipCode();
     int calcInsuranceUid();
+    QStandardItemModel * insuranceModelByLocale();
+    bool fillEmptyAvailableModel();
 
 private:
     AccountDB::InsuranceModel *m_Model;

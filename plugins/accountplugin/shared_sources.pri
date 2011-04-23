@@ -63,10 +63,12 @@ HEADERS += \
     $${PWD}/receipts/choiceDialog.h \
     $${PWD}/receipts/constants.h \
     $${PWD}/receipts/distance.h \
+    $${PWD}/receipts/controlreceiptsIO.h \
     $${PWD}/receipts/receiptviewer.h
 
 FORMS += $${PWD}/receipts/findValuesGUI.ui \
     $${PWD}/receipts/ChoiceDialog.ui \
+    $${PWD}/receipts/controlreceipts.ui \
     $${PWD}/receipts/receiptviewer.ui
 
 SOURCES += \
@@ -74,8 +76,9 @@ SOURCES += \
     $${PWD}/receipts/receiptsIO.cpp \
     $${PWD}/receipts/findReceiptsValues.cpp \
     $${PWD}/receipts/choiceDialog.cpp \
-    $${PWD}/receipts/xmlcategoriesparser.cpp \   # redondant with Utils::readXml in <utils/global.h>
+    $${PWD}/receipts/xmlcategoriesparser.cpp \   
     $${PWD}/receipts/distance.cpp \
+    $${PWD}/receipts/controlreceiptsIO.cpp \
     $${PWD}/receipts/receiptviewer.cpp
 
 # include assets

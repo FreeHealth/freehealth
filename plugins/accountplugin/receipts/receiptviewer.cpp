@@ -59,7 +59,7 @@ static inline Core::IPatient *patient() { return Core::ICore::instance()->patien
 using namespace ReceiptsConstants;
 using namespace Constants;
 
-namespace Internal {
+namespace InternalAmount {
 
     class AmountModel : public QAbstractTableModel
     {
@@ -280,7 +280,7 @@ void treeViewsActions::fillActionTreeView()
     parametersMap.insert("Sites","sites");
     parametersMap.insert("Prefered Value","Prefered Value");
     parametersMap.insert("Round trip","Round trip");
-    parametersMap.insert("Distance rules","Distance rules");
+    parametersMap.insert("Distance rules","distance_rules");
     listOfMainActions = parametersMap.keys();
     //insert items from tables if available
     QMap<QString,QString> mapSubItems;
@@ -300,8 +300,8 @@ void treeViewsActions::fillActionTreeView()
         {
         	  if (strKeysParameters == "Debtor")
         	  {
-        	       mapSubItems.insertMulti("Debtor","Patient");
-                       mapSubItems.insertMulti("Debtor","CPAM28");  
+        	       mapSubItems.insertMulti(strKeysParameters,"Patient");
+                       mapSubItems.insertMulti(strKeysParameters,"CPAM28");  
         	      }
         	  else if (strKeysParameters == "Thesaurus")
         	  {
@@ -327,6 +327,7 @@ void treeViewsActions::fillActionTreeView()
     QStandardItem *parentItem = treeModel()->invisibleRootItem();
     QString strMainActions;
     foreach(strMainActions,listOfMainActions){
+        qDebug() << __FILE__ << QString::number(__LINE__) << " strMainActions =" << strMainActions ;
         QStandardItem *actionItem = new QStandardItem(strMainActions);
         //treeViewsActions colors
         if (strMainActions == "Debtor")
@@ -373,8 +374,9 @@ void treeViewsActions::fillActionTreeView()
         listSubActions = mapSubItems.values(strMainActions);
         QString strSubActions;
         foreach(strSubActions,listSubActions){
+            qDebug() << __FILE__ << QString::number(__LINE__) << " strSubActions =" << strSubActions ;
             QStandardItem *subActionItem = new QStandardItem(strSubActions);
-            actionItem->appendRow(subActionItem);
+            actionItem->appendRow(subActionItem);            
         }
     }
     qDebug() << __FILE__ << QString::number(__LINE__)  ;
@@ -408,9 +410,11 @@ ReceiptViewer::ReceiptViewer(QWidget *parent) :
     ui(new Ui::ReceiptViewer)
 {
     m_userUuid = user()->value(Core::IUser::Uuid).toString();
+    receiptsManager rManager;
     m_kilometers = 0.00 ;
     m_distanceRuleValue = 0.00;
-    m_model = new ::Internal::AmountModel(this);
+    m_insuranceUid = 0;
+    m_model = new InternalAmount::AmountModel(this);
     ui->setupUi(this);
     ui->amountsView->verticalHeader()->setResizeMode(QHeaderView::ResizeToContents);
     ui->amountsView->horizontalHeader()->setResizeMode(QHeaderView::ResizeToContents);
@@ -445,6 +449,7 @@ ReceiptViewer::ReceiptViewer(QWidget *parent) :
     QString debtor = QString("Debtor");
     m_siteUid = firstItemChoosenAsPreferential(site);
     m_distanceRuleValue = firstItemChoosenAsPreferential(distRule).toDouble();
+    m_distanceRuleType = rManager.m_preferedDistanceRule.toString();
     m_insuranceUid = firstItemChoosenAsPreferential(debtor);
     qDebug() << __FILE__ << QString::number(__LINE__) 
              << " site,dist,ins prefered =" << m_siteUid.toString()
@@ -453,10 +458,16 @@ ReceiptViewer::ReceiptViewer(QWidget *parent) :
     
     //right click
     m_clear = new QAction(trUtf8("Clear all."),this);
+    //ui_controlreceipts
+    m_control = new ControlReceipts(this);
+    m_control->hide();
+    ui->displayRadioButton->setCheckable(true);
     connect(ui->quitButton,SIGNAL(pressed()),this,SLOT(close()));
     connect(ui->saveButton,SIGNAL(pressed()),this,SLOT(save()));
     connect(ui->saveAndQuitButton,SIGNAL(pressed()),this,SLOT(saveAndQuit()));
     connect(ui->thesaurusButton,SIGNAL(pressed()),this,SLOT(saveInThesaurus()));
+    connect(ui->displayRadioButton,SIGNAL(clicked(bool)),this,SLOT(showControlReceipts(bool)));
+    
     connect(actionTreeView,SIGNAL(clicked(const QModelIndex&)),this,SLOT(actionsOfTreeView(const QModelIndex&)));
     connect(m_clear,SIGNAL(triggered(bool)),this,SLOT(clearAll(bool)));
 }
@@ -508,7 +519,7 @@ void ReceiptViewer::actionsOfTreeView(const QModelIndex &index){
                     percentage = choice.m_percentValue;//double
                     
                 
-            qDebug() << __FILE__ << QString::number(__LINE__) << " typeOfPayment = "<< QString::number(typeOfPayment);
+            //qDebug() << __FILE__ << QString::number(__LINE__) << " typeOfPayment = "<< QString::number(typeOfPayment);
             
              /*QStringList*/ m_listOfValues << hashOfValues.keys();
              m_modelReturnedList->setStringList(m_listOfValues);
@@ -539,18 +550,24 @@ void ReceiptViewer::actionsOfTreeView(const QModelIndex &index){
     if (manager.getDistanceRules().keys().contains(data))
     {
     	  m_distanceRuleValue = manager.getDistanceRules().value(data).toDouble();
+    	  m_distanceRuleType = data;
+    	  qDebug() << __FILE__ << QString::number(__LINE__) << " m_distanceRuleValue =" << QString::number(m_distanceRuleValue) ;
+    	  qDebug() << __FILE__ << QString::number(__LINE__) << " m_distanceRuleType =" << m_distanceRuleType ;
         }
     if (data == "Round trip")
     {
     	  distance dist(this);
     	  if (dist.exec()== QDialog::Accepted)
     	  {
-    	          m_kilometers = dist.getDistanceNumber();
+    	          m_kilometers = dist.getDistanceNumber(m_distanceRuleType);
                   double value = m_kilometers *m_distanceRuleValue;
     	          typeOfPayment = dist.returnDistanceDialog();
     	          percentage = dist.m_percentValue;
     	  	  hashOfValues.insertMulti("DistPrice",QString::number(value));
     	          qDebug() << __FILE__ << QString::number(__LINE__) << " distance =" << QString::number(m_kilometers) ;
+    	          qDebug() << __FILE__ << QString::number(__LINE__) << " value =" << QString::number(value) ;
+    	          m_listOfValues << trUtf8("Kilometers");
+                  m_modelReturnedList->setStringList(m_listOfValues);
     	          fillModel(hashOfValues,typeOfPayment,percentage);
     	      }
     	  
@@ -597,7 +614,7 @@ void ReceiptViewer::fillModel(QHash<QString,QString> &hashOfValues, int typeOfPa
     }
     value = value*percentage/100.00;
     qDebug() << __FILE__ << QString::number(__LINE__) << " values =" << QString::number(value);
-    const QModelIndex index = m_model->index(typeOfPayment, ::Internal::AmountModel::Col_Value);
+    const QModelIndex index = m_model->index(typeOfPayment, ::InternalAmount::AmountModel::Col_Value);
     double lastValue = m_model->data(index).toDouble();
     value += lastValue;
     m_model->setData(index, value, Qt::EditRole);
@@ -608,12 +625,12 @@ void ReceiptViewer::save()
     using namespace ::Internal;
     QString userUuid = user()->value(Core::IUser::Uuid).toString();
     QString textOfListOfActs = m_listOfValues.join("+");
-    double cash = m_model->data(m_model->index(AmountModel::Row_Cash,AmountModel::Col_Value)).toDouble();
-    double cheque = m_model->data(m_model->index(AmountModel::Row_Cheque,AmountModel::Col_Value)).toDouble();
-    double visa = m_model->data(m_model->index(AmountModel::Row_Visa,AmountModel::Col_Value)).toDouble();
-    double banking = m_model->data(m_model->index(AmountModel::Row_Banking,AmountModel::Col_Value)).toDouble();
-    double other = m_model->data(m_model->index(AmountModel::Row_Other,AmountModel::Col_Value)).toDouble();
-    double due = m_model->data(m_model->index(AmountModel::Row_Du,AmountModel::Col_Value)).toDouble();
+    double cash = m_model->data(m_model->index(InternalAmount::AmountModel::Row_Cash,InternalAmount::AmountModel::Col_Value)).toDouble();
+    double cheque = m_model->data(m_model->index(InternalAmount::AmountModel::Row_Cheque,InternalAmount::AmountModel::Col_Value)).toDouble();
+    double visa = m_model->data(m_model->index(InternalAmount::AmountModel::Row_Visa,InternalAmount::AmountModel::Col_Value)).toDouble();
+    double banking = m_model->data(m_model->index(InternalAmount::AmountModel::Row_Banking,InternalAmount::AmountModel::Col_Value)).toDouble();
+    double other = m_model->data(m_model->index(InternalAmount::AmountModel::Row_Other,InternalAmount::AmountModel::Col_Value)).toDouble();
+    double due = m_model->data(m_model->index(InternalAmount::AmountModel::Row_Du,InternalAmount::AmountModel::Col_Value)).toDouble();
     qDebug() << __FILE__ << QString::number(__LINE__) << " values =" << QString::number(cash)+ " "
                                                                      << QString::number(cheque)+ " "
                                                                      << QString::number(visa)+ " "
@@ -693,19 +710,19 @@ void ReceiptViewer::clearAll(bool b)
     m_listOfValues.clear();
     m_modelReturnedList->removeRows(0,m_modelReturnedList->rowCount(),QModelIndex());
     //clear accountmodel
-    for (int i = 0; i < ::Internal::AmountModel::RowCount; i += 1) {
+    for (int i = 0; i < ::InternalAmount::AmountModel::RowCount; i += 1) {
         double value = 0.00;
-        m_model->setData(m_model->index(i, ::Internal::AmountModel::Col_Value), value, Qt::EditRole);
+        m_model->setData(m_model->index(i, ::InternalAmount::AmountModel::Col_Value), value, Qt::EditRole);
     }
 }
 
-QVariant ReceiptViewer::firstItemChoosenAsPreferential(QString &item)
+QVariant ReceiptViewer::firstItemChoosenAsPreferential(QString & item)
 {
     QVariant variantValue = QVariant("No item");
     receiptsManager manager;
-    if (manager.getDistanceRules().keys().contains(item))
+    if (item == "Distance rules")
     {
-    	  variantValue = manager.m_preferedDistanceRule;
+    	  variantValue = manager.m_preferedDistanceValue;
         }
     if (manager.getHashOfSites().keys().contains(item))
     {
@@ -716,4 +733,15 @@ QVariant ReceiptViewer::firstItemChoosenAsPreferential(QString &item)
     	  variantValue = manager.m_preferedInsurance;
         }
     return variantValue;
+}
+
+void ReceiptViewer::showControlReceipts(bool b){
+    if (b)
+    {
+    	  m_control->show();
+        }
+}
+
+void ReceiptViewer::resizeEvent(QResizeEvent *event){
+    m_control->resizeControlReceipts(this);
 }

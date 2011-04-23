@@ -119,6 +119,10 @@ void DistanceRulesModel::setFilter(const QString & filter){
     d->m_SqlTable->setFilter(filter);
 }
 
+QString DistanceRulesModel::filter(){
+    return d->m_SqlTable->filter();
+}
+
 
 QVariant DistanceRulesModel::headerData(int section, Qt::Orientation orientation, int role) const
 {

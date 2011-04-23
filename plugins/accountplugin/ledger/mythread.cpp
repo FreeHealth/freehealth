@@ -212,6 +212,12 @@ QStringList ProduceDoc::calculateMovements(QString & dateBegin, QString & dateEn
     LedgerIO lio(0);
     QStringList typeAndSumsList;
     typeAndSumsList = lio.getListOfSumsMonthlyMovementsIO(0,beginningOfMonth , endOfMonth);
+    qDebug() << __FILE__ << QString::number(__LINE__) << " typeAndSumsList.size() =" << QString::number(typeAndSumsList.size()) ;
+    for (int i = 0; i < typeAndSumsList.size(); i += 1)
+    {
+    	qDebug() << __FILE__ << QString::number(__LINE__) << "typeAndSumsList[i]  =" << typeAndSumsList[i] ;
+        }
+    
     return typeAndSumsList;
 }
 //--------------------fonction de remplissage de tableau par mois-------------------------------------------
@@ -260,7 +266,8 @@ bool ProduceDoc::modele(QString & month,
                 sumsReceipts   = calculateReceipts( un, trenteetquelque);
                 //qDebug() << __FILE__ << QString::number(__LINE__) << " thread 5+1 "   ;
     ////qDebug() << "tableLedgerTypeReceipts.size()= "+ QString::number(tableLedgerTypeReceipts.size()) << __LINE__;
-    fillTable(tableLedgerTypeReceipts,tableFormatModele,cursorForFillFunction,thisMonth,sumsReceipts,RECEIPTS_TYPE);
+    QString emptyStringForReceipts;
+    fillTable(tableLedgerTypeReceipts,tableFormatModele,cursorForFillFunction,thisMonth,sumsReceipts,RECEIPTS_TYPE,emptyStringForReceipts);
 //----------------tableau depenses---------------------------------------------------------
     //qDebug() << __FILE__ << QString::number(__LINE__) << " thread 6 "   ;
     QList<QVector<QString> > tableLedgerMonthDepenses;
@@ -269,17 +276,28 @@ bool ProduceDoc::modele(QString & month,
 
 //----------------iteration des depenses par type------------------------------------------------------
     QList<QVector<QString> > tableauLivreTypeDepense;
-    for(int i = 0 ; i < m_typesMovements.size() ; i++){
+    QStringList listOfTypeMovements;
+    listOfTypeMovements = m_typesMovements;
+    qDebug() << __FILE__ << QString::number(__LINE__) << "m_typesMovements.size()  =" <<  QString::number(m_typesMovements.size());
+    for(int i = 0 ; i < listOfTypeMovements.size() ; i++){
             QVector<QString> vector;
             foreach(vector,tableLedgerMonthDepenses){
-                 if(vector[VM_LABEL] == m_typesMovements[i]){
+                 if(vector[VM_LABEL] == listOfTypeMovements[i]){
+                     //qDebug() << __FILE__ << QString::number(__LINE__) << "vector[VM_LABEL]  =" << vector[VM_LABEL] ;
                      tableauLivreTypeDepense << vector;
                      }
             }
         }
     QStringList sommedepenses;
                 sommedepenses = calculateMovements( un, trenteetquelque);
-    fillTable(tableauLivreTypeDepense,tableFormatModele,cursorForFillFunction,thisMonth,sommedepenses,MOVEMENTS_TYPE);
+    QString totalOfMovements;
+    if (sommedepenses.size()>0)
+    {
+    	  totalOfMovements = sommedepenses.last().split("=")[1];
+    	  
+    	  //sommedepenses.removeAt(0);
+        }
+    fillTable(tableauLivreTypeDepense,tableFormatModele,cursorForFillFunction,thisMonth,sommedepenses,MOVEMENTS_TYPE,totalOfMovements);
     //qDebug() << __FILE__ << QString::number(__LINE__) << " thread 8 "   ;
     return true;
 }
@@ -291,7 +309,8 @@ void ProduceDoc::fillTable(QList<QVector<QString> > & tableau,
                            QTextCursor * cursorForFillFunction,
                            QString & thisMonth, 
                            QStringList & listSums, 
-                           int choice){
+                           int choice,
+                           const QString & totalMovementString){
     QList<QVector<QString> > tableauInFonction;
                          tableauInFonction         = tableau;
         int              nbreLignesTableau         = tableauInFonction.size();
@@ -302,16 +321,18 @@ void ProduceDoc::fillTable(QList<QVector<QString> > & tableau,
         QString          thisMonthfonction         = thisMonth;
         QString          type                      = "";
         QStringList      totalSumsList             = listSums;
+        QString total;
         /*for (int i = 0; i < totalSumsList.size(); i += 1)
         {
         	//qDebug() << __FILE__ << QString::number(__LINE__) << " totalSumsList =" << totalSumsList[i] ;
             }*/
         if(choice == RECEIPTS_TYPE){
             type = trUtf8("Receipts");
-            
+            total = totalSumsList[SUMS_SUM];
                         }
         if(choice == MOVEMENTS_TYPE){
             type = trUtf8("Movements");
+            total = totalMovementString;
             }
         //qDebug() << __FILE__ << QString::number(__LINE__) << " thread 9 "   ;
         QTextBlockFormat centerHead ;
@@ -349,6 +370,7 @@ void ProduceDoc::fillTable(QList<QVector<QString> > & tableau,
     	        for (int a = 0 ;a < nbreColonnesTableau ; a++){
                     QString str = vectorString[a];
                          list << str;
+                         qDebug() << __FILE__ << QString::number(__LINE__) << " str =" << str ;
                    }
                    double s = list[2].toDouble();
                    if(s > 0){
@@ -366,6 +388,7 @@ void ProduceDoc::fillTable(QList<QVector<QString> > & tableau,
        cursortrieinfunction         -> insertBlock(centrer);
        cursortrieinfunction         -> insertText("\n \n");
 //----------------insertion fin de table-------------------------------------------
+    qDebug() << __FILE__ << QString::number(__LINE__) << "total  =" << total ;
     table                           -> insertRows(table->rows(),1);
     table                           -> mergeCells(table->rows()-1,0,1,2);//-1 car part de zero
     QTextTableCell cell              = table->cellAt(table->rows()-1,0);
@@ -374,7 +397,7 @@ void ProduceDoc::fillTable(QList<QVector<QString> > & tableau,
     QTextTableCell cell2             = table->cellAt(table->rows()-1,2);
      QTextCursor cellCursor2         = cell2.firstCursorPosition();
      table                          -> mergeCells(table->rows()-1,2,1,3);
-     cellCursor2                      .insertText(totalSumsList[SUMS_SUM]);
+     cellCursor2                      .insertText(total);
     cursortrieinfunction            -> movePosition(QTextCursor::End,QTextCursor::MoveAnchor,1);
     
     QTextBlockFormat centrer1 ;
@@ -389,17 +412,19 @@ void ProduceDoc::fillTable(QList<QVector<QString> > & tableau,
     }
     //qDebug() << __FILE__ << QString::number(__LINE__) << " thread 12 "   ;
 //---------------insertion table recapitulative----------------------------------
+//---------------complete year---------------------------------------------------
     QTextTable *tableRecap;
     if(choice == RECEIPTS_TYPE){
         QString esp               = totalSumsList[SUMS_CASH];
         QString chq               = totalSumsList[SUMS_CHECKS];
         QString cb                = totalSumsList[SUMS_CREDITCARDS];
         QString banking           = totalSumsList[SUMS_BANKING];
-        nbreLignesTableau         = int(SUMS_MaxParam) -1;
+        QString totalReceipts     = totalSumsList[SUMS_SUM];
+        nbreLignesTableau         = int(SUMS_MaxParam) ;
         tableRecap                = cursortrieinfunction->insertTable(nbreLignesTableau,2,tableFormatDone);
         QTextTableCell cell00     = tableRecap->cellAt(0,0);//verify all table
          QTextCursor cellCursor00 = cell00.firstCursorPosition();
-         cellCursor00             . insertText(trUtf8("Total Receipts"));
+         cellCursor00             . insertText(trUtf8("Total Cash"));
         QTextTableCell cell01     = tableRecap->cellAt(0,1);
          QTextCursor cellCursor01 = cell01.firstCursorPosition();
          cellCursor01             . insertText(esp);
@@ -421,13 +446,26 @@ void ProduceDoc::fillTable(QList<QVector<QString> > & tableau,
         QTextTableCell cell31     = tableRecap->cellAt(3,1);
          QTextCursor cellCursor31 = cell31.firstCursorPosition();
          cellCursor31             . insertText(banking);
-    }
+            QTextTableCell cell40     = tableRecap->cellAt(4,0);
+            QTextCursor cellCursor40  = cell40.firstCursorPosition();
+            cellCursor40              . insertText(trUtf8("Total receipts"));
+            QTextTableCell cell41     = tableRecap->cellAt(4,1);
+            QTextCursor cellCursor41  = cell41.firstCursorPosition();
+            cellCursor41              . insertText(totalReceipts);  
+            }
+
+        
+
     //qDebug() << __FILE__ << QString::number(__LINE__) << " thread 13 "   ;
     if(choice == MOVEMENTS_TYPE){
-        nbreLignesTableau = m_typesMovements.size();
-        tableRecap        = cursortrieinfunction->insertTable(nbreLignesTableau,2,tableFormatDone);
-        for(int i = 0 ; i < nbreLignesTableau ; i++){
+        //nbreLignesTableau = m_typesMovements.size();
+        int nberLines = nbreLignesTableau +1 ;
+        qDebug() << __FILE__ << QString::number(__LINE__) << "nberLines  =" <<  QString::number(nberLines);
+        tableRecap                = cursortrieinfunction->insertTable(nberLines,2,tableFormatDone);
+        for(int i = 0 ; i < nberLines ; i++){
             QStringList paireDepenseMontant = totalSumsList[i].split("=");
+            qDebug() << __FILE__ << QString::number(__LINE__) << "paireDepenseMontant[1]  =" << paireDepenseMontant[1] ;
+            qDebug() << __FILE__ << QString::number(__LINE__) << "paireDepenseMontant[0]  =" << paireDepenseMontant[0] ;
             QTextTableCell cellDep          = tableRecap->cellAt(i,0);
              QTextCursor cellCursorDep      = cellDep.firstCursorPosition();
              cellCursorDep                  . insertText(paireDepenseMontant[0]);
@@ -439,7 +477,7 @@ void ProduceDoc::fillTable(QList<QVector<QString> > & tableau,
     //qDebug() << __FILE__ << QString::number(__LINE__) << " thread 14 "   ;
     //calculparmois(listforquery,table, un,trenteetquelque);//calcul par type recette et mois
     cursortrieinfunction  ->movePosition(QTextCursor::End,QTextCursor::MoveAnchor,1);
-    }
+   }
     //qDebug() << __FILE__ << QString::number(__LINE__) << " thread 15 "   ;
 }//end of fillTable
 
@@ -448,7 +486,7 @@ void ProduceDoc::recupSlot(const QString & text){
 }
 
 QTextDocument *ProduceDoc::getTextDocument(){
-    qDebug() << __FILE__ << QString::number(__LINE__) << " m_textDocument =" << m_textDocument->toPlainText() ;
+    //qDebug() << __FILE__ << QString::number(__LINE__) << " m_textDocument =" << m_textDocument->toPlainText() ;
     return m_textDocument;
 }
 

@@ -293,7 +293,6 @@ QStandardItemModel *AvailableMovementWidget::availableMovementModelByLocale()
         	//qDebug() << __FILE__ << QString::number(__LINE__) << " listOfItems[i] =" << listOfItems[i] ;
         	QString itemOfList = listOfItems[i];
         	itemOfList.remove("\"");
-        	itemOfList.remove("'");
         	item->setData(itemOfList);
         	listOfItemsData << item;
         	}

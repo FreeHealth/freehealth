@@ -197,7 +197,7 @@ void findReceiptsValues::showNext(){
     for (int i = 0; i < count; i += 1)
     {
     	QString name = model->dataWithFilter(model->index(i,MP_NAME),Qt::DisplayRole,afterSqlFilter).toString();
-    	qDebug() << __FILE__ << QString::number(__LINE__) << " names =" << name ;
+    	//qDebug() << __FILE__ << QString::number(__LINE__) << " names =" << name ;
     	QString value = model->dataWithFilter(model->index(i,MP_AMOUNT),Qt::DisplayRole,afterSqlFilter).toString();
     	QStandardItem *itemName = new QStandardItem(name);
     	QStandardItem *itemValue = new QStandardItem(value);

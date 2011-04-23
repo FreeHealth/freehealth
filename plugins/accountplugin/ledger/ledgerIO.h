@@ -18,17 +18,17 @@ class LedgerIO : public QObject {
         ~LedgerIO();
         QStringList getListOfYears();
         AccountModel * getModelMonthlyReceiptsIO(QObject * parent,QString & month , QString & year);
-        QStringList getTypesByMonth(QString & month,QString & year);
-        int getNbrOfRowsByTypeAndMonth(QString & month,QString & year,QString & type);
+        QStringList getTypesByMonth(QObject * parent,QString & month,QString & year);
+        int getNbrOfRowsByTypeAndMonth(QObject * parent,QString & month,QString & year,QString & type);
         QStringList listOfTypesByYear(QString & year);
-        int getNbrOfRowsByTypeAndYear(QString & year,QString & type);
+        int getNbrOfRowsByTypeAndYear(QObject * parent,QString & year,QString & type);
         double getYearlyReceiptsSum(QObject * parent,QString & year);
         
         MovementModel * getModelMonthlyMovementsIO(QObject * parent,QString & month, QString & year);
         QStandardItemModel * getModelMonthlyAndTypeMovementsIO(QObject * parent,QString & month, QString & year);
         QStandardItemModel * getModelYearlyAndTypeMovementsIO(QObject * parent,QString & year);
         
-        double getMovementSum(MovementModel * model);
+        double getMovementSum(QObject * parent,QString & month, QString & year);
         //ledger
         QStringList getListOfSumsMonthlyReceiptsIO(QObject * parent,QString & dateBegin , QString & dateEnd);
         QStringList getListOfSumsMonthlyMovementsIO(QObject * parent,QString & dateBegin , QString & dateEnd);

@@ -21,7 +21,7 @@
 /***************************************************************************
  *   Main Developper : Eric MAEKER, <eric.maeker@free.fr>                  *
  *   Contributors :                                                        *
- *       NAME <MAIL@ADRESS>                                                *
+ *       Pierre-Marie Desombre <pm.desombre@gmail.com>                     *
  *       NAME <MAIL@ADRESS>                                                *
  ***************************************************************************/
 #include "accountpreferences.h"

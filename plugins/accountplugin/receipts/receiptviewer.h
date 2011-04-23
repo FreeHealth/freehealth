@@ -1,6 +1,8 @@
 #ifndef RECEIPTVIEWER_H
 #define RECEIPTVIEWER_H
 
+#include "controlreceiptsIO.h"
+
 #include <accountplugin/account_exporter.h>
 
 #include <QWidget>
@@ -18,7 +20,7 @@ namespace Ui {
 }
 
 /** \todo this is not correct. Two choices: create its own files or hide it in the cpp in an anonymous namespace. */
-namespace Internal {
+namespace InternalAmount {
 class AmountModel;
 }  // End namespace Internal
 
@@ -78,6 +80,7 @@ protected:
 private:
     void mousePressEvent(QMouseEvent *event);
     QVariant firstItemChoosenAsPreferential(QString &item);
+    void resizeEvent(QResizeEvent *event);
 
 private Q_SLOTS:
     void deleteLine();
@@ -85,19 +88,20 @@ private Q_SLOTS:
     void saveAndQuit();
     void actionsOfTreeView(const QModelIndex &);
     void saveInThesaurus();
-
-    /** \todo What does mean \e b ? Use explicit naming */
+    void showControlReceipts(bool b);
     void clearAll(bool b);
 
 private:
     /** \todo create a pimpl */
     Ui::ReceiptViewer *ui;
     QStringListModel *m_modelReturnedList;
-    Internal::AmountModel *m_model;
+    InternalAmount::AmountModel *m_model;
+    ControlReceipts * m_control;
     QVariant m_siteUid;
     QVariant m_insuranceUid;
     double m_kilometers;
     double m_distanceRuleValue;
+    QString m_distanceRuleType;
     QStringList m_listOfValues;
 };
 

@@ -485,6 +485,7 @@ AccountBase::AccountBase(QObject *parent)
     addField(Table_DistanceRules,  DISTRULES_UID,     "DISTRULES_UID",     FieldIsUUID);
     addField(Table_DistanceRules,  DISTRULES_TYPE,    "TYPE",              FieldIsShortText);
     addField(Table_DistanceRules,  DISTRULES_VALUES,  "VALUES",            FieldIsShortText);
+    addField(Table_DistanceRules,  DISTRULES_MIN_KM,  "MINIMUM_KILOMETERS",FieldIsShortText);
     addField(Table_DistanceRules,  DISTRULES_PREF,    "PREFERED",          FieldIsBoolean);
 
     addField(Table_Thesaurus,  THESAURUS_ID,      "THESAURUS_ID",      FieldIsUniquePrimaryKey);

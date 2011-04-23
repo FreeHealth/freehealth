@@ -47,6 +47,8 @@
 #include <QRegExp>
 #include <QLocale>
 #include <QUuid>
+#include <QDir>
+#include <QFile>
 
 using namespace Account;
 using namespace Account::Internal;
@@ -118,8 +120,17 @@ DistanceRulesWidget::DistanceRulesWidget(QWidget *parent) :
     addButton->setText("New");
     deleteButton->setIcon(theme()->icon(Core::Constants::ICONREMOVE));
     deleteButton->setText("Delete");
+    preferedSpinBox->setRange(0,1);
     
     m_Model = new AccountDB::DistanceRulesModel(this);
+    if (m_Model->rowCount() < 1)
+    {
+    	  if (!fillEmptyDistanceRulesModel())
+    	  {
+    	  	  QMessageBox::warning(0,trUtf8("Warning"),trUtf8("Unable to fill availablemodel whith local .csv"),
+    	  	                       QMessageBox::Ok);
+    	      }
+        }
         /** \todo  m_Model->setUserUuid(); */
     distanceRulesUidLabel->setText("");
     m_Mapper = new QDataWidgetMapper(this);
@@ -129,6 +140,8 @@ DistanceRulesWidget::DistanceRulesWidget(QWidget *parent) :
     m_Mapper->addMapping(distanceRulesUidLabel,AccountDB::Constants::DISTRULES_UID);
     m_Mapper->addMapping(typeEdit, AccountDB::Constants::DISTRULES_TYPE);
     m_Mapper->addMapping(valueDoubleSpinBox, AccountDB::Constants::DISTRULES_VALUES);
+    m_Mapper->addMapping(preferedSpinBox, AccountDB::Constants::DISTRULES_PREF);
+    m_Mapper->addMapping(minKmDoubleSpinBox, AccountDB::Constants::DISTRULES_MIN_KM);
     //m_Mapper->toFirst();
     distanceRulesComboBox->setModel(m_Model);
     distanceRulesComboBox->setModelColumn(AccountDB::Constants::DISTRULES_TYPE);
@@ -181,9 +194,7 @@ void DistanceRulesWidget::on_addButton_clicked()
     distanceRulesComboBox->setCurrentIndex(m_Model->rowCount()-1);
     distanceRulesUidLabel->setText(calcDistanceRulesUid());
     distanceRulesUidLabel->setFocus();
-    //qDebug() << __FILE__ << QString::number(__LINE__) << " percentUidLabel =" << percentUidLabel->text();
-    //qDebug() << __FILE__ << QString::number(__LINE__) << " currentIndex =" << QString::number(m_Mapper->currentIndex());
-
+    typeEdit->setFocus();
 }
 
 void DistanceRulesWidget::on_deleteButton_clicked()
@@ -233,5 +244,115 @@ QString DistanceRulesWidget::calcDistanceRulesUid(){
     QString uuidStr;
     uuidStr = QUuid::createUuid().toString();
     return uuidStr;
+}
+
+static QString getCsvDefaultFile()
+{
+    QString sqlDirPath = settings()->path(Core::ISettings::BundleResourcesPath) + "/sql/account";
+    QDir dir(sqlDirPath);
+    if (!dir.exists())
+        return QString();
+    QString fileName = QString("distance_rules_%1.csv").arg(QLocale().name());
+    QFile file(dir.absolutePath() + QDir::separator() + fileName);
+    if (!file.exists())
+        return QString();
+    return file.fileName();
+}
+
+QStandardItemModel *DistanceRulesWidget::distanceRulesModelByLocale()
+{
+    QStandardItemModel *model = new QStandardItemModel;
+    QString csvFileName = getCsvDefaultFile();
+    qDebug() << __FILE__ << QString::number(__LINE__) << " csvFileName =" << csvFileName ;
+    QFile file(getCsvDefaultFile());
+    // some validity checking
+    if (!file.exists()) {
+        LOG_ERROR(tkTr(Trans::Constants::FILE_1_DOESNOT_EXISTS).arg(QLocale().name() + " " + tr("Distance rules")));
+        return model;
+    }
+    if (!file.open(QFile::ReadOnly | QFile::Text)) {
+        LOG_ERROR(tkTr(Trans::Constants::FILE_1_ISNOT_READABLE).arg(file.fileName()));
+        return model;
+    }
+
+    // read the content with UTF8 coding system
+    QTextStream stream(&file);
+    stream.setCodec("UTF-8");
+    // skip first line
+    //stream.readLine();
+    //int row = 0;
+    while (!stream.atEnd())
+    {
+        int row = 0;
+        QString line = stream.readLine();
+        QStringList listOfSeparators;
+        listOfSeparators << ",\"" << ";\"" << QString("\t\"")
+                         << ",''" << ";''" << QString("\t''");
+        QString separator;
+        QString separatorStr;
+        foreach(separatorStr,listOfSeparators){
+            if (line.contains(separatorStr)){
+                separator = separatorStr;
+                }
+            }
+        if (!line.contains("DISTRULES_ID")){
+            //"AVAILMOV_ID","PARENT","TYPE","LABEL","CODE","COMMENT","DEDUCTIBILITY"
+            QList<QStandardItem*> listOfItemsData;
+            QStringList listOfItems;
+            listOfItems = line.split(separator);
+            for (int i = 0; i < AccountDB::Constants::DISTRULES_MaxParam ; i += 1){
+                //model->setData(model->index(row,i),listOfItems[i],Qt::EditRole);
+        	QStandardItem * item = new QStandardItem;
+        	qDebug() << __FILE__ << QString::number(__LINE__) << " listOfItems[i] =" << listOfItems[i] ;
+        	QString itemOfList = listOfItems[i];
+        	itemOfList.remove("\"");
+        	itemOfList.remove("'");
+        	item->setData(itemOfList);
+        	listOfItemsData << item;
+        	}
+            model->appendRow(listOfItemsData);
+            ++row;  
+            }
+    }
+    return model;
+}
+
+
+bool DistanceRulesWidget::fillEmptyDistanceRulesModel(){
+    bool test = false;
+    QStandardItemModel * model = distanceRulesModelByLocale();
+    int availModelRows = model->rowCount();
+    //qDebug() << __FILE__ << QString::number(__LINE__) << " availModelRows = " << QString::number(availModelRows) ;
+    QString strList;
+    for (int i = 0; i < availModelRows; i += 1){
+        if (!m_Model->insertRows(m_Model->rowCount(),1,QModelIndex()))
+    	  		{qWarning() << __FILE__ << QString::number(__LINE__) << QString::number(m_Model->rowCount()) ;
+    	  			  /*QMessageBox::warning(0,trUtf8("Warning"),trUtf8("Unable to insert row \n")
+    	  			  +__FILE__+QString::number(__LINE__),QMessageBox::Ok);*/
+    	  		    }
+    	  		    QString strValues;
+    	  	for (int j = 0; j < AccountDB::Constants::DISTRULES_MaxParam ; j += 1){
+    	  		QStandardItem * item = model->itemFromIndex(model->index(i,j));
+    	  		QVariant value = item->data();
+    	  		//todo, semantics
+    	  		if (value.canConvert(QVariant::String))
+    	  		{
+    	  			  QString strValue = value.toString().replace("'","''");
+    	  			  value = QVariant::fromValue(strValue);
+    	  		    }
+    	  		    strValues += value.toString()+" ";
+    	  		//qDebug() << __FILE__ << QString::number(__LINE__) << " value =" << value ;
+    	  		//qDebug() << __FILE__ << QString::number(__LINE__) << "m_Model->rowCount() =" << QString::number(m_Model->rowCount()) ;
+    	  		if (!m_Model->setData(m_Model->index(m_Model->rowCount()-1,j),value,Qt::EditRole))
+    	  		{
+    	  			qWarning() << __FILE__ << QString::number(__LINE__) << "data not inserted !" ;  
+    	  		    }
+    	  	    }
+    	  	    strList += strValues+"\n";
+    	      test = m_Model->submit();
+    	      }
+    	      qDebug() << __FILE__ << QString::number(__LINE__) << " values = \n" << strList;
+
+    return test;
 }
 

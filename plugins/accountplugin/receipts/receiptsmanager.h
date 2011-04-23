@@ -29,6 +29,8 @@ class ACCOUNT_EXPORT receiptsManager : public QObject
   QVariant m_preferedInsurance;
   QVariant m_preferedSite;
   QVariant m_preferedDistanceRule;
+  QVariant m_preferedDistanceValue;
+  QVariant m_preferedInsuranceUid;
   QString m_rbmReq;
 
 };

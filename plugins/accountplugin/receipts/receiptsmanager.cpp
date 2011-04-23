@@ -25,6 +25,10 @@ using namespace Constants;
 
 receiptsManager::receiptsManager()
 {
+    if (!getPreferedValues())
+    {
+    	  qWarning() << __FILE__ << QString::number(__LINE__) << "Unable to get prefered values !" ;
+        }
 }
 
 receiptsManager::~receiptsManager()
@@ -113,12 +117,13 @@ QHash<QString,QVariant> receiptsManager::getParametersDatas(QString & values , c
     if (table == "distance_rules")
     {
    	  DistanceRulesModel model(this);
+   	  qDebug() << __FILE__ << QString::number(__LINE__) << " distrules =" << QString::number(model.rowCount()) ;
    	  for (int row = 0; row < model.rowCount(); row += 1)
    	  {
    	  	QString str = model.data(model.index(row,DISTRULES_TYPE),Qt::DisplayRole).toString();
    	  	QVariant uid = model.data(model.index(row,DISTRULES_UID),Qt::DisplayRole);
    	  	qDebug() << __FILE__ << QString::number(__LINE__) << " receiptsManager list = " << str;
-   	  	hashForReturn.insert(str,uid);
+   	  	hashForReturn.insertMulti(str,uid);
    	  }
    	  if(hashForReturn.size()< 1){
    	      hashForReturn.insert("distance_rules","uid");
@@ -153,7 +158,7 @@ QHash<QString,QVariant> receiptsManager::getHashOfSites(){
    	  	QVariant uid = model.data(model.index(row,SITES_UID),Qt::DisplayRole);
    	  	//qDebug() << __FILE__ << QString::number(__LINE__) << " receiptsManager list = " << str;
    	  	//qDebug() << __FILE__ << QString::number(__LINE__) << " uid =" << uid.toString() ;
-   	  	hash.insert(str,uid);
+   	  	hash.insertMulti(str,uid);
    	  	
    	  	  	  	
    	  }
@@ -170,7 +175,7 @@ QHash<QString,QVariant> receiptsManager::getHashOfInsurance(){
    	  {
    	  	QString str = model.data(model.index(row,INSURANCE_NAME),Qt::DisplayRole).toString();
    	  	QVariant uid = model.data(model.index(row,INSURANCE_UID),Qt::DisplayRole);
-   	  	hash.insert(str,uid);
+   	  	hash.insertMulti(str,uid);
     	  }
    	  if(hash.size()< 1){
    	      hash.insert("patient","uid");
@@ -185,7 +190,7 @@ QHash<QString,QVariant> receiptsManager::getDistanceRules(){
    	  {
    	  	QString str = model.data(model.index(row,DISTRULES_TYPE),Qt::DisplayRole).toString();
    	  	QVariant uid = model.data(model.index(row,DISTRULES_VALUES),Qt::DisplayRole);
-   	  	hash.insert(str,uid);
+   	  	hash.insertMulti(str,uid);
     	  }
    	  if(hash.size()< 1){
    	      hash.insert("DistPrice",0.50);
@@ -202,7 +207,7 @@ QHash<QString,QVariant> receiptsManager::getHashOfThesaurus(){
    	  	QVariant uid = model.data(model.index(row,THESAURUS_USERUID),Qt::DisplayRole);
    	  	//qDebug() << __FILE__ << QString::number(__LINE__) << " receiptsManager list = " << str;
    	  	//qDebug() << __FILE__ << QString::number(__LINE__) << " uid =" << uid.toString() ;
-   	  	hash.insert(str,uid);
+   	  	hash.insertMulti(str,uid);
    	  }
    	  if(hash.size()< 1){
    	      hash.insert("thesaurus","userUuid");
@@ -423,12 +428,15 @@ bool receiptsManager::getPreferedValues(){
     DistanceRulesModel modelDR(this);
     modelDR.setFilter("PREFERED = '1'");
     m_preferedDistanceRule = modelDR.data(modelDR.index(0,DISTRULES_TYPE),Qt::DisplayRole);
+    m_preferedDistanceValue = modelDR.data(modelDR.index(0,DISTRULES_VALUES),Qt::DisplayRole);
+    qDebug() << __FILE__ << QString::number(__LINE__) << " m_preferedDistanceRule =" << m_preferedDistanceRule.toString() ;
     WorkingPlacesModel modelWP(this);
     modelWP.setFilter("PREFERED = '1'");
     m_preferedSite = modelWP.data(modelWP.index(0,SITES_NAME),Qt::DisplayRole);
     InsuranceModel modelINS(this);
     modelINS.setFilter("PREFERED = '1'");
     m_preferedInsurance = modelINS.data(modelINS.index(0,INSURANCE_NAME),Qt::DisplayRole);
+    m_preferedInsuranceUid = modelINS.data(modelINS.index(0,INSURANCE_UID),Qt::DisplayRole);
     if(m_preferedDistanceRule.isNull() || m_preferedInsurance.isNull() || m_preferedSite.isNull()){
         b = false;
         }

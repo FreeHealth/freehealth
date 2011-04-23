@@ -43,6 +43,7 @@
 
 #include <QCompleter>
 #include <QDir>
+#include <QTimer>
 
 using namespace Account;
 using namespace Account::Internal;
@@ -156,6 +157,7 @@ MedicalProcedureWidget::MedicalProcedureWidget(QWidget *parent) :
     mpComboBox->setModel(m_Model);
     mpComboBox->setModelColumn(AccountDB::Constants::MP_NAME);
     setDatasToUi();
+    
 }
 
 MedicalProcedureWidget::~MedicalProcedureWidget()
@@ -305,6 +307,7 @@ static QString getCsvDefaultFile()
 
 QStandardItemModel *MedicalProcedureWidget::MedicalProcedureModelByLocale()
 {
+    QApplication::setOverrideCursor(Qt::WaitCursor);
     QStandardItemModel *model = new QStandardItemModel;
     QString csvFileName = getCsvDefaultFile();
     qDebug() << __FILE__ << QString::number(__LINE__) << " csvFileName =" << csvFileName ;
@@ -350,7 +353,6 @@ QStandardItemModel *MedicalProcedureWidget::MedicalProcedureModelByLocale()
         	//qDebug() << __FILE__ << QString::number(__LINE__) << " listOfItems[i] =" << listOfItems[i] ;
         	QString itemOfList = listOfItems[i];
         	itemOfList.remove("\"");
-        	itemOfList.remove("'");
         	item->setData(itemOfList);
         	listOfItemsData << item;
         	}
@@ -359,6 +361,7 @@ QStandardItemModel *MedicalProcedureWidget::MedicalProcedureModelByLocale()
             qDebug() << __FILE__ << QString::number(__LINE__) << " row =" << QString::number(row) ;
             }
     }
+
     return model;
 }
 
@@ -397,7 +400,7 @@ bool MedicalProcedureWidget::fillEmptyMPModel(){
     	      test = m_Model->submit();
     	      }
     	      qDebug() << __FILE__ << QString::number(__LINE__) << " values = \n" << strList;
-
+    QApplication::restoreOverrideCursor();
     return test;
 }
 

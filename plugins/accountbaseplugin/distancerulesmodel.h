@@ -32,6 +32,12 @@
  *   ANY WAY OUT OF THE USE OF THIS SOFTWARE, EVEN IF ADVISED OF THE       *
  *   POSSIBILITY OF SUCH DAMAGE.                                           *
  ***************************************************************************/
+ /***************************************************************************
+  *   Main Developper : Eric MAEKER, <eric.maeker@free.fr>                  *
+  *   Contributors :                                                        *
+  *       Pierre-Marie Desombre <pm.desombre@gmail.com>                     *
+  *       NAME <MAIL@ADRESS>                                                *
+  ***************************************************************************/
 #ifndef DISTANCERULESMODEL_H
 #define DISTANCERULESMODEL_H
 
@@ -69,6 +75,7 @@ public:
     bool removeRow(int arow, const QModelIndex &aparent = QModelIndex())        { return removeRows(arow, 1, aparent); }
     bool removeColumn(int acolumn, const QModelIndex &aparent = QModelIndex())  { return removeColumns(acolumn, 1, aparent); }
     void setFilter(const QString & filter);
+    QString filter();
     void setUserUuid(const QString &uuid);
     QSqlError lastError();
     bool isDirty() const;

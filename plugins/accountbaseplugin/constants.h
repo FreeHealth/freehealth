@@ -275,6 +275,7 @@ namespace Constants {
         DISTRULES_UID,
         DISTRULES_TYPE,
         DISTRULES_VALUES,
+        DISTRULES_MIN_KM,
         DISTRULES_PREF,
         DISTRULES_MaxParam
     };

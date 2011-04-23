@@ -2,7 +2,7 @@
 #define LEDGERMANAGER_H
 #include "ledgerIO.h"
 #include <QObject>
-#include <QSqlTableModel>
+#include <QStandardItemModel>
 
 
 class LedgerManager : public QObject {
@@ -15,8 +15,8 @@ class LedgerManager : public QObject {
         LedgerManager(QObject * parent);
         ~LedgerManager();
         AccountModel * getModelMonthlyReceiptsAnalysis(QObject * parent,QString & month , QString & year);
-        QSqlTableModel * getModelMonthlyAndTypeReceiptsAnalysis(QObject * parent,QString & month,QString & year);
-        QSqlTableModel * getModelYearlyAndTypeReceiptsAnalysis(QObject * parent,QString & year);
+        QStandardItemModel * getModelMonthlyAndTypeReceiptsAnalysis(QObject * parent,QString & month,QString & year);
+        QStandardItemModel * getModelYearlyAndTypeReceiptsAnalysis(QObject * parent,QString & year);
         
         MovementModel * getModelMonthlyMovementsAnalysis(QObject * parent,QString & month , QString & year);
         QStandardItemModel * getModelMonthlyAndTypeMovementAnalysis(QObject * parent,QString & month,QString & year);

@@ -72,7 +72,8 @@ class ProduceDoc: public QThread {
                               QTextCursor * cursorForFillFunction,
                               QString & thisMonth, 
                               QStringList & listSums, 
-                              int choice);
+                              int choice,
+                              const QString & totalMovementString);
         QStringList calculateReceipts(QString & dateBegin, QString & dateEnd);
         QStringList calculateMovements(QString & dateBegin, QString & dateEnd);
     

@@ -57,6 +57,7 @@ using namespace Trans::ConstantTranslations;
 static inline Core::ISettings *settings() { return Core::ICore::instance()->settings(); }
 static inline Core::ITheme *theme()  { return Core::ICore::instance()->theme(); }
 static inline Core::IUser *user() { return Core::ICore::instance()->user(); }
+const QString global_resourcesPath = qApp->applicationDirPath()+"/../../global_resources";
 
 
 /////////////////////////////////////////////////////////////////////////////////////////////////////
@@ -285,10 +286,11 @@ void SitesWidget::findCityFromZipCode(const QString & zipCodeText){
 
 QHash<QString,QString> SitesWidget::parseZipcodeCsv(){
     QHash<QString,QString> hash;
-    QString zipcodeStr = qApp->applicationDirPath()+"/../global_resources/textfiles/zipcodes.csv";
+    QString zipcodeStr = global_resourcesPath+"/textfiles/zipcodes.csv";
     QFile zipcodeFile(zipcodeStr);
     if(!zipcodeFile.open(QIODevice::ReadOnly|QIODevice::Text)){
         qWarning() << __FILE__ << QString::number(__LINE__) << "zipcode cannot open !" ;
+        qDebug() << __FILE__ << QString::number(__LINE__) << " zipcodeFile =" << zipcodeStr ;
        }
     QTextStream stream(&zipcodeFile);
     while (!stream.atEnd())
@@ -312,11 +314,12 @@ QHash<QString,QString> SitesWidget::parseZipcodeCsv(){
 
 QStringList SitesWidget::listOfCountries(){
     QStringList list;
-    QString countryFileStr = qApp->applicationDirPath()+"/../global_resources/textfiles/pays.txt";
+    QString countryFileStr = global_resourcesPath+"/textfiles/pays.txt";
     QFile file(countryFileStr);
     if (!file.open(QIODevice::ReadOnly|QIODevice::Text))
     {
     	  qWarning() << __FILE__ << QString::number(__LINE__) << "pays.txt cannot open !" ;
+    	  qDebug() << __FILE__ << QString::number(__LINE__) << " pays.txt =" << countryFileStr ;
         }
     QTextStream stream(&file);
     while (!stream.atEnd())

@@ -5,6 +5,7 @@
 #include <accountbaseplugin/accountmodel.h>
 #include <accountbaseplugin/medicalproceduremodel.h>
 #include <accountbaseplugin/thesaurusmodel.h>
+#include <accountbaseplugin/distancerulesmodel.h>
 
 #include <QHash>
 #include <QSqlDatabase>
@@ -23,6 +24,7 @@ public:
     bool insertInThesaurus(const QString &listOfValuesStr, const QString &userUuid);
     bool deleteFromThesaurus(QString & data );
     bool addBoolTrue(QString & data);
+    double getMinDistanceValue(const QString & data);
 
 private:
    AccountModel *m_mpmodel;
