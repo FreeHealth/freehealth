@@ -255,4 +255,9 @@ tar czf ../$1fullsources-$VERSION.tgz  ./$1-$VERSION
 echo "**** CLEANING TMP SOURCES PATH ****"
 rm -R $PACKPATH
 
+PWD=`pwd`
+
+echo "*** Source package for $1 successfully created at"
+echo $PWD/$1-$VERSION
+
 exit 0
