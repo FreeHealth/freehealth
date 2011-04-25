@@ -45,6 +45,8 @@
 #include <utils/log.h>
 #include <translationutils/constanttranslations.h>
 
+#include <QMessageBox>
+
 using namespace Account::Constants;
 using namespace Account;
 using namespace Account::Internal;
@@ -152,7 +154,9 @@ AccountActionHandler::AccountActionHandler(QObject *parent) :
 #endif
 
     // Create local actions
-    a = aAddReceipts = new QAction(this);
+    aAddReceipts = new QAction(this);
+    aAddReceipts->setShortcut(QKeySequence("a+z"));
+     a = aAddReceipts;
     a->setObjectName("aAddReceipts");
     a->setIcon(th->icon(Core::Constants::ICONHELP));
     cmd = actionManager()->registerAction(a, Constants::A_ADDRECEIPTS, global);
@@ -235,7 +239,7 @@ void AccountActionHandler::updateActions()
 
 void AccountActionHandler::addReceipts()
 {
-
+    QMessageBox::information(0,trUtf8("info"),trUtf8("add receipt")+__FILE__+QString::number(__LINE__),QMessageBox::Ok);
 }
 
 void AccountActionHandler::receipts()

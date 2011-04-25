@@ -18,7 +18,24 @@ ControlReceipts::ControlReceipts(QWidget * parent):QWidget(parent),ui(new Ui::Co
     int w = parent->width();
     resize(w,h);
     setAutoFillBackground(true);
+    ui->resultLabel->setText("");
     m_accountModel = new AccountModel(this);
+    if (!m_accountModel->setHeaderData(ACCOUNT_PATIENT_NAME,Qt::Horizontal ,trUtf8("Patient") , Qt::EditRole))
+    {
+    	  qWarning() << __FILE__ << QString::number(__LINE__) << "Unable to set header data" ;
+        }
+    qDebug() << __FILE__ << QString::number(__LINE__) << " headerData =" << m_accountModel->headerData(ACCOUNT_PATIENT_NAME,Qt::Horizontal, Qt::DisplayRole).toString() ;
+    m_accountModel->setHeaderData(ACCOUNT_DATE,Qt::Horizontal ,trUtf8("Date") , Qt::EditRole);
+    m_accountModel->setHeaderData(ACCOUNT_MEDICALPROCEDURE_TEXT,Qt::Horizontal ,trUtf8("Acts") , Qt::EditRole);
+    m_accountModel->setHeaderData(ACCOUNT_COMMENT,Qt::Horizontal ,trUtf8("Comment") , Qt::EditRole);
+    m_accountModel->setHeaderData(ACCOUNT_CASHAMOUNT,Qt::Horizontal ,trUtf8("Cash") , Qt::EditRole);
+    m_accountModel->setHeaderData(ACCOUNT_CHEQUEAMOUNT,Qt::Horizontal ,trUtf8("Checks") , Qt::EditRole);
+    m_accountModel->setHeaderData(ACCOUNT_VISAAMOUNT,Qt::Horizontal ,trUtf8("Credit card") , Qt::EditRole);
+    m_accountModel->setHeaderData(ACCOUNT_INSURANCEAMOUNT,Qt::Horizontal ,trUtf8("Insurance") , Qt::EditRole);
+    m_accountModel->setHeaderData(ACCOUNT_OTHERAMOUNT,Qt::Horizontal ,trUtf8("Other") , Qt::EditRole);
+    m_accountModel->setHeaderData(ACCOUNT_DUEAMOUNT,Qt::Horizontal ,trUtf8("Due") , Qt::EditRole);
+    m_accountModel->setHeaderData(ACCOUNT_DUEBY,Qt::Horizontal ,trUtf8("by") , Qt::EditRole);
+    m_accountModel->setHeaderData(ACCOUNT_ISVALID,Qt::Horizontal ,trUtf8("Valid") , Qt::EditRole);
     m_userUuid = m_accountModel->getUserUuid();
     m_typeOfMoney = trUtf8("Euros");
     ui->beginDateEdit->setDate(QDate::currentDate());
@@ -66,6 +83,7 @@ void ControlReceipts::search(){
     filter += " AND ";
     filter += QString("%1 LIKE '%2'").arg(field,filterEdit);
     filter += " AND ";
+    filter += QString("%1 NOT LIKE '%2' AND ").arg(field,"0.0");
     filter += QString("DATE BETWEEN '%1' AND '%2'").arg(dateBeginStr,dateEndStr);
     m_accountModel->setFilter(filter);
     qDebug() << __FILE__ << QString::number(__LINE__) << " filter =" << m_accountModel->filter() ;
@@ -78,7 +96,12 @@ void ControlReceipts::search(){
     ui->tableView->setColumnHidden(ACCOUNT_INSURANCE_ID,true);
     ui->tableView->setColumnHidden(ACCOUNT_MEDICALPROCEDURE_XML,true);
     ui->tableView->setColumnHidden(ACCOUNT_TRACE,true);
-    textOfSums(m_accountModel);
+    ui->tableView->horizontalHeader()->setResizeMode(QHeaderView::Interactive);
+    ui->tableView->horizontalHeader()  ->setResizeMode(QHeaderView::Stretch);
+    ui->tableView->resizeColumnsToContents();
+    QString textResult = textOfSums(m_accountModel);
+    ui->resultLabel->setText(textResult);
+    //refreshFilter(filter);
 }
 
 void ControlReceipts::deleteLine(){
@@ -91,7 +114,9 @@ void ControlReceipts::deleteLine(){
   if(m_accountModel->removeRows(i,1,QModelIndex())){
           QMessageBox::information(0,trUtf8("Information"),trUtf8("Line is deleted."),QMessageBox::Ok);
       }
-  textOfSums(m_accountModel);
+  QString textResult = textOfSums(m_accountModel);
+  ui->resultLabel->setText(textResult);
+  refreshFilter(m_accountModel->filter());
 }
 
 QString ControlReceipts::textOfSums(AccountModel * model){
@@ -140,4 +165,8 @@ void ControlReceipts::refresh(){
     m_accountModel = new AccountModel(this);
 }
 
-void ControlReceipts::refreshFilter(const QString & filter){}
+void ControlReceipts::refreshFilter(const QString & filter){
+    delete m_accountModel;
+    m_accountModel = new AccountModel(this);
+    m_accountModel->setFilter(filter);
+}

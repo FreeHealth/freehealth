@@ -32,6 +32,12 @@
  *   ANY WAY OUT OF THE USE OF THIS SOFTWARE, EVEN IF ADVISED OF THE       *
  *   POSSIBILITY OF SUCH DAMAGE.                                           *
  ***************************************************************************/
+ /***************************************************************************
+  *   Main Developper : Eric MAEKER, <eric.maeker@free.fr>                  *
+  *   Contributors :                                                        *
+  *       Pierre-Marie Desombre <pm.desombre@gmail.com>                     *
+  *       NAME <MAIL@ADRESS>                                                *
+  ***************************************************************************/
 #ifndef ACCOUNTMODEL_H
 #define ACCOUNTMODEL_H
 
@@ -65,6 +71,7 @@ public:
 
     QVariant headerData(int section, Qt::Orientation orientation,
                                 int role = Qt::DisplayRole) const;
+    bool setHeaderData(int section, Qt::Orientation orientation, const QVariant & value, int role = Qt::EditRole);
 
     bool insertRows(int row, int count, const QModelIndex &parent = QModelIndex());
     bool removeRows(int row, int count, const QModelIndex &parent = QModelIndex());

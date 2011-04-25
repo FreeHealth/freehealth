@@ -175,9 +175,9 @@ bool AccountModel::setData(const QModelIndex &index, const QVariant &value, int 
 
 QVariant AccountModel::headerData(int section, Qt::Orientation orientation, int role) const
 {
-    if (orientation==Qt::Horizontal) {
+    /*if (orientation==Qt::Horizontal) {
         switch (section) {
-        /** \todo remove tr translations use tkTr*/
+        //todo remove tr translations use tkTr
         case Constants::ACCOUNT_CASHAMOUNT : return tr(Constants::CASH, Constants::ACCOUNTCONSTANTS_TR_CONTEXT);
         case Constants::ACCOUNT_CHEQUEAMOUNT : return tr(Constants::CHEQUES, Constants::ACCOUNTCONSTANTS_TR_CONTEXT);
         case Constants::ACCOUNT_COMMENT : return tr("Comments");
@@ -198,9 +198,14 @@ QVariant AccountModel::headerData(int section, Qt::Orientation orientation, int 
         case Constants::ACCOUNT_USER_UID : return tkTr(Trans::Constants::USER);
         case Constants::ACCOUNT_VISAAMOUNT : return tr(Constants::VISA, Constants::ACCOUNTCONSTANTS_TR_CONTEXT);
         }
-    }
+    }*/
 
-    return QVariant();
+    return d->m_SqlTable->headerData(section, orientation, role);
+}
+
+bool AccountModel::setHeaderData(int section, Qt::Orientation orientation, const QVariant & value,
+                                 int role){
+    return d->m_SqlTable->setHeaderData(section,orientation,value,role);
 }
 
 bool AccountModel::insertRows(int row, int count, const QModelIndex &parent)
