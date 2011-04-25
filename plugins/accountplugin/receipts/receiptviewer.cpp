@@ -470,6 +470,8 @@ ReceiptViewer::ReceiptViewer(QWidget *parent) :
     
     connect(actionTreeView,SIGNAL(clicked(const QModelIndex&)),this,SLOT(actionsOfTreeView(const QModelIndex&)));
     connect(m_clear,SIGNAL(triggered(bool)),this,SLOT(clearAll(bool)));
+    connect(m_control,SIGNAL(isClosing()),this,SLOT(controlReceiptsDestroyed()));
+    
 }
 
 ReceiptViewer::~ReceiptViewer()
@@ -744,4 +746,9 @@ void ReceiptViewer::showControlReceipts(bool b){
 
 void ReceiptViewer::resizeEvent(QResizeEvent *event){
     m_control->resizeControlReceipts(this);
+}
+
+void ReceiptViewer::controlReceiptsDestroyed(){
+    qDebug() << __FILE__ << QString::number(__LINE__) << " in controlReceiptsDestroyed " ;
+    ui->inputRadioButton->setChecked(true);
 }

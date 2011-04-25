@@ -27,11 +27,14 @@ class ACCOUNT_EXPORT ControlReceipts : public QWidget
         ControlReceipts(QWidget * parent);
         ~ControlReceipts();
         void resizeControlReceipts(QWidget * parent);
+    signals :
+        void isClosing();
     private slots :
         void search();
         void deleteLine();
         void printDues();
         void print();
+        void closeAction();
     
     private:
         void coloringDoubles();

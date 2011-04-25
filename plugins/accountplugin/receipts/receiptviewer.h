@@ -90,6 +90,7 @@ private Q_SLOTS:
     void saveInThesaurus();
     void showControlReceipts(bool b);
     void clearAll(bool b);
+    void controlReceiptsDestroyed();
 
 private:
     /** \todo create a pimpl */

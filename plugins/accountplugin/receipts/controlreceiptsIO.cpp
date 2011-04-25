@@ -61,7 +61,7 @@ ControlReceipts::ControlReceipts(QWidget * parent):QWidget(parent),ui(new Ui::Co
     connect(ui->deleteButton,SIGNAL(pressed()),this,SLOT(deleteLine()));
     connect(ui->duesButton,SIGNAL(pressed()),this,SLOT(printDues()));
     connect(ui->printButton,SIGNAL(pressed()),this,SLOT(print()));
-    connect(ui->quitButton,SIGNAL(pressed()),this,SLOT(close()));
+    connect(ui->quitButton,SIGNAL(pressed()),this,SLOT(closeAction()));
 }
 
 ControlReceipts::~ControlReceipts(){}
@@ -169,4 +169,9 @@ void ControlReceipts::refreshFilter(const QString & filter){
     delete m_accountModel;
     m_accountModel = new AccountModel(this);
     m_accountModel->setFilter(filter);
+}
+
+void ControlReceipts::closeAction(){
+    emit isClosing();
+    emit close();
 }
