@@ -9,6 +9,7 @@
 #define CONTROLRECEIPTSIO_H
 
 #include <accountbaseplugin/accountmodel.h>
+#include <accountbaseplugin/constants.h>
 #include <accountplugin/account_exporter.h>
 
 #include <QWidget>
@@ -36,10 +37,12 @@ class ACCOUNT_EXPORT ControlReceipts : public QWidget
         void coloringDoubles();
         void refresh();
         void refreshFilter(const QString & filter);
+        QString textOfSums(AccountModel * model);
         Ui::ControlReceiptsWidget * ui;
         AccountModel * m_accountModel;
         QString m_userUuid;
         QMap<QString,QString> m_mapCombo;
+        QString m_typeOfMoney;
 };
 
 #endif

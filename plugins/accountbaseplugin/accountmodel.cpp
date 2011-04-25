@@ -298,3 +298,7 @@ QString AccountModel::getUserUuid(){
     QString uuid = d->m_UserUid;
     return uuid;
 }
+
+QSqlRecord AccountModel::record(int row){
+    return d->m_SqlTable->record(row);
+}

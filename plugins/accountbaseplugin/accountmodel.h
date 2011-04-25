@@ -38,6 +38,7 @@
 #include <accountbaseplugin/accountbase_exporter.h>
 
 #include <QAbstractTableModel>
+#include <QSqlRecord>
 #include <QSqlError>
 
 namespace AccountDB {
@@ -81,6 +82,7 @@ public:
     void setFilter(const QString & filter);
     QString filter();
     void select();
+    QSqlRecord record(int row);
 
     // Filter fucntions
     void setStartDate(const QDate &date);
