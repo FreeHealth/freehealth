@@ -1,5 +1,5 @@
                   Welcome to FreeMeForms
-           Copyright (C) 2008-2009 by Eric MAEKER
+           Copyright (C) 2008-2011 by Eric MAEKER
                    eric.maeker@free.fr
                   All rights reserved.
 
@@ -26,9 +26,8 @@ FreeMedForms and Derivatives are available for :
 
 II. Build specification
 
-Build instructions are described here (doxygen generated) :
-http://ericmaeker.fr/FreeMedForms/doc/index.html
-(follow the link -> Build Instructions in this page)
+Build instructions are described here:
+    http://freemedforms.com/en/code/buildsystem
 
 
 
