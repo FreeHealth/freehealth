@@ -64,11 +64,13 @@ HEADERS += \
     $${PWD}/receipts/constants.h \
     $${PWD}/receipts/distance.h \
     $${PWD}/receipts/controlreceiptsIO.h \
+    $${PWD}/receipts/preferedreceipts.h \
     $${PWD}/receipts/receiptviewer.h
 
 FORMS += $${PWD}/receipts/findValuesGUI.ui \
     $${PWD}/receipts/ChoiceDialog.ui \
     $${PWD}/receipts/controlreceipts.ui \
+    $${PWD}/receipts/preferedreceipts.ui \
     $${PWD}/receipts/receiptviewer.ui
 
 SOURCES += \
@@ -79,6 +81,7 @@ SOURCES += \
     $${PWD}/receipts/xmlcategoriesparser.cpp \   
     $${PWD}/receipts/distance.cpp \
     $${PWD}/receipts/controlreceiptsIO.cpp \
+    $${PWD}/receipts/preferedreceipts.cpp \
     $${PWD}/receipts/receiptviewer.cpp
 
 # include assets

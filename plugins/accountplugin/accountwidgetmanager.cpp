@@ -28,8 +28,8 @@
 #include "constants.h"
 #include "accountcontextualwidget.h"
 
+#include <accountplugin/receipts/preferedreceipts.h>
 #include <accountplugin/receipts/receiptviewer.h>
-
 #include <accountplugin/assets/assetsViewer.h>
 #include <accountplugin/ledger/ledgerviewer.h>
 #include <accountplugin/movements/movementsviewer.h>
@@ -154,13 +154,12 @@ AccountActionHandler::AccountActionHandler(QObject *parent) :
 #endif
 
     // Create local actions
-    aAddReceipts = new QAction(this);
-    aAddReceipts->setShortcut(QKeySequence("a+z"));
-     a = aAddReceipts;
+    a = aAddReceipts = new QAction(this);
     a->setObjectName("aAddReceipts");
     a->setIcon(th->icon(Core::Constants::ICONHELP));
     cmd = actionManager()->registerAction(a, Constants::A_ADDRECEIPTS, global);
     cmd->setTranslations(Constants::ADD_RECEIPTS, Constants::ADD_RECEIPTS, Constants::ACCOUNT_TR_CONTEXT);
+    cmd->setDefaultKeySequence(QKeySequence("Ctrl+r"));
     menu->addAction(cmd, Constants::G_ACCOUNT_APPS);
     connect(a, SIGNAL(triggered()), this, SLOT(addReceipts()));
 
@@ -239,7 +238,10 @@ void AccountActionHandler::updateActions()
 
 void AccountActionHandler::addReceipts()
 {
-    QMessageBox::information(0,trUtf8("info"),trUtf8("add receipt")+__FILE__+QString::number(__LINE__),QMessageBox::Ok);
+    QWidget *w = mainWindow()->centralWidget();
+    delete w;
+    w = 0;
+    mainWindow()->setCentralWidget(new PreferedReceipts(mainWindow()));   
 }
 
 void AccountActionHandler::receipts()

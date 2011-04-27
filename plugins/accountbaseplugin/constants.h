@@ -87,6 +87,7 @@ namespace Constants {
         MP_ID = 0,
         MP_UID,
         MP_USER_UID,
+        MP_INSURANCE_UID,
         MP_NAME,
         MP_ABSTRACT,
         MP_TYPE,

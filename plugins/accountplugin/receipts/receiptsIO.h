@@ -6,6 +6,8 @@
 #include <accountbaseplugin/medicalproceduremodel.h>
 #include <accountbaseplugin/thesaurusmodel.h>
 #include <accountbaseplugin/distancerulesmodel.h>
+#include <accountbaseplugin/workingplacesmodel.h>
+#include <accountbaseplugin/insurancemodel.h>
 
 #include <QHash>
 #include <QSqlDatabase>
@@ -25,8 +27,17 @@ public:
     bool deleteFromThesaurus(QString & data );
     bool addBoolTrue(QString & data);
     double getMinDistanceValue(const QString & data);
+    QHash<int,QVariant> getListOfPreferedValues(QString & userUuid,int choice);
 
 private:
+    enum typeOfChoice {
+            CASH = 0,
+            CHECK,
+            VISA,
+            BANKING,
+            OTHER,
+            DUE
+        };
    AccountModel *m_mpmodel;
    QSqlDatabase  m_db;
 };

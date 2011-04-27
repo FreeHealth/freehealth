@@ -248,9 +248,10 @@ QHash<QString,QString> receiptsManager::getPreferentialActFromThesaurus(){
     }
     else
     {
-    	data = "CS";
+        qWarning() << __FILE__ << QString::number(__LINE__) << "data is empty !" ;
+    	/*data = "CS";
     	value = 23.00;
-    	hash.insert(data,QString::number(value));
+    	hash.insert(data,QString::number(value));*/
         }
     return hash;
 }

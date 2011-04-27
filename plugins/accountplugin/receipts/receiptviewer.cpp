@@ -540,8 +540,9 @@ void ReceiptViewer::actionsOfTreeView(const QModelIndex &index){
             qDebug() << __FILE__ << QString::number(__LINE__) << " preferential acts =" << hashOfValues.keys()[0] ;
             if (hashOfValues.size() < 1)
             {
-            	  hashOfValues.insertMulti("CS","23.00");//preferential act
-            	  qWarning() << __FILE__ << QString::number(__LINE__) << "default value CS = 23 €" ;
+            	  hashOfValues.insertMulti("NULL","23.00");//preferential act
+            	  QMessageBox::warning(0,trUtf8("Warning"),trUtf8("You have to insert your prefered "
+            	                 	  "value\nin thesaurus\nand choose it as prefered."),QMessageBox::Ok);
                 }           
             m_listOfValues << hashOfValues.keys();
             m_modelReturnedList->setStringList(m_listOfValues);
@@ -651,6 +652,7 @@ void ReceiptViewer::save()
     {
     	  patientName = "Patient Name";
         }
+    QVariant insurance = "by";//todo
     QHash<int,QVariant> hash;
     hash.insert(ACCOUNT_UID,"UID");
     hash.insert(ACCOUNT_USER_UID,userUuid);
@@ -668,7 +670,7 @@ void ReceiptViewer::save()
     hash.insert(ACCOUNT_INSURANCEAMOUNT,banking);
     hash.insert(ACCOUNT_OTHERAMOUNT,other);
     hash.insert(ACCOUNT_DUEAMOUNT,due);
-    hash.insert(ACCOUNT_DUEBY,"by");
+    hash.insert(ACCOUNT_DUEBY,insurance);
     hash.insert(ACCOUNT_ISVALID,0);
     hash.insert(ACCOUNT_TRACE, QVariant());
     receiptsEngine r;

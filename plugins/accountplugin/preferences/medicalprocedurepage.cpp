@@ -327,10 +327,10 @@ QStandardItemModel *MedicalProcedureWidget::MedicalProcedureModelByLocale()
     stream.setCodec("UTF-8");
     // skip first line
     //stream.readLine();
-    //int row = 0;
+    int row = 0;
     while (!stream.atEnd())
     {
-        int row = 0;
+        //int row = 0;
         QString line = stream.readLine();
         QStringList listOfSeparators;
         listOfSeparators << ",\"" << ";\"" << QString("\t\"")
@@ -343,7 +343,7 @@ QStandardItemModel *MedicalProcedureWidget::MedicalProcedureModelByLocale()
                 }
             }*/
         if (!line.contains("MP_UUID")){
-            //"MP_ID","MP_UUID","MP_USER_UID","NAME","ABSTRACT","TYPE","AMOUNT","REIMBOURSEMENT","DATE"
+            //"MP_ID","MP_UUID","MP_USER_UID","MP_INSURANCE_UID","NAME","ABSTRACT","TYPE","AMOUNT","REIMBOURSEMENT","DATE"
             QList<QStandardItem*> listOfItemsData;
             QStringList listOfItems;
             listOfItems = line.split(separator);
@@ -370,7 +370,7 @@ bool MedicalProcedureWidget::fillEmptyMPModel(){
     bool test = false;
     QStandardItemModel * model = MedicalProcedureModelByLocale();
     int availModelRows = model->rowCount();
-    //qDebug() << __FILE__ << QString::number(__LINE__) << " availModelRows = " << QString::number(availModelRows) ;
+    qDebug() << __FILE__ << QString::number(__LINE__) << " availModelRows = " << QString::number(availModelRows) ;
     QString strList;
     for (int i = 0; i < availModelRows; i += 1){
         if (!m_Model->insertRows(m_Model->rowCount(),1,QModelIndex()))

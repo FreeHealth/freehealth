@@ -29,6 +29,7 @@
 #include <QSqlDriver>
 #include <QMessageBox>
 #include <QUuid>
+#include <QDate>
 
 #include <QDebug>
 
@@ -186,5 +187,104 @@ double receiptsEngine::getMinDistanceValue(const QString & data){
     qDebug() << __FILE__ << QString::number(__LINE__) << " filter =" << model.filter() ;
     minDistance = model.data(model.index(0,DISTRULES_MIN_KM),Qt::DisplayRole).toDouble();
     return minDistance;
+}
+
+QHash<int,QVariant> receiptsEngine::getListOfPreferedValues(QString & userUuid,
+                                                           int choice){
+    QHash<int,QVariant> hash;
+    double cash = 0.00;
+    double check = 0.00;
+    double visa = 0.00;
+    double banking = 0.00;
+    double other = 0.00;
+    double due = 0.00;
+    WorkingPlacesModel modelWP(this);
+    modelWP.setFilter("PREFERED = '1'");
+    QVariant preferedSiteUid = modelWP.data(modelWP.index(0,SITES_UID),Qt::DisplayRole);
+    InsuranceModel modelINS(this);
+    modelINS.setFilter("PREFERED = '1'");
+    QVariant preferedInsurance = modelINS.data(modelINS.index(0,INSURANCE_NAME),Qt::DisplayRole);
+    QVariant preferedInsuranceUid = modelINS.data(modelINS.index(0,INSURANCE_UID),Qt::DisplayRole);
+    QVariant dateThisDay = QVariant(QDate::currentDate().toString("yyyy-MM-dd"));
+    ThesaurusModel model(this);
+    QString filter = QString("%1 = '%2'").arg("PREFERED",QString::number(true));
+    model.setFilter(filter);
+    model.select();
+    QString data = model.data(model.index(0,THESAURUS_VALUES)).toString();
+    MedicalProcedureModel MPmodel(this);
+    double value = 0.00;
+    QString MPfilter ;
+    QStringList list;
+    if(!data.isEmpty()){
+    qDebug() << __FILE__ << QString::number(__LINE__) << " data is not empty " ;
+        if (data.contains("+"))
+        {
+    	    list = data.split("+");
+          }
+        else{
+              list << data;
+            }
+        QString str;
+        foreach(str,list){
+            str = str.trimmed();
+            qDebug() << __FILE__ << QString::number(__LINE__) << " str =" << str ;
+            MPfilter = QString("%1='%2'").arg("NAME",str);
+            qDebug() << __FILE__ << QString::number(__LINE__) << " MPfilter =" << MPfilter ;
+            MPmodel.setFilter(MPfilter);
+            value += MPmodel.data(MPmodel.index(0,MP_AMOUNT)).toDouble();
+            }
+    }
+    else
+    {
+            	  QMessageBox::warning(0,trUtf8("Warning"),trUtf8("You have to insert your prefered "
+            	                 	  "value\nin thesaurus\nand choose it as prefered."),QMessageBox::Ok);
+        }
+    QVariant preferedAct = QVariant(data);
+    double preferedValue = value;
+    switch(choice){
+        case CASH :
+            cash = preferedValue;
+            break;
+        case CHECK :
+            check = preferedValue;
+            break;
+        case VISA :
+            visa = preferedValue;
+            break;
+        case BANKING :
+            banking = preferedValue;
+            break;
+        case OTHER :
+            other = preferedValue;
+            break;
+        case DUE :
+            due = preferedValue;
+            break;
+        default :
+            break;    
+        }
+    
+         
+    QVariant comment = QVariant(trUtf8("prefered act"));
+    hash.insert(ACCOUNT_UID,"UID");
+    hash.insert(ACCOUNT_USER_UID,userUuid);
+    hash.insert(ACCOUNT_PATIENT_UID,"patientUid");
+    hash.insert(ACCOUNT_PATIENT_NAME,"patientName");
+    hash.insert(ACCOUNT_SITE_ID,preferedSiteUid);//AccountDB::Constants::SITES_UID
+    hash.insert(ACCOUNT_INSURANCE_ID,preferedInsuranceUid);
+    hash.insert(ACCOUNT_DATE,dateThisDay);
+    hash.insert(ACCOUNT_MEDICALPROCEDURE_XML, QVariant());
+    hash.insert(ACCOUNT_MEDICALPROCEDURE_TEXT,preferedAct);
+    hash.insert(ACCOUNT_COMMENT, comment);
+    hash.insert(ACCOUNT_CASHAMOUNT,cash);
+    hash.insert(ACCOUNT_CHEQUEAMOUNT,check);
+    hash.insert(ACCOUNT_VISAAMOUNT,visa);
+    hash.insert(ACCOUNT_INSURANCEAMOUNT,banking);
+    hash.insert(ACCOUNT_OTHERAMOUNT,other);
+    hash.insert(ACCOUNT_DUEAMOUNT,due);
+    hash.insert(ACCOUNT_DUEBY,preferedInsurance);
+    hash.insert(ACCOUNT_ISVALID,0);
+    hash.insert(ACCOUNT_TRACE, QVariant());
+    return hash;
 }
 

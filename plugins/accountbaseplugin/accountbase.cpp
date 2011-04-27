@@ -158,6 +158,7 @@ AccountBase::AccountBase(QObject *parent)
     addField(Table_MedicalProcedure, MP_ID,             "MP_ID",          FieldIsUniquePrimaryKey);
     addField(Table_MedicalProcedure, MP_UID,            "MP_UUID",        FieldIsUUID);
     addField(Table_MedicalProcedure, MP_USER_UID,       "MP_USER_UID",    FieldIsUUID);
+    addField(Table_MedicalProcedure, MP_INSURANCE_UID,  "MP_INSURANCE_UID",FieldIsUUID);
     addField(Table_MedicalProcedure, MP_NAME,           "NAME",           FieldIsShortText);
     addField(Table_MedicalProcedure, MP_ABSTRACT,       "ABSTRACT",       FieldIsLongText);
     addField(Table_MedicalProcedure, MP_TYPE,           "TYPE",           FieldIsShortText);
@@ -165,6 +166,7 @@ AccountBase::AccountBase(QObject *parent)
     addField(Table_MedicalProcedure, MP_REIMBOURSEMENT, "REIMBOURSEMENT", FieldIsReal);
     addField(Table_MedicalProcedure, MP_DATE,           "DATE",           FieldIsDate);
     /** Add a link to INSURANCE table ? One MP is reimburse by a specific insurance... */
+    //ok but have to enter insurance uid in .csv
 
 //    "CREATE TABLE 	actes_disponibles ("  --> medical_procedure
 //            "id_acte_dispo  int(10)  	UNSIGNED  	       		NOT NULL  	 auto_increment ,"
