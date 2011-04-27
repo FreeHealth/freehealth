@@ -162,7 +162,7 @@ void Database::logAvailableDrivers()
         }
     }
     tmp.chop(3);
-    Utils::Log::addMessage("Database", QString("Available drivers: %1").arg(QSqlDatabase::drivers().join(" ; ")));
+    LOG_FOR("Database", QString("Available drivers: %1").arg(QSqlDatabase::drivers().join(" ; ")));
 }
 
 
@@ -237,7 +237,7 @@ bool Database::createConnection(const QString & connectionName, const QString & 
     case SQLite :
         {
             if (WarnLogMessages)
-                Utils::Log::addMessage("Database", QString("Trying to connect database %1 with %2 driver")
+                LOG_FOR("Database", QString("Trying to connect database %1 with %2 driver")
                                    .arg(dbName)
                                    .arg("SQLite"));
             if (!QSqlDatabase::isDriverAvailable("QSQLITE")) {
@@ -251,7 +251,7 @@ bool Database::createConnection(const QString & connectionName, const QString & 
     case MySQL:
         {
             if (WarnLogMessages)
-                Utils::Log::addMessage("Database", QString("Trying to connect database %1 with %2 driver")
+                LOG_FOR("Database", QString("Trying to connect database %1 with %2 driver")
                                    .arg(dbName)
                                    .arg("MySQL"));
             if (!QSqlDatabase::isDriverAvailable("QMYSQL")) {
@@ -265,7 +265,7 @@ bool Database::createConnection(const QString & connectionName, const QString & 
     case PostSQL :
         {
             if (WarnLogMessages)
-                Utils::Log::addMessage("Database", QString("Trying to connect database %1 with %2 driver")
+                LOG_FOR("Database", QString("Trying to connect database %1 with %2 driver")
                                    .arg(dbName)
                                    .arg("PostGre SQL"));
             if (!QSqlDatabase::isDriverAvailable("QPSQL")) {
@@ -308,7 +308,7 @@ bool Database::createConnection(const QString & connectionName, const QString & 
                 return false;
             }
             if (WarnLogMessages)
-                Utils::Log::addMessage("Database", QString("Connected to host %1").arg(pathOrHostName));
+                LOG_FOR("Database", QString("Connected to host %1").arg(pathOrHostName));
             break;
         }
     case PostSQL:
@@ -364,7 +364,7 @@ bool Database::createConnection(const QString & connectionName, const QString & 
                 }
             }
             if (WarnLogMessages)
-                Utils::Log::addMessage("Database", QString("Connected to database %1").arg(dbName));
+                LOG_FOR("Database", QString("Connected to database %1").arg(dbName));
             break;
         }
     case PostSQL:
@@ -464,7 +464,7 @@ bool Database::createConnection(const QString & connectionName, const QString & 
 
     DB.open();
     if (WarnLogMessages)
-        Log::addMessage("Database", QCoreApplication::translate("Database",  "INFO : database %1 connection = %2")
+        LOG_FOR("Database", QCoreApplication::translate("Database",  "INFO : database %1 connection = %2")
                        .arg(connectionName).arg(DB.isOpen()));
 
     // test connection
@@ -476,7 +476,7 @@ bool Database::createConnection(const QString & connectionName, const QString & 
     }
     else {
         if (WarnLogMessages)
-            Log::addMessage("Database", QCoreApplication::translate("Database", "INFO : database %1 installed. Path : %2")
+            LOG_FOR("Database", QCoreApplication::translate("Database", "INFO : database %1 installed. Path : %2")
                            .arg(connectionName, pathOrHostName));
     }
     // return boolean
@@ -1055,6 +1055,17 @@ QString Database::select(const Field &select, const Join &join, const FieldList 
     FieldList get;
     get << select;
     return this->select(get, joins, conditions);
+}
+
+QString Database::select(const Field &select, const Join &join, const Field &condition) const
+{
+    JoinList joins;
+    joins << join;
+    FieldList get;
+    get << select;
+    FieldList conds;
+    conds << condition;
+    return this->select(get, joins, conds);
 }
 
 /**

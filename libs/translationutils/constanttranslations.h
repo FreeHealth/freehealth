@@ -387,6 +387,9 @@ enum TitleInterpret {
         const char* const STATUS                             = QT_TRANSLATE_NOOP("tkConstants", "Status");
         const char* const ICD10                              = QT_TRANSLATE_NOOP("tkConstants", "ICD10");
         const char* const NOW                                = QT_TRANSLATE_NOOP("tkConstants", "now");
+        const char* const LOW                                = QT_TRANSLATE_NOOP("tkConstants", "low");
+        const char* const MEDIUM                             = QT_TRANSLATE_NOOP("tkConstants", "medium");
+        const char* const HIGH                               = QT_TRANSLATE_NOOP("tkConstants", "high");
 
         // Settings related messages
         const char* const SETTINGS_RECOVERED                = QT_TRANSLATE_NOOP("tkConstants", "Settings recovered" );
