@@ -41,6 +41,10 @@
 #include <coreplugin/constants.h>
 #include <coreplugin/translators.h>
 
+#ifdef FREETOOLBOX
+#    include <coreplugin/ftb_constants.h>
+#endif
+
 #include <QCoreApplication>
 #include <QSqlDatabase>
 #include <QSqlError>
@@ -59,6 +63,14 @@ using namespace Trans::ConstantTranslations;
 
 static inline Core::ISettings *settings()  { return Core::ICore::instance()->settings(); }
 
+// Database fullPath
+static inline QString fullDatabasePath() {
+#ifdef FREETOOLBOX
+    return QDir::cleanPath(settings()->value(Core::Constants::S_DBOUTPUT_PATH).toString() + "/icd10/");
+#else
+    return settings()->path(Core::ISettings::ReadOnlyDatabasesPath) + QDir::separator() + QString(ICD::Constants::DB_ICD10);
+#endif
+}
 
 namespace ICD {
 namespace Internal {
@@ -277,8 +289,8 @@ bool IcdDatabase::init()
       }
 
      // log the path of the database
-     QString pathToDb = settings()->path(Core::ISettings::ReadOnlyDatabasesPath) + QDir::separator() + QString(ICD::Constants::DB_ICD10);
-     Utils::Log::addMessage(this, tr("Searching databases into dir %1").arg(pathToDb));
+     QString pathToDb = fullDatabasePath();
+     LOG(tr("Searching databases into dir %1").arg(pathToDb));
 
      // Removing existing old connections
      if (QSqlDatabase::contains(Constants::DB_ICD10)) {
@@ -292,13 +304,17 @@ bool IcdDatabase::init()
      }
 
      if (!checkDatabaseScheme()) {
-         Utils::Log::addError(this, tr("ICD10 database corrupted, please contact your administrator."), __FILE__, __LINE__);
+         LOG_ERROR(tr("ICD10 database corrupted, please contact your administrator."));
      }
 
      if (!database().isOpen()) {
          if (!database().open()) {
-             Utils::Log::addError(this, tkTr(Trans::Constants::UNABLE_TO_OPEN_DATABASE_1_ERROR_2).arg(Constants::DB_ICD10).arg(database().lastError().text()), __FILE__, __LINE__);
+             LOG_ERROR(tkTr(Trans::Constants::UNABLE_TO_OPEN_DATABASE_1_ERROR_2).arg(Constants::DB_ICD10).arg(database().lastError().text()));
+         } else {
+             LOG(tkTr(Trans::Constants::CONNECTED_TO_DATABASE_1_DRIVER_2).arg(database().connectionName()).arg(database().driverName()));
          }
+     } else {
+         LOG(tkTr(Trans::Constants::CONNECTED_TO_DATABASE_1_DRIVER_2).arg(database().connectionName()).arg(database().driverName()));
      }
 
      if (!d->m_DownloadAndPopulate)

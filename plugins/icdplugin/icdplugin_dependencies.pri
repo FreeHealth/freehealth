@@ -1,2 +1,4 @@
 include( ../coreplugin/coreplugin.pri )
-include( ../formmanagerplugin/formmanagerplugin.pri )
+include( ../listviewplugin/listviewplugin.pri )
+
+!isEmpty(FREEMEDFORMS):include( ../formmanagerplugin/formmanagerplugin.pri )

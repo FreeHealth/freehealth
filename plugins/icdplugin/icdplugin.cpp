@@ -105,7 +105,9 @@ void IcdPlugin::extensionsInitialized()
 void IcdPlugin::postCoreInitialization()
 {
     // Create the widgetmanager instance (here because we need that MainWindow has done its initialization)
+#ifndef FREETOOLBOX
     IcdWidgetManager::instance();
+#endif
 }
 
 

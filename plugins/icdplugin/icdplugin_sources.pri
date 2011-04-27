@@ -49,4 +49,4 @@ TRANSLATIONS += $${SOURCES_TRANSLATIONS_PATH}/icdplugin_fr.ts \
                 $${SOURCES_TRANSLATIONS_PATH}/icdplugin_de.ts \
                 $${SOURCES_TRANSLATIONS_PATH}/icdplugin_es.ts
 
-OTHER_FILES += $${SOURCES_RESOURCES_SQL}/icd10.sql
+OTHER_FILES += $${SOURCES_RESOURCES_SQL}/icd10/icd10.sql
