@@ -1001,6 +1001,13 @@ QString Database::select(const FieldList &select, const JoinList &joins, const F
     return QString("SELECT %1 FROM %2 \n %3 WHERE %4").arg(fields, from, j, w);
 }
 
+QString Database::select(const FieldList &select, const JoinList &joins, const Field &condition) const
+{
+    FieldList cond;
+    cond << condition;
+    return this->select(select, joins, cond);
+}
+
 /**
   \brief Create a complex SELECT command with jointures and conditions.
   Jointures must be ordered as needed in the SQL command.

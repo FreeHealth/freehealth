@@ -259,6 +259,7 @@ public:
 
     virtual QString select(const FieldList &select, const JoinList &joins) const;
     virtual QString select(const FieldList &select, const JoinList &joins, const FieldList &conditions) const;
+    virtual QString select(const FieldList &select, const JoinList &joins, const Field &condition) const;
     virtual QString select(const int tableref, const JoinList &joins, const FieldList &conditions) const;
     virtual QString select(const int tableref, const Join &join, const Field &condition) const;
     virtual QString select(const int tableref, const Join &join, const FieldList &conditions) const;
