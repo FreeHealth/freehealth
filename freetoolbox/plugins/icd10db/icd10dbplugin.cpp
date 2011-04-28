@@ -25,6 +25,7 @@
  ***************************************************************************/
 #include "icd10dbplugin.h"
 #include "icd10databasecreator.h"
+#include "icdgrouplinker.h"
 
 #include <coreplugin/dialogs/pluginaboutpage.h>
 
@@ -55,6 +56,7 @@ bool Icd10DbPlugin::initialize(const QStringList &arguments, QString *errorMessa
     //    Core::ICore::instance()->translators()->addNewTranslator("freeicd-Icd10DbPlugin");
 
     addAutoReleasedObject(new Icd10DatabasePage(this));
+    addAutoReleasedObject(new IcdGroupLinkerPage(this));
 
     // add plugin info page
     addAutoReleasedObject(new Core::PluginAboutPage(pluginSpec(), this));

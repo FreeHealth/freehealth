@@ -1,6 +1,5 @@
 TEMPLATE = lib
 TARGET = Icd10DB
-PACKAGE_VERSION = 0.0.2
 
 DEFINES += FREETOOLBOX
 FREETOOLBOX = 1
@@ -18,14 +17,17 @@ DEPENDPATH += ../
 SOURCES += \
     icd10databasecreator.cpp \
     icd10dbplugin.cpp \
+    icdgrouplinker.cpp
 
 HEADERS  += \
     icd10databasecreator.h \
     icd10dbplugin.h \
+    icdgrouplinker.h
 
 
 FORMS += \
-    icd10databasewidget.ui
+    icd10databasewidget.ui \
+    icdgrouplinker.ui
 
 
 OTHER_FILES += \

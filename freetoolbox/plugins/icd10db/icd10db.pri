@@ -1,7 +1,7 @@
-include(drugsdb_dependencies.pri)
+include(icd10db_dependencies.pri)
 CONFIG( debug, debug|release ) {
-    unix:LIBS    *= -lDrugsDB_debug
-    win32:LIBS   *= -lDrugsDB_d
+    unix:LIBS    *= -lIcd10DB_debug
+    win32:LIBS   *= -lIcd10DB_d
 } else {
-    LIBS  *= -lDrugsDB
+    LIBS  *= -lIcd10DB
 }

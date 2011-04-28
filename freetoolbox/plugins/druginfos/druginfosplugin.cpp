@@ -26,6 +26,7 @@
 #include "druginfosplugin.h"
 #include "biamextractor.h"
 #include "pimintegrator.h"
+#include "pimdatabasecreator.h"
 
 #include <coreplugin/dialogs/pluginaboutpage.h>
 
@@ -57,6 +58,7 @@ bool DrugInfosPlugin::initialize(const QStringList &arguments, QString *errorMes
     //    Core::ICore::instance()->translators()->addNewTranslator("freeicd-DrugInfosPlugin");
     addAutoReleasedObject(new BiamExtractorPage(this));
     addAutoReleasedObject(new PimsTreePage(this));
+    addAutoReleasedObject(new PimDatabasePage(this));
 
     // add plugin info page
     addAutoReleasedObject(new Core::PluginAboutPage(pluginSpec(), this));

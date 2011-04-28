@@ -15,6 +15,7 @@ public:
         InteractionDatabase = 0,
         DrugsDatabase,
         IcdDatabase,
+        PimDatabase,
         TmpCleaning
     };
 

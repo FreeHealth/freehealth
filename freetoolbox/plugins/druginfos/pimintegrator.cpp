@@ -1,4 +1,5 @@
 #include "pimintegrator.h"
+#include "pim_constants.h"
 #include "ui_pimintegrator.h"
 
 #include <coreplugin/icore.h>
@@ -30,6 +31,7 @@ static inline QString treeXmlFile() {return QDir::cleanPath(settings()->value(Co
 
 using namespace DrugInfos;
 using namespace Internal;
+using namespace Constants;
 using namespace Trans::ConstantTranslations;
 
 
@@ -59,16 +61,6 @@ public:
 private:
     QHash<int, QVariant> m_Datas;
 };
-
-
-    static const char * XML_TAG_PIM = "PIM";
-    static const char * XML_TAG_RISK = "Risk";
-
-    static const char * XML_ATTRIB_RISK_LANG = "lang";
-    static const char * XML_ATTRIB_RISK_VALUE = "value";
-
-    static const char * XML_ATTRIB_PIM_TYPE = "type";
-    static const char * XML_ATTRIB_PIM_LEVEL = "level";
 
 }  // End namespace Internal
 }  // End namespace DrugInfos

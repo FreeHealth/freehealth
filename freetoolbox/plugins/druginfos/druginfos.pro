@@ -18,18 +18,22 @@ DEPENDPATH += ../
 SOURCES += \
     druginfosplugin.cpp \
     biamextractor.cpp \
-    pimintegrator.cpp
+    pimintegrator.cpp \
+    pimdatabasecreator.cpp
 
 
 HEADERS  += \
     druginfosplugin.h \
     biamextractor.h \
-    pimintegrator.h
+    pimintegrator.h \
+    pimdatabasecreator.h \
+    pim_constants.h
 
 
 FORMS += \
     biamextractor.ui \
-    pimintegrator.ui
+    pimintegrator.ui \
+    pimdatabasecreator.ui
 
 
 OTHER_FILES += \

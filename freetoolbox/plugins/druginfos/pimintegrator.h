@@ -17,7 +17,7 @@ public:
 
     virtual QString id() const {return "PimsTreePage";}
     virtual QString name() const {return "PimsTreePage";}
-    virtual QString category() const {return tr("Pims database");}
+    virtual QString category() const {return tr("PIM database");}
     virtual QIcon icon() const {return QIcon();}
 
     // widget will be deleted after the show
@@ -30,7 +30,7 @@ class PimTreeModel : public Utils::QAbstractXmlTreeModel
 public:
     enum DataRepresentation {
         NameOrTranslatedText = 0,
-            TypeOrLanguage,
+        TypeOrLanguage,
         Level,
         Review,
         ColumnCount

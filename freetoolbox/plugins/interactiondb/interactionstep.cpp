@@ -220,7 +220,7 @@ static bool setClassTreeToDatabase(const QString &iclass,
 
             if (id==-1) {
                 // one INN can have N codes --> get codes
-                QVector<int> ids = Core::Tools::getAtcIds(Core::Constants::MASTER_DATABASE_NAME, inn);
+                QVector<int> ids = Core::Tools::getAtcIdsFromLabel(Core::Constants::MASTER_DATABASE_NAME, inn);
 //                qWarning() << "  ids ->" <<ids;
                 if (ids.isEmpty()) {
                     LOG_ERROR_FOR("InteractionStep", "No ATC ID for "+inn);

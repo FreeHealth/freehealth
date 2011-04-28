@@ -925,7 +925,7 @@ bool addComponentAtcLinks(const QString &connection, const QMultiHash<int, int> 
     return true;
 }
 
-QVector<int> getAtcIds(const QString &connection, const QString &label)
+QVector<int> getAtcIdsFromLabel(const QString &connection, const QString &label)
 {
     QVector<int> ret;
     QString req;
@@ -951,6 +951,30 @@ QVector<int> getAtcIds(const QString &connection, const QString &label)
     }
     return ret;
 }
+
+QVector<int> getAtcIdsFromCode(const QString &connection, const QString &code)
+{
+    QVector<int> ret;
+    QString req;
+    QSqlDatabase db = QSqlDatabase::database(connection);
+    if (!db.isOpen()) {
+        if (!db.open()) {
+            return ret;
+        }
+    }
+    QSqlQuery query(db);
+    req = QString("SELECT DISTINCT ATC.ATC_ID FROM ATC "
+                  "WHERE ATC.CODE like \"%1\";").arg(code);
+    if (query.exec(req)) {
+        while (query.next()) {
+            ret << query.value(0).toInt();
+        }
+    } else {
+        LOG_QUERY_ERROR_FOR("Tools", query);
+    }
+    return ret;
+}
+
 
 } // end namespace Tools
 
