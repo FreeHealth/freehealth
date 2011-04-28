@@ -222,7 +222,7 @@ bool IcdCollectionModel::addCode(const QVariant &SID)
 {
     // Can add this code ?
     if (!canAddThisCode(SID)) {
-        Utils::Log::addError(this, tr("Can not add this code: %1").arg(icdBase()->getIcdCode(SID).toString()));
+        LOG_ERROR(tr("Can not add this code: %1").arg(icdBase()->getIcdCode(SID).toString()));
         return false;
     }
 
@@ -243,6 +243,12 @@ bool IcdCollectionModel::addCode(const QVariant &SID)
     // get all exclusions
     d->m_ExcludedSIDs << icdBase()->getExclusions(SID);
     return true;
+}
+
+bool IcdCollectionModel::addCode(const QString &code)
+{
+    QVariant sid = icdBase()->getSid(code);
+    return addCode(sid);
 }
 
 /**
@@ -358,6 +364,28 @@ QStringList IcdCollectionModel::includedCodesWithDaget() const
         if (hasChildren(idx)) {
             for(int j = 0; j < rowCount(idx); ++j) {
                 QModelIndex child = index(i, CodeWithDaget, idx);
+                children << child.data().toString();
+            }
+        }
+        QString c = children.join(";");
+        if (!c.isEmpty()) {
+            c.prepend("(");
+            c.append(")");
+        }
+        codes << idx.data().toString() + c;
+    }
+    return codes;
+}
+
+QStringList IcdCollectionModel::includedCodesWithoutDaget() const
+{
+    QStringList codes;
+    for(int i = 0; i < rowCount(); ++i) {
+        QModelIndex idx = index(i, CodeWithoutDaget);
+        QStringList children;
+        if (hasChildren(idx)) {
+            for(int j = 0; j < rowCount(idx); ++j) {
+                QModelIndex child = index(i, CodeWithoutDaget, idx);
                 children << child.data().toString();
             }
         }

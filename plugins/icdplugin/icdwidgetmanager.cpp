@@ -175,7 +175,9 @@ IcdActionHandler::IcdActionHandler(QObject *parent) :
         searchmenu = actionManager()->createMenu(Constants::M_ICD_SEARCH);
         searchmenu->appendGroup(Constants::G_ICD_SEARCH);
         searchmenu->setTranslations(Constants::SEARCHMENU_TEXT, Constants::ICDCONSTANTS_TR_CONTEXT);
+#ifndef FREETOOLBOX
         menu->addMenu(searchmenu, Core::Constants::G_EDIT_FIND);
+#endif
     }
     Q_ASSERT(searchmenu);
 
@@ -206,7 +208,9 @@ IcdActionHandler::IcdActionHandler(QObject *parent) :
         modesmenu->appendGroup(Constants::G_ICD_SELECTORMODE);
         modesmenu->appendGroup(Constants::G_ICD_COLLECTIONMODE);
         modesmenu->setTranslations(Constants::MODESMENU_TEXT, Constants::ICDCONSTANTS_TR_CONTEXT);
+#ifndef FREETOOLBOX
         menu->addMenu(modesmenu, Core::Constants::G_EDIT_OTHER);
+#endif
     }
     Q_ASSERT(modesmenu);
 

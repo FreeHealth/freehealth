@@ -446,6 +446,30 @@ QList<int> IcdDatabase::getHeadersSID(const QVariant &SID)
     return toReturn;
 }
 
+QVariant IcdDatabase::getSid(const QString &code)
+{
+    if (!database().isOpen()) {
+        if (!database().open()) {
+            LOG_ERROR(tkTr(Trans::Constants::UNABLE_TO_OPEN_DATABASE_1_ERROR_2).arg(Constants::DB_ICD10).arg(database().lastError().text()));
+            return QVariant();
+        }
+    }
+    QSqlQuery query(database());
+    QHash<int, QString> where;
+    where.insert(Constants::MASTER_CODE, QString("='%1'").arg(code));
+    QString req = select(Constants::Table_Master, Constants::MASTER_SID, where);
+    if (query.exec(req)) {
+        if (query.next()) {
+            QVariant *s = new QVariant(code);
+            d->m_CachedCodes.insert(query.value(0).toInt(), s);
+            return query.value(0);
+        }
+    } else {
+        LOG_QUERY_ERROR(query);
+    }
+    return QVariant();
+}
+
 QVariant IcdDatabase::getIcdCode(const QVariant &SID)
 {
     if (d->m_CachedCodes.keys().contains(SID.toInt())) {

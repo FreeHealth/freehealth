@@ -26,6 +26,8 @@
 #ifndef ICDDATABASE_H
 #define ICDDATABASE_H
 
+#include <icdplugin/icd_exporter.h>
+
 #include <utils/database.h>
 
 /**
@@ -44,7 +46,7 @@ class IcdDatabasePrivate;
 class IcdAssociation;
 }
 
-class IcdDatabase : public QObject, public Utils::Database
+class ICD_EXPORT IcdDatabase : public QObject, public Utils::Database
 {
     Q_OBJECT
     friend class ICD::IcdPlugin;
@@ -62,6 +64,7 @@ public:
 
     QList<int> getHeadersSID(const QVariant &SID);
 
+    QVariant getSid(const QString &code);
     QVariant getIcdCode(const QVariant &SID);
     QString getDagStarCode(const QVariant &SID);
     QString invertDagCode(const QString &dagCode) const;

@@ -61,11 +61,13 @@ public:
     bool canAddThisCode(const QVariant &SID, bool checkDaget = true) const;
     bool canAddThisAssociation(const Internal::IcdAssociation &pair) const;
     bool addCode(const QVariant &SID);
+    bool addCode(const QString &code);
     bool addAssociation(const Internal::IcdAssociation &pair);
 
     // Direct access to datas and model cleaning
     void clearCollection();
     QStringList includedCodesWithDaget() const;
+    QStringList includedCodesWithoutDaget() const;
     QString includedLabelsToHtml() const;
     QStringList includedLabels() const;
 
