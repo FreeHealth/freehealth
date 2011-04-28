@@ -35,6 +35,7 @@
 #include "drugsbase.h"
 #include "drugsdatabaseselector.h"
 #include "drugdruginteractionengine.h"
+#include "pimengine.h"
 
 #include <utils/log.h>
 
@@ -68,6 +69,10 @@ DrugsBasePlugin::~DrugsBasePlugin()
     if (m_DDIEngine)
         delete m_DDIEngine;
     m_DDIEngine = 0;
+    removeObject(m_PimEngine);
+    if (m_PimEngine)
+        delete m_PimEngine;
+    m_PimEngine = 0;
 }
 
 bool DrugsBasePlugin::initialize(const QStringList &arguments, QString *errorString)
@@ -86,6 +91,9 @@ bool DrugsBasePlugin::initialize(const QStringList &arguments, QString *errorStr
     m_DDIEngine = new DrugsDB::Internal::DrugDrugInteractionEngine(this);
     m_DDIEngine->init();
     addObject(m_DDIEngine);
+    m_PimEngine = new DrugsDB::Internal::PimEngine(this);
+    m_PimEngine->init();
+    addObject(m_PimEngine);
 
     // initialize DrugsBase
     Internal::DrugsBase::instance();

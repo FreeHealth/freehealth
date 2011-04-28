@@ -32,7 +32,7 @@
  * \file constants_databaseschema.h
  * \author Eric MAEKER <eric.maeker@free.fr>
  * \version 0.6.0
- * \date 24 Feb 2011
+ * \date 24 Apr 2011
 */
 
 namespace DrugsDB {
@@ -55,6 +55,8 @@ namespace Constants {
         Table_DRUG_ROUTES, Table_DRUG_FORMS, Table_ROUTES, Table_SEARCHENGINES,
         Table_VERSION, Table_ATC, Table_INTERACTIONS, Table_IAKNOWLEDGE,
         Table_IA_IAK, Table_ATC_LABELS, Table_IAM_TREE,
+        Table_PIM_SOURCES, Table_PIM_TYPES, Table_PIMS, Table_PIMS_RELATED_ATC,
+        Table_PIMS_RELATED_ICD,
         Table_MaxParam
     };
 
@@ -191,6 +193,32 @@ namespace Constants {
         IAM_TREE_MaxParam
     };
 
+    enum PIM_SOURCESFields {
+        PIM_SOURCES_SID = 0, PIM_SOURCES_UID, PIM_SOURCES_NAME, PIM_SOURCES_PMID,
+        PIM_SOURCES_COUNTRY, PIM_SOURCES_WWW,
+        PIM_SOURCES_MaxParam
+    };
+
+    enum PIM_TYPESFields {
+        PIM_TYPES_TID = 0, PIM_TYPES_UID, PIM_TYPES_MASTER_LID,
+        PIM_TYPES_MaxParam
+    };
+
+    enum PIMSFields {
+        PIMS_ID = 0, PIMS_SID, PIMS_TID, PIMS_LEVEL, PIMS_RISK_MASTER_LID,
+        PIMS_MaxParam
+    };
+
+    enum PIMS_RELATED_ATCFields {
+        PIMS_RELATC_RMID = 0, PIMS_RELATC_PIM_ID, PIMS_RELATC_ATC_ID,
+        PIMS_RELATC_MAXDAYDOSE, PIMS_RELATC_MAXDAYDOSEUNIT,
+        PIMS_RELATC_MaxParam
+    };
+
+    enum PIMS_RELATED_ICDFields {
+        PIMS_RELICD_RMID = 0, PIMS_RELICD_PIM_ID, PIMS_RELICD_ICD_SID,
+        PIMS_RELICD_MaxParam
+    };
 
 }  // End namespace Constants
 

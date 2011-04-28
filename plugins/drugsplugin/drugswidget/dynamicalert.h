@@ -63,6 +63,9 @@ public:
 
     static DialogResult executeDynamicAlert(const DrugsDB::DrugInteractionInformationQuery &query, QWidget *parent = 0);
 
+protected Q_SLOTS:
+    void showInteractionSynthesisDialog();
+
 protected:
     void changeEvent(QEvent *e);
 

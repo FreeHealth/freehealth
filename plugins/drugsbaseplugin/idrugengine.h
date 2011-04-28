@@ -63,8 +63,10 @@ public:
     virtual bool isCalculatingPatientDrugInteractions() const = 0;
 
     virtual QString name() const = 0;
+    virtual QString shortName() const = 0;
     virtual QString uid() const = 0;
     virtual QIcon icon(const int size = 0) const = 0;
+    virtual QString iconFullPath(const int size = 0) const = 0;
 
     virtual int calculateInteractions(const QVector<IDrug *> &drugs) = 0;
     virtual QVector<IDrugInteraction *> getAllInteractionsFound() = 0;

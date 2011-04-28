@@ -521,6 +521,40 @@ DrugsBase::DrugsBase(QObject *parent)
     addField(Table_IAM_TREE, IAM_TREE_ID_ATC, "ID_ATC");
     addField(Table_IAM_TREE, IAM_TREE_BIBMASTERID, "BIB_MASTER_ID");
 
+    // Add PIMS
+    addTable(Table_PIM_SOURCES,      "PIM_SOURCES");
+    addTable(Table_PIM_TYPES,        "PIM_TYPES");
+    addTable(Table_PIMS,             "PIMS");
+    addTable(Table_PIMS_RELATED_ATC, "PIMS_RELATED_ATC");
+    addTable(Table_PIMS_RELATED_ICD, "PIMS_RELATED_ICD");
+
+    addField(Table_PIM_SOURCES, PIM_SOURCES_SID, "PIM_SID");
+    addField(Table_PIM_SOURCES, PIM_SOURCES_UID, "UID");
+    addField(Table_PIM_SOURCES, PIM_SOURCES_NAME, "NAME");
+    addField(Table_PIM_SOURCES, PIM_SOURCES_PMID, "PMID");
+    addField(Table_PIM_SOURCES, PIM_SOURCES_COUNTRY, "COUNTRY");
+    addField(Table_PIM_SOURCES, PIM_SOURCES_WWW, "WWW");
+
+    addField(Table_PIM_TYPES, PIM_TYPES_TID, "PIM_TID");
+    addField(Table_PIM_TYPES, PIM_TYPES_UID, "UID");
+    addField(Table_PIM_TYPES, PIM_TYPES_MASTER_LID, "MASTER_LID");
+
+    addField(Table_PIMS, PIMS_ID, "PIM_ID");
+    addField(Table_PIMS, PIMS_SID, "PIM_SID");
+    addField(Table_PIMS, PIMS_TID, "PIM_TID");
+    addField(Table_PIMS, PIMS_LEVEL, "LEVEL");
+    addField(Table_PIMS, PIMS_RISK_MASTER_LID, "RISK_MASTER_LID");
+
+    addField(Table_PIMS_RELATED_ATC, PIMS_RELATC_RMID, "PIM_RMID");
+    addField(Table_PIMS_RELATED_ATC, PIMS_RELATC_PIM_ID, "PIM_ID");
+    addField(Table_PIMS_RELATED_ATC, PIMS_RELATC_ATC_ID, "ATC_ID");
+    addField(Table_PIMS_RELATED_ATC, PIMS_RELATC_MAXDAYDOSE, "MAXDAYDOSE");
+    addField(Table_PIMS_RELATED_ATC, PIMS_RELATC_MAXDAYDOSEUNIT, "MAXDAYDOSEUNIT");
+
+    addField(Table_PIMS_RELATED_ICD, PIMS_RELICD_RMID, "PIM_RMID");
+    addField(Table_PIMS_RELATED_ICD, PIMS_RELICD_PIM_ID, "PIM_ID");
+    addField(Table_PIMS_RELATED_ICD, PIMS_RELICD_ICD_SID, "ICD10_ID");
+
     connect(Core::ICore::instance(), SIGNAL(databaseServerChanged()), this, SLOT(onCoreDatabaseServerChanged()));
 }
 
@@ -637,6 +671,7 @@ bool DrugsBase::init()
         checkDosageDatabaseVersion();
     }
 
+    setConnectionName(Constants::DB_DRUGS_NAME);
     d->retreiveLinkTables();
     d->getSearchEngine();
     d->getInteractingClassTree();

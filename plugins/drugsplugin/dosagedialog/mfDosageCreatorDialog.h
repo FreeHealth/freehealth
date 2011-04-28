@@ -75,6 +75,7 @@ private Q_SLOTS:
     void helpRequested();
     void drugsInformationsRequested();
     void addTestOnlyRequested();
+    void showInteractionSynthesisRequested();
 
 private:
     DosageCreatorDialogPrivate *d;

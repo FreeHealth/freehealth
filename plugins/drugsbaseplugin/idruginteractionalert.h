@@ -29,6 +29,7 @@
 
 #include <drugsbaseplugin/drugsbase_exporter.h>
 #include <drugsbaseplugin/druginteractioninformationquery.h>
+#include <drugsbaseplugin/idrugengine.h>
 
 class QIcon;
 class QWidget;
@@ -41,10 +42,11 @@ class DRUGSBASE_EXPORT IDrugInteractionAlert //: public QObject
 {
 //    Q_OBJECT
 public:
-    IDrugInteractionAlert() {}
+    IDrugInteractionAlert(IDrugEngine *engine) : m_Engine(engine){}
     virtual ~IDrugInteractionAlert() {}
 
-    virtual QString engineUid() const = 0;
+    virtual QString engineUid() const {if (m_Engine) return m_Engine->uid(); return QString();}
+    virtual IDrugEngine *engine() const {return m_Engine;}
 
     // static alert
     virtual QIcon icon(const IDrug *drug, const DrugInteractionInformationQuery &query) const = 0;
@@ -56,6 +58,9 @@ public:
     virtual QWidget *dynamicAlertWidget(const DrugInteractionInformationQuery &query, QWidget *parent = 0) = 0;
     virtual void setOverridden(bool overridden) = 0;
     virtual bool wasOverridden() const = 0;
+
+private:
+    IDrugEngine *m_Engine;
 };
 
 }  // End namespace DrugsDB

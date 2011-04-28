@@ -219,7 +219,7 @@ DrugsActionHandler::DrugsActionHandler(QObject *parent) :
     connect(a, SIGNAL(triggered()), this, SLOT(sortDrugs()));
 
     a = aViewInteractions = new QAction(this);
-    a->setIcon(th->icon(Core::Constants::ICONEYES));
+    a->setIcon(th->icon(DrugsDB::Constants::I_DRUGENGINE));
     cmd = actionManager()->registerAction(a, DrugsWidget::Constants::A_VIEW_INTERACTIONS, ctx);
     cmd->setTranslations(Trans::Constants::VIEWINTERACTIONS_TEXT);
     menu->addAction(cmd, DrugsWidget::Constants::G_PLUGINS_INTERACTIONS);

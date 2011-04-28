@@ -61,6 +61,7 @@ public:
     Q_DECLARE_FLAGS(TypesOfIAM, TypeOfIAM);
 
     explicit DrugDrugInteractionEngine(QObject *parent = 0);
+    ~DrugDrugInteractionEngine();
 
     bool init();
     bool canComputeInteractions() const {return true;}
@@ -69,8 +70,10 @@ public:
     bool isCalculatingPatientDrugInteractions() const {return false;}
 
     QString name() const;
+    QString shortName() const;
     QString uid() const;
     QIcon icon(const int size = 0) const;
+    QString iconFullPath(const int size = 0) const;
 
     int calculateInteractions(const QVector<IDrug *> &drugs);
     QVector<IDrugInteraction *> getAllInteractionsFound();

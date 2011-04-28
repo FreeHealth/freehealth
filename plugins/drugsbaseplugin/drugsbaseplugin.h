@@ -40,6 +40,7 @@
 namespace DrugsDB {
     namespace Internal {
         class DrugDrugInteractionEngine;
+        class PimEngine;
     }
 
 class DrugsBasePlugin : public ExtensionSystem::IPlugin
@@ -54,6 +55,7 @@ public:
 
 private:
     DrugsDB::Internal::DrugDrugInteractionEngine *m_DDIEngine;
+    DrugsDB::Internal::PimEngine *m_PimEngine;
 };
 
 

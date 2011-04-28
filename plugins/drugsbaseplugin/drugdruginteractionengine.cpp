@@ -377,8 +377,8 @@ private:
 class Alert : public IDrugInteractionAlert
 {
 public:
-    Alert(DrugInteractionResult *result) :
-            IDrugInteractionAlert(), m_Overridden(false), m_Result(result)
+    Alert(DrugInteractionResult *result, IDrugEngine *engine) :
+            IDrugInteractionAlert(engine), m_Overridden(false), m_Result(result)
     {
     }
 
@@ -602,9 +602,8 @@ public:
                     drug2 = ddi->drugs().at(0)->brandName();
                 }
                 line = QString("<tr>\n"
-                                 "  <td width=5px></td>\n"
-                                 "  <td width=*>* %1<br>&nbsp;&nbsp;&nbsp;&nbsp;%2</td>\n"
-                                 "</tr>")
+                               "  <td>* %1<br>&nbsp;&nbsp;&nbsp;&nbsp;%2</td>\n"
+                               "</tr>")
                         .arg(ddi->getInteractingDrug(drug)->brandName())
                         .arg(di->header("//"));
                 QString &ditmp = lines[typeId];
@@ -618,12 +617,12 @@ public:
             QMap<int, QString>::const_iterator i = lines.constEnd();
             --i;
             while (true) {
-                if (!i.value().isEmpty()) {
-                    const QString &drugs = i.value();
-                    tmp += QString("<table>\n"
+                const QString &drugs = i.value();
+                if (!drugs.isEmpty()) {
+                    tmp += QString("<table border=\"0\" width=\"100%\">\n"
                                    "<tr>\n"
-                                   "  <td rowspan=%1 width=32px valign=middle><img src=\"%2\"></td>\n"
-                                   "  <td colspan=2 width=*><b>%3</b></td>\n"
+                                   "  <td rowspan=\"%1\" width=\"32px\" align=\"center\" valign=\"top\"><img src=\"%2\"></td>\n"
+                                   "  <td><b>%3</b></td>\n"
                                    "</tr>\n"
                                    "%4\n"
                                    "</table>\n<br />"
@@ -637,7 +636,9 @@ public:
                     break;
                 --i;
             }
+
             toReturn = tmp;
+
             break;
         }
         case DrugInteractionInformationQuery::DetailledToolTip:
@@ -781,6 +782,13 @@ DrugDrugInteractionEngine::DrugDrugInteractionEngine(QObject *parent) :
 //    }
 }
 
+DrugDrugInteractionEngine::~DrugDrugInteractionEngine()
+{
+    if (d)
+        delete d;
+    d = 0;
+}
+
 bool DrugDrugInteractionEngine::init()
 {
     // get all interactions ids and mol <-> atc links
@@ -814,11 +822,18 @@ bool DrugDrugInteractionEngine::init()
 
 QString DrugDrugInteractionEngine::name() const {return QCoreApplication::translate(Constants::DRUGSBASE_TR_CONTEXT, Constants::DDI_TEXT);}
 
+QString DrugDrugInteractionEngine::shortName() const {return QCoreApplication::translate(Constants::DRUGSBASE_TR_CONTEXT, Constants::DDI_SHORT_TEXT);}
+
 QString DrugDrugInteractionEngine::uid() const {return Constants::DDI_ENGINE_UID;}
 
 QIcon DrugDrugInteractionEngine::icon(const int size) const
 {
     return theme()->icon(Constants::I_DRUGDRUGINTERACTIONENGINE, Core::ITheme::IconSize(size));
+}
+
+QString DrugDrugInteractionEngine::iconFullPath(const int size) const
+{
+    return theme()->iconFullPath(Constants::I_DRUGDRUGINTERACTIONENGINE, Core::ITheme::IconSize(size));
 }
 
 bool DrugDrugInteractionEngine::checkDrugInteraction(IDrug *drug, const QVector<IDrug *> &drugsList)
@@ -1028,7 +1043,7 @@ QVector<IDrugInteraction *> DrugDrugInteractionEngine::getAllInteractionsFound()
 QVector<IDrugInteractionAlert *> DrugDrugInteractionEngine::getAllAlerts(DrugInteractionResult *addToResult)
 {
     QVector<IDrugInteractionAlert *> alerts;
-    alerts << new Alert(addToResult);
+    alerts << new Alert(addToResult, this);
     return alerts;
 }
 

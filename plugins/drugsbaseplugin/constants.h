@@ -126,7 +126,12 @@ namespace Constants {
     const char * const  I_PROTOCOL_SAVE =              "protocol_save.png";
     const char * const  I_PROTOCOL_TESTONLY =          "protocol_testonly.png";
 
+    const char * const  I_DRUGENGINE = "drugengines.png";
     const char * const  I_DRUGDRUGINTERACTIONENGINE = "drugengine_ddi.png";
+    const char * const  I_PIMENGINE = "pimengine.png";
+
+    const char * const  I_DRUGALERT_ACCEPT = "drugalert_accept.png";
+    const char * const  I_DRUGALERT_OVERRIDE = "drugalert_override.png";
 
     // INTERACTIONS ICONS
     const char * const  INTERACTION_ICONCRITICAL =         "critical.png";      /*!< \brief Themed icon name for Interactions logo. */
@@ -244,7 +249,16 @@ namespace Constants {
     const char * const  DRUGSBASE_TR_CONTEXT = "mfDrugsConstants";
     const char * const  NATURE_OF_RISK = QT_TRANSLATE_NOOP("mfDrugsConstants", "Nature of risk");
     const char * const  MANAGEMENT = QT_TRANSLATE_NOOP("mfDrugsConstants", "Management");
-    const char * const  DDI_TEXT = QT_TRANSLATE_NOOP("mfDrugsConstants", "Drug-drug interactions engine");
+    const char * const  DDI_TEXT = QT_TRANSLATE_NOOP("mfDrugsConstants", "Drug-drug interactions");
+
+     /*: This is the short name of the Drug-drug interactions engine. */
+    const char * const  DDI_SHORT_TEXT = QT_TRANSLATE_NOOP("mfDrugsConstants", "DDI");
+
+    const char * const  PIMENGINE_TEXT = QT_TRANSLATE_NOOP("mfDrugsConstants", "Potentially inappropriate medications");
+
+    /*: This is the short name of the Potentially inappropriate medications engine. */
+    const char * const  PIMENGINE_SHORT_TEXT = QT_TRANSLATE_NOOP("mfDrugsConstants", "PIM");
+    const char * const  PIM_TEXT = QT_TRANSLATE_NOOP("mfDrugsConstants", "Potentially inappropriate medications");
 
     // Some usefull enums
     enum LevelOfInteractionWarnings {
@@ -255,6 +269,7 @@ namespace Constants {
 
     // Drugs engines uid
     const char * const  DDI_ENGINE_UID = "ddiEngine";
+    const char * const  PIM_ENGINE_UID = "pimEngine";
 
     //--------------------------------------------------------------------------------------------------------
     //------------------------------------- Enums for Models Management --------------------------------------

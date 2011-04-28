@@ -99,7 +99,7 @@ QVector<IDrugInteraction *> DrugInteractionResult::getInteractions(const IDrug *
     QVector<IDrugInteraction *> toReturn;
     for(int i = 0; i < m_Interactions.count(); ++i) {
         IDrugInteraction *di = m_Interactions.at(i);
-        if (di->engine()->uid() == engineUid || engineUid.isEmpty()) {
+       if (di->engine()->uid() == engineUid || engineUid.isEmpty()) {
             if (di->drugs().contains((IDrug*)drug))
                 toReturn << di;
         }
@@ -190,10 +190,7 @@ QStandardItemModel *DrugInteractionResult::toStandardModel() const
             if (di->engine()!=engine)
                 continue;
 
-//            // No double
-//            if (id_di.contains(di->value(Internal::DrugsInteraction::DI_Id).toInt()))
-//                continue;
-//            id_di << di->value(Internal::DrugsInteraction::DI_Id).toInt();
+            /** \todo code here : no double */
 
             // Get the interaction level item
             QStandardItem *level = levels.value(di->type(), 0);
@@ -277,11 +274,13 @@ void DrugInteractionResult::warn() const
     }
     QString tmp = QString("DrugInteractionResult: %1\n"
                           "    (DDITested: %2; PDITested: %3)\n"
-                          "    (NbOfInteractions: %4)")
+                          "    (NbOfInteractions: %4)"
+                          "    (NbOfAlerts: %5)")
             .arg(names.join("; "))
             .arg(m_DDITested)
             .arg(m_PDITested)
-            .arg(m_Interactions.count());
+            .arg(m_Interactions.count())
+            .arg(m_Alerts.count());
     qWarning() << tmp;
 }
 

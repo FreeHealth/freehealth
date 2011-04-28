@@ -31,7 +31,8 @@ HEADERS += $${PWD}/drugsbaseplugin.h \
     $${PWD}/druginteractionresult.h \
     $${PWD}/idruginteractionalert.h \
     $${PWD}/druginteractioninformationquery.h \
-    $${PWD}/iprescription.h
+    $${PWD}/iprescription.h \
+    $${PWD}/pimengine.h
 
 #    $${PWD}/interactionsbase.h \
 #    $${PWD}/drugsdatabaseaboutpage.h \
@@ -57,7 +58,8 @@ SOURCES += $${PWD}/drugsbaseplugin.cpp \
     $${PWD}/idruginteractionalert.cpp \
     $${PWD}/druginteractionquery.cpp \
     $${PWD}/druginteractionresult.cpp \
-    $${PWD}/druginteractioninformationquery.cpp
+    $${PWD}/druginteractioninformationquery.cpp \
+    $${PWD}/pimengine.cpp
 
 #    $${PWD}/interactionsbase.cpp \
 #    $${PWD}/drugsdatabaseaboutpage.cpp \

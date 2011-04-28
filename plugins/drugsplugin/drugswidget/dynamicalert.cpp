@@ -26,26 +26,52 @@
  ***************************************************************************/
 #include "dynamicalert.h"
 
+#include <drugsplugin/drugswidget/interactionsynthesisdialog.h>
+
 #include <drugsbaseplugin/druginteractionresult.h>
 #include <drugsbaseplugin/druginteractioninformationquery.h>
 #include <drugsbaseplugin/idruginteractionalert.h>
 #include <drugsbaseplugin/constants.h>
+#include <drugsbaseplugin/idrugengine.h>
+#include <drugsbaseplugin/drugsmodel.h>
 
 #include <coreplugin/icore.h>
 #include <coreplugin/itheme.h>
 #include <coreplugin/constants_icons.h>
 #include <coreplugin/imainwindow.h>
 
+#include <utils/global.h>
+
 #include "ui_dynamicalert.h"
 
 #include <QTabWidget>
 #include <QDialogButtonBox>
 #include <QLabel>
+#include <QToolButton>
+
+#include <QDebug>
 
 using namespace DrugsWidget;
 
 static inline Core::ITheme *theme() {return Core::ICore::instance()->theme();}
+static inline DrugsDB::DrugsModel *drugModel() { return DrugsDB::DrugsModel::activeModel(); }
 
+static inline QWidget *engineTitle(QWidget *parent, DrugsDB::IDrugEngine *engine)
+{
+    QWidget *w = new QWidget(parent);
+    QHBoxLayout *lay = new QHBoxLayout(w);
+    w->setLayout(lay);
+
+    QLabel *icon = new QLabel(w);
+    icon->setPixmap(engine->icon(Core::ITheme::MediumIcon).pixmap(32,32));
+
+    QLabel *name = new QLabel(w);
+    name->setText("<b>"+engine->name()+"</b>");
+
+    lay->addWidget(icon);
+    lay->addWidget(name, 10);
+    return w;
+}
 
 DynamicAlert::DynamicAlert(const DrugsDB::DrugInteractionInformationQuery &query, QWidget *parent) :
     QDialog(parent),
@@ -53,8 +79,9 @@ DynamicAlert::DynamicAlert(const DrugsDB::DrugInteractionInformationQuery &query
 {
     ui->setupUi(this);
     setWindowTitle(tr("Drug interaction alert"));
+    setWindowIcon(theme()->icon(DrugsDB::Constants::I_DRUGENGINE));
     setWindowModality(Qt::WindowModal);
-    ui->generalIconLabel->setPixmap(theme()->icon(DrugsDB::Constants::I_DRUGDRUGINTERACTIONENGINE, Core::ITheme::BigIcon).pixmap(64,64));
+    ui->generalIconLabel->setPixmap(theme()->icon(DrugsDB::Constants::I_DRUGENGINE, Core::ITheme::BigIcon).pixmap(64,64));
     QVector<DrugsDB::IDrugInteractionAlert *> alerts = query.result->alerts(query);
     QVector<int> alertsToUse;
     for(int i=0; i<alerts.count(); ++i) {
@@ -66,18 +93,24 @@ DynamicAlert::DynamicAlert(const DrugsDB::DrugInteractionInformationQuery &query
     // No alerts -> should never be the case ==> assert
     Q_ASSERT(!alertsToUse.isEmpty());
 
+    qWarning() << "nbOfDynAlerts" << alertsToUse.count();
+
     if (alertsToUse.count()==1) {
         // No tabwidget
         DrugsDB::IDrugInteractionAlert *alert = alerts.at(alertsToUse.at(0));
+
         QLabel *label = new QLabel(this);
         label->setTextFormat(Qt::RichText);
-        label->setSizePolicy(QSizePolicy::Preferred, QSizePolicy::Preferred);
+        label->setWordWrap(true);
+//        label->setSizePolicy(QSizePolicy::Preferred, QSizePolicy::Preferred);
         DrugsDB::DrugInteractionInformationQuery myQuery(query);
         myQuery.messageType = DrugsDB::DrugInteractionInformationQuery::InformationAlert;
         myQuery.iconSize = DrugsDB::DrugInteractionInformationQuery::BigSize;
         myQuery.levelOfWarningStaticAlert = myQuery.levelOfWarningDynamicAlert;
         label->setText(alert->message(myQuery.relatedDrug, myQuery));
-        ui->centralLayout->addWidget(label, 0, 0);
+
+        ui->centralLayout->addWidget(engineTitle(this, alert->engine()), 0, 0);
+        ui->centralLayout->addWidget(label, 1, 0);
     } else {
         // With tabwidget
         QTabWidget *tab = new QTabWidget(this);
@@ -89,17 +122,47 @@ DynamicAlert::DynamicAlert(const DrugsDB::DrugInteractionInformationQuery &query
             DrugsDB::DrugInteractionInformationQuery myQuery(query);
             myQuery.messageType = DrugsDB::DrugInteractionInformationQuery::InformationAlert;
             label->setText(alert->message(myQuery.relatedDrug, myQuery));
-            tab->addTab(label, alert->engineUid());
+
+            QWidget *w = new QWidget(this);
+            QVBoxLayout *lay = new QVBoxLayout(w);
+            lay->setMargin(0);
+            lay->setSpacing(5);
+            w->setLayout(lay);
+            lay->addWidget(engineTitle(this, alert->engine()));
+            lay->addWidget(label);
+
+            tab->addTab(w, alert->engine()->icon(Core::ITheme::SmallIcon), alert->engine()->shortName());
         }
+
         ui->centralLayout->addWidget(tab, 0, 0);
     }
 
     // Add buttons
     QDialogButtonBox *box = new QDialogButtonBox(this);
-    QPushButton *accept = box->addButton(tr("Accept alert and cancel last action"), QDialogButtonBox::AcceptRole);
-    QPushButton *override = box->addButton(tr("Override alert and go on"), QDialogButtonBox::RejectRole);
+    QToolButton *accept = new QToolButton(this);
+    accept->setText(tr("Accept alert and cancel last action"));
+    accept->setIcon(theme()->icon(DrugsDB::Constants::I_DRUGALERT_ACCEPT, Core::ITheme::MediumIcon));
+    accept->setIconSize(QSize(32,32));
+    accept->setToolButtonStyle(Qt::ToolButtonTextUnderIcon);
+    box->addButton(accept, QDialogButtonBox::AcceptRole);
+
+    QToolButton *override = new QToolButton(this);
+    override->setText(tr("Override alert and go on"));
+    override->setIcon(theme()->icon(DrugsDB::Constants::I_DRUGALERT_OVERRIDE, Core::ITheme::MediumIcon));
+    override->setIconSize(QSize(32,32));
+    override->setToolButtonStyle(Qt::ToolButtonTextUnderIcon);
+    box->addButton(override, QDialogButtonBox::RejectRole);
+
+    QToolButton *showSynthesis = new QToolButton(this);
+    showSynthesis->setText(tr("Show full interactions information"));
+    showSynthesis->setIcon(theme()->icon(DrugsDB::Constants::I_DRUGENGINE, Core::ITheme::MediumIcon));
+    showSynthesis->setIconSize(QSize(32,32));
+    showSynthesis->setToolButtonStyle(Qt::ToolButtonTextUnderIcon);
+    box->addButton(showSynthesis, QDialogButtonBox::HelpRole);
+
     connect(box, SIGNAL(accepted()), this, SLOT(accept()));
     connect(box, SIGNAL(rejected()), this, SLOT(reject()));
+    connect(showSynthesis, SIGNAL(clicked()), this, SLOT(showInteractionSynthesisDialog()));
     ui->buttonLayout->addWidget(box);
 
     adjustSize();
@@ -132,6 +195,13 @@ DynamicAlert::DialogResult DynamicAlert::executeDynamicAlert(const DrugsDB::Drug
     }
     /** \todo create an interface class like IDrugDynamicAlertListener and get object in the plugin manager pool. To allow plugins to implement alert overridden logging. */
     return DynamicAlertOverridden;
+}
+
+void DynamicAlert::showInteractionSynthesisDialog()
+{
+    InteractionSynthesisDialog dlg(drugModel(), this);
+    Utils::resizeAndCenter(&dlg, Core::ICore::instance()->mainWindow());
+    dlg.exec();
 }
 
 void DynamicAlert::changeEvent(QEvent *e)

@@ -39,6 +39,7 @@
 
 #include <drugsplugin/constants.h>
 #include <drugsplugin/drugswidgetmanager.h>
+#include <drugsplugin/drugswidget/interactionsynthesisdialog.h>
 
 #include <drugsbaseplugin/dosagemodel.h>
 #include <drugsbaseplugin/drugsmodel.h>
@@ -55,6 +56,7 @@
 #include <coreplugin/icore.h>
 #include <coreplugin/isettings.h>
 #include <coreplugin/itheme.h>
+#include <coreplugin/imainwindow.h>
 #include <coreplugin/dialogs/helpdialog.h>
 #include <coreplugin/constants_icons.h>
 
@@ -271,6 +273,15 @@ DosageCreatorDialog::DosageCreatorDialog(QWidget *parent, DrugsDB::Internal::Dos
     QModelIndex idx = dosageModel->index(0,Dosages::Constants::Label);
     availableDosagesListView->setCurrentIndex(idx);
 
+    // interaction button
+    showInteractionSynthesisButton->setIcon(theme()->icon(DrugsDB::Constants::I_DRUGENGINE));
+    connect(showInteractionSynthesisButton, SIGNAL(clicked()), this, SLOT(showInteractionSynthesisRequested()));
+    if (drugModel()->drugData(drugId, Drug::Interacts).toBool()) {
+        showInteractionSynthesisButton->show();
+    } else {
+        showInteractionSynthesisButton->hide();
+    }
+
     updateSettings();
 }
 
@@ -413,4 +424,11 @@ void DosageCreatorDialog::addTestOnlyRequested()
     drugModel()->setDrugData(d->m_DosageModel->drugId(), DrugsDB::Constants::Prescription::OnlyForTest, true);
     dosageViewer->done(QDialog::Accepted);
     done(QDialog::Accepted);
+}
+
+void DosageCreatorDialog::showInteractionSynthesisRequested()
+{
+    InteractionSynthesisDialog dlg(drugModel(), this);
+    Utils::resizeAndCenter(&dlg, Core::ICore::instance()->mainWindow());
+    dlg.exec();
 }
