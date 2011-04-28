@@ -33,6 +33,7 @@
 #include <QString>
 #include <QDataWidgetMapper>
 #include <QStandardItemModel>
+#include <QProgressDialog>
 
 #include "ui_medicalprocedurepage.h"
 
@@ -87,6 +88,7 @@ private:
     void setCompletionAbstractList(const QString & text);
     QStandardItemModel * MedicalProcedureModelByLocale();
     bool fillEmptyMPModel();
+    int numberOfLinesForProgressBar();
 
 private:
     AccountDB::MedicalProcedureModel *m_Model;
@@ -95,6 +97,7 @@ private:
     QString m_user_fullName;
     QStringList m_completionList;
     QStringList m_completionAbstractList;
+    QProgressDialog * m_progressDialog;
 };
 
 }  // End Internal

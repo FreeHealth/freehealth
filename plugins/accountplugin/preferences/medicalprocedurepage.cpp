@@ -111,6 +111,9 @@ MedicalProcedureWidget::MedicalProcedureWidget(QWidget *parent) :
 {
     setObjectName("MedicalProcedureWidget");
     setupUi(this);
+    int max = numberOfLinesForProgressBar();
+    m_progressDialog = new QProgressDialog(trUtf8("Wait ..."),trUtf8("Abort"),0,max,this);
+    m_progressDialog->setWindowModality(Qt::WindowModal);
     m_user_uid = user()->value(Core::IUser::Uuid).toString();
     m_user_fullName = user()->value(Core::IUser::FullName).toString();
     if (m_user_fullName.isEmpty()) {
@@ -134,7 +137,6 @@ MedicalProcedureWidget::MedicalProcedureWidget(QWidget *parent) :
     	  	                       QMessageBox::Ok);
     	      }
         }
-        /** \todo  m_Model->setUserUuid(); */
     QLabel *mpUidLabel = new QLabel(this);
     mpUidLabel->setText("NULL");
     mpUidLabel->hide();
@@ -163,6 +165,7 @@ MedicalProcedureWidget::MedicalProcedureWidget(QWidget *parent) :
 MedicalProcedureWidget::~MedicalProcedureWidget()
 {
     //saveModel();
+    delete m_progressDialog;
 }
 
 void MedicalProcedureWidget::setDatasToUi()
@@ -295,11 +298,24 @@ void MedicalProcedureWidget::on_abstractEdit_textChanged(const QString & text){
 static QString getCsvDefaultFile()
 {
     QString sqlDirPath = settings()->path(Core::ISettings::BundleResourcesPath) + "/sql/account";
+    QString defaultString = ("medical_procedure");
     QDir dir(sqlDirPath);
     if (!dir.exists())
         return QString();
-    QString fileName = QString("medical_procedure_%1.csv").arg(QLocale().name());
-    QFile file(dir.absolutePath() + QDir::separator() + fileName);
+    QStringList nameFilters;
+    nameFilters << "*"+QLocale().name()+".csv";
+    dir.setNameFilters(nameFilters);
+    QStringList listOfFiles = dir.entryList(nameFilters);
+    QString fileName ;//= QString("medical_procedure_%1.csv").arg(QLocale().name());
+    QString filesOfDir;
+    foreach(filesOfDir,listOfFiles){
+        if (filesOfDir.contains(defaultString))
+        {
+        	  fileName = dir.absolutePath() + QDir::separator() +filesOfDir;
+        	  qDebug() << __FILE__ << QString::number(__LINE__) << " fileName =" << fileName ;
+            }
+        }
+    QFile file(fileName);
     if (!file.exists())
         return QString();
     return file.fileName();
@@ -357,8 +373,8 @@ QStandardItemModel *MedicalProcedureWidget::MedicalProcedureModelByLocale()
         	listOfItemsData << item;
         	}
             model->appendRow(listOfItemsData);
-            ++row;  
-            qDebug() << __FILE__ << QString::number(__LINE__) << " row =" << QString::number(row) ;
+            ++row;
+            //qDebug() << __FILE__ << QString::number(__LINE__) << " row =" << QString::number(row) ;
             }
     }
 
@@ -373,6 +389,8 @@ bool MedicalProcedureWidget::fillEmptyMPModel(){
     qDebug() << __FILE__ << QString::number(__LINE__) << " availModelRows = " << QString::number(availModelRows) ;
     QString strList;
     for (int i = 0; i < availModelRows; i += 1){
+        m_progressDialog->setValue(i);
+        //qDebug() << __FILE__ << QString::number(__LINE__) << " i =" << QString::number(i) ;
         if (!m_Model->insertRows(m_Model->rowCount(),1,QModelIndex()))
     	  		{qWarning() << __FILE__ << QString::number(__LINE__) << QString::number(m_Model->rowCount()) ;
     	  			  /*QMessageBox::warning(0,trUtf8("Warning"),trUtf8("Unable to insert row \n")
@@ -399,9 +417,26 @@ bool MedicalProcedureWidget::fillEmptyMPModel(){
     	  	    strList += strValues+"\n";
     	      test = m_Model->submit();
     	      }
-    	      qDebug() << __FILE__ << QString::number(__LINE__) << " values = \n" << strList;
+    	      m_progressDialog->setValue(numberOfLinesForProgressBar());
+    	      //m_progressDialog->close();
+    	      //qDebug() << __FILE__ << QString::number(__LINE__) << " values = \n" << strList;
     QApplication::restoreOverrideCursor();
     return test;
 }
 
+int MedicalProcedureWidget::numberOfLinesForProgressBar(){
+    QString filePathAndName = getCsvDefaultFile();
+    QString fileName = filePathAndName.split(QDir::separator()).last();
+    qDebug() << __FILE__ << QString::number(__LINE__) << " fileName =" << fileName ;
+    fileName.remove("_"+QLocale().name());
+    fileName.remove(".csv");
+    QStringList listFromFileName = fileName.split("_");
+    QString numberOfLines = listFromFileName.last();
+    qDebug() << __FILE__ << QString::number(__LINE__) << " numberOfLines =" << numberOfLines ;
+    
+    int max = numberOfLines.toInt();
+    
+    qDebug() << __FILE__ << QString::number(__LINE__) << " max =" << QString::number(max) ;
+    return max;
+}
 
