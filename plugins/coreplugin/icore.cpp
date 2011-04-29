@@ -20,6 +20,11 @@
  ***************************************************************************/
 #include "icore.h"
 
+#include <utils/global.h>
+
+#include <QApplication>
+#include <QString>
+
 /*!
     \namespace Core
     \brief The Core namespace contains all classes that make up the Core plugin
@@ -43,3 +48,31 @@
     \mainclass
 */
 
+Core::ICore::ICore(QObject *parent) :
+        QObject(parent), m_UpdatePreferences(false)
+{
+    alphaDialog();
+}
+
+Core::ICore::~ICore()
+{}
+
+bool Core::ICore::alphaDialog() const
+{
+    if (qApp->applicationVersion().contains("alpha") && !Utils::isDebugCompilation()) {
+        Utils::warningMessageBox("<p style=\"text-transform:uppercase;font-weight:bold;color:red;font-size:large\">" +
+                                 tr("You are running an alpha version of %1. This version "
+                                    "can be heavily buggy and is only provided for "
+                                    "testing purpose.")
+                                 .arg(qApp->applicationName() + " (" + qApp->applicationVersion() + ")") +
+                                 "</p>"
+                                 ,
+                                 tr("If you found any problem with %1, please report "
+                                    "it on our mailing list: "
+                                    "<a href=\"mailto:freemedforms@googlegroups.com>freemedforms@googlegroups.com</a>")
+                                 .arg(qApp->applicationName()), "",
+                                 tr("Warning alpha version")
+                                 );
+    }
+    return true;
+}

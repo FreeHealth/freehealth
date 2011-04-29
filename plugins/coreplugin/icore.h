@@ -38,8 +38,8 @@ class QWidget;
 /**
  * \file icore.h
  * \author Eric MAEKER <eric.maeker@free.fr>
- * \version 0.5.0
- * \date 16 Mar 2011
+ * \version 0.6.0
+ * \date 28 Apr 2011
 */
 
 
@@ -70,13 +70,16 @@ class CORE_EXPORT ICore : public QObject
     Q_OBJECT
 
 public:
-    ICore(QObject *parent) : QObject(parent), m_UpdatePreferences(false) {}
-    virtual ~ICore() {}
+    ICore(QObject *parent);
+    virtual ~ICore();
 
     static ICore *instance();
 
     // Some informations
     virtual bool updatePreferences() const {return m_UpdatePreferences;}
+
+    // Alpha dialog
+    virtual bool alphaDialog() const;
 
     // Action manager, ContextManager, ModeManager, FileManager
     virtual ActionManager *actionManager() const = 0;
