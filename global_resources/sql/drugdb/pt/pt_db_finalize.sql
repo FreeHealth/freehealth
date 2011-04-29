@@ -20,10 +20,10 @@
 --  ***************************************************************************/
 
 -- /**
---  * \file be_db_finalize.sql
+--  * \file pt_db_finalize.sql
 --  * \author Eric MAEKER, MD <eric.maeker@free.fr>
---  * \version 0.5.4
---  * \date 14 Jan 2011
+--  * \version 0.6.0
+--  * \date 29 Apr 2011
 --  */
 
 -- /**
@@ -38,23 +38,23 @@
 -- Feed INFORMATIONS (info about the drug data source)
 -- ********************************
 UPDATE SOURCES SET
-  LANG            = "fr_FR",
-  WEB             = "http://www.fagg-afmps.be/",
+  LANG            = "es_PT",
+  WEB             = "http://www.infarmed.pt/infomed/",
   COPYRIGHT       = "Public domain",
   DATE            = CURRENT_DATE,
   DRUGS_VERSION   = "0.6.0",
   AUTHORS         = "Eric Maeker, MD (Fr)",
   VERSION         = "0.6.0",
-  PROVIDER        = "AFMPS : Agence Fédérale des Médicaments et des Produits de Santé",
-  WEBLINK         = "http://www.fagg-afmps.be/fr/items-HOME/Bases_de_donnees/index.jsp",
+  PROVIDER        = "http://www.infarmed.pt/infomed/",
+  WEBLINK         = "http://www.infarmed.pt/infomed/",
   DRUG_UID_NAME   = "CIS",
-  ATC             = 1,
-  INTERACTIONS    = 1,
-  COMPLEMENTARY_WEBSITE  = "",
+  ATC             = 0,
+  INTERACTIONS    = 0,
+  COMPLEMENTARY_WEBSITE  = "http://www.infarmed.pt/infomed/",
   PACK_MAIN_CODE_NAME    = "CIP",
   DRUGS_NAME_CONSTRUCTOR = "NAME (FORM, GLOBAL_STRENGTH)",
   FREEMEDFORMS_COMPTA_VERSION = "0.6.0",
   WEBPORTAL_COMPTA_VERSION    = "0.1.0"
-WHERE DATABASE_UID= "FAGG_AFMPS_BE";
+WHERE DATABASE_UID= "INFARMED_PT";
 
 VACUUM;

@@ -41,8 +41,8 @@
 -- /**
 --  * \file canadian_db_finalize.sql
 --  * \author Jim Busser, MD <jbusser@interchange.ubc.ca>, Eric MAEKER, MD <eric.maeker@free.fr>
---  * \version 0.4.4
---  * \date 14 July 2010
+--  * \version 0.6.0
+--  * \date 29 Apr 2011
 --  */
 
 -- /**
@@ -62,7 +62,7 @@ UPDATE SOURCES SET
   DATE            =CURRENT_DATE,
   DRUGS_VERSION   ="0.6.0",
   AUTHORS         ="Jim Busser, MD (CA) & Eric Maeker, MD (FR)",
-  AUTHOR_COMMENT  ="While the download is technically open, the data is copyright. Please report any problem to the author. Apply: http://publications.gc.ca/helpAndInfo/cc-dac/application-e.html on a no-charge, royalty-free, non-exclusive, annual renewable basis.",
+  AUTHOR_COMMENTS ="While the download is technically open, the data is copyright. Please report any problem to the author. Apply: http://publications.gc.ca/helpAndInfo/cc-dac/application-e.html on a no-charge, royalty-free, non-exclusive, annual renewable basis.",
   VERSION         ="0.6.0",
   PROVIDER        ="HC: Health Canada Drug Product Database",
   WEBLINK         ="http://www.hc-sc.gc.ca/dhp-mps/prodpharma/databasdon/index-eng.php",
