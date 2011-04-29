@@ -114,6 +114,8 @@ MedicalProcedureWidget::MedicalProcedureWidget(QWidget *parent) :
     int max = numberOfLinesForProgressBar();
     m_progressDialog = new QProgressDialog(trUtf8("Wait ..."),trUtf8("Abort"),0,max,this);
     m_progressDialog->setWindowModality(Qt::WindowModal);
+    m_progressDialog->setAutoReset(true);
+    m_progressDialog->setAutoClose(true);
     m_user_uid = user()->value(Core::IUser::Uuid).toString();
     m_user_fullName = user()->value(Core::IUser::FullName).toString();
     if (m_user_fullName.isEmpty()) {
@@ -165,7 +167,7 @@ MedicalProcedureWidget::MedicalProcedureWidget(QWidget *parent) :
 MedicalProcedureWidget::~MedicalProcedureWidget()
 {
     //saveModel();
-    delete m_progressDialog;
+    //delete m_progressDialog;
 }
 
 void MedicalProcedureWidget::setDatasToUi()
@@ -418,6 +420,7 @@ bool MedicalProcedureWidget::fillEmptyMPModel(){
     	      test = m_Model->submit();
     	      }
     	      m_progressDialog->setValue(numberOfLinesForProgressBar());
+    	      
     	      //m_progressDialog->close();
     	      //qDebug() << __FILE__ << QString::number(__LINE__) << " values = \n" << strList;
     QApplication::restoreOverrideCursor();
