@@ -15,10 +15,10 @@
 
     <!-- Translatable values -->
     <licence>GPLv3</licence>
-    <description lang="fr">Dossier médical générique</description>
-    <description lang="en">Generic patient file</description>
-    <category lang="en">Medical files: General practitioner</category>
-    <category lang="fr">Dossier médicaux : Médecine générale</category>
+    <description lang="fr">Dossier médical générique avec page médicaments</description>
+    <description lang="xx">Generic patient file with drugs page</description>
+    <category lang="xx">General practice</category>
+    <category lang="fr">Médecine générale</category>
     <tooltip lang="fr">French tooltip</tooltip>
     <tooltip lang="xx">All other languages tooltip</tooltip>
     <htmldescription lang="fr"></htmldescription>
@@ -38,7 +38,7 @@
     <Item>
       <type>identity</type>
       <name>identity</name>
-      <label lang="en">Full Identity</label>
+      <label lang="xx">Full Identity</label>
       <label lang="fr">Identité</label>
     </Item>
   </MedForm>

@@ -27,25 +27,26 @@
 
   </formdescription>
 
-<MedForm>
-  <name>formSample</name>
-  <label>AGGIR</label>
-  <type>form</type>
-  <column>1</column>
-  <option>compact</option>
+  <MedForm>
+    <name>frenchAggirScore</name>
+    <label>AGGIR</label>
+    <type>form</type>
+    <options>compact</options>
 
-  <Item>
-    <name>girwidget</name>
-    <label>Gir sample</label>
-    <type>gir</type>
-    <script>
-      <onload>{onload script}</onload>
-      <postload>{post load}</postload>
-      <ondemand>{ondemand}</ondemand>
-      <onvaluechanged>{onvaluechanged}</onvaluechanged>
-      <onvaluerequiered>{onvaluerequiered}</onvaluerequiered>
-      <ondependencieschanged>{ondependencieschanged}</ondependencieschanged>
-    </script>
-  </Item>
-</MedForm>
+    <Item>
+      <name>girwidget</name>
+      <label>Gir sample</label>
+      <type>gir</type>
+      <script>
+        <onload>{onload script}</onload>
+        <postload>{post load}</postload>
+        <ondemand>{ondemand}</ondemand>
+        <onvaluechanged>{onvaluechanged}</onvaluechanged>
+        <onvaluerequiered>{onvaluerequiered}</onvaluerequiered>
+        <ondependencieschanged>{ondependencieschanged}</ondependencieschanged>
+      </script>
+    </Item>
+
+  </MedForm>
+
 </FreeMedForms>

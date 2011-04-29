@@ -1,10 +1,6 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <!DOCTYPE FreeMedForms>
 <FreeMedForms>
-  <version>0.5.0~alpha</version>
-  <authors>Eric Maeker, MD</authors>
-  <licence>GPLv3</licence>
-  <creationdate>2011-03-15</creationdate>
 
     <MedForm>
       <type>form</type>
