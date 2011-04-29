@@ -144,13 +144,10 @@ INSTALLS += forms
 }
 
 # Install drugs databases
-!isEmpty(INSTALL_DRUGS):!isEmpty(INSTALL_DATABASES_PATH):!isEmpty(SOURCES_DATABASES){
+eval(INSTALL_DRUGS=1):!isEmpty(INSTALL_DATABASES_PATH):!isEmpty(SOURCES_DATABASES){
 drugsdb.path = $${INSTALL_DATABASES_PATH}/drugs
-drugsdb.files = $${SOURCES_DATABASES}/drugs/drugs*.db
+drugsdb.files = $${SOURCES_DATABASES}/drugs/master.db
 INSTALLS += drugsdb
-iamdb.path = $${INSTALL_DATABASES_PATH}/drugs
-iamdb.files = $${SOURCES_DATABASES}/drugs/iam*.db
-INSTALLS += iamdb
 }
 
 !isEmpty(INSTALL_DATABASES_PATH):!isEmpty(SOURCES_DATABASES){
@@ -164,13 +161,15 @@ screens.path = $${INSTALL_SPLASHPIX_PATH}
 screens.files = $${SOURCES_GLOBAL_RESOURCES}/pixmap/splashscreens/*.png
 pix16.path = $${INSTALL_SMALLPIX_PATH}
 pix16.files = $${SOURCES_GLOBAL_RESOURCES}/pixmap/16x16/*.png
+pix16flags.path = $${INSTALL_SMALLPIX_PATH}/flags
+pix16flags.files = $${SOURCES_GLOBAL_RESOURCES}/pixmap/16x16/flags/*.png
 pix32.path = $${INSTALL_MEDIUMPIX_PATH}
 pix32.files = $${SOURCES_GLOBAL_RESOURCES}/pixmap/32x32/*.png
 pix64.path = $${INSTALL_BIGPIX_PATH}
 pix64.files = $${SOURCES_GLOBAL_RESOURCES}/pixmap/64x64/*.png
 pixsvg.path = $${INSTALL_BIGPIX_PATH}/svg
 pixsvg.files = $${SOURCES_GLOBAL_RESOURCES}/pixmap/svg/*.svg
-INSTALLS+=screens pix16 pix32 pix64
+INSTALLS+=screens pix16 pix16flags pix32 pix64
 
 # Install desktop file
 !isEmpty(INSTALL_DESKTOP_FILES_PATH){
