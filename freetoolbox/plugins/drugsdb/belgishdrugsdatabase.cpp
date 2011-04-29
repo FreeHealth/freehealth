@@ -452,6 +452,16 @@ bool BeDrugDatatabaseStep::populateDatabase()
 
 bool BeDrugDatatabaseStep::linkMolecules()
 {
+    // 29 APR 2011
+    //    NUMBER OF MOLECULES 2147
+    //    CORRECTED BY NAME 1
+    //    CORRECTED BY ATC 0
+    //    FOUNDED 1353 "
+    //    LINKERMODEL (WithATC:659;WithoutATC:13) 672"
+    //    LINKERNATURE 0
+    //    LEFT 781
+    //    CONFIDENCE INDICE 63
+
     // 10 Jan 2011
     //    NUMBER OF MOLECULES 2146
     //    CORRECTED BY NAME 1

@@ -79,7 +79,7 @@ const bool unzipFile( const QString & fileName, const QString & pathToUnZippedFi
 //     if (!unzip.waitForFinished(100000))
 //         return false;
 //
-//     Utils::Log::addMessage("Tools", "unzip returned : " + unzip.readAll());
+//     LOG_FOR("Tools", "unzip returned : " + unzip.readAll());
 //     return true;
 
      QuaZip zip( fileName );
@@ -109,7 +109,7 @@ const bool unzipFile( const QString & fileName, const QString & pathToUnZippedFi
           out.setFileName( pathToUnZippedFiles + QDir::separator() + name );
 
           // inform user
-          Utils::Log::addMessage("Tools", QString( "Zip : extracting : %1" ).arg( out.fileName() ));
+          LOG_FOR("Tools", QString( "Zip : extracting : %1" ).arg( out.fileName() ));
 
           if ( !out.open( QIODevice::WriteOnly | QIODevice::Text ) ) {
                Utils::Log::addError("Tools", QString( "%1: %2" ).arg( out.fileName() ).arg( out.error() ));
@@ -243,7 +243,7 @@ bool executeProcess(const QString &proc)
     QProcess process;
     process.start(proc, QIODevice::ReadOnly);
 
-    Utils::Log::addMessage("Tools", QString("Executing process : %1").arg(proc));
+    LOG_FOR("Tools", QString("Executing process : %1").arg(proc));
 
     if (!process.waitForStarted())
         Utils::Log::addError("Tools", QString("Process %1 can not start").arg(proc.left(20)), __FILE__, __LINE__);
@@ -257,7 +257,7 @@ bool executeProcess(const QString &proc)
         Utils::Log::addError("Tools", QString("ERROR : %1").arg(error), __FILE__, __LINE__);
         return false;
     }
-    Utils::Log::addMessage("Tools", QString("Process done : %1, output : %2").arg(proc.left(20)).arg(QString(process.readAllStandardOutput())));
+    LOG_FOR("Tools", QString("Process done : %1, output : %2").arg(proc.left(20)).arg(QString(process.readAllStandardOutput())));
     return true;
 }
 
@@ -300,7 +300,7 @@ bool executeSqlFile(const QString &connectionName, const QString &fileName, QPro
     // Reconstruct req : removes comments
     foreach(const QString &s, list) {
         if (s.startsWith("--")) {
-            Utils::Log::addMessage("Tools", s);
+            LOG_FOR("Tools", s);
             continue;
         }
         req += s + " \n";
@@ -339,7 +339,7 @@ bool executeSqlFile(const QString &connectionName, const QString &fileName, QPro
 //            DB.rollback();
             return false;
         } else {
-            Utils::Log::addMessage("Tools", QString("Query correctly done (%1 ms)").arg(time.elapsed()));
+            LOG_FOR("Tools", QString("Query correctly done (%1 ms)").arg(time.elapsed()));
         }
 
         if (dlg)
@@ -395,7 +395,7 @@ bool connectDatabase(const QString &connection, const QString &fileName)
             Utils::Log::addError("Tools", QString("ERROR : %1 // %2").arg(DB.lastError().text()).arg(fileName), __FILE__, __LINE__);
             return false;
         } else {
-            Utils::Log::addMessage("Tools", QString("Connection to database created : %1 %2")
+            LOG_FOR("Tools", QString("Connection to database created : %1 %2")
                     .arg(DB.connectionName(), DB.databaseName()));
         }
     }

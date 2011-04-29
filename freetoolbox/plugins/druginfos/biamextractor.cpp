@@ -384,7 +384,7 @@ public:
             return false;
         }
 
-        Utils::Log::addMessage("BIAM", QString("Database schema created"));
+        LOG_FOR("BIAM", QString("Database schema created"));
         return true;
     }
 
@@ -424,14 +424,14 @@ BiamExtractor::BiamExtractor(QWidget *parent) :
     if (!QDir().mkpath(d->m_WorkingPath))
         Utils::Log::addError(this, "Unable to create BIAM Working Path :" + d->m_WorkingPath, __FILE__, __LINE__);
     else
-        Utils::Log::addMessage(this, "Tmp dir created");
+        LOG("Tmp dir created");
     // Create database output dir
     const QString &dbpath = QFileInfo(databaseAbsPath()).absolutePath();
     if (!QDir().exists(dbpath)) {
         if (!QDir().mkpath(dbpath))
             Utils::Log::addError(this, "Unable to create BIAM database output path :" + dbpath, __FILE__, __LINE__);
         else
-            Utils::Log::addMessage(this, "BIAM database output dir created");
+            LOG("BIAM database output dir created");
     }
 
     // Connect ui

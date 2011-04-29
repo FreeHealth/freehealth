@@ -162,17 +162,17 @@ PtDrugDatatabaseStep::~PtDrugDatatabaseStep()
 bool PtDrugDatatabaseStep::createDir()
 {
     if (!QDir().mkpath(workingPath()))
-        Utils::Log::addError(this, "Unable to create Pt Working Path :" + workingPath(), __FILE__, __LINE__);
+        LOG_ERROR("Unable to create Pt Working Path :" + workingPath());
     else
-        Utils::Log::addMessage(this, "Tmp dir created");
+        LOG("Tmp dir created");
     // Create database output dir
     const QString &dbpath = QFileInfo(databaseAbsPath()).absolutePath();
     if (!QDir().exists(dbpath)) {
         if (!QDir().mkpath(dbpath)) {
-            Utils::Log::addError(this, "Unable to create Pt database output path :" + dbpath, __FILE__, __LINE__);
+            LOG_ERROR("Unable to create Pt database output path :" + dbpath);
             m_Errors << tr("Unable to create Pt database output path :") + dbpath;
         } else {
-            Utils::Log::addMessage(this, "Drugs database (Pt) output dir created");
+            LOG("Drugs database (Pt) output dir created");
         }
     }
     return true;
@@ -235,11 +235,11 @@ bool PtDrugDatatabaseStep::createDatabase()
     labels.insert("de","Portugiesisch therapeutischen database");
 
     if (Core::Tools::createNewDrugsSource(Core::Constants::MASTER_DATABASE_NAME, PT_DRUGS_DATABASE_NAME, labels) == -1) {
-        Utils::Log::addError(this, "Unable to create the PT drugs sources");
+        LOG_ERROR("Unable to create the PT drugs sources");
         return false;
     }
 
-    Utils::Log::addMessage(this, QString("Database schema created"));
+    LOG(QString("Database schema created"));
     Q_EMIT progress(1);
     return true;
 }
@@ -249,7 +249,7 @@ static int readUids(QHash<QString, int> &drugs_uids)
     int lastUid = 20110001;
     QString content = Utils::readTextFile(uidFile());
     if (content.isEmpty())
-        Utils::Log::addError("PtDrugDatatabaseStep", "Unable to read UIDs file", __FILE__, __LINE__);
+        LOG_ERROR_FOR("PtDrugDatatabaseStep", "Unable to read UIDs file");
     foreach(const QString &line, content.split("\n", QString::SkipEmptyParts)) {
         if (line.startsWith("//"))
             continue;
@@ -261,7 +261,7 @@ static int readUids(QHash<QString, int> &drugs_uids)
                 lastUid = uid;
             drugs_uids.insert(drugname, uid);
         } else {
-            Utils::Log::addError("PtDrugDatatabaseStep", QString("Line : %1 , does not contains 2 values").arg(line));
+            LOG_ERROR_FOR("PtDrugDatatabaseStep", QString("Line : %1 , does not contains 2 values").arg(line));
         }
     }
     return lastUid;
@@ -292,7 +292,7 @@ static bool saveUids(const QHash<QString, int> &drugs_uids)
         content += drug + ";" + QString::number(drugs_uids.value(drug)) + "\n";
     }
     if (!Utils::saveStringToFile(content.toUtf8(), uidFile())) {
-        Utils::Log::addError("PtDrugDatatabaseStep", "Unable to save UID file", __FILE__, __LINE__);
+        LOG_ERROR_FOR("PtDrugDatatabaseStep", "Unable to save UID file");
         return false;
     }
     return true;
@@ -313,7 +313,7 @@ bool PtDrugDatatabaseStep::populateDatabase()
 
     QFile csv(rawCsvAbsFile());
     if (!csv.open(QFile::ReadOnly | QFile::Text)) {
-        Utils::Log::addError(this, "Unable to read file", __FILE__, __LINE__);
+        LOG_ERROR("Unable to read file");
         return false;
     }
 
@@ -411,12 +411,12 @@ bool PtDrugDatatabaseStep::populateDatabase()
 
     // Run SQL commands one by one
     if (!Core::Tools::executeSqlFile(Core::Constants::MASTER_DATABASE_NAME, databaseFinalizationScript())) {
-        Utils::Log::addError(this, "Can create FDA DB.", __FILE__, __LINE__);
+        LOG_ERROR("Can create FDA DB.");
         return false;
     }
     Q_EMIT progress(3);
 
-    Utils::Log::addMessage(this, QString("Database processed"));
+    LOG(QString("Database processed"));
 
     return true;
 }
@@ -429,7 +429,7 @@ bool PtDrugDatatabaseStep::linkMolecules()
     // Get SID
     int sid = Core::Tools::getSourceId(Core::Constants::MASTER_DATABASE_NAME, PT_DRUGS_DATABASE_NAME);
     if (sid==-1) {
-        Utils::Log::addError(this, "NO SID DEFINED", __FILE__, __LINE__);
+        LOG_ERROR("NO SID DEFINED");
         return false;
     }
 
@@ -457,7 +457,7 @@ bool PtDrugDatatabaseStep::linkMolecules()
     // Save to links to drugs database
     Core::Tools::addComponentAtcLinks(Core::Constants::MASTER_DATABASE_NAME, mol_atc, sid);
 
-    Utils::Log::addMessage(this, QString("Database processed"));
+    LOG(QString("Database processed"));
 
     // add unfound to extralinkermodel
     Q_EMIT progressLabelChanged(tr("Updating component link XML file"));

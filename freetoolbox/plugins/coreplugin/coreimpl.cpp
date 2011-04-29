@@ -114,7 +114,7 @@ CoreImpl::CoreImpl(QObject *parent) :
     m_FileManager = new FileManager(this);
     m_UpdateChecker = new Utils::UpdateChecker(this);
 
-    Utils::Log::addMessage( "Core" , tkTr(Trans::Constants::STARTING_APPLICATION_AT_1).arg( QDateTime::currentDateTime().toString() ) );
+    LOG_FOR("Core", tkTr(Trans::Constants::STARTING_APPLICATION_AT_1).arg( QDateTime::currentDateTime().toString()));
 
     // initialize the settings
     m_Theme->messageSplashScreen(tkTr(Trans::Constants::LOADING_SETTINGS));
@@ -123,14 +123,14 @@ CoreImpl::CoreImpl(QObject *parent) :
 #ifdef Q_OS_WIN
     // For WINE testings
 //    if (m_CommandLine->value(Core::CommandLine::CL_RunningUnderWine).toBool()) {
-//        Utils::Log::addMessage( "Core", "Running under Wine environnement." );
+//        LOG_FOR( "Core", "Running under Wine environnement." );
 //        QFont::insertSubstitution("MS Shell Dlg", "Tahoma" );
 //        QFont::insertSubstitution("MS Shell Dlg 2", "Tahoma" );
 //    }
 #endif
 
     foreach(const QString &l, QCoreApplication::libraryPaths()) {
-        Utils::Log::addMessage("Core" , tkTr(Trans::Constants::USING_LIBRARY_1).arg(l));
+        LOG_FOR("Core" , tkTr(Trans::Constants::USING_LIBRARY_1).arg(l));
     }
 
     if (logChrono)
@@ -139,7 +139,7 @@ CoreImpl::CoreImpl(QObject *parent) :
     if (Utils::isRunningOnMac())
         QApplication::setAttribute(Qt::AA_DontShowIconsInMenus);
 
-    Utils::Log::addMessage("Core" , QCoreApplication::translate("Core", "Creating main window..."));
+    LOG_FOR("Core" , QCoreApplication::translate("Core", "Creating main window..."));
     m_MainWindow = new MainWindow;
     m_ActionManager = new ActionManagerPrivate(m_MainWindow);
     m_ContextManager = new ContextManagerPrivate(m_MainWindow);
@@ -150,7 +150,7 @@ CoreImpl::CoreImpl(QObject *parent) :
     // ready
     m_Theme->messageSplashScreen(QCoreApplication::translate("Core", "Core intialization finished..."));
 
-    Utils::Log::addMessage("Core" , QCoreApplication::translate("Core", "Core intialization finished..."));
+    LOG_FOR("Core" , QCoreApplication::translate("Core", "Core intialization finished..."));
     if (logChrono)
         Utils::Log::logTimeElapsed(chrono, "Core", "end of core intialization");
 }

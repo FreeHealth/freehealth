@@ -433,6 +433,16 @@ bool CaDrugDatatabaseStep::populateDatabase()
 
 bool CaDrugDatatabaseStep::linkMolecules()
 {
+    // 29 APR 2011
+    //    NUMBER OF MOLECULES 1848
+    //    CORRECTED BY NAME 23
+    //    CORRECTED BY ATC 0
+    //    FOUNDED 1219 "
+    //    LINKERMODEL (WithATC:81;WithoutATC:75) 156"
+    //    LINKERNATURE 0
+    //    LEFT 554
+    //    CONFIDENCE INDICE 70
+
     // 15 Jan 2011
     //    NUMBER OF MOLECULES 1825
     //    CORRECTED BY NAME 23

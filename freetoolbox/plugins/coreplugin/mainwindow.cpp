@@ -189,7 +189,7 @@ bool MainWindow::initialize(const QStringList &, QString *)
     // Start the update checker
     if (updateChecker()->needsUpdateChecking(settings()->getQSettings())) {
         messageSplash(tkTr(Trans::Constants::CHECKING_UPDATES));
-        Utils::Log::addMessage(this, tkTr(Trans::Constants::CHECKING_UPDATES));
+        LOG(tkTr(Trans::Constants::CHECKING_UPDATES));
         statusBar()->addWidget(new QLabel(tkTr(Trans::Constants::CHECKING_UPDATES), this));
         statusBar()->addWidget(updateChecker()->progressBar(this),1);
         connect(updateChecker(), SIGNAL(updateFound()), this, SLOT(updateFound()));

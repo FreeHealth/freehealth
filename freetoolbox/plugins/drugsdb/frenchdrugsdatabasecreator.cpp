@@ -158,7 +158,7 @@ bool FrDrugDatatabaseStep::unzipFiles()
     }
 
     // unzip files using QProcess
-    Utils::Log::addMessage(this, QString("Starting unzipping afssaps file %1").arg(fileName));
+    LOG(QString("Starting unzipping afssaps file %1").arg(fileName));
 
     return Core::Tools::unzipFile(fileName, workingPath());
 }
@@ -199,7 +199,7 @@ bool FrDrugDatatabaseStep::createDatabase()
         return false;
     }
 
-    Utils::Log::addMessage(this, QString("Database schema created"));
+    LOG(QString("Database schema created"));
     return true;
 }
 
@@ -328,6 +328,16 @@ bool FrDrugDatatabaseStep::populateDatabase()
 
 bool FrDrugDatatabaseStep::linkMolecules()
 {
+    // 29 Apr 2011
+    //    NUMBER OF MOLECULES 5154
+    //    CORRECTED BY NAME 0
+    //    CORRECTED BY ATC 0
+    //    FOUNDED 2856 "
+    //    LINKERMODEL (WithATC:568;WithoutATC:790) 1358"
+    //    LINKERNATURE 528
+    //    LEFT 1507
+    //    CONFIDENCE INDICE 70
+
     // 10 Dec 2010
     //    NUMBER OF MOLECULES 5112
     //    CORRECTED BY NAME 0
@@ -438,7 +448,7 @@ bool FrDrugDatatabaseStep::linkMolecules()
     // Save to links to drugs database
     Core::Tools::addComponentAtcLinks(Core::Constants::MASTER_DATABASE_NAME, mol_atc, sid);
 
-    Utils::Log::addMessage(this, QString("Database processed"));
+    LOG(QString("Database processed"));
 
     // add unfound to extralinkermodel
     Q_EMIT progressLabelChanged(tr("Updating component link XML file"));

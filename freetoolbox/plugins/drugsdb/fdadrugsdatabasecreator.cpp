@@ -388,6 +388,16 @@ bool FdaDrugDatatabaseStep::populateDatabase()
 
 bool FdaDrugDatatabaseStep::linkMolecules()
 {
+    // 28 APR 2011
+    //    NUMBER OF MOLECULES 2000
+    //    CORRECTED BY NAME 11
+    //    CORRECTED BY ATC 0
+    //    FOUNDED 1207 "
+    //    LINKERMODEL (WithATC:259;WithoutATC:1) 260"
+    //    LINKERNATURE 0
+    //    LEFT 792
+    //    CONFIDENCE INDICE 60
+
     // 04 Dec 2010
     //    NUMBER OF MOLECULES 1983
     //    CORRECTED BY NAME 11
