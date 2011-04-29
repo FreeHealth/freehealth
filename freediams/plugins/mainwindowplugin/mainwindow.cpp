@@ -136,7 +136,7 @@ public:
             QString tmp;
             if (QFile(exfile).exists())
                 tmp = Utils::readTextFile(exfile, Utils::DontWarnUser);
-            //            Utils::Log::addMessage(this, "Content of the exchange file : " + tmp);
+            //            LOG("Content of the exchange file : " + tmp);
             DrugsDB::DrugsIO io;
             if (tmp.contains(DrugsDB::Constants::ENCODEDHTML_FREEDIAMSTAG)) {
                 int begin = tmp.indexOf(DrugsDB::Constants::ENCODEDHTML_FREEDIAMSTAG) + QString(DrugsDB::Constants::ENCODEDHTML_FREEDIAMSTAG).length();
@@ -376,7 +376,7 @@ void MainWindow::extensionsInitialized()
     // SelectionOnly ?
     if (commandLine()->value(Core::CommandLine::CL_SelectionOnly).toBool()) {
         // Log mode
-        Utils::Log::addMessage(this, tr("Entering selection mode"));
+        LOG(tr("Entering selection mode"));
         // Unable some actions in menus
     //    aPrint->setEnabled(false);
     //    aPrintPreview->setEnabled(false);
@@ -386,14 +386,13 @@ void MainWindow::extensionsInitialized()
 
     // If needed read exchange file
     if (!d->readExchangeFile(tr("Reading exchange file..."))) {
-        Utils::Log::addError(this, tkTr(Trans::Constants::FILE_1_ISNOT_READABLE).arg(commandLine()->value(Core::CommandLine::CL_ExchangeOutFile).toString()),
-                             __FILE__, __LINE__);
+        LOG_ERROR(tkTr(Trans::Constants::FILE_1_ISNOT_READABLE).arg(commandLine()->value(Core::CommandLine::CL_ExchangeOutFile).toString()));
     }
 
     // Start the update checker
     if (updateChecker()->needsUpdateChecking(settings()->getQSettings())) {
         messageSplash(tkTr(Trans::Constants::CHECKING_UPDATES));
-        Utils::Log::addMessage(this, tkTr(Trans::Constants::CHECKING_UPDATES));
+        LOG(tkTr(Trans::Constants::CHECKING_UPDATES));
         statusBar()->addWidget(new QLabel(tkTr(Trans::Constants::CHECKING_UPDATES), this));
         statusBar()->addWidget(updateChecker()->progressBar(this),1);
         connect(updateChecker(), SIGNAL(updateFound()), this, SLOT(updateFound()));

@@ -177,7 +177,7 @@ namespace Internal {
                                script,
                                Core::ICore::instance()->theme()->iconFullPath(Core::Constants::ICONFREEDIAMS),
                                MEDINTUX_ACTION_KEYSEQUENCE)) {
-            Utils::Log::addMessage( "diMedinTux", QString("Unable to add user menu.") );
+            LOG_FOR("diMedinTux", QString("Unable to add user menu.") );
             finalMsg += QCoreApplication::translate("diMedinTux", "Unable to configure MedinTux user menu.") + "\n";
             error = true;
         } else {
@@ -224,9 +224,9 @@ namespace Internal {
                 QDir(defaultList).remove("Editer avec DrugsInteractions.html");
 
         } else {
-            Utils::Log::addMessage("diMedinTux",
-                                   QCoreApplication::translate( "diMedinTux", "Unable to find the prescription list directory.")
-                                   .arg(defaultList));
+            LOG_FOR("diMedinTux",
+                    QCoreApplication::translate("diMedinTux", "Unable to find the prescription list directory.")
+                    .arg(defaultList));
             finalMsg += QCoreApplication::translate("diMedinTux", "Unable to find the prescription list directory.");
             error = true;
         }

@@ -132,13 +132,13 @@ int main( int argc, char *argv[] )
 
     // Add some debugging informations
     defineLibraryPaths();
-    Utils::Log::addMessage("Main","looking for libraries in path : " + qApp->libraryPaths().join(";"));
-    Utils::Log::addMessage("Main","Command line : " + qApp->arguments().join(" "));
+    LOG_FOR("Main","looking for libraries in path : " + qApp->libraryPaths().join(";"));
+    LOG_FOR("Main","Command line : " + qApp->arguments().join(" "));
     Utils::Database::logAvailableDrivers();
 
-    QLibrary mysql("/Developer/Applications/Qt/plugins/sqldrivers/libqsqlmysql.dylib");
-    mysql.load();
-    qWarning() << mysql.errorString() << mysql.isLoaded();
+//    QLibrary mysql("/Developer/Applications/Qt/plugins/sqldrivers/libqsqlmysql.dylib");
+//    mysql.load();
+//    qWarning() << mysql.errorString() << mysql.isLoaded();
 
 
     QTextCodec::setCodecForTr( QTextCodec::codecForName( "UTF-8" ) );
@@ -155,7 +155,7 @@ int main( int argc, char *argv[] )
         return 0;
     }
 
-    Utils::Log::addMessage("Main", qApp->arguments().join(";"));
+    LOG_FOR("Main", qApp->arguments().join(";"));
 
     ExtensionSystem::PluginManager pluginManager;
     pluginManager.setFileExtension(QString("pluginspec"));
@@ -164,12 +164,12 @@ int main( int argc, char *argv[] )
     pluginManager.setPluginPaths(QStringList() << pluginPaths);
 
 #ifdef DEBUG
-    Utils::Log::addMessage("Main", "Running debug version");
+    LOG_FOR("Main", "Running debug version");
 #else
-    Utils::Log::addMessage("Main", "Running release version");
+    LOG_FOR("Main", "Running release version");
 #endif
 #ifdef LINUX_INTEGRATED
-    Utils::Log::addMessage("Main", "Linux Integrated");
+    LOG_FOR("Main", "Linux Integrated");
 #endif
 
 //    const QStringList arguments = app.arguments();

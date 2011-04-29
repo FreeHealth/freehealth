@@ -79,11 +79,10 @@ namespace Constants {
 
 inline static void warnXmlReadError(const QString &file, const QString &msg, const int line = 0, const int col = 0)
 {
-    Utils::Log::addError("CommandLine",
+    LOG_ERROR_FOR("CommandLine",
                          Trans::ConstantTranslations::tkTr(Trans::Constants::FILE_1_ISNOT_READABLE).arg(file) + " ; " +
                          Trans::ConstantTranslations::tkTr(Trans::Constants::ERROR_1_LINE_2_COLUMN_3)
-                         .arg(msg).arg(line).arg(col),
-                         __FILE__, __LINE__);
+                         .arg(msg).arg(line).arg(col));
 }
 
 class CommandLinePrivate
@@ -183,7 +182,7 @@ public:
 
         if (!value.value(CommandLine::CL_ExchangeInFile).isNull()) {
             QString file = value.value(CommandLine::CL_ExchangeInFile).toString();
-            Utils::Log::addMessage("Core", QCoreApplication::translate("CommandLine", "Passing exchange in file : %1").arg(file));
+            LOG_FOR("Core", QCoreApplication::translate("CommandLine", "Passing exchange in file : %1").arg(file));
             if (QDir::isRelativePath(file)) {
                 file.prepend(qApp->applicationDirPath() + QDir::separator());
                 file = QDir::cleanPath(file);
@@ -191,21 +190,19 @@ public:
             if (QFile::exists(file)) {
                 readInFileXml(file);
             } else {
-                Utils::Log::addError("Core", QCoreApplication::translate("CommandLine", "Passing %1 as exchange in file, but file does not exists.").arg(file),
-                                     __FILE__, __LINE__);
+                LOG_ERROR_FOR("Core", QCoreApplication::translate("CommandLine", "Passing %1 as exchange in file, but file does not exists.").arg(file));
             }
         }
     }
 
     bool readInFileXml(const QString &file)
     {
-        Utils::Log::addMessage("Core", QCoreApplication::translate("CommandLine", "Reading exchange in file : %1").arg(QFileInfo(file).absoluteFilePath()));
+        LOG_FOR("Core", QCoreApplication::translate("CommandLine", "Reading exchange in file : %1").arg(QFileInfo(file).absoluteFilePath()));
         // Read contents if necessary
         QString contents;
         contents = Utils::readTextFile(file, Utils::DontWarnUser);
         if (contents.isEmpty()) {
-            Utils::Log::addError("CommandLine", QCoreApplication::translate("CommandLine", "In File %1 is empty.").arg(file),
-                                 __FILE__, __LINE__);
+            LOG_ERROR_FOR("CommandLine", QCoreApplication::translate("CommandLine", "In File %1 is empty.").arg(file));
             return false;
         }
 
