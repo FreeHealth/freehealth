@@ -74,6 +74,8 @@ OTHER_FILES += \
     ../global_resources/sql/drugdb/us/us_db_finalize.sql \
     ../global_resources/sql/drugdb/za/za_db_finalize.sql \
     ../global_resources/sql/drugdb/za/za_uids.csv \
+    ../global_resources/sql/drugdb/pt/pt_db_finalize.sql \
+    ../global_resources/sql/drugdb/pt/pt_uids.csv \
 
 
 OTHER_FILES += DrugsDB.pluginspec
