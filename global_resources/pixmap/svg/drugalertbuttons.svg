@@ -19,9 +19,9 @@
    version="1.0"
    sodipodi:docname="drugalertbuttons.svg"
    inkscape:output_extension="org.inkscape.output.svg.inkscape"
-   inkscape:export-filename="/Users/eric/Desktop/Programmation/freemedforms/global_resources/pixmap/svg/drugengines-64.png"
-   inkscape:export-xdpi="180"
-   inkscape:export-ydpi="180">
+   inkscape:export-filename="/Users/eric/Desktop/Programmation/freemedforms/global_resources/pixmap/svg/drugalert_accept-32.png"
+   inkscape:export-xdpi="90"
+   inkscape:export-ydpi="90">
   <defs
      id="defs2460"><linearGradient
    inkscape:collect="always"
@@ -324,7 +324,7 @@
      inkscape:cx="28.549021"
      inkscape:cy="12.882065"
      inkscape:document-units="px"
-     inkscape:current-layer="layer4"
+     inkscape:current-layer="layer3"
      showgrid="false"
      inkscape:window-width="1280"
      inkscape:window-height="752"
@@ -446,7 +446,8 @@ IAOkfF7HgUk9h9C8ALMACdkOavjE/QA5m0tw+vg/3XkxMCKSpFoAAAAASUVORK5CYII=
   <g
      inkscape:groupmode="layer"
      id="layer4"
-     inkscape:label="Calque#2">
+     inkscape:label="Calque#2"
+     style="display:none">
     <image
        style="display:inline"
        y="3.4488537"
@@ -482,7 +483,7 @@ HGRBkX0hL3ec33T+bMmh9eq9eJyAyy2MSPu9AfelQKZFUkaz0PWqNjc3Ld+zWn1F9wGLVBu0QeuX
      inkscape:groupmode="layer"
      id="layer2"
      inkscape:label="Calque"
-     style="display:inline">
+     style="display:none">
     <g
        style="overflow:visible"
        id="g3340"
