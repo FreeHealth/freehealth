@@ -717,6 +717,10 @@ void resizeAndCenter(QWidget *widget, QWidget *reference)
     QWidget *ref = reference;
     if (!reference)
         ref = qApp->activeWindow();
+    if (!ref) {
+        widget->adjustSize();
+        return;
+    }
     QSize size = ref->size();
     size = QSize(size.width()*0.9, size.height()*0.9);
     widget->resize(size);
