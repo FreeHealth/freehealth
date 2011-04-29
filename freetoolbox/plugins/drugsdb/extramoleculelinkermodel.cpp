@@ -566,7 +566,7 @@ QMultiHash<int, int> ExtraMoleculeLinkerModel::moleculeLinker
     // get all ATC ids
     QSqlDatabase iam = QSqlDatabase::database(Core::Constants::MASTER_DATABASE_NAME);
     if (!iam.open()) {
-        Utils::Log::addError(this, "Can not connect to MASTER db", __FILE__, __LINE__);
+        LOG_ERROR("Can not connect to MASTER db");
         return mol_atc;
     }
 
@@ -576,7 +576,7 @@ QMultiHash<int, int> ExtraMoleculeLinkerModel::moleculeLinker
     QSqlQuery query(req, iam);
 
     // Get all ATC Code and Label
-    Utils::Log::addMessage(this, "Getting ATC Informations from the interactions database");
+    LOG("Getting ATC Informations from the interactions database");
     req = QString("SELECT ATC.ATC_ID, ATC.CODE, LABELS.LABEL "
                   "FROM ATC "
                   "JOIN ATC_LABELS ON ATC_LABELS.ATC_ID=ATC.ATC_ID "
@@ -595,12 +595,12 @@ QMultiHash<int, int> ExtraMoleculeLinkerModel::moleculeLinker
     // Get source ID (SID)
     int sid = Core::Tools::getSourceId(Core::Constants::MASTER_DATABASE_NAME, drugsDbUid);
     if (sid==-1) {
-        Utils::Log::addError(this, "NO SID: " + drugsDbUid, __FILE__, __LINE__);
+        LOG_ERROR("NO SID: " + drugsDbUid);
         return mol_atc;
     }
 
     // Get all MOLS.MID and Label
-    Utils::Log::addMessage(this, "Getting Drugs Composition from " + drugsDbUid);
+   LOG("Getting Drugs Composition from " + drugsDbUid);
     QMultiHash<QString, int> mols;
     req = QString("SELECT DISTINCT MID, NAME FROM MOLS WHERE SID=%1;").arg(sid);
     if (query.exec(req)) {
@@ -637,7 +637,7 @@ QMultiHash<int, int> ExtraMoleculeLinkerModel::moleculeLinker
                 qWarning() << "Corrected by ATC" << mol << atc << atcName_id.key(atc_id.value(atc));
             }
         }
-        Utils::Log::addMessage(this, "Hand made association: " + QString::number(mol_atc.count()));
+        LOG("Hand made association: " + QString::number(mol_atc.count()));
     }
 
     // find links
@@ -769,24 +769,24 @@ QMultiHash<int, int> ExtraMoleculeLinkerModel::moleculeLinker
 
     // Try to find new associations via the COMPOSITION.LK_NATURE field
     int natureLinkerNb = 0;
-    if (drugsDbUid == "_________AFSSAPS_FR_______") {
+    if (drugsDbUid == "FR_AFSSAPS") {
         /** \todo code here */
         QMap<int, QMultiHash<int, int> > cis_codeMol_lk;
         QMap<int, QVector<MolLink> > cis_compo;
         {
-            QString req = "SELECT `UID`, `MOLECULE_CODE`, `LK_NATURE`, `MOLECULE_FORM` FROM `COMPOSITION` ORDER BY `UID`";
-            QSqlQuery query(req , QSqlDatabase::database(drugsDbUid));
-            if (query.isActive()) {
+//            QString req = "SELECT `UID`, `MOLECULE_CODE`, `LK_NATURE`, `MOLECULE_FORM` FROM `COMPOSITION` ORDER BY `UID`";
+            QString req = "SELECT `DID`, `MID`, `LK_NATURE` FROM `COMPOSITION` ORDER BY `DID`";
+            if (query.exec(req)) {
                 while (query.next()) {
                     QVector<MolLink> &receiver = cis_compo[query.value(0).toInt()];
                     MolLink lk;
                     lk.mol = query.value(1).toInt();
                     lk.lk_nature = query.value(2).toInt();
-                    lk.mol_form = query.value(3).toString();
+//                    lk.mol_form = query.value(3).toString();
                     receiver.append(lk);
                 }
             } else {
-                Utils::Log::addQueryError("moleculeLinker", query, __FILE__, __LINE__);
+                LOG_QUERY_ERROR(query);
             }
             QMutableMapIterator<int, QVector<MolLink> > i(cis_compo);
             while (i.hasNext()) {
@@ -861,14 +861,14 @@ QMultiHash<int, int> ExtraMoleculeLinkerModel::moleculeLinker
                     }
                 }
             }
-            Utils::Log::addMessage("moleculeLinker", QString("%1 total associations founded.").arg(nb));
+            LOG(QString("Link composition by nature: %1 total associations founded.").arg(nb));
         }
         while (nb > 0);
     }
 
     // Save completion percent in drugs database INFORMATION table
     int completion = ((double) (1.0 - ((double)(unfoundOutput->count() - reviewedWithoutAtcLink) / (double)knownMoleculeNames.count())) * 100.00);
-    Utils::Log::addMessage(this, QString("Molecule links completion: %1").arg(completion));
+    LOG(QString("Molecule links completion: %1").arg(completion));
     Core::Tools::executeSqlQuery(QString("UPDATE SOURCES SET MOL_LINK_COMPLETION=%1 WHERE SID=%2")
                                  .arg(completion).arg(sid),
                                  Core::Constants::MASTER_DATABASE_NAME, __FILE__, __LINE__);
