@@ -44,7 +44,7 @@ using namespace Trans::ConstantTranslations;
 
 static const char *ABOUT_TEXT = QT_TRANSLATE_NOOP("AboutDialog",
         "<p align=center><b>Welcome to %1</b><br />"
-        "Copyright (C) 2008-2009 by Pierre-Marie DESOMBRE, MD and Eric MAEKER, MD</p>"
+        "Copyright (C) 2008-2011 by Pierre-Marie DESOMBRE, MD and Eric MAEKER, MD</p>"
         "<p align=left>This application is a stable release but can still contains some bugs.<br />"
         "This software is release without any warranty and only for test purposal.<br />"
         "Please refer to web site for more informations.<br />"
@@ -60,6 +60,16 @@ AppAboutPage::AppAboutPage(QObject *parent) :
 
 AppAboutPage::~AppAboutPage()
 {
+}
+
+QString AppAboutPage::name() const
+{
+    return "1. " + tr("Application");
+}
+
+QString AppAboutPage::category() const
+{
+    return tr("Application");
 }
 
 QWidget *AppAboutPage::widget()
@@ -85,6 +95,15 @@ QWidget *AppAboutPage::widget()
     return w;
 }
 
+QString CommandLineAboutPage::name() const
+{
+    return "5. " + tr("Command line");
+}
+
+QString CommandLineAboutPage::category() const
+{
+    return tr("Application");
+}
 
 QWidget *CommandLineAboutPage::widget()
 {

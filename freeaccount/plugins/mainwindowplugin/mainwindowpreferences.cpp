@@ -69,8 +69,8 @@ MainWindowPreferencesPage::~MainWindowPreferencesPage()
 }
 
 QString MainWindowPreferencesPage::id() const { return objectName(); }
-QString MainWindowPreferencesPage::name() const { return tr("General"); }
-QString MainWindowPreferencesPage::category() const { return tr("General"); }
+QString MainWindowPreferencesPage::name() const { return tkTr(Trans::Constants::GENERAL); }
+QString MainWindowPreferencesPage::category() const { return tkTr(Trans::Constants::GENERAL); }
 
 void MainWindowPreferencesPage::resetToDefaults()
 {

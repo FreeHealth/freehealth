@@ -1,7 +1,7 @@
 TEMPLATE         = app
 TARGET           = freeaccount
 mac:TARGET       = $$quote(FreeAccount)
-PACKAGE_VERSION  = 0.1.0
+PACKAGE_VERSION  = 0.1.0~alpha
 
 BUILD_PATH_POSTFIXE = FreeAccount
 

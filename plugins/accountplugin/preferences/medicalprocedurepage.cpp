@@ -111,11 +111,6 @@ MedicalProcedureWidget::MedicalProcedureWidget(QWidget *parent) :
 {
     setObjectName("MedicalProcedureWidget");
     setupUi(this);
-    int max = numberOfLinesForProgressBar();
-    m_progressDialog = new QProgressDialog(trUtf8("Wait ..."),trUtf8("Abort"),0,max,this);
-    m_progressDialog->setWindowModality(Qt::WindowModal);
-    m_progressDialog->setAutoReset(true);
-    m_progressDialog->setAutoClose(true);
     m_user_uid = user()->value(Core::IUser::Uuid).toString();
     m_user_fullName = user()->value(Core::IUser::FullName).toString();
     if (m_user_fullName.isEmpty()) {
@@ -131,14 +126,12 @@ MedicalProcedureWidget::MedicalProcedureWidget(QWidget *parent) :
     dateEdit->setDate(QDate::currentDate());
     rateSpin->setRange(0.00,100.00);
     m_Model = new AccountDB::MedicalProcedureModel(this);
-    if (m_Model->rowCount() < 1)
-    {
-    	  if (!fillEmptyMPModel())
-    	  {
-    	  	  QMessageBox::warning(0,trUtf8("Warning"),trUtf8("Unable to fill medicalprocedure whith local .csv"),
-    	  	                       QMessageBox::Ok);
-    	      }
-        }
+//    if (m_Model->rowCount() < 1) {
+//        if (!fillEmptyMPModel()) {
+//            QMessageBox::warning(0,trUtf8("Warning"),trUtf8("Unable to fill medicalprocedure whith local .csv"),
+//                                 QMessageBox::Ok);
+//        }
+//    }
     QLabel *mpUidLabel = new QLabel(this);
     mpUidLabel->setText("NULL");
     mpUidLabel->hide();
@@ -162,6 +155,7 @@ MedicalProcedureWidget::MedicalProcedureWidget(QWidget *parent) :
     mpComboBox->setModelColumn(AccountDB::Constants::MP_NAME);
     setDatasToUi();
     
+    connect(createDefault, SIGNAL(clicked()), SLOT(createDefaultMedicalProcedures()));
 }
 
 MedicalProcedureWidget::~MedicalProcedureWidget()
@@ -240,7 +234,7 @@ void MedicalProcedureWidget::on_removeButton_clicked()
 void MedicalProcedureWidget::saveToSettings(Core::ISettings *sets)
 {
     if (!m_Model->submit()) {
-        Utils::Log::addError(this, tkTr(Trans::Constants::UNABLE_TO_SAVE_DATA_IN_DATABASE_1).arg(tr("medical_procedures")));
+        LOG_ERROR(tkTr(Trans::Constants::UNABLE_TO_SAVE_DATA_IN_DATABASE_1).arg(tr("medical_procedures")));
         Utils::warningMessageBox(tr("Can not submit medical procedure to your personnal database."),
                                  tr("An error occured during medical procedures saving. Datas are corrupted."));
     }
@@ -323,6 +317,16 @@ static QString getCsvDefaultFile()
     return file.fileName();
 }
 
+void MedicalProcedureWidget::createDefaultMedicalProcedures()
+{
+    int max = numberOfLinesForProgressBar();
+    m_progressDialog = new QProgressDialog(trUtf8("Wait ..."),trUtf8("Abort"),0,max,this);
+    m_progressDialog->setWindowModality(Qt::WindowModal);
+    m_progressDialog->setAutoReset(true);
+    m_progressDialog->setAutoClose(true);
+    fillEmptyMPModel();
+}
+
 QStandardItemModel *MedicalProcedureWidget::MedicalProcedureModelByLocale()
 {
     QApplication::setOverrideCursor(Qt::WaitCursor);
@@ -383,8 +387,8 @@ QStandardItemModel *MedicalProcedureWidget::MedicalProcedureModelByLocale()
     return model;
 }
 
-
-bool MedicalProcedureWidget::fillEmptyMPModel(){
+bool MedicalProcedureWidget::fillEmptyMPModel()
+{
     bool test = false;
     QStandardItemModel * model = MedicalProcedureModelByLocale();
     int availModelRows = model->rowCount();
@@ -393,41 +397,40 @@ bool MedicalProcedureWidget::fillEmptyMPModel(){
     for (int i = 0; i < availModelRows; i += 1){
         m_progressDialog->setValue(i);
         //qDebug() << __FILE__ << QString::number(__LINE__) << " i =" << QString::number(i) ;
-        if (!m_Model->insertRows(m_Model->rowCount(),1,QModelIndex()))
-    	  		{qWarning() << __FILE__ << QString::number(__LINE__) << QString::number(m_Model->rowCount()) ;
-    	  			  /*QMessageBox::warning(0,trUtf8("Warning"),trUtf8("Unable to insert row \n")
+        if (!m_Model->insertRows(m_Model->rowCount(),1,QModelIndex())) {
+            qWarning() << __FILE__ << QString::number(__LINE__) << QString::number(m_Model->rowCount()) ;
+            /*QMessageBox::warning(0,trUtf8("Warning"),trUtf8("Unable to insert row \n")
     	  			  +__FILE__+QString::number(__LINE__),QMessageBox::Ok);*/
-    	  		    }
-    	  		    QString strValues;
-    	  	for (int j = 0; j < AccountDB::Constants::MP_MaxParam ; j += 1){
-    	  		QStandardItem * item = model->itemFromIndex(model->index(i,j));
-    	  		QVariant value = item->data();
-    	  		//todo, semantics
-    	  		if (value.canConvert(QVariant::String))
-    	  		{
-    	  			  QString strValue = value.toString().replace("'","''");
-    	  			  value = QVariant::fromValue(strValue);
-    	  		    }
-    	  		    strValues += value.toString()+" ";
-    	  		//qDebug() << __FILE__ << QString::number(__LINE__) << " value =" << value ;
-    	  		//qDebug() << __FILE__ << QString::number(__LINE__) << "m_Model->rowCount() =" << QString::number(m_Model->rowCount()) ;
-    	  		if (!m_Model->setData(m_Model->index(m_Model->rowCount()-1,j),value,Qt::EditRole))
-    	  		{
-    	  			qWarning() << __FILE__ << QString::number(__LINE__) << "data not inserted !" ;  
-    	  		    }
-    	  	    }
-    	  	    strList += strValues+"\n";
-    	      test = m_Model->submit();
-    	      }
-    	      m_progressDialog->setValue(numberOfLinesForProgressBar());
-    	      
-    	      //m_progressDialog->close();
-    	      //qDebug() << __FILE__ << QString::number(__LINE__) << " values = \n" << strList;
+        }
+        QString strValues;
+        for (int j = 0; j < AccountDB::Constants::MP_MaxParam ; j += 1) {
+            QStandardItem * item = model->itemFromIndex(model->index(i,j));
+            QVariant value = item->data();
+            //todo, semantics
+            if (value.canConvert(QVariant::String)) {
+                QString strValue = value.toString().replace("'","''");
+                value = QVariant::fromValue(strValue);
+            }
+            strValues += value.toString()+" ";
+            //qDebug() << __FILE__ << QString::number(__LINE__) << " value =" << value ;
+            //qDebug() << __FILE__ << QString::number(__LINE__) << "m_Model->rowCount() =" << QString::number(m_Model->rowCount()) ;
+            if (!m_Model->setData(m_Model->index(m_Model->rowCount()-1,j),value,Qt::EditRole)) {
+                qWarning() << __FILE__ << QString::number(__LINE__) << "data not inserted !" ;
+            }
+        }
+        strList += strValues+"\n";
+        test = m_Model->submit();
+    }
+    m_progressDialog->setValue(numberOfLinesForProgressBar());
+
+    //m_progressDialog->close();
+    //qDebug() << __FILE__ << QString::number(__LINE__) << " values = \n" << strList;
     QApplication::restoreOverrideCursor();
     return test;
 }
 
-int MedicalProcedureWidget::numberOfLinesForProgressBar(){
+int MedicalProcedureWidget::numberOfLinesForProgressBar()
+{
     QString filePathAndName = getCsvDefaultFile();
     QString fileName = filePathAndName.split(QDir::separator()).last();
     qDebug() << __FILE__ << QString::number(__LINE__) << " fileName =" << fileName ;
@@ -436,9 +439,7 @@ int MedicalProcedureWidget::numberOfLinesForProgressBar(){
     QStringList listFromFileName = fileName.split("_");
     QString numberOfLines = listFromFileName.last();
     qDebug() << __FILE__ << QString::number(__LINE__) << " numberOfLines =" << numberOfLines ;
-    
     int max = numberOfLines.toInt();
-    
     qDebug() << __FILE__ << QString::number(__LINE__) << " max =" << QString::number(max) ;
     return max;
 }

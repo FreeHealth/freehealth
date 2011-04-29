@@ -78,8 +78,13 @@ private:
     void saveModel();
     bool insertYearsRange();
     QString calcAssetsRatesUid();
-    bool writeDefaultsWithLocale();
+
+private Q_SLOTS:
+    void createDefaultAssetsRates();
+
+private:
     QStandardItemModel *assetsRatesModelByLocale();
+    bool writeDefaultsWithLocale();
 
 private:
     AccountDB::AssetsRatesModel *m_Model;

@@ -38,9 +38,9 @@ public:
     AppAboutPage(QObject *parent);
     ~AppAboutPage();
 
-    QString id() const       { return objectName();   }
-    QString name() const     { return tr("1. General"); }
-    QString category() const { return tr("Application"); }
+    QString id() const {return objectName();}
+    QString name() const;
+    QString category() const;
 
     QWidget *widget();
 };
@@ -51,9 +51,9 @@ public:
     CommandLineAboutPage(QObject *parent) : IAboutPage(parent) {}
     ~CommandLineAboutPage() {}
 
-    QString id() const       { return objectName();   }
-    QString name() const     { return tr("5. Command line"); }
-    QString category() const { return tr("Application"); }
+    QString id() const {return objectName();}
+    QString name() const;
+    QString category() const;
 
     QWidget *widget();
 };

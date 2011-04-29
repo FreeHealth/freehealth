@@ -86,7 +86,12 @@ private:
     void saveModel();
     void setCompletionList(const QString & text);
     void setCompletionAbstractList(const QString & text);
-    QStandardItemModel * MedicalProcedureModelByLocale();
+
+private Q_SLOTS:
+    void createDefaultMedicalProcedures();
+
+private:
+    QStandardItemModel *MedicalProcedureModelByLocale();
     bool fillEmptyMPModel();
     int numberOfLinesForProgressBar();
 

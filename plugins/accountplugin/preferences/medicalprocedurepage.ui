@@ -7,7 +7,7 @@
     <x>0</x>
     <y>0</y>
     <width>476</width>
-    <height>441</height>
+    <height>465</height>
    </rect>
   </property>
   <property name="sizePolicy">
@@ -42,7 +42,7 @@
      </property>
     </widget>
    </item>
-   <item row="6" column="0" colspan="4">
+   <item row="8" column="0" colspan="4">
     <widget class="QGroupBox" name="groupBox">
      <property name="title">
       <string>Account details</string>
@@ -186,7 +186,7 @@
      </property>
     </widget>
    </item>
-   <item row="2" column="3">
+   <item row="4" column="3">
     <widget class="QPushButton" name="addButton">
      <property name="sizePolicy">
       <sizepolicy hsizetype="Preferred" vsizetype="Fixed">
@@ -199,10 +199,10 @@
      </property>
     </widget>
    </item>
-   <item row="2" column="1" colspan="2">
+   <item row="4" column="1" colspan="2">
     <widget class="QComboBox" name="mpComboBox"/>
    </item>
-   <item row="2" column="0">
+   <item row="4" column="0">
     <widget class="QLabel" name="MPLabel">
      <property name="text">
       <string>Medical 
@@ -216,7 +216,7 @@ Procedure</string>
      </property>
     </widget>
    </item>
-   <item row="3" column="3">
+   <item row="5" column="3">
     <widget class="QPushButton" name="removeButton">
      <property name="sizePolicy">
       <sizepolicy hsizetype="Preferred" vsizetype="Fixed">
@@ -226,6 +226,20 @@ Procedure</string>
      </property>
      <property name="text">
       <string/>
+     </property>
+    </widget>
+   </item>
+   <item row="2" column="0" colspan="4">
+    <widget class="QPushButton" name="createDefault">
+     <property name="text">
+      <string>Create the default values</string>
+     </property>
+    </widget>
+   </item>
+   <item row="3" column="0" colspan="4">
+    <widget class="Line" name="line_2">
+     <property name="orientation">
+      <enum>Qt::Horizontal</enum>
      </property>
     </widget>
    </item>

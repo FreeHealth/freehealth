@@ -81,7 +81,8 @@ void AssetsRatesPage::resetToDefaults()
 }
 
 void AssetsRatesPage::applyChanges()
-{qDebug() << __FILE__ << QString::number(__LINE__) << " applyChanges ";
+{
+    qDebug() << __FILE__ << QString::number(__LINE__) << " applyChanges ";
     if (!m_Widget) {
         return;
     }
@@ -125,14 +126,12 @@ AssetsRatesWidget::AssetsRatesWidget(QWidget *parent) :
     rateDoubleSpinBox->setRange(0.00,1000.00);
     rateDoubleSpinBox->setSingleStep(0.01);
     m_Model = new AccountDB::AssetsRatesModel(this);
-    if (m_Model->rowCount() < 1)
-    {
-    	  if (!writeDefaultsWithLocale())
-    	  {
-    	  	  QMessageBox::warning(0,trUtf8("Warning"),trUtf8("Unable to fill assetsratesmodel whith local .csv"),
-    	  	                       QMessageBox::Ok);
-    	      }
-        }
+//    if (m_Model->rowCount() < 1) {
+//        if (!writeDefaultsWithLocale()) {
+//            QMessageBox::warning(0,trUtf8("Warning"),trUtf8("Unable to fill assetsratesmodel whith local .csv"),
+//                                 QMessageBox::Ok);
+//        }
+//    }
     assetsRatesUidLabel->setText("");
     m_Mapper = new QDataWidgetMapper(this);
     m_Mapper->setSubmitPolicy(QDataWidgetMapper::AutoSubmit);
@@ -147,6 +146,7 @@ AssetsRatesWidget::AssetsRatesWidget(QWidget *parent) :
     assetsNameComboBox->setModelColumn(AccountDB::Constants::ASSETSRATES_NAME);
     setDatasToUi();
     connect(m_Mapper,SIGNAL(currentIndexChanged(int)),this,SLOT(changeSpinBoxes(int)));
+    connect(createDefaults, SIGNAL(clicked()), this, SLOT(createDefaultAssetsRates()));
 }
 
 AssetsRatesWidget::~AssetsRatesWidget()
@@ -172,8 +172,7 @@ void AssetsRatesWidget::saveModel()
                 Utils::Log::addError(this, tkTr(Trans::Constants::UNABLE_TO_SAVE_DATA_IN_DATABASE_1).
                                                    arg(tr("assetsrates")), __FILE__, __LINE__);
             }
-        } 
-        else {
+        } else {
             m_Model->revert();
         }
     }
@@ -285,6 +284,11 @@ static QString getCsvDefaultFile()
     return file.fileName();
 }
 
+void AssetsRatesWidget::createDefaultAssetsRates()
+{
+    writeDefaultsWithLocale();
+}
+
 QStandardItemModel *AssetsRatesWidget::assetsRatesModelByLocale()
 {
     QStandardItemModel *model = new QStandardItemModel;
@@ -342,40 +346,39 @@ QStandardItemModel *AssetsRatesWidget::assetsRatesModelByLocale()
 }
 
 
-bool AssetsRatesWidget::writeDefaultsWithLocale(){
+bool AssetsRatesWidget::writeDefaultsWithLocale()
+{
     bool test = false;
     QStandardItemModel * model = assetsRatesModelByLocale();
     int assetsratesModelRows = model->rowCount();
     QString strList;
-    for (int i = 0; i < assetsratesModelRows; i += 1){
-        if (!m_Model->insertRows(m_Model->rowCount(),1,QModelIndex()))
-    	    {
+    for (int i = 0; i < assetsratesModelRows; i += 1) {
+        if (!m_Model->insertRows(m_Model->rowCount(),1,QModelIndex())) {
     	    qWarning() << __FILE__ << QString::number(__LINE__) << QString::number(m_Model->rowCount()) ;
-    	    }
-    	  		    QString strValues;
-    	  	for (int j = 0; j < AccountDB::Constants::ASSETSRATES_MaxParam ; j += 1){
-    	  		QStandardItem * item = model->itemFromIndex(model->index(i,j));
-    	  		QVariant value = item->data();
-    	  		if (value.canConvert(QVariant::String))
-    	  		{
-    	  			  QString strValue = value.toString().replace("'","''");
-    	  			  value = QVariant::fromValue(strValue);
-    	  		    }
-    	  		    strValues += value.toString()+" ";
-    	  		if (!m_Model->setData(m_Model->index(m_Model->rowCount()-1,j),value,Qt::EditRole))
-    	  		{
-    	  			qWarning() << __FILE__ << QString::number(__LINE__) << "data not inserted !" ;  
-    	  		    }
-    	  	    }
-    	  	    strList += strValues+"\n";
-    	      test = m_Model->submit();
-    	      }
-    	      qDebug() << __FILE__ << QString::number(__LINE__) << " values = \n" << strList;
+        }
+        QString strValues;
+        for (int j = 0; j < AccountDB::Constants::ASSETSRATES_MaxParam ; j += 1) {
+            QStandardItem * item = model->itemFromIndex(model->index(i,j));
+            QVariant value = item->data();
+            if (value.canConvert(QVariant::String)) {
+                QString strValue = value.toString().replace("'","''");
+                value = QVariant::fromValue(strValue);
+            }
+            strValues += value.toString()+" ";
+            if (!m_Model->setData(m_Model->index(m_Model->rowCount()-1,j),value,Qt::EditRole)) {
+                qWarning() << __FILE__ << QString::number(__LINE__) << "data not inserted !" ;
+            }
+        }
+        strList += strValues+"\n";
+        test = m_Model->submit();
+    }
+    qDebug() << __FILE__ << QString::number(__LINE__) << " values = \n" << strList;
 
     return test;
 }
 
-void AssetsRatesWidget::changeSpinBoxes(int index){
+void AssetsRatesWidget::changeSpinBoxes(int index)
+{
     int beginYear = 0;
     int endYear = 0;
     AccountDB::AssetsRatesModel model(this);
@@ -384,8 +387,7 @@ void AssetsRatesWidget::changeSpinBoxes(int index){
     model.setFilter(filter);
     QString years = model.data(m_Model->index(0,AccountDB::Constants::ASSETSRATES_YEARS),Qt::DisplayRole).toString();
     QStringList listYears = years.split("_");
-    if (listYears.size()>1)
-    {
+    if (listYears.size()>1) {
     	beginYear = listYears[0].toInt();
         endYear= listYears[1].toInt(); 
         }

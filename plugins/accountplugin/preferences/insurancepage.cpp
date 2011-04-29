@@ -148,15 +148,13 @@ InsuranceWidget::InsuranceWidget(QWidget *parent) :
     countryComboBox->addItems(listForCountry);
     
     m_Model = new AccountDB::InsuranceModel(this);
-    if (m_Model->rowCount() < 1)
-    {
-    	  if (!fillEmptyAvailableModel())
-    	  {
-    	  	  QMessageBox::warning(0,trUtf8("Warning"),trUtf8("Unable to fill availablemodel whith local .csv"),
-    	  	                       QMessageBox::Ok);
-    	      }
+    if (m_Model->rowCount() < 1)  {
+        if (!fillEmptyAvailableModel()) {
+            QMessageBox::warning(0,trUtf8("Warning"),trUtf8("Unable to fill availablemodel whith local .csv"),
+                                 QMessageBox::Ok);
         }
-        /** \todo  m_Model->setUserUuid(); */
+    }
+    /** \todo  m_Model->setUserUuid(); */
     m_insuranceUidLabel = new QSpinBox(this);
     //m_insuranceUidLabel->setText("NULL");
     m_insuranceUidLabel->setValue(11111);
@@ -434,7 +432,8 @@ QStandardItemModel *InsuranceWidget::insuranceModelByLocale()
 }
 
 
-bool InsuranceWidget::fillEmptyAvailableModel(){
+bool InsuranceWidget::fillEmptyAvailableModel()
+{
     bool test = false;
     QStandardItemModel * model = insuranceModelByLocale();
     int availModelRows = model->rowCount();
