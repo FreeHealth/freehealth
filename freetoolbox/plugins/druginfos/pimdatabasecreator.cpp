@@ -264,7 +264,7 @@ void PimStep::savePim(const QDomElement &element, const int sourceId, const int 
     }
 
     int id = -1;
-    QString req = QString("INSERT INTO PIMS (PIM_SID, PIM_TID, LEVEL, RISK_MASTER_LID) "
+    QString req = QString("INSERT INTO `PIMS` (`PIM_SID`, `PIM_TID`, `LEVEL`, `RISK_MASTER_LID`) "
                           "VALUES (%1, %2, %3, %4);")
             .arg(sourceId)
             .arg(typeId)
@@ -276,7 +276,7 @@ void PimStep::savePim(const QDomElement &element, const int sourceId, const int 
 
     if (!query.exec(req)) {
         LOG_QUERY_ERROR(query);
-        LOG_ERROR("PIM Error line " + element.lineNumber());
+        LOG_ERROR(QString("PIM Error line %1").arg(element.lineNumber()));
         return;
     } else {
         id = query.lastInsertId().toInt();
@@ -322,11 +322,11 @@ void PimStep::savePim(const QDomElement &element, const int sourceId, const int 
 
         for(int i = 0; i < atcIds.count(); ++i) {
             int atcid = atcIds.at(i);
-            req = QString("INSERT INTO PIMS_RELATED_ATC (PIM_ID, ATC_ID, MAXDAYDOSE, MAXDAYDOSEUNIT) "
+            req = QString("INSERT INTO `PIMS_RELATED_ATC` (`PIM_ID`, `ATC_ID`, `MAXDAYDOSE`, `MAXDAYDOSEUNIT`) "
                           "VALUES (%1, %2, %3, '%4');")
                     .arg(id)
                     .arg(atcid)
-                    .arg(mols.attribute(Constants::XML_ATTRIB_MAXDAILYDOSE))
+                    .arg(mols.attribute(Constants::XML_ATTRIB_MAXDAILYDOSE).toDouble())
                     .arg(mols.attribute(Constants::XML_ATTRIB_MAXDAILYDOSEUNIT));
 
             req.replace(", ''", ", NULL");
@@ -336,7 +336,7 @@ void PimStep::savePim(const QDomElement &element, const int sourceId, const int 
 
             if (!query.exec(req)) {
                 LOG_QUERY_ERROR(query);
-                LOG_ERROR("PIM Error line " + mols.lineNumber());
+                LOG_ERROR(QString("PIM Error line %1").arg(mols.lineNumber()));
                 return;
             }
         }
@@ -362,7 +362,7 @@ void PimStep::savePim(const QDomElement &element, const int sourceId, const int 
 
             if (!query.exec(req)) {
                 LOG_QUERY_ERROR(query);
-                LOG_ERROR("PIM Error line " + icd.lineNumber());
+                LOG_ERROR(QString("PIM Error line %1").arg(icd.lineNumber()));
                 return;
             }
 
