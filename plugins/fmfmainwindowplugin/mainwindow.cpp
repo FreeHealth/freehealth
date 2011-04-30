@@ -215,15 +215,6 @@ void MainWindow::extensionsInitialized()
     if (!user()->hasCurrentUser()) {
         return;
     }
-
-    if (settings()->firstTimeRunning()) {
-        if (!applicationConfiguratorWizard()) {
-            qApp->exit(1234);
-            return;
-        }
-        settings()->noMoreFirstTimeRunning();
-    }
-
     setWindowIcon(theme()->icon(Core::Constants::ICONFREEMEDFORMS));
 
     // Start the update checker
@@ -245,6 +236,14 @@ void MainWindow::extensionsInitialized()
     m_modeStack->statusBar()->hide();
 
     setCentralWidget(m_modeStack);
+
+    if (settings()->firstTimeRunning()) {
+        if (!applicationConfiguratorWizard()) {
+            qApp->exit(1234);
+            return;
+        }
+        settings()->noMoreFirstTimeRunning();
+    }
 
     // Connect post core initialization
     connect(Core::ICore::instance(), SIGNAL(coreOpened()), this, SLOT(postCoreInitialization()));
