@@ -1,6 +1,7 @@
 TEMPLATE = lib
 TARGET = Templates
-PACKAGE_VERSION = 0.0.2
+
+BUILD_PATH_POSTFIXE = FreeMedForms
 
 include($${PWD}/shared_sources.pri)
 

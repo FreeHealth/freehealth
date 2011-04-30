@@ -4,6 +4,8 @@ TARGET          = PMH
 DEFINES += PMH_LIBRARY
 DEFINES += FREEMEDFORMS
 
+BUILD_PATH_POSTFIXE = FreeMedForms
+
 include(../fmf_plugins.pri)
 include(pmhplugin_dependencies.pri)
 

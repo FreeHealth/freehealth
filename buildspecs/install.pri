@@ -142,8 +142,8 @@ INSTALLS +=  qti18n i18n
 forms.path = $${INSTALL_FORMS_PATH}
 forms.files = $${SOURCES_FORMS}
 profiles.path =  = $${INSTALL_PROFILES_PATH}
-forms.files = $${SOURCES_PROFILES}
-INSTALLS += forms
+profiles.files = $${SOURCES_PROFILES}
+INSTALLS += forms profiles
 }
 
 # Install drugs databases

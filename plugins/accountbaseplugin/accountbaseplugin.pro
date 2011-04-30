@@ -4,7 +4,7 @@ TARGET = AccountBase
 DEFINES += ACCOUNTBASE_LIBRARY
 DEFINES += FREEMEDFORMS
 
-BUILD_PATH_POSTFIXE = FreeAccount
+BUILD_PATH_POSTFIXE = FreeMedForms
 
 include(shared_sources.pri)
 
