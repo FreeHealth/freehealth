@@ -6,8 +6,10 @@ PACKAGE_VERSION  = 0.5.9~alpha
 # cat this.pro | grep "PACKAGE_VERSION" -m 1 | cut -d = -s -f2 | tr -d ' '
 
 # include general configuration
-INSTALL_DRUGS = 1
 FREEDIAMS = 1
+INSTALL_DRUGS = 1
+INSTALL_ICD_DATABASE = 1
+
 include( ../config.pri )
 !CONFIG(debug, release|debug):include( ../buildspecs/install.pri )
 

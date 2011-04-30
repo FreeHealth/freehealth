@@ -40,6 +40,7 @@ DEFINES *= "INSTALL_BINARY_PATH=\"\\\"$$INSTALL_BINARY_PATH\\\"\"" \
 INSTALL_TRANSLATIONS_PATH = $${INSTALL_RESOURCES_PATH}/translations
 INSTALL_DATABASES_PATH    = $${INSTALL_RESOURCES_PATH}/databases
 INSTALL_FORMS_PATH        = $${INSTALL_RESOURCES_PATH}
+INSTALL_PROFILES_PATH     = $${INSTALL_RESOURCES_PATH}
 INSTALL_TEXTFILES_PATH    = $${INSTALL_RESOURCES_PATH}/textfiles
 INSTALL_SMALLPIX_PATH     = $${INSTALL_RESOURCES_PATH}/pixmap/16x16
 INSTALL_MEDIUMPIX_PATH    = $${INSTALL_RESOURCES_PATH}/pixmap/32x32
@@ -136,10 +137,12 @@ qti18n.files = $$[QT_INSTALL_TRANSLATIONS]/translations/*fr.qm \
 INSTALLS +=  qti18n i18n
 }
 
-# Install forms
+# Install forms && FreeMedForms Profiles
 !isEmpty(INSTALL_FORMS_PATH):!isEmpty(SOURCES_FORMS){
 forms.path = $${INSTALL_FORMS_PATH}
 forms.files = $${SOURCES_FORMS}
+profiles.path =  = $${INSTALL_PROFILES_PATH}
+forms.files = $${SOURCES_PROFILES}
 INSTALLS += forms
 }
 
@@ -203,9 +206,9 @@ INSTALLS+=packageHelpers
 }
 
 # Install some specific files
-!isEmpty(FREEICD){
-freeicd_sqlfile.path=$${INSTALL_RESOURCES_PATH}/sql
-freeicd_sqlfile.files=$${SOURCES_GLOBAL_RESOURCES}/sql/icd10.sql
+eval(INSTALL_ICD_DATABASE=1){
+freeicd_sqlfile.path=$${INSTALL_RESOURCES_PATH}/sql/icd10
+freeicd_sqlfile.files=$${SOURCES_GLOBAL_RESOURCES}/sql/icd10/icd10.sql
 freeicd_db.path=$${INSTALL_DATABASES_PATH}/icd10
 freeicd_db.files=$${SOURCES_DATABASES}/icd10/icd10.db
 INSTALLS+=freeicd_sqlfile freeicd_db

@@ -4,6 +4,7 @@ mac:TARGET       = $$quote(FreeICD)
 PACKAGE_VERSION  = 0.1.0
 
 # include general configuration
+INSTALL_ICD_DATABASE = 1
 FREEICD = 1
 
 include( ../config.pri )
