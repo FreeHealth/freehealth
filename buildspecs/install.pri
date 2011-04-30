@@ -141,9 +141,7 @@ INSTALLS +=  qti18n i18n
 !isEmpty(INSTALL_FORMS_PATH):!isEmpty(SOURCES_FORMS){
 forms.path = $${INSTALL_FORMS_PATH}
 forms.files = $${SOURCES_FORMS}
-profiles.path =  = $${INSTALL_PROFILES_PATH}
-profiles.files = $${SOURCES_PROFILES}
-INSTALLS += forms profiles
+INSTALLS += forms
 }
 
 # Install drugs databases
@@ -158,6 +156,11 @@ usersdb.path = $${INSTALL_DATABASES_PATH}/users
 usersdb.files = $${SOURCES_GLOBAL_RESOURCES}/databases/users/*txt
 INSTALLS += usersdb
 }
+
+# Install profiles
+profiles.path =  = $${INSTALL_PROFILES_PATH}
+profiles.files = $${SOURCES_PROFILES}
+INSTALLS += profiles
 
 # Install theme
 screens.path = $${INSTALL_SPLASHPIX_PATH}
