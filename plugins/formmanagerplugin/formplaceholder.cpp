@@ -165,8 +165,8 @@ private:
     FormPlaceHolder *q;
 };
 
-FormItemDelegate::FormItemDelegate(QObject *parent)
- : QStyledItemDelegate(parent)
+FormItemDelegate::FormItemDelegate(QObject *parent) :
+        QStyledItemDelegate(parent)
 {
 }
 
@@ -299,8 +299,10 @@ FormPlaceHolder::FormPlaceHolder(QWidget *parent) :
 	vertic->addWidget(w);
     d->horizSplitter->addWidget(vertic);
 
-//    d->horizSplitter->setStretchFactor(0, 1);
-//    d->horizSplitter->setStretchFactor(1, 3);
+    int width = size().width();
+    int third = width/3;
+    d->horizSplitter->setSizes(QList<int>() << third << width-third);
+
 //    vertic->setStretchFactor(0, 1);
 //    vertic->setStretchFactor(1, 3);
 
@@ -328,9 +330,12 @@ void FormPlaceHolder::setObjectName(const QString &name)
     QObject::setObjectName(name);
     QList<QVariant> sizesVar = settings()->value(QString("%1/%2").arg(Constants::S_PLACEHOLDERSPLITTER_SIZES).arg(objectName())).toList();
     QList<int> sizes;
-    foreach(const QVariant &v, sizesVar)
-        sizes << v.toInt();
-    d->horizSplitter->setSizes(sizes);
+    foreach(const QVariant &v, sizesVar) {
+        if (!v.isNull())
+            sizes << v.toInt();
+    }
+    if (!sizes.isEmpty())
+        d->horizSplitter->setSizes(sizes);
 }
 
 /**
