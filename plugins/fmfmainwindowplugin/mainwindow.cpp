@@ -239,6 +239,7 @@ void MainWindow::extensionsInitialized()
 
     if (settings()->firstTimeRunning()) {
         if (!applicationConfiguratorWizard()) {
+            theme()->finishSplashScreen(this);
             qApp->exit(1234);
             return;
         }

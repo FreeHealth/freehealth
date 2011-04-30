@@ -10,6 +10,9 @@ macx {
      # rpath application to the libs path. Here the path must be an absolute path (eg:/usr/lib/appname/).
      #QMAKE_RPATHDIR += $${RPATH_LIBS_BIN}
 
+     # libs and plugs are installed in the same place
+     QMAKE_RPATHDIR += \$\$ORIGIN
+     # only the application binary needs to know where are the libs and plugs
      QMAKE_RPATHDIR += /usr/$${LIBRARY_BASENAME}/$${LOWERED_APPNAME}
 
    }else{

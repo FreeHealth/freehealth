@@ -14,7 +14,7 @@ configure: configure-stamp
 configure-stamp:
 	dh_testdir
 	# Add here commands to configure the package.
-	qmake-qt4 -r -config release "CONFIG+=LINUX_INTEGRATED" "INSTALL_ROOT_PATH=$(CURDIR)/debian/freemedforms/usr/" freemedforms.pro
+	qmake-qt4 -r -config release "CONFIG+=LINUX_INTEGRATED" "INSTALL_ROOT_PATH=$(CURDIR)/debian/freemedforms/usr/" LOWERED_APPNAME=freemedforms freemedforms.pro
 	touch configure-stamp
 
 
