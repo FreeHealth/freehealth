@@ -93,5 +93,5 @@ bool CategoryCore::saveCategory(CategoryItem *category)
 
 bool CategoryCore::removeAllExistingCategories(const QString &mime)
 {
-    base()->removeAllExistingCategories(mime);
+    return base()->removeAllExistingCategories(mime);
 }

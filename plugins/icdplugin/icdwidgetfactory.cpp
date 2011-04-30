@@ -109,7 +109,7 @@ void IcdFormWidget::retranslate()
 
 ////////////////////////////////////////// ItemData /////////////////////////////////////////////
 IcdFormData::IcdFormData(Form::FormItem *item) :
-        m_Form(0), m_FormItem(item)
+        m_FormItem(item), m_Form(0)
 {}
 
 IcdFormData::~IcdFormData()

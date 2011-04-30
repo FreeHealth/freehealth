@@ -244,7 +244,7 @@ QList<Form::FormIODescription *> FormFilesSelectorWidget::selectedForms() const
     if (!model->hasSelection())
         return toReturn;
     foreach(const QModelIndex &index, model->selectedIndexes()) {
-        int id = d->ui->treeView->currentIndex().data(Qt::UserRole+1).toInt();
+        int id = index.data(Qt::UserRole+1).toInt();
         if (id >= 0 && id < d->m_FormDescr.count()) {
             Form::FormIODescription *descr = d->m_FormDescr.at(id);
             toReturn << descr;
