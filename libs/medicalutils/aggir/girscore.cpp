@@ -718,6 +718,7 @@ int NewGirScore::resultingGir() const
 QString NewGirScore::explanations(int girScore) const
 {
     /** \todo code here */
+    return QString();
 }
 
 QString NewGirScore::serializeScore() const

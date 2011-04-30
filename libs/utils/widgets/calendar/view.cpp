@@ -107,4 +107,5 @@ CalendarItemWidget *View::getWidgetByUid(const QString &uid) const {
 		if (widget && widget->uid() == uid)
 			return widget;
 	}
+        return 0;
 }
