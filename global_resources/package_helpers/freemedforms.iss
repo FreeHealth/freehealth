@@ -6,7 +6,7 @@
 AppName=FreeMedForms
 AppId=FreeMedForms
 AppVerName=FreeMedForms,0.5.9~alpha
-DefaultDirName={pf}FreeMedForms
+DefaultDirName={pf}\FreeMedForms
 DefaultGroupName=FreeMedForms
 UninstallDisplayIcon={app}\freemedforms.exe
 VersionInfoDescription=FreeMedForms 0.5.9~alpha
@@ -21,10 +21,10 @@ ChangesAssociations=yes
 ;LicenseFile=
 ;OutputDir=SourceDir
 ;WizardSmallImageFile=mysmallimage.bmp
-SourceDir=e:\freemedforms-0.5.9\packages\win\freemedforms
-SetupIconFile=e:\freemedforms-0.5.9\freemedforms\freemedforms.ico
-WizardSmallImageFile=e:\freemedforms-0.5.9\global_resources\pixmap\svg\freemedforms-128.bmp
-WizardImageFile=e:\freemedforms-0.5.9\global_resources\pixmap\svg\freemedforms-128.bmp
+SourceDir=e:\freemedforms-0.5.9~alpha1\packages\win\freemedforms
+SetupIconFile=e:\freemedforms-0.5.9~alpha1\freemedforms\freemedforms.ico
+;WizardSmallImageFile=e:\freemedforms-0.5.9~alpha1\global_resources\pixmap\svg\freemedforms-128.bmp
+;WizardImageFile=e:\freemedforms-0.5.9~alpha1\global_resources\pixmap\svg\freemedforms-128.bmp
 ;WizardImageStretch=no
 Compression=lzma/normal
 
@@ -82,7 +82,6 @@ Name: "custom"; Description: {cm:CustomInstall}; Flags: iscustom
 
 [Components]
 Name: "program"; Description: "FreeMedForms"; Types: full custom; Flags: fixed
-Name: "dbFr"; Description: {cm:CompDbFr}; Types: full
 Name: "helpEn"; Description: {cm:CompHelpEn}; Types: full custom
 Name: "helpFr"; Description: {cm:CompHelpFr}; Types: full custom
 
@@ -91,8 +90,10 @@ Name: "helpFr"; Description: {cm:CompHelpFr}; Types: full custom
 Source: "freemedforms.exe"; DestDir: "{app}"; Components: program
 Source: "*.dll"; DestDir: "{app}"; Components: program
 Source: "plugins/*"; DestDir: "{app}/plugins"; Components: program; Flags: recursesubdirs
-Source: "Resources/databases/drugs/master.db"; DestDir: "{app}/Resources/databases/drugs"; Components: dbFr
+Source: "Resources/databases/*"; DestDir: "{app}/Resources/databases/"; Components: program; Flags: recursesubdirs
+Source: "Resources/forms/*"; DestDir: "{app}/Resources/forms/"; Components: program; Flags: recursesubdirs
 Source: "Resources/pixmap/*"; DestDir: "{app}/Resources/pixmap"; Components: program; Flags: recursesubdirs
+Source: "Resources/profiles/*"; DestDir: "{app}/Resources/profiles"; Components: program; Flags: recursesubdirs
 Source: "Resources/textfiles/*"; DestDir: "{app}/Resources/textfiles"; Components: program; Flags: recursesubdirs
 Source: "Resources/translations/*"; DestDir: "{app}/Resources/translations"; Components: program; Flags: recursesubdirs
 Source: "Resources/doc/freemedforms/en/*"; DestDir: "{app}/Resources/doc/freemedforms/en"; Components: helpEn; Flags: recursesubdirs
