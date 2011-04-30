@@ -3,6 +3,7 @@ TARGET          = ICD
 
 DEFINES += ICD_LIBRARY
 DEFINES += FREEMEDFORMS
+FREEMEDFORMS = 1
 
 include(../fmf_plugins.pri)
 include(icdplugin_dependencies.pri)

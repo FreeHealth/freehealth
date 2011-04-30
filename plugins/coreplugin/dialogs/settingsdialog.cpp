@@ -58,9 +58,8 @@ using namespace Core::Internal;
 
 static inline Core::ISettings *settings()  { return Core::ICore::instance()->settings(); }
 
-SettingsDialog::SettingsDialog(QWidget *parent, const QString &categoryId,
-                               const QString &pageId)
-    : QDialog(parent), m_applied(false)
+SettingsDialog::SettingsDialog(QWidget *parent, const QString &categoryId, const QString &pageId) :
+        QDialog(parent), m_applied(false)
 {
     m_ui = new Ui::SettingsDialog();
     setWindowFlags(Qt::Window | Qt::CustomizeWindowHint | Qt::WindowSystemMenuHint | Qt::WindowCloseButtonHint);

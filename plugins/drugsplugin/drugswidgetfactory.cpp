@@ -251,11 +251,13 @@ void DrugsWidgetData::setStorableData(const QVariant &data)
 {
     if (!data.isValid())
         return;
-    DrugsDB::DrugsIO::prescriptionFromXml(m_Widget->m_PrescriptionModel, data.toString(), DrugsDB::DrugsIO::ReplacePrescription);
+    DrugsDB::DrugsIO io;
+    io.prescriptionFromXml(m_Widget->m_PrescriptionModel, data.toString(), DrugsDB::DrugsIO::ReplacePrescription);
     m_Widget->m_PrescriptionModel->setModified(false);
 }
 
 QVariant DrugsWidgetData::storableData() const
 {
-    return DrugsDB::DrugsIO::prescriptionToXml(m_Widget->m_PrescriptionModel);
+    DrugsDB::DrugsIO io;
+    return io.prescriptionToXml(m_Widget->m_PrescriptionModel);
 }

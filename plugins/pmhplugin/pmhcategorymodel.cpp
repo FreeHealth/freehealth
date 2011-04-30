@@ -376,6 +376,8 @@ PmhCategoryModel::~PmhCategoryModel()
 
 void PmhCategoryModel::refreshFromDatabase()
 {
+    if (!patient())
+        return;
     qDeleteAll(d->m_Pmhs);
     d->m_Pmhs.clear();
     d->m_Cat_Pmhs.clear();

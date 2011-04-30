@@ -121,7 +121,7 @@ CoreImpl::CoreImpl(QObject *parent) :
 #ifdef Q_OS_WIN
     // For WINE testings
     if (m_CommandLine->value(Core::CommandLine::CL_RunningUnderWine).toBool()) {
-        Utils::Log::addMessage( "Core", "Running under Wine environnement." );
+        LOG("Running under Wine environnement." );
         QFont::insertSubstitution("MS Shell Dlg", "Tahoma" );
         QFont::insertSubstitution("MS Shell Dlg 2", "Tahoma" );
     }
@@ -204,10 +204,11 @@ bool CoreImpl::initialize(const QStringList &arguments, QString *errorString)
         // show the license agreement dialog
 #ifndef LINUX_INTEGRATED
         if (!Utils::defaultLicenceAgreementDialog(
-                QCoreApplication::translate("Core", "You are running a new version of FreeDiams, you need to renew the licence agreement."),
+                QCoreApplication::translate("Core", "You are running a new version of %1, you need to renew the licence agreement.").arg(qApp->applicationName()),
                 Utils::LicenseTerms::GPLv3 ))
             return false;
 #endif
+        /** \todo code here: if alpha -> delete old configuration && databases */
         m_Settings->setLicenseApprovedApplicationNumber(qApp->applicationVersion());
     }
 
@@ -216,7 +217,7 @@ bool CoreImpl::initialize(const QStringList &arguments, QString *errorString)
 
 void CoreImpl::extensionsInitialized()
 {
-    Utils::Log::addMessage(this, "Core Opened");
+    LOG("Core Opened");
     Q_EMIT coreOpened();
 }
 

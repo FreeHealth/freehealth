@@ -213,8 +213,8 @@ bool PmhBase::createDatabase(const QString &connectionName , const QString &dbNa
     if (connectionName != Constants::DB_NAME)
         return false;
 
-    Utils::Log::addMessage(this, tkTr(Trans::Constants::TRYING_TO_CREATE_1_PLACE_2)
-                           .arg(dbName).arg(pathOrHostName));
+    LOG(tkTr(Trans::Constants::TRYING_TO_CREATE_1_PLACE_2)
+        .arg(dbName).arg(pathOrHostName));
 
     // create an empty database and connect
     QSqlDatabase DB;
@@ -241,7 +241,7 @@ bool PmhBase::createDatabase(const QString &connectionName , const QString &dbNa
             }
             QSqlQuery q(QString("CREATE DATABASE `%1`").arg(dbName), d);
             if (!q.isActive()) {
-                Utils::Log::addQueryError("Database", q);
+                LOG_QUERY_ERROR(q);
                 Utils::warningMessageBox(tr("Unable to create the Templates database."),tr("Please contact dev team."));
                 return false;
             }
@@ -262,9 +262,9 @@ bool PmhBase::createDatabase(const QString &connectionName , const QString &dbNa
     setConnectionName(connectionName);
 
     if (createTables()) {
-        Utils::Log::addMessage(this, tkTr(Trans::Constants::DATABASE_1_CORRECTLY_CREATED).arg(dbName));
+        LOG(tkTr(Trans::Constants::DATABASE_1_CORRECTLY_CREATED).arg(dbName));
     } else {
-        Utils::Log::addError(this, tkTr(Trans::Constants::DATABASE_1_CANNOT_BE_CREATED_ERROR_2)
+        LOG_ERROR(tkTr(Trans::Constants::DATABASE_1_CANNOT_BE_CREATED_ERROR_2)
                          .arg(dbName, DB.lastError().text()));
         return false;
     }
