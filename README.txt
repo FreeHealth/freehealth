@@ -1,6 +1,6 @@
                   Welcome to FreeMeForms
-           Copyright (C) 2008-2009 by Eric MAEKER
-                   eric.maeker@free.fr
+           Copyright (C) 2008-2011 by Eric MAEKER
+                   eric.maeker@gmail.com
                   All rights reserved.
 
 
@@ -39,7 +39,7 @@ Sources, issues are located on GoogleCode server :
 http://code.google.com/p/freemedforms/
 
 Build instructions and technical documentation are described here :
-http://ericmaeker.fr/FreeMedForms/doc/index.html
+http://www.freemedforms.com/en/code_doc
 
 
 IV. I want to contribute this project
