@@ -49,9 +49,6 @@ namespace Constants {
     enum Tables {
       Table_MASTER = 0,
       Table_EPISODE,
-      Table_ICD,
-      Table_CATEGORIES,
-      Table_CATEGORY_LABEL,
       Table_VERSION
     };
 
@@ -86,24 +83,6 @@ namespace Constants {
         EPISODE_COMMENT,
         EPISODE_TRACE_ID,
         EPISODE_MaxParam
-    };
-
-    enum IcdFields {
-        ICD_ID = 0,
-        ICD_CONTENT,
-        ICD_MaxParam
-    };
-
-    enum PmhCatFields {
-        CATEGORY_ID = 0, CATEGORY_PARENT, CATEGORY_LABEL_ID, CATEGORY_ISRISKFACTOR,
-        CATEGORY_ISCHONICDISEASE, CATEGORY_SORT_ID, CATEGORY_ISVALID, CATEGORY_THEMEDICON,
-        CATEGORY_MaxParam
-    };
-
-    enum PmhCatLabelFields {
-        CATEGORYLABEL_ID = 0, CATEGORYLABEL_LABEL_ID, CATEGORYLABEL_LANG, CATEGORYLABEL_VALUE,
-        CATEGORYLABEL_ISVALID,
-        CATEGORYLABEL_MaxParam
     };
 
     enum VersionFields {

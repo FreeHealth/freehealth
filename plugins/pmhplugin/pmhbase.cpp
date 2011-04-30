@@ -114,9 +114,6 @@ PmhBase::PmhBase(QObject *parent) :
     using namespace PMH::Constants;
     addTable(Table_MASTER,        "PMH_MASTER");
     addTable(Table_EPISODE,       "PMH_EPISODE");
-    addTable(Table_ICD,           "PMH_ICD_CODING");
-    addTable(Table_CATEGORIES,    "PMH_CATEGORIES");
-    addTable(Table_CATEGORY_LABEL,"PMH_CAT_LABEL");
 
 //    addTable(Table_VERSION, "VERSION");
 
@@ -144,21 +141,6 @@ PmhBase::PmhBase(QObject *parent) :
     addField(Table_EPISODE, EPISODE_ISVALID,       "VALID",          FieldIsBoolean, "1");
     addField(Table_EPISODE, EPISODE_COMMENT,       "COMMENT",        FieldIsLongText);
     addField(Table_EPISODE, EPISODE_TRACE_ID,      "TRACE_ID",       FieldIsInteger);
-
-    addField(Table_CATEGORIES, CATEGORY_ID,              "ID",         FieldIsUniquePrimaryKey);
-    addField(Table_CATEGORIES, CATEGORY_PARENT,          "PARENT_ID",  FieldIsInteger);
-    addField(Table_CATEGORIES, CATEGORY_LABEL_ID,        "LABEL_ID",   FieldIsInteger);
-    addField(Table_CATEGORIES, CATEGORY_ISRISKFACTOR,    "IS_RF",      FieldIsBoolean);
-    addField(Table_CATEGORIES, CATEGORY_ISCHONICDISEASE, "IS_CD",      FieldIsBoolean);
-    addField(Table_CATEGORIES, CATEGORY_SORT_ID,         "SHORT_ID",   FieldIsInteger);
-    addField(Table_CATEGORIES, CATEGORY_ISVALID,         "VALID",      FieldIsBoolean, "1");
-    addField(Table_CATEGORIES, CATEGORY_THEMEDICON,      "THEMED_ICON",FieldIsShortText);
-
-    addField(Table_CATEGORY_LABEL, CATEGORYLABEL_ID,       "ID",       FieldIsUniquePrimaryKey);
-    addField(Table_CATEGORY_LABEL, CATEGORYLABEL_LABEL_ID, "LID",      FieldIsInteger);
-    addField(Table_CATEGORY_LABEL, CATEGORYLABEL_LANG,     "LANG",     FieldIsLanguageText);
-    addField(Table_CATEGORY_LABEL, CATEGORYLABEL_VALUE,    "VALUE",    FieldIsShortText);
-    addField(Table_CATEGORY_LABEL, CATEGORYLABEL_ISVALID,  "VALID",    FieldIsBoolean);
 
     connect(Core::ICore::instance(), SIGNAL(databaseServerChanged()), this, SLOT(onCoreDatabaseServerChanged()));
 }
