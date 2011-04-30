@@ -89,7 +89,7 @@ static inline QString getPluginPaths()
 
 #ifdef RELEASE
 #ifdef LINUX_INTEGRATED
-    return QString("/usr/%1/%2").arg(LIBRARY_BASENAME).arg(BINARY_NAME);
+    return QString("/usr/%1/%2").arg(LIBRARY_BASENAME).arg(QString(BINARY_NAME).toLower());
 #endif
 
 
