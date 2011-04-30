@@ -5,26 +5,26 @@
 [Setup]
 AppName=FreeDiams
 AppId=FreeDiams
-AppVerName=FreeDiams,0.5.0
+AppVerName=FreeDiams,0.5.9~alpha
 DefaultDirName={pf}\FreeDiams
 DefaultGroupName=FreeDiams
 UninstallDisplayIcon={app}\freediams.exe
-VersionInfoDescription=FreeDiams 0.5.0
+VersionInfoDescription=FreeDiams 0.5.9~alpha
 VersionInfoProductName=FreeDiams
 OutputDir=FreeDiams
 ;ShowLanguageDialog=no
 ;ShowUndisplayableLanguages=yes
-AppCopyright=Copyright (C) 2008-2010 Eric Maeker, MD, {cm:FreeMedFormsProject}
+AppCopyright=Copyright (C) 2008-2011 Eric Maeker, MD, {cm:FreeMedFormsProject}
 AppPublisher={cm:FreeMedFormsProject}
 AppPublisherURL=http://www.freemedforms.com/
 ChangesAssociations=yes
 ;LicenseFile=
 ;OutputDir=SourceDir
 ;WizardSmallImageFile=mysmallimage.bmp
-SourceDir=e:\freediams-0.5.0\packages\win\freediams
-SetupIconFile=e:\freediams-0.5.0\freediams\freediams.ico
-WizardSmallImageFile=e:\freediams-0.5.0\global_resources\pixmap\svg\freediams-128.bmp
-WizardImageFile=e:\freediams-0.5.0\global_resources\pixmap\svg\freediams-128.bmp
+SourceDir=e:\freediams-0.5.9\packages\win\freediams
+SetupIconFile=e:\freediams-0.5.9\freediams\freediams.ico
+WizardSmallImageFile=e:\freediams-0.5.9\global_resources\pixmap\svg\freediams-128.bmp
+WizardImageFile=e:\freediams-0.5.9\global_resources\pixmap\svg\freediams-128.bmp
 ;WizardImageStretch=no
 Compression=lzma/normal
 
@@ -63,18 +63,9 @@ de.UninstallProgram=Deinstallieren %1
 ;de.OneDbInstall=
 ;fr.OneDbInstall=Installation avec une seule base de données thérapeutique
 
-en.CompDbFr=French drugs database
-de.CompDbFr=French drugs database
-fr.CompDbFr=Base de données thérapeutique française
-en.CompDbCa=Canadian drugs database
-de.CompDbCa=Canadian drugs database
-fr.CompDbCa=Base de données thérapeutique canadienne
-en.CompDbUs=USA drugs database
-de.CompDbUs=USA drugs database
-fr.CompDbUs=Base de données thérapeutique américaine
-en.CompDbZa=South african drugs database
-de.CompDbZa=South african drugs database
-fr.CompDbZa=Base de données thérapeutique sud africaine
+en.CompDbFr=Drugs database
+de.CompDbFr=Drugs database
+fr.CompDbFr=Base de données thérapeutique
 
 ;en.TypeDbFr=custom
 ;de.TypeDbFr=custom
@@ -107,10 +98,7 @@ Name: "custom"; Description: {cm:CustomInstall}; Flags: iscustom
 
 [Components]
 Name: "program"; Description: "FreeDiams"; Types: full custom; Flags: fixed
-Name: "dbFr"; Description: {cm:CompDbFr}; Types: full custom
-Name: "dbCa"; Description: {cm:CompDbCa}; Types: full custom
-Name: "dbUs"; Description: {cm:CompDbUs}; Types: full custom
-Name: "dbZa"; Description: {cm:CompDbZa}; Types: full custom
+Name: "dbFr"; Description: {cm:CompDbFr}; Types: full
 Name: "helpEn"; Description: {cm:CompHelpEn}; Types: full custom
 Name: "helpFr"; Description: {cm:CompHelpFr}; Types: full custom
 
@@ -119,11 +107,7 @@ Name: "helpFr"; Description: {cm:CompHelpFr}; Types: full custom
 Source: "freediams.exe"; DestDir: "{app}"; Components: program
 Source: "*.dll"; DestDir: "{app}"; Components: program
 Source: "plugins/*"; DestDir: "{app}/plugins"; Components: program; Flags: recursesubdirs
-Source: "Resources/databases/drugs/iam.db"; DestDir: "{app}/Resources/databases/drugs/"; Components: program
-Source: "Resources/databases/drugs/drugs-fr_FR.db"; DestDir: "{app}/Resources/databases/drugs"; Components: dbFr
-Source: "Resources/databases/drugs/drugs-en_CA.db"; DestDir: "{app}/Resources/databases/drugs/"; Components: dbCa
-Source: "Resources/databases/drugs/drugs-en_US.db"; DestDir: "{app}/Resources/databases/drugs/"; Components: dbUs
-Source: "Resources/databases/drugs/drugs-en_ZA.db"; DestDir: "{app}/Resources/databases/drugs/"; Components: dbZa
+Source: "Resources/databases/drugs/master.db"; DestDir: "{app}/Resources/databases/drugs"; Components: dbFr
 Source: "Resources/pixmap/*"; DestDir: "{app}/Resources/pixmap"; Components: program; Flags: recursesubdirs
 Source: "Resources/textfiles/*"; DestDir: "{app}/Resources/textfiles"; Components: program; Flags: recursesubdirs
 Source: "Resources/translations/*"; DestDir: "{app}/Resources/translations"; Components: program; Flags: recursesubdirs
