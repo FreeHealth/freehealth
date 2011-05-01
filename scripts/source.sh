@@ -267,8 +267,6 @@ if [ $1 == "freepad" ] ; then
     EXCLUSIONS="--exclude 'global_resources/forms' "
 fi
 
-
-
 tar -cf $PACKPATH/sources.tar \
 --exclude '.svn' --exclude '.cvsignore' --exclude 'qtc-gdbmacros' \
 --exclude '_protected' --exclude 'build' --exclude 'bin' --exclude 'packages' --exclude 'rushes' \
