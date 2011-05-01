@@ -54,6 +54,7 @@ class InsurancePage;
 class PercentagesPage;
 class DistanceRulesPage;
 class AssetsRatesPage;
+class AccountDatabaseDefautsPage;
 
 class AccountPlugin : public ExtensionSystem::IPlugin
 {
@@ -76,6 +77,7 @@ private:
     PercentagesPage *m_PercentPage;
     DistanceRulesPage *m_DistancePage;
     AssetsRatesPage *m_AssetsRatesPage;
+    AccountDatabaseDefautsPage *m_DefaultPage;
 };
 
 

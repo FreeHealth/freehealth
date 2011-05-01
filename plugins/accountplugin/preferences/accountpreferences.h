@@ -38,12 +38,13 @@
 #include <QString>
 
 #include "ui_accountuseroptionspage.h"
+#include "ui_accountdatabasedefaultswidget.h"
 
 /**
  * \file accountpreferences.h
  * \author Eric MAEKER <eric.maeker@free.fr>
- * \version 0.4.0
- * \date 5 Mar 2010
+ * \version 0.6.0
+ * \date 01 May 2011
 */
 
 namespace Core {
@@ -112,5 +113,64 @@ private:
 };
 
 }  // End namespace Account
+
+namespace Account {
+namespace Internal {
+
+class AccountDatabaseDefautsWidget : public QWidget, private Ui::AccountDatabaseDefautsWidget
+{
+    Q_OBJECT
+    Q_DISABLE_COPY(AccountDatabaseDefautsWidget)
+
+public:
+    explicit AccountDatabaseDefautsWidget(QWidget *parent = 0);
+    void setDatasToUi();
+
+    static void writeDefaultSettings( Core::ISettings *s );
+
+public Q_SLOTS:
+    void saveToSettings(Core::ISettings *s = 0);
+
+private Q_SLOTS:
+    void on_createButton_clicked();
+
+private:
+    bool createDefaultsFor(const QString &filePrototype, const int tableRef);
+
+protected:
+    virtual void changeEvent(QEvent *e);
+
+private:
+};
+
+}  // End Internal
+
+
+class AccountDatabaseDefautsPage : public Core::IOptionsPage
+{
+public:
+    AccountDatabaseDefautsPage(QObject *parent = 0);
+    ~AccountDatabaseDefautsPage();
+
+    QString id() const;
+    QString name() const;
+    QString category() const;
+
+    void resetToDefaults();
+    void checkSettingsValidity();
+    void applyChanges();
+    void finish();
+
+    QString helpPage() {return QString();}
+
+    static void writeDefaultSettings(Core::ISettings *s) {Internal::AccountDatabaseDefautsWidget::writeDefaultSettings(s);}
+
+    QWidget *createPage(QWidget *parent = 0);
+private:
+    QPointer<Internal::AccountDatabaseDefautsWidget> m_Widget;
+};
+
+}  // End namespace Account
+
 
 #endif // ACCOUNT_PREFERENCES_H

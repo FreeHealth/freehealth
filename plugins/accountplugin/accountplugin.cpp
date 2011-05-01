@@ -69,7 +69,8 @@ AccountPlugin::AccountPlugin() :
         m_InsurPage(new InsurancePage(this)),
         m_PercentPage(new PercentagesPage(this)),
         m_DistancePage(new DistanceRulesPage(this)),
-        m_AssetsRatesPage(new AssetsRatesPage(this))
+        m_AssetsRatesPage(new AssetsRatesPage(this)),
+        m_DefaultPage(new AccountDatabaseDefautsPage(this))
 
 {
     if (Utils::Log::warnPluginsCreation())
@@ -91,6 +92,7 @@ AccountPlugin::~AccountPlugin()
     removeObject(m_PercentPage);
     removeObject(m_DistancePage);
     removeObject(m_AssetsRatesPage);
+    removeObject(m_DefaultPage);
 }
 
 bool AccountPlugin::initialize(const QStringList &arguments, QString *errorString)
@@ -137,6 +139,7 @@ void AccountPlugin::extensionsInitialized()
     m_PercentPage->checkSettingsValidity();
     m_DistancePage->checkSettingsValidity();
     m_AssetsRatesPage->checkSettingsValidity();
+    m_DefaultPage->checkSettingsValidity();
 
     // Add pages to plugins manager object pool
     addObject(m_BankPage);
@@ -148,6 +151,7 @@ void AccountPlugin::extensionsInitialized()
     addObject(m_PercentPage);
     addObject(m_DistancePage);
     addObject(m_AssetsRatesPage);
+    addObject(m_DefaultPage);
 }
 
 

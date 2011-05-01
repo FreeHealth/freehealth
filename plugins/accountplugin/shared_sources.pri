@@ -16,7 +16,8 @@ SOURCES = $${PWD}/accountplugin.cpp \
     $${PWD}/accountview.cpp \
     $${PWD}/accountcontextualwidget.cpp
 
-FORMS = $${PWD}/accountview.ui
+FORMS = $${PWD}/accountview.ui \
+    accountdatabasedefaultswidget.ui
 
 #include preferences
 HEADERS += \

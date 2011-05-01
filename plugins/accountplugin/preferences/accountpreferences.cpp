@@ -33,8 +33,12 @@
 
 #include <accountplugin/constants.h>
 
+#include <accountbaseplugin/constants.h>
+#include <accountbaseplugin/accountbase.h>
+
 #include <utils/log.h>
 #include <utils/global.h>
+#include <utils/database.h>
 #include <translationutils/constanttranslations.h>
 
 #include <coreplugin/icore.h>
@@ -53,7 +57,7 @@ using namespace Account::Internal;
 using namespace Trans::ConstantTranslations;
 
 static inline Core::ISettings *settings() { return Core::ICore::instance()->settings(); }
-
+static inline AccountDB::AccountBase *base() {return AccountDB::AccountBase::instance();}
 
 /////////////////////////////////////////////////////////////////////////////////////////////////////
 /////////////////////////////////  AccountUserOptionsPage  //////////////////////////////////////////
@@ -110,6 +114,7 @@ QWidget *AccountUserOptionsPage::createPage(QWidget *parent)
 AccountUserWidget::AccountUserWidget(QWidget *parent) :
         QWidget(parent), header(0), footer(0), wm(0)
 {
+    setObjectName("AccountUserWidget");
     header = new Print::TextDocumentExtra;
     footer = new Print::TextDocumentExtra;
     wm = new Print::TextDocumentExtra;
@@ -153,8 +158,8 @@ void AccountUserWidget::saveToSettings(Core::ISettings *sets)
 void AccountUserWidget::writeDefaultSettings(Core::ISettings *s)
 {
 //    qWarning() << "---------> writedefaults";
-    Utils::Log::addMessage("AccountUserWidget", tkTr(Trans::Constants::CREATING_DEFAULT_SETTINGS_FOR_1).arg("AccountUserWidget"));
-    s->sync();
+//    LOG_FOR(tkTr(Trans::Constants::CREATING_DEFAULT_SETTINGS_FOR_1).arg("AccountUserWidget"));
+//    s->sync();
 }
 
 void AccountUserWidget::changeEvent(QEvent *e)
@@ -167,4 +172,134 @@ void AccountUserWidget::changeEvent(QEvent *e)
     default:
         break;
     }
+}
+
+
+/////////////////////////////////////////////////////////////////////////////////////////////////////
+///////////////////////////////  AccountDatabaseDefautsPage  ////////////////////////////////////////
+/////////////////////////////////////////////////////////////////////////////////////////////////////
+AccountDatabaseDefautsPage::AccountDatabaseDefautsPage(QObject *parent) :
+        IOptionsPage(parent), m_Widget(0) { setObjectName("AccountDatabaseDefautsPage"); }
+
+AccountDatabaseDefautsPage::~AccountDatabaseDefautsPage()
+{
+    if (m_Widget) delete m_Widget;
+    m_Widget = 0;
+}
+
+QString AccountDatabaseDefautsPage::id() const { return objectName(); }
+QString AccountDatabaseDefautsPage::name() const { return tkTr(Trans::Constants::DEFAULTS); }
+QString AccountDatabaseDefautsPage::category() const { return tkTr(Trans::Constants::ACCOUNTANCY); }
+
+void AccountDatabaseDefautsPage::resetToDefaults()
+{
+    m_Widget->writeDefaultSettings(settings());
+    m_Widget->setDatasToUi();
+}
+
+void AccountDatabaseDefautsPage::applyChanges()
+{
+    if (!m_Widget) {
+        return;
+    }
+    m_Widget->saveToSettings(settings());
+}
+
+void AccountDatabaseDefautsPage::finish() { delete m_Widget; }
+
+void AccountDatabaseDefautsPage::checkSettingsValidity()
+{
+    QHash<QString, QVariant> defaultvalues;
+//    defaultvalues.insert(DrugsDB::Constants::S_AVAILABLEDOSAGESBACKGROUNGCOLOR, DrugsDB::Constants::S_DEF_AVAILABLEDOSAGESBACKGROUNGCOLOR);
+
+    foreach(const QString &k, defaultvalues.keys()) {
+        if (settings()->value(k) == QVariant())
+            settings()->setValue(k, defaultvalues.value(k));
+    }
+    settings()->sync();
+}
+
+QWidget *AccountDatabaseDefautsPage::createPage(QWidget *parent)
+{
+    if (m_Widget)
+        delete m_Widget;
+    m_Widget = new AccountDatabaseDefautsWidget(parent);
+    return m_Widget;
+}
+
+AccountDatabaseDefautsWidget::AccountDatabaseDefautsWidget(QWidget *parent) :
+        QWidget(parent)
+{
+    setObjectName("AccountDatabaseDefautsWidget");
+    setupUi(this);
+//    setDatasToUi();
+}
+
+void AccountDatabaseDefautsWidget::on_createButton_clicked()
+{
+    if (medicalProcedure->isChecked()) {
+        if (!createDefaultsFor("medical_procedure_6949", AccountDB::Constants::Table_MedicalProcedure))
+            Utils::warningMessageBox(tr("beuh"), tr("Medical procedure defaults can not be included."));
+    }
+//    if (assets->isChecked()) {
+//        if (!createDefaultsFor("assets_rates", AccountDB::Constants::Table_AssetsRates))
+//            Utils::warningMessageBox(tr("beuh"), tr("Assets Rates defaults can not be included."));
+//    }
+    if (assetsRates->isChecked()) {
+        if (!createDefaultsFor("assets_rates", AccountDB::Constants::Table_AssetsRates))
+            Utils::warningMessageBox(tr("beuh"), tr("Assets Rates defaults can not be included."));
+    }
+    if (distance->isChecked()) {
+        if (!createDefaultsFor("distance_rules", AccountDB::Constants::Table_DistanceRules))
+            Utils::warningMessageBox(tr("beuh"), tr("Distance rules defaults can not be included."));
+    }
+    if (insurance->isChecked()) {
+        if (!createDefaultsFor("insurances", AccountDB::Constants::Table_Insurance))
+            Utils::warningMessageBox(tr("beuh"), tr("Insurance defaults can not be included."));
+    }
+    if (others->isChecked()) {
+        if (!createDefaultsFor("assets_rates", AccountDB::Constants::Table_AssetsRates))
+            Utils::warningMessageBox(tr("beuh"), tr("Assets Rates defaults can not be included."));
+    }
+}
+
+void AccountDatabaseDefautsWidget::setDatasToUi()
+{
+    /** \todo For each defaults checkbox: check if defaults are: 1) available (if no -> unable checkbox) 2) not already inserted (unable checkbox) */
+}
+
+void AccountDatabaseDefautsWidget::saveToSettings(Core::ISettings *)
+{
+}
+
+void AccountDatabaseDefautsWidget::writeDefaultSettings(Core::ISettings *)
+{
+}
+
+void AccountDatabaseDefautsWidget::changeEvent(QEvent *e)
+{
+    QWidget::changeEvent(e);
+    switch (e->type()) {
+    case QEvent::LanguageChange:
+        retranslateUi(this);
+        break;
+    default:
+        break;
+    }
+}
+
+// just send "assets_rates" -> "/abs/path/assets_rates_fr_FR.csv"
+static QString getCsvAbsFilePath(const QString &filePrototype)
+{
+    QString sqlPath = settings()->path(Core::ISettings::BundleResourcesPath) + "/sql/account/";
+    return QString ("%1%2_%3.csv").arg(sqlPath).arg(filePrototype).arg(QLocale().name());
+}
+
+bool AccountDatabaseDefautsWidget::createDefaultsFor(const QString &filePrototype, const int tableRef)
+{
+    bool yes = Utils::Database::importCsvToDatabase(AccountDB::Constants::DB_ACCOUNTANCY,
+                                         getCsvAbsFilePath(filePrototype),
+                                         base()->table(tableRef),
+                                         ";", true);
+    return yes;
 }
