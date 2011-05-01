@@ -206,8 +206,8 @@ void SitesWidget::saveModel()
                                              "Do you want to save them ?"));
         if (yes) {
            if (!m_Model->submit()) {qDebug() << __FILE__ << QString::number(__LINE__) << " sites submit ";
-                Utils::Log::addError(this, tkTr(Trans::Constants::UNABLE_TO_SAVE_DATA_IN_DATABASE_1).
-                                                   arg(tr("sites")), __FILE__, __LINE__);
+                LOG_ERROR(tkTr(Trans::Constants::UNABLE_TO_SAVE_DATA_IN_DATABASE_1).
+                                                   arg(tr("sites")));
             }
         } 
         else {
@@ -227,7 +227,7 @@ void SitesWidget::on_addButton_clicked()
 {
     //qDebug() << __FILE__ << QString::number(__LINE__) << " rowCount1 =" << QString::number(m_Model->rowCount());
     if (!m_Model->insertRow(m_Model->rowCount()))
-        Utils::Log::addError(this, "Unable to add row", __FILE__, __LINE__);
+        LOG_ERROR("Unable to add row");
     //qDebug() << __FILE__ << QString::number(__LINE__) << " rowCount2 =" << QString::number(m_Model->rowCount());
     wpComboBox->setCurrentIndex(m_Model->rowCount()-1);
     m_siteUidLabel->setValue(calcSitesUid());
@@ -243,7 +243,7 @@ void SitesWidget::on_deleteButton_clicked()
 {
     if (!m_Model->removeRow(wpComboBox->currentIndex()))
     {
-    	  Utils::Log::addError(this, "Unable to remove row", __FILE__, __LINE__);
+          LOG_ERROR("Unable to remove row");
         }
     wpComboBox->setCurrentIndex(m_Model->rowCount() - 1);
 }
@@ -251,7 +251,7 @@ void SitesWidget::on_deleteButton_clicked()
 void SitesWidget::saveToSettings(Core::ISettings *sets)
 {
     if (!m_Model->submit()) {
-        Utils::Log::addError(this, tkTr(Trans::Constants::UNABLE_TO_SAVE_DATA_IN_DATABASE_1).arg(tr("sites")));
+        LOG_ERROR(tkTr(Trans::Constants::UNABLE_TO_SAVE_DATA_IN_DATABASE_1).arg(tr("sites")));
         Utils::warningMessageBox(tr("Can not submit sites to your personnal database."),
                                  tr("An error occured during sites saving. Datas are corrupted."));
     }
@@ -316,32 +316,31 @@ QHash<QString,QString> SitesWidget::parseZipcodeCsv(){
     return hash;
 }
 
-QStringList SitesWidget::listOfCountries(){
+QStringList SitesWidget::listOfCountries()
+{
     QStringList list;
     QString countryFileStr = global_resourcesPath+"/textfiles/pays.txt";
     QFile file(countryFileStr);
-    if (!file.open(QIODevice::ReadOnly|QIODevice::Text))
-    {
-    	  qWarning() << __FILE__ << QString::number(__LINE__) << "pays.txt cannot open !" ;
-    	  qDebug() << __FILE__ << QString::number(__LINE__) << " pays.txt =" << countryFileStr ;
-        }
+    if (!file.open(QIODevice::ReadOnly|QIODevice::Text)) {
+        qWarning() << __FILE__ << QString::number(__LINE__) << "pays.txt cannot open !" ;
+        qDebug() << __FILE__ << QString::number(__LINE__) << " pays.txt =" << countryFileStr ;
+    }
     QTextStream stream(&file);
     while (!stream.atEnd())
     {
     	QString line = stream.readLine().trimmed();
     	//qDebug() << __FILE__ << QString::number(__LINE__) << " country =" << line;
-    	if (!line.isEmpty())
-    	{
-    		list << line;  
-    	    }
+        if (!line.isEmpty()) {
+            list << line;
+        }
     }
     return list;
 }
 
-int SitesWidget::calcSitesUid(){
+int SitesWidget::calcSitesUid()
+{
     QModelIndex index = m_Model->index(m_Model->rowCount()-2,AccountDB::Constants::SITES_UID);
-    if (!index.isValid())
-    {
+    if (!index.isValid()) {
     	  qWarning() << __FILE__ << QString::number(__LINE__) << "index is not valid" ;
         }
     int siteUidBefore = m_Model->data(index,Qt::DisplayRole).toInt();

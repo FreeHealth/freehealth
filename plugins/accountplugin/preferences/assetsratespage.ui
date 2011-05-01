@@ -14,7 +14,7 @@
    <string>Form</string>
   </property>
   <layout class="QGridLayout" name="gridLayout_2">
-   <item row="5" column="0">
+   <item row="3" column="0">
     <layout class="QGridLayout" name="gridLayout">
      <item row="0" column="0">
       <widget class="QLabel" name="AssetsNameLabel">
@@ -187,20 +187,6 @@ p, li { white-space: pre-wrap; }
       <widget class="QDateEdit" name="dateEdit"/>
      </item>
     </layout>
-   </item>
-   <item row="3" column="0">
-    <widget class="QPushButton" name="createDefaults">
-     <property name="text">
-      <string>Create default values</string>
-     </property>
-    </widget>
-   </item>
-   <item row="4" column="0">
-    <widget class="Line" name="line">
-     <property name="orientation">
-      <enum>Qt::Horizontal</enum>
-     </property>
-    </widget>
    </item>
    <item row="1" column="0">
     <widget class="Line" name="line_2">

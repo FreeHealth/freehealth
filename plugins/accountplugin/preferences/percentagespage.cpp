@@ -171,8 +171,8 @@ void PercentagesWidget::saveModel()
                                              "Do you want to save them ?"));
         if (yes) {
            if (!m_Model->submit()) {qDebug() << __FILE__ << QString::number(__LINE__) << " percentages no submit ";
-                Utils::Log::addError(this, tkTr(Trans::Constants::UNABLE_TO_SAVE_DATA_IN_DATABASE_1).
-                                                   arg(tr("percentages")), __FILE__, __LINE__);
+                LOG_ERROR(tkTr(Trans::Constants::UNABLE_TO_SAVE_DATA_IN_DATABASE_1).
+                                                   arg(tr("percentages")));
             }
         } 
         else {
@@ -192,7 +192,7 @@ void PercentagesWidget::on_addButton_clicked()
 {
     qDebug() << __FILE__ << QString::number(__LINE__) << " rowCount1 =" << QString::number(m_Model->rowCount());
     if (!m_Model->insertRow(m_Model->rowCount()))
-        Utils::Log::addError(this, "Unable to add row", __FILE__, __LINE__);
+        LOG_ERROR("Unable to add row");
     qDebug() << __FILE__ << QString::number(__LINE__) << " rowCount2 =" << QString::number(m_Model->rowCount());
     percentagesComboBox->setCurrentIndex(m_Model->rowCount()-1);
     userEditedLabel->setText(m_user_uid);
@@ -210,7 +210,7 @@ void PercentagesWidget::on_deleteButton_clicked()
 {
     if (!m_Model->removeRow(percentagesComboBox->currentIndex()))
     {
-    	  Utils::Log::addError(this, "Unable to remove row", __FILE__, __LINE__);
+          LOG_ERROR("Unable to remove row");
         }
     percentagesComboBox->setCurrentIndex(m_Model->rowCount() - 1);
 }
@@ -218,7 +218,7 @@ void PercentagesWidget::on_deleteButton_clicked()
 void PercentagesWidget::saveToSettings(Core::ISettings *sets)
 {
     if (!m_Model->submit()) {
-        Utils::Log::addError(this, tkTr(Trans::Constants::UNABLE_TO_SAVE_DATA_IN_DATABASE_1).arg(tr("percentages")));
+        LOG_ERROR(tkTr(Trans::Constants::UNABLE_TO_SAVE_DATA_IN_DATABASE_1).arg(tr("percentages")));
         Utils::warningMessageBox(tr("Can not submit percentages to your personnal database."),
                                  tr("An error occured during percentages saving. Datas are corrupted."));
     }

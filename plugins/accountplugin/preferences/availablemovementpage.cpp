@@ -123,14 +123,12 @@ AvailableMovementWidget::AvailableMovementWidget(QWidget *parent) :
     typeComboBox->addItem(theme()->icon(Core::Constants::ICONADD),add);
     m_completionList << trUtf8("Receipts");
     m_Model = new AccountDB::AvailableMovementModel(this);
-    if (m_Model->rowCount() < 1)
-    {
-    	  if (!fillEmptyAvailableModel())
-    	  {
-    	  	  QMessageBox::warning(0,trUtf8("Warning"),trUtf8("Unable to fill availablemodel whith local .csv"),
-    	  	                       QMessageBox::Ok);
-    	      }
-        }
+//    if (m_Model->rowCount() < 1) {
+//        if (!fillEmptyAvailableModel()) {
+//            QMessageBox::warning(0,trUtf8("Warning"),trUtf8("Unable to fill availablemodel whith local .csv"),
+//                                 QMessageBox::Ok);
+//        }
+//    }
     /** \todo  m_Model->setUserUuid(); */
     m_Mapper = new QDataWidgetMapper(this);
     m_Mapper->setSubmitPolicy(QDataWidgetMapper::AutoSubmit);
@@ -169,7 +167,7 @@ void AvailableMovementWidget::saveModel()
         if (yes) {
             if (!m_Model->submit()) {
                 qWarning() << __FILE__ << QString::number(__LINE__) << "model error = "<< m_Model->lastError().text() ;
-                Utils::Log::addError(this, tkTr(Trans::Constants::UNABLE_TO_SAVE_DATA_IN_DATABASE_1).arg(tr("available_movement")));
+                LOG_ERROR(tkTr(Trans::Constants::UNABLE_TO_SAVE_DATA_IN_DATABASE_1).arg(tr("available_movement")));
             }
         } else {
             m_Model->revert();
@@ -191,7 +189,7 @@ void AvailableMovementWidget::on_movComboBox_currentIndexChanged(int index)
 void AvailableMovementWidget::on_addButton_clicked()
 {
     if (!m_Model->insertRow(m_Model->rowCount()))
-        Utils::Log::addError(this, "Unable to add row", __FILE__, __LINE__);
+        LOG_ERROR("Unable to add row");
     qDebug() << __FILE__ << QString::number(__LINE__) << " rowCount =" << QString::number(m_Model->rowCount()) ;
     movComboBox->setCurrentIndex(m_Model->rowCount() - 1);
     taxDeductibilityComboBox->setFocus();
@@ -209,7 +207,7 @@ void AvailableMovementWidget::on_removeButton_clicked()
 void AvailableMovementWidget::saveToSettings(Core::ISettings *sets)
 {
     if (!m_Model->submit()) {
-        Utils::Log::addError(this, tkTr(Trans::Constants::UNABLE_TO_SAVE_DATA_IN_DATABASE_1).arg(tr("available_movement")));
+        LOG_ERROR(tkTr(Trans::Constants::UNABLE_TO_SAVE_DATA_IN_DATABASE_1).arg(tr("available_movement")));
         Utils::warningMessageBox(tr("Can not submit available movements to your personnal database."),
                                  tr("An error occured during available movements saving. Datas are corrupted."));
     }
@@ -238,114 +236,114 @@ void AvailableMovementWidget::changeEvent(QEvent *e)
     }
 }
 
-static QString getCsvDefaultFile()
-{
-    QString sqlDirPath = settings()->path(Core::ISettings::BundleResourcesPath) + "/sql/account";
-    QDir dir(sqlDirPath);
-    if (!dir.exists())
-        return QString();
-    QString fileName = QString("available_movements_%1.csv").arg(QLocale().name());
-    QFile file(dir.absolutePath() + QDir::separator() + fileName);
-    if (!file.exists())
-        return QString();
-    return file.fileName();
-}
+//static QString getCsvDefaultFile()
+//{
+//    QString sqlDirPath = settings()->path(Core::ISettings::BundleResourcesPath) + "/sql/account";
+//    QDir dir(sqlDirPath);
+//    if (!dir.exists())
+//        return QString();
+//    QString fileName = QString("available_movements_%1.csv").arg(QLocale().name());
+//    QFile file(dir.absolutePath() + QDir::separator() + fileName);
+//    if (!file.exists())
+//        return QString();
+//    return file.fileName();
+//}
 
-QStandardItemModel *AvailableMovementWidget::availableMovementModelByLocale()
-{
-    QStandardItemModel *model = new QStandardItemModel;
-    QString csvFileName = getCsvDefaultFile();
-    qDebug() << __FILE__ << QString::number(__LINE__) << " csvFileName =" << csvFileName ;
-    QFile file(getCsvDefaultFile());
-    // some validity checking
-    if (!file.exists()) {
-        LOG_ERROR(tkTr(Trans::Constants::FILE_1_DOESNOT_EXISTS).arg(QLocale().name() + " " + tr("Available Movements")));
-        return model;
-    }
-    if (!file.open(QFile::ReadOnly | QFile::Text)) {
-        LOG_ERROR(tkTr(Trans::Constants::FILE_1_ISNOT_READABLE).arg(file.fileName()));
-        return model;
-    }
+//QStandardItemModel *AvailableMovementWidget::availableMovementModelByLocale()
+//{
+//    QStandardItemModel *model = new QStandardItemModel;
+//    QString csvFileName = getCsvDefaultFile();
+//    qDebug() << __FILE__ << QString::number(__LINE__) << " csvFileName =" << csvFileName ;
+//    QFile file(getCsvDefaultFile());
+//    // some validity checking
+//    if (!file.exists()) {
+//        LOG_ERROR(tkTr(Trans::Constants::FILE_1_DOESNOT_EXISTS).arg(QLocale().name() + " " + tr("Available Movements")));
+//        return model;
+//    }
+//    if (!file.open(QFile::ReadOnly | QFile::Text)) {
+//        LOG_ERROR(tkTr(Trans::Constants::FILE_1_ISNOT_READABLE).arg(file.fileName()));
+//        return model;
+//    }
 
-    // read the content with UTF8 coding system
-    QTextStream stream(&file);
-    stream.setCodec("UTF-8");
-    // skip first line
-    //stream.readLine();
-    //int row = 0;
-    while (!stream.atEnd())
-    {
-        int row = 0;
-        QString line = stream.readLine();
-        QStringList listOfSeparators;
-        listOfSeparators << ",\"" << ";\"" << QString("\t\"")
-                         << ",''" << ";''" << QString("\t''");
-        QString separator;
-        QString separatorStr;
-        foreach(separatorStr,listOfSeparators){
-            if (line.contains(separatorStr)){
-                separator = separatorStr;
-                }
-            }
-        if (!line.contains("AVAILMOV_ID")){
-            //"AVAILMOV_ID","PARENT","TYPE","LABEL","CODE","COMMENT","DEDUCTIBILITY"
-            QList<QStandardItem*> listOfItemsData;
-            QStringList listOfItems;
-            listOfItems = line.split(separator);
-            for (int i = 0; i < AccountDB::Constants::AVAILMOV_MaxParam ; i += 1){
-                //model->setData(model->index(row,i),listOfItems[i],Qt::EditRole);
-        	QStandardItem * item = new QStandardItem;
-        	//qDebug() << __FILE__ << QString::number(__LINE__) << " listOfItems[i] =" << listOfItems[i] ;
-        	QString itemOfList = listOfItems[i];
-        	itemOfList.remove("\"");
-        	item->setData(itemOfList);
-        	listOfItemsData << item;
-        	}
-            model->appendRow(listOfItemsData);
-            ++row;  
-            }
-    }
-    return model;
-}
+//    // read the content with UTF8 coding system
+//    QTextStream stream(&file);
+//    stream.setCodec("UTF-8");
+//    // skip first line
+//    //stream.readLine();
+//    //int row = 0;
+//    while (!stream.atEnd())
+//    {
+//        int row = 0;
+//        QString line = stream.readLine();
+//        QStringList listOfSeparators;
+//        listOfSeparators << ",\"" << ";\"" << QString("\t\"")
+//                         << ",''" << ";''" << QString("\t''");
+//        QString separator;
+//        QString separatorStr;
+//        foreach(separatorStr,listOfSeparators){
+//            if (line.contains(separatorStr)){
+//                separator = separatorStr;
+//                }
+//            }
+//        if (!line.contains("AVAILMOV_ID")){
+//            //"AVAILMOV_ID","PARENT","TYPE","LABEL","CODE","COMMENT","DEDUCTIBILITY"
+//            QList<QStandardItem*> listOfItemsData;
+//            QStringList listOfItems;
+//            listOfItems = line.split(separator);
+//            for (int i = 0; i < AccountDB::Constants::AVAILMOV_MaxParam ; i += 1){
+//                //model->setData(model->index(row,i),listOfItems[i],Qt::EditRole);
+//        	QStandardItem * item = new QStandardItem;
+//        	//qDebug() << __FILE__ << QString::number(__LINE__) << " listOfItems[i] =" << listOfItems[i] ;
+//        	QString itemOfList = listOfItems[i];
+//        	itemOfList.remove("\"");
+//        	item->setData(itemOfList);
+//        	listOfItemsData << item;
+//        	}
+//            model->appendRow(listOfItemsData);
+//            ++row;
+//            }
+//    }
+//    return model;
+//}
 
+//bool AvailableMovementWidget::fillEmptyAvailableModel()
+//{
+//    bool test = false;
+//    QStandardItemModel * model = availableMovementModelByLocale();
+//    int availModelRows = model->rowCount();
+//    //qDebug() << __FILE__ << QString::number(__LINE__) << " availModelRows = " << QString::number(availModelRows) ;
+//    QString strList;
+//    for (int i = 0; i < availModelRows; i += 1){
+//        if (!m_Model->insertRows(m_Model->rowCount(),1,QModelIndex()))
+//    	  		{qWarning() << __FILE__ << QString::number(__LINE__) << QString::number(m_Model->rowCount()) ;
+//    	  			  /*QMessageBox::warning(0,trUtf8("Warning"),trUtf8("Unable to insert row \n")
+//    	  			  +__FILE__+QString::number(__LINE__),QMessageBox::Ok);*/
+//    	  		    }
+//    	  		    QString strValues;
+//    	  	for (int j = 0; j < AccountDB::Constants::AVAILMOV_MaxParam ; j += 1){
+//    	  		QStandardItem * item = model->itemFromIndex(model->index(i,j));
+//    	  		QVariant value = item->data();
+//    	  		//todo, semantics
+//    	  		if (value.canConvert(QVariant::String))
+//    	  		{
+//    	  			  QString strValue = value.toString().replace("'","''");
+//    	  			  value = QVariant::fromValue(strValue);
+//    	  		    }
+//    	  		    strValues += value.toString()+" ";
+//    	  		//qDebug() << __FILE__ << QString::number(__LINE__) << " value =" << value ;
+//    	  		//qDebug() << __FILE__ << QString::number(__LINE__) << "m_Model->rowCount() =" << QString::number(m_Model->rowCount()) ;
+//    	  		if (!m_Model->setData(m_Model->index(m_Model->rowCount()-1,j),value,Qt::EditRole))
+//    	  		{
+//    	  			qWarning() << __FILE__ << QString::number(__LINE__) << "data not inserted !" ;
+//    	  		    }
+//    	  	    }
+//    	  	    strList += strValues+"\n";
+//    	      test = m_Model->submit();
+//    	      }
+//    	      qDebug() << __FILE__ << QString::number(__LINE__) << " values = \n" << strList;
 
-bool AvailableMovementWidget::fillEmptyAvailableModel(){
-    bool test = false;
-    QStandardItemModel * model = availableMovementModelByLocale();
-    int availModelRows = model->rowCount();
-    //qDebug() << __FILE__ << QString::number(__LINE__) << " availModelRows = " << QString::number(availModelRows) ;
-    QString strList;
-    for (int i = 0; i < availModelRows; i += 1){
-        if (!m_Model->insertRows(m_Model->rowCount(),1,QModelIndex()))
-    	  		{qWarning() << __FILE__ << QString::number(__LINE__) << QString::number(m_Model->rowCount()) ;
-    	  			  /*QMessageBox::warning(0,trUtf8("Warning"),trUtf8("Unable to insert row \n")
-    	  			  +__FILE__+QString::number(__LINE__),QMessageBox::Ok);*/
-    	  		    }
-    	  		    QString strValues;
-    	  	for (int j = 0; j < AccountDB::Constants::AVAILMOV_MaxParam ; j += 1){
-    	  		QStandardItem * item = model->itemFromIndex(model->index(i,j));
-    	  		QVariant value = item->data();
-    	  		//todo, semantics
-    	  		if (value.canConvert(QVariant::String))
-    	  		{
-    	  			  QString strValue = value.toString().replace("'","''");
-    	  			  value = QVariant::fromValue(strValue);
-    	  		    }
-    	  		    strValues += value.toString()+" ";
-    	  		//qDebug() << __FILE__ << QString::number(__LINE__) << " value =" << value ;
-    	  		//qDebug() << __FILE__ << QString::number(__LINE__) << "m_Model->rowCount() =" << QString::number(m_Model->rowCount()) ;
-    	  		if (!m_Model->setData(m_Model->index(m_Model->rowCount()-1,j),value,Qt::EditRole))
-    	  		{
-    	  			qWarning() << __FILE__ << QString::number(__LINE__) << "data not inserted !" ;  
-    	  		    }
-    	  	    }
-    	  	    strList += strValues+"\n";
-    	      test = m_Model->submit();
-    	      }
-    	      qDebug() << __FILE__ << QString::number(__LINE__) << " values = \n" << strList;
-
-    return test;
-}
+//    return test;
+//}
 
 void AvailableMovementWidget::setCompletionList(const QString & text){
     m_completionList << text;

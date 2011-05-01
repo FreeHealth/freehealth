@@ -84,8 +84,8 @@ private:
     QStringList listOfCountries();
     QString findCityFromZipCode();
     int calcInsuranceUid();
-    QStandardItemModel * insuranceModelByLocale();
-    bool fillEmptyAvailableModel();
+//    QStandardItemModel * insuranceModelByLocale();
+//    bool fillEmptyAvailableModel();
 
 private:
     AccountDB::InsuranceModel *m_Model;

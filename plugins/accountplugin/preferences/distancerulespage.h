@@ -79,8 +79,8 @@ private:
     void changeEvent(QEvent *e);
     void saveModel();
     QString calcDistanceRulesUid();
-    QStandardItemModel * distanceRulesModelByLocale();
-    bool fillEmptyDistanceRulesModel();
+//    QStandardItemModel * distanceRulesModelByLocale();
+//    bool fillEmptyDistanceRulesModel();
 
 private:
     AccountDB::DistanceRulesModel *m_Model;

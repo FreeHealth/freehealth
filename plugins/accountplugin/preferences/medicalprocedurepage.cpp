@@ -159,7 +159,7 @@ MedicalProcedureWidget::MedicalProcedureWidget(QWidget *parent) :
     mpComboBox->setModelColumn(AccountDB::Constants::MP_NAME);
     setDatasToUi();
     
-    connect(createDefault, SIGNAL(clicked()), SLOT(createDefaultMedicalProcedures()));
+//    connect(createDefault, SIGNAL(clicked()), SLOT(createDefaultMedicalProcedures()));
 }
 
 MedicalProcedureWidget::~MedicalProcedureWidget()
@@ -183,8 +183,8 @@ void MedicalProcedureWidget::saveModel()
                                              "Do you want to save them ?"));
         if (yes) {
             if (!m_Model->submit()) {
-                Utils::Log::addError(this, tkTr(Trans::Constants::UNABLE_TO_SAVE_DATA_IN_DATABASE_1).
-                                                   arg(tr("medical_procedures")), __FILE__, __LINE__);
+                LOG_ERROR(tkTr(Trans::Constants::UNABLE_TO_SAVE_DATA_IN_DATABASE_1).
+                                                   arg(tr("medical_procedures")));
             }
         } else {
             m_Model->revert();
@@ -207,7 +207,7 @@ void MedicalProcedureWidget::on_addButton_clicked()
 {
     qDebug() << __FILE__ << QString::number(__LINE__) << " rowCount1 =" << QString::number(m_Model->rowCount());
     if (!m_Model->insertRow(m_Model->rowCount()))
-        Utils::Log::addError(this, "Unable to add row", __FILE__, __LINE__);
+        LOG_ERROR("Unable to add row");
     qDebug() << __FILE__ << QString::number(__LINE__) << " rowCount2 =" << QString::number(m_Model->rowCount());
     mpComboBox->setCurrentIndex(m_Model->rowCount()-1);
     rateSpin->setValue(70.00);
@@ -230,7 +230,7 @@ void MedicalProcedureWidget::on_removeButton_clicked()
 {
     if (!m_Model->removeRow(mpComboBox->currentIndex()))
     {
-    	  Utils::Log::addError(this, "Unable to remove row", __FILE__, __LINE__);
+          LOG_ERROR("Unable to remove row");
         }
     mpComboBox->setCurrentIndex(m_Model->rowCount() - 1);
 }
@@ -295,156 +295,156 @@ void MedicalProcedureWidget::on_abstractEdit_textChanged(const QString & text){
     abstractEdit->setCompleter(c);
 }
 
-static QString getCsvDefaultFile()
-{
-    QString sqlDirPath = settings()->path(Core::ISettings::BundleResourcesPath) + "/sql/account";
-    QString defaultString = ("medical_procedure");
-    QDir dir(sqlDirPath);
-    if (!dir.exists())
-        return QString();
-    QStringList nameFilters;
-    nameFilters << "*"+QLocale().name()+".csv";
-    dir.setNameFilters(nameFilters);
-    QStringList listOfFiles = dir.entryList(nameFilters);
-    QString fileName ;//= QString("medical_procedure_%1.csv").arg(QLocale().name());
-    QString filesOfDir;
-    foreach(filesOfDir,listOfFiles){
-        if (filesOfDir.contains(defaultString))
-        {
-        	  fileName = dir.absolutePath() + QDir::separator() +filesOfDir;
-        	  qDebug() << __FILE__ << QString::number(__LINE__) << " fileName =" << fileName ;
-            }
-        }
-    QFile file(fileName);
-    if (!file.exists())
-        return QString();
-    return file.fileName();
-}
+//static QString getCsvDefaultFile()
+//{
+//    QString sqlDirPath = settings()->path(Core::ISettings::BundleResourcesPath) + "/sql/account";
+//    QString defaultString = ("medical_procedure");
+//    QDir dir(sqlDirPath);
+//    if (!dir.exists())
+//        return QString();
+//    QStringList nameFilters;
+//    nameFilters << "*"+QLocale().name()+".csv";
+//    dir.setNameFilters(nameFilters);
+//    QStringList listOfFiles = dir.entryList(nameFilters);
+//    QString fileName ;//= QString("medical_procedure_%1.csv").arg(QLocale().name());
+//    QString filesOfDir;
+//    foreach(filesOfDir,listOfFiles){
+//        if (filesOfDir.contains(defaultString))
+//        {
+//        	  fileName = dir.absolutePath() + QDir::separator() +filesOfDir;
+//        	  qDebug() << __FILE__ << QString::number(__LINE__) << " fileName =" << fileName ;
+//            }
+//        }
+//    QFile file(fileName);
+//    if (!file.exists())
+//        return QString();
+//    return file.fileName();
+//}
 
-void MedicalProcedureWidget::createDefaultMedicalProcedures()
-{
-    int max = numberOfLinesForProgressBar();
-    m_progressDialog = new QProgressDialog(trUtf8("Wait ..."),trUtf8("Abort"),0,max,this);
-    m_progressDialog->setWindowModality(Qt::WindowModal);
-    m_progressDialog->setAutoReset(true);
-    m_progressDialog->setAutoClose(true);
-    fillEmptyMPModel();
-}
+//void MedicalProcedureWidget::createDefaultMedicalProcedures()
+//{
+//    int max = numberOfLinesForProgressBar();
+//    m_progressDialog = new QProgressDialog(trUtf8("Wait ..."),trUtf8("Abort"),0,max,this);
+//    m_progressDialog->setWindowModality(Qt::WindowModal);
+//    m_progressDialog->setAutoReset(true);
+//    m_progressDialog->setAutoClose(true);
+//    fillEmptyMPModel();
+//}
 
-QStandardItemModel *MedicalProcedureWidget::MedicalProcedureModelByLocale()
-{
-    QApplication::setOverrideCursor(Qt::WaitCursor);
-    QStandardItemModel *model = new QStandardItemModel;
-    QString csvFileName = getCsvDefaultFile();
-    qDebug() << __FILE__ << QString::number(__LINE__) << " csvFileName =" << csvFileName ;
-    QFile file(getCsvDefaultFile());
-    // some validity checking
-    if (!file.exists()) {
-        LOG_ERROR(tkTr(Trans::Constants::FILE_1_DOESNOT_EXISTS).arg(QLocale().name() + " " + tr("Medical_procedure.")));
-        return model;
-    }
-    if (!file.open(QFile::ReadOnly | QFile::Text)) {
-        LOG_ERROR(tkTr(Trans::Constants::FILE_1_ISNOT_READABLE).arg(file.fileName()));
-        return model;
-    }
+//QStandardItemModel *MedicalProcedureWidget::MedicalProcedureModelByLocale()
+//{
+//    QApplication::setOverrideCursor(Qt::WaitCursor);
+//    QStandardItemModel *model = new QStandardItemModel;
+//    QString csvFileName = getCsvDefaultFile();
+//    qDebug() << __FILE__ << QString::number(__LINE__) << " csvFileName =" << csvFileName ;
+//    QFile file(getCsvDefaultFile());
+//    // some validity checking
+//    if (!file.exists()) {
+//        LOG_ERROR(tkTr(Trans::Constants::FILE_1_DOESNOT_EXISTS).arg(QLocale().name() + " " + tr("Medical_procedure.")));
+//        return model;
+//    }
+//    if (!file.open(QFile::ReadOnly | QFile::Text)) {
+//        LOG_ERROR(tkTr(Trans::Constants::FILE_1_ISNOT_READABLE).arg(file.fileName()));
+//        return model;
+//    }
 
-    // read the content with UTF8 coding system
-    QTextStream stream(&file);
-    stream.setCodec("UTF-8");
-    // skip first line
-    //stream.readLine();
-    int row = 0;
-    while (!stream.atEnd())
-    {
-        //int row = 0;
-        QString line = stream.readLine();
-        QStringList listOfSeparators;
-        listOfSeparators << ",\"" << ";\"" << QString("\t\"")
-                         << ",''" << ";''" << QString("\t''");
-        QString separator = ";\"";
-        /*QString separatorStr;
-        foreach(separatorStr,listOfSeparators){
-            if (line.contains(separatorStr)){
-                separator = separatorStr;
-                }
-            }*/
-        if (!line.contains("MP_UUID")){
-            //"MP_ID","MP_UUID","MP_USER_UID","MP_INSURANCE_UID","NAME","ABSTRACT","TYPE","AMOUNT","REIMBOURSEMENT","DATE"
-            QList<QStandardItem*> listOfItemsData;
-            QStringList listOfItems;
-            listOfItems = line.split(separator);
-            for (int i = 0; i < AccountDB::Constants::MP_MaxParam ; i += 1){
-                //model->setData(model->index(row,i),listOfItems[i],Qt::EditRole);
-        	QStandardItem * item = new QStandardItem;
-        	//qDebug() << __FILE__ << QString::number(__LINE__) << " listOfItems[i] =" << listOfItems[i] ;
-        	QString itemOfList = listOfItems[i];
-        	itemOfList.remove("\"");
-        	item->setData(itemOfList);
-        	listOfItemsData << item;
-        	}
-            model->appendRow(listOfItemsData);
-            ++row;
-            //qDebug() << __FILE__ << QString::number(__LINE__) << " row =" << QString::number(row) ;
-            }
-    }
+//    // read the content with UTF8 coding system
+//    QTextStream stream(&file);
+//    stream.setCodec("UTF-8");
+//    // skip first line
+//    //stream.readLine();
+//    int row = 0;
+//    while (!stream.atEnd())
+//    {
+//        //int row = 0;
+//        QString line = stream.readLine();
+//        QStringList listOfSeparators;
+//        listOfSeparators << ",\"" << ";\"" << QString("\t\"")
+//                         << ",''" << ";''" << QString("\t''");
+//        QString separator = ";\"";
+//        /*QString separatorStr;
+//        foreach(separatorStr,listOfSeparators){
+//            if (line.contains(separatorStr)){
+//                separator = separatorStr;
+//                }
+//            }*/
+//        if (!line.contains("MP_UUID")){
+//            //"MP_ID","MP_UUID","MP_USER_UID","MP_INSURANCE_UID","NAME","ABSTRACT","TYPE","AMOUNT","REIMBOURSEMENT","DATE"
+//            QList<QStandardItem*> listOfItemsData;
+//            QStringList listOfItems;
+//            listOfItems = line.split(separator);
+//            for (int i = 0; i < AccountDB::Constants::MP_MaxParam ; i += 1){
+//                //model->setData(model->index(row,i),listOfItems[i],Qt::EditRole);
+//        	QStandardItem * item = new QStandardItem;
+//        	//qDebug() << __FILE__ << QString::number(__LINE__) << " listOfItems[i] =" << listOfItems[i] ;
+//        	QString itemOfList = listOfItems[i];
+//        	itemOfList.remove("\"");
+//        	item->setData(itemOfList);
+//        	listOfItemsData << item;
+//        	}
+//            model->appendRow(listOfItemsData);
+//            ++row;
+//            //qDebug() << __FILE__ << QString::number(__LINE__) << " row =" << QString::number(row) ;
+//            }
+//    }
 
-    return model;
-}
+//    return model;
+//}
 
-bool MedicalProcedureWidget::fillEmptyMPModel()
-{
-    bool test = false;
-    QStandardItemModel * model = MedicalProcedureModelByLocale();
-    int availModelRows = model->rowCount();
-    qDebug() << __FILE__ << QString::number(__LINE__) << " availModelRows = " << QString::number(availModelRows) ;
-    QString strList;
-    for (int i = 0; i < availModelRows; i += 1){
-        m_progressDialog->setValue(i);
-        //qDebug() << __FILE__ << QString::number(__LINE__) << " i =" << QString::number(i) ;
-        if (!m_Model->insertRows(m_Model->rowCount(),1,QModelIndex())) {
-            qWarning() << __FILE__ << QString::number(__LINE__) << QString::number(m_Model->rowCount()) ;
-            /*QMessageBox::warning(0,trUtf8("Warning"),trUtf8("Unable to insert row \n")
-    	  			  +__FILE__+QString::number(__LINE__),QMessageBox::Ok);*/
-        }
-        QString strValues;
-        for (int j = 0; j < AccountDB::Constants::MP_MaxParam ; j += 1) {
-            QStandardItem * item = model->itemFromIndex(model->index(i,j));
-            QVariant value = item->data();
-            //todo, semantics
-            if (value.canConvert(QVariant::String)) {
-                QString strValue = value.toString().replace("'","''");
-                value = QVariant::fromValue(strValue);
-            }
-            strValues += value.toString()+" ";
-            //qDebug() << __FILE__ << QString::number(__LINE__) << " value =" << value ;
-            //qDebug() << __FILE__ << QString::number(__LINE__) << "m_Model->rowCount() =" << QString::number(m_Model->rowCount()) ;
-            if (!m_Model->setData(m_Model->index(m_Model->rowCount()-1,j),value,Qt::EditRole)) {
-                qWarning() << __FILE__ << QString::number(__LINE__) << "data not inserted !" ;
-            }
-        }
-        strList += strValues+"\n";
-        test = m_Model->submit();
-    }
-    m_progressDialog->setValue(numberOfLinesForProgressBar());
+//bool MedicalProcedureWidget::fillEmptyMPModel()
+//{
+//    bool test = false;
+//    QStandardItemModel * model = MedicalProcedureModelByLocale();
+//    int availModelRows = model->rowCount();
+//    qDebug() << __FILE__ << QString::number(__LINE__) << " availModelRows = " << QString::number(availModelRows) ;
+//    QString strList;
+//    for (int i = 0; i < availModelRows; i += 1){
+//        m_progressDialog->setValue(i);
+//        //qDebug() << __FILE__ << QString::number(__LINE__) << " i =" << QString::number(i) ;
+//        if (!m_Model->insertRows(m_Model->rowCount(),1,QModelIndex())) {
+//            qWarning() << __FILE__ << QString::number(__LINE__) << QString::number(m_Model->rowCount()) ;
+//            /*QMessageBox::warning(0,trUtf8("Warning"),trUtf8("Unable to insert row \n")
+//    	  			  +__FILE__+QString::number(__LINE__),QMessageBox::Ok);*/
+//        }
+//        QString strValues;
+//        for (int j = 0; j < AccountDB::Constants::MP_MaxParam ; j += 1) {
+//            QStandardItem * item = model->itemFromIndex(model->index(i,j));
+//            QVariant value = item->data();
+//            //todo, semantics
+//            if (value.canConvert(QVariant::String)) {
+//                QString strValue = value.toString().replace("'","''");
+//                value = QVariant::fromValue(strValue);
+//            }
+//            strValues += value.toString()+" ";
+//            //qDebug() << __FILE__ << QString::number(__LINE__) << " value =" << value ;
+//            //qDebug() << __FILE__ << QString::number(__LINE__) << "m_Model->rowCount() =" << QString::number(m_Model->rowCount()) ;
+//            if (!m_Model->setData(m_Model->index(m_Model->rowCount()-1,j),value,Qt::EditRole)) {
+//                qWarning() << __FILE__ << QString::number(__LINE__) << "data not inserted !" ;
+//            }
+//        }
+//        strList += strValues+"\n";
+//        test = m_Model->submit();
+//    }
+//    m_progressDialog->setValue(numberOfLinesForProgressBar());
 
-    //m_progressDialog->close();
-    //qDebug() << __FILE__ << QString::number(__LINE__) << " values = \n" << strList;
-    QApplication::restoreOverrideCursor();
-    return test;
-}
+//    //m_progressDialog->close();
+//    //qDebug() << __FILE__ << QString::number(__LINE__) << " values = \n" << strList;
+//    QApplication::restoreOverrideCursor();
+//    return test;
+//}
 
-int MedicalProcedureWidget::numberOfLinesForProgressBar()
-{
-    QString filePathAndName = getCsvDefaultFile();
-    QString fileName = filePathAndName.split(QDir::separator()).last();
-    qDebug() << __FILE__ << QString::number(__LINE__) << " fileName =" << fileName ;
-    fileName.remove("_"+QLocale().name());
-    fileName.remove(".csv");
-    QStringList listFromFileName = fileName.split("_");
-    QString numberOfLines = listFromFileName.last();
-    qDebug() << __FILE__ << QString::number(__LINE__) << " numberOfLines =" << numberOfLines ;
-    int max = numberOfLines.toInt();
-    qDebug() << __FILE__ << QString::number(__LINE__) << " max =" << QString::number(max) ;
-    return max;
-}
+//int MedicalProcedureWidget::numberOfLinesForProgressBar()
+//{
+//    QString filePathAndName = getCsvDefaultFile();
+//    QString fileName = filePathAndName.split(QDir::separator()).last();
+//    qDebug() << __FILE__ << QString::number(__LINE__) << " fileName =" << fileName ;
+//    fileName.remove("_"+QLocale().name());
+//    fileName.remove(".csv");
+//    QStringList listFromFileName = fileName.split("_");
+//    QString numberOfLines = listFromFileName.last();
+//    qDebug() << __FILE__ << QString::number(__LINE__) << " numberOfLines =" << numberOfLines ;
+//    int max = numberOfLines.toInt();
+//    qDebug() << __FILE__ << QString::number(__LINE__) << " max =" << QString::number(max) ;
+//    return max;
+//}
 

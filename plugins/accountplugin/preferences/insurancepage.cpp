@@ -152,12 +152,12 @@ InsuranceWidget::InsuranceWidget(QWidget *parent) :
     countryComboBox->addItems(listForCountry);
     
     m_Model = new AccountDB::InsuranceModel(this);
-    if (m_Model->rowCount() < 1)  {
-        if (!fillEmptyAvailableModel()) {
-            QMessageBox::warning(0,trUtf8("Warning"),trUtf8("Unable to fill availablemodel whith local .csv"),
-                                 QMessageBox::Ok);
-        }
-    }
+//    if (m_Model->rowCount() < 1)  {
+//        if (!fillEmptyAvailableModel()) {
+//            QMessageBox::warning(0,trUtf8("Warning"),trUtf8("Unable to fill availablemodel whith local .csv"),
+//                                 QMessageBox::Ok);
+//        }
+//    }
     /** \todo  m_Model->setUserUuid(); */
     m_insuranceUidLabel = new QSpinBox(this);
     //m_insuranceUidLabel->setText("NULL");
@@ -209,8 +209,8 @@ void InsuranceWidget::saveModel()
                                              "Do you want to save them ?"));
         if (yes) {
            if (!m_Model->submit()) {qDebug() << __FILE__ << QString::number(__LINE__) << " insurance submit ";
-                Utils::Log::addError(this, tkTr(Trans::Constants::UNABLE_TO_SAVE_DATA_IN_DATABASE_1).
-                                                   arg(tr("insurance")), __FILE__, __LINE__);
+                LOG_ERROR(tkTr(Trans::Constants::UNABLE_TO_SAVE_DATA_IN_DATABASE_1).
+                                                   arg(tr("insurance")));
             }
         } 
         else {
@@ -230,7 +230,7 @@ void InsuranceWidget::on_addButton_clicked()
 {
     //qDebug() << __FILE__ << QString::number(__LINE__) << " rowCount1 =" << QString::number(m_Model->rowCount());
     if (!m_Model->insertRow(m_Model->rowCount()))
-        Utils::Log::addError(this, "Unable to add row", __FILE__, __LINE__);
+        LOG_ERROR("Unable to add row");
     //qDebug() << __FILE__ << QString::number(__LINE__) << " rowCount2 =" << QString::number(m_Model->rowCount());
     insuranceComboBox->setCurrentIndex(m_Model->rowCount()-1);
     m_insuranceUidLabel->setValue(calcInsuranceUid());
@@ -258,7 +258,7 @@ void InsuranceWidget::on_deleteButton_clicked()
 {
     if (!m_Model->removeRow(insuranceComboBox->currentIndex()))
     {
-    	  Utils::Log::addError(this, "Unable to remove row", __FILE__, __LINE__);
+          LOG_ERROR("Unable to remove row");
         }
     insuranceComboBox->setCurrentIndex(m_Model->rowCount() - 1);
 }
@@ -266,7 +266,7 @@ void InsuranceWidget::on_deleteButton_clicked()
 void InsuranceWidget::saveToSettings(Core::ISettings *sets)
 {
     if (!m_Model->submit()) {
-        Utils::Log::addError(this, tkTr(Trans::Constants::UNABLE_TO_SAVE_DATA_IN_DATABASE_1).arg(tr("insurance")));
+        LOG_ERROR(tkTr(Trans::Constants::UNABLE_TO_SAVE_DATA_IN_DATABASE_1).arg(tr("insurance")));
         Utils::warningMessageBox(tr("Can not submit insurance to your personnal database."),
                                  tr("An error occured during insurance saving. Datas are corrupted."));
     }
@@ -334,27 +334,24 @@ QStringList InsuranceWidget::listOfCountries(){
     QStringList list;
     QString countryFileStr = global_resourcesPath+"/textfiles/pays.txt";
     QFile file(countryFileStr);
-    if (!file.open(QIODevice::ReadOnly|QIODevice::Text))
-    {
-    	  qWarning() << __FILE__ << QString::number(__LINE__) << "pays.txt cannot open !" ;
-        }
+    if (!file.open(QIODevice::ReadOnly|QIODevice::Text)) {
+        qWarning() << __FILE__ << QString::number(__LINE__) << "pays.txt cannot open !" ;
+    }
     QTextStream stream(&file);
     while (!stream.atEnd())
     {
     	QString line = stream.readLine().trimmed();
     	//qDebug() << __FILE__ << QString::number(__LINE__) << " country =" << line;
-    	if (!line.isEmpty())
-    	{
-    		list << line;  
-    	    }
+        if (!line.isEmpty()) {
+            list << line;
+        }
     }
     return list;
 }
 
 int InsuranceWidget::calcInsuranceUid(){
     QModelIndex index = m_Model->index(m_Model->rowCount()-2,AccountDB::Constants::INSURANCE_UID);
-    if (!index.isValid())
-    {
+    if (!index.isValid()) {
     	  qWarning() << __FILE__ << QString::number(__LINE__) << "index is not valid" ;
         }
     int siteUidBefore = m_Model->data(index,Qt::DisplayRole).toInt();
@@ -364,114 +361,113 @@ int InsuranceWidget::calcInsuranceUid(){
     return siteUid;
 }
 
-static QString getCsvDefaultFile()
-{
-    QString sqlDirPath = settings()->path(Core::ISettings::BundleResourcesPath) + "/sql/account";
-    QDir dir(sqlDirPath);
-    if (!dir.exists())
-        return QString();
-    QString fileName = QString("insurances_%1.csv").arg(QLocale().name());
-    QFile file(dir.absolutePath() + QDir::separator() + fileName);
-    if (!file.exists())
-        return QString();
-    return file.fileName();
-}
+//static QString getCsvDefaultFile()
+//{
+//    QString sqlDirPath = settings()->path(Core::ISettings::BundleResourcesPath) + "/sql/account";
+//    QDir dir(sqlDirPath);
+//    if (!dir.exists())
+//        return QString();
+//    QString fileName = QString("insurances_%1.csv").arg(QLocale().name());
+//    QFile file(dir.absolutePath() + QDir::separator() + fileName);
+//    if (!file.exists())
+//        return QString();
+//    return file.fileName();
+//}
 
-QStandardItemModel *InsuranceWidget::insuranceModelByLocale()
-{
-    QStandardItemModel *model = new QStandardItemModel;
-    QString csvFileName = getCsvDefaultFile();
-    qDebug() << __FILE__ << QString::number(__LINE__) << " csvFileName =" << csvFileName ;
-    QFile file(getCsvDefaultFile());
-    // some validity checking
-    if (!file.exists()) {
-        LOG_ERROR(tkTr(Trans::Constants::FILE_1_DOESNOT_EXISTS).arg(QLocale().name() + " " + tr("Insurances")));
-        return model;
-    }
-    if (!file.open(QFile::ReadOnly | QFile::Text)) {
-        LOG_ERROR(tkTr(Trans::Constants::FILE_1_ISNOT_READABLE).arg(file.fileName()));
-        return model;
-    }
+//QStandardItemModel *InsuranceWidget::insuranceModelByLocale()
+//{
+//    QStandardItemModel *model = new QStandardItemModel;
+//    QString csvFileName = getCsvDefaultFile();
+//    qDebug() << __FILE__ << QString::number(__LINE__) << " csvFileName =" << csvFileName ;
+//    QFile file(getCsvDefaultFile());
+//    // some validity checking
+//    if (!file.exists()) {
+//        LOG_ERROR(tkTr(Trans::Constants::FILE_1_DOESNOT_EXISTS).arg(QLocale().name() + " " + tr("Insurances")));
+//        return model;
+//    }
+//    if (!file.open(QFile::ReadOnly | QFile::Text)) {
+//        LOG_ERROR(tkTr(Trans::Constants::FILE_1_ISNOT_READABLE).arg(file.fileName()));
+//        return model;
+//    }
 
-    // read the content with UTF8 coding system
-    QTextStream stream(&file);
-    stream.setCodec("UTF-8");
-    // skip first line
-    //stream.readLine();
-    //int row = 0;
-    while (!stream.atEnd())
-    {
-        int row = 0;
-        QString line = stream.readLine();
-        QStringList listOfSeparators;
-        listOfSeparators << ",\"" << ";\"" << QString("\t\"")
-                         << ",''" << ";''" << QString("\t''");
-        QString separator;
-        QString separatorStr;
-        foreach(separatorStr,listOfSeparators){
-            if (line.contains(separatorStr)){
-                separator = separatorStr;
-                }
-            }
-        if (!line.contains("INSURANCE_ID")){
-            //"INSURANCE_ID","PARENT","TYPE","LABEL","CODE","COMMENT","DEDUCTIBILITY"
-            QList<QStandardItem*> listOfItemsData;
-            QStringList listOfItems;
-            listOfItems = line.split(separator);
-            for (int i = 0; i < AccountDB::Constants::INSURANCE_MaxParam ; i += 1){
-                //model->setData(model->index(row,i),listOfItems[i],Qt::EditRole);
-        	QStandardItem * item = new QStandardItem;
-        	//qDebug() << __FILE__ << QString::number(__LINE__) << " listOfItems[i] =" << listOfItems[i] ;
-        	QString itemOfList = listOfItems[i];
-        	itemOfList.remove("\"");
-        	itemOfList.remove("'");
-        	item->setData(itemOfList);
-        	listOfItemsData << item;
-        	}
-            model->appendRow(listOfItemsData);
-            ++row;  
-            }
-    }
-    return model;
-}
+//    // read the content with UTF8 coding system
+//    QTextStream stream(&file);
+//    stream.setCodec("UTF-8");
+//    // skip first line
+//    //stream.readLine();
+//    //int row = 0;
+//    while (!stream.atEnd())
+//    {
+//        int row = 0;
+//        QString line = stream.readLine();
+//        QStringList listOfSeparators;
+//        listOfSeparators << ",\"" << ";\"" << QString("\t\"")
+//                         << ",''" << ";''" << QString("\t''");
+//        QString separator;
+//        QString separatorStr;
+//        foreach(separatorStr,listOfSeparators){
+//            if (line.contains(separatorStr)){
+//                separator = separatorStr;
+//                }
+//            }
+//        if (!line.contains("INSURANCE_ID")){
+//            //"INSURANCE_ID","PARENT","TYPE","LABEL","CODE","COMMENT","DEDUCTIBILITY"
+//            QList<QStandardItem*> listOfItemsData;
+//            QStringList listOfItems;
+//            listOfItems = line.split(separator);
+//            for (int i = 0; i < AccountDB::Constants::INSURANCE_MaxParam ; i += 1){
+//                //model->setData(model->index(row,i),listOfItems[i],Qt::EditRole);
+//        	QStandardItem * item = new QStandardItem;
+//        	//qDebug() << __FILE__ << QString::number(__LINE__) << " listOfItems[i] =" << listOfItems[i] ;
+//        	QString itemOfList = listOfItems[i];
+//        	itemOfList.remove("\"");
+//        	itemOfList.remove("'");
+//        	item->setData(itemOfList);
+//        	listOfItemsData << item;
+//        	}
+//            model->appendRow(listOfItemsData);
+//            ++row;
+//            }
+//    }
+//    return model;
+//}
 
+//bool InsuranceWidget::fillEmptyAvailableModel()
+//{
+//    bool test = false;
+//    QStandardItemModel  *model = insuranceModelByLocale();
+//    int availModelRows = model->rowCount();
+//    //qDebug() << __FILE__ << QString::number(__LINE__) << " availModelRows = " << QString::number(availModelRows) ;
+//    QString strList;
+//    for (int i = 0; i < availModelRows; i += 1){
+//        if (!m_Model->insertRows(m_Model->rowCount(),1,QModelIndex()))
+//    	  		{qWarning() << __FILE__ << QString::number(__LINE__) << QString::number(m_Model->rowCount()) ;
+//    	  			  /*QMessageBox::warning(0,trUtf8("Warning"),trUtf8("Unable to insert row \n")
+//    	  			  +__FILE__+QString::number(__LINE__),QMessageBox::Ok);*/
+//    	  		    }
+//    	  		    QString strValues;
+//    	  	for (int j = 0; j < AccountDB::Constants::INSURANCE_MaxParam ; j += 1){
+//    	  		QStandardItem * item = model->itemFromIndex(model->index(i,j));
+//    	  		QVariant value = item->data();
+//    	  		//todo, semantics
+//    	  		if (value.canConvert(QVariant::String))
+//    	  		{
+//    	  			  QString strValue = value.toString().replace("'","''");
+//    	  			  value = QVariant::fromValue(strValue);
+//    	  		    }
+//    	  		    strValues += value.toString()+" ";
+//    	  		//qDebug() << __FILE__ << QString::number(__LINE__) << " value =" << value ;
+//    	  		//qDebug() << __FILE__ << QString::number(__LINE__) << "m_Model->rowCount() =" << QString::number(m_Model->rowCount()) ;
+//    	  		if (!m_Model->setData(m_Model->index(m_Model->rowCount()-1,j),value,Qt::EditRole))
+//    	  		{
+//    	  			qWarning() << __FILE__ << QString::number(__LINE__) << "data not inserted !" ;
+//    	  		    }
+//    	  	    }
+//    	  	    strList += strValues+"\n";
+//    	      test = m_Model->submit();
+//    	      }
+//    	      qDebug() << __FILE__ << QString::number(__LINE__) << " values = \n" << strList;
 
-bool InsuranceWidget::fillEmptyAvailableModel()
-{
-    bool test = false;
-    QStandardItemModel * model = insuranceModelByLocale();
-    int availModelRows = model->rowCount();
-    //qDebug() << __FILE__ << QString::number(__LINE__) << " availModelRows = " << QString::number(availModelRows) ;
-    QString strList;
-    for (int i = 0; i < availModelRows; i += 1){
-        if (!m_Model->insertRows(m_Model->rowCount(),1,QModelIndex()))
-    	  		{qWarning() << __FILE__ << QString::number(__LINE__) << QString::number(m_Model->rowCount()) ;
-    	  			  /*QMessageBox::warning(0,trUtf8("Warning"),trUtf8("Unable to insert row \n")
-    	  			  +__FILE__+QString::number(__LINE__),QMessageBox::Ok);*/
-    	  		    }
-    	  		    QString strValues;
-    	  	for (int j = 0; j < AccountDB::Constants::INSURANCE_MaxParam ; j += 1){
-    	  		QStandardItem * item = model->itemFromIndex(model->index(i,j));
-    	  		QVariant value = item->data();
-    	  		//todo, semantics
-    	  		if (value.canConvert(QVariant::String))
-    	  		{
-    	  			  QString strValue = value.toString().replace("'","''");
-    	  			  value = QVariant::fromValue(strValue);
-    	  		    }
-    	  		    strValues += value.toString()+" ";
-    	  		//qDebug() << __FILE__ << QString::number(__LINE__) << " value =" << value ;
-    	  		//qDebug() << __FILE__ << QString::number(__LINE__) << "m_Model->rowCount() =" << QString::number(m_Model->rowCount()) ;
-    	  		if (!m_Model->setData(m_Model->index(m_Model->rowCount()-1,j),value,Qt::EditRole))
-    	  		{
-    	  			qWarning() << __FILE__ << QString::number(__LINE__) << "data not inserted !" ;  
-    	  		    }
-    	  	    }
-    	  	    strList += strValues+"\n";
-    	      test = m_Model->submit();
-    	      }
-    	      qDebug() << __FILE__ << QString::number(__LINE__) << " values = \n" << strList;
-
-    return test;
-}
+//    return test;
+//}
 

@@ -150,7 +150,7 @@ AssetsRatesWidget::AssetsRatesWidget(QWidget *parent) :
     assetsNameComboBox->setModelColumn(AccountDB::Constants::ASSETSRATES_NAME);
     setDatasToUi();
     connect(m_Mapper,SIGNAL(currentIndexChanged(int)),this,SLOT(changeSpinBoxes(int)));
-    connect(createDefaults, SIGNAL(clicked()), this, SLOT(createDefaultAssetsRates()));
+//    connect(createDefaults, SIGNAL(clicked()), this, SLOT(createDefaultAssetsRates()));
 }
 
 AssetsRatesWidget::~AssetsRatesWidget()
@@ -173,8 +173,7 @@ void AssetsRatesWidget::saveModel()
                                              "Do you want to save them ?"));
         if (yes) {
            if (!m_Model->submit()) {qDebug() << __FILE__ << QString::number(__LINE__) << " assetsrates no submit ";
-                Utils::Log::addError(this, tkTr(Trans::Constants::UNABLE_TO_SAVE_DATA_IN_DATABASE_1).
-                                                   arg(tr("assetsrates")), __FILE__, __LINE__);
+                LOG_ERROR( tkTr(Trans::Constants::UNABLE_TO_SAVE_DATA_IN_DATABASE_1).arg(tr("assetsrates")));
             }
         } else {
             m_Model->revert();
@@ -192,7 +191,7 @@ void AssetsRatesWidget::on_addButton_clicked()
 {
     qDebug() << __FILE__ << QString::number(__LINE__) << " rowCount1 =" << QString::number(m_Model->rowCount());
     if (!m_Model->insertRow(m_Model->rowCount()))
-        Utils::Log::addError(this, "Unable to add row", __FILE__, __LINE__);
+        LOG_ERROR( "Unable to add row");
     qDebug() << __FILE__ << QString::number(__LINE__) << " rowCount2 =" << QString::number(m_Model->rowCount());
     assetsNameComboBox->setCurrentIndex(m_Model->rowCount()-1);
     assetsRatesUidLabel->setText(m_user_uid);
@@ -207,26 +206,24 @@ void AssetsRatesWidget::on_addButton_clicked()
 
 void AssetsRatesWidget::on_deleteButton_clicked()
 {
-    if (!m_Model->removeRow(assetsNameComboBox->currentIndex()))
-    {
-    	  Utils::Log::addError(this, "Unable to remove row", __FILE__, __LINE__);
-        }
+    if (!m_Model->removeRow(assetsNameComboBox->currentIndex())) {
+        LOG_ERROR("Unable to remove row");
+    }
     assetsNameComboBox->setCurrentIndex(m_Model->rowCount() - 1);
 }
 
 void AssetsRatesWidget::saveToSettings(Core::ISettings *sets)
 {
     if (!m_Model->submit()) {
-        Utils::Log::addError(this, tkTr(Trans::Constants::UNABLE_TO_SAVE_DATA_IN_DATABASE_1).arg(tr("assetsrates")));
+        LOG_ERROR(tkTr(Trans::Constants::UNABLE_TO_SAVE_DATA_IN_DATABASE_1).arg(tr("assetsrates")));
         Utils::warningMessageBox(tr("Can not submit assetsrates to your personnal database."),
                                  tr("An error occured during assetsrates saving. Datas are corrupted."));
     }
-    if (!insertYearsRange())
-    {
-    	  qWarning() << __FILE__ << QString::number(__LINE__) << " Unable to insert years range !" ;
-        }
-        connect(nameEdit,SIGNAL(textEdited(const QString &)),assetsNameComboBox,SLOT(setEditText(const QString &)));
-        update();
+    if (!insertYearsRange()) {
+        qWarning() << __FILE__ << QString::number(__LINE__) << " Unable to insert years range !" ;
+    }
+    connect(nameEdit,SIGNAL(textEdited(const QString &)),assetsNameComboBox,SLOT(setEditText(const QString &)));
+    update();
 }
 
 void AssetsRatesWidget::writeDefaultSettings(Core::ISettings *s)
@@ -252,13 +249,15 @@ void AssetsRatesWidget::changeEvent(QEvent *e)
     }
 }
 
-QString AssetsRatesWidget::calcAssetsRatesUid(){
+QString AssetsRatesWidget::calcAssetsRatesUid()
+{
     QString uuidStr;
     uuidStr = QUuid::createUuid().toString();
     return uuidStr;
 }
 
-bool AssetsRatesWidget::insertYearsRange(){
+bool AssetsRatesWidget::insertYearsRange()
+{
     bool ret = true;
     QString beginYear = QString::number(beginSpinBox->value());
     QString endYear = QString::number(endSpinBox->value());
@@ -267,119 +266,67 @@ bool AssetsRatesWidget::insertYearsRange(){
     qDebug() << __FILE__ << QString::number(__LINE__) << " m_Model->rowCount =" << QString::number((m_Model->rowCount())) ;
     
     if (!m_Model->setData(m_Model->index(m_Model->rowCount()-1,AccountDB::Constants::ASSETSRATES_YEARS),
-          yearRange,Qt::EditRole))
-    {
+                          yearRange,Qt::EditRole)) {
         qWarning() << __FILE__ << QString::number(__LINE__) 
-                   << "unable to insert years range "+m_Model->lastError().text();
-        }
+                << "unable to insert years range "+m_Model->lastError().text();
+    }
     return ret;
 }
 
-static QString getCsvDefaultFile()
-{
-    QString sqlDirPath = settings()->path(Core::ISettings::BundleResourcesPath) + "/sql/account";
-    QDir dir(sqlDirPath);
-    if (!dir.exists())
-        return QString();
-    QString fileName = QString("assets_rates_%1.csv").arg(QLocale().name());
-    QFile file(dir.absolutePath() + QDir::separator() + fileName);
-    if (!file.exists())
-        return QString();
-    return file.fileName();
-}
+//static QString getCsvDefaultFile()
+//{
+//    QString sqlDirPath = settings()->path(Core::ISettings::BundleResourcesPath) + "/sql/account";
+//    QDir dir(sqlDirPath);
+//    if (!dir.exists())
+//        return QString();
+//    QString fileName = QString("assets_rates_%1.csv").arg(QLocale().name());
+//    QFile file(dir.absolutePath() + QDir::separator() + fileName);
+//    if (!file.exists())
+//        return QString();
+//    return file.fileName();
+//}
 
-void AssetsRatesWidget::createDefaultAssetsRates()
-{
-    writeDefaultsWithLocale();
-}
+//void AssetsRatesWidget::createDefaultAssetsRates()
+//{
+//    writeDefaultsWithLocale();
+//}
 
-QStandardItemModel *AssetsRatesWidget::assetsRatesModelByLocale()
-{
-    QStandardItemModel *model = new QStandardItemModel;
-    QString csvFileName = getCsvDefaultFile();
-    qDebug() << __FILE__ << QString::number(__LINE__) << " csvFileName =" << csvFileName ;
-    QFile file(getCsvDefaultFile());
-    // some validity checking
-    if (!file.exists()) {
-        LOG_ERROR(tkTr(Trans::Constants::FILE_1_DOESNOT_EXISTS).arg(QLocale().name() + " " + tr("Assets rates")));
-        return model;
-    }
-    if (!file.open(QFile::ReadOnly | QFile::Text)) {
-        LOG_ERROR(tkTr(Trans::Constants::FILE_1_ISNOT_READABLE).arg(file.fileName()));
-        return model;
-    }
+//QStandardItemModel *AssetsRatesWidget::assetsRatesModelByLocale()
+//            }
+//    }
+//    return model;
+//}
 
-    // read the content with UTF8 coding system
-    QTextStream stream(&file);
-    stream.setCodec("UTF-8");
-    // skip first line
-    //stream.readLine();
-    //int row = 0;
-    while (!stream.atEnd())
-    {
-        int row = 0;
-        QString line = stream.readLine();
-        QStringList listOfSeparators;
-        listOfSeparators << ",\"" << ";\"" << QString("\t\"")
-                         << ",''" << ";''" << QString("\t''");
-        QString separator;
-        QString separatorStr;
-        foreach(separatorStr,listOfSeparators){
-            if (line.contains(separatorStr)){
-                separator = separatorStr;
-                }
-            }
-        if (!line.contains("ASSETSRATES_ID")){
-            QList<QStandardItem*> listOfItemsData;
-            QStringList listOfItems;
-            listOfItems = line.split(separator);
-            for (int i = 0; i < AccountDB::Constants::ASSETSRATES_MaxParam ; i += 1){
-        	QStandardItem * item = new QStandardItem;
-        	//qDebug() << __FILE__ << QString::number(__LINE__) << " listOfItems[i] =" << listOfItems[i] ;
-        	QString itemOfList = listOfItems[i];
-        	itemOfList.remove("\"");
-        	itemOfList.remove("'");
-        	item->setData(itemOfList);
-        	listOfItemsData << item;
-        	}
-            model->appendRow(listOfItemsData);
-            ++row;  
-            }
-    }
-    return model;
-}
+//bool AssetsRatesWidget::writeDefaultsWithLocale()
+//{
+//    bool test = false;
+//    QStandardItemModel * model = assetsRatesModelByLocale();
+//    int assetsratesModelRows = model->rowCount();
+//    QString strList;
+//    for (int i = 0; i < assetsratesModelRows; i += 1) {
+//        if (!m_Model->insertRows(m_Model->rowCount(),1,QModelIndex())) {
+//    	    qWarning() << __FILE__ << QString::number(__LINE__) << QString::number(m_Model->rowCount()) ;
+//        }
+//        QString strValues;
+//        for (int j = 0; j < AccountDB::Constants::ASSETSRATES_MaxParam ; j += 1) {
+//            QStandardItem * item = model->itemFromIndex(model->index(i,j));
+//            QVariant value = item->data();
+//            if (value.canConvert(QVariant::String)) {
+//                QString strValue = value.toString().replace("'","''");
+//                value = QVariant::fromValue(strValue);
+//            }
+//            strValues += value.toString()+" ";
+//            if (!m_Model->setData(m_Model->index(m_Model->rowCount()-1,j),value,Qt::EditRole)) {
+//                qWarning() << __FILE__ << QString::number(__LINE__) << "data not inserted !" ;
+//            }
+//        }
+//        strList += strValues+"\n";
+//        test = m_Model->submit();
+//    }
+//    qDebug() << __FILE__ << QString::number(__LINE__) << " values = \n" << strList;
 
-
-bool AssetsRatesWidget::writeDefaultsWithLocale()
-{
-    bool test = false;
-    QStandardItemModel * model = assetsRatesModelByLocale();
-    int assetsratesModelRows = model->rowCount();
-    QString strList;
-    for (int i = 0; i < assetsratesModelRows; i += 1) {
-        if (!m_Model->insertRows(m_Model->rowCount(),1,QModelIndex())) {
-    	    qWarning() << __FILE__ << QString::number(__LINE__) << QString::number(m_Model->rowCount()) ;
-        }
-        QString strValues;
-        for (int j = 0; j < AccountDB::Constants::ASSETSRATES_MaxParam ; j += 1) {
-            QStandardItem * item = model->itemFromIndex(model->index(i,j));
-            QVariant value = item->data();
-            if (value.canConvert(QVariant::String)) {
-                QString strValue = value.toString().replace("'","''");
-                value = QVariant::fromValue(strValue);
-            }
-            strValues += value.toString()+" ";
-            if (!m_Model->setData(m_Model->index(m_Model->rowCount()-1,j),value,Qt::EditRole)) {
-                qWarning() << __FILE__ << QString::number(__LINE__) << "data not inserted !" ;
-            }
-        }
-        strList += strValues+"\n";
-        test = m_Model->submit();
-    }
-    qDebug() << __FILE__ << QString::number(__LINE__) << " values = \n" << strList;
-
-    return test;
-}
+//    return test;
+//}
 
 void AssetsRatesWidget::changeSpinBoxes(int index)
 {

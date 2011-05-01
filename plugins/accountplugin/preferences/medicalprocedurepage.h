@@ -92,13 +92,13 @@ private:
     void setCompletionList(const QString & text);
     void setCompletionAbstractList(const QString & text);
 
-private Q_SLOTS:
-    void createDefaultMedicalProcedures();
+//private Q_SLOTS:
+//    void createDefaultMedicalProcedures();
 
-private:
-    QStandardItemModel *MedicalProcedureModelByLocale();
-    bool fillEmptyMPModel();
-    int numberOfLinesForProgressBar();
+//private:
+//    QStandardItemModel *MedicalProcedureModelByLocale();
+//    bool fillEmptyMPModel();
+//    int numberOfLinesForProgressBar();
 
 private:
     AccountDB::MedicalProcedureModel *m_Model;
