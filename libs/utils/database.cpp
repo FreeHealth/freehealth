@@ -1477,6 +1477,16 @@ bool Database::executeSqlFile(const QString &connectionName, const QString &file
 /**  \brief Import a CSV structured file \e fielName into a database \e connectionName, table \e table, using the speficied \e separator, and \e ingoreFirstLine or not.*/
 bool Database::importCsvToDatabase(const QString &connectionName, const QString &fileName, const QString &table, const QString &separator, bool ignoreFirstLine)
 {
+    // get database
+    QSqlDatabase db = QSqlDatabase::database(connectionName);
+    if (!db.isOpen()) {
+        if (!db.open()) {
+            LOG_ERROR_FOR("Database", tkTr(Trans::Constants::UNABLE_TO_OPEN_DATABASE_1_ERROR_2)
+                          .arg(db.connectionName(), db.lastError().text()));
+            return false;
+        }
+    }
+
     QString content = Utils::readTextFile(fileName, Utils::DontWarnUser);
     if (content.isEmpty())
         return false;
@@ -1486,29 +1496,19 @@ bool Database::importCsvToDatabase(const QString &connectionName, const QString 
     if (ignoreFirstLine)
         start = 1;
 
-    // get database
-    QSqlDatabase db = QSqlDatabase::database(connectionName);
-    if (!db.isOpen()) {
-        if (!db.open()) {
-            Utils::Log::addError("Database", tkTr(Trans::Constants::UNABLE_TO_OPEN_DATABASE_1_ERROR_2)
-                                 .arg(db.connectionName(), db.lastError().text()));
-            return false;
-        }
-    }
-
     // get table field's name
     if (!db.tables().contains(table)) {
-        Utils::Log::addError("Database", "No table found");
+        LOG_ERROR_FOR("Database", "No table found");
         return false;
     }
     // prepare the sql query
     QSqlRecord record = db.record(table);
     QString req = "INSERT INTO " + table + " (\n";
     for(int i = 0; i < record.count(); ++i) {
-        req += record.fieldName(i) + ", \n";
+        req += "`" + record.fieldName(i) + "`, ";
     }
-    req.chop(3);
-    req += "\n) VALUES (";
+    req.chop(2);
+    req += ")\n VALUES (";
 
     db.transaction();
 
@@ -1520,7 +1520,10 @@ bool Database::importCsvToDatabase(const QString &connectionName, const QString 
             if (val.isEmpty()) {
                 reqValues += "NULL, ";
             } else {
+                /** \todo this needs some improvements (string, numbers, " chars...) */
                 if (val.startsWith("'") && val.endsWith("'")) {
+                    reqValues += val + ", ";
+                } else if (val.startsWith("\"") && val.endsWith("\"")) {
                     reqValues += val + ", ";
                 } else if (val.contains(QRegExp("\\D", Qt::CaseInsensitive))) {
                     QString tmp = val;
