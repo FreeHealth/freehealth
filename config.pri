@@ -5,6 +5,7 @@ isEmpty(TARGET) {
 # include the generic cofiguration file (define some paths)
 SOURCES_ROOT_PATH        = $${PWD}
 include(buildspecs/config_paths.pri)
+include(buildspecs/svnversion.pri)
 
 macx:include(buildspecs/config_mac.pri)
 else:linux*:include(buildspecs/config_linux.pri)

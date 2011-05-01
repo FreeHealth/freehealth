@@ -776,10 +776,7 @@ QTreeWidget* SettingsPrivate::getTreeWidget(QWidget *parent) const
         new QTreeWidgetItem(compilItem, QStringList() << tr("Compile mode") << Trans::ConstantTranslations::tkTr(Trans::Constants::BUILD_DEBUG));
     else
         new QTreeWidgetItem(compilItem, QStringList() << tr("Compile mode") << Trans::ConstantTranslations::tkTr(Trans::Constants::BUILD_RELEASE));
-    if (Utils::isFullApplication())
-        new QTreeWidgetItem(compilItem, QStringList() << tr("Application source") << Trans::ConstantTranslations::tkTr(Trans::Constants::BUILD_FULLAPP));
-    else
-        new QTreeWidgetItem(compilItem, QStringList() << tr("Application source") << Trans::ConstantTranslations::tkTr(Trans::Constants::BUILD_SVNAPP));
+    new QTreeWidgetItem(compilItem, QStringList() << tr("SVN version") << QString(SVN_VERSION));
 
 
     // add paths
@@ -877,10 +874,7 @@ QString SettingsPrivate::toString() const
         tmp += tr("Actual build : Debug\n");
     else
         tmp += tr("Actual build : Release\n");
-    if (Utils::isFullApplication())
-        tmp += tr("Actual build") + " : " + tr("Full Application Build\n");
-    else
-        tmp += tr("Actual build") + " : " + tr("Svn Build\n");
+    tmp += tr("SVN version : %1\n").arg(SVN_VERSION);
     tmp += tr("Application path : %1\n").arg(qApp->applicationDirPath());
     tmp += QString("Ini File Name\t%2").arg(fileName()) + "\n";
     tmp += tr("Using Ini File") + "\t" + fileName() + "\n";

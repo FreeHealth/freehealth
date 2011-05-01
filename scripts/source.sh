@@ -289,6 +289,11 @@ echo "**** UNPACK SOURCES PACKAGE TO CREATED DIR ****"
 tar xf $PACKPATH/sources.tar -C $PACKPATH
 rm $PACKPATH/sources.tar
 find $PACKPATH -type f -exec chmod -R 666 {} \;
+echo "   * ADDING SVN VERSION NUMBER"
+cd $PACKPATH/buildspecs
+echo "SVN_VERSION="`svn info -r HEAD $SCRIPT_PATH"/.." | grep 'Changed\ Rev' | cut -b 19-`  > svnversion.pri
+echo 'DEFINES *= "SVN_VERSION=\"\\\"$${SVN_VERSION}\\\"\""'  >> svnversion.pri
+echo ""  >> svnversion.pri
 
 echo "**** REPACK SOURCES PACKAGE FROM CREATED DIR ****"
 cd $SCRIPT_PATH

@@ -46,7 +46,7 @@ static const char* COREPLUGINSNAME = "Core";
 static const char* USERPLUGINSNAME = "UserManager";
 
 static const QString VERSION_MESSAGE =
-        QString("FreeMedForms %1 - %2 ; build on %3 %4 \n  %5 \n  Compiled with Qt: %6 - Running with Qt: %7")
+        QString("FreeMedForms %1 - %2 ; build on %3 %4 \n  SVN version: %5 \n  Compiled with Qt: %6 - Running with Qt: %7")
         .arg(PACKAGE_VERSION)
 #ifdef LINUX_INTEGRATED
 #  ifdef DEBUG
@@ -62,11 +62,7 @@ static const QString VERSION_MESSAGE =
 #  endif
 #endif
         .arg(__DATE__, __TIME__)
-#ifdef FULLAPPLICATION_BUILD
-        .arg("Full application")
-#else
-        .arg("SVN application")
-#endif
+        .arg(SVN_VERSION)
         .arg(QT_VERSION_STR)
         .arg(qVersion());
 
