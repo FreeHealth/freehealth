@@ -121,7 +121,6 @@ MedicalProcedureWidget::MedicalProcedureWidget(QWidget *parent) :
     if (m_user_fullName.isEmpty()) {
         m_user_fullName = "Admin_Test";
     }
-    save->hide();
     addButton->setIcon(theme()->icon(Core::Constants::ICONADD));
     addButton->setText("New");
     removeButton->setIcon(theme()->icon(Core::Constants::ICONREMOVE));

@@ -80,6 +80,7 @@ public:
     void setFilter(const QString & filter);
     QString filter();
     void clear();
+    bool select();
 
 public Q_SLOTS:
     bool submit();

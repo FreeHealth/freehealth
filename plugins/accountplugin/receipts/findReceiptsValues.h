@@ -43,6 +43,7 @@
 
 #include <QtGui>
 #include <QtCore>
+#include <QSqlDatabase>
 
 using namespace AccountDB;
 namespace Ui{
@@ -62,8 +63,9 @@ private:
     Ui::findValueDialog * ui;
     //receiptsManager * m_rbm;
     xmlCategoriesParser * m_xmlParser;
-    MedicalProcedureModel * model;
-    QStandardItemModel * itemModel;
+    QSqlDatabase m_db;
+    //MedicalProcedureModel * model;
+    //QStandardItemModel * itemModel;
     QHash<QString,QString> m_hashValuesChoosen;
     void initialize();
     void fillComboCategories();

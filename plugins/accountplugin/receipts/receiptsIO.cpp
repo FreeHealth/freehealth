@@ -78,7 +78,7 @@ bool receiptsEngine::insertIntoAccount(const QHash<int,QVariant> &hashValues, co
     
     for(int i = 1 ; i < ACCOUNT_MaxParam ; i ++){
          data = hashValues.value(i);
-         qDebug() << __FILE__ << QString::number(__LINE__) << " data + i =" << data.toString()+" "+QString::number(i);
+         //qDebug() << __FILE__ << QString::number(__LINE__) << " data + i =" << data.toString()+" "+QString::number(i);
          if (!m_mpmodel-> setData(m_mpmodel->index(rowBefore,i), data ,Qt::EditRole))
             {
             	qWarning() << __FILE__ << QString::number(__LINE__) << " model account error = " 

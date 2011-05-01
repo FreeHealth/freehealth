@@ -71,7 +71,6 @@ public:
     
     void setTable(){
           m_SqlTable->setTable(AccountDB::AccountBase::instance()->table(Constants::Table_MedicalProcedure));
-
     }
     
     /*void refreshFilter()
@@ -130,7 +129,7 @@ int MedicalProcedureModel::rowCount(const QModelIndex &parent) const
 { 
     int rows = 0;
     d->m_SqlTable->setFilter("");
-    d->m_SqlTable->select();
+    //d->m_SqlTable->select();
     rows = d->m_SqlTable->rowCount(parent);
     return rows;
 }
@@ -256,7 +255,7 @@ bool MedicalProcedureModel::removeRows(int row, int count, const QModelIndex &pa
 
 void MedicalProcedureModel::setFilter(const QString & filter){
     d->m_SqlTable->setFilter(filter);
-    //d->m_SqlTable->select();
+    d->m_SqlTable->select();
 }
 
 QString MedicalProcedureModel::filter(){
@@ -289,4 +288,8 @@ QSqlError MedicalProcedureModel::lastError(){
 
 void MedicalProcedureModel::clear(){
     d->m_SqlTable->clear();
+}
+
+bool MedicalProcedureModel::select(){
+    return d->m_SqlTable->select();
 }

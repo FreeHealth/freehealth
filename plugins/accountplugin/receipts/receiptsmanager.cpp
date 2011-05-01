@@ -281,7 +281,7 @@ QHash<QString,QString> receiptsManager::getPreferentialActFromThesaurus(){
     {
         qWarning() << __FILE__ << QString::number(__LINE__) << "data is empty !" ;
     	data = "NULL";
-    	value = 23.00;
+    	value = 0.00;
     	hash.insert(data,QString::number(value));
         }
     return hash;

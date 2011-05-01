@@ -30,6 +30,8 @@
  *      NAME <MAIL@ADRESS>                                                 *
  ***************************************************************************/
 #include "findReceiptsValues.h"
+#include <QSqlQuery>
+#include <QSqlTableModel>
 
 using namespace AccountDB;
 using namespace Constants;
@@ -38,7 +40,8 @@ findReceiptsValues::findReceiptsValues(QWidget * parent):QDialog(parent){
   ui = new Ui::findValueDialog;
   ui->setupUi(this);
   ui->nextButton->hide();
-  model = new MedicalProcedureModel(parent);
+  MedicalProcedureModel model(parent);
+  m_db = QSqlDatabase::database(Constants::DB_ACCOUNTANCY);
   fillComboCategories();
   initialize();
   QString comboValue = ui->comboBoxCategories->currentText().trimmed();
@@ -74,6 +77,7 @@ void findReceiptsValues::fillComboCategories(){
     QStringList choiceList ;
     QHash<QString,QString> hashCategories = m_xmlParser->readXmlFile()[0];
     choiceList = hashCategories.value("typesOfReceipts").split(",");
+    MedicalProcedureModel *model = new MedicalProcedureModel(this);
     int MPRows = model->rowCount(QModelIndex());
     for (int i = 0; i < MPRows; i += 1)
     {
@@ -87,7 +91,7 @@ void findReceiptsValues::fillComboCategories(){
     ui->comboBoxCategories->addItems(choiceList);
 }
 
-void findReceiptsValues::fillListViewValues(const QString & comboItem){
+/*void findReceiptsValues::fillListViewValues(const QString & comboItem){
     QString filter = QString("%1 LIKE '%%2%'").arg("TYPE",comboItem);
     if (!((itemModel = new QStandardItemModel(this)) == NULL) )
     {
@@ -126,7 +130,46 @@ void findReceiptsValues::fillListViewValues(const QString & comboItem){
     {
     	  enableShowNextTable();
         }
-   
+}*/
+
+void findReceiptsValues::fillListViewValues(const QString & comboItem){
+    const QString baseName = trUtf8("medical_procedure");
+    const QString strItem = comboItem.trimmed();
+    const QString name = trUtf8("NAME");
+    const QString amount = trUtf8("AMOUNT");
+    const QString type = trUtf8("TYPE");
+    QString filter = QString("WHERE %1 = '%2'").arg(type,strItem);
+    QString req = QString("SELECT %1,%2 FROM %3 ").arg(name,amount,baseName )+filter;
+    QStandardItemModel *model = new QStandardItemModel(0,2,this);
+    int row = 0;
+    QSqlQuery q(m_db);
+    if (!q.exec(req))
+    {
+    	 qWarning() << __FILE__ << QString::number(__LINE__) 
+    	                        << "Error __FILE__"+QString::number(__LINE__)+q.lastError().text() ; 
+        }
+    while (q.next())
+    {
+    	QString n = q.value(0).toString();
+    	QString a = q.value(1).toString();
+    	//qDebug() << __FILE__ << QString::number(__LINE__) << " n and a	= " << n << a;
+    	model->insertRows(row,1,QModelIndex());
+    	model->setData(model->index(row,0),n,Qt::EditRole);
+        model->setData(model->index(row,1),a,Qt::EditRole);
+        model->submit();
+        //qDebug() << __FILE__ << QString::number(__LINE__) << " model data =" << model->data(model->index(row,0),Qt::DisplayRole).toString();
+        ++row;
+        //qDebug() << __FILE__ << QString::number(__LINE__) << " rows =" << QString::number(row) ;
+        }
+    ui->tableViewOfValues->setModel(model);
+    ui->tableViewOfValues-> setSelectionBehavior(QAbstractItemView::SelectRows);
+    ui->tableViewOfValues-> setSelectionMode(QAbstractItemView::SingleSelection);
+    ui->tableViewOfValues->horizontalHeader()->setStretchLastSection ( true );
+    ui->tableViewOfValues->setGridStyle(Qt::NoPen);
+    /*if (tableViewIsFull(ui->tableViewOfValues->model()))
+    {
+    	  enableShowNextTable();
+        }*/
 }
 
 void findReceiptsValues::chooseValue(const QModelIndex& index){
@@ -154,7 +197,7 @@ QHash<QString,QString> findReceiptsValues::getChoosenValues(){
     return m_hashValuesChoosen;
 }
 
-void findReceiptsValues::on_lineEditFilter_textChanged(const QString & text){
+/*void findReceiptsValues::on_lineEditFilter_textChanged(const QString & text){
     if (!((itemModel = new QStandardItemModel(this)) == NULL) )
     {
         itemModel->clear();
@@ -195,6 +238,43 @@ void findReceiptsValues::on_lineEditFilter_textChanged(const QString & text){
     {
     	  enableShowNextTable();
         }
+}*/
+
+void findReceiptsValues::on_lineEditFilter_textChanged(const QString & text){
+    QString comboChoice = ui->comboBoxCategories->currentText();
+    QString filterText = ""+text+"%";
+    QString filter = QString("WHERE %1 LIKE '%2' AND %3 LIKE '%4'").arg("TYPE",comboChoice,"NAME",filterText);
+    const QString baseName = trUtf8("medical_procedure");
+    const QString name = trUtf8("NAME");
+    const QString amount = trUtf8("AMOUNT");
+    const QString type = trUtf8("TYPE");
+    QString req = QString("SELECT %1,%2 FROM %3 ").arg(name,amount,baseName )+filter;
+    QStandardItemModel *model = new QStandardItemModel(1,2,this);
+    int row = 0;
+    QSqlQuery q(m_db);
+    if (!q.exec(req))
+    {
+    	 qWarning() << __FILE__ << QString::number(__LINE__) 
+    	                        << "Error __FILE__"+QString::number(__LINE__)+q.lastError().text() ; 
+        }
+    while (q.next())
+    {
+    	QString n = q.value(0).toString();
+    	QString a = q.value(1).toString();
+    	//qDebug() << __FILE__ << QString::number(__LINE__) << " n and a	= " << n << a;
+    	model->insertRows(row,1,QModelIndex());
+    	model->setData(model->index(row,0),n,Qt::EditRole);
+        model->setData(model->index(row,1),a,Qt::EditRole);
+        model->submit();
+        //qDebug() << __FILE__ << QString::number(__LINE__) << " model data =" << model->data(model->index(row,0),Qt::DisplayRole).toString();
+        ++row;
+        //qDebug() << __FILE__ << QString::number(__LINE__) << " rows =" << QString::number(row) ;
+        }
+    ui->tableViewOfValues->setModel(model);
+    ui->tableViewOfValues-> setSelectionBehavior(QAbstractItemView::SelectRows);
+    ui->tableViewOfValues-> setSelectionMode(QAbstractItemView::SingleSelection);
+    ui->tableViewOfValues->horizontalHeader()->setStretchLastSection ( true );
+    ui->tableViewOfValues->setGridStyle(Qt::NoPen);
 }
 
 bool findReceiptsValues::tableViewIsFull(QAbstractItemModel * model){
@@ -213,7 +293,7 @@ void findReceiptsValues::enableShowNextTable(){
     ui->nextButton->show();
 }
 
-void findReceiptsValues::showNext(){
+/*void findReceiptsValues::showNext(){
     QAbstractItemModel * abModel = ui->tableViewOfValues->model();
     int rows = abModel->rowCount();
     qDebug() << __FILE__ << QString::number(__LINE__) << " row =" << QString::number(rows) ;
@@ -248,6 +328,31 @@ void findReceiptsValues::showNext(){
     	  qWarning() << __FILE__ << QString::number(__LINE__) << "no header data available";
         } 
     ui->tableViewOfValues->setModel(itemModel);
+    ui->tableViewOfValues-> setSelectionBehavior(QAbstractItemView::SelectRows);
+    ui->tableViewOfValues-> setSelectionMode(QAbstractItemView::SingleSelection);
+    ui->tableViewOfValues->horizontalHeader()->setStretchLastSection ( true );
+    ui->tableViewOfValues->setGridStyle(Qt::NoPen);
+}*/
+
+void findReceiptsValues::showNext(){
+    QAbstractItemModel * abModel = ui->tableViewOfValues->model();
+    int rows = abModel->rowCount();
+    qDebug() << __FILE__ << QString::number(__LINE__) << " row =" << QString::number(rows) ;
+    int numberOfLastRow = abModel->headerData(rows -1,Qt::Vertical,Qt::DisplayRole).toInt();
+    QString lastData = abModel->data(abModel->index(numberOfLastRow -1,0 ),Qt::DisplayRole).toString();
+    QString comboChoice = ui->comboBoxCategories->currentText();
+    QString afterSqlFilter = QString("%1 LIKE '%2' AND %3 >= '%4'").arg("TYPE",comboChoice,"NAME",lastData);
+    MedicalProcedureModel *model = new MedicalProcedureModel(this);
+    model->setFilter(afterSqlFilter);
+    ui->tableViewOfValues->setModel(model);
+    ui->tableViewOfValues->setColumnHidden(MP_ID,true);
+    ui->tableViewOfValues->setColumnHidden(MP_UID,true);
+    ui->tableViewOfValues->setColumnHidden(MP_USER_UID,true);
+    ui->tableViewOfValues->setColumnHidden(MP_INSURANCE_UID,true);
+    ui->tableViewOfValues->setColumnHidden(MP_REIMBOURSEMENT,true);
+    ui->tableViewOfValues->setColumnHidden(MP_ABSTRACT,true);
+    ui->tableViewOfValues->setColumnHidden(MP_TYPE,true);
+    ui->tableViewOfValues->setColumnHidden(MP_DATE,true);    
     ui->tableViewOfValues-> setSelectionBehavior(QAbstractItemView::SelectRows);
     ui->tableViewOfValues-> setSelectionMode(QAbstractItemView::SingleSelection);
     ui->tableViewOfValues->horizontalHeader()->setStretchLastSection ( true );
