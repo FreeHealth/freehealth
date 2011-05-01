@@ -422,7 +422,11 @@ ReceiptViewer::ReceiptViewer(QWidget *parent) :
     m_insuranceUid = 0;
     m_model = new InternalAmount::AmountModel(this);
     ui->setupUi(this);
-    ui->amountsView->verticalHeader()->setResizeMode(QHeaderView::ResizeToContents);
+    ui->bankedLabel->hide();
+    ui->dateBanked->hide();
+    ui->bookLabel->hide();
+    ui->dateBook->hide();
+    ui->amountsView->verticalHeader()->setResizeMode(QHeaderView::Fixed);
     ui->amountsView->horizontalHeader()->setResizeMode(QHeaderView::ResizeToContents);
     ui->amountsView->setModel(m_model);
     ui->amountsView->setItemDelegateForColumn(0, new Utils::SpinBoxDelegate(this));
