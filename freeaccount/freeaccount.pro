@@ -7,6 +7,8 @@ BUILD_PATH_POSTFIXE = FreeAccount
 
 # include general configuration
 INSTALL_DRUGS = 0
+INSTALL_ACCOUNT_FILES = 1
+
 include( ../config.pri )
 !CONFIG(debug, release|debug):include( ../buildspecs/install.pri )
 

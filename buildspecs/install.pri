@@ -216,6 +216,12 @@ freeicd_db.path=$${INSTALL_DATABASES_PATH}/icd10
 freeicd_db.files=$${SOURCES_DATABASES}/icd10/icd10.db
 INSTALLS+=freeicd_sqlfile freeicd_db
 }
+# Install FreeAccount SQL files
+eval(INSTALL_ACCOUNT_FILES=1){
+account_sqlfile.path=$${INSTALL_RESOURCES_PATH}/sql/account
+account_sqlfile.files=$${SOURCES_GLOBAL_RESOURCES}/sql/account/*
+INSTALLS+=account_sqlfile
+}
 
 # configuration for non-integrated solutions (everything is included inside the bundle)
 !isEmpty(INSTALL_QT_INSIDE_BUNDLE){

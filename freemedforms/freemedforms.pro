@@ -7,6 +7,7 @@ PACKAGE_VERSION = 0.5.9~alpha1
 FMF_BUILD = 1
 INSTALL_DRUGS = 1
 INSTALL_ICD_DATABASE = 1
+INSTALL_ACCOUNT_FILES = 1
 
 # include general configuration
 include( ../config.pri )

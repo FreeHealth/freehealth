@@ -164,6 +164,7 @@ global_resources/pixmap \
 global_resources/package_helpers/freeaccount* \
 global_resources/package_helpers/freemedforms.url \
 global_resources/profiles \
+global_resources/sql/account \
 global_resources/textfiles/boys_surnames.csv \
 global_resources/textfiles/default_user_footer.htm \
 global_resources/textfiles/default_user_header.htm \
@@ -199,6 +200,7 @@ global_resources/forms \
 global_resources/package_helpers \
 global_resources/pixmap \
 global_resources/profiles \
+global_resources/sql/account \
 global_resources/textfiles/FreeMedForms.desktop \
 global_resources/textfiles/boys_surnames.csv \
 global_resources/textfiles/default_user_footer.htm \
