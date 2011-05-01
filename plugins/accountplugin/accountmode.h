@@ -34,6 +34,8 @@
 
 #include <coreplugin/modemanager/basemode.h>
 
+#include <QStackedWidget>
+
 namespace Account {
 namespace Internal {
 
@@ -43,8 +45,10 @@ class AccountMode : public Core::BaseMode
 public:
     explicit AccountMode(QObject *parent = 0);
 
-private:
+    void setCentralWidget(QWidget *widget);
 
+private:
+    QStackedWidget *m_Stack;
 };
 
 }  // End namespace Internal

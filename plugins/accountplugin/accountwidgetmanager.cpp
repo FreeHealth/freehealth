@@ -39,6 +39,10 @@
 #include <accountplugin/ledger/ledgerviewer.h>
 #include <accountplugin/movements/movementsviewer.h>
 
+#ifdef FREEMEDFORMS
+#    include <accountplugin/accountmode.h>
+#endif
+
 #include <coreplugin/constants.h>
 #include <coreplugin/icore.h>
 #include <coreplugin/itheme.h>
@@ -46,6 +50,8 @@
 #include <coreplugin/contextmanager/contextmanager.h>
 #include <coreplugin/actionmanager/actionmanager.h>
 #include <coreplugin/uniqueidmanager.h>
+#include <coreplugin/modemanager/modemanager.h>
+#include <coreplugin/modemanager/imode.h>
 
 #include <utils/log.h>
 #include <translationutils/constanttranslations.h>
@@ -60,6 +66,7 @@ using namespace Trans::ConstantTranslations;
 inline static Core::ActionManager *actionManager() {return Core::ICore::instance()->actionManager();}
 static inline Core::ContextManager *contextManager() { return Core::ICore::instance()->contextManager(); }
 static inline Core::IMainWindow *mainWindow() { return Core::ICore::instance()->mainWindow(); }
+static inline Core::ModeManager *modeManager() {return Core::ICore::instance()->modeManager();}
 
 ///////////////////////////////////////////////////////////////////////////////////////////////////////////
 /////////////////////////////////////////      MANAGER      ///////////////////////////////////////////////
@@ -241,6 +248,7 @@ void AccountActionHandler::updateActions()
 {
 }
 
+#ifndef FREEMEDFORMS
 void AccountActionHandler::addReceipts()
 {
     QWidget *w = mainWindow()->centralWidget();
@@ -280,3 +288,40 @@ void AccountActionHandler::assets()
     w = 0;
     mainWindow()->setCentralWidget(new AssetsViewer(mainWindow()));
 }
+#else
+void AccountActionHandler::addReceipts()
+{
+    AccountMode *accMode = qobject_cast<AccountMode*>(modeManager()->mode(Core::Constants::MODE_ACCOUNT));
+    accMode->setCentralWidget(new PreferedReceipts(mainWindow()));
+    modeManager()->activateMode(Core::Constants::MODE_ACCOUNT);
+}
+
+void AccountActionHandler::receipts()
+{
+    AccountMode *accMode = qobject_cast<AccountMode*>(modeManager()->mode(Core::Constants::MODE_ACCOUNT));
+    accMode->setCentralWidget(new ReceiptViewer(mainWindow()));
+    modeManager()->activateMode(Core::Constants::MODE_ACCOUNT);
+}
+
+void AccountActionHandler::ledger()
+{
+    AccountMode *accMode = qobject_cast<AccountMode*>(modeManager()->mode(Core::Constants::MODE_ACCOUNT));
+    accMode->setCentralWidget(new LedgerViewer(mainWindow()));
+    modeManager()->activateMode(Core::Constants::MODE_ACCOUNT);
+}
+
+void AccountActionHandler::movements()
+{
+    AccountMode *accMode = qobject_cast<AccountMode*>(modeManager()->mode(Core::Constants::MODE_ACCOUNT));
+    accMode->setCentralWidget(new MovementsViewer(mainWindow()));
+    modeManager()->activateMode(Core::Constants::MODE_ACCOUNT);
+}
+
+void AccountActionHandler::assets()
+{
+    AccountMode *accMode = qobject_cast<AccountMode*>(modeManager()->mode(Core::Constants::MODE_ACCOUNT));
+    accMode->setCentralWidget(new AssetsViewer(mainWindow()));
+    modeManager()->activateMode(Core::Constants::MODE_ACCOUNT);
+}
+#endif
+

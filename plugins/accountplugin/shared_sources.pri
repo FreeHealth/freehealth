@@ -16,8 +16,7 @@ SOURCES = $${PWD}/accountplugin.cpp \
     $${PWD}/accountview.cpp \
     $${PWD}/accountcontextualwidget.cpp
 
-FORMS = $${PWD}/accountview.ui \
-    accountdatabasedefaultswidget.ui
+FORMS = $${PWD}/accountview.ui
 
 #include preferences
 HEADERS += \
@@ -53,7 +52,8 @@ FORMS += $${PWD}/preferences/accountuseroptionspage.ui \
     $${PWD}/preferences/virtualdatabasecreator.ui \
     $${PWD}/preferences/percentagespage.ui \
     $${PWD}/preferences/assetsratespage.ui \
-    $${PWD}/preferences/distancerulespage.ui
+    $${PWD}/preferences/distancerulespage.ui \
+    $${PWD}/preferences/accountdatabasedefaultswidget.ui
 
 # include receipts
 HEADERS += \

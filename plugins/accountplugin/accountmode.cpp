@@ -50,8 +50,20 @@ AccountMode::AccountMode(QObject *parent) :
     setUniqueModeName(Core::Constants::MODE_ACCOUNT);
 //    const QList<int> &context;
 //    setContext();
-    setWidget(new Account::AccountView);
+    m_Stack = new QStackedWidget;
+    m_Stack->addWidget(new Account::AccountView);
+    setWidget(m_Stack);
 
     /** \todo connect actions from the account menu */
     /** \todo connect patient changed and refresh views ? */
+}
+
+void AccountMode::setCentralWidget(QWidget *widget)
+{
+    QWidget *w = m_Stack->currentWidget();
+    m_Stack->removeWidget(w);
+    delete w;
+    w = 0;
+    m_Stack->addWidget(widget);
+    m_Stack->setCurrentWidget(widget);
 }
