@@ -688,6 +688,9 @@ void ReceiptViewer::save()
     if (!r.insertIntoAccount(hash,userUuid)) {
         QMessageBox::warning(0,trUtf8("Warning"),trUtf8("Error inserting into AccountModel!"),QMessageBox::Ok);
     }
+    else{
+        clearAll(true);
+        }
 }
 
 void ReceiptViewer::saveAndQuit()
