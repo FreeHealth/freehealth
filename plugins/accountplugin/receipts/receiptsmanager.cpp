@@ -30,6 +30,7 @@
  *      NAME <MAIL@ADRESS>                                                 *
  ***************************************************************************/
 #include "receiptsmanager.h"
+#include "receiptsIO.h"
 #include "xmlcategoriesparser.h"
 
 #include <accountbaseplugin/constants.h>
@@ -248,12 +249,13 @@ QHash<QString,QVariant> receiptsManager::getHashOfThesaurus(){
 
 QHash<QString,QString> receiptsManager::getPreferentialActFromThesaurus(){
     QHash<QString,QString> hash;
+    receiptsEngine rIO;
     ThesaurusModel model(this);
     QString filter = QString("%1 = '%2'").arg("PREFERED",QString::number(true));
     model.setFilter(filter);
     model.select();
     QString data = model.data(model.index(0,THESAURUS_VALUES)).toString();
-    MedicalProcedureModel MPmodel(this);
+    
     double value = 0.00;
     QString MPfilter ;
     QStringList list;
@@ -261,6 +263,8 @@ QHash<QString,QString> receiptsManager::getPreferentialActFromThesaurus(){
     qDebug() << __FILE__ << QString::number(__LINE__) << " data is not empty " ;
         if (data.contains("+"))
         {
+    	    qDebug() << __FILE__ << QString::number(__LINE__) << "data.contains(+)"   ;
+    	    
     	    list = data.split("+");
           }
         else{
@@ -268,12 +272,11 @@ QHash<QString,QString> receiptsManager::getPreferentialActFromThesaurus(){
             }
         QString str;
         foreach(str,list){
-            str = str.trimmed();
+            const QString field = trUtf8("NAME");
+            QHash<QString,double> hashActAmount = rIO.getFilteredValueFromMedicalProcedure(str,field); 
             qDebug() << __FILE__ << QString::number(__LINE__) << " str =" << str ;
-            MPfilter = QString("%1='%2'").arg("NAME",str);
-            qDebug() << __FILE__ << QString::number(__LINE__) << " MPfilter =" << MPfilter ;
-            MPmodel.setFilter(MPfilter);
-            value += MPmodel.data(MPmodel.index(0,MP_AMOUNT)).toDouble();
+            qDebug() << __FILE__ << QString::number(__LINE__) << " valueBef =" << QString::number(hashActAmount.value(str)) ;
+            value += hashActAmount.value(str);
             }
         hash.insert(data,QString::number(value));
     }

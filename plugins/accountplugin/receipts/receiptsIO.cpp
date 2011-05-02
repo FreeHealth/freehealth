@@ -36,6 +36,7 @@
 #include <QMessageBox>
 #include <QUuid>
 #include <QDate>
+#include <QSqlQuery>
 
 #include <QDebug>
 
@@ -46,6 +47,7 @@ using namespace Constants;
 
 receiptsEngine::receiptsEngine(){
     m_mpmodel = new AccountModel(this);
+    m_db = QSqlDatabase::database(Constants::DB_ACCOUNTANCY);
 }
 
 receiptsEngine::~receiptsEngine()
@@ -294,3 +296,31 @@ QHash<int,QVariant> receiptsEngine::getListOfPreferedValues(QString & userUuid,
     return hash;
 }
 
+QHash<QString,double> receiptsEngine::getFilteredValueFromMedicalProcedure(const QString & act, 
+                                                                              const QString & field){
+    QHash<QString,double> hash;
+    const QString baseName = trUtf8("medical_procedure");
+    const QString name = act;
+    const QString amount = trUtf8("AMOUNT");
+    const QString type = field;
+    QString filter = QString("WHERE %1 = '%2'").arg(type,act);
+    QString req = QString("SELECT %1 FROM %3 ").arg(amount,baseName )+filter;
+    QSqlQuery q(m_db);
+    if (!q.exec(req))
+    {
+    	 qWarning() << __FILE__ << QString::number(__LINE__) 
+    	                        << "Error __FILE__"+QString::number(__LINE__)+q.lastError().text() ; 
+        }
+    while (q.next())
+    {
+    	double amount = q.value(0).toDouble();
+    	//qDebug() << __FILE__ << QString::number(__LINE__) << " n and a	= " << n << a;
+        hash.insertMulti(act,amount);
+        } 
+    if (hash.size()>1)
+    {
+    	  QMessageBox::warning(0,trUtf8("Warning"),trUtf8("More than one value")+__FILE__+QString::number(__LINE__),
+    	  	                                     QMessageBox::Ok);
+        }   
+    return hash;
+}

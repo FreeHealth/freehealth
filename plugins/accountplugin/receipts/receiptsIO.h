@@ -44,7 +44,6 @@
 #include <QSqlDatabase>
 #include <QSqlTableModel>
 
-
 using namespace AccountDB;
 class ACCOUNT_EXPORT receiptsEngine : public QObject
 {
@@ -59,6 +58,7 @@ public:
     bool addBoolTrue(QString & data);
     double getMinDistanceValue(const QString & data);
     QHash<int,QVariant> getListOfPreferedValues(QString & userUuid,int choice);
+    QHash<QString,double> getFilteredValueFromMedicalProcedure(const QString & string, const QString & field);
 
 private:
     enum typeOfChoice {

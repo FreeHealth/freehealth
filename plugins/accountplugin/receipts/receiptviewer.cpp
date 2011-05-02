@@ -605,11 +605,12 @@ void ReceiptViewer::actionsOfTreeView(const QModelIndex &index){
             QStringList list;
             list = data.split("+");
             receiptsEngine r;
-            QHash<QString,QVariant> hashFromMp ;
-            hashFromMp = r.getNamesAndValuesFromMP();
+            QHash<QString,double> hashFromMp ;
+            const QString field = trUtf8("NAME");
             QString str;
             foreach(str,list){
-                QString value = hashFromMp.value(str).toString();
+                hashFromMp = r.getFilteredValueFromMedicalProcedure(str,field);
+                QString value = QString::number(hashFromMp.value(str));
                 hashOfValues.insertMulti(str,value);
                 }
             fillModel(hashOfValues,typeOfPayment,percentage);

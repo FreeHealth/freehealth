@@ -71,6 +71,8 @@ public:
     
     void setTable(){
           m_SqlTable->setTable(AccountDB::AccountBase::instance()->table(Constants::Table_MedicalProcedure));
+          m_SqlTable->setFilter("");
+          m_SqlTable->select();
     }
     
     /*void refreshFilter()
@@ -113,7 +115,7 @@ MedicalProcedureModel::MedicalProcedureModel(QObject *parent) :
 {
 //    d->m_SqlTable->setEditStrategy(QSqlTableModel::OnManualSubmit);
     d->m_SqlTable->setEditStrategy(QSqlTableModel::OnFieldChange);
-    d->m_SqlTable->select();
+    //d->m_SqlTable->select();
 }
 
 MedicalProcedureModel::~MedicalProcedureModel()
@@ -255,7 +257,7 @@ bool MedicalProcedureModel::removeRows(int row, int count, const QModelIndex &pa
 
 void MedicalProcedureModel::setFilter(const QString & filter){
     d->m_SqlTable->setFilter(filter);
-    d->m_SqlTable->select();
+    //d->m_SqlTable->select();
 }
 
 QString MedicalProcedureModel::filter(){
