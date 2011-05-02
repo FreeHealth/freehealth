@@ -96,10 +96,10 @@ namespace InternalAmount {
         int columnCount(const QModelIndex &parent = QModelIndex()) const {return ColCount;}
 
         bool submit(){
-            if (!submit()) {
+            /*if (!submit()) {
                return false;
-            }
-          return true;
+            }*/
+          return QAbstractTableModel::submit();
         }
 
 

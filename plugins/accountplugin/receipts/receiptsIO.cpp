@@ -102,7 +102,7 @@ bool receiptsEngine::insertIntoAccount(const QHash<int,QVariant> &hashValues, co
     return ret;
 }
 
-QHash<QString,QVariant> receiptsEngine::getNamesAndValuesFromMP(){
+QHash<QString,QVariant> receiptsEngine::getNamesAndValuesFromMP(){//obsolete
     QHash<QString,QVariant> hash;
     MedicalProcedureModel model(this);
     int rows = model.rowCount(QModelIndex());
