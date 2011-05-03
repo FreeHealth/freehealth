@@ -356,11 +356,13 @@ double AssetsIO::getRate(const QDate &date, double duration) {
     QHash<QString,QDate> hashRatesDates;
     QStringList listChosenOfRanges;
     AssetsRatesModel model(this);
+    qDebug() << __FILE__ << QString::number(__LINE__) << " model.rowCount() =" << QString::number(model.rowCount()) ;
     for (int i = 0; i < model.rowCount(); i += 1)
     {
     	QDate dateRequest = model.data(model.index(i,ASSETSRATES_DATE),Qt::DisplayRole).toDate();
     	QString rangeReq = model.data(model.index(i,ASSETSRATES_YEARS),Qt::DisplayRole).toString();
     	QString rate = model.data(model.index(i,ASSETSRATES_RATES),Qt::DisplayRole).toString();
+    	qDebug() << __FILE__ << QString::number(__LINE__) << " rangeReq and rate =" << rangeReq+" "+rate ;
     	QStringList listOfRanges = rangeReq.split("_");
     	if (int(duration) >= listOfRanges[0].toInt() && int(duration) <= listOfRanges[1].toInt())
     	{

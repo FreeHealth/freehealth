@@ -68,11 +68,12 @@ private:
 
 
 AssetsRatesModel::AssetsRatesModel(QObject *parent) : QAbstractTableModel(parent), 
-                                                      m_UserUid(user()->value(Core::IUser::Uuid).toString()),
+                                                      //m_UserUid(user()->value(Core::IUser::Uuid).toString()),
                                                       d(new Internal::AssetsRatesModelPrivate(this))
 {
+    m_UserUid= user()->value(Core::IUser::Uuid).toString();
     d->m_SqlTable->setEditStrategy(QSqlTableModel::OnFieldChange);
-    setUserUuid(m_UserUid);
+    //setUserUuid(m_UserUid);
 }
 
 AssetsRatesModel::~AssetsRatesModel()
@@ -86,6 +87,9 @@ AssetsRatesModel::~AssetsRatesModel()
 
 int AssetsRatesModel::rowCount(const QModelIndex &parent) const
 {
+    QString filter = QString("%1='%2'").arg("USER_UID",m_UserUid);
+    d->m_SqlTable->setFilter("");
+    d->m_SqlTable->select();
     return d->m_SqlTable->rowCount(parent);
 }
 

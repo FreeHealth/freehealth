@@ -66,7 +66,7 @@ public:
     bool removeRow(int arow, const QModelIndex &aparent = QModelIndex())        { return removeRows(arow, 1, aparent); }
     bool removeColumn(int acolumn, const QModelIndex &aparent = QModelIndex())  { return removeColumns(acolumn, 1, aparent); }
 
-    void setUserUuid(const QString &uuid);
+    void setUserUuid(const QString & uuid);
     bool isDirty() const;
     void setFilter(const QString & filter);
     QString filter();
