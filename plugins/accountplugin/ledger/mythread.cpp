@@ -470,7 +470,8 @@ void ProduceDoc::fillTable(QList<QVector<QString> > & tableau,
 
     //qDebug() << __FILE__ << QString::number(__LINE__) << " thread 13 "   ;
     if(choice == MOVEMENTS_TYPE){
-        //nbreLignesTableau = m_typesMovements.size();
+        nbreLignesTableau = m_typesMovements.size();
+        qDebug() << __FILE__ << QString::number(__LINE__) << " m_typesMovements.size() =" << QString::number(m_typesMovements.size())  ;
         int nberLines = nbreLignesTableau +1 ;
         qDebug() << __FILE__ << QString::number(__LINE__) << "nberLines  =" <<  QString::number(nberLines);
         tableRecap                = cursortrieinfunction->insertTable(nberLines,2,tableFormatDone);
@@ -486,11 +487,11 @@ void ProduceDoc::fillTable(QList<QVector<QString> > & tableau,
              cellCursorDep1                 . insertText(paireDepenseMontant[1]);
         }
     }
-    //qDebug() << __FILE__ << QString::number(__LINE__) << " thread 14 "   ;
+    qDebug() << __FILE__ << QString::number(__LINE__) << " thread 14 "   ;
     //calculparmois(listforquery,table, un,trenteetquelque);//calcul par type recette et mois
     cursortrieinfunction  ->movePosition(QTextCursor::End,QTextCursor::MoveAnchor,1);
    }
-    //qDebug() << __FILE__ << QString::number(__LINE__) << " thread 15 "   ;
+    qDebug() << __FILE__ << QString::number(__LINE__) << " thread 15 "   ;
 }//end of fillTable
 
 void ProduceDoc::recupSlot(const QString & text){

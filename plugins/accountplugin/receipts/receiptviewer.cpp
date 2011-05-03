@@ -428,6 +428,7 @@ ReceiptViewer::ReceiptViewer(QWidget *parent) :
     ui->dateBook->hide();
     ui->amountsView->verticalHeader()->setResizeMode(QHeaderView::Fixed);
     ui->amountsView->horizontalHeader()->setResizeMode(QHeaderView::ResizeToContents);
+    ui->amountsView->horizontalHeader()->setResizeMode(QHeaderView::Interactive);
     ui->amountsView->setModel(m_model);
     ui->amountsView->setItemDelegateForColumn(0, new Utils::SpinBoxDelegate(this));
     ui->dateExecution->setDisplayFormat("yyyy-MM-dd");

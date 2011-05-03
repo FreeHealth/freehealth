@@ -45,7 +45,6 @@ static inline Core::IPatient *patient() { return Core::ICore::instance()->patien
 
 PreferedReceipts::PreferedReceipts(QWidget * parent):QWidget(parent),ui(new Ui::PreferedReceiptsWidget){
     ui->setupUi(this);
-    receiptsEngine receiptsIO;
     m_typeOfChoice = 0;
     choiceDialog * choice = new choiceDialog(this);
     if (choice->exec() == QDialog::Accepted)

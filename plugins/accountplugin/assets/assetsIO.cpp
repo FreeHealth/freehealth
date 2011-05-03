@@ -202,10 +202,17 @@ QString AssetsIO::getBankNameFromId(int id){
 
 int AssetsIO::getIdFromBankName(const QString & bankName){
     int id = 0;
+    QString bank = bankName;
+    if (bankName.contains("'"))
+    {
+    	  bank.replace("'","''");
+        }
+    
     BankAccountModel bankmodel(this);
-    QString filter = QString("%1 = '%2'").arg("BD_LABEL",bankName);
+    QString filter = QString("%1 = '%2'").arg("BD_LABEL",bank);
     bankmodel.setFilter(filter);
     id = bankmodel.data(bankmodel.index(0,BANKDETAILS_ID),Qt::DisplayRole).toInt();
+    qDebug() << __FILE__ << QString::number(__LINE__) << " filter =" << bankmodel.filter() ;
     return id;
 }
 
@@ -315,7 +322,8 @@ bool AssetsIO::creditValueDeletedToBankAccount(double value, int idBank){
     double newvalue = bankmodel.data(bankmodel.index(0,BANKDETAILS_BALANCE),Qt::DisplayRole).toDouble() + value;
     if (!bankmodel.setData(bankmodel.index(0,BANKDETAILS_BALANCE),newvalue,Qt::EditRole))
     {
-    	  QMessageBox::warning(0,trUtf8("Warning"),trUtf8("Unable "),QMessageBox::Ok);
+    	  QMessageBox::warning(0,trUtf8("Warning"),trUtf8("Unable to credit the value in bank balance.")+
+    	  __FILE__+QString::number(__LINE__),QMessageBox::Ok);
         }    
     return ret;
 }
@@ -361,7 +369,13 @@ double AssetsIO::getRate(const QDate &date, double duration) {
         }
     QList<QDate> valuesOfDates = hashRatesDates.values();
     qDebug() << __FILE__ << QString::number(__LINE__) << " valuesOfDates size =" << QString::number(valuesOfDates.size()) ;
-    
+    if (hashRatesDates.size()< 1)
+    {
+    	  QMessageBox::warning(0,trUtf8("Warning"),trUtf8("You have to fill defaults for assets rates.\nGo "
+    	                                       "in Configuration>Preferences to do so.\n"
+    	                                       "Otherwise result will be wrong !"),QMessageBox::Ok);
+    	  return 1.00;                                     
+        }
     qSort(valuesOfDates.begin(),valuesOfDates.end());
 
     QDate nearestDate = valuesOfDates.last();

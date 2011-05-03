@@ -235,11 +235,10 @@ QHash<int,QVariant> receiptsEngine::getListOfPreferedValues(QString & userUuid,
         QString str;
         foreach(str,list){
             str = str.trimmed();
-            qDebug() << __FILE__ << QString::number(__LINE__) << " str =" << str ;
-            MPfilter = QString("%1='%2'").arg("NAME",str);
-            qDebug() << __FILE__ << QString::number(__LINE__) << " MPfilter =" << MPfilter ;
-            MPmodel.setFilter(MPfilter);
-            value += MPmodel.data(MPmodel.index(0,MP_AMOUNT)).toDouble();
+            QString field = "NAME";
+            QHash<QString,double> hashTypeAndValue = getFilteredValueFromMedicalProcedure(str,field); 
+            double val = hashTypeAndValue.value(str);
+            value += val;
             }
     }
     else

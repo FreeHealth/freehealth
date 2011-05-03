@@ -81,6 +81,7 @@ ControlReceipts::ControlReceipts(QWidget * parent):QWidget(parent),ui(new Ui::Co
     listForCombo.removeDuplicates();
     ui->fieldComboBox->addItems(listForCombo);
     ui->fieldComboBox->setEditText(trUtf8("Patient"));
+    search();
     connect(ui->searchButton,SIGNAL(pressed()),this,SLOT(search()));
     connect(ui->deleteButton,SIGNAL(pressed()),this,SLOT(deleteLine()));
     connect(ui->duesButton,SIGNAL(pressed()),this,SLOT(printDues()));
@@ -121,8 +122,8 @@ void ControlReceipts::search(){
     ui->tableView->setColumnHidden(ACCOUNT_MEDICALPROCEDURE_XML,true);
     ui->tableView->setColumnHidden(ACCOUNT_TRACE,true);
     ui->tableView->horizontalHeader()->setResizeMode(QHeaderView::Interactive);
-    ui->tableView->horizontalHeader()  ->setResizeMode(QHeaderView::Stretch);
-    ui->tableView->resizeColumnsToContents();
+    ui->tableView->horizontalHeader()->setResizeMode(QHeaderView::ResizeToContents);
+    //ui->tableView->resizeColumnsToContents();
     QString textResult = textOfSums(m_accountModel);
     ui->resultLabel->setText(textResult);
     //refreshFilter(filter);
