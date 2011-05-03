@@ -15,24 +15,55 @@ using namespace Calendar;
 
 CalendarItemNode::~CalendarItemNode() {
 	// destroy recursively all the structure (siblings and children)
-	if (m_child)
-		delete m_child;
+	if (m_right)
+		delete m_right;
 	if (m_next)
 		delete m_next;
 }
 
+CalendarItemNode *CalendarItemNode::mostBottomNode() {
+	CalendarItemNode *node = this;
+	while (node->next())
+		node = node->next();
+	return node;
+}
+
+CalendarItemNode *CalendarItemNode::getNextCollidingNode(const CalendarItem &item) {
+	CalendarItemNode *node = mostBottomNode();
+	if (node->item().overlap(item))
+		return node;
+
+	if (node->right())
+		return node->right()->getNextCollidingNode(item);
+
+	if (node->colliding())
+		return node->colliding()->getNextCollidingNode(item);
+
+	return 0;
+}
+
 void CalendarItemNode::store(const CalendarItem &item) {
-	if (m_item.overlap(item)) { // a child?
-		if (m_child)
-			m_child->store(item);
-		else
-			m_child = new CalendarItemNode(item);
-	} else {
-		if (m_next)
-			m_next->store(item);
-		else
-			m_next = new CalendarItemNode(item);
+	CalendarItemNode *current = mostBottomNode();
+	if (current->item().overlap(item)) {
+		if (current->right())
+			current->right()->store(item);
+		else {
+			if (current->colliding()) {
+				if (current->colliding()->item().overlap(item)) {
+					if (current->m_index + 1 >= current->colliding()->m_index) { // we reached the insertion count of node before the colliding one
+						current->colliding()->store(item);
+					} else // insert it
+						current->m_right = new CalendarItemNode(item, current->m_colliding, current->m_index + 1);
+				} else
+					current->m_right = new CalendarItemNode(item, current->colliding()->getNextCollidingNode(item), current->m_index + 1);
+			} else
+				current->m_right = new CalendarItemNode(item, 0, current->m_index + 1);
+		}
+		return;
 	}
+
+	// non overlapping => will be the next item
+	current->m_next = new CalendarItemNode(item, current->getNextCollidingNode(item), current->m_index);
 }
 
 // -------------------------------------
@@ -431,26 +462,17 @@ void DayRangeView::itemModified(const CalendarItem &oldItem, const CalendarItem 
 }
 
 void DayRangeView::resetItemWidgets() {
-	CalendarItemWidget *widget;
+	for (int i = 0; i < m_rangeWidth; i++)
+		refreshDayWidgets(m_firstDate.addDays(i));
 
-	// remove old ones
-	for (int i = children().count() - 1; i >= 0; i--) {
-		QWidget *widget = qobject_cast<CalendarItemWidget*>(children()[i]);
-		if (widget)
-			delete widget;
-	}
-
-	if (!model())
-		return;
-
-	// create new ones
+/*	// create new ones
 	foreach (const CalendarItem &item, model()->getItemsBetween(m_firstDate, m_firstDate.addDays(m_rangeWidth - 1))) {
 		widget = new CalendarItemWidget(this, item.uid());
 		widget->setBeginDateTime(item.beginning());
 		widget->setEndDateTime(item.ending());
 		widget->show();
 		refreshItemSizeAndPosition(widget);
-	}
+		}*/
 }
 
 // at first compare with begin dates. If they're equals, compare by end dates.
@@ -473,6 +495,9 @@ void DayRangeView::refreshDayWidgets(const QDate &dayDate) {
 	// at first remove all day widgets
 	qDeleteAll(getWidgetsByDate(dayDate));
 
+	if (!model())
+		return;
+
 	// re-create them
 	QList<CalendarItem> items = model()->getItemsBetween(dayDate, dayDate);
 
@@ -486,8 +511,6 @@ void DayRangeView::refreshDayWidgets(const QDate &dayDate) {
 
 	for (int i = 1; i < items.count(); i++)
 		node.store(items[i]);
-
-
 }
 
 QList<CalendarItemWidget*> DayRangeView::getWidgetsByDate(const QDate &dayDate) const {

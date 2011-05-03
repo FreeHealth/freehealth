@@ -7,20 +7,29 @@ namespace Calendar {
 	class CalendarItemNode
 	{
 	public:
-		CalendarItemNode(const CalendarItem &item) : m_item(item), m_child(0), m_next(0) {}
+		CalendarItemNode(const CalendarItem &item, CalendarItemNode *colliding = 0, int index = -1) : m_item(item), m_right(0), m_next(0), m_colliding(colliding), m_index(index) {}
 		~CalendarItemNode();
 
-		const CalendarItem &item() const { return m_item; }
-		CalendarItemNode *child() const { return m_child; }
-		CalendarItemNode *next() const { return m_next; }
+		const CalendarItem &item() const { return m_item; }			// the calendar item associates with the node
+		CalendarItemNode *right() const { return m_right; }			// the node which is overlapping itself and shares horizontal space with itself and other overlapping sibling nodes
+		CalendarItemNode *next() const { return m_next; }			// the node which follows itself in the time but non overlapping (will be drawn at the bottom)
+		CalendarItemNode *colliding() const { return m_colliding; }	// the potential colliding node if it exists. It is always at the right position.
+		int index() const { return m_index; }						// the right index of the node. Starts at 0.
 
 		// store an item at the right place with a recursive method depending on date ranges
 		void store(const CalendarItem &item);
 
 	private:
 		CalendarItem m_item;
-		CalendarItemNode *m_child;
+		CalendarItemNode *m_right;
 		CalendarItemNode *m_next;
+		CalendarItemNode *m_colliding;
+		int m_index;
+
+		// returns the most bottom node (the most far next node)
+		CalendarItemNode *mostBottomNode();
+		// returns the next colliding node with <item> potentially including <this>
+		CalendarItemNode *getNextCollidingNode(const CalendarItem &item);
 	};
 
 	class DayRangeHeader : public ViewHeader
