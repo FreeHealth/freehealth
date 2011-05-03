@@ -384,6 +384,7 @@ double AssetsIO::getRate(const QDate &date, double duration) {
     QString nearestDateStr = nearestDate.toString("yyyy-MM-dd");
     QString rateStr = hashRatesDates.key(nearestDate);
     rate = rateStr.toDouble();
+    qWarning() << __FILE__ << QString::number(__LINE__) << "rate = " << QString::number(rate) ;
     return rate;
 }
 
