@@ -48,6 +48,7 @@ public:
   choiceDialog(QWidget *parent = 0);
   ~choiceDialog();
   int returnChoiceDialog();
+  double returnPercentValue();
   double m_percentValue;
 private slots:
   void value(double val);

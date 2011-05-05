@@ -52,6 +52,9 @@ class ACCOUNT_EXPORT PreferedReceipts: public QWidget {
         void insertPreferedValuesIntoAccount();
         Ui::PreferedReceiptsWidget *ui;
         int m_typeOfChoice;
+        double m_percent;
+    private Q_SLOTS :
+        void showChoiceDialog();
 };
 
 #endif

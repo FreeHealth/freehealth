@@ -141,3 +141,7 @@ void choiceDialog::quickLess(){
  		}
     ui->percentDoubleSpinBox->setValue(m_percent);
 }
+
+double choiceDialog::returnPercentValue(){
+    return m_percent;
+}
