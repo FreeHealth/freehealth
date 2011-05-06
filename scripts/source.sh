@@ -289,8 +289,9 @@ rm $PACKPATH/sources.tar
 find $PACKPATH -type f -exec chmod -R 666 {} \;
 echo "   * ADDING SVN VERSION NUMBER"
 cd $PACKPATH/buildspecs
-echo "SVN_VERSION="`svn info -r HEAD $SCRIPT_PATH"/.." | grep 'Changed\ Rev' | cut -b 19-`  > svnversion.pri
-echo 'DEFINES *= "SVN_VERSION=\"\\\"$${SVN_VERSION}\\\"\""'  >> svnversion.pri
+SVN=`svn info -r HEAD $SCRIPT_PATH"/.." | grep 'Changed\ Rev' | cut -b 19-`
+echo "SVN_VERSION=$SVN"  > svnversion.pri
+echo 'DEFINES *= "SVN_VERSION=\"\\\\\"$${SVN_VERSION}\\\\\"\""'  >> svnversion.pri
 echo ""  >> svnversion.pri
 
 echo "**** REPACK SOURCES PACKAGE FROM CREATED DIR ****"
@@ -304,5 +305,6 @@ PWD=`pwd`
 
 echo "*** Source package for $1 successfully created at"
 echo $PWD/$1-$VERSION
+echo "SVN version: "$SVN
 
 exit 0
