@@ -180,6 +180,7 @@ AccountActionHandler::AccountActionHandler(QObject *parent) :
     a->setIcon(th->icon(Core::Constants::ICONHELP));
     cmd = actionManager()->registerAction(a, Constants::A_RECEIPTS, global);
     cmd->setTranslations(Constants::RECEIPTS, Constants::RECEIPTS, Constants::ACCOUNT_TR_CONTEXT);
+    cmd->setDefaultKeySequence(QKeySequence("Shift+r"));
     menu->addAction(cmd, Constants::G_ACCOUNT_APPS);
     connect(a, SIGNAL(triggered()), this, SLOT(receipts()));
 
@@ -188,6 +189,7 @@ AccountActionHandler::AccountActionHandler(QObject *parent) :
     a->setIcon(th->icon(Core::Constants::ICONHELP));
     cmd = actionManager()->registerAction(a, Constants::A_LEDGER, global);
     cmd->setTranslations(Constants::LEDGER, Constants::LEDGER, Constants::ACCOUNT_TR_CONTEXT);
+    cmd->setDefaultKeySequence(QKeySequence("Alt+l"));
     menu->addAction(cmd, Constants::G_ACCOUNT_APPS);
     connect(a, SIGNAL(triggered()), this, SLOT(ledger()));
 
@@ -196,6 +198,7 @@ AccountActionHandler::AccountActionHandler(QObject *parent) :
     a->setIcon(th->icon(Core::Constants::ICONHELP));
     cmd = actionManager()->registerAction(a, Constants::A_MOVEMENTS, global);
     cmd->setTranslations(Constants::MOVEMENTS, Constants::MOVEMENTS, Constants::ACCOUNT_TR_CONTEXT);
+    cmd->setDefaultKeySequence(QKeySequence("Ctrl+m"));
     menu->addAction(cmd, Constants::G_ACCOUNT_APPS);
     connect(a, SIGNAL(triggered()), this, SLOT(movements()));
 
@@ -204,6 +207,7 @@ AccountActionHandler::AccountActionHandler(QObject *parent) :
     a->setIcon(th->icon(Core::Constants::ICONHELP));
     cmd = actionManager()->registerAction(a, Constants::A_ASSETS, global);
     cmd->setTranslations(Constants::ASSETS, Constants::ASSETS, Constants::ACCOUNT_TR_CONTEXT);
+    cmd->setDefaultKeySequence(QKeySequence("Alt+z"));
     menu->addAction(cmd, Constants::G_ACCOUNT_APPS);
     connect(a, SIGNAL(triggered()), this, SLOT(assets()));
 
