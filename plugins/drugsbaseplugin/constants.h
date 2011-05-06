@@ -132,6 +132,7 @@ namespace Constants {
 
     const char * const  I_DRUGALERT_ACCEPT = "drugalert_accept.png";
     const char * const  I_DRUGALERT_OVERRIDE = "drugalert_override.png";
+    const char * const  I_DRUGREPORT = "drugreport.png";
 
     // INTERACTIONS ICONS
     const char * const  INTERACTION_ICONCRITICAL =         "critical.png";      /*!< \brief Themed icon name for Interactions logo. */

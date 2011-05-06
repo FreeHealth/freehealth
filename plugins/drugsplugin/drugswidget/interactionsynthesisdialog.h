@@ -66,7 +66,8 @@ protected Q_SLOTS:
     void interactionActivated(const QModelIndex &current, const QModelIndex &previous);
 //    void interactorsActivated(QTableWidgetItem *item);
     void on_getBiblio_clicked();
-    void print();
+    void print(QAction *action);
+    void drugReportRequested();
 
 protected:
     void changeEvent(QEvent *e);

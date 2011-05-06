@@ -83,12 +83,10 @@ public:
         browser->clear();
         ui->interactionQueryView->selectionModel()->clear();
         QString drugs;
-        if (interaction->drugs().count() == 2) {
-            foreach(DrugsDB::IDrug *drug, interaction->drugs()) {
-                for(int i=0; i<m_InteractionQueryModel->rowCount();++i) {
-                    if (m_InteractionQueryModel->index(i, 0).data().toString()==drug->brandName()) {
-                        ui->interactionQueryView->selectionModel()->select(m_InteractionQueryModel->index(i, 0), QItemSelectionModel::Select);
-                    }
+        foreach(DrugsDB::IDrug *drug, interaction->drugs()) {
+            for(int i=0; i<m_InteractionQueryModel->rowCount();++i) {
+                if (m_InteractionQueryModel->index(i, 0).data(Qt::UserRole+1)==drug->drugId()) {
+                    ui->interactionQueryView->selectionModel()->select(m_InteractionQueryModel->index(i, 0), QItemSelectionModel::Select);
                 }
             }
         }
@@ -102,6 +100,7 @@ public:
     QMultiHash<DrugsDB::IDrugInteraction *, MedicalUtils::EbmData *> m_Biblio;
     QStandardItemModel *m_InteractionModel, *m_InteractionQueryModel;
     DrugsDB::DrugInteractionResult *m_InteractionResult;
+    QToolButton *close, *report, *print, *help;
 };
 }
 }
@@ -122,6 +121,62 @@ InteractionSynthesisDialog::InteractionSynthesisDialog(DrugsDB::DrugsModel *drug
     setWindowTitle(tr("Synthetic interactions") + " - " + qApp->applicationName());
     setWindowFlags(Qt::Window | Qt::CustomizeWindowHint | Qt::WindowSystemMenuHint | Qt::WindowCloseButtonHint | Qt::WindowMinMaxButtonsHint);
 
+//    QToolBar *bar = new QToolBar(this);
+//    bar->setIconSize(QSize(32,32));
+//    bar->setToolButtonStyle(Qt::ToolButtonTextUnderIcon);
+//    d->ui->toolbarLayout->addWidget(bar);
+
+    d->aPrintAll = new QAction(this);
+    d->aPrintAll->setText(tr("Print all interactions"));
+    d->aPrintAll->setShortcut(QKeySequence::Print);
+    d->aPrintAll->setIcon(theme()->icon(Core::Constants::ICONPRINT, Core::ITheme::MediumIcon));
+    d->aPrintAll->setData(-1);
+//    bar->addAction(d->aPrintAll);
+
+    d->aPrintOne = new QAction(this);
+    d->aPrintOne->setText(tr("Print selected interaction"));
+    d->aPrintOne->setShortcut(QKeySequence::Print);
+    d->aPrintOne->setIcon(theme()->icon(Core::Constants::ICONPRINT, Core::ITheme::MediumIcon));
+    d->aPrintOne->setData(-1);
+//    bar->addAction(d->aPrintOne);
+
+//    connect(bar, SIGNAL(actionTriggered(QAction*)), this, SLOT(levelActivated(QAction*)));
+//    connect(d->aPrintAll, SIGNAL(triggered()), this, SLOT(print()));
+//    connect(d->aPrintOne, SIGNAL(triggered()), this, SLOT(print()));
+
+    // populate the button box
+    d->close = new QToolButton(this);
+    d->close->setIconSize(QSize(32, 32));
+    d->close->setText(tkTr(Trans::Constants::CLOSE_TEXT));
+    d->close->setIcon(theme()->icon(Core::Constants::ICONQUIT, Core::ITheme::MediumIcon));
+    d->close->setToolButtonStyle(Qt::ToolButtonTextUnderIcon);
+
+    d->print = new QToolButton(this);
+    d->print->setIconSize(QSize(32, 32));
+    d->print->addAction(d->aPrintAll);
+    d->print->addAction(d->aPrintOne);
+    d->print->setDefaultAction(d->aPrintAll);
+    d->print->setToolButtonStyle(Qt::ToolButtonTextUnderIcon);
+    connect(d->print, SIGNAL(triggered(QAction*)), this, SLOT(print(QAction*)));
+
+    d->report = new QToolButton(this);
+    d->report->setIconSize(QSize(32, 32));
+    d->report->setText(tr("Send a report"));
+    d->report->setIcon(theme()->icon(DrugsDB::Constants::I_DRUGREPORT, Core::ITheme::MediumIcon));
+    d->report->setToolButtonStyle(Qt::ToolButtonTextUnderIcon);
+    connect(d->report, SIGNAL(clicked()), this, SLOT(drugReportRequested()));
+
+    d->help = new QToolButton(this);
+    d->help->setIconSize(QSize(32, 32));
+    d->help->setText(tkTr(Trans::Constants::HELP_TEXT));
+    d->help->setIcon(theme()->icon(Core::Constants::ICONHELP, Core::ITheme::MediumIcon));
+    d->help->setToolButtonStyle(Qt::ToolButtonTextUnderIcon);
+
+    d->ui->buttonBox->addButton(d->close, QDialogButtonBox::YesRole);
+    d->ui->buttonBox->addButton(d->report, QDialogButtonBox::ActionRole);
+    d->ui->buttonBox->addButton(d->print, QDialogButtonBox::ActionRole);
+    d->ui->buttonBox->addButton(d->help, QDialogButtonBox::HelpRole);
+
     d->m_InteractionResult = drugModel->drugInteractionResult();
     d->m_InteractionModel = drugModel->drugInteractionResult()->toStandardModel();
     d->m_InteractionQueryModel = drugModel->drugInteractionQuery()->toStandardModel();
@@ -135,29 +190,6 @@ InteractionSynthesisDialog::InteractionSynthesisDialog(DrugsDB::DrugsModel *drug
     d->ui->tabWidget->setCurrentWidget(d->ui->tabInfo);
 
     connect(d->ui->interactionResultView->selectionModel(), SIGNAL(currentChanged(QModelIndex,QModelIndex)), this, SLOT(interactionActivated(QModelIndex,QModelIndex)));
-
-    QToolBar *bar = new QToolBar(this);
-    bar->setIconSize(QSize(32,32));
-    bar->setToolButtonStyle(Qt::ToolButtonTextUnderIcon);
-    d->ui->toolbarLayout->addWidget(bar);
-
-    d->aPrintAll = new QAction(this);
-    d->aPrintAll->setText(tr("Print all interactions"));
-    d->aPrintAll->setShortcut(QKeySequence::Print);
-    d->aPrintAll->setIcon(theme()->icon(Core::Constants::ICONPRINT, Core::ITheme::MediumIcon));
-    d->aPrintAll->setData(-1);
-    bar->addAction(d->aPrintAll);
-
-    d->aPrintOne = new QAction(this);
-    d->aPrintOne->setText(tr("Print selected interaction"));
-    d->aPrintOne->setShortcut(QKeySequence::Print);
-    d->aPrintOne->setIcon(theme()->icon(Core::Constants::ICONPRINT, Core::ITheme::MediumIcon));
-    d->aPrintOne->setData(-1);
-    bar->addAction(d->aPrintOne);
-
-//    connect(bar, SIGNAL(actionTriggered(QAction*)), this, SLOT(levelActivated(QAction*)));
-    connect(d->aPrintAll, SIGNAL(triggered()), this, SLOT(print()));
-    connect(d->aPrintOne, SIGNAL(triggered()), this, SLOT(print()));
 }
 
 InteractionSynthesisDialog::~InteractionSynthesisDialog()
@@ -188,9 +220,9 @@ void InteractionSynthesisDialog::interactionActivated(const QModelIndex &current
     d->ui->biblioReferences->clear();
 
     DrugsDB::IDrugInteraction *interaction = d->m_InteractionResult->interactions().at(id);
-    d->ui->riskBrowser->setPlainText(interaction->risk().replace("<br />","\n"));
-    d->ui->managementBrowser->setPlainText(interaction->management().replace("<br />","\n"));
-    d->ui->link->setText(QString("<a href=\"%1\">Link to reference</a>").arg(interaction->referencesLink()));
+    d->ui->riskBrowser->setPlainText(interaction->risk().replace("<br />","\n").replace("<br>","\n"));
+    d->ui->managementBrowser->setPlainText(interaction->management().replace("<br />","\n").replace("<br>","\n"));
+//    d->ui->link->setText(QString("<a href=\"%1\">Link to reference</a>").arg(interaction->referencesLink()));
     d->ui->getBiblio->setEnabled(true);
     d->populateDrugsBrowser(interaction, d->ui->interactingDrugsBrowser);
 }
@@ -245,16 +277,16 @@ void InteractionSynthesisDialog::on_getBiblio_clicked()
     d->ui->biblioReferences->setHtml(reftable.replace("\n","<br />"));
 }
 
-void InteractionSynthesisDialog::print()
+void InteractionSynthesisDialog::print(QAction *action)
 {
     QVector<DrugsDB::IDrug *> drugs;
     QVector<DrugsDB::IDrugInteraction *> interactions;
     QString head;
-    if (sender() == d->aPrintAll) {
+    if (action == d->aPrintAll) {
         head = tr("Tested drugs");
         drugs = d->m_DrugModel->drugsList().toVector();
         interactions = d->m_InteractionResult->interactions();
-    } else if (sender() == d->aPrintOne) {
+    } else if (action == d->aPrintOne) {
         head = tr("Related to drugs");
         const int id = d->m_InteractionModel->itemFromIndex(d->ui->interactionResultView->selectionModel()->currentIndex())->data(Qt::UserRole).toInt();
         if (id==-1)
@@ -292,6 +324,11 @@ void InteractionSynthesisDialog::print()
     tokens.insert(Core::Constants::TOKEN_DATE, QDate::currentDate().toString("dd MMMM yyyy"));
     p->addTokens(Core::IDocumentPrinter::Tokens_Global, tokens);
     p->print(display, Core::IDocumentPrinter::Papers_Prescription_User, true);
+}
+
+void InteractionSynthesisDialog::drugReportRequested()
+{
+    /** \todo code here */
 }
 
 void InteractionSynthesisDialog::changeEvent(QEvent *e)

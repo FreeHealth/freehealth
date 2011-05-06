@@ -67,7 +67,8 @@ void DrugInteractionQuery::setDrugsList(const QVector<IDrug *> &list)
 
 void DrugInteractionQuery::addDrug(IDrug *drug)
 {
-    m_Drugs.append(drug);
+    if (!m_Drugs.contains(drug))
+        m_Drugs.append(drug);
 }
 
 void DrugInteractionQuery::removeDrug(IDrug *drug)
@@ -89,6 +90,7 @@ bool DrugInteractionQuery::containsDrug(const IDrug *drug) const
     return m_Drugs.contains((IDrug*)drug);
 }
 
+/** Creates a StandardItemModel with the queried drugs. Items userData are DrugID. */
 QStandardItemModel *DrugInteractionQuery::toStandardModel() const
 {
     if (!m_StandardModel) {
@@ -98,11 +100,16 @@ QStandardItemModel *DrugInteractionQuery::toStandardModel() const
     // for all drugs
     QFont bold;
     bold.setBold(true);
+    QVector<IDrug *> insertedDrugs;
     for(int i=0; i < m_Drugs.count(); ++i) {
         IDrug *drug = m_Drugs.at(i);
+        if (insertedDrugs.contains(drug))
+            continue;
+        insertedDrugs.append(drug);
         // add a root item
         QStandardItem *root = new QStandardItem(drug->brandName());
         root->setFlags(Qt::ItemIsEnabled | Qt::ItemIsSelectable);
+        root->setData(drug->drugId());
         m_StandardModel->appendRow(root);
         /** \todo foreach component of the drug, append total daily dose */
     }

@@ -185,6 +185,7 @@ QStandardItemModel *DrugInteractionResult::toStandardModel() const
 
         // for all interactions for this engine
         QHash<QString, QStandardItem *> levels;
+        QHash<QString, QStandardItem *> mainInteractors;
         for(int j=0; j < m_Interactions.count(); ++j) {
             IDrugInteraction *di = m_Interactions.at(j);
             if (di->engine()!=engine)
@@ -206,40 +207,36 @@ QStandardItemModel *DrugInteractionResult::toStandardModel() const
             }
 
             // Include the interaction's datas
-            QString h = di->header("@@");
-            bool interactorsAdded = false;
-            foreach(const QString &part, h.split("@@")) {
-                QStandardItem *interactor = new QStandardItem(part.trimmed());
+            QStringList h = di->header("@@").split("@@", QString::SkipEmptyParts);
+            if (h.count()==0)
+                continue;
+            // Main interactor
+            QStandardItem *mainInteractor = mainInteractors.value(di->type() + h.at(0).trimmed(), 0);
+            if (!mainInteractor) {
+                mainInteractor = new QStandardItem(h.at(0).trimmed());
+                level->appendRow(mainInteractor);
+                mainInteractors.insert(di->type() + h.at(0).trimmed(), mainInteractor);
+            }
+            // Interactors
+            for(int w = 1; w < h.count(); ++w) {
+                QString childName = h.at(w).trimmed();
+                // already in clidren's list
+                bool included = false;
+                for(int z = 0; z < mainInteractor->rowCount(); ++z) {
+                    if (mainInteractor->child(z)->text()==childName) {
+                        included = true;
+                        break;
+                    }
+                }
+                if (included)
+                    continue;
+                // include as children of mainInteractor
+                QStandardItem *interactor = new QStandardItem(childName);
                 interactor->setData(j, Qt::UserRole);
                 interactor->setFlags(Qt::ItemIsEnabled | Qt::ItemIsSelectable);
-                level->appendRow(interactor);
-                interactorsAdded = true;
-            }
-            if (!interactorsAdded) {
-                QStandardItem *interactors = new QStandardItem(di->header());
-                interactors->setData(j, Qt::UserRole);
-                interactors->setFlags(Qt::ItemIsEnabled | Qt::ItemIsSelectable);
-                level->appendRow(interactors);
+                mainInteractor->appendRow(interactor);
             }
 
-//            QStandardItem *risk = new QStandardItem(di->risk());
-//            QLabel *riskLabel = new QLabel(QString("%1: %2")
-//                                           .arg(QCoreApplication::translate(Constants::DRUGSBASE_TR_CONTEXT, Constants::NATURE_OF_RISK))
-//                                           .arg(di->value(Internal::DrugsInteraction::DI_Risk).toString()));
-//            risk->setWordWrap(true);
-//            tree->setItemWidget(risk, 0, riskLabel);
-
-//            QStandardItem *management = new QStandardItem(di->management());
-//            QLabel *managementLabel = new QLabel(QString("%1: %2")
-//                                                 .arg(tr("Management: "))
-//                                                 .arg(di->value(Internal::DrugsInteraction::DI_Management).toString()));
-//            managementLabel->setWordWrap(true);
-//            managementLabel->setSizePolicy(QSizePolicy::Preferred, QSizePolicy::Preferred);
-//            tree->setItemWidget(management, 0, managementLabel);
-//            managementLabel->setMargin(0);
-            //        qWarning() << managementLabel << managementLabel->contentsMargins();
-//            interactors->appendRow(risk);
-//            interactors->appendRow(management);
         }
     }
     return m_StandardModel;

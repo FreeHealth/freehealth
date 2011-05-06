@@ -890,6 +890,7 @@ bool DrugDrugInteractionEngine::checkDrugInteraction(IDrug *drug, const QVector<
     //      qWarning() << "checkDrugInteraction" << m_DDIFound;
     if (d->m_DDIFound.count() != 0)
         return true;
+
     return false;
 }
 
@@ -905,6 +906,9 @@ int DrugDrugInteractionEngine::calculateInteractions(const QVector<IDrug *> &dru
         checkDrugInteraction(drug, drugs);
     if (d->m_LogChrono)
         Utils::Log::logTimeElapsed(t, "DrugDrugInteractionEngine", QString("interactions() : %1 drugs").arg(drugs.count()));
+
+//    qWarning() << "DDIEngine::foundATCtoATC DDI" << d->m_DDIFound;
+
     return d->m_DDIFound.count();
 }
 
@@ -1023,6 +1027,9 @@ QVector<IDrugInteraction *> DrugDrugInteractionEngine::getAllInteractionsFound()
         Q_ASSERT(ddi);
         id1 = ddi->value(DrugsInteraction::DI_ATC1).toInt();
         id2 = ddi->value(DrugsInteraction::DI_ATC2).toInt();
+
+//        qWarning() << "DDIs" << id1 << id2 << ddi->value(DrugsInteraction::DI_Id).toInt();
+
         // test all drugs in the list
         foreach(IDrug *drg, d->m_TestedDrugs)  {
             if (drg->allInnAndInteractingClassesIds().contains(id1) || drg->allInnAndInteractingClassesIds().contains(id2)) {
