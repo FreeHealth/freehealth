@@ -67,6 +67,19 @@ buildFromSourcePackage()
   PROJECT_FILE=$SOURCES_PATH$PROJECT.pro;
 }
 
+buildTranslations()
+{
+  cd $SOURCES_PATH
+  MAKE_STEP=`lrelease ./global_resources/translations/*.ts`
+  MAKE_STEP=$?
+  if [ ! $MAKE_STEP = 0 ]; then
+    echo "   *** Error: lrelease step wrong ***"
+    exit 123
+  else
+    echo "   *** Translations created"
+  fi
+}
+
 buildApp()
 {
   #####################################
@@ -221,6 +234,7 @@ echo "      * project file $PROJECT_FILE"
 echo "      * from source path $SOURCES_PATH"
 echo "      * to package path $PACKAGES_PATH"
 
+buildTranslations
 buildApp
 linkQtLibs
 linkMySqlLib
