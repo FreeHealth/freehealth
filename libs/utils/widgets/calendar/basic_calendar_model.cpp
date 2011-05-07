@@ -14,15 +14,15 @@ BasicCalendarModel::BasicCalendarModel(QObject *parent) :
 
 	// TEMP just for tests
 	QDate now = QDate::currentDate();
-	insertItem(QDateTime(now, QTime(10, 0)), QDateTime(now, QTime(12, 0)));
-	insertItem(QDateTime(now, QTime(10, 0)), QDateTime(now, QTime(12, 0)));
-	insertItem(QDateTime(now, QTime(10, 0)), QDateTime(now, QTime(12, 0)));
-	insertItem(QDateTime(now, QTime(10, 30)), QDateTime(now, QTime(13, 0)));
-	insertItem(QDateTime(now, QTime(12, 0)), QDateTime(now, QTime(14, 0)));
-	insertItem(QDateTime(now, QTime(14, 0)), QDateTime(now, QTime(15, 0)));
-	insertItem(QDateTime(now, QTime(14, 0)), QDateTime(now, QTime(15, 0)));
-	insertItem(QDateTime(now, QTime(14, 0)), QDateTime(now, QTime(15, 0)));
-	insertItem(QDateTime(now, QTime(14, 0)), QDateTime(now, QTime(15, 0)));
+	insertItem(QDateTime(now, QTime(0, 0)), QDateTime(now, QTime(2, 0)));
+	insertItem(QDateTime(now, QTime(0, 0)), QDateTime(now, QTime(2, 0)));
+	insertItem(QDateTime(now, QTime(0, 0)), QDateTime(now, QTime(2, 0)));
+	insertItem(QDateTime(now, QTime(0, 30)), QDateTime(now, QTime(3, 0)));
+	insertItem(QDateTime(now, QTime(2, 0)), QDateTime(now, QTime(4, 0)));
+	insertItem(QDateTime(now, QTime(4, 0)), QDateTime(now, QTime(5, 0)));
+	insertItem(QDateTime(now, QTime(4, 0)), QDateTime(now, QTime(5, 0)));
+	insertItem(QDateTime(now, QTime(4, 0)), QDateTime(now, QTime(5, 0)));
+	insertItem(QDateTime(now, QTime(4, 0)), QDateTime(now, QTime(5, 0)));
 }
 
 QList<CalendarItem> BasicCalendarModel::getItemsBetween(const QDate &from, const QDate &to) const {

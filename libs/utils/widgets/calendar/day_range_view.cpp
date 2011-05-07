@@ -66,6 +66,48 @@ void CalendarItemNode::store(const CalendarItem &item) {
 	current->m_next = new CalendarItemNode(item, current->getNextCollidingNode(item), current->m_index);
 }
 
+int CalendarItemNode::computeMaxCount() {
+	m_maxCount = 1 + (m_right ? m_right->computeMaxCount() : 0);
+	return qMax(m_maxCount, m_next ? m_next->computeMaxCount() : 0);
+}
+
+int CalendarItemNode::computeMaxCountBeforeColliding() {
+	m_maxCountBeforeColliding = 1;
+
+	if (m_right && m_right->m_colliding == m_colliding)
+		m_maxCountBeforeColliding += m_right->computeMaxCountBeforeColliding();
+
+	if (m_next) {
+		int nextMaxCountBeforeColliding = m_next->computeMaxCountBeforeColliding();
+		if (m_next->m_colliding == m_colliding)
+			return qMax(m_maxCountBeforeColliding, nextMaxCountBeforeColliding);
+	}
+	return m_maxCountBeforeColliding;
+}
+
+void CalendarItemNode::prepareForWidthsComputing() {
+	computeMaxCount();
+	computeMaxCountBeforeColliding();
+}
+
+void CalendarItemNode::computeWidths(int left, int width, QList<CalendarItemNode*> &list) {
+	m_left = left;
+	list << this;
+
+	int collidingWidth = -1;
+
+	// compute colliding width
+	if (m_colliding)
+		collidingWidth = (m_colliding->m_left - left) / m_maxCountBeforeColliding;
+	m_width = width / m_maxCount;
+	if (collidingWidth != -1 && collidingWidth < m_width)
+		m_width = collidingWidth;
+	if (m_right)
+		m_right->computeWidths(m_left + m_width, width - m_width, list);
+	if (m_next)
+		m_next->computeWidths(m_left, width, list);
+}
+
 // -------------------------------------
 
 int DayRangeView::m_leftScaleWidth = 60;
@@ -245,11 +287,9 @@ ViewHeader *DayRangeView::createHeaderWidget(QWidget *parent) {
 	return widget;
 }
 
-void DayRangeView::refreshItemSizeAndPosition(CalendarItemWidget *item) {
-	// TODO if item is over many days, explodes it in several times intervals
-	QRect rect = getTimeIntervalRect(item->beginDateTime().date().dayOfWeek(), item->beginDateTime().time(), item->endDateTime().time());
-	item->move(rect.x(), rect.y());
-	item->resize(rect.width() - 8, rect.height());
+void DayRangeView::refreshItemsSizesAndPositions() {
+	for (int i = 0; i < m_rangeWidth; i++)
+		refreshDayWidgets(m_firstDate.addDays(i));
 }
 
 QRect DayRangeView::getTimeIntervalRect(int day, const QTime &begin, const QTime &end) const {
@@ -266,6 +306,25 @@ QRect DayRangeView::getTimeIntervalRect(int day, const QTime &begin, const QTime
 				 top,
 				 ((day + 1) * containWidth) / m_rangeWidth - (day * containWidth) / m_rangeWidth,
 				 height);
+}
+
+QPair<int, int> DayRangeView::getBand(const QDate &date) const {
+	int containWidth = rect().width() - m_leftScaleWidth;
+	QPair<int, int> band;
+
+	int day = date.dayOfWeek() - 1;
+	band.first = m_leftScaleWidth + (day * containWidth) / m_rangeWidth;
+	band.second = ((day + 1) * containWidth) / m_rangeWidth - (day * containWidth) / m_rangeWidth - 8;
+	return band;
+}
+
+QPair<int, int> DayRangeView::getItemVerticalData(const QTime &begin, const QTime &end) const {
+	int seconds = end < begin ? begin.secsTo(QTime(23, 59)) + 1 : begin.secsTo(end);
+	int top = (QTime(0, 0).secsTo(begin) * m_hourHeight) / 3600;
+	int height = (seconds * m_hourHeight) / 3600;
+
+	// vertical lines
+	return QPair<int, int>(top, height);
 }
 
 void DayRangeView::setRangeWidth(int width) {
@@ -436,11 +495,8 @@ void DayRangeView::mouseReleaseEvent(QMouseEvent *) {
 }
 
 void DayRangeView::itemInserted(const CalendarItem &item) {
-	CalendarItemWidget *widget = new CalendarItemWidget(this, item.uid());
-	widget->setBeginDateTime(item.beginning());
-	widget->setEndDateTime(item.ending());
-	widget->show();
-	refreshItemSizeAndPosition(widget);
+	// refresh the entire day band
+	refreshDayWidgets(item.beginning().date());
 }
 
 void DayRangeView::itemModified(const CalendarItem &oldItem, const CalendarItem &newItem) {
@@ -464,15 +520,6 @@ void DayRangeView::itemModified(const CalendarItem &oldItem, const CalendarItem 
 void DayRangeView::resetItemWidgets() {
 	for (int i = 0; i < m_rangeWidth; i++)
 		refreshDayWidgets(m_firstDate.addDays(i));
-
-/*	// create new ones
-	foreach (const CalendarItem &item, model()->getItemsBetween(m_firstDate, m_firstDate.addDays(m_rangeWidth - 1))) {
-		widget = new CalendarItemWidget(this, item.uid());
-		widget->setBeginDateTime(item.beginning());
-		widget->setEndDateTime(item.ending());
-		widget->show();
-		refreshItemSizeAndPosition(widget);
-		}*/
 }
 
 // at first compare with begin dates. If they're equals, compare by end dates.
@@ -482,7 +529,7 @@ bool calendarItemLessThan(const Calendar::CalendarItem &item1, const Calendar::C
 		return true;
 	else if (item1.beginning() > item2.beginning())
 		return false;
-	else if (item1.ending() < item2.ending())
+	else if (item1.ending() > item2.ending())
 		return true;
 	else
 		return false;
@@ -504,6 +551,8 @@ void DayRangeView::refreshDayWidgets(const QDate &dayDate) {
 	if (!items.count())
 		return;
 
+	QPair<int, int> band = getBand(dayDate);
+
 	// sorting and create the tree
 	qSort(items.begin(), items.end(), calendarItemLessThan);
 
@@ -511,6 +560,20 @@ void DayRangeView::refreshDayWidgets(const QDate &dayDate) {
 
 	for (int i = 1; i < items.count(); i++)
 		node.store(items[i]);
+
+	node.prepareForWidthsComputing();
+	QList<CalendarItemNode*> nodes;
+	node.computeWidths(band.first, band.second, nodes);
+
+	foreach (CalendarItemNode *node, nodes) {
+		CalendarItemWidget *widget = new CalendarItemWidget(this, node->item().uid());
+		QPair<int, int> verticalData = getItemVerticalData(node->item().beginning().time(), node->item().ending().time());
+		widget->setBeginDateTime(node->item().beginning());
+		widget->setEndDateTime(node->item().ending());
+		widget->move(node->left(), verticalData.first);
+		widget->resize(node->width(), verticalData.second);
+		widget->show();
+	}
 }
 
 QList<CalendarItemWidget*> DayRangeView::getWidgetsByDate(const QDate &dayDate) const {
