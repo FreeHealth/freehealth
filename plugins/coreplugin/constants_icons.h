@@ -112,6 +112,10 @@ const char * const  ICONEYES =         "eyes.png";
 const char * const  ICONVIEWSIDE =     "view_sidetree.png";
 const char * const  ICONFULLSCREEN =   "view-fullscreen.png";
 
+// Network
+const char * const  ICONCOMPUTER = "computer.png";
+const char * const  ICONNETWORK =  "network.png";
+
 // menu TextFormat
 const char * const  ICONBOLD =          "format-text-bold.png";
 const char * const  ICONUNDERLINE =     "format-text-underline.png";

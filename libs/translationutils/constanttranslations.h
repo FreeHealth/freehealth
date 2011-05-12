@@ -397,7 +397,7 @@ enum TitleInterpret {
         const char* const SAVING_SETTINGS                   = QT_TRANSLATE_NOOP("tkConstants", "Settings recovered" );
         const char* const CREATING_DEFAULT_SETTINGS_FOR_1   = QT_TRANSLATE_NOOP("tkConstants", "Creating default settings for %1");
 
-        // Users related msessage
+        // Users related message
         const char* const WELCOME_USER                      = QT_TRANSLATE_NOOP("tkConstants", "Welcome to FreeMedForms, you are now connected.");
         const char* const CONNECTED_AS_1                    = QT_TRANSLATE_NOOP("tkConstants", "Connected as\n  %1");
         const char* const NO_USER_CONNECTED                 = QT_TRANSLATE_NOOP("tkConstants", "No user connected.");
@@ -423,6 +423,11 @@ enum TitleInterpret {
         const char* const OPEN_FILE                          = QT_TRANSLATE_NOOP("tkConstants", "Open file");
         const char* const OPENING_FILE_1                     = QT_TRANSLATE_NOOP("tkConstants", "Opening file %1");
         const char* const SAVING_FILE_1                      = QT_TRANSLATE_NOOP("tkConstants", "Saving file %1");
+
+
+        const char* const XML_WRONG_NUMBER_OF_TAG_1          = QT_TRANSLATE_NOOP("tkConstants", "Wrong number of tags (%1)");
+        const char* const XML_WRONG_ROOT_TAG_1_2             = QT_TRANSLATE_NOOP("tkConstants", "Wrong root tag %1 %2.");
+        const char* const XML_DOCUMENT_TYPE_MISMATCH         = QT_TRANSLATE_NOOP("tkConstants", "Document type name mismatch.");
 
         // Messages and errors
         const char* const INFORMATIONS                       = QT_TRANSLATE_NOOP("tkConstants", "Informations");
