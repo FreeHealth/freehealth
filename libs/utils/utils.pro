@@ -48,7 +48,10 @@ HEADERS += global_exporter.h \
     widgets/calendar/common.h \
     widgets/calendar/day_range_view.h \
     widgets/calendar/month_view.h \
-    widgets/calendar/view.h
+    widgets/calendar/view.h \
+    widgets/languagecombobox.h \
+    widgets/languagecomboboxdelegate.h
+#    widgets/dialogbuttonbox.h
 
 SOURCES += global.cpp \
     database.cpp \
@@ -85,7 +88,10 @@ SOURCES += global.cpp \
     widgets/calendar/common.cpp \
     widgets/calendar/day_range_view.cpp \
     widgets/calendar/month_view.cpp \
-    widgets/calendar/view.cpp
+    widgets/calendar/view.cpp \
+    widgets/languagecombobox.cpp \
+    widgets/languagecomboboxdelegate.cpp
+#    widgets/dialogbuttonbox.cpp
 
 
 macx {
