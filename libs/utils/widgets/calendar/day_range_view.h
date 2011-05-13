@@ -4,6 +4,8 @@
 #include "view.h"
 
 namespace Calendar {
+	// this class is used to build a hierarchical structure of items for a day and to manage overlappings
+	// the algorithm behavior is inspired from google calendar
 	class CalendarItemNode
 	{
 	public:
@@ -102,7 +104,6 @@ namespace Calendar {
 	protected:
 		virtual void paintBody(QPainter *painter, const QRect &visibleRect);
 		virtual void refreshItemsSizesAndPositions();
-//		virtual void refreshItemSizeAndPosition(CalendarItemWidget *item);
 		virtual void mousePressEvent(QMouseEvent *event);
 		virtual void mouseMoveEvent(QMouseEvent *event);
 		virtual void mouseReleaseEvent(QMouseEvent *event);
@@ -140,8 +141,6 @@ namespace Calendar {
 
 		// refresh all widgets of a day
 		void refreshDayWidgets(const QDate &dayDate);
-
-		QList<CalendarItemWidget*> getWidgetsByDate(const QDate &dayDate) const;
 	};
 }
 

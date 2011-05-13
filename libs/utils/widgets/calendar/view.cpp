@@ -72,9 +72,8 @@ void View::resizeEvent(QResizeEvent *event) {
 void View::refreshItemsSizesAndPositions() {
 	foreach (QObject *object, children()) {
 		CalendarItemWidget *widget = qobject_cast<CalendarItemWidget*>(object);
-		if (widget) {
+		if (widget)
 			refreshItemSizeAndPosition(widget);
-		}
 	}
 }
 
@@ -108,4 +107,24 @@ CalendarItemWidget *View::getWidgetByUid(const QString &uid) const {
 			return widget;
 	}
         return 0;
+}
+
+QList<CalendarItemWidget*> View::getWidgetsByDate(const QDate &dayDate) const {
+	QList<CalendarItemWidget*> list;
+	foreach (QObject *obj, children()) {
+		CalendarItemWidget *widget = qobject_cast<CalendarItemWidget*>(obj);
+		if (widget && widget->beginDateTime().date() == dayDate)
+			list << widget;
+	}
+	return list;
+}
+
+void View::deleteAllWidgets() {
+	QList<CalendarItemWidget*> list;
+	foreach (QObject *obj, children()) {
+		CalendarItemWidget *widget = qobject_cast<CalendarItemWidget*>(obj);
+		if (widget)
+			list << widget;
+	}
+	qDeleteAll(list);
 }

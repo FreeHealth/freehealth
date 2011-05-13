@@ -1,6 +1,5 @@
 GÉNÉRIQUE
 * Revenir sur la granularité à la demi-heure quand on retaille un item
-* placement intelligent des items qui se chevauchent
 * formulaire basique d'édition (offrir la possibilité de pouvoir le remplacer)
 * Offrir la possibilité à l'utilisateur de pouvoir peindre un item comme il le veut
 * Représenter les items dans la vue "month"

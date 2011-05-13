@@ -518,6 +518,7 @@ void DayRangeView::itemModified(const CalendarItem &oldItem, const CalendarItem 
 }
 
 void DayRangeView::resetItemWidgets() {
+	deleteAllWidgets();
 	for (int i = 0; i < m_rangeWidth; i++)
 		refreshDayWidgets(m_firstDate.addDays(i));
 }
@@ -574,14 +575,4 @@ void DayRangeView::refreshDayWidgets(const QDate &dayDate) {
 		widget->resize(node->width(), verticalData.second);
 		widget->show();
 	}
-}
-
-QList<CalendarItemWidget*> DayRangeView::getWidgetsByDate(const QDate &dayDate) const {
-	QList<CalendarItemWidget*> list;
-	foreach (QObject *obj, children()) {
-		CalendarItemWidget *widget = qobject_cast<CalendarItemWidget*>(obj);
-		if (widget && widget->beginDateTime().date() == dayDate)
-			list << widget;
-	}
-	return list;
 }

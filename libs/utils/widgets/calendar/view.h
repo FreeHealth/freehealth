@@ -79,6 +79,8 @@ namespace Calendar {
 		virtual void resetItemWidgets() {}
 
 		CalendarItemWidget *getWidgetByUid(const QString &uid) const;
+		QList<CalendarItemWidget*> getWidgetsByDate(const QDate &dayDate) const;
+		void deleteAllWidgets();
 
 	protected slots:
 		virtual void itemInserted(const CalendarItem &item) { Q_UNUSED(item); }
