@@ -93,7 +93,7 @@ public:
     QString getSQLCreateTable(const int & tableref);
     QString getTypeOfField(const int & fieldref) const;
 
-    void getGrants(const QString &connection, const QStringList &grants)
+    static Database::Grants getGrants(const QString &connection, const QStringList &grants)
     {
         QHash<QString, int> ref;
         ref.insert("ALL PRIVILEGES", Database::Grant_All);
@@ -133,8 +133,7 @@ public:
                 }
             }
         }
-        m_Grants.insert(connection, g);
-//        qWarning() << g;
+        return g;
     }
 
 public:
@@ -387,25 +386,27 @@ bool Database::createConnection(const QString & connectionName, const QString & 
         }
     case MySQL:
         {
-            if (!DB.open()) {
-                LOG_ERROR_FOR("Database", QCoreApplication::translate("Database",
-                              "ERROR : Database %1 is not readable. Path : %2")
-                              .arg(dbName, pathOrHostName));
-                return false;
+            if (!DB.isOpen()) {
+                if (!DB.open()) {
+                    LOG_ERROR_FOR("Database", QCoreApplication::translate("Database",
+                                                                          "ERROR : Database %1 is not readable. Path : %2")
+                                  .arg(dbName, pathOrHostName));
+                    return false;
+                }
             }
             QSqlQuery query("SHOW GRANTS FOR CURRENT_USER;", DB);
             if (!query.isActive()) {
                 LOG_ERROR_FOR("Database", QCoreApplication::translate("Database",
-                              "ERROR : Database %1 is not readable. Path : %2")
+                                                                      "ERROR : Database %1 is not readable. Path : %2")
                               .arg(dbName, pathOrHostName));
-                Log::addQueryError("Database", query);
+                LOG_QUERY_ERROR_FOR("Database", query);
                 return false;
             } else {
                 QStringList grants;
                 while (query.next()) {
                     grants << query.value(0).toString();
                 }
-                d->getGrants(connectionName, grants);
+                d->m_Grants.insert(connectionName, d->getGrants(connectionName, grants));
 //                qWarning() << grants;
             }
             break;
@@ -496,6 +497,43 @@ Database::Grants Database::grants(const QString &connectionName) const
 {
     return d->m_Grants.value(connectionName, 0);
 }
+
+/**
+   Returns the grants according to the database \e connectionName.
+   Database must be open and connected with a specific user.
+*/
+Database::Grants Database::getConnectionGrants(const QString &connectionName) // static
+{
+    QSqlDatabase DB = QSqlDatabase::database(connectionName);
+    if (!DB.isOpen()) {
+        if (!DB.open()) {
+            LOG_ERROR_FOR("Database", tkTr(Trans::Constants::UNABLE_TO_OPEN_DATABASE_1_ERROR_2)
+                          .arg(connectionName).arg(DB.lastError().text()));
+            return false;
+        }
+    }
+    if (DB.driverName()=="QSQLITE") {
+        return Grant_All;
+    }
+    if (DB.driverName()=="QMYSQL") {
+        QStringList grants;
+        QSqlQuery query("SHOW GRANTS FOR CURRENT_USER;", DB);
+        if (!query.isActive()) {
+            LOG_ERROR_FOR("Database", "No grants for user on database ?");
+            LOG_QUERY_ERROR_FOR("Database", query);
+            return Grant_NoGrant;
+        } else {
+            while (query.next()) {
+                grants << query.value(0).toString();
+            }
+        }
+        query.finish();
+        return DatabasePrivate::getGrants(connectionName, grants);
+    }
+    /** \todo code here : PostGreSQL and other drivers */
+    return Grant_NoGrant;
+}
+
 
 /** \brief Set connectionName to \e c */
 void Database::setConnectionName(const QString & c)

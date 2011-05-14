@@ -172,6 +172,7 @@ public:
 
     /** \brief Describe the grants on database/server (mainly used for MySQL connections). */
     enum Grant {
+        Grant_NoGrant          = 0x00000,
         Grant_Select           = 0x00001,
         Grant_Update           = 0x00002,
         Grant_Insert           = 0x00004,
@@ -225,6 +226,7 @@ public:
     virtual QString connectionName() const;
 
     Grants grants(const QString &connectionName) const;
+    static Grants getConnectionGrants(const QString &connectionName);
 
 
     // manage database scheme (use enums for the int references)
