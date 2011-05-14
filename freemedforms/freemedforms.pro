@@ -1,7 +1,7 @@
 # first definitions
 TEMPLATE = app
 TARGET = $$quote(FreeMedForms)
-PACKAGE_VERSION = 0.5.9~alpha1
+PACKAGE_VERSION = 0.5.9~alpha2
 
 # Prepare installation
 FMF_BUILD = 1
