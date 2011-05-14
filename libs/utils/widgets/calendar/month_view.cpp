@@ -35,6 +35,8 @@ void MonthHeader::paintEvent(QPaintEvent *) {
 
 MonthView::MonthView(QWidget *parent) : View(parent) {
 	setSizePolicy(QSizePolicy::Expanding, QSizePolicy::Expanding);
+
+	connect(this, SIGNAL(firstDateChanged()), this, SLOT(firstDateChanged()));
 }
 
 int MonthView::topHeaderHeight() const {
@@ -58,31 +60,13 @@ void MonthView::paintBody(QPainter *painter, const QRect &visibleRect) {
 	pen.setCapStyle(Qt::FlatCap);
 	painter->setPen(pen);
 
-	QPair<QDate,QDate> boundingMonthInterval = Calendar::getBoundingMonthDaysInterval(m_firstDate);
-
-	// compute week count in way to englobe all month days
-	QDate now = QDate::currentDate();
-	int weekCount = 0;
-	int focusRow = -1;
-	for (QDate date = boundingMonthInterval.first; date <= boundingMonthInterval.second; date = date.addDays(7)) {
-		if (now >= date && now < date.addDays(7)) {
-			focusRow = weekCount;
-		}
-		weekCount++;
-	}
-
-	int horiAmount = visibleRect.width() - 6; // total width without lines width
-	int vertiAmount = visibleRect.height() - weekCount + 1; // total height without lines height
+	int horiAmount = visibleRect.width() - 6; // total width without lines width (7 days => 6 lines)
+	int vertiAmount = visibleRect.height() - m_weekCount + 1; // total height without lines height
 
 	// draw current day?
-	if (focusRow >= 0) {
-		int i = now.dayOfWeek() - 1;
-		int j = focusRow;
-		QRect r((i * horiAmount) / 7 + i, (j * vertiAmount) / weekCount + j,
-				((i + 1) * horiAmount) / 7 - (i * horiAmount) / 7,
-				((j + 1) * vertiAmount) / weekCount - (j * vertiAmount) / weekCount);
-		painter->fillRect(r, QColor(255, 255, 200));
-	}
+	QDate now = QDate::currentDate();
+	if (now >= m_monthBoundingDays.first && now <= m_monthBoundingDays.second)
+		painter->fillRect(getDayRect(now), QColor(255, 255, 200));
 
 	// vertical lines
 	for (int i = 1; i < 7; ++i)
@@ -90,31 +74,75 @@ void MonthView::paintBody(QPainter *painter, const QRect &visibleRect) {
 						  (i * horiAmount) / 7 + i - 1, visibleRect.height());
 
 	// horizontal lines
-	for (int i = 1; i < weekCount; ++i)
-		painter->drawLine(0, (i * vertiAmount) / weekCount + i - 1,
-						  visibleRect.width(), (i * vertiAmount) / weekCount + i - 1);
+	for (int i = 1; i < m_weekCount; ++i)
+		painter->drawLine(0, (i * vertiAmount) / m_weekCount + i - 1,
+						  visibleRect.width(), (i * vertiAmount) / m_weekCount + i - 1);
 
 	// day texts
-	QDate day = boundingMonthInterval.first;
-	for (int j = 0; j < weekCount; ++j)
-		for (int i = 0; i < 7; ++i) {
-			QRect r((i * horiAmount) / 7 + i, (j * vertiAmount) / weekCount + j + 2, // +2 is a correction to be not stucked to the top line
-					((i + 1) * horiAmount) / 7 - (i * horiAmount) / 7 - 2, // -2 is a correction to be not stucked to the right line
-					((j + 1) * vertiAmount) / weekCount - (j * vertiAmount) / weekCount);
+	for (QDate day = m_monthBoundingDays.first; day <= m_monthBoundingDays.second; day = day.addDays(1)) {
+		QRect dayRect = getDayRect(day);
 
-			QString text;
-			if (day.day() == 1)
-				text = day.toString(tr("d MMM"));
-			else
-				text = day.toString(tr("d"));
+		QString text;
+		if (day.day() == 1)
+			text = day.toString(tr("d MMM"));
+		else
+			text = day.toString(tr("d"));
 
-			if (day.month() != m_firstDate.month())
-				pen.setColor(QColor(180, 180, 180));
-			else
-				pen.setColor(QColor(100, 100, 100));
-			painter->setPen(pen);
+		if (day.month() != m_firstDate.month())
+			pen.setColor(QColor(180, 180, 180));
+		else
+			pen.setColor(QColor(100, 100, 100));
+		painter->setPen(pen);
 
-			painter->drawText(r, Qt::AlignRight | Qt::AlignTop, text);
-			day = day.addDays(1);
-		}
+		painter->drawText(dayRect.adjusted(0, 2, -2, 0), Qt::AlignRight | Qt::AlignTop, text); // correction to not be stucked to the top/right lines
+	}
+}
+
+/*void MonthView::paintEvents(QPainter &painter, const QDate &day, const QRect &dayRect) {
+	QList<CalendarItem> items = model()->getItemsBetween(day, day);
+	if (!items.count())
+		return;
+
+	qSort(items.begin(), items.end(), calendarItemLessThan);
+
+	int itemHeight = QFontMetrics(painter.font()).height();
+	int visibleItemsCount = dayRect.height() / itemHeight - 1;
+	int top = 0;
+
+	foreach (const CalendarItem &item, items) {
+		if (visibleItemsCount < 0)
+			break;
+
+		painter.drawText(dayRect.adjusted(2, top, -2, 0), Qt::AlignLeft, QString("%1 %2").arg(item.beginning().time().toString("hh:mm")).arg(item.title().isEmpty() ? "(untitled)" : item.title()));
+
+		top += itemHeight;
+		visibleItemsCount--;
+	}
+	}*/
+
+void MonthView::resetItemWidgets() {
+	// re-create all widgets
+	deleteAllWidgets();
+
+	
+}
+
+QRect MonthView::getDayRect(const QDate &day) const {
+	int i = day.dayOfWeek() - 1;
+	int j = m_monthBoundingDays.first.daysTo(day) / 7;
+
+	int horiAmount = rect().width() - 6; // total width without lines width
+	int vertiAmount = rect().height() - m_weekCount + 1; // total height without lines height
+	return QRect((i * horiAmount) / 7 + i, (j * vertiAmount) / m_weekCount + j,
+				 ((i + 1) * horiAmount) / 7 - (i * horiAmount) / 7,
+				 ((j + 1) * vertiAmount) / m_weekCount - (j * vertiAmount) / m_weekCount);
+}
+
+void MonthView::firstDateChanged() {
+	// refresh some internal variables
+
+	// compute week counts
+	m_weekCount = 0;
+	m_monthBoundingDays = Calendar::getBoundingMonthDaysInterval(m_firstDate);
+	m_weekCount = (m_monthBoundingDays.first.daysTo(m_monthBoundingDays.second) + 1) / 7;
 }

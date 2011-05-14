@@ -65,6 +65,9 @@ namespace Calendar {
 		/** called when a new model has been defined */
 		void setModel(AbstractCalendarModel *model);
 
+	signals:
+		void firstDateChanged();
+
 	protected:
 		QDate m_firstDate;
 

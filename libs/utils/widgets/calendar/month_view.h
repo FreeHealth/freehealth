@@ -29,6 +29,16 @@ namespace Calendar {
 
 	protected:
 		virtual void paintBody(QPainter *painter, const QRect &visibleRect);
+		virtual void resetItemWidgets();
+		QRect getDayRect(const QDate &day) const;
+
+	private:
+		int m_weekCount;
+		QPair<QDate,QDate> m_monthBoundingDays;
+//		void paintEvents(QPainter &painter, const QDate &day, const QRect &dayRect);
+
+	private slots:
+		void firstDateChanged();
 	};
 }
 

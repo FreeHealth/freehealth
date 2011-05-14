@@ -43,3 +43,15 @@ int CalendarItem::intersects(const QDate &firstDay, const QDate &lastDay) const 
 bool CalendarItem::overlap(const CalendarItem &item) const {
 	return m_ending > item.beginning() && m_beginning < item.ending();
 }
+
+// at first compare with begin dates. If they're equals, compare by end dates.
+bool Calendar::calendarItemLessThan(const CalendarItem &item1, const CalendarItem &item2) {
+	if (item1.beginning() < item2.beginning())
+		return true;
+	else if (item1.beginning() > item2.beginning())
+		return false;
+	else if (item1.ending() > item2.ending())
+		return true;
+	else
+		return false;
+}

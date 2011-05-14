@@ -52,6 +52,10 @@ namespace Calendar {
 		QDateTime m_ending;
 		QString m_description;
 	};
+
+	/** a sort function for calendar items
+	 */
+	bool calendarItemLessThan(const CalendarItem &item1, const CalendarItem &item2);
 }
 
 #endif

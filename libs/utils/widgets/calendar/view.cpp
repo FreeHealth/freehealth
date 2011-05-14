@@ -36,6 +36,8 @@ void View::setFirstDate(const QDate &firstDate) {
 		return;
 
 	m_firstDate = firstDate;
+	emit firstDateChanged();
+
 	resetItemWidgets();
 	m_refreshGrid = true;
 	update();

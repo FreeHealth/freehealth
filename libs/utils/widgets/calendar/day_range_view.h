@@ -51,6 +51,8 @@ namespace Calendar {
 		int computeMaxCountBeforeColliding();
 	};
 
+	class DayItemWidget;
+
 	class DayRangeHeader : public ViewHeader
 	{
 		Q_OBJECT
@@ -128,7 +130,7 @@ namespace Calendar {
 		QDateTime m_pressDateTime;
 		QDateTime m_previousDateTime;
 		QPoint m_pressPos;
-		CalendarItemWidget *m_pressItemWidget;
+		DayItemWidget *m_pressItemWidget;
 		CalendarItem m_pressItem;
 		MouseMode m_mouseMode;
 

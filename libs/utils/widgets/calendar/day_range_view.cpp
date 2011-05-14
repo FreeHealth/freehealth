@@ -5,7 +5,7 @@
 #include <QScrollArea>
 #include <QMouseEvent>
 
-#include "calendar_item_widget.h"
+#include "day_item_widget.h"
 #include "common.h"
 #include "abstract_calendar_model.h"
 #include "calendar_widget.h"
@@ -369,7 +369,7 @@ void DayRangeView::mousePressEvent(QMouseEvent *event) {
 	m_pressPos = event->pos();
 
 	// item under mouse?
-	m_pressItemWidget = qobject_cast<CalendarItemWidget*>(childAt(event->pos()));
+	m_pressItemWidget = qobject_cast<DayItemWidget*>(childAt(event->pos()));
 	if (m_pressItemWidget) {
 		m_pressItem = model()->getItemByUid(m_pressItemWidget->uid());
 		QPoint pos = m_pressItemWidget->mapFromParent(event->pos());
@@ -397,7 +397,7 @@ void DayRangeView::mouseMoveEvent(QMouseEvent *event) {
 	case MouseMode_Creation:
 		if (dateTime != m_pressDateTime) {
 			if (!m_pressItemWidget) {
-				m_pressItemWidget = new CalendarItemWidget(this);
+				m_pressItemWidget = new DayItemWidget(this);
 				m_pressItemWidget->setBeginDateTime(m_pressDateTime);
 				m_pressItemWidget->show();
 			}
@@ -523,19 +523,6 @@ void DayRangeView::resetItemWidgets() {
 		refreshDayWidgets(m_firstDate.addDays(i));
 }
 
-// at first compare with begin dates. If they're equals, compare by end dates.
-bool calendarItemLessThan(const Calendar::CalendarItem &item1, const Calendar::CalendarItem &item2)
-{
-	if (item1.beginning() < item2.beginning())
-		return true;
-	else if (item1.beginning() > item2.beginning())
-		return false;
-	else if (item1.ending() > item2.ending())
-		return true;
-	else
-		return false;
-}
-
 void DayRangeView::refreshDayWidgets(const QDate &dayDate) {
 	if (dayDate < m_firstDate || dayDate >= m_firstDate.addDays(m_rangeWidth)) // day is out of range
 		return;
@@ -552,8 +539,6 @@ void DayRangeView::refreshDayWidgets(const QDate &dayDate) {
 	if (!items.count())
 		return;
 
-	QPair<int, int> band = getBand(dayDate);
-
 	// sorting and create the tree
 	qSort(items.begin(), items.end(), calendarItemLessThan);
 
@@ -564,10 +549,11 @@ void DayRangeView::refreshDayWidgets(const QDate &dayDate) {
 
 	node.prepareForWidthsComputing();
 	QList<CalendarItemNode*> nodes;
+	QPair<int, int> band = getBand(dayDate);
 	node.computeWidths(band.first, band.second, nodes);
 
 	foreach (CalendarItemNode *node, nodes) {
-		CalendarItemWidget *widget = new CalendarItemWidget(this, node->item().uid());
+		DayItemWidget *widget = new DayItemWidget(this, node->item().uid());
 		QPair<int, int> verticalData = getItemVerticalData(node->item().beginning().time(), node->item().ending().time());
 		widget->setBeginDateTime(node->item().beginning());
 		widget->setEndDateTime(node->item().ending());

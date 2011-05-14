@@ -9,8 +9,6 @@ namespace Calendar {
 	{
 		Q_OBJECT
 	public:
-		/** if uid is empty, this calendar item is considered as temporary and will be drawn with transparence
-		 */
 		CalendarItemWidget(QWidget *parent = 0, const QString &uid = "");
 
 		const QString &uid() const { return m_uid; }
@@ -18,19 +16,12 @@ namespace Calendar {
 		void setBeginDateTime(const QDateTime &dateTime);
 		const QDateTime &endDateTime() const { return m_endDateTime; }
 		void setEndDateTime(const QDateTime &dateTime);
-		bool inMotion() const { return m_inMotion; }
-		void setInMotion(bool value);
-
-	protected:
-		virtual void paintEvent(QPaintEvent *event);
-		virtual void mouseMoveEvent(QMouseEvent *event);
 
 	private:
 		// TMP : all date will probably be moved into a pure data class for events/tasks, etc
 		QDateTime m_beginDateTime;
 		QDateTime m_endDateTime;
 		QString m_uid;
-		bool m_inMotion;
 	};
 }
 
