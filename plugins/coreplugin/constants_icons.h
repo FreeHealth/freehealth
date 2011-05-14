@@ -171,6 +171,10 @@ const char * const  ICONEDITUSER      = "edituser.png";
 const char * const  ICONCLEARUSER     = "editclear.png";
 const char * const  ICONDELETEUSER    = "deleteuser.png";
 const char * const  ICONNEWUSER       = "adduser.png";
+const char * const  ICONNEWUSER_QUICK = "adduser-quick.png";
+const char * const  ICONDOCTOR        = "people-doctor.png";
+const char * const  ICONSECRETARY     = "people-secretary.png";
+const char * const  ICONSERVERADMIN   = "people-serveradmin.png";
 
 // patients icons --> MediumSize / BigSize
 const char * const  ICONPATIENT       = "patient.png";
