@@ -54,6 +54,7 @@ class ACCOUNT_EXPORT receiptsManager : public QObject
   QHash<QString,QVariant> getHashOfThesaurus();
   QHash<QString,QString> getPreferentialActFromThesaurus();
   bool getPreferedValues();
+  QVariant getPreferedDistanceRule();
   //QString createTablesAndFields();
   //bool writeAllDefaultsValues();
   QStringList getChoiceFromCategories(QString &);

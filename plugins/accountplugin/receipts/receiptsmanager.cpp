@@ -206,6 +206,7 @@ QHash<QString,QVariant> receiptsManager::getHashOfInsurance(){
    	  for (int row = 0; row < model.rowCount(); row += 1)
    	  {
    	  	QString str = model.data(model.index(row,INSURANCE_NAME),Qt::DisplayRole).toString();
+   	  	qDebug() << __FILE__ << QString::number(__LINE__) << " str =" << str ;
    	  	QVariant uid = model.data(model.index(row,INSURANCE_UID),Qt::DisplayRole);
    	  	hash.insertMulti(str,uid);
     	  }
@@ -501,5 +502,7 @@ QStringList receiptsManager::getChoiceFromCategories(QString & categoriesItem){
     return listOfItems;
 }
 
-
+QVariant receiptsManager::getPreferedDistanceRule(){
+      return m_preferedDistanceRule;
+  }
 

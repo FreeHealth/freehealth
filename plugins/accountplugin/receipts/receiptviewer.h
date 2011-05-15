@@ -102,7 +102,13 @@ public:
 
 protected:
     void changeEvent(QEvent *e);
-    void fillModel(QHash<QString,QString> &hashOfValues, int typeOfPayment, double percentage);
+    void fillModel(QHash<QString,QString> &hashOfValues, 
+                   int typeOfPayment, 
+                   double percentage, 
+                   const QVariant & debtor, 
+                   const QVariant & site, 
+                   const QVariant & distrules,
+                   const int row);
 
     /** \todo remove this using the Core::ActionManager. */
     QAction *m_clear;

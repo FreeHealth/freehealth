@@ -38,18 +38,69 @@
 #include <QTimer>
 #include <QHash>
 
+#include <QStandardItemModel>
+#include <QMenu>
+#include <QAction>
+#include <QTreeView>
+
 namespace Ui{
     class ChoiceDialog;
 }
+
+namespace ChoiceActions{
+class treeViewsActions: public QTreeView
+{
+    Q_OBJECT
+
+public:
+    treeViewsActions(QWidget *parent);
+    ~treeViewsActions();
+
+    void reset() {QTreeView::reset();}
+    void fillActionTreeView();
+    QStandardItemModel *treeModel() const {return m_actionsTreeModel;}
+
+private:
+    void mousePressEvent(QMouseEvent *event);
+    bool deleteItemFromThesaurus(QModelIndex &index);
+    bool addPreferedItem(QModelIndex &index);
+    bool isChildOfThesaurus();
+
+private Q_SLOTS:
+    void choosePreferedValue(bool b);
+    void deleteBox(bool b);
+
+private:
+    /** \create a pimpl */
+    QAction *m_choosePreferedValue;
+    QAction *m_deleteThesaurusValue;
+    QMenu *m_menuRightClic;
+    QStandardItemModel *m_actionsTreeModel;
+};
+}
+
 class ACCOUNT_EXPORT choiceDialog : public QDialog
 {
   Q_OBJECT
 public:
-  choiceDialog(QWidget *parent = 0);
+  enum returningModel{
+      TYPE_OF_CHOICE = 0,
+      PERCENTAGE,
+      DEBTOR,
+      SITE,
+      DISTRULES,
+      returningModel_MaxParam
+      };
+  choiceDialog(QWidget *parent = 0,bool roundtrip = false);
   ~choiceDialog();
+  double getDistanceNumber(const QString & data);
   int returnChoiceDialog();
   double returnPercentValue();
   double m_percentValue;
+  QList<double> m_listOfPercentValues;
+  QStandardItemModel * m_modelChoicePercentDebtorSiteDistruleValues;
+  QList<double> listOfPercentValues();
+  QStandardItemModel * getChoicePercentageDebtorSiteDistruleModel();
 private slots:
   void value(double val);
   void valueUp();
@@ -58,13 +109,24 @@ private slots:
   void valueDownStop();
   void quickPlus();
   void quickLess();
+  void beforeAccepted();
 private:
   Ui::ChoiceDialog * ui;
   QTimer * m_timerUp;
   QTimer * m_timerDown;
+  ChoiceActions::treeViewsActions *m_actionTreeView;
+  QVariant m_siteUid;
+  QVariant m_insuranceUid;
+  QVariant m_insurance;
+  double m_distanceRuleValue;
+  QString m_distanceRuleType;
+  int m_row;
   double m_percent;
   int m_quickInt;
   QHash<int,QString> m_hashPercentages;
+private:
+  QVariant firstItemChoosenAsPreferential(QString &item);
+
 };
 
 #endif

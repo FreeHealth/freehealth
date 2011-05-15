@@ -67,7 +67,7 @@ using namespace Constants;
 
 namespace InternalAmount {
 
-    class AmountModel : public QAbstractTableModel
+    /*class AmountModel : public QAbstractTableModel
     {
     public:
         enum ColumnRepresentation {
@@ -96,10 +96,7 @@ namespace InternalAmount {
         int columnCount(const QModelIndex &parent = QModelIndex()) const {return ColCount;}
 
         bool submit(){
-            /*if (!submit()) {
-               return false;
-            }*/
-          return QAbstractTableModel::submit();
+        return QAbstractTableModel::submit();
         }
 
 
@@ -112,6 +109,9 @@ namespace InternalAmount {
                 switch (index.column()) {
                 case Col_Value:
                     return m_Values[index.row()];
+                    break;
+                case Col_Currency:
+                    return trUtf8("euros");
                     break;
                 default: return QVariant();
                 }
@@ -128,10 +128,20 @@ namespace InternalAmount {
                 switch (index.column()) {
                 case Col_Value:
                     {
-                        m_Values[index.row()] = value.toFloat();
+                        m_Values[index.row()] = value.toDouble();//toFloat();
                         Q_EMIT dataChanged(index, index);
                         return true;
                     }
+                    break;
+                case Col_Currency:
+                    qDebug() << __FILE__ << QString::number(__LINE__) << " dataChanged =" << value.toString() ;
+                    QAbstractTableModel::setData(index,value,role);
+                    Q_EMIT dataChanged(index, index);
+                    return true;
+                    break;
+                 default:
+                    return false;
+                    break;
                 }
             }
             return false;
@@ -175,15 +185,221 @@ namespace InternalAmount {
 
     private:
         QList<float> m_Values;
-    };
+    };*/
 
+
+
+    class AmountModel : public QAbstractTableModel
+    {
+    public:
+        enum ColumnRepresentation {
+            Col_Cash = 0,
+            Col_Cheque,  // Devise monétaire
+            Col_Visa,
+            Col_Banking,
+            Col_Other,
+            Col_Du,
+            Col_Debtor,
+            Col_Site,
+            Col_DistRule,
+            Col_Count
+        };
+
+        AmountModel(QObject *parent = 0) : QAbstractTableModel(parent)
+        {
+             m_listsOfValuesbyRows = new QVector<QList<QVariant> >;
+        }
+        
+        int rowCount(const QModelIndex &parent ) const {
+            Q_UNUSED(parent);
+            return m_listsOfValuesbyRows->size();
+            }
+            
+        int columnCount(const QModelIndex &parent = QModelIndex()) const {
+            Q_UNUSED(parent);
+            return int(Col_Count);
+            }
+        
+        QModelIndex index ( int row, int column, const QModelIndex & parent = QModelIndex() ) const
+        {
+            return QAbstractTableModel::index(row,column,parent);
+        }
+        
+        bool insertRows( int position, int count, const QModelIndex & parent = QModelIndex() ){
+            beginInsertRows(parent, position, position+count-1);
+            for (int row=0; row < count; row++) {
+                
+                QList<QVariant> list;
+                for (int j = 0; j < Col_Count; j += 1)
+                {
+            	    list << QVariant(0);
+            	    }
+                m_listsOfValuesbyRows -> insert(row,list);
+            }
+            QList<QVariant> listDouble;
+            listDouble = m_listsOfValuesbyRows->at(position);
+            m_headersRows.append(listDouble[Col_Debtor].toString());
+            endInsertRows();
+            return true;
+            
+        }
+        
+        bool removeRows(int position, int count, const QModelIndex & parent = QModelIndex()){
+            Q_UNUSED(parent);
+            beginRemoveRows(parent, position, position+count-1);
+            for (int row=0; row < count; row++) {
+                m_listsOfValuesbyRows -> remove(row);
+            }
+            endRemoveRows();
+            return true;
+        }
+        
+        bool submit(){
+            return QAbstractTableModel::submit();
+        }
+
+
+        QVariant data(const QModelIndex &index, int role = Qt::DisplayRole) const
+        {
+            
+            QVariant data;
+            if (!index.isValid()){
+                qWarning() << __FILE__ << QString::number(__LINE__) << "index not valid" ;
+                return QVariant();
+                }
+                
+            
+            if (role==Qt::EditRole || role==Qt::DisplayRole) {
+               int row = index.row();
+               const QList<QVariant> & valuesListByRow = m_listsOfValuesbyRows->at(row);
+               data = valuesListByRow[index.column()];
+            }
+            return data;
+        }
+
+        bool setData(const QModelIndex &index, const QVariant &value, int role = Qt::EditRole)
+        {   
+            bool ret = true;
+            if (!index.isValid()){
+                qWarning() << __FILE__ << QString::number(__LINE__) << "index not valid" ;
+                return false;
+                }
+
+            if (role==Qt::EditRole) {
+                QList<QVariant> list;
+                int row = index.row();
+                list = m_listsOfValuesbyRows->at(row);
+                switch(index.column()){
+                    case Col_Cash :
+                        list.replace(Col_Cash,value);
+                        break;
+                    case Col_Cheque :
+                        list.replace(Col_Cheque,value);
+                        break;
+                    case Col_Visa :
+                        list.replace(Col_Visa,value);
+                        break;
+                    case Col_Banking :
+                        list.replace(Col_Banking,value);
+                        break;
+                    case Col_Other :
+                        list.replace(Col_Other,value);
+                        break;
+                    case Col_Du :
+                        list.replace(Col_Du,value);
+                        break;
+                    case Col_Debtor :
+                        list.replace(Col_Debtor,value);
+                        break;
+                    case Col_Site :
+                        list.replace(Col_Site,value);
+                        break;
+                    case Col_DistRule :
+                        list.replace(Col_DistRule,value);
+                        break;
+                    default :
+                        break;    
+                    }
+                    m_listsOfValuesbyRows->replace(row,list);
+                    Q_EMIT dataChanged(index, index);
+                    ret = true;
+                }
+            return ret;
+        }
+
+        QVariant headerData(int section, Qt::Orientation orientation, int role = Qt::DisplayRole) const
+        {
+            if (role==Qt::DisplayRole) {
+                if (orientation==Qt::Horizontal) {
+                    switch (section) {
+                    case Col_Cash: return tr("Cash");
+                    case Col_Cheque: return trUtf8("Cheque");
+                    case Col_Visa: return trUtf8("Visa");
+                    case Col_Banking: return trUtf8("Banking");
+                    case Col_Other: return trUtf8("Other");
+                    case Col_Du: return trUtf8("Du");
+                    case Col_Debtor : return "debtor";
+                    case Col_Site : return "site";
+                    case Col_DistRule : return "distRule";
+                     
+                    }
+                } else if (orientation==Qt::Vertical) {
+                    return QVariant(m_headersRows[section]);
+                }
+            }
+            return QVariant();
+        }
+        
+        bool setHeaderData( int section, Qt::Orientation orientation, const QVariant & value, int role = Qt::EditRole )
+        {
+            if (role==Qt::EditRole||role == Qt::DisplayRole)
+            {
+            	  if (orientation == Qt::Vertical)
+            	  {
+            	  	  m_headersRows.insert(section,value.toString());
+            	      }
+                }
+            else
+            {
+            	return false;
+                }
+                
+            Q_EMIT QAbstractTableModel::headerDataChanged(orientation, section, section) ;
+            return true;
+        }
+
+        QSqlError lastError(){
+            return lastError();
+            }
+
+        Qt::ItemFlags flags(const QModelIndex &index) const
+        {
+            if (   index.column()==Col_Cash 
+                || index.column()==Col_Cheque
+                || index.column()==Col_Visa
+                || index.column()==Col_Banking
+                || index.column()==Col_Other 
+                || index.column()==Col_Du
+                || index.column()==Col_Debtor
+                || index.column()==Col_Site
+                || index.column()==Col_DistRule ) {
+                return Qt::ItemIsEnabled | Qt::ItemIsEditable | Qt::ItemIsSelectable;
+            } else {
+                return Qt::ItemIsEnabled | Qt::ItemIsSelectable;
+            }
+        }
+
+
+    private:
+        QVector<QList<QVariant> > *m_listsOfValuesbyRows;
+        QStringList m_headersRows;
+        int m_rows ;
+        
+    };
 }  // End namespace Internal
 
 
-
-
-
-treeViewsActions::treeViewsActions(QWidget *parent){
+treeViewsActions::treeViewsActions(QWidget *parent):QTreeView(parent){
     m_deleteThesaurusValue = new QAction(trUtf8("Delete this value."),this);
     m_choosePreferedValue = new QAction(trUtf8("Choose this value like the prefered."),this);
     connect(m_choosePreferedValue,SIGNAL(triggered(bool)),this,SLOT(choosePreferedValue(bool)));
@@ -211,6 +427,7 @@ void treeViewsActions::mousePressEvent(QMouseEvent *event){
 }
 
 void treeViewsActions::deleteBox(bool b){
+    Q_UNUSED(b);
     QMessageBox msgBox;
             msgBox.setText("Do you want to delete choosen item ?");
             msgBox.setStandardButtons(QMessageBox::Yes | QMessageBox::No);
@@ -228,6 +445,7 @@ void treeViewsActions::deleteBox(bool b){
 }
 
 void treeViewsActions::choosePreferedValue(bool b){
+    Q_UNUSED(b);
     QMessageBox msgBox;
             msgBox.setText("Do you want to choose this item as prefered value ?");
             msgBox.setStandardButtons(QMessageBox::Yes | QMessageBox::No);
@@ -280,13 +498,13 @@ void treeViewsActions::fillActionTreeView()
     m_actionsTreeModel = new QStandardItemModel;
     QStringList listOfMainActions;
     QMap<QString,QString> parametersMap;
-    parametersMap.insert("Debtor","insurance");
+    //parametersMap.insert("Debtor","insurance");
     parametersMap.insert("Thesaurus","thesaurus");
     parametersMap.insert("Values","values");
-    parametersMap.insert("Sites","sites");
+    //parametersMap.insert("Sites","sites");
     parametersMap.insert("Prefered Value","Prefered Value");
     parametersMap.insert("Round trip","Round trip");
-    parametersMap.insert("Distance rules","distance_rules");
+    //parametersMap.insert("Distance rules","distance_rules");
     listOfMainActions = parametersMap.keys();
     //insert items from tables if available
     QMap<QString,QString> mapSubItems;
@@ -422,23 +640,36 @@ ReceiptViewer::ReceiptViewer(QWidget *parent) :
     m_insuranceUid = 0;
     m_model = new InternalAmount::AmountModel(this);
     ui->setupUi(this);
-    ui->bankedLabel->hide();
+    /*ui->bankedLabel->hide();
     ui->dateBanked->hide();
     ui->bookLabel->hide();
-    ui->dateBook->hide();
-    ui->amountsView->verticalHeader()->setResizeMode(QHeaderView::Fixed);
+    ui->dateBook->hide();*/
+    ui->amountsView->setShowGrid(false);
+    /*ui->amountsView->verticalHeader()->setResizeMode(QHeaderView::Interactive);
+    ui->amountsView->verticalHeader()->setDefaultSectionSize(10);
+    ui->amountsView->verticalHeader()->setDefaultAlignment(Qt::AlignTop);*/
+    
     ui->amountsView->horizontalHeader()->setResizeMode(QHeaderView::ResizeToContents);
     ui->amountsView->horizontalHeader()->setResizeMode(QHeaderView::Interactive);
     ui->amountsView->setModel(m_model);
-    ui->amountsView->setItemDelegateForColumn(0, new Utils::SpinBoxDelegate(this));
+    ui->amountsView->setItemDelegateForColumn(Cash, new Utils::SpinBoxDelegate(this));
+    ui->amountsView->setItemDelegateForColumn(Check, new Utils::SpinBoxDelegate(this));
+    ui->amountsView->setItemDelegateForColumn(Visa, new Utils::SpinBoxDelegate(this));
+    ui->amountsView->setItemDelegateForColumn(Banking, new Utils::SpinBoxDelegate(this));
+    ui->amountsView->setItemDelegateForColumn(Other, new Utils::SpinBoxDelegate(this));
+    ui->amountsView->setItemDelegateForColumn(Due, new Utils::SpinBoxDelegate(this));
+    ui->amountsView->setColumnHidden(InternalAmount::AmountModel::Col_Debtor,true);
+    ui->amountsView->setColumnHidden(InternalAmount::AmountModel::Col_Site,true);
+    ui->amountsView->setColumnHidden(InternalAmount::AmountModel::Col_DistRule,true);
+    //ui->amountsView->resizeRowsToContents();
     ui->dateExecution->setDisplayFormat("yyyy-MM-dd");
     ui->dateExecution->setDate(QDate::currentDate());
     ui->datePayment->setDisplayFormat("yyyy-MM-dd");
     ui->datePayment->setDate(QDate::currentDate());
-    ui->dateBanked->setDisplayFormat("yyyy-MM-dd");
+    /*ui->dateBanked->setDisplayFormat("yyyy-MM-dd");
     ui->dateBanked->setDate(QDate::currentDate());
     ui->dateBook->setDisplayFormat("yyyy-MM-dd");
-    ui->dateBook->setDate(QDate::currentDate());
+    ui->dateBook->setDate(QDate::currentDate());*/
     ui->inputRadioButton->setChecked(true);
     ui->saveAndQuitButton->setShortcut(QKeySequence::InsertParagraphSeparator);
     ui->quitButton->setShortcut(QKeySequence("Ctrl+q"));
@@ -460,7 +691,7 @@ ReceiptViewer::ReceiptViewer(QWidget *parent) :
     QString debtor = QString("Debtor");
     m_siteUid = firstItemChoosenAsPreferential(site);
     m_distanceRuleValue = firstItemChoosenAsPreferential(distRule).toDouble();
-    m_distanceRuleType = rManager.m_preferedDistanceRule.toString();
+    m_distanceRuleType = rManager.getPreferedDistanceRule().toString();
     m_insuranceUid = firstItemChoosenAsPreferential(debtor);
     qDebug() << __FILE__ << QString::number(__LINE__) 
              << " site,dist,ins prefered =" << m_siteUid.toString()
@@ -521,43 +752,61 @@ void ReceiptViewer::actionsOfTreeView(const QModelIndex &index){
     QHash<QString,QString> hashOfValues;
     int typeOfPayment = ReceiptsConstants::Cash;
     double percentage = 100.00;
+    QVariant  debtor;
+    QVariant site;
+    QVariant distrules;
     if(data == "Values"){
         findReceiptsValues *rv = new findReceiptsValues(this);
         if(rv->exec() == QDialog::Accepted){
             hashOfValues = rv -> getChoosenValues();
-            choiceDialog choice(rv);
+            choiceDialog choice(rv,false);
             if(hashOfValues.keys().size() > 0){
                 if(choice.exec() == QDialog::Accepted){
-                    typeOfPayment = choice.returnChoiceDialog();//int
-                    percentage = choice.m_percentValue;//double
-                    
-                
-            //qDebug() << __FILE__ << QString::number(__LINE__) << " typeOfPayment = "<< QString::number(typeOfPayment);
-            
-             /*QStringList*/ m_listOfValues << hashOfValues.keys();
-             m_modelReturnedList->setStringList(m_listOfValues);
-             fillModel(hashOfValues,typeOfPayment,percentage);
+                    QStandardItemModel * model = choice.getChoicePercentageDebtorSiteDistruleModel();
+                    for (int i = 0; i < model->rowCount(QModelIndex()); i += 1)
+                    {
+                        typeOfPayment = model->data(model->index(i,choice.TYPE_OF_CHOICE),Qt::DisplayRole).toInt();
+                        percentage = model->data(model->index(i,choice.PERCENTAGE),Qt::DisplayRole).toDouble();
+                        debtor = model->data(model->index(i,choice.DEBTOR),Qt::DisplayRole);
+                        site = model->data(model->index(i,choice.SITE),Qt::DisplayRole);
+                        distrules = model->data(model->index(i,choice.DISTRULES),Qt::DisplayRole);
+                       /*QStringList*/ m_listOfValues << hashOfValues.keys();
+                        m_modelReturnedList->setStringList(m_listOfValues);
+                        fillModel(hashOfValues,typeOfPayment,percentage,debtor,site,distrules,i);
+                     }
+                     delete model;
+                 }
+               }
              }
-            }
-           }
          }
     if(data == "Prefered Value"){// preferential act of payment
-        choiceDialog choice(this);
+        choiceDialog choice(this,false);
         if(choice.exec() == QDialog::Accepted){
-            typeOfPayment = choice.returnChoiceDialog();//int
-            percentage = choice.m_percentValue;
-            qDebug() << __FILE__ << QString::number(__LINE__) << " prefered value =" << data ;
-            hashOfValues = manager.getPreferentialActFromThesaurus();
-            qDebug() << __FILE__ << QString::number(__LINE__) << " preferential acts =" << hashOfValues.keys()[0] ;
-            if (hashOfValues.size() < 1)
+            QStandardItemModel * model = choice.getChoicePercentageDebtorSiteDistruleModel();
+            for (int i = 0; i < model->rowCount(); i += 1)
             {
-            	  hashOfValues.insertMulti("NULL","23.00");//preferential act
-            	  QMessageBox::warning(0,trUtf8("Warning"),trUtf8("You have to insert your prefered "
+                typeOfPayment = model->data(model->index(i,choice.TYPE_OF_CHOICE),Qt::DisplayRole).toInt();
+                qDebug() << __FILE__ << QString::number(__LINE__) << " typeOfPayment =" << QString::number(typeOfPayment) ;
+                
+                percentage = model->data(model->index(i,choice.PERCENTAGE),Qt::DisplayRole).toDouble();
+                debtor = model->data(model->index(i,choice.DEBTOR),Qt::DisplayRole);
+                qDebug() << __FILE__ << QString::number(__LINE__) << " debtor =" << debtor.toString() ;
+                site = model->data(model->index(i,choice.SITE),Qt::DisplayRole);
+                distrules = model->data(model->index(i,choice.DISTRULES),Qt::DisplayRole);
+                qDebug() << __FILE__ << QString::number(__LINE__) << " prefered value =" << data ;
+                hashOfValues = manager.getPreferentialActFromThesaurus();
+                qDebug() << __FILE__ << QString::number(__LINE__) << " preferential acts =" << hashOfValues.keys()[0] ;
+                if (hashOfValues.size() < 1)
+                {
+            	    hashOfValues.insertMulti("NULL","0");//preferential act
+            	    QMessageBox::warning(0,trUtf8("Warning"),trUtf8("You have to insert your prefered "
             	                 	  "value\nin thesaurus\nand choose it as prefered."),QMessageBox::Ok);
-                }           
-            m_listOfValues << hashOfValues.keys();
-            m_modelReturnedList->setStringList(m_listOfValues);
-            fillModel(hashOfValues,typeOfPayment,percentage);
+                    }           
+                m_listOfValues << hashOfValues.keys();
+                m_modelReturnedList->setStringList(m_listOfValues);
+                fillModel(hashOfValues,typeOfPayment,percentage,debtor,site,distrules,i);
+                }
+            delete model;
             }
         }
         
@@ -570,19 +819,27 @@ void ReceiptViewer::actionsOfTreeView(const QModelIndex &index){
         }
     if (data == "Round trip")
     {
-    	  distance dist(this);
+    	  choiceDialog dist(this,true);
     	  if (dist.exec()== QDialog::Accepted)
     	  {
+              QStandardItemModel * model = dist.getChoicePercentageDebtorSiteDistruleModel();
+              for (int i = 0; i < model->rowCount(); i += 1)
+              {
     	          m_kilometers = dist.getDistanceNumber(m_distanceRuleType);
                   double value = m_kilometers *m_distanceRuleValue;
-    	          typeOfPayment = dist.returnDistanceDialog();
-    	          percentage = dist.m_percentValue;
+                  typeOfPayment = model->data(model->index(i,dist.TYPE_OF_CHOICE),Qt::DisplayRole).toInt();
+                  percentage = model->data(model->index(i,dist.PERCENTAGE),Qt::DisplayRole).toDouble();
+                  debtor = model->data(model->index(i,dist.DEBTOR),Qt::DisplayRole);
+                  site = model->data(model->index(i,dist.SITE),Qt::DisplayRole);
+                  distrules = model->data(model->index(i,dist.DISTRULES),Qt::DisplayRole);;
     	  	  hashOfValues.insertMulti("DistPrice",QString::number(value));
     	          qDebug() << __FILE__ << QString::number(__LINE__) << " distance =" << QString::number(m_kilometers) ;
     	          qDebug() << __FILE__ << QString::number(__LINE__) << " value =" << QString::number(value) ;
     	          m_listOfValues << trUtf8("Kilometers");
                   m_modelReturnedList->setStringList(m_listOfValues);
-    	          fillModel(hashOfValues,typeOfPayment,percentage);
+    	          fillModel(hashOfValues,typeOfPayment,percentage,debtor,site,distrules,i);
+    	          }
+    	          delete model;
     	      }
     	  
         }
@@ -598,29 +855,42 @@ void ReceiptViewer::actionsOfTreeView(const QModelIndex &index){
         }
     if (manager.getHashOfThesaurus().keys().contains(data))
     {
-        choiceDialog choice(this);
+        choiceDialog choice(this,false);
         if(choice.exec() == QDialog::Accepted){
-            typeOfPayment = choice.returnChoiceDialog();//int
-            percentage = choice.m_percentValue;
-            
-            QStringList list;
-            list = data.split("+");
-            receiptsEngine r;
-            QHash<QString,double> hashFromMp ;
-            const QString field = trUtf8("NAME");
-            QString str;
-            foreach(str,list){
-                hashFromMp = r.getFilteredValueFromMedicalProcedure(str,field);
-                QString value = QString::number(hashFromMp.value(str));
-                hashOfValues.insertMulti(str,value);
+            QStandardItemModel * model = choice.getChoicePercentageDebtorSiteDistruleModel();
+            for (int i = 0; i < model->rowCount(); i += 1)
+            {
+                typeOfPayment = model->data(model->index(i,choice.TYPE_OF_CHOICE),Qt::DisplayRole).toInt();
+                percentage = model->data(model->index(i,choice.PERCENTAGE),Qt::DisplayRole).toDouble();
+                debtor = model->data(model->index(i,choice.DEBTOR),Qt::DisplayRole);
+                site = model->data(model->index(i,choice.SITE),Qt::DisplayRole);
+                distrules = model->data(model->index(i,choice.DISTRULES),Qt::DisplayRole);
+                QStringList list;
+                list = data.split("+");
+                receiptsEngine r;
+                QHash<QString,double> hashFromMp ;
+                const QString field = trUtf8("NAME");
+                QString str;
+                foreach(str,list){
+                    hashFromMp = r.getFilteredValueFromMedicalProcedure(str,field);
+                    QString value = QString::number(hashFromMp.value(str));
+                    hashOfValues.insertMulti(str,value);
+                    }
+                fillModel(hashOfValues,typeOfPayment,percentage,debtor,site,distrules,i);
                 }
-            fillModel(hashOfValues,typeOfPayment,percentage);
+                delete model;
             }
         }
         //actionTreeView->reset();
 }
 
-void ReceiptViewer::fillModel(QHash<QString,QString> &hashOfValues, int typeOfPayment, double percentage){
+void ReceiptViewer::fillModel(QHash<QString,QString> &hashOfValues, 
+                              int typeOfPayment, 
+                              double percentage,
+                              const QVariant & debtor, 
+                              const QVariant & site, 
+                              const QVariant & distrules,
+                              const int row){
     double value = 0.00;
     QHashIterator<QString,QString> it(hashOfValues);
     while(it.hasNext()){
@@ -629,31 +899,72 @@ void ReceiptViewer::fillModel(QHash<QString,QString> &hashOfValues, int typeOfPa
     }
     value = value*percentage/100.00;
     qDebug() << __FILE__ << QString::number(__LINE__) << " values =" << QString::number(value);
-    const QModelIndex index = m_model->index(typeOfPayment, ::InternalAmount::AmountModel::Col_Value);
+    qDebug() << __FILE__ << QString::number(__LINE__) << " row =" << QString::number(row)  ;
+    qDebug() << __FILE__ << QString::number(__LINE__) << " column =" << QString::number(typeOfPayment) ;
+    /*const QModelIndex index = m_model->index(row-1, typeOfPayment);
+    qDebug() << __FILE__ << QString::number(__LINE__) << " repere " ;
     double lastValue = m_model->data(index).toDouble();
-    value += lastValue;
-    m_model->setData(index, value, Qt::EditRole);
+    qDebug() << __FILE__ << QString::number(__LINE__) << " lastValue " << QString::number(lastValue);
+    value += lastValue;*/
+    qDebug() << __FILE__ << QString::number(__LINE__) << " value =" << QString::number(value) ;
+    if (!m_model->insertRows(row,1,QModelIndex()))
+    {
+    	  qWarning() << __FILE__ << QString::number(__LINE__) << "unable to insert row = "+QString::number(row) ;
+        }
+    qDebug() << __FILE__ << QString::number(__LINE__) << " repere " ;
+    QModelIndex indexValue = m_model->index(row, typeOfPayment);
+    QModelIndex indexDebtor = m_model->index(row, InternalAmount::AmountModel::Col_Debtor);
+    QModelIndex indexSite = m_model->index(row, InternalAmount::AmountModel::Col_Site);
+    QModelIndex indexDistrules = m_model->index(row, InternalAmount::AmountModel::Col_DistRule);
+    //header vertical is debtor
+    m_model->setHeaderData(row,Qt::Vertical,debtor,Qt::EditRole);
+    if (!m_model->setData(indexValue, value, Qt::EditRole))
+    {
+    	  qWarning() << __FILE__ << QString::number(__LINE__) << "unable to setData" ;
+        }
+    if (!m_model->setData(indexDebtor, debtor, Qt::EditRole))
+    {
+    	  qWarning() << __FILE__ << QString::number(__LINE__) << "unable to setData" ;
+        }
+    if (!m_model->setData(indexSite, site, Qt::EditRole))
+    {
+    	  qWarning() << __FILE__ << QString::number(__LINE__) << "unable to setData" ;
+        }
+    if (!m_model->setData(indexDistrules, distrules , Qt::EditRole))
+    {
+    	  qWarning() << __FILE__ << QString::number(__LINE__) << "unable to setData" ;
+        }
+    qDebug() << __FILE__ << QString::number(__LINE__) << " 859 "  ;
 }
 
 void ReceiptViewer::save()
 {
     using namespace ::Internal;
+    receiptsEngine rIO;
     QString userUuid = user()->value(Core::IUser::Uuid).toString();
     QString textOfListOfActs = m_listOfValues.join("+");
-    double cash = m_model->data(m_model->index(InternalAmount::AmountModel::Row_Cash,InternalAmount::AmountModel::Col_Value)).toDouble();
-    double cheque = m_model->data(m_model->index(InternalAmount::AmountModel::Row_Cheque,InternalAmount::AmountModel::Col_Value)).toDouble();
-    double visa = m_model->data(m_model->index(InternalAmount::AmountModel::Row_Visa,InternalAmount::AmountModel::Col_Value)).toDouble();
-    double banking = m_model->data(m_model->index(InternalAmount::AmountModel::Row_Banking,InternalAmount::AmountModel::Col_Value)).toDouble();
-    double other = m_model->data(m_model->index(InternalAmount::AmountModel::Row_Other,InternalAmount::AmountModel::Col_Value)).toDouble();
-    double due = m_model->data(m_model->index(InternalAmount::AmountModel::Row_Du,InternalAmount::AmountModel::Col_Value)).toDouble();
+    for (int row = 0; row < m_model->rowCount(QModelIndex()); row += 1)
+    {
+        double cash = m_model->data(m_model->index(row,InternalAmount::AmountModel::Col_Cash)).toDouble();
+        double cheque = m_model->data(m_model->index(row,InternalAmount::AmountModel::Col_Cheque)).toDouble();
+        double visa = m_model->data(m_model->index(row,InternalAmount::AmountModel::Col_Visa)).toDouble();
+        double banking = m_model->data(m_model->index(row,InternalAmount::AmountModel::Col_Banking)).toDouble();
+        double other = m_model->data(m_model->index(row,InternalAmount::AmountModel::Col_Other)).toDouble();
+        double due = m_model->data(m_model->index(row,InternalAmount::AmountModel::Col_Du)).toDouble();
+        QVariant insurance = m_model->data(m_model->index(row,InternalAmount::AmountModel::Col_Debtor));
+        QVariant insuranceUid = rIO.getInsuranceUidFromInsurance(insurance.toString());
+        QVariant site = m_model->data(m_model->index(row,InternalAmount::AmountModel::Col_Site));
+        QVariant siteUid = rIO.getSiteUidFromSite(site.toString());
+    
+    
     qDebug() << __FILE__ << QString::number(__LINE__) << " values =" << QString::number(cash)+ " "
                                                                      << QString::number(cheque)+ " "
                                                                      << QString::number(visa)+ " "
                                                                      << QString::number(banking)+ " "
                                                                      << QString::number(other)+ " "
                                                                      << QString::number(due) 
-                                                                     << "site uid = "+m_siteUid.toString()
-                                                                     << "insurance = "+m_insuranceUid.toString();
+                                                                     << "site uid = "+siteUid.toString()
+                                                                     << "insurance uid = "+insuranceUid.toString();
     QString patientUid = patient()->data(Core::IPatient::Uid).toString();
     if (patientUid.isEmpty())
     {
@@ -664,14 +975,14 @@ void ReceiptViewer::save()
     {
     	  patientName = "Patient Name";
         }
-    QVariant insurance = "by";//todo
+    //QVariant insurance = "by";//todo
     QHash<int,QVariant> hash;
     hash.insert(ACCOUNT_UID,"UID");
     hash.insert(ACCOUNT_USER_UID,userUuid);
     hash.insert(ACCOUNT_PATIENT_UID,patientUid);
     hash.insert(ACCOUNT_PATIENT_NAME,patientName);
-    hash.insert(ACCOUNT_SITE_ID,m_siteUid);//AccountDB::Constants::SITES_UID
-    hash.insert(ACCOUNT_INSURANCE_ID,m_insuranceUid);
+    hash.insert(ACCOUNT_SITE_ID,siteUid);//AccountDB::Constants::SITES_UID
+    hash.insert(ACCOUNT_INSURANCE_ID,insuranceUid);
     hash.insert(ACCOUNT_DATE,ui->dateExecution->date()/*.toString("yyyy-MM-dd")*/);
     hash.insert(ACCOUNT_MEDICALPROCEDURE_XML, QVariant());
     hash.insert(ACCOUNT_MEDICALPROCEDURE_TEXT,textOfListOfActs);
@@ -692,6 +1003,7 @@ void ReceiptViewer::save()
     else{
         clearAll(true);
         }
+    }
 }
 
 void ReceiptViewer::saveAndQuit()
@@ -729,9 +1041,8 @@ void ReceiptViewer::clearAll(bool b)
     m_listOfValues.clear();
     m_modelReturnedList->removeRows(0,m_modelReturnedList->rowCount(),QModelIndex());
     //clear accountmodel
-    for (int i = 0; i < ::InternalAmount::AmountModel::RowCount; i += 1) {
-        double value = 0.00;
-        m_model->setData(m_model->index(i, ::InternalAmount::AmountModel::Col_Value), value, Qt::EditRole);
+    for (int i = 0; i < m_model->rowCount(QModelIndex()); i += 1) {
+        m_model->removeRows(i,1);
     }
 }
 
@@ -762,6 +1073,7 @@ void ReceiptViewer::showControlReceipts(bool b){
 }
 
 void ReceiptViewer::resizeEvent(QResizeEvent *event){
+    Q_UNUSED(event);
     m_control->resizeControlReceipts(this);
 }
 

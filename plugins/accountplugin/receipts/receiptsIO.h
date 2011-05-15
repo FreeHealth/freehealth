@@ -59,6 +59,9 @@ public:
     double getMinDistanceValue(const QString & data);
     QHash<int,QVariant> getListOfPreferedValues(QString & userUuid,int choice);
     QHash<QString,double> getFilteredValueFromMedicalProcedure(const QString & string, const QString & field);
+    QString getStringFromInsuranceUid(const QVariant & insuranceUid);
+    QVariant getSiteUidFromSite(const QString & site);
+    QVariant getInsuranceUidFromInsurance(const QString & insurance);
 
 private:
     enum typeOfChoice {

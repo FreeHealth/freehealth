@@ -31,28 +31,294 @@
  ***************************************************************************/
 #include "choiceDialog.h"
 #include "receiptsmanager.h"
+#include "receiptsIO.h"
 #include "ui_ChoiceDialog.h"
 #include "constants.h"
 #include <QRadioButton>
+#include <QMessageBox>
+
+#include <QBrush>
+#include <QColor>
+#include <QMouseEvent>
+
+using namespace ChoiceActions;
+treeViewsActions::treeViewsActions(QWidget *parent):QTreeView(parent){
+    m_deleteThesaurusValue = new QAction(trUtf8("Delete this value."),this);
+    m_choosePreferedValue = new QAction(trUtf8("Choose this value like the prefered."),this);
+    connect(m_choosePreferedValue,SIGNAL(triggered(bool)),this,SLOT(choosePreferedValue(bool)));
+    connect(m_deleteThesaurusValue,SIGNAL(triggered(bool)),this,SLOT(deleteBox(bool)));
+    }
+    
+treeViewsActions::~treeViewsActions(){}
+
+void treeViewsActions::mousePressEvent(QMouseEvent *event){
+    if(event->button() == Qt::RightButton){
+        if(isChildOfThesaurus()){
+            blockSignals(true);
+            m_menuRightClic = new QMenu(this); 
+            m_menuRightClic -> addAction(m_choosePreferedValue);
+            m_menuRightClic-> addAction(m_deleteThesaurusValue);
+            m_menuRightClic->exec(event->globalPos());
+            blockSignals(false);
+        }
+
+    }
+    if(event->button() == Qt::LeftButton){
+        blockSignals(false);
+        QTreeView::mousePressEvent(event);
+    }
+}
+
+void treeViewsActions::deleteBox(bool b){
+    Q_UNUSED(b);
+    QMessageBox msgBox;
+            msgBox.setText("Do you want to delete choosen item ?");
+            msgBox.setStandardButtons(QMessageBox::Yes | QMessageBox::No);
+            msgBox.setDefaultButton(QMessageBox::Yes);
+            int ret = msgBox.exec();
+            QModelIndex index;
+            switch(ret){
+                case QMessageBox::Yes :
+                    index = currentIndex();
+                    deleteItemFromThesaurus(index);
+                    break;
+                case QMessageBox::No :
+                    break;
+            }
+}
+
+void treeViewsActions::choosePreferedValue(bool b){
+    Q_UNUSED(b);
+    QMessageBox msgBox;
+            msgBox.setText("Do you want to choose this item as prefered value ?");
+            msgBox.setStandardButtons(QMessageBox::Yes | QMessageBox::No);
+            msgBox.setDefaultButton(QMessageBox::Yes);
+            int ret = msgBox.exec();
+            QModelIndex index;
+            switch(ret){
+                case QMessageBox::Yes :
+                    index = currentIndex();
+                    if (!addPreferedItem(index))
+                    {
+                    	  QMessageBox::warning(0,trUtf8("Warning"),trUtf8("Unable to choose this item."),
+                    	                       QMessageBox::Ok);
+                        }
+                    break;
+                case QMessageBox::No :
+                    break;
+            }
+} 
+
+bool treeViewsActions::addPreferedItem(QModelIndex &index){
+    bool ret = true;
+    QString data = index.data().toString();
+    receiptsEngine r;
+    if (!r.addBoolTrue(data))
+    {
+    	  QMessageBox::warning(0,trUtf8("Warning"),trUtf8("Cannot change value bool in thesaurus :")+data,
+    	                       QMessageBox::Ok);
+    	  ret = false;
+        }
+    fillActionTreeView();
+    return ret;
+}
+
+bool treeViewsActions::isChildOfThesaurus(){
+    bool ret = true;
+    QModelIndex current = currentIndex();
+    QModelIndex indexParent = treeModel()->parent(current);
+    QString dataParent = treeModel()->data(indexParent).toString();
+    qDebug() << __FILE__ << QString::number(__LINE__) << " dataParent =" << dataParent ;
+    if (dataParent != "Thesaurus")
+    {
+    	  ret = false;
+        }
+    return ret;
+}
+
+void treeViewsActions::fillActionTreeView()
+{
+    m_actionsTreeModel = new QStandardItemModel;
+    QStringList listOfMainActions;
+    QMap<QString,QString> parametersMap;
+    parametersMap.insert("Debtor","insurance");
+    //parametersMap.insert("Thesaurus","thesaurus");
+    //parametersMap.insert("Values","values");
+    parametersMap.insert("Sites","sites");
+    //parametersMap.insert("Prefered Value","Prefered Value");
+    //parametersMap.insert("Round trip","Round trip");
+    parametersMap.insert("Distance rules","distance_rules");
+    listOfMainActions = parametersMap.keys();
+    //insert items from tables if available
+    QMap<QString,QString> mapSubItems;
+    receiptsManager manager;
+    QString strKeysParameters;
+    foreach(strKeysParameters,listOfMainActions){
+        QString table = parametersMap.value(strKeysParameters);
+        QStringList listOfItemsOfTable;
+        QString null = QString();
+        listOfItemsOfTable = manager.getParametersDatas(null,table).keys();//QHash<QString,QVariant> name,uid
+        QString strItemsOfTable;
+        foreach(strItemsOfTable,listOfItemsOfTable){
+            mapSubItems.insertMulti(strKeysParameters,strItemsOfTable);
+        }
+        //default values if unavailables :
+        if (listOfItemsOfTable.size()<1)
+        {
+        	  if (strKeysParameters == "Debtor")
+        	  {
+        	       mapSubItems.insertMulti(strKeysParameters,"Patient");
+                       mapSubItems.insertMulti(strKeysParameters,"CPAM28");  
+        	      }
+        	  /*else if (strKeysParameters == "Thesaurus")
+        	  {
+        	       mapSubItems.insertMulti("Thesaurus","CS");
+                       mapSubItems.insertMulti("Thesaurus","V");  
+        	      }*/
+        	  else if (strKeysParameters == "Sites")
+        	  {
+        	       mapSubItems.insertMulti("Sites","cabinet");
+                       mapSubItems.insertMulti("Sites","clinique");  
+        	      }
+        	  else if (strKeysParameters == "Distance rules")
+        	  {
+        	  	  mapSubItems.insertMulti("Distance rules","DistPrice");
+        	      }
+        	  else
+        	  {
+        	       qWarning() << __FILE__ << QString::number(__LINE__) 
+        	       << " No default value for "<< strKeysParameters ;
+        	       }
+            }
+    }
+    QStandardItem *parentItem = treeModel()->invisibleRootItem();
+    QString strMainActions;
+    foreach(strMainActions,listOfMainActions){
+        qDebug() << __FILE__ << QString::number(__LINE__) << " strMainActions =" << strMainActions ;
+        QStandardItem *actionItem = new QStandardItem(strMainActions);
+        //treeViewsActions colors
+        if (strMainActions == "Debtor")
+        {
+        	  QBrush green(Qt::darkGreen);
+                  actionItem->setForeground(green);
+            }
+        /*//preferential choices in the tree view.
+    QString site = QString("Sites");
+    QString distRule = QString("Distance rules");
+    QString debtor = QString("Debtor");
+    m_siteUidUid = firstItemChoosenAsPreferential(site);
+    m_distanceRuleValue = firstItemChoosenAsPreferential(distRule).toDouble();
+    m_distanceRuleType = rManager.m_preferedDistanceRule.toString();
+    m_insuranceUid = firstItemChoosenAsPreferential(debtor);else if (strMainActions == "Prefered Value")
+        {
+        	  QBrush red(Qt::red);
+                  actionItem->setForeground(red);
+            }*/
+        else if (strMainActions == "Sites")
+        {
+        	  QBrush green(Qt::darkGreen);
+                  actionItem->setForeground(green);       	  
+            }
+        /*else if (strMainActions == "Thesaurus")
+        {
+        	  QBrush red(Qt::red);
+                  actionItem->setForeground(red);        	  
+            }*/
+        /*else if (strMainActions == "Values")
+        {
+        	  QBrush blue(Qt::blue);
+                  actionItem->setForeground(blue);        	  
+            }*/
+        /*else if (strMainActions == "Round trip")
+        {
+        	  QBrush blue(Qt::blue);
+                  actionItem->setForeground(blue);    
+            }*/
+        else if (strMainActions == "Distance rules")
+        {
+        	  QBrush green(Qt::darkGreen);
+                  actionItem->setForeground(green);
+            }
+        else{
+                  qWarning() << __FILE__ << QString::number(__LINE__) << "Error color treeViewsActions." ;
+        }
+        
+        parentItem->appendRow(actionItem);
+        QStringList listSubActions;
+        listSubActions = mapSubItems.values(strMainActions);
+        QString strSubActions;
+        foreach(strSubActions,listSubActions){
+            qDebug() << __FILE__ << QString::number(__LINE__) << " strSubActions =" << strSubActions ;
+            QStandardItem *subActionItem = new QStandardItem(strSubActions);
+            actionItem->appendRow(subActionItem);            
+        }
+    }
+    qDebug() << __FILE__ << QString::number(__LINE__)  ;
+    setHeaderHidden(true);
+    setStyleSheet("background-color: rgb(201, 201, 201)");
+   // actionsTreeView->setStyleSheet("foreground-color: red");
+    setModel(treeModel());
+    qDebug() << __FILE__ << QString::number(__LINE__)  ;
+}
+
+bool treeViewsActions::deleteItemFromThesaurus(QModelIndex &index){
+    bool ret = true;
+    QString data = index.data().toString();
+    receiptsEngine r;
+    if (!r.deleteFromThesaurus(data))
+    {
+    	  QMessageBox::warning(0,trUtf8("Warning"),trUtf8("Cannot delete in thesaurus :")+data,QMessageBox::Ok);
+    	  ret = false;
+        }
+    fillActionTreeView();
+    return ret;
+}
 
 
 using namespace ReceiptsConstants;
-choiceDialog::choiceDialog(QWidget * parent):QDialog(parent),ui(new Ui::ChoiceDialog){
+choiceDialog::choiceDialog(QWidget * parent,bool roundtrip):QDialog(parent),ui(new Ui::ChoiceDialog){
     ui->setupUi(this);
     ui->distanceDoubleSpinBox->hide();
     ui->distanceGroupBox->hide();
     m_percent = 100.00;
     m_percentValue = 100.00;
     receiptsManager manager;
+    manager.getPreferedValues();
     m_hashPercentages = manager.getPercentages();
     m_quickInt = m_hashPercentages.keys().last();
     ui->percentDoubleSpinBox->setRange(0.00,100.00);
     ui->percentDoubleSpinBox->setValue(100.00);
     ui->percentDoubleSpinBox->setSingleStep(0.10);
     ui->percentDoubleSpinBox->setButtonSymbols(QAbstractSpinBox::NoButtons);
+    if (roundtrip)
+    {
+        ui->distanceDoubleSpinBox->show();
+        ui->distanceGroupBox->show();
+        ui->distanceDoubleSpinBox->setRange(0.00,100000.00);
+        ui->distanceDoubleSpinBox->setSingleStep(0.10);
+        }
+
+    //treeViewsActions
+    m_actionTreeView = new treeViewsActions(this);
+    QVBoxLayout *vbox = new QVBoxLayout;
+                 vbox-> addWidget(m_actionTreeView);
+    ui->paramsGroupBox->setLayout(vbox);
+    m_actionTreeView->fillActionTreeView();
+    //preferential choices in the tree view.
+    QString site = QString("Sites");
+    QString distRule = QString("Distance rules");
+    QString debtor = QString("Debtor");
+    m_siteUid = firstItemChoosenAsPreferential(site);
+    m_distanceRuleValue = firstItemChoosenAsPreferential(distRule).toDouble();
+    m_distanceRuleType = manager.getPreferedDistanceRule().toString();
+    m_insurance = firstItemChoosenAsPreferential(debtor);
+    m_insuranceUid = manager.m_preferedInsuranceUid;
+    qDebug() << __FILE__ << QString::number(__LINE__) << " m_insuranceUid =" << m_insuranceUid.toString() ;
+    m_modelChoicePercentDebtorSiteDistruleValues = new QStandardItemModel(0,returningModel_MaxParam);
+    m_row = 0;
     m_timerUp = new QTimer(this);
     m_timerDown = new QTimer(this);
-    connect(ui->okButton,SIGNAL(pressed()),this,SLOT(accept()));
+    connect(ui->okButton,SIGNAL(pressed()),this,SLOT(beforeAccepted()));
     connect(ui->quitButton,SIGNAL(pressed()),this,SLOT(reject()));
     connect(ui->percentDoubleSpinBox,SIGNAL(valueChanged(double)),this,SLOT(value(double)));
     connect(ui->plusButton,SIGNAL(pressed()),this,SLOT(valueUp()));
@@ -62,10 +328,22 @@ choiceDialog::choiceDialog(QWidget * parent):QDialog(parent),ui(new Ui::ChoiceDi
     connect(ui->plusConstButton,SIGNAL(pressed()),this,SLOT(quickPlus()));
     connect(ui->lessConstButton,SIGNAL(pressed()),this,SLOT(quickLess()));
 }
+
 choiceDialog::~choiceDialog(){
     delete m_timerUp;
     delete m_timerDown;
 }
+
+double choiceDialog::getDistanceNumber(const QString & data){
+    qDebug() << __FILE__ << QString::number(__LINE__) << " data =" << data  ;
+    receiptsEngine recIO;
+    double dist = 0.00;
+    double minDistance = recIO.getMinDistanceValue(data);
+    qDebug() << __FILE__ << QString::number(__LINE__) << " minDistance =" << QString::number(minDistance) ;
+    dist = ui->distanceDoubleSpinBox->value() - minDistance;
+    return dist;
+}
+
 int choiceDialog::returnChoiceDialog(){
     int ret = 0;
         if (ui->cashButton->isChecked())
@@ -145,3 +423,80 @@ void choiceDialog::quickLess(){
 double choiceDialog::returnPercentValue(){
     return m_percent;
 }
+
+QList<double> choiceDialog::listOfPercentValues(){
+    return m_listOfPercentValues;
+}
+
+void choiceDialog::beforeAccepted(){
+     receiptsEngine rIO;
+     qDebug() << __FILE__ << QString::number(__LINE__) << " m_insuranceUid =" << QString::number(m_insuranceUid.toInt()) ;
+     QString debtor = rIO.getStringFromInsuranceUid(m_insuranceUid);
+     qDebug() << __FILE__ << QString::number(__LINE__) << " debtor =" << debtor ;
+     m_modelChoicePercentDebtorSiteDistruleValues->insertRows(m_row,1,QModelIndex());
+     
+     if (m_percent!=100.00)
+     {
+     	   QMessageBox msgBox;
+           msgBox.setText(trUtf8("Choose another percentage value."));
+           msgBox.setInformativeText(trUtf8("Do you want to choose another percentage ?"));
+           msgBox.setStandardButtons(QMessageBox::Ok | QMessageBox::No);
+           msgBox.setDefaultButton(QMessageBox::Ok);
+           int ret = msgBox.exec();
+           
+           switch(ret){
+               case QMessageBox::Ok :
+                   m_modelChoicePercentDebtorSiteDistruleValues->setData(m_modelChoicePercentDebtorSiteDistruleValues->index(m_row,TYPE_OF_CHOICE),returnChoiceDialog(),Qt::EditRole);
+                   m_modelChoicePercentDebtorSiteDistruleValues->setData(m_modelChoicePercentDebtorSiteDistruleValues->index(m_row,PERCENTAGE),m_percent,Qt::EditRole);
+                   m_modelChoicePercentDebtorSiteDistruleValues->setData(m_modelChoicePercentDebtorSiteDistruleValues->index(m_row,DEBTOR),debtor,Qt::EditRole);
+                   m_modelChoicePercentDebtorSiteDistruleValues->setData(m_modelChoicePercentDebtorSiteDistruleValues->index(m_row,SITE),m_siteUid,Qt::EditRole);
+                   m_modelChoicePercentDebtorSiteDistruleValues->setData(m_modelChoicePercentDebtorSiteDistruleValues->index(m_row,DISTRULES),m_distanceRuleType,Qt::EditRole);
+                   ++m_row;
+                   return;
+                   break;
+               case QMessageBox::No :
+                   m_modelChoicePercentDebtorSiteDistruleValues->setData(m_modelChoicePercentDebtorSiteDistruleValues->index(m_row,TYPE_OF_CHOICE),returnChoiceDialog(),Qt::EditRole);
+                   m_modelChoicePercentDebtorSiteDistruleValues->setData(m_modelChoicePercentDebtorSiteDistruleValues->index(m_row,PERCENTAGE),m_percent,Qt::EditRole);
+                   m_modelChoicePercentDebtorSiteDistruleValues->setData(m_modelChoicePercentDebtorSiteDistruleValues->index(m_row,DEBTOR),debtor,Qt::EditRole);
+                   m_modelChoicePercentDebtorSiteDistruleValues->setData(m_modelChoicePercentDebtorSiteDistruleValues->index(m_row,SITE),m_siteUid,Qt::EditRole);
+                   m_modelChoicePercentDebtorSiteDistruleValues->setData(m_modelChoicePercentDebtorSiteDistruleValues->index(m_row,DISTRULES),m_distanceRuleType,Qt::EditRole);
+                   accept();
+                   break;
+               default :
+                   break;    
+               }
+         }
+     else
+     {
+        m_modelChoicePercentDebtorSiteDistruleValues->setData(m_modelChoicePercentDebtorSiteDistruleValues->index(m_row,TYPE_OF_CHOICE),returnChoiceDialog(),Qt::EditRole);
+        m_modelChoicePercentDebtorSiteDistruleValues->setData(m_modelChoicePercentDebtorSiteDistruleValues->index(m_row,PERCENTAGE),m_percent,Qt::EditRole);
+        m_modelChoicePercentDebtorSiteDistruleValues->setData(m_modelChoicePercentDebtorSiteDistruleValues->index(m_row,DEBTOR),debtor,Qt::EditRole);
+        m_modelChoicePercentDebtorSiteDistruleValues->setData(m_modelChoicePercentDebtorSiteDistruleValues->index(m_row,SITE),m_siteUid,Qt::EditRole);
+        m_modelChoicePercentDebtorSiteDistruleValues->setData(m_modelChoicePercentDebtorSiteDistruleValues->index(m_row,DISTRULES),m_distanceRuleType,Qt::EditRole);
+     	accept();
+         }
+}
+
+QStandardItemModel * choiceDialog::getChoicePercentageDebtorSiteDistruleModel(){
+     return m_modelChoicePercentDebtorSiteDistruleValues;
+}
+
+QVariant choiceDialog::firstItemChoosenAsPreferential(QString & item)
+{qDebug() << __FILE__ << QString::number(__LINE__) << " item =" << item ;
+    QVariant variantValue = QVariant("No item");
+    receiptsManager manager;
+    if (item == trUtf8("Distance rules"))
+    {
+    	  variantValue = manager.m_preferedDistanceValue;
+        }
+    if (item == trUtf8("Sites"))
+    {
+    	  variantValue = manager.m_preferedSite;
+        }
+    if (item== trUtf8("Debtor"))
+    {
+    	  variantValue = manager.m_preferedInsurance;
+        }
+    return variantValue;
+}
+
