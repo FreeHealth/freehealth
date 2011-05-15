@@ -46,7 +46,7 @@ QT_END_NAMESPACE
  * \file database.h
  * \author Eric MAEKER <eric.maeker@free.fr>
  * \version 0.6.0
- * \date 03 Mar 2011
+ * \date 15 May 2011
 */
 
 
@@ -203,7 +203,7 @@ public:
     static void logAvailableDrivers();
 
     // connection
-    virtual bool createConnection(const QString &connectionName, const QString &dbName,
+    virtual bool createConnection(const QString &connectionName, const QString &nonPrefixedDbName,
                                    const QString &pathOrHostName,
                                    TypeOfAccess access = ReadWrite, AvailableDrivers driver = SQLite,
                                    const QString &login = QString::null, const QString &pass = QString::null,
@@ -214,13 +214,17 @@ public:
         \brief This member is called by createConnection() if the asked database does not exists.
                By default it does nothing and return an error state (false).
     */
-    virtual bool createDatabase( const QString &/*connectionName*/ , const QString &/*dbName*/,
-                                  const QString &/*pathOrHostName*/,
-                                  TypeOfAccess /*access*/, AvailableDrivers /*driver*/,
-                                  const QString &/*login*/, const QString &/*pass*/,
-                                  const int /*port*/,
-                                  CreationOption /*createOption*/
-                                ) { return false; }
+    virtual bool createDatabase(const QString &/*connectionName*/ , const QString &/*prefixedDbName*/,
+                                const QString &/*pathOrHostName*/,
+                                TypeOfAccess /*access*/, AvailableDrivers /*driver*/,
+                                const QString &/*login*/, const QString &/*pass*/,
+                                const int /*port*/,
+                                CreationOption /*createOption*/
+                               ) { return false; }
+
+    virtual QString prefixedDatabaseName(AvailableDrivers driver, const QString &dbName) const;
+
+    virtual bool createMySQLDatabase(const QString &dbName);
 
     virtual QSqlDatabase database() const;
     virtual QString connectionName() const;

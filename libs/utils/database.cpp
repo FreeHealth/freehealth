@@ -25,7 +25,7 @@
  ***************************************************************************/
 /**
   \class Utils::Database
- \brief this class is a base class for databases. It manages scheme and creates SQL queries.
+  this class is a base class for databases. It manages scheme and creates SQL queries.
     The idea is to create a database scheme dynamically. Your superbase must hold the enums
     corresponding to the tables and the fields of each tables.\n
     Then Database is populated with real names of tables and fields.\n
@@ -77,7 +77,7 @@
 #include <QTreeWidget>
 #include <QProgressDialog>
 
-enum { WarnSqlCommands=false , WarnLogMessages = false };
+enum { WarnSqlCommands = false , WarnLogMessages = true };
 
 using namespace Utils;
 using namespace Utils::Internal;
@@ -187,14 +187,48 @@ DatabasePrivate::DatabasePrivate() :
 //--------------------------------------------------------------------------------------------------------
 //------------------------------- Managing Databases files and connections -------------------------------
 //--------------------------------------------------------------------------------------------------------
-/**
-  \brief Return the pointer to the QSqlDatabase in use.
-*/
+QString Database::prefixedDatabaseName(AvailableDrivers driver, const QString &dbName) const
+{
+    if (driver==SQLite) {
+        return dbName;
+    }
+    if (driver==MySQL || driver==PostSQL) {
+        if (dbName.startsWith("fmf_"))
+            return dbName;
+        return "fmf_" + dbName;
+    }
+    return dbName;
+}
+
+/** Creates a MySQL database on an opened database. The current connection must be opened.*/
+bool Database::createMySQLDatabase(const QString &dbName)
+{
+    if (!database().isOpen()) {
+        LOG_ERROR_FOR("Database", tkTr(Trans::Constants::UNABLE_TO_OPEN_DATABASE_1_ERROR_2)
+                      .arg(database().connectionName()).arg(database().lastError().text()));
+        return false;
+    }
+    LOG_FOR("Database", QString("Trying to create database: %1\n"
+                                "       on host: %2(%3)\n"
+                                "       with user: %4")
+            .arg(dbName).arg(database().hostName()).arg(database().port()).arg(database().userName()));
+
+    QSqlQuery query(database());
+    if (!query.exec(QString("CREATE DATABASE `%1`;").arg(dbName))) {
+        LOG_QUERY_ERROR_FOR("Database", query);
+        return false;
+    }
+    LOG_FOR("Database", tkTr(Trans::Constants::DATABASE_1_CORRECTLY_CREATED).arg(dbName));
+    query.finish();
+    return true;
+}
+
+/** Return the pointer to the QSqlDatabase in use. */
 QSqlDatabase Database::database() const
 { return QSqlDatabase::database(d->m_ConnectionName); }
 
 /**
-  \brief Create the connection to the database.
+   Create the connection to the database.
   If database does not exists, according to the \e createOption, createDatabase() is called.
   An error is returned if :
   - Driver is not available
@@ -211,14 +245,18 @@ QSqlDatabase Database::database() const
   \param password = login to the server (not used for SQLite)
   \param createOption = what to do if the database does not exist.
 */
-bool Database::createConnection(const QString & connectionName, const QString & dbName,
-                                   const QString & pathOrHostName,
+bool Database::createConnection(const QString &connectionName, const QString &nonPrefixedDbName,
+                                   const QString &pathOrHostName,
                                    TypeOfAccess access, AvailableDrivers driver,
                                    const QString &login, const QString &password,
                                    const int port,
                                    CreationOption createOption
                                    )
 {   
+    bool toReturn = true;
+    d->m_ConnectionName = "";
+    QString dbName = prefixedDatabaseName(driver, nonPrefixedDbName);
+
     if (WarnLogMessages)
         qDebug() << __FILE__ << QString::number(__LINE__) << connectionName
                 << dbName
@@ -228,8 +266,6 @@ bool Database::createConnection(const QString & connectionName, const QString & 
                 << login
                 << password
                 << QString::number(port) ;
-    bool toReturn = true;
-    d->m_ConnectionName = "";
 
     // does driver is available
     switch (driver) {
@@ -279,9 +315,9 @@ bool Database::createConnection(const QString & connectionName, const QString & 
     // does connection already exists ?
     if (QSqlDatabase::contains(connectionName)) {
         if (WarnLogMessages)
-            Log::addMessage("Database", QCoreApplication::translate("Database",
-                                                                "WARNING : %1 database already in use")
-                        .arg(connectionName));
+            LOG_FOR("Database", QCoreApplication::translate("Database",
+                                                            "WARNING : %1 database already in use")
+                    .arg(connectionName));
         d->m_ConnectionName = connectionName;
         return true;
     }
@@ -301,9 +337,8 @@ bool Database::createConnection(const QString & connectionName, const QString & 
             DB.setPort(port);
             bool ok = DB.open();
             if (!ok) {
-                Utils::Log::addError("Database", QString("Unable to connect to the server %1 - %2")
-                                     .arg(pathOrHostName).arg(DB.lastError().text()),
-                                     __FILE__, __LINE__);
+                LOG_ERROR_FOR("Database", QString("Unable to connect to the server %1 - %2")
+                                     .arg(pathOrHostName).arg(DB.lastError().text()));
                 return false;
             }
             if (WarnLogMessages)
@@ -331,8 +366,8 @@ bool Database::createConnection(const QString & connectionName, const QString & 
                     }
                 } else { // Warn Only
                     if (WarnLogMessages)
-                        Log::addMessage("Database", QCoreApplication::translate("Database",
-                                                                            "ERROR : %1 database does not exist and can not be created. Path = %2").arg(dbName, pathOrHostName));
+                        LOG_FOR("Database", QCoreApplication::translate("Database",
+                                                                        "ERROR : %1 database does not exist and can not be created. Path = %2").arg(dbName, pathOrHostName));
                     return false;
                 }
             }
@@ -344,9 +379,8 @@ bool Database::createConnection(const QString & connectionName, const QString & 
             DB.setDatabaseName(dbName);
             bool ok = DB.open();
             if (!ok) {
-                Utils::Log::addError("Database", QString("Unable to connect to the database %1 - %2")
-                                     .arg(dbName).arg(DB.lastError().text()),
-                                     __FILE__, __LINE__);
+                LOG_ERROR_FOR("Database", QString("Unable to connect to the database %1 - %2")
+                                     .arg(dbName).arg(DB.lastError().text()));
                 if (createOption == CreateDatabase) {
                     if (!createDatabase(connectionName, dbName, pathOrHostName, access, driver, login, password, port, createOption)) {
                         LOG_ERROR_FOR("Database", QCoreApplication::translate("Database",
@@ -356,7 +390,7 @@ bool Database::createConnection(const QString & connectionName, const QString & 
                     }
                 } else { // Warn Only
                     if (WarnLogMessages)
-                        Log::addMessage("Database", QCoreApplication::translate("Database",
+                        LOG_FOR("Database", QCoreApplication::translate("Database",
                                         "ERROR : %1 database does not exist and can not be created. Path = %2")
                                         .arg(dbName, pathOrHostName));
                     return false;
@@ -486,13 +520,13 @@ bool Database::createConnection(const QString & connectionName, const QString & 
     return toReturn;
 }
 
-/** \brief Returns the connectionName in use */
+/**  Returns the connectionName in use */
 QString Database::connectionName() const
 {
     return d->m_ConnectionName;
 }
 
-/** \brief returns the grants according to the database \e connectionName. When using a SQLite driver Grants always == 0. */
+/**  returns the grants according to the database \e connectionName. When using a SQLite driver Grants always == 0. */
 Database::Grants Database::grants(const QString &connectionName) const
 {
     return d->m_Grants.value(connectionName, 0);
@@ -535,22 +569,22 @@ Database::Grants Database::getConnectionGrants(const QString &connectionName) //
 }
 
 
-/** \brief Set connectionName to \e c */
+/**  Set connectionName to \e c */
 void Database::setConnectionName(const QString & c)
 { d->m_ConnectionName = c; }
 
-/** \brief Define the driver to use */
+/**  Define the driver to use */
 void Database::setDriver(const Database::AvailableDrivers &drv)
 { d->m_Driver = drv; }
 
-/** \brief Add a table \e name to the database scheme with the index \e ref */
+/**  Add a table \e name to the database scheme with the index \e ref */
 int Database::addTable(const int & ref, const QString & name)
 {
     d->m_Tables.insert(ref, name);
     return d->m_Tables.key(name);
 }
 
-/** \brief Add a field \e name to the database scheme with the index \e fieldref into table indexed \e tableref.\n
+/**  Add a field \e name to the database scheme with the index \e fieldref into table indexed \e tableref.\n
     The field is a type \e type and get the default value \e defaultValue.\n
     Please take care that \e name can not exceed 50 chars.
     \sa createTables(), createTable()
@@ -566,7 +600,7 @@ int Database::addField(const int & tableref, const int & fieldref, const QString
     return d->m_Fields.key(name) - (tableref * 1000);
 }
 
-/** \brief Add a primary key reference to \e tableref \e fieldref.
+/**  Add a primary key reference to \e tableref \e fieldref.
     \sa createTables(), createTable(), addField(), addTable()
 */
 void Database::addPrimaryKey(const int &tableref, const int &fieldref)
@@ -574,7 +608,7 @@ void Database::addPrimaryKey(const int &tableref, const int &fieldref)
     d->m_PrimKeys.insertMulti(tableref, fieldref);
 }
 
-/** \brief Verify that the dynamically scheme passed is corresponding to the real database scheme. */
+/**  Verify that the dynamically scheme passed is corresponding to the real database scheme. */
 bool Database::checkDatabaseScheme()
 {
     if (d->m_ConnectionName.isEmpty())
@@ -612,7 +646,7 @@ bool Database::checkDatabaseScheme()
 }
 
 /**
-   \brief Return the field name for the table \e tableref field \e fieldref
+    Return the field name for the table \e tableref field \e fieldref
    \sa addField()
 */
 QString Database::fieldName(const int &tableref, const int &fieldref) const
@@ -628,7 +662,7 @@ QString Database::fieldName(const int &tableref, const int &fieldref) const
 }
 
 /**
-   \brief Return a complete reference to a field for the table \e tableref field \e fieldref
+    Return a complete reference to a field for the table \e tableref field \e fieldref
    \sa addField()
 */
 Field Database::field(const int &tableref, const int &fieldref) const
@@ -641,7 +675,7 @@ Field Database::field(const int &tableref, const int &fieldref) const
     return ret;
 }
 
-/** \brief Return all fields of a table as \e FieldList */
+/**  Return all fields of a table as \e FieldList */
 FieldList Database::fields(const int tableref) const
 {
     FieldList fields;
@@ -651,7 +685,7 @@ FieldList Database::fields(const int tableref) const
     return fields;
 }
 
-/** \brief Return all fields name of a table */
+/**  Return all fields name of a table */
 QStringList Database::fieldNames(const int &tableref) const
 {
     if (!d->m_Tables.contains(tableref))
@@ -678,7 +712,7 @@ QStringList Database::tables() const
 }
 
 /**
-  \brief Create a where clause on the table \e tableref using conditions mapped into a hash.
+   Create a where clause on the table \e tableref using conditions mapped into a hash.
   Conditions: key = fieldReference , value = whereClauseString.
   \code
     QHash<int,QString> where;
@@ -709,7 +743,7 @@ QString Database::getWhereClause(const int &tableref, const QHash<int, QString> 
 }
 
 /**
-  \brief Create a where clause on the \e fields.
+   Create a where clause on the \e fields.
   \code
     FieldList fields;
     fields << field(1, 2, QString("='%1'").arg(myStringMatch));
@@ -748,7 +782,7 @@ QString Database::getWhereClause(const FieldList &fields) const
 }
 
 /**
-  \brief Create a join statement on \e join.field1.tableName using fields equality.
+   Create a join statement on \e join.field1.tableName using fields equality.
   \code
     Join join(t1, f1, t2, f2, joinType);
     QString sqlJoin = db.joinToSql(join);
@@ -776,7 +810,7 @@ QString Database::joinToSql(const Join &join) const
 }
 
 /**
-  \brief Return a SELECT SQL command with the table \e tableref, field \e fieldref and where conditions \e conditions.
+   Return a SELECT SQL command with the table \e tableref, field \e fieldref and where conditions \e conditions.
   \code
   // output is like:
   SELECT FIELD1 FROM TABLE1 WHERE (...);
@@ -797,7 +831,7 @@ QString Database::select(const int &tableref, const int &fieldref, const QHash<i
 }
 
 /**
-  \brief Return a SELECT SQL command with the table \e tableref, field \e fieldref.
+   Return a SELECT SQL command with the table \e tableref, field \e fieldref.
   \code
   // output is like:
   SELECT FIELD1 FROM TABLE1;
@@ -817,7 +851,7 @@ QString Database::select(const int &tableref, const int &fieldref) const
 }
 
 /**
-  \brief Return a SELECT SQL command.
+   Return a SELECT SQL command.
 */
 QString Database::select(const int &tableref, const QList<int> &fieldsref, const QHash<int, QString> & conditions) const
 {
@@ -838,7 +872,7 @@ QString Database::select(const int &tableref, const QList<int> &fieldsref, const
 }
 
 /**
-  \brief Return a SELECT SQL command.
+   Return a SELECT SQL command.
 */
 QString Database::select(const int & tableref,const  QList<int> &fieldsref) const
 {
@@ -858,7 +892,7 @@ QString Database::select(const int & tableref,const  QList<int> &fieldsref) cons
 }
 
 /**
-  \brief Return a SELECT SQL command for the table \e tableref with conditions \e conditions.
+   Return a SELECT SQL command for the table \e tableref with conditions \e conditions.
   The fields are ordered.
   \sa addField()
 */
@@ -884,7 +918,7 @@ QString Database::select(const int &tableref, const QHash<int, QString> &conditi
 }
 
 /**
-  \brief Return a SELECT SQL command for the table \e tableref.
+   Return a SELECT SQL command for the table \e tableref.
   The fields are ordered.
   \sa addField()
 */
@@ -908,7 +942,7 @@ QString Database::select(const int &tableref) const
 }
 
 /**
-  \brief Return a SELECT DISTINCT SQL command.
+   Return a SELECT DISTINCT SQL command.
   \sa select()
 */
 QString Database::selectDistinct(const int & tableref, const int & fieldref, const QHash<int, QString> & conditions) const
@@ -917,7 +951,7 @@ QString Database::selectDistinct(const int & tableref, const int & fieldref, con
 }
 
 /**
-  \brief Return a SELECT DISTINCT SQL command.
+   Return a SELECT DISTINCT SQL command.
   \sa select()
 */
 QString Database::selectDistinct(const int & tableref, const int & fieldref) const
@@ -974,7 +1008,7 @@ QString Database::select(const FieldList &select, const JoinList &joins) const
 }
 
 /**
-  \brief Create a complex SELECT command with jointures and conditions.
+   Create a complex SELECT command with jointures and conditions.
   Jointures must be ordered as needed in the SQL command.
 */
 QString Database::select(const FieldList &select, const JoinList &joins, const FieldList &conditions) const
@@ -1047,7 +1081,7 @@ QString Database::select(const FieldList &select, const JoinList &joins, const F
 }
 
 /**
-  \brief Create a complex SELECT command with jointures and conditions.
+   Create a complex SELECT command with jointures and conditions.
   Jointures must be ordered as needed in the SQL command.
 */
 QString Database::select(const int tableref, const JoinList &joins, const FieldList &conditions) const
@@ -1114,7 +1148,7 @@ QString Database::select(const Field &select, const Join &join, const Field &con
 }
 
 /**
-  \brief Return a SELECT SQL structured field equality.
+   Return a SELECT SQL structured field equality.
   \code
   // output is like:
   TABLE1.FIELD1=TABLE2.FIELD2
@@ -1129,7 +1163,7 @@ QString Database::fieldEquality(const int tableRef1, const int fieldRef1, const 
 }
 
 /**
-  \brief Return a a COUNT SQL command on the table \e tableref, field \e fieldref with the filter \e filter.
+   Return a a COUNT SQL command on the table \e tableref, field \e fieldref with the filter \e filter.
   Filter whould be not contains the "WHERE" word.
 */
 int Database::count(const int & tableref, const int & fieldref, const QString &filter) const
@@ -1153,7 +1187,7 @@ int Database::count(const int & tableref, const int & fieldref, const QString &f
 }
 
 /**
-  \brief Return a MAX SQL command on the table \e tableref, field \e fieldref with the filter \e filter.
+   Return a MAX SQL command on the table \e tableref, field \e fieldref with the filter \e filter.
   Filter whould be not contains the "WHERE" word.
 */
 double Database::max(const int &tableref, const int &fieldref, const QString &filter) const
@@ -1179,7 +1213,7 @@ double Database::max(const int &tableref, const int &fieldref, const QString &fi
 }
 
 /**
-  \brief Return a MAX SQL command with grouping on the table \e tableref, field \e fieldref, grouped by field \e groupBy with the filter \e filter.
+   Return a MAX SQL command with grouping on the table \e tableref, field \e fieldref, grouped by field \e groupBy with the filter \e filter.
   Filter whould be not contains the "WHERE" word.
 */
 double Database::max(const int &tableref, const int &fieldref, const int &groupBy, const QString &filter) const
@@ -1206,7 +1240,7 @@ double Database::max(const int &tableref, const int &fieldref, const int &groupB
 }
 
 /**
-  \brief Return a TOTAL SQL command on the table \e tableref, field \e fieldref with the filter \e filter.
+   Return a TOTAL SQL command on the table \e tableref, field \e fieldref with the filter \e filter.
   Filter whould be not contains the "WHERE" word.
 */
 QString Database::total(const int tableRef, const int fieldRef, const QHash<int, QString> &where) const
@@ -1225,7 +1259,7 @@ QString Database::total(const int tableRef, const int fieldRef, const QHash<int,
     return toReturn;
 }
 
-/**  \brief Return a TOTAL SQL command on the table \e tableref, field \e fieldref. */
+/** Return a TOTAL SQL command on the table \e tableref, field \e fieldref. */
 QString Database::total(const int tableRef, const int fieldRef) const
 {
     QString toReturn;
@@ -1235,7 +1269,7 @@ QString Database::total(const int tableRef, const int fieldRef) const
     return toReturn;
 }
 
-/**  \brief Return a SQL command usable for QSqlQuery::prepareInsertQuery(). Fields are ordered. */
+/** Return a SQL command usable for QSqlQuery::prepareInsertQuery(). Fields are ordered. */
 QString Database::prepareInsertQuery(const int tableref) const
 {
     QString toReturn;
@@ -1259,7 +1293,7 @@ QString Database::prepareInsertQuery(const int tableref) const
     return toReturn;
 }
 
-/**  \brief Return a SQL command usable for QSqlQuery::prepareUpdateQuery(). Fields are ordered. */
+/** Return a SQL command usable for QSqlQuery::prepareUpdateQuery(). Fields are ordered. */
 QString Database::prepareUpdateQuery(const int tableref, const int fieldref, const QHash<int, QString> &conditions)
 {
     QString toReturn;
@@ -1275,7 +1309,7 @@ QString Database::prepareUpdateQuery(const int tableref, const int fieldref, con
     return toReturn;
 }
 
-/**  \brief Return a SQL command usable for QSqlQuery::prepareUpdateQuery(). Fields are ordered. */
+/** Return a SQL command usable for QSqlQuery::prepareUpdateQuery(). Fields are ordered. */
 QString Database::prepareUpdateQuery(const int tableref, const QList<int> &fieldref, const QHash<int, QString> &conditions)
 {
     QString toReturn;
@@ -1296,7 +1330,7 @@ QString Database::prepareUpdateQuery(const int tableref, const QList<int> &field
     return toReturn;
 }
 
-/**  \brief Return a SQL command usable for QSqlQuery::prepareUpdateQuery(). Fields are ordered. */
+/** Return a SQL command usable for QSqlQuery::prepareUpdateQuery(). Fields are ordered. */
 QString Database::prepareUpdateQuery(const int tableref, const int fieldref)
 {
     QString toReturn;
@@ -1311,7 +1345,7 @@ QString Database::prepareUpdateQuery(const int tableref, const int fieldref)
     return toReturn;
 }
 
-/** \brief Return a SQL command usable for QSqlQuery::prepareUpdateQuery(). Fields are ordered. */
+/**  Return a SQL command usable for QSqlQuery::prepareUpdateQuery(). Fields are ordered. */
 QString Database::prepareUpdateQuery(const int tableref, const QHash<int, QString> &conditions)
 {
     QString toReturn;
@@ -1331,7 +1365,7 @@ QString Database::prepareUpdateQuery(const int tableref, const QHash<int, QStrin
     return toReturn;
 }
 
-/** \brief Return a SQL command usable for QSqlQuery::prepareUpdateQuery(). Fields are ordered. */
+/**  Return a SQL command usable for QSqlQuery::prepareUpdateQuery(). Fields are ordered. */
 QString Database::prepareUpdateQuery(const int tableref)
 {
     QString toReturn;
@@ -1350,7 +1384,7 @@ QString Database::prepareUpdateQuery(const int tableref)
     return toReturn;
 }
 
-/**  \brief Return a SQL command usable for DELETE command. Fields are ordered. */
+/** Return a SQL command usable for DELETE command. Fields are ordered. */
 QString Database::prepareDeleteQuery(const int tableref, const QHash<int,QString> & conditions)
 {
     QString toReturn;
@@ -1362,7 +1396,7 @@ QString Database::prepareDeleteQuery(const int tableref, const QHash<int,QString
     return toReturn;
 }
 
-/**  \brief Create table \e tableref in the database. */
+/** Create table \e tableref in the database. */
 bool Database::createTable(const int &tableref) const
 {
     if (!d->m_Tables.contains(tableref))
@@ -1374,7 +1408,7 @@ bool Database::createTable(const int &tableref) const
 
     // get database and open
     QSqlDatabase DB = QSqlDatabase::database(d->m_ConnectionName);
-    if (!DB.open())
+    if (!DB.isOpen())
         return false;
 
     // create query
@@ -1384,7 +1418,7 @@ bool Database::createTable(const int &tableref) const
     return executeSQL(QStringList() << req, DB);
 }
 
-/**  \brief Create all the tables in the database. */
+/** Create all the tables in the database. */
 bool Database::createTables() const
 {
     bool toReturn = true;
@@ -1393,13 +1427,12 @@ bool Database::createTables() const
     foreach(const int & i, list)
         if(!createTable(i)) {
             toReturn = false;
-            Utils::Log::addError("Database", QCoreApplication::translate("Database", "Can not create table %1").arg(table(i)),
-                                 __FILE__, __LINE__);
+            LOG_ERROR_FOR("Database", QCoreApplication::translate("Database", "Can not create table %1").arg(table(i)));
         }
     return toReturn;
 }
 
-/**  \brief Execute simple SQL commands on the QSqlDatabase \e DB. */
+/** Execute simple SQL commands on the QSqlDatabase \e DB. */
 bool Database::executeSQL(const QStringList &list, const QSqlDatabase &DB)
 {
     if (!DB.isOpen())
@@ -1420,7 +1453,7 @@ bool Database::executeSQL(const QStringList &list, const QSqlDatabase &DB)
     return true;
 }
 
-/**  \brief Execute simple SQL commands on the QSqlDatabase \e DB. */
+/** Execute simple SQL commands on the QSqlDatabase \e DB. */
 bool Database::executeSQL(const QString &req, const QSqlDatabase & DB)
 {
     if (req.isEmpty())
@@ -1431,15 +1464,14 @@ bool Database::executeSQL(const QString &req, const QSqlDatabase & DB)
 }
 
 /**
-  \brief Execute simple SQL commands stored in a file on the QSqlDatabase connected as \e connectionName.
+   Execute simple SQL commands stored in a file on the QSqlDatabase connected as \e connectionName.
   Line starting with '-- ' are ignored.\n
   All SQL commands must end with a ;
 */
 bool Database::executeSqlFile(const QString &connectionName, const QString &fileName, QProgressDialog *dlg)
 {
     if (!QFile::exists(fileName)) {
-        Utils::Log::addError("Database", tkTr(Trans::Constants::FILE_1_DOESNOT_EXISTS).arg(fileName),
-                             __FILE__, __LINE__);
+        LOG_ERROR_FOR("Database", tkTr(Trans::Constants::FILE_1_DOESNOT_EXISTS).arg(fileName));
         return false;
     }
 
@@ -1459,10 +1491,16 @@ bool Database::executeSqlFile(const QString &connectionName, const QString &file
 
     QStringList list = req.split("\n");
     QSqlDatabase DB = QSqlDatabase::database(connectionName);
-    if (!DB.open())
-        return false;
+    if (!DB.isOpen()) {
+        if (!DB.open()) {
+            return false;
+        }
+    }
+
+    qWarning() << getConnectionGrants(connectionName);
+
 //    if (!DB.transaction()) {
-//        Utils::Log::addError("Tools", "Can not create transaction. Tools::executeSqlFile()", __FILE__, __LINE__);
+//        LOG_ERROR_FOR("Tools", "Can not create transaction. Tools::executeSqlFile()", __FILE__, __LINE__);
 //        return false;
 //    }
 
@@ -1501,6 +1539,7 @@ bool Database::executeSqlFile(const QString &connectionName, const QString &file
         QSqlQuery query(sql, DB);
         if (!query.isActive()) {
             LOG_QUERY_ERROR_FOR("Database", query);
+            qWarning() << DB.database() << DB.hostName() << DB.userName() << DB.isOpenError();
 //            DB.rollback();
             return false;
         }
@@ -1512,7 +1551,7 @@ bool Database::executeSqlFile(const QString &connectionName, const QString &file
     return true;
 }
 
-/**  \brief Import a CSV structured file \e fielName into a database \e connectionName, table \e table, using the speficied \e separator, and \e ingoreFirstLine or not.*/
+/** Import a CSV structured file \e fielName into a database \e connectionName, table \e table, using the speficied \e separator, and \e ingoreFirstLine or not.*/
 bool Database::importCsvToDatabase(const QString &connectionName, const QString &fileName, const QString &table, const QString &separator, bool ignoreFirstLine)
 {
     // get database
@@ -1661,6 +1700,8 @@ QString DatabasePrivate::getSQLCreateTable(const int &tableref)
 
     toReturn.append("\n); \n\n");
 
+    qWarning() << toReturn;
+
     if (WarnSqlCommands)
         qWarning() << toReturn;
 
@@ -1717,7 +1758,7 @@ QString DatabasePrivate::getTypeOfField(const int & fieldref) const
     return toReturn;
 }
 
-/** \brief Used for the debugging. */
+/**  Used for the debugging. */
 void Database::warn() const
 {
     QSqlDatabase DB = QSqlDatabase::database(d->m_ConnectionName);
@@ -1742,7 +1783,7 @@ void Database::warn() const
     }
 }
 
-/** \brief Used for debugging and informations purpose. */
+/**  Used for debugging and informations purpose. */
 void Database::toTreeWidget(QTreeWidget *tree)
 {
     QFont bold;
