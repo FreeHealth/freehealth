@@ -201,6 +201,7 @@ global_resources/package_helpers \
 global_resources/pixmap \
 global_resources/profiles \
 global_resources/sql/account \
+global_resources/sql/server_config \
 global_resources/textfiles/FreeMedForms.desktop \
 global_resources/textfiles/boys_surnames.csv \
 global_resources/textfiles/default_user_footer.htm \
