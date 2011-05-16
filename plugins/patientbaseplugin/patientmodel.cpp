@@ -37,8 +37,6 @@
 #include "constants_settings.h"
 #include "constants_trans.h"
 
-#include <usermanagerplugin/usermodel.h>
-
 #include <coreplugin/icore.h>
 #include <coreplugin/isettings.h>
 #include <coreplugin/itheme.h>
@@ -65,10 +63,9 @@ using namespace Trans::ConstantTranslations;
 
 
 static inline Patients::Internal::PatientBase *patientBase() {return Patients::Internal::PatientBase::instance();}
-static inline UserPlugin::UserModel *userModel() {return UserPlugin::UserModel::instance();}
+static inline Core::IUser *user() {return Core::ICore::instance()->user();}
 static inline Core::ISettings *settings()  { return Core::ICore::instance()->settings(); }
 static inline Core::ITheme *theme()  { return Core::ICore::instance()->theme(); }
-static inline Core::IUser *user()  { return Core::ICore::instance()->user(); }
 
 
 namespace Patients {
@@ -83,8 +80,8 @@ public:
             m_SqlPhoto(0),
             q(parent)
     {
-        m_UserUuid = userModel()->currentUserData(Core::IUser::Uuid).toString();
-        q->connect(userModel(), SIGNAL(userConnected(QString)), q, SLOT(changeUserUuid(QString)));
+        m_UserUuid = user()->value(Core::IUser::Uuid).toString();
+        q->connect(user(), SIGNAL(userChanged()), q, SLOT(changeUserUuid()));
 
         // install the Core Patient wrapper
 //        Core::ICore::instance()->setPatient(q);
@@ -139,8 +136,10 @@ public:
         if (!settings()->value(Constants::S_SELECTOR_SHOWVIRTUALPATIENTS).toBool())
             where.insert(Constants::IDENTITY_ISVIRTUAL, "=0");
 
-        // Manage User Link ID
-        where.insert(Constants::IDENTITY_LK_TOPRACT_LKID, QString("IN (%1)").arg(m_LkIds));
+        // All users share the same patients
+//        where.insert(Constants::IDENTITY_LK_TOPRACT_LKID, QString("IN (%1)").arg(m_LkIds));
+        where.insert(Constants::IDENTITY_ISACTIVE, "=1");
+
         QString filter = patientBase()->getWhereClause(Constants::Table_IDENT, where);
 
         if (!m_ExtraFilter.isEmpty())
@@ -234,7 +233,6 @@ public:
 
 public:
     QSqlTableModel *m_SqlPatient, *m_SqlPhoto;
-//    PatientModelWrapper *m_PatientWrapper;
     QString m_ExtraFilter;
     QString m_LkIds;
     QString m_UserUuid;
@@ -264,7 +262,7 @@ PatientModel::PatientModel(QObject *parent) :
     d->m_SqlPhoto->setTable(patientBase()->table(Constants::Table_PATIENT_PHOTO));
 
     d->connectSqlPatientSignals();
-    changeUserUuid(d->m_UserUuid);
+    changeUserUuid();
     d->refreshFilter();
 //    d->m_SqlPatient->select();
 }
@@ -277,10 +275,10 @@ PatientModel::~PatientModel()
     }
 }
 
-void PatientModel::changeUserUuid(const QString &uuid)
+void PatientModel::changeUserUuid()
 {
-    d->m_UserUuid = uuid;
-    QList<int> ids = userModel()->practionnerLkIds(uuid);
+    d->m_UserUuid = user()->value(Core::IUser::Uuid).toString();
+    QList<int> ids = QList<int>() << user()->value(Core::IUser::PersonalLinkId).toInt();
     d->m_LkIds.clear();
     foreach(int i, ids)
         d->m_LkIds.append(QString::number(i) + ",");

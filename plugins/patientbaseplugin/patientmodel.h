@@ -111,7 +111,7 @@ Q_SIGNALS:
     void patientCreated(const QString &uuid);
 
 protected Q_SLOTS:
-    void changeUserUuid(const QString &uuid);
+    void changeUserUuid();
 
 private:
     Internal::PatientModelPrivate *d;
