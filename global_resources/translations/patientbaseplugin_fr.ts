@@ -263,26 +263,26 @@
 <context>
     <name>Patients::Internal::PatientBase</name>
     <message>
-        <location filename="../../plugins/patientbaseplugin/patientbase.cpp" line="236"/>
+        <location filename="../../plugins/patientbaseplugin/patientbase.cpp" line="234"/>
         <source>Unable to connect the Patient&apos;s database host.</source>
         <translation>Impossible de se connecter à la base de données patient.</translation>
     </message>
     <message>
-        <location filename="../../plugins/patientbaseplugin/patientbase.cpp" line="236"/>
-        <location filename="../../plugins/patientbaseplugin/patientbase.cpp" line="242"/>
-        <location filename="../../plugins/patientbaseplugin/patientbase.cpp" line="247"/>
-        <location filename="../../plugins/patientbaseplugin/patientbase.cpp" line="256"/>
+        <location filename="../../plugins/patientbaseplugin/patientbase.cpp" line="234"/>
+        <location filename="../../plugins/patientbaseplugin/patientbase.cpp" line="240"/>
+        <location filename="../../plugins/patientbaseplugin/patientbase.cpp" line="245"/>
+        <location filename="../../plugins/patientbaseplugin/patientbase.cpp" line="254"/>
         <source>Please contact dev team.</source>
         <translation>Veuillez contacter l&apos;équipe de développement.</translation>
     </message>
     <message>
-        <location filename="../../plugins/patientbaseplugin/patientbase.cpp" line="242"/>
+        <location filename="../../plugins/patientbaseplugin/patientbase.cpp" line="240"/>
         <source>Unable to create the Patients database.</source>
         <translation>Impossible de créer la base de données patients.</translation>
     </message>
     <message>
-        <location filename="../../plugins/patientbaseplugin/patientbase.cpp" line="247"/>
-        <location filename="../../plugins/patientbaseplugin/patientbase.cpp" line="256"/>
+        <location filename="../../plugins/patientbaseplugin/patientbase.cpp" line="245"/>
+        <location filename="../../plugins/patientbaseplugin/patientbase.cpp" line="254"/>
         <source>Unable to connect the Patients database.</source>
         <translation>Impossible de se connecter à la base de données patients.</translation>
     </message>

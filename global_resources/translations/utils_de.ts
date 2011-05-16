@@ -2,68 +2,131 @@
 <!DOCTYPE TS>
 <TS version="2.0" language="de_DE">
 <context>
+    <name>Calendar::CalendarNavbar</name>
+    <message>
+        <location filename="../../libs/utils/widgets/calendar/calendar_navbar.cpp" line="29"/>
+        <source>Day</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../../libs/utils/widgets/calendar/calendar_navbar.cpp" line="30"/>
+        <source>Week</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../../libs/utils/widgets/calendar/calendar_navbar.cpp" line="31"/>
+        <source>Month</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../../libs/utils/widgets/calendar/calendar_navbar.cpp" line="45"/>
+        <source>Today</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../../libs/utils/widgets/calendar/calendar_navbar.cpp" line="46"/>
+        <source>Yesterday</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../../libs/utils/widgets/calendar/calendar_navbar.cpp" line="47"/>
+        <source>Tomorrow</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../../libs/utils/widgets/calendar/calendar_navbar.cpp" line="154"/>
+        <location filename="../../libs/utils/widgets/calendar/calendar_navbar.cpp" line="156"/>
+        <location filename="../../libs/utils/widgets/calendar/calendar_navbar.cpp" line="158"/>
+        <source>d MMM yyyy</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../../libs/utils/widgets/calendar/calendar_navbar.cpp" line="156"/>
+        <source>d MMM</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../../libs/utils/widgets/calendar/calendar_navbar.cpp" line="158"/>
+        <source>d</source>
+        <translation type="unfinished"></translation>
+    </message>
+</context>
+<context>
+    <name>Calendar::MonthView</name>
+    <message>
+        <location filename="../../libs/utils/widgets/calendar/month_view.cpp" line="87"/>
+        <source>d MMM</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../../libs/utils/widgets/calendar/month_view.cpp" line="89"/>
+        <source>d</source>
+        <translation type="unfinished"></translation>
+    </message>
+</context>
+<context>
     <name>Database</name>
     <message>
-        <location filename="../../libs/utils/database.cpp" line="244"/>
-        <location filename="../../libs/utils/database.cpp" line="258"/>
-        <location filename="../../libs/utils/database.cpp" line="272"/>
+        <location filename="../../libs/utils/database.cpp" line="279"/>
+        <location filename="../../libs/utils/database.cpp" line="293"/>
+        <location filename="../../libs/utils/database.cpp" line="307"/>
         <source>ERROR : %1 driver is not available</source>
         <translation>%1 Treiber ist nicht verfügbar</translation>
     </message>
     <message>
-        <location filename="../../libs/utils/database.cpp" line="283"/>
+        <location filename="../../libs/utils/database.cpp" line="318"/>
         <source>WARNING : %1 database already in use</source>
         <translation>%1 Datenbank bereits in benutzung</translation>
     </message>
     <message>
-        <location filename="../../libs/utils/database.cpp" line="329"/>
-        <location filename="../../libs/utils/database.cpp" line="335"/>
-        <location filename="../../libs/utils/database.cpp" line="353"/>
-        <location filename="../../libs/utils/database.cpp" line="360"/>
+        <location filename="../../libs/utils/database.cpp" line="363"/>
+        <location filename="../../libs/utils/database.cpp" line="369"/>
+        <location filename="../../libs/utils/database.cpp" line="386"/>
+        <location filename="../../libs/utils/database.cpp" line="393"/>
         <source>ERROR : %1 database does not exist and can not be created. Path = %2</source>
         <translation>Error: %1 Datenbank existiert nicht und kann nicht angelegt werden: Pfad=%2</translation>
     </message>
     <message>
-        <location filename="../../libs/utils/database.cpp" line="382"/>
-        <location filename="../../libs/utils/database.cpp" line="391"/>
-        <location filename="../../libs/utils/database.cpp" line="398"/>
+        <location filename="../../libs/utils/database.cpp" line="415"/>
+        <location filename="../../libs/utils/database.cpp" line="425"/>
+        <location filename="../../libs/utils/database.cpp" line="433"/>
         <source>ERROR : Database %1 is not readable. Path : %2</source>
         <translation>Datenbank %1 ist nicht lesbar Pfad: %2</translation>
     </message>
     <message>
-        <location filename="../../libs/utils/database.cpp" line="426"/>
+        <location filename="../../libs/utils/database.cpp" line="461"/>
         <source>ERROR : Database %1 is not writable. Path : %2.</source>
         <translation>Datenbank %1 ist nicht schreibbar Pfad: %2.</translation>
     </message>
     <message>
-        <location filename="../../libs/utils/database.cpp" line="467"/>
+        <location filename="../../libs/utils/database.cpp" line="502"/>
         <source>INFO : database %1 connection = %2</source>
         <translation>Datenbank %1 verbindung= %2</translation>
     </message>
     <message>
-        <location filename="../../libs/utils/database.cpp" line="472"/>
+        <location filename="../../libs/utils/database.cpp" line="507"/>
         <source>WARNING : can not open database %1 : %2 
  %3 </source>
         <translation>Kann datenbank %1 : %2 
  %3 nicht öffnen</translation>
     </message>
     <message>
-        <location filename="../../libs/utils/database.cpp" line="479"/>
+        <location filename="../../libs/utils/database.cpp" line="514"/>
         <source>INFO : database %1 installed. Path : %2</source>
         <translation>Datenbank %1 installiert in Pfad: %2</translation>
     </message>
     <message>
-        <location filename="../../libs/utils/database.cpp" line="557"/>
+        <location filename="../../libs/utils/database.cpp" line="629"/>
         <source>Database Scheme Error : wrong number of fields for table %1</source>
         <translation>Datenbank Scheme Error: falsche Feldnummern für die Tabelle %1</translation>
     </message>
     <message>
-        <location filename="../../libs/utils/database.cpp" line="566"/>
+        <location filename="../../libs/utils/database.cpp" line="638"/>
         <source>Database Scheme Error : field number %1 differs : %2 instead of %3 in table %4</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../../libs/utils/database.cpp" line="1340"/>
+        <location filename="../../libs/utils/database.cpp" line="1430"/>
         <source>Can not create table %1</source>
         <translation type="unfinished"></translation>
     </message>
@@ -249,7 +312,7 @@
         <translation>%1 ist nun in keinem Vollbildmodus.</translation>
     </message>
     <message>
-        <location filename="../../libs/utils/global.cpp" line="1074"/>
+        <location filename="../../libs/utils/global.cpp" line="1078"/>
         <source>Token replacement error (%1). Wrong number of parentheses.</source>
         <translation>Token ersetzungs Error (%1) Falsche Anzahl an Eltern.</translation>
     </message>

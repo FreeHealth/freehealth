@@ -4,7 +4,7 @@
 <context>
     <name>Form::EpisodeModel</name>
     <message>
-        <location filename="../../plugins/formmanagerplugin/episodemodel.cpp" line="1161"/>
+        <location filename="../../plugins/formmanagerplugin/episodemodel.cpp" line="1172"/>
         <source>No user</source>
         <translation type="unfinished"></translation>
     </message>
@@ -66,7 +66,7 @@
 <context>
     <name>Form::FormMainDebugPage</name>
     <message>
-        <location filename="../../plugins/formmanagerplugin/iformitem.cpp" line="667"/>
+        <location filename="../../plugins/formmanagerplugin/iformitem.cpp" line="671"/>
         <source>Forms : </source>
         <translation type="unfinished"></translation>
     </message>
@@ -101,14 +101,27 @@
 <context>
     <name>Form::Internal::EpisodesCoreListener</name>
     <message>
-        <location filename="../../plugins/formmanagerplugin/episodemodel.cpp" line="276"/>
+        <location filename="../../plugins/formmanagerplugin/episodemodel.cpp" line="287"/>
         <source>Save episodes.</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../../plugins/formmanagerplugin/episodemodel.cpp" line="277"/>
+        <location filename="../../plugins/formmanagerplugin/episodemodel.cpp" line="288"/>
         <source>Some datas are not actually saved into database.Do you want to save them ?
  Answering &apos;No&apos; will cause definitive data lose.</source>
+        <translation type="unfinished"></translation>
+    </message>
+</context>
+<context>
+    <name>Form::Internal::FirstRunFormManagerWizardPage</name>
+    <message>
+        <location filename="../../plugins/formmanagerplugin/firstrunformmanager.cpp" line="49"/>
+        <source>General patient form selection</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../../plugins/formmanagerplugin/firstrunformmanager.cpp" line="50"/>
+        <source>You can define your own patient form file, or use the default one. Select it from here. All patients will have the same forms, but you can add subforms anywhere in the form.</source>
         <translation type="unfinished"></translation>
     </message>
 </context>
@@ -123,7 +136,7 @@
 <context>
     <name>Form::Internal::FormManagerPlugin</name>
     <message>
-        <location filename="../../plugins/formmanagerplugin/formmanagerplugin.cpp" line="87"/>
+        <location filename="../../plugins/formmanagerplugin/formmanagerplugin.cpp" line="95"/>
         <source>Initializing form manager plugin...</source>
         <translation type="unfinished"></translation>
     </message>
@@ -131,12 +144,12 @@
 <context>
     <name>Form::Internal::FormManagerPreferencesPage</name>
     <message>
-        <location filename="../../plugins/formmanagerplugin/formmanagerpreferencespage.cpp" line="59"/>
+        <location filename="../../plugins/formmanagerplugin/formmanagerpreferencespage.cpp" line="61"/>
         <source>Selector</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../../plugins/formmanagerplugin/formmanagerpreferencespage.cpp" line="60"/>
+        <location filename="../../plugins/formmanagerplugin/formmanagerpreferencespage.cpp" line="62"/>
         <source>Forms</source>
         <translation type="unfinished"></translation>
     </message>
@@ -230,20 +243,20 @@
 <context>
     <name>QApplication</name>
     <message>
-        <location filename="../../plugins/formmanagerplugin/episodemodel.cpp" line="551"/>
+        <location filename="../../plugins/formmanagerplugin/episodemodel.cpp" line="562"/>
         <source>EpisodeModel</source>
         <comment>Save episode ?</comment>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../../plugins/formmanagerplugin/episodemodel.cpp" line="552"/>
+        <location filename="../../plugins/formmanagerplugin/episodemodel.cpp" line="563"/>
         <source>EpisodeModel</source>
         <comment>The actual episode has been modified. Do you want to save changes in your database ?
 Answering &apos;No&apos; will cause definitve data lose.</comment>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../../plugins/formmanagerplugin/episodemodel.cpp" line="554"/>
+        <location filename="../../plugins/formmanagerplugin/episodemodel.cpp" line="565"/>
         <source>EpisodeModel</source>
         <comment>Save episode</comment>
         <translation type="unfinished"></translation>

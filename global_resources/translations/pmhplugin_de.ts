@@ -4,27 +4,27 @@
 <context>
     <name>PMH</name>
     <message>
-        <location filename="../../plugins/pmhplugin/constants.h" line="163"/>
+        <location filename="../../plugins/pmhplugin/constants.h" line="142"/>
         <source>Create a new PMHx</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../../plugins/pmhplugin/constants.h" line="164"/>
+        <location filename="../../plugins/pmhplugin/constants.h" line="143"/>
         <source>Remove PMH</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../../plugins/pmhplugin/constants.h" line="165"/>
+        <location filename="../../plugins/pmhplugin/constants.h" line="144"/>
         <source>Create a new category</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../../plugins/pmhplugin/constants.h" line="166"/>
+        <location filename="../../plugins/pmhplugin/constants.h" line="145"/>
         <source>Remove category</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../../plugins/pmhplugin/constants.h" line="167"/>
+        <location filename="../../plugins/pmhplugin/constants.h" line="146"/>
         <source>PMHx category manager</source>
         <translation type="unfinished"></translation>
     </message>
@@ -32,24 +32,24 @@
 <context>
     <name>PMH::Internal::PmhBase</name>
     <message>
-        <location filename="../../plugins/pmhplugin/pmhbase.cpp" line="239"/>
+        <location filename="../../plugins/pmhplugin/pmhbase.cpp" line="221"/>
         <source>Unable to connect the Templates host.</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../../plugins/pmhplugin/pmhbase.cpp" line="239"/>
-        <location filename="../../plugins/pmhplugin/pmhbase.cpp" line="245"/>
-        <location filename="../../plugins/pmhplugin/pmhbase.cpp" line="249"/>
+        <location filename="../../plugins/pmhplugin/pmhbase.cpp" line="221"/>
+        <location filename="../../plugins/pmhplugin/pmhbase.cpp" line="227"/>
+        <location filename="../../plugins/pmhplugin/pmhbase.cpp" line="231"/>
         <source>Please contact dev team.</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../../plugins/pmhplugin/pmhbase.cpp" line="245"/>
+        <location filename="../../plugins/pmhplugin/pmhbase.cpp" line="227"/>
         <source>Unable to create the Templates database.</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../../plugins/pmhplugin/pmhbase.cpp" line="249"/>
+        <location filename="../../plugins/pmhplugin/pmhbase.cpp" line="231"/>
         <source>Unable to connect the Templates database.</source>
         <translation type="unfinished"></translation>
     </message>
@@ -63,7 +63,7 @@
     </message>
     <message>
         <location filename="../../plugins/pmhplugin/pmhmode.cpp" line="93"/>
-        <location filename="../../plugins/pmhplugin/pmhmode.cpp" line="176"/>
+        <location filename="../../plugins/pmhplugin/pmhmode.cpp" line="182"/>
         <source>Edit</source>
         <translation type="unfinished"></translation>
     </message>
