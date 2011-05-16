@@ -27,7 +27,8 @@
 #ifndef USERMANAGER_P_H
 #define USERMANAGER_P_H
 
-class QMainWindow;
+#include <QWidget>
+
 class QModelIndex;
 class QTableView;
 class QToolButton;
@@ -41,15 +42,17 @@ namespace UserPlugin {
 namespace Internal {
 class UserManagerContext;
 
-class UserManagerPrivate : public QObject, private Ui::UserManager
+class UserManagerWidget : public QWidget, private Ui::UserManager
 {
     Q_OBJECT
-    Q_DISABLE_COPY(UserManagerPrivate)
+    Q_DISABLE_COPY(UserManagerWidget)
 
 public:
-    explicit UserManagerPrivate( QMainWindow *parent ); // work with usermodel
-    ~UserManagerPrivate();
+    explicit UserManagerWidget(QWidget *parent); // work with usermodel
+    ~UserManagerWidget();
     bool initialize();
+
+    bool canCloseParent();
 
 private Q_SLOTS:
     void on_searchLineEdit_textchanged();
@@ -69,11 +72,15 @@ private:
     void changeEvent(QEvent *e);
     void retranslate();
 
+Q_SIGNALS:
+    void closeRequested();
+
 private:
     bool         m_CanModify, m_CanCreate, m_CanViewAllUsers, m_CanViewRestrictedDatas, m_CanDelete;
     int          m_EditingRow;
     int          m_SearchBy;
-    QMainWindow *m_Parent;
+    QWidget     *m_Parent;
+    QToolBar    *m_ToolBar;
     QToolButton *m_SearchToolBut;
     QAction     *searchByNameAct, *searchByFirstnameAct, *searchByNameAndFirstnameAct, *searchByCityAct;
     QLabel      *m_PermanentUserName;

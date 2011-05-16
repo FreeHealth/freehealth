@@ -9,10 +9,12 @@ DEFINES += USERS_LIBRARY
 HEADERS += $${PWD}/usermanagerplugin.h \
     $${PWD}/usermanager_exporter.h \
     $${PWD}/iuserlistener.h \
-    $${PWD}/currentuserpreferencespage.h
+    $${PWD}/currentuserpreferencespage.h \
+    $${PWD}/userfistrunpage.h
 
 SOURCES += $${PWD}/usermanagerplugin.cpp \
-    $${PWD}/currentuserpreferencespage.cpp
+    $${PWD}/currentuserpreferencespage.cpp \
+    $${PWD}/userfistrunpage.cpp
 
 # Compile
 HEADERS += $${PWD}/global.h \
@@ -45,7 +47,8 @@ FORMS += $${PWD}/widgets/userviewer.ui \
     $${PWD}/widgets/usermanager.ui \
     $${PWD}/widgets/headersfootersviewerprivate.ui \
     $${PWD}/widgets/userpassworddialog.ui \
-    $${PWD}/currentuserpreferenceswidget.ui
+    $${PWD}/currentuserpreferenceswidget.ui \
+    $${PWD}/firstrunusercreationwidget.ui
 
 # translators
 TRANSLATIONS += $${SOURCES_TRANSLATIONS_PATH}/usermanagerplugin_fr.ts \

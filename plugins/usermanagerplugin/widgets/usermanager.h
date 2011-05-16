@@ -29,16 +29,19 @@
 
 #include <usermanagerplugin/usermanager_exporter.h>
 #include <QMainWindow>
+#include <QDialog>
+
+
 /**
  * \file usermanager.h
  * \author Eric MAEKER <eric.maeker@free.fr>
- * \version 0.0.8
- * \date 19 Sept 2009
+ * \version 0.6.0
+ * \date 15 May 2011
 */
 
 namespace UserPlugin {
 namespace Internal {
-class UserManagerPrivate;
+class UserManagerWidget;
 }  // End Internal
 
 class USER_EXPORT UserManager : public QMainWindow
@@ -55,8 +58,28 @@ protected:
     void closeEvent(QCloseEvent *event);
     
 private:
-    Internal::UserManagerPrivate *d;
+    Internal::UserManagerWidget *m_Widget;
 };
+
+
+
+class USER_EXPORT UserManagerDialog : public QDialog
+{
+    Q_OBJECT
+    Q_DISABLE_COPY(UserManagerDialog)
+public:
+    explicit UserManagerDialog(QWidget *parent = 0); // work with tkUserModel
+    ~UserManagerDialog();
+
+    virtual bool initialize();
+
+protected:
+    void done(int r);
+
+private:
+    Internal::UserManagerWidget *m_Widget;
+};
+
 
 }  // End UserPlugin
 

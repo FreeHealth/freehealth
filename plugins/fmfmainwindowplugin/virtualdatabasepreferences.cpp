@@ -53,6 +53,7 @@
 #include <QBuffer>
 
 static inline UserPlugin::UserModel *userModel() {return UserPlugin::UserModel::instance();}
+static inline Core::IUser *user() {return Core::ICore::instance()->user();}
 static inline Patients::Internal::PatientBase *patientBase()  { return Patients::Internal::PatientBase::instance(); }
 static inline Patients::PatientModel *patientModel()  { return Patients::PatientModel::activeModel(); }
 static inline Form::Internal::EpisodeBase *episodeBase()  { return Form::Internal::EpisodeBase::instance(); }
@@ -146,11 +147,14 @@ VirtualDatabasePreferences::VirtualDatabasePreferences(QWidget *parent) :
 
 void VirtualDatabasePreferences::writeDefaultSettings(Core::ISettings *)
 {
-    Utils::Log::addMessage("VirtualDatabasePreferences", tkTr(Trans::Constants::CREATING_DEFAULT_SETTINGS_FOR_1).arg("VirtualDatabasePreferences"));
+    LOG_FOR("VirtualDatabasePreferences", tkTr(Trans::Constants::CREATING_DEFAULT_SETTINGS_FOR_1).arg("VirtualDatabasePreferences"));
     QHash<int, QString> where;
     where.insert(Patients::Constants::IDENTITY_NAME, "LIKE 'DOE'");
     int c = patientBase()->count(Patients::Constants::Table_IDENT, Patients::Constants::IDENTITY_NAME, patientBase()->getWhereClause(Patients::Constants::Table_IDENT, where));
     if (!c) {
+
+        qWarning() << userModel()->practionnerLkIds(userModel()->currentUserData(Core::IUser::Uuid).toString());
+
         int userLkId = userModel()->practionnerLkIds(userModel()->currentUserData(Core::IUser::Uuid).toString()).at(0);
         QString path = settings()->path(Core::ISettings::BigPixmapPath) + QDir::separator();
 
@@ -180,6 +184,7 @@ void VirtualDatabasePreferences::on_populateDb_clicked()
     // Prepare virtual patients
     int nb = nbVirtualPatients->value();
     int userLkId = userModel()->practionnerLkIds(userModel()->currentUserData(Core::IUser::Uuid).toString()).at(0);
+    qWarning() << "eeeeeeeeeeeeeeeeeeee" << user() << userLkId;
     QProgressDialog dlg(tr("Creating %1 virtual patients").arg(nb), tr("Cancel"), 0, nb, qApp->activeWindow());
     dlg.setWindowModality(Qt::WindowModal);
 
@@ -251,7 +256,7 @@ void VirtualDatabasePreferences::on_populateEpisodes_clicked()
         while (query.next())
             patients << query.value(0).toString();
     } else {
-        Utils::Log::addQueryError(this, query);
+        LOG_QUERY_ERROR(query);
     }
     query.finish();
 
@@ -301,7 +306,7 @@ void VirtualDatabasePreferences::on_populateEpisodes_clicked()
                 episodeQuery.bindValue(Constants::EPISODES_LABEL, tmp);
 
                 if (!episodeQuery.exec()) {
-                    Utils::Log::addQueryError(this, episodeQuery);
+                    LOG_QUERY_ERROR(episodeQuery);
                 }
                 episodeQuery.finish();
 

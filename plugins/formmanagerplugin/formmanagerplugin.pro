@@ -26,7 +26,8 @@ HEADERS = formmanagerplugin.h \
     formmanagerpreferencespage.h \
     formcontextualwidget.h \
     formfile.h \
-    formeditordialog.h
+    formeditordialog.h \
+    firstrunformmanager.h
 SOURCES = formmanagerplugin.cpp \
     formmanager.cpp \
     iformitem.cpp \
@@ -40,7 +41,8 @@ SOURCES = formmanagerplugin.cpp \
     iformio.cpp \
     formcontextualwidget.cpp \
     formfile.cpp \
-    formeditordialog.cpp
+    formeditordialog.cpp \
+    firstrunformmanager.cpp
 
 OTHER_FILES = FormManager.pluginspec
 

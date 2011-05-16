@@ -73,6 +73,9 @@ using namespace Trans::ConstantTranslations;
 static inline ExtensionSystem::PluginManager *pluginManager() {return ExtensionSystem::PluginManager::instance();}
 static inline UserPlugin::Internal::UserBase *userBase() {return UserPlugin::Internal::UserBase::instance();}
 
+namespace {
+    const char * const SERVER_ADMINISTRATOR_UUID = "serverAdmin";
+}
 
 namespace UserPlugin {
 namespace Internal {
@@ -148,7 +151,7 @@ public:
             return true;
 
         // get user from database
-        UserData *un = UserBase::instance()->getUserByUuid(uuid);
+        UserData *un = userBase()->getUserByUuid(uuid);
         m_Uuid_UserList.insert(uuid, un);
         return true;
     }
@@ -160,14 +163,14 @@ public:
     QString addUserFromDatabase(const QString &log64, const QString &pass64)
     {
         // get user from database
-        QString uuid = UserBase::instance()->getUuid(log64, pass64);
+        QString uuid = userBase()->getUuid(log64, pass64);
         if (uuid.isEmpty())
             return QString();
         // make sure it is not already in the hash
         if (m_Uuid_UserList.keys().contains(uuid)) {
             return uuid;
         }
-        m_Uuid_UserList.insert(uuid, UserBase::instance()->getUserByUuid(uuid));
+        m_Uuid_UserList.insert(uuid, userBase()->getUserByUuid(uuid));
         return uuid;
     }
 
@@ -175,7 +178,7 @@ public:
     QString createNewEmptyUser(UserModel *model, const int createdRow)
     {
         // 1. create an empty user into the hash
-        QString uuid = UserBase::instance()->createNewUuid();
+        QString uuid = userBase()->createNewUuid();
         m_Uuid_UserList.insert(uuid, new UserData(uuid));
         return uuid;
     }
@@ -207,7 +210,7 @@ UserModel *UserModel::instance(QObject *parent)
 
 /** \brief Constructor */
 UserModel::UserModel(QObject *parent)
-        : QSqlTableModel(parent, Internal::UserBase::instance()->database()), d(0)
+        : QSqlTableModel(parent, userBase()->database()), d(0)
 {
     setObjectName("UserModel");
     d = new Internal::UserModelPrivate(this);
@@ -217,7 +220,7 @@ UserModel::UserModel(QObject *parent)
 
     if (!parent)
         setParent(qApp);
-    QSqlTableModel::setTable(Internal::UserBase::instance()->table(Table_USERS));
+    QSqlTableModel::setTable(userBase()->table(Table_USERS));
     setEditStrategy(QSqlTableModel::OnManualSubmit);
     select();
 }
@@ -229,30 +232,14 @@ UserModel::~UserModel()
     d=0;
 }
 
-/** \brief Should not be used. */
-QModelIndex UserModel::createIndex (int /*row*/, int /*column*/, quint32 /*id*/) const
-{
-    qWarning() << "UserModel::createIndex (int row, int column, quint32 id) const  --> OBSOLETE";
-    return QModelIndex();
-}
-
-/** \brief Should not be used. \sa index() */
-QModelIndex UserModel::createIndex(int row, int col, void * /*ptr*/) const
-{
-    if ((col >= 0) && (col < Core::IUser::NumberOfColumns))
-        return QAbstractItemModel::createIndex(row, col, 0);
-    return QModelIndex();
-}
-
 /**
   \brief Defines the current user using its login and password. There can be only one current user.
   The date and time of loggin are trace into database.
-
   \todo Create a UserChangerListener +++ instead of using sig/slot
-
 */
-bool UserModel::setCurrentUser(const QString &log64, const QString &cryptpass64)
+bool UserModel::setCurrentUser(const QString &log64, const QString &cryptpass64, bool refreshCache)
 {
+//    qWarning() << Q_FUNC_INFO << log64 << cryptpass64;
     QList<IUserListener *> listeners = pluginManager()->getObjects<IUserListener>();
 
     // 1. Ask all listeners to prepare the current user disconnection
@@ -265,8 +252,15 @@ bool UserModel::setCurrentUser(const QString &log64, const QString &cryptpass64)
     QString uuid;
     foreach(Internal::UserData *u, d->m_Uuid_UserList.values()) {
         if (u->login()==log64 && u->cryptedPassword()==cryptpass64) {
-            uuid = u->uuid();
-            break;
+            if (!refreshCache) {
+                uuid = u->uuid();
+                break;
+            } else {
+                d->m_Uuid_UserList.remove(u->uuid());
+                delete u;
+                u = 0;
+                break;
+            }
         }
     }
 
@@ -275,7 +269,7 @@ bool UserModel::setCurrentUser(const QString &log64, const QString &cryptpass64)
         uuid = d->addUserFromDatabase(log64, cryptpass64);
     }
     if (uuid.isEmpty()) {
-        Utils::Log::addError(this, tr("Unable to retreive user into the model using login and password."));
+        LOG_ERROR(tr("Unable to retreive user into the model using login and password."));
         return false;
     }
 
@@ -286,7 +280,7 @@ bool UserModel::setCurrentUser(const QString &log64, const QString &cryptpass64)
     }
 
     // 4. Connect new user
-    Utils::Log::addMessage(this, tr("Setting current user uuid to %1").arg(uuid));
+    LOG(tr("Setting current user uuid to %1").arg(uuid));
     if (!d->m_CurrentUserUuid.isEmpty()) {
         Q_EMIT userAboutToDisconnect(d->m_CurrentUserUuid);
     }
@@ -296,19 +290,90 @@ bool UserModel::setCurrentUser(const QString &log64, const QString &cryptpass64)
     foreach(Internal::UserData *u, d->m_Uuid_UserList.values())
         u->setCurrent(false);
 
+    // 5. If precedent currentUser was SERVER_ADMINISTRATOR_UUID --> remove it from the cache
+    /** \todo code here */
+
     Q_EMIT(userAboutToConnect(uuid));
+
     // trace log
     Internal::UserData *user = d->m_Uuid_UserList[d->m_CurrentUserUuid];
     user->setCurrent(true);
     user->setLastLogin(QDateTime::currentDateTime());
     user->addLoginToHistory();
-    Internal::UserBase::instance()->saveUser(user);
+    userBase()->saveUser(user);
     user->setModified(false);
     d->m_CurrentUserUuid = uuid;
+    /** \todo this is not the usermanger role if asked uuid == currentuser */
     d->m_CurrentUserRights = Core::IUser::UserRights(user->rightsValue(USER_ROLE_USERMANAGER).toInt());
+
+    LOG(tkTr(Trans::Constants::CONNECTED_AS_1).arg(user->fullName()));
     Q_EMIT memoryUsageChanged();
     Q_EMIT userConnected(uuid);
+
     return true;
+}
+
+/**
+  Define the current user as the database server manager. The unique user that can create
+  users at startup time.
+  \sa UserPlugin::UserCreationPage
+*/
+bool UserModel::setCurrentUserIsServerManager()
+{
+    if (userBase()->database().driverName()=="QSQLITE") {
+        return false;
+    }
+    if (!database().isOpen()) {
+        if (!database().open()) {
+            LOG_ERROR(tkTr(Trans::Constants::UNABLE_TO_OPEN_DATABASE_1_ERROR_2).arg(database().connectionName().arg(database().lastError().text())));
+            return false;
+        }
+    }
+//    qWarning() << Q_FUNC_INFO << log64 << cryptpass64;
+        QList<IUserListener *> listeners = pluginManager()->getObjects<IUserListener>();
+
+        // 1. Ask all listeners to prepare the current user disconnection
+        foreach(IUserListener *l, listeners) {
+            if (!l->userAboutToChange())
+                return false;
+        }
+
+        // 2. Check "in memory" users
+        QString uuid = ::SERVER_ADMINISTRATOR_UUID;
+        Internal::UserData *u = d->m_Uuid_UserList.value(uuid);
+        if (!u) {
+            u = new Internal::UserData(uuid);
+            u->setName(tr("Database server administrator"));
+            u->setRights(Constants::USER_ROLE_USERMANAGER, Core::IUser::AllRights);
+            d->m_Uuid_UserList.insert(uuid, u);
+        }
+
+        // 3. Ask all listeners for the current user disconnection
+        foreach(IUserListener *l, listeners) {
+            if (!l->currentUserAboutToDisconnect())
+                return false;
+        }
+
+        // 4. Connect new user
+        LOG(tr("Setting current user uuid to %1").arg(uuid));
+        if (!d->m_CurrentUserUuid.isEmpty()) {
+            Q_EMIT userAboutToDisconnect(d->m_CurrentUserUuid);
+        }
+        d->m_CurrentUserUuid.clear();
+        d->m_CurrentUserRights = Core::IUser::AllRights;
+        d->m_CurrentUserUuid = uuid;
+        foreach(Internal::UserData *user, d->m_Uuid_UserList.values())
+            user->setCurrent(false);
+        u->setCurrent(true);
+
+        Q_EMIT(userAboutToConnect(uuid));
+
+        u->setModified(false);
+
+        LOG(tkTr(Trans::Constants::CONNECTED_AS_1).arg(u->fullName()));
+        Q_EMIT memoryUsageChanged();
+        Q_EMIT userConnected(uuid);
+        return true;
 }
 
 /** \brief Return true if a current user has been defined. */
@@ -320,7 +385,7 @@ bool UserModel::hasCurrentUser()
 /** \brief Return the index of the current user. */
 QModelIndex UserModel::currentUserIndex() const
 {
-//    qWarning() << "currentUserIndex" << rowCount() << d->m_CurrentUserUuid;
+//    qWarning() << Q_FUNC_INFO << rowCount() << d->m_CurrentUserUuid;
     if (d->m_CurrentUserUuid.isEmpty())
         return QModelIndex();
     QModelIndexList list = match(createIndex(0, Core::IUser::Uuid), Qt::DisplayRole, d->m_CurrentUserUuid, 1);
@@ -333,7 +398,7 @@ QModelIndex UserModel::currentUserIndex() const
 /** \brief Returns the current database */
 QSqlDatabase UserModel::database() const
 {
-    return Internal::UserBase::instance()->database();
+    return userBase()->database();
 }
 
 /** \brief Clears the content of the model. Silently save users if needed. */
@@ -349,7 +414,7 @@ void UserModel::clear()
 /** \brief Check login/password validity. \sa UserBase::checkLogin(). */
 bool UserModel::isCorrectLogin(const QString &logbase64, const QString &cryptpassbase64)
 {
-    return Internal::UserBase::instance()->checkLogin(logbase64, cryptpassbase64);
+    return userBase()->checkLogin(logbase64, cryptpassbase64);
 }
 
 /**
@@ -370,7 +435,7 @@ bool UserModel::removeRows(int row, int count, const QModelIndex &parent)
         QString uuid = QSqlTableModel::index(row+i , USER_UUID).data().toString();
 
         if (uuid == d->m_CurrentUserUuid) {
-            Utils::Log::addMessage(this, tr("Default user can not be deleted from database."));
+            LOG(tr("Default user can not be deleted from database."));
             Utils::okCancelMessageBox(tr("User can not be deleted."),
                                           tr("You can not delete super-administrator user."),
                                           tr("The super-administrator user is defined by default, "
@@ -384,7 +449,7 @@ bool UserModel::removeRows(int row, int count, const QModelIndex &parent)
         // Delete from QHash
         if (d->m_Uuid_UserList.keys().contains(uuid)) {
             if (d->m_Uuid_UserList.value(uuid)->isModified())  {
-                Utils::Log::addError(this, tr("You can not delete a modified user, save it before."));
+               LOG_ERROR(tr("You can not delete a modified user, save it before."));
                 noError = false;
             } else {
                 delete d->m_Uuid_UserList[uuid];
@@ -394,8 +459,8 @@ bool UserModel::removeRows(int row, int count, const QModelIndex &parent)
         }
 
         // Delete from real database
-        if (!Internal::UserBase::instance()->deleteUser(uuid)) {
-            Utils::Log::addError(this, tr("User can not be deleted from database."));
+        if (!userBase()->deleteUser(uuid)) {
+           LOG_ERROR(tr("User can not be deleted from database."));
             noError = false;
         }
     }
@@ -412,11 +477,10 @@ bool UserModel::insertRows(int row, int count, const QModelIndex &parent)
     if (!d->m_CurrentUserRights & Core::IUser::Create)
         return false;
     int i=0;
-    for (i=0;i<count;i++)
-    {
+    for (i=0;i<count;i++) {
         // create a new empty tkUser
         if (!QSqlTableModel::insertRows(row + i, 1, parent)) {
-            Utils::Log::addError(this, QString("Can not create a new user into SQL Table."));
+           LOG_ERROR(QString("Can not create a new user into SQL Table."));
             return i;
         }
         // feed the QSqlTableModel with uuid and crypted empty password
@@ -424,13 +488,13 @@ bool UserModel::insertRows(int row, int count, const QModelIndex &parent)
         Internal::UserData *user = d->m_Uuid_UserList.value(uuid);
         QModelIndex newIndex = index(row+i, Core::IUser::Uuid);
         if (!QSqlTableModel::setData(newIndex, uuid, Qt::EditRole)) {
-            Utils::Log::addError(this, QString("Can not add user's uuid into the new user into SQL Table. Row = %1 , UUID = %2 ")
+           LOG_ERROR(QString("Can not add user's uuid into the new user into SQL Table. Row = %1 , UUID = %2 ")
                              .arg(row+i).arg(uuid));
             return i;
         }
         newIndex = index(row+i, Core::IUser::Password);
         if (!QSqlTableModel::setData(newIndex, UserPlugin::crypt(""), Qt::EditRole)) {
-            Utils::Log::addError(this, QString("Can not add user's login into the new user into SQL Table. Row = %1 , UUID = %2 ")
+           LOG_ERROR(QString("Can not add user's login into the new user into SQL Table. Row = %1 , UUID = %2 ")
                              .arg(row+i).arg(uuid));
             return i;
         }
@@ -444,7 +508,7 @@ bool UserModel::insertRows(int row, int count, const QModelIndex &parent)
         query.bindValue(Constants::LK_USER_UUID, uuid);
         query.bindValue(Constants::LK_LKID, maxLkId + 1);
         if (!query.exec()) {
-            Utils::Log::addQueryError(this, query);
+            LOG_QUERY_ERROR(query);
         }
         userBase()->updateMaxLinkId(maxLkId + 1);
         user->setLkIds(QList<int>() << maxLkId+1);
@@ -491,7 +555,7 @@ bool UserModel::setData(const QModelIndex &item, const QVariant &value, int role
     if (item.column() < USER_MaxParam) {
         // prepare SQL update
         if (!QSqlTableModel::setData(item, value, role)) {
-            Utils::Log::addError(this, QString("enable to setData to SqlModel. Row %1, col %2, data %3")
+           LOG_ERROR(QString("enable to setData to SqlModel. Row %1, col %2, data %3")
                              .arg(item.row()).arg(item.column()).arg(value.toString()));
             return false;
         }
@@ -575,6 +639,7 @@ QVariant UserModel::data(const QModelIndex &item, int role) const
 
     // get user
     QString uuid = QSqlTableModel::data(QSqlTableModel::index(item.row(), USER_UUID), Qt::DisplayRole).toString();
+    QVariant toReturn;
 
     // First manage decoration WITHOUT retreiving any user from database
     if (role == Qt::FontRole)
@@ -602,38 +667,33 @@ QVariant UserModel::data(const QModelIndex &item, int role) const
             c = QColor(Qt::white);
          return c;
     }
-
-
-    // Manage table USERS using the QSqlTableModel WITHOUT retreiving whole user from database
-    if ((item.column() < Core::IUser::LanguageIndex)) {
-        // here we suppose that it is the currentUser the ask for datas
-        /** \todo had delegates rights */
-        if (d->m_CurrentUserRights & Core::IUser::ReadAll)
-            return QSqlTableModel::data(item, role);
-        else if ((d->m_CurrentUserRights & Core::IUser::ReadOwn) &&
-                  (d->m_CurrentUserUuid == uuid))
-            return QSqlTableModel::data(item, role);
-    }
-
-    // Here we must get values from complete user, so retreive it from database if necessary
-    if (! d->m_Uuid_UserList.keys().contains(uuid)) {
-        d->addUserFromDatabase(uuid);
-        Q_EMIT memoryUsageChanged();
-    }
-    const Internal::UserData *user = d->m_Uuid_UserList.value(uuid);
-    // check user write rights
-    if (user->isCurrent()) {
-        if (!d->m_CurrentUserRights & Core::IUser::ReadOwn)
-            return QVariant();
-    } else if (!d->m_CurrentUserRights & Core::IUser::ReadAll)
-            return QVariant();
-    /** \todo if user if a delegate of current user */
-
-    // get the requiered data
-    QVariant toReturn;
-
-    if ((role == Qt::DisplayRole) || (role == Qt::EditRole))
+    else if ((role == Qt::DisplayRole) || (role == Qt::EditRole))
     {
+        // Manage table USERS using the QSqlTableModel WITHOUT retreiving whole user from database
+        if ((item.column() < Core::IUser::LanguageIndex)) {
+            // here we suppose that it is the currentUser the ask for datas
+//            qWarning() << (bool)(d->m_CurrentUserRights & Core::IUser::ReadAll) << (bool)(d->m_CurrentUserRights & Core::IUser::ReadOwn) << (d->m_CurrentUserUuid == uuid);
+            /** \todo had delegates rights */
+            if (d->m_CurrentUserRights & Core::IUser::ReadAll)
+                return QSqlTableModel::data(item, role);
+            else if (d->m_CurrentUserUuid == uuid)
+                return QSqlTableModel::data(item, role);
+        }
+
+        // Here we must get values from complete user, so retreive it from database if necessary
+        if (!d->m_Uuid_UserList.keys().contains(uuid)) {
+            d->addUserFromDatabase(uuid);
+            Q_EMIT memoryUsageChanged();
+        }
+        const Internal::UserData *user = d->m_Uuid_UserList.value(uuid);
+        // check user write rights
+        if (user->isCurrent()) {
+            if (!d->m_CurrentUserRights & Core::IUser::ReadOwn)
+                return QVariant();
+        } else if (!d->m_CurrentUserRights & Core::IUser::ReadAll)
+            return QVariant();
+        /** \todo if user if a delegate of current user */
+
         // get datas directly from database using QSqlTableModel if possible
         if (item.column() < USER_LANGUAGE)
             return QSqlTableModel::data(item, role);
@@ -655,13 +715,7 @@ QVariant UserModel::data(const QModelIndex &item, int role) const
         case Core::IUser::Name : toReturn = user->name(); break;
         case Core::IUser::SecondName : toReturn = user->secondName(); break;
         case Core::IUser::Firstname : toReturn = user->firstname(); break;
-        case Core::IUser::FullName :
-            {
-                QString r = user->title() + " " + user->name() + " " + user->secondName() + " " + user->firstname();
-                r.replace("  ", " ");
-                toReturn = r;
-                break;
-            }
+        case Core::IUser::FullName : toReturn = user->fullName(); break;
         case Core::IUser::Mail : toReturn = user->mail(); break;
         case Core::IUser::Language : toReturn = user->language(); break;
         case Core::IUser::LanguageIndex : toReturn = Core::Translators::availableLocales().indexOf(user->language()); break;
@@ -845,7 +899,7 @@ bool UserModel::submitUser(const QString &uuid)
         } else if ((!user->isCurrent()) &&
                    (!d->m_CurrentUserRights & Core::IUser::WriteAll)) {
             toReturn = false;
-        } else if (!Internal::UserBase::instance()->saveUser(user)) {
+        } else if (!userBase()->saveUser(user)) {
             toReturn = false;
         }
     }
@@ -893,7 +947,7 @@ void UserModel::setFilter (const QHash<int,QString> &conditions)
 {
     /** \todo filter by name AND Firstname at the same time */
     QString filter = "";
-    const Internal::UserBase *b = Internal::UserBase::instance();
+    const Internal::UserBase *b = userBase();
     foreach(const int r, conditions.keys()) {
         QString baseField = "";
         switch (r)
@@ -939,6 +993,7 @@ int UserModel::practionnerLkId(const QString &uid)
 
 QList<int> UserModel::practionnerLkIds(const QString &uid)
 {
+//    qWarning() << "\n\n" << Q_FUNC_INFO << uid;
     /** \todo manage user's groups */
     if (d->m_Uuid_UserList.keys().contains(uid)) {
         Internal::UserData *user = d->m_Uuid_UserList.value(uid);
@@ -958,9 +1013,9 @@ QList<int> UserModel::practionnerLkIds(const QString &uid)
         while (query.next())
             lk_ids.append(query.value(0).toInt());
     } else {
-        Utils::Log::addQueryError("UserModel", query);
+        LOG_QUERY_ERROR(query);
     }
-//    qWarning() << "xxxxxxxxxxxxx database" << uid << lk_ids;
+//    qWarning() << "xxxxxxxxxxxxx database" << uid << lk_ids << "\n\n";
     return lk_ids;
 }
 

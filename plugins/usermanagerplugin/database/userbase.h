@@ -68,7 +68,7 @@ public:
     virtual ~UserBase() {}
 
     // initialize
-    bool initialize(Core::ISettings *settings);
+    bool initialize(Core::ISettings *settings = 0);
     bool createDatabase(const QString & connectionName, const QString & dbName,
                         const QString & pathOrHostName,
                         TypeOfAccess access, AvailableDrivers driver,

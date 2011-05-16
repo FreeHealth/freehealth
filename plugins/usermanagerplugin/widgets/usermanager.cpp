@@ -81,7 +81,7 @@ namespace Internal {
 class UserManagerContext : public Core::IContext
 {
 public:
-    UserManagerContext(UserManager *parent) : Core::IContext(parent), wgt(parent)
+    UserManagerContext(QWidget *parent) : Core::IContext(parent), wgt(parent)
     {
         setObjectName("UserManagerContext");
         ctx << Core::ICore::instance()->uniqueIDManager()->uniqueIdentifier(Core::Constants::C_USERMANAGER);
@@ -92,7 +92,7 @@ public:
     QWidget *widget() {return wgt;}
 
 private:
-    UserManager *wgt;
+    QWidget *wgt;
     QList<int> ctx;
 };
 
@@ -108,47 +108,32 @@ private:
   \todo Search user by city, search by name & firstname,
   \ingroup widget_usertoolkit usertoolkit usermanager
 */
-UserManager::UserManager(QWidget * parent)
-    : QMainWindow(parent)
+UserManager::UserManager(QWidget * parent) :
+        QMainWindow(parent)
 {
     Q_ASSERT_X(UserModel::instance()->hasCurrentUser(), "UserManager", "NO CURRENT USER");
     if (!UserModel::instance()->hasCurrentUser())
         return;
     setAttribute(Qt::WA_DeleteOnClose);
-    d = new UserManagerPrivate(this);
+    m_Widget = new UserManagerWidget(this);
+    setCentralWidget(m_Widget);
     setUnifiedTitleAndToolBarOnMac(true);
 }
 
 bool UserManager::initialize()
 {
-    d->m_Context = new UserManagerContext(this);
-    contextManager()->addContextObject(d->m_Context);
-    d->initialize();
+    m_Widget->initialize();
     return true;
 }
 
 /** \brief Close the usermanager. Check if modifications have to be saved and ask user. */
 void UserManager::closeEvent(QCloseEvent *event)
 {
-    if (UserModel::instance()->hasUserToSave()) {
-        int ret = Utils::withButtonsMessageBox(tr("You've modified the users' list."), tr("Do you want to save your changes ?"), "",
-                                         QMessageBox::Save | QMessageBox::Discard | QMessageBox::Cancel,
-                                         QMessageBox::Save, windowTitle());
-        if (ret == QMessageBox::Discard)
-            event->accept();
-        else if (ret == QMessageBox::Cancel)
-            event->ignore();
-        else if (UserModel::instance()->submitAll()) {
-            QMessageBox::information(this, windowTitle(), tr("Changes have been correctly saved."));
-            event->accept();
-        }
-        else {
-            QMessageBox::information(this, windowTitle(), tr("Changes can not be correctly saved."));
-            event->ignore();
-        }
-    }
-    else
+    if (m_Widget->canCloseParent()) {
         event->accept();
+    } else {
+        event->ignore();
+    }
 }
 
 /** \brief Destructor */
@@ -156,21 +141,67 @@ UserManager::~UserManager()
 {
     if (Utils::isDebugCompilation())
         qWarning() << "~UserManager";
-    contextManager()->removeContextObject(d->m_Context);
-    if (d) {
-        delete d;
-        d = 0;
+//    if (m_Widget) {
+//        delete m_Widget;
+//        m_Widget = 0;
+//    }
+}
+
+
+
+/**
+  \brief Main user interface for User Manager.
+  User Model must have been instanciated BEFORE this interface, and a current user must have been setted.\n
+  You must instanciate this class as a pointer in order to avoid errors at deletion.
+  \sa UserModel, UserModel::hasCurrentUser()
+  \todo Search user by city, search by name & firstname,
+  \ingroup widget_usertoolkit usertoolkit usermanager
+*/
+UserManagerDialog::UserManagerDialog(QWidget * parent) :
+        QDialog(parent)
+{
+    Q_ASSERT_X(UserModel::instance()->hasCurrentUser(), "UserManagerDialog", "NO CURRENT USER");
+    if (!UserModel::instance()->hasCurrentUser())
+        return;
+    setAttribute(Qt::WA_DeleteOnClose);
+    m_Widget = new UserManagerWidget(this);
+}
+
+bool UserManagerDialog::initialize()
+{
+    m_Widget->initialize();
+    return true;
+}
+
+/** \brief Close the usermanager. Check if modifications have to be saved and ask user. */
+void UserManagerDialog::done(int r)
+{
+    if (m_Widget->canCloseParent()) {
+        QDialog::done(r);
     }
 }
+
+/** \brief Destructor */
+UserManagerDialog::~UserManagerDialog()
+{
+    if (Utils::isDebugCompilation())
+        qWarning() << "~UserManagerDialog";
+//    if (m_Widget) {
+//        delete m_Widget;
+//        m_Widget = 0;
+//    }
+}
+
 
 /**
   \brief UserManager Main Ui interface.
   \internal
   \ingroup widget_usertoolkit usertoolkit usermanager
 */
-UserManagerPrivate::UserManagerPrivate(QMainWindow * parent) :
-        QObject(parent),
+UserManagerWidget::UserManagerWidget(QWidget *parent) :
+        QWidget(parent),
         m_Parent(parent),
+        m_ToolBar(0),
         m_SearchToolBut(0),
         searchByNameAct(0), searchByFirstnameAct(0), searchByNameAndFirstnameAct(0), searchByCityAct(0),
         m_PermanentUserName(0),
@@ -180,9 +211,21 @@ UserManagerPrivate::UserManagerPrivate(QMainWindow * parent) :
     m_SearchBy = Core::IUser::Name;
 }
 
-bool UserManagerPrivate::initialize()
+bool UserManagerWidget::initialize()
 {
-    setupUi(m_Parent);
+//    m_Context = new UserManagerContext(this);
+//    contextManager()->addContextObject(m_Context);
+
+    setupUi(this);
+
+    QMainWindow *p = qobject_cast<QMainWindow*>(parent());
+    if (p) {
+        mainLayout->removeItem(toolbarLayout);
+        m_ToolBar = toolBar;
+    } else {
+        m_ToolBar = new QToolBar(this);
+        toolbarLayout->addWidget(m_ToolBar);
+    }
 
     toolBar->addAction(createNewUserAct);
     toolBar->addAction(modifyUserAct);
@@ -210,6 +253,7 @@ bool UserManagerPrivate::initialize()
     userTableView->setSelectionMode(QAbstractItemView::SingleSelection);
     userTableView->setSelectionBehavior(QAbstractItemView::SelectRows);
     userTableView->horizontalHeader()->setStretchLastSection(true);
+
     // prepare Search Line Edit
     m_SearchToolBut = new QToolButton(searchLineEdit);
     searchLineEdit->setLeftButton(m_SearchToolBut);
@@ -222,6 +266,7 @@ bool UserManagerPrivate::initialize()
     //    m_SearchToolBut->addAction(searchByNameAndFirstnameAct);
     //    m_SearchToolBut->addAction(searchByCityAct);
     m_SearchToolBut->setPopupMode(QToolButton::InstantPopup);
+
     retranslate();
 
     selectUserTableView(UserModel::instance()->currentUserIndex().row());
@@ -237,12 +282,13 @@ bool UserManagerPrivate::initialize()
     connect(createNewUserAct, SIGNAL(triggered()), this, SLOT(on_createNewUserAct_triggered()));
     connect(clearModificationsAct, SIGNAL(triggered()), this, SLOT(on_clearModificationsAct_triggered()));
     connect(deleteUserAct,  SIGNAL(triggered()), this, SLOT(on_deleteUserAct_triggered()));
-    connect(quitUserManagerAct,  SIGNAL(triggered()), m_Parent, SLOT(close()));
     connect(userTableView, SIGNAL(activated(const QModelIndex &)),
              this, SLOT(on_userTableView_activated(const QModelIndex &)));
     // connections for search line edit
     connect(searchLineEdit, SIGNAL(textChanged(const QString &)), this, SLOT(on_searchLineEdit_textchanged()));
     connect(m_SearchToolBut, SIGNAL(triggered(QAction*)), this, SLOT(on_m_SearchToolButton_triggered(QAction*)));
+
+    connect(quitUserManagerAct,  SIGNAL(triggered()), this, SIGNAL(closeRequested()));
 
     updateStatusBar();
     connect(UserModel::instance(), SIGNAL(memoryUsageChanged()), this, SLOT(updateStatusBar()));
@@ -269,13 +315,36 @@ bool UserManagerPrivate::initialize()
     return true;
 }
 
-UserManagerPrivate::~UserManagerPrivate()
+bool UserManagerWidget::canCloseParent()
 {
-    if (Utils::isDebugCompilation())
-        qWarning() << "~UserManagerPrivate";
+    if (UserModel::instance()->hasUserToSave()) {
+        int ret = Utils::withButtonsMessageBox(tr("You've modified the users' list."), tr("Do you want to save your changes ?"), "",
+                                         QMessageBox::Save | QMessageBox::Discard | QMessageBox::Cancel,
+                                         QMessageBox::Save, windowTitle());
+        if (ret == QMessageBox::Discard)
+            return true;
+        else if (ret == QMessageBox::Cancel)
+            return false;
+        else if (UserModel::instance()->submitAll()) {
+            QMessageBox::information(this, windowTitle(), tr("Changes have been correctly saved."));
+            return true;
+        }
+        else {
+            QMessageBox::information(this, windowTitle(), tr("Changes can not be correctly saved."));
+            return false;
+        }
+    }
+    return true;
 }
 
-void UserManagerPrivate::analyseCurrentUserRights()
+UserManagerWidget::~UserManagerWidget()
+{
+    if (Utils::isDebugCompilation())
+        qWarning() << "~UserManagerWidget";
+//    contextManager()->removeContextObject(m_Context);
+}
+
+void UserManagerWidget::analyseCurrentUserRights()
 {
     // retreive user manager rights from model
     UserModel *m = UserModel::instance();
@@ -297,7 +366,7 @@ void UserManagerPrivate::analyseCurrentUserRights()
 }
 
 /** \brief upadet status bar for current user, and refresh memory usage group */
-void UserManagerPrivate::updateStatusBar()
+void UserManagerWidget::updateStatusBar()
 {
     UserModel *m = UserModel::instance();
     if (! m_PermanentWidget) {
@@ -312,11 +381,11 @@ void UserManagerPrivate::updateStatusBar()
                                      .arg(m->rowCount())
                                      .arg(m->numberOfUsersInMemory()));
     m_PermanentUserName->setText(m->index(m->currentUserIndex().row(), Core::IUser::Name).data().toString());
-    m_Parent->statusBar()->addPermanentWidget(m_PermanentWidget);
+//    m_Parent->statusBar()->addPermanentWidget(m_PermanentWidget);
 }
 
 /** \brief Change the search method for the users's model */
-void UserManagerPrivate::on_m_SearchToolButton_triggered(QAction * act)
+void UserManagerWidget::on_m_SearchToolButton_triggered(QAction * act)
 {
     if (act == searchByNameAct)
         m_SearchBy= Core::IUser::Name;
@@ -333,7 +402,7 @@ void UserManagerPrivate::on_m_SearchToolButton_triggered(QAction * act)
   \todo Manage error when user select an action in the toolbutton
   \todo where can only be calculated by model
  */
-void UserManagerPrivate::on_searchLineEdit_textchanged()
+void UserManagerWidget::on_searchLineEdit_textchanged()
 {
     QHash<int, QString> where;
     where.insert(m_SearchBy, QString("LIKE '%1%'").arg(searchLineEdit->searchText()));
@@ -341,7 +410,7 @@ void UserManagerPrivate::on_searchLineEdit_textchanged()
 }
 
 /** \brief Create a new user using tkUserWizard. */
-void UserManagerPrivate::on_createNewUserAct_triggered()
+void UserManagerWidget::on_createNewUserAct_triggered()
 {
     int createdRow = userTableView->model()->rowCount();
     if (! userTableView->model()->insertRows(createdRow, 1)) {
@@ -357,67 +426,71 @@ void UserManagerPrivate::on_createNewUserAct_triggered()
         if (! userTableView->model()->removeRows(createdRow, 1)) {
             Utils::Log::addError(this, "Cannot delete new user : can not delete row to model");
             return;
-        } else
-            m_Parent->statusBar()->showMessage(tr("No user created"), 2000);
+        } else {
+//            m_Parent->statusBar()->showMessage(tr("No user created"), 2000);
+        }
     } else {
         userTableView->selectRow(createdRow);
         on_userTableView_activated(index);
-        m_Parent->statusBar()->showMessage(tr("User created"), 2000);
+//        m_Parent->statusBar()->showMessage(tr("User created"), 2000);
     }
     qApp->setActiveWindow(m_Parent);
     m_Parent->activateWindow();
 }
 
-void UserManagerPrivate::on_clearModificationsAct_triggered()
+void UserManagerWidget::on_clearModificationsAct_triggered()
 {
-    if (UserModel::instance()->revertAll())
-        m_Parent->statusBar()->showMessage(tr("Modifications cleared"), 2000);
-    else
-        m_Parent->statusBar()->showMessage(tr("Can not clear modifications"), 2000);
+//    if (UserModel::instance()->revertAll())
+//        m_Parent->statusBar()->showMessage(tr("Modifications cleared"), 2000);
+//    else
+//        m_Parent->statusBar()->showMessage(tr("Can not clear modifications"), 2000);
 }
 
-void UserManagerPrivate::on_saveAct_triggered()
+void UserManagerWidget::on_saveAct_triggered()
 {
     if ((!m_CanModify) || (! m_CanCreate))
         return;
     // redefine focus
-    m_Parent->statusBar()->setFocus();
+//    m_Parent->statusBar()->setFocus();
     // save changes to database
-    if (UserModel::instance()->submitAll())
-        m_Parent->statusBar()->showMessage(tr("User saved"), 2000);
+    if (UserModel::instance()->submitAll()) {
+//        m_Parent->statusBar()->showMessage(tr("User saved"), 2000);
+    }
 }
 
-void UserManagerPrivate::on_deleteUserAct_triggered()
+void UserManagerWidget::on_deleteUserAct_triggered()
 {
-    if (UserModel::instance()->removeRow(userTableView->currentIndex().row()))
-        m_Parent->statusBar()->showMessage(tr("User deleted"), 2000);
-    else
-        m_Parent->statusBar()->showMessage(tr("User can not be deleted"), 2000);
+//    if (UserModel::instance()->removeRow(userTableView->currentIndex().row()))
+//        m_Parent->statusBar()->showMessage(tr("User deleted"), 2000);
+//    else
+//        m_Parent->statusBar()->showMessage(tr("User can not be deleted"), 2000);
 }
 
-void UserManagerPrivate::on_userTableView_activated(const QModelIndex & index)
+void UserManagerWidget::on_userTableView_activated(const QModelIndex & index)
 {
     userViewer->changeUserTo(index.row());
 }
 
-void  UserManagerPrivate::selectUserTableView(int row)
+void  UserManagerWidget::selectUserTableView(int row)
 {
     userTableView->selectRow(row);
     userViewer->changeUserTo(row);
 }
 
 /** \brief Assume retranslation of ui. */
-void UserManagerPrivate::changeEvent(QEvent *e)
+void UserManagerWidget::changeEvent(QEvent *e)
 {
     if ((e->type() == QEvent::LanguageChange)) {
         retranslateUi(m_Parent);
-        m_Parent->setWindowTitle(tr("User Manager") + " - " + qApp->applicationName());
+//        m_Parent->setWindowTitle(tr("User Manager") + " - " + qApp->applicationName());
     }
     retranslate();
 }
 
-void UserManagerPrivate::retranslate()
+void UserManagerWidget::retranslate()
 {
+    if (!searchByNameAct)
+        return;
     searchByNameAct->setText(tr("Search user by name"));
     searchByFirstnameAct->setText(tr("Search user by firstname"));
     searchByNameAndFirstnameAct->setText(tr("Search user by name and firstname"));
@@ -427,11 +500,11 @@ void UserManagerPrivate::retranslate()
     searchByNameAndFirstnameAct->setToolTip(tr("Search user by name and firstname"));
     searchByCityAct->setToolTip(tr("Search user by city"));
     m_SearchToolBut->setToolTip(tr("Search a user"));
-    m_Parent->setWindowTitle(tr("User Manager") + " - " + qApp->applicationName());
+//    m_Parent->setWindowTitle(tr("User Manager") + " - " + qApp->applicationName());
     updateStatusBar();
 }
 
-void UserManagerPrivate::showUserDebugDialog(const QModelIndex &id)
+void UserManagerWidget::showUserDebugDialog(const QModelIndex &id)
 {
     QStringList list;
     list << UserModel::instance()->index(id.row(), Core::IUser::WarnText).data(Qt::DisplayRole).toStringList();

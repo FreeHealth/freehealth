@@ -90,6 +90,7 @@ public:
     void createUser(bool state = true)     { m_CreateUser = state; }
 
     bool setCreatedUserAsCurrent() const;
+    QString createdUuid() const {return m_Uuid;}
 
     static void setUserPaper(const int ref, const QString &xml) {m_Papers.insert(ref, xml);}
     static void setUserRights(const int role, const int value) {m_Rights.insert(role, value);}
@@ -101,6 +102,7 @@ protected Q_SLOTS:
 private:
     int m_Row;
     bool m_Saved, m_CreateUser;
+    QString m_Uuid;
     static QHash<int, QString> m_Papers;
     static QHash<int, int> m_Rights;
 };

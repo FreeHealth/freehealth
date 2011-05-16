@@ -22,51 +22,53 @@
  *   Main Developper : Eric MAEKER, <eric.maeker@free.fr>                  *
  *   Contributors :                                                        *
  *       NAME <MAIL@ADRESS>                                                *
+ *       NAME <MAIL@ADRESS>                                                *
  ***************************************************************************/
-#ifndef IFIRSTCONFIGURATIONPAGE_H
-#define IFIRSTCONFIGURATIONPAGE_H
+#ifndef FIRSTRUNFORMMANAGER_H
+#define FIRSTRUNFORMMANAGER_H
 
-#include <coreplugin/core_exporter.h>
+#include <coreplugin/ifirstconfigurationpage.h>
 
-#include <QtCore/QObject>
-#include <QtCore/QString>
-#include <QtGui/QWizardPage>
+#include <QWizardPage>
 
 /**
- * \file ifirstconfigurationpage.h
+ * \file firstrunformmanager.h
  * \author Eric MAEKER <eric.maeker@free.fr>
  * \version 0.6.0
- * \date 11 May 2011
- * \class Core::IFirstConfigurationPage
- * \brief Derive object from this interface and set it inside the PluginManager object pool to get your page in the application configurator.
- * You should create the pages in the constructor of your plugin. They should be used before the ool initialize(const QStringList &arguments, QString *errorMessage = 0);
+ * \date 16 May 2011
 */
 
-namespace Core {
+namespace Form {
+class FormFilesSelectorWidget;
 
-class CORE_EXPORT IFirstConfigurationPage : public QObject
+namespace Internal {
+
+class FirstRunFormManagerWizardPage : public QWizardPage
 {
-    Q_OBJECT
 public:
-    enum Pages {
-        FirstPage = 0,
-        ServerClientConfig,
-        ServerConfig,
-        UserDbConnection,
-        UserCreation,
-        PatientForm,
-        OtherPage,
-        LastPage = 100000
-    };
-    IFirstConfigurationPage(QObject *parent = 0) : QObject(parent) {}
-    virtual ~IFirstConfigurationPage() {}
+    FirstRunFormManagerWizardPage(QWidget *parent);
 
-    virtual int id() const = 0;
+    bool validatePage();
+    int nextId() const;
 
-    // widget will be deleted after the show
-    virtual QWizardPage *createPage(QWidget *parent) = 0;
+private:
+    void changeEvent(QEvent *e);
+    void retranslate();
+
+private:
+    FormFilesSelectorWidget *selector;
 };
 
-} // namespace Core
+class FirstRunFormManagerConfigPage : public Core::IFirstConfigurationPage
+{
+public:
+    FirstRunFormManagerConfigPage(QObject *parent) : IFirstConfigurationPage(parent) {}
+    int id() const {return Core::IFirstConfigurationPage::PatientForm;}
+    QWizardPage *createPage(QWidget *parent) {return new FirstRunFormManagerWizardPage(parent);}
+};
 
-#endif // IFIRSTCONFIGURATIONPAGE_H
+
+}  // End namespace Internal
+}  // End namespace Form
+
+#endif // FIRSTRUNFORMMANAGER_H

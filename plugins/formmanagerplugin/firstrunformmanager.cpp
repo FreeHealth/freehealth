@@ -22,51 +22,55 @@
  *   Main Developper : Eric MAEKER, <eric.maeker@free.fr>                  *
  *   Contributors :                                                        *
  *       NAME <MAIL@ADRESS>                                                *
+ *       NAME <MAIL@ADRESS>                                                *
  ***************************************************************************/
-#ifndef IFIRSTCONFIGURATIONPAGE_H
-#define IFIRSTCONFIGURATIONPAGE_H
+#include "firstrunformmanager.h"
+#include "formfilesselectorwidget.h"
 
-#include <coreplugin/core_exporter.h>
+#include <QEvent>
+#include <QGridLayout>
 
-#include <QtCore/QObject>
-#include <QtCore/QString>
-#include <QtGui/QWizardPage>
+using namespace Form;
+using namespace Internal;
 
-/**
- * \file ifirstconfigurationpage.h
- * \author Eric MAEKER <eric.maeker@free.fr>
- * \version 0.6.0
- * \date 11 May 2011
- * \class Core::IFirstConfigurationPage
- * \brief Derive object from this interface and set it inside the PluginManager object pool to get your page in the application configurator.
- * You should create the pages in the constructor of your plugin. They should be used before the ool initialize(const QStringList &arguments, QString *errorMessage = 0);
-*/
-
-namespace Core {
-
-class CORE_EXPORT IFirstConfigurationPage : public QObject
+FirstRunFormManagerWizardPage::FirstRunFormManagerWizardPage(QWidget *parent) :
+        QWizardPage(parent)//, m_Wizard(parent)
 {
-    Q_OBJECT
-public:
-    enum Pages {
-        FirstPage = 0,
-        ServerClientConfig,
-        ServerConfig,
-        UserDbConnection,
-        UserCreation,
-        PatientForm,
-        OtherPage,
-        LastPage = 100000
-    };
-    IFirstConfigurationPage(QObject *parent = 0) : QObject(parent) {}
-    virtual ~IFirstConfigurationPage() {}
+    QGridLayout *layout = new QGridLayout(this);
+    setLayout(layout);
+    selector = new Form::FormFilesSelectorWidget(this, Form::FormFilesSelectorWidget::CompleteForms);
+    selector->expandAllItems();
+    layout->addWidget(selector, 0, 0);
+    selector->updateGeometry();
+}
 
-    virtual int id() const = 0;
+void FirstRunFormManagerWizardPage::retranslate()
+{
+    setTitle(tr("General patient form selection"));
+    setSubTitle(tr("You can define your own patient form file, or use the default one. "
+                   "Select it from here. All patients will have the same forms, but you can "
+                   "add subforms anywhere in the form."));
+}
 
-    // widget will be deleted after the show
-    virtual QWizardPage *createPage(QWidget *parent) = 0;
-};
+bool FirstRunFormManagerWizardPage::validatePage()
+{
+    return true;
+}
 
-} // namespace Core
+int FirstRunFormManagerWizardPage::nextId() const
+{
+    return Core::IFirstConfigurationPage::LastPage;
+}
 
-#endif // IFIRSTCONFIGURATIONPAGE_H
+void FirstRunFormManagerWizardPage::changeEvent(QEvent *e)
+{
+    QWidget::changeEvent(e);
+    switch (e->type()) {
+    case QEvent::LanguageChange:
+        retranslate();
+        break;
+    default:
+        break;
+    }
+}
+

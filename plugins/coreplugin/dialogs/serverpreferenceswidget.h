@@ -22,51 +22,69 @@
  *   Main Developper : Eric MAEKER, <eric.maeker@free.fr>                  *
  *   Contributors :                                                        *
  *       NAME <MAIL@ADRESS>                                                *
+ *       NAME <MAIL@ADRESS>                                                *
  ***************************************************************************/
-#ifndef IFIRSTCONFIGURATIONPAGE_H
-#define IFIRSTCONFIGURATIONPAGE_H
+#ifndef SERVERPREFERENCESWIDGET_H
+#define SERVERPREFERENCESWIDGET_H
 
 #include <coreplugin/core_exporter.h>
+#include <utils/database.h>
 
-#include <QtCore/QObject>
-#include <QtCore/QString>
-#include <QtGui/QWizardPage>
-
-/**
- * \file ifirstconfigurationpage.h
- * \author Eric MAEKER <eric.maeker@free.fr>
- * \version 0.6.0
- * \date 11 May 2011
- * \class Core::IFirstConfigurationPage
- * \brief Derive object from this interface and set it inside the PluginManager object pool to get your page in the application configurator.
- * You should create the pages in the constructor of your plugin. They should be used before the ool initialize(const QStringList &arguments, QString *errorMessage = 0);
-*/
+#include <QWidget>
 
 namespace Core {
+class ISettings;
 
-class CORE_EXPORT IFirstConfigurationPage : public QObject
+namespace Internal {
+namespace Ui {
+class ServerPreferencesWidget;
+}  // End namespace Ui
+}  // End namespace Internal
+
+class CORE_EXPORT ServerPreferencesWidget : public QWidget
 {
     Q_OBJECT
+    Q_DISABLE_COPY(ServerPreferencesWidget)
+
 public:
-    enum Pages {
-        FirstPage = 0,
-        ServerClientConfig,
-        ServerConfig,
-        UserDbConnection,
-        UserCreation,
-        PatientForm,
-        OtherPage,
-        LastPage = 100000
-    };
-    IFirstConfigurationPage(QObject *parent = 0) : QObject(parent) {}
-    virtual ~IFirstConfigurationPage() {}
+    explicit ServerPreferencesWidget(QWidget *parent = 0);
+    ~ServerPreferencesWidget();
 
-    virtual int id() const = 0;
+    bool connectionSucceeded() const;
+    void setUserLoginGroupTitle(const QString &text);
 
-    // widget will be deleted after the show
-    virtual QWizardPage *createPage(QWidget *parent) = 0;
+    QString hostName() const;
+    int port() const;
+    QString login() const;
+    QString password() const;
+
+    Utils::Database::Grants grantsOnLastConnectedDatabase() const {return m_Grants;}
+
+    static void writeDefaultSettings(Core::ISettings *s);
+
+private:
+    void setDatasToUi();
+
+protected Q_SLOTS:
+    void testHost();
+    void testHost(const QString &hostName);
+    void saveToSettings(Core::ISettings *s = 0);
+
+private Q_SLOTS:
+    void on_testButton_clicked();
+    void toggleLogPass(bool state);
+
+protected:
+    virtual void changeEvent(QEvent *e);
+
+private:
+    Internal::Ui::ServerPreferencesWidget *ui;
+    bool m_HostReachable, m_ConnectionSucceeded;
+    Utils::Database::Grants m_Grants;
 };
 
-} // namespace Core
 
-#endif // IFIRSTCONFIGURATIONPAGE_H
+}  // End namespace Core
+
+
+#endif // SERVERPREFERENCESWIDGET_H

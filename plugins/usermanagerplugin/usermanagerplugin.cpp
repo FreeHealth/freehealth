@@ -42,6 +42,7 @@
 #include "widgets/useridentifier.h"
 #include "widgets/userwizard.h"
 #include "currentuserpreferencespage.h"
+#include "userfistrunpage.h"
 
 #include <coreplugin/icore.h>
 #include <coreplugin/isettings.h>
@@ -119,10 +120,14 @@ static inline bool identifyUser()
 
 
 UserManagerPlugin::UserManagerPlugin() :
-        aUserManager(0), aCreateUser(0), aChangeUser(0), m_UserManager(0)
+        aUserManager(0), aCreateUser(0), aChangeUser(0), m_UserManager(0),
+        m_First_Connection(new FirstRun_UserConnection(this)),
+        m_FirstCreation(new FirstRun_UserCreation(this))
 {
     if (Utils::Log::warnPluginsCreation())
         qWarning() << "creating UserManagerPlugin";
+    addObject(m_First_Connection);
+    addObject(m_FirstCreation);
 }
 
 UserManagerPlugin::~UserManagerPlugin()
@@ -132,6 +137,16 @@ UserManagerPlugin::~UserManagerPlugin()
         m_UserManager->close();
         delete m_UserManager;
         m_UserManager = 0;
+    }
+    if (m_First_Connection) {
+        removeObject(m_First_Connection);
+        delete m_First_Connection;
+        m_First_Connection = 0;
+    }
+    if (m_FirstCreation) {
+        removeObject(m_FirstCreation);
+        delete m_FirstCreation;
+        m_FirstCreation = 0;
     }
 }
 

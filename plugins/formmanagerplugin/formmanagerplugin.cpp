@@ -38,6 +38,7 @@
 #include "episodebase.h"
 #include "episodemodel.h"
 #include "formmanagerpreferencespage.h"
+#include "firstrunformmanager.h"
 
 #include <utils/log.h>
 
@@ -60,10 +61,12 @@ static inline Form::Internal::EpisodeBase *episodeBase() {return Form::Internal:
 
 
 FormManagerPlugin::FormManagerPlugin() :
-        mode(0)
+        mode(0), m_FirstRun(0)
 {
     if (Utils::Log::warnPluginsCreation())
         qWarning() << "creating FormManagerPlugin";
+    m_FirstRun = new Internal::FirstRunFormManagerConfigPage(this);
+    addObject(m_FirstRun);
 }
 
 FormManagerPlugin::~FormManagerPlugin()
@@ -73,6 +76,11 @@ FormManagerPlugin::~FormManagerPlugin()
         removeObject(mode);
         delete mode;
         mode = 0;
+    }
+    if (m_FirstRun) {
+        removeObject(m_FirstRun);
+        delete m_FirstRun;
+        m_FirstRun = 0;
     }
     delete FormManager::instance();
 }

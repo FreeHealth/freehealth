@@ -61,6 +61,7 @@ using namespace MainWin;
 using namespace Trans::ConstantTranslations;
 
 static inline Core::ISettings *settings() { return Core::ICore::instance()->settings(); }
+static inline Core::Translators *translators() { return Core::ICore::instance()->translators(); }
 static inline Core::ITheme *theme()  { return Core::ICore::instance()->theme(); }
 static inline Core::IUser *user() {return Core::ICore::instance()->user();}
 static inline Form::Internal::EpisodeBase *episodeBase() {return Form::Internal::EpisodeBase::instance();}
@@ -69,11 +70,15 @@ static inline Form::FormManager *formManager() {return Form::FormManager::instan
 AppConfigWizard::AppConfigWizard(QWidget *parent)
     : QWizard(parent)
 {
-    addPage(new BeginConfigPage(this));
-    addPage(new DatabaseConfigurationPage(this));
-    addPage(new PatientFilePage(this));
-    addPage(new VirtualDatabasePage(this));
-    addPage(new EndConfigPage(this));
+    // add translations
+    translators()->changeLanguage(QLocale().language());
+    // create pages
+    setPage(InitialPage, new DatabaseConfigurationPage(this));
+    setPage(UserCreationPage, new BeginConfigPage(this));
+    setPage(PatientFormPage, new PatientFilePage(this));
+//    setPage(new VirtualDatabasePage(this));
+    setPage(LastPage, new EndConfigPage(this));
+    // window text
     setWindowTitle(tr("Application Configurator Wizard"));
     QList<QWizard::WizardButton> layout;
     layout << QWizard::CancelButton << QWizard::Stretch << QWizard::BackButton
@@ -105,8 +110,8 @@ void AppConfigWizard::done(int r)
     }
 }
 
-BeginConfigPage::BeginConfigPage(QWidget *parent)
-    : QWizardPage(parent)
+BeginConfigPage::BeginConfigPage(AppConfigWizard *parent)
+    : QWizardPage(parent), m_Wizard(parent)
 {
     langLabel = new QLabel(this);
     langLabel->setWordWrap(true);
@@ -188,10 +193,14 @@ void BeginConfigPage::createNewUser()
     UserPlugin::UserWizard wiz(this);
     wiz.createUser(true);
     if (wiz.exec()==QDialog::Accepted) {
-        /** \todo Change user atthe end of the wizard ? Possible Rights problem. */
-        if (!wiz.setCreatedUserAsCurrent()) {
-            LOG_ERROR("Can not define the current user to the newly created");
+        // We can create only one user
+        if (!wiz.createdUuid().isEmpty()) {
+            m_Wizard->setNewUserUid(wiz.createdUuid());
+            createUserButton->setEnabled(false);
         }
+//        if (!wiz.setCreatedUserAsCurrent()) {
+//            LOG_ERROR("Can not define the current user to the newly created");
+//        }
     }
 }
 
@@ -267,8 +276,11 @@ bool PatientFilePage::validatePage()
     if (!selector->selectedForms().count())
         return false;
     Form::FormIODescription *descr = selector->selectedForms().at(0);
+    qWarning() << "fff" << user()->value(Core::IUser::Uuid);
     episodeBase()->setGenericPatientFormFile(descr->data(Form::FormIODescription::UuidOrAbsPath).toString());
+    qWarning() << "fff" << user()->value(Core::IUser::Uuid);
     formManager()->readPmhxCategories(descr->data(Form::FormIODescription::UuidOrAbsPath).toString());
+    qWarning() << "fff" << user()->value(Core::IUser::Uuid);
     return true;
 }
 

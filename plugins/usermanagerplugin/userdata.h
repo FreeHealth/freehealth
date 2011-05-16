@@ -187,7 +187,7 @@ public:
     QString cryptedPassword() const      { return value(Table_USERS, USER_PASSWORD).toString(); }
 //    QString lastLogin() const;
     QDateTime lastLogin() const          { return value(Table_USERS, USER_LASTLOG).toDateTime(); }
-    QString fullName();
+    QString fullName() const;
     int     title() const                { return dynamicDataValue(USER_DATAS_TITLE).toInt(); }
     int     genderIndex() const          { return dynamicDataValue(USER_DATAS_GENDER).toInt(); }
     QString name() const                 { return value(Table_USERS, USER_NAME).toString(); }
@@ -237,6 +237,7 @@ public:
     // Linkers
     QList<int> linkIds() const;
     QString linkIdsToString() const;
+    /** \todo these two must be removed: setPersonalLkId(), personalLinkId */
     void setPersonalLkId(const int lkid);
     int personalLinkId() const;
 

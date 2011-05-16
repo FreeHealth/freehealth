@@ -25,6 +25,8 @@
  *       NAME <MAIL@ADRESS>                                                *
  ***************************************************************************/
 #include "coreimpl.h"
+#include "appconfigwizard.h"
+
 #include <coreplugin/settings_p.h>
 #include <coreplugin/isettings.h>
 #include <coreplugin/imainwindow.h>
@@ -194,6 +196,12 @@ bool CoreImpl::initialize(const QStringList &arguments, QString *errorString)
 
     // first time runnning ?
     if (m_Settings->firstTimeRunning()) {
+        AppConfigWizard wizard;
+        if (wizard.exec()==QDialog::Rejected) {
+            return false;
+        }
+        m_Settings->noMoreFirstTimeRunning();
+
         // show the license agreement dialog
 #ifndef LINUX_INTEGRATED
         if (!Utils::defaultLicenceAgreementDialog("", Utils::LicenseTerms::GPLv3 ))

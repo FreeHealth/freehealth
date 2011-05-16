@@ -506,6 +506,7 @@ UserData::UserData()
     d->m_IsNull = true;
     d->m_Modified = false;
     d->m_IsCurrent = false;
+    d->m_PersonalLkId = -1;
 //    setDynamicDataValue(USER_DATAS_LOGINHISTORY,
 //                        QCoreApplication::translate("tkUser", "User created at %1\n")
 //                        .arg(QDateTime::currentDateTime().toString(Qt::DefaultLocaleLongDate)));
@@ -536,6 +537,7 @@ UserData::UserData(const QString & uuid)
     d->m_IsNull = true;
     d->m_Modified = false;
     d->m_IsCurrent = false;
+    d->m_PersonalLkId = -1;
 //    setDynamicDataValue(USER_DATAS_LOGINHISTORY,
 //                        QCoreApplication::translate("tkUser", "User created at %1\n")
 //                        .arg(QDateTime::currentDateTime().toString(Qt::DefaultLocaleLongDate)));
@@ -698,18 +700,27 @@ void UserData::setLkIds(const QList<int> &lkids)
 
 QList<int> UserData::linkIds() const
 {
-    /** \todo this must be updated */
-    return QList<int>() << d->m_PersonalLkId;
+    if (d->m_PersonalLkId != -1) {
+        return QList<int>() << d->m_LkIds << d->m_PersonalLkId;
+    }
+    return QList<int>() << d->m_LkIds;
 }
 
 QString UserData::linkIdsToString() const
 {
-    /** \todo this must be updated */
-    return QString::number(d->m_PersonalLkId);
+    QString tmp;
+    for(int i = 0; i < d->m_LkIds.count(); ++i) {
+        tmp += QString::number(d->m_LkIds.at(i)) + ",";
+    }
+    tmp.chop(1);
+    if (d->m_PersonalLkId != -1)
+        tmp += QString::number(d->m_PersonalLkId);
+    return tmp;
 }
 
 void UserData::setPersonalLkId(const int lkid)
 {
+    qWarning() << Q_FUNC_INFO << lkid;
     d->m_PersonalLkId = lkid;
 }
 
@@ -952,6 +963,13 @@ Print::TextDocumentExtra *UserData::extraDocument(const int index) const
     return 0;
 }
 
+QString UserData::fullName() const
+{
+    QString r = title() + " " + name() + " " + secondName() + " " + firstname();
+    r.replace("  ", " ");
+    return r;
+}
+
 //--------------------------------------------------------------------------------------------------------
 //------------------------------------------------ Viewers -----------------------------------------------
 //--------------------------------------------------------------------------------------------------------
@@ -974,10 +992,17 @@ QStringList UserData::warnText() const
     UserBase *tkb = UserBase::instance();
 
     QString tmp;
+
     for (i = 0; i < USER_MaxParam; i++)
-        tmp = QString("%1 = %2\n")
+        tmp += QString("%1 = %2\n")
         .arg(tkb->fieldName(Table_USERS , i))
         .arg(d->m_Table_Field_Value.value(Table_USERS).value(i).toString());
+    tmp += QString("%1 = %2\n").arg("LkIds").arg(linkIdsToString());
+    tmp += QString("%1 = ").arg("LkIds (list)");
+    for(int i = 0; i < d->m_LkIds.count(); ++i) {
+        tmp += QString::number(d->m_LkIds.at(i)) + ";";
+    }
+    tmp += "\n";
     list << tmp;
     tmp.clear();
 

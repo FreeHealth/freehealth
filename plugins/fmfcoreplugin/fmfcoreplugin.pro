@@ -16,11 +16,16 @@ QT *= script
 HEADERS += coreplugin.h \
     coreimpl.h \
     commandlineparser.h \
-    appaboutpage.h
+    appaboutpage.h \
+    appconfigwizard.h
+
 SOURCES += coreplugin.cpp \
     coreimpl.cpp \
-    appaboutpage.cpp
+    appaboutpage.cpp \
+    appconfigwizard.cpp
+
 TRANSLATIONS += $${SOURCES_TRANSLATIONS_PATH}/fmfcoreplugin_fr.ts \
     $${SOURCES_TRANSLATIONS_PATH}/fmfcoreplugin_de.ts \
     $${SOURCES_TRANSLATIONS_PATH}/fmfcoreplugin_es.ts
+
 OTHER_FILES = Core.pluginspec

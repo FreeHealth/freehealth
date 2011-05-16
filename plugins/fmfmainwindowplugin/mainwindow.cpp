@@ -237,14 +237,14 @@ void MainWindow::extensionsInitialized()
 
     setCentralWidget(m_modeStack);
 
-    if (settings()->firstTimeRunning()) {
-        if (!applicationConfiguratorWizard()) {
-            theme()->finishSplashScreen(this);
-            qApp->exit(1234);
-            return;
-        }
-        settings()->noMoreFirstTimeRunning();
-    }
+//    if (settings()->firstTimeRunning()) {
+//        if (!applicationConfiguratorWizard()) {
+//            theme()->finishSplashScreen(this);
+//            qApp->exit(1234);
+//            return;
+//        }
+//        settings()->noMoreFirstTimeRunning();
+//    }
 
     // Connect post core initialization
     connect(Core::ICore::instance(), SIGNAL(coreOpened()), this, SLOT(postCoreInitialization()));

@@ -40,8 +40,8 @@
 /**
  * \file usermodel.h
  * \author Eric MAEKER <eric.maeker@free.fr>
- * \version 0.4.0
- * \date 16 June 2010
+ * \version 0.6.0
+ * \date 15 May 2011
 */
 
 namespace Print {
@@ -68,7 +68,9 @@ public:
 
     bool isCorrectLogin(const QString &logbase64, const QString &cryptpassbase64);
 
-    bool setCurrentUser(const QString &log64, const QString &cryptpass64);
+    bool setCurrentUser(const QString &log64, const QString &cryptpass64, bool refreshCache = false);
+    bool setCurrentUserIsServerManager();
+
     bool hasCurrentUser();
     QModelIndex currentUserIndex() const;
     QVariant currentUserData(const int column) const { return index(currentUserIndex().row(), column).data(); }
@@ -120,10 +122,6 @@ Q_SIGNALS:
     void userAboutToDisconnect(const QString &uuid) const;
     void userDisconnected(const QString &uuid) const;
     void userDocumentsChanged() const;
-
-private:
-    QModelIndex createIndex(int row, int column, void * ptr = 0) const;
-    QModelIndex createIndex(int row, int column, quint32 id) const;
 
 private:
     Internal::UserModelPrivate *d;

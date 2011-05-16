@@ -285,6 +285,9 @@ void PatientModel::changeUserUuid(const QString &uuid)
     foreach(int i, ids)
         d->m_LkIds.append(QString::number(i) + ",");
     d->m_LkIds.chop(1);
+
+//    qWarning() << Q_FUNC_INFO << d->m_LkIds << userModel()->practionnerLkIds(uuid);
+
     d->refreshFilter();
 }
 
@@ -643,7 +646,7 @@ bool PatientModel::insertRows(int row, int count, const QModelIndex &parent)
             ok = false;
             Utils::Log::addError(this, "Unable to setData to newly created patient.", __FILE__,__LINE__);
         }
-        qWarning() << ",nnnnnnnnnnnn" << user()->value(Core::IUser::PersonalLinkId);
+//        qWarning() << ",nnnnnnnnnnnn" << user()->value(Core::IUser::PersonalLinkId);
         if (!d->m_SqlPatient->setData(d->m_SqlPatient->index(row+i, Constants::IDENTITY_LK_TOPRACT_LKID), user()->value(Core::IUser::PersonalLinkId))) { // linkIds
             ok = false;
             Utils::Log::addError(this, "Unable to setData to newly created patient.", __FILE__,__LINE__);

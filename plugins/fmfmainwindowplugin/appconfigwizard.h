@@ -67,19 +67,31 @@ class MAINWIN_EXPORT AppConfigWizard : public QWizard
 {
     Q_OBJECT
 public:
+    enum Pages {
+        InitialPage = 0,
+        UserCreationPage,
+        PatientFormPage,
+        ServerConfigPage,
+        ExtraPage,
+        LastPage = 100000
+    };
+
     AppConfigWizard(QWidget *parent = 0);
+
+    void setNewUserUid(const QString &uid) {m_NewUserUid = uid;}
 
 protected Q_SLOTS:
     void done(int r);
 
 private:
+    QString m_NewUserUid;
 };
 
 class BeginConfigPage: public QWizardPage
 {
     Q_OBJECT
 public:
-    BeginConfigPage(QWidget *parent = 0);
+    BeginConfigPage(AppConfigWizard *parent = 0);
     bool validatePage();
 
 protected:
@@ -93,6 +105,7 @@ protected:
     void changeEvent(QEvent *e);
 
 private:
+    AppConfigWizard *m_Wizard;
     QLabel *intro;
     QLabel *langLabel, *adminPassLabel, *createUserLabel;
     QPushButton *adminButton, *createUserButton;

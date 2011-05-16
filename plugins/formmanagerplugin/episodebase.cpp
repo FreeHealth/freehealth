@@ -346,7 +346,6 @@ bool EpisodeBase::setGenericPatientFormFile(const QString &absPathOrUid)
         }
     }
     return true;
-
 }
 
 /**

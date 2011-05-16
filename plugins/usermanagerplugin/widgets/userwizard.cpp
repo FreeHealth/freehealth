@@ -237,11 +237,11 @@ void UserWizard::done(int r)
             userModel()->setData(idx, m_Rights.value(role));
         }
 
-        const QString &uuid = userModel()->index(m_Row, Core::IUser::Uuid).data().toString();
+        m_Uuid = userModel()->index(m_Row, Core::IUser::Uuid).data().toString();
         QHashIterator<int, QString> it(m_Papers);
         while (it.hasNext()) {
              it.next();
-             userModel()->setPaper(uuid, it.key(), Print::TextDocumentExtra::fromXml(it.value()));
+             userModel()->setPaper(m_Uuid, it.key(), Print::TextDocumentExtra::fromXml(it.value()));
          }
 
 
@@ -275,7 +275,7 @@ bool UserWizard::setCreatedUserAsCurrent() const
     if (!m_CreateUser)
         return false;
     return userModel()->setCurrentUser(loginForSQL(field("Login").toString()),
-                                       crypt(field("Password").toString()));
+                                       crypt(field("Password").toString()), true);
 }
 
 

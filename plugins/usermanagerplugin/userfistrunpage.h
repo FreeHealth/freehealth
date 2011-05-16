@@ -22,51 +22,82 @@
  *   Main Developper : Eric MAEKER, <eric.maeker@free.fr>                  *
  *   Contributors :                                                        *
  *       NAME <MAIL@ADRESS>                                                *
+ *       NAME <MAIL@ADRESS>                                                *
  ***************************************************************************/
-#ifndef IFIRSTCONFIGURATIONPAGE_H
-#define IFIRSTCONFIGURATIONPAGE_H
+#ifndef USERFISTRUNPAGE_H
+#define USERFISTRUNPAGE_H
 
-#include <coreplugin/core_exporter.h>
+#include <coreplugin/ifirstconfigurationpage.h>
 
-#include <QtCore/QObject>
-#include <QtCore/QString>
-#include <QtGui/QWizardPage>
+#include <QWizardPage>
 
-/**
- * \file ifirstconfigurationpage.h
- * \author Eric MAEKER <eric.maeker@free.fr>
- * \version 0.6.0
- * \date 11 May 2011
- * \class Core::IFirstConfigurationPage
- * \brief Derive object from this interface and set it inside the PluginManager object pool to get your page in the application configurator.
- * You should create the pages in the constructor of your plugin. They should be used before the ool initialize(const QStringList &arguments, QString *errorMessage = 0);
-*/
+namespace UserPlugin {
 
-namespace Core {
+namespace Ui {
+    class UserConnectionPage;
+    class FirstRunUserCreationWidget;
+}
 
-class CORE_EXPORT IFirstConfigurationPage : public QObject
+class UserConnectionPage : public QWizardPage
 {
     Q_OBJECT
+
 public:
-    enum Pages {
-        FirstPage = 0,
-        ServerClientConfig,
-        ServerConfig,
-        UserDbConnection,
-        UserCreation,
-        PatientForm,
-        OtherPage,
-        LastPage = 100000
-    };
-    IFirstConfigurationPage(QObject *parent = 0) : QObject(parent) {}
-    virtual ~IFirstConfigurationPage() {}
+    explicit UserConnectionPage(QWidget *parent = 0);
+    ~UserConnectionPage();
 
-    virtual int id() const = 0;
+    void initializePage();
+    bool validatePage();
 
-    // widget will be deleted after the show
-    virtual QWizardPage *createPage(QWidget *parent) = 0;
+protected:
+    void changeEvent(QEvent *e);
+
+private:
+    Ui::UserConnectionPage *ui;
 };
 
-} // namespace Core
+class UserCreationPage : public QWizardPage
+{
+    Q_OBJECT
 
-#endif // IFIRSTCONFIGURATIONPAGE_H
+public:
+    explicit UserCreationPage(QWidget *parent = 0);
+    ~UserCreationPage();
+
+    void initializePage();
+    bool validatePage();
+
+protected:
+    void changeEvent(QEvent *e);
+
+private Q_SLOTS:
+    void userManager();
+    void userWizard();
+
+private:
+    Ui::FirstRunUserCreationWidget *ui;
+};
+
+class FirstRun_UserConnection : public Core::IFirstConfigurationPage
+{
+public:
+    FirstRun_UserConnection(QObject *parent = 0) : Core::IFirstConfigurationPage(parent) {}
+    ~FirstRun_UserConnection() {}
+    int id() const {return Core::IFirstConfigurationPage::UserDbConnection;}
+    QWizardPage *createPage(QWidget *parent) {return new UserPlugin::UserConnectionPage(parent);}
+};
+
+class FirstRun_UserCreation : public Core::IFirstConfigurationPage
+{
+public:
+    FirstRun_UserCreation(QObject *parent = 0) : Core::IFirstConfigurationPage(parent) {}
+    ~FirstRun_UserCreation() {}
+    int id() const {return Core::IFirstConfigurationPage::UserCreation;}
+    QWizardPage *createPage(QWidget *parent) {return new UserPlugin::UserCreationPage(parent);}
+};
+
+
+}  // End namespace UserPlugin
+
+
+#endif // USERFISTRUNPAGE_H

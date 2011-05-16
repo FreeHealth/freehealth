@@ -36,13 +36,14 @@ class QAction;
 /**
  * \file usermanagerplugin.h
  * \author Eric MAEKER <eric.maeker@free.fr>
- * \version 0.0.6
- * \date 26 Sept 2009
+ * \version 0.6.0
+ * \date 11 May 2011
 */
 
 namespace UserPlugin {
 class UserManager;
-
+class FirstRun_UserConnection;
+class FirstRun_UserCreation;
 
 class UserManagerPlugin : public ExtensionSystem::IPlugin
 {
@@ -65,6 +66,9 @@ private:
     QAction *aCreateUser;
     QAction *aChangeUser;
     QPointer<UserManager> m_UserManager;
+
+    FirstRun_UserConnection *m_First_Connection;
+    FirstRun_UserCreation *m_FirstCreation;
 };
 
 

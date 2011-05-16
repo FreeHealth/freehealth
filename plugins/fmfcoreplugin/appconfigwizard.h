@@ -22,51 +22,108 @@
  *   Main Developper : Eric MAEKER, <eric.maeker@free.fr>                  *
  *   Contributors :                                                        *
  *       NAME <MAIL@ADRESS>                                                *
+ *       NAME <MAIL@ADRESS>                                                *
  ***************************************************************************/
-#ifndef IFIRSTCONFIGURATIONPAGE_H
-#define IFIRSTCONFIGURATIONPAGE_H
+#ifndef CORE_APPCONFIGWIZARD_H
+#define CORE_APPCONFIGWIZARD_H
 
-#include <coreplugin/core_exporter.h>
+#include <QObject>
+#include <QWidget>
+#include <QWizardPage>
+#include <QWizard>
 
-#include <QtCore/QObject>
-#include <QtCore/QString>
-#include <QtGui/QWizardPage>
+QT_BEGIN_NAMESPACE
+class QLabel;
+class QComboBox;
+QT_END_NAMESPACE
 
 /**
- * \file ifirstconfigurationpage.h
+ * \file appconfigwizard.h
  * \author Eric MAEKER <eric.maeker@free.fr>
  * \version 0.6.0
  * \date 11 May 2011
- * \class Core::IFirstConfigurationPage
- * \brief Derive object from this interface and set it inside the PluginManager object pool to get your page in the application configurator.
- * You should create the pages in the constructor of your plugin. They should be used before the ool initialize(const QStringList &arguments, QString *errorMessage = 0);
 */
 
-namespace Core {
+namespace Utils {
+    class LanguageComboBox;
+}
 
-class CORE_EXPORT IFirstConfigurationPage : public QObject
+namespace Core {
+class ServerPreferencesWidget;
+
+class AppConfigWizard : public QWizard
 {
     Q_OBJECT
 public:
-    enum Pages {
-        FirstPage = 0,
-        ServerClientConfig,
-        ServerConfig,
-        UserDbConnection,
-        UserCreation,
-        PatientForm,
-        OtherPage,
-        LastPage = 100000
-    };
-    IFirstConfigurationPage(QObject *parent = 0) : QObject(parent) {}
-    virtual ~IFirstConfigurationPage() {}
+    AppConfigWizard(QWidget *parent = 0);
 
-    virtual int id() const = 0;
-
-    // widget will be deleted after the show
-    virtual QWizardPage *createPage(QWidget *parent) = 0;
+protected Q_SLOTS:
+    void done(int r);
 };
 
-} // namespace Core
 
-#endif // IFIRSTCONFIGURATIONPAGE_H
+class CoreConfigPage: public QWizardPage
+{
+    Q_OBJECT
+public:
+    CoreConfigPage(QWidget *parent = 0);
+
+    bool validatePage();
+    int nextId() const;
+
+private:
+    void changeEvent(QEvent *e);
+    void retranslate();
+
+private:
+    QLabel *langLabel, *typeLabel;
+    Utils::LanguageComboBox *combo;
+    QComboBox *installCombo;
+};
+
+class ServerConfigPage: public QWizardPage
+{
+    Q_OBJECT
+public:
+    ServerConfigPage(QWidget *parent = 0);
+
+    bool validatePage();
+    int nextId() const;
+
+private:
+    void changeEvent(QEvent *e);
+    void retranslate();
+
+private:
+    Core::ServerPreferencesWidget *serverWidget;
+};
+
+class ClientConfigPage: public QWizardPage
+{
+    Q_OBJECT
+public:
+    ClientConfigPage(QWidget *parent = 0);
+
+    bool validatePage();
+    int nextId() const;
+
+private:
+    void changeEvent(QEvent *e);
+    void retranslate();
+
+private:
+    Core::ServerPreferencesWidget *serverWidget;
+};
+
+class EndConfigPage: public QWizardPage
+{
+    Q_OBJECT
+public:
+    EndConfigPage(QWidget *parent = 0);
+};
+
+
+}  // End namespace Core
+
+
+#endif // CORE_APPCONFIGWIZARD_H
