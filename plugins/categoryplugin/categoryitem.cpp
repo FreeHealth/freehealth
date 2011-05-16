@@ -103,7 +103,8 @@ CategoryItem::~CategoryItem()
 void CategoryItem::setParent(CategoryItem *parent)
 {
     d->m_Parent = parent;
-    setData(DbOnly_ParentId, parent->id());
+    if (parent)
+        setData(DbOnly_ParentId, parent->id());
     d->m_IsDirty = true;
 }
 
