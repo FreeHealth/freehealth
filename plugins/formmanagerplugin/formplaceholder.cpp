@@ -311,7 +311,7 @@ FormPlaceHolder::FormPlaceHolder(QWidget *parent) :
 
 FormPlaceHolder::~FormPlaceHolder()
 {
-    d->saveSettings();
+//    d->saveSettings();
 //    if (d->m_RootForm) {
 //        // Remove object from the plugin object pool
 //        pluginManager()->removeObject(d->m_RootForm);
@@ -328,14 +328,24 @@ FormPlaceHolder::~FormPlaceHolder()
 void FormPlaceHolder::setObjectName(const QString &name)
 {
     QObject::setObjectName(name);
-    QList<QVariant> sizesVar = settings()->value(QString("%1/%2").arg(Constants::S_PLACEHOLDERSPLITTER_SIZES).arg(objectName())).toList();
-    QList<int> sizes;
-    foreach(const QVariant &v, sizesVar) {
-        if (!v.isNull())
-            sizes << v.toInt();
-    }
-    if (!sizes.isEmpty())
-        d->horizSplitter->setSizes(sizes);
+//    QList<QVariant> sizesVar = settings()->value(QString("%1/%2").arg(Constants::S_PLACEHOLDERSPLITTER_SIZES).arg(objectName())).toList();
+//    QList<int> sizes;
+//    foreach(const QVariant &v, sizesVar) {
+//        if (!v.isNull() && v.toInt() > 0)
+//            sizes << v.toInt();
+//    }
+//    if (!sizes.isEmpty()) {
+//        d->horizSplitter->setSizes(sizes);
+//    } else {
+//        int width = size().width();
+//        int third = width/3;
+//        QList<int> s;
+//        s << third << width-third;
+//        QList<QVariant> v;
+//        v << third << width-third;
+//        d->horizSplitter->setSizes(s);
+//        settings()->setValue(QString("%1/%2").arg(Constants::S_PLACEHOLDERSPLITTER_SIZES).arg(objectName()), v);
+//    }
 }
 
 /**
