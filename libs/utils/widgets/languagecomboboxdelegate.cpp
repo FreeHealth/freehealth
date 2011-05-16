@@ -16,6 +16,7 @@ public:
 
 public:
     int m_DisplayMode;
+    QString m_TrPath, m_IconPath;
 };
 }
 }
@@ -33,10 +34,22 @@ LanguageComboBoxDelegate::~LanguageComboBoxDelegate()
     d = 0;
 }
 
+void LanguageComboBoxDelegate::setTranslationsPath(const QString &absFullPath)
+{
+    d->m_TrPath = absFullPath;
+}
+
+void LanguageComboBoxDelegate::setFlagsIconPath(const QString &absFullPath)
+{
+    d->m_IconPath = absFullPath;
+}
+
 QWidget *LanguageComboBoxDelegate::createEditor(QWidget *parent, const QStyleOptionViewItem &option,
                       const QModelIndex &index) const
 {
     LanguageComboBox *editor = new LanguageComboBox(parent);
+    editor->setTranslationsPath(d->m_TrPath);
+    editor->setFlagsIconPath(d->m_IconPath);
     if (d->m_DisplayMode == AllLanguages)
         editor->setDisplayMode(LanguageComboBox::AllLanguages);
     else

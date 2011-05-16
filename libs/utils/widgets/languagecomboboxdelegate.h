@@ -21,6 +21,9 @@ public:
     explicit LanguageComboBoxDelegate(QObject *parent = 0, DisplayMode mode = AvailableTranslations);
     ~LanguageComboBoxDelegate();
 
+    void setTranslationsPath(const QString &absFullPath);
+    void setFlagsIconPath(const QString &absFullPath);
+
     QWidget *createEditor(QWidget *parent, const QStyleOptionViewItem &option,
                           const QModelIndex &index) const;
 

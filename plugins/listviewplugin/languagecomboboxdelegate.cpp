@@ -1,70 +1,45 @@
+/***************************************************************************
+ *  The FreeMedForms project is a set of free, open source medical         *
+ *  applications.                                                          *
+ *  (C) 2008-2011 by Eric MAEKER, MD (France) <eric.maeker@free.fr>        *
+ *  All rights reserved.                                                   *
+ *                                                                         *
+ *  This program is free software: you can redistribute it and/or modify   *
+ *  it under the terms of the GNU General Public License as published by   *
+ *  the Free Software Foundation, either version 3 of the License, or      *
+ *  (at your option) any later version.                                    *
+ *                                                                         *
+ *  This program is distributed in the hope that it will be useful,        *
+ *  but WITHOUT ANY WARRANTY; without even the implied warranty of         *
+ *  MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the          *
+ *  GNU General Public License for more details.                           *
+ *                                                                         *
+ *  You should have received a copy of the GNU General Public License      *
+ *  along with this program (COPYING.FREEMEDFORMS file).                   *
+ *  If not, see <http://www.gnu.org/licenses/>.                            *
+ ***************************************************************************/
+/***************************************************************************
+ *   Main Developper : Eric MAEKER, <eric.maeker@gmail.com>                *
+ *   Contributors :                                                        *
+ *       NAME <MAIL@ADRESS>                                                *
+ *       NAME <MAIL@ADRESS>                                                *
+ ***************************************************************************/
 #include "languagecomboboxdelegate.h"
-#include "languagecombobox.h"
+
+#include <coreplugin/icore.h>
+#include <coreplugin/itheme.h>
+#include <coreplugin/isettings.h>
 
 #include <QDebug>
 
+static inline Core::ITheme *theme() {return Core::ICore::instance()->theme();}
+static inline Core::ISettings *settings() {return Core::ICore::instance()->settings();}
+
 using namespace Views;
-using namespace Internal;
-
-namespace Views {
-namespace Internal {
-class LangageComboBoxDelegatePrivate
-{
-public:
-    LangageComboBoxDelegatePrivate() {}
-    ~LangageComboBoxDelegatePrivate() {}
-
-public:
-    int m_DisplayMode;
-};
-}
-}
 
 LanguageComboBoxDelegate::LanguageComboBoxDelegate(QObject *parent, DisplayMode mode) :
-        QItemDelegate(parent), d(new Internal::LangageComboBoxDelegatePrivate)
+        Utils::LanguageComboBoxDelegate(parent)
 {
-    d->m_DisplayMode = mode;
+    setFlagsIconPath(settings()->path(Core::ISettings::SmallPixmapPath) + "/flags/");
+    setTranslationsPath(settings()->path(Core::ISettings::TranslationsPath));
 }
-
-LanguageComboBoxDelegate::~LanguageComboBoxDelegate()
-{
-    if (d)
-        delete d;
-    d = 0;
-}
-
-QWidget *LanguageComboBoxDelegate::createEditor(QWidget *parent, const QStyleOptionViewItem &option,
-                      const QModelIndex &index) const
-{
-    LanguageComboBox *editor = new LanguageComboBox(parent);
-    if (d->m_DisplayMode == AllLanguages)
-        editor->setDisplayMode(LanguageComboBox::AllLanguages);
-    else
-        editor->setDisplayMode(LanguageComboBox::AvailableTranslations);
-    editor->setCurrentLanguage(static_cast<QLocale::Language>(index.data(Qt::EditRole).toInt()));
-    return editor;
-}
-
-void LanguageComboBoxDelegate::setEditorData(QWidget *editor, const QModelIndex &index) const
-{
-    LanguageComboBox *combo = qobject_cast<LanguageComboBox*>(editor);
-    if (combo) {
-        combo->setCurrentLanguage(static_cast<QLocale::Language>(index.data(Qt::EditRole).toInt()));
-    }
-}
-
-void LanguageComboBoxDelegate::setModelData(QWidget *editor, QAbstractItemModel *model,
-                  const QModelIndex &index) const
-{
-    LanguageComboBox *combo = qobject_cast<LanguageComboBox*>(editor);
-    if (combo) {
-        model->setData(index, combo->currentLanguage(), Qt::EditRole);
-    }
-}
-
-void LanguageComboBoxDelegate::updateEditorGeometry(QWidget *editor,
-    const QStyleOptionViewItem &option, const QModelIndex &index) const
-{
-    editor->setGeometry(option.rect);
-}
-
