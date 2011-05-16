@@ -69,6 +69,7 @@ basewidgets.subdir   = basewidgetsplugin
 basewidgets.depends += core
 basewidgets.depends += texteditor
 basewidgets.depends += formmanager
+basewidgets.depends += patientbase
 
 aggir.subdir   = aggirplugin
 aggir.depends += core
