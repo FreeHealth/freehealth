@@ -106,7 +106,7 @@ public:
         a->setToolTip(QCoreApplication::translate("FormFilesSelectorWidget", "by type"));
         ui->toolButton->addAction(a);
 
-        ui->toolButton->setDefaultAction(aByCategory);
+//        ui->toolButton->setDefaultAction(aByCategory);
     }
 
     void getDescriptions()
@@ -177,12 +177,12 @@ public:
 
 
 
-FormFilesSelectorWidget::FormFilesSelectorWidget(QWidget *parent, const FormType type) :
+FormFilesSelectorWidget::FormFilesSelectorWidget(QWidget *parent, const FormType type, const SelectionType selType) :
     QWidget(parent),
     d(new FormFilesSelectorWidgetPrivate)
 {
     d->m_Type = type;
-    d->m_SelType = Single;
+    d->m_SelType = selType;
     d->ui->setupUi(this);
 
     // Create and connect actions
@@ -202,6 +202,7 @@ FormFilesSelectorWidget::FormFilesSelectorWidget(QWidget *parent, const FormType
 
     // prepare the first model = category tree model
     d->aByCategory->trigger();
+//    d->createTreeModel(Form::FormIODescription::Category);
     d->ui->treeView->setModel(d->m_TreeModel);
     d->ui->treeView->header()->hide();
 //    d->ui->treeView->setRootIndex(d->dirModel->index(settings()->path(Core::ISettings::CompleteFormsPath)));
@@ -289,8 +290,11 @@ void FormFilesSelectorWidget::changeEvent(QEvent *e)
     QWidget::changeEvent(e);
     switch (e->type()) {
     case QEvent::LanguageChange:
-        if (d->ui)
+        if (d->ui) {
             d->ui->retranslateUi(this);
+            // correcting a Qt bug
+            d->ui->toolButton->defaultAction()->trigger();
+        }
         break;
     default:
         break;

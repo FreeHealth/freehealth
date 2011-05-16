@@ -66,7 +66,7 @@ public:
         Multiple = QAbstractItemView::MultiSelection
     };
 
-    FormFilesSelectorWidget(QWidget *parent = 0, const FormType type = AllForms);
+    FormFilesSelectorWidget(QWidget *parent = 0, const FormType type = AllForms, const SelectionType selType = Single);
     ~FormFilesSelectorWidget();
 
     void setFormType(FormType type);
