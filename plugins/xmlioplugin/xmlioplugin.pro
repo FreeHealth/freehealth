@@ -13,9 +13,11 @@ include( xmlioplugin_dependencies.pri )
 HEADERS = xmlioplugin.h \
     xmlio_exporter.h \
     xmlformio.h \
-    xmlformioconstants.h
+    xmlformioconstants.h \
+    xmlformcontentreader.h
 
 SOURCES = xmlioplugin.cpp \
-    xmlformio.cpp
+    xmlformio.cpp \
+    xmlformcontentreader.cpp
 
 OTHER_FILES = XmlIO.pluginspec

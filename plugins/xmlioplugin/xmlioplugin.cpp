@@ -32,6 +32,7 @@
 
 #include "xmlioplugin.h"
 #include "xmlformio.h"
+#include "xmlformcontentreader.h"
 
 #include <coreplugin/dialogs/pluginaboutpage.h>
 
@@ -42,15 +43,24 @@
 
 using namespace XmlForms;
 
-XmlFormIOPlugin::XmlFormIOPlugin()
+XmlFormIOPlugin::XmlFormIOPlugin() :
+        ExtensionSystem::IPlugin(),
+        m_XmlReader(0)
 {
     if (Utils::Log::warnPluginsCreation())
         qWarning() << "creating XmlIOPlugin";
+    // create XML reader singleton
+    m_XmlReader = Internal::XmlFormContentReader::instance();
+    addAutoReleasedObject(new XmlFormIO("",this));
 }
 
 XmlFormIOPlugin::~XmlFormIOPlugin()
 {
     qWarning() << "XmlFormIOPlugin::~XmlFormIOPlugin()";
+    // delete XmlFormContentReader singleton
+    if (m_XmlReader)
+        delete m_XmlReader;
+    m_XmlReader = 0;
 }
 
 bool XmlFormIOPlugin::initialize(const QStringList &arguments, QString *errorString)
@@ -59,6 +69,7 @@ bool XmlFormIOPlugin::initialize(const QStringList &arguments, QString *errorStr
         qWarning() << "XmlIOPlugin::initialize";
     Q_UNUSED(arguments);
     Q_UNUSED(errorString);
+
     return true;
 }
 
@@ -67,7 +78,6 @@ void XmlFormIOPlugin::extensionsInitialized()
     if (Utils::Log::warnPluginsCreation())
         qWarning() << "XmlIOPlugin::extensionsInitialized";
 
-    addAutoReleasedObject(new XmlFormIO("",this));
     addAutoReleasedObject(new Core::PluginAboutPage(pluginSpec(), this));
 }
 

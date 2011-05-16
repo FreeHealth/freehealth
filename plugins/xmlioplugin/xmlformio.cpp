@@ -26,6 +26,7 @@
  ***************************************************************************/
 #include "xmlformio.h"
 #include "xmlformioconstants.h"
+#include "xmlformcontentreader.h"
 
 #include <extensionsystem/pluginmanager.h>
 #include <utils/log.h>
@@ -65,6 +66,7 @@
 
 
 using namespace XmlForms;
+using namespace Internal;
 using namespace Trans::ConstantTranslations;
 
 ////////////////////////////////////////////////////////////////////////////////////////////////////////////
@@ -83,7 +85,7 @@ inline static ExtensionSystem::PluginManager *pluginManager() {return ExtensionS
 static inline Core::ISettings *settings()  { return Core::ICore::instance()->settings(); }
 static inline Category::CategoryCore *categoryCore() {return  Category::CategoryCore::instance();}
 static inline PMH::PmhCore *pmhCore() {return PMH::PmhCore::instance();}
-
+static inline Internal::XmlFormContentReader *reader() {return Internal::XmlFormContentReader::instance();}
 
 inline static void refreshPlugsFactories()
 {
@@ -95,14 +97,7 @@ inline static void refreshPlugsFactories()
     }
 }
 
-//inline static Form::FormMain *createNewForm(const QDomElement &element, Form::FormItem *item = 0)
-//{
-//    QString name = element.firstChildElement(Constants::TAG_NAME).text();
-//    Form::FormMain *parent = formManager()->getParent<Form::FormMain>(item);
-//    return formManager()->createForm(name, parent);
-//}
-
-inline static bool populateValues(Form::FormItem *item, const QDomElement &root)
+static bool populateValues(Form::FormItem *item, const QDomElement &root)
 {
     QDomElement element = root.firstChildElement();
     while (!element.isNull()) {
@@ -123,7 +118,7 @@ inline static bool populateValues(Form::FormItem *item, const QDomElement &root)
     return true;
 }
 
-inline static bool populateScripts(Form::FormItem *item, const QDomElement &root)
+static bool populateScripts(Form::FormItem *item, const QDomElement &root)
 {
     QDomElement element = root.firstChildElement();
     QString lang = root.attribute(Constants::ATTRIB_LANGUAGE, Trans::Constants::ALL_LANGUAGE).left(2);

@@ -36,8 +36,8 @@
 /**
  * \file xmlformio.h
  * \author Eric MAEKER <eric.maeker@free.fr>
- * \version 0.5.0
- * \date 08 Apr 2011
+ * \version 0.6.0
+ * \date 10 May 2011
 */
 
 namespace Category {
@@ -52,10 +52,6 @@ class IFormWidgetFactory;
 
 namespace XmlForms {
 
-//namespace Internal {
-//class XmlIOPrivate;
-//} // End Internal
-
 class XmlFormIO : public Form::IFormIO
 {
      Q_OBJECT
@@ -63,6 +59,9 @@ public:
     XmlFormIO(const QString &absFileName, QObject *parent=0);
     ~XmlFormIO();
 
+    static QString lastestXmlVersion();
+
+    // Form::IForm interface
     QString name() const {return "XmlFormIO";}
 
     void muteUserWarnings(bool state) {m_Mute = state;}
@@ -79,9 +78,8 @@ public:
 
     bool saveForm(QObject *treeRoot) { Q_UNUSED(treeRoot); return true; }
 
-    static QString lastestXmlVersion();
-
     QString lastError() const {return m_Error.join("\n");}
+    // End Form::IForm interface
 
 private:
     bool checkFormFileContent(const QString &absFileName) const;

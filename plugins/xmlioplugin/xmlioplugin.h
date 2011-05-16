@@ -39,6 +39,9 @@
 */
 
 namespace XmlForms {
+namespace Internal {
+class XmlFormContentReader;
+}
 
 class XmlFormIOPlugin : public ExtensionSystem::IPlugin
 {
@@ -49,6 +52,9 @@ public:
 
     bool initialize(const QStringList &arguments, QString *errorString);
     void extensionsInitialized();
+
+private:
+    Internal::XmlFormContentReader *m_XmlReader;
 };
 
 
