@@ -19,61 +19,28 @@
  *  If not, see <http://www.gnu.org/licenses/>.                            *
  ***************************************************************************/
 /***************************************************************************
- *   Main Developper : Eric MAEKER, <eric.maeker@free.fr>                  *
+ *   Main Developper : Eric MAEKER, <eric.maeker@gmail.com>                *
  *   Contributors :                                                        *
  *       NAME <MAIL@ADRESS>                                                *
  *       NAME <MAIL@ADRESS>                                                *
  ***************************************************************************/
-/***************************************************************************
- *   Code adapted from the Qxt Librairy (LGPL 2.1)                         *
- ***************************************************************************/
-#ifndef LANGUAGECOMBOBOX_H
-#define LANGUAGECOMBOBOX_H
+#ifndef VIEWS_LANGUAGECOMBOBOX_H
+#define VIEWS_LANGUAGECOMBOBOX_H
 
-#include <QComboBox>
-#include <QLocale>
 #include <listviewplugin/listview_exporter.h>
 
-namespace Views {
-namespace Internal {
-class LanguageComboBoxPrivate;
-}  // End namespace Internal
+#include <utils/widgets/languagecombobox.h>
 
-class LISTVIEW_EXPORT LanguageComboBox : public QComboBox
+namespace Views {
+
+class LISTVIEW_EXPORT LanguageComboBox : public Utils::LanguageComboBox
 {
     Q_OBJECT
-    Q_PROPERTY(QLocale::Language currentLanguage READ currentLanguage WRITE setCurrentLanguage NOTIFY currentLanguageChanged)
-
 public:
     explicit LanguageComboBox(QWidget* parent = 0);
-    virtual ~LanguageComboBox();
-
-    enum DisplayMode {
-        AllLanguages,
-        AvailableTranslations
-    };
-
-    DisplayMode displayMode() const;
-    QLocale::Language currentLanguage() const;
-    QString currentLanguageName() const;
-
-public Q_SLOTS:
-    void setCurrentIsoLanguage(const QString &languageIsoCode);
-    void setCurrentLanguage(QLocale::Language lang);
-    void setDisplayMode(DisplayMode mode);
-
-private Q_SLOTS:
-    void comboBoxCurrentIndexChanged(int id);
-
-Q_SIGNALS:
-    void currentLanguageChanged(QLocale::Language country);
-    void currentLanguageNameChanged(const QString &name);
-
-private:
-    Internal::LanguageComboBoxPrivate *d;
 };
 
 
 }  // End namespace Views
 
-#endif // LANGUAGECOMBOBOX_H
+#endif // VIEWS_LANGUAGECOMBOBOX_H

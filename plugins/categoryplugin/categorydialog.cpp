@@ -35,9 +35,9 @@
 #include <coreplugin/constants_icons.h>
 
 #include <listviewplugin/languagecombobox.h>
-#include <listviewplugin/languagecomboboxdelegate.h>
 
 #include <utils/log.h>
+#include <utils/widgets/languagecomboboxdelegate.h>
 
 #include "ui_categorydialog.h"
 
@@ -160,7 +160,7 @@ void CategoryDialog::editItem(const QModelIndex &current, const QModelIndex &pre
     }
     d->m_CatLabelsModel->setCategoryItem(cat);
     d->populateUiWithCategory();
-    d->ui->tableView->setItemDelegateForColumn(CategoryLabelsModel::Lang, new Views::LanguageComboBoxDelegate(this));
+    d->ui->tableView->setItemDelegateForColumn(CategoryLabelsModel::Lang, new Utils::LanguageComboBoxDelegate(this));
 }
 
 void CategoryDialog::done(int r)
