@@ -153,7 +153,7 @@ public:
 
     virtual bool canReadForms(const QString &uuidOrAbsPath) const = 0;
     // canReadFile() must be called first, no need to loadForm to get these informations
-    virtual FormIODescription *readFileInformations() = 0;
+    virtual FormIODescription *readFileInformations(const QString &uuidOrAbsPath) = 0;
 
     virtual QList<FormIODescription *> getFormFileDescriptions(const FormIOQuery &query) = 0;
 
