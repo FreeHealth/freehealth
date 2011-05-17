@@ -66,11 +66,9 @@ public:
 
     void muteUserWarnings(bool state) {m_Mute = state;}
 
-    void warnXmlReadError(bool muteUserWarnings, const QString &file, const QString &msg, const int line = 0, const int col = 0) const;
-
     bool canReadForms(const QString &uuidOrAbsPath) const;
 
-    Form::FormIODescription *readFileInformations();
+    Form::FormIODescription *readFileInformations(const QString &uuidOrAbsPath);
     QList<Form::FormIODescription *> getFormFileDescriptions(const Form::FormIOQuery &query);
 
     QList<Form::FormMain *> loadAllRootForms(const QString &uuidOrAbsPath = QString::null);
@@ -82,16 +80,18 @@ public:
     // End Form::IForm interface
 
 private:
-    bool checkFormFileContent(const QString &absFileName) const;
-    bool loadForm(const QString &file, Form::FormMain *rootForm);
+    void getAllFormsFromDir(const QString &absPath, QList<Form::FormIODescription *> *list);
+//    void warnXmlReadError(bool muteUserWarnings, const QString &file, const QString &msg, const int line = 0, const int col = 0) const;
+//    bool checkFormFileContent(const QString &absFileName) const;
+//    bool loadForm(const QString &file, Form::FormMain *rootForm);
 
     bool createCategory(const QDomElement &element, Category::CategoryItem *parent);
 
-    bool loadElement(Form::FormItem *item, QDomElement &rootElement);
-    bool createElement(Form::FormItem *item, QDomElement &element);
-    bool createItemWidget(Form::FormItem *item, QWidget *parent = 0);
-    bool createFormWidget(Form::FormMain *form);
-    bool createWidgets(const Form::FormMain *rootForm);
+//    bool loadElement(Form::FormItem *item, QDomElement &rootElement);
+//    bool createElement(Form::FormItem *item, QDomElement &element);
+//    bool createItemWidget(Form::FormItem *item, QWidget *parent = 0);
+//    bool createFormWidget(Form::FormMain *form);
+//    bool createWidgets(const Form::FormMain *rootForm);
 
 private:
      mutable QString m_AbsFileName;

@@ -41,11 +41,9 @@ public:
 
     void warnXmlReadError(bool muteUserWarnings, const QString &file, const QString &msg, const int line = -1, const int col = -1) const;
 
-    bool checkFormFileContent(const QString &formUid, const QString &contents) const;
+    bool checkFormFileContent(const QString &formUidOrFullAbsPath, const QString &contents) const;
 
-    bool canReadForms(const QString &uuidOrAbsPath) const;
-
-    Form::FormIODescription *readFileInformations(const QDomDocument &doc);
+    Form::FormIODescription *readFileInformations(const QString &formUidOrFullAbsPath);
 
     QList<Form::FormIODescription *> getFormFileDescriptions(const Form::FormIOQuery &query);
 
