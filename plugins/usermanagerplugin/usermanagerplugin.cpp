@@ -246,6 +246,13 @@ void UserManagerPlugin::extensionsInitialized()
     // Update context is necessary
 //    contextManager()->updateContext();
 
+    connect(Core::ICore::instance(), SIGNAL(coreOpened()), this, SLOT(postCoreInitialization()));
+}
+
+void UserManagerPlugin::postCoreInitialization()
+{
+    // be sure everyone is informed of the currently connected user
+    userModel()->emitUserConnected();
 }
 
 /** \brief Show the user manager session is connected to Core::Constants::A_USERMANAGER command. */

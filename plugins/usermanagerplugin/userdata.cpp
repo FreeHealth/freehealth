@@ -720,7 +720,6 @@ QString UserData::linkIdsToString() const
 
 void UserData::setPersonalLkId(const int lkid)
 {
-    qWarning() << Q_FUNC_INFO << lkid;
     d->m_PersonalLkId = lkid;
 }
 

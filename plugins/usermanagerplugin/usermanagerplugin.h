@@ -56,6 +56,7 @@ public:
     void extensionsInitialized();
 
 private Q_SLOTS:
+    void postCoreInitialization();
     void showUserManager();
     void createUser();
     void changeCurrentUser();

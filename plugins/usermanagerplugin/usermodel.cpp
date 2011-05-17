@@ -49,7 +49,6 @@
 #include <translationutils/constanttranslations.h>
 
 #include <coreplugin/translators.h>
-#include <coreplugin/iuser.h>
 
 #include <printerplugin/textdocumentextra.h>
 
@@ -80,47 +79,40 @@ namespace {
 namespace UserPlugin {
 namespace Internal {
 
-/** \brief UserModel wrapper can be accessed using Core::ICore::instance()->user() */
-class UserModelWrapper : public Core::IUser
+UserModelWrapper::UserModelWrapper(UserModel *model) :
+        Core::IUser(model), m_Model(model)
 {
-public:
-    UserModelWrapper(UserModel *model) :
-            Core::IUser(model), m_Model(model) {}
+    connect(model, SIGNAL(userConnected(QString)), this, SLOT(newUserConnected(QString)));
+}
 
-    ~UserModelWrapper() {}
+UserModelWrapper::~UserModelWrapper() {}
 
-    // IPatient interface
-    void clear() {}
-    bool has(const int ref) const {return (ref>=0 && ref<Core::IUser::NumberOfColumns);}
-    bool hasCurrentUser() const {return m_Model->hasCurrentUser();}
+// IPatient interface
+bool UserModelWrapper::hasCurrentUser() const {return m_Model->hasCurrentUser();}
 
+QVariant UserModelWrapper::value(const int ref) const {return m_Model->currentUserData(ref);}
 
-    QVariant value(const int ref) const {return m_Model->currentUserData(ref);}
-    bool setValue(const int ref, const QVariant &value)
-    {
-        if (m_Model->setData(m_Model->index(m_Model->currentUserIndex().row(), ref), value)) {
-            Q_EMIT this->userDataChanged(ref);
-            return true;
-        }
-        return false;
+bool UserModelWrapper::setValue(const int ref, const QVariant &value)
+{
+    if (m_Model->setData(m_Model->index(m_Model->currentUserIndex().row(), ref), value)) {
+        Q_EMIT this->userDataChanged(ref);
+        return true;
     }
+    return false;
+}
 
-    /** \todo Is this needed in freemedforms ? */
-    QString toXml() const {return QString();}
-    bool fromXml(const QString &) {return true;}
-
-    bool saveChanges()
-    {
-        if (m_Model) {
-            return m_Model->submitUser(value(Core::IUser::Uuid).toString());
-        }
-        return false;
+bool UserModelWrapper::saveChanges()
+{
+    if (m_Model) {
+        return m_Model->submitUser(value(Core::IUser::Uuid).toString());
     }
+    return false;
+}
 
-private:
-    UserModel *m_Model;
-};
-
+void UserModelWrapper::newUserConnected(const QString &uid)
+{
+    Q_EMIT userChanged();
+}
 
 
 /**
@@ -964,6 +956,7 @@ void UserModel::setFilter (const QHash<int,QString> &conditions)
 //    qWarning() << filter;
 }
 
+/** Return the LinkId for the user with uuid \e uid */
 int UserModel::practionnerLkId(const QString &uid)
 {
     /** \todo manage user's groups */
@@ -1033,4 +1026,10 @@ void UserModel::warn()
     qWarning() << "UserModel Warning";
     qWarning() << "  * Current user uuid" << d->m_CurrentUserUuid;
     qWarning() << "  * Current users list" << d->m_Uuid_UserList;
+}
+
+/** Used by UserManagerPlugin to inform the currently connected user after Core is opened. */
+void UserModel::emitUserConnected() const
+{
+    Q_EMIT userConnected(d->m_CurrentUserUuid);
 }

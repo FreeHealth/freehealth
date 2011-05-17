@@ -32,6 +32,9 @@
   - A Patient creator wizard
   - A patient selector
   - The patient mode and bar
+
+  The patient plugin is not dependent of UserManagerPlugin suring build time, but it is dependent of it
+  at application start up. So dependence is notified in the pluginspec only.
 */
 
 #include "patientbaseplugin.h"
@@ -118,6 +121,7 @@ void PatientBasePlugin::extensionsInitialized()
 {
     if (Utils::Log::warnPluginsCreation())
         qWarning() << "PatientBasePlugin::extensionsInitialized";
+
     connect(Core::ICore::instance(), SIGNAL(coreOpened()), this, SLOT(postCoreInitialization()));
 }
 

@@ -31,6 +31,8 @@
 #include <usermanagerplugin/global.h>
 #include <usermanagerplugin/constants.h>
 
+#include <coreplugin/iuser.h>
+
 #include <QSqlTableModel>
 #include <QAbstractListModel>
 #include <QHash>
@@ -51,14 +53,48 @@ class TextDocumentExtra;
 
 
 namespace UserPlugin {
+class UserManagerPlugin;
+class UserModel;
+
 namespace Internal {
 class UserModelPrivate;
+
+class UserModelWrapper : public Core::IUser
+{
+    Q_OBJECT
+public:
+    UserModelWrapper(UserModel *model);
+    ~UserModelWrapper();
+
+    // IPatient interface
+    void clear() {}
+    bool has(const int ref) const {return (ref>=0 && ref<Core::IUser::NumberOfColumns);}
+    bool hasCurrentUser() const;
+
+    QVariant value(const int ref) const;
+    bool setValue(const int ref, const QVariant &value);
+
+    /** \todo Is this needed in freemedforms ? */
+    QString toXml() const {return QString();}
+    bool fromXml(const QString &) {return true;}
+
+    bool saveChanges();
+
+private Q_SLOTS:
+    void newUserConnected(const QString &uid);
+
+private:
+    UserModel *m_Model;
+};
 }  // End Internal
+
 
 
 class USER_EXPORT UserModel : public QSqlTableModel
 {
     Q_OBJECT
+    friend class UserPlugin::UserManagerPlugin;
+
 protected:
     UserModel(QObject *parent);
 
@@ -122,6 +158,9 @@ Q_SIGNALS:
     void userAboutToDisconnect(const QString &uuid) const;
     void userDisconnected(const QString &uuid) const;
     void userDocumentsChanged() const;
+
+protected:
+    void emitUserConnected() const;
 
 private:
     Internal::UserModelPrivate *d;

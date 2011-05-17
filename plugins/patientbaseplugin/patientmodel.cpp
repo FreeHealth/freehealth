@@ -80,8 +80,7 @@ public:
             m_SqlPhoto(0),
             q(parent)
     {
-        m_UserUuid = user()->value(Core::IUser::Uuid).toString();
-        q->connect(user(), SIGNAL(userChanged()), q, SLOT(changeUserUuid()));
+//        m_UserUuid = user()->value(Core::IUser::Uuid).toString();
 
         // install the Core Patient wrapper
 //        Core::ICore::instance()->setPatient(q);
@@ -262,9 +261,11 @@ PatientModel::PatientModel(QObject *parent) :
     d->m_SqlPhoto->setTable(patientBase()->table(Constants::Table_PATIENT_PHOTO));
 
     d->connectSqlPatientSignals();
-    changeUserUuid();
-    d->refreshFilter();
+//    changeUserUuid();
+//    d->refreshFilter();
 //    d->m_SqlPatient->select();
+
+    connect(user(), SIGNAL(userChanged()), this, SLOT(changeUserUuid()));
 }
 
 PatientModel::~PatientModel()
