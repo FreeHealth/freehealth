@@ -327,6 +327,7 @@ choiceDialog::choiceDialog(QWidget * parent,bool roundtrip):QDialog(parent),ui(n
     connect(ui->lessButton,SIGNAL(released()),this,SLOT(valueDownStop()));
     connect(ui->plusConstButton,SIGNAL(pressed()),this,SLOT(quickPlus()));
     connect(ui->lessConstButton,SIGNAL(pressed()),this,SLOT(quickLess()));
+    connect(m_actionTreeView,SIGNAL(clicked(const QModelIndex&)),this,SLOT(actionsOfTreeView(const QModelIndex&)));
 }
 
 choiceDialog::~choiceDialog(){
@@ -341,6 +342,10 @@ double choiceDialog::getDistanceNumber(const QString & data){
     double minDistance = recIO.getMinDistanceValue(data);
     qDebug() << __FILE__ << QString::number(__LINE__) << " minDistance =" << QString::number(minDistance) ;
     dist = ui->distanceDoubleSpinBox->value() - minDistance;
+    if (dist < 0.00)
+    {
+    	  dist = 0.00;
+        }
     return dist;
 }
 
@@ -446,6 +451,7 @@ void choiceDialog::beforeAccepted(){
            
            switch(ret){
                case QMessageBox::Ok :
+                   qDebug() << __FILE__ << QString::number(__LINE__) << " m_row =" << QString::number(m_row) ;
                    m_modelChoicePercentDebtorSiteDistruleValues->setData(m_modelChoicePercentDebtorSiteDistruleValues->index(m_row,TYPE_OF_CHOICE),returnChoiceDialog(),Qt::EditRole);
                    m_modelChoicePercentDebtorSiteDistruleValues->setData(m_modelChoicePercentDebtorSiteDistruleValues->index(m_row,PERCENTAGE),m_percent,Qt::EditRole);
                    m_modelChoicePercentDebtorSiteDistruleValues->setData(m_modelChoicePercentDebtorSiteDistruleValues->index(m_row,DEBTOR),debtor,Qt::EditRole);
@@ -499,4 +505,36 @@ QVariant choiceDialog::firstItemChoosenAsPreferential(QString & item)
         }
     return variantValue;
 }
+
+void choiceDialog::actionsOfTreeView(const QModelIndex &index){
+    QString data = index.data(Qt::DisplayRole).toString();
+    qDebug() << __FILE__ << QString::number(__LINE__) << " data =" << data;
+    receiptsManager manager;
+    QHash<QString,QString> hashOfValues;
+    int typeOfPayment = ReceiptsConstants::Cash;
+    double percentage = 100.00;
+    QVariant  debtor;
+    QVariant site;
+    QVariant distrules;
+  
+    if (manager.getDistanceRules().keys().contains(data))
+    {
+    	  m_distanceRuleValue = manager.getDistanceRules().value(data).toDouble();
+    	  m_distanceRuleType = data;
+    	  qDebug() << __FILE__ << QString::number(__LINE__) << " m_distanceRuleValue =" << QString::number(m_distanceRuleValue) ;
+    	  qDebug() << __FILE__ << QString::number(__LINE__) << " m_distanceRuleType =" << m_distanceRuleType ;
+        }
+    if (manager.getHashOfSites().keys().contains(data))
+    {
+    	  m_siteUid = manager.getHashOfSites().value(data);
+    	  qDebug() << __FILE__ << QString::number(__LINE__) << " m_siteUid =" << m_siteUid.toString() ;
+        }
+    if (manager.getHashOfInsurance().keys().contains(data))
+    {
+    	  m_insuranceUid = manager.getHashOfInsurance().value(data);
+    	  qDebug() << __FILE__ << QString::number(__LINE__) << " m_insuranceUid =" << m_insuranceUid.toString() ;
+        }
+        //actionTreeView->reset();
+}
+
 

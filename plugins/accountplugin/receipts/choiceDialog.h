@@ -110,6 +110,7 @@ private slots:
   void quickPlus();
   void quickLess();
   void beforeAccepted();
+  void actionsOfTreeView(const QModelIndex& index);
 private:
   Ui::ChoiceDialog * ui;
   QTimer * m_timerUp;

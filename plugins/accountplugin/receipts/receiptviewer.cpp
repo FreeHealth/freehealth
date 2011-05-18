@@ -234,7 +234,7 @@ namespace InternalAmount {
                 {
             	    list << QVariant(0);
             	    }
-                m_listsOfValuesbyRows -> insert(row,list);
+                m_listsOfValuesbyRows -> append(list);
             }
             QList<QVariant> listDouble;
             listDouble = m_listsOfValuesbyRows->at(position);
@@ -288,6 +288,8 @@ namespace InternalAmount {
             if (role==Qt::EditRole) {
                 QList<QVariant> list;
                 int row = index.row();
+                qDebug() << __FILE__ << QString::number(__LINE__) << " row =" << QString::number(row) ;
+                qDebug() << __FILE__ << QString::number(__LINE__) << " value =" << value.toString() ;
                 list = m_listsOfValuesbyRows->at(row);
                 switch(index.column()){
                     case Col_Cash :
@@ -648,7 +650,7 @@ ReceiptViewer::ReceiptViewer(QWidget *parent) :
     /*ui->amountsView->verticalHeader()->setResizeMode(QHeaderView::Interactive);
     ui->amountsView->verticalHeader()->setDefaultSectionSize(10);
     ui->amountsView->verticalHeader()->setDefaultAlignment(Qt::AlignTop);*/
-    
+    ui->amountsView->verticalHeader()->setResizeMode(QHeaderView::ResizeToContents);
     ui->amountsView->horizontalHeader()->setResizeMode(QHeaderView::ResizeToContents);
     ui->amountsView->horizontalHeader()->setResizeMode(QHeaderView::Interactive);
     ui->amountsView->setModel(m_model);
@@ -661,7 +663,7 @@ ReceiptViewer::ReceiptViewer(QWidget *parent) :
     ui->amountsView->setColumnHidden(InternalAmount::AmountModel::Col_Debtor,true);
     ui->amountsView->setColumnHidden(InternalAmount::AmountModel::Col_Site,true);
     ui->amountsView->setColumnHidden(InternalAmount::AmountModel::Col_DistRule,true);
-    //ui->amountsView->resizeRowsToContents();
+    ui->amountsView->resizeRowsToContents();
     ui->dateExecution->setDisplayFormat("yyyy-MM-dd");
     ui->dateExecution->setDate(QDate::currentDate());
     ui->datePayment->setDisplayFormat("yyyy-MM-dd");
@@ -771,8 +773,9 @@ void ReceiptViewer::actionsOfTreeView(const QModelIndex &index){
                         site = model->data(model->index(i,choice.SITE),Qt::DisplayRole);
                         distrules = model->data(model->index(i,choice.DISTRULES),Qt::DisplayRole);
                        /*QStringList*/ m_listOfValues << hashOfValues.keys();
-                        m_modelReturnedList->setStringList(m_listOfValues);
-                        fillModel(hashOfValues,typeOfPayment,percentage,debtor,site,distrules,i);
+                       m_listOfValues.removeDuplicates();
+                       m_modelReturnedList->setStringList(m_listOfValues);
+                       fillModel(hashOfValues,typeOfPayment,percentage,debtor,site,distrules,i);
                      }
                      delete model;
                  }
@@ -803,6 +806,7 @@ void ReceiptViewer::actionsOfTreeView(const QModelIndex &index){
             	                 	  "value\nin thesaurus\nand choose it as prefered."),QMessageBox::Ok);
                     }           
                 m_listOfValues << hashOfValues.keys();
+                m_listOfValues.removeDuplicates();
                 m_modelReturnedList->setStringList(m_listOfValues);
                 fillModel(hashOfValues,typeOfPayment,percentage,debtor,site,distrules,i);
                 }
@@ -836,6 +840,7 @@ void ReceiptViewer::actionsOfTreeView(const QModelIndex &index){
     	          qDebug() << __FILE__ << QString::number(__LINE__) << " distance =" << QString::number(m_kilometers) ;
     	          qDebug() << __FILE__ << QString::number(__LINE__) << " value =" << QString::number(value) ;
     	          m_listOfValues << trUtf8("Kilometers");
+    	          m_listOfValues.removeDuplicates();
                   m_modelReturnedList->setStringList(m_listOfValues);
     	          fillModel(hashOfValues,typeOfPayment,percentage,debtor,site,distrules,i);
     	          }
@@ -901,11 +906,7 @@ void ReceiptViewer::fillModel(QHash<QString,QString> &hashOfValues,
     qDebug() << __FILE__ << QString::number(__LINE__) << " values =" << QString::number(value);
     qDebug() << __FILE__ << QString::number(__LINE__) << " row =" << QString::number(row)  ;
     qDebug() << __FILE__ << QString::number(__LINE__) << " column =" << QString::number(typeOfPayment) ;
-    /*const QModelIndex index = m_model->index(row-1, typeOfPayment);
-    qDebug() << __FILE__ << QString::number(__LINE__) << " repere " ;
-    double lastValue = m_model->data(index).toDouble();
-    qDebug() << __FILE__ << QString::number(__LINE__) << " lastValue " << QString::number(lastValue);
-    value += lastValue;*/
+    qDebug() << __FILE__ << QString::number(__LINE__) << " debtor =" << debtor.toString() ;
     qDebug() << __FILE__ << QString::number(__LINE__) << " value =" << QString::number(value) ;
     if (!m_model->insertRows(row,1,QModelIndex()))
     {
@@ -934,6 +935,7 @@ void ReceiptViewer::fillModel(QHash<QString,QString> &hashOfValues,
     {
     	  qWarning() << __FILE__ << QString::number(__LINE__) << "unable to setData" ;
         }
+    m_model->submit();
     qDebug() << __FILE__ << QString::number(__LINE__) << " 859 "  ;
 }
 
@@ -1000,10 +1002,8 @@ void ReceiptViewer::save()
     if (!r.insertIntoAccount(hash,userUuid)) {
         QMessageBox::warning(0,trUtf8("Warning"),trUtf8("Error inserting into AccountModel!"),QMessageBox::Ok);
     }
-    else{
-        clearAll(true);
-        }
     }
+    clearAll(true);
 }
 
 void ReceiptViewer::saveAndQuit()
