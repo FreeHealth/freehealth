@@ -30,6 +30,7 @@ namespace Calendar {
 	protected:
 		virtual void paintBody(QPainter *painter, const QRect &visibleRect);
 		virtual void resetItemWidgets();
+		virtual void refreshItemsSizesAndPositions();
 		QRect getDayRect(const QDate &day) const;
 
 	private:

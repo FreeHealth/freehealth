@@ -50,6 +50,7 @@ HEADERS += global_exporter.h \
     widgets/calendar/month_view.h \
     widgets/calendar/view.h \
     widgets/calendar/day_item_widget.h \
+    widgets/calendar/month_day_widget.h \
     widgets/languagecombobox.h \
     widgets/languagecomboboxdelegate.h
 #    widgets/dialogbuttonbox.h
@@ -91,6 +92,7 @@ SOURCES += global.cpp \
     widgets/calendar/month_view.cpp \
     widgets/calendar/view.cpp \
     widgets/calendar/day_item_widget.cpp \
+    widgets/calendar/month_day_widget.cpp \
     widgets/languagecombobox.cpp \
     widgets/languagecomboboxdelegate.cpp
 #    widgets/dialogbuttonbox.cpp

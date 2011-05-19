@@ -274,7 +274,6 @@ void DayRangeView::paintBody(QPainter *painter, const QRect &visibleRect) {
 		m_hourWidget->move(m_leftScaleWidth + (day * containWidth) / m_rangeWidth, y + minY);
 		m_hourWidget->raise();
 		m_hourWidget->show();
-
 	} else if (m_hourWidget) {
 		delete m_hourWidget;
 		m_hourWidget = 0;

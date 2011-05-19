@@ -2,6 +2,7 @@
 
 #include "common.h"
 #include "month_view.h"
+#include "month_day_widget.h"
 
 using namespace Calendar;
 
@@ -95,6 +96,7 @@ void MonthView::paintBody(QPainter *painter, const QRect &visibleRect) {
 		painter->setPen(pen);
 
 		painter->drawText(dayRect.adjusted(0, 2, -2, 0), Qt::AlignRight | Qt::AlignTop, text); // correction to not be stucked to the top/right lines
+//		paintEvents(*painter, day, dayRect.adjusted(0, 2 + QFontMetrics(painter->font()).height(), 0, 0));
 	}
 }
 
@@ -108,23 +110,42 @@ void MonthView::paintBody(QPainter *painter, const QRect &visibleRect) {
 	int itemHeight = QFontMetrics(painter.font()).height();
 	int visibleItemsCount = dayRect.height() / itemHeight - 1;
 	int top = 0;
+	int count = visibleItemsCount < items.count() ? visibleItemsCount - 1 : items.count();
 
-	foreach (const CalendarItem &item, items) {
-		if (visibleItemsCount < 0)
-			break;
-
+	for (int i = 0; i < count; i++) {
+		const CalendarItem &item = items[i];
 		painter.drawText(dayRect.adjusted(2, top, -2, 0), Qt::AlignLeft, QString("%1 %2").arg(item.beginning().time().toString("hh:mm")).arg(item.title().isEmpty() ? "(untitled)" : item.title()));
-
 		top += itemHeight;
-		visibleItemsCount--;
+	}
+
+	if (count != items.count()) { // add a link
+		painter.drawText(dayRect.adjusted(2, top, -2, 0), Qt::AlignLeft, "more elements");
 	}
 	}*/
 
 void MonthView::resetItemWidgets() {
 	// re-create all widgets
-	deleteAllWidgets();
+	QList<MonthDayWidget*> list;
+	foreach (QObject *obj, children()) {
+		MonthDayWidget *widget = qobject_cast<MonthDayWidget*>(obj);
+		if (widget)
+			list << widget;
+	}
+	qDeleteAll(list);
 
-	
+	if (!model())
+		return;
+
+	for (QDate day = m_monthBoundingDays.first; day <= m_monthBoundingDays.second; day = day.addDays(1)) {
+		if (!model()->getItemsBetween(day, day).count())
+			continue;
+
+		QRect dayWithoutHeaderRect = getDayRect(day).adjusted(0, 2 + QFontMetrics(QFont()).height(), 0, 0); // TODO: take the real header font
+		MonthDayWidget *widget = new MonthDayWidget(model(), day, this);
+		widget->move(dayWithoutHeaderRect.topLeft());
+		widget->resize(dayWithoutHeaderRect.size());
+		widget->show();
+	}
 }
 
 QRect MonthView::getDayRect(const QDate &day) const {
@@ -145,4 +166,15 @@ void MonthView::firstDateChanged() {
 	m_weekCount = 0;
 	m_monthBoundingDays = Calendar::getBoundingMonthDaysInterval(m_firstDate);
 	m_weekCount = (m_monthBoundingDays.first.daysTo(m_monthBoundingDays.second) + 1) / 7;
+}
+
+void MonthView::refreshItemsSizesAndPositions() {
+	foreach (QObject *obj, children()) {
+		MonthDayWidget *widget = qobject_cast<MonthDayWidget*>(obj);
+		if (widget) {
+			QRect dayWithoutHeaderRect = getDayRect(widget->day()).adjusted(0, 2 + QFontMetrics(QFont()).height(), 0, 0); // TODO: take the real header font
+			widget->move(dayWithoutHeaderRect.topLeft());
+			widget->resize(dayWithoutHeaderRect.size());
+		}
+	}
 }
