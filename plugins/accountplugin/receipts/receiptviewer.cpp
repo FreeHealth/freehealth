@@ -653,8 +653,10 @@ ReceiptViewer::ReceiptViewer(QWidget *parent) :
     ui->amountsView->verticalHeader()->setDefaultSectionSize(10);
     ui->amountsView->verticalHeader()->setDefaultAlignment(Qt::AlignTop);*/
     ui->amountsView->verticalHeader()->setResizeMode(QHeaderView::ResizeToContents);
+    ui->amountsView->verticalHeader()->setStretchLastSection ( false );
     ui->amountsView->horizontalHeader()->setResizeMode(QHeaderView::ResizeToContents);
     ui->amountsView->horizontalHeader()->setResizeMode(QHeaderView::Interactive);
+    ui->amountsView->horizontalHeader()->setStretchLastSection ( false );
     ui->amountsView->setModel(m_model);
     ui->amountsView->setItemDelegateForColumn(Cash, new Utils::SpinBoxDelegate(this));
     ui->amountsView->setItemDelegateForColumn(Check, new Utils::SpinBoxDelegate(this));
