@@ -247,8 +247,10 @@ namespace InternalAmount {
         bool removeRows(int position, int count, const QModelIndex & parent = QModelIndex()){
             Q_UNUSED(parent);
             beginRemoveRows(parent, position, position+count-1);
+            int rows = m_listsOfValuesbyRows->size();
             for (int row=0; row < count; row++) {
-                m_listsOfValuesbyRows -> remove(row);
+                qDebug() << __FILE__ << QString::number(__LINE__) << " row =" << QString::number(row) ;
+                m_listsOfValuesbyRows -> remove(rows - row -1);
             }
             endRemoveRows();
             return true;
@@ -958,7 +960,6 @@ void ReceiptViewer::save()
         QVariant site = m_model->data(m_model->index(row,InternalAmount::AmountModel::Col_Site));
         QVariant siteUid = rIO.getSiteUidFromSite(site.toString());
     
-    
     qDebug() << __FILE__ << QString::number(__LINE__) << " values =" << QString::number(cash)+ " "
                                                                      << QString::number(cheque)+ " "
                                                                      << QString::number(visa)+ " "
@@ -1041,9 +1042,7 @@ void ReceiptViewer::clearAll(bool b)
     m_listOfValues.clear();
     m_modelReturnedList->removeRows(0,m_modelReturnedList->rowCount(),QModelIndex());
     //clear accountmodel
-    for (int i = 0; i < m_model->rowCount(QModelIndex()); i += 1) {
-        m_model->removeRows(i,1);
-    }
+    m_model->removeRows(0,m_model->rowCount(QModelIndex()),QModelIndex());
 }
 
 QVariant ReceiptViewer::firstItemChoosenAsPreferential(QString & item)
