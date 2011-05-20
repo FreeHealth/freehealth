@@ -2,8 +2,8 @@
 
 using namespace Calendar;
 
-CalendarItemWidget::CalendarItemWidget(QWidget *parent, const QString &uid) :
-	QWidget(parent), m_uid(uid) {
+CalendarItemWidget::CalendarItemWidget(QWidget *parent, const QString &uid, AbstractCalendarModel *model) :
+	QWidget(parent), m_uid(uid), m_model(model) {
 }
 
 void CalendarItemWidget::setBeginDateTime(const QDateTime &dateTime) {

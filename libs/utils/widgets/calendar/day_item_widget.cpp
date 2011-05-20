@@ -2,10 +2,11 @@
 #include <QMouseEvent>
 
 #include "day_item_widget.h"
+#include "abstract_calendar_model.h"
 
 using namespace Calendar;
 
-DayItemWidget::DayItemWidget(QWidget *parent, const QString &uid) : CalendarItemWidget(parent, uid) {
+DayItemWidget::DayItemWidget(QWidget *parent, const QString &uid, AbstractCalendarModel *model) : CalendarItemWidget(parent, uid, model) {
 	m_inMotion = uid.isEmpty();
 	setMouseTracking(true);
 }
@@ -47,6 +48,13 @@ void DayItemWidget::paintEvent(QPaintEvent *) {
 	brush.setColor(QColor(0, 200, 0, m_inMotion ? 200 : 255));
 	bodyPainter.setBrush(brush);
 	bodyPainter.drawRoundedRect(QRect(0, 0, width(), height()), 5, 5);
+	if (model()) {
+		CalendarItem item = model()->getItemByUid(uid());
+		if (item.isValid() && !item.title().isEmpty()) {
+			bodyPainter.setPen(Qt::white);
+			bodyPainter.drawText(QRect(2, 20, width(), height()), Qt::AlignLeft, item.title());
+		}
+	}
 
 	// main
 	QPainter painter(this);

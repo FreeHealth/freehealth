@@ -551,7 +551,7 @@ void DayRangeView::refreshDayWidgets(const QDate &dayDate) {
 	node.computeWidths(band.first, band.second, nodes);
 
 	foreach (CalendarItemNode *node, nodes) {
-		DayItemWidget *widget = new DayItemWidget(this, node->item().uid());
+		DayItemWidget *widget = new DayItemWidget(this, node->item().uid(), model());
 		QPair<int, int> verticalData = getItemVerticalData(node->item().beginning().time(), node->item().ending().time());
 		widget->setBeginDateTime(node->item().beginning());
 		widget->setEndDateTime(node->item().ending());

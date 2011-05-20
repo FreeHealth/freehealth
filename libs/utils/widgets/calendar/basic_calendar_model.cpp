@@ -185,7 +185,6 @@ void BasicCalendarModel::setItemByUid(const QString &uid, const CalendarItem &it
 	// create the item once but insert it in two lists
 	CalendarItem *pItem = new CalendarItem(item);
 
-	qDebug("insertion");
 	m_sortedByBeginList.insert(getInsertionIndex(true, item.beginning(), m_sortedByBeginList, 0, m_sortedByBeginList.count() - 1), pItem);
 	m_sortedByEndList.insert(getInsertionIndex(false, item.ending(), m_sortedByEndList, 0, m_sortedByEndList.count() - 1), pItem);
 
