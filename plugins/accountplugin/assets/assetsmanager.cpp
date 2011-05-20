@@ -185,7 +185,8 @@ QList<double> AssetsManager::decreasingCalc(int row, double value , double durat
     qDebug() << __FILE__ << QString::number(__LINE__) << " currDateYear =" << QString::number(currentDateYear) ;
     //----------------first year---------------------------------------
     
-    double    numberOfMonths          = double(12 - month);
+    double    numberOfMonths          = double(12 - month +1);//from the beginning of month
+    qDebug() << __FILE__ << QString::number(__LINE__) << " numberOfMonths =" << QString::number(numberOfMonths) ;
     double    decreasingRatePercent      = 100/duration * rate;
     double    decreasingRate          = (decreasingRatePercent)/100;
     
