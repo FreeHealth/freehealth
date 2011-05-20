@@ -1,7 +1,10 @@
 #include <QVBoxLayout>
 #include <QLabel>
+#include <QEvent>
+#include <QTimer>
 
 #include "month_day_widget.h"
+#include "basic_item_edition_dialog.h"
 
 using namespace Calendar;
 
@@ -9,9 +12,6 @@ MonthDayWidget::MonthDayWidget(AbstractCalendarModel *model, const QDate &day, Q
 	: QWidget(parent),
 	  m_model(model),
 	  m_day(day) {
-
-	m_items = m_model->getItemsBetween(m_day, m_day);
-	qSort(m_items.begin(), m_items.end(), calendarItemLessThan);
 }
 
 void MonthDayWidget::resizeEvent(QResizeEvent *event) {
@@ -29,6 +29,9 @@ void MonthDayWidget::refreshItems() {
 			list << widget;
 	}
 	qDeleteAll(list);
+
+	m_items = m_model->getItemsBetween(m_day, m_day);
+	qSort(m_items.begin(), m_items.end(), calendarItemLessThan);
 
 	if (!m_items.count())
 		return;
@@ -49,6 +52,8 @@ void MonthDayWidget::refreshItems() {
 		label->setCursor(Qt::PointingHandCursor);
 		label->move(0, top);
 		label->show();
+		m_uidByWidget.insert(label, item.uid());
+		label->installEventFilter(this);
 		top += itemHeight;
 	}
 
@@ -62,4 +67,33 @@ void MonthDayWidget::refreshItems() {
 		label->move(0, top);
 		label->show();
 	}
+}
+
+bool MonthDayWidget::eventFilter(QObject *obj, QEvent *event) {
+	if (event->type() == QEvent::MouseButtonPress) {
+		QLabel *label = qobject_cast<QLabel*>(obj);
+		QString uid = m_uidByWidget[label];
+		CalendarItem *item = getItemByUid(uid);
+		BasicItemEditionDialog dialog(this);
+		dialog.init(*item);
+		if (dialog.exec() == QDialog::Accepted) {
+			m_model->setItemByUid(uid, dialog.item());
+
+			// refresh cell
+		    QTimer::singleShot(0, this, SLOT(refreshItems()));
+
+			// TODO: potentially refresh other cells which contains this modified item
+		}
+		return true;
+	}
+	return QWidget::eventFilter(obj, event);
+}
+
+CalendarItem *MonthDayWidget::getItemByUid(const QString &uid) {
+	for (int i = 0; i < m_items.count(); i++) {
+		CalendarItem &item = m_items[i];
+		if (item.uid() == uid)
+			return &item;
+	}
+	return 0;
 }

@@ -51,6 +51,7 @@ HEADERS += global_exporter.h \
     widgets/calendar/view.h \
     widgets/calendar/day_item_widget.h \
     widgets/calendar/month_day_widget.h \
+    widgets/calendar/basic_item_edition_dialog.h \
     widgets/languagecombobox.h \
     widgets/languagecomboboxdelegate.h
 #    widgets/dialogbuttonbox.h
@@ -93,10 +94,12 @@ SOURCES += global.cpp \
     widgets/calendar/view.cpp \
     widgets/calendar/day_item_widget.cpp \
     widgets/calendar/month_day_widget.cpp \
+    widgets/calendar/basic_item_edition_dialog.cpp \
     widgets/languagecombobox.cpp \
     widgets/languagecomboboxdelegate.cpp
 #    widgets/dialogbuttonbox.cpp
 
+FORMS += widgets/calendar/basic_item_edition_dialog.ui
 
 macx {
     OBJECTIVE_SOURCES += iconbadgealert.mm

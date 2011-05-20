@@ -3,6 +3,7 @@
 
 #include <QWidget>
 #include <QDate>
+#include <QMap>
 
 #include "abstract_calendar_model.h"
 #include "calendar_item.h"
@@ -17,12 +18,17 @@ namespace Calendar {
 
 	protected:
 		virtual void resizeEvent(QResizeEvent *event);
+		bool eventFilter(QObject *obj, QEvent *event);
 
 	private:
 		AbstractCalendarModel *m_model;
 		QDate m_day;
 		QList<CalendarItem> m_items;
+		QMap<QWidget *, QString> m_uidByWidget;
 
+		CalendarItem *getItemByUid(const QString &uid);
+
+	private slots:
 		void refreshItems();
 	};
 }

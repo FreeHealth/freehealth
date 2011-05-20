@@ -2,7 +2,6 @@ GÉNÉRIQUE
 * Revenir sur la granularité à la demi-heure quand on retaille un item
 * formulaire basique d'édition (offrir la possibilité de pouvoir le remplacer)
 * Offrir la possibilité à l'utilisateur de pouvoir peindre un item comme il le veut
-* Représenter les items dans la vue "month"
 * Pouvoir cacher le week-end
 * Offrir une couche d'API de configuration du widget
 * Pouvoir supprimer un item
