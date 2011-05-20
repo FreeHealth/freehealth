@@ -122,10 +122,10 @@ void PreferedReceipts::showChoiceDialog(){
     	  	int TYPE = choice->TYPE_OF_CHOICE;
     	  	int PERCENTAGE = choice->PERCENTAGE;
     	  	int DEBTOR = choice->DEBTOR;
-    	  	
-    	  	int typeOfChoice = model->data(model->index(0,TYPE),Qt::DisplayRole).toInt();
-    	  	double percentage = model->data(model->index(0,PERCENTAGE),Qt::DisplayRole).toDouble();
-    	  	QVariant debtor = model->data(model->index(0,DEBTOR),Qt::DisplayRole);
+    	  	qDebug() << __FILE__ << QString::number(__LINE__) << " TYPE =" <<  QString::number(TYPE);
+    	  	int typeOfChoice = model->data(model->index(i,TYPE),Qt::DisplayRole).toInt();
+    	  	double percentage = model->data(model->index(i,PERCENTAGE),Qt::DisplayRole).toDouble();
+    	  	QVariant debtor = model->data(model->index(i,DEBTOR),Qt::DisplayRole);
     	        m_choiceAndPercentagesHash.insertMulti(typeOfChoice,percentage);
     	        m_choiceAndDebtorHash.insertMulti(typeOfChoice,debtor);
     	      }
