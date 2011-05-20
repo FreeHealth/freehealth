@@ -311,7 +311,7 @@ QPair<int, int> DayRangeView::getBand(const QDate &date) const {
 	int containWidth = rect().width() - m_leftScaleWidth;
 	QPair<int, int> band;
 
-	int day = date.dayOfWeek() - 1;
+	int day = m_firstDate.daysTo(date);
 	band.first = m_leftScaleWidth + (day * containWidth) / m_rangeWidth;
 	band.second = ((day + 1) * containWidth) / m_rangeWidth - (day * containWidth) / m_rangeWidth - 8;
 	return band;
@@ -534,7 +534,6 @@ void DayRangeView::refreshDayWidgets(const QDate &dayDate) {
 
 	// re-create them
 	QList<CalendarItem> items = model()->getItemsBetween(dayDate, dayDate);
-
 	if (!items.count())
 		return;
 

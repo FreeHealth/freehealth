@@ -25,12 +25,12 @@ BasicCalendarModel::BasicCalendarModel(QObject *parent) :
 	insertItem(QDateTime(now, QTime(4, 0)), QDateTime(now, QTime(5, 0)));
 
 	now = now.addDays(1);
-	insertItem(QDateTime(now, QTime(0, 30)), QDateTime(now, QTime(3, 0)));
-	insertItem(QDateTime(now, QTime(2, 0)), QDateTime(now, QTime(4, 0)));
-	insertItem(QDateTime(now, QTime(4, 0)), QDateTime(now, QTime(5, 0)));
-	insertItem(QDateTime(now, QTime(4, 0)), QDateTime(now, QTime(5, 0)));
-	insertItem(QDateTime(now, QTime(4, 0)), QDateTime(now, QTime(5, 0)));
-	insertItem(QDateTime(now, QTime(4, 0)), QDateTime(now, QTime(5, 0)));
+	insertItem(QDateTime(now, QTime(2, 30)), QDateTime(now, QTime(5, 0)));
+	insertItem(QDateTime(now, QTime(4, 0)), QDateTime(now, QTime(6, 0)));
+	insertItem(QDateTime(now, QTime(6, 0)), QDateTime(now, QTime(7, 0)));
+	insertItem(QDateTime(now, QTime(6, 0)), QDateTime(now, QTime(7, 0)));
+	insertItem(QDateTime(now, QTime(6, 0)), QDateTime(now, QTime(7, 0)));
+	insertItem(QDateTime(now, QTime(6, 0)), QDateTime(now, QTime(7, 0)));
 }
 
 QList<CalendarItem> BasicCalendarModel::getItemsBetween(const QDate &from, const QDate &to) const {

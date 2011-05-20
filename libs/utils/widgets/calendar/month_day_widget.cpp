@@ -34,6 +34,7 @@ void MonthDayWidget::refreshItems() {
 		return;
 
 	QFont itemFont = QLabel().font(); // the font is a QLabel font classical => todo : change it and choose a better one
+	itemFont.setPixelSize(10);
 	QFont linkFont = itemFont;
 	linkFont.setUnderline(true);
 	int itemHeight = QFontMetrics(itemFont).height();
@@ -45,6 +46,7 @@ void MonthDayWidget::refreshItems() {
 		const CalendarItem &item = m_items[i];
 		QLabel *label = new QLabel(QString("<b>%1</b> %2").arg(item.beginning().time().toString("hh:mm")).arg(item.title().isEmpty() ? "(untitled)" : item.title()), this);
 		label->setFont(itemFont);
+		label->setCursor(Qt::PointingHandCursor);
 		label->move(0, top);
 		label->show();
 		top += itemHeight;
@@ -59,18 +61,5 @@ void MonthDayWidget::refreshItems() {
 		label->setCursor(Qt::PointingHandCursor);
 		label->move(0, top);
 		label->show();
-/*		painter.drawText(dayRect.adjusted(2, top, -2, 0), Qt::AlignLeft, "more elements");*/
 	}
-
-/*
-	foreach (const CalendarItem &item, m_items) {
-		QLabel *label = new QLabel(QString("<b>%1</b> %2").arg(item.beginning().time().toString("hh:mm")).arg(item.title().isEmpty() ? "(untitled)" : item.title()), this);
-		label->move(0, top);
-		top += QFontMetrics(label->font()).height();
-		label->show();
-	}
-*/
-/*	if (count != items.count()) { // add a link
-		painter.drawText(dayRect.adjusted(2, top, -2, 0), Qt::AlignLeft, "more elements");
-		}*/
 }
