@@ -57,6 +57,7 @@ class LedgerViewer : public QWidget {
         void monthlyAndTypeMovementsAnalysis();
         void yearlyAndTypeMovementsAnalysis();
         void ledgerActionShow();
+        void monthsComboBoxcurrentIndexChanged(const QString& month);
 
     private :
         void fillMenuBar();
@@ -79,6 +80,8 @@ class LedgerViewer : public QWidget {
         QAction * m_ledgerActionShow;
         
         QString m_currency;
+        QHash<QString,QAction*> m_hashTextAndAction;
+        QString m_actionText;
         Ui::LedgerViewerWidget * ui;
 
 };

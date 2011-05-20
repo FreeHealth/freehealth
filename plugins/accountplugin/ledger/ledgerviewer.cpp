@@ -58,6 +58,9 @@ LedgerViewer::LedgerViewer(QWidget * parent): QWidget(parent),ui(new Ui::LedgerV
     createActions();
     createMenus();
     fillMenuBar();
+    connect(ui->monthsComboBox,SIGNAL(activated(const QString&)),this,
+                               SLOT(monthsComboBoxcurrentIndexChanged(const QString&)));
+    
 }
 
 LedgerViewer::~LedgerViewer(){}
@@ -90,39 +93,48 @@ void LedgerViewer::createActions(){
     m_closeAction = new QAction(trUtf8("E&xit"),this);
     m_closeAction->setShortcuts(QKeySequence::Close);
     m_closeAction->setStatusTip(trUtf8("Close Ledger"));
+    m_hashTextAndAction.insert(m_closeAction->text(),m_closeAction);
     connect(m_closeAction, SIGNAL(triggered()), this, SLOT(close()));
     
     m_monthlyReceiptsAnalysis = new QAction(trUtf8("Receipts by month"),this);
     m_monthlyReceiptsAnalysis->setStatusTip(trUtf8("See receipts by month."));
+    m_hashTextAndAction.insert(m_monthlyReceiptsAnalysis->text(),m_monthlyReceiptsAnalysis);
     connect(m_monthlyReceiptsAnalysis, SIGNAL(triggered()), this, SLOT(monthlyReceiptsAnalysis()));
     
     m_monthlyAndTypeReceiptsAnalysis = new QAction(trUtf8("Receipts by month and type"),this);
     m_monthlyAndTypeReceiptsAnalysis->setStatusTip(trUtf8("See receipts by month and type."));
+    m_hashTextAndAction.insert(m_monthlyAndTypeReceiptsAnalysis->text(),m_monthlyAndTypeReceiptsAnalysis);
     connect(m_monthlyAndTypeReceiptsAnalysis, SIGNAL(triggered()), this, SLOT(monthlyAndTypeReceiptsAnalysis()));
     
     m_yearlyAndTypeReceiptsAnalysis = new QAction(trUtf8("Receipts by year and type"),this);
     m_yearlyAndTypeReceiptsAnalysis->setStatusTip(trUtf8("See receipts by year and type."));
+    m_hashTextAndAction.insert(m_yearlyAndTypeReceiptsAnalysis->text(),m_yearlyAndTypeReceiptsAnalysis);
     connect(m_yearlyAndTypeReceiptsAnalysis, SIGNAL(triggered()), this, SLOT(yearlyAndTypeReceiptsAnalysis()));
     
     m_monthlyMovementsAnalysis = new QAction(trUtf8("Movements by month"),this);
     m_monthlyMovementsAnalysis->setStatusTip(trUtf8("See receipts by month."));
+    m_hashTextAndAction.insert(m_monthlyMovementsAnalysis->text(),m_monthlyMovementsAnalysis);
     connect(m_monthlyMovementsAnalysis, SIGNAL(triggered()), this, SLOT(monthlyMovementsAnalysis()));
     
     m_monthlyAndTypeMovementsAnalysis = new QAction(trUtf8("Movements by month and type"),this);
     m_monthlyAndTypeMovementsAnalysis->setStatusTip(trUtf8("See receipts by month and type."));
+    m_hashTextAndAction.insert(m_monthlyAndTypeMovementsAnalysis->text(),m_monthlyAndTypeMovementsAnalysis);
     connect(m_monthlyAndTypeMovementsAnalysis, SIGNAL(triggered()), this, SLOT(monthlyAndTypeMovementsAnalysis()));
     
     m_yearlyAndTypeMovementsAnalysis = new QAction(trUtf8("Movements by year and type"),this);
     m_yearlyAndTypeMovementsAnalysis->setStatusTip(trUtf8("See receipts by year and type."));
+    m_hashTextAndAction.insert(m_monthlyAndTypeMovementsAnalysis->text(),m_monthlyAndTypeMovementsAnalysis);
     connect(m_yearlyAndTypeMovementsAnalysis, SIGNAL(triggered()), this, SLOT(yearlyAndTypeMovementsAnalysis()));
     
     m_ledgerActionShow = new QAction(trUtf8("&Ledger"),this);
     m_ledgerActionShow->setStatusTip(trUtf8("See ledger."));
+    m_hashTextAndAction.insert(m_ledgerActionShow->text(),m_ledgerActionShow);
     connect(m_ledgerActionShow, SIGNAL(triggered()), this, SLOT(ledgerActionShow()));
     
 }
 
 void LedgerViewer::monthlyReceiptsAnalysis(){
+    m_actionText = m_monthlyReceiptsAnalysis->text();
     QString month = ui->monthsComboBox->currentText();
     QString year = ui->yearsComboBox->currentText();
     AccountModel * model = m_lm->getModelMonthlyReceiptsAnalysis(this,
@@ -134,6 +146,7 @@ void LedgerViewer::monthlyReceiptsAnalysis(){
     ui->sumLabel->setText(labelText);
 }
 void LedgerViewer::monthlyAndTypeReceiptsAnalysis(){
+    m_actionText = m_monthlyAndTypeReceiptsAnalysis->text();
     QString month = ui->monthsComboBox->currentText();
     QString year = ui->yearsComboBox->currentText();
     QStandardItemModel * model = m_lm->getModelMonthlyAndTypeReceiptsAnalysis(this,
@@ -145,6 +158,7 @@ void LedgerViewer::monthlyAndTypeReceiptsAnalysis(){
     ui->sumLabel->setText(labelText);
 }
 void LedgerViewer::yearlyAndTypeReceiptsAnalysis(){
+    m_actionText = m_yearlyAndTypeReceiptsAnalysis->text();
     QString year = ui->yearsComboBox->currentText();
     QStandardItemModel * model = m_lm->getModelYearlyAndTypeReceiptsAnalysis(this,year);
     ui->tableView->setModel(model);
@@ -152,6 +166,7 @@ void LedgerViewer::yearlyAndTypeReceiptsAnalysis(){
     ui->sumLabel->setText(labelText);
 }
 void LedgerViewer::monthlyMovementsAnalysis(){
+    m_actionText = m_monthlyMovementsAnalysis->text();
     QString month = ui->monthsComboBox->currentText();
     QString year = ui->yearsComboBox->currentText();
     MovementModel * model = m_lm->getModelMonthlyMovementsAnalysis(this,month,year);
@@ -161,6 +176,7 @@ void LedgerViewer::monthlyMovementsAnalysis(){
     
 }
 void LedgerViewer::monthlyAndTypeMovementsAnalysis(){
+    m_actionText = m_monthlyAndTypeMovementsAnalysis->text();
     QString month = ui->monthsComboBox->currentText();
     QString year = ui->yearsComboBox->currentText();
     QStandardItemModel * model = m_lm->getModelMonthlyAndTypeMovementAnalysis(this,
@@ -171,6 +187,7 @@ void LedgerViewer::monthlyAndTypeMovementsAnalysis(){
     ui->sumLabel->setText(labelText);
 }
 void LedgerViewer::yearlyAndTypeMovementsAnalysis(){
+    m_actionText = m_yearlyAndTypeMovementsAnalysis->text();
     QString year = ui->yearsComboBox->currentText();
     QStandardItemModel * model = m_lm->getModelYearlyAndTypeMovementAnalysis(this,year);
     ui->tableView->setModel(model);
@@ -183,6 +200,16 @@ void LedgerViewer::ledgerActionShow(){
 }
 
 void LedgerViewer::resizeEvent(QResizeEvent *event){
+    Q_UNUSED(event);
     ui->sumLabel->setText("");
     m_ledgerEdit->resizeLedgerEdit(this);
+}
+
+void LedgerViewer::monthsComboBoxcurrentIndexChanged(const QString& month){
+    Q_UNUSED(month);
+    qDebug() << __FILE__ << QString::number(__LINE__) << " in monthsComboBoxcurrentIndexChanged , month = "+month  ;
+    qDebug() << __FILE__ << QString::number(__LINE__) << " m_actionText =" << m_actionText ;
+    QAction * choosenAction = m_hashTextAndAction.value(m_actionText);
+    //choosenAction->setCheckable(true);
+    choosenAction->activate(QAction::Trigger);
 }
