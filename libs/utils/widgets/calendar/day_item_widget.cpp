@@ -50,9 +50,9 @@ void DayItemWidget::paintEvent(QPaintEvent *) {
 	bodyPainter.drawRoundedRect(QRect(0, 0, width(), height()), 5, 5);
 	if (model()) {
 		CalendarItem item = model()->getItemByUid(uid());
-		if (item.isValid() && !item.title().isEmpty()) {
+		if (item.isValid()) {
 			bodyPainter.setPen(Qt::white);
-			bodyPainter.drawText(QRect(2, 20, width(), height()), Qt::AlignLeft, item.title());
+			bodyPainter.drawText(QRect(2, 20, width() - 3, height()), Qt::TextWordWrap | Qt::AlignLeft, item.title().isEmpty() ? tr("(untitled)") : item.title());
 		}
 	}
 
