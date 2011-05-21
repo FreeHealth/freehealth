@@ -77,3 +77,11 @@ void DayItemWidget::mouseMoveEvent(QMouseEvent *event) {
 
 	QWidget::mouseMoveEvent(event);
 }
+
+/*void DayItemWidget::mouseReleaseEvent(QMouseEvent *event) {
+	// display a menu
+	QMenu menu;
+	QAction *modifyAction = menu.addAction(tr("modify"));
+	QAction *removeAction = menu.addAction(tr("remove"));
+	menu.exec(event->globalPos());
+	}*/

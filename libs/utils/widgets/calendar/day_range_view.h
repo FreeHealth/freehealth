@@ -114,6 +114,7 @@ namespace Calendar {
 	protected slots:
 		void itemInserted(const CalendarItem &item);
 		void itemModified(const CalendarItem &oldItem, const CalendarItem &newItem);
+		void itemRemoved(const CalendarItem &removedItem);
 
 	private:
 		enum MouseMode {
@@ -143,6 +144,10 @@ namespace Calendar {
 
 		// refresh all widgets of a day
 		void refreshDayWidgets(const QDate &dayDate);
+
+	private slots:
+		void modifyPressItem();
+		void removePressItem();
 	};
 }
 

@@ -89,6 +89,7 @@ void View::setModel(AbstractCalendarModel *model) {
 	if (m_model){
 		disconnect(m_model, SIGNAL(itemInserted(const CalendarItem &)), this, SLOT(itemInserted(const CalendarItem &)));
 		disconnect(m_model, SIGNAL(itemModified(const CalendarItem &, const CalendarItem &)), this, SLOT(itemModified(const CalendarItem &, const CalendarItem &)));
+		disconnect(m_model, SIGNAL(itemRemoved(const CalendarItem &)), this, SLOT(itemRemoved(const CalendarItem &)));
 	}
 
 	m_model = model;
@@ -97,6 +98,7 @@ void View::setModel(AbstractCalendarModel *model) {
 		// connect slots
 		connect(m_model, SIGNAL(itemInserted(const CalendarItem &)), this, SLOT(itemInserted(const CalendarItem &)));
 		connect(m_model, SIGNAL(itemModified(const CalendarItem &, const CalendarItem &)), this, SLOT(itemModified(const CalendarItem &, const CalendarItem &)));
+		connect(m_model, SIGNAL(itemRemoved(const CalendarItem &)), this, SLOT(itemRemoved(const CalendarItem &)));
 	}
 
 	resetItemWidgets();

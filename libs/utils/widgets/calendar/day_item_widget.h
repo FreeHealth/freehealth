@@ -23,6 +23,7 @@ namespace Calendar {
 	protected:
 		virtual void paintEvent(QPaintEvent *event);
 		virtual void mouseMoveEvent(QMouseEvent *event);
+//		virtual void mouseReleaseEvent(QMouseEvent *event);
 	};
 }
 

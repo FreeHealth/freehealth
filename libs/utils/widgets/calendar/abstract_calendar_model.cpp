@@ -26,4 +26,12 @@ void AbstractCalendarModel::endModifyItem(const CalendarItem &oldItem, const Cal
 	emit itemModified(oldItem, newItem);
 }
 
+void AbstractCalendarModel::beginRemoveItem() {
+	// does nothing for now (maybe emit a signal in the future)
+}
+
+void AbstractCalendarModel::endRemoveItem(const CalendarItem &removedItem) {
+	emit itemRemoved(removedItem);
+}
+
 void AbstractCalendarModel::setItemByUid(const QString &, const CalendarItem &) {}

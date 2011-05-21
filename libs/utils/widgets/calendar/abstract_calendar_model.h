@@ -32,9 +32,15 @@ namespace Calendar {
 		 */
 		virtual void setItemByUid(const QString &uid, const CalendarItem &item);
 
+		/**
+		 * Remove a calendar item in function of a uid
+		 */
+		virtual void removeItem(const QString &uid) = 0;
+
 	signals:
 		void itemInserted(const CalendarItem &newItem);
 		void itemModified(const CalendarItem &oldItem, const CalendarItem &newItem);
+		void itemRemoved(const CalendarItem &removedItem);
 
 	protected:
 		/** this function must be called before any item insertion */
@@ -45,6 +51,10 @@ namespace Calendar {
 		void beginModifyItem();
 		/** this function must be called after any item modification */
 		void endModifyItem(const CalendarItem &oldItem, const CalendarItem &newItem);
+		/** this function must be called before any item deletion */
+		void beginRemoveItem();
+		/** this function must be called after any item deletion */
+		void endRemoveItem(const CalendarItem &removedItem);
 	};
 }
 

@@ -4,12 +4,14 @@
 #include <QPixmapCache>
 #include <QScrollArea>
 #include <QMouseEvent>
+#include <QMenu>
 
 #include "day_item_widget.h"
 #include "common.h"
 #include "abstract_calendar_model.h"
 #include "calendar_widget.h"
 #include "day_range_view.h"
+#include "basic_item_edition_dialog.h"
 
 using namespace Calendar;
 
@@ -457,7 +459,7 @@ void DayRangeView::mouseMoveEvent(QMouseEvent *event) {
 	}
 }
 
-void DayRangeView::mouseReleaseEvent(QMouseEvent *) {
+void DayRangeView::mouseReleaseEvent(QMouseEvent *event) {
 	QDateTime beginning, ending;
 	CalendarItem newItem;
 
@@ -480,10 +482,20 @@ void DayRangeView::mouseReleaseEvent(QMouseEvent *) {
 		break;
 	case MouseMode_Move:
 	case MouseMode_Resize:
-		newItem = m_pressItem;
-		newItem.setBeginning(m_pressItemWidget->beginDateTime());
-		newItem.setEnding(m_pressItemWidget->endDateTime());
-		model()->setItemByUid(m_pressItem.uid(), newItem);
+		if (!m_pressItemWidget->inMotion()) {
+			// display a menu
+			QMenu menu;
+			QAction *modifyAction = menu.addAction(tr("modify"));
+			connect(modifyAction, SIGNAL(triggered()), this, SLOT(modifyPressItem()));
+			QAction *removeAction = menu.addAction(tr("remove"));
+			connect(removeAction, SIGNAL(triggered()), this, SLOT(removePressItem()));
+			menu.exec(event->globalPos());
+		} else {
+			newItem = m_pressItem;
+			newItem.setBeginning(m_pressItemWidget->beginDateTime());
+			newItem.setEnding(m_pressItemWidget->endDateTime());
+			model()->setItemByUid(m_pressItem.uid(), newItem);
+		}
 		break;
 	default:;
 	}
@@ -496,6 +508,11 @@ void DayRangeView::mouseReleaseEvent(QMouseEvent *) {
 void DayRangeView::itemInserted(const CalendarItem &item) {
 	// refresh the entire day band
 	refreshDayWidgets(item.beginning().date());
+}
+
+void DayRangeView::itemRemoved(const CalendarItem &removedItem) {
+	// refresh the involved bands
+	refreshDayWidgets(removedItem.beginning().date());
 }
 
 void DayRangeView::itemModified(const CalendarItem &oldItem, const CalendarItem &newItem) {
@@ -559,4 +576,15 @@ void DayRangeView::refreshDayWidgets(const QDate &dayDate) {
 		widget->resize(node->width(), verticalData.second);
 		widget->show();
 	}
+}
+
+void DayRangeView::modifyPressItem() {
+	BasicItemEditionDialog dialog(this);
+	dialog.init(m_pressItem);
+	if (dialog.exec() == QDialog::Accepted)
+		model()->setItemByUid(m_pressItem.uid(), dialog.item());
+}
+
+void DayRangeView::removePressItem() {
+	model()->removeItem(m_pressItem.uid());
 }

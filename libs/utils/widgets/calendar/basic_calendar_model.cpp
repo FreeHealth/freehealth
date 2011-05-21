@@ -192,3 +192,19 @@ void BasicCalendarModel::setItemByUid(const QString &uid, const CalendarItem &it
 
 	delete oldItem;
 }
+
+void BasicCalendarModel::removeItem(const QString &uid) {
+	// remove the old item
+	CalendarItem *oldItem = getItemPointerByUid(uid);
+	if (!oldItem)
+		return;
+
+	beginRemoveItem();
+
+	m_sortedByBeginList.removeAt(m_sortedByBeginList.indexOf(oldItem));
+	m_sortedByEndList.removeAt(m_sortedByEndList.indexOf(oldItem));
+
+	endRemoveItem(*oldItem);
+
+	delete oldItem;
+}
