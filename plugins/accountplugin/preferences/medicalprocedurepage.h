@@ -39,6 +39,7 @@
 #include <QDataWidgetMapper>
 #include <QStandardItemModel>
 #include <QProgressDialog>
+#include <QSqlDatabase>
 
 #include "ui_medicalprocedurepage.h"
 
@@ -68,6 +69,16 @@ class MedicalProcedureWidget : public QWidget, private Ui::MedicalProcedureWidge
 {
     Q_OBJECT
     Q_DISABLE_COPY(MedicalProcedureWidget)
+    
+    enum widgetsNumbers{
+        WN_MP_USER_UID = 0,
+        WN_NAME,
+        WN_ABSTRACT,
+        WN_TYPE,
+        WN_AMOUNT,
+        WN_REIMBOURSEMENT,
+        WN_DATE
+    };
 
 public:
     explicit MedicalProcedureWidget(QWidget *parent = 0);
@@ -78,9 +89,10 @@ public:
 
 public Q_SLOTS:
     void saveToSettings(Core::ISettings *s = 0);
-    void on_mpComboBox_currentIndexChanged(int index);
+    void on_mpComboBox_currentIndexChanged(const QString & text);
+    void on_alphabetBox_currentIndexChanged(const QString & text);
     void on_addButton_clicked();
-    void on_save_clicked();
+    //void on_save_clicked();
     void on_removeButton_clicked();
     void on_type_textChanged(const QString & text);
     void on_abstractEdit_textChanged(const QString & text);
@@ -91,6 +103,12 @@ private:
     void saveModel();
     void setCompletionList(const QString & text);
     void setCompletionAbstractList(const QString & text);
+    void fillTypeCompletionList();
+    QHash<int,QString> fillHashOfInsurances();
+    void save();
+    
+private Q_SLOTS :
+    void fillMPCombo();
 
 //private Q_SLOTS:
 //    void createDefaultMedicalProcedures();
@@ -102,12 +120,16 @@ private:
 
 private:
     AccountDB::MedicalProcedureModel *m_Model;
+    QStandardItemModel * m_ModelPartial;
+    QSqlDatabase m_db;
     QDataWidgetMapper *m_Mapper;
     QString m_user_uid;
     QString m_user_fullName;
     QStringList m_completionList;
     QStringList m_completionAbstractList;
     QProgressDialog * m_progressDialog;
+    int m_index;
+    QHash<int,QString> m_hashInsuranceBox;
 };
 
 }  // End Internal

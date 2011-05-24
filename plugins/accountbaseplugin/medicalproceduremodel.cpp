@@ -41,9 +41,12 @@
 #include <translationutils/constanttranslations.h>
 
 #include <QSqlTableModel>
+#include <QSqlQuery>
+
 #include <QUuid>
 
 using namespace AccountDB;
+using namespace Constants;
 using namespace Trans::ConstantTranslations;
 
 enum {WarnFilter=true};
@@ -116,6 +119,7 @@ MedicalProcedureModel::MedicalProcedureModel(QObject *parent) :
 //    d->m_SqlTable->setEditStrategy(QSqlTableModel::OnManualSubmit);
     d->m_SqlTable->setEditStrategy(QSqlTableModel::OnFieldChange);
     //d->m_SqlTable->select();
+    m_db = QSqlDatabase::database(AccountDB::Constants::DB_ACCOUNTANCY);
 }
 
 MedicalProcedureModel::~MedicalProcedureModel()
@@ -129,9 +133,26 @@ MedicalProcedureModel::~MedicalProcedureModel()
 
 int MedicalProcedureModel::rowCount(const QModelIndex &parent) const
 { 
+    /*int rows = 0;
+    QSqlQuery q(m_db);
+    const QString req = QString("SELECT %1 FROM %2").arg("NAME","medical_procedure");
+    if (!q.exec(req))
+    {
+    	  qWarning() << __FILE__ << QString::number(__LINE__) << q.lastError().text()
+    	             <<" : "
+    	             << q.lastQuery() ;
+        }
+    while (q.next())
+    {
+        ++rows;
+        }    
+    return rows;*/
+   
     int rows = 0;
     d->m_SqlTable->setFilter("");
     //d->m_SqlTable->select();
+    while(d->m_SqlTable->canFetchMore())
+                   d->m_SqlTable->fetchMore();
     rows = d->m_SqlTable->rowCount(parent);
     return rows;
 }
@@ -223,21 +244,23 @@ bool MedicalProcedureModel::insertRows(int row, int count, const QModelIndex &pa
 //            Utils::Log::addQueryError(this, query, __FILE__, __LINE__);
 //        }
 //        query.finish();
-
-        if (!d->m_SqlTable->insertRow(row+i, parent)) {
-            qWarning() << d->m_SqlTable->database().lastError().text();
+        while(d->m_SqlTable->canFetchMore())
+                   d->m_SqlTable->fetchMore();
+        if (!d->m_SqlTable->insertRows(row+i,1, parent)) {
+            qWarning() << __FILE__ << QString::number(__LINE__) << d->m_SqlTable->database().lastError().text();
             ok = false;
         } else {
             // Set CurrentUser UUID
+            qWarning() << __FILE__ << QString::number(__LINE__) << "else" ;
             QModelIndex userUid = d->m_SqlTable->index(row+i, Constants::MP_USER_UID, parent);
             if (!d->m_SqlTable->setData(userUid, user()->value(Core::IUser::Uuid))) {
-                qWarning() << d->m_SqlTable->database().lastError().text();
+                qWarning() << "1" << d->m_SqlTable->database().lastError().text();
                 ok = false;
             }
             // Create MP UUID
             QModelIndex mpUid = d->m_SqlTable->index(row+i, Constants::MP_UID, parent);
             if (!d->m_SqlTable->setData(mpUid, QUuid::createUuid().toString())) {
-                qWarning() << d->m_SqlTable->database().lastError().text();
+                qWarning() << "2" << d->m_SqlTable->database().lastError().text();
                 ok = false;
             }
         }
@@ -252,6 +275,8 @@ bool MedicalProcedureModel::insertRows(int row, int count, const QModelIndex &pa
 bool MedicalProcedureModel::removeRows(int row, int count, const QModelIndex &parent)
 {
     d->m_IsDirty = true;
+    while(d->m_SqlTable->canFetchMore())
+                   d->m_SqlTable->fetchMore();
     return d->m_SqlTable->removeRows(row, count, parent);
 }
 

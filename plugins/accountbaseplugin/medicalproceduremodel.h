@@ -36,7 +36,7 @@
 
 #include <QAbstractTableModel>
 #include <QSqlError>
-
+#include <QSqlDatabase>
 
 namespace AccountDB {
 namespace Internal {
@@ -87,6 +87,7 @@ public Q_SLOTS:
     void revert();
 
 private:
+    QSqlDatabase m_db;
     Internal::MedicalProcedureModelPrivate *d;
 };
 
