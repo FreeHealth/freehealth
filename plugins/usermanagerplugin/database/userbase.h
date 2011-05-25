@@ -77,8 +77,9 @@ public:
                         CreationOption createOption
                        );
     bool checkDatabaseVersion();
-
     bool isNewlyCreated() const;
+    bool createDefaultUser();
+
 
     // retreivers
     UserData *getUserById(const QVariant &_id) const;  // not used

@@ -195,7 +195,7 @@ bool UserBase::initialize(Core::ISettings *s)
         QString pathToDb = set->path(Core::ISettings::ReadWriteDatabasesPath);
         pathToDb = QDir::cleanPath(pathToDb + QDir::separator() + USER_DB_CONNECTION);
         if (!QDir(pathToDb).exists()) {
-            Utils::Log::addMessage(this, tkTr(Trans::Constants::CREATE_DIR_1).arg(pathToDb));
+            LOG(tkTr(Trans::Constants::CREATE_DIR_1).arg(pathToDb));
             QDir().mkpath(pathToDb);
         }
         if (!createConnection(USER_DB_CONNECTION,
@@ -518,10 +518,6 @@ bool UserBase::createDatabase(const QString &connectionName , const QString &dbN
         DB.open();
     } else if (driver == MySQL) {
         /** \todo test grants here or before ? */
-
-        qWarning() << "ici";
-
-        QSqlDatabase DB;
         if (QSqlDatabase::connectionNames().contains(connectionName)) {
             DB = QSqlDatabase::database(connectionName);
         } else {
@@ -531,18 +527,18 @@ bool UserBase::createDatabase(const QString &connectionName , const QString &dbN
             DB.setPassword(pass);
             DB.setPort(port);
         }
-        qWarning() << DB.open();
         DB.setDatabaseName("mysql");
-        qWarning() << DB.open();
         if (!DB.open()) {
             LOG_ERROR(tkTr(Trans::Constants::UNABLE_TO_OPEN_DATABASE_1_ERROR_2).arg(DB.connectionName()).arg(DB.lastError().text()));
         }
-
-        qWarning() << "createMySQLDatabase(dbName);";
+//        qWarning() << "createMySQLDatabase(dbName);";
         createMySQLDatabase(dbName);
         // change database connection
         DB.setDatabaseName(dbName);
-        qWarning() << DB.open();
+        if (!DB.open()) {
+            LOG_ERROR(tkTr(Trans::Constants::UNABLE_TO_OPEN_DATABASE_1_ERROR_2).arg(DB.connectionName()).arg(DB.lastError().text()));
+            return false;
+        }
     }
 
     // create db structure
@@ -552,6 +548,26 @@ bool UserBase::createDatabase(const QString &connectionName , const QString &dbN
     }
 
     // add general administrator
+    createDefaultUser();
+
+    // Table INFORMATIONS
+    QSqlQuery query(DB);
+    query.prepare(prepareInsertQuery(Constants::Table_INFORMATIONS));
+    query.bindValue(Constants::INFO_VERSION, Constants::USER_DB_VERSION);
+    query.bindValue(Constants::INFO_MAX_LKID, 1);
+    if (!query.exec()) {
+        LOG_QUERY_ERROR(query);
+    }
+
+    // database is readable/writable
+    LOG(QCoreApplication::translate("UserBase", "User database created : File %1").arg(pathOrHostName + QDir::separator() + dbName));
+
+    m_IsNewlyCreated = true;
+    return true;
+}
+
+bool UserBase::createDefaultUser()
+{
     UserData* user = new UserData;
     user->setLogin(DEFAULT_USER_LOGIN);
     user->setCryptedPassword(DEFAULT_USER_PASSWORD);
@@ -592,7 +608,19 @@ bool UserBase::createDatabase(const QString &connectionName , const QString &dbN
     saveUser(user);
 
     // create the linker
-    QSqlQuery query(database());
+    QSqlDatabase DB = QSqlDatabase::database(Constants::USER_DB_CONNECTION);
+    if (!DB.isOpen()) {
+        if (!DB.open()) {
+            LOG_ERROR(tkTr(Trans::Constants::UNABLE_TO_OPEN_DATABASE_1_ERROR_2).arg(DB.connectionName()).arg(DB.lastError().text()));
+            delete user; // list is deleted here
+            if (extraFooter)
+                delete extraFooter;
+            if (headerDoc)
+                delete headerDoc;
+            return false;
+        }
+    }
+    QSqlQuery query(DB);
     query.prepare(prepareInsertQuery(Constants::Table_USER_LK_ID));
     query.bindValue(Constants::LK_ID, QVariant());
     query.bindValue(Constants::LK_GROUP_UUID, QVariant());
@@ -600,6 +628,12 @@ bool UserBase::createDatabase(const QString &connectionName , const QString &dbN
     query.bindValue(Constants::LK_LKID, 1);
     if (!query.exec()) {
         LOG_QUERY_ERROR(query);
+        delete user; // list is deleted here
+        if (extraFooter)
+            delete extraFooter;
+        if (headerDoc)
+            delete headerDoc;
+        return false;
     }
 
     delete user; // list is deleted here
@@ -607,21 +641,6 @@ bool UserBase::createDatabase(const QString &connectionName , const QString &dbN
         delete extraFooter;
     if (headerDoc)
         delete headerDoc;
-
-    // Table INFORMATIONS
-    query.finish();
-    query.prepare(prepareInsertQuery(Constants::Table_INFORMATIONS));
-    query.bindValue(Constants::INFO_VERSION, Constants::USER_DB_VERSION);
-    query.bindValue(Constants::INFO_MAX_LKID, 1);
-    if (!query.exec()) {
-        LOG_QUERY_ERROR(query);
-    }
-
-    // database is readable/writable
-    LOG(QCoreApplication::translate("UserBase", "User database created : File %1").arg(pathOrHostName + QDir::separator() + dbName));
-
-    m_IsNewlyCreated = true;
-    return true;
 }
 
 /**
