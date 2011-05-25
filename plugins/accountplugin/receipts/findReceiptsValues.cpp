@@ -42,10 +42,14 @@ findReceiptsValues::findReceiptsValues(QWidget * parent):QDialog(parent){
   ui->nextButton->hide();
   MedicalProcedureModel model(parent);
   m_db = QSqlDatabase::database(Constants::DB_ACCOUNTANCY);
+  qDebug() << __FILE__ << QString::number(__LINE__)   ;
   fillComboCategories();
+  qDebug() << __FILE__ << QString::number(__LINE__)   ;
   initialize();
+  qDebug() << __FILE__ << QString::number(__LINE__)   ;
   QString comboValue = ui->comboBoxCategories->currentText().trimmed();
   emit fillListViewValues(comboValue);
+  qDebug() << __FILE__ << QString::number(__LINE__)   ;
   connect(ui->comboBoxCategories,SIGNAL(activated(const QString&)),this,SLOT(fillListViewValues(const QString&)));
   connect(ui->tableViewOfValues,SIGNAL(pressed(const QModelIndex&)),this,SLOT(chooseValue(const QModelIndex&)));
   connect(ui->listChoosenWidget,SIGNAL(itemClicked(QListWidgetItem *)),this,SLOT(supprItemChoosen(QListWidgetItem *)));
@@ -75,17 +79,30 @@ void findReceiptsValues::clear(){
 
 void findReceiptsValues::fillComboCategories(){
     QStringList choiceList ;
-    QHash<QString,QString> hashCategories = m_xmlParser->readXmlFile()[0];
+    /*QHash<QString,QString> hashCategories = m_xmlParser->readXmlFile()[0];
     choiceList = hashCategories.value("typesOfReceipts").split(",");
     MedicalProcedureModel *model = new MedicalProcedureModel(this);
     int MPRows = model->rowCount(QModelIndex());
+    qDebug() << __FILE__ << QString::number(__LINE__) << " rowCount =" << QString::number(MPRows) ;
     for (int i = 0; i < MPRows; i += 1)
     {
         QString typeData = model->data(model->index(i,MP_TYPE)).toString();
         if(!choiceList.contains(typeData)){
            choiceList << typeData;
            }
-    }
+    }*/
+    QSqlQuery q(m_db);
+    const QString req = QString("SELECT %1 FROM %2").arg("TYPE","medical_procedure");
+    if (!q.exec(req))
+    {
+    	  qWarning() << __FILE__ << QString::number(__LINE__) << q.lastError().text() ;
+        }
+    while (q.next())
+    {
+    	QString type = q.value(0).toString();
+    	choiceList << type;
+        }
+    choiceList.removeDuplicates();
     ui->comboBoxCategories->setEditable(true);
     ui->comboBoxCategories->setInsertPolicy(QComboBox::NoInsert);
     ui->comboBoxCategories->addItems(choiceList);

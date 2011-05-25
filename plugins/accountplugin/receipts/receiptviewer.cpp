@@ -763,6 +763,7 @@ void ReceiptViewer::actionsOfTreeView(const QModelIndex &index){
     QVariant distrules;
     if(data == "Values"){
         findReceiptsValues *rv = new findReceiptsValues(this);
+        qDebug() << __FILE__ << QString::number(__LINE__) << " in findReceiptsValues "  ;
         if(rv->exec() == QDialog::Accepted){
             hashOfValues = rv -> getChoosenValues();
             choiceDialog choice(rv,false);
