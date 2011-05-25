@@ -40,6 +40,7 @@ findReceiptsValues::findReceiptsValues(QWidget * parent):QDialog(parent){
   ui = new Ui::findValueDialog;
   ui->setupUi(this);
   ui->nextButton->hide();
+  ui->nameRadioButton->setChecked(true);
   MedicalProcedureModel model(parent);
   m_db = QSqlDatabase::database(Constants::DB_ACCOUNTANCY);
   qDebug() << __FILE__ << QString::number(__LINE__)   ;
@@ -259,12 +260,25 @@ QHash<QString,QString> findReceiptsValues::getChoosenValues(){
 
 void findReceiptsValues::on_lineEditFilter_textChanged(const QString & text){
     QString comboChoice = ui->comboBoxCategories->currentText();
-    QString filterText = ""+text+"%";
-    QString filter = QString("WHERE %1 LIKE '%2' AND %3 LIKE '%4'").arg("TYPE",comboChoice,"NAME",filterText);
+    QString filterText ;
+    QString filter; 
     const QString baseName = trUtf8("medical_procedure");
     const QString name = trUtf8("NAME");
     const QString amount = trUtf8("AMOUNT");
     const QString type = trUtf8("TYPE");
+    if (ui->nameRadioButton->isChecked())
+    {
+    	  filterText = ""+text+"%";
+    	  filter = QString("WHERE %1 LIKE '%2' AND %3 LIKE '%4'").arg("TYPE",comboChoice,"NAME",filterText); 
+        }
+    else if (ui->abstractRadioButton->isChecked())
+    {
+    	  filterText = "%"+text+"%";
+    	  filter = QString("WHERE %1 LIKE '%2' AND %3 LIKE '%4'").arg("TYPE",comboChoice,"ABSTRACT",filterText); 
+        }
+    else{
+    	QMessageBox::warning(0,trUtf8("Warning"),trUtf8("Check a radioButton."),QMessageBox::Ok);
+    }
     QString req = QString("SELECT %1,%2 FROM %3 ").arg(name,amount,baseName )+filter;
     QStandardItemModel *model = new QStandardItemModel(1,2,this);
     int row = 0;
