@@ -261,7 +261,7 @@ void LanguageComboBox::setTranslationsPath(const QString &absFullPath)
 
 void LanguageComboBox::setFlagsIconPath(const QString &absFullPath)
 {
-    d->m_IconPath = absFullPath;
+    d->m_IconPath = QDir::cleanPath(absFullPath);
     d->reset();
 }
 
