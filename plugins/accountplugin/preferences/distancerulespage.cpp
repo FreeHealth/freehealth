@@ -118,6 +118,7 @@ QWidget *DistanceRulesPage::createPage(QWidget *parent)
 DistanceRulesWidget::DistanceRulesWidget(QWidget *parent) :
         QWidget(parent), m_Model(0), m_Mapper(0)
 {
+    QCoreApplication::processEvents(QEventLoop::AllEvents);
     setObjectName("DistanceRulesWidget");
     setupUi(this);
     addButton->setIcon(theme()->icon(Core::Constants::ICONADD));

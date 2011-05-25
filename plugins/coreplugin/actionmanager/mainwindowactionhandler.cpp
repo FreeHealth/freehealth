@@ -64,6 +64,8 @@
 #include <QLocale>
 #include <QStatusBar>
 #include <QLabel>
+#include <QTimer>
+
 
 using namespace Core;
 using namespace Core::Internal;
@@ -1196,8 +1198,10 @@ bool MainWindowActionHandler::debugDialog()
 /** \brief Shows the standard Preferences dialog. \sa Core::SettingsDialog */
 bool MainWindowActionHandler::applicationPreferences()
 {
-    Core::SettingsDialog dlg(this);
-    dlg.exec();
+    hide();
+    Core::SettingsDialog *dlg = new Core::SettingsDialog(this);
+    QTimer::singleShot(0,qobject_cast<Core::SettingsDialog*>(dlg),SLOT(exec()));
+    delete dlg;
     return true;
 }
 

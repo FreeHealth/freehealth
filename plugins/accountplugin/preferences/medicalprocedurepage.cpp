@@ -118,6 +118,7 @@ QWidget *MedicalProcedurePage::createPage(QWidget *parent)
 MedicalProcedureWidget::MedicalProcedureWidget(QWidget *parent) :
         QWidget(parent), m_Model(0), m_Mapper(0)
 {
+    QCoreApplication::processEvents(QEventLoop::AllEvents);
     setObjectName("MedicalProcedureWidget");
     setupUi(this);
     m_db = QSqlDatabase::database(AccountDB::Constants::DB_ACCOUNTANCY);
@@ -399,7 +400,7 @@ void  MedicalProcedureWidget::fillMPCombo(){
     while (q.next())
     {
     	QString str = q.value(0).toString();
-    	qDebug() << __FILE__ << QString::number(__LINE__) << " strItem =" << str ;
+    	//qDebug() << __FILE__ << QString::number(__LINE__) << " strItem =" << str ;
     	list << str;
         }
     mpComboBox->clear();

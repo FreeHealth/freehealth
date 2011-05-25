@@ -117,6 +117,7 @@ QWidget *InsurancePage::createPage(QWidget *parent)
 InsuranceWidget::InsuranceWidget(QWidget *parent) :
         QWidget(parent), m_Model(0), m_Mapper(0)
 {
+    QCoreApplication::processEvents(QEventLoop::AllEvents);
     setObjectName("InsuranceWidget");
     setupUi(this);
     m_user_uid = user()->value(Core::IUser::Uuid).toString();

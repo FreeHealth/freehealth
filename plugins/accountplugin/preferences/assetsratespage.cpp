@@ -118,6 +118,7 @@ QWidget *AssetsRatesPage::createPage(QWidget *parent)
 AssetsRatesWidget::AssetsRatesWidget(QWidget *parent) :
         QWidget(parent), m_Model(0), m_Mapper(0)
 {
+    QCoreApplication::processEvents(QEventLoop::AllEvents);
     setObjectName("AssetsRatesWidget");
     setupUi(this);
     m_user_uid = user()->value(Core::IUser::Uuid).toString();

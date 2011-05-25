@@ -112,6 +112,7 @@ QWidget *AvailableMovementPage::createPage(QWidget *parent)
 AvailableMovementWidget::AvailableMovementWidget(QWidget *parent) :
         QWidget(parent), m_Model(0), m_Mapper(0)
 {
+    QCoreApplication::processEvents(QEventLoop::AllEvents);
     setupUi(this);
     taxDeductibilityComboBox->addItem(tkTr(Trans::Constants::NO));//0
     taxDeductibilityComboBox->addItem(tkTr(Trans::Constants::YES));//1
