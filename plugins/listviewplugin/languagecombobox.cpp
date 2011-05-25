@@ -45,7 +45,7 @@ using namespace Views;
 LanguageComboBox::LanguageComboBox(QWidget* parent) :
         Utils::LanguageComboBox(parent)
 {
-    setFlagsIconPath(settings()->path(Core::ISettings::SmallPixmapPath) + "/flags/");
+    setFlagsIconPath(settings()->path(Core::ISettings::SmallPixmapPath));
     setTranslationsPath(settings()->path(Core::ISettings::TranslationsPath));
 }
 
