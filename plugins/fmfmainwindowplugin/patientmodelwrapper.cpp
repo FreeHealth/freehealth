@@ -54,6 +54,8 @@ PatientModelWrapper::PatientModelWrapper(Patients::PatientModel *model) :
 
 PatientModelWrapper::~PatientModelWrapper()
 {
+    // remove this wrapper from the core instance
+    Core::ICore::instance()->setPatient(0);
 }
 
 /** \brief Initialize the model */
@@ -125,6 +127,16 @@ bool PatientModelWrapper::setData(const QModelIndex &item, const QVariant &value
         return true;
     }
     return false;
+}
+
+void PatientModelWrapper::hidePatientBar()
+{
+    Patients::PatientBar::instance()->hide();
+}
+
+void PatientModelWrapper::showPatientBar()
+{
+    Patients::PatientBar::instance()->show();
 }
 
 /** \brief Private connection to the Patient::PatientModel source. */

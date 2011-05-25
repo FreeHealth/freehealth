@@ -75,6 +75,9 @@ public:
     QString toXml() const {return QString();}
     bool fromXml(const QString &) {return true;}
 
+    virtual void hidePatientBar();
+    virtual void showPatientBar();
+
 private Q_SLOTS:
     void patientDataChanged(const QModelIndex &index);
 

@@ -142,6 +142,9 @@ public:
 
     void replaceTokens(QString &stringWillBeModified);
 
+    virtual void hidePatientBar() = 0;
+    virtual void showPatientBar() = 0;
+
 Q_SIGNALS:
     void currentPatientChanged();
 };

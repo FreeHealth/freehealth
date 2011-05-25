@@ -85,7 +85,11 @@ UserModelWrapper::UserModelWrapper(UserModel *model) :
     connect(model, SIGNAL(userConnected(QString)), this, SLOT(newUserConnected(QString)));
 }
 
-UserModelWrapper::~UserModelWrapper() {}
+UserModelWrapper::~UserModelWrapper()
+{
+    // remove this wrapper from the core implementation
+    Core::ICore::instance()->setUser(0);
+}
 
 // IPatient interface
 bool UserModelWrapper::hasCurrentUser() const {return m_Model->hasCurrentUser();}
