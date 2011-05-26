@@ -87,9 +87,11 @@ public Q_SLOTS:
 
 private:
     void changeEvent(QEvent *e);
+    void showEvent(QShowEvent *event);
     void saveModel();
 //    bool fillEmptyAvailableModel();
     void fillParentCombo();
+    void fillHugeWidgets();
 //    QStandardItemModel * availableMovementModelByLocale();
     void setCompletionList(const QString & text);
     

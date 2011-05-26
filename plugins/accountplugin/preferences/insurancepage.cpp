@@ -117,7 +117,7 @@ QWidget *InsurancePage::createPage(QWidget *parent)
 InsuranceWidget::InsuranceWidget(QWidget *parent) :
         QWidget(parent), m_Model(0), m_Mapper(0)
 {
-    QCoreApplication::processEvents(QEventLoop::AllEvents);
+    //QCoreApplication::processEvents(QEventLoop::AllEvents);
     setObjectName("InsuranceWidget");
     setupUi(this);
     m_user_uid = user()->value(Core::IUser::Uuid).toString();
@@ -132,26 +132,10 @@ InsuranceWidget::InsuranceWidget(QWidget *parent) :
     deleteButton->setText("Delete");
     zipComboBox->setEditable(true);
     zipComboBox->setInsertPolicy(QComboBox::NoInsert);
-    QStringList listOfZipcodes;
-    listOfZipcodes  = m_hashTownZip.keys();
-    listOfZipcodes.removeDuplicates();
-    listOfZipcodes.sort();
-    
-    QLocale local;
-    QString localCountry;
-    localCountry = QLocale::countryToString(local.country());
-    qDebug() << __FILE__ << QString::number(__LINE__) << " country =" << localCountry ;
-    QStringList listForCountry;
-    listForCountry = listOfCountries();
-    listForCountry.sort();
-    listForCountry.prepend(localCountry);
-    
-    zipComboBox->addItems(listOfZipcodes);
     
     countryComboBox->setEditable(true);
     countryComboBox->setInsertPolicy(QComboBox::NoInsert);
-    countryComboBox->addItems(listForCountry);
-    
+        
     m_Model = new AccountDB::InsuranceModel(this);
 //    if (m_Model->rowCount() < 1)  {
 //        if (!fillEmptyAvailableModel()) {
@@ -183,16 +167,35 @@ InsuranceWidget::InsuranceWidget(QWidget *parent) :
     m_Mapper->toFirst();
     insuranceComboBox->setModel(m_Model);
     insuranceComboBox->setModelColumn(AccountDB::Constants::INSURANCE_NAME);
-    //hash of towns and zipcode
-    
+  
     setDatasToUi();
-    emit findCityFromZipCode(zipComboBox->currentText());
     connect(zipComboBox,SIGNAL(currentIndexChanged(const QString &)),this,SLOT(findCityFromZipCode(const QString &)));
 }
 
 InsuranceWidget::~InsuranceWidget()
 {
     //saveModel();
+}
+
+void InsuranceWidget::fillComboBoxes(){
+    qDebug() << __FILE__ << QString::number(__LINE__) << " in fillcomboboxes "  ;
+    QLocale local;
+    QString localCountry;
+    localCountry = QLocale::countryToString(local.country());
+    qWarning() << __FILE__ << QString::number(__LINE__) << " country =" << localCountry ;
+    //zipcodes 
+    QStringList listOfZipcodes;
+    listOfZipcodes  = m_hashTownZip.keys();
+    listOfZipcodes.removeDuplicates();
+    listOfZipcodes.sort();
+    zipComboBox->addItems(listOfZipcodes);
+    //countries
+    QStringList listForCountry;
+    listForCountry = listOfCountries();
+    listForCountry.sort();
+    listForCountry.prepend(localCountry);
+    countryComboBox->addItems(listForCountry);
+    emit findCityFromZipCode(zipComboBox->currentText());    
 }
 
 void InsuranceWidget::setDatasToUi()
@@ -224,6 +227,7 @@ void InsuranceWidget::saveModel()
 void InsuranceWidget::on_insuranceComboBox_currentIndexChanged(int index)
 {
     //saveModel();
+    Q_UNUSED(index);
     m_Mapper->setCurrentIndex(insuranceComboBox->currentIndex());
 }
 
@@ -266,6 +270,7 @@ void InsuranceWidget::on_deleteButton_clicked()
 
 void InsuranceWidget::saveToSettings(Core::ISettings *sets)
 {
+    Q_UNUSED(sets);
     if (!m_Model->submit()) {
         LOG_ERROR(tkTr(Trans::Constants::UNABLE_TO_SAVE_DATA_IN_DATABASE_1).arg(tr("insurance")));
         Utils::warningMessageBox(tr("Can not submit insurance to your personnal database."),
@@ -277,6 +282,7 @@ void InsuranceWidget::saveToSettings(Core::ISettings *sets)
 
 void InsuranceWidget::writeDefaultSettings(Core::ISettings *s)
 {
+    Q_UNUSED(s);
 //    Utils::Log::addMessage("InsuranceWidget", tkTr(Trans::Constants::CREATING_DEFAULT_SETTINGS_FOR_1).arg("InsuranceWidget"));
 //    s->sync();
 }
@@ -296,6 +302,13 @@ void InsuranceWidget::changeEvent(QEvent *e)
     default:
         break;
     }
+}
+
+void InsuranceWidget::showEvent(QShowEvent *event){
+    Q_UNUSED(event);
+    qWarning() << __FILE__ << QString::number(__LINE__) << " insurance activated "   ;
+    fillComboBoxes();
+    update();
 }
 
 void InsuranceWidget::findCityFromZipCode(const QString & zipCodeText){

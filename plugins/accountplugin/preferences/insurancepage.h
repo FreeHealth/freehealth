@@ -75,10 +75,12 @@ public Q_SLOTS:
     void on_addButton_clicked();
     void on_deleteButton_clicked();
     void findCityFromZipCode(const QString & zipCodeText);
-   // void on_name_textChanged(const QString & text);
+    void fillComboBoxes();
+    // void on_name_textChanged(const QString & text);
 
 private:
     void changeEvent(QEvent *e);
+    void showEvent(QShowEvent *event);
     void saveModel();
     QHash<QString,QString> parseZipcodeCsv();
     QStringList listOfCountries();

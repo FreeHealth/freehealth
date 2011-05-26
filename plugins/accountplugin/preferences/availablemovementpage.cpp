@@ -112,7 +112,7 @@ QWidget *AvailableMovementPage::createPage(QWidget *parent)
 AvailableMovementWidget::AvailableMovementWidget(QWidget *parent) :
         QWidget(parent), m_Model(0), m_Mapper(0)
 {
-    QCoreApplication::processEvents(QEventLoop::AllEvents);
+    //QCoreApplication::processEvents(QEventLoop::AllEvents);
     setupUi(this);
     taxDeductibilityComboBox->addItem(tkTr(Trans::Constants::NO));//0
     taxDeductibilityComboBox->addItem(tkTr(Trans::Constants::YES));//1
@@ -123,7 +123,25 @@ AvailableMovementWidget::AvailableMovementWidget(QWidget *parent) :
     typeComboBox->addItem(theme()->icon(Core::Constants::ICONADD),less);
     typeComboBox->addItem(theme()->icon(Core::Constants::ICONADD),add);
     m_completionList << trUtf8("Receipts");
-    m_Model = new AccountDB::AvailableMovementModel(this);
+
+    
+}
+
+AvailableMovementWidget::~AvailableMovementWidget()
+{
+    //saveModel();
+}
+
+void AvailableMovementWidget::setDatasToUi()
+{
+    m_Mapper->setCurrentIndex(movComboBox->currentIndex());
+}
+
+void AvailableMovementWidget::fillParentCombo(){
+}
+
+void AvailableMovementWidget::fillHugeWidgets(){
+     m_Model = new AccountDB::AvailableMovementModel(this);
 //    if (m_Model->rowCount() < 1) {
 //        if (!fillEmptyAvailableModel()) {
 //            QMessageBox::warning(0,trUtf8("Warning"),trUtf8("Unable to fill availablemodel whith local .csv"),
@@ -142,21 +160,8 @@ AvailableMovementWidget::AvailableMovementWidget(QWidget *parent) :
     m_Mapper->addMapping(parentEdit, AccountDB::Constants::AVAILMOV_PARENT,"text");//parent movement
     m_Mapper->addMapping(taxDeductibilityComboBox,AccountDB::Constants::AVAILMOV_DEDUCTIBILITY,"currentIndex");
     movComboBox->setModel(m_Model);
-    movComboBox->setModelColumn(AccountDB::Constants::AVAILMOV_LABEL);
-    setDatasToUi();
-}
-
-AvailableMovementWidget::~AvailableMovementWidget()
-{
-    //saveModel();
-}
-
-void AvailableMovementWidget::setDatasToUi()
-{
-    m_Mapper->setCurrentIndex(movComboBox->currentIndex());
-}
-
-void AvailableMovementWidget::fillParentCombo(){
+    movComboBox->setModelColumn(AccountDB::Constants::AVAILMOV_LABEL);  
+    setDatasToUi(); 
 }
 
 void AvailableMovementWidget::saveModel()
@@ -207,6 +212,7 @@ void AvailableMovementWidget::on_removeButton_clicked()
 
 void AvailableMovementWidget::saveToSettings(Core::ISettings *sets)
 {
+    Q_UNUSED(sets);
     if (!m_Model->submit()) {
         LOG_ERROR(tkTr(Trans::Constants::UNABLE_TO_SAVE_DATA_IN_DATABASE_1).arg(tr("available_movement")));
         Utils::warningMessageBox(tr("Can not submit available movements to your personnal database."),
@@ -215,7 +221,8 @@ void AvailableMovementWidget::saveToSettings(Core::ISettings *sets)
 }
 
 void AvailableMovementWidget::writeDefaultSettings(Core::ISettings *s)
-{
+{    
+    Q_UNUSED(s);
 //    Utils::Log::addMessage("AvailableMovementWidget", tkTr(Trans::Constants::CREATING_DEFAULT_SETTINGS_FOR_1).arg("AvailableMovementWidget"));
 //    s->sync();
 }
@@ -235,6 +242,11 @@ void AvailableMovementWidget::changeEvent(QEvent *e)
     default:
         break;
     }
+}
+
+void AvailableMovementWidget::showEvent(QShowEvent *event){
+    Q_UNUSED(event);
+    fillHugeWidgets();
 }
 
 //static QString getCsvDefaultFile()
@@ -352,6 +364,7 @@ void AvailableMovementWidget::setCompletionList(const QString & text){
 }
 
 void AvailableMovementWidget::on_parentEdit_textChanged(const QString & text){
+    Q_UNUSED(text);
     QCompleter *c = new QCompleter(m_completionList,this);
     c->setCaseSensitivity(Qt::CaseInsensitive);
     parentEdit->setCompleter(c);

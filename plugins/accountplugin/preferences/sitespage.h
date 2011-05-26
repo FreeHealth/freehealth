@@ -79,11 +79,13 @@ public Q_SLOTS:
 
 private:
     void changeEvent(QEvent *e);
+    void showEvent(QShowEvent *event);
     void saveModel();
     QHash<QString,QString> parseZipcodeCsv();
     QStringList listOfCountries();
     QString findCityFromZipCode();
     int calcSitesUid();
+    void fillHugeWidgets();
 
 private:
     AccountDB::WorkingPlacesModel *m_Model;

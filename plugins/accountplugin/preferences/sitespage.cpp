@@ -134,24 +134,11 @@ SitesWidget::SitesWidget(QWidget *parent) :
     deleteButton->setText("Delete");
     zipComboBox->setEditable(true);
     zipComboBox->setInsertPolicy(QComboBox::NoInsert);
-    QStringList listOfZipcodes;
-    listOfZipcodes  = m_hashTownZip.keys();
-    listOfZipcodes.removeDuplicates();
-    listOfZipcodes.sort();
-    QLocale local;
-    QString localCountry;
-    localCountry = QLocale::countryToString(local.country());
-    qDebug() << __FILE__ << QString::number(__LINE__) << " country =" << localCountry ;
-    QStringList listForCountry;
-    listForCountry = listOfCountries();
-    listForCountry.sort();
-    listForCountry.prepend(localCountry);
     
-    zipComboBox->addItems(listOfZipcodes);
     
     countryComboBox->setEditable(true);
     countryComboBox->setInsertPolicy(QComboBox::NoInsert);
-    countryComboBox->addItems(listForCountry);
+    
     
     m_Model = new AccountDB::WorkingPlacesModel(this);
         /** \todo  m_Model->setUserUuid(); */
@@ -190,6 +177,25 @@ SitesWidget::SitesWidget(QWidget *parent) :
 SitesWidget::~SitesWidget()
 {
     //saveModel();
+}
+
+void SitesWidget::fillHugeWidgets(){
+    QStringList listOfZipcodes;
+    listOfZipcodes  = m_hashTownZip.keys();
+    listOfZipcodes.removeDuplicates();
+    listOfZipcodes.sort();
+    QLocale local;
+    QString localCountry;
+    localCountry = QLocale::countryToString(local.country());
+    qDebug() << __FILE__ << QString::number(__LINE__) << " country =" << localCountry ;
+    QStringList listForCountry;
+    listForCountry = listOfCountries();
+    listForCountry.sort();
+    listForCountry.prepend(localCountry);
+    
+    zipComboBox->addItems(listOfZipcodes);
+    
+    countryComboBox->addItems(listForCountry);
 }
 
 void SitesWidget::setDatasToUi()
@@ -237,9 +243,6 @@ void SitesWidget::on_addButton_clicked()
     //qDebug() << __FILE__ << QString::number(__LINE__) << " currentIndex =" << QString::number(m_Mapper->currentIndex());
 }
 
-
-
-
 void SitesWidget::on_deleteButton_clicked()
 {
     if (!m_Model->removeRow(wpComboBox->currentIndex()))
@@ -281,6 +284,13 @@ void SitesWidget::changeEvent(QEvent *e)
     default:
         break;
     }
+}
+
+void SitesWidget::showEvent(QShowEvent *event){
+    Q_UNUSED(event);
+    qWarning() << __FILE__ << QString::number(__LINE__) << " sites activated "   ;
+    fillHugeWidgets();
+    update();
 }
 
 void SitesWidget::findCityFromZipCode(const QString & zipCodeText){

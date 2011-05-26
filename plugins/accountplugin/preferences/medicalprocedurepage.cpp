@@ -116,9 +116,9 @@ QWidget *MedicalProcedurePage::createPage(QWidget *parent)
 }
 
 MedicalProcedureWidget::MedicalProcedureWidget(QWidget *parent) :
-        QWidget(parent), m_Model(0), m_Mapper(0)
+        QWidget(parent)
 {
-    QCoreApplication::processEvents(QEventLoop::AllEvents);
+    //QCoreApplication::processEvents(QEventLoop::AllEvents);
     setObjectName("MedicalProcedureWidget");
     setupUi(this);
     m_db = QSqlDatabase::database(AccountDB::Constants::DB_ACCOUNTANCY);
@@ -137,7 +137,7 @@ MedicalProcedureWidget::MedicalProcedureWidget(QWidget *parent) :
     dateEdit->setDate(QDate::currentDate());
     amountSpin->setRange(0.00,1000000000.00);
     rateSpin->setRange(0.00,100.00);
-    fillTypeCompletionList();
+    
     //fill alphabet combo
     QStringList listOfAlphabet;
     //QString alphabet = trUtf8("abcdefghijklmnopqrstuvwxyz");
@@ -148,46 +148,25 @@ MedicalProcedureWidget::MedicalProcedureWidget(QWidget *parent) :
     	listOfAlphabet << letter;
         }
     alphabetBox->addItems(listOfAlphabet);
-    m_hashInsuranceBox = fillHashOfInsurances();
-    QStringList listInsurances = m_hashInsuranceBox.values();
-    insuranceBox->addItems(listInsurances);
+    
     const QString insuranceInfo = trUtf8("Insurances are created in another preference widget.");
     insuranceBox->setToolTip(insuranceInfo);
-    m_Model = new AccountDB::MedicalProcedureModel(this);
-    m_ModelPartial = new QStandardItemModel(this);
+    
     /*const QString filterMaxNumber = QString("%1 < '%2'").arg("MP_ID","10");
-    m_Model->setFilter(filterMaxNumber);
-    m_Model->select();*/
-//    if (m_Model->rowCount() < 1) {
+    modelMP->setFilter(filterMaxNumber);
+    modelMP->select();*/
+//    if (modelMP->rowCount() < 1) {
 //        if (!fillEmptyMPModel()) {
 //            QMessageBox::warning(0,trUtf8("Warning"),trUtf8("Unable to fill medicalprocedure whith local .csv"),
 //                                 QMessageBox::Ok);
 //        }
 //    }
-    QLabel *mpUidLabel = new QLabel(this);
-    mpUidLabel->setText("NULL");
-    mpUidLabel->hide();
     userUidLabel->setText(m_user_uid);
-    m_Mapper = new QDataWidgetMapper(this);
-    /*m_Mapper->setSubmitPolicy(QDataWidgetMapper::AutoSubmit);
-    m_Mapper->setModel(m_Model);
-    m_Mapper->setCurrentModelIndex(QModelIndex());
-    //m_Mapper->addMapping(mpIDLabel, AccountDB::Constants::MP_ID, "ID");
-    m_Mapper->addMapping(mpUidLabel, AccountDB::Constants::MP_UID);
-    m_Mapper->addMapping(userUidLabel, AccountDB::Constants::MP_USER_UID);
-    m_Mapper->addMapping(name, AccountDB::Constants::MP_NAME);
-    //m_Mapper->addMapping(mpComboBox, AccountDB::Constants::MP_NAME);
-    m_Mapper->addMapping(abstractEdit, AccountDB::Constants::MP_ABSTRACT);
-    m_Mapper->addMapping(type, AccountDB::Constants::MP_TYPE);
-    m_Mapper->addMapping(amountSpin, AccountDB::Constants::MP_AMOUNT);
-    m_Mapper->addMapping(rateSpin, AccountDB::Constants::MP_REIMBOURSEMENT);
-    m_Mapper->addMapping(dateEdit, AccountDB::Constants::MP_DATE);*/
-   
-    //mpComboBox->setModel(m_Model);
+     //mpComboBox->setModel(modelMP);
     //mpComboBox->setMaxCount(20);
     //mpComboBox->setModelColumn(AccountDB::Constants::MP_NAME);
     //setDatasToUi();
-     fillMPCombo();
+     
     
 //    connect(createDefault, SIGNAL(clicked()), SLOT(createDefaultMedicalProcedures()));
 }
@@ -198,32 +177,18 @@ MedicalProcedureWidget::~MedicalProcedureWidget()
     //delete m_progressDialog;
 }
 
-void MedicalProcedureWidget::setDatasToUi()
-{
-    m_Mapper->setCurrentIndex(900);
+void MedicalProcedureWidget::fillHugeWidgets(){
+    
+    fillTypeCompletionList();
+    m_hashInsuranceBox = fillHashOfInsurances();
+    QStringList listInsurances = m_hashInsuranceBox.values();
+    insuranceBox->addItems(listInsurances);
+    fillMPCombo();       
 }
 
-void MedicalProcedureWidget::saveModel()
+void MedicalProcedureWidget::setDatasToUi()
 {
-    qDebug() << __FILE__ << QString::number(__LINE__) << " currentIndex =" << QString::number(m_Mapper->currentIndex());
-    if (!m_Model->isDirty()) {
-        bool yes = Utils::yesNoMessageBox(tr("Save changes ?"),
-                                          tr("You make changes into the medical procedures table.\n"
-                                             "Do you want to save them ?"));
-        if (yes) {
-            if (!m_Model->submit()) {
-                LOG_ERROR(tkTr(Trans::Constants::UNABLE_TO_SAVE_DATA_IN_DATABASE_1).
-                                                   arg(tr("medical_procedures")));
-            }
-        } else {
-            m_Model->revert();
-        }
-        QString typeText = type->text();
-        setCompletionList(typeText);
-        QString textAbstract = abstractEdit->text();
-        setCompletionAbstractList(textAbstract);
-//        qWarning() << __FILE__ << QString::number(__LINE__) << "error "<< m_Model->lastError().text() ;
-    }
+    //m_Mapper->setCurrentIndex(900);
 }
 
 void MedicalProcedureWidget::on_alphabetBox_currentIndexChanged(const QString & text){
@@ -272,11 +237,12 @@ void MedicalProcedureWidget::on_mpComboBox_currentIndexChanged(const QString & t
 
 void MedicalProcedureWidget::on_addButton_clicked()//todo
 {
-    qDebug() << __FILE__ << QString::number(__LINE__) << " rowCount1 =" << QString::number(m_Model->rowCount());
-    int numberOfRows = m_Model->rowCount();
-    if (!m_Model->insertRow(numberOfRows,QModelIndex()))
+    MedicalProcedureModel *modelMP = new MedicalProcedureModel(this);
+    qDebug() << __FILE__ << QString::number(__LINE__) << " rowCount1 =" << QString::number(modelMP->rowCount());
+    int numberOfRows = modelMP->rowCount();
+    if (!modelMP->insertRow(numberOfRows,QModelIndex()))
         LOG_ERROR("Unable to add row");
-    qDebug() << __FILE__ << QString::number(__LINE__) << " rowCount2 =" << QString::number(m_Model->rowCount());
+    qDebug() << __FILE__ << QString::number(__LINE__) << " rowCount2 =" << QString::number(modelMP->rowCount());
     		  name->setText("");
     		  abstractEdit->setText("");
     		  type->setText("");
@@ -312,18 +278,18 @@ void MedicalProcedureWidget::on_removeButton_clicked()
     }
         
     
-    /*if (!m_Model->removeRow(mpComboBox->currentIndex()))
+    /*if (!modelMP->removeRow(mpComboBox->currentIndex()))
     {
           LOG_ERROR("Unable to remove row");
         }
-    mpComboBox->setCurrentIndex(m_Model->rowCount() - 1);*/
+    mpComboBox->setCurrentIndex(modelMP->rowCount() - 1);*/
 }
 
 void MedicalProcedureWidget::saveToSettings(Core::ISettings *sets)
 {
     Q_UNUSED(sets);
     qWarning() << __FILE__ << QString::number(__LINE__) << "saving" ;
-    /*if (!m_Model->submit()) {
+    /*if (!modelMP->submit()) {
         LOG_ERROR(tkTr(Trans::Constants::UNABLE_TO_SAVE_DATA_IN_DATABASE_1).arg(tr("medical_procedures")));
         Utils::warningMessageBox(tr("Can not submit medical procedure to your personnal database."),
                                  tr("An error occured during medical procedures saving. Datas are corrupted."));
@@ -359,6 +325,13 @@ void MedicalProcedureWidget::changeEvent(QEvent *e)
     default:
         break;
     }
+}
+
+void MedicalProcedureWidget::showEvent(QShowEvent *event){
+    Q_UNUSED(event);
+    qWarning() << __FILE__ << QString::number(__LINE__) << " medical procedures activated "   ;
+    fillHugeWidgets();
+    update();
 }
 
 void MedicalProcedureWidget::setCompletionList(const QString & text){
@@ -452,6 +425,7 @@ void MedicalProcedureWidget::save(){
         }
      else
      {
+     	    MedicalProcedureModel *modelMP = new MedicalProcedureModel(this);
      	    QString owner = userUidLabel->text();
      	    int insuranceUid = m_hashInsuranceBox.key(insuranceBox->currentText());
             QString abstract =  abstractEdit->text();
@@ -460,41 +434,41 @@ void MedicalProcedureWidget::save(){
             QVariant rate =  rateSpin->value();
             QVariant date =   dateEdit->date();
             bool test = true;
-            int numberOfRows = m_Model->rowCount() -1 ;
+            int numberOfRows = modelMP->rowCount() -1 ;
             qDebug() << __FILE__ << QString::number(__LINE__) << " numberOfRows =" << QString::number(numberOfRows) ;
-            if (!m_Model->setData(m_Model->index(numberOfRows,MP_USER_UID),owner,Qt::EditRole))
+            if (!modelMP->setData(modelMP->index(numberOfRows,MP_USER_UID),owner,Qt::EditRole))
             {qDebug() << __FILE__ << QString::number(__LINE__)  << "a" ;
     	        test = false;
                 }
-            if (!m_Model->setData(m_Model->index(numberOfRows,MP_INSURANCE_UID),insuranceUid,Qt::EditRole))
+            if (!modelMP->setData(modelMP->index(numberOfRows,MP_INSURANCE_UID),insuranceUid,Qt::EditRole))
             {qDebug() << __FILE__ << QString::number(__LINE__)  << "a" ;
     	        test = false;
                 }
-            if (!m_Model->setData(m_Model->index(numberOfRows,MP_NAME),nameStr,Qt::EditRole))
+            if (!modelMP->setData(modelMP->index(numberOfRows,MP_NAME),nameStr,Qt::EditRole))
                 {qDebug() << __FILE__ << QString::number(__LINE__) << "b"  ;
     	        test = false;
                 }
-            if (!m_Model->setData(m_Model->index(numberOfRows,MP_ABSTRACT),abstract,Qt::EditRole))
+            if (!modelMP->setData(modelMP->index(numberOfRows,MP_ABSTRACT),abstract,Qt::EditRole))
                 {qDebug() << __FILE__ << QString::number(__LINE__)  << "c" ;
     	        test = false;
                 }
-            if (!m_Model->setData(m_Model->index(numberOfRows,MP_TYPE),typeStr,Qt::EditRole))
+            if (!modelMP->setData(modelMP->index(numberOfRows,MP_TYPE),typeStr,Qt::EditRole))
                 {qDebug() << __FILE__ << QString::number(__LINE__)  << "d" ;
     	        test = false;
                 }
-             if (!m_Model->setData(m_Model->index(numberOfRows,MP_AMOUNT),amount,Qt::EditRole))
+             if (!modelMP->setData(modelMP->index(numberOfRows,MP_AMOUNT),amount,Qt::EditRole))
                 {qDebug() << __FILE__ << QString::number(__LINE__)  << "e" ;
     	         test = false;
                 }
-             if (!m_Model->setData(m_Model->index(numberOfRows,MP_REIMBOURSEMENT),rate,Qt::EditRole))
+             if (!modelMP->setData(modelMP->index(numberOfRows,MP_REIMBOURSEMENT),rate,Qt::EditRole))
                 {qDebug() << __FILE__ << QString::number(__LINE__) << "f"  ;
     	         test = false;
                 }
-             if (!m_Model->setData(m_Model->index(numberOfRows,MP_DATE),date,Qt::EditRole))
+             if (!modelMP->setData(modelMP->index(numberOfRows,MP_DATE),date,Qt::EditRole))
                 {qDebug() << __FILE__ << QString::number(__LINE__) << "g"  ;
     	         test = false;
                 }
-             if (!m_Model->submit())
+             if (!modelMP->submit())
              {
              	  qWarning() << __FILE__ << QString::number(__LINE__) << "submit unable" ;
              	  test = false;
@@ -502,7 +476,7 @@ void MedicalProcedureWidget::save(){
              if (test == false)
                 {qDebug() << __FILE__ << QString::number(__LINE__)   ;
     	         QMessageBox::warning(0,trUtf8("Warning"),trUtf8("Error inserting datas ")
-    	      	  +m_Model->lastError().text(),QMessageBox::Ok);
+    	      	  +modelMP->lastError().text(),QMessageBox::Ok);
                 }
          }
 }
@@ -649,8 +623,8 @@ QHash<int,QString> MedicalProcedureWidget::fillHashOfInsurances(){
 //    for (int i = 0; i < availModelRows; i += 1){
 //        m_progressDialog->setValue(i);
 //        //qDebug() << __FILE__ << QString::number(__LINE__) << " i =" << QString::number(i) ;
-//        if (!m_Model->insertRows(m_Model->rowCount(),1,QModelIndex())) {
-//            qWarning() << __FILE__ << QString::number(__LINE__) << QString::number(m_Model->rowCount()) ;
+//        if (!modelMP->insertRows(modelMP->rowCount(),1,QModelIndex())) {
+//            qWarning() << __FILE__ << QString::number(__LINE__) << QString::number(modelMP->rowCount()) ;
 //            /*QMessageBox::warning(0,trUtf8("Warning"),trUtf8("Unable to insert row \n")
 //    	  			  +__FILE__+QString::number(__LINE__),QMessageBox::Ok);*/
 //        }
@@ -665,13 +639,13 @@ QHash<int,QString> MedicalProcedureWidget::fillHashOfInsurances(){
 //            }
 //            strValues += value.toString()+" ";
 //            //qDebug() << __FILE__ << QString::number(__LINE__) << " value =" << value ;
-//            //qDebug() << __FILE__ << QString::number(__LINE__) << "m_Model->rowCount() =" << QString::number(m_Model->rowCount()) ;
-//            if (!m_Model->setData(m_Model->index(m_Model->rowCount()-1,j),value,Qt::EditRole)) {
+//            //qDebug() << __FILE__ << QString::number(__LINE__) << "modelMP->rowCount() =" << QString::number(modelMP->rowCount()) ;
+//            if (!modelMP->setData(modelMP->index(modelMP->rowCount()-1,j),value,Qt::EditRole)) {
 //                qWarning() << __FILE__ << QString::number(__LINE__) << "data not inserted !" ;
 //            }
 //        }
 //        strList += strValues+"\n";
-//        test = m_Model->submit();
+//        test = modelMP->submit();
 //    }
 //    m_progressDialog->setValue(numberOfLinesForProgressBar());
 

@@ -37,8 +37,6 @@
 #include <QPointer>
 #include <QString>
 #include <QDataWidgetMapper>
-#include <QStandardItemModel>
-#include <QProgressDialog>
 #include <QSqlDatabase>
 
 #include "ui_medicalprocedurepage.h"
@@ -52,10 +50,6 @@
 
 namespace Core {
 class ISettings;
-}
-
-namespace AccountDB {
-class MedicalProcedureModel;
 }
 
 namespace Account {
@@ -100,12 +94,14 @@ public Q_SLOTS:
 
 private:
     void changeEvent(QEvent *e);
-    void saveModel();
+    void showEvent(QShowEvent *event);
+    //void saveModel();
     void setCompletionList(const QString & text);
     void setCompletionAbstractList(const QString & text);
     void fillTypeCompletionList();
     QHash<int,QString> fillHashOfInsurances();
     void save();
+    void fillHugeWidgets();
     
 private Q_SLOTS :
     void fillMPCombo();
@@ -119,15 +115,13 @@ private Q_SLOTS :
 //    int numberOfLinesForProgressBar();
 
 private:
-    AccountDB::MedicalProcedureModel *m_Model;
-    QStandardItemModel * m_ModelPartial;
+    //AccountDB::MedicalProcedureModel *m_Model;
     QSqlDatabase m_db;
-    QDataWidgetMapper *m_Mapper;
     QString m_user_uid;
     QString m_user_fullName;
     QStringList m_completionList;
     QStringList m_completionAbstractList;
-    QProgressDialog * m_progressDialog;
+    //QProgressDialog * m_progressDialog;
     int m_index;
     QHash<int,QString> m_hashInsuranceBox;
 };
