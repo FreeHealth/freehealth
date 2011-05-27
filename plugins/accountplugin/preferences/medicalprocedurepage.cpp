@@ -118,7 +118,7 @@ QWidget *MedicalProcedurePage::createPage(QWidget *parent)
 MedicalProcedureWidget::MedicalProcedureWidget(QWidget *parent) :
         QWidget(parent)
 {
-    //QCoreApplication::processEvents(QEventLoop::AllEvents);
+    QCoreApplication::processEvents(QEventLoop::AllEvents);
     setObjectName("MedicalProcedureWidget");
     setupUi(this);
     m_db = QSqlDatabase::database(AccountDB::Constants::DB_ACCOUNTANCY);
@@ -288,6 +288,7 @@ void MedicalProcedureWidget::on_removeButton_clicked()
 void MedicalProcedureWidget::saveToSettings(Core::ISettings *sets)
 {
     Q_UNUSED(sets);
+    QApplication::setOverrideCursor(QCursor(Qt::BusyCursor));
     qWarning() << __FILE__ << QString::number(__LINE__) << "saving" ;
     /*if (!modelMP->submit()) {
         LOG_ERROR(tkTr(Trans::Constants::UNABLE_TO_SAVE_DATA_IN_DATABASE_1).arg(tr("medical_procedures")));
@@ -301,6 +302,7 @@ void MedicalProcedureWidget::saveToSettings(Core::ISettings *sets)
         connect(name,SIGNAL(textEdited(const QString &)),mpComboBox,SLOT(setEditText(const QString &)));*/
         save();
         update();
+    QApplication::restoreOverrideCursor ();
 }
 
 void MedicalProcedureWidget::writeDefaultSettings(Core::ISettings *s)
@@ -478,6 +480,7 @@ void MedicalProcedureWidget::save(){
     	         QMessageBox::warning(0,trUtf8("Warning"),trUtf8("Error inserting datas ")
     	      	  +modelMP->lastError().text(),QMessageBox::Ok);
                 }
+             fillMPCombo();
          }
 }
 

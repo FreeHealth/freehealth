@@ -57,9 +57,9 @@
        </widget>
       </item>
       <item row="1" column="0">
-       <widget class="QCheckBox" name="assets">
+       <widget class="QCheckBox" name="available_movements">
         <property name="text">
-         <string>Assets</string>
+         <string>Available Movements</string>
         </property>
        </widget>
       </item>

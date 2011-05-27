@@ -185,6 +185,7 @@ void AssetsRatesWidget::saveModel()
 
 void AssetsRatesWidget::on_assetsNameComboBox_currentIndexChanged(int index)
 {
+    Q_UNUSED(index);
     m_Mapper->setCurrentIndex(assetsNameComboBox->currentIndex());
 }
 
@@ -214,7 +215,8 @@ void AssetsRatesWidget::on_deleteButton_clicked()
 }
 
 void AssetsRatesWidget::saveToSettings(Core::ISettings *sets)
-{
+{   
+    Q_UNUSED(sets);
     if (!m_Model->submit()) {
         LOG_ERROR(tkTr(Trans::Constants::UNABLE_TO_SAVE_DATA_IN_DATABASE_1).arg(tr("assetsrates")));
         Utils::warningMessageBox(tr("Can not submit assetsrates to your personnal database."),
@@ -228,7 +230,8 @@ void AssetsRatesWidget::saveToSettings(Core::ISettings *sets)
 }
 
 void AssetsRatesWidget::writeDefaultSettings(Core::ISettings *s)
-{
+{   
+    Q_UNUSED(s);
 //    Utils::Log::addMessage("AssetsRatesWidget", tkTr(Trans::Constants::CREATING_DEFAULT_SETTINGS_FOR_1).arg("AssetsRatesWidget"));
 //    s->sync();
 }
@@ -331,6 +334,7 @@ bool AssetsRatesWidget::insertYearsRange()
 
 void AssetsRatesWidget::changeSpinBoxes(int index)
 {
+    Q_UNUSED(index);
     int beginYear = 0;
     int endYear = 0;
     AccountDB::AssetsRatesModel model(this);

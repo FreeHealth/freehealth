@@ -118,7 +118,7 @@ QWidget *DistanceRulesPage::createPage(QWidget *parent)
 DistanceRulesWidget::DistanceRulesWidget(QWidget *parent) :
         QWidget(parent), m_Model(0), m_Mapper(0)
 {
-    QCoreApplication::processEvents(QEventLoop::AllEvents);
+    //QCoreApplication::processEvents(QEventLoop::AllEvents);
     setObjectName("DistanceRulesWidget");
     setupUi(this);
     addButton->setIcon(theme()->icon(Core::Constants::ICONADD));
@@ -184,6 +184,7 @@ void DistanceRulesWidget::saveModel()
 
 void DistanceRulesWidget::on_distanceRulesComboBox_currentIndexChanged(int index)
 {
+    Q_UNUSED(index);
     //saveModel();
     m_Mapper->setCurrentIndex(distanceRulesComboBox->currentIndex());
 }
@@ -211,6 +212,7 @@ void DistanceRulesWidget::on_deleteButton_clicked()
 
 void DistanceRulesWidget::saveToSettings(Core::ISettings *sets)
 {
+    Q_UNUSED(sets);
     if (!m_Model->submit()) {
         LOG_ERROR(tkTr(Trans::Constants::UNABLE_TO_SAVE_DATA_IN_DATABASE_1).arg(tr("distancerules")));
         Utils::warningMessageBox(tr("Can not submit distancerules to your personnal database."),
@@ -222,6 +224,7 @@ void DistanceRulesWidget::saveToSettings(Core::ISettings *sets)
 
 void DistanceRulesWidget::writeDefaultSettings(Core::ISettings *s)
 {
+    Q_UNUSED(s);
 //    Utils::Log::addMessage("DistanceRulesWidget", tkTr(Trans::Constants::CREATING_DEFAULT_SETTINGS_FOR_1).arg("DistanceRulesWidget"));
 //    s->sync();
 }

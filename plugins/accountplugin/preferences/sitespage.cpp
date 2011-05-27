@@ -119,7 +119,7 @@ QWidget *SitesPage::createPage(QWidget *parent)
 SitesWidget::SitesWidget(QWidget *parent) :
         QWidget(parent), m_Model(0), m_Mapper(0)
 {
-    QCoreApplication::processEvents(QEventLoop::AllEvents);
+    //QCoreApplication::processEvents(QEventLoop::AllEvents);
     setObjectName("SitesWidget");
     setupUi(this);
     m_user_uid = user()->value(Core::IUser::Uuid).toString();
@@ -226,6 +226,7 @@ void SitesWidget::saveModel()
 
 void SitesWidget::on_wpComboBox_currentIndexChanged(int index)
 {
+    Q_UNUSED(index);
     //saveModel();
     m_Mapper->setCurrentIndex(wpComboBox->currentIndex());
 }
@@ -254,6 +255,7 @@ void SitesWidget::on_deleteButton_clicked()
 
 void SitesWidget::saveToSettings(Core::ISettings *sets)
 {
+    Q_UNUSED(sets);
     if (!m_Model->submit()) {
         LOG_ERROR(tkTr(Trans::Constants::UNABLE_TO_SAVE_DATA_IN_DATABASE_1).arg(tr("sites")));
         Utils::warningMessageBox(tr("Can not submit sites to your personnal database."),
@@ -265,6 +267,7 @@ void SitesWidget::saveToSettings(Core::ISettings *sets)
 
 void SitesWidget::writeDefaultSettings(Core::ISettings *s)
 {
+    Q_UNUSED(s);
 //    Utils::Log::addMessage("SitesWidget", tkTr(Trans::Constants::CREATING_DEFAULT_SETTINGS_FOR_1).arg("SitesWidget"));
 //    s->sync();
 }

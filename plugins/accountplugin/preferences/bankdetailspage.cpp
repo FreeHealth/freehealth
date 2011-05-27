@@ -111,7 +111,7 @@ QWidget *BankDetailsPage::createPage(QWidget *parent)
 BankDetailsWidget::BankDetailsWidget(QWidget *parent) :
         QWidget(parent), m_Model(0), m_Mapper(0)
 {
-    QCoreApplication::processEvents(QEventLoop::AllEvents);
+    //QCoreApplication::processEvents(QEventLoop::AllEvents);
     setupUi(this);
     balanceDate->setDate(QDate::currentDate());
     m_user_uid = user()->value(Core::IUser::Uuid).toString();
@@ -179,6 +179,7 @@ void BankDetailsWidget::saveModel()
 
 void BankDetailsWidget::on_accountComboBox_currentIndexChanged(int index)
 {
+    Q_UNUSED(index);
     m_Mapper->setCurrentIndex(accountComboBox->currentIndex());
 }
 
@@ -200,6 +201,7 @@ void BankDetailsWidget::on_removeButton_clicked()
 
 void BankDetailsWidget::saveToSettings(Core::ISettings *sets)
 {
+    Q_UNUSED(sets);
     if (!m_Model->submit()) {
         LOG_ERROR(tkTr(Trans::Constants::UNABLE_TO_SAVE_DATA_IN_DATABASE_1).arg(tr("bank account details")));
         Utils::warningMessageBox(tr("Can not submit bank account details to your personnal database."),
@@ -209,6 +211,7 @@ void BankDetailsWidget::saveToSettings(Core::ISettings *sets)
 
 void BankDetailsWidget::writeDefaultSettings(Core::ISettings *s)
 {
+    Q_UNUSED(s);
 //    Utils::Log::addMessage("BankDetailsWidget", tkTr(Trans::Constants::CREATING_DEFAULT_SETTINGS_FOR_1).arg("BankDetailsWidget"));
 //    s->sync();
 }

@@ -116,11 +116,11 @@ QWidget *PercentagesPage::createPage(QWidget *parent)
 PercentagesWidget::PercentagesWidget(QWidget *parent) :
         QWidget(parent), m_Model(0), m_Mapper(0)
 {
-    QCoreApplication::processEvents(QEventLoop::AllEvents);
+    //QCoreApplication::processEvents(QEventLoop::AllEvents);
     setObjectName("PercentagesWidget");
     setupUi(this);
     m_user_uid = user()->value(Core::IUser::Uuid).toString();
-    qDebug() << __FILE__ << QString::number(__LINE__) << " m_user_uid =" << m_user_uid ;
+    //qDebug() << __FILE__ << QString::number(__LINE__) << " m_user_uid =" << m_user_uid ;
     m_user_fullName = user()->value(Core::IUser::FullName).toString();
     if (m_user_fullName.isEmpty()) {
         m_user_fullName = "Admin_Test";
@@ -132,7 +132,7 @@ PercentagesWidget::PercentagesWidget(QWidget *parent) :
     
     m_Model = new AccountDB::PercentModel(this);
         /** \todo  m_Model->setUserUuid(); */
-    qDebug() << __FILE__ << QString::number(__LINE__) << " m_user_uid =" << m_user_uid ;
+    //qDebug() << __FILE__ << QString::number(__LINE__) << " m_user_uid =" << m_user_uid ;
     userEditedLabel->setText(m_user_uid);
     percentUidLabel->setText("");
     //percentUidLabel->setFocus();
@@ -159,7 +159,7 @@ PercentagesWidget::~PercentagesWidget()
 
 void PercentagesWidget::setDatasToUi()
 {
-    qDebug() << __FILE__ << QString::number(__LINE__) << "index row  =" << QString::number(percentagesComboBox->currentIndex());
+    //qDebug() << __FILE__ << QString::number(__LINE__) << "index row  =" << QString::number(percentagesComboBox->currentIndex());
     m_Mapper->setCurrentIndex(percentagesComboBox->currentIndex());
 }
 
@@ -218,6 +218,7 @@ void PercentagesWidget::on_deleteButton_clicked()
 
 void PercentagesWidget::saveToSettings(Core::ISettings *sets)
 {
+    Q_UNUSED(sets);
     if (!m_Model->submit()) {
         LOG_ERROR(tkTr(Trans::Constants::UNABLE_TO_SAVE_DATA_IN_DATABASE_1).arg(tr("percentages")));
         Utils::warningMessageBox(tr("Can not submit percentages to your personnal database."),
@@ -229,6 +230,7 @@ void PercentagesWidget::saveToSettings(Core::ISettings *sets)
 
 void PercentagesWidget::writeDefaultSettings(Core::ISettings *s)
 {
+    Q_UNUSED(s);
 //    Utils::Log::addMessage("PercentagesWidget", tkTr(Trans::Constants::CREATING_DEFAULT_SETTINGS_FOR_1).arg("PercentagesWidget"));
 //    s->sync();
 }

@@ -267,6 +267,7 @@ void VirtualDatabaseCreator::on_populate_clicked()
     accountBase()->database().transaction();
     for(int i = 0; i < ui->movements->value(); ++i) {
         dlg.setValue(++stepsDone);
+        createMovement(userUid, &r);
     }
     accountBase()->database().commit();
 
