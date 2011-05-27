@@ -63,11 +63,12 @@ public:
     AccountModelPrivate(AccountModel *parent) :
             m_SqlTable(0), m_IsDirty(false),
             //m_StartDate(QDate::currentDate()), m_EndDate(QDate::currentDate()),
-            m_UserUid(user()->value(Core::IUser::Uuid).toString()),
             q(parent)
     {   //qDebug() << __FILE__ << QString::number(__LINE__) << " m_UserUid =  " << m_UserUid;
         m_SqlTable = new QSqlTableModel(q, QSqlDatabase::database(Constants::DB_ACCOUNTANCY));
         m_SqlTable->setTable(accountBase()->table(Constants::Table_Account));
+        if (user())
+            m_UserUid = user()->value(Core::IUser::Uuid).toString();
         //setFilterUserUuid();
         //refreshFilter();
     }
@@ -267,8 +268,10 @@ double AccountModel::sum(const int &fieldRef)
 
 void AccountModel::userChanged()
 {
-    d->m_UserUid = user()->value(Core::IUser::Uuid).toString();
-    d->refreshFilter();
+    if (user()) {
+        d->m_UserUid = user()->value(Core::IUser::Uuid).toString();
+        d->refreshFilter();
+    }
 }
 
 QSqlError AccountModel::lastError(){
