@@ -232,6 +232,7 @@ AccountDatabaseDefautsWidget::AccountDatabaseDefautsWidget(QWidget *parent) :
 {
     setObjectName("AccountDatabaseDefautsWidget");
     setupUi(this);
+    others->hide();
 //    setDatasToUi();
 }
 

@@ -59,6 +59,7 @@ public:
 
 private:
     void filterChanged();
+    void calc();
 
 private Q_SLOTS:
     void on_startDate_dateChanged(const QDate &date);

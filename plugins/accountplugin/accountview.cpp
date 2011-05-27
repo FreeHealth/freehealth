@@ -88,7 +88,10 @@ AccountView::AccountView(QWidget *parent) :
             << AccountDB::Constants::ACCOUNT_UID
             << AccountDB::Constants::ACCOUNT_USER_UID
             << AccountDB::Constants::ACCOUNT_INSURANCE_ID
-            << AccountDB::Constants::ACCOUNT_ISVALID;
+            << AccountDB::Constants::ACCOUNT_ISVALID
+            << AccountDB::Constants::ACCOUNT_PATIENT_UID
+            << AccountDB::Constants::ACCOUNT_MEDICALPROCEDURE_XML
+            << AccountDB::Constants::ACCOUNT_TRACE;
     foreach(int i, hide) {
         d->m_ui->tableView->hideColumn(i);
     }
@@ -117,6 +120,8 @@ void AccountView::filterChanged()
     d->m_ui->du->setText(QString::number(d->m_Model->sum(AccountDB::Constants::ACCOUNT_DUEAMOUNT)));
     d->m_ui->insurance->setText(QString::number(d->m_Model->sum(AccountDB::Constants::ACCOUNT_INSURANCEAMOUNT)));
     d->m_ui->visa->setText(QString::number(d->m_Model->sum(AccountDB::Constants::ACCOUNT_VISAAMOUNT)));
+    
+    calc();
 }
 
 void AccountView::on_startDate_dateChanged(const QDate &date)
@@ -167,4 +172,25 @@ void AccountView::on_periodCombo_currentIndexChanged(int index)
     blockSignals(false);
 
     filterChanged();
+}
+
+void AccountView::calc(){
+    QHash<int,QLineEdit*> hash;
+    hash.insert(AccountDB::Constants::ACCOUNT_CASHAMOUNT,d->m_ui->cash);
+    hash.insert(AccountDB::Constants::ACCOUNT_CHEQUEAMOUNT,d->m_ui->cheque);
+    hash.insert(AccountDB::Constants::ACCOUNT_VISAAMOUNT,d->m_ui->visa);
+    hash.insert(AccountDB::Constants::ACCOUNT_DUEAMOUNT,d->m_ui->du);
+    hash.insert(AccountDB::Constants::ACCOUNT_INSURANCEAMOUNT,d->m_ui->insurance);
+    QAbstractItemModel *model = d->m_ui->tableView->model();
+    double sum = 0.00;
+    for (int col = AccountDB::Constants::ACCOUNT_CASHAMOUNT; col < AccountDB::Constants::ACCOUNT_DUEAMOUNT+1; col += 1)
+    {
+    	for (int row = 0; row < model->rowCount(); row += 1)
+    	{
+    		sum += model->data(model->index(row,col),Qt::DisplayRole).toDouble();
+    		
+    	    }
+    	    QString textSum = QString::number(sum);
+    	    hash.value(col)->setText(textSum);
+        }
 }
