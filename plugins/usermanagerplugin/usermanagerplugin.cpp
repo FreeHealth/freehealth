@@ -38,11 +38,13 @@
 
 #include "usermanagerplugin.h"
 #include "usermodel.h"
+#include "database/userbase.h"
 #include "widgets/usermanager.h"
 #include "widgets/useridentifier.h"
 #include "widgets/userwizard.h"
 #include "currentuserpreferencespage.h"
 #include "userfistrunpage.h"
+#include "usermanagermode.h"
 
 #include <coreplugin/icore.h>
 #include <coreplugin/isettings.h>
@@ -69,6 +71,7 @@ using namespace Trans::ConstantTranslations;
 static inline Core::ActionManager *actionManager() {return Core::ICore::instance()->actionManager();}
 static inline Core::ISettings *settings() {return Core::ICore::instance()->settings();}
 static inline UserPlugin::UserModel *userModel() {return UserPlugin::UserModel::instance();}
+static inline UserPlugin::Internal::UserBase *userBase() {return UserPlugin::Internal::UserBase::instance();}
 static inline Core::ContextManager *contextManager() { return Core::ICore::instance()->contextManager(); }
 static inline Core::IUser *user() {return Core::ICore::instance()->user();}
 
@@ -84,7 +87,7 @@ static inline bool identifyUser()
     bool ask = true;
     while (true) {
         if (userModel()->isCorrectLogin(log, pass)) {
-            userModel()->setCurrentUser(log, pass);
+            userModel()->setCurrentUser(loginForSQL(log), crypt(pass));
             if (ask) {
                 int r = Utils::withButtonsMessageBox(tkTr(Trans::Constants::CONNECTED_AS_1)
                                                      .arg(userModel()->currentUserData(Core::IUser::FullName).toString()),
@@ -109,10 +112,13 @@ static inline bool identifyUser()
             if (ident.exec() == QDialog::Rejected)
                 return false;
             log = ident.login();
-            pass = ident.cryptedPassword();
-            settings()->setValue(Core::Constants::S_LASTLOGIN, log);
-            settings()->setValue(Core::Constants::S_LASTPASSWORD, pass);
+            pass = ident.password();
+
+            /** \todo This should disappear (2 next lines) */
+            settings()->setValue(Core::Constants::S_LASTLOGIN, log);//ident.login64crypt());
+            settings()->setValue(Core::Constants::S_LASTPASSWORD, pass);//ident.cryptedPassword());
             ask = false;
+            break;
         }
     }
     return true;
@@ -120,10 +126,12 @@ static inline bool identifyUser()
 
 
 UserManagerPlugin::UserManagerPlugin() :
-        aUserManager(0), aCreateUser(0), aChangeUser(0), m_UserManager(0),
+        aCreateUser(0), aChangeUser(0),
         m_First_Connection(new FirstRun_UserConnection(this)),
-        m_FirstCreation(new FirstRun_UserCreation(this))
+        m_FirstCreation(new FirstRun_UserCreation(this)),
+        m_Mode(0)
 {
+    setObjectName("UserManagerPlugin");
     if (Utils::Log::warnPluginsCreation())
         qWarning() << "creating UserManagerPlugin";
     addObject(m_First_Connection);
@@ -133,11 +141,6 @@ UserManagerPlugin::UserManagerPlugin() :
 UserManagerPlugin::~UserManagerPlugin()
 {
     qWarning() << "UserManagerPlugin::~UserManagerPlugin()";
-    if (m_UserManager) {
-        m_UserManager->close();
-        delete m_UserManager;
-        m_UserManager = 0;
-    }
     if (m_First_Connection) {
         removeObject(m_First_Connection);
         delete m_First_Connection;
@@ -161,6 +164,14 @@ bool UserManagerPlugin::initialize(const QStringList &arguments, QString *errorS
 
     // Add Translator to the Application
     Core::ICore::instance()->translators()->addNewTranslator("usermanagerplugin");
+
+    // is UserBase reachable ?
+    userBase();
+    if (!userBase()->isInitialized()) {
+        /** \todo add a dialog here */
+        LOG_ERROR(tkTr(Trans::Constants::UNABLE_TO_OPEN_DATABASE_1_ERROR_2).arg("UserDatabase").arg(userBase()->database().lastError().text()));
+        return false;
+    }
 
     // Ask for User login
     if (!identifyUser()) {
@@ -207,17 +218,6 @@ void UserManagerPlugin::extensionsInitialized()
     QAction *a = 0;
     Core::Command *cmd = 0;
 
-    // User Manager action
-    a = aUserManager = new QAction(this);
-    a->setObjectName("aUserManager");
-    a->setIcon(QIcon(Core::Constants::ICONUSERMANAGER));
-    cmd = actionManager()->registerAction(aUserManager, Core::Constants::A_USERMANAGER, ctx);
-    Q_ASSERT(cmd);
-    cmd->setTranslations(Trans::Constants::USERMANAGER_TEXT);
-    menu->addAction(cmd, Core::Constants::G_GENERAL_USERS);
-    cmd->retranslate();
-    connect(aUserManager, SIGNAL(triggered()), this, SLOT(showUserManager()));
-
     // Create user
     /** \todo manage user's right to enable/unable these actions */
     a = aCreateUser = new QAction(this);
@@ -243,8 +243,9 @@ void UserManagerPlugin::extensionsInitialized()
     connect(aChangeUser, SIGNAL(triggered()), this, SLOT(changeCurrentUser()));
 
     updateActions();
-    // Update context is necessary
-//    contextManager()->updateContext();
+
+    // create the mode
+    m_Mode = new Internal::UserManagerMode(this);
 
     connect(Core::ICore::instance(), SIGNAL(coreOpened()), this, SLOT(postCoreInitialization()));
 }
@@ -255,23 +256,11 @@ void UserManagerPlugin::postCoreInitialization()
     userModel()->emitUserConnected();
 }
 
-/** \brief Show the user manager session is connected to Core::Constants::A_USERMANAGER command. */
-void UserManagerPlugin::showUserManager()
-{
-    if (m_UserManager) {
-        m_UserManager->show();
-    } else {
-        m_UserManager = new UserManager();
-        m_UserManager->initialize();
-        m_UserManager->show();
-    }
-}
-
 /** \brief Create a new user is connected to Core::Constants::A_CREATEUSER. */
 void UserManagerPlugin::createUser()
 {
     UserWizard wiz;
-    wiz.createUser(true);
+//    wiz.createUser(true);
     wiz.exec();
 }
 
@@ -282,8 +271,9 @@ void UserManagerPlugin::changeCurrentUser()
     if (ident.exec() == QDialog::Rejected)
         return;
     updateActions();
-    QString log = ident.login();
+    QString log = ident.login64crypt();
     QString pass = ident.cryptedPassword();
+    /** \todo these 2 lines must disappear */
     settings()->setValue(Core::Constants::S_LASTLOGIN, log);
     settings()->setValue(Core::Constants::S_LASTPASSWORD, pass);
     Utils::informativeMessageBox(tkTr(Trans::Constants::CONNECTED_AS_1)
@@ -298,10 +288,8 @@ void UserManagerPlugin::updateActions()
 //        Core::IUser::UserRights adminRights(user()->value(Core::IUser::AdministrativeRights));
         if ((umRights & Core::IUser::AllRights) ||
             (umRights & Core::IUser::ReadAll)) {
-            aUserManager->setEnabled(true);
             aCreateUser->setEnabled(true);
         } else {
-            aUserManager->setEnabled(false);
             if (umRights & Core::IUser::Create)
                 aCreateUser->setEnabled(true);
             else

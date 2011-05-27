@@ -69,10 +69,11 @@ public:
 
     // initialize
     bool initialize(Core::ISettings *settings = 0);
-    bool createDatabase(const QString & connectionName, const QString & dbName,
-                        const QString & pathOrHostName,
+    bool isInitialized() const;
+    bool createDatabase(const QString &connectionName, const QString &dbName,
+                        const QString &pathOrHostName,
                         TypeOfAccess access, AvailableDrivers driver,
-                        const QString & login, const QString & pass,
+                        const QString &login, const QString &pass,
                         const int port,
                         CreationOption createOption
                        );
@@ -89,13 +90,15 @@ public:
     // datas retrievers
     QString getUuid(const QString &log64, const QString &cryptpass64);
     QString createNewUuid();
+    QString getLogin64(const QString &uuid);
 
     // savers
-    bool     saveUser(UserData *user);
-    bool     deleteUser(const QString &uuid);
+    bool createUser(UserData *user);
+    bool saveUser(UserData *user);
+    bool deleteUser(const QString &uuid);
 
     // datas checkers
-    bool      checkLogin(const QString &login, const QString &cryptedPassword) const;
+    bool checkLogin(const QString &clearLogin, const QString &clearPassword) const;
     QDateTime recordLastLogin(const QString &log, const QString &pass);
 
     // Linkers

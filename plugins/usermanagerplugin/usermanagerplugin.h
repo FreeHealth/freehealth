@@ -41,9 +41,12 @@ class QAction;
 */
 
 namespace UserPlugin {
-class UserManager;
+class UserManagerDialog;
 class FirstRun_UserConnection;
 class FirstRun_UserCreation;
+namespace Internal {
+class UserManagerMode;
+}
 
 class UserManagerPlugin : public ExtensionSystem::IPlugin
 {
@@ -57,19 +60,18 @@ public:
 
 private Q_SLOTS:
     void postCoreInitialization();
-    void showUserManager();
     void createUser();
     void changeCurrentUser();
     void updateActions();
 
 private:
-    QAction *aUserManager;
     QAction *aCreateUser;
     QAction *aChangeUser;
-    QPointer<UserManager> m_UserManager;
 
     FirstRun_UserConnection *m_First_Connection;
     FirstRun_UserCreation *m_FirstCreation;
+
+    Internal::UserManagerMode *m_Mode;
 };
 
 

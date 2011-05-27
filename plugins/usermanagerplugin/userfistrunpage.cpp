@@ -90,10 +90,10 @@ UserCreationPage::UserCreationPage(QWidget *parent) :
     ui->setupUi(this);
     ui->userManagerButton->setIcon(theme()->icon(Core::Constants::ICONUSERMANAGER, Core::ITheme::MediumIcon));
     ui->completeWizButton->setIcon(theme()->icon(Core::Constants::ICONNEWUSER, Core::ITheme::MediumIcon));
-    ui->quickWizButton->setIcon(theme()->icon(Core::Constants::ICONNEWUSER_QUICK, Core::ITheme::MediumIcon));
-    ui->quickDocWizButton->setIcon(theme()->icon(Core::Constants::ICONDOCTOR, Core::ITheme::MediumIcon));
-    ui->quickSecWizButton->setIcon(theme()->icon(Core::Constants::ICONSECRETARY, Core::ITheme::MediumIcon));
-    ui->quickAdminWizButton->setIcon(theme()->icon(Core::Constants::ICONSERVERADMIN, Core::ITheme::MediumIcon));
+//    ui->quickWizButton->setIcon(theme()->icon(Core::Constants::ICONNEWUSER_QUICK, Core::ITheme::MediumIcon));
+//    ui->quickDocWizButton->setIcon(theme()->icon(Core::Constants::ICONDOCTOR, Core::ITheme::MediumIcon));
+//    ui->quickSecWizButton->setIcon(theme()->icon(Core::Constants::ICONSECRETARY, Core::ITheme::MediumIcon));
+//    ui->quickAdminWizButton->setIcon(theme()->icon(Core::Constants::ICONSERVERADMIN, Core::ITheme::MediumIcon));
 
     QPixmap pix = theme()->splashScreenPixmap("freemedforms-wizard-users.png");
     setPixmap(QWizard::BackgroundPixmap, pix);
@@ -125,7 +125,7 @@ void UserCreationPage::userManager()
 void UserCreationPage::userWizard()
 {
     UserWizard wiz;
-    wiz.createUser(true);
+//    wiz.createUser(true);
     wiz.exec();
 }
 

@@ -57,7 +57,7 @@ UserManagerMode::UserManagerMode(QObject *parent) :
         Core::BaseMode(parent), inPool(false)
 {
     setName(tkTr(Trans::Constants::USERMANAGER_TEXT));
-    setIcon(theme()->icon(Core::Constants::ICONUSERMANAGER, Core::ITheme::BigIcon));
+    setIcon(theme()->icon(Core::Constants::ICONUSERMANAGER, Core::ITheme::MediumIcon));
     setPriority(Core::Constants::P_MODE_USERMANAGER);
     setUniqueModeName(Core::Constants::MODE_USERMANAGER);
 

@@ -193,7 +193,12 @@ public:
         Grant_Process          = 0x20000,
         Grant_Trigger          = 0x40000,
         Grant_ShowDatabases    = 0x80000,
-        Grant_All              = 0xFFFFF
+        Grant_All              = Grant_Select|Grant_Update|Grant_Insert|Grant_Delete|Grant_Create|
+                                 Grant_Drop|Grant_Index|Grant_Alter|Grant_CreateTmpTables|
+                                 Grant_LockTables|Grant_Execute|Grant_CreateView|Grant_ShowView|
+                                 Grant_CreateRoutine|Grant_AlterRoutine|Grant_CreateUser|Grant_Options|
+                                 Grant_Process|Grant_Trigger|Grant_ShowDatabases
+
     };
     Q_DECLARE_FLAGS(Grants, Grant);
 
@@ -224,8 +229,12 @@ public:
 
     virtual QString prefixedDatabaseName(AvailableDrivers driver, const QString &dbName) const;
 
+    // MySQL Specific members
     virtual bool createMySQLDatabase(const QString &dbName);
+    virtual bool createMySQLUser(const QString &log, const QString &clearPass, const Grants grants, const QString &userHost = QString::null, const QString &userDatabases = QString::null);
+    virtual bool dropMySQLUser(const QString &log, const QString &userHost = QString::null);
 
+    // All drivers members
     virtual QSqlDatabase database() const;
     virtual QString connectionName() const;
 
@@ -306,7 +315,8 @@ public:
     virtual void setConnectionName(const QString &c);
 
 protected:
-    virtual void setDriver(const AvailableDrivers &d);
+    virtual void setDriver(const AvailableDrivers d);
+    virtual AvailableDrivers driver() const;
 
 private:
     Internal::DatabasePrivate *d;

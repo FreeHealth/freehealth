@@ -208,6 +208,12 @@ bool Database::createMySQLDatabase(const QString &dbName)
                       .arg(database().connectionName()).arg(database().lastError().text()));
         return false;
     }
+    // Testing current connected user grants
+    Grants userGrants = d->m_Grants.value(d->m_ConnectionName, Grant_NoGrant);
+    if (userGrants & Grant_Create) {
+        LOG_ERROR_FOR("Database", "Trying to create database, no suffisant rights.");
+        return false;
+    }
     LOG_FOR("Database", QString("Trying to create database: %1\n"
                                 "       on host: %2(%3)\n"
                                 "       with user: %4")
@@ -220,6 +226,148 @@ bool Database::createMySQLDatabase(const QString &dbName)
     }
     LOG_FOR("Database", tkTr(Trans::Constants::DATABASE_1_CORRECTLY_CREATED).arg(dbName));
     query.finish();
+    return true;
+}
+
+/** Create a MySQL server user using the \e log and \e pass, with the specified \e grants on the \e userHost and the \e userDatabases. */
+bool Database::createMySQLUser(const QString &log, const QString &password,
+                               const Grants grants,
+                               const QString &userHost, const QString &userDatabases)
+{
+    if (!database().isOpen()) {
+        if (!database().open()) {
+            LOG_ERROR_FOR("Database", tkTr(Trans::Constants::UNABLE_TO_OPEN_DATABASE_1_ERROR_2)
+                          .arg(database().connectionName()).arg(database().lastError().text()));
+            return false;
+        }
+    }
+
+    // Testing current connected user grants
+    Grants userGrants = d->m_Grants.value(d->m_ConnectionName, Grant_NoGrant);
+
+    /** \todo bug with grant privileges of created user */
+//    qWarning() << "xxxxxxxxxxxxxxxxxxxxxxx check";
+//    qWarning() << grants << (grants & Grant_All);
+
+    if (!(userGrants & Grant_CreateUser)) {
+        LOG_ERROR_FOR("Database", "Trying to create user, no suffisant rights.");
+        return false;
+    }
+    // Creating grants string
+    QString g;
+    if (grants & Grant_All) {
+        g = "ALL PRIVILEGES";
+    } else {
+        if (grants & Grant_Select) {
+            g += "SELECT, ";
+        }
+        if (grants & Grant_Update) {
+            g += "UPDATE, ";
+        }
+        if (grants & Grant_Insert) {
+            g += "INSERT, ";
+        }
+        if (grants & Grant_Delete) {
+            g += "DELETE, ";
+        }
+        if (grants & Grant_Create) {
+            g += "CREATE, ";
+        }
+        if (grants & Grant_Drop) {
+            g += "DROP, ";
+        }
+        if (grants & Grant_Alter) {
+            g += "ALTER, ";
+        }
+        if (grants & Grant_CreateUser) {
+            g += "CREATE USER, ";
+        }
+        g.chop(2);
+    }
+    if (g.isEmpty()) {
+        LOG_ERROR_FOR("Database","No grants when creating user");
+        return false;
+    }
+    // Managing defaults
+    QString uh = userHost;
+    if (uh.isEmpty()) {
+        uh = "%";
+    }
+    QString udb = userDatabases;
+    if (udb.isEmpty()) {
+        udb = "fmf\\_%";
+    }
+    LOG_FOR("Database", QString("Trying to create MySQL user: %1\n"
+                                "       on host: %2(%3)\n"
+                                "       with user: %4")
+            .arg(log).arg(database().hostName()).arg(database().port()).arg(database().userName()));
+
+    QSqlQuery query(database());
+    QString req;
+    req = QString("CREATE USER '%1'@'%2' IDENTIFIED BY '%3';").arg(log).arg(uh).arg(password);
+    if (!query.exec(req)) {
+        LOG_QUERY_ERROR_FOR("Database", query);
+        return false;
+    }
+    query.finish();
+    // If grants fail -> remove user and return false
+    req = QString("GRANT %1 ON `%2`.* TO '%3'@'%' IDENTIFIED BY '%4';").arg(g).arg(udb).arg(log).arg(password);
+    if (!query.exec(req)) {
+        LOG_QUERY_ERROR_FOR("Database", query);
+        query.finish();
+        req = QString("DROP USER '%1'@'%2'").arg(log).arg(uh);
+        if (!query.exec(req)) {
+            LOG_QUERY_ERROR_FOR("Database", query);
+        } else {
+            LOG_ERROR_FOR("Database", QString("User %1 removed").arg(log));
+        }
+        LOG_QUERY_ERROR_FOR("Database", query);
+        return false;
+    }
+    query.finish();
+    LOG_FOR("Database", tkTr(Trans::Constants::DATABASE_USER_1_CORRECTLY_CREATED).arg(log));
+    return true;
+}
+
+/** Drop a MySQL user identified by his \e log and the \e userHostName. */
+bool Database::dropMySQLUser(const QString &log, const QString &userHost)
+{
+    if (!database().isOpen()) {
+        if (!database().open()) {
+            LOG_ERROR_FOR("Database", tkTr(Trans::Constants::UNABLE_TO_OPEN_DATABASE_1_ERROR_2)
+                          .arg(database().connectionName()).arg(database().lastError().text()));
+            return false;
+        }
+    }
+
+    // Testing current connected user grants
+    Grants userGrants = d->m_Grants.value(d->m_ConnectionName, Grant_NoGrant);
+
+//    qWarning() << "xxxxxxxxxxxxxxxxxxxxxxx check";
+//    qWarning() << grants << (grants & Grant_All);
+
+    if (!(userGrants & Grant_CreateUser)) {
+        LOG_ERROR_FOR("Database", "Trying to create user, no suffisant rights.");
+        return false;
+    }
+    LOG_FOR("Database", QString("Trying to drop MySQL user: %1\n"
+                                "       on host: %2(%3)\n"
+                                "       with user: %4")
+            .arg(log).arg(database().hostName()).arg(database().port()).arg(database().userName()));
+
+    QString req;
+    if (userHost.isEmpty()) {
+        req = QString("DROP USER '%1';").arg(log);
+    } else {
+        req = QString("DROP USER '%1'@'%2';").arg(log).arg(userHost);
+    }
+    QSqlQuery query(database());
+    if (!query.exec(req)) {
+        LOG_QUERY_ERROR_FOR("Database", query);
+        return false;
+    } else {
+        LOG_FOR("Database", QString("User %1 removed").arg(log));
+    }
     return true;
 }
 
@@ -255,12 +403,13 @@ bool Database::createConnection(const QString &connectionName, const QString &no
 {   
     bool toReturn = true;
     d->m_ConnectionName = "";
+    d->m_Driver = driver;
     QString dbName = prefixedDatabaseName(driver, nonPrefixedDbName);
 
     if (WarnLogMessages)
         qDebug() << __FILE__ << QString::number(__LINE__) << connectionName
                 << dbName
-                <<pathOrHostName
+                << pathOrHostName
                 << access
                 << driver
                 << login
@@ -441,7 +590,6 @@ bool Database::createConnection(const QString &connectionName, const QString &no
                     grants << query.value(0).toString();
                 }
                 d->m_Grants.insert(connectionName, d->getGrants(connectionName, grants));
-//                qWarning() << grants;
             }
             break;
         }
@@ -574,8 +722,11 @@ void Database::setConnectionName(const QString & c)
 { d->m_ConnectionName = c; }
 
 /**  Define the driver to use */
-void Database::setDriver(const Database::AvailableDrivers &drv)
+void Database::setDriver(const Database::AvailableDrivers drv)
 { d->m_Driver = drv; }
+
+Database::AvailableDrivers Database::driver() const
+{ return d->m_Driver; }
 
 /**  Add a table \e name to the database scheme with the index \e ref */
 int Database::addTable(const int & ref, const QString & name)

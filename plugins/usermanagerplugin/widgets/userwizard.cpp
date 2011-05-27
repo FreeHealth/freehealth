@@ -43,6 +43,9 @@
 
 #include "userwizard.h"
 
+#include <usermanagerplugin/userdata.h>
+#include <usermanagerplugin/database/userbase.h>
+
 #include <texteditorplugin/texteditor.h>
 
 #include <printerplugin/printer.h>
@@ -80,9 +83,11 @@
 #include <QCheckBox>
 
 using namespace UserPlugin;
+using namespace Internal;
 using namespace Trans::ConstantTranslations;
 
 static inline UserPlugin::UserModel *userModel() { return UserModel::instance(); }
+static inline UserPlugin::Internal::UserBase *userBase() { return UserPlugin::Internal::UserBase::instance(); }
 static inline Core::ITheme *theme()  { return Core::ICore::instance()->theme(); }
 static inline Core::ISettings *settings()  { return Core::ICore::instance()->settings(); }
 static inline QString bundlePath()  { return settings()->path(Core::ISettings::BundleResourcesPath); }
@@ -136,11 +141,12 @@ static inline QString defaultWatermark(const QString &profession, const QString 
 QHash<int, QString> UserWizard::m_Papers;
 QHash<int, int> UserWizard::m_Rights;
 
-UserWizard::UserWizard(QWidget *parent)
-    : QWizard(parent),
-      m_Row(-1),
-      m_Saved(false),
-      m_CreateUser(false)
+UserWizard::UserWizard(QWidget *parent) :
+        QWizard(parent),
+        m_User(new UserData),
+        m_Row(-1),
+        m_Saved(false),
+        m_CreateUser(true)
 {
     setPage(LanguageSelectorPage, new UserLanguageSelectorPage(this));
     setPage(LoginPasswordPage, new UserLoginPasswordPage(this));
@@ -162,111 +168,120 @@ UserWizard::UserWizard(QWidget *parent)
     //    setAttribute(Qt::WA_DeleteOnClose);
 }
 
+UserWizard::~UserWizard()
+{
+    if (m_User) {
+        delete m_User;
+        m_User = 0;
+    }
+}
+
 void UserWizard::done(int r)
 {
     validateCurrentPage();
+
+    // No user -> rejected & close
+    if (!m_User) {
+        QDialog::done(QDialog::Rejected);
+        return;
+    }
+
+    // dialog result == Rejected -> ask for a confirmation
     if (r == QDialog::Rejected) {
         m_Saved = false;
         bool yes = Utils::yesNoMessageBox(tr("WARNING ! You don't save this user."),
                                tr("If you continue changes will be lost.\n"
                                   "Do you really want to close this dialog ?"),
                                "", tr("Data losing"));
-        if (yes)
+        if (yes) {
             QDialog::done(r);
-    } else if (m_Saved) {
-        QDialog::done(r);
-    } else {
-        if ((m_CreateUser) || (m_Row == -1)) {
-            m_Row = userModel()->rowCount();
-            if (!userModel()->insertRows(m_Row, 1)) {
+        }
+        return;
+    }
+
+    // Dialog is Accepted here, User not saved -> save it
+    if (true) {
+
+        // Feed userData with the wizard values
+        m_User->setLogin64(loginForSQL(field("Login").toString()));
+        m_User->setClearPassword(field("Password").toString());
+        m_User->setCryptedPassword(UserPlugin::crypt(field("Password").toString()));
+        m_User->setName(field("Name"));
+        m_User->setSecondName(field("SecondName"));
+        m_User->setFirstname(field("Firstname"));
+        m_User->setTitle(field("Title"));
+        m_User->setGender(field("Gender"));
+        m_User->setAdress(field("Adress"));
+        m_User->setZipcode(field("Zipcode"));
+        m_User->setCity(field("City"));
+        m_User->setCountry(field("Country"));
+        m_User->setLanguage(field("Language"));
+        m_User->setTel1(field("Tel1"));
+        m_User->setTel2(field("Tel2"));
+        m_User->setTel3(field("Tel3"));
+        m_User->setFax(field("Fax"));
+        m_User->setMail(field("Mail"));
+        m_User->setSpecialty(field("Specialities").toStringList());
+        m_User->setQualification(field("Qualifications").toStringList());
+        m_User->setPractitionerIdentifiant(field("Identifiants").toStringList());
+
+        m_User->setRights(Constants::USER_ROLE_USERMANAGER, Core::IUser::UserRights(m_Rights.value(Core::IUser::ManagerRights)));
+        m_User->setRights(Constants::USER_ROLE_MEDICAL, Core::IUser::UserRights(m_Rights.value(Core::IUser::MedicalRights)));
+        m_User->setRights(Constants::USER_ROLE_DOSAGES, Core::IUser::UserRights(m_Rights.value(Core::IUser::DrugsRights)));
+        m_User->setRights(Constants::USER_ROLE_PARAMEDICAL, Core::IUser::UserRights(m_Rights.value(Core::IUser::ParamedicalRights)));
+        m_User->setRights(Constants::USER_ROLE_ADMINISTRATIVE, Core::IUser::UserRights(m_Rights.value(Core::IUser::AdministrativeRights)));
+
+        m_User->setGenericHeader(m_Papers.value(Core::IUser::GenericHeader));
+        m_User->setGenericFooter(m_Papers.value(Core::IUser::GenericFooter));
+        m_User->setGenericWatermark(m_Papers.value(Core::IUser::GenericWatermark));
+
+        m_User->setAdminHeader(m_Papers.value(Core::IUser::AdministrativeHeader));
+        m_User->setAdminFooter(m_Papers.value(Core::IUser::AdministrativeFooter));
+        m_User->setAdminWatermark(m_Papers.value(Core::IUser::AdministrativeWatermark));
+
+        m_User->setPrescriptionHeader(m_Papers.value(Core::IUser::PrescriptionHeader));
+        m_User->setPrescriptionFooter(m_Papers.value(Core::IUser::PrescriptionFooter));
+        m_User->setPrescriptionWatermark(m_Papers.value(Core::IUser::PrescriptionWatermark));
+
+        if (m_CreateUser) {
+            // Create user in database
+            if (!userBase()->createUser(m_User)) {
                 Utils::warningMessageBox(tr("An error occured during database access."),
-                                             tr("Logged errors saved. Please refer to the %1 to manage this error.")
-                                       .arg(Utils::Log::saveLog()),
-                                       "", tr("Error during database access"));
-                QDialog::done(QDialog::Rejected);
-            }
-        }
-        QModelIndex idx;
-        idx = userModel()->index(m_Row, Core::IUser::DecryptedLogin);
-        userModel()->setData(idx, field("Login"));
-        idx = userModel()->index(m_Row, Core::IUser::Password);
-        userModel()->setData(idx, UserPlugin::crypt(field("Password").toString()));
-
-        idx = userModel()->index(m_Row, Core::IUser::Name);
-        userModel()->setData(idx, field("Name"));
-        idx = userModel()->index(m_Row, Core::IUser::SecondName);
-        userModel()->setData(idx, field("SecondName"));
-        idx = userModel()->index(m_Row, Core::IUser::Firstname);
-        userModel()->setData(idx, field("Firstname"));
-        idx = userModel()->index(m_Row, Core::IUser::Title);
-        userModel()->setData(idx, field("Title"));
-        idx = userModel()->index(m_Row, Core::IUser::Gender);
-        userModel()->setData(idx, field("Gender"));
-
-        idx = userModel()->index(m_Row, Core::IUser::Adress);
-        userModel()->setData(idx, field("Adress"));
-        idx = userModel()->index(m_Row, Core::IUser::Zipcode);
-        userModel()->setData(idx, field("Zipcode"));
-        idx = userModel()->index(m_Row, Core::IUser::City);
-        userModel()->setData(idx, field("City"));
-        idx = userModel()->index(m_Row, Core::IUser::Country);
-        userModel()->setData(idx, field("Country"));
-        idx = userModel()->index(m_Row, Core::IUser::LocaleCodedLanguage);
-        userModel()->setData(idx, field("Language"));
-
-        idx = userModel()->index(m_Row, Core::IUser::Tel1);
-        userModel()->setData(idx, field("Tel1"));
-        idx = userModel()->index(m_Row, Core::IUser::Tel2);
-        userModel()->setData(idx, field("Tel2"));
-        idx = userModel()->index(m_Row, Core::IUser::Tel3);
-        userModel()->setData(idx, field("Tel3"));
-        idx = userModel()->index(m_Row, Core::IUser::Fax);
-        userModel()->setData(idx, field("Fax"));
-        idx = userModel()->index(m_Row, Core::IUser::Mail);
-        userModel()->setData(idx, field("Mail"));
-
-        idx = userModel()->index(m_Row, Core::IUser::Specialities);
-        userModel()->setData(idx, field("Specialities"));
-        idx = userModel()->index(m_Row, Core::IUser::Qualifications);
-        userModel()->setData(idx, field("Qualifications"));
-        idx = userModel()->index(m_Row, Core::IUser::PractitionerId);
-        userModel()->setData(idx, field("Identifiants"));
-
-        foreach(int role, m_Rights.keys()) {
-            idx = userModel()->index(m_Row, role);
-            userModel()->setData(idx, m_Rights.value(role));
-        }
-
-        m_Uuid = userModel()->index(m_Row, Core::IUser::Uuid).data().toString();
-        QHashIterator<int, QString> it(m_Papers);
-        while (it.hasNext()) {
-             it.next();
-             userModel()->setPaper(m_Uuid, it.key(), Print::TextDocumentExtra::fromXml(it.value()));
-         }
-
-
-#ifdef DEBUG
-        // warn user
-        idx = userModel()->index(m_Row, Core::IUser::Warn);
-        idx.data();
-#endif
-
-        if (userModel()->submitRow(m_Row)) {
-            Utils::informativeMessageBox(tr("User correctly saved into database."),
-                                             tr("You can poursue with the current user %1 or set this new user to current user.")
-                                             .arg(userModel()->currentUserData(Core::IUser::Name).toString()),
-                                             "", tr("User correctly saved into database."));
-            m_Saved = true;
-            QDialog::done(r);
-        } else {
-            userModel()->removeRows(m_Row, 1);
-            Utils::warningMessageBox(tr("An error occured during database access."),
                                          tr("Logged errors saved. Please refer to the %1 to manage this error.")
                                          .arg(Utils::Log::saveLog()),
                                          "", tr("Error during database access"));
-            QDialog::done(r);
-            m_Saved = false;
+                QDialog::done(QDialog::Rejected);
+            } else {
+                Utils::informativeMessageBox(tr("User correctly saved into database."),
+                                             tr("You can poursue with the current user %1 or set this new user to current user.")
+                                             .arg(userModel()->currentUserData(Core::IUser::Name).toString()),
+                                             "", tr("User correctly saved into database."));
+                // Reset the usermodel
+                userModel()->refresh();
+                m_Saved = true;
+                QDialog::done(r);
+            }
+
+//            m_Row = userModel()->rowCount();
+//            if (!userModel()->insertRows(m_Row, 1)) {
+//            }
         }
+
+#ifdef DEBUG
+        // warn user
+        m_User->warn();
+#endif
+
+//        if (userModel()->submitRow(m_Row)) {
+//        } else {
+//            userModel()->removeRows(m_Row, 1);
+//            Utils::warningMessageBox(tr("An error occured during database access."),
+//                                         tr("Logged errors saved. Please refer to the %1 to manage this error.")
+//                                         .arg(Utils::Log::saveLog()),
+//                                         "", tr("Error during database access"));
+//            QDialog::done(r);
+//            m_Saved = false;
+//        }
     }
 }
 
@@ -278,6 +293,13 @@ bool UserWizard::setCreatedUserAsCurrent() const
                                        crypt(field("Password").toString()), true);
 }
 
+QString UserWizard::createdUuid() const
+{
+    if (m_User) {
+        return m_User->uuid();
+    }
+    return QString();
+}
 
 UserLanguageSelectorPage::UserLanguageSelectorPage(QWidget *parent)
     : QWizardPage(parent), lbl(0)
@@ -414,8 +436,8 @@ bool UserLoginPasswordPage::validatePage()
         return false;
     }
     // log/pass already used ?
-    if (userModel()->isCorrectLogin(UserPlugin::loginForSQL(field("Login").toString()),
-                            UserPlugin::crypt(field("Password").toString()))) {
+    if (userModel()->isCorrectLogin(field("Login").toString(),
+                                    field("Password").toString())) {
         Utils::warningMessageBox(tr("Login and password already used"),
                                  tr("The users' database already contains the same login/password couple.\n"
                                     "You must specify a different login/password."),

@@ -54,7 +54,7 @@ public:
         Id = 0,
         Uuid,           /*!< \brief Unique identifier the each users */
         Validity,       /*!< \brief Validity of this user */
-        Login,          /*!< \brief Crypted login \sa UserGlobal::loginForSQL() */
+        Login64,        /*!< \brief Crypted login \sa UserGlobal::loginForSQL() */
         Password,       /*!< \brief Crypted password \sa UserGlobal::crypt() */
         LastLogin,      /*!< \brief Date of the last correct login */
         Name,           /*!< \brief Name */
@@ -63,15 +63,16 @@ public:
         Mail,           /*!< \brief Mail address */
         Language,       /*!< \brief Language for interface */
         Locker,         /*!< \brief Locker */
-        LanguageIndex,  /*!< \brief Language index from Core::Translators::availableLanguages() */
+        LanguageIndex,  /*!< \brief Language index from Core::Translators::availableLanguages() */  //12
 
         // ORDER CAN CHANGE
+        ClearLogin,
         LocaleCodedLanguage,
         PersonalLinkId,
         FullName,
         GenderIndex, TitleIndex, Gender, Title,
         Adress, Zipcode, City, Country, Tel1, Tel2, Tel3, Fax, PractitionerId,
-        Specialities, Qualifications, Preferences,
+        Specialities, Qualifications, Preferences,  // 31
 
         GenericHeader,
         GenericFooter,

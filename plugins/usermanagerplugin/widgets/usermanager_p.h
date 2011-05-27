@@ -24,67 +24,80 @@
  *       NAME <MAIL@ADRESS>                                                *
  *       NAME <MAIL@ADRESS>                                                *
  ***************************************************************************/
-#ifndef USERMANAGER_P_H
-#define USERMANAGER_P_H
+#ifndef USERMANAGERWIDGET_P_H
+#define USERMANAGERWIDGET_P_H
 
 #include <QWidget>
 
 class QModelIndex;
 class QTableView;
 class QToolButton;
+class QToolBar;
 class QLabel;
 class QWidget;
 class QGroupBox;
-
-#include "ui_usermanager.h"
 
 namespace UserPlugin {
 namespace Internal {
 class UserManagerContext;
 
-class UserManagerWidget : public QWidget, private Ui::UserManager
+namespace Ui {
+    class UserManagerWidget;
+}
+
+class UserManagerWidget : public QWidget
 {
     Q_OBJECT
     Q_DISABLE_COPY(UserManagerWidget)
 
 public:
-    explicit UserManagerWidget(QWidget *parent); // work with usermodel
+    explicit UserManagerWidget(QWidget *parent = 0); // work with usermodel
     ~UserManagerWidget();
     bool initialize();
 
     bool canCloseParent();
 
 private Q_SLOTS:
-    void on_searchLineEdit_textchanged();
-    void on_m_SearchToolButton_triggered( QAction * act );
-    void on_saveAct_triggered();
-    void on_userTableView_activated( const QModelIndex & );
-    void on_createNewUserAct_triggered();
-    void on_clearModificationsAct_triggered();
-    void on_deleteUserAct_triggered();
+    void onCurrentUserChanged();
+    void onSearchRequested();
+    void onSearchToolButtonTriggered(QAction *act);
+    void onSaveRequested();
+    void onUserActivated(const QModelIndex &index);
+    void onCreateUserRequested();
+    void onClearModificationRequested();
+    void onDeleteUserRequested();
     void updateStatusBar();
 
-    void showUserDebugDialog( const QModelIndex &id );
+    void showUserDebugDialog(const QModelIndex &id);
 
 private:
     void analyseCurrentUserRights();
-    void selectUserTableView( int row );
+    void selectUserTableView(int row);
     void changeEvent(QEvent *e);
     void retranslate();
 
 Q_SIGNALS:
     void closeRequested();
 
+protected:
+    virtual bool event(QEvent *event);
+
 private:
-    bool         m_CanModify, m_CanCreate, m_CanViewAllUsers, m_CanViewRestrictedDatas, m_CanDelete;
-    int          m_EditingRow;
-    int          m_SearchBy;
-    QWidget     *m_Parent;
-    QToolBar    *m_ToolBar;
+    Ui::UserManagerWidget *ui;
+    QAction *createNewUserAct;
+    QAction *modifyUserAct;
+    QAction *saveAct;
+    QAction *clearModificationsAct;
+    QAction *deleteUserAct;
+    QAction *quitUserManagerAct;
+    bool m_CanModify, m_CanCreate, m_CanViewAllUsers, m_CanViewRestrictedDatas, m_CanDelete;
+    int m_EditingRow;
+    int m_SearchBy;
+    QToolBar *m_ToolBar;
     QToolButton *m_SearchToolBut;
-    QAction     *searchByNameAct, *searchByFirstnameAct, *searchByNameAndFirstnameAct, *searchByCityAct;
-    QLabel      *m_PermanentUserName;
-    QWidget     *m_PermanentWidget;
+    QAction *searchByNameAct, *searchByFirstnameAct, *searchByNameAndFirstnameAct, *searchByCityAct;
+    QLabel *m_PermanentUserName;
+    QWidget *m_PermanentWidget;
 
 public:
     UserManagerContext *m_Context;
@@ -94,4 +107,4 @@ public:
 }  // End UserPlugin
 
 
-#endif // TKUSERMANAGER_P_H
+#endif // USERMANAGER_P_H

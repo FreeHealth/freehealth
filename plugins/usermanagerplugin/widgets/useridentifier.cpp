@@ -71,7 +71,7 @@ static inline Core::ITheme *theme() {return Core::ICore::instance()->theme();}
 static inline Core::ISettings *settings() { return Core::ICore::instance()->settings(); }
 
 UserIdentifier::UserIdentifier(QWidget *parent) :
-    QDialog(parent)
+        QDialog(parent)
 {
     // initialization
     setObjectName("UserIdentifier");
@@ -105,7 +105,7 @@ void UserIdentifier::done(int result)
     UserModel *m = UserModel::instance();
     if (result == QDialog::Accepted) {
         // ask database with login/password couple
-        if (!m->isCorrectLogin(login(), cryptedPassword())) {
+        if (!m->isCorrectLogin(login(), password())) {
             m_NumberOfTries++;
             if (m_NumberOfTries == MaxNumberOfTries)
 		QDialog::done(QDialog::Rejected);
@@ -115,25 +115,36 @@ void UserIdentifier::done(int result)
                                          .arg(MaxNumberOfTries - m_NumberOfTries),"",qApp->applicationName());
             }
         } else {
-            Utils::Log::addMessage(this, tr("User is identified."));
-	    m->setCurrentUser(login(), cryptedPassword());
+            LOG(tr("User is identified."));
+            m->setCurrentUser(login64crypt(), cryptedPassword());
             if (theme()->splashScreen())
                 theme()->splashScreen()->show();
             QDialog::done(QDialog::Accepted);
         }
     }
     else if (result == QDialog::Rejected) {
-        Utils::Log::addMessage(this, tr("User is not identified."));
+        LOG(tr("User is not identified."));
 	QDialog::done(QDialog::Rejected);
     }
 }
 
-QString UserIdentifier::cryptedPassword()
+QString UserIdentifier::login() const
+{
+    return m_ui->login->lineEdit()->text();
+}
+
+QString UserIdentifier::login64crypt() const
+{
+    return loginForSQL(m_ui->login->lineEdit()->text());
+}
+
+QString UserIdentifier::password() const
+{
+    return m_ui->password->lineEdit()->text();
+}
+
+QString UserIdentifier::cryptedPassword() const
 {
     return crypt(m_ui->password->lineEdit()->text());
 }
 
-QString UserIdentifier::login()
-{
-    return loginForSQL(m_ui->login->lineEdit()->text());
-}

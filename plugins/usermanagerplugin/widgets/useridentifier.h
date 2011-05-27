@@ -53,8 +53,11 @@ class USER_EXPORT UserIdentifier : public QDialog
 public:
     explicit UserIdentifier(QWidget *parent = 0 );
 
-    QString login();
-    QString cryptedPassword();
+    QString login() const;
+    QString login64crypt() const;
+
+    QString password() const;
+    QString cryptedPassword() const;
 
 private:
     void done(int result);

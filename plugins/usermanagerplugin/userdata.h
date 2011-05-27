@@ -135,18 +135,19 @@ public:
     bool isEmpty() const;
 
     bool createUuid();
-    void setUuid(const QString & val);
+    void setUuid(const QString &val);
 
     // setters to create or change the values
-    void setDynamicDataValue(const char * name, const QVariant & val, UserDynamicData::DynamicDataType t = UserDynamicData::String);
-    void setRights(const char * roleName, const Core::IUser::UserRights rights);
+    void setDynamicDataValue(const char *name, const QVariant & val, UserDynamicData::DynamicDataType t = UserDynamicData::String);
+    void setRights(const char *roleName, const Core::IUser::UserRights rights);
 
 
     // simplified setters (TODO : some must be logged)
     void  setId(const QVariant & val)                  { setValue(Table_USERS, USER_ID, val); }
     void  setValidity(const QVariant & val)            { setValue(Table_USERS, USER_VALIDITY, val); }
     void  setLocker(const QVariant & val)              { setValue(Table_USERS, USER_LOCKER ,val); }
-    void  setLogin(const QVariant & val)               { setValue(Table_USERS, USER_LOGIN, val); }
+    void  setLogin64(const QVariant & val)             { setValue(Table_USERS, USER_LOGIN, val); }
+    void  setClearPassword(const QString &val);
     void  setCryptedPassword(const QVariant & val)     { setValue(Table_USERS, USER_PASSWORD, val); }
     void  setLastLogin(const QVariant & val)           { setValue(Table_USERS, USER_LASTLOG, val); }
     void  setTitle(const QVariant & val)               { setDynamicDataValue(USER_DATAS_TITLE, val); }
@@ -167,13 +168,22 @@ public:
     void  setFax(const QVariant & val)                 { setDynamicDataValue(USER_DATAS_FAX , val); }
     void  setPractitionerIdentifiant(const QStringList & val) { setDynamicDataValue(USER_DATAS_PRACTIDENTIFIANT, Utils::Serializer::toString(val)); }
 
-    void  setSpecialty(const QStringList & val)        { setDynamicDataValue(USER_DATAS_SPECIALTY, Utils::Serializer::toString(val)); }
-    void  setQualification(const QStringList & val)    { setDynamicDataValue(USER_DATAS_QUALIFICATION, Utils::Serializer::toString(val)); }
-    void  setAdminHeader(const QVariant & val)         { setDynamicDataValue(USER_DATAS_ADMINISTRATIVEHEADER , val); }
-    void  setAdminFooter(const QVariant & val)         { setDynamicDataValue(USER_DATAS_ADMINISTRATIVEFOOTER , val); }
-    void  setPrescriptionHeader(const QVariant & val)  { setDynamicDataValue(USER_DATAS_PRESCRIPTIONHEADER , val); }
-    void  setPrescriptionFooter(const QVariant & val)  { setDynamicDataValue(USER_DATAS_PRESCRIPTIONFOOTER , val); }
-    void  setPreferences(const QVariant & val)         { setDynamicDataValue(USER_DATAS_PREFERENCES , val); }
+    void  setSpecialty(const QStringList & val)         { setDynamicDataValue(USER_DATAS_SPECIALTY, Utils::Serializer::toString(val)); }
+    void  setQualification(const QStringList & val)     { setDynamicDataValue(USER_DATAS_QUALIFICATION, Utils::Serializer::toString(val)); }
+
+    void  setGenericHeader(const QVariant & val)        { setDynamicDataValue(USER_DATAS_GENERICHEADER , val); }
+    void  setGenericFooter(const QVariant & val)        { setDynamicDataValue(USER_DATAS_GENERICFOOTER , val); }
+    void  setGenericWatermark(const QVariant &val)      { setDynamicDataValue(USER_DATAS_GENERICWATERMARK , val); }
+
+    void  setAdminHeader(const QVariant & val)          { setDynamicDataValue(USER_DATAS_ADMINISTRATIVEHEADER , val); }
+    void  setAdminFooter(const QVariant & val)          { setDynamicDataValue(USER_DATAS_ADMINISTRATIVEFOOTER , val); }
+    void  setAdminWatermark(const QVariant &val)        { setDynamicDataValue(USER_DATAS_ADMINISTRATIVEWATERMARK , val); }
+
+    void  setPrescriptionHeader(const QVariant & val)   { setDynamicDataValue(USER_DATAS_PRESCRIPTIONHEADER , val); }
+    void  setPrescriptionFooter(const QVariant & val)   { setDynamicDataValue(USER_DATAS_PRESCRIPTIONFOOTER , val); }
+    void  setPrescriptionWatermark(const QVariant &val) { setDynamicDataValue(USER_DATAS_PRESCRIPTIONWATERMARK , val); }
+
+    void  setPreferences(const QVariant & val)          { setDynamicDataValue(USER_DATAS_PREFERENCES , val); }
 
     void  addLoginToHistory();
 
@@ -182,7 +192,8 @@ public:
     QString uuid() const                 { return value(Table_USERS, USER_UUID).toString(); }
     bool    validity() const             { return value(Table_USERS, USER_VALIDITY).toBool(); }
     bool    locker() const               { return value(Table_USERS, USER_LOCKER).toBool(); }
-    QString login() const                { return value(Table_USERS, USER_LOGIN).toString(); }
+    QString login64() const              { return value(Table_USERS, USER_LOGIN).toString(); }
+    QString clearLogin() const           { return QString(QByteArray::fromBase64(login64().toAscii())); }
     QString decryptedLogin() const       { return UserPlugin::loginFromSQL(value(Table_USERS, USER_LOGIN));  }
     QString cryptedPassword() const      { return value(Table_USERS, USER_PASSWORD).toString(); }
 //    QString lastLogin() const;
@@ -201,25 +212,22 @@ public:
     QString city() const                 { return dynamicDataValue(USER_DATAS_CITY).toString(); }
     QString country() const              { return dynamicDataValue(USER_DATAS_COUNTRY).toString(); }
     QStringList tels() const             { return QStringList()
-				      << dynamicDataValue(USER_DATAS_TEL1).toString()
-				      << dynamicDataValue(USER_DATAS_TEL2).toString()
-				      << dynamicDataValue(USER_DATAS_TEL3).toString();
-                                    }
+                                           << dynamicDataValue(USER_DATAS_TEL1).toString()
+                                           << dynamicDataValue(USER_DATAS_TEL2).toString()
+                                           << dynamicDataValue(USER_DATAS_TEL3).toString(); }
     QString fax() const                  { return dynamicDataValue(USER_DATAS_FAX).toString(); }
 
 
-    QStringList practitionerId() const       { return Utils::Serializer::toStringList(dynamicDataValue(USER_DATAS_PRACTIDENTIFIANT).toString()); }
+    QStringList practitionerId() const   { return Utils::Serializer::toStringList(dynamicDataValue(USER_DATAS_PRACTIDENTIFIANT).toString()); }
     QStringList specialty() const        { return Utils::Serializer::toStringList(dynamicDataValue(USER_DATAS_SPECIALTY).toString());  }
-    QStringList qualifications() const       { return Utils::Serializer::toStringList(dynamicDataValue(USER_DATAS_QUALIFICATION).toString()); }
+    QStringList qualifications() const   { return Utils::Serializer::toStringList(dynamicDataValue(USER_DATAS_QUALIFICATION).toString()); }
 
     QStringList adminPapers() const      { return QStringList()
-				      << dynamicDataValue(USER_DATAS_ADMINISTRATIVEHEADER).toString()
-				      << dynamicDataValue(USER_DATAS_ADMINISTRATIVEFOOTER).toString();
-                                    }
+                                           << dynamicDataValue(USER_DATAS_ADMINISTRATIVEHEADER).toString()
+                                           << dynamicDataValue(USER_DATAS_ADMINISTRATIVEFOOTER).toString(); }
     QStringList prescrPapers() const     { return QStringList()
-				      << dynamicDataValue(USER_DATAS_PRESCRIPTIONHEADER).toString()
-				      << dynamicDataValue(USER_DATAS_PRESCRIPTIONFOOTER).toString();
-                                    }
+                                           << dynamicDataValue(USER_DATAS_PRESCRIPTIONHEADER).toString()
+                                           << dynamicDataValue(USER_DATAS_PRESCRIPTIONFOOTER).toString();}
 
     void setExtraDocument(Print::TextDocumentExtra *extra, const int index);
     void setExtraDocumentHtml(const QVariant &val, const int index);
@@ -233,6 +241,7 @@ public:
 
     // Rights getters
     QVariant rightsValue(const char *name) const;
+    bool hasRight(const char *name, const int rightToTest) const;
 
     // Linkers
     QList<int> linkIds() const;
@@ -258,6 +267,7 @@ protected: // use only with database tkUserBase
     bool hasModifiedRightsToStore() const;
     QList<UserDynamicData*> modifiedDynamicDatas() const;
     QStringList modifiedRoles() const;
+    QString clearPassword() const;
 
     // generic getters for database
     QVariant value(const int tableref, const int fieldref) const;

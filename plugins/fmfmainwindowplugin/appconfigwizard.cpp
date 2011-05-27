@@ -157,14 +157,14 @@ void BeginConfigPage::retranslate()
                    "for the undefined parameters."));
     langLabel->setText(tr("Select your language"));
     // if user is admin && password == "admin"
-    if ((user()->value(Core::IUser::Login).toString()!=UserPlugin::Constants::DEFAULT_USER_LOGIN) ||
+    if ((user()->value(Core::IUser::Login64).toString()!=UserPlugin::Constants::DEFAULT_USER_LOGIN) ||
         (user()->value(Core::IUser::Password).toString()!=UserPlugin::Constants::DEFAULT_USER_PASSWORD)) {
         adminPassLabel->setText(tr("For security reason, it is highly suggested "
                                    "to change the default administrator password"));
     } else {
         adminPassLabel->setText(tr("Click the button to change your password"));
     }
-    if (user()->value(Core::IUser::Login).toString()==UserPlugin::Constants::DEFAULT_USER_LOGIN) {
+    if (user()->value(Core::IUser::Login64).toString()==UserPlugin::Constants::DEFAULT_USER_LOGIN) {
         createUserLabel->setText(tr("You are logged as the administrator, for "
                                     "security reasons, it is highly "
                                     "recommended to create and use a new user "
@@ -191,7 +191,7 @@ void BeginConfigPage::changeAdminPassword()
 void BeginConfigPage::createNewUser()
 {
     UserPlugin::UserWizard wiz(this);
-    wiz.createUser(true);
+//    wiz.createUser(true);
     if (wiz.exec()==QDialog::Accepted) {
         // We can create only one user
         if (!wiz.createdUuid().isEmpty()) {

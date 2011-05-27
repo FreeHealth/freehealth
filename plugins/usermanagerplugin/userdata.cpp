@@ -471,7 +471,7 @@ public:
     bool m_HasModifiedDynamicDatas;
     QList<int> m_LkIds;
     int m_PersonalLkId;
-    QString m_LkIdsToString;
+    QString m_LkIdsToString, m_ClearPassword;
 };
 
 }  // End Internal
@@ -779,6 +779,11 @@ void UserData::setRights(const char *roleName, const Core::IUser::UserRights rig
     setModified(true);
 }
 
+void UserData::setClearPassword(const QString &val)
+{
+    d->m_ClearPassword = val;
+}
+
 /**
   \todo document
 */
@@ -819,16 +824,24 @@ QVariant UserData::dynamicDataValue(const char*name) const
 /**
   \todo document
 */
-QVariant UserData::rightsValue(const QString & name, const int fieldref) const
+QVariant UserData::rightsValue(const QString &name, const int fieldref) const
 {
     return d->m_Role_Rights.value(name).value(fieldref);
 }
+
 /**
   \todo document
 */
 QVariant UserData::rightsValue(const char *name) const
 {
     return d->m_Role_Rights.value(name).value(RIGHTS_RIGHTS);
+}
+
+bool UserData::hasRight(const char *name, const int rightToTest) const
+{
+    Core::IUser::UserRights rights = Core::IUser::UserRights(rightToTest);
+    Core::IUser::UserRights rightrole = Core::IUser::UserRights(rightsValue(name).toInt());
+    return (rightrole & rights);
 }
 
 
@@ -875,6 +888,11 @@ bool UserData::hasModifiedRightsToStore() const
 QStringList UserData::modifiedRoles() const
 {
     return d->m_ModifiedRoles.toList();
+}
+
+QString UserData::clearPassword() const
+{
+    return d->m_ClearPassword;
 }
 
 // HEADER/FOOTER/WATERMARK MANAGEMENT

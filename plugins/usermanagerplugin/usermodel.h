@@ -102,23 +102,24 @@ public:
     static UserModel *instance(QObject *parent = 0);
     ~UserModel();
 
-    bool isCorrectLogin(const QString &logbase64, const QString &cryptpassbase64);
+    bool isCorrectLogin(const QString &clearLog, const QString &clearPassword);
 
     bool setCurrentUser(const QString &log64, const QString &cryptpass64, bool refreshCache = false);
     bool setCurrentUserIsServerManager();
 
     bool hasCurrentUser();
     QModelIndex currentUserIndex() const;
-    QVariant currentUserData(const int column) const { return index(currentUserIndex().row(), column).data(); }
 
     bool hasUserToSave();
 
     virtual QSqlDatabase database() const;
 
     virtual void clear();
+    virtual void refresh();
 
     virtual int columnCount(const QModelIndex & = QModelIndex());
 
+    QVariant currentUserData(const int column) const;
     virtual QVariant data(const QModelIndex &item, int role = Qt::DisplayRole) const;
     virtual bool setData(const QModelIndex &index, const QVariant &value, int role = Qt::EditRole);
     virtual bool setPaper(const QString &uuid, const int ref, Print::TextDocumentExtra *extra);
@@ -134,9 +135,6 @@ public:
     virtual void setFilter(const QString &filter);
 
     QString tableName() const;
-
-    QModelIndex index(int row, int column, const QModelIndex & = QModelIndex()) const
-    { return createIndex(row, column); }
 
     QList<int> practionnerLkIds(const QString &uid);
     int practionnerLkId(const QString &uid);
