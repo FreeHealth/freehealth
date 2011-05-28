@@ -39,8 +39,8 @@
 /**
  * \file accountbase.h
  * \author Eric MAEKER <eric.maeker@free.fr>
- * \version 0.4.0
- * \date 27 Mar 2010
+ * \version 0.6.0
+ * \date 29 May 2011
 */
 
 
