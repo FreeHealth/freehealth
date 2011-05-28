@@ -584,9 +584,9 @@ bool DrugsBase::init()
     if (!QSqlDatabase::connectionNames().contains(Constants::DB_DRUGS_NAME)) {
         // test driver
         if (!QSqlDatabase::isDriverAvailable("QSQLITE")) {
-            LOG_ERROR(tkTr(Trans::Constants::SQLITE_DRIVER_NOT_AVAILABLE));
+            LOG_ERROR(tkTr(Trans::Constants::DATABASE_DRIVER_1_NOT_AVAILABLE).arg("SQLite"));
             Utils::warningMessageBox(tkTr(Trans::Constants::APPLICATION_FAILURE),
-                                     tkTr(Trans::Constants::SQLITE_DRIVER_NOT_AVAILABLE_DETAIL),
+                                     tkTr(Trans::Constants::DATABASE_DRIVER_1_NOT_AVAILABLE_DETAIL).arg("SQLite"),
                                      "", qApp->applicationName());
             return false;
         }
@@ -647,6 +647,13 @@ bool DrugsBase::init()
     // create dosage database connection
     if (!QSqlDatabase::connectionNames().contains(Dosages::Constants::DB_DOSAGES_NAME)) {
         if (settings()->value(Core::Constants::S_USE_EXTERNAL_DATABASE, false).toBool()) {
+            if (!QSqlDatabase::isDriverAvailable("QMYSQL")) {
+                LOG_ERROR(tkTr(Trans::Constants::DATABASE_DRIVER_1_NOT_AVAILABLE).arg("MySQL"));
+                Utils::warningMessageBox(tkTr(Trans::Constants::APPLICATION_FAILURE),
+                                         tkTr(Trans::Constants::DATABASE_DRIVER_1_NOT_AVAILABLE_DETAIL).arg("MySQL"),
+                                         "", qApp->applicationName());
+                return false;
+            }
             createConnection(Dosages::Constants::DB_DOSAGES_NAME,
                              Dosages::Constants::DB_DOSAGES_NAME,
                              QString(QByteArray::fromBase64(settings()->value(Core::Constants::S_EXTERNAL_DATABASE_HOST, QByteArray("localhost").toBase64()).toByteArray())),
@@ -657,6 +664,13 @@ bool DrugsBase::init()
                              QString(QByteArray::fromBase64(settings()->value(Core::Constants::S_EXTERNAL_DATABASE_PORT, QByteArray("").toBase64()).toByteArray())).toInt(),
                              Utils::Database::CreateDatabase);
         } else {
+            if (!QSqlDatabase::isDriverAvailable("QSQLITE")) {
+                LOG_ERROR(tkTr(Trans::Constants::DATABASE_DRIVER_1_NOT_AVAILABLE).arg("SQLite"));
+                Utils::warningMessageBox(tkTr(Trans::Constants::APPLICATION_FAILURE),
+                                         tkTr(Trans::Constants::DATABASE_DRIVER_1_NOT_AVAILABLE_DETAIL).arg("SQLite"),
+                                         "", qApp->applicationName());
+                return false;
+            }
             createConnection(Dosages::Constants::DB_DOSAGES_NAME,
                              Dosages::Constants::DB_DOSAGES_FILENAME,
                              settings()->path(Core::ISettings::ReadWriteDatabasesPath) + QDir::separator() + QString(Constants::DB_DRUGS_NAME),
@@ -664,11 +678,23 @@ bool DrugsBase::init()
                              "log", "pas", 0,
                              Utils::Database::CreateDatabase);
         }
-        if (!QSqlDatabase::database(Dosages::Constants::DB_DOSAGES_NAME).open())
-            Utils::Log::addError("DrugsBase", tr("WARNING : can not open database %1 : %2 \n %3 ")
-                                 .arg(Dosages::Constants::DB_DOSAGES_NAME, QSqlDatabase::database(Dosages::Constants::DB_DOSAGES_NAME).lastError().driverText(), QSqlDatabase::database(Dosages::Constants::DB_DOSAGES_NAME).lastError().databaseText()),
-                                 __FILE__, __LINE__);
+        QSqlDatabase dosageDb = QSqlDatabase::database(Dosages::Constants::DB_DOSAGES_NAME);
+        if (!dosageDb.isOpen()) {
+            if (!dosageDb.open()) {
+                LOG_ERROR(tkTr(Trans::Constants::UNABLE_TO_OPEN_DATABASE_1_ERROR_2).arg(Dosages::Constants::DB_DOSAGES_NAME).arg(dosageDb.lastError().text()));
+            } else {
+                LOG(tkTr(Trans::Constants::CONNECTED_TO_DATABASE_1_DRIVER_2).arg(dosageDb.connectionName()).arg(dosageDb.driverName()));
+            }
+        } else {
+            LOG(tkTr(Trans::Constants::CONNECTED_TO_DATABASE_1_DRIVER_2).arg(dosageDb.connectionName()).arg(dosageDb.driverName()));
+        }
+
         checkDosageDatabaseVersion();
+
+//        if (!checkDosageDatabaseVersion()) {
+//            LOG_ERROR(tkTr(Trans::Constants::DATABASE_1_SCHEMA_ERROR).arg(Dosages::Constants::DB_DOSAGES_NAME));
+//            return false;
+//        }
     }
 
     setConnectionName(Constants::DB_DRUGS_NAME);

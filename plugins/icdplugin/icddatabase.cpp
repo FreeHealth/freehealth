@@ -281,11 +281,11 @@ bool IcdDatabase::init()
 
     // test driver (ICD is provided with the application --> SQLite)
      if (!QSqlDatabase::isDriverAvailable("QSQLITE")) {
-         Utils::Log::addError(this, tkTr(Trans::Constants::SQLITE_DRIVER_NOT_AVAILABLE));
+         LOG_ERROR(tkTr(Trans::Constants::DATABASE_DRIVER_1_NOT_AVAILABLE).arg("SQLite"));
          Utils::warningMessageBox(tkTr(Trans::Constants::APPLICATION_FAILURE),
-                                  tkTr(Trans::Constants::SQLITE_DRIVER_NOT_AVAILABLE_DETAIL),
+                                  tkTr(Trans::Constants::DATABASE_DRIVER_1_NOT_AVAILABLE_DETAIL).arg("SQLite"),
                                   "", qApp->applicationName());
-          return false;
+         return false;
       }
 
      // log the path of the database

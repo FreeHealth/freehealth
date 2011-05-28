@@ -307,8 +307,9 @@ enum TitleInterpret {
         const char*const  ASSETSRATES = QT_TRANSLATE_NOOP("tkConstants", "Assets rates");
 
         // Database related
-        const char *const SQLITE_DRIVER_NOT_AVAILABLE = QT_TRANSLATE_NOOP("tkConstants", "SQLite driver is not available.");
-        const char *const SQLITE_DRIVER_NOT_AVAILABLE_DETAIL = QT_TRANSLATE_NOOP("tkConstants", "The SQLite database driver is not installed or can not be found. Please report this error to the developper.");
+        const char *const DATABASE_DRIVER_1_NOT_AVAILABLE = QT_TRANSLATE_NOOP("tkConstants", "The %1 driver is not available.");
+        const char *const DATABASE_DRIVER_1_NOT_AVAILABLE_DETAIL = QT_TRANSLATE_NOOP("tkConstants", "The %1 database driver is not installed or can not be found. Please report this error to the developper.");
+        const char *const  DATABASE_1_SCHEMA_ERROR = QT_TRANSLATE_NOOP("tkConstants", "Database %1: Schema error.");
 
         // Time and periods
         const char* const DURATION   = QT_TRANSLATE_NOOP("tkConstants", "Duration");

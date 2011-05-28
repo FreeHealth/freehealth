@@ -165,6 +165,13 @@ bool EpisodeBase::init()
 
     // Check settings --> SQLite or MySQL ?
     if (settings()->value(Core::Constants::S_USE_EXTERNAL_DATABASE, false).toBool()) {
+        if (!QSqlDatabase::isDriverAvailable("QMYSQL")) {
+            LOG_ERROR(tkTr(Trans::Constants::DATABASE_DRIVER_1_NOT_AVAILABLE).arg("MySQL"));
+            Utils::warningMessageBox(tkTr(Trans::Constants::APPLICATION_FAILURE),
+                                     tkTr(Trans::Constants::DATABASE_DRIVER_1_NOT_AVAILABLE_DETAIL).arg("MySQL"),
+                                     "", qApp->applicationName());
+            return false;
+        }
         createConnection(Constants::DB_NAME,
                          Constants::DB_NAME,
                          QString(QByteArray::fromBase64(settings()->value(Core::Constants::S_EXTERNAL_DATABASE_HOST, QByteArray("localhost").toBase64()).toByteArray())),
@@ -175,6 +182,13 @@ bool EpisodeBase::init()
                          QString(QByteArray::fromBase64(settings()->value(Core::Constants::S_EXTERNAL_DATABASE_PORT, QByteArray("").toBase64()).toByteArray())).toInt(),
                          Utils::Database::CreateDatabase);
     } else {
+        if (!QSqlDatabase::isDriverAvailable("QSQLITE")) {
+            LOG_ERROR(tkTr(Trans::Constants::DATABASE_DRIVER_1_NOT_AVAILABLE).arg("SQLite"));
+            Utils::warningMessageBox(tkTr(Trans::Constants::APPLICATION_FAILURE),
+                                     tkTr(Trans::Constants::DATABASE_DRIVER_1_NOT_AVAILABLE_DETAIL).arg("SQLite"),
+                                     "", qApp->applicationName());
+            return false;
+        }
         createConnection(Constants::DB_NAME,
                          Constants::DB_FILENAME,
                          settings()->path(Core::ISettings::ReadWriteDatabasesPath) + QDir::separator() + QString(Constants::DB_NAME),
@@ -184,15 +198,22 @@ bool EpisodeBase::init()
                          Utils::Database::CreateDatabase);
     }
 
+    if (!database().isOpen()) {
+        if (!database().open()) {
+            LOG_ERROR(tkTr(Trans::Constants::UNABLE_TO_OPEN_DATABASE_1_ERROR_2).arg(Constants::DB_NAME).arg(database().lastError().text()));
+        } else {
+            LOG(tkTr(Trans::Constants::CONNECTED_TO_DATABASE_1_DRIVER_2).arg(database().connectionName()).arg(database().driverName()));
+        }
+    } else {
+        LOG(tkTr(Trans::Constants::CONNECTED_TO_DATABASE_1_DRIVER_2).arg(database().connectionName()).arg(database().driverName()));
+    }
+
     //    d->checkDatabaseVersion();
 
-//    if (!checkDatabaseScheme()) {
-//        Utils::warningMessageBox(tr("The patient database is corrupted. Application will close."),
-//                                 tr("The database schema is corrupted, application will close. Please contact the dev team.")
-//                                 );
-//        qApp->exit(1);
-//        return false;
-//    }
+    if (!checkDatabaseScheme()) {
+        LOG_ERROR(tkTr(Trans::Constants::DATABASE_1_SCHEMA_ERROR).arg(Constants::DB_NAME));
+        return false;
+    }
 
     m_initialized = true;
     return true;
@@ -209,56 +230,57 @@ bool EpisodeBase::createDatabase(const QString &connectionName , const QString &
     if (connectionName != Constants::DB_NAME)
         return false;
 
-    Utils::Log::addMessage(this, tkTr(Trans::Constants::TRYING_TO_CREATE_1_PLACE_2)
-                           .arg(dbName).arg(pathOrHostName));
+    LOG(tkTr(Trans::Constants::TRYING_TO_CREATE_1_PLACE_2)
+        .arg(dbName).arg(pathOrHostName));
 
     // create an empty database and connect
     QSqlDatabase DB;
     if (driver == SQLite) {
         DB = QSqlDatabase::addDatabase("QSQLITE", connectionName);
-        if (!QDir(pathOrHostName).exists()) {
-            if (!QDir().mkpath(pathOrHostName)) {
-                Utils::Log::addError(this, tkTr(Trans::Constants::_1_ISNOT_AVAILABLE_CANNOTBE_CREATED).arg(pathOrHostName));
-            } else {
-                Utils::Log::addMessage(this, tkTr(Trans::Constants::CREATE_DIR_1).arg(pathOrHostName));
-            }
-        }
+        if (!QDir(pathOrHostName).exists())
+            if (!QDir().mkpath(pathOrHostName))
+                tkTr(Trans::Constants::_1_ISNOT_AVAILABLE_CANNOTBE_CREATED).arg(pathOrHostName);
         DB.setDatabaseName(QDir::cleanPath(pathOrHostName + QDir::separator() + dbName));
         if (!DB.open())
-            Utils::Log::addError(this, tkTr(Trans::Constants::DATABASE_1_CANNOT_BE_CREATED_ERROR_2).arg(dbName).arg(DB.lastError().text()));
+            LOG(tkTr(Trans::Constants::DATABASE_1_CANNOT_BE_CREATED_ERROR_2).arg(dbName).arg(DB.lastError().text()));
         setDriver(Utils::Database::SQLite);
     }
     else if (driver == MySQL) {
         DB = QSqlDatabase::database(connectionName);
         if (!DB.open()) {
-            QSqlDatabase d = QSqlDatabase::addDatabase("QMYSQL", "EPISODE_CREATOR");
+            QSqlDatabase d = QSqlDatabase::addDatabase("QMYSQL", "__EPISODE_CREATOR");
             d.setHostName(pathOrHostName);
             d.setUserName(login);
             d.setPassword(pass);
             d.setPort(port);
             if (!d.open()) {
-                Utils::warningMessageBox(tr("Unable to connect the episodes' database host."),tr("Please contact dev team."));
+                Utils::warningMessageBox(tkTr(Trans::Constants::UNABLE_TO_OPEN_DATABASE_1_ERROR_2)
+                                         .arg(DB.connectionName()).arg(DB.lastError().text()),
+                                         tr("Please contact dev team."));
                 return false;
             }
             QSqlQuery q(QString("CREATE DATABASE `%1`").arg(dbName), d);
             if (!q.isActive()) {
-                Utils::Log::addQueryError("Database", q);
-                Utils::warningMessageBox(tr("Unable to create the episodes database."),tr("Please contact dev team."));
-                qApp->exit(1);
+                LOG_QUERY_ERROR(q);
+                Utils::warningMessageBox(tkTr(Trans::Constants::DATABASE_1_CANNOT_BE_CREATED_ERROR_2)
+                                         .arg(DB.connectionName()).arg(DB.lastError().text()),
+                                         tr("Please contact dev team."));
                 return false;
             }
             if (!DB.open()) {
-                Utils::warningMessageBox(tr("Unable to connect the episodes database."),tr("Please contact dev team."));
-                qApp->exit(1);
+                Utils::warningMessageBox(tkTr(Trans::Constants::UNABLE_TO_OPEN_DATABASE_1_ERROR_2)
+                                         .arg(DB.connectionName()).arg(DB.lastError().text()),
+                                         tr("Please contact dev team."));
                 return false;
             }
             DB.setDatabaseName(dbName);
         }
-        if (QSqlDatabase::connectionNames().contains("EPISODE_CREATOR"))
-            QSqlDatabase::removeDatabase("EPISODE_CREATOR");
+        if (QSqlDatabase::connectionNames().contains("__EPISODE_CREATOR"))
+            QSqlDatabase::removeDatabase("__EPISODE_CREATOR");
         if (!DB.open()) {
-            Utils::warningMessageBox(tr("Unable to connect the episodes database."),tr("Please contact dev team."));
-            qApp->exit(1);
+            Utils::warningMessageBox(tkTr(Trans::Constants::UNABLE_TO_OPEN_DATABASE_1_ERROR_2)
+                                     .arg(DB.connectionName()).arg(DB.lastError().text()),
+                                     tr("Please contact dev team."));
             return false;
         }
         setDriver(Utils::Database::MySQL);
@@ -299,12 +321,11 @@ void EpisodeBase::populateWithDefaultValues()
 
 void EpisodeBase::onCoreDatabaseServerChanged()
 {
-    /** \todo code here */
-//    m_initialized = false;
-//    if (QSqlDatabase::connectionNames().contains(Templates::Constants::DB_TEMPLATES_NAME)) {
-//        QSqlDatabase::removeDatabase(Templates::Constants::DB_TEMPLATES_NAME);
-//    }
-//    init();
+    m_initialized = false;
+    if (QSqlDatabase::connectionNames().contains(Constants::DB_NAME)) {
+        QSqlDatabase::removeDatabase(Constants::DB_NAME);
+    }
+    init();
 }
 
 /**

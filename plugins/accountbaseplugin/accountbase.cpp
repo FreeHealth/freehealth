@@ -545,6 +545,8 @@ AccountBase::AccountBase(QObject *parent)
 //          "guid             varchar(6)                NOT NULL);";
 
     init();
+
+    connect(Core::ICore::instance(), SIGNAL(databaseServerChanged()), this, SLOT(onCoreDatabaseServerChanged()));
 }
 
 /** \brief Destructor. */
@@ -561,51 +563,88 @@ bool AccountBase::init()
         return true;
 
     // test driver
-     if (!QSqlDatabase::isDriverAvailable("QSQLITE")) {
-         LOG_ERROR(tkTr(Trans::Constants::SQLITE_DRIVER_NOT_AVAILABLE));
-         Utils::warningMessageBox(tkTr(Trans::Constants::APPLICATION_FAILURE),
-                                  tkTr(Trans::Constants::SQLITE_DRIVER_NOT_AVAILABLE_DETAIL),
-                                  "", qApp->applicationName());
-          return false;
-      }
+    // Check settings --> SQLite or MySQL ?
+    if (settings()->value(Core::Constants::S_USE_EXTERNAL_DATABASE, false).toBool()) {
+        if (!QSqlDatabase::isDriverAvailable("QMYSQL")) {
+            LOG_ERROR(tkTr(Trans::Constants::DATABASE_DRIVER_1_NOT_AVAILABLE).arg("MySQL"));
+            Utils::warningMessageBox(tkTr(Trans::Constants::APPLICATION_FAILURE),
+                                     tkTr(Trans::Constants::DATABASE_DRIVER_1_NOT_AVAILABLE_DETAIL).arg("MySQL"),
+                                     "", qApp->applicationName());
+            return false;
+        }
+        createConnection(Constants::DB_ACCOUNTANCY,
+                         Constants::DB_ACCOUNTANCY,
+                         QString(QByteArray::fromBase64(settings()->value(Core::Constants::S_EXTERNAL_DATABASE_HOST, QByteArray("localhost").toBase64()).toByteArray())),
+                         Utils::Database::ReadWrite,
+                         Utils::Database::MySQL,
+                         QString(QByteArray::fromBase64(settings()->value(Core::Constants::S_EXTERNAL_DATABASE_LOG, QByteArray("root").toBase64()).toByteArray())),
+                         QString(QByteArray::fromBase64(settings()->value(Core::Constants::S_EXTERNAL_DATABASE_PASS, QByteArray("").toBase64()).toByteArray())),
+                         QString(QByteArray::fromBase64(settings()->value(Core::Constants::S_EXTERNAL_DATABASE_PORT, QByteArray("").toBase64()).toByteArray())).toInt(),
+                         Utils::Database::CreateDatabase);
+    } else {
+        if (!QSqlDatabase::isDriverAvailable("QSQLITE")) {
+            LOG_ERROR(tkTr(Trans::Constants::DATABASE_DRIVER_1_NOT_AVAILABLE).arg("SQLite"));
+            Utils::warningMessageBox(tkTr(Trans::Constants::APPLICATION_FAILURE),
+                                     tkTr(Trans::Constants::DATABASE_DRIVER_1_NOT_AVAILABLE_DETAIL).arg("SQLite"),
+                                     "", qApp->applicationName());
+            return false;
+        }
+        createConnection(Constants::DB_ACCOUNTANCY,
+                         QString(Constants::DB_ACCOUNTANCY) + ".db",
+                         settings()->path(Core::ISettings::ReadWriteDatabasesPath) + QDir::separator() + QString(Constants::DB_ACCOUNTANCY),
+                         Utils::Database::ReadWrite,
+                         Utils::Database::SQLite,
+                         "", "", 0,
+                         Utils::Database::CreateDatabase);
+    }
 
-     // log the path of the database
-     QString pathToDb = settings()->path(Core::ISettings::ReadWriteDatabasesPath);
-     LOG(tr("Searching databases into dir %1").arg(pathToDb));
+    if (!database().isOpen()) {
+        if (!database().open()) {
+            LOG_ERROR(tkTr(Trans::Constants::UNABLE_TO_OPEN_DATABASE_1_ERROR_2).arg(Constants::DB_ACCOUNTANCY).arg(database().lastError().text()));
+        } else {
+            LOG(tkTr(Trans::Constants::CONNECTED_TO_DATABASE_1_DRIVER_2).arg(database().connectionName()).arg(database().driverName()));
+        }
+    } else {
+        LOG(tkTr(Trans::Constants::CONNECTED_TO_DATABASE_1_DRIVER_2).arg(database().connectionName()).arg(database().driverName()));
+    }
 
-#ifdef FREEACCOUNT
-     if (commandLine()->value(Core::CommandLine::CL_Test).toBool()) {
-         // check if database exists
-         bool feed = !QFile(pathToDb + QDir::separator() + QString(Constants::DB_ACCOUNTANCY) + "-test.db").exists();
+    // log the path of the database
+//    QString pathToDb = settings()->path(Core::ISettings::ReadWriteDatabasesPath);
+//    LOG(tr("Searching databases into dir %1").arg(pathToDb));
 
-         // Connect normal Account Database
-         createConnection(Constants::DB_ACCOUNTANCY, QString(Constants::DB_ACCOUNTANCY) + "-test.db", pathToDb,
-                          Utils::Database::ReadWrite, Utils::Database::SQLite, "", "", 0, CreateDatabase);
-         if (feed) {
-             // send defaults datas to DB
-             LOG("feeding test database with datas");
-             QString content = Utils::readTextFile(settings()->path(Core::ISettings::BundleResourcesPath) + "/textfiles/freeaccount-testing-database.sql");
-             if (!executeSQL(content, database()))
-                 LOG_ERROR("can feed test database");
-         }
-     } else {
-         // Connect normal Account Database
-         createConnection(Constants::DB_ACCOUNTANCY, QString(Constants::DB_ACCOUNTANCY) + ".db", pathToDb,
-                          Utils::Database::ReadWrite, Utils::Database::SQLite, "", "", 0, CreateDatabase);
-     }
-#else
-     // Connect normal Account Database
-     createConnection(Constants::DB_ACCOUNTANCY, QString(Constants::DB_ACCOUNTANCY) + ".db", pathToDb,
-                      Utils::Database::ReadWrite, Utils::Database::SQLite, "", "", 0, CreateDatabase);
-#endif
+//#ifdef FREEACCOUNT
+//     if (commandLine()->value(Core::CommandLine::CL_Test).toBool()) {
+//         // check if database exists
+//         bool feed = !QFile(pathToDb + QDir::separator() + QString(Constants::DB_ACCOUNTANCY) + "-test.db").exists();
 
-     if (checkDatabaseScheme())
-         qWarning() << "xxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxx OK";
-     else
-         qWarning() << "xxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxx WRONG";
+//         // Connect normal Account Database
+//         createConnection(Constants::DB_ACCOUNTANCY, QString(Constants::DB_ACCOUNTANCY) + "-test.db", pathToDb,
+//                          Utils::Database::ReadWrite, Utils::Database::SQLite, "", "", 0, CreateDatabase);
+//         if (feed) {
+//             // send defaults datas to DB
+//             LOG("feeding test database with datas");
+//             QString content = Utils::readTextFile(settings()->path(Core::ISettings::BundleResourcesPath) + "/textfiles/freeaccount-testing-database.sql");
+//             if (!executeSQL(content, database()))
+//                 LOG_ERROR("can feed test database");
+//         }
+//     } else {
+//         // Connect normal Account Database
+//         createConnection(Constants::DB_ACCOUNTANCY, QString(Constants::DB_ACCOUNTANCY) + ".db", pathToDb,
+//                          Utils::Database::ReadWrite, Utils::Database::SQLite, "", "", 0, CreateDatabase);
+//     }
+//#else
+//     // Connect normal Account Database
+//     createConnection(Constants::DB_ACCOUNTANCY, QString(Constants::DB_ACCOUNTANCY) + ".db", pathToDb,
+//                      Utils::Database::ReadWrite, Utils::Database::SQLite, "", "", 0, CreateDatabase);
+//#endif
 
-     m_initialized = true;
-     return true;
+    if (!checkDatabaseScheme()) {
+        LOG_ERROR(tkTr(Trans::Constants::DATABASE_1_SCHEMA_ERROR).arg(Constants::DB_ACCOUNTANCY));
+        return false;
+    }
+
+    m_initialized = true;
+    return true;
 }
 
 void AccountBase::logChronos(bool state)
@@ -614,16 +653,19 @@ void AccountBase::logChronos(bool state)
 bool AccountBase::createDatabase(const QString &connectionName , const QString &dbName,
                     const QString &pathOrHostName,
                     TypeOfAccess access, AvailableDrivers driver,
-                    const QString & /*login*/, const QString & /*pass*/,
+                    const QString & login, const QString & pass,
                     const int port,
-                    CreationOption /*createOption*/
+                    CreationOption createOption
                    )
 {
     qWarning() << "CREATE";
+    /** \todo manage createOption */
     if (connectionName != Constants::DB_ACCOUNTANCY)
         return false;
+
     LOG(tkTr(Trans::Constants::TRYING_TO_CREATE_1_PLACE_2)
         .arg(dbName).arg(pathOrHostName));
+
     // create an empty database and connect
     QSqlDatabase DB;
     if (driver == SQLite) {
@@ -633,27 +675,66 @@ bool AccountBase::createDatabase(const QString &connectionName , const QString &
                 tkTr(Trans::Constants::_1_ISNOT_AVAILABLE_CANNOTBE_CREATED).arg(pathOrHostName);
         DB.setDatabaseName(QDir::cleanPath(pathOrHostName + QDir::separator() + dbName));
         DB.open();
+        setDriver(Utils::Database::SQLite);
     }
     else if (driver == MySQL) {
-        /** \todo param MySQL database */
+        DB = QSqlDatabase::database(connectionName);
+        if (!DB.open()) {
+            QSqlDatabase d = QSqlDatabase::addDatabase("QMYSQL", "__ACCOUNTANCY_CREATOR");
+            d.setHostName(pathOrHostName);
+            d.setUserName(login);
+            d.setPassword(pass);
+            d.setPort(port);
+            if (!d.open()) {
+                Utils::warningMessageBox(tkTr(Trans::Constants::UNABLE_TO_OPEN_DATABASE_1_ERROR_2)
+                                         .arg(DB.connectionName()).arg(DB.lastError().text()),
+                                         tr("Please contact dev team."));
+                return false;
+            }
+            QSqlQuery q(QString("CREATE DATABASE `%1`").arg(dbName), d);
+            if (!q.isActive()) {
+                LOG_QUERY_ERROR(q);
+                Utils::warningMessageBox(tkTr(Trans::Constants::DATABASE_1_CANNOT_BE_CREATED_ERROR_2)
+                                         .arg(DB.connectionName()).arg(DB.lastError().text()),
+                                         tr("Please contact dev team."));
+                return false;
+            }
+            if (!DB.open()) {
+                Utils::warningMessageBox(tkTr(Trans::Constants::UNABLE_TO_OPEN_DATABASE_1_ERROR_2)
+                                         .arg(DB.connectionName()).arg(DB.lastError().text()),
+                                         tr("Please contact dev team."));
+                return false;
+            }
+            DB.setDatabaseName(dbName);
+        }
+        if (QSqlDatabase::connectionNames().contains("__ACCOUNTANCY_CREATOR"))
+            QSqlDatabase::removeDatabase("__ACCOUNTANCY_CREATOR");
+        DB.open();
+        setDriver(Utils::Database::MySQL);
     }
 
     // create db structure
     // before we need to inform Utils::Database of the connectionName to use
     setConnectionName(connectionName);
 
-    qWarning() << "xxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxx";
-
     if (createTables()) {
-        LOG(tr("Database %1 %2 correctly created").arg(connectionName, dbName));
-        return true;
+        LOG(tkTr(Trans::Constants::DATABASE_1_CORRECTLY_CREATED).arg(dbName));
     } else {
-        qDebug() << __FILE__ << QString::number(__LINE__) << " database can not be created " ;
-        LOG_ERROR(tr("ERROR : database can not be created %1 %2 %3")
-                  .arg(connectionName, dbName, DB.lastError().text()));
+        LOG_ERROR(tkTr(Trans::Constants::DATABASE_1_CANNOT_BE_CREATED_ERROR_2)
+                         .arg(dbName, DB.lastError().text()));
+        return false;
     }
-    qWarning() << "xxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxx";
-    return false;
+
+    // Add version number
+//    QSqlQuery query(DB);
+//    query.prepare(prepareInsertQuery(Constants::Table_VERSION));
+//    query.bindValue(Constants::VERSION_TEXT, Constants::DB_ACTUALVERSION);
+//    if (!query.exec()) {
+//        LOG_QUERY_ERROR(query);
+//        return false;
+//    }
+
+    return true;
 }
 
 AccountData *AccountBase::getAccountByUid(const QString &uid)
@@ -688,3 +769,11 @@ AccountData *AccountBase::getAccountByUid(const QString &uid)
     return 0;
 }
 
+void AccountBase::onCoreDatabaseServerChanged()
+{
+    m_initialized = false;
+    if (QSqlDatabase::connectionNames().contains(Constants::DB_ACCOUNTANCY)) {
+        QSqlDatabase::removeDatabase(Constants::DB_ACCOUNTANCY);
+    }
+    init();
+}

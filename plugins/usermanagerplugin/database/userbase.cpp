@@ -180,6 +180,13 @@ bool UserBase::initialize(Core::ISettings *s)
     // test connection (create DB if not exists)
     // Check settings --> SQLite or MySQL ?
     if (set->value(Core::Constants::S_USE_EXTERNAL_DATABASE, false).toBool()) {
+        if (!QSqlDatabase::isDriverAvailable("QMYSQL")) {
+            LOG_ERROR(tkTr(Trans::Constants::DATABASE_DRIVER_1_NOT_AVAILABLE).arg("MySQL"));
+            Utils::warningMessageBox(tkTr(Trans::Constants::APPLICATION_FAILURE),
+                                     tkTr(Trans::Constants::DATABASE_DRIVER_1_NOT_AVAILABLE_DETAIL).arg("MySQL"),
+                                     "", qApp->applicationName());
+            return false;
+        }
         if (!createConnection(USER_DB_CONNECTION,
                               USER_DB_CONNECTION,
                               QString(QByteArray::fromBase64(set->value(Core::Constants::S_EXTERNAL_DATABASE_HOST, QByteArray("localhost").toBase64()).toByteArray())),
@@ -191,6 +198,13 @@ bool UserBase::initialize(Core::ISettings *s)
                               Utils::Database::CreateDatabase))
             return false;
     } else {
+        if (!QSqlDatabase::isDriverAvailable("QSQLITE")) {
+            LOG_ERROR(tkTr(Trans::Constants::DATABASE_DRIVER_1_NOT_AVAILABLE).arg("SQLite"));
+            Utils::warningMessageBox(tkTr(Trans::Constants::APPLICATION_FAILURE),
+                                     tkTr(Trans::Constants::DATABASE_DRIVER_1_NOT_AVAILABLE_DETAIL).arg("SQLite"),
+                                     "", qApp->applicationName());
+            return false;
+        }
         // Connect SQLite database
         QString pathToDb = set->path(Core::ISettings::ReadWriteDatabasesPath);
         pathToDb = QDir::cleanPath(pathToDb + QDir::separator() + USER_DB_CONNECTION);
@@ -206,6 +220,21 @@ bool UserBase::initialize(Core::ISettings *s)
                               "log", "pas", 0,
                               Utils::Database::CreateDatabase))
             return false;
+    }
+
+    if (!database().isOpen()) {
+        if (!database().open()) {
+            LOG_ERROR(tkTr(Trans::Constants::UNABLE_TO_OPEN_DATABASE_1_ERROR_2).arg(USER_DB_CONNECTION).arg(database().lastError().text()));
+        } else {
+            LOG(tkTr(Trans::Constants::CONNECTED_TO_DATABASE_1_DRIVER_2).arg(database().connectionName()).arg(database().driverName()));
+        }
+    } else {
+        LOG(tkTr(Trans::Constants::CONNECTED_TO_DATABASE_1_DRIVER_2).arg(database().connectionName()).arg(database().driverName()));
+    }
+
+    if (!checkDatabaseScheme()) {
+        LOG_ERROR(tkTr(Trans::Constants::DATABASE_1_SCHEMA_ERROR).arg(USER_DB_CONNECTION));
+        return false;
     }
 
     if (!checkDatabaseVersion())
@@ -562,6 +591,10 @@ bool UserBase::createDatabase(const QString &connectionName , const QString &dbN
 {
     Q_UNUSED(access);
     Q_UNUSED(createOption);
+
+    if (connectionName != Constants::USER_DB_CONNECTION)
+        return false;
+
     LOG(QCoreApplication::translate("UserBase",
                                     "Trying to create empty user database. \n"
                                     "       Location : %1 \n"
@@ -575,9 +608,14 @@ bool UserBase::createDatabase(const QString &connectionName , const QString &dbN
     // create an empty database and connect
     QSqlDatabase DB;
     if (driver == SQLite) {
-        DB = QSqlDatabase::addDatabase("QSQLITE" , connectionName);
+        DB = QSqlDatabase::addDatabase("QSQLITE", connectionName);
+        if (!QDir(pathOrHostName).exists())
+            if (!QDir().mkpath(pathOrHostName))
+                tkTr(Trans::Constants::_1_ISNOT_AVAILABLE_CANNOTBE_CREATED).arg(pathOrHostName);
         DB.setDatabaseName(QDir::cleanPath(pathOrHostName + QDir::separator() + dbName));
-        DB.open();
+        if (!DB.open())
+            LOG(tkTr(Trans::Constants::DATABASE_1_CANNOT_BE_CREATED_ERROR_2).arg(dbName).arg(DB.lastError().text()));
+        setDriver(Utils::Database::SQLite);
     } else if (driver == MySQL) {
         /** \todo test grants here or before ? */
         if (QSqlDatabase::connectionNames().contains(connectionName)) {
@@ -592,6 +630,7 @@ bool UserBase::createDatabase(const QString &connectionName , const QString &dbN
         DB.setDatabaseName("mysql");
         if (!DB.open()) {
             LOG_ERROR(tkTr(Trans::Constants::UNABLE_TO_OPEN_DATABASE_1_ERROR_2).arg(DB.connectionName()).arg(DB.lastError().text()));
+            return false;
         }
         //        qWarning() << "createMySQLDatabase(dbName);";
         createMySQLDatabase(dbName);
@@ -604,8 +643,11 @@ bool UserBase::createDatabase(const QString &connectionName , const QString &dbN
     }
 
     // create db structure
-    if (!createTables()) {
-        LOG_ERROR(tkTr(Trans::Constants::DATABASE_1_CANNOT_BE_CREATED_ERROR_2).arg(dbName).arg(DB.lastError().text()));
+    if (createTables()) {
+        LOG(tkTr(Trans::Constants::DATABASE_1_CORRECTLY_CREATED).arg(dbName));
+    } else {
+        LOG_ERROR(tkTr(Trans::Constants::DATABASE_1_CANNOT_BE_CREATED_ERROR_2)
+                  .arg(dbName, DB.lastError().text()));
         return false;
     }
 
@@ -622,7 +664,7 @@ bool UserBase::createDatabase(const QString &connectionName , const QString &dbN
     }
 
     // database is readable/writable
-    LOG(QCoreApplication::translate("UserBase", "User database created : File %1").arg(pathOrHostName + QDir::separator() + dbName));
+    LOG(tkTr(Trans::Constants::DATABASE_1_CORRECTLY_CREATED).arg(pathOrHostName + QDir::separator() + dbName));
 
     m_IsNewlyCreated = true;
     return true;
@@ -643,6 +685,7 @@ bool UserBase::createDefaultUser()
     user->setRights(Constants::USER_ROLE_MEDICAL, Core::IUser::ReadAll | Core::IUser::WriteAll | Core::IUser::Create | Core::IUser::Delete | Core::IUser::Print);
     user->setRights(Constants::USER_ROLE_ADMINISTRATIVE, Core::IUser::ReadAll | Core::IUser::WriteAll | Core::IUser::Create | Core::IUser::Delete | Core::IUser::Print);
     user->setRights(Constants::USER_ROLE_PARAMEDICAL, Core::IUser::ReadAll | Core::IUser::WriteAll | Core::IUser::Create | Core::IUser::Delete | Core::IUser::Print);
+    user->setPersonalLkId(1);
 
     QList<UserDynamicData*> list;
 
@@ -687,7 +730,7 @@ bool UserBase::createDefaultUser()
     query.bindValue(Constants::LK_ID, QVariant());
     query.bindValue(Constants::LK_GROUP_UUID, QVariant());
     query.bindValue(Constants::LK_USER_UUID, user->uuid());
-    query.bindValue(Constants::LK_LKID, 1);
+    query.bindValue(Constants::LK_LKID, user->personalLinkId());
     if (!query.exec()) {
         LOG_QUERY_ERROR(query);
         delete user; // list is deleted here
@@ -930,7 +973,7 @@ bool UserBase::saveUser(UserData *user)
 
         // create the USER_LK
         if (user->personalLinkId() == -1) {
-            user->setPersonalLkId(getMaxLinkId());
+            user->setPersonalLkId(getMaxLinkId() + 1);
             QSqlQuery q(DB);
             q.prepare(prepareInsertQuery(Table_USER_LK_ID));
             q.bindValue(LK_ID,         QVariant());

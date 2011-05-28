@@ -112,6 +112,13 @@ bool CategoryBase::init()
 
     // Check settings --> SQLite or MySQL ?
     if (settings()->value(Core::Constants::S_USE_EXTERNAL_DATABASE, false).toBool()) {
+        if (!QSqlDatabase::isDriverAvailable("QMYSQL")) {
+            LOG_ERROR(tkTr(Trans::Constants::DATABASE_DRIVER_1_NOT_AVAILABLE).arg("MySQL"));
+            Utils::warningMessageBox(tkTr(Trans::Constants::APPLICATION_FAILURE),
+                                     tkTr(Trans::Constants::DATABASE_DRIVER_1_NOT_AVAILABLE_DETAIL).arg("MySQL"),
+                                     "", qApp->applicationName());
+            return false;
+        }
         createConnection(Constants::DB_NAME,
                          Constants::DB_NAME,
                          QString(QByteArray::fromBase64(settings()->value(Core::Constants::S_EXTERNAL_DATABASE_HOST, QByteArray("localhost").toBase64()).toByteArray())),
@@ -122,6 +129,13 @@ bool CategoryBase::init()
                          QString(QByteArray::fromBase64(settings()->value(Core::Constants::S_EXTERNAL_DATABASE_PORT, QByteArray("").toBase64()).toByteArray())).toInt(),
                          Utils::Database::CreateDatabase);
     } else {
+        if (!QSqlDatabase::isDriverAvailable("QSQLITE")) {
+            LOG_ERROR(tkTr(Trans::Constants::DATABASE_DRIVER_1_NOT_AVAILABLE).arg("SQLite"));
+            Utils::warningMessageBox(tkTr(Trans::Constants::APPLICATION_FAILURE),
+                                     tkTr(Trans::Constants::DATABASE_DRIVER_1_NOT_AVAILABLE_DETAIL).arg("SQLite"),
+                                     "", qApp->applicationName());
+            return false;
+        }
         createConnection(Constants::DB_NAME,
                          Constants::DB_FILENAME,
                          settings()->path(Core::ISettings::ReadWriteDatabasesPath) + QDir::separator() + QString(Constants::DB_NAME),
@@ -129,6 +143,21 @@ bool CategoryBase::init()
                          Utils::Database::SQLite,
                          "log", "pas", 0,
                          Utils::Database::CreateDatabase);
+    }
+
+    if (!database().isOpen()) {
+        if (!database().open()) {
+            LOG_ERROR(tkTr(Trans::Constants::UNABLE_TO_OPEN_DATABASE_1_ERROR_2).arg(Constants::DB_NAME).arg(database().lastError().text()));
+        } else {
+            LOG(tkTr(Trans::Constants::CONNECTED_TO_DATABASE_1_DRIVER_2).arg(database().connectionName()).arg(database().driverName()));
+        }
+    } else {
+        LOG(tkTr(Trans::Constants::CONNECTED_TO_DATABASE_1_DRIVER_2).arg(database().connectionName()).arg(database().driverName()));
+    }
+
+    if (!checkDatabaseScheme()) {
+        LOG_ERROR(tkTr(Trans::Constants::DATABASE_1_SCHEMA_ERROR).arg(Constants::DB_NAME));
+        return false;
     }
 
 //    checkDatabaseVersion();
@@ -157,36 +186,48 @@ bool CategoryBase::createDatabase(const QString &connectionName , const QString 
             if (!QDir().mkpath(pathOrHostName))
                 tkTr(Trans::Constants::_1_ISNOT_AVAILABLE_CANNOTBE_CREATED).arg(pathOrHostName);
         DB.setDatabaseName(QDir::cleanPath(pathOrHostName + QDir::separator() + dbName));
-        DB.open();
+        if (!DB.open())
+            LOG(tkTr(Trans::Constants::DATABASE_1_CANNOT_BE_CREATED_ERROR_2).arg(dbName).arg(DB.lastError().text()));
         setDriver(Utils::Database::SQLite);
     }
     else if (driver == MySQL) {
         DB = QSqlDatabase::database(connectionName);
         if (!DB.open()) {
-            QSqlDatabase d = QSqlDatabase::addDatabase("QMYSQL", "CREATOR");
+            QSqlDatabase d = QSqlDatabase::addDatabase("QMYSQL", "__CATEGORY_CREATOR");
             d.setHostName(pathOrHostName);
             d.setUserName(login);
             d.setPassword(pass);
             d.setPort(port);
             if (!d.open()) {
-                Utils::warningMessageBox(tr("Unable to connect the Templates host."),tr("Please contact dev team."));
+                Utils::warningMessageBox(tkTr(Trans::Constants::UNABLE_TO_OPEN_DATABASE_1_ERROR_2)
+                                         .arg(DB.connectionName()).arg(DB.lastError().text()),
+                                         tr("Please contact dev team."));
                 return false;
             }
             QSqlQuery q(QString("CREATE DATABASE `%1`").arg(dbName), d);
             if (!q.isActive()) {
-                LOG_QUERY_ERROR_FOR("Database", q);
-                Utils::warningMessageBox(tr("Unable to create the Templates database."),tr("Please contact dev team."));
+                LOG_QUERY_ERROR(q);
+                Utils::warningMessageBox(tkTr(Trans::Constants::DATABASE_1_CANNOT_BE_CREATED_ERROR_2)
+                                         .arg(DB.connectionName()).arg(DB.lastError().text()),
+                                         tr("Please contact dev team."));
                 return false;
             }
             if (!DB.open()) {
-                Utils::warningMessageBox(tr("Unable to connect the Templates database."),tr("Please contact dev team."));
+                Utils::warningMessageBox(tkTr(Trans::Constants::UNABLE_TO_OPEN_DATABASE_1_ERROR_2)
+                                         .arg(DB.connectionName()).arg(DB.lastError().text()),
+                                         tr("Please contact dev team."));
                 return false;
             }
             DB.setDatabaseName(dbName);
         }
-        if (QSqlDatabase::connectionNames().contains("CREATOR"))
-            QSqlDatabase::removeDatabase("CREATOR");
-        DB.open();
+        if (QSqlDatabase::connectionNames().contains("__CATEGORY_CREATOR"))
+            QSqlDatabase::removeDatabase("__CATEGORY_CREATOR");
+        if (!DB.open()) {
+            Utils::warningMessageBox(tkTr(Trans::Constants::UNABLE_TO_OPEN_DATABASE_1_ERROR_2)
+                                     .arg(DB.connectionName()).arg(DB.lastError().text()),
+                                     tr("Please contact dev team."));
+            return false;
+        }
         setDriver(Utils::Database::MySQL);
     }
 
@@ -197,8 +238,8 @@ bool CategoryBase::createDatabase(const QString &connectionName , const QString 
     if (createTables()) {
         LOG(tkTr(Trans::Constants::DATABASE_1_CORRECTLY_CREATED).arg(dbName));
     } else {
-        LOG(tkTr(Trans::Constants::DATABASE_1_CANNOT_BE_CREATED_ERROR_2)
-            .arg(dbName, DB.lastError().text()));
+        LOG_ERROR(tkTr(Trans::Constants::DATABASE_1_CANNOT_BE_CREATED_ERROR_2)
+                  .arg(dbName, DB.lastError().text()));
         return false;
     }
 

@@ -203,6 +203,7 @@ void UserWizard::done(int r)
     if (true) {
 
         // Feed userData with the wizard values
+        m_User->setValidity(1);
         m_User->setLogin64(loginForSQL(field("Login").toString()));
         m_User->setClearPassword(field("Password").toString());
         m_User->setCryptedPassword(UserPlugin::crypt(field("Password").toString()));

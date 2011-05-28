@@ -61,7 +61,6 @@ public:
     static AccountBase *instance();
     ~AccountBase();
 
-
     // Initializer / Checkers
     static bool isInitialized() { return m_initialized; }
     void logChronos(bool state);
@@ -78,6 +77,9 @@ private:
 
 
     AccountData *getAccountByUid(const QString &uid);
+
+private Q_SLOTS:
+    void onCoreDatabaseServerChanged();
 
 private:
     // intialization state

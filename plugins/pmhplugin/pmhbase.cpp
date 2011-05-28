@@ -175,10 +175,14 @@ bool PmhBase::init()
                          settings()->path(Core::ISettings::ReadWriteDatabasesPath) + QDir::separator() + QString(Constants::DB_NAME),
                          Utils::Database::ReadWrite,
                          Utils::Database::SQLite,
-                         "log", "pas", 0,
+                         "", "", 0,
                          Utils::Database::CreateDatabase);
     }
-//    checkDatabaseVersion();
+
+    if (!checkDatabaseScheme()) {
+        LOG_ERROR(tkTr(Trans::Constants::DATABASE_1_SCHEMA_ERROR).arg(Constants::DB_NAME));
+        return false;
+    }
 
     m_initialized = true;
     return true;
@@ -212,29 +216,35 @@ bool PmhBase::createDatabase(const QString &connectionName , const QString &dbNa
     else if (driver == MySQL) {
         DB = QSqlDatabase::database(connectionName);
         if (!DB.open()) {
-            QSqlDatabase d = QSqlDatabase::addDatabase("QMYSQL", "CREATOR");
+            QSqlDatabase d = QSqlDatabase::addDatabase("QMYSQL", "__PMH_CREATOR");
             d.setHostName(pathOrHostName);
             d.setUserName(login);
             d.setPassword(pass);
             d.setPort(port);
             if (!d.open()) {
-                Utils::warningMessageBox(tr("Unable to connect the Templates host."),tr("Please contact dev team."));
+                Utils::warningMessageBox(tkTr(Trans::Constants::UNABLE_TO_OPEN_DATABASE_1_ERROR_2)
+                                         .arg(DB.connectionName()).arg(DB.lastError().text()),
+                                         tr("Please contact dev team."));
                 return false;
             }
             QSqlQuery q(QString("CREATE DATABASE `%1`").arg(dbName), d);
             if (!q.isActive()) {
                 LOG_QUERY_ERROR(q);
-                Utils::warningMessageBox(tr("Unable to create the Templates database."),tr("Please contact dev team."));
+                Utils::warningMessageBox(tkTr(Trans::Constants::DATABASE_1_CANNOT_BE_CREATED_ERROR_2)
+                                         .arg(DB.connectionName()).arg(DB.lastError().text()),
+                                         tr("Please contact dev team."));
                 return false;
             }
             if (!DB.open()) {
-                Utils::warningMessageBox(tr("Unable to connect the Templates database."),tr("Please contact dev team."));
+                Utils::warningMessageBox(tkTr(Trans::Constants::UNABLE_TO_OPEN_DATABASE_1_ERROR_2)
+                                         .arg(DB.connectionName()).arg(DB.lastError().text()),
+                                         tr("Please contact dev team."));
                 return false;
             }
             DB.setDatabaseName(dbName);
         }
-        if (QSqlDatabase::connectionNames().contains("CREATOR"))
-            QSqlDatabase::removeDatabase("CREATOR");
+        if (QSqlDatabase::connectionNames().contains("__PMH_CREATOR"))
+            QSqlDatabase::removeDatabase("__PMH_CREATOR");
         DB.open();
         setDriver(Utils::Database::MySQL);
     }
@@ -521,10 +531,10 @@ bool PmhBase::savePmhCategory(Category::CategoryItem *category)
 
 void PmhBase::onCoreDatabaseServerChanged()
 {
-//    m_initialized = false;
-//    if (QSqlDatabase::connectionNames().contains(Templates::Constants::DB_TEMPLATES_NAME)) {
-//        QSqlDatabase::removeDatabase(Templates::Constants::DB_TEMPLATES_NAME);
-//    }
-//    init();
+    m_initialized = false;
+    if (QSqlDatabase::connectionNames().contains(Constants::DB_NAME)) {
+        QSqlDatabase::removeDatabase(Constants::DB_NAME);
+    }
+    init();
 }
 
