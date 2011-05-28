@@ -40,6 +40,7 @@ class AccountData;
 
 class ACCOUNTBASE_EXPORT AmountModel : public QAbstractTableModel
 {
+    Q_OBJECT
 public:
     enum ColumnRepresentation {
         Col_Value = 0,

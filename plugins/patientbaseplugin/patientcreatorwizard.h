@@ -47,6 +47,7 @@ class IdentityPage;
 
 class PATIENT_EXPORT PatientCreatorWizard : public QWizard
 {
+    Q_OBJECT
 public:
     enum Pages {
          Page_Identity

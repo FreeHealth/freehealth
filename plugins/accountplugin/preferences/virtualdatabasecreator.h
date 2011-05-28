@@ -89,6 +89,7 @@ private:
 
 class VirtualDatabaseCreatorPage : public Core::IOptionsPage
 {
+    Q_OBJECT
 public:
     VirtualDatabaseCreatorPage(QObject *parent = 0);
     ~VirtualDatabaseCreatorPage();

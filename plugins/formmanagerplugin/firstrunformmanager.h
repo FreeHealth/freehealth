@@ -45,6 +45,7 @@ namespace Internal {
 
 class FirstRunFormManagerWizardPage : public QWizardPage
 {
+    Q_OBJECT
 public:
     FirstRunFormManagerWizardPage(QWidget *parent);
 
