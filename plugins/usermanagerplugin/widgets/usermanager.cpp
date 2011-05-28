@@ -171,7 +171,10 @@ UserManagerDialog::UserManagerDialog(QWidget * parent) :
     if (!UserModel::instance()->hasCurrentUser())
         return;
 //    setAttribute(Qt::WA_DeleteOnClose);
+    QGridLayout *lay = new QGridLayout(this);
+    setLayout(lay);
     m_Widget = new UserManagerWidget(this);
+    lay->addWidget(m_Widget, 0, 0);
 }
 
 bool UserManagerDialog::initialize()
