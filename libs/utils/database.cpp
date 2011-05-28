@@ -1810,17 +1810,27 @@ QString DatabasePrivate::getSQLCreateTable(const int &tableref)
                                 .arg(m_DefaultFieldValue.value(i)));
                 break;
             case Database::FieldIsDate :
-                if (m_DefaultFieldValue.value(i).startsWith("CUR"))
-                    toReturn.append(QString("%1 \t %2 DEFAULT %3, \n")
-                                .arg(QString("`%1`").arg(m_Fields.value(i)))//.leftJustified(55, ' '))
-                                .arg(getTypeOfField(i))// .leftJustified(20, ' '))
-                                .arg(m_DefaultFieldValue.value(i)));
-                else
-                    toReturn.append(QString("%1 \t %2 DEFAULT '%3', \n")
-                                .arg(QString("`%1`").arg(m_Fields.value(i)))//.leftJustified(55, ' '))
-                                .arg(getTypeOfField(i))// .leftJustified(20, ' '))
-                                .arg(m_DefaultFieldValue.value(i)));
-                break;
+                {
+                    QString defVal = m_DefaultFieldValue.value(i).simplified();
+                    if (defVal.startsWith("CUR")) {
+                        if (m_Driver==Database::MySQL) {
+                            // CURRENT_DATE as default value is not supported by MySQL
+                            defVal = "NULL";
+                        } else if (defVal.endsWith("()")) {
+                            defVal = defVal.remove("()");
+                        }
+                        toReturn.append(QString("%1 \t %2 DEFAULT %3, \n")
+                                        .arg(QString("`%1`").arg(m_Fields.value(i)))//.leftJustified(55, ' '))
+                                        .arg(getTypeOfField(i))// .leftJustified(20, ' '))
+                                        .arg(defVal));
+                    }
+                    else
+                        toReturn.append(QString("%1 \t %2 DEFAULT '%3', \n")
+                                        .arg(QString("`%1`").arg(m_Fields.value(i)))//.leftJustified(55, ' '))
+                                        .arg(getTypeOfField(i))// .leftJustified(20, ' '))
+                                        .arg(m_DefaultFieldValue.value(i)));
+                    break;
+                }
             case Database::FieldIsBoolean :
             case Database::FieldIsInteger :
             case Database::FieldIsLongInteger :
@@ -1850,8 +1860,6 @@ QString DatabasePrivate::getSQLCreateTable(const int &tableref)
     }
 
     toReturn.append("\n); \n\n");
-
-    qWarning() << toReturn;
 
     if (WarnSqlCommands)
         qWarning() << toReturn;
