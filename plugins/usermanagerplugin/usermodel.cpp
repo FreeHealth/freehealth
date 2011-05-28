@@ -716,7 +716,7 @@ bool UserModel::setData(const QModelIndex &item, const QVariant &value, int role
                 break;
             }
         case Core::IUser::LocaleCodedLanguage: user->setLanguage(QLocale(QLocale::Language(value.toInt())).name().left(2)); break;
-        case Core::IUser::Adress :  user->setAdress(value); break;
+        case Core::IUser::Adress :  user->setAddress(value); break;
         case Core::IUser::Zipcode :  user->setZipcode(value); break;
         case Core::IUser::City :  user->setCity(value); break;
         case Core::IUser::Country :  user->setCountry(value); break;

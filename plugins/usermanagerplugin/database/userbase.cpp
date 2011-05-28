@@ -680,7 +680,7 @@ bool UserBase::createDefaultUser()
     user->setFirstname(DEFAULT_USER_FIRSTNAME);
     user->setLanguage(QLocale().language());
     user->setSpecialty(QStringList() << DEFAULT_USER_SPECIALTY);
-    user->setAdress(DEFAULT_USER_ADRESS);
+    user->setAddress(DEFAULT_USER_ADRESS);
     user->setRights(Constants::USER_ROLE_USERMANAGER, Core::IUser::ReadAll | Core::IUser::WriteAll | Core::IUser::Create | Core::IUser::Delete | Core::IUser::Print);
     user->setRights(Constants::USER_ROLE_MEDICAL, Core::IUser::ReadAll | Core::IUser::WriteAll | Core::IUser::Create | Core::IUser::Delete | Core::IUser::Print);
     user->setRights(Constants::USER_ROLE_ADMINISTRATIVE, Core::IUser::ReadAll | Core::IUser::WriteAll | Core::IUser::Create | Core::IUser::Delete | Core::IUser::Print);

@@ -21,8 +21,8 @@
 /***************************************************************************
  *  Main Developper : Eric MAEKER, <eric.maeker@free.fr>                  *
  *  Contributors :                                                        *
- *      NAME <MAIL@ADRESS>                                                *
- *      NAME <MAIL@ADRESS>                                                *
+ *      NAME <MAIL@Address>                                                *
+ *      NAME <MAIL@Address>                                                *
  ***************************************************************************/
 /**
   \class UserPlugin::UserWizard
@@ -48,9 +48,6 @@
 
 #include <texteditorplugin/texteditor.h>
 
-#include <printerplugin/printer.h>
-#include <printerplugin/textdocumentextra.h>
-
 #include <listviewplugin/stringlistview.h>
 #include <listviewplugin/stringlistmodel.h>
 
@@ -73,6 +70,7 @@
 #include <translationutils/constanttranslations.h>
 
 #include <QGridLayout>
+#include <QFormLayout>
 #include <QLineEdit>
 #include <QComboBox>
 #include <QLabel>
@@ -81,6 +79,9 @@
 #include <QPushButton>
 #include <QList>
 #include <QCheckBox>
+#include <QGroupBox>
+
+#include "ui_userwizardcontactwidget.h"
 
 using namespace UserPlugin;
 using namespace Internal;
@@ -148,17 +149,11 @@ UserWizard::UserWizard(QWidget *parent) :
         m_Saved(false),
         m_CreateUser(true)
 {
-    setPage(LanguageSelectorPage, new UserLanguageSelectorPage(this));
-    setPage(LoginPasswordPage, new UserLoginPasswordPage(this));
-    setPage(IdentityPage, new UserIdentityPage(this));
-    setPage(AdressPage, new UserAdressPage(this));
-    setPage(TelsAndMailPage, new UserTelsAndMailPage(this));
+    setPage(IdentityAndLoginPage, new UserIdentityAndLoginPage(this));
+    setPage(ContactPage, new UserContactPage(this));
     setPage(ProfilPage, new UserProfilPage(this));
     setPage(RightsPage, new UserRightsPage(this));
     setPage(SpecialiesQualificationsPage, new UserSpecialiesQualificationsPage(this));
-//    setPage(PaperGenericPage, new UserPaperPage("Generic", PaperAdministrativePage, this));
-//    setPage(PaperAdministrativePage, new UserPaperPage("Administrative", PaperPrescriptionsPage, this));
-//    setPage(PaperPrescriptionsPage, new UserPaperPage("Prescription", -1, this));
 
     setWindowTitle(tr("User Creator Wizard"));
     QList<QWizard::WizardButton> layout;
@@ -212,7 +207,7 @@ void UserWizard::done(int r)
         m_User->setFirstname(field("Firstname"));
         m_User->setTitle(field("Title"));
         m_User->setGender(field("Gender"));
-        m_User->setAdress(field("Adress"));
+        m_User->setAddress(field("Address"));
         m_User->setZipcode(field("Zipcode"));
         m_User->setCity(field("City"));
         m_User->setCountry(field("Country"));
@@ -302,101 +297,50 @@ QString UserWizard::createdUuid() const
     return QString();
 }
 
-UserLanguageSelectorPage::UserLanguageSelectorPage(QWidget *parent)
-    : QWizardPage(parent), lbl(0)
+UserIdentityAndLoginPage::UserIdentityAndLoginPage(QWidget *parent) :
+        QWizardPage(parent), langLbl(0)
 {
-    lbl = new QLabel(tr("Language"), this);
-    retranslate();
+    identGroup = new QGroupBox(this);
+    logGroup = new QGroupBox(this);
+
+    langLbl = new QLabel(tr("Language"), this);
+    lblTitle = new QLabel(tr("Title"), this);
+    lblName = new QLabel(tr("Name"), this);
+    lblFirstName = new QLabel(tr("Firstname"), this);
+    lblSecondName = new QLabel(tr("Second Name"), this);
+    lblGender = new QLabel(tr("Gender"), this);
+
+    cbTitle = new QComboBox(this);
+    leName = new QLineEdit(this);
+    leFirstName = new QLineEdit(this);
+    leSecondName = new QLineEdit(this);
+    cbGender = new QComboBox(this);
+
     Views::LanguageComboBox *cbLanguage = new Views::LanguageComboBox(this);
     cbLanguage->setDisplayMode(Views::LanguageComboBox::AvailableTranslations);
     cbLanguage->setCurrentLanguage(QLocale().language());
 
-//    cbLanguage->addItems(Core::Translators::availableLocales());
-//    cbLanguage->setCurrentIndex(Core::Translators::availableLocales().indexOf(QLocale().name().left(2)));
     connect(cbLanguage, SIGNAL(currentLanguageChanged(QLocale::Language)), Core::Translators::instance(), SLOT(changeLanguage(QLocale::Language)));
 
+    QFormLayout *identLayout = new QFormLayout;
+    identLayout->addRow(langLbl, cbLanguage);
+    identLayout->addRow(lblTitle, cbTitle);
+    identLayout->addRow(lblName, leName);
+    identLayout->addRow(lblFirstName, leFirstName);
+    identLayout->addRow(lblSecondName, leSecondName);
+    identLayout->addRow(lblGender, cbGender);
+    identGroup->setLayout(identLayout);
+
     registerField("Language", cbLanguage , "currentIndex");
-
-    QGridLayout *layout = new QGridLayout(this);
-    layout->addWidget(lbl, 0, 0);
-    layout->addWidget(cbLanguage, 0, 1);
-    setLayout(layout);
-}
-
-void UserLanguageSelectorPage::changeEvent(QEvent *e)
-{
-    if (e->type() == QEvent::LanguageChange)
-        retranslate();
-}
-
-void UserLanguageSelectorPage::retranslate()
-{
-    setTitle(tr("Please set your language."));
-    setSubTitle(tr("Whole application will be translated to this language, forms too (when possible).\n"
-                     "For instance, FreeMedForms is available in few languages.\n"
-                     "New translations are planned."));
-    if (lbl)
-        lbl->setText(tr("Language"));
-}
-
-UserIdentityPage::UserIdentityPage(QWidget *parent)
-    : QWizardPage(parent)
-{
-    setTitle(tr("Please enter your identity."));
-    QLabel *lblTitle = new QLabel(tr("Title"), this);
-    QLabel *lblName = new QLabel(tr("Name"), this);
-    QLabel *lblFirstName = new QLabel(tr("Firstname"), this);
-    QLabel *lblSecondName = new QLabel(tr("Second Name"), this);
-    QLabel *lblGender = new QLabel(tr("Gender"), this);
-
-    QComboBox *cbTitle = new QComboBox(this);
-    QLineEdit *leName = new QLineEdit(this);
-    QLineEdit *leFirstName = new QLineEdit(this);
-    QLineEdit *leSecondName = new QLineEdit(this);
-    QComboBox *cbGender = new QComboBox(this);
-
     registerField("Name", leName, "text");
     registerField("Firstname", leFirstName, "text");
     registerField("SecondName", leSecondName, "text");
     registerField("Title", cbTitle, "currentIndex");
     registerField("Gender", cbGender, "currentIndex");
 
-    cbTitle->addItems(titles());
-    cbGender->addItems(genders());
-
-    QGridLayout *layout = new QGridLayout;
-    layout->addWidget(lblTitle, 0, 0);
-    layout->addWidget(cbTitle, 0, 1);
-    layout->addWidget(lblName, 1, 0);
-    layout->addWidget(leName, 1, 1);
-    layout->addWidget(lblFirstName, 2, 0);
-    layout->addWidget(leFirstName, 2, 1);
-    layout->addWidget(lblSecondName, 3, 0);
-    layout->addWidget(leSecondName, 3, 1);
-    layout->addWidget(lblGender, 4, 0);
-    layout->addWidget(cbGender, 4, 1);
-    setLayout(layout);
-}
-
-bool UserIdentityPage::validatePage()
-{
-    if (field("Name").toString().isEmpty() || field("Firstname").toString().isEmpty()) {
-        Utils::warningMessageBox(tr("Forbidden anonymous user."),
-                                 tr("All users must have at least a name and a firstname.\n"
-                                    "You can not poursue with an anonymous user."), "",
-                                 tr("Forbidden anonymous user."));
-        return false;
-    }
-    return true;
-}
-
-UserLoginPasswordPage::UserLoginPasswordPage(QWidget *parent)
-    : QWizardPage(parent)
-{
-    setTitle(tr("Please enter your login and password."));
-    QLabel *lblL = new QLabel(tr("Login"), this);
-    QLabel *lblP = new QLabel(tr("Password"), this);
-    QLabel *lblCP = new QLabel(tr("Confirm Password"), this);
+    lblL = new QLabel(tr("Login"), this);
+    lblP = new QLabel(tr("Password"), this);
+    lblCP = new QLabel(tr("Confirm Password"), this);
 
     leLogin = new Utils::LineEditEchoSwitcher(this);
     lePassword = new Utils::LineEditEchoSwitcher(this);
@@ -412,18 +356,56 @@ UserLoginPasswordPage::UserLoginPasswordPage(QWidget *parent)
     registerField("Password", lePassword, "text");
     registerField("ConfirmPassword", lePasswordConfirm, "text");
 
-    QGridLayout *layout = new QGridLayout;
-    layout->addWidget(lblL, 0, 0);
-    layout->addWidget(leLogin, 0, 1);
-    layout->addWidget(lblP, 1, 0);
-    layout->addWidget(lePassword, 1, 1);
-    layout->addWidget(lblCP, 2, 0);
-    layout->addWidget(lePasswordConfirm, 2, 1);
-    setLayout(layout);
+    QFormLayout *loglayout = new QFormLayout;
+    loglayout->addRow(lblL, leLogin);
+    loglayout->addRow(lblP, lePassword);
+    loglayout->addRow(lblCP, lePasswordConfirm);
+    logGroup->setLayout(loglayout);
+
+    QGridLayout *lay = new QGridLayout(this);
+    setLayout(lay);
+    lay->addWidget(identGroup);
+    lay->addWidget(logGroup);
+
+    retranslate();
 }
 
-bool UserLoginPasswordPage::validatePage()
+void UserIdentityAndLoginPage::changeEvent(QEvent *e)
 {
+    if (e->type() == QEvent::LanguageChange)
+        retranslate();
+}
+
+void UserIdentityAndLoginPage::retranslate()
+{
+    setTitle(tr("Create a new user."));
+    setSubTitle(tr("Enter your identity."));
+    if (langLbl) {
+        langLbl->setText(tr("Language"));
+        lblTitle->setText(tr("Title"));
+        lblName->setText(tr("Name"));
+        lblFirstName->setText(tr("Firstname"));
+        lblSecondName->setText(tr("Second Name"));
+        lblGender->setText(tr("Gender"));
+        cbTitle->addItems(titles());
+        cbGender->addItems(genders());
+        lblL->setText(tr("Login"));
+        lblP->setText(tr("Password"));
+        lblCP->setText(tr("Confirm Password"));
+        identGroup->setTitle(tr("Identity"));
+        logGroup->setTitle(tr("Database connection"));
+    }
+}
+
+bool UserIdentityAndLoginPage::validatePage()
+{
+    if (field("Name").toString().isEmpty() || field("Firstname").toString().isEmpty()) {
+        Utils::warningMessageBox(tr("Forbidden anonymous user."),
+                                 tr("All users must have at least a name and a firstname.\n"
+                                    "You can not poursue with an anonymous user."), "",
+                                 tr("Forbidden anonymous user."));
+        return false;
+    }
     if (field("Password").toString() != field("ConfirmPassword")) {
         Utils::warningMessageBox(tr("Password confirmation error."),
                                  tr("You must correctly confirm your password to go throw this page."),
@@ -433,6 +415,12 @@ bool UserLoginPasswordPage::validatePage()
     if (field("Login").toString().isEmpty()) {
         Utils::warningMessageBox(tr("Login error."),
                                  tr("You must specify a valid login. Empty login is forbidden."),
+                                 "", tr("Wrong login"));
+        return false;
+    }
+    if (field("Login").toString().size() <= 3) {
+        Utils::warningMessageBox(tr("Login error."),
+                                 tr("You must specify a valid login. Login must be more than 3 chars."),
                                  "", tr("Wrong login"));
         return false;
     }
@@ -448,78 +436,32 @@ bool UserLoginPasswordPage::validatePage()
     return true;
 }
 
-UserAdressPage::UserAdressPage(QWidget *parent)
-    : QWizardPage(parent)
+
+UserContactPage::UserContactPage(QWidget *parent) :
+        QWizardPage(parent), ui(new Ui::UserWizardContactWidget)
 {
-    setTitle(tr("Please enter your complete adress."));
+    setTitle(tr("Please enter your complete address."));
     setSubTitle(tr("This represents your professional address."));
-    QLabel *lblAdress = new QLabel(tr("Address"), this);
-    QLabel *lblCity = new QLabel(tr("City"), this);
-    QLabel *lblZipcode = new QLabel(tr("Zipcode"), this);
-    QLabel *lblCountry = new QLabel(tr("Country"), this);
 
-    QTextEdit *teAdress = new QTextEdit(this);
-    QLineEdit *leCity = new QLineEdit(this);
-    QLineEdit *leZipcode = new QLineEdit(this);
-    QLineEdit *leCountry = new QLineEdit(this);
+    ui->setupUi(this);
+    ui->country->setText(QLocale::countryToString(QLocale().country()));
+    ui->tabWidget->setCurrentIndex(0);
 
-    registerField("Adress", teAdress , "plainText");
-    registerField("City", leCity , "text");
-    registerField("Zipcode", leZipcode , "text");
-    registerField("Country", leCountry , "text");
+    registerField("Address", ui->address , "plainText");
+    registerField("City", ui->city , "text");
+    registerField("Zipcode", ui->zipcode , "text");
+    registerField("Country", ui->country , "text");
 
-    QGridLayout *layout = new QGridLayout;
-    layout->addWidget(lblAdress, 0, 0);
-    layout->addWidget(teAdress, 0, 1);
-    layout->addWidget(lblCity, 1, 0);
-    layout->addWidget(leCity, 1, 1);
-    layout->addWidget(lblZipcode, 2, 0);
-    layout->addWidget(leZipcode, 2, 1);
-    layout->addWidget(lblCountry, 3, 0);
-    layout->addWidget(leCountry, 3, 1);
-    setLayout(layout);
+    registerField("Tel1", ui->tel1, "text");
+    registerField("Tel2", ui->tel2, "text");
+    registerField("Tel3", ui->tel3, "text");
+    registerField("Fax", ui->fax, "text");
+    registerField("Mail", ui->mail, "text");
 }
 
-UserTelsAndMailPage::UserTelsAndMailPage(QWidget *parent)
-    : QWizardPage(parent)
+UserContactPage::~UserContactPage()
 {
-    setTitle(tr("Please, enter tels, fax and mail adress."));
-    QLabel *lblT1 = new QLabel(tr("Tel1"), this);
-    QLabel *lblT2 = new QLabel(tr("Tel2"), this);
-    QLabel *lblT3 = new QLabel(tr("Tel3"), this);
-    QLabel *lblFax = new QLabel(tr("Fax"), this);
-    QLabel *lblMail = new QLabel(tr("Mail"), this);
-
-    QLineEdit *leT1 = new QLineEdit(this);
-    QLineEdit *leT2 = new QLineEdit(this);
-    QLineEdit *leT3 = new QLineEdit(this);
-    QLineEdit *leFax = new QLineEdit(this);
-    QLineEdit *leMail = new QLineEdit(this);
-
-    registerField("Tel1", leT1, "text");
-    registerField("Tel2", leT2, "text");
-    registerField("Tel3", leT3, "text");
-    registerField("Fax", leFax, "text");
-    registerField("Mail", leMail, "text");
-
-    QGridLayout *layout = new QGridLayout;
-    layout->addWidget(lblT1, 0, 0);
-    layout->addWidget(leT1, 0, 1);
-    layout->addWidget(lblT2, 1, 0);
-    layout->addWidget(leT2, 1, 1);
-    layout->addWidget(lblT3, 2, 0);
-    layout->addWidget(leT3, 2, 1);
-    layout->addWidget(lblFax, 3, 0);
-    layout->addWidget(leFax, 3, 1);
-    layout->addWidget(lblMail, 4, 0);
-    layout->addWidget(leMail, 4, 1);
-    setLayout(layout);
-}
-
-bool UserTelsAndMailPage::validatePage()
-{
-    // TODO check mail and tel/fax formatting
-    return true;
+    delete ui;
 }
 
 
@@ -666,65 +608,3 @@ bool UserRightsPage::validatePage()
     return true;
 }
 
-//UserPaperPage::UserPaperPage(const QString &paperName, int nextPage, QWidget *parent) :
-//        QWizardPage(parent), type(paperName), m_Next(nextPage)
-//{
-//    QString title;
-//    if (type=="Generic")
-//        title = tr("Generic");
-//    else if (type == "Prescription")
-//        title = tr("Prescription");
-//    else if (type == "Administrative")
-//            title = tr("Administrative");
-//    setTitle(tr("%1 headers and footers").arg(title));
-
-//    header = new Print::TextDocumentExtra;
-//    footer = new Print::TextDocumentExtra;
-//    wm = new Print::TextDocumentExtra;
-//    previewer = Print::Printer::previewer(this);
-
-//    QGridLayout *layout = new QGridLayout;
-//    layout->addWidget(previewer, 0, 0);
-//    setLayout(layout);
-
-//    header->setHtml(defaultHeader());
-//    footer->setHtml(defaultFooter());
-
-//    if (type=="Prescription") {
-//        wm->setPresence(Print::Printer::DuplicataOnly);
-//    }
-
-//    previewer->setHeader(header);
-//    previewer->setFooter(footer);
-//    previewer->setWatermark(wm);
-//}
-
-//bool UserPaperPage::validatePage()
-//{
-//    Print::TextDocumentExtra *tmp = new Print::TextDocumentExtra;
-//    int header, footer, wmk;
-//    if (type=="Generic") {
-//        header = Core::IUser::GenericHeader;
-//        footer = Core::IUser::GenericFooter;
-//        wmk = Core::IUser::GenericWatermark;
-//    } else if (type == "Prescription") {
-//        header = Core::IUser::PrescriptionHeader;
-//        footer = Core::IUser::PrescriptionFooter;
-//        wmk = Core::IUser::PrescriptionWatermark;
-//    } else if (type == "Administrative") {
-//        header = Core::IUser::AdministrativeHeader;
-//        footer = Core::IUser::AdministrativeFooter;
-//        wmk = Core::IUser::AdministrativeWatermark;
-//    }
-
-//    previewer->headerToPointer(tmp);
-//    UserWizard::setUserPaper(header, tmp->toXml());
-
-//    previewer->footerToPointer(tmp);
-//    UserWizard::setUserPaper(footer, tmp->toXml());
-
-//    previewer->watermarkToPointer(tmp);
-//    UserWizard::setUserPaper(wmk, tmp->toXml());
-
-//    return true;
-//}

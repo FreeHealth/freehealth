@@ -35,17 +35,22 @@
 #include <QWizard>
 #include <QHash>
 #include <QString>
+
+QT_BEGIN_NAMESPACE
 class QLabel;
 class QEvent;
 class QLineEdit;
 class QPushButton;
 class QCheckBox;
+class QComboBox;
+class QGroupBox;
+QT_END_NAMESPACE
 
 /**
  * \file userwizard.h
  * \author Eric MAEKER <eric.maeker@free.fr>
- * \version 0.4.0
- * \date 16 June 2010
+ * \version 0.6.0
+ * \date 29 May 2011
 */
 
 namespace Views {
@@ -66,6 +71,10 @@ namespace UserPlugin {
 namespace Internal {
 class UserRightsWidget;
 class UserData;
+
+namespace Ui {
+class UserWizardContactWidget;
+}
 }
 
 /** \todo create a new wizard manager in Core */
@@ -75,11 +84,8 @@ class USER_EXPORT UserWizard : public QWizard
     Q_OBJECT
 public:
     enum Pages {
-        LanguageSelectorPage,
-        LoginPasswordPage,
-        IdentityPage,
-        AdressPage,
-        TelsAndMailPage,
+        IdentityAndLoginPage,
+        ContactPage,
         ProfilPage,
         RightsPage,
         SpecialiesQualificationsPage
@@ -108,49 +114,33 @@ private:
 };
 
 
-class UserLanguageSelectorPage: public QWizardPage
+class UserIdentityAndLoginPage: public QWizardPage
 {
     Q_OBJECT
 public:
-    UserLanguageSelectorPage(QWidget *parent = 0);
+    UserIdentityAndLoginPage(QWidget *parent = 0);
+
+    bool validatePage();
+
 private:
     void changeEvent(QEvent *e);
     void retranslate();
-    QLabel * lbl;
-};
-
-class UserIdentityPage: public QWizardPage
-{
-    Q_OBJECT
-public:
-    UserIdentityPage(QWidget *parent = 0);
-    bool validatePage();
-};
-
-class UserAdressPage: public QWizardPage
-{
-    Q_OBJECT
-public:
-    UserAdressPage(QWidget *parent = 0);
-};
-
-class UserTelsAndMailPage: public QWizardPage
-{
-    Q_OBJECT
-public:
-    UserTelsAndMailPage(QWidget *parent = 0);
-    bool validatePage();
-};
-
-class UserLoginPasswordPage: public QWizardPage
-{
-    Q_OBJECT
-public:
-    UserLoginPasswordPage(QWidget *parent = 0);
-    bool validatePage();
-private:
-    QPushButton *echoConfirmPass, *echoPass;
+    QLabel *langLbl, *lblTitle, *lblName, *lblFirstName, *lblSecondName, *lblGender, *lblL, *lblP, *lblCP;
+    QComboBox *cbTitle, *cbGender;
+    QLineEdit *leName, *leFirstName, *leSecondName;
+    QGroupBox *identGroup, *logGroup;
     Utils::LineEditEchoSwitcher *leLogin, *lePassword, *lePasswordConfirm;
+};
+
+class UserContactPage: public QWizardPage
+{
+    Q_OBJECT
+public:
+    UserContactPage(QWidget *parent = 0);
+    ~UserContactPage();
+
+private:
+    Internal::Ui::UserWizardContactWidget *ui;
 };
 
 class UserProfilPage : public QWizardPage
@@ -187,37 +177,8 @@ private:
     Internal::UserRightsWidget *um, *drugs, *med, *paramed, *administ;
 };
 
-//class UserPaperPage: public QWizardPage
-//{
-//    Q_OBJECT
-//public:
-//    UserPaperPage(const QString &paperName, int nextPage = -1, QWidget *parent = 0);
-//    bool validatePage();
-
-//    int nextId() const {return m_Next;}
-
-//private:
-//    Print::TextDocumentExtra *header, *footer, *wm;
-//    Print::PrinterPreviewer *previewer;
-//    QString type;
-//    int m_Next;
-//};
-
-//class UserPrescriptionsPage: public QWizardPage
-//{
-//    Q_OBJECT
-//public:
-//    UserPrescriptionsPage(QWidget *parent = 0);
-//};
-//
-//class UserAdministrativePage: public QWizardPage
-//{
-//    Q_OBJECT
-//public:
-//    UserAdministrativePage(QWidget *parent = 0);
-//};
 
 }  // End UserPlugin
 
 
-#endif // TKUSERWIZARD_H
+#endif // USERWIZARD_H

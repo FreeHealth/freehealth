@@ -11,12 +11,12 @@ HEADERS += $${PWD}/usermanagerplugin.h \
     $${PWD}/iuserlistener.h \
     $${PWD}/currentuserpreferencespage.h \
     $${PWD}/userfistrunpage.h \
-    usermanagermode.h
+    $${PWD}/usermanagermode.h
 
 SOURCES += $${PWD}/usermanagerplugin.cpp \
     $${PWD}/currentuserpreferencespage.cpp \
     $${PWD}/userfistrunpage.cpp \
-    usermanagermode.cpp
+    $${PWD}/usermanagermode.cpp
 
 # Compile
 HEADERS += $${PWD}/global.h \
@@ -51,7 +51,8 @@ FORMS += $${PWD}/widgets/userviewer.ui \
     $${PWD}/widgets/userpassworddialog.ui \
     $${PWD}/currentuserpreferenceswidget.ui \
     $${PWD}/firstrunusercreationwidget.ui \
-    usermanagerwidget.ui
+    $${PWD}/usermanagerwidget.ui \
+    $${PWD}/userwizardcontactwidget.ui
 
 # translators
 TRANSLATIONS += $${SOURCES_TRANSLATIONS_PATH}/usermanagerplugin_fr.ts \

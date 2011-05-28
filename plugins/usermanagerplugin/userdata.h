@@ -160,7 +160,7 @@ public:
     void  setLanguage(const QVariant & val)            { setValue(Table_USERS, USER_LANGUAGE, val); }
     void  setMail(const QVariant & val)                { setValue(Table_USERS, USER_MAIL, val); }
 
-    void  setAdress(const QVariant & val)              { setDynamicDataValue(USER_DATAS_ADRESS , val); }
+    void  setAddress(const QVariant & val)             { setDynamicDataValue(USER_DATAS_ADRESS , val); }
     void  setZipcode(const QVariant & val)             { setDynamicDataValue(USER_DATAS_ZIPCODE , val); }
     void  setCity(const QVariant & val)                { setDynamicDataValue(USER_DATAS_CITY , val); }
     void  setCountry(const QVariant & val)             { setDynamicDataValue(USER_DATAS_COUNTRY , val); }
