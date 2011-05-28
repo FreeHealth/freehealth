@@ -135,7 +135,7 @@ QString UserIdentifier::login() const
 
 QString UserIdentifier::login64crypt() const
 {
-    return loginForSQL(m_ui->login->lineEdit()->text());
+    return Utils::loginForSQL(m_ui->login->lineEdit()->text());
 }
 
 QString UserIdentifier::password() const
@@ -145,6 +145,6 @@ QString UserIdentifier::password() const
 
 QString UserIdentifier::cryptedPassword() const
 {
-    return crypt(m_ui->password->lineEdit()->text());
+    return Utils::cryptPassword(m_ui->password->lineEdit()->text());
 }
 

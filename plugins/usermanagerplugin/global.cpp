@@ -66,23 +66,4 @@ QString getLibraryInformations()
 }
 
 
-/** \brief First crypt string using SHA1 logarythm then transform crypted result to base64 (so it can be
-           added into database without problem - no special characters).
-*/
-QString crypt( const QString & toCrypt )
-{
-    QCryptographicHash crypter( QCryptographicHash::Sha1 );
-    crypter.addData( toCrypt.toAscii() );
-    return crypter.result().toBase64();
-}
-
-QString loginForSQL ( const QString & log )
-{ return log.toAscii().toBase64(); }
-
-QString loginFromSQL( const QVariant & sql )
-{ return QByteArray::fromBase64( sql.toByteArray() ); }
-
-QString loginFromSQL( const QString & sql )
-{ return QByteArray::fromBase64( sql.toAscii() ); }
-
 }

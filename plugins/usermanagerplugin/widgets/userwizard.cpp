@@ -204,9 +204,9 @@ void UserWizard::done(int r)
 
         // Feed userData with the wizard values
         m_User->setValidity(1);
-        m_User->setLogin64(loginForSQL(field("Login").toString()));
+        m_User->setLogin64(Utils::loginForSQL(field("Login").toString()));
         m_User->setClearPassword(field("Password").toString());
-        m_User->setCryptedPassword(UserPlugin::crypt(field("Password").toString()));
+        m_User->setCryptedPassword(Utils::cryptPassword(field("Password").toString()));
         m_User->setName(field("Name"));
         m_User->setSecondName(field("SecondName"));
         m_User->setFirstname(field("Firstname"));
@@ -290,8 +290,8 @@ bool UserWizard::setCreatedUserAsCurrent() const
 {
     if (!m_CreateUser)
         return false;
-    return userModel()->setCurrentUser(loginForSQL(field("Login").toString()),
-                                       crypt(field("Password").toString()), true);
+    return userModel()->setCurrentUser(Utils::loginForSQL(field("Login").toString()),
+                                       Utils::cryptPassword(field("Password").toString()), true);
 }
 
 QString UserWizard::createdUuid() const

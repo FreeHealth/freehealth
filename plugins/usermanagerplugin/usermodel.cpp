@@ -624,7 +624,7 @@ bool UserModel::insertRows(int row, int count, const QModelIndex &parent)
             return i;
         }
         newIndex = index(row+i, Core::IUser::Password);
-        if (!QSqlTableModel::setData(newIndex, UserPlugin::crypt(""), Qt::EditRole)) {
+        if (!QSqlTableModel::setData(newIndex, Utils::cryptPassword(""), Qt::EditRole)) {
            LOG_ERROR(QString("Can not add user's login into the new user into SQL Table. Row = %1 , UUID = %2 ")
                              .arg(row+i).arg(uuid));
             return i;

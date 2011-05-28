@@ -45,8 +45,8 @@ QT_END_NAMESPACE
 /**
  * \file global.h
  * \author Eric MAEKER <eric.maeker@free.fr>
- * \version 0.0.18
- * \date 10 Aug 2009
+ * \version 0.6.0
+ * \date 29 May 2011
 */
 
 namespace Utils {
@@ -146,6 +146,13 @@ UTILS_EXPORT void    xmlWrite(QDomElement &father, const QString &name, bool val
 // Some functions for token replacement [ text added if token exists [TOKEN] text added if token exists ]
 UTILS_EXPORT int replaceToken( QString &textToAnalyse, const QString &token, const QString &value );
 UTILS_EXPORT int replaceTokens(QString &textToAnalyse, const QHash<QString, QString> &tokens_values);
+
+// Some database identifiers helpers
+// Login and password transformations
+UTILS_EXPORT QString cryptPassword(const QString &toCrypt);
+UTILS_EXPORT QString loginForSQL(const QString &log);
+UTILS_EXPORT QString loginFromSQL(const QVariant &sql);
+UTILS_EXPORT QString loginFromSQL(const QString &sql);
 
 }  // end Utils
 

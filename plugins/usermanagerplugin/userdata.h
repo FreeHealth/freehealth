@@ -36,6 +36,8 @@
 #include <usermanagerplugin/constants.h>
 #include <usermanagerplugin/global.h>
 
+#include <utils/global.h>
+
 #include <QObject>
 #include <QVariant>
 #include <QDateTime>
@@ -194,7 +196,7 @@ public:
     bool    locker() const               { return value(Table_USERS, USER_LOCKER).toBool(); }
     QString login64() const              { return value(Table_USERS, USER_LOGIN).toString(); }
     QString clearLogin() const           { return QString(QByteArray::fromBase64(login64().toAscii())); }
-    QString decryptedLogin() const       { return UserPlugin::loginFromSQL(value(Table_USERS, USER_LOGIN));  }
+    QString decryptedLogin() const       { return Utils::loginFromSQL(value(Table_USERS, USER_LOGIN));  }
     QString cryptedPassword() const      { return value(Table_USERS, USER_PASSWORD).toString(); }
 //    QString lastLogin() const;
     QDateTime lastLogin() const          { return value(Table_USERS, USER_LASTLOG).toDateTime(); }

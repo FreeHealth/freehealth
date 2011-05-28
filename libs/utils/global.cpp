@@ -47,6 +47,7 @@
 #include <QPushButton>
 #include <QAbstractButton>
 #include <QTextDocument>
+#include <QCryptographicHash>
 
 /**
   \namespace Utils
@@ -1106,5 +1107,25 @@ int replaceTokens(QString &textToAnalyse, const QHash<QString, QString> &tokens_
     }
     return i;
 }
+
+/** First crypt string using SHA1 logarythm then transform crypted result to base64 (so it can be added into database without problem - no special characters). */
+QString cryptPassword(const QString &toCrypt)
+{
+    QCryptographicHash crypter( QCryptographicHash::Sha1 );
+    crypter.addData( toCrypt.toAscii() );
+    return crypter.result().toBase64();
+}
+
+/** Crypt a clear login. */
+QString loginForSQL(const QString &log)
+{ return log.toAscii().toBase64(); }
+
+/** Decrypt a crypted login. */
+QString loginFromSQL(const QVariant &sql)
+{ return QByteArray::fromBase64( sql.toByteArray() ); }
+
+/** Decrypt a crypted login. */
+QString loginFromSQL(const QString &sql)
+{ return QByteArray::fromBase64(sql.toAscii()); }
 
 } // End Utils

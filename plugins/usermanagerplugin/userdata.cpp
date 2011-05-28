@@ -500,7 +500,7 @@ UserData::UserData()
     setRights(USER_ROLE_DOSAGES, Core::IUser::NoRights);
     setRights(USER_ROLE_PARAMEDICAL, Core::IUser::NoRights);
     setRights(USER_ROLE_ADMINISTRATIVE, Core::IUser::NoRights);
-    setCryptedPassword(UserPlugin::crypt(""));
+    setCryptedPassword(Utils::cryptPassword(""));
     setLocker(false);
     createUuid();
     d->m_IsNull = true;
@@ -532,7 +532,7 @@ UserData::UserData(const QString & uuid)
     setRights(USER_ROLE_DOSAGES, Core::IUser::NoRights);
     setRights(USER_ROLE_PARAMEDICAL, Core::IUser::NoRights);
     setRights(USER_ROLE_ADMINISTRATIVE, Core::IUser::NoRights);
-    setCryptedPassword(UserPlugin::crypt(""));
+    setCryptedPassword(Utils::cryptPassword(""));
     setLocker(false);
     d->m_IsNull = true;
     d->m_Modified = false;

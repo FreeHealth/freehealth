@@ -469,8 +469,8 @@ bool UserBase::checkLogin(const QString &clearLogin, const QString &clearPasswor
     QList<int> list;
     list << USER_UUID << USER_LOGIN << USER_PASSWORD;
     QHash<int, QString> where;
-    where.insert(USER_LOGIN, QString("='%1'").arg(loginForSQL(clearLogin)));
-    where.insert(USER_PASSWORD, QString("='%1'").arg(crypt(clearPassword)));
+    where.insert(USER_LOGIN, QString("='%1'").arg(Utils::loginForSQL(clearLogin)));
+    where.insert(USER_PASSWORD, QString("='%1'").arg(Utils::cryptPassword(clearPassword)));
     QString req = select(Table_USERS, list, where);
 
     {
@@ -1030,21 +1030,28 @@ bool UserBase::deleteUser(const QString &uuid)
     QHash<int,QString> where;
     where.insert(Constants::USER_UUID, QString("='%1'").arg(uuid));
     if (!query.exec(prepareDeleteQuery(Table_USERS, where))) {
-        Utils::Log::addQueryError(this, query);
+        LOG_QUERY_ERROR(query);
         return false;
     }
     query.finish();
     where.clear();
     where.insert(Constants::DATAS_USER_UUID, QString("='%1'").arg(uuid));
     if (!query.exec(prepareDeleteQuery(Table_RIGHTS, where))) {
-        Utils::Log::addQueryError(this, query);
+        LOG_QUERY_ERROR(query);
         return false;
     }
     query.finish();
     where.clear();
     where.insert(Constants::RIGHTS_USER_UUID, QString("='%1'").arg(uuid));
     if (!query.exec(prepareDeleteQuery(Table_DATAS, where))) {
-        Utils::Log::addQueryError(this, query);
+        LOG_QUERY_ERROR(query);
+        return false;
+    }
+    query.finish();
+    where.clear();
+    where.insert(Constants::LK_USER_UUID, QString("='%1'").arg(uuid));
+    if (!query.exec(prepareDeleteQuery(Table_USER_LK_ID, where))) {
+        LOG_QUERY_ERROR(query);
         return false;
     }
     query.finish();

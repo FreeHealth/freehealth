@@ -51,12 +51,6 @@ USER_EXPORT void initLib();
 // Libs informations
 USER_EXPORT QString getLibraryInformations();
 
-// Login and password transformations
-USER_EXPORT QString crypt( const QString & toCrypt );
-USER_EXPORT QString loginForSQL ( const QString & log );
-USER_EXPORT QString loginFromSQL( const QVariant & sql );
-USER_EXPORT QString loginFromSQL( const QString & sql );
-
 }  // End namespace UserPlugin
 
 #endif  // USERGLOBAL_H
