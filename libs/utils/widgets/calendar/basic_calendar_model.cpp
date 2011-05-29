@@ -14,6 +14,7 @@ BasicCalendarModel::BasicCalendarModel(QObject *parent) :
 
 	// TEMP just for tests
 	QDate now = QDate::currentDate();
+
 	insertItem(QDateTime(now, QTime(0, 0)), QDateTime(now, QTime(2, 0)));
 	insertItem(QDateTime(now, QTime(0, 0)), QDateTime(now, QTime(2, 0)));
 	insertItem(QDateTime(now, QTime(0, 0)), QDateTime(now, QTime(2, 0)));
