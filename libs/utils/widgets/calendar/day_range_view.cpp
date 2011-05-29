@@ -503,9 +503,15 @@ void DayRangeView::mouseReleaseEvent(QMouseEvent *event) {
 	default:;
 	}
 	m_pressDateTime = QDateTime();
-	m_pressItem = CalendarItem();
 	m_pressItemWidget = 0;
 	m_mouseMode = MouseMode_None;
+}
+
+void DayRangeView::mouseDoubleClickEvent(QMouseEvent *event) {
+	BasicItemEditionDialog dialog(this);
+	dialog.init(m_pressItem);
+	if (dialog.exec() == QDialog::Accepted)
+		model()->setItemByUid(m_pressItem.uid(), dialog.item());
 }
 
 void DayRangeView::itemInserted(const CalendarItem &item) {

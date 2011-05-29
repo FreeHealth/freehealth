@@ -14,6 +14,12 @@ BasicCalendarModel::BasicCalendarModel(QObject *parent) :
 
 	// TEMP just for tests
 	QDate now = QDate::currentDate();
+/*	qsrand(time(0));
+	for (int i = 0; i < 30; i++) {
+		QDateTime start(now, QTime(qrand() % 24, qrand() % 60));
+		QDateTime end = start.addSecs(3600 * (1 + qrand() % 5));
+		insertItem(start, end);
+		}*/
 
 	insertItem(QDateTime(now, QTime(0, 0)), QDateTime(now, QTime(2, 0)));
 	insertItem(QDateTime(now, QTime(0, 0)), QDateTime(now, QTime(2, 0)));

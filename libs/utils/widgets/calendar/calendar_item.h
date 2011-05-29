@@ -11,7 +11,9 @@ namespace Calendar {
 		/** constructs an invalid item */
 		CalendarItem() {}
 		CalendarItem(const QString &uid, const QDateTime &beginning, const QDateTime &ending) :
-			m_uid(uid), m_beginning(beginning), m_ending(ending) {}
+			m_uid(uid), m_beginning(beginning), m_ending(ending), m_created(QDateTime::currentDateTime()) {
+			m_lastModified = m_created;
+		}
 
 		bool isValid() const { return m_beginning.isValid(); }
 
@@ -45,12 +47,22 @@ namespace Calendar {
 		const QString &description() const { return m_description; }
 		void setDescription(const QString &value);
 
+		const QDateTime &created() const { return m_created; }
+		void setCreated(const QDateTime &value); // should not be called in normal times, only use it for hacking purpose
+
+		const QDateTime &lastModified() const { return m_lastModified; }
+		void setLastModified(const QDateTime &value); // should not be called in normal times, only use it for hacking purpose
+
 	private:
 		QString m_uid;
 		QString m_title;
 		QDateTime m_beginning;
 		QDateTime m_ending;
 		QString m_description;
+		QDateTime m_created;
+		QDateTime m_lastModified;
+
+		void touchLastModified();
 	};
 
 	/** a sort function for calendar items
