@@ -79,6 +79,8 @@ void CalendarWidget::setModel(AbstractCalendarModel *model) {
 	}
 	if (m_d->m_view)
 		m_d->m_view->setModel(model);
+	if (m_d->m_header)
+		m_d->m_header->setModel(model);
 }
 
 void CalendarWidget::firstDateChanged() {
@@ -110,6 +112,7 @@ void CalendarWidget::viewTypeChanged() {
 	m_d->m_header->setScrollArea(m_d->m_scrollArea);
 	m_d->m_header->setFirstDate(m_d->m_navbar->firstDate());
 	m_d->m_mainLayout->insertWidget(1, m_d->m_header);
+	m_d->m_view->setModel(m_model);
 	m_d->m_view->setModel(m_model);
 }
 

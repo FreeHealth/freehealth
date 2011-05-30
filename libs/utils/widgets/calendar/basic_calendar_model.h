@@ -21,7 +21,7 @@ namespace Calendar {
 
 		int count() const { return m_sortedByBeginList.count(); }
 
-		bool insertItem(const QDateTime &beginning, const QDateTime &ending);
+		CalendarItem insertItem(const QDateTime &beginning, const QDateTime &ending);
 
 		void setItemByUid(const QString &uid, const CalendarItem &item);
 

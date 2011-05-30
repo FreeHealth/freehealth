@@ -7,7 +7,8 @@
 
 using namespace Calendar;
 
-ViewHeader::ViewHeader(QWidget *parent) : QWidget(parent)
+ViewHeader::ViewHeader(QWidget *parent) : QWidget(parent),
+										  m_model(0)
 {
 	setSizePolicy(QSizePolicy::Expanding, QSizePolicy::Fixed);
 }
@@ -28,6 +29,25 @@ void ViewHeader::setScrollArea(QScrollArea *scrollArea) {
 	m_scrollArea = scrollArea;
 }
 
+void ViewHeader::setModel(AbstractCalendarModel *model) {
+	// disconnect slots
+	if (m_model){
+		disconnect(m_model, SIGNAL(itemInserted(const CalendarItem &)), this, SLOT(itemInserted(const CalendarItem &)));
+		disconnect(m_model, SIGNAL(itemModified(const CalendarItem &, const CalendarItem &)), this, SLOT(itemModified(const CalendarItem &, const CalendarItem &)));
+		disconnect(m_model, SIGNAL(itemRemoved(const CalendarItem &)), this, SLOT(itemRemoved(const CalendarItem &)));
+	}
+
+	m_model = model;
+
+	if (m_model) {
+		// connect slots
+		connect(m_model, SIGNAL(itemInserted(const CalendarItem &)), this, SLOT(itemInserted(const CalendarItem &)));
+		connect(m_model, SIGNAL(itemModified(const CalendarItem &, const CalendarItem &)), this, SLOT(itemModified(const CalendarItem &, const CalendarItem &)));
+		connect(m_model, SIGNAL(itemRemoved(const CalendarItem &)), this, SLOT(itemRemoved(const CalendarItem &)));
+	}
+
+	update();
+}
 
 ///////////////////////////////
 

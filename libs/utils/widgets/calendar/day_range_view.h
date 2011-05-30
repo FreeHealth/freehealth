@@ -70,6 +70,8 @@ namespace Calendar {
 
 	private:
 		int m_rangeWidth;
+
+		QList<CalendarItem> getItems() const;
 	};
 
 	class HourWidget : public QWidget

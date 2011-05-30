@@ -4,6 +4,8 @@
 #include <QString>
 #include <QDateTime>
 
+#include "common.h"
+
 namespace Calendar {
 	class CalendarItem
 	{
@@ -11,7 +13,8 @@ namespace Calendar {
 		/** constructs an invalid item */
 		CalendarItem() {}
 		CalendarItem(const QString &uid, const QDateTime &beginning, const QDateTime &ending) :
-			m_uid(uid), m_beginning(beginning), m_ending(ending), m_created(QDateTime::currentDateTime()) {
+			m_uid(uid), m_beginning(beginning), m_beginningType(Date_DateTime), m_ending(ending), m_endingType(Date_DateTime) {
+			m_created = QDateTime::currentDateTime();
 			m_lastModified = m_created;
 		}
 
@@ -41,23 +44,34 @@ namespace Calendar {
 		const QDateTime &beginning() const { return m_beginning; }
 		void setBeginning(const QDateTime &value);
 
+		DateType beginningType() const { return m_beginningType; }
+		void setBeginningType(DateType value);
+
 		const QDateTime &ending() const { return m_ending; }
 		void setEnding(const QDateTime &value);
+
+		DateType endingType() const { return m_endingType; }
+		void setEndingType(DateType value);
 
 		const QString &description() const { return m_description; }
 		void setDescription(const QString &value);
 
 		const QDateTime &created() const { return m_created; }
-		void setCreated(const QDateTime &value); // should not be called in normal times, only use it for hacking purpose
+		void setCreated(const QDateTime &value); // CAUTION: should not be called in normal times, only use it for hacking purpose
 
 		const QDateTime &lastModified() const { return m_lastModified; }
-		void setLastModified(const QDateTime &value); // should not be called in normal times, only use it for hacking purpose
+		void setLastModified(const QDateTime &value); // CAUTION: should not be called in normal times, only use it for hacking purpose
+
+		/** if true, beginning and ending date types are set to Date_Date. If false, beginning and ending date types are set to Date_DateTime */
+		void setDaily(bool value);
 
 	private:
 		QString m_uid;
 		QString m_title;
 		QDateTime m_beginning;
+		DateType m_beginningType;
 		QDateTime m_ending;
+		DateType m_endingType;
 		QString m_description;
 		QDateTime m_created;
 		QDateTime m_lastModified;

@@ -6,8 +6,8 @@ AbstractCalendarModel::AbstractCalendarModel(QObject *parent) :
 	QObject(parent) {
 }
 
-bool AbstractCalendarModel::insertItem(const QDateTime &, const QDateTime &) {
-	return false;
+CalendarItem AbstractCalendarModel::insertItem(const QDateTime &, const QDateTime &) {
+	return CalendarItem();
 }
 
 void AbstractCalendarModel::beginInsertItem() {

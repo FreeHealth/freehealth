@@ -23,9 +23,9 @@ namespace Calendar {
 
 		/** \brief insert an item with begin and end dates
 		 * The base class function does nothing.
-		 * \return false if the insertion occured
+		 * \return the item if the insertion occured, or invalid item if failure
 		 */
-		virtual bool insertItem(const QDateTime &begin, const QDateTime &end);
+		virtual CalendarItem insertItem(const QDateTime &begin, const QDateTime &end);
 
 		/**
 		 * Set a new calendar item for an uid

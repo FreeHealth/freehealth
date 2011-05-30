@@ -4,13 +4,17 @@
 #include <QPair>
 
 class QDate;
-class CalendarItem;
 
 namespace Calendar {
 	enum ViewType {
 		View_Day,
 		View_Week,
 		View_Month
+	};
+
+	enum DateType {
+		Date_DateTime,
+		Date_Date
 	};
 
 	/** returns the first date of the view in function of a random date */

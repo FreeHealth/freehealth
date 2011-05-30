@@ -22,11 +22,31 @@ void CalendarItem::setBeginning(const QDateTime &value) {
 	touchLastModified();
 }
 
+void CalendarItem::setBeginningType(DateType value) {
+	if (value == m_beginningType)
+		return;
+
+	m_beginningType = value;
+	if (m_beginningType == Date_Date)
+		m_beginning.setTime(QTime(0, 0));
+	touchLastModified();
+}
+
 void CalendarItem::setEnding(const QDateTime &value) {
 	if (value == m_ending)
 		return;
 
 	m_ending = value;
+	touchLastModified();
+}
+
+void CalendarItem::setEndingType(DateType value) {
+	if (value == m_endingType)
+		return;
+
+	m_endingType = value;
+	if (m_endingType == Date_Date)
+		m_ending.setTime(QTime(0, 0));
 	touchLastModified();
 }
 
@@ -50,6 +70,17 @@ void CalendarItem::setLastModified(const QDateTime &value) {
 		return;
 
 	m_lastModified = value;
+}
+
+void CalendarItem::setDaily(bool value) {
+	DateType dateType = value ? Date_Date : Date_DateTime;
+
+	if (m_beginningType == dateType && m_endingType == dateType)
+		return;
+
+	m_beginningType = dateType;
+	m_endingType = dateType;
+	touchLastModified();
 }
 
 int CalendarItem::intersects(const QDate &firstDay, const QDate &lastDay) const {

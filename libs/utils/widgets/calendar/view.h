@@ -22,6 +22,12 @@ namespace Calendar {
 
 		void setScrollArea(QScrollArea *scrollArea);
 
+		/** returns the current model */
+		AbstractCalendarModel *model() const { return m_model; }
+
+		/** called when a new model has been defined */
+		void setModel(AbstractCalendarModel *model);
+
 	signals:
 		void resized(const QSize &size);
 
@@ -30,8 +36,14 @@ namespace Calendar {
 
 		virtual void resizeEvent(QResizeEvent *event);
 
+	protected slots:
+		virtual void itemInserted(const CalendarItem &item) { Q_UNUSED(item); update(); }
+		virtual void itemModified(const CalendarItem &oldItem, const CalendarItem &newItem) { Q_UNUSED(oldItem); Q_UNUSED(newItem); update(); }
+		virtual void itemRemoved(const CalendarItem &removedItem) { Q_UNUSED(removedItem); update(); }
+
 	private:
 		QDate m_firstDate;
+		AbstractCalendarModel *m_model;
 	};
 
 	/**
