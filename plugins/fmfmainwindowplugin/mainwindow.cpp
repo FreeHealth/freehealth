@@ -219,9 +219,9 @@ void MainWindow::extensionsInitialized()
 
     // Start the update checker
     if (updateChecker()->needsUpdateChecking(settings()->getQSettings())) {
-        Utils::Log::addMessage(this, tkTr(Trans::Constants::CHECKING_UPDATES));
-        statusBar()->addWidget(new QLabel(tkTr(Trans::Constants::CHECKING_UPDATES), this));
-        statusBar()->addWidget(updateChecker()->progressBar(this),1);
+        LOG(tkTr(Trans::Constants::CHECKING_UPDATES));
+//        statusBar()->addWidget(new QLabel(tkTr(Trans::Constants::CHECKING_UPDATES), this));
+//        statusBar()->addWidget(updateChecker()->progressBar(this),1);
         connect(updateChecker(), SIGNAL(updateFound()), this, SLOT(updateFound()));
         connect(updateChecker(), SIGNAL(done(bool)), this, SLOT(updateCheckerEnd()));
         updateChecker()->check(Utils::Constants::FREEMEDFORMS_UPDATE_URL);
@@ -280,7 +280,7 @@ void MainWindow::postCoreInitialization()
     show();
 
     // clear the focus of the mainwin so that the lineeditbuton show the tooltip
-    statusBar()->setFocus();
+    this->setFocus();
 }
 
 /** \brief Slot connected to Core::IUser::userChanged().*/
@@ -467,7 +467,7 @@ void MainWindow::openRecentPatient()
 /** \brief Reads main window's settings */
 void MainWindow::readSettings()
 {
-    statusBar()->showMessage(tkTr(Trans::Constants::LOADING_SETTINGS));
+//    statusBar()->showMessage(tkTr(Trans::Constants::LOADING_SETTINGS));
 
     // Main Application settings
     settings()->restoreState(this);
@@ -480,7 +480,7 @@ void MainWindow::readSettings()
     m_HelpTextShow = settings()->value(Core::Constants::S_SHOWHELPTEXT, true).toBool();
 
     // Notify
-    statusBar()->showMessage(tkTr(Trans::Constants::SETTINGS_RECOVERED), 2000);
+//    statusBar()->showMessage(tkTr(Trans::Constants::SETTINGS_RECOVERED), 2000);
 }
 
 /** \brief Write main window's settings */
