@@ -270,8 +270,10 @@ void DayRangeHeader::paintEvent(QPaintEvent *) {
 			dayIndex++;
 		}
 		// paint
-		QRect r(QPoint(60 + (firstIndex * containWidth) / m_rangeWidth, scaleHeight + top * (fontHeight + 5)), QPoint(60 + ((lastIndex + 1) * containWidth) / m_rangeWidth - 1, scaleHeight + (top + 1) * (fontHeight + 5) - 2));
-		painter.drawRoundedRect(r, 5, 5);
+		QRect r(QPoint(60 + (firstIndex * containWidth) / m_rangeWidth + 1, scaleHeight + top * (fontHeight + 5)), QPoint(60 + ((lastIndex + 1) * containWidth) / m_rangeWidth - 2, scaleHeight + (top + 1) * (fontHeight + 5) - 2));
+		painter.drawRoundedRect(r, 4, 4);
+		painter.setPen(Qt::white);
+		painter.drawText(r.adjusted(2, 0, 0, 0), Qt::AlignVCenter | Qt::AlignLeft, item.title().isEmpty() ? tr("(untitled)") : item.title());
 	}
 }
 
