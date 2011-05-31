@@ -33,7 +33,6 @@
 
 #include <usermanagerplugin/usermanager_exporter.h>
 #include <usermanagerplugin/constants.h>
-#include <usermanagerplugin/global.h>
 
 #include <QObject>
 

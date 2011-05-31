@@ -46,9 +46,12 @@
 
 #include <utils/global.h>
 #include <utils/log.h>
+#include <utils/databaseconnector.h>
 #include <translationutils/constanttranslations.h>
 
 #include <coreplugin/translators.h>
+#include <coreplugin/icore.h>
+#include <coreplugin/isettings.h>
 
 #include <printerplugin/textdocumentextra.h>
 
@@ -71,6 +74,7 @@ using namespace Trans::ConstantTranslations;
 
 static inline ExtensionSystem::PluginManager *pluginManager() {return ExtensionSystem::PluginManager::instance();}
 static inline UserPlugin::Internal::UserBase *userBase() {return UserPlugin::Internal::UserBase::instance();}
+static inline Core::ISettings *settings() {return Core::ICore::instance()->settings();}
 
 namespace {
     const char * const SERVER_ADMINISTRATOR_UUID = "serverAdmin";
@@ -364,9 +368,13 @@ UserModel::~UserModel()
   The date and time of loggin are trace into database.
   \todo Create a UserChangerListener +++ instead of using sig/slot
 */
-bool UserModel::setCurrentUser(const QString &log64, const QString &cryptpass64, bool refreshCache)
+bool UserModel::setCurrentUser(const QString &clearLog, const QString &clearPassword, bool refreshCache)
 {
-    qWarning() << Q_FUNC_INFO << log64 << cryptpass64;
+    qWarning() << Q_FUNC_INFO << clearLog << clearPassword;
+
+    QString log64 = Utils::loginForSQL(clearLog);
+    QString cryptpass64 = Utils::cryptPassword(clearPassword);
+
     QList<IUserListener *> listeners = pluginManager()->getObjects<IUserListener>();
 
     // 1. Ask all listeners to prepare the current user disconnection
@@ -435,6 +443,16 @@ bool UserModel::setCurrentUser(const QString &log64, const QString &cryptpass64,
     d->m_CurrentUserRights = Core::IUser::UserRights(user->rightsValue(USER_ROLE_USERMANAGER).toInt());
 
     LOG(tkTr(Trans::Constants::CONNECTED_AS_1).arg(user->fullName()));
+
+    // If we are running with a server, we need to reconnect all databases
+    if (settings()->databaseConnector().driver()==Utils::Database::MySQL) {
+        Utils::DatabaseConnector connector = settings()->databaseConnector();
+        connector.setClearLog(clearLog);
+        connector.setClearPass(clearPassword);
+        settings()->setDatabaseConnector(connector);
+        Core::ICore::instance()->databaseServerLoginChanged(); // with this signal all databases should reconnect
+    }
+
     Q_EMIT memoryUsageChanged();
     Q_EMIT userConnected(uuid);
 

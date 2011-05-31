@@ -29,6 +29,8 @@
 #include <coreplugin/core_exporter.h>
 #include <coreplugin/isettings.h>
 
+#include <utils/databaseconnector.h>
+
 #include <QSettings>
 #include <QStringList>
 #include <QDir>
@@ -89,6 +91,12 @@ public:
     QTreeWidget* getTreeWidget( QWidget * parent ) const;
     QString toString() const;
 
+    // Network datas
+    Utils::DatabaseConnector databaseConnector() const;
+    void setDatabaseConnector(Utils::DatabaseConnector &dbConnector);
+    void readDatabaseConnector();
+    void writeDatabaseConnector();
+
     // values management
     void appendToValue( const QString &key, const QString &value );    
 
@@ -96,8 +104,9 @@ protected:
     QString getIniFile(const QString &name = QString::null, const QString &version = QString::null);
 
 private:
-    QHash< int, QString >   m_Enum_Path;
-    bool                    m_FirstTime;
+    QHash< int, QString > m_Enum_Path;
+    bool m_FirstTime;
+    Utils::DatabaseConnector m_DbConnector;
 };
 
 } // End Internal

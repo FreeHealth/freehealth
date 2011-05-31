@@ -63,9 +63,6 @@ bool CategoryPlugin::initialize(const QStringList &arguments, QString *errorStri
     Q_UNUSED(arguments);
     Q_UNUSED(errorString);
 
-    // Create the core instance
-    CategoryCore::instance(this);
-
     return true;
 }
 
@@ -74,6 +71,9 @@ void CategoryPlugin::extensionsInitialized()
     if (Utils::Log::warnPluginsCreation())
         qWarning() << "CategoryPlugin::extensionsInitialized";
     addAutoReleasedObject(new Core::PluginAboutPage(pluginSpec(), this));
+
+    // Create the core instance
+    CategoryCore::instance(this);
 }
 
 

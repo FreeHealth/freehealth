@@ -28,7 +28,6 @@
 #define USERMODEL_H
 
 #include <usermanagerplugin/usermanager_exporter.h>
-#include <usermanagerplugin/global.h>
 #include <usermanagerplugin/constants.h>
 
 #include <coreplugin/iuser.h>
@@ -104,7 +103,7 @@ public:
 
     bool isCorrectLogin(const QString &clearLog, const QString &clearPassword);
 
-    bool setCurrentUser(const QString &log64, const QString &cryptpass64, bool refreshCache = false);
+    bool setCurrentUser(const QString &clearLog, const QString &clearPassword, bool refreshCache = false);
     bool setCurrentUserIsServerManager();
 
     bool hasCurrentUser();

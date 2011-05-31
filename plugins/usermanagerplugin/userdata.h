@@ -34,7 +34,6 @@
 
 #include <usermanagerplugin/usermanager_exporter.h>
 #include <usermanagerplugin/constants.h>
-#include <usermanagerplugin/global.h>
 
 #include <utils/global.h>
 
@@ -59,6 +58,7 @@ class TextDocumentExtra;
 
 namespace UserPlugin {
 class UserModel;
+class UserWizard;
 
 namespace Internal {
 class UserDataPrivate;
@@ -120,6 +120,7 @@ class USER_EXPORT UserData
 {
     friend class UserBase;
     friend class UserPlugin::UserModel;
+    friend class UserPlugin::UserWizard;
 
 public:
     UserData();
@@ -133,6 +134,7 @@ public:
     bool isCurrent() const;
     bool isModifiable() const;
     bool isModified() const;
+    bool isPasswordModified() const;
     bool isNull() const;
     bool isEmpty() const;
 
@@ -148,10 +150,7 @@ public:
     void  setId(const QVariant & val)                  { setValue(Table_USERS, USER_ID, val); }
     void  setValidity(const QVariant & val)            { setValue(Table_USERS, USER_VALIDITY, val); }
     void  setLocker(const QVariant & val)              { setValue(Table_USERS, USER_LOCKER ,val); }
-    void  setLogin64(const QVariant & val)             { setValue(Table_USERS, USER_LOGIN, val); }
     void  setClearPassword(const QString &val);
-    void  setCryptedPassword(const QVariant & val)     { setValue(Table_USERS, USER_PASSWORD, val); }
-    void  setLastLogin(const QVariant & val)           { setValue(Table_USERS, USER_LASTLOG, val); }
     void  setTitle(const QVariant & val)               { setDynamicDataValue(USER_DATAS_TITLE, val); }
     void  setGender(const QVariant & val)              { setDynamicDataValue(USER_DATAS_GENDER, val); }
     void  setName(const QVariant & val)                { setValue(Table_USERS, USER_NAME, val); }
@@ -257,12 +256,20 @@ public:
     QStringList warnText() const;
 
 
-protected: // use only with database tkUserBase
+protected:
+    // use only with database UserBase
+
     // generic setters to use only when retreiving datas from database
     void setValue(const int tableref, const int fieldref, const QVariant & val);
     void addDynamicDatasFromDatabase(const QList<UserDynamicData*> &list);
     void addRightsFromDatabase(const char * roleName, const int fieldref, const QVariant & val);
     void setLkIds(const QList<int> &lkids);
+
+    // Login can not be changed for any users
+    void setLogin64(const QVariant & val)             { setValue(Table_USERS, USER_LOGIN, val); }
+    void setLastLogin(const QVariant & val)           { setValue(Table_USERS, USER_LASTLOG, val); }
+    // Crypted password must always be sync with clear password
+    void setCryptedPassword(const QVariant &val);
 
     // getters for database
     bool hasModifiedDynamicDatasToStore() const;

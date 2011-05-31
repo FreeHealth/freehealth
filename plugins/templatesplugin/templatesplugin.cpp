@@ -73,9 +73,6 @@ bool TemplatesPlugin::initialize(const QStringList &arguments, QString *errorStr
     prefPage->checkSettingsValidity();
     addObject(prefPage);
 
-    // Initialize template database
-    Templates::TemplateBase::instance();
-
     return true;
 }
 
@@ -83,6 +80,9 @@ void TemplatesPlugin::extensionsInitialized()
 {
     if (Utils::Log::warnPluginsCreation())
         qWarning() << "TemplatesPlugin::extensionsInitialized";
+
+    // Initialize template database
+    Templates::TemplateBase::instance();
 
     // Initialize TemplatesViewManager
     Templates::Internal::TemplatesViewManager::instance(this);

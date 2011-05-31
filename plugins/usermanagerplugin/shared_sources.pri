@@ -19,7 +19,7 @@ SOURCES += $${PWD}/usermanagerplugin.cpp \
     $${PWD}/usermanagermode.cpp
 
 # Compile
-HEADERS += $${PWD}/global.h \
+HEADERS += \
     $${PWD}/constants.h \
     $${PWD}/userdata.h \
     $${PWD}/usermodel.h \
@@ -33,7 +33,7 @@ HEADERS += $${PWD}/global.h \
     $${PWD}/widgets/userrightswidget.h \
     $${PWD}/widgets/userwizard.h
 
-SOURCES += $${PWD}/global.cpp \
+SOURCES += \
     $${PWD}/userdata.cpp \
     $${PWD}/usermodel.cpp \
     $${PWD}/database/userbase.cpp \

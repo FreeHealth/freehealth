@@ -35,6 +35,7 @@
 #include <utils/global.h>
 #include <utils/log.h>
 #include <utils/httpdownloader.h>
+#include <utils/databaseconnector.h>
 
 #include <coreplugin/isettings.h>
 #include <coreplugin/icore.h>
@@ -298,8 +299,16 @@ bool IcdDatabase::init()
      }
 
      // Connect normal Account Database
-     if (!createConnection(ICD::Constants::DB_ICD10, QString(Constants::DB_ICD10) + ".db", pathToDb,
-                           Utils::Database::ReadOnly, Utils::Database::SQLite, "", "",0, CreateDatabase)) {
+     // Connect Drugs Database
+     Utils::DatabaseConnector connector;
+     connector.setAbsPathToReadOnlySqliteDatabase(settings()->path(Core::ISettings::ReadOnlyDatabasesPath));
+     connector.setHost(QString(Constants::DB_ICD10) + ".db");
+     connector.setAccessMode(Utils::DatabaseConnector::ReadOnly);
+     connector.setDriver(Utils::Database::SQLite);
+
+     if (createConnection(Constants::DB_ICD10, QString(Constants::DB_ICD10) + ".db", connector)) {
+         LOG(tkTr(Trans::Constants::CONNECTED_TO_DATABASE_1_DRIVER_2).arg(Constants::DB_ICD10).arg("SQLite"));
+     } else {
          d->m_DownloadAndPopulate = true;
      }
 

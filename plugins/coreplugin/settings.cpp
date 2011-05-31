@@ -247,7 +247,6 @@
 
 #include <utils/global.h>
 
-// include Qt headers
 #include <QApplication>
 #include <QMainWindow>
 #include <QDockWidget>
@@ -261,53 +260,53 @@
   \todo Manage user's settings stored into database
 */
 
-namespace SettingsPrivateConstants {
+namespace {
 
-    static const char* const WEBSITE              = "http://www.freemedforms.org/";
+    const char* const WEBSITE              = "http://www.freemedforms.org/";
 
     // BUNDLE RESOURCES  --> located inside the bundle. Location calculated from BundleRootPath
 #ifdef DEBUG
-    static const char* const BUNDLERESOURCE_PATH   = "";                    // resources are located into global_resources paths
+    const char* const BUNDLERESOURCE_PATH   = "";                    // resources are located into global_resources paths
 #else
-    static const char* const BUNDLERESOURCE_PATH  = "/Resources";          // resources are located inside the bundle
+    const char* const BUNDLERESOURCE_PATH  = "/Resources";          // resources are located inside the bundle
 #endif
-    static const char* const READONLYRESOURCES    = "";
-    static const char* const READONLYDATABASE     = "/databases";
-    static const char* const TRANSLATIONS_PATH    = "/translations";
-    static const char* const DEFAULTFORMS         = "/forms";
-    static const char* const DEFAULTTHEME_PATH    = "";
-    static const char* const DEFAULTTHEME_PIXMAP  = "/pixmap";
-    static const char* const DEFAULTTHEME_SPLASH  = "/pixmap/splashscreens";
-    static const char* const USERMANUAL_PATH      = "/doc/%1";
-    static const char* const LINUX_USERMANUAL_PATH  = "/usr/share/doc/%1-doc/html";
+    const char* const READONLYRESOURCES    = "";
+    const char* const READONLYDATABASE     = "/databases";
+    const char* const TRANSLATIONS_PATH    = "/translations";
+    const char* const DEFAULTFORMS         = "/forms";
+    const char* const DEFAULTTHEME_PATH    = "";
+    const char* const DEFAULTTHEME_PIXMAP  = "/pixmap";
+    const char* const DEFAULTTHEME_SPLASH  = "/pixmap/splashscreens";
+    const char* const USERMANUAL_PATH      = "/doc/%1";
+    const char* const LINUX_USERMANUAL_PATH  = "/usr/share/doc/%1-doc/html";
 
     // APPLICATIONS RESOURCES --> located next to the application binary
 #ifdef DEBUG
-    static const char* const MAC_PLUGINSPATH      = "/../../../plugins";
+    const char* const MAC_PLUGINSPATH      = "/../../../plugins";
 #else
-    static const char* const MAC_PLUGINSPATH      = "/../plugins";
+    const char* const MAC_PLUGINSPATH      = "/../plugins";
 #endif
-    static const char* const NONMAC_PLUGINSPATH   = "/plugins";
-    static const char* const ALL_QTPLUGINSPATH    = "/qt";
-    static const char* const MAC_QTFRAMEWORKPATH  = "/../FrameWorks";
-    static const char* const WIN_QTFRAMEWORKPATH  = "";
-    static const char* const UNIX_QTFRAMEWORKPATH = "/../libs";
-    static const char* const MAC_TOBUNDLEROOTPATH = "/../../..";
-    static const char* const WIN_TOBUNDLEROOTPATH = "/..";
-    static const char* const NUX_TOBUNDLEROOTPATH = "/..";
-    static const char* const BSD_TOBUNDLEROOTPATH = "/..";
+    const char* const NONMAC_PLUGINSPATH   = "/plugins";
+    const char* const ALL_QTPLUGINSPATH    = "/qt";
+    const char* const MAC_QTFRAMEWORKPATH  = "/../FrameWorks";
+    const char* const WIN_QTFRAMEWORKPATH  = "";
+    const char* const UNIX_QTFRAMEWORKPATH = "/../libs";
+    const char* const MAC_TOBUNDLEROOTPATH = "/../../..";
+    const char* const WIN_TOBUNDLEROOTPATH = "/..";
+    const char* const NUX_TOBUNDLEROOTPATH = "/..";
+    const char* const BSD_TOBUNDLEROOTPATH = "/..";
 
     // USER WRITABLE RESOURCES  --> located inside/outside the bundle. Location calculated from ResourcesPath (where stands the ini file)
-    static const char* const WRITABLEDATABASE     = "/databases";
+    const char* const WRITABLEDATABASE     = "/databases";
 
     // SETTINGS
-    static const char* const LICENSE_VERSION      = "License/AcceptedVersion";
+    const char* const S_LICENSE_VERSION    = "License/AcceptedVersion";
+    const char* const S_DATABASECONNECTOR  = "Network/Db";
 
 }
 
 using namespace Core;
 using namespace Core::Internal;
-using namespace SettingsPrivateConstants;
 
 
 /**
@@ -315,8 +314,8 @@ using namespace SettingsPrivateConstants;
   All path are calculated by the constructor.\n
   Users' writable resources are located in the dir of the config.ini file.
 */
-SettingsPrivate::SettingsPrivate(QObject *parent, const QString &appName, const QString &fileName)
-        : ISettings(), QSettings(getIniFile(appName, fileName), QSettings::IniFormat,parent)
+SettingsPrivate::SettingsPrivate(QObject *parent, const QString &appName, const QString &fileName) :
+        ISettings(), QSettings(getIniFile(appName, fileName), QSettings::IniFormat,parent)
 {
     setObjectName("SettingsPrivate");
     QString resourcesPath;
@@ -335,6 +334,9 @@ SettingsPrivate::SettingsPrivate(QObject *parent, const QString &appName, const 
     setPath(ApplicationTempPath, QDir::tempPath());
     setPath(SystemTempPath, QDir::tempPath());
     setPath(WebSiteUrl, WEBSITE);
+
+    readDatabaseConnector();
+
 //    if (Utils::isRunningOnLinux())
 //        setPath(FMFPluginsPath, LIBRARY_BASENAME);
 
@@ -536,7 +538,7 @@ void SettingsPrivate::noMoreFirstTimeRunning()
 */
 QString SettingsPrivate::licenseApprovedApplicationNumber() const
 {
-    return value(LICENSE_VERSION).toString();
+    return value(S_LICENSE_VERSION).toString();
 }
 
 /**
@@ -544,7 +546,7 @@ QString SettingsPrivate::licenseApprovedApplicationNumber() const
 */
 void SettingsPrivate::setLicenseApprovedApplicationNumber(const QString &version)
 {
-    setValue(LICENSE_VERSION, version);
+    setValue(S_LICENSE_VERSION, version);
 }
 
 /**
@@ -853,10 +855,7 @@ QTreeWidget* SettingsPrivate::getTreeWidget(QWidget *parent) const
     return tree;
 }
 
-/**
- \fn QString Core::ISettings::toString() const
- \brief For debugging purpose.
-*/
+/** \brief For debugging purpose. */
 QString SettingsPrivate::toString() const
 {
     QString tmp = "\n\n";
@@ -923,3 +922,29 @@ QString SettingsPrivate::toString() const
     return tmp;
 }
 
+/** Returns all server connection's params */
+Utils::DatabaseConnector SettingsPrivate::databaseConnector() const
+{
+    return m_DbConnector;
+}
+
+/** Define all server connection's params. Params are automatically saved into the settings file. */
+void SettingsPrivate::setDatabaseConnector(Utils::DatabaseConnector &dbConnector)
+{
+    m_DbConnector = dbConnector;
+    m_DbConnector.setAbsPathToReadOnlySqliteDatabase(path(Core::ISettings::ReadOnlyDatabasesPath));
+    m_DbConnector.setAbsPathToReadWriteSqliteDatabase(path(Core::ISettings::ReadWriteDatabasesPath));
+    writeDatabaseConnector();
+}
+
+void SettingsPrivate::readDatabaseConnector()
+{
+    m_DbConnector.fromSettings(value(S_DATABASECONNECTOR).toString());
+    m_DbConnector.setAbsPathToReadOnlySqliteDatabase(path(Core::ISettings::ReadOnlyDatabasesPath));
+    m_DbConnector.setAbsPathToReadWriteSqliteDatabase(path(Core::ISettings::ReadWriteDatabasesPath));
+}
+
+void SettingsPrivate::writeDatabaseConnector()
+{
+    setValue(S_DATABASECONNECTOR, m_DbConnector.forSettings());
+}

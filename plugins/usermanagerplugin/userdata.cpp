@@ -64,7 +64,6 @@
 #include "database/userbase.h"
 
 #include <usermanagerplugin/constants.h>
-#include <usermanagerplugin/global.h>
 
 #include <utils/global.h>
 #include <utils/log.h>
@@ -390,7 +389,8 @@ class UserDataPrivate
 public:
     static QHash<QString, int> m_Link_PaperName_ModelIndex;  /** \brief For speed improvments, stores the link between name of headers/footers/watermark and there index into UserModel \sa UserConstants. */
 
-    UserDataPrivate()
+    UserDataPrivate() :
+            m_PasswordChanged(false)
     {
         if (m_Link_PaperName_ModelIndex.count() == 0)
             feedStaticHash();
@@ -472,6 +472,7 @@ public:
     QList<int> m_LkIds;
     int m_PersonalLkId;
     QString m_LkIdsToString, m_ClearPassword;
+    bool m_PasswordChanged;
 };
 
 }  // End Internal
@@ -567,6 +568,7 @@ void UserData::setModified(bool state)
             data->setDirty(false);
         }
         d->m_ModifiedRoles.clear();
+        d->m_PasswordChanged = false;
     }
 }
 
@@ -579,6 +581,11 @@ bool UserData::isModified() const
     if (hasModifiedRightsToStore())
         return true;
     return false;
+}
+
+bool UserData::isPasswordModified() const
+{
+    return d->m_PasswordChanged;
 }
 
 bool UserData::isNull() const
@@ -638,8 +645,11 @@ void UserData::setValue(const int tableref, const int fieldref, const QVariant &
     if (!d->m_Modifiable)
         return;
     // if value is the same as the stored value --> return
-    if (d->m_Table_Field_Value.count())//contains(tableref))
-    {
+    if (tableref == Table_USERS && fieldref == USER_PASSWORD) {
+        setCryptedPassword(val);
+        return;
+    }
+    if (d->m_Table_Field_Value.count()) {
         if (d->m_Table_Field_Value.keys().contains(tableref)) {
             const QHash<int, QVariant> &table = d->m_Table_Field_Value.value(tableref);
             if (table.keys().contains(fieldref))
@@ -763,7 +773,8 @@ void UserData::setDynamicDataValue(const char *name, const QVariant &val, UserDy
 }
 
 /**
-  \todo document
+  Define the rights of the user according to the role name of the rights.
+  \sa UserPlugin::Constants::USER_ROLE_ADMINISTRATIVE, UserPlugin::Constants::USER_ROLE_MEDICAL, UserPlugin::Constants::USER_ROLE_PARAMEDICAL, UserPlugin::Constants::USER_ROLE_USERMANAGER, UserPlugin::Constants::USER_ROLE_DOSAGES, Core::IUser::UserRights
 */
 void UserData::setRights(const char *roleName, const Core::IUser::UserRights rights)
 {
@@ -779,14 +790,36 @@ void UserData::setRights(const char *roleName, const Core::IUser::UserRights rig
     setModified(true);
 }
 
+/**
+  Define the password is a clear way, the crypted password is sync if needed
+  \sa setCryptedPassword(),
+*/
 void UserData::setClearPassword(const QString &val)
 {
+    if (val == d->m_ClearPassword)
+        return;
     d->m_ClearPassword = val;
+    d->m_PasswordChanged = true;
+    // Sync cryptedPassword
+    if (Utils::cryptPassword(val) != cryptedPassword()) {
+        setCryptedPassword(Utils::cryptPassword(val));
+    }
 }
 
 /**
-  \todo document
+   Define the crypted password. You should not use this function, but the setClearPassword() instead
+   \sa setClearPassword(), isPasswordModified()
 */
+
+void UserData::setCryptedPassword(const QVariant &val)
+{
+    if (val.toString() == value(Table_USERS, USER_PASSWORD).toString())
+        return;
+    d->m_Table_Field_Value[Table_USERS].insert(USER_PASSWORD, val);
+    d->m_PasswordChanged = true;
+}
+
+/** Add the current login to the login history of the user. */
 void UserData::addLoginToHistory()
 {
     setDynamicDataValue(USER_DATAS_LOGINHISTORY,
@@ -806,8 +839,11 @@ void UserData::addLoginToHistory()
 */
 QVariant UserData::value(const int tableref, const int fieldref) const
 {
-    if (d->m_Table_Field_Value.value(tableref).keys().contains(fieldref))
-        return d->m_Table_Field_Value.value(tableref).value(fieldref);
+    if (d->m_Table_Field_Value.keys().contains(tableref)) {
+        const QHash<int, QVariant> &fields = d->m_Table_Field_Value.value(tableref);
+        if (fields.contains(fieldref))
+            return fields.value(fieldref);
+    }
     return QVariant();
 }
 

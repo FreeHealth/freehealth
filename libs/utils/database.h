@@ -46,11 +46,12 @@ QT_END_NAMESPACE
  * \file database.h
  * \author Eric MAEKER <eric.maeker@free.fr>
  * \version 0.6.0
- * \date 15 May 2011
+ * \date 31 May 2011
 */
 
 
 namespace Utils {
+class DatabaseConnector;
 
 namespace Internal {
 class DatabasePrivate;
@@ -209,16 +210,19 @@ public:
 
     // connection
     virtual bool createConnection(const QString &connectionName, const QString &nonPrefixedDbName,
-                                   const QString &pathOrHostName,
-                                   TypeOfAccess access = ReadWrite, AvailableDrivers driver = SQLite,
-                                   const QString &login = QString::null, const QString &pass = QString::null,
-                                   const int port = 0,
-                                   CreationOption createOption = WarnOnly);
+                                  const Utils::DatabaseConnector &connector,
+                                  CreationOption createOption = WarnOnly);
+
 
     /**
         \brief This member is called by createConnection() if the asked database does not exists.
                By default it does nothing and return an error state (false).
     */
+    virtual bool createDatabase(const QString &connectionName , const QString &prefixedDbName,
+                                const Utils::DatabaseConnector &connector,
+                                CreationOption createOption
+                               );
+
     virtual bool createDatabase(const QString &/*connectionName*/ , const QString &/*prefixedDbName*/,
                                 const QString &/*pathOrHostName*/,
                                 TypeOfAccess /*access*/, AvailableDrivers /*driver*/,

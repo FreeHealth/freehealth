@@ -55,6 +55,7 @@ public:
         UserDbConnection,
         UserCreation,
         PatientForm,
+        VirtualPatients,
         OtherPage,
         LastPage = 100000
     };

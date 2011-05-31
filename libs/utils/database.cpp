@@ -63,6 +63,7 @@
 #include "database.h"
 #include "log.h"
 #include "global.h"
+#include "databaseconnector.h"
 
 #include <translationutils/constanttranslations.h>
 
@@ -255,9 +256,10 @@ bool Database::createMySQLUser(const QString &log, const QString &password,
     }
     // Creating grants string
     QString g;
-    if (grants & Grant_All) {
-        g = "ALL PRIVILEGES";
-    } else {
+//    if (grants & Grant_All) {
+//        g = "ALL PRIVILEGES";
+//    } else {
+    // Database privileges
         if (grants & Grant_Select) {
             g += "SELECT, ";
         }
@@ -279,11 +281,8 @@ bool Database::createMySQLUser(const QString &log, const QString &password,
         if (grants & Grant_Alter) {
             g += "ALTER, ";
         }
-        if (grants & Grant_CreateUser) {
-            g += "CREATE USER, ";
-        }
         g.chop(2);
-    }
+//    }
     if (g.isEmpty()) {
         LOG_ERROR_FOR("Database","No grants when creating user");
         return false;
@@ -311,7 +310,8 @@ bool Database::createMySQLUser(const QString &log, const QString &password,
     }
     query.finish();
     // If grants fail -> remove user and return false
-    req = QString("GRANT %1 ON `%2`.* TO '%3'@'%' IDENTIFIED BY '%4';").arg(g).arg(udb).arg(log).arg(password);
+//    req = QString("GRANT %1 ON `%2`.* TO '%3'@'%' IDENTIFIED BY '%4';").arg(g).arg(udb).arg(log).arg(password);
+    req = QString("GRANT %1, GRANT OPTION ON `%2`.* TO '%3'@'%';").arg(g).arg(udb).arg(log);
     if (!query.exec(req)) {
         LOG_QUERY_ERROR_FOR("Database", query);
         query.finish();
@@ -325,6 +325,24 @@ bool Database::createMySQLUser(const QString &log, const QString &password,
         return false;
     }
     query.finish();
+
+    if (grants & Grant_CreateUser) {
+        req = QString("GRANT CREATE USER, GRANT OPTION ON *.* TO '%1'@'%';").arg(log);
+        if (!query.exec(req)) {
+            LOG_QUERY_ERROR_FOR("Database", query);
+            query.finish();
+            req = QString("DROP USER '%1'@'%2'").arg(log).arg(uh);
+            if (!query.exec(req)) {
+                LOG_QUERY_ERROR_FOR("Database", query);
+            } else {
+                LOG_ERROR_FOR("Database", QString("User %1 removed").arg(log));
+            }
+            LOG_QUERY_ERROR_FOR("Database", query);
+            return false;
+        }
+        query.finish();
+    }
+
     LOG_FOR("Database", tkTr(Trans::Constants::DATABASE_USER_1_CORRECTLY_CREATED).arg(log));
     return true;
 }
@@ -375,6 +393,7 @@ bool Database::dropMySQLUser(const QString &log, const QString &userHost)
 QSqlDatabase Database::database() const
 { return QSqlDatabase::database(d->m_ConnectionName); }
 
+
 /**
    Create the connection to the database.
   If database does not exists, according to the \e createOption, createDatabase() is called.
@@ -385,80 +404,27 @@ QSqlDatabase Database::database() const
   - Can not read database if asked to be readable
   - Can not write in database if asked to be writable
   \param connectionName = name of the connect
-  \param dbName = name of the database
-  \param pathOrHostName = path to the SQLite file or name of the host name to connect to.
-  \param acces = type of acces requiered.
-  \param driver = type of driver requiered
-  \param login = login to the server (not used for SQLite)
-  \param password = login to the server (not used for SQLite)
+  \param connector = Utils::DatabaseConnector = connection params
   \param createOption = what to do if the database does not exist.
 */
 bool Database::createConnection(const QString &connectionName, const QString &nonPrefixedDbName,
-                                   const QString &pathOrHostName,
-                                   TypeOfAccess access, AvailableDrivers driver,
-                                   const QString &login, const QString &password,
-                                   const int port,
-                                   CreationOption createOption
-                                   )
-{   
+                                const Utils::DatabaseConnector &connector,
+                                CreationOption createOption
+                                )
+{
     bool toReturn = true;
-    d->m_ConnectionName = "";
-    d->m_Driver = driver;
-    QString dbName = prefixedDatabaseName(driver, nonPrefixedDbName);
+    d->m_ConnectionName.clear();
+    d->m_Driver = connector.driver();
+    QString dbName = prefixedDatabaseName(d->m_Driver, nonPrefixedDbName);
 
-    if (WarnLogMessages)
-        qDebug() << __FILE__ << QString::number(__LINE__) << connectionName
-                << dbName
-                << pathOrHostName
-                << access
-                << driver
-                << login
-                << password
-                << QString::number(port) ;
+    if (WarnLogMessages) {
+        qDebug() << __FILE__ << QString::number(__LINE__) << connectionName << dbName;
+        connector.warn();
+    }
 
     // does driver is available
-    switch (driver) {
-    case SQLite :
-        {
-            if (WarnLogMessages)
-                LOG_FOR("Database", QString("Trying to connect database %1 with %2 driver")
-                                   .arg(dbName)
-                                   .arg("SQLite"));
-            if (!QSqlDatabase::isDriverAvailable("QSQLITE")) {
-                LOG_ERROR_FOR("Database", QCoreApplication::translate("Database",
-                                                                      "ERROR : %1 driver is not available")
-                              .arg("SQLite"));
-                return false;
-            }
-            break;
-        }
-    case MySQL:
-        {
-            if (WarnLogMessages)
-                LOG_FOR("Database", QString("Trying to connect database %1 with %2 driver")
-                                   .arg(dbName)
-                                   .arg("MySQL"));
-            if (!QSqlDatabase::isDriverAvailable("QMYSQL")) {
-                LOG_ERROR_FOR("Database", QCoreApplication::translate("Database",
-                                                                      "ERROR : %1 driver is not available")
-                              .arg("MySQL"));
-                return false;
-            }
-            break;
-        }
-    case PostSQL :
-        {
-            if (WarnLogMessages)
-                LOG_FOR("Database", QString("Trying to connect database %1 with %2 driver")
-                                   .arg(dbName)
-                                   .arg("PostGre SQL"));
-            if (!QSqlDatabase::isDriverAvailable("QPSQL")) {
-                LOG_ERROR_FOR("Database", QCoreApplication::translate("Database",
-                                                                      "ERROR : %1 driver is not available")
-                              .arg("PostGreSQL"));
-                return false;
-            }
-        }
+    if (!connector.isDriverValid()) {
+        return false;
     }
 
     // does connection already exists ?
@@ -472,26 +438,32 @@ bool Database::createConnection(const QString &connectionName, const QString &no
     }
 
     QSqlDatabase DB;
-    QString fileName = pathOrHostName + QDir::separator() + dbName;
+
+    // Construct SQLite database fileName
+    QString fileName;
+    if (connector.accessMode()==DatabaseConnector::ReadOnly) {
+        fileName = QDir::cleanPath(connector.absPathToSqliteReadOnlyDatabase() + QDir::separator() + connectionName + QDir::separator() + dbName);
+    } else if (connector.accessMode()==DatabaseConnector::ReadOnly) {
+        fileName = QDir::cleanPath(connector.absPathToSqliteReadWriteDatabase() + QDir::separator() + connectionName + QDir::separator() + dbName);
+    }
 
     // check server connection
-    switch (driver) {
+    switch (connector.driver()) {
     case SQLite: break;
     case MySQL:
         {
             DB = QSqlDatabase::addDatabase("QMYSQL" , connectionName);
-            DB.setHostName(pathOrHostName);
-            DB.setUserName(login);
-            DB.setPassword(password);
-            DB.setPort(port);
-            bool ok = DB.open();
-            if (!ok) {
+            DB.setHostName(connector.host());
+            DB.setUserName(connector.clearLog());
+            DB.setPassword(connector.clearPass());
+            DB.setPort(connector.port());
+            if (!DB.open()) {
                 LOG_ERROR_FOR("Database", QString("Unable to connect to the server %1 - %2")
-                                     .arg(pathOrHostName).arg(DB.lastError().text()));
+                                     .arg(connector.host()).arg(DB.lastError().text()));
                 return false;
             }
             if (WarnLogMessages)
-                LOG_FOR("Database", QString("Connected to host %1").arg(pathOrHostName));
+                LOG_FOR("Database", QString("Connected to host %1").arg(connector.host()));
             break;
         }
     case PostSQL:
@@ -502,21 +474,19 @@ bool Database::createConnection(const QString &connectionName, const QString &no
     }
 
     // create database is not exists and user ask for database creation
-    switch (driver) {
+    switch (connector.driver()) {
     case SQLite:
         {
             if ((!QFile(fileName).exists()) ||
                 (QFileInfo(fileName).size() == 0)) {
                 if (createOption == CreateDatabase) {
-                    if (!createDatabase(connectionName, dbName, pathOrHostName, access, driver, login, password, port, createOption)) {
-                        LOG_ERROR_FOR("Database", QCoreApplication::translate("Database",
-                                                                              "ERROR : %1 database does not exist and can not be created. Path = %2").arg(dbName, pathOrHostName));
+                    if (!createDatabase(connectionName, dbName, connector, createOption)) {
+                        LOG_ERROR_FOR("Database", tkTr(Trans::Constants::DATABASE_1_CANNOT_BE_CREATED_ERROR_2).arg(dbName + "@" + fileName).arg(""));
                         return false;
                     }
                 } else { // Warn Only
                     if (WarnLogMessages)
-                        LOG_FOR("Database", QCoreApplication::translate("Database",
-                                                                        "ERROR : %1 database does not exist and can not be created. Path = %2").arg(dbName, pathOrHostName));
+                        LOG_ERROR_FOR("Database", tkTr(Trans::Constants::DATABASE_1_CANNOT_BE_CREATED_ERROR_2).arg(dbName + "@" + fileName).arg(""));
                     return false;
                 }
             }
@@ -526,27 +496,21 @@ bool Database::createConnection(const QString &connectionName, const QString &no
         {
             // can get connection to server ?
             DB.setDatabaseName(dbName);
-            bool ok = DB.open();
-            if (!ok) {
-                LOG_ERROR_FOR("Database", QString("Unable to connect to the database %1 - %2")
-                                     .arg(dbName).arg(DB.lastError().text()));
+            if (!DB.open()) {
+                LOG_ERROR_FOR("Database", tkTr(Trans::Constants::UNABLE_TO_OPEN_DATABASE_1_ERROR_2).arg(dbName).arg(DB.lastError().text()));
                 if (createOption == CreateDatabase) {
-                    if (!createDatabase(connectionName, dbName, pathOrHostName, access, driver, login, password, port, createOption)) {
-                        LOG_ERROR_FOR("Database", QCoreApplication::translate("Database",
-                                      "ERROR : %1 database does not exist and can not be created. Path = %2")
-                                      .arg(dbName, pathOrHostName));
+                    if (!createDatabase(connectionName, dbName, connector, createOption)) {
+                        LOG_ERROR_FOR("Database", tkTr(Trans::Constants::DATABASE_1_CANNOT_BE_CREATED_ERROR_2).arg(dbName + "@" + connector.host()).arg(""));
                         return false;
                     }
                 } else { // Warn Only
                     if (WarnLogMessages)
-                        LOG_FOR("Database", QCoreApplication::translate("Database",
-                                        "ERROR : %1 database does not exist and can not be created. Path = %2")
-                                        .arg(dbName, pathOrHostName));
+                        LOG_ERROR_FOR("Database", tkTr(Trans::Constants::DATABASE_1_CANNOT_BE_CREATED_ERROR_2).arg(dbName + "@" + connector.host()).arg(""));
                     return false;
                 }
             }
             if (WarnLogMessages)
-                LOG_FOR("Database", QString("Connected to database %1").arg(dbName));
+                LOG_FOR("Database", tkTr(Trans::Constants::CONNECTED_TO_DATABASE_1_DRIVER_2).arg(dbName).arg(DB.driverName()));
             break;
         }
     case PostSQL:
@@ -557,12 +521,12 @@ bool Database::createConnection(const QString &connectionName, const QString &no
     }
 
     // test read access to database
-    switch (driver) {
+    switch (connector.driver()) {
     case SQLite:
         {
             if (!QFileInfo(fileName).isReadable()) {
                 LOG_ERROR_FOR("Database", QCoreApplication::translate("Database", "ERROR : Database %1 is not readable. Path : %2")
-                              .arg(dbName, pathOrHostName));
+                              .arg(dbName, fileName));
                 toReturn = false;
             }
             break;
@@ -572,8 +536,8 @@ bool Database::createConnection(const QString &connectionName, const QString &no
             if (!DB.isOpen()) {
                 if (!DB.open()) {
                     LOG_ERROR_FOR("Database", QCoreApplication::translate("Database",
-                                                                          "ERROR : Database %1 is not readable. Path : %2")
-                                  .arg(dbName, pathOrHostName));
+                                                                          "ERROR : Database %1 is not readable. Host: %2")
+                                  .arg(dbName, connector.host()));
                     return false;
                 }
             }
@@ -581,7 +545,7 @@ bool Database::createConnection(const QString &connectionName, const QString &no
             if (!query.isActive()) {
                 LOG_ERROR_FOR("Database", QCoreApplication::translate("Database",
                                                                       "ERROR : Database %1 is not readable. Path : %2")
-                              .arg(dbName, pathOrHostName));
+                              .arg(dbName, connector.host()));
                 LOG_QUERY_ERROR_FOR("Database", query);
                 return false;
             } else {
@@ -601,14 +565,14 @@ bool Database::createConnection(const QString &connectionName, const QString &no
     }
 
     // test write access
-    if (access == ReadWrite) {
-        switch (driver) {
+    if (connector.accessMode() == DatabaseConnector::ReadWrite) {
+        switch (connector.driver()) {
         case SQLite:
             {
                 if (!QFileInfo(fileName).isWritable()) {
                     LOG_ERROR_FOR("Database", QCoreApplication::translate("Database",
                                   "ERROR : Database %1 is not writable. Path : %2.")
-                                  .arg(dbName, pathOrHostName));
+                                  .arg(dbName, fileName));
                     toReturn = false;
                 }
                 break;
@@ -627,7 +591,7 @@ bool Database::createConnection(const QString &connectionName, const QString &no
     }
 
     // create connection
-    switch (driver)
+    switch (connector.driver())
     {
         case SQLite :
         {
@@ -648,25 +612,36 @@ bool Database::createConnection(const QString &connectionName, const QString &no
     DB.open();
     if (WarnLogMessages)
         LOG_FOR("Database", QCoreApplication::translate("Database",  "INFO : database %1 connection = %2")
-                       .arg(connectionName).arg(DB.isOpen()));
+                       .arg(dbName).arg(DB.isOpen()));
 
     // test connection
     if (!DB.isOpen()) {
-        LOG_ERROR_FOR("Database", QCoreApplication::translate("Database",
-                                                                    "WARNING : can not open database %1 : %2 \n %3 ")
-                         .arg(connectionName, DB.lastError().driverText(), DB.lastError().databaseText()));
+        LOG_ERROR_FOR("Database", tkTr(Trans::Constants::UNABLE_TO_OPEN_DATABASE_1_ERROR_2).arg(dbName, DB.lastError().text()));
         toReturn = false;
     }
     else {
         if (WarnLogMessages)
-            LOG_FOR("Database", QCoreApplication::translate("Database", "INFO : database %1 installed. Path : %2")
-                           .arg(connectionName, pathOrHostName));
+            LOG_FOR("Database", tkTr(Trans::Constants::CONNECTED_TO_DATABASE_1_DRIVER_2).arg(dbName).arg(DB.driverName()));
     }
+
     // return boolean
     if (toReturn)
         d->m_ConnectionName = connectionName;
     return toReturn;
 }
+
+
+
+bool Database::createDatabase(const QString &connectionName , const QString &prefixedDbName,
+                            const Utils::DatabaseConnector &connector,
+                            CreationOption createOption
+                           ) { return createDatabase(connectionName, prefixedDbName,
+                                                     connector.host(), Database::TypeOfAccess(connector.accessMode()),
+                                                     connector.driver(),
+                                                     connector.clearLog(), connector.clearPass(),
+                                                     connector.port(),
+                                                     createOption); }
+
 
 /**  Returns the connectionName in use */
 QString Database::connectionName() const

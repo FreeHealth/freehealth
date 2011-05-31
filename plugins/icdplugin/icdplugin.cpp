@@ -82,9 +82,6 @@ bool IcdPlugin::initialize(const QStringList &arguments, QString *errorString)
     // Add Translator to the Application
     Core::ICore::instance()->translators()->addNewTranslator("icdplugin");
 
-    // Create the database instance
-    IcdDatabase::instance();
-
     return true;
 }
 
@@ -92,6 +89,9 @@ void IcdPlugin::extensionsInitialized()
 {
     if (Utils::Log::warnPluginsCreation())
         qWarning() << "IcdPlugin::extensionsInitialized";
+
+    // Create the database instance
+    IcdDatabase::instance();
 
     addAutoReleasedObject(new Core::PluginAboutPage(pluginSpec(), this));
 

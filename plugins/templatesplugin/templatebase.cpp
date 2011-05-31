@@ -29,6 +29,7 @@
 
 #include <utils/global.h>
 #include <utils/log.h>
+#include <utils/databaseconnector.h>
 #include <translationutils/constanttranslations.h>
 
 #include <coreplugin/isettings.h>
@@ -277,40 +278,45 @@ bool TemplateBase::init()
     if (m_initialized)
         return true;
 
-    // Check settings --> SQLite or MySQL ?
-    if (settings()->value(Core::Constants::S_USE_EXTERNAL_DATABASE, false).toBool()) {
-        if (!QSqlDatabase::isDriverAvailable("QMYSQL")) {
-            LOG_ERROR(tkTr(Trans::Constants::DATABASE_DRIVER_1_NOT_AVAILABLE).arg("MySQL"));
-            Utils::warningMessageBox(tkTr(Trans::Constants::APPLICATION_FAILURE),
-                                     tkTr(Trans::Constants::DATABASE_DRIVER_1_NOT_AVAILABLE_DETAIL).arg("MySQL"),
-                                     "", qApp->applicationName());
-            return false;
-        }
-        createConnection(Templates::Constants::DB_TEMPLATES_NAME,
-                         Templates::Constants::DB_TEMPLATES_NAME,
-                         QString(QByteArray::fromBase64(settings()->value(Core::Constants::S_EXTERNAL_DATABASE_HOST, QByteArray("localhost").toBase64()).toByteArray())),
-                         Utils::Database::ReadWrite,
-                         Utils::Database::MySQL,
-                         QString(QByteArray::fromBase64(settings()->value(Core::Constants::S_EXTERNAL_DATABASE_LOG, QByteArray("root").toBase64()).toByteArray())),
-                         QString(QByteArray::fromBase64(settings()->value(Core::Constants::S_EXTERNAL_DATABASE_PASS, QByteArray("").toBase64()).toByteArray())),
-                         QString(QByteArray::fromBase64(settings()->value(Core::Constants::S_EXTERNAL_DATABASE_PORT, QByteArray("").toBase64()).toByteArray())).toInt(),
-                         Utils::Database::CreateDatabase);
-    } else {
-        if (!QSqlDatabase::isDriverAvailable("QSQLITE")) {
-            LOG_ERROR(tkTr(Trans::Constants::DATABASE_DRIVER_1_NOT_AVAILABLE).arg("SQLite"));
-            Utils::warningMessageBox(tkTr(Trans::Constants::APPLICATION_FAILURE),
-                                     tkTr(Trans::Constants::DATABASE_DRIVER_1_NOT_AVAILABLE_DETAIL).arg("SQLite"),
-                                     "", qApp->applicationName());
-            return false;
-        }
-        createConnection(Templates::Constants::DB_TEMPLATES_NAME,
-                         Templates::Constants::DB_TEMPLATES_FILENAME,
-                         settings()->path(Core::ISettings::ReadWriteDatabasesPath) + QDir::separator() + QString(Templates::Constants::DB_TEMPLATES_NAME),
-                         Utils::Database::ReadWrite,
-                         Utils::Database::SQLite,
-                         "log", "pas", 0,
-                         Utils::Database::CreateDatabase);
-    }
+    // connect
+    createConnection(Templates::Constants::DB_TEMPLATES_NAME, Templates::Constants::DB_TEMPLATES_NAME,
+                     settings()->databaseConnector(),
+                     Utils::Database::CreateDatabase);
+
+//    // Check settings --> SQLite or MySQL ?
+//    if (settings()->value(Core::Constants::S_USE_EXTERNAL_DATABASE, false).toBool()) {
+//        if (!QSqlDatabase::isDriverAvailable("QMYSQL")) {
+//            LOG_ERROR(tkTr(Trans::Constants::DATABASE_DRIVER_1_NOT_AVAILABLE).arg("MySQL"));
+//            Utils::warningMessageBox(tkTr(Trans::Constants::APPLICATION_FAILURE),
+//                                     tkTr(Trans::Constants::DATABASE_DRIVER_1_NOT_AVAILABLE_DETAIL).arg("MySQL"),
+//                                     "", qApp->applicationName());
+//            return false;
+//        }
+//        createConnection(Templates::Constants::DB_TEMPLATES_NAME,
+//                         Templates::Constants::DB_TEMPLATES_NAME,
+//                         QString(QByteArray::fromBase64(settings()->value(Core::Constants::S_EXTERNAL_DATABASE_HOST, QByteArray("localhost").toBase64()).toByteArray())),
+//                         Utils::Database::ReadWrite,
+//                         Utils::Database::MySQL,
+//                         QString(QByteArray::fromBase64(settings()->value(Core::Constants::S_EXTERNAL_DATABASE_LOG, QByteArray("root").toBase64()).toByteArray())),
+//                         QString(QByteArray::fromBase64(settings()->value(Core::Constants::S_EXTERNAL_DATABASE_PASS, QByteArray("").toBase64()).toByteArray())),
+//                         QString(QByteArray::fromBase64(settings()->value(Core::Constants::S_EXTERNAL_DATABASE_PORT, QByteArray("").toBase64()).toByteArray())).toInt(),
+//                         Utils::Database::CreateDatabase);
+//    } else {
+//        if (!QSqlDatabase::isDriverAvailable("QSQLITE")) {
+//            LOG_ERROR(tkTr(Trans::Constants::DATABASE_DRIVER_1_NOT_AVAILABLE).arg("SQLite"));
+//            Utils::warningMessageBox(tkTr(Trans::Constants::APPLICATION_FAILURE),
+//                                     tkTr(Trans::Constants::DATABASE_DRIVER_1_NOT_AVAILABLE_DETAIL).arg("SQLite"),
+//                                     "", qApp->applicationName());
+//            return false;
+//        }
+//        createConnection(Templates::Constants::DB_TEMPLATES_NAME,
+//                         Templates::Constants::DB_TEMPLATES_FILENAME,
+//                         settings()->path(Core::ISettings::ReadWriteDatabasesPath) + QDir::separator() + QString(Templates::Constants::DB_TEMPLATES_NAME),
+//                         Utils::Database::ReadWrite,
+//                         Utils::Database::SQLite,
+//                         "log", "pas", 0,
+//                         Utils::Database::CreateDatabase);
+//    }
 
     if (!database().isOpen()) {
         if (!database().open()) {

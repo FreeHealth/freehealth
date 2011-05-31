@@ -40,9 +40,12 @@
 --  */
 
 -- Create the main FreeMedForms adminstrator on MySQL user
+DROP USER 'fmf_admin';
 CREATE USER 'fmf_admin' IDENTIFIED BY 'fmf_admin';
-GRANT ALL PRIVILEGES ON `fmf\_%`.* TO 'fmf_admin'@'%' IDENTIFIED BY 'fmf_admin';
-GRANT CREATE USER ON *.* TO 'fmf_admin'@'%' IDENTIFIED BY 'fmf_admin';
+GRANT CREATE USER, GRANT OPTION, SHOW DATABASES ON *.* TO 'fmf_admin'@'%' IDENTIFIED BY 'fmf_admin';
+GRANT SELECT, UPDATE, INSERT, DELETE, CREATE, DROP, ALTER, GRANT OPTION ON `fmf\_%`.* TO 'fmf_admin'@'%' IDENTIFIED BY 'fmf_admin';
+GRANT CREATE USER, GRANT OPTION, SHOW DATABASES ON *.* TO 'fmf_admin'@'localhost' IDENTIFIED BY 'fmf_admin';
+GRANT SELECT, UPDATE, INSERT, DELETE, CREATE, DROP, ALTER, GRANT OPTION ON `fmf\_%`.* TO 'fmf_admin'@'localhost' IDENTIFIED BY 'fmf_admin';
 FLUSH PRIVILEGES;
 
 -- Create the main FreeMedForms administrator on FreeMedForms user table

@@ -63,6 +63,7 @@
 
 #include <utils/global.h>
 #include <utils/log.h>
+#include <utils/databaseconnector.h>
 
 #include <medicalutils/ebmdata.h>
 
@@ -612,8 +613,13 @@ bool DrugsBase::init()
         LOG(tr("Searching databases into dir %1").arg(pathToDb));
 
         // Connect Drugs Database
-        if (createConnection(Constants::DB_DRUGS_NAME, QFileInfo(dbFileName).fileName(), pathToDb,
-                             Utils::Database::ReadOnly, Utils::Database::SQLite)) {
+        Utils::DatabaseConnector drugConnector;
+        drugConnector.setAbsPathToReadOnlySqliteDatabase(settings()->path(Core::ISettings::ReadOnlyDatabasesPath));
+        drugConnector.setHost(QFileInfo(dbFileName).fileName());
+        drugConnector.setAccessMode(Utils::DatabaseConnector::ReadOnly);
+        drugConnector.setDriver(Utils::Database::SQLite);
+
+        if (createConnection(Constants::DB_DRUGS_NAME, QFileInfo(dbFileName).fileName(), drugConnector)) {
             LOG(tkTr(Trans::Constants::CONNECTED_TO_DATABASE_1_DRIVER_2).arg(QString("%1(%2)").arg(Constants::DB_DRUGS_NAME).arg(dbFileName)).arg("SQLite"));
             d->m_ActualDBInfos = getDrugSourceInformations(drugSource);
         } else {
@@ -646,38 +652,47 @@ bool DrugsBase::init()
 
     // create dosage database connection
     if (!QSqlDatabase::connectionNames().contains(Dosages::Constants::DB_DOSAGES_NAME)) {
-        if (settings()->value(Core::Constants::S_USE_EXTERNAL_DATABASE, false).toBool()) {
-            if (!QSqlDatabase::isDriverAvailable("QMYSQL")) {
-                LOG_ERROR(tkTr(Trans::Constants::DATABASE_DRIVER_1_NOT_AVAILABLE).arg("MySQL"));
-                Utils::warningMessageBox(tkTr(Trans::Constants::APPLICATION_FAILURE),
-                                         tkTr(Trans::Constants::DATABASE_DRIVER_1_NOT_AVAILABLE_DETAIL).arg("MySQL"),
-                                         "", qApp->applicationName());
-                return false;
-            }
-            createConnection(Dosages::Constants::DB_DOSAGES_NAME,
-                             Dosages::Constants::DB_DOSAGES_NAME,
-                             QString(QByteArray::fromBase64(settings()->value(Core::Constants::S_EXTERNAL_DATABASE_HOST, QByteArray("localhost").toBase64()).toByteArray())),
-                             Utils::Database::ReadWrite,
-                             Utils::Database::MySQL,
-                             QString(QByteArray::fromBase64(settings()->value(Core::Constants::S_EXTERNAL_DATABASE_LOG, QByteArray("root").toBase64()).toByteArray())),
-                             QString(QByteArray::fromBase64(settings()->value(Core::Constants::S_EXTERNAL_DATABASE_PASS, QByteArray("").toBase64()).toByteArray())),
-                             QString(QByteArray::fromBase64(settings()->value(Core::Constants::S_EXTERNAL_DATABASE_PORT, QByteArray("").toBase64()).toByteArray())).toInt(),
-                             Utils::Database::CreateDatabase);
-        } else {
-            if (!QSqlDatabase::isDriverAvailable("QSQLITE")) {
-                LOG_ERROR(tkTr(Trans::Constants::DATABASE_DRIVER_1_NOT_AVAILABLE).arg("SQLite"));
-                Utils::warningMessageBox(tkTr(Trans::Constants::APPLICATION_FAILURE),
-                                         tkTr(Trans::Constants::DATABASE_DRIVER_1_NOT_AVAILABLE_DETAIL).arg("SQLite"),
-                                         "", qApp->applicationName());
-                return false;
-            }
-            createConnection(Dosages::Constants::DB_DOSAGES_NAME,
-                             Dosages::Constants::DB_DOSAGES_FILENAME,
-                             settings()->path(Core::ISettings::ReadWriteDatabasesPath) + QDir::separator() + QString(Constants::DB_DRUGS_NAME),
-                             Utils::Database::ReadWrite, Utils::Database::SQLite,
-                             "log", "pas", 0,
-                             Utils::Database::CreateDatabase);
-        }
+
+        // connect
+        createConnection(Dosages::Constants::DB_DOSAGES_NAME, Dosages::Constants::DB_DOSAGES_NAME,
+                         settings()->databaseConnector(),
+                         Utils::Database::CreateDatabase);
+
+
+
+//        if (settings()->value(Core::Constants::S_USE_EXTERNAL_DATABASE, false).toBool()) {
+//            if (!QSqlDatabase::isDriverAvailable("QMYSQL")) {
+//                LOG_ERROR(tkTr(Trans::Constants::DATABASE_DRIVER_1_NOT_AVAILABLE).arg("MySQL"));
+//                Utils::warningMessageBox(tkTr(Trans::Constants::APPLICATION_FAILURE),
+//                                         tkTr(Trans::Constants::DATABASE_DRIVER_1_NOT_AVAILABLE_DETAIL).arg("MySQL"),
+//                                         "", qApp->applicationName());
+//                return false;
+//            }
+//            createConnection(Dosages::Constants::DB_DOSAGES_NAME,
+//                             Dosages::Constants::DB_DOSAGES_NAME,
+//                             QString(QByteArray::fromBase64(settings()->value(Core::Constants::S_EXTERNAL_DATABASE_HOST, QByteArray("localhost").toBase64()).toByteArray())),
+//                             Utils::Database::ReadWrite,
+//                             Utils::Database::MySQL,
+//                             QString(QByteArray::fromBase64(settings()->value(Core::Constants::S_EXTERNAL_DATABASE_LOG, QByteArray("root").toBase64()).toByteArray())),
+//                             QString(QByteArray::fromBase64(settings()->value(Core::Constants::S_EXTERNAL_DATABASE_PASS, QByteArray("").toBase64()).toByteArray())),
+//                             QString(QByteArray::fromBase64(settings()->value(Core::Constants::S_EXTERNAL_DATABASE_PORT, QByteArray("").toBase64()).toByteArray())).toInt(),
+//                             Utils::Database::CreateDatabase);
+//        } else {
+//            if (!QSqlDatabase::isDriverAvailable("QSQLITE")) {
+//                LOG_ERROR(tkTr(Trans::Constants::DATABASE_DRIVER_1_NOT_AVAILABLE).arg("SQLite"));
+//                Utils::warningMessageBox(tkTr(Trans::Constants::APPLICATION_FAILURE),
+//                                         tkTr(Trans::Constants::DATABASE_DRIVER_1_NOT_AVAILABLE_DETAIL).arg("SQLite"),
+//                                         "", qApp->applicationName());
+//                return false;
+//            }
+//            createConnection(Dosages::Constants::DB_DOSAGES_NAME,
+//                             Dosages::Constants::DB_DOSAGES_FILENAME,
+//                             settings()->path(Core::ISettings::ReadWriteDatabasesPath) + QDir::separator() + QString(Constants::DB_DRUGS_NAME),
+//                             Utils::Database::ReadWrite, Utils::Database::SQLite,
+//                             "log", "pas", 0,
+//                             Utils::Database::CreateDatabase);
+//        }
+
         QSqlDatabase dosageDb = QSqlDatabase::database(Dosages::Constants::DB_DOSAGES_NAME);
         if (!dosageDb.isOpen()) {
             if (!dosageDb.open()) {

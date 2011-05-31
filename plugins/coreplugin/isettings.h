@@ -41,9 +41,15 @@ QT_END_NAMESPACE
 /**
  * \file settings.h
  * \author Eric MAEKER <eric.maeker@free.fr>
- * \version 0.4.0
- * \date 18 Mar 2010
+ * \version 0.6.0
+ * \date 30 May 2011
 */
+
+
+namespace Utils {
+class DatabaseConnector;
+}
+
 
 namespace Core {
 
@@ -107,6 +113,10 @@ public:
     virtual QString path( const int type ) const = 0;
     virtual QString resourcesPath() const { return path( ResourcesPath ); }
     virtual QString databasePath() const  { return path( ReadOnlyDatabasesPath ); }
+
+    // Network datas
+    virtual Utils::DatabaseConnector databaseConnector() const = 0;
+    virtual void setDatabaseConnector(Utils::DatabaseConnector &dbConnector) = 0;
 
     // values management
     virtual void appendToValue( const QString &key, const QString &value ) = 0;

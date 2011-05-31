@@ -6,8 +6,8 @@
    <rect>
     <x>0</x>
     <y>0</y>
-    <width>534</width>
-    <height>277</height>
+    <width>535</width>
+    <height>446</height>
    </rect>
   </property>
   <property name="windowTitle">
@@ -16,6 +16,12 @@
   <layout class="QGridLayout" name="gridLayout_3">
    <item row="0" column="0" colspan="2">
     <widget class="QLabel" name="lblAppName">
+     <property name="sizePolicy">
+      <sizepolicy hsizetype="Preferred" vsizetype="Fixed">
+       <horstretch>0</horstretch>
+       <verstretch>0</verstretch>
+      </sizepolicy>
+     </property>
      <property name="font">
       <font>
        <weight>75</weight>
@@ -32,6 +38,12 @@
    </item>
    <item row="1" column="0" colspan="2">
     <widget class="QLabel" name="lblAppName_2">
+     <property name="sizePolicy">
+      <sizepolicy hsizetype="Preferred" vsizetype="Fixed">
+       <horstretch>0</horstretch>
+       <verstretch>0</verstretch>
+      </sizepolicy>
+     </property>
      <property name="minimumSize">
       <size>
        <width>100</width>
@@ -79,25 +91,6 @@
         </property>
        </widget>
       </item>
-      <item row="2" column="0" colspan="2">
-       <widget class="QCheckBox" name="chkRemember">
-        <property name="enabled">
-         <bool>false</bool>
-        </property>
-        <property name="layoutDirection">
-         <enum>Qt::RightToLeft</enum>
-        </property>
-        <property name="autoFillBackground">
-         <bool>false</bool>
-        </property>
-        <property name="text">
-         <string>Remember me for a while</string>
-        </property>
-        <property name="tristate">
-         <bool>false</bool>
-        </property>
-       </widget>
-      </item>
       <item row="0" column="1">
        <widget class="Utils::LineEditEchoSwitcher" name="login" native="true">
         <property name="minimumSize">
@@ -121,7 +114,7 @@
      </layout>
     </widget>
    </item>
-   <item row="6" column="0" colspan="2">
+   <item row="7" column="0" colspan="2">
     <widget class="QDialogButtonBox" name="buttonBox">
      <property name="minimumSize">
       <size>
@@ -139,6 +132,12 @@
    </item>
    <item row="4" column="0" colspan="2">
     <widget class="QLabel" name="newlyMessage">
+     <property name="sizePolicy">
+      <sizepolicy hsizetype="Preferred" vsizetype="Fixed">
+       <horstretch>0</horstretch>
+       <verstretch>0</verstretch>
+      </sizepolicy>
+     </property>
      <property name="minimumSize">
       <size>
        <width>100</width>
@@ -167,6 +166,39 @@ p, li { white-space: pre-wrap; }
      </property>
     </widget>
    </item>
+   <item row="6" column="0" colspan="2">
+    <widget class="QGroupBox" name="groupServer">
+     <property name="title">
+      <string>Server</string>
+     </property>
+     <layout class="QGridLayout" name="gridLayout_2">
+      <item row="0" column="0">
+       <widget class="QLabel" name="label_3">
+        <property name="text">
+         <string>Host</string>
+        </property>
+       </widget>
+      </item>
+      <item row="0" column="1">
+       <widget class="QLineEdit" name="host"/>
+      </item>
+      <item row="0" column="2">
+       <widget class="QLabel" name="label_4">
+        <property name="text">
+         <string>Port</string>
+        </property>
+       </widget>
+      </item>
+      <item row="0" column="3">
+       <widget class="QSpinBox" name="port">
+        <property name="maximum">
+         <number>10000</number>
+        </property>
+       </widget>
+      </item>
+     </layout>
+    </widget>
+   </item>
   </layout>
  </widget>
  <customwidgets>
@@ -178,7 +210,6 @@ p, li { white-space: pre-wrap; }
   </customwidget>
  </customwidgets>
  <tabstops>
-  <tabstop>chkRemember</tabstop>
   <tabstop>buttonBox</tabstop>
  </tabstops>
  <resources/>

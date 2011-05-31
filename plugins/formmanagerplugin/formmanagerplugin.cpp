@@ -97,14 +97,6 @@ bool FormManagerPlugin::initialize(const QStringList &arguments, QString *errorS
     // Add Translator to the Application
     Core::ICore::instance()->translators()->addNewTranslator("formmanagerplugin");
 
-    // Initialize patient base
-    episodeBase();
-    if (!episodeBase()->isInitialized())
-        return false;
-
-    // Add options page
-    addAutoReleasedObject(new Internal::FormManagerPreferencesPage(this));
-
     return true;
 }
 
@@ -113,6 +105,10 @@ void FormManagerPlugin::extensionsInitialized()
     if (Utils::Log::warnPluginsCreation())
         qWarning() << "FormManagerPlugin::extensionsInitialized";
 
+    // Initialize patient base
+    episodeBase();
+
+    addAutoReleasedObject(new Internal::FormManagerPreferencesPage(this));
     addAutoReleasedObject(new Core::PluginAboutPage(pluginSpec(), this));
 
     // Add mode

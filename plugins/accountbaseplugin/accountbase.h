@@ -67,8 +67,8 @@ public:
 
 private:
     bool init();
-    bool createDatabase(const QString & connectionName , const QString & dbName,
-                        const QString & pathOrHostName,
+    bool createDatabase(const QString &connectionName , const QString &dbName,
+                        const QString &pathOrHostName,
                         TypeOfAccess access, AvailableDrivers driver,
                         const QString & /*login*/, const QString & /*pass*/,
                         const int port,

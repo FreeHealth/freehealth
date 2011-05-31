@@ -61,9 +61,6 @@ bool AccountBasePlugin::initialize(const QStringList &arguments, QString *errorS
     Q_UNUSED(arguments);
     Q_UNUSED(errorString);
 
-    // Initialize Account Database
-    AccountBase::instance();
-
     return true;
 }
 
@@ -71,6 +68,9 @@ void AccountBasePlugin::extensionsInitialized()
 {
     if (Utils::Log::warnPluginsCreation())
         qWarning() << "AccountBasePlugin::extensionsInitialized";
+
+    // Initialize Account Database
+    AccountBase::instance();
 
     // Add Translator to the Application
     Core::ICore::instance()->translators()->addNewTranslator("accountbaseplugin");

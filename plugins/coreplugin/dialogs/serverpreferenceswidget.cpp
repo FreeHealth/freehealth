@@ -29,6 +29,7 @@
 
 #include <utils/log.h>
 #include <utils/global.h>
+#include <utils/databaseconnector.h>
 #include <translationutils/constanttranslations.h>
 
 #include <coreplugin/icore.h>
@@ -104,24 +105,33 @@ QString ServerPreferencesWidget::password() const
 
 void ServerPreferencesWidget::setDatasToUi()
 {
-//    ui->autoSave->setChecked(settings()->value(Core::Constants::S_ALWAYS_SAVE_WITHOUT_PROMPTING).toBool());
-//    ui->useExternalDB->setChecked(settings()->value(Core::Constants::S_USE_EXTERNAL_DATABASE).toBool());
-    ui->host->setText(QByteArray::fromBase64(settings()->value(Core::Constants::S_EXTERNAL_DATABASE_HOST).toByteArray()));
-
-    if (Utils::isDebugCompilation() && settings()->value(Core::Constants::S_EXTERNAL_DATABASE_HOST).toString().trimmed().isEmpty()) {
-        ui->host->setText("localhost");
-        testHost("localhost");
+    // Get from settings()->databaseConnector()
+    const Utils::DatabaseConnector &db = settings()->databaseConnector();
+//    ui->host->setText(QByteArray::fromBase64(settings()->value(Core::Constants::S_EXTERNAL_DATABASE_HOST).toByteArray()));
+//    ui->log->setText(QByteArray::fromBase64(settings()->value(Core::Constants::S_EXTERNAL_DATABASE_LOG).toByteArray()));
+//    ui->pass->setText(QByteArray::fromBase64(settings()->value(Core::Constants::S_EXTERNAL_DATABASE_PASS).toByteArray()));
+    ui->host->setText(db.host());
+    ui->log->setText(db.clearLog());
+    ui->pass->setText(db.clearPass());
+    ui->port->setValue(db.port());
+    if (Utils::isDebugCompilation()) {
+        if (db.host().isEmpty()) {
+            ui->host->setText("localhost");
+            testHost("localhost");
+        }
+        ui->port->setValue(3306);
 //        ui->host->setText("192.168.0.20");
 //        testHost("192.168.0.20");
     }
 
-    ui->log->setText(QByteArray::fromBase64(settings()->value(Core::Constants::S_EXTERNAL_DATABASE_LOG).toByteArray()));
-    ui->pass->setText(QByteArray::fromBase64(settings()->value(Core::Constants::S_EXTERNAL_DATABASE_PASS).toByteArray()));
-    if (!settings()->value(Core::Constants::S_EXTERNAL_DATABASE_PORT).isNull()) {
-        ui->port->setValue(QString(QByteArray::fromBase64(settings()->value(Core::Constants::S_EXTERNAL_DATABASE_PORT).toByteArray())).toInt());
-    } else {
-        ui->port->setValue(3306);
-    }
+//    ui->autoSave->setChecked(settings()->value(Core::Constants::S_ALWAYS_SAVE_WITHOUT_PROMPTING).toBool());
+//    ui->useExternalDB->setChecked(settings()->value(Core::Constants::S_USE_EXTERNAL_DATABASE).toBool());
+
+//    if (!settings()->value(Core::Constants::S_EXTERNAL_DATABASE_PORT).isNull()) {
+//        ui->port->setValue(QString(QByteArray::fromBase64(settings()->value(Core::Constants::S_EXTERNAL_DATABASE_PORT).toByteArray())).toInt());
+//    } else {
+//        ui->port->setValue(3306);
+//    }
 }
 
 void ServerPreferencesWidget::testHost()
@@ -162,16 +172,18 @@ void ServerPreferencesWidget::saveToSettings(Core::ISettings *sets)
         return;
     }
     LOG("saving host");
-    s->setValue(Core::Constants::S_USE_EXTERNAL_DATABASE, true);
-    s->setValue(Core::Constants::S_EXTERNAL_DATABASE_HOST, QString(ui->host->text().toAscii().toBase64()));
-    s->setValue(Core::Constants::S_EXTERNAL_DATABASE_PORT, QString::number(ui->port->value()).toAscii().toBase64());
+    Utils::DatabaseConnector db(ui->log->text(), ui->pass->text(), ui->host->text(), ui->port->value());
+    db.setDriver(Utils::Database::MySQL);
+//    s->setValue(Core::Constants::S_USE_EXTERNAL_DATABASE, true);
+//    s->setValue(Core::Constants::S_EXTERNAL_DATABASE_HOST, QString(ui->host->text().toAscii().toBase64()));
+//    s->setValue(Core::Constants::S_EXTERNAL_DATABASE_PORT, QString::number(ui->port->value()).toAscii().toBase64());
     if (ui->useDefaultAdminLog->isChecked()) {
-        s->setValue(Core::Constants::S_EXTERNAL_DATABASE_LOG, QString(QString("fmf_admin").toAscii().toBase64()));
-        s->setValue(Core::Constants::S_EXTERNAL_DATABASE_PASS, QString(QString("fmf_admin").toAscii().toBase64()));
-    } else {
-        s->setValue(Core::Constants::S_EXTERNAL_DATABASE_LOG, QString(ui->log->text().toAscii().toBase64()));
-        s->setValue(Core::Constants::S_EXTERNAL_DATABASE_PASS, QString(ui->pass->text().toAscii().toBase64()));
+        db.setClearLog("fmf_admin");
+        db.setClearPass("fmf_admin");
+//        s->setValue(Core::Constants::S_EXTERNAL_DATABASE_LOG, QString(QString("fmf_admin").toAscii().toBase64()));
+//        s->setValue(Core::Constants::S_EXTERNAL_DATABASE_PASS, QString(QString("fmf_admin").toAscii().toBase64()));
     }
+    s->setDatabaseConnector(db);
     s->sync();
     Core::ICore::instance()->databaseServerLoginChanged();
 }
@@ -179,13 +191,15 @@ void ServerPreferencesWidget::saveToSettings(Core::ISettings *sets)
 void ServerPreferencesWidget::writeDefaultSettings(Core::ISettings *s)
 {
     //    qWarning() << "---------> writedefaults";
-    Utils::Log::addMessage("ApplicationGeneralPreferencesWidget", tkTr(Trans::Constants::CREATING_DEFAULT_SETTINGS_FOR_1).arg("FreeDiamsMainWindow"));
+    LOG_FOR("ServerPreferencesWidget", tkTr(Trans::Constants::CREATING_DEFAULT_SETTINGS_FOR_1).arg("ServerPreferencesWidget"));
 //    s->setValue(Core::Constants::S_ALWAYS_SAVE_WITHOUT_PROMPTING, true);
 //    s->setValue(Core::Constants::S_USE_EXTERNAL_DATABASE, false);
-    s->setValue(Core::Constants::S_EXTERNAL_DATABASE_HOST, QString());
-    s->setValue(Core::Constants::S_EXTERNAL_DATABASE_PORT, QString());
-    s->setValue(Core::Constants::S_EXTERNAL_DATABASE_LOG, QString());
-    s->setValue(Core::Constants::S_EXTERNAL_DATABASE_PASS, QString());
+//    s->setValue(Core::Constants::S_EXTERNAL_DATABASE_HOST, QString());
+//    s->setValue(Core::Constants::S_EXTERNAL_DATABASE_PORT, QString());
+//    s->setValue(Core::Constants::S_EXTERNAL_DATABASE_LOG, QString());
+//    s->setValue(Core::Constants::S_EXTERNAL_DATABASE_PASS, QString());
+    Utils::DatabaseConnector db;
+    s->setDatabaseConnector(db);
     s->sync();
 }
 

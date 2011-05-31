@@ -285,8 +285,8 @@ bool UserWizard::setCreatedUserAsCurrent() const
 {
     if (!m_CreateUser)
         return false;
-    return userModel()->setCurrentUser(Utils::loginForSQL(field("Login").toString()),
-                                       Utils::cryptPassword(field("Password").toString()), true);
+    return userModel()->setCurrentUser(field("Login").toString(),
+                                       field("Password").toString(), true);
 }
 
 QString UserWizard::createdUuid() const
@@ -310,15 +310,15 @@ UserIdentityAndLoginPage::UserIdentityAndLoginPage(QWidget *parent) :
     lblSecondName = new QLabel(tr("Second Name"), this);
     lblGender = new QLabel(tr("Gender"), this);
 
+    Views::LanguageComboBox *cbLanguage = new Views::LanguageComboBox(this);
+    cbLanguage->setDisplayMode(Views::LanguageComboBox::AvailableTranslations);
+    cbLanguage->setCurrentLanguage(QLocale().language());
+
     cbTitle = new QComboBox(this);
     leName = new QLineEdit(this);
     leFirstName = new QLineEdit(this);
     leSecondName = new QLineEdit(this);
     cbGender = new QComboBox(this);
-
-    Views::LanguageComboBox *cbLanguage = new Views::LanguageComboBox(this);
-    cbLanguage->setDisplayMode(Views::LanguageComboBox::AvailableTranslations);
-    cbLanguage->setCurrentLanguage(QLocale().language());
 
     connect(cbLanguage, SIGNAL(currentLanguageChanged(QLocale::Language)), Core::Translators::instance(), SLOT(changeLanguage(QLocale::Language)));
 

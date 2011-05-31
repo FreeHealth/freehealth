@@ -22,48 +22,75 @@
  *   Main Developper : Eric MAEKER, <eric.maeker@free.fr>                  *
  *   Contributors :                                                        *
  *       NAME <MAIL@ADRESS>                                                *
- *       NAME <MAIL@ADRESS>                                                *
  ***************************************************************************/
-#include <usermanagerplugin/global.h>
-#include <usermanagerplugin/database/userbase.h>
-#include <usermanagerplugin/usermodel.h>
+#ifndef UTILS_DATABASECONNECTOR_H
+#define UTILS_DATABASECONNECTOR_H
 
-#include <coreplugin/translators.h>
-#include <coreplugin/isettings.h>
+#include <utils/global_exporter.h>
+#include <utils/database.h>
 
-#include <utils/log.h>
+/**
+ * \file databaseconnector.h
+ * \author Eric MAEKER <eric.maeker@free.fr>
+ * \version 0.6.0
+ * \date 29 May 2011
+*/
 
-#include <QCryptographicHash>
-#include <QByteArray>
+namespace Utils {
+namespace Internal {
+class DatabaseConnectorPrivate;
+}
 
-namespace UserPlugin {
-
-void initLib()
+class UTILS_EXPORT DatabaseConnector
 {
-//    tkLog::addMessage( "tkUserGlobal", "Initializing tkUser lib" );
-//    // load translator
-//    if ( tkTranslators::instance() )
-//        tkTranslators::instance()->addNewTranslator( "usertoolkit" );
-//    // initialize database
-//    Q_ASSERT_X( tkSettings::instance() , "tkSettings", "Before calling tkUserGlobal::init() YOU MUST define an instance of tkSettings" );
-////    tkUserBase::instance()->initialize( tkSettings::instance() );
-//    // initialize model
-//    tkUserModel::instance();
-//    tkLog::addMessage( "tkUserGlobal", "tkUser lib is initialized" );
-}
+public:
+    enum AccessMode {
+        ReadOnly = 0,
+        ReadWrite
+    };
 
-QString getLibraryInformations()
-{
-    return QString( "user toolkit library, version : %1 %2 , compiled on : %3 %4" )
-            .arg( PACKAGE_VERSION )
-#ifdef DEBUG
-            .arg( "debug" )
-#else
-            .arg( "release" )
-#endif
-            .arg( __DATE__ )
-            .arg( __TIME__ );
-}
+    DatabaseConnector();
+    DatabaseConnector(const QString &clearLog, const QString &clearPass, const QString &hostName, const int port);
+    DatabaseConnector(const QString &clearLog, const QString &clearPass);
+    ~DatabaseConnector();
+
+    void clear();
+    bool isValid();
+
+    void setDriver(const ::Utils::Database::AvailableDrivers driver);
+    void setClearLog(const QString &log);
+    void setClearPass(const QString &pass);
+    void setHost(const QString &hostName);
+    void setPort(const int port);
+    void setAbsPathToReadOnlySqliteDatabase(const QString &absPath);
+    void setAbsPathToReadWriteSqliteDatabase(const QString &absPath);
+    void setAccessMode(const AccessMode mode);
+
+    Database::AvailableDrivers driver() const;
+    QString clearLog() const;
+    QString clearPass() const;
+    QString cryptedLog() const;
+    QString cryptedPass() const;
+    QString host() const;
+    int port() const;
+    QString absPathToSqliteReadOnlyDatabase() const;
+    QString absPathToSqliteReadWriteDatabase() const;
+    AccessMode accessMode() const;
+    bool isDriverValid() const;
+
+    QString forSettings() const;
+    void fromSettings(const QString &value);
+
+    DatabaseConnector &operator=(const DatabaseConnector &in);
+    bool operator==(const DatabaseConnector &other) const;
+
+    void warn() const;
+
+private:
+    Internal::DatabaseConnectorPrivate *d;
+};
+
+}  // End namespace Utils
 
 
-}
+#endif // UTILS_DATABASECONNECTOR_H

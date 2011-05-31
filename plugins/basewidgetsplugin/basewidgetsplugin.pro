@@ -11,17 +11,23 @@ HEADERS += basewidgetsplugin.h \
     baseformwidgets.h \
     baseformwidgetsoptionspage.h \
     texteditorfactory.h \
-    identitywidgetfactory.h
-
+    identitywidgetfactory.h \
+#    qtuiformwidgets.h
 # baseformwidgetsaboutpage.h
 # basewigets_exporter.h \
+
+
 SOURCES += basewidgetsplugin.cpp \
     baseformwidgets.cpp \
     baseformwidgetsoptionspage.cpp \
     texteditorfactory.cpp \
-    identitywidgetfactory.cpp
-
+    identitywidgetfactory.cpp \
+#    qtuiformwidgets.cpp
 # baseformwidgetsaboutpage.cpp
+
+
 FORMS += baseformwidgetsoptionspage.ui \
     baseformwidget.ui
+
+
 OTHER_FILES = BaseWidgets.pluginspec

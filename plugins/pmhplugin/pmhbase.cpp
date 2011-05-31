@@ -38,6 +38,7 @@
 
 #include <utils/global.h>
 #include <utils/log.h>
+#include <utils/databaseconnector.h>
 #include <translationutils/constanttranslations.h>
 
 #include <coreplugin/icore.h>
@@ -158,26 +159,31 @@ bool PmhBase::init()
     if (m_initialized)
         return true;
 
-    // Check settings --> SQLite or MySQL ?
-    if (settings()->value(Core::Constants::S_USE_EXTERNAL_DATABASE, false).toBool()) {
-        createConnection(Constants::DB_NAME,
-                         Constants::DB_NAME,
-                         QString(QByteArray::fromBase64(settings()->value(Core::Constants::S_EXTERNAL_DATABASE_HOST, QByteArray("localhost").toBase64()).toByteArray())),
-                         Utils::Database::ReadWrite,
-                         Utils::Database::MySQL,
-                         QString(QByteArray::fromBase64(settings()->value(Core::Constants::S_EXTERNAL_DATABASE_LOG, QByteArray("root").toBase64()).toByteArray())),
-                         QString(QByteArray::fromBase64(settings()->value(Core::Constants::S_EXTERNAL_DATABASE_PASS, QByteArray("").toBase64()).toByteArray())),
-                         QString(QByteArray::fromBase64(settings()->value(Core::Constants::S_EXTERNAL_DATABASE_PORT, QByteArray("").toBase64()).toByteArray())).toInt(),
-                         Utils::Database::CreateDatabase);
-    } else {
-        createConnection(Constants::DB_NAME,
-                         Constants::DB_FILENAME,
-                         settings()->path(Core::ISettings::ReadWriteDatabasesPath) + QDir::separator() + QString(Constants::DB_NAME),
-                         Utils::Database::ReadWrite,
-                         Utils::Database::SQLite,
-                         "", "", 0,
-                         Utils::Database::CreateDatabase);
-    }
+    // connect
+    createConnection(Constants::DB_NAME, Constants::DB_NAME,
+                     settings()->databaseConnector(),
+                     Utils::Database::CreateDatabase);
+
+//    // Check settings --> SQLite or MySQL ?
+//    if (settings()->value(Core::Constants::S_USE_EXTERNAL_DATABASE, false).toBool()) {
+//        createConnection(Constants::DB_NAME,
+//                         Constants::DB_NAME,
+//                         QString(QByteArray::fromBase64(settings()->value(Core::Constants::S_EXTERNAL_DATABASE_HOST, QByteArray("localhost").toBase64()).toByteArray())),
+//                         Utils::Database::ReadWrite,
+//                         Utils::Database::MySQL,
+//                         QString(QByteArray::fromBase64(settings()->value(Core::Constants::S_EXTERNAL_DATABASE_LOG, QByteArray("root").toBase64()).toByteArray())),
+//                         QString(QByteArray::fromBase64(settings()->value(Core::Constants::S_EXTERNAL_DATABASE_PASS, QByteArray("").toBase64()).toByteArray())),
+//                         QString(QByteArray::fromBase64(settings()->value(Core::Constants::S_EXTERNAL_DATABASE_PORT, QByteArray("").toBase64()).toByteArray())).toInt(),
+//                         Utils::Database::CreateDatabase);
+//    } else {
+//        createConnection(Constants::DB_NAME,
+//                         Constants::DB_FILENAME,
+//                         settings()->path(Core::ISettings::ReadWriteDatabasesPath) + QDir::separator() + QString(Constants::DB_NAME),
+//                         Utils::Database::ReadWrite,
+//                         Utils::Database::SQLite,
+//                         "", "", 0,
+//                         Utils::Database::CreateDatabase);
+//    }
 
     if (!checkDatabaseScheme()) {
         LOG_ERROR(tkTr(Trans::Constants::DATABASE_1_SCHEMA_ERROR).arg(Constants::DB_NAME));

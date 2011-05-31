@@ -27,27 +27,26 @@
 
 /**
  \class UserPlugin::Internal::UserIdentifier
-  \brief This class is a dialog that ask user for is login/password, with a limited number of tries.
-  You can show some informations on the left using the first parameter of the constructor.
-  If there is not informations to show, the informations' groupBox is hidden.
+ This class is a dialog that ask user for is login/password, with a limited number of tries.
+ You can show some informations on the left using the first parameter of the constructor.
+ If there is not informations to show, the informations' groupBox is hidden.
 
-  When the identification is good :
-  - the dialog result() is setted to QDialog::Accepted,
-  - current user is setted into user's model with the login and password of this dialog,
-  - the lastLogin information is saved into database,
-  - the login history is completed.
+ When the user is correctly identified on the server and/or the database:
+   - the dialog result() is setted to QDialog::Accepted,
+   - current user is setted into user's model with the current login and password,
+   - the login history is completed,
+   - the lastLogin information is saved into database.
 
-  In the other case, it is setted to QDialog::Rejected.
+ In the other case, the dialog returns \e QDialog::Rejected.
 
-  You can retreive cryptedLogin and cryptedPassword using : login() and cryptedPassword().
-  \ingroup usertoolkit widget_usertoolkit
-  \ingroup usermanager
+ You can retreive login(), login64crypt(), password() and cryptedPassword().
 */
 
 #include "useridentifier.h"
 
 #include <utils/global.h>
 #include <utils/log.h>
+#include <utils/databaseconnector.h>
 
 #include <coreplugin/icore.h>
 #include <coreplugin/itheme.h>
@@ -55,7 +54,6 @@
 
 #include <utils/widgets/lineeditechoswitcher.h>
 
-#include <usermanagerplugin/global.h>
 #include <usermanagerplugin/usermodel.h>
 #include <usermanagerplugin/database/userbase.h>
 
@@ -96,6 +94,15 @@ UserIdentifier::UserIdentifier(QWidget *parent) :
     }
     m_ui->password->toogleEchoMode();
     m_ui->login->lineEdit()->setFocus();
+
+    // Server or local
+    if (settings()->databaseConnector().driver()==Utils::Database::MySQL) {
+        m_ui->groupServer->show();
+        m_ui->host->setText(settings()->databaseConnector().host());
+        m_ui->port->setValue(settings()->databaseConnector().port());
+    } else {
+        m_ui->groupServer->hide();
+    }
     adjustSize();
     Utils::centerWidget(this);
 }
@@ -116,7 +123,7 @@ void UserIdentifier::done(int result)
             }
         } else {
             LOG(tr("User is identified."));
-            m->setCurrentUser(login64crypt(), cryptedPassword());
+            m->setCurrentUser(login(), password());
             if (theme()->splashScreen())
                 theme()->splashScreen()->show();
             QDialog::done(QDialog::Accepted);
@@ -128,21 +135,25 @@ void UserIdentifier::done(int result)
     }
 }
 
+/** Uncrypted login. */
 QString UserIdentifier::login() const
 {
     return m_ui->login->lineEdit()->text();
 }
 
+/** FreeMedForms crypted login. */
 QString UserIdentifier::login64crypt() const
 {
     return Utils::loginForSQL(m_ui->login->lineEdit()->text());
 }
 
+/** Uncrypted password. */
 QString UserIdentifier::password() const
 {
     return m_ui->password->lineEdit()->text();
 }
 
+/** FreeMedForms crypted password (the crypt algorythm is destructive). */
 QString UserIdentifier::cryptedPassword() const
 {
     return Utils::cryptPassword(m_ui->password->lineEdit()->text());

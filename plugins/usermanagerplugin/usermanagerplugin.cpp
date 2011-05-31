@@ -87,7 +87,7 @@ static inline bool identifyUser()
     bool ask = true;
     while (true) {
         if (userModel()->isCorrectLogin(log, pass)) {
-            userModel()->setCurrentUser(Utils::loginForSQL(log), Utils::cryptPassword(pass));
+            userModel()->setCurrentUser(log, pass);
             if (ask) {
                 int r = Utils::withButtonsMessageBox(tkTr(Trans::Constants::CONNECTED_AS_1)
                                                      .arg(userModel()->currentUserData(Core::IUser::FullName).toString()),
