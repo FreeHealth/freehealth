@@ -198,7 +198,7 @@ void DayRangeHeader::paintEvent(QPaintEvent *) {
 	QDate now = QDate::currentDate();
 	int fontHeight = QFontMetrics(QFont()).height();
 	for (int i = 0; i < m_rangeWidth; ++i) {
-		QRect br(QPoint(60 + (i * containWidth) / m_rangeWidth, 0), QPoint(60 + ((i + 1) * containWidth) / m_rangeWidth, rect().height()));
+		QRect br(QPoint(60 + (i * containWidth) / m_rangeWidth, 0), QPoint(60 + ((i + 1) * containWidth) / m_rangeWidth, rect().height() - 2));
 		painter.fillRect(br, Qt::white);
 
 		// vertical lines
@@ -210,7 +210,7 @@ void DayRangeHeader::paintEvent(QPaintEvent *) {
 			painter.drawLine(60 + (i * containWidth) / m_rangeWidth, 0,
 							 60 + (i * containWidth) / m_rangeWidth, rect().height());
 		}
-		br = QRect(QPoint(60 + (i * containWidth) / m_rangeWidth, rect().height() - 5), QPoint(60 + ((i + 1) * containWidth) / m_rangeWidth, rect().height()));
+		br = QRect(QPoint(60 + (i * containWidth) / m_rangeWidth, rect().height() - 5), QPoint(60 + ((i + 1) * containWidth) / m_rangeWidth, rect().height() - 2));
 		painter.fillRect(br, QColor(220, 220, 255));
 
 		QRect r(QPoint(60 + (i * containWidth) / m_rangeWidth, 0), QPoint(60 + ((i + 1) * containWidth) / m_rangeWidth, fontHeight + 4));

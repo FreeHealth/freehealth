@@ -24,6 +24,7 @@ BasicCalendarModel::BasicCalendarModel(QObject *parent) :
 
 	item = insertItem(QDateTime(now), QDateTime(now.addDays(1)));
 	item.setDaily(true);
+	item.setTitle("Another brick in the wall");
 	setItemByUid(item.uid(), item);
 	item = insertItem(QDateTime(now), QDateTime(now.addDays(2)));
 	item.setDaily(true);
@@ -33,6 +34,7 @@ BasicCalendarModel::BasicCalendarModel(QObject *parent) :
 	setItemByUid(item.uid(), item);
 	item = insertItem(QDateTime(now.addDays(2)), QDateTime(now.addDays(5)));
 	item.setDaily(true);
+	item.setTitle("Ceci est un exemple");
 	setItemByUid(item.uid(), item);
 	insertItem(QDateTime(now, QTime(2, 0)), QDateTime(now, QTime(4, 0)));
 	insertItem(QDateTime(now, QTime(2, 0)), QDateTime(now, QTime(4, 0)));
