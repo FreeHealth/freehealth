@@ -1128,4 +1128,33 @@ QString loginFromSQL(const QVariant &sql)
 QString loginFromSQL(const QString &sql)
 { return QByteArray::fromBase64(sql.toAscii()); }
 
+
+QByteArray crypt(const QString &texte)
+{
+    QByteArray texteEnBytes = texte.toAscii();
+    QString k = QCryptographicHash::hash(qApp->applicationName().left(qApp->applicationName().indexOf("_d")).toAscii(), QCryptographicHash::Sha1);
+    QByteArray cle = k.toAscii().toBase64();
+    QByteArray codeFinal;
+    int tailleCle = cle.length();
+    for (int i = 0; i < texteEnBytes.length(); ++i) {
+        codeFinal += char(texteEnBytes[i] ^ cle[i % tailleCle]);
+    }
+    return codeFinal.toHex().toBase64();
+}
+
+// "MTEwZjI5MGQxODNhNDQwODMzMmI=" "CacaBoudin"
+
+QString decrypt(const QByteArray &texte)
+{
+    QByteArray texteEnBytes = QByteArray::fromHex(QByteArray::fromBase64(texte));
+    QString k = QCryptographicHash::hash(qApp->applicationName().left(qApp->applicationName().indexOf("_d")).toAscii(), QCryptographicHash::Sha1);
+    QByteArray cle = k.toAscii().toBase64();
+    QByteArray codeFinal;
+    int tailleCle = cle.length();
+    for (int i = 0; i < texteEnBytes.length(); ++i) {
+        codeFinal += char(texteEnBytes[i] ^ cle[i % tailleCle]);
+    }
+    return codeFinal;
+}
+
 } // End Utils

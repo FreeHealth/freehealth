@@ -154,6 +154,9 @@ UTILS_EXPORT QString loginForSQL(const QString &log);
 UTILS_EXPORT QString loginFromSQL(const QVariant &sql);
 UTILS_EXPORT QString loginFromSQL(const QString &sql);
 
+UTILS_EXPORT QByteArray crypt(const QString &texte);
+UTILS_EXPORT QString decrypt(const QByteArray &texte);
+
 }  // end Utils
 
 #endif  // UTILSGLOBAL_H
