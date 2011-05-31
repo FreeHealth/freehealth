@@ -42,6 +42,7 @@
 -- Create the main FreeMedForms adminstrator on MySQL user
 CREATE USER 'fmf_admin' IDENTIFIED BY 'fmf_admin';
 GRANT ALL PRIVILEGES ON `fmf\_%`.* TO 'fmf_admin'@'%' IDENTIFIED BY 'fmf_admin';
+GRANT CREATE USER ON *.* TO 'fmf_admin'@'%' IDENTIFIED BY 'fmf_admin';
 FLUSH PRIVILEGES;
 
 -- Create the main FreeMedForms administrator on FreeMedForms user table
