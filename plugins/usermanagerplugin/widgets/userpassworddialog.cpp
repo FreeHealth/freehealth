@@ -41,7 +41,7 @@
 #include <utils/global.h>
 #include <utils/widgets/lineeditechoswitcher.h>
 
-#include <usermanagerplugin/global.h>
+//#include <usermanagerplugin/global.h>
 
 #include "ui_userpassworddialog.h"
 
