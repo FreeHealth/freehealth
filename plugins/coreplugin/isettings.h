@@ -26,23 +26,24 @@
 #ifndef CORESETTINGS_H
 #define CORESETTINGS_H
 
-// include toolkit headers
 #include <coreplugin/core_exporter.h>
 
-// include Qt headers
+#include <QObject>
 #include <QVariant>
+
 QT_BEGIN_NAMESPACE
 class QStringList;
 class QTreeWidget;
 class QMainWindow;
 class QSettings;
+class QFile;
 QT_END_NAMESPACE
 
 /**
- * \file settings.h
+ * \file isettings.h
  * \author Eric MAEKER <eric.maeker@free.fr>
  * \version 0.6.0
- * \date 30 May 2011
+ * \date 01 Jun 2011
 */
 
 
@@ -53,8 +54,9 @@ class DatabaseConnector;
 
 namespace Core {
 
-class CORE_EXPORT ISettings
+class CORE_EXPORT ISettings : public QObject
 {
+    Q_OBJECT
 public:
 
     enum Paths {
@@ -83,21 +85,25 @@ public:
         Splashscreen
     };
 
+    ISettings(QObject *parent = 0) : QObject(parent) {}
     virtual ~ISettings() {}
+
+    virtual void setUserSettings(const QString &file) = 0;
+    virtual QString userSettings() const = 0;
 
     virtual QSettings *getQSettings() = 0;
 
     // QSettings wrappers
-    virtual void beginGroup( const QString & prefix ) = 0;
+    virtual void beginGroup(const QString &prefix) = 0;
     virtual QStringList childGroups() const = 0;
     virtual QStringList childKeys() const = 0;
-    virtual bool contains( const QString & key ) const = 0;
+    virtual bool contains(const QString &key) const = 0;
     virtual void endGroup() = 0;
     virtual QString fileName() const = 0;
     virtual QString group() const = 0;
 
-    virtual void setValue( const QString & key, const QVariant & value ) = 0;
-    virtual QVariant value( const QString & key, const QVariant & defaultValue = QVariant() ) const = 0;
+    virtual void setValue(const QString &key, const QVariant &value) = 0;
+    virtual QVariant value(const QString &key, const QVariant &defaultValue = QVariant()) const = 0;
 
     virtual bool firstTimeRunning() const = 0;
     virtual void noMoreFirstTimeRunning() = 0;
@@ -105,26 +111,28 @@ public:
     virtual void sync() = 0;
 
     // Window's states
-    virtual void restoreState( QMainWindow * window, const QString & prefix = QString::null ) = 0;
-    virtual void saveState( QMainWindow * window, const QString & prefix = QString::null ) = 0;
+    virtual void restoreState(QMainWindow *window, const QString &prefix = QString::null) = 0;
+    virtual void saveState(QMainWindow *window, const QString &prefix = QString::null) = 0;
 
     // paths
-    virtual void setPath( const int type, const QString & absPath ) = 0;
-    virtual QString path( const int type ) const = 0;
-    virtual QString resourcesPath() const { return path( ResourcesPath ); }
-    virtual QString databasePath() const  { return path( ReadOnlyDatabasesPath ); }
+    virtual void setPath(const int type, const QString &absPath) = 0;
+    virtual QString path(const int type) const = 0;
+    virtual QString resourcesPath() const { return path(ResourcesPath); }
+    virtual QString databasePath() const  { return path(ReadOnlyDatabasesPath); }
 
     // Network datas
     virtual Utils::DatabaseConnector databaseConnector() const = 0;
     virtual void setDatabaseConnector(Utils::DatabaseConnector &dbConnector) = 0;
 
     // values management
-    virtual void appendToValue( const QString &key, const QString &value ) = 0;
+    virtual void appendToValue(const QString &key, const QString &value) = 0;
 
     // for debugging functions : to treewidget and to string
-    virtual QTreeWidget* getTreeWidget(QWidget *parent) const = 0;
+    virtual QTreeWidget *getTreeWidget(QWidget *parent) const = 0;
     virtual QString toString() const = 0;
 
+Q_SIGNALS:
+    void userSettingsSynchronized();
 };
 
 } // End Core

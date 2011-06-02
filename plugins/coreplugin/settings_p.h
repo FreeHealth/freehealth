@@ -44,34 +44,38 @@ QT_END_NAMESPACE
 /**
  * \file settings_p.h
  * \author Eric MAEKER <eric.maeker@free.fr>
- * \version 0.4.0
- * \date 23 Mar 2010
+ * \version 0.6.0
+ * \date 01 Jun 2011
 */
 
 namespace Core {
 namespace Internal {
 
-class CORE_EXPORT SettingsPrivate : public ISettings, public QSettings
+class CORE_EXPORT SettingsPrivate : public ISettings
 {
+    Q_OBJECT
 public:
-    SettingsPrivate(QObject *parent = 0, const QString &appName = QString::null, const QString &fileName = QString::null );
+    SettingsPrivate(QObject *parent = 0, const QString &appName = QString::null, const QString &fileName = QString::null);
     ~SettingsPrivate();
+
+    void setUserSettings(const QString &file);
+    QString userSettings() const;
 
     QSettings *getQSettings();
 
     // QSettings wrappers
-    inline void beginGroup ( const QString & prefix ) { QSettings::beginGroup(prefix); }
-    inline QStringList childGroups () const { return QSettings::childGroups(); }
-    inline QStringList childKeys () const { return QSettings::childKeys(); }
-    inline bool contains ( const QString & key ) const { return QSettings::contains(key); }
-    inline void endGroup () { QSettings::endGroup(); }
-    inline QString fileName () const { return QSettings::fileName(); }
-    inline QString group () const { return QSettings::group();}
+    void beginGroup(const QString &prefix);
+    QStringList childGroups() const;
+    QStringList childKeys() const;
+    bool contains(const QString &key) const;
+    void endGroup();
+    QString fileName() const;
+    QString group() const;
 
-    inline void setValue( const QString & key, const QVariant & value ) { QSettings::setValue(key,value); }
-    inline QVariant value( const QString & key, const QVariant & defaultValue = QVariant() ) const { return QSettings::value(key,defaultValue); }
+    void setValue(const QString &key, const QVariant &value);
+    QVariant value(const QString &key, const QVariant &defaultValue = QVariant()) const;
 
-    inline void sync() {QSettings::sync();}
+    void sync();
 
     // first time running ?
     bool firstTimeRunning() const;
@@ -80,15 +84,15 @@ public:
     void setLicenseApprovedApplicationNumber(const QString &version);
 
     // manage mainwindow
-    void restoreState( QMainWindow * window, const QString & prefix = QString::null );
-    void saveState( QMainWindow * window, const QString & prefix = QString::null );
+    void restoreState(QMainWindow *window, const QString &prefix = QString::null);
+    void saveState(QMainWindow *window, const QString &prefix = QString::null);
 
     // paths
-    void setPath( const int type, const QString & absPath );
-    QString path( const int type ) const;
+    void setPath(const int type, const QString &absPath);
+    QString path(const int type) const;
 
     // for debugging functions : to treewidget and to string
-    QTreeWidget* getTreeWidget( QWidget * parent ) const;
+    QTreeWidget *getTreeWidget(QWidget *parent) const;
     QString toString() const;
 
     // Network datas
@@ -98,12 +102,13 @@ public:
     void writeDatabaseConnector();
 
     // values management
-    void appendToValue( const QString &key, const QString &value );    
+    void appendToValue(const QString &key, const QString &value);
 
 protected:
     QString getIniFile(const QString &name = QString::null, const QString &version = QString::null);
 
 private:
+    QSettings *m_NetworkSettings, *m_UserSettings;
     QHash< int, QString > m_Enum_Path;
     bool m_FirstTime;
     Utils::DatabaseConnector m_DbConnector;

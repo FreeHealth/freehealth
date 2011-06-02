@@ -50,7 +50,8 @@
        |                                    |
        `- .ApplicationName                   `- .ApplicationName
         |                                     |
-        |- config.ini                         |- config.ini
+        |- config.ini                         |- config.ini             == user settings for non-networked apps
+        |- config-network.ini                 |- config-network.ini
         |                                     |
         `- databases                          `- databases
          |                                     |
@@ -254,6 +255,7 @@
 #include <QFileInfo>
 #include <QDir>
 #include <QRegExp>
+#include <QUuid>
 
 
 /**
@@ -315,12 +317,19 @@ using namespace Core::Internal;
   Users' writable resources are located in the dir of the config.ini file.
 */
 SettingsPrivate::SettingsPrivate(QObject *parent, const QString &appName, const QString &fileName) :
-        ISettings(), QSettings(getIniFile(appName, fileName), QSettings::IniFormat,parent)
+        ISettings(parent),
+        m_NetworkSettings(0), m_UserSettings(0)
 {
     setObjectName("SettingsPrivate");
+
+    QString file = getIniFile(appName, fileName);
+    QFileInfo fi(file);
+    QString f = fi.absolutePath() + QDir::separator() + fi.baseName() + "-net." + fi.completeSuffix();
+    m_NetworkSettings = new QSettings(f, QSettings::IniFormat, this);
+    m_UserSettings = new QSettings(file, QSettings::IniFormat, this);
     QString resourcesPath;
-    QString databasePath;
     QString applicationName;
+
     // if appName like "AppName - debug"  --> use "AppName" only
     if (appName.isEmpty())
         applicationName = qApp->applicationName();
@@ -350,7 +359,7 @@ SettingsPrivate::SettingsPrivate(QObject *parent, const QString &appName, const 
 
         res = QDir::cleanPath(res);
         resourcesPath = res + "/";
-        setPath(ResourcesPath, QFileInfo(QSettings::fileName()).absolutePath());
+        setPath(ResourcesPath, QFileInfo(file).absolutePath());
 
         if (Utils::isRunningOnMac()) {
             setPath(BundleResourcesPath, resourcesPath);
@@ -369,7 +378,7 @@ SettingsPrivate::SettingsPrivate(QObject *parent, const QString &appName, const 
         }
 #endif
         m_FirstTime = value("FirstTimeRunning", true).toBool();
-        setPath(ResourcesPath, QFileInfo(QSettings::fileName()).absolutePath());//QDir::homePath() + "/." + applicationName);//resourcesPath);
+        setPath(ResourcesPath, QFileInfo(file).absolutePath());//QDir::homePath() + "/." + applicationName);//resourcesPath);
     }
 
     if (parent)
@@ -379,7 +388,45 @@ SettingsPrivate::SettingsPrivate(QObject *parent, const QString &appName, const 
 }
 
 SettingsPrivate::~SettingsPrivate()
-{}
+{
+    if (m_NetworkSettings) {
+        m_NetworkSettings->sync();
+        delete m_NetworkSettings;
+        m_NetworkSettings = 0;
+    }
+    if (m_UserSettings) {
+//        m_UserSettings->sync();
+        delete m_UserSettings;
+        m_UserSettings = 0;
+    }
+}
+
+void SettingsPrivate::setUserSettings(const QString &content)
+{
+    // create a temp file with the content
+    QString fileName = path(ApplicationTempPath) + QDir::separator() + QUuid().createUuid().toString().remove("{").remove("}") + ".ini";
+    qWarning() << fileName;
+    QFile f(fileName);
+    while (f.exists()) {
+        fileName = path(ApplicationTempPath) + QDir::separator() + QUuid().createUuid().toString().remove("{").remove("}") + ".ini";
+        f.setFileName(fileName);
+    }
+
+    // populate the file with the content
+    Utils::saveStringToFile(content, fileName, Utils::Overwrite, Utils::DontWarnUser);
+
+    // change the fileName of the current QSettings
+    if (m_UserSettings) {
+        delete m_UserSettings;
+        m_UserSettings = 0;
+    }
+    m_UserSettings = new QSettings(fileName, QSettings::IniFormat, this);
+}
+
+QString SettingsPrivate::userSettings() const
+{
+    return Utils::readTextFile(m_UserSettings->fileName(), Utils::DontWarnUser);
+}
 
 /**
   \fn QSettings *Core::ISettings::getQSettings()
@@ -387,7 +434,32 @@ SettingsPrivate::~SettingsPrivate()
 */
 QSettings *SettingsPrivate::getQSettings()
 {
-    return this;
+    return m_UserSettings;
+}
+
+void SettingsPrivate::beginGroup(const QString &prefix) { m_UserSettings->beginGroup(prefix); }
+QStringList SettingsPrivate::childGroups() const { return m_UserSettings->childGroups(); }
+QStringList SettingsPrivate::childKeys() const { return m_UserSettings->childKeys(); }
+bool SettingsPrivate::contains(const QString &key) const { return m_UserSettings->contains(key); }
+void SettingsPrivate::endGroup() { m_UserSettings->endGroup(); }
+QString SettingsPrivate::fileName() const { return m_UserSettings->fileName(); }
+QString SettingsPrivate::group() const { return m_UserSettings->group();}
+
+void SettingsPrivate::setValue(const QString &key, const QVariant &value)
+{
+    m_UserSettings->setValue(key, value);
+}
+
+QVariant SettingsPrivate::value(const QString &key, const QVariant &defaultValue) const
+{
+    return m_UserSettings->value(key, defaultValue);
+}
+
+void SettingsPrivate::sync()
+{
+    m_UserSettings->sync();
+    m_NetworkSettings->sync();
+    Q_EMIT userSettingsSynchronized();
 }
 
 /**
@@ -695,7 +767,7 @@ void SettingsPrivate::restoreState(QMainWindow * window, const QString & prefix)
         window->restoreGeometry(value(keyGeo).toByteArray());
         window->restoreState(value(keyState).toByteArray());
         // get all settings key starting with prefix+"/Dock"
-        QStringList k = this->allKeys().filter(QRegExp(QString(prefix + "Dock/"), Qt::CaseSensitive, QRegExp::Wildcard));
+        QStringList k = m_UserSettings->allKeys().filter(QRegExp(QString(prefix + "Dock/"), Qt::CaseSensitive, QRegExp::Wildcard));
         QWidget *w = 0;
         foreach(const QString &s, k) {
             w = window->findChild<QDockWidget*>(s.mid(s.indexOf("Dock/")+5));
@@ -829,7 +901,7 @@ QTreeWidget* SettingsPrivate::getTreeWidget(QWidget *parent) const
     QTreeWidgetItem * orphan = new QTreeWidgetItem(settingsItem, QStringList() << tr("Orphan settings"));
     orphan->setFont(0,bold);
     QTreeWidgetItem * group = 0;
-    QStringList list = allKeys();
+    QStringList list = m_UserSettings->allKeys();
     qSort(list);
     foreach(const QString & k, list) {
         if (k.contains("/")) {
@@ -915,7 +987,7 @@ QString SettingsPrivate::toString() const
         tmp += p + "\t" + paths[p] + "\n";
 
     // add all values of the inifile
-    foreach(QString k, allKeys())
+    foreach(QString k, m_UserSettings->allKeys())
         tmp += QString("%1\t%2\n").arg(k, value(k).toString());
     tmp += "\n\n";
 
@@ -939,12 +1011,13 @@ void SettingsPrivate::setDatabaseConnector(Utils::DatabaseConnector &dbConnector
 
 void SettingsPrivate::readDatabaseConnector()
 {
-    m_DbConnector.fromSettings(value(S_DATABASECONNECTOR).toString());
+    m_DbConnector.fromSettings(m_NetworkSettings->value(S_DATABASECONNECTOR).toString());
     m_DbConnector.setAbsPathToReadOnlySqliteDatabase(path(Core::ISettings::ReadOnlyDatabasesPath));
     m_DbConnector.setAbsPathToReadWriteSqliteDatabase(path(Core::ISettings::ReadWriteDatabasesPath));
 }
 
 void SettingsPrivate::writeDatabaseConnector()
 {
-    setValue(S_DATABASECONNECTOR, m_DbConnector.forSettings());
+    m_NetworkSettings->setValue(S_DATABASECONNECTOR, m_DbConnector.forSettings());
+    m_NetworkSettings->sync();
 }

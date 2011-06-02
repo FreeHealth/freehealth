@@ -359,6 +359,12 @@ UserModel::UserModel(QObject *parent) :
 /** \brief Destructor */
 UserModel::~UserModel()
 {
+    if (!d->m_CurrentUserUuid.isEmpty()) {
+        // save user preferences
+        Internal::UserData *user = d->m_Uuid_UserList[d->m_CurrentUserUuid];
+        user->setPreferences(settings()->userSettings());
+        userBase()->saveUser(user);
+    }
     if (d) delete d;
     d=0;
 }
@@ -417,6 +423,10 @@ bool UserModel::setCurrentUser(const QString &clearLog, const QString &clearPass
     // 4. Connect new user
     LOG(tr("Setting current user uuid to %1").arg(uuid));
     if (!d->m_CurrentUserUuid.isEmpty()) {
+        // save user preferences
+        Internal::UserData *user = d->m_Uuid_UserList[d->m_CurrentUserUuid];
+        user->setPreferences(settings()->userSettings());
+        userBase()->saveUser(user);
         Q_EMIT userAboutToDisconnect(d->m_CurrentUserUuid);
     }
     d->m_CurrentUserUuid.clear();
@@ -430,8 +440,11 @@ bool UserModel::setCurrentUser(const QString &clearLog, const QString &clearPass
 
     Q_EMIT(userAboutToConnect(uuid));
 
-    // trace log
+    // 6. Feed Core::ISettings with the user's settings
     Internal::UserData *user = d->m_Uuid_UserList[d->m_CurrentUserUuid];
+    settings()->setUserSettings(user->preferences());
+
+    // 7. Trace log
     user->setCurrent(true);
     user->setLastLogin(QDateTime::currentDateTime());
     user->addLoginToHistory();
