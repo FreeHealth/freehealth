@@ -4,53 +4,6 @@
 #include "view.h"
 
 namespace Calendar {
-	// this class is used to build a hierarchical structure of items for a day and to manage overlappings
-	// the algorithm behavior is inspired from google calendar
-	class CalendarItemNode
-	{
-	public:
-		CalendarItemNode(const CalendarItem &item, CalendarItemNode *colliding = 0, int index = -1) : m_item(item), m_right(0), m_next(0), m_colliding(colliding), m_index(index), m_maxCount(0) {}
-		~CalendarItemNode();
-
-		const CalendarItem &item() const { return m_item; }			// the calendar item associates with the node
-		CalendarItemNode *right() const { return m_right; }			// the node which is overlapping itself and shares horizontal space with itself and other overlapping sibling nodes
-		CalendarItemNode *next() const { return m_next; }			// the node which follows itself in the time but non overlapping (will be drawn at the bottom)
-		CalendarItemNode *colliding() const { return m_colliding; }	// the potential colliding node if it exists. It is always at the right position.
-		int index() const { return m_index; }						// the right index of the node. Starts at 0.
-		int left() const { return m_left; }
-		int width() const { return m_width; }
-
-		// store an item at the right place with a recursive method depending on date ranges
-		void store(const CalendarItem &item);
-
-		// mandatory when we want to compute widths
-		void prepareForWidthsComputing();
-
-		// compute width of the node and all its neighbours and add them into a list
-		void computeWidths(int left, int width, QList<CalendarItemNode*> &list);
-
-	private:
-		CalendarItem m_item;
-		CalendarItemNode *m_right;
-		CalendarItemNode *m_next;
-		CalendarItemNode *m_colliding;
-		int m_index;
-		int m_maxCount;
-		int m_maxCountBeforeColliding;
-		int m_left;
-		int m_width;
-
-		// returns the most bottom node (the most far next node)
-		CalendarItemNode *mostBottomNode();
-		// returns the next colliding node with <item> potentially including <this>
-		CalendarItemNode *getNextCollidingNode(const CalendarItem &item);
-
-		// returns the maximal count of right nodes
-		int computeMaxCount();
-		// returns the maximal count of right nodes before the colliding one
-		int computeMaxCountBeforeColliding();
-	};
-
 	class DayItemWidget;
 
 	class DayRangeHeader : public ViewHeader

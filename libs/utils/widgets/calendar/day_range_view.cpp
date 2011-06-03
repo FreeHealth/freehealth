@@ -10,110 +10,11 @@
 #include "common.h"
 #include "abstract_calendar_model.h"
 #include "calendar_widget.h"
-#include "day_range_view.h"
 #include "basic_item_edition_dialog.h"
+#include "day_item_node.h"
+#include "day_range_view.h"
 
 using namespace Calendar;
-
-CalendarItemNode::~CalendarItemNode() {
-	// destroy recursively all the structure (siblings and children)
-	if (m_right)
-		delete m_right;
-	if (m_next)
-		delete m_next;
-}
-
-CalendarItemNode *CalendarItemNode::mostBottomNode() {
-	CalendarItemNode *node = this;
-	while (node->next())
-		node = node->next();
-	return node;
-}
-
-CalendarItemNode *CalendarItemNode::getNextCollidingNode(const CalendarItem &item) {
-	CalendarItemNode *node = mostBottomNode();
-	if (node->item().overlap(item))
-		return node;
-
-	if (node->right())
-		return node->right()->getNextCollidingNode(item);
-
-	if (node->colliding())
-		return node->colliding()->getNextCollidingNode(item);
-
-	return 0;
-}
-
-void CalendarItemNode::store(const CalendarItem &item) {
-	CalendarItemNode *current = mostBottomNode();
-	if (current->item().overlap(item)) {
-		if (current->right())
-			current->right()->store(item);
-		else {
-			if (current->colliding()) {
-				if (current->colliding()->item().overlap(item)) {
-					if (current->m_index + 1 >= current->colliding()->m_index) { // we reached the insertion count of node before the colliding one
-						current->colliding()->store(item);
-					} else // insert it
-						current->m_right = new CalendarItemNode(item, current->m_colliding, current->m_index + 1);
-				} else
-					current->m_right = new CalendarItemNode(item, current->colliding()->getNextCollidingNode(item), current->m_index + 1);
-			} else
-				current->m_right = new CalendarItemNode(item, 0, current->m_index + 1);
-		}
-		return;
-	}
-
-	// non overlapping => will be the next item
-	current->m_next = new CalendarItemNode(item, current->getNextCollidingNode(item), current->m_index);
-}
-
-int CalendarItemNode::computeMaxCount() {
-	m_maxCount = 1 + (m_right ? m_right->computeMaxCount() : 0);
-	return qMax(m_maxCount, m_next ? m_next->computeMaxCount() : 0);
-}
-
-int CalendarItemNode::computeMaxCountBeforeColliding() {
-	m_maxCountBeforeColliding = 1;
-
-	if (m_right){
-		int rightCount = m_right->computeMaxCountBeforeColliding();
-		if (m_right->m_colliding == m_colliding)
-			m_maxCountBeforeColliding += rightCount;
-	}
-
-	if (m_next) {
-		int nextMaxCountBeforeColliding = m_next->computeMaxCountBeforeColliding();
-		if (m_next->m_colliding == m_colliding)
-			return qMax(m_maxCountBeforeColliding, nextMaxCountBeforeColliding);
-	}
-	return m_maxCountBeforeColliding;
-}
-
-void CalendarItemNode::prepareForWidthsComputing() {
-	computeMaxCount();
-	computeMaxCountBeforeColliding();
-}
-
-void CalendarItemNode::computeWidths(int left, int width, QList<CalendarItemNode*> &list) {
-	m_left = left;
-	list << this;
-
-	int collidingWidth = -1;
-
-	// compute colliding width
-	if (m_colliding)
-		collidingWidth = (m_colliding->m_left - left) / m_maxCountBeforeColliding;
-	m_width = width / m_maxCount;
-	if (collidingWidth != -1 && collidingWidth < m_width)
-		m_width = collidingWidth;
-	if (m_right)
-		m_right->computeWidths(m_left + m_width, width - m_width, list);
-	if (m_next)
-		m_next->computeWidths(m_left, width, list);
-}
-
-// -------------------------------------
 
 int DayRangeView::m_leftScaleWidth = 60;
 int DayRangeView::m_hourHeight = 40;
@@ -187,7 +88,6 @@ void DayRangeHeader::paintEvent(QPaintEvent *) {
 	painter.setPen(pen);
 	painter.drawLine(0, rect().bottom(), rect().right(), rect().bottom());
 
-	// text
 	pen.setColor(QColor(150, 150, 255));
 	painter.setPen(pen);
 
@@ -273,7 +173,7 @@ void DayRangeHeader::paintEvent(QPaintEvent *) {
 		QRect r(QPoint(60 + (firstIndex * containWidth) / m_rangeWidth + 1, scaleHeight + top * (fontHeight + 5)), QPoint(60 + ((lastIndex + 1) * containWidth) / m_rangeWidth - 2, scaleHeight + (top + 1) * (fontHeight + 5) - 2));
 		painter.drawRoundedRect(r, 4, 4);
 		painter.setPen(Qt::white);
-		painter.drawText(r.adjusted(2, 0, 0, 0), Qt::AlignVCenter | Qt::AlignLeft, item.title().isEmpty() ? tr("(untitled)") : item.title());
+		painter.drawText(r.adjusted(2, 0, -2, 0), Qt::AlignVCenter | Qt::AlignLeft, item.title().isEmpty() ? tr("(untitled)") : item.title());
 	}
 }
 
@@ -679,17 +579,17 @@ void DayRangeView::refreshDayWidgets(const QDate &dayDate) {
 	// sorting and create the tree
 	qSort(items.begin(), items.end(), calendarItemLessThan);
 
-	CalendarItemNode node(items[0]);
+	DayItemNode node(items[0]);
 
 	for (int i = 1; i < items.count(); i++)
 		node.store(items[i]);
 
 	node.prepareForWidthsComputing();
-	QList<CalendarItemNode*> nodes;
+	QList<DayItemNode*> nodes;
 	QPair<int, int> band = getBand(dayDate);
 	node.computeWidths(band.first, band.second, nodes);
 
-	foreach (CalendarItemNode *node, nodes) {
+	foreach (DayItemNode *node, nodes) {
 		DayItemWidget *widget = new DayItemWidget(this, node->item().uid(), model());
 		QPair<int, int> verticalData = getItemVerticalData(node->item().beginning().time(), node->item().ending().time());
 		widget->setBeginDateTime(node->item().beginning());
