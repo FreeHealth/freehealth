@@ -58,6 +58,7 @@
 #include <translationutils/constanttranslations.h>
 #include <utils/log.h>
 #include <utils/global.h>
+#include <utils/databaseconnector.h>
 
 #include <extensionsystem/pluginmanager.h>
 
@@ -82,8 +83,13 @@ static inline bool identifyUser()
 {
     // instanciate user model
     userModel();
-    QString log = settings()->value(Core::Constants::S_LASTLOGIN).toString();
-    QString pass = settings()->value(Core::Constants::S_LASTPASSWORD).toString();
+    QString log;
+    QString pass;
+    bool sqliteVersion = (settings()->databaseConnector().driver()==Utils::Database::SQLite);
+    if (sqliteVersion) {
+        log = settings()->databaseConnector().clearLog();
+        pass = settings()->databaseConnector().clearPass();
+    }
     bool ask = true;
     while (true) {
         if (userModel()->isCorrectLogin(log, pass)) {
@@ -114,9 +120,13 @@ static inline bool identifyUser()
             log = ident.login();
             pass = ident.password();
 
-            /** \todo This should disappear (2 next lines) */
-            settings()->setValue(Core::Constants::S_LASTLOGIN, log);//ident.login64crypt());
-            settings()->setValue(Core::Constants::S_LASTPASSWORD, pass);//ident.cryptedPassword());
+            if (sqliteVersion) {
+                Utils::DatabaseConnector c = settings()->databaseConnector();
+                c.setClearLog(log);
+                c.setClearPass(pass);
+                settings()->setDatabaseConnector(c);
+            }
+
             ask = false;
             break;
         }
