@@ -48,6 +48,7 @@
 */
 
 #include "userbase.h"
+#include "constants.h"
 
 #include <coreplugin/icore.h>
 #include <coreplugin/isettings.h>
@@ -178,51 +179,6 @@ bool UserBase::initialize(Core::ISettings *s)
     createConnection(USER_DB_CONNECTION, USER_DB_CONNECTION,
                      settings()->databaseConnector(),
                      Utils::Database::CreateDatabase);
-
-//    // test connection (create DB if not exists)
-//    // Check settings --> SQLite or MySQL ?
-//    if (set->value(Core::Constants::S_USE_EXTERNAL_DATABASE, false).toBool()) {
-//        if (!QSqlDatabase::isDriverAvailable("QMYSQL")) {
-//            LOG_ERROR(tkTr(Trans::Constants::DATABASE_DRIVER_1_NOT_AVAILABLE).arg("MySQL"));
-//            Utils::warningMessageBox(tkTr(Trans::Constants::APPLICATION_FAILURE),
-//                                     tkTr(Trans::Constants::DATABASE_DRIVER_1_NOT_AVAILABLE_DETAIL).arg("MySQL"),
-//                                     "", qApp->applicationName());
-//            return false;
-//        }
-//        if (!createConnection(USER_DB_CONNECTION,
-//                              USER_DB_CONNECTION,
-//                              QString(QByteArray::fromBase64(set->value(Core::Constants::S_EXTERNAL_DATABASE_HOST, QByteArray("localhost").toBase64()).toByteArray())),
-//                              Utils::Database::ReadWrite,
-//                              Utils::Database::MySQL,
-//                              QString(QByteArray::fromBase64(set->value(Core::Constants::S_EXTERNAL_DATABASE_LOG, QByteArray("root").toBase64()).toByteArray())),
-//                              QString(QByteArray::fromBase64(set->value(Core::Constants::S_EXTERNAL_DATABASE_PASS, QByteArray("").toBase64()).toByteArray())),
-//                              QString(QByteArray::fromBase64(set->value(Core::Constants::S_EXTERNAL_DATABASE_PORT, QByteArray("").toBase64()).toByteArray())).toInt(),
-//                              Utils::Database::CreateDatabase))
-//            return false;
-//    } else {
-//        if (!QSqlDatabase::isDriverAvailable("QSQLITE")) {
-//            LOG_ERROR(tkTr(Trans::Constants::DATABASE_DRIVER_1_NOT_AVAILABLE).arg("SQLite"));
-//            Utils::warningMessageBox(tkTr(Trans::Constants::APPLICATION_FAILURE),
-//                                     tkTr(Trans::Constants::DATABASE_DRIVER_1_NOT_AVAILABLE_DETAIL).arg("SQLite"),
-//                                     "", qApp->applicationName());
-//            return false;
-//        }
-//        // Connect SQLite database
-//        QString pathToDb = set->path(Core::ISettings::ReadWriteDatabasesPath);
-//        pathToDb = QDir::cleanPath(pathToDb + QDir::separator() + USER_DB_CONNECTION);
-//        if (!QDir(pathToDb).exists()) {
-//            LOG(tkTr(Trans::Constants::CREATE_DIR_1).arg(pathToDb));
-//            QDir().mkpath(pathToDb);
-//        }
-//        if (!createConnection(USER_DB_CONNECTION,
-//                              QString("%1.db").arg(USER_DB_CONNECTION),
-//                              pathToDb,
-//                              Utils::Database::ReadWrite,
-//                              Utils::Database::SQLite,
-//                              "log", "pas", 0,
-//                              Utils::Database::CreateDatabase))
-//            return false;
-//    }
 
     if (!database().isOpen()) {
         if (!database().open()) {
@@ -476,7 +432,7 @@ bool UserBase::checkLogin(const QString &clearLogin, const QString &clearPasswor
     QString req = select(Table_USERS, list, where);
 
     {
-        QSqlQuery q(req , QSqlDatabase::database("__ConnectionTest__"));
+        QSqlQuery q(req , QSqlDatabase::database(USER_DB_CONNECTION));
         if (q.isActive()) {
             if (q.next()) {
                 m_LastUuid = q.value(0).toString();
@@ -579,10 +535,7 @@ static inline QString defaultFooter()
     return Utils::readTextFile(settings()->path(Core::ISettings::BundleResourcesPath) + "/textfiles/default_user_footer.htm");
 }
 
-/**
-  \brief Create the default users database if it does not exists.
-  Actually this function only supports SQLite database.
-*/
+/** Create the default users database if it does not exists. */
 bool UserBase::createDatabase(const QString &connectionName , const QString &dbName,
                     const QString &pathOrHostName,
                     TypeOfAccess access, AvailableDrivers driver,
@@ -616,7 +569,7 @@ bool UserBase::createDatabase(const QString &connectionName , const QString &dbN
                 tkTr(Trans::Constants::_1_ISNOT_AVAILABLE_CANNOTBE_CREATED).arg(pathOrHostName);
         DB.setDatabaseName(QDir::cleanPath(pathOrHostName + QDir::separator() + dbName));
         if (!DB.open())
-            LOG(tkTr(Trans::Constants::DATABASE_1_CANNOT_BE_CREATED_ERROR_2).arg(dbName).arg(DB.lastError().text()));
+            LOG_ERROR(tkTr(Trans::Constants::DATABASE_1_CANNOT_BE_CREATED_ERROR_2).arg(dbName).arg(DB.lastError().text()));
         setDriver(Utils::Database::SQLite);
     } else if (driver == MySQL) {
         /** \todo test grants here or before ? */

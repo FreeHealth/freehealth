@@ -32,7 +32,6 @@
 #include <coreplugin/isettings.h>
 
 #include <usermanagerplugin/usermanager_exporter.h>
-#include <usermanagerplugin/constants.h>
 
 #include <QObject>
 
@@ -52,11 +51,6 @@ class UserData;
 class USER_EXPORT UserBase :  public QObject, public Utils::Database
 {
     Q_OBJECT
-//    friend void initLib();
-//    friend class UserPlugin::UserModel;
-//    friend class UserModelPrivate;
-//    friend class UserData;
-//    friend class UserIdentifier;
 
 protected:
     UserBase(QObject *parent = 0);
