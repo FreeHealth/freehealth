@@ -95,8 +95,9 @@ public:
 DatabaseConnector::DatabaseConnector() :
         d(new DatabaseConnectorPrivate)
 {
-    d->m_DriverIsValid = false;
     d->m_Port = -1;
+    d->m_Driver = Database::SQLite;
+    d->m_DriverIsValid = d->testDriver(Database::SQLite);
 }
 }
 
@@ -107,7 +108,8 @@ DatabaseConnector::DatabaseConnector(const QString &clearLog, const QString &cle
     d->m_ClearPass = clearPass;
     d->m_HostName = hostName;
     d->m_Port = port;
-    d->m_DriverIsValid = false;
+    d->m_Driver = Database::SQLite;
+    d->m_DriverIsValid = d->testDriver(Database::SQLite);
 }
 
 DatabaseConnector::DatabaseConnector(const QString &clearLog, const QString &clearPass) :
@@ -115,7 +117,8 @@ DatabaseConnector::DatabaseConnector(const QString &clearLog, const QString &cle
 {
     d->m_ClearLog = clearLog;
     d->m_ClearPass = clearPass;
-    d->m_DriverIsValid = false;
+    d->m_Driver = Database::SQLite;
+    d->m_DriverIsValid = d->testDriver(Database::SQLite);
     d->m_Port = -1;
 }
 
@@ -141,9 +144,12 @@ void DatabaseConnector::clear()
     d->m_ClearLog.clear();
     d->m_ClearPass.clear();
     d->m_Driver = Utils::Database::SQLite;
-    d->m_DriverIsValid = false;
+    d->m_DriverIsValid = d->testDriver(d->m_Driver);
     d->m_HostName.clear();
     d->m_Port = -1;
+    d->m_AbsPathToReadOnlySQLiteDb.clear();
+    d->m_AbsPathToReadWriteSQLiteDb.clear();
+    d->m_AccessMode = ReadOnly;
 }
 
 bool DatabaseConnector::isValid()
@@ -199,10 +205,10 @@ void DatabaseConnector::fromSettings(const QString &value)
 {
     clear();
     QString tmp = Utils::decrypt(value.toAscii());
-    qWarning() << "xxxxxxxxxxxx" << value;
     QStringList vals = tmp.split(SEPARATOR);
     if (vals.count() != 5) {
         LOG_ERROR_FOR("DatabaseConnector", "Decrypt error");
+        clear();
         return;
     }
     d->m_ClearLog = vals.at(0);
@@ -261,7 +267,14 @@ void DatabaseConnector::warn() const
     } else {
         dr += "(**Error**)";
     }
-    QString t = QString("DatabaseConnector(Log:%1; Pass:%2; Host:%3; Port:%4; Driver:%5)")
+    QString t = QString("DatabaseConnector(Log:%1; Pass:%2; Host:%3; Port:%4; Driver:%5")
                 .arg(d->m_ClearLog).arg(d->m_ClearPass).arg(d->m_HostName).arg(d->m_Port).arg(dr);
+    if (d->m_Driver==Database::SQLite) {
+        t += QString("\n                   RO:%1"
+                     "\n                   RW:%2")
+                .arg(d->m_AbsPathToReadOnlySQLiteDb)
+                .arg(d->m_AbsPathToReadWriteSQLiteDb);
+    }
+    t += ")";
     qWarning() << t;
 }

@@ -344,8 +344,6 @@ SettingsPrivate::SettingsPrivate(QObject *parent, const QString &appName, const 
     setPath(SystemTempPath, QDir::tempPath());
     setPath(WebSiteUrl, WEBSITE);
 
-    readDatabaseConnector();
-
 //    if (Utils::isRunningOnLinux())
 //        setPath(FMFPluginsPath, LIBRARY_BASENAME);
 
@@ -380,6 +378,8 @@ SettingsPrivate::SettingsPrivate(QObject *parent, const QString &appName, const 
         m_FirstTime = value("FirstTimeRunning", true).toBool();
         setPath(ResourcesPath, QFileInfo(file).absolutePath());//QDir::homePath() + "/." + applicationName);//resourcesPath);
     }
+
+    readDatabaseConnector();
 
     if (parent)
         setParent(parent);

@@ -204,7 +204,7 @@ bool CoreImpl::initialize(const QStringList &arguments, QString *errorString)
 
         // show the license agreement dialog
 #ifndef LINUX_INTEGRATED
-        if (!Utils::defaultLicenceAgreementDialog("", Utils::LicenseTerms::GPLv3 ))
+        if (!Utils::defaultLicenceAgreementDialog("", Utils::LicenseTerms::GPLv3))
             return false;
 #endif
         m_Settings->setLicenseApprovedApplicationNumber(qApp->applicationVersion());

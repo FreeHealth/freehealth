@@ -443,9 +443,13 @@ bool Database::createConnection(const QString &connectionName, const QString &no
     QString fileName;
     if (connector.accessMode()==DatabaseConnector::ReadOnly) {
         fileName = QDir::cleanPath(connector.absPathToSqliteReadOnlyDatabase() + QDir::separator() + connectionName + QDir::separator() + dbName);
-    } else if (connector.accessMode()==DatabaseConnector::ReadOnly) {
+    } else if (connector.accessMode()==DatabaseConnector::ReadWrite) {
         fileName = QDir::cleanPath(connector.absPathToSqliteReadWriteDatabase() + QDir::separator() + connectionName + QDir::separator() + dbName);
     }
+    if (!fileName.endsWith(".db")) {
+        fileName += ".db";
+    }
+    QFileInfo sqliteFileInfo(fileName);
 
     // check server connection
     switch (connector.driver()) {
@@ -477,10 +481,9 @@ bool Database::createConnection(const QString &connectionName, const QString &no
     switch (connector.driver()) {
     case SQLite:
         {
-            if ((!QFile(fileName).exists()) ||
-                (QFileInfo(fileName).size() == 0)) {
+            if ((!sqliteFileInfo.exists()) || (sqliteFileInfo.size() == 0)) {
                 if (createOption == CreateDatabase) {
-                    if (!createDatabase(connectionName, dbName, connector, createOption)) {
+                    if (!createDatabase(connectionName, sqliteFileInfo.fileName(), connector, createOption)) {
                         LOG_ERROR_FOR("Database", tkTr(Trans::Constants::DATABASE_1_CANNOT_BE_CREATED_ERROR_2).arg(dbName + "@" + fileName).arg(""));
                         return false;
                     }
@@ -524,9 +527,9 @@ bool Database::createConnection(const QString &connectionName, const QString &no
     switch (connector.driver()) {
     case SQLite:
         {
-            if (!QFileInfo(fileName).isReadable()) {
+            if (!sqliteFileInfo.isReadable()) {
                 LOG_ERROR_FOR("Database", QCoreApplication::translate("Database", "ERROR : Database %1 is not readable. Path : %2")
-                              .arg(dbName, fileName));
+                              .arg(dbName, sqliteFileInfo.absoluteFilePath()));
                 toReturn = false;
             }
             break;
@@ -569,7 +572,7 @@ bool Database::createConnection(const QString &connectionName, const QString &no
         switch (connector.driver()) {
         case SQLite:
             {
-                if (!QFileInfo(fileName).isWritable()) {
+                if (!sqliteFileInfo.isWritable()) {
                     LOG_ERROR_FOR("Database", QCoreApplication::translate("Database",
                                   "ERROR : Database %1 is not writable. Path : %2.")
                                   .arg(dbName, fileName));
@@ -596,7 +599,7 @@ bool Database::createConnection(const QString &connectionName, const QString &no
         case SQLite :
         {
              DB = QSqlDatabase::addDatabase("QSQLITE", connectionName);
-             DB.setDatabaseName(QDir::cleanPath(fileName));
+             DB.setDatabaseName(sqliteFileInfo.absoluteFilePath());
              break;
          }
         case MySQL :
@@ -618,8 +621,7 @@ bool Database::createConnection(const QString &connectionName, const QString &no
     if (!DB.isOpen()) {
         LOG_ERROR_FOR("Database", tkTr(Trans::Constants::UNABLE_TO_OPEN_DATABASE_1_ERROR_2).arg(dbName, DB.lastError().text()));
         toReturn = false;
-    }
-    else {
+    } else {
         if (WarnLogMessages)
             LOG_FOR("Database", tkTr(Trans::Constants::CONNECTED_TO_DATABASE_1_DRIVER_2).arg(dbName).arg(DB.driverName()));
     }
@@ -627,6 +629,7 @@ bool Database::createConnection(const QString &connectionName, const QString &no
     // return boolean
     if (toReturn)
         d->m_ConnectionName = connectionName;
+
     return toReturn;
 }
 
@@ -635,12 +638,26 @@ bool Database::createConnection(const QString &connectionName, const QString &no
 bool Database::createDatabase(const QString &connectionName , const QString &prefixedDbName,
                             const Utils::DatabaseConnector &connector,
                             CreationOption createOption
-                           ) { return createDatabase(connectionName, prefixedDbName,
-                                                     connector.host(), Database::TypeOfAccess(connector.accessMode()),
-                                                     connector.driver(),
-                                                     connector.clearLog(), connector.clearPass(),
-                                                     connector.port(),
-                                                     createOption); }
+                           )
+{
+    if (connector.driver()==SQLite) {
+        return createDatabase(connectionName, prefixedDbName,
+                              connector.absPathToSqliteReadWriteDatabase() + QDir::separator() + connectionName + QDir::separator(),
+                              Database::TypeOfAccess(connector.accessMode()),
+                              connector.driver(),
+                              connector.clearLog(), connector.clearPass(),
+                              connector.port(),
+                              createOption);
+    } else {
+        return createDatabase(connectionName, prefixedDbName,
+                              connector.host(),
+                              Database::TypeOfAccess(connector.accessMode()),
+                              connector.driver(),
+                              connector.clearLog(), connector.clearPass(),
+                              connector.port(),
+                              createOption);
+    }
+}
 
 
 /**  Returns the connectionName in use */
@@ -745,7 +762,13 @@ bool Database::checkDatabaseScheme()
         return false;
 
     QSqlDatabase DB = QSqlDatabase::database(d->m_ConnectionName);
-    DB.open();
+    if (!DB.isOpen()) {
+        if (!DB.open()) {
+            LOG_ERROR_FOR("Database", tkTr(Trans::Constants::UNABLE_TO_OPEN_DATABASE_1_ERROR_2)
+                          .arg(d->m_ConnectionName).arg(DB.lastError().text()));
+            return false;
+        }
+    }
 
     QList<int> list = d->m_Tables.keys();
     qSort(list);
