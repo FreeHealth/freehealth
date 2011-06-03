@@ -359,14 +359,20 @@ UserModel::UserModel(QObject *parent) :
 /** \brief Destructor */
 UserModel::~UserModel()
 {
-    if (!d->m_CurrentUserUuid.isEmpty()) {
-        // save user preferences
-        Internal::UserData *user = d->m_Uuid_UserList[d->m_CurrentUserUuid];
-        user->setPreferences(settings()->userSettings());
-        userBase()->saveUser(user);
+//    if (!d->m_CurrentUserUuid.isEmpty() && d->m_CurrentUserUuid != ::SERVER_ADMINISTRATOR_UUID) {
+//        // save user preferences
+//        if (d->m_Uuid_UserList.contains(d->m_CurrentUserUuid)) {
+//            Internal::UserData *user = d->m_Uuid_UserList[d->m_CurrentUserUuid];
+//            if (user) {
+//                user->setPreferences(settings()->userSettings());
+//                userBase()->saveUser(user);
+//            }
+//        }
+//    }
+    if (d) {
+        delete d;
+        d=0;
     }
-    if (d) delete d;
-    d=0;
 }
 
 /**
