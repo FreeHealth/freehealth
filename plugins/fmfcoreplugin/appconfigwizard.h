@@ -59,6 +59,9 @@ public:
 
 protected Q_SLOTS:
     void done(int r);
+
+protected:
+    void resizeEvent(QResizeEvent *event);
 };
 
 

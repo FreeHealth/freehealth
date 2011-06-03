@@ -107,7 +107,8 @@ AppConfigWizard::AppConfigWizard(QWidget *parent)
     // add pages to wizard
     for(int i = 0 ; i < pages.count(); ++i) {
         IFirstConfigurationPage *page = pages.at(i);
-        setPage(page->id(), page->createPage(this));
+        QWizardPage *p = page->createPage(this);
+        setPage(page->id(), p);
     }
 
     // set window text
@@ -140,6 +141,12 @@ void AppConfigWizard::done(int r)
 
             QDialog::done(r);
     }
+}
+
+void AppConfigWizard::resizeEvent(QResizeEvent *event)
+{
+    QWizard::resizeEvent(event);
+    Utils::centerWidget(this);
 }
 
 ///////////////////////////////////////////////////////////////////////////////////////////////////
