@@ -123,8 +123,6 @@ AvailableMovementWidget::AvailableMovementWidget(QWidget *parent) :
     typeComboBox->addItem(theme()->icon(Core::Constants::ICONADD),less);
     typeComboBox->addItem(theme()->icon(Core::Constants::ICONADD),add);
     m_completionList << trUtf8("Receipts");
-
-    
 }
 
 AvailableMovementWidget::~AvailableMovementWidget()
@@ -213,6 +211,8 @@ void AvailableMovementWidget::on_removeButton_clicked()
 void AvailableMovementWidget::saveToSettings(Core::ISettings *sets)
 {
     Q_UNUSED(sets);
+    if (!m_Model)
+        return;
     if (!m_Model->submit()) {
         LOG_ERROR(tkTr(Trans::Constants::UNABLE_TO_SAVE_DATA_IN_DATABASE_1).arg(tr("available_movement")));
         Utils::warningMessageBox(tr("Can not submit available movements to your personnal database."),
