@@ -53,6 +53,7 @@ HEADERS += global_exporter.h \
     widgets/calendar/hour_range_node.h \
     widgets/calendar/month_day_widget.h \
     widgets/calendar/basic_item_edition_dialog.h \
+    widgets/calendar/day_widget.h \
     widgets/languagecombobox.h \
     widgets/languagecomboboxdelegate.h \
     databaseconnector.h
@@ -98,6 +99,7 @@ SOURCES += global.cpp \
     widgets/calendar/hour_range_node.cpp \
     widgets/calendar/month_day_widget.cpp \
     widgets/calendar/basic_item_edition_dialog.cpp \
+    widgets/calendar/day_widget.cpp \
     widgets/languagecombobox.cpp \
     widgets/languagecomboboxdelegate.cpp \
     databaseconnector.cpp
