@@ -94,7 +94,6 @@ public:
     UserWizard(QWidget *parent = 0);
     ~UserWizard();
 
-    bool setCreatedUserAsCurrent() const;
     QString createdUuid() const;
 
     static void setUserPaper(const int ref, const QString &xml) {m_Papers.insert(ref, xml);}

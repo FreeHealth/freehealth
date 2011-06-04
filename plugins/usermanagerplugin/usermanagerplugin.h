@@ -68,7 +68,6 @@ private:
     QAction *aCreateUser;
     QAction *aChangeUser;
 
-    FirstRun_UserConnection *m_First_Connection;
     FirstRun_UserCreation *m_FirstCreation;
 
     Internal::UserManagerMode *m_Mode;

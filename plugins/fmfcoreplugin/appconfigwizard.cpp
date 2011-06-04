@@ -398,17 +398,32 @@ EndConfigPage::EndConfigPage(QWidget *parent) :
                    "If you have any question, you can ask them to "
                    "the mailing list."));
 
+    // add labels
     QVBoxLayout *l = new QVBoxLayout(this);
     setLayout(l);
-    QLabel *lbl = new QLabel(tr("French/english mailing list : "
+    QLabel *lbl = new QLabel(tr("Default virtual patients were created (Kirk, Picard, Doe)."), this);
+    lbl->setOpenExternalLinks(true);
+
+    QLabel *lbl1 = new QLabel(tr("French/english mailing list : "
                                 "<a href=\"mailto:freemedforms@googlegroups.com\">"
                                 "freemedforms@googlegroups.com</a>"), this);
-    lbl->setOpenExternalLinks(true);
+    lbl1->setOpenExternalLinks(true);
     QLabel *lbl2 = new QLabel(tr("Application main web site: "
                                 "<a href=\"%1\">"
                                 "%1</a>").arg(settings()->path(Core::ISettings::WebSiteUrl)), this);
     lbl2->setOpenExternalLinks(true);
     l->addWidget(lbl);
+    l->addWidget(lbl1);
     l->addWidget(lbl2);
 }
 
+void EndConfigPage::initializePage()
+{
+    // Create virtual patients
+    QList<Core::IOptionsPage*> pages = pluginManager()->getObjects<Core::IOptionsPage>();
+    for(int i = 0; i < pages.count(); ++i) {
+        if (pages.at(i)->id() == "VirtualPatientBasePage") {
+            pages.at(i)->resetToDefaults();
+        }
+    }
+}

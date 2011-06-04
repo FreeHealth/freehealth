@@ -184,6 +184,16 @@ namespace Constants {
         INFO_MAX_LKID
     };
 
+    // Translations
+    const char* const TR_CONTEXT_USERS = "UserPlugin";
+
+    const char* const USER_WIZARD = QT_TRANSLATE_NOOP("UserPlugin", "User creator wizard");
+    const char* const CREATE_USER = QT_TRANSLATE_NOOP("UserPlugin", "Create user");
+    const char* const MODIFY_USER = QT_TRANSLATE_NOOP("UserPlugin", "Modify user");
+    const char* const DELETE_USER = QT_TRANSLATE_NOOP("UserPlugin", "Delete user");
+    const char* const SAVE_USER = QT_TRANSLATE_NOOP("UserPlugin", "Save user");
+
+
 }  // End Constants
 }  // End UserPlugin
 

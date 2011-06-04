@@ -109,6 +109,9 @@ public:
             l.at(id)->trigger();
             l.at(id)->setChecked(true);
             m_SearchToolButton->setDefaultAction(l.at(id));
+            m_SearchMethod = id;
+        } else {
+            m_SearchMethod = 0;
         }
 
         // add buttons to search line

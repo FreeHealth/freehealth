@@ -137,25 +137,18 @@ static inline bool identifyUser()
 
 UserManagerPlugin::UserManagerPlugin() :
         aCreateUser(0), aChangeUser(0),
-        m_First_Connection(new FirstRun_UserConnection(this)),
         m_FirstCreation(new FirstRun_UserCreation(this)),
         m_Mode(0)
 {
     setObjectName("UserManagerPlugin");
     if (Utils::Log::warnPluginsCreation())
         qWarning() << "creating UserManagerPlugin";
-    addObject(m_First_Connection);
     addObject(m_FirstCreation);
 }
 
 UserManagerPlugin::~UserManagerPlugin()
 {
     qWarning() << "UserManagerPlugin::~UserManagerPlugin()";
-    if (m_First_Connection) {
-        removeObject(m_First_Connection);
-        delete m_First_Connection;
-        m_First_Connection = 0;
-    }
     if (m_FirstCreation) {
         removeObject(m_FirstCreation);
         delete m_FirstCreation;

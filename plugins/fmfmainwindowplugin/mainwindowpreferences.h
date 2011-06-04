@@ -48,18 +48,18 @@ class ISettings;
 namespace MainWin {
 namespace Internal {
 
-class VirtualBasePage : public Core::IOptionsPage
+class VirtualPatientBasePage : public Core::IOptionsPage
 {
     Q_OBJECT
 public:
-    VirtualBasePage(QObject *parent = 0);
-    ~VirtualBasePage();
+    VirtualPatientBasePage(QObject *parent = 0);
+    ~VirtualPatientBasePage();
 
     QString id() const;
     QString name() const;
     QString category() const;
 
-    void resetToDefaults() {}
+    void resetToDefaults() {VirtualDatabasePreferences::writeDefaultSettings();}
     void checkSettingsValidity() {}
     void applyChanges() {}
     void finish();

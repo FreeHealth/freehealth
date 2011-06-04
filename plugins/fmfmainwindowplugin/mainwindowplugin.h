@@ -34,14 +34,14 @@
 /**
  * \file mainwindowplugin.h
  * \author Eric MAEKER <eric.maeker@free.fr>
- * \version 0.0.2
- * \date 23 Oct 2009
+ * \version 0.6.0
+ * \date 04 June 2011
 */
 
 namespace MainWin {
 namespace Internal {
 class MainWindowPreferencesPage;
-class VirtualBasePage;
+class VirtualPatientBasePage;
 } // End Internal
 
 class MainWindow;
@@ -59,7 +59,7 @@ public:
 private:
     MainWindow *m_MainWindow;
     Internal::MainWindowPreferencesPage *prefPage;
-    Internal::VirtualBasePage *virtualBasePage;
+    Internal::VirtualPatientBasePage *virtualBasePage;
 };
 
 

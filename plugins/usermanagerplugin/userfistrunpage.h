@@ -34,27 +34,8 @@
 namespace UserPlugin {
 
 namespace Ui {
-    class UserConnectionPage;
     class FirstRunUserCreationWidget;
 }
-
-class UserConnectionPage : public QWizardPage
-{
-    Q_OBJECT
-
-public:
-    explicit UserConnectionPage(QWidget *parent = 0);
-    ~UserConnectionPage();
-
-    void initializePage();
-    bool validatePage();
-
-protected:
-    void changeEvent(QEvent *e);
-
-private:
-    Ui::UserConnectionPage *ui;
-};
 
 class UserCreationPage : public QWizardPage
 {
@@ -68,6 +49,7 @@ public:
     bool validatePage();
 
 protected:
+    void retranslate();
     void changeEvent(QEvent *e);
 
 private Q_SLOTS:
@@ -76,15 +58,6 @@ private Q_SLOTS:
 
 private:
     Ui::FirstRunUserCreationWidget *ui;
-};
-
-class FirstRun_UserConnection : public Core::IFirstConfigurationPage
-{
-public:
-    FirstRun_UserConnection(QObject *parent = 0) : Core::IFirstConfigurationPage(parent) {}
-    ~FirstRun_UserConnection() {}
-    int id() const {return Core::IFirstConfigurationPage::UserDbConnection;}
-    QWizardPage *createPage(QWidget *parent) {return new UserPlugin::UserConnectionPage(parent);}
 };
 
 class FirstRun_UserCreation : public Core::IFirstConfigurationPage

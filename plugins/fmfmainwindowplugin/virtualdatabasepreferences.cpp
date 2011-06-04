@@ -153,9 +153,8 @@ void VirtualDatabasePreferences::writeDefaultSettings(Core::ISettings *)
     int c = patientBase()->count(Patients::Constants::Table_IDENT, Patients::Constants::IDENTITY_NAME, patientBase()->getWhereClause(Patients::Constants::Table_IDENT, where));
     if (!c) {
 
-        qWarning() << userModel()->practionnerLkIds(userModel()->currentUserData(Core::IUser::Uuid).toString());
-
-        int userLkId = userModel()->practionnerLkIds(userModel()->currentUserData(Core::IUser::Uuid).toString()).at(0);
+        // Unusefull while all practitionners share the same patients...
+        int userLkId = 1; //userModel()->practionnerLkIds(userModel()->currentUserData(Core::IUser::Uuid).toString()).at(0);
         QString path = settings()->path(Core::ISettings::BigPixmapPath) + QDir::separator();
 
         QString uid = QUuid::createUuid().toString();

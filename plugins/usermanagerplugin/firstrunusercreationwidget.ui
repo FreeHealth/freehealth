@@ -14,10 +14,16 @@
    <string>Form</string>
   </property>
   <layout class="QGridLayout" name="gridLayout_4">
-   <item row="1" column="0">
-    <widget class="QToolButton" name="userManagerButton">
+   <item row="1" column="1">
+    <widget class="QToolButton" name="completeWizButton">
+     <property name="minimumSize">
+      <size>
+       <width>200</width>
+       <height>70</height>
+      </size>
+     </property>
      <property name="text">
-      <string>User manager</string>
+      <string/>
      </property>
      <property name="iconSize">
       <size>
@@ -30,10 +36,16 @@
      </property>
     </widget>
    </item>
-   <item row="1" column="1">
-    <widget class="QToolButton" name="completeWizButton">
+   <item row="0" column="1">
+    <widget class="QToolButton" name="userManagerButton">
+     <property name="minimumSize">
+      <size>
+       <width>200</width>
+       <height>70</height>
+      </size>
+     </property>
      <property name="text">
-      <string>Wizard (complete)</string>
+      <string/>
      </property>
      <property name="iconSize">
       <size>

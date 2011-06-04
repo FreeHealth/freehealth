@@ -194,6 +194,11 @@ bool CoreImpl::initialize(const QStringList &arguments, QString *errorString)
     Q_UNUSED(arguments);
     Q_UNUSED(errorString);
 
+    // For alpha -> remove config.ini to restart the app configurator
+    if (Utils::isAlpha() && m_Settings->licenseApprovedApplicationNumber() != qApp->applicationVersion()) {
+        /** \todo code here -> remove ini settings */
+    }
+
     // first time runnning ?
     if (m_Settings->firstTimeRunning()) {
         AppConfigWizard wizard;

@@ -249,8 +249,7 @@ void UserWizard::done(int r)
                 QDialog::done(QDialog::Rejected);
             } else {
                 Utils::informativeMessageBox(tr("User correctly saved into database."),
-                                             tr("You can poursue with the current user %1 or set this new user to current user.")
-                                             .arg(userModel()->currentUserData(Core::IUser::Name).toString()),
+                                             tr("The user was correctly created and saved into database."),
                                              "", tr("User correctly saved into database."));
                 // Reset the usermodel
                 userModel()->refresh();
@@ -279,14 +278,6 @@ void UserWizard::done(int r)
 //            m_Saved = false;
 //        }
     }
-}
-
-bool UserWizard::setCreatedUserAsCurrent() const
-{
-    if (!m_CreateUser)
-        return false;
-    return userModel()->setCurrentUser(field("Login").toString(),
-                                       field("Password").toString(), true);
 }
 
 QString UserWizard::createdUuid() const

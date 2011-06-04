@@ -50,6 +50,11 @@ MainWinPlugin::MainWinPlugin() :
     m_MainWindow = new MainWindow;
     Core::ICore::instance()->setMainWindow(m_MainWindow);
     m_MainWindow->init();
+
+    // Add preferences pages
+    virtualBasePage = new Internal::VirtualPatientBasePage();
+    virtualBasePage->checkSettingsValidity();
+    addObject(virtualBasePage);
 }
 
 MainWinPlugin::~MainWinPlugin()
@@ -72,11 +77,6 @@ bool MainWinPlugin::initialize(const QStringList &arguments, QString *errorStrin
 
     // Add Translator to the Application
     Core::ICore::instance()->translators()->addNewTranslator("fmfmainwindowplugin");
-
-    // Add preferences pages
-    virtualBasePage = new Internal::VirtualBasePage();
-    virtualBasePage->checkSettingsValidity();
-    addObject(virtualBasePage);
 
     m_MainWindow->initialize(arguments, errorString);
     return true;

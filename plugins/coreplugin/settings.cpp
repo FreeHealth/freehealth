@@ -640,7 +640,7 @@ QString SettingsPrivate::getIniFile(const QString & appName, const QString & fil
             tmpAppName = tmpAppName.left(tmpAppName.indexOf(" "));
     }
     tmpAppName.prepend(".");
-    if (qApp->applicationVersion().contains("alpha", Qt::CaseInsensitive)) {
+    if (Utils::isAlpha()) {
         tmpAppName.append("_alpha");
     }
 

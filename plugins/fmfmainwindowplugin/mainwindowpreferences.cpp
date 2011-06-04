@@ -46,23 +46,23 @@ static inline Core::ISettings *settings() { return Core::ICore::instance()->sett
 static inline Core::ITheme *theme()  { return Core::ICore::instance()->theme(); }
 
 
-VirtualBasePage::VirtualBasePage(QObject *parent) :
+VirtualPatientBasePage::VirtualPatientBasePage(QObject *parent) :
         IOptionsPage(parent), m_Widget(0)
-{ setObjectName("VirtualBasePage"); }
+{ setObjectName("VirtualPatientBasePage"); }
 
-VirtualBasePage::~VirtualBasePage()
+VirtualPatientBasePage::~VirtualPatientBasePage()
 {
     if (m_Widget) delete m_Widget;
     m_Widget = 0;
 }
 
-QString VirtualBasePage::id() const { return objectName(); }
-QString VirtualBasePage::name() const { return tr("Virtual databases"); }
-QString VirtualBasePage::category() const { return tkTr(Trans::Constants::GENERAL); }
+QString VirtualPatientBasePage::id() const { return objectName(); }
+QString VirtualPatientBasePage::name() const { return tr("Virtual databases"); }
+QString VirtualPatientBasePage::category() const { return tkTr(Trans::Constants::GENERAL); }
 
-void VirtualBasePage::finish() { delete m_Widget; }
+void VirtualPatientBasePage::finish() { delete m_Widget; }
 
-QWidget *VirtualBasePage::createPage(QWidget *parent)
+QWidget *VirtualPatientBasePage::createPage(QWidget *parent)
 {
     if (m_Widget)
         delete m_Widget;

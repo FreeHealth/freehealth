@@ -86,6 +86,10 @@ bool isFullApplication()
     return false;
 #endif
 }
+bool isAlpha()
+{
+    return qApp->applicationVersion().contains("alpha", Qt::CaseInsensitive);
+}
 bool isRunningOnMac()
 {
 #ifdef Q_OS_MAC

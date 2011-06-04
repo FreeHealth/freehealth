@@ -517,24 +517,25 @@ void UserManagerWidget::retranslate()
     searchByFirstnameAct->setText(tr("Search user by firstname"));
     searchByNameAndFirstnameAct->setText(tr("Search user by name and firstname"));
     searchByCityAct->setText(tr("Search user by city"));
-    searchByNameAct->setToolTip(tr("Search user by name"));
-    searchByFirstnameAct->setToolTip(tr("Search user by firstname"));
-    searchByNameAndFirstnameAct->setToolTip(tr("Search user by name and firstname"));
-    searchByCityAct->setToolTip(tr("Search user by city"));
-    m_SearchToolBut->setToolTip(tr("Search a user"));
 
-    createNewUserAct->setText(tr("Create new user"));
-    createNewUserAct->setToolTip(tr("Create new user"));
-    modifyUserAct->setText(tr("Modify User"));
-    modifyUserAct->setToolTip(tr("Modify User"));
-    saveAct->setText(tr("Save changes"));
-    saveAct->setToolTip(tr("Save changes"));
+    searchByNameAct->setToolTip(searchByNameAct->text());
+    searchByFirstnameAct->setToolTip(searchByFirstnameAct->text());
+    searchByNameAndFirstnameAct->setToolTip(searchByNameAndFirstnameAct->text());
+    searchByCityAct->setToolTip(searchByCityAct->text());
+    m_SearchToolBut->setToolTip(m_SearchToolBut->text());
+
+    createNewUserAct->setText(QCoreApplication::translate(Constants::TR_CONTEXT_USERS, Constants::CREATE_USER));
+    createNewUserAct->setToolTip(createNewUserAct->text());
+    modifyUserAct->setText(QCoreApplication::translate(Constants::TR_CONTEXT_USERS, Constants::MODIFY_USER));
+    modifyUserAct->setToolTip(modifyUserAct->text());
+    saveAct->setText(QCoreApplication::translate(Constants::TR_CONTEXT_USERS, Constants::SAVE_USER));
+    saveAct->setToolTip(saveAct->text());
     clearModificationsAct->setText(tr("Clear modifications"));
-    clearModificationsAct->setToolTip(tr("Clear modifications"));
-    deleteUserAct->setText(tr("Delete User"));
-    deleteUserAct->setToolTip(tr("Delete User"));
+    clearModificationsAct->setToolTip(clearModificationsAct->text());
+    deleteUserAct->setText(QCoreApplication::translate(Constants::TR_CONTEXT_USERS, Constants::DELETE_USER));
+    deleteUserAct->setToolTip(deleteUserAct->text());
     quitUserManagerAct->setText(tr("Quit User Manager"));
-    quitUserManagerAct->setToolTip(tr("Quit User Manager"));
+    quitUserManagerAct->setToolTip(quitUserManagerAct->text());
 
 //    m_Parent->setWindowTitle(tr("User Manager") + " - " + qApp->applicationName());
 //    updateStatusBar();

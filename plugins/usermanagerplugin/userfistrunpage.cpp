@@ -35,52 +35,16 @@
 #include <coreplugin/itheme.h>
 #include <coreplugin/constants_icons.h>
 
+#include <translationutils/constanttranslations.h>
+
 #include "ui_firstrunusercreationwidget.h"
 
 using namespace UserPlugin;
+using namespace Trans::ConstantTranslations;
 
 static inline Core::ITheme *theme()  { return Core::ICore::instance()->theme(); }
 static inline UserPlugin::UserModel *userModel() {return UserPlugin::UserModel::instance();}
 static inline UserPlugin::Internal::UserBase *userBase() {return UserPlugin::Internal::UserBase::instance();}
-
-
-UserConnectionPage::UserConnectionPage(QWidget *parent) :
-    QWizardPage(parent)
-//    ui(new Ui::UserConnectionPage)
-{
-//    ui->setupUi(this);
-}
-
-UserConnectionPage::~UserConnectionPage()
-{
-//    delete ui;
-}
-
-void UserConnectionPage::initializePage()
-{
-    Internal::UserIdentifier id(this);
-    if (id.exec()!=QDialog::Accepted) {
-        /** \todo improve this */
-        qApp->exit(123);
-    }
-}
-
-bool UserConnectionPage::validatePage()
-{
-    return true;
-}
-
-void UserConnectionPage::changeEvent(QEvent *e)
-{
-    QWidget::changeEvent(e);
-    switch (e->type()) {
-    case QEvent::LanguageChange:
-//        ui->retranslateUi(this);
-        break;
-    default:
-        break;
-    }
-}
 
 
 UserCreationPage::UserCreationPage(QWidget *parent) :
@@ -114,9 +78,6 @@ UserCreationPage::~UserCreationPage()
 
 void UserCreationPage::userManager()
 {
-//    UserManager *m_UserManager = new UserManager(this);
-//    m_UserManager->initialize();
-//    m_UserManager->show();
     UserManagerDialog dlg(this);
     dlg.initialize();
     dlg.exec();
@@ -125,7 +86,6 @@ void UserCreationPage::userManager()
 void UserCreationPage::userWizard()
 {
     UserWizard wiz;
-//    wiz.createUser(true);
     wiz.exec();
 }
 
@@ -149,12 +109,20 @@ bool UserCreationPage::validatePage()
     return true;
 }
 
+void UserCreationPage::retranslate()
+{
+    setTitle(QCoreApplication::translate(Constants::TR_CONTEXT_USERS, Constants::CREATE_USER));
+    setSubTitle(tr("You can use the full user manager dialog to create user or create simple users using the user wizard."));
+    ui->userManagerButton->setText(tkTr(Trans::Constants::USERMANAGER_TEXT));
+    ui->completeWizButton->setText(QCoreApplication::translate(Constants::TR_CONTEXT_USERS, Constants::USER_WIZARD));
+}
+
 void UserCreationPage::changeEvent(QEvent *e)
 {
     QWidget::changeEvent(e);
     switch (e->type()) {
     case QEvent::LanguageChange:
-        ui->retranslateUi(this);
+        retranslate();
         break;
     default:
         break;

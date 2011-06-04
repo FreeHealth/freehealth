@@ -123,6 +123,9 @@ class EndConfigPage: public QWizardPage
     Q_OBJECT
 public:
     EndConfigPage(QWidget *parent = 0);
+
+public:
+    void initializePage();
 };
 
 

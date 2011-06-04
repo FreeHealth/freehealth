@@ -74,6 +74,8 @@ UTILS_EXPORT bool isDebugCompilation();
 UTILS_EXPORT bool isSvnBuild();
 /** \brief Return true if the application was build with all private parts. */
 UTILS_EXPORT bool isFullApplication();
+/** \brief Return true if the application is an alpha build (release or debug). */
+UTILS_EXPORT bool isAlpha();
 /** \brief Return true if the application is running on MacOs. */
 UTILS_EXPORT bool isRunningOnMac();
 /** \brief Return true if the application is running on Windows. */
