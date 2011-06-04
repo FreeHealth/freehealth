@@ -6,12 +6,12 @@
 #include <QMouseEvent>
 #include <QMenu>
 
-#include "day_item_widget.h"
+#include "hour_range_widget.h"
 #include "common.h"
 #include "abstract_calendar_model.h"
 #include "calendar_widget.h"
 #include "basic_item_edition_dialog.h"
-#include "day_item_node.h"
+#include "hour_range_node.h"
 #include "day_range_view.h"
 
 using namespace Calendar;
@@ -374,7 +374,7 @@ void DayRangeBody::mousePressEvent(QMouseEvent *event) {
 	m_pressPos = event->pos();
 
 	// item under mouse?
-	m_pressItemWidget = qobject_cast<DayItemWidget*>(childAt(event->pos()));
+	m_pressItemWidget = qobject_cast<HourRangeWidget*>(childAt(event->pos()));
 	if (m_pressItemWidget) {
 		m_pressItem = model()->getItemByUid(m_pressItemWidget->uid());
 		QPoint pos = m_pressItemWidget->mapFromParent(event->pos());
@@ -402,7 +402,7 @@ void DayRangeBody::mouseMoveEvent(QMouseEvent *event) {
 	case MouseMode_Creation:
 		if (dateTime != m_pressDateTime) {
 			if (!m_pressItemWidget) {
-				m_pressItemWidget = new DayItemWidget(this);
+				m_pressItemWidget = new HourRangeWidget(this);
 				m_pressItemWidget->setBeginDateTime(m_pressDateTime);
 				m_pressItemWidget->show();
 			}
@@ -508,7 +508,7 @@ void DayRangeBody::mouseReleaseEvent(QMouseEvent *event) {
 	m_mouseMode = MouseMode_None;
 }
 
-void DayRangeBody::mouseDoubleClickEvent(QMouseEvent *event) {
+void DayRangeBody::mouseDoubleClickEvent(QMouseEvent *) {
 	BasicItemEditionDialog dialog(this);
 	dialog.init(m_pressItem);
 	if (dialog.exec() == QDialog::Accepted)
@@ -573,18 +573,18 @@ void DayRangeBody::refreshDayWidgets(const QDate &dayDate) {
 	// sorting and create the tree
 	qSort(items.begin(), items.end(), calendarItemLessThan);
 
-	DayItemNode node(items[0]);
+	HourRangeNode node(items[0]);
 
 	for (int i = 1; i < items.count(); i++)
 		node.store(items[i]);
 
 	node.prepareForWidthsComputing();
-	QList<DayItemNode*> nodes;
+	QList<HourRangeNode*> nodes;
 	QPair<int, int> band = getBand(dayDate);
 	node.computeWidths(band.first, band.second, nodes);
 
-	foreach (DayItemNode *node, nodes) {
-		DayItemWidget *widget = new DayItemWidget(this, node->item().uid(), model());
+	foreach (HourRangeNode *node, nodes) {
+		HourRangeWidget *widget = new HourRangeWidget(this, node->item().uid(), model());
 		QPair<int, int> verticalData = getItemVerticalData(node->item().beginning().time(), node->item().ending().time());
 		widget->setBeginDateTime(node->item().beginning());
 		widget->setEndDateTime(node->item().ending());

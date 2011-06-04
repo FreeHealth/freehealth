@@ -1,9 +1,9 @@
 #include "calendar_item.h"
-#include "day_item_node.h"
+#include "hour_range_node.h"
 
 using namespace Calendar;
 
-DayItemNode::~DayItemNode() {
+HourRangeNode::~HourRangeNode() {
 	// destroy recursively all the structure (siblings and children)
 	if (m_right)
 		delete m_right;
@@ -11,15 +11,15 @@ DayItemNode::~DayItemNode() {
 		delete m_next;
 }
 
-DayItemNode *DayItemNode::mostBottomNode() {
-	DayItemNode *node = this;
+HourRangeNode *HourRangeNode::mostBottomNode() {
+	HourRangeNode *node = this;
 	while (node->next())
 		node = node->next();
 	return node;
 }
 
-DayItemNode *DayItemNode::getNextCollidingNode(const CalendarItem &item) {
-	DayItemNode *node = mostBottomNode();
+HourRangeNode *HourRangeNode::getNextCollidingNode(const CalendarItem &item) {
+	HourRangeNode *node = mostBottomNode();
 	if (node->item().overlap(item))
 		return node;
 
@@ -32,8 +32,8 @@ DayItemNode *DayItemNode::getNextCollidingNode(const CalendarItem &item) {
 	return 0;
 }
 
-void DayItemNode::store(const CalendarItem &item) {
-	DayItemNode *current = mostBottomNode();
+void HourRangeNode::store(const CalendarItem &item) {
+	HourRangeNode *current = mostBottomNode();
 	if (current->item().overlap(item)) {
 		if (current->right())
 			current->right()->store(item);
@@ -43,25 +43,25 @@ void DayItemNode::store(const CalendarItem &item) {
 					if (current->m_index + 1 >= current->colliding()->m_index) { // we reached the insertion count of node before the colliding one
 						current->colliding()->store(item);
 					} else // insert it
-						current->m_right = new DayItemNode(item, current->m_colliding, current->m_index + 1);
+						current->m_right = new HourRangeNode(item, current->m_colliding, current->m_index + 1);
 				} else
-					current->m_right = new DayItemNode(item, current->colliding()->getNextCollidingNode(item), current->m_index + 1);
+					current->m_right = new HourRangeNode(item, current->colliding()->getNextCollidingNode(item), current->m_index + 1);
 			} else
-				current->m_right = new DayItemNode(item, 0, current->m_index + 1);
+				current->m_right = new HourRangeNode(item, 0, current->m_index + 1);
 		}
 		return;
 	}
 
 	// non overlapping => will be the next item
-	current->m_next = new DayItemNode(item, current->getNextCollidingNode(item), current->m_index);
+	current->m_next = new HourRangeNode(item, current->getNextCollidingNode(item), current->m_index);
 }
 
-int DayItemNode::computeMaxCount() {
+int HourRangeNode::computeMaxCount() {
 	m_maxCount = 1 + (m_right ? m_right->computeMaxCount() : 0);
 	return qMax(m_maxCount, m_next ? m_next->computeMaxCount() : 0);
 }
 
-int DayItemNode::computeMaxCountBeforeColliding() {
+int HourRangeNode::computeMaxCountBeforeColliding() {
 	m_maxCountBeforeColliding = 1;
 
 	if (m_right){
@@ -78,12 +78,12 @@ int DayItemNode::computeMaxCountBeforeColliding() {
 	return m_maxCountBeforeColliding;
 }
 
-void DayItemNode::prepareForWidthsComputing() {
+void HourRangeNode::prepareForWidthsComputing() {
 	computeMaxCount();
 	computeMaxCountBeforeColliding();
 }
 
-void DayItemNode::computeWidths(int left, int width, QList<DayItemNode*> &list) {
+void HourRangeNode::computeWidths(int left, int width, QList<HourRangeNode*> &list) {
 	m_left = left;
 	list << this;
 
@@ -100,4 +100,3 @@ void DayItemNode::computeWidths(int left, int width, QList<DayItemNode*> &list) 
 	if (m_next)
 		m_next->computeWidths(m_left, width, list);
 }
-

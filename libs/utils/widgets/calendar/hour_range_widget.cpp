@@ -1,18 +1,18 @@
 #include <QPainter>
 #include <QMouseEvent>
 
-#include "day_item_widget.h"
+#include "hour_range_widget.h"
 #include "abstract_calendar_model.h"
 
 using namespace Calendar;
 
-DayItemWidget::DayItemWidget(QWidget *parent, const QString &uid, AbstractCalendarModel *model)
+HourRangeWidget::HourRangeWidget(QWidget *parent, const QString &uid, AbstractCalendarModel *model)
 	: CalendarItemWidget(parent, uid, model), m_aboveWidget(0) {
 	m_inMotion = uid.isEmpty();
 	setMouseTracking(true);
 }
 
-void DayItemWidget::paintEvent(QPaintEvent *) {
+void HourRangeWidget::paintEvent(QPaintEvent *) {
 	// title
 	QPixmap titlePixmap(size().width(), 20);
 	titlePixmap.fill(Qt::transparent);
@@ -63,7 +63,7 @@ void DayItemWidget::paintEvent(QPaintEvent *) {
 	painter.drawPixmap(QPoint(0, 15), bodyPixmap, QRect(0, 15, width(), rect().height() - 15));
 }
 
-void DayItemWidget::setInMotion(bool value) {
+void HourRangeWidget::setInMotion(bool value) {
 	if (m_inMotion == value)
 		return;
 
@@ -86,7 +86,7 @@ void DayItemWidget::setInMotion(bool value) {
 	}
 }
 
-void DayItemWidget::mouseMoveEvent(QMouseEvent *event) {
+void HourRangeWidget::mouseMoveEvent(QMouseEvent *event) {
 	if (event->pos().y() >= height() - 5 && event->pos().y() < height())
 		setCursor(Qt::SizeVerCursor);
 	else
@@ -95,10 +95,10 @@ void DayItemWidget::mouseMoveEvent(QMouseEvent *event) {
 	QWidget::mouseMoveEvent(event);
 }
 
-/*void DayItemWidget::mouseReleaseEvent(QMouseEvent *event) {
-	// display a menu
-	QMenu menu;
-	QAction *modifyAction = menu.addAction(tr("modify"));
-	QAction *removeAction = menu.addAction(tr("remove"));
-	menu.exec(event->globalPos());
-	}*/
+/*void HourRangeWidget::mouseReleaseEvent(QMouseEvent *event) {
+// display a menu
+QMenu menu;
+QAction *modifyAction = menu.addAction(tr("modify"));
+QAction *removeAction = menu.addAction(tr("remove"));
+menu.exec(event->globalPos());
+}*/

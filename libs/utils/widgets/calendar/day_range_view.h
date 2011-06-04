@@ -4,7 +4,7 @@
 #include "view.h"
 
 namespace Calendar {
-	class DayItemWidget;
+	class HourRangeWidget;
 
 	class DayRangeHeader : public ViewWidget
 	{
@@ -80,7 +80,7 @@ namespace Calendar {
 		QDateTime m_pressDateTime;
 		QDateTime m_previousDateTime;
 		QPoint m_pressPos;
-		DayItemWidget *m_pressItemWidget;
+		HourRangeWidget *m_pressItemWidget;
 		CalendarItem m_pressItem;
 		MouseMode m_mouseMode;
 
