@@ -133,6 +133,14 @@ bool XmlFormContentReader::isInCache(const QString &formUid) const
     return m_ReadableForms.contains(formUid);
 }
 
+/** Return the cached readable QDomDocument from the cache system or 0 if the \e formuid is not present in cache. */
+QDomDocument *XmlFormContentReader::fromCache(const QString &formUid) const
+{
+    if (m_DomDocFormCache.contains(formUid))
+        return m_DomDocFormCache[formUid];
+    return 0;
+}
+
 /** Warn XML reading errors */
 void XmlFormContentReader::warnXmlReadError(bool muteUserWarnings, const QString &file, const QString &msg, const int line, const int col) const
 {
@@ -258,6 +266,9 @@ Form::FormIODescription *XmlFormContentReader::readFileInformations(const QStrin
 QList<Form::FormIODescription *> XmlFormContentReader::getFormFileDescriptions(const Form::FormIOQuery &query)
 {
     QList<Form::FormIODescription *> toReturn;
+
+    /** \todo code here */
+
 //    QString startPath;
 //    if (query.typeOfForms() & Form::FormIOQuery::UserForms) {
 //        /** \todo manage user forms path and default path */
