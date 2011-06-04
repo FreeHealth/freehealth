@@ -19,6 +19,7 @@ namespace Calendar {
 
 	private:
 		bool m_inMotion;
+		QWidget *m_aboveWidget;
 
 	protected:
 		virtual void paintEvent(QPaintEvent *event);

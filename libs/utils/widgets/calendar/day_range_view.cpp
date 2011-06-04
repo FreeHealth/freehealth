@@ -96,7 +96,6 @@ void DayRangeHeader::paintEvent(QPaintEvent *) {
 	painter.setPen(pen);
 
 	// vertical lines
-//	int containWidth = m_scrollArea->viewport()->width() - 60;
 	int containWidth = (masterScrollArea ? masterScrollArea->viewport()->width() : width()) - 60;
 	QPen oldPen = painter.pen();
 	QDate date = firstDate();

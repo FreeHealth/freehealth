@@ -6,7 +6,8 @@
 
 using namespace Calendar;
 
-DayItemWidget::DayItemWidget(QWidget *parent, const QString &uid, AbstractCalendarModel *model) : CalendarItemWidget(parent, uid, model) {
+DayItemWidget::DayItemWidget(QWidget *parent, const QString &uid, AbstractCalendarModel *model)
+	: CalendarItemWidget(parent, uid, model), m_aboveWidget(0) {
 	m_inMotion = uid.isEmpty();
 	setMouseTracking(true);
 }
@@ -67,6 +68,22 @@ void DayItemWidget::setInMotion(bool value) {
 		return;
 
 	m_inMotion = value;
+
+	if (m_inMotion) { // record the above widget and put itself in the stack top
+		QWidget *parent = parentWidget();
+		m_aboveWidget = 0;
+		for (int index = parent->children().indexOf(this) + 1; index < parent->children().count(); index++) {
+			QWidget *widget = qobject_cast<QWidget*>(parent->children()[index]);
+			if (widget) {
+				m_aboveWidget = widget;
+				break;
+			}
+		}
+		raise();
+	} else { // restore the widget in the stack
+		if (m_aboveWidget)
+			stackUnder(m_aboveWidget);
+	}
 }
 
 void DayItemWidget::mouseMoveEvent(QMouseEvent *event) {
