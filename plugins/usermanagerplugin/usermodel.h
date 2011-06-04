@@ -159,6 +159,9 @@ Q_SIGNALS:
 protected:
     void emitUserConnected() const;
 
+private Q_SLOTS:
+    void updateUserPreferences();
+
 private:
     Internal::UserModelPrivate *d;
     static UserModel *m_Instance;

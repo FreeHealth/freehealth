@@ -194,8 +194,6 @@ void MainWindow::init()
     connectConfigurationActions();
     connectHelpActions();
 
-    readSettings();
-
     // Create Mode stack
     m_modeStack = new Utils::FancyTabWidget;
     modeManager()->init(m_modeStack);
@@ -289,6 +287,7 @@ void MainWindow::onCurrentUserChanged()
     setWindowTitle(qApp->applicationName() + " - " + qApp->applicationVersion() + " / " +
                    user()->value(Core::IUser::FullName).toString());
     setWindowIcon(theme()->icon(Core::Constants::ICONFREEMEDFORMS));
+    readSettings();
 }
 
 /** \brief  Define the current patient to different structure such as Form::FormManager, Form::EpisodeModel.*/

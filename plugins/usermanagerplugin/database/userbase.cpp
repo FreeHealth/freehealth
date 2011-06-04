@@ -837,7 +837,7 @@ bool UserBase::saveUser(UserData *user)
         if (user->hasModifiedDynamicDatasToStore()) {
             const QList<UserDynamicData*> &datasToUpdate = user->modifiedDynamicDatas();
             foreach(UserDynamicData *dyn, datasToUpdate) {
-                QSqlQuery q (DB);
+                QSqlQuery q(DB);
                 //                qWarning() << "SAVE UDD TO BASE" ;
                 //                dyn->warn();
                 if (dyn->id() == -1) {
@@ -857,8 +857,12 @@ bool UserBase::saveUser(UserData *user)
                 if (!q.exec()) {
                     error = true;
                     LOG_QUERY_ERROR(q);
-                } else
+                } else {
                     dyn->setDirty(false);
+                }
+                if (dyn->id() == -1) {
+                    dyn->setId(q.lastInsertId().toInt());
+                }
             }
         }
 

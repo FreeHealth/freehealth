@@ -52,6 +52,7 @@
 #include <coreplugin/translators.h>
 #include <coreplugin/icore.h>
 #include <coreplugin/isettings.h>
+#include <coreplugin/icorelistener.h>
 
 #include <printerplugin/textdocumentextra.h>
 
@@ -78,6 +79,16 @@ static inline Core::ISettings *settings() {return Core::ICore::instance()->setti
 
 namespace {
     const char * const SERVER_ADMINISTRATOR_UUID = "serverAdmin";
+
+//    class UserModelCoreListener : public Core::ICoreListener
+//    {
+//    public:
+//        UserModelCoreListener(QObject *parent) : Core::ICoreListener(parent) {}
+//        bool coreAboutToClose()
+//        {
+//            return true;
+//        }
+//    };
 }
 
 namespace UserPlugin {
@@ -348,7 +359,7 @@ UserModel::UserModel(QObject *parent) :
 
     // install the Core Patient wrapper
     Core::ICore::instance()->setUser(d->m_UserModelWrapper);
-
+    connect(settings(), SIGNAL(userSettingsSynchronized()), this, SLOT(updateUserPreferences()));
     if (!parent)
         setParent(qApp);
     QSqlTableModel::setTable(userBase()->table(Table_USERS));
@@ -1095,4 +1106,14 @@ void UserModel::warn()
 void UserModel::emitUserConnected() const
 {
     Q_EMIT userConnected(d->m_CurrentUserUuid);
+}
+
+void UserModel::updateUserPreferences()
+{
+    if (!d->m_CurrentUserUuid.isEmpty() && d->m_CurrentUserUuid!=::SERVER_ADMINISTRATOR_UUID) {
+        // save user preferences
+        Internal::UserData *user = d->m_Uuid_UserList[d->m_CurrentUserUuid];
+        user->setPreferences(settings()->userSettings());
+        userBase()->saveUser(user);
+    }
 }
