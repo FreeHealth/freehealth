@@ -12,61 +12,21 @@ class QRect;
 class QScrollArea;
 
 namespace Calendar {
-	class ViewHeader : public QWidget {
-		Q_OBJECT
-	public:
-		ViewHeader(QWidget *parent = 0);
-
-		const QDate &firstDate() const { return m_firstDate; }
-		void setFirstDate(const QDate &date);
-
-		void setScrollArea(QScrollArea *scrollArea);
-
-		/** returns the current model */
-		AbstractCalendarModel *model() const { return m_model; }
-
-		/** called when a new model has been defined */
-		void setModel(AbstractCalendarModel *model);
-
-	signals:
-		void resized(const QSize &size);
-
-	protected:
-		QScrollArea *m_scrollArea;
-
-		virtual void resizeEvent(QResizeEvent *event);
-
-	protected slots:
-		virtual void itemInserted(const CalendarItem &item) { Q_UNUSED(item); update(); }
-		virtual void itemModified(const CalendarItem &oldItem, const CalendarItem &newItem) { Q_UNUSED(oldItem); Q_UNUSED(newItem); update(); }
-		virtual void itemRemoved(const CalendarItem &removedItem) { Q_UNUSED(removedItem); update(); }
-
-	private:
-		QDate m_firstDate;
-		AbstractCalendarModel *m_model;
-	};
-
 	/**
 	 * \brief a view is an abstract class which defines common things about calendar views (headers, body, etc)
 	 */
-	class View : public QWidget
+	class ViewWidget : public QWidget
 	{
 		Q_OBJECT
 	public:
-		View(QWidget *parent = 0) : QWidget(parent), m_refreshGrid(false), m_model(0) {}
+		ViewWidget(QWidget *parent = 0) : QWidget(parent), masterScrollArea(0), m_refreshGrid(false), m_model(0) {}
 
-		/** returns the top header height for the view */
-		virtual int topHeaderHeight() const = 0;
-		/** returns the left height width for the view */
-		virtual int leftHeaderWidth() const = 0;
-
-		virtual ViewHeader *createHeaderWidget(QWidget *parent = 0) { Q_UNUSED(parent); return 0; }
+		/** returns the first date of the view */
+		const QDate &firstDate() const { return m_firstDate; }
 
 		/** sets a date for the view
 		 */
 		void setFirstDate(const QDate &firstDate);
-
-		const QDate &firstDate() const { return m_firstDate; }
 
 		/** used to refresh all current date time stuffs */
 		virtual void refreshCurrentDateTimeStuff();
@@ -77,11 +37,14 @@ namespace Calendar {
 		/** called when a new model has been defined */
 		void setModel(AbstractCalendarModel *model);
 
+		/** set the master widget scrollarea used to paint (generally used for header to know how the body is painted) */
+		void setMasterScrollArea(QScrollArea *scrollArea);
+
 	signals:
 		void firstDateChanged();
 
 	protected:
-		QDate m_firstDate;
+		QScrollArea *masterScrollArea;
 
 		QPixmap generatePixmap();
 		void forceUpdate() { m_refreshGrid = true; update(); }
@@ -103,6 +66,7 @@ namespace Calendar {
 		virtual void itemRemoved(const CalendarItem &removedItem) { Q_UNUSED(removedItem); }
 
 	private:
+		QDate m_firstDate;
 		bool m_refreshGrid;
 		AbstractCalendarModel *m_model;
 	};

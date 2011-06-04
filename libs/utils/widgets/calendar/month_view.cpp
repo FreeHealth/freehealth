@@ -6,6 +6,10 @@
 
 using namespace Calendar;
 
+MonthHeader::MonthHeader(QWidget *parent) : ViewWidget(parent) {
+	setSizePolicy(QSizePolicy::Expanding, QSizePolicy::Fixed);
+}
+
 QSize MonthHeader::sizeHint() const {
 	return QSize(0, 20);
 }
@@ -34,27 +38,21 @@ void MonthHeader::paintEvent(QPaintEvent *) {
 
 /////////////////////////////////////////////////////////////
 
-MonthView::MonthView(QWidget *parent) : View(parent) {
+MonthBody::MonthBody(QWidget *parent) : ViewWidget(parent) {
 	setSizePolicy(QSizePolicy::Expanding, QSizePolicy::Expanding);
 
 	connect(this, SIGNAL(firstDateChanged()), this, SLOT(firstDateChanged()));
 }
 
-int MonthView::topHeaderHeight() const {
+int MonthBody::topHeaderHeight() const {
 	return 0;
 }
 
-int MonthView::leftHeaderWidth() const {
+int MonthBody::leftHeaderWidth() const {
 	return 0;
 }
 
-ViewHeader *MonthView::createHeaderWidget(QWidget *parent) {
-	MonthHeader *widget = new MonthHeader(parent);
-	widget->setFirstDate(m_firstDate);
-	return widget;
-}
-
-void MonthView::paintBody(QPainter *painter, const QRect &visibleRect) {
+void MonthBody::paintBody(QPainter *painter, const QRect &visibleRect) {
 	painter->fillRect(visibleRect, Qt::white);
 	QPen pen = painter->pen();
 	pen.setColor(QColor(200, 200, 200));
@@ -89,7 +87,7 @@ void MonthView::paintBody(QPainter *painter, const QRect &visibleRect) {
 		else
 			text = day.toString(tr("d"));
 
-		if (day.month() != m_firstDate.month())
+		if (day.month() != firstDate().month())
 			pen.setColor(QColor(180, 180, 180));
 		else
 			pen.setColor(QColor(100, 100, 100));
@@ -100,7 +98,7 @@ void MonthView::paintBody(QPainter *painter, const QRect &visibleRect) {
 	}
 }
 
-/*void MonthView::paintEvents(QPainter &painter, const QDate &day, const QRect &dayRect) {
+/*void MonthBody::paintEvents(QPainter &painter, const QDate &day, const QRect &dayRect) {
 	QList<CalendarItem> items = model()->getItemsBetween(day, day);
 	if (!items.count())
 		return;
@@ -123,7 +121,7 @@ void MonthView::paintBody(QPainter *painter, const QRect &visibleRect) {
 	}
 	}*/
 
-void MonthView::resetItemWidgets() {
+void MonthBody::resetItemWidgets() {
 	// re-create all widgets
 	QList<MonthDayWidget*> list;
 	foreach (QObject *obj, children()) {
@@ -148,7 +146,7 @@ void MonthView::resetItemWidgets() {
 	}
 }
 
-QRect MonthView::getDayRect(const QDate &day) const {
+QRect MonthBody::getDayRect(const QDate &day) const {
 	int i = day.dayOfWeek() - 1;
 	int j = m_monthBoundingDays.first.daysTo(day) / 7;
 
@@ -159,16 +157,16 @@ QRect MonthView::getDayRect(const QDate &day) const {
 				 ((j + 1) * vertiAmount) / m_weekCount - (j * vertiAmount) / m_weekCount);
 }
 
-void MonthView::firstDateChanged() {
+void MonthBody::firstDateChanged() {
 	// refresh some internal variables
 
 	// compute week counts
 	m_weekCount = 0;
-	m_monthBoundingDays = Calendar::getBoundingMonthDaysInterval(m_firstDate);
+	m_monthBoundingDays = Calendar::getBoundingMonthDaysInterval(firstDate());
 	m_weekCount = (m_monthBoundingDays.first.daysTo(m_monthBoundingDays.second) + 1) / 7;
 }
 
-void MonthView::refreshItemsSizesAndPositions() {
+void MonthBody::refreshItemsSizesAndPositions() {
 	foreach (QObject *obj, children()) {
 		MonthDayWidget *widget = qobject_cast<MonthDayWidget*>(obj);
 		if (widget) {

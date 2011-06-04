@@ -16,8 +16,12 @@
 
 using namespace Calendar;
 
-int DayRangeView::m_leftScaleWidth = 60;
-int DayRangeView::m_hourHeight = 40;
+int DayRangeBody::m_leftScaleWidth = 60;
+int DayRangeBody::m_hourHeight = 40;
+
+DayRangeHeader::DayRangeHeader(QWidget *parent, int rangeWidth) : ViewWidget(parent), m_rangeWidth(rangeWidth) {
+	setSizePolicy(QSizePolicy::Expanding, QSizePolicy::Fixed);
+}
 
 QList<CalendarItem> DayRangeHeader::getItems() const {
 	// optimization : do not compute items every time...
@@ -50,13 +54,13 @@ QSize DayRangeHeader::sizeHint() const {
 		// refresh all stacks
 		int dayIndex = 0;
 		int firstIndex = -1;
-		int lastIndex;
+//		int lastIndex;
 		for (QDate date = first; date <= last; date = date.addDays(1)) {
 			if (!item.intersects(date, date)) {
 				if (firstIndex == -1)
 					firstIndex = dayIndex;
 				dayStacks.insert(date, width + 1);
-				lastIndex = dayIndex;
+//				lastIndex = dayIndex;
 			}
 			dayIndex++;
 		}
@@ -92,7 +96,8 @@ void DayRangeHeader::paintEvent(QPaintEvent *) {
 	painter.setPen(pen);
 
 	// vertical lines
-	int containWidth = m_scrollArea->viewport()->width() - 60;
+//	int containWidth = m_scrollArea->viewport()->width() - 60;
+	int containWidth = (masterScrollArea ? masterScrollArea->viewport()->width() : width()) - 60;
 	QPen oldPen = painter.pen();
 	QDate date = firstDate();
 	QDate now = QDate::currentDate();
@@ -179,6 +184,10 @@ void DayRangeHeader::paintEvent(QPaintEvent *) {
 
 /////////////////////////////////////////////////////////////////
 
+HourWidget::HourWidget(QWidget *parent) : QWidget(parent) {
+	setSizePolicy(QSizePolicy::Expanding, QSizePolicy::Fixed);
+}
+
 void HourWidget::paintEvent(QPaintEvent *) {
 	QPainter painter(this);
 	painter.fillRect(rect(), QColor(255, 150, 150));
@@ -186,8 +195,8 @@ void HourWidget::paintEvent(QPaintEvent *) {
 
 /////////////////////////////////////////////////////////////////
 
-DayRangeView::DayRangeView(QWidget *parent, int rangeWidth) :
-	View(parent),
+DayRangeBody::DayRangeBody(QWidget *parent, int rangeWidth) :
+	ViewWidget(parent),
 	m_hourWidget(0),
 	m_rangeWidth(rangeWidth),
 	m_pressItemWidget(0),
@@ -197,19 +206,11 @@ DayRangeView::DayRangeView(QWidget *parent, int rangeWidth) :
 	setFirstDate(Calendar::getFirstDateByRandomDate(Calendar::View_Week, QDate::currentDate()));
 }
 
-QSize DayRangeView::sizeHint() const {
+QSize DayRangeBody::sizeHint() const {
 	return QSize(0, 24 * m_hourHeight);
 }
 
-int DayRangeView::topHeaderHeight() const {
-	return 40;
-}
-
-int DayRangeView::leftHeaderWidth() const {
-	return 0;
-}
-
-void DayRangeView::paintBody(QPainter *painter, const QRect &visibleRect) {
+void DayRangeBody::paintBody(QPainter *painter, const QRect &visibleRect) {
 	painter->fillRect(visibleRect, Qt::white);
 	QPen pen = painter->pen();
 	pen.setColor(QColor(200, 200, 200));
@@ -219,8 +220,8 @@ void DayRangeView::paintBody(QPainter *painter, const QRect &visibleRect) {
 
 	// draw current day?
 	QDate now = QDate::currentDate();
-	if (now >= m_firstDate && now < m_firstDate.addDays(m_rangeWidth)){
-		int day = now.dayOfWeek() - m_firstDate.dayOfWeek();
+	if (now >= firstDate() && now < firstDate().addDays(m_rangeWidth)){
+		int day = now.dayOfWeek() - firstDate().dayOfWeek();
 		painter->fillRect(m_leftScaleWidth + (day * containWidth) / m_rangeWidth, 0,
 						  ((day + 1) * containWidth) / m_rangeWidth - (day * containWidth) / m_rangeWidth, visibleRect.height(),
 						  QColor(255, 255, 200));
@@ -269,11 +270,11 @@ void DayRangeView::paintBody(QPainter *painter, const QRect &visibleRect) {
 	}
 
 	// hour widget
-	if (now >= m_firstDate && now < m_firstDate.addDays(m_rangeWidth)) {
+	if (now >= firstDate() && now < firstDate().addDays(m_rangeWidth)) {
 		if (!m_hourWidget)
 			m_hourWidget = new HourWidget(this);
 
-		int day = now.dayOfWeek() - m_firstDate.dayOfWeek();
+		int day = now.dayOfWeek() - firstDate().dayOfWeek();
 
 		// move and resize
 		m_hourWidget->resize(((day + 1) * containWidth) / m_rangeWidth - (day * containWidth) / m_rangeWidth, m_hourWidget->sizeHint().height());
@@ -292,18 +293,12 @@ void DayRangeView::paintBody(QPainter *painter, const QRect &visibleRect) {
 	}
 }
 
-ViewHeader *DayRangeView::createHeaderWidget(QWidget *parent) {
-	DayRangeHeader *widget = new DayRangeHeader(parent, m_rangeWidth);
-	widget->setFirstDate(m_firstDate);
-	return widget;
-}
-
-void DayRangeView::refreshItemsSizesAndPositions() {
+void DayRangeBody::refreshItemsSizesAndPositions() {
 	for (int i = 0; i < m_rangeWidth; i++)
-		refreshDayWidgets(m_firstDate.addDays(i));
+		refreshDayWidgets(firstDate().addDays(i));
 }
 
-QRect DayRangeView::getTimeIntervalRect(int day, const QTime &begin, const QTime &end) const {
+QRect DayRangeBody::getTimeIntervalRect(int day, const QTime &begin, const QTime &end) const {
 	int containWidth = rect().width() - m_leftScaleWidth;
 
 	day--; // convert 1 -> 7 to 0 -> 6 for drawing reasons
@@ -319,17 +314,17 @@ QRect DayRangeView::getTimeIntervalRect(int day, const QTime &begin, const QTime
 				 height);
 }
 
-QPair<int, int> DayRangeView::getBand(const QDate &date) const {
+QPair<int, int> DayRangeBody::getBand(const QDate &date) const {
 	int containWidth = rect().width() - m_leftScaleWidth;
 	QPair<int, int> band;
 
-	int day = m_firstDate.daysTo(date);
+	int day = firstDate().daysTo(date);
 	band.first = m_leftScaleWidth + (day * containWidth) / m_rangeWidth;
 	band.second = ((day + 1) * containWidth) / m_rangeWidth - (day * containWidth) / m_rangeWidth - 8;
 	return band;
 }
 
-QPair<int, int> DayRangeView::getItemVerticalData(const QTime &begin, const QTime &end) const {
+QPair<int, int> DayRangeBody::getItemVerticalData(const QTime &begin, const QTime &end) const {
 	int seconds = end < begin ? begin.secsTo(QTime(23, 59)) + 1 : begin.secsTo(end);
 	int top = (QTime(0, 0).secsTo(begin) * m_hourHeight) / 3600;
 	int height = (seconds * m_hourHeight) / 3600;
@@ -338,7 +333,7 @@ QPair<int, int> DayRangeView::getItemVerticalData(const QTime &begin, const QTim
 	return QPair<int, int>(top, height);
 }
 
-void DayRangeView::setRangeWidth(int width) {
+void DayRangeBody::setRangeWidth(int width) {
 	if (width == m_rangeWidth)
 		return;
 
@@ -346,7 +341,7 @@ void DayRangeView::setRangeWidth(int width) {
 	forceUpdate();
 }
 
-QDateTime DayRangeView::getDateTime(const QPoint &pos) const {
+QDateTime DayRangeBody::getDateTime(const QPoint &pos) const {
 	// get day and time
 	int containWidth = rect().width() - m_leftScaleWidth;
 	int x = pos.x();
@@ -369,10 +364,10 @@ QDateTime DayRangeView::getDateTime(const QPoint &pos) const {
 		minutes = 0;
 		hour++;
 	}
-	return QDateTime(m_firstDate.addDays(day), QTime(hour, minutes));
+	return QDateTime(firstDate().addDays(day), QTime(hour, minutes));
 }
 
-void DayRangeView::mousePressEvent(QMouseEvent *event) {
+void DayRangeBody::mousePressEvent(QMouseEvent *event) {
 	if (event->pos().x() < m_leftScaleWidth)
 		return;
 	m_pressDateTime = getDateTime(event->pos());
@@ -393,7 +388,7 @@ void DayRangeView::mousePressEvent(QMouseEvent *event) {
 	}
 }
 
-void DayRangeView::mouseMoveEvent(QMouseEvent *event) {
+void DayRangeBody::mouseMoveEvent(QMouseEvent *event) {
 	QDateTime dateTime = getDateTime(event->pos());
 	QRect rect;
 	int seconds, limits;
@@ -469,7 +464,7 @@ void DayRangeView::mouseMoveEvent(QMouseEvent *event) {
 	}
 }
 
-void DayRangeView::mouseReleaseEvent(QMouseEvent *event) {
+void DayRangeBody::mouseReleaseEvent(QMouseEvent *event) {
 	QDateTime beginning, ending;
 	CalendarItem newItem;
 
@@ -514,31 +509,31 @@ void DayRangeView::mouseReleaseEvent(QMouseEvent *event) {
 	m_mouseMode = MouseMode_None;
 }
 
-void DayRangeView::mouseDoubleClickEvent(QMouseEvent *event) {
+void DayRangeBody::mouseDoubleClickEvent(QMouseEvent *event) {
 	BasicItemEditionDialog dialog(this);
 	dialog.init(m_pressItem);
 	if (dialog.exec() == QDialog::Accepted)
 		model()->setItemByUid(m_pressItem.uid(), dialog.item());
 }
 
-void DayRangeView::itemInserted(const CalendarItem &item) {
+void DayRangeBody::itemInserted(const CalendarItem &item) {
 	// refresh the entire day band
 	refreshDayWidgets(item.beginning().date());
 }
 
-void DayRangeView::itemRemoved(const CalendarItem &removedItem) {
+void DayRangeBody::itemRemoved(const CalendarItem &removedItem) {
 	// refresh the involved bands
 	refreshDayWidgets(removedItem.beginning().date());
 }
 
-void DayRangeView::itemModified(const CalendarItem &oldItem, const CalendarItem &newItem) {
+void DayRangeBody::itemModified(const CalendarItem &oldItem, const CalendarItem &newItem) {
 	QList<QDate> daysToRefresh;
-	if (!oldItem.intersects(m_firstDate, m_firstDate.addDays(m_rangeWidth - 1))) { // collect all old item days
+	if (!oldItem.intersects(firstDate(), firstDate().addDays(m_rangeWidth - 1))) { // collect all old item days
 		daysToRefresh << oldItem.beginning().date();
 		if (daysToRefresh.indexOf(oldItem.ending().date()) < 0)
 			daysToRefresh << oldItem.ending().date();
 	}
-	if (!newItem.intersects(m_firstDate, m_firstDate.addDays(m_rangeWidth - 1))) { // collect all new item days
+	if (!newItem.intersects(firstDate(), firstDate().addDays(m_rangeWidth - 1))) { // collect all new item days
 		if (daysToRefresh.indexOf(newItem.beginning().date()) < 0)
 			daysToRefresh << newItem.beginning().date();
 		if (daysToRefresh.indexOf(newItem.ending().date()) < 0)
@@ -549,14 +544,14 @@ void DayRangeView::itemModified(const CalendarItem &oldItem, const CalendarItem 
 		refreshDayWidgets(date);
 }
 
-void DayRangeView::resetItemWidgets() {
+void DayRangeBody::resetItemWidgets() {
 	deleteAllWidgets();
 	for (int i = 0; i < m_rangeWidth; i++)
-		refreshDayWidgets(m_firstDate.addDays(i));
+		refreshDayWidgets(firstDate().addDays(i));
 }
 
-void DayRangeView::refreshDayWidgets(const QDate &dayDate) {
-	if (dayDate < m_firstDate || dayDate >= m_firstDate.addDays(m_rangeWidth)) // day is out of range
+void DayRangeBody::refreshDayWidgets(const QDate &dayDate) {
+	if (dayDate < firstDate() || dayDate >= firstDate().addDays(m_rangeWidth)) // day is out of range
 		return;
 
 	// at first remove all day widgets
@@ -600,13 +595,13 @@ void DayRangeView::refreshDayWidgets(const QDate &dayDate) {
 	}
 }
 
-void DayRangeView::modifyPressItem() {
+void DayRangeBody::modifyPressItem() {
 	BasicItemEditionDialog dialog(this);
 	dialog.init(m_pressItem);
 	if (dialog.exec() == QDialog::Accepted)
 		model()->setItemByUid(m_pressItem.uid(), dialog.item());
 }
 
-void DayRangeView::removePressItem() {
+void DayRangeBody::removePressItem() {
 	model()->removeItem(m_pressItem.uid());
 }

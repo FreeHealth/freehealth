@@ -20,14 +20,13 @@ struct Calendar::CalendarWidgetPrivate
 	QVBoxLayout *m_mainLayout;
 	QScrollArea *m_scrollArea;
 	CalendarNavbar *m_navbar;
-	View *m_view;
-	ViewHeader *m_header;
+	ViewWidget *m_header;
+	ViewWidget *m_body;
 	QTimer m_timer; // used to refresh every date/time stuffs
 };
 
-CalendarWidgetPrivate::CalendarWidgetPrivate(CalendarWidget *calendar) :
-	m_view(0),
-	m_header(0) {
+CalendarWidgetPrivate::CalendarWidgetPrivate(CalendarWidget *calendar)
+	: m_header(0), m_body(0) {
 	m_mainLayout = new QVBoxLayout(calendar);
 	m_mainLayout->setContentsMargins(0, 0, 0, 0);
 	m_mainLayout->setSpacing(0);
@@ -39,8 +38,9 @@ CalendarWidgetPrivate::CalendarWidgetPrivate(CalendarWidget *calendar) :
 	m_scrollArea->setFrameShape(QFrame::NoFrame);
 
 	// navigation bar
-	m_navbar = new CalendarNavbar(calendar);
-	m_mainLayout->insertWidget(0, m_navbar);
+//	m_navbar = new CalendarNavbar(calendar);
+	m_mainLayout->addWidget(m_navbar = new CalendarNavbar(calendar));
+//	m_mainLayout->insertWidget(0, m_navbar);
 
 	m_mainLayout->addWidget(m_scrollArea);
 }
@@ -68,52 +68,49 @@ CalendarWidget::CalendarWidget(QWidget *parent)
 }
 
 void CalendarWidget::setModel(AbstractCalendarModel *model) {
-	// disconnect slots
-	if (m_model){
-	}
-
 	m_model = model;
 
-	if (m_model) {
-		// connect slots
-	}
-	if (m_d->m_view)
-		m_d->m_view->setModel(model);
 	if (m_d->m_header)
 		m_d->m_header->setModel(model);
+	if (m_d->m_body)
+		m_d->m_body->setModel(model);
 }
 
 void CalendarWidget::firstDateChanged() {
 	m_d->m_header->setFirstDate(m_d->m_navbar->firstDate());
-	m_d->m_view->setFirstDate(m_d->m_navbar->firstDate());
+	m_d->m_body->setFirstDate(m_d->m_navbar->firstDate());
 }
 
 void CalendarWidget::viewTypeChanged() {
+	// delete old view elements. No need to destroy the body since QScrollArea::setWidget() already does.
+	if (m_d->m_header)
+		delete m_d->m_header;
+
 	Calendar::ViewType viewType = m_d->m_navbar->viewType();
 	switch (viewType) {
 	case View_Day:
-		m_d->m_view = new DayRangeView(0, 1);
+		m_d->m_header = new DayRangeHeader(0, 1);
+		m_d->m_body = new DayRangeBody(0, 1);
 		break;
 	case View_Week:
-		m_d->m_view = new DayRangeView;
+		m_d->m_header = new DayRangeHeader;
+		m_d->m_body = new DayRangeBody;
 		break;
 	case View_Month:
-		m_d->m_view = new MonthView;
+		m_d->m_header = new MonthHeader;
+		m_d->m_body = new MonthBody;
 		break;
 	default:
 		Q_ASSERT(true); // should never happend :)
 	}
 
-	m_d->m_scrollArea->setWidget(m_d->m_view);
-	m_d->m_view->setFirstDate(m_d->m_navbar->firstDate());
-	if (m_d->m_header)
-		delete m_d->m_header;
-	m_d->m_header = m_d->m_view->createHeaderWidget();
-	m_d->m_header->setScrollArea(m_d->m_scrollArea);
-	m_d->m_header->setFirstDate(m_d->m_navbar->firstDate());
+	m_d->m_scrollArea->setWidget(m_d->m_body);
+	m_d->m_body->setFirstDate(m_d->m_navbar->firstDate());
+	m_d->m_header->setMasterScrollArea(m_d->m_scrollArea);
 	m_d->m_mainLayout->insertWidget(1, m_d->m_header);
-	m_d->m_view->setModel(m_model);
-	m_d->m_view->setModel(m_model);
+	m_d->m_header->setFirstDate(m_d->m_navbar->firstDate());
+	m_d->m_header->setModel(m_model);
+	m_d->m_body->setModel(m_model);
 }
 
 void CalendarWidget::setViewType(Calendar::ViewType viewType) {
@@ -121,7 +118,7 @@ void CalendarWidget::setViewType(Calendar::ViewType viewType) {
 }
 
 void CalendarWidget::timeout() {
-	m_d->m_view->refreshCurrentDateTimeStuff();
+	m_d->m_body->refreshCurrentDateTimeStuff();
 }
 
 ViewType CalendarWidget::viewType() const{

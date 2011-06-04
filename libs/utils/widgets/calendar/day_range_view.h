@@ -6,11 +6,11 @@
 namespace Calendar {
 	class DayItemWidget;
 
-	class DayRangeHeader : public ViewHeader
+	class DayRangeHeader : public ViewWidget
 	{
 		Q_OBJECT
 	public:
-		DayRangeHeader(QWidget *parent = 0, int rangeWidth = 7) : ViewHeader(parent), m_rangeWidth(rangeWidth) {}
+		DayRangeHeader(QWidget *parent = 0, int rangeWidth = 7);
 
 		virtual QSize sizeHint() const;
 
@@ -31,9 +31,7 @@ namespace Calendar {
 	{
 		Q_OBJECT
 	public:
-		HourWidget(QWidget *parent = 0) : QWidget(parent) {
-			setSizePolicy(QSizePolicy::Expanding, QSizePolicy::Fixed);
-		}
+		HourWidget(QWidget *parent = 0);
 
 		virtual QSize sizeHint() const { return QSize(0, 2); }
 
@@ -41,20 +39,15 @@ namespace Calendar {
 		void paintEvent(QPaintEvent *event);
 	};
 
-	class DayRangeView : public View
+	class DayRangeBody : public ViewWidget
 	{
 		Q_OBJECT
 	public:
-		DayRangeView(QWidget *parent = 0, int rangeWidth = 7);
-
-		virtual int topHeaderHeight() const;
-		virtual int leftHeaderWidth() const;
+		DayRangeBody(QWidget *parent = 0, int rangeWidth = 7);
 
 		/** for a week, the range width is 7 */
 		int rangeWidth() const { return m_rangeWidth; }
 		void setRangeWidth(int width);
-
-		virtual ViewHeader *createHeaderWidget(QWidget *parent = 0);
 
 		virtual QSize sizeHint() const;
 
