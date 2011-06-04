@@ -158,6 +158,7 @@ namespace {
         PmhData *pmhData() const {return m_Pmh;}
 
         bool isCategory() const {return (m_Cat);}
+        bool isPmh() const {return (!isCategory());}
 
         // For sort functions
         //    static bool lessThan(TreeItem *item1, TreeItem *item2)
@@ -587,28 +588,30 @@ Qt::ItemFlags PmhCategoryModel::flags(const QModelIndex &index) const
 /** \brief Remove PMHx or Categories. */
 bool PmhCategoryModel::removeRows(int row, int count, const QModelIndex &parent)
 {
-//    qWarning() << "beforeRemoveRows";
-    d->m_Root->warn();
+//    d->m_Root->warn();
     int max = row+count;
     TreeItem *parentItem = 0;
+//    qWarning() << "beforeRemoveRows" << row << count << max;
 
     for(int i = row; i < max; ++i) {
-        QModelIndex indexToDelete = index(row,0,parent);
+        QModelIndex indexToDelete = index(row, 0, parent);
+//        qWarning() << i << indexToDelete;
         if (!indexToDelete.isValid())
             continue;
         TreeItem *item = d->getItem(indexToDelete);
         if (!item)
             continue;
 
+//        qWarning() << "itemIsCat" << item->isPmh() << item->label();
+
         // Item is a PMH
-        if (!item->isCategory()) {
+        if (item->isPmh()) {
             // Get the root index of the PMH
             while (true) {
                 if (isCategory(indexToDelete.parent()))
                     break;
                 indexToDelete = indexToDelete.parent();
             }
-
             beginRemoveRows(indexToDelete.parent(), indexToDelete.row(), indexToDelete.row()+1);
             item = d->getItem(indexToDelete);
             if (!item)
@@ -653,7 +656,7 @@ bool PmhCategoryModel::removeRows(int row, int count, const QModelIndex &parent)
         }
     }
 //    qWarning() << "afterRemoveRows";
-    d->m_Root->warn();
+//    d->m_Root->warn();
     return true;
 }
 
@@ -742,7 +745,7 @@ void PmhCategoryModel::updateFontAndColors(const QModelIndex &parent)
 bool PmhCategoryModel::isCategory(const QModelIndex &index) const
 {
     if (!index.isValid())
-        return false;
+        return true; // root is a category
     TreeItem *it = d->getItem(index);
     return it->isCategory();
 }
