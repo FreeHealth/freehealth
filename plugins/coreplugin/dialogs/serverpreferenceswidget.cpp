@@ -141,6 +141,10 @@ void ServerPreferencesWidget::testHost()
 
 void ServerPreferencesWidget::testHost(const QString &hostName)
 {
+    if (hostName.length() < 3) {
+        m_HostReachable = false;
+        return;
+    }
     QHostInfo info = QHostInfo::fromName(hostName);
     if (info.error()==QHostInfo::NoError) {
         QPalette palette = ui->host->palette();
@@ -207,6 +211,10 @@ void ServerPreferencesWidget::on_testButton_clicked()
 {
     if (!m_HostReachable) {
         ui->testConnectionLabel->setText(tr("Host not reachable..."));
+        return;
+    }
+    if (ui->log->text().isEmpty() && !ui->useDefaultAdminLog->isChecked()) {
+        ui->testConnectionLabel->setText(tr("No anonymous connection allowed"));
         return;
     }
     ui->testConnectionLabel->setText(tr("Test in progress..."));
