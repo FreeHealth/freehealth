@@ -421,7 +421,7 @@ QModelIndex PmhCategoryModel::parent(const QModelIndex &index) const
 
     TreeItem *parentItem = childItem->parent();
 
-    if (parentItem == d->m_Root || !parentItem)
+    if ((parentItem == d->m_Root) || (!parentItem))
         return QModelIndex();
 
     return createIndex(parentItem->childNumber(), 0, parentItem);
@@ -665,34 +665,48 @@ bool PmhCategoryModel::removeRows(int row, int count, const QModelIndex &parent)
 */
 bool PmhCategoryModel::addPmhData(PmhData *pmh)
 {
+    qWarning() << Q_FUNC_INFO << pmh->data(PmhData::Label) << d->m_Pmhs.contains(pmh);
+
     if (d->m_Pmhs.contains(pmh)) {
         // Update PMH
         TreeItem *oldItem = d->m_PmhToItems.value(pmh);
         TreeItem *parentOldItem = oldItem->parent(); //parent should be a category
-        // Remove the row
-        QModelIndex pmhIndex = indexForPmhData(pmh);
+        QModelIndex newParentIndex;
         // Insert the row to the right category
         for(int i=0; i < d->m_Cats.count(); ++i) {
             Category::CategoryItem *cat = d->m_Cats.at(i);
             if (cat->id() == pmh->categoryId()) {
-                parentOldItem = d->m_CategoryToItem.value(cat);
+                newParentIndex = indexForCategory(cat);
                 break;
             }
         }
+        if (!newParentIndex.isValid()) {
+            LOG_ERROR("Unable to update PmhCategoryModel");
+            return false;
+        }
 
-        beginInsertRows(pmhIndex.parent(), pmhIndex.row(), pmhIndex.row());
+        qWarning() << newParentIndex << newParentIndex.data();
+
+        beginInsertRows(newParentIndex, rowCount(newParentIndex), rowCount(newParentIndex));
         TreeItem *item = new TreeItem;
-        d->pmhToItem(pmh, item, pmhIndex.row());
+        d->pmhToItem(pmh, item, rowCount(newParentIndex));
         endInsertRows();
 
-        beginRemoveRows(pmhIndex.parent(), pmhIndex.row()+1, pmhIndex.row()+1);
+        // Remove the row
+        QModelIndex pmhOldIndex = indexForPmhData(pmh);
+        beginRemoveRows(pmhOldIndex.parent(), pmhOldIndex.row(), pmhOldIndex.row());
         parentOldItem->removeChild(oldItem);
         delete oldItem;
         oldItem = 0;
         endRemoveRows();
 
+        d->m_Root->warn(2);
+
         // Send to database
         base()->savePmhData(pmh);
+
+        /** \todo improve the reset() */
+        reset();
 
         return true;
     } else {
