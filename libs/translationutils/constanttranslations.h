@@ -262,6 +262,7 @@ enum TitleInterpret {
         const char* const DRUGS_DATABASE_INFORMATIONS   = QT_TRANSLATE_NOOP("tkConstants", "Drugs database informations");
         const char* const DOSAGES_DATABASE_INFORMATIONS   = QT_TRANSLATE_NOOP("tkConstants", "Protocols database informations");
         const char* const INTERACTIONS_DATABASE_INFORMATIONS   = QT_TRANSLATE_NOOP("tkConstants", "Interactions database informations");
+        const char* const PMH_DATABASE_INFORMATIONS     = QT_TRANSLATE_NOOP("tkConstants", "PMHx database informations");
         const char* const INTERACTIONS_DATABASE         = QT_TRANSLATE_NOOP("tkConstants", "Interactions database");
         const char* const DRUGS                         = QT_TRANSLATE_NOOP("tkConstants", "Drugs");
         const char* const PROTOCOLS                     = QT_TRANSLATE_NOOP("tkConstants", "Protocols");

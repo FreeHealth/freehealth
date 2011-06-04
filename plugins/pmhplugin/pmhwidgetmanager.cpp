@@ -30,6 +30,7 @@
 #include "pmhcreatordialog.h"
 #include "pmhcore.h"
 #include "pmhcategorymodel.h"
+#include "pmhbase.h"
 
 #include <categoryplugin/categorydialog.h>
 
@@ -47,6 +48,11 @@
 #include <coreplugin/actionmanager/actionmanager.h>
 #include <coreplugin/uniqueidmanager.h>
 
+#include <QGridLayout>
+#include <QTreeWidget>
+#include <QHeaderView>
+
+
 using namespace PMH;
 using namespace Internal;
 using namespace Trans::ConstantTranslations;
@@ -55,6 +61,7 @@ inline static Core::ActionManager *actionManager() {return Core::ICore::instance
 static inline Core::ContextManager *contextManager() { return Core::ICore::instance()->contextManager(); }
 static inline Core::IMainWindow *mainWindow() { return Core::ICore::instance()->mainWindow(); }
 static inline PMH::PmhCore *pmhCore() { return PMH::PmhCore::instance(); }
+static inline PMH::Internal::PmhBase *pmhBase() { return PMH::Internal::PmhBase::instance(); }
 
 
 ///////////////////////////////////////////////////////////////////////////////////////////////////////////
@@ -179,6 +186,18 @@ PmhActionHandler::PmhActionHandler(QObject *parent) :
     pmhMenu->addAction(cmd, Constants::G_PMH_EDITION);
     connect(a, SIGNAL(triggered()), this, SLOT(categoryManager()));
 
+    Core::ActionContainer *hmenu = actionManager()->actionContainer(Core::Constants::M_HELP_DATABASES);
+    a = aPmhDatabaseInformations = new QAction(this);
+    a->setObjectName("aPmhDatabaseInformations");
+    a->setIcon(th->icon(Core::Constants::ICONHELP));
+    cmd = actionManager()->registerAction(a, Constants::A_PMH_SHOWDBINFOS, globalcontext);
+    cmd->setTranslations(Trans::Constants::PMH_DATABASE_INFORMATIONS);
+    cmd->retranslate();
+    if (hmenu) {
+        hmenu->addAction(cmd, Core::Constants::G_HELP_DATABASES);
+    }
+    connect(aPmhDatabaseInformations, SIGNAL(triggered()), this, SLOT(showPmhDatabaseInformations()));
+
     contextManager()->updateContext();
     actionManager()->retranslateMenusAndActions();
 }
@@ -222,8 +241,16 @@ void PmhActionHandler::updateActions()
 
 void PmhActionHandler::showPmhDatabaseInformations()
 {
-    /** \todo code this : PmhActionHandler::showPmhDatabaseInformations() */
     qWarning() << Q_FUNC_INFO;
+    QDialog dlg(mainWindow(), Qt::Window | Qt::CustomizeWindowHint | Qt::WindowSystemMenuHint | Qt::WindowCloseButtonHint | Qt::WindowMinMaxButtonsHint);
+    QGridLayout lay(&dlg);
+    QTreeWidget tree(&dlg);
+    tree.setColumnCount(2);
+    tree.header()->hide();
+    pmhBase()->toTreeWidget(&tree);
+    lay.addWidget(&tree);
+    Utils::resizeAndCenter(&dlg);
+    dlg.exec();
 }
 
 void PmhActionHandler::createPmh()

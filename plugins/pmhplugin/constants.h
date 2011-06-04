@@ -135,6 +135,7 @@ namespace Constants {
     const char * const  A_PMH_REMOVE            = "aRemovePmh";
     const char * const  A_PMH_NEWCATEGORY       = "aNewCatgeroyPmh";
     const char * const  A_PMH_CATEGORYMANAGER   = "aPmhCatMan";
+    const char * const  A_PMH_SHOWDBINFOS       = "aPmhShowDbInfos";
 
 
     // Translations
