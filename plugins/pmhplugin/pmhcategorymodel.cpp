@@ -665,8 +665,6 @@ bool PmhCategoryModel::removeRows(int row, int count, const QModelIndex &parent)
 */
 bool PmhCategoryModel::addPmhData(PmhData *pmh)
 {
-    qWarning() << Q_FUNC_INFO << pmh->data(PmhData::Label) << d->m_Pmhs.contains(pmh);
-
     if (d->m_Pmhs.contains(pmh)) {
         // Update PMH
         TreeItem *oldItem = d->m_PmhToItems.value(pmh);
@@ -685,8 +683,6 @@ bool PmhCategoryModel::addPmhData(PmhData *pmh)
             return false;
         }
 
-        qWarning() << newParentIndex << newParentIndex.data();
-
         beginInsertRows(newParentIndex, rowCount(newParentIndex), rowCount(newParentIndex));
         TreeItem *item = new TreeItem;
         d->pmhToItem(pmh, item, rowCount(newParentIndex));
@@ -699,8 +695,6 @@ bool PmhCategoryModel::addPmhData(PmhData *pmh)
         delete oldItem;
         oldItem = 0;
         endRemoveRows();
-
-        d->m_Root->warn(2);
 
         // Send to database
         base()->savePmhData(pmh);
