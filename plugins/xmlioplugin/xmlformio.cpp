@@ -56,15 +56,6 @@
 #include <QTextCodec>
 #include <QFileInfo>
 
-
-//class XmlIOPrivate {
-//public:
-//    XmlIOPrivate() {}
-//    ~XmlIOPrivate() {}
-//public:
-//};
-
-
 using namespace XmlForms;
 using namespace Internal;
 using namespace Trans::ConstantTranslations;
@@ -72,64 +63,13 @@ using namespace Trans::ConstantTranslations;
 ////////////////////////////////////////////////////////////////////////////////////////////////////////////
 ///////////////////////////////////////  Inline static functions  //////////////////////////////////////////
 ////////////////////////////////////////////////////////////////////////////////////////////////////////////
-//namespace {
-//    static QHash<QString, Form::IFormWidgetFactory *> m_PlugsFactories;
-//    static QHash<QString, int> m_ScriptsTypes;
-//    static QHash<QString, int> m_ValuesTypes;
-//    static QHash<QString, int> m_SpecsTypes;
-//    static QHash<QString, int> m_PatientDatas;
-//}
 
-//inline static Form::FormManager *formManager() { return Form::FormManager::instance(); }
 inline static ExtensionSystem::PluginManager *pluginManager() {return ExtensionSystem::PluginManager::instance();}
 static inline Core::ISettings *settings()  { return Core::ICore::instance()->settings(); }
 static inline Category::CategoryCore *categoryCore() {return  Category::CategoryCore::instance();}
 static inline PMH::PmhCore *pmhCore() {return PMH::PmhCore::instance();}
 static inline Internal::XmlFormContentReader *reader() {return Internal::XmlFormContentReader::instance();}
 
-//inline static void refreshPlugsFactories()
-//{
-//    ::m_PlugsFactories.clear();
-//    foreach(Form::IFormWidgetFactory *fact, pluginManager()->getObjects<Form::IFormWidgetFactory>()) {
-//        foreach(const QString &widgetname, fact->providedWidgets()) {
-//            ::m_PlugsFactories.insert(widgetname,fact);
-//        }
-//    }
-//}
-
-//static bool populateValues(Form::FormItem *item, const QDomElement &root)
-//{
-//    QDomElement element = root.firstChildElement();
-//    while (!element.isNull()) {
-//        QString lang = element.attribute(Constants::ATTRIB_LANGUAGE, Trans::Constants::ALL_LANGUAGE);
-////        qWarning() << "Values" << root.tagName() << element.tagName() << lang;
-//        int id = element.attribute(Constants::ATTRIB_ID, 0).toInt();
-//        QString val = element.text();
-//        int type = ::m_ValuesTypes.value(element.tagName(), -1);
-//        if (type != -1) {
-//            item->valueReferences()->setValue(type, id, val, lang);
-//        } else {
-//            if (element.tagName().compare(Constants::TAG_VALUE_DEFAULT, Qt::CaseInsensitive)==0) {
-//                item->valueReferences()->setDefaultValue(val, lang);
-//            }
-//        }
-//        element = element.nextSiblingElement();
-//    }
-//    return true;
-//}
-
-//static bool populateScripts(Form::FormItem *item, const QDomElement &root)
-//{
-//    QDomElement element = root.firstChildElement();
-//    QString lang = root.attribute(Constants::ATTRIB_LANGUAGE, Trans::Constants::ALL_LANGUAGE).left(2);
-//    while (!element.isNull()) {
-//        QString script = element.text();
-//        int type = ::m_ScriptsTypes.value(element.tagName(), Form::FormItemScripts::Script_OnDemand);
-//        item->scripts()->setScript(type, script, lang);
-//        element = element.nextSiblingElement();
-//    }
-//    return true;
-//}
 
 ////////////////////////////////////////////////////////////////////////////////////////////////////////////
 //////////////////////////////////////////////  XmlFormIO  /////////////////////////////////////////////////
@@ -138,40 +78,6 @@ XmlFormIO::XmlFormIO(const QString &absFileName, QObject *parent) :
         IFormIO(absFileName, parent), m_AbsFileName(absFileName), m_Mute(false)
 {
     setObjectName("XmlFormIO");
-//    m_DomDocFormCache.setMaxCost(20);
-
-//    ::m_ScriptsTypes.clear();
-//    ::m_ScriptsTypes.insert(Constants::TAG_SCRIPT_ONLOAD, Form::FormItemScripts::Script_OnLoad);
-//    ::m_ScriptsTypes.insert(Constants::TAG_SCRIPT_POSTLOAD, Form::FormItemScripts::Script_PostLoad);
-//    ::m_ScriptsTypes.insert(Constants::TAG_SCRIPT_ONDEMAND, Form::FormItemScripts::Script_OnDemand);
-//    ::m_ScriptsTypes.insert(Constants::TAG_SCRIPT_ONVALUECHANGED, Form::FormItemScripts::Script_OnValueChanged);
-//    ::m_ScriptsTypes.insert(Constants::TAG_SCRIPT_ONVALUEREQUIERED, Form::FormItemScripts::Script_OnValueRequiered);
-//    ::m_ScriptsTypes.insert(Constants::TAG_SCRIPT_ONDEPENDENCIESCHANGED, Form::FormItemScripts::Script_OnDependentValueChanged);
-
-//    ::m_ValuesTypes.clear();
-//    ::m_ValuesTypes.insert(Constants::TAG_VALUE_UUID, Form::FormItemValues::Value_Uuid);
-//    ::m_ValuesTypes.insert(Constants::TAG_VALUE_NUMERICAL, Form::FormItemValues::Value_Numerical);
-//    ::m_ValuesTypes.insert(Constants::TAG_VALUE_SCRIPT, Form::FormItemValues::Value_Script);
-//    ::m_ValuesTypes.insert(Constants::TAG_VALUE_POSSIBLE, Form::FormItemValues::Value_Possible);
-//    ::m_ValuesTypes.insert(Constants::TAG_VALUE_DEPENDENCIES, Form::FormItemValues::Value_Dependency);
-
-//    ::m_SpecsTypes.clear();
-//    ::m_SpecsTypes.insert(Constants::TAG_SPEC_PLUGINNAME, Form::FormItemSpec::Spec_Plugin);
-//    ::m_SpecsTypes.insert(Constants::TAG_SPEC_AUTHORS, Form::FormItemSpec::Spec_Author);
-//    ::m_SpecsTypes.insert(Constants::TAG_SPEC_CATEGORY, Form::FormItemSpec::Spec_Category);
-//    ::m_SpecsTypes.insert(Constants::TAG_SPEC_LICENSE, Form::FormItemSpec::Spec_License);
-//    ::m_SpecsTypes.insert(Constants::TAG_SPEC_CREATIONDATE, Form::FormItemSpec::Spec_CreationDate);
-//    ::m_SpecsTypes.insert(Constants::TAG_SPEC_BIBLIOGRAPHY, Form::FormItemSpec::Spec_Bibliography);
-//    ::m_SpecsTypes.insert(Constants::TAG_SPEC_DESCRIPTION, Form::FormItemSpec::Spec_Description);
-//    ::m_SpecsTypes.insert(Constants::TAG_SPEC_LABEL, Form::FormItemSpec::Spec_Label);
-//    ::m_SpecsTypes.insert(Constants::TAG_SPEC_VERSION, Form::FormItemSpec::Spec_Version);
-//    ::m_SpecsTypes.insert(Constants::TAG_SPEC_ICON, Form::FormItemSpec::Spec_IconFileName);
-
-//    ::m_PatientDatas.clear();
-//    ::m_PatientDatas.insert(Constants::TAG_DATAPATIENT_DRUGSALLERGIES, Core::IPatient::DrugsInnAllergies);
-//    ::m_PatientDatas.insert(Constants::TAG_DATAPATIENT_DRUGSCHRONIC, Core::IPatient::DrugsChronicTherapeutics);
-//    ::m_PatientDatas.insert(Constants::TAG_DATAPATIENT_WEIGHT, Core::IPatient::Weight);
-//    ::m_PatientDatas.insert(Constants::TAG_DATAPATIENT_HEIGHT, Core::IPatient::Height);
 }
 
 XmlFormIO::~XmlFormIO()
@@ -182,80 +88,6 @@ QString XmlFormIO::lastestXmlVersion()
 {
     return "0.3.0";
 }
-
-//QStringList XmlFormIO::fileFilters() const
-//{
-//    return QStringList() << tr("FreeMedForms Form File (*.%1)").arg(Constants::DOCTYPE_EXTENSION);
-//}
-
-//void XmlFormIO::warnXmlReadError(bool muteUserWarnings, const QString &file, const QString &msg, const int line, const int col) const
-//{
-//    QString m = Trans::ConstantTranslations::tkTr(Trans::Constants::FILE_1_ISNOT_READABLE).arg(file) + " ; " +
-//                  Trans::ConstantTranslations::tkTr(Trans::Constants::ERROR_1_LINE_2_COLUMN_3)
-//                  .arg(msg).arg(line).arg(col);
-//    LOG_ERROR(m);
-//    m_Error.append(Trans::ConstantTranslations::tkTr(Trans::Constants::ERROR_1_LINE_2_COLUMN_3)
-//                   .arg(msg).arg(line).arg(col));
-////    m_Error.append(m_MainDoc);
-
-//    if (!muteUserWarnings)
-//        Utils::warningMessageBox(
-//            Trans::ConstantTranslations::tkTr(Trans::Constants::FILE_1_ISNOT_READABLE).arg(file),
-//            Trans::ConstantTranslations::tkTr(Trans::Constants::ERROR_1_LINE_2_COLUMN_3)
-//            .arg(msg).arg(line).arg(col),"",qApp->applicationName());
-//}
-
-//bool XmlFormIO::checkFormFileContent(const QString &absFileName) const
-//{
-//    bool ok = true;
-//    QString contents = Utils::readTextFile(absFileName, Utils::DontWarnUser);
-//    if (contents.isEmpty()) {
-//        warnXmlReadError(m_Mute, absFileName, tkTr(Trans::Constants::FILE_1_ISEMPTY).arg(absFileName));
-//        m_Error.append(tkTr(Trans::Constants::FILE_1_ISEMPTY).arg(absFileName));
-//        return false;
-//    }
-//    if (contents.count("<"+QString(Constants::TAG_NEW_FORM)+">") != contents.count("</"+QString(Constants::TAG_NEW_FORM)+">")) {
-//        ok = false;
-//        m_Error.append(tr("Wrong number of tags (%1)").arg(Constants::TAG_NEW_FORM));
-//        LOG_ERROR(Trans::ConstantTranslations::tkTr(Trans::Constants::FILE_1_ISNOT_READABLE).arg(absFileName));
-//    }
-//    if ((contents.count(QString("<%1>").arg(Constants::TAG_MAINXMLTAG)) != 1) ||
-//        (contents.count(QString("</%1>").arg(Constants::TAG_MAINXMLTAG)) != 1)) {
-//        m_Error.append(tr("Wrong number of tags (%1)").arg(Constants::TAG_NEW_FORM));
-//        ok = false;
-//    }
-
-//    // load document
-//    QString errorMsg;
-//    int errorLine, errorColumn;
-//    QDomDocument *doc = new QDomDocument;
-//    if (!doc->setContent(contents, &errorMsg, &errorLine, &errorColumn)) {
-//        warnXmlReadError(m_Mute, absFileName, errorMsg, errorLine, errorColumn);
-//        ok = false;
-//    }
-
-//    // Check doctype name
-//    if (doc->doctype().name().compare(Constants::DOCTYPE_NAME,Qt::CaseInsensitive)!=0) {
-//        const QString &error = tr("This file is not a FreeMedForms XML file. Document type name mismatch.");
-//        m_Error << error;
-//        warnXmlReadError(m_Mute, absFileName, error);
-//        ok = false;
-//    }
-
-//    /** \todo check version of the file */
-////    if (!contents.contains(QString("<%1>").arg(Constants::TAG_SPEC_VERSION), Qt::CaseInsensitive)) {
-////        const QString &error = tr("No version number defined");
-////        warnXmlReadError(m_Mute, file, error);
-////        return false;
-////    } else {
-////        int beg = contents.indexOf(QString("<%1>").arg(Constants::TAG_SPEC_VERSION)) + QString("<%1>").arg(Constants::TAG_SPEC_VERSION).length();
-////        int end = contents.indexOf(QString("</%1>").arg(Constants::TAG_SPEC_VERSION));
-////        QString version = contents.mid(beg, end-beg).simplified();
-////    }
-//    if (ok)
-//        m_DomDocFormCache.insert(absFileName, doc);
-//    return ok;
-//}
 
 bool XmlFormIO::canReadForms(const QString &absFileName) const
 {
@@ -300,67 +132,9 @@ bool XmlFormIO::canReadForms(const QString &absFileName) const
     return false;
 }
 
-//static Form::FormIODescription *readFileInformations(const QDomDocument &doc)
-//{
-//    Form::FormIODescription *ioDesc = new Form::FormIODescription;
-//    QDomElement root = doc.documentElement();
-//    root = root.firstChildElement(Constants::TAG_FORM_DESCRIPTION);
-//    QHash<int, QString> elements;
-//    // get non translatable items
-//    elements.insert(Form::FormIODescription::Version, Constants::TAG_SPEC_VERSION);
-//    elements.insert(Form::FormIODescription::Author, Constants::TAG_SPEC_AUTHORS);
-//    elements.insert(Form::FormIODescription::CreationDate, Constants::TAG_SPEC_CREATIONDATE);
-//    elements.insert(Form::FormIODescription::LastModificationDate, Constants::TAG_SPEC_LASTMODIFDATE);
-//    elements.insert(Form::FormIODescription::GeneralIcon, Constants::TAG_SPEC_ICON);
-//    elements.insert(Form::FormIODescription::WebLink, Constants::TAG_SPEC_WEBLINK);
-//    elements.insert(Form::FormIODescription::FreeMedFormsCompatVersion, Constants::TAG_SPEC_COMPTAVERSION);
-//    QHashIterator<int, QString> i(elements);
-//    while (i.hasNext()) {
-//        i.next();
-//        ioDesc->setData(i.key(), root.firstChildElement(i.value()).text());
-//    }
-//    // get translatable items
-//    elements.clear();
-//    elements.insert(Form::FormIODescription::Category, Constants::TAG_SPEC_CATEGORY);
-//    elements.insert(Form::FormIODescription::ShortDescription, Constants::TAG_SPEC_DESCRIPTION);
-//    elements.insert(Form::FormIODescription::HtmlDescription, Constants::TAG_SPEC_HTMLDESCRIPTION);
-//    elements.insert(Form::FormIODescription::License, Constants::TAG_SPEC_LICENSE);
-//    elements.insert(Form::FormIODescription::Specialties, Constants::TAG_SPEC_SPECIALTIES);
-//    i = elements;
-//    while (i.hasNext()) {
-//        i.next();
-//        QDomElement desc = root.firstChildElement(i.value());
-//        while (!desc.isNull()) {
-//            ioDesc->setData(i.key(), desc.text(), desc.attribute(Constants::ATTRIB_LANGUAGE, Trans::Constants::ALL_LANGUAGE));
-//            desc = desc.nextSiblingElement(i.value());
-//        }
-//    }
-//    return ioDesc;
-//}
-
-//static void setPathToDescription(QString path, Form::FormIODescription *desc)
-//{
-//    path.replace(settings()->path(Core::ISettings::CompleteFormsPath), Core::Constants::TAG_APPLICATION_COMPLETEFORMS_PATH);
-//    path.replace(settings()->path(Core::ISettings::SubFormsPath), Core::Constants::TAG_APPLICATION_SUBFORMS_PATH);
-//    desc->setData(Form::FormIODescription::UuidOrAbsPath, path);
-//}
-
-//static Form::FormIODescription *readFileInformations(const QString &absFileName)
-//{
-//    QDomDocument doc;
-//    doc.setContent(Utils::readTextFile(absFileName));
-//    Form::FormIODescription *descr = readFileInformations(doc);
-//    setPathToDescription(QFileInfo(absFileName).absolutePath(), descr);
-//    return descr;
-//}
-
 Form::FormIODescription *XmlFormIO::readFileInformations(const QString &uuidOrAbsPath)
 {
     return reader()->readFileInformations(uuidOrAbsPath);
-//    Form::FormIODescription *ioDesc = ::readFileInformations(m_MainDoc);
-//    ioDesc->setIoFormReader(this);
-//    setPathToDescription(m_AbsFileName, ioDesc);
-//    return ioDesc;
 }
 
 void XmlFormIO::getAllFormsFromDir(const QString &absPath, QList<Form::FormIODescription *> *list)
@@ -408,36 +182,6 @@ QList<Form::FormIODescription *> XmlFormIO::getFormFileDescriptions(const Form::
     }
     return toReturn;
 }
-
-//bool XmlFormIO::loadForm(const QString &file, Form::FormMain *rootForm)
-//{
-//    QDomDocument *doc = 0;
-//    if (!m_DomDocFormCache.keys().contains(file)) {
-//        if (!canReadForms(file))
-//            return false;
-//    }
-//    doc = m_DomDocFormCache[file];
-//    QDomElement root = doc->firstChildElement(Constants::TAG_MAINXMLTAG);
-//    QDomElement newForm = root.firstChildElement(Constants::TAG_NEW_FORM);
-//    QDomElement addFile = root.firstChildElement(Constants::TAG_ADDFILE);
-
-//    // in case of no rootForm is passed --> XML must start with a file inclusion or a newform tag
-//    if (!rootForm) {
-//        if (addFile.isNull() && newForm.isNull()) {
-//            warnXmlReadError(m_Mute, file, tr("Wrong root tag %1 %2.").arg(root.tagName()).arg(Constants::TAG_NEW_FORM));
-//            return false;
-//        }
-////        rootForm = createNewForm(newForm, m_ActualForm);
-////        m_ActualForm = rootForm;
-//    }
-
-//    if (!loadElement(rootForm, root))
-//        return false;
-
-////    rootForm->createDebugPage();
-//    createWidgets(rootForm);
-//    return true;
-//}
 
 QList<Form::FormMain *> XmlFormIO::loadAllRootForms(const QString &uuidOrAbsPath)
 {
@@ -491,22 +235,26 @@ QList<Form::FormMain *> XmlFormIO::loadAllRootForms(const QString &uuidOrAbsPath
 
 bool XmlFormIO::loadPmhCategories(const QString &uuidOrAbsPath)
 {
-    QString file = uuidOrAbsPath;
-    if (!uuidOrAbsPath.endsWith("xml", Qt::CaseInsensitive)) {
-        file.append("/pmhcategories.xml");
-    }
+    QString file = QFileInfo(uuidOrAbsPath).absolutePath() + "/pmhcategories.xml";
     // replace path TAGs
     file.replace(Core::Constants::TAG_APPLICATION_COMPLETEFORMS_PATH, settings()->path(Core::ISettings::CompleteFormsPath));
     file.replace(Core::Constants::TAG_APPLICATION_SUBFORMS_PATH, settings()->path(Core::ISettings::SubFormsPath));
     file.replace(Core::Constants::TAG_APPLICATION_RESOURCES_PATH, settings()->path(Core::ISettings::BundleResourcesPath));
 
     QDomDocument *doc = 0;
-    if (!m_DomDocFormCache.keys().contains(file)) {
-        if (!canReadForms(file))
+    if (!reader()->isInCache(file)) {
+        if (!canReadForms(file)) {
+            LOG_ERROR("Unable to read Pmh Category file: " + file);
             return false;
+        }
     }
     categoryCore()->removeAllExistingCategories("PMHx");
-    doc = m_DomDocFormCache[file];
+    doc = reader()->fromCache(file);
+    Q_ASSERT(doc);
+    if (!doc) {
+        LOG_ERROR("No category document in XmlFormIO::loadPmhCategories("+file+")");
+        return false;
+    }
     QDomElement root = doc->firstChildElement(Constants::TAG_MAINXMLTAG);
     QDomElement element = root.firstChildElement(Constants::TAG_PMHX_CATEGORIES);
     element = element.firstChildElement(::Constants::TAG_CATEGORY);
