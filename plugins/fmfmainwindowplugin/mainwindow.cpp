@@ -25,7 +25,6 @@
  *       NAME <MAIL@ADRESS>                                                *
  ***************************************************************************/
 #include "mainwindow.h"
-#include "appconfigwizard.h"
 #include "patientmodelwrapper.h"
 
 #include <translationutils/constanttranslations.h>
@@ -171,7 +170,7 @@ void MainWindow::init()
 
     actions.setConfigurationActions(
             Core::MainWindowActions::A_AppPreferences |
-            Core::MainWindowActions::A_AppConfigurator |
+//            Core::MainWindowActions::A_AppConfigurator |
             Core::MainWindowActions::A_PluginsPreferences |
             Core::MainWindowActions::A_LangageChange
             );
@@ -509,7 +508,9 @@ bool MainWindow::applicationPreferences()
 /** \brief Open the application global configurator dialog. \sa MainWindow::AppConfigWizard */
 bool MainWindow::applicationConfiguratorWizard()
 {
-    AppConfigWizard wiz(this);
-    int r = wiz.exec();
-    return r==QDialog::Accepted;
+    /** \todo code here ? */
+//    AppConfigWizard wiz(this);
+//    int r = wiz.exec();
+//    return r==QDialog::Accepted;
+    return true;
 }

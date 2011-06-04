@@ -11,7 +11,6 @@ HEADERS = mainwindowplugin.h \
     mainwindow_exporter.h \
     mainwindow.h \
     mainwindowpreferences.h \
-    appconfigwizard.h \
     virtualdatabasepreferences.h \
     patientmodelwrapper.h \
     #documentprinter.h
@@ -19,7 +18,6 @@ HEADERS = mainwindowplugin.h \
 SOURCES = mainwindowplugin.cpp \
     mainwindow.cpp \
     mainwindowpreferences.cpp \
-    appconfigwizard.cpp \
     virtualdatabasepreferences.cpp \
     patientmodelwrapper.cpp \
     #documentprinter.cpp
