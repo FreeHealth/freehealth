@@ -12,7 +12,7 @@ namespace Calendar {
 	public:
 		DayRangeHeader(QWidget *parent = 0, int rangeWidth = 7);
 
-		virtual QSize sizeHint() const;
+		QSize sizeHint() const;
 
 		/** for a week, the range width is 7 */
 		int rangeWidth() const { return m_rangeWidth; }
@@ -20,11 +20,16 @@ namespace Calendar {
 
 	protected:
 		void paintEvent(QPaintEvent *event);
+		void resetItemWidgets();
+		void refreshItemsSizesAndPositions();
 
 	private:
 		int m_rangeWidth;
+		QFont m_scaleFont; // TODO: choose a better font
+		int getScaleHeight() const;
 
 		QList<CalendarItem> getItems() const;
+		void computeWidgets();
 	};
 
 	class HourWidget : public QWidget

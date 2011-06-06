@@ -12,6 +12,7 @@
 #include "calendar_widget.h"
 #include "basic_item_edition_dialog.h"
 #include "hour_range_node.h"
+#include "day_widget.h"
 #include "day_range_view.h"
 
 using namespace Calendar;
@@ -23,7 +24,14 @@ DayRangeHeader::DayRangeHeader(QWidget *parent, int rangeWidth) : ViewWidget(par
 	setSizePolicy(QSizePolicy::Expanding, QSizePolicy::Fixed);
 }
 
+void DayRangeHeader::resetItemWidgets() {
+	computeWidgets();
+	updateGeometry();
+}
+
 QList<CalendarItem> DayRangeHeader::getItems() const {
+	if (!model())
+		return QList<CalendarItem>();
 	// optimization : do not compute items every time...
 	QList<CalendarItem> items = model()->getItemsBetween(firstDate(), firstDate().addDays(m_rangeWidth - 1));
 	// filter only day items
@@ -36,41 +44,70 @@ QList<CalendarItem> DayRangeHeader::getItems() const {
 }
 
 QSize DayRangeHeader::sizeHint() const {
-	// optimization : do not compute items every time...
+	int maxBottom = -1;
+	foreach (QObject *obj, children()) {
+		DayWidget *widget = qobject_cast<DayWidget*>(obj);
+		if (!widget)
+			continue;
+		int bottom = widget->y() + widget->height();
+		if (widget && bottom > maxBottom)
+			maxBottom = bottom;
+	}
+	return QSize(0, maxBottom == -1 ? getScaleHeight() + DayWidget::staticSizeHint().height() + 5 : maxBottom + DayWidget::staticSizeHint().height() + 5);
+}
+
+void DayRangeHeader::computeWidgets() {
+	// remove old day widgets
+	foreach (QObject *object, children()) {
+		DayWidget *widget = qobject_cast<DayWidget*>(object);
+		if (widget)
+			delete widget;
+	}
+
+	int containWidth = (masterScrollArea ? masterScrollArea->viewport()->width() : width()) - 60;
+	int scaleHeight = getScaleHeight();
 	QList<CalendarItem> items = getItems();
 	qSort(items.begin(), items.end(), calendarItemLessThan);
 	QDate first = firstDate();
 	QDate last = first.addDays(m_rangeWidth - 1);
 	QMap<QDate, int> dayStacks;
-	int maxWidth = 0;
 	foreach (const CalendarItem &item, items) {
-		int width = 0;
-		// get width first
+		int top = 0;
+		// get top first
 		for (QDate date = first; date <= last; date = date.addDays(1))
 			if (!item.intersects(date, date)) {
-				if (dayStacks[date] > width)
-					width = dayStacks[date];
+				if (dayStacks[date] > top)
+					top = dayStacks[date];
 			}
 		// refresh all stacks
 		int dayIndex = 0;
 		int firstIndex = -1;
-//		int lastIndex;
+		int lastIndex;
 		for (QDate date = first; date <= last; date = date.addDays(1)) {
 			if (!item.intersects(date, date)) {
 				if (firstIndex == -1)
 					firstIndex = dayIndex;
-				dayStacks.insert(date, width + 1);
-//				lastIndex = dayIndex;
+				dayStacks.insert(date, top + 1);
+				lastIndex = dayIndex;
 			}
 			dayIndex++;
 		}
-		if (width + 1> maxWidth)
-			maxWidth = width + 1;
+		// paint
+		int fontHeight = QFontMetrics(QFont()).height(); // replace it
+		int w = ((lastIndex + 1) * containWidth) / m_rangeWidth - (firstIndex * containWidth) / m_rangeWidth - 2;
+		QRect r(QPoint(60 + (firstIndex * containWidth) / m_rangeWidth + 1, scaleHeight + top * (fontHeight + 5)), QSize(w, fontHeight + 4));
+
+		DayWidget *widget = new DayWidget(this, item.uid(), model());
+		widget->move(r.topLeft());
+		widget->resize(r.size());
+		widget->show();
 	}
+}
 
-	int fontHeight = QFontMetrics(QFont()).height();
-
-	return QSize(0, fontHeight + 4 + (maxWidth ? (maxWidth + 1) * (fontHeight + 5) : fontHeight + 4 + 5));
+void DayRangeHeader::refreshItemsSizesAndPositions() {
+	// TEMP: reconstruct all at resize time
+	computeWidgets();
+	updateGeometry();
 }
 
 void DayRangeHeader::setRangeWidth(int width) {
@@ -78,6 +115,8 @@ void DayRangeHeader::setRangeWidth(int width) {
 		return;
 
 	m_rangeWidth = width;
+	computeWidgets();
+	updateGeometry();
 	update();
 }
 
@@ -137,48 +176,10 @@ void DayRangeHeader::paintEvent(QPaintEvent *) {
 		painter.setPen(oldPen);
 		date = date.addDays(1);
 	}
-	int scaleHeight = fontHeight + 5;
+}
 
-	// items
-	painter.setRenderHint(QPainter::Antialiasing);
-	painter.setPen(Qt::NoPen);
-	QBrush brush = painter.brush();
-	brush.setStyle(Qt::SolidPattern);
-	brush.setColor(QColor(0, 150, 0, 255));
-	painter.setBrush(brush);
-
-	QList<CalendarItem> items = getItems();
-	qSort(items.begin(), items.end(), calendarItemLessThan);
-	QDate first = firstDate();
-	QDate last = first.addDays(m_rangeWidth - 1);
-	QMap<QDate, int> dayStacks;
-	foreach (const CalendarItem &item, items) {
-		int top = 0;
-		// get top first
-		for (QDate date = first; date <= last; date = date.addDays(1))
-			if (!item.intersects(date, date)) {
-				if (dayStacks[date] > top)
-					top = dayStacks[date];
-			}
-		// refresh all stacks
-		int dayIndex = 0;
-		int firstIndex = -1;
-		int lastIndex;
-		for (QDate date = first; date <= last; date = date.addDays(1)) {
-			if (!item.intersects(date, date)) {
-				if (firstIndex == -1)
-					firstIndex = dayIndex;
-				dayStacks.insert(date, top + 1);
-				lastIndex = dayIndex;
-			}
-			dayIndex++;
-		}
-		// paint
-		QRect r(QPoint(60 + (firstIndex * containWidth) / m_rangeWidth + 1, scaleHeight + top * (fontHeight + 5)), QPoint(60 + ((lastIndex + 1) * containWidth) / m_rangeWidth - 2, scaleHeight + (top + 1) * (fontHeight + 5) - 2));
-		painter.drawRoundedRect(r, 4, 4);
-		painter.setPen(Qt::white);
-		painter.drawText(r.adjusted(2, 0, -2, 0), Qt::AlignVCenter | Qt::AlignLeft, item.title().isEmpty() ? tr("(untitled)") : item.title());
-	}
+int DayRangeHeader::getScaleHeight() const {
+	return QFontMetrics(m_scaleFont).height() + 5;
 }
 
 /////////////////////////////////////////////////////////////////

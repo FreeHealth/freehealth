@@ -6,6 +6,9 @@
 namespace Calendar {
 	class AbstractCalendarModel;
 
+	/**
+	 * This class represents a day event without hour range specification
+	 */
 	class DayWidget : public CalendarItemWidget
 	{
 		Q_OBJECT
@@ -17,9 +20,15 @@ namespace Calendar {
 		bool inMotion() const { return m_inMotion; }
 		void setInMotion(bool value);
 
+		QSize sizeHint() const;
+		static QSize staticSizeHint();
+
 	private:
 		bool m_inMotion;
 		QWidget *m_aboveWidget;
+		QFont m_titleFont; // TODO: choose a better font than the default one
+
+		static QFont getTitleFont();
 
 	protected:
 		virtual void paintEvent(QPaintEvent *event);

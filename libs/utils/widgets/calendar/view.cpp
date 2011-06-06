@@ -40,9 +40,10 @@ void ViewWidget::paintEvent(QPaintEvent *) {
 }
 
 void ViewWidget::resizeEvent(QResizeEvent *event) {
-	m_refreshGrid = true;
-
-	refreshItemsSizesAndPositions();
+	if (!masterScrollArea) {
+		m_refreshGrid = true;
+		refreshItemsSizesAndPositions();
+	}
 
 	QWidget::resizeEvent(event);
 }
@@ -111,4 +112,20 @@ void ViewWidget::deleteAllWidgets() {
 
 void ViewWidget::setMasterScrollArea(QScrollArea *scrollArea) {
 	masterScrollArea = scrollArea;
+	if (masterScrollArea) {
+		masterScrollArea->viewport()->installEventFilter(this);
+	}
 }
+
+bool ViewWidget::eventFilter(QObject *obj, QEvent *event) {
+	bool r = QWidget::eventFilter(obj, event);
+	if (event->type() == QEvent::Resize) {
+//		QWidget *w = qobject_cast<QWidget*>(obj);
+/*		QScrollArea *w = qobject_cast<QScrollArea*>(obj);
+		qDebug("resize: %d, %d", w->width(), w->viewport()->width());*/
+		m_refreshGrid = true;
+		refreshItemsSizesAndPositions();
+	}
+	return r;
+}
+

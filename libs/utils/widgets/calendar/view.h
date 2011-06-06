@@ -55,6 +55,7 @@ namespace Calendar {
 		virtual void refreshItemSizeAndPosition(CalendarItemWidget *) {}
 		virtual void refreshItemsSizesAndPositions();
 		virtual void resetItemWidgets() {}
+		bool eventFilter(QObject *obj, QEvent *event);
 
 		CalendarItemWidget *getWidgetByUid(const QString &uid) const;
 		QList<CalendarItemWidget*> getWidgetsByDate(const QDate &dayDate) const;
