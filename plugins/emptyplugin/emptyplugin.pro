@@ -1,8 +1,10 @@
 TEMPLATE        = lib
 TARGET          = Empty
-PACKAGE_VERSION = 0.0.2
 
 DEFINES += EMPTY_LIBRARY
+DEFINES += FREEMEDFORMS
+
+BUILD_PATH_POSTFIXE = FreeMedForms
 
 include(../fmf_plugins.pri)
 include( emptyplugin_dependencies.pri )
