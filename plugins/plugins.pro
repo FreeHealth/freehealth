@@ -22,7 +22,7 @@ SUBDIRS = \
     category \
     accountbase \
     account \
-#    calendar \
+    agenda \
 #    alerts \
 
 # root plugin
@@ -96,6 +96,9 @@ usermanager.depends += listview
 patientbase.subdir   = patientbaseplugin
 patientbase.depends += core
 patientbase.depends += usermanager
+
+agenda.subdir = agendaplugin
+agenda.depends += core
 
 #alerts.subdir = alertsplugin
 #alerts.depends += core
