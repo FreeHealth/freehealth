@@ -628,15 +628,15 @@ bool UserBase::createDatabase(const QString &connectionName , const QString &dbN
 bool UserBase::createDefaultUser()
 {
     UserData* user = new UserData;
-    user->setLogin64(DEFAULT_USER_LOGIN);
-    user->setCryptedPassword(DEFAULT_USER_PASSWORD);
+    user->setLogin64(Utils::loginForSQL(DEFAULT_USER_CLEARLOGIN));
+    user->setClearPassword(DEFAULT_USER_CLEARPASSWORD);
     user->setValidity(true);
     user->setName(DEFAULT_USER_NAME);
     user->setFirstname(DEFAULT_USER_FIRSTNAME);
     user->setLanguage(QLocale().language());
     user->setSpecialty(QStringList() << DEFAULT_USER_SPECIALTY);
     user->setAddress(DEFAULT_USER_ADRESS);
-    user->setRights(Constants::USER_ROLE_USERMANAGER, Core::IUser::ReadAll | Core::IUser::WriteAll | Core::IUser::Create | Core::IUser::Delete | Core::IUser::Print);
+    user->setRights(Constants::USER_ROLE_USERMANAGER, Core::IUser::ReadOwn | Core::IUser::ReadDelegates | Core::IUser::ReadAll | Core::IUser::WriteAll | Core::IUser::Create | Core::IUser::Delete | Core::IUser::Print);
     user->setRights(Constants::USER_ROLE_MEDICAL, Core::IUser::ReadAll | Core::IUser::WriteAll | Core::IUser::Create | Core::IUser::Delete | Core::IUser::Print);
     user->setRights(Constants::USER_ROLE_ADMINISTRATIVE, Core::IUser::ReadAll | Core::IUser::WriteAll | Core::IUser::Create | Core::IUser::Delete | Core::IUser::Print);
     user->setRights(Constants::USER_ROLE_PARAMEDICAL, Core::IUser::ReadAll | Core::IUser::WriteAll | Core::IUser::Create | Core::IUser::Delete | Core::IUser::Print);
