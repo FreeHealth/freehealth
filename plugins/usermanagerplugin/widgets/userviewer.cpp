@@ -57,6 +57,8 @@
 #include <QStringListModel>
 #include <QTextEdit>
 
+#include <QDebug>
+
 using namespace UserPlugin;
 using namespace Internal;
 using namespace Trans::ConstantTranslations;
@@ -111,9 +113,9 @@ void UserViewerPrivate::changeUserIndex(const int modelRow)
     int oldRow = m_Row;
     m_Row = modelRow;
     checkUserRights();
-    if (m_CanRead)
+    if (m_CanRead) {
         m_Mapper->setCurrentModelIndex(UserModel::instance()->index(modelRow, 0));
-    else {
+    } else {
         m_Row = oldRow;
         Utils::informativeMessageBox(tr("You can not access to these datas."), tr("You don't have these rights."), "");
     }
@@ -230,14 +232,14 @@ void UserViewerPrivate::checkUserRights()
 {
     UserModel *m = UserModel::instance();
     int currentUserRow = m->currentUserIndex().row();
-    if (currentUserRow == m_Row){
+    if (currentUserRow == m_Row) {
         // showing currentuser
-        Core::IUser::UserRights r = Core::IUser::UserRights(m->index(currentUserRow, Core::IUser::ManagerRights).data().toInt());
+        Core::IUser::UserRights r = Core::IUser::UserRights(m->currentUserData(Core::IUser::ManagerRights).toInt());
         m_CanModify = (r ^ Core::IUser::WriteOwn);
         m_CanRead = (r ^ Core::IUser::ReadOwn);
     } else {
         // not showing currentuser
-        Core::IUser::UserRights r = Core::IUser::UserRights(m->index(currentUserRow, Core::IUser::ManagerRights).data().toInt());
+        Core::IUser::UserRights r = Core::IUser::UserRights(m->currentUserData(Core::IUser::ManagerRights).toInt());
         m_CanModify = (r & Core::IUser::WriteAll);
         m_CanRead = (r & Core::IUser::ReadAll);
     }

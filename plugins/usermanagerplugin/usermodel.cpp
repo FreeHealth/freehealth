@@ -496,9 +496,9 @@ bool UserModel::setCurrentUser(const QString &clearLog, const QString &clearPass
 */
 bool UserModel::setCurrentUserIsServerManager()
 {
-    if (userBase()->database().driverName()=="QSQLITE") {
-        return false;
-    }
+//    if (userBase()->database().driverName()=="QSQLITE") {
+//        return false;
+//    }
     if (!database().isOpen()) {
         if (!database().open()) {
             LOG_ERROR(tkTr(Trans::Constants::UNABLE_TO_OPEN_DATABASE_1_ERROR_2).arg(database().connectionName().arg(database().lastError().text())));
