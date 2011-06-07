@@ -82,7 +82,7 @@ namespace Constants {
     const char * const DEFAULT_USER_LOGIN     = "Zm1mX2FkbWlu";                  // fmf_admin
     const char * const DEFAULT_USER_PASSWORD  = "TRWR6Wtzaiou0phnGmGphgO2MTg=";  // fmf_admin
     const char * const DEFAULT_USER_CLEARLOGIN     = "fmf_admin";
-    const char * const DEFAULT_USER_CLEARPASSWORD  = "fmf_admin=";
+    const char * const DEFAULT_USER_CLEARPASSWORD  = "fmf_admin";
     const char * const DEFAULT_USER_NAME      = "ADMINISTRATOR";
     const char * const DEFAULT_USER_FIRSTNAME = "Admin";
     const char * const DEFAULT_USER_ADRESS    = "You should change the login/password of this user.";
