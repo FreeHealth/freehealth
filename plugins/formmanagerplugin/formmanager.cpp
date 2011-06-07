@@ -198,7 +198,7 @@ Form::FormMain *FormManager::rootForm(const char *modeUniqueName)
 bool FormManager::loadSubForms()
 {
     // get sub-forms from database
-    QHash<QString, QString> subs = episodeBase()->getSubFormFiles();
+    const QHash<QString, QString> &subs = episodeBase()->getSubFormFiles();
     if (subs.isEmpty()) {
         return true;
     }

@@ -307,6 +307,13 @@ void MainWindow::closeEvent(QCloseEvent *event)
 {
     LOG("Closing MainWindow");
     writeSettings();
+    QList<Core::ICoreListener *> listeners = pluginManager()->getObjects<Core::ICoreListener>();
+    for(int i = 0; i < listeners.count(); ++i) {
+        if (!listeners.at(i)->coreAboutToClose()) {
+            event->ignore();
+            return;
+        }
+    }
     event->accept();
 }
 

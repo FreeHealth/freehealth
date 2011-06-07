@@ -45,6 +45,7 @@
 #include <coreplugin/itheme.h>
 #include <coreplugin/isettings.h>
 #include <coreplugin/ipatient.h>
+#include <coreplugin/imainwindow.h>
 #include <coreplugin/constants_icons.h>
 #include <coreplugin/actionmanager/actionmanager.h>
 
@@ -74,12 +75,47 @@ static inline ExtensionSystem::PluginManager *pluginManager() { return Extension
 static inline Form::FormManager *formManager() { return Form::FormManager::instance(); }
 static inline Core::ITheme *theme()  { return Core::ICore::instance()->theme(); }
 static inline Core::ISettings *settings()  { return Core::ICore::instance()->settings(); }
+static inline Core::IMainWindow *mainWindow()  { return Core::ICore::instance()->mainWindow(); }
 static inline Core::IPatient *patient()  { return Core::ICore::instance()->patient(); }
 inline static Core::ActionManager *actionManager() {return Core::ICore::instance()->actionManager();}
 
 
 namespace Form {
 namespace Internal {
+
+FormPlaceHolderCoreListener::FormPlaceHolderCoreListener(Form::FormPlaceHolder *parent) :
+        Core::ICoreListener(parent)
+{
+    Q_ASSERT(parent);
+    m_Holder = parent;
+}
+FormPlaceHolderCoreListener::~FormPlaceHolderCoreListener() {}
+
+bool FormPlaceHolderCoreListener::coreAboutToClose()
+{
+    qWarning() << Q_FUNC_INFO;
+    mainWindow()->setFocus();
+    m_Holder->setCurrentEpisode(QModelIndex());
+    return true;
+}
+
+FormPlaceHolderPatientListener::FormPlaceHolderPatientListener(Form::FormPlaceHolder *parent) :
+        Core::IPatientListener(parent)
+{
+    Q_ASSERT(parent);
+    m_Holder = parent;
+}
+FormPlaceHolderPatientListener::~FormPlaceHolderPatientListener() {}
+
+bool FormPlaceHolderPatientListener::currentPatientAboutToChange()
+{
+    qWarning() << Q_FUNC_INFO;
+    mainWindow()->setFocus();
+    m_Holder->setCurrentEpisode(QModelIndex());
+    return true;
+}
+
+
 class FormPlaceHolderPrivate
 {
 public:
@@ -92,6 +128,8 @@ public:
             m_Stack(0),
             m_GeneralLayout(0),
             horizSplitter(0),
+            m_CoreListener(0),
+            m_PatientListener(0),
             q(parent)
     {
     }
@@ -106,6 +144,16 @@ public:
         }
         if (m_GeneralLayout) {
             delete m_GeneralLayout; m_GeneralLayout=0;
+        }
+        if (m_CoreListener) {
+            pluginManager()->removeObject(m_CoreListener);
+            delete m_CoreListener;
+            m_CoreListener = 0;
+        }
+        if (m_PatientListener) {
+            pluginManager()->removeObject(m_PatientListener);
+            delete m_PatientListener;
+            m_PatientListener = 0;
         }
     }
 
@@ -160,6 +208,8 @@ public:
     QGridLayout *m_GeneralLayout;
     QHash<int, QString> m_StackId_FormUuid;
     Utils::MiniSplitter *horizSplitter;
+    FormPlaceHolderCoreListener *m_CoreListener;
+    FormPlaceHolderPatientListener *m_PatientListener;
 
 private:
     FormPlaceHolder *q;
@@ -231,6 +281,17 @@ FormPlaceHolder::FormPlaceHolder(QWidget *parent) :
         FormContextualWidget(parent),
         d(new Internal::FormPlaceHolderPrivate(this))
 {
+    // Autosave feature
+    //    Core Listener
+    d->m_CoreListener = new Internal::FormPlaceHolderCoreListener(this);
+    pluginManager()->addObject(d->m_CoreListener);
+
+    //    User Listener
+
+    //    Patient change listener
+    d->m_PatientListener = new Internal::FormPlaceHolderPatientListener(this);
+    pluginManager()->addObject(d->m_PatientListener);
+
     FormManager::instance();
     // create general layout
     d->m_GeneralLayout = new QGridLayout(this);
@@ -442,6 +503,13 @@ void FormPlaceHolder::setCurrentForm(const QString &formUuid)
 void FormPlaceHolder::setCurrentEpisode(const QModelIndex &index)
 {
 //    d->m_LastEpisode = index;
+    if (!d) {
+        return;
+    }
+    if (!d->m_EpisodeModel) {
+        return;
+    }
+
     const QString &formUuid = d->m_EpisodeModel->index(index.row(), EpisodeModel::FormUuid, index.parent()).data().toString();
     setCurrentForm(formUuid);
     if (d->m_EpisodeModel->isEpisode(index)) {

@@ -29,6 +29,8 @@
 
 #include <formmanagerplugin/formmanager_exporter.h>
 #include <formmanagerplugin/formcontextualwidget.h>
+#include <coreplugin/icorelistener.h>
+#include <coreplugin/ipatientlistener.h>
 
 #include <QWidget>
 #include <QTreeView>
@@ -43,10 +45,32 @@ QT_END_NAMESPACE
 namespace Form {
 class EpisodeModel;
 class FormMain;
+class FormPlaceHolder;
 
 namespace Internal {
-
 class FormPlaceHolderPrivate;
+
+class FormPlaceHolderCoreListener : public Core::ICoreListener
+{
+    Q_OBJECT
+public:
+    FormPlaceHolderCoreListener(Form::FormPlaceHolder *parent);
+    ~FormPlaceHolderCoreListener();
+    bool coreAboutToClose();
+private:
+    Form::FormPlaceHolder *m_Holder;
+};
+
+class FormPlaceHolderPatientListener : public Core::IPatientListener
+{
+    Q_OBJECT
+public:
+    FormPlaceHolderPatientListener(Form::FormPlaceHolder *parent);
+    ~FormPlaceHolderPatientListener();
+    bool currentPatientAboutToChange();
+private:
+    Form::FormPlaceHolder *m_Holder;
+};
 
 class FormItemDelegate : public QStyledItemDelegate
 {
@@ -90,7 +114,7 @@ public Q_SLOTS:
 protected Q_SLOTS:
     void handlePressed(const QModelIndex &index);
     void handleClicked(const QModelIndex &index);
-//    void reset();
+
     void newEpisode();
     void removeEpisode();
     void validateEpisode();

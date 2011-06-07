@@ -31,8 +31,10 @@
 
 #include <QAbstractItemModel>
 
+
 namespace Form {
 class FormMain;
+class EpisodeModel;
 
 namespace Internal {
 class EpisodeModelPrivate;
@@ -41,7 +43,6 @@ class EpisodeModelPrivate;
 class FORM_EXPORT EpisodeModel : public QAbstractItemModel
 {
     Q_OBJECT
-
 public:
 
     enum DataRepresentation {

@@ -43,10 +43,12 @@
 #include <coreplugin/ipatient.h>
 #include <coreplugin/iuser.h>
 #include <coreplugin/constants_icons.h>
+#include <coreplugin/ipatientlistener.h>
 
 #include <medicalutils/global.h>
 #include <utils/log.h>
 #include <translationutils/constanttranslations.h>
+#include <extensionsystem/pluginmanager.h>
 
 #include <QObject>
 #include <QSqlTableModel>
@@ -61,7 +63,7 @@ using namespace Trans::ConstantTranslations;
 
 /** The PatientModelWrapper is installed in Core::ICore by MainWindow */
 
-
+static inline ExtensionSystem::PluginManager *pluginManager() { return ExtensionSystem::PluginManager::instance(); }
 static inline Patients::Internal::PatientBase *patientBase() {return Patients::Internal::PatientBase::instance();}
 static inline Core::IUser *user() {return Core::ICore::instance()->user();}
 static inline Core::ISettings *settings()  { return Core::ICore::instance()->settings(); }
@@ -300,6 +302,14 @@ void PatientModel::setCurrentPatient(const QModelIndex &index)
     if (index == m_CurrentPatient) {
         return;
     }
+
+    QList<Core::IPatientListener *> listeners = pluginManager()->getObjects<Core::IPatientListener>();
+    for(int i = 0; i < listeners.count(); ++i) {
+        if (!listeners.at(i)->currentPatientAboutToChange()) {
+            return;
+        }
+    }
+
     m_CurrentPatient = index;
     LOG("setCurrentPatient: " + this->index(index.row(), Core::IPatient::Uid).data().toString());
     Q_EMIT patientChanged(this->index(index.row(), Core::IPatient::Uid).data().toString());

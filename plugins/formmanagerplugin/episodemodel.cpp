@@ -49,6 +49,7 @@
 #include <utils/log.h>
 #include <utils/global.h>
 #include <translationutils/constanttranslations.h>
+#include <extensionsystem/pluginmanager.h>
 
 #include <QSqlTableModel>
 #include <QSqlDatabase>
@@ -76,8 +77,6 @@ enum {
   PatientDataRepresentation
 */
 
-
-
 using namespace Form;
 using namespace Trans::ConstantTranslations;
 
@@ -90,7 +89,7 @@ static inline QString currentUserUuid() {return user()->value(Core::IUser::Uuid)
 
 static inline Core::ISettings *settings()  { return Core::ICore::instance()->settings(); }
 static inline Core::ActionManager *actionManager() { return Core::ICore::instance()->actionManager(); }
-
+static inline ExtensionSystem::PluginManager *pluginManager() { return ExtensionSystem::PluginManager::instance(); }
 
 namespace {
 
@@ -269,39 +268,6 @@ namespace {
 
 namespace Form {
 namespace Internal {
-
-class EpisodesCoreListener : public Core::ICoreListener
-{
-    Q_OBJECT
-public:
-    EpisodesCoreListener(Form::EpisodeModel *parent) : Core::ICoreListener(parent)
-    {
-        Q_ASSERT(parent);
-        m_Model = parent;
-    }
-    ~EpisodesCoreListener() {}
-
-    bool coreAboutToClose()
-    {
-        if (m_Model->isDirty()) {
-            bool yes = Utils::yesNoMessageBox(tr("Save episodes."),
-                                              tr("Some datas are not actually saved into database."
-                                                 "Do you want to save them ?\n Answering 'No' will cause definitive data lose."),
-                                              "");
-            if (yes) {
-                return m_Model->submit();
-            } else {
-                m_Model->revert();
-                return true;
-            }
-        }
-        return false;
-    }
-
-private:
-    Form::EpisodeModel *m_Model;
-};
-
 
 class EpisodeModelPrivate
 {
@@ -559,10 +525,10 @@ public:
         if (formIsModified) {
             // ask user what to do
             if (!settings()->value(Core::Constants::S_ALWAYS_SAVE_WITHOUT_PROMPTING, false).toBool()) {
-                bool yes = Utils::yesNoMessageBox(QApplication::tr("EpisodeModel", "Save episode ?"),
-                                                  QApplication::tr("EpisodeModel", "The actual episode has been modified. Do you want to save changes in your database ?\n"
+                bool yes = Utils::yesNoMessageBox(QCoreApplication::translate("EpisodeModel", "Save episode ?"),
+                                                  QCoreApplication::translate("EpisodeModel", "The actual episode has been modified. Do you want to save changes in your database ?\n"
                                                      "Answering 'No' will cause definitve data lose."),
-                                                  "", QApplication::tr("EpisodeModel", "Save episode"));
+                                                  "", QCoreApplication::translate("EpisodeModel", "Save episode"));
                 if (!yes) {
                     saveEpisodeHeaders(form, item);
                     return true;
@@ -770,7 +736,6 @@ private:
 };
 }
 }
-
 
 EpisodeModel::EpisodeModel(FormMain *rootEmptyForm, QObject *parent) :
         QAbstractItemModel(parent), d(new Internal::EpisodeModelPrivate(this))
