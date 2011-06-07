@@ -57,18 +57,10 @@
 <context>
     <name>AccountDB::AccountBase</name>
     <message>
-        <location filename="../../plugins/accountbaseplugin/accountbase.cpp" line="574"/>
-        <source>Searching databases into dir %1</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <location filename="../../plugins/accountbaseplugin/accountbase.cpp" line="648"/>
-        <source>Database %1 %2 correctly created</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <location filename="../../plugins/accountbaseplugin/accountbase.cpp" line="652"/>
-        <source>ERROR : database can not be created %1 %2 %3</source>
+        <location filename="../../plugins/accountbaseplugin/accountbase.cpp" line="700"/>
+        <location filename="../../plugins/accountbaseplugin/accountbase.cpp" line="708"/>
+        <location filename="../../plugins/accountbaseplugin/accountbase.cpp" line="714"/>
+        <source>Please contact dev team.</source>
         <translation type="unfinished"></translation>
     </message>
 </context>

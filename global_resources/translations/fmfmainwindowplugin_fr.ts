@@ -2,112 +2,11 @@
 <!DOCTYPE TS>
 <TS version="2.0" language="fr_FR">
 <context>
-    <name>MainWin::AppConfigWizard</name>
-    <message>
-        <location filename="../../plugins/fmfmainwindowplugin/appconfigwizard.cpp" line="82"/>
-        <source>Application Configurator Wizard</source>
-        <translation>Assistant de configuration</translation>
-    </message>
-</context>
-<context>
-    <name>MainWin::BeginConfigPage</name>
-    <message>
-        <location filename="../../plugins/fmfmainwindowplugin/appconfigwizard.cpp" line="151"/>
-        <source>Welcome to FreeMedForms</source>
-        <translation>FreeMedForms : bienvenue</translation>
-    </message>
-    <message>
-        <location filename="../../plugins/fmfmainwindowplugin/appconfigwizard.cpp" line="152"/>
-        <source>&lt;b&gt;Welcome to FreeMedForms&lt;/b&gt;&lt;br /&gt;&lt;br /&gt;This wizard will help you to configure the base parameters of the application.&lt;br /&gt;At any time, you can cancel this wizard, the default values will be activated for the undefined parameters.</source>
-        <translation>&lt;b&gt;Bienvenue sur FreeMedForms&lt;/b&gt;&lt;br /&gt;&lt;br /&gt;Cet assistant va vous aider à configurer les paramètres de base de l&apos;application.&lt;br /&gt;Vous pouvez, à tout moment, annuler cet assistant, les valeurs par défaut seront activées.</translation>
-    </message>
-    <message>
-        <location filename="../../plugins/fmfmainwindowplugin/appconfigwizard.cpp" line="158"/>
-        <source>Select your language</source>
-        <translation>Sélectionnez votre langue</translation>
-    </message>
-    <message>
-        <location filename="../../plugins/fmfmainwindowplugin/appconfigwizard.cpp" line="162"/>
-        <source>For security reason, it is highly suggested to change the default administrator password</source>
-        <translation>Pour des raisons de sécurité, il est fortement recommandé de modifier le mot de passe de l&apos;utilisateur (administrateur) par défaut.</translation>
-    </message>
-    <message>
-        <location filename="../../plugins/fmfmainwindowplugin/appconfigwizard.cpp" line="165"/>
-        <source>Click the button to change your password</source>
-        <translation>Cliquez pour changer votre mot de passe</translation>
-    </message>
-    <message>
-        <location filename="../../plugins/fmfmainwindowplugin/appconfigwizard.cpp" line="168"/>
-        <source>You are logged as the administrator, for security reasons, it is highly recommended to create and use a new user instead of using the default administrator.
-</source>
-        <translation>Vous êtes connecté comme administrateur, pour des raisons de sécurité, il est fortement recommandé de créer et d&apos;utiliser un nouvel utilisateur au lieu de l&apos;administrateur.</translation>
-    </message>
-    <message>
-        <location filename="../../plugins/fmfmainwindowplugin/appconfigwizard.cpp" line="173"/>
-        <source>Click the button to create a new user.</source>
-        <translation>Créer un nouvel utilisateur.</translation>
-    </message>
-    <message>
-        <location filename="../../plugins/fmfmainwindowplugin/appconfigwizard.cpp" line="176"/>
-        <source>Create a new user</source>
-        <translation>Créer un nouvel utilisateur</translation>
-    </message>
-    <message>
-        <location filename="../../plugins/fmfmainwindowplugin/appconfigwizard.cpp" line="177"/>
-        <source>Change password</source>
-        <translation>Changer votre mot de passe</translation>
-    </message>
-    <message>
-        <location filename="../../plugins/fmfmainwindowplugin/appconfigwizard.cpp" line="183"/>
-        <source>Change default administrator&apos;s password</source>
-        <translation>Changer le mot de passe de l&apos;administrateur</translation>
-    </message>
-</context>
-<context>
-    <name>MainWin::DatabaseConfigurationPage</name>
-    <message>
-        <location filename="../../plugins/fmfmainwindowplugin/appconfigwizard.cpp" line="228"/>
-        <source>Update checking and database configuration</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <location filename="../../plugins/fmfmainwindowplugin/appconfigwizard.cpp" line="229"/>
-        <source>By default, FreeMedForms is configured to use a local SQLite database. You can choose an external server.</source>
-        <translation type="unfinished"></translation>
-    </message>
-</context>
-<context>
-    <name>MainWin::EndConfigPage</name>
-    <message>
-        <location filename="../../plugins/fmfmainwindowplugin/appconfigwizard.cpp" line="314"/>
-        <source>FreeMedForms is now configured</source>
-        <translation>FreeMedForms est maintenant configuré</translation>
-    </message>
-    <message>
-        <location filename="../../plugins/fmfmainwindowplugin/appconfigwizard.cpp" line="315"/>
-        <source>Please read the user&apos;s manual. If you have any question, you can ask them to the mailing list.</source>
-        <translation>Veuillez lire le manuel de l&apos;utilisateur, si vous avez des questions, vous pouvez les poser sur notre liste de diffusion.</translation>
-    </message>
-    <message>
-        <location filename="../../plugins/fmfmainwindowplugin/appconfigwizard.cpp" line="318"/>
-        <source>French/english mailing list : &lt;a href=&quot;mailto:freemedforms@googlegroups.com&quot;&gt;freemedforms@googlegroups.com&lt;/a&gt;</source>
-        <translation>Liste de diffusion (français/anglais) :&lt;a href=&quot;mailto:freemedforms@googlegroups.com&quot;&gt;freemedforms@googlegroups.com&lt;/a&gt;</translation>
-    </message>
-</context>
-<context>
-    <name>MainWin::Internal::VirtualBasePage</name>
-    <message>
-        <location filename="../../plugins/fmfmainwindowplugin/mainwindowpreferences.cpp" line="60"/>
-        <source>Virtual databases</source>
-        <translation>Bases de données virtuelles</translation>
-    </message>
-</context>
-<context>
     <name>MainWin::Internal::VirtualDatabasePreferences</name>
     <message>
         <location filename="../../plugins/fmfmainwindowplugin/virtualbasepage.ui" line="14"/>
         <source>Form</source>
-        <translation type="unfinished"></translation>
+        <translation></translation>
     </message>
     <message>
         <location filename="../../plugins/fmfmainwindowplugin/virtualbasepage.ui" line="26"/>
@@ -147,67 +46,47 @@
         <translation>Créer des utilisateurs virtuels</translation>
     </message>
     <message>
-        <location filename="../../plugins/fmfmainwindowplugin/virtualdatabasepreferences.cpp" line="188"/>
+        <location filename="../../plugins/fmfmainwindowplugin/virtualdatabasepreferences.cpp" line="187"/>
         <source>Creating %1 virtual patients</source>
         <translation>Création de %1 patients virtuels</translation>
     </message>
     <message>
-        <location filename="../../plugins/fmfmainwindowplugin/virtualdatabasepreferences.cpp" line="188"/>
-        <location filename="../../plugins/fmfmainwindowplugin/virtualdatabasepreferences.cpp" line="263"/>
-        <location filename="../../plugins/fmfmainwindowplugin/virtualdatabasepreferences.cpp" line="348"/>
+        <location filename="../../plugins/fmfmainwindowplugin/virtualdatabasepreferences.cpp" line="187"/>
+        <location filename="../../plugins/fmfmainwindowplugin/virtualdatabasepreferences.cpp" line="262"/>
+        <location filename="../../plugins/fmfmainwindowplugin/virtualdatabasepreferences.cpp" line="347"/>
         <source>Cancel</source>
         <translation>Annuler</translation>
     </message>
     <message>
-        <location filename="../../plugins/fmfmainwindowplugin/virtualdatabasepreferences.cpp" line="263"/>
+        <location filename="../../plugins/fmfmainwindowplugin/virtualdatabasepreferences.cpp" line="262"/>
         <source>Creating %1 virtual episodes</source>
         <translation>Création de %1 épisodes virtuels</translation>
     </message>
     <message>
-        <location filename="../../plugins/fmfmainwindowplugin/virtualdatabasepreferences.cpp" line="348"/>
+        <location filename="../../plugins/fmfmainwindowplugin/virtualdatabasepreferences.cpp" line="347"/>
         <source>Creating %1 virtual users</source>
         <translation>Création de %1 utilisateurs virtuels</translation>
     </message>
 </context>
 <context>
+    <name>MainWin::Internal::VirtualPatientBasePage</name>
+    <message>
+        <location filename="../../plugins/fmfmainwindowplugin/mainwindowpreferences.cpp" line="60"/>
+        <source>Virtual databases</source>
+        <translation>Bases de données virtuelles</translation>
+    </message>
+</context>
+<context>
     <name>MainWin::MainWindow</name>
     <message>
-        <location filename="../../plugins/fmfmainwindowplugin/mainwindow.cpp" line="126"/>
+        <location filename="../../plugins/fmfmainwindowplugin/mainwindow.cpp" line="125"/>
         <source>Creating Main Window</source>
         <translation>Création de la fenêtre principale</translation>
     </message>
     <message>
-        <location filename="../../plugins/fmfmainwindowplugin/mainwindow.cpp" line="347"/>
+        <location filename="../../plugins/fmfmainwindowplugin/mainwindow.cpp" line="345"/>
         <source>Choose a patient file directory</source>
         <translation type="unfinished"></translation>
-    </message>
-</context>
-<context>
-    <name>MainWin::PatientFilePage</name>
-    <message>
-        <location filename="../../plugins/fmfmainwindowplugin/appconfigwizard.cpp" line="262"/>
-        <source>Patients Forms File</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <location filename="../../plugins/fmfmainwindowplugin/appconfigwizard.cpp" line="263"/>
-        <source>FreeMedForms allows you to define your own patient forms file. You can select it from here. All patients will have the same forms.</source>
-        <translation type="unfinished"></translation>
-    </message>
-</context>
-<context>
-    <name>MainWin::VirtualDatabasePage</name>
-    <message>
-        <location filename="../../plugins/fmfmainwindowplugin/appconfigwizard.cpp" line="291"/>
-        <source>Create Virtual Patients</source>
-        <translation>Créer des patients virtuels</translation>
-    </message>
-    <message>
-        <location filename="../../plugins/fmfmainwindowplugin/appconfigwizard.cpp" line="292"/>
-        <source>You can create some virtual patients and users in order to test FreeMedForms.
-Just select the number of patients/users you want to create and click on the &apos;populate&apos; button.</source>
-        <translation>Vous pouvez créer des patients virtuels ainsi que des utilisateurs virtuels pour tester FreeMedForms.
-Sélectionnez le nombre de patients/utilisateurs que vous souhaitez créer et cliquez sur le bouton &quot;peupler&quot;.</translation>
     </message>
 </context>
 </TS>

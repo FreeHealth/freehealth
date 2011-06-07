@@ -219,7 +219,7 @@
     <message>
         <location filename="../../plugins/patientbaseplugin/identitywidget.ui" line="123"/>
         <source>dd/MM/yyyy</source>
-        <translation type="unfinished"></translation>
+        <translation></translation>
     </message>
     <message>
         <location filename="../../plugins/patientbaseplugin/identitywidget.ui" line="136"/>
@@ -263,28 +263,12 @@
 <context>
     <name>Patients::Internal::PatientBase</name>
     <message>
-        <location filename="../../plugins/patientbaseplugin/patientbase.cpp" line="234"/>
-        <source>Unable to connect the Patient&apos;s database host.</source>
-        <translation>Impossible de se connecter à la base de données patient.</translation>
-    </message>
-    <message>
-        <location filename="../../plugins/patientbaseplugin/patientbase.cpp" line="234"/>
-        <location filename="../../plugins/patientbaseplugin/patientbase.cpp" line="240"/>
-        <location filename="../../plugins/patientbaseplugin/patientbase.cpp" line="245"/>
-        <location filename="../../plugins/patientbaseplugin/patientbase.cpp" line="254"/>
+        <location filename="../../plugins/patientbaseplugin/patientbase.cpp" line="259"/>
+        <location filename="../../plugins/patientbaseplugin/patientbase.cpp" line="267"/>
+        <location filename="../../plugins/patientbaseplugin/patientbase.cpp" line="273"/>
+        <location filename="../../plugins/patientbaseplugin/patientbase.cpp" line="283"/>
         <source>Please contact dev team.</source>
         <translation>Veuillez contacter l&apos;équipe de développement.</translation>
-    </message>
-    <message>
-        <location filename="../../plugins/patientbaseplugin/patientbase.cpp" line="240"/>
-        <source>Unable to create the Patients database.</source>
-        <translation>Impossible de créer la base de données patients.</translation>
-    </message>
-    <message>
-        <location filename="../../plugins/patientbaseplugin/patientbase.cpp" line="245"/>
-        <location filename="../../plugins/patientbaseplugin/patientbase.cpp" line="254"/>
-        <source>Unable to connect the Patients database.</source>
-        <translation>Impossible de se connecter à la base de données patients.</translation>
     </message>
 </context>
 <context>
@@ -333,9 +317,9 @@
 <context>
     <name>Patients::PatientBasePlugin</name>
     <message>
-        <location filename="../../plugins/patientbaseplugin/patientbaseplugin.cpp" line="92"/>
+        <location filename="../../plugins/patientbaseplugin/patientbaseplugin.cpp" line="95"/>
         <source>Initializing patients database plugin...</source>
-        <translation type="unfinished"></translation>
+        <translation>Initialisation de la base de données patients...</translation>
     </message>
 </context>
 <context>

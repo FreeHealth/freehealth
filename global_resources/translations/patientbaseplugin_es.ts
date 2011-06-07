@@ -263,27 +263,11 @@
 <context>
     <name>Patients::Internal::PatientBase</name>
     <message>
-        <location filename="../../plugins/patientbaseplugin/patientbase.cpp" line="234"/>
-        <source>Unable to connect the Patient&apos;s database host.</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <location filename="../../plugins/patientbaseplugin/patientbase.cpp" line="234"/>
-        <location filename="../../plugins/patientbaseplugin/patientbase.cpp" line="240"/>
-        <location filename="../../plugins/patientbaseplugin/patientbase.cpp" line="245"/>
-        <location filename="../../plugins/patientbaseplugin/patientbase.cpp" line="254"/>
+        <location filename="../../plugins/patientbaseplugin/patientbase.cpp" line="259"/>
+        <location filename="../../plugins/patientbaseplugin/patientbase.cpp" line="267"/>
+        <location filename="../../plugins/patientbaseplugin/patientbase.cpp" line="273"/>
+        <location filename="../../plugins/patientbaseplugin/patientbase.cpp" line="283"/>
         <source>Please contact dev team.</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <location filename="../../plugins/patientbaseplugin/patientbase.cpp" line="240"/>
-        <source>Unable to create the Patients database.</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <location filename="../../plugins/patientbaseplugin/patientbase.cpp" line="245"/>
-        <location filename="../../plugins/patientbaseplugin/patientbase.cpp" line="254"/>
-        <source>Unable to connect the Patients database.</source>
         <translation type="unfinished"></translation>
     </message>
 </context>
@@ -333,7 +317,7 @@
 <context>
     <name>Patients::PatientBasePlugin</name>
     <message>
-        <location filename="../../plugins/patientbaseplugin/patientbaseplugin.cpp" line="92"/>
+        <location filename="../../plugins/patientbaseplugin/patientbaseplugin.cpp" line="95"/>
         <source>Initializing patients database plugin...</source>
         <translation type="unfinished"></translation>
     </message>

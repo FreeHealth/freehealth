@@ -283,67 +283,61 @@ Do you want to add them to the file ?</source>
 <context>
     <name>DrugsDB::Internal::DrugsBase</name>
     <message>
-        <location filename="../../plugins/drugsbaseplugin/drugsbase.cpp" line="612"/>
+        <location filename="../../plugins/drugsbaseplugin/drugsbase.cpp" line="613"/>
         <source>Searching databases into dir %1</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../../plugins/drugsbaseplugin/drugsbase.cpp" line="620"/>
+        <location filename="../../plugins/drugsbaseplugin/drugsbase.cpp" line="626"/>
         <source>No drugs database found.</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../../plugins/drugsbaseplugin/drugsbase.cpp" line="631"/>
+        <location filename="../../plugins/drugsbaseplugin/drugsbase.cpp" line="637"/>
         <source>Drug database source does not exists.</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../../plugins/drugsbaseplugin/drugsbase.cpp" line="632"/>
+        <location filename="../../plugins/drugsbaseplugin/drugsbase.cpp" line="638"/>
         <source>Switching to the default drugs database source.</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../../plugins/drugsbaseplugin/drugsbase.cpp" line="668"/>
-        <source>WARNING : can not open database %1 : %2 
- %3 </source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <location filename="../../plugins/drugsbaseplugin/drugsbase.cpp" line="944"/>
-        <location filename="../../plugins/drugsbaseplugin/drugsbase.cpp" line="950"/>
-        <location filename="../../plugins/drugsbaseplugin/drugsbase.cpp" line="955"/>
+        <location filename="../../plugins/drugsbaseplugin/drugsbase.cpp" line="985"/>
+        <location filename="../../plugins/drugsbaseplugin/drugsbase.cpp" line="991"/>
+        <location filename="../../plugins/drugsbaseplugin/drugsbase.cpp" line="996"/>
         <source>Unable to create the Protocol database.</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../../plugins/drugsbaseplugin/drugsbase.cpp" line="944"/>
-        <location filename="../../plugins/drugsbaseplugin/drugsbase.cpp" line="950"/>
-        <location filename="../../plugins/drugsbaseplugin/drugsbase.cpp" line="955"/>
+        <location filename="../../plugins/drugsbaseplugin/drugsbase.cpp" line="985"/>
+        <location filename="../../plugins/drugsbaseplugin/drugsbase.cpp" line="991"/>
+        <location filename="../../plugins/drugsbaseplugin/drugsbase.cpp" line="996"/>
         <source>Please contact dev team.</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../../plugins/drugsbaseplugin/drugsbase.cpp" line="1068"/>
+        <location filename="../../plugins/drugsbaseplugin/drugsbase.cpp" line="1109"/>
         <source>Unable to update the protocol&apos;s transmission date.</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../../plugins/drugsbaseplugin/drugsbase.cpp" line="1297"/>
+        <location filename="../../plugins/drugsbaseplugin/drugsbase.cpp" line="1338"/>
         <source>No drug database source selected</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../../plugins/drugsbaseplugin/drugsbase.cpp" line="1299"/>
+        <location filename="../../plugins/drugsbaseplugin/drugsbase.cpp" line="1340"/>
         <source>No drugs database loaded.</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../../plugins/drugsbaseplugin/drugsbase.cpp" line="1317"/>
+        <location filename="../../plugins/drugsbaseplugin/drugsbase.cpp" line="1358"/>
         <source>Asking for a drug without UID</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../../plugins/drugsbaseplugin/drugsbase.cpp" line="1440"/>
+        <location filename="../../plugins/drugsbaseplugin/drugsbase.cpp" line="1481"/>
         <source>Unable to find drug with DID %1</source>
         <translation type="unfinished"></translation>
     </message>

@@ -74,27 +74,11 @@
 <context>
     <name>Form::Internal::EpisodeBase</name>
     <message>
-        <location filename="../../plugins/formmanagerplugin/episodebase.cpp" line="240"/>
-        <source>Unable to connect the episodes&apos; database host.</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <location filename="../../plugins/formmanagerplugin/episodebase.cpp" line="240"/>
-        <location filename="../../plugins/formmanagerplugin/episodebase.cpp" line="246"/>
-        <location filename="../../plugins/formmanagerplugin/episodebase.cpp" line="251"/>
-        <location filename="../../plugins/formmanagerplugin/episodebase.cpp" line="260"/>
+        <location filename="../../plugins/formmanagerplugin/episodebase.cpp" line="265"/>
+        <location filename="../../plugins/formmanagerplugin/episodebase.cpp" line="273"/>
+        <location filename="../../plugins/formmanagerplugin/episodebase.cpp" line="279"/>
+        <location filename="../../plugins/formmanagerplugin/episodebase.cpp" line="289"/>
         <source>Please contact dev team.</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <location filename="../../plugins/formmanagerplugin/episodebase.cpp" line="246"/>
-        <source>Unable to create the episodes database.</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <location filename="../../plugins/formmanagerplugin/episodebase.cpp" line="251"/>
-        <location filename="../../plugins/formmanagerplugin/episodebase.cpp" line="260"/>
-        <source>Unable to connect the episodes database.</source>
         <translation type="unfinished"></translation>
     </message>
 </context>

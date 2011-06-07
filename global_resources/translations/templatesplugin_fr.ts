@@ -172,26 +172,12 @@ Répondre &apos;Non&apos; causera une perte de données définitive.</translatio
 <context>
     <name>Templates::TemplateBase</name>
     <message>
-        <location filename="../../plugins/templatesplugin/templatebase.cpp" line="355"/>
-        <source>Unable to connect the Templates host.</source>
-        <translation>Impossible de se connecter à l&apos;hôte.</translation>
-    </message>
-    <message>
-        <location filename="../../plugins/templatesplugin/templatebase.cpp" line="355"/>
-        <location filename="../../plugins/templatesplugin/templatebase.cpp" line="361"/>
-        <location filename="../../plugins/templatesplugin/templatebase.cpp" line="365"/>
+        <location filename="../../plugins/templatesplugin/templatebase.cpp" line="384"/>
+        <location filename="../../plugins/templatesplugin/templatebase.cpp" line="392"/>
+        <location filename="../../plugins/templatesplugin/templatebase.cpp" line="398"/>
+        <location filename="../../plugins/templatesplugin/templatebase.cpp" line="408"/>
         <source>Please contact dev team.</source>
         <translation>Veuillez contacter l&apos;équipe de développement.</translation>
-    </message>
-    <message>
-        <location filename="../../plugins/templatesplugin/templatebase.cpp" line="361"/>
-        <source>Unable to create the Templates database.</source>
-        <translation>Impossible de créer la base de données Modèles.</translation>
-    </message>
-    <message>
-        <location filename="../../plugins/templatesplugin/templatebase.cpp" line="365"/>
-        <source>Unable to connect the Templates database.</source>
-        <translation>Impossible de se connecter à la base de données Modèles.</translation>
     </message>
 </context>
 <context>

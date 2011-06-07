@@ -60,7 +60,7 @@ Veuillez vérifier vos répartitions journalières et vos relations avec le repa
     <message>
         <location filename="../../plugins/drugsbaseplugin/drugsbaseplugin.cpp" line="85"/>
         <source>Initializing drugs database plugin...</source>
-        <translation>Initialisation du plugin des bases de données thérapeutique</translation>
+        <translation>Initialisation du plugin des bases de données thérapeutique...</translation>
     </message>
 </context>
 <context>
@@ -291,68 +291,61 @@ Voulez-vous les ajouter au fichier ?</translation>
 <context>
     <name>DrugsDB::Internal::DrugsBase</name>
     <message>
-        <location filename="../../plugins/drugsbaseplugin/drugsbase.cpp" line="612"/>
+        <location filename="../../plugins/drugsbaseplugin/drugsbase.cpp" line="613"/>
         <source>Searching databases into dir %1</source>
         <translation>Recherche des bases de données dans le répertoire %1</translation>
     </message>
     <message>
-        <location filename="../../plugins/drugsbaseplugin/drugsbase.cpp" line="620"/>
+        <location filename="../../plugins/drugsbaseplugin/drugsbase.cpp" line="626"/>
         <source>No drugs database found.</source>
         <translation>Pas de base de données thérapeutique trouvée.</translation>
     </message>
     <message>
-        <location filename="../../plugins/drugsbaseplugin/drugsbase.cpp" line="631"/>
+        <location filename="../../plugins/drugsbaseplugin/drugsbase.cpp" line="637"/>
         <source>Drug database source does not exists.</source>
         <translation>La source de données n&apos;existe pas.</translation>
     </message>
     <message>
-        <location filename="../../plugins/drugsbaseplugin/drugsbase.cpp" line="632"/>
+        <location filename="../../plugins/drugsbaseplugin/drugsbase.cpp" line="638"/>
         <source>Switching to the default drugs database source.</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../../plugins/drugsbaseplugin/drugsbase.cpp" line="668"/>
-        <source>WARNING : can not open database %1 : %2 
- %3 </source>
-        <translation>ATTENTION : impossible d&apos;ouvrir la base de données %1 : %2 
-%3</translation>
-    </message>
-    <message>
-        <location filename="../../plugins/drugsbaseplugin/drugsbase.cpp" line="944"/>
-        <location filename="../../plugins/drugsbaseplugin/drugsbase.cpp" line="950"/>
-        <location filename="../../plugins/drugsbaseplugin/drugsbase.cpp" line="955"/>
+        <location filename="../../plugins/drugsbaseplugin/drugsbase.cpp" line="985"/>
+        <location filename="../../plugins/drugsbaseplugin/drugsbase.cpp" line="991"/>
+        <location filename="../../plugins/drugsbaseplugin/drugsbase.cpp" line="996"/>
         <source>Unable to create the Protocol database.</source>
         <translation>Impossible de créer la base de données Protocoles.</translation>
     </message>
     <message>
-        <location filename="../../plugins/drugsbaseplugin/drugsbase.cpp" line="944"/>
-        <location filename="../../plugins/drugsbaseplugin/drugsbase.cpp" line="950"/>
-        <location filename="../../plugins/drugsbaseplugin/drugsbase.cpp" line="955"/>
+        <location filename="../../plugins/drugsbaseplugin/drugsbase.cpp" line="985"/>
+        <location filename="../../plugins/drugsbaseplugin/drugsbase.cpp" line="991"/>
+        <location filename="../../plugins/drugsbaseplugin/drugsbase.cpp" line="996"/>
         <source>Please contact dev team.</source>
         <translation>Veuillez contacter l&apos;équipe de développement.</translation>
     </message>
     <message>
-        <location filename="../../plugins/drugsbaseplugin/drugsbase.cpp" line="1068"/>
+        <location filename="../../plugins/drugsbaseplugin/drugsbase.cpp" line="1109"/>
         <source>Unable to update the protocol&apos;s transmission date.</source>
         <translation>Impossible de mettre à jour la date de transmission des protocoles.</translation>
     </message>
     <message>
-        <location filename="../../plugins/drugsbaseplugin/drugsbase.cpp" line="1297"/>
+        <location filename="../../plugins/drugsbaseplugin/drugsbase.cpp" line="1338"/>
         <source>No drug database source selected</source>
         <translation>Pas de source pour la base de données thérapeutique sélectionné</translation>
     </message>
     <message>
-        <location filename="../../plugins/drugsbaseplugin/drugsbase.cpp" line="1299"/>
+        <location filename="../../plugins/drugsbaseplugin/drugsbase.cpp" line="1340"/>
         <source>No drugs database loaded.</source>
         <translation>Pas de base de données thérapeutique chargée.</translation>
     </message>
     <message>
-        <location filename="../../plugins/drugsbaseplugin/drugsbase.cpp" line="1317"/>
+        <location filename="../../plugins/drugsbaseplugin/drugsbase.cpp" line="1358"/>
         <source>Asking for a drug without UID</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../../plugins/drugsbaseplugin/drugsbase.cpp" line="1440"/>
+        <location filename="../../plugins/drugsbaseplugin/drugsbase.cpp" line="1481"/>
         <source>Unable to find drug with DID %1</source>
         <translation type="unfinished"></translation>
     </message>

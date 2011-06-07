@@ -4,27 +4,27 @@
 <context>
     <name>PMH</name>
     <message>
-        <location filename="../../plugins/pmhplugin/constants.h" line="142"/>
+        <location filename="../../plugins/pmhplugin/constants.h" line="143"/>
         <source>Create a new PMHx</source>
         <translation>Créer un nouvel ATCD</translation>
     </message>
     <message>
-        <location filename="../../plugins/pmhplugin/constants.h" line="143"/>
+        <location filename="../../plugins/pmhplugin/constants.h" line="144"/>
         <source>Remove PMH</source>
         <translation>Retirer l&apos;ATCD</translation>
     </message>
     <message>
-        <location filename="../../plugins/pmhplugin/constants.h" line="144"/>
+        <location filename="../../plugins/pmhplugin/constants.h" line="145"/>
         <source>Create a new category</source>
         <translation>Créer une nouvelle catégorie</translation>
     </message>
     <message>
-        <location filename="../../plugins/pmhplugin/constants.h" line="145"/>
+        <location filename="../../plugins/pmhplugin/constants.h" line="146"/>
         <source>Remove category</source>
         <translation>Retirer la catégorie</translation>
     </message>
     <message>
-        <location filename="../../plugins/pmhplugin/constants.h" line="146"/>
+        <location filename="../../plugins/pmhplugin/constants.h" line="147"/>
         <source>PMHx category manager</source>
         <translation>Gestionnaire de catégories pour les ATCD</translation>
     </message>
@@ -32,26 +32,11 @@
 <context>
     <name>PMH::Internal::PmhBase</name>
     <message>
-        <location filename="../../plugins/pmhplugin/pmhbase.cpp" line="221"/>
-        <source>Unable to connect the Templates host.</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <location filename="../../plugins/pmhplugin/pmhbase.cpp" line="221"/>
-        <location filename="../../plugins/pmhplugin/pmhbase.cpp" line="227"/>
-        <location filename="../../plugins/pmhplugin/pmhbase.cpp" line="231"/>
+        <location filename="../../plugins/pmhplugin/pmhbase.cpp" line="233"/>
+        <location filename="../../plugins/pmhplugin/pmhbase.cpp" line="241"/>
+        <location filename="../../plugins/pmhplugin/pmhbase.cpp" line="247"/>
         <source>Please contact dev team.</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <location filename="../../plugins/pmhplugin/pmhbase.cpp" line="227"/>
-        <source>Unable to create the Templates database.</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <location filename="../../plugins/pmhplugin/pmhbase.cpp" line="231"/>
-        <source>Unable to connect the Templates database.</source>
-        <translation type="unfinished"></translation>
+        <translation>Veuillez contacter l&apos;équipe de développement.</translation>
     </message>
 </context>
 <context>
@@ -59,13 +44,13 @@
     <message>
         <location filename="../../plugins/pmhplugin/pmhmodewidget.ui" line="14"/>
         <source>Form</source>
-        <translation type="unfinished"></translation>
+        <translation></translation>
     </message>
     <message>
         <location filename="../../plugins/pmhplugin/pmhmode.cpp" line="93"/>
         <location filename="../../plugins/pmhplugin/pmhmode.cpp" line="182"/>
         <source>Edit</source>
-        <translation type="unfinished"></translation>
+        <translation>Éditer</translation>
     </message>
 </context>
 <context>
@@ -73,7 +58,7 @@
     <message>
         <location filename="../../plugins/pmhplugin/pmhpreferencespage.ui" line="14"/>
         <source>Form</source>
-        <translation type="unfinished"></translation>
+        <translation></translation>
     </message>
     <message>
         <location filename="../../plugins/pmhplugin/pmhpreferencespage.ui" line="26"/>
@@ -146,7 +131,7 @@
     <message>
         <location filename="../../plugins/pmhplugin/pmhviewer.ui" line="14"/>
         <source>Form</source>
-        <translation type="unfinished"></translation>
+        <translation></translation>
     </message>
     <message>
         <location filename="../../plugins/pmhplugin/pmhviewer.ui" line="29"/>
@@ -229,7 +214,7 @@
     <message>
         <location filename="../../plugins/pmhplugin/pmhcreatordialog.ui" line="14"/>
         <source>Form</source>
-        <translation type="unfinished"></translation>
+        <translation></translation>
     </message>
     <message>
         <location filename="../../plugins/pmhplugin/pmhcreatordialog.cpp" line="50"/>
@@ -265,7 +250,7 @@
     <message>
         <location filename="../../plugins/pmhplugin/pmhepisodeviewer.ui" line="14"/>
         <source>Form</source>
-        <translation type="unfinished"></translation>
+        <translation></translation>
     </message>
 </context>
 <context>

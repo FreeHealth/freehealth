@@ -5,55 +5,55 @@
     <name>ICD</name>
     <message>
         <source>ICD Collection file (*.icd)</source>
-        <translation type="unfinished"></translation>
+        <translation>Collection CIM10 (*.icd)</translation>
     </message>
     <message>
         <source>Recreate ICD10 database</source>
-        <translation type="unfinished"></translation>
+        <translation>Recréer la base de données CIM10</translation>
     </message>
     <message>
         <source>ICD10 database informations</source>
-        <translation type="unfinished"></translation>
+        <translation>Information base de données: CIM10</translation>
     </message>
     <message>
         <source>ICD10 search method</source>
-        <translation type="unfinished"></translation>
+        <translation>Mode de recherche dans la CIM10</translation>
     </message>
     <message>
         <source>Search by label</source>
-        <translation type="unfinished"></translation>
+        <translation>Rechercher par libellé</translation>
     </message>
     <message>
         <source>ICD models modes</source>
-        <translation type="unfinished"></translation>
+        <translation>Modes d&apos;édition CIM10</translation>
     </message>
     <message>
         <source>Search by code</source>
-        <translation type="unfinished"></translation>
+        <translation>Rechercher par code</translation>
     </message>
     <message>
         <source>Toggle code selector</source>
-        <translation type="unfinished"></translation>
+        <translation>Afficher/cacher le sélectionneur de code</translation>
     </message>
     <message>
         <source>Print ICD10 code collection</source>
-        <translation type="unfinished"></translation>
+        <translation>Imprimer la collection CIM10</translation>
     </message>
     <message>
         <source>Selector: simple list mode</source>
-        <translation type="unfinished"></translation>
+        <translation>Mode d&apos;édition : liste simple</translation>
     </message>
     <message>
         <source>Selector: full mode</source>
-        <translation type="unfinished"></translation>
+        <translation>Mode d&apos;édition : complet</translation>
     </message>
     <message>
         <source>Collection: simple list mode</source>
-        <translation type="unfinished"></translation>
+        <translation>Mode d&apos;édition : liste simple de codes</translation>
     </message>
     <message>
         <source>Collection: full mode</source>
-        <translation type="unfinished"></translation>
+        <translation>Mode d&apos;édition : mode collection</translation>
     </message>
     <message>
         <source>ICD10 code collection</source>
@@ -64,57 +64,57 @@
     <name>ICD::IcdCentralWidget</name>
     <message>
         <source>Form</source>
-        <translation type="unfinished"></translation>
+        <translation></translation>
     </message>
     <message>
         <source>Collection</source>
-        <translation type="unfinished"></translation>
+        <translation></translation>
     </message>
     <message>
         <source>Can not add this code to your collection.</source>
-        <translation type="unfinished"></translation>
+        <translation>Impossible d&apos;ajouter ce code à votre collection.</translation>
     </message>
     <message>
         <source>This code is already included or is excluded by the current collection code.</source>
-        <translation type="unfinished"></translation>
+        <translation>Ce code est déjà inclus ou est exclus par la collection actuelle.</translation>
     </message>
     <message>
         <source>Opening an ICD Collection : merge or replace ?</source>
-        <translation type="unfinished"></translation>
+        <translation>Ouverture d&apos;une collection CIM10 : ajouter ou remplacer ?</translation>
     </message>
     <message>
         <source>There is an ICD Collection inside the editor, do you to replace it or to add the opened collection ?</source>
-        <translation type="unfinished"></translation>
+        <translation>L&apos;éditeur contient déjà une collection CIM10, voulez-vous la remplacer ou l&apos;ajouter à la collection préexistante ?</translation>
     </message>
     <message>
         <source>Replace collection</source>
-        <translation type="unfinished"></translation>
+        <translation>Remplacer la collection</translation>
     </message>
     <message>
         <source>Add to collection</source>
-        <translation type="unfinished"></translation>
+        <translation>Ajouter à la collection</translation>
     </message>
     <message>
         <source>Open a collection</source>
-        <translation type="unfinished"></translation>
+        <translation>Ouvrir la collection</translation>
     </message>
 </context>
 <context>
     <name>ICD::IcdCodeSelector</name>
     <message>
         <source>Form</source>
-        <translation type="unfinished"></translation>
+        <translation></translation>
     </message>
 </context>
 <context>
     <name>ICD::IcdCollectionModel</name>
     <message>
         <source>Can not add this code: %1</source>
-        <translation type="unfinished"></translation>
+        <translation>Impossible d&apos;ajouter le code: %1</translation>
     </message>
     <message>
         <source>Can not add this Association: %1-%2</source>
-        <translation type="unfinished"></translation>
+        <translation>Impossible d&apos;ajouter cette association : %1 - %2</translation>
     </message>
 </context>
 <context>
@@ -125,7 +125,7 @@
     </message>
     <message>
         <source>ICD10 database corrupted, please contact your administrator.</source>
-        <translation type="unfinished"></translation>
+        <translation>La base de données CIM10 est corrompue, veuillez contacter votre administrateur.</translation>
     </message>
 </context>
 <context>
@@ -152,34 +152,34 @@ Please contact the dev team.</source>
     <name>ICD::IcdPlugin</name>
     <message>
         <source>Initializing ICD10 plugin...</source>
-        <translation type="unfinished"></translation>
+        <translation>Initialisation du plugin CIM10...</translation>
     </message>
 </context>
 <context>
     <name>ICD::IcdViewer</name>
     <message>
         <source>Form</source>
-        <translation type="unfinished"></translation>
+        <translation></translation>
     </message>
     <message>
         <source>CODE</source>
-        <translation type="unfinished"></translation>
+        <translation>Code</translation>
     </message>
     <message>
         <source>TextLabel</source>
-        <translation type="unfinished"></translation>
+        <translation></translation>
     </message>
     <message>
         <source>Dependencies</source>
-        <translation type="unfinished"></translation>
+        <translation>Dépendances</translation>
     </message>
     <message>
         <source>Includes</source>
-        <translation type="unfinished"></translation>
+        <translation>Inclusions</translation>
     </message>
     <message>
         <source>Excludes</source>
-        <translation type="unfinished"></translation>
+        <translation>Exclusions</translation>
     </message>
 </context>
 </TS>
