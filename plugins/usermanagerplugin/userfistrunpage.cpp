@@ -34,7 +34,10 @@
 #include <coreplugin/icore.h>
 #include <coreplugin/itheme.h>
 #include <coreplugin/constants_icons.h>
+#include <coreplugin/isettings.h>
 
+#include <utils/databaseconnector.h>
+#include <utils/log.h>
 #include <translationutils/constanttranslations.h>
 
 #include "ui_firstrunusercreationwidget.h"
@@ -45,6 +48,7 @@ using namespace Trans::ConstantTranslations;
 static inline Core::ITheme *theme()  { return Core::ICore::instance()->theme(); }
 static inline UserPlugin::UserModel *userModel() {return UserPlugin::UserModel::instance();}
 static inline UserPlugin::Internal::UserBase *userBase() {return UserPlugin::Internal::UserBase::instance();}
+static inline Core::ISettings *settings() { return Core::ICore::instance()->settings(); }
 
 
 UserCreationPage::UserCreationPage(QWidget *parent) :
@@ -62,6 +66,14 @@ UserCreationPage::UserCreationPage(QWidget *parent) :
     QPixmap pix = theme()->splashScreenPixmap("freemedforms-wizard-users.png");
     setPixmap(QWizard::BackgroundPixmap, pix);
     setPixmap(QWizard::WatermarkPixmap, pix);
+
+    const Utils::DatabaseConnector &db = settings()->databaseConnector();
+    if (db.driver()==Utils::Database::SQLite) {
+        if (!userModel()->setCurrentUser(Constants::DEFAULT_USER_CLEARLOGIN, Constants::DEFAULT_USER_CLEARPASSWORD)) {
+            LOG_ERROR("Unable to connect has default admin user");
+            ui->userManagerButton->setEnabled(false);
+        }
+    }
 
     connect(ui->userManagerButton, SIGNAL(clicked()), this, SLOT(userManager()));
     connect(ui->completeWizButton, SIGNAL(clicked()), this, SLOT(userWizard()));
@@ -101,11 +113,18 @@ void UserCreationPage::initializePage()
 
 bool UserCreationPage::validatePage()
 {
+    /** \todo code here */
     // Are there user created ? no -> can not validate
     // disconnected user database ?
-    // remove currentUserIsServerManager() from userModel
-    // delete usermanager pointer
+    // disconnect currentUser from userModel
+    userModel()->clear();
+
     // remove login/pass from settings()
+    Utils::DatabaseConnector db = settings()->databaseConnector();
+    db.setClearLog("");
+    db.setClearPass("");
+    settings()->setDatabaseConnector(db);
+    settings()->sync();
     return true;
 }
 
