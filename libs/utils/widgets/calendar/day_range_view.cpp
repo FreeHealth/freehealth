@@ -13,6 +13,7 @@
 #include "basic_item_edition_dialog.h"
 #include "hour_range_node.h"
 #include "day_widget.h"
+#include "day_node.h"
 #include "day_range_view.h"
 
 using namespace Calendar;
@@ -67,41 +68,44 @@ void DayRangeHeader::computeWidgets() {
 	int containWidth = (masterScrollArea ? masterScrollArea->viewport()->width() : width()) - 60;
 	int scaleHeight = getScaleHeight();
 	QList<CalendarItem> items = getItems();
+	if (!items.count())
+		return;
+
 	qSort(items.begin(), items.end(), calendarItemLessThan);
 	QDate first = firstDate();
 	QDate last = first.addDays(m_rangeWidth - 1);
 	QMap<QDate, int> dayStacks;
-	foreach (const CalendarItem &item, items) {
-		int top = 0;
-		// get top first
-		for (QDate date = first; date <= last; date = date.addDays(1))
-			if (!item.intersects(date, date)) {
-				if (dayStacks[date] > top)
-					top = dayStacks[date];
-			}
-		// refresh all stacks
-		int dayIndex = 0;
-		int firstIndex = -1;
-		int lastIndex;
-		for (QDate date = first; date <= last; date = date.addDays(1)) {
-			if (!item.intersects(date, date)) {
-				if (firstIndex == -1)
-					firstIndex = dayIndex;
-				dayStacks.insert(date, top + 1);
-				lastIndex = dayIndex;
-			}
-			dayIndex++;
-		}
-		// paint
-		int fontHeight = QFontMetrics(QFont()).height(); // replace it
-		int w = ((lastIndex + 1) * containWidth) / m_rangeWidth - (firstIndex * containWidth) / m_rangeWidth - 2;
-		QRect r(QPoint(60 + (firstIndex * containWidth) / m_rangeWidth + 1, scaleHeight + top * (fontHeight + 5)), QSize(w, fontHeight + 4));
 
-		DayWidget *widget = new DayWidget(this, item.uid(), model());
-		widget->move(r.topLeft());
-		widget->resize(r.size());
-		widget->show();
+	DayNode firstNode(items[0]);
+	computeWidget(items[0], 0);
+	for (int i = 1; i < items.count(); i++)
+		computeWidget(items[i], firstNode.store(items[i]));
+}
+
+void DayRangeHeader::computeWidget(const CalendarItem &item, int depth) {
+	int containWidth = (masterScrollArea ? masterScrollArea->viewport()->width() : width()) - 60;
+	int scaleHeight = getScaleHeight();
+	int fontHeight = QFontMetrics(QFont()).height(); // replace it
+
+	QDate first = firstDate();
+	QDate last = first.addDays(m_rangeWidth - 1);
+	int firstIndex = -1, lastIndex, dayIndex = 0;
+	for (QDate date = first; date <= last; date = date.addDays(1)) {
+		if (!item.intersects(date, date)) {
+			if (firstIndex == -1)
+				firstIndex = dayIndex;
+			lastIndex = dayIndex;
+		}
+		dayIndex++;
 	}
+
+	int w = ((lastIndex + 1) * containWidth) / m_rangeWidth - (firstIndex * containWidth) / m_rangeWidth - 2;
+	QRect r(QPoint(60 + (firstIndex * containWidth) / m_rangeWidth + 1, scaleHeight + depth * (fontHeight + 5)), QSize(w, fontHeight + 4));
+
+	DayWidget *widget = new DayWidget(this, item.uid(), model());
+	widget->move(r.topLeft());
+	widget->resize(r.size());
+	widget->show();
 }
 
 void DayRangeHeader::refreshItemsSizesAndPositions() {

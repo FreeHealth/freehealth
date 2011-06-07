@@ -30,6 +30,7 @@ namespace Calendar {
 
 		QList<CalendarItem> getItems() const;
 		void computeWidgets();
+		void computeWidget(const CalendarItem &item, int depth);
 	};
 
 	class HourWidget : public QWidget
