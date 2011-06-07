@@ -683,13 +683,14 @@ bool PmhCategoryModel::addPmhData(PmhData *pmh)
             return false;
         }
 
+        QModelIndex pmhOldIndex = indexForPmhData(pmh);
+
         beginInsertRows(newParentIndex, rowCount(newParentIndex), rowCount(newParentIndex));
         TreeItem *item = new TreeItem;
         d->pmhToItem(pmh, item, rowCount(newParentIndex));
         endInsertRows();
 
         // Remove the row
-        QModelIndex pmhOldIndex = indexForPmhData(pmh);
         beginRemoveRows(pmhOldIndex.parent(), pmhOldIndex.row(), pmhOldIndex.row());
         parentOldItem->removeChild(oldItem);
         delete oldItem;

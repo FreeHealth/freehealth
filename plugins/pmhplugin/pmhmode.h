@@ -52,6 +52,8 @@ public:
     PmhModeWidget(QWidget *parent = 0);
     ~PmhModeWidget();
 
+    int currentSelectedCategory() const;
+
 private Q_SLOTS:
     void currentChanged(const QModelIndex &current, const QModelIndex &previous);
     void onButtonClicked(QAbstractButton *button);

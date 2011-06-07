@@ -140,6 +140,7 @@ PmhActionHandler::PmhActionHandler(QObject *parent) :
     QList<int> globalcontext = QList<int>() << Core::Constants::C_GLOBAL_ID;
 
     Core::ActionContainer *menu = actionManager()->actionContainer(Core::Constants::M_PATIENTS);
+    Core::ActionContainer *newmenu = actionManager()->actionContainer(Core::Constants::M_GENERAL_NEW);
     Core::ActionContainer *pmhMenu = actionManager()->createMenu(Constants::M_PMH);
     Q_ASSERT(menu);
     if (!menu) {
@@ -154,12 +155,14 @@ PmhActionHandler::PmhActionHandler(QObject *parent) :
     }
 
     // Create local actions
-    a = aAddPmh= new QAction(this);
+    a = aAddPmh = new QAction(this);
     a->setObjectName("aAddPmh");
     a->setIcon(th->icon(Core::Constants::ICONADD));
     cmd = actionManager()->registerAction(a, Constants::A_PMH_NEW, globalcontext);
     cmd->setTranslations(Constants::CREATEPMH_TEXT, Constants::CREATEPMH_TEXT, Constants::PMHCONSTANTS_TR_CONTEXT);
     pmhMenu->addAction(cmd, Constants::G_PMH_NEW);
+    if (newmenu)
+        newmenu->addAction(cmd, Core::Constants::G_GENERAL_NEW);
     connect(a, SIGNAL(triggered()), this, SLOT(createPmh()));
 
     a = aRemovePmh= new QAction(this);
@@ -222,7 +225,7 @@ void PmhActionHandler::setCurrentView(PmhContextualWidget *view)
 //                   this, SLOT(drugsModelChanged()));
 //        m_CurrentView->drugSelector()->disconnectFilter();
 //    }
-//    m_CurrentView = view;
+    m_CurrentView = view;
 
 //    DrugsDB::DrugsModel::setActiveModel(view->currentDrugsModel());
 //    // reconnect some actions

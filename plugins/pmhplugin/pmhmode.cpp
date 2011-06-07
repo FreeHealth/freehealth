@@ -47,6 +47,8 @@
 #include <listviewplugin/fancytreeview.h>
 #include <listviewplugin/simplecategorymodel.h>
 
+#include <categoryplugin/categoryitem.h>
+
 #include <categoryplugin/categorydialog.h>
 
 #include <translationutils/constanttranslations.h>
@@ -111,8 +113,24 @@ PmhModeWidget::~PmhModeWidget()
     delete ui;
 }
 
+int PmhModeWidget::currentSelectedCategory() const
+{
+    if (!ui->treeView->selectionModel()->hasSelection())
+        return -1;
+    QModelIndex item = ui->treeView->selectionModel()->currentIndex();
+    while (!pmhCore()->pmhCategoryModel()->isCategory(item)) {
+        item = item.parent();
+    }
+    Category::CategoryItem *cat = pmhCore()->pmhCategoryModel()->categoryForIndex(item);
+    if (cat) {
+        return cat->id();
+    }
+    return -1;
+}
+
 void PmhModeWidget::currentChanged(const QModelIndex &current, const QModelIndex &previous)
 {
+    currentSelectedCategory();
     if (!current.isValid())
         return;
 

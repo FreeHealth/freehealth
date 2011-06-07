@@ -30,8 +30,13 @@
 #include "pmhdata.h"
 #include "pmhcategorymodel.h"
 #include "constants.h"
+//#include "pmhmode.h"
 
 #include <coreplugin/dialogs/helpdialog.h>
+#include <coreplugin/icore.h>
+//#include <coreplugin/modemanager/modemanager.h>
+//#include <coreplugin/modemanager/imode.h>
+//#include <coreplugin/constants_menus.h>
 
 #include "ui_pmhcreatordialog.h"
 
@@ -40,7 +45,7 @@
 using namespace PMH;
 
 static inline PmhCore *pmhCore() {return PmhCore::instance();}
-
+//static inline Core::ModeManager *modeManager() {return Core::ICore::instance()->modeManager();}
 
 PmhCreatorDialog::PmhCreatorDialog(QWidget *parent) :
     QDialog(parent),
@@ -51,6 +56,15 @@ PmhCreatorDialog::PmhCreatorDialog(QWidget *parent) :
     ui->pmhViewer->setEditMode(PmhViewer::ReadWriteMode);
     ui->pmhViewer->createNewPmh();
     ui->pmhViewer->setShowPatientInformations(true);
+    // Get selected category id
+//    if (modeManager()->currentMode()->uniqueModeName()==Core::Constants::MODE_PATIENT_HISTORY) {
+//        Internal::PmhMode *mode = qobject_cast<Internal::PmhMode*>(modeManager()->currentMode());
+//        if (mode) {
+//            if (mode->widget()->isVisible()) {
+
+//            }
+//        }
+//    }
 }
 
 PmhCreatorDialog::~PmhCreatorDialog()
