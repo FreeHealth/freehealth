@@ -26,12 +26,20 @@
  ***************************************************************************/
 #include "firstrunformmanager.h"
 #include "formfilesselectorwidget.h"
+#include "iformio.h"
+
+#include <coreplugin/icore.h>
+#include <coreplugin/isettings.h>
+
+#include <utils/global.h>
 
 #include <QEvent>
 #include <QGridLayout>
 
 using namespace Form;
 using namespace Internal;
+
+static inline Core::ISettings *settings() { return Core::ICore::instance()->settings(); }
 
 FirstRunFormManagerWizardPage::FirstRunFormManagerWizardPage(QWidget *parent) :
         QWizardPage(parent)//, m_Wizard(parent)
@@ -54,6 +62,16 @@ void FirstRunFormManagerWizardPage::retranslate()
 
 bool FirstRunFormManagerWizardPage::validatePage()
 {
+    QList<Form::FormIODescription *> sel = selector->selectedForms();
+    if (sel.count() != 1) {
+        Utils::warningMessageBox(tr("Please one (and only one) form for your default patient file."),
+                                 tr("You must select one file to be used by default."));
+        return false;
+    }
+    // Save the selected form in the network settings
+    Form::FormIODescription * f = sel.at(0);
+    settings()->setDefaultForm(f->data(Form::FormIODescription::UuidOrAbsPath).toString());
+    settings()->sync();
     return true;
 }
 

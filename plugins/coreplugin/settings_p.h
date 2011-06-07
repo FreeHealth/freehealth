@@ -82,6 +82,8 @@ public:
     void noMoreFirstTimeRunning();
     QString licenseApprovedApplicationNumber() const;
     void setLicenseApprovedApplicationNumber(const QString &version);
+    void setDefaultForm(const QString &formUid);
+    QString defaultForm() const;
 
     // manage mainwindow
     void restoreState(QMainWindow *window, const QString &prefix = QString::null);

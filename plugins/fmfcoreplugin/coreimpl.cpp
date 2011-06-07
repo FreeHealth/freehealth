@@ -206,21 +206,20 @@ bool CoreImpl::initialize(const QStringList &arguments, QString *errorString)
             return false;
         }
         m_Settings->noMoreFirstTimeRunning();
-
-        // show the license agreement dialog
-#ifndef LINUX_INTEGRATED
-        if (!Utils::defaultLicenceAgreementDialog("", Utils::LicenseTerms::GPLv3))
-            return false;
-#endif
-        m_Settings->setLicenseApprovedApplicationNumber(qApp->applicationVersion());
-    } else if (m_Settings->licenseApprovedApplicationNumber() != qApp->applicationVersion()) {
-        // show the license agreement dialog
-#ifndef LINUX_INTEGRATED
-        if (!Utils::defaultLicenceAgreementDialog(
-                QCoreApplication::translate("Core", "You are running a new version of %1, you need to renew the licence agreement.").arg(qApp->applicationName()),
-                Utils::LicenseTerms::GPLv3 ))
-            return false;
-#endif
+//        // show the license agreement dialog
+//#ifndef LINUX_INTEGRATED
+//        if (!Utils::defaultLicenceAgreementDialog("", Utils::LicenseTerms::GPLv3))
+//            return false;
+//#endif
+//        m_Settings->setLicenseApprovedApplicationNumber(qApp->applicationVersion());
+//    } else if (m_Settings->licenseApprovedApplicationNumber() != qApp->applicationVersion()) {
+//        // show the license agreement dialog
+//#ifndef LINUX_INTEGRATED
+//        if (!Utils::defaultLicenceAgreementDialog(
+//                QCoreApplication::translate("Core", "You are running a new version of %1, you need to renew the licence agreement.").arg(qApp->applicationName()),
+//                Utils::LicenseTerms::GPLv3 ))
+//            return false;
+//#endif
         /** \todo code here: if alpha -> delete old configuration && databases */
         m_Settings->setLicenseApprovedApplicationNumber(qApp->applicationVersion());
     }

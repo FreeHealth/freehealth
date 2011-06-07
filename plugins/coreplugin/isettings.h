@@ -123,6 +123,8 @@ public:
     // Network datas
     virtual Utils::DatabaseConnector databaseConnector() const = 0;
     virtual void setDatabaseConnector(Utils::DatabaseConnector &dbConnector) = 0;
+    virtual void setDefaultForm(const QString &formUid) = 0;
+    virtual QString defaultForm() const = 0;
 
     // values management
     virtual void appendToValue(const QString &key, const QString &value) = 0;

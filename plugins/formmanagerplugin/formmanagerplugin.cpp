@@ -44,6 +44,7 @@
 
 #include <coreplugin/dialogs/pluginaboutpage.h>
 #include <coreplugin/icore.h>
+#include <coreplugin/isettings.h>
 #include <coreplugin/itheme.h>
 #include <coreplugin/translators.h>
 
@@ -52,6 +53,7 @@
 #include <QDebug>
 
 static inline Core::ITheme *theme()  { return Core::ICore::instance()->theme(); }
+static inline Core::ISettings *settings()  { return Core::ICore::instance()->settings(); }
 static inline void messageSplash(const QString &s) {theme()->messageSplashScreen(s); }
 
 using namespace Form;
@@ -105,16 +107,25 @@ void FormManagerPlugin::extensionsInitialized()
     if (Utils::Log::warnPluginsCreation())
         qWarning() << "FormManagerPlugin::extensionsInitialized";
 
-    // Initialize patient base
+    // Initialize patient base and manager
     episodeBase();
+    FormManager::instance();
+
+    // Check FirstRun Default Form
+    const QString &uid = settings()->defaultForm();
+    if (!uid.isEmpty()) {
+        episodeBase()->setGenericPatientFormFile(uid);
+        FormManager::instance()->readPmhxCategories(uid);
+        settings()->setDefaultForm("");
+    }
 
     addAutoReleasedObject(new Internal::FormManagerPreferencesPage(this));
     addAutoReleasedObject(new Core::PluginAboutPage(pluginSpec(), this));
 
     // Add mode
-    FormManager::instance();
     mode = new FormManagerMode(this);
     addObject(mode);
+
 }
 
 

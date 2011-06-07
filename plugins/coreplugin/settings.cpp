@@ -304,6 +304,7 @@ namespace {
     // SETTINGS
     const char* const S_LICENSE_VERSION    = "License/AcceptedVersion";
     const char* const S_DATABASECONNECTOR  = "Network/Db";
+    const char* const S_DEFAULTFORM        = "Form/Default";
 
 }
 
@@ -620,6 +621,24 @@ QString SettingsPrivate::licenseApprovedApplicationNumber() const
 void SettingsPrivate::setLicenseApprovedApplicationNumber(const QString &version)
 {
     m_NetworkSettings->setValue(S_LICENSE_VERSION, version);
+}
+
+/**
+  \fn void Core::ISettings::setDefaultForm(const QString &formUid)
+  Store the default form to use for patient files. Only used by the Application General Configurator.
+*/
+void SettingsPrivate::setDefaultForm(const QString &formUid)
+{
+    m_NetworkSettings->setValue(S_DEFAULTFORM, formUid);
+}
+
+/**
+  \fn void Core::ISettings::defaultForm() const
+  Return the default form to use for patient files. Only used by the Application General Configurator.
+*/
+QString SettingsPrivate::defaultForm() const
+{
+    return m_NetworkSettings->value(S_DEFAULTFORM).toString();
 }
 
 /**
