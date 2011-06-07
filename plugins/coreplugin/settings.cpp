@@ -591,7 +591,7 @@ QString SettingsPrivate::path(const int type) const
 */
 bool SettingsPrivate::firstTimeRunning() const
 {
-    return value("FirstTimeRunning", true).toBool();
+    return m_NetworkSettings->value("FirstTimeRunning", true).toBool();
 }
 
 /**
@@ -601,7 +601,8 @@ bool SettingsPrivate::firstTimeRunning() const
 */
 void SettingsPrivate::noMoreFirstTimeRunning()
 {
-    setValue("FirstTimeRunning", false);
+    m_NetworkSettings->setValue("FirstTimeRunning", false);
+    m_NetworkSettings->sync();
     m_FirstTime = false;
 }
 
@@ -610,7 +611,7 @@ void SettingsPrivate::noMoreFirstTimeRunning()
 */
 QString SettingsPrivate::licenseApprovedApplicationNumber() const
 {
-    return value(S_LICENSE_VERSION).toString();
+    return m_NetworkSettings->value(S_LICENSE_VERSION).toString();
 }
 
 /**
@@ -618,7 +619,7 @@ QString SettingsPrivate::licenseApprovedApplicationNumber() const
 */
 void SettingsPrivate::setLicenseApprovedApplicationNumber(const QString &version)
 {
-    setValue(S_LICENSE_VERSION, version);
+    m_NetworkSettings->setValue(S_LICENSE_VERSION, version);
 }
 
 /**
