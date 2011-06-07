@@ -67,14 +67,6 @@ UserCreationPage::UserCreationPage(QWidget *parent) :
     setPixmap(QWizard::BackgroundPixmap, pix);
     setPixmap(QWizard::WatermarkPixmap, pix);
 
-    const Utils::DatabaseConnector &db = settings()->databaseConnector();
-    if (db.driver()==Utils::Database::SQLite) {
-        if (!userModel()->setCurrentUser(Constants::DEFAULT_USER_CLEARLOGIN, Constants::DEFAULT_USER_CLEARPASSWORD)) {
-            LOG_ERROR("Unable to connect has default admin user");
-            ui->userManagerButton->setEnabled(false);
-        }
-    }
-
     connect(ui->userManagerButton, SIGNAL(clicked()), this, SLOT(userManager()));
     connect(ui->completeWizButton, SIGNAL(clicked()), this, SLOT(userWizard()));
 //    connect(ui->quickWizButton, SIGNAL(clicked()), this, SLOT());
@@ -105,6 +97,15 @@ void UserCreationPage::initializePage()
 {
     // Create the user database
     userBase()->initialize();
+
+    const Utils::DatabaseConnector &db = settings()->databaseConnector();
+    if (db.driver()==Utils::Database::SQLite) {
+        if (!userModel()->setCurrentUser(Constants::DEFAULT_USER_CLEARLOGIN, Constants::DEFAULT_USER_CLEARPASSWORD)) {
+            LOG_ERROR("Unable to connect has default admin user");
+            ui->userManagerButton->setEnabled(false);
+        }
+    }
+
     // Set current user into user model
     userModel()->setCurrentUserIsServerManager();
 
