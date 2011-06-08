@@ -113,13 +113,13 @@ void AccountView::filterChanged()
     // Filter model
     d->m_Model->setStartDate(d->m_ui->startDate->date());
     d->m_Model->setEndDate(d->m_ui->endDate->date());
-
+    qDebug() << __FILE__ << QString::number(__LINE__) << " in filterChanged " ;
     // Calculate sums of paiements
-    d->m_ui->cash->setText(QString::number(d->m_Model->sum(AccountDB::Constants::ACCOUNT_CASHAMOUNT)));
+    /*d->m_ui->cash->setText(QString::number(d->m_Model->sum(AccountDB::Constants::ACCOUNT_CASHAMOUNT)));
     d->m_ui->cheque->setText(QString::number(d->m_Model->sum(AccountDB::Constants::ACCOUNT_CHEQUEAMOUNT)));
     d->m_ui->du->setText(QString::number(d->m_Model->sum(AccountDB::Constants::ACCOUNT_DUEAMOUNT)));
     d->m_ui->insurance->setText(QString::number(d->m_Model->sum(AccountDB::Constants::ACCOUNT_INSURANCEAMOUNT)));
-    d->m_ui->visa->setText(QString::number(d->m_Model->sum(AccountDB::Constants::ACCOUNT_VISAAMOUNT)));
+    d->m_ui->visa->setText(QString::number(d->m_Model->sum(AccountDB::Constants::ACCOUNT_VISAAMOUNT)));*/
     
     calc();
 }
@@ -175,14 +175,18 @@ void AccountView::on_periodCombo_currentIndexChanged(int index)
 }
 
 void AccountView::calc(){
+    qDebug() << __FILE__ << QString::number(__LINE__) << " in calc " ;
     QHash<int,QLineEdit*> hash;
     hash.insert(AccountDB::Constants::ACCOUNT_CASHAMOUNT,d->m_ui->cash);
     hash.insert(AccountDB::Constants::ACCOUNT_CHEQUEAMOUNT,d->m_ui->cheque);
     hash.insert(AccountDB::Constants::ACCOUNT_VISAAMOUNT,d->m_ui->visa);
     hash.insert(AccountDB::Constants::ACCOUNT_DUEAMOUNT,d->m_ui->du);
+    hash.insert(AccountDB::Constants::ACCOUNT_OTHERAMOUNT,d->m_ui->other);
     hash.insert(AccountDB::Constants::ACCOUNT_INSURANCEAMOUNT,d->m_ui->insurance);
     QAbstractItemModel *model = d->m_ui->tableView->model();
+    qDebug() << __FILE__ << QString::number(__LINE__) << " 1 " ;
     double sum = 0.00;
+    qDebug() << __FILE__ << QString::number(__LINE__) << " 2 " ;
     for (int col = AccountDB::Constants::ACCOUNT_CASHAMOUNT; col < AccountDB::Constants::ACCOUNT_DUEAMOUNT+1; col += 1)
     {
     	for (int row = 0; row < model->rowCount(); row += 1)
@@ -191,6 +195,8 @@ void AccountView::calc(){
     		
     	    }
     	    QString textSum = QString::number(sum);
+    	    qDebug() << __FILE__ << QString::number(__LINE__) << " textSum =" << textSum;
     	    hash.value(col)->setText(textSum);
         }
+     qDebug() << __FILE__ << QString::number(__LINE__) << " in calc end " ;
 }
