@@ -1,3 +1,4 @@
+#include "common.h"
 #include "calendar_item.h"
 
 using namespace Calendar;
@@ -84,13 +85,7 @@ void CalendarItem::setDaily(bool value) {
 }
 
 int CalendarItem::intersects(const QDate &firstDay, const QDate &lastDay) const {
-	if (m_ending.date() < firstDay ||
-		(m_ending.date() == firstDay && m_ending.time() == QTime(0, 0)))
-		return -1;
-	if (m_beginning.date() > lastDay)
-		return 1;
-
-	return 0;
+	return intersectsDays(m_beginning, m_ending, firstDay, lastDay);
 }
 
 bool CalendarItem::overlap(const CalendarItem &item) const {

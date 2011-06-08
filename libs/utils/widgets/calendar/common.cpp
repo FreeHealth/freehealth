@@ -33,4 +33,30 @@ namespace Calendar {
 	QPair<QDate, QDate> getBoundingMonthDaysInterval(const QDate &date) {
 		return getBoundingMonthDaysInterval(date.year(), date.month());
 	}
+
+	int intersectsDays(const QDateTime &beginning, const QDateTime &ending,
+				  const QDate &firstDay, const QDate &lastDay) {
+		if (ending.date() < firstDay ||
+			(ending.date() == firstDay && ending.time() == QTime(0, 0)))
+			return -1;
+		if (beginning.date() > lastDay)
+			return 1;
+
+		return 0;
+	}
+
+	QPair<QDate, QDate> getIntersectDayRange(const QDateTime &beginning, const QDateTime &ending) {
+		QDate first = beginning.date();
+		QDate last = ending.date();
+		QDate firstDate, lastDate;
+		for (QDate date = first; date <= last; date = date.addDays(1)) {
+			if (!intersectsDays(beginning, ending, date, date)) {
+				if (!firstDate.isValid())
+					firstDate = date;
+				lastDate = date;
+			} else
+				break;
+		}
+		return QPair<QDate,QDate>(firstDate, lastDate);
+	}
 }

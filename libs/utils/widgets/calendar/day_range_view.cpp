@@ -44,7 +44,7 @@ QList<CalendarItem> DayRangeHeader::getItems() const {
 	return items;
 }
 
-QSize DayRangeHeader::sizeHint() const {
+int DayRangeHeader::getLastWidgetBottom() const {
 	int maxBottom = -1;
 	foreach (QObject *obj, children()) {
 		DayWidget *widget = qobject_cast<DayWidget*>(obj);
@@ -54,53 +54,61 @@ QSize DayRangeHeader::sizeHint() const {
 		if (widget && bottom > maxBottom)
 			maxBottom = bottom;
 	}
+	return maxBottom;
+}
+
+QSize DayRangeHeader::sizeHint() const {
+	int maxBottom = getLastWidgetBottom();
 	return QSize(0, maxBottom == -1 ? getScaleHeight() + DayWidget::staticSizeHint().height() + 5 : maxBottom + DayWidget::staticSizeHint().height() + 5);
 }
 
 void DayRangeHeader::computeWidgets() {
-	// remove old day widgets
+	// 1. remove old day widgets
 	foreach (QObject *object, children()) {
 		DayWidget *widget = qobject_cast<DayWidget*>(object);
 		if (widget)
 			delete widget;
 	}
 
-	int containWidth = (masterScrollArea ? masterScrollArea->viewport()->width() : width()) - 60;
-	int scaleHeight = getScaleHeight();
+	m_maxDepth = -1; // if no widgets => convention is to set the max depth to -1
+
+	// 2. create new widgets
 	QList<CalendarItem> items = getItems();
 	if (!items.count())
 		return;
 
 	qSort(items.begin(), items.end(), calendarItemLessThan);
-	QDate first = firstDate();
-	QDate last = first.addDays(m_rangeWidth - 1);
-	QMap<QDate, int> dayStacks;
 
+	m_maxDepth = 0;
 	DayNode firstNode(items[0]);
 	computeWidget(items[0], 0);
-	for (int i = 1; i < items.count(); i++)
-		computeWidget(items[i], firstNode.store(items[i]));
+	for (int i = 1; i < items.count(); i++) {
+		int depth = firstNode.store(items[i]);
+		if (depth > m_maxDepth)
+			m_maxDepth = depth;
+		computeWidget(items[i], depth);
+	}
+}
+
+int DayRangeHeader::getContainWidth() const {
+	return (masterScrollArea ? masterScrollArea->viewport()->width() : width()) - 60;
+}
+
+QRect DayRangeHeader::computeWidgetRect(const QDate &firstDay, const QDate &lastDay, int depth) const {
+	int containWidth = getContainWidth();
+	int scaleHeight = getScaleHeight();
+	int widgetHeight = DayWidget::staticSizeHint().height();
+
+	int firstIndex = qMax(0, firstDate().daysTo(firstDay));
+	int lastIndex = qMin(m_rangeWidth - 1, firstDate().daysTo(lastDay));
+
+	int w = ((lastIndex + 1) * containWidth) / m_rangeWidth - (firstIndex * containWidth) / m_rangeWidth - 2;
+	return QRect(QPoint(60 + (firstIndex * containWidth) / m_rangeWidth + 1, scaleHeight + depth * (widgetHeight + 1)), QSize(w, widgetHeight));
 }
 
 void DayRangeHeader::computeWidget(const CalendarItem &item, int depth) {
-	int containWidth = (masterScrollArea ? masterScrollArea->viewport()->width() : width()) - 60;
-	int scaleHeight = getScaleHeight();
-	int fontHeight = QFontMetrics(QFont()).height(); // replace it
-
-	QDate first = firstDate();
-	QDate last = first.addDays(m_rangeWidth - 1);
-	int firstIndex = -1, lastIndex, dayIndex = 0;
-	for (QDate date = first; date <= last; date = date.addDays(1)) {
-		if (!item.intersects(date, date)) {
-			if (firstIndex == -1)
-				firstIndex = dayIndex;
-			lastIndex = dayIndex;
-		}
-		dayIndex++;
-	}
-
-	int w = ((lastIndex + 1) * containWidth) / m_rangeWidth - (firstIndex * containWidth) / m_rangeWidth - 2;
-	QRect r(QPoint(60 + (firstIndex * containWidth) / m_rangeWidth + 1, scaleHeight + depth * (fontHeight + 5)), QSize(w, fontHeight + 4));
+	QPair<QDate,QDate> dayInterval = getIntersectDayRange(item.beginning(), item.ending());
+	QRect r = computeWidgetRect(dayInterval.first, dayInterval.second, depth);
 
 	DayWidget *widget = new DayWidget(this, item.uid(), model());
 	widget->move(r.topLeft());
@@ -184,6 +192,107 @@ void DayRangeHeader::paintEvent(QPaintEvent *) {
 
 int DayRangeHeader::getScaleHeight() const {
 	return QFontMetrics(m_scaleFont).height() + 5;
+}
+
+QDate DayRangeHeader::getDate(int x) const {
+	// get day
+	int containWidth = (masterScrollArea ? masterScrollArea->viewport()->width() : width()) - 60;
+	int day = 0;
+	for (int i = 0; i < m_rangeWidth; ++i) {
+		if (x >= (i * containWidth) / m_rangeWidth + 60 && x < ((i + 1) * containWidth) / m_rangeWidth + 60){
+			break;
+		}
+		day++;
+	}
+	return firstDate().addDays(day);
+}
+
+void DayRangeHeader::mousePressEvent(QMouseEvent *event) {
+	if (event->pos().x() < 60 || event->pos().y() < getScaleHeight()) {
+		QWidget::mousePressEvent(event);
+		return;
+	}
+
+	m_pressDate = getDate(event->pos().x());
+	m_previousDate = m_pressDate;
+	m_pressPos = event->pos();
+
+	// item under mouse?
+	m_pressItemWidget = qobject_cast<DayWidget*>(childAt(event->pos()));
+	if (m_pressItemWidget) {
+		m_pressItem = model()->getItemByUid(m_pressItemWidget->uid());
+		m_pressDayInterval = getIntersectDayRange(m_pressItem.beginning(), m_pressItem.ending());
+		m_mouseMode = MouseMode_Move;
+	} else
+		m_mouseMode = MouseMode_Creation;
+}
+
+void DayRangeHeader::mouseMoveEvent(QMouseEvent *event) {
+	if (m_mouseMode == MouseMode_None) {
+		QWidget::mouseMoveEvent(event);
+		return;
+	}
+
+	QDate date = getDate(event->pos().x());
+	if (date == m_previousDate)
+		return;
+
+	m_previousDate = date;
+
+	switch (m_mouseMode) {
+	case MouseMode_Creation:
+/*		if (dateTime != m_pressDateTime) {
+			if (!m_pressItemWidget) {
+				m_pressItemWidget = new HourRangeWidget(this);
+				m_pressItemWidget->setBeginDateTime(m_pressDateTime);
+				m_pressItemWidget->show();
+			}
+
+			if (event->pos().y() > m_pressPos.y()) {
+				rect = getTimeIntervalRect(m_pressDateTime.date().dayOfWeek(), m_pressDateTime.time(), dateTime.time());
+				m_pressItemWidget->setBeginDateTime(m_pressDateTime);
+				m_pressItemWidget->setEndDateTime(dateTime);
+			}
+			else {
+				rect = getTimeIntervalRect(m_pressDateTime.date().dayOfWeek(), dateTime.time(), m_pressDateTime.time());
+				m_pressItemWidget->setBeginDateTime(dateTime);
+				m_pressItemWidget->setEndDateTime(m_pressDateTime);
+			}
+
+			m_pressItemWidget->move(rect.x(), rect.y());
+			m_pressItemWidget->resize(rect.width(), rect.height());
+			}*/
+		break;
+	case MouseMode_Move:
+	{
+		if (!m_pressItemWidget->inMotion()) {
+			m_pressItemWidget->setInMotion(true);
+		}
+		int dayCount = m_pressDayInterval.first.daysTo(m_pressDayInterval.second);
+		QRect r = computeWidgetRect(date, date.addDays(dayCount - 1), m_maxDepth + 1);
+		m_pressItemWidget->move(r.topLeft());
+	}
+	break;
+	default:;
+	}
+}
+
+void DayRangeHeader::mouseReleaseEvent(QMouseEvent *event) {
+	QWidget::mouseReleaseEvent(event);
+
+	QDate date = getDate(event->pos().x());
+	if (m_mouseMode == MouseMode_Move) {
+		int daysAdded = m_pressDayInterval.first.daysTo(date);
+		if (daysAdded) {
+			m_pressItem.setBeginning(m_pressItem.beginning().addDays(daysAdded));
+			m_pressItem.setEnding(m_pressItem.ending().addDays(daysAdded));
+			model()->setItemByUid(m_pressItem.uid(), m_pressItem);
+		}
+		computeWidgets();
+		updateGeometry();
+	}
+
+	m_mouseMode = MouseMode_None;
 }
 
 /////////////////////////////////////////////////////////////////
@@ -372,8 +481,10 @@ QDateTime DayRangeBody::getDateTime(const QPoint &pos) const {
 }
 
 void DayRangeBody::mousePressEvent(QMouseEvent *event) {
-	if (event->pos().x() < m_leftScaleWidth)
+	if (event->pos().x() < m_leftScaleWidth) {
+		QWidget::mousePressEvent(event);
 		return;
+	}
 	m_pressDateTime = getDateTime(event->pos());
 	m_previousDateTime = m_pressDateTime;
 	m_pressPos = event->pos();
@@ -387,9 +498,8 @@ void DayRangeBody::mousePressEvent(QMouseEvent *event) {
 			m_mouseMode = MouseMode_Resize;
 		else
 			m_mouseMode = MouseMode_Move;
-	} else {
+	} else
 		m_mouseMode = MouseMode_Creation;
-	}
 }
 
 void DayRangeBody::mouseMoveEvent(QMouseEvent *event) {
@@ -397,6 +507,11 @@ void DayRangeBody::mouseMoveEvent(QMouseEvent *event) {
 	QRect rect;
 	int seconds, limits;
 	QDateTime beginning, ending;
+
+	if (m_mouseMode == MouseMode_None) {
+		QWidget::mouseMoveEvent(event);
+		return;
+	}
 
 	if (m_previousDateTime == dateTime)
 		return;

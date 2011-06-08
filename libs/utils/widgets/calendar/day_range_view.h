@@ -5,6 +5,7 @@
 
 namespace Calendar {
 	class HourRangeWidget;
+	class DayWidget;
 
 	class DayRangeHeader : public ViewWidget
 	{
@@ -22,15 +23,37 @@ namespace Calendar {
 		void paintEvent(QPaintEvent *event);
 		void resetItemWidgets();
 		void refreshItemsSizesAndPositions();
+		void mousePressEvent(QMouseEvent *event);
+		void mouseMoveEvent(QMouseEvent *event);
+		void mouseReleaseEvent(QMouseEvent *event);
 
 	private:
+		enum MouseMode {
+			MouseMode_None,
+			MouseMode_Move,
+			MouseMode_Resize,
+			MouseMode_Creation
+		};
 		int m_rangeWidth;
+		int m_maxDepth;
 		QFont m_scaleFont; // TODO: choose a better font
-		int getScaleHeight() const;
+		QDate m_pressDate;
+		QDate m_previousDate;
+		QPoint m_pressPos;
+		MouseMode m_mouseMode;
+		DayWidget *m_pressItemWidget;
+		CalendarItem m_pressItem;
+		QPair<QDate,QDate> m_pressDayInterval;
 
+		int getScaleHeight() const;
+		int getContainWidth() const;
+
+		QDate getDate(int x) const;
 		QList<CalendarItem> getItems() const;
+		QRect computeWidgetRect(const QDate &firstDay, const QDate &lastDay, int depth) const;
 		void computeWidgets();
 		void computeWidget(const CalendarItem &item, int depth);
+		int getLastWidgetBottom() const;
 	};
 
 	class HourWidget : public QWidget
