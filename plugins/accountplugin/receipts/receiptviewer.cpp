@@ -401,7 +401,9 @@ namespace InternalAmount {
         
     };
 }  // End namespace Internal
-
+//////////////////////////////////////////////////////////////////////////
+/////////////treeview/////////////////////////////////////////////////////
+///////////////////////////////////////////////////////////////////////////
 
 treeViewsActions::treeViewsActions(QWidget *parent):QTreeView(parent){
     m_deleteThesaurusValue = new QAction(trUtf8("Delete this value."),this);
@@ -412,10 +414,12 @@ treeViewsActions::treeViewsActions(QWidget *parent):QTreeView(parent){
     
 treeViewsActions::~treeViewsActions(){}
 
-void treeViewsActions::mousePressEvent(QMouseEvent *event){
+/*void treeViewsActions::mousePressEvent(QMouseEvent *event){
+    qDebug() << __FILE__ << QString::number(__LINE__) << " in  tree clicked" ;
     if(event->button() == Qt::RightButton){
         if(isChildOfThesaurus()){
             blockSignals(true);
+            qDebug() << __FILE__ << QString::number(__LINE__) << " in treeview right button " ;
             m_menuRightClic = new QMenu(this); 
             m_menuRightClic -> addAction(m_choosePreferedValue);
             m_menuRightClic-> addAction(m_deleteThesaurusValue);
@@ -425,8 +429,30 @@ void treeViewsActions::mousePressEvent(QMouseEvent *event){
 
     }
     if(event->button() == Qt::LeftButton){
-        blockSignals(false);
-        QTreeView::mousePressEvent(event);
+            qDebug() << __FILE__ << QString::number(__LINE__) << " in left button " ;
+            blockSignals(false);
+            QTreeView::mousePressEvent(event);
+    }
+}*/
+
+void treeViewsActions::mouseReleaseEvent(QMouseEvent *event){
+    qDebug() << __FILE__ << QString::number(__LINE__) << " in  tree clicked" ;
+    if(event->button() == Qt::RightButton){
+        if(isChildOfThesaurus()){
+            blockSignals(true);
+            qDebug() << __FILE__ << QString::number(__LINE__) << " in treeview right button " ;
+            m_menuRightClic = new QMenu(this); 
+            m_menuRightClic -> addAction(m_choosePreferedValue);
+            m_menuRightClic-> addAction(m_deleteThesaurusValue);
+            m_menuRightClic->exec(event->globalPos());
+            blockSignals(false);
+        }
+
+    }
+    if(event->button() == Qt::LeftButton){
+            qDebug() << __FILE__ << QString::number(__LINE__) << " in left button " ;
+            blockSignals(false);
+            QTreeView::mouseReleaseEvent(event);
     }
 }
 
@@ -485,14 +511,15 @@ bool treeViewsActions::addPreferedItem(QModelIndex &index){
 }
 
 bool treeViewsActions::isChildOfThesaurus(){
-    bool ret = true;
+    bool ret = false;
     QModelIndex current = currentIndex();
     QModelIndex indexParent = treeModel()->parent(current);
     QString dataParent = treeModel()->data(indexParent).toString();
+    QStringList valuesOfThesaurus = m_mapSubItems.values("Thesaurus");
     qDebug() << __FILE__ << QString::number(__LINE__) << " dataParent =" << dataParent ;
-    if (dataParent != "Thesaurus")
+    if (dataParent == "Thesaurus"|| valuesOfThesaurus.contains(dataParent))
     {
-    	  ret = false;
+    	  ret = true;
         }
     return ret;
 }
@@ -511,7 +538,7 @@ void treeViewsActions::fillActionTreeView()
     //parametersMap.insert("Distance rules","distance_rules");
     listOfMainActions = parametersMap.keys();
     //insert items from tables if available
-    QMap<QString,QString> mapSubItems;
+    //QMap<QString,QString> m_mapSubItems;
     receiptsManager manager;
     QString strKeysParameters;
     foreach(strKeysParameters,listOfMainActions){
@@ -521,29 +548,29 @@ void treeViewsActions::fillActionTreeView()
         listOfItemsOfTable = manager.getParametersDatas(null,table).keys();//QHash<QString,QVariant> name,uid
         QString strItemsOfTable;
         foreach(strItemsOfTable,listOfItemsOfTable){
-            mapSubItems.insertMulti(strKeysParameters,strItemsOfTable);
+            m_mapSubItems.insertMulti(strKeysParameters,strItemsOfTable);
         }
         //default values if unavailables :
         if (listOfItemsOfTable.size()<1)
         {
         	  if (strKeysParameters == "Debtor")
         	  {
-        	       mapSubItems.insertMulti(strKeysParameters,"Patient");
-                       mapSubItems.insertMulti(strKeysParameters,"CPAM28");  
+        	       m_mapSubItems.insertMulti(strKeysParameters,"Patient");
+                       m_mapSubItems.insertMulti(strKeysParameters,"CPAM28");  
         	      }
         	  else if (strKeysParameters == "Thesaurus")
         	  {
-        	       mapSubItems.insertMulti("Thesaurus","CS");
-                       mapSubItems.insertMulti("Thesaurus","V");  
+        	       m_mapSubItems.insertMulti("Thesaurus","CS");
+                       m_mapSubItems.insertMulti("Thesaurus","V");  
         	      }
         	  else if (strKeysParameters == "Sites")
         	  {
-        	       mapSubItems.insertMulti("Sites","cabinet");
-                       mapSubItems.insertMulti("Sites","clinique");  
+        	       m_mapSubItems.insertMulti("Sites","cabinet");
+                       m_mapSubItems.insertMulti("Sites","clinique");  
         	      }
         	  else if (strKeysParameters == "Distance rules")
         	  {
-        	  	  mapSubItems.insertMulti("Distance rules","DistPrice");
+        	  	  m_mapSubItems.insertMulti("Distance rules","DistPrice");
         	      }
         	  else
         	  {
@@ -599,7 +626,7 @@ void treeViewsActions::fillActionTreeView()
         
         parentItem->appendRow(actionItem);
         QStringList listSubActions;
-        listSubActions = mapSubItems.values(strMainActions);
+        listSubActions = m_mapSubItems.values(strMainActions);
         QString strSubActions;
         foreach(strSubActions,listSubActions){
             qDebug() << __FILE__ << QString::number(__LINE__) << " strSubActions =" << strSubActions ;
@@ -658,12 +685,12 @@ ReceiptViewer::ReceiptViewer(QWidget *parent) :
     ui->amountsView->horizontalHeader()->setResizeMode(QHeaderView::Interactive);
     ui->amountsView->horizontalHeader()->setStretchLastSection ( false );
     ui->amountsView->setModel(m_model);
-    ui->amountsView->setItemDelegateForColumn(Cash, new Utils::SpinBoxDelegate(this));
-    ui->amountsView->setItemDelegateForColumn(Check, new Utils::SpinBoxDelegate(this));
-    ui->amountsView->setItemDelegateForColumn(Visa, new Utils::SpinBoxDelegate(this));
-    ui->amountsView->setItemDelegateForColumn(Banking, new Utils::SpinBoxDelegate(this));
-    ui->amountsView->setItemDelegateForColumn(Other, new Utils::SpinBoxDelegate(this));
-    ui->amountsView->setItemDelegateForColumn(Due, new Utils::SpinBoxDelegate(this));
+    ui->amountsView->setItemDelegateForColumn(Cash, new Utils::SpinBoxDelegate(this,0.00,100.00,true));
+    ui->amountsView->setItemDelegateForColumn(Check, new Utils::SpinBoxDelegate(this,0.00,100.00,true));
+    ui->amountsView->setItemDelegateForColumn(Visa, new Utils::SpinBoxDelegate(this,0.00,100.00,true));
+    ui->amountsView->setItemDelegateForColumn(Banking, new Utils::SpinBoxDelegate(this,0.00,100.00,true));
+    ui->amountsView->setItemDelegateForColumn(Other, new Utils::SpinBoxDelegate(this,0.00,100.00,true));
+    ui->amountsView->setItemDelegateForColumn(Due, new Utils::SpinBoxDelegate(this,0.00,100.00,true));
     ui->amountsView->setColumnHidden(InternalAmount::AmountModel::Col_Debtor,true);
     ui->amountsView->setColumnHidden(InternalAmount::AmountModel::Col_Site,true);
     ui->amountsView->setColumnHidden(InternalAmount::AmountModel::Col_DistRule,true);

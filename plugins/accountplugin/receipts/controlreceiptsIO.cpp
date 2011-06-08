@@ -141,7 +141,9 @@ void ControlReceipts::deleteLine(){
       }
   QString textResult = textOfSums(m_accountModel);
   ui->resultLabel->setText(textResult);
-  refreshFilter(m_accountModel->filter());
+  const QString filter = m_accountModel->filter();
+  qDebug() << __FILE__ << QString::number(__LINE__) << " filter =" << filter ;
+  refreshFilter(filter);
 }
 
 QString ControlReceipts::textOfSums(AccountModel * model){
@@ -194,6 +196,17 @@ void ControlReceipts::refreshFilter(const QString & filter){
     delete m_accountModel;
     m_accountModel = new AccountModel(this);
     m_accountModel->setFilter(filter);
+    ui->tableView->setModel(m_accountModel);
+    ui->tableView->setColumnHidden(ACCOUNT_ID,true);
+    ui->tableView->setColumnHidden(ACCOUNT_UID,true);
+    ui->tableView->setColumnHidden(ACCOUNT_USER_UID,true);
+    ui->tableView->setColumnHidden(ACCOUNT_PATIENT_UID,true);
+    ui->tableView->setColumnHidden(ACCOUNT_SITE_ID,true);
+    ui->tableView->setColumnHidden(ACCOUNT_INSURANCE_ID,true);
+    ui->tableView->setColumnHidden(ACCOUNT_MEDICALPROCEDURE_XML,true);
+    ui->tableView->setColumnHidden(ACCOUNT_TRACE,true);
+    ui->tableView->horizontalHeader()->setResizeMode(QHeaderView::Interactive);
+    ui->tableView->horizontalHeader()->setResizeMode(QHeaderView::ResizeToContents);
 }
 
 void ControlReceipts::closeAction(){

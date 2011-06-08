@@ -245,6 +245,7 @@ QHash<int,QVariant> receiptsEngine::getListOfPreferedValues(QString & userUuid,
     {
             	  QMessageBox::warning(0,trUtf8("Warning"),trUtf8("You have to insert your prefered "
             	                 	  "value\nin thesaurus\nand choose it as prefered."),QMessageBox::Ok);
+            	  value = -1.13;
         }
     QVariant preferedAct = QVariant(data);
     double preferedValue = value;

@@ -238,6 +238,7 @@ AccountDatabaseDefautsWidget::AccountDatabaseDefautsWidget(QWidget *parent) :
 
 void AccountDatabaseDefautsWidget::on_createButton_clicked()
 {
+    QApplication::setOverrideCursor(QCursor(Qt::BusyCursor));
     if (medicalProcedure->isChecked()) {
         if (!createDefaultsFor("medical_procedure_6949", AccountDB::Constants::Table_MedicalProcedure))
             Utils::warningMessageBox(tr("beuh"), tr("Medical procedure defaults can not be included."));
@@ -262,6 +263,7 @@ void AccountDatabaseDefautsWidget::on_createButton_clicked()
 //        if (!createDefaultsFor("assets_rates", AccountDB::Constants::Table_AssetsRates))
 //            Utils::warningMessageBox(tr("beuh"), tr("Assets Rates defaults can not be included."));
 //    }
+    QApplication::restoreOverrideCursor ();
 }
 
 void AccountDatabaseDefautsWidget::setDatasToUi()

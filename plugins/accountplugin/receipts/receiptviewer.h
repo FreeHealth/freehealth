@@ -69,7 +69,8 @@ public:
     QStandardItemModel *treeModel() const {return m_actionsTreeModel;}
 
 private:
-    void mousePressEvent(QMouseEvent *event);
+    //void mousePressEvent(QMouseEvent *event);
+    void mouseReleaseEvent(QMouseEvent *event);
     bool deleteItemFromThesaurus(QModelIndex &index);
     bool addPreferedItem(QModelIndex &index);
     bool isChildOfThesaurus();
@@ -84,6 +85,7 @@ private:
     QAction *m_deleteThesaurusValue;
     QMenu *m_menuRightClic;
     QStandardItemModel *m_actionsTreeModel;
+    QMap<QString,QString> m_mapSubItems;
 };
 
 

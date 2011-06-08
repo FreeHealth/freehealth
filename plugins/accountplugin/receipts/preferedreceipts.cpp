@@ -79,7 +79,13 @@ void PreferedReceipts::insertPreferedValuesIntoAccount(){
     	QHash <int,QVariant> hashOfPrefValues = receiptsIO.getListOfPreferedValues(userUuid,typeOfChoice); 
     	preferedAct = hashOfPrefValues.value(Constants::ACCOUNT_MEDICALPROCEDURE_TEXT).toString();
         double preferedValue = hashOfPrefValues.value(Constants::ACCOUNT_CHEQUEAMOUNT+typeOfChoice-1).toDouble();
+        qDebug() << __FILE__ << QString::number(__LINE__) << " preferedValue =" << QString::number(preferedValue) ;
         QVariant debtor = m_choiceAndDebtorHash.value(typeOfChoice);
+        if (preferedValue == -1.13)//means does not exists
+        {
+        	  qWarning() << __FILE__ << QString::number(__LINE__) << "no prefered value" ;
+        	  return;
+            }
 
         if (m_percent!=100.00)
         {
