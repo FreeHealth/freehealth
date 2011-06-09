@@ -24,66 +24,82 @@
  *       NAME <MAIL@ADRESS>                                                *
  *       NAME <MAIL@ADRESS>                                                *
  ***************************************************************************/
+#ifndef XMLIOBASE_H
+#define XMLIOBASE_H
+
+#include <utils/database.h>
+
+#include <QObject>
+#include <QDateTime>
 
 /**
-  \namespace XmlForms
-  \brief Namespace reserved for the XML Forms' IO plugin.
+ * \file xmliobase.h
+ * \author Eric MAEKER <eric.maeker@free.fr>
+ * \version 0.6.0
+ * \date 09 Jun 2011
 */
 
-#include "xmlioplugin.h"
-#include "xmlformio.h"
-#include "xmlformcontentreader.h"
-#include "xmliobase.h"
-
-#include <coreplugin/dialogs/pluginaboutpage.h>
-
-#include <utils/log.h>
-
-#include <QtCore/QtPlugin>
-#include <QDebug>
-
-using namespace XmlForms;
-
-XmlFormIOPlugin::XmlFormIOPlugin() :
-        ExtensionSystem::IPlugin(),
-        m_XmlReader(0)
-{
-    if (Utils::Log::warnPluginsCreation())
-        qWarning() << "creating XmlIOPlugin";
-    // create XML reader singleton
-    m_XmlReader = Internal::XmlFormContentReader::instance();
-    addAutoReleasedObject(new XmlFormIO(this));
-}
-
-XmlFormIOPlugin::~XmlFormIOPlugin()
-{
-    qWarning() << "XmlFormIOPlugin::~XmlFormIOPlugin()";
-    // delete XmlFormContentReader singleton
-    if (m_XmlReader)
-        delete m_XmlReader;
-    m_XmlReader = 0;
-}
-
-bool XmlFormIOPlugin::initialize(const QStringList &arguments, QString *errorString)
-{
-    if (Utils::Log::warnPluginsCreation())
-        qWarning() << "XmlIOPlugin::initialize";
-    Q_UNUSED(arguments);
-    Q_UNUSED(errorString);
-
-    return true;
-}
-
-void XmlFormIOPlugin::extensionsInitialized()
-{
-    if (Utils::Log::warnPluginsCreation())
-        qWarning() << "XmlIOPlugin::extensionsInitialized";
-
-    // initialize database
-    Internal::XmlIOBase::instance();
-
-    addAutoReleasedObject(new Core::PluginAboutPage(pluginSpec(), this));
+namespace Form {
+class FormIODescription;
+class FormIOQuery;
 }
 
 
-Q_EXPORT_PLUGIN(XmlFormIOPlugin)
+namespace XmlForms {
+namespace Internal {
+
+class XmlIOBase :  public QObject, public Utils::Database
+{
+    Q_OBJECT
+
+protected:
+    XmlIOBase(QObject *parent = 0);
+
+public:
+    enum TypeOfContent {
+        FullContent = 0,
+        Description,
+        Forms,
+        PmhCategories
+    };
+
+    // Constructor
+    static XmlIOBase *instance();
+    virtual ~XmlIOBase() {}
+
+    // initialize
+    bool initialize();
+    bool isInitialized() const;
+
+    // Getters
+    bool isFormExists(const QString &formUid, const int type = FullContent, const QString &modeName = QString::null);
+
+    QList<Form::FormIODescription *> getFormDescription(const Form::FormIOQuery &query);
+    QHash<QString, QString> getAllFormFullContent(const QString &formUid);
+    QString getFormContent(const QString &formUid, const int type, const QString &modeName = QString::null);
+
+    // Setters
+    bool saveContent(const QString &formUid, const QString &xmlContent, const int type, const QString &modeName = QString::null, const QDateTime &date = QDateTime::currentDateTime());
+
+private:
+    bool createDatabase(const QString &connectionName, const QString &dbName,
+                        const QString &pathOrHostName,
+                        TypeOfAccess access, AvailableDrivers driver,
+                        const QString &login, const QString &pass,
+                        const int port,
+                        CreationOption createOption
+                       );
+    bool checkDatabaseVersion();
+
+private Q_SLOTS:
+    void onCoreDatabaseServerChanged();
+
+private:
+    static bool m_initialized;
+    static XmlIOBase *m_Instance;
+};
+
+}  // End namespace Internal
+}  // End namespace XmlForms
+
+#endif // XMLIOBASE_H

@@ -278,15 +278,19 @@ void CategoryItem::warn() const
 {
     QString tmp = "Category(";
     tmp += QString("Id:%1; ").arg(data(DbOnly_Id).toString());
-    tmp += QString("Label:%1; ").arg(label());
     tmp += QString("LId:%1; ").arg(data(DbOnly_LabelId).toString());
     tmp += QString("ParentId:%1; ").arg(data(DbOnly_ParentId).toString());
     tmp += QString("IsValid:%1; ").arg(data(DbOnly_IsValid).toString());
     tmp += QString("IsDirty:%1; ").arg(isDirty());
-    tmp += QString("Mime:%1; ").arg(data(DbOnly_Mime).toString());
-    tmp += QString("Icon:%1; ").arg(data(ThemedIcon).toString());
     tmp += QString("SortId:%1; ").arg(data(SortId).toString());
+    tmp += "\n          ";
+    tmp += QString("Label:%1; ").arg(label());
+    tmp += QString("Mime:%1; ").arg(data(DbOnly_Mime).toString());
+    tmp += "\n          ";
+    tmp += QString("Icon:%1; ").arg(data(ThemedIcon).toString());
     tmp += QString("Password:%1; ").arg(data(Password).toString());
+    tmp += "\n          ";
+    tmp += QString("Extra:%1; ").arg(data(ExtraXml).toString());
     tmp.chop(2);
     qWarning() << tmp+")";
 }

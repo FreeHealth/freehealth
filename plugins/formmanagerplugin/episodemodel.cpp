@@ -1154,7 +1154,7 @@ bool EpisodeModel::activateEpisode(const QModelIndex &index, const QString &form
     // read the xml'd content
     QHash<QString, QString> datas;
     if (!Utils::readXml(xml, Form::Constants::XML_FORM_GENERAL_TAG, datas, false)) {
-        Utils::Log::addError(this, QString("Error while reading EpisodeContent %2:%1").arg(__LINE__).arg(__FILE__));
+        LOG_ERROR(QString("Error while reading EpisodeContent %2:%1").arg(__LINE__).arg(__FILE__));
         return false;
     }
 

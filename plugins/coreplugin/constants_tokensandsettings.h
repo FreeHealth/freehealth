@@ -78,10 +78,10 @@ const char * const  TOKEN_USERFULLCONTACT    = "USERFULLCONTACT";
 
 
 // Some path tags
-const char * const  TAG_APPLICATION_RESOURCES_PATH = "%appResources%";
-const char * const  TAG_APPLICATION_THEME_PATH     = "%theme%";
-const char * const  TAG_APPLICATION_COMPLETEFORMS_PATH = "%completeForms%";
-const char * const  TAG_APPLICATION_SUBFORMS_PATH = "%subForms%";
+const char * const  TAG_APPLICATION_RESOURCES_PATH = "__appResources__";
+const char * const  TAG_APPLICATION_THEME_PATH     = "__theme__";
+const char * const  TAG_APPLICATION_COMPLETEFORMS_PATH = "__completeForms__";
+const char * const  TAG_APPLICATION_SUBFORMS_PATH = "__subForms__";
 
 // Settings keys
 const char * const  S_RECENTFILES_GROUP = "RecentFiles";

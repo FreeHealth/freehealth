@@ -86,6 +86,22 @@ private:
     QString m_uuid;
 };
 
+//class FORM_EXPORT FormIOResult
+//{
+//public:
+//    FormIOResult(const FormIOQuery &query);
+//    virtual ~FormIOResult();
+
+//    QString originalFormUuid() const;
+
+//    QList<Form::FormMain *> rootForms() const {return m_RootForms;}
+//    void setRootForms(const QList<Form::FormMain *> &list) const {m_RootForms=list;}
+
+//private:
+//    FormIOQuery m_Query;
+//    QList<Form::FormMain *> m_RootForms;
+//};
+
 }
 Q_DECLARE_OPERATORS_FOR_FLAGS(Form::FormIOQuery::TypesOfForm)
 
@@ -144,7 +160,7 @@ class FORM_EXPORT IFormIO : public QObject
 {
     Q_OBJECT
 public:
-    IFormIO(const QString &absFileName, QObject *parent=0) : QObject(parent) { Q_UNUSED(absFileName); }
+    IFormIO(QObject *parent=0) : QObject(parent) {}
     virtual ~IFormIO() {}
 
     virtual QString name() const = 0;
@@ -152,9 +168,8 @@ public:
     virtual void muteUserWarnings(bool state) = 0;
 
     virtual bool canReadForms(const QString &uuidOrAbsPath) const = 0;
-    // canReadFile() must be called first, no need to loadForm to get these informations
-    virtual FormIODescription *readFileInformations(const QString &uuidOrAbsPath) = 0;
 
+    virtual FormIODescription *readFileInformations(const QString &uuidOrAbsPath) = 0;
     virtual QList<FormIODescription *> getFormFileDescriptions(const FormIOQuery &query) = 0;
 
     virtual QList<Form::FormMain *> loadAllRootForms(const QString &uuidOrAbsPath = QString::null) = 0;

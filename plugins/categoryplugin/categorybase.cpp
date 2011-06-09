@@ -67,6 +67,7 @@ CategoryBase *CategoryBase::instance()
 CategoryBase::CategoryBase(QObject *parent) :
         QObject(parent), Utils::Database()
 {
+    setObjectName("CategoryBase");
     using namespace Category::Constants;
     addTable(Table_CATEGORIES, "CATEGORIES");
     addTable(Table_CATEGORY_LABEL, "LABEL");

@@ -25,7 +25,8 @@
  *       NAME <MAIL@ADRESS>                                                *
  ***************************************************************************/
 #include "xmlformcontentreader.h"
-#include "xmlformioconstants.h"
+#include "constants.h"
+#include "xmliobase.h"
 
 #include <extensionsystem/pluginmanager.h>
 #include <utils/log.h>
@@ -66,8 +67,7 @@ static inline Core::ISettings *settings()  { return Core::ICore::instance()->set
 static inline Category::CategoryCore *categoryCore() {return  Category::CategoryCore::instance();}
 static inline PMH::PmhCore *pmhCore() {return PMH::PmhCore::instance();}
 static inline Internal::XmlFormContentReader *reader() {return Internal::XmlFormContentReader::instance();}
-
-
+static inline Internal::XmlIOBase *base() {return Internal::XmlIOBase::instance();}
 
 XmlFormContentReader *XmlFormContentReader::m_Instance = 0;
 XmlFormContentReader *XmlFormContentReader::instance()
@@ -150,7 +150,6 @@ void XmlFormContentReader::warnXmlReadError(bool muteUserWarnings, const QString
     LOG_ERROR_FOR("XmlFormContentReader", m);
     m_Error.append(Trans::ConstantTranslations::tkTr(Trans::Constants::ERROR_1_LINE_2_COLUMN_3)
                    .arg(msg).arg(line).arg(col));
-//    m_Error.append(m_MainDoc);
 
     if (!muteUserWarnings)
         Utils::warningMessageBox(
@@ -163,7 +162,6 @@ void XmlFormContentReader::warnXmlReadError(bool muteUserWarnings, const QString
 bool XmlFormContentReader::checkFormFileContent(const QString &formUidOrFullAbsPath, const QString &contents) const
 {
     bool ok = true;
-//    QString contents = Utils::readTextFile(formUid, Utils::DontWarnUser);
     if (contents.isEmpty()) {
         warnXmlReadError(m_Mute, formUidOrFullAbsPath, tkTr(Trans::Constants::FILE_1_ISEMPTY).arg(formUidOrFullAbsPath));
         m_Error.append(tkTr(Trans::Constants::FILE_1_ISEMPTY).arg(formUidOrFullAbsPath));
@@ -219,16 +217,10 @@ static void setPathToDescription(QString path, Form::FormIODescription *desc)
     desc->setData(Form::FormIODescription::UuidOrAbsPath, path);
 }
 
-/** Return the Form description. Call this member just after the checkFormFileContent() so that the form xml content will be cached */
-Form::FormIODescription *XmlFormContentReader::readFileInformations(const QString &formUidOrFullAbsPath)
+/** Return the Form::FormIODescription according to the XML QDomElement \e xmlDescr. The \e xmlDescr must point to the first description tag of the document. */
+Form::FormIODescription *XmlFormContentReader::readXmlDescription(const QDomElement &xmlDescr, const QString &formUid)
 {
-    // Get the QDomDocument from cache
-    QDomDocument *doc = m_DomDocFormCache[formUidOrFullAbsPath];
-    if (!doc)
-        return 0;
     Form::FormIODescription *ioDesc = new Form::FormIODescription;
-    QDomElement root = doc->documentElement();
-    root = root.firstChildElement(Constants::TAG_FORM_DESCRIPTION);
     QHash<int, QString> elements;
     // get non translatable items
     elements.insert(Form::FormIODescription::Version, Constants::TAG_SPEC_VERSION);
@@ -241,7 +233,7 @@ Form::FormIODescription *XmlFormContentReader::readFileInformations(const QStrin
     QHashIterator<int, QString> i(elements);
     while (i.hasNext()) {
         i.next();
-        ioDesc->setData(i.key(), root.firstChildElement(i.value()).text());
+        ioDesc->setData(i.key(), xmlDescr.firstChildElement(i.value()).text());
     }
     // get translatable items
     elements.clear();
@@ -253,14 +245,26 @@ Form::FormIODescription *XmlFormContentReader::readFileInformations(const QStrin
     i = elements;
     while (i.hasNext()) {
         i.next();
-        QDomElement desc = root.firstChildElement(i.value());
+        QDomElement desc = xmlDescr.firstChildElement(i.value());
         while (!desc.isNull()) {
             ioDesc->setData(i.key(), desc.text(), desc.attribute(Constants::ATTRIB_LANGUAGE, Trans::Constants::ALL_LANGUAGE));
             desc = desc.nextSiblingElement(i.value());
         }
     }
-    setPathToDescription(formUidOrFullAbsPath, ioDesc);
+    setPathToDescription(formUid, ioDesc);
     return ioDesc;
+}
+
+/** Return the Form description. Call this member just after the checkFormFileContent() so that the form xml content will be cached */
+Form::FormIODescription *XmlFormContentReader::readFileInformations(const QString &formUidOrFullAbsPath)
+{
+    // Get the QDomDocument from cache
+    QDomDocument *doc = m_DomDocFormCache[formUidOrFullAbsPath];
+    if (!doc)
+        return 0;
+    QDomElement root = doc->documentElement();
+    root = root.firstChildElement(Constants::TAG_FORM_DESCRIPTION);
+    return readXmlDescription(root, formUidOrFullAbsPath);
 }
 
 QList<Form::FormIODescription *> XmlFormContentReader::getFormFileDescriptions(const Form::FormIOQuery &query)
@@ -317,7 +321,7 @@ bool XmlFormContentReader::loadForm(const QString &file, Form::FormMain *rootFor
     }
     m_ActualForm = rootForm;
 
-    if (!loadElement(rootForm, root))
+    if (!loadElement(rootForm, root, file))
         return false;
 
 //    rootForm->createDebugPage();
@@ -325,7 +329,7 @@ bool XmlFormContentReader::loadForm(const QString &file, Form::FormMain *rootFor
     return true;
 }
 
-bool XmlFormContentReader::loadElement(Form::FormItem *item, QDomElement &rootElement)
+bool XmlFormContentReader::loadElement(Form::FormItem *item, QDomElement &rootElement, const QString &readingFile)
 {
     bool descriptionPassed = false; // for speed improvements
     QDomElement element = rootElement.firstChildElement();
@@ -344,7 +348,7 @@ bool XmlFormContentReader::loadElement(Form::FormItem *item, QDomElement &rootEl
         // Create a nem FormItem ?
         i = Constants::createTags.indexOf(element.tagName());
         if (i != -1) {
-            createElement(item, element);
+            createElement(item, element, readingFile);
             element = element.nextSiblingElement();
             continue;
         }
@@ -405,13 +409,19 @@ bool XmlFormContentReader::loadElement(Form::FormItem *item, QDomElement &rootEl
 
         // Add a file ?
         if (element.tagName().compare(Constants::TAG_ADDFILE, Qt::CaseInsensitive)==0) {
-            /** \todo code here */
-//            QDomDocument doc;
-//            QString fileName = element.text();
-//            if (QFileInfo(fileName).isRelative())
-//                fileName.prepend(QFileInfo(m_AbsFileName).absoluteDir().absolutePath() + QDir::separator());
-//            fileName = QDir::cleanPath(fileName);
-//            loadForm(fileName,0);
+            QDomDocument *doc;
+            QString fileName = element.text();
+            if (QFileInfo(fileName).isRelative())
+                fileName.prepend(QFileInfo(readingFile).absolutePath() + QDir::separator());
+            fileName = QDir::cleanPath(fileName);
+            QString content = Utils::readTextFile(fileName, Utils::DontWarnUser);
+            if (checkFormFileContent(fileName, content)) {
+                if (!loadForm(fileName, m_ActualForm)) {
+                    LOG_ERROR_FOR("XmlReader", "Unable to add form file " + element.text());
+                } else {
+                    saveFormToDatabase(fileName, content);
+                }
+            }
             element = element.nextSiblingElement();
             continue;
         }
@@ -440,13 +450,13 @@ bool XmlFormContentReader::loadElement(Form::FormItem *item, QDomElement &rootEl
     return true;
 }
 
-bool XmlFormContentReader::createElement(Form::FormItem *item, QDomElement &element)
+bool XmlFormContentReader::createElement(Form::FormItem *item, QDomElement &element, const QString &readingFile)
 {
 //    qWarning() << "XmlFormIO create element" << element.text();
     // new item
     if (element.tagName().compare(Constants::TAG_NEW_ITEM, Qt::CaseInsensitive)==0) {
         if (item) {
-            loadElement(item->createChildItem(), element);
+            loadElement(item->createChildItem(), element, readingFile);
             return true;
         }
         else
@@ -461,7 +471,7 @@ bool XmlFormContentReader::createElement(Form::FormItem *item, QDomElement &elem
         m_ActualForm = m_ActualForm->createChildForm(element.firstChildElement(Constants::TAG_NAME).text());
         item = m_ActualForm;
         if (item) {
-            loadElement(item, element);
+            loadElement(item, element, readingFile);
             // read specific form's datas
             m_ActualForm = oldRootForm;
             return true;
@@ -475,7 +485,7 @@ bool XmlFormContentReader::createElement(Form::FormItem *item, QDomElement &elem
         item = item->createPage(element.firstChildElement(Constants::TAG_NAME).text());
         /** \todo add page to a form */
         if (item) {
-            loadElement(item, element);
+            loadElement(item, element, readingFile);
             // read specific page's datas
             return true;
         }
@@ -575,3 +585,93 @@ bool XmlFormContentReader::createWidgets(const Form::FormMain *rootForm)
     return true;
 }
 
+bool XmlFormContentReader::loadPmhCategories(const QString &uuidOrAbsPath)
+{
+//    QString file = QFileInfo(uuidOrAbsPath).absolutePath() + "/pmhcategories.xml";
+//    // replace path TAGs
+//    file.replace(Core::Constants::TAG_APPLICATION_COMPLETEFORMS_PATH, settings()->path(Core::ISettings::CompleteFormsPath));
+//    file.replace(Core::Constants::TAG_APPLICATION_SUBFORMS_PATH, settings()->path(Core::ISettings::SubFormsPath));
+//    file.replace(Core::Constants::TAG_APPLICATION_RESOURCES_PATH, settings()->path(Core::ISettings::BundleResourcesPath));
+
+//    QDomDocument *doc = 0;
+//    if (!reader()->isInCache(file)) {
+//        if (!canReadForms(file)) {
+//            LOG_ERROR("Unable to read Pmh Category file: " + file);
+//            return false;
+//        }
+//    }
+//    categoryCore()->removeAllExistingCategories("PMHx");
+//    doc = reader()->fromCache(file);
+//    Q_ASSERT(doc);
+//    if (!doc) {
+//        LOG_ERROR("No category document in XmlFormIO::loadPmhCategories("+file+")");
+//        return false;
+//    }
+//    QDomElement root = doc->firstChildElement(Constants::TAG_MAINXMLTAG);
+//    QDomElement element = root.firstChildElement(Constants::TAG_PMHX_CATEGORIES);
+//    element = element.firstChildElement(::Constants::TAG_CATEGORY);
+//    while (!element.isNull()) {
+//        createCategory(element, 0);
+//        element = element.nextSiblingElement(::Constants::TAG_CATEGORY);
+//    }
+//    pmhCore()->pmhCategoryModel()->refreshFromDatabase();
+    return true;
+}
+
+bool XmlFormContentReader::createCategory(const QDomElement &element, Category::CategoryItem *parent)
+{
+//    // create the category
+//    Category::CategoryItem *item = new Category::CategoryItem;
+//    item->setData(Category::CategoryItem::DbOnly_Mime, "PMHx");
+//    item->setData(Category::CategoryItem::ThemedIcon, element.attribute(::Constants::ATTRIB_ICON));
+
+//    // read the labels
+//    QDomElement label = element.firstChildElement(::Constants::TAG_SPEC_LABEL);
+//    while (!label.isNull()) {
+//        item->setLabel(label.text(), label.attribute(::Constants::ATTRIB_LANGUAGE, Trans::Constants::ALL_LANGUAGE));
+//        label = label.nextSiblingElement(::Constants::TAG_SPEC_LABEL);
+//    }
+
+//    // get ExtraTag content -> CategoryItem::ExtraXml
+//    QDomElement extra = element.firstChildElement(::Constants::TAG_SPEC_EXTRA);
+//    if (!extra.isNull()) {
+//        item->setData(Category::CategoryItem::ExtraXml, extra.toDocument().toString(2));
+//    }
+
+//    // save to database
+//    if (parent) {
+//        parent->addChild(item);
+//        item->setParent(parent);
+//    }
+//    categoryCore()->saveCategory(item);
+
+//    // has children ?
+//    QDomElement child = element.firstChildElement(::Constants::TAG_CATEGORY);
+//    while (!child.isNull()) {
+//        createCategory(child, item);
+//        child = child.nextSiblingElement(::Constants::TAG_CATEGORY);
+//    }
+    return true;
+}
+
+/** Save the \e content of the form \e formAbsPath to the database and return the used formUid. If the \e content is empty the form file is accessed */
+QString XmlFormContentReader::saveFormToDatabase(const QString &formAbsPath, const QString &content, const QString &modeName)
+{
+    // add form to database
+    QString absPath = formAbsPath;
+    QString tmp = formAbsPath;
+    if (formAbsPath.startsWith(QString(Core::Constants::TAG_APPLICATION_COMPLETEFORMS_PATH).left(2))) {
+        absPath.replace(Core::Constants::TAG_APPLICATION_COMPLETEFORMS_PATH, settings()->path(Core::ISettings::CompleteFormsPath));
+        absPath.replace(Core::Constants::TAG_APPLICATION_SUBFORMS_PATH, settings()->path(Core::ISettings::SubFormsPath));
+        absPath.replace(Core::Constants::TAG_APPLICATION_RESOURCES_PATH, settings()->path(Core::ISettings::BundleResourcesPath));
+    }
+    tmp.replace(settings()->path(Core::ISettings::CompleteFormsPath), Core::Constants::TAG_APPLICATION_COMPLETEFORMS_PATH);
+    tmp.replace(settings()->path(Core::ISettings::SubFormsPath), Core::Constants::TAG_APPLICATION_SUBFORMS_PATH);
+    tmp.replace(settings()->path(Core::ISettings::BundleResourcesPath), Core::Constants::TAG_APPLICATION_RESOURCES_PATH);
+    if (content.isEmpty()) {
+        base()->saveContent(tmp, Utils::readTextFile(absPath, Utils::DontWarnUser), XmlIOBase::FullContent, modeName);
+    } else {
+        base()->saveContent(tmp, content, XmlIOBase::FullContent, modeName);
+    }
+    return tmp;
+}

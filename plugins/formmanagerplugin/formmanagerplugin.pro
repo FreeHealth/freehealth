@@ -27,7 +27,9 @@ HEADERS = formmanagerplugin.h \
     formcontextualwidget.h \
     formfile.h \
     formeditordialog.h \
-    firstrunformmanager.h
+    firstrunformmanager.h \
+    formiodescription.h \
+    formioquery.h
 SOURCES = formmanagerplugin.cpp \
     formmanager.cpp \
     iformitem.cpp \

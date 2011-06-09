@@ -38,9 +38,12 @@
  * \file xmlformcontentreader.h
  * \author Eric MAEKER <eric.maeker@free.fr>
  * \version 0.6.0
- * \date 10 May 2011
+ * \date 08 Jun 2011
 */
 
+namespace Category {
+class CategoryItem;
+}
 
 namespace Form {
 class FormItem;
@@ -70,14 +73,15 @@ public:
 
     bool checkFormFileContent(const QString &formUidOrFullAbsPath, const QString &contents) const;
 
+    Form::FormIODescription *readXmlDescription(const QDomElement &xmlDescr, const QString &formUid);
     Form::FormIODescription *readFileInformations(const QString &formUidOrFullAbsPath);
 
     QList<Form::FormIODescription *> getFormFileDescriptions(const Form::FormIOQuery &query);
 
     bool loadForm(const QString &file, Form::FormMain *rootForm);
 
-    bool loadElement(Form::FormItem *item, QDomElement &rootElement);
-    bool createElement(Form::FormItem *item, QDomElement &element);
+    bool loadElement(Form::FormItem *item, QDomElement &rootElement, const QString &readingFile);
+    bool createElement(Form::FormItem *item, QDomElement &element, const QString &readingFile);
 
     bool populateValues(Form::FormItem *item, const QDomElement &root);
     bool populateScripts(Form::FormItem *item, const QDomElement &root);
@@ -85,6 +89,13 @@ public:
     bool createItemWidget(Form::FormItem *item, QWidget *parent = 0);
     bool createFormWidget(Form::FormMain *form);
     bool createWidgets(const Form::FormMain *rootForm);
+
+    // PMHx categories
+    bool loadPmhCategories(const QString &uuidOrAbsPath);
+    bool createCategory(const QDomElement &element, Category::CategoryItem *parent);
+
+    // Some database
+    QString saveFormToDatabase(const QString &formAbsPath, const QString &content = QString::null, const QString &modeName = QString::null);
 
 private:
     static XmlFormContentReader *m_Instance;

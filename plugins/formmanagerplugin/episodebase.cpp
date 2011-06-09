@@ -399,7 +399,6 @@ QString EpisodeBase::getGenericFormFile()
         LOG_QUERY_ERROR(query);
         return QString();
     }
-    path.replace(Core::Constants::TAG_APPLICATION_COMPLETEFORMS_PATH, settings()->path(Core::ISettings::CompleteFormsPath));
     return path;
 }
 
