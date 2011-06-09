@@ -34,7 +34,7 @@
     <label lang="fr">Identité</label>
     <type>form</type>
     <options>unique</options>
-    <icon>%theme%/identity.png</icon>
+    <icon>__theme__/identity.png</icon>
     <Item>
       <type>identity</type>
       <name>identity</name>
@@ -47,7 +47,7 @@
     <type>form</type>
     <name>soap_form</name>
     <label>SOAP</label>
-    <icon>%theme%/edit.png</icon>
+    <icon>__theme__/edit.png</icon>
     <Item>
       <name>soap_subjective</name>
       <type>texteditor</type>
@@ -79,7 +79,7 @@
     <type>form</type>
     <name>prescriptions_form</name>
     <label>Prescriptions</label>
-    <icon>%theme%/edit.png</icon>
+    <icon>__theme__/edit.png</icon>
     <options>noepisode</options>
 
     <MedForm>

@@ -7,8 +7,8 @@
     <authors>Eric Maeker, MD</authors>
     <description lang="fr">Dossier médical générique</description>
     <description lang="en">Generic patient file</description>
-    <category lang="en">Medical files: General practitioner</category>
-    <category lang="fr">Dossier médicaux : Médecine générale</category>
+    <category lang="xx">General practice</category>
+    <category lang="fr">Médecine générale</category>
     <bibliography/>
     <licence>GPLv3</licence>
     <cdate>2011-03-15</cdate>
@@ -20,7 +20,7 @@
     <label lang="fr">Identité</label>
     <type>form</type>
     <options>unique</options>
-    <icon>%theme%/identity.png</icon>
+    <icon>__theme__/identity.png</icon>
     <Item>
       <type>identity</type>
       <name>identity</name>
@@ -34,7 +34,7 @@
     <name>drugs</name>
     <label lang="xx">Drugs</label>
     <label lang="fr">Médicaments</label>
-    <icon>%theme%/freediams.png</icon>
+    <icon>__theme__/freediams.png</icon>
     <options>noepisode</options>
 
     <MedForm>
@@ -82,7 +82,7 @@
     <type>form</type>
     <name>soap_form</name>
     <label>SOAP</label>
-    <icon>%theme%/edit.png</icon>
+    <icon>__theme__/edit.png</icon>
     <Item>
       <name>soap_subjective</name>
       <type>texteditor</type>
@@ -114,7 +114,7 @@
     <type>form</type>
     <name>prescriptions_form</name>
     <label>Prescriptions</label>
-    <icon>%theme%/edit.png</icon>
+    <icon>__theme__/edit.png</icon>
     <options>noepisode</options>
 
     <MedForm>
