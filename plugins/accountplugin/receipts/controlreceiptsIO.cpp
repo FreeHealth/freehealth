@@ -114,6 +114,7 @@ void ControlReceipts::search(){
     qDebug() << __FILE__ << QString::number(__LINE__) << " filter =" << m_accountModel->filter() ;
     qDebug() << __FILE__ << QString::number(__LINE__) << " rowCount =" << QString::number(m_accountModel->rowCount()) ;
     ui->tableView->setModel(m_accountModel);
+    ui->tableView->setShowGrid(false);
     ui->tableView->setColumnHidden(ACCOUNT_ID,true);
     ui->tableView->setColumnHidden(ACCOUNT_UID,true);
     ui->tableView->setColumnHidden(ACCOUNT_USER_UID,true);
@@ -124,6 +125,8 @@ void ControlReceipts::search(){
     ui->tableView->setColumnHidden(ACCOUNT_TRACE,true);
     ui->tableView->horizontalHeader()->setResizeMode(QHeaderView::Interactive);
     ui->tableView->horizontalHeader()->setResizeMode(QHeaderView::ResizeToContents);
+    ui->tableView->horizontalHeader()->setCascadingSectionResizes (true);
+    ui->tableView->horizontalHeader()->setStretchLastSection(true);
     //ui->tableView->resizeColumnsToContents();
     QString textResult = textOfSums(m_accountModel);
     ui->resultLabel->setText(textResult);

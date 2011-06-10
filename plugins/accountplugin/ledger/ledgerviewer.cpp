@@ -209,7 +209,13 @@ void LedgerViewer::monthsComboBoxcurrentIndexChanged(const QString& month){
     Q_UNUSED(month);
     qDebug() << __FILE__ << QString::number(__LINE__) << " in monthsComboBoxcurrentIndexChanged , month = "+month  ;
     qDebug() << __FILE__ << QString::number(__LINE__) << " m_actionText =" << m_actionText ;
-    QAction * choosenAction = m_hashTextAndAction.value(m_actionText);
-    //choosenAction->setCheckable(true);
-    choosenAction->activate(QAction::Trigger);
+    if (m_actionText.isEmpty())
+    {
+    	  QMessageBox::warning(0,trUtf8("Warning"),trUtf8("Choose an action."),QMessageBox::Ok);
+    	  return;
+        }
+    else{
+        QAction * choosenAction = m_hashTextAndAction.value(m_actionText);
+        choosenAction->activate(QAction::Trigger);
+    }
 }

@@ -683,7 +683,8 @@ ReceiptViewer::ReceiptViewer(QWidget *parent) :
     ui->amountsView->verticalHeader()->setStretchLastSection ( false );
     ui->amountsView->horizontalHeader()->setResizeMode(QHeaderView::ResizeToContents);
     ui->amountsView->horizontalHeader()->setResizeMode(QHeaderView::Interactive);
-    ui->amountsView->horizontalHeader()->setStretchLastSection ( false );
+    ui->amountsView->horizontalHeader()->setCascadingSectionResizes (true);
+    //ui->amountsView->horizontalHeader()->setStretchLastSection ( true );
     ui->amountsView->setModel(m_model);
     ui->amountsView->setItemDelegateForColumn(Cash, new Utils::SpinBoxDelegate(this,0.00,100.00,true));
     ui->amountsView->setItemDelegateForColumn(Check, new Utils::SpinBoxDelegate(this,0.00,100.00,true));
