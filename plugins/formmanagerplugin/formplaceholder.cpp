@@ -165,10 +165,10 @@ public:
         clearStackLayout();
         foreach(FormMain *form, m_RootForm->flattenFormMainChildren()) {
             if (form->formWidget()) {
-				QScrollArea *sa = new QScrollArea;
-				sa->setWidgetResizable(true);
+                QScrollArea *sa = new QScrollArea;
+                sa->setWidgetResizable(true);
                 QWidget *w = new QWidget();
-				sa->setWidget(w);
+                sa->setWidget(w);
                 QVBoxLayout *vl = new QVBoxLayout(w);
                 vl->setSpacing(0);
                 vl->setMargin(0);

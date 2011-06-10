@@ -100,6 +100,8 @@ public:
         return parent;
     }
 
+    QList<Form::FormMain *> loadFormFile(const QString &formUid);
+
 private:
     void cleanPluginManagerObjectPool();
 

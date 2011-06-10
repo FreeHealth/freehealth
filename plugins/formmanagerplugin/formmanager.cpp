@@ -27,7 +27,7 @@
 
 /**
    \class Form::FormManager
-   \brief This class manages all aspect of the patient's forms.
+    This class manages all aspect of the patient's forms.
 */
 
 #include "formmanager.h"
@@ -118,6 +118,7 @@ private:
 
 FormManager *FormManager::m_Instance = 0;
 
+/** Unique instance of the Form::FormManager object */
 FormManager *FormManager::instance()
 {
     if (!m_Instance) {
@@ -144,25 +145,54 @@ FormManager::~FormManager()
     }
 }
 
-/** \brief Activate the Form Mode in the main window. */
+/**  Activate the Form Mode in the main window. */
 void FormManager::activateMode()
 {
     modeManager()->activateMode(Core::Constants::MODE_PATIENT_FILE);
 }
 
-/** \brief Return all available forms from the PluginManager object pool. \sa Form::FormMain */
+/**  Return all available forms from the PluginManager object pool. \sa Form::FormMain */
 QList<FormMain *> FormManager::forms() const
 {
     return pluginManager()->getObjects<FormMain>();
 }
 
+/**
+  Return the empty root forms loaded from the \e formUid by the IFormIO objects. \n
+  All these forms are stored in the plugin manager object pool and can be accessed using
+  forms().
+ */
+QList<Form::FormMain *> FormManager::loadFormFile(const QString &formUid)
+{
+    QList<Form::FormMain *> toReturn;
+
+    if (formUid.isEmpty()) {
+        LOG_ERROR("No formUid to load...");
+        return toReturn;
+    }
+
+    // get all form readers (IFormIO)
+    QList<Form::IFormIO *> list = pluginManager()->getObjects<Form::IFormIO>();
+    if (list.isEmpty()) {
+        LOG_ERROR("No IFormIO loaded...");
+        return toReturn;
+    }
+
+    // Load root forms
+    foreach(Form::IFormIO *io, list) {
+        if (io->canReadForms(formUid)) {
+            toReturn << io->loadAllRootForms(formUid);
+        }
+    }
+
+    return toReturn;
+}
+
+/** Load the generic patient file (and included subforms) and emit patientFormsLoaded() when finished. */
 bool FormManager::loadPatientFile()
 {
     qDeleteAll(d->m_RootForms);
     d->m_RootForms.clear();
-
-    // get all form readers (IFormIO)
-    QList<Form::IFormIO *> list = pluginManager()->getObjects<Form::IFormIO>();
 
     // get form general form absPath from episodeBase
     QString absDirPath = episodeBase()->getGenericFormFile();
@@ -171,11 +201,7 @@ bool FormManager::loadPatientFile()
         return false;
     }
 
-    foreach(Form::IFormIO *io, list) {
-        if (io->canReadForms(absDirPath)) {
-            d->m_RootForms << io->loadAllRootForms(absDirPath);
-        }
-    }
+    d->m_RootForms = loadFormFile(absDirPath);
 
     loadSubForms();
 
@@ -183,6 +209,11 @@ bool FormManager::loadPatientFile()
     return true;
 }
 
+/**
+  Extract from the <b>patient file form</b> the empty root form corresponding to the \e modeUniqueName
+  or 0 if no form matches the \e modeUniqueName.
+  \sa loadPatientFile()
+*/
 Form::FormMain *FormManager::rootForm(const char *modeUniqueName)
 {
     // get all root form from the plugin manager
