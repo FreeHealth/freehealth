@@ -33,7 +33,7 @@
 #define ACCOUNTVIEW_H
 
 #include <accountplugin/account_exporter.h>
-
+#include <accountbaseplugin/accountmodel.h>
 #include <QObject>
 #include <QWidget>
 #include <QDate>
@@ -44,11 +44,17 @@
  * \version 0.1.0
  * \date 13 Apr 2011
 */
+namespace Ui{
+    class AccountViewWidget;
+}
 
+using namespace AccountDB;
 namespace Account {
 namespace Internal {
 class AccountViewPrivate;
 }
+
+
 
 class ACCOUNT_EXPORT AccountView : public QWidget
 {
@@ -59,6 +65,7 @@ public:
 
 private:
     void filterChanged();
+    void refresh();
     void calc();
 
 private Q_SLOTS:
@@ -67,7 +74,10 @@ private Q_SLOTS:
     void on_periodCombo_currentIndexChanged(int index);
 
 private:
-    Internal::AccountViewPrivate *d;
+    //Internal::AccountViewPrivate *d;
+    AccountModel *m_Model;
+    Ui::AccountViewWidget *m_ui ;
+    QString m_userUuid;
 };
 
 

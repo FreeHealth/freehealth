@@ -30,22 +30,17 @@
  *      NAME <MAIL@ADRESS>                                                 *
  ***************************************************************************/
 #include "accountview.h"
-
+#include "ui_accountview.h"
 #include <utils/log.h>
 
 #include <coreplugin/icore.h>
 
-#include <accountbaseplugin/accountmodel.h>
 #include <accountbaseplugin/constants.h>
 
 #include <QTableView>
 #include <QDebug>
 
-#include "ui_accountview.h"
-
-using namespace Account;
-
-namespace Account {
+/*namespace Account {
 namespace Internal {
 class AccountViewPrivate
 {
@@ -70,18 +65,52 @@ private:
     AccountView *q;
 };
 }
-}
-
+}*/
+using namespace AccountDB;
+using namespace Account;
 
 AccountView::AccountView(QWidget *parent) :
-        QWidget(parent), d(new Internal::AccountViewPrivate(this))
+        QWidget(parent), m_ui(new Ui::AccountViewWidget)//, d(new Internal::AccountViewPrivate(this))
 {
     setObjectName("AccountView");
-    d->m_ui->setupUi(this);
+    m_ui->setupUi(this);
 
-    d->m_Model = new AccountDB::AccountModel(this);
-    d->m_ui->tableView->setModel(d->m_Model);
+    qDebug() << __FILE__ << QString::number(__LINE__) << " 1 " ;
+    m_Model = new AccountDB::AccountModel(this);
+    //m_Model->setFilter("");
+    m_Model->select();
+    m_ui->tableView->setModel(m_Model);
+    m_ui->tableView->horizontalHeader()->setResizeMode(QHeaderView::Interactive);
+    m_ui->tableView->horizontalHeader()->setResizeMode(QHeaderView::ResizeToContents);
+    m_ui->tableView->show();
+    qDebug() << __FILE__ << QString::number(__LINE__) << " rowCount =" << QString::number(m_Model->rowCount()) ;
+    qDebug() << __FILE__ << QString::number(__LINE__) << " 2 " ;
+    m_userUuid = m_Model->getUserUuid();
+    qDebug() << __FILE__ << QString::number(__LINE__) << " m_userUuid =" << m_userUuid ;
+    //QString filter = QString("%1 = '%2'").arg("USER_UID",m_userUuid);
+    //m_Model->setFilter(filter);
+    m_ui->startDate->setDate(QDate::currentDate());
+    m_ui->endDate->setDate(QDate::currentDate()); 
+    //refresh();
 
+}
+
+AccountView::~AccountView()
+{
+}
+
+void AccountView::refresh(){
+    QString dateBeginStr = m_ui->startDate->date().toString("yyyy-MM-dd");
+    QString dateEndStr = m_ui->endDate->date().toString("yyyy-MM-dd");
+    QString filter = QString("%1 = '%2'").arg("USER_UID",m_userUuid);
+    filter += " AND ";
+    filter += QString("DATE BETWEEN '%1' AND '%2'").arg(dateBeginStr,dateEndStr);
+    qDebug() << __FILE__ << QString::number(__LINE__) << " filter =" << filter ;
+    m_Model->setFilter(filter);
+    qDebug() << __FILE__ << QString::number(__LINE__) << " filter =" << m_Model->filter() ;
+    qDebug() << __FILE__ << QString::number(__LINE__) << " rowCount =" << QString::number(m_Model->rowCount()) ;
+    m_ui->tableView->setModel(m_Model);
+       
     QList<int> hide;
     hide
             << AccountDB::Constants::ACCOUNT_ID
@@ -93,45 +122,36 @@ AccountView::AccountView(QWidget *parent) :
             << AccountDB::Constants::ACCOUNT_MEDICALPROCEDURE_XML
             << AccountDB::Constants::ACCOUNT_TRACE;
     foreach(int i, hide) {
-        d->m_ui->tableView->hideColumn(i);
-    }
-
-    d->m_ui->startDate->setDate(QDate::currentDate());
-    d->m_ui->endDate->setDate(QDate::currentDate());
-}
-
-AccountView::~AccountView()
-{
-    if (d) {
-        delete d;
-        d=0;
+        m_ui->tableView->hideColumn(i);
     }
 }
 
 void AccountView::filterChanged()
 {
     // Filter model
-    d->m_Model->setStartDate(d->m_ui->startDate->date());
-    d->m_Model->setEndDate(d->m_ui->endDate->date());
+    //m_Model->setStartDate(m_ui->startDate->date());
+    //m_Model->setEndDate(m_ui->endDate->date());
     qDebug() << __FILE__ << QString::number(__LINE__) << " in filterChanged " ;
     // Calculate sums of paiements
-    /*d->m_ui->cash->setText(QString::number(d->m_Model->sum(AccountDB::Constants::ACCOUNT_CASHAMOUNT)));
-    d->m_ui->cheque->setText(QString::number(d->m_Model->sum(AccountDB::Constants::ACCOUNT_CHEQUEAMOUNT)));
-    d->m_ui->du->setText(QString::number(d->m_Model->sum(AccountDB::Constants::ACCOUNT_DUEAMOUNT)));
-    d->m_ui->insurance->setText(QString::number(d->m_Model->sum(AccountDB::Constants::ACCOUNT_INSURANCEAMOUNT)));
-    d->m_ui->visa->setText(QString::number(d->m_Model->sum(AccountDB::Constants::ACCOUNT_VISAAMOUNT)));*/
-    
+    /*m_ui->cash->setText(QString::number(m_Model->sum(AccountDB::Constants::ACCOUNT_CASHAMOUNT)));
+    m_ui->cheque->setText(QString::number(m_Model->sum(AccountDB::Constants::ACCOUNT_CHEQUEAMOUNT)));
+    m_ui->du->setText(QString::number(m_Model->sum(AccountDB::Constants::ACCOUNT_DUEAMOUNT)));
+    m_ui->insurance->setText(QString::number(m_Model->sum(AccountDB::Constants::ACCOUNT_INSURANCEAMOUNT)));
+    m_ui->visa->setText(QString::number(m_Model->sum(AccountDB::Constants::ACCOUNT_VISAAMOUNT)));*/
+    refresh();
     calc();
 }
 
 void AccountView::on_startDate_dateChanged(const QDate &date)
 {
-    d->m_Model->setStartDate(date);
+    //refresh();
+    //m_Model->setStartDate(date);
 }
 
 void AccountView::on_endDate_dateChanged(const QDate &date)
 {
-    d->m_Model->setEndDate(date);
+    //refresh();
+    //m_Model->setEndDate(date);
 }
 
 void AccountView::on_periodCombo_currentIndexChanged(int index)
@@ -167,8 +187,8 @@ void AccountView::on_periodCombo_currentIndexChanged(int index)
     }
 
     blockSignals(true);
-    d->m_ui->startDate->setDate(start);
-    d->m_ui->endDate->setDate(end);
+    m_ui->startDate->setDate(start);
+    m_ui->endDate->setDate(end);
     blockSignals(false);
 
     filterChanged();
@@ -177,13 +197,13 @@ void AccountView::on_periodCombo_currentIndexChanged(int index)
 void AccountView::calc(){
     qDebug() << __FILE__ << QString::number(__LINE__) << " in calc " ;
     QHash<int,QLineEdit*> hash;
-    hash.insert(AccountDB::Constants::ACCOUNT_CASHAMOUNT,d->m_ui->cash);
-    hash.insert(AccountDB::Constants::ACCOUNT_CHEQUEAMOUNT,d->m_ui->cheque);
-    hash.insert(AccountDB::Constants::ACCOUNT_VISAAMOUNT,d->m_ui->visa);
-    hash.insert(AccountDB::Constants::ACCOUNT_DUEAMOUNT,d->m_ui->du);
-    hash.insert(AccountDB::Constants::ACCOUNT_OTHERAMOUNT,d->m_ui->other);
-    hash.insert(AccountDB::Constants::ACCOUNT_INSURANCEAMOUNT,d->m_ui->insurance);
-    QAbstractItemModel *model = d->m_ui->tableView->model();
+    hash.insert(AccountDB::Constants::ACCOUNT_CASHAMOUNT,m_ui->cash);
+    hash.insert(AccountDB::Constants::ACCOUNT_CHEQUEAMOUNT,m_ui->cheque);
+    hash.insert(AccountDB::Constants::ACCOUNT_VISAAMOUNT,m_ui->visa);
+    hash.insert(AccountDB::Constants::ACCOUNT_DUEAMOUNT,m_ui->du);
+    hash.insert(AccountDB::Constants::ACCOUNT_OTHERAMOUNT,m_ui->other);
+    hash.insert(AccountDB::Constants::ACCOUNT_INSURANCEAMOUNT,m_ui->insurance);
+    QAbstractItemModel *model = m_ui->tableView->model();
     qDebug() << __FILE__ << QString::number(__LINE__) << " 1 " ;
     double sum = 0.00;
     qDebug() << __FILE__ << QString::number(__LINE__) << " 2 " ;
@@ -191,7 +211,10 @@ void AccountView::calc(){
     {
     	for (int row = 0; row < model->rowCount(); row += 1)
     	{
-    		sum += model->data(model->index(row,col),Qt::DisplayRole).toDouble();
+    		double tot = model->data(model->index(row,col),Qt::DisplayRole).toDouble();
+    		
+    		qDebug() << __FILE__ << QString::number(__LINE__) << " tot =" << QString::number(tot) ;
+    		sum += tot;
     		
     	    }
     	    QString textSum = QString::number(sum);
@@ -200,3 +223,5 @@ void AccountView::calc(){
         }
      qDebug() << __FILE__ << QString::number(__LINE__) << " in calc end " ;
 }
+
+

@@ -38,6 +38,7 @@
 #include <accountplugin/assets/assetsViewer.h>
 #include <accountplugin/ledger/ledgerviewer.h>
 #include <accountplugin/movements/movementsviewer.h>
+#include <accountplugin/accountview.h>
 
 #ifdef FREEMEDFORMS
 #    include <accountplugin/accountmode.h>
@@ -210,6 +211,15 @@ AccountActionHandler::AccountActionHandler(QObject *parent) :
     cmd->setDefaultKeySequence(QKeySequence("Alt+z"));
     menu->addAction(cmd, Constants::G_ACCOUNT_APPS);
     connect(a, SIGNAL(triggered()), this, SLOT(assets()));
+    
+    a = aAccount = new QAction(this);
+    a->setObjectName("aAccount");
+    a->setIcon(th->icon(Core::Constants::ICONHELP));
+    cmd = actionManager()->registerAction(a, Constants::A_ACCOUNT, global);
+    cmd->setTranslations(Constants::ACCOUNT, Constants::ACCOUNT, Constants::ACCOUNT_TR_CONTEXT);
+    cmd->setDefaultKeySequence(QKeySequence("Alt+A"));
+    menu->addAction(cmd, Constants::G_ACCOUNT_APPS);
+    connect(a, SIGNAL(triggered()), this, SLOT(account()));
 
     contextManager()->updateContext();
     actionManager()->retranslateMenusAndActions();
@@ -292,6 +302,13 @@ void AccountActionHandler::assets()
     w = 0;
     mainWindow()->setCentralWidget(new AssetsViewer(mainWindow()));
 }
+
+void AccountActionHandler::account(){
+    QWidget *w = mainWindow()->centralWidget();
+    delete w;
+    w = 0;
+    mainWindow()->setCentralWidget(new AccountView(mainWindow()));    
+}
 #else
 void AccountActionHandler::addReceipts()
 {
@@ -326,6 +343,13 @@ void AccountActionHandler::assets()
     AccountMode *accMode = qobject_cast<AccountMode*>(modeManager()->mode(Core::Constants::MODE_ACCOUNT));
     accMode->setCentralWidget(new AssetsViewer(mainWindow()));
     modeManager()->activateMode(Core::Constants::MODE_ACCOUNT);
+}
+
+void AccountActionHandler::account(){
+    QWidget *w = mainWindow()->centralWidget();
+    delete w;
+    w = 0;
+    mainWindow()->setCentralWidget(new AccountView(mainWindow()));    
 }
 #endif
 

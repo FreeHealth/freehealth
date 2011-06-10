@@ -82,7 +82,7 @@ public:
     m_SqlTable->select();
     }
 
-    void refreshFilter()
+    /*void refreshFilter()
     {
         if (!m_SqlTable)
             return;
@@ -95,10 +95,10 @@ public:
         }
         where.insert(AccountDB::Constants::ACCOUNT_USER_UID, QString("='%1'").arg(m_UserUid));
         m_SqlTable->setFilter(accountBase()->getWhereClause(Constants::Table_Account, where));
-        /*if (WarnFilter)
-            qWarning() << m_SqlTable->filter() << __FILE__ << __LINE__;*/
+        if (WarnFilter)
+            qWarning() << m_SqlTable->filter() << __FILE__ << __LINE__;
         q->reset();
-    }
+    }*/
 
 public:
     QSqlTableModel *m_SqlTable;
@@ -244,13 +244,13 @@ bool AccountModel::isDirty() const
 void AccountModel::setStartDate(const QDate &date)
 {
     d->m_StartDate = date;
-    d->refreshFilter();
+    //d->refreshFilter();
 }
 
 void AccountModel::setEndDate(const QDate &date)
 {
     d->m_EndDate = date;
-    d->refreshFilter();
+    //d->refreshFilter();
 }
 
 double AccountModel::sum(const int &fieldRef)
@@ -270,7 +270,7 @@ void AccountModel::userChanged()
 {
     if (user()) {
         d->m_UserUid = user()->value(Core::IUser::Uuid).toString();
-        d->refreshFilter();
+        //d->refreshFilter();
     }
 }
 

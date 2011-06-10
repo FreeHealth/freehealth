@@ -112,6 +112,7 @@ void ControlReceipts::search(){
     filter += QString("DATE BETWEEN '%1' AND '%2'").arg(dateBeginStr,dateEndStr);
     m_accountModel->setFilter(filter);
     qDebug() << __FILE__ << QString::number(__LINE__) << " filter =" << m_accountModel->filter() ;
+    qDebug() << __FILE__ << QString::number(__LINE__) << " rowCount =" << QString::number(m_accountModel->rowCount()) ;
     ui->tableView->setModel(m_accountModel);
     ui->tableView->setColumnHidden(ACCOUNT_ID,true);
     ui->tableView->setColumnHidden(ACCOUNT_UID,true);

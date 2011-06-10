@@ -70,6 +70,7 @@ namespace Constants {
     const char* const   A_LEDGER                = "a.Acc.Ledger";
     const char* const   A_MOVEMENTS             = "a.Acc.Movements";
     const char* const   A_ASSETS                = "a.Acc.Assets";
+    const char* const   A_ACCOUNT               = "a.Acc.AccountView";
 
     // Translations
     const char* const   ACCOUNT_TR_CONTEXT      = "Account";
@@ -82,6 +83,7 @@ namespace Constants {
     const char* const   LEDGER                  = QT_TRANSLATE_NOOP("Account", "Ledger");
     const char* const   ASSETS                  = QT_TRANSLATE_NOOP("Account", "Assets");
     const char* const   MOVEMENTS               = QT_TRANSLATE_NOOP("Account", "Movements");
+    const char* const   ACCOUNT                 = QT_TRANSLATE_NOOP("Account", "AccountView");
 
 //    approche par les dépenses   n f spending-based approach
 //    calendrier des dépenses   n m spending schedule

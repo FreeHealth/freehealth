@@ -69,7 +69,8 @@ private Q_SLOTS:
     void receipts();
     void ledger();
     void movements();
-    void assets();    
+    void assets();  
+    void account();
 
 private:
     void updateActions();
@@ -80,6 +81,7 @@ protected:
     QAction *aLegder;
     QAction *aMovements;
     QAction *aAssets;
+    QAction *aAccount;
 
     QPointer<AccountContextualWidget> m_CurrentView;
 
