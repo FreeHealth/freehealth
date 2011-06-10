@@ -31,6 +31,7 @@
  ***************************************************************************/
 #include "accountmode.h"
 #include "accountview.h"
+#include "receipts/receiptviewer.h"
 
 #include <coreplugin/icore.h>
 #include <coreplugin/itheme.h>
@@ -51,7 +52,7 @@ AccountMode::AccountMode(QObject *parent) :
 //    const QList<int> &context;
 //    setContext();
     m_Stack = new QStackedWidget;
-    m_Stack->addWidget(new Account::AccountView);
+    m_Stack->addWidget(new ReceiptViewer);
     setWidget(m_Stack);
 
     /** \todo connect actions from the account menu */
