@@ -34,6 +34,17 @@
 #include <QAbstractItemModel>
 #include <QAbstractProxyModel>
 
+/**
+ * \file pmhcategorymodel.h
+ * \author Eric MAEKER <eric.maeker@free.fr>
+ * \version 0.6.0
+ * \date 10 Jun 2011
+*/
+
+namespace Form {
+class FormMain;
+}
+
 namespace PMH {
 namespace Internal {
 class PmhCategoryModelPrivate;
@@ -85,10 +96,16 @@ public:
     // Helpers
     void updateFontAndColors(const QModelIndex &parent = QModelIndex());
 
-    // Category::ICategoryModelHelper interface
+    // Category::ICategoryModelHelper and Form interface
+    bool isPmhx(const QModelIndex &item) const;
     bool isCategory(const QModelIndex &item) const;
+    bool isForm(const QModelIndex &item) const;
+
     Category::CategoryItem *categoryForIndex(const QModelIndex &item) const;
     QModelIndex indexForCategory(const Category::CategoryItem *category) const;
+
+    Form::FormMain *formForIndex(const QModelIndex &item) const;
+    bool activateFormEpisode(const QModelIndex &formIndex);
 
     void addCategory(Category::CategoryItem *category, int row, const QModelIndex &parentCategory);
     void updateCategory(Category::CategoryItem *category);

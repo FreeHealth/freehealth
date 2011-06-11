@@ -50,7 +50,6 @@ class QTreeWidget;
 class QTreeWidgetItem;
 QT_END_NAMESPACE
 
-
 /**
  * \file iformitem.h
  * \author Eric MAEKER <eric.maeker@free.fr>

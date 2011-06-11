@@ -269,6 +269,54 @@ namespace {
 namespace Form {
 namespace Internal {
 
+
+    EpisodeModelCoreListener::EpisodeModelCoreListener(Form::EpisodeModel *parent) :
+            Core::ICoreListener(parent)
+    {
+        Q_ASSERT(parent);
+        m_EpisodeModel = parent;
+    }
+    EpisodeModelCoreListener::~EpisodeModelCoreListener() {}
+
+    bool EpisodeModelCoreListener::coreAboutToClose()
+    {
+        qWarning() << Q_FUNC_INFO;
+        m_EpisodeModel->submit();
+        return true;
+    }
+
+    EpisodeModelPatientListener::EpisodeModelPatientListener(Form::EpisodeModel *parent) :
+            Core::IPatientListener(parent)
+    {
+        Q_ASSERT(parent);
+        m_EpisodeModel = parent;
+    }
+    EpisodeModelPatientListener::~EpisodeModelPatientListener() {}
+
+    bool EpisodeModelPatientListener::currentPatientAboutToChange()
+    {
+        qWarning() << Q_FUNC_INFO;
+        m_EpisodeModel->submit();
+        return true;
+    }
+
+
+//    EpisodeModelUserListener::EpisodeModelUserListener(Form::EpisodeModel *parent) :
+//            UserPlugin::IUserListener(parent)
+//    {
+//        Q_ASSERT(parent);
+//        m_EpisodeModel = parent;
+//    }
+//    EpisodeModelUserListener::~EpisodeModelUserListener() {}
+
+//    bool EpisodeModelUserListener::userAboutToChange()
+//    {
+//        qWarning() << Q_FUNC_INFO;
+//        m_EpisodeModel->submit();
+//        return true;
+//    }
+//    bool EpisodeModelUserListener::currentUserAboutToDisconnect() {return true;}
+
 class EpisodeModelPrivate
 {
 public:
@@ -277,12 +325,24 @@ public:
             m_FormTreeCreated(false),
             m_ReadOnly(false),
             m_ActualEpisode(0),
+            m_CoreListener(0),
+            m_PatientListener(0),
             q(parent)
     {
     }
 
     ~EpisodeModelPrivate ()
     {
+        if (m_CoreListener) {
+            pluginManager()->removeObject(m_CoreListener);
+            delete m_CoreListener;
+            m_CoreListener = 0;
+        }
+        if (m_PatientListener) {
+            pluginManager()->removeObject(m_PatientListener);
+            delete m_PatientListener;
+            m_PatientListener = 0;
+        }
         if (m_Sql) {
             delete m_Sql;
             m_Sql = 0;
@@ -730,6 +790,8 @@ public:
     TreeItem *m_ActualEpisode;
     QString m_ActualEpisode_FormUid;
     QString m_TmpFile;
+    EpisodeModelCoreListener *m_CoreListener;
+    EpisodeModelPatientListener *m_PatientListener;
 
 private:
     EpisodeModel *q;
@@ -743,6 +805,18 @@ EpisodeModel::EpisodeModel(FormMain *rootEmptyForm, QObject *parent) :
     Q_ASSERT(rootEmptyForm);
     setObjectName("EpisodeModel");
     d->m_RootForm = rootEmptyForm;
+
+    // Autosave feature
+    //    Core Listener
+    d->m_CoreListener = new Internal::EpisodeModelCoreListener(this);
+    pluginManager()->addObject(d->m_CoreListener);
+
+    //    User Listener
+
+    //    Patient change listener
+    d->m_PatientListener = new Internal::EpisodeModelPatientListener(this);
+    pluginManager()->addObject(d->m_PatientListener);
+
     init();
 }
 
@@ -800,17 +874,10 @@ void EpisodeModel::onUserChanged()
 
 void EpisodeModel::onPatientChanged()
 {
-    qWarning() << Q_FUNC_INFO;
     d->m_CurrentPatient = patient()->data(Core::IPatient::Uid).toString();
     d->refreshEpisodes();
     d->getLastEpisodesAndFeedPatientModel();
     reset();
-    qWarning() << ",,,,,,,";
-}
-
-void EpisodeModel::setCurrentFormUuid(const QString &uuid)
-{
-    d->m_CurrentForm = uuid;
 }
 
 QModelIndex EpisodeModel::index(int row, int column, const QModelIndex &parent) const
@@ -975,11 +1042,13 @@ Qt::ItemFlags EpisodeModel::flags(const QModelIndex &index) const
     return Qt::ItemIsSelectable | Qt::ItemIsEnabled;
 }
 
+/** Not implemented */
 QVariant EpisodeModel::headerData(int section, Qt::Orientation orientation, int role) const
 {
     return QVariant();
 }
 
+/** Insert new episodes to the \e parent. The parent must be a form. */
 bool EpisodeModel::insertRows(int row, int count, const QModelIndex &parent)
 {
     qWarning() << "insertRows" << row << count << parent.data();
@@ -1017,6 +1086,7 @@ bool EpisodeModel::insertRows(int row, int count, const QModelIndex &parent)
     return true;
 }
 
+/** Not implemented */
 bool EpisodeModel::removeRows(int row, int count, const QModelIndex &parent)
 {
     //    qWarning() << "removeRows" << row << count;
@@ -1049,6 +1119,7 @@ bool EpisodeModel::removeRows(int row, int count, const QModelIndex &parent)
     return true;
 }
 
+/** Return true is the \e index is an episode. */
 bool EpisodeModel::isEpisode(const QModelIndex &index) const
 {
     if (!index.isValid())
@@ -1058,6 +1129,7 @@ bool EpisodeModel::isEpisode(const QModelIndex &index) const
     return it->isEpisode();
 }
 
+/** Return true is the \e index only owns one unique episode. It is supposed that the \e index points to a form */
 bool EpisodeModel::isUniqueEpisode(const QModelIndex &index) const
 {
     if (!index.isValid())
@@ -1069,6 +1141,7 @@ bool EpisodeModel::isUniqueEpisode(const QModelIndex &index) const
     return false;
 }
 
+/** Return true is the \e index does not own episodes. It is supposed that the \e index points to a form */
 bool EpisodeModel::isNoEpisode(const QModelIndex &index)
 {
     if (!index.isValid())
@@ -1080,23 +1153,74 @@ bool EpisodeModel::isNoEpisode(const QModelIndex &index)
     return false;
 }
 
+/** Define the whole model read mode */
 void EpisodeModel::setReadOnly(const bool state)
 {
     d->m_ReadOnly = state;
 }
 
+/** Return true if the whole model is in a read only mode */
 bool EpisodeModel::isReadOnly() const
 {
     return d->m_ReadOnly;
 }
 
+/** Return true if the model has unsaved data */
 bool EpisodeModel::isDirty() const
 {
     return false;
 }
 
+/** Return the Form::FormMain pointer corresponding to the \e index. The returned pointer must not be deleted */
+Form::FormMain *EpisodeModel::formForIndex(const QModelIndex &index) const
+{
+    if (!index.isValid())
+        return false;
+    TreeItem *item = d->getItem(index);
+    FormMain *form = d->m_RootForm->formMainChild(item->data(FormUuid).toString());
+    return form;
+}
+
+static QModelIndex formIndex(const QString &formUid, const QModelIndex &parent, const Form::EpisodeModel *model)
+{
+    // Test parent
+    if (model->isForm(parent)) {
+        if (parent.data().toString()==formUid) {
+            return model->index(parent.row(), 0, parent.parent());
+        }
+    }
+    // Test its children
+    for(int i = 0; i < model->rowCount(parent); ++i) {
+        QModelIndex item = model->index(i, EpisodeModel::FormUuid, parent);
+        QModelIndex ret = formIndex(formUid, item, model);
+        if (ret.isValid())
+            return model->index(ret.row(), 0, ret.parent());
+    }
+    return QModelIndex();
+}
+
+/** Return the QModelIndex corresponding to the form with the specified \e formUid, or return an invalid index. */
+QModelIndex EpisodeModel::indexForForm(const QString &formUid) const
+{
+    for(int i = 0; i < rowCount(); ++i) {
+        QModelIndex ret = formIndex(formUid, index(i, EpisodeModel::FormUuid), this);
+        if (ret.isValid()) {
+            return ret;
+        }
+    }
+    return QModelIndex();
+}
+
+/**
+  Save the whole model
+  \sa isDirty()
+ */
 bool EpisodeModel::submit()
 {
+    // No active patient ?
+    if (patient()->data(Core::IPatient::Uid).isNull())
+        return false;
+
     // save actual episode if needed
     if (d->m_ActualEpisode) {
         if (!d->saveEpisode(d->m_ActualEpisode, d->m_ActualEpisode_FormUid)) {

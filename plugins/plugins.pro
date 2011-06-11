@@ -117,6 +117,7 @@ pmh.depends += icd
 pmh.depends += listview
 pmh.depends += texteditor
 pmh.depends += category
+pmh.depends += formmanager
 
 category.subdir = categoryplugin
 category.depends += core

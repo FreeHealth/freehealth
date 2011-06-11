@@ -29,6 +29,9 @@
 
 #include <formmanagerplugin/formmanager_exporter.h>
 
+#include <coreplugin/icorelistener.h>
+#include <coreplugin/ipatientlistener.h>
+
 #include <QAbstractItemModel>
 
 
@@ -38,6 +41,29 @@ class EpisodeModel;
 
 namespace Internal {
 class EpisodeModelPrivate;
+
+class EpisodeModelCoreListener : public Core::ICoreListener
+{
+    Q_OBJECT
+public:
+    EpisodeModelCoreListener(Form::EpisodeModel *parent);
+    ~EpisodeModelCoreListener();
+    bool coreAboutToClose();
+private:
+    Form::EpisodeModel *m_EpisodeModel;
+};
+
+class EpisodeModelPatientListener : public Core::IPatientListener
+{
+    Q_OBJECT
+public:
+    EpisodeModelPatientListener(Form::EpisodeModel *parent);
+    ~EpisodeModelPatientListener();
+    bool currentPatientAboutToChange();
+private:
+    Form::EpisodeModel *m_EpisodeModel;
+};
+
 }
 
 class FORM_EXPORT EpisodeModel : public QAbstractItemModel
@@ -67,7 +93,7 @@ public:
     ~EpisodeModel();
     void init();
 
-    QModelIndex index(int row, int column, const QModelIndex &parent) const;
+    QModelIndex index(int row, int column, const QModelIndex &parent = QModelIndex()) const;
     QModelIndex parent(const QModelIndex &index) const;
     Qt::ItemFlags flags(const QModelIndex &index) const;
 
@@ -92,6 +118,9 @@ public:
     bool isReadOnly() const;
     bool isDirty() const;
 
+    Form::FormMain *formForIndex(const QModelIndex &index) const;
+    QModelIndex indexForForm(const QString &formUid) const;
+
     bool submit();
 
 Q_SIGNALS:
@@ -108,8 +137,6 @@ private Q_SLOTS:
     void onPatientChanged();
 
 public Q_SLOTS:
-    void setCurrentFormUuid(const QString &uuid);
-
     bool activateEpisode(const QModelIndex &index, const QString &formUid); //const int id, const QString &formUid, const QString &xmlcontent);
     bool saveEpisode(const QModelIndex &index, const QString &formUid = QString::null);
 

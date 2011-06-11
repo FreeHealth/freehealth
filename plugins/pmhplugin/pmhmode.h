@@ -31,6 +31,9 @@
 #include <pmhplugin/pmhcontextualwidget.h>
 
 #include <QObject>
+#include <QHash>
+#include <QString>
+
 QT_BEGIN_NAMESPACE
 class QModelIndex;
 class QAbstractButton;
@@ -59,6 +62,7 @@ private Q_SLOTS:
     void onButtonClicked(QAbstractButton *button);
     void createCategory();
     void removeItem();
+    void onPatientChanged();
 
 private:
     void changeEvent(QEvent *e);
@@ -67,7 +71,7 @@ private:
     Ui::PmhModeWidget *ui;
     QToolBar *m_ToolBar;
     QPushButton *m_EditButton;
-
+    QHash<QString, int> m_FormUid_StackId;
 };
 
 class PmhMode : public Core::BaseMode

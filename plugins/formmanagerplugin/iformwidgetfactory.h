@@ -37,6 +37,13 @@
 #include <QtGui/QBoxLayout>
 #include <QtGui/QLabel>
 
+/**
+ * \file iformwidgetfactory.h
+ * \author Eric MAEKER <eric.maeker@free.fr>
+ * \version 0.5.0
+ * \date 03 Apr 2011
+*/
+
 namespace Form {
 
 class IFormWidget;

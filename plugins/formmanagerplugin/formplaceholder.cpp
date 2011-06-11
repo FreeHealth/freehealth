@@ -83,39 +83,6 @@ inline static Core::ActionManager *actionManager() {return Core::ICore::instance
 namespace Form {
 namespace Internal {
 
-FormPlaceHolderCoreListener::FormPlaceHolderCoreListener(Form::FormPlaceHolder *parent) :
-        Core::ICoreListener(parent)
-{
-    Q_ASSERT(parent);
-    m_Holder = parent;
-}
-FormPlaceHolderCoreListener::~FormPlaceHolderCoreListener() {}
-
-bool FormPlaceHolderCoreListener::coreAboutToClose()
-{
-    qWarning() << Q_FUNC_INFO;
-    mainWindow()->setFocus();
-    m_Holder->setCurrentEpisode(QModelIndex());
-    return true;
-}
-
-FormPlaceHolderPatientListener::FormPlaceHolderPatientListener(Form::FormPlaceHolder *parent) :
-        Core::IPatientListener(parent)
-{
-    Q_ASSERT(parent);
-    m_Holder = parent;
-}
-FormPlaceHolderPatientListener::~FormPlaceHolderPatientListener() {}
-
-bool FormPlaceHolderPatientListener::currentPatientAboutToChange()
-{
-    qWarning() << Q_FUNC_INFO;
-    mainWindow()->setFocus();
-    m_Holder->setCurrentEpisode(QModelIndex());
-    return true;
-}
-
-
 class FormPlaceHolderPrivate
 {
 public:
@@ -128,8 +95,6 @@ public:
             m_Stack(0),
             m_GeneralLayout(0),
             horizSplitter(0),
-            m_CoreListener(0),
-            m_PatientListener(0),
             q(parent)
     {
     }
@@ -144,16 +109,6 @@ public:
         }
         if (m_GeneralLayout) {
             delete m_GeneralLayout; m_GeneralLayout=0;
-        }
-        if (m_CoreListener) {
-            pluginManager()->removeObject(m_CoreListener);
-            delete m_CoreListener;
-            m_CoreListener = 0;
-        }
-        if (m_PatientListener) {
-            pluginManager()->removeObject(m_PatientListener);
-            delete m_PatientListener;
-            m_PatientListener = 0;
         }
     }
 
@@ -208,8 +163,6 @@ public:
     QGridLayout *m_GeneralLayout;
     QHash<int, QString> m_StackId_FormUuid;
     Utils::MiniSplitter *horizSplitter;
-    FormPlaceHolderCoreListener *m_CoreListener;
-    FormPlaceHolderPatientListener *m_PatientListener;
 
 private:
     FormPlaceHolder *q;
@@ -281,17 +234,6 @@ FormPlaceHolder::FormPlaceHolder(QWidget *parent) :
         FormContextualWidget(parent),
         d(new Internal::FormPlaceHolderPrivate(this))
 {
-    // Autosave feature
-    //    Core Listener
-    d->m_CoreListener = new Internal::FormPlaceHolderCoreListener(this);
-    pluginManager()->addObject(d->m_CoreListener);
-
-    //    User Listener
-
-    //    Patient change listener
-    d->m_PatientListener = new Internal::FormPlaceHolderPatientListener(this);
-    pluginManager()->addObject(d->m_PatientListener);
-
     FormManager::instance();
     // create general layout
     d->m_GeneralLayout = new QGridLayout(this);
@@ -548,7 +490,7 @@ void FormPlaceHolder::newEpisode()
 
     // create a new episode the selected form and its children
     if (!d->m_EpisodeModel->insertRow(0, index)) {
-        Utils::Log::addError(this, "Unable to create new episode");
+        LOG_ERROR("Unable to create new episode");
         return;
     }
     // activate the newly created main episode
@@ -564,21 +506,20 @@ void FormPlaceHolder::removeEpisode()
 {
     if (!d->m_FileTree->selectionModel())
         return;
-    /** \todo removeEpisode */
+    /** \todo code here : removeEpisode */
 }
 
 void FormPlaceHolder::validateEpisode()
 {
     if (!d->m_FileTree->selectionModel())
         return;
-    /** \todo validateEpisode */
+    /** \todo code here : validateEpisode */
 }
 
 void FormPlaceHolder::addForm()
 {
     if (!isVisible())
         return;
-    // Dialog ?
     FormEditorDialog dlg(d->m_EpisodeModel, FormEditorDialog::DefaultMode, this);
     dlg.exec();
 }

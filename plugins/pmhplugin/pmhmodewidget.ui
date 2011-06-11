@@ -49,19 +49,21 @@
        </item>
       </layout>
      </widget>
-     <widget class="QWidget" name="layoutWidget">
-      <layout class="QVBoxLayout" name="verticalLayout">
-       <item>
-        <widget class="PMH::PmhViewer" name="pmhViewer" native="true"/>
-       </item>
-       <item>
-        <widget class="QDialogButtonBox" name="buttonBox">
-         <property name="standardButtons">
-          <set>QDialogButtonBox::Cancel|QDialogButtonBox::Save</set>
-         </property>
-        </widget>
-       </item>
-      </layout>
+     <widget class="QStackedWidget" name="stackedWidget">
+      <widget class="QWidget" name="Page1">
+       <layout class="QVBoxLayout" name="verticalLayout">
+        <item>
+         <widget class="PMH::PmhViewer" name="pmhViewer" native="true"/>
+        </item>
+        <item>
+         <widget class="QDialogButtonBox" name="buttonBox">
+          <property name="standardButtons">
+           <set>QDialogButtonBox::Cancel|QDialogButtonBox::Save</set>
+          </property>
+         </widget>
+        </item>
+       </layout>
+      </widget>
      </widget>
     </widget>
    </item>
