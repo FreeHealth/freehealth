@@ -60,6 +60,8 @@ class LedgerEdit : public QWidget {
         Ui::LedgerEditWidget * ui;
         ProduceDoc    *m_myThread;
         QTextDocument *m_doc;
+        int m_typeOfPaper;
+        bool m_duplicata;
         QDate m_date;
 };
 

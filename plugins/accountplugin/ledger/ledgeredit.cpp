@@ -32,7 +32,16 @@
 #include "ledgeredit.h"
 #include "ui_ledgeredit.h"
 #include "ledgerIO.h"
+#include <coreplugin/idocumentprinter.h>
+#include <extensionsystem/pluginmanager.h>
+#include <coreplugin/constants_tokensandsettings.h>
+
 #include <QDebug>
+using namespace ExtensionSystem;
+using namespace Core;
+using namespace Core::Constants;
+inline static Core::IDocumentPrinter *printer() {return ExtensionSystem::PluginManager::instance()
+                                                 ->getObject<Core::IDocumentPrinter>();}
 
 LedgerEdit::LedgerEdit(QWidget * parent):QWidget(parent),ui(new Ui::LedgerEditWidget){
     ui->setupUi(this);
@@ -59,6 +68,9 @@ LedgerEdit::LedgerEdit(QWidget * parent):QWidget(parent),ui(new Ui::LedgerEditWi
     ui->textEdit->setPalette(p);
     ui->textEdit->setDocument(m_doc);
     m_myThread = new ProduceDoc();
+    //print
+    m_typeOfPaper = 0;
+    m_duplicata = false;
     connect(ui->quitButton,SIGNAL(pressed()),this,SLOT(close()));
     connect(ui->showButton,SIGNAL(pressed()),this,SLOT(showLedger()));
     connect(ui->printButton,SIGNAL(pressed()),this,SLOT(printLedger()));
@@ -86,7 +98,23 @@ void LedgerEdit::showLedger(){
     connect(this       ,SIGNAL(deleteThread()),            this,       SLOT(slotDeleteThread()));
 }
 
-void LedgerEdit::printLedger(){}
+void LedgerEdit::printLedger(){
+    Core::IDocumentPrinter *p = printer();
+    if (!p) {
+        qWarning() << __FILE__ << QString::number(__LINE__) << "No IDocumentPrinter found" ;
+        //LOG_ERROR("No IDocumentPrinter found");
+        return;
+    }
+    p->clearTokens();
+    QHash<QString, QVariant> tokens;
+
+    // Là tu ajoutes tes tokens pour l'impression (lire la doc de FreeDiams sur le gestionnaire d'étiquettes)
+    tokens.insert(Core::Constants::TOKEN_DOCUMENTTITLE, this->windowTitle());
+    p->addTokens(Core::IDocumentPrinter::Tokens_Global, tokens);
+    
+    // Ensuite on demande l'impression (avec les entêtes/pieds de page et duplicata ou non)
+    p->print(m_doc, m_typeOfPaper, m_duplicata);    
+}
 
 void LedgerEdit::choosenDate(const QString & dateText){
     ////qDebug() << __FILE__ << QString::number(__LINE__) << " dateText =" << dateText ;

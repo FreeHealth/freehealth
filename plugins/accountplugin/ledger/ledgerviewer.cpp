@@ -48,13 +48,11 @@ LedgerViewer::LedgerViewer(QWidget * parent): QWidget(parent),ui(new Ui::LedgerV
     ui->monthsComboBox->addItems(listOfMonths);
     QStringList listOfYears;
     QString currentDate = QDate::currentDate().toString("yyyy");
-    qDebug() << __FILE__ << QString::number(__LINE__) << " 1 "  ;
     listOfYears << currentDate;
-    qDebug() << __FILE__ << QString::number(__LINE__) << " 2 "  ;
     listOfYears << m_lm->getListOfYears();
-    qDebug() << __FILE__ << QString::number(__LINE__) << " 3 "  ;
     listOfYears.removeDuplicates();
     ui->yearsComboBox->addItems(listOfYears);
+    ui->tableView->setShowGrid(false);
     createActions();
     createMenus();
     fillMenuBar();
@@ -140,20 +138,40 @@ void LedgerViewer::monthlyReceiptsAnalysis(){
     AccountModel * model = m_lm->getModelMonthlyReceiptsAnalysis(this,
                                                               month,
                                                               year);
-    qDebug() << __FILE__ << QString::number(__LINE__) << " modelAccount =" << QString::number(model->rowCount()) ;
+    model->setHeaderData( ACCOUNT_PATIENT_NAME, Qt::Horizontal, trUtf8("PATIENT NAME"), Qt::EditRole );
+    model->setHeaderData( ACCOUNT_SITE_ID, Qt::Horizontal, trUtf8("SITE ID"), Qt::EditRole );
+    model->setHeaderData( ACCOUNT_INSURANCE_ID, Qt::Horizontal, trUtf8("INSURANCE ID"), Qt::EditRole );
+    model->setHeaderData( ACCOUNT_MEDICALPROCEDURE_TEXT, Qt::Horizontal, trUtf8("TEXT"), Qt::EditRole );
     ui->tableView->setModel(model);
+    QList<int> listOff ;
+    listOff << ACCOUNT_ID 
+            << ACCOUNT_UID 
+            << ACCOUNT_USER_UID 
+            << ACCOUNT_PATIENT_UID 
+            << ACCOUNT_MEDICALPROCEDURE_XML 
+            << ACCOUNT_TRACE;
+    for (int i = 0; i < listOff.size(); i += 1)
+    {
+    	ui->tableView->setColumnHidden(listOff[i],true);
+        }
+    
     QString labelText = "Total = "+QString::number(m_lm->m_sums)+" "+m_currency;
     ui->sumLabel->setText(labelText);
 }
 void LedgerViewer::monthlyAndTypeReceiptsAnalysis(){
+    qDebug() << __FILE__ << QString::number(__LINE__) << " in monthlyAndTypeReceiptsAnalysis " ;
     m_actionText = m_monthlyAndTypeReceiptsAnalysis->text();
     QString month = ui->monthsComboBox->currentText();
     QString year = ui->yearsComboBox->currentText();
-    QStandardItemModel * model = m_lm->getModelMonthlyAndTypeReceiptsAnalysis(this,
-                                                                       month,
-                                                                       year);
-    qDebug() << __FILE__ << QString::number(__LINE__) << " model->rowCount() =" << QString::number(model->rowCount()) ;
-    ui->tableView->setModel(model);
+    QItemSelectionModel *m = ui->tableView->selectionModel();
+    delete m;
+    QStandardItemModel * modelStd = m_lm->getModelMonthlyAndTypeReceiptsAnalysis(this,
+                                                                                 month,
+                                                                                 year);
+    modelStd->setHeaderData( 0, Qt::Horizontal, trUtf8("TYPE"), Qt::EditRole );
+    modelStd->setHeaderData( 1, Qt::Horizontal, trUtf8("VALUE"), Qt::EditRole );
+    ui->tableView->setModel(modelStd);
+    ui->tableView->resizeColumnsToContents();
     QString labelText = "Total = "+QString::number(m_lm->m_sums)+" "+m_currency;
     ui->sumLabel->setText(labelText);
 }
@@ -161,6 +179,8 @@ void LedgerViewer::yearlyAndTypeReceiptsAnalysis(){
     m_actionText = m_yearlyAndTypeReceiptsAnalysis->text();
     QString year = ui->yearsComboBox->currentText();
     QStandardItemModel * model = m_lm->getModelYearlyAndTypeReceiptsAnalysis(this,year);
+    model->setHeaderData( 0, Qt::Horizontal, trUtf8("TYPE"), Qt::EditRole );
+    model->setHeaderData( 1, Qt::Horizontal, trUtf8("VALUE"), Qt::EditRole );
     ui->tableView->setModel(model);
     QString labelText = "Total = "+QString::number(m_lm->m_sums)+" "+m_currency;
     ui->sumLabel->setText(labelText);
@@ -171,6 +191,16 @@ void LedgerViewer::monthlyMovementsAnalysis(){
     QString year = ui->yearsComboBox->currentText();
     MovementModel * model = m_lm->getModelMonthlyMovementsAnalysis(this,month,year);
     ui->tableView->setModel(model);
+    QList<int> listOff ;
+    listOff << MOV_ID 
+            << MOV_AV_MOVEMENT_ID
+            << ACCOUNT_USER_UID 
+            << MOV_ACCOUNT_ID
+            << MOV_TRACE;
+    for (int i = 0; i < listOff.size(); i += 1)
+    {
+    	ui->tableView->setColumnHidden(listOff[i],true);
+        }
     QString labelText = "Total = "+QString::number(m_lm->m_sums)+" "+m_currency;
     ui->sumLabel->setText(labelText);
     
@@ -180,9 +210,12 @@ void LedgerViewer::monthlyAndTypeMovementsAnalysis(){
     QString month = ui->monthsComboBox->currentText();
     QString year = ui->yearsComboBox->currentText();
     QStandardItemModel * model = m_lm->getModelMonthlyAndTypeMovementAnalysis(this,
-                                                                           month,
-                                                                           year);
+                                                                              month,
+                                                                              year);
+    model->setHeaderData( 0, Qt::Horizontal, trUtf8("TYPE"), Qt::EditRole );
+    model->setHeaderData( 1, Qt::Horizontal, trUtf8("VALUE"), Qt::EditRole );                                                                              
     ui->tableView->setModel(model);
+    ui->tableView->resizeColumnsToContents();
     QString labelText = "Total = "+QString::number(m_lm->m_sums)+" "+m_currency;
     ui->sumLabel->setText(labelText);
 }
@@ -190,7 +223,10 @@ void LedgerViewer::yearlyAndTypeMovementsAnalysis(){
     m_actionText = m_yearlyAndTypeMovementsAnalysis->text();
     QString year = ui->yearsComboBox->currentText();
     QStandardItemModel * model = m_lm->getModelYearlyAndTypeMovementAnalysis(this,year);
+    model->setHeaderData( 0, Qt::Horizontal, trUtf8("TYPE"), Qt::EditRole );
+    model->setHeaderData( 1, Qt::Horizontal, trUtf8("VALUE"), Qt::EditRole );
     ui->tableView->setModel(model);
+    ui->tableView->resizeColumnsToContents();
     QString labelText = "Total = "+QString::number(m_lm->m_sums)+" "+m_currency;
     ui->sumLabel->setText(labelText);
 }

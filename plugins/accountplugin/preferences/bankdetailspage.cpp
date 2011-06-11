@@ -127,11 +127,11 @@ BankDetailsWidget::BankDetailsWidget(QWidget *parent) :
     deleteButton->setIcon(theme()->icon(Core::Constants::ICONREMOVE));
     deleteButton->setText("Delete");
     m_Model = new AccountDB::BankAccountModel(this);
-//    if (m_Model->rowCount()<1)  {
-//        if (!setCashBox())  {
-//            QMessageBox::warning(0,trUtf8("Warning"),trUtf8("Unable to create cash box."),QMessageBox::Ok);
-//        }
-//    }
+    if (m_Model->rowCount()<1)  {
+        if (!setCashBox())  {
+            QMessageBox::warning(0,trUtf8("Warning"),trUtf8("Unable to create cash box."),QMessageBox::Ok);
+        }
+    }
     /** \todo  m_Model->setUserUuid(); */
     m_Mapper = new QDataWidgetMapper(this);
     m_Mapper->setSubmitPolicy(QDataWidgetMapper::AutoSubmit);
