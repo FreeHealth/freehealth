@@ -36,7 +36,7 @@
 
 ProduceDoc::ProduceDoc(){
     m_fieldsToJoin     = 0;
-    m_tableFormatParameters = "200,50,50,200,170";
+    m_tableFormatParameters = "200,200,150,250,170";//the last is not used in fact
     m_tablesRecapParameters = "400,400";
 }
     
@@ -194,12 +194,15 @@ void ProduceDoc::organize(){
 QTextTableFormat ProduceDoc::myFormat(QTextTableFormat & tableFormat,QString & parametersForTableFormat){
      QTextTableFormat table         = tableFormat;
      QStringList parametersList     = parametersForTableFormat.split(",");
+     qDebug() << __FILE__ << QString::number(__LINE__) << " parametersList.size =" 
+              << QString::number(parametersList.size()) ;
      tableFormat                     .setBackground(QColor("#C0C0C0"));
      tableFormat                     .setAlignment(Qt::AlignCenter);
      tableFormat                     .setCellPadding(2);
      tableFormat                     .setCellSpacing(2);
      QVector<QTextLength> constraints;
          for(int i = 0;i < parametersList.size() ; i++){
+             qDebug() << __FILE__ << QString::number(__LINE__) << " parametersForTableFormat =" << parametersList[i] ;
              constraints << QTextLength(QTextLength::FixedLength, parametersList[i].toInt());
              }
 
@@ -360,7 +363,6 @@ void ProduceDoc::fillTable(QList<QVector<QString> > & tableau,
            cursortrieinfunction         -> insertHtml("<font size = 6 color = #3300FF><bold><br/>"
                                                       "<br/>"+heads+"<bold>"
                                                       "</font><br/><br/>");
-        
         QTextTableFormat tableFormatDone;   
         myFormat(tableFormatDone,m_tablesRecapParameters);
         //qDebug() << __FILE__ << QString::number(__LINE__) << " thread 10 "   ;
@@ -405,7 +407,9 @@ void ProduceDoc::fillTable(QList<QVector<QString> > & tableau,
     table                           -> mergeCells(table->rows()-1,0,1,2);//-1 car part de zero
     QTextTableCell cell              = table->cellAt(table->rows()-1,0);
      QTextCursor cellCursor          = cell.firstCursorPosition();
-     cellCursor                       .insertText(trUtf8("Total ")+thisMonthfonction+"");
+     QString totalMonth = QString("<html><font size = 4 color = #FF0000><bold>%1 %2 <bold></font></html>")
+                          .arg(trUtf8("Total of "),thisMonthfonction);
+     cellCursor                       .insertHtml(totalMonth);
     QTextTableCell cell2             = table->cellAt(table->rows()-1,2);
      QTextCursor cellCursor2         = cell2.firstCursorPosition();
      table                          -> mergeCells(table->rows()-1,2,1,3);
@@ -460,7 +464,9 @@ void ProduceDoc::fillTable(QList<QVector<QString> > & tableau,
          cellCursor31             . insertText(banking);
             QTextTableCell cell40     = tableRecap->cellAt(4,0);
             QTextCursor cellCursor40  = cell40.firstCursorPosition();
-            cellCursor40              . insertText(trUtf8("Total receipts"));
+            QString totalReceiptsHtml = QString("<html><font size = 4 color = #FF0000><bold>%1 %2 <bold></font></html>")
+                                        .arg(trUtf8("Total of "),trUtf8("receipts"));
+            cellCursor40              . insertHtml(totalReceiptsHtml);
             QTextTableCell cell41     = tableRecap->cellAt(4,1);
             QTextCursor cellCursor41  = cell41.firstCursorPosition();
             cellCursor41              . insertText(totalReceipts);  
@@ -481,7 +487,17 @@ void ProduceDoc::fillTable(QList<QVector<QString> > & tableau,
             qDebug() << __FILE__ << QString::number(__LINE__) << "paireDepenseMontant[0]  =" << paireDepenseMontant[0] ;
             QTextTableCell cellDep          = tableRecap->cellAt(i,0);
              QTextCursor cellCursorDep      = cellDep.firstCursorPosition();
-             cellCursorDep                  . insertText(paireDepenseMontant[0]);
+             QString paireDepenseMontantLeft = paireDepenseMontant[0];
+             qDebug() << __FILE__ << QString::number(__LINE__) << "paireDepenseMontantLeft  =" << paireDepenseMontantLeft ;
+             if (paireDepenseMontantLeft == trUtf8("Total"))
+             {
+             	  QString totalInHtml = QString("<html><font size = 4 color = #FF0000><bold>%1<bold></font></html>")
+                                       .arg(paireDepenseMontantLeft);
+             	  cellCursorDep                  . insertHtml(totalInHtml);
+                 }
+             else{
+                 cellCursorDep . insertText(paireDepenseMontantLeft);
+                 }
             QTextTableCell cellDep1         = tableRecap->cellAt(i,1);
              QTextCursor cellCursorDep1     = cellDep1.firstCursorPosition();
              cellCursorDep1                 . insertText(paireDepenseMontant[1]);
