@@ -402,6 +402,9 @@ public:
      BaseDate(Form::FormItem *linkedObject, QWidget *parent = 0);
      ~BaseDate();
 
+ private Q_SLOTS:
+     void onPatientChanged();
+
 public Q_SLOTS:
      void retranslate();
 

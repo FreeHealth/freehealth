@@ -26,6 +26,9 @@
  ***************************************************************************/
 #include "baseformwidgets.h"
 
+#include <coreplugin/icore.h>
+#include <coreplugin/ipatient.h>
+
 #include <formmanagerplugin/iformitem.h>
 
 #include <utils/global.h>
@@ -49,7 +52,8 @@
 #include "ui_baseformwidget.h"
 
 using namespace BaseWidgets;
-//using namespace BaseWidgets::Internal;
+
+static inline Core::IPatient *patient() {return Core::ICore::instance()->patient();}
 
 namespace {
     // TypeEnum must be sync with the widgetsName QStringList
@@ -83,6 +87,7 @@ namespace {
             << "date" << "button" << "sum";
 
     const char * const  EXTRAS_KEY              = "option";
+    const char * const  EXTRAS_KEY2             = "options";
     const char * const  EXTRAS_KEY_COLUMN       = "column";
     const char * const  EXTRAS_COMPACT_VIEW     = "compact";
     const char * const  EXTRAS_GROUP_CHECKABLE  = "checkable";
@@ -91,13 +96,24 @@ namespace {
     const char * const  EXTRAS_ALIGN_HORIZONTAL = "horizontal";
     const char * const  CHANGE_EPISODE_LABEL    = "changeepisodelabel";
 
+    // Date options
     const char * const  DATE_EXTRAS_KEY         = "dateformat";
+    const char * const  DATE_NOW                = "now";
+    const char * const  DATE_PATIENTLIMITS      = "patientLimits";
     const char * const  SUM_EXTRA_KEY           = "sumof";
 
     const char * const  SPIN_EXTRAS_KEY_MIN         = "min";
     const char * const  SPIN_EXTRAS_KEY_MAX         = "max";
     const char * const  SPIN_EXTRAS_KEY_STEP        = "step";
 
+}
+
+inline static QStringList getOptions(Form::FormItem *item)
+{
+    QStringList l;
+    l = item->extraDatas().value(::EXTRAS_KEY).split(";", QString::SkipEmptyParts);
+    l += item->extraDatas().value(::EXTRAS_KEY2).split(";", QString::SkipEmptyParts);
+    return l;
 }
 
 inline static int getNumberOfColumns(Form::FormItem *item, int defaultValue = 1)
@@ -971,23 +987,12 @@ BaseCombo::BaseCombo(Form::FormItem *formItem, QWidget *parent)
     // Prepare Widget Layout and label
     QBoxLayout *hb = getBoxLayout(Label_OnLeft, m_FormItem->spec()->label(), this);
     hb->addWidget(m_Label);
-    //     if (!(mfo(m_FormItem)->options() & mfObjectFundamental::LabelOnTop))
-    //     {
-    //          Qt::Alignment alignment = m_Label->alignment();
-    //          alignment &= ~(Qt::AlignVertical_Mask);
-    //          alignment |= Qt::AlignVCenter;
-    //          m_Label->setAlignment(alignment);
-    //     }
 
     // Add List and manage size
     m_Combo = new QComboBox(this);
     m_Combo->setObjectName("Combo_" + m_FormItem->uuid());
     m_Combo->addItems(m_FormItem->valueReferences()->values(Form::FormItemValues::Value_Possible));
     hb->addWidget(m_Combo);
-    //     if (mfo(m_FormItem)->options() & mfObjectFundamental::SizePreferred)
-    //          m_Combo->setSizePolicy(QSizePolicy::Preferred, QSizePolicy::Preferred);
-    //     else
-    //          m_Combo->setSizePolicy(QSizePolicy::Expanding , QSizePolicy::Fixed);
 
     // create FormItemData
     BaseComboData *data = new BaseComboData(m_FormItem);
@@ -1081,19 +1086,12 @@ QVariant BaseComboData::storableData() const
 //--------------------------------------------------------------------------------------------------------
 //----------------------------------------- BaseDate ---------------------------------------------------
 //--------------------------------------------------------------------------------------------------------
-BaseDate::BaseDate(Form::FormItem *formItem, QWidget *parent)
-        : Form::IFormWidget(formItem,parent), m_Date(0)
+BaseDate::BaseDate(Form::FormItem *formItem, QWidget *parent) :
+        Form::IFormWidget(formItem,parent), m_Date(0)
 {
     // Prepare Widget Layout and label
     QBoxLayout * hb = getBoxLayout(Label_OnLeft, m_FormItem->spec()->label(), this);
     hb->addWidget(m_Label);
-    //     if (!(mfo(m_FormItem)->options() & mfObjectFundamental::LabelOnTop))
-    //     {
-    //          Qt::Alignment alignment = m_Label->alignment();
-    //          alignment &= ~(Qt::AlignVertical_Mask);
-    //          alignment |= Qt::AlignVCenter;
-    //          m_Label->setAlignment(alignment);
-    //     }
 
     // Add Date selector and manage date format
     m_Date = new QDateTimeEdit(this);
@@ -1103,10 +1101,14 @@ BaseDate::BaseDate(Form::FormItem *formItem, QWidget *parent)
     m_Date->setCalendarPopup(true);
     hb->addWidget(m_Date);
 
-    // Initialize mfo and dateedit with mfo options
-    //     const QStringList &options = mfo(m_FormItem)->param(mfObject::Param_Options).toStringList();
-    //     if (options.contains("now"))
-    //          m_Date->setDateTime(QDateTime::currentDateTime());
+    // Manage options
+    const QStringList &options = getOptions(formItem);
+    if (options.contains(::DATE_NOW))
+        m_Date->setDateTime(QDateTime::currentDateTime());
+    if (options.contains(::DATE_PATIENTLIMITS)) {
+        connect(patient(), SIGNAL(currentPatientChanged()), this, SLOT(onPatientChanged()));
+        onPatientChanged();
+    }
 
     // create FormItemData
     BaseDateData *data = new BaseDateData(m_FormItem);
@@ -1116,6 +1118,20 @@ BaseDate::BaseDate(Form::FormItem *formItem, QWidget *parent)
 
 BaseDate::~BaseDate()
 {
+}
+
+void BaseDate::onPatientChanged()
+{
+    if (!patient()->data(Core::IPatient::DateOfBirth).isNull()) {
+        m_Date->setMinimumDate(patient()->data(Core::IPatient::DateOfBirth).toDate());
+    } else {
+        m_Date->setMinimumDate(QDate::currentDate().addYears(-200));
+    }
+    if (!patient()->data(Core::IPatient::DateOfDeath).isNull()) {
+        m_Date->setMaximumDate(patient()->data(Core::IPatient::DateOfDeath).toDate());
+    } else {
+        m_Date->setMaximumDate(QDate::currentDate().addYears(200));
+    }
 }
 
 void BaseDate::retranslate()
@@ -1210,7 +1226,6 @@ BaseSpin::BaseSpin(Form::FormItem *formItem, QWidget *parent, bool doubleSpin)
     hb->addWidget(m_Spin);
 
     // manage options
-    ;
 
     // create FormItemData
     BaseSpinData *data = new BaseSpinData(m_FormItem);
