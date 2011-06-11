@@ -35,7 +35,7 @@
 #include <coreplugin/idocumentprinter.h>
 #include <extensionsystem/pluginmanager.h>
 #include <coreplugin/constants_tokensandsettings.h>
-
+#include <utils/log.h>
 #include <QDebug>
 using namespace ExtensionSystem;
 using namespace Core;
@@ -102,7 +102,7 @@ void LedgerEdit::printLedger(){
     Core::IDocumentPrinter *p = printer();
     if (!p) {
         qWarning() << __FILE__ << QString::number(__LINE__) << "No IDocumentPrinter found" ;
-        //LOG_ERROR("No IDocumentPrinter found");
+        LOG_ERROR("No IDocumentPrinter found");
         return;
     }
     p->clearTokens();

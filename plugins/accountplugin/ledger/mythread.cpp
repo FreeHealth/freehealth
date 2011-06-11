@@ -33,7 +33,6 @@
 #include "ledgerIO.h"
 #include <QDebug>
 
-
 ProduceDoc::ProduceDoc(){
     m_fieldsToJoin     = 0;
     m_tableFormatParameters = "200,200,150,250,170";//the last is not used in fact
