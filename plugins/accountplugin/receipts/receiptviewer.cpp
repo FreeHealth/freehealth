@@ -43,6 +43,8 @@
 #include <accountbaseplugin/constants.h>
 #include <accountbaseplugin/workingplacesmodel.h>
 
+#include <accountplugin/ledger/ledgerviewer.h>
+
 #include <coreplugin/icore.h>
 #include <coreplugin/iuser.h>
 #include <coreplugin/ipatient.h>
@@ -671,6 +673,8 @@ ReceiptViewer::ReceiptViewer(QWidget *parent) :
     m_insuranceUid = 0;
     m_model = new InternalAmount::AmountModel(this);
     ui->setupUi(this);
+    ui->saveAndQuitButton->hide();
+    ui->quitButton->hide();
     /*ui->bankedLabel->hide();
     ui->dateBanked->hide();
     ui->bookLabel->hide();
@@ -705,7 +709,8 @@ ReceiptViewer::ReceiptViewer(QWidget *parent) :
     ui->dateBook->setDisplayFormat("yyyy-MM-dd");
     ui->dateBook->setDate(QDate::currentDate());*/
     ui->inputRadioButton->setChecked(true);
-    ui->saveAndQuitButton->setShortcut(QKeySequence::InsertParagraphSeparator);
+    //ui->saveAndQuitButton->setShortcut(QKeySequence::InsertParagraphSeparator);
+    ui->saveButton->setShortcut(QKeySequence::InsertParagraphSeparator);
     ui->quitButton->setShortcut(QKeySequence("Ctrl+q"));
     ui->thesaurusButton->setShortcut(QKeySequence("Ctrl+t"));
     ui->returnedListView->setStyleSheet("background-color: rgb(201, 201, 201)");
@@ -737,9 +742,15 @@ ReceiptViewer::ReceiptViewer(QWidget *parent) :
     //ui_controlreceipts
     m_control = new ControlReceipts(this);
     m_control->hide();
+    /*QStringList othersList;
+    othersList << trUtf8("Ledger");
+    ui->othersBox->addItems(othersList);*/
+    ui->othersBox->hide();
+    ui->othersLabel->hide();
     ui->displayRadioButton->setCheckable(true);
     connect(ui->quitButton,SIGNAL(pressed()),this,SLOT(close()));
     connect(ui->saveButton,SIGNAL(pressed()),this,SLOT(save()));
+    //connect(ui->othersBox,SIGNAL(activated(const QString&)),this,SLOT(othersWidgets(const QString&)));
     connect(ui->saveAndQuitButton,SIGNAL(pressed()),this,SLOT(saveAndQuit()));
     connect(ui->thesaurusButton,SIGNAL(pressed()),this,SLOT(saveInThesaurus()));
     connect(ui->displayRadioButton,SIGNAL(clicked(bool)),this,SLOT(showControlReceipts(bool)));
@@ -1111,3 +1122,5 @@ void ReceiptViewer::controlReceiptsDestroyed(){
     qDebug() << __FILE__ << QString::number(__LINE__) << " in controlReceiptsDestroyed " ;
     ui->inputRadioButton->setChecked(true);
 }
+
+

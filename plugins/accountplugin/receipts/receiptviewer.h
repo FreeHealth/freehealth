@@ -33,7 +33,7 @@
 #define RECEIPTVIEWER_H
 
 #include "controlreceiptsIO.h"
-
+#include <accountplugin/accountmode.h>
 #include <accountplugin/account_exporter.h>
 
 #include <QWidget>
@@ -45,6 +45,7 @@
 #include <QAction>
 #include <QStringListModel>
 #include <QTreeView>
+
 
 namespace Ui {
     class ReceiptViewer;

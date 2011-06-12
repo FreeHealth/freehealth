@@ -89,10 +89,10 @@ AccountView::AccountView(QWidget *parent) :
     qDebug() << __FILE__ << QString::number(__LINE__) << " m_userUuid =" << m_userUuid ;
     //QString filter = QString("%1 = '%2'").arg("USER_UID",m_userUuid);
     //m_Model->setFilter(filter);
-    m_ui->startDate->setDate(QDate::currentDate());
+    m_ui->startDate->setDate(QDate(2000,01,01));
     m_ui->endDate->setDate(QDate::currentDate()); 
-    //refresh();
-
+    refresh();
+    calc();
 }
 
 AccountView::~AccountView()
@@ -106,10 +106,11 @@ void AccountView::refresh(){
     filter += " AND ";
     filter += QString("DATE BETWEEN '%1' AND '%2'").arg(dateBeginStr,dateEndStr);
     qDebug() << __FILE__ << QString::number(__LINE__) << " filter =" << filter ;
-    m_Model->setFilter(filter);
-    qDebug() << __FILE__ << QString::number(__LINE__) << " filter =" << m_Model->filter() ;
-    qDebug() << __FILE__ << QString::number(__LINE__) << " rowCount =" << QString::number(m_Model->rowCount()) ;
-    m_ui->tableView->setModel(m_Model);
+    AccountDB::AccountModel *model = new AccountDB::AccountModel(this);
+    model->setFilter(filter);
+    qDebug() << __FILE__ << QString::number(__LINE__) << " filter =" << model->filter() ;
+    qDebug() << __FILE__ << QString::number(__LINE__) << " rowCount =" << QString::number(model->rowCount()) ;
+    m_ui->tableView->setModel(model);
        
     QList<int> hide;
     hide
@@ -144,13 +145,17 @@ void AccountView::filterChanged()
 
 void AccountView::on_startDate_dateChanged(const QDate &date)
 {
-    //refresh();
+    Q_UNUSED(date);
+    refresh();
+    calc();
     //m_Model->setStartDate(date);
 }
 
 void AccountView::on_endDate_dateChanged(const QDate &date)
 {
-    //refresh();
+    Q_UNUSED(date);
+    refresh();
+    calc();
     //m_Model->setEndDate(date);
 }
 

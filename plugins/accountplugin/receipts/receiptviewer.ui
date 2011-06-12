@@ -6,7 +6,7 @@
    <rect>
     <x>0</x>
     <y>0</y>
-    <width>708</width>
+    <width>821</width>
     <height>428</height>
    </rect>
   </property>
@@ -168,6 +168,16 @@
          <property name="text">
           <string>&amp;Save</string>
          </property>
+         <property name="default">
+          <bool>true</bool>
+         </property>
+        </widget>
+       </item>
+       <item>
+        <widget class="QLabel" name="othersLabel">
+         <property name="text">
+          <string>Other</string>
+         </property>
         </widget>
        </item>
        <item>
@@ -176,7 +186,7 @@
           <string>Sa&amp;ve and quit</string>
          </property>
          <property name="default">
-          <bool>true</bool>
+          <bool>false</bool>
          </property>
         </widget>
        </item>
@@ -192,6 +202,9 @@
           <string>&amp;Quit</string>
          </property>
         </widget>
+       </item>
+       <item>
+        <widget class="QComboBox" name="othersBox"/>
        </item>
       </layout>
      </item>
