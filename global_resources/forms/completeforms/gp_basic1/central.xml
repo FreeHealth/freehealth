@@ -29,7 +29,7 @@
   </formdescription>
 
   <MedForm>
-    <name>episodeTester</name>
+    <name>GP::Basic::IdentityForm</name>
     <label lang="xx">Identity</label>
     <label lang="fr">Identité</label>
     <type>form</type>
@@ -37,7 +37,7 @@
     <icon>__theme__/identity.png</icon>
     <Item>
       <type>identity</type>
-      <name>identity</name>
+      <name>GP::Basic::IdentityItem</name>
       <label lang="xx">Full Identity</label>
       <label lang="fr">Identité</label>
     </Item>
@@ -45,29 +45,29 @@
 
   <MedForm>
     <type>form</type>
-    <name>soap_form</name>
+    <name>GP::Basic::SOAP</name>
     <label>SOAP</label>
     <icon>__theme__/edit.png</icon>
     <Item>
-      <name>soap_subjective</name>
+      <name>GP::Basic::SOAP::S</name>
       <type>texteditor</type>
       <label lang="xx">Subjective</label>
       <label lang="fr">Subjectif</label>
     </Item>
     <Item>
-      <name>soap_objective</name>
+      <name>GP::Basic::SOAP::O</name>
       <type>texteditor</type>
       <label lang="xx">Objective</label>
       <label lang="fr">Objectif</label>
     </Item>
     <Item>
-      <name>soap_assessment</name>
+      <name>GP::Basic::SOAP::A</name>
       <type>texteditor</type>
       <label lang="xx">Assessment</label>
       <label lang="fr">Appréciation clinique</label>
     </Item>
     <Item>
-      <name>soap_plan</name>
+      <name>GP::Basic::SOAP::P</name>
       <type>texteditor</type>
       <label lang="xx">Plan</label>
       <label lang="fr">Prise en charge</label>
@@ -77,19 +77,19 @@
 
   <MedForm>
     <type>form</type>
-    <name>prescriptions_form</name>
+    <name>GP::Basic::Prescr</name>
     <label>Prescriptions</label>
     <icon>__theme__/edit.png</icon>
     <options>noepisode</options>
 
     <MedForm>
-    <type>form</type>
-    <name>prescriptions_text_form</name>
-    <label lang="xx">Textual prescriptions</label>
-    <label lang="fr">Prescriptions textuelles</label>
+      <type>form</type>
+      <name>GP::Basic::Prescr::Text</name>
+      <label lang="xx">Textual prescriptions</label>
+      <label lang="fr">Prescriptions textuelles</label>
 
       <Item>
-        <name>prescription_textual</name>
+        <name>GP::Basic::Prescr::Text::Content</name>
         <type>texteditor</type>
         <label lang="xx">Textual prescription</label>
         <label lang="fr">Prescription textuelle</label>
@@ -98,12 +98,12 @@
 
 
     <MedForm>
-    <type>form</type>
-    <name>prescriptions_drugs_form</name>
-    <label lang="xx">Drugs prescriptions</label>
-    <label lang="fr">Prescriptions médicamenteuses</label>
+      <type>form</type>
+      <name>GP::Basic::Prescr::Drugs</name>
+      <label lang="xx">Drugs prescriptions</label>
+      <label lang="fr">Prescriptions médicamenteuses</label>
       <Item>
-        <name>chronicdrugs</name>
+        <name>GP::Basic::Prescr::Drugs::Content</name>
         <type>prescriptor</type>
         <label lang="xx">Therapeutic prescription</label>
         <label lang="fr">Prescription médicamenteuse</label>
@@ -114,11 +114,11 @@
 
   <MedForm>
     <type>form</type>
-    <name>globalicd_form</name>
+    <name>GP::Basic::ICD10</name>
     <label lang="xx">ICD10 coding</label>
     <label lang="fr">Codes CIM10</label>
     <Item>
-      <name>globalicd</name>
+      <name>GP::Basic::ICD10::Content</name>
       <type>icd</type>
       <label lang="xx">ICD10 coding</label>
       <label lang="fr">Codes CIM10</label>

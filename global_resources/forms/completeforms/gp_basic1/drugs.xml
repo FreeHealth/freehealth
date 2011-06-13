@@ -4,11 +4,11 @@
 
     <MedForm>
       <type>form</type>
-      <name>chronictherapeutic</name>
+      <name>GP::Basic::Drugs::Chronic</name>
       <label lang="xx">Chronic therapeutic</label>
       <label lang="fr">Traitement chronique</label>
       <Item>
-        <name>chronicdrugs</name>
+        <name>GP::Basic::Drugs::Chronic::Content</name>
         <type>prescriptor</type>
         <label lang="xx">Chronic therapeutic</label>
         <label lang="fr">Traitement chronique</label>
@@ -16,7 +16,7 @@
       </Item>
       <Item>
         <type>texteditor</type>
-        <name>drugsremark</name>
+        <name>GP::Basic::Drugs::Chronic::Comment</name>
         <label lang="xx">Comments</label>
         <label lang="fr">Remarques</label>
       </Item>
@@ -24,10 +24,10 @@
 
     <MedForm>
       <type>form</type>
-      <name>drugsallergiesform</name>
+      <name>GP::Basic::Drugs::Allergies</name>
       <label lang="xx">Allergies</label>
       <Item>
-        <name>drugsallergies</name>
+        <name>GP::Basic::Drugs::Allergies::Content</name>
         <type>drugselector</type>
         <label lang="xx">Known drugs allergies</label>
         <label lang="fr">Allergies médicamenteuses connues</label>
@@ -36,7 +36,7 @@
       </Item>
       <Item>
         <type>texteditor</type>
-        <name>drugsallergiesremark</name>
+        <name>GP::Basic::Drugs::Allergies::Comment</name>
         <label lang="xx">Comments</label>
         <label lang="xx">Remarques</label>
       </Item>

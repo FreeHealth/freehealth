@@ -1,21 +1,35 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <!DOCTYPE FreeMedForms>
+
 <FreeMedForms>
 
   <formdescription>
-    <version>0.5.0~alpha</version>
+    <!-- Non translatable values -->
     <authors>Eric Maeker, MD</authors>
-    <description lang="fr">Dossier médical générique</description>
-    <description lang="en">Generic patient file</description>
+    <version>0.5.0~alpha</version>
+    <compatversion>0.5.0</compatversion>
+    <cdate>2011-03-15</cdate>
+    <icon>generalpractitioner.png</icon>
+    <weblink></weblink>
+    <bibliography/>
+
+    <!-- Translatable values -->
+    <licence>GPLv3</licence>
+    <description lang="fr">Dossier médical générique avec page médicaments</description>
+    <description lang="xx">Generic patient file with drugs page</description>
     <category lang="xx">General practice</category>
     <category lang="fr">Médecine générale</category>
-    <bibliography/>
-    <licence>GPLv3</licence>
-    <cdate>2011-03-15</cdate>
+    <tooltip lang="fr"></tooltip>
+    <tooltip lang="xx"></tooltip>
+    <htmldescription lang="fr"></htmldescription>
+    <htmldescription lang="xx"></htmldescription>
+    <specialties lang="fr"></specialties>
+    <specialties lang="xx"></specialties>
+
   </formdescription>
 
   <MedForm>
-    <name>episodeTester</name>
+    <name>GP::Basic::IdentityForm</name>
     <label lang="xx">Identity</label>
     <label lang="fr">Identité</label>
     <type>form</type>
@@ -23,27 +37,19 @@
     <icon>__theme__/identity.png</icon>
     <Item>
       <type>identity</type>
-      <name>identity</name>
-      <label lang="en">Full Identity</label>
+      <name>GP::Basic::IdentityItem</name>
+      <label lang="xx">Full Identity</label>
       <label lang="fr">Identité</label>
     </Item>
   </MedForm>
 
-  <MedForm>
-    <type>form</type>
-    <name>drugs</name>
-    <label lang="xx">Drugs</label>
-    <label lang="fr">Médicaments</label>
-    <icon>__theme__/freediams.png</icon>
-    <options>noepisode</options>
-
     <MedForm>
       <type>form</type>
-      <name>chronictherapeutic</name>
+      <name>GP::Basic::Drugs::Chronic</name>
       <label lang="xx">Chronic therapeutic</label>
       <label lang="fr">Traitement chronique</label>
       <Item>
-        <name>chronicdrugs</name>
+        <name>GP::Basic::Drugs::Chronic::Content</name>
         <type>prescriptor</type>
         <label lang="xx">Chronic therapeutic</label>
         <label lang="fr">Traitement chronique</label>
@@ -51,7 +57,7 @@
       </Item>
       <Item>
         <type>texteditor</type>
-        <name>drugsremark</name>
+        <name>GP::Basic::Drugs::Chronic::Comment</name>
         <label lang="xx">Comments</label>
         <label lang="fr">Remarques</label>
       </Item>
@@ -59,10 +65,10 @@
 
     <MedForm>
       <type>form</type>
-      <name>drugsallergiesform</name>
+      <name>GP::Basic::Drugs::Allergies</name>
       <label lang="xx">Allergies</label>
       <Item>
-        <name>drugsallergies</name>
+        <name>GP::Basic::Drugs::Allergies::Content</name>
         <type>drugselector</type>
         <label lang="xx">Known drugs allergies</label>
         <label lang="fr">Allergies médicamenteuses connues</label>
@@ -71,38 +77,37 @@
       </Item>
       <Item>
         <type>texteditor</type>
-        <name>drugsallergiesremark</name>
+        <name>GP::Basic::Drugs::Allergies::Comment</name>
         <label lang="xx">Comments</label>
         <label lang="xx">Remarques</label>
       </Item>
     </MedForm>
-  </MedForm>
 
   <MedForm>
     <type>form</type>
-    <name>soap_form</name>
+    <name>GP::Basic::SOAP</name>
     <label>SOAP</label>
     <icon>__theme__/edit.png</icon>
     <Item>
-      <name>soap_subjective</name>
+      <name>GP::Basic::SOAP::S</name>
       <type>texteditor</type>
       <label lang="xx">Subjective</label>
       <label lang="fr">Subjectif</label>
     </Item>
     <Item>
-      <name>soap_objective</name>
+      <name>GP::Basic::SOAP::O</name>
       <type>texteditor</type>
       <label lang="xx">Objective</label>
       <label lang="fr">Objectif</label>
     </Item>
     <Item>
-      <name>soap_assessment</name>
+      <name>GP::Basic::SOAP::A</name>
       <type>texteditor</type>
       <label lang="xx">Assessment</label>
       <label lang="fr">Appréciation clinique</label>
     </Item>
     <Item>
-      <name>soap_plan</name>
+      <name>GP::Basic::SOAP::P</name>
       <type>texteditor</type>
       <label lang="xx">Plan</label>
       <label lang="fr">Prise en charge</label>
@@ -112,19 +117,19 @@
 
   <MedForm>
     <type>form</type>
-    <name>prescriptions_form</name>
+    <name>GP::Basic::Prescr</name>
     <label>Prescriptions</label>
     <icon>__theme__/edit.png</icon>
     <options>noepisode</options>
 
     <MedForm>
-    <type>form</type>
-    <name>prescriptions_text_form</name>
-    <label lang="xx">Textual prescriptions</label>
-    <label lang="fr">Prescriptions textuelles</label>
+      <type>form</type>
+      <name>GP::Basic::Prescr::Text</name>
+      <label lang="xx">Textual prescriptions</label>
+      <label lang="fr">Prescriptions textuelles</label>
 
       <Item>
-        <name>prescription_textual</name>
+        <name>GP::Basic::Prescr::Text::Content</name>
         <type>texteditor</type>
         <label lang="xx">Textual prescription</label>
         <label lang="fr">Prescription textuelle</label>
@@ -133,12 +138,12 @@
 
 
     <MedForm>
-    <type>form</type>
-    <name>prescriptions_drugs_form</name>
-    <label lang="xx">Drugs prescriptions</label>
-    <label lang="fr">Prescriptions médicamenteuses</label>
+      <type>form</type>
+      <name>GP::Basic::Prescr::Drugs</name>
+      <label lang="xx">Drugs prescriptions</label>
+      <label lang="fr">Prescriptions médicamenteuses</label>
       <Item>
-        <name>chronicdrugs</name>
+        <name>GP::Basic::Prescr::Drugs::Content</name>
         <type>prescriptor</type>
         <label lang="xx">Therapeutic prescription</label>
         <label lang="fr">Prescription médicamenteuse</label>
@@ -149,11 +154,11 @@
 
   <MedForm>
     <type>form</type>
-    <name>globalicd_form</name>
+    <name>GP::Basic::ICD10</name>
     <label lang="xx">ICD10 coding</label>
     <label lang="fr">Codes CIM10</label>
     <Item>
-      <name>globalicd</name>
+      <name>GP::Basic::ICD10::Content</name>
       <type>icd</type>
       <label lang="xx">ICD10 coding</label>
       <label lang="fr">Codes CIM10</label>
