@@ -57,7 +57,8 @@ HEADERS += global_exporter.h \
     widgets/calendar/day_node.h \
     widgets/languagecombobox.h \
     widgets/languagecomboboxdelegate.h \
-    databaseconnector.h
+    databaseconnector.h \
+    versionnumber.h
 #    widgets/dialogbuttonbox.h
 
 SOURCES += global.cpp \
@@ -104,7 +105,8 @@ SOURCES += global.cpp \
     widgets/calendar/day_node.cpp \
     widgets/languagecombobox.cpp \
     widgets/languagecomboboxdelegate.cpp \
-    databaseconnector.cpp
+    databaseconnector.cpp \
+    versionnumber.cpp
 #    widgets/dialogbuttonbox.cpp
 
 FORMS += widgets/calendar/basic_item_edition_dialog.ui
