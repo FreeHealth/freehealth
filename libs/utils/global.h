@@ -110,7 +110,8 @@ UTILS_EXPORT bool defaultLicenceAgreementDialog(const QString &message, Utils::L
 UTILS_EXPORT QString askUser( const QString &title, const QString &question );
 
 // Working with files and dirs
-UTILS_EXPORT bool removeDir(const QString &name, QString *error);
+UTILS_EXPORT bool removeDir(const QString &absPath, QString *error);
+UTILS_EXPORT bool removeDirRecursively(const QString &absPath, QString *error);
 UTILS_EXPORT QFileInfoList getFiles(QDir fromDir, const QStringList &filters, bool recursive = true);
 UTILS_EXPORT QFileInfoList getFiles(QDir fromDir, const QString &filters = QString::null, bool recursive = true);
 UTILS_EXPORT QFileInfoList getDirs(QDir fromDir, const QStringList &filters, bool recursive = true);

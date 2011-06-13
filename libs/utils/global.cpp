@@ -190,6 +190,34 @@ bool removeDir(const QString &name, QString *error)
     return true;
 }
 
+bool removeDirRecursively(const QString &absPath, QString *error)
+{
+    error->clear();
+    QDir dir(absPath);
+    if (!dir.exists()) {
+        error->append(Trans::ConstantTranslations::tkTr(Trans::Constants::PATH_1_DOESNOT_EXISTS).arg(absPath));
+        return false;
+    }
+
+    // remove all dirs inside this dir (recursively)
+    foreach(const QString &dirPath, dir.entryList(QDir::Dirs | QDir::NoDotAndDotDot)) {
+        QString er;
+        if (!removeDirRecursively(dir.absolutePath() + QDir::separator() + dirPath, &er)) {
+            error->append(er);
+            return false;
+        }
+    }
+
+    // remove this dir
+    QString er;
+    if (!removeDir(dir.absolutePath(), &er)) {
+        error->append(er);
+        return false;
+    }
+
+    return true;
+}
+
 QFileInfoList getFiles(QDir fromDir, const QStringList &filters, bool recursive)
 {
     QFileInfoList files;
@@ -233,18 +261,18 @@ QFileInfoList getDirs(QDir fromDir, const QStringList &filters, bool recursive)
 **/
 bool checkDir(const QString & absPath, bool createIfNotExist, const QString & logDirName)
 {
-    if (! QFile::exists(absPath)) {
+    if (!QFile::exists(absPath)) {
         if (createIfNotExist) {
-            Utils::Log::addMessage("Utils", QCoreApplication::translate("Utils", "%1 : %2 does not exist. Trying to create it.")
+            LOG_FOR("Utils", QCoreApplication::translate("Utils", "%1 : %2 does not exist. Trying to create it.")
                                .arg(logDirName, absPath));
-            if (! QDir().mkpath(absPath)) {
+            if (!QDir().mkpath(absPath)) {
                 Utils::Log::addError("Utils", QCoreApplication::translate("Utils", "Unable to create the %1 : %2.")
                                  .arg(logDirName, absPath) ,
                                  __FILE__, __LINE__);
                 return false;
             }
         } else {
-            Utils::Log::addMessage("Utils", QCoreApplication::translate("Utils", "%1 : %2 does not exist.")
+            LOG_FOR("Utils", QCoreApplication::translate("Utils", "%1 : %2 does not exist.")
                                .arg(logDirName, absPath));
             return false;
         }
@@ -295,9 +323,9 @@ bool saveStringToFile(const QString &toSave, const QString &toFile, IOMode iomod
                 return false;
             }
             file.write(toSave.toAscii());
-            Utils::Log::addMessage("Utils", QCoreApplication::translate("Utils", "%1 correctly saved").arg(file.fileName()));
+            LOG_FOR("Utils", QCoreApplication::translate("Utils", "%1 correctly saved").arg(file.fileName()));
         } else {
-            Utils::Log::addMessage("Utils", QCoreApplication::translate("Utils", "Save file aborted by user (file already exists) : ") + file.fileName());
+            LOG_FOR("Utils", QCoreApplication::translate("Utils", "Save file aborted by user (file already exists) : ") + file.fileName());
             return false;
         }
     } else {
@@ -308,7 +336,7 @@ bool saveStringToFile(const QString &toSave, const QString &toFile, IOMode iomod
             return false;
         }
         file.write(toSave.toAscii());
-        Utils::Log::addMessage("Utils", QCoreApplication::translate("Utils", "%1 correctly saved").arg(file.fileName()));
+        LOG_FOR("Utils", QCoreApplication::translate("Utils", "%1 correctly saved").arg(file.fileName()));
     }
     return true;
 }
@@ -368,7 +396,7 @@ QString readTextFile(const QString &toRead, const QString &encoder, const Warn w
         QByteArray data = file.readAll();
         QTextCodec *codec = QTextCodec::codecForName(encoder.toUtf8());
         QString str = codec->toUnicode(data);
-        Utils::Log::addMessage("Utils", tkTr(Trans::Constants::FILE_1_LOADED).arg(toRead));
+        LOG_FOR("Utils", tkTr(Trans::Constants::FILE_1_LOADED).arg(toRead));
         return str;
     }
     return QString::null;
@@ -424,7 +452,7 @@ void informativeMessageBox(const QString &text, const QString &infoText, const Q
 /** \brief Creates a warning messagebox. **/
 void warningMessageBox(const QString &text, const QString &infoText, const QString &detail, const QString &title)
 {
-    Utils::Log::addMessage("Warning Dialog", infoText);
+    LOG_FOR("Warning Dialog", infoText);
     QWidget *parent = qApp->activeWindow();
     QMessageBox mb(parent);
     mb.setWindowModality(Qt::WindowModal);
@@ -705,12 +733,12 @@ void setFullScreen(QWidget* win, bool on)
 
     if (on) {
         win->setWindowState(win->windowState() | Qt::WindowFullScreen);
-        Utils::Log::addMessage("mfGlobal", QCoreApplication::translate("Utils", "%1 is now in fullScreen Mode.").arg(win->objectName()));
+        LOG_FOR("mfGlobal", QCoreApplication::translate("Utils", "%1 is now in fullScreen Mode.").arg(win->objectName()));
         //statusBar()->hide();
         //menuBar()->hide();
     } else {
         win->setWindowState(win->windowState() & ~Qt::WindowFullScreen);
-        Utils::Log::addMessage("mfGlobal", QCoreApplication::translate("Utils", "%1 is now in non fullScreen Mode.").arg(win->objectName()));
+        LOG_FOR("mfGlobal", QCoreApplication::translate("Utils", "%1 is now in non fullScreen Mode.").arg(win->objectName()));
         //menuBar()->show();
         //statusBar()->show();
     }
