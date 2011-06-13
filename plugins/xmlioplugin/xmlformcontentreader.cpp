@@ -220,6 +220,7 @@ static void setPathToDescription(QString path, Form::FormIODescription *desc)
 /** Return the Form::FormIODescription according to the XML QDomElement \e xmlDescr. The \e xmlDescr must point to the first description tag of the document. */
 Form::FormIODescription *XmlFormContentReader::readXmlDescription(const QDomElement &xmlDescr, const QString &formUid)
 {
+    qWarning() << xmlDescr.text();
     Form::FormIODescription *ioDesc = new Form::FormIODescription;
     QHash<int, QString> elements;
     // get non translatable items
@@ -409,7 +410,6 @@ bool XmlFormContentReader::loadElement(Form::FormItem *item, QDomElement &rootEl
 
         // Add a file ?
         if (element.tagName().compare(Constants::TAG_ADDFILE, Qt::CaseInsensitive)==0) {
-            QDomDocument *doc;
             QString fileName = element.text();
             if (QFileInfo(fileName).isRelative())
                 fileName.prepend(QFileInfo(readingFile).absolutePath() + QDir::separator());

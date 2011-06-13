@@ -276,8 +276,8 @@ QVector<PmhData *> PmhBase::getPmh(const QString &patientUid) const
     QVector<PmhData *> pmhs;
     if (!database().isOpen()) {
         if (!database().open()) {
-            Utils::Log::addError(this, tkTr(Trans::Constants::UNABLE_TO_OPEN_DATABASE_1_ERROR_2)
-                                 .arg(database().connectionName()).arg(database().lastError().text()), __FILE__, __LINE__);
+            LOG_ERROR(tkTr(Trans::Constants::UNABLE_TO_OPEN_DATABASE_1_ERROR_2)
+                      .arg(database().connectionName()).arg(database().lastError().text()));
             return pmhs;
         }
     }
@@ -316,7 +316,7 @@ QVector<PmhData *> PmhBase::getPmh(const QString &patientUid) const
             pmhs << pmh;
         }
     } else {
-        Utils::Log::addQueryError(this, query, __FILE__, __LINE__);
+        LOG_QUERY_ERROR(query);
     }
     query.finish();
 
@@ -341,7 +341,7 @@ QVector<PmhData *> PmhBase::getPmh(const QString &patientUid) const
                 pmh->addEpisode(ep);
             }
         } else {
-            Utils::Log::addQueryError(this, query, __FILE__, __LINE__);
+            LOG_QUERY_ERROR(query);
         }
     }
 

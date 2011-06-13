@@ -327,6 +327,8 @@ SettingsPrivate::SettingsPrivate(QObject *parent, const QString &appName, const 
     QFileInfo fi(file);
     QString f = fi.absolutePath() + QDir::separator() + fi.baseName() + "-net." + fi.completeSuffix();
     m_NetworkSettings = new QSettings(f, QSettings::IniFormat, this);
+    LOG_FOR("Settings", "Using network ini file " + f);
+
     m_UserSettings = new QSettings(file, QSettings::IniFormat, this);
     QString resourcesPath;
     QString applicationName;

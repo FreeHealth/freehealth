@@ -330,7 +330,7 @@ QList<Form::FormIODescription *> XmlIOBase::getFormDescription(const Form::FormI
         while (query.next()) {
             QDomDocument doc;
             doc.setContent(query.value(1).toString());
-            Form::FormIODescription *descr = reader()->readXmlDescription(doc.firstChildElement(Constants::TAG_FORM_DESCRIPTION), query.value(1).toString());
+            Form::FormIODescription *descr = reader()->readXmlDescription(doc.firstChildElement(Constants::TAG_FORM_DESCRIPTION), query.value(0).toString());
             if (descr) {
                 descr->setData(Form::FormIODescription::Category, "db: " + descr->data(Form::FormIODescription::Category).toString(), QLocale().name().left(2));
                 toReturn << descr;
