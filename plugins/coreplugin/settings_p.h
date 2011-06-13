@@ -78,8 +78,10 @@ public:
     void sync();
 
     // first time running ?
-    bool firstTimeRunning() const;
-    void noMoreFirstTimeRunning();
+    bool firstTimeRunning(const QString &subProcess = QString::null) const;
+    void setFirstTimeRunning(const bool state, const QString &subProcess = QString::null);
+    void noMoreFirstTimeRunning(const QString &subProcess = QString::null);
+
     QString licenseApprovedApplicationNumber() const;
     void setLicenseApprovedApplicationNumber(const QString &version);
     void setDefaultForm(const QString &formUid);

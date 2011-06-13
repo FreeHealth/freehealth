@@ -586,25 +586,51 @@ QString SettingsPrivate::path(const int type) const
 }
 
 /**
-  \fn bool Core::ISettings::firstTimeRunning() const
+  \fn bool Core::ISettings::firstTimeRunning(const QString &subProcess) const
   \brief Return true if the application runs for the first time.
-  \sa noMoreFirstTimeRunning()
+  \sa noMoreFirstTimeRunning(const QString &subProcess)
 */
-bool SettingsPrivate::firstTimeRunning() const
+bool SettingsPrivate::firstTimeRunning(const QString &subProcess) const
 {
-    return m_NetworkSettings->value("FirstTimeRunning", true).toBool();
+    if (subProcess.isEmpty())
+        return m_NetworkSettings->value("FirstTimeRunning", true).toBool();
+    return m_UserSettings->value("FirstTimeRunning/" + subProcess, true).toBool();
 }
 
 /**
-  \fn void Core::ISettings::noMoreFirstTimeRunning()
+  \fn void Core::ISettings::noMoreFirstTimeRunning(const QString &subProcess)
   \brief Set the first time running of this application to false.
-  \sa firstTimeRunning()
+  \sa firstTimeRunning(const QString &subProcess)
 */
-void SettingsPrivate::noMoreFirstTimeRunning()
+void SettingsPrivate::noMoreFirstTimeRunning(const QString &subProcess)
 {
-    m_NetworkSettings->setValue("FirstTimeRunning", false);
-    m_NetworkSettings->sync();
-    m_FirstTime = false;
+    if (subProcess.isEmpty()) {
+        m_NetworkSettings->setValue("FirstTimeRunning", false);
+        m_NetworkSettings->sync();
+        m_FirstTime = false;
+    } else {
+        m_UserSettings->setValue("FirstTimeRunning/" + subProcess, false);
+        m_UserSettings->sync();
+        Q_EMIT userSettingsSynchronized();
+    }
+}
+
+/**
+  \fn void Core::ISettings::setFirstTimeRunning(const bool state, const QString &subProcess)
+  \brief Set the first time running of this application to false.
+  \sa firstTimeRunning(const QString &subProcess)
+*/
+void SettingsPrivate::setFirstTimeRunning(const bool state, const QString &subProcess)
+{
+    if (subProcess.isEmpty()) {
+        m_NetworkSettings->setValue("FirstTimeRunning", state);
+        m_NetworkSettings->sync();
+        m_FirstTime = false;
+    } else {
+        m_UserSettings->setValue("FirstTimeRunning/" + subProcess, state);
+        m_UserSettings->sync();
+        Q_EMIT userSettingsSynchronized();
+    }
 }
 
 /**

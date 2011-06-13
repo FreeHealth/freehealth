@@ -105,8 +105,9 @@ public:
     virtual void setValue(const QString &key, const QVariant &value) = 0;
     virtual QVariant value(const QString &key, const QVariant &defaultValue = QVariant()) const = 0;
 
-    virtual bool firstTimeRunning() const = 0;
-    virtual void noMoreFirstTimeRunning() = 0;
+    virtual bool firstTimeRunning(const QString &subProcess = QString::null) const = 0;
+    virtual void setFirstTimeRunning(const bool state, const QString &subProcess = QString::null) = 0;
+    virtual void noMoreFirstTimeRunning(const QString &subProcess = QString::null) = 0;
 
     virtual void sync() = 0;
 
