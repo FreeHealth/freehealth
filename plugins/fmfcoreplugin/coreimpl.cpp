@@ -46,6 +46,7 @@
 #include <utils/log.h>
 #include <utils/global.h>
 #include <utils/updatechecker.h>
+#include <utils/versionnumber.h>
 #include <translationutils/constanttranslations.h>
 
 #include <QtCore/QDir>
@@ -194,9 +195,28 @@ bool CoreImpl::initialize(const QStringList &arguments, QString *errorString)
     Q_UNUSED(arguments);
     Q_UNUSED(errorString);
 
+    // Test Versions
+    Utils::VersionNumber approved(m_Settings->licenseApprovedApplicationNumber());
+    Utils::VersionNumber app(qApp->applicationVersion());
+    // End
+
     // For alpha -> remove config.ini to restart the app configurator
-    if (Utils::isAlpha() && m_Settings->licenseApprovedApplicationNumber() != qApp->applicationVersion()) {
-        /** \todo code here -> remove ini settings */
+    if (Utils::isAlpha() && (approved < app)) {
+        // remove the config.ini content
+        if (!QFile(settings()->fileName()).remove())
+            LOG_ERROR("Unable to clean user settings... " + settings()->fileName());
+
+        // remove all files in UserResources dir
+        QString error;
+        if (!settings()->path(Core::ISettings::ReadWriteDatabasesPath).contains("global_resources")) {
+            if (!Utils::removeDirRecursively(settings()->path(Core::ISettings::ReadWriteDatabasesPath), &error))
+                LOG_FOR("Settings", "Unable to clean user databases... " + error);
+        } else {
+            LOG_FOR("Settings", "Unable to clean user databases... The global_resources can not be deleted");
+        }
+
+        settings()->sync();
+        settings()->setFirstTimeRunning(true);
     }
 
     // first time runnning ?
