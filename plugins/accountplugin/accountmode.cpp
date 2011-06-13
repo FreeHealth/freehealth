@@ -59,38 +59,34 @@ AccountMode::AccountMode(QObject *parent) :
     m_Stack = new QStackedWidget;
     m_Stack->addWidget(new ReceiptViewer);
     setWidget(m_Stack);
-    QString fileFirstTimeString = settings()->path(Core::ISettings::BundleResourcesPath) 
-                                              + "/textfiles/accountNotFirstTime.txt";
-    QFile fileFirst(fileFirstTimeString,this);
-    if (!fileFirst.exists())
-    {
-    	  QString firstExplanationText = trUtf8("Please read this explanation before using FreeAccount.\n"
-    	                                 "FreeAccount is composed of :\n"
-    	                                 "Receipts to get your earnings,\n"
-    	                                 "Movements in your accountancy,\n"
-    	                                 "Asset for your assets,\n"
-    	                                 "Ledger to analyse your accountancy and produce and print your ledger.\n"
-    	                                 "The shortcuts for those programs are :\n"
-    	                                 "for your rapid receipt, CTRL+R,\n"
-    	                                 "for the receipts widget, Maj+R,\n"
-    	                                 "for the movements widget, CTRL+M,\n"
-    	                                 "for assets widget, ALT+Z,\n"
-    	                                 "for ledger and analysis widget, ALT+L.\n"
-    	                                 "To avoid to see this message again, click the check box.");
-    	  
-    	  QMessageBox mess ;
-    	  mess.setWindowTitle(trUtf8("Read me."));
-    	  mess.setInformativeText(firstExplanationText);
-    	  mess.setStandardButtons(QMessageBox::Ok);
-    	  mess.setDefaultButton(QMessageBox::Ok);
-    	  QPushButton * notAgain = mess.addButton(trUtf8("Do not show me this message again."),QMessageBox::ActionRole);
-    	  mess.exec();
-    	  if (mess.clickedButton() == notAgain )
-    	  {
-    	  	  qDebug() << __FILE__ << QString::number(__LINE__) << " action " ;
-    	  	  createFirstTimeTxt();
-    	      }
-    	  }
+
+    if (settings()->firstTimeRunning(Core::Constants::MODE_ACCOUNT)) {
+        QString firstExplanationText = trUtf8("Please read this explanation before using FreeAccount.\n"
+                                              "FreeAccount is composed of :\n"
+                                              "Receipts to get your earnings,\n"
+                                              "Movements in your accountancy,\n"
+                                              "Asset for your assets,\n"
+                                              "Ledger to analyse your accountancy and produce and print your ledger.\n"
+                                              "The shortcuts for those programs are :\n"
+                                              "for your rapid receipt, CTRL+R,\n"
+                                              "for the receipts widget, Maj+R,\n"
+                                              "for the movements widget, CTRL+M,\n"
+                                              "for assets widget, ALT+Z,\n"
+                                              "for ledger and analysis widget, ALT+L.\n"
+                                              "To avoid to see this message again, click the check box.");
+
+        QMessageBox mess ;
+        mess.setWindowTitle(trUtf8("Read me."));
+        mess.setInformativeText(firstExplanationText);
+        mess.setStandardButtons(QMessageBox::Ok);
+        mess.setDefaultButton(QMessageBox::Ok);
+        QPushButton * notAgain = mess.addButton(trUtf8("Do not show this message again."),QMessageBox::ActionRole);
+        mess.exec();
+        if (mess.clickedButton() == notAgain ) {
+            qDebug() << __FILE__ << QString::number(__LINE__) << " action " ;
+            settings()->noMoreFirstTimeRunning(Core::Constants::MODE_ACCOUNT);
+        }
+    }
     /** \todo connect actions from the account menu */
     /** \todo connect patient changed and refresh views ? */
 }
@@ -105,14 +101,3 @@ void AccountMode::setCentralWidget(QWidget *widget)
     m_Stack->setCurrentWidget(widget);
 }
 
-void AccountMode::createFirstTimeTxt(){
-    qWarning() << __FILE__ << QString::number(__LINE__) << "create first time file." ;
-    QString fileFirstTimeString = settings()->path(Core::ISettings::BundleResourcesPath) 
-                                  + "/textfiles/accountNotFirstTime.txt";
-    QFile fileFirstTime(fileFirstTimeString);
-    if (!fileFirstTime.open(QIODevice::WriteOnly))
-    {
-    	  qWarning() << __FILE__ << QString::number(__LINE__) << "fileFirstTime cannot be created." ;
-        }
-    fileFirstTime.close();
-}

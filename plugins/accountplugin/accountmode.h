@@ -47,7 +47,6 @@ public:
     void setCentralWidget(QWidget *widget);
     
 private:
-    void createFirstTimeTxt();
     QStackedWidget *m_Stack;
 };
 
