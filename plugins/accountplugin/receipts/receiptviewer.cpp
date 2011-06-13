@@ -48,6 +48,7 @@
 #include <coreplugin/icore.h>
 #include <coreplugin/iuser.h>
 #include <coreplugin/ipatient.h>
+#include <coreplugin/isettings.h>
 
 #include <utils/widgets/spinboxdelegate.h>
 
@@ -63,6 +64,7 @@
 
 static inline Core::IUser *user() { return Core::ICore::instance()->user(); }
 static inline Core::IPatient *patient() { return Core::ICore::instance()->patient(); }
+static inline Core::ISettings *settings() { return Core::ICore::instance()->settings(); }
 
 using namespace ReceiptsConstants;
 using namespace Constants;
@@ -679,6 +681,38 @@ ReceiptViewer::ReceiptViewer(QWidget *parent) :
     ui->dateBanked->hide();
     ui->bookLabel->hide();
     ui->dateBook->hide();*/
+    //explanation for shortcuts at first time
+    /*QString fileFirstTimeString = settings()->path(Core::ISettings::BundleResourcesPath) + "/textfiles/accountNotFirstTime.txt";
+    m_fileFirstTime = new QFile(fileFirstTimeString,this);
+    if (!m_fileFirstTime->exists())
+    {
+    	  QString firstExplanationText = trUtf8("Please read this explanation before using FreeAccount.\n"
+    	                                 "FreeAccount is composed of :\n"
+    	                                 "Receipts to get your earnings,\n"
+    	                                 "Movements in your accountancy,\n"
+    	                                 "Asset for your assets,\n"
+    	                                 "Ledger to analyse your accountancy and produce and print your ledger.\n"
+    	                                 "The shortcuts for those programs are :\n"
+    	                                 "for your rapid receipt, CTRL+R,\n"
+    	                                 "for the receipts widget, Maj+R,\n"
+    	                                 "for the movements widget, CTRL+M,\n"
+    	                                 "for assets widget, ALT+Z,\n"
+    	                                 "for ledger and analysis widget, ALT+L.\n"
+    	                                 "To avoid to see this message again, click the check box.");
+    	  
+    	  QMessageBox mess ;
+    	  mess.setWindowTitle(trUtf8("Read me."));
+    	  mess.setInformativeText(firstExplanationText);
+    	  mess.setStandardButtons(QMessageBox::Ok);
+    	  mess.setDefaultButton(QMessageBox::Ok);
+    	  QPushButton * notAgain = mess.addButton(trUtf8("Do not show me this message again."),QMessageBox::ActionRole);
+    	  mess.exec();
+    	  if (mess.clickedButton() == notAgain )
+    	  {
+    	  	  qDebug() << __FILE__ << QString::number(__LINE__) << " action " ;
+    	  	  emit createFirstTimeTxt();
+    	      }
+    	  }*/
     ui->amountsView->setShowGrid(false);
     /*ui->amountsView->verticalHeader()->setResizeMode(QHeaderView::Interactive);
     ui->amountsView->verticalHeader()->setDefaultSectionSize(10);
@@ -1123,4 +1157,12 @@ void ReceiptViewer::controlReceiptsDestroyed(){
     ui->inputRadioButton->setChecked(true);
 }
 
+/*void ReceiptViewer::createFirstTimeTxt(){
+    qWarning() << __FILE__ << QString::number(__LINE__) << "create first time file." ;
+    if (!m_fileFirstTime->open(QIODevice::WriteOnly))
+    {
+    	  qWarning() << __FILE__ << QString::number(__LINE__) << "m_fileFirstTime cannot be created." ;
+        }
+    m_fileFirstTime->close();
+}*/
 

@@ -44,10 +44,10 @@ class AccountMode : public Core::BaseMode
     Q_OBJECT
 public:
     explicit AccountMode(QObject *parent = 0);
-
     void setCentralWidget(QWidget *widget);
-
+    
 private:
+    void createFirstTimeTxt();
     QStackedWidget *m_Stack;
 };
 

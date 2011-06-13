@@ -45,7 +45,7 @@
 #include <QAction>
 #include <QStringListModel>
 #include <QTreeView>
-
+#include <QFile>
 
 namespace Ui {
     class ReceiptViewer;
@@ -131,6 +131,7 @@ private Q_SLOTS:
     void showControlReceipts(bool b);
     void clearAll(bool b);
     void controlReceiptsDestroyed();
+    //void createFirstTimeTxt();
 
 private:
     /** \todo create a pimpl */
@@ -144,6 +145,7 @@ private:
     double m_distanceRuleValue;
     QString m_distanceRuleType;
     QStringList m_listOfValues;
+    //QFile m_fileFirstTime;
 };
 
 #endif // RECEIPTVIEWER_H
