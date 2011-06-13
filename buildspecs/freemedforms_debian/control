@@ -1,7 +1,10 @@
 Source: freemedforms
 Section: science
 Priority: optional
-Maintainer: Eric Maeker <eric.maeker@gmail.com>
+Maintainer: Debian Med Packaging Team <debian-med-packaging@lists.alioth.debian.org>
+Uploaders: Eric Maeker <eric.maeker@gmail.com>,
+ Andreas Tille <tille@debian.org>
+DM-Upload-Allowed: yes
 Build-Depends: debhelper (>= 7.1), quilt, libqt4-dev (>= 4.6.2), doxygen (>= 1.5.8), libxext-dev
 Standards-Version: 3.8.3
 Homepage: http://www.freemedforms.com/
@@ -10,7 +13,7 @@ Vcs-Svn: svn://svn.debian.org/svn/debian-med/trunk/packages/freemedforms/trunk/
 
 Package: freemedforms
 Architecture: any
-Depends: ${shlibs:Depends}, ${misc:Depends}, libqtcore4 (>= 4.6.2), libqtgui4 (>= 4.4.3), libqt4-sql-sqlite, libqt4-xml, libqt4-network, libqt4-svg, libqt4-script
+Depends: ${shlibs:Depends}, ${misc:Depends}, freemedforms-data (= ${source:Version}), libqtcore4 (>= 4.6.2), libqtgui4 (>= 4.6.2), libqt4-sql-sqlite, libqt4-xml, libqt4-network, libqt4-svg, libqt4-script
 Description: Free, open source Electronic Medical Record Manager.
  FreeMedForms is a free and open source Electronic Medical
  Record manager.
@@ -31,3 +34,44 @@ Description: Free, open source Electronic Medical Record Manager.
  stable and usable in practice as the prescriber
  FreeDiams.
  homepage : http://www.freemedforms.com
+
+Package: freemedforms-data
+Architecture: all
+Depends: ${shlibs:Depends}, ${misc:Depends}
+Recommends: freemedforms
+Description: Data for FreeMedForms EMR
+ FreeMedForms is a free and open source Electronic Medical
+ Record manager.
+ FreeMedForms is developed by a international community of
+ medical doctors and computer workers and is
+ mainly intended for health professionals.
+ .
+ Currently, the suite is under development. It is
+ available only for testing purposes.
+ The main objective of FreeMedForms is to manage the
+ electronic medical records based on your
+ medical practice or the practice of clinical
+ research groups.
+ .
+ This package contains the architecture independent data.
+
+Package: freemedforms-doc
+Architecture: all
+Section: doc
+Depends: ${shlibs:Depends}, ${misc:Depends}
+Recommends: freemedforms
+Description: Documentation for FreeMedForms EMR
+ FreeMedForms is a free and open source Electronic Medical
+ Record manager.
+ FreeMedForms is developed by a international community of
+ medical doctors and computer workers and is
+ mainly intended for health professionals.
+ .
+ Currently, the suite is under development. It is
+ available only for testing purposes.
+ The main objective of FreeMedForms is to manage the
+ electronic medical records based on your
+ medical practice or the practice of clinical
+ research groups.
+ .
+ This package contains the documentation of FreeMedForms.

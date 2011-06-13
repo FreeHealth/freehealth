@@ -1,5 +1,5 @@
-freemedforms (0.5.9~alpha1-1) jaunty; urgency=low
+freemedforms (0.6.0~alpha-1) UNRELEASED; urgency=low
 
-  * Initial package release
+  * Third alpha release
 
- -- eric <eric.maeker@free.fr>  Sat, 05 Sep 2009 16:22:53 +0200
+ -- Eric Maeker <eric.maeker@free.fr>  Fri, 29 Apr 2011 23:00:00 +0100
