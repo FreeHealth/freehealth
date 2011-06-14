@@ -72,8 +72,7 @@ AccountMode::AccountMode(QObject *parent) :
                                               "for the receipts widget, Maj+R,\n"
                                               "for the movements widget, CTRL+M,\n"
                                               "for assets widget, ALT+Z,\n"
-                                              "for ledger and analysis widget, ALT+L.\n"
-                                              "To avoid to see this message again, click the check box.");
+                                              "for ledger and analysis widget, ALT+L.\n.");
 
         QMessageBox mess ;
         mess.setWindowTitle(trUtf8("Read me."));
