@@ -49,13 +49,19 @@ using namespace MainWin::Internal;
 PatientModelWrapper::PatientModelWrapper(Patients::PatientModel *model) :
         Core::IPatient(model), m_Model(model)
 {
-    connect(model, SIGNAL(patientChanged(QString)), this, SIGNAL(currentPatientChanged()));
+    connect(model, SIGNAL(patientChanged(QString)), this, SLOT(onCurrentPatientChanged(QString)));
 }
 
 PatientModelWrapper::~PatientModelWrapper()
 {
     // remove this wrapper from the core instance
     Core::ICore::instance()->setPatient(0);
+}
+
+void PatientModelWrapper::onCurrentPatientChanged(const QString &)
+{
+    qWarning() << Q_FUNC_INFO;
+    Q_EMIT currentPatientChanged();
 }
 
 /** \brief Initialize the model */

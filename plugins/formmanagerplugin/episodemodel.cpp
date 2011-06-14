@@ -704,6 +704,8 @@ public:
             items.insert(it->uuid(), it);
         }
 
+//        qWarning() << Q_FUNC_INFO << feedPatientModel << form->uuid();
+
         // feed the formitemdatas for this form and get the data for the patientmodel
         foreach(FormItem *it, items.values()) {
             if (!it) {
@@ -713,11 +715,12 @@ public:
             if (it->itemDatas()) {
                 it->itemDatas()->setStorableData(datas.value(it->uuid()));
                 if (feedPatientModel) {
+                    qWarning() << "Feeding patientModel data with" << it->patientDataRepresentation() << it->itemDatas()->data(it->patientDataRepresentation(), IFormItemData::ID_ForPatientModel);
                     patient()->setValue(it->patientDataRepresentation(), it->itemDatas()->data(it->patientDataRepresentation(), IFormItemData::ID_ForPatientModel));
                 }
-            }
-            else
+            } else {
                 qWarning() << "FormManager::activateForm :: ERROR : no itemData :" << items.key(it);
+            }
         }
     }
 
@@ -733,7 +736,7 @@ public:
 
             // test all children FormItem for patientDataRepresentation
             bool hasPatientDatas = false;
-            foreach(Form::FormItem *item, f->formItemChildren()) {
+            foreach(Form::FormItem *item, f->flattenFormItemChildren()) {
                 if (item->itemDatas()) {
                     if (item->patientDataRepresentation()!=-1) {
                         hasPatientDatas = true;
@@ -825,23 +828,22 @@ void EpisodeModel::init()
     d->m_UserUuid = currentUserUuid();
     d->m_TmpFile = settings()->path(Core::ISettings::ApplicationTempPath) + "/FreeMedForms_Episodes.xml";
     LOG("Using temporary path " + d->m_TmpFile);
+
     connect(user(), SIGNAL(userChanged()), this, SLOT(onUserChanged()));
     connect(patient(), SIGNAL(currentPatientChanged()), this, SLOT(onPatientChanged()));
 
     d->m_CurrentPatient = patient()->data(Core::IPatient::Uid).toString();
-
     d->createFormTree();
 
-//    d->connectSqlPatientSignals();
     onUserChanged();
 
     // connect the save action
     Core::Command * cmd = actionManager()->command(Core::Constants::A_FILE_SAVE);
     connect(cmd->action(), SIGNAL(triggered()), this, SLOT(submit()));
 
-//    setSupportedDragActions(Qt::CopyAction | Qt::MoveAction);
-//
-//    connect(Core::ICore::instance(), SIGNAL(databaseServerChanged()), this, SLOT(onCoreDatabaseServerChanged()));
+    connect(Core::ICore::instance(), SIGNAL(databaseServerChanged()), this, SLOT(onCoreDatabaseServerChanged()));
+
+    onPatientChanged();
 }
 
 void EpisodeModel::refreshFormTree()
@@ -849,6 +851,7 @@ void EpisodeModel::refreshFormTree()
     d->m_FormTreeCreated = false;
     d->createFormTree();
     d->refreshEpisodes();
+    d->getLastEpisodesAndFeedPatientModel();
     reset();
 }
 
@@ -865,6 +868,7 @@ void EpisodeModel::onCoreDatabaseServerChanged()
     d->m_FormTreeCreated = false;
     d->createFormTree();
     d->refreshEpisodes();
+    d->getLastEpisodesAndFeedPatientModel();
     reset();
 }
 

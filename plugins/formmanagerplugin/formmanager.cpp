@@ -274,7 +274,7 @@ bool FormManager::insertSubForm(const SubFormInsertionPoint &insertionPoint)
             for(int k=0; k < children.count(); ++k) {
                 FormMain *child = children.at(k);
                 if (child->uuid()==insertIntoUuid) {
-                    qWarning() << "inserting subForm"<< insertionPoint.subFormUid() << "to" << insertionPoint.receiverUid();
+//                    qWarning() << "inserting subForm"<< insertionPoint.subFormUid() << "to" << insertionPoint.receiverUid();
                     foreach(Form::FormMain *form, sub->firstLevelFormMainChildren()) {
                         form->setParent(child);
                     }

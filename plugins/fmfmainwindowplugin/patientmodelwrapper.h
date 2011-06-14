@@ -79,6 +79,7 @@ public:
     virtual void showPatientBar();
 
 private Q_SLOTS:
+    void onCurrentPatientChanged(const QString &);
     void patientDataChanged(const QModelIndex &index);
 
 private:
