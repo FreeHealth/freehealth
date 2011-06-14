@@ -71,6 +71,8 @@ public:
 
     void warnXmlReadError(bool muteUserWarnings, const QString &file, const QString &msg, const int line = -1, const int col = -1) const;
 
+    QString lastError() const {return m_Error.join("\n");}
+
     bool checkFormFileContent(const QString &formUidOrFullAbsPath, const QString &contents) const;
 
     Form::FormIODescription *readXmlDescription(const QDomElement &xmlDescr, const QString &formUid);

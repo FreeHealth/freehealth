@@ -93,6 +93,7 @@ QString XmlFormIO::lastestXmlVersion()
 
 bool XmlFormIO::canReadForms(const QString &absFileName) const
 {
+//    qWarning() << Q_FUNC_INFO << absFileName;
     if (m_ReadableForms.keys().contains(absFileName)) {
         return m_ReadableForms.value(absFileName);
     }
@@ -106,28 +107,49 @@ bool XmlFormIO::canReadForms(const QString &absFileName) const
     if (m_ReadableForms.keys().contains(fileName)) {
         return m_ReadableForms.value(fileName);
     }
-    // Correct filename ?
-    if (QFileInfo(fileName).isDir()) {
-        // try to read central.xml
-        fileName = fileName + "/central.xml";
-    }
-    if (!QFileInfo(fileName).exists()) {
-        m_Error.append(tkTr(Trans::Constants::FILE_1_DOESNOT_EXISTS).arg(fileName));
-        return false;
-    }
-    if (QFileInfo(fileName).suffix().toLower()=="xml") {
-        if (reader()->checkFormFileContent(fileName, Utils::readTextFile(fileName, Utils::DontWarnUser))) {  // use reader
+
+    QFileInfo formFile(absFileName);
+    if (base()->isFormExists(formFile.path(), XmlIOBase::FullContent, formFile.baseName())) {
+//        qWarning() << "READ FROM DATABASE";
+        if (reader()->checkFormFileContent(formFile.path(), base()->getFormContent(formFile.path(), XmlIOBase::FullContent, formFile.baseName()))) {
             m_AbsFileName = fileName;
-            m_ReadableForms.insert(fileName, true);
+            m_ReadableForms.insert(formFile.path(), true);
             m_ReadableForms.insert(absFileName, true);
             return true;
         } else {
-            m_ReadableForms.insert(fileName, false);
-            m_ReadableForms.insert(absFileName, false);
+            Utils::warningMessageBox(tr("Invalid form in database."),
+                                     tr("An invalid form was found in the database. Please contact your software administrator.\n"
+                                        "Wrong form: %1\n"
+                                        "Error: %2")
+                                     .arg(absFileName)
+                                     .arg(reader()->lastError()));
             return false;
         }
     } else {
-        m_Error.append(tkTr(Trans::Constants::FILE_1_ISNOT_READABLE).arg(fileName));
+//        qWarning() << "READ FROM FILE";
+        // Correct filename ?
+        if (QFileInfo(fileName).isDir()) {
+            // try to read central.xml
+            fileName = fileName + "/central.xml";
+        }
+        if (!QFileInfo(fileName).exists()) {
+            m_Error.append(tkTr(Trans::Constants::FILE_1_DOESNOT_EXISTS).arg(fileName));
+            return false;
+        }
+        if (QFileInfo(fileName).suffix().toLower()=="xml") {
+            if (reader()->checkFormFileContent(fileName, Utils::readTextFile(fileName, Utils::DontWarnUser))) {  // use reader
+                m_AbsFileName = fileName;
+                m_ReadableForms.insert(fileName, true);
+                m_ReadableForms.insert(absFileName, true);
+                return true;
+            } else {
+                m_ReadableForms.insert(fileName, false);
+                m_ReadableForms.insert(absFileName, false);
+                return false;
+            }
+        } else {
+            m_Error.append(tkTr(Trans::Constants::FILE_1_ISNOT_READABLE).arg(fileName));
+        }
     }
     m_ReadableForms.insert(fileName, false);
     m_ReadableForms.insert(absFileName, false);
@@ -196,7 +218,7 @@ QList<Form::FormMain *> XmlFormIO::loadAllRootForms(const QString &uuidOrAbsPath
       * - Before read process, check if formUid exists in database, if not populate db with the
       *   local form file_s_ (all modes).
     */
-//    qWarning() << Q_FUNC_INFO << uuidOrAbsPath;
+    qWarning() << Q_FUNC_INFO << uuidOrAbsPath;
     QList<Form::FormMain *> toReturn;
     QString uuid = uuidOrAbsPath;
     if (uuidOrAbsPath.isEmpty()) {
