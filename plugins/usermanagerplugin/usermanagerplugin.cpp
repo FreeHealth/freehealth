@@ -171,8 +171,9 @@ bool UserManagerPlugin::initialize(const QStringList &arguments, QString *errorS
     // is UserBase reachable ?
     userBase();
     if (!userBase()->isInitialized()) {
-        /** \todo add a dialog here */
-        LOG_ERROR(tkTr(Trans::Constants::UNABLE_TO_OPEN_DATABASE_1_ERROR_2).arg("UserDatabase").arg(userBase()->database().lastError().text()));
+        Utils::warningMessageBox(tr("Unable to connect to the user database."),
+                                 tr("The user database is not reachable. Please check your configuration. \n"
+                                    "Application will stop."));
         return false;
     }
 

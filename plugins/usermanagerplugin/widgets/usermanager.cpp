@@ -74,8 +74,9 @@
 
 #include "ui_usermanagerwidget.h"
 
-using namespace UserPlugin::Internal;
 using namespace UserPlugin;
+using namespace Internal;
+using namespace Trans::ConstantTranslations;
 
 static inline Core::ContextManager *contextManager() {return  Core::ICore::instance()->contextManager();}
 static inline Core::ITheme *theme() {return Core::ICore::instance()->theme();}
@@ -180,6 +181,8 @@ UserManagerDialog::UserManagerDialog(QWidget * parent) :
 bool UserManagerDialog::initialize()
 {
     m_Widget->initialize();
+    setWindowTitle(tkTr(Trans::Constants::USERMANAGER_TEXT));
+    setWindowIcon(theme()->icon(Core::Constants::ICONUSERMANAGER));
     return true;
 }
 

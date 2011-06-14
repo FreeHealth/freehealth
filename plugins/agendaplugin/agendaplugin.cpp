@@ -68,7 +68,7 @@ void AgendaPlugin::extensionsInitialized()
     addAutoReleasedObject(new Core::PluginAboutPage(pluginSpec(), this));
 
     // Initialize database
-    Internal::AgendaBase::instance();
+//    Internal::AgendaBase::instance();
 }
 
 

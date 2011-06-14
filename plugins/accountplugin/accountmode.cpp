@@ -36,8 +36,11 @@
 #include <coreplugin/icore.h>
 #include <coreplugin/isettings.h>
 #include <coreplugin/itheme.h>
+#include <coreplugin/iuser.h>
 #include <coreplugin/constants_menus.h>
 #include <coreplugin/constants_icons.h>
+#include <coreplugin/modemanager/modemanager.h>
+
 #include <QMessageBox>
 #include <QFile>
 #include <QPushButton>
@@ -46,6 +49,7 @@ using namespace Account::Internal;
 
 static inline Core::ITheme *theme()  { return Core::ICore::instance()->theme(); }
 static inline Core::ISettings *settings() { return Core::ICore::instance()->settings(); }
+static inline Core::ModeManager *modeManager() {return Core::ICore::instance()->modeManager();}
 
 AccountMode::AccountMode(QObject *parent) :
     Core::BaseMode(parent)
@@ -57,9 +61,36 @@ AccountMode::AccountMode(QObject *parent) :
 //    const QList<int> &context;
 //    setContext();
     m_Stack = new QStackedWidget;
-    m_Stack->addWidget(new ReceiptViewer);
     setWidget(m_Stack);
 
+    connect(Core::ICore::instance(), SIGNAL(coreOpened()), this, SLOT(postCoreInitialization()));
+    connect(modeManager(), SIGNAL(currentModeChanged(Core::IMode*)), this, SLOT(modeActivated(Core::IMode*)));
+
+    /** \todo connect actions from the account menu */
+    /** \todo connect patient changed and refresh views ? */
+}
+
+void AccountMode::setCentralWidget(QWidget *widget)
+{
+    QWidget *w = m_Stack->currentWidget();
+    m_Stack->removeWidget(w);
+    delete w;
+    w = 0;
+    m_Stack->addWidget(widget);
+    m_Stack->setCurrentWidget(widget);
+}
+
+void AccountMode::postCoreInitialization()
+{
+    if (m_Stack)
+        m_Stack->addWidget(new ReceiptViewer);
+}
+
+void AccountMode::modeActivated(Core::IMode *mode)
+{
+    if (mode!=this) {
+        return;
+    }
     if (settings()->firstTimeRunning(Core::Constants::MODE_ACCOUNT)) {
         QString firstExplanationText = trUtf8("Please read this explanation before using FreeAccount.\n"
                                               "FreeAccount is composed of :\n"
@@ -86,17 +117,4 @@ AccountMode::AccountMode(QObject *parent) :
             settings()->noMoreFirstTimeRunning(Core::Constants::MODE_ACCOUNT);
         }
     }
-    /** \todo connect actions from the account menu */
-    /** \todo connect patient changed and refresh views ? */
 }
-
-void AccountMode::setCentralWidget(QWidget *widget)
-{
-    QWidget *w = m_Stack->currentWidget();
-    m_Stack->removeWidget(w);
-    delete w;
-    w = 0;
-    m_Stack->addWidget(widget);
-    m_Stack->setCurrentWidget(widget);
-}
-

@@ -668,7 +668,8 @@ ReceiptViewer::ReceiptViewer(QWidget *parent) :
     QWidget(parent),
     ui(new Ui::ReceiptViewer)
 {
-    m_userUuid = user()->value(Core::IUser::Uuid).toString();
+    if (user())
+        m_userUuid = user()->value(Core::IUser::Uuid).toString();
     receiptsManager rManager;
     m_kilometers = 0.00 ;
     m_distanceRuleValue = 0.00;

@@ -46,6 +46,10 @@ public:
     explicit AccountMode(QObject *parent = 0);
     void setCentralWidget(QWidget *widget);
     
+private Q_SLOTS:
+    void postCoreInitialization();
+    void modeActivated(Core::IMode *mode);
+
 private:
     QStackedWidget *m_Stack;
 };

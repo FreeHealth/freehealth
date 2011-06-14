@@ -41,6 +41,7 @@
 #include <utils/updatechecker.h>
 #include <utils/widgets/languagecombobox.h>
 #include <utils/database.h>
+#include <utils/databaseconnector.h>
 
 #include <extensionsystem/pluginmanager.h>
 
@@ -206,6 +207,16 @@ void CoreConfigPage::retranslate()
 
 bool CoreConfigPage::validatePage()
 {
+    if (installCombo->currentIndex()==0) {
+        // Define the default database connector for the SQLite version
+        Utils::DatabaseConnector connector;
+        connector.setClearLog("fmf_admin");
+        connector.setClearPass("fmf_admin");
+        connector.setDriver(Utils::Database::SQLite);
+        connector.setAccessMode(Utils::DatabaseConnector::ReadWrite);
+        // Path are automatically informed by settings()
+        settings()->setDatabaseConnector(connector);
+    }
     return true;
 }
 

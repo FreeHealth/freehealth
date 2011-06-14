@@ -24,6 +24,20 @@
  *       NAME <MAIL@ADRESS>                                                *
  *       NAME <MAIL@ADRESS>                                                *
  ***************************************************************************/
+/**
+  \class Utils::DatabaseConnector
+  This class owns all params needed to connect to the databases.\n
+  The Core::ISettings is in charge of populating paths for the SQLite driver.\n
+  Default params are:
+  - log: empty
+  - pass: empty
+  - host: empty
+  - port: -1 (undefined)
+  - driver: SQLite
+  - accessMode: ReadWrite
+  \sa Utils::Database
+*/
+
 #include "databaseconnector.h"
 #include "global.h"
 #include "log.h"
@@ -97,6 +111,7 @@ DatabaseConnector::DatabaseConnector() :
 {
     d->m_Port = -1;
     d->m_Driver = Database::SQLite;
+    d->m_AccessMode = ReadWrite;
     d->m_DriverIsValid = d->testDriver(Database::SQLite);
 }
 }
@@ -109,6 +124,7 @@ DatabaseConnector::DatabaseConnector(const QString &clearLog, const QString &cle
     d->m_HostName = hostName;
     d->m_Port = port;
     d->m_Driver = Database::SQLite;
+    d->m_AccessMode = ReadWrite;
     d->m_DriverIsValid = d->testDriver(Database::SQLite);
 }
 
@@ -118,6 +134,7 @@ DatabaseConnector::DatabaseConnector(const QString &clearLog, const QString &cle
     d->m_ClearLog = clearLog;
     d->m_ClearPass = clearPass;
     d->m_Driver = Database::SQLite;
+    d->m_AccessMode = ReadWrite;
     d->m_DriverIsValid = d->testDriver(Database::SQLite);
     d->m_Port = -1;
 }
@@ -149,7 +166,7 @@ void DatabaseConnector::clear()
     d->m_Port = -1;
     d->m_AbsPathToReadOnlySQLiteDb.clear();
     d->m_AbsPathToReadWriteSQLiteDb.clear();
-    d->m_AccessMode = ReadOnly;
+    d->m_AccessMode = ReadWrite;
 }
 
 bool DatabaseConnector::isValid()
@@ -217,7 +234,6 @@ void DatabaseConnector::fromSettings(const QString &value)
     d->m_Port = vals.at(3).toInt();
     d->m_Driver = Utils::Database::AvailableDrivers(vals.at(4).toInt());
     d->m_DriverIsValid = d->testDriver(d->m_Driver);
-    warn();
 }
 
 DatabaseConnector &DatabaseConnector::operator=(const DatabaseConnector &in)
@@ -269,6 +285,11 @@ void DatabaseConnector::warn() const
     }
     QString t = QString("DatabaseConnector(Log:%1; Pass:%2; Host:%3; Port:%4; Driver:%5")
                 .arg(d->m_ClearLog).arg(d->m_ClearPass).arg(d->m_HostName).arg(d->m_Port).arg(dr);
+    if (d->m_AccessMode==ReadWrite) {
+        t += "; RW";
+    } else {
+        t += "; RO";
+    }
     if (d->m_Driver==Database::SQLite) {
         t += QString("\n                   RO:%1"
                      "\n                   RW:%2")

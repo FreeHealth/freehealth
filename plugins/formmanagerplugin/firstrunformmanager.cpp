@@ -42,14 +42,8 @@ using namespace Internal;
 static inline Core::ISettings *settings() { return Core::ICore::instance()->settings(); }
 
 FirstRunFormManagerWizardPage::FirstRunFormManagerWizardPage(QWidget *parent) :
-        QWizardPage(parent)//, m_Wizard(parent)
+        QWizardPage(parent), selector(0)//, m_Wizard(parent)
 {
-    QGridLayout *layout = new QGridLayout(this);
-    setLayout(layout);
-    selector = new Form::FormFilesSelectorWidget(this, Form::FormFilesSelectorWidget::CompleteForms);
-    selector->expandAllItems();
-    layout->addWidget(selector, 0, 0);
-    selector->updateGeometry();
 }
 
 void FirstRunFormManagerWizardPage::retranslate()
@@ -58,6 +52,19 @@ void FirstRunFormManagerWizardPage::retranslate()
     setSubTitle(tr("You can define your own patient form file, or use the default one. "
                    "Select it from here. All patients will have the same forms, but you can "
                    "add subforms anywhere in the form."));
+}
+
+void FirstRunFormManagerWizardPage::initializePage()
+{
+    if (!selector) {
+        QGridLayout *layout = new QGridLayout(this);
+        setLayout(layout);
+        selector = new Form::FormFilesSelectorWidget(this, Form::FormFilesSelectorWidget::CompleteForms);
+        selector->expandAllItems();
+        layout->addWidget(selector, 0, 0);
+        adjustSize();
+        selector->updateGeometry();
+    }
 }
 
 bool FirstRunFormManagerWizardPage::validatePage()

@@ -424,6 +424,7 @@ bool Database::createConnection(const QString &connectionName, const QString &no
 
     // does driver is available
     if (!connector.isDriverValid()) {
+        LOG_ERROR_FOR("Database", "Driver is not valid");
         return false;
     }
 
@@ -493,6 +494,8 @@ bool Database::createConnection(const QString &connectionName, const QString &no
                     return false;
                 }
             }
+            // now that the file was created, reload the fileinfo
+            sqliteFileInfo.setFile(sqliteFileInfo.absoluteFilePath());
             break;
         }
     case MySQL:
@@ -528,7 +531,7 @@ bool Database::createConnection(const QString &connectionName, const QString &no
     case SQLite:
         {
             if (!sqliteFileInfo.isReadable()) {
-                LOG_ERROR_FOR("Database", QCoreApplication::translate("Database", "ERROR : Database %1 is not readable. Path : %2")
+                LOG_ERROR_FOR("Database", QCoreApplication::translate("Database", "ERROR : Database `%1` is not readable. Path : %2")
                               .arg(dbName, sqliteFileInfo.absoluteFilePath()));
                 toReturn = false;
             }
@@ -951,7 +954,7 @@ QString Database::joinToSql(const Join &join) const
     }
     if (s.isEmpty())
         return s;
-    s += join.field1.tableName + " ON " ;
+    s += "`" + join.field1.tableName + "` ON " ;
     s += QString("`%1`.`%2`=`%3`.`%4` ")
          .arg(join.field1.tableName, join.field1.fieldName)
          .arg(join.field2.tableName, join.field2.fieldName);

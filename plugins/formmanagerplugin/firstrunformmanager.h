@@ -49,6 +49,7 @@ class FirstRunFormManagerWizardPage : public QWizardPage
 public:
     FirstRunFormManagerWizardPage(QWidget *parent);
 
+    void initializePage();
     bool validatePage();
     int nextId() const;
 

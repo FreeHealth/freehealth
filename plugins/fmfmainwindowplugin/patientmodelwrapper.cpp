@@ -60,7 +60,6 @@ PatientModelWrapper::~PatientModelWrapper()
 
 void PatientModelWrapper::onCurrentPatientChanged(const QString &)
 {
-    qWarning() << Q_FUNC_INFO;
     Q_EMIT currentPatientChanged();
 }
 

@@ -52,11 +52,13 @@
 #include <coreplugin/dialogs/pluginaboutpage.h>
 #include <coreplugin/icore.h>
 #include <coreplugin/translators.h>
+#include <coreplugin/iuser.h>
 
 #include <QtCore/QtPlugin>
 #include <QDebug>
 
 using namespace Account;
+static inline Core::IUser *user() { return Core::ICore::instance()->user(); }
 
 AccountPlugin::AccountPlugin() :
         ExtensionSystem::IPlugin(),
@@ -112,6 +114,9 @@ void AccountPlugin::extensionsInitialized()
 {
     if (Utils::Log::warnPluginsCreation())
         qWarning() << "AccountPlugin::extensionsInitialized";
+
+    if (!user())
+        return;
 
     // Add Translator to the Application
     Core::ICore::instance()->translators()->addNewTranslator("accountplugin");

@@ -158,9 +158,9 @@ INSTALLS += usersdb
 }
 
 # Install profiles
-profiles.path =  = $${INSTALL_PROFILES_PATH}
-profiles.files = $${SOURCES_PROFILES}
-INSTALLS += profiles
+profiles_resources.path =  = $${INSTALL_PROFILES_PATH}
+profiles_resources.files = $${SOURCES_PROFILES}
+INSTALLS += profiles_resources
 
 # Install theme
 screens.path = $${INSTALL_SPLASHPIX_PATH}
