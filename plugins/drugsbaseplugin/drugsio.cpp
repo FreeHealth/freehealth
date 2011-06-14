@@ -615,20 +615,20 @@ bool DrugsIO::prescriptionFromXml(DrugsDB::DrugsModel *m, const QString &xmlCont
     QString errorMsg;
     QDomElement prescr = fullPrescription.firstChildElement(XML_PRESCRIPTION_MAINTAG);
 
-    Utils::Log::logTimeElapsed(time, "DrugsIO", "xxxxx");
+//    Utils::Log::logTimeElapsed(time, "DrugsIO", "xxxxx");
 
     while (!prescr.isNull()) {
         QDomElement item = prescr.firstChildElement(::XML_DRUG_ROOT);
         IDrug *readingDrug = d->readDrug(item);
 
-        Utils::Log::logTimeElapsed(time, "DrugsIO", "Reading drug" + readingDrug->brandName());
+//        Utils::Log::logTimeElapsed(time, "DrugsIO", "Reading drug" + readingDrug->brandName());
 
 
         item = prescr.firstChildElement(::XML_PRESCRIPTION_DOSAGE);
         d->readDose(readingDrug, item);
         drugs << readingDrug;
 
-        Utils::Log::logTimeElapsed(time, "DrugsIO", "Reading dose" + readingDrug->brandName());
+//        Utils::Log::logTimeElapsed(time, "DrugsIO", "Reading dose" + readingDrug->brandName());
 
         // check Model Updaters
 //        if (needUpdate) {
@@ -637,11 +637,11 @@ bool DrugsIO::prescriptionFromXml(DrugsDB::DrugsModel *m, const QString &xmlCont
 
         prescr = prescr.nextSiblingElement(XML_PRESCRIPTION_MAINTAG);
     }
-    Utils::Log::logTimeElapsed(time, "DrugsIO", "Reading full prescription file");
+//    Utils::Log::logTimeElapsed(time, "DrugsIO", "Reading full prescription file");
 
     // Feed model with drugs
     m->addDrugs(drugs, false);
-    Utils::Log::logTimeElapsed(time, "DrugsIO", "Adding drugs to model (no DDI checking)");
+//    Utils::Log::logTimeElapsed(time, "DrugsIO", "Adding drugs to model (no DDI checking)");
 
     if ((needUpdate) && (!version.isEmpty())){
         DrugsDB::VersionUpdater::instance()->updateXmlIOModel(version, m, rowsToUpdate);
@@ -655,9 +655,9 @@ bool DrugsIO::prescriptionFromXml(DrugsDB::DrugsModel *m, const QString &xmlCont
     // check interaction, emit final signal from model for views to update
     m->checkInteractions();
     Q_EMIT m->numberOfRowsChanged();
-    Utils::Log::logTimeElapsed(time, "DrugsIO", "DDI checking");
+//    Utils::Log::logTimeElapsed(time, "DrugsIO", "DDI checking");
 
-    Utils::Log::logTimeElapsed(time, "DrugsIO", "Reading prescription");
+//    Utils::Log::logTimeElapsed(time, "DrugsIO", "Reading prescription");
 
     // small debug information
     LOG_FOR("DrugsIO", tr("Xml prescription correctly read."));
