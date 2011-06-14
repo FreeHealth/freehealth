@@ -38,9 +38,9 @@ class UTILS_EXPORT VersionNumber
 public:
     VersionNumber(const QString &versionNumber);
 
-    int major() const {return m_Major;}
-    int minor() const {return m_Minor;}
-    int debug() const {return m_Debug;}
+    int majorNumber() const {return m_Major;}
+    int minorNumber() const {return m_Minor;}
+    int debugNumber() const {return m_Debug;}
 
     bool isAlpha() const {return m_IsAlpha;}
     int alphaNumber() const {return m_Alpha;}

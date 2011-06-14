@@ -92,15 +92,15 @@ VersionNumber::VersionNumber(const QString &version) :
 
 bool VersionNumber::operator>(const VersionNumber &b) const
 {
-    if (m_Major > b.major()) {
+    if (m_Major > b.majorNumber()) {
         return true;
-    } else if (m_Major == b.major()) {
-        if (m_Minor > b.minor()) {
+    } else if (m_Major == b.majorNumber()) {
+        if (m_Minor > b.minorNumber()) {
             return true;
-        } else if (m_Minor == b.minor()) {
-            if (m_Debug > b.debug()) {
+        } else if (m_Minor == b.minorNumber()) {
+            if (m_Debug > b.debugNumber()) {
                 return true;
-            } else if (m_Debug==b.debug()) {
+            } else if (m_Debug==b.debugNumber()) {
                 // Check sub versions
                 if (m_IsAlpha) {
                     if (b.isAlpha()) {
@@ -136,7 +136,7 @@ bool VersionNumber::operator<(const VersionNumber &b) const
 
 bool VersionNumber::operator==(const VersionNumber &b) const
 {
-    if (m_Major==b.major() && m_Minor==b.minor() && m_Debug==b.debug()) {
+    if (m_Major==b.majorNumber() && m_Minor==b.minorNumber() && m_Debug==b.debugNumber()) {
         if ((m_IsAlpha && b.isAlpha()) && (m_Alpha==b.alphaNumber())) {
             return true;
         } else if ((m_IsBeta && b.isBeta()) && (m_Beta==b.betaNumber())) {
