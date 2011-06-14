@@ -220,6 +220,7 @@ plugins/fmf_plugins.pri \
 plugins/accountbaseplugin \
 plugins/accountplugin \
 plugins/aggirplugin \
+plugins/agendaplugin \
 plugins/basewidgetsplugin \
 plugins/categoryplugin \
 plugins/coreplugin \
