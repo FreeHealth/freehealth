@@ -92,6 +92,7 @@ public:
     EpisodeModel(Form::FormMain *rootEmptyForm, QObject *parent = 0);
     ~EpisodeModel();
     void init();
+    void refreshFormTree();
 
     QModelIndex index(int row, int column, const QModelIndex &parent = QModelIndex()) const;
     QModelIndex parent(const QModelIndex &index) const;

@@ -27,6 +27,7 @@
 #include "episodebase.h"
 #include "constants_db.h"
 #include "iformio.h"
+#include "subforminsertionpoint.h"
 
 #include <utils/global.h>
 #include <utils/log.h>
@@ -51,7 +52,8 @@
 #include <QTreeWidgetItem>
 #include <QFont>
 
-using namespace Form::Internal;
+using namespace Form;
+using namespace Internal;
 using namespace Trans::ConstantTranslations;
 
 static inline Core::ISettings *settings()  { return Core::ICore::instance()->settings(); }
@@ -139,6 +141,8 @@ EpisodeBase::EpisodeBase(QObject *parent) :
     addField(Table_FORM, FORM_SUBFORMUID, "SUBUID", FieldIsShortText);
     // Insertion point = formuuid where to insert the form
     addField(Table_FORM, FORM_INSERTIONPOINT, "IP", FieldIsShortText);
+    addField(Table_FORM, FORM_INSERTASCHILD, "CHILD", FieldIsBoolean, "true");
+    addField(Table_FORM, FORM_APPEND, "APPEND", FieldIsBoolean, "false");
 
     /** \todo manage user access restriction */
     /** \todo add index */
@@ -367,6 +371,8 @@ bool EpisodeBase::setGenericPatientFormFile(const QString &absPathOrUid)
         query.bindValue(Constants::FORM_PATIENTUID, QVariant());
         query.bindValue(Constants::FORM_SUBFORMUID, QVariant());
         query.bindValue(Constants::FORM_INSERTIONPOINT, QVariant());
+        query.bindValue(Constants::FORM_INSERTASCHILD, QVariant());
+        query.bindValue(Constants::FORM_APPEND, QVariant());
         if (!query.exec()) {
             LOG_QUERY_ERROR(query);
             return false;
@@ -403,14 +409,12 @@ QString EpisodeBase::getGenericFormFile()
 }
 
 /**
-  \brief Return all sub-form additions.
-  The QHash represents:
-    - Key = FormUuid place to insert the sub-form
-    - Value = SubForm file path
+  Return all sub-form additions.
+  \sa Form::SubFormInsertionPoint, Form::FormManager::insertSubForm()
 */
-QHash<QString,QString> EpisodeBase::getSubFormFiles()
+QVector<Form::SubFormInsertionPoint> EpisodeBase::getSubFormFiles()
 {
-    QHash<QString,QString> toReturn;
+    QVector<SubFormInsertionPoint> toReturn;
     QSqlDatabase DB = QSqlDatabase::database(Constants::DB_NAME);
     if (!connectDatabase(DB, __FILE__, __LINE__)) {
         return toReturn;
@@ -422,13 +426,18 @@ QHash<QString,QString> EpisodeBase::getSubFormFiles()
     QSqlQuery query(DB);
     QString req = select(Constants::Table_FORM, QList<int>()
                          << Constants::FORM_SUBFORMUID
-                         << Constants::FORM_INSERTIONPOINT, where);
+                         << Constants::FORM_INSERTIONPOINT
+                         << Constants::FORM_INSERTASCHILD
+                         << Constants::FORM_APPEND, where);
     if (query.exec(req)) {
         while (query.next()) {
-            QString path = query.value(1).toString();
-            path.replace(Core::Constants::TAG_APPLICATION_COMPLETEFORMS_PATH, settings()->path(Core::ISettings::CompleteFormsPath));
-            path.replace(Core::Constants::TAG_APPLICATION_SUBFORMS_PATH, settings()->path(Core::ISettings::SubFormsPath));
-            toReturn.insert(query.value(0).toString(), path);
+            QString insertUid = query.value(1).toString();
+            insertUid.replace(Core::Constants::TAG_APPLICATION_COMPLETEFORMS_PATH, settings()->path(Core::ISettings::CompleteFormsPath));
+            insertUid.replace(Core::Constants::TAG_APPLICATION_SUBFORMS_PATH, settings()->path(Core::ISettings::SubFormsPath));
+            SubFormInsertionPoint point(insertUid, query.value(0).toString());
+            point.setAddAsChild(query.value(2).toBool());
+            point.setAppendToForm(query.value(3).toBool());
+            toReturn << point;
         }
     } else {
         LOG_QUERY_ERROR(query);
@@ -436,7 +445,11 @@ QHash<QString,QString> EpisodeBase::getSubFormFiles()
     return toReturn;
 }
 
-bool EpisodeBase::addSubForms(const QString &receiverUuid, const QList<Form::FormIODescription *> &subforms)
+/**
+  Save subForm insertions to the database.
+  \sa Form::SubFormInsertionPoint, Form::FormManager::insertSubForm()
+*/
+bool EpisodeBase::addSubForms(const QVector<SubFormInsertionPoint> &insertions)
 {
     QSqlDatabase DB = QSqlDatabase::database(Constants::DB_NAME);
     if (!connectDatabase(DB, __FILE__, __LINE__)) {
@@ -445,15 +458,16 @@ bool EpisodeBase::addSubForms(const QString &receiverUuid, const QList<Form::For
     // save
     bool success = true;
     QSqlQuery query(DB);
-    for(int i = 0; i < subforms.count(); ++i) {
-        Form::FormIODescription *descr = subforms.at(i);
+    for(int i = 0; i < insertions.count(); ++i) {
         query.prepare(prepareInsertQuery(Constants::Table_FORM));
         query.bindValue(Constants::FORM_ID, QVariant());
         query.bindValue(Constants::FORM_VALID, 1);
         query.bindValue(Constants::FORM_GENERIC, QVariant());
         query.bindValue(Constants::FORM_PATIENTUID, patient()->data(Core::IPatient::Uid));
-        query.bindValue(Constants::FORM_SUBFORMUID, descr->data(Form::FormIODescription::UuidOrAbsPath));
-        query.bindValue(Constants::FORM_INSERTIONPOINT, receiverUuid);
+        query.bindValue(Constants::FORM_SUBFORMUID, insertions.at(i).subFormUid());
+        query.bindValue(Constants::FORM_INSERTIONPOINT, insertions.at(i).receiverUid());
+        query.bindValue(Constants::FORM_INSERTASCHILD, insertions.at(i).addAsChild());
+        query.bindValue(Constants::FORM_APPEND, insertions.at(i).appendToForm());
         if (!query.exec()) {
             LOG_QUERY_ERROR(query);
             success = false;

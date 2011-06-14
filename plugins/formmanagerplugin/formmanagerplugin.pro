@@ -29,7 +29,8 @@ HEADERS = formmanagerplugin.h \
     formeditordialog.h \
     firstrunformmanager.h \
     formiodescription.h \
-    formioquery.h
+    formioquery.h \
+    subforminsertionpoint.h
 SOURCES = formmanagerplugin.cpp \
     formmanager.cpp \
     iformitem.cpp \

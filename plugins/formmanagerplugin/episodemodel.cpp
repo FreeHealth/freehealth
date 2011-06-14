@@ -844,6 +844,14 @@ void EpisodeModel::init()
 //    connect(Core::ICore::instance(), SIGNAL(databaseServerChanged()), this, SLOT(onCoreDatabaseServerChanged()));
 }
 
+void EpisodeModel::refreshFormTree()
+{
+    d->m_FormTreeCreated = false;
+    d->createFormTree();
+    d->refreshEpisodes();
+    reset();
+}
+
 EpisodeModel::~EpisodeModel()
 {
     if (d) {

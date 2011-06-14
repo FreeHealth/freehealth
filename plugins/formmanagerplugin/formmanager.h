@@ -54,6 +54,7 @@ class FormMain;
 class FormItem;
 class IFormIO;
 class FormPlaceHolder;
+class SubFormInsertionPoint;
 
 namespace Internal {
 class FormManagerPrivate;
@@ -108,10 +109,15 @@ private:
 public Q_SLOTS:
     bool loadPatientFile();
     bool loadSubForms();
+    bool insertSubForm(const SubFormInsertionPoint &insertionPoint);
+
     bool readPmhxCategories(const QString &formUuidOrAbsPath);
 
 Q_SIGNALS:
     void patientFormsLoaded();
+
+//private Q_SLOTS:
+//    void coreAboutToClose();
 
 private:
     Internal::FormManagerPrivate *d;

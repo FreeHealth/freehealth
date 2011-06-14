@@ -36,6 +36,7 @@
 #include "formplaceholder.h"
 #include "episodebase.h"
 #include "constants_db.h"
+#include "subforminsertionpoint.h"
 
 #include <formmanagerplugin/iformwidgetfactory.h>
 #include <formmanagerplugin/iformitemdata.h>
@@ -133,7 +134,7 @@ FormManager::FormManager(QObject *parent) :
 {
     setObjectName("FormManager");
 
-//    connect(this, SIGNAL(loadPatientForms(QString)), Core::ICore::instance(), SIGNAL(loadPatientForms(QString)));
+//    connect(Core::ICore::instance(), SIGNAL(coreAboutToClose()), this, SLOT(coreAboutToClose()));
     connect(patient(), SIGNAL(currentPatientChanged()), this, SLOT(loadPatientFile()));
 }
 
@@ -151,10 +152,10 @@ void FormManager::activateMode()
     modeManager()->activateMode(Core::Constants::MODE_PATIENT_FILE);
 }
 
-/**  Return all available forms from the PluginManager object pool. \sa Form::FormMain */
+/**  Return all available empty root forms for the current patient. \sa Form::FormMain */
 QList<FormMain *> FormManager::forms() const
 {
-    return pluginManager()->getObjects<FormMain>();
+    return d->m_RootForms;
 }
 
 /**
@@ -229,28 +230,28 @@ Form::FormMain *FormManager::rootForm(const char *modeUniqueName)
 bool FormManager::loadSubForms()
 {
     // get sub-forms from database
-    const QHash<QString, QString> &subs = episodeBase()->getSubFormFiles();
+    const QVector<SubFormInsertionPoint> &subs = episodeBase()->getSubFormFiles();
     if (subs.isEmpty()) {
         return true;
     }
 
-    // read all sub-forms
-    QList<Form::IFormIO *> list = pluginManager()->getObjects<Form::IFormIO>();
-    QList<Form::FormMain *> subFormsRoot;
-    foreach(Form::IFormIO *io, list) {
-        QHashIterator<QString, QString> i(subs);
-        while (i.hasNext()) {
-            i.next();
-            if (io->canReadForms(i.key())) {
-                subFormsRoot << io->loadAllRootForms(i.key());
-            }
-        }
+    for(int i = 0; i < subs.count(); ++i) {
+        if (!insertSubForm(subs.at(i)))
+            return false;
     }
+
+    return true;
+}
+
+bool FormManager::insertSubForm(const SubFormInsertionPoint &insertionPoint)
+{
+    // read all sub-forms
+    QList<Form::FormMain *> subFormsRoot = loadFormFile(insertionPoint.subFormUid());
 
     // insert sub-forms
     for(int i=0; i < subFormsRoot.count(); ++i) {
         FormMain *sub = subFormsRoot.at(i);
-        QString insertIntoUuid = subs.value(sub->uuid());
+        const QString &insertIntoUuid = insertionPoint.receiverUid();
 //        qWarning() << "insert" << sub->uuid() << "to" << insertIntoUuid;
         if (insertIntoUuid == Constants::ROOT_FORM_TAG) {
             // insert into its mode root form
@@ -262,22 +263,26 @@ bool FormManager::loadSubForms()
             foreach(Form::FormMain *form, sub->firstLevelFormMainChildren())
                 form->setParent(rootMode);
         }
+
         // find point of insertion
-        for(int j=0; j < d->m_RootForms.count(); ++j) {
-            FormMain *parent = d->m_RootForms.at(j);
+        QList<Form::FormMain *> allForms = forms();
+
+        for(int j=0; j < allForms.count(); ++j) {
+            FormMain *parent = allForms.at(j);
             // search inside flatten children
             QList<Form::FormMain *> children = parent->flattenFormMainChildren();
             for(int k=0; k < children.count(); ++k) {
                 FormMain *child = children.at(k);
                 if (child->uuid()==insertIntoUuid) {
-                    foreach(Form::FormMain *form, sub->firstLevelFormMainChildren())
+                    qWarning() << "inserting subForm"<< insertionPoint.subFormUid() << "to" << insertionPoint.receiverUid();
+                    foreach(Form::FormMain *form, sub->firstLevelFormMainChildren()) {
                         form->setParent(child);
+                    }
                     break;
                 }
             }
         }
     }
-
     return true;
 }
 

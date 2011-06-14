@@ -220,7 +220,6 @@ static void setPathToDescription(QString path, Form::FormIODescription *desc)
 /** Return the Form::FormIODescription according to the XML QDomElement \e xmlDescr. The \e xmlDescr must point to the first description tag of the document. */
 Form::FormIODescription *XmlFormContentReader::readXmlDescription(const QDomElement &xmlDescr, const QString &formUid)
 {
-    qWarning() << xmlDescr.text();
     Form::FormIODescription *ioDesc = new Form::FormIODescription;
     QHash<int, QString> elements;
     // get non translatable items

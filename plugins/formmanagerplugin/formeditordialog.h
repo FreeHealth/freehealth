@@ -64,6 +64,7 @@ private Q_SLOTS:
 private:
     Ui::FormEditorDialog *ui;
     QSortFilterProxyModel *proxyModel;
+    Form::EpisodeModel *m_EpisodeModel;
 };
 
 }  // End namespace Form

@@ -63,7 +63,7 @@ namespace Constants {
     };
     enum FormFields {
         FORM_ID = 0, FORM_VALID, FORM_GENERIC, FORM_PATIENTUID,
-        FORM_SUBFORMUID, FORM_INSERTIONPOINT,
+        FORM_SUBFORMUID, FORM_INSERTIONPOINT, FORM_INSERTASCHILD, FORM_APPEND,
         FORM_MaxParam
     };
     enum VersionFields {

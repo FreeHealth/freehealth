@@ -28,6 +28,9 @@
 #include "episodemodel.h"
 #include "constants_db.h"
 #include "episodebase.h"
+#include "subforminsertionpoint.h"
+#include "formmanager.h"
+#include "iformio.h"
 
 #include <coreplugin/icore.h>
 #include <coreplugin/itheme.h>
@@ -42,10 +45,12 @@
 using namespace Form;
 static inline Form::Internal::EpisodeBase *episodeBase() { return Form::Internal::EpisodeBase::instance(); }
 static inline Core::ITheme *theme()  { return Core::ICore::instance()->theme(); }
+static inline Form::FormManager *formManager() {return Form::FormManager::instance();}
 
 FormEditorDialog::FormEditorDialog(EpisodeModel *model, EditionModes mode, QWidget *parent) :
     QDialog(parent),
-    ui(new Ui::FormEditorDialog)
+    ui(new Ui::FormEditorDialog),
+    m_EpisodeModel(model)
 {
     ui->setupUi(this);
     ui->formSelector->setFormType(Form::FormFilesSelectorWidget::AllForms);
@@ -82,18 +87,25 @@ void FormEditorDialog::on_addForm_clicked()
     } else {
         QModelIndex idx = ui->treeView->selectionModel()->currentIndex();
         idx = proxyModel->mapToSource(idx);
-        insertTo = proxyModel->sourceModel()->index(idx.row(), EpisodeModel::FormUuid, idx.parent()).data().toString();
+        insertTo = m_EpisodeModel->index(idx.row(), EpisodeModel::FormUuid, idx.parent()).data().toString();
     }
 
     // Save to database
     QList<Form::FormIODescription *> selected = ui->formSelector->selectedForms();
     if (selected.isEmpty() || insertTo.isEmpty())
         return;
-    episodeBase()->addSubForms(insertTo, selected);
+    QVector<SubFormInsertionPoint> insertions;
+    for(int i=0; i < selected.count(); ++i) {
+        Form::FormIODescription *insert = selected.at(i);
+        SubFormInsertionPoint point(insertTo, insert->data(Form::FormIODescription::UuidOrAbsPath).toString());
+        insertions << point;
+        formManager()->insertSubForm(point);
+    }
+    episodeBase()->addSubForms(insertions);
 
     // Re-create the patient form
-    // --->>>>>
-    //
+    m_EpisodeModel->refreshFormTree();
+
 }
 
 void FormEditorDialog::changeEvent(QEvent *e)

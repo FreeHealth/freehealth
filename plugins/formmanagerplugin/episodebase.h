@@ -44,6 +44,8 @@
 
 namespace Form {
 class FormIODescription;
+class SubFormInsertionPoint;
+
 namespace Internal {
 class EpisodeBasePrivate;
 
@@ -64,8 +66,8 @@ public:
 
     bool setGenericPatientFormFile(const QString &absPathOrUid);
     QString getGenericFormFile();
-    QHash<QString,QString> getSubFormFiles();
-    bool addSubForms(const QString &receiverUuid, const QList<Form::FormIODescription *> &subforms);
+    QVector<SubFormInsertionPoint> getSubFormFiles();
+    bool addSubForms(const QVector<SubFormInsertionPoint> &insertions);
 
 private:
     bool createDatabase(const QString &connectionName, const QString &dbName,
