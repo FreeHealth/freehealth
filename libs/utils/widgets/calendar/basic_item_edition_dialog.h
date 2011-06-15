@@ -20,6 +20,9 @@ namespace Calendar {
 
 	private:
 		CalendarItem m_item;
+
+	private slots:
+		void on_checkBoxAllDay_toggled(bool checked);
 	};
 }
 

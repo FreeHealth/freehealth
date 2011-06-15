@@ -54,6 +54,10 @@ namespace Calendar {
 		void computeWidgets();
 		void computeWidget(const CalendarItem &item, int depth);
 		int getLastWidgetBottom() const;
+
+	private slots:
+		void modifyPressItem();
+		void removePressItem();
 	};
 
 	class HourWidget : public QWidget

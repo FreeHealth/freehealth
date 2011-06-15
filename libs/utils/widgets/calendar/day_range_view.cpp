@@ -282,17 +282,43 @@ void DayRangeHeader::mouseReleaseEvent(QMouseEvent *event) {
 
 	QDate date = getDate(event->pos().x());
 	if (m_mouseMode == MouseMode_Move) {
-		int daysAdded = m_pressDayInterval.first.daysTo(date);
-		if (daysAdded) {
-			m_pressItem.setBeginning(m_pressItem.beginning().addDays(daysAdded));
-			m_pressItem.setEnding(m_pressItem.ending().addDays(daysAdded));
-			model()->setItemByUid(m_pressItem.uid(), m_pressItem);
+		if (!m_pressItemWidget->inMotion()) {
+			// display a menu
+			QMenu menu;
+			QAction *modifyAction = menu.addAction(tr("modify"));
+			connect(modifyAction, SIGNAL(triggered()), this, SLOT(modifyPressItem()));
+			QAction *removeAction = menu.addAction(tr("remove"));
+			connect(removeAction, SIGNAL(triggered()), this, SLOT(removePressItem()));
+			menu.exec(event->globalPos());
+		} else {
+			int daysAdded = m_pressDayInterval.first.daysTo(date);
+			if (daysAdded) {
+				m_pressItem.setBeginning(m_pressItem.beginning().addDays(daysAdded));
+				m_pressItem.setEnding(m_pressItem.ending().addDays(daysAdded));
+				model()->setItemByUid(m_pressItem.uid(), m_pressItem);
+			}
+			computeWidgets();
+			updateGeometry();
 		}
-		computeWidgets();
-		updateGeometry();
 	}
 
 	m_mouseMode = MouseMode_None;
+}
+
+void DayRangeHeader::modifyPressItem() {
+	BasicItemEditionDialog dialog(this);
+	dialog.init(m_pressItem);
+	if (dialog.exec() == QDialog::Accepted) {
+		model()->setItemByUid(m_pressItem.uid(), dialog.item());
+		computeWidgets();
+		updateGeometry();
+	}
+}
+
+void DayRangeHeader::removePressItem() {
+	model()->removeItem(m_pressItem.uid());
+	computeWidgets();
+	updateGeometry();
 }
 
 /////////////////////////////////////////////////////////////////
