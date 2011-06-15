@@ -48,7 +48,7 @@
 */
 
 #include "userbase.h"
-#include "constants.h"
+#include <usermanagerplugin/constants.h>
 
 #include <coreplugin/icore.h>
 #include <coreplugin/isettings.h>

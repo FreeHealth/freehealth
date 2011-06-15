@@ -1,6 +1,7 @@
 # first definitions
 TEMPLATE = app
-TARGET = $$quote(FreeMedForms)
+macx:win32:TARGET = $$quote(FreeMedForms)
+else:TARGET = $$quote(freemedforms)
 PACKAGE_VERSION = 0.5.9~alpha2
 
 # Prepare installation

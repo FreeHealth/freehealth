@@ -158,7 +158,7 @@ INSTALLS += usersdb
 }
 
 # Install profiles
-profiles_resources.path =  = $${INSTALL_PROFILES_PATH}
+profiles_resources.path = $${INSTALL_PROFILES_PATH}
 profiles_resources.files = $${SOURCES_PROFILES}
 INSTALLS += profiles_resources
 

@@ -36,6 +36,7 @@ bool ICalendarEvent::setData(const int ref, const QVariant &value)
 {
     /** \todo block DbOnly_ refs */
     m_Datas.insert(ref, value);
+    return true;
 }
 
 void ICalendarEvent::setDatabaseValue(const int ref, const QVariant &value)
