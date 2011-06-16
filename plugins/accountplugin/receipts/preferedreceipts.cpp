@@ -40,7 +40,7 @@
 #include <accountbaseplugin/constants.h>
 
 #include <QMessageBox>
-
+enum { WarnDebugMessage = true };
 static inline Core::IUser *user() { return Core::ICore::instance()->user(); }
 static inline Core::IPatient *patient() { return Core::ICore::instance()->patient(); }
 
@@ -79,7 +79,8 @@ void PreferedReceipts::insertPreferedValuesIntoAccount(){
     	QHash <int,QVariant> hashOfPrefValues = receiptsIO.getListOfPreferedValues(userUuid,typeOfChoice); 
     	preferedAct = hashOfPrefValues.value(Constants::ACCOUNT_MEDICALPROCEDURE_TEXT).toString();
         double preferedValue = hashOfPrefValues.value(Constants::ACCOUNT_CHEQUEAMOUNT+typeOfChoice-1).toDouble();
-        qDebug() << __FILE__ << QString::number(__LINE__) << " preferedValue =" << QString::number(preferedValue) ;
+        if (WarnDebugMessage)
+    	      qDebug() << __FILE__ << QString::number(__LINE__) << " preferedValue =" << QString::number(preferedValue) ;
         QVariant debtor = m_choiceAndDebtorHash.value(typeOfChoice);
         if (preferedValue == -1.13)//means does not exists
         {
@@ -128,7 +129,8 @@ void PreferedReceipts::showChoiceDialog(){
     	  	int TYPE = choice->TYPE_OF_CHOICE;
     	  	int PERCENTAGE = choice->PERCENTAGE;
     	  	int DEBTOR = choice->DEBTOR;
-    	  	qDebug() << __FILE__ << QString::number(__LINE__) << " TYPE =" <<  QString::number(TYPE);
+    	  	if (WarnDebugMessage)
+    	      qDebug() << __FILE__ << QString::number(__LINE__) << " TYPE =" <<  QString::number(TYPE);
     	  	int typeOfChoice = model->data(model->index(i,TYPE),Qt::DisplayRole).toInt();
     	  	double percentage = model->data(model->index(i,PERCENTAGE),Qt::DisplayRole).toDouble();
     	  	QVariant debtor = model->data(model->index(i,DEBTOR),Qt::DisplayRole);

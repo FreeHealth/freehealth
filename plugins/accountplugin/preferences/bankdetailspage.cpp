@@ -45,7 +45,7 @@
 #include <coreplugin/itheme.h>
 #include <coreplugin/iuser.h>
 #include <coreplugin/constants_icons.h>
-
+enum { WarnDebugMessage = true };
 using namespace Account;
 using namespace Constants;
 using namespace Account::Internal;
@@ -79,7 +79,8 @@ void BankDetailsPage::resetToDefaults()
 }
 
 void BankDetailsPage::applyChanges()
-{qDebug() << __FILE__ << QString::number(__LINE__) << " applyChanges ";
+{if (WarnDebugMessage)
+    	      qDebug() << __FILE__ << QString::number(__LINE__) << " applyChanges ";
     if (!m_Widget) {
         return;
     }

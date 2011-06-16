@@ -38,7 +38,7 @@
 
 #include <QMessageBox>
 #include <QDebug>
-
+enum { WarnDebugMessage = true };
 using namespace AccountDB;
 using namespace Constants;
 
@@ -179,7 +179,8 @@ void AssetsViewer::deleteAsset(){
     AssetsIO  assetIO(this) ;
     int idMovement = assetIO.getMovementId(row);
     int idBank = assetIO.getIdFromBankName(bankName);
-    qDebug() << __FILE__ << QString::number(__LINE__) << " idMovement =" << QString::number(idMovement) ;
+    if (WarnDebugMessage)
+        qDebug() << __FILE__ << QString::number(__LINE__) << " idMovement =" << QString::number(idMovement) ;
     if (!assetIO.deleteAsset(row))
     {
     	QMessageBox::warning(0,trUtf8("Error"),trUtf8("Asset is not deleted."),QMessageBox::Ok);
@@ -216,11 +217,13 @@ void AssetsViewer::yearDateChanged(const QDate & year){
     AssetsManager manager;
     QStandardItemModel *model = new QStandardItemModel(this); 
     model = manager.getYearlyValues(year);
-    qDebug() << __FILE__ << QString::number(__LINE__)<< "model in viewer = "<< model->rowCount();
+    if (WarnDebugMessage)
+        qDebug() << __FILE__ << QString::number(__LINE__)<< "model in viewer = "<< model->rowCount();
     for (int i = 0; i < model->rowCount(); i += 1)
     {
     	double yearlyValue = model->data(model->index(i,YEARLY_VALUE),Qt::DisplayRole).toDouble();
-    	qDebug() << __FILE__ << QString::number(__LINE__) << " yearlyValue =" << QString::number(yearlyValue) ;
+    	if (WarnDebugMessage)
+        qDebug() << __FILE__ << QString::number(__LINE__) << " yearlyValue =" << QString::number(yearlyValue) ;
     	sumOfYearlyValues += yearlyValue;
         }
     QString textLabel = "Total value to declare for "+yearString+" = "+QString::number(sumOfYearlyValues);

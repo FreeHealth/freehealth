@@ -35,7 +35,7 @@
 #include "receiptsIO.h"
 #include "ui_ChoiceDialog.h"
 #include <QDebug>
-
+enum { WarnDebugMessage = true };
 using namespace ReceiptsConstants;
 distance::distance(QWidget * parent):QDialog(parent),ui(new Ui::ChoiceDialog){
     ui->setupUi(this);
@@ -66,11 +66,13 @@ distance::distance(QWidget * parent):QDialog(parent),ui(new Ui::ChoiceDialog){
 distance::~distance(){}
 
 double distance::getDistanceNumber(const QString & data){
-    qDebug() << __FILE__ << QString::number(__LINE__) << " data =" << data  ;
+    if (WarnDebugMessage)
+    	      qDebug() << __FILE__ << QString::number(__LINE__) << " data =" << data  ;
     receiptsEngine recIO;
     double dist = 0.00;
     double minDistance = recIO.getMinDistanceValue(data);
-    qDebug() << __FILE__ << QString::number(__LINE__) << " minDistance =" << QString::number(minDistance) ;
+    if (WarnDebugMessage)
+    	      qDebug() << __FILE__ << QString::number(__LINE__) << " minDistance =" << QString::number(minDistance) ;
     dist = ui->distanceDoubleSpinBox->value() - minDistance;
     return dist;
 }

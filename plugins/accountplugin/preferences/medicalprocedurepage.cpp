@@ -51,7 +51,7 @@
 #include <QCompleter>
 #include <QDir>
 #include <QTimer>
-
+enum { WarnDebugMessage = true };
 using namespace Account;
 using namespace Account::Internal;
 using namespace Trans::ConstantTranslations;
@@ -86,7 +86,8 @@ void MedicalProcedurePage::resetToDefaults()
 }
 
 void MedicalProcedurePage::applyChanges()
-{qDebug() << __FILE__ << QString::number(__LINE__) << " applyChanges ";
+{if (WarnDebugMessage)
+    	      qDebug() << __FILE__ << QString::number(__LINE__) << " applyChanges ";
     if (!m_Widget) {
         return;
     }
@@ -224,25 +225,29 @@ void MedicalProcedureWidget::on_mpComboBox_currentIndexChanged(const QString & t
     		  amountSpin->setValue(q.value(WN_AMOUNT).toDouble());
     		  rateSpin->setValue(q.value(WN_REIMBOURSEMENT).toDouble());
     		  dateEdit->setDate(q.value(WN_DATE).toDate());
-    		  qDebug() << __FILE__ << QString::number(__LINE__) << " index =" << QString::number(row) ;
+    		  if (WarnDebugMessage)
+    	      qDebug() << __FILE__ << QString::number(__LINE__) << " index =" << QString::number(row) ;
     	    }
     	++row;
         }
     
     //m_Mapper->setCurrentIndex(m_index);
     
-    qDebug() << __FILE__ << QString::number(__LINE__) << "index   =" << QString::number(m_index)  ;
+    if (WarnDebugMessage)
+    	      qDebug() << __FILE__ << QString::number(__LINE__) << "index   =" << QString::number(m_index)  ;
     
 }
 
 void MedicalProcedureWidget::on_addButton_clicked()//todo
 {
     MedicalProcedureModel *modelMP = new MedicalProcedureModel(this);
-    qDebug() << __FILE__ << QString::number(__LINE__) << " rowCount1 =" << QString::number(modelMP->rowCount());
+    if (WarnDebugMessage)
+    	      qDebug() << __FILE__ << QString::number(__LINE__) << " rowCount1 =" << QString::number(modelMP->rowCount());
     int numberOfRows = modelMP->rowCount();
     if (!modelMP->insertRow(numberOfRows,QModelIndex()))
         LOG_ERROR("Unable to add row");
-    qDebug() << __FILE__ << QString::number(__LINE__) << " rowCount2 =" << QString::number(modelMP->rowCount());
+    if (WarnDebugMessage)
+    	      qDebug() << __FILE__ << QString::number(__LINE__) << " rowCount2 =" << QString::number(modelMP->rowCount());
     		  name->setText("");
     		  abstractEdit->setText("");
     		  type->setText("");
@@ -375,7 +380,8 @@ void  MedicalProcedureWidget::fillMPCombo(){
     while (q.next())
     {
     	QString str = q.value(0).toString();
-    	//qDebug() << __FILE__ << QString::number(__LINE__) << " strItem =" << str ;
+    	if (WarnDebugMessage)
+    	      qDebug() << __FILE__ << QString::number(__LINE__) << " strItem =" << str ;
     	list << str;
         }
     mpComboBox->clear();
@@ -437,37 +443,46 @@ void MedicalProcedureWidget::save(){
             QVariant date =   dateEdit->date();
             bool test = true;
             int numberOfRows = modelMP->rowCount() -1 ;
-            qDebug() << __FILE__ << QString::number(__LINE__) << " numberOfRows =" << QString::number(numberOfRows) ;
+            if (WarnDebugMessage)
+    	      qDebug() << __FILE__ << QString::number(__LINE__) << " numberOfRows =" << QString::number(numberOfRows) ;
             if (!modelMP->setData(modelMP->index(numberOfRows,MP_USER_UID),owner,Qt::EditRole))
-            {qDebug() << __FILE__ << QString::number(__LINE__)  << "a" ;
+            {if (WarnDebugMessage)
+    	      qDebug() << __FILE__ << QString::number(__LINE__)  << "a" ;
     	        test = false;
                 }
             if (!modelMP->setData(modelMP->index(numberOfRows,MP_INSURANCE_UID),insuranceUid,Qt::EditRole))
-            {qDebug() << __FILE__ << QString::number(__LINE__)  << "a" ;
+            {if (WarnDebugMessage)
+    	      qDebug() << __FILE__ << QString::number(__LINE__)  << "a" ;
     	        test = false;
                 }
             if (!modelMP->setData(modelMP->index(numberOfRows,MP_NAME),nameStr,Qt::EditRole))
-                {qDebug() << __FILE__ << QString::number(__LINE__) << "b"  ;
+                {if (WarnDebugMessage)
+    	      qDebug() << __FILE__ << QString::number(__LINE__) << "b"  ;
     	        test = false;
                 }
             if (!modelMP->setData(modelMP->index(numberOfRows,MP_ABSTRACT),abstract,Qt::EditRole))
-                {qDebug() << __FILE__ << QString::number(__LINE__)  << "c" ;
+                {if (WarnDebugMessage)
+    	      qDebug() << __FILE__ << QString::number(__LINE__)  << "c" ;
     	        test = false;
                 }
             if (!modelMP->setData(modelMP->index(numberOfRows,MP_TYPE),typeStr,Qt::EditRole))
-                {qDebug() << __FILE__ << QString::number(__LINE__)  << "d" ;
+                {if (WarnDebugMessage)
+    	      qDebug() << __FILE__ << QString::number(__LINE__)  << "d" ;
     	        test = false;
                 }
              if (!modelMP->setData(modelMP->index(numberOfRows,MP_AMOUNT),amount,Qt::EditRole))
-                {qDebug() << __FILE__ << QString::number(__LINE__)  << "e" ;
+                {if (WarnDebugMessage)
+    	      qDebug() << __FILE__ << QString::number(__LINE__)  << "e" ;
     	         test = false;
                 }
              if (!modelMP->setData(modelMP->index(numberOfRows,MP_REIMBOURSEMENT),rate,Qt::EditRole))
-                {qDebug() << __FILE__ << QString::number(__LINE__) << "f"  ;
+                {if (WarnDebugMessage)
+    	      qDebug() << __FILE__ << QString::number(__LINE__) << "f"  ;
     	         test = false;
                 }
              if (!modelMP->setData(modelMP->index(numberOfRows,MP_DATE),date,Qt::EditRole))
-                {qDebug() << __FILE__ << QString::number(__LINE__) << "g"  ;
+                {if (WarnDebugMessage)
+    	      qDebug() << __FILE__ << QString::number(__LINE__) << "g"  ;
     	         test = false;
                 }
              if (!modelMP->submit())
@@ -476,7 +491,8 @@ void MedicalProcedureWidget::save(){
              	  test = false;
                  }
              if (test == false)
-                {qDebug() << __FILE__ << QString::number(__LINE__)   ;
+                {if (WarnDebugMessage)
+    	      qDebug() << __FILE__ << QString::number(__LINE__)   ;
     	         QMessageBox::warning(0,trUtf8("Warning"),trUtf8("Error inserting datas ")
     	      	  +modelMP->lastError().text(),QMessageBox::Ok);
                 }
@@ -537,7 +553,8 @@ QHash<int,QString> MedicalProcedureWidget::fillHashOfInsurances(){
 //        if (filesOfDir.contains(defaultString))
 //        {
 //        	  fileName = dir.absolutePath() + QDir::separator() +filesOfDir;
-//        	  qDebug() << __FILE__ << QString::number(__LINE__) << " fileName =" << fileName ;
+//        	  if (WarnDebugMessage)
+//    	      qDebug() << __FILE__ << QString::number(__LINE__) << " fileName =" << fileName ;
 //            }
 //        }
 //    QFile file(fileName);
@@ -561,7 +578,8 @@ QHash<int,QString> MedicalProcedureWidget::fillHashOfInsurances(){
 //    QApplication::setOverrideCursor(Qt::WaitCursor);
 //    QStandardItemModel *model = new QStandardItemModel;
 //    QString csvFileName = getCsvDefaultFile();
-//    qDebug() << __FILE__ << QString::number(__LINE__) << " csvFileName =" << csvFileName ;
+//    if (WarnDebugMessage)
+//    	      qDebug() << __FILE__ << QString::number(__LINE__) << " csvFileName =" << csvFileName ;
 //    QFile file(getCsvDefaultFile());
 //    // some validity checking
 //    if (!file.exists()) {
@@ -601,7 +619,8 @@ QHash<int,QString> MedicalProcedureWidget::fillHashOfInsurances(){
 //            for (int i = 0; i < AccountDB::Constants::MP_MaxParam ; i += 1){
 //                //model->setData(model->index(row,i),listOfItems[i],Qt::EditRole);
 //        	QStandardItem * item = new QStandardItem;
-//        	//qDebug() << __FILE__ << QString::number(__LINE__) << " listOfItems[i] =" << listOfItems[i] ;
+//        	//if (WarnDebugMessage)
+//    	      qDebug() << __FILE__ << QString::number(__LINE__) << " listOfItems[i] =" << listOfItems[i] ;
 //        	QString itemOfList = listOfItems[i];
 //        	itemOfList.remove("\"");
 //        	item->setData(itemOfList);
@@ -609,7 +628,8 @@ QHash<int,QString> MedicalProcedureWidget::fillHashOfInsurances(){
 //        	}
 //            model->appendRow(listOfItemsData);
 //            ++row;
-//            //qDebug() << __FILE__ << QString::number(__LINE__) << " row =" << QString::number(row) ;
+//            //if (WarnDebugMessage)
+//    	      qDebug() << __FILE__ << QString::number(__LINE__) << " row =" << QString::number(row) ;
 //            }
 //    }
 
@@ -621,11 +641,13 @@ QHash<int,QString> MedicalProcedureWidget::fillHashOfInsurances(){
 //    bool test = false;
 //    QStandardItemModel * model = MedicalProcedureModelByLocale();
 //    int availModelRows = model->rowCount();
-//    qDebug() << __FILE__ << QString::number(__LINE__) << " availModelRows = " << QString::number(availModelRows) ;
+//    if (WarnDebugMessage)
+//    	      qDebug() << __FILE__ << QString::number(__LINE__) << " availModelRows = " << QString::number(availModelRows) ;
 //    QString strList;
 //    for (int i = 0; i < availModelRows; i += 1){
 //        m_progressDialog->setValue(i);
-//        //qDebug() << __FILE__ << QString::number(__LINE__) << " i =" << QString::number(i) ;
+//        //if (WarnDebugMessage)
+//    	      qDebug() << __FILE__ << QString::number(__LINE__) << " i =" << QString::number(i) ;
 //        if (!modelMP->insertRows(modelMP->rowCount(),1,QModelIndex())) {
 //            qWarning() << __FILE__ << QString::number(__LINE__) << QString::number(modelMP->rowCount()) ;
 //            /*QMessageBox::warning(0,trUtf8("Warning"),trUtf8("Unable to insert row \n")
@@ -641,8 +663,10 @@ QHash<int,QString> MedicalProcedureWidget::fillHashOfInsurances(){
 //                value = QVariant::fromValue(strValue);
 //            }
 //            strValues += value.toString()+" ";
-//            //qDebug() << __FILE__ << QString::number(__LINE__) << " value =" << value ;
-//            //qDebug() << __FILE__ << QString::number(__LINE__) << "modelMP->rowCount() =" << QString::number(modelMP->rowCount()) ;
+//            //if (WarnDebugMessage)
+//    	      qDebug() << __FILE__ << QString::number(__LINE__) << " value =" << value ;
+//            //if (WarnDebugMessage)
+//                  qDebug() << __FILE__ << QString::number(__LINE__) << "modelMP->rowCount() =" << QString::number(modelMP->rowCount()) ;
 //            if (!modelMP->setData(modelMP->index(modelMP->rowCount()-1,j),value,Qt::EditRole)) {
 //                qWarning() << __FILE__ << QString::number(__LINE__) << "data not inserted !" ;
 //            }
@@ -653,7 +677,8 @@ QHash<int,QString> MedicalProcedureWidget::fillHashOfInsurances(){
 //    m_progressDialog->setValue(numberOfLinesForProgressBar());
 
 //    //m_progressDialog->close();
-//    //qDebug() << __FILE__ << QString::number(__LINE__) << " values = \n" << strList;
+//    //if (WarnDebugMessage)
+//    	      qDebug() << __FILE__ << QString::number(__LINE__) << " values = \n" << strList;
 //    QApplication::restoreOverrideCursor();
 //    return test;
 //}
@@ -662,14 +687,17 @@ QHash<int,QString> MedicalProcedureWidget::fillHashOfInsurances(){
 //{
 //    QString filePathAndName = getCsvDefaultFile();
 //    QString fileName = filePathAndName.split(QDir::separator()).last();
-//    qDebug() << __FILE__ << QString::number(__LINE__) << " fileName =" << fileName ;
+//    if (WarnDebugMessage)
+//    	      qDebug() << __FILE__ << QString::number(__LINE__) << " fileName =" << fileName ;
 //    fileName.remove("_"+QLocale().name());
 //    fileName.remove(".csv");
 //    QStringList listFromFileName = fileName.split("_");
 //    QString numberOfLines = listFromFileName.last();
-//    qDebug() << __FILE__ << QString::number(__LINE__) << " numberOfLines =" << numberOfLines ;
+//    if (WarnDebugMessage)
+//    	      qDebug() << __FILE__ << QString::number(__LINE__) << " numberOfLines =" << numberOfLines ;
 //    int max = numberOfLines.toInt();
-//    qDebug() << __FILE__ << QString::number(__LINE__) << " max =" << QString::number(max) ;
+//    if (WarnDebugMessage)
+//    	      qDebug() << __FILE__ << QString::number(__LINE__) << " max =" << QString::number(max) ;
 //    return max;
 //}
 

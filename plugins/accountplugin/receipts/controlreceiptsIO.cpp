@@ -31,9 +31,9 @@
  ***************************************************************************/
 #include "controlreceiptsIO.h"
 #include "ui_controlreceipts.h"
-
 #include <QMessageBox>
 #include <QDebug>
+enum { WarnDebugMessage = true };
 using namespace AccountDB;
 using namespace Constants;
 ControlReceipts::ControlReceipts(QWidget * parent):QWidget(parent),ui(new Ui::ControlReceiptsWidget){
@@ -48,7 +48,8 @@ ControlReceipts::ControlReceipts(QWidget * parent):QWidget(parent),ui(new Ui::Co
     {
     	  qWarning() << __FILE__ << QString::number(__LINE__) << "Unable to set header data" ;
         }
-    qDebug() << __FILE__ << QString::number(__LINE__) << " headerData =" << m_accountModel->headerData(ACCOUNT_PATIENT_NAME,Qt::Horizontal, Qt::DisplayRole).toString() ;
+    if (WarnDebugMessage)
+    	      qDebug() << __FILE__ << QString::number(__LINE__) << " headerData =" << m_accountModel->headerData(ACCOUNT_PATIENT_NAME,Qt::Horizontal, Qt::DisplayRole).toString() ;
     m_accountModel->setHeaderData(ACCOUNT_DATE,Qt::Horizontal ,trUtf8("Date") , Qt::EditRole);
     m_accountModel->setHeaderData(ACCOUNT_MEDICALPROCEDURE_TEXT,Qt::Horizontal ,trUtf8("Acts") , Qt::EditRole);
     m_accountModel->setHeaderData(ACCOUNT_COMMENT,Qt::Horizontal ,trUtf8("Comment") , Qt::EditRole);
@@ -111,8 +112,10 @@ void ControlReceipts::search(){
     filter += QString("%1 NOT LIKE '%2' AND ").arg(field,"0.0");
     filter += QString("DATE BETWEEN '%1' AND '%2'").arg(dateBeginStr,dateEndStr);
     m_accountModel->setFilter(filter);
-    qDebug() << __FILE__ << QString::number(__LINE__) << " filter =" << m_accountModel->filter() ;
-    qDebug() << __FILE__ << QString::number(__LINE__) << " rowCount =" << QString::number(m_accountModel->rowCount()) ;
+    if (WarnDebugMessage)
+    	      qDebug() << __FILE__ << QString::number(__LINE__) << " filter =" << m_accountModel->filter() ;
+    if (WarnDebugMessage)
+    	      qDebug() << __FILE__ << QString::number(__LINE__) << " rowCount =" << QString::number(m_accountModel->rowCount()) ;
     ui->tableView->setModel(m_accountModel);
     ui->tableView->setShowGrid(false);
     ui->tableView->setColumnHidden(ACCOUNT_ID,true);
@@ -146,7 +149,8 @@ void ControlReceipts::deleteLine(){
   QString textResult = textOfSums(m_accountModel);
   ui->resultLabel->setText(textResult);
   const QString filter = m_accountModel->filter();
-  qDebug() << __FILE__ << QString::number(__LINE__) << " filter =" << filter ;
+  if (WarnDebugMessage)
+    	      qDebug() << __FILE__ << QString::number(__LINE__) << " filter =" << filter ;
   refreshFilter(filter);
 }
 
@@ -160,7 +164,8 @@ QString ControlReceipts::textOfSums(AccountModel * model){
     double totalReceived = 0.00;
     double totals = 0.00;
    int modelRowCount = model->rowCount(QModelIndex());
-   qDebug() << __FILE__ << QString::number(__LINE__) << " modelRowCount = " << QString::number(modelRowCount);
+   if (WarnDebugMessage)
+    	      qDebug() << __FILE__ << QString::number(__LINE__) << " modelRowCount = " << QString::number(modelRowCount);
    for(int i = 0; i < modelRowCount ; i ++){
        QSqlRecord rowRecord = model->record(i);//ligne d'enregistrement
        cash  += rowRecord.value(ACCOUNT_CASHAMOUNT).toDouble();

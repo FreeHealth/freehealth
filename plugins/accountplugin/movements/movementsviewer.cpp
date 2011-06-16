@@ -41,7 +41,7 @@
 
 #include <QMessageBox>
 #include <QDebug>
-
+enum { WarnDebugMessage = true };
 /*********************/
 //todo bank system et deposit
 /********************/
@@ -151,7 +151,8 @@ void MovementsViewer::deleteMovement()
         QMessageBox::warning(0,trUtf8("Error"),trUtf8("You forgot to select a line."),QMessageBox::Ok);
     }
     int row = index.row(); 
-    qDebug() << __FILE__ << QString::number(__LINE__) << " row =" << QString::number(row) ;
+    if (WarnDebugMessage)
+    	      qDebug() << __FILE__ << QString::number(__LINE__) << " row =" << QString::number(row) ;
     MovementsIODb  mov(this) ;
     if (mov.containsFixAsset(row))
     {

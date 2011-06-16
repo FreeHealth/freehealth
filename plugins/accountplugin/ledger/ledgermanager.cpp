@@ -32,7 +32,7 @@
 #include "ledgermanager.h"
 #include <QDebug>
 
-	
+enum { WarnDebugMessage = true };
 LedgerManager::LedgerManager(QObject * parent):m_sums(0.00){}
 
 LedgerManager::~LedgerManager(){}
@@ -41,7 +41,8 @@ AccountModel * LedgerManager::getModelMonthlyReceiptsAnalysis(QObject * parent,Q
     LedgerIO lio(this);
     m_sums = 0.00;
     AccountModel * model = lio.getModelMonthlyReceiptsIO(parent,month,year);
-    //qDebug() << __FILE__ << QString::number(__LINE__) << "model->rowCount()  =" <<  QString::number(model->rowCount());
+    //if (WarnDebugMessage)
+    	      qDebug() << __FILE__ << QString::number(__LINE__) << "model->rowCount()  =" <<  QString::number(model->rowCount());
     for (int i = 0; i < model->rowCount(); i += 1)
     {
     	m_sums += model->data(model->index(i,ACCOUNT_CASHAMOUNT),Qt::DisplayRole).toDouble();
@@ -60,7 +61,8 @@ QStandardItemModel * LedgerManager::getModelMonthlyAndTypeReceiptsAnalysis(QObje
     m_sums = 0.00;
     LedgerIO lio(this);
     AccountModel * modelAccount = lio.getModelMonthlyReceiptsIO(parent,month,year);
-    qDebug() << __FILE__ << QString::number(__LINE__) << "modelAccount->rowCount()  =" << QString::number(modelAccount->rowCount()) ;
+    if (WarnDebugMessage)
+    	      qDebug() << __FILE__ << QString::number(__LINE__) << "modelAccount->rowCount()  =" << QString::number(modelAccount->rowCount()) ;
     for (int i = 0; i < modelAccount->rowCount(); i += 1)
     {
     	m_sums += modelAccount->data(modelAccount->index(i,ACCOUNT_CASHAMOUNT),Qt::DisplayRole).toDouble();
@@ -71,13 +73,16 @@ QStandardItemModel * LedgerManager::getModelMonthlyAndTypeReceiptsAnalysis(QObje
     }
     QStringList listOfTypesByMonth;
     listOfTypesByMonth = lio.getTypesByMonth(parent,month,year);
-    qDebug() << __FILE__ << QString::number(__LINE__) << " listOfTypesByMonth.size() =" << QString::number(listOfTypesByMonth.size()) ;
+    if (WarnDebugMessage)
+    	      qDebug() << __FILE__ << QString::number(__LINE__) << " listOfTypesByMonth.size() =" << QString::number(listOfTypesByMonth.size()) ;
     int listOfTypesSize = listOfTypesByMonth.size();
     for (int i = 0; i < listOfTypesSize; i += 1)
     {
     	int nbrOfRowByType = lio.getNbrOfRowsByTypeAndMonth(parent,month,year,listOfTypesByMonth[i]);
-    	qDebug() << __FILE__ << QString::number(__LINE__) << " nbrOfRowByType =" << QString::number(nbrOfRowByType) ;
-    	qDebug() << __FILE__ << QString::number(__LINE__) << "listOfTypesByMonth[i]  =" << listOfTypesByMonth[i] ;
+    	if (WarnDebugMessage)
+    	      qDebug() << __FILE__ << QString::number(__LINE__) << " nbrOfRowByType =" << QString::number(nbrOfRowByType) ;
+    	if (WarnDebugMessage)
+    	      qDebug() << __FILE__ << QString::number(__LINE__) << "listOfTypesByMonth[i]  =" << listOfTypesByMonth[i] ;
     	QStandardItem * itemRows = new QStandardItem(QString::number(nbrOfRowByType));
     	QStandardItem * itemTypes = new QStandardItem(listOfTypesByMonth[i]);
         QList<QStandardItem*> list;
@@ -85,7 +90,8 @@ QStandardItemModel * LedgerManager::getModelMonthlyAndTypeReceiptsAnalysis(QObje
         model->appendRow(list);
     }
     delete modelAccount;
-    qDebug() << __FILE__ << QString::number(__LINE__) << " model->rowCount() =" << QString::number(model->rowCount()) ;
+    if (WarnDebugMessage)
+    	      qDebug() << __FILE__ << QString::number(__LINE__) << " model->rowCount() =" << QString::number(model->rowCount()) ;
     return model;//type,number
 }
 
@@ -113,7 +119,8 @@ MovementModel * LedgerManager::getModelMonthlyMovementsAnalysis(QObject * parent
     LedgerIO lio(this);
     MovementModel * model = lio.getModelMonthlyMovementsIO(parent,month,year);
     m_sums = lio.getMovementSum(parent,month,year);
-    qDebug() << __FILE__ << QString::number(__LINE__) << " m_sums =" << QString::number(m_sums) ;
+    if (WarnDebugMessage)
+    	      qDebug() << __FILE__ << QString::number(__LINE__) << " m_sums =" << QString::number(m_sums) ;
     return model;
 }
 
@@ -128,7 +135,8 @@ QStandardItemModel * LedgerManager::getModelMonthlyAndTypeMovementAnalysis(QObje
     {
     	m_sums += model->data(model->index(i,MOVEMENT_VALUE),Qt::DisplayRole).toDouble();
     }
-    qDebug() << __FILE__ << QString::number(__LINE__) << " m_sums =" << QString::number(m_sums) ;
+    if (WarnDebugMessage)
+    	      qDebug() << __FILE__ << QString::number(__LINE__) << " m_sums =" << QString::number(m_sums) ;
     return  model;
 }
 
@@ -141,7 +149,8 @@ QStandardItemModel * LedgerManager::getModelYearlyAndTypeMovementAnalysis(QObjec
     {
     	m_sums += model->data(model->index(i,MOVEMENT_VALUE),Qt::DisplayRole).toDouble();
     }
-    qDebug() << __FILE__ << QString::number(__LINE__) << " m_sums =" << QString::number(m_sums) ;
+    if (WarnDebugMessage)
+    	      qDebug() << __FILE__ << QString::number(__LINE__) << " m_sums =" << QString::number(m_sums) ;
     return model;
 }
 

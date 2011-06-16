@@ -50,9 +50,7 @@
 #include <QIODevice>
 #include <QRegExp>
 #include <QLocale>
-
-
-
+enum { WarnDebugMessage = true };
 
 using namespace Account;
 using namespace Account::Internal;
@@ -87,7 +85,8 @@ void SitesPage::resetToDefaults()
 }
 
 void SitesPage::applyChanges()
-{qDebug() << __FILE__ << QString::number(__LINE__) << " applyChanges ";
+{if (WarnDebugMessage)
+    	      qDebug() << __FILE__ << QString::number(__LINE__) << " applyChanges ";
     if (!m_Widget) {
         return;
     }
@@ -187,7 +186,8 @@ void SitesWidget::fillHugeWidgets(){
     QLocale local;
     QString localCountry;
     localCountry = QLocale::countryToString(local.country());
-    qDebug() << __FILE__ << QString::number(__LINE__) << " country =" << localCountry ;
+    if (WarnDebugMessage)
+    	      qDebug() << __FILE__ << QString::number(__LINE__) << " country =" << localCountry ;
     QStringList listForCountry;
     listForCountry = listOfCountries();
     listForCountry.sort();
@@ -200,19 +200,22 @@ void SitesWidget::fillHugeWidgets(){
 
 void SitesWidget::setDatasToUi()
 {
-    qDebug() << __FILE__ << QString::number(__LINE__) << "index row  =" << QString::number(wpComboBox->currentIndex());
+    if (WarnDebugMessage)
+    	      qDebug() << __FILE__ << QString::number(__LINE__) << "index row  =" << QString::number(wpComboBox->currentIndex());
     m_Mapper->setCurrentIndex(wpComboBox->currentIndex());
 }
 
 void SitesWidget::saveModel()
 {
-    qDebug() << __FILE__ << QString::number(__LINE__) << " currentIndex =" << QString::number(m_Mapper->currentIndex());
+    if (WarnDebugMessage)
+    	      qDebug() << __FILE__ << QString::number(__LINE__) << " currentIndex =" << QString::number(m_Mapper->currentIndex());
     if (m_Model->isDirty()) {
         bool yes = Utils::yesNoMessageBox(tr("Save changes ?"),
                                           tr("You make changes into the sites table.\n"
                                              "Do you want to save them ?"));
         if (yes) {
-           if (!m_Model->submit()) {qDebug() << __FILE__ << QString::number(__LINE__) << " sites submit ";
+           if (!m_Model->submit()) {if (WarnDebugMessage)
+    	      qDebug() << __FILE__ << QString::number(__LINE__) << " sites submit ";
                 LOG_ERROR(tkTr(Trans::Constants::UNABLE_TO_SAVE_DATA_IN_DATABASE_1).
                                                    arg(tr("sites")));
             }
@@ -221,7 +224,8 @@ void SitesWidget::saveModel()
             m_Model->revert();
         }
     }
-    qDebug() << __FILE__ << QString::number(__LINE__) << " site error =" << m_Model->lastError().text();
+    if (WarnDebugMessage)
+    	      qDebug() << __FILE__ << QString::number(__LINE__) << " site error =" << m_Model->lastError().text();
 }
 
 void SitesWidget::on_wpComboBox_currentIndexChanged(int index)
@@ -233,15 +237,19 @@ void SitesWidget::on_wpComboBox_currentIndexChanged(int index)
 
 void SitesWidget::on_addButton_clicked()
 {
-    //qDebug() << __FILE__ << QString::number(__LINE__) << " rowCount1 =" << QString::number(m_Model->rowCount());
+    //if (WarnDebugMessage)
+    	      qDebug() << __FILE__ << QString::number(__LINE__) << " rowCount1 =" << QString::number(m_Model->rowCount());
     if (!m_Model->insertRow(m_Model->rowCount()))
         LOG_ERROR("Unable to add row");
-    //qDebug() << __FILE__ << QString::number(__LINE__) << " rowCount2 =" << QString::number(m_Model->rowCount());
+    //if (WarnDebugMessage)
+    	      qDebug() << __FILE__ << QString::number(__LINE__) << " rowCount2 =" << QString::number(m_Model->rowCount());
     wpComboBox->setCurrentIndex(m_Model->rowCount()-1);
     m_siteUidLabel->setValue(calcSitesUid());
     m_siteUidLabel->setFocus();
-    //qDebug() << __FILE__ << QString::number(__LINE__) << " m_siteUidLabel =" << m_siteUidLabel->text();
-    //qDebug() << __FILE__ << QString::number(__LINE__) << " currentIndex =" << QString::number(m_Mapper->currentIndex());
+    //if (WarnDebugMessage)
+    	      qDebug() << __FILE__ << QString::number(__LINE__) << " m_siteUidLabel =" << m_siteUidLabel->text();
+    //if (WarnDebugMessage)
+    	      qDebug() << __FILE__ << QString::number(__LINE__) << " currentIndex =" << QString::number(m_Mapper->currentIndex());
 }
 
 void SitesWidget::on_deleteButton_clicked()
@@ -308,7 +316,8 @@ QHash<QString,QString> SitesWidget::parseZipcodeCsv(){
     QFile zipcodeFile(zipcodeStr);
     if(!zipcodeFile.open(QIODevice::ReadOnly|QIODevice::Text)){
         qWarning() << __FILE__ << QString::number(__LINE__) << "zipcode cannot open !" ;
-        qDebug() << __FILE__ << QString::number(__LINE__) << " zipcodeFile =" << zipcodeStr ;
+        if (WarnDebugMessage)
+    	      qDebug() << __FILE__ << QString::number(__LINE__) << " zipcodeFile =" << zipcodeStr ;
        }
     QTextStream stream(&zipcodeFile);
     while (!stream.atEnd())
@@ -322,11 +331,13 @@ QHash<QString,QString> SitesWidget::parseZipcodeCsv(){
     	QString city = line.replace(QRegExp("[0-9]"),"").replace(",","").trimmed();
         QString zip = line2.replace(QRegExp("[^0123456789]"),"").trimmed();
 
-    	   // qDebug() << __FILE__ << QString::number(__LINE__) << " zip city  =" << zip+","+city;
+    	   // if (WarnDebugMessage)
+    	      qDebug() << __FILE__ << QString::number(__LINE__) << " zip city  =" << zip+","+city;
     	    hash.insertMulti(zip,city);//zipcode,city
 
         }
-        qDebug() << __FILE__ << QString::number(__LINE__) << " hash size =" << hash.size();
+        if (WarnDebugMessage)
+    	      qDebug() << __FILE__ << QString::number(__LINE__) << " hash size =" << hash.size();
     return hash;
 }
 
@@ -337,13 +348,15 @@ QStringList SitesWidget::listOfCountries()
     QFile file(countryFileStr);
     if (!file.open(QIODevice::ReadOnly|QIODevice::Text)) {
         qWarning() << __FILE__ << QString::number(__LINE__) << "pays.txt cannot open !" ;
-        qDebug() << __FILE__ << QString::number(__LINE__) << " pays.txt =" << countryFileStr ;
+        if (WarnDebugMessage)
+    	      qDebug() << __FILE__ << QString::number(__LINE__) << " pays.txt =" << countryFileStr ;
     }
     QTextStream stream(&file);
     while (!stream.atEnd())
     {
     	QString line = stream.readLine().trimmed();
-    	//qDebug() << __FILE__ << QString::number(__LINE__) << " country =" << line;
+    	//if (WarnDebugMessage)
+    	      qDebug() << __FILE__ << QString::number(__LINE__) << " country =" << line;
         if (!line.isEmpty()) {
             list << line;
         }
@@ -358,8 +371,10 @@ int SitesWidget::calcSitesUid()
     	  qWarning() << __FILE__ << QString::number(__LINE__) << "index is not valid" ;
         }
     int siteUidBefore = m_Model->data(index,Qt::DisplayRole).toInt();
-    qDebug() << __FILE__ << QString::number(__LINE__) << " siteUidBefore =" << QString::number(siteUidBefore) ;
+    if (WarnDebugMessage)
+    	      qDebug() << __FILE__ << QString::number(__LINE__) << " siteUidBefore =" << QString::number(siteUidBefore) ;
     int siteUid =  siteUidBefore + 1;
-    qDebug() << __FILE__ << QString::number(__LINE__) << " siteUid =" << QString::number(siteUid);
+    if (WarnDebugMessage)
+    	      qDebug() << __FILE__ << QString::number(__LINE__) << " siteUid =" << QString::number(siteUid);
     return siteUid;
 }

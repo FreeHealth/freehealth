@@ -36,7 +36,7 @@
 #include <QDebug>
 #include <QRect>
 #include <QMessageBox>
-
+enum { WarnDebugMessage = true };
 LedgerViewer::LedgerViewer(QWidget * parent): QWidget(parent),ui(new Ui::LedgerViewerWidget){
     ui->setupUi(this);
     m_currency = "euro";
@@ -159,7 +159,8 @@ void LedgerViewer::monthlyReceiptsAnalysis(){
     ui->sumLabel->setText(labelText);
 }
 void LedgerViewer::monthlyAndTypeReceiptsAnalysis(){
-    qDebug() << __FILE__ << QString::number(__LINE__) << " in monthlyAndTypeReceiptsAnalysis " ;
+    if (WarnDebugMessage)
+    	      qDebug() << __FILE__ << QString::number(__LINE__) << " in monthlyAndTypeReceiptsAnalysis " ;
     m_actionText = m_monthlyAndTypeReceiptsAnalysis->text();
     QString month = ui->monthsComboBox->currentText();
     QString year = ui->yearsComboBox->currentText();
@@ -243,8 +244,10 @@ void LedgerViewer::resizeEvent(QResizeEvent *event){
 
 void LedgerViewer::monthsComboBoxcurrentIndexChanged(const QString& month){
     Q_UNUSED(month);
-    qDebug() << __FILE__ << QString::number(__LINE__) << " in monthsComboBoxcurrentIndexChanged , month = "+month  ;
-    qDebug() << __FILE__ << QString::number(__LINE__) << " m_actionText =" << m_actionText ;
+    if (WarnDebugMessage)
+    	      qDebug() << __FILE__ << QString::number(__LINE__) << " in monthsComboBoxcurrentIndexChanged , month = "+month  ;
+    if (WarnDebugMessage)
+    	      qDebug() << __FILE__ << QString::number(__LINE__) << " m_actionText =" << m_actionText ;
     if (m_actionText.isEmpty())
     {
     	  QMessageBox::warning(0,trUtf8("Warning"),trUtf8("Choose an action."),QMessageBox::Ok);

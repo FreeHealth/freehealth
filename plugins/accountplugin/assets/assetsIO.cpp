@@ -44,7 +44,7 @@
 #include <QDebug>
 #include <QMessageBox>
 #include <QDate>
-
+enum { WarnDebugMessage = true };
 using namespace AccountDB;
 using namespace Constants;
 
@@ -77,16 +77,14 @@ bool AssetsIO::insertIntoAssets(const QHash<int,QVariant> &hashValues)
     if (WarnDebugMessage)
         qDebug() << __FILE__ << QString::number(__LINE__) << " rowBefore = " << QString::number(rowBefore);
     if (m_assetModel->insertRows(rowBefore,1,QModelIndex())) {
-        if (WarnDebugMessage)
-            qWarning() << __FILE__ << QString::number(__LINE__) << "Row inserted !" ;
+             qWarning() << __FILE__ << QString::number(__LINE__) << "Row inserted !" ;
     }
     QVariant data;
     for(int i = 1 ; i < ASSETS_MaxParam ; i ++){
         data = hashValues.value(i);
         //qDebug() << __FILE__ << QString::number(__LINE__) << " data + i =" << data.toString()+" "+QString::number(i);
         if (!m_assetModel-> setData(m_assetModel->index(rowBefore,i), data ,Qt::EditRole)) {
-            if (WarnDebugMessage)
-                        qWarning() << __FILE__ << QString::number(__LINE__) << " asset model error = " << m_assetModel->lastError().text() ;
+             qWarning() << __FILE__ << QString::number(__LINE__) << " asset model error = " << m_assetModel->lastError().text() ;
         }
     }
     m_assetModel->submit();
@@ -110,8 +108,7 @@ bool AssetsIO::insertIntoMovements(const QHash<int,QVariant> &hashValues)
     if (WarnDebugMessage)
         qDebug() << __FILE__ << QString::number(__LINE__) << " rowBefore = " << QString::number(rowBefore);
     if (modelMovements.insertRows(rowBefore,1,QModelIndex())) {
-        if (WarnDebugMessage)
-                qWarning() << __FILE__ << QString::number(__LINE__) << "Row inserted !" ;
+         qWarning() << __FILE__ << QString::number(__LINE__) << "Row inserted !" ;
     }
     QVariant data;
     for(int i = 1 ; i < MOV_MaxParam ; i ++) {
@@ -133,9 +130,8 @@ bool AssetsIO::insertIntoMovements(const QHash<int,QVariant> &hashValues)
             }
         //qDebug() << __FILE__ << QString::number(__LINE__) << " data + i =" << data.toString()+" "+QString::number(i);
         if (!modelMovements. setData(modelMovements.index(rowBefore,i), data ,Qt::EditRole)) {
-            if (WarnDebugMessage){
             qWarning() << __FILE__ << QString::number(__LINE__) << " model account error = "
-                    << modelMovements.lastError().text() ;}
+                    << modelMovements.lastError().text() ;
         }
     }
     modelMovements.submit();
@@ -154,8 +150,7 @@ bool AssetsIO::insertIntoMovements(const QHash<int,QVariant> &hashValues)
     	  
         }
     if (!debitOrCreditInBankBalance(bank,value)){
-            if (WarnDebugMessage)
-    	  	  qWarning() << __FILE__ << QString::number(__LINE__) << "Unable to debit or credit balance !" ;
+           qWarning() << __FILE__ << QString::number(__LINE__) << "Unable to debit or credit balance !" ;
     	}
     return ret;
 }
@@ -184,13 +179,11 @@ bool AssetsIO::debitOrCreditInBankBalance(const QString &bank, double value){
     QDate date = QDate::currentDate();
     if (!model.setData(model.index(row,BANKDETAILS_BALANCE),newBalance,Qt::EditRole))
     {
-    	  if (WarnDebugMessage)
-    	      qWarning() << __FILE__ << QString::number(__LINE__) << "Unable to insert balance data !" ;
+    	  qWarning() << __FILE__ << QString::number(__LINE__) << "Unable to insert balance data !" ;
         }
     if (!model.setData(model.index(row,BANKDETAILS_BALANCEDATE),date,Qt::EditRole))
     {
-          if (WarnDebugMessage)
-    	      qWarning() << __FILE__ << QString::number(__LINE__) << "Unable to insert balance new date !" ;
+          qWarning() << __FILE__ << QString::number(__LINE__) << "Unable to insert balance new date !" ;
         }
     if (!model.submit())
     {
@@ -357,8 +350,7 @@ bool AssetsIO::deleteOneYearToRun(int row){
     yearsToRun--;
     if (!model.setData(model.index(row,ASSETS_YEARS),yearsToRun,Qt::EditRole))
         {
-    	    if (WarnDebugMessage)
-    	        qWarning() << __FILE__ << QString::number(__LINE__) << "Error = "+model.lastError().text() ;
+    	    qWarning() << __FILE__ << QString::number(__LINE__) << "Error = "+model.lastError().text() ;
             }
     if (!model.submit())
     {
@@ -403,8 +395,7 @@ double AssetsIO::getRate(const QDate &date, double duration) {
     QString nearestDateStr = nearestDate.toString("yyyy-MM-dd");
     QString rateStr = hashRatesDates.key(nearestDate);
     rate = rateStr.toDouble();
-    if (WarnDebugMessage)
-        qWarning() << __FILE__ << QString::number(__LINE__) << "rate = " << QString::number(rate) ;
+         qWarning() << __FILE__ << QString::number(__LINE__) << "rate = " << QString::number(rate) ;
     return rate;
 }
 

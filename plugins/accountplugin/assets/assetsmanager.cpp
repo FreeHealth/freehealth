@@ -36,7 +36,7 @@
 
 #include <QDate>
 #include <QDebug>
-
+enum { WarnDebugMessage = true };
 using namespace AccountDB;
 using namespace Constants;
 
@@ -154,7 +154,8 @@ double AssetsManager::getYearlyValue(const QString &year, int row){
 }
 
 double AssetsManager::linearCalc(double value , double  duration , const QString &beginDate, const QDate &refDate){
-    qDebug() << __FILE__ << QString::number(__LINE__) << " in linear calc " ;
+    if (WarnDebugMessage)
+        qDebug() << __FILE__ << QString::number(__LINE__) << " in linear calc " ;
     AssetsIO assetIO(this);
     QDate currentDate = refDate;
     int currDateYear = currentDate.year();
@@ -169,7 +170,8 @@ double AssetsManager::linearCalc(double value , double  duration , const QString
 }
 
 QList<double> AssetsManager::decreasingCalc(int row, double value , double duration , const QString &dateBegin, const QDate &refDate){
-    qDebug() << __FILE__ << QString::number(__LINE__) << " in decreasing calc " ;
+    if (WarnDebugMessage)
+        qDebug() << __FILE__ << QString::number(__LINE__) << " in decreasing calc " ;
     QList<double> list;
     AssetsIO assetIO(this);
     QDate       beginDate       = QDate::fromString(dateBegin,"yyyy-MM-dd");
@@ -180,18 +182,22 @@ QList<double> AssetsManager::decreasingCalc(int row, double value , double durat
     double rate = m_rate;
     int       month              = beginDate.month();
     int       beginDateYear       = beginDate.year();
-    qDebug() << __FILE__ << QString::number(__LINE__) << " beginDateYear =" << QString::number(beginDateYear) ;
+    if (WarnDebugMessage)
+        qDebug() << __FILE__ << QString::number(__LINE__) << " beginDateYear =" << QString::number(beginDateYear) ;
     int       currentDateYear        = dateThisDay.year();
-    qDebug() << __FILE__ << QString::number(__LINE__) << " currDateYear =" << QString::number(currentDateYear) ;
+    if (WarnDebugMessage)
+        qDebug() << __FILE__ << QString::number(__LINE__) << " currDateYear =" << QString::number(currentDateYear) ;
     //----------------first year---------------------------------------
     
     double    numberOfMonths          = double(12 - month +1);//from the beginning of month
-    qDebug() << __FILE__ << QString::number(__LINE__) << " numberOfMonths =" << QString::number(numberOfMonths) ;
+    if (WarnDebugMessage)
+        qDebug() << __FILE__ << QString::number(__LINE__) << " numberOfMonths =" << QString::number(numberOfMonths) ;
     double    decreasingRatePercent      = 100/duration * rate;
     double    decreasingRate          = (decreasingRatePercent)/100;
     
     int diffOfYears = currentDateYear - beginDateYear;
-    qDebug() << __FILE__ << QString::number(__LINE__) << " diffOfYears =" << QString::number(diffOfYears) ;
+    if (WarnDebugMessage)
+        qDebug() << __FILE__ << QString::number(__LINE__) << " diffOfYears =" << QString::number(diffOfYears) ;
     if (diffOfYears == 0)
     {
     	yearlyValue         = (value * decreasingRate) * (numberOfMonths/12) ;
@@ -201,8 +207,11 @@ QList<double> AssetsManager::decreasingCalc(int row, double value , double durat
     else
     {           
         double residualValueRefreshed = assetIO.getResidualValueWhenRefresh(row);
+        if (WarnDebugMessage)
         qDebug() << __FILE__ << QString::number(__LINE__) << "old residualValue =" << QString::number(residualValueRefreshed) ;
+        if (WarnDebugMessage)
         qDebug() << __FILE__ << QString::number(__LINE__) << " decreasingRatePercent =" << QString::number(decreasingRatePercent) ;
+        if (WarnDebugMessage)
         qDebug() << __FILE__ << QString::number(__LINE__) << "100/duration  =" << QString::number(100/duration) ;
         double newDuration = duration - diffOfYears;
         if(decreasingRatePercent < 100/newDuration){
@@ -211,14 +220,18 @@ QList<double> AssetsManager::decreasingCalc(int row, double value , double durat
         }
         double newYearlyValue      = residualValueRefreshed * decreasingRate;
         double residualValueNew = residualValueRefreshed;
+        if (WarnDebugMessage)
         qDebug() << __FILE__ << QString::number(__LINE__) << " newYearlyValue =" << QString::number(newYearlyValue) ;
      	residualValueNew  -= newYearlyValue;
+        if (WarnDebugMessage)
         qDebug() << __FILE__ << QString::number(__LINE__) << " residualValue =" << QString::number(residualValueNew) ;
            yearlyValue            = newYearlyValue ;
            residualValue = residualValueNew;
         }  
-    qDebug() << __FILE__ << QString::number(__LINE__) << " yearlyValue =" << QString::number(yearlyValue) ;
-    qDebug() << __FILE__ << QString::number(__LINE__) << " residualValue =" << QString::number(residualValue) ;
+    if (WarnDebugMessage)
+        qDebug() << __FILE__ << QString::number(__LINE__) << " yearlyValue =" << QString::number(yearlyValue) ;
+    if (WarnDebugMessage)
+        qDebug() << __FILE__ << QString::number(__LINE__) << " residualValue =" << QString::number(residualValue) ;
     list << yearlyValue << residualValue;
     return list;
 }
@@ -230,12 +243,14 @@ double AssetsManager::getCalculatedResidualValue(double value, double yearlyValu
 }
 
 bool AssetsManager::setRefreshedResidualValue(){
-    qDebug() << __FILE__ << QString::number(__LINE__) << " in  setRefreshedResidualValue()"   ;
+    if (WarnDebugMessage)
+        qDebug() << __FILE__ << QString::number(__LINE__) << " in  setRefreshedResidualValue()"   ;
     bool ret = true;
     AssetsIO assetIO(this);
     AssetModel assetModel(this);
     QStandardItemModel * model = assetIO.getListsOfValuesForRefresh(this);//QString beginDate,int mode, double value, double duration,int yearsToRun
-    qDebug() << __FILE__ << QString::number(__LINE__) << " model rowCount =" << QString::number(model->rowCount()) ;
+    if (WarnDebugMessage)
+        qDebug() << __FILE__ << QString::number(__LINE__) << " model rowCount =" << QString::number(model->rowCount()) ;
     for (int i = 0; i < model->rowCount(); i += 1)
     {   
     	double residualValue = 0.00;
@@ -254,10 +269,12 @@ bool AssetsManager::setRefreshedResidualValue(){
     	int yearsToRun = model->data(model->index(i,ITEM_ENUM_YEARS),Qt::DisplayRole).toInt();
     	int diffOfYears = currentYear - beginYear;
     	int lessYearsToRun = duration - yearsToRun;
-    	qDebug() << __FILE__ << QString::number(__LINE__);
+    	if (WarnDebugMessage)
+        qDebug() << __FILE__ << QString::number(__LINE__);
     	if(lessYearsToRun != diffOfYears && yearsToRun > 0){
     	QList<double> listFromDecreasingCalc;
-    	qDebug() << __FILE__ << QString::number(__LINE__) << " mode =" << QString::number(mode) ;
+    	if (WarnDebugMessage)
+        qDebug() << __FILE__ << QString::number(__LINE__) << " mode =" << QString::number(mode) ;
     	if (!assetIO.deleteOneYearToRun(i))
         {
     	      qWarning() << __FILE__ << QString::number(__LINE__) << "Unable to delete one year !" ;
@@ -266,12 +283,14 @@ bool AssetsManager::setRefreshedResidualValue(){
     	    case LINEAR_MODE :
     	        yearlyValue = linearCalc(value ,duration, beginDateStr , currentDate);
     	        residualValue = value - (yearlyValue*yearsFactor);
-    	        qDebug() << __FILE__ << QString::number(__LINE__) << " residualValue = " << QString::number(residualValue) ;
+    	        if (WarnDebugMessage)
+        qDebug() << __FILE__ << QString::number(__LINE__) << " residualValue = " << QString::number(residualValue) ;
     	        break;
     	    case DECREASING_MODE :
     	        listFromDecreasingCalc = decreasingCalc(i,value ,duration, beginDateStr , currentDate);
     	        yearlyValue = listFromDecreasingCalc[YEARLY_DECR_VALUE];
-    	        qDebug() << __FILE__ << QString::number(__LINE__) << " yearlyValue = " << QString::number(yearlyValue) ;
+    	        if (WarnDebugMessage)
+        qDebug() << __FILE__ << QString::number(__LINE__) << " yearlyValue = " << QString::number(yearlyValue) ;
     	        residualValue = listFromDecreasingCalc[1];
     	        break;
     	    default :
@@ -286,6 +305,7 @@ bool AssetsManager::setRefreshedResidualValue(){
     	    }
         }
         }
+        if (WarnDebugMessage)
         qDebug() << __FILE__ << QString::number(__LINE__);
     return ret;
 }
@@ -333,6 +353,7 @@ QStandardItemModel * AssetsManager::getYearlyValues(const QDate &year){
         QStandardItem * itemLabel = new QStandardItem();
         QStandardItem * itemYearlyValue = new QStandardItem();
         QList<QStandardItem*> listOfItems;
+        if (WarnDebugMessage)
         qDebug() << __FILE__ << QString::number(__LINE__) << " dateYear =" << dateYear << "yearStr = "<< yearStr ;
     	switch(mode){
     	    case LINEAR_MODE :
@@ -352,7 +373,8 @@ QStandardItemModel * AssetsManager::getYearlyValues(const QDate &year){
         itemYearlyValue->setText(yearlyValue);
     	listOfItems << itemLabel << itemYearlyValue;
     	newModel->appendRow(listOfItems);
-    	qDebug() << __FILE__ << QString::number(__LINE__) << " yearlyValue in manager  =" << yearlyValue ;
+    	if (WarnDebugMessage)
+        qDebug() << __FILE__ << QString::number(__LINE__) << " yearlyValue in manager  =" << yearlyValue ;
         }
     
     return newModel;

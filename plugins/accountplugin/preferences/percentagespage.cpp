@@ -51,7 +51,7 @@
 #include <QRegExp>
 #include <QLocale>
 #include <QUuid>
-
+enum { WarnDebugMessage = true };
 using namespace Account;
 using namespace Account::Internal;
 using namespace Trans::ConstantTranslations;
@@ -84,7 +84,8 @@ void PercentagesPage::resetToDefaults()
 }
 
 void PercentagesPage::applyChanges()
-{qDebug() << __FILE__ << QString::number(__LINE__) << " applyChanges ";
+{if (WarnDebugMessage)
+    	      qDebug() << __FILE__ << QString::number(__LINE__) << " applyChanges ";
     if (!m_Widget) {
         return;
     }
@@ -120,7 +121,8 @@ PercentagesWidget::PercentagesWidget(QWidget *parent) :
     setObjectName("PercentagesWidget");
     setupUi(this);
     m_user_uid = user()->uuid();
-    //qDebug() << __FILE__ << QString::number(__LINE__) << " m_user_uid =" << m_user_uid ;
+    //if (WarnDebugMessage)
+    	      qDebug() << __FILE__ << QString::number(__LINE__) << " m_user_uid =" << m_user_uid ;
     m_user_fullName = user()->value(Core::IUser::FullName).toString();
     if (m_user_fullName.isEmpty()) {
         m_user_fullName = "Admin_Test";
@@ -132,7 +134,8 @@ PercentagesWidget::PercentagesWidget(QWidget *parent) :
     
     m_Model = new AccountDB::PercentModel(this);
         /** \todo  m_Model->setUserUuid(); */
-    //qDebug() << __FILE__ << QString::number(__LINE__) << " m_user_uid =" << m_user_uid ;
+    //if (WarnDebugMessage)
+    	      qDebug() << __FILE__ << QString::number(__LINE__) << " m_user_uid =" << m_user_uid ;
     userEditedLabel->setText(m_user_uid);
     percentUidLabel->setText("");
     //percentUidLabel->setFocus();
@@ -159,19 +162,22 @@ PercentagesWidget::~PercentagesWidget()
 
 void PercentagesWidget::setDatasToUi()
 {
-    //qDebug() << __FILE__ << QString::number(__LINE__) << "index row  =" << QString::number(percentagesComboBox->currentIndex());
+    //if (WarnDebugMessage)
+    	      qDebug() << __FILE__ << QString::number(__LINE__) << "index row  =" << QString::number(percentagesComboBox->currentIndex());
     m_Mapper->setCurrentIndex(percentagesComboBox->currentIndex());
 }
 
 void PercentagesWidget::saveModel()
 {
-    qDebug() << __FILE__ << QString::number(__LINE__) << " currentIndex =" << QString::number(m_Mapper->currentIndex());
+    if (WarnDebugMessage)
+    	      qDebug() << __FILE__ << QString::number(__LINE__) << " currentIndex =" << QString::number(m_Mapper->currentIndex());
     if (m_Model->isDirty()) {
         bool yes = Utils::yesNoMessageBox(tr("Save changes ?"),
                                           tr("You make changes into the percentages table.\n"
                                              "Do you want to save them ?"));
         if (yes) {
-           if (!m_Model->submit()) {qDebug() << __FILE__ << QString::number(__LINE__) << " percentages no submit ";
+           if (!m_Model->submit()) {if (WarnDebugMessage)
+    	      qDebug() << __FILE__ << QString::number(__LINE__) << " percentages no submit ";
                 LOG_ERROR(tkTr(Trans::Constants::UNABLE_TO_SAVE_DATA_IN_DATABASE_1).
                                                    arg(tr("percentages")));
             }
@@ -180,7 +186,8 @@ void PercentagesWidget::saveModel()
             m_Model->revert();
         }
     }
-    qDebug() << __FILE__ << QString::number(__LINE__) << " percentage error =" << m_Model->lastError().text();
+    if (WarnDebugMessage)
+    	      qDebug() << __FILE__ << QString::number(__LINE__) << " percentage error =" << m_Model->lastError().text();
 }
 
 void PercentagesWidget::on_percentagesComboBox_currentIndexChanged(int index)
@@ -191,19 +198,24 @@ void PercentagesWidget::on_percentagesComboBox_currentIndexChanged(int index)
 
 void PercentagesWidget::on_addButton_clicked()
 {
-    qDebug() << __FILE__ << QString::number(__LINE__) << " rowCount1 =" << QString::number(m_Model->rowCount());
+    if (WarnDebugMessage)
+    	      qDebug() << __FILE__ << QString::number(__LINE__) << " rowCount1 =" << QString::number(m_Model->rowCount());
     if (!m_Model->insertRow(m_Model->rowCount()))
         LOG_ERROR("Unable to add row");
-    qDebug() << __FILE__ << QString::number(__LINE__) << " rowCount2 =" << QString::number(m_Model->rowCount());
+    if (WarnDebugMessage)
+    	      qDebug() << __FILE__ << QString::number(__LINE__) << " rowCount2 =" << QString::number(m_Model->rowCount());
     percentagesComboBox->setCurrentIndex(m_Model->rowCount()-1);
     userEditedLabel->setText(m_user_uid);
     userEditedLabel->setFocus();
     percentUidLabel->setText(calcPercentagesUid());
     percentUidLabel->setFocus();
     
-    qDebug() << __FILE__ << QString::number(__LINE__) << " userEditedLabel =" << userEditedLabel->text() ;
-    //qDebug() << __FILE__ << QString::number(__LINE__) << " percentUidLabel =" << percentUidLabel->text();
-    //qDebug() << __FILE__ << QString::number(__LINE__) << " currentIndex =" << QString::number(m_Mapper->currentIndex());
+    if (WarnDebugMessage)
+    	      qDebug() << __FILE__ << QString::number(__LINE__) << " userEditedLabel =" << userEditedLabel->text() ;
+    //if (WarnDebugMessage)
+    	      qDebug() << __FILE__ << QString::number(__LINE__) << " percentUidLabel =" << percentUidLabel->text();
+    //if (WarnDebugMessage)
+    	      qDebug() << __FILE__ << QString::number(__LINE__) << " currentIndex =" << QString::number(m_Mapper->currentIndex());
 
 }
 
@@ -254,16 +266,19 @@ void PercentagesWidget::changeEvent(QEvent *e)
 
 QString PercentagesWidget::calcPercentagesUid(){
     QString Uid = QUuid::createUuid().toString();
-    /*qDebug() << __FILE__ << QString::number(__LINE__) << " rowCount =" << m_Model->rowCount() ;
+    /*if (WarnDebugMessage)
+    	      qDebug() << __FILE__ << QString::number(__LINE__) << " rowCount =" << m_Model->rowCount() ;
     QModelIndex index = m_Model->index(m_Model->rowCount()-2,AccountDB::Constants::PERCENT_UID);
     if (!index.isValid())
     {
     	  qWarning() << __FILE__ << QString::number(__LINE__) << "index is not valid" ;
         }
     int percentageUidBefore = m_Model->data(index,Qt::DisplayRole).toInt();
-    qDebug() << __FILE__ << QString::number(__LINE__) << " percentageUidBefore =" << QString::number(percentageUidBefore) ;
+    if (WarnDebugMessage)
+    	      qDebug() << __FILE__ << QString::number(__LINE__) << " percentageUidBefore =" << QString::number(percentageUidBefore) ;
     int percentageUid =  percentageUidBefore + 1;
-    qDebug() << __FILE__ << QString::number(__LINE__) << " percentageUid =" << QString::number(percentageUid);*/
+    if (WarnDebugMessage)
+    	      qDebug() << __FILE__ << QString::number(__LINE__) << " percentageUid =" << QString::number(percentageUid);*/
     return Uid;
 }
 

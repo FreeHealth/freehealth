@@ -37,6 +37,7 @@
 #include <coreplugin/constants_tokensandsettings.h>
 #include <utils/log.h>
 #include <QDebug>
+enum { WarnDebugMessage = true };
 using namespace ExtensionSystem;
 using namespace Core;
 using namespace Core::Constants;

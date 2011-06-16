@@ -38,7 +38,7 @@
 #include <QFile>
 #include <QtXml>
 #include <QLocale>
-
+enum { WarnDebugMessage = true };
 static inline Core::ISettings *settings()  { return Core::ICore::instance()->settings(); }
 
 
@@ -72,7 +72,8 @@ QList<QHash<QString,QString> > xmlCategoriesParser::readXmlFile()
         for(QDomNode n = rootElement.firstChild() ; !n.isNull() ;  n = n.nextSibling()) {
             QHash<QString,QString> xmlHash;
             QDomElement childElement = n.toElement();
-//            qDebug() << __FILE__ << QString::number(__LINE__) << " tag = "+childElement.tagName();
+//            if (WarnDebugMessage)
+    	      qDebug() << __FILE__ << QString::number(__LINE__) << " tag = "+childElement.tagName();
             if(n.isElement()){
                 for(QDomNode nc = childElement.firstChild() ; !nc.isNull() ;  nc = nc.nextSibling()){
                     QString str;
@@ -81,7 +82,8 @@ QList<QHash<QString,QString> > xmlCategoriesParser::readXmlFile()
                         QDomElement e = nc.toElement();
                         str = e.text().replace("\n","").replace(" ","");
                         tagName = e.tagName();
-//                        qDebug() << __FILE__ << QString::number(__LINE__) << " tag = "+tagName+" str ="+str;
+//                        if (WarnDebugMessage)
+    	      qDebug() << __FILE__ << QString::number(__LINE__) << " tag = "+tagName+" str ="+str;
                         xmlHash.insert(tagName,str);
 
                     }

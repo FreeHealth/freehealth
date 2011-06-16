@@ -40,7 +40,7 @@
 #include <QBrush>
 #include <QColor>
 #include <QMouseEvent>
-
+enum { WarnDebugMessage = true };
 using namespace ChoiceActions;
 treeViewsActions::treeViewsActions(QWidget *parent):QTreeView(parent){
     m_deleteThesaurusValue = new QAction(trUtf8("Delete this value."),this);
@@ -128,7 +128,8 @@ bool treeViewsActions::isChildOfThesaurus(){
     QModelIndex current = currentIndex();
     QModelIndex indexParent = treeModel()->parent(current);
     QString dataParent = treeModel()->data(indexParent).toString();
-    qDebug() << __FILE__ << QString::number(__LINE__) << " dataParent =" << dataParent ;
+    if (WarnDebugMessage)
+    	      qDebug() << __FILE__ << QString::number(__LINE__) << " dataParent =" << dataParent ;
     if (dataParent != "Thesaurus")
     {
     	  ret = false;
@@ -194,7 +195,8 @@ void treeViewsActions::fillActionTreeView()
     QStandardItem *parentItem = treeModel()->invisibleRootItem();
     QString strMainActions;
     foreach(strMainActions,listOfMainActions){
-        qDebug() << __FILE__ << QString::number(__LINE__) << " strMainActions =" << strMainActions ;
+        if (WarnDebugMessage)
+    	      qDebug() << __FILE__ << QString::number(__LINE__) << " strMainActions =" << strMainActions ;
         QStandardItem *actionItem = new QStandardItem(strMainActions);
         //treeViewsActions colors
         if (strMainActions == "Debtor")
@@ -248,17 +250,20 @@ void treeViewsActions::fillActionTreeView()
         listSubActions = mapSubItems.values(strMainActions);
         QString strSubActions;
         foreach(strSubActions,listSubActions){
-            qDebug() << __FILE__ << QString::number(__LINE__) << " strSubActions =" << strSubActions ;
+            if (WarnDebugMessage)
+    	      qDebug() << __FILE__ << QString::number(__LINE__) << " strSubActions =" << strSubActions ;
             QStandardItem *subActionItem = new QStandardItem(strSubActions);
             actionItem->appendRow(subActionItem);            
         }
     }
-    qDebug() << __FILE__ << QString::number(__LINE__)  ;
+    if (WarnDebugMessage)
+    	      qDebug() << __FILE__ << QString::number(__LINE__)  ;
     setHeaderHidden(true);
     setStyleSheet("background-color: rgb(201, 201, 201)");
    // actionsTreeView->setStyleSheet("foreground-color: red");
     setModel(treeModel());
-    qDebug() << __FILE__ << QString::number(__LINE__)  ;
+    if (WarnDebugMessage)
+    	      qDebug() << __FILE__ << QString::number(__LINE__)  ;
 }
 
 bool treeViewsActions::deleteItemFromThesaurus(QModelIndex &index){
@@ -313,7 +318,8 @@ choiceDialog::choiceDialog(QWidget * parent,bool roundtrip):QDialog(parent),ui(n
     m_distanceRuleType = manager.getPreferedDistanceRule().toString();
     m_insurance = firstItemChoosenAsPreferential(debtor);
     m_insuranceUid = manager.m_preferedInsuranceUid;
-    qDebug() << __FILE__ << QString::number(__LINE__) << " m_insuranceUid =" << m_insuranceUid.toString() ;
+    if (WarnDebugMessage)
+    	      qDebug() << __FILE__ << QString::number(__LINE__) << " m_insuranceUid =" << m_insuranceUid.toString() ;
     m_modelChoicePercentDebtorSiteDistruleValues = new QStandardItemModel(0,returningModel_MaxParam);
     m_row = 0;
     m_timerUp = new QTimer(this);
@@ -336,11 +342,13 @@ choiceDialog::~choiceDialog(){
 }
 
 double choiceDialog::getDistanceNumber(const QString & data){
-    qDebug() << __FILE__ << QString::number(__LINE__) << " data =" << data  ;
+    if (WarnDebugMessage)
+    	      qDebug() << __FILE__ << QString::number(__LINE__) << " data =" << data  ;
     receiptsEngine recIO;
     double dist = 0.00;
     double minDistance = recIO.getMinDistanceValue(data);
-    qDebug() << __FILE__ << QString::number(__LINE__) << " minDistance =" << QString::number(minDistance) ;
+    if (WarnDebugMessage)
+    	      qDebug() << __FILE__ << QString::number(__LINE__) << " minDistance =" << QString::number(minDistance) ;
     dist = ui->distanceDoubleSpinBox->value() - minDistance;
     if (dist < 0.00)
     {
@@ -435,9 +443,11 @@ QList<double> choiceDialog::listOfPercentValues(){
 
 void choiceDialog::beforeAccepted(){
      receiptsEngine rIO;
-     qDebug() << __FILE__ << QString::number(__LINE__) << " m_insuranceUid =" << QString::number(m_insuranceUid.toInt()) ;
+     if (WarnDebugMessage)
+    	      qDebug() << __FILE__ << QString::number(__LINE__) << " m_insuranceUid =" << QString::number(m_insuranceUid.toInt()) ;
      QString debtor = rIO.getStringFromInsuranceUid(m_insuranceUid);
-     qDebug() << __FILE__ << QString::number(__LINE__) << " debtor =" << debtor ;
+     if (WarnDebugMessage)
+    	      qDebug() << __FILE__ << QString::number(__LINE__) << " debtor =" << debtor ;
      m_modelChoicePercentDebtorSiteDistruleValues->insertRows(m_row,1,QModelIndex());
      
      if (m_percent!=100.00)
@@ -451,7 +461,8 @@ void choiceDialog::beforeAccepted(){
            
            switch(ret){
                case QMessageBox::Ok :
-                   qDebug() << __FILE__ << QString::number(__LINE__) << " m_row =" << QString::number(m_row) ;
+                   if (WarnDebugMessage)
+    	      qDebug() << __FILE__ << QString::number(__LINE__) << " m_row =" << QString::number(m_row) ;
                    m_modelChoicePercentDebtorSiteDistruleValues->setData(m_modelChoicePercentDebtorSiteDistruleValues->index(m_row,TYPE_OF_CHOICE),returnChoiceDialog(),Qt::EditRole);
                    m_modelChoicePercentDebtorSiteDistruleValues->setData(m_modelChoicePercentDebtorSiteDistruleValues->index(m_row,PERCENTAGE),m_percent,Qt::EditRole);
                    m_modelChoicePercentDebtorSiteDistruleValues->setData(m_modelChoicePercentDebtorSiteDistruleValues->index(m_row,DEBTOR),debtor,Qt::EditRole);
@@ -488,7 +499,8 @@ QStandardItemModel * choiceDialog::getChoicePercentageDebtorSiteDistruleModel(){
 }
 
 QVariant choiceDialog::firstItemChoosenAsPreferential(QString & item)
-{qDebug() << __FILE__ << QString::number(__LINE__) << " item =" << item ;
+{if (WarnDebugMessage)
+    	      qDebug() << __FILE__ << QString::number(__LINE__) << " item =" << item ;
     QVariant variantValue = QVariant("No item");
     receiptsManager manager;
     if (item == trUtf8("Distance rules"))
@@ -508,7 +520,8 @@ QVariant choiceDialog::firstItemChoosenAsPreferential(QString & item)
 
 void choiceDialog::actionsOfTreeView(const QModelIndex &index){
     QString data = index.data(Qt::DisplayRole).toString();
-    qDebug() << __FILE__ << QString::number(__LINE__) << " data =" << data;
+    if (WarnDebugMessage)
+    	      qDebug() << __FILE__ << QString::number(__LINE__) << " data =" << data;
     receiptsManager manager;
     QHash<QString,QString> hashOfValues;
     int typeOfPayment = ReceiptsConstants::Cash;
@@ -521,18 +534,22 @@ void choiceDialog::actionsOfTreeView(const QModelIndex &index){
     {
     	  m_distanceRuleValue = manager.getDistanceRules().value(data).toDouble();
     	  m_distanceRuleType = data;
-    	  qDebug() << __FILE__ << QString::number(__LINE__) << " m_distanceRuleValue =" << QString::number(m_distanceRuleValue) ;
-    	  qDebug() << __FILE__ << QString::number(__LINE__) << " m_distanceRuleType =" << m_distanceRuleType ;
+    	  if (WarnDebugMessage)
+    	      qDebug() << __FILE__ << QString::number(__LINE__) << " m_distanceRuleValue =" << QString::number(m_distanceRuleValue) ;
+    	  if (WarnDebugMessage)
+    	      qDebug() << __FILE__ << QString::number(__LINE__) << " m_distanceRuleType =" << m_distanceRuleType ;
         }
     if (manager.getHashOfSites().keys().contains(data))
     {
     	  m_siteUid = manager.getHashOfSites().value(data);
-    	  qDebug() << __FILE__ << QString::number(__LINE__) << " m_siteUid =" << m_siteUid.toString() ;
+    	  if (WarnDebugMessage)
+    	      qDebug() << __FILE__ << QString::number(__LINE__) << " m_siteUid =" << m_siteUid.toString() ;
         }
     if (manager.getHashOfInsurance().keys().contains(data))
     {
     	  m_insuranceUid = manager.getHashOfInsurance().value(data);
-    	  qDebug() << __FILE__ << QString::number(__LINE__) << " m_insuranceUid =" << m_insuranceUid.toString() ;
+    	  if (WarnDebugMessage)
+    	      qDebug() << __FILE__ << QString::number(__LINE__) << " m_insuranceUid =" << m_insuranceUid.toString() ;
         }
         //actionTreeView->reset();
 }

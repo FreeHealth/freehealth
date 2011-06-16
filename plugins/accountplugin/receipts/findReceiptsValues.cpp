@@ -32,7 +32,7 @@
 #include "findReceiptsValues.h"
 #include <QSqlQuery>
 #include <QSqlTableModel>
-
+enum { WarnDebugMessage = true };
 using namespace AccountDB;
 using namespace Constants;
 
@@ -43,14 +43,18 @@ findReceiptsValues::findReceiptsValues(QWidget * parent):QDialog(parent){
   ui->nameRadioButton->setChecked(true);
   MedicalProcedureModel model(parent);
   m_db = QSqlDatabase::database(Constants::DB_ACCOUNTANCY);
-  qDebug() << __FILE__ << QString::number(__LINE__)   ;
+  if (WarnDebugMessage)
+    	      qDebug() << __FILE__ << QString::number(__LINE__)   ;
   fillComboCategories();
-  qDebug() << __FILE__ << QString::number(__LINE__)   ;
+  if (WarnDebugMessage)
+    	      qDebug() << __FILE__ << QString::number(__LINE__)   ;
   initialize();
-  qDebug() << __FILE__ << QString::number(__LINE__)   ;
+  if (WarnDebugMessage)
+    	      qDebug() << __FILE__ << QString::number(__LINE__)   ;
   QString comboValue = ui->comboBoxCategories->currentText().trimmed();
   emit fillListViewValues(comboValue);
-  qDebug() << __FILE__ << QString::number(__LINE__)   ;
+  if (WarnDebugMessage)
+    	      qDebug() << __FILE__ << QString::number(__LINE__)   ;
   connect(ui->comboBoxCategories,SIGNAL(activated(const QString&)),this,SLOT(fillListViewValues(const QString&)));
   connect(ui->tableViewOfValues,SIGNAL(pressed(const QModelIndex&)),this,SLOT(chooseValue(const QModelIndex&)));
   connect(ui->listChoosenWidget,SIGNAL(itemClicked(QListWidgetItem *)),this,SLOT(supprItemChoosen(QListWidgetItem *)));
@@ -84,7 +88,8 @@ void findReceiptsValues::fillComboCategories(){
     choiceList = hashCategories.value("typesOfReceipts").split(",");
     MedicalProcedureModel *model = new MedicalProcedureModel(this);
     int MPRows = model->rowCount(QModelIndex());
-    qDebug() << __FILE__ << QString::number(__LINE__) << " rowCount =" << QString::number(MPRows) ;
+    if (WarnDebugMessage)
+    	      qDebug() << __FILE__ << QString::number(__LINE__) << " rowCount =" << QString::number(MPRows) ;
     for (int i = 0; i < MPRows; i += 1)
     {
         QString typeData = model->data(model->index(i,MP_TYPE)).toString();
@@ -123,7 +128,8 @@ void findReceiptsValues::fillComboCategories(){
     {
     	QString name = model->dataWithFilter(model->index(i,MP_NAME),Qt::DisplayRole,filter).toString();
     	QString value = model->dataWithFilter(model->index(i,MP_AMOUNT),Qt::DisplayRole,filter).toString();
-    	qDebug() << __FILE__ << QString::number(__LINE__) << " names =" << name ;
+    	if (WarnDebugMessage)
+    	      qDebug() << __FILE__ << QString::number(__LINE__) << " names =" << name ;
     	QStandardItem *itemName = new QStandardItem(name);
     	QStandardItem *itemValue = new QStandardItem(value);
     	QList<QStandardItem*> list;
@@ -170,14 +176,17 @@ void findReceiptsValues::fillListViewValues(const QString & comboItem){
     {
     	QString n = q.value(0).toString();
     	QString a = q.value(1).toString();
-    	//qDebug() << __FILE__ << QString::number(__LINE__) << " n and a	= " << n << a;
+    	//if (WarnDebugMessage)
+    	      qDebug() << __FILE__ << QString::number(__LINE__) << " n and a	= " << n << a;
     	model->insertRows(row,1,QModelIndex());
     	model->setData(model->index(row,0),n,Qt::EditRole);
         model->setData(model->index(row,1),a,Qt::EditRole);
         model->submit();
-        //qDebug() << __FILE__ << QString::number(__LINE__) << " model data =" << model->data(model->index(row,0),Qt::DisplayRole).toString();
+        //if (WarnDebugMessage)
+    	      qDebug() << __FILE__ << QString::number(__LINE__) << " model data =" << model->data(model->index(row,0),Qt::DisplayRole).toString();
         ++row;
-        //qDebug() << __FILE__ << QString::number(__LINE__) << " rows =" << QString::number(row) ;
+        //if (WarnDebugMessage)
+    	      qDebug() << __FILE__ << QString::number(__LINE__) << " rows =" << QString::number(row) ;
         }
     ui->tableViewOfValues->setModel(model);
     ui->tableViewOfValues-> setSelectionBehavior(QAbstractItemView::SelectRows);
@@ -199,13 +208,15 @@ void findReceiptsValues::chooseValue(const QModelIndex& index){
     QModelIndex indexAmount = model->index(row,1,QModelIndex());
     QString data = model->data(indexData,Qt::DisplayRole).toString();//NAME
     QString amount = model->data(indexAmount,Qt::DisplayRole).toString();//AMOUNT
-    qDebug() << __FILE__ << QString::number(__LINE__) << " data = " << data;
+    if (WarnDebugMessage)
+    	      qDebug() << __FILE__ << QString::number(__LINE__) << " data = " << data;
     ui->listChoosenWidget->addItem(data);
     m_hashValuesChoosen.insert(data,amount);
 }
 
 void findReceiptsValues::supprItemChoosen(QListWidgetItem * item){
-    qDebug() << __FILE__ << QString::number(__LINE__) << " item = " << item->text();
+    if (WarnDebugMessage)
+    	      qDebug() << __FILE__ << QString::number(__LINE__) << " item = " << item->text();
     QString dataToRemove = item->data(Qt::DisplayRole).toString();
     m_hashValuesChoosen.remove(dataToRemove);
     delete item;
@@ -230,7 +241,8 @@ QHash<QString,QString> findReceiptsValues::getChoosenValues(){
     for (int i = 0; i < count; i += 1)
     {
     	QString name = model->dataWithFilter(model->index(i,MP_NAME),Qt::DisplayRole,filter).toString();
-    	qDebug() << __FILE__ << QString::number(__LINE__) << " names =" << name ;
+    	if (WarnDebugMessage)
+    	      qDebug() << __FILE__ << QString::number(__LINE__) << " names =" << name ;
     	QString value = model->dataWithFilter(model->index(i,MP_AMOUNT),Qt::DisplayRole,filter).toString();
     	QStandardItem *itemName = new QStandardItem(name);
     	QStandardItem *itemValue = new QStandardItem(value);
@@ -292,14 +304,17 @@ void findReceiptsValues::on_lineEditFilter_textChanged(const QString & text){
     {
     	QString n = q.value(0).toString();
     	QString a = q.value(1).toString();
-    	//qDebug() << __FILE__ << QString::number(__LINE__) << " n and a	= " << n << a;
+    	//if (WarnDebugMessage)
+    	      qDebug() << __FILE__ << QString::number(__LINE__) << " n and a	= " << n << a;
     	model->insertRows(row,1,QModelIndex());
     	model->setData(model->index(row,0),n,Qt::EditRole);
         model->setData(model->index(row,1),a,Qt::EditRole);
         model->submit();
-        //qDebug() << __FILE__ << QString::number(__LINE__) << " model data =" << model->data(model->index(row,0),Qt::DisplayRole).toString();
+        //if (WarnDebugMessage)
+    	      qDebug() << __FILE__ << QString::number(__LINE__) << " model data =" << model->data(model->index(row,0),Qt::DisplayRole).toString();
         ++row;
-        //qDebug() << __FILE__ << QString::number(__LINE__) << " rows =" << QString::number(row) ;
+        //if (WarnDebugMessage)
+    	      qDebug() << __FILE__ << QString::number(__LINE__) << " rows =" << QString::number(row) ;
         }
     ui->tableViewOfValues->setModel(model);
     ui->tableViewOfValues-> setSelectionBehavior(QAbstractItemView::SelectRows);
@@ -320,18 +335,22 @@ bool findReceiptsValues::tableViewIsFull(QAbstractItemModel * model){
 }
 
 void findReceiptsValues::enableShowNextTable(){
-    qDebug() << __FILE__ << QString::number(__LINE__) << " enableshownet "   ;
+    if (WarnDebugMessage)
+    	      qDebug() << __FILE__ << QString::number(__LINE__) << " enableshownet "   ;
     ui->nextButton->show();
 }
 
 /*void findReceiptsValues::showNext(){
     QAbstractItemModel * abModel = ui->tableViewOfValues->model();
     int rows = abModel->rowCount();
-    qDebug() << __FILE__ << QString::number(__LINE__) << " row =" << QString::number(rows) ;
+    if (WarnDebugMessage)
+    	      qDebug() << __FILE__ << QString::number(__LINE__) << " row =" << QString::number(rows) ;
     int numberOfLastRow = abModel->headerData(rows -1,Qt::Vertical,Qt::DisplayRole).toInt();
     QString lastData = abModel->data(abModel->index(numberOfLastRow -1,0 ),Qt::DisplayRole).toString();
-    qDebug() << __FILE__ << QString::number(__LINE__) << " numberOfLastRow =" << QString::number(numberOfLastRow) ;
-    qDebug() << __FILE__ << QString::number(__LINE__) << " shownext data =" <<  lastData;
+    if (WarnDebugMessage)
+    	      qDebug() << __FILE__ << QString::number(__LINE__) << " numberOfLastRow =" << QString::number(numberOfLastRow) ;
+    if (WarnDebugMessage)
+    	      qDebug() << __FILE__ << QString::number(__LINE__) << " shownext data =" <<  lastData;
     QString comboChoice = ui->comboBoxCategories->currentText();
     QString afterSqlFilter = QString("%1 LIKE '%2' AND %3 >= '%4'").arg("TYPE",comboChoice,"NAME",lastData);
     model->setFilter(afterSqlFilter);
@@ -339,7 +358,8 @@ void findReceiptsValues::enableShowNextTable(){
     for (int i = 0; i < count; i += 1)
     {
     	QString name = model->dataWithFilter(model->index(i,MP_NAME),Qt::DisplayRole,afterSqlFilter).toString();
-    	//qDebug() << __FILE__ << QString::number(__LINE__) << " names =" << name ;
+    	//if (WarnDebugMessage)
+    	      qDebug() << __FILE__ << QString::number(__LINE__) << " names =" << name ;
     	QString value = model->dataWithFilter(model->index(i,MP_AMOUNT),Qt::DisplayRole,afterSqlFilter).toString();
     	QStandardItem *itemName = new QStandardItem(name);
     	QStandardItem *itemValue = new QStandardItem(value);
@@ -368,7 +388,8 @@ void findReceiptsValues::enableShowNextTable(){
 void findReceiptsValues::showNext(){
     QAbstractItemModel * abModel = ui->tableViewOfValues->model();
     int rows = abModel->rowCount();
-    qDebug() << __FILE__ << QString::number(__LINE__) << " row =" << QString::number(rows) ;
+    if (WarnDebugMessage)
+    	      qDebug() << __FILE__ << QString::number(__LINE__) << " row =" << QString::number(rows) ;
     int numberOfLastRow = abModel->headerData(rows -1,Qt::Vertical,Qt::DisplayRole).toInt();
     QString lastData = abModel->data(abModel->index(numberOfLastRow -1,0 ),Qt::DisplayRole).toString();
     QString comboChoice = ui->comboBoxCategories->currentText();

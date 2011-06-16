@@ -51,7 +51,7 @@
 #include <QRegExp>
 #include <QLocale>
 #include <QDir>
-
+enum { WarnDebugMessage = true };
 using namespace Account;
 using namespace Account::Internal;
 using namespace Trans::ConstantTranslations;
@@ -85,7 +85,8 @@ void InsurancePage::resetToDefaults()
 }
 
 void InsurancePage::applyChanges()
-{qDebug() << __FILE__ << QString::number(__LINE__) << " applyChanges ";
+{if (WarnDebugMessage)
+    	      qDebug() << __FILE__ << QString::number(__LINE__) << " applyChanges ";
     if (!m_Widget) {
         return;
     }
@@ -178,7 +179,8 @@ InsuranceWidget::~InsuranceWidget()
 }
 
 void InsuranceWidget::fillComboBoxes(){
-    qDebug() << __FILE__ << QString::number(__LINE__) << " in fillcomboboxes "  ;
+    if (WarnDebugMessage)
+    	      qDebug() << __FILE__ << QString::number(__LINE__) << " in fillcomboboxes "  ;
     QLocale local;
     QString localCountry;
     localCountry = QLocale::countryToString(local.country());
@@ -200,19 +202,22 @@ void InsuranceWidget::fillComboBoxes(){
 
 void InsuranceWidget::setDatasToUi()
 {
-    qDebug() << __FILE__ << QString::number(__LINE__) << "index row  =" << QString::number(insuranceComboBox->currentIndex());
+    if (WarnDebugMessage)
+    	      qDebug() << __FILE__ << QString::number(__LINE__) << "index row  =" << QString::number(insuranceComboBox->currentIndex());
     m_Mapper->setCurrentIndex(insuranceComboBox->currentIndex());
 }
 
 void InsuranceWidget::saveModel()
 {
-    qDebug() << __FILE__ << QString::number(__LINE__) << " currentIndex =" << QString::number(m_Mapper->currentIndex());
+    if (WarnDebugMessage)
+    	      qDebug() << __FILE__ << QString::number(__LINE__) << " currentIndex =" << QString::number(m_Mapper->currentIndex());
     if (m_Model->isDirty()) {
         bool yes = Utils::yesNoMessageBox(tr("Save changes ?"),
                                           tr("You make changes into the insurance table.\n"
                                              "Do you want to save them ?"));
         if (yes) {
-           if (!m_Model->submit()) {qDebug() << __FILE__ << QString::number(__LINE__) << " insurance submit ";
+           if (!m_Model->submit()) {if (WarnDebugMessage)
+    	      qDebug() << __FILE__ << QString::number(__LINE__) << " insurance submit ";
                 LOG_ERROR(tkTr(Trans::Constants::UNABLE_TO_SAVE_DATA_IN_DATABASE_1).
                                                    arg(tr("insurance")));
             }
@@ -221,7 +226,8 @@ void InsuranceWidget::saveModel()
             m_Model->revert();
         }
     }
-    qDebug() << __FILE__ << QString::number(__LINE__) << " site error =" << m_Model->lastError().text();
+    if (WarnDebugMessage)
+    	      qDebug() << __FILE__ << QString::number(__LINE__) << " site error =" << m_Model->lastError().text();
 }
 
 void InsuranceWidget::on_insuranceComboBox_currentIndexChanged(int index)
@@ -233,15 +239,19 @@ void InsuranceWidget::on_insuranceComboBox_currentIndexChanged(int index)
 
 void InsuranceWidget::on_addButton_clicked()
 {
-    //qDebug() << __FILE__ << QString::number(__LINE__) << " rowCount1 =" << QString::number(m_Model->rowCount());
+    //if (WarnDebugMessage)
+    	      qDebug() << __FILE__ << QString::number(__LINE__) << " rowCount1 =" << QString::number(m_Model->rowCount());
     if (!m_Model->insertRow(m_Model->rowCount()))
         LOG_ERROR("Unable to add row");
-    //qDebug() << __FILE__ << QString::number(__LINE__) << " rowCount2 =" << QString::number(m_Model->rowCount());
+    //if (WarnDebugMessage)
+    	      qDebug() << __FILE__ << QString::number(__LINE__) << " rowCount2 =" << QString::number(m_Model->rowCount());
     insuranceComboBox->setCurrentIndex(m_Model->rowCount()-1);
     m_insuranceUidLabel->setValue(calcInsuranceUid());
     m_insuranceUidLabel->setFocus();
-    //qDebug() << __FILE__ << QString::number(__LINE__) << " m_insuranceUidLabel =" << m_insuranceUidLabel->text();
-    //qDebug() << __FILE__ << QString::number(__LINE__) << " currentIndex =" << QString::number(m_Mapper->currentIndex());
+    //if (WarnDebugMessage)
+    	      qDebug() << __FILE__ << QString::number(__LINE__) << " m_insuranceUidLabel =" << m_insuranceUidLabel->text();
+    //if (WarnDebugMessage)
+    	      qDebug() << __FILE__ << QString::number(__LINE__) << " currentIndex =" << QString::number(m_Mapper->currentIndex());
     /*nameEdit->setText("name");
     adressEdit->setText("adress");
     cityEdit->setText("city");
@@ -336,11 +346,13 @@ QHash<QString,QString> InsuranceWidget::parseZipcodeCsv(){
     	QString city = line.replace(QRegExp("[0-9]"),"").replace(",","").trimmed();
         QString zip = line2.replace(QRegExp("[^0123456789]"),"").trimmed();
 
-    	   // qDebug() << __FILE__ << QString::number(__LINE__) << " zip city  =" << zip+","+city;
+    	   // if (WarnDebugMessage)
+    	      qDebug() << __FILE__ << QString::number(__LINE__) << " zip city  =" << zip+","+city;
     	    hash.insertMulti(zip,city);//zipcode,city
 
         }
-        qDebug() << __FILE__ << QString::number(__LINE__) << " hash size =" << hash.size();
+        if (WarnDebugMessage)
+    	      qDebug() << __FILE__ << QString::number(__LINE__) << " hash size =" << hash.size();
     return hash;
 }
 
@@ -355,7 +367,8 @@ QStringList InsuranceWidget::listOfCountries(){
     while (!stream.atEnd())
     {
     	QString line = stream.readLine().trimmed();
-    	//qDebug() << __FILE__ << QString::number(__LINE__) << " country =" << line;
+    	//if (WarnDebugMessage)
+    	      qDebug() << __FILE__ << QString::number(__LINE__) << " country =" << line;
         if (!line.isEmpty()) {
             list << line;
         }
@@ -369,9 +382,11 @@ int InsuranceWidget::calcInsuranceUid(){
     	  qWarning() << __FILE__ << QString::number(__LINE__) << "index is not valid" ;
         }
     int siteUidBefore = m_Model->data(index,Qt::DisplayRole).toInt();
-    qDebug() << __FILE__ << QString::number(__LINE__) << " siteUidBefore =" << QString::number(siteUidBefore) ;
+    if (WarnDebugMessage)
+    	      qDebug() << __FILE__ << QString::number(__LINE__) << " siteUidBefore =" << QString::number(siteUidBefore) ;
     int siteUid =  siteUidBefore + 1;
-    qDebug() << __FILE__ << QString::number(__LINE__) << " siteUid =" << QString::number(siteUid);
+    if (WarnDebugMessage)
+    	      qDebug() << __FILE__ << QString::number(__LINE__) << " siteUid =" << QString::number(siteUid);
     return siteUid;
 }
 
@@ -392,7 +407,8 @@ int InsuranceWidget::calcInsuranceUid(){
 //{
 //    QStandardItemModel *model = new QStandardItemModel;
 //    QString csvFileName = getCsvDefaultFile();
-//    qDebug() << __FILE__ << QString::number(__LINE__) << " csvFileName =" << csvFileName ;
+//    if (WarnDebugMessage)
+//    	      qDebug() << __FILE__ << QString::number(__LINE__) << " csvFileName =" << csvFileName ;
 //    QFile file(getCsvDefaultFile());
 //    // some validity checking
 //    if (!file.exists()) {
@@ -432,7 +448,8 @@ int InsuranceWidget::calcInsuranceUid(){
 //            for (int i = 0; i < AccountDB::Constants::INSURANCE_MaxParam ; i += 1){
 //                //model->setData(model->index(row,i),listOfItems[i],Qt::EditRole);
 //        	QStandardItem * item = new QStandardItem;
-//        	//qDebug() << __FILE__ << QString::number(__LINE__) << " listOfItems[i] =" << listOfItems[i] ;
+//        	//if (WarnDebugMessage)
+//    	      qDebug() << __FILE__ << QString::number(__LINE__) << " listOfItems[i] =" << listOfItems[i] ;
 //        	QString itemOfList = listOfItems[i];
 //        	itemOfList.remove("\"");
 //        	itemOfList.remove("'");
@@ -451,7 +468,8 @@ int InsuranceWidget::calcInsuranceUid(){
 //    bool test = false;
 //    QStandardItemModel  *model = insuranceModelByLocale();
 //    int availModelRows = model->rowCount();
-//    //qDebug() << __FILE__ << QString::number(__LINE__) << " availModelRows = " << QString::number(availModelRows) ;
+//    //if (WarnDebugMessage)
+//    	      qDebug() << __FILE__ << QString::number(__LINE__) << " availModelRows = " << QString::number(availModelRows) ;
 //    QString strList;
 //    for (int i = 0; i < availModelRows; i += 1){
 //        if (!m_Model->insertRows(m_Model->rowCount(),1,QModelIndex()))
@@ -470,8 +488,10 @@ int InsuranceWidget::calcInsuranceUid(){
 //    	  			  value = QVariant::fromValue(strValue);
 //    	  		    }
 //    	  		    strValues += value.toString()+" ";
-//    	  		//qDebug() << __FILE__ << QString::number(__LINE__) << " value =" << value ;
-//    	  		//qDebug() << __FILE__ << QString::number(__LINE__) << "m_Model->rowCount() =" << QString::number(m_Model->rowCount()) ;
+//    	  		//if (WarnDebugMessage)
+//    	      qDebug() << __FILE__ << QString::number(__LINE__) << " value =" << value ;
+//    	  		//if (WarnDebugMessage)
+//    	      qDebug() << __FILE__ << QString::number(__LINE__) << "m_Model->rowCount() =" << QString::number(m_Model->rowCount()) ;
 //    	  		if (!m_Model->setData(m_Model->index(m_Model->rowCount()-1,j),value,Qt::EditRole))
 //    	  		{
 //    	  			qWarning() << __FILE__ << QString::number(__LINE__) << "data not inserted !" ;
@@ -480,6 +500,7 @@ int InsuranceWidget::calcInsuranceUid(){
 //    	  	    strList += strValues+"\n";
 //    	      test = m_Model->submit();
 //    	      }
+//    	      if (WarnDebugMessage)
 //    	      qDebug() << __FILE__ << QString::number(__LINE__) << " values = \n" << strList;
 
 //    return test;

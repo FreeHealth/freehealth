@@ -39,11 +39,9 @@
 #include <QSqlQuery>
 
 #include <QDebug>
-
+enum { WarnDebugMessage = true };
 using namespace AccountDB;
 using namespace Constants;
-
-
 
 receiptsEngine::receiptsEngine(){
     m_mpmodel = new AccountModel(this);
@@ -58,19 +56,22 @@ bool receiptsEngine::insertIntoAccount(const QHash<int,QVariant> &hashValues, co
 {
     // fetch all the account model
     /*while (m_mpmodel->canFetchMore(QModelIndex())) {
-        qDebug() << __FILE__ << QString::number(__LINE__)<< " while ";
+        if (WarnDebugMessage)
+    	      qDebug() << __FILE__ << QString::number(__LINE__)<< " while ";
         m_mpmodel->QAbstractItemModel::fetchMore(QModelIndex());
     }*/
 
     QSqlDatabase db = QSqlDatabase::database(Constants::DB_ACCOUNTANCY);
     QSqlDriver *driver = db.driver();
     if (driver->hasFeature(QSqlDriver::QuerySize)) {
-        qDebug() << __FILE__ << QString::number(__LINE__) << "driver has feature";
+        if (WarnDebugMessage)
+    	      qDebug() << __FILE__ << QString::number(__LINE__) << "driver has feature";
     }
     QString filterUser = QString("%1='%2'").arg("USER_UID",userUuid);
     m_mpmodel->AccountModel::setFilter(filterUser);
     int rowBefore = m_mpmodel->AccountModel::rowCount(QModelIndex());
-    qDebug() << __FILE__ << QString::number(__LINE__) << " rowBefore = " << QString::number(rowBefore);
+    if (WarnDebugMessage)
+    	      qDebug() << __FILE__ << QString::number(__LINE__) << " rowBefore = " << QString::number(rowBefore);
     if (m_mpmodel->insertRows(rowBefore,1,QModelIndex()))
     {
     	  qWarning() << __FILE__ << QString::number(__LINE__) << "Row inserted !" ;
@@ -80,7 +81,8 @@ bool receiptsEngine::insertIntoAccount(const QHash<int,QVariant> &hashValues, co
     
     for(int i = 1 ; i < ACCOUNT_MaxParam ; i ++){
          data = hashValues.value(i);
-         //qDebug() << __FILE__ << QString::number(__LINE__) << " data + i =" << data.toString()+" "+QString::number(i);
+         //if (WarnDebugMessage)
+    	      qDebug() << __FILE__ << QString::number(__LINE__) << " data + i =" << data.toString()+" "+QString::number(i);
          if (!m_mpmodel-> setData(m_mpmodel->index(rowBefore,i), data ,Qt::EditRole))
             {
             	qWarning() << __FILE__ << QString::number(__LINE__) << " model account error = " 
@@ -106,7 +108,8 @@ QHash<QString,QVariant> receiptsEngine::getNamesAndValuesFromMP(){//obsolete
     QHash<QString,QVariant> hash;
     MedicalProcedureModel model(this);
     int rows = model.rowCount(QModelIndex());
-    qDebug() << __FILE__ << QString::number(__LINE__) << " MP row count =" << QString::number(rows) ;
+    if (WarnDebugMessage)
+    	      qDebug() << __FILE__ << QString::number(__LINE__) << " MP row count =" << QString::number(rows) ;
     for (int i = 0; i < rows; i += 1)
     {
     	QString name = model.data(model.index(i,MP_NAME),Qt::DisplayRole).toString();
@@ -122,12 +125,14 @@ bool receiptsEngine::insertInThesaurus(const QString &listOfValuesStr, const QSt
     QString uuidStr = uuid.createUuid();
     ThesaurusModel model(this);
     int rowBefore = model.ThesaurusModel::rowCount(QModelIndex());
-    qDebug() << __FILE__ << QString::number(__LINE__) << " rowCount thesaurus =" << QString::number(rowBefore) ;
+    if (WarnDebugMessage)
+    	      qDebug() << __FILE__ << QString::number(__LINE__) << " rowCount thesaurus =" << QString::number(rowBefore) ;
     if (model.insertRows(rowBefore,1,QModelIndex()))
         {
     	  qWarning() << __FILE__ << QString::number(__LINE__) << "Row inserted !" ;
         }
-    qDebug() << __FILE__ << QString::number(__LINE__) << " rowCount thesaurus =" << QString::number(model.ThesaurusModel::rowCount(QModelIndex())) ;
+    if (WarnDebugMessage)
+    	      qDebug() << __FILE__ << QString::number(__LINE__) << " rowCount thesaurus =" << QString::number(model.ThesaurusModel::rowCount(QModelIndex())) ;
     model.setData(model.index(rowBefore,THESAURUS_UID), uuidStr,Qt::EditRole);
     model.setData(model.index(rowBefore,THESAURUS_USERUID), userUuid,Qt::EditRole);
     model.setData(model.index(rowBefore,THESAURUS_VALUES),listOfValuesStr,Qt::EditRole);
@@ -192,7 +197,8 @@ double receiptsEngine::getMinDistanceValue(const QString & data){
     DistanceRulesModel model(this);
     QString filter = QString("%1 = '%2'").arg("TYPE",data);
     model.setFilter(filter);
-    qDebug() << __FILE__ << QString::number(__LINE__) << " filter =" << model.filter() ;
+    if (WarnDebugMessage)
+    	      qDebug() << __FILE__ << QString::number(__LINE__) << " filter =" << model.filter() ;
     minDistance = model.data(model.index(0,DISTRULES_MIN_KM),Qt::DisplayRole).toDouble();
     return minDistance;
 }
@@ -224,7 +230,8 @@ QHash<int,QVariant> receiptsEngine::getListOfPreferedValues(QString & userUuid,
     QString MPfilter ;
     QStringList list;
     if(!data.isEmpty()){
-    qDebug() << __FILE__ << QString::number(__LINE__) << " data is not empty " ;
+    if (WarnDebugMessage)
+    	      qDebug() << __FILE__ << QString::number(__LINE__) << " data is not empty " ;
         if (data.contains("+"))
         {
     	    list = data.split("+");
@@ -314,7 +321,6 @@ QHash<QString,double> receiptsEngine::getFilteredValueFromMedicalProcedure(const
     while (q.next())
     {
     	double amount = q.value(0).toDouble();
-    	//qDebug() << __FILE__ << QString::number(__LINE__) << " n and a	= " << n << a;
         hash.insertMulti(act,amount);
         } 
     if (hash.size()>1)
@@ -382,6 +388,7 @@ QVariant receiptsEngine::getInsuranceUidFromInsurance(const QString & insurance)
     { 
         uid = q.value(0);
         } 
-    qDebug() << __FILE__ << QString::number(__LINE__) << " uid insuranceUid =" << uid.toString() ;   
+    if (WarnDebugMessage)
+    	      qDebug() << __FILE__ << QString::number(__LINE__) << " uid insuranceUid =" << uid.toString() ;   
     return uid;
 }

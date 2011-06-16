@@ -48,7 +48,7 @@
 #include <QFile>
 #include <QTextStream>
 #include <QCompleter>
-
+enum { WarnDebugMessage = true };
 using namespace Account;
 using namespace Account::Internal;
 using namespace Trans::ConstantTranslations;
@@ -80,7 +80,8 @@ void AvailableMovementPage::resetToDefaults()
 }
 
 void AvailableMovementPage::applyChanges()
-{qDebug() << __FILE__ << QString::number(__LINE__) << " applyChanges ";
+{if (WarnDebugMessage)
+    	      qDebug() << __FILE__ << QString::number(__LINE__) << " applyChanges ";
     if (!m_Widget) {
         return;
     }
@@ -194,7 +195,8 @@ void AvailableMovementWidget::on_addButton_clicked()
 {
     if (!m_Model->insertRow(m_Model->rowCount()))
         LOG_ERROR("Unable to add row");
-    qDebug() << __FILE__ << QString::number(__LINE__) << " rowCount =" << QString::number(m_Model->rowCount()) ;
+    if (WarnDebugMessage)
+    	      qDebug() << __FILE__ << QString::number(__LINE__) << " rowCount =" << QString::number(m_Model->rowCount()) ;
     movComboBox->setCurrentIndex(m_Model->rowCount() - 1);
     taxDeductibilityComboBox->setFocus();
     taxDeductibilityComboBox->setCurrentIndex(1);
@@ -266,7 +268,6 @@ void AvailableMovementWidget::showEvent(QShowEvent *event){
 //{
 //    QStandardItemModel *model = new QStandardItemModel;
 //    QString csvFileName = getCsvDefaultFile();
-//    qDebug() << __FILE__ << QString::number(__LINE__) << " csvFileName =" << csvFileName ;
 //    QFile file(getCsvDefaultFile());
 //    // some validity checking
 //    if (!file.exists()) {
@@ -306,7 +307,6 @@ void AvailableMovementWidget::showEvent(QShowEvent *event){
 //            for (int i = 0; i < AccountDB::Constants::AVAILMOV_MaxParam ; i += 1){
 //                //model->setData(model->index(row,i),listOfItems[i],Qt::EditRole);
 //        	QStandardItem * item = new QStandardItem;
-//        	//qDebug() << __FILE__ << QString::number(__LINE__) << " listOfItems[i] =" << listOfItems[i] ;
 //        	QString itemOfList = listOfItems[i];
 //        	itemOfList.remove("\"");
 //        	item->setData(itemOfList);
@@ -324,7 +324,6 @@ void AvailableMovementWidget::showEvent(QShowEvent *event){
 //    bool test = false;
 //    QStandardItemModel * model = availableMovementModelByLocale();
 //    int availModelRows = model->rowCount();
-//    //qDebug() << __FILE__ << QString::number(__LINE__) << " availModelRows = " << QString::number(availModelRows) ;
 //    QString strList;
 //    for (int i = 0; i < availModelRows; i += 1){
 //        if (!m_Model->insertRows(m_Model->rowCount(),1,QModelIndex()))
@@ -343,8 +342,6 @@ void AvailableMovementWidget::showEvent(QShowEvent *event){
 //    	  			  value = QVariant::fromValue(strValue);
 //    	  		    }
 //    	  		    strValues += value.toString()+" ";
-//    	  		//qDebug() << __FILE__ << QString::number(__LINE__) << " value =" << value ;
-//    	  		//qDebug() << __FILE__ << QString::number(__LINE__) << "m_Model->rowCount() =" << QString::number(m_Model->rowCount()) ;
 //    	  		if (!m_Model->setData(m_Model->index(m_Model->rowCount()-1,j),value,Qt::EditRole))
 //    	  		{
 //    	  			qWarning() << __FILE__ << QString::number(__LINE__) << "data not inserted !" ;
@@ -353,8 +350,7 @@ void AvailableMovementWidget::showEvent(QShowEvent *event){
 //    	  	    strList += strValues+"\n";
 //    	      test = m_Model->submit();
 //    	      }
-//    	      qDebug() << __FILE__ << QString::number(__LINE__) << " values = \n" << strList;
-
+//    	      
 //    return test;
 //}
 

@@ -52,7 +52,7 @@
 #include <QRegExp>
 #include <QLocale>
 #include <QUuid>
-
+enum { WarnDebugMessage = true };
 using namespace Account;
 using namespace Account::Internal;
 using namespace Trans::ConstantTranslations;
@@ -86,7 +86,8 @@ void AssetsRatesPage::resetToDefaults()
 
 void AssetsRatesPage::applyChanges()
 {
-    qDebug() << __FILE__ << QString::number(__LINE__) << " applyChanges ";
+    if (WarnDebugMessage)
+    	      qDebug() << __FILE__ << QString::number(__LINE__) << " applyChanges ";
     if (!m_Widget) {
         return;
     }
@@ -161,26 +162,30 @@ AssetsRatesWidget::~AssetsRatesWidget()
 
 void AssetsRatesWidget::setDatasToUi()
 {
-    qDebug() << __FILE__ << QString::number(__LINE__) << "index row  =" << QString::number(assetsNameComboBox->currentIndex());
+    if (WarnDebugMessage)
+    	      qDebug() << __FILE__ << QString::number(__LINE__) << "index row  =" << QString::number(assetsNameComboBox->currentIndex());
     m_Mapper->setCurrentIndex(assetsNameComboBox->currentIndex());
 }
 
 void AssetsRatesWidget::saveModel()
 {
-    qDebug() << __FILE__ << QString::number(__LINE__) << " currentIndex =" << QString::number(m_Mapper->currentIndex());
+    if (WarnDebugMessage)
+    	      qDebug() << __FILE__ << QString::number(__LINE__) << " currentIndex =" << QString::number(m_Mapper->currentIndex());
     if (m_Model->isDirty()) {
         bool yes = Utils::yesNoMessageBox(tr("Save changes ?"),
                                           tr("You make changes into the assetsrates table.\n"
                                              "Do you want to save them ?"));
         if (yes) {
-           if (!m_Model->submit()) {qDebug() << __FILE__ << QString::number(__LINE__) << " assetsrates no submit ";
+           if (!m_Model->submit()) {if (WarnDebugMessage)
+    	      qDebug() << __FILE__ << QString::number(__LINE__) << " assetsrates no submit ";
                 LOG_ERROR( tkTr(Trans::Constants::UNABLE_TO_SAVE_DATA_IN_DATABASE_1).arg(tr("assetsrates")));
             }
         } else {
             m_Model->revert();
         }
     }
-    qDebug() << __FILE__ << QString::number(__LINE__) << " assets rates error =" << m_Model->lastError().text();
+    if (WarnDebugMessage)
+    	      qDebug() << __FILE__ << QString::number(__LINE__) << " assets rates error =" << m_Model->lastError().text();
 }
 
 void AssetsRatesWidget::on_assetsNameComboBox_currentIndexChanged(int index)
@@ -191,18 +196,20 @@ void AssetsRatesWidget::on_assetsNameComboBox_currentIndexChanged(int index)
 
 void AssetsRatesWidget::on_addButton_clicked()
 {
-    qDebug() << __FILE__ << QString::number(__LINE__) << " rowCount1 =" << QString::number(m_Model->rowCount());
+    if (WarnDebugMessage)
+    	      qDebug() << __FILE__ << QString::number(__LINE__) << " rowCount1 =" << QString::number(m_Model->rowCount());
     if (!m_Model->insertRow(m_Model->rowCount()))
         LOG_ERROR( "Unable to add row");
-    qDebug() << __FILE__ << QString::number(__LINE__) << " rowCount2 =" << QString::number(m_Model->rowCount());
+    if (WarnDebugMessage)
+    	      qDebug() << __FILE__ << QString::number(__LINE__) << " rowCount2 =" << QString::number(m_Model->rowCount());
     assetsNameComboBox->setCurrentIndex(m_Model->rowCount()-1);
     assetsRatesUidLabel->setText(m_user_uid);
     assetsRatesUidLabel->setFocus();
     QDate currentDate = QDate::currentDate();
     dateEdit->setDate(currentDate);
     dateEdit->setFocus();
-    //qDebug() << __FILE__ << QString::number(__LINE__) << " percentUidLabel =" << percentUidLabel->text();
-    //qDebug() << __FILE__ << QString::number(__LINE__) << " currentIndex =" << QString::number(m_Mapper->currentIndex());
+    if (WarnDebugMessage)
+    	      qDebug() << __FILE__ << QString::number(__LINE__) << " currentIndex =" << QString::number(m_Mapper->currentIndex());
 
 }
 
@@ -267,7 +274,8 @@ bool AssetsRatesWidget::insertYearsRange()
     QString endYear = QString::number(endSpinBox->value());
     QString yearRange = QString("%1_%2").arg(beginYear,endYear);
     m_Model->setFilter("");
-    qDebug() << __FILE__ << QString::number(__LINE__) << " m_Model->rowCount =" << QString::number((m_Model->rowCount())) ;
+    if (WarnDebugMessage)
+    	      qDebug() << __FILE__ << QString::number(__LINE__) << " m_Model->rowCount =" << QString::number((m_Model->rowCount())) ;
     
     if (!m_Model->setData(m_Model->index(m_Model->rowCount()-1,AccountDB::Constants::ASSETSRATES_YEARS),
                           yearRange,Qt::EditRole)) {
@@ -327,7 +335,8 @@ bool AssetsRatesWidget::insertYearsRange()
 //        strList += strValues+"\n";
 //        test = m_Model->submit();
 //    }
-//    qDebug() << __FILE__ << QString::number(__LINE__) << " values = \n" << strList;
+//    if (WarnDebugMessage)
+//    	      qDebug() << __FILE__ << QString::number(__LINE__) << " values = \n" << strList;
 
 //    return test;
 //}

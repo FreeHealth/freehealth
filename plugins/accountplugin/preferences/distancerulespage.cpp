@@ -53,7 +53,7 @@
 #include <QUuid>
 #include <QDir>
 #include <QFile>
-
+enum { WarnDebugMessage = true };
 using namespace Account;
 using namespace Account::Internal;
 using namespace Trans::ConstantTranslations;
@@ -86,7 +86,8 @@ void DistanceRulesPage::resetToDefaults()
 }
 
 void DistanceRulesPage::applyChanges()
-{qDebug() << __FILE__ << QString::number(__LINE__) << " applyChanges ";
+{if (WarnDebugMessage)
+    	      qDebug() << __FILE__ << QString::number(__LINE__) << " applyChanges ";
     if (!m_Widget) {
         return;
     }
@@ -158,19 +159,22 @@ DistanceRulesWidget::~DistanceRulesWidget()
 
 void DistanceRulesWidget::setDatasToUi()
 {
-    qDebug() << __FILE__ << QString::number(__LINE__) << "index row  =" << QString::number(distanceRulesComboBox->currentIndex());
+    if (WarnDebugMessage)
+    	      qDebug() << __FILE__ << QString::number(__LINE__) << "index row  =" << QString::number(distanceRulesComboBox->currentIndex());
     m_Mapper->setCurrentIndex(distanceRulesComboBox->currentIndex());
 }
 
 void DistanceRulesWidget::saveModel()
 {
-    qDebug() << __FILE__ << QString::number(__LINE__) << " currentIndex =" << QString::number(m_Mapper->currentIndex());
+    if (WarnDebugMessage)
+    	      qDebug() << __FILE__ << QString::number(__LINE__) << " currentIndex =" << QString::number(m_Mapper->currentIndex());
     if (m_Model->isDirty()) {
         bool yes = Utils::yesNoMessageBox(tr("Save changes ?"),
                                           tr("You make changes into the distancerules table.\n"
                                              "Do you want to save them ?"));
         if (yes) {
-           if (!m_Model->submit()) {qDebug() << __FILE__ << QString::number(__LINE__) << " distancerules no submit ";
+           if (!m_Model->submit()) {if (WarnDebugMessage)
+    	      qDebug() << __FILE__ << QString::number(__LINE__) << " distancerules no submit ";
                 LOG_ERROR(tkTr(Trans::Constants::UNABLE_TO_SAVE_DATA_IN_DATABASE_1).
                                                    arg(tr("distancerules")));
             }
@@ -179,7 +183,8 @@ void DistanceRulesWidget::saveModel()
             m_Model->revert();
         }
     }
-    qDebug() << __FILE__ << QString::number(__LINE__) << " distanceRules error =" << m_Model->lastError().text();
+    if (WarnDebugMessage)
+    	      qDebug() << __FILE__ << QString::number(__LINE__) << " distanceRules error =" << m_Model->lastError().text();
 }
 
 void DistanceRulesWidget::on_distanceRulesComboBox_currentIndexChanged(int index)
@@ -191,10 +196,12 @@ void DistanceRulesWidget::on_distanceRulesComboBox_currentIndexChanged(int index
 
 void DistanceRulesWidget::on_addButton_clicked()
 {
-    qDebug() << __FILE__ << QString::number(__LINE__) << " rowCount1 =" << QString::number(m_Model->rowCount());
+    if (WarnDebugMessage)
+    	      qDebug() << __FILE__ << QString::number(__LINE__) << " rowCount1 =" << QString::number(m_Model->rowCount());
     if (!m_Model->insertRow(m_Model->rowCount()))
         LOG_ERROR("Unable to add row");
-    qDebug() << __FILE__ << QString::number(__LINE__) << " rowCount2 =" << QString::number(m_Model->rowCount());
+    if (WarnDebugMessage)
+    	      qDebug() << __FILE__ << QString::number(__LINE__) << " rowCount2 =" << QString::number(m_Model->rowCount());
     distanceRulesComboBox->setCurrentIndex(m_Model->rowCount()-1);
     distanceRulesUidLabel->setText(calcDistanceRulesUid());
     distanceRulesUidLabel->setFocus();
@@ -269,7 +276,8 @@ QString DistanceRulesWidget::calcDistanceRulesUid(){
 //{
 //    QStandardItemModel *model = new QStandardItemModel;
 //    QString csvFileName = getCsvDefaultFile();
-//    qDebug() << __FILE__ << QString::number(__LINE__) << " csvFileName =" << csvFileName ;
+//    if (WarnDebugMessage)
+//    	      qDebug() << __FILE__ << QString::number(__LINE__) << " csvFileName =" << csvFileName ;
 //    QFile file(getCsvDefaultFile());
 //    // some validity checking
 //    if (!file.exists()) {
@@ -309,7 +317,8 @@ QString DistanceRulesWidget::calcDistanceRulesUid(){
 //            for (int i = 0; i < AccountDB::Constants::DISTRULES_MaxParam ; i += 1){
 //                //model->setData(model->index(row,i),listOfItems[i],Qt::EditRole);
 //        	QStandardItem * item = new QStandardItem;
-//        	qDebug() << __FILE__ << QString::number(__LINE__) << " listOfItems[i] =" << listOfItems[i] ;
+//        	if (WarnDebugMessage)
+//    	      qDebug() << __FILE__ << QString::number(__LINE__) << " listOfItems[i] =" << listOfItems[i] ;
 //        	QString itemOfList = listOfItems[i];
 //        	itemOfList.remove("\"");
 //        	itemOfList.remove("'");
@@ -327,7 +336,8 @@ QString DistanceRulesWidget::calcDistanceRulesUid(){
 //    bool test = false;
 //    QStandardItemModel * model = distanceRulesModelByLocale();
 //    int availModelRows = model->rowCount();
-//    //qDebug() << __FILE__ << QString::number(__LINE__) << " availModelRows = " << QString::number(availModelRows) ;
+//    //if (WarnDebugMessage)
+//    	      qDebug() << __FILE__ << QString::number(__LINE__) << " availModelRows = " << QString::number(availModelRows) ;
 //    QString strList;
 //    for (int i = 0; i < availModelRows; i += 1){
 //        if (!m_Model->insertRows(m_Model->rowCount(),1,QModelIndex()))
@@ -346,8 +356,10 @@ QString DistanceRulesWidget::calcDistanceRulesUid(){
 //    	  			  value = QVariant::fromValue(strValue);
 //    	  		    }
 //    	  		    strValues += value.toString()+" ";
-//    	  		//qDebug() << __FILE__ << QString::number(__LINE__) << " value =" << value ;
-//    	  		//qDebug() << __FILE__ << QString::number(__LINE__) << "m_Model->rowCount() =" << QString::number(m_Model->rowCount()) ;
+//    	  		//if (WarnDebugMessage)
+//    	      qDebug() << __FILE__ << QString::number(__LINE__) << " value =" << value ;
+//    	  		//if (WarnDebugMessage)
+//   	      qDebug() << __FILE__ << QString::number(__LINE__) << "m_Model->rowCount() =" << QString::number(m_Model->rowCount()) ;
 //    	  		if (!m_Model->setData(m_Model->index(m_Model->rowCount()-1,j),value,Qt::EditRole))
 //    	  		{
 //    	  			qWarning() << __FILE__ << QString::number(__LINE__) << "data not inserted !" ;
@@ -356,6 +368,7 @@ QString DistanceRulesWidget::calcDistanceRulesUid(){
 //    	  	    strList += strValues+"\n";
 //    	      test = m_Model->submit();
 //    	      }
+//    	      if (WarnDebugMessage)
 //    	      qDebug() << __FILE__ << QString::number(__LINE__) << " values = \n" << strList;
 
 //    return test;
