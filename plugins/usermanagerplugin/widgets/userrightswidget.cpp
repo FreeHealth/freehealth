@@ -27,7 +27,10 @@
 /**
   \class UserPlugin::UserRightsWidget
   \brief This widget is specifically develop for UserViewer rights datamapper.
-  \ingroup usertoolkit widget_usertoolkit usermanager
+  The UserPlugin::UserRightsWidget is connected to the UserPlugin::UserRightsModel. It receives
+  the user rights using setRights(). The widget property \e rights is defined to be used with any
+  QDateWidgetMapper.
+  \sa UserPlugin::UserViewer
 */
 
 #include "userrightswidget.h"
@@ -69,6 +72,8 @@ QVariant UserRightsModel::data(const QModelIndex &index, int role) const
     if (!index.isValid())
         return QVariant();
 
+//    qWarning() << Q_FUNC_INFO;
+
     if (role==Qt::DisplayRole) {
         if (index.row() < m_RightsName.count())
             return m_RightsName.at(index.row());
@@ -79,8 +84,9 @@ QVariant UserRightsModel::data(const QModelIndex &index, int role) const
             return m_Rights == Core::IUser::AllRights ? Qt::Checked : Qt::Unchecked;
         if (index.row()==0) // No Rights
             return m_Rights == 0 ? Qt::Checked : Qt::Unchecked;
-        if (m_Rights & m_NameToRole.value(index.row(), 0))
+        if (m_Rights & m_NameToRole.value(index.row(), 0)) {
             return Qt::Checked;
+        }
         return Qt::Unchecked;
     }
 

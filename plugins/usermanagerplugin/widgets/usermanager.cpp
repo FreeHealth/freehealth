@@ -114,7 +114,6 @@ private:
   You must instanciate this class as a pointer in order to avoid errors at deletion.
   \sa UserModel, UserModel::hasCurrentUser()
   \todo Search user by city, search by name & firstname,
-  \ingroup widget_usertoolkit usertoolkit usermanager
 */
 UserManager::UserManager(QWidget * parent) :
         QMainWindow(parent)
@@ -163,7 +162,6 @@ UserManager::~UserManager()
   You must instanciate this class as a pointer in order to avoid errors at deletion.
   \sa UserModel, UserModel::hasCurrentUser()
   \todo Search user by city, search by name & firstname,
-  \ingroup widget_usertoolkit usertoolkit usermanager
 */
 UserManagerDialog::UserManagerDialog(QWidget * parent) :
         QDialog(parent)
@@ -330,6 +328,8 @@ bool UserManagerWidget::initialize()
 //        connect(userTableView,SIGNAL(activated(QModelIndex)), this, SLOT(showUserDebugDialog(QModelIndex)));
 
     // TODO active userTableView on currentUser
+
+    updateStatusBar();
     return true;
 }
 
@@ -385,7 +385,7 @@ void UserManagerWidget::analyseCurrentUserRights()
 void UserManagerWidget::updateStatusBar()
 {
     UserModel *m = UserModel::instance();
-    ui->memoryUsageLabel->setText(tr("Database usage : %1,\nMemory usage : %2")
+    ui->memoryUsageLabel->setText(tr("Database: %1,\nMemory: %2")
                                      .arg(m->rowCount())
                                      .arg(m->numberOfUsersInMemory()));
 //    if (! m_PermanentWidget) {
@@ -471,7 +471,7 @@ void UserManagerWidget::onClearModificationRequested()
 
 void UserManagerWidget::onSaveRequested()
 {
-    if ((!m_CanModify) || (! m_CanCreate))
+    if ((!m_CanModify) || (!m_CanCreate))
         return;
     // redefine focus
 //    m_Parent->statusBar()->setFocus();
@@ -490,7 +490,7 @@ void UserManagerWidget::onDeleteUserRequested()
     }
 }
 
-void UserManagerWidget::onUserActivated(const QModelIndex & index)
+void UserManagerWidget::onUserActivated(const QModelIndex &index)
 {
     ui->userViewer->changeUserTo(index.row());
 }
