@@ -69,18 +69,28 @@
 #include <QModelIndex>
 
 
-namespace mfDrugsWidgetPluginsPrivateConstants {
+namespace {
     const char* const OPTION_HIDESELECTOR     = "hideselector";
     const char* const OPTION_WITHPRESCRIBING  = "withprescribing";
     const char* const OPTION_WITHPRINTING     = "withprinting";
+
+    const char * const  EXTRAS_KEY              = "option";
+    const char * const  EXTRAS_KEY2             = "options";
 }
 
-using namespace mfDrugsWidgetPluginsPrivateConstants;
 using namespace DrugsWidget;
-using namespace DrugsWidget::Internal;
+using namespace Internal;
 
 static inline DrugsDB::Internal::DrugsBase *drugsBase() {return DrugsDB::Internal::DrugsBase::instance();}
 static inline Core::ISettings *settings() {return Core::ICore::instance()->settings();}
+
+inline static QStringList getOptions(Form::FormItem *item)
+{
+    QStringList l;
+    l = item->extraDatas().value(::EXTRAS_KEY).split(";", QString::SkipEmptyParts);
+    l += item->extraDatas().value(::EXTRAS_KEY2).split(";", QString::SkipEmptyParts);
+    return l;
+}
 
 //--------------------------------------------------------------------------------------------------------
 //------------------------------------ mfDrugsWidget plugin interface ------------------------------------
@@ -136,23 +146,9 @@ DrugsPrescriptorWidget::DrugsPrescriptorWidget(const QString &name, Form::FormIt
 
     // Add QLabel
     hb->addWidget(m_Label);
-//    if ( !( mfo->options() & mfObjectFundamental::LabelOnTop ) )
-//    {
-//        Qt::Alignment alignment = m_Label->alignment();
-//        alignment &= ~( Qt::AlignVertical_Mask );
-//        alignment |= Qt::AlignVCenter;
-//        m_Label->setAlignment( alignment );
-//    }
 
-//    // Get options
-//    const QStringList &options = mfo->param( mfObject::Param_Options ).toStringList();
-//    if ( options.contains( OPTION_WITHPRINTING, Qt::CaseInsensitive ) )
-//        m_WithPrinting = true;
-
-    // intialize drugs database
-//    drugsBase();
-
-    if (formItem->extraDatas().value("options").contains(OPTION_WITHPRESCRIBING, Qt::CaseInsensitive)) {
+    const QStringList &options = getOptions(formItem);
+    if (options.contains(OPTION_WITHPRESCRIBING, Qt::CaseInsensitive)) {
         m_WithPrescribing = true;
     } else if (name.compare("drugselector",Qt::CaseInsensitive)==0) {
         m_WithPrescribing = false;

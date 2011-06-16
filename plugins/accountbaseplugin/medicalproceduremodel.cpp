@@ -63,7 +63,7 @@ class MedicalProcedureModelPrivate
 public:
     MedicalProcedureModelPrivate(MedicalProcedureModel *parent) : m_SqlTable(0), 
                                                                   m_IsDirty(false),
-                                                                  m_UserUid(user()->value(Core::IUser::Uuid).toString()),
+                                                                  m_UserUid(user()->uuid()),
                                                                   q(parent)
     {
         m_SqlTable = new QSqlTableModel(q, QSqlDatabase::database(Constants::DB_ACCOUNTANCY));
@@ -239,7 +239,7 @@ bool MedicalProcedureModel::insertRows(int row, int count, const QModelIndex &pa
 //        query.bindValue(AccountDB::Constants::MP_REIMBOURSEMENT, QVariant());
 //        query.bindValue(AccountDB::Constants::MP_TYPE, QVariant());
 //        query.bindValue(AccountDB::Constants::MP_UID, QUuid::createUuid().toString());
-//        query.bindValue(AccountDB::Constants::MP_USER_UID, user()->value(Core::IUser::Uuid));
+//        query.bindValue(AccountDB::Constants::MP_USER_UID, user()->uuid());
 //        if (!query.exec()) {
 //            Utils::Log::addQueryError(this, query, __FILE__, __LINE__);
 //        }
@@ -253,7 +253,7 @@ bool MedicalProcedureModel::insertRows(int row, int count, const QModelIndex &pa
             // Set CurrentUser UUID
             qWarning() << __FILE__ << QString::number(__LINE__) << "else" ;
             QModelIndex userUid = d->m_SqlTable->index(row+i, Constants::MP_USER_UID, parent);
-            if (!d->m_SqlTable->setData(userUid, user()->value(Core::IUser::Uuid))) {
+            if (!d->m_SqlTable->setData(userUid, user()->uuid())) {
                 qWarning() << "1" << d->m_SqlTable->database().lastError().text();
                 ok = false;
             }

@@ -239,7 +239,7 @@ void VirtualDatabaseCreator::on_populate_clicked()
 {
     int nb = ui->bankAccounts->value() + ui->medicalProcedures->value() + ui->accounts->value() + ui->movements->value();
     int stepsDone = 0;
-    QString userUid = user()->value(Core::IUser::Uuid).toString();
+    QString userUid = user()->uuid();
 //    int userLkId = userModel()->practionnerLkIds(userModel()->currentUserData(Core::IUser::Uuid).toString()).at(0);
     QProgressDialog dlg(tr("Creating virtual database (%1 items to create)").arg(nb), tr("Cancel"), 0, nb, qApp->activeWindow());
     dlg.setWindowModality(Qt::WindowModal);

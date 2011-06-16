@@ -242,7 +242,7 @@ bool DrugsCentralWidget::createTemplate()
     dlg.setTemplateContent(content);
     dlg.setTemplateSummary(io.prescriptionToHtml(m_CurrentDrugModel, "", DrugsDB::DrugsIO::SimpleVersion));
     dlg.setTemplateMimeTypes(io.prescriptionMimeTypes());
-    dlg.setUserUuid(user()->value(Core::IUser::Uuid).toString());
+    dlg.setUserUuid(user()->uuid());
     dlg.exec();
     return true;
 }

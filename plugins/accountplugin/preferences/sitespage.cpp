@@ -122,7 +122,7 @@ SitesWidget::SitesWidget(QWidget *parent) :
     //QCoreApplication::processEvents(QEventLoop::AllEvents);
     setObjectName("SitesWidget");
     setupUi(this);
-    m_user_uid = user()->value(Core::IUser::Uuid).toString();
+    m_user_uid = user()->uuid();
     m_user_fullName = user()->value(Core::IUser::FullName).toString();
     if (m_user_fullName.isEmpty()) {
         m_user_fullName = "Admin_Test";

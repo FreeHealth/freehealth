@@ -57,7 +57,7 @@ PreferedReceipts::~PreferedReceipts(){}
 void PreferedReceipts::insertPreferedValuesIntoAccount(){
     QString currency = trUtf8("euros");
     receiptsEngine receiptsIO;
-    QString userUuid = user()->value(Core::IUser::Uuid).toString();
+    QString userUuid = user()->uuid();
     QString patientUid = patient()->data(Core::IPatient::Uid).toString();
     if (patientUid.isEmpty())
     {

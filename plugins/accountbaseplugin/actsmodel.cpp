@@ -63,7 +63,7 @@ public:
     ActsModelPrivate(ActsModel *parent) :
             m_SqlTable(0), m_IsDirty(false),
             m_StartDate(QDate::currentDate()), m_EndDate(QDate::currentDate()),
-            m_UserUid(user()->value(Core::IUser::Uuid).toString()),
+            m_UserUid(user()->uuid()),
             q(parent)
     {qDebug() << __FILE__ << QString::number(__LINE__) << " m_UserUid =  " << m_UserUid;
         m_SqlTable = new QSqlTableModel(q, QSqlDatabase::database(Constants::DB_ACCOUNTANCY));
@@ -254,7 +254,7 @@ double ActsModel::sum(const int &fieldRef)
 
 void ActsModel::userChanged()
 {
-    d->m_UserUid = user()->value(Core::IUser::Uuid).toString();
+    d->m_UserUid = user()->uuid();
     d->refreshFilter();
 }
 

@@ -124,7 +124,7 @@ bool UserModelWrapper::setValue(const int ref, const QVariant &value)
 bool UserModelWrapper::saveChanges()
 {
     if (m_Model) {
-        return m_Model->submitUser(value(Core::IUser::Uuid).toString());
+        return m_Model->submitUser(uuid());
     }
     return false;
 }

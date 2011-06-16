@@ -672,6 +672,7 @@ void GlobalDrugsModel::refreshDrugsPrecautions(const QModelIndex &topleft, const
     bool refreshModel = false;
     int ref = topleft.column();
     if (ref == Core::IPatient::DrugsUidAllergies) {
+        qWarning() << "GlobalDrugsModel::refreshDrugsPrecautions  Core::IPatient::DrugsUidAllergies";
         d->uidAllergies = patient()->data(Core::IPatient::DrugsUidAllergies).toStringList();
         d->uidAllergies.removeAll("");
         d->m_testUidAllergies = !d->uidAllergies.isEmpty();
@@ -679,6 +680,7 @@ void GlobalDrugsModel::refreshDrugsPrecautions(const QModelIndex &topleft, const
         refreshModel = true;
     }
     if (ref == Core::IPatient::DrugsInnAllergies) {
+        qWarning() << "GlobalDrugsModel::refreshDrugsPrecautions  Core::IPatient::DrugsInnAllergies";
         d->innAllergies = patient()->data(Core::IPatient::DrugsInnAllergies).toStringList();
         d->innAllergies.removeAll("");
         d->m_testInnAllergies = !d->innAllergies.isEmpty();
@@ -687,6 +689,7 @@ void GlobalDrugsModel::refreshDrugsPrecautions(const QModelIndex &topleft, const
         refreshModel = true;
     }
     if (ref == Core::IPatient::DrugsAtcAllergies) {
+        qWarning() << "GlobalDrugsModel::refreshDrugsPrecautions  Core::IPatient::DrugsAtcAllergies";
         d->fullAtcAllergies.clear();
         d->classAtcAllergies.clear();
         foreach(const QString &atc, patient()->data(Core::IPatient::DrugsAtcAllergies).toStringList()) {
@@ -702,6 +705,7 @@ void GlobalDrugsModel::refreshDrugsPrecautions(const QModelIndex &topleft, const
         refreshModel = true;
     }
     if (ref == Core::IPatient::DrugsAtcIntolerances) {
+        qWarning() << "GlobalDrugsModel::refreshDrugsPrecautions  Core::IPatient::DrugsAtcIntolerances";
         d->fullAtcIntolerances.clear();
         d->classAtcIntolerances.clear();
         foreach(const QString &atc, patient()->data(Core::IPatient::DrugsAtcIntolerances).toStringList()) {

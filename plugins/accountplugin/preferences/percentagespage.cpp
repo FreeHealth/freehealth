@@ -119,7 +119,7 @@ PercentagesWidget::PercentagesWidget(QWidget *parent) :
     //QCoreApplication::processEvents(QEventLoop::AllEvents);
     setObjectName("PercentagesWidget");
     setupUi(this);
-    m_user_uid = user()->value(Core::IUser::Uuid).toString();
+    m_user_uid = user()->uuid();
     //qDebug() << __FILE__ << QString::number(__LINE__) << " m_user_uid =" << m_user_uid ;
     m_user_fullName = user()->value(Core::IUser::FullName).toString();
     if (m_user_fullName.isEmpty()) {

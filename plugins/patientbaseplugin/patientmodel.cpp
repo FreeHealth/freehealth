@@ -82,7 +82,7 @@ public:
             m_SqlPhoto(0),
             q(parent)
     {
-//        m_UserUuid = user()->value(Core::IUser::Uuid).toString();
+//        m_UserUuid = user()->uuid();
 
         // install the Core Patient wrapper
 //        Core::ICore::instance()->setPatient(q);
@@ -280,7 +280,7 @@ PatientModel::~PatientModel()
 
 void PatientModel::changeUserUuid()
 {
-    d->m_UserUuid = user()->value(Core::IUser::Uuid).toString();
+    d->m_UserUuid = user()->uuid();
     QList<int> ids = QList<int>() << user()->value(Core::IUser::PersonalLinkId).toInt();
     d->m_LkIds.clear();
     foreach(int i, ids)

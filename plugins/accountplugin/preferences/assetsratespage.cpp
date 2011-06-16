@@ -121,7 +121,7 @@ AssetsRatesWidget::AssetsRatesWidget(QWidget *parent) :
     //QCoreApplication::processEvents(QEventLoop::AllEvents);
     setObjectName("AssetsRatesWidget");
     setupUi(this);
-    m_user_uid = user()->value(Core::IUser::Uuid).toString();
+    m_user_uid = user()->uuid();
     addButton->setIcon(theme()->icon(Core::Constants::ICONADD));
     addButton->setText("New");
     deleteButton->setIcon(theme()->icon(Core::Constants::ICONREMOVE));

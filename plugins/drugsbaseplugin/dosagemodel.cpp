@@ -335,7 +335,7 @@ bool DosageModel::insertRows(int row, int count, const QModelIndex & parent)
     Q_ASSERT_X(!m_UID.isNull(), "DosageModel::insertRows", "before inserting row, you must specify the UID of the related drug");
     if (WarnDebuggingDatas)
         qWarning() << "DosageModel::insertRows (row:" << row << ";count" << count << ")" << parent;
-    QString userUuid = user()->value(Core::IUser::Uuid).toString();
+    QString userUuid = user()->uuid();
     int i;
     int createdRow;
     bool toReturn = true;

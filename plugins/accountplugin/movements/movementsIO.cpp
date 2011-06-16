@@ -51,7 +51,7 @@ static inline Core::IUser *user() { return  Core::ICore::instance()->user(); }
 
 MovementsIODb::MovementsIODb(QObject *parent) : QObject(parent){
     m_modelMovements = new MovementModel(parent);
-    m_user_uid = user()->value(Core::IUser::Uuid).toString();
+    m_user_uid = user()->uuid();
 }
 
 MovementsIODb::~MovementsIODb()

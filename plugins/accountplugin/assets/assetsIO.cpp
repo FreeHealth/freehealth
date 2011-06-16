@@ -55,7 +55,7 @@ AssetsIO::AssetsIO(QObject *parent) :
         QObject(parent)
 {
     m_assetModel = new AccountDB::AssetModel(parent);
-    m_user_uid = user()->value(Core::IUser::Uuid).toString();
+    m_user_uid = user()->uuid();
 }
 
 AssetsIO::~AssetsIO()

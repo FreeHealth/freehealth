@@ -95,7 +95,6 @@ void UserViewer::changeUserTo(const int modelRow)
 /** \brief Change current viewing user to \e modelRow from UserModel */
 void UserViewerPrivate::changeUserIndex(const int modelRow)
 {
-    qWarning() << Q_FUNC_INFO << modelRow;
     // clear ui
     genericPreview->headerEditor()->clear();
     genericPreview->footerEditor()->clear();
@@ -114,9 +113,7 @@ void UserViewerPrivate::changeUserIndex(const int modelRow)
     m_Row = modelRow;
     checkUserRights();
     if (m_CanRead) {
-        qWarning() << "------------";
         m_Mapper->setCurrentIndex(modelRow);
-        qWarning() << "------------";
     } else {
         m_Row = oldRow;
         Utils::informativeMessageBox(tr("You can not access to these datas."), tr("You don't have these rights."), "");
@@ -216,11 +213,9 @@ void UserViewerPrivate::prepareMapper()
     m_Mapper->addMapping(paramedicalRightsWidget, Core::IUser::ParamedicalRights, "rights");
     m_Mapper->addMapping(administrativeRightsWidget, Core::IUser::AdministrativeRights, "rights");
 
-    qWarning() << "\n\n\nMapper setCurrentIndex"<< UserModel::instance()->currentUserIndex() << UserModel::instance()->currentUserIndex().data().toString() << "\n\n\n";
     m_Mapper->setCurrentIndex(UserModel::instance()->currentUserIndex().row());
 
     QModelIndex test = UserModel::instance()->index(UserModel::instance()->currentUserIndex().row(), Core::IUser::Adress);
-    qWarning() << "-------------" << test.data().toString() << test.data(Qt::EditRole).toString();
 
     // make connections
     connect (m_Mapper->model(), SIGNAL(modelReset()), this, SLOT(onModelReseted()));

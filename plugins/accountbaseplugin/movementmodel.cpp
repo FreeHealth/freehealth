@@ -71,7 +71,7 @@ private:
 
 MovementModel::MovementModel(QObject *parent) :
         QAbstractTableModel(parent),
-        m_UserUid(user()->value(Core::IUser::Uuid).toString()), 
+        m_UserUid(user()->uuid()),
         d(new Internal::MovementModelPrivate(this))
 {
 //    d->m_SqlTable->setEditStrategy(QSqlTableModel::OnManualSubmit);

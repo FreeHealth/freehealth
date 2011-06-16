@@ -68,7 +68,7 @@ private:
 
 
 BankAccountModel::BankAccountModel(QObject *parent) : QAbstractTableModel(parent), 
-                                                      m_UserUid(user()->value(Core::IUser::Uuid).toString()),
+                                                      m_UserUid(user()->uuid()),
                                                       d(new Internal::BankAccountModelPrivate(this))
 {
     d->m_SqlTable->setEditStrategy(QSqlTableModel::OnFieldChange);

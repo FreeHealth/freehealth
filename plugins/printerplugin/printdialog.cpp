@@ -126,7 +126,7 @@ void PrintDialog::accept()
             QDir().mkpath(fileName);
         fileName.append(QDir::separator() + docName);
         m_Printer->toPdf(fileName, docName);
-        docPrinter()->addPrintedDoc(fileName,docName,QDateTime::currentDateTime(), user()->value(Core::IUser::Uuid).toString());
+        docPrinter()->addPrintedDoc(fileName,docName,QDateTime::currentDateTime(), user()->uuid());
     }
     QDialog::accept();
 }

@@ -71,7 +71,7 @@ AssetsRatesModel::AssetsRatesModel(QObject *parent) : QAbstractTableModel(parent
                                                       //m_UserUid(user()->value(Core::IUser::Uuid).toString()),
                                                       d(new Internal::AssetsRatesModelPrivate(this))
 {
-    m_UserUid= user()->value(Core::IUser::Uuid).toString();
+    m_UserUid= user()->uuid();
     d->m_SqlTable->setEditStrategy(QSqlTableModel::OnFieldChange);
     //setUserUuid(m_UserUid);
 }

@@ -68,7 +68,7 @@ public:
         m_SqlTable = new QSqlTableModel(q, QSqlDatabase::database(Constants::DB_ACCOUNTANCY));
         m_SqlTable->setTable(accountBase()->table(Constants::Table_Account));
         if (user())
-            m_UserUid = user()->value(Core::IUser::Uuid).toString();
+            m_UserUid = user()->uuid();
         //setFilterUserUuid();
         //refreshFilter();
     }
@@ -269,7 +269,7 @@ double AccountModel::sum(const int &fieldRef)
 void AccountModel::userChanged()
 {
     if (user()) {
-        d->m_UserUid = user()->value(Core::IUser::Uuid).toString();
+        d->m_UserUid = user()->uuid();
         //d->refreshFilter();
     }
 }

@@ -62,7 +62,7 @@ using namespace Trans::ConstantTranslations;
 
 static inline Core::ISettings *settings()  { return Core::ICore::instance()->settings(); }
 static inline Core::IPatient *patient()  { return Core::ICore::instance()->patient(); }
-static inline QString currentUserUuid() {return Core::ICore::instance()->user()->value(Core::IUser::Uuid).toString();}
+static inline QString currentUserUuid() {return Core::ICore::instance()->user()->uuid();}
 static inline Category::CategoryCore *categoryCore() {return Category::CategoryCore::instance();}
 
 

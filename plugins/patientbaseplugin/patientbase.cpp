@@ -322,7 +322,7 @@ void PatientBase::onCoreDatabaseServerChanged()
 void PatientBase::toTreeWidget(QTreeWidget *tree)
 {
     Database::toTreeWidget(tree);
-    QString uuid = user()->value(Core::IUser::Uuid).toString();
+    QString uuid = user()->uuid();
     QHash<int, QString> where;
     /** \todo here */
 //    where.clear();

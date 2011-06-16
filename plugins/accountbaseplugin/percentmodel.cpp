@@ -55,7 +55,7 @@ class PercentModelPrivate
 {
 public:
     PercentModelPrivate(PercentModel *parent) : m_SqlTable(0),
-                                                m_UserUid(user()->value(Core::IUser::Uuid).toString()),
+                                                m_UserUid(user()->uuid()),
                                                 m_IsDirty(false),
                                                 q(parent)
     {   qDebug() << __FILE__ << QString::number(__LINE__) << " m_UserUid =  " << m_UserUid;

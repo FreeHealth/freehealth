@@ -481,7 +481,7 @@ bool EpisodeBase::addSubForms(const QVector<SubFormInsertionPoint> &insertions)
 void EpisodeBase::toTreeWidget(QTreeWidget *tree)
 {
     Database::toTreeWidget(tree);
-    QString uuid = user()->value(Core::IUser::Uuid).toString();
+    QString uuid = user()->uuid();
     QHash<int, QString> where;
     where.clear();
     /** \todo here */

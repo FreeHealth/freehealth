@@ -70,7 +70,7 @@ private:
 
 
 AssetModel::AssetModel(QObject *parent) : QAbstractTableModel(parent),
-                                          m_UserUid(user()->value(Core::IUser::Uuid).toString()),
+                                          m_UserUid(user()->uuid()),
                                           d(new Internal::AssetModelPrivate(this))
 {
     d->m_SqlTable->setEditStrategy(QSqlTableModel::OnFieldChange);

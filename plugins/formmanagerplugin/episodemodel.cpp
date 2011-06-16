@@ -85,7 +85,7 @@ static inline Form::Internal::EpisodeBase *episodeBase() {return Form::Internal:
 
 static inline Core::IUser *user() {return Core::ICore::instance()->user();}
 static inline Core::IPatient *patient() {return Core::ICore::instance()->patient();}
-static inline QString currentUserUuid() {return user()->value(Core::IUser::Uuid).toString();}
+static inline QString currentUserUuid() {return user()->uuid();}
 
 static inline Core::ISettings *settings()  { return Core::ICore::instance()->settings(); }
 static inline Core::ActionManager *actionManager() { return Core::ICore::instance()->actionManager(); }

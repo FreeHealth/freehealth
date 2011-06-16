@@ -669,7 +669,7 @@ ReceiptViewer::ReceiptViewer(QWidget *parent) :
     ui(new Ui::ReceiptViewer)
 {
     if (user())
-        m_userUuid = user()->value(Core::IUser::Uuid).toString();
+        m_userUuid = user()->uuid();
     receiptsManager rManager;
     m_kilometers = 0.00 ;
     m_distanceRuleValue = 0.00;
@@ -1022,7 +1022,7 @@ void ReceiptViewer::save()
 {
     using namespace ::Internal;
     receiptsEngine rIO;
-    QString userUuid = user()->value(Core::IUser::Uuid).toString();
+    QString userUuid = user()->uuid();
     QString textOfListOfActs = m_listOfValues.join("+");
     for (int row = 0; row < m_model->rowCount(QModelIndex()); row += 1)
     {

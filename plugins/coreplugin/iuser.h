@@ -145,6 +145,9 @@ public:
 
     void replaceTokens(QString &stringWillBeModified);
 
+    // Some code easiers
+    QString uuid() const {return value(Uuid).toString();}
+
 Q_SIGNALS:
     void userChanged();
     void userDataChanged(const int ref);
