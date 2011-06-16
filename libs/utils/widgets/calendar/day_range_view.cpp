@@ -154,7 +154,10 @@ void DayRangeHeader::paintEvent(QPaintEvent *) {
 	int fontHeight = QFontMetrics(QFont()).height();
 	for (int i = 0; i < m_rangeWidth; ++i) {
 		QRect br(QPoint(60 + (i * containWidth) / m_rangeWidth, 0), QPoint(60 + ((i + 1) * containWidth) / m_rangeWidth, rect().height() - 2));
-		painter.fillRect(br, Qt::white);
+		if (m_mouseMode == MouseMode_Creation && date >= m_pressDayInterval.first && date <= m_pressDayInterval.second)
+			painter.fillRect(br, QColor(240, 240, 240));
+		else
+			painter.fillRect(br, Qt::white);
 
 		// vertical lines
 		if (i > 0) {
@@ -223,8 +226,13 @@ void DayRangeHeader::mousePressEvent(QMouseEvent *event) {
 		m_pressItem = model()->getItemByUid(m_pressItemWidget->uid());
 		m_pressDayInterval = getIntersectDayRange(m_pressItem.beginning(), m_pressItem.ending());
 		m_mouseMode = MouseMode_Move;
-	} else
+	} else {
 		m_mouseMode = MouseMode_Creation;
+
+		m_pressDayInterval.first = m_pressDate;
+		m_pressDayInterval.second = m_pressDate;
+		update();
+	}
 }
 
 void DayRangeHeader::mouseMoveEvent(QMouseEvent *event) {
@@ -241,27 +249,14 @@ void DayRangeHeader::mouseMoveEvent(QMouseEvent *event) {
 
 	switch (m_mouseMode) {
 	case MouseMode_Creation:
-/*		if (dateTime != m_pressDateTime) {
-			if (!m_pressItemWidget) {
-				m_pressItemWidget = new HourRangeWidget(this);
-				m_pressItemWidget->setBeginDateTime(m_pressDateTime);
-				m_pressItemWidget->show();
-			}
-
-			if (event->pos().y() > m_pressPos.y()) {
-				rect = getTimeIntervalRect(m_pressDateTime.date().dayOfWeek(), m_pressDateTime.time(), dateTime.time());
-				m_pressItemWidget->setBeginDateTime(m_pressDateTime);
-				m_pressItemWidget->setEndDateTime(dateTime);
-			}
-			else {
-				rect = getTimeIntervalRect(m_pressDateTime.date().dayOfWeek(), dateTime.time(), m_pressDateTime.time());
-				m_pressItemWidget->setBeginDateTime(dateTime);
-				m_pressItemWidget->setEndDateTime(m_pressDateTime);
-			}
-
-			m_pressItemWidget->move(rect.x(), rect.y());
-			m_pressItemWidget->resize(rect.width(), rect.height());
-			}*/
+		if (m_previousDate < m_pressDate) {
+			m_pressDayInterval.first = m_previousDate;
+			m_pressDayInterval.second = m_pressDate;
+		} else {
+			m_pressDayInterval.first = m_pressDate;
+			m_pressDayInterval.second = m_previousDate;
+		}
+		update();
 		break;
 	case MouseMode_Move:
 	{
@@ -300,6 +295,13 @@ void DayRangeHeader::mouseReleaseEvent(QMouseEvent *event) {
 			computeWidgets();
 			updateGeometry();
 		}
+	} else if (m_mouseMode == MouseMode_Creation) {
+		CalendarItem item = model()->insertItem(QDateTime(m_pressDayInterval.first, QTime(0, 0)),
+												QDateTime(m_pressDayInterval.second.addDays(1), QTime(0, 0)));
+		item.setDaily(true);
+		model()->setItemByUid(item.uid(), item);
+		computeWidgets();
+		updateGeometry();
 	}
 
 	m_mouseMode = MouseMode_None;
