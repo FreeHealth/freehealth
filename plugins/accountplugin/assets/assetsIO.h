@@ -53,6 +53,7 @@ class AssetModel;
 class ACCOUNT_EXPORT AssetsIO : public QObject
 {
     Q_OBJECT
+enum { WarnDebugMessage = true };
 public:
     AssetsIO(QObject *parent);
     ~AssetsIO();

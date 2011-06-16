@@ -74,17 +74,19 @@ bool AssetsIO::insertIntoAssets(const QHash<int,QVariant> &hashValues)
 {
     bool ret = true;
     int rowBefore = m_assetModel->rowCount(QModelIndex());
-    qDebug() << __FILE__ << QString::number(__LINE__) << " rowBefore = " << QString::number(rowBefore);
+    if (WarnDebugMessage)
+        qDebug() << __FILE__ << QString::number(__LINE__) << " rowBefore = " << QString::number(rowBefore);
     if (m_assetModel->insertRows(rowBefore,1,QModelIndex())) {
-        qWarning() << __FILE__ << QString::number(__LINE__) << "Row inserted !" ;
+        if (WarnDebugMessage)
+            qWarning() << __FILE__ << QString::number(__LINE__) << "Row inserted !" ;
     }
     QVariant data;
     for(int i = 1 ; i < ASSETS_MaxParam ; i ++){
         data = hashValues.value(i);
         //qDebug() << __FILE__ << QString::number(__LINE__) << " data + i =" << data.toString()+" "+QString::number(i);
         if (!m_assetModel-> setData(m_assetModel->index(rowBefore,i), data ,Qt::EditRole)) {
-            qWarning() << __FILE__ << QString::number(__LINE__) << " asset model error = "
-                    << m_assetModel->lastError().text() ;
+            if (WarnDebugMessage)
+                        qWarning() << __FILE__ << QString::number(__LINE__) << " asset model error = " << m_assetModel->lastError().text() ;
         }
     }
     m_assetModel->submit();
@@ -105,9 +107,11 @@ bool AssetsIO::insertIntoMovements(const QHash<int,QVariant> &hashValues)
     int type = 2;
     QString bank;
     int rowBefore = modelMovements.rowCount(QModelIndex());
-    qDebug() << __FILE__ << QString::number(__LINE__) << " rowBefore = " << QString::number(rowBefore);
+    if (WarnDebugMessage)
+        qDebug() << __FILE__ << QString::number(__LINE__) << " rowBefore = " << QString::number(rowBefore);
     if (modelMovements.insertRows(rowBefore,1,QModelIndex())) {
-        qWarning() << __FILE__ << QString::number(__LINE__) << "Row inserted !" ;
+        if (WarnDebugMessage)
+                qWarning() << __FILE__ << QString::number(__LINE__) << "Row inserted !" ;
     }
     QVariant data;
     for(int i = 1 ; i < MOV_MaxParam ; i ++) {
@@ -124,12 +128,14 @@ bool AssetsIO::insertIntoMovements(const QHash<int,QVariant> &hashValues)
         {
         	  int bankId = data.toInt();
         	  bank = getBankNameFromId(bankId);
-        	  qDebug() << __FILE__ << QString::number(__LINE__) << " bank =" << bank ;
+        	  if (WarnDebugMessage)      	  
+        	      qDebug() << __FILE__ << QString::number(__LINE__) << " bank =" << bank ;
             }
         //qDebug() << __FILE__ << QString::number(__LINE__) << " data + i =" << data.toString()+" "+QString::number(i);
         if (!modelMovements. setData(modelMovements.index(rowBefore,i), data ,Qt::EditRole)) {
+            if (WarnDebugMessage){
             qWarning() << __FILE__ << QString::number(__LINE__) << " model account error = "
-                    << modelMovements.lastError().text() ;
+                    << modelMovements.lastError().text() ;}
         }
     }
     modelMovements.submit();
@@ -143,10 +149,12 @@ bool AssetsIO::insertIntoMovements(const QHash<int,QVariant> &hashValues)
     if (type < 1)
     {
     	  value = 0.00 - value;
-    	  qDebug() << __FILE__ << QString::number(__LINE__) << " value neg =" << QString::number(value) ;
+    	  if (WarnDebugMessage)
+    	      qDebug() << __FILE__ << QString::number(__LINE__) << " value neg =" << QString::number(value) ;
     	  
         }
     if (!debitOrCreditInBankBalance(bank,value)){
+            if (WarnDebugMessage)
     	  	  qWarning() << __FILE__ << QString::number(__LINE__) << "Unable to debit or credit balance !" ;
     	}
     return ret;
@@ -176,11 +184,13 @@ bool AssetsIO::debitOrCreditInBankBalance(const QString &bank, double value){
     QDate date = QDate::currentDate();
     if (!model.setData(model.index(row,BANKDETAILS_BALANCE),newBalance,Qt::EditRole))
     {
-    	  qWarning() << __FILE__ << QString::number(__LINE__) << "Unable to insert balance data !" ;
+    	  if (WarnDebugMessage)
+    	      qWarning() << __FILE__ << QString::number(__LINE__) << "Unable to insert balance data !" ;
         }
     if (!model.setData(model.index(row,BANKDETAILS_BALANCEDATE),date,Qt::EditRole))
     {
-    	  qWarning() << __FILE__ << QString::number(__LINE__) << "Unable to insert balance new date !" ;
+          if (WarnDebugMessage)
+    	      qWarning() << __FILE__ << QString::number(__LINE__) << "Unable to insert balance new date !" ;
         }
     if (!model.submit())
     {
@@ -195,7 +205,8 @@ QString AssetsIO::getBankNameFromId(int id){
     QString field = model.headerData(BANKDETAILS_ID,Qt::Horizontal,Qt::DisplayRole).toString();
     QString filter = field +QString(" = '%1'").arg(id);
     model.setFilter(filter);
-    qDebug() << __FILE__ << QString::number(__LINE__) << " model filter =" << model.filter() ;
+    if (WarnDebugMessage)
+        qDebug() << __FILE__ << QString::number(__LINE__) << " model filter =" << model.filter() ;
     bank = model.data(model.index(0,BANKDETAILS_LABEL),Qt::DisplayRole).toString();
     return bank;
 }
@@ -212,7 +223,8 @@ int AssetsIO::getIdFromBankName(const QString & bankName){
     QString filter = QString("%1 = '%2'").arg("BD_LABEL",bank);
     bankmodel.setFilter(filter);
     id = bankmodel.data(bankmodel.index(0,BANKDETAILS_ID),Qt::DisplayRole).toInt();
-    qDebug() << __FILE__ << QString::number(__LINE__) << " filter =" << bankmodel.filter() ;
+    if (WarnDebugMessage)
+        qDebug() << __FILE__ << QString::number(__LINE__) << " filter =" << bankmodel.filter() ;
     return id;
 }
 
@@ -231,7 +243,8 @@ QStandardItemModel * AssetsIO::getBankComboBoxModel(QObject * parent){
         if (bankDefault == "1") {
             icon = QIcon(theme()->icon(Core::Constants::ICONADD));
             item->setIcon(icon);
-            qDebug() << __FILE__ << QString::number(__LINE__) << " item def =" << item->text() ;
+            if (WarnDebugMessage)
+                qDebug() << __FILE__ << QString::number(__LINE__) << " item def =" << item->text() ;
             model->appendRow(item);
             } 
         }
@@ -245,7 +258,8 @@ QStandardItemModel * AssetsIO::getBankComboBoxModel(QObject * parent){
     	{
     	    icon = QIcon(theme()->icon(Core::Constants::ICONREMOVE));
             item->setIcon(icon);
-            qDebug() << __FILE__ << QString::number(__LINE__) << " item def =" << item->text() ;
+            if (WarnDebugMessage)
+                qDebug() << __FILE__ << QString::number(__LINE__) << " item def =" << item->text() ;
             model->appendRow(item);
     	    } 
         }
@@ -291,7 +305,8 @@ int AssetsIO::getLastMovementId(){
 
 bool AssetsIO::deleteMovement(int idMovement,int idBank){
     bool ret = true;
-    qDebug() << __FILE__ << QString::number(__LINE__) << " idMovement =" << QString::number(idMovement) ;
+    if (WarnDebugMessage)
+        qDebug() << __FILE__ << QString::number(__LINE__) << " idMovement =" << QString::number(idMovement) ;
     MovementModel movModel(this);
     QString filter = QString("%1 = '%2'").arg("MOV_ID",QString::number(idMovement));
     movModel.setFilter(filter);
@@ -342,7 +357,8 @@ bool AssetsIO::deleteOneYearToRun(int row){
     yearsToRun--;
     if (!model.setData(model.index(row,ASSETS_YEARS),yearsToRun,Qt::EditRole))
         {
-    	    qWarning() << __FILE__ << QString::number(__LINE__) << "Error = "+model.lastError().text() ;
+    	    if (WarnDebugMessage)
+    	        qWarning() << __FILE__ << QString::number(__LINE__) << "Error = "+model.lastError().text() ;
             }
     if (!model.submit())
     {
@@ -356,13 +372,15 @@ double AssetsIO::getRate(const QDate &date, double duration) {
     QHash<QString,QDate> hashRatesDates;
     QStringList listChosenOfRanges;
     AssetsRatesModel model(this);
-    qDebug() << __FILE__ << QString::number(__LINE__) << " model.rowCount() =" << QString::number(model.rowCount()) ;
+    if (WarnDebugMessage)
+        qDebug() << __FILE__ << QString::number(__LINE__) << " model.rowCount() =" << QString::number(model.rowCount()) ;
     for (int i = 0; i < model.rowCount(); i += 1)
     {
     	QDate dateRequest = model.data(model.index(i,ASSETSRATES_DATE),Qt::DisplayRole).toDate();
     	QString rangeReq = model.data(model.index(i,ASSETSRATES_YEARS),Qt::DisplayRole).toString();
     	QString rate = model.data(model.index(i,ASSETSRATES_RATES),Qt::DisplayRole).toString();
-    	qDebug() << __FILE__ << QString::number(__LINE__) << " rangeReq and rate =" << rangeReq+" "+rate ;
+    	if (WarnDebugMessage)
+    	    qDebug() << __FILE__ << QString::number(__LINE__) << " rangeReq and rate =" << rangeReq+" "+rate ;
     	QStringList listOfRanges = rangeReq.split("_");
     	if (int(duration) >= listOfRanges[0].toInt() && int(duration) <= listOfRanges[1].toInt())
     	{
@@ -370,7 +388,8 @@ double AssetsIO::getRate(const QDate &date, double duration) {
     	    }
         }
     QList<QDate> valuesOfDates = hashRatesDates.values();
-    qDebug() << __FILE__ << QString::number(__LINE__) << " valuesOfDates size =" << QString::number(valuesOfDates.size()) ;
+    if (WarnDebugMessage)
+        qDebug() << __FILE__ << QString::number(__LINE__) << " valuesOfDates size =" << QString::number(valuesOfDates.size()) ;
     if (hashRatesDates.size()< 1)
     {
     	  QMessageBox::warning(0,trUtf8("Warning"),trUtf8("You have to fill defaults for assets rates.\nGo "
@@ -384,7 +403,8 @@ double AssetsIO::getRate(const QDate &date, double duration) {
     QString nearestDateStr = nearestDate.toString("yyyy-MM-dd");
     QString rateStr = hashRatesDates.key(nearestDate);
     rate = rateStr.toDouble();
-    qWarning() << __FILE__ << QString::number(__LINE__) << "rate = " << QString::number(rate) ;
+    if (WarnDebugMessage)
+        qWarning() << __FILE__ << QString::number(__LINE__) << "rate = " << QString::number(rate) ;
     return rate;
 }
 
@@ -400,8 +420,10 @@ QStandardItemModel * AssetsIO::getYearlyValues(const QDate & year, QObject * par
                                                                            dateEnd);
     AssetModel assetModel(this);
     assetModel.setFilter(filter);
-    qDebug() << __FILE__ << QString::number(__LINE__) << " assetModel filter =" << assetModel.filter() ;
-    qDebug() << __FILE__ << QString::number(__LINE__) << "model row = " << assetModel.rowCount();
+    if (WarnDebugMessage)
+        qDebug() << __FILE__ << QString::number(__LINE__) << " assetModel filter =" << assetModel.filter() ;
+    if (WarnDebugMessage)
+        qDebug() << __FILE__ << QString::number(__LINE__) << "model row = " << assetModel.rowCount();
     for (int i = 0; i < assetModel.rowCount(); i += 1)
     {
     	QString label = assetModel.data(assetModel.index(i,ASSETS_LABEL),Qt::DisplayRole).toString();
@@ -415,7 +437,8 @@ QStandardItemModel * AssetsIO::getYearlyValues(const QDate & year, QObject * par
     	QStandardItem * itemDuration = new QStandardItem(duration);
     	QStandardItem * itemDate = new QStandardItem(date);
     	QList<QStandardItem*> listOfItems;
-    	qDebug() << __FILE__ << QString::number(__LINE__);
+    	if (WarnDebugMessage)
+    	    	qDebug() << __FILE__ << QString::number(__LINE__);
     	
     	listOfItems << itemLabel << itemValue << itemMode << itemDuration << itemDate;
     	model->appendRow(listOfItems);
