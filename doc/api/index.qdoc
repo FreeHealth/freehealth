@@ -1,15 +1,15 @@
 /*!
     \mainpage FreeMedForms a free and open source medical files manager.
     \author    Eric Maeker, MD
-    \version   FreeMedForms alpha 0.5.0 (not released yet)
+    \version   FreeMedForms alpha 0.5.9~alpha2
 
 
     \section introduction Introduction
 
     \subsection intro_fr Français
 
-FreeMedForms (FMF) est une suite logicielle multi-plateforme (disponible pour MacOs, Linux, FreeBsd, Windows),
-multilingue, gratuite et en code ouvert sous licence BSD révisée. FreeMedForms est développée par des médecins et
+FreeMedForms (FMF) est une suite logicielle multi-plateforme (disponible pour MacOs, Linux, FreeBSD, Windows),
+multilingue, gratuite et en code ouvert sous licence GPLv3. FreeMedForms est développée par des médecins et
 est essentiellement destinée aux professionnels de la santé. Actuellement, la suite est en phase de développement.
 Elle est mise à disposition uniquement à des fins de tests. Le principal objectif de FreeMedForms est de gérer les
 dossiers médicaux électroniques basés sur votre pratique médicale ou la pratique de groupes de recherche clinique.
@@ -18,8 +18,8 @@ sont déjà opérationnelles et utilisables en pratique courante comme le prescr
 DrugsInteractions).
 
 FreeDiams est le plugins prescripteur de la suite FreeMedForms construit en une application à part entière.
-FreeDiams est un logiciel multi-plateforme (MacOs, Linux, FreeBsd, Windows), gratuit et en code ouvert sous
-licence BSD révisée. Il est développé par des médecins et se destine à une utilisation par ces mêmes professionnels.
+FreeDiams est un logiciel multi-plateforme (MacOs, Linux, FreeBSD, Windows), gratuit et en code ouvert sous
+licence GPLv3. Il est développé par des médecins et se destine à une utilisation par ces mêmes professionnels.
 Il peut être utilisé seul pour prescrire et/ou tester les interactions médicamenteuses d'une prescription.
 Il peut être lié à n'importe quelle application grâce à ses paramétres de ligne de commande. La base de données
 thérapeutique et des interactions est synchronisée aux données de l'AFSSAPS.
@@ -27,7 +27,7 @@ thérapeutique et des interactions est synchronisée aux données de l'AFSSAPS.
     \subsection intro_en Anglais
 
 FreeMedForms (FMF) is a multi-platform software (available on MacOS, Linux, FreeBSD, Windows), multilingual,
-free and open source, released under the new BSD license. FreeMedForms is developed by medical doctors and is
+free and open source, released under the GPLv3 license. FreeMedForms is developed by medical doctors and is
 mainly intended for health professionals. Currently, the suite is under development. It is available only for
 testing purposes. The main objective of FreeMedForms is to manage the electronic medical records based on your
 medical practice or the practice of clinical research groups. Your records will be fully customizable through
@@ -36,7 +36,7 @@ FreeDiams (formerly DrugsInteractions).
 
 
 FreeDiams prescriber is the result of FreeMedForms prescriber plugins built into a standalone application.
-FreeDiams is a multi-platform (MacOS, Linux, FreeBSD, Windows), free and open source released under the new BSD license.
+FreeDiams is a multi-platform (MacOS, Linux, FreeBSD, Windows), free and open source released under the GPLv3 license.
 It is developed by medical doctors and is intended for use by these same professionals. It can be used alone to
 prescribe and / or test drug interactions within a prescription. It can be linked to any application thanks to its
 command line parameters. The therapeutic and interactions database are synchronized with data from the french AFSSAPS.
@@ -45,7 +45,7 @@ command line parameters. The therapeutic and interactions database are synchroni
 
 FreeMedForms (FMF) ist eine multiplattform Software (verfügbar auf
 MacOS, Linux, FreeBSD und Windows), sie ist multilingual, ist free und
-open Source und veröffentlicht unter der BSD Lizenz. FreeMedForms wurde
+open Source und veröffentlicht unter der GPLv3 Lizenz. FreeMedForms wurde
 von Medizinern entwickelt und richtet sich an professionelle im
 Gesundheitswesen.
 Momentan ist die Sofware in Entwicklung, und steht momentan nur zu
@@ -60,7 +60,7 @@ benutzbar und auch in der Praxis zum Verschreiben der Rezepte nutzbar
 FreeDiams ist das Resultat der FreeMedForms Rezept Plugins, die als
 eigenständige Applikation designed wurde. FreeDiams ist eine multi-
 Plattform (MacOS, Linux, FreeBSD, Windows) Free- und Opensource
-Anwendung, die unter der neuen BSD Lizenz veröffentlicht wurde. Es ist
+Anwendung, die unter der GPLv3 Lizenz veröffentlicht wurde. Es ist
 von Medizinern entwickelt, und richtet sich an das professionelle
 Umfeld. Es kann benutzt werden, um Rezepte zu verschreiben, oder aber
 zum testen von Wechselwirkungen verschiedener Medikamente. Es kann dank
