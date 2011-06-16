@@ -64,8 +64,6 @@ public:
 
 public Q_SLOTS:
     void saveToSettings(Core::ISettings *s = 0);
-    void on_testButton_clicked();
-    void toggleDatabaseConfiguration(bool state);
 
 protected:
     virtual void changeEvent(QEvent *e);
