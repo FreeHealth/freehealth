@@ -32,7 +32,7 @@
 
 #include <coreplugin/iuser.h>
 
-#include <QSqlTableModel>
+#include <QAbstractTableModel>
 #include <QAbstractListModel>
 #include <QHash>
 #include <QStringList>
@@ -89,7 +89,7 @@ private:
 
 
 
-class USER_EXPORT UserModel : public QSqlTableModel
+class USER_EXPORT UserModel : public QAbstractTableModel
 {
     Q_OBJECT
     friend class UserPlugin::UserManagerPlugin;
@@ -111,12 +111,12 @@ public:
 
     bool hasUserToSave();
 
-    virtual QSqlDatabase database() const;
-
     virtual void clear();
     virtual void refresh();
 
-    virtual int columnCount(const QModelIndex & = QModelIndex());
+    virtual int rowCount(const QModelIndex &parent = QModelIndex()) const;
+    virtual int columnCount(const QModelIndex &parent = QModelIndex()) const;
+    virtual Qt::ItemFlags flags(const QModelIndex &index) const;
 
     QVariant currentUserData(const int column) const;
     virtual QVariant data(const QModelIndex &item, int role = Qt::DisplayRole) const;

@@ -65,7 +65,7 @@ public:
     void changeUserIndex( const int modelRow );
 
 public Q_SLOTS:
-    void on_modelReseted();
+    void onModelReseted();
     void on_but_changePassword_clicked();
     void on_but_viewHistory_clicked();
 

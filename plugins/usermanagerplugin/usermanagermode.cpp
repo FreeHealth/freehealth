@@ -56,7 +56,7 @@ static inline Core::IUser *user()  { return Core::ICore::instance()->user(); }
 UserManagerMode::UserManagerMode(QObject *parent) :
         Core::BaseMode(parent), inPool(false)
 {
-    setName(tkTr(Trans::Constants::USERMANAGER_TEXT));
+    setName(tkTr(Trans::Constants::USERS));
     setIcon(theme()->icon(Core::Constants::ICONUSERMANAGER, Core::ITheme::MediumIcon));
     setPriority(Core::Constants::P_MODE_USERMANAGER);
     setUniqueModeName(Core::Constants::MODE_USERMANAGER);

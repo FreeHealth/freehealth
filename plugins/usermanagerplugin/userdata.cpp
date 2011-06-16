@@ -862,6 +862,7 @@ QVariant UserData::dynamicDataValue(const char*name) const
 */
 QVariant UserData::rightsValue(const QString &name, const int fieldref) const
 {
+    qWarning() << "rightsValue" << name << fieldref << d->m_Role_Rights.value(name).value(fieldref);
     return d->m_Role_Rights.value(name).value(fieldref);
 }
 
@@ -1061,13 +1062,10 @@ QStringList UserData::warnText() const
 
     const QList<UserDynamicData*> &dynList = modifiedDynamicDatas();
 
-    if (dynList.count() == 0)
-        list << "    /!\\ NO DATAS MODIFIED /!\\ ";
-    else
-        foreach(const UserDynamicData *dyn, dynList) {
-            tmp += "\n\nDATA : " + dyn->name() + "\n";
-            tmp += QString("%1\n").arg(dyn->warnText());
-        }
+    foreach(const UserDynamicData *dyn, d->m_DynamicDatas.values()) {
+        tmp += "\nDATA: " + dyn->name() + "\n";
+        tmp += QString("%1\n").arg(dyn->warnText());
+    }
     list << tmp;
     tmp.clear();
 

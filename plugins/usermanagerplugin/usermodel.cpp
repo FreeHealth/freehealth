@@ -68,6 +68,7 @@
 #include <QByteArray>
 #include <QFont>
 #include <QHash>
+#include <QSqlTableModel>
 
 using namespace UserPlugin;
 using namespace UserPlugin::Constants;
@@ -142,12 +143,20 @@ void UserModelWrapper::newUserConnected(const QString &uid)
 class UserModelPrivate
 {
 public:
-    UserModelPrivate(UserModel *parent) : m_UserModelWrapper(new UserModelWrapper(parent)) {}
+    UserModelPrivate(UserModel *parent) :
+            m_UserModelWrapper(new UserModelWrapper(parent)),
+            m_Sql(0)
+    {}
+
     ~UserModelPrivate()
     {
         if (m_Uuid_UserList.count() > 0) {
             qDeleteAll(m_Uuid_UserList);
             m_Uuid_UserList.clear();
+        }
+        if (m_Sql) {
+            delete m_Sql;
+            m_Sql = 0;
         }
     }
 
@@ -173,7 +182,6 @@ public:
     */
     QString addUserFromDatabase(const QString &log64, const QString &pass64)
     {
-        qWarning() << Q_FUNC_INFO << log64 << pass64;
         // get user from database
         QString uuid = userBase()->getUuid(log64, pass64);
         if (uuid.isEmpty())
@@ -219,6 +227,7 @@ public:
         case Core::IUser::FullName : toReturn = user->fullName(); break;
         case Core::IUser::Mail : toReturn = user->mail(); break;
         case Core::IUser::Language : toReturn = user->language(); break;
+            /** \todo language index must be modified */
         case Core::IUser::LanguageIndex : toReturn = Core::Translators::availableLocales().indexOf(user->language()); break;
         case Core::IUser::LocaleCodedLanguage: toReturn = QLocale(user->language()).language(); break;
         case Core::IUser::Adress : toReturn = user->adress(); break;
@@ -311,22 +320,23 @@ public:
                 return Qt::AlignCenter;
             }
 
-            case Core::IUser::IsModified : toReturn = user->isModified(); break;
-            case Core::IUser::ManagerRights : toReturn = user->rightsValue(USER_ROLE_USERMANAGER); break;
-            case Core::IUser::MedicalRights : toReturn = user->rightsValue(USER_ROLE_MEDICAL); break;
-            case Core::IUser::DrugsRights : toReturn = user->rightsValue(USER_ROLE_DOSAGES); break;
-            case Core::IUser::ParamedicalRights : toReturn = user->rightsValue(USER_ROLE_PARAMEDICAL); break;
-            case Core::IUser::AdministrativeRights : toReturn = user->rightsValue(USER_ROLE_ADMINISTRATIVE); break;
-            case Core::IUser::LoginHistory : toReturn = user->loginHistory(); break;
-            case Core::IUser::Warn : user->warn(); break;
-            case Core::IUser::WarnText : toReturn = user->warnText(); break;
-            default : toReturn = QVariant();
-        };
+        case Core::IUser::IsModified : toReturn = user->isModified(); break;
+        case Core::IUser::ManagerRights : toReturn = user->rightsValue(USER_ROLE_USERMANAGER); break;
+        case Core::IUser::MedicalRights : toReturn = user->rightsValue(USER_ROLE_MEDICAL); break;
+        case Core::IUser::DrugsRights : toReturn = user->rightsValue(USER_ROLE_DOSAGES); break;
+        case Core::IUser::ParamedicalRights : toReturn = user->rightsValue(USER_ROLE_PARAMEDICAL); break;
+        case Core::IUser::AdministrativeRights : toReturn = user->rightsValue(USER_ROLE_ADMINISTRATIVE); break;
+        case Core::IUser::LoginHistory : toReturn = user->loginHistory(); break;
+        case Core::IUser::Warn : user->warn(); break;
+        case Core::IUser::WarnText : toReturn = user->warnText(); break;
+        default : toReturn = QVariant();
+    };
         return toReturn;
     }
 
 public:
     UserModelWrapper *m_UserModelWrapper;
+    QSqlTableModel *m_Sql;
     QHash<QString, UserData *> m_Uuid_UserList;
     QString m_CurrentUserUuid;
     Core::IUser::UserRights m_CurrentUserRights;
@@ -352,19 +362,20 @@ UserModel *UserModel::instance(QObject *parent)
 
 /** \brief Constructor */
 UserModel::UserModel(QObject *parent) :
-        QSqlTableModel(parent, userBase()->database()), d(0)
+        QAbstractTableModel(parent), d(0)
 {
     setObjectName("UserModel");
     d = new Internal::UserModelPrivate(this);
+    d->m_Sql = new QSqlTableModel(this, userBase()->database());
+    d->m_Sql->setTable(userBase()->table(Table_USERS));
+    d->m_Sql->setEditStrategy(QSqlTableModel::OnManualSubmit);
+    d->m_Sql->select();
 
     // install the Core Patient wrapper
     Core::ICore::instance()->setUser(d->m_UserModelWrapper);
     connect(settings(), SIGNAL(userSettingsSynchronized()), this, SLOT(updateUserPreferences()));
     if (!parent)
         setParent(qApp);
-    QSqlTableModel::setTable(userBase()->table(Table_USERS));
-    setEditStrategy(QSqlTableModel::OnManualSubmit);
-    select();
 }
 
 /** \brief Destructor */
@@ -389,7 +400,6 @@ UserModel::~UserModel()
 /**
   \brief Defines the current user using its login and password. There can be only one current user.
   The date and time of loggin are trace into database.
-  \todo Create a UserChangerListener +++ instead of using sig/slot
 */
 bool UserModel::setCurrentUser(const QString &clearLog, const QString &clearPassword, bool refreshCache)
 {
@@ -499,9 +509,9 @@ bool UserModel::setCurrentUserIsServerManager()
 //    if (userBase()->database().driverName()=="QSQLITE") {
 //        return false;
 //    }
-    if (!database().isOpen()) {
-        if (!database().open()) {
-            LOG_ERROR(tkTr(Trans::Constants::UNABLE_TO_OPEN_DATABASE_1_ERROR_2).arg(database().connectionName().arg(database().lastError().text())));
+    if (!d->m_Sql->database().isOpen()) {
+        if (!d->m_Sql->database().open()) {
+            LOG_ERROR(tkTr(Trans::Constants::UNABLE_TO_OPEN_DATABASE_1_ERROR_2).arg(d->m_Sql->database().connectionName().arg(d->m_Sql->database().lastError().text())));
             return false;
         }
     }
@@ -570,15 +580,10 @@ QModelIndex UserModel::currentUserIndex() const
     return QModelIndex();
 }
 
-/** \brief Returns the current database */
-QSqlDatabase UserModel::database() const
-{
-    return userBase()->database();
-}
-
 /** \brief Clears the content of the model. Silently save users if needed. */
 void UserModel::clear()
 {
+    // d->m_Sql ?
     submitAll();
     d->m_CurrentUserRights = 0;
     d->m_CurrentUserUuid.clear();
@@ -588,7 +593,8 @@ void UserModel::clear()
 
 void UserModel::refresh()
 {
-    select();
+    d->m_Sql->select();
+    reset();
 }
 
 /** \brief Check login/password validity. \sa UserBase::checkLogin(). */
@@ -614,7 +620,7 @@ bool UserModel::removeRows(int row, int count, const QModelIndex &)
     /** \todo pb when userviewer is showing the index to delete */
     int i = 0;
     for (i=0; i < count ; i++) {
-        QString uuid = QSqlTableModel::index(row+i , USER_UUID).data().toString();
+        QString uuid = d->m_Sql->index(row+i , USER_UUID).data().toString();
 
         if (uuid == d->m_CurrentUserUuid) {
             Utils::okCancelMessageBox(tr("User can not be deleted."),
@@ -644,7 +650,7 @@ bool UserModel::removeRows(int row, int count, const QModelIndex &)
         }
     }
     endRemoveRows();
-    QSqlTableModel::select();
+    d->m_Sql->select();
     reset(); // needed ?
     Q_EMIT memoryUsageChanged();
     return noError;
@@ -656,9 +662,9 @@ bool UserModel::insertRows(int row, int count, const QModelIndex &parent)
     if (!d->m_CurrentUserRights & Core::IUser::Create)
         return false;
     int i=0;
-    for (i=0;i<count;i++) {
+    for (i=0; i<count; i++) {
         // create a new empty tkUser
-        if (!QSqlTableModel::insertRows(row + i, 1, parent)) {
+        if (!d->m_Sql->insertRows(row + i, 1, parent)) {
            LOG_ERROR(QString("Can not create a new user into SQL Table."));
             return i;
         }
@@ -666,13 +672,13 @@ bool UserModel::insertRows(int row, int count, const QModelIndex &parent)
         QString uuid = d->createNewEmptyUser(this, row+i);
         Internal::UserData *user = d->m_Uuid_UserList.value(uuid);
         QModelIndex newIndex = index(row+i, Core::IUser::Uuid);
-        if (!QSqlTableModel::setData(newIndex, uuid, Qt::EditRole)) {
+        if (!d->m_Sql->setData(newIndex, uuid, Qt::EditRole)) {
            LOG_ERROR(QString("Can not add user's uuid into the new user into SQL Table. Row = %1 , UUID = %2 ")
                              .arg(row+i).arg(uuid));
             return i;
         }
         newIndex = index(row+i, Core::IUser::Password);
-        if (!QSqlTableModel::setData(newIndex, Utils::cryptPassword(""), Qt::EditRole)) {
+        if (!d->m_Sql->setData(newIndex, Utils::cryptPassword(""), Qt::EditRole)) {
            LOG_ERROR(QString("Can not add user's login into the new user into SQL Table. Row = %1 , UUID = %2 ")
                              .arg(row+i).arg(uuid));
             return i;
@@ -680,7 +686,7 @@ bool UserModel::insertRows(int row, int count, const QModelIndex &parent)
         // define a lkid for this user
         int maxLkId = userBase()->getMaxLinkId();
         /** \todo user already have a lkid ? --> manage this */
-        QSqlQuery query(database());
+        QSqlQuery query(userBase()->database());
         query.prepare(userBase()->prepareInsertQuery(Constants::Table_USER_LK_ID));
         query.bindValue(Constants::LK_ID, QVariant());
         query.bindValue(Constants::LK_GROUP_UUID, QVariant());
@@ -696,9 +702,21 @@ bool UserModel::insertRows(int row, int count, const QModelIndex &parent)
     return i;
 }
 
-int UserModel::columnCount(const QModelIndex &)
+int UserModel::rowCount(const QModelIndex &) const
+{
+    return d->m_Sql->rowCount();
+}
+
+int UserModel::columnCount(const QModelIndex &) const
 {
     return Core::IUser::NumberOfColumns;
+}
+
+Qt::ItemFlags UserModel::flags(const QModelIndex &index) const
+{
+    if (!index.isValid())
+        return Qt::NoItemFlags;
+    return Qt::ItemIsEnabled | Qt::ItemIsSelectable | Qt::ItemIsEditable;
 }
 
 /** \brief Define the datas of users.  */
@@ -715,7 +733,7 @@ bool UserModel::setData(const QModelIndex &item, const QVariant &value, int role
         return false;
 
     // get uuid from real database
-    QString uuid = QSqlTableModel::data(QSqlTableModel::index(item.row(), USER_UUID), Qt::DisplayRole).toString();
+    QString uuid = d->m_Sql->data(d->m_Sql->index(item.row(), USER_UUID), Qt::DisplayRole).toString();
     if (!d->m_Uuid_UserList.keys().contains(uuid)) {
         d->addUserFromDatabase(uuid);
         Q_EMIT memoryUsageChanged();
@@ -733,7 +751,7 @@ bool UserModel::setData(const QModelIndex &item, const QVariant &value, int role
     // set datas directly into database using QSqlTableModel if possible
     if (item.column() < USER_MaxParam) {
         // prepare SQL update
-        if (!QSqlTableModel::setData(item, value, role)) {
+        if (!d->m_Sql->setData(item, value, role)) {
            LOG_ERROR(QString("enable to setData to SqlModel. Row %1, col %2, data %3")
                              .arg(item.row()).arg(item.column()).arg(value.toString()));
             return false;
@@ -743,39 +761,39 @@ bool UserModel::setData(const QModelIndex &item, const QVariant &value, int role
 
     switch (item.column())
     {
-        case Core::IUser::Id :  user->setId(value); break;
-        case Core::IUser::Uuid :  user->setUuid(value.toString()); break;
-        case Core::IUser::Validity :  user->setValidity(value); break;
-        case Core::IUser::Login64 :  user->setLogin64(value); break;
-        case Core::IUser::DecryptedLogin : user->setLogin64(value.toString().toAscii().toBase64()); break;
-        case Core::IUser::Password :  user->setCryptedPassword(value); break;
-        case Core::IUser::LastLogin :  user->setLastLogin(value); break;
-        case Core::IUser::GenderIndex : user->setGender(value); break;
-        case Core::IUser::TitleIndex : user->setTitle(value); break;
-        case Core::IUser::Name :  user->setName(value); break;
-        case Core::IUser::SecondName :  user->setSecondName(value); break;
-        case Core::IUser::Firstname :  user->setFirstname(value); break;
-        case Core::IUser::Mail :  user->setMail(value); break;
-        case Core::IUser::Language :  user->setLanguage(value); break;
-        case Core::IUser::LanguageIndex :
-            {
-                if (value.toInt() < Core::Translators::availableLocales().count())
-                    user->setLanguage(Core::Translators::availableLocales().at(value.toInt()));
-                break;
-            }
-        case Core::IUser::LocaleCodedLanguage: user->setLanguage(QLocale(QLocale::Language(value.toInt())).name().left(2)); break;
-        case Core::IUser::Adress :  user->setAddress(value); break;
-        case Core::IUser::Zipcode :  user->setZipcode(value); break;
-        case Core::IUser::City :  user->setCity(value); break;
-        case Core::IUser::Country :  user->setCountry(value); break;
-        case Core::IUser::Tel1 :  user->setTel1(value); break;
-        case Core::IUser::Tel2 :  user->setTel2(value); break;
-        case Core::IUser::Tel3 :  user->setTel3(value); break;
-        case Core::IUser::Fax :  user->setFax(value); break;
-        case Core::IUser::PractitionerId :  user->setPractitionerIdentifiant(value.toStringList()); break;
-        case Core::IUser::Specialities :  user->setSpecialty(value.toStringList()); break;
-        case Core::IUser::Qualifications :  user->setQualification(value.toStringList()); break;
-        case Core::IUser::Preferences :  user->setPreferences(value); break;
+    case Core::IUser::Id :  user->setId(value); break;
+    case Core::IUser::Uuid :  user->setUuid(value.toString()); break;
+    case Core::IUser::Validity :  user->setValidity(value); break;
+    case Core::IUser::Login64 :  user->setLogin64(value); break;
+    case Core::IUser::DecryptedLogin : user->setLogin64(value.toString().toAscii().toBase64()); break;
+    case Core::IUser::Password :  user->setCryptedPassword(value); break;
+    case Core::IUser::LastLogin :  user->setLastLogin(value); break;
+    case Core::IUser::GenderIndex : user->setGender(value); break;
+    case Core::IUser::TitleIndex : user->setTitle(value); break;
+    case Core::IUser::Name :  user->setName(value); break;
+    case Core::IUser::SecondName :  user->setSecondName(value); break;
+    case Core::IUser::Firstname :  user->setFirstname(value); break;
+    case Core::IUser::Mail :  user->setMail(value); break;
+    case Core::IUser::Language :  user->setLanguage(value); break;
+    case Core::IUser::LanguageIndex :
+        {
+            if (value.toInt() < Core::Translators::availableLocales().count())
+                user->setLanguage(Core::Translators::availableLocales().at(value.toInt()));
+            break;
+        }
+    case Core::IUser::LocaleCodedLanguage: user->setLanguage(QLocale(QLocale::Language(value.toInt())).name().left(2)); break;
+    case Core::IUser::Adress :  user->setAddress(value); break;
+    case Core::IUser::Zipcode :  user->setZipcode(value); break;
+    case Core::IUser::City :  user->setCity(value); break;
+    case Core::IUser::Country :  user->setCountry(value); break;
+    case Core::IUser::Tel1 :  user->setTel1(value); break;
+    case Core::IUser::Tel2 :  user->setTel2(value); break;
+    case Core::IUser::Tel3 :  user->setTel3(value); break;
+    case Core::IUser::Fax :  user->setFax(value); break;
+    case Core::IUser::PractitionerId :  user->setPractitionerIdentifiant(value.toStringList()); break;
+    case Core::IUser::Specialities :  user->setSpecialty(value.toStringList()); break;
+    case Core::IUser::Qualifications :  user->setQualification(value.toStringList()); break;
+    case Core::IUser::Preferences :  user->setPreferences(value); break;
 
         /** \todo Add Xml extra document to model */
     case Core::IUser::GenericHeader : user->setExtraDocumentHtml(value, Core::IUser::GenericHeader); Q_EMIT(userDocumentsChanged()); break;
@@ -799,14 +817,14 @@ bool UserModel::setData(const QModelIndex &item, const QVariant &value, int role
     case Core::IUser::PrescriptionFooterPresence : user->setExtraDocumentPresence(value.toInt(), Core::IUser::PrescriptionFooter); Q_EMIT(userDocumentsChanged()); break;
     case Core::IUser::PrescriptionWatermarkPresence : user->setExtraDocumentPresence(value.toInt(), Core::IUser::PrescriptionWatermark); Q_EMIT(userDocumentsChanged()); break;
 
-        case Core::IUser::ManagerRights : user->setRights(USER_ROLE_USERMANAGER, Core::IUser::UserRights(value.toInt())); break;
-        case Core::IUser::MedicalRights : user->setRights(USER_ROLE_MEDICAL, Core::IUser::UserRights(value.toInt())); break;
-        case Core::IUser::DrugsRights : user->setRights(USER_ROLE_DOSAGES, Core::IUser::UserRights(value.toInt())); break;
-        case Core::IUser::ParamedicalRights : user->setRights(USER_ROLE_PARAMEDICAL, Core::IUser::UserRights(value.toInt())); break;
-        case Core::IUser::AdministrativeRights : user->setRights(USER_ROLE_ADMINISTRATIVE, Core::IUser::UserRights(value.toInt())); break;
-        default : return false;
+    case Core::IUser::ManagerRights : user->setRights(USER_ROLE_USERMANAGER, Core::IUser::UserRights(value.toInt())); break;
+    case Core::IUser::MedicalRights : user->setRights(USER_ROLE_MEDICAL, Core::IUser::UserRights(value.toInt())); break;
+    case Core::IUser::DrugsRights : user->setRights(USER_ROLE_DOSAGES, Core::IUser::UserRights(value.toInt())); break;
+    case Core::IUser::ParamedicalRights : user->setRights(USER_ROLE_PARAMEDICAL, Core::IUser::UserRights(value.toInt())); break;
+    case Core::IUser::AdministrativeRights : user->setRights(USER_ROLE_ADMINISTRATIVE, Core::IUser::UserRights(value.toInt())); break;
+    default : return false;
     };
-    Q_EMIT dataChanged(index(item.row(), 0), index(item.row(), this->columnCount()));
+    Q_EMIT dataChanged(index(item.row(), 0), index(item.row(), Core::IUser::NumberOfColumns));
     return true;
 }
 
@@ -816,19 +834,23 @@ QVariant UserModel::currentUserData(const int column) const
         return QVariant();
     }
     const Internal::UserData *user = d->m_Uuid_UserList.value(d->m_CurrentUserUuid);
+    if (!user)
+        return QVariant();
     return d->getUserData(user, column);
 }
 
 /** \brief Returns the datas of users. \sa Core::IUser::Model */
 QVariant UserModel::data(const QModelIndex &item, int role) const
 {
-    if (!item.isValid())
+    if (!item.isValid()) {
         return QVariant();
+    }
 
     // get user
-    QString uuid = QSqlTableModel::data(QSqlTableModel::index(item.row(), USER_UUID), Qt::DisplayRole).toString();
-    if (uuid==d->m_CurrentUserUuid && role == Qt::DisplayRole)
+    QString uuid = d->m_Sql->data(d->m_Sql->index(item.row(), USER_UUID), Qt::DisplayRole).toString();
+    if (uuid==d->m_CurrentUserUuid && (role==Qt::DisplayRole || role==Qt::EditRole)) {
         return currentUserData(item.column());
+    }
     QVariant toReturn;
 
     // First manage decoration WITHOUT retreiving any user from database
@@ -862,9 +884,9 @@ QVariant UserModel::data(const QModelIndex &item, int role) const
 //            qWarning() << (bool)(d->m_CurrentUserRights & Core::IUser::ReadAll) << (bool)(d->m_CurrentUserRights & Core::IUser::ReadOwn) << (d->m_CurrentUserUuid == uuid);
             /** \todo has delegates rights */
             if (d->m_CurrentUserRights & Core::IUser::ReadAll)
-                return QSqlTableModel::data(item, role);
+                return d->m_Sql->data(item, role);
             else if (d->m_CurrentUserUuid == uuid)
-                return QSqlTableModel::data(item, role);
+                return d->m_Sql->data(item, role);
         }
 
         // Here we must get values from complete user, so retreive it from database if necessary
@@ -884,13 +906,10 @@ QVariant UserModel::data(const QModelIndex &item, int role) const
 
         // get datas directly from database using QSqlTableModel if possible
         if (item.column() < USER_LANGUAGE)
-            return QSqlTableModel::data(item, role);
+            return d->m_Sql->data(item, role);
 
         return d->getUserData(user, item.column());
     }
-
-//    qWarning() << "end data" << toReturn;
-
     return toReturn;
 }
 
@@ -985,7 +1004,7 @@ bool UserModel::revertAll()
     int i = 0;
     for(i=0; i < rowCount() ; i++)
         revertRow(i);
-    select();
+    d->m_Sql->select();
     reset();
     return true;
 }
@@ -993,8 +1012,8 @@ bool UserModel::revertAll()
 /** \brief Revert a row */
 void UserModel::revertRow(int row)
 {
-    QString uuid = QSqlTableModel::index(row, USER_UUID).data().toString();
-    QSqlTableModel::revertRow(row);
+    QString uuid = d->m_Sql->index(row, USER_UUID).data().toString();
+    d->m_Sql->revertRow(row);
     if (d->m_Uuid_UserList.keys().contains(uuid)) {
         delete d->m_Uuid_UserList[uuid];
         d->m_Uuid_UserList[uuid] = 0;
@@ -1026,7 +1045,8 @@ void UserModel::setFilter (const QHash<int,QString> &conditions)
         filter += QString("(`%1` %2) AND \n").arg(baseField, conditions.value(r));
     }
     filter.chop(5);
-    QSqlTableModel::setFilter(filter);
+    d->m_Sql->setFilter(filter);
+    reset();
 //    qWarning() << filter;
 }
 

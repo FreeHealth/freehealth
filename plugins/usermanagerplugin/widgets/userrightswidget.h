@@ -29,10 +29,18 @@
 
 #include <usermanagerplugin/constants.h>
 
-//#include <QListWidget>
 #include <QListView>
 #include <QAbstractListModel>
 class QEvent;
+
+#include <QDebug>
+
+/**
+ * \file userrightswidget.h
+ * \author Eric MAEKER <eric.maeker@free.fr>
+ * \version 0.6.0
+ * \date 16 June 2011
+*/
 
 namespace UserPlugin {
 namespace Internal {
@@ -70,8 +78,8 @@ class UserRightsWidget : public QListView
 public:
     UserRightsWidget(QWidget * parent = 0);
 
-    void setRights(const int r)     { m_Model->setRights(r); }
-    int  getRights()                { return m_Model->getRights(); }
+    void setRights(const int r)     { qWarning() << "UserRightsWidget::setRights" << r; m_Model->setRights(r); }
+    int  getRights()                { qWarning() << "UserRightsWidget::getRights" << m_Model->getRights();  return m_Model->getRights(); }
 
 private:
     void changeEvent(QEvent *e);

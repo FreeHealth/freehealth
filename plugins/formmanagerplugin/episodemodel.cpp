@@ -584,7 +584,7 @@ public:
         // no changes == nothing to do
         if (formIsModified) {
             // ask user what to do
-            if (!settings()->value(Core::Constants::S_ALWAYS_SAVE_WITHOUT_PROMPTING, false).toBool()) {
+            if (!settings()->value(Core::Constants::S_ALWAYS_SAVE_WITHOUT_PROMPTING, true).toBool()) {
                 bool yes = Utils::yesNoMessageBox(QCoreApplication::translate("EpisodeModel", "Save episode ?"),
                                                   QCoreApplication::translate("EpisodeModel", "The actual episode has been modified. Do you want to save changes in your database ?\n"
                                                      "Answering 'No' will cause definitve data lose."),

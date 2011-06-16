@@ -31,7 +31,6 @@
   Rights are managed via the UserPlugin::UserModel.\n
   Changes are automaticaly saved into the UserPlugin::UserModel.
   \todo limit memory usage.
-  \ingroup usertoolkit widget_usertoolkit usermanager
 */
 
 #include "userviewer.h"
@@ -77,9 +76,9 @@ UserViewer::UserViewer(QWidget *parent)
         Utils::centerWidget(this);
 }
 
-UserViewerPrivate::UserViewerPrivate(QObject *parent)
-    : QObject(parent), m_Parent(0), m_Mapper(0),
-      genericPreview(0), adminPreview(0), prescriptionPreview(0)
+UserViewerPrivate::UserViewerPrivate(QObject *parent) :
+        QObject(parent), m_Parent(0), m_Mapper(0),
+        genericPreview(0), adminPreview(0), prescriptionPreview(0)
 {
     Q_ASSERT_X(static_cast<QDialog *>(parent), "UserViewerPrivate", "*parent is not a QDialog");
     setObjectName("UserViewerPrivate");
@@ -96,6 +95,7 @@ void UserViewer::changeUserTo(const int modelRow)
 /** \brief Change current viewing user to \e modelRow from UserModel */
 void UserViewerPrivate::changeUserIndex(const int modelRow)
 {
+    qWarning() << Q_FUNC_INFO << modelRow;
     // clear ui
     genericPreview->headerEditor()->clear();
     genericPreview->footerEditor()->clear();
@@ -114,7 +114,9 @@ void UserViewerPrivate::changeUserIndex(const int modelRow)
     m_Row = modelRow;
     checkUserRights();
     if (m_CanRead) {
-        m_Mapper->setCurrentModelIndex(UserModel::instance()->index(modelRow, 0));
+        qWarning() << "------------";
+        m_Mapper->setCurrentIndex(modelRow);
+        qWarning() << "------------";
     } else {
         m_Row = oldRow;
         Utils::informativeMessageBox(tr("You can not access to these datas."), tr("You don't have these rights."), "");
@@ -159,9 +161,7 @@ void UserViewerPrivate::initialize()
     tabHeadersFooters->setCurrentWidget(genericTab);
 }
 
-/**
-  \brief Mapper preparer
-*/
+/** Prepare the UserModel Mapper */
 void UserViewerPrivate::prepareMapper()
 {
     m_Mapper = new QDataWidgetMapper(m_Parent);
@@ -171,7 +171,7 @@ void UserViewerPrivate::prepareMapper()
     m_Mapper->addMapping(titleCombo, Core::IUser::TitleIndex, "currentIndex");
     m_Mapper->addMapping(genderCombo, Core::IUser::GenderIndex, "currentIndex");
     m_Mapper->addMapping(nameLineEdit, Core::IUser::Name);
-    m_Mapper->addMapping(loginLineEdit, Core::IUser::DecryptedLogin);
+    m_Mapper->addMapping(loginLineEdit, Core::IUser::ClearLogin);
     m_Mapper->addMapping(secNameLineEdit, Core::IUser::SecondName);
     m_Mapper->addMapping(firstnameLineEdit, Core::IUser::Firstname);
     m_Mapper->addMapping(lastLoginDateTimeEdit, Core::IUser::LastLogin);
@@ -216,20 +216,27 @@ void UserViewerPrivate::prepareMapper()
     m_Mapper->addMapping(paramedicalRightsWidget, Core::IUser::ParamedicalRights, "rights");
     m_Mapper->addMapping(administrativeRightsWidget, Core::IUser::AdministrativeRights, "rights");
 
-    m_Mapper->setCurrentModelIndex(UserModel::instance()->currentUserIndex());
+    qWarning() << "\n\n\nMapper setCurrentIndex"<< UserModel::instance()->currentUserIndex() << UserModel::instance()->currentUserIndex().data().toString() << "\n\n\n";
+    m_Mapper->setCurrentIndex(UserModel::instance()->currentUserIndex().row());
+
+    QModelIndex test = UserModel::instance()->index(UserModel::instance()->currentUserIndex().row(), Core::IUser::Adress);
+    qWarning() << "-------------" << test.data().toString() << test.data(Qt::EditRole).toString();
+
     // make connections
-    connect (m_Mapper->model(), SIGNAL(modelReset()), this, SLOT(on_modelReseted()));
+    connect (m_Mapper->model(), SIGNAL(modelReset()), this, SLOT(onModelReseted()));
 }
 
 /** \brief Change current user view. No save are done into the database from the model. */
-void UserViewerPrivate::on_modelReseted()
+void UserViewerPrivate::onModelReseted()
 {
     changeUserIndex(UserModel::instance()->currentUserIndex().row());
 }
 
-/** \brief Verify rights of user */
+/** Verify rights of user */
 void UserViewerPrivate::checkUserRights()
 {
+    m_CanModify = false;
+    m_CanRead = false;
     UserModel *m = UserModel::instance();
     int currentUserRow = m->currentUserIndex().row();
     if (currentUserRow == m_Row) {
