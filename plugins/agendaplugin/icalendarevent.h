@@ -30,6 +30,7 @@
 
 #include <QVariant>
 #include <QHash>
+#include <QStringList>
 
 /**
  * \file icalendarevent.h
@@ -58,36 +59,61 @@ public:
         IsBusy,
         IsAGroupEvent,
         TextualSite,
-        IsRelatedToPatient,
         UserUid,
         PatientUid,
         PatientFullName,
         DateStart,
         DateEnd,
+        SiteUid,
+        ThemedIcon,
         DbOnly_CalId,
         DbOnly_ComId,
         DbOnly_EvId,
         DbOnly_CycEvId,
+        DbOnly_CatId,
         DbOnly_IsValid,
         DbOnly_XmlViewOptions,
         DbOnly_XmlOptions,
     };
 
-    ICalendarEvent() {}
+    ICalendarEvent();
     virtual ~ICalendarEvent() {}
+
+    virtual bool isValid() const;
+    virtual bool isNull() const;
 
     virtual QVariant data(const int ref) const;
     virtual bool setData(const int ref, const QVariant &value);
 
+    virtual void addPatient(const QString &patientUid);
+    virtual QStringList patients() const;
+    virtual void removePatient(const QString &patientUid);
+
+    virtual void addUser(const QString &userUid);
+    virtual QStringList users() const;
+    virtual void removeUser(const QString &userUid);
+
+    virtual bool isModified() const;
+    virtual void setModified(const bool state);
+
+    virtual bool isCycling() const {return false;}
+
 protected:
     virtual void setDatabaseValue(const int ref, const QVariant &value);
+    virtual int calendarId() const;
+    virtual int commonId() const;
+    virtual int eventId() const;
+    virtual int cyclingEventId() const;
+    virtual int categoryId() const;
 
 private:
     QHash<int, QVariant> m_Datas;
+    bool m_Modified;
+    QStringList m_Patients, m_Users;
 };
 
 
-class ICalendarCyclingEvent : public ICalendarEvent
+class AGENDA_EXPORT ICalendarCyclingEvent : public ICalendarEvent
 {
 public:
     enum DataRepresentation {
@@ -99,6 +125,7 @@ public:
     ICalendarCyclingEvent() : ICalendarEvent() {}
     ~ICalendarCyclingEvent() {}
 
+    virtual bool isCycling() const {return true;}
 };
 
 }  // End namespace Agenda

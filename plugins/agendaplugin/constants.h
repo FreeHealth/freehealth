@@ -41,7 +41,7 @@ namespace Constants {
     {
         Table_CALENDAR = 0, Table_USERCALENDARS,
         Table_COMMON, Table_EVENTS, Table_CYCLINGEVENTS,
-        Table_EVENTTYPES, Table_EVENTSTATUS, Table_USER_WORKINGTIME,
+        // Table_USER_WORKINGTIME,
         Table_VERSION,
         Table_MaxParam
     };
@@ -54,9 +54,15 @@ namespace Constants {
 
     enum FieldsCALENDAR {
         CAL_ID = 0,
+        CAL_CATEGORYID,
         CAL_ISVALID,
+        CAL_STATUS,
+        CAL_TYPE,
         CAL_SITEUID,
+        CAL_ISPRIVATE,
+        CAL_PASSWORD,
         CAL_LABEL,
+        CAL_THEMEDICON,
         CAL_XMLOPTIONS
     };
 
@@ -72,7 +78,10 @@ namespace Constants {
         COMMON_ISAGROUPEVENT, // (event can be defined by and for a group of users)
         COMMON_LABEL,
         COMMON_FULLCONTENT,
-        COMMON_TEXTUAL_SITE
+        COMMON_TEXTUAL_SITE,
+        COMMON_THEMEDICON,
+        COMMON_XMLVIEWOPTIONS, // (color, margins, spacing…)
+        COMMON_XMLCALOPTIONS // (can be changed…)
     };
 
     enum fieldsEVENTS {
@@ -80,12 +89,9 @@ namespace Constants {
         EVENT_CAL_ID,
         EVENT_COMMON_ID,
         EVENT_PATIENT_UID,
-        EVENT_ISNOTRELATEDTOPATIENT,
         EVENT_ISVALID,
         EVENT_DATESTART,
-        EVENT_DATEEND,
-        EVENT_XMLVIEWOPTIONS, // (color, margins, spacing…)
-        EVENT_XMLCALOPTIONS // (can be changed…)
+        EVENT_DATEEND
     };
 
     enum fieldsCYCLINGEVENTS {
@@ -100,19 +106,6 @@ namespace Constants {
         CYCLING_REPEATINTERVAL,
         CYCLING_REPEATSCHEMA,
         CYCLING_REPEATTIMES // (eg repeat only seven times)
-    };
-
-    enum fieldsEVENTTYPES {  // ?? hard coded ??
-        TYPE_ID = 0,
-        TYPE_LABEL,
-        TYPE_DEFAULT_DURING_TIME,
-        TYPE_COLOR,
-        TYPE_XML_OPTIONS
-    };
-
-    enum fieldsEVENTSTATUS {  // ?? hard coded ??
-        STATUS_ID,
-        STATUS_LABEL
     };
 
     enum fieldsUSER_WORKINGTIME {

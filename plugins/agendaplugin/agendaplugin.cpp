@@ -25,6 +25,8 @@
  ***************************************************************************/
 #include "agendaplugin.h"
 #include "agendabase.h"
+#include "icalendarevent.h"
+#include "iusercalendar.h"
 
 #include <utils/log.h>
 
@@ -36,6 +38,7 @@
 #include <QDebug>
 
 using namespace Agenda;
+using namespace Internal;
 
 AgendaPlugin::AgendaPlugin()
 {
@@ -68,8 +71,63 @@ void AgendaPlugin::extensionsInitialized()
     addAutoReleasedObject(new Core::PluginAboutPage(pluginSpec(), this));
 
     // Initialize database
-//    Internal::AgendaBase::instance();
+    Internal::AgendaBase::instance();
+    testDatabase();
 }
 
+void AgendaPlugin::testDatabase()
+{
+    qWarning() << "\n\n\nxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxx AGENDA BASE TEST";
+    Internal::AgendaBase *base = Internal::AgendaBase::instance();
+    // Create a calendar for the current user
+    IUserCalendar *ucal = new IUserCalendar();
+    ucal->setData(IUserCalendar::DbOnly_IsValid, 1);
+    ucal->setData(IUserCalendar::Password, "NonCryptedPassword");
+    ucal->setData(IUserCalendar::Label, "Label of IUserCalendar");
+    ucal->setData(IUserCalendar::IsPrivate, 0);
+    ucal->setData(IUserCalendar::ThemedIcon, "pen.png");
+    if (base->saveUserCalendar(ucal))
+        qWarning() << "user calendar correctly saved";
+
+    // Create events in the calendar
+    QDateTime start = QDateTime::currentDateTime();
+    start.setTime(QTime(QTime::currentTime().hour()+1, 0, 0));
+    QDateTime end = start.addSecs(60*15);
+    ICalendarEvent *ev = new ICalendarEvent;
+    ev->setData(ICalendarEvent::DbOnly_CalId, ucal->data(IUserCalendar::DbOnly_CalId));
+    ev->setData(ICalendarEvent::DbOnly_IsValid, 1);
+    ev->setData(ICalendarEvent::DbOnly_EvId, -1);
+    ev->setData(ICalendarEvent::DbOnly_CalId, 1);
+//    ev->setData(ICalendarEvent::DbOnly_ComId, );
+    ev->setData(ICalendarEvent::PatientUid, "Patient");
+    ev->setData(ICalendarEvent::DateStart, start);
+    ev->setData(ICalendarEvent::DateEnd, end);
+    ev->setData(ICalendarEvent::DbOnly_CatId, -1);
+    ev->setData(ICalendarEvent::TypeId, 1);
+    ev->setData(ICalendarEvent::StatusId, 2);
+    ev->setData(ICalendarEvent::SiteUid, "siteId");
+    ev->setData(ICalendarEvent::IsPrivate, 0);
+    ev->setData(ICalendarEvent::Password, "nopass");
+    ev->setData(ICalendarEvent::IsBusy, 0);
+    ev->setData(ICalendarEvent::IsAGroupEvent, 0);
+    ev->setData(ICalendarEvent::Label, "Labelllllll");
+    ev->setData(ICalendarEvent::FullContent, "Bla Bla in html ?");
+    ev->setData(ICalendarEvent::TextualSite, "textual site");
+    ev->setData(ICalendarEvent::DbOnly_XmlViewOptions, "XmlViewOptions");
+    ev->setData(ICalendarEvent::DbOnly_XmlOptions, "XmlOptions");
+    if (base->saveCalendarEvent(ev))
+        qWarning() << "event correctly saved";
+
+    // Try to get events now
+    CalendarEventQuery q;
+    q.setDateRangeForCurrentWeek();
+    QList<ICalendarEvent*> list = base->getCalendarEvents(q);
+    qWarning() << "Retreived" << list.count() << "events from the database for user" << ucal->data(IUserCalendar::UserOwnerUid).toString() << "dateRange" << q.dateStart().toString(Qt::ISODate)<< q.dateEnd().toString(Qt::ISODate);
+
+    qDeleteAll(list);
+    list.clear();
+
+    qWarning() << "xxxxxxxxxxxxxxxxxxxxxxxxxxxxxxx AGENDA BASE TEST END\n\n\n";
+}
 
 Q_EXPORT_PLUGIN(AgendaPlugin)

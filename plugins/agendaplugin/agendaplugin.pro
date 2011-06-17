@@ -12,11 +12,13 @@ include( agendaplugin_dependencies.pri )
 HEADERS = agendaplugin.h agenda_exporter.h \
     constants.h \
     agendabase.h \
-    icalendarevent.h
+    icalendarevent.h \
+    iusercalendar.h
 
 SOURCES = agendaplugin.cpp \
     agendabase.cpp \
-    icalendarevent.cpp
+    icalendarevent.cpp \
+    iusercalendar.cpp
 
 OTHER_FILES = Agenda.pluginspec
 

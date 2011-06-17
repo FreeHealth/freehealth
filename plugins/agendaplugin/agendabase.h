@@ -40,11 +40,13 @@
  * \file agendabase.h
  * \author Eric MAEKER <eric.maeker@free.fr>
  * \version 0.6.0
- * \date 06 Jun 2011
+ * \date 17 Jun 2011
 */
 
 namespace Agenda {
 class ICalendarEvent;
+class ICalendarCyclingEvent;
+class IUserCalendar;
 
 namespace Internal {
 
@@ -52,26 +54,34 @@ class CalendarEventQuery
 {
 public:
     CalendarEventQuery();
-    CalendarEventQuery(const QDateTime &start, const QDateTime end);
-    CalendarEventQuery(const QDateTime &start, const QDateTime end, const int limit);
-    CalendarEventQuery(const QDateTime &start, const QDateTime end, const int limit, const int startItem);
     ~CalendarEventQuery();
 
+    void setUserFilter(const QString &userUid);
+    void setPatientFilter(const QStringList &limitToPatientUids);
+
+    void setDateRange(const QDateTime &start, const QDateTime &end) {m_DateStart=start;m_DateEnd=end;}
+    void setDateRangeForToday();
+    void setDateRangeForTomorrow();
+    void setDateRangeForYesterday();
+    void setDateRangeForCurrentWeek();
     void setDateStart(const QDateTime &dt) {m_DateStart = dt;}
     void setDateEnd(const QDateTime &dt) {m_DateEnd = dt;}
-    void setLimit(const int max) {m_Limit = max;}
+
+    void setExtractionLimit(const int max) {m_Limit = max;}
     void setStartAtItem(const int start) {m_StartItem = start;}
-    void setUserUuid(const QString &uuid) {m_UserUuid = uuid; m_UseCurrentUser = false;}
-    void setUseCurrentUser(const bool use) {m_UseCurrentUser = use;}
+    void setUseCurrentUser(const bool use) {m_UseCurrentUser = use; m_Users.clear();}
 
     void setCalendarIds(const QList<int> &ids) {m_CalIds = ids;}
     void setCalendarId(const int id) {m_CalIds = QList<int>() << id;}
 
     QDateTime dateStart() const {return m_DateStart;}
     QDateTime dateEnd() const {return m_DateEnd;}
+    bool hasDateRange() const;
+
     int limit() const {return m_Limit;}
     int startItem() const {return m_StartItem;}
-    QString userUuid() const {return m_UserUuid;}
+    QStringList usersUuid() const {return m_Users;}
+    bool useCurrentUser() const {return m_UseCurrentUser;}
 
     QList<int> calendarIds() const {return m_CalIds;}
     int calendarId() const {if (m_CalIds.count()>=1) return m_CalIds.at(0); return -1;}
@@ -79,9 +89,9 @@ public:
 private:
     int m_Limit, m_StartItem;
     QDateTime m_DateStart, m_DateEnd;
-    QString m_UserUuid;
     bool m_UseCurrentUser;
     QList<int> m_CalIds;
+    QStringList m_Users, m_Patients;
 };
 
 class AgendaBase :  public QObject, public Utils::Database
@@ -112,8 +122,17 @@ private Q_SLOTS:
     void onCoreDatabaseServerChanged();
 
 public:
+    bool saveUserCalendar(IUserCalendar *calendar);
     QList<ICalendarEvent *> getCalendarEvents(const CalendarEventQuery &query);
+    bool saveCalendarEvents(const QList<Agenda::ICalendarEvent *> &events);
+    bool saveCalendarEvent(Agenda::ICalendarEvent *event);
 
+private:
+    bool updateCyclingEvent(Agenda::ICalendarCyclingEvent *event);
+    bool updateNonCyclingEvent(Agenda::ICalendarEvent *event);
+    bool saveCommonEvent(Agenda::ICalendarEvent *event);
+    bool saveCyclingEvent(Agenda::ICalendarCyclingEvent *event);
+    bool saveNonCyclingEvent(Agenda::ICalendarEvent *event);
 
 private:
     static bool m_initialized;
