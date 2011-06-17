@@ -80,10 +80,10 @@ void DayRangeHeader::computeWidgets() {
 	qSort(items.begin(), items.end(), calendarItemLessThan);
 
 	m_maxDepth = 0;
-	DayNode firstNode(items[0]);
-	computeWidget(items[0], 0);
-	for (int i = 1; i < items.count(); i++) {
-		int depth = firstNode.store(items[i]);
+
+	DayStore store;
+	for (int i = 0; i < items.count(); i++) {
+		int depth = store.store(items[i]);
 		if (depth > m_maxDepth)
 			m_maxDepth = depth;
 		computeWidget(items[i], depth);

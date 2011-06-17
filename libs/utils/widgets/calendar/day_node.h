@@ -4,21 +4,16 @@
 namespace Calendar {
 	class CalendarItem;
 
-	class DayNode
+	class DayStore
 	{
 	public:
-		DayNode(const CalendarItem &item);
-		~DayNode();
-
 		/** store an item at the right place with a recursive method depending on date ranges
 		 * \return {int} the depth of the node (0 -> N)
 		 */
 		int store(const CalendarItem &item);
 
 	private:
-		CalendarItem m_item;
-		DayNode *m_right;
-		DayNode *m_next;
+		QList<QList<CalendarItem> > m_items; // contains all layers of items m_items[0] is the first layer, m_items[1] is the second, etc
 	};
 }
 

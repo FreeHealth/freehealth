@@ -3,31 +3,26 @@
 
 using namespace Calendar;
 
-DayNode::DayNode(const CalendarItem &item)
-	: m_item(item), m_right(0), m_next(0) {
-}
+int DayStore::store(const CalendarItem &item) {
+	int depth = 0;
+	for (; depth < m_items.count(); depth++) {
+		QList<CalendarItem> &layer = m_items[depth];
 
-DayNode::~DayNode() {
-	if (m_right)
-		delete m_right;
-	if (m_next)
-		delete m_next;
-}
-
-int DayNode::store(const CalendarItem &item) {
-	if (m_item.overlap(item)) {
-		if (m_next)
-			return m_next->store(item) + 1;
-		else {
-			m_next = new DayNode(item);
-			return 1;
+		if (layer.isEmpty()) { // no items in the layer => the argument will be the first
+			layer << item;
+			return depth;
 		}
-	} else {
-		if (m_right)
-			return m_right->store(item);
-		else {
-			m_right = new DayNode(item);
-			return 0;
+
+		const CalendarItem &last = layer.last();
+		if (!last.overlap(item)) { // no overlapping => just append it to the queue
+			layer << item;
+			return depth;
 		}
 	}
+
+	depth  = m_items.isEmpty() ? 0 : depth;
+	QList<CalendarItem> layer;
+	layer << item;
+	m_items << layer;
+	return depth;
 }

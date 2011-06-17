@@ -29,13 +29,13 @@ BasicCalendarModel::BasicCalendarModel(QObject *parent) :
 	item = insertItem(QDateTime(now), QDateTime(now.addDays(2)));
 	item.setDaily(true);
 	setItemByUid(item.uid(), item);
-	item = insertItem(QDateTime(now.addDays(1)), QDateTime(now.addDays(3)));
+/*	item = insertItem(QDateTime(now.addDays(1)), QDateTime(now.addDays(3)));
 	item.setDaily(true);
 	setItemByUid(item.uid(), item);
 	item = insertItem(QDateTime(now.addDays(2)), QDateTime(now.addDays(5)));
 	item.setDaily(true);
 	item.setTitle("Ceci est un exemple");
-	setItemByUid(item.uid(), item);
+	setItemByUid(item.uid(), item);*/
 	insertItem(QDateTime(now, QTime(2, 0)), QDateTime(now, QTime(4, 0)));
 	insertItem(QDateTime(now, QTime(2, 0)), QDateTime(now, QTime(4, 0)));
 	insertItem(QDateTime(now, QTime(2, 30)), QDateTime(now, QTime(5, 0)));
