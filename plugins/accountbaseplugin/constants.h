@@ -49,6 +49,7 @@ namespace Constants {
 
     const char * const DB_ACCOUNTANCY           = "account";
     const char * const DEFAULT_ACCOUNTANCY_USER = "AccountancyDefaultUser";
+    const char * const DB_VERSION_NUMBER        = "0.1";
 
     // Database abstraction
     
@@ -71,7 +72,8 @@ namespace Constants {
         Table_Thesaurus,
         Table_Session,
         Table_Banking,
-        Table_NameIndex
+        Table_NameIndex,
+        Table_VERSION
     };
 
     enum TableMedicalProcedure_Fields {
@@ -279,6 +281,10 @@ namespace Constants {
         THESAURUS_VALUES,
         THESAURUS_PREF,
         THESAURUS_MaxParam
+    };
+
+    enum fieldsVERSION {
+        VERSION_ACTUAL = 0
     };
     
     //assets

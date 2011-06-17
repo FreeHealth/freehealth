@@ -63,7 +63,6 @@ using namespace AccountDB;
 using namespace AccountDB::Internal;
 using namespace Trans::ConstantTranslations;
 
-
 static inline Core::ISettings *settings()  { return Core::ICore::instance()->settings(); }
 static inline Core::CommandLine *commandLine()  { return Core::ICore::instance()->commandLine(); }
 
@@ -152,6 +151,9 @@ AccountBase::AccountBase(QObject *parent)
 //    addTable(Table_Session,           "session");
 //    addTable(Table_Banking,           "banking");
 //    addTable(Table_NameIndex,         "nameindex");
+
+    addTable(Table_VERSION,         "VERSION");
+    addField(Table_VERSION, VERSION_ACTUAL, "ACTUAL", FieldIsShortText);
 
     addField(Table_MedicalProcedure, MP_ID,             "MP_ID",          FieldIsUniquePrimaryKey);
     addField(Table_MedicalProcedure, MP_UID,            "MP_UUID",        FieldIsUUID);
@@ -563,49 +565,10 @@ bool AccountBase::init()
     if (m_initialized)
         return true;
 
-    settings()->databaseConnector().warn();
-
     // connect
     createConnection(Constants::DB_ACCOUNTANCY, Constants::DB_ACCOUNTANCY,
                      settings()->databaseConnector(),
                      Utils::Database::CreateDatabase);
-
-
-    // Check settings --> SQLite or MySQL ?
-//    if (settings()->value(Core::Constants::S_USE_EXTERNAL_DATABASE, false).toBool()) {
-//        if (!QSqlDatabase::isDriverAvailable("QMYSQL")) {
-//            LOG_ERROR(tkTr(Trans::Constants::DATABASE_DRIVER_1_NOT_AVAILABLE).arg("MySQL"));
-//            Utils::warningMessageBox(tkTr(Trans::Constants::APPLICATION_FAILURE),
-//                                     tkTr(Trans::Constants::DATABASE_DRIVER_1_NOT_AVAILABLE_DETAIL).arg("MySQL"),
-//                                     "", qApp->applicationName());
-//            return false;
-//        }
-//        createConnection(Constants::DB_ACCOUNTANCY, Constants::DB_ACCOUNTANCY,
-//                         settings()->databaseConnector(),
-//                         Utils::Database::CreateDatabase);
-////                         QString(QByteArray::fromBase64(settings()->value(Core::Constants::S_EXTERNAL_DATABASE_HOST, QByteArray("localhost").toBase64()).toByteArray())),
-////                         Utils::Database::ReadWrite,
-////                         Utils::Database::MySQL,
-////                         QString(QByteArray::fromBase64(settings()->value(Core::Constants::S_EXTERNAL_DATABASE_LOG, QByteArray("root").toBase64()).toByteArray())),
-////                         QString(QByteArray::fromBase64(settings()->value(Core::Constants::S_EXTERNAL_DATABASE_PASS, QByteArray("").toBase64()).toByteArray())),
-////                         QString(QByteArray::fromBase64(settings()->value(Core::Constants::S_EXTERNAL_DATABASE_PORT, QByteArray("").toBase64()).toByteArray())).toInt(),
-////                         Utils::Database::CreateDatabase);
-//    } else {
-//        if (!QSqlDatabase::isDriverAvailable("QSQLITE")) {
-//            LOG_ERROR(tkTr(Trans::Constants::DATABASE_DRIVER_1_NOT_AVAILABLE).arg("SQLite"));
-//            Utils::warningMessageBox(tkTr(Trans::Constants::APPLICATION_FAILURE),
-//                                     tkTr(Trans::Constants::DATABASE_DRIVER_1_NOT_AVAILABLE_DETAIL).arg("SQLite"),
-//                                     "", qApp->applicationName());
-//            return false;
-//        }
-//        createConnection(Constants::DB_ACCOUNTANCY,
-//                         QString(Constants::DB_ACCOUNTANCY) + ".db",
-//                         settings()->path(Core::ISettings::ReadWriteDatabasesPath) + QDir::separator() + QString(Constants::DB_ACCOUNTANCY),
-//                         Utils::Database::ReadWrite,
-//                         Utils::Database::SQLite,
-//                         "", "", 0,
-//                         Utils::Database::CreateDatabase);
-//    }
 
     if (!database().isOpen()) {
         if (!database().open()) {
@@ -667,7 +630,6 @@ bool AccountBase::createDatabase(const QString &connectionName , const QString &
                     CreationOption createOption
                    )
 {
-    qWarning() << "CREATE";
     /** \todo manage createOption */
     if (connectionName != Constants::DB_ACCOUNTANCY)
         return false;
@@ -735,13 +697,13 @@ bool AccountBase::createDatabase(const QString &connectionName , const QString &
     }
 
     // Add version number
-//    QSqlQuery query(DB);
-//    query.prepare(prepareInsertQuery(Constants::Table_VERSION));
-//    query.bindValue(Constants::VERSION_TEXT, Constants::DB_ACTUALVERSION);
-//    if (!query.exec()) {
-//        LOG_QUERY_ERROR(query);
-//        return false;
-//    }
+    QSqlQuery query(DB);
+    query.prepare(prepareInsertQuery(Constants::Table_VERSION));
+    query.bindValue(Constants::VERSION_ACTUAL, Constants::DB_VERSION_NUMBER);
+    if (!query.exec()) {
+        LOG_QUERY_ERROR(query);
+        return false;
+    }
 
     return true;
 }
