@@ -283,22 +283,18 @@ bool UserManagerWidget::initialize()
     UserModel *model = UserModel::instance();
     ui->userTableView->setEditTriggers(QAbstractItemView::NoEditTriggers);
     ui->userTableView->setModel(model);
-    ui->userTableView->horizontalHeader()->hide();
-    ui->userTableView->verticalHeader()->hide();
-    ui->userTableView->hideColumn(USER_ID);
-    ui->userTableView->hideColumn(USER_UUID);
-    ui->userTableView->hideColumn(USER_LOGIN);
-    ui->userTableView->hideColumn(USER_PASSWORD);
-    ui->userTableView->hideColumn(USER_LANGUAGE);
-    ui->userTableView->hideColumn(USER_MAIL);
-    ui->userTableView->hideColumn(USER_VALIDITY);
-    ui->userTableView->hideColumn(USER_SECONDNAME);
-    ui->userTableView->hideColumn(USER_LASTLOG);
-    ui->userTableView->hideColumn(USER_LOCKER);
+    for(int i=0; i < model->columnCount(); ++i) {
+        ui->userTableView->hideColumn(i);
+    }
+    ui->userTableView->showColumn(Core::IUser::Name);
+    ui->userTableView->showColumn(Core::IUser::SecondName);
+    ui->userTableView->showColumn(Core::IUser::Firstname);
     ui->userTableView->resizeColumnsToContents();
     ui->userTableView->setSelectionMode(QAbstractItemView::SingleSelection);
     ui->userTableView->setSelectionBehavior(QAbstractItemView::SelectRows);
     ui->userTableView->horizontalHeader()->setStretchLastSection(true);
+    ui->userTableView->horizontalHeader()->hide();
+    ui->userTableView->verticalHeader()->hide();
 
     retranslate();
 
@@ -321,7 +317,6 @@ bool UserManagerWidget::initialize()
 
     connect(quitUserManagerAct,  SIGNAL(triggered()), this, SIGNAL(closeRequested()));
 
-    updateStatusBar();
     connect(UserModel::instance(), SIGNAL(memoryUsageChanged()), this, SLOT(updateStatusBar()));
 
 //    if (Utils::isDebugCompilation())
