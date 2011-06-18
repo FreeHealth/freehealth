@@ -182,6 +182,7 @@ AgendaBase::AgendaBase(QObject *parent) :
     addField(Table_CALENDAR, CAL_PASSWORD, "PASSWORD", FieldIsShortText);
     addField(Table_CALENDAR, CAL_LABEL, "LABEL", FieldIsShortText);
     addField(Table_CALENDAR, CAL_THEMEDICON, "THEMEDICON", FieldIsShortText);
+    addField(Table_CALENDAR, CAL_FULLCONTENT, "FULLCONTENT", FieldIsBlob);
     addField(Table_CALENDAR, CAL_XMLOPTIONS, "XMLOPTIONS", FieldIsBlob);
 
     addField(Table_COMMON, COMMON_ID, "COM_ID", FieldIsUniquePrimaryKey);
@@ -194,7 +195,7 @@ AgendaBase::AgendaBase(QObject *parent) :
     addField(Table_COMMON, COMMON_ISBUSY, "ISBUSY", FieldIsBoolean);
     addField(Table_COMMON, COMMON_ISAGROUPEVENT, "ISGROUP", FieldIsBoolean); // (event can be defined by and for a group of users)
     addField(Table_COMMON, COMMON_LABEL, "LABEL", FieldIsShortText);
-    addField(Table_COMMON, COMMON_FULLCONTENT, "CONTENT", FieldIsLongText);
+    addField(Table_COMMON, COMMON_FULLCONTENT, "CONTENT", FieldIsBlob);
     addField(Table_COMMON, COMMON_TEXTUAL_SITE, "TEXT_SITE", FieldIsShortText);
     addField(Table_COMMON, COMMON_THEMEDICON, "THEMEDICON", FieldIsShortText);
     addField(Table_COMMON, COMMON_XMLVIEWOPTIONS, "XML_VIEW", FieldIsBlob);// (color, margins, spacing…)
@@ -369,6 +370,49 @@ void AgendaBase::onCoreDatabaseServerChanged()
     initialize();
 }
 
+/** Retreive all calendars of the user defined by its uuid \e userUuid. If the \e userUuid is empty, retrieve all calendars of the currently connected user. */
+QList<Agenda::IUserCalendar *> AgendaBase::getUserCalendars(const QString &userUuid)
+{
+    QList<Agenda::IUserCalendar *> toReturn;
+    if (!connectDatabase(Constants::DB_NAME, __LINE__))
+        return toReturn;
+
+    QString uid = userUuid;
+    if (userUuid.isEmpty())
+        uid = user()->uuid();
+
+    Utils::JoinList joins;
+    joins << Utils::Join(Constants::Table_CALENDAR, Constants::CAL_ID, Constants::Table_USERCALENDARS, Constants::USERCAL_CAL_ID);
+    Utils::FieldList conds;
+    conds << Utils::Field(Constants::Table_CALENDAR, Constants::CAL_ISVALID, "=1");
+    conds << Utils::Field(Constants::Table_USERCALENDARS, Constants::USERCAL_USER_UUID, QString("='%1'").arg(uid));
+    QSqlQuery query(database());
+    if (query.exec(select(Constants::Table_CALENDAR, joins, conds))) {
+        while (query.next()) {
+            IUserCalendar *u = new IUserCalendar;
+//            u->setDatabaseValue(IUserCalendar::DbOnly_UserCalId, query.value());
+            u->setDatabaseValue(IUserCalendar::DbOnly_CalId, query.value(Constants::CAL_ID));
+            u->setDatabaseValue(IUserCalendar::DbOnly_CatId, query.value(Constants::CAL_CATEGORYID));
+            u->setDatabaseValue(IUserCalendar::DbOnly_IsValid, 1);
+//            CAL_SITEUID,
+//            CAL_XMLOPTIONS
+            u->setDatabaseValue(IUserCalendar::UserOwnerUid, uid);
+            u->setDatabaseValue(IUserCalendar::Label, query.value(Constants::CAL_LABEL));
+            u->setDatabaseValue(IUserCalendar::FullContent, query.value(Constants::CAL_FULLCONTENT));
+            u->setDatabaseValue(IUserCalendar::TypeId, query.value(Constants::CAL_TYPE));
+            u->setDatabaseValue(IUserCalendar::StatusId, query.value(Constants::CAL_STATUS));
+            u->setDatabaseValue(IUserCalendar::IsPrivate, query.value(Constants::CAL_ISPRIVATE));
+            u->setDatabaseValue(IUserCalendar::Password, query.value(Constants::CAL_PASSWORD));
+            u->setDatabaseValue(IUserCalendar::ThemedIcon, query.value(Constants::CAL_THEMEDICON));
+            toReturn << u;
+        }
+    } else {
+        LOG_QUERY_ERROR(query);
+    }
+    return toReturn;
+}
+
+/** Save the user's calendar Agenda::IUserCalendar \e calendar to database */
 bool AgendaBase::saveUserCalendar(Agenda::IUserCalendar *calendar)
 {
     if (!connectDatabase(Constants::DB_NAME, __LINE__))
@@ -445,6 +489,7 @@ bool AgendaBase::saveUserCalendar(Agenda::IUserCalendar *calendar)
     return true;
 }
 
+/** Retrieve all events from database according to the Agenda::CalendarEventQuery \e calQuery. */
 QList<Agenda::ICalendarEvent *> AgendaBase::getCalendarEvents(const CalendarEventQuery &calQuery)
 {
     QList<ICalendarEvent *> toReturn;

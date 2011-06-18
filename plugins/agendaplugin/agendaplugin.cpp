@@ -27,6 +27,13 @@
 #include "agendabase.h"
 #include "icalendarevent.h"
 #include "iusercalendar.h"
+#include "agendawidgetmanager.h"
+
+// TEST
+#include "eventeditorwidget.h"
+#include <utils/randomizer.h>
+#include <coreplugin/isettings.h>
+// END TEST
 
 #include <utils/log.h>
 
@@ -35,10 +42,16 @@
 #include <coreplugin/translators.h>
 
 #include <QtCore/QtPlugin>
+#include <QDialog>
+#include <QGridLayout>
 #include <QDebug>
 
 using namespace Agenda;
 using namespace Internal;
+
+// TEST
+static inline Core::ISettings *settings() {return Core::ICore::instance()->settings();}
+// END TEST
 
 AgendaPlugin::AgendaPlugin()
 {
@@ -72,6 +85,10 @@ void AgendaPlugin::extensionsInitialized()
 
     // Initialize database
     Internal::AgendaBase::instance();
+
+    // Initialize ActionHandler and WidgetManager
+    AgendaWidgetManager::instance();
+
     testDatabase();
 }
 
@@ -79,15 +96,30 @@ void AgendaPlugin::testDatabase()
 {
     qWarning() << "\n\n\nxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxx AGENDA BASE TEST";
     Internal::AgendaBase *base = Internal::AgendaBase::instance();
-    // Create a calendar for the current user
-    IUserCalendar *ucal = new IUserCalendar();
-    ucal->setData(IUserCalendar::DbOnly_IsValid, 1);
-    ucal->setData(IUserCalendar::Password, "NonCryptedPassword");
-    ucal->setData(IUserCalendar::Label, "Label of IUserCalendar");
-    ucal->setData(IUserCalendar::IsPrivate, 0);
-    ucal->setData(IUserCalendar::ThemedIcon, "pen.png");
-    if (base->saveUserCalendar(ucal))
-        qWarning() << "user calendar correctly saved";
+
+    // Try to get calendar(s) for the current user
+    QList<IUserCalendar *> cals = base->getUserCalendars();
+    qWarning() << "Number of user calendars" << cals.count();
+
+    Utils::Randomizer r;
+    r.setPathToFiles(settings()->path(Core::ISettings::BundleResourcesPath) + "/textfiles/");
+
+    IUserCalendar *ucal = 0;
+    if (cals.count() == 0) {
+        for(int i=0; i < 5; ++i) {
+            ucal = new IUserCalendar();
+            // Create a calendar for the current user
+            ucal->setData(IUserCalendar::DbOnly_IsValid, 1);
+            ucal->setData(IUserCalendar::Password, r.getRandomString(r.randomInt(0,10)));
+            ucal->setData(IUserCalendar::Label, r.randomWords(r.randomInt(0,5)));
+            ucal->setData(IUserCalendar::IsPrivate, r.randomInt(0,1));
+            ucal->setData(IUserCalendar::ThemedIcon, "pen.png");
+            if (base->saveUserCalendar(ucal))
+                qWarning() << "user calendar correctly saved to database";
+            cals << ucal;
+        }
+    }
+    ucal = cals.at(0);
 
     // Create events in the calendar
     QDateTime start = QDateTime::currentDateTime();
@@ -99,24 +131,35 @@ void AgendaPlugin::testDatabase()
     ev->setData(ICalendarEvent::DbOnly_EvId, -1);
     ev->setData(ICalendarEvent::DbOnly_CalId, 1);
 //    ev->setData(ICalendarEvent::DbOnly_ComId, );
-    ev->setData(ICalendarEvent::PatientUid, "Patient");
+    ev->setData(ICalendarEvent::PatientUid, r.getRandomString(45));
     ev->setData(ICalendarEvent::DateStart, start);
     ev->setData(ICalendarEvent::DateEnd, end);
     ev->setData(ICalendarEvent::DbOnly_CatId, -1);
     ev->setData(ICalendarEvent::TypeId, 1);
     ev->setData(ICalendarEvent::StatusId, 2);
     ev->setData(ICalendarEvent::SiteUid, "siteId");
-    ev->setData(ICalendarEvent::IsPrivate, 0);
+    ev->setData(ICalendarEvent::IsPrivate, r.randomInt(0,1));
     ev->setData(ICalendarEvent::Password, "nopass");
-    ev->setData(ICalendarEvent::IsBusy, 0);
-    ev->setData(ICalendarEvent::IsAGroupEvent, 0);
-    ev->setData(ICalendarEvent::Label, "Labelllllll");
-    ev->setData(ICalendarEvent::FullContent, "Bla Bla in html ?");
-    ev->setData(ICalendarEvent::TextualSite, "textual site");
+    ev->setData(ICalendarEvent::IsBusy, r.randomInt(0,1));
+    ev->setData(ICalendarEvent::IsAGroupEvent, r.randomInt(0,1));
+    ev->setData(ICalendarEvent::Label, r.randomWords(r.randomInt(2, 15)));
+    ev->setData(ICalendarEvent::FullContent, r.randomWords(r.randomInt(10, 500)));
+    ev->setData(ICalendarEvent::TextualSite, r.getRandomString(r.randomInt(1,145)));
+    ev->setData(ICalendarEvent::ThemedIcon, "pen.png");
     ev->setData(ICalendarEvent::DbOnly_XmlViewOptions, "XmlViewOptions");
     ev->setData(ICalendarEvent::DbOnly_XmlOptions, "XmlOptions");
     if (base->saveCalendarEvent(ev))
         qWarning() << "event correctly saved";
+
+    // Test event dialog
+    QDialog dlg;
+    QGridLayout lay(&dlg);
+    EventEditorWidget w(&dlg);
+    w.setCalendarEvent(ev);
+    lay.addWidget(&w);
+    dlg.setLayout(&lay);
+    dlg.exec();
+
 
     // Try to get events now
     CalendarEventQuery q;

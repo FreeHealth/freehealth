@@ -53,17 +53,18 @@ namespace Constants {
     };
 
     enum FieldsCALENDAR {
-        CAL_ID = 0,
-        CAL_CATEGORYID,
-        CAL_ISVALID,
-        CAL_STATUS,
-        CAL_TYPE,
-        CAL_SITEUID,
-        CAL_ISPRIVATE,
-        CAL_PASSWORD,
-        CAL_LABEL,
-        CAL_THEMEDICON,
-        CAL_XMLOPTIONS
+            CAL_ID = 0,
+            CAL_CATEGORYID,
+            CAL_ISVALID,
+            CAL_STATUS,
+            CAL_TYPE,
+            CAL_SITEUID,
+            CAL_ISPRIVATE,
+            CAL_PASSWORD,
+            CAL_LABEL,
+            CAL_FULLCONTENT,
+            CAL_THEMEDICON,
+            CAL_XMLOPTIONS
     };
 
     enum fieldsCOMMON_FOR_EVENTS {
@@ -115,6 +116,28 @@ namespace Constants {
     enum VERSION_Fields {
         VERSION_ACTUAL = 0
     };
+
+
+    // WIDGETS
+    const char * const C_AGENDA_PLUGIN = "contextAgenga";
+    const char * const M_PLUGINS_AGENDA = "menuAgenda";
+    const char * const G_AGENDA_VIEW = "gAgendaView";
+    const char * const G_AGENDA_EDIT = "gAgendaEdit";
+    const char * const G_AGENDA_OPTIONS = "gAgendaOptions";
+
+    const char * const A_NEW_AGENDAEVENT = "agendaNewEvent";
+    const char * const A_PRINT_SELECTION = "agendaPrintSelection";
+    const char * const A_PRINT_PREVIEW_SELECTION = "agendaPreviewSelection";
+    const char * const A_AGENDADATABASE_INFORMATIONS = "agendaDbInfos";
+
+
+
+    const char * const I_NEW_AGENDAEVENT = "agenda_newevent.png";
+
+
+    // Translations
+    const char * const AGENDA_TR_CONTEXT = "Agenda";
+    const char * const PRINTSELECTION_TEXT = QT_TRANSLATE_NOOP("Agenda", "Print current selection");
 
 }  // End Constants
 }  // End Agenda

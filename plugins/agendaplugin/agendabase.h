@@ -122,7 +122,9 @@ private Q_SLOTS:
     void onCoreDatabaseServerChanged();
 
 public:
+    QList<Agenda::IUserCalendar *> getUserCalendars(const QString &userUuid = QString::null);
     bool saveUserCalendar(IUserCalendar *calendar);
+
     QList<ICalendarEvent *> getCalendarEvents(const CalendarEventQuery &query);
     bool saveCalendarEvents(const QList<Agenda::ICalendarEvent *> &events);
     bool saveCalendarEvent(Agenda::ICalendarEvent *event);
