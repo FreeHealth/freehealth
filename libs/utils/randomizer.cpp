@@ -195,9 +195,27 @@ QString Randomizer::getRandomName()
     return d->words.at(makeRand(d->words.count() - 1));
 }
 
+QString Randomizer::randomWords(int nbOfWords)
+{
+    QStringList t;
+    for(int i=0; i < nbOfWords; ++i) {
+        t <<  getRandomName();
+    }
+    return t.join(" ");
+}
+
 int Randomizer::randomInt(int max)
 {
     return makeRand(max);
+}
+
+bool Randomizer::randomBool()
+{
+    int z = 0;
+    for(int i=0; i < randomInt(1, 50); ++i) {
+        z += randomInt(0,1);
+    }
+    return (z%1==0);
 }
 
 int Randomizer::randomInt(int min, int max)

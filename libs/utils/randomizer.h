@@ -55,6 +55,9 @@ public:
 
     int randomInt(int max);
     int randomInt(int min, int max);
+    bool randomBool();
+
+    QString randomWords(int nbOfWords);
 
     QDate randomDate(const int minYear, const int minMonth = 1, const int minDay = 1);
     QDateTime randomDateTime(const QDateTime &mindate);
