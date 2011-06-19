@@ -516,6 +516,12 @@ enum TitleInterpret {
         const char* const WATERMARK = QT_TRANSLATE_NOOP("tkConstants", "Watermark");
         const char* const PRINTING = QT_TRANSLATE_NOOP("tkConstants", "Printing");
 
+        // Agenda related
+        const char * const AGENDA = QT_TRANSLATE_NOOP("tkConstants", "Agenda");
+        const char * const AGENDA_EVENT = QT_TRANSLATE_NOOP("tkConstants", "Agenda event");
+        const char * const AGENDA_EVENTS = QT_TRANSLATE_NOOP("tkConstants", "Agenda events");
+        const char * const AGENDA_DATABASE_INFORMATIONS = QT_TRANSLATE_NOOP("tkConstants", "Agenda database informations");
+
 
         // File filters
         const char * const FILE_FILTER_ZIP = QT_TRANSLATE_NOOP("tkConstants", "Zip archive (*zip)");
