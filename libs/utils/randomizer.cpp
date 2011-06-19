@@ -223,7 +223,7 @@ bool Randomizer::randomBool()
 int Randomizer::randomInt(int min, int max)
 {
     Q_ASSERT(min < max);
-    int i = min;
+    int i = min - 10;
     int z = 0;
     while (i < min) {
         i = makeRand(max);
