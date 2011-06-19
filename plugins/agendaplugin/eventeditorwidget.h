@@ -32,6 +32,7 @@ public Q_SLOTS:
 
 private Q_SLOTS:
     void on_selectIconButton_clicked();
+    void changeDuration(const int comboIndex);
 
 protected:
     void changeEvent(QEvent *e);
