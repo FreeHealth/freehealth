@@ -33,6 +33,8 @@
 #include "eventeditorwidget.h"
 #include <utils/randomizer.h>
 #include <coreplugin/isettings.h>
+#include <QDir>
+#include <QFileInfo>
 // END TEST
 
 #include <utils/log.h>
@@ -145,7 +147,8 @@ void AgendaPlugin::testDatabase()
     ev->setData(ICalendarEvent::Label, r.randomWords(r.randomInt(2, 15)));
     ev->setData(ICalendarEvent::FullContent, r.randomWords(r.randomInt(10, 500)));
     ev->setData(ICalendarEvent::TextualSite, r.getRandomString(r.randomInt(1,145)));
-    ev->setData(ICalendarEvent::ThemedIcon, "pen.png");
+    QDir pix(settings()->path(Core::ISettings::SmallPixmapPath));
+    ev->setData(ICalendarEvent::ThemedIcon, r.randomFile(pix, QStringList() << "*.png").fileName());
     ev->setData(ICalendarEvent::DbOnly_XmlViewOptions, "XmlViewOptions");
     ev->setData(ICalendarEvent::DbOnly_XmlOptions, "XmlOptions");
     if (base->saveCalendarEvent(ev))
