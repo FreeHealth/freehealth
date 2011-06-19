@@ -59,6 +59,7 @@ namespace Constants {
             CAL_STATUS,
             CAL_TYPE,
             CAL_SITEUID,
+            CAL_DEFAULT,
             CAL_ISPRIVATE,
             CAL_PASSWORD,
             CAL_LABEL,

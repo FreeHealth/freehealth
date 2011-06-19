@@ -30,6 +30,9 @@
 #include <agendaplugin/agenda_exporter.h>
 
 #include <QVariant>
+QT_BEGIN_NAMESPACE
+class QStandardItem;
+QT_END_NAMESPACE
 
 namespace Agenda {
 namespace Internal {
@@ -47,6 +50,7 @@ public:
         FullContent,
         TypeId,
         StatusId,
+        IsDefault,
         IsPrivate,
         Password,
         ThemedIcon,
@@ -68,9 +72,11 @@ public:
     virtual bool isModified() const;
     virtual void setModified(const bool state);
 
+    virtual QStandardItem *toStandardItem() const;
+    virtual int calendarId() const;
+
 protected:
     virtual void setDatabaseValue(const int ref, const QVariant &value);
-    virtual int calendarId() const;
     virtual QString userOwnerUid() const;
     virtual int categoryId() const;
     virtual QString xmlOptions() const;

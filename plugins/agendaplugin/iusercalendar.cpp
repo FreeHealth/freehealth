@@ -28,11 +28,15 @@
 
 #include <coreplugin/icore.h>
 #include <coreplugin/iuser.h>
+#include <coreplugin/itheme.h>
+
+#include <QStandardItem>
 
 using namespace Agenda;
 //using namespace Internal;
 
 static inline Core::IUser *user() {return Core::ICore::instance()->user();}
+static inline Core::ITheme *theme() {return Core::ICore::instance()->theme();}
 
 IUserCalendar::IUserCalendar() :
         m_Modified(false)
@@ -79,6 +83,16 @@ bool IUserCalendar::isModified() const
 void IUserCalendar::setModified(const bool state)
 {
     m_Modified=state;
+}
+
+QStandardItem *IUserCalendar::toStandardItem() const
+{
+    QStandardItem *it = new QStandardItem;
+    if (m_Datas.keys().contains(ThemedIcon))
+        it->setIcon(theme()->icon(m_Datas.value(ThemedIcon).toString()));
+    it->setText(m_Datas.value(Label).toString());
+    it->setToolTip(it->text());
+    return it;
 }
 
 void IUserCalendar::setDatabaseValue(const int ref, const QVariant &value)

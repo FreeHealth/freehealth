@@ -178,6 +178,7 @@ AgendaBase::AgendaBase(QObject *parent) :
     addField(Table_CALENDAR, CAL_STATUS, "STATUS", FieldIsInteger);
     addField(Table_CALENDAR, CAL_TYPE, "TYPE", FieldIsInteger);
     addField(Table_CALENDAR, CAL_SITEUID, "SITE_UUID", FieldIsUUID);
+    addField(Table_CALENDAR, CAL_DEFAULT, "DEFAULT", FieldIsBoolean);
     addField(Table_CALENDAR, CAL_ISPRIVATE, "ISPRIV", FieldIsBoolean);
     addField(Table_CALENDAR, CAL_PASSWORD, "PASSWORD", FieldIsShortText);
     addField(Table_CALENDAR, CAL_LABEL, "LABEL", FieldIsShortText);
@@ -401,6 +402,7 @@ QList<Agenda::IUserCalendar *> AgendaBase::getUserCalendars(const QString &userU
             u->setDatabaseValue(IUserCalendar::FullContent, query.value(Constants::CAL_FULLCONTENT));
             u->setDatabaseValue(IUserCalendar::TypeId, query.value(Constants::CAL_TYPE));
             u->setDatabaseValue(IUserCalendar::StatusId, query.value(Constants::CAL_STATUS));
+            u->setDatabaseValue(IUserCalendar::IsDefault, query.value(Constants::CAL_DEFAULT));
             u->setDatabaseValue(IUserCalendar::IsPrivate, query.value(Constants::CAL_ISPRIVATE));
             u->setDatabaseValue(IUserCalendar::Password, query.value(Constants::CAL_PASSWORD));
             u->setDatabaseValue(IUserCalendar::ThemedIcon, query.value(Constants::CAL_THEMEDICON));
@@ -424,9 +426,10 @@ bool AgendaBase::saveUserCalendar(Agenda::IUserCalendar *calendar)
         query.bindValue(Constants::CAL_ID, QVariant());
         query.bindValue(Constants::CAL_CATEGORYID, calendar->categoryId());
         query.bindValue(Constants::CAL_ISVALID, 1);
-        query.bindValue(Constants::CAL_STATUS, 1);
-        query.bindValue(Constants::CAL_TYPE, 1);
-        query.bindValue(Constants::CAL_ISPRIVATE, calendar->data(IUserCalendar::IsPrivate));
+        query.bindValue(Constants::CAL_STATUS, calendar->data(IUserCalendar::TypeId).toInt());
+        query.bindValue(Constants::CAL_TYPE, calendar->data(IUserCalendar::StatusId).toInt());
+        query.bindValue(Constants::CAL_DEFAULT, calendar->data(IUserCalendar::IsDefault).toInt());
+        query.bindValue(Constants::CAL_ISPRIVATE, calendar->data(IUserCalendar::IsPrivate).toInt());
         query.bindValue(Constants::CAL_PASSWORD, calendar->data(IUserCalendar::Password));
         query.bindValue(Constants::CAL_SITEUID, "siteUid");
         query.bindValue(Constants::CAL_LABEL, calendar->data(IUserCalendar::Label));
@@ -463,6 +466,7 @@ bool AgendaBase::saveUserCalendar(Agenda::IUserCalendar *calendar)
                                          << Constants::CAL_ISPRIVATE
                                          << Constants::CAL_TYPE
                                          << Constants::CAL_STATUS
+                                         << Constants::CAL_DEFAULT
                                          << Constants::CAL_PASSWORD
                                          << Constants::CAL_SITEUID
                                          << Constants::CAL_LABEL
@@ -474,11 +478,12 @@ bool AgendaBase::saveUserCalendar(Agenda::IUserCalendar *calendar)
         query.bindValue(2, calendar->data(IUserCalendar::IsPrivate).toInt());
         query.bindValue(3, calendar->data(IUserCalendar::TypeId).toInt());
         query.bindValue(4, calendar->data(IUserCalendar::StatusId).toInt());
-        query.bindValue(5, calendar->data(IUserCalendar::Password));
-        query.bindValue(6, "siteUid");
-        query.bindValue(7, calendar->data(IUserCalendar::Label));
-        query.bindValue(8, calendar->data(IUserCalendar::ThemedIcon));
-        query.bindValue(9, calendar->xmlOptions());
+        query.bindValue(5, calendar->data(IUserCalendar::IsDefault).toInt());
+        query.bindValue(6, calendar->data(IUserCalendar::Password));
+        query.bindValue(7, "siteUid");
+        query.bindValue(8, calendar->data(IUserCalendar::Label));
+        query.bindValue(9, calendar->data(IUserCalendar::ThemedIcon));
+        query.bindValue(10, calendar->xmlOptions());
         if (!query.exec()) {
             LOG_QUERY_ERROR(query);
             return false;

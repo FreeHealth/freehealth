@@ -11,6 +11,7 @@
 #include "ui_eventeditorwidget.h"
 
 #include <QIcon>
+#include <QStandardItemModel>
 #include <QDebug>
 
 using namespace Agenda;
@@ -31,6 +32,7 @@ namespace Internal {
         EventEditorWidgetPrivate(EventEditorWidget *parent) :
                 ui(new Internal::Ui::EventEditorWidget),
                 m_Event(0),
+                m_UserCalsModel(0),
                 q(parent)
         {
         }
@@ -79,12 +81,18 @@ namespace Internal {
             m_Event->setData(ICalendarEvent::Label, ui->eventLabel->text());
             m_Event->setData(ICalendarEvent::FullContent,ui->fullInfo->toHtml());
 //            m_Event->setData(ICalendarEvent::ThemedIcon, QString());
+            // get user calendar
+            if (ui->calendarCombo->currentIndex() <= m_UserCals.count()) {
+                IUserCalendar *ucal = m_UserCals.at(ui->calendarCombo->currentIndex());
+                m_Event->setData(ICalendarEvent::DbOnly_CalId, ucal->calendarId());
+            }
         }
 
     public:
         Ui::EventEditorWidget *ui;
         Agenda::ICalendarEvent *m_Event;
         QList<IUserCalendar *> m_UserCals;
+        QStandardItemModel *m_UserCalsModel;
 
     private:
         EventEditorWidget *q;
@@ -141,6 +149,23 @@ Agenda::ICalendarEvent *EventEditorWidget::calendarEvent() const
 void EventEditorWidget::setAvailableUserCalendar(const QList<IUserCalendar *> &userCals)
 {
     d->m_UserCals = userCals;
+
+    // create the model
+    if (d->m_UserCalsModel) {
+        delete d->m_UserCalsModel;
+        d->m_UserCalsModel = 0;
+    }
+    d->m_UserCalsModel = new QStandardItemModel(this);
+    QStandardItem *root = d->m_UserCalsModel->invisibleRootItem();
+    int defaultRow = -1;
+    for(int i = 0; i < userCals.count(); ++i) {
+        root->appendRow(userCals.at(i)->toStandardItem());
+        if (userCals.at(i)->data(IUserCalendar::IsDefault).toBool()) {
+            defaultRow = i;
+        }
+    }
+    d->ui->calendarCombo->setModel(d->m_UserCalsModel);
+    d->ui->calendarCombo->setCurrentIndex(defaultRow);
 }
 
 /** Submit UI changes to the internal Agenda::ICalendarEvent \sa calendarEvent(), setCalendarEvent() */

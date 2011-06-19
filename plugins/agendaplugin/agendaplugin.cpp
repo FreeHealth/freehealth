@@ -105,6 +105,7 @@ void AgendaPlugin::testDatabase()
 
     Utils::Randomizer r;
     r.setPathToFiles(settings()->path(Core::ISettings::BundleResourcesPath) + "/textfiles/");
+    QDir pix(settings()->path(Core::ISettings::SmallPixmapPath));
 
     IUserCalendar *ucal = 0;
     if (cals.count() == 0) {
@@ -113,13 +114,17 @@ void AgendaPlugin::testDatabase()
             // Create a calendar for the current user
             ucal->setData(IUserCalendar::DbOnly_IsValid, 1);
             ucal->setData(IUserCalendar::Password, r.getRandomString(r.randomInt(0,10)));
-            ucal->setData(IUserCalendar::Label, r.randomWords(r.randomInt(0,5)));
+            ucal->setData(IUserCalendar::Label, r.randomWords(r.randomInt(2,5)));
             ucal->setData(IUserCalendar::IsPrivate, r.randomInt(0,1));
-            ucal->setData(IUserCalendar::ThemedIcon, "pen.png");
+            ucal->setData(IUserCalendar::ThemedIcon, r.randomFile(pix, QStringList() << "*.png").fileName());
             if (base->saveUserCalendar(ucal))
                 qWarning() << "user calendar correctly saved to database";
             cals << ucal;
         }
+        // one must be the default
+        ucal = cals.at(r.randomInt(0,4));
+        ucal->setData(IUserCalendar::IsDefault, 1);
+        base->saveUserCalendar(ucal);
     }
     ucal = cals.at(0);
 
@@ -147,7 +152,6 @@ void AgendaPlugin::testDatabase()
     ev->setData(ICalendarEvent::Label, r.randomWords(r.randomInt(2, 15)));
     ev->setData(ICalendarEvent::FullContent, r.randomWords(r.randomInt(10, 500)));
     ev->setData(ICalendarEvent::TextualSite, r.getRandomString(r.randomInt(1,145)));
-    QDir pix(settings()->path(Core::ISettings::SmallPixmapPath));
     ev->setData(ICalendarEvent::ThemedIcon, r.randomFile(pix, QStringList() << "*.png").fileName());
     ev->setData(ICalendarEvent::DbOnly_XmlViewOptions, "XmlViewOptions");
     ev->setData(ICalendarEvent::DbOnly_XmlOptions, "XmlOptions");
@@ -159,10 +163,10 @@ void AgendaPlugin::testDatabase()
     QGridLayout lay(&dlg);
     EventEditorWidget w(&dlg);
     w.setCalendarEvent(ev);
+    w.setAvailableUserCalendar(cals);
     lay.addWidget(&w);
     dlg.setLayout(&lay);
     dlg.exec();
-
 
     // Try to get events now
     CalendarEventQuery q;
