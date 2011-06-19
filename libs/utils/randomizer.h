@@ -29,9 +29,17 @@
 #include <utils/global_exporter.h>
 
 #include <QString>
+#include <QStringList>
+#include <QFileInfo>
 #include <QPair>
 #include <QDate>
 
+/**
+ * \file randomizer.h
+ * \author Eric MAEKER <eric.maeker@gmail.com>
+ * \version 0.6.0
+ * \date 19 Jun 2011
+*/
 
 namespace Utils {
 namespace Internal {
@@ -61,6 +69,8 @@ public:
 
     QDate randomDate(const int minYear, const int minMonth = 1, const int minDay = 1);
     QDateTime randomDateTime(const QDateTime &mindate);
+
+    QFileInfo randomFile(const QDir &inDir, const QStringList &filters);
 
 private:
     Internal::RandomizerPrivate *d;

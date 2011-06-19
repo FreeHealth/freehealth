@@ -35,6 +35,8 @@
 #include <time.h>
 
 #include <QFile>
+#include <QFileInfo>
+#include <QDir>
 #include <QVector>
 
 #include <time.h>
@@ -277,4 +279,10 @@ QDateTime Randomizer::randomDateTime(const QDateTime &minDate)
         toReturn.setTime(QTime(randomInt(23), randomInt(59), randomInt(59), randomInt(99)));
     }
     return toReturn;
+}
+
+QFileInfo Randomizer::randomFile(const QDir &inDir, const QStringList &filters)
+{
+    QFileInfoList list = inDir.entryInfoList(filters);
+    return list.at(randomInt(0, list.count()));
 }
