@@ -35,6 +35,7 @@
 #include <coreplugin/isettings.h>
 #include <QDir>
 #include <QFileInfo>
+#include <QProgressDialog>
 // END TEST
 
 #include <utils/log.h>
@@ -129,34 +130,71 @@ void AgendaPlugin::testDatabase()
     ucal = cals.at(0);
 
     // Create events in the calendar
-    QDateTime start = QDateTime::currentDateTime();
-    start.setTime(QTime(QTime::currentTime().hour()+1, 0, 0));
-    QDateTime end = start.addSecs(60*15);
-    ICalendarEvent *ev = new ICalendarEvent;
-    ev->setData(ICalendarEvent::DbOnly_CalId, ucal->data(IUserCalendar::DbOnly_CalId));
-    ev->setData(ICalendarEvent::DbOnly_IsValid, 1);
-    ev->setData(ICalendarEvent::DbOnly_EvId, -1);
-    ev->setData(ICalendarEvent::DbOnly_CalId, 1);
-//    ev->setData(ICalendarEvent::DbOnly_ComId, );
-    ev->setData(ICalendarEvent::PatientUid, r.getRandomString(45));
-    ev->setData(ICalendarEvent::DateStart, start);
-    ev->setData(ICalendarEvent::DateEnd, end);
-    ev->setData(ICalendarEvent::DbOnly_CatId, -1);
-    ev->setData(ICalendarEvent::TypeId, 1);
-    ev->setData(ICalendarEvent::StatusId, 2);
-    ev->setData(ICalendarEvent::SiteUid, "siteId");
-    ev->setData(ICalendarEvent::IsPrivate, r.randomInt(0,1));
-    ev->setData(ICalendarEvent::Password, "nopass");
-    ev->setData(ICalendarEvent::IsBusy, r.randomInt(0,1));
-    ev->setData(ICalendarEvent::IsAGroupEvent, r.randomInt(0,1));
-    ev->setData(ICalendarEvent::Label, r.randomWords(r.randomInt(2, 15)));
-    ev->setData(ICalendarEvent::FullContent, r.randomWords(r.randomInt(10, 500)));
-    ev->setData(ICalendarEvent::TextualSite, r.getRandomString(r.randomInt(1,145)));
-    ev->setData(ICalendarEvent::ThemedIcon, r.randomFile(pix, QStringList() << "*.png").fileName());
-    ev->setData(ICalendarEvent::DbOnly_XmlViewOptions, "XmlViewOptions");
-    ev->setData(ICalendarEvent::DbOnly_XmlOptions, "XmlOptions");
-    if (base->saveCalendarEvent(ev))
-        qWarning() << "event correctly saved";
+    // Try to get events now
+    QTime chrono;
+    chrono.start();
+    CalendarEventQuery q;
+    q.setDateRangeForCurrentWeek();
+    QList<ICalendarEvent*> list = base->getCalendarEvents(q);
+    qWarning() << "Retreived" << list.count() << "events from the database for user" << ucal->data(IUserCalendar::UserOwnerUid).toString() << "dateRange" << q.dateStart().toString(Qt::ISODate)<< q.dateEnd().toString(Qt::ISODate) << "in" << chrono.elapsed() << "ms";
+
+    ICalendarEvent *ev = 0;
+    if (list.count()==0) {
+        chrono.restart();
+        bool ok = true;
+        int nbEvents = r.randomInt(1000, 2000);
+        QDateTime start = QDateTime::currentDateTime();
+
+        QProgressDialog prog;
+        prog.setLabelText(QString("Creating %1 events (1 month ~= 800 events").arg(nbEvents));
+        prog.setRange(0, nbEvents);
+        prog.show();
+
+        for(int i = 0; i < nbEvents; ++i) {
+            if ((i % 100)==0) {
+                prog.setValue(i);
+                qApp->processEvents();
+            }
+
+            if (start.time().hour() >= 18) {
+                start.setDate(start.addDays(1).date());
+                start.setTime(QTime(8,0,0));
+            } else {
+                start.setTime(start.addSecs(60*15).time());
+            }
+            QDateTime end = start.addSecs(60*15);
+            ucal = cals.at(r.randomInt(0, cals.count()-1));
+
+            ICalendarEvent *ev = new ICalendarEvent;
+            ev->setData(ICalendarEvent::DbOnly_CalId, ucal->data(IUserCalendar::DbOnly_CalId));
+            ev->setData(ICalendarEvent::DbOnly_IsValid, 1);
+            ev->setData(ICalendarEvent::DbOnly_EvId, -1);
+            //    ev->setData(ICalendarEvent::DbOnly_ComId, );
+            ev->setData(ICalendarEvent::PatientUid, r.getRandomString(45));
+            ev->setData(ICalendarEvent::DateStart, start);
+            ev->setData(ICalendarEvent::DateEnd, end);
+            ev->setData(ICalendarEvent::DbOnly_CatId, -1);
+            ev->setData(ICalendarEvent::TypeId, 1);
+            ev->setData(ICalendarEvent::StatusId, 2);
+            ev->setData(ICalendarEvent::SiteUid, "siteId");
+            ev->setData(ICalendarEvent::IsPrivate, r.randomInt(0,1));
+            ev->setData(ICalendarEvent::Password, "nopass");
+            ev->setData(ICalendarEvent::IsBusy, r.randomInt(0,1));
+            ev->setData(ICalendarEvent::IsAGroupEvent, r.randomInt(0,1));
+            ev->setData(ICalendarEvent::Label, r.randomWords(r.randomInt(2, 15)));
+            ev->setData(ICalendarEvent::FullContent, r.randomWords(r.randomInt(10, 500)));
+            ev->setData(ICalendarEvent::TextualSite, r.getRandomString(r.randomInt(1,145)));
+            ev->setData(ICalendarEvent::ThemedIcon, r.randomFile(pix, QStringList() << "*.png").fileName());
+            ev->setData(ICalendarEvent::DbOnly_XmlViewOptions, "XmlViewOptions");
+            ev->setData(ICalendarEvent::DbOnly_XmlOptions, "XmlOptions");
+            if (!base->saveCalendarEvent(ev))
+                ok = false;
+            list << ev;
+        }
+        if (ok)
+            qWarning() << nbEvents << "events correctly created and saved in" << chrono.elapsed() << "ms";
+    }
+    ev = list.at(0);
 
     // Test event dialog
     QDialog dlg;
@@ -167,12 +205,6 @@ void AgendaPlugin::testDatabase()
     lay.addWidget(&w);
     dlg.setLayout(&lay);
     dlg.exec();
-
-    // Try to get events now
-    CalendarEventQuery q;
-    q.setDateRangeForCurrentWeek();
-    QList<ICalendarEvent*> list = base->getCalendarEvents(q);
-    qWarning() << "Retreived" << list.count() << "events from the database for user" << ucal->data(IUserCalendar::UserOwnerUid).toString() << "dateRange" << q.dateStart().toString(Qt::ISODate)<< q.dateEnd().toString(Qt::ISODate);
 
     qDeleteAll(list);
     list.clear();
