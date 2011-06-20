@@ -302,8 +302,11 @@ const char * const MODE_PATIENT_FILE      = "central";
 const char * const MODE_PATIENT_HISTORY   = "PatientHistory";
 const char * const MODE_PATIENT_DRUGS     = "drugs";
 const char * const MODE_ACCOUNT           = "account";
+const char * const MODE_AGENDA            = "agenda";
 const char * const MODE_USERMANAGER       = "usermanager";
+
 const int          P_MODE_PATIENT_SEARCH  = 100;
+const int          P_MODE_AGENDA          = 90;
 const int          P_MODE_PATIENT_HISTORY = 80;
 const int          P_MODE_PATIENT_DRUGS   = 60;
 const int          P_MODE_PATIENT_FILE    = 40;

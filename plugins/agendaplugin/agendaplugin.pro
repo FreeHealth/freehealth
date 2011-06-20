@@ -15,14 +15,20 @@ HEADERS = agendaplugin.h agenda_exporter.h \
     icalendarevent.h \
     iusercalendar.h \
     agendawidgetmanager.h \
-    eventeditorwidget.h
+    eventeditorwidget.h \
+    agendaeventsmodel.h \
+    useragendasviewer.h \
+    agendamode.h
 
 SOURCES = agendaplugin.cpp \
     agendabase.cpp \
     icalendarevent.cpp \
     iusercalendar.cpp \
     agendawidgetmanager.cpp \
-    eventeditorwidget.cpp
+    eventeditorwidget.cpp \
+    agendaeventsmodel.cpp \
+    useragendasviewer.cpp \
+    agendamode.cpp
 
 OTHER_FILES = Agenda.pluginspec
 
@@ -31,4 +37,5 @@ TRANSLATIONS += $${SOURCES_TRANSLATIONS_PATH}/agendaplugin_fr.ts \
                 $${SOURCES_TRANSLATIONS_PATH}/agendaplugin_es.ts
 
 FORMS += \
-    eventeditorwidget.ui
+    eventeditorwidget.ui \
+    useragendasviewer.ui

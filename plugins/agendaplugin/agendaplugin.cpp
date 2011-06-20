@@ -28,6 +28,7 @@
 #include "icalendarevent.h"
 #include "iusercalendar.h"
 #include "agendawidgetmanager.h"
+#include "agendamode.h"
 
 // TEST
 #include "eventeditorwidget.h"
@@ -93,6 +94,9 @@ void AgendaPlugin::extensionsInitialized()
     AgendaWidgetManager::instance();
 
     testDatabase();
+
+    // Add Agenda's mode
+    addAutoReleasedObject(new AgendaMode(this));
 }
 
 void AgendaPlugin::testDatabase()

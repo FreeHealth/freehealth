@@ -523,9 +523,10 @@ QList<Agenda::ICalendarEvent *> AgendaBase::getCalendarEvents(const CalendarEven
     } else {
         LOG_ERROR("not yet implemented");
     }
-    // Add order
+    // Manage pagination
+    //     Add order
     QString order = QString("\n ORDER BY `%1`.`%2` ASC").arg(table(Constants::Table_EVENTS)).arg(fieldName(Constants::Table_EVENTS, Constants::EVENT_ID));
-    // Manage pagination ?
+
 
     // Get Event table
     req = select(Constants::Table_EVENTS, joins, conds);
