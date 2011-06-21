@@ -48,6 +48,8 @@ public:
         qWarning() << m_Events.count();
 
         // Create calendar items
+		QTime t;
+		t.start();
         Calendar::AbstractCalendarModel *model = ui->calendarViewer->model();
 		model->stopEvents();
 		model->clearAll();
@@ -60,6 +62,7 @@ public:
             m_UidToListIndex.insert(item.uid(), i);
         }
 		model->resumeEvents();
+		qDebug("elapsed time for massive insertion: %d (ms)", t.elapsed());
     }
 
 

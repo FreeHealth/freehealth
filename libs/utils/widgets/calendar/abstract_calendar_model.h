@@ -25,7 +25,7 @@ namespace Calendar {
 		 * The base class function does nothing.
 		 * \return the item if the insertion occured, or invalid item if failure
 		 */
-		virtual CalendarItem insertItem(const QDateTime &begin, const QDateTime &end);
+		virtual const CalendarItem &insertItem(const QDateTime &begin, const QDateTime &end);
 
 		/**
 		 * Set a new calendar item for an uid

@@ -114,7 +114,7 @@ QList<CalendarItem> BasicCalendarModel::getItemsBetween(const QDate &from, const
 	return list;
 }
 
-CalendarItem BasicCalendarModel::insertItem(const QDateTime &beginning, const QDateTime &ending) {
+const CalendarItem &BasicCalendarModel::insertItem(const QDateTime &beginning, const QDateTime &ending) {
 	if (m_propagateEvents)
 		beginInsertItem();
 
@@ -171,9 +171,10 @@ int BasicCalendarModel::searchForIntersectedItem(const QList<CalendarItem*> &lis
 	return middle; // intersection => found!
 }
 
+/* TODO: optimize this function */
 QString BasicCalendarModel::createUid() const {
 	// at first, get the date
-	QString nowStr = QDate::currentDate().toString("yyyyMMdd");
+	QString nowStr = QDateTime::currentDateTime().toString("yyyyMMddThhmmsszz");
 	int index = 0;
 	QString propal;
 	do {
