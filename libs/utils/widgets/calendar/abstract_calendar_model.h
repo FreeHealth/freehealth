@@ -37,12 +37,31 @@ namespace Calendar {
 		 */
 		virtual void removeItem(const QString &uid) = 0;
 
+		/**
+		 * Clear all items
+		 */
+		virtual void clearAll() {};
+
+		/**
+		 * Cancel all future events about insertion, modification, deletion, etc
+		 * Can be used for massive items insertion loops
+		 */
+		void stopEvents();
+
+		/**
+		 * Resume all events behavior about insertion, modification, deletion, etc
+		 */
+		void resumeEvents();
+
 	signals:
 		void itemInserted(const CalendarItem &newItem);
 		void itemModified(const CalendarItem &oldItem, const CalendarItem &newItem);
 		void itemRemoved(const CalendarItem &removedItem);
+		void reset();
 
 	protected:
+		bool m_propagateEvents;
+
 		/** this function must be called before any item insertion */
 		void beginInsertItem();
 		/** this function must be called after any item insertion */

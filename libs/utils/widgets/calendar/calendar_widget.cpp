@@ -52,6 +52,17 @@ CalendarWidget::CalendarWidget(QWidget *parent)
 	  m_d(new CalendarWidgetPrivate(this)),
 	  m_model(0) {
 
+	CalendarItem *item;
+	QList<CalendarItem*> list;
+	QDateTime begin = QDateTime::currentDateTime();
+	QDateTime end = begin;
+	qDebug("avant");
+	for (int i = 0; i < 100000; i++){
+		item = new CalendarItem("ok", begin, end);
+		list << item;
+	}
+	qDebug("apres");
+
 	// navigation bar stuffs
 	connect(m_d->m_navbar, SIGNAL(firstDateChanged()), this, SLOT(firstDateChanged()));
 	connect(m_d->m_navbar, SIGNAL(viewTypeChanged()), this, SLOT(viewTypeChanged()));

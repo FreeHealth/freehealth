@@ -49,7 +49,9 @@ public:
 
         // Create calendar items
         Calendar::AbstractCalendarModel *model = ui->calendarViewer->model();
-        for(int i = 0; i < m_Events.count(); ++i) {
+		model->stopEvents();
+		model->clearAll();
+        for(int i = 0; i < m_Events.count() / 1; ++i) {
             ICalendarEvent *event = m_Events.at(i);
             Calendar::CalendarItem item = model->insertItem(event->data(ICalendarEvent::DateStart).toDateTime(), event->data(ICalendarEvent::DateEnd).toDateTime());
             item.setTitle(event->data(ICalendarEvent::Label).toString());
@@ -57,6 +59,7 @@ public:
             model->setItemByUid(item.uid(), item);
             m_UidToListIndex.insert(item.uid(), i);
         }
+		model->resumeEvents();
     }
 
 

@@ -29,6 +29,8 @@ namespace Calendar {
 
 		void removeItem(const QString &uid);
 
+		void clearAll();
+
 	private:
 		QList<CalendarItem*> m_sortedByBeginList;
 		QList<CalendarItem*> m_sortedByEndList;

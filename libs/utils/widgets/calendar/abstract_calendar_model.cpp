@@ -3,7 +3,7 @@
 using namespace Calendar;
 
 AbstractCalendarModel::AbstractCalendarModel(QObject *parent) :
-	QObject(parent) {
+	QObject(parent), m_propagateEvents(true) {
 }
 
 CalendarItem AbstractCalendarModel::insertItem(const QDateTime &, const QDateTime &) {
@@ -15,7 +15,8 @@ void AbstractCalendarModel::beginInsertItem() {
 }
 
 void AbstractCalendarModel::endInsertItem(const CalendarItem &newItem) {
-	emit itemInserted(newItem);
+	if (m_propagateEvents)
+		emit itemInserted(newItem);
 }
 
 void AbstractCalendarModel::beginModifyItem() {
@@ -23,7 +24,8 @@ void AbstractCalendarModel::beginModifyItem() {
 }
 
 void AbstractCalendarModel::endModifyItem(const CalendarItem &oldItem, const CalendarItem &newItem) {
-	emit itemModified(oldItem, newItem);
+	if (m_propagateEvents)
+		emit itemModified(oldItem, newItem);
 }
 
 void AbstractCalendarModel::beginRemoveItem() {
@@ -31,7 +33,18 @@ void AbstractCalendarModel::beginRemoveItem() {
 }
 
 void AbstractCalendarModel::endRemoveItem(const CalendarItem &removedItem) {
-	emit itemRemoved(removedItem);
+	if (m_propagateEvents)
+		emit itemRemoved(removedItem);
 }
 
 void AbstractCalendarModel::setItemByUid(const QString &, const CalendarItem &) {}
+
+void AbstractCalendarModel::stopEvents() {
+	m_propagateEvents = false;
+}
+
+void AbstractCalendarModel::resumeEvents() {
+	m_propagateEvents = true;
+	emit reset();
+}
+

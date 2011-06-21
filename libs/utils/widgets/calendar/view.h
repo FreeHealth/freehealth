@@ -65,6 +65,7 @@ namespace Calendar {
 		virtual void itemInserted(const CalendarItem &item) { Q_UNUSED(item); }
 		virtual void itemModified(const CalendarItem &oldItem, const CalendarItem &newItem) { Q_UNUSED(oldItem); Q_UNUSED(newItem); }
 		virtual void itemRemoved(const CalendarItem &removedItem) { Q_UNUSED(removedItem); }
+		virtual void reset();
 
 	private:
 		QDate m_firstDate;

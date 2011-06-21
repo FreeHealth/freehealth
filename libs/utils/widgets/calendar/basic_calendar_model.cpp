@@ -16,11 +16,16 @@ BasicCalendarModel::BasicCalendarModel(QObject *parent) :
 	QDate now = QDate::currentDate();
 	CalendarItem item;
 /*	qsrand(time(0));
-	for (int i = 0; i < 30; i++) {
+	QTime t;
+	t.start();
+	stopEvents();
+	for (int i = 0; i < 300; i++) {
 		QDateTime start(now, QTime(qrand() % 24, qrand() % 60));
 		QDateTime end = start.addSecs(3600 * (1 + qrand() % 5));
 		insertItem(start, end);
-		}*/
+	}
+	resumeEvents();
+	qDebug("elapsed: %d", t.elapsed());*/
 
 	item = insertItem(QDateTime(now), QDateTime(now.addDays(1)));
 	item.setDaily(true);
@@ -29,13 +34,13 @@ BasicCalendarModel::BasicCalendarModel(QObject *parent) :
 	item = insertItem(QDateTime(now), QDateTime(now.addDays(2)));
 	item.setDaily(true);
 	setItemByUid(item.uid(), item);
-/*	item = insertItem(QDateTime(now.addDays(1)), QDateTime(now.addDays(3)));
+	item = insertItem(QDateTime(now.addDays(1)), QDateTime(now.addDays(3)));
 	item.setDaily(true);
 	setItemByUid(item.uid(), item);
 	item = insertItem(QDateTime(now.addDays(2)), QDateTime(now.addDays(5)));
 	item.setDaily(true);
 	item.setTitle("Ceci est un exemple");
-	setItemByUid(item.uid(), item);*/
+	setItemByUid(item.uid(), item);
 	insertItem(QDateTime(now, QTime(2, 0)), QDateTime(now, QTime(4, 0)));
 	insertItem(QDateTime(now, QTime(2, 0)), QDateTime(now, QTime(4, 0)));
 	insertItem(QDateTime(now, QTime(2, 30)), QDateTime(now, QTime(5, 0)));
@@ -110,7 +115,8 @@ QList<CalendarItem> BasicCalendarModel::getItemsBetween(const QDate &from, const
 }
 
 CalendarItem BasicCalendarModel::insertItem(const QDateTime &beginning, const QDateTime &ending) {
-	beginInsertItem();
+	if (m_propagateEvents)
+		beginInsertItem();
 
 	// create the item once but insert it in two lists
 	CalendarItem *item = new CalendarItem(createUid(), beginning, ending);
@@ -118,7 +124,8 @@ CalendarItem BasicCalendarModel::insertItem(const QDateTime &beginning, const QD
 	m_sortedByBeginList.insert(getInsertionIndex(true, beginning, m_sortedByBeginList, 0, m_sortedByBeginList.count() - 1), item);
 	m_sortedByEndList.insert(getInsertionIndex(false, ending, m_sortedByEndList, 0, m_sortedByEndList.count() - 1), item);
 
-	endInsertItem(*item);
+	if (m_propagateEvents)
+		endInsertItem(*item);
 
 	return *item;
 }
@@ -145,7 +152,7 @@ int BasicCalendarModel::getInsertionIndex(bool begin, const QDateTime &dateTime,
 
 int BasicCalendarModel::searchForIntersectedItem(const QList<CalendarItem*> &list, const QDate &from, const QDate &to, int first, int last) const {
 	if (last == -1) // 0 items
-		return 0;
+		return -1;
 
 	if (first == last) { // only one item, left or right?
 		if (list[first]->intersects(from, to))
@@ -228,4 +235,12 @@ void BasicCalendarModel::removeItem(const QString &uid) {
 	endRemoveItem(*oldItem);
 
 	delete oldItem;
+}
+
+void BasicCalendarModel::clearAll() {
+	qDeleteAll(m_sortedByBeginList);
+	m_sortedByBeginList.clear();
+	m_sortedByEndList.clear();
+	if (m_propagateEvents)
+		emit reset();
 }
