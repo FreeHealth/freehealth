@@ -79,6 +79,8 @@ BasicCalendarModel::BasicCalendarModel(QObject *parent) :
 //        QDir pix(settings()->path(Core::ISettings::SmallPixmapPath));
         QDateTime cd = QDateTime::currentDateTime();
         cd.setTime(QTime(cd.time().hour(), 00, 00));
+        cd.setDate(cd.date().addDays(- cd.date().dayOfWeek()));
+
         for(int i = 0 ; i< 300; ++i) {
             CalendarItem item = insertItem(cd, cd.addSecs(15*60));
             if (cd.time().hour() >= 18) {
