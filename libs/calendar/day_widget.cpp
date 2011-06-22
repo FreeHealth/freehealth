@@ -27,7 +27,7 @@ QSize DayWidget::staticSizeHint() {
 }
 
 void DayWidget::paintEvent(QPaintEvent *) {
-	QPainter painter(this);
+        QPainter painter(this);
 	painter.setRenderHint(QPainter::Antialiasing);
 	painter.setPen(Qt::NoPen);
 	QBrush brush = painter.brush();

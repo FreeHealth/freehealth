@@ -7,5 +7,6 @@ SUBDIRS += translationutils \
     aggregation \
     extensionsystem \
     utils \
+    calendar \
     ../contrib/quazip
 

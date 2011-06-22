@@ -1,7 +1,7 @@
 # toolkit library project file
 TEMPLATE = lib
 TARGET = Utils
-PACKAGE_VERSION = 0.4.0
+
 DEFINES *= UTILS_LIBRARY
 
 # include config file
@@ -39,26 +39,10 @@ HEADERS += global_exporter.h \
     pubmeddownloader.h \
     qabstractxmltreemodel.h \
     widgets/datetimedelegate.h \
-    widgets/calendar/abstract_calendar_model.h \
-    widgets/calendar/basic_calendar_model.h \
-    widgets/calendar/calendar_item.h \
-    widgets/calendar/calendar_item_widget.h \
-    widgets/calendar/calendar_navbar.h \
-    widgets/calendar/calendar_widget.h \
-    widgets/calendar/common.h \
-    widgets/calendar/day_range_view.h \
-    widgets/calendar/month_view.h \
-    widgets/calendar/view.h \
-    widgets/calendar/hour_range_widget.h \
-    widgets/calendar/hour_range_node.h \
-    widgets/calendar/month_day_widget.h \
-    widgets/calendar/basic_item_edition_dialog.h \
-    widgets/calendar/day_widget.h \
-    widgets/calendar/day_node.h \
     widgets/languagecombobox.h \
     widgets/languagecomboboxdelegate.h \
     databaseconnector.h \
-    versionnumber.h
+    versionnumber.h \
 #    widgets/dialogbuttonbox.h
 
 SOURCES += global.cpp \
@@ -87,29 +71,11 @@ SOURCES += global.cpp \
     pubmeddownloader.cpp \
     qabstractxmltreemodel.cpp \
     widgets/datetimedelegate.cpp \
-    widgets/calendar/abstract_calendar_model.cpp \
-    widgets/calendar/basic_calendar_model.cpp \
-    widgets/calendar/calendar_item.cpp \
-    widgets/calendar/calendar_item_widget.cpp \
-    widgets/calendar/calendar_navbar.cpp \
-    widgets/calendar/calendar_widget.cpp \
-    widgets/calendar/common.cpp \
-    widgets/calendar/day_range_view.cpp \
-    widgets/calendar/month_view.cpp \
-    widgets/calendar/view.cpp \
-    widgets/calendar/hour_range_widget.cpp \
-    widgets/calendar/hour_range_node.cpp \
-    widgets/calendar/month_day_widget.cpp \
-    widgets/calendar/basic_item_edition_dialog.cpp \
-    widgets/calendar/day_widget.cpp \
-    widgets/calendar/day_node.cpp \
     widgets/languagecombobox.cpp \
     widgets/languagecomboboxdelegate.cpp \
     databaseconnector.cpp \
-    versionnumber.cpp
+    versionnumber.cpp \
 #    widgets/dialogbuttonbox.cpp
-
-FORMS += widgets/calendar/basic_item_edition_dialog.ui
 
 macx {
     OBJECTIVE_SOURCES += iconbadgealert.mm
