@@ -40,24 +40,15 @@ BasicCalendarModel::BasicCalendarModel(QObject *parent) :
 	item = insertItem(QDateTime(now.addDays(2)), QDateTime(now.addDays(5)));
 	item.setDaily(true);
 	item.setTitle("Ceci est un exemple");
-	setItemByUid(item.uid(), item);
-	insertItem(QDateTime(now, QTime(2, 0)), QDateTime(now, QTime(4, 0)));
-	insertItem(QDateTime(now, QTime(2, 0)), QDateTime(now, QTime(4, 0)));
-	insertItem(QDateTime(now, QTime(2, 30)), QDateTime(now, QTime(5, 0)));
-	insertItem(QDateTime(now, QTime(4, 0)), QDateTime(now, QTime(6, 0)));
-	insertItem(QDateTime(now, QTime(6, 0)), QDateTime(now, QTime(7, 0)));
-	insertItem(QDateTime(now, QTime(6, 0)), QDateTime(now, QTime(7, 0)));
-	insertItem(QDateTime(now, QTime(6, 0)), QDateTime(now, QTime(7, 0)));
-	insertItem(QDateTime(now, QTime(6, 0)), QDateTime(now, QTime(7, 0)));
+        setItemByUid(item.uid(), item);
 
-	now = now.addDays(1);
-	insertItem(QDateTime(now, QTime(3, 30)), QDateTime(now, QTime(6, 0)));
-	insertItem(QDateTime(now, QTime(5, 0)), QDateTime(now, QTime(7, 0)));
-	insertItem(QDateTime(now, QTime(7, 0)), QDateTime(now, QTime(8, 0)));
-	insertItem(QDateTime(now, QTime(7, 0)), QDateTime(now, QTime(8, 0)));
-	insertItem(QDateTime(now, QTime(7, 0)), QDateTime(now, QTime(8, 0)));
-	insertItem(QDateTime(now, QTime(7, 0)), QDateTime(now, QTime(8, 0)));
-}
+        QDateTime cd = QDateTime::currentDateTime();
+        cd.setTime(QTime(cd.time().hour(), 00, 00));
+        for(int i = 0 ; i< 300; ++i) {
+            insertItem(cd, cd.addSecs(15*60));
+            cd = cd.addSecs(15*60);
+        }
+    }
 
 QList<CalendarItem> BasicCalendarModel::getItemsBetween(const QDate &from, const QDate &to) const {
 	Q_ASSERT_X(from <= to, "BasicCalendarModel::getItemsBetween", "<from> is strictly greater than <to>");
