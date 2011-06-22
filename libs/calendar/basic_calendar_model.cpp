@@ -1,6 +1,37 @@
-#include <QMap>
-
+/***************************************************************************
+ *  The FreeMedForms project is a set of free, open source medical         *
+ *  applications.                                                          *
+ *  (C) 2008-2011 by Eric MAEKER, MD (France) <eric.maeker@free.fr>        *
+ *  All rights reserved.                                                   *
+ *                                                                         *
+ *  This program is free software: you can redistribute it and/or modify   *
+ *  it under the terms of the GNU General Public License as published by   *
+ *  the Free Software Foundation, either version 3 of the License, or      *
+ *  (at your option) any later version.                                    *
+ *                                                                         *
+ *  This program is distributed in the hope that it will be useful,        *
+ *  but WITHOUT ANY WARRANTY; without even the implied warranty of         *
+ *  MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the          *
+ *  GNU General Public License for more details.                           *
+ *                                                                         *
+ *  You should have received a copy of the GNU General Public License      *
+ *  along with this program (COPYING.FREEMEDFORMS file).                   *
+ *  If not, see <http://www.gnu.org/licenses/>.                            *
+ ***************************************************************************/
+/***************************************************************************
+ *   Main Developpers :                                                    *
+ *       Guillaume Denry <guillaume.denry@gmail.com>                       *
+ *       Eric MAEKER, MD <eric.maeker@gmail.com>                           *
+ *   Contributors :                                                        *
+ *       NAME <MAIL@ADRESS>                                                *
+ ***************************************************************************/
 #include "basic_calendar_model.h"
+
+// FOR TEST
+#include <utils/randomizer.h>
+// END TEST
+
+#include <QMap>
 
 using namespace Calendar;
 
@@ -42,11 +73,35 @@ BasicCalendarModel::BasicCalendarModel(QObject *parent) :
 	item.setTitle("Ceci est un exemple");
         setItemByUid(item.uid(), item);
 
+        // Create factice events
+        Utils::Randomizer r;
+//        r.setPathToFiles(settings()->path(Core::ISettings::BundleResourcesPath) + "/textfiles/");
+//        QDir pix(settings()->path(Core::ISettings::SmallPixmapPath));
         QDateTime cd = QDateTime::currentDateTime();
         cd.setTime(QTime(cd.time().hour(), 00, 00));
         for(int i = 0 ; i< 300; ++i) {
-            insertItem(cd, cd.addSecs(15*60));
-            cd = cd.addSecs(15*60);
+            CalendarItem item = insertItem(cd, cd.addSecs(15*60));
+            if (cd.time().hour() >= 18) {
+                cd.setDate(cd.addDays(1).date());
+                cd.setTime(QTime(8,0,0));
+            } else {
+                cd.setTime(cd.addSecs(60*15).time());
+            }
+            QDateTime end = cd.addSecs(60*15);
+            item.setData(CalendarItem::DateStart, cd);
+            item.setData(CalendarItem::DateEnd, end);
+            item.setData(CalendarItem::Type, 1);
+            item.setData(CalendarItem::Status, 2);
+            item.setData(CalendarItem::LocationUid, "siteId");
+            item.setData(CalendarItem::IsPrivate, r.randomInt(0,1));
+            item.setData(CalendarItem::Password, "nopass");
+            item.setData(CalendarItem::IsBusy, r.randomInt(0,1));
+            item.setData(CalendarItem::IsAGroupEvent, r.randomInt(0,1));
+            item.setData(CalendarItem::Label, r.getRandomString(r.randomInt(2, 15)));
+            item.setData(CalendarItem::Description, r.getRandomString(r.randomInt(10, 500)));
+            item.setData(CalendarItem::Location, r.getRandomString(r.randomInt(1,145)));
+//            item.setData(CalendarItem::ThemedIcon, r.randomFile(pix, QStringList() << "*.png").fileName());
+            setItemByUid(item.uid(), item);
         }
     }
 

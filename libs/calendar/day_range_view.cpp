@@ -309,7 +309,7 @@ void DayRangeHeader::mouseReleaseEvent(QMouseEvent *event) {
 
 void DayRangeHeader::modifyPressItem() {
 	BasicItemEditionDialog dialog(this);
-	dialog.init(m_pressItem);
+        dialog.init(m_pressItem);
 	if (dialog.exec() == QDialog::Accepted) {
 		model()->setItemByUid(m_pressItem.uid(), dialog.item());
 		computeWidgets();
@@ -658,7 +658,7 @@ void DayRangeBody::mouseReleaseEvent(QMouseEvent *event) {
 
 void DayRangeBody::mouseDoubleClickEvent(QMouseEvent *) {
 	BasicItemEditionDialog dialog(this);
-	dialog.init(m_pressItem);
+        dialog.init(m_pressItem);
 	if (dialog.exec() == QDialog::Accepted)
 		model()->setItemByUid(m_pressItem.uid(), dialog.item());
 }

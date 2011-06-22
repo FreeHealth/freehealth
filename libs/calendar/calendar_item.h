@@ -19,9 +19,11 @@
  *  If not, see <http://www.gnu.org/licenses/>.                            *
  ***************************************************************************/
 /***************************************************************************
- *   Main Developper : Guillaume Denry <guillaume.denry@gmail.com>         *
+ *   Main Developpers :                                                    *
+ *       Guillaume Denry <guillaume.denry@gmail.com>                       *
+ *       Eric MAEKER, MD <eric.maeker@gmail.com>                           *
  *   Contributors :                                                        *
- *       Eric MAEKER, <eric.maeker@gmail.com>                              *
+ *       NAME <MAIL@ADRESS>                                                *
  ***************************************************************************/
 #ifndef CALENDAR_ITEM_H
 #define CALENDAR_ITEM_H
@@ -117,28 +119,28 @@ public:
     bool overlap(const CalendarItem &item) const;
 
     // getters
-    const QString &uid() const { return data(Uid).toString(); }
+    QString uid() const { return data(Uid).toString(); }
 
-    const QString &title() const { return data(Label).toString(); }
+    QString title() const { return data(Label).toString(); }
     void setTitle(const QString &value) {setData(Label, value);}
 
-    const QDateTime &beginning() const { return data(DateStart).toDateTime(); }
+    QDateTime beginning() const { return data(DateStart).toDateTime(); }
     void setBeginning(const QDateTime &value) {setData(DateStart, value);}
 
     DateType beginningType() const { return m_beginningType; }
     void setBeginningType(DateType value);
 
-    const QDateTime &ending() const { return data(DateEnd).toDateTime(); }
+    QDateTime ending() const { return data(DateEnd).toDateTime(); }
     void setEnding(const QDateTime &value) {setData(DateEnd, value);}
 
     DateType endingType() const { return m_endingType; }
     void setEndingType(DateType value);
 
-    const QString &description() const { return data(Description).toString(); }
+    QString description() const { return data(Description).toString(); }
     void setDescription(const QString &value) {setData(Description, value);}
 
     // Put this in a private part ?
-    const QDateTime &created() const { return data(CreatedDate).toDateTime(); }
+    QDateTime created() const { return data(CreatedDate).toDateTime(); }
     void setCreated(const QDateTime &value) {setData(CreatedDate,value);}
 
     /** if true, beginning and ending date types are set to Date_Date. If false, beginning and ending date types are set to Date_DateTime */

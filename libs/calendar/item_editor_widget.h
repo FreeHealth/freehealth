@@ -25,65 +25,50 @@
  *   Contributors :                                                        *
  *       NAME <MAIL@ADRESS>                                                *
  ***************************************************************************/
-#include "basic_item_edition_dialog.h"
-#include "calendar_item.h"
+#ifndef CALENDAR_ITEMEDITORWIDGET_H
+#define CALENDAR_ITEMEDITORWIDGET_H
 
-#include "ui_basic_item_edition_dialog.h"
+#include <calendar/calendar_exporter.h>
 
-using namespace Calendar;
+#include <QWidget>
 
-BasicItemEditionDialog::BasicItemEditionDialog(QWidget *parent) :
-        QDialog(parent), ui(new Internal::Ui::BasicItemEditionDialog)
-{
-    ui->setupUi(this);
+namespace Calendar {
+class CalendarItem;
+class UserCalendar;
+
+namespace Internal {
+class ItemEditorWidgetPrivate;
 }
 
-BasicItemEditionDialog::~BasicItemEditionDialog()
+class CALENDAR_EXPORT ItemEditorWidget : public QWidget
 {
-    delete ui;
-}
+    Q_OBJECT
 
-void BasicItemEditionDialog::init(const CalendarItem &item)
-{
-    ui->viewer->submit();
-    ui->viewer->setCalendarEvent(item);
-}
+public:
+    explicit ItemEditorWidget(QWidget *parent = 0);
+    ~ItemEditorWidget();
 
-Calendar::CalendarItem BasicItemEditionDialog::item() const
-{
-    return ui->viewer->calendarEvent();
-}
+    void clear();
 
-//	lineEditTitle->setText(m_item.title());
-//	dateEditStart->setDate(item.beginning().date());
-//	timeEditStart->setTime(item.beginning().time());
-//	if (item.endingType() == Date_Date)
-//		dateEditEnd->setDate(item.ending().date().addDays(-1));
-//	else
-//		dateEditEnd->setDate(item.ending().date());
-//	timeEditEnd->setTime(item.ending().time());
-//	checkBoxAllDay->setChecked(item.beginningType() == Date_Date &&
-//							   item.endingType() == Date_Date);
-//	textEditDescription->setText(m_item.description());
-//}
+    void setCalendarEvent(const Calendar::CalendarItem &event);
+    Calendar::CalendarItem calendarEvent() const;
 
-//void BasicItemEditionDialog::accept() {
-//	m_item.setTitle(lineEditTitle->text());
-//	m_item.setBeginningType(checkBoxAllDay->isChecked() ? Date_Date : Date_DateTime);
-//	m_item.setEndingType(checkBoxAllDay->isChecked() ? Date_Date : Date_DateTime);
-//	if (checkBoxAllDay->isChecked()) {
-//		m_item.setBeginning(QDateTime(dateEditStart->date(), QTime(0, 0)));
-//		m_item.setEnding(QDateTime(dateEditEnd->date().addDays(1), QTime(0, 0)));
-//	} else {
-//		m_item.setBeginning(QDateTime(dateEditStart->date(), timeEditStart->time()));
-//		m_item.setEnding(QDateTime(dateEditEnd->date(), timeEditEnd->time()));
-//	}
-//	m_item.setDescription(textEditDescription->toPlainText());
+    void setAvailableUserCalendar(const QList<Calendar::UserCalendar *> &userCals);
 
-//	QDialog::accept();
-//}
+public Q_SLOTS:
+    void submit();
 
-//void BasicItemEditionDialog::on_checkBoxAllDay_toggled(bool checked) {
-//	timeEditStart->setVisible(!checked);
-//	timeEditEnd->setVisible(!checked);
-//}
+private Q_SLOTS:
+    void on_selectIconButton_clicked();
+    void changeDuration(const int comboIndex);
+
+protected:
+    void changeEvent(QEvent *e);
+
+private:
+    Internal::ItemEditorWidgetPrivate *d;
+};
+
+}  // End namespace Calendar
+
+#endif // CALENDAR_ITEMEDITORWIDGET_H

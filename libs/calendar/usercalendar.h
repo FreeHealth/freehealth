@@ -40,7 +40,8 @@ class CALENDAR_EXPORT UserCalendar
 {
 public:
     enum DataRepresentation {
-        UserOwnerUid = 0,
+        Uid = 0,
+        UserOwnerUid,
         Label,
         Description,
         Type,
@@ -48,7 +49,7 @@ public:
         IsDefault,
         IsPrivate,
         Password,
-        AbsPathIcon,
+        AbsPathIcon
     };
 
     UserCalendar();

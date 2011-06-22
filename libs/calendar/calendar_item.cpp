@@ -19,9 +19,11 @@
  *  If not, see <http://www.gnu.org/licenses/>.                            *
  ***************************************************************************/
 /***************************************************************************
- *   Main Developper : Guillaume Denry <guillaume.denry@gmail.com>         *
+ *   Main Developpers :                                                    *
+ *       Guillaume Denry <guillaume.denry@gmail.com>                       *
+ *       Eric MAEKER, MD <eric.maeker@gmail.com>                           *
  *   Contributors :                                                        *
- *       Eric MAEKER, <eric.maeker@gmail.com>                              *
+ *       NAME <MAIL@ADRESS>                                                *
  ***************************************************************************/
 #include "common.h"
 #include "calendar_item.h"

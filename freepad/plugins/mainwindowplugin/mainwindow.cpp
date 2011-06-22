@@ -53,7 +53,8 @@
 #include <utils/log.h>
 #include <utils/global.h>
 #include <utils/updatechecker.h>
-#include <utils/widgets/calendar/calendar_widget.h>
+
+#include <calendar/calendar_widget.h>
 
 #include "ui_mainwindow.h"
 

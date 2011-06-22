@@ -1,12 +1,12 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <ui version="4.0">
- <class>BasicItemEditionDialog</class>
- <widget class="QDialog" name="BasicItemEditionDialog">
+ <class>Calendar::Internal::BasicItemEditionDialog</class>
+ <widget class="QDialog" name="Calendar::Internal::BasicItemEditionDialog">
   <property name="geometry">
    <rect>
     <x>0</x>
     <y>0</y>
-    <width>413</width>
+    <width>431</width>
     <height>300</height>
    </rect>
   </property>
@@ -14,35 +14,7 @@
    <string>Calendar item edition</string>
   </property>
   <layout class="QGridLayout" name="gridLayout">
-   <item row="0" column="0" colspan="6">
-    <widget class="QLineEdit" name="lineEditTitle"/>
-   </item>
-   <item row="1" column="0">
-    <widget class="QDateEdit" name="dateEditStart"/>
-   </item>
-   <item row="1" column="1">
-    <widget class="QTimeEdit" name="timeEditStart"/>
-   </item>
-   <item row="1" column="2">
-    <widget class="QLabel" name="labelTo">
-     <property name="text">
-      <string>to</string>
-     </property>
-     <property name="alignment">
-      <set>Qt::AlignCenter</set>
-     </property>
-    </widget>
-   </item>
-   <item row="1" column="3">
-    <widget class="QTimeEdit" name="timeEditEnd"/>
-   </item>
-   <item row="1" column="4">
-    <widget class="QDateEdit" name="dateEditEnd"/>
-   </item>
-   <item row="3" column="0" colspan="6">
-    <widget class="QTextEdit" name="textEditDescription"/>
-   </item>
-   <item row="4" column="0" colspan="6">
+   <item row="1" column="0" colspan="2">
     <widget class="QDialogButtonBox" name="buttonBox">
      <property name="orientation">
       <enum>Qt::Horizontal</enum>
@@ -52,34 +24,25 @@
      </property>
     </widget>
    </item>
-   <item row="2" column="0">
-    <widget class="QCheckBox" name="checkBoxAllDay">
-     <property name="text">
-      <string>All day</string>
-     </property>
-    </widget>
-   </item>
-   <item row="1" column="5">
-    <spacer name="horizontalSpacer">
-     <property name="orientation">
-      <enum>Qt::Horizontal</enum>
-     </property>
-     <property name="sizeHint" stdset="0">
-      <size>
-       <width>40</width>
-       <height>20</height>
-      </size>
-     </property>
-    </spacer>
+   <item row="0" column="0" colspan="2">
+    <widget class="Calendar::ItemEditorWidget" name="viewer" native="true"/>
    </item>
   </layout>
  </widget>
+ <customwidgets>
+  <customwidget>
+   <class>Calendar::ItemEditorWidget</class>
+   <extends>QWidget</extends>
+   <header location="global">calendar/item_editor_widget.h</header>
+   <container>1</container>
+  </customwidget>
+ </customwidgets>
  <resources/>
  <connections>
   <connection>
    <sender>buttonBox</sender>
    <signal>accepted()</signal>
-   <receiver>BasicItemEditionDialog</receiver>
+   <receiver>Calendar::Internal::BasicItemEditionDialog</receiver>
    <slot>accept()</slot>
    <hints>
     <hint type="sourcelabel">
@@ -95,7 +58,7 @@
   <connection>
    <sender>buttonBox</sender>
    <signal>rejected()</signal>
-   <receiver>BasicItemEditionDialog</receiver>
+   <receiver>Calendar::Internal::BasicItemEditionDialog</receiver>
    <slot>reject()</slot>
    <hints>
     <hint type="sourcelabel">

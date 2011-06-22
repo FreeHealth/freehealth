@@ -1,18 +1,48 @@
+/***************************************************************************
+ *  The FreeMedForms project is a set of free, open source medical         *
+ *  applications.                                                          *
+ *  (C) 2008-2011 by Eric MAEKER, MD (France) <eric.maeker@free.fr>        *
+ *  All rights reserved.                                                   *
+ *                                                                         *
+ *  This program is free software: you can redistribute it and/or modify   *
+ *  it under the terms of the GNU General Public License as published by   *
+ *  the Free Software Foundation, either version 3 of the License, or      *
+ *  (at your option) any later version.                                    *
+ *                                                                         *
+ *  This program is distributed in the hope that it will be useful,        *
+ *  but WITHOUT ANY WARRANTY; without even the implied warranty of         *
+ *  MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the          *
+ *  GNU General Public License for more details.                           *
+ *                                                                         *
+ *  You should have received a copy of the GNU General Public License      *
+ *  along with this program (COPYING.FREEMEDFORMS file).                   *
+ *  If not, see <http://www.gnu.org/licenses/>.                            *
+ ***************************************************************************/
+/***************************************************************************
+ *   Main Developpers :                                                    *
+ *       Guillaume Denry <guillaume.denry@gmail.com>                       *
+ *       Eric MAEKER, MD <eric.maeker@gmail.com>                           *
+ *   Contributors :                                                        *
+ *       NAME <MAIL@ADRESS>                                                *
+ ***************************************************************************/
+#include "calendar_widget.h"
+#include "day_range_view.h"
+#include "month_view.h"
+#include "basic_calendar_model.h"
+#include "calendar_navbar.h"
+
 #include <QPainter>
 #include <QPaintEvent>
 #include <QRect>
 #include <QPushButton>
 #include <QVBoxLayout>
 
-#include "day_range_view.h"
-#include "month_view.h"
-#include "basic_calendar_model.h"
-#include "calendar_widget.h"
-#include "calendar_navbar.h"
-
 using namespace Calendar;
 
-#define REFRESH_INTERVAL 60 // in seconds
+namespace {
+    enum { REFRESH_INTERVAL = 60 }; // in secondes
+}
+
 
 struct Calendar::CalendarWidgetPrivate
 {
@@ -56,12 +86,6 @@ CalendarWidget::CalendarWidget(QWidget *parent)
 	QList<CalendarItem*> list;
 	QDateTime begin = QDateTime::currentDateTime();
 	QDateTime end = begin;
-	qDebug("avant");
-	for (int i = 0; i < 100000; i++){
-		item = new CalendarItem("ok", begin, end);
-		list << item;
-	}
-	qDebug("apres");
 
 	// navigation bar stuffs
 	connect(m_d->m_navbar, SIGNAL(firstDateChanged()), this, SLOT(firstDateChanged()));
