@@ -1,80 +1,79 @@
+/***************************************************************************
+ *  The FreeMedForms project is a set of free, open source medical         *
+ *  applications.                                                          *
+ *  (C) 2008-2011 by Eric MAEKER, MD (France) <eric.maeker@free.fr>        *
+ *  All rights reserved.                                                   *
+ *                                                                         *
+ *  This program is free software: you can redistribute it and/or modify   *
+ *  it under the terms of the GNU General Public License as published by   *
+ *  the Free Software Foundation, either version 3 of the License, or      *
+ *  (at your option) any later version.                                    *
+ *                                                                         *
+ *  This program is distributed in the hope that it will be useful,        *
+ *  but WITHOUT ANY WARRANTY; without even the implied warranty of         *
+ *  MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the          *
+ *  GNU General Public License for more details.                           *
+ *                                                                         *
+ *  You should have received a copy of the GNU General Public License      *
+ *  along with this program (COPYING.FREEMEDFORMS file).                   *
+ *  If not, see <http://www.gnu.org/licenses/>.                            *
+ ***************************************************************************/
+/***************************************************************************
+ *   Main Developpers :                                                    *
+ *       Guillaume Denry <guillaume.denry@gmail.com>                       *
+ *       Eric MAEKER, MD <eric.maeker@gmail.com>                           *
+ *   Contributors :                                                        *
+ *       NAME <MAIL@ADRESS>                                                *
+ ***************************************************************************/
 #ifndef ABSTRACT_CALENDAR_MODEL_H
 #define ABSTRACT_CALENDAR_MODEL_H
+
+#include <calendar/calendar_exporter.h>
 
 #include <QObject>
 
 #include "calendar_item.h"
 
 namespace Calendar {
-	class AbstractCalendarModel : public QObject
-	{
-		Q_OBJECT
-	public:
-		AbstractCalendarModel(QObject *parent = 0);
 
-		/** return an item by an uid */
-		virtual CalendarItem getItemByUid(const QString &uid) const = 0;
+class CALENDAR_EXPORT AbstractCalendarModel : public QObject
+{
+    Q_OBJECT
+public:
+    AbstractCalendarModel(QObject *parent = 0);
 
-		/** returns all calendar items between two days */
-		virtual QList<CalendarItem> getItemsBetween(const QDate &from, const QDate &to) const = 0;
+    virtual int count() const = 0;
 
-		/** returns the total items count */
-		virtual int count() const = 0;
+    virtual CalendarItem getItemByUid(const QString &uid) const = 0;
+    virtual QList<CalendarItem> getItemsBetween(const QDate &from, const QDate &to) const = 0;
 
-		/** \brief insert an item with begin and end dates
-		 * The base class function does nothing.
-		 * \return the item if the insertion occured, or invalid item if failure
-		 */
-		virtual const CalendarItem &insertItem(const QDateTime &begin, const QDateTime &end);
+    virtual const CalendarItem &insertItem(const QDateTime &begin, const QDateTime &end);
+    virtual void setItemByUid(const QString &uid, const CalendarItem &item);
+    virtual void removeItem(const QString &uid) = 0;
 
-		/**
-		 * Set a new calendar item for an uid
-		 */
-		virtual void setItemByUid(const QString &uid, const CalendarItem &item);
+    void stopEvents();
+    void resumeEvents();
 
-		/**
-		 * Remove a calendar item in function of a uid
-		 */
-		virtual void removeItem(const QString &uid) = 0;
+public Q_SLOTS:
+    virtual void clearAll() {}
 
-		/**
-		 * Clear all items
-		 */
-		virtual void clearAll() {};
+Q_SIGNALS:
+    void itemInserted(const CalendarItem &newItem);
+    void itemModified(const CalendarItem &oldItem, const CalendarItem &newItem);
+    void itemRemoved(const CalendarItem &removedItem);
+    void reset();
 
-		/**
-		 * Cancel all future events about insertion, modification, deletion, etc
-		 * Can be used for massive items insertion loops
-		 */
-		void stopEvents();
+protected:
+    bool m_propagateEvents;
 
-		/**
-		 * Resume all events behavior about insertion, modification, deletion, etc
-		 */
-		void resumeEvents();
+    void beginInsertItem();
+    void endInsertItem(const CalendarItem &newItem);
+    void beginModifyItem();
+    void endModifyItem(const CalendarItem &oldItem, const CalendarItem &newItem);
+    void beginRemoveItem();
+    void endRemoveItem(const CalendarItem &removedItem);
+};
 
-	signals:
-		void itemInserted(const CalendarItem &newItem);
-		void itemModified(const CalendarItem &oldItem, const CalendarItem &newItem);
-		void itemRemoved(const CalendarItem &removedItem);
-		void reset();
+}  // End namespace Calendar
 
-	protected:
-		bool m_propagateEvents;
-
-		/** this function must be called before any item insertion */
-		void beginInsertItem();
-		/** this function must be called after any item insertion */
-		void endInsertItem(const CalendarItem &newItem);
-		/** this function must be called before any item modification */
-		void beginModifyItem();
-		/** this function must be called after any item modification */
-		void endModifyItem(const CalendarItem &oldItem, const CalendarItem &newItem);
-		/** this function must be called before any item deletion */
-		void beginRemoveItem();
-		/** this function must be called after any item deletion */
-		void endRemoveItem(const CalendarItem &removedItem);
-	};
-}
-
- #endif
+ #endif  // ABSTRACT_CALENDAR_MODEL_H
