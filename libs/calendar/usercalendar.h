@@ -49,7 +49,9 @@ public:
         IsDefault,
         IsPrivate,
         Password,
-        AbsPathIcon
+        LocationUid,
+        AbsPathIcon,
+        UserData = 10000
     };
 
     UserCalendar();
@@ -65,11 +67,7 @@ public:
     virtual void setModified(const bool state);
 
     virtual QStandardItem *toStandardItem() const;
-//    virtual int calendarId() const;
 
-protected:
-//    virtual void setDatabaseValue(const int ref, const QVariant &value);
-//    virtual QString userOwnerUid() const;
     virtual QString xmlOptions() const;
 
 private:

@@ -25,6 +25,11 @@
  *   Contributors :                                                        *
  *       NAME <MAIL@ADRESS>                                                *
  ***************************************************************************/
+/**
+  \class Calendar::CalendarItem
+  Represents a event in an agenda (calendar).
+*/
+
 #include "common.h"
 #include "calendar_item.h"
 
