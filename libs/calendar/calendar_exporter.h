@@ -26,6 +26,11 @@
 #ifndef CALENDARUTILSEXPORTER_H
 #define CALENDARUTILSEXPORTER_H
 
+/**
+  \namespace Calendar
+  Namespace for the Calendar library
+*/
+
 #include <qglobal.h>
 
 // DEFINE EXPORTER

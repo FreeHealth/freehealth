@@ -30,6 +30,7 @@
 
 using namespace Calendar;
 
+/** Constructs an invalid item */
 CalendarItem::CalendarItem() :
         m_Modified(false)
 {}
@@ -45,6 +46,7 @@ CalendarItem::CalendarItem(const QString &uid, const QDateTime &beginning, const
     m_Modified = false;
 }
 
+/** if true, beginning and ending date types are set to Date_Date. If false, beginning and ending date types are set to Date_DateTime */
 void CalendarItem::setDaily(bool value) {
 	DateType dateType = value ? Date_Date : Date_DateTime;
 
@@ -147,34 +149,47 @@ void CalendarItem::clearPeople(const PeopleType people)
     }
 }
 
+/** compute an intersection value with a day range
+             * returns:
+             * -1 if item is entirely before first day
+             * 0 if item intersects [firstDay, lastDay]
+             * 1 if item is entirely after lastDay
+*/
 int CalendarItem::intersects(const QDate &firstDay, const QDate &lastDay) const
 {
     return intersectsDays(beginning(), ending(), firstDay, lastDay);
 }
 
+/** compute an overlap value with another item
+             * returns:
+             * false if items do not overlap
+             * true if items overlap
+*/
 bool CalendarItem::overlap(const CalendarItem &item) const
 {
     return ending() > item.beginning() && beginning() < item.ending();
 }
 
-// at first compare with begin dates. If they're equals, compare by end dates.
-bool Calendar::calendarItemLessThan(const CalendarItem &item1, const CalendarItem &item2) {
-	// at first, compare the beginnings
-	if (item1.beginning() < item2.beginning())
-		return true;
-	else if (item1.beginning() > item2.beginning())
-		return false;
-	// beginnings are the same => compare the endings
-	else if (item1.ending() > item2.ending())
-		return true;
-	else if (item1.ending() < item2.ending())
-		return false;
-	// beginnings and endings are the same, compare the creation date time
-	else if (item1.created() < item2.created())
-		return true;
-	else if (item1.created() > item2.created())
-		return false;
-	// create date time are the same => finally compare uid
-	else
-		return item1.uid() > item2.uid();
+/** a sort function for calendar items */
+bool Calendar::calendarItemLessThan(const CalendarItem &item1, const CalendarItem &item2)
+{
+    // at first compare with begin dates. If they're equals, compare by end dates.
+    // at first, compare the beginnings
+    if (item1.beginning() < item2.beginning())
+        return true;
+    else if (item1.beginning() > item2.beginning())
+        return false;
+    // beginnings are the same => compare the endings
+    else if (item1.ending() > item2.ending())
+        return true;
+    else if (item1.ending() < item2.ending())
+        return false;
+    // beginnings and endings are the same, compare the creation date time
+    else if (item1.created() < item2.created())
+        return true;
+    else if (item1.created() > item2.created())
+        return false;
+    // create date time are the same => finally compare uid
+    else
+        return item1.uid() > item2.uid();
 }
