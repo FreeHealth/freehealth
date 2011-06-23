@@ -50,6 +50,16 @@ bool ICalendarEvent::isNull() const
     return false;
 }
 
+bool ICalendarEvent::isModified() const
+{
+    return m_Modified;
+}
+
+void ICalendarEvent::setModified(const bool state)
+{
+    m_Modified=state;
+}
+
 QVariant ICalendarEvent::data(const int ref) const
 {
     return m_Datas.value(ref, QVariant());
@@ -63,45 +73,6 @@ bool ICalendarEvent::setData(const int ref, const QVariant &value)
     return true;
 }
 
-bool ICalendarEvent::isModified() const
-{
-    return m_Modified;
-}
-
-void ICalendarEvent::setModified(const bool state)
-{
-    m_Modified=state;
-}
-
-void ICalendarEvent::addPatient(const QString &patientUid)
-{
-    m_Patients << patientUid;
-}
-
-QStringList ICalendarEvent::patients() const
-{
-    return m_Patients;
-}
-
-void ICalendarEvent::removePatient(const QString &patientUid)
-{
-    m_Patients.removeAll(patientUid);
-}
-
-void ICalendarEvent::addUser(const QString &userUid)
-{
-    m_Users << userUid;
-}
-
-QStringList ICalendarEvent::users() const
-{
-    return m_Users;
-}
-
-void ICalendarEvent::removeUser(const QString &userUid)
-{
-    m_Users.removeAll(userUid);
-}
 
 void ICalendarEvent::setDatabaseValue(const int ref, const QVariant &value)
 {

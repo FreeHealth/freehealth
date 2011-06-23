@@ -3,9 +3,11 @@
 
 #include <QWidget>
 
+namespace Calendar {
+    class UserCalendar;
+}
 
 namespace Agenda {
-class IUserCalendar;
 
 namespace Internal {
 class UserAgendasViewerPrivate;
@@ -23,7 +25,10 @@ public:
     explicit UserAgendasViewer(QWidget *parent = 0);
     ~UserAgendasViewer();
 
-    void setUserCalendar(const QList<IUserCalendar *> &user, const AgendaOwner owner = OwnAgendas);
+    void setUserCalendar(const QList<Calendar::UserCalendar *> &user, const AgendaOwner owner = OwnAgendas);
+
+private Q_SLOTS:
+    void on_availableAgendasCombo_activated(const int index);
 
 protected:
     void changeEvent(QEvent *e);

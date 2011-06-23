@@ -28,6 +28,8 @@
 #define AGENDABASE_H
 
 #include <utils/database.h>
+#include <calendar/calendar_item.h>
+#include <calendar/usercalendar.h>
 
 #include <QObject>
 #include <QDateTime>
@@ -44,9 +46,6 @@
 */
 
 namespace Agenda {
-class ICalendarEvent;
-class ICalendarCyclingEvent;
-class IUserCalendar;
 
 namespace Internal {
 
@@ -69,6 +68,8 @@ public:
 
     void setExtractionLimit(const int max) {m_Limit = max;}
     void setStartAtItem(const int start) {m_StartItem = start;}
+
+    /** Use the current user default calendar */
     void setUseCurrentUser(const bool use) {m_UseCurrentUser = use; m_Users.clear();}
 
     void setCalendarIds(const QList<int> &ids) {m_CalIds = ids;}
@@ -122,19 +123,19 @@ private Q_SLOTS:
     void onCoreDatabaseServerChanged();
 
 public:
-    QList<Agenda::IUserCalendar *> getUserCalendars(const QString &userUuid = QString::null);
-    bool saveUserCalendar(IUserCalendar *calendar);
+    QList<Calendar::UserCalendar *> getUserCalendars(const QString &userUuid = QString::null);
+    bool saveUserCalendar(Calendar::UserCalendar *calendar);
 
-    QList<ICalendarEvent *> getCalendarEvents(const CalendarEventQuery &query);
-    bool saveCalendarEvents(const QList<Agenda::ICalendarEvent *> &events);
-    bool saveCalendarEvent(Agenda::ICalendarEvent *event);
+    QList<Calendar::CalendarItem *> getCalendarEvents(const CalendarEventQuery &query);
+    bool saveCalendarEvents(const QList<Calendar::CalendarItem *> &events);
+    bool saveCalendarEvent(Calendar::CalendarItem *event);
 
 private:
-    bool updateCyclingEvent(Agenda::ICalendarCyclingEvent *event);
-    bool updateNonCyclingEvent(Agenda::ICalendarEvent *event);
-    bool saveCommonEvent(Agenda::ICalendarEvent *event);
-    bool saveCyclingEvent(Agenda::ICalendarCyclingEvent *event);
-    bool saveNonCyclingEvent(Agenda::ICalendarEvent *event);
+//    bool updateCyclingEvent(Agenda::ICalendarCyclingEvent *event);
+//    bool updateNonCyclingEvent(Agenda::ICalendarEvent *event);
+    bool saveCommonEvent(Calendar::CalendarItem *event);
+//    bool saveCyclingEvent(Agenda::ICalendarCyclingEvent *event);
+    bool saveNonCyclingEvent(Calendar::CalendarItem *event);
 
 private:
     static bool m_initialized;

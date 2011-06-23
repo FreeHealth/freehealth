@@ -19,7 +19,7 @@
      <property name="orientation">
       <enum>Qt::Horizontal</enum>
      </property>
-     <widget class="QWidget" name="">
+     <widget class="QWidget" name="layoutWidget">
       <layout class="QVBoxLayout" name="leftVerticalLayout">
        <item>
         <widget class="QGroupBox" name="groupBox">
@@ -82,7 +82,7 @@
   <customwidget>
    <class>Calendar::CalendarWidget</class>
    <extends>QWidget</extends>
-   <header location="global">utils/widgets/calendar/calendar_widget.h</header>
+   <header location="global">calendar/calendar_widget.h</header>
    <container>1</container>
   </customwidget>
  </customwidgets>

@@ -36,6 +36,13 @@
 
 #include <QStackedWidget>
 
+/**
+ * \file agendamode.h
+ * \author Eric MAEKER <eric.maeker@free.fr>
+ * \version 0.6.0
+ * \date 17 Jun 2011
+*/
+
 namespace Agenda {
 namespace Internal {
 class UserAgendasViewer;

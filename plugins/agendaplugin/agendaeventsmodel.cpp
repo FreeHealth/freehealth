@@ -26,7 +26,7 @@
 #include "agendaeventsmodel.h"
 #include "agendabase.h"
 
-#include <utils/widgets/calendar/basic_calendar_model.h>
+#include <calendar/basic_calendar_model.h>
 
 using namespace Agenda;
 using namespace Internal;

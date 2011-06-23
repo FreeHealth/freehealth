@@ -27,6 +27,8 @@
 #ifndef AGENDA_CONSTANTS_H
 #define AGENDA_CONSTANTS_H
 
+#include <calendar/calendar_item.h>
+#include <calendar/usercalendar.h>
 
 namespace Agenda {
 namespace Constants {
@@ -118,6 +120,18 @@ namespace Constants {
         VERSION_ACTUAL = 0
     };
 
+    // Private datas for Calendar items
+    enum PrivateDatasCalendarItem {
+        Db_CalId = Calendar::CalendarItem::UserData + 1,
+        Db_UserCalId,
+        Db_CatId,
+        Db_EvId,
+        Db_CyclingEvId,
+        Db_ComId,
+        Db_IsValid,
+        Db_XmlViewOptions,
+        Db_XmlOptions
+    };
 
     // WIDGETS
     const char * const C_AGENDA_PLUGIN = "contextAgenga";

@@ -22,87 +22,70 @@
  *   Main Developper : Eric MAEKER, <eric.maeker@free.fr>                  *
  *   Contributors :                                                        *
  *       NAME <MAIL@ADRESS>                                                *
+ *       NAME <MAIL@ADRESS>                                                *
  ***************************************************************************/
-#ifndef ICALENDAREVENT
-#define ICALENDAREVENT
+#ifndef CALENDARITEMMODEL_H
+#define CALENDARITEMMODEL_H
 
 #include <agendaplugin/agenda_exporter.h>
-
-#include <QVariant>
-#include <QHash>
-#include <QStringList>
-#include <QVector>
+#include <calendar/abstract_calendar_model.h>
 
 /**
- * \file icalendarevent.h
+ * \file calendaritemmodel.h
  * \author Eric MAEKER <eric.maeker@free.fr>
  * \version 0.6.0
- * \date 22 June 2011
+ * \date 23 Jun 2011
 */
 
 namespace Agenda {
-namespace Internal {
-class AgendaBase;
 
-struct PeopleStructPrivate {
-    PeopleStructPrivate(const int _type, const QString &_name, const QString &_uid) :
-            uid(_uid), name(_name), type(_type) {}
-
-    QString uid, name;
-    int type;
-};
-
-}
-
-class AGENDA_EXPORT ICalendarEvent
+class AGENDA_EXPORT CalendarItemModel : public Calendar::AbstractCalendarModel
 {
-    friend class Agenda::Internal::AgendaBase;
-
+    Q_OBJECT
 public:
-    ICalendarEvent();
-    virtual ~ICalendarEvent() {}
+    CalendarItemModel(QObject *parent);
+    ~CalendarItemModel();
 
-    virtual bool isValid() const;
-    virtual bool isNull() const;
+    Calendar::CalendarItem getItemByUid(const QString &uid) const;
+    QList<Calendar::CalendarItem> getItemsBetween(const QDate &from, const QDate &to) const;
 
-    virtual bool isModified() const;
-    virtual void setModified(const bool state);
+    int count() const;
 
-    virtual QVariant data(const int ref) const;
-    virtual bool setData(const int ref, const QVariant &value);
+    const Calendar::CalendarItem &insertItem(const QDateTime &begin, const QDateTime &end);
+    void setItemByUid(const QString &uid, const Calendar::CalendarItem &item);
+    void removeItem(const QString &uid);
 
-    virtual bool isCycling() const {return false;}
+    void stopEvents();
+    void resumeEvents();
+
+public Q_SLOTS:
+    void clearAll();
+
+Q_SIGNALS:
+    void itemInserted(const Calendar::CalendarItem &newItem);
+    void itemModified(const Calendar::CalendarItem &oldItem, const Calendar::CalendarItem &newItem);
+    void itemRemoved(const Calendar::CalendarItem &removedItem);
+    void reset();
 
 protected:
-    virtual void setDatabaseValue(const int ref, const QVariant &value);
-    virtual int calendarId() const;
-    virtual int commonId() const;
-    virtual int eventId() const;
-    virtual int cyclingEventId() const;
-    virtual int categoryId() const;
+    void beginInsertItem();
+    void endInsertItem(const Calendar::CalendarItem &newItem);
+    void beginModifyItem();
+    void endModifyItem(const Calendar::CalendarItem &oldItem, const Calendar::CalendarItem &newItem);
+    void beginRemoveItem();
+    void endRemoveItem(const Calendar::CalendarItem &removedItem);
 
 private:
-    QHash<int, QVariant> m_Datas;
-    bool m_Modified;
-    QVector<Internal::PeopleStructPrivate> m_People;
-};
+    int searchForIntersectedItem(const QList<Calendar::CalendarItem*> &list, const QDate &from, const QDate &to, int first, int last) const;
+    int getInsertionIndex(bool begin, const QDateTime &dateTime, const QList<Calendar::CalendarItem*> &list, int first, int last) const;
+    Calendar::CalendarItem *getItemPointerByUid(const QString &uid) const;
+    QString createUid() const;
 
-
-class AGENDA_EXPORT ICalendarCyclingEvent : public ICalendarEvent
-{
-public:
-    enum DataRepresentation {
-        RepeatTime = 1000,
-        RepeatScheme,
-        RepeatInterval
-    };
-
-    ICalendarCyclingEvent() : ICalendarEvent() {}
-    ~ICalendarCyclingEvent() {}
-
-    virtual bool isCycling() const {return true;}
+private:
+    QList<Calendar::CalendarItem*> m_sortedByBeginList;
+    QList<Calendar::CalendarItem*> m_sortedByEndList;
 };
 
 }  // End namespace Agenda
 
-#endif //  ICALENDAREVENT
+#endif // CALENDARITEMMODEL_H
