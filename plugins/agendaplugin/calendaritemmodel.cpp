@@ -28,17 +28,26 @@
 #include "agendabase.h"
 #include "constants.h"
 
+#include <coreplugin/icore.h>
+#include <coreplugin/iuser.h>
+#include <coreplugin/itheme.h>
+
 #include <calendar/calendar_item.h>
 #include <calendar/usercalendar.h>
+
+#include <QStandardItemModel>
+#include <QStandardItem>
 
 using namespace Agenda;
 using namespace Internal;
 
-//static inline Core::IUser *user() {return Core::ICore::instance()->user();}
+static inline Core::ITheme *theme() {return Core::ICore::instance()->theme();}
+static inline Core::IUser *user() {return Core::ICore::instance()->user();}
 //static inline Core::IPatient *patient() {return Core::ICore::instance()->patient();}
 static inline Agenda::Internal::AgendaBase *base() {return Agenda::Internal::AgendaBase::instance();}
 
-CalendarItemModel::CalendarItemModel(QObject *parent)
+CalendarItemModel::CalendarItemModel(QObject *parent) :
+        Calendar::AbstractCalendarModel(parent)
 {
     // TEST
     // get all items from database
@@ -47,9 +56,11 @@ CalendarItemModel::CalendarItemModel(QObject *parent)
     QList<Calendar::CalendarItem *> items = base()->getCalendarEvents(query);
     for(int i = 0; i < items.count(); ++i) {
         Calendar::CalendarItem *item = items.at(i);
+        setItemIsMine(item);
         m_sortedByBeginList.insert(getInsertionIndex(true, item->beginning(), m_sortedByBeginList, 0, m_sortedByBeginList.count() - 1), item);
         m_sortedByEndList.insert(getInsertionIndex(false, item->ending(), m_sortedByEndList, 0, m_sortedByEndList.count() - 1), item);
     }
+    userChanged();
     // END TEST
 }
 
@@ -221,6 +232,30 @@ void CalendarItemModel::resumeEvents()
     Calendar::AbstractCalendarModel::resumeEvents();
 }
 
+Calendar::UserCalendar CalendarItemModel::calendar(const Calendar::CalendarItem &item) const
+{}
+
+bool CalendarItemModel::updateUserCalendar(const Calendar::UserCalendar &calendar)
+{
+    return true;
+}
+
+QAbstractItemModel *CalendarItemModel::userCalendarComboModel(QObject *parent) const
+{
+    QStandardItemModel *model = new QStandardItemModel(parent);
+    QStandardItem *root = model->invisibleRootItem();
+    for(int i = 0; i < m_UserCalendar.count(); ++i) {
+        Calendar::UserCalendar *ucal = m_UserCalendar.at(i);
+        QStandardItem *it = new QStandardItem;
+        if (!ucal->data(Calendar::UserCalendar::AbsPathIcon).isNull())
+            it->setIcon(theme()->icon(ucal->data(Calendar::UserCalendar::AbsPathIcon).toString()));
+        it->setText(ucal->data(Calendar::UserCalendar::Label).toString());
+        it->setToolTip(it->text());
+        root->appendRow(it);
+    }
+    return model;
+}
+
 void CalendarItemModel::clearAll()
 {
     qDeleteAll(m_sortedByBeginList);
@@ -328,4 +363,12 @@ QString CalendarItemModel::createUid() const
         index++;
     } while (getItemByUid(propal).isValid());
     return propal;
+}
+
+void CalendarItemModel::userChanged()
+{
+    // get all UserCalendars
+    qDeleteAll(m_UserCalendar);
+    m_UserCalendar.clear();
+    m_UserCalendar = base()->getUserCalendars(user()->uuid());
 }

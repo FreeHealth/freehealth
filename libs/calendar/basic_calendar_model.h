@@ -59,7 +59,8 @@ namespace Calendar {
 		void clearAll();
 
                 Calendar::UserCalendar calendar(const Calendar::CalendarItem &item) const {}
-                bool updateUserCalendar(const Calendar::UserCalendar &calendar) {}
+                bool updateUserCalendar(const Calendar::UserCalendar &calendar) {return false;}
+                virtual QAbstractItemModel *userCalendarComboModel(QObject *) const {return 0;}
 
 	private:
 		QList<CalendarItem*> m_sortedByBeginList;

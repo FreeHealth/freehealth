@@ -39,6 +39,8 @@
 #include "common.h"
 
 namespace Calendar {
+    class AbstractCalendarModel;
+
 namespace Internal {
 
 struct CALENDAR_EXPORT PeopleStructPrivate {
@@ -53,6 +55,8 @@ struct CALENDAR_EXPORT PeopleStructPrivate {
 
 class CALENDAR_EXPORT CalendarItem
 {
+    friend class Calendar::AbstractCalendarModel;
+
 public:
     enum DataRepresentation {
         Uid  = 0,
@@ -133,12 +137,19 @@ public:
 
     void setDaily(bool value);
 
+    // AbstractCalendarModel
+    Calendar::AbstractCalendarModel *model() const {return m_Model;}
+
+protected:
+    void setModel(Calendar::AbstractCalendarModel *model) {m_Model=model;}
+
 private:
     QHash<int, QVariant> m_Datas;
     QVector<Internal::PeopleStructPrivate> m_People;
     DateType m_beginningType;
     DateType m_endingType;
     bool m_Modified;
+    AbstractCalendarModel *m_Model;
 };
 
 bool calendarItemLessThan(const CalendarItem &item1, const CalendarItem &item2);

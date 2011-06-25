@@ -33,7 +33,9 @@
 #include <calendar/usercalendar.h>
 
 #include <QObject>
-
+QT_BEGIN_NAMESPACE
+class QAbstractItemModel;
+QT_END_NAMESPACE
 
 namespace Calendar {
 
@@ -63,6 +65,7 @@ public:
     // Management of Calendars
     virtual Calendar::UserCalendar calendar(const Calendar::CalendarItem &item) const = 0;
     virtual bool updateUserCalendar(const Calendar::UserCalendar &calendar) = 0;
+    virtual QAbstractItemModel *userCalendarComboModel(QObject *parent) const = 0;
 
 public Q_SLOTS:
     virtual void clearAll() {}
@@ -82,6 +85,8 @@ protected:
     void endModifyItem(const Calendar::CalendarItem &oldItem, const Calendar::CalendarItem &newItem);
     void beginRemoveItem();
     void endRemoveItem(const Calendar::CalendarItem &removedItem);
+
+    void setItemIsMine(Calendar::CalendarItem *item);
 };
 
 }  // End namespace Calendar

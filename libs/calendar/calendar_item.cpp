@@ -37,10 +37,12 @@ using namespace Calendar;
 
 /** Constructs an invalid item */
 CalendarItem::CalendarItem() :
-        m_Modified(false)
+        m_Modified(false),
+        m_Model(0)
 {}
 
-CalendarItem::CalendarItem(const QDateTime &beginning, const QDateTime &ending)
+CalendarItem::CalendarItem(const QDateTime &beginning, const QDateTime &ending) :
+        m_Model(0)
 {
     m_Datas.insert(DateStart, beginning);
     m_Datas.insert(DateEnd, ending);
@@ -50,7 +52,8 @@ CalendarItem::CalendarItem(const QDateTime &beginning, const QDateTime &ending)
     m_Modified = false;
 }
 
-CalendarItem::CalendarItem(const QString &uid, const QDateTime &beginning, const QDateTime &ending)
+CalendarItem::CalendarItem(const QString &uid, const QDateTime &beginning, const QDateTime &ending) :
+        m_Model(0)
 {
     m_Datas.insert(Uid, uid);
     m_Datas.insert(DateStart, beginning);

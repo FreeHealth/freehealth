@@ -60,8 +60,9 @@ public:
     void stopEvents();
     void resumeEvents();
 
-    Calendar::UserCalendar calendar(const Calendar::CalendarItem &item) const {}
-    bool updateUserCalendar(const Calendar::UserCalendar &calendar) {}
+    Calendar::UserCalendar calendar(const Calendar::CalendarItem &item) const;
+    bool updateUserCalendar(const Calendar::UserCalendar &calendar);
+    virtual QAbstractItemModel *userCalendarComboModel(QObject *parent) const;
 
 public Q_SLOTS:
     void clearAll();
@@ -87,9 +88,13 @@ private:
     Calendar::CalendarItem *getItemPointerByUid(const QString &uid) const;
     QString createUid() const;
 
+private Q_SLOTS:
+    void userChanged();
+
 private:
     QList<Calendar::CalendarItem*> m_sortedByBeginList;
     QList<Calendar::CalendarItem*> m_sortedByEndList;
+    QList<Calendar::UserCalendar*> m_UserCalendar;
 };
 
 }  // End namespace Agenda
