@@ -388,6 +388,9 @@ QList<Calendar::UserCalendar *> AgendaBase::getUserCalendars(const QString &user
     conds << Utils::Field(Constants::Table_CALENDAR, Constants::CAL_ISVALID, "=1");
     conds << Utils::Field(Constants::Table_USERCALENDARS, Constants::USERCAL_USER_UUID, QString("='%1'").arg(uid));
     QSqlQuery query(database());
+
+    qWarning() << select(Constants::Table_CALENDAR, joins, conds);
+
     if (query.exec(select(Constants::Table_CALENDAR, joins, conds))) {
         while (query.next()) {
             Calendar::UserCalendar *u = new Calendar::UserCalendar;
@@ -448,6 +451,10 @@ bool AgendaBase::saveUserCalendar(Calendar::UserCalendar *calendar)
         calendar->setModified(false);
         query.finish();
 
+        if (calendar->data(Calendar::UserCalendar::UserOwnerUid).isNull() ||
+            !calendar->data(Calendar::UserCalendar::UserOwnerUid).isValid()) {
+            calendar->setData(Calendar::UserCalendar::UserOwnerUid, user()->uuid());
+        }
         query.prepare(prepareInsertQuery(Constants::Table_USERCALENDARS));
         query.bindValue(Constants::USERCAL_ID, QVariant());
         query.bindValue(Constants::USERCAL_CAL_ID, calendar->data(Constants::Db_CalId).toInt());
@@ -709,6 +716,7 @@ bool AgendaBase::saveCommonEvent(Calendar::CalendarItem *event)
 
 bool AgendaBase::saveNonCyclingEvent(Calendar::CalendarItem *event)
 {
+    qWarning() << Q_FUNC_INFO;
     if (event->isCycling())
         return false;
 
@@ -740,7 +748,6 @@ bool AgendaBase::saveNonCyclingEvent(Calendar::CalendarItem *event)
     return true;
 }
 
-
 /** Save or update events in the database, when saved events are set to non modified. Return false in case of an error. */
 bool AgendaBase::saveCalendarEvents(const QList<Calendar::CalendarItem *> &events)
 {
@@ -751,25 +758,16 @@ bool AgendaBase::saveCalendarEvents(const QList<Calendar::CalendarItem *> &event
     bool ok = true;
     for(int i = 0; i < events.count(); ++i) {
         Calendar::CalendarItem *ev = events.at(i);
-        if ((ev->isCycling() && !ev->data(Constants::Db_CyclingEvId).isNull()) ||
-           (!ev->isCycling() && !ev->data(Constants::Db_EvId).isNull())) {
-            // update event
-//            if (ev->isCycling()) {
-//                if (!updateCyclingEvent(static_cast<ICalendarCyclingEvent*>(ev)))
-//                    ok = false;
-//            } else {
-//                if (!updateNonCyclingEvent(ev))
-//                    ok = false;
-//            }
+        if (ev->isCycling()) {
+            //                if (!updateCyclingEvent(static_cast<ICalendarCyclingEvent*>(ev)))
+            //                    ok = false;
         } else {
-            // save event
-//            if (ev->isCycling()) {
-//                if (!saveCyclingEvent(static_cast<ICalendarCyclingEvent*>(ev)))
-//                    ok = false;
-//            } else {
+            if (ev->data(Constants::Db_EvId).isNull() || ev->data(Constants::Db_EvId).toInt()==-1) {
                 if (!saveNonCyclingEvent(ev))
                     ok = false;
-//            }
+//                else if (!updateNonCyclingEvent(ev))
+//                    ok = false;
+            }
         }
     }
     return ok;
