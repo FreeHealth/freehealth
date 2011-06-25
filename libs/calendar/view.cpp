@@ -64,9 +64,9 @@ void ViewWidget::refreshCurrentDateTimeStuff() {
 void ViewWidget::setModel(AbstractCalendarModel *model) {
 	// disconnect slots
 	if (m_model){
-		disconnect(m_model, SIGNAL(itemInserted(const CalendarItem &)), this, SLOT(itemInserted(const CalendarItem &)));
-		disconnect(m_model, SIGNAL(itemModified(const CalendarItem &, const CalendarItem &)), this, SLOT(itemModified(const CalendarItem &, const CalendarItem &)));
-		disconnect(m_model, SIGNAL(itemRemoved(const CalendarItem &)), this, SLOT(itemRemoved(const CalendarItem &)));
+                disconnect(m_model, SIGNAL(itemInserted(const Calendar::CalendarItem &)), this, SLOT(itemInserted(const Calendar::CalendarItem &)));
+                disconnect(m_model, SIGNAL(itemModified(const Calendar::CalendarItem &, const Calendar::CalendarItem &)), this, SLOT(itemModified(const CalendarItem &, const Calendar::CalendarItem &)));
+                disconnect(m_model, SIGNAL(itemRemoved(const Calendar::CalendarItem &)), this, SLOT(itemRemoved(const Calendar::CalendarItem &)));
 		disconnect(m_model, SIGNAL(reset()), this, SLOT(reset()));
 	}
 
@@ -74,9 +74,9 @@ void ViewWidget::setModel(AbstractCalendarModel *model) {
 
 	if (m_model) {
 		// connect slots
-		connect(m_model, SIGNAL(itemInserted(const CalendarItem &)), this, SLOT(itemInserted(const CalendarItem &)));
-		connect(m_model, SIGNAL(itemModified(const CalendarItem &, const CalendarItem &)), this, SLOT(itemModified(const CalendarItem &, const CalendarItem &)));
-		connect(m_model, SIGNAL(itemRemoved(const CalendarItem &)), this, SLOT(itemRemoved(const CalendarItem &)));
+                connect(m_model, SIGNAL(itemInserted(const Calendar::CalendarItem &)), this, SLOT(itemInserted(const Calendar::CalendarItem &)));
+                connect(m_model, SIGNAL(itemModified(const Calendar::CalendarItem &, const Calendar::CalendarItem &)), this, SLOT(itemModified(const Calendar::CalendarItem &, const Calendar::CalendarItem &)));
+                connect(m_model, SIGNAL(itemRemoved(const Calendar::CalendarItem &)), this, SLOT(itemRemoved(const Calendar::CalendarItem &)));
 		connect(m_model, SIGNAL(reset()), this, SLOT(reset()));
 	}
 
