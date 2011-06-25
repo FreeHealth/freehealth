@@ -5,7 +5,7 @@ Maintainer: Debian Med Packaging Team <debian-med-packaging@lists.alioth.debian.
 Uploaders: Eric Maeker <eric.maeker@gmail.com>,
  Andreas Tille <tille@debian.org>
 DM-Upload-Allowed: yes
-Build-Depends: debhelper (>= 7.1), quilt, libqt4-dev (>= 4.6.2), doxygen (>= 1.5.8), libxext-dev
+Build-Depends: debhelper (>= 7.1), quilt (>= 0.47), zlib1g-dev, libqt4-dev (>= 4.6.2), libxext-dev
 Standards-Version: 3.9.2
 Homepage: http://www.freemedforms.com/
 Vcs-Browser: http://svn.debian.org/wsvn/debian-med/trunk/packages/freemedforms/?rev=0&sc=0
@@ -13,7 +13,7 @@ Vcs-Svn: svn://svn.debian.org/svn/debian-med/trunk/packages/freemedforms/trunk/
 
 Package: freemedforms
 Architecture: any
-Depends: ${shlibs:Depends}, ${misc:Depends}, freemedforms-data (= ${source:Version}), libqtcore4 (>= 4.6.2), libqtgui4 (>= 4.6.2), libqt4-sql-sqlite, libqt4-xml, libqt4-network, libqt4-svg, libqt4-script
+Depends: ${shlibs:Depends}, ${misc:Depends}, freemedforms-data (= ${source:Version}), libqtcore4 (>= 4.6.2), libqtgui4 (>= 4.6.2), libqt4-sql-sqlite, libqt4-sql-mysql, libqt4-xml, libqt4-network, libqt4-svg, libqt4-script, zlib1g
 Description: Electronic Medical Record Manager
  FreeMedForms is developed by a international community of
  medical doctors and computer workers and is
