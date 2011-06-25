@@ -62,9 +62,9 @@ namespace Calendar {
 		void deleteAllWidgets();
 
 	protected slots:
-                virtual void itemInserted(const Calendar::CalendarItem &item) { Q_UNUSED(item); }
-                virtual void itemModified(const Calendar::CalendarItem &oldItem, const Calendar::CalendarItem &newItem) { Q_UNUSED(oldItem); Q_UNUSED(newItem); }
-                virtual void itemRemoved(const Calendar::CalendarItem &removedItem) { Q_UNUSED(removedItem); }
+		virtual void itemInserted(const Calendar::CalendarItem &item) { Q_UNUSED(item); }
+		virtual void itemModified(const Calendar::CalendarItem &oldItem, const Calendar::CalendarItem &newItem) { Q_UNUSED(oldItem); Q_UNUSED(newItem); }
+		virtual void itemRemoved(const Calendar::CalendarItem &removedItem) { Q_UNUSED(removedItem); }
 		virtual void reset();
 
 	private:

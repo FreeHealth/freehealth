@@ -66,9 +66,9 @@ namespace Calendar {
 		QList<CalendarItem*> m_sortedByBeginList;
 		QList<CalendarItem*> m_sortedByEndList;
 
-                void setItemByUid(const QString &uid, const CalendarItem &item);
+		void setItemByUid(const QString &uid, const CalendarItem &item);
 
-                // returns an insertion index for a datetime in <list> from <first> to <last> (dichotomy method)
+		// returns an insertion index for a datetime in <list> from <first> to <last> (dichotomy method)
 		int getInsertionIndex(bool begin, const QDateTime &dateTime, const QList<CalendarItem*> &list, int first, int last) const;
 
 		// search for an intersected item, the first found item is enough

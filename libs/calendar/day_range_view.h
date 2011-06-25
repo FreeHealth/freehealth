@@ -82,6 +82,12 @@ namespace Calendar {
 		int rangeWidth() const { return m_rangeWidth; }
 		void setRangeWidth(int width);
 
+		/** @returns a minutes count for the items creation/resize granularity. 30 by default. */
+		int granularity() const { return m_granularity; }
+
+		/** Set the granularity. Can only be a divider of 24 * 60 */
+		void setGranularity(int value);
+
 		virtual QSize sizeHint() const;
 
 	protected:
@@ -116,12 +122,14 @@ namespace Calendar {
 		HourRangeWidget *m_pressItemWidget;
 		CalendarItem m_pressItem;
 		MouseMode m_mouseMode;
+		int m_granularity;
 
 		// if end < begin, the end time will be considered as midnight
 		QRect getTimeIntervalRect(int day, const QTime &begin, const QTime &end) const;
 		// returns the left position and width of the day band
 		QPair<int, int> getBand(const QDate &date) const;
 		QPair<int, int> getItemVerticalData(const QTime &begin, const QTime &end) const;
+		QDateTime quantized(const QDateTime &dateTime) const; // constrains the date to the nearest granular value
 		QDateTime getDateTime(const QPoint &pos) const;
 
 		// refresh all widgets of a day
