@@ -290,16 +290,20 @@ void DayRangeHeader::mouseReleaseEvent(QMouseEvent *event) {
 			if (daysAdded) {
 				m_pressItem.setBeginning(m_pressItem.beginning().addDays(daysAdded));
 				m_pressItem.setEnding(m_pressItem.ending().addDays(daysAdded));
-				model()->setItemByUid(m_pressItem.uid(), m_pressItem);
+//				model()->setItemByUid(m_pressItem.uid(), m_pressItem);
+                                model()->updateCalendarItem(m_pressItem);
 			}
 			computeWidgets();
 			updateGeometry();
 		}
 	} else if (m_mouseMode == MouseMode_Creation) {
-		CalendarItem item = model()->insertItem(QDateTime(m_pressDayInterval.first, QTime(0, 0)),
-												QDateTime(m_pressDayInterval.second.addDays(1), QTime(0, 0)));
-		item.setDaily(true);
-		model()->setItemByUid(item.uid(), item);
+//		CalendarItem item = model()->insertItem(QDateTime(m_pressDayInterval.first, QTime(0, 0)),
+//												QDateTime(m_pressDayInterval.second.addDays(1), QTime(0, 0)));
+            CalendarItem item = CalendarItem(QDateTime(m_pressDayInterval.first, QTime(0, 0)),
+                                             QDateTime(m_pressDayInterval.second.addDays(1), QTime(0, 0)));
+            item.setDaily(true);
+            model()->addCalendarItem(item);
+
 		computeWidgets();
 		updateGeometry();
 	}
@@ -311,7 +315,8 @@ void DayRangeHeader::modifyPressItem() {
 	BasicItemEditionDialog dialog(this);
         dialog.init(m_pressItem);
 	if (dialog.exec() == QDialog::Accepted) {
-		model()->setItemByUid(m_pressItem.uid(), dialog.item());
+//		model()->setItemByUid(m_pressItem.uid(), dialog.item());
+            model()->updateCalendarItem(dialog.item());
 		computeWidgets();
 		updateGeometry();
 	}
@@ -646,7 +651,8 @@ void DayRangeBody::mouseReleaseEvent(QMouseEvent *event) {
 			newItem = m_pressItem;
 			newItem.setBeginning(m_pressItemWidget->beginDateTime());
 			newItem.setEnding(m_pressItemWidget->endDateTime());
-			model()->setItemByUid(m_pressItem.uid(), newItem);
+//			model()->setItemByUid(m_pressItem.uid(), newItem);
+                        model()->updateCalendarItem(newItem);
 		}
 		break;
 	default:;
@@ -659,8 +665,10 @@ void DayRangeBody::mouseReleaseEvent(QMouseEvent *event) {
 void DayRangeBody::mouseDoubleClickEvent(QMouseEvent *) {
 	BasicItemEditionDialog dialog(this);
         dialog.init(m_pressItem);
-	if (dialog.exec() == QDialog::Accepted)
-		model()->setItemByUid(m_pressItem.uid(), dialog.item());
+        if (dialog.exec() == QDialog::Accepted) {
+            model()->updateCalendarItem(dialog.item());
+//            model()->setItemByUid(m_pressItem.uid(), dialog.item());
+        }
 }
 
 void DayRangeBody::itemInserted(const CalendarItem &item) {
@@ -745,8 +753,10 @@ void DayRangeBody::refreshDayWidgets(const QDate &dayDate) {
 void DayRangeBody::modifyPressItem() {
 	BasicItemEditionDialog dialog(this);
 	dialog.init(m_pressItem);
-	if (dialog.exec() == QDialog::Accepted)
-		model()->setItemByUid(m_pressItem.uid(), dialog.item());
+        if (dialog.exec() == QDialog::Accepted) {
+            model()->updateCalendarItem(dialog.item());
+//            model()->setItemByUid(m_pressItem.uid(), dialog.item());
+        }
 }
 
 void DayRangeBody::removePressItem() {

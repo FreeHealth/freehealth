@@ -40,6 +40,16 @@ CalendarItem::CalendarItem() :
         m_Modified(false)
 {}
 
+CalendarItem::CalendarItem(const QDateTime &beginning, const QDateTime &ending)
+{
+    m_Datas.insert(DateStart, beginning);
+    m_Datas.insert(DateEnd, ending);
+    m_Datas.insert(CreatedDate, QDateTime::currentDateTime());
+    m_beginningType = Date_DateTime;
+    m_endingType = Date_DateTime;
+    m_Modified = false;
+}
+
 CalendarItem::CalendarItem(const QString &uid, const QDateTime &beginning, const QDateTime &ending)
 {
     m_Datas.insert(Uid, uid);

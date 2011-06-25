@@ -143,6 +143,34 @@ const Calendar::CalendarItem &CalendarItemModel::insertItem(const QDateTime &beg
     return *item;
 }
 
+Calendar::CalendarItem CalendarItemModel::addCalendarItem(const Calendar::CalendarItem &item)
+{
+    // already in list ? -> update item
+    Calendar::CalendarItem *oldItem = getItemPointerByUid(item.uid());
+    if (oldItem) {
+        if (updateCalendarItem(item))
+            return item;
+    }
+    // create new item
+    beginInsertItem();
+
+    // create the item once but insert it in two lists
+    Calendar::CalendarItem *pItem = new Calendar::CalendarItem(item);
+    pItem->setData(Calendar::CalendarItem::Uid, createUid());
+
+    m_sortedByBeginList.insert(getInsertionIndex(true, item.beginning(), m_sortedByBeginList, 0, m_sortedByBeginList.count() - 1), pItem);
+    m_sortedByEndList.insert(getInsertionIndex(false, item.ending(), m_sortedByEndList, 0, m_sortedByEndList.count() - 1), pItem);
+
+    endInsertItem(*pItem);
+    return *pItem;
+}
+
+bool CalendarItemModel::updateCalendarItem(const Calendar::CalendarItem &item)
+{
+    setItemByUid(item.uid(), item);
+    return true;
+}
+
 void CalendarItemModel::setItemByUid(const QString &uid, const Calendar::CalendarItem &item)
 {
     // remove the old item

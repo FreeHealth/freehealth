@@ -54,11 +54,6 @@
 */
 
 /**
-  \fn void Calendar::AbstractCalendarModel::setItemByUid(const QString &uid, const CalendarItem &item)
-  Set a new calendar item for an uid
-*/
-
-/**
   \fn void Calendar::AbstractCalendarModel::removeItem(const QString &uid)
   Remove a calendar item in function of a uid
 */
@@ -139,9 +134,9 @@ AbstractCalendarModel::AbstractCalendarModel(QObject *parent) :
 	QObject(parent), m_propagateEvents(true) {
 }
 
-const CalendarItem &AbstractCalendarModel::insertItem(const QDateTime &, const QDateTime &) {
-	return CalendarItem();
-}
+//const CalendarItem &AbstractCalendarModel::insertItem(const QDateTime &, const QDateTime &) {
+//	return CalendarItem();
+//}
 
 void AbstractCalendarModel::beginInsertItem() {
 	// does nothing for now (maybe emit a signal in the future)
@@ -170,7 +165,7 @@ void AbstractCalendarModel::endRemoveItem(const CalendarItem &removedItem) {
 		emit itemRemoved(removedItem);
 }
 
-void AbstractCalendarModel::setItemByUid(const QString &, const CalendarItem &) {}
+//void AbstractCalendarModel::setItemByUid(const QString &, const CalendarItem &) {}
 
 void AbstractCalendarModel::stopEvents() {
 	m_propagateEvents = false;

@@ -34,7 +34,7 @@
  * \file calendaritemmodel.h
  * \author Eric MAEKER <eric.maeker@free.fr>
  * \version 0.6.0
- * \date 23 Jun 2011
+ * \date 25 Jun 2011
 */
 
 namespace Agenda {
@@ -52,11 +52,16 @@ public:
     int count() const;
 
     const Calendar::CalendarItem &insertItem(const QDateTime &begin, const QDateTime &end);
-    void setItemByUid(const QString &uid, const Calendar::CalendarItem &item);
+    Calendar::CalendarItem addCalendarItem(const Calendar::CalendarItem &item);
+    bool updateCalendarItem(const Calendar::CalendarItem &item);
+
     void removeItem(const QString &uid);
 
     void stopEvents();
     void resumeEvents();
+
+    Calendar::UserCalendar calendar(const Calendar::CalendarItem &item) const {}
+    bool updateUserCalendar(const Calendar::UserCalendar &calendar) {}
 
 public Q_SLOTS:
     void clearAll();
@@ -76,6 +81,7 @@ protected:
     void endRemoveItem(const Calendar::CalendarItem &removedItem);
 
 private:
+    void setItemByUid(const QString &uid, const Calendar::CalendarItem &item);
     int searchForIntersectedItem(const QList<Calendar::CalendarItem*> &list, const QDate &from, const QDate &to, int first, int last) const;
     int getInsertionIndex(bool begin, const QDateTime &dateTime, const QList<Calendar::CalendarItem*> &list, int first, int last) const;
     Calendar::CalendarItem *getItemPointerByUid(const QString &uid) const;

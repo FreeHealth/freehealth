@@ -58,20 +58,27 @@ BasicCalendarModel::BasicCalendarModel(QObject *parent) :
 	resumeEvents();
 	qDebug("elapsed: %d", t.elapsed());*/
 
-	item = insertItem(QDateTime(now), QDateTime(now.addDays(1)));
+//	item = insertItem(QDateTime(now), QDateTime(now.addDays(1)));
+        item = CalendarItem(QDateTime(now), QDateTime(now.addDays(1)));
 	item.setDaily(true);
 	item.setTitle("Another brick in the wall");
-	setItemByUid(item.uid(), item);
-	item = insertItem(QDateTime(now), QDateTime(now.addDays(2)));
-	item.setDaily(true);
-	setItemByUid(item.uid(), item);
-	item = insertItem(QDateTime(now.addDays(1)), QDateTime(now.addDays(3)));
-	item.setDaily(true);
-	setItemByUid(item.uid(), item);
-	item = insertItem(QDateTime(now.addDays(2)), QDateTime(now.addDays(5)));
-	item.setDaily(true);
-	item.setTitle("Ceci est un exemple");
-        setItemByUid(item.uid(), item);
+        addCalendarItem(item);
+//	setItemByUid(item.uid(), item);
+
+//	item = insertItem(QDateTime(now), QDateTime(now.addDays(2)));
+        item = CalendarItem(QDateTime(now), QDateTime(now.addDays(2)));
+        item.setDaily(true);
+        item.setTitle("Gloubiboulgah");
+        addCalendarItem(item);
+//	setItemByUid(item.uid(), item);
+
+//	item = insertItem(QDateTime(now.addDays(1)), QDateTime(now.addDays(3)));
+//	item.setDaily(true);
+//	setItemByUid(item.uid(), item);
+//	item = insertItem(QDateTime(now.addDays(2)), QDateTime(now.addDays(5)));
+//	item.setDaily(true);
+//	item.setTitle("Ceci est un exemple");
+//        setItemByUid(item.uid(), item);
 
         // Create factice events
         Utils::Randomizer r;
@@ -82,7 +89,8 @@ BasicCalendarModel::BasicCalendarModel(QObject *parent) :
         cd.setDate(cd.date().addDays(- cd.date().dayOfWeek()));
 
         for(int i = 0 ; i< 300; ++i) {
-            CalendarItem item = insertItem(cd, cd.addSecs(15*60));
+//            CalendarItem item = insertItem(cd, cd.addSecs(15*60));
+            CalendarItem item = CalendarItem(cd, cd.addSecs(15*60));
             if (cd.time().hour() >= 18) {
                 cd.setDate(cd.addDays(1).date());
                 cd.setTime(QTime(8,0,0));
@@ -103,7 +111,7 @@ BasicCalendarModel::BasicCalendarModel(QObject *parent) :
             item.setData(CalendarItem::Description, r.getRandomString(r.randomInt(10, 500)));
             item.setData(CalendarItem::Location, r.getRandomString(r.randomInt(1,145)));
 //            item.setData(CalendarItem::ThemedIcon, r.randomFile(pix, QStringList() << "*.png").fileName());
-            setItemByUid(item.uid(), item);
+            addCalendarItem(item);
         }
     }
 
@@ -268,6 +276,34 @@ void BasicCalendarModel::setItemByUid(const QString &uid, const CalendarItem &it
 	endModifyItem(*oldItem, *pItem);
 
 	delete oldItem;
+}
+
+Calendar::CalendarItem BasicCalendarModel::addCalendarItem(const Calendar::CalendarItem &item)
+{
+    // already in list ? -> update item
+    CalendarItem *oldItem = getItemPointerByUid(item.uid());
+    if (oldItem) {
+        if (updateCalendarItem(item))
+            return item;
+    }
+    // create new item
+    beginInsertItem();
+
+    // create the item once but insert it in two lists
+    CalendarItem *pItem = new CalendarItem(item);
+    pItem->setData(CalendarItem::Uid, createUid());
+
+    m_sortedByBeginList.insert(getInsertionIndex(true, item.beginning(), m_sortedByBeginList, 0, m_sortedByBeginList.count() - 1), pItem);
+    m_sortedByEndList.insert(getInsertionIndex(false, item.ending(), m_sortedByEndList, 0, m_sortedByEndList.count() - 1), pItem);
+
+    endInsertItem(*pItem);
+    return *pItem;
+}
+
+bool BasicCalendarModel::updateCalendarItem(const Calendar::CalendarItem &item)
+{
+    setItemByUid(item.uid(), item);
+    return true;
 }
 
 void BasicCalendarModel::removeItem(const QString &uid) {

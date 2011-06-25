@@ -79,8 +79,8 @@ public:
         PeopleUser
     };
 
-
     CalendarItem();
+    CalendarItem(const QDateTime &beginning, const QDateTime &ending);
     CalendarItem(const QString &uid, const QDateTime &beginning, const QDateTime &ending);
 
     virtual ~CalendarItem() {}

@@ -29,10 +29,11 @@
 #define ABSTRACT_CALENDAR_MODEL_H
 
 #include <calendar/calendar_exporter.h>
+#include <calendar/calendar_item.h>
+#include <calendar/usercalendar.h>
 
 #include <QObject>
 
-#include "calendar_item.h"
 
 namespace Calendar {
 
@@ -42,36 +43,45 @@ class CALENDAR_EXPORT AbstractCalendarModel : public QObject
 public:
     AbstractCalendarModel(QObject *parent = 0);
 
+    // Management of Items
     virtual int count() const = 0;
 
-    virtual CalendarItem getItemByUid(const QString &uid) const = 0;
-    virtual QList<CalendarItem> getItemsBetween(const QDate &from, const QDate &to) const = 0;
+    virtual Calendar::CalendarItem getItemByUid(const QString &uid) const = 0;
+    virtual QList<Calendar::CalendarItem> getItemsBetween(const QDate &from, const QDate &to) const = 0;
 
-    virtual const CalendarItem &insertItem(const QDateTime &begin, const QDateTime &end);
-    virtual void setItemByUid(const QString &uid, const CalendarItem &item);
+//    virtual void setItemByUid(const QString &uid, const Calendar::CalendarItem &item);
+
+    virtual const CalendarItem &insertItem(const QDateTime &begin, const QDateTime &end) = 0;
+    virtual Calendar::CalendarItem addCalendarItem(const Calendar::CalendarItem &item) = 0;
+    virtual bool updateCalendarItem(const Calendar::CalendarItem &item) = 0;
+
     virtual void removeItem(const QString &uid) = 0;
 
     void stopEvents();
     void resumeEvents();
 
+    // Management of Calendars
+    virtual Calendar::UserCalendar calendar(const Calendar::CalendarItem &item) const = 0;
+    virtual bool updateUserCalendar(const Calendar::UserCalendar &calendar) = 0;
+
 public Q_SLOTS:
     virtual void clearAll() {}
 
 Q_SIGNALS:
-    void itemInserted(const CalendarItem &newItem);
-    void itemModified(const CalendarItem &oldItem, const CalendarItem &newItem);
-    void itemRemoved(const CalendarItem &removedItem);
+    void itemInserted(const Calendar::CalendarItem &newItem);
+    void itemModified(const Calendar::CalendarItem &oldItem, const Calendar::CalendarItem &newItem);
+    void itemRemoved(const Calendar::CalendarItem &removedItem);
     void reset();
 
 protected:
     bool m_propagateEvents;
 
     void beginInsertItem();
-    void endInsertItem(const CalendarItem &newItem);
+    void endInsertItem(const Calendar::CalendarItem &newItem);
     void beginModifyItem();
-    void endModifyItem(const CalendarItem &oldItem, const CalendarItem &newItem);
+    void endModifyItem(const Calendar::CalendarItem &oldItem, const Calendar::CalendarItem &newItem);
     void beginRemoveItem();
-    void endRemoveItem(const CalendarItem &removedItem);
+    void endRemoveItem(const Calendar::CalendarItem &removedItem);
 };
 
 }  // End namespace Calendar

@@ -48,9 +48,9 @@ namespace Calendar {
 
 		int count() const { return m_sortedByBeginList.count(); }
 
-		const CalendarItem &insertItem(const QDateTime &beginning, const QDateTime &ending);
-
-		void setItemByUid(const QString &uid, const CalendarItem &item);
+                const CalendarItem &insertItem(const QDateTime &beginning, const QDateTime &ending);
+                Calendar::CalendarItem addCalendarItem(const Calendar::CalendarItem &item);
+                bool updateCalendarItem(const Calendar::CalendarItem &item);
 
 		CalendarItem getItemByUid(const QString &uid) const;
 
@@ -58,11 +58,16 @@ namespace Calendar {
 
 		void clearAll();
 
+                Calendar::UserCalendar calendar(const Calendar::CalendarItem &item) const {}
+                bool updateUserCalendar(const Calendar::UserCalendar &calendar) {}
+
 	private:
 		QList<CalendarItem*> m_sortedByBeginList;
 		QList<CalendarItem*> m_sortedByEndList;
 
-		// returns an insertion index for a datetime in <list> from <first> to <last> (dichotomy method)
+                void setItemByUid(const QString &uid, const CalendarItem &item);
+
+                // returns an insertion index for a datetime in <list> from <first> to <last> (dichotomy method)
 		int getInsertionIndex(bool begin, const QDateTime &dateTime, const QList<CalendarItem*> &list, int first, int last) const;
 
 		// search for an intersected item, the first found item is enough

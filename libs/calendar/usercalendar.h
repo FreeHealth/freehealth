@@ -30,11 +30,38 @@
 #include <calendar/calendar_exporter.h>
 
 #include <QVariant>
+#include <QVector>
 QT_BEGIN_NAMESPACE
 class QStandardItem;
 QT_END_NAMESPACE
 
 namespace Calendar {
+
+//struct DayAvailability {
+//    DayAvailability(const int weekDay, const QTime &_from, const QTime &_to, bool _isAvailable = true) :
+//            from(_from), to(_to), isAvailable(_isAvailable)
+//    {
+//        weekDays.append(weekDay);
+//    }
+
+//    void setWeekDays(const QVector<int> &_weekDays) {weekDays=_weekDays;}
+//    void addWeekDay(const int &_weekDay) {weekDays.append(_weekDay);}
+
+//    QTime from, to;
+//    QVector<int> weekDays;
+//    bool isAvailable;
+//};
+
+//class CALENDAR_EXPORT IUserAvailability
+//{
+//    IUserAvailability() {}
+//    virtual ~IUserAvailability() {}
+
+//    virtual bool isAvailable(const QDateTime &start, const QDateTime &end) = 0;
+//    virtual bool isAvailable(const int weekOfDay, const QDateTime &start, const int durationInMinutes) = 0;
+
+//    virtual QList<DayAvailability> dayAvailabilities(const int weekOfDay) const = 0;
+//};
 
 class CALENDAR_EXPORT UserCalendar
 {
@@ -42,6 +69,7 @@ public:
     enum DataRepresentation {
         Uid = 0,
         UserOwnerUid,
+        UserName,
         Label,
         Description,
         Type,

@@ -77,7 +77,8 @@ bool MonthDayWidget::eventFilter(QObject *obj, QEvent *event) {
 		BasicItemEditionDialog dialog(this);
 		dialog.init(*item);
 		if (dialog.exec() == QDialog::Accepted) {
-			m_model->setItemByUid(uid, dialog.item());
+//			m_model->setItemByUid(uid, dialog.item());
+                    m_model->updateCalendarItem(dialog.item());
 
 			// refresh cell
 		    QTimer::singleShot(0, this, SLOT(refreshItems()));
