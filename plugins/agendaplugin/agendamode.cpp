@@ -49,17 +49,17 @@ void AgendaMode::modeActivated(Core::IMode *mode)
     if (mode==this) {
         patient()->hidePatientBar();
         lastWasMe = true;
-        connect(user(), SIGNAL(userChanged()), this, SLOT(updateUser()));
-        updateUser();
+        connect(user(), SIGNAL(userChanged()), this, SLOT(userChanged()));
+        userChanged();
     } else if (lastWasMe) {
         patient()->showPatientBar();
         lastWasMe = false;
-        disconnect(user(), SIGNAL(userChanged()), this, SLOT(updateUser()));
+        disconnect(user(), SIGNAL(userChanged()), this, SLOT(userChanged()));
     }
 }
 
-void AgendaMode::updateUser()
+void AgendaMode::userChanged()
 {
     // get its calendars and set to calendarviewer
-    m_Viewer->setUserCalendar(base()->getUserCalendars());
+//    m_Viewer->setUserCalendar(base()->getUserCalendars());
 }

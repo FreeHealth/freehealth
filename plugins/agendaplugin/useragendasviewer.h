@@ -25,10 +25,9 @@ public:
     explicit UserAgendasViewer(QWidget *parent = 0);
     ~UserAgendasViewer();
 
-    void setUserCalendar(const QList<Calendar::UserCalendar *> &user, const AgendaOwner owner = OwnAgendas);
-
 private Q_SLOTS:
     void on_availableAgendasCombo_activated(const int index);
+    void userChanged();
 
 protected:
     void changeEvent(QEvent *e);

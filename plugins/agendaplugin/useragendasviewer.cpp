@@ -27,58 +27,29 @@ class UserAgendasViewerPrivate
 public:
     UserAgendasViewerPrivate(UserAgendasViewer *parent) :
             ui(new Ui::UserAgendasViewer),
-            m_UserCalsModel(0),
+            m_Model(new Agenda::CalendarItemModel(parent)),
             q(parent)
-    {}
+    {
+    }
 
     ~UserAgendasViewerPrivate()
     {
         delete ui;
-        qDeleteAll(m_Events);
-        m_Events.clear();
+        if (m_Model) {
+            delete m_Model;
+            m_Model = 0;
+        }
     }
 
     void populateCalendarWithCurrentWeek(Calendar::UserCalendar *calendar)
     {
-        qWarning() << Q_FUNC_INFO;
-        qDeleteAll(m_Events);
-        m_Events.clear();
-
-        // get events from database
-//        CalendarEventQuery query;
-//        query.setDateRangeForCurrentWeek();
-//        query.setCalendarId(calendar->data(Constants::Db_CalId).toInt());
-//        m_Events = base()->getCalendarEvents(query);
-
-//        qWarning() << m_Events.count();
-
-        QTime chrono;
-        chrono.start();
-
-        // Create calendar items
-        QTime t;
-        t.start();
-        ui->calendarViewer->setModel(new Agenda::CalendarItemModel(q));
-//        Calendar::AbstractCalendarModel *model = ui->calendarViewer->model();
-//        model->stopEvents();
-//        model->clearAll();
-//        for(int i = 0; i < m_Events.count(); ++i) {
-//            const Calendar::CalendarItem *item = m_Events.at(i);
-//            model->setItemByUid(item->uid(), *item);
-//            m_UidToListIndex.insert(item->uid(), i);
-//        }
-//        qWarning() << (chrono.elapsed()/m_Events.count()) << "ms par item créé == "<< chrono.elapsed()<< "ms";
-
-//        model->resumeEvents();
-
+        ui->calendarViewer->setModel(m_Model);
     }
 
 
 public:
     Ui::UserAgendasViewer *ui;
-    QStandardItemModel *m_UserCalsModel;
-    QList<Calendar::CalendarItem *> m_Events;
-    QList<Calendar::UserCalendar *> m_UserCals;
+    CalendarItemModel *m_Model;
     QHash<QString, int> m_UidToListIndex;
 
 private:
@@ -94,7 +65,14 @@ UserAgendasViewer::UserAgendasViewer(QWidget *parent) :
     d(new UserAgendasViewerPrivate(this))
 {
     d->ui->setupUi(this);
-    d->ui->userFullNameLabel->setText("user:");
+    d->ui->userNameLabel->setText(user()->value(Core::IUser::FullName).toString());
+    d->ui->availableAgendasCombo->setModel(d->m_Model->userCalendarComboModel(this));
+
+    int width = size().width();
+    int third = width/3;
+    d->ui->splitter->setSizes(QList<int>() << third << width-third);
+
+    connect(user(), SIGNAL(userChanged()), this, SLOT(userChanged()));
 }
 
 UserAgendasViewer::~UserAgendasViewer()
@@ -105,34 +83,15 @@ UserAgendasViewer::~UserAgendasViewer()
     }
 }
 
-void UserAgendasViewer::setUserCalendar(const QList<Calendar::UserCalendar *> &userCals, const AgendaOwner owner)
-{
-    d->m_UserCals = userCals;
-    // create the model
-    if (d->m_UserCalsModel) {
-        delete d->m_UserCalsModel;
-        d->m_UserCalsModel = 0;
-    }
-    d->m_UserCalsModel = new QStandardItemModel(this);
-    QStandardItem *root = d->m_UserCalsModel->invisibleRootItem();
-    int defaultRow = -1;
-    for(int i = 0; i < userCals.count(); ++i) {
-        root->appendRow(userCals.at(i)->toStandardItem());
-        if (userCals.at(i)->data(Calendar::UserCalendar::IsDefault).toBool()) {
-            defaultRow = i;
-        }
-    }
-    d->ui->availableAgendasCombo->setModel(d->m_UserCalsModel);
-    d->ui->availableAgendasCombo->setCurrentIndex(defaultRow);
-
-    // update events
-    if (defaultRow > -1 && defaultRow < userCals.count())
-        d->populateCalendarWithCurrentWeek(userCals.at(defaultRow));
-}
-
 void UserAgendasViewer::on_availableAgendasCombo_activated(const int index)
 {
-    d->populateCalendarWithCurrentWeek(d->m_UserCals.at(index));
+//    d->populateCalendarWithCurrentWeek(d->m_UserCals.at(index));
+}
+
+void UserAgendasViewer::userChanged()
+{
+    // model is automatocally updated and reseted but the userCalendar combo model
+    d->ui->availableAgendasCombo->setModel(d->m_Model->userCalendarComboModel(this));
 }
 
 void UserAgendasViewer::changeEvent(QEvent *e)

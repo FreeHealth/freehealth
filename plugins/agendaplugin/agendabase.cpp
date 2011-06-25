@@ -388,9 +388,6 @@ QList<Calendar::UserCalendar *> AgendaBase::getUserCalendars(const QString &user
     conds << Utils::Field(Constants::Table_CALENDAR, Constants::CAL_ISVALID, "=1");
     conds << Utils::Field(Constants::Table_USERCALENDARS, Constants::USERCAL_USER_UUID, QString("='%1'").arg(uid));
     QSqlQuery query(database());
-
-    qWarning() << select(Constants::Table_CALENDAR, joins, conds);
-
     if (query.exec(select(Constants::Table_CALENDAR, joins, conds))) {
         while (query.next()) {
             Calendar::UserCalendar *u = new Calendar::UserCalendar;

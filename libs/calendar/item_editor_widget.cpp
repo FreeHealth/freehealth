@@ -87,7 +87,9 @@ namespace Internal {
             ui->eventLabel->setText(m_Item.data(CalendarItem::Label).toString());
             ui->fullInfo->setText(m_Item.data(CalendarItem::Description).toString());
 //            ui->iconLabel->setPixmap(theme()->icon(m_Item.data(CalendarItem::ThemedIcon).toString()).pixmap(16, 16));
-            ui->calendarCombo->setModel(m_Item.model()->userCalendarComboModel(q));
+//            qWarning() << m_Item.model();
+//            if (m_Item.model())
+                ui->calendarCombo->setModel(m_Item.model()->userCalendarComboModel(q));
         }
 
         void submit()

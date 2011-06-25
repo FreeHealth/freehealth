@@ -46,6 +46,7 @@ QToolButton *CalendarNavbar::createTodayButton() {
 	menu->addAction(tr("Yesterday"), this, SLOT(yesterdayPage()));
 	menu->addAction(tr("Tomorrow"), this, SLOT(tomorrowPage()));
 	button->setMenu(menu);
+        button->setPopupMode(QToolButton::InstantPopup);
 	button->setDefaultAction(action);
 	return button;
 }

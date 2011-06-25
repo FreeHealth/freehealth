@@ -291,6 +291,7 @@ Calendar::CalendarItem BasicCalendarModel::addCalendarItem(const Calendar::Calen
 
     // create the item once but insert it in two lists
     CalendarItem *pItem = new CalendarItem(item);
+    setItemIsMine(pItem);
     pItem->setData(CalendarItem::Uid, createUid());
 
     m_sortedByBeginList.insert(getInsertionIndex(true, item.beginning(), m_sortedByBeginList, 0, m_sortedByBeginList.count() - 1), pItem);

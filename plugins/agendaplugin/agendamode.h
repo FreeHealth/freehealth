@@ -56,7 +56,7 @@ public:
 private Q_SLOTS:
     void postCoreInitialization();
     void modeActivated(Core::IMode *mode);
-    void updateUser();
+    void userChanged();
 
 private:
     QStackedWidget *m_Stack;
