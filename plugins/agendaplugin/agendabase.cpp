@@ -716,7 +716,6 @@ bool AgendaBase::saveCommonEvent(Calendar::CalendarItem *event)
 
 bool AgendaBase::saveNonCyclingEvent(Calendar::CalendarItem *event)
 {
-    qWarning() << Q_FUNC_INFO;
     if (event->isCycling())
         return false;
 
