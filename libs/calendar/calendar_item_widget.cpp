@@ -11,6 +11,7 @@ void CalendarItemWidget::setBeginDateTime(const QDateTime &dateTime) {
 		return;
 
 	m_beginDateTime = dateTime;
+	update();
 }
 
 void CalendarItemWidget::setEndDateTime(const QDateTime &dateTime) {
@@ -18,4 +19,5 @@ void CalendarItemWidget::setEndDateTime(const QDateTime &dateTime) {
 		return;
 
 	m_endDateTime = dateTime;
+	update();
 }

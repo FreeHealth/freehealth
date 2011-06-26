@@ -278,7 +278,6 @@ void DayRangeHeader::mouseReleaseEvent(QMouseEvent *event) {
 
 	QDate date = getDate(event->pos().x());
 	if (m_mouseMode == MouseMode_Move) {
-		qDebug("move");
 		if (!m_pressItemWidget->inMotion()) {
 			// display a menu
 			QMenu menu;
@@ -591,7 +590,7 @@ void DayRangeBody::mouseMoveEvent(QMouseEvent *event) {
 			}
 
 			m_pressItemWidget->move(rect.x(), rect.y());
-			m_pressItemWidget->resize(rect.width(), rect.height());
+			m_pressItemWidget->resize(rect.width(), rect.height() < m_minimumItemHeight ? m_minimumItemHeight : rect.height());
 		}
 		break;
 	case MouseMode_Move:
