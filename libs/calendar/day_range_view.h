@@ -115,6 +115,7 @@ namespace Calendar {
 		HourWidget *m_hourWidget;
 		static int m_leftScaleWidth;
 		static int m_hourHeight;
+		static int m_minimumItemHeight;
 		int m_rangeWidth;
 		QDateTime m_pressDateTime;
 		QDateTime m_previousDateTime;

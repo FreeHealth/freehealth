@@ -20,6 +20,7 @@ using namespace Calendar;
 
 int DayRangeBody::m_leftScaleWidth = 60;
 int DayRangeBody::m_hourHeight = 40;
+int DayRangeBody::m_minimumItemHeight = 20;
 
 DayRangeHeader::DayRangeHeader(QWidget *parent, int rangeWidth) : ViewWidget(parent), m_rangeWidth(rangeWidth) {
 	setSizePolicy(QSizePolicy::Expanding, QSizePolicy::Fixed);
@@ -483,6 +484,9 @@ QPair<int, int> DayRangeBody::getItemVerticalData(const QTime &begin, const QTim
 	int seconds = end < begin ? begin.secsTo(QTime(23, 59)) + 1 : begin.secsTo(end);
 	int top = (QTime(0, 0).secsTo(begin) * m_hourHeight) / 3600;
 	int height = (seconds * m_hourHeight) / 3600;
+
+	if (height < m_minimumItemHeight)
+		height = m_minimumItemHeight;
 
 	// vertical lines
 	return QPair<int, int>(top, height);
