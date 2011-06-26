@@ -650,8 +650,10 @@ void DayRangeBody::mouseReleaseEvent(QMouseEvent *event) {
 			ending.setDate(m_pressDateTime.date());
 			delete m_pressItemWidget;
 		}
-		if (model())
-			model()->insertItem(beginning, ending);
+		if (model()) {
+			newItem = CalendarItem(beginning, ending);
+			model()->addCalendarItem(newItem);
+		}
 		break;
 	case MouseMode_Move:
 	case MouseMode_Resize:

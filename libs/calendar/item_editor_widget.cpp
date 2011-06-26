@@ -91,7 +91,7 @@ namespace Internal {
 //            ui->iconLabel->setPixmap(theme()->icon(m_Item.data(CalendarItem::ThemedIcon).toString()).pixmap(16, 16));
             qWarning() << m_Item.model() << m_Model;
             if (m_Item.model()) {
-                ui->calendarCombo->setModel(m_Item.model()->userCalendarComboModel(q));
+			ui->calendarCombo->setModel(m_Item.model()->userCalendarComboModel(q));
             } else {
                 ui->calendarCombo->setModel(m_Model->userCalendarComboModel(q));
             }
