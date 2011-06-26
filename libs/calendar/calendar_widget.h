@@ -46,6 +46,8 @@ class AbstractCalendarModel;
 class CALENDAR_EXPORT CalendarWidget : public QWidget
 {
     Q_OBJECT
+	Q_PROPERTY(int dayGranularity READ dayGranularity WRITE setDayGranularity)
+
 public:
     CalendarWidget(QWidget *parent = 0);
 
@@ -60,7 +62,7 @@ public:
 	/** set the day granularity (only dividers of 24*60 are allowed) */
 	void setDayGranularity(int value);
 
-	private slots:
+private Q_SLOTS:
     // navigation bar slots
     void firstDateChanged();
     void viewTypeChanged();
