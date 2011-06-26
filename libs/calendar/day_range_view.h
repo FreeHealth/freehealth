@@ -82,11 +82,17 @@ namespace Calendar {
 		int rangeWidth() const { return m_rangeWidth; }
 		void setRangeWidth(int width);
 
-		/** @returns a minutes count for the items creation/resize granularity. 30 by default. */
+		/** returns a minutes count for the items creation/resize granularity. 30 by default. */
 		int granularity() const { return m_granularity; }
 
-		/** Set the granularity. Can only be a divider of 24 * 60 */
+		/** set the granularity. Can only be a divider of 24 * 60 */
 		void setGranularity(int value);
+
+		/** returns the minutes count for an item creation. 30 by default. */
+		int itemDefaultDuration() const { return m_itemDefaultDuration; }
+
+		/** set the default duration of an item */
+		void setItemDefaultDuration(int value);
 
 		virtual QSize sizeHint() const;
 
@@ -124,6 +130,7 @@ namespace Calendar {
 		CalendarItem m_pressItem;
 		MouseMode m_mouseMode;
 		int m_granularity;
+		int m_itemDefaultDuration;
 
 		// if end < begin, the end time will be considered as midnight
 		QRect getTimeIntervalRect(int day, const QTime &begin, const QTime &end) const;

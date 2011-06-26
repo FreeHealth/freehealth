@@ -292,7 +292,6 @@ void DayRangeHeader::mouseReleaseEvent(QMouseEvent *event) {
 			if (daysAdded) {
 				m_pressItem.setBeginning(m_pressItem.beginning().addDays(daysAdded));
 				m_pressItem.setEnding(m_pressItem.ending().addDays(daysAdded));
-//				model()->setItemByUid(m_pressItem.uid(), m_pressItem);
 				model()->updateCalendarItem(m_pressItem);
 			}
 			computeWidgets();
@@ -301,7 +300,6 @@ void DayRangeHeader::mouseReleaseEvent(QMouseEvent *event) {
 	} else if (m_mouseMode == MouseMode_Creation) {
 //		CalendarItem item = model()->insertItem(QDateTime(m_pressDayInterval.first, QTime(0, 0)),
 //												QDateTime(m_pressDayInterval.second.addDays(1), QTime(0, 0)));
-		qDebug("creation");
 		CalendarItem item = CalendarItem(QDateTime(m_pressDayInterval.first, QTime(0, 0)),
 										 QDateTime(m_pressDayInterval.second.addDays(1), QTime(0, 0)));
 		item.setDaily(true);
@@ -318,8 +316,7 @@ void DayRangeHeader::modifyPressItem() {
 	BasicItemEditionDialog dialog(this);
         dialog.init(m_pressItem);
 	if (dialog.exec() == QDialog::Accepted) {
-//		model()->setItemByUid(m_pressItem.uid(), dialog.item());
-            model()->updateCalendarItem(dialog.item());
+		model()->updateCalendarItem(dialog.item());
 		computeWidgets();
 		updateGeometry();
 	}
@@ -350,7 +347,8 @@ DayRangeBody::DayRangeBody(QWidget *parent, int rangeWidth) :
 	m_rangeWidth(rangeWidth),
 	m_pressItemWidget(0),
 	m_mouseMode(MouseMode_None),
-	m_granularity(30) {
+	m_granularity(30),
+	m_itemDefaultDuration(30) {
 	setSizePolicy(QSizePolicy::Expanding, QSizePolicy::Fixed);
 
 	setFirstDate(Calendar::getFirstDateByRandomDate(Calendar::View_Week, QDate::currentDate()));
@@ -360,6 +358,13 @@ void DayRangeBody::setGranularity(int value) {
 	int dayMinutes = 24 * 60;
 	if ((dayMinutes / value) * value == dayMinutes) // only accepts divider values
 		m_granularity = value;
+}
+
+void DayRangeBody::setItemDefaultDuration(int value) {
+	if (value == m_itemDefaultDuration)
+		return;
+
+	m_itemDefaultDuration = value;
 }
 
 QSize DayRangeBody::sizeHint() const {
@@ -632,7 +637,7 @@ void DayRangeBody::mouseMoveEvent(QMouseEvent *event) {
 		m_pressItemWidget->setEndDateTime(ending);
 		rect = getTimeIntervalRect(beginning.date().dayOfWeek(), beginning.time(), ending.time());
 		m_pressItemWidget->move(rect.x(), rect.y());
-		m_pressItemWidget->resize(rect.width(), rect.height());
+		m_pressItemWidget->resize(rect.width(), rect.height() < m_minimumItemHeight ? m_minimumItemHeight : rect.height());
 		break;
 	default:;
 	}
@@ -645,9 +650,8 @@ void DayRangeBody::mouseReleaseEvent(QMouseEvent *event) {
 	switch (m_mouseMode) {
 	case MouseMode_Creation:
 		if (!m_pressItemWidget) {
-			// an hour by default
 			beginning = m_pressDateTime;
-			ending = m_pressDateTime.addSecs(3600);
+			ending = m_pressDateTime.addSecs(m_itemDefaultDuration * 60);
 		} else {
 			beginning = m_pressItemWidget->beginDateTime();
 			ending = m_pressItemWidget->endDateTime();

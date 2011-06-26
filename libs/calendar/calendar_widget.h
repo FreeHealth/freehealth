@@ -47,6 +47,7 @@ class CALENDAR_EXPORT CalendarWidget : public QWidget
 {
     Q_OBJECT
 	Q_PROPERTY(int dayGranularity READ dayGranularity WRITE setDayGranularity)
+	Q_PROPERTY(int dayItemDefaultDuration READ dayItemDefaultDuration WRITE setDayItemDefaultDuration)
 
 public:
     CalendarWidget(QWidget *parent = 0);
@@ -61,6 +62,10 @@ public:
 	int dayGranularity() const;
 	/** set the day granularity (only dividers of 24*60 are allowed) */
 	void setDayGranularity(int value);
+	/** returns the default item duration in day/week view */
+	int dayItemDefaultDuration() const;
+	/** set the default item duration in day/week view */
+	void setDayItemDefaultDuration(int value);
 
 private Q_SLOTS:
     // navigation bar slots

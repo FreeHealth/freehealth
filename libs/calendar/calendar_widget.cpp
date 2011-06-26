@@ -53,6 +53,7 @@ struct Calendar::CalendarWidgetPrivate
 	ViewWidget *m_header;
 	ViewWidget *m_body;
 	int m_dayGranularity;
+	int m_dayItemDefaultDuration;
 	QTimer m_timer; // used to refresh every date/time stuffs
 };
 
@@ -74,6 +75,7 @@ CalendarWidgetPrivate::CalendarWidgetPrivate(CalendarWidget *calendar)
 	m_mainLayout->addWidget(m_scrollArea);
 
 	m_dayGranularity = 15;
+	m_dayItemDefaultDuration = 30;
 }
 
 // -----------------------------
@@ -140,8 +142,10 @@ void CalendarWidget::viewTypeChanged() {
 		Q_ASSERT(true); // should never happend :)
 	}
 
-	if (qobject_cast<DayRangeBody*>(m_d->m_body))
+	if (qobject_cast<DayRangeBody*>(m_d->m_body)) {
 		qobject_cast<DayRangeBody*>(m_d->m_body)->setGranularity(m_d->m_dayGranularity);
+		qobject_cast<DayRangeBody*>(m_d->m_body)->setItemDefaultDuration(m_d->m_dayItemDefaultDuration);
+	}
 
 	m_d->m_scrollArea->setWidget(m_d->m_body);
 	m_d->m_body->setFirstDate(m_d->m_navbar->firstDate());
@@ -174,5 +178,18 @@ void CalendarWidget::setDayGranularity(int value) {
 
 	m_d->m_dayGranularity = value;
 	if (qobject_cast<DayRangeBody*>(m_d->m_body))
-		qobject_cast<DayRangeBody*>(m_d->m_body)->setGranularity(m_d->m_dayGranularity);
+		qobject_cast<DayRangeBody*>(m_d->m_body)->setGranularity(value);
+}
+
+int CalendarWidget::dayItemDefaultDuration() const {
+	return m_d->m_dayItemDefaultDuration;
+}
+
+void CalendarWidget::setDayItemDefaultDuration(int value) {
+	if (m_d->m_dayItemDefaultDuration == value)
+		return;
+
+	m_d->m_dayItemDefaultDuration = value;
+	if (qobject_cast<DayRangeBody*>(m_d->m_body))
+		qobject_cast<DayRangeBody*>(m_d->m_body)->setItemDefaultDuration(value);
 }
