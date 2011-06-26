@@ -35,6 +35,8 @@
 #include <calendar/calendar_item.h>
 #include <calendar/usercalendar.h>
 
+#include <utils/log.h>
+
 #include <QStandardItemModel>
 #include <QStandardItem>
 
@@ -49,6 +51,7 @@ static inline Agenda::Internal::AgendaBase *base() {return Agenda::Internal::Age
 CalendarItemModel::CalendarItemModel(QObject *parent) :
         Calendar::AbstractCalendarModel(parent)
 {
+    setObjectName("CalendarItemModel");
     // TEST
     // get all items from database
     CalendarEventQuery query;
@@ -73,7 +76,11 @@ CalendarItemModel::~CalendarItemModel()
 Calendar::CalendarItem CalendarItemModel::getItemByUid(const QString &uid) const
 {
     Calendar::CalendarItem *item = getItemPointerByUid(uid);
-    return item ? *item : Calendar::CalendarItem();
+    if (!item) {
+        item = new Calendar::CalendarItem();
+        setItemIsMine(item);
+    }
+    return *item;
 }
 
 QList<Calendar::CalendarItem> CalendarItemModel::getItemsBetween(const QDate &from, const QDate &to) const
@@ -233,11 +240,34 @@ void CalendarItemModel::resumeEvents()
 }
 
 Calendar::UserCalendar CalendarItemModel::calendar(const Calendar::CalendarItem &item) const
-{}
+{
+    return Calendar::UserCalendar();
+}
+
+Calendar::UserCalendar CalendarItemModel::addUserCalendar(const Calendar::UserCalendar &userCalendar)
+{
+//    setCalendarIsMine();
+    return Calendar::UserCalendar();
+}
 
 bool CalendarItemModel::updateUserCalendar(const Calendar::UserCalendar &calendar)
 {
     return true;
+}
+
+Calendar::UserCalendar CalendarItemModel::defaultUserCalendar() const
+{
+    qWarning() << Q_FUNC_INFO;
+    for(int i=0; i < m_UserCalendar.count(); ++i) {
+        if (m_UserCalendar.at(i)->data(Calendar::UserCalendar::IsDefault).toBool())
+            return *m_UserCalendar.at(i);
+    }
+    if (m_UserCalendar.count()) {
+        LOG_ERROR("No default calendar. Returning first UserCalendar");
+        return *m_UserCalendar.at(0);
+    }
+    LOG_ERROR("No calendar. Returning empty UserCalendar");
+    return Calendar::UserCalendar();
 }
 
 QAbstractItemModel *CalendarItemModel::userCalendarComboModel(QObject *parent) const
@@ -254,6 +284,25 @@ QAbstractItemModel *CalendarItemModel::userCalendarComboModel(QObject *parent) c
         root->appendRow(it);
     }
     return model;
+}
+
+int CalendarItemModel::defaultUserCalendarComboModelIndex() const
+{
+    for(int i=0; i < m_UserCalendar.count(); ++i) {
+        if (m_UserCalendar.at(i)->data(Calendar::UserCalendar::IsDefault).toBool())
+            return i;
+    }
+    LOG_ERROR("No default calendar. Returning empty UserCalendar");
+    return -1;
+}
+
+Calendar::UserCalendar CalendarItemModel::calendarFromComboModelIndex(const int index) const
+{
+    Q_ASSERT(index>0);
+    Q_ASSERT(index<m_UserCalendar.count());
+    if (index < 0 || index >= m_UserCalendar.count())
+        return Calendar::UserCalendar();
+    return *m_UserCalendar.at(index);
 }
 
 void CalendarItemModel::clearAll()
@@ -371,4 +420,7 @@ void CalendarItemModel::userChanged()
     qDeleteAll(m_UserCalendar);
     m_UserCalendar.clear();
     m_UserCalendar = base()->getUserCalendars(user()->uuid());
+    for(int i = 0; i < m_UserCalendar.count(); ++i) {
+        setCalendarIsMine(m_UserCalendar.at(i));
+    }
 }

@@ -60,9 +60,15 @@ public:
     void stopEvents();
     void resumeEvents();
 
+    // Management of Calendars
     Calendar::UserCalendar calendar(const Calendar::CalendarItem &item) const;
+    Calendar::UserCalendar addUserCalendar(const Calendar::UserCalendar &userCalendar);
     bool updateUserCalendar(const Calendar::UserCalendar &calendar);
-    virtual QAbstractItemModel *userCalendarComboModel(QObject *parent) const;
+    Calendar::UserCalendar defaultUserCalendar() const;
+
+    QAbstractItemModel *userCalendarComboModel(QObject *parent) const;
+    int defaultUserCalendarComboModelIndex() const;
+    Calendar::UserCalendar calendarFromComboModelIndex(const int index) const;
 
 public Q_SLOTS:
     void clearAll();

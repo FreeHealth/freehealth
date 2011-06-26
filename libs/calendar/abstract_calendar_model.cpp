@@ -165,8 +165,12 @@ void AbstractCalendarModel::endRemoveItem(const CalendarItem &removedItem) {
 		emit itemRemoved(removedItem);
 }
 
-void AbstractCalendarModel::setItemIsMine(Calendar::CalendarItem *item) {
-    item->setModel(this);
+void AbstractCalendarModel::setItemIsMine(Calendar::CalendarItem *item) const {
+    item->setModel((AbstractCalendarModel*)this);
+}
+
+void AbstractCalendarModel::setCalendarIsMine(Calendar::UserCalendar *cal) const {
+    cal->setModel((AbstractCalendarModel*)this);
 }
 
 //void AbstractCalendarModel::setItemByUid(const QString &, const CalendarItem &) {}

@@ -181,6 +181,7 @@ AgendaBase::AgendaBase(QObject *parent) :
     addField(Table_CALENDAR, CAL_DEFAULT, "DEFAULT", FieldIsBoolean);
     addField(Table_CALENDAR, CAL_ISPRIVATE, "ISPRIV", FieldIsBoolean);
     addField(Table_CALENDAR, CAL_PASSWORD, "PASSWORD", FieldIsShortText);
+    addField(Table_CALENDAR, CAL_DEFAULTDURATION, "DEFDURATION", FieldIsInteger);
     addField(Table_CALENDAR, CAL_LABEL, "LABEL", FieldIsShortText);
     addField(Table_CALENDAR, CAL_THEMEDICON, "THEMEDICON", FieldIsShortText);
     addField(Table_CALENDAR, CAL_FULLCONTENT, "FULLCONTENT", FieldIsBlob);
@@ -408,6 +409,7 @@ QList<Calendar::UserCalendar *> AgendaBase::getUserCalendars(const QString &user
             u->setData(Calendar::UserCalendar::IsDefault, query.value(Constants::CAL_DEFAULT));
             u->setData(Calendar::UserCalendar::IsPrivate, query.value(Constants::CAL_ISPRIVATE));
             u->setData(Calendar::UserCalendar::Password, query.value(Constants::CAL_PASSWORD));
+            u->setData(Calendar::UserCalendar::DefaultDuration, query.value(Constants::CAL_DEFAULTDURATION));
             u->setData(Calendar::UserCalendar::AbsPathIcon, query.value(Constants::CAL_THEMEDICON));
             u->setModified(false);
             toReturn << u;
@@ -436,6 +438,8 @@ bool AgendaBase::saveUserCalendar(Calendar::UserCalendar *calendar)
         query.bindValue(Constants::CAL_DEFAULT, calendar->data(Calendar::UserCalendar::IsDefault).toInt());
         query.bindValue(Constants::CAL_ISPRIVATE, calendar->data(Calendar::UserCalendar::IsPrivate).toInt());
         query.bindValue(Constants::CAL_PASSWORD, calendar->data(Calendar::UserCalendar::Password));
+        query.bindValue(Constants::CAL_DEFAULTDURATION, calendar->data(Calendar::UserCalendar::DefaultDuration));
+        query.bindValue(Constants::CAL_FULLCONTENT, calendar->data(Calendar::UserCalendar::Description));
         query.bindValue(Constants::CAL_SITEUID, calendar->data(Calendar::UserCalendar::LocationUid).toInt());
         query.bindValue(Constants::CAL_LABEL, calendar->data(Calendar::UserCalendar::Label));
         query.bindValue(Constants::CAL_THEMEDICON, calendar->data(Calendar::UserCalendar::AbsPathIcon));
@@ -481,6 +485,8 @@ bool AgendaBase::saveUserCalendar(Calendar::UserCalendar *calendar)
                                          << Constants::CAL_LABEL
                                          << Constants::CAL_THEMEDICON
                                          << Constants::CAL_XMLOPTIONS
+                                         << Constants::CAL_DEFAULTDURATION
+                                         << Constants::CAL_FULLCONTENT
                                          , where));
         query.bindValue(0, calendar->data(Constants::Db_CalId));
         query.bindValue(1, calendar->data(Constants::Db_IsValid).toInt());
@@ -493,6 +499,8 @@ bool AgendaBase::saveUserCalendar(Calendar::UserCalendar *calendar)
         query.bindValue(8, calendar->data(Calendar::UserCalendar::Label));
         query.bindValue(9, calendar->data(Calendar::UserCalendar::AbsPathIcon));
         query.bindValue(10, calendar->xmlOptions());
+        query.bindValue(11, calendar->data(Calendar::UserCalendar::DefaultDuration));
+        query.bindValue(12, calendar->data(Calendar::UserCalendar::Description));
         if (!query.exec()) {
             LOG_QUERY_ERROR(query);
             return false;

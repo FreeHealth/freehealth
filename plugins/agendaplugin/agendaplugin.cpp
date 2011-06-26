@@ -122,13 +122,16 @@ void AgendaPlugin::testDatabase()
             ucal->setData(Calendar::UserCalendar::Password, r.getRandomString(r.randomInt(0,10)));
             ucal->setData(Calendar::UserCalendar::Label, r.randomWords(r.randomInt(2,5)));
             ucal->setData(Calendar::UserCalendar::IsPrivate, r.randomInt(0,1));
+            ucal->setData(Calendar::UserCalendar::IsDefault, 0);
+            ucal->setData(Calendar::UserCalendar::DefaultDuration, r.randomInt(10,120));
+            ucal->setData(Calendar::UserCalendar::Description, r.randomWords(r.randomInt(5,50)));
             ucal->setData(Calendar::UserCalendar::AbsPathIcon, r.randomFile(pix, QStringList() << "*.png").fileName());
             if (base->saveUserCalendar(ucal))
                 qWarning() << "user calendar correctly saved to database";
             cals << ucal;
         }
         // one must be the default
-        ucal = cals.at(r.randomInt(0,4));
+        ucal = cals.at(2);
         ucal->setData(Calendar::UserCalendar::IsDefault, 1);
         base->saveUserCalendar(ucal);
     }

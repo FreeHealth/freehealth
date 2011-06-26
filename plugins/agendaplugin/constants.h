@@ -64,6 +64,7 @@ namespace Constants {
             CAL_DEFAULT,
             CAL_ISPRIVATE,
             CAL_PASSWORD,
+            CAL_DEFAULTDURATION,
             CAL_LABEL,
             CAL_FULLCONTENT,
             CAL_THEMEDICON,

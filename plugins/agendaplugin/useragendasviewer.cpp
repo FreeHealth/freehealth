@@ -65,14 +65,27 @@ UserAgendasViewer::UserAgendasViewer(QWidget *parent) :
     d(new UserAgendasViewerPrivate(this))
 {
     d->ui->setupUi(this);
-    d->ui->userNameLabel->setText(user()->value(Core::IUser::FullName).toString());
-    d->ui->availableAgendasCombo->setModel(d->m_Model->userCalendarComboModel(this));
+
+    Calendar::UserCalendar cal = d->m_Model->defaultUserCalendar();
+
+    qWarning() << cal.data(Calendar::UserCalendar::Description);
+    qWarning() << cal.data(Calendar::UserCalendar::UserOwnerUid);
+    qWarning() << cal.data(Calendar::UserCalendar::IsDefault);
+    qWarning() << cal.data(Calendar::UserCalendar::Label);
+    qWarning() << d->m_Model->defaultUserCalendarComboModelIndex();
+
+    if (cal.isValid()) {
+        d->ui->description->setHtml(cal.data(Calendar::UserCalendar::Description).toString());
+        d->ui->durationLabel->setText(cal.data(Calendar::UserCalendar::DefaultDuration).toString());
+    }
 
     int width = size().width();
     int third = width/3;
     d->ui->splitter->setSizes(QList<int>() << third << width-third);
 
     connect(user(), SIGNAL(userChanged()), this, SLOT(userChanged()));
+
+    userChanged();
 }
 
 UserAgendasViewer::~UserAgendasViewer()
@@ -90,8 +103,10 @@ void UserAgendasViewer::on_availableAgendasCombo_activated(const int index)
 
 void UserAgendasViewer::userChanged()
 {
+    d->ui->userNameLabel->setText(user()->value(Core::IUser::FullName).toString());
     // model is automatocally updated and reseted but the userCalendar combo model
     d->ui->availableAgendasCombo->setModel(d->m_Model->userCalendarComboModel(this));
+    d->ui->availableAgendasCombo->setCurrentIndex(d->m_Model->defaultUserCalendarComboModelIndex());
 }
 
 void UserAgendasViewer::changeEvent(QEvent *e)

@@ -64,8 +64,13 @@ public:
 
     // Management of Calendars
     virtual Calendar::UserCalendar calendar(const Calendar::CalendarItem &item) const = 0;
+    virtual Calendar::UserCalendar addUserCalendar(const Calendar::UserCalendar &userCalendar) = 0;
     virtual bool updateUserCalendar(const Calendar::UserCalendar &calendar) = 0;
+    virtual Calendar::UserCalendar defaultUserCalendar() const = 0;
+
     virtual QAbstractItemModel *userCalendarComboModel(QObject *parent) const = 0;
+    virtual int defaultUserCalendarComboModelIndex() const = 0;
+    virtual Calendar::UserCalendar calendarFromComboModelIndex(const int index) const = 0;
 
 public Q_SLOTS:
     virtual void clearAll() {}
@@ -86,7 +91,8 @@ protected:
     void beginRemoveItem();
     void endRemoveItem(const Calendar::CalendarItem &removedItem);
 
-    void setItemIsMine(Calendar::CalendarItem *item);
+    void setItemIsMine(Calendar::CalendarItem *item) const;
+    void setCalendarIsMine(Calendar::UserCalendar *item) const;
 };
 
 }  // End namespace Calendar

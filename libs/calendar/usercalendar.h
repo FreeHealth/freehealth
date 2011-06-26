@@ -37,6 +37,8 @@ QT_END_NAMESPACE
 
 namespace Calendar {
 
+class AbstractCalendarModel;
+
 //struct DayAvailability {
 //    DayAvailability(const int weekDay, const QTime &_from, const QTime &_to, bool _isAvailable = true) :
 //            from(_from), to(_to), isAvailable(_isAvailable)
@@ -65,6 +67,7 @@ namespace Calendar {
 
 class CALENDAR_EXPORT UserCalendar
 {
+    friend class Calendar::AbstractCalendarModel;
 public:
     enum DataRepresentation {
         Uid = 0,
@@ -79,6 +82,7 @@ public:
         Password,
         LocationUid,
         AbsPathIcon,
+        DefaultDuration,
         UserData = 10000
     };
 
@@ -98,9 +102,15 @@ public:
 
     virtual QString xmlOptions() const;
 
+    AbstractCalendarModel *model() {return m_model;}
+
+protected:
+    void setModel(AbstractCalendarModel *model) {m_model=model;}
+
 private:
     QHash<int, QVariant> m_Datas;
     bool m_Modified;
+    AbstractCalendarModel *m_model;
 };
 
 }  // End namespace Calendar

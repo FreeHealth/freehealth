@@ -245,7 +245,11 @@ QString BasicCalendarModel::createUid() const {
 
 CalendarItem BasicCalendarModel::getItemByUid(const QString &uid) const {
 	CalendarItem *item = getItemPointerByUid(uid);
-	return item ? *item : CalendarItem();
+        if (!item) {
+            item = new CalendarItem();
+            setItemIsMine(item);
+        }
+        return *item;
 }
 
 CalendarItem *BasicCalendarModel::getItemPointerByUid(const QString &uid) const {
