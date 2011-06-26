@@ -349,7 +349,7 @@ DayRangeBody::DayRangeBody(QWidget *parent, int rangeWidth) :
 	m_rangeWidth(rangeWidth),
 	m_pressItemWidget(0),
 	m_mouseMode(MouseMode_None),
-	m_granularity(15) {
+	m_granularity(30) {
 	setSizePolicy(QSizePolicy::Expanding, QSizePolicy::Fixed);
 
 	setFirstDate(Calendar::getFirstDateByRandomDate(Calendar::View_Week, QDate::currentDate()));

@@ -55,6 +55,11 @@ public:
     ViewType viewType() const;
     void setViewType(Calendar::ViewType viewType);
 
+	/** returns the day granularity (see granularity in day_range_view.h) */
+	int dayGranularity() const;
+	/** set the day granularity (only dividers of 24*60 are allowed) */
+	void setDayGranularity(int value);
+
 	private slots:
     // navigation bar slots
     void firstDateChanged();
