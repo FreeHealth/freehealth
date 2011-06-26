@@ -312,7 +312,7 @@ void DayRangeHeader::mouseReleaseEvent(QMouseEvent *event) {
 }
 
 void DayRangeHeader::modifyPressItem() {
-	BasicItemEditionDialog dialog(this);
+        BasicItemEditionDialog dialog(model(), this);
         dialog.init(m_pressItem);
 	if (dialog.exec() == QDialog::Accepted) {
 		model()->updateCalendarItem(dialog.item());
@@ -678,7 +678,7 @@ void DayRangeBody::mouseReleaseEvent(QMouseEvent *event) {
 }
 
 void DayRangeBody::mouseDoubleClickEvent(QMouseEvent *) {
-	BasicItemEditionDialog dialog(this);
+        BasicItemEditionDialog dialog(model(), this);
         dialog.init(m_pressItem);
         if (dialog.exec() == QDialog::Accepted)
             model()->updateCalendarItem(dialog.item());
@@ -766,7 +766,7 @@ void DayRangeBody::refreshDayWidgets(const QDate &dayDate) {
 }
 
 void DayRangeBody::modifyPressItem() {
-	BasicItemEditionDialog dialog(this);
+        BasicItemEditionDialog dialog(model(), this);
 	dialog.init(m_pressItem);
         if (dialog.exec() == QDialog::Accepted)
             model()->updateCalendarItem(dialog.item());

@@ -35,6 +35,7 @@
 namespace Calendar {
 class CalendarItem;
 class UserCalendar;
+class AbstractCalendarModel;
 
 namespace Internal {
 class ItemEditorWidgetPrivate;
@@ -49,6 +50,7 @@ public:
     ~ItemEditorWidget();
 
     void clear();
+    void setModel(AbstractCalendarModel *model);
 
     void setCalendarEvent(const Calendar::CalendarItem &event);
     Calendar::CalendarItem calendarEvent() const;

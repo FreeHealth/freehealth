@@ -74,7 +74,7 @@ bool MonthDayWidget::eventFilter(QObject *obj, QEvent *event) {
 		QLabel *label = qobject_cast<QLabel*>(obj);
 		QString uid = m_uidByWidget[label];
 		CalendarItem *item = getItemByUid(uid);
-		BasicItemEditionDialog dialog(this);
+                BasicItemEditionDialog dialog(m_model, this);
 		dialog.init(*item);
 		if (dialog.exec() == QDialog::Accepted) {
 //			m_model->setItemByUid(uid, dialog.item());

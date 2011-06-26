@@ -32,10 +32,14 @@
 
 using namespace Calendar;
 
-BasicItemEditionDialog::BasicItemEditionDialog(QWidget *parent) :
-        QDialog(parent), ui(new Internal::Ui::BasicItemEditionDialog)
+BasicItemEditionDialog::BasicItemEditionDialog(AbstractCalendarModel *model, QWidget *parent) :
+        QDialog(parent),
+        m_Model(model),
+        ui(new Internal::Ui::BasicItemEditionDialog)
 {
+    Q_ASSERT(model);
     ui->setupUi(this);
+    ui->viewer->setModel(model);
 }
 
 BasicItemEditionDialog::~BasicItemEditionDialog()

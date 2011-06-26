@@ -33,6 +33,7 @@
 #include <QDialog>
 
 namespace Calendar {
+    class AbstractCalendarModel;
     class CalendarItem;
     namespace Internal {
         namespace Ui {
@@ -45,7 +46,7 @@ class CALENDAR_EXPORT BasicItemEditionDialog : public QDialog
 {
     Q_OBJECT
 public:
-    BasicItemEditionDialog(QWidget *parent = 0);
+    BasicItemEditionDialog(AbstractCalendarModel *model, QWidget *parent = 0);
     ~BasicItemEditionDialog();
 
     void init(const CalendarItem &item);
@@ -56,6 +57,7 @@ public:
     //		void accept();
 
 private:
+    AbstractCalendarModel *m_Model;
     Internal::Ui::BasicItemEditionDialog *ui;
 };
 

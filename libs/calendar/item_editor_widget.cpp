@@ -31,6 +31,7 @@
 #include "abstract_calendar_model.h"
 
 #include <translationutils/constanttranslations.h>
+#include <utils/log.h>
 
 #include "ui_item_editor_widget.h"
 
@@ -52,6 +53,7 @@ namespace Internal {
     {
     public:
         ItemEditorWidgetPrivate(ItemEditorWidget *parent) :
+                m_Model(0),
                 ui(new Internal::Ui::ItemEditorWidget),
                 m_UserCalsModel(0),
                 q(parent)
@@ -87,9 +89,12 @@ namespace Internal {
             ui->eventLabel->setText(m_Item.data(CalendarItem::Label).toString());
             ui->fullInfo->setText(m_Item.data(CalendarItem::Description).toString());
 //            ui->iconLabel->setPixmap(theme()->icon(m_Item.data(CalendarItem::ThemedIcon).toString()).pixmap(16, 16));
-//            qWarning() << m_Item.model();
-//            if (m_Item.model())
+            qWarning() << m_Item.model() << m_Model;
+            if (m_Item.model()) {
                 ui->calendarCombo->setModel(m_Item.model()->userCalendarComboModel(q));
+            } else {
+                ui->calendarCombo->setModel(m_Model->userCalendarComboModel(q));
+            }
         }
 
         void submit()
@@ -114,6 +119,7 @@ namespace Internal {
         }
 
     public:
+        AbstractCalendarModel *m_Model;
         Ui::ItemEditorWidget *ui;
         Calendar::CalendarItem m_Item;
         QList<UserCalendar *> m_UserCals;
@@ -155,6 +161,12 @@ void ItemEditorWidget::clear()
     d->ui->eventLabel->clear();
     d->ui->fullInfo->clear();
     d->ui->iconLabel->clear();
+}
+
+void ItemEditorWidget::setModel(AbstractCalendarModel *model)
+{
+    Q_ASSERT(model);
+    d->m_Model = model;
 }
 
 void ItemEditorWidget::setCalendarEvent(const CalendarItem &item)

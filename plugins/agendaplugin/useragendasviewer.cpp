@@ -67,13 +67,6 @@ UserAgendasViewer::UserAgendasViewer(QWidget *parent) :
     d->ui->setupUi(this);
 
     Calendar::UserCalendar cal = d->m_Model->defaultUserCalendar();
-
-    qWarning() << cal.data(Calendar::UserCalendar::Description);
-    qWarning() << cal.data(Calendar::UserCalendar::UserOwnerUid);
-    qWarning() << cal.data(Calendar::UserCalendar::IsDefault);
-    qWarning() << cal.data(Calendar::UserCalendar::Label);
-    qWarning() << d->m_Model->defaultUserCalendarComboModelIndex();
-
     if (cal.isValid()) {
         d->ui->description->setHtml(cal.data(Calendar::UserCalendar::Description).toString());
         d->ui->durationLabel->setText(cal.data(Calendar::UserCalendar::DefaultDuration).toString());
