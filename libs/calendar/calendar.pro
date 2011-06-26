@@ -25,7 +25,8 @@ HEADERS += calendar_exporter.h \
     day_widget.h \
     day_node.h \
     usercalendar.h \
-    item_editor_widget.h
+    item_editor_widget.h \
+    usercalendar_editor_widget.h
 
 SOURCES += \
     abstract_calendar_model.cpp \
@@ -45,14 +46,14 @@ SOURCES += \
     day_widget.cpp \
     day_node.cpp \
     usercalendar.cpp \
-    item_editor_widget.cpp
+    item_editor_widget.cpp \
+    usercalendar_editor_widget.cpp
 
 FORMS += basic_item_edition_dialog.ui \
-    item_editor_widget.ui
+    item_editor_widget.ui \
+    usercalendar_editor_widget.ui
 
 # translators
 TRANSLATIONS += $${SOURCES_TRANSLATIONS_PATH}/calendar_fr.ts \
     $${SOURCES_TRANSLATIONS_PATH}/calendar_de.ts \
     $${SOURCES_TRANSLATIONS_PATH}/calendar_es.ts
-
-
