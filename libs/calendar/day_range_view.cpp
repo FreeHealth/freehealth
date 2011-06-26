@@ -486,15 +486,7 @@ QPair<int, int> DayRangeBody::getBand(const QDate &date) const {
 }
 
 QPair<int, int> DayRangeBody::getItemVerticalData(const QTime &begin, const QTime &end) const {
-	int seconds = end < begin ? begin.secsTo(QTime(23, 59)) + 1 : begin.secsTo(end);
-	int top = (QTime(0, 0).secsTo(begin) * m_hourHeight) / 3600;
-	int height = (seconds * m_hourHeight) / 3600;
-
-	if (height < m_minimumItemHeight)
-		height = m_minimumItemHeight;
-
-	// vertical lines
-	return QPair<int, int>(top, height);
+	return getItemTopAndHeight(begin, end, m_hourHeight, m_minimumItemHeight);
 }
 
 void DayRangeBody::setRangeWidth(int width) {
@@ -751,6 +743,8 @@ void DayRangeBody::refreshDayWidgets(const QDate &dayDate) {
 	// sorting and create the tree
 	qSort(items.begin(), items.end(), calendarItemLessThan);
 
+	HourRangeNode::setHourHeight(m_hourHeight);
+	HourRangeNode::setMinimumItemHeight(m_minimumItemHeight);
 	HourRangeNode node(items[0]);
 
 	for (int i = 1; i < items.count(); i++)

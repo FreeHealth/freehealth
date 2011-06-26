@@ -5,6 +5,7 @@
 
 class QDate;
 class QDateTime;
+class QTime;
 
 namespace Calendar {
 	enum ViewType {
@@ -48,6 +49,9 @@ namespace Calendar {
 	 * \return {QPair<QDate,QDate>} The first and last day intersecting the given range
 	 */
 	QPair<QDate, QDate> getIntersectDayRange(const QDateTime &beginning, const QDateTime &ending);
+
+	/** returns the top and the height of an item, taking account of a minimum item height */
+	QPair<int, int> getItemTopAndHeight(const QTime &begin, const QTime &end, int hourHeight, int minimumItemHeight);
 }
 
 #endif

@@ -59,4 +59,16 @@ namespace Calendar {
 		}
 		return QPair<QDate,QDate>(firstDate, lastDate);
 	}
+
+	QPair<int, int> getItemTopAndHeight(const QTime &begin, const QTime &end, int hourHeight, int minimumItemHeight) {
+		int seconds = end < begin ? begin.secsTo(QTime(23, 59)) + 1 : begin.secsTo(end);
+		int top = (QTime(0, 0).secsTo(begin) * hourHeight) / 3600;
+		int height = (seconds * hourHeight) / 3600;
+
+		if (height < minimumItemHeight)
+			height = minimumItemHeight;
+
+		// vertical lines
+		return QPair<int, int>(top, height);
+	}
 }

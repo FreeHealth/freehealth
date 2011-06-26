@@ -1,7 +1,26 @@
+#include <QRect>
+
 #include "calendar_item.h"
 #include "hour_range_node.h"
 
 using namespace Calendar;
+
+int HourRangeNode::m_hourHeight = 40;
+int HourRangeNode::m_minimumItemHeight = 20;
+
+void HourRangeNode::setHourHeight(int value) {
+	if (m_hourHeight == value)
+		return;
+
+	m_hourHeight = value;
+}
+
+void HourRangeNode::setMinimumItemHeight(int value) {
+	if (m_minimumItemHeight == value)
+		return;
+
+	m_minimumItemHeight = value;
+}
 
 HourRangeNode::~HourRangeNode() {
 	// destroy recursively all the structure (siblings and children)
@@ -20,7 +39,8 @@ HourRangeNode *HourRangeNode::mostBottomNode() {
 
 HourRangeNode *HourRangeNode::getNextCollidingNode(const CalendarItem &item) {
 	HourRangeNode *node = mostBottomNode();
-	if (node->item().overlap(item))
+//	if (node->item().overlap(item))
+	if (overlap(node->item(), item))
 		return node;
 
 	if (node->right())
@@ -34,12 +54,13 @@ HourRangeNode *HourRangeNode::getNextCollidingNode(const CalendarItem &item) {
 
 void HourRangeNode::store(const CalendarItem &item) {
 	HourRangeNode *current = mostBottomNode();
-	if (current->item().overlap(item)) {
+//	if (current->item().overlap(item)) {
+	if (overlap(current->item(), item)) {
 		if (current->right())
 			current->right()->store(item);
 		else {
 			if (current->colliding()) {
-				if (current->colliding()->item().overlap(item)) {
+				if (overlap(current->colliding()->item(), item)) {
 					if (current->m_index + 1 >= current->colliding()->m_index) { // we reached the insertion count of node before the colliding one
 						current->colliding()->store(item);
 					} else // insert it
@@ -99,4 +120,13 @@ void HourRangeNode::computeWidths(int left, int width, QList<HourRangeNode*> &li
 		m_right->computeWidths(m_left + m_width, width - m_width, list);
 	if (m_next)
 		m_next->computeWidths(m_left, width, list);
+}
+
+bool HourRangeNode::overlap(const CalendarItem &item1, const CalendarItem &item2) const {
+	QPair<int, int> verti1 = getItemTopAndHeight(item1.beginning().time(), item1.ending().time(), m_hourHeight, m_minimumItemHeight);
+	QPair<int, int> verti2 = getItemTopAndHeight(item2.beginning().time(), item2.ending().time(), m_hourHeight, m_minimumItemHeight);
+
+	QRect rect1(0, verti1.first, 10, verti1.second);
+	QRect rect2(0, verti2.first, 10, verti2.second);
+	return rect1.intersects(rect2);
 }

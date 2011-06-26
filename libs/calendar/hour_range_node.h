@@ -30,7 +30,14 @@ namespace Calendar {
 		// compute width of the node and all its neighbours and add them into a list
 		void computeWidths(int left, int width, QList<HourRangeNode*> &list);
 
+		// those parameters are used to know it two items are overlapping, even if they are not overlapping in time, but taking account of the minimum item height
+		static void setHourHeight(int value);
+		static void setMinimumItemHeight(int value);
+
 	private:
+		static int m_hourHeight;
+		static int m_minimumItemHeight;
+
 		CalendarItem m_item;
 		HourRangeNode *m_right;
 		HourRangeNode *m_next;
@@ -55,6 +62,9 @@ namespace Calendar {
 		int computeMaxCount();
 		// returns the maximal count of right nodes before the colliding one
 		int computeMaxCountBeforeColliding();
+
+		// an overlap test function which takes in account the minimum item height
+		bool overlap(const CalendarItem &item1, const CalendarItem &item2) const;
 	};
 }
 
