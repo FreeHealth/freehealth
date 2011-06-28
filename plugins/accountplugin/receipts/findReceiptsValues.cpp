@@ -157,6 +157,7 @@ void findReceiptsValues::fillComboCategories(){
 }*/
 
 void findReceiptsValues::fillListViewValues(const QString & comboItem){
+    QList<int> counterList;
     const QString baseName = trUtf8("medical_procedure");
     const QString strItem = comboItem.trimmed();
     const QString name = trUtf8("NAME");
@@ -176,17 +177,18 @@ void findReceiptsValues::fillListViewValues(const QString & comboItem){
     {
     	QString n = q.value(0).toString();
     	QString a = q.value(1).toString();
-    	//if (WarnDebugMessage)
-    	      qDebug() << __FILE__ << QString::number(__LINE__) << " n and a	= " << n << a;
     	model->insertRows(row,1,QModelIndex());
     	model->setData(model->index(row,0),n,Qt::EditRole);
         model->setData(model->index(row,1),a,Qt::EditRole);
         model->submit();
-        //if (WarnDebugMessage)
-    	      qDebug() << __FILE__ << QString::number(__LINE__) << " model data =" << model->data(model->index(row,0),Qt::DisplayRole).toString();
         ++row;
-        //if (WarnDebugMessage)
-    	      qDebug() << __FILE__ << QString::number(__LINE__) << " rows =" << QString::number(row) ;
+        counterList << row;
+        }
+    if (counterList.size()<1)
+    {
+    	  const QString explanationText = trUtf8("The medical procedure database is empty.\n"
+    	                                  "You should create defaults in Configuration > Preference > Accountancy.");
+    	  QMessageBox::warning(0,trUtf8("Warning"),explanationText,QMessageBox::Ok);
         }
     ui->tableViewOfValues->setModel(model);
     ui->tableViewOfValues-> setSelectionBehavior(QAbstractItemView::SelectRows);

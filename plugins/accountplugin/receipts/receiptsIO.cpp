@@ -213,15 +213,15 @@ QHash<int,QVariant> receiptsEngine::getListOfPreferedValues(QString & userUuid,
     double other = 0.00;
     double due = 0.00;
     WorkingPlacesModel modelWP(this);
-    modelWP.setFilter("PREFERED = '1'");
+    modelWP.setFilter("PREFERRED = '1'");
     QVariant preferedSiteUid = modelWP.data(modelWP.index(0,SITES_UID),Qt::DisplayRole);
     InsuranceModel modelINS(this);
-    modelINS.setFilter("PREFERED = '1'");
+    modelINS.setFilter("PREFERRED = '1'");
     QVariant preferedInsurance = modelINS.data(modelINS.index(0,INSURANCE_NAME),Qt::DisplayRole);
     QVariant preferedInsuranceUid = modelINS.data(modelINS.index(0,INSURANCE_UID),Qt::DisplayRole);
     QVariant dateThisDay = QVariant(QDate::currentDate().toString("yyyy-MM-dd"));
     ThesaurusModel model(this);
-    QString filter = QString("%1 = '%2'").arg("PREFERED",QString::number(true));
+    QString filter = QString("%1 = '%2'").arg("PREFERRED",QString::number(true));
     model.setFilter(filter);
     model.select();
     QString data = model.data(model.index(0,THESAURUS_VALUES)).toString();
@@ -250,8 +250,8 @@ QHash<int,QVariant> receiptsEngine::getListOfPreferedValues(QString & userUuid,
     }
     else
     {
-            	  QMessageBox::warning(0,trUtf8("Warning"),trUtf8("You have to insert your prefered "
-            	                 	  "value\nin thesaurus\nand choose it as prefered."),QMessageBox::Ok);
+            	  QMessageBox::warning(0,trUtf8("Warning"),trUtf8("You have to insert your preferred "
+            	                 	  "value\nin thesaurus\nand choose it as preferred."),QMessageBox::Ok);
             	  value = -1.13;
         }
     QVariant preferedAct = QVariant(data);
@@ -280,7 +280,7 @@ QHash<int,QVariant> receiptsEngine::getListOfPreferedValues(QString & userUuid,
         }
     
          
-    QVariant comment = QVariant(trUtf8("prefered act"));
+    QVariant comment = QVariant(trUtf8("preferred act"));
     hash.insert(ACCOUNT_UID,"UID");
     hash.insert(ACCOUNT_USER_UID,userUuid);
     hash.insert(ACCOUNT_PATIENT_UID,"patientUid");

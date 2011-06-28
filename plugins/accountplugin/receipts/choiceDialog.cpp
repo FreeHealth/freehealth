@@ -44,7 +44,7 @@ enum { WarnDebugMessage = true };
 using namespace ChoiceActions;
 treeViewsActions::treeViewsActions(QWidget *parent):QTreeView(parent){
     m_deleteThesaurusValue = new QAction(trUtf8("Delete this value."),this);
-    m_choosePreferedValue = new QAction(trUtf8("Choose this value like the prefered."),this);
+    m_choosePreferedValue = new QAction(trUtf8("Choose this value like the preferred."),this);
     connect(m_choosePreferedValue,SIGNAL(triggered(bool)),this,SLOT(choosePreferedValue(bool)));
     connect(m_deleteThesaurusValue,SIGNAL(triggered(bool)),this,SLOT(deleteBox(bool)));
     }
@@ -90,7 +90,7 @@ void treeViewsActions::deleteBox(bool b){
 void treeViewsActions::choosePreferedValue(bool b){
     Q_UNUSED(b);
     QMessageBox msgBox;
-            msgBox.setText("Do you want to choose this item as prefered value ?");
+            msgBox.setText("Do you want to choose this item as preferred value ?");
             msgBox.setStandardButtons(QMessageBox::Yes | QMessageBox::No);
             msgBox.setDefaultButton(QMessageBox::Yes);
             int ret = msgBox.exec();
@@ -146,7 +146,7 @@ void treeViewsActions::fillActionTreeView()
     //parametersMap.insert("Thesaurus","thesaurus");
     //parametersMap.insert("Values","values");
     parametersMap.insert("Sites","sites");
-    //parametersMap.insert("Prefered Value","Prefered Value");
+    //parametersMap.insert("Preferred Value","Preferred Value");
     //parametersMap.insert("Round trip","Round trip");
     parametersMap.insert("Distance rules","distance_rules");
     listOfMainActions = parametersMap.keys();
@@ -211,7 +211,7 @@ void treeViewsActions::fillActionTreeView()
     m_siteUidUid = firstItemChoosenAsPreferential(site);
     m_distanceRuleValue = firstItemChoosenAsPreferential(distRule).toDouble();
     m_distanceRuleType = rManager.m_preferedDistanceRule.toString();
-    m_insuranceUid = firstItemChoosenAsPreferential(debtor);else if (strMainActions == "Prefered Value")
+    m_insuranceUid = firstItemChoosenAsPreferential(debtor);else if (strMainActions == "Preferred Value")
         {
         	  QBrush red(Qt::red);
                   actionItem->setForeground(red);

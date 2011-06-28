@@ -84,7 +84,8 @@ void PreferedReceipts::insertPreferedValuesIntoAccount(){
         QVariant debtor = m_choiceAndDebtorHash.value(typeOfChoice);
         if (preferedValue == -1.13)//means does not exists
         {
-        	  qWarning() << __FILE__ << QString::number(__LINE__) << "no prefered value" ;
+        	  qWarning() << __FILE__ << QString::number(__LINE__) << "no preferred value" ;
+        	  QMessageBox::warning(0,trUtf8("Warning"),trUtf8("You should create a preferedValue."),QMessageBox::Ok);
         	  return;
             }
 

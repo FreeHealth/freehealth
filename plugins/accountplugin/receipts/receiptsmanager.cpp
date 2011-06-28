@@ -59,7 +59,7 @@ receiptsManager::receiptsManager()
 {
     if (!getPreferedValues())
     {
-    	  qWarning() << __FILE__ << QString::number(__LINE__) << "Unable to get prefered values !" ;
+    	  qWarning() << __FILE__ << QString::number(__LINE__) << "Unable to get preferred values !" ;
         }
 }
 
@@ -266,7 +266,7 @@ QHash<QString,QString> receiptsManager::getPreferentialActFromThesaurus(){
     QHash<QString,QString> hash;
     receiptsEngine rIO;
     ThesaurusModel model(this);
-    QString filter = QString("%1 = '%2'").arg("PREFERED",QString::number(true));
+    QString filter = QString("%1 = '%2'").arg("PREFERRED",QString::number(true));
     model.setFilter(filter);
     model.select();
     QString data = model.data(model.index(0,THESAURUS_VALUES)).toString();
@@ -487,16 +487,16 @@ QHash<QString,QString> receiptsManager::getPreferentialActFromThesaurus(){
 bool receiptsManager::getPreferedValues(){
     bool b = true;
     DistanceRulesModel modelDR(this);
-    modelDR.setFilter("PREFERED = '1'");
+    modelDR.setFilter("PREFERRED = '1'");
     m_preferedDistanceRule = modelDR.data(modelDR.index(0,DISTRULES_TYPE),Qt::DisplayRole);
     m_preferedDistanceValue = modelDR.data(modelDR.index(0,DISTRULES_VALUES),Qt::DisplayRole);
     if (WarnDebugMessage)
     	      qDebug() << __FILE__ << QString::number(__LINE__) << " m_preferedDistanceRule =" << m_preferedDistanceRule.toString() ;
     WorkingPlacesModel modelWP(this);
-    modelWP.setFilter("PREFERED = '1'");
+    modelWP.setFilter("PREFERRED = '1'");
     m_preferedSite = modelWP.data(modelWP.index(0,SITES_NAME),Qt::DisplayRole);
     InsuranceModel modelINS(this);
-    modelINS.setFilter("PREFERED = '1'");
+    modelINS.setFilter("PREFERRED = '1'");
     m_preferedInsurance = modelINS.data(modelINS.index(0,INSURANCE_NAME),Qt::DisplayRole);
     m_preferedInsuranceUid = modelINS.data(modelINS.index(0,INSURANCE_UID),Qt::DisplayRole);
     if(m_preferedDistanceRule.isNull() || m_preferedInsurance.isNull() || m_preferedSite.isNull()){

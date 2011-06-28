@@ -415,7 +415,7 @@ namespace InternalAmount {
 
 treeViewsActions::treeViewsActions(QWidget *parent):QTreeView(parent){
     m_deleteThesaurusValue = new QAction(trUtf8("Delete this value."),this);
-    m_choosePreferedValue = new QAction(trUtf8("Choose this value like the prefered."),this);
+    m_choosePreferedValue = new QAction(trUtf8("Choose this value like the preferred."),this);
     connect(m_choosePreferedValue,SIGNAL(triggered(bool)),this,SLOT(choosePreferedValue(bool)));
     connect(m_deleteThesaurusValue,SIGNAL(triggered(bool)),this,SLOT(deleteBox(bool)));
     }
@@ -473,7 +473,7 @@ void treeViewsActions::mouseReleaseEvent(QMouseEvent *event){
 void treeViewsActions::deleteBox(bool b){
     Q_UNUSED(b);
     QMessageBox msgBox;
-            msgBox.setText("Do you want to delete choosen item ?");
+            msgBox.setText("Do you want to delete chosen item ?");
             msgBox.setStandardButtons(QMessageBox::Yes | QMessageBox::No);
             msgBox.setDefaultButton(QMessageBox::Yes);
             int ret = msgBox.exec();
@@ -491,7 +491,7 @@ void treeViewsActions::deleteBox(bool b){
 void treeViewsActions::choosePreferedValue(bool b){
     Q_UNUSED(b);
     QMessageBox msgBox;
-            msgBox.setText("Do you want to choose this item as prefered value ?");
+            msgBox.setText("Do you want to choose this item as preferred value ?");
             msgBox.setStandardButtons(QMessageBox::Yes | QMessageBox::No);
             msgBox.setDefaultButton(QMessageBox::Yes);
             int ret = msgBox.exec();
@@ -548,7 +548,7 @@ void treeViewsActions::fillActionTreeView()
     parametersMap.insert("Thesaurus","thesaurus");
     parametersMap.insert("Values","values");
     //parametersMap.insert("Sites","sites");
-    parametersMap.insert("Prefered Value","Prefered Value");
+    parametersMap.insert("Preferred Value","Preferred Value");
     parametersMap.insert("Round trip","Round trip");
     //parametersMap.insert("Distance rules","distance_rules");
     listOfMainActions = parametersMap.keys();
@@ -606,7 +606,7 @@ void treeViewsActions::fillActionTreeView()
         	  QBrush green(Qt::darkGreen);
                   actionItem->setForeground(green);
             }
-        else if (strMainActions == "Prefered Value")
+        else if (strMainActions == "Preferred Value")
         {
         	  QBrush red(Qt::red);
                   actionItem->setForeground(red);
@@ -785,7 +785,7 @@ ReceiptViewer::ReceiptViewer(QWidget *parent) :
     m_insuranceUid = firstItemChoosenAsPreferential(debtor);
     if (WarnDebugMessage)
     	      qDebug() << __FILE__ << QString::number(__LINE__) 
-             << " site,dist,ins prefered =" << m_siteUid.toString()
+             << " site,dist,ins preferred =" << m_siteUid.toString()
                                             << QString::number(m_distanceRuleValue)
                                             << m_insuranceUid.toString() ;
     
@@ -880,7 +880,7 @@ void ReceiptViewer::actionsOfTreeView(const QModelIndex &index){
                }
              }
          }
-    if(data == "Prefered Value"){// preferential act of payment
+    if(data == "Preferred Value"){// preferential act of payment
         choiceDialog choice(this,false);
         if(choice.exec() == QDialog::Accepted){
             QStandardItemModel * model = choice.getChoicePercentageDebtorSiteDistruleModel();
@@ -897,15 +897,15 @@ void ReceiptViewer::actionsOfTreeView(const QModelIndex &index){
                 site = model->data(model->index(i,choice.SITE),Qt::DisplayRole);
                 distrules = model->data(model->index(i,choice.DISTRULES),Qt::DisplayRole);
                 if (WarnDebugMessage)
-    	      qDebug() << __FILE__ << QString::number(__LINE__) << " prefered value =" << data ;
+    	      qDebug() << __FILE__ << QString::number(__LINE__) << " preferred value =" << data ;
                 hashOfValues = manager.getPreferentialActFromThesaurus();
                 if (WarnDebugMessage)
     	      qDebug() << __FILE__ << QString::number(__LINE__) << " preferential acts =" << hashOfValues.keys()[0] ;
                 if (hashOfValues.size() < 1)
                 {
             	    hashOfValues.insertMulti("NULL","0");//preferential act
-            	    QMessageBox::warning(0,trUtf8("Warning"),trUtf8("You have to insert your prefered "
-            	                 	  "value\nin thesaurus\nand choose it as prefered."),QMessageBox::Ok);
+            	    QMessageBox::warning(0,trUtf8("Warning"),trUtf8("You have to insert your preferred "
+            	                 	  "value\nin thesaurus\nand choose it as preferred."),QMessageBox::Ok);
                     }           
                 m_listOfValues << hashOfValues.keys();
                 m_listOfValues.removeDuplicates();

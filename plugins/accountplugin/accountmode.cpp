@@ -103,7 +103,10 @@ void AccountMode::modeActivated(Core::IMode *mode)
                                               "for the receipts widget, Maj+R,\n"
                                               "for the movements widget, CTRL+M,\n"
                                               "for assets widget, ALT+Z,\n"
-                                              "for ledger and analysis widget, ALT+L.\n.");
+                                              "for ledger and analysis widget, ALT+L.\n"
+                                              "Before the first use, open Configuration > Preferences > Accountancy > Defaults,\n"
+                                              "and create defaults.\n"
+                                              "Then parametrize your user, sites, bank and so on.");
 
         QMessageBox mess ;
         mess.setWindowTitle(trUtf8("Read me."));
