@@ -82,6 +82,7 @@ QHash<int,QString> receiptsManager::getPercentages()
 
 QHash<QString,QVariant> receiptsManager::getParametersDatas(QString & values , const QString & table)
 {
+   Q_UNUSED(values);
    QHash<QString,QVariant> hashForReturn;
    if (WarnDebugMessage)
     	      qDebug() << __FILE__ << QString::number(__LINE__) << " receiptsManager : in getComboBoxesDatas";
@@ -305,6 +306,10 @@ QHash<QString,QString> receiptsManager::getPreferentialActFromThesaurus(){
     	data = "NULL";
     	value = 0.00;
     	hash.insert(data,QString::number(value));
+    	const QString information = trUtf8("You have to configure your datas in "
+            	                       	  "Configuration > Preferences > Accountancy.\n"
+            	                       	  "Then create defaults in the same widget.");
+        QMessageBox::warning(0,trUtf8("Warning"),information,QMessageBox::Ok);
         }
     return hash;
 }

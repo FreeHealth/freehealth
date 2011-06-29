@@ -61,7 +61,7 @@
 #include <QString>
 #include <QBrush>
 #include <QColor>
-enum { WarnDebugMessage = false };
+enum { WarnDebugMessage = true };
 static inline Core::IUser *user() { return Core::ICore::instance()->user(); }
 static inline Core::IPatient *patient() { return Core::ICore::instance()->patient(); }
 static inline Core::ISettings *settings() { return Core::ICore::instance()->settings(); }
@@ -881,26 +881,36 @@ void ReceiptViewer::actionsOfTreeView(const QModelIndex &index){
              }
          }
     if(data == "Preferred Value"){// preferential act of payment
+        
         choiceDialog choice(this,false);
         if(choice.exec() == QDialog::Accepted){
             QStandardItemModel * model = choice.getChoicePercentageDebtorSiteDistruleModel();
+            if (WarnDebugMessage)
+            	qDebug() << __FILE__ << QString::number(__LINE__) << " model->rowCount() =" << QString::number(model->rowCount()) ;
+
             for (int i = 0; i < model->rowCount(); i += 1)
             {
                 typeOfPayment = model->data(model->index(i,choice.TYPE_OF_CHOICE),Qt::DisplayRole).toInt();
                 if (WarnDebugMessage)
-              qDebug() << __FILE__ << QString::number(__LINE__) << " typeOfPayment =" << QString::number(typeOfPayment) ;
+                      qDebug() << __FILE__ << QString::number(__LINE__) << " typeOfPayment =" << QString::number(typeOfPayment) ;
                 
                 percentage = model->data(model->index(i,choice.PERCENTAGE),Qt::DisplayRole).toDouble();
                 debtor = model->data(model->index(i,choice.DEBTOR),Qt::DisplayRole);
                 if (WarnDebugMessage)
-    	      qDebug() << __FILE__ << QString::number(__LINE__) << " debtor =" << debtor.toString() ;
+    	              qDebug() << __FILE__ << QString::number(__LINE__) << " debtor =" << debtor.toString() ;
                 site = model->data(model->index(i,choice.SITE),Qt::DisplayRole);
                 distrules = model->data(model->index(i,choice.DISTRULES),Qt::DisplayRole);
                 if (WarnDebugMessage)
-    	      qDebug() << __FILE__ << QString::number(__LINE__) << " preferred value =" << data ;
+    	               qDebug() << __FILE__ << QString::number(__LINE__) << " preferred value =" << data ;
                 hashOfValues = manager.getPreferentialActFromThesaurus();
+                QString preferredAct = hashOfValues.keys()[0] ;
                 if (WarnDebugMessage)
-    	      qDebug() << __FILE__ << QString::number(__LINE__) << " preferential acts =" << hashOfValues.keys()[0] ;
+    	               qDebug() << __FILE__ << QString::number(__LINE__) << " preferential acts =" << preferredAct;
+                if (preferredAct == "NULL")
+                {
+                	  qWarning() << __FILE__ << QString::number(__LINE__) << "preferredAct == NULL" ;
+                	  return;
+                    }
                 if (hashOfValues.size() < 1)
                 {
             	    hashOfValues.insertMulti("NULL","0");//preferential act
