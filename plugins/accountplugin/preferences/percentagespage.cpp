@@ -51,7 +51,7 @@
 #include <QRegExp>
 #include <QLocale>
 #include <QUuid>
-enum { WarnDebugMessage = true };
+enum { WarnDebugMessage = false };
 using namespace Account;
 using namespace Account::Internal;
 using namespace Trans::ConstantTranslations;

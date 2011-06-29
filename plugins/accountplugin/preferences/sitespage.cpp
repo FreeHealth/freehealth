@@ -50,7 +50,7 @@
 #include <QIODevice>
 #include <QRegExp>
 #include <QLocale>
-enum { WarnDebugMessage = true };
+enum { WarnDebugMessage = false };
 
 using namespace Account;
 using namespace Account::Internal;
@@ -119,6 +119,7 @@ SitesWidget::SitesWidget(QWidget *parent) :
         QWidget(parent), m_Model(0), m_Mapper(0)
 {
     //QCoreApplication::processEvents(QEventLoop::AllEvents);
+    QApplication::setOverrideCursor(QCursor(Qt::BusyCursor));
     setObjectName("SitesWidget");
     setupUi(this);
     m_user_uid = user()->uuid();
@@ -170,6 +171,7 @@ SitesWidget::SitesWidget(QWidget *parent) :
     
     setDatasToUi();
     emit findCityFromZipCode(zipComboBox->currentText());
+    QApplication::restoreOverrideCursor();
     connect(zipComboBox,SIGNAL(currentIndexChanged(const QString &)),this,SLOT(findCityFromZipCode(const QString &)));
 }
 
@@ -237,18 +239,18 @@ void SitesWidget::on_wpComboBox_currentIndexChanged(int index)
 
 void SitesWidget::on_addButton_clicked()
 {
-    //if (WarnDebugMessage)
+    if (WarnDebugMessage)
     	      qDebug() << __FILE__ << QString::number(__LINE__) << " rowCount1 =" << QString::number(m_Model->rowCount());
     if (!m_Model->insertRow(m_Model->rowCount()))
         LOG_ERROR("Unable to add row");
-    //if (WarnDebugMessage)
+    if (WarnDebugMessage)
     	      qDebug() << __FILE__ << QString::number(__LINE__) << " rowCount2 =" << QString::number(m_Model->rowCount());
     wpComboBox->setCurrentIndex(m_Model->rowCount()-1);
     m_siteUidLabel->setValue(calcSitesUid());
     m_siteUidLabel->setFocus();
-    //if (WarnDebugMessage)
+    if (WarnDebugMessage)
     	      qDebug() << __FILE__ << QString::number(__LINE__) << " m_siteUidLabel =" << m_siteUidLabel->text();
-    //if (WarnDebugMessage)
+    if (WarnDebugMessage)
     	      qDebug() << __FILE__ << QString::number(__LINE__) << " currentIndex =" << QString::number(m_Mapper->currentIndex());
 }
 
@@ -331,7 +333,7 @@ QHash<QString,QString> SitesWidget::parseZipcodeCsv(){
     	QString city = line.replace(QRegExp("[0-9]"),"").replace(",","").trimmed();
         QString zip = line2.replace(QRegExp("[^0123456789]"),"").trimmed();
 
-    	   // if (WarnDebugMessage)
+    	   if (WarnDebugMessage)
     	      qDebug() << __FILE__ << QString::number(__LINE__) << " zip city  =" << zip+","+city;
     	    hash.insertMulti(zip,city);//zipcode,city
 
@@ -355,7 +357,7 @@ QStringList SitesWidget::listOfCountries()
     while (!stream.atEnd())
     {
     	QString line = stream.readLine().trimmed();
-    	//if (WarnDebugMessage)
+    	if (WarnDebugMessage)
     	      qDebug() << __FILE__ << QString::number(__LINE__) << " country =" << line;
         if (!line.isEmpty()) {
             list << line;

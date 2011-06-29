@@ -51,7 +51,7 @@
 #include <QRegExp>
 #include <QLocale>
 #include <QDir>
-enum { WarnDebugMessage = true };
+enum { WarnDebugMessage = false };
 using namespace Account;
 using namespace Account::Internal;
 using namespace Trans::ConstantTranslations;
@@ -119,6 +119,7 @@ InsuranceWidget::InsuranceWidget(QWidget *parent) :
         QWidget(parent), m_Model(0), m_Mapper(0)
 {
     //QCoreApplication::processEvents(QEventLoop::AllEvents);
+    QApplication::setOverrideCursor(QCursor(Qt::BusyCursor));
     setObjectName("InsuranceWidget");
     setupUi(this);
     m_user_uid = user()->uuid();
@@ -171,6 +172,7 @@ InsuranceWidget::InsuranceWidget(QWidget *parent) :
   
     setDatasToUi();
     connect(zipComboBox,SIGNAL(currentIndexChanged(const QString &)),this,SLOT(findCityFromZipCode(const QString &)));
+    QApplication::restoreOverrideCursor();
 }
 
 InsuranceWidget::~InsuranceWidget()
@@ -239,18 +241,18 @@ void InsuranceWidget::on_insuranceComboBox_currentIndexChanged(int index)
 
 void InsuranceWidget::on_addButton_clicked()
 {
-    //if (WarnDebugMessage)
+    if (WarnDebugMessage)
     	      qDebug() << __FILE__ << QString::number(__LINE__) << " rowCount1 =" << QString::number(m_Model->rowCount());
     if (!m_Model->insertRow(m_Model->rowCount()))
         LOG_ERROR("Unable to add row");
-    //if (WarnDebugMessage)
+    if (WarnDebugMessage)
     	      qDebug() << __FILE__ << QString::number(__LINE__) << " rowCount2 =" << QString::number(m_Model->rowCount());
     insuranceComboBox->setCurrentIndex(m_Model->rowCount()-1);
     m_insuranceUidLabel->setValue(calcInsuranceUid());
     m_insuranceUidLabel->setFocus();
-    //if (WarnDebugMessage)
+    if (WarnDebugMessage)
     	      qDebug() << __FILE__ << QString::number(__LINE__) << " m_insuranceUidLabel =" << m_insuranceUidLabel->text();
-    //if (WarnDebugMessage)
+    if (WarnDebugMessage)
     	      qDebug() << __FILE__ << QString::number(__LINE__) << " currentIndex =" << QString::number(m_Mapper->currentIndex());
     /*nameEdit->setText("name");
     adressEdit->setText("adress");
@@ -346,7 +348,7 @@ QHash<QString,QString> InsuranceWidget::parseZipcodeCsv(){
     	QString city = line.replace(QRegExp("[0-9]"),"").replace(",","").trimmed();
         QString zip = line2.replace(QRegExp("[^0123456789]"),"").trimmed();
 
-    	   // if (WarnDebugMessage)
+    	    if (WarnDebugMessage)
     	      qDebug() << __FILE__ << QString::number(__LINE__) << " zip city  =" << zip+","+city;
     	    hash.insertMulti(zip,city);//zipcode,city
 
@@ -367,7 +369,7 @@ QStringList InsuranceWidget::listOfCountries(){
     while (!stream.atEnd())
     {
     	QString line = stream.readLine().trimmed();
-    	//if (WarnDebugMessage)
+    	if (WarnDebugMessage)
     	      qDebug() << __FILE__ << QString::number(__LINE__) << " country =" << line;
         if (!line.isEmpty()) {
             list << line;

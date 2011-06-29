@@ -51,7 +51,7 @@
 #include <QCompleter>
 #include <QDir>
 #include <QTimer>
-enum { WarnDebugMessage = true };
+enum { WarnDebugMessage = false };
 using namespace Account;
 using namespace Account::Internal;
 using namespace Trans::ConstantTranslations;

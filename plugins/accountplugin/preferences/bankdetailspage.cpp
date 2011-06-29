@@ -45,7 +45,7 @@
 #include <coreplugin/itheme.h>
 #include <coreplugin/iuser.h>
 #include <coreplugin/constants_icons.h>
-enum { WarnDebugMessage = true };
+enum { WarnDebugMessage = false };
 using namespace Account;
 using namespace Constants;
 using namespace Account::Internal;

@@ -157,6 +157,7 @@ void AccountUserWidget::saveToSettings(Core::ISettings *sets)
 
 void AccountUserWidget::writeDefaultSettings(Core::ISettings *s)
 {
+    Q_UNUSED(s);
 //    qWarning() << "---------> writedefaults";
 //    LOG_FOR(tkTr(Trans::Constants::CREATING_DEFAULT_SETTINGS_FOR_1).arg("AccountUserWidget"));
 //    s->sync();
@@ -239,31 +240,49 @@ AccountDatabaseDefautsWidget::AccountDatabaseDefautsWidget(QWidget *parent) :
 void AccountDatabaseDefautsWidget::on_createButton_clicked()
 {
     QApplication::setOverrideCursor(QCursor(Qt::BusyCursor));
+    bool success = true;
     if (medicalProcedure->isChecked()) {
         if (!createDefaultsFor("medical_procedure_6949", AccountDB::Constants::Table_MedicalProcedure))
-            Utils::warningMessageBox(tr("beuh"), tr("Medical procedure defaults can not be included."));
+            {Utils::warningMessageBox(tr("beuh"), tr("Medical procedure defaults can not be included."));
+             success = false;
+             }
     }
     if (assetsRates->isChecked()) {
         if (!createDefaultsFor("assets_rates", AccountDB::Constants::Table_AssetsRates))
-            Utils::warningMessageBox(tr("beuh"), tr("Assets Rates defaults can not be included."));
+            {Utils::warningMessageBox(tr("beuh"), tr("Assets Rates defaults can not be included."));
+             success = false;
+             }
     }
     if (available_movements->isChecked()) {
         if (!createDefaultsFor("available_movement", AccountDB::Constants::Table_AvailableMovement))
-            Utils::warningMessageBox(tr("beuh"), tr("Movements defaults can not be included."));
+            {Utils::warningMessageBox(tr("beuh"), tr("Movements defaults can not be included."));
+             success = false;
+             }
     }
     if (distance->isChecked()) {
         if (!createDefaultsFor("distance_rules", AccountDB::Constants::Table_DistanceRules))
-            Utils::warningMessageBox(tr("beuh"), tr("Distance rules defaults can not be included."));
+            {Utils::warningMessageBox(tr("beuh"), tr("Distance rules defaults can not be included."));
+             success = false;
+             }
     }
     if (insurance->isChecked()) {
         if (!createDefaultsFor("insurances", AccountDB::Constants::Table_Insurance))
-            Utils::warningMessageBox(tr("beuh"), tr("Insurance defaults can not be included."));
+            {Utils::warningMessageBox(tr("beuh"), tr("Insurance defaults can not be included."));
+             success = false;
+             }
     }
 //    if (others->isChecked()) {
 //        if (!createDefaultsFor("assets_rates", AccountDB::Constants::Table_AssetsRates))
-//            Utils::warningMessageBox(tr("beuh"), tr("Assets Rates defaults can not be included."));
+//            {Utils::warningMessageBox(tr("beuh"), tr("Assets Rates defaults can not be included."));
+//             success = false;
+//              }
 //    }
     QApplication::restoreOverrideCursor ();
+    if (success)
+    {
+    	  qWarning() << __FILE__ << QString::number(__LINE__) << "Defaults have been created." ;
+    	  QMessageBox::information(0,trUtf8("Information"),trUtf8("Defaults have been created. "),QMessageBox::Ok);
+        }
 }
 
 void AccountDatabaseDefautsWidget::setDatasToUi()

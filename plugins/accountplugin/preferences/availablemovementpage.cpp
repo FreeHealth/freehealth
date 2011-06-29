@@ -48,7 +48,7 @@
 #include <QFile>
 #include <QTextStream>
 #include <QCompleter>
-enum { WarnDebugMessage = true };
+enum { WarnDebugMessage = false };
 using namespace Account;
 using namespace Account::Internal;
 using namespace Trans::ConstantTranslations;

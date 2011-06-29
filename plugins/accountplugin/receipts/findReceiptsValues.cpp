@@ -32,7 +32,7 @@
 #include "findReceiptsValues.h"
 #include <QSqlQuery>
 #include <QSqlTableModel>
-enum { WarnDebugMessage = true };
+enum { WarnDebugMessage = false };
 using namespace AccountDB;
 using namespace Constants;
 
