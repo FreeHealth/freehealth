@@ -85,7 +85,11 @@ void PreferedReceipts::insertPreferedValuesIntoAccount(){
         if (preferedValue == -1.13)//means does not exists
         {
         	  qWarning() << __FILE__ << QString::number(__LINE__) << "no preferred value" ;
-        	  QMessageBox::warning(0,trUtf8("Warning"),trUtf8("You should create a preferedValue."),QMessageBox::Ok);
+        	  QMessageBox::warning(0,trUtf8("Warning"),trUtf8("You should create a preferedValue like this:\n"
+        	                                          "Take a value in thesaurus list with a RIGHT clic,\n"
+        	                                          "if you don't have one, save the next value"
+        	                                          " in thesaurus and chose it in the same way"),
+        	                                          QMessageBox::Ok);
         	  return;
             }
 
