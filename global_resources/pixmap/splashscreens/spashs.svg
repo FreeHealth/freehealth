@@ -16,7 +16,7 @@
    version="1.1"
    inkscape:version="0.48.0 r9654"
    sodipodi:docname="spashs.svg"
-   inkscape:export-filename="/Users/eric/Desktop/Programmation/freemedforms/global_resources/pixmap/splashscreens/openreact.png"
+   inkscape:export-filename="/Users/eric/Desktop/Programmation/freemedforms/global_resources/pixmap/splashscreens/freemedforms.png"
    inkscape:export-xdpi="90"
    inkscape:export-ydpi="90"
    style="display:inline">
@@ -4955,6 +4955,138 @@
        is_visible="true"
        id="path-effect4511"
        effect="bend_path" />
+    <filter
+       id="filter4948"
+       inkscape:label="Drop shadow"
+       width="1.5"
+       height="1.5"
+       x="-.25"
+       y="-.25">
+      <feGaussianBlur
+         id="feGaussianBlur4950"
+         in="SourceAlpha"
+         stdDeviation="0.9"
+         result="blur" />
+      <feColorMatrix
+         id="feColorMatrix4952"
+         result="bluralpha"
+         type="matrix"
+         values="1 0 0 0 0 0 1 0 0 0 0 0 1 0 0 0 0 0 0.7 0 " />
+      <feOffset
+         id="feOffset4954"
+         in="bluralpha"
+         dx="0.8"
+         dy="0.9"
+         result="offsetBlur" />
+      <feMerge
+         id="feMerge4956">
+        <feMergeNode
+           id="feMergeNode4958"
+           in="offsetBlur" />
+        <feMergeNode
+           id="feMergeNode4960"
+           in="SourceGraphic" />
+      </feMerge>
+    </filter>
+    <filter
+       id="filter4985"
+       inkscape:label="Drop shadow"
+       width="1.5"
+       height="1.5"
+       x="-.25"
+       y="-.25">
+      <feGaussianBlur
+         id="feGaussianBlur4987"
+         in="SourceAlpha"
+         stdDeviation="0.9"
+         result="blur" />
+      <feColorMatrix
+         id="feColorMatrix4989"
+         result="bluralpha"
+         type="matrix"
+         values="1 0 0 0 0 0 1 0 0 0 0 0 1 0 0 0 0 0 0.7 0 " />
+      <feOffset
+         id="feOffset4991"
+         in="bluralpha"
+         dx="0.8"
+         dy="0.9"
+         result="offsetBlur" />
+      <feMerge
+         id="feMerge4993">
+        <feMergeNode
+           id="feMergeNode4995"
+           in="offsetBlur" />
+        <feMergeNode
+           id="feMergeNode4997"
+           in="SourceGraphic" />
+      </feMerge>
+    </filter>
+    <filter
+       id="filter4999"
+       inkscape:label="Drop shadow"
+       width="1.5"
+       height="1.5"
+       x="-.25"
+       y="-.25">
+      <feGaussianBlur
+         id="feGaussianBlur5001"
+         in="SourceAlpha"
+         stdDeviation="0.9"
+         result="blur" />
+      <feColorMatrix
+         id="feColorMatrix5003"
+         result="bluralpha"
+         type="matrix"
+         values="1 0 0 0 0 0 1 0 0 0 0 0 1 0 0 0 0 0 0.7 0 " />
+      <feOffset
+         id="feOffset5005"
+         in="bluralpha"
+         dx="0.8"
+         dy="0.9"
+         result="offsetBlur" />
+      <feMerge
+         id="feMerge5007">
+        <feMergeNode
+           id="feMergeNode5009"
+           in="offsetBlur" />
+        <feMergeNode
+           id="feMergeNode5011"
+           in="SourceGraphic" />
+      </feMerge>
+    </filter>
+    <filter
+       id="filter5013"
+       inkscape:label="Drop shadow"
+       width="1.5"
+       height="1.5"
+       x="-.25"
+       y="-.25">
+      <feGaussianBlur
+         id="feGaussianBlur5015"
+         in="SourceAlpha"
+         stdDeviation="0.9"
+         result="blur" />
+      <feColorMatrix
+         id="feColorMatrix5017"
+         result="bluralpha"
+         type="matrix"
+         values="1 0 0 0 0 0 1 0 0 0 0 0 1 0 0 0 0 0 0.7 0 " />
+      <feOffset
+         id="feOffset5019"
+         in="bluralpha"
+         dx="0.8"
+         dy="0.9"
+         result="offsetBlur" />
+      <feMerge
+         id="feMerge5021">
+        <feMergeNode
+           id="feMergeNode5023"
+           in="offsetBlur" />
+        <feMergeNode
+           id="feMergeNode5025"
+           in="SourceGraphic" />
+      </feMerge>
+    </filter>
   </defs>
   <sodipodi:namedview
      id="base"
@@ -4964,10 +5096,10 @@
      inkscape:pageopacity="0.0"
      inkscape:pageshadow="2"
      inkscape:zoom="1.979899"
-     inkscape:cx="186.89921"
+     inkscape:cx="130.29292"
      inkscape:cy="-3.1857802"
      inkscape:document-units="px"
-     inkscape:current-layer="layer3"
+     inkscape:current-layer="layer6"
      showgrid="true"
      inkscape:window-width="1280"
      inkscape:window-height="712"
@@ -5066,7 +5198,63 @@
        ry="1" />
   </g>
   <g
+     inkscape:groupmode="layer"
+     id="layer4"
+     inkscape:label="alpha"
+     style="display:inline">
+    <text
+       xml:space="preserve"
+       style="font-size:22px;font-style:normal;font-variant:normal;font-weight:bold;font-stretch:normal;text-align:start;line-height:125%;letter-spacing:0px;word-spacing:0px;writing-mode:lr-tb;text-anchor:start;fill:#c40000;fill-opacity:1;stroke:none;filter:url(#filter4985);font-family:Georgia;-inkscape-font-specification:Georgia Bold"
+       x="121.72338"
+       y="114.34519"
+       id="text4965"
+       sodipodi:linespacing="125%"
+       transform="matrix(0.70710678,-0.70710678,0.70710678,0.70710678,70.545087,79.30684)"><tspan
+         sodipodi:role="line"
+         id="tspan4967"
+         x="121.72338"
+         y="114.34519">ALPHA</tspan></text>
+  </g>
+  <g
+     inkscape:groupmode="layer"
+     id="layer5"
+     inkscape:label="beta"
      style="display:none"
+     sodipodi:insensitive="true">
+    <text
+       xml:space="preserve"
+       style="font-size:22px;font-style:normal;font-variant:normal;font-weight:bold;font-stretch:normal;text-align:start;line-height:125%;letter-spacing:0px;word-spacing:0px;writing-mode:lr-tb;text-anchor:start;fill:#c40000;fill-opacity:1;stroke:none;display:inline;filter:url(#filter4999);font-family:Georgia;-inkscape-font-specification:Georgia Bold"
+       x="124.75384"
+       y="145.45686"
+       id="text4969"
+       sodipodi:linespacing="125%"
+       transform="matrix(0.70710678,-0.70710678,0.70710678,0.70710678,54.317886,51.233862)"><tspan
+         sodipodi:role="line"
+         id="tspan4971"
+         x="124.75384"
+         y="145.45686">BETA</tspan></text>
+  </g>
+  <g
+     inkscape:groupmode="layer"
+     id="layer6"
+     inkscape:label="stable"
+     style="display:none"
+     sodipodi:insensitive="true">
+    <text
+       xml:space="preserve"
+       style="font-size:22px;font-style:normal;font-variant:normal;font-weight:bold;font-stretch:normal;text-align:start;line-height:125%;letter-spacing:0px;word-spacing:0px;writing-mode:lr-tb;text-anchor:start;fill:#c40000;fill-opacity:1;stroke:none;display:inline;filter:url(#filter5013);font-family:Georgia;-inkscape-font-specification:Georgia Bold"
+       x="127.7843"
+       y="180.12437"
+       id="text4973"
+       sodipodi:linespacing="125%"
+       transform="matrix(0.70710678,-0.70710678,0.70710678,0.70710678,15.041168,41.696658)"><tspan
+         sodipodi:role="line"
+         id="tspan4975"
+         x="127.7843"
+         y="180.12437">STABLE</tspan></text>
+  </g>
+  <g
+     style="display:inline"
      transform="translate(0,-972.36218)"
      id="g7099"
      inkscape:groupmode="layer"
@@ -7185,7 +7373,8 @@
   <g
      inkscape:groupmode="layer"
      id="layer3"
-     inkscape:label="openreact">
+     inkscape:label="openreact"
+     style="display:none">
     <text
        xml:space="preserve"
        style="font-size:10px;font-style:normal;font-variant:normal;font-weight:bold;font-stretch:normal;text-align:start;line-height:125%;letter-spacing:0px;word-spacing:0px;writing-mode:lr-tb;text-anchor:start;fill:#000000;fill-opacity:1;stroke:none;filter:url(#filter3912);font-family:Georgia;-inkscape-font-specification:Sans Bold"
@@ -7222,7 +7411,7 @@
          id="tspan3908">Portail  des interactions médicamenteuses</tspan></text>
     <text
        xml:space="preserve"
-       style="font-size:8px;font-style:normal;font-variant:normal;font-weight:bold;font-stretch:normal;text-align:start;line-height:125%;letter-spacing:0px;word-spacing:0px;writing-mode:lr-tb;text-anchor:start;fill:#000000;fill-opacity:1;stroke:none;font-family:Georgia;-inkscape-font-specification:Sans Bold;filter:url(#filter3958)"
+       style="font-size:8px;font-style:normal;font-variant:normal;font-weight:bold;font-stretch:normal;text-align:start;line-height:125%;letter-spacing:0px;word-spacing:0px;writing-mode:lr-tb;text-anchor:start;fill:#000000;fill-opacity:1;stroke:none;filter:url(#filter3958);font-family:Georgia;-inkscape-font-specification:Sans Bold"
        x="147.98735"
        y="71.413704"
        id="text3954"
