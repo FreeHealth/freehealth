@@ -61,7 +61,7 @@
 #include <QString>
 #include <QBrush>
 #include <QColor>
-enum { WarnDebugMessage = true };
+enum { WarnDebugMessage = false };
 static inline Core::IUser *user() { return Core::ICore::instance()->user(); }
 static inline Core::IPatient *patient() { return Core::ICore::instance()->patient(); }
 static inline Core::ISettings *settings() { return Core::ICore::instance()->settings(); }
@@ -945,6 +945,16 @@ void ReceiptViewer::actionsOfTreeView(const QModelIndex &index){
               {
     	          m_kilometers = dist.getDistanceNumber(m_distanceRuleType);
                   double value = m_kilometers *m_distanceRuleValue;
+                  if (WarnDebugMessage)
+                    qDebug() << __FILE__ << QString::number(__LINE__) << " m_distanceRuleValue =" << QString::number(m_distanceRuleValue) ;
+                  if (m_distanceRuleValue == 0.00)
+                  {
+                  	  qWarning() << __FILE__ << QString::number(__LINE__) << "no m_distanceRuleValue available" ;
+                  	  const QString information = trUtf8("No distance rule value available !\n"
+                  	                                     "You should create one in Preferences.");
+                  	  QMessageBox::warning(0,trUtf8("Warning"),information,QMessageBox::Ok);
+                  	  return;
+                      }
                   typeOfPayment = model->data(model->index(i,dist.TYPE_OF_CHOICE),Qt::DisplayRole).toInt();
                   percentage = model->data(model->index(i,dist.PERCENTAGE),Qt::DisplayRole).toDouble();
                   debtor = model->data(model->index(i,dist.DEBTOR),Qt::DisplayRole);
@@ -952,9 +962,9 @@ void ReceiptViewer::actionsOfTreeView(const QModelIndex &index){
                   distrules = model->data(model->index(i,dist.DISTRULES),Qt::DisplayRole);;
     	  	  hashOfValues.insertMulti("DistPrice",QString::number(value));
     	          if (WarnDebugMessage)
-    	      qDebug() << __FILE__ << QString::number(__LINE__) << " distance =" << QString::number(m_kilometers) ;
+    	          qDebug() << __FILE__ << QString::number(__LINE__) << " distance =" << QString::number(m_kilometers) ;
     	          if (WarnDebugMessage)
-    	      qDebug() << __FILE__ << QString::number(__LINE__) << " value =" << QString::number(value) ;
+    	          qDebug() << __FILE__ << QString::number(__LINE__) << " value =" << QString::number(value) ;
     	          m_listOfValues << trUtf8("Kilometers");
     	          m_listOfValues.removeDuplicates();
                   m_modelReturnedList->setStringList(m_listOfValues);
@@ -978,11 +988,15 @@ void ReceiptViewer::actionsOfTreeView(const QModelIndex &index){
         }
     if (manager.getHashOfThesaurus().keys().contains(data))
     {
+        if (WarnDebugMessage)
+                qDebug() << __FILE__ << QString::number(__LINE__) << " IN THESAURUS " ;
         choiceDialog choice(this,false);
         if(choice.exec() == QDialog::Accepted){
             QStandardItemModel * model = choice.getChoicePercentageDebtorSiteDistruleModel();
             for (int i = 0; i < model->rowCount(); i += 1)
             {
+                if (WarnDebugMessage)
+                    qDebug() << __FILE__ << QString::number(__LINE__) << " IN THESAURUS FOR "  ;
                 typeOfPayment = model->data(model->index(i,choice.TYPE_OF_CHOICE),Qt::DisplayRole).toInt();
                 percentage = model->data(model->index(i,choice.PERCENTAGE),Qt::DisplayRole).toDouble();
                 debtor = model->data(model->index(i,choice.DEBTOR),Qt::DisplayRole);
@@ -995,6 +1009,12 @@ void ReceiptViewer::actionsOfTreeView(const QModelIndex &index){
                 const QString field = trUtf8("NAME");
                 QString str;
                 foreach(str,list){
+                    qDebug() << __FILE__ << QString::number(__LINE__) << " str =" << str ;
+                    if (str == trUtf8("thesaurus"))
+                    {
+                    	  qWarning() << __FILE__ << QString::number(__LINE__) << "no thesaurus value available" ;
+                    	  return;
+                        }
                     hashFromMp = r.getFilteredValueFromMedicalProcedure(str,field);
                     QString value = QString::number(hashFromMp.value(str));
                     hashOfValues.insertMulti(str,value);

@@ -41,7 +41,7 @@
 
 #include <QMessageBox>
 #include <QDebug>
-enum { WarnDebugMessage = true };
+enum { WarnDebugMessage = false };
 /*********************/
 //todo bank system et deposit
 /********************/

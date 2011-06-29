@@ -42,7 +42,7 @@
 #include <QMessageBox>
 #include <QDebug>
 #include <QDate>
-enum { WarnDebugMessage = true };
+enum { WarnDebugMessage = false };
 using namespace AccountDB;
 using namespace Constants;
 
@@ -108,7 +108,15 @@ QStandardItemModel  *MovementsIODb::getMovementsComboBoxModel(QObject *parent)
     AvailableMovementModel availablemodel(this);
     QStringList listOfAvModelParents;
     listOfAvModelParents = listOfParents();
-    for (int i = 0; i < availablemodel.rowCount(); i += 1) {
+    int avMovRows = availablemodel.rowCount();
+    if (avMovRows < 1)
+    {
+    	  qWarning() << __FILE__ << QString::number(__LINE__) << "no availableMovement available" ;
+    	  const QString information = trUtf8("No available movement available.\n"
+    	                             "Please create defaults in Configuration > Preferences.");
+    	  QMessageBox::warning(0,trUtf8("Warning"),information,QMessageBox::Ok);
+        }
+    for (int i = 0; i < avMovRows ; i += 1) {
         int type = availablemodel.data(availablemodel.index(i,AVAILMOV_TYPE),Qt::DisplayRole).toInt();
     	QIcon icon;
         if (type == 1) {
