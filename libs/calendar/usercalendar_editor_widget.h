@@ -62,9 +62,10 @@ protected:
 private:
     Ui::UserCalendarEditorWidget *ui;
     UserCalendar m_Calendar;
+    DayAvailabilityModel *m_AvailabilityModel;
 };
 
 }  // End namespace Calendar
 
 
-#endif // UserCalendarEditorWidget_H
+#endif // USERCALENDARWIDGET_H

@@ -31,43 +31,55 @@
 
 #include <QVariant>
 #include <QVector>
-QT_BEGIN_NAMESPACE
-class QStandardItem;
-QT_END_NAMESPACE
+#include <QPair>
+#include <QTime>
+#include <QStandardItemModel>
 
 namespace Calendar {
 
 class AbstractCalendarModel;
 
-//struct DayAvailability {
-//    DayAvailability(const int weekDay, const QTime &_from, const QTime &_to, bool _isAvailable = true) :
-//            from(_from), to(_to), isAvailable(_isAvailable)
-//    {
-//        weekDays.append(weekDay);
-//    }
+struct CALENDAR_EXPORT TimeRange {
+    TimeRange() : id(-1) {}
 
-//    void setWeekDays(const QVector<int> &_weekDays) {weekDays=_weekDays;}
-//    void addWeekDay(const int &_weekDay) {weekDays.append(_weekDay);}
+    // the id is used for database accesses and should be modified
+    int id;
+    QTime from, to;
+};
 
-//    QTime from, to;
-//    QVector<int> weekDays;
-//    bool isAvailable;
-//};
+class CALENDAR_EXPORT DayAvailability
+{
+public:
+    DayAvailability();
 
-//class CALENDAR_EXPORT IUserAvailability
-//{
-//    IUserAvailability() {}
-//    virtual ~IUserAvailability() {}
+    void setId(const int id) {m_id= id;}
+    int id() const {return m_id;}
 
-//    virtual bool isAvailable(const QDateTime &start, const QDateTime &end) = 0;
-//    virtual bool isAvailable(const int weekOfDay, const QDateTime &start, const int durationInMinutes) = 0;
+    void clearTimeRange() {timeRanges.clear();}
 
-//    virtual QList<DayAvailability> dayAvailabilities(const int weekOfDay) const = 0;
-//};
+    void setWeekDay(const int _weekDays) {m_WeekDay=_weekDays;}
+    int weekDay() const {return m_WeekDay;}
+
+    void addTimeRange(const QTime &from, const QTime &to);
+    void addTimeRange(const TimeRange &tr);
+    void setTimeRanges(const QVector<TimeRange> &ranges) {timeRanges=ranges;}
+
+    int timeRangeCount() const {return timeRanges.count();}
+    TimeRange timeRange(const int index) const;
+
+private:
+    int m_id;
+    int m_WeekDay;
+    bool m_isAvailable;
+    QVector<TimeRange> timeRanges;
+};
+
+class DayAvailabilityModel;
 
 class CALENDAR_EXPORT UserCalendar
 {
     friend class Calendar::AbstractCalendarModel;
+    friend class Calendar::DayAvailabilityModel;
 public:
     enum DataRepresentation {
         Uid = 0,
@@ -98,9 +110,12 @@ public:
     virtual bool isModified() const;
     virtual void setModified(const bool state);
 
-    virtual QStandardItem *toStandardItem() const;
-
     virtual QString xmlOptions() const;
+
+    bool hasAvailability() const;
+    QVector<DayAvailability> availabilities(const int day = -1) const;
+    void addAvailabilities(const DayAvailability &av);
+    void setAvailabilities(const QList<DayAvailability> &availabilities);
 
     AbstractCalendarModel *model() {return m_model;}
 
@@ -110,8 +125,30 @@ protected:
 private:
     QHash<int, QVariant> m_Datas;
     bool m_Modified;
+    QList<DayAvailability> m_Availabilities;
     AbstractCalendarModel *m_model;
 };
+
+
+namespace Internal {
+class DayAvailabilityModelPrivate;
+}
+
+class CALENDAR_EXPORT DayAvailabilityModel : public QStandardItemModel
+{
+public:
+    DayAvailabilityModel(QObject *parent = 0);
+    ~DayAvailabilityModel();
+
+    void setUserCalendar(const UserCalendar &calendar);
+    UserCalendar userCalendar() const;
+
+    void addAvailability(const DayAvailability &availability);
+
+private:
+    Internal::DayAvailabilityModelPrivate *d;
+};
+
 
 }  // End namespace Calendar
 

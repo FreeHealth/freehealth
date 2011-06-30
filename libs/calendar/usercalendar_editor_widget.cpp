@@ -28,11 +28,14 @@
 #include "usercalendar_editor_widget.h"
 #include "ui_usercalendar_editor_widget.h"
 
+#include <QDebug>
+
 using namespace Calendar;
 
 UserCalendarEditorWidget::UserCalendarEditorWidget(QWidget *parent) :
     QWidget(parent),
-    ui(new Ui::UserCalendarEditorWidget)
+    ui(new Ui::UserCalendarEditorWidget),
+    m_AvailabilityModel(0)
 {
     ui->setupUi(this);
 }
@@ -40,19 +43,47 @@ UserCalendarEditorWidget::UserCalendarEditorWidget(QWidget *parent) :
 UserCalendarEditorWidget::~UserCalendarEditorWidget()
 {
     delete ui;
+    if (m_AvailabilityModel)
+        delete m_AvailabilityModel;
+    m_AvailabilityModel = 0;
 }
 
 void UserCalendarEditorWidget::setModel(AbstractCalendarModel *model)
 {}
 
 void UserCalendarEditorWidget::setUserCalendar(const Calendar::UserCalendar &calendar)
-{}
+{
+    // Availability
+    if (m_AvailabilityModel) {
+        delete m_AvailabilityModel;
+        m_AvailabilityModel = 0;
+    }
+
+    m_AvailabilityModel = new DayAvailabilityModel(this);
+    m_AvailabilityModel->setUserCalendar(calendar);
+    ui->availabilityView->setModel(m_AvailabilityModel);
+
+    // Description
+    ui->calendarLabel->setText(calendar.data(UserCalendar::Label).toString());
+    ui->defaultLocation->setText(calendar.data(UserCalendar::LocationUid).toString());
+    ui->description->setText(calendar.data(UserCalendar::Description).toString());
+//    ui->iconLabel->setPixmap();
+
+    // Infos
+    ui->defaultDuration->setValue(calendar.data(UserCalendar::DefaultDuration).toInt());
+    ui->isDefaultCheck->setChecked(calendar.data(UserCalendar::IsDefault).toBool());
+    ui->isPrivateCheck->setChecked(calendar.data(UserCalendar::IsPrivate).toBool());
+    ui->password->setText(calendar.data(UserCalendar::Password).toString());
+
+}
 
 void UserCalendarEditorWidget::submit()
-{}
+{
+}
 
 UserCalendar UserCalendarEditorWidget::userCalendar() const
-{}
+{
+}
 
 void UserCalendarEditorWidget::changeEvent(QEvent *e)
 {

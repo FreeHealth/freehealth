@@ -38,6 +38,7 @@
 #include <QProgressDialog>
 #include <calendar/calendar_item.h>
 #include <calendar/usercalendar.h>
+#include <calendar/usercalendar_editor_widget.h>
 // END TEST
 
 #include <utils/log.h>
@@ -126,6 +127,15 @@ void AgendaPlugin::testDatabase()
             ucal->setData(Calendar::UserCalendar::DefaultDuration, r.randomInt(10,120));
             ucal->setData(Calendar::UserCalendar::Description, r.randomWords(r.randomInt(5,50)));
             ucal->setData(Calendar::UserCalendar::AbsPathIcon, r.randomFile(pix, QStringList() << "*.png").fileName());
+            // Create availabilities
+            for(int i = 1; i < 6; ++i) {
+                QTime from = r.randomTime(6, 12);
+                QTime to = r.randomTime(17, 20);
+                Calendar::DayAvailability av;
+                av.setWeekDay(i);
+                av.addTimeRange(from, to);
+                ucal->addAvailabilities(av);
+            }
             if (base->saveUserCalendar(ucal))
                 qWarning() << "user calendar correctly saved to database";
             cals << ucal;
@@ -136,6 +146,17 @@ void AgendaPlugin::testDatabase()
         base->saveUserCalendar(ucal);
     }
     ucal = cals.at(0);
+
+//    qWarning() << ucal->data(Constants::Db_CalId) << ucal->availabilities().count();
+
+    // Test UserCalendar Widget Editor
+    QDialog dlg;
+    QGridLayout lay(&dlg);
+    Calendar::UserCalendarEditorWidget w(&dlg);
+    w.setUserCalendar(*ucal);
+    lay.addWidget(&w);
+    dlg.setLayout(&lay);
+    dlg.exec();
 
     // Create events in the calendar
     // Try to get events now

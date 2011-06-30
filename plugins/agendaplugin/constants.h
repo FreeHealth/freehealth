@@ -41,8 +41,8 @@ namespace Constants {
     /** \brief Enumerates all the tables of the database */
     enum Tables
     {
-        Table_CALENDAR = 0, Table_USERCALENDARS,
-        Table_COMMON, Table_EVENTS, Table_CYCLINGEVENTS,
+        Table_CALENDAR = 0, Table_USERCALENDARS, Table_AVAILABILITIES,
+        Table_TIMERANGE, Table_AVAIL_TO_TIMERANGE, Table_COMMON, Table_EVENTS, Table_CYCLINGEVENTS,
         // Table_USER_WORKINGTIME,
         Table_VERSION,
         Table_MaxParam
@@ -71,6 +71,22 @@ namespace Constants {
             CAL_XMLOPTIONS
     };
 
+    enum FieldsAVAILABILITIES {
+        AVAIL_ID = 0,
+        AVAIL_CAL_ID,
+        AVAIL_WEEKDAY
+    };
+
+    enum FieldsAVTOTR {
+        AVTOTR_AVID = 0,
+        AVTOTR_TRID
+    };
+
+    enum FieldsTIMERANGE {
+        TIMERANGE_ID = 0,
+        TIMERANGE_FROM,
+        TIMERANGE_TO,
+    };
     enum fieldsCOMMON_FOR_EVENTS {
         COMMON_ID = 0,
         COMMON_CAT_ID,

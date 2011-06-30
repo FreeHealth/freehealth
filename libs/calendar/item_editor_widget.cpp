@@ -196,7 +196,7 @@ void ItemEditorWidget::setAvailableUserCalendar(const QList<UserCalendar *> &use
     QStandardItem *root = d->m_UserCalsModel->invisibleRootItem();
     int defaultRow = -1;
     for(int i = 0; i < userCals.count(); ++i) {
-        root->appendRow(userCals.at(i)->toStandardItem());
+        root->appendRow(new QStandardItem(userCals.at(i)->data(Calendar::UserCalendar::Label).toString()));
         if (userCals.at(i)->data(UserCalendar::IsDefault).toBool()) {
             defaultRow = i;
         }

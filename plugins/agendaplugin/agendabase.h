@@ -131,6 +131,7 @@ public:
     bool saveCalendarEvent(Calendar::CalendarItem *event);
 
 private:
+    bool saveCalendarAvailabilities(Calendar::UserCalendar *calendar);
 //    bool updateCyclingEvent(Agenda::ICalendarCyclingEvent *event);
 //    bool updateNonCyclingEvent(Agenda::ICalendarEvent *event);
     bool saveCommonEvent(Calendar::CalendarItem *event);

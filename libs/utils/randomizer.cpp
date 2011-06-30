@@ -107,8 +107,7 @@ public:
             return;
         QString c = Utils::readTextFile(m_Path + "/listemotsfr.txt");
         if (c.isEmpty())
-            Utils::Log::addError("Randomizer", "Can not read french words.",
-                                 __FILE__, __LINE__);
+            LOG_ERROR_FOR("Randomizer", "Can not read french words.");
         foreach(const QString &s, c.split("\n", QString::SkipEmptyParts)) {
             words.append(s.toUpper());
         }
@@ -279,6 +278,14 @@ QDateTime Randomizer::randomDateTime(const QDateTime &minDate)
         toReturn.setTime(QTime(randomInt(23), randomInt(59), randomInt(59), randomInt(99)));
     }
     return toReturn;
+}
+
+QTime Randomizer::randomTime(const int minHour, const int maxHour)
+{
+    int h = randomInt(minHour, maxHour);
+    int m = randomInt(0, 59);
+    int s = randomInt(0, 59);
+    return QTime(h,m,s);
 }
 
 QFileInfo Randomizer::randomFile(const QDir &inDir, const QStringList &filters)
