@@ -160,6 +160,11 @@ void CalendarWidget::setViewType(Calendar::ViewType viewType) {
 	m_d->m_navbar->setViewType(viewType);
 }
 
+/** set the view to the selected date */
+void CalendarWidget::setDate(const QDate &date) {
+    m_d->m_navbar->setDate(date);
+}
+
 void CalendarWidget::timeout() {
 	m_d->m_body->refreshCurrentDateTimeStuff();
 }
@@ -168,10 +173,12 @@ ViewType CalendarWidget::viewType() const {
 	return m_d->m_navbar->viewType();
 }
 
+/** returns the day granularity (see granularity in day_range_view.h) */
 int CalendarWidget::dayGranularity() const {
 	return m_d->m_dayGranularity;
 }
 
+/** set the day granularity (only dividers of 24*60 are allowed) */
 void CalendarWidget::setDayGranularity(int value) {
 	if (m_d->m_dayGranularity == value)
 		return;
@@ -181,10 +188,12 @@ void CalendarWidget::setDayGranularity(int value) {
 		qobject_cast<DayRangeBody*>(m_d->m_body)->setGranularity(value);
 }
 
+/** returns the default item duration in day/week view */
 int CalendarWidget::dayItemDefaultDuration() const {
 	return m_d->m_dayItemDefaultDuration;
 }
 
+/** set the default item duration in day/week view */
 void CalendarWidget::setDayItemDefaultDuration(int value) {
 	if (m_d->m_dayItemDefaultDuration == value)
 		return;
