@@ -10,7 +10,6 @@ BUILD_PATH_POSTFIXE = FreeMedForms
 include(../coreplugin/common_core.pri)
 include(../coreplugin/modemanager/modemanager.pri)
 DEFINES += FREEMEDFORMS
-QT *= script
 
 # specific derivative files
 HEADERS += coreplugin.h \

@@ -25,7 +25,6 @@ DEFINES *= FMF_CORE_BUILD
 # Qt definitions
 QT *= xml \
     network \
-    script \
     sql
 
 macx {

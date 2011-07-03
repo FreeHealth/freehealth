@@ -12,7 +12,6 @@ DEFINES += CORE_LIBRARY
 # Qt definitions
 QT *= xml \
     network \
-#    script \
     sql
 
 include(actionmanager/actionmanager.pri)
