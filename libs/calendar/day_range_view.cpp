@@ -1,11 +1,3 @@
-#include <QRect>
-#include <QPainter>
-#include <QDate>
-#include <QPixmapCache>
-#include <QScrollArea>
-#include <QMouseEvent>
-#include <QMenu>
-
 #include "hour_range_widget.h"
 #include "common.h"
 #include "abstract_calendar_model.h"
@@ -15,6 +7,16 @@
 #include "day_widget.h"
 #include "day_node.h"
 #include "day_range_view.h"
+
+#include <QRect>
+#include <QPainter>
+#include <QDate>
+#include <QPixmapCache>
+#include <QScrollArea>
+#include <QMouseEvent>
+#include <QMenu>
+
+#include <QDebug>
 
 using namespace Calendar;
 

@@ -6,9 +6,12 @@
 
 #include "common.h"
 
+QT_BEGIN_NAMESPACE
 class QPushButton;
 class QToolButton;
 class QLabel;
+class QComboBox;
+QT_END_NAMESPACE
 
 namespace Calendar {
 	class CalendarNavbar : public QWidget
@@ -23,13 +26,15 @@ namespace Calendar {
 		const QDate &firstDate() const { return m_firstDate; }
 		void setDate(const QDate &date);
 
-	public slots:
+        public Q_SLOTS:
+                void setDayGranularity(const int durationInMinutes);
 
-	signals:
+        Q_SIGNALS:
 		void firstDateChanged();
 		void viewTypeChanged();
+                void granularityChanged(int);
 
-	private slots:
+        private Q_SLOTS:
 		void todayPage();
 		void yesterdayPage();
 		void tomorrowPage();
@@ -38,6 +43,7 @@ namespace Calendar {
 		void dayMode();
 		void weekMode();
 		void monthMode();
+                void changeGranularity(const int index);
 
 	private:
 		ViewType m_viewType;
@@ -49,6 +55,8 @@ namespace Calendar {
 		QPushButton *m_weekButton;
 		QPushButton *m_monthButton;
 		QLabel *m_dateLabel;
+                QComboBox *m_granularity;
+
 
 		void refreshInfos();
 		QString getDateIntervalString();

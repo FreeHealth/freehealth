@@ -37,10 +37,12 @@
 #include <QPushButton>
 #include <QVBoxLayout>
 
+#include <QDebug>
+
 using namespace Calendar;
 
 namespace {
-    enum { REFRESH_INTERVAL = 60 }; // in secondes
+    enum { RefreshInterval = 60 }; // in secondes
 }
 
 
@@ -57,52 +59,56 @@ struct Calendar::CalendarWidgetPrivate
 	QTimer m_timer; // used to refresh every date/time stuffs
 };
 
-CalendarWidgetPrivate::CalendarWidgetPrivate(CalendarWidget *calendar)
-	: m_header(0), m_body(0) {
-	m_mainLayout = new QVBoxLayout(calendar);
-	m_mainLayout->setContentsMargins(0, 0, 0, 0);
-	m_mainLayout->setSpacing(0);
+CalendarWidgetPrivate::CalendarWidgetPrivate(CalendarWidget *calendar) :
+    m_header(0), m_body(0)
+{
+    m_mainLayout = new QVBoxLayout(calendar);
+    m_mainLayout->setContentsMargins(0, 0, 0, 0);
+    m_mainLayout->setSpacing(0);
 
-	// scroll area
-	m_scrollArea = new QScrollArea;
-	m_scrollArea->setVerticalScrollBarPolicy(Qt::ScrollBarAsNeeded);
-	m_scrollArea->setWidgetResizable(true);
-	m_scrollArea->setFrameShape(QFrame::NoFrame);
+    // scroll area
+    m_scrollArea = new QScrollArea;
+    m_scrollArea->setVerticalScrollBarPolicy(Qt::ScrollBarAsNeeded);
+    m_scrollArea->setWidgetResizable(true);
+    m_scrollArea->setFrameShape(QFrame::NoFrame);
 
-	// navigation bar
-	m_mainLayout->addWidget(m_navbar = new CalendarNavbar(calendar));
+    m_dayGranularity = 15;
+    m_dayItemDefaultDuration = 30;
 
-	m_mainLayout->addWidget(m_scrollArea);
+    // navigation bar
+    m_navbar = new CalendarNavbar(calendar);
+    m_navbar->setDayGranularity(m_dayGranularity);
+    m_mainLayout->addWidget(m_navbar);
 
-	m_dayGranularity = 15;
-	m_dayItemDefaultDuration = 30;
+    m_mainLayout->addWidget(m_scrollArea);
+
 }
 
 // -----------------------------
 
-CalendarWidget::CalendarWidget(QWidget *parent)
-	: QWidget(parent),
-	  m_d(new CalendarWidgetPrivate(this)),
-	  m_model(0) {
+CalendarWidget::CalendarWidget(QWidget *parent) :
+    QWidget(parent),
+    m_d(new CalendarWidgetPrivate(this)),
+    m_model(0)
+{
+    QList<CalendarItem*> list;
+    QDateTime begin = QDateTime::currentDateTime();
+    QDateTime end = begin;
 
-	CalendarItem *item;
-	QList<CalendarItem*> list;
-	QDateTime begin = QDateTime::currentDateTime();
-	QDateTime end = begin;
+    // navigation bar stuffs
+    connect(m_d->m_navbar, SIGNAL(firstDateChanged()), this, SLOT(firstDateChanged()));
+    connect(m_d->m_navbar, SIGNAL(viewTypeChanged()), this, SLOT(viewTypeChanged()));
+    connect(m_d->m_navbar, SIGNAL(granularityChanged(int)), this, SLOT(setDayGranularity(int)));
+    m_d->m_navbar->setViewType(Calendar::View_Week);
+    m_d->m_navbar->setDate(QDate::currentDate());
 
-	// navigation bar stuffs
-	connect(m_d->m_navbar, SIGNAL(firstDateChanged()), this, SLOT(firstDateChanged()));
-	connect(m_d->m_navbar, SIGNAL(viewTypeChanged()), this, SLOT(viewTypeChanged()));
-	m_d->m_navbar->setViewType(Calendar::View_Week);
-	m_d->m_navbar->setDate(QDate::currentDate());
+    // basic model
+    setModel(new BasicCalendarModel(this));
 
-	// basic model
-	setModel(new BasicCalendarModel(this));
-
-	// start the hour timer
-	m_d->m_timer.setInterval(REFRESH_INTERVAL * 1000);
-	connect(&m_d->m_timer, SIGNAL(timeout()), this, SLOT(timeout()));
-	m_d->m_timer.start();
+    // start the hour timer
+    m_d->m_timer.setInterval(RefreshInterval * 1000);
+    connect(&m_d->m_timer, SIGNAL(timeout()), this, SLOT(timeout()));
+    m_d->m_timer.start();
 }
 
 void CalendarWidget::setModel(AbstractCalendarModel *model) {

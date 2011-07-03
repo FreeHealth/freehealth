@@ -58,17 +58,13 @@ public:
     ViewType viewType() const;
     void setViewType(Calendar::ViewType viewType);
 
-    /** set the view to the selected date */
     void setDate(const QDate &date);
 
-    /** returns the day granularity (see granularity in day_range_view.h) */
     int dayGranularity() const;
-    /** set the day granularity (only dividers of 24*60 are allowed) */
-    void setDayGranularity(int value);
-
-    /** returns the default item duration in day/week view */
     int dayItemDefaultDuration() const;
-    /** set the default item duration in day/week view */
+
+public Q_SLOTS:
+    void setDayGranularity(int value);
     void setDayItemDefaultDuration(int value);
 
 private Q_SLOTS:

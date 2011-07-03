@@ -1,42 +1,65 @@
+#include "calendar_navbar.h"
+
+#include <translationutils/constanttranslations.h>
+
 #include <QHBoxLayout>
 #include <QPushButton>
 #include <QToolButton>
 #include <QLabel>
 #include <QDate>
 #include <QMenu>
-
-#include "calendar_navbar.h"
+#include <QComboBox>
 
 using namespace Calendar;
+using namespace Trans::ConstantTranslations;
+
+/**
+  \class Calendar::CalendarNavbar
+  Assume the navigation in the calendar view.
+*/
+
+/**
+  \fn void Calendar::CalendarNavbar::granularityChanged(int);
+  Signal sent when user select a new day granularity. Time is sent in minutes.
+*/
 
 CalendarNavbar::CalendarNavbar(QWidget *parent) :
-	QWidget(parent) {
-	setSizePolicy(QSizePolicy::Expanding, QSizePolicy::Fixed);
-	setAutoFillBackground(true);
-	QPalette palette = this->palette();
-	palette.setColor(QPalette::Window, QColor(180, 180, 255));
-	this->setPalette(palette);
+        QWidget(parent)
+{
+    setSizePolicy(QSizePolicy::Expanding, QSizePolicy::Fixed);
+    setAutoFillBackground(true);
+    QPalette palette = this->palette();
+    palette.setColor(QPalette::Window, QColor(180, 180, 255));
+    this->setPalette(palette);
 
-	QHBoxLayout *layout = new QHBoxLayout(this);
-	layout->addWidget(m_todayButton = createTodayButton());
-	layout->addWidget(m_previousPageButton = new QPushButton("<<"));
-	layout->addWidget(m_nextPageButton = new QPushButton(">>"));
-	layout->addWidget(m_dateLabel = new QLabel);
-	QFont font = m_dateLabel->font();
-	font.setBold(true);
-	m_dateLabel->setFont(font);
-	layout->addStretch();
-	layout->addWidget(m_dayButton = new QPushButton(tr("Day")));
-	layout->addWidget(m_weekButton = new QPushButton(tr("Week")));
-	layout->addWidget(m_monthButton = new QPushButton(tr("Month")));
+    // Create a combo granularity selector
+    m_granularity = new QComboBox(this);
+    for(int i = 1; i < 19; ++i) {
+        m_granularity->addItem(QString("%1 %2").arg(i*5).arg(tkTr(Trans::Constants::MINUTES)));
+    }
 
-	// signal/slot connections
-	connect(m_todayButton, SIGNAL(clicked()), this, SLOT(todayPage()));
-	connect(m_previousPageButton, SIGNAL(clicked()), this, SLOT(previousPage()));
-	connect(m_nextPageButton, SIGNAL(clicked()), this, SLOT(nextPage()));
-	connect(m_dayButton, SIGNAL(clicked()), this, SLOT(dayMode()));
-	connect(m_weekButton, SIGNAL(clicked()), this, SLOT(weekMode()));
-	connect(m_monthButton, SIGNAL(clicked()), this, SLOT(monthMode()));
+    QHBoxLayout *layout = new QHBoxLayout(this);
+    layout->addWidget(m_todayButton = createTodayButton());
+    layout->addWidget(m_previousPageButton = new QPushButton("<<"));
+    layout->addWidget(m_nextPageButton = new QPushButton(">>"));
+    layout->addWidget(m_granularity);
+    layout->addWidget(m_dateLabel = new QLabel);
+    QFont font = m_dateLabel->font();
+    font.setBold(true);
+    m_dateLabel->setFont(font);
+    layout->addStretch();
+    layout->addWidget(m_dayButton = new QPushButton(tr("Day")));
+    layout->addWidget(m_weekButton = new QPushButton(tr("Week")));
+    layout->addWidget(m_monthButton = new QPushButton(tr("Month")));
+
+    // signal/slot connections
+    connect(m_todayButton, SIGNAL(clicked()), this, SLOT(todayPage()));
+    connect(m_previousPageButton, SIGNAL(clicked()), this, SLOT(previousPage()));
+    connect(m_nextPageButton, SIGNAL(clicked()), this, SLOT(nextPage()));
+    connect(m_dayButton, SIGNAL(clicked()), this, SLOT(dayMode()));
+    connect(m_weekButton, SIGNAL(clicked()), this, SLOT(weekMode()));
+    connect(m_monthButton, SIGNAL(clicked()), this, SLOT(monthMode()));
+    connect(m_granularity, SIGNAL(activated(int)), this, SLOT(changeGranularity(int)));
 }
 
 QToolButton *CalendarNavbar::createTodayButton() {
@@ -70,6 +93,16 @@ void CalendarNavbar::setDate(const QDate &date) {
 	m_firstDate = firstDate;
 	refreshInfos();
 	emit firstDateChanged();
+}
+
+void CalendarNavbar::setDayGranularity(const int durationInMinutes) {
+    // Find the index (every 5 minutes)
+    int index = -1;
+    if (durationInMinutes%5)
+        index = (durationInMinutes/5);
+    else
+        index = (durationInMinutes/5 - 1);
+    m_granularity->setCurrentIndex(index);
 }
 
 void CalendarNavbar::refreshInfos() {
@@ -142,6 +175,10 @@ void CalendarNavbar::weekMode() {
 
 void CalendarNavbar::monthMode() {
 	setViewType(Calendar::View_Month);
+}
+
+void CalendarNavbar::changeGranularity(const int index) {
+    Q_EMIT granularityChanged((index+1)*5);
 }
 
 QString CalendarNavbar::getDateIntervalString() {
