@@ -22,76 +22,42 @@
  *   Main Developper : Eric MAEKER, <eric.maeker@free.fr>                  *
  *   Contributors :                                                        *
  *       NAME <MAIL@ADRESS>                                                *
- *       NAME <MAIL@ADRESS>                                                *
  ***************************************************************************/
-#ifndef PATIENTS_DB_CONSTANTS_H
-#define PATIENTS_DB_CONSTANTS_H
+#ifndef PATIENTBASECOMPLETER_H
+#define PATIENTBASECOMPLETER_H
 
-#include <QColor>
+#include <patientbaseplugin/patientbase_exporter.h>
+
+#include <QCompleter>
+#include <QValidator>
+
+class QSqlTableModel;
+
+/**
+ * \file patientcompleter.h
+ * \author Eric MAEKER <eric.maeker@free.fr>
+ * \version 0.6.0
+ * \date 03 Jul 2011
+*/
 
 namespace Patients {
-namespace Constants {
+namespace Internal {
+class PatientBaseCompleterPrivate;
+}
 
-    const char * const  DB_NAME            = "patients";
-    const char * const  DB_FILENAME        = "patients.db";
-    const char * const  DB_ACTUALVERSION   = "0.1";
+class PATIENT_EXPORT PatientBaseCompleter : public QCompleter
+{
+    Q_OBJECT
+public:
+    explicit PatientBaseCompleter(QObject *parent = 0);
+    ~PatientBaseCompleter();
 
-    // Tables
-    enum Tables {
-      Table_IDENT = 0,
-      Table_PATIENT_PHOTO,
-      Table_VERSION
-    };
+    QValidator *validator() const;
 
-    // Fields
-    enum IdentFields {
-        IDENTITY_ID = 0,
-        IDENTITY_UID,
-        IDENTITY_LK_TOPRACT_LKID,
-        IDENTITY_FAMILY_UID,
-        IDENTITY_ISACTIVE,
-        IDENTITY_ISVIRTUAL,
-        IDENTITY_NAME,
-        IDENTITY_FIRSTNAME,
-        IDENTITY_SECONDNAME,
-        IDENTITY_GENDER,
-        IDENTITY_TITLE,    // Encoded like = 1=Mister, 2=Miss, 3=Madam , 4=Doctor, 5=Professor, 6=Captain
-        IDENTITY_DOB,
-        IDENTITY_MARITAL_STATUS,
-        IDENTITY_DATEOFDEATH,
-        IDENTITY_PROFESSION,
-        IDENTITY_ADDRESS_STREET,
-        IDENTITY_ADDRESS_STREET_NUMBER,
-        IDENTITY_ADDRESS_ZIPCODE,
-        IDENTITY_ADRESS_CITY,
-        IDENTITY_ADDRESS_COUNTRY,
-        IDENTITY_ADDRESS_NOTE,
-        IDENTITY_MAILS,
-        IDENTITY_TELS,
-        IDENTITY_FAXES,
-        IDENT_VERSION
-    };
-    enum LkFields {
-        LK_TOPRACT_ID = 0,
-        LK_TOPRACT_LKID,
-        LK_TOPRACT_PRACT_UUID,
-        LK_TOPRACT_GROUP_UUID
-    };
-    enum PhotoFields {
-        PHOTO_ID = 0 ,
-        PHOTO_UID,
-        PHOTO_PATIENT_UID,
-        PHOTO_BLOB
-    };
-    enum VersionFields {
-        VERSION_TEXT = 0
-    };
+private:
+    Internal::PatientBaseCompleterPrivate *d;
+};
 
-    static const QColor femaleColor(255, 207, 255, 90);  //ffcfff
-    static const QColor maleColor(225, 225, 255, 90);    //e0e0ff
-    static const QColor hermaColor(255, 214, 255, 90);   //ffd6ff
+}
 
-}  // End namespace Patients::Constants
-}  // End namespace Patients
-
-#endif // End PATIENTS_DB_CONSTANTS_H
+#endif // PATIENTBASECOMPLETER_H

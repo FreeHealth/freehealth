@@ -247,10 +247,6 @@ private:
 
 PatientModel *PatientModel::m_ActiveModel = 0;
 
-static const QColor femaleColor(255, 207, 255, 90);  //ffcfff
-static const QColor maleColor(225, 225, 255, 90);    //e0e0ff
-static const QColor hermaColor(255, 214, 255, 90);   //ffd6ff
-
 PatientModel::PatientModel(QObject *parent) :
         QAbstractTableModel(parent), d(new Internal::PatientModelPrivate(this))
 {
@@ -435,11 +431,11 @@ QVariant PatientModel::data(const QModelIndex &index, int role) const
         if (settings()->value(Constants::S_SELECTOR_USEGENDERCOLORS).toBool()) {
             const QString &g = d->m_SqlPatient->data(d->m_SqlPatient->index(index.row(), Constants::IDENTITY_GENDER)).toString();
             if (g=="M") {
-                return maleColor;
+                return Constants::maleColor;
             } else if (g=="F") {
-                return femaleColor;
+                return Constants::femaleColor;
             } else if (g=="H") {
-                return hermaColor;
+                return Constants::hermaColor;
             }
         }
     }
