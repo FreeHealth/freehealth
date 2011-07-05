@@ -70,7 +70,8 @@ UserCalendar::UserCalendar() :
 }
 
 UserCalendar::~UserCalendar()
-{}
+{
+}
 
 bool UserCalendar::isValid() const
 {
@@ -126,7 +127,6 @@ QVector<DayAvailability> UserCalendar::availabilities(const int day) const
             toReturn << m_Availabilities.at(i);
         }
     }
-    qWarning() << day << toReturn.count();
     return toReturn;
 }
 
@@ -139,6 +139,35 @@ void UserCalendar::setAvailabilities(const QList<DayAvailability> &availabilitie
 {
     m_Availabilities = availabilities;
 }
+
+bool UserCalendar::canBeAvailable(const QDateTime &date) const
+{
+    int day = date.date().dayOfWeek();
+    if (day==-1)
+        return false;
+    QTime time = date.time();
+    for(int i = 0; i < m_Availabilities.count(); ++i) {
+        if (m_Availabilities.at(i).weekDay()==day) {
+            for(int j = 0; j < m_Availabilities.at(i).timeRangeCount(); ++j) {
+                TimeRange range = m_Availabilities.at(i).timeRange(j);
+                // date included in one timeRange ? --> return true
+                if (time >= range.from && time <= range.to) {
+                    return true;
+                }
+            }
+        }
+    }
+    return false;
+}
+
+/** Create a Calendar::DayAvailabilityModel for this Calendar::UserCalendar with the \e parent. The object will not be deleted by this class. */
+Calendar::DayAvailabilityModel *UserCalendar::availabilitiesModel(QObject *parent) const
+{
+    DayAvailabilityModel *model = new DayAvailabilityModel(parent);
+    model->setUserCalendar(*this);
+    return model;
+}
+
 
 namespace Calendar {
 namespace Internal {
@@ -154,6 +183,7 @@ public:
 }
 
 DayAvailabilityModel::DayAvailabilityModel(QObject *parent) :
+        QStandardItemModel(parent),
         d(new Internal::DayAvailabilityModelPrivate)
 {}
 
@@ -167,17 +197,25 @@ DayAvailabilityModel::~DayAvailabilityModel()
 
 void DayAvailabilityModel::setUserCalendar(const UserCalendar &calendar)
 {
+    QFont bold;
+    bold.setBold(true);
     // Create on item foreach week of day
     QVector<QStandardItem *> days;
     for(int i = 1; i < 8; ++i) {
         QStandardItem *day = new QStandardItem(QDate::longDayName(i));
+        day->setFont(bold);
         days << day;
         // Add availabilities to items
         const QVector<DayAvailability> &avail = calendar.availabilities(i);
         for(int j = 0; j < avail.count(); ++j) {
             for(int k = 0; k < avail.at(j).timeRangeCount(); ++k) {
                 TimeRange range = avail.at(j).timeRange(k);
-                QStandardItem *time = new QStandardItem(QString("%1 - %2").arg(range.from.toString()).arg(range.to.toString()));
+//                QStandardItem *time1 = new QStandardItem(QString("%1").arg(range.from.toString()));
+//                QStandardItem *time2 = new QStandardItem(QString("%1").arg(range.to.toString()));
+//                day->appendRow(time1);
+//                day->appendRow(time2);
+                QStandardItem *time = new QStandardItem(QString("de %1 à %2").arg(range.from.toString()).arg(range.to.toString()));
+                time->setToolTip(time->text());
                 day->appendRow(time);
             }
         }

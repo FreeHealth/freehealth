@@ -116,6 +116,8 @@ public:
     QVector<DayAvailability> availabilities(const int day = -1) const;
     void addAvailabilities(const DayAvailability &av);
     void setAvailabilities(const QList<DayAvailability> &availabilities);
+    bool canBeAvailable(const QDateTime &date) const;
+    Calendar::DayAvailabilityModel *availabilitiesModel(QObject *parent) const;
 
     AbstractCalendarModel *model() {return m_model;}
 
