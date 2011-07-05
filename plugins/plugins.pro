@@ -95,10 +95,11 @@ usermanager.depends += listview
 
 patientbase.subdir   = patientbaseplugin
 patientbase.depends += core
-patientbase.depends += usermanager
 
 agenda.subdir = agendaplugin
 agenda.depends += core
+agenda.depends += patientbase
+
 
 #alerts.subdir = alertsplugin
 #alerts.depends += core
