@@ -32,10 +32,18 @@
 
 #include <QWidget>
 
+/**
+ * \file item_editor_widget.h
+ * \author Guillaume Denry, Eric Maeker
+ * \version 0.6.0
+ * \date 05 Jul 2011
+*/
+
 namespace Calendar {
 class CalendarItem;
 class UserCalendar;
 class AbstractCalendarModel;
+class ICalendarItemDataWidget;
 
 namespace Internal {
 class ItemEditorWidgetPrivate;
@@ -56,6 +64,8 @@ public:
     Calendar::CalendarItem calendarEvent() const;
 
     void setAvailableUserCalendar(const QList<Calendar::UserCalendar *> &userCals);
+
+    void addCalendarDataWidget(Calendar::ICalendarItemDataWidget *dataWidget);
 
 public Q_SLOTS:
     void submit();

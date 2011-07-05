@@ -25,52 +25,50 @@
  *   Contributors :                                                        *
  *       NAME <MAIL@ADRESS>                                                *
  ***************************************************************************/
-#ifndef BASIC_ITEM_EDITION_DIALOG_H
-#define BASIC_ITEM_EDITION_DIALOG_H
+#ifndef ICALENDARITEMDATAWIDGET_H
+#define ICALENDARITEMDATAWIDGET_H
 
 #include <calendar/calendar_exporter.h>
 
-#include <QDialog>
+#include <QObject>
 
 /**
- * \file basic_item_edition_dialog.h
- * \author Guillaume Denry, Eric Maeker
+ * \file icalendaritemdatawidget.h
+ * \author Eric MAEKER <eric.maeker@free.fr>
  * \version 0.6.0
  * \date 05 Jul 2011
 */
 
+
 namespace Calendar {
-class AbstractCalendarModel;
-class ICalendarItemDataWidget;
 class CalendarItem;
-namespace Internal {
-namespace Ui {
-class BasicItemEditionDialog;
-} // End namespace Ui
-}  // End namespace Internal
 
-
-class CALENDAR_EXPORT BasicItemEditionDialog : public QDialog
+class ICalendarItemDataWidget : public QObject
 {
     Q_OBJECT
 public:
-    BasicItemEditionDialog(AbstractCalendarModel *model, QWidget *parent = 0);
-    ~BasicItemEditionDialog();
+    enum InsertionPlaces {
+        Beginning = 0,
+        Ending,
+        AfterGeneralInformation,
+        AfterDateTime,
+        AfterDescription,
+        BeforeDateTime,
+        BeforeDescrition
+    };
 
-    void addCalendarDataWidget(Calendar::ICalendarItemDataWidget *dataWidget);
+    ICalendarItemDataWidget(QObject *parent = 0) : QObject(parent) { }
+    virtual ~ICalendarItemDataWidget() {}
 
-    void init(const CalendarItem &item);
+    virtual int insertionPlace() const = 0;
+    virtual QWidget *createWidget(QWidget *parent = 0) = 0;
+    virtual bool setCalendarItem(const Calendar::CalendarItem &item) = 0;
 
-    CalendarItem item() const;
-
-    //	public slots:
-    //		void accept();
-
-private:
-    AbstractCalendarModel *m_Model;
-    Internal::Ui::BasicItemEditionDialog *ui;
+    virtual bool clear() = 0;
+    virtual bool submitChangesToCalendarItem(Calendar::CalendarItem &item) = 0;
 };
 
 }  // End namespace Calendar
 
-#endif
+
+#endif // ICALENDARITEMDATAWIDGET_H

@@ -25,52 +25,26 @@
  *   Contributors :                                                        *
  *       NAME <MAIL@ADRESS>                                                *
  ***************************************************************************/
-#ifndef BASIC_ITEM_EDITION_DIALOG_H
-#define BASIC_ITEM_EDITION_DIALOG_H
-
-#include <calendar/calendar_exporter.h>
-
-#include <QDialog>
+#include "icalendaritemdatawidget.h"
 
 /**
- * \file basic_item_edition_dialog.h
- * \author Guillaume Denry, Eric Maeker
- * \version 0.6.0
- * \date 05 Jul 2011
+  \class Calendar::ICalendarItemDataWidget
+
 */
 
-namespace Calendar {
-class AbstractCalendarModel;
-class ICalendarItemDataWidget;
-class CalendarItem;
-namespace Internal {
-namespace Ui {
-class BasicItemEditionDialog;
-} // End namespace Ui
-}  // End namespace Internal
 
+/**
+ \fn virtual int Calendar::ICalendarItemDataWidget::insertionPlace() const = 0;
+*/
 
-class CALENDAR_EXPORT BasicItemEditionDialog : public QDialog
-{
-    Q_OBJECT
-public:
-    BasicItemEditionDialog(AbstractCalendarModel *model, QWidget *parent = 0);
-    ~BasicItemEditionDialog();
+/**
+ \fn virtual QWidget *Calendar::ICalendarItemDataWidget::createWidget(QWidget *parent = 0) = 0;
+*/
 
-    void addCalendarDataWidget(Calendar::ICalendarItemDataWidget *dataWidget);
+/**
+ \fn virtual bool Calendar::ICalendarItemDataWidget::setCalendarItem(const Calendar::CalendarItem &item) = 0;
+*/
 
-    void init(const CalendarItem &item);
-
-    CalendarItem item() const;
-
-    //	public slots:
-    //		void accept();
-
-private:
-    AbstractCalendarModel *m_Model;
-    Internal::Ui::BasicItemEditionDialog *ui;
-};
-
-}  // End namespace Calendar
-
-#endif
+/**
+ \fn virtual bool Calendar::ICalendarItemDataWidget::submitChangesToCalendarItem(Calendar::CalendarItem &item) = 0;
+*/

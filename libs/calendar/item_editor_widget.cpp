@@ -25,10 +25,18 @@
  *   Contributors :                                                        *
  *       NAME <MAIL@ADRESS>                                                *
  ***************************************************************************/
+
+/**
+  \class Calendar::ItemEditorWidget
+  Basic editing widget of Calendar::CalendarItem. This widget can be extended with the
+  usage of Calendar::ICalendarItemDataWidget objects.
+*/
+
 #include "item_editor_widget.h"
 #include "calendar_item.h"
 #include "usercalendar.h"
 #include "abstract_calendar_model.h"
+#include "icalendaritemdatawidget.h"
 
 #include <translationutils/constanttranslations.h>
 #include <utils/log.h>
@@ -65,7 +73,7 @@ namespace Internal {
         void populateDurationCombo()
         {
             ui->durationCombo->clear();
-            for(int i = 0; i < (60/durationDivider); ++i) {
+            for(int i = 0; i < (120/durationDivider); ++i) {
                 ui->durationCombo->addItem(QString::number(i*5) + " " + tkTr(Trans::Constants::MINUTES));
             }
         }
@@ -124,6 +132,7 @@ namespace Internal {
         Calendar::CalendarItem m_Item;
         QList<UserCalendar *> m_UserCals;
         QStandardItemModel *m_UserCalsModel;
+        QVector<ICalendarItemDataWidget *> m_AddedWidgets;
 
     private:
         ItemEditorWidget *q;
@@ -146,6 +155,7 @@ ItemEditorWidget::~ItemEditorWidget()
     delete d;
 }
 
+/** Clear the widget of its datas. All changes will be lost. You must redefine the Calendar::CalendarItem to edit. \sa setCalendarEvent() */
 void ItemEditorWidget::clear()
 {
     d->ui->typeCombo->setCurrentIndex(-1);
@@ -161,14 +171,20 @@ void ItemEditorWidget::clear()
     d->ui->eventLabel->clear();
     d->ui->fullInfo->clear();
     d->ui->iconLabel->clear();
+    // clear addedWidgets
+    for(int i = 0; i < d->m_AddedWidgets.count(); ++i) {
+        d->m_AddedWidgets.at(i)->clear();
+    }
 }
 
+/** Define the Calendar::AbstractCalendarModel to use for the current edition. */
 void ItemEditorWidget::setModel(AbstractCalendarModel *model)
 {
     Q_ASSERT(model);
     d->m_Model = model;
 }
 
+/** Define the Calendar::CalendarItem to use for the current edition. */
 void ItemEditorWidget::setCalendarEvent(const CalendarItem &item)
 {
     d->m_Item = item;
@@ -176,13 +192,20 @@ void ItemEditorWidget::setCalendarEvent(const CalendarItem &item)
     clear();
     // Populate ui
     d->setEventToUi();
+
+    // set to addedWidgets
+    for(int i = 0; i < d->m_AddedWidgets.count(); ++i) {
+        d->m_AddedWidgets.at(i)->setCalendarItem(item);
+    }
 }
 
+/** Return the modification done on the Calendar::CalendarItem. You must call submit() before if you want to get the update version of the Calendar::CalendarItem. \sa submit(), setCalendarEvent() */
 Calendar::CalendarItem ItemEditorWidget::calendarEvent() const
 {
     return d->m_Item;
 }
 
+/** Define the Calendar::UserCalendar to use for the current edition. */
 void ItemEditorWidget::setAvailableUserCalendar(const QList<UserCalendar *> &userCals)
 {
     d->m_UserCals = userCals;
@@ -205,9 +228,32 @@ void ItemEditorWidget::setAvailableUserCalendar(const QList<UserCalendar *> &use
     d->ui->calendarCombo->setCurrentIndex(defaultRow);
 }
 
+/**
+  Add specific widgets to the editor using the Calendar::ICalendarItemDataWidget interface.
+  You must set the Calendar::CalendarItem AFTER you have added ALL your Calendar::ICalendarItemDataWidget.
+*/
+void ItemEditorWidget::addCalendarDataWidget(Calendar::ICalendarItemDataWidget *dataWidget)
+{
+    d->m_AddedWidgets << dataWidget;
+    QWidget *widget = dataWidget->createWidget(this);
+    switch (dataWidget->insertionPlace()) {
+    case ICalendarItemDataWidget::Beginning: d->ui->beginningLayout->addWidget(widget); break;
+    case ICalendarItemDataWidget::Ending: d->ui->endingLayout->addWidget(widget); break;
+    case ICalendarItemDataWidget::AfterDateTime: d->ui->afterDateTimeLayout->addWidget(widget); break;
+    case ICalendarItemDataWidget::AfterDescription: d->ui->afterDescriptionLayout->addWidget(widget); break;
+    case ICalendarItemDataWidget::AfterGeneralInformation: d->ui->afterGeneralInformationLayout->addWidget(widget); break;
+    case ICalendarItemDataWidget::BeforeDateTime: d->ui->beforeDateTimeLayout->addWidget(widget); break;
+    case ICalendarItemDataWidget::BeforeDescrition: d->ui->beforeDescriptionLayout->addWidget(widget); break;
+    }
+}
+
 /** Submit UI changes to the internal Agenda::CalendarItem \sa calendarEvent(), setCalendarEvent() */
 void ItemEditorWidget::submit()
 {
+    // clear addedWidgets
+    for(int i = 0; i < d->m_AddedWidgets.count(); ++i) {
+        d->m_AddedWidgets.at(i)->submitChangesToCalendarItem(d->m_Item);
+    }
     d->submit();
 }
 

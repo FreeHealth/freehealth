@@ -26,7 +26,8 @@ HEADERS += calendar_exporter.h \
     day_node.h \
     usercalendar.h \
     item_editor_widget.h \
-    usercalendar_editor_widget.h
+    usercalendar_editor_widget.h \
+    icalendaritemdatawidget.h
 
 SOURCES += \
     abstract_calendar_model.cpp \
@@ -47,7 +48,8 @@ SOURCES += \
     day_node.cpp \
     usercalendar.cpp \
     item_editor_widget.cpp \
-    usercalendar_editor_widget.cpp
+    usercalendar_editor_widget.cpp \
+    icalendaritemdatawidget.cpp
 
 FORMS += basic_item_edition_dialog.ui \
     item_editor_widget.ui \
