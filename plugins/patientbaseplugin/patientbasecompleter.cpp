@@ -145,15 +145,19 @@ public:
             separator = ",";
         if (string.contains(";"))
             separator = ";";
+
+        QString sql = string;
+        sql = sql.replace("*", "%");
+
         if (!separator.isEmpty()) {
-            QStringList list = string.split(separator, QString::KeepEmptyParts);
+            QStringList list = sql.split(separator, QString::KeepEmptyParts);
             for(int i = 0; list.count()-4; ++i) {
                 list << "";
             }
             m_Model->setNameFilter(list);
             return QValidator::Acceptable;
         }
-        m_Model->setNameFilter(QStringList() << string << "" << "" << "");
+        m_Model->setNameFilter(QStringList() << sql << "" << "" << "");
         return QValidator::Acceptable;
     }
 
@@ -193,7 +197,6 @@ PatientBaseCompleter::PatientBaseCompleter(QObject *parent) :
     setCompletionColumn(PatientCompleterModel::ColumnFullName);
     setCompletionMode(QCompleter::UnfilteredPopupCompletion);
     popup()->setAlternatingRowColors(true);
-//    qWarning() << "xxxxxxxxxxxxxxxx Completer created" << model()->columnCount() << model()->rowCount();
 }
 
 PatientBaseCompleter::~PatientBaseCompleter()
