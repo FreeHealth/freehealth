@@ -28,6 +28,7 @@
 #include "constants.h"
 #include "agendawidgetmanager.h"
 #include "agendamode.h"
+#include "calendaritemeditorpatientmapper.h"
 
 // TEST
 #include "eventeditorwidget.h"
@@ -99,6 +100,9 @@ void AgendaPlugin::extensionsInitialized()
 
     // Add Agenda's mode
     addAutoReleasedObject(new AgendaMode(this));
+
+    // Add Agenda's Calendar::CalendarItem extended editing widgets
+    addAutoReleasedObject(new CalendarItemEditorPatientMapper(this));
 }
 
 void AgendaPlugin::testDatabase()
@@ -150,13 +154,13 @@ void AgendaPlugin::testDatabase()
 //    qWarning() << ucal->data(Constants::Db_CalId) << ucal->availabilities().count();
 
     // Test UserCalendar Widget Editor
-    QDialog dlg;
-    QGridLayout lay(&dlg);
-    Calendar::UserCalendarEditorWidget w(&dlg);
-    w.setUserCalendar(*ucal);
-    lay.addWidget(&w);
-    dlg.setLayout(&lay);
-    dlg.exec();
+//    QDialog dlg;
+//    QGridLayout lay(&dlg);
+//    Calendar::UserCalendarEditorWidget w(&dlg);
+//    w.setUserCalendar(*ucal);
+//    lay.addWidget(&w);
+//    dlg.setLayout(&lay);
+//    dlg.exec();
 
     // Create events in the calendar
     // Try to get events now
@@ -234,6 +238,9 @@ void AgendaPlugin::testDatabase()
 //    lay.addWidget(&w);
 //    dlg.setLayout(&lay);
 //    dlg.exec();
+
+    // Test nextAvailableDate
+    qWarning() << "Next available dates (15min)" << base->nextAvailableTime(QDateTime::currentDateTime(), 15, *ucal, 5);
 
     qDeleteAll(list);
     list.clear();

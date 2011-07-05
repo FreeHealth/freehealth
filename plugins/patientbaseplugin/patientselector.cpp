@@ -160,6 +160,7 @@ PatientSelector::PatientSelector(QWidget *parent, const FieldsToShow fields) :
 {
     d->ui->setupUi(this);
     d->ui->searchLine->setDelayedSignals(true);
+
     if (fields == None) {
         d->m_Fields = FieldsToShow(settings()->value(Constants::S_SELECTOR_FIELDSTOSHOW, Default).toInt());
     } else {

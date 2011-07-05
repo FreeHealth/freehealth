@@ -1,3 +1,30 @@
+/***************************************************************************
+ *  The FreeMedForms project is a set of free, open source medical         *
+ *  applications.                                                          *
+ *  (C) 2008-2011 by Eric MAEKER, MD (France) <eric.maeker@free.fr>        *
+ *  All rights reserved.                                                   *
+ *                                                                         *
+ *  This program is free software: you can redistribute it and/or modify   *
+ *  it under the terms of the GNU General Public License as published by   *
+ *  the Free Software Foundation, either version 3 of the License, or      *
+ *  (at your option) any later version.                                    *
+ *                                                                         *
+ *  This program is distributed in the hope that it will be useful,        *
+ *  but WITHOUT ANY WARRANTY; without even the implied warranty of         *
+ *  MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the          *
+ *  GNU General Public License for more details.                           *
+ *                                                                         *
+ *  You should have received a copy of the GNU General Public License      *
+ *  along with this program (COPYING.FREEMEDFORMS file).                   *
+ *  If not, see <http://www.gnu.org/licenses/>.                            *
+ ***************************************************************************/
+/***************************************************************************
+ *   Main Developpers :                                                    *
+ *       Guillaume Denry <guillaume.denry@gmail.com>                       *
+ *       Eric MAEKER, MD <eric.maeker@gmail.com>                           *
+ *   Contributors :                                                        *
+ *       NAME <MAIL@ADRESS>                                                *
+ ***************************************************************************/
 #include "agendamode.h"
 #include "useragendasviewer.h"
 #include "agendabase.h"
@@ -25,7 +52,7 @@ AgendaMode::AgendaMode(QObject *parent) :
         Core::BaseMode(parent)
 {
     setName(tr("Agenda"));
-    setIcon(theme()->icon(Core::Constants::ICONCATEGORY_MANAGER, Core::ITheme::BigIcon));
+    setIcon(theme()->icon(Core::Constants::ICONAGENDA, Core::ITheme::BigIcon));
     setPriority(Core::Constants::P_MODE_AGENDA);
     setUniqueModeName(Core::Constants::MODE_AGENDA);
 //    const QList<int> &context;

@@ -7,7 +7,7 @@
     <x>0</x>
     <y>0</y>
     <width>626</width>
-    <height>446</height>
+    <height>456</height>
    </rect>
   </property>
   <property name="windowTitle">
@@ -62,31 +62,76 @@
         </widget>
        </item>
        <item>
-        <widget class="QGroupBox" name="groupBox_3">
-         <property name="sizePolicy">
-          <sizepolicy hsizetype="Preferred" vsizetype="Expanding">
-           <horstretch>0</horstretch>
-           <verstretch>0</verstretch>
-          </sizepolicy>
-         </property>
+        <widget class="QGroupBox" name="nextAvailGroup">
          <property name="title">
-          <string>Agenda information</string>
+          <string>Next availabilities</string>
          </property>
-         <layout class="QGridLayout" name="gridLayout_4">
+         <layout class="QGridLayout" name="nextAvailLayout">
+          <item row="2" column="0" colspan="2">
+           <widget class="QComboBox" name="nextAvailCombo"/>
+          </item>
           <item row="0" column="0">
-           <widget class="QLabel" name="label">
+           <widget class="QLabel" name="label_2">
             <property name="text">
-             <string>Default duration (in minutes)</string>
+             <string>Duration (mins)</string>
             </property>
            </widget>
           </item>
           <item row="0" column="1">
-           <widget class="QLabel" name="durationLabel"/>
+           <widget class="QComboBox" name="availDurationCombo"/>
           </item>
           <item row="1" column="0" colspan="2">
-           <widget class="QTextBrowser" name="description"/>
+           <widget class="QToolButton" name="availButton">
+            <property name="popupMode">
+             <enum>QToolButton::MenuButtonPopup</enum>
+            </property>
+           </widget>
           </item>
          </layout>
+        </widget>
+       </item>
+       <item>
+        <widget class="QTabWidget" name="tabWidget">
+         <property name="currentIndex">
+          <number>0</number>
+         </property>
+         <widget class="QWidget" name="timeTab">
+          <attribute name="title">
+           <string>Time</string>
+          </attribute>
+          <layout class="QGridLayout" name="gridLayout_5">
+           <item row="0" column="0">
+            <widget class="QLabel" name="label">
+             <property name="text">
+              <string>Default duration (in minutes)</string>
+             </property>
+            </widget>
+           </item>
+           <item row="0" column="1">
+            <widget class="QLabel" name="durationLabel"/>
+           </item>
+           <item row="1" column="0">
+            <widget class="QTreeView" name="availabilitiesView">
+             <property name="editTriggers">
+              <set>QAbstractItemView::NoEditTriggers</set>
+             </property>
+             <attribute name="headerVisible">
+              <bool>false</bool>
+             </attribute>
+            </widget>
+           </item>
+          </layout>
+         </widget>
+         <widget class="QWidget" name="descriptionTab">
+          <attribute name="title">
+           <string>Description</string>
+          </attribute>
+          <layout class="QGridLayout" name="gridLayout_4">
+           <item row="0" column="0">
+            <widget class="QTextBrowser" name="description"/>
+           </item>
+          </layout>
+         </widget>
         </widget>
        </item>
       </layout>

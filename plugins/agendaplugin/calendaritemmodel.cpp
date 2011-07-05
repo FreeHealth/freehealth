@@ -52,19 +52,7 @@ CalendarItemModel::CalendarItemModel(QObject *parent) :
         Calendar::AbstractCalendarModel(parent)
 {
     setObjectName("CalendarItemModel");
-    // TEST
-    // get all items from database
-    CalendarEventQuery query;
-    query.setDateRangeForCurrentWeek();
-    QList<Calendar::CalendarItem *> items = base()->getCalendarEvents(query);
-    for(int i = 0; i < items.count(); ++i) {
-        Calendar::CalendarItem *item = items.at(i);
-        setItemIsMine(item);
-        m_sortedByBeginList.insert(getInsertionIndex(true, item->beginning(), m_sortedByBeginList, 0, m_sortedByBeginList.count() - 1), item);
-        m_sortedByEndList.insert(getInsertionIndex(false, item->ending(), m_sortedByEndList, 0, m_sortedByEndList.count() - 1), item);
-    }
     userChanged();
-    // END TEST
 }
 
 CalendarItemModel::~CalendarItemModel()
@@ -86,6 +74,8 @@ Calendar::CalendarItem CalendarItemModel::getItemByUid(const QString &uid) const
 QList<Calendar::CalendarItem> CalendarItemModel::getItemsBetween(const QDate &from, const QDate &to) const
 {
     Q_ASSERT_X(from <= to, "CalendarItemModel::getItemsBetween", "<from> is strictly greater than <to>");
+
+//    qWarning() << Q_FUNC_INFO << from << to;
 
     QList<Calendar::CalendarItem> list;
     QMap<Calendar::CalendarItem*, bool> added;
@@ -257,10 +247,10 @@ bool CalendarItemModel::updateUserCalendar(const Calendar::UserCalendar &calenda
 
 Calendar::UserCalendar CalendarItemModel::defaultUserCalendar() const
 {
-    qWarning() << Q_FUNC_INFO;
     for(int i=0; i < m_UserCalendar.count(); ++i) {
-        if (m_UserCalendar.at(i)->data(Calendar::UserCalendar::IsDefault).toBool())
-            return *m_UserCalendar.at(i);
+        if (m_UserCalendar.at(i)->data(Calendar::UserCalendar::IsDefault).toBool()) {
+            return Calendar::UserCalendar(*m_UserCalendar.at(i));
+        }
     }
     if (m_UserCalendar.count()) {
         LOG_ERROR("No default calendar. Returning first UserCalendar");
@@ -311,7 +301,7 @@ void CalendarItemModel::clearAll()
     m_sortedByBeginList.clear();
     m_sortedByEndList.clear();
     if (m_propagateEvents)
-            emit reset();
+            Q_EMIT reset();
 }
 
 void CalendarItemModel::beginInsertItem()
@@ -416,6 +406,7 @@ QString CalendarItemModel::createUid() const
 
 void CalendarItemModel::userChanged()
 {
+    clearAll();
     // get all UserCalendars
     qDeleteAll(m_UserCalendar);
     m_UserCalendar.clear();
@@ -423,4 +414,31 @@ void CalendarItemModel::userChanged()
     for(int i = 0; i < m_UserCalendar.count(); ++i) {
         setCalendarIsMine(m_UserCalendar.at(i));
     }
+
+    // TEST
+    // Find default user calendar
+    Calendar::UserCalendar *cal = 0;
+    for(int i=0; i < m_UserCalendar.count(); ++i) {
+        if (m_UserCalendar.at(i)->data(Calendar::UserCalendar::IsDefault).toBool()) {
+            cal = m_UserCalendar.at(i);
+        }
+    }
+    if (!cal) {
+        LOG_ERROR("No default");
+        return;
+    }
+
+    // get all items from database
+    CalendarEventQuery query;
+    query.setDateRangeForCurrentYear();
+    query.setCalendarId(cal->data(Constants::Db_CalId).toInt());
+    QList<Calendar::CalendarItem *> items = base()->getCalendarEvents(query);
+    for(int i = 0; i < items.count(); ++i) {
+        Calendar::CalendarItem *item = items.at(i);
+        setItemIsMine(item);
+        m_sortedByBeginList.insert(getInsertionIndex(true, item->beginning(), m_sortedByBeginList, 0, m_sortedByBeginList.count() - 1), item);
+        m_sortedByEndList.insert(getInsertionIndex(false, item->ending(), m_sortedByEndList, 0, m_sortedByEndList.count() - 1), item);
+    }
+    // END TEST
+
 }

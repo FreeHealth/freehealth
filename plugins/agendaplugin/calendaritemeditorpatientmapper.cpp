@@ -25,42 +25,56 @@
  *   Contributors :                                                        *
  *       NAME <MAIL@ADRESS>                                                *
  ***************************************************************************/
-#ifndef AGENDAMODE_H
-#define AGENDAMODE_H
+#include "calendaritemeditorpatientmapper.h"
 
-#include <coreplugin/modemanager/basemode.h>
+#include <patientbaseplugin/patientbasecompleter.h>
 
-#include <QStackedWidget>
+#include "ui_calendaritemeditorpatientmapper.h"
 
-/**
- * \file agendamode.h
- * \author Eric MAEKER <eric.maeker@free.fr>
- * \version 0.6.0
- * \date 17 Jun 2011
-*/
+using namespace Agenda;
+using namespace Internal;
 
-namespace Agenda {
-namespace Internal {
-class UserAgendasViewer;
-
-class AgendaMode : public Core::BaseMode
+CalendarItemEditorPatientMapperWidget::CalendarItemEditorPatientMapperWidget(QWidget *parent) :
+    QWidget(parent),
+    ui(new Internal::Ui::CalendarItemEditorPatientMapper)
 {
-    Q_OBJECT
-public:
-    explicit AgendaMode(QObject *parent = 0);
+    ui->setupUi(this);
 
-private Q_SLOTS:
-    void postCoreInitialization();
-    void modeActivated(Core::IMode *mode);
-    void userChanged();
+    Patients::PatientBaseCompleter *c = new Patients::PatientBaseCompleter(this);
+    ui->searchPatient->setValidator(c->validator());
+    ui->searchPatient->setCompleter(c);
+}
 
-private:
-    QStackedWidget *m_Stack;
-    UserAgendasViewer *m_Viewer;
-};
-
-}  // End namespace Internal
-}  // End namespace Agenda
+CalendarItemEditorPatientMapperWidget::~CalendarItemEditorPatientMapperWidget()
+{
+    delete ui;
+}
 
 
-#endif // AGENDAMODE_H
+CalendarItemEditorPatientMapper::CalendarItemEditorPatientMapper(QObject *parent) :
+    Calendar::ICalendarItemDataWidget(parent)
+{
+}
+
+CalendarItemEditorPatientMapper::~CalendarItemEditorPatientMapper()
+{
+}
+
+int CalendarItemEditorPatientMapper::insertionPlace() const
+{
+    return Calendar::ICalendarItemDataWidget::Beginning;
+}
+
+QWidget *CalendarItemEditorPatientMapper::createWidget(QWidget *parent)
+{
+    return new Internal::CalendarItemEditorPatientMapperWidget(parent);
+}
+
+bool CalendarItemEditorPatientMapper::setCalendarItem(const Calendar::CalendarItem &item)
+{}
+
+bool CalendarItemEditorPatientMapper::clear()
+{}
+
+bool CalendarItemEditorPatientMapper::submitChangesToCalendarItem(Calendar::CalendarItem &item)
+{}

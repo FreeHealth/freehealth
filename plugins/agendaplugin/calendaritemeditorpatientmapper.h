@@ -25,42 +25,54 @@
  *   Contributors :                                                        *
  *       NAME <MAIL@ADRESS>                                                *
  ***************************************************************************/
-#ifndef AGENDAMODE_H
-#define AGENDAMODE_H
+#ifndef CALENDARITEMEDITORPATIENTMAPPER_H
+#define CALENDARITEMEDITORPATIENTMAPPER_H
 
-#include <coreplugin/modemanager/basemode.h>
+#include <calendar/icalendaritemdatawidget.h>
 
-#include <QStackedWidget>
+#include <QWidget>
 
 /**
- * \file agendamode.h
+ * \file calendaritemeditorpatientmapper.h
  * \author Eric MAEKER <eric.maeker@free.fr>
  * \version 0.6.0
- * \date 17 Jun 2011
+ * \date 05 Jul 2011
 */
 
 namespace Agenda {
 namespace Internal {
-class UserAgendasViewer;
+namespace Ui {
+    class CalendarItemEditorPatientMapper;
+}
 
-class AgendaMode : public Core::BaseMode
+class CalendarItemEditorPatientMapperWidget : public QWidget
 {
-    Q_OBJECT
 public:
-    explicit AgendaMode(QObject *parent = 0);
-
-private Q_SLOTS:
-    void postCoreInitialization();
-    void modeActivated(Core::IMode *mode);
-    void userChanged();
+    CalendarItemEditorPatientMapperWidget(QWidget *parent);
+    ~CalendarItemEditorPatientMapperWidget();
 
 private:
-    QStackedWidget *m_Stack;
-    UserAgendasViewer *m_Viewer;
+    Internal::Ui::CalendarItemEditorPatientMapper *ui;
 };
 
 }  // End namespace Internal
+
+class CalendarItemEditorPatientMapper : public Calendar::ICalendarItemDataWidget
+{
+    Q_OBJECT
+public:
+    explicit CalendarItemEditorPatientMapper(QObject *parent = 0);
+    ~CalendarItemEditorPatientMapper();
+
+    int insertionPlace() const;
+    QWidget *createWidget(QWidget *parent = 0);
+    bool setCalendarItem(const Calendar::CalendarItem &item);
+
+    bool clear();
+    bool submitChangesToCalendarItem(Calendar::CalendarItem &item);
+};
+
+
 }  // End namespace Agenda
 
-
-#endif // AGENDAMODE_H
+#endif // CALENDARITEMEDITORPATIENTMAPPER_H
