@@ -62,6 +62,8 @@
 #include <QDateTime>
 #include <QUuid>
 
+enum { WarnNextAvailableTimeWarnings = false };
+
 using namespace Agenda::Internal;
 using namespace Agenda::Constants;
 using namespace Trans::ConstantTranslations;
@@ -131,6 +133,20 @@ void CalendarEventQuery::setDateRangeForCurrentWeek()
     monday = monday.addDays(-monday.dayOfWeek() + 1);
     m_DateStart = QDateTime(monday, QTime(0,0,0));
     m_DateEnd = QDateTime(monday.addDays(6), QTime(23,59,59));
+}
+
+void CalendarEventQuery::setDateRangeForCurrentMonth()
+{
+    QDate first = QDate(QDate::currentDate().year(), QDate::currentDate().month(), 1);
+    m_DateStart = QDateTime(first, QTime(0,0,0));;
+    m_DateEnd = m_DateStart.addMonths(1);
+}
+
+void CalendarEventQuery::setDateRangeForCurrentYear()
+{
+    QDate first = QDate(QDate::currentDate().year(), 1, 1);
+    m_DateStart = QDateTime(first, QTime(0,0,0));;
+    m_DateEnd = m_DateStart.addMonths(12);
 }
 
 bool CalendarEventQuery::hasDateRange() const
@@ -675,6 +691,7 @@ QList<Calendar::CalendarItem *> AgendaBase::getCalendarEvents(const CalendarEven
     }
     // Calendars && User conditions
     if (calQuery.calendarIds().count()) {
+        joins << Utils::Join(Constants::Table_EVENTS, Constants::EVENT_CAL_ID, Constants::Table_CALENDAR, Constants::CAL_ID);
         const QList<int> &ids = calQuery.calendarIds();
         Utils::Field calIdField = field(Constants::Table_CALENDAR, Constants::CAL_ID);
         QString w = "=";
@@ -711,7 +728,7 @@ QList<Calendar::CalendarItem *> AgendaBase::getCalendarEvents(const CalendarEven
     // Get Event table
     req = select(Constants::Table_EVENTS, joins, conds) + order;
 
-//    qWarning() << req;
+    qWarning() << req;
 
     if (query.exec(req)) {
         while (query.next()) {
@@ -924,3 +941,111 @@ bool AgendaBase::saveCalendarEvent(Calendar::CalendarItem *event)
     return saveCalendarEvents(QList<Calendar::CalendarItem *>() << event);
 }
 
+QList<QDateTime> AgendaBase::nextAvailableTime(const QDateTime &startSearch, const int durationInMinutes, const Calendar::UserCalendar &calendar, const int numberOfDates)
+{
+    QList<QDateTime> toReturn;
+    if (!connectDatabase(Constants::DB_NAME, __LINE__))
+        return toReturn;
+
+    if (WarnNextAvailableTimeWarnings)
+        qWarning() << Q_FUNC_INFO<< startSearch << durationInMinutes << calendar.data(Constants::Db_CalId).toInt();
+
+    QSqlQuery query(database());
+    int limit = 0;
+    int durationInSeconds = durationInMinutes * 60;
+    QDateTime lastEnd, newStart;
+//    lastEnd = startSearch;
+    Utils::FieldList get;
+    get << Utils::Field(Table_EVENTS, EVENT_DATESTART);
+    get << Utils::Field(Table_EVENTS, EVENT_DATEEND);
+    Utils::JoinList joins;
+    // no joins
+    Utils::FieldList conds;
+    conds << Utils::Field(Table_EVENTS, EVENT_ISVALID, "=1");
+    conds << Utils::Field(Table_EVENTS, EVENT_CAL_ID, QString("=%1").arg(calendar.data(Constants::Db_CalId).toString()));
+    conds << Utils::Field(Table_EVENTS, EVENT_DATESTART, QString("> '%1'").arg(startSearch.toString(Qt::ISODate)));
+    QString req = select(get, joins, conds);
+    req + QString("\n ORDER BY `%1`.`%2`\n")
+            .arg(table(Table_EVENTS))
+            .arg(fieldName(Table_EVENTS, EVENT_DATESTART));
+
+    // get the first event and make tests
+    QString l = QString(" LIMIT 0,1");
+    if (query.exec(req+l)) {
+        if (query.next()) {
+            newStart = query.value(0).toDateTime();
+            lastEnd = query.value(1).toDateTime();
+        }
+    } else {
+        LOG_QUERY_ERROR(query);
+        return toReturn;
+    }
+    if (lastEnd.isNull()) {
+        // No events recorded -> use calendar dayAvailabilities only
+        if (WarnNextAvailableTimeWarnings)
+            qWarning() << "  UseCal limits" << lastEnd << newStart << startSearch;
+
+//    } else if (newStart.isValid() && startSearch.addSecs(durationInSeconds) < newStart)) {
+    }
+
+    ++limit;
+
+    // Test with the next 100000 events
+    for(int i = 0; i < 1000; ++i) {
+        l = QString(" LIMIT %1, %2\n").arg(limit).arg(limit+100);
+        limit += 100;
+        if (!query.exec(req+l)) {
+            LOG_QUERY_ERROR(query);
+            break;
+        }
+        if (query.size()==0) {
+            break;
+        }
+        while (query.next()) {
+            newStart = query.value(0).toDateTime();
+
+            // Skip intersected date
+            if ((newStart < lastEnd) || (lastEnd > newStart)) {
+                lastEnd = query.value(1).toDateTime();
+                continue;
+            }
+
+            // time between the two dates >= duration ?
+            QDateTime supposedEnd = lastEnd.addSecs(durationInSeconds);
+
+            // supposedStart and supposedEnd must be the same day
+            if (newStart.date().dayOfWeek() != supposedEnd.date().dayOfWeek()) {
+                lastEnd = query.value(1).toDateTime();
+                continue;
+            }
+
+            if (WarnNextAvailableTimeWarnings)
+                qWarning() << "lastEnd" << lastEnd << "newStart" << newStart << "supposedEnd" << supposedEnd;
+
+            if (supposedEnd < newStart) {
+                if (calendar.canBeAvailable(lastEnd) && calendar.canBeAvailable(supposedEnd)) {
+                    if (WarnNextAvailableTimeWarnings)
+                        qWarning() << "   -> OK: start" << lastEnd  << "end" << supposedEnd;
+                    toReturn << lastEnd;
+                    if (toReturn.count() == numberOfDates)
+                        return toReturn;
+                }
+            }
+
+            lastEnd = query.value(1).toDateTime();
+        }
+    }
+
+    if (WarnNextAvailableTimeWarnings)
+        qWarning() << "No available time found";
+
+    return toReturn;
+}
+
+QDateTime AgendaBase::nextAvailableTime(const QDateTime &startSearch, const int durationInMinutes, const Calendar::UserCalendar &calendar)
+{
+    QList<QDateTime> l = nextAvailableTime(startSearch, durationInMinutes, calendar, 1);
+    if (l.count())
+        return l.at(0);
+    return QDateTime();
+}

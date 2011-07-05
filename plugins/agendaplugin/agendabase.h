@@ -63,6 +63,8 @@ public:
     void setDateRangeForTomorrow();
     void setDateRangeForYesterday();
     void setDateRangeForCurrentWeek();
+    void setDateRangeForCurrentMonth();
+    void setDateRangeForCurrentYear();
     void setDateStart(const QDateTime &dt) {m_DateStart = dt;}
     void setDateEnd(const QDateTime &dt) {m_DateEnd = dt;}
 
@@ -129,6 +131,9 @@ public:
     QList<Calendar::CalendarItem *> getCalendarEvents(const CalendarEventQuery &query);
     bool saveCalendarEvents(const QList<Calendar::CalendarItem *> &events);
     bool saveCalendarEvent(Calendar::CalendarItem *event);
+
+    QList<QDateTime> nextAvailableTime(const QDateTime &startSearch, const int durationInMinutes, const Calendar::UserCalendar &calendar, const int numberOfDates);
+    QDateTime nextAvailableTime(const QDateTime &startSearch, const int durationInMinutes, const Calendar::UserCalendar &calendar);
 
 private:
     bool saveCalendarAvailabilities(Calendar::UserCalendar *calendar);
