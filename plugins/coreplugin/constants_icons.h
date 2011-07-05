@@ -163,6 +163,10 @@ const char * const  ICONCATEGORY_MANAGER  =  "category_manager.png";
 const char * const  ICONCATEGORY_ADD  =  "category_add.png";
 const char * const  ICONCATEGORY_REMOVE  =  "category_remove.png";
 
+// Agenda icons
+const char * const  ICONAGENDA =  "x-office-calendar.png";
+const char * const  ICONAGENDA_NEW =  "appointment-new.png";
+
 // menu Users --> MediumSize
 const char * const  ICONUSER          = "user.png";
 const char * const  ICONPERSONAL      = "personal.png";
