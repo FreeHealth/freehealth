@@ -40,7 +40,8 @@ static inline Patients::Internal::PatientBase *patientBase() {return Patients::I
 static inline Core::ITheme *theme()  { return Core::ICore::instance()->theme(); }
 
 namespace {
-class PatientCompleterModel : public QSqlTableModel
+
+class PatientCompleterModel : public QSqlQueryModel
 {
 public:
     enum { ColumnFullName = 0 };
@@ -51,51 +52,34 @@ public:
         SecondNameIndex
     };
 
-    PatientCompleterModel(QObject *parent) : QSqlTableModel(parent, patientBase()->database())
+    PatientCompleterModel(QObject *parent) : QSqlQueryModel(parent)
     {
-        setTable(patientBase()->table(Constants::Table_IDENT));
     }
 
     // See FilterListIndex for the content of the filter
     void setNameFilter(const QStringList &names)
     {
-        qWarning() << Q_FUNC_INFO << names;
-
-        /** \todo use setQuery -> limit 20, order by asc name... */
-
-        // Filter is
-        //   not dead ?
-        //   active
-        //   name/first/second
-        const QString &table = patientBase()->table(Constants::Table_IDENT);
-        QStringList filter;
-        filter << QString("`%1`.`%2`=1")
-                  .arg(table)
-                  .arg(patientBase()->fieldName(Constants::Table_IDENT, Constants::IDENTITY_ISACTIVE));
-
-        if (!names.at(NameIndex).isEmpty()) {
-            filter << QString("`%1`.`%2` like '%3%'")
-                      .arg(table)
-                      .arg(patientBase()->fieldName(Constants::Table_IDENT, Constants::IDENTITY_NAME))
-                      .arg(names.at(NameIndex));
-        }
-        if (!names.at(FirstNameIndex).isEmpty()) {
-            filter << QString("`%1`.`%2` like '%3%'")
-                      .arg(table)
-                      .arg(patientBase()->fieldName(Constants::Table_IDENT, Constants::IDENTITY_FIRSTNAME))
-                      .arg(names.at(FirstNameIndex));
-        }
-        if (!names.at(SecondNameIndex).isEmpty()) {
-            filter << QString("`%1`.`%2` like '%3%'")
-                      .arg(table)
-                      .arg(patientBase()->fieldName(Constants::Table_IDENT, Constants::IDENTITY_SECONDNAME))
-                      .arg(names.at(SecondNameIndex));
-        }
-
-//        qWarning() << filter.join(" AND ");
-
-        setFilter(filter.join(" AND "));
-        select();
+        QHash<int, QString> where;
+        where.insert(Constants::IDENTITY_ISACTIVE, "=1");
+        if (!names.at(NameIndex).isEmpty())
+            where.insert(Constants::IDENTITY_NAME, QString("like '%1%'").arg(names.at(NameIndex)));
+        if (!names.at(FirstNameIndex).isEmpty())
+            where.insert(Constants::IDENTITY_FIRSTNAME, QString("like '%1%'").arg(names.at(FirstNameIndex)));
+        if (!names.at(SecondNameIndex).isEmpty())
+            where.insert(Constants::IDENTITY_SECONDNAME, QString("like '%1%'").arg(names.at(SecondNameIndex)));
+        QString req = patientBase()->select(Constants::Table_IDENT,
+                                            QList<int>()
+                                            << Constants::IDENTITY_ISACTIVE
+                                            << Constants::IDENTITY_NAME
+                                            << Constants::IDENTITY_FIRSTNAME
+                                            << Constants::IDENTITY_SECONDNAME
+                                            << Constants::IDENTITY_GENDER
+                                            << Constants::IDENTITY_DOB,
+                                            where
+                                            );
+        req += QString("\n  ORDER BY `%1` ASC").arg(patientBase()->fieldName(Constants::Table_IDENT, Constants::IDENTITY_NAME));
+        req += "\n  LIMIT 20";
+        setQuery(req, patientBase()->database());
     }
 
     QVariant data(const QModelIndex &idx, int role) const
@@ -105,13 +89,13 @@ public:
 
         if (idx.column()==ColumnFullName) {
             if (role==Qt::DisplayRole || role==Qt::EditRole || role==Qt::ToolTipRole) {
-                QString name = QSqlTableModel::data(QSqlTableModel::index(idx.row(), Constants::IDENTITY_NAME, idx.parent())).toString();
-                QString firstName = QSqlTableModel::data(QSqlTableModel::index(idx.row(), Constants::IDENTITY_FIRSTNAME, idx.parent())).toString();
-                QString secName = QSqlTableModel::data(QSqlTableModel::index(idx.row(), Constants::IDENTITY_SECONDNAME, idx.parent())).toString();
+                QString name = QSqlQueryModel::data(QSqlQueryModel::index(idx.row(), 1, idx.parent())).toString();
+                QString firstName = QSqlQueryModel::data(QSqlQueryModel::index(idx.row(), 2, idx.parent())).toString();
+                QString secName = QSqlQueryModel::data(QSqlQueryModel::index(idx.row(), 3, idx.parent())).toString();
                 QString r = QString("%1 %2 %3").arg(name).arg(firstName).arg(secName).simplified();
                 return r;
             } else if (role==Qt::BackgroundRole) {
-                const QString &g = QSqlTableModel::data(QSqlTableModel::index(idx.row(), Constants::IDENTITY_GENDER)).toString();
+                const QString &g = QSqlQueryModel::data(QSqlQueryModel::index(idx.row(), 4)).toString();
                 if (g=="M") {
                     return Constants::maleColor;
                 } else if (g=="F") {
@@ -120,7 +104,7 @@ public:
                     return Constants::hermaColor;
                 }
             } else if (role==Qt::DecorationRole) {
-                const QString &g = QSqlTableModel::data(QSqlTableModel::index(idx.row(), Constants::IDENTITY_GENDER)).toString();
+                const QString &g = QSqlQueryModel::data(QSqlQueryModel::index(idx.row(), 4)).toString();
                 if (g=="M") {
                     return theme()->icon(Core::Constants::ICONMALE);
                 } else if (g=="F") {
@@ -151,6 +135,24 @@ public:
     QValidator::State validate(QString &string, int &pos) const
     {
         // Filter the model with the string
+        // split using various separators
+        QString separator;
+        if (string.contains("/"))
+            separator = "/";
+        if (string.contains(":"))
+            separator = ":";
+        if (string.contains(","))
+            separator = ",";
+        if (string.contains(";"))
+            separator = ";";
+        if (!separator.isEmpty()) {
+            QStringList list = string.split(separator, QString::KeepEmptyParts);
+            for(int i = 0; list.count()-4; ++i) {
+                list << "";
+            }
+            m_Model->setNameFilter(list);
+            return QValidator::Acceptable;
+        }
         m_Model->setNameFilter(QStringList() << string << "" << "" << "");
         return QValidator::Acceptable;
     }
@@ -189,6 +191,7 @@ PatientBaseCompleter::PatientBaseCompleter(QObject *parent) :
     setCaseSensitivity(Qt::CaseInsensitive);
     setModel(d->m_Model);
     setCompletionColumn(PatientCompleterModel::ColumnFullName);
+    setCompletionMode(QCompleter::UnfilteredPopupCompletion);
     popup()->setAlternatingRowColors(true);
 //    qWarning() << "xxxxxxxxxxxxxxxx Completer created" << model()->columnCount() << model()->rowCount();
 }
