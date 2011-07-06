@@ -98,7 +98,7 @@ public:
     explicit ReceiptViewer(QWidget *parent = 0);
     ~ReceiptViewer();
     void setPosition(QWidget *parent);
-
+    const QString userUid();
     /** \todo this is not recommended. Use const functions to get infos and define setters. */
     QString m_userUuid;
     treeViewsActions *actionTreeView;

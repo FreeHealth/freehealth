@@ -80,9 +80,8 @@ QHash<int,QString> receiptsManager::getPercentages()
   return hash;
 }
 
-QHash<QString,QVariant> receiptsManager::getParametersDatas(QString & values , const QString & table)
+QHash<QString,QVariant> receiptsManager::getParametersDatas(QString & userUid , const QString & table)
 {
-   Q_UNUSED(values);
    QHash<QString,QVariant> hashForReturn;
    if (WarnDebugMessage)
     	      qDebug() << __FILE__ << QString::number(__LINE__) << " receiptsManager : in getComboBoxesDatas";
@@ -174,6 +173,8 @@ QHash<QString,QVariant> receiptsManager::getParametersDatas(QString & values , c
     if (table == "thesaurus")
     {
    	  ThesaurusModel model(this);
+   	  QString userFilter = QString("%1 = '%2'").arg("THESAURUS_USERUID",userUid);
+   	  model.setFilter(userFilter);
    	  for (int row = 0; row < model.rowCount(); row += 1)
    	  {
    	  	QString str = model.data(model.index(row,THESAURUS_VALUES),Qt::DisplayRole).toString();
@@ -263,11 +264,13 @@ QHash<QString,QVariant> receiptsManager::getHashOfThesaurus(){
     return hash;
 }
 
-QHash<QString,QString> receiptsManager::getPreferentialActFromThesaurus(){
+QHash<QString,QString> receiptsManager::getPreferentialActFromThesaurus(const QString & userUuid){
     QHash<QString,QString> hash;
     receiptsEngine rIO;
     ThesaurusModel model(this);
     QString filter = QString("%1 = '%2'").arg("PREFERRED",QString::number(true));
+    filter += QString(" AND ");
+    filter += QString("%1 = '%2'").arg("THESAURUS_USERUID",userUuid);
     model.setFilter(filter);
     model.select();
     QString data = model.data(model.index(0,THESAURUS_VALUES)).toString();

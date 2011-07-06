@@ -559,8 +559,8 @@ void treeViewsActions::fillActionTreeView()
     foreach(strKeysParameters,listOfMainActions){
         QString table = parametersMap.value(strKeysParameters);
         QStringList listOfItemsOfTable;
-        QString null = QString();
-        listOfItemsOfTable = manager.getParametersDatas(null,table).keys();//QHash<QString,QVariant> name,uid
+        QString userUuid = user()->uuid();
+        listOfItemsOfTable = manager.getParametersDatas(userUuid,table).keys();//QHash<QString,QVariant> name,uid
         QString strItemsOfTable;
         foreach(strItemsOfTable,listOfItemsOfTable){
             m_mapSubItems.insertMulti(strKeysParameters,strItemsOfTable);
@@ -785,7 +785,7 @@ ReceiptViewer::ReceiptViewer(QWidget *parent) :
     m_insuranceUid = firstItemChoosenAsPreferential(debtor);
     if (WarnDebugMessage)
     	      qDebug() << __FILE__ << QString::number(__LINE__) 
-             << " site,dist,ins preferred =" << m_siteUid.toString()
+                                            << " site,dist,ins preferred =" << m_siteUid.toString()
                                             << QString::number(m_distanceRuleValue)
                                             << m_insuranceUid.toString() ;
     
@@ -890,6 +890,7 @@ void ReceiptViewer::actionsOfTreeView(const QModelIndex &index){
 
             for (int i = 0; i < model->rowCount(); i += 1)
             {
+                const QString userUuid = userUid();
                 typeOfPayment = model->data(model->index(i,choice.TYPE_OF_CHOICE),Qt::DisplayRole).toInt();
                 if (WarnDebugMessage)
                       qDebug() << __FILE__ << QString::number(__LINE__) << " typeOfPayment =" << QString::number(typeOfPayment) ;
@@ -902,7 +903,7 @@ void ReceiptViewer::actionsOfTreeView(const QModelIndex &index){
                 distrules = model->data(model->index(i,choice.DISTRULES),Qt::DisplayRole);
                 if (WarnDebugMessage)
     	               qDebug() << __FILE__ << QString::number(__LINE__) << " preferred value =" << data ;
-                hashOfValues = manager.getPreferentialActFromThesaurus();
+                hashOfValues = manager.getPreferentialActFromThesaurus(userUuid);
                 QString preferredAct = hashOfValues.keys()[0] ;
                 if (WarnDebugMessage)
     	               qDebug() << __FILE__ << QString::number(__LINE__) << " preferential acts =" << preferredAct;
@@ -1227,6 +1228,10 @@ void ReceiptViewer::controlReceiptsDestroyed(){
     if (WarnDebugMessage)
     	      qDebug() << __FILE__ << QString::number(__LINE__) << " in controlReceiptsDestroyed " ;
     ui->inputRadioButton->setChecked(true);
+}
+
+const QString ReceiptViewer::userUid(){
+    return m_userUuid;
 }
 
 /*void ReceiptViewer::createFirstTimeTxt(){

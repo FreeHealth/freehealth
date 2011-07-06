@@ -47,12 +47,12 @@ class ACCOUNT_EXPORT receiptsManager : public QObject
   receiptsManager();
   ~receiptsManager();
   QHash<int,QString> getPercentages();
-  QHash<QString,QVariant> getParametersDatas(QString & values , const QString & table);//name,uid
+  QHash<QString,QVariant> getParametersDatas(QString & userUid , const QString & table);//name,uid
   QHash<QString,QVariant> getHashOfSites();
   QHash<QString,QVariant> getHashOfInsurance();
   QHash<QString,QVariant> getDistanceRules();
   QHash<QString,QVariant> getHashOfThesaurus();
-  QHash<QString,QString> getPreferentialActFromThesaurus();
+  QHash<QString,QString> getPreferentialActFromThesaurus(const QString & userUuid);
   bool getPreferedValues();
   QVariant getPreferedDistanceRule();
   //QString createTablesAndFields();
