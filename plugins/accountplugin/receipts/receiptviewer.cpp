@@ -61,7 +61,7 @@
 #include <QString>
 #include <QBrush>
 #include <QColor>
-enum { WarnDebugMessage = false };
+enum { WarnDebugMessage = true };
 static inline Core::IUser *user() { return Core::ICore::instance()->user(); }
 static inline Core::IPatient *patient() { return Core::ICore::instance()->patient(); }
 static inline Core::ISettings *settings() { return Core::ICore::instance()->settings(); }
@@ -1034,6 +1034,11 @@ void ReceiptViewer::fillModel(QHash<QString,QString> &hashOfValues,
                               const QVariant & site, 
                               const QVariant & distrules,
                               const int row){
+    Q_UNUSED(row);
+    int rowOfAmountModel = 0;
+    rowOfAmountModel = m_model->rowCount(QModelIndex());
+    if (WarnDebugMessage)
+    qDebug() << __FILE__ << QString::number(__LINE__) << "m_model->rowCount()  =" << QString::number(rowOfAmountModel) ;
     double value = 0.00;
     QHashIterator<QString,QString> it(hashOfValues);
     while(it.hasNext()){
@@ -1055,14 +1060,12 @@ void ReceiptViewer::fillModel(QHash<QString,QString> &hashOfValues,
     {
     	  qWarning() << __FILE__ << QString::number(__LINE__) << "unable to insert row = "+QString::number(row) ;
         }
-    if (WarnDebugMessage)
-    	      qDebug() << __FILE__ << QString::number(__LINE__) << " repere " ;
-    QModelIndex indexValue = m_model->index(row, typeOfPayment);
-    QModelIndex indexDebtor = m_model->index(row, InternalAmount::AmountModel::Col_Debtor);
-    QModelIndex indexSite = m_model->index(row, InternalAmount::AmountModel::Col_Site);
-    QModelIndex indexDistrules = m_model->index(row, InternalAmount::AmountModel::Col_DistRule);
+    QModelIndex indexValue = m_model->index(rowOfAmountModel, typeOfPayment);
+    QModelIndex indexDebtor = m_model->index(rowOfAmountModel, InternalAmount::AmountModel::Col_Debtor);
+    QModelIndex indexSite = m_model->index(rowOfAmountModel, InternalAmount::AmountModel::Col_Site);
+    QModelIndex indexDistrules = m_model->index(rowOfAmountModel, InternalAmount::AmountModel::Col_DistRule);
     //header vertical is debtor
-    m_model->setHeaderData(row,Qt::Vertical,debtor,Qt::EditRole);
+    m_model->setHeaderData(rowOfAmountModel,Qt::Vertical,debtor,Qt::EditRole);
     if (!m_model->setData(indexValue, value, Qt::EditRole))
     {
     	  qWarning() << __FILE__ << QString::number(__LINE__) << "unable to setData" ;
@@ -1080,8 +1083,6 @@ void ReceiptViewer::fillModel(QHash<QString,QString> &hashOfValues,
     	  qWarning() << __FILE__ << QString::number(__LINE__) << "unable to setData" ;
         }
     m_model->submit();
-    if (WarnDebugMessage)
-    	      qDebug() << __FILE__ << QString::number(__LINE__) << " 859 "  ;
 }
 
 void ReceiptViewer::save()
@@ -1122,7 +1123,7 @@ void ReceiptViewer::save()
     {
     	  patientName = "Patient Name";
         }
-    //QVariant insurance = "by";//todo
+
     QHash<int,QVariant> hash;
     hash.insert(ACCOUNT_UID,"UID");
     hash.insert(ACCOUNT_USER_UID,userUuid);

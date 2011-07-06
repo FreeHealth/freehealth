@@ -306,9 +306,7 @@ QHash<QString,QString> receiptsManager::getPreferentialActFromThesaurus(){
     	data = "NULL";
     	value = 0.00;
     	hash.insert(data,QString::number(value));
-    	const QString information = trUtf8("You have to configure your datas in "
-            	                       	  "Configuration > Preferences > Accountancy.\n"
-            	                       	  "Then create defaults in the same widget.");
+    	const QString information = trUtf8("You have to create a preferred value in Thesaurus. ");
         QMessageBox::warning(0,trUtf8("Warning"),information,QMessageBox::Ok);
         }
     return hash;
