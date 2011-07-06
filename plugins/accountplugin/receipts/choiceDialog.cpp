@@ -34,13 +34,16 @@
 #include "receiptsIO.h"
 #include "ui_ChoiceDialog.h"
 #include "constants.h"
+#include <coreplugin/icore.h>
+#include <coreplugin/iuser.h>
+
 #include <QRadioButton>
 #include <QMessageBox>
-
 #include <QBrush>
 #include <QColor>
 #include <QMouseEvent>
 enum { WarnDebugMessage = true };
+static inline Core::IUser *user() { return Core::ICore::instance()->user(); }
 using namespace ChoiceActions;
 treeViewsActions::treeViewsActions(QWidget *parent):QTreeView(parent){
     m_deleteThesaurusValue = new QAction(trUtf8("Delete this value."),this);
@@ -270,7 +273,8 @@ bool treeViewsActions::deleteItemFromThesaurus(QModelIndex &index){
     bool ret = true;
     QString data = index.data().toString();
     receiptsEngine r;
-    if (!r.deleteFromThesaurus(data))
+    const QString userUid = user()->uuid();
+    if (!r.deleteFromThesaurus(data,userUid))
     {
     	  QMessageBox::warning(0,trUtf8("Warning"),trUtf8("Cannot delete in thesaurus :")+data,QMessageBox::Ok);
     	  ret = false;

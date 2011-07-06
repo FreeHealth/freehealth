@@ -144,9 +144,11 @@ bool receiptsEngine::insertInThesaurus(const QString &listOfValuesStr, const QSt
     return ret;
 }
 
-bool receiptsEngine::deleteFromThesaurus(QString & data ){
+bool receiptsEngine::deleteFromThesaurus(const QString & data , const QString & userUid ){
     bool ret = true;
     ThesaurusModel model(this);
+    QString userFilter = QString("%1 = '%2'").arg("THESAURUS_USERUID",userUid);
+    model.setFilter(userFilter);
     int row = 0;
     for (int i = 0; i < model.rowCount(); i += 1)
     {

@@ -54,7 +54,7 @@ public:
     bool insertIntoAccount(const QHash<int,QVariant> &hashValues, const QString &userUuid);
     QHash<QString,QVariant> getNamesAndValuesFromMP();
     bool insertInThesaurus(const QString &listOfValuesStr, const QString &userUuid);
-    bool deleteFromThesaurus(QString & data );
+    bool deleteFromThesaurus(const QString & data , const QString & userUid );
     bool addBoolTrue(QString & data);
     double getMinDistanceValue(const QString & data);
     QHash<int,QVariant> getListOfPreferedValues(QString & userUuid,int choice);

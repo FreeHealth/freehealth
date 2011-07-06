@@ -554,6 +554,7 @@ void treeViewsActions::fillActionTreeView()
     listOfMainActions = parametersMap.keys();
     //insert items from tables if available
     //QMap<QString,QString> m_mapSubItems;
+    m_mapSubItems.clear();
     receiptsManager manager;
     QString strKeysParameters;
     foreach(strKeysParameters,listOfMainActions){
@@ -664,8 +665,9 @@ void treeViewsActions::fillActionTreeView()
 bool treeViewsActions::deleteItemFromThesaurus(QModelIndex &index){
     bool ret = true;
     QString data = index.data().toString();
+    const QString userUid = user()->uuid();
     receiptsEngine r;
-    if (!r.deleteFromThesaurus(data))
+    if (!r.deleteFromThesaurus(data,userUid))
     {
     	  QMessageBox::warning(0,trUtf8("Warning"),trUtf8("Cannot delete in thesaurus :")+data,QMessageBox::Ok);
     	  ret = false;
