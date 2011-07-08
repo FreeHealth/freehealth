@@ -171,10 +171,12 @@ namespace Constants {
     const char * const A_PRINT_PREVIEW_SELECTION = "agendaPreviewSelection";
     const char * const A_AGENDADATABASE_INFORMATIONS = "agendaDbInfos";
 
-
-
+    // Icons
     const char * const I_NEW_AGENDAEVENT = "agenda_newevent.png";
-
+    const char * const I_VIEWMODE = "agenda_viewmode.png";
+    const char * const I_DAYVIEWMODE = "agenda_viewmode_day.png";
+    const char * const I_MONTHVIEWMODE = "agenda_viewmode_month.png";
+    const char * const I_WEEKVIEWMODE = "agenda_viewmode_week.png";
 
     // Translations
     const char * const AGENDA_TR_CONTEXT = "Agenda";

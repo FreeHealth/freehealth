@@ -34,7 +34,6 @@
 #include "eventeditorwidget.h"
 #include <utils/randomizer.h>
 #include <utils/log.h>
-#include <coreplugin/isettings.h>
 #include <QDir>
 #include <QFileInfo>
 #include <QProgressDialog>
@@ -46,10 +45,13 @@
 // END TEST
 
 #include <utils/log.h>
+#include <calendar/calendar_theme.h>
 
-#include <coreplugin/dialogs/pluginaboutpage.h>
 #include <coreplugin/icore.h>
+#include <coreplugin/isettings.h>
 #include <coreplugin/translators.h>
+#include <coreplugin/constants_icons.h>
+#include <coreplugin/dialogs/pluginaboutpage.h>
 
 #include <QtCore/QtPlugin>
 #include <QDialog>
@@ -60,9 +62,10 @@ using namespace Agenda;
 using namespace Internal;
 
 // TEST
-static inline Core::ISettings *settings() {return Core::ICore::instance()->settings();}
 static inline Patients::Internal::PatientBase *patientBase() {return Patients::Internal::PatientBase::instance();}
 // END TEST
+
+static inline Core::ISettings *settings() {return Core::ICore::instance()->settings();}
 
 AgendaPlugin::AgendaPlugin()
 {
@@ -100,7 +103,20 @@ void AgendaPlugin::extensionsInitialized()
     // Initialize ActionHandler and WidgetManager
     AgendaWidgetManager::instance();
 
-    testDatabase();
+//    testDatabase();
+
+    // Inform Calendar lib of theme paths and icons
+    Calendar::CalendarTheme *th = Calendar::CalendarTheme::instance();
+    th->setPath(Calendar::CalendarTheme::SmallIconPath, settings()->path(Core::ISettings::SmallPixmapPath));
+    th->setPath(Calendar::CalendarTheme::MediumIconPath, settings()->path(Core::ISettings::MediumPixmapPath));
+    th->setPath(Calendar::CalendarTheme::BigIconPath, settings()->path(Core::ISettings::BigPixmapPath));
+    th->setIconFileName(Calendar::CalendarTheme::NavigationBookmarks, Core::Constants::ICONAGENDA);
+    th->setIconFileName(Calendar::CalendarTheme::NavigationViewMode, Constants::I_VIEWMODE);
+    th->setIconFileName(Calendar::CalendarTheme::NavigationDayViewMode, Constants::I_VIEWMODE);
+    th->setIconFileName(Calendar::CalendarTheme::NavigationWeekViewMode, Constants::I_VIEWMODE);
+    th->setIconFileName(Calendar::CalendarTheme::NavigationMonthViewMode, Constants::I_VIEWMODE);
+    th->setIconFileName(Calendar::CalendarTheme::NavigationNext, Core::Constants::ICONNEXT);
+    th->setIconFileName(Calendar::CalendarTheme::NavigationPrevious, Core::Constants::ICONPREVIOUS);
 
     // Add Agenda's mode
     addAutoReleasedObject(new AgendaMode(this));
