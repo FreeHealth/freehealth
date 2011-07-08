@@ -25,12 +25,6 @@
  *   Contributors :                                                        *
  *       NAME <MAIL@ADRESS>                                                *
  ***************************************************************************/
-
-/**
-  \class Calendar::CalendarNavbar
-  Navigation bar of calendar viewer.
-*/
-
 #include "calendar_navbar.h"
 #include "calendar_theme.h"
 
@@ -70,10 +64,7 @@ CalendarNavbar::CalendarNavbar(QWidget *parent) :
 
     QHBoxLayout *layout = new QHBoxLayout(this);
     layout->addWidget(createNavigationButtons());
-//    layout->addWidget(m_dateLabel = new QLabel);
-//    QFont font = m_dateLabel->font();
-//    font.setBold(true);
-//    m_dateLabel->setFont(font);
+    layout->addStretch();
     layout->addWidget(createCurrentDateViewButton());
     layout->addStretch();
     layout->addWidget(createNavigationModeButton());
