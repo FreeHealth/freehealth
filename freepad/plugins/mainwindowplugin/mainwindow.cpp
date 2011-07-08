@@ -262,7 +262,7 @@ void MainWindow::extensionsInitialized()
 
 	QHBoxLayout *layout = new QHBoxLayout(m_ui->tabCalendar);
         Calendar::CalendarWidget *calendarWidget = new Calendar::CalendarWidget(this);
-        calendarWidget->setModel(Calendar::BasicCalendarModel(this));
+        calendarWidget->setModel(new Calendar::BasicCalendarModel(this));
         layout->addWidget(calendarWidget);
 
 	// tmp: fill with dummy tokens
