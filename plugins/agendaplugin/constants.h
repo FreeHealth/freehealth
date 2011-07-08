@@ -42,7 +42,9 @@ namespace Constants {
     enum Tables
     {
         Table_CALENDAR = 0, Table_USERCALENDARS, Table_AVAILABILITIES,
-        Table_TIMERANGE, Table_AVAIL_TO_TIMERANGE, Table_COMMON, Table_EVENTS, Table_CYCLINGEVENTS,
+        Table_TIMERANGE, Table_AVAIL_TO_TIMERANGE, Table_COMMON,
+        Table_EVENTS, Table_CYCLINGEVENTS,
+        Table_PEOPLE,
         // Table_USER_WORKINGTIME,
         Table_VERSION,
         Table_MaxParam
@@ -85,7 +87,7 @@ namespace Constants {
     enum FieldsTIMERANGE {
         TIMERANGE_ID = 0,
         TIMERANGE_FROM,
-        TIMERANGE_TO,
+        TIMERANGE_TO
     };
     enum fieldsCOMMON_FOR_EVENTS {
         COMMON_ID = 0,
@@ -113,6 +115,13 @@ namespace Constants {
         EVENT_ISVALID,
         EVENT_DATESTART,
         EVENT_DATEEND
+    };
+
+    enum fieldsPEOPLE {
+        PEOPLE_ID = 0,
+        PEOPLE_EVENT_ID,
+        PEOPLE_UID,
+        PEOPLE_TYPE
     };
 
     enum fieldsCYCLINGEVENTS {

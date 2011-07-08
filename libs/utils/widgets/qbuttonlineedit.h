@@ -29,8 +29,8 @@
 /**
  * \file qbuttonlineedit.h
  * \author Eric MAEKER <eric.maeker@free.fr>
- * \version 0.4.2
- * \date 30 June 2010
+ * \version 0.6.0
+ * \date 06 Jul 2010
 */
 
 #include <utils/global_exporter.h>
@@ -65,20 +65,22 @@ public:
 
     QString searchText() const;
 
+protected:
+    void keyPressEvent(QKeyEvent *event);
+    void resizeEvent(QResizeEvent *);
+    void focusInEvent(QFocusEvent *event);
+    void focusOutEvent(QFocusEvent *event);
+
 private:
     QString emptyTextWithExtraText() const;
-    void keyPressEvent(QKeyEvent *event);
-    void resizeEvent( QResizeEvent * );
-    void focusInEvent ( QFocusEvent * event );
-    void focusOutEvent ( QFocusEvent * event );
-    void setSpecificStyleSheet( const QString & css );
+    void setSpecificStyleSheet(const QString &css);
     void prepareConnections();
     void changeEvent(QEvent *e);
 
 private Q_SLOTS:
     void emitTextChangedSignal();
 
-    void leftTrig( QAction * action );
+    void leftTrig(QAction *action);
 
 private:
     QToolButton *m_leftButton;
@@ -89,6 +91,6 @@ private:
     bool m_Delayed;
 };
 
-}
+}  // End namespace Utils
 
 #endif

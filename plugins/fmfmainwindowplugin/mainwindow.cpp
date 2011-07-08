@@ -432,14 +432,17 @@ void MainWindow::aboutToShowRecentPatients()
 
     bool hasRecentFiles = false;
     const QStringList &uuids = m_RecentPatients->recentFiles();
-    const QStringList &names = Patients::PatientModel::patientName(uuids);
-    for(int i=0; i < names.count(); ++i) {
+    const QHash<QString, QString> &names = Patients::PatientModel::patientName(uuids);
+    QHashIterator<QString, QString> i(names);
+    while (i.hasNext()) {
+        i.next();
         hasRecentFiles = true;
-        QAction *action = recentsMenu->menu()->addAction(names.at(i));
-        action->setData(uuids.at(i));
+        QAction *action = recentsMenu->menu()->addAction(i.value());
+        action->setData(i.key());
         connect(action, SIGNAL(triggered()), this, SLOT(openRecentPatient()));
     }
-    recentsMenu->menu()->setEnabled(hasRecentFiles);    
+
+    recentsMenu->menu()->setEnabled(hasRecentFiles);
 }
 
 /** \brief Opens a recent file. This slot is called by a recent files' menu's action. */

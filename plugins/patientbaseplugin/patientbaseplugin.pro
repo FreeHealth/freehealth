@@ -23,7 +23,7 @@ HEADERS = patientbaseplugin.h \
     patientbasepreferencespage.h \
     patientbar.h \
     patientcreatorwizard.h \
-    patientbasecompleter.h
+    patientlineeditcompletersearch.h
 SOURCES = patientbaseplugin.cpp \
     patientbase.cpp \
     patientdata.cpp \
@@ -35,7 +35,7 @@ SOURCES = patientbaseplugin.cpp \
     patientbasepreferencespage.cpp \
     patientbar.cpp \
     patientcreatorwizard.cpp \
-    patientbasecompleter.cpp
+    patientlineeditcompletersearch.cpp
 FORMS += identitywidget.ui \
     patientselector.ui \
     patientbasepreferencespage.ui \

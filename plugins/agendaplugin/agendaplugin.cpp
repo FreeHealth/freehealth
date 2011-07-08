@@ -33,6 +33,7 @@
 // TEST
 #include "eventeditorwidget.h"
 #include <utils/randomizer.h>
+#include <utils/log.h>
 #include <coreplugin/isettings.h>
 #include <QDir>
 #include <QFileInfo>
@@ -40,6 +41,8 @@
 #include <calendar/calendar_item.h>
 #include <calendar/usercalendar.h>
 #include <calendar/usercalendar_editor_widget.h>
+#include <patientbaseplugin/patientbase.h>
+#include <patientbaseplugin/constants_db.h>
 // END TEST
 
 #include <utils/log.h>
@@ -58,6 +61,7 @@ using namespace Internal;
 
 // TEST
 static inline Core::ISettings *settings() {return Core::ICore::instance()->settings();}
+static inline Patients::Internal::PatientBase *patientBase() {return Patients::Internal::PatientBase::instance();}
 // END TEST
 
 AgendaPlugin::AgendaPlugin()
@@ -103,6 +107,43 @@ void AgendaPlugin::extensionsInitialized()
 
     // Add Agenda's Calendar::CalendarItem extended editing widgets
     addAutoReleasedObject(new CalendarItemEditorPatientMapper(this));
+}
+
+static int numberOfPatients()
+{
+    return patientBase()->count(Patients::Constants::Table_IDENT, Patients::Constants::IDENTITY_ID);
+}
+
+static QString patientUid(const int row)
+{
+    QSqlQuery query(patientBase()->database());
+    QString req= patientBase()->select(Patients::Constants::Table_IDENT, Patients::Constants::IDENTITY_UID);
+    req += QString(" LIMIT %1,%1").arg(row);
+    if (query.exec(req)) {
+        if (query.next()) {
+            return query.value(0).toString();
+        }
+    } else {
+        LOG_QUERY_ERROR_FOR("AgendaPlugin", query);
+        return QString();
+    }
+    return QString();
+}
+
+static QString patientName(const int row)
+{
+    QSqlQuery query(patientBase()->database());
+    QString req= patientBase()->select(Patients::Constants::Table_IDENT, Patients::Constants::IDENTITY_NAME);
+    req += QString(" LIMIT %1,%1").arg(row);
+    if (query.exec(req)) {
+        if (query.next()) {
+            return query.value(0).toString();
+        }
+    } else {
+        LOG_QUERY_ERROR_FOR("AgendaPlugin", query);
+        return QString();
+    }
+    return QString();
 }
 
 void AgendaPlugin::testDatabase()
@@ -168,8 +209,11 @@ void AgendaPlugin::testDatabase()
     chrono.start();
     CalendarEventQuery q;
     q.setDateRangeForCurrentWeek();
+    q.setCalendarId(ucal->data(Constants::Db_CalId).toInt());
     QList<Calendar::CalendarItem *> list = base->getCalendarEvents(q);
     qWarning() << "Retreived" << list.count() << "events from the database for user" << ucal->data(Calendar::UserCalendar::UserOwnerUid).toString() << "dateRange" << q.dateStart().toString(Qt::ISODate)<< q.dateEnd().toString(Qt::ISODate) << "in" << chrono.elapsed() << "ms";
+
+    qWarning() << "PatientBase count" << numberOfPatients() << "Uid of patient 5" << patientUid(5);
 
     Calendar::CalendarItem *ev = 0;
     if (list.count()==0) {
@@ -182,6 +226,7 @@ void AgendaPlugin::testDatabase()
         prog.setLabelText(QString("Creating %1 events (1 month ~= 800 events").arg(nbEvents));
         prog.setRange(0, nbEvents);
         prog.show();
+        int maxDb = numberOfPatients();
 
         for(int i = 0; i < nbEvents; ++i) {
             if ((i % 100)==0) {
@@ -220,6 +265,13 @@ void AgendaPlugin::testDatabase()
             ev->setData(Calendar::CalendarItem::Description, r.randomWords(r.randomInt(10, 500)));
             ev->setData(Calendar::CalendarItem::Location, r.getRandomString(r.randomInt(1,145)));
             ev->setData(Calendar::CalendarItem::IconPath, r.randomFile(pix, QStringList() << "*.png").fileName());
+
+            // Add 1 to 3 patients
+            for(int y = 0; y < r.randomInt(1, 3); ++y) {
+                int zz = r.randomInt(0, maxDb);
+                ev->addPeople(Calendar::CalendarItem::PeopleAttendee, patientName(zz), patientUid(zz));
+            }
+
             if (!base->saveCalendarEvent(ev))
                 ok = false;
             list << ev;

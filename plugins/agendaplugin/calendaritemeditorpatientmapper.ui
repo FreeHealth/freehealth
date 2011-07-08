@@ -17,6 +17,9 @@
    <property name="margin">
     <number>0</number>
    </property>
+   <property name="spacing">
+    <number>0</number>
+   </property>
    <item row="0" column="0">
     <widget class="QGroupBox" name="groupBox_3">
      <property name="title">
@@ -37,7 +40,7 @@
        </widget>
       </item>
       <item row="0" column="1">
-       <widget class="QLineEdit" name="searchPatient">
+       <widget class="Patients::PatientLineEditCompleterSearch" name="searchPatient">
         <property name="minimumSize">
          <size>
           <width>0</width>
@@ -67,6 +70,13 @@
    </item>
   </layout>
  </widget>
+ <customwidgets>
+  <customwidget>
+   <class>Patients::PatientLineEditCompleterSearch</class>
+   <extends>QLineEdit</extends>
+   <header location="global">patientbaseplugin/patientlineeditcompletersearch.h</header>
+  </customwidget>
+ </customwidgets>
  <resources/>
  <connections/>
 </ui>

@@ -59,6 +59,8 @@ public:
     void setPatientFilter(const QStringList &limitToPatientUids);
 
     void setDateRange(const QDateTime &start, const QDateTime &end) {m_DateStart=start;m_DateEnd=end;}
+    void setDateRange(const QDate &start, const QDate &end);
+    void setDateRangeForDay(const QDate &day);
     void setDateRangeForToday();
     void setDateRangeForTomorrow();
     void setDateRangeForYesterday();
@@ -137,10 +139,10 @@ public:
 
 private:
     bool saveCalendarAvailabilities(Calendar::UserCalendar *calendar);
-//    bool updateCyclingEvent(Agenda::ICalendarCyclingEvent *event);
-//    bool updateNonCyclingEvent(Agenda::ICalendarEvent *event);
+    bool saveEventRelatedPeoples(const Calendar::CalendarItem *event);
+    bool getRelatedPeoples(Calendar::CalendarItem *event);
+    bool getPatientNames(const QList<Calendar::CalendarItem *> &items);
     bool saveCommonEvent(Calendar::CalendarItem *event);
-//    bool saveCyclingEvent(Agenda::ICalendarCyclingEvent *event);
     bool saveNonCyclingEvent(Calendar::CalendarItem *event);
 
 private:

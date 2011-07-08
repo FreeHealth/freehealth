@@ -696,28 +696,37 @@ bool PatientModel::refreshModel()
     return true;
 }
 
-/** \brief Return the list patient name corresponding to the uuids list passed as param. Static.*/
-QList<QString> PatientModel::patientName(const QList<QString> &uuids)
+/** Return the patient name corresponding to the \e uuids. Hash key represents the uuid while value is the full name. */
+QHash<QString, QString> PatientModel::patientName(const QList<QString> &uuids)
 {
-    QList<QString> names;
+    QHash<QString, QString> names;
+
     if (!patientBase()->database().transaction())
-        Utils::Log::addError("PatientModel", "Unable to set transaction with patient database");
+        LOG_ERROR_FOR("PatientModel", "Unable to set transaction with patient database");
+
+    QSqlQuery query(patientBase()->database());
+    const QStringList &titles = Trans::ConstantTranslations::titles();
+
     foreach(const QString &u, uuids) {
-        QSqlQuery query(patientBase()->database());
+        if (u.isEmpty())
+            continue;
         QHash<int, QString> where;
         where.insert(Constants::IDENTITY_UID, QString("='%1'").arg(u));
-        QString req = patientBase()->select(Constants::Table_IDENT, QList<int>() << Constants::IDENTITY_NAME << Constants::IDENTITY_SECONDNAME << Constants::IDENTITY_FIRSTNAME, where);
+        QString req = patientBase()->select(Constants::Table_IDENT, QList<int>() << Constants::IDENTITY_TITLE << Constants::IDENTITY_NAME << Constants::IDENTITY_SECONDNAME << Constants::IDENTITY_FIRSTNAME, where);
         if (query.exec(req)) {
             if (query.next()) {
                 if (!query.value(1).toString().isEmpty())
-                    names << QString("%1 - %2 %3").arg(query.value(0).toString(), query.value(1).toString(), query.value(2).toString());
+                    names.insert(u, QString("%1 %2 - %3 %4").arg(titles.at(query.value(0).toInt()), query.value(1).toString(), query.value(2).toString(), query.value(3).toString()).simplified());
                 else
-                    names << QString("%1 %3").arg(query.value(0).toString(), query.value(2).toString());
+                    names.insert(u, QString("%1 %3").arg(titles.at(query.value(0).toInt()), query.value(2).toString(), query.value(3).toString()).simplified());
             }
         } else {
-            Utils::Log::addQueryError("PatientModel", query);
+            LOG_QUERY_ERROR_FOR("PatientModel", query);
         }
+        query.finish();
     }
+
     patientBase()->database().commit();
+
     return names;
 }

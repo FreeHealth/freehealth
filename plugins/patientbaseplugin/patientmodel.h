@@ -94,7 +94,7 @@ public:
 //                                  Qt::MatchFlags(Qt::MatchStartsWith|Qt::MatchWrap)) const;
 //    QSize span(const QModelIndex &index) const;
 
-    static QList<QString> patientName(const QList<QString> &uuids);
+    static QHash<QString, QString> patientName(const QList<QString> &uuids);
 
 public Q_SLOTS:
     bool submit();

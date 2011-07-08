@@ -26,6 +26,11 @@
  ***************************************************************************/
 
 /**
+  \class Agenda::CalendarEventQuery
+  Define a query for the AgendaBase. All dates are included in the extraction.
+*/
+
+/**
  \class Agenda::AgendaBase
  \brief Management of all database access for the agendas.
  Database schema:
@@ -47,6 +52,8 @@
 #include <coreplugin/constants_tokensandsettings.h>
 #include <printerplugin/textdocumentextra.h>
 #include <coreplugin/iuser.h>
+
+#include <patientbaseplugin/patientmodel.h>
 
 #include <utils/log.h>
 #include <utils/global.h>
@@ -107,6 +114,18 @@ void CalendarEventQuery::setUserFilter(const QString &userUid)
 void CalendarEventQuery::setPatientFilter(const QStringList &limitToPatientUids)
 {
     m_Patients = limitToPatientUids;
+}
+
+void CalendarEventQuery::setDateRange(const QDate &start, const QDate &end)
+{
+    m_DateStart = QDateTime(start, QTime(0,0,0));
+    m_DateEnd = QDateTime(end, QTime(23,59,59));
+}
+
+void CalendarEventQuery::setDateRangeForDay(const QDate &day)
+{
+    m_DateStart = QDateTime(day, QTime(0,0,0));
+    m_DateEnd = QDateTime(day, QTime(23,59,59));
 }
 
 void CalendarEventQuery::setDateRangeForToday()
@@ -185,6 +204,7 @@ AgendaBase::AgendaBase(QObject *parent) :
     addTable(Table_COMMON, "COMMON");
     addTable(Table_EVENTS, "EVENTS");
     addTable(Table_CYCLINGEVENTS, "CYCLING");
+    addTable(Table_PEOPLE, "PEOPLE");
 //    addTable(Table_USER_WORKINGTIME, "USERWORK");
 
     addField(Table_USERCALENDARS, USERCAL_ID, "USERCAL_ID", FieldIsUniquePrimaryKey);
@@ -240,6 +260,11 @@ AgendaBase::AgendaBase(QObject *parent) :
     addField(Table_EVENTS, EVENT_ISVALID, "ISVALID", FieldIsBoolean);
     addField(Table_EVENTS, EVENT_DATESTART, "DTSTART", FieldIsDate);
     addField(Table_EVENTS, EVENT_DATEEND, "DTEND", FieldIsDate);
+
+    addField(Table_PEOPLE, PEOPLE_ID, "P_IP", FieldIsUniquePrimaryKey);
+    addField(Table_PEOPLE, PEOPLE_EVENT_ID, "P_EVID", FieldIsInteger);
+    addField(Table_PEOPLE, PEOPLE_UID, "P_UID", FieldIsUUID);
+    addField(Table_PEOPLE, PEOPLE_TYPE, "P_TYPE", FieldIsInteger);
 
     addField(Table_CYCLINGEVENTS, CYCLING_ID, "CYC_ID", FieldIsUniquePrimaryKey);
     addField(Table_CYCLINGEVENTS, CYCLING_CALENDAR_ID, "CAL_ID", FieldIsInteger);
@@ -724,11 +749,8 @@ QList<Calendar::CalendarItem *> AgendaBase::getCalendarEvents(const CalendarEven
     //     Add order
     QString order = QString("\n ORDER BY `%1`.`%2` ASC").arg(table(Constants::Table_EVENTS)).arg(fieldName(Constants::Table_EVENTS, Constants::EVENT_ID));
 
-
     // Get Event table
     req = select(Constants::Table_EVENTS, joins, conds) + order;
-
-    qWarning() << req;
 
     if (query.exec(req)) {
         while (query.next()) {
@@ -775,32 +797,23 @@ QList<Calendar::CalendarItem *> AgendaBase::getCalendarEvents(const CalendarEven
             LOG_QUERY_ERROR(query);
         }
         query.finish();
+
+        // Get peoples
+        getRelatedPeoples(ev);
     }
+
+    getPatientNames(toReturn);
+
     return toReturn;
 }
 
-//bool AgendaBase::updateCyclingEvent(Agenda::ICalendarCyclingEvent *event)
-//{
-//    if (!event->isCycling())
-//        return false;
-
-//    return true;
-//}
-
-//bool AgendaBase::updateNonCyclingEvent(Agenda::ICalendarEvent *event)
-//{
-//    if (event->isCycling())
-//        return false;
-
-//    return true;
-//}
-
-/** Save the common part of events and set the commonId() in the event */
+/** Save or update the common part of events and set the commonId() in the event */
 bool AgendaBase::saveCommonEvent(Calendar::CalendarItem *event)
 {
     QSqlQuery query(database());
-    if (event->data(Constants::Db_ComId).isNull() ||
-        !event->data(Constants::Db_ComId).isValid()) {
+    if (event->data(Constants::Db_EvId).isNull() ||
+            !event->data(Constants::Db_EvId).isValid() ||
+            event->data(Constants::Db_EvId).toInt() == -1) {
         // save
         query.prepare(prepareInsertQuery(Constants::Table_COMMON));
         query.bindValue(Constants::COMMON_ID, QVariant());
@@ -869,14 +882,101 @@ bool AgendaBase::saveCommonEvent(Calendar::CalendarItem *event)
     return true;
 }
 
-//bool AgendaBase::saveCyclingEvent(Agenda::ICalendarCyclingEvent *event)
-//{
-//    if (!event->isCycling())
-//        return false;
+/** Save the peoples related to an \e event. */
+bool AgendaBase::saveEventRelatedPeoples(const Calendar::CalendarItem *event)
+{
+    QSqlQuery query(database());
+    if (event->data(Constants::Db_EvId).isNull() ||
+            !event->data(Constants::Db_EvId).isValid() ||
+            event->data(Constants::Db_EvId).toInt() == -1) {
+        LOG_ERROR("No Event ID");
+        return false;
+    }
 
-//    return true;
-//}
+    // People
+    const QStringList &attendees = event->peopleUids(Calendar::CalendarItem::PeopleAttendee);
+    for(int i = 0; i < attendees.count(); ++i) {
+        query.prepare(prepareInsertQuery(Table_PEOPLE));
+        query.bindValue(PEOPLE_ID, QVariant());
+        query.bindValue(PEOPLE_EVENT_ID, event->data(Constants::Db_EvId));
+        query.bindValue(PEOPLE_UID, attendees.at(i));
+        query.bindValue(PEOPLE_TYPE, Calendar::CalendarItem::PeopleAttendee);
+        if (!query.exec()) {
+            LOG_QUERY_ERROR(query);
+            return false;
+        }
+        query.finish();
+    }
+    const QStringList &users = event->peopleUids(Calendar::CalendarItem::PeopleUser);
+    for(int i = 0; i < users.count(); ++i) {
+        query.prepare(prepareInsertQuery(Table_PEOPLE));
+        query.bindValue(PEOPLE_ID, QVariant());
+        query.bindValue(PEOPLE_EVENT_ID, event->data(Constants::Db_EvId));
+        query.bindValue(PEOPLE_UID, users.at(i));
+        query.bindValue(PEOPLE_TYPE, Calendar::CalendarItem::PeopleUser);
+        if (!query.exec()) {
+            LOG_QUERY_ERROR(query);
+            return false;
+        }
+        query.finish();
+    }
+    return true;
+}
 
+/** Retrieve the peoples related to an \e event. */
+bool AgendaBase::getRelatedPeoples(Calendar::CalendarItem *event)
+{
+    if (!connectDatabase(Constants::DB_NAME, __LINE__)) {
+        return false;
+    }
+    QSqlQuery query(database());
+    QHash<int, QString> where;
+    where.insert(Constants::PEOPLE_EVENT_ID, "=" + event->data(Constants::Db_EvId).toString());
+    QString req = select(Table_PEOPLE, where);
+    if (query.exec(req)) {
+        while (query.next()) {
+            event->addPeople(Calendar::CalendarItem::PeopleType(query.value(PEOPLE_TYPE).toInt()),
+                             "", query.value(PEOPLE_UID).toString());
+        }
+    } else {
+        LOG_QUERY_ERROR(query);
+        return false;
+    }
+    return true;
+}
+
+bool AgendaBase::getPatientNames(const QList<Calendar::CalendarItem *> &items)
+{
+    QTime chr;
+    chr.start();
+
+    // get all patient uids
+    QStringList uids;
+    for(int i = 0; i < items.count(); ++i) {
+        uids << items.at(i)->peopleUids(Calendar::CalendarItem::PeopleAttendee);
+    }
+    uids.removeAll("");
+
+    // retrieve names
+    QHash<QString, QString> names = Patients::PatientModel::patientName(uids);
+
+    qWarning() << chr.elapsed();
+    chr.restart();
+
+    // feed calendaritems
+    for(int i = 0; i < items.count(); ++i) {
+        QStringList l = items.at(i)->peopleUids(Calendar::CalendarItem::PeopleAttendee);
+        for(int j = 0; j < l.count(); ++j) {
+            QString name = names.value(l.at(j));
+            items.at(i)->setPeopleName(Calendar::CalendarItem::PeopleAttendee, l.at(j), name);
+        }
+    }
+
+    qWarning() << chr.elapsed();
+    return true;
+}
+
+/** Save or update a Calendar::CalendarItem to the agenda database */
 bool AgendaBase::saveNonCyclingEvent(Calendar::CalendarItem *event)
 {
     if (event->isCycling())
@@ -886,27 +986,64 @@ bool AgendaBase::saveNonCyclingEvent(Calendar::CalendarItem *event)
         return false;
 
     QSqlQuery query(database());
-    query.prepare(prepareInsertQuery(Constants::Table_EVENTS));
-    query.bindValue(Constants::EVENT_ID, QVariant());
-    query.bindValue(Constants::EVENT_CAL_ID, event->data(Constants::Db_CalId));
-    query.bindValue(Constants::EVENT_COMMON_ID, event->data(Constants::Db_ComId));
-    query.bindValue(Constants::EVENT_PATIENT_UID, QVariant()); //event->patients());
-    query.bindValue(Constants::EVENT_ISVALID, event->data(Constants::Db_IsValid));
-    query.bindValue(Constants::EVENT_DATESTART, event->data(Calendar::CalendarItem::DateStart));
-    query.bindValue(Constants::EVENT_DATEEND, event->data(Calendar::CalendarItem::DateEnd));
+    if (event->data(Constants::Db_EvId).isNull() ||
+            !event->data(Constants::Db_EvId).isValid() ||
+            event->data(Constants::Db_EvId).toInt() == -1) {
+        // save
+        query.prepare(prepareInsertQuery(Constants::Table_EVENTS));
+        query.bindValue(Constants::EVENT_ID, QVariant());
+        query.bindValue(Constants::EVENT_CAL_ID, event->data(Constants::Db_CalId));
+        query.bindValue(Constants::EVENT_COMMON_ID, event->data(Constants::Db_ComId));
+        query.bindValue(Constants::EVENT_PATIENT_UID, QVariant()); //event->patients());
+        query.bindValue(Constants::EVENT_ISVALID, event->data(Constants::Db_IsValid));
+        query.bindValue(Constants::EVENT_DATESTART, event->data(Calendar::CalendarItem::DateStart));
+        query.bindValue(Constants::EVENT_DATEEND, event->data(Calendar::CalendarItem::DateEnd));
+        if (!query.exec()) {
+            LOG_QUERY_ERROR(query);
+            return false;
+        }
+        event->setData(Constants::Db_EvId, query.lastInsertId());
+        query.finish();
 
-    /**
-      \todo 1 event == N patients
-      \todo 1 event == N users
-    */
+        event->setModified(false);
 
-    if (!query.exec()) {
-        LOG_QUERY_ERROR(query);
-        return false;
+        if (!saveEventRelatedPeoples(event))
+            return false;
+
+    } else {
+        // update
+        QHash<int, QString> where;
+        where.insert(Constants::EVENT_ID, "=" + event->data(Constants::Db_EvId).toString());
+        query.prepare(prepareUpdateQuery(Constants::Table_EVENTS,
+                                         QList<int>()
+                                         << Constants::EVENT_CAL_ID
+                                         << Constants::EVENT_ISVALID
+                                         << Constants::EVENT_DATESTART
+                                         << Constants::EVENT_DATEEND
+                                         , where));
+        query.bindValue(0, event->data(Constants::Db_CalId).toInt());
+        query.bindValue(1, event->data(Constants::Db_IsValid).toInt());
+        query.bindValue(2, event->data(Calendar::CalendarItem::DateStart));
+        query.bindValue(3, event->data(Calendar::CalendarItem::DateEnd));
+        if (!query.exec()) {
+            LOG_QUERY_ERROR(query);
+            return false;
+        }
+        query.finish();
+
+        // update peoples
+        where.clear();
+        where.insert(Constants::PEOPLE_EVENT_ID, "=" + event->data(Constants::Db_EvId).toString());
+        query.exec(prepareDeleteQuery(Table_PEOPLE, where));
+        if (!query.exec()) {
+            LOG_QUERY_ERROR(query);
+            return false;
+        }
+        query.finish();
+
+        if (!saveEventRelatedPeoples(event))
+            return false;
     }
-    event->setData(Constants::Db_EvId, query.lastInsertId());
-    event->setModified(false);
-    query.finish();
     return true;
 }
 

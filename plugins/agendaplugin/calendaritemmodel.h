@@ -93,14 +93,16 @@ private:
     int getInsertionIndex(bool begin, const QDateTime &dateTime, const QList<Calendar::CalendarItem*> &list, int first, int last) const;
     Calendar::CalendarItem *getItemPointerByUid(const QString &uid) const;
     QString createUid() const;
+    void getItemFromDatabase(const QDate &from, const QDate &to, const int calendarId) const;
 
 private Q_SLOTS:
     void userChanged();
 
 private:
-    QList<Calendar::CalendarItem*> m_sortedByBeginList;
-    QList<Calendar::CalendarItem*> m_sortedByEndList;
-    QList<Calendar::UserCalendar*> m_UserCalendar;
+    mutable QList<Calendar::CalendarItem*> m_sortedByBeginList;
+    mutable QList<Calendar::CalendarItem*> m_sortedByEndList;
+    mutable QList<Calendar::UserCalendar*> m_UserCalendar;
+    mutable QVector<QDate> m_RetrievedDates;
 };
 
 }  // End namespace Agenda

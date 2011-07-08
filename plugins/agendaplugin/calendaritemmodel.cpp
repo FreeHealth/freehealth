@@ -71,11 +71,12 @@ Calendar::CalendarItem CalendarItemModel::getItemByUid(const QString &uid) const
     return *item;
 }
 
+/** Return the filtred items between specified dates \e from and \e to. This function uses the default Calendar::UserCalendar or the first available. */
 QList<Calendar::CalendarItem> CalendarItemModel::getItemsBetween(const QDate &from, const QDate &to) const
 {
     Q_ASSERT_X(from <= to, "CalendarItemModel::getItemsBetween", "<from> is strictly greater than <to>");
 
-//    qWarning() << Q_FUNC_INFO << from << to;
+    getItemFromDatabase(from, to, -1);
 
     QList<Calendar::CalendarItem> list;
     QMap<Calendar::CalendarItem*, bool> added;
@@ -202,6 +203,7 @@ void CalendarItemModel::setItemByUid(const QString &uid, const Calendar::Calenda
     delete oldItem;
 }
 
+/** Remove a Calendar::CalendarItem according to its \e uid */
 void CalendarItemModel::removeItem(const QString &uid)
 {
     // remove the old item
@@ -286,6 +288,7 @@ int CalendarItemModel::defaultUserCalendarComboModelIndex() const
     return -1;
 }
 
+/** Return the Calendar::UserCalendar related to the userCalendarComboModel() \e index. \sa userCalendarComboModel() */
 Calendar::UserCalendar CalendarItemModel::calendarFromComboModelIndex(const int index) const
 {
     Q_ASSERT(index>0);
@@ -295,11 +298,13 @@ Calendar::UserCalendar CalendarItemModel::calendarFromComboModelIndex(const int 
     return *m_UserCalendar.at(index);
 }
 
+/** Clear the model and reset. All Calendar::CalendarItem will be deleted without beeing saved into database, even if they are modified. */
 void CalendarItemModel::clearAll()
 {
     qDeleteAll(m_sortedByBeginList);
     m_sortedByBeginList.clear();
     m_sortedByEndList.clear();
+    m_RetrievedDates.clear();
     if (m_propagateEvents)
             Q_EMIT reset();
 }
@@ -416,29 +421,77 @@ void CalendarItemModel::userChanged()
     }
 
     // TEST
-    // Find default user calendar
-    Calendar::UserCalendar *cal = 0;
-    for(int i=0; i < m_UserCalendar.count(); ++i) {
-        if (m_UserCalendar.at(i)->data(Calendar::UserCalendar::IsDefault).toBool()) {
-            cal = m_UserCalendar.at(i);
+//    // Find default user calendar
+//    Calendar::UserCalendar *cal = 0;
+//    for(int i=0; i < m_UserCalendar.count(); ++i) {
+//        if (m_UserCalendar.at(i)->data(Calendar::UserCalendar::IsDefault).toBool()) {
+//            cal = m_UserCalendar.at(i);
+//        }
+//    }
+//    if (!cal) {
+//        LOG_ERROR("No default");
+//        return;
+//    }
+
+//    // get all items from database
+//    CalendarEventQuery query;
+//    query.setDateRangeForCurrentYear();
+//    query.setCalendarId(cal->data(Constants::Db_CalId).toInt());
+//    QList<Calendar::CalendarItem *> items = base()->getCalendarEvents(query);
+//    for(int i = 0; i < items.count(); ++i) {
+//        Calendar::CalendarItem *item = items.at(i);
+//        setItemIsMine(item);
+//        m_sortedByBeginList.insert(getInsertionIndex(true, item->beginning(), m_sortedByBeginList, 0, m_sortedByBeginList.count() - 1), item);
+//        m_sortedByEndList.insert(getInsertionIndex(false, item->ending(), m_sortedByEndList, 0, m_sortedByEndList.count() - 1), item);
+//    }
+    // END TEST
+}
+
+
+void CalendarItemModel::getItemFromDatabase(const QDate &from, const QDate &to, const int calendarId) const
+{
+    /** \todo code here: manage calendarId */
+    // appointements are already available ?
+    QDate testDate = from;
+    bool getFullRange = true;
+    QVector<QDate> getDates;
+    while (true) {
+        if (m_RetrievedDates.contains(testDate)) {
+            getFullRange = false;
+        } else {
+            getDates << testDate;
         }
+        if (testDate == to)
+            break;
+        testDate = testDate.addDays(1);
     }
-    if (!cal) {
-        LOG_ERROR("No default");
+
+    // nothing to retrieve ?
+    if (!getFullRange && getDates.isEmpty()) {
         return;
     }
 
-    // get all items from database
+    // get from database needed appointements
+    QList<Calendar::CalendarItem *> items;
+
     CalendarEventQuery query;
-    query.setDateRangeForCurrentYear();
-    query.setCalendarId(cal->data(Constants::Db_CalId).toInt());
-    QList<Calendar::CalendarItem *> items = base()->getCalendarEvents(query);
+    query.setCalendarId(defaultUserCalendar().data(Constants::Db_CalId).toInt());
+
+    if (getFullRange) {
+        query.setDateRange(from, to);
+        items = base()->getCalendarEvents(query);
+        m_RetrievedDates << getDates;
+    } else {
+        for(int i=0; i < getDates.count(); ++i) {
+            query.setDateRangeForDay(getDates.at(i));
+            items << base()->getCalendarEvents(query);
+        }
+    }
+
     for(int i = 0; i < items.count(); ++i) {
         Calendar::CalendarItem *item = items.at(i);
         setItemIsMine(item);
         m_sortedByBeginList.insert(getInsertionIndex(true, item->beginning(), m_sortedByBeginList, 0, m_sortedByBeginList.count() - 1), item);
         m_sortedByEndList.insert(getInsertionIndex(false, item->ending(), m_sortedByEndList, 0, m_sortedByEndList.count() - 1), item);
     }
-    // END TEST
-
 }

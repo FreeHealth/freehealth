@@ -19,83 +19,74 @@
  *  If not, see <http://www.gnu.org/licenses/>.                            *
  ***************************************************************************/
 /***************************************************************************
- *   Main Developpers :                                                    *
- *       Guillaume Denry <guillaume.denry@gmail.com>                       *
- *       Eric MAEKER, MD <eric.maeker@gmail.com>                           *
+ *   Main Developper : Eric MAEKER, <eric.maeker@free.fr>                  *
  *   Contributors :                                                        *
  *       NAME <MAIL@ADRESS>                                                *
  ***************************************************************************/
-#ifndef CALENDARITEMEDITORPATIENTMAPPER_H
-#define CALENDARITEMEDITORPATIENTMAPPER_H
+#ifndef PATIENTBASECOMPLETER_H
+#define PATIENTBASECOMPLETER_H
 
-#include <calendar/icalendaritemdatawidget.h>
+#include <patientbaseplugin/patientbase_exporter.h>
+#include <utils/widgets/qbuttonlineedit.h>
 
-#include <QWidget>
-#include <QStringListModel>
-#include <QPointer>
+#include <QCompleter>
+#include <QValidator>
+
+class QSqlTableModel;
 
 /**
- * \file calendaritemeditorpatientmapper.h
+ * \file patientlineeditcompletersearch.h
  * \author Eric MAEKER <eric.maeker@free.fr>
  * \version 0.6.0
  * \date 05 Jul 2011
 */
 
 namespace Patients {
-class PatientBaseCompleter;
-}
-
-namespace Agenda {
 namespace Internal {
-namespace Ui {
-    class CalendarItemEditorPatientMapper;
-}
+class PatientBaseCompleterPrivate;
 
-class CalendarItemEditorPatientMapperWidget : public QWidget
+class PatientBaseCompleter : public QCompleter
 {
     Q_OBJECT
 public:
-    CalendarItemEditorPatientMapperWidget(QWidget *parent);
-    ~CalendarItemEditorPatientMapperWidget();
+    enum CompleterModelRepresentation {
+        FullName = 0,
+        Uid
+    };
 
-    void clear();
-    void setCalendarItem(const Calendar::CalendarItem &item);
+    explicit PatientBaseCompleter(QObject *parent = 0);
+    ~PatientBaseCompleter();
 
-    QStringList selectedPatientUids() const {return m_SelectedPatientUids;}
-    QStringList selectedPatientsNames() const {return m_SelectedPatientsNames;}
-
-private Q_SLOTS:
-    void onPatientSelected(const QString &name, const QString &uid);
+    QValidator *validator() const;
 
 private:
-    Internal::Ui::CalendarItemEditorPatientMapper *ui;
-    QStringList m_SelectedPatientUids;
-    QStringList m_SelectedPatientsNames;
-    Patients::PatientBaseCompleter *m_Completer;
-    QStringListModel *m_StringListModel;
+    Internal::PatientBaseCompleterPrivate *d;
 };
-
 }  // End namespace Internal
 
-class CalendarItemEditorPatientMapper : public Calendar::ICalendarItemDataWidget
+class PATIENT_EXPORT PatientLineEditCompleterSearch : public Utils::QButtonLineEdit
 {
     Q_OBJECT
 public:
-    explicit CalendarItemEditorPatientMapper(QObject *parent = 0);
-    ~CalendarItemEditorPatientMapper();
+    explicit PatientLineEditCompleterSearch(QWidget *parent = 0);
+    ~PatientLineEditCompleterSearch();
 
-    int insertionPlace() const;
-    QWidget *createWidget(QWidget *parent = 0);
-    bool setCalendarItem(const Calendar::CalendarItem &item);
+Q_SIGNALS:
+    void selectedPatient(const QString &uid, const QString &fullName);
 
-    bool clear();
-    bool submitChangesToCalendarItem(Calendar::CalendarItem &item);
+private Q_SLOTS:
+    void textChanged(const QString &newText);
+    void cancelSearch();
+    void patientSelected(const QModelIndex &index);
+
+//private:
+//    void keyPressEvent(QKeyEvent *event);
 
 private:
-    QPointer<Internal::CalendarItemEditorPatientMapperWidget> m_Widget;
+    QString m_LastSearch;
+    Internal::PatientBaseCompleter *m_Completer;
 };
 
+}
 
-}  // End namespace Agenda
-
-#endif // CALENDARITEMEDITORPATIENTMAPPER_H
+#endif // PATIENTBASECOMPLETER_H

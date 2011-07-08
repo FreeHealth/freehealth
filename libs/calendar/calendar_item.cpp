@@ -33,6 +33,8 @@
 #include "common.h"
 #include "calendar_item.h"
 
+#include <QDebug>
+
 using namespace Calendar;
 
 /** Constructs an invalid item */
@@ -130,11 +132,21 @@ void CalendarItem::addPeople(const PeopleType people, const QString &name, const
     m_People.append(Internal::PeopleStructPrivate(people, name, uid));
 }
 
+void CalendarItem::setPeopleName(const PeopleType people, const QString &uid, const QString &name)
+{
+    for(int i = 0; i < m_People.count(); ++i) {
+        if (m_People.at(i).type==people && m_People.at(i).uid==uid) {
+            m_People[i].name = name;
+        }
+    }
+}
+
 QStringList CalendarItem::peopleNames(const PeopleType people) const
 {
     QStringList toReturn;
     for(int i = 0; i < m_People.count(); ++i) {
-        toReturn << m_People.at(i).name;
+        if (m_People.at(i).type == people)
+            toReturn << m_People.at(i).name;
     }
     return toReturn;
 }
@@ -143,7 +155,8 @@ QStringList CalendarItem::peopleUids(const PeopleType people) const
 {
     QStringList toReturn;
     for(int i = 0; i < m_People.count(); ++i) {
-        toReturn << m_People.at(i).uid;
+        if (m_People.at(i).type == people)
+            toReturn << m_People.at(i).uid;
     }
     return toReturn;
 }
