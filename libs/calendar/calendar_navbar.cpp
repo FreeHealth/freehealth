@@ -62,15 +62,8 @@ CalendarNavbar::CalendarNavbar(QWidget *parent) :
     palette.setColor(QPalette::Window, QColor(180, 180, 255));
     this->setPalette(palette);
 
-    // Create a combo granularity selector
-    m_granularity = new QComboBox(this);
-    for(int i = 1; i < 19; ++i) {
-        m_granularity->addItem(QString("%1 %2").arg(i*5).arg(tkTr(Trans::Constants::MINUTES)));
-    }
-
     QHBoxLayout *layout = new QHBoxLayout(this);
     layout->addWidget(createNavigationButtons());
-    layout->addWidget(m_granularity);
     layout->addWidget(m_dateLabel = new QLabel);
     QFont font = m_dateLabel->font();
     font.setBold(true);
@@ -83,7 +76,6 @@ CalendarNavbar::CalendarNavbar(QWidget *parent) :
     connect(m_previousPageButton, SIGNAL(clicked()), this, SLOT(previousPage()));
     connect(m_nextPageButton, SIGNAL(clicked()), this, SLOT(nextPage()));
     connect(m_viewModeNav, SIGNAL(triggered(QAction*)), this, SLOT(changeViewMode(QAction*)));
-    connect(m_granularity, SIGNAL(activated(int)), this, SLOT(changeGranularity(int)));
 }
 
 QWidget *CalendarNavbar::createNavigationButtons() {
@@ -149,10 +141,17 @@ QToolButton *CalendarNavbar::createTodayButton() {
     else
         button->setIcon(QIcon(icon));
 
-    QMenu *menu = new QMenu;
+    QMenu *menu = new QMenu(this);
     menu->addAction(tr("Today"), this, SLOT(todayPage()));
     menu->addAction(tr("Yesterday"), this, SLOT(yesterdayPage()));
     menu->addAction(tr("Tomorrow"), this, SLOT(tomorrowPage()));
+    QMenu *viewMenu = menu->addMenu(tr("View range"));
+    for(int i = 1; i < 19; ++i) {
+        QAction *action = viewMenu->addAction(QString("%1 %2").arg(i*5).arg(tkTr(Trans::Constants::MINUTES)));
+        action->setData(i);
+    }
+    connect(viewMenu, SIGNAL(triggered(QAction*)), this, SLOT(changeGranularity(QAction*)));
+
     button->setMenu(menu);
     button->setPopupMode(QToolButton::InstantPopup);
 //    button->setDefaultAction(action);
@@ -181,13 +180,14 @@ void CalendarNavbar::setDate(const QDate &date) {
 }
 
 void CalendarNavbar::setDayGranularity(const int durationInMinutes) {
-    // Find the index (every 5 minutes)
-    int index = -1;
-    if (durationInMinutes%5)
-        index = (durationInMinutes/5);
-    else
-        index = (durationInMinutes/5 - 1);
-    m_granularity->setCurrentIndex(index);
+    Q_UNUSED(durationInMinutes);
+//    // Find the index (every 5 minutes)
+//    int index = -1;
+//    if (durationInMinutes%5)
+//        index = (durationInMinutes/5);
+//    else
+//        index = (durationInMinutes/5 - 1);
+//    m_granularity->setCurrentIndex(index);
 }
 
 void CalendarNavbar::refreshInfos() {
@@ -271,8 +271,8 @@ void CalendarNavbar::monthMode() {
 	setViewType(Calendar::View_Month);
 }
 
-void CalendarNavbar::changeGranularity(const int index) {
-    Q_EMIT granularityChanged((index+1)*5);
+void CalendarNavbar::changeGranularity(QAction *action) {
+    Q_EMIT granularityChanged(action->data().toInt()*5);
 }
 
 QString CalendarNavbar::getDateIntervalString() {

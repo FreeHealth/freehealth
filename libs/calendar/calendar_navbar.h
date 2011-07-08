@@ -71,7 +71,7 @@ namespace Calendar {
                 void dayMode();
 		void weekMode();
 		void monthMode();
-                void changeGranularity(const int index);
+                void changeGranularity(QAction *action);
 
 	private:
 		ViewType m_viewType;
@@ -84,7 +84,6 @@ namespace Calendar {
                 QAction *m_monthView;
                 QToolButton *m_viewModeNav;
 		QLabel *m_dateLabel;
-                QComboBox *m_granularity;
 
 
 		void refreshInfos();
