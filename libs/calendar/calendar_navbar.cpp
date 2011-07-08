@@ -25,6 +25,12 @@
  *   Contributors :                                                        *
  *       NAME <MAIL@ADRESS>                                                *
  ***************************************************************************/
+
+/**
+  \class Calendar::CalendarNavbar
+  Navigation bar of calendar viewer.
+*/
+
 #include "calendar_navbar.h"
 #include "calendar_theme.h"
 
