@@ -1,3 +1,30 @@
+/***************************************************************************
+ *  The FreeMedForms project is a set of free, open source medical         *
+ *  applications.                                                          *
+ *  (C) 2008-2011 by Eric MAEKER, MD (France) <eric.maeker@free.fr>        *
+ *  All rights reserved.                                                   *
+ *                                                                         *
+ *  This program is free software: you can redistribute it and/or modify   *
+ *  it under the terms of the GNU General Public License as published by   *
+ *  the Free Software Foundation, either version 3 of the License, or      *
+ *  (at your option) any later version.                                    *
+ *                                                                         *
+ *  This program is distributed in the hope that it will be useful,        *
+ *  but WITHOUT ANY WARRANTY; without even the implied warranty of         *
+ *  MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the          *
+ *  GNU General Public License for more details.                           *
+ *                                                                         *
+ *  You should have received a copy of the GNU General Public License      *
+ *  along with this program (COPYING.FREEMEDFORMS file).                   *
+ *  If not, see <http://www.gnu.org/licenses/>.                            *
+ ***************************************************************************/
+/***************************************************************************
+ *   Main Developpers :                                                    *
+ *       Guillaume Denry <guillaume.denry@gmail.com>                       *
+ *       Eric MAEKER, MD <eric.maeker@gmail.com>                           *
+ *   Contributors :                                                        *
+ *       NAME <MAIL@ADRESS>                                                *
+ ***************************************************************************/
 #ifndef CALENDAR_NAVBAR_H
 #define CALENDAR_NAVBAR_H
 
@@ -40,7 +67,8 @@ namespace Calendar {
 		void tomorrowPage();
 		void previousPage();
 		void nextPage();
-		void dayMode();
+                void changeViewMode(QAction *action);
+                void dayMode();
 		void weekMode();
 		void monthMode();
                 void changeGranularity(const int index);
@@ -49,18 +77,21 @@ namespace Calendar {
 		ViewType m_viewType;
 		QDate m_firstDate;
 		QToolButton *m_todayButton;
-		QPushButton *m_previousPageButton;
-		QPushButton *m_nextPageButton;
-		QPushButton *m_dayButton;
-		QPushButton *m_weekButton;
-		QPushButton *m_monthButton;
+                QToolButton *m_previousPageButton;
+                QToolButton *m_nextPageButton;
+                QAction *m_dayView;
+                QAction *m_weekView;
+                QAction *m_monthView;
+                QToolButton *m_viewModeNav;
 		QLabel *m_dateLabel;
                 QComboBox *m_granularity;
 
 
 		void refreshInfos();
 		QString getDateIntervalString();
-		QToolButton *createTodayButton();
+                QWidget *createNavigationButtons();
+                QToolButton *createNavigationModeButton();
+                QToolButton *createTodayButton();
 	};
 }
 

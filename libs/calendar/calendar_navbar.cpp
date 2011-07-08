@@ -1,4 +1,32 @@
+/***************************************************************************
+ *  The FreeMedForms project is a set of free, open source medical         *
+ *  applications.                                                          *
+ *  (C) 2008-2011 by Eric MAEKER, MD (France) <eric.maeker@free.fr>        *
+ *  All rights reserved.                                                   *
+ *                                                                         *
+ *  This program is free software: you can redistribute it and/or modify   *
+ *  it under the terms of the GNU General Public License as published by   *
+ *  the Free Software Foundation, either version 3 of the License, or      *
+ *  (at your option) any later version.                                    *
+ *                                                                         *
+ *  This program is distributed in the hope that it will be useful,        *
+ *  but WITHOUT ANY WARRANTY; without even the implied warranty of         *
+ *  MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the          *
+ *  GNU General Public License for more details.                           *
+ *                                                                         *
+ *  You should have received a copy of the GNU General Public License      *
+ *  along with this program (COPYING.FREEMEDFORMS file).                   *
+ *  If not, see <http://www.gnu.org/licenses/>.                            *
+ ***************************************************************************/
+/***************************************************************************
+ *   Main Developpers :                                                    *
+ *       Guillaume Denry <guillaume.denry@gmail.com>                       *
+ *       Eric MAEKER, MD <eric.maeker@gmail.com>                           *
+ *   Contributors :                                                        *
+ *       NAME <MAIL@ADRESS>                                                *
+ ***************************************************************************/
 #include "calendar_navbar.h"
+#include "calendar_theme.h"
 
 #include <translationutils/constanttranslations.h>
 
@@ -12,6 +40,8 @@
 
 using namespace Calendar;
 using namespace Trans::ConstantTranslations;
+
+static inline Calendar::CalendarTheme *theme() {return Calendar::CalendarTheme::instance();}
 
 /**
   \class Calendar::CalendarNavbar
@@ -39,39 +69,94 @@ CalendarNavbar::CalendarNavbar(QWidget *parent) :
     }
 
     QHBoxLayout *layout = new QHBoxLayout(this);
-    layout->addWidget(m_todayButton = createTodayButton());
-    layout->addWidget(m_previousPageButton = new QPushButton("<<"));
-    layout->addWidget(m_nextPageButton = new QPushButton(">>"));
+    layout->addWidget(createNavigationButtons());
     layout->addWidget(m_granularity);
     layout->addWidget(m_dateLabel = new QLabel);
     QFont font = m_dateLabel->font();
     font.setBold(true);
     m_dateLabel->setFont(font);
     layout->addStretch();
-    layout->addWidget(m_dayButton = new QPushButton(tr("Day")));
-    layout->addWidget(m_weekButton = new QPushButton(tr("Week")));
-    layout->addWidget(m_monthButton = new QPushButton(tr("Month")));
+    layout->addWidget(createNavigationModeButton());
 
     // signal/slot connections
     connect(m_todayButton, SIGNAL(clicked()), this, SLOT(todayPage()));
     connect(m_previousPageButton, SIGNAL(clicked()), this, SLOT(previousPage()));
     connect(m_nextPageButton, SIGNAL(clicked()), this, SLOT(nextPage()));
-    connect(m_dayButton, SIGNAL(clicked()), this, SLOT(dayMode()));
-    connect(m_weekButton, SIGNAL(clicked()), this, SLOT(weekMode()));
-    connect(m_monthButton, SIGNAL(clicked()), this, SLOT(monthMode()));
+    connect(m_viewModeNav, SIGNAL(triggered(QAction*)), this, SLOT(changeViewMode(QAction*)));
     connect(m_granularity, SIGNAL(activated(int)), this, SLOT(changeGranularity(int)));
 }
 
+QWidget *CalendarNavbar::createNavigationButtons() {
+    QWidget *w = new QWidget(this);
+    QHBoxLayout *layout = new QHBoxLayout(w);
+    layout->setSpacing(0);
+    layout->setMargin(0);
+
+    // Add prev/next
+    m_previousPageButton = new QToolButton(this);
+    QString icon = theme()->iconFileName(CalendarTheme::NavigationPrevious);
+    if (icon.isEmpty())
+        m_previousPageButton->setText("<<");
+    else
+        m_previousPageButton->setIcon(QIcon(icon));
+
+    m_nextPageButton = new QToolButton(this);
+    icon = theme()->iconFileName(CalendarTheme::NavigationNext);
+    if (icon.isEmpty())
+        m_nextPageButton->setText(">>");
+    else
+        m_nextPageButton->setIcon(QIcon(icon));
+
+    layout->addWidget(m_previousPageButton);
+    layout->addWidget(m_nextPageButton);
+
+    // Add day nav
+    layout->addWidget(m_todayButton = createTodayButton());
+    w->setLayout(layout);
+    return w;
+}
+
+QToolButton *CalendarNavbar::createNavigationModeButton() {
+    QString icon;
+    m_viewModeNav = new QToolButton(this);
+    icon = theme()->iconFileName(CalendarTheme::NavigationViewMode);
+    if (!icon.isEmpty())
+        m_viewModeNav->setIcon(QIcon(icon));
+    m_viewModeNav->setPopupMode(QToolButton::InstantPopup);
+    m_dayView = new QAction(tkTr(Trans::Constants::DAY), this);
+    icon = theme()->iconFileName(CalendarTheme::NavigationDayViewMode);
+    if (!icon.isEmpty())
+        m_dayView->setIcon(QIcon(icon));
+    m_weekView = new QAction(tkTr(Trans::Constants::WEEK), this);
+    icon = theme()->iconFileName(CalendarTheme::NavigationDayViewMode);
+    if (!icon.isEmpty())
+        m_weekView->setIcon(QIcon(icon));
+    m_monthView = new QAction(tkTr(Trans::Constants::MONTH), this);
+    icon = theme()->iconFileName(CalendarTheme::NavigationDayViewMode);
+    if (!icon.isEmpty())
+        m_monthView->setIcon(QIcon(icon));
+    m_viewModeNav->addAction(m_dayView);
+    m_viewModeNav->addAction(m_weekView);
+    m_viewModeNav->addAction(m_monthView);
+    return m_viewModeNav;
+}
+
 QToolButton *CalendarNavbar::createTodayButton() {
-	QToolButton *button = new QToolButton;
-	QMenu *menu = new QMenu;
-	QAction *action = menu->addAction(tr("Today"), this, SLOT(todayPage()));
-	menu->addAction(tr("Yesterday"), this, SLOT(yesterdayPage()));
-	menu->addAction(tr("Tomorrow"), this, SLOT(tomorrowPage()));
-	button->setMenu(menu);
-        button->setPopupMode(QToolButton::InstantPopup);
-	button->setDefaultAction(action);
-	return button;
+    QToolButton *button = new QToolButton(this);
+    QString icon = theme()->iconFileName(CalendarTheme::NavigationBookmarks);
+    if (icon.isEmpty())
+        button->setText("^");
+    else
+        button->setIcon(QIcon(icon));
+
+    QMenu *menu = new QMenu;
+    menu->addAction(tr("Today"), this, SLOT(todayPage()));
+    menu->addAction(tr("Yesterday"), this, SLOT(yesterdayPage()));
+    menu->addAction(tr("Tomorrow"), this, SLOT(tomorrowPage()));
+    button->setMenu(menu);
+    button->setPopupMode(QToolButton::InstantPopup);
+//    button->setDefaultAction(action);
+    return button;
 }
 
 void CalendarNavbar::setViewType(ViewType viewType) {
@@ -163,6 +248,15 @@ void CalendarNavbar::nextPage() {
 	default: // should never happend
 		break;
 	}
+}
+
+void CalendarNavbar::changeViewMode(QAction *action) {
+    if (action==m_dayView)
+        dayMode();
+    else if (action==m_weekView)
+        weekMode();
+    else if (action==m_monthView)
+        monthMode();
 }
 
 void CalendarNavbar::dayMode() {
