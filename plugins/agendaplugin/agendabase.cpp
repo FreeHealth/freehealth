@@ -802,7 +802,7 @@ QList<Calendar::CalendarItem *> AgendaBase::getCalendarEvents(const CalendarEven
         getRelatedPeoples(ev);
     }
 
-    getPatientNames(toReturn);
+//    getPatientNames(toReturn);
 
     return toReturn;
 }
@@ -974,6 +974,11 @@ bool AgendaBase::getPatientNames(const QList<Calendar::CalendarItem *> &items)
 
     qWarning() << chr.elapsed();
     return true;
+}
+
+bool AgendaBase::getPatientNames(Calendar::CalendarItem *item)
+{
+    return getPatientNames(QList<Calendar::CalendarItem *>() << item);
 }
 
 /** Save or update a Calendar::CalendarItem to the agenda database */

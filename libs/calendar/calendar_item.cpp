@@ -141,22 +141,32 @@ void CalendarItem::setPeopleName(const PeopleType people, const QString &uid, co
     }
 }
 
-QStringList CalendarItem::peopleNames(const PeopleType people) const
+QStringList CalendarItem::peopleNames(const PeopleType people, bool skipEmpty) const
 {
     QStringList toReturn;
     for(int i = 0; i < m_People.count(); ++i) {
-        if (m_People.at(i).type == people)
+        if (m_People.at(i).type == people) {
+            if (skipEmpty) {
+                if (m_People.at(i).name.isEmpty())
+                    continue;
+            }
             toReturn << m_People.at(i).name;
+        }
     }
     return toReturn;
 }
 
-QStringList CalendarItem::peopleUids(const PeopleType people) const
+QStringList CalendarItem::peopleUids(const PeopleType people, bool skipEmpty) const
 {
     QStringList toReturn;
     for(int i = 0; i < m_People.count(); ++i) {
-        if (m_People.at(i).type == people)
+        if (m_People.at(i).type == people) {
+            if (skipEmpty) {
+                if (m_People.at(i).uid.isEmpty())
+                    continue;
+            }
             toReturn << m_People.at(i).uid;
+        }
     }
     return toReturn;
 }

@@ -137,11 +137,13 @@ public:
     QList<QDateTime> nextAvailableTime(const QDateTime &startSearch, const int durationInMinutes, const Calendar::UserCalendar &calendar, const int numberOfDates);
     QDateTime nextAvailableTime(const QDateTime &startSearch, const int durationInMinutes, const Calendar::UserCalendar &calendar);
 
+    bool getPatientNames(const QList<Calendar::CalendarItem *> &items);
+    bool getPatientNames(Calendar::CalendarItem *item);
+
 private:
     bool saveCalendarAvailabilities(Calendar::UserCalendar *calendar);
     bool saveEventRelatedPeoples(const Calendar::CalendarItem *event);
     bool getRelatedPeoples(Calendar::CalendarItem *event);
-    bool getPatientNames(const QList<Calendar::CalendarItem *> &items);
     bool saveCommonEvent(Calendar::CalendarItem *event);
     bool saveNonCyclingEvent(Calendar::CalendarItem *event);
 

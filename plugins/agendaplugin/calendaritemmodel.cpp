@@ -67,6 +67,11 @@ Calendar::CalendarItem CalendarItemModel::getItemByUid(const QString &uid) const
     if (!item) {
         item = new Calendar::CalendarItem();
         setItemIsMine(item);
+    } else {
+        // populate names if needed
+        if (item->peopleUids(Calendar::CalendarItem::PeopleAttendee, true).count() != item->peopleNames(Calendar::CalendarItem::PeopleAttendee, true).count()) {
+            base()->getPatientNames(item);
+        }
     }
     return *item;
 }

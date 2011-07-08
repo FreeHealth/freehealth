@@ -55,6 +55,7 @@ CalendarItemEditorPatientMapperWidget::~CalendarItemEditorPatientMapperWidget()
 
 void CalendarItemEditorPatientMapperWidget::setCalendarItem(const Calendar::CalendarItem &item)
 {
+    clear();
     // get peoples
     m_SelectedPatientUids = item.peopleUids(Calendar::CalendarItem::PeopleAttendee);
     m_SelectedPatientsNames = item.peopleNames(Calendar::CalendarItem::PeopleAttendee);

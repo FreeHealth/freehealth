@@ -101,8 +101,8 @@ public:
     // People
     virtual void addPeople(const PeopleType people, const QString &name, const QString &uid = QString::null);
     virtual void setPeopleName(const PeopleType people, const QString &uid, const QString &name);
-    virtual QStringList peopleNames(const PeopleType people = PeopleAttendee) const;
-    virtual QStringList peopleUids(const PeopleType people = PeopleAttendee) const;
+    virtual QStringList peopleNames(const PeopleType people = PeopleAttendee, bool skipEmpty = false) const;
+    virtual QStringList peopleUids(const PeopleType people = PeopleAttendee, bool skipEmpty = false) const;
     virtual void removePeople(const QString &uid);
     virtual void clearPeople(const PeopleType people = PeopleAttendee);
 
