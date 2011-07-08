@@ -25,6 +25,15 @@
  *   Contributors :                                                        *
  *       NAME <MAIL@ADRESS>                                                *
  ***************************************************************************/
+/**
+  \class Calendar::CalendarWidget
+  This widget is the central view of the calendar. It provides:
+  - a navigation bar
+  - a full calendar viewer.
+
+  You must define the Calendar::AbstractCalendarModel to use with.
+*/
+
 #include "calendar_widget.h"
 #include "day_range_view.h"
 #include "month_view.h"
@@ -36,6 +45,7 @@
 #include <QRect>
 #include <QPushButton>
 #include <QVBoxLayout>
+#include <QScrollBar>
 
 #include <QDebug>
 
@@ -44,7 +54,6 @@ using namespace Calendar;
 namespace {
     enum { RefreshInterval = 60 }; // in secondes
 }
-
 
 struct Calendar::CalendarWidgetPrivate
 {
@@ -108,6 +117,7 @@ CalendarWidget::CalendarWidget(QWidget *parent) :
     m_d->m_timer.start();
 }
 
+/** Define the Calendar::AbstractCalendarModel to use with this view */
 void CalendarWidget::setModel(AbstractCalendarModel *model) {
 	m_model = model;
 
@@ -150,6 +160,7 @@ void CalendarWidget::viewTypeChanged() {
 		qobject_cast<DayRangeBody*>(m_d->m_body)->setItemDefaultDuration(m_d->m_dayItemDefaultDuration);
 	}
 
+        m_d->m_scrollArea->verticalScrollBar()->setSingleStep(50);
 	m_d->m_scrollArea->setWidget(m_d->m_body);
 	m_d->m_body->setFirstDate(m_d->m_navbar->firstDate());
 	m_d->m_header->setMasterScrollArea(m_d->m_scrollArea);
@@ -159,6 +170,7 @@ void CalendarWidget::viewTypeChanged() {
 	m_d->m_body->setModel(m_model);
 }
 
+/** Define the calendar view type \e viewType that can be: day view, week view and month view. */
 void CalendarWidget::setViewType(Calendar::ViewType viewType) {
 	m_d->m_navbar->setViewType(viewType);
 }
@@ -172,6 +184,7 @@ void CalendarWidget::timeout() {
 	m_d->m_body->refreshCurrentDateTimeStuff();
 }
 
+/** Return the current view type */
 ViewType CalendarWidget::viewType() const {
 	return m_d->m_navbar->viewType();
 }
