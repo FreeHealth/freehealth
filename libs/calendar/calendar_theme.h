@@ -47,6 +47,7 @@ public:
     enum IconReference {
         NavigationNext = 0,
         NavigationPrevious,
+        NavigationCurrentDateView,
         NavigationBookmarks,
         NavigationViewMode,
         NavigationDayViewMode,

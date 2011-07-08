@@ -65,9 +65,15 @@ namespace Calendar {
 		void todayPage();
 		void yesterdayPage();
 		void tomorrowPage();
-		void previousPage();
+                void currentWeekPage();
+                void nextWeekPage();
+                void currentMonthPage();
+                void nextMonthPage();
+                void previousPage();
 		void nextPage();
                 void changeViewMode(QAction *action);
+                void changeMonths(QAction *action);
+                void changeWeek(QAction *action);
                 void dayMode();
 		void weekMode();
 		void monthMode();
@@ -83,7 +89,8 @@ namespace Calendar {
                 QAction *m_weekView;
                 QAction *m_monthView;
                 QToolButton *m_viewModeNav;
-		QLabel *m_dateLabel;
+                QLabel *m_dateLabel; // replace with a toolButton
+                QToolButton *m_currentDateViewButton;
 
 
 		void refreshInfos();
@@ -91,6 +98,7 @@ namespace Calendar {
                 QWidget *createNavigationButtons();
                 QToolButton *createNavigationModeButton();
                 QToolButton *createTodayButton();
+                QToolButton *createCurrentDateViewButton();
 	};
 }
 

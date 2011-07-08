@@ -64,10 +64,11 @@ CalendarNavbar::CalendarNavbar(QWidget *parent) :
 
     QHBoxLayout *layout = new QHBoxLayout(this);
     layout->addWidget(createNavigationButtons());
-    layout->addWidget(m_dateLabel = new QLabel);
-    QFont font = m_dateLabel->font();
-    font.setBold(true);
-    m_dateLabel->setFont(font);
+//    layout->addWidget(m_dateLabel = new QLabel);
+//    QFont font = m_dateLabel->font();
+//    font.setBold(true);
+//    m_dateLabel->setFont(font);
+    layout->addWidget(createCurrentDateViewButton());
     layout->addStretch();
     layout->addWidget(createNavigationModeButton());
 
@@ -143,8 +144,16 @@ QToolButton *CalendarNavbar::createTodayButton() {
 
     QMenu *menu = new QMenu(this);
     menu->addAction(tr("Today"), this, SLOT(todayPage()));
-    menu->addAction(tr("Yesterday"), this, SLOT(yesterdayPage()));
     menu->addAction(tr("Tomorrow"), this, SLOT(tomorrowPage()));
+    menu->addAction(tr("Yesterday"), this, SLOT(yesterdayPage()));
+    menu->addSeparator();
+    menu->addAction(tkTr("Current week"), this, SLOT(currentWeekPage()));
+    menu->addAction(tkTr("Next week"), this, SLOT(nextWeekPage()));
+    menu->addSeparator();
+    menu->addAction(tkTr("Current month"), this, SLOT(currentMonthPage()));
+    menu->addAction(tkTr("Next month"), this, SLOT(nextMonthPage()));
+    menu->addSeparator();
+
     QMenu *viewMenu = menu->addMenu(tr("View range"));
     for(int i = 1; i < 19; ++i) {
         QAction *action = viewMenu->addAction(QString("%1 %2").arg(i*5).arg(tkTr(Trans::Constants::MINUTES)));
@@ -156,6 +165,59 @@ QToolButton *CalendarNavbar::createTodayButton() {
     button->setPopupMode(QToolButton::InstantPopup);
 //    button->setDefaultAction(action);
     return button;
+}
+
+QToolButton *CalendarNavbar::createCurrentDateViewButton() {
+    m_currentDateViewButton = new QToolButton(this);
+    QString icon = theme()->iconFileName(CalendarTheme::NavigationCurrentDateView);
+    if (!icon.isEmpty()) {
+        m_currentDateViewButton->setIcon(QIcon(icon));
+        m_currentDateViewButton->setToolButtonStyle(Qt::ToolButtonTextBesideIcon);
+    }
+    QFont bold;
+    bold.setBold(true);
+    m_currentDateViewButton->setFont(bold);
+    m_currentDateViewButton->setPopupMode(QToolButton::InstantPopup);
+
+    QAction *a = 0;
+    QMenu *generalMenu = new QMenu(this);
+
+    // Add month menu
+    QMenu *months = generalMenu->addMenu(tkTr(Trans::Constants::MONTHS));
+    for(int i = 1 ; i < 13; ++i) {
+        QString t = QDate::longMonthName(i);
+        t = t.left(1).toUpper()+t.mid(1);
+        a = months->addAction(t);
+        a->setData(i);
+    }
+    connect(months, SIGNAL(triggered(QAction*)), this, SLOT(changeMonths(QAction*)));
+
+    // Add weeks menu
+    // go to the first monday of the year
+    QDate date = QDate(QDate::currentDate().year(), 1, 1);
+    if (date.dayOfWeek() != 1)
+        date = date.addDays(8 - date.dayOfWeek());
+    QDate endWeek;
+    QString dateFormat = QLocale().dateFormat(QLocale::ShortFormat);
+    QMenu *weeks = generalMenu->addMenu(tkTr(Trans::Constants::WEEKS));
+    QMenu *menu = weeks->addMenu(QString("1 - 10"));
+    for(int i = 1 ; i < 53; ++i) {
+        if (i % 10 == 0) {
+            menu = weeks->addMenu(QString("%1 - %2").arg(i).arg(i + 9));
+        }
+        endWeek = date.addDays(6);
+        a = menu->addAction(QString("%1: %2 - %3")
+                             .arg(i)
+                             .arg(date.toString(dateFormat))
+                             .arg(endWeek.toString(dateFormat)));
+        a->setData(date);
+        date = date.addDays(7);
+    }
+    connect(weeks, SIGNAL(triggered(QAction*)), this, SLOT(changeWeek(QAction*)));
+
+    m_currentDateViewButton->setMenu(generalMenu);
+
+    return m_currentDateViewButton;
 }
 
 void CalendarNavbar::setViewType(ViewType viewType) {
@@ -194,14 +256,17 @@ void CalendarNavbar::refreshInfos() {
 	// TODO (refresh label, etc...)
 	switch (m_viewType){
 	case View_Day:
-		m_dateLabel->setText(m_firstDate.toString());
+//		m_dateLabel->setText(m_firstDate.toString());
+                m_currentDateViewButton->setText(m_firstDate.toString());
 		break;
 	case View_Week:
-		m_dateLabel->setText(getDateIntervalString());
-		break;
+//		m_dateLabel->setText(getDateIntervalString());
+                m_currentDateViewButton->setText(getDateIntervalString());
+                break;
 	case View_Month:
-		m_dateLabel->setText(m_firstDate.toString("MMMM yyyy"));
-		break;
+//		m_dateLabel->setText(m_firstDate.toString("MMMM yyyy"));
+                m_currentDateViewButton->setText(m_firstDate.toString("MMMM yyyy"));
+                break;
 	default:; // should never happends
 	}
 }
@@ -216,6 +281,26 @@ void CalendarNavbar::yesterdayPage() {
 
 void CalendarNavbar::tomorrowPage() {
 	setDate(QDate::currentDate().addDays(1));
+}
+
+void CalendarNavbar::currentWeekPage() {
+    setViewType(View_Week);
+    setDate(QDate::currentDate());
+}
+
+void CalendarNavbar::nextWeekPage() {
+    setViewType(View_Week);
+    setDate(QDate::currentDate().addDays(7));
+}
+
+void CalendarNavbar::currentMonthPage() {
+    setViewType(View_Month);
+    setDate(QDate::currentDate());
+}
+
+void CalendarNavbar::nextMonthPage() {
+    setViewType(View_Month);
+    setDate(QDate::currentDate().addDays(QDate::currentDate().daysInMonth()));
 }
 
 void CalendarNavbar::previousPage() {
@@ -257,6 +342,21 @@ void CalendarNavbar::changeViewMode(QAction *action) {
         weekMode();
     else if (action==m_monthView)
         monthMode();
+}
+
+void CalendarNavbar::changeMonths(QAction *action) {
+    QDate monday = QDate(QDate::currentDate().year(), action->data().toInt(), 1);
+    if (monday.dayOfWeek() != 1) {
+        monday = monday.addDays(8 - monday.dayOfWeek());
+    }
+    setViewType(View_Month);
+    setDate(monday);
+}
+
+void CalendarNavbar::changeWeek(QAction *action) {
+    QDate monday = action->data().toDate();
+    setViewType(View_Week);
+    setDate(monday);
 }
 
 void CalendarNavbar::dayMode() {

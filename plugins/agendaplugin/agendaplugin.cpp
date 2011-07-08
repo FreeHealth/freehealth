@@ -111,6 +111,7 @@ void AgendaPlugin::extensionsInitialized()
     th->setPath(Calendar::CalendarTheme::MediumIconPath, settings()->path(Core::ISettings::MediumPixmapPath));
     th->setPath(Calendar::CalendarTheme::BigIconPath, settings()->path(Core::ISettings::BigPixmapPath));
     th->setIconFileName(Calendar::CalendarTheme::NavigationBookmarks, Core::Constants::ICONAGENDA);
+    th->setIconFileName(Calendar::CalendarTheme::NavigationCurrentDateView, Core::Constants::ICONEYES);
     th->setIconFileName(Calendar::CalendarTheme::NavigationViewMode, Constants::I_VIEWMODE);
     th->setIconFileName(Calendar::CalendarTheme::NavigationDayViewMode, Constants::I_VIEWMODE);
     th->setIconFileName(Calendar::CalendarTheme::NavigationWeekViewMode, Constants::I_VIEWMODE);
