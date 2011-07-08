@@ -55,6 +55,7 @@
 #include <utils/updatechecker.h>
 
 #include <calendar/calendar_widget.h>
+#include <calendar/basic_calendar_model.h>
 
 #include "ui_mainwindow.h"
 
@@ -260,7 +261,9 @@ void MainWindow::extensionsInitialized()
 	m_padTools->createSyntaxHighlighter(m_ui->padTextEdit->textEdit(), m_tokens);
 
 	QHBoxLayout *layout = new QHBoxLayout(m_ui->tabCalendar);
-	layout->addWidget(new Calendar::CalendarWidget());
+        Calendar::CalendarWidget *calendarWidget = new Calendar::CalendarWidget(this);
+        calendarWidget->setModel(Calendar::BasicCalendarModel(this));
+        layout->addWidget(calendarWidget);
 
 	// tmp: fill with dummy tokens
 	m_tokens.insert("DRUG", "drug");

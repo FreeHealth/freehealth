@@ -102,9 +102,6 @@ CalendarWidget::CalendarWidget(QWidget *parent) :
     m_d->m_navbar->setViewType(Calendar::View_Week);
     m_d->m_navbar->setDate(QDate::currentDate());
 
-    // basic model
-    setModel(new BasicCalendarModel(this));
-
     // start the hour timer
     m_d->m_timer.setInterval(RefreshInterval * 1000);
     connect(&m_d->m_timer, SIGNAL(timeout()), this, SLOT(timeout()));
