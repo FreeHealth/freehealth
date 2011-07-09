@@ -48,6 +48,7 @@
 #include <QAbstractButton>
 #include <QTextDocument>
 #include <QCryptographicHash>
+#include <QMainWindow>
 
 /**
   \namespace Utils
@@ -715,8 +716,22 @@ void centerWidget(QWidget *win, QWidget *reference)
 {
     QPoint center;
     if (!reference) {
-        reference = qApp->desktop();
-        center = reference->rect().center();
+        // try to find the mainwindow
+        QMainWindow *win = 0;
+        QWidgetList list = qApp->topLevelWidgets();
+        for(int i = 0; i < list.count(); ++i) {
+            win = qobject_cast<QMainWindow*>(list.at(i));
+            if (win) {
+                break;
+            }
+        }
+        if (win) {
+            reference = win;
+            center = reference->rect().center() + reference->pos();
+        } else {
+            reference = qApp->desktop();
+            center = reference->rect().center();
+        }
     } else {
         center = reference->rect().center() + reference->pos();
     }
