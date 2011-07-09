@@ -26,6 +26,12 @@
 #ifndef AGENDA_EXPORTER_H
 #define AGENDA_EXPORTER_H
 
+/**
+  \namespace Agenda
+  \brief Namespace for the Agenda plugin.
+  Namespace for the Agenda plugin.
+*/
+
 #include <qglobal.h>
 
 #if defined(AGENDA_LIBRARY)

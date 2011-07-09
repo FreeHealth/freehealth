@@ -28,6 +28,7 @@
 
 /**
   \namespace Calendar
+  \brief Namespace for the Calendar library
   Namespace for the Calendar library
 */
 
