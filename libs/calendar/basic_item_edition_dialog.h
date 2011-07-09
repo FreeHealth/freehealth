@@ -31,6 +31,7 @@
 #include <calendar/calendar_exporter.h>
 
 #include <QDialog>
+#include <QPushButton>
 
 /**
  * \file basic_item_edition_dialog.h
@@ -63,12 +64,13 @@ public:
 
     CalendarItem item() const;
 
-    //	public slots:
-    //		void accept();
+private Q_SLOTS:
+    void showMoreTriggered();
 
 private:
     AbstractCalendarModel *m_Model;
     Internal::Ui::BasicItemEditionDialog *ui;
+    QPushButton *m_moreInfo;
 };
 
 }  // End namespace Calendar

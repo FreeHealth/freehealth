@@ -59,10 +59,13 @@
 #include "icalendaritemdatawidget.h"
 
 #include <extensionsystem/pluginmanager.h>
+#include <translationutils/constanttranslations.h>
+#include <utils/global.h>
 
 #include "ui_basic_item_edition_dialog.h"
 
 using namespace Calendar;
+using namespace Trans::ConstantTranslations;
 
 static inline ExtensionSystem::PluginManager *pluginManager() { return ExtensionSystem::PluginManager::instance(); }
 
@@ -73,11 +76,18 @@ BasicItemEditionDialog::BasicItemEditionDialog(AbstractCalendarModel *model, QWi
 {
     Q_ASSERT(model);
     ui->setupUi(this);
+    m_moreInfo = ui->buttonBox->addButton(tkTr(Trans::Constants::MORE_INFORMATIONS), QDialogButtonBox::HelpRole);
+    connect(m_moreInfo, SIGNAL(clicked()), this, SLOT(showMoreTriggered()));
+
     ui->viewer->setModel(model);
+
     // Ask plugin manager for extended widgets
     QList<ICalendarItemDataWidget*> extended = pluginManager()->getObjects<ICalendarItemDataWidget>();
     for(int i = 0; i < extended.count(); ++i)
         addCalendarDataWidget(extended.at(i));
+
+    adjustSize();
+    Utils::centerWidget(this);
 }
 
 BasicItemEditionDialog::~BasicItemEditionDialog()
@@ -92,6 +102,7 @@ BasicItemEditionDialog::~BasicItemEditionDialog()
 void BasicItemEditionDialog::addCalendarDataWidget(Calendar::ICalendarItemDataWidget *dataWidget)
 {
     ui->viewer->addCalendarDataWidget(dataWidget);
+    ui->viewer->adjustSize();
 }
 
 /** Initialize the dialog with the specified Calendar::CalendarItem \e item. */
@@ -106,4 +117,11 @@ Calendar::CalendarItem BasicItemEditionDialog::item() const
 {
     ui->viewer->submit();
     return ui->viewer->calendarEvent();
+}
+
+void BasicItemEditionDialog::showMoreTriggered()
+{
+    ui->viewer->toogleExtraInformations();
+    adjustSize();
+    Utils::centerWidget(this);
 }

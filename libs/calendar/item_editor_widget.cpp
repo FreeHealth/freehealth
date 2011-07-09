@@ -61,10 +61,11 @@ namespace Internal {
     {
     public:
         ItemEditorWidgetPrivate(ItemEditorWidget *parent) :
-                m_Model(0),
-                ui(new Internal::Ui::ItemEditorWidget),
-                m_UserCalsModel(0),
-                q(parent)
+            m_Model(0),
+            ui(new Internal::Ui::ItemEditorWidget),
+            m_UserCalsModel(0),
+            m_ShowingExtra(true),
+            q(parent)
         {
         }
 
@@ -133,6 +134,7 @@ namespace Internal {
         QList<UserCalendar *> m_UserCals;
         QStandardItemModel *m_UserCalsModel;
         QVector<ICalendarItemDataWidget *> m_AddedWidgets;
+        bool m_ShowingExtra;
 
     private:
         ItemEditorWidget *q;
@@ -148,6 +150,11 @@ ItemEditorWidget::ItemEditorWidget(QWidget *parent) :
     d->ui->setupUi(this);
     d->populateDurationCombo();
     connect(d->ui->durationCombo, SIGNAL(activated(int)), this, SLOT(changeDuration(int)));
+
+    // hide extra infos
+    toogleExtraInformations();
+
+    adjustSize();
 }
 
 ItemEditorWidget::~ItemEditorWidget()
@@ -203,6 +210,20 @@ void ItemEditorWidget::setCalendarEvent(const CalendarItem &item)
 Calendar::CalendarItem ItemEditorWidget::calendarEvent() const
 {
     return d->m_Item;
+}
+
+/** Hide/show the extra informations. */
+void ItemEditorWidget::toogleExtraInformations()
+{
+    d->m_ShowingExtra = !d->m_ShowingExtra;
+    d->ui->tabWidget->setVisible(d->m_ShowingExtra);
+    adjustSize();
+}
+
+/** Return true is the view is showing the extra informations. */
+bool ItemEditorWidget::isShowingExtraInformations() const
+{
+    return d->m_ShowingExtra;
 }
 
 /** Define the Calendar::UserCalendar to use for the current edition. */

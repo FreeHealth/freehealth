@@ -398,6 +398,9 @@ enum TitleInterpret {
         const char* const LOADING_SETTINGS                  = QT_TRANSLATE_NOOP("tkConstants", "Reading settings file");
         const char* const SAVING_SETTINGS                   = QT_TRANSLATE_NOOP("tkConstants", "Settings recovered" );
         const char* const CREATING_DEFAULT_SETTINGS_FOR_1   = QT_TRANSLATE_NOOP("tkConstants", "Creating default settings for %1");
+        const char* const SHOW_DETAILS                      = QT_TRANSLATE_NOOP("tkConstants", "Show details");
+        const char* const MORE_INFORMATIONS                 = QT_TRANSLATE_NOOP("tkConstants", "More informations");
+        const char* const HIDE_EXTRA_INFORMATIONS           = QT_TRANSLATE_NOOP("tkConstants", "Hide extra informations");
 
         // Users related message
         const char* const WELCOME_USER                      = QT_TRANSLATE_NOOP("tkConstants", "Welcome to FreeMedForms, you are now connected.");
