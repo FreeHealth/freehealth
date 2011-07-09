@@ -760,7 +760,7 @@ QList<Calendar::CalendarItem *> AgendaBase::getCalendarEvents(const CalendarEven
             ev->setData(Constants::Db_ComId, query.value(Constants::EVENT_COMMON_ID));
             ev->setData(Constants::Db_IsValid, query.value(Constants::EVENT_ISVALID));
 //            ev->setData(ICalendarEvent::PatientUid, query.value(Constants::EVENT_PATIENT_UID));
-            ev->setData(Calendar::CalendarItem::Uid, query.value(Constants::EVENT_CAL_ID));
+            ev->setData(Calendar::CalendarItem::Uid, query.value(Constants::EVENT_ID));
             ev->setData(Calendar::CalendarItem::DateStart, query.value(Constants::EVENT_DATESTART));
             ev->setData(Calendar::CalendarItem::DateEnd, query.value(Constants::EVENT_DATEEND));
             toReturn << ev;
@@ -947,9 +947,6 @@ bool AgendaBase::getRelatedPeoples(Calendar::CalendarItem *event)
 
 bool AgendaBase::getPatientNames(const QList<Calendar::CalendarItem *> &items)
 {
-    QTime chr;
-    chr.start();
-
     // get all patient uids
     QStringList uids;
     for(int i = 0; i < items.count(); ++i) {
@@ -960,9 +957,6 @@ bool AgendaBase::getPatientNames(const QList<Calendar::CalendarItem *> &items)
     // retrieve names
     QHash<QString, QString> names = Patients::PatientModel::patientName(uids);
 
-    qWarning() << chr.elapsed();
-    chr.restart();
-
     // feed calendaritems
     for(int i = 0; i < items.count(); ++i) {
         QStringList l = items.at(i)->peopleUids(Calendar::CalendarItem::PeopleAttendee);
@@ -972,7 +966,6 @@ bool AgendaBase::getPatientNames(const QList<Calendar::CalendarItem *> &items)
         }
     }
 
-    qWarning() << chr.elapsed();
     return true;
 }
 
