@@ -32,6 +32,7 @@
 
 #include <QHash>
 #include <QString>
+#include <QColor>
 
 namespace Calendar {
 
@@ -61,6 +62,15 @@ public:
         BigSize
     };
 
+    enum ColorInUse {
+        ColorStatusWaiting = 0,
+        ColorStatusApproved,
+        ColorStatusArrived,
+        ColorStatusChanged,
+        ColorStatusCancelled,
+        ColorStatusMissed
+    };
+
     static CalendarTheme *instance();
     ~CalendarTheme() {}
 
@@ -69,11 +79,16 @@ public:
 
     QString iconFileName(const IconReference ref, const IconSize size = SmallSize) const;
 
+    void setColor(const ColorInUse colorRef, const QColor &color);
+    QColor color(const ColorInUse colorRef) const;
+
 private:
     CalendarTheme() {}
+    void populateWithDefault();
 
     QHash<PathReference, QString> m_path;
     QHash<IconReference, QString> m_icons;
+    QHash<ColorInUse, QColor> m_colors;
     static CalendarTheme *m_Instance;
 };
 

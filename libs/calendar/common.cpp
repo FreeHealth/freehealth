@@ -1,9 +1,25 @@
+#include "common.h"
+#include "calendar_item.h"
+
+#include <translationutils/constanttranslations.h>
+
 #include <QDate>
 
-#include "calendar_item.h"
-#include "common.h"
+using namespace Trans::ConstantTranslations;
 
 namespace Calendar {
+
+QStringList availableStatus() {
+    return QStringList()
+            << tkTr(Trans::Constants::WAITING)
+            << tkTr(Trans::Constants::APPROVED)
+            << tkTr(Trans::Constants::ARRIVED)
+            << tkTr(Trans::Constants::CHANGED)
+            << tkTr(Trans::Constants::CANCELLED)
+            << tkTr(Trans::Constants::MISSED)
+               ;
+}
+
 	QDate getFirstDateByRandomDate(ViewType viewType, const QDate &randomDate) {
 		switch (viewType) {
 		case View_Day:

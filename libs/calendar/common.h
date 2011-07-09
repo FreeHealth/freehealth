@@ -19,6 +19,9 @@ namespace Calendar {
 		Date_Date
 	};
 
+        /** Return the translated available status for the CalendarItem. Recall each QEvent::LanguageChange. */
+        QStringList availableStatus();
+
 	/** returns the first date of the view in function of a random date */
 	QDate getFirstDateByRandomDate(ViewType viewType, const QDate &randomDate);
 

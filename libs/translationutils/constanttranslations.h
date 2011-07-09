@@ -524,7 +524,13 @@ enum TitleInterpret {
         const char * const AGENDA_EVENT = QT_TRANSLATE_NOOP("tkConstants", "Agenda event");
         const char * const AGENDA_EVENTS = QT_TRANSLATE_NOOP("tkConstants", "Agenda events");
         const char * const AGENDA_DATABASE_INFORMATIONS = QT_TRANSLATE_NOOP("tkConstants", "Agenda database informations");
-
+        // Status
+        const char * const ARRIVED = QT_TRANSLATE_NOOP("tkConstants", "Arrived");
+        const char * const CANCELLED = QT_TRANSLATE_NOOP("tkConstants", "Cancelled");
+        const char * const MISSED = QT_TRANSLATE_NOOP("tkConstants", "Missed");
+        const char * const WAITING = QT_TRANSLATE_NOOP("tkConstants", "Waiting");
+        const char * const CHANGED = QT_TRANSLATE_NOOP("tkConstants", "Changed");
+        const char * const APPROVED = QT_TRANSLATE_NOOP("tkConstants", "Approved");
 
         // File filters
         const char * const FILE_FILTER_ZIP = QT_TRANSLATE_NOOP("tkConstants", "Zip archive (*zip)");

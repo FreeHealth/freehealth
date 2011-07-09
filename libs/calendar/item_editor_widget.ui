@@ -203,27 +203,8 @@
       <item row="3" column="3">
        <widget class="QTimeEdit" name="endTime"/>
       </item>
-      <item row="4" column="0" colspan="6">
+      <item row="5" column="0" colspan="6">
        <layout class="QHBoxLayout" name="horizontalLayout">
-        <item>
-         <widget class="QCheckBox" name="privateCheck">
-          <property name="minimumSize">
-           <size>
-            <width>0</width>
-            <height>22</height>
-           </size>
-          </property>
-          <property name="maximumSize">
-           <size>
-            <width>16777215</width>
-            <height>16777215</height>
-           </size>
-          </property>
-          <property name="text">
-           <string>Is a private event</string>
-          </property>
-         </widget>
-        </item>
         <item>
          <widget class="QLabel" name="label_7">
           <property name="sizePolicy">
@@ -302,6 +283,35 @@
         </property>
        </widget>
       </item>
+      <item row="4" column="0">
+       <widget class="QLabel" name="label_4">
+        <property name="text">
+         <string>Status</string>
+        </property>
+       </widget>
+      </item>
+      <item row="4" column="1" colspan="3">
+       <widget class="QComboBox" name="statusCombo"/>
+      </item>
+      <item row="4" column="4" colspan="2">
+       <widget class="QCheckBox" name="privateCheck">
+        <property name="minimumSize">
+         <size>
+          <width>0</width>
+          <height>22</height>
+         </size>
+        </property>
+        <property name="maximumSize">
+         <size>
+          <width>16777215</width>
+          <height>16777215</height>
+         </size>
+        </property>
+        <property name="text">
+         <string>Is a private</string>
+        </property>
+       </widget>
+      </item>
      </layout>
     </widget>
    </item>
@@ -312,7 +322,7 @@
      </property>
      <widget class="QWidget" name="tab">
       <attribute name="title">
-       <string>General Information</string>
+       <string>Extra</string>
       </attribute>
       <layout class="QGridLayout" name="gridLayout_5">
        <item row="0" column="0">

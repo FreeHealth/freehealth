@@ -101,11 +101,13 @@ void CalendarItem::setModified(const bool state)
 
 QVariant CalendarItem::data(const int ref) const
 {
+    /** \todo retrieve datas from the model */
     return m_Datas.value(ref, QVariant());
 }
 
 bool CalendarItem::setData(const int ref, const QVariant &value)
 {
+    /** \todo set datas to the model */
     m_Modified = true;
     m_Datas.insert(ref, value);
     return true;

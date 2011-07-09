@@ -67,3 +67,20 @@ QString CalendarTheme::iconFileName(const IconReference ref, const IconSize size
     return QString();
 }
 
+void CalendarTheme::setColor(const ColorInUse colorRef, const QColor &color)
+{
+    m_colors.insert(colorRef, color);
+}
+
+QColor CalendarTheme::color(const ColorInUse colorRef) const
+{
+    return m_colors.value(colorRef);
+}
+
+void CalendarTheme::populateWithDefault()
+{
+    /** \todo Guillaume: code here */
+    // populate colors
+}
+
+

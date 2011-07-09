@@ -37,6 +37,7 @@
 #include "usercalendar.h"
 #include "abstract_calendar_model.h"
 #include "icalendaritemdatawidget.h"
+#include "common.h"
 
 #include <translationutils/constanttranslations.h>
 #include <utils/log.h>
@@ -79,9 +80,13 @@ namespace Internal {
             }
         }
 
+        void populateStatusCombo()
+        {
+            ui->statusCombo->addItems(availableStatus());
+        }
+
         void setEventToUi()
         {
-//            ui->typeCombo->setCurrentIndex();
             QDateTime start = m_Item.data(CalendarItem::DateStart).toDateTime();
             QDateTime end = m_Item.data(CalendarItem::DateEnd).toDateTime();
             int durationInMinutes = start.secsTo(end) / 60;
@@ -91,19 +96,18 @@ namespace Internal {
             ui->endDate->setDate(end.date());
             ui->startTime->setTime(start.time());
             ui->endTime->setTime(end.time());
-//            ui->durationCombo->setCurrentIndex(-1);
             ui->busyCheck->setChecked(m_Item.data(CalendarItem::IsBusy).toBool());
             ui->privateCheck->setChecked(m_Item.data(CalendarItem::IsPrivate).toBool());
             ui->password->setText(m_Item.data(CalendarItem::Password).toString());
             ui->eventLabel->setText(m_Item.data(CalendarItem::Label).toString());
             ui->fullInfo->setText(m_Item.data(CalendarItem::Description).toString());
 //            ui->iconLabel->setPixmap(theme()->icon(m_Item.data(CalendarItem::ThemedIcon).toString()).pixmap(16, 16));
-            qWarning() << m_Item.model() << m_Model;
             if (m_Item.model()) {
 			ui->calendarCombo->setModel(m_Item.model()->userCalendarComboModel(q));
             } else {
                 ui->calendarCombo->setModel(m_Model->userCalendarComboModel(q));
             }
+            ui->statusCombo->setCurrentIndex(m_Item.data(CalendarItem::Status).toInt());
         }
 
         void submit()
@@ -149,6 +153,7 @@ ItemEditorWidget::ItemEditorWidget(QWidget *parent) :
 {
     d->ui->setupUi(this);
     d->populateDurationCombo();
+    d->populateStatusCombo();
     connect(d->ui->durationCombo, SIGNAL(activated(int)), this, SLOT(changeDuration(int)));
 
     // hide extra infos
