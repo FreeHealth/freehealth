@@ -33,7 +33,7 @@
        </sizepolicy>
       </property>
       <property name="currentIndex">
-       <number>0</number>
+       <number>2</number>
       </property>
       <widget class="QWidget" name="tabIdentity">
        <attribute name="title">
@@ -202,18 +202,6 @@
             <widget class="Views::LanguageComboBox" name="languageCombo"/>
            </item>
           </layout>
-          <zorder>languageCombo</zorder>
-          <zorder>label_6</zorder>
-          <zorder>genderCombo</zorder>
-          <zorder>label_8</zorder>
-          <zorder>titleCombo</zorder>
-          <zorder>label_5</zorder>
-          <zorder>secNameLineEdit</zorder>
-          <zorder>label_3</zorder>
-          <zorder>firstnameLineEdit</zorder>
-          <zorder>label_4</zorder>
-          <zorder>label_21</zorder>
-          <zorder>nameLineEdit</zorder>
           <zorder>genderCombo</zorder>
           <zorder>label_6</zorder>
           <zorder>languageCombo</zorder>

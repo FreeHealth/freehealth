@@ -1,7 +1,7 @@
 /***************************************************************************
  *  The FreeMedForms project is a set of free, open source medical         *
  *  applications.                                                          *
- *  (C) 2008-2011 by Eric MAEKER, MD (France) <eric.maeker@free.fr>        *
+ *  (C) 2008-2011 by Eric MAEKER, MD (France) <eric.maeker@gmail.com>      *
  *  All rights reserved.                                                   *
  *                                                                         *
  *  This program is free software: you can redistribute it and/or modify   *
@@ -19,7 +19,7 @@
  *  If not, see <http://www.gnu.org/licenses/>.                            *
  ***************************************************************************/
 /***************************************************************************
- *   Main Developper : Eric MAEKER, <eric.maeker@free.fr>                  *
+ *   Main Developper : Eric MAEKER, <eric.maeker@gmail.com>                *
  *   Contributors :                                                        *
  *       NAME <MAIL@ADRESS>                                                *
  ***************************************************************************/
@@ -141,7 +141,7 @@ static const QList<Team> m_Team = QList<Team>()
         << Team( Trans::ConstantTranslations::tkTr(Trans::Constants::TEAM_CREATOR),
                  "Eric MAEKER, MD",
                  Trans::ConstantTranslations::tkTr(Trans::Constants::COUNTRY_FRANCE),
-                 "eric.maeker@free.fr",
+                 "eric.maeker@gmail.com",
                  Trans::ConstantTranslations::tkTr(Trans::Constants::TEAM_CREATOR)
                 )
 
@@ -183,7 +183,7 @@ static const QList<Team> m_Team = QList<Team>()
         << Team( Trans::ConstantTranslations::tkTr(Trans::Constants::TEAM_DRUG_DATABASE_MANAGER),
                  "Eric MAEKER, MD",
                   Trans::ConstantTranslations::tkTr(Trans::Constants::COUNTRY_FRANCE),
-                 "eric.maeker@free.fr",
+                 "eric.maeker@gmail.com",
                  Trans::ConstantTranslations::tkTr(Trans::Constants::TEAM_DRUG_DATABASE_MANAGER)
                 )
 
@@ -204,7 +204,7 @@ static const QList<Team> m_Team = QList<Team>()
         << Team( Trans::ConstantTranslations::tkTr(Trans::Constants::TEAM_MEDICAL_ADVISORS),
                  "Eric MAEKER, MD",
                   Trans::ConstantTranslations::tkTr(Trans::Constants::COUNTRY_FRANCE),
-                 "eric.maeker@free.fr",
+                 "eric.maeker@gmail.com",
                  Trans::ConstantTranslations::tkTr(Trans::Constants::TEAM_MEDICAL_ADVISOR)
                 )
 
@@ -253,7 +253,7 @@ static const QList<Team> m_Team = QList<Team>()
         << Team( Trans::ConstantTranslations::tkTr(Trans::Constants::TEAM_WEBMASTER),
                  "Eric MAEKER, MD",
                   Trans::ConstantTranslations::tkTr(Trans::Constants::COUNTRY_FRANCE),
-                 "eric.maeker@free.fr",
+                 "eric.maeker@gmail.com",
                  Trans::ConstantTranslations::tkTr(Trans::Constants::TEAM_WEBMASTER)
                 )
 
@@ -267,7 +267,7 @@ static const QList<Team> m_Team = QList<Team>()
         << Team( Trans::ConstantTranslations::tkTr(Trans::Constants::TEAM_PACKAGER),
                  "Eric Maeker, MD",
                  Trans::ConstantTranslations::tkTr(Trans::Constants::COUNTRY_FRANCE),
-                 "eric.maeker@free.fr",
+                 "eric.maeker@gmail.com",
                  Trans::ConstantTranslations::tkTr(Trans::Constants::TEAM_PACKAGER_FOR_1).arg("Debian and Ubuntu")
                 )
 
@@ -295,7 +295,7 @@ static const QList<Team> m_Team = QList<Team>()
         << Team( Trans::ConstantTranslations::tkTr(Trans::Constants::TEAM_TRANSLATORS),
 		 "Eric Maeker, MD",
 		 Trans::ConstantTranslations::tkTr(Trans::Constants::COUNTRY_FRANCE),
-		 "eric.maeker@free.fr",
+		 "eric.maeker@gmail.com",
 		 "French / English"
 		)
 	;

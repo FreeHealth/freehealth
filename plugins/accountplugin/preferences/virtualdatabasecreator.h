@@ -42,7 +42,7 @@
 
 /**
  * \file virtualdatabasecreator.h
- * \author Eric MAEKER <eric.maeker@free.fr>
+ * \author Eric MAEKER <eric.maeker@gmail.com>
  * \version 0.1.0
  * \date 02 Oct 2010
 */

@@ -1,7 +1,7 @@
 /***************************************************************************
  *  The FreeMedForms project is a set of free, open source medical         *
  *  applications.                                                          *
- *  (C) 2008-2011 by Eric MAEKER, MD (France) <eric.maeker@free.fr>        *
+ *  (C) 2008-2011 by Eric MAEKER, MD (France) <eric.maeker@gmail.com>      *
  *  All rights reserved.                                                   *
  *                                                                         *
  *  This program is free software: you can redistribute it and/or modify   *
@@ -19,24 +19,22 @@
  *  If not, see <http://www.gnu.org/licenses/>.                            *
  ***************************************************************************/
 /***************************************************************************
- *   Main Developper : Eric MAEKER, <eric.maeker@free.fr>                  *
+ *   Main Developper : Eric MAEKER, <eric.maeker@gmail.com>                *
  *   Contributors :                                                        *
  *       NAME <MAIL@ADRESS>                                                *
  *       NAME <MAIL@ADRESS>                                                *
  ***************************************************************************/
-#ifndef TKUSERVIEWER_H
-#define TKUSERVIEWER_H
+#ifndef USERVIEWER_H
+#define USERVIEWER_H
 
-// include tkUser headers
 #include <usermanagerplugin/usermanager_exporter.h>
 
-// include Qt headers
 #include <QWidget>
 #include <QObject>
 
 /**
  * \file userviewer.h
- * \author Eric MAEKER <eric.maeker@free.fr>
+ * \author Eric MAEKER <eric.maeker@gmail.com>
  * \version 0.0.4
  * \date 18 Sept 2009
 */
@@ -49,10 +47,9 @@ class UserViewerPrivate;
 class USER_EXPORT UserViewer : public QWidget
 {
     Q_OBJECT
-    Q_DISABLE_COPY(UserViewer);
-
+    Q_DISABLE_COPY(UserViewer)
 public:
-    explicit UserViewer(QWidget *parent = 0); // work with model
+    explicit UserViewer(QWidget *parent = 0);
     void changeUserTo(const int modelRow);
 
 private:
@@ -61,4 +58,4 @@ private:
 
 }  // End UserPlugin
 
-#endif // TKUSERVIEWER_H
+#endif // USERVIEWER_H

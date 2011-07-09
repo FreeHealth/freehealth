@@ -46,7 +46,7 @@
 
 /**
  * \file availablemovementpage.h
- * \author Eric MAEKER <eric.maeker@free.fr>
+ * \author Eric MAEKER <eric.maeker@gmail.com>
  * \version 0.4.0
  * \date 31 Mar 2010
 */

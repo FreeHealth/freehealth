@@ -1,18 +1,18 @@
 <?xml version='1.0' encoding='UTF-8'?>
 <FreeMedForms_PIMs>
   <PIMSources>
-    <Source name="beers2003" pmid="14662625" country=""/>
-    <Source name="laroche2007" pmid="" country=""/>
-    <Source name="priscus2010" pmid="" country=""/>
+    <Source id="beers2003" name="Beers criteria 2003 updated" pmid="14662625" country="us"/>
+    <Source id="laroche2007" pmid="" country="fr"/>
+    <Source id="priscus2010" pmid="" country="de"/>
   </PIMSources>
   <PIMTypes>
-    <Type id="PimOld" fr="PRESCRIPTION POTENTIELLEMENT INAPPROPRIÉE CHEZ LE SUJET ÂGÉ: INDÉPENDANTE DES DIAGNOSTICS OU DES CONDITIONS PATHOLOGIQUES" en="POTENTIALLY INNAPROPRIATE MEDICATION USE IN OLD ADULTS: INDEPENDANT TO DIAGNOSES OR CONDITIONS" de="" es=""/>
-    <Type id="PimOldDepDiag" fr="PRESCRIPTION POTENTIELLEMENT INAPPROPRIÉE CHEZ LE SUJET ÂGÉ: DÉPENDANTE DES DIAGNOSTICS OU DES CONDITIONS PATHOLOGIQUES" en="POTENTIALLY INNAPROPRIATE MEDICATION USE IN OLD ADULTS: DEPENDANT TO DIAGNOSES OR CONDITIONS" de="" es=""/>
+    <Type id="PimOld" fr="PRESCRIPTION POTENTIELLEMENT INAPPROPRIÉE CHEZ LE SUJET ÂGÉ: INDÉPENDANTE DES DIAGNOSTICS OU DES CONDITIONS PATHOLOGIQUES" en="POTENTIALLY INAPPROPRIATE MEDICATION USE IN OLD ADULTS: INDEPENDANT TO DIAGNOSES OR CONDITIONS" de="POTENTIELL Innapropriate Medikamenten in alte Erwachsene: INDEPENDENT Diagnosen ODER BEDINGUNGEN" es="Medicación potencialmente inapropiado USO EN ADULTOS DE EDAD: INDEPENDIENTE DE DIAGNÓSTICOS Y CONDICIONES"/>
+    <Type id="PimOldDepDiag" fr="PRESCRIPTION POTENTIELLEMENT INAPPROPRIÉE CHEZ LE SUJET ÂGÉ: DÉPENDANTE DES DIAGNOSTICS OU DES CONDITIONS PATHOLOGIQUES" en="POTENTIALLY INAPPROPRIATE MEDICATION USE IN OLD ADULTS: DEPENDANT TO DIAGNOSIS OR CONDITIONS" de="POTENTIELL Innapropriate Medikamenten in alte Erwachsene: Abhängig zur Diagnose oder BEDINGUNGEN" es="Medicación potencialmente inapropiado USO EN ADULTOS DE EDAD: DEPENDIENTES DE DIAGNÓSTICO Y CONDICIONES"/>
   </PIMTypes>
 
 <PIMs>
-  <PIM_Source name="Beers, 2003">
-  <PIM_Type name="POTENTIALLY INNAPROPRIATE MEDICATION USE IN OLD ADULTS: INDEPENDANT TO DIAGNOSES OR CONDITIONS" >
+  <PIM_Source id="beers2003" name="Beers, 2003">
+  <PIM_Type id="PimOld" name="POTENTIALLY INNAPROPRIATE MEDICATION USE IN OLD ADULTS: INDEPENDANT TO DIAGNOSES OR CONDITIONS" >
   <PIM level="low">
     <Molecules>
       <Molecule name="propoxyphene" />
@@ -21,7 +21,7 @@
   </PIM>
   <PIM level="high">
     <Molecules>
-      <Molecule name="Indomethacin" />
+      <Molecule name="INDOMETACIN" />
     </Molecules>
     <Risk lang="en" value="Of all available nonsteroidal anti-inflammatory drugs, this drug produces the most CNS adverse effects."/>
   </PIM>
@@ -74,11 +74,11 @@
 
   <PIM level="high">
     <Molecules>
-      <Molecule name="lorazepam" maxDailyDose="3mg" />
-      <Molecule name="oxazepam" maxDailyDose="60mg" />
-      <Molecule name="alprazolam" maxDailyDose="2mg" />
-      <Molecule name="temazepam" maxDailyDose="15mg" />
-      <Molecule name="triazolam" maxDailyDose="0.25mg" />
+      <Molecule name="lorazepam" maxDailyDose="3" maxDailyDoseUnit="mg"/>
+      <Molecule name="oxazepam" maxDailyDose="60" maxDailyDoseUnit="mg" />
+      <Molecule name="alprazolam" maxDailyDose="2" maxDailyDoseUnit="mg" />
+      <Molecule name="temazepam" maxDailyDose="15" maxDailyDoseUnit="mg" />
+      <Molecule name="triazolam" maxDailyDose="0.25" maxDailyDoseUnit="mg" />
     </Molecules>
     <Risk lang="en" value="Because of increased sensitivity to benzoadiazepines in elderly patients, smaller doses may be effective as well as safer. Total daily doses should rarely exceed the suggested maximums."/>
   </PIM>
@@ -115,7 +115,7 @@
   </PIM>
   <PIM level="low">
     <Molecules>
-      <Molecule name="Reserpine" maxDailyDose="0.25mg" />
+      <Molecule name="Reserpine" maxDailyDose="0.25" maxDailyDoseUnit="mg" />
     </Molecules>
     <Risk lang="en" value="May induce depression, impotence, sedation, and orthostatic hypotension."/>
   </PIM>
@@ -152,7 +152,7 @@
   </PIM>
   <PIM level="low">
     <Molecules>
-      <Molecule name="Ferrous sulfate" maxDailyDose="325mg"/>
+      <Molecule name="Ferrous sulfate" maxDailyDose="325" maxDailyDoseUnit="mg"/>
     </Molecules>
     <Risk lang="en" value="Doses 􏰂325 mg/d do not dramatically increase the amount absorbed but greatly increase the incidence of constipation."/>
   </PIM>
@@ -322,7 +322,7 @@
 
 
 
-  <PIM_Type name="POTENTIALLY INNAPROPRIATE MEDICATION USE IN OLD ADULTS: DEPENDANT TO DIAGNOSES OR CONDITIONS">
+  <PIM_Type id="PimOldDepDiag" name="POTENTIALLY INNAPROPRIATE MEDICATION USE IN OLD ADULTS: DEPENDANT TO DIAGNOSES OR CONDITIONS">
   <PIM level="high">
     <Molecules>
       <Molecule name="Disopyramide" />
@@ -350,7 +350,7 @@
   <PIM level="high">
     <Molecules>
       <Molecule name="NON-STEROIDAL ANTI-INFLAMMATORIES" />
-      <Molecule name="ACIDE ACETYLSALICYLIQUE" maxDailyDose="􏰂325 mg" />
+      <Molecule name="ACIDE ACETYLSALICYLIQUE" maxDailyDose="􏰂325" maxDailyDoseUnit="mg" />
     </Molecules>
     <Diseases>
       <Disease icd="GastroDuodenalUlcers" />
@@ -400,10 +400,10 @@
   </PIM>
   <PIM level="high">
     <Molecules>
-      <Molecule name="􏰨alpha-Blockers" />
-      <Molecule name="􏰨anticholinergics, tricyclic antidepressants (imipramine hydrochloride, doxepin hydrochloride, and amitriptyline hydrochloride), and long-acting benzodiazepines" />
-      <Molecule name="􏰨tricyclic antidepressants" />
-      <Molecule name="􏰨long-acting benzodiazepines" />
+      <Molecule name="􏰨alpha-Blockers"/>
+      <Molecule name="ANTICHOLINERGICS AND ANTIHISTAMINES"/>
+      <Molecule name="tricyclic antidepressants"/>
+      <Molecule name="long acting benzodiazepines" />
     </Molecules>
     <Diseases>
       <Disease icd="StressIncontinence" />
@@ -428,11 +428,17 @@
     <Diseases>
       <Disease icd="Parkinson" />
     </Diseases>
-    <Risk lang="en" value="Concern due to their antidopaminergic/ cholinergic effects."/>
+    <Risk lang="en" value="Concern due to their antidopaminergic/cholinergic effects."/>
   </PIM>
   <PIM level="high">
     <Molecules>
-      <Molecule name="Decongestants, theophylline (Theodur), methylphenidate (Ritalin), MAOIs, and amphetamines" />
+      <Molecule name="Decongestants"/>
+      <Molecule name="theophylline"/>
+      <Molecule name="methylphenidate"/>
+      <Molecule name="IMAO NON SELECTIFS"/>
+      <Molecule name="IMAO-A SELECTIFS"/>
+      <Molecule name="IMAO-B SELECTIFS"/>
+      <Molecule name="amphetamines" />
     </Molecules>
     <Diseases>
       <Disease icd="Insomnia" />
@@ -441,7 +447,13 @@
   </PIM>
   <PIM level="high">
     <Molecules>
-      <Molecule name="Barbiturates, anticholinergics, antispasmodics, and muscle relaxants. CNS stimulants: dextroAmphetamine (Adderall), methylphenidate (Ritalin), methamphetamine (Desoxyn), and pemolin" />
+      <Molecule name="Barbiturates"/>
+      <Molecule name="ANTICHOLINERGICS AND ANTIHISTAMINES"/>
+      <Molecule name="MUSCLE RELAXANTS AND ANTISPASMODICS"/>
+      <Molecule name="dextroAmphetamine"/>
+      <Molecule name="methylphenidate"/>
+      <Molecule name="methamphetamine"/>
+      <Molecule name="pemolin" />
     </Molecules>
     <Diseases>
       <Disease icd="CognitiveImpairment" />
@@ -450,16 +462,23 @@
   </PIM>
   <PIM level="high">
     <Molecules>
-      <Molecule name="Long-term benzodiazepine use. Sympatholytic agents: methyldopa (Aldomet), reserpine, and guanethidine (Ismelin)" />
+      <Molecule name="BENZODIAZEPINES AND RELATED"/>
+      <Molecule name="methyldopa"/>
+      <Molecule name="reserpine"/>
+      <Molecule name="guanethidine" />
     </Molecules>
     <Diseases>
       <Disease icd="Depression" />
     </Diseases>
-    <Risk lang="en" value="May produce or exacerbate depression."/>
+    <Risk lang="en" value="May produce or exacerbate depression. PS: Long-term benzodiazepine prescription."/>
   </PIM>
   <PIM level="high">
     <Molecules>
-      <Molecule name="CNS stimulants: DextroAmphetamine (Adderall), methylphenidate (Ritalin), methamphetamine (Desoxyn), pemolin, and fluoxetine (Prozac)" />
+      <Molecule name="dextroAmphetamine"/>
+      <Molecule name="methylphenidate"/>
+      <Molecule name="methamphetamine"/>
+      <Molecule name="pemolin"/>
+      <Molecule name="fluoxetine" />
     </Molecules>
     <Diseases>
       <Disease icd="Anorexia" />
@@ -469,7 +488,9 @@
   </PIM>
   <PIM level="high">
     <Molecules>
-      <Molecule name="hort- to intermediate-acting benzodiazepine and tricyclic antidepressants (imipramine hydrochloride, doxepin hydrochloride, and amitriptyline hydrochloride)" />
+      <Molecule name="SHORT ACTING BENZODIAZEPINES"/>
+      <Molecule name="INTERMEDIATE ACTING BENZODIAZEPINES"/>
+      <Molecule name="TRICYCLIC ANTIDEPRESSANTS"/>
     </Molecules>
     <Diseases>
       <Disease icd="Syncope" />
@@ -479,7 +500,7 @@
   </PIM>
   <PIM level="low">
     <Molecules>
-      <Molecule name="SSRIs: fluoxetine (Prozac), citalopram (Celexa), fluvoxamine (Luvox), paroxetine (Paxil), and sertraline (Zoloft)" />
+      <Molecule name="SELECTIVE SEROTONIN REUPTAKE INHIBITORS"/>
     </Molecules>
     <Diseases>
       <Disease icd="SIADH" />
@@ -507,8 +528,8 @@
   </PIM>
   <PIM level="high">
     <Molecules>
-      <Molecule name="Long-acting benzodiazepines: chlordiazepoxide (Librium),
-      chlordiazepoxide-amitriptyline (Limbitrol), clidinium-chlordiazepoxide (Librax), diazepam (Valium), quazepam (Doral), halazepam (Paxipam), and chlorazepate (Tranxene). 􏰧-blockers: propranolol" />
+      <Molecule name="LONG ACTING BENZODIAZEPINES"/>
+      <Molecule name="propranolol" />
     </Molecules>
     <Diseases>
       <Disease icd="COPD" />
@@ -517,7 +538,9 @@
   </PIM>
   <PIM level="low">
     <Molecules>
-      <Molecule name="Calcium channel blockers, anticholinergics, and tricyclic antidepressant (imipramine hydrochloride, doxepin hydrochloride, and amitriptyline hydrochloride)" />
+      <Molecule name="CALCIUM CHANNEL ANTAGONISTS"/>
+      <Molecule name="ANTICHOLINERGICS AND ANTIHISTAMINES"/>
+      <Molecule name="TRICYCLIC ANTIDEPRESSANTS" />
     </Molecules>
     <Diseases>
       <Disease icd="ChronicConstipation" />

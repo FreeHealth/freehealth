@@ -1,7 +1,7 @@
 /***************************************************************************
  *   FreeMedicalForms                                                      *
  *   (C) 2008-2010 by Eric MAEKER, MD                                      *
- *   eric.maeker@free.fr                                                   *
+ *   eric.maeker@gmail.com                                                   *
  *   All rights reserved.                                                  *
  *                                                                         *
  *   This program is a free and open source software.                      *
@@ -35,11 +35,11 @@
 /***************************************************************************
  *   This code is largely inspired of the Qt example : Text Edit           *
  *   Adaptations to FreeMedForms by : Eric Maeker, MD                      *
- *   eric.maeker@free.fr                                                   *
+ *   eric.maeker@gmail.com                                                   *
  ***************************************************************************/
 
 /***************************************************************************
- *   Main Developper : Eric MAEKER, <eric.maeker@free.fr>                  *
+ *   Main Developper : Eric MAEKER, <eric.maeker@gmail.com>                *
  *   Contributors :                                                        *
  *       NAME <MAIL@ADRESS>                                                *
  ***************************************************************************/
@@ -57,7 +57,7 @@
 
 /**
  * \file mfRichTextEditorWidget.h
- * \author Eric MAEKER <eric.maeker@free.fr>
+ * \author Eric MAEKER <eric.maeker@gmail.com>
  * \version 0.0.2
  * \date 07 March 2009
 */

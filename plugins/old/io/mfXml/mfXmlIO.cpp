@@ -1,7 +1,7 @@
 /***************************************************************************
  *   FreeMedicalForms                                                      *
  *   (C) 2008-2010 by Eric MAEKER, MD                                     **
- *   eric.maeker@free.fr                                                   *
+ *   eric.maeker@gmail.com                                                   *
  *   All rights reserved.                                                  *
  *                                                                         *
  *   This program is a free and open source software.                      *
@@ -49,7 +49,7 @@ mfXmlIO::mfXmlIO() : mfIOInterface()
      mPluginInfos.Name = PLUGIN_NAME;
      mPluginInfos.Caption = tr( "XML I/O plugin" );
      mPluginInfos.Description = tr( "Plugin for XML save and load operations of mfObjects" );
-     mPluginInfos.Author = "Eric Maeker,MD <eric.maeker@free.fr>, Guillaume Denry<guillaume.denry@gmail.com>";
+     mPluginInfos.Author = "Eric Maeker,MD <eric.maeker@gmail.com>, Guillaume Denry<guillaume.denry@gmail.com>";
      mPluginInfos.Type = mfBaseInterface::iIO;
      mPluginInfos.Version = "1.0.0";
      mPluginInfos.Enabled = false;

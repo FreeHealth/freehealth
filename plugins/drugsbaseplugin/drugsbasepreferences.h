@@ -1,7 +1,7 @@
 /***************************************************************************
  *   FreeMedicalForms                                                      *
  *   (C) 2008-2010 by Eric MAEKER, MD                                      *
- *   eric.maeker@free.fr                                                   *
+ *   eric.maeker@gmail.com                                                   *
  *   All rights reserved.                                                  *
  *                                                                         *
  *   This program is a free and open source software.                      *
@@ -33,7 +33,7 @@
  *   POSSIBILITY OF SUCH DAMAGE.                                           *
  ***************************************************************************/
 /***************************************************************************
- *   Main Developper : Eric MAEKER, <eric.maeker@free.fr>                  *
+ *   Main Developper : Eric MAEKER, <eric.maeker@gmail.com>                *
  *   Contributors :                                                        *
  *       NAME <MAIL@ADRESS>                                                *
  *       NAME <MAIL@ADRESS>                                                *
@@ -49,7 +49,7 @@
 
 /**
  * \file drugsbasepreferences.h
- * \author Eric MAEKER <eric.maeker@free.fr>
+ * \author Eric MAEKER <eric.maeker@gmail.com>
  * \version 0.0.2
  * \date 26 Oct 2009
 */

@@ -38,7 +38,7 @@
 
 /**
  * \file accountbaseplugin.h
- * \author Eric MAEKER <eric.maeker@free.fr>
+ * \author Eric MAEKER <eric.maeker@gmail.com>
  * \version 0.0.4
  * \date 27 Mar 2010
 */

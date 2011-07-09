@@ -1,7 +1,7 @@
 /***************************************************************************
  *   FreeMedForms Project                                                  *
  *   (C) 2008-2010 by Eric MAEKER, MD                            *
- *   eric.maeker@free.fr                                                   *
+ *   eric.maeker@gmail.com                                                   *
  *                                                                         *
  *   This program is free software; you can redistribute it and/or modify  *
  *   it under the terms of the GNU General Public License as published by  *
@@ -35,7 +35,7 @@
 
 /**
   \brief This project is the FreeMedForms' usermanager application
-  \author Eric MAEKER, MD <eric.maeker@free.fr>
+  \author Eric MAEKER, MD <eric.maeker@gmail.com>
 */
 
 int main(int argc, char *argv[])

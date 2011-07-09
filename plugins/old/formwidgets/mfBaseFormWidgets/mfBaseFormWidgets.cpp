@@ -1,7 +1,7 @@
 /***************************************************************************
  *   FreeMedicalForms                                                      *
  *   (C) 2008-2010 by Eric MAEKER, MD                                     **
- *   eric.maeker@free.fr                                                   *
+ *   eric.maeker@gmail.com                                                   *
  *   All rights reserved.                                                  *
  *                                                                         *
  *   This program is a free and open source software.                      *
@@ -43,7 +43,7 @@ mfBaseFormWidgets::mfBaseFormWidgets()
      // define plugins informations
      mPluginInfos.Caption = tr( "Form's Base Widgets" );
      mPluginInfos.Description = tr( "Plugin for form's widget : base widgets." );
-     mPluginInfos.Author = "Eric Maeker,MD <eric.maeker@free.fr>";
+     mPluginInfos.Author = "Eric Maeker,MD <eric.maeker@gmail.com>";
      mPluginInfos.Type = mfBaseInterface::iFormWidget;
      mPluginInfos.Name = PLUGIN_NAME;
      mPluginInfos.Version = "1.0.0";

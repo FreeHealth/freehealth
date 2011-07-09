@@ -40,7 +40,7 @@
 
 /**
  * \file accountview.h
- * \author Eric MAEKER <eric.maeker@free.fr>
+ * \author Eric MAEKER <eric.maeker@gmail.com>
  * \version 0.1.0
  * \date 13 Apr 2011
 */

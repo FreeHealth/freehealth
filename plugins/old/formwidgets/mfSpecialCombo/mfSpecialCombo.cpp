@@ -1,7 +1,7 @@
 /***************************************************************************
  *   FreeMedicalForms                                                      *
  *   (C) 2008-2010 by Eric MAEKER, MD                                     **
- *   eric.maeker@free.fr                                                   *
+ *   eric.maeker@gmail.com                                                   *
  *   All rights reserved.                                                  *
  *                                                                         *
  *   This program is a free and open source software.                      *
@@ -46,7 +46,7 @@ mfSpecialComboPlugin::mfSpecialComboPlugin()
      mPluginInfos.Caption = tr( "Form's Special Combo Widgets" );
      mPluginInfos.Description = tr( "Plugin for form's widget : "
                                     "special combo can be populated with a file or a database." );
-     mPluginInfos.Author = "Eric Maeker,MD <eric.maeker@free.fr>";
+     mPluginInfos.Author = "Eric Maeker,MD <eric.maeker@gmail.com>";
      mPluginInfos.Type = mfBaseInterface::iFormWidget;
      mPluginInfos.Name = PLUGIN_NAME;
      mPluginInfos.Version = "0.0.1";

@@ -1,7 +1,7 @@
 /***************************************************************************
  *  The FreeMedForms project is a set of free, open source medical         *
  *  applications.                                                          *
- *  (C) 2008-2011 by Eric MAEKER, MD (France) <eric.maeker@free.fr>        *
+ *  (C) 2008-2011 by Eric MAEKER, MD (France) <eric.maeker@gmail.com>      *
  *  All rights reserved.                                                   *
  *                                                                         *
  *  This program is free software: you can redistribute it and/or modify   *
@@ -21,11 +21,11 @@
 /***************************************************************************
  *   This code is inspired of the Qt example : Text Edit                   *
  *   Adaptations to FreeMedForms and improvments by : Eric Maeker, MD      *
- *   eric.maeker@free.fr                                                   *
+ *   eric.maeker@gmail.com                                                   *
  ***************************************************************************/
 
 /***************************************************************************
- *   Main Developper : Eric MAEKER, <eric.maeker@free.fr>                  *
+ *   Main Developper : Eric MAEKER, <eric.maeker@gmail.com>                *
  *   Contributors :                                                        *
  *       NAME <MAIL@ADRESS>                                                *
  ***************************************************************************/

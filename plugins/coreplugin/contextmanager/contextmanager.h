@@ -8,7 +8,7 @@
 
 /**
  * \file contextmanager.h
- * \author Eric MAEKER <eric.maeker@free.fr>
+ * \author Eric MAEKER <eric.maeker@gmail.com>
  * \version 0.4.0
  * \date 25 Apr 2010
  * \brief adaptation of QtCreator MainWindow -> context management

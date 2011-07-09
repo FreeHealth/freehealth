@@ -2,7 +2,7 @@
  *   Copyright (C) 2009 by Docteur Pierre-Marie Desombre, GP               *
  *   pm.desombre@medsyn.fr                                                 *
  *   original from Eric Maeker, MD.                                        *
- *   eric.maeker@free.fr                                                   *
+ *   eric.maeker@gmail.com                                                   *
  *                                                                         *
  *   This program is free software; you can redistribute it and/or modify  *
  *   it under the terms of the GNU Library General Public License as       *
@@ -20,7 +20,7 @@
  *   59 Temple Place - Suite 330, Boston, MA  02111-1307, USA.             *
  ***************************************************************************/
 /***************************************************************************
- *   Main Developper : Eric MAEKER, <eric.maeker@free.fr>                  *
+ *   Main Developper : Eric MAEKER, <eric.maeker@gmail.com>                *
  *   Contributors :                                                        *
  *       Pierre-Marie DESOMBRE <pm.desombre@medsyn.fr>                     *
  *       NAME <MAIL@ADRESS>                                                *

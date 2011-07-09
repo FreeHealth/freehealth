@@ -27,7 +27,7 @@
 **
 **************************************************************************/
 /***************************************************************************
- *   Adaptation to FreeMedForms : Eric MAEKER, <eric.maeker@free.fr>       *
+ *   Adaptation to FreeMedForms : Eric MAEKER, <eric.maeker@gmail.com>     *
  *   Contributors :                                                        *
  *       NAME <MAIL@ADRESS>                                                *
  ***************************************************************************/

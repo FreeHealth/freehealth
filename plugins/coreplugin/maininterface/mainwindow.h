@@ -1,7 +1,7 @@
 /***************************************************************************
  *   FreeMedicalForms                                                      *
  *   (C) 2008-2010 by Eric MAEKER, MD                                      *
- *   eric.maeker@free.fr                                                   *
+ *   eric.maeker@gmail.com                                                   *
  *   All rights reserved.                                                  *
  *                                                                         *
  *   This program is a free and open source software.                      *
@@ -33,7 +33,7 @@
  *   POSSIBILITY OF SUCH DAMAGE.                                           *
  ***************************************************************************/
 /***************************************************************************
- *   Main Developper : Eric MAEKER, <eric.maeker@free.fr>                  *
+ *   Main Developper : Eric MAEKER, <eric.maeker@gmail.com>                *
  *   Contributors :                                                        *
  *       Guillaume DENRY <guillaume.denry@gmail.com>                       *
  *       NAME <MAIL@ADRESS>                                                *
@@ -73,7 +73,7 @@ QT_END_NAMESPACE
 
 /**
  * \file mainwindow.h
- * \author Eric MAEKER <eric.maeker@free.fr>, Guillaume Denry
+ * \author Eric MAEKER <eric.maeker@gmail.com>, Guillaume Denry
  * \version 0.0.12
  * \date 09 Aug 2009
 */

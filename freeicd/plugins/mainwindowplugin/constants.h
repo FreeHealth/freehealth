@@ -3,7 +3,7 @@
 
 /**
  * \file constants.h
- * \author Eric MAEKER <eric.maeker@free.fr>
+ * \author Eric MAEKER <eric.maeker@gmail.com>
  * \version 0.5.0
  * \date 12 Oct 2010
 */

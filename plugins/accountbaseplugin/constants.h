@@ -38,7 +38,7 @@
 
 /**
  * \file constants.h
- * \author Eric MAEKER <eric.maeker@free.fr>
+ * \author Eric MAEKER <eric.maeker@gmail.com>
  * \version 0.1.0
  * \date 28 Mar 2010
  * \brief Some constants for Accountancy database and model management

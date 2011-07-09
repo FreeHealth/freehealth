@@ -38,7 +38,7 @@
 
 /**
  * \file accountcontextualwidget.h
- * \author Eric MAEKER <eric.maeker@free.fr>
+ * \author Eric MAEKER <eric.maeker@gmail.com>
  * \version 0.1.0
  * \date 03 Mar 2011
  * \internal

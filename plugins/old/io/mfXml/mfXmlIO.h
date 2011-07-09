@@ -1,7 +1,7 @@
 /***************************************************************************
  *   FreeMedicalForms                                                      *
  *   (C) 2008-2010 by Eric MAEKER, MD                                      *
- *   eric.maeker@free.fr                                                   *
+ *   eric.maeker@gmail.com                                                   *
  *   All rights reserved.                                                  *
  *                                                                         *
  *   This program is a free and open source software.                      *
@@ -35,7 +35,7 @@
 /***************************************************************************
  *   Main Developper : Guillaume DENRY <guillaume.denry@gmail.com>         *
  *   Contributors :                                                        *
- *       Eric MAEKER <eric.maeker@free.fr>                                 *
+ *       Eric MAEKER <eric.maeker@gmail.com>                               *
  *       NAME <MAIL@ADRESS>                                                *
  ***************************************************************************/
 #ifndef MFXMLIO_H

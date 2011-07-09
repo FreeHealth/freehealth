@@ -41,7 +41,7 @@
 
 /**
  * \file accountwidgetmanager.h
- * \author Eric MAEKER <eric.maeker@free.fr>
+ * \author Eric MAEKER <eric.maeker@gmail.com>
  * \version 0.5.0
  * \date 03 Mar 2011
  * \internal

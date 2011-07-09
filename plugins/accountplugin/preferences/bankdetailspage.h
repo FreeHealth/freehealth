@@ -42,7 +42,7 @@
 
 /**
  * \file bankdetailspage.h
- * \author Eric MAEKER <eric.maeker@free.fr>
+ * \author Eric MAEKER <eric.maeker@gmail.com>
  * \version 0.4.0
  * \date 29 Mar 2010
 */

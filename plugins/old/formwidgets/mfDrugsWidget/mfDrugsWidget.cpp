@@ -1,7 +1,7 @@
 /***************************************************************************
  *   FreeMedicalForms                                                      *
  *   (C) 2008-2010 by Eric MAEKER, MD                                     **
- *   eric.maeker@free.fr                                                   *
+ *   eric.maeker@gmail.com                                                   *
  *   All rights reserved.                                                  *
  *                                                                         *
  *   This program is a free and open source software.                      *
@@ -33,7 +33,7 @@
  *   POSSIBILITY OF SUCH DAMAGE.                                           *
  ***************************************************************************/
 /***************************************************************************
- *   Main Developper : Eric MAEKER, <eric.maeker@free.fr>                  *
+ *   Main Developper : Eric MAEKER, <eric.maeker@gmail.com>                *
  *   Contributors :                                                        *
  *       NAME <MAIL@ADRESS>                                                *
  *       NAME <MAIL@ADRESS>                                                *
@@ -95,7 +95,7 @@ mfDrugsWidgetPlugin::mfDrugsWidgetPlugin()
     mPluginInfos.Caption = tr( "Form's Drugs Manager Widgets" );
     mPluginInfos.Description = tr( "Plugin for form's widget : "
                                    "drug database widget, lets you manage prescribing." );
-    mPluginInfos.Author = "Eric Maeker,MD <eric.maeker@free.fr>";
+    mPluginInfos.Author = "Eric Maeker,MD <eric.maeker@gmail.com>";
     mPluginInfos.Type = mfBaseInterface::iFormWidget;
     mPluginInfos.Name = PLUGIN_NAME;
     mPluginInfos.Version = "0.0.2";
