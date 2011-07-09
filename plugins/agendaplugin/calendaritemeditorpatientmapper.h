@@ -31,14 +31,14 @@
 #include <calendar/icalendaritemdatawidget.h>
 
 #include <QWidget>
-#include <QStringListModel>
+#include <QHash>
 #include <QPointer>
 
 /**
  * \file calendaritemeditorpatientmapper.h
  * \author Eric MAEKER <eric.maeker@gmail.com>
  * \version 0.6.0
- * \date 05 Jul 2011
+ * \date 09 Jul 2011
 */
 
 namespace Patients {
@@ -64,7 +64,11 @@ public:
     QStringList selectedPatientUids() const {return m_SelectedPatientUids;}
     QStringList selectedPatientsNames() const {return m_SelectedPatientsNames;}
 
+private:
+    void addPatientRow(const QString &name, const QString &uid);
+
 private Q_SLOTS:
+    void removePatient(QAction *action);
     void onPatientSelected(const QString &name, const QString &uid);
 
 private:
@@ -72,7 +76,7 @@ private:
     QStringList m_SelectedPatientUids;
     QStringList m_SelectedPatientsNames;
     Patients::PatientBaseCompleter *m_Completer;
-    QStringListModel *m_StringListModel;
+    QHash<QString, QWidget *> m_PatientWidgets;
 };
 
 }  // End namespace Internal

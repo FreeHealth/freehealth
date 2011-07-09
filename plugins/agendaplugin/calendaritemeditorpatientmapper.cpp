@@ -29,7 +29,12 @@
 
 //#include <patientbaseplugin/patientlineeditcompletersearch.h>
 
+#include <coreplugin/icore.h>
+#include <coreplugin/itheme.h>
+#include <coreplugin/constants_icons.h>
+
 #include <calendar/calendar_item.h>
+#include <translationutils/constanttranslations.h>
 
 #include "ui_calendaritemeditorpatientmapper.h"
 
@@ -37,14 +42,15 @@
 
 using namespace Agenda;
 using namespace Internal;
+using namespace Trans::ConstantTranslations;
+
+static inline Core::ITheme *theme() {return Core::ICore::instance()->theme();}
 
 CalendarItemEditorPatientMapperWidget::CalendarItemEditorPatientMapperWidget(QWidget *parent) :
     QWidget(parent),
     ui(new Internal::Ui::CalendarItemEditorPatientMapper)
 {
     ui->setupUi(this);
-    m_StringListModel = new QStringListModel(this);
-    ui->selectedPatientView->setModel(m_StringListModel);
     connect(ui->searchPatient, SIGNAL(selectedPatient(QString,QString)), this, SLOT(onPatientSelected(QString,QString)));
 }
 
@@ -59,24 +65,67 @@ void CalendarItemEditorPatientMapperWidget::setCalendarItem(const Calendar::Cale
     // get peoples
     m_SelectedPatientUids = item.peopleUids(Calendar::CalendarItem::PeopleAttendee);
     m_SelectedPatientsNames = item.peopleNames(Calendar::CalendarItem::PeopleAttendee);
-    m_StringListModel->setStringList(m_SelectedPatientsNames);
+    for(int i = 0; i < m_SelectedPatientUids.count(); ++i) {
+        addPatientRow(m_SelectedPatientsNames.at(i), m_SelectedPatientUids.at(i));
+    }
 }
 
 void CalendarItemEditorPatientMapperWidget::clear()
 {
+    foreach(const QString &uid, m_PatientWidgets.keys()) {
+        ui->groupGridLayout->removeWidget(m_PatientWidgets.value(uid));
+    }
+    m_PatientWidgets.clear();
     ui->searchPatient->clear();
     m_SelectedPatientUids.clear();
     m_SelectedPatientsNames.clear();
 }
 
+void CalendarItemEditorPatientMapperWidget::addPatientRow(const QString &name, const QString &uid)
+{
+    QWidget *w = new QWidget(this);
+    QHBoxLayout *layout = new QHBoxLayout(w);
+    w->setLayout(layout);
+    layout->setMargin(0);
+    // Remove button
+    QToolButton *b = new QToolButton(this);
+    b->setIconSize(QSize(16, 16));
+    b->setMinimumSize(QSize(20,20));
+    b->setMaximumSize(QSize(20,20));
+    QAction *a = new QAction(this);
+    a->setIcon(theme()->icon(Core::Constants::ICONCLOSEDARK));
+    a->setToolTip(QString("%1 %2").arg(tkTr(Trans::Constants::REMOVE_TEXT)).arg(tkTr(Trans::Constants::PATIENT)));
+    a->setData(uid);
+    b->addAction(a);
+    b->setDefaultAction(a);
+    connect(b, SIGNAL(triggered(QAction*)), this, SLOT(removePatient(QAction*)));
+    // Patient name
+    QLabel *l = new QLabel(this);
+    l->setText(name);
+    QFont bold;
+    bold.setBold(true);
+    l->setFont(bold);
+    // Add to layout
+    layout->addWidget(b);
+    layout->addWidget(l);
+    ui->groupGridLayout->addWidget(w);
+    m_PatientWidgets.insert(uid, w);
+}
+
+void CalendarItemEditorPatientMapperWidget::removePatient(QAction *action)
+{
+    QString uid = action->data().toString();
+    ui->groupGridLayout->removeWidget(m_PatientWidgets.value(uid));
+    delete m_PatientWidgets.value(uid);
+    m_PatientWidgets.remove(uid);
+}
+
 void CalendarItemEditorPatientMapperWidget::onPatientSelected(const QString &name, const QString &uid)
 {
-    QStringList list = m_StringListModel->stringList();
-    if (!list.contains(name)) {
-        list.append(name);
+    if (!m_PatientWidgets.contains(uid)) {
+        addPatientRow(name, uid);
         m_SelectedPatientUids.append(uid);
         m_SelectedPatientsNames.append(name);
-        m_StringListModel->setStringList(list);
         ui->searchPatient->clear();
     }
 }
@@ -108,6 +157,7 @@ bool CalendarItemEditorPatientMapper::setCalendarItem(const Calendar::CalendarIt
 {
     if (m_Widget)
         m_Widget->setCalendarItem(item);
+    return true;
 }
 
 bool CalendarItemEditorPatientMapper::clear()
@@ -115,6 +165,7 @@ bool CalendarItemEditorPatientMapper::clear()
     if (m_Widget) {
         m_Widget->clear();
     }
+    return true;
 }
 
 bool CalendarItemEditorPatientMapper::submitChangesToCalendarItem(Calendar::CalendarItem &item)
