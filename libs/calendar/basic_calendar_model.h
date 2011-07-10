@@ -48,7 +48,7 @@ namespace Calendar {
 
 		int count() const { return m_sortedByBeginList.count(); }
 
-                const CalendarItem &insertItem(const QDateTime &beginning, const QDateTime &ending);
+                CalendarItem insertItem(const QDateTime &beginning, const QDateTime &ending);
                 Calendar::CalendarItem addCalendarItem(const Calendar::CalendarItem &item);
                 bool updateCalendarItem(const Calendar::CalendarItem &item);
 

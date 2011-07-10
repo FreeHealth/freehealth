@@ -63,11 +63,11 @@ void CalendarItemEditorPatientMapperWidget::setCalendarItem(const Calendar::Cale
 {
     clear();
     // get peoples
-    m_SelectedPatientUids = item.peopleUids(Calendar::CalendarItem::PeopleAttendee);
-    m_SelectedPatientsNames = item.peopleNames(Calendar::CalendarItem::PeopleAttendee);
-    for(int i = 0; i < m_SelectedPatientUids.count(); ++i) {
-        addPatientRow(m_SelectedPatientsNames.at(i), m_SelectedPatientUids.at(i));
-    }
+//    m_SelectedPatientUids = item.peopleUids(Calendar::CalendarItem::PeopleAttendee);
+//    m_SelectedPatientsNames = item.peopleNames(Calendar::CalendarItem::PeopleAttendee);
+//    for(int i = 0; i < m_SelectedPatientUids.count(); ++i) {
+//        addPatientRow(m_SelectedPatientsNames.at(i), m_SelectedPatientUids.at(i));
+//    }
 }
 
 void CalendarItemEditorPatientMapperWidget::clear()
@@ -173,8 +173,8 @@ bool CalendarItemEditorPatientMapper::submitChangesToCalendarItem(Calendar::Cale
     if (!m_Widget) {
         return false;
     }
-    for(int i = 0; i < m_Widget->selectedPatientUids().count(); ++i) {
-        item.addPeople(Calendar::CalendarItem::PeopleAttendee, m_Widget->selectedPatientsNames().at(i), m_Widget->selectedPatientUids().at(i));
-    }
+//    for(int i = 0; i < m_Widget->selectedPatientUids().count(); ++i) {
+//        item.addPeople(Calendar::CalendarItem::PeopleAttendee, m_Widget->selectedPatientsNames().at(i), m_Widget->selectedPatientUids().at(i));
+//    }
     return true;
 }

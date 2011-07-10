@@ -31,13 +31,14 @@
 #include "calendaritemeditorpatientmapper.h"
 
 // TEST
+#include "appointement.h"
+#include "calendaritemmodel.h"
 #include "eventeditorwidget.h"
 #include <utils/randomizer.h>
 #include <utils/log.h>
 #include <QDir>
 #include <QFileInfo>
 #include <QProgressDialog>
-#include <calendar/calendar_item.h>
 #include <calendar/usercalendar.h>
 #include <calendar/usercalendar_editor_widget.h>
 #include <patientbaseplugin/patientbase.h>
@@ -227,12 +228,12 @@ void AgendaPlugin::testDatabase()
     CalendarEventQuery q;
     q.setDateRangeForCurrentWeek();
     q.setCalendarId(ucal->data(Constants::Db_CalId).toInt());
-    QList<Calendar::CalendarItem *> list = base->getCalendarEvents(q);
+    QList<Appointement *> list = base->getCalendarEvents(q);
     qWarning() << "Retreived" << list.count() << "events from the database for user" << ucal->data(Calendar::UserCalendar::UserOwnerUid).toString() << "dateRange" << q.dateStart().toString(Qt::ISODate)<< q.dateEnd().toString(Qt::ISODate) << "in" << chrono.elapsed() << "ms";
 
-    qWarning() << "PatientBase count" << numberOfPatients() << "Uid of patient 5" << patientUid(5);
+    qWarning() << "PatientBase count" << numberOfPatients();
 
-    Calendar::CalendarItem *ev = 0;
+    Appointement *ev = 0;
     if (list.count()==0) {
         chrono.restart();
         bool ok = true;
@@ -260,7 +261,7 @@ void AgendaPlugin::testDatabase()
             QDateTime end = start.addSecs(60*15);
             ucal = cals.at(r.randomInt(0, cals.count()-1));
 
-            Calendar::CalendarItem *ev = new Calendar::CalendarItem;
+            ev = new Appointement;
             ev->setData(Constants::Db_CalId, ucal->data(Constants::Db_CalId));
             ev->setData(Constants::Db_IsValid, 1);
             ev->setData(Constants::Db_EvId, -1);
@@ -269,24 +270,24 @@ void AgendaPlugin::testDatabase()
             //    ev->setData(Constants::DbOnly_ComId, );
             ev->setData(Constants::Db_CatId, -1);
 //            ev->setData(Calendar::CalendarItem::PatientUid, r.getRandomString(45));
-            ev->setData(Calendar::CalendarItem::DateStart, start);
-            ev->setData(Calendar::CalendarItem::DateEnd, end);
-            ev->setData(Calendar::CalendarItem::Type, 1);
-            ev->setData(Calendar::CalendarItem::Status, 2);
-            ev->setData(Calendar::CalendarItem::LocationUid, "siteId");
-            ev->setData(Calendar::CalendarItem::IsPrivate, r.randomInt(0,1));
-            ev->setData(Calendar::CalendarItem::Password, "nopass");
-            ev->setData(Calendar::CalendarItem::IsBusy, r.randomInt(0,1));
-            ev->setData(Calendar::CalendarItem::IsAGroupEvent, r.randomInt(0,1));
-            ev->setData(Calendar::CalendarItem::Label, r.randomWords(r.randomInt(2, 15)));
-            ev->setData(Calendar::CalendarItem::Description, r.randomWords(r.randomInt(10, 500)));
-            ev->setData(Calendar::CalendarItem::Location, r.getRandomString(r.randomInt(1,145)));
-            ev->setData(Calendar::CalendarItem::IconPath, r.randomFile(pix, QStringList() << "*.png").fileName());
+            ev->setData(CalendarItemModel::DateStart, start);
+            ev->setData(CalendarItemModel::DateEnd, end);
+            ev->setData(CalendarItemModel::Type, 1);
+            ev->setData(CalendarItemModel::Status, 2);
+            ev->setData(CalendarItemModel::LocationUid, "siteId");
+            ev->setData(CalendarItemModel::IsPrivate, r.randomInt(0,1));
+            ev->setData(CalendarItemModel::Password, "nopass");
+            ev->setData(CalendarItemModel::IsBusy, r.randomInt(0,1));
+            ev->setData(CalendarItemModel::IsAGroupEvent, r.randomInt(0,1));
+            ev->setData(CalendarItemModel::Label, r.randomWords(r.randomInt(2, 15)));
+            ev->setData(CalendarItemModel::Description, r.randomWords(r.randomInt(10, 500)));
+            ev->setData(CalendarItemModel::Location, r.getRandomString(r.randomInt(1,145)));
+            ev->setData(CalendarItemModel::IconPath, r.randomFile(pix, QStringList() << "*.png").fileName());
 
             // Add 1 to 3 patients
             for(int y = 0; y < r.randomInt(1, 3); ++y) {
                 int zz = r.randomInt(0, maxDb);
-                ev->addPeople(Calendar::CalendarItem::PeopleAttendee, patientName(zz), patientUid(zz));
+                ev->addPeople(CalendarItemModel::PeopleAttendee, patientName(zz), patientUid(zz));
             }
 
             if (!base->saveCalendarEvent(ev))

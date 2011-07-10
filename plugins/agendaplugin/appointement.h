@@ -22,87 +22,79 @@
  *   Main Developper : Eric MAEKER, <eric.maeker@gmail.com>                *
  *   Contributors :                                                        *
  *       NAME <MAIL@ADRESS>                                                *
+ *       NAME <MAIL@ADRESS>                                                *
  ***************************************************************************/
-#ifndef ICALENDAREVENT
-#define ICALENDAREVENT
+#ifndef APPOINTEMENT_H
+#define APPOINTEMENT_H
 
-#include <agendaplugin/agenda_exporter.h>
+#include <agendaplugin/constants.h>
 
 #include <QVariant>
 #include <QHash>
 #include <QStringList>
 #include <QVector>
-
-/**
- * \file icalendarevent.h
- * \author Eric MAEKER <eric.maeker@gmail.com>
- * \version 0.6.0
- * \date 22 June 2011
-*/
+#include <QDateTime>
 
 namespace Agenda {
 namespace Internal {
-class AgendaBase;
 
 struct PeopleStructPrivate {
     PeopleStructPrivate(const int _type, const QString &_name, const QString &_uid) :
             uid(_uid), name(_name), type(_type) {}
+    PeopleStructPrivate() {}
 
     QString uid, name;
     int type;
 };
 
-}
-
-class AGENDA_EXPORT ICalendarEvent
+class Appointement
 {
-    friend class Agenda::Internal::AgendaBase;
-
 public:
-    ICalendarEvent();
-    virtual ~ICalendarEvent() {}
+    // Data representation is the same as the Calendar::AbstractCalendarModel
+    Appointement();
 
     virtual bool isValid() const;
     virtual bool isNull() const;
 
-    virtual bool isModified() const;
-    virtual void setModified(const bool state);
+    virtual bool isModified() const {return m_Modified;}
+    virtual void setModified(const bool state) {m_Modified=state;}
 
     virtual QVariant data(const int ref) const;
     virtual bool setData(const int ref, const QVariant &value);
 
+    // People
+    virtual void addPeople(const int people, const QString &name, const QString &uid = QString::null);
+    virtual void setPeopleName(const int people, const QString &uid, const QString &name);
+    virtual QStringList peopleNames(const int people, bool skipEmpty = false) const;
+    virtual QStringList peopleUids(const int people, bool skipEmpty = false) const;
+    virtual void removePeople(const QString &uid);
+    virtual void clearPeople(const int people);
+
     virtual bool isCycling() const {return false;}
 
-protected:
-    virtual void setDatabaseValue(const int ref, const QVariant &value);
-    virtual int calendarId() const;
-    virtual int commonId() const;
-    virtual int eventId() const;
-    virtual int cyclingEventId() const;
-    virtual int categoryId() const;
+    QDateTime beginning() const;
+    QDateTime ending() const;
+    int intersects(const QDate &firstDay, const QDate &lastDay) const;
+
+    int calendarId() const {return data(Constants::Db_CalId).toInt();}
+    int commonId() const {return data(Constants::Db_ComId).toInt();}
+    int eventId() const {return data(Constants::Db_EvId).toInt();}
+    int cyclingEventId() const {return data(Constants::Db_CyclingEvId).toInt();}
+    int categoryId() const {return data(Constants::Db_CatId).toInt();}
+
+    void setModelUid(const int uid) {m_uid = uid;}
+    int modelUid() const {return m_uid;}
+
+    static bool dateLessThan(const Appointement *item1, const Appointement *item2);
 
 private:
     QHash<int, QVariant> m_Datas;
-    bool m_Modified;
     QVector<Internal::PeopleStructPrivate> m_People;
+    bool m_Modified;
+    int m_uid;
 };
 
-
-class AGENDA_EXPORT ICalendarCyclingEvent : public ICalendarEvent
-{
-public:
-    enum DataRepresentation {
-        RepeatTime = 1000,
-        RepeatScheme,
-        RepeatInterval
-    };
-
-    ICalendarCyclingEvent() : ICalendarEvent() {}
-    ~ICalendarCyclingEvent() {}
-
-    virtual bool isCycling() const {return true;}
-};
-
+}  // End namespace Internal
 }  // End namespace Agenda
 
-#endif //  ICALENDAREVENT
+#endif // APPOINTEMENT_H

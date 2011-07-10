@@ -134,9 +134,40 @@ AbstractCalendarModel::AbstractCalendarModel(QObject *parent) :
 	QObject(parent), m_propagateEvents(true) {
 }
 
-//const CalendarItem &AbstractCalendarModel::insertItem(const QDateTime &, const QDateTime &) {
-//	return CalendarItem();
-//}
+
+QVariant AbstractCalendarModel::data(const Calendar::CalendarItem &item, const int dataRef, int role) const
+{
+    Q_UNUSED(item);
+    Q_UNUSED(dataRef);
+    Q_UNUSED(role);
+    return QVariant();
+}
+
+bool AbstractCalendarModel::setData(const Calendar::CalendarItem &item, const int dataRef, const QVariant &value, int role)
+{
+    Q_UNUSED(item);
+    Q_UNUSED(dataRef);
+    Q_UNUSED(value);
+    Q_UNUSED(role);
+    return true;
+}
+
+void AbstractCalendarModel::addPeople(const Calendar::CalendarItem &item, const PeopleType people, const QString &name, const QString &uid)
+{
+    Q_UNUSED(item);
+    Q_UNUSED(people);
+    Q_UNUSED(uid);
+    Q_UNUSED(name);
+}
+
+QStringList AbstractCalendarModel::peopleNames(const Calendar::CalendarItem &item, const PeopleType people, bool skipEmpty) const
+{
+    Q_UNUSED(item);
+    Q_UNUSED(people);
+    Q_UNUSED(skipEmpty);
+    return QStringList();
+}
+
 
 void AbstractCalendarModel::beginInsertItem() {
 	// does nothing for now (maybe emit a signal in the future)

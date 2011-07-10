@@ -87,8 +87,8 @@ namespace Internal {
 
         void setEventToUi()
         {
-            QDateTime start = m_Item.data(CalendarItem::DateStart).toDateTime();
-            QDateTime end = m_Item.data(CalendarItem::DateEnd).toDateTime();
+            QDateTime start = m_Item.beginning();
+            QDateTime end = m_Item.ending();
             int durationInMinutes = start.secsTo(end) / 60;
             ui->durationCombo->setCurrentIndex(durationInMinutes / durationDivider);
             ui->location->setText(m_Item.data(CalendarItem::Location).toString());

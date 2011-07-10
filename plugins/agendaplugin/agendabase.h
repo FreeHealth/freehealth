@@ -28,7 +28,6 @@
 #define AGENDABASE_H
 
 #include <utils/database.h>
-#include <calendar/calendar_item.h>
 #include <calendar/usercalendar.h>
 
 #include <QObject>
@@ -42,12 +41,13 @@
  * \file agendabase.h
  * \author Eric MAEKER <eric.maeker@gmail.com>
  * \version 0.6.0
- * \date 17 Jun 2011
+ * \date 10 Jul 2011
 */
 
 namespace Agenda {
 
 namespace Internal {
+class Appointement;
 
 class CalendarEventQuery
 {
@@ -130,22 +130,22 @@ public:
     QList<Calendar::UserCalendar *> getUserCalendars(const QString &userUuid = QString::null);
     bool saveUserCalendar(Calendar::UserCalendar *calendar);
 
-    QList<Calendar::CalendarItem *> getCalendarEvents(const CalendarEventQuery &query);
-    bool saveCalendarEvents(const QList<Calendar::CalendarItem *> &events);
-    bool saveCalendarEvent(Calendar::CalendarItem *event);
+    QList<Appointement *> getCalendarEvents(const CalendarEventQuery &query);
+    bool saveCalendarEvents(const QList<Appointement *> &events);
+    bool saveCalendarEvent(Appointement *event);
 
     QList<QDateTime> nextAvailableTime(const QDateTime &startSearch, const int durationInMinutes, const Calendar::UserCalendar &calendar, const int numberOfDates);
     QDateTime nextAvailableTime(const QDateTime &startSearch, const int durationInMinutes, const Calendar::UserCalendar &calendar);
 
-    bool getPatientNames(const QList<Calendar::CalendarItem *> &items);
-    bool getPatientNames(Calendar::CalendarItem *item);
+    bool getPatientNames(const QList<Appointement *> &items);
+    bool getPatientNames(Appointement *item);
 
 private:
     bool saveCalendarAvailabilities(Calendar::UserCalendar *calendar);
-    bool saveEventRelatedPeoples(const Calendar::CalendarItem *event);
-    bool getRelatedPeoples(Calendar::CalendarItem *event);
-    bool saveCommonEvent(Calendar::CalendarItem *event);
-    bool saveNonCyclingEvent(Calendar::CalendarItem *event);
+    bool saveEventRelatedPeoples(const Appointement *event);
+    bool getRelatedPeoples(Appointement *event);
+    bool saveCommonEvent(Appointement *event);
+    bool saveNonCyclingEvent(Appointement *event);
 
 private:
     static bool m_initialized;

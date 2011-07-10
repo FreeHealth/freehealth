@@ -64,6 +64,8 @@
 
 #include "ui_basic_item_edition_dialog.h"
 
+#include <QDebug>
+
 using namespace Calendar;
 using namespace Trans::ConstantTranslations;
 

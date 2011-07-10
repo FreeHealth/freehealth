@@ -77,12 +77,6 @@ public:
         UserData = 10000
     };
 
-    enum PeopleType {
-        PeopleAttendee = 0,
-        PeopleOwner,
-        PeopleUser
-    };
-
     CalendarItem();
     CalendarItem(const QDateTime &beginning, const QDateTime &ending);
     CalendarItem(const QString &uid, const QDateTime &beginning, const QDateTime &ending);
@@ -92,19 +86,8 @@ public:
     virtual bool isValid() const;
     virtual bool isNull() const;
 
-    virtual bool isModified() const;
-    virtual void setModified(const bool state);
-
     virtual QVariant data(const int ref) const;
     virtual bool setData(const int ref, const QVariant &value);
-
-    // People
-    virtual void addPeople(const PeopleType people, const QString &name, const QString &uid = QString::null);
-    virtual void setPeopleName(const PeopleType people, const QString &uid, const QString &name);
-    virtual QStringList peopleNames(const PeopleType people = PeopleAttendee, bool skipEmpty = false) const;
-    virtual QStringList peopleUids(const PeopleType people = PeopleAttendee, bool skipEmpty = false) const;
-    virtual void removePeople(const QString &uid);
-    virtual void clearPeople(const PeopleType people = PeopleAttendee);
 
     virtual bool isCycling() const {return false;}
 
@@ -112,31 +95,32 @@ public:
 
     bool overlap(const CalendarItem &item) const;
 
-    QString uid() const { return data(Uid).toString(); }
+    QString uid() const {return m_uid;}
 
     QString title() const { return data(Label).toString(); }
     void setTitle(const QString &value) {setData(Label, value);}
 
-    QDateTime beginning() const { return data(DateStart).toDateTime(); }
-    void setBeginning(const QDateTime &value) {setData(DateStart, value);}
+    QDateTime beginning() const { return m_beginning; }
+    void setBeginning(const QDateTime &value) {m_beginning=value;}
 
     DateType beginningType() const { return m_beginningType; }
     void setBeginningType(DateType value);
 
-    QDateTime ending() const { return data(DateEnd).toDateTime(); }
-    void setEnding(const QDateTime &value) {setData(DateEnd, value);}
+    QDateTime ending() const { return m_ending; }
+    void setEnding(const QDateTime &value) {m_ending=value;}
 
     DateType endingType() const { return m_endingType; }
     void setEndingType(DateType value);
 
     QString description() const { return data(Description).toString(); }
-    void setDescription(const QString &value) {setData(Description, value);}
 
     // Put this in a private part ?
-    QDateTime created() const { return data(CreatedDate).toDateTime(); }
-    void setCreated(const QDateTime &value) {setData(CreatedDate,value);}
+    QDateTime created() const { return m_created; }
+    void setCreated(const QDateTime &value) {m_created=value;}
 
     void setDaily(bool value);
+
+    bool operator==(const CalendarItem &other) const;
 
     // AbstractCalendarModel
     Calendar::AbstractCalendarModel *model() const {return m_Model;}
@@ -145,11 +129,12 @@ protected:
     void setModel(Calendar::AbstractCalendarModel *model) {m_Model=model;}
 
 private:
-    QHash<int, QVariant> m_Datas;
-    QVector<Internal::PeopleStructPrivate> m_People;
+    QString m_uid;
+    QDateTime m_beginning;
+    QDateTime m_ending;
+    QDateTime m_created;
     DateType m_beginningType;
     DateType m_endingType;
-    bool m_Modified;
     AbstractCalendarModel *m_Model;
 };
 

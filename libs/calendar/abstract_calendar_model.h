@@ -43,6 +43,31 @@ class CALENDAR_EXPORT AbstractCalendarModel : public QObject
 {
     Q_OBJECT
 public:
+    enum DataRepresentation {
+        Uid  = 0,
+        Label,
+        Description,
+        Type,
+        Status,
+        IsPrivate,
+        Password,
+        IsBusy,
+        IsAGroupEvent,
+        DateStart,
+        DateEnd,
+        Location,
+        LocationUid,
+        IconPath,
+        CreatedDate,
+        UserData = 10000
+    };
+
+    enum PeopleType {
+        PeopleAttendee = 0,
+        PeopleOwner,
+        PeopleUser
+    };
+
     AbstractCalendarModel(QObject *parent = 0);
 
     // Management of Items
@@ -51,16 +76,22 @@ public:
     virtual Calendar::CalendarItem getItemByUid(const QString &uid) const = 0;
     virtual QList<Calendar::CalendarItem> getItemsBetween(const QDate &from, const QDate &to) const = 0;
 
-//    virtual void setItemByUid(const QString &uid, const Calendar::CalendarItem &item);
-
-    virtual const CalendarItem &insertItem(const QDateTime &begin, const QDateTime &end) = 0;
+    virtual CalendarItem insertItem(const QDateTime &begin, const QDateTime &end) = 0;
     virtual Calendar::CalendarItem addCalendarItem(const Calendar::CalendarItem &item) = 0;
     virtual bool updateCalendarItem(const Calendar::CalendarItem &item) = 0;
-
     virtual void removeItem(const QString &uid) = 0;
+
+    // Item data
+    virtual QVariant data(const Calendar::CalendarItem &item, int dataRef, int role = Qt::DisplayRole) const;
+    virtual bool setData(const Calendar::CalendarItem &item, int dataRef, const QVariant &value, int role = Qt::EditRole);
+
+    virtual void addPeople(const Calendar::CalendarItem &item, const PeopleType people, const QString &name, const QString &uid = QString::null);
+    virtual QStringList peopleNames(const Calendar::CalendarItem &item, const PeopleType people = PeopleAttendee, bool skipEmpty = false) const;
+
 
     void stopEvents();
     void resumeEvents();
+
 
     // Management of Calendars
     virtual Calendar::UserCalendar calendar(const Calendar::CalendarItem &item) const = 0;
@@ -76,6 +107,7 @@ public Q_SLOTS:
     virtual void clearAll() {}
 
 Q_SIGNALS:
+    void dataChanged(const Calendar::CalendarItem &begin);
     void itemInserted(const Calendar::CalendarItem &newItem);
     void itemModified(const Calendar::CalendarItem &oldItem, const Calendar::CalendarItem &newItem);
     void itemRemoved(const Calendar::CalendarItem &removedItem);

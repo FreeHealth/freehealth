@@ -32,6 +32,7 @@
 
 #include "common.h"
 #include "calendar_item.h"
+#include "abstract_calendar_model.h"
 
 #include <QDebug>
 
@@ -39,31 +40,28 @@ using namespace Calendar;
 
 /** Constructs an invalid item */
 CalendarItem::CalendarItem() :
-        m_Modified(false),
         m_Model(0)
 {}
 
 CalendarItem::CalendarItem(const QDateTime &beginning, const QDateTime &ending) :
         m_Model(0)
 {
-    m_Datas.insert(DateStart, beginning);
-    m_Datas.insert(DateEnd, ending);
-    m_Datas.insert(CreatedDate, QDateTime::currentDateTime());
+    m_beginning = beginning;
+    m_ending = ending;
+    m_created = QDateTime::currentDateTime();
     m_beginningType = Date_DateTime;
     m_endingType = Date_DateTime;
-    m_Modified = false;
 }
 
 CalendarItem::CalendarItem(const QString &uid, const QDateTime &beginning, const QDateTime &ending) :
         m_Model(0)
 {
-    m_Datas.insert(Uid, uid);
-    m_Datas.insert(DateStart, beginning);
-    m_Datas.insert(DateEnd, ending);
-    m_Datas.insert(CreatedDate, QDateTime::currentDateTime());
+    m_uid = uid;
+    m_beginning = beginning;
+    m_ending = ending;
+    m_created = QDateTime::currentDateTime();
     m_beginningType = Date_DateTime;
     m_endingType = Date_DateTime;
-    m_Modified = false;
 }
 
 /** if true, beginning and ending date types are set to Date_Date. If false, beginning and ending date types are set to Date_DateTime */
@@ -80,7 +78,7 @@ void CalendarItem::setDaily(bool value) {
 bool CalendarItem::isValid() const
 {
     /** \todo code here */
-    return m_Datas.value(DateStart).toDateTime().isValid();
+    return m_beginning.isValid() && (m_Model);
 }
 
 bool CalendarItem::isNull() const
@@ -89,28 +87,47 @@ bool CalendarItem::isNull() const
     return false;
 }
 
-bool CalendarItem::isModified() const
-{
-    return m_Modified;
-}
-
-void CalendarItem::setModified(const bool state)
-{
-    m_Modified=state;
-}
-
+/** Wrapper to the Calendar::AbstractCalendarModel::data() */
 QVariant CalendarItem::data(const int ref) const
 {
-    /** \todo retrieve datas from the model */
-    return m_Datas.value(ref, QVariant());
+    if (m_Model) {
+        // from Calendar ref to Model ref
+        int refModel = -1;
+        switch (ref) {
+        case Uid : return m_uid;
+        case Label: refModel = AbstractCalendarModel::Label; break;
+        case Description: refModel = AbstractCalendarModel::Description; break;
+        case Type: refModel = AbstractCalendarModel::Type; break;
+        case Status: refModel = AbstractCalendarModel::Status; break;
+        case IsPrivate: refModel = AbstractCalendarModel::IsPrivate; break;
+        case Password: refModel = AbstractCalendarModel::Password; break;
+        case IsBusy: refModel = AbstractCalendarModel::IsBusy; break;
+        case IsAGroupEvent: refModel = AbstractCalendarModel::IsAGroupEvent; break;
+        case DateStart: return m_beginning;
+        case DateEnd: return m_ending;
+        case Location: refModel = AbstractCalendarModel::Location; break;
+        case LocationUid: refModel = AbstractCalendarModel::LocationUid; break;
+        case IconPath: refModel = AbstractCalendarModel::IconPath; break;
+        case CreatedDate: return m_created;
+        }
+        if (refModel!=-1)
+            return m_Model->data(*this, refModel);
+    }
+    return QVariant();
 }
 
+/** Wrapper to the Calendar::AbstractCalendarModel::setData() */
 bool CalendarItem::setData(const int ref, const QVariant &value)
 {
-    /** \todo set datas to the model */
-    m_Modified = true;
-    m_Datas.insert(ref, value);
-    return true;
+    if (m_Model) {
+        switch (ref) {
+        case DateStart: m_beginning = value.toDateTime(); break;
+        case DateEnd:  m_ending = value.toDateTime(); break;
+        case CreatedDate: m_created = value.toDateTime(); break;
+        }
+        return m_Model->setData(*this, ref, value);
+    }
+    return false;
 }
 
 void CalendarItem::setBeginningType(DateType value)
@@ -118,7 +135,6 @@ void CalendarItem::setBeginningType(DateType value)
     if (m_beginningType==value)
         return;
     m_beginningType = value;
-    m_Modified = true;
 }
 
 void CalendarItem::setEndingType(DateType value)
@@ -126,70 +142,6 @@ void CalendarItem::setEndingType(DateType value)
     if (m_endingType==value)
         return;
     m_endingType = value;
-    m_Modified = true;
-}
-
-void CalendarItem::addPeople(const PeopleType people, const QString &name, const QString &uid)
-{
-    m_People.append(Internal::PeopleStructPrivate(people, name, uid));
-}
-
-void CalendarItem::setPeopleName(const PeopleType people, const QString &uid, const QString &name)
-{
-    for(int i = 0; i < m_People.count(); ++i) {
-        if (m_People.at(i).type==people && m_People.at(i).uid==uid) {
-            m_People[i].name = name;
-        }
-    }
-}
-
-QStringList CalendarItem::peopleNames(const PeopleType people, bool skipEmpty) const
-{
-    QStringList toReturn;
-    for(int i = 0; i < m_People.count(); ++i) {
-        if (m_People.at(i).type == people) {
-            if (skipEmpty) {
-                if (m_People.at(i).name.isEmpty())
-                    continue;
-            }
-            toReturn << m_People.at(i).name;
-        }
-    }
-    return toReturn;
-}
-
-QStringList CalendarItem::peopleUids(const PeopleType people, bool skipEmpty) const
-{
-    QStringList toReturn;
-    for(int i = 0; i < m_People.count(); ++i) {
-        if (m_People.at(i).type == people) {
-            if (skipEmpty) {
-                if (m_People.at(i).uid.isEmpty())
-                    continue;
-            }
-            toReturn << m_People.at(i).uid;
-        }
-    }
-    return toReturn;
-}
-
-void CalendarItem::removePeople(const QString &uid)
-{
-    for(int i = 0; i < m_People.count(); ++i) {
-        if (m_People.at(i).uid==uid) {
-            m_People.remove(i);
-            break;
-        }
-    }
-}
-
-void CalendarItem::clearPeople(const PeopleType people)
-{
-    for(int i = 0; i < m_People.count(); ++i) {
-        if (m_People.at(i).type==people) {
-            m_People.remove(i);
-        }
-    }
 }
 
 /** compute an intersection value with a day range
@@ -211,6 +163,14 @@ int CalendarItem::intersects(const QDate &firstDay, const QDate &lastDay) const
 bool CalendarItem::overlap(const CalendarItem &item) const
 {
     return ending() > item.beginning() && beginning() < item.ending();
+}
+
+bool CalendarItem::operator==(const CalendarItem &other) const
+{
+    /** \todo match on uid should be enough assuming each CalendarItem have a different uid. */
+    return (other.uid()==uid() &&
+            other.beginning()==m_beginning &&
+            other.ending() == m_ending);
 }
 
 /** a sort function for calendar items */

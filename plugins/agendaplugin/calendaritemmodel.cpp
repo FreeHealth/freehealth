@@ -27,6 +27,7 @@
 #include "calendaritemmodel.h"
 #include "agendabase.h"
 #include "constants.h"
+#include "appointement.h"
 
 #include <coreplugin/icore.h>
 #include <coreplugin/iuser.h>
@@ -63,17 +64,20 @@ CalendarItemModel::~CalendarItemModel()
 
 Calendar::CalendarItem CalendarItemModel::getItemByUid(const QString &uid) const
 {
-    Calendar::CalendarItem *item = getItemPointerByUid(uid);
+    Appointement *item = getItemPointerByUid(uid.toInt());
+//    qWarning() << item << uid;
     if (!item) {
-        item = new Calendar::CalendarItem();
-        setItemIsMine(item);
+        Calendar::CalendarItem cal;
+        cal.setData(Uid, createUid());
+        setItemIsMine(&cal);
+        return cal;
     } else {
         // populate names if needed
-        if (item->peopleUids(Calendar::CalendarItem::PeopleAttendee, true).count() != item->peopleNames(Calendar::CalendarItem::PeopleAttendee, true).count()) {
-            base()->getPatientNames(item);
-        }
+//        if (item->peopleUids(PeopleAttendee, true).count() != item->peopleNames(PeopleAttendee, true).count()) {
+//            base()->getPatientNames(item);
+//        }
     }
-    return *item;
+    return toCalendarItem(item);
 }
 
 /** Return the filtred items between specified dates \e from and \e to. This function uses the default Calendar::UserCalendar or the first available. */
@@ -84,21 +88,21 @@ QList<Calendar::CalendarItem> CalendarItemModel::getItemsBetween(const QDate &fr
     getItemFromDatabase(from, to, -1);
 
     QList<Calendar::CalendarItem> list;
-    QMap<Calendar::CalendarItem*, bool> added;
+    QMap<Appointement *, bool> added;
 
     int pivot = searchForIntersectedItem(m_sortedByBeginList, from, to, 0, m_sortedByBeginList.count() - 1);
 
     if (pivot == -1)
             return list;
 
-    list << *m_sortedByBeginList[pivot];
+    list << toCalendarItem(m_sortedByBeginList[pivot]);
     added.insert(m_sortedByBeginList[pivot], true);
 
     // search backward...
     for (int i = pivot - 1; i >= 0; i--) {
             if (m_sortedByBeginList[i]->intersects(from, to))
                     break;
-            list << *m_sortedByBeginList[i];
+            list << toCalendarItem(m_sortedByBeginList[i]);
             added.insert(m_sortedByBeginList[i], true);
     }
 
@@ -106,7 +110,7 @@ QList<Calendar::CalendarItem> CalendarItemModel::getItemsBetween(const QDate &fr
     for (int i = pivot + 1; i < m_sortedByBeginList.count(); i++) {
             if (m_sortedByBeginList[i]->intersects(from, to))
                     break;
-            list << *m_sortedByBeginList[i];
+            list << toCalendarItem(m_sortedByBeginList[i]);
             added.insert(m_sortedByBeginList[i], true);
     }
 
@@ -119,7 +123,7 @@ QList<Calendar::CalendarItem> CalendarItemModel::getItemsBetween(const QDate &fr
                     continue;
             if (m_sortedByEndList[i]->intersects(from, to))
                     break;
-            list << *m_sortedByEndList[i];
+            list << toCalendarItem(m_sortedByEndList[i]);
     }
 
     // ... and forward
@@ -128,9 +132,8 @@ QList<Calendar::CalendarItem> CalendarItemModel::getItemsBetween(const QDate &fr
                     continue;
             if (m_sortedByEndList[i]->intersects(from, to))
                     break;
-            list << *m_sortedByEndList[i];
+            list << toCalendarItem(m_sortedByEndList[i]);
     }
-
 
     return list;
 }
@@ -140,55 +143,69 @@ int CalendarItemModel::count() const
     return m_sortedByBeginList.count();
 }
 
-const Calendar::CalendarItem &CalendarItemModel::insertItem(const QDateTime &beginning, const QDateTime &ending)
+Calendar::CalendarItem CalendarItemModel::insertItem(const QDateTime &beginning, const QDateTime &ending)
 {
     if (m_propagateEvents)
             beginInsertItem();
 
     // create the item once but insert it in two lists
-    Calendar::CalendarItem *item = new Calendar::CalendarItem(createUid(), beginning, ending);
+    Appointement *item = new Appointement;
+    item->setModelUid(createUid());
+    item->setData(DateStart, beginning);
+    item->setData(DateEnd, ending);
 
     m_sortedByBeginList.insert(getInsertionIndex(true, beginning, m_sortedByBeginList, 0, m_sortedByBeginList.count() - 1), item);
     m_sortedByEndList.insert(getInsertionIndex(false, ending, m_sortedByEndList, 0, m_sortedByEndList.count() - 1), item);
 
     if (m_propagateEvents)
-            endInsertItem(*item);
+            endInsertItem(toCalendarItem(item));
 
-    return *item;
+    return toCalendarItem(item);
 }
 
 Calendar::CalendarItem CalendarItemModel::addCalendarItem(const Calendar::CalendarItem &item)
 {
     // already in list ? -> update item
-    Calendar::CalendarItem *oldItem = getItemPointerByUid(item.uid());
+    Appointement *oldItem = getItemPointerByUid(item.uid().toInt());
     if (oldItem) {
-        if (updateCalendarItem(item))
-            return item;
+        LOG_ERROR("Item already present");
+//        if (updatetoCalendarItem(item))
+//            return item;
     }
     // create new item
     beginInsertItem();
 
     // create the item once but insert it in two lists
-    Calendar::CalendarItem *pItem = new Calendar::CalendarItem(item);
-    pItem->setData(Calendar::CalendarItem::Uid, createUid());
+    Appointement *pItem = new Appointement;
+    pItem->setModelUid(createUid());
+    pItem->setData(DateStart, item.beginning());
+    pItem->setData(DateEnd, item.ending());
 
     m_sortedByBeginList.insert(getInsertionIndex(true, item.beginning(), m_sortedByBeginList, 0, m_sortedByBeginList.count() - 1), pItem);
     m_sortedByEndList.insert(getInsertionIndex(false, item.ending(), m_sortedByEndList, 0, m_sortedByEndList.count() - 1), pItem);
 
-    endInsertItem(*pItem);
-    return *pItem;
+    endInsertItem(toCalendarItem(pItem));
+    return toCalendarItem(pItem);
 }
 
 bool CalendarItemModel::updateCalendarItem(const Calendar::CalendarItem &item)
 {
+    /** \todo OBSOLETE */
     setItemByUid(item.uid(), item);
     return true;
+}
+
+Calendar::CalendarItem CalendarItemModel::toCalendarItem(Appointement *item) const
+{
+    Calendar::CalendarItem c(QString::number(item->modelUid()), item->beginning(), item->ending());
+    setItemIsMine(&c);
+    return c;
 }
 
 void CalendarItemModel::setItemByUid(const QString &uid, const Calendar::CalendarItem &item)
 {
     // remove the old item
-    Calendar::CalendarItem *oldItem = getItemPointerByUid(uid);
+    Appointement *oldItem = getItemPointerByUid(uid.toInt());
     if (!oldItem)
             return;
 
@@ -198,12 +215,15 @@ void CalendarItemModel::setItemByUid(const QString &uid, const Calendar::Calenda
     m_sortedByEndList.removeAt(m_sortedByEndList.indexOf(oldItem));
 
     // create the item once but insert it in two lists
-    Calendar::CalendarItem *pItem = new Calendar::CalendarItem(item);
+    Appointement *pItem = new Appointement;
+    pItem->setData(DateStart, item.beginning());
+    pItem->setData(DateEnd, item.ending());
+    pItem->setModelUid(uid.toInt());
 
     m_sortedByBeginList.insert(getInsertionIndex(true, item.beginning(), m_sortedByBeginList, 0, m_sortedByBeginList.count() - 1), pItem);
     m_sortedByEndList.insert(getInsertionIndex(false, item.ending(), m_sortedByEndList, 0, m_sortedByEndList.count() - 1), pItem);
 
-    endModifyItem(*oldItem, *pItem);
+    endModifyItem(toCalendarItem(oldItem), toCalendarItem(pItem));
 
     delete oldItem;
 }
@@ -212,7 +232,7 @@ void CalendarItemModel::setItemByUid(const QString &uid, const Calendar::Calenda
 void CalendarItemModel::removeItem(const QString &uid)
 {
     // remove the old item
-    Calendar::CalendarItem *oldItem = getItemPointerByUid(uid);
+    Appointement *oldItem = getItemPointerByUid(uid.toInt());
     if (!oldItem)
             return;
 
@@ -221,9 +241,58 @@ void CalendarItemModel::removeItem(const QString &uid)
     m_sortedByBeginList.removeAt(m_sortedByBeginList.indexOf(oldItem));
     m_sortedByEndList.removeAt(m_sortedByEndList.indexOf(oldItem));
 
-    endRemoveItem(*oldItem);
+    endRemoveItem(toCalendarItem(oldItem));
 
     delete oldItem;
+}
+
+QVariant CalendarItemModel::data(const Calendar::CalendarItem &item, int dataRef, int role) const
+{
+    if (!item.isValid())
+        return QVariant();
+
+    const Appointement *pItem = getItemPointerByUid(item.uid().toInt());
+
+    if (!pItem)
+        return QVariant();
+
+    if (role==Qt::DisplayRole) {
+        switch (dataRef) {
+        case Uid: return item.uid();
+        case DateStart: return pItem->beginning();
+        case DateEnd: return pItem->ending();
+        case CreatedDate: return item.created();
+        default: return pItem->data(dataRef);
+        }
+//    } else if (role==Qt::BackgroundRole) {
+//        if (status==Calendar::Status::Cancelled)
+    }
+    return QVariant();
+}
+
+bool CalendarItemModel::setData(const Calendar::CalendarItem &item, int dataRef, const QVariant &value, int role)
+{
+    if (!item.isValid())
+        return false;
+
+    if (dataRef==Uid)
+        return false;
+
+    Appointement *pItem = getItemPointerByUid(item.uid().toInt());
+
+    if (!pItem)
+        return false;
+
+    if (role==Qt::EditRole) {
+        pItem->setData(dataRef, value);
+        if (dataRef==DateStart || dataRef==DateEnd) {
+            Q_EMIT itemModified(item, toCalendarItem(pItem));
+        }
+        Q_EMIT dataChanged(item);
+        return true;
+    }
+
+    return false;
 }
 
 void CalendarItemModel::stopEvents()
@@ -346,7 +415,7 @@ void CalendarItemModel::endRemoveItem(const Calendar::CalendarItem &removedItem)
 
 
 ////// PRIVATE PART
-int CalendarItemModel::searchForIntersectedItem(const QList<Calendar::CalendarItem*> &list, const QDate &from, const QDate &to, int first, int last) const
+int CalendarItemModel::searchForIntersectedItem(const QList<Appointement *> &list, const QDate &from, const QDate &to, int first, int last) const
 {
     if (last == -1) // 0 items
         return -1;
@@ -368,7 +437,7 @@ int CalendarItemModel::searchForIntersectedItem(const QList<Calendar::CalendarIt
     return middle; // intersection => found!
 }
 
-int CalendarItemModel::getInsertionIndex(bool begin, const QDateTime &dateTime, const QList<Calendar::CalendarItem*> &list, int first, int last) const
+int CalendarItemModel::getInsertionIndex(bool begin, const QDateTime &dateTime, const QList<Appointement *> &list, int first, int last) const
 {
     if (last == - 1) // 0 items
         return 0;
@@ -389,29 +458,33 @@ int CalendarItemModel::getInsertionIndex(bool begin, const QDateTime &dateTime, 
     return getInsertionIndex(begin, dateTime, list, middle + 1, last); // insertion index is in right part
 }
 
-Calendar::CalendarItem *CalendarItemModel::getItemPointerByUid(const QString &uid) const
+Appointement *CalendarItemModel::getItemPointerByUid(const int uid) const
 {
     // TODO: optimize it
-    foreach (Calendar::CalendarItem *item, m_sortedByBeginList)
-        if (item->uid() == uid)
+    foreach (Appointement *item, m_sortedByBeginList)
+        if (item->modelUid() == uid)
             return item;
     return 0;
 }
 
-QString CalendarItemModel::createUid() const
+/** Create an uid only used by this model. The uid is not connected to the database but only to Calendar::CalendarItem */
+int CalendarItemModel::createUid() const
 {
-    // at first, get the date
-    QString nowStr = QDateTime::currentDateTime().toString("yyyyMMddThhmmsszz");
-    int index = 0;
-    QString propal;
-    do {
-        if (!index)
-            propal = nowStr;
-        else
-            propal = nowStr + QString("-%1").arg(index);
-        index++;
-    } while (getItemByUid(propal).isValid());
-    return propal;
+    static int handle = 0;
+    ++handle;
+    return handle;
+//    // at first, get the date
+//    QString nowStr = QDateTime::currentDateTime().toString("yyyyMMddThhmmsszz");
+//    int index = 0;
+//    QString propal;
+//    do {
+//        if (!index)
+//            propal = nowStr;
+//        else
+//            propal = nowStr + QString("-%1").arg(index);
+//        index++;
+//    } while (getItemByUid(propal).isValid());
+//    return propal;
 }
 
 void CalendarItemModel::userChanged()
@@ -452,7 +525,6 @@ void CalendarItemModel::userChanged()
     // END TEST
 }
 
-
 void CalendarItemModel::getItemFromDatabase(const QDate &from, const QDate &to, const int calendarId) const
 {
     /** \todo code here: manage calendarId */
@@ -477,7 +549,7 @@ void CalendarItemModel::getItemFromDatabase(const QDate &from, const QDate &to, 
     }
 
     // get from database needed appointements
-    QList<Calendar::CalendarItem *> items;
+    QList<Appointement *> items;
 
     CalendarEventQuery query;
     query.setCalendarId(defaultUserCalendar().data(Constants::Db_CalId).toInt());
@@ -494,8 +566,9 @@ void CalendarItemModel::getItemFromDatabase(const QDate &from, const QDate &to, 
     }
 
     for(int i = 0; i < items.count(); ++i) {
-        Calendar::CalendarItem *item = items.at(i);
-        setItemIsMine(item);
+        Appointement *item = items.at(i);
+        item->setModelUid(createUid());
+//        setItemIsMine(item);
         m_sortedByBeginList.insert(getInsertionIndex(true, item->beginning(), m_sortedByBeginList, 0, m_sortedByBeginList.count() - 1), item);
         m_sortedByEndList.insert(getInsertionIndex(false, item->ending(), m_sortedByEndList, 0, m_sortedByEndList.count() - 1), item);
     }

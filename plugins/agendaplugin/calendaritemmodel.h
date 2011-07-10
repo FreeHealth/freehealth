@@ -38,6 +38,9 @@
 */
 
 namespace Agenda {
+namespace Internal {
+class Appointement;
+}
 
 class AGENDA_EXPORT CalendarItemModel : public Calendar::AbstractCalendarModel
 {
@@ -51,11 +54,13 @@ public:
 
     int count() const;
 
-    const Calendar::CalendarItem &insertItem(const QDateTime &begin, const QDateTime &end);
+    Calendar::CalendarItem insertItem(const QDateTime &begin, const QDateTime &end);
     Calendar::CalendarItem addCalendarItem(const Calendar::CalendarItem &item);
     bool updateCalendarItem(const Calendar::CalendarItem &item);
-
     void removeItem(const QString &uid);
+
+    QVariant data(const Calendar::CalendarItem &item, int dataRef, int role = Qt::DisplayRole) const;
+    bool setData(const Calendar::CalendarItem &item, int dataRef, const QVariant &value, int role = Qt::EditRole);
 
     void stopEvents();
     void resumeEvents();
@@ -88,19 +93,20 @@ protected:
     void endRemoveItem(const Calendar::CalendarItem &removedItem);
 
 private:
+    Calendar::CalendarItem toCalendarItem(Internal::Appointement *item) const;
     void setItemByUid(const QString &uid, const Calendar::CalendarItem &item);
-    int searchForIntersectedItem(const QList<Calendar::CalendarItem*> &list, const QDate &from, const QDate &to, int first, int last) const;
-    int getInsertionIndex(bool begin, const QDateTime &dateTime, const QList<Calendar::CalendarItem*> &list, int first, int last) const;
-    Calendar::CalendarItem *getItemPointerByUid(const QString &uid) const;
-    QString createUid() const;
+    int searchForIntersectedItem(const QList<Internal::Appointement *> &list, const QDate &from, const QDate &to, int first, int last) const;
+    int getInsertionIndex(bool begin, const QDateTime &dateTime, const QList<Internal::Appointement*> &list, int first, int last) const;
+    Internal::Appointement *getItemPointerByUid(const int uid) const;
+    int createUid() const;
     void getItemFromDatabase(const QDate &from, const QDate &to, const int calendarId) const;
 
 private Q_SLOTS:
     void userChanged();
 
 private:
-    mutable QList<Calendar::CalendarItem*> m_sortedByBeginList;
-    mutable QList<Calendar::CalendarItem*> m_sortedByEndList;
+    mutable QList<Internal::Appointement *> m_sortedByBeginList;
+    mutable QList<Internal::Appointement *> m_sortedByEndList;
     mutable QList<Calendar::UserCalendar*> m_UserCalendar;
     mutable QVector<QDate> m_RetrievedDates;
 };

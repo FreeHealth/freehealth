@@ -170,7 +170,7 @@ QList<CalendarItem> BasicCalendarModel::getItemsBetween(const QDate &from, const
 	return list;
 }
 
-const CalendarItem &BasicCalendarModel::insertItem(const QDateTime &beginning, const QDateTime &ending) {
+CalendarItem BasicCalendarModel::insertItem(const QDateTime &beginning, const QDateTime &ending) {
 	if (m_propagateEvents)
 		beginInsertItem();
 
