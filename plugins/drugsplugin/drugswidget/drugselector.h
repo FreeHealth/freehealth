@@ -83,6 +83,7 @@ Q_SIGNALS:
 private:
     void createDrugsHistoryActions();
     void createToolButtons();
+    void createAvailableDrugsDatabaseButtons();
     void createDrugModelView();
     void createINNModelView();
 
@@ -98,6 +99,9 @@ private Q_SLOTS:
 
     void onDrugsBaseChanged();
     void changeDrugBaseUid(QAction *a);
+
+private:
+    void changeEvent(QEvent *e);
 
 private:
     // models

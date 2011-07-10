@@ -260,7 +260,7 @@ PatientModel::PatientModel(QObject *parent) :
 
     d->connectSqlPatientSignals();
 //    changeUserUuid();
-//    d->refreshFilter();
+    d->refreshFilter();
 //    d->m_SqlPatient->select();
 
     connect(user(), SIGNAL(userChanged()), this, SLOT(changeUserUuid()));

@@ -199,6 +199,17 @@ void DrugSelector::createToolButtons()
     searchLine->setLeftButton(m_SearchToolButton);
     searchLine->setRightButton(m_DrugsHistoricButton);
 
+    createAvailableDrugsDatabaseButtons();
+    connect(drugsDatabaseSelectorButton, SIGNAL(triggered(QAction*)), drugsDatabaseSelectorButton, SLOT(setDefaultAction(QAction*)));
+    connect(drugsDatabaseSelectorButton, SIGNAL(triggered(QAction*)), this, SLOT(changeDrugBaseUid(QAction*)));
+}
+
+void DrugSelector::createAvailableDrugsDatabaseButtons()
+{
+    for(int i=drugsDatabaseSelectorButton->actions().count()-1; i > -1 ; --i) {
+        drugsDatabaseSelectorButton->removeAction(drugsDatabaseSelectorButton->actions().at(i));
+    }
+
     // Create drug database selector toolbutton
     QAction *defaultAction = 0;
     QVector<DrugsDB::DatabaseInfos *> list = base()->getAllDrugSourceInformations();
@@ -215,8 +226,6 @@ void DrugSelector::createToolButtons()
         }
     }
     drugsDatabaseSelectorButton->setDefaultAction(defaultAction);
-    connect(drugsDatabaseSelectorButton, SIGNAL(triggered(QAction*)), drugsDatabaseSelectorButton, SLOT(setDefaultAction(QAction*)));
-    connect(drugsDatabaseSelectorButton, SIGNAL(triggered(QAction*)), this, SLOT(changeDrugBaseUid(QAction*)));
 }
 
 /** \brief Update the views if user selected another drugs database */
@@ -436,5 +445,12 @@ void DrugSelector::on_textButton_clicked()
     if (r==QDialog::Accepted) {
         int row = drugModel()->addTextualPrescription(dlg.drugLabel(), dlg.drugNote());
         drugModel()->setData(drugModel()->index(row, DrugsDB::Constants::Prescription::IsALD), dlg.isALD());
+    }
+}
+
+void DrugSelector::changeEvent(QEvent *e)
+{
+    if (e->type()==QEvent::LanguageChange) {
+        createAvailableDrugsDatabaseButtons();
     }
 }
