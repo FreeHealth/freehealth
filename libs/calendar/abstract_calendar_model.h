@@ -78,7 +78,6 @@ public:
 
     virtual CalendarItem insertItem(const QDateTime &begin, const QDateTime &end) = 0;
     virtual Calendar::CalendarItem addCalendarItem(const Calendar::CalendarItem &item) = 0;
-    virtual bool updateCalendarItem(const Calendar::CalendarItem &item) = 0;
     virtual void removeItem(const QString &uid) = 0;
 
     // Item data

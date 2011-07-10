@@ -110,7 +110,6 @@ void BasicItemEditionDialog::addCalendarDataWidget(Calendar::ICalendarItemDataWi
 /** Initialize the dialog with the specified Calendar::CalendarItem \e item. */
 void BasicItemEditionDialog::init(const CalendarItem &item)
 {
-    ui->viewer->submit();
     ui->viewer->setCalendarEvent(item);
 }
 

@@ -121,11 +121,13 @@ bool CalendarItem::setData(const int ref, const QVariant &value)
 {
     if (m_Model) {
         switch (ref) {
-        case DateStart: m_beginning = value.toDateTime(); break;
-        case DateEnd:  m_ending = value.toDateTime(); break;
+        case DateStart: setBeginning(value.toDateTime()); break;
+        case DateEnd:  setEnding(value.toDateTime()); break;
         case CreatedDate: m_created = value.toDateTime(); break;
         }
         return m_Model->setData(*this, ref, value);
+    } else {
+        qWarning() << "CalendarItem does not have model";
     }
     return false;
 }
@@ -163,6 +165,28 @@ int CalendarItem::intersects(const QDate &firstDay, const QDate &lastDay) const
 bool CalendarItem::overlap(const CalendarItem &item) const
 {
     return ending() > item.beginning() && beginning() < item.ending();
+}
+
+void CalendarItem::setBeginning(const QDateTime &value)
+{
+    if (m_beginning==value)
+        return;
+    m_beginning=value;
+    // inform the model
+    if (m_Model) {
+        m_Model->setData(*this, AbstractCalendarModel::DateStart, value);
+    }
+}
+
+void CalendarItem::setEnding(const QDateTime &value)
+{
+    if (m_ending==value)
+        return;
+    m_ending=value;
+    // inform the model
+    if (m_Model) {
+        m_Model->setData(*this, AbstractCalendarModel::DateEnd, value);
+    }
 }
 
 bool CalendarItem::operator==(const CalendarItem &other) const

@@ -101,13 +101,13 @@ public:
     void setTitle(const QString &value) {setData(Label, value);}
 
     QDateTime beginning() const { return m_beginning; }
-    void setBeginning(const QDateTime &value) {m_beginning=value;}
+    void setBeginning(const QDateTime &value);
 
     DateType beginningType() const { return m_beginningType; }
     void setBeginningType(DateType value);
 
     QDateTime ending() const { return m_ending; }
-    void setEnding(const QDateTime &value) {m_ending=value;}
+    void setEnding(const QDateTime &value);
 
     DateType endingType() const { return m_endingType; }
     void setEndingType(DateType value);

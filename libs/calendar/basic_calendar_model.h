@@ -50,11 +50,9 @@ namespace Calendar {
 
                 CalendarItem insertItem(const QDateTime &beginning, const QDateTime &ending);
                 Calendar::CalendarItem addCalendarItem(const Calendar::CalendarItem &item);
-                bool updateCalendarItem(const Calendar::CalendarItem &item);
+                void removeItem(const QString &uid);
 
 		CalendarItem getItemByUid(const QString &uid) const;
-
-		void removeItem(const QString &uid);
 
 		void clearAll();
 

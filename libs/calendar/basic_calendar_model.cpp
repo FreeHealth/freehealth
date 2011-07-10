@@ -287,8 +287,7 @@ Calendar::CalendarItem BasicCalendarModel::addCalendarItem(const Calendar::Calen
     // already in list ? -> update item
     CalendarItem *oldItem = getItemPointerByUid(item.uid());
     if (oldItem) {
-        if (updateCalendarItem(item))
-            return item;
+        return item;
     }
     // create new item
     beginInsertItem();
@@ -303,12 +302,6 @@ Calendar::CalendarItem BasicCalendarModel::addCalendarItem(const Calendar::Calen
 
     endInsertItem(*pItem);
     return *pItem;
-}
-
-bool BasicCalendarModel::updateCalendarItem(const Calendar::CalendarItem &item)
-{
-    setItemByUid(item.uid(), item);
-    return true;
 }
 
 void BasicCalendarModel::removeItem(const QString &uid) {
