@@ -293,7 +293,6 @@ void DayRangeHeader::mouseReleaseEvent(QMouseEvent *event) {
 			if (daysAdded) {
 				m_pressItem.setBeginning(m_pressItem.beginning().addDays(daysAdded));
 				m_pressItem.setEnding(m_pressItem.ending().addDays(daysAdded));
-				model()->updateCalendarItem(m_pressItem);
 			}
 			computeWidgets();
 			updateGeometry();
@@ -317,7 +316,6 @@ void DayRangeHeader::modifyPressItem() {
         BasicItemEditionDialog dialog(model(), this);
         dialog.init(m_pressItem);
 	if (dialog.exec() == QDialog::Accepted) {
-		model()->updateCalendarItem(dialog.item());
 		computeWidgets();
 		updateGeometry();
 	}
@@ -551,8 +549,12 @@ void DayRangeBody::mousePressEvent(QMouseEvent *event) {
 			m_mouseMode = MouseMode_Resize;
 		else
 			m_mouseMode = MouseMode_Move;
-	} else
+        } else {
 		m_mouseMode = MouseMode_Creation;
+        }
+
+
+        qWarning() << m_pressItem.uid() << m_pressItem.beginning() << m_pressItem.ending();
 }
 
 void DayRangeBody::mouseMoveEvent(QMouseEvent *event) {
@@ -671,7 +673,6 @@ void DayRangeBody::mouseReleaseEvent(QMouseEvent *event) {
 			newItem = m_pressItem;
 			newItem.setBeginning(m_pressItemWidget->beginDateTime());
 			newItem.setEnding(m_pressItemWidget->endDateTime());
-			model()->updateCalendarItem(newItem);
 		}
 		break;
 	default:;
@@ -684,8 +685,7 @@ void DayRangeBody::mouseReleaseEvent(QMouseEvent *event) {
 void DayRangeBody::mouseDoubleClickEvent(QMouseEvent *) {
         BasicItemEditionDialog dialog(model(), this);
         dialog.init(m_pressItem);
-        if (dialog.exec() == QDialog::Accepted)
-            model()->updateCalendarItem(dialog.item());
+        dialog.exec();
 }
 
 void DayRangeBody::itemInserted(const CalendarItem &item) {
@@ -772,8 +772,7 @@ void DayRangeBody::refreshDayWidgets(const QDate &dayDate) {
 void DayRangeBody::modifyPressItem() {
         BasicItemEditionDialog dialog(model(), this);
 	dialog.init(m_pressItem);
-        if (dialog.exec() == QDialog::Accepted)
-            model()->updateCalendarItem(dialog.item());
+        dialog.exec();
 }
 
 void DayRangeBody::removePressItem() {

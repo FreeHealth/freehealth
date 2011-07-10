@@ -188,13 +188,6 @@ Calendar::CalendarItem CalendarItemModel::addCalendarItem(const Calendar::Calend
     return toCalendarItem(pItem);
 }
 
-bool CalendarItemModel::updateCalendarItem(const Calendar::CalendarItem &item)
-{
-    /** \todo OBSOLETE */
-    setItemByUid(item.uid(), item);
-    return true;
-}
-
 Calendar::CalendarItem CalendarItemModel::toCalendarItem(Appointement *item) const
 {
     Calendar::CalendarItem c(QString::number(item->modelUid()), item->beginning(), item->ending());
@@ -283,7 +276,12 @@ bool CalendarItemModel::setData(const Calendar::CalendarItem &item, int dataRef,
     if (!pItem)
         return false;
 
+    if (pItem->data(dataRef) == value)
+        return true;
+
+
     if (role==Qt::EditRole) {
+        qWarning() << "SetData" << pItem->modelUid() << item.uid() << dataRef << value;
         pItem->setData(dataRef, value);
         if (dataRef==DateStart || dataRef==DateEnd) {
             Q_EMIT itemModified(item, toCalendarItem(pItem));
