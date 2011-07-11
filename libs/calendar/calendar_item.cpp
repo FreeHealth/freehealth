@@ -27,7 +27,8 @@
  ***************************************************************************/
 /**
   \class Calendar::CalendarItem
-  Represents a event in an agenda (calendar).
+  The Calendar::CalendarItem is used to locate an event in the
+  Calendar::AbstractCalendarModel. It acts the same way as QModelIndex.
 */
 
 #include "common.h"
@@ -43,6 +44,7 @@ CalendarItem::CalendarItem() :
         m_Model(0)
 {}
 
+/** Constructs an item starting at \e beginning and ending at \e ending. */
 CalendarItem::CalendarItem(const QDateTime &beginning, const QDateTime &ending) :
         m_Model(0)
 {
@@ -53,6 +55,7 @@ CalendarItem::CalendarItem(const QDateTime &beginning, const QDateTime &ending) 
     m_endingType = Date_DateTime;
 }
 
+/** Constructs an item starting at \e beginning and ending at \e ending with the specified \e uid. */
 CalendarItem::CalendarItem(const QString &uid, const QDateTime &beginning, const QDateTime &ending) :
         m_Model(0)
 {
@@ -167,6 +170,7 @@ bool CalendarItem::overlap(const CalendarItem &item) const
     return ending() > item.beginning() && beginning() < item.ending();
 }
 
+/** Define the beginning date. The date will be passed to the item's model */
 void CalendarItem::setBeginning(const QDateTime &value)
 {
     if (!value.isValid())
@@ -180,6 +184,7 @@ void CalendarItem::setBeginning(const QDateTime &value)
     }
 }
 
+/** Define the ending date. The date will be passed to the item's model */
 void CalendarItem::setEnding(const QDateTime &value)
 {
     if (!value.isValid())
@@ -193,6 +198,7 @@ void CalendarItem::setEnding(const QDateTime &value)
     }
 }
 
+/** Test Calendar::CalendarItem equality */
 bool CalendarItem::operator==(const CalendarItem &other) const
 {
     /** \todo match on uid should be enough assuming each CalendarItem have a different uid. */
@@ -201,7 +207,7 @@ bool CalendarItem::operator==(const CalendarItem &other) const
             other.ending() == m_ending);
 }
 
-/** a sort function for calendar items */
+/** A sort function for calendar items */
 bool Calendar::calendarItemLessThan(const CalendarItem &item1, const CalendarItem &item2)
 {
     // at first compare with begin dates. If they're equals, compare by end dates.
