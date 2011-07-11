@@ -65,17 +65,12 @@ CalendarItemModel::~CalendarItemModel()
 Calendar::CalendarItem CalendarItemModel::getItemByUid(const QString &uid) const
 {
     Appointement *item = getItemPointerByUid(uid.toInt());
-//    qWarning() << item << uid;
+
     if (!item) {
         Calendar::CalendarItem cal;
         cal.setData(Uid, createUid());
         setItemIsMine(&cal);
         return cal;
-    } else {
-        // populate names if needed
-//        if (item->peopleUids(PeopleAttendee, true).count() != item->peopleNames(PeopleAttendee, true).count()) {
-//            base()->getPatientNames(item);
-//        }
     }
     return toCalendarItem(item);
 }
@@ -257,8 +252,17 @@ QVariant CalendarItemModel::data(const Calendar::CalendarItem &item, int dataRef
         case CreatedDate: return item.created();
         default: return pItem->data(dataRef);
         }
-//    } else if (role==Qt::BackgroundRole) {
-//        if (status==Calendar::Status::Cancelled)
+    } else if (role==Qt::BackgroundRole && dataRef==Status) {
+        int status = pItem->data(Status).toInt();
+        /** \todo create preferences for color */
+        switch (status) {
+        case Waiting: return QColor(0,0,200); break;
+        case Approved: return QColor(0,200,0); break;
+        case Arrived: return QColor(0,200,200); break;
+        case Changed: return QColor(0,200,100); break;
+        case Cancelled: return QColor(200,100,0); break;
+        case Missed: return QColor(200,0,0); break;
+        }
     }
     return QVariant();
 }
@@ -380,6 +384,25 @@ void CalendarItemModel::clearAll()
     if (m_propagateEvents)
             Q_EMIT reset();
 }
+
+bool CalendarItemModel::submitAll()
+{
+    return base()->saveCalendarEvents(m_sortedByBeginList);
+}
+
+bool CalendarItemModel::submit(const Calendar::CalendarItem &item)
+{
+    if (!item.isValid())
+        return false;
+
+    Appointement *pItem = getItemPointerByUid(item.uid().toInt());
+
+    if (!pItem)
+        return false;
+
+    return base()->saveCalendarEvent(pItem);
+}
+
 
 void CalendarItemModel::beginInsertItem()
 {

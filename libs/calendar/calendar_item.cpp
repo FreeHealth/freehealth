@@ -169,6 +169,8 @@ bool CalendarItem::overlap(const CalendarItem &item) const
 
 void CalendarItem::setBeginning(const QDateTime &value)
 {
+    if (!value.isValid())
+        return;
     if (m_beginning==value)
         return;
     m_beginning=value;
@@ -180,6 +182,8 @@ void CalendarItem::setBeginning(const QDateTime &value)
 
 void CalendarItem::setEnding(const QDateTime &value)
 {
+    if (!value.isValid())
+        return;
     if (m_ending==value)
         return;
     m_ending=value;

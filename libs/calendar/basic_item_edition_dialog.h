@@ -29,6 +29,7 @@
 #define BASIC_ITEM_EDITION_DIALOG_H
 
 #include <calendar/calendar_exporter.h>
+#include <calendar/calendar_item.h>
 
 #include <QDialog>
 #include <QPushButton>
@@ -37,7 +38,7 @@
  * \file basic_item_edition_dialog.h
  * \author Guillaume Denry, Eric Maeker
  * \version 0.6.0
- * \date 05 Jul 2011
+ * \date 11 Jul 2011
 */
 
 namespace Calendar {
@@ -62,7 +63,8 @@ public:
 
     void init(const CalendarItem &item);
 
-    CalendarItem item() const;
+protected:
+    void done(int r);
 
 private Q_SLOTS:
     void showMoreTriggered();
@@ -71,6 +73,7 @@ private:
     AbstractCalendarModel *m_Model;
     Internal::Ui::BasicItemEditionDialog *ui;
     QPushButton *m_moreInfo;
+    CalendarItem m_Item;
 };
 
 }  // End namespace Calendar

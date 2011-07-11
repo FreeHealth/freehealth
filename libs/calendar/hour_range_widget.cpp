@@ -1,15 +1,18 @@
 #include <QPainter>
 #include <QMouseEvent>
+#include <QColor>
 
 #include "hour_range_widget.h"
 #include "abstract_calendar_model.h"
 
 using namespace Calendar;
 
-HourRangeWidget::HourRangeWidget(QWidget *parent, const QString &uid, AbstractCalendarModel *model)
-	: CalendarItemWidget(parent, uid, model), m_aboveWidget(0) {
-	m_inMotion = uid.isEmpty();
-	setMouseTracking(true);
+HourRangeWidget::HourRangeWidget(QWidget *parent, const QString &uid, AbstractCalendarModel *model) :
+        CalendarItemWidget(parent, uid, model), m_aboveWidget(0)
+{
+    m_inMotion = uid.isEmpty();
+    setMouseTracking(true);
+    connect(model, SIGNAL(dataChanged(Calendar::CalendarItem)), this, SLOT(update()));
 }
 
 void HourRangeWidget::paintEvent(QPaintEvent *) {
@@ -21,7 +24,9 @@ void HourRangeWidget::paintEvent(QPaintEvent *) {
 	titlePainter.setPen(Qt::NoPen);
 	QBrush brush = titlePainter.brush();
 	brush.setStyle(Qt::SolidPattern);
-	brush.setColor(QColor(0, 100, 0, m_inMotion ? 200 : 255));
+        QColor baseColor = model()->data(model()->getItemByUid(uid()), AbstractCalendarModel::Status, Qt::BackgroundRole).value<QColor>();;
+        m_inMotion ? baseColor.setAlpha(200) : baseColor.setAlpha(255);
+        brush.setColor(baseColor);
 	titlePainter.setBrush(brush);
 	titlePainter.drawRoundedRect(QRect(0, 0, width(), 20), 5, 5);
 
@@ -43,17 +48,20 @@ void HourRangeWidget::paintEvent(QPaintEvent *) {
 	bodyPixmap.fill(Qt::transparent);
 	QPainter bodyPainter(&bodyPixmap);
 	bodyPainter.setRenderHint(QPainter::Antialiasing);
-	bodyPainter.setPen(QColor(0, 100, 0, m_inMotion ? 200 : 255));
+        QColor lightBase = baseColor;
+        lightBase.lighter();
+        bodyPainter.setPen(lightBase);
 	brush = bodyPainter.brush();
 	brush.setStyle(Qt::SolidPattern);
-	brush.setColor(QColor(0, 200, 0, m_inMotion ? 200 : 255));
+        brush.setColor(baseColor);
 	bodyPainter.setBrush(brush);
 	bodyPainter.drawRoundedRect(QRect(0, 0, width(), height()), 5, 5);
 	if (model()) {
 		CalendarItem item = model()->getItemByUid(uid());
 		if (item.isValid()) {
 			bodyPainter.setPen(Qt::white);
-			bodyPainter.drawText(QRect(2, 20, width() - 3, height()), Qt::TextWordWrap | Qt::AlignLeft, item.title().isEmpty() ? tr("(untitled)") : item.title());
+                        QString label = item.title().isEmpty() ? tr("(untitled)") : item.title();
+                        bodyPainter.drawText(QRect(2, 20, width() - 3, height()), Qt::TextWordWrap | Qt::AlignLeft, label);
 		}
 	}
 

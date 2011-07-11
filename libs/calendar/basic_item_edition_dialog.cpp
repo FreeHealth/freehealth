@@ -57,6 +57,7 @@
 #include "basic_item_edition_dialog.h"
 #include "calendar_item.h"
 #include "icalendaritemdatawidget.h"
+#include "abstract_calendar_model.h"
 
 #include <extensionsystem/pluginmanager.h>
 #include <translationutils/constanttranslations.h>
@@ -97,6 +98,16 @@ BasicItemEditionDialog::~BasicItemEditionDialog()
     delete ui;
 }
 
+void BasicItemEditionDialog::done(int r)
+{
+    qWarning() << "DONE";
+    if (r==QDialog::Accepted) {
+        ui->viewer->submit();
+        m_Model->submit(m_Item);
+    }
+    QDialog::done(r);
+}
+
 /**
   Add specific widgets to the editor using the Calendar::ICalendarItemDataWidget interface.
   You must set the Calendar::CalendarItem AFTER you have added ALL your Calendar::ICalendarItemDataWidget.
@@ -110,14 +121,8 @@ void BasicItemEditionDialog::addCalendarDataWidget(Calendar::ICalendarItemDataWi
 /** Initialize the dialog with the specified Calendar::CalendarItem \e item. */
 void BasicItemEditionDialog::init(const CalendarItem &item)
 {
+    m_Item = item;
     ui->viewer->setCalendarEvent(item);
-}
-
-/** Submit changes done to the user interface in the Calendar::CalendarItem used at initialization time and return it. \sa init() */
-Calendar::CalendarItem BasicItemEditionDialog::item() const
-{
-    ui->viewer->submit();
-    return ui->viewer->calendarEvent();
 }
 
 void BasicItemEditionDialog::showMoreTriggered()

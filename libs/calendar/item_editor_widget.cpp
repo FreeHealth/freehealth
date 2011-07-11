@@ -122,6 +122,7 @@ namespace Internal {
             m_Item.setData(CalendarItem::Password, ui->password->text());
             m_Item.setData(CalendarItem::Label, ui->eventLabel->text());
             m_Item.setData(CalendarItem::Description,ui->fullInfo->toHtml());
+            m_Item.setData(CalendarItem::Status, ui->statusCombo->currentIndex());
 //            m_Item.setData(CalendarItem::ThemedIcon, QString());
 
             // get user calendar

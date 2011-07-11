@@ -40,6 +40,7 @@
 #include <QFileInfo>
 #include <QProgressDialog>
 #include <calendar/usercalendar.h>
+#include <calendar/common.h>
 #include <calendar/usercalendar_editor_widget.h>
 #include <patientbaseplugin/patientbase.h>
 #include <patientbaseplugin/constants_db.h>
@@ -234,6 +235,7 @@ void AgendaPlugin::testDatabase()
     qWarning() << "PatientBase count" << numberOfPatients();
 
     Appointement *ev = 0;
+    int maxStatus = Calendar::availableStatus().count() - 1;
     if (list.count()==0) {
         chrono.restart();
         bool ok = true;
@@ -273,7 +275,7 @@ void AgendaPlugin::testDatabase()
             ev->setData(CalendarItemModel::DateStart, start);
             ev->setData(CalendarItemModel::DateEnd, end);
             ev->setData(CalendarItemModel::Type, 1);
-            ev->setData(CalendarItemModel::Status, 2);
+            ev->setData(CalendarItemModel::Status, r.randomInt(0, maxStatus));
             ev->setData(CalendarItemModel::LocationUid, "siteId");
             ev->setData(CalendarItemModel::IsPrivate, r.randomInt(0,1));
             ev->setData(CalendarItemModel::Password, "nopass");

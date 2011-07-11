@@ -77,6 +77,8 @@ public:
 
 public Q_SLOTS:
     void clearAll();
+    bool submitAll();
+    bool submit(const Calendar::CalendarItem &item);
 
 Q_SIGNALS:
     void itemInserted(const Calendar::CalendarItem &newItem);

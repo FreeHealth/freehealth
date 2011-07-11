@@ -113,6 +113,7 @@ public:
     void setEndingType(DateType value);
 
     QString description() const { return data(Description).toString(); }
+    int status() const {return data(Status).toInt();}
 
     // Put this in a private part ?
     QDateTime created() const { return m_created; }

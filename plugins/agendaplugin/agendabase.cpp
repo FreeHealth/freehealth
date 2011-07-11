@@ -811,9 +811,7 @@ QList<Appointement *> AgendaBase::getCalendarEvents(const CalendarEventQuery &ca
 bool AgendaBase::saveCommonEvent(Appointement *event)
 {
     QSqlQuery query(database());
-    if (event->data(Constants::Db_EvId).isNull() ||
-            !event->data(Constants::Db_EvId).isValid() ||
-            event->data(Constants::Db_EvId).toInt() == -1) {
+    if (event->eventId() == -1) {
         // save
         query.prepare(prepareInsertQuery(Constants::Table_COMMON));
         query.bindValue(Constants::COMMON_ID, QVariant());
@@ -976,6 +974,9 @@ bool AgendaBase::getPatientNames(Appointement *item)
 /** Save or update a Calendar::CalendarItem to the agenda database */
 bool AgendaBase::saveNonCyclingEvent(Appointement *event)
 {
+    if (!event->isModified())
+        return true;
+
     if (event->isCycling())
         return false;
 
@@ -983,9 +984,7 @@ bool AgendaBase::saveNonCyclingEvent(Appointement *event)
         return false;
 
     QSqlQuery query(database());
-    if (event->data(Constants::Db_EvId).isNull() ||
-            !event->data(Constants::Db_EvId).isValid() ||
-            event->data(Constants::Db_EvId).toInt() == -1) {
+    if (event->eventId() == -1) {
         // save
         query.prepare(prepareInsertQuery(Constants::Table_EVENTS));
         query.bindValue(Constants::EVENT_ID, QVariant());
@@ -1054,17 +1053,8 @@ bool AgendaBase::saveCalendarEvents(const QList<Appointement *> &events)
     bool ok = true;
     for(int i = 0; i < events.count(); ++i) {
         Appointement *ev = events.at(i);
-        if (ev->isCycling()) {
-            //                if (!updateCyclingEvent(static_cast<ICalendarCyclingEvent*>(ev)))
-            //                    ok = false;
-        } else {
-            if (ev->data(Constants::Db_EvId).isNull() || ev->data(Constants::Db_EvId).toInt()==-1) {
-                if (!saveNonCyclingEvent(ev))
-                    ok = false;
-//                else if (!updateNonCyclingEvent(ev))
-//                    ok = false;
-            }
-        }
+        if (!saveNonCyclingEvent(ev))
+            ok = false;
     }
     return ok;
 }

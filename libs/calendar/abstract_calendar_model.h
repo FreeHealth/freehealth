@@ -37,6 +37,13 @@ QT_BEGIN_NAMESPACE
 class QAbstractItemModel;
 QT_END_NAMESPACE
 
+/**
+ * \file abstract_calendar_model.h
+ * \author Guillaume Denry, Eric Maeker
+ * \version 0.6.0
+ * \date 11 Jul 2011
+*/
+
 namespace Calendar {
 
 class CALENDAR_EXPORT AbstractCalendarModel : public QObject
@@ -68,6 +75,15 @@ public:
         PeopleUser
     };
 
+    enum ItemStatus {  // synchronized with common.h -> availableStatus() stringlist
+        Waiting = 0,
+        Approved,
+        Arrived,
+        Changed,
+        Cancelled,
+        Missed
+    };
+
     AbstractCalendarModel(QObject *parent = 0);
 
     // Management of Items
@@ -87,7 +103,6 @@ public:
     virtual void addPeople(const Calendar::CalendarItem &item, const PeopleType people, const QString &name, const QString &uid = QString::null);
     virtual QStringList peopleNames(const Calendar::CalendarItem &item, const PeopleType people = PeopleAttendee, bool skipEmpty = false) const;
 
-
     void stopEvents();
     void resumeEvents();
 
@@ -104,6 +119,8 @@ public:
 
 public Q_SLOTS:
     virtual void clearAll() {}
+    virtual bool submitAll() {return false;}
+    virtual bool submit(const Calendar::CalendarItem &) {return false;}
 
 Q_SIGNALS:
     void dataChanged(const Calendar::CalendarItem &begin);
