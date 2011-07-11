@@ -139,13 +139,11 @@ UserAgendasViewer::~UserAgendasViewer()
 void UserAgendasViewer::newEventAtAvailabity(QAction *action)
 {
     Calendar::BasicItemEditionDialog dlg(d->m_Model, this);
-    Calendar::CalendarItem item;
     QDateTime start = action->data().toDateTime();
-    item.setBeginning(start);
-    item.setEnding(start.addSecs((d->ui->availDurationCombo->currentIndex()+1)*5*60));
+    Calendar::CalendarItem item = d->m_Model->insertItem(start, start.addSecs((d->ui->availDurationCombo->currentIndex()+1)*5*60));
     dlg.init(item);
-    if (dlg.exec() == QDialog::Accepted) {
-        d->m_Model->addCalendarItem(dlg.item());
+    if (dlg.exec() != QDialog::Accepted) {
+        d->m_Model->removeItem(item.uid());
     }
 }
 
