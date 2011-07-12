@@ -57,8 +57,9 @@ VirtualPatientBasePage::~VirtualPatientBasePage()
 }
 
 QString VirtualPatientBasePage::id() const { return objectName(); }
-QString VirtualPatientBasePage::name() const { return tr("Virtual databases"); }
+QString VirtualPatientBasePage::name() const { return tr("Virtual database"); }
 QString VirtualPatientBasePage::category() const { return tkTr(Trans::Constants::GENERAL); }
+QString VirtualPatientBasePage::title() const {return tr("Virtual database");}
 
 void VirtualPatientBasePage::finish() { delete m_Widget; }
 

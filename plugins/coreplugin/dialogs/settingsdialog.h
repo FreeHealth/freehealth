@@ -64,7 +64,7 @@ public Q_SLOTS:
     void done(int);
 
 private Q_SLOTS:
-    void pageSelected();
+//    void pageSelected();
     void accept();
     void reject();
     void apply();

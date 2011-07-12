@@ -470,6 +470,7 @@ enum TitleInterpret {
         const char* const YES                                = QT_TRANSLATE_NOOP("tkConstants", "Yes");
         const char* const NO                                 = QT_TRANSLATE_NOOP("tkConstants", "No");
         const char* const GENERAL                            = QT_TRANSLATE_NOOP("tkConstants", "General");
+        const char* const GENERAL_PREFERENCES                = QT_TRANSLATE_NOOP("tkConstants", "General preferences");
         const char* const APPLICATION_FAILURE                = QT_TRANSLATE_NOOP("tkConstants", "Fatal error : Application failure. Please restart application.");
 
         const char* const CONNECTED_TO_DATABASE_1_DRIVER_2   = QT_TRANSLATE_NOOP("tkConstants", "Connected to database %1 with driver %2");

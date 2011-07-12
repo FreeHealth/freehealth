@@ -9,7 +9,8 @@ SOURCES += $${PWD}/aboutdialog.cpp \
     $${PWD}/helpdialog.cpp \
     $${PWD}/applicationgeneralpreferences.cpp \
     $${PWD}/simpletextdialog.cpp \
-    $${PWD}/serverpreferenceswidget.cpp
+    $${PWD}/serverpreferenceswidget.cpp \
+    $${PWD}/pagewidget.cpp
 
 HEADERS += $${PWD}/aboutdialog.h \
     $${PWD}/commonaboutpages.h \
@@ -21,11 +22,14 @@ HEADERS += $${PWD}/aboutdialog.h \
     $${PWD}/helpdialog.h \
     $${PWD}/applicationgeneralpreferences.h \
     $${PWD}/simpletextdialog.h \
-    $${PWD}/serverpreferenceswidget.h
+    $${PWD}/serverpreferenceswidget.h \
+    $${PWD}/pagewidget.h
 
 FORMS += $${PWD}/aboutdialog.ui \
     $${PWD}/debugdialog.ui \
     $${PWD}/settingsdialog.ui \
     $${PWD}/applicationgeneralpreferences.ui \
     $${PWD}/simpletextdialog.ui \
-    $${PWD}/serverpreferenceswidget.ui
+    $${PWD}/serverpreferenceswidget.ui \
+    $${PWD}/pagewidget.ui
+

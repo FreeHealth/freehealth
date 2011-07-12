@@ -6,7 +6,7 @@
    <rect>
     <x>0</x>
     <y>0</y>
-    <width>413</width>
+    <width>417</width>
     <height>373</height>
    </rect>
   </property>
@@ -15,26 +15,6 @@
   </property>
   <layout class="QGridLayout" name="gridLayout_4">
    <item row="0" column="0">
-    <widget class="QLabel" name="label">
-     <property name="font">
-      <font>
-       <weight>75</weight>
-       <bold>true</bold>
-      </font>
-     </property>
-     <property name="text">
-      <string>                              Available working places</string>
-     </property>
-    </widget>
-   </item>
-   <item row="1" column="0">
-    <widget class="Line" name="line">
-     <property name="orientation">
-      <enum>Qt::Horizontal</enum>
-     </property>
-    </widget>
-   </item>
-   <item row="2" column="0">
     <layout class="QGridLayout" name="gridLayout">
      <item row="0" column="0">
       <widget class="QLabel" name="label_2">
@@ -73,7 +53,7 @@
      </item>
     </layout>
    </item>
-   <item row="3" column="0">
+   <item row="1" column="0">
     <widget class="QTabWidget" name="tabWidget">
      <property name="currentIndex">
       <number>0</number>
@@ -248,7 +228,7 @@
         <rect>
          <x>28</x>
          <y>40</y>
-         <width>429</width>
+         <width>430</width>
          <height>71</height>
         </rect>
        </property>

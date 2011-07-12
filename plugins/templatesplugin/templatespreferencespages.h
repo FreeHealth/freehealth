@@ -75,6 +75,7 @@ public:
     QString id() const;
     QString name() const;
     QString category() const;
+    QString title() const;
 
     void resetToDefaults();
     void checkSettingsValidity();

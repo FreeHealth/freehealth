@@ -60,6 +60,7 @@ FormManagerPreferencesPage::~FormManagerPreferencesPage()
 QString FormManagerPreferencesPage::id() const { return objectName(); }
 QString FormManagerPreferencesPage::name() const { return tr("Selector"); }
 QString FormManagerPreferencesPage::category() const { return tr("Forms"); }
+QString FormManagerPreferencesPage::title() const {return tr("Patient file form selector");}
 
 void FormManagerPreferencesPage::resetToDefaults()
 {

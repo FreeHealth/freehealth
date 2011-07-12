@@ -58,6 +58,7 @@ ProtocolPreferencesPage::~ProtocolPreferencesPage()
 QString ProtocolPreferencesPage::id() const { return objectName(); }
 QString ProtocolPreferencesPage::name() const { return tkTr(Trans::Constants::PROTOCOLS); }
 QString ProtocolPreferencesPage::category() const { return tkTr(Trans::Constants::DRUGS); }
+QString ProtocolPreferencesPage::title() const {return tr("Drug's protocole preferences");}
 
 void ProtocolPreferencesPage::resetToDefaults()
 {

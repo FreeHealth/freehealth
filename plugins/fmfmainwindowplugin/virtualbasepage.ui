@@ -6,7 +6,7 @@
    <rect>
     <x>0</x>
     <y>0</y>
-    <width>495</width>
+    <width>497</width>
     <height>314</height>
    </rect>
   </property>
@@ -15,29 +15,6 @@
   </property>
   <layout class="QGridLayout" name="gridLayout_3">
    <item row="0" column="0" colspan="2">
-    <widget class="QLabel" name="label">
-     <property name="font">
-      <font>
-       <weight>75</weight>
-       <bold>true</bold>
-      </font>
-     </property>
-     <property name="text">
-      <string>Virtual database creator</string>
-     </property>
-     <property name="alignment">
-      <set>Qt::AlignCenter</set>
-     </property>
-    </widget>
-   </item>
-   <item row="1" column="0" colspan="2">
-    <widget class="Line" name="line">
-     <property name="orientation">
-      <enum>Qt::Horizontal</enum>
-     </property>
-    </widget>
-   </item>
-   <item row="2" column="0" colspan="2">
     <widget class="QGroupBox" name="groupBox">
      <property name="title">
       <string>Virtual patients</string>
@@ -87,7 +64,7 @@
      </layout>
     </widget>
    </item>
-   <item row="3" column="0" colspan="2">
+   <item row="1" column="0" colspan="2">
     <widget class="QGroupBox" name="groupBox_2">
      <property name="title">
       <string>Virtual users</string>
@@ -120,7 +97,7 @@
      </layout>
     </widget>
    </item>
-   <item row="4" column="1">
+   <item row="2" column="1">
     <spacer name="verticalSpacer">
      <property name="orientation">
       <enum>Qt::Vertical</enum>

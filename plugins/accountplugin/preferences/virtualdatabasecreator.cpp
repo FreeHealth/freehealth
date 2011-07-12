@@ -177,6 +177,7 @@ VirtualDatabaseCreatorPage::~VirtualDatabaseCreatorPage()
 QString VirtualDatabaseCreatorPage::id() const { return objectName(); }
 QString VirtualDatabaseCreatorPage::name() const { return tr("Virtual database creator"); }
 QString VirtualDatabaseCreatorPage::category() const { return tkTr(Trans::Constants::ACCOUNTANCY); }
+QString VirtualDatabaseCreatorPage::title() const {return tr("Accountancy virtual database creator");}
 
 void VirtualDatabaseCreatorPage::resetToDefaults()
 {

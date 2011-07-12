@@ -25,7 +25,8 @@ HEADERS += $${PWD}/core_exporter.h \
     $${PWD}/ipadtools.h \
     $${PWD}/icalendar.h \
     $${PWD}/ifirstconfigurationpage.h \
-    $${PWD}/ipatientlistener.h
+    $${PWD}/ipatientlistener.h \
+    $${PWD}/igenericpage.h
 
 SOURCES += $${PWD}/uniqueidmanager.cpp \
     $${PWD}/icore.cpp \

@@ -65,6 +65,7 @@ PmhPreferencesPage::~PmhPreferencesPage()
 QString PmhPreferencesPage::id() const { return objectName(); }
 QString PmhPreferencesPage::name() const { return tkTr(Trans::Constants::PASTMEDICALHISTORY); }
 QString PmhPreferencesPage::category() const { return tkTr(Trans::Constants::PMHX); }
+QString PmhPreferencesPage::title() const {return tr("PMHx preferences");}
 
 void PmhPreferencesPage::resetToDefaults()
 {

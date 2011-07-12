@@ -22,6 +22,7 @@
 #define IOPTIONSPAGE_H
 
 #include <coreplugin/core_exporter.h>
+#include <coreplugin/igenericpage.h>
 
 #include <QtCore/QObject>
 #include <QtCore/QString>
@@ -30,19 +31,19 @@
 /**
  * \file ioptionspage.h
  * \author Eric MAEKER <eric.maeker@gmail.com>
- * \version 0.0.10
- * \date 09 Aug 2009
+ * \version 0.6.0
+ * \date 12 Jul 2011
  * \class Core::IOptionsPage
  * \brief Represents an application preferences page. Derive objects from this interface and set it inside the PluginManager oject pool to get the page in the Core::SettingsDialog.
 */
 
 namespace Core {
 
-class CORE_EXPORT IOptionsPage : public QObject
+class CORE_EXPORT IOptionsPage : public IGenericPage
 {
     Q_OBJECT
 public:
-    IOptionsPage(QObject *parent = 0) : QObject(parent) {}
+    IOptionsPage(QObject *parent = 0) : IGenericPage(parent) {}
     virtual ~IOptionsPage() {}
 
     virtual QString id() const = 0;
@@ -61,4 +62,4 @@ public:
 
 } // namespace Core
 
-#endif // IDEBUGPAGE_H
+#endif // IOPTIONSPAGE_H

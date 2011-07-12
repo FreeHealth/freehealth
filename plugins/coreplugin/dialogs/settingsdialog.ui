@@ -15,48 +15,7 @@
   </property>
   <layout class="QVBoxLayout">
    <item>
-    <widget class="QSplitter" name="splitter">
-     <property name="orientation">
-      <enum>Qt::Horizontal</enum>
-     </property>
-     <widget class="QTreeWidget" name="pageTree">
-      <property name="sizePolicy">
-       <sizepolicy hsizetype="Expanding" vsizetype="Expanding">
-        <horstretch>0</horstretch>
-        <verstretch>0</verstretch>
-       </sizepolicy>
-      </property>
-      <property name="columnCount">
-       <number>1</number>
-      </property>
-      <column>
-       <property name="text">
-        <string>0</string>
-       </property>
-      </column>
-     </widget>
-     <widget class="QWidget" name="layoutWidget">
-      <layout class="QVBoxLayout">
-       <item>
-        <widget class="QStackedWidget" name="stackedPages">
-         <property name="minimumSize">
-          <size>
-           <width>350</width>
-           <height>250</height>
-          </size>
-         </property>
-        </widget>
-       </item>
-       <item>
-        <widget class="Line" name="line">
-         <property name="orientation">
-          <enum>Qt::Horizontal</enum>
-         </property>
-        </widget>
-       </item>
-      </layout>
-     </widget>
-    </widget>
+    <widget class="Core::PageWidget" name="widget" native="true"/>
    </item>
    <item>
     <widget class="QDialogButtonBox" name="buttonBox">
@@ -70,6 +29,14 @@
    </item>
   </layout>
  </widget>
+ <customwidgets>
+  <customwidget>
+   <class>Core::PageWidget</class>
+   <extends>QWidget</extends>
+   <header location="global">coreplugin/dialogs/pagewidget.h</header>
+   <container>1</container>
+  </customwidget>
+ </customwidgets>
  <resources/>
  <connections>
   <connection>

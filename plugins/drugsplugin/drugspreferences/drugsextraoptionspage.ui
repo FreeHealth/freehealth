@@ -14,50 +14,20 @@
    <string>Form</string>
   </property>
   <layout class="QGridLayout" name="gridLayout_4">
-   <item row="0" column="0">
-    <widget class="QLabel" name="label">
-     <property name="sizePolicy">
-      <sizepolicy hsizetype="Expanding" vsizetype="Fixed">
-       <horstretch>0</horstretch>
-       <verstretch>0</verstretch>
-      </sizepolicy>
-     </property>
-     <property name="font">
-      <font>
-       <pointsize>12</pointsize>
-       <weight>75</weight>
-       <bold>true</bold>
-      </font>
-     </property>
-     <property name="text">
-      <string>Drugs Extra Preferences</string>
-     </property>
-     <property name="alignment">
-      <set>Qt::AlignCenter</set>
-     </property>
-    </widget>
-   </item>
-   <item row="1" column="0">
-    <widget class="Line" name="line">
-     <property name="orientation">
-      <enum>Qt::Horizontal</enum>
-     </property>
-    </widget>
-   </item>
-   <item row="7" column="0">
+   <item row="5" column="0">
     <widget class="Editor::TextEditor" name="ALDAfter" native="true"/>
    </item>
-   <item row="5" column="0">
+   <item row="3" column="0">
     <widget class="Editor::TextEditor" name="ALDBefore" native="true"/>
    </item>
-   <item row="2" column="0">
+   <item row="0" column="0">
     <widget class="QCheckBox" name="hideLabCheck">
      <property name="text">
       <string>Hide laboratory name</string>
      </property>
     </widget>
    </item>
-   <item row="4" column="0">
+   <item row="2" column="0">
     <widget class="QLabel" name="label_15">
      <property name="sizePolicy">
       <sizepolicy hsizetype="Preferred" vsizetype="Fixed">
@@ -76,7 +46,7 @@
      </property>
     </widget>
    </item>
-   <item row="6" column="0">
+   <item row="4" column="0">
     <widget class="QLabel" name="label_16">
      <property name="sizePolicy">
       <sizepolicy hsizetype="Preferred" vsizetype="Fixed">

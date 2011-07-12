@@ -71,6 +71,7 @@ DrugsViewOptionsPage::~DrugsViewOptionsPage()
 QString DrugsViewOptionsPage::id() const { return objectName(); }
 QString DrugsViewOptionsPage::name() const { return tr("View"); }
 QString DrugsViewOptionsPage::category() const { return tkTr(Trans::Constants::DRUGS); }
+QString DrugsViewOptionsPage::title() const {return tr("Drug's view preferences");}
 
 void DrugsViewOptionsPage::resetToDefaults()
 {
@@ -143,6 +144,7 @@ DrugsSelectorOptionsPage::~DrugsSelectorOptionsPage()
 QString DrugsSelectorOptionsPage::id() const { return objectName(); }
 QString DrugsSelectorOptionsPage::name() const { return tr("Selector"); }
 QString DrugsSelectorOptionsPage::category() const { return tkTr(Trans::Constants::DRUGS); }
+QString DrugsSelectorOptionsPage::title() const {return tr("Drug's selector preferences");}
 
 void DrugsSelectorOptionsPage::resetToDefaults()
 {
@@ -211,6 +213,7 @@ DrugsPrintOptionsPage::~DrugsPrintOptionsPage()
 QString DrugsPrintOptionsPage::id() const { return objectName(); }
 QString DrugsPrintOptionsPage::name() const { return tr("Printing"); }
 QString DrugsPrintOptionsPage::category() const { return tkTr(Trans::Constants::DRUGS); }
+QString DrugsPrintOptionsPage::title() const {return tr("Drug's printing preferences");}
 
 void DrugsPrintOptionsPage::resetToDefaults()
 {
@@ -301,6 +304,7 @@ DrugsUserOptionsPage::~DrugsUserOptionsPage()
 QString DrugsUserOptionsPage::id() const { return objectName(); }
 QString DrugsUserOptionsPage::name() const { return tr("User's documents"); }
 QString DrugsUserOptionsPage::category() const { return tkTr(Trans::Constants::DRUGS); }
+QString DrugsUserOptionsPage::title() const {return tr("User preferences");}
 
 void DrugsUserOptionsPage::resetToDefaults()
 {
@@ -365,6 +369,7 @@ DrugsExtraOptionsPage::~DrugsExtraOptionsPage()
 QString DrugsExtraOptionsPage::id() const { return objectName(); }
 QString DrugsExtraOptionsPage::name() const { return tr("Extras"); }
 QString DrugsExtraOptionsPage::category() const { return tkTr(Trans::Constants::DRUGS); }
+QString DrugsExtraOptionsPage::title() const {return tr("Drug's extra preferences");}
 
 void DrugsExtraOptionsPage::resetToDefaults()
 {

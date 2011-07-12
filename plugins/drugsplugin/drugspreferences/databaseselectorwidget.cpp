@@ -72,6 +72,7 @@ DrugsDatabaseSelectorPage::~DrugsDatabaseSelectorPage()
 QString DrugsDatabaseSelectorPage::id() const { return objectName(); }
 QString DrugsDatabaseSelectorPage::name() const { return tr("Database selector"); }
 QString DrugsDatabaseSelectorPage::category() const { return tkTr(Trans::Constants::DRUGS); }
+QString DrugsDatabaseSelectorPage::title() const {return tr("Drug database selector");}
 
 void DrugsDatabaseSelectorPage::resetToDefaults()
 {

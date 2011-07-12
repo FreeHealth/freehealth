@@ -63,6 +63,7 @@ PatientBasePreferencesPage::~PatientBasePreferencesPage()
 QString PatientBasePreferencesPage::id() const { return objectName(); }
 QString PatientBasePreferencesPage::name() const { return tkTr(Trans::Constants::PATIENTS); }
 QString PatientBasePreferencesPage::category() const { return tkTr(Trans::Constants::PATIENT_DATABASE); }
+QString PatientBasePreferencesPage::title() const {return tr("Patient database preferences");}
 
 void PatientBasePreferencesPage::resetToDefaults()
 {

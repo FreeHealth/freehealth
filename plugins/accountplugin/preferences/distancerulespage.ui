@@ -7,14 +7,14 @@
     <x>0</x>
     <y>0</y>
     <width>431</width>
-    <height>373</height>
+    <height>413</height>
    </rect>
   </property>
   <property name="windowTitle">
    <string>Form</string>
   </property>
   <layout class="QGridLayout" name="gridLayout_2">
-   <item row="2" column="0">
+   <item row="0" column="0">
     <layout class="QGridLayout" name="gridLayout">
      <item row="0" column="0" colspan="2">
       <widget class="QLabel" name="distanceRulesLabel">
@@ -165,29 +165,6 @@ kilometers</string>
       <widget class="QDoubleSpinBox" name="minKmDoubleSpinBox"/>
      </item>
     </layout>
-   </item>
-   <item row="0" column="0">
-    <widget class="QLabel" name="label">
-     <property name="font">
-      <font>
-       <weight>75</weight>
-       <bold>true</bold>
-      </font>
-     </property>
-     <property name="text">
-      <string>Distance rules</string>
-     </property>
-     <property name="alignment">
-      <set>Qt::AlignCenter</set>
-     </property>
-    </widget>
-   </item>
-   <item row="1" column="0">
-    <widget class="Line" name="line">
-     <property name="orientation">
-      <enum>Qt::Horizontal</enum>
-     </property>
-    </widget>
    </item>
   </layout>
  </widget>
