@@ -108,7 +108,7 @@ void CurrentUserPreferencesWidget::setDatasToUi()
 void CurrentUserPreferencesWidget::saveToSettings(Core::ISettings *)
 {
     if (userModel()->hasCurrentUser()) {
-        label->setFocus();
+        this->setFocus();
         userModel()->submitRow(userModel()->currentUserIndex().row());
     }
 }

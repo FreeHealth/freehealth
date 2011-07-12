@@ -187,11 +187,15 @@ QWidget *PageWidget::createPageWidget(IGenericPage *page)
     // add title and line
     QFont bold;
     bold.setBold(true);
+    bold.setPointSize(bold.pointSize()+1);
     QLabel *title = new QLabel(w);
     title->setFont(bold);
     title->setText(page->title());
-    title->setAlignment(Qt::AlignCenter);
-//    m_pageTitle.insert(page, title);
+    title->setIndent(5);
+    title->setContentsMargins(5,5,5,5);
+//    title->setAlignment(Qt::AlignCenter);
+//    title->setStyleSheet("background:qlineargradient(spread:pad, x1:0, y1:0, x2:1, y2:0, stop:0.464 rgba(176, 246, 255, 149), stop:1 rgba(255, 255, 255, 0))");
+    title->setStyleSheet("background:qlineargradient(spread:pad, x1:0, y1:0, x2:1, y2:0, stop:0.464 rgba(255, 255, 176, 149), stop:1 rgba(255, 255, 255, 0))");
     QFrame *line = new QFrame(w);
     line->setFrameShape(QFrame::HLine);
     line->setFrameShadow(QFrame::Sunken);
