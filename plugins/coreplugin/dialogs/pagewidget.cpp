@@ -189,7 +189,7 @@ QWidget *PageWidget::createPageWidget(IGenericPage *page)
     bold.setBold(true);
     QLabel *title = new QLabel(w);
     title->setFont(bold);
-    title->setText(page->name());
+    title->setText(page->title());
     title->setAlignment(Qt::AlignCenter);
 //    m_pageTitle.insert(page, title);
     QFrame *line = new QFrame(w);
