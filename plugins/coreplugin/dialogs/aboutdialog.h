@@ -63,16 +63,9 @@ class AboutDialog : public QDialog
 public:
     explicit AboutDialog(QWidget *parent = 0);
     virtual ~AboutDialog();
-    void setPages(const QList<IAboutPage*> pages);
-    void showDialog();
-
-private Q_SLOTS:
-    void currentItemChanged(QTreeWidgetItem *cat);
 
 private:
     Ui::AboutDialog *m_ui;
-    QStackedLayout  *m_slayout;
-    QHash<QTreeWidgetItem *, QWidget *> m_Widgets;
 };
 
 } // End Internal

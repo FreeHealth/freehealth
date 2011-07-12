@@ -1205,7 +1205,7 @@ bool MainWindowActionHandler::applicationPreferences()
 bool MainWindowActionHandler::aboutApplication()
 {
     AboutDialog dlg(this);
-    dlg.showDialog();
+    dlg.exec();
     return true;
 }
 /** \shows the standard About Plugins dialog. \sa Core::PluginDialog */

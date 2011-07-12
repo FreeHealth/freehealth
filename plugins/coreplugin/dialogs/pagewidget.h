@@ -69,6 +69,9 @@ public:
 
     void setupUi();
 
+    void expandAllCategories();
+    void expandFirstCategories();
+
     IGenericPage *currentPage() const;
     void saveState();
 

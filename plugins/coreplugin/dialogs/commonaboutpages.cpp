@@ -56,9 +56,9 @@ BuildAboutPage::~BuildAboutPage()
 {
 }
 
-QWidget *BuildAboutPage::widget()
+QWidget *BuildAboutPage::createPage(QWidget *parent)
 {
-    QWidget *w = new QWidget();
+    QWidget *w = new QWidget(parent);
     QVBoxLayout *layout = new QVBoxLayout(w);
     QTreeWidget *tree = new QTreeWidget(w);
     tree->header()->hide();
@@ -107,9 +107,9 @@ LicenseAboutPage::~LicenseAboutPage()
 {
 }
 
-QWidget *LicenseAboutPage::widget()
+QWidget *LicenseAboutPage::createPage(QWidget *parent)
 {
-    QWidget *w = new QWidget();
+    QWidget *w = new QWidget(parent);
     QVBoxLayout *layout = new QVBoxLayout(w);
     layout->setSpacing(0);
     layout->setMargin(0);
@@ -312,9 +312,9 @@ TeamAboutPage::~TeamAboutPage()
 {
 }
 
-QWidget *TeamAboutPage::widget()
+QWidget *TeamAboutPage::createPage(QWidget *parent)
 {
-    QWidget *w = new QWidget();
+    QWidget *w = new QWidget(parent);
     QVBoxLayout *layout = new QVBoxLayout(w);
     layout->setMargin(0);
     layout->setSpacing(0);

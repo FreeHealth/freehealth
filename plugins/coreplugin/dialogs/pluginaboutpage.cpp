@@ -70,12 +70,12 @@ QString PluginAboutPage::category() const
     return tkTr(Trans::Constants::PLUGINS_CATEGORY);
 }
 
-QWidget *PluginAboutPage::widget()
+QWidget *PluginAboutPage::createPage(QWidget *parent)
 {
     if (!m_Spec)
-        return new QWidget();
+        return new QWidget(parent);
 
-    QWidget *w = new QWidget();
+    QWidget *w = new QWidget(parent);
     QVBoxLayout *layout = new QVBoxLayout(w);
     layout->setSpacing(0);
     layout->setMargin(0);

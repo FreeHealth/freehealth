@@ -48,74 +48,20 @@ AboutDialog::AboutDialog(QWidget *parent) :
     typedef QMap<QString, QTreeWidgetItem *> CategoryItemMap;
     m_ui->setupUi(this);
     m_ui->applicationNameLabel->setText(qApp->applicationName());
-    m_slayout = new QStackedLayout(m_ui->forStack);
-    m_ui->forStack->setLayout(m_slayout);
-    setWindowTitle(qApp->applicationName());
-    setObjectName("AboutDialog");
 
-    m_ui->tree->header()->hide();
-    connect(m_ui->tree, SIGNAL(currentItemChanged(QTreeWidgetItem*, QTreeWidgetItem*)),
-        this, SLOT(currentItemChanged(QTreeWidgetItem*)));
+    QList<IAboutPage*> pages =
+        ExtensionSystem::PluginManager::instance()->getObjects<IAboutPage>();
 
-    QList<IAboutPage*> pages = ExtensionSystem::PluginManager::instance()->getObjects<IAboutPage>();
-    setPages(pages);
-//    m_ui->splitter->setStretchFactor(0,1);
-//    m_ui->splitter->setStretchFactor(1,3);
+    m_ui->widget->setPages<IAboutPage>(pages);
+    m_ui->widget->setSettingKey("Dialogs/About");
+    m_ui->widget->setupUi();
+    m_ui->widget->expandAllCategories();
 
     // resize and center window
     Utils::resizeAndCenter(this);
 }
 
-void AboutDialog::setPages(const QList<IAboutPage*> pages)
-{
-    typedef QMap<QString, QTreeWidgetItem *> CategoryItemMap;
-
-    CategoryItemMap categories;
-
-    m_ui->tree->clear();
-    foreach (IAboutPage *page, pages) {
-        // ensure category root
-        const QString categoryName = page->category();
-        CategoryItemMap::iterator cit = categories.find(categoryName);
-        if (cit == categories.end()) {
-            QTreeWidgetItem *categoryItem = new QTreeWidgetItem(m_ui->tree);
-            categoryItem->setFlags(Qt::ItemIsEnabled|Qt::ItemIsSelectable);
-            categoryItem->setText(0, page->category());
-            cit = categories.insert(categoryName, categoryItem);
-        }
-        // add item
-        QTreeWidgetItem *pageItem = new QTreeWidgetItem(cit.value(), QStringList(page->name()));
-        QWidget *w = page->widget();
-        pageItem->setFlags(Qt::ItemIsEnabled|Qt::ItemIsSelectable);
-        m_Widgets.insert(pageItem,w);
-        m_slayout->addWidget(w);
-    }
-    m_ui->tree->sortItems(0,Qt::AscendingOrder);
-}
-
-void AboutDialog::showDialog()
-{
-    m_ui->tree->expandAll();
-    if (QTreeWidgetItem *rootItem = m_ui->tree->topLevelItem(0)) {
-        m_ui->tree->scrollToItem(rootItem);
-        if (rootItem->childCount())
-            m_ui->tree->setCurrentItem(rootItem->child(0));
-    }
-    exec();
-}
-
 AboutDialog::~AboutDialog()
 {
-    // delete all widgets in use
-    qDeleteAll(m_Widgets.values());
     delete m_ui;
 }
-
-void AboutDialog::currentItemChanged(QTreeWidgetItem *cat)
-{
-    if (m_Widgets.keys().contains(cat)) {
-        m_slayout->setCurrentWidget(m_Widgets.value(cat));
-    }
-}
-
-

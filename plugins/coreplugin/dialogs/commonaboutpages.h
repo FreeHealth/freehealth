@@ -43,7 +43,7 @@ public:
     QString name() const     { return tr("4. Build informations"); }
     QString category() const { return tr("Application"); }
 
-    QWidget *widget();
+    QWidget *createPage(QWidget *parent = 0);
 };
 
 class LicenseAboutPage : public IAboutPage
@@ -57,7 +57,7 @@ public:
     QString name() const     { return tr("3. License"); }
     QString category() const { return tr("Application"); }
 
-    QWidget *widget();
+    QWidget *createPage(QWidget *parent);
 };
 
 class TeamAboutPage : public IAboutPage
@@ -71,7 +71,7 @@ public:
     QString name() const     { return tr("2. Team"); }
     QString category() const { return tr("Application"); }
 
-    QWidget *widget();
+    QWidget *createPage(QWidget *parent = 0);
 
 private Q_SLOTS:
     void mailTo(QTreeWidgetItem *item);

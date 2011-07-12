@@ -174,6 +174,16 @@ void PageWidget::setupUi()
     Utils::resizeAndCenter(this);
 }
 
+void PageWidget::expandAllCategories()
+{
+    m_ui->pageTree->expandAll();
+}
+
+void PageWidget::expandFirstCategories()
+{
+//    m_ui->pageTree->expandItem(m_ui->pageTree->);
+}
+
 PageWidget::~PageWidget()
 {
 }

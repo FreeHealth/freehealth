@@ -27,6 +27,7 @@
 #define IABOUTPAGE_H
 
 #include <coreplugin/core_exporter.h>
+#include <coreplugin/igenericpage.h>
 
 #include <QtCore/QObject>
 #include <QtCore/QString>
@@ -43,19 +44,14 @@
 
 namespace Core {
 
-class CORE_EXPORT IAboutPage : public QObject
+class CORE_EXPORT IAboutPage : public Core::IGenericPage
 {
     Q_OBJECT
 public:
-    IAboutPage(QObject *parent = 0) : QObject(parent) {}
+    IAboutPage(QObject *parent = 0) : Core::IGenericPage(parent) {}
     virtual ~IAboutPage() {}
 
-    virtual QString id() const = 0;
-    virtual QString name() const = 0;
-    virtual QString category() const = 0;
-
-    // widget will be deleted after the show
-    virtual QWidget *widget() = 0;
+    QString title() const {return name();}
 };
 
 } // namespace Core

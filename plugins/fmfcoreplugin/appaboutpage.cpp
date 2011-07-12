@@ -56,9 +56,9 @@ AppAboutPage::~AppAboutPage()
 {
 }
 
-QWidget *AppAboutPage::widget()
+QWidget *AppAboutPage::createPage(QWidget *parent)
 {
-    QWidget *w = new QWidget();
+    QWidget *w = new QWidget(parent);
     QVBoxLayout *layout = new QVBoxLayout(w);
     layout->setSpacing(0);
     layout->setMargin(0);
