@@ -85,16 +85,6 @@ SettingsDialog::~SettingsDialog()
 {
 }
 
-//void SettingsDialog::pageSelected()
-//{
-//    QTreeWidgetItem *item = m_ui->pageTree->currentItem();
-//    PageData data = item->data(0, Qt::UserRole).value<PageData>();
-//    int index = data.index;
-//    m_currentCategory = data.category;
-//    m_currentPage = data.id;
-//    m_ui->stackedPages->setCurrentIndex(index);
-//}
-
 void SettingsDialog::accept()
 {
     m_applied = true;
@@ -147,7 +137,6 @@ bool SettingsDialog::execDialog()
 
 void SettingsDialog::done(int val)
 {
-    settings()->setValue("Dialogs/Settings/LastPreferenceCategory", m_currentCategory);
-    settings()->setValue("Dialogs/Settings/LastPreferencePage", m_currentPage);
+    m_ui->widget->saveState();
     QDialog::done(val);
 }

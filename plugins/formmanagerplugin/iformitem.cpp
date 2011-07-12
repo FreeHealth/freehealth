@@ -679,7 +679,7 @@ void FormMainDebugPage::refreshContents()
     tree->resizeColumnToContents(1);
 }
 
-QWidget *FormMainDebugPage::widget()
+QWidget *FormMainDebugPage::createPage(QWidget *parent)
 {
     return m_Widget;
 }

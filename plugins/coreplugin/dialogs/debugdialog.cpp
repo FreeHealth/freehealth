@@ -49,83 +49,25 @@ DebugDialog::DebugDialog(QWidget *parent) :
     m_ui->setupUi(this);
     setWindowFlags(Qt::Window | Qt::CustomizeWindowHint | Qt::WindowSystemMenuHint | Qt::WindowCloseButtonHint);
 
-    m_slayout = new QStackedLayout(m_ui->forStack);
-    m_slayout->setMargin(0);
-    m_slayout->setSpacing(0);
-    setWindowTitle( qApp->applicationName() );
-    setObjectName( "DebugDialog" );
+    setWindowTitle(qApp->applicationName());
+    setObjectName("DebugDialog");
 
-    m_ui->tree->header()->hide();
+    QList<IDebugPage*> pages =
+        ExtensionSystem::PluginManager::instance()->getObjects<IDebugPage>();
 
-    // connect tree navigation
-    connect(m_ui->tree, SIGNAL(currentItemChanged(QTreeWidgetItem*, QTreeWidgetItem*)),
-        this, SLOT(currentItemChanged(QTreeWidgetItem*)));
-
-    m_sending = false;
-    if (!Utils::isDebugCompilation())
-        m_ui->butSend->setEnabled( Utils::Log::hasError() );
-
-    QList<IDebugPage*> pages = ExtensionSystem::PluginManager::instance()->getObjects<IDebugPage>();
-    setPages(pages);
+    m_ui->widget->setPages<IDebugPage>(pages);
+    m_ui->widget->setSettingKey("Dialogs/Debug");
+    m_ui->widget->setupUi();
+    m_ui->widget->expandAllCategories();
 
     // resize and center windows
     Utils::resizeAndCenter(this);
 }
 
-void DebugDialog::setPages(const QList<IDebugPage*> pages)
-{
-    typedef QMap<QString, QTreeWidgetItem *> CategoryItemMap;
-
-    CategoryItemMap categories;
-
-    m_ui->tree->clear();
-    foreach (IDebugPage *page, pages) {
-        // ensure category root
-        const QString categoryName = page->category();
-        CategoryItemMap::iterator cit = categories.find(categoryName);
-        if (cit == categories.end()) {
-            QTreeWidgetItem *categoryItem = new QTreeWidgetItem(m_ui->tree);
-            categoryItem->setFlags(Qt::ItemIsEnabled|Qt::ItemIsSelectable);
-            categoryItem->setText(0, page->category());
-            cit = categories.insert(categoryName, categoryItem);
-        }
-        // add item
-        QTreeWidgetItem *pageItem = new QTreeWidgetItem(cit.value(), QStringList(page->name()));
-        pageItem->setFlags(Qt::ItemIsEnabled|Qt::ItemIsSelectable);
-        QWidget *w = page->widget();
-        if (w)
-            m_slayout->addWidget(w);
-        m_Widgets.insert(pageItem,w);
-    }
-}
-
-void DebugDialog::showDialog()
-{
-    m_ui->tree->expandAll();
-    if (QTreeWidgetItem *rootItem = m_ui->tree->topLevelItem(0)) {
-        m_ui->tree->scrollToItem(rootItem);
-        if (rootItem->childCount())
-            m_ui->tree->setCurrentItem(rootItem->child(0));
-    }
-//    updateOkButton();
-//    if (exec() != Accepted)
-//        return 0;
-//    return currentWizard();
-    exec();
-}
-
 DebugDialog::~DebugDialog()
 {
-    // delete all widgets in use
-    qDeleteAll(m_Widgets.values());
+    m_ui->widget->saveState();
     delete m_ui;
-}
-
-void DebugDialog::currentItemChanged(QTreeWidgetItem *cat)
-{
-    if (m_Widgets.keys().contains(cat)) {
-        m_slayout->setCurrentWidget(m_Widgets.value(cat));
-    }
 }
 
 void DebugDialog::on_fullScreenButton_clicked()

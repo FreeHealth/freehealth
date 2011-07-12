@@ -62,23 +62,12 @@ class DebugDialog : public QDialog
 public:
     explicit DebugDialog(QWidget * parent);
     ~DebugDialog();
-    void showDialog();
-
-private Q_SLOTS:
-//    void done( int code );
-    void currentItemChanged(QTreeWidgetItem *cat);
-
-    void setPages(const QList<IDebugPage*> pages);
 
 private Q_SLOTS:
     void on_fullScreenButton_clicked();
     void on_butSend_clicked();
     void onSendMessage_done();
     bool on_butSave_clicked();
-//    void on_expandedMessagesButton_clicked();
-//    void on_chronologicMessagesButton_clicked();
-//    void on_expandedErrorButton_clicked();
-//    void on_chronologicErrorButton_clicked();
 
 private:
     Ui::DebugDialog *m_ui;

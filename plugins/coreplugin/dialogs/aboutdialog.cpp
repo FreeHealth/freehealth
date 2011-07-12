@@ -63,5 +63,6 @@ AboutDialog::AboutDialog(QWidget *parent) :
 
 AboutDialog::~AboutDialog()
 {
+    m_ui->widget->saveState();
     delete m_ui;
 }

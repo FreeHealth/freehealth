@@ -27,7 +27,6 @@
 #define CORE_FILEMANAGER_H
 
 #include <coreplugin/core_exporter.h>
-#include <coreplugin/idebugpage.h>
 
 #include <QObject>
 #include <QString>

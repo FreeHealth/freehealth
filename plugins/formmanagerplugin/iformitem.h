@@ -273,7 +273,7 @@ public:
 
     void refreshContents();
 
-    QWidget *widget();
+    QWidget *createPage(QWidget *parent = 0);
 
 private:
     QPointer<QWidget> m_Widget;

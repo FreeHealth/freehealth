@@ -1189,7 +1189,7 @@ void MainWindowActionHandler::createTemplatesActions(int actions)
 bool MainWindowActionHandler::debugDialog()
 {
     DebugDialog dlg(this);
-    dlg.showDialog();
+    dlg.exec();
     return true;
 }
 

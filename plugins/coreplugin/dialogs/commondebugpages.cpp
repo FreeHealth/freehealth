@@ -53,7 +53,7 @@ LogErrorDebugPage::~LogErrorDebugPage()
 QString LogErrorDebugPage::name() const     { return Trans::ConstantTranslations::tkTr(Trans::Constants::LOGGED_ERRORS); }
 QString LogErrorDebugPage::category() const { return Trans::ConstantTranslations::tkTr(Trans::Constants::ERRORS); }
 
-QWidget *LogErrorDebugPage::widget()
+QWidget *LogErrorDebugPage::createPage(QWidget *parent)
 {
     QWidget *m_Widget = new QWidget();
     QGridLayout *layout = new QGridLayout(m_Widget);
@@ -82,9 +82,9 @@ QString LogMessageDebugPage::name() const
 QString LogMessageDebugPage::category() const
 { return Trans::ConstantTranslations::tkTr(Trans::Constants::MESSAGES); }
 
-QWidget *LogMessageDebugPage::widget()
+QWidget *LogMessageDebugPage::createPage(QWidget *parent)
 {
-    QWidget *m_Widget = new QWidget();
+    QWidget *m_Widget = new QWidget(parent);
     QGridLayout *layout = new QGridLayout(m_Widget);
     layout->setSpacing(0);
     layout->setMargin(0);
@@ -108,9 +108,9 @@ SettingDebugPage::~SettingDebugPage()
 {
 }
 
-QWidget *SettingDebugPage::widget()
+QWidget *SettingDebugPage::createPage(QWidget *parent)
 {
-    QWidget *m_Widget = new QWidget();
+    QWidget *m_Widget = new QWidget(parent);
     QGridLayout *layout = new QGridLayout(m_Widget);
     layout->setSpacing(0);
     layout->setMargin(0);

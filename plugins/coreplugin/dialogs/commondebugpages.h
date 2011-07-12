@@ -48,7 +48,7 @@ public:
     QString name() const;
     QString category() const;
 
-    QWidget *widget();
+    QWidget *createPage(QWidget *parent = 0);
 };
 
 
@@ -63,7 +63,7 @@ public:
     QString name() const;
     QString category() const;
 
-    QWidget *widget();
+    QWidget *createPage(QWidget *parent = 0);
 };
 
 
@@ -78,9 +78,7 @@ public:
     QString name() const     { return tr("Settings"); }
     QString category() const { return tr("Settings"); }
 
-    void refreshContents();
-
-    QWidget *widget();
+    QWidget *createPage(QWidget *parent = 0);
 
 private:
     QPointer<QWidget> m_Widget;
