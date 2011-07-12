@@ -6,17 +6,25 @@ include( $${PWD}/usermanagerplugin_dependencies.pri )
 
 DEFINES += USERS_LIBRARY
 
+HEADERS += \
+
+SOURCES += \
+
 HEADERS += $${PWD}/usermanagerplugin.h \
     $${PWD}/usermanager_exporter.h \
     $${PWD}/iuserlistener.h \
     $${PWD}/currentuserpreferencespage.h \
     $${PWD}/userfistrunpage.h \
-    $${PWD}/usermanagermode.h
+    $${PWD}/usermanagermode.h \
+    $${PWD}/widgets/iuserviewerpage.h \
+    $${PWD}/defautuserviewerpages.h
 
 SOURCES += $${PWD}/usermanagerplugin.cpp \
     $${PWD}/currentuserpreferencespage.cpp \
     $${PWD}/userfistrunpage.cpp \
-    $${PWD}/usermanagermode.cpp
+    $${PWD}/usermanagermode.cpp \
+    $${PWD}/widgets/iuserviewerpage.cpp \
+    $${PWD}/defautuserviewerpages.cpp
 
 # Compile
 HEADERS += \
@@ -47,12 +55,16 @@ SOURCES += \
 FORMS += $${PWD}/widgets/userviewer.ui \
     $${PWD}/widgets/useridentifier.ui \
     $${PWD}/widgets/usermanager.ui \
-    $${PWD}/widgets/headersfootersviewerprivate.ui \
+#    $${PWD}/widgets/headersfootersviewerprivate.ui \
     $${PWD}/widgets/userpassworddialog.ui \
-    $${PWD}/currentuserpreferenceswidget.ui \
-    $${PWD}/firstrunusercreationwidget.ui \
-    $${PWD}/usermanagerwidget.ui \
-    $${PWD}/userwizardcontactwidget.ui
+    $${PWD}/widgets/currentuserpreferenceswidget.ui \
+    $${PWD}/widgets/firstrunusercreationwidget.ui \
+    $${PWD}/widgets/usermanagerwidget.ui \
+    $${PWD}/widgets/userwizardcontactwidget.ui \
+    $${PWD}/widgets/userviewer_identity.ui \
+    $${PWD}/widgets/userviewer_papers.ui \
+    $${PWD}/widgets/userviewer_medicalrights.ui \
+    $${PWD}/widgets/userviewer_professional.ui
 
 # translators
 TRANSLATIONS += $${SOURCES_TRANSLATIONS_PATH}/usermanagerplugin_fr.ts \

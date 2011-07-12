@@ -56,6 +56,11 @@
 #include <QStringListModel>
 #include <QTextEdit>
 
+#include "ui_userviewer_identity.h"
+#include "ui_userviewer_papers.h"
+#include "ui_userviewer_medicalrights.h"
+#include "ui_userviewer_professional.h"
+
 #include <QDebug>
 
 using namespace UserPlugin;
@@ -214,8 +219,6 @@ void UserViewerPrivate::prepareMapper()
     m_Mapper->addMapping(administrativeRightsWidget, Core::IUser::AdministrativeRights, "rights");
 
     m_Mapper->setCurrentIndex(UserModel::instance()->currentUserIndex().row());
-
-    QModelIndex test = UserModel::instance()->index(UserModel::instance()->currentUserIndex().row(), Core::IUser::Adress);
 
     // make connections
     connect (m_Mapper->model(), SIGNAL(modelReset()), this, SLOT(onModelReseted()));
