@@ -55,10 +55,13 @@ LedgerEdit::LedgerEdit(QWidget * parent):QWidget(parent),ui(new Ui::LedgerEditWi
     QString currentDate = QDate::currentDate().toString("yyyy");
     listOfYears << currentDate;
     listOfYears << lio.getListOfYears();
+    qDebug() << __FILE__ << QString::number(__LINE__) << " listOfYears.size() =" <<QString::number(listOfYears.size())  ;
     listOfYears.removeDuplicates();
+    qDebug() << __FILE__ << QString::number(__LINE__) << " listOfYears.size() =" <<QString::number(listOfYears.size())  ;
     for (int i = 0; i < listOfYears.size(); i += 1)
     {
-    	//qDebug() << __FILE__ << QString::number(__LINE__) << " listOfYears[i] =" << listOfYears[i] ;
+    	//if (WarnDebugMessage)
+    	    	qDebug() << __FILE__ << QString::number(__LINE__) << " listOfYears[i] =" << listOfYears[i] ;
         }
     ui->yearComboBox->addItems(listOfYears);
     ui->infoLabel->setText("");
@@ -90,7 +93,8 @@ void LedgerEdit::showLedger(){
     if (m_myThread->isRunning())
     {
     	  m_myThread->terminate();
-    	  //qDebug() << __FILE__ << QString::number(__LINE__) << " in  m_myThread->terminate"   ;
+    	  if (WarnDebugMessage)
+    	      	  qDebug() << __FILE__ << QString::number(__LINE__) << " in  m_myThread->terminate"   ;
         }
     m_myThread->start();
     connect(m_myThread ,SIGNAL(finished()),this,SLOT(getDocument()));

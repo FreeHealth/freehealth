@@ -33,7 +33,9 @@
 #include <QDebug>
 
 enum { WarnDebugMessage = true };
-LedgerManager::LedgerManager(QObject * parent):m_sums(0.00){}
+LedgerManager::LedgerManager(QObject * parent):m_sums(0.00){
+    Q_UNUSED(parent);
+}
 
 LedgerManager::~LedgerManager(){}
 
@@ -41,7 +43,7 @@ AccountModel * LedgerManager::getModelMonthlyReceiptsAnalysis(QObject * parent,Q
     LedgerIO lio(this);
     m_sums = 0.00;
     AccountModel * model = lio.getModelMonthlyReceiptsIO(parent,month,year);
-    //if (WarnDebugMessage)
+    if (WarnDebugMessage)
     	      qDebug() << __FILE__ << QString::number(__LINE__) << "model->rowCount()  =" <<  QString::number(model->rowCount());
     for (int i = 0; i < model->rowCount(); i += 1)
     {
@@ -127,6 +129,7 @@ MovementModel * LedgerManager::getModelMonthlyMovementsAnalysis(QObject * parent
 QStandardItemModel * LedgerManager::getModelMonthlyAndTypeMovementAnalysis(QObject * parent,
                                                                            QString & month,
                                                                            QString & year){
+    Q_UNUSED(parent);
     m_sums = 0.00;
     LedgerIO lio(this);
     QStandardItemModel * model = lio.getModelMonthlyAndTypeMovementsIO(this,month,year);
@@ -141,6 +144,7 @@ QStandardItemModel * LedgerManager::getModelMonthlyAndTypeMovementAnalysis(QObje
 }
 
 QStandardItemModel * LedgerManager::getModelYearlyAndTypeMovementAnalysis(QObject * parent,QString & year){
+    Q_UNUSED(parent);
     m_sums = 0.00;
     LedgerIO lio(this);
     QStandardItemModel * model = lio.getModelYearlyAndTypeMovementsIO(this,year);

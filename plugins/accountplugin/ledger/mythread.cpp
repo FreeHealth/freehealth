@@ -44,7 +44,7 @@ ProduceDoc::~ProduceDoc(){
 }
 
 void ProduceDoc::run(){
-    //if (WarnDebugMessage)
+    if (WarnDebugMessage)
     	      qDebug() << __FILE__ << QString::number(__LINE__) << " RUN !!! "  ;
     m_mutex.lock();
     m_textDocument = new QTextDocument;  
@@ -164,15 +164,15 @@ void ProduceDoc::organize(){
 	QString anneeList;	             
 	anneeList                    = unjanv+","+ trenteetundec;
 //--------------construction de listes des types----------------------------------------------------------
-    //if (WarnDebugMessage)
+    if (WarnDebugMessage)
     	      qDebug() << __FILE__ << QString::number(__LINE__) << " thread 1 "   ;
     LedgerIO lio(0);
     m_typesReceipts = lio.listOfReceiptsTypes();
     m_typesReceipts.removeDuplicates();
     m_typesMovements = lio.listOfMovementsTypes();
     m_typesMovements.removeDuplicates();
-    //if (WarnDebugMessage)
-    	      qDebug() << __FILE__ << QString::number(__LINE__) << " thread 2 "   ;
+    if (WarnDebugMessage)
+      	      qDebug() << __FILE__ << QString::number(__LINE__) << " thread 2 "   ;
 //------------boucles mois ---------------------------------------------------------------------
     QStringList listeMois;
         listeMois << janvier << fevrier << mars << avril << mai << juin 
@@ -255,15 +255,19 @@ bool ProduceDoc::modele(QString & month,
     
     LedgerIO lio(0);
     QList<QVector<QString> > tableLedgerMonth;
-    //if (WarnDebugMessage)
+    if (WarnDebugMessage)
+    
     	      qDebug() << __FILE__ << QString::number(__LINE__) << " thread 3 "   ;
     tableLedgerMonth = lio.getDatasReceiptsInVector(un,trenteetquelque);  
-    //if (WarnDebugMessage)
+    if (WarnDebugMessage)
+    
     	      qDebug() << __FILE__ << QString::number(__LINE__) << " thread 4 "   ;
 //---------------itération recettes par type-----------------------------------------------------------------
     QList<QVector<QString> > tableLedgerTypeReceipts;
         for(int i = 0; i <  m_typesReceipts.size(); i++){
             QString typeRecettes = m_typesReceipts[i];
+            if (WarnDebugMessage)
+                qDebug() << __FILE__ << QString::number(__LINE__) << " m_typesReceipts[i] =" << m_typesReceipts[i] ;
             QStringList listeLibelle;
             listeLibelle << trUtf8("Cash") << trUtf8("Cheques") << trUtf8("Credit cards") << trUtf8("Bankings");
             for (int j = 0 ; j < listeLibelle.size() ; j++){
@@ -282,22 +286,27 @@ bool ProduceDoc::modele(QString & month,
                 }
             }
        }
-       //if (WarnDebugMessage)
+       if (WarnDebugMessage)
+    
     	      qDebug() << __FILE__ << QString::number(__LINE__) << " thread 5 "   ;
     QStringList sumsReceipts;
                 sumsReceipts   = calculateReceipts( un, trenteetquelque);
-                //if (WarnDebugMessage)
+                if (WarnDebugMessage)
+    
     	      qDebug() << __FILE__ << QString::number(__LINE__) << " thread 5+1 "   ;
-    ////if (WarnDebugMessage)
+    if (WarnDebugMessage)
+    
     	      qDebug() << "tableLedgerTypeReceipts.size()= "+ QString::number(tableLedgerTypeReceipts.size()) << __LINE__;
     QString emptyStringForReceipts;
     fillTable(tableLedgerTypeReceipts,tableFormatModele,cursorForFillFunction,thisMonth,sumsReceipts,RECEIPTS_TYPE,emptyStringForReceipts);
 //----------------tableau depenses---------------------------------------------------------
-    //if (WarnDebugMessage)
+    if (WarnDebugMessage)
+    
     	      qDebug() << __FILE__ << QString::number(__LINE__) << " thread 6 "   ;
     QList<QVector<QString> > tableLedgerMonthDepenses;
     tableLedgerMonthDepenses = lio.getDatasMovementsInVector(un,trenteetquelque);
-    //if (WarnDebugMessage)
+    if (WarnDebugMessage)
+    
     	      qDebug() << __FILE__ << QString::number(__LINE__) << " thread 7 "   ;    
 
 //----------------iteration des depenses par type------------------------------------------------------
@@ -305,13 +314,15 @@ bool ProduceDoc::modele(QString & month,
     QStringList listOfTypeMovements;
     listOfTypeMovements = m_typesMovements;
     if (WarnDebugMessage)
-    	      qDebug() << __FILE__ << QString::number(__LINE__) << "m_typesMovements.size()  =" <<  QString::number(m_typesMovements.size());
+    	      qDebug() << __FILE__ << QString::number(__LINE__) << "m_typesMovements.size()  =" 
+    	      <<  QString::number(m_typesMovements.size());
     for(int i = 0 ; i < listOfTypeMovements.size() ; i++){
             QVector<QString> vector;
             foreach(vector,tableLedgerMonthDepenses){
                  if(vector[VM_LABEL] == listOfTypeMovements[i]){
-                     //if (WarnDebugMessage)
-    	      qDebug() << __FILE__ << QString::number(__LINE__) << "vector[VM_LABEL]  =" << vector[VM_LABEL] ;
+                     if (WarnDebugMessage)    
+    	                 qDebug() << __FILE__ << QString::number(__LINE__) 
+    	                 << "vector[VM_LABEL]  =" << vector[VM_LABEL] ;
                      tableauLivreTypeDepense << vector;
                      }
             }
@@ -326,7 +337,8 @@ bool ProduceDoc::modele(QString & month,
     	  //sommedepenses.removeAt(0);
         }
     fillTable(tableauLivreTypeDepense,tableFormatModele,cursorForFillFunction,thisMonth,sommedepenses,MOVEMENTS_TYPE,totalOfMovements);
-    //if (WarnDebugMessage)
+    if (WarnDebugMessage)
+    
     	      qDebug() << __FILE__ << QString::number(__LINE__) << " thread 8 "   ;
     return true;
 }
@@ -353,7 +365,8 @@ void ProduceDoc::fillTable(QList<QVector<QString> > & tableau,
         QString total;
         /*for (int i = 0; i < totalSumsList.size(); i += 1)
         {
-        	//if (WarnDebugMessage)
+        	if (WarnDebugMessage)
+    
     	      qDebug() << __FILE__ << QString::number(__LINE__) << " totalSumsList =" << totalSumsList[i] ;
             }*/
         if(choice == RECEIPTS_TYPE){
@@ -364,11 +377,13 @@ void ProduceDoc::fillTable(QList<QVector<QString> > & tableau,
             type = trUtf8("Movements");
             total = totalMovementString;
             }
-        //if (WarnDebugMessage)
+        if (WarnDebugMessage)
+    
     	      qDebug() << __FILE__ << QString::number(__LINE__) << " thread 9 "   ;
         QTextBlockFormat centerHead ;
        //centrer                       .setBackground(Qt::yellow) ;
-       //if (WarnDebugMessage)
+       if (WarnDebugMessage)
+    
     	      qDebug() << __FILE__ << QString::number(__LINE__) << " thisMonthfonction =" << thisMonthfonction ;
            QString heads = trUtf8("Month of ")+thisMonthfonction+" = "+type;
        if (thisMonthfonction == trUtf8("complete year"))
@@ -382,7 +397,8 @@ void ProduceDoc::fillTable(QList<QVector<QString> > & tableau,
                                                       "</font><br/><br/>");
         QTextTableFormat tableFormatDone;   
         myFormat(tableFormatDone,m_tablesRecapParameters);
-        //if (WarnDebugMessage)
+        if (WarnDebugMessage)
+    
     	      qDebug() << __FILE__ << QString::number(__LINE__) << " thread 10 "   ;
         if(sizeOfTable!= 0){
             if((thisMonthfonction != trUtf8("complete year")) ){
@@ -392,11 +408,13 @@ void ProduceDoc::fillTable(QList<QVector<QString> > & tableau,
             for(int i=0 ; i< nbreLignesTableau ; i++){
                 QVector<QString> vectorString;
                     vectorString = tableauInFonction[i];
-                /*//if (WarnDebugMessage)
+                /*if (WarnDebugMessage)
+    
     	      qDebug() << __FILE__ << QString::number(__LINE__) << "vectorString size  =" 
                                      <<  QString::number(vectorString.size());*/
                 QStringList list; // liste des données de la ligne
-                /*//if (WarnDebugMessage)
+                /*if (WarnDebugMessage)
+    
     	      qDebug() << __FILE__ << QString::number(__LINE__) << "nbreColonnesTableau  = " 
                          << QString::number(nbreColonnesTableau)  ;*/
     	        for (int a = 0 ;a < nbreColonnesTableau ; a++){
@@ -414,7 +432,8 @@ void ProduceDoc::fillTable(QList<QVector<QString> > & tableau,
                       }
                    }
             }
-     //if (WarnDebugMessage)
+     if (WarnDebugMessage)
+    
     	      qDebug() << __FILE__ << QString::number(__LINE__) << " thread 11 "   ; 
     QTextBlockFormat centrer ;
        //centrer                       .setBackground(Qt::yellow) ;
@@ -447,7 +466,8 @@ void ProduceDoc::fillTable(QList<QVector<QString> > & tableau,
                                                     "<br/>"+headAccumulation+"<bold></font>"
                                                     "<br/><br/>");       
     }
-    //if (WarnDebugMessage)
+    if (WarnDebugMessage)
+    
     	      qDebug() << __FILE__ << QString::number(__LINE__) << " thread 12 "   ;
 //---------------insertion table recapitulative----------------------------------
 //---------------complete year---------------------------------------------------
@@ -496,7 +516,8 @@ void ProduceDoc::fillTable(QList<QVector<QString> > & tableau,
 
         
 
-    //if (WarnDebugMessage)
+    if (WarnDebugMessage)
+    
     	      qDebug() << __FILE__ << QString::number(__LINE__) << " thread 13 "   ;
     if(choice == MOVEMENTS_TYPE){
         nbreLignesTableau = m_typesMovements.size();
@@ -545,7 +566,7 @@ void ProduceDoc::recupSlot(const QString & text){
 }
 
 QTextDocument *ProduceDoc::getTextDocument(){
-    //if (WarnDebugMessage)
+    if (WarnDebugMessage)
     	      qDebug() << __FILE__ << QString::number(__LINE__) << " m_textDocument =" << m_textDocument->toPlainText() ;
     return m_textDocument;
 }
