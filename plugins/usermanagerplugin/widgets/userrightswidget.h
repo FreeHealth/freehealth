@@ -70,7 +70,6 @@ private:
     int m_Rights;
 };
 
-
 class UserRightsWidget : public QListView
 {
     Q_OBJECT

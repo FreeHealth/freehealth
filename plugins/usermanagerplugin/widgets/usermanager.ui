@@ -27,7 +27,23 @@
           <widget class="Utils::QButtonLineEdit" name="searchLineEdit"/>
          </item>
          <item>
-          <widget class="QTableView" name="userTableView"/>
+          <widget class="QTableView" name="userTableView">
+           <property name="editTriggers">
+            <set>QAbstractItemView::NoEditTriggers</set>
+           </property>
+           <property name="alternatingRowColors">
+            <bool>true</bool>
+           </property>
+           <property name="selectionMode">
+            <enum>QAbstractItemView::SingleSelection</enum>
+           </property>
+           <property name="selectionBehavior">
+            <enum>QAbstractItemView::SelectRows</enum>
+           </property>
+           <attribute name="horizontalHeaderVisible">
+            <bool>false</bool>
+           </attribute>
+          </widget>
          </item>
          <item>
           <widget class="QGroupBox" name="groupBox">

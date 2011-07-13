@@ -19,8 +19,10 @@
  *  If not, see <http://www.gnu.org/licenses/>.                            *
  ***************************************************************************/
 /***************************************************************************
- *   Adaptations to FreeMedForms and improvments by : Eric Maeker, MD      *
- *   eric.maeker@gmail.com                                                   *
+ *   Main Developper : Eric MAEKER, <eric.maeker@gmail.com>                *
+ *   Contributors :                                                        *
+ *       NAME <MAIL@ADRESS>                                                *
+ *       NAME <MAIL@ADRESS>                                                *
  ***************************************************************************/
 
 /**
@@ -42,16 +44,6 @@
 
 #include <QHeaderView>
 #include <QPushButton>
-
-namespace {
-    struct PageData {
-        int index;
-        QString category;
-        QString id;
-    };
-}
-
-Q_DECLARE_METATYPE(::PageData);
 
 using namespace Core;
 using namespace Core::Internal;

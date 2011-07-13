@@ -28,9 +28,7 @@
 #define IUSERVIEWERPAGE_H
 
 #include <usermanagerplugin/usermanager_exporter.h>
-
-#include <QObject>
-#include <QModelIndex>
+#include <coreplugin/igenericpage.h>
 
 /**
  * \file iuserviewerpage.h
@@ -40,21 +38,17 @@
 */
 
 namespace UserPlugin {
+class UserModel;
 
-class USER_EXPORT IUserViewerPage : public QObject
+class USER_EXPORT IUserViewerPage : public Core::IGenericPage
 {
     Q_OBJECT
 public:
-    explicit IUserViewerPage(QObject *parent = 0);
+    explicit IUserViewerPage(QObject *parent = 0) : Core::IGenericPage(parent) {}
     virtual ~IUserViewerPage() {}
 
-    virtual QString uid() const = 0;
-    virtual QString name() const = 0;
-    virtual QStringList categoryTree() const = 0;
-
-    virtual QWidget *createWidget(QWidget *parent) = 0;
-
-    virtual void setUserIndex(const QModelIndex &index) = 0;
+    virtual void setUserModel(UserModel *model) = 0;
+    virtual void setUserIndex(const int row) = 0;
     virtual bool clear() = 0;
     virtual bool submit() = 0;
 };

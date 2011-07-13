@@ -19,8 +19,10 @@
  *  If not, see <http://www.gnu.org/licenses/>.                            *
  ***************************************************************************/
 /***************************************************************************
- *   Adaptations to FreeMedForms and improvments by : Eric Maeker, MD      *
- *   eric.maeker@gmail.com                                                   *
+ *   Main Developper : Eric MAEKER, <eric.maeker@gmail.com>                *
+ *   Contributors :                                                        *
+ *       NAME <MAIL@ADRESS>                                                *
+ *       NAME <MAIL@ADRESS>                                                *
  ***************************************************************************/
 #ifndef SETTINGSDIALOG_H
 #define SETTINGSDIALOG_H
@@ -33,8 +35,8 @@
 /**
  * \file settingsdialog.h
  * \author Eric MAEKER <eric.maeker@gmail.com>
- * \version 0.0.8
- * \date 08 Sept 2009
+ * \version 0.6.0
+ * \date 12 Jul 2011
 */
 
 namespace Core {

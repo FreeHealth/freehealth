@@ -30,11 +30,3 @@
   \todo document
 */
 
-#include "iuserviewerpage.h"
-
-using namespace UserPlugin;
-
-IUserViewerPage::IUserViewerPage(QObject *parent) :
-    QObject(parent)
-{
-}

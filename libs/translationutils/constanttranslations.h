@@ -409,6 +409,12 @@ enum TitleInterpret {
         const char* const USER                              = QT_TRANSLATE_NOOP("tkConstants", "User");
         const char* const USERS                             = QT_TRANSLATE_NOOP("tkConstants", "Users");
         const char* const USER_DATAS                        = QT_TRANSLATE_NOOP("tkConstants", "User datas");
+        const char* const RIGHTS                            = QT_TRANSLATE_NOOP("tkConstants", "Rights");
+        const char* const USER_RIGHTS                       = QT_TRANSLATE_NOOP("tkConstants", "User rights");
+        const char* const RIGHTS_MEDICAL                    = QT_TRANSLATE_NOOP("tkConstants", "Medical rights");
+        const char* const RIGHTS_ADMINISTRATIVE             = QT_TRANSLATE_NOOP("tkConstants", "Administrative rights");
+        const char* const RIGHTS_USERMANAGER                = QT_TRANSLATE_NOOP("tkConstants", "User manager rights");
+        const char* const RIGHTS_DRUGS                      = QT_TRANSLATE_NOOP("tkConstants", "Drug rights");
 
         const char* const SAVE_AND_RESTORE                  = QT_TRANSLATE_NOOP("tkConstants", "Save and restore");
 

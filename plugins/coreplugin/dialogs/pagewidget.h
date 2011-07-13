@@ -67,7 +67,7 @@ public:
     void setSettingKey(const QString &settingKey) {m_settingKey = settingKey;}
     void setStartingPage(const QString &initialCategory, const QString &initialPage) {m_currentCategory=initialCategory; m_currentPage=initialPage;}
 
-    void setupUi();
+    void setupUi(bool treeView = true);
 
     void expandAllCategories();
     void expandFirstCategories();

@@ -27,34 +27,24 @@
 /**
   \class UserPlugin::UserViewer
   \brief This class is a data wrapper for users.
-  When you instanciate this widget, it retreive and show the UserPlugin::UserModel::currentUserIndex().\n
+  When you instanciate this widget, it retreive and show the
+  UserPlugin::UserModel::currentUserIndex().\n
   Rights are managed via the UserPlugin::UserModel.\n
-  Changes are automaticaly saved into the UserPlugin::UserModel.
+  Changes are automaticaly saved into the UserPlugin::UserModel.\n
+  You can add pages to the viewer using the virtual class UserPlugin::IUserViewerPage. \n
   \todo limit memory usage.
 */
 
-#include "userviewer.h"
-#include "userviewer_p.h"
+#include "newuserviewer.h"
+#include "iuserviewerpage.h"
+#include "defautuserviewerpages.h"
+#include "usermodel.h"
+
+#include <coreplugin/dialogs/pagewidget.h>
 
 #include <utils/global.h>
-#include <utils/serializer.h>
 #include <translationutils/constanttranslations.h>
-
-#include <coreplugin/translators.h>
-#include <coreplugin/iuser.h>
-
-#include <listviewplugin/stringlistview.h>
-
-#include <printerplugin/printer.h>
-
-#include <usermanagerplugin/usermodel.h>
-#include <usermanagerplugin/widgets/userpassworddialog.h>
-
-#include <QByteArray>
-#include <QSqlTableModel>
-#include <QHeaderView>
-#include <QStringListModel>
-#include <QTextEdit>
+#include <extensionsystem/pluginmanager.h>
 
 #include "ui_userviewer_identity.h"
 #include "ui_userviewer_papers.h"
@@ -67,215 +57,92 @@ using namespace UserPlugin;
 using namespace Internal;
 using namespace Trans::ConstantTranslations;
 
-//--------------------------------------------------------------------------------------------------------
-//-------------------------------------- Constructors / Destructors --------------------------------------
-//--------------------------------------------------------------------------------------------------------
-UserViewer::UserViewer(QWidget *parent)
-    : QWidget(parent)
+namespace UserPlugin {
+namespace Internal {
+class UserViewerPrivate
+{
+public:
+    bool canReadRow(int row)
+    {
+        bool canRead = false;
+        int currentUserRow = m_Model->currentUserIndex().row();
+        if (currentUserRow == row) {
+            // showing currentuser
+            Core::IUser::UserRights r = Core::IUser::UserRights(m_Model->currentUserData(Core::IUser::ManagerRights).toInt());
+            canRead = (r ^ Core::IUser::ReadOwn);
+        } else {
+            // not showing currentuser
+            Core::IUser::UserRights r = Core::IUser::UserRights(m_Model->currentUserData(Core::IUser::ManagerRights).toInt());
+            canRead = (r & Core::IUser::ReadAll);
+        }
+        return canRead;
+    }
+
+public:
+    UserModel *m_Model;
+    Core::PageWidget *m_Widget;
+    QList<IUserViewerPage*> m_pages;
+    int m_CurrentRow;
+    bool m_CanRead;
+};
+}  // End Internal
+}  // End UserPlugin
+
+
+UserViewer::UserViewer(QWidget *parent) :
+     QWidget(parent),
+    d(new UserViewerPrivate)
 {
     setObjectName("UserViewer");
-    d = new UserViewerPrivate(this);
-    d->initialize();
-    d->languageCombo->setDisplayMode(Views::LanguageComboBox::AvailableTranslations);
-    if (!parent)
-        Utils::centerWidget(this);
+    d->m_Model = UserModel::instance(); //new UserModel(this);
+    QHBoxLayout *layout = new QHBoxLayout(this);
+    setLayout(layout);
+    d->m_Widget = new Core::PageWidget(this);
+    layout->addWidget(d->m_Widget);
+
+    d->m_pages << new Internal::DefaultUserIdentityPage(this);
+    d->m_pages << new Internal::DefaultUserContactPage(this);
+    d->m_pages << new Internal::DefaultUserRightsPage(this);
+    d->m_pages << new Internal::DefaultUserProfessionalPage(this);
+
+    d->m_pages << new Internal::DefaultUserPapersPage(DefaultUserPapersPage::GenericPaper, this);
+    d->m_pages << new Internal::DefaultUserPapersPage(DefaultUserPapersPage::AdministrativePaper, this);
+    d->m_pages << new Internal::DefaultUserPapersPage(DefaultUserPapersPage::PrescriptionPaper, this);
+
+    d->m_pages << ExtensionSystem::PluginManager::instance()->getObjects<IUserViewerPage>();
+
+    d->m_Widget->setPages<IUserViewerPage>(d->m_pages);
+    d->m_Widget->setSettingKey("UserViewer/Pages");
+    d->m_Widget->setupUi(false);
+
+    d->m_Widget->expandAllCategories();
+
+    d->m_Widget->setVisible(d->canReadRow(d->m_Model->currentUserIndex().row()));
+
+    for(int i = 0; i < d->m_pages.count(); ++i) {
+        d->m_pages.at(i)->setUserModel(d->m_Model);
+        d->m_pages.at(i)->setUserIndex(d->m_Model->currentUserIndex().row());
+    }
 }
 
-UserViewerPrivate::UserViewerPrivate(QObject *parent) :
-        QObject(parent), m_Parent(0), m_Mapper(0),
-        genericPreview(0), adminPreview(0), prescriptionPreview(0)
+UserViewer::~UserViewer()
 {
-    Q_ASSERT_X(static_cast<QDialog *>(parent), "UserViewerPrivate", "*parent is not a QDialog");
-    setObjectName("UserViewerPrivate");
-    m_Parent = static_cast<QWidget *>(parent);
-    m_Row = UserModel::instance()->currentUserIndex().row();
+    if (d)
+        delete d;
+    d = 0;
 }
 
 /** \brief Change current viewing user to \e modelRow from UserModel */
 void UserViewer::changeUserTo(const int modelRow)
 {
-    d->changeUserIndex(modelRow);
-}
-
-/** \brief Change current viewing user to \e modelRow from UserModel */
-void UserViewerPrivate::changeUserIndex(const int modelRow)
-{
-    // clear ui
-    genericPreview->headerEditor()->clear();
-    genericPreview->footerEditor()->clear();
-    genericPreview->watermarkEditor()->clear();
-
-    adminPreview->headerEditor()->clear();
-    adminPreview->footerEditor()->clear();
-    adminPreview->watermarkEditor()->clear();
-
-    prescriptionPreview->headerEditor()->clear();
-    prescriptionPreview->footerEditor()->clear();
-    prescriptionPreview->watermarkEditor()->clear();
-
     // manage row changing
-    int oldRow = m_Row;
-    m_Row = modelRow;
-    checkUserRights();
-    if (m_CanRead) {
-        m_Mapper->setCurrentIndex(modelRow);
+    if (d->canReadRow(modelRow)) {
+        d->m_CurrentRow = modelRow;
+        for(int i = 0; i < d->m_pages.count(); ++i) {
+            d->m_pages.at(i)->setUserIndex(modelRow);
+        }
     } else {
-        m_Row = oldRow;
         Utils::informativeMessageBox(tr("You can not access to these datas."), tr("You don't have these rights."), "");
     }
 }
 
-//--------------------------------------------------------------------------------------------------------
-//------------------------------------------- PRIVATE PART -----------------------------------------------
-//--------------------------------------------------------------------------------------------------------
-/** \brief Ui initializer. */
-void UserViewerPrivate::initialize()
-{
-    setupUi(m_Parent);
-    // add previewer
-    genericPreview = Print::Printer::previewer(m_Parent);
-    adminPreview = Print::Printer::previewer(m_Parent);
-    prescriptionPreview = Print::Printer::previewer(m_Parent);
-    editorsGenericLayout->addWidget(genericPreview, 0,0);
-    editorsAdminLayout->addWidget(adminPreview, 0,0);
-    editorsPrescriptionLayout->addWidget(prescriptionPreview, 0,0);
-
-    // populate combos
-    titleCombo->addItems(titles());
-    genderCombo->addItems(genders());
-    // QListView need to be managed by hand
-    QStringListModel *modelspe = new QStringListModel(this);
-    specialtyListView->setModel(modelspe);
-    specialtyListView->setActions(Views::Constants::AllActions);
-    QStringListModel *modelqual = new QStringListModel(this);
-    qualificationsListView->setModel(modelqual);
-    QStringListModel *modelids = new QStringListModel(this);
-    practIdsListView->setModel(modelids);
-
-    checkUserRights();
-    prepareMapper();
-
-    // make connections
-    connect(but_changePassword, SIGNAL(clicked()), this, SLOT(on_but_changePassword_clicked()));
-    connect(but_viewHistory, SIGNAL(clicked()), this, SLOT(on_but_viewHistory_clicked()));
-
-    tabWidget->setCurrentWidget(tabIdentity);
-    tabHeadersFooters->setCurrentWidget(genericTab);
-}
-
-/** Prepare the UserModel Mapper */
-void UserViewerPrivate::prepareMapper()
-{
-    m_Mapper = new QDataWidgetMapper(m_Parent);
-    m_Mapper->setModel(UserModel::instance());
-    m_Mapper->setSubmitPolicy(QDataWidgetMapper::AutoSubmit);
-    m_Mapper->addMapping(uuidLineEdit, Core::IUser::Uuid);
-    m_Mapper->addMapping(titleCombo, Core::IUser::TitleIndex, "currentIndex");
-    m_Mapper->addMapping(genderCombo, Core::IUser::GenderIndex, "currentIndex");
-    m_Mapper->addMapping(nameLineEdit, Core::IUser::Name);
-    m_Mapper->addMapping(loginLineEdit, Core::IUser::ClearLogin);
-    m_Mapper->addMapping(secNameLineEdit, Core::IUser::SecondName);
-    m_Mapper->addMapping(firstnameLineEdit, Core::IUser::Firstname);
-    m_Mapper->addMapping(lastLoginDateTimeEdit, Core::IUser::LastLogin);
-    m_Mapper->addMapping(languageCombo, Core::IUser::LocaleCodedLanguage, "currentLanguage");
-    m_Mapper->addMapping(adressTextEdit, Core::IUser::Adress, "plainText");
-    m_Mapper->addMapping(countryLineEdit, Core::IUser::Country);
-    m_Mapper->addMapping(zipcodeLineEdit, Core::IUser::Zipcode);
-    m_Mapper->addMapping(cityLineEdit, Core::IUser::City);
-    m_Mapper->addMapping(tel1LineEdit, Core::IUser::Tel1);
-    m_Mapper->addMapping(tel2LineEdit, Core::IUser::Tel2);
-    m_Mapper->addMapping(tel3LineEdit, Core::IUser::Tel3);
-    m_Mapper->addMapping(faxLineEdit, Core::IUser::Fax);
-    m_Mapper->addMapping(mailLineEdit, Core::IUser::Mail);
-    m_Mapper->addMapping(specialtyListView, Core::IUser::Specialities, "stringList");
-    m_Mapper->addMapping(qualificationsListView, Core::IUser::Qualifications, "stringList");
-    m_Mapper->addMapping(practIdsListView, Core::IUser::PractitionerId, "stringList");
-
-    m_Mapper->addMapping(genericPreview->headerEditor() , Core::IUser::GenericHeader, "html");
-    m_Mapper->addMapping(genericPreview->headerPresenceCombo(), Core::IUser::GenericHeaderPresence, "currentIndex");
-    m_Mapper->addMapping(genericPreview->footerEditor() , Core::IUser::GenericFooter, "html");
-    m_Mapper->addMapping(genericPreview->headerPresenceCombo(), Core::IUser::GenericFooterPresence, "currentIndex");
-    m_Mapper->addMapping(genericPreview->watermarkEditor(), Core::IUser::GenericWatermark, "html");
-    m_Mapper->addMapping(genericPreview->watermarkPresenceCombo(), Core::IUser::GenericWatermarkPresence, "currentIndex");
-
-    m_Mapper->addMapping(adminPreview->headerEditor(), Core::IUser::AdministrativeHeader, "html");
-    m_Mapper->addMapping(adminPreview->headerPresenceCombo(), Core::IUser::AdministrativeHeaderPresence, "currentIndex");
-    m_Mapper->addMapping(adminPreview->footerEditor(), Core::IUser::AdministrativeFooter, "html");
-    m_Mapper->addMapping(adminPreview->footerPresenceCombo(), Core::IUser::AdministrativeFooterPresence, "currentIndex");
-    m_Mapper->addMapping(adminPreview->watermarkEditor(), Core::IUser::AdministrativeWatermark, "html");
-    m_Mapper->addMapping(adminPreview->watermarkPresenceCombo(), Core::IUser::AdministrativeWatermarkPresence, "currentIndex");
-
-    m_Mapper->addMapping(prescriptionPreview->headerEditor(), Core::IUser::PrescriptionHeader, "html");
-    m_Mapper->addMapping(prescriptionPreview->headerPresenceCombo(), Core::IUser::PrescriptionHeaderPresence, "currentIndex");
-    m_Mapper->addMapping(prescriptionPreview->footerEditor(), Core::IUser::PrescriptionFooter, "html");
-    m_Mapper->addMapping(prescriptionPreview->footerPresenceCombo(), Core::IUser::PrescriptionFooterPresence, "currentIndex");
-    m_Mapper->addMapping(prescriptionPreview->watermarkEditor(), Core::IUser::PrescriptionWatermark, "html");
-    m_Mapper->addMapping(prescriptionPreview->watermarkPresenceCombo(), Core::IUser::PrescriptionWatermarkPresence, "currentIndex");
-
-    m_Mapper->addMapping(userManagerRightsListWidget, Core::IUser::ManagerRights, "rights");
-    m_Mapper->addMapping(drugsRightsListWidget, Core::IUser::DrugsRights, "rights");
-    m_Mapper->addMapping(medicalRightsListWidget, Core::IUser::MedicalRights, "rights");
-    m_Mapper->addMapping(paramedicalRightsWidget, Core::IUser::ParamedicalRights, "rights");
-    m_Mapper->addMapping(administrativeRightsWidget, Core::IUser::AdministrativeRights, "rights");
-
-    m_Mapper->setCurrentIndex(UserModel::instance()->currentUserIndex().row());
-
-    // make connections
-    connect (m_Mapper->model(), SIGNAL(modelReset()), this, SLOT(onModelReseted()));
-}
-
-/** \brief Change current user view. No save are done into the database from the model. */
-void UserViewerPrivate::onModelReseted()
-{
-    changeUserIndex(UserModel::instance()->currentUserIndex().row());
-}
-
-/** Verify rights of user */
-void UserViewerPrivate::checkUserRights()
-{
-    m_CanModify = false;
-    m_CanRead = false;
-    UserModel *m = UserModel::instance();
-    int currentUserRow = m->currentUserIndex().row();
-    if (currentUserRow == m_Row) {
-        // showing currentuser
-        Core::IUser::UserRights r = Core::IUser::UserRights(m->currentUserData(Core::IUser::ManagerRights).toInt());
-        m_CanModify = (r ^ Core::IUser::WriteOwn);
-        m_CanRead = (r ^ Core::IUser::ReadOwn);
-    } else {
-        // not showing currentuser
-        Core::IUser::UserRights r = Core::IUser::UserRights(m->currentUserData(Core::IUser::ManagerRights).toInt());
-        m_CanModify = (r & Core::IUser::WriteAll);
-        m_CanRead = (r & Core::IUser::ReadAll);
-    }
-    // enable editors
-    foreach(QLineEdit *l, findChildren<QLineEdit *>())
-        l->setEnabled(m_CanModify);
-    foreach(QComboBox *c, findChildren<QComboBox *>())
-        c->setEnabled(m_CanModify);
-    foreach(QPushButton *c, findChildren<QPushButton *>())
-        c->setEnabled(m_CanModify);
-}
-
-void UserViewerPrivate::on_but_changePassword_clicked()
-{
-    UserModel *m = UserModel::instance();
-    UserPasswordDialog d(m->index(m_Row, Core::IUser::Password).data().toString(), m_Parent);
-    if (d.exec() == QDialog::Accepted){
-        if (! d.canGetNewPassword())
-            return;
-        QModelIndex idx = m->index(m_Row, Core::IUser::Password);
-        m->setData(idx, d.cryptedPassword());
-    }
-}
-
-void UserViewerPrivate::on_but_viewHistory_clicked()
-{
-    UserModel *m = UserModel::instance();
-    Utils::informativeMessageBox(tr("Login history."),
-                                     tr("User %1\nLast connection : %2")
-                           .arg(m->index(m_Row,Core::IUser::Name).data().toString())
-                           .arg(m->index(m_Row,Core::IUser::LastLogin).data().toDateTime().toString()),
-                            m->index(m_Row,Core::IUser::LoginHistory).data().toString(),
-                            qApp->applicationName());
-}

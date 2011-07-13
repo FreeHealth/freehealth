@@ -42,7 +42,10 @@
       </column>
      </widget>
      <widget class="QWidget" name="layoutWidget">
-      <layout class="QVBoxLayout">
+      <layout class="QVBoxLayout" name="layout">
+       <property name="spacing">
+        <number>0</number>
+       </property>
        <item>
         <widget class="QStackedWidget" name="stackedPages">
          <property name="minimumSize">

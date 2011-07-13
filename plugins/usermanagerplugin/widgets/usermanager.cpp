@@ -277,11 +277,10 @@ bool UserManagerWidget::initialize()
     m_ToolBar->addAction(deleteUserAct);
     m_ToolBar->addAction(clearModificationsAct);
 //    m_ToolBar->addAction(quitUserManagerAct);
-    m_ToolBar->setSizePolicy(QSizePolicy::Preferred, QSizePolicy::Expanding);
+    m_ToolBar->setSizePolicy(QSizePolicy::Preferred, QSizePolicy::Preferred);
     ui->toolbarLayout->addWidget(m_ToolBar);
 
     UserModel *model = UserModel::instance();
-    ui->userTableView->setEditTriggers(QAbstractItemView::NoEditTriggers);
     ui->userTableView->setModel(model);
     for(int i=0; i < model->columnCount(); ++i) {
         ui->userTableView->hideColumn(i);
@@ -290,11 +289,12 @@ bool UserManagerWidget::initialize()
     ui->userTableView->showColumn(Core::IUser::SecondName);
     ui->userTableView->showColumn(Core::IUser::Firstname);
     ui->userTableView->resizeColumnsToContents();
-    ui->userTableView->setSelectionMode(QAbstractItemView::SingleSelection);
-    ui->userTableView->setSelectionBehavior(QAbstractItemView::SelectRows);
     ui->userTableView->horizontalHeader()->setStretchLastSection(true);
     ui->userTableView->horizontalHeader()->hide();
     ui->userTableView->verticalHeader()->hide();
+    ui->userTableView->setEditTriggers(QAbstractItemView::NoEditTriggers);
+    ui->userTableView->setSelectionBehavior(QAbstractItemView::SelectRows);
+    ui->userTableView->setSelectionMode(QAbstractItemView::SingleSelection);
 
     retranslate();
 
@@ -478,11 +478,19 @@ void UserManagerWidget::onSaveRequested()
 
 void UserManagerWidget::onDeleteUserRequested()
 {
+    if (!ui->userTableView->selectionModel()->hasSelection())
+        return;
+
+    // User can not delete himself
+    if (ui->userTableView->currentIndex().row() == UserModel::instance()->currentUserIndex().row())
+        return;
+
     if (UserModel::instance()->removeRow(ui->userTableView->currentIndex().row())) {
         LOG(tr("User deleted"));
     } else {
         LOG(tr("User can not be deleted"));
     }
+    selectUserTableView(UserModel::instance()->currentUserIndex().row());
 }
 
 void UserManagerWidget::onUserActivated(const QModelIndex &index)
@@ -490,9 +498,10 @@ void UserManagerWidget::onUserActivated(const QModelIndex &index)
     ui->userViewer->changeUserTo(index.row());
 }
 
-void  UserManagerWidget::selectUserTableView(int row)
+void UserManagerWidget::selectUserTableView(int row)
 {
-    ui->userTableView->selectRow(row);
+//    ui->userTableView->selectRow(row);
+    ui->userTableView->setCurrentIndex(ui->userTableView->model()->index(row, 0));
     ui->userViewer->changeUserTo(row);
 }
 

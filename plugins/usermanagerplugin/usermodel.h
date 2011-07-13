@@ -93,6 +93,7 @@ class USER_EXPORT UserModel : public QAbstractTableModel
 {
     Q_OBJECT
     friend class UserPlugin::UserManagerPlugin;
+//    friend class UserPlugin::UserViewer;
 
 protected:
     UserModel(QObject *parent);
@@ -122,6 +123,7 @@ public:
     virtual QVariant data(const QModelIndex &item, int role = Qt::DisplayRole) const;
     virtual bool setData(const QModelIndex &index, const QVariant &value, int role = Qt::EditRole);
     virtual bool setPaper(const QString &uuid, const int ref, Print::TextDocumentExtra *extra);
+    virtual Print::TextDocumentExtra *paper(const int row, const int ref);
 
     virtual bool removeRows(int row, int count, const QModelIndex &parent = QModelIndex());
     virtual bool insertRows(int row, int count, const QModelIndex &parent = QModelIndex());

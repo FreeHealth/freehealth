@@ -88,7 +88,7 @@ PageWidget::PageWidget(QWidget *parent) :
     m_ui->setupUi(this);
 }
 
-void PageWidget::setupUi()
+void PageWidget::setupUi(bool treeView)
 {
     QString initialCategory = m_currentCategory;
     QString initialPage = m_currentPage;
@@ -106,11 +106,10 @@ void PageWidget::setupUi()
     QMap<QString, QTreeWidgetItem *> categories;
 
     int index = 0;
+
     foreach(IGenericPage *page, m_pages) {
         PageData pageData;
         pageData.index = index;
-        qWarning() << page->name() << page->id();
-
         pageData.category = page->category();
         pageData.id = page->id();
 
@@ -165,10 +164,14 @@ void PageWidget::setupUi()
     sizes << 150 << 300;
     m_ui->splitter->setSizes(sizes);
 
-    m_ui->pageTree->sortItems(0, Qt::AscendingOrder);
+    if (treeView)
+        m_ui->pageTree->sortItems(0, Qt::AscendingOrder);
 
     m_ui->splitter->setStretchFactor(m_ui->splitter->indexOf(m_ui->pageTree), 0);
     m_ui->splitter->setStretchFactor(m_ui->splitter->indexOf(m_ui->layoutWidget), 1);
+
+    m_ui->stackedPages->layout()->setMargin(0);
+    m_ui->stackedPages->layout()->setSpacing(0);
 
     // resize and center window
     Utils::resizeAndCenter(this);
@@ -193,6 +196,7 @@ QWidget *PageWidget::createPageWidget(IGenericPage *page)
     QWidget *w = new QWidget(this);
     QVBoxLayout *lay = new QVBoxLayout(w);
     lay->setMargin(0);
+    lay->setContentsMargins(0,0,0,0);
     w->setLayout(lay);
     // add title and line
     QFont bold;
@@ -247,11 +251,12 @@ void PageWidget::saveState()
 void PageWidget::changeEvent(QEvent *event)
 {
     if (event->type()==QEvent::LanguageChange) {
-        // recreate the widget
-        m_ui->pageTree->clear();
-        for(int i = 0; i < m_ui->stackedPages->count(); ++i) {
-            m_ui->stackedPages->removeWidget(m_ui->stackedPages->widget(i));
-        }
-        setupUi();
+        /** \todo code here: PageWidget::changeEvent(QEvent *event) */
+//        // recreate the widget
+//        m_ui->pageTree->clear();
+//        for(int i = 0; i < m_ui->stackedPages->count(); ++i) {
+//            m_ui->stackedPages->removeWidget(m_ui->stackedPages->widget(i));
+//        }
+//        setupUi();
     }
 }

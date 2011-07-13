@@ -35,8 +35,8 @@
 /**
  * \file userviewer.h
  * \author Eric MAEKER <eric.maeker@gmail.com>
- * \version 0.0.4
- * \date 18 Sept 2009
+ * \version 0.6.0
+ * \date 13 Jul 2011
 */
 
 namespace UserPlugin {
@@ -50,6 +50,7 @@ class USER_EXPORT UserViewer : public QWidget
     Q_DISABLE_COPY(UserViewer)
 public:
     explicit UserViewer(QWidget *parent = 0);
+    ~UserViewer();
     void changeUserTo(const int modelRow);
 
 private:

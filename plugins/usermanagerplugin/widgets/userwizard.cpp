@@ -29,7 +29,7 @@
   \brief Wizard for user creation.
   You can tell tkWiz to create the user itself or use a defined user. createUser() define the
   creation mode. If you set it to false, inform the row of the model to use with setModelRow(). By default,
-  tkUserWizard create itself a new user.\n
+  UserWizard create itself a new user.\n
   Usage :
   \code
     UserWizard wiz;
@@ -227,17 +227,30 @@ void UserWizard::done(int r)
         m_User->setRights(Constants::USER_ROLE_PARAMEDICAL, Core::IUser::UserRights(m_Rights.value(Core::IUser::ParamedicalRights)));
         m_User->setRights(Constants::USER_ROLE_ADMINISTRATIVE, Core::IUser::UserRights(m_Rights.value(Core::IUser::AdministrativeRights)));
 
-        m_User->setGenericHeader(m_Papers.value(Core::IUser::GenericHeader));
-        m_User->setGenericFooter(m_Papers.value(Core::IUser::GenericFooter));
-        m_User->setGenericWatermark(m_Papers.value(Core::IUser::GenericWatermark));
+//        m_User->setGenericHeader(m_Papers.value(Core::IUser::GenericHeader));
+//        m_User->setGenericFooter(m_Papers.value(Core::IUser::GenericFooter));
+//        m_User->setGenericWatermark(m_Papers.value(Core::IUser::GenericWatermark));
 
-        m_User->setAdminHeader(m_Papers.value(Core::IUser::AdministrativeHeader));
-        m_User->setAdminFooter(m_Papers.value(Core::IUser::AdministrativeFooter));
-        m_User->setAdminWatermark(m_Papers.value(Core::IUser::AdministrativeWatermark));
+//        m_User->setAdminHeader(m_Papers.value(Core::IUser::AdministrativeHeader));
+//        m_User->setAdminFooter(m_Papers.value(Core::IUser::AdministrativeFooter));
+//        m_User->setAdminWatermark(m_Papers.value(Core::IUser::AdministrativeWatermark));
 
-        m_User->setPrescriptionHeader(m_Papers.value(Core::IUser::PrescriptionHeader));
-        m_User->setPrescriptionFooter(m_Papers.value(Core::IUser::PrescriptionFooter));
-        m_User->setPrescriptionWatermark(m_Papers.value(Core::IUser::PrescriptionWatermark));
+//        m_User->setPrescriptionHeader(m_Papers.value(Core::IUser::PrescriptionHeader));
+//        m_User->setPrescriptionFooter(m_Papers.value(Core::IUser::PrescriptionFooter));
+//        m_User->setPrescriptionWatermark(m_Papers.value(Core::IUser::PrescriptionWatermark));
+
+        m_User->setExtraDocument(Print::TextDocumentExtra::fromXml(m_Papers.value(Core::IUser::GenericHeader)), Core::IUser::GenericHeader);
+        m_User->setExtraDocument(Print::TextDocumentExtra::fromXml(m_Papers.value(Core::IUser::GenericFooter)), Core::IUser::GenericFooter);
+        m_User->setExtraDocument(Print::TextDocumentExtra::fromXml(m_Papers.value(Core::IUser::GenericWatermark)), Core::IUser::GenericWatermark);
+
+        m_User->setExtraDocument(Print::TextDocumentExtra::fromXml(m_Papers.value(Core::IUser::AdministrativeHeader)), Core::IUser::AdministrativeHeader);
+        m_User->setExtraDocument(Print::TextDocumentExtra::fromXml(m_Papers.value(Core::IUser::AdministrativeFooter)), Core::IUser::AdministrativeFooter);
+        m_User->setExtraDocument(Print::TextDocumentExtra::fromXml(m_Papers.value(Core::IUser::AdministrativeWatermark)), Core::IUser::AdministrativeWatermark);
+
+        m_User->setExtraDocument(Print::TextDocumentExtra::fromXml(m_Papers.value(Core::IUser::PrescriptionHeader)), Core::IUser::PrescriptionHeader);
+        m_User->setExtraDocument(Print::TextDocumentExtra::fromXml(m_Papers.value(Core::IUser::PrescriptionFooter)), Core::IUser::PrescriptionFooter);
+        m_User->setExtraDocument(Print::TextDocumentExtra::fromXml(m_Papers.value(Core::IUser::PrescriptionWatermark)), Core::IUser::PrescriptionWatermark);
+
 
         if (m_CreateUser) {
             // Create user in database

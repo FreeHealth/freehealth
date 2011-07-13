@@ -188,20 +188,26 @@ QString PrinterPreviewerPrivate::watermarkToHtml() const
 
 void PrinterPreviewerPrivate::setHeader(const TextDocumentExtra *extra)
 {
-    setHeaderHtml(extra->toHtml());
-    setHeaderPresence(extra->presence());
+    if (extra) {
+        setHeaderHtml(extra->toHtml());
+        setHeaderPresence(extra->presence());
+    }
 }
 
 void PrinterPreviewerPrivate::setFooter(const TextDocumentExtra *extra)
 {
-    setFooterHtml(extra->toHtml());
-    setFooterPresence(extra->presence());
+    if (extra) {
+        setFooterHtml(extra->toHtml());
+        setFooterPresence(extra->presence());
+    }
 }
 
 void PrinterPreviewerPrivate::setWatermark(const TextDocumentExtra *extra)
 {
-    setWatermarkHtml(extra->toHtml());
-    setWatermarkPresence(extra->presence());
+    if (extra) {
+        setWatermarkHtml(extra->toHtml());
+        setWatermarkPresence(extra->presence());
+    }
 }
 
 void PrinterPreviewerPrivate::headerToPointer(TextDocumentExtra *extra)

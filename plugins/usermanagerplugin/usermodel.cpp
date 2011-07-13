@@ -943,6 +943,15 @@ bool UserModel::setPaper(const QString &uuid, const int ref, Print::TextDocument
     return true;
 }
 
+Print::TextDocumentExtra *UserModel::paper(const int row, const int ref)
+{
+    QString uuid = d->m_Sql->data(d->m_Sql->index(row, USER_UUID), Qt::DisplayRole).toString();
+    Internal::UserData *user = d->m_Uuid_UserList[uuid];
+    if (!user)
+        return 0;
+    return user->extraDocument(ref);
+}
+
 /** \brief Returns true if model has dirty rows that need to be saved into database. */
 bool UserModel::hasUserToSave()
 {
