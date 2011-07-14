@@ -35,7 +35,7 @@
   \todo limit memory usage.
 */
 
-#include "newuserviewer.h"
+#include "userviewer.h"
 #include "iuserviewerpage.h"
 #include "defautuserviewerpages.h"
 #include "usermodel.h"

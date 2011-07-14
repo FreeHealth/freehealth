@@ -28,27 +28,30 @@ HEADERS += \
     $${PWD}/userdata.h \
     $${PWD}/usermodel.h \
     $${PWD}/database/userbase.h \
-    $${PWD}/widgets/newuserviewer.h \
+    $${PWD}/widgets/userviewer.h \
     $${PWD}/widgets/useridentifier.h \
     $${PWD}/widgets/usermanager.h \
     $${PWD}/widgets/usermanager_p.h \
     $${PWD}/widgets/userpassworddialog.h \
     $${PWD}/widgets/userrightswidget.h \
-    $${PWD}/widgets/userwizard.h
+    $${PWD}/widgets/userwizard.h \
+#    $${PWD}/widgets/userlineeditcompletersearch.h
 #    $${PWD}/widgets/userviewer_p.h \
 
 SOURCES += \
     $${PWD}/userdata.cpp \
     $${PWD}/usermodel.cpp \
     $${PWD}/database/userbase.cpp \
-    $${PWD}/widgets/newuserviewer.cpp \
+    $${PWD}/widgets/userviewer.cpp \
     $${PWD}/widgets/useridentifier.cpp \
     $${PWD}/widgets/usermanager.cpp \
     $${PWD}/widgets/userpassworddialog.cpp \
     $${PWD}/widgets/userrightswidget.cpp \
-    $${PWD}/widgets/userwizard.cpp
+    $${PWD}/widgets/userwizard.cpp \
+#    $${PWD}/widgets/userlineeditcompletersearch.h
 
-FORMS += $${PWD}/widgets/newuserviewer.ui \
+
+FORMS += $${PWD}/widgets/userviewer.ui \
     $${PWD}/widgets/useridentifier.ui \
     $${PWD}/widgets/usermanager.ui \
     $${PWD}/widgets/userpassworddialog.ui \
