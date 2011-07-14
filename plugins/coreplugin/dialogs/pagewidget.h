@@ -58,6 +58,7 @@ public:
 
     template <class T>
     void setPages(const QList<T*> &pages) {
+        m_pages.clear();
         for(int i = 0; i < pages.count(); ++i) {
             IGenericPage *p = qobject_cast<IGenericPage*>(pages.at(i));
             if (p)

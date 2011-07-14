@@ -17,7 +17,8 @@ HEADERS = agendaplugin.h agenda_exporter.h \
     agendamode.h \
     calendaritemmodel.h \
     calendaritemeditorpatientmapper.h \
-    appointement.h
+    appointement.h \
+    agendauserviewerpages.h \
 #    eventeditorwidget.h \
 #    icalendarevent.h \
 #    iusercalendar.h \
@@ -30,7 +31,8 @@ SOURCES = agendaplugin.cpp \
     agendamode.cpp \
     calendaritemmodel.cpp \
     calendaritemeditorpatientmapper.cpp \
-    appointement.cpp
+    appointement.cpp \
+    agendauserviewerpages.cpp \
 #    eventeditorwidget.cpp \
 #    icalendarevent.cpp \
 #    iusercalendar.cpp \
@@ -44,5 +46,6 @@ TRANSLATIONS += $${SOURCES_TRANSLATIONS_PATH}/agendaplugin_fr.ts \
 
 FORMS += \
     useragendasviewer.ui \
+    calendaritemeditorpatientmapper.ui \
+    agendauserviewerwidget.ui
 #    eventeditorwidget.ui \
-    calendaritemeditorpatientmapper.ui

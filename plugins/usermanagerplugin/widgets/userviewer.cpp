@@ -41,6 +41,7 @@
 #include "usermodel.h"
 
 #include <coreplugin/dialogs/pagewidget.h>
+#include <extensionsystem/pluginmanager.h>
 
 #include <utils/global.h>
 #include <translationutils/constanttranslations.h>
@@ -56,6 +57,8 @@
 using namespace UserPlugin;
 using namespace Internal;
 using namespace Trans::ConstantTranslations;
+
+static inline ExtensionSystem::PluginManager *pluginManager() {return ExtensionSystem::PluginManager::instance();}
 
 namespace UserPlugin {
 namespace Internal {
@@ -109,7 +112,7 @@ UserViewer::UserViewer(QWidget *parent) :
     d->m_pages << new Internal::DefaultUserPapersPage(DefaultUserPapersPage::AdministrativePaper, this);
     d->m_pages << new Internal::DefaultUserPapersPage(DefaultUserPapersPage::PrescriptionPaper, this);
 
-    d->m_pages << ExtensionSystem::PluginManager::instance()->getObjects<IUserViewerPage>();
+    d->m_pages << pluginManager()->getObjects<IUserViewerPage>();
 
     d->m_Widget->setPages<IUserViewerPage>(d->m_pages);
     d->m_Widget->setSettingKey("UserViewer/Pages");
@@ -123,6 +126,10 @@ UserViewer::UserViewer(QWidget *parent) :
         d->m_pages.at(i)->setUserModel(d->m_Model);
         d->m_pages.at(i)->setUserIndex(d->m_Model->currentUserIndex().row());
     }
+
+    connect(pluginManager(), SIGNAL(objectAdded(QObject*)), this, SLOT(pluginManagerObjectAdded(QObject*)));
+    connect(pluginManager(), SIGNAL(aboutToRemoveObject(QObject*)), this, SLOT(pluginManagerObjectRemoved(QObject*)));
+
 }
 
 UserViewer::~UserViewer()
@@ -146,3 +153,24 @@ void UserViewer::changeUserTo(const int modelRow)
     }
 }
 
+void UserViewer::pluginManagerObjectAdded(QObject *o)
+{
+    IUserViewerPage *page = qobject_cast<IUserViewerPage *>(o);
+    if (page) {
+        d->m_pages << page;
+//        d->m_Widget->setPages<IUserViewerPage>(d->m_pages);
+//        d->m_Widget->setupUi(false);
+    }
+}
+
+void UserViewer::pluginManagerObjectRemoved(QObject *o)
+{
+    IUserViewerPage *page = qobject_cast<IUserViewerPage *>(o);
+    if (page) {
+        /** \todo remove page */
+        if (d->m_pages.contains(page))
+            d->m_pages.removeAll(page);
+//        d->m_Widget->setPages<IUserViewerPage>(d->m_pages);
+//        d->m_Widget->setupUi(false);
+    }
+}

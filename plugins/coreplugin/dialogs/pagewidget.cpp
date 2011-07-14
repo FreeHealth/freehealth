@@ -86,6 +86,11 @@ PageWidget::PageWidget(QWidget *parent) :
 {
     m_ui = new Ui::PageWidget();
     m_ui->setupUi(this);
+    m_ui->splitter->setCollapsible(1, false);
+    m_ui->pageTree->header()->setVisible(false);
+
+    connect(m_ui->pageTree, SIGNAL(currentItemChanged(QTreeWidgetItem *, QTreeWidgetItem *)),
+        this, SLOT(pageSelected()));
 }
 
 void PageWidget::setupUi(bool treeView)
@@ -97,21 +102,16 @@ void PageWidget::setupUi(bool treeView)
         initialPage = settings()->value(m_settingKey+"/LastPage", QVariant(QString())).toString();
     }
 
-    m_ui->splitter->setCollapsible(1, false);
-    m_ui->pageTree->header()->setVisible(false);
-
-    connect(m_ui->pageTree, SIGNAL(currentItemChanged(QTreeWidgetItem *, QTreeWidgetItem *)),
-        this, SLOT(pageSelected()));
-
     QMap<QString, QTreeWidgetItem *> categories;
 
     int index = 0;
-
     foreach(IGenericPage *page, m_pages) {
         PageData pageData;
         pageData.index = index;
         pageData.category = page->category();
         pageData.id = page->id();
+
+        qWarning() << page << page->id() << index;
 
         QTreeWidgetItem *item = new QTreeWidgetItem;
         item->setText(0, page->name());
@@ -215,7 +215,7 @@ QWidget *PageWidget::createPageWidget(IGenericPage *page)
     line->setFrameShadow(QFrame::Sunken);
     lay->addWidget(title);
     lay->addWidget(line);
-    QWidget *p = page->createPage(m_ui->stackedPages);
+    QWidget *p = page->createPage(w);
     p->setSizePolicy(QSizePolicy::Expanding, QSizePolicy::Expanding);
     lay->addWidget(p);
     return w;
@@ -225,6 +225,9 @@ void PageWidget::pageSelected()
 {
     QTreeWidgetItem *item = m_ui->pageTree->currentItem();
     PageData data = item->data(0, Qt::UserRole).value<PageData>();
+
+    qWarning() << "selected" << data.id << data.index;
+
     int index = data.index;
     m_currentCategory = data.category;
     m_currentPage = data.id;

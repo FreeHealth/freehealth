@@ -24,43 +24,77 @@
  *       NAME <MAIL@ADRESS>                                                *
  *       NAME <MAIL@ADRESS>                                                *
  ***************************************************************************/
-#ifndef USERVIEWER_H
-#define USERVIEWER_H
+#ifndef AGENDAUSERVIEWERPAGES_H
+#define AGENDAUSERVIEWERPAGES_H
 
-#include <usermanagerplugin/usermanager_exporter.h>
+#include <usermanagerplugin/widgets/iuserviewerpage.h>
 
 #include <QWidget>
-#include <QObject>
+#include <QPointer>
+class QDataWidgetMapper;
 
 /**
- * \file userviewer.h
+ * \file agendauserviewerpages.h
  * \author Eric MAEKER <eric.maeker@gmail.com>
  * \version 0.6.0
- * \date 13 Jul 2011
+ * \date 12 Jul 2011
 */
 
-namespace UserPlugin {
+namespace Agenda {
 namespace Internal {
-class UserViewerPrivate;
-}  // End Internal
+namespace Ui {
+class AgendaUserViewer;
+}
 
-class USER_EXPORT UserViewer : public QWidget
+class AgendaUserIdentityWidget : public QWidget
 {
     Q_OBJECT
-    Q_DISABLE_COPY(UserViewer)
 public:
-    explicit UserViewer(QWidget *parent = 0);
-    ~UserViewer();
-    void changeUserTo(const int modelRow);
+    AgendaUserIdentityWidget(QWidget *parent = 0);
+    ~AgendaUserIdentityWidget();
 
-private Q_SLOTS:
-    void pluginManagerObjectAdded(QObject *o);
-    void pluginManagerObjectRemoved(QObject *o);
+    void setUserModel(UserPlugin::UserModel *model);
+    void setUserIndex(const int index);
+
+    void clear();
+    bool submit();
+
+//private Q_SLOTS:
+//    void on_but_changePassword_clicked();
+//    void on_but_viewHistory_clicked();
 
 private:
-    Internal::UserViewerPrivate *d;
+    Ui::AgendaUserViewer *ui;
+    QDataWidgetMapper *m_Mapper;
+    UserPlugin::UserModel *m_Model;
 };
 
-}  // End UserPlugin
+class AgendaUserViewerPage : public UserPlugin::IUserViewerPage
+{
+    Q_OBJECT
+public:
+    AgendaUserViewerPage(QObject *parent = 0);
+    ~AgendaUserViewerPage();
 
-#endif // USERVIEWER_H
+    QString id() const;
+    QString name() const;
+    QString category() const;
+    QString title() const;
+
+    QWidget *createPage(QWidget *parent);
+
+    void setUserModel(UserPlugin::UserModel *model);
+    void setUserIndex(const int index);
+    bool clear();
+    bool submit();
+
+private:
+    QPointer<AgendaUserIdentityWidget> m_Widget;
+    UserPlugin::UserModel *m_Model;
+};
+
+
+}  // End namespace Internal
+}  // End namespace Agenda
+
+#endif // AGENDAUSERVIEWERPAGES_H

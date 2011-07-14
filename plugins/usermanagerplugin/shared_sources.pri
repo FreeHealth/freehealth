@@ -35,7 +35,7 @@ HEADERS += \
     $${PWD}/widgets/userpassworddialog.h \
     $${PWD}/widgets/userrightswidget.h \
     $${PWD}/widgets/userwizard.h \
-#    $${PWD}/widgets/userlineeditcompletersearch.h
+    $${PWD}/widgets/userlineeditcompletersearch.h
 #    $${PWD}/widgets/userviewer_p.h \
 
 SOURCES += \
@@ -48,7 +48,7 @@ SOURCES += \
     $${PWD}/widgets/userpassworddialog.cpp \
     $${PWD}/widgets/userrightswidget.cpp \
     $${PWD}/widgets/userwizard.cpp \
-#    $${PWD}/widgets/userlineeditcompletersearch.h
+    $${PWD}/widgets/userlineeditcompletersearch.cpp
 
 
 FORMS += $${PWD}/widgets/userviewer.ui \

@@ -22,45 +22,71 @@
  *   Main Developper : Eric MAEKER, <eric.maeker@gmail.com>                *
  *   Contributors :                                                        *
  *       NAME <MAIL@ADRESS>                                                *
- *       NAME <MAIL@ADRESS>                                                *
  ***************************************************************************/
-#ifndef USERVIEWER_H
-#define USERVIEWER_H
+#ifndef USERPLUGINLINEEDITCOMPLETER_H
+#define USERPLUGINLINEEDITCOMPLETER_H
 
 #include <usermanagerplugin/usermanager_exporter.h>
+#include <utils/widgets/qbuttonlineedit.h>
 
-#include <QWidget>
-#include <QObject>
+#include <QCompleter>
+#include <QValidator>
+
+class QSqlTableModel;
 
 /**
- * \file userviewer.h
+ * \file userlineeditcompletersearch.h
  * \author Eric MAEKER <eric.maeker@gmail.com>
  * \version 0.6.0
- * \date 13 Jul 2011
+ * \date 14 Jul 2011
 */
 
 namespace UserPlugin {
 namespace Internal {
-class UserViewerPrivate;
-}  // End Internal
+class UserCompleterPrivate;
 
-class USER_EXPORT UserViewer : public QWidget
+class UserCompleter : public QCompleter
 {
     Q_OBJECT
-    Q_DISABLE_COPY(UserViewer)
 public:
-    explicit UserViewer(QWidget *parent = 0);
-    ~UserViewer();
-    void changeUserTo(const int modelRow);
+    enum CompleterModelRepresentation {
+        FullName = 0,
+        Uid
+    };
 
-private Q_SLOTS:
-    void pluginManagerObjectAdded(QObject *o);
-    void pluginManagerObjectRemoved(QObject *o);
+    explicit UserCompleter(QObject *parent = 0);
+    ~UserCompleter();
+
+    QValidator *validator() const;
 
 private:
-    Internal::UserViewerPrivate *d;
+    Internal::UserCompleterPrivate *d;
+};
+}  // End namespace Internal
+
+class USER_EXPORT UserLineEditCompleterSearch : public Utils::QButtonLineEdit
+{
+    Q_OBJECT
+public:
+    explicit UserLineEditCompleterSearch(QWidget *parent = 0);
+    ~UserLineEditCompleterSearch();
+
+Q_SIGNALS:
+    void selectedUser(const QString &uid, const QString &fullName);
+
+private Q_SLOTS:
+    void textChanged(const QString &newText);
+    void cancelSearch();
+    void userSelected(const QModelIndex &index);
+
+//private:
+//    void keyPressEvent(QKeyEvent *event);
+
+private:
+    QString m_LastSearch;
+    Internal::UserCompleter *m_Completer;
 };
 
-}  // End UserPlugin
+}  // End namespace UserPlugin
 
-#endif // USERVIEWER_H
+#endif // USERPLUGINLINEEDITCOMPLETER_H

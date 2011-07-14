@@ -29,6 +29,7 @@
 #include "agendawidgetmanager.h"
 #include "agendamode.h"
 #include "calendaritemeditorpatientmapper.h"
+#include "agendauserviewerpages.h"
 
 // TEST
 #include "appointement.h"
@@ -88,6 +89,9 @@ bool AgendaPlugin::initialize(const QStringList &arguments, QString *errorString
 
     // Add Translator to the Application
     Core::ICore::instance()->translators()->addNewTranslator("AgendaPlugin");
+
+    // Add Agenda's UserViewer editor page
+    addAutoReleasedObject(new Internal::AgendaUserViewerPage(this));
 
     return true;
 }
