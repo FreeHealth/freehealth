@@ -79,6 +79,7 @@ private:
 private Q_SLOTS:
     void choosePreferedValue(bool b);
     void deleteBox(bool b);
+    void userIsChanged();
 
 private:
     /** \create a pimpl */
@@ -86,6 +87,7 @@ private:
     QAction *m_deleteThesaurusValue;
     QMenu *m_menuRightClic;
     QStandardItemModel *m_actionsTreeModel;
+    QString m_userUuid;
     QMap<QString,QString> m_mapSubItems;
 };
 
@@ -98,8 +100,7 @@ public:
     explicit ReceiptViewer(QWidget *parent = 0);
     ~ReceiptViewer();
     void setPosition(QWidget *parent);
-    const QString userUid();
-    /** \todo this is not recommended. Use const functions to get infos and define setters. */
+    
     QString m_userUuid;
     treeViewsActions *actionTreeView;
 
@@ -131,6 +132,7 @@ private Q_SLOTS:
     void showControlReceipts(bool b);
     void clearAll(bool b);
     void controlReceiptsDestroyed();
+    void userUid();
     //void createFirstTimeTxt();
 
 private:

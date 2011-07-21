@@ -36,6 +36,8 @@
 
 #include <accountbaseplugin/movementmodel.h>
 #include <accountbaseplugin/constants.h>
+#include <coreplugin/icore.h>
+#include <coreplugin/iuser.h>
 
 #include "ui_movementsviewer.h"
 
@@ -49,6 +51,7 @@ enum { WarnDebugMessage = false };
 using namespace AccountDB;
 using namespace Account;
 using namespace Constants;
+static inline Core::IUser *user() { return  Core::ICore::instance()->user(); }
 
 MovementsViewer::MovementsViewer(QWidget * parent) :
         QWidget(parent),ui(new Ui::MovementsViewerWidget)
@@ -72,11 +75,16 @@ MovementsViewer::MovementsViewer(QWidget * parent) :
     connect(ui->valAndRecButton,SIGNAL(pressed()),this,SLOT(validAndRecord()));
     connect(ui->movementsComboBox,SIGNAL(highlighted(int)),this,
                                   SLOT(setMovementsComboBoxToolTips(int)));
+    connect(user(), SIGNAL(userChanged()), this, SLOT(userIsChanged()));
     
 }
 
 MovementsViewer::~MovementsViewer()
 {
+}
+
+void MovementsViewer::userIsChanged(){
+    showMovements();
 }
 
 void MovementsViewer::showMovements()

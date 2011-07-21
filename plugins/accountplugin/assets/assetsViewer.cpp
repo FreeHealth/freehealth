@@ -35,12 +35,14 @@
 #include "ui_assetsviewer.h"
 #include <accountbaseplugin/assetmodel.h>
 #include <accountbaseplugin/constants.h>
-
+#include <coreplugin/icore.h>
+#include <coreplugin/iuser.h>
 #include <QMessageBox>
 #include <QDebug>
 enum { WarnDebugMessage = true };
 using namespace AccountDB;
 using namespace Constants;
+static inline Core::IUser *user() { return  Core::ICore::instance()->user(); }
 
 AssetsViewer::AssetsViewer(QWidget * parent):QWidget(parent),ui(new Ui::AssetsViewerWidget){
     ui->setupUi(this);
@@ -62,10 +64,17 @@ AssetsViewer::AssetsViewer(QWidget * parent):QWidget(parent),ui(new Ui::AssetsVi
     connect(ui->deleteButton,SIGNAL(pressed()),this,SLOT(deleteAsset()));
     connect(ui->quitButton,SIGNAL(pressed()),this,SLOT(close()));
     connect(ui->yearEdit,SIGNAL(dateChanged(const QDate&)),this,SLOT(yearDateChanged(const QDate&)));
-    connect(ui->tableView,SIGNAL(activated(const QModelIndex&)),this,SLOT(writeLabelByRow(const QModelIndex&)));
+    connect(ui->tableView,SIGNAL(clicked(const QModelIndex&)),this,SLOT(writeLabelByRow(const QModelIndex&)));
+    connect(user(), SIGNAL(userChanged()), this, SLOT(userIsChanged()));
 }
 
 AssetsViewer::~AssetsViewer(){}
+
+void AssetsViewer::userIsChanged(){
+    QDate year = ui->yearEdit->date();
+    showAssets();
+    yearDateChanged(year);
+}
 
 void AssetsViewer::showAssets()
 {
@@ -89,6 +98,8 @@ void AssetsViewer::recordAsset(){
     QHash<int,QVariant>  hashValues;
     QHash<int,QVariant>  hashValuesMovements;
     QString bankName = ui->bankComboBox->currentText();
+    QDate year = ui->yearEdit->date();
+    
     AssetsManager manager;
     AssetsIO asIO(this);
     QString userUid = asIO.getUserUid();
@@ -167,6 +178,7 @@ void AssetsViewer::recordAsset(){
           QMessageBox::warning(0,trUtf8("Error"),trUtf8("Asset recorded."),QMessageBox::Ok);
     }
     showAssets();
+    yearDateChanged(year);
 }
 
 void AssetsViewer::deleteAsset(){
@@ -232,6 +244,8 @@ void AssetsViewer::yearDateChanged(const QDate & year){
 
 void AssetsViewer::writeLabelByRow(const QModelIndex& index){
     int row = index.row();
+    if (WarnDebugMessage)
+        qDebug() << __FILE__ << QString::number(__LINE__) << " in writeLabelByRow =" << QString::number(row) ;
     QString yearString = ui->yearEdit->date().toString("yyyy");
     AssetsManager manager;
     double yearlyValue = manager.getYearlyValue(yearString ,row);

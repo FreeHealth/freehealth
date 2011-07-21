@@ -58,6 +58,7 @@ private Q_SLOTS:
     void deleteAsset();
     void yearDateChanged(const QDate &year);
     void writeLabelByRow(const QModelIndex &index);
+    void userIsChanged();
 
 private:
     void fillModeComboBox();

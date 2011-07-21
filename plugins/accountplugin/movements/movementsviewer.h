@@ -53,6 +53,7 @@ class ACCOUNT_EXPORT MovementsViewer : public QWidget
         void validMovement();
         void validAndRecord();
         void setMovementsComboBoxToolTips(int);
+        void userIsChanged();
     private:
         Ui::MovementsViewerWidget * ui;
         void fillMovementsComboBox();

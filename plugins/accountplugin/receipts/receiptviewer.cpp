@@ -416,11 +416,18 @@ namespace InternalAmount {
 treeViewsActions::treeViewsActions(QWidget *parent):QTreeView(parent){
     m_deleteThesaurusValue = new QAction(trUtf8("Delete this value."),this);
     m_choosePreferedValue = new QAction(trUtf8("Choose this value like the preferred."),this);
+    m_userUuid = user()->uuid();
     connect(m_choosePreferedValue,SIGNAL(triggered(bool)),this,SLOT(choosePreferedValue(bool)));
     connect(m_deleteThesaurusValue,SIGNAL(triggered(bool)),this,SLOT(deleteBox(bool)));
+    connect(user(), SIGNAL(userChanged()), this, SLOT(userIsChanged()));
     }
     
 treeViewsActions::~treeViewsActions(){}
+
+void treeViewsActions::userIsChanged(){
+    m_userUuid = user()->uuid();
+    fillActionTreeView();
+}
 
 /*void treeViewsActions::mousePressEvent(QMouseEvent *event){
     if (WarnDebugMessage)
@@ -560,8 +567,7 @@ void treeViewsActions::fillActionTreeView()
     foreach(strKeysParameters,listOfMainActions){
         QString table = parametersMap.value(strKeysParameters);
         QStringList listOfItemsOfTable;
-        QString userUuid = user()->uuid();
-        listOfItemsOfTable = manager.getParametersDatas(userUuid,table).keys();//QHash<QString,QVariant> name,uid
+        listOfItemsOfTable = manager.getParametersDatas(m_userUuid,table).keys();//QHash<QString,QVariant> name,uid
         QString strItemsOfTable;
         foreach(strItemsOfTable,listOfItemsOfTable){
             m_mapSubItems.insertMulti(strKeysParameters,strItemsOfTable);
@@ -812,6 +818,7 @@ ReceiptViewer::ReceiptViewer(QWidget *parent) :
     connect(actionTreeView,SIGNAL(clicked(const QModelIndex&)),this,SLOT(actionsOfTreeView(const QModelIndex&)));
     connect(m_clear,SIGNAL(triggered(bool)),this,SLOT(clearAll(bool)));
     connect(m_control,SIGNAL(isClosing()),this,SLOT(controlReceiptsDestroyed()));
+    connect(user(), SIGNAL(userChanged()), this, SLOT(userUid()));
     
 }
 
@@ -892,7 +899,7 @@ void ReceiptViewer::actionsOfTreeView(const QModelIndex &index){
 
             for (int i = 0; i < model->rowCount(); i += 1)
             {
-                const QString userUuid = userUid();
+                const QString userUuid = m_userUuid;
                 typeOfPayment = model->data(model->index(i,choice.TYPE_OF_CHOICE),Qt::DisplayRole).toInt();
                 if (WarnDebugMessage)
                       qDebug() << __FILE__ << QString::number(__LINE__) << " typeOfPayment =" << QString::number(typeOfPayment) ;
@@ -1232,8 +1239,8 @@ void ReceiptViewer::controlReceiptsDestroyed(){
     ui->inputRadioButton->setChecked(true);
 }
 
-const QString ReceiptViewer::userUid(){
-    return m_userUuid;
+void ReceiptViewer::userUid(){
+    m_userUuid = user()->uuid();
 }
 
 /*void ReceiptViewer::createFirstTimeTxt(){
