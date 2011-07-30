@@ -84,9 +84,9 @@ SET AUTHORIZATION =
 -- Localize INFORMATIONS
 -- **************************************************
 
-UPDATE INFORMATIONS
-SET IDENTIFIANT = "CA_HCDPD@BC"
-;
+-- UPDATE INFORMATIONS
+-- SET IDENTIFIANT = "CA_HCDPD@BC"
+-- ;
 
 UPDATE INFORMATIONS
 SET NAME = "en=Canadian Drug Product Database / British Columbia
@@ -108,12 +108,13 @@ INSERT INTO `SEARCH_ENGINES` VALUES (NULL, "Health Canada: Drug information (sea
 INSERT INTO `SEARCH_ENGINES` VALUES (NULL, "Health Canada: Special Access program", "http://www.hc-sc.gc.ca/dhp-mps/acces/drugs-drogues/index-eng.php");
 INSERT INTO `SEARCH_ENGINES` VALUES (NULL, "Meta coverage lookup (drugcoverage.ca search)", "http://www.drugcoverage.ca/");
 INSERT INTO `SEARCH_ENGINES` VALUES (NULL, "Pill identifier (NLM Pillbox beta)", "http://pillbox.nlm.nih.gov/bin-release/PillBox.php");
+INSERT INTO `SEARCH_ENGINES` VALUES (NULL, "Renal dosing at U Heidelberg", "http://www.dosing.de/Niere/nierelst.htm");
 INSERT INTO `SEARCH_ENGINES` VALUES (NULL, "WHO classification (auto-query ATC)", "http://www.whocc.no/atc_ddd_index/?&code=[[ONE_ATC_CODE]]&showdescription=yes");
 
 -- clean up
 
-DROP TABLE pnp;
-DROP TABLE drugmast;
+-- DROP TABLE pnp;
+-- DROP TABLE drugmast;
 VACUUM;
 
 
