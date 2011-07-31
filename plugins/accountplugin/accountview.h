@@ -72,6 +72,7 @@ private Q_SLOTS:
     void on_startDate_dateChanged(const QDate &date);
     void on_endDate_dateChanged(const QDate &date);
     void on_periodCombo_currentIndexChanged(int index);
+    void deleteLine();
 
 private:
     //Internal::AccountViewPrivate *d;

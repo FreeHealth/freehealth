@@ -38,6 +38,7 @@
 #include <accountbaseplugin/constants.h>
 
 #include <QTableView>
+#include <QMessageBox>
 #include <QDebug>
 
 /*namespace Account {
@@ -68,35 +69,32 @@ private:
 }*/
 using namespace AccountDB;
 using namespace Account;
-
+enum { WarnDebugMessage = false };
 AccountView::AccountView(QWidget *parent) :
         QWidget(parent), m_ui(new Ui::AccountViewWidget)//, d(new Internal::AccountViewPrivate(this))
 {
     setObjectName("AccountView");
     m_ui->setupUi(this);
-
-    qDebug() << __FILE__ << QString::number(__LINE__) << " 1 " ;
     m_Model = new AccountDB::AccountModel(this);
-    //m_Model->setFilter("");
     m_Model->select();
     m_ui->tableView->setModel(m_Model);
     m_ui->tableView->horizontalHeader()->setResizeMode(QHeaderView::Interactive);
     m_ui->tableView->horizontalHeader()->setResizeMode(QHeaderView::ResizeToContents);
     m_ui->tableView->show();
-    qDebug() << __FILE__ << QString::number(__LINE__) << " rowCount =" << QString::number(m_Model->rowCount()) ;
-    qDebug() << __FILE__ << QString::number(__LINE__) << " 2 " ;
     m_userUuid = m_Model->getUserUuid();
-    qDebug() << __FILE__ << QString::number(__LINE__) << " m_userUuid =" << m_userUuid ;
-    //QString filter = QString("%1 = '%2'").arg("USER_UID",m_userUuid);
-    //m_Model->setFilter(filter);
     m_ui->startDate->setDate(QDate(2000,01,01));
     m_ui->endDate->setDate(QDate::currentDate()); 
     refresh();
     calc();
+    connect(m_ui->deleteButton,SIGNAL(pressed()),this,SLOT(deleteLine()));
 }
 
 AccountView::~AccountView()
 {
+        if (m_ui) {
+            
+            delete m_ui;
+            m_ui = 0;}    
 }
 
 void AccountView::refresh(){
@@ -141,6 +139,20 @@ void AccountView::filterChanged()
     m_ui->visa->setText(QString::number(m_Model->sum(AccountDB::Constants::ACCOUNT_VISAAMOUNT)));*/
     refresh();
     calc();
+}
+
+void AccountView::deleteLine(){
+    QModelIndex index = m_ui->tableView->QAbstractItemView::currentIndex();
+    if(!index.isValid()){
+        QMessageBox::warning(0,trUtf8("Error"),trUtf8("Please select a line to delete."),QMessageBox::Ok);
+        return;
+        }
+    int i = index.row();
+    QAbstractItemModel *model = m_ui->tableView->model();
+    if(model->removeRows(i,1,QModelIndex())){
+          QMessageBox::information(0,trUtf8("Information"),trUtf8("Line is deleted."),QMessageBox::Ok);
+        }
+    refresh();
 }
 
 void AccountView::on_startDate_dateChanged(const QDate &date)
@@ -200,7 +212,8 @@ void AccountView::on_periodCombo_currentIndexChanged(int index)
 }
 
 void AccountView::calc(){
-    qDebug() << __FILE__ << QString::number(__LINE__) << " in calc " ;
+    if (WarnDebugMessage)
+        qDebug() << __FILE__ << QString::number(__LINE__) << " in calc " ;
     QHash<int,QLineEdit*> hash;
     hash.insert(AccountDB::Constants::ACCOUNT_CASHAMOUNT,m_ui->cash);
     hash.insert(AccountDB::Constants::ACCOUNT_CHEQUEAMOUNT,m_ui->cheque);
@@ -209,24 +222,22 @@ void AccountView::calc(){
     hash.insert(AccountDB::Constants::ACCOUNT_OTHERAMOUNT,m_ui->other);
     hash.insert(AccountDB::Constants::ACCOUNT_INSURANCEAMOUNT,m_ui->insurance);
     QAbstractItemModel *model = m_ui->tableView->model();
-    qDebug() << __FILE__ << QString::number(__LINE__) << " 1 " ;
-    double sum = 0.00;
-    qDebug() << __FILE__ << QString::number(__LINE__) << " 2 " ;
     for (int col = AccountDB::Constants::ACCOUNT_CASHAMOUNT; col < AccountDB::Constants::ACCOUNT_DUEAMOUNT+1; col += 1)
     {
+    	double sum = 0.00;
     	for (int row = 0; row < model->rowCount(); row += 1)
     	{
     		double tot = model->data(model->index(row,col),Qt::DisplayRole).toDouble();
-    		
-    		qDebug() << __FILE__ << QString::number(__LINE__) << " tot =" << QString::number(tot) ;
+    		if (WarnDebugMessage)
+    		    		qDebug() << __FILE__ << QString::number(__LINE__) << " tot =" << QString::number(tot) ;
     		sum += tot;
     		
     	    }
     	    QString textSum = QString::number(sum);
-    	    qDebug() << __FILE__ << QString::number(__LINE__) << " textSum =" << textSum;
+    	    if (WarnDebugMessage)
+    	        	    qDebug() << __FILE__ << QString::number(__LINE__) << " textSum =" << textSum;
     	    hash.value(col)->setText(textSum);
         }
-     qDebug() << __FILE__ << QString::number(__LINE__) << " in calc end " ;
 }
 
 

@@ -35,7 +35,7 @@
 #include <QDate>
 #include <QDebug>
 
-enum { WarnDebugMessage = true };
+enum { WarnDebugMessage = false };
 static inline Core::IUser *user() { return Core::ICore::instance()->user(); }
 LedgerIO::LedgerIO(QObject * parent){
     if (WarnDebugMessage)

@@ -138,6 +138,7 @@ AccountActionHandler::AccountActionHandler(QObject *parent) :
         aLegder(0),
         aMovements(0),
         aAssets(0),
+        aAccount(0),
         m_CurrentView(0)
 {
     setObjectName("AccountActionHandler");
@@ -346,10 +347,13 @@ void AccountActionHandler::assets()
 }
 
 void AccountActionHandler::account(){
-    QWidget *w = mainWindow()->centralWidget();
+    AccountMode *accMode = qobject_cast<AccountMode*>(modeManager()->mode(Core::Constants::MODE_ACCOUNT));
+    accMode->setCentralWidget(new AccountView(mainWindow()));
+    modeManager()->activateMode(Core::Constants::MODE_ACCOUNT);
+    /*QWidget *w = mainWindow()->centralWidget();
     delete w;
     w = 0;
-    mainWindow()->setCentralWidget(new AccountView(mainWindow()));    
+    mainWindow()->setCentralWidget(new AccountView(mainWindow()));    */
 }
 #endif
 
