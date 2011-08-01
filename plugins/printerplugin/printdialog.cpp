@@ -33,6 +33,7 @@
 #include <printerplugin/printer.h>
 #include <printerplugin/constants.h>
 
+#include <utils/database.h>
 #include <translationutils/constanttranslations.h>
 
 #include <extensionsystem/pluginmanager.h>
@@ -45,7 +46,6 @@
 #include <QDir>
 #include <QDateTime>
 #include <QFileDialog>
-#include <QUuid>
 
 #include <QDebug>
 
@@ -110,8 +110,7 @@ void PrintDialog::accept()
 
     // Duplicate to a pdf file
     if (settings()->value(Constants::S_KEEP_PDF).toBool()) {
-        QString uid = QUuid::createUuid().toString();
-        uid = uid.remove("{").remove("}");
+        QString uid = Utils::Database::createUid();
         QString docName = QString("%1_%2.pdf")
                           .arg(qApp->applicationName())
                           .arg(uid)

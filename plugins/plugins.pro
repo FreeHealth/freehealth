@@ -99,7 +99,8 @@ patientbase.depends += core
 agenda.subdir = agendaplugin
 agenda.depends += core
 agenda.depends += patientbase
-
+agenda.depends += usermanager
+agenda.depends += listview
 
 #alerts.subdir = alertsplugin
 #alerts.depends += core

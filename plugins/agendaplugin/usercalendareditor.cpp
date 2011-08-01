@@ -25,19 +25,32 @@
  *   Contributors :                                                        *
  *       NAME <MAIL@ADRESS>                                                *
  ***************************************************************************/
-#include "usercalendar_editor_widget.h"
-#include "ui_usercalendar_editor_widget.h"
+/**
+  \class Agenda::UserCalendarEditorWidget
+  Is a data widget mapper to the Agenda::UserCalendarModel.
+*/
+
+#include "usercalendareditor.h"
+#include "usercalendarmodel.h"
+#include "usercalendar.h"
+
+#include "ui_usercalendareditor.h"
 
 #include <QDebug>
 
-using namespace Calendar;
+using namespace Agenda;
 
 UserCalendarEditorWidget::UserCalendarEditorWidget(QWidget *parent) :
     QWidget(parent),
     ui(new Ui::UserCalendarEditorWidget),
-    m_AvailabilityModel(0)
+    m_UserCalendarModel(0),
+    m_AvailabilityModel(0),
+    m_Mapper(0)
 {
     ui->setupUi(this);
+    connect(ui->buttonBox, SIGNAL(clicked(QAbstractButton*)), this, SLOT(setFocus()));
+    connect(ui->buttonBox, SIGNAL(accepted()), this, SLOT(submit()));
+    connect(ui->buttonBox, SIGNAL(rejected()), this, SLOT(revert()));
 }
 
 UserCalendarEditorWidget::~UserCalendarEditorWidget()
@@ -48,41 +61,53 @@ UserCalendarEditorWidget::~UserCalendarEditorWidget()
     m_AvailabilityModel = 0;
 }
 
-void UserCalendarEditorWidget::setModel(AbstractCalendarModel *model)
-{}
-
-void UserCalendarEditorWidget::setUserCalendar(const Calendar::UserCalendar &calendar)
+/** Define the Agenda::UserCalendarModel to use. */
+void UserCalendarEditorWidget::setUserCalendarModel(UserCalendarModel *model)
 {
+    m_UserCalendarModel = model;
+}
+
+/** Define the \e index to use. You must firstly define the Agenda::UserCalendarModel with setUserCalendarModel(). */
+void UserCalendarEditorWidget::setCurrentIndex(const QModelIndex &index)
+{
+    Q_ASSERT(m_UserCalendarModel);
+    if (!m_UserCalendarModel)
+        return;
+
+    // Create mapper
+    if (!m_Mapper) {
+        m_Mapper = new QDataWidgetMapper(this);
+        m_Mapper->setSubmitPolicy(QDataWidgetMapper::ManualSubmit);
+        m_Mapper->setModel(m_UserCalendarModel);
+        m_Mapper->addMapping(ui->calendarLabel, UserCalendarModel::Label);
+        m_Mapper->addMapping(ui->defaultLocation, UserCalendarModel::LocationUid);
+        m_Mapper->addMapping(ui->description, UserCalendarModel::Description);
+        m_Mapper->addMapping(ui->defaultDuration, UserCalendarModel::DefaultDuration);
+        m_Mapper->addMapping(ui->isDefaultCheck, UserCalendarModel::IsDefault, "checked");
+        m_Mapper->addMapping(ui->isPrivateCheck, UserCalendarModel::IsPrivate, "checked");
+        m_Mapper->addMapping(ui->password, UserCalendarModel::Password);
+    }
+    m_Mapper->setCurrentIndex(index.row());
+
     // Availability
     if (m_AvailabilityModel) {
         delete m_AvailabilityModel;
         m_AvailabilityModel = 0;
     }
-
-    m_AvailabilityModel = new DayAvailabilityModel(this);
-    m_AvailabilityModel->setUserCalendar(calendar);
+    m_AvailabilityModel = m_UserCalendarModel->availabilityModel(index, this);
     ui->availabilityView->setModel(m_AvailabilityModel);
-
-    // Description
-    ui->calendarLabel->setText(calendar.data(UserCalendar::Label).toString());
-    ui->defaultLocation->setText(calendar.data(UserCalendar::LocationUid).toString());
-    ui->description->setText(calendar.data(UserCalendar::Description).toString());
-//    ui->iconLabel->setPixmap();
-
-    // Infos
-    ui->defaultDuration->setValue(calendar.data(UserCalendar::DefaultDuration).toInt());
-    ui->isDefaultCheck->setChecked(calendar.data(UserCalendar::IsDefault).toBool());
-    ui->isPrivateCheck->setChecked(calendar.data(UserCalendar::IsPrivate).toBool());
-    ui->password->setText(calendar.data(UserCalendar::Password).toString());
-
 }
 
+/** Submit changes to the model. */
 void UserCalendarEditorWidget::submit()
 {
+    m_Mapper->submit();
 }
 
-UserCalendar UserCalendarEditorWidget::userCalendar() const
+/** Submit changes to the model. */
+void UserCalendarEditorWidget::revert()
 {
+    m_Mapper->revert();
 }
 
 void UserCalendarEditorWidget::changeEvent(QEvent *e)

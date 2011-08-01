@@ -26,7 +26,7 @@
  ***************************************************************************/
 /**
   \class UserPlugin::UserModel
-  \brief Users are represented into a table model. Each row represents a user, each column a value.
+  Users are represented into a table model. Each row represents a user, each column a value.
   The current user represents the actually logged user. Before the current user can be changed (disconnection,
   another user connection) IUserListener registered in the PluginManager are asked.
   Set filter with setFilter().
@@ -63,7 +63,6 @@
 #include <extensionsystem/pluginmanager.h>
 
 #include <QApplication>
-#include <QUuid>
 #include <QColor>
 #include <QByteArray>
 #include <QFont>
@@ -136,7 +135,7 @@ void UserModelWrapper::newUserConnected(const QString &uid)
 
 
 /**
-  \brief Private Part.
+  Private Part.
   \internal
   \ingroup usertoolkit widget_usertoolkit usermanager
 */
@@ -161,7 +160,7 @@ public:
     }
 
     /**
-      \brief Retreive all users datas and store it to the cache of the model.
+      Retreive all users datas and store it to the cache of the model.
       \sa numberOfUsersInMemory(), m_Uuid_UserList
     */
     bool addUserFromDatabase(const QString &uuid)
@@ -177,7 +176,7 @@ public:
     }
 
     /**
-      \brief Retreive all users datas and store it to the cache of the model. Return the created uuid.
+      Retreive all users datas and store it to the cache of the model. Return the created uuid.
       \sa numberOfUsersInMemory(), m_Uuid_UserList
     */
     QString addUserFromDatabase(const QString &log64, const QString &pass64)
@@ -194,7 +193,7 @@ public:
         return uuid;
     }
 
-    /** \brief Create and empty user into the model. The uuid of the user is automatically setted and returned. */
+    /** Create and empty user into the model. The uuid of the user is automatically setted and returned. */
     QString createNewEmptyUser(UserModel *model, const int createdRow)
     {
         // 1. create an empty user into the hash
@@ -360,7 +359,7 @@ UserModel *UserModel::instance(QObject *parent)
     return m_Instance;
 }
 
-/** \brief Constructor */
+/** Constructor */
 UserModel::UserModel(QObject *parent) :
         QAbstractTableModel(parent), d(0)
 {
@@ -378,7 +377,7 @@ UserModel::UserModel(QObject *parent) :
         setParent(qApp);
 }
 
-/** \brief Destructor */
+/** Destructor */
 UserModel::~UserModel()
 {
 //    if (!d->m_CurrentUserUuid.isEmpty() && d->m_CurrentUserUuid != ::SERVER_ADMINISTRATOR_UUID) {
@@ -398,7 +397,7 @@ UserModel::~UserModel()
 }
 
 /**
-  \brief Defines the current user using its login and password. There can be only one current user.
+  Defines the current user using its login and password. There can be only one current user.
   The date and time of loggin are trace into database.
 */
 bool UserModel::setCurrentUser(const QString &clearLog, const QString &clearPassword, bool refreshCache)
@@ -562,13 +561,13 @@ bool UserModel::setCurrentUserIsServerManager()
         return true;
 }
 
-/** \brief Return true if a current user has been defined. */
+/** Return true if a current user has been defined. */
 bool UserModel::hasCurrentUser()
 {
     return (!d->m_CurrentUserUuid.isEmpty());
 }
 
-/** \brief Return the index of the current user. */
+/** Return the index of the current user. */
 QModelIndex UserModel::currentUserIndex() const
 {
     if (d->m_CurrentUserUuid.isEmpty())
@@ -580,7 +579,7 @@ QModelIndex UserModel::currentUserIndex() const
     return QModelIndex();
 }
 
-/** \brief Clears the content of the model. Silently save users if needed. */
+/** Clears the content of the model. Silently save users if needed. */
 void UserModel::clear()
 {
     // d->m_Sql ?
@@ -597,7 +596,7 @@ void UserModel::refresh()
     reset();
 }
 
-/** \brief Check login/password validity. \sa UserBase::checkLogin(). */
+/** Check login/password validity. \sa UserBase::checkLogin(). */
 bool UserModel::isCorrectLogin(const QString &clearLog, const QString &clearPassword)
 {
     return userBase()->checkLogin(clearLog, clearPassword);
@@ -656,7 +655,7 @@ bool UserModel::removeRows(int row, int count, const QModelIndex &)
     return noError;
 }
 
-/** \brief Create a new row (new user) into the model. */
+/** Create a new row (new user) into the model. */
 bool UserModel::insertRows(int row, int count, const QModelIndex &parent)
 {
     if (!d->m_CurrentUserRights & Core::IUser::Create)
@@ -719,7 +718,7 @@ Qt::ItemFlags UserModel::flags(const QModelIndex &index) const
     return Qt::ItemIsEnabled | Qt::ItemIsSelectable | Qt::ItemIsEditable;
 }
 
-/** \brief Define the datas of users.  */
+/** Define the datas of users.  */
 bool UserModel::setData(const QModelIndex &item, const QVariant &value, int role)
 {
     if (!value.isValid())
@@ -839,7 +838,7 @@ QVariant UserModel::currentUserData(const int column) const
     return d->getUserData(user, column);
 }
 
-/** \brief Returns the datas of users. \sa Core::IUser::Model */
+/** Returns the datas of users. \sa Core::IUser::Model */
 QVariant UserModel::data(const QModelIndex &item, int role) const
 {
     if (!item.isValid()) {
@@ -952,7 +951,7 @@ Print::TextDocumentExtra *UserModel::paper(const int row, const int ref)
     return user->extraDocument(ref);
 }
 
-/** \brief Returns true if model has dirty rows that need to be saved into database. */
+/** Returns true if model has dirty rows that need to be saved into database. */
 bool UserModel::hasUserToSave()
 {
     foreach(const Internal::UserData *u, d->m_Uuid_UserList.values())
@@ -961,7 +960,7 @@ bool UserModel::hasUserToSave()
     return false;
 }
 
-/** \brief Submit all changes of the model into database */
+/** Submit all changes of the model into database */
 bool UserModel::submitAll()
 {
     bool toReturn = true;
@@ -976,7 +975,7 @@ bool UserModel::submitAll()
     return toReturn;
 }
 
-/** \brief Submit only one user changes of the model into database according to the current user rights. */
+/** Submit only one user changes of the model into database according to the current user rights. */
 bool UserModel::submitUser(const QString &uuid)
 {
     bool toReturn = true;
@@ -1006,7 +1005,7 @@ bool UserModel::submitRow(const int row)
     return submitUser(index(row, Core::IUser::Uuid).data().toString());
 }
 
-/** \brief Reverts the model. */
+/** Reverts the model. */
 bool UserModel::revertAll()
 {
     /** \todo ASSERT failure in QSqlTableModelPrivate::revertCachedRow(): "Invalid entry in cache map", file models\qsqltablemodel.cpp, line 151 */
@@ -1018,7 +1017,7 @@ bool UserModel::revertAll()
     return true;
 }
 
-/** \brief Revert a row */
+/** Revert a row */
 void UserModel::revertRow(int row)
 {
     QString uuid = d->m_Sql->index(row, USER_UUID).data().toString();
@@ -1034,7 +1033,7 @@ void UserModel::revertRow(int row)
 }
 
 /**
-  \brief Define the filter of the model.
+  Define the filter of the model.
   \sa Utils::Database::getWhereClause()
 */
 void UserModel::setFilter (const QHash<int,QString> &conditions)
@@ -1115,13 +1114,13 @@ QList<int> UserModel::practionnerLkIds(const QString &uid)
     return lk_ids;
 }
 
-/** \brief Returns the number of user stored into the memory. */
+/** Returns the number of user stored into the memory. */
 int UserModel::numberOfUsersInMemory()
 {
     return d->m_Uuid_UserList.count();
 }
 
-/** \brief For debugging purpose only */
+/** For debugging purpose only */
 void UserModel::warn()
 {
     if (!Utils::isDebugCompilation())

@@ -57,6 +57,8 @@ public:
     const char* uniqueModeName() const;
     QList<int> context() const;
 
+    bool isPatientBarVisible() const {return false;}
+
 private:
     PatientSelector *m_Selector;
 };

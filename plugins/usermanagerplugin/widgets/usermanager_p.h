@@ -66,6 +66,7 @@ private Q_SLOTS:
     void onCreateUserRequested();
     void onClearModificationRequested();
     void onDeleteUserRequested();
+    void toggleSearchView();
     void updateStatusBar();
 
     void showUserDebugDialog(const QModelIndex &id);
@@ -84,20 +85,19 @@ protected:
 
 private:
     Ui::UserManagerWidget *ui;
-    QAction *createNewUserAct;
-    QAction *modifyUserAct;
-    QAction *saveAct;
-    QAction *clearModificationsAct;
-    QAction *deleteUserAct;
-    QAction *quitUserManagerAct;
     bool m_CanModify, m_CanCreate, m_CanViewAllUsers, m_CanViewRestrictedDatas, m_CanDelete;
     int m_EditingRow;
     int m_SearchBy;
     QToolBar *m_ToolBar;
     QToolButton *m_SearchToolBut;
+    QAction *aCreateUser;
+    QAction *aModifyUser;
+    QAction *aSave;
+    QAction *aRevert;
+    QAction *aDeleteUser;
+    QAction *aQuit;
+    QAction *aToggleSearchView;
     QAction *searchByNameAct, *searchByFirstnameAct, *searchByNameAndFirstnameAct, *searchByCityAct;
-    QLabel *m_PermanentUserName;
-    QWidget *m_PermanentWidget;
 
 public:
     UserManagerContext *m_Context;

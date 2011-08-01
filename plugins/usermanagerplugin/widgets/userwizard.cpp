@@ -30,6 +30,8 @@
   You can tell tkWiz to create the user itself or use a defined user. createUser() define the
   creation mode. If you set it to false, inform the row of the model to use with setModelRow(). By default,
   UserWizard create itself a new user.\n
+  You can extend the wizard with the UserPlugin::IUserWizardPage interface. The wizard will catch all
+  objects (in its contructor) from the plugin manager object pool and present the pages to the user.\n
   Usage :
   \code
     UserWizard wiz;
@@ -38,7 +40,6 @@
   \endcode
 
   \todo If row is defined --> populate all wizard pages with users values.
-  \ingroup usertoolkit widget_usertoolkit usermanager
 */
 
 #include "userwizard.h"
@@ -60,14 +61,15 @@
 
 #include <usermanagerplugin/usermodel.h>
 #include <usermanagerplugin/widgets/userrightswidget.h>
+#include <usermanagerplugin/iuserwizardpage.h>
 
 #include <listviewplugin/languagecombobox.h>
 
 #include <utils/log.h>
 #include <utils/global.h>
 #include <utils/widgets/lineeditechoswitcher.h>
-
 #include <translationutils/constanttranslations.h>
+#include <extensionsystem/pluginmanager.h>
 
 #include <QGridLayout>
 #include <QFormLayout>
@@ -87,6 +89,7 @@ using namespace UserPlugin;
 using namespace Internal;
 using namespace Trans::ConstantTranslations;
 
+static inline ExtensionSystem::PluginManager *pluginManager() {return ExtensionSystem::PluginManager::instance();}
 static inline UserPlugin::UserModel *userModel() { return UserModel::instance(); }
 static inline UserPlugin::Internal::UserBase *userBase() { return UserPlugin::Internal::UserBase::instance(); }
 static inline Core::ITheme *theme()  { return Core::ICore::instance()->theme(); }
@@ -142,6 +145,7 @@ static inline QString defaultWatermark(const QString &profession, const QString 
 QHash<int, QString> UserWizard::m_Papers;
 QHash<int, int> UserWizard::m_Rights;
 
+/** Create a full UserWizard creator with the extending IUserWizardPage from the plugin manager object pool. */
 UserWizard::UserWizard(QWidget *parent) :
         QWizard(parent),
         m_User(new UserData),
@@ -154,6 +158,11 @@ UserWizard::UserWizard(QWidget *parent) :
     setPage(ProfilPage, new UserProfilPage(this));
     setPage(RightsPage, new UserRightsPage(this));
     setPage(SpecialiesQualificationsPage, new UserSpecialiesQualificationsPage(this));
+
+    m_ExtraPages = pluginManager()->getObjects<IUserWizardPage>();
+    for(int i = 0; i < m_ExtraPages.count(); ++i) {
+        setPage(ExtraPages + i, m_ExtraPages.at(i)->createWizardPage(this));
+    }
 
     setWindowTitle(tr("User Creator Wizard"));
     QList<QWizard::WizardButton> layout;
@@ -227,18 +236,6 @@ void UserWizard::done(int r)
         m_User->setRights(Constants::USER_ROLE_PARAMEDICAL, Core::IUser::UserRights(m_Rights.value(Core::IUser::ParamedicalRights)));
         m_User->setRights(Constants::USER_ROLE_ADMINISTRATIVE, Core::IUser::UserRights(m_Rights.value(Core::IUser::AdministrativeRights)));
 
-//        m_User->setGenericHeader(m_Papers.value(Core::IUser::GenericHeader));
-//        m_User->setGenericFooter(m_Papers.value(Core::IUser::GenericFooter));
-//        m_User->setGenericWatermark(m_Papers.value(Core::IUser::GenericWatermark));
-
-//        m_User->setAdminHeader(m_Papers.value(Core::IUser::AdministrativeHeader));
-//        m_User->setAdminFooter(m_Papers.value(Core::IUser::AdministrativeFooter));
-//        m_User->setAdminWatermark(m_Papers.value(Core::IUser::AdministrativeWatermark));
-
-//        m_User->setPrescriptionHeader(m_Papers.value(Core::IUser::PrescriptionHeader));
-//        m_User->setPrescriptionFooter(m_Papers.value(Core::IUser::PrescriptionFooter));
-//        m_User->setPrescriptionWatermark(m_Papers.value(Core::IUser::PrescriptionWatermark));
-
         m_User->setExtraDocument(Print::TextDocumentExtra::fromXml(m_Papers.value(Core::IUser::GenericHeader)), Core::IUser::GenericHeader);
         m_User->setExtraDocument(Print::TextDocumentExtra::fromXml(m_Papers.value(Core::IUser::GenericFooter)), Core::IUser::GenericFooter);
         m_User->setExtraDocument(Print::TextDocumentExtra::fromXml(m_Papers.value(Core::IUser::GenericWatermark)), Core::IUser::GenericWatermark);
@@ -251,7 +248,6 @@ void UserWizard::done(int r)
         m_User->setExtraDocument(Print::TextDocumentExtra::fromXml(m_Papers.value(Core::IUser::PrescriptionFooter)), Core::IUser::PrescriptionFooter);
         m_User->setExtraDocument(Print::TextDocumentExtra::fromXml(m_Papers.value(Core::IUser::PrescriptionWatermark)), Core::IUser::PrescriptionWatermark);
 
-
         if (m_CreateUser) {
             // Create user in database
             if (!userBase()->createUser(m_User)) {
@@ -261,35 +257,26 @@ void UserWizard::done(int r)
                                          "", tr("Error during database access"));
                 QDialog::done(QDialog::Rejected);
             } else {
+                // Reset the usermodel
+                userModel()->refresh();
+
+                // Submit extra-pages
+                for(int i = 0; i < m_ExtraPages.count(); ++i) {
+                    m_ExtraPages.at(i)->submit(m_User->uuid());
+                }
+
                 Utils::informativeMessageBox(tr("User correctly saved into database."),
                                              tr("The user was correctly created and saved into database."),
                                              "", tr("User correctly saved into database."));
-                // Reset the usermodel
-                userModel()->refresh();
                 m_Saved = true;
                 QDialog::done(r);
             }
-
-//            m_Row = userModel()->rowCount();
-//            if (!userModel()->insertRows(m_Row, 1)) {
-//            }
         }
 
 #ifdef DEBUG
         // warn user
         m_User->warn();
 #endif
-
-//        if (userModel()->submitRow(m_Row)) {
-//        } else {
-//            userModel()->removeRows(m_Row, 1);
-//            Utils::warningMessageBox(tr("An error occured during database access."),
-//                                         tr("Logged errors saved. Please refer to the %1 to manage this error.")
-//                                         .arg(Utils::Log::saveLog()),
-//                                         "", tr("Error during database access"));
-//            QDialog::done(r);
-//            m_Saved = false;
-//        }
     }
 }
 
@@ -475,13 +462,7 @@ UserProfilPage::UserProfilPage(QWidget *parent) :
     setTitle(tr("Select a profil"));
     setSubTitle(tr("FreeMedForms allows you to create users using predefined profils. Select your profil and options."));
 
-//    registerField("isMedical", new QWidget(this));
-//    registerField("UserManager", new QWidget(this));
-//    registerField("DrugsManager", new QWidget(this));
-//    registerField("Medical", new QWidget(this));
-//    registerField("Paramedical", new QWidget(this));
-//    registerField("Administrative", new QWidget(this));
-
+    /** \todo code here = add new profiles */
     Views::StringListModel *model = new Views::StringListModel(this);
     model->setStringList(QStringList() << tkTr(Trans::Constants::DOCTOR) << tr("Software administrator"));
     model->setCheckable(true);

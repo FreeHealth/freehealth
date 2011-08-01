@@ -144,6 +144,7 @@ public:
 
     virtual void hidePatientBar() = 0;
     virtual void showPatientBar() = 0;
+    virtual bool isPatientBarVisible() const = 0;
 
 Q_SIGNALS:
     void currentPatientChanged();

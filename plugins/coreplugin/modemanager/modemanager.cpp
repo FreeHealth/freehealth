@@ -35,8 +35,6 @@
 #include <utils/widgets/fancytabwidget.h>
 #include <utils/widgets/fancyactionbar.h>
 
-#include <coreplugin/icore.h>
-
 #include <aggregation/aggregate.h>
 
 #include <coreplugin/actionmanager/actionmanager.h>
@@ -44,9 +42,10 @@
 #include <coreplugin/constants_menus.h>
 #include <coreplugin/modemanager/imode.h>
 #include <coreplugin/contextmanager/contextmanager.h>
+#include <coreplugin/icore.h>
+#include <coreplugin/ipatient.h>
 
 #include <extensionsystem/pluginmanager.h>
-
 
 #include <QtCore/QObject>
 #include <QtCore/QDebug>
@@ -62,7 +61,7 @@ using namespace Core::Internal;
 
 static inline Core::ActionManager *actionManager() { return Core::ICore::instance()->actionManager(); }
 static inline Core::ContextManager *contextManager() { return Core::ICore::instance()->contextManager(); }
-
+static inline Core::IPatient *patient() {return Core::ICore::instance()->patient();}
 
 ModeManager *ModeManager::m_instance = 0;
 
@@ -124,8 +123,18 @@ IMode *ModeManager::mode(const QString &id) const
 void ModeManager::activateMode(const QString &id)
 {
     const int index = indexOf(id);
-    if (index >= 0)
+    if (index >= 0) {
+        // modify PatientBar visibility
+        if (patient()) {
+            IMode *mode = m_modes.at(index);
+            if (mode->isPatientBarVisible())
+                patient()->showPatientBar();
+            else
+                patient()->hidePatientBar();
+        }
+
         m_modeStack->setCurrentIndex(index);
+    }
 }
 
 void ModeManager::objectAdded(QObject *obj)
@@ -235,6 +244,14 @@ void ModeManager::currentTabChanged(int index)
             contextManager()->addAdditionalContext(context);
         emit currentModeChanged(mode);
         contextManager()->updateContext();
+
+        // modify PatientBar visibility
+        if (patient()) {
+            if (mode->isPatientBarVisible())
+                patient()->showPatientBar();
+            else
+                patient()->hidePatientBar();
+        }
     }
 }
 

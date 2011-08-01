@@ -35,6 +35,13 @@
 #include <QVector>
 #include <QDateTime>
 
+/**
+ * \file appointement.h
+ * \author Eric MAEKER <eric.maeker@gmail.com>
+ * \version 0.6.0
+ * \date 25 Jul 2011
+*/
+
 namespace Agenda {
 namespace Internal {
 

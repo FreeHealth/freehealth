@@ -47,7 +47,6 @@
 #include <QSqlRecord>
 #include <QSqlField>
 #include <QDir>
-#include <QUuid>
 #include <QProgressDialog>
 #include <QTreeWidgetItem>
 #include <QFont>
@@ -114,7 +113,7 @@ EpisodeBase::EpisodeBase(QObject *parent) :
     addField(Table_EPISODES, EPISODES_ID, "EPISODE_ID", FieldIsUniquePrimaryKey);
     addField(Table_EPISODES, EPISODES_PATIENT_UID, "PATIENT_UID", FieldIsUUID);
     addField(Table_EPISODES, EPISODES_LK_TOPRACT_LKID, "LK_TOPRACT_LKID", FieldIsInteger);
-//    addField(Table_EPISODES, EPISODES_ISVALID, "ISVALID", FieldIsBoolean);
+    addField(Table_EPISODES, EPISODES_ISVALID, "ISVALID", FieldIsBoolean);
     addField(Table_EPISODES, EPISODES_FORM_PAGE_UID, "FORM_PAGE_UID", FieldIsUUID);
     addField(Table_EPISODES, EPISODES_LABEL, "LABEL", FieldIsShortText);
     addField(Table_EPISODES, EPISODES_DATE, "DATE", FieldIsDate);
@@ -122,30 +121,38 @@ EpisodeBase::EpisodeBase(QObject *parent) :
     addField(Table_EPISODES, EPISODES_DATEOFMODIFICATION, "DATEMODIF", FieldIsDate);
     addField(Table_EPISODES, EPISODES_DATEOFVALIDATION, "DATEVALIDATION", FieldIsDate);
     addField(Table_EPISODES, EPISODES_VALIDATED, "VALIDATED", FieldIsBoolean);
-    /** \todo add a valid field for the deletion of episodes */
+    addIndex(Table_EPISODES, EPISODES_ID);
+    addIndex(Table_EPISODES, EPISODES_PATIENT_UID);
+    addIndex(Table_EPISODES, EPISODES_FORM_PAGE_UID);
+
+    /** \todo code here : add a valid field for the deletion of episodes */
 
     addTable(Table_EPISODE_CONTENT, "EPISODES_CONTENT");
     addField(Table_EPISODE_CONTENT, EPISODE_CONTENT_ID, "CONTENT_ID", FieldIsUniquePrimaryKey);
     addField(Table_EPISODE_CONTENT, EPISODE_CONTENT_EPISODE_ID, "EPISODE_ID", FieldIsLongInteger);
     addField(Table_EPISODE_CONTENT, EPISODE_CONTENT_XML, "XML_CONTENT", FieldIsBlob);
-    /** \todo add a valid field for the deletion of episodes content */
-    /** \todo add index */
+    addIndex(Table_EPISODE_CONTENT, EPISODE_CONTENT_ID);
+    addIndex(Table_EPISODE_CONTENT, EPISODE_CONTENT_EPISODE_ID);
+    /** \todo code here : add a valid field for the deletion of episodes content */
 
     addTable(Table_FORM, "FORM_FILES");
     addField(Table_FORM, FORM_ID,      "ID", FieldIsUniquePrimaryKey);
     addField(Table_FORM, FORM_VALID,   "VALID", FieldIsBoolean);
     addField(Table_FORM, FORM_GENERIC, "GENERIC", FieldIsShortText);
     addField(Table_FORM, FORM_PATIENTUID, "PATIENT", FieldIsUUID);
-
     // Uuid of the form to insert
     addField(Table_FORM, FORM_SUBFORMUID, "SUBUID", FieldIsShortText);
     // Insertion point = formuuid where to insert the form
     addField(Table_FORM, FORM_INSERTIONPOINT, "IP", FieldIsShortText);
     addField(Table_FORM, FORM_INSERTASCHILD, "CHILD", FieldIsBoolean, "true");
     addField(Table_FORM, FORM_APPEND, "APPEND", FieldIsBoolean, "false");
+    addIndex(Table_FORM, FORM_ID);
+    addIndex(Table_FORM, FORM_PATIENTUID);
+    addIndex(Table_FORM, FORM_SUBFORMUID);
+    addIndex(Table_FORM, FORM_INSERTIONPOINT);
 
-    /** \todo manage user access restriction */
-    /** \todo add index */
+    /** \todo code here : manage user access restriction */
+    /** \todo code here : add index */
 
     // Version
     addTable(Table_VERSION, "VERSION");
@@ -172,41 +179,6 @@ bool EpisodeBase::init()
     createConnection(Constants::DB_NAME, Constants::DB_NAME,
                      settings()->databaseConnector(),
                      Utils::Database::CreateDatabase);
-
-//    // Check settings --> SQLite or MySQL ?
-//    if (settings()->value(Core::Constants::S_USE_EXTERNAL_DATABASE, false).toBool()) {
-//        if (!QSqlDatabase::isDriverAvailable("QMYSQL")) {
-//            LOG_ERROR(tkTr(Trans::Constants::DATABASE_DRIVER_1_NOT_AVAILABLE).arg("MySQL"));
-//            Utils::warningMessageBox(tkTr(Trans::Constants::APPLICATION_FAILURE),
-//                                     tkTr(Trans::Constants::DATABASE_DRIVER_1_NOT_AVAILABLE_DETAIL).arg("MySQL"),
-//                                     "", qApp->applicationName());
-//            return false;
-//        }
-//        createConnection(Constants::DB_NAME,
-//                         Constants::DB_NAME,
-//                         QString(QByteArray::fromBase64(settings()->value(Core::Constants::S_EXTERNAL_DATABASE_HOST, QByteArray("localhost").toBase64()).toByteArray())),
-//                         Utils::Database::ReadWrite,
-//                         Utils::Database::MySQL,
-//                         QString(QByteArray::fromBase64(settings()->value(Core::Constants::S_EXTERNAL_DATABASE_LOG, QByteArray("root").toBase64()).toByteArray())),
-//                         QString(QByteArray::fromBase64(settings()->value(Core::Constants::S_EXTERNAL_DATABASE_PASS, QByteArray("").toBase64()).toByteArray())),
-//                         QString(QByteArray::fromBase64(settings()->value(Core::Constants::S_EXTERNAL_DATABASE_PORT, QByteArray("").toBase64()).toByteArray())).toInt(),
-//                         Utils::Database::CreateDatabase);
-//    } else {
-//        if (!QSqlDatabase::isDriverAvailable("QSQLITE")) {
-//            LOG_ERROR(tkTr(Trans::Constants::DATABASE_DRIVER_1_NOT_AVAILABLE).arg("SQLite"));
-//            Utils::warningMessageBox(tkTr(Trans::Constants::APPLICATION_FAILURE),
-//                                     tkTr(Trans::Constants::DATABASE_DRIVER_1_NOT_AVAILABLE_DETAIL).arg("SQLite"),
-//                                     "", qApp->applicationName());
-//            return false;
-//        }
-//        createConnection(Constants::DB_NAME,
-//                         Constants::DB_FILENAME,
-//                         settings()->path(Core::ISettings::ReadWriteDatabasesPath) + QDir::separator() + QString(Constants::DB_NAME),
-//                         Utils::Database::ReadWrite,
-//                         Utils::Database::SQLite,
-//                         "log", "pas", 0,
-//                         Utils::Database::CreateDatabase);
-//    }
 
     if (!database().isOpen()) {
         if (!database().open()) {

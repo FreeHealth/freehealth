@@ -93,7 +93,10 @@ void PmhPlugin::extensionsInitialized()
     Internal::PmhBase::instance();
 
     addAutoReleasedObject(new Core::PluginAboutPage(pluginSpec(), this));
-    addAutoReleasedObject(new Internal::PmhPreferencesPage(this));
+
+    Internal::PmhPreferencesPage *prefPage = new Internal::PmhPreferencesPage(this);
+    prefPage->checkSettingsValidity();
+    addAutoReleasedObject(prefPage);
 
     connect(Core::ICore::instance(), SIGNAL(coreOpened()), this, SLOT(postCoreInit()));
 }

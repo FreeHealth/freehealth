@@ -85,17 +85,29 @@ CategoryBase::CategoryBase(QObject *parent) :
     addField(Table_CATEGORIES, CATEGORY_ISVALID,         "VALID",      FieldIsBoolean, "1");
     addField(Table_CATEGORIES, CATEGORY_THEMEDICON,      "THEMED_ICON",FieldIsShortText);
     addField(Table_CATEGORIES, CATEGORY_EXTRAXML,        "EXTRA",      FieldIsLongText);
+    addIndex(Table_CATEGORIES, CATEGORY_ID);
+    addIndex(Table_CATEGORIES, CATEGORY_UUID);
+    addIndex(Table_CATEGORIES, CATEGORY_PARENT);
+    addIndex(Table_CATEGORIES, CATEGORY_LABEL_ID);
+    addIndex(Table_CATEGORIES, CATEGORY_MIME);
+    addIndex(Table_CATEGORIES, CATEGORY_PROTECTION_ID);
+    addIndex(Table_CATEGORIES, CATEGORY_SORT_ID);
 
     addField(Table_CATEGORY_LABEL, CATEGORYLABEL_ID,       "ID",       FieldIsUniquePrimaryKey);
     addField(Table_CATEGORY_LABEL, CATEGORYLABEL_LABEL_ID, "LID",      FieldIsInteger);
     addField(Table_CATEGORY_LABEL, CATEGORYLABEL_LANG,     "LANG",     FieldIsLanguageText);
     addField(Table_CATEGORY_LABEL, CATEGORYLABEL_VALUE,    "VALUE",    FieldIsShortText);
     addField(Table_CATEGORY_LABEL, CATEGORYLABEL_ISVALID,  "VALID",    FieldIsBoolean);
+    addIndex(Table_CATEGORY_LABEL, CATEGORYLABEL_ID);
+    addIndex(Table_CATEGORY_LABEL, CATEGORYLABEL_LABEL_ID);
+    addIndex(Table_CATEGORY_LABEL, CATEGORYLABEL_LANG);
 
     addField(Table_PROTECTION, PROTECTION_ID,                "ID",     FieldIsUniquePrimaryKey);
     addField(Table_PROTECTION, PROTECTION_PID,               "PID",    FieldIsInteger);
     addField(Table_PROTECTION, PROTECTION_RESTRICTEDTOUSER,  "USER_RESTRICTED", FieldIsUUID);
     addField(Table_PROTECTION, PROTECTION_RESTRICTEDTOGROUP, "GROUP_RESTRICTED",FieldIsUUID);
+    addIndex(Table_PROTECTION, PROTECTION_ID);
+    addIndex(Table_PROTECTION, PROTECTION_PID);
 
     addField(Table_VERSION, VERSION_TEXT, "VERSION",  FieldIsShortText);
 
@@ -116,41 +128,6 @@ bool CategoryBase::init()
     createConnection(Constants::DB_NAME, Constants::DB_NAME,
                      settings()->databaseConnector(),
                      Utils::Database::CreateDatabase);
-
-    // Check settings --> SQLite or MySQL ?
-//    if (settings()->value(Core::Constants::S_USE_EXTERNAL_DATABASE, false).toBool()) {
-//        if (!QSqlDatabase::isDriverAvailable("QMYSQL")) {
-//            LOG_ERROR(tkTr(Trans::Constants::DATABASE_DRIVER_1_NOT_AVAILABLE).arg("MySQL"));
-//            Utils::warningMessageBox(tkTr(Trans::Constants::APPLICATION_FAILURE),
-//                                     tkTr(Trans::Constants::DATABASE_DRIVER_1_NOT_AVAILABLE_DETAIL).arg("MySQL"),
-//                                     "", qApp->applicationName());
-//            return false;
-//        }
-//        createConnection(Constants::DB_NAME,
-//                         Constants::DB_NAME,
-//                         QString(QByteArray::fromBase64(settings()->value(Core::Constants::S_EXTERNAL_DATABASE_HOST, QByteArray("localhost").toBase64()).toByteArray())),
-//                         Utils::Database::ReadWrite,
-//                         Utils::Database::MySQL,
-//                         QString(QByteArray::fromBase64(settings()->value(Core::Constants::S_EXTERNAL_DATABASE_LOG, QByteArray("root").toBase64()).toByteArray())),
-//                         QString(QByteArray::fromBase64(settings()->value(Core::Constants::S_EXTERNAL_DATABASE_PASS, QByteArray("").toBase64()).toByteArray())),
-//                         QString(QByteArray::fromBase64(settings()->value(Core::Constants::S_EXTERNAL_DATABASE_PORT, QByteArray("").toBase64()).toByteArray())).toInt(),
-//                         Utils::Database::CreateDatabase);
-//    } else {
-//        if (!QSqlDatabase::isDriverAvailable("QSQLITE")) {
-//            LOG_ERROR(tkTr(Trans::Constants::DATABASE_DRIVER_1_NOT_AVAILABLE).arg("SQLite"));
-//            Utils::warningMessageBox(tkTr(Trans::Constants::APPLICATION_FAILURE),
-//                                     tkTr(Trans::Constants::DATABASE_DRIVER_1_NOT_AVAILABLE_DETAIL).arg("SQLite"),
-//                                     "", qApp->applicationName());
-//            return false;
-//        }
-//        createConnection(Constants::DB_NAME,
-//                         Constants::DB_FILENAME,
-//                         settings()->path(Core::ISettings::ReadWriteDatabasesPath) + QDir::separator() + QString(Constants::DB_NAME),
-//                         Utils::Database::ReadWrite,
-//                         Utils::Database::SQLite,
-//                         "log", "pas", 0,
-//                         Utils::Database::CreateDatabase);
-//    }
 
     if (!database().isOpen()) {
         if (!database().open()) {

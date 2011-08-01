@@ -144,6 +144,11 @@ void PatientModelWrapper::showPatientBar()
     Patients::PatientBar::instance()->show();
 }
 
+bool PatientModelWrapper::isPatientBarVisible() const
+{
+    return Patients::PatientBar::instance()->isVisible();
+}
+
 /** \brief Private connection to the Patient::PatientModel source. */
 void PatientModelWrapper::patientDataChanged(const QModelIndex &index)
 {

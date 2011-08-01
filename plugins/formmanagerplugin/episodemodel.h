@@ -74,6 +74,7 @@ public:
     enum DataRepresentation {
         Label = 0,
         Date,
+        IsValid,
         Summary,
         FullContent,
         Id,

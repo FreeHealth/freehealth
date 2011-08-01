@@ -145,6 +145,7 @@ IcdDatabase::IcdDatabase(QObject *parent) :
     setObjectName("IcdDatabase");
 
     using namespace ICD::Constants;
+    // No need to add indexes while db creation uses icd10.sql file
     addTable(Table_Chapter,    "chapter");
     addTable(Table_Common,     "common");
     addTable(Table_Dagstar,    "dagstar");

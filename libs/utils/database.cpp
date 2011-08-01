@@ -77,6 +77,8 @@
 #include <QTreeWidgetItem>
 #include <QTreeWidget>
 #include <QProgressDialog>
+#include <QUuid>
+
 #include <QDebug>
 
 enum { WarnSqlCommands = false , WarnLogMessages = false };
@@ -87,12 +89,18 @@ using namespace Trans::ConstantTranslations;
 
 namespace Utils {
 namespace Internal {
+
+struct DbIndex {
+    Utils::Field field;
+    QString name;
+};
+
 class DatabasePrivate
 {
 public:
     DatabasePrivate();
     ~DatabasePrivate() {}
-    QString getSQLCreateTable(const int & tableref);
+    QStringList getSQLCreateTable(const int & tableref);
     QString getTypeOfField(const int & fieldref) const;
 
     static Database::Grants getGrants(const QString &connection, const QStringList &grants)
@@ -150,6 +158,7 @@ public:
     QHash<QString, Database::Grants> m_Grants;
     Database::AvailableDrivers m_Driver;
     QMultiHash<int,int> m_PrimKeys;
+    QVector<DbIndex> m_DbIndexes;
 };
 }
 }
@@ -670,6 +679,12 @@ QString Database::connectionName() const
     return d->m_ConnectionName;
 }
 
+/** Create an UUID compatible with the Utils::Database manager. This code uses QUuid::createUuid().toString() with some string contraction. */
+QString Database::createUid()
+{
+    return QUuid::createUuid().toString().remove("-").remove("{").remove("}");
+}
+
 /**  returns the grants according to the database \e connectionName. When using a SQLite driver Grants always == 0. */
 Database::Grants Database::grants(const QString &connectionName) const
 {
@@ -753,6 +768,29 @@ int Database::addField(const int & tableref, const int & fieldref, const QString
 void Database::addPrimaryKey(const int &tableref, const int &fieldref)
 {
     d->m_PrimKeys.insertMulti(tableref, fieldref);
+}
+
+/** Create an index on the specified \e tableRef, \e fieldRef, named \e name. If \e name is not specified a unique name is created. */
+void Database::addIndex(const int &tableref, const int &fieldref, const QString &name)
+{
+    Utils::Field f = this->field(tableref, fieldref);
+    addIndex(f, name);
+}
+
+/** Create an index on the specified \e field, named \e name. If \e name is not specified a unique name is created. */
+void Database::addIndex(const Utils::Field &field, const QString &name)
+{
+    Internal::DbIndex index;
+    // Get the correct field with field and table names
+    index.field = this->field( field.table, field.field);
+    // Recreate index' name
+    if (name.isEmpty()) {
+        index.name = index.field.tableName + "__" + index.field.fieldName;
+    } else {
+        index.name = name;
+    }
+    // Store index
+    d->m_DbIndexes.append(index);
 }
 
 /**  Verify that the dynamically scheme passed is corresponding to the real database scheme. */
@@ -1565,10 +1603,10 @@ bool Database::createTable(const int &tableref) const
         return false;
 
     // create query
-    QString req;
+    QStringList req;
     req = d->getSQLCreateTable(tableref);
 
-    return executeSQL(QStringList() << req, DB);
+    return executeSQL(req, DB);
 }
 
 /** Create all the tables in the database. */
@@ -1786,7 +1824,8 @@ bool Database::importCsvToDatabase(const QString &connectionName, const QString 
     return true;
 }
 
-QString DatabasePrivate::getSQLCreateTable(const int &tableref)
+/** Create the SQL command for the table creation \e tableref. \sa addTable(), addField() */
+QStringList DatabasePrivate::getSQLCreateTable(const int &tableref)
 {
     QString toReturn;
     toReturn = QString("CREATE TABLE IF NOT EXISTS `%1` (\n").arg(m_Tables.value(tableref));
@@ -1870,21 +1909,33 @@ QString DatabasePrivate::getSQLCreateTable(const int &tableref)
         }
     }
 
-    toReturn.append("\n); \n\n");
+    toReturn.append("\n); \n");
+
+    QStringList indexes;
+    for(int i = 0; i < m_DbIndexes.count(); ++i) {
+        const DbIndex &idx = m_DbIndexes.at(i);
+        if (idx.field.table==tableref) {
+            indexes << QString("CREATE INDEX %1 ON %2 (%3);\n")
+                    .arg(idx.name)
+                    .arg(idx.field.tableName)
+                    .arg(idx.field.fieldName);
+        }
+    }
 
     if (WarnSqlCommands)
-        qWarning() << toReturn;
+        qWarning() << toReturn << indexes;
 
-    return toReturn;
+    return QStringList() << toReturn << indexes;
 }
 
-QString DatabasePrivate::getTypeOfField(const int & fieldref) const
+/** Return the SQL type of field for the field \e fieldref.*/
+QString DatabasePrivate::getTypeOfField(const int &fieldref) const
 {
     QString toReturn;
     switch (Database::TypeOfField(m_TypeOfField.value(fieldref)))
     {
         case Database::FieldIsUUID :
-            toReturn = "varchar(40)";
+            toReturn = "varchar(32)";
             break;
         case Database::FieldIsBoolean :
             toReturn = "int(1)";

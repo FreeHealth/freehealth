@@ -41,7 +41,7 @@
 
 namespace Agenda {
 namespace Internal {
-class UserAgendasViewer;
+class UserCalendarViewer;
 
 class AgendaMode : public Core::BaseMode
 {
@@ -51,12 +51,11 @@ public:
 
 private Q_SLOTS:
     void postCoreInitialization();
-    void modeActivated(Core::IMode *mode);
     void userChanged();
 
 private:
     QStackedWidget *m_Stack;
-    UserAgendasViewer *m_Viewer;
+    UserCalendarViewer *m_Viewer;
 };
 
 }  // End namespace Internal

@@ -38,6 +38,7 @@
 */
 
 namespace Agenda {
+class AgendaCore;
 
 class AgendaPlugin : public ExtensionSystem::IPlugin
 {
@@ -51,6 +52,8 @@ public:
 
     void testDatabase();
 
+private:
+    AgendaCore *m_Core;
 };
 
 

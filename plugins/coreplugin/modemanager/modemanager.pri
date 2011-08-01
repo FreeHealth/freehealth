@@ -4,4 +4,4 @@ HEADERS += $${PWD}/imode.h \
            $${PWD}/modemanager.h
 
 SOURCES += $${PWD}/basemode.cpp \
-           $${PWD}/modemanager.cpp
+           $${PWD}/modemanager.cpp \

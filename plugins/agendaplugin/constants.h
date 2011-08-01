@@ -28,7 +28,6 @@
 #define AGENDA_CONSTANTS_H
 
 #include <calendar/calendar_item.h>
-#include <calendar/usercalendar.h>
 
 namespace Agenda {
 namespace Constants {
@@ -59,6 +58,7 @@ namespace Constants {
     enum FieldsCALENDAR {
             CAL_ID = 0,
             CAL_CATEGORYID,
+            CAL_SORTID,
             CAL_ISVALID,
             CAL_STATUS,
             CAL_TYPE,
@@ -155,6 +155,7 @@ namespace Constants {
         Db_CyclingEvId,
         Db_ComId,
         Db_IsValid,
+        Db_SortId,
         Db_XmlViewOptions,
         Db_XmlOptions
     };

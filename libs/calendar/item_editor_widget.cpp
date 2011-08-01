@@ -34,7 +34,6 @@
 
 #include "item_editor_widget.h"
 #include "calendar_item.h"
-#include "usercalendar.h"
 #include "abstract_calendar_model.h"
 #include "icalendaritemdatawidget.h"
 #include "common.h"
@@ -102,11 +101,13 @@ namespace Internal {
             ui->eventLabel->setText(m_Item.data(CalendarItem::Label).toString());
             ui->fullInfo->setText(m_Item.data(CalendarItem::Description).toString());
 //            ui->iconLabel->setPixmap(theme()->icon(m_Item.data(CalendarItem::ThemedIcon).toString()).pixmap(16, 16));
-            if (m_Item.model()) {
-			ui->calendarCombo->setModel(m_Item.model()->userCalendarComboModel(q));
-            } else {
-                ui->calendarCombo->setModel(m_Model->userCalendarComboModel(q));
-            }
+
+//            if (m_Item.model()) {
+//			ui->calendarCombo->setModel(m_Item.model()->userCalendarComboModel(q));
+//            } else {
+//                ui->calendarCombo->setModel(m_Model->userCalendarComboModel(q));
+//            }
+
             ui->statusCombo->setCurrentIndex(m_Item.data(CalendarItem::Status).toInt());
         }
 
@@ -233,27 +234,27 @@ bool ItemEditorWidget::isShowingExtraInformations() const
 }
 
 /** Define the Calendar::UserCalendar to use for the current edition. */
-void ItemEditorWidget::setAvailableUserCalendar(const QList<UserCalendar *> &userCals)
-{
-    d->m_UserCals = userCals;
+//void ItemEditorWidget::setAvailableUserCalendar(const QList<UserCalendar *> &userCals)
+//{
+//    d->m_UserCals = userCals;
 
-    // create the model
-    if (d->m_UserCalsModel) {
-        delete d->m_UserCalsModel;
-        d->m_UserCalsModel = 0;
-    }
-    d->m_UserCalsModel = new QStandardItemModel(this);
-    QStandardItem *root = d->m_UserCalsModel->invisibleRootItem();
-    int defaultRow = -1;
-    for(int i = 0; i < userCals.count(); ++i) {
-        root->appendRow(new QStandardItem(userCals.at(i)->data(Calendar::UserCalendar::Label).toString()));
-        if (userCals.at(i)->data(UserCalendar::IsDefault).toBool()) {
-            defaultRow = i;
-        }
-    }
-    d->ui->calendarCombo->setModel(d->m_UserCalsModel);
-    d->ui->calendarCombo->setCurrentIndex(defaultRow);
-}
+//    // create the model
+//    if (d->m_UserCalsModel) {
+//        delete d->m_UserCalsModel;
+//        d->m_UserCalsModel = 0;
+//    }
+//    d->m_UserCalsModel = new QStandardItemModel(this);
+//    QStandardItem *root = d->m_UserCalsModel->invisibleRootItem();
+//    int defaultRow = -1;
+//    for(int i = 0; i < userCals.count(); ++i) {
+//        root->appendRow(new QStandardItem(userCals.at(i)->data(Calendar::UserCalendar::Label).toString()));
+//        if (userCals.at(i)->data(UserCalendar::IsDefault).toBool()) {
+//            defaultRow = i;
+//        }
+//    }
+//    d->ui->calendarCombo->setModel(d->m_UserCalsModel);
+//    d->ui->calendarCombo->setCurrentIndex(defaultRow);
+//}
 
 /**
   Add specific widgets to the editor using the Calendar::ICalendarItemDataWidget interface.

@@ -55,6 +55,8 @@ public:
     virtual QIcon icon() const = 0;
     virtual int priority() const = 0;
     virtual const char *uniqueModeName() const = 0;
+
+    virtual bool isPatientBarVisible() const = 0;
 };
 
 } // namespace Core

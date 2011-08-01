@@ -68,27 +68,28 @@ class TextDocumentExtra;
 
 
 namespace UserPlugin {
+class IUserWizardPage;
+
 namespace Internal {
 class UserRightsWidget;
 class UserData;
 
 namespace Ui {
 class UserWizardContactWidget;
-}
-}
-
-/** \todo create a new wizard manager in Core */
+}  // End namespace Ui
+}  // End namespace Internal
 
 class USER_EXPORT UserWizard : public QWizard
 {
     Q_OBJECT
 public:
     enum Pages {
-        IdentityAndLoginPage,
+        IdentityAndLoginPage = 0,
         ContactPage,
         ProfilPage,
         RightsPage,
-        SpecialiesQualificationsPage
+        SpecialiesQualificationsPage,
+        ExtraPages
     };
 
     UserWizard(QWidget *parent = 0);
@@ -110,6 +111,7 @@ private:
     QString m_Uuid;
     static QHash<int, QString> m_Papers;
     static QHash<int, int> m_Rights;
+    QList<IUserWizardPage*> m_ExtraPages;
 };
 
 

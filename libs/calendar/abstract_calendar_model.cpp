@@ -175,7 +175,7 @@ void AbstractCalendarModel::beginInsertItem() {
 
 void AbstractCalendarModel::endInsertItem(const CalendarItem &newItem) {
 	if (m_propagateEvents)
-		emit itemInserted(newItem);
+                Q_EMIT itemInserted(newItem);
 }
 
 void AbstractCalendarModel::beginModifyItem() {
@@ -184,7 +184,7 @@ void AbstractCalendarModel::beginModifyItem() {
 
 void AbstractCalendarModel::endModifyItem(const CalendarItem &oldItem, const CalendarItem &newItem) {
 	if (m_propagateEvents)
-		emit itemModified(oldItem, newItem);
+                Q_EMIT itemModified(oldItem, newItem);
 }
 
 void AbstractCalendarModel::beginRemoveItem() {
@@ -193,16 +193,16 @@ void AbstractCalendarModel::beginRemoveItem() {
 
 void AbstractCalendarModel::endRemoveItem(const CalendarItem &removedItem) {
 	if (m_propagateEvents)
-		emit itemRemoved(removedItem);
+                Q_EMIT itemRemoved(removedItem);
 }
 
 void AbstractCalendarModel::setItemIsMine(Calendar::CalendarItem *item) const {
     item->setModel((AbstractCalendarModel*)this);
 }
 
-void AbstractCalendarModel::setCalendarIsMine(Calendar::UserCalendar *cal) const {
-    cal->setModel((AbstractCalendarModel*)this);
-}
+//void AbstractCalendarModel::setCalendarIsMine(Calendar::UserCalendar *cal) const {
+//    cal->setModel((AbstractCalendarModel*)this);
+//}
 
 //void AbstractCalendarModel::setItemByUid(const QString &, const CalendarItem &) {}
 
@@ -212,6 +212,6 @@ void AbstractCalendarModel::stopEvents() {
 
 void AbstractCalendarModel::resumeEvents() {
 	m_propagateEvents = true;
-	emit reset();
+        Q_EMIT reset();
 }
 

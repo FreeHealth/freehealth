@@ -13,30 +13,36 @@ HEADERS = agendaplugin.h agenda_exporter.h \
     constants.h \
     agendabase.h \
     agendawidgetmanager.h \
-    useragendasviewer.h \
+    usercalendarviewer.h \
     agendamode.h \
     calendaritemmodel.h \
     calendaritemeditorpatientmapper.h \
     appointement.h \
-    agendauserviewerpages.h \
-#    eventeditorwidget.h \
-#    icalendarevent.h \
-#    iusercalendar.h \
-#    agendaeventsmodel.h \
+    usercalendar.h \
+    usercalendareditor.h \
+    usercalendarpageforuserviewer.h \
+    usercalendarmodel.h \
+    usercalendarwizardcreatorpage.h \
+    usercalendarmodelfulleditorwidget.h \
+    agendacore.h \
+    agendapreferencespage.h
 
 SOURCES = agendaplugin.cpp \
     agendabase.cpp \
     agendawidgetmanager.cpp \
-    useragendasviewer.cpp \
+    usercalendarviewer.cpp \
     agendamode.cpp \
     calendaritemmodel.cpp \
     calendaritemeditorpatientmapper.cpp \
     appointement.cpp \
-    agendauserviewerpages.cpp \
-#    eventeditorwidget.cpp \
-#    icalendarevent.cpp \
-#    iusercalendar.cpp \
-#    agendaeventsmodel.cpp \
+    usercalendar.cpp \
+    usercalendareditor.cpp \
+    usercalendarpageforuserviewer.cpp \
+    usercalendarmodel.cpp \
+    usercalendarwizardcreatorpage.cpp \
+    usercalendarmodelfulleditorwidget.cpp \
+    agendacore.cpp \
+    agendapreferencespage.cpp
 
 OTHER_FILES = Agenda.pluginspec
 
@@ -45,7 +51,10 @@ TRANSLATIONS += $${SOURCES_TRANSLATIONS_PATH}/agendaplugin_fr.ts \
                 $${SOURCES_TRANSLATIONS_PATH}/agendaplugin_es.ts
 
 FORMS += \
-    useragendasviewer.ui \
     calendaritemeditorpatientmapper.ui \
-    agendauserviewerwidget.ui
-#    eventeditorwidget.ui \
+    usercalendarviewer.ui \
+    usercalendareditor.ui \
+    usercalendarwizardcreatorpage.ui \
+    usercalendarmodelfulleditorwidget.ui \
+    agendapreferencespage.ui
+#    agendauserviewerwidget.ui \

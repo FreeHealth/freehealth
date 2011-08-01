@@ -119,13 +119,15 @@ void FormManagerPlugin::extensionsInitialized()
         settings()->setDefaultForm("");
     }
 
-    addAutoReleasedObject(new Internal::FormManagerPreferencesPage(this));
     addAutoReleasedObject(new Core::PluginAboutPage(pluginSpec(), this));
+
+    Internal::FormManagerPreferencesPage *prefPage = new Internal::FormManagerPreferencesPage(this);
+    prefPage->checkSettingsValidity();
+    addAutoReleasedObject(prefPage);
 
     // Add mode
     mode = new FormManagerMode(this);
     addObject(mode);
-
 }
 
 

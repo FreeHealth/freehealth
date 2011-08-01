@@ -47,7 +47,7 @@ namespace Constants {
         EPISODES_ID = 0,
         EPISODES_PATIENT_UID,
         EPISODES_LK_TOPRACT_LKID,
-//        EPISODES_ISVALID,
+        EPISODES_ISVALID,
         EPISODES_FORM_PAGE_UID,
         EPISODES_LABEL,
         EPISODES_DATE,

@@ -70,7 +70,6 @@
 #include <QDir>
 #include <QLocale>
 #include <QDateTime>
-#include <QUuid>
 
 using namespace UserPlugin::Internal;
 using namespace UserPlugin::Constants;
@@ -124,6 +123,11 @@ UserBase::UserBase(QObject *parent)
     addField(Table_USERS, USER_MAIL,         "MAIL",            FieldIsShortText);
     addField(Table_USERS, USER_LANGUAGE,     "LANGUAGE",        FieldIsLanguageText);
     addField(Table_USERS, USER_LOCKER,       "LOCKER",          FieldIsBoolean);
+    addIndex(Table_USERS, USER_UUID);
+    addIndex(Table_USERS, USER_LOGIN);
+    addIndex(Table_USERS, USER_NAME);
+    addIndex(Table_USERS, USER_SECONDNAME);
+    addIndex(Table_USERS, USER_FIRSTNAME);
 
     addField(Table_DATAS, DATAS_ID,          "DATAS_ID",        FieldIsUniquePrimaryKey);
     addField(Table_DATAS, DATAS_USER_UUID,   "USER_UUID",       FieldIsUUID);
@@ -136,23 +140,29 @@ UserBase::UserBase(QObject *parent)
     addField(Table_DATAS, DATAS_LANGUAGE,    "DATA_LANGUAGE",   FieldIsShortText);
     addField(Table_DATAS, DATAS_LASTCHANGE,  "LASTCHANGE",      FieldIsDate);
     addField(Table_DATAS, DATAS_TRACE_ID,    "TRACE_ID",        FieldIsInteger);
+    addIndex(Table_DATAS, DATAS_USER_UUID);
 
     addField(Table_RIGHTS, RIGHTS_ID,        "RIGHTS_ID",       FieldIsUniquePrimaryKey);
     addField(Table_RIGHTS, RIGHTS_USER_UUID, "USER_UUID",       FieldIsUUID);
     addField(Table_RIGHTS, RIGHTS_ROLE,      "RIGHTS_ROLE",     FieldIsShortText);
     addField(Table_RIGHTS, RIGHTS_RIGHTS,    "RIGHTS_RIGHTS",   FieldIsInteger);
+    addIndex(Table_RIGHTS, RIGHTS_USER_UUID);
 
     addField(Table_GROUPS, GROUPS_ID,               "GROUP_ID",   FieldIsUniquePrimaryKey);
     addField(Table_GROUPS, GROUPS_UID,              "GROUP_UID",  FieldIsUUID);
     addField(Table_GROUPS, GROUPS_USER_UID,         "USER_UID",   FieldIsUUID);
     addField(Table_GROUPS, GROUPS_PARENT_GROUP_UID, "PARENT_GROUP_UID", FieldIsUUID);
+//    addIndex(Table_RIGHTS, RIGHTS_USER_UUID);
 
     // links
     addTable(Table_USER_LK_ID, "LK_USER");
     addField(Table_USER_LK_ID, LK_ID,         "ID", FieldIsUniquePrimaryKey);
-    addField(Table_USER_LK_ID, LK_LKID,       "LK_ID", FieldIsUUID);
+    addField(Table_USER_LK_ID, LK_LKID,       "LK_ID", FieldIsInteger);
     addField(Table_USER_LK_ID, LK_USER_UUID,  "USER_UID", FieldIsUUID);
     addField(Table_USER_LK_ID, LK_GROUP_UUID, "GROUP_UID", FieldIsUUID);
+    addIndex(Table_USER_LK_ID, LK_USER_UUID);
+    addIndex(Table_USER_LK_ID, LK_GROUP_UUID);
+    addIndex(Table_USER_LK_ID, LK_LKID);
 
     // informations
     addTable(Table_INFORMATIONS, "INFORMATIONS");
@@ -483,7 +493,7 @@ QString UserBase::createNewUuid()
 {
     QString tmp;
     while (tmp.isEmpty()) {
-        tmp = QUuid::createUuid().toString();
+        tmp = Utils::Database::createUid();
         // create query
         QHash<int, QString> where;
         where.insert(USER_UUID, QString("='%1'").arg(tmp));

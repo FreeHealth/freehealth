@@ -611,7 +611,6 @@ bool DrugsIO::prescriptionFromXml(DrugsDB::DrugsModel *m, const QString &xmlCont
     // Read prescription itself
     QVector<IDrug *> drugs;
     QList<int> rowsToUpdate;
-    int row = 0;
     QString errorMsg;
     QDomElement prescr = fullPrescription.firstChildElement(XML_PRESCRIPTION_MAINTAG);
 

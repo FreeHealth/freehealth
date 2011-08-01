@@ -50,7 +50,7 @@ namespace {
 }  // End anonymous namespace
 
 DefaultUserIdentityWidget::DefaultUserIdentityWidget(QWidget *parent) :
-    QWidget(parent),
+    UserPlugin::IUserViewerWidget(parent),
     ui(new Ui::UserViewer_IdentityUI),
     m_Mapper(0),
     m_Model(0)
@@ -126,8 +126,7 @@ void DefaultUserIdentityWidget::on_but_viewHistory_clicked()
 
 
 DefaultUserIdentityPage::DefaultUserIdentityPage(QObject *parent) :
-    IUserViewerPage(parent),
-    m_Model(0)
+    IUserViewerPage(parent)
 {
     setObjectName("DefaultUserIdentityPage");
 }
@@ -157,42 +156,13 @@ QString DefaultUserIdentityPage::title() const
 
 QWidget *DefaultUserIdentityPage::createPage(QWidget *parent)
 {
-    if (!m_Widget)
-        m_Widget = new DefaultUserIdentityWidget(parent);
-    return m_Widget;
-}
-
-void DefaultUserIdentityPage::setUserModel(UserModel *model)
-{
-    m_Model = model;
-    if (m_Widget)
-        m_Widget->setUserModel(model);
-}
-
-void DefaultUserIdentityPage::setUserIndex(const int index)
-{
-    if (m_Model && m_Widget)
-        m_Widget->setUserIndex(index);
-}
-
-bool DefaultUserIdentityPage::clear()
-{
-    if (m_Widget)
-        m_Widget->clear();
-    return true;
-}
-
-bool DefaultUserIdentityPage::submit()
-{
-    if (m_Widget)
-        return m_Widget->submit();
-    return false;
+    return new DefaultUserIdentityWidget(parent);
 }
 
 
 //////////////////////////////////////////////////////////////////////////////////////////
 DefaultUserContactWidget::DefaultUserContactWidget(QWidget *parent) :
-    QWidget(parent),
+    UserPlugin::IUserViewerWidget(parent),
     ui(new Ui::UserViewer_ContactUI),
     m_Mapper(0),
     m_Model(0)
@@ -242,8 +212,7 @@ bool DefaultUserContactWidget::submit()
 
 
 DefaultUserContactPage::DefaultUserContactPage(QObject *parent) :
-    IUserViewerPage(parent),
-    m_Model(0)
+    IUserViewerPage(parent)
 {
     setObjectName("DefaultUserContactPage");
 }
@@ -273,42 +242,14 @@ QString DefaultUserContactPage::title() const
 
 QWidget *DefaultUserContactPage::createPage(QWidget *parent)
 {
-    if (!m_Widget)
-        m_Widget = new DefaultUserContactWidget(parent);
-    return m_Widget;
+    return new DefaultUserContactWidget(parent);
 }
 
-void DefaultUserContactPage::setUserModel(UserModel *model)
-{
-    m_Model = model;
-    if (m_Widget)
-        m_Widget->setUserModel(model);
-}
-
-void DefaultUserContactPage::setUserIndex(const int index)
-{
-    if (m_Model && m_Widget)
-        m_Widget->setUserIndex(index);
-}
-
-bool DefaultUserContactPage::clear()
-{
-    if (m_Widget)
-        m_Widget->clear();
-    return true;
-}
-
-bool DefaultUserContactPage::submit()
-{
-    if (m_Widget)
-        return m_Widget->submit();
-    return false;
-}
 
 
 //////////////////////////////////////////////////////////////////////////////////////////
 DefaultUserProfessionalWidget::DefaultUserProfessionalWidget(QWidget *parent) :
-    QWidget(parent),
+    UserPlugin::IUserViewerWidget(parent),
     ui(new Ui::UserViewer_ProfessionalUI),
     m_Mapper(0),
     m_Model(0)
@@ -359,8 +300,7 @@ bool DefaultUserProfessionalWidget::submit()
 
 
 DefaultUserProfessionalPage::DefaultUserProfessionalPage(QObject *parent) :
-    IUserViewerPage(parent),
-    m_Model(0)
+    IUserViewerPage(parent)
 {
     setObjectName("DefaultUserProfessionalPage");
 }
@@ -390,41 +330,13 @@ QString DefaultUserProfessionalPage::title() const
 
 QWidget *DefaultUserProfessionalPage::createPage(QWidget *parent)
 {
-    if (!m_Widget)
-        m_Widget = new DefaultUserProfessionalWidget(parent);
-    return m_Widget;
+    return new DefaultUserProfessionalWidget(parent);
 }
 
-void DefaultUserProfessionalPage::setUserModel(UserModel *model)
-{
-    m_Model = model;
-    if (m_Widget)
-        m_Widget->setUserModel(model);
-}
-
-void DefaultUserProfessionalPage::setUserIndex(const int index)
-{
-    if (m_Model && m_Widget)
-        m_Widget->setUserIndex(index);
-}
-
-bool DefaultUserProfessionalPage::clear()
-{
-    if (m_Widget)
-        m_Widget->clear();
-    return true;
-}
-
-bool DefaultUserProfessionalPage::submit()
-{
-    if (m_Widget)
-        return m_Widget->submit();
-    return false;
-}
 
 //////////////////////////////////////////////////////////////////////////////////////////
 DefaultUserRightsWidget::DefaultUserRightsWidget(QWidget *parent) :
-    QWidget(parent),
+    UserPlugin::IUserViewerWidget(parent),
     ui(new Ui::UserViewer_RightsUI),
     m_Mapper(0),
     m_Model(0)
@@ -470,8 +382,7 @@ bool DefaultUserRightsWidget::submit()
 
 
 DefaultUserRightsPage::DefaultUserRightsPage(QObject *parent) :
-    IUserViewerPage(parent),
-    m_Model(0)
+    IUserViewerPage(parent)
 {
     setObjectName("DefaultUserRightsPage");
 }
@@ -501,48 +412,22 @@ QString DefaultUserRightsPage::title() const
 
 QWidget *DefaultUserRightsPage::createPage(QWidget *parent)
 {
-    if (!m_Widget)
-        m_Widget = new DefaultUserRightsWidget(parent);
-    return m_Widget;
-}
-
-void DefaultUserRightsPage::setUserModel(UserModel *model)
-{
-    m_Model = model;
-    if (m_Widget)
-        m_Widget->setUserModel(model);
-}
-
-void DefaultUserRightsPage::setUserIndex(const int index)
-{
-    if (m_Model && m_Widget)
-        m_Widget->setUserIndex(index);
-}
-
-bool DefaultUserRightsPage::clear()
-{
-    if (m_Widget)
-        m_Widget->clear();
-    return true;
-}
-
-bool DefaultUserRightsPage::submit()
-{
-    if (m_Widget)
-        return m_Widget->submit();
-    return false;
+    return new DefaultUserRightsWidget(parent);
 }
 
 
 //////////////////////////////////////////////////////////////////////////////////////////
 DefaultUserPapersWidget::DefaultUserPapersWidget(const int type, QWidget *parent) :
-    QWidget(parent),
+    UserPlugin::IUserViewerWidget(parent),
     m_Mapper(0),
     m_Model(0),
     m_type(type),
     m_row(-1)
 {
+    QVBoxLayout *layout = new QVBoxLayout(this);
+    setLayout(layout);
     preview = Print::Printer::previewer(this);
+    layout->addWidget(preview);
 }
 
 DefaultUserPapersWidget::~DefaultUserPapersWidget()
@@ -634,7 +519,6 @@ bool DefaultUserPapersWidget::submit()
 
 DefaultUserPapersPage::DefaultUserPapersPage(const PaperType type, QObject *parent) :
     IUserViewerPage(parent),
-    m_Model(0),
     m_type(type)
 {
     setObjectName("DefaultUserPapersPage");
@@ -670,36 +554,8 @@ QString DefaultUserPapersPage::title() const
 
 QWidget *DefaultUserPapersPage::createPage(QWidget *parent)
 {
-    if (!m_Widget)
-        m_Widget = new DefaultUserPapersWidget(m_type, parent);
-    return m_Widget;
+    return new DefaultUserPapersWidget(m_type, parent);
 }
 
-void DefaultUserPapersPage::setUserModel(UserModel *model)
-{
-    m_Model = model;
-    if (m_Widget)
-        m_Widget->setUserModel(model);
-}
-
-void DefaultUserPapersPage::setUserIndex(const int index)
-{
-    if (m_Model && m_Widget)
-        m_Widget->setUserIndex(index);
-}
-
-bool DefaultUserPapersPage::clear()
-{
-    if (m_Widget)
-        m_Widget->clear();
-    return true;
-}
-
-bool DefaultUserPapersPage::submit()
-{
-    if (m_Widget)
-        return m_Widget->submit();
-    return false;
-}
 
 

@@ -134,6 +134,17 @@ bool DrugsPlugin::initialize(const QStringList &arguments, QString *errorMessage
     addAutoReleasedObject(new DrugsWidgetsFactory(this));
 #endif
 
+    // Initialize drugs database after the settings where checked
+    drugsBase();
+
+    return true;
+}
+
+void DrugsPlugin::extensionsInitialized()
+{
+    if (Utils::Log::warnPluginsCreation())
+        qWarning() << "DrugsPlugin::extensionsInitialized";
+
     viewPage = new DrugsViewOptionsPage(this);
     selectorPage = new DrugsSelectorOptionsPage(this);
     printPage = new DrugsPrintOptionsPage(this);
@@ -177,16 +188,6 @@ bool DrugsPlugin::initialize(const QStringList &arguments, QString *errorMessage
     addObject(databaseSelectorPage);
     addObject(protocolPage);
 
-    // Initialize drugs database after the settings where checked
-    drugsBase();
-
-    return true;
-}
-
-void DrugsPlugin::extensionsInitialized()
-{
-    if (Utils::Log::warnPluginsCreation())
-        qWarning() << "DrugsPlugin::extensionsInitialized";
     connect(Core::ICore::instance(), SIGNAL(coreOpened()), this, SLOT(postCoreOpened()));
 }
 
@@ -195,6 +196,7 @@ void DrugsPlugin::postCoreOpened()
 #ifdef FREEMEDFORMS
     // Add drug mode. DrugsMode manages its inclusion in pluginManager itself.
     DrugsMode *mode = new DrugsMode(this);
+    Q_UNUSED(mode);
 #endif
 }
 

@@ -39,7 +39,6 @@
 #include <coreplugin/iuser.h>
 
 #include <QSqlTableModel>
-#include <QUuid>
 
 using namespace AccountDB;
 

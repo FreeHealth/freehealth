@@ -79,8 +79,6 @@ private:
     QHash<QString, QWidget *> m_PatientWidgets;
 };
 
-}  // End namespace Internal
-
 class CalendarItemEditorPatientMapper : public Calendar::ICalendarItemDataWidget
 {
     Q_OBJECT
@@ -99,7 +97,7 @@ private:
     QPointer<Internal::CalendarItemEditorPatientMapperWidget> m_Widget;
 };
 
-
+}  // End namespace Internal
 }  // End namespace Agenda
 
 #endif // CALENDARITEMEDITORPATIENTMAPPER_H

@@ -40,17 +40,25 @@
 namespace UserPlugin {
 class UserModel;
 
+class USER_EXPORT IUserViewerWidget : public QWidget
+{
+    Q_OBJECT
+public:
+    explicit IUserViewerWidget(QWidget *parent = 0) : QWidget(parent) {}
+    virtual ~IUserViewerWidget() {}
+
+    virtual void setUserModel(UserModel *model) = 0;
+    virtual void setUserIndex(const int row) = 0;
+    virtual void clear() = 0;
+    virtual bool submit() = 0;
+};
+
 class USER_EXPORT IUserViewerPage : public Core::IGenericPage
 {
     Q_OBJECT
 public:
     explicit IUserViewerPage(QObject *parent = 0) : Core::IGenericPage(parent) {}
     virtual ~IUserViewerPage() {}
-
-    virtual void setUserModel(UserModel *model) = 0;
-    virtual void setUserIndex(const int row) = 0;
-    virtual bool clear() = 0;
-    virtual bool submit() = 0;
 };
 
 }  // End namespace UserPlugin

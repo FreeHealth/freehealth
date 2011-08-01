@@ -38,6 +38,9 @@
 */
 
 namespace Agenda {
+class UserCalendar;
+class AgendaCore;
+
 namespace Internal {
 class Appointement;
 }
@@ -45,8 +48,12 @@ class Appointement;
 class AGENDA_EXPORT CalendarItemModel : public Calendar::AbstractCalendarModel
 {
     Q_OBJECT
+    friend class Agenda::AgendaCore;
+
+protected:
+    CalendarItemModel(const QVariant &calendarUid, QObject *parent);
+
 public:
-    CalendarItemModel(QObject *parent);
     ~CalendarItemModel();
 
     Calendar::CalendarItem getItemByUid(const QString &uid) const;
@@ -65,15 +72,8 @@ public:
     void stopEvents();
     void resumeEvents();
 
-    // Management of Calendars
-    Calendar::UserCalendar calendar(const Calendar::CalendarItem &item) const;
-    Calendar::UserCalendar addUserCalendar(const Calendar::UserCalendar &userCalendar);
-    bool updateUserCalendar(const Calendar::UserCalendar &calendar);
-    Calendar::UserCalendar defaultUserCalendar() const;
-
-    QAbstractItemModel *userCalendarComboModel(QObject *parent) const;
-    int defaultUserCalendarComboModelIndex() const;
-    Calendar::UserCalendar calendarFromComboModelIndex(const int index) const;
+    // Filters
+    bool filterUserCalendarEvents(const QVariant &calendarUid);
 
 public Q_SLOTS:
     void clearAll();
@@ -103,14 +103,14 @@ private:
     int createUid() const;
     void getItemFromDatabase(const QDate &from, const QDate &to, const int calendarId) const;
 
-private Q_SLOTS:
-    void userChanged();
+//private Q_SLOTS:
+//    void userChanged();
 
 private:
     mutable QList<Internal::Appointement *> m_sortedByBeginList;
     mutable QList<Internal::Appointement *> m_sortedByEndList;
-    mutable QList<Calendar::UserCalendar*> m_UserCalendar;
     mutable QVector<QDate> m_RetrievedDates;
+    QVariant m_CalendarUid;
 };
 
 }  // End namespace Agenda

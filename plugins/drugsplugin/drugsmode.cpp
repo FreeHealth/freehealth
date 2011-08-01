@@ -56,6 +56,7 @@ DrugsMode::DrugsMode(QObject *parent) :
     setIcon(theme()->icon(Core::Constants::ICONDRUGMODE, Core::ITheme::BigIcon));
     setPriority(Core::Constants::P_MODE_PATIENT_DRUGS);
     setUniqueModeName(Core::Constants::MODE_PATIENT_DRUGS);
+    setPatientBarVisibility(true);
 //    const QList<int> &context;
 //    setContext();
     setWidget(m_Holder);

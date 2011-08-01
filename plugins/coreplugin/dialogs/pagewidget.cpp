@@ -63,6 +63,7 @@
 #include <QPushButton>
 #include <QLabel>
 #include <QTreeWidgetItem>
+#include <QScrollArea>
 
 #include <QDebug>
 
@@ -93,8 +94,20 @@ PageWidget::PageWidget(QWidget *parent) :
         this, SLOT(pageSelected()));
 }
 
-void PageWidget::setupUi(bool treeView)
+/** Setup the ui. You can specify if you want the category view to be sorted or not using the \e sortCategoryView. */
+void PageWidget::setupUi(bool sortCategoryView)
 {
+    // clear ui
+    m_ui->pageTree->clear();
+    m_AddedWidgets.clear();  // widgets are deleted with the "delete w" above.
+    for(int i = m_ui->stackedPages->count(); i > -1; --i) {
+        QWidget *w = m_ui->stackedPages->widget(i);
+        m_ui->stackedPages->removeWidget(w);
+        delete w;
+        w = 0;
+    }
+
+    // create ui
     QString initialCategory = m_currentCategory;
     QString initialPage = m_currentPage;
     if (initialCategory.isEmpty() && initialPage.isEmpty() && !m_settingKey.isEmpty()) {
@@ -110,8 +123,6 @@ void PageWidget::setupUi(bool treeView)
         pageData.index = index;
         pageData.category = page->category();
         pageData.id = page->id();
-
-        qWarning() << page << page->id() << index;
 
         QTreeWidgetItem *item = new QTreeWidgetItem;
         item->setText(0, page->name());
@@ -164,19 +175,21 @@ void PageWidget::setupUi(bool treeView)
     sizes << 150 << 300;
     m_ui->splitter->setSizes(sizes);
 
-    if (treeView)
+    if (sortCategoryView)
         m_ui->pageTree->sortItems(0, Qt::AscendingOrder);
 
     m_ui->splitter->setStretchFactor(m_ui->splitter->indexOf(m_ui->pageTree), 0);
     m_ui->splitter->setStretchFactor(m_ui->splitter->indexOf(m_ui->layoutWidget), 1);
 
     m_ui->stackedPages->layout()->setMargin(0);
-    m_ui->stackedPages->layout()->setSpacing(0);
+    m_ui->layoutWidget->layout()->setContentsMargins(12,0,12,0);
+//    m_ui->stackedPages->layout()->setSpacing(0);
 
     // resize and center window
     Utils::resizeAndCenter(this);
 }
 
+/** Expand all categories in the category treeView. */
 void PageWidget::expandAllCategories()
 {
     m_ui->pageTree->expandAll();
@@ -196,8 +209,9 @@ QWidget *PageWidget::createPageWidget(IGenericPage *page)
     QWidget *w = new QWidget(this);
     QVBoxLayout *lay = new QVBoxLayout(w);
     lay->setMargin(0);
-    lay->setContentsMargins(0,0,0,0);
+//    lay->setContentsMargins(0,0,0,0);
     w->setLayout(lay);
+
     // add title and line
     QFont bold;
     bold.setBold(true);
@@ -215,18 +229,32 @@ QWidget *PageWidget::createPageWidget(IGenericPage *page)
     line->setFrameShadow(QFrame::Sunken);
     lay->addWidget(title);
     lay->addWidget(line);
+
+    // add a scrollarea with the widget's page to add
     QWidget *p = page->createPage(w);
+    m_AddedWidgets << p;
     p->setSizePolicy(QSizePolicy::Expanding, QSizePolicy::Expanding);
-    lay->addWidget(p);
+    if (p->layout())
+        p->layout()->setMargin(0);
+    QScrollArea *scroll = new QScrollArea(w);
+    scroll->setWidget(p);
+    scroll->setWidgetResizable(true);
+    scroll->setFrameShape(QFrame::NoFrame);
+    lay->addWidget(scroll);
+
+//    QFrame *bottomline = new QFrame(w);
+//    bottomline->setFrameShape(QFrame::HLine);
+//    bottomline->setFrameShadow(QFrame::Sunken);
+//    lay->addWidget(bottomline);
+
     return w;
 }
 
+/** Slot connected to the page selection. */
 void PageWidget::pageSelected()
 {
     QTreeWidgetItem *item = m_ui->pageTree->currentItem();
     PageData data = item->data(0, Qt::UserRole).value<PageData>();
-
-    qWarning() << "selected" << data.id << data.index;
 
     int index = data.index;
     m_currentCategory = data.category;
@@ -234,6 +262,7 @@ void PageWidget::pageSelected()
     m_ui->stackedPages->setCurrentIndex(index);
 }
 
+/** Return the current selected and activated page. */
 IGenericPage *PageWidget::currentPage() const
 {
     QTreeWidgetItem *item = m_ui->pageTree->currentItem();
@@ -243,12 +272,19 @@ IGenericPage *PageWidget::currentPage() const
     return 0;
 }
 
+/** Save the state of the widget */
 void PageWidget::saveState()
 {
     if (!m_settingKey.isEmpty()) {
         settings()->setValue(m_settingKey+"/LastCategory", m_currentCategory);
         settings()->setValue(m_settingKey+"/LastPage", m_currentPage);
     }
+}
+
+/** Return the list of all added widgets from the selected pages */
+QList<QWidget *> PageWidget::pageWidgets() const
+{
+    return m_AddedWidgets;
 }
 
 void PageWidget::changeEvent(QEvent *event)

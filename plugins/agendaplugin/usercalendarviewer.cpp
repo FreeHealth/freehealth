@@ -25,28 +25,30 @@
  ***************************************************************************/
 
 /**
-  \class Agenda::UserAgendasViewer
-  \brief Calendar::UserCalendar widget viewer for FreeMedForms.
+  \class Agenda::UserCalendarViewer
+  \brief Agenda::UserCalendar widget viewer for FreeMedForms.
   This widget presents:
   - a left bar with some usercalendar informations, plus automated next availabilities calculation
   - a central Calendar::CalendarViewer
 */
 
-#include "useragendasviewer.h"
+#include "usercalendarviewer.h"
 #include "agendabase.h"
 #include "constants.h"
 #include "calendaritemmodel.h"
+#include "usercalendar.h"
+#include "usercalendarmodel.h"
+#include "agendacore.h"
 
 #include <coreplugin/icore.h>
 #include <coreplugin/iuser.h>
 #include <coreplugin/ipatient.h>
 
-#include <calendar/usercalendar.h>
 #include <calendar/basic_item_edition_dialog.h>
 
 #include <translationutils/constanttranslations.h>
 
-#include "ui_useragendasviewer.h"
+#include "ui_usercalendarviewer.h"
 
 #include <QStandardItemModel>
 
@@ -57,65 +59,78 @@ using namespace Trans::ConstantTranslations;
 static inline Core::IUser *user() {return Core::ICore::instance()->user();}
 static inline Core::IPatient *patient() {return Core::ICore::instance()->patient();}
 static inline Agenda::Internal::AgendaBase *base() {return Agenda::Internal::AgendaBase::instance();}
+static inline Agenda::AgendaCore *agendaCore() {return Agenda::AgendaCore::instance();}
 
 namespace Agenda {
 namespace Internal {
-class UserAgendasViewerPrivate
+class UserCalendarViewerPrivate
 {
 public:
-    UserAgendasViewerPrivate(UserAgendasViewer *parent) :
-            ui(new Ui::UserAgendasViewer),
-            m_Model(new Agenda::CalendarItemModel(parent)),
-            q(parent)
+    UserCalendarViewerPrivate(UserCalendarViewer *parent) :
+        ui(new Ui::UserCalendarViewer),
+        m_CalendarItemModel(0),
+        m_UserCalendarModel(agendaCore()->userCalendarModel(user()->uuid())),
+        q(parent)
     {
-    }
-
-    ~UserAgendasViewerPrivate()
-    {
-        delete ui;
-        if (m_Model) {
-            delete m_Model;
-            m_Model = 0;
+        UserCalendar *u = m_UserCalendarModel->defaultUserCalendar();
+        if (u) {
+            agendaCore()->calendarItemModel(u->uid());
         }
     }
 
-    void populateCalendarWithCurrentWeek(Calendar::UserCalendar *calendar)
+    ~UserCalendarViewerPrivate()
     {
-        ui->calendarViewer->setModel(m_Model);
+        delete ui;
+//        if (m_CalendarItemModel) {
+//            delete m_CalendarItemModel;
+//            m_CalendarItemModel = 0;
+//        }
+//        if (m_UserCalendarModel) {
+//            delete m_UserCalendarModel;
+//            m_UserCalendarModel = 0;
+//        }
+    }
+
+    void populateCalendarWithCurrentWeek(Agenda::UserCalendar *calendar)
+    {
+        ui->calendarViewer->setModel(m_CalendarItemModel);
     }
 
 
 public:
-    Ui::UserAgendasViewer *ui;
-    CalendarItemModel *m_Model;
+    Ui::UserCalendarViewer *ui;
+    CalendarItemModel *m_CalendarItemModel;
+    UserCalendarModel *m_UserCalendarModel;
     QHash<QString, int> m_UidToListIndex;
 
 private:
-    UserAgendasViewer *q;
+    UserCalendarViewer *q;
 };
 
 }  // End namespace Internal
 }  // End namespace Agenda
 
 
-UserAgendasViewer::UserAgendasViewer(QWidget *parent) :
+UserCalendarViewer::UserCalendarViewer(QWidget *parent) :
     QWidget(parent),
-    d(new UserAgendasViewerPrivate(this))
+    d(new UserCalendarViewerPrivate(this))
 {
     d->ui->setupUi(this);
     d->ui->calendarViewer->setDate(QDate::currentDate().addDays(3));
-    d->ui->calendarViewer->setModel(d->m_Model);
+    d->ui->calendarViewer->setModel(d->m_CalendarItemModel);
 
-    Calendar::UserCalendar cal = d->m_Model->defaultUserCalendar();
     // populate the availabilities duration selector combo (every five minutes)
     for(int i = 1; i < 19; ++i) {
         d->ui->availDurationCombo->addItem(QString("%1 %2").arg(i*5).arg(tkTr(Trans::Constants::MINUTES)));
     }
     connect(d->ui->availDurationCombo, SIGNAL(activated(int)), this, SLOT(recalculateAvailabilitiesWithDurationIndex(int)));
 
-    if (cal.isValid()) {
-        d->ui->description->setHtml(cal.data(Calendar::UserCalendar::Description).toString());
-        d->ui->durationLabel->setText(cal.data(Calendar::UserCalendar::DefaultDuration).toString());
+    Agenda::UserCalendar *cal = d->m_UserCalendarModel->defaultUserCalendar();
+    if (cal) {
+        if (cal->isValid()) {
+            d->ui->description->setHtml(cal->data(Agenda::UserCalendar::Description).toString());
+            d->ui->durationLabel->setText(cal->data(Agenda::UserCalendar::DefaultDuration).toString());
+        }
     }
 
     int width = size().width();
@@ -127,7 +142,7 @@ UserAgendasViewer::UserAgendasViewer(QWidget *parent) :
     userChanged();
 }
 
-UserAgendasViewer::~UserAgendasViewer()
+UserCalendarViewer::~UserCalendarViewer()
 {
     if (d) {
         delete d;
@@ -136,27 +151,30 @@ UserAgendasViewer::~UserAgendasViewer()
 }
 
 /** When the user select an availability in the toolButton, this slot is activated. Open a EventEditor dialog and save the item in the CalendarItemModel if the dialog is accepted. */
-void UserAgendasViewer::newEventAtAvailabity(QAction *action)
+void UserCalendarViewer::newEventAtAvailabity(QAction *action)
 {
-    Calendar::BasicItemEditionDialog dlg(d->m_Model, this);
+    Calendar::BasicItemEditionDialog dlg(d->m_CalendarItemModel, this);
     QDateTime start = action->data().toDateTime();
-    Calendar::CalendarItem item = d->m_Model->insertItem(start, start.addSecs((d->ui->availDurationCombo->currentIndex()+1)*5*60));
+    Calendar::CalendarItem item = d->m_CalendarItemModel->insertItem(start, start.addSecs((d->ui->availDurationCombo->currentIndex()+1)*5*60));
     dlg.init(item);
     if (dlg.exec() != QDialog::Accepted) {
-        d->m_Model->removeItem(item.uid());
+        d->m_CalendarItemModel->removeItem(item.uid());
     }
 }
 
-void UserAgendasViewer::recalculateAvailabilitiesWithDurationIndex(const int index)
+void UserCalendarViewer::recalculateAvailabilitiesWithDurationIndex(const int index)
 {
     /** \todo Create a tree model for the nextAvailableDates */
 
     for(int i = 1; i < d->ui->availButton->actions().count(); ++i)
         d->ui->availButton->removeAction(d->ui->availButton->actions().at(i));
 
-    Calendar::UserCalendar cal = d->m_Model->defaultUserCalendar();
-    // Next available dates
-    QList<QDateTime> dates = base()->nextAvailableTime(QDateTime::currentDateTime(), index*5, cal, 5);
+    QList<QDateTime> dates;
+    Agenda::UserCalendar *cal = d->m_UserCalendarModel->defaultUserCalendar();
+    if (cal) {
+        // Next available dates
+        dates = base()->nextAvailableTime(QDateTime::currentDateTime(), index*5, *cal, 5);
+    }
     d->ui->nextAvailCombo->clear();
     for(int i = 0; i < dates.count(); ++i) {
         QAction *a = new QAction(d->ui->availButton);
@@ -168,26 +186,39 @@ void UserAgendasViewer::recalculateAvailabilitiesWithDurationIndex(const int ind
     }
 }
 
-void UserAgendasViewer::on_availableAgendasCombo_activated(const int index)
+void UserCalendarViewer::on_availableAgendasCombo_activated(const int index)
 {
+    qWarning() << Q_FUNC_INFO;
+    if (index > 0 && index < d->m_UserCalendarModel->rowCount()) {
+        QVariant uid = d->m_UserCalendarModel->index(index, UserCalendarModel::Uid).data();
+        if (uid.isNull())
+            return;
+        if (!uid.isValid())
+            return;
+        qWarning() << d->m_UserCalendarModel << d->m_CalendarItemModel << index << uid;
+        d->m_CalendarItemModel = agendaCore()->calendarItemModel(uid);
+    }
 //    d->populateCalendarWithCurrentWeek(d->m_UserCals.at(index));
 }
 
-void UserAgendasViewer::userChanged()
+void UserCalendarViewer::userChanged()
 {
-    Calendar::UserCalendar cal = d->m_Model->defaultUserCalendar();
-
     d->ui->userNameLabel->setText(user()->value(Core::IUser::FullName).toString());
     // model is automatically updated and reseted but the userCalendar combo model
-    d->ui->availableAgendasCombo->setModel(d->m_Model->userCalendarComboModel(this));
-    d->ui->availableAgendasCombo->setCurrentIndex(d->m_Model->defaultUserCalendarComboModelIndex());
+    d->ui->availableAgendasCombo->setModel(d->m_UserCalendarModel);
+    d->ui->availableAgendasCombo->setCurrentIndex(d->m_UserCalendarModel->defaultUserCalendarModelIndex().row());
 
     // Add availabilities
-    d->ui->availabilitiesView->setModel(cal.availabilitiesModel(this));
-    d->ui->availabilitiesView->expandAll();
+    /** \todo code here */
+//    d->ui->availabilitiesView->setModel(cal.availabilitiesModel(this));
+//    d->ui->availabilitiesView->expandAll();
 
     // Next available dates
-    int duration = cal.data(Calendar::UserCalendar::DefaultDuration).toInt();
+    Agenda::UserCalendar *cal = d->m_UserCalendarModel->defaultUserCalendar();
+    int duration = 5;
+    if (cal) {
+         duration = cal->data(Agenda::UserCalendar::DefaultDuration).toInt();
+    }
     if (duration%5)
         duration = (duration/5);
     else
@@ -196,7 +227,7 @@ void UserAgendasViewer::userChanged()
     recalculateAvailabilitiesWithDurationIndex(duration);
 }
 
-void UserAgendasViewer::changeEvent(QEvent *e)
+void UserCalendarViewer::changeEvent(QEvent *e)
 {
     QWidget::changeEvent(e);
     switch (e->type()) {

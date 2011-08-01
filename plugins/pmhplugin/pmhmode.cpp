@@ -251,6 +251,8 @@ PmhMode::PmhMode(QObject *parent) :
     setIcon(theme()->icon(Core::Constants::ICONPATIENTHISTORY, Core::ITheme::BigIcon));
     setPriority(Core::Constants::P_MODE_PATIENT_HISTORY);
     setUniqueModeName(Core::Constants::MODE_PATIENT_HISTORY);
+    setPatientBarVisibility(true);
+
 //    const QList<int> &context;
 //    setContext();
 

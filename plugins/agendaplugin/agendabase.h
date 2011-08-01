@@ -28,14 +28,13 @@
 #define AGENDABASE_H
 
 #include <utils/database.h>
-#include <calendar/usercalendar.h>
+#include <agendaplugin/usercalendar.h>
 
 #include <QObject>
 #include <QDateTime>
 #include <QString>
 #include <QVariant>
 #include <QList>
-
 
 /**
  * \file agendabase.h
@@ -127,21 +126,21 @@ private Q_SLOTS:
     void onCoreDatabaseServerChanged();
 
 public:
-    QList<Calendar::UserCalendar *> getUserCalendars(const QString &userUuid = QString::null);
-    bool saveUserCalendar(Calendar::UserCalendar *calendar);
+    QList<Agenda::UserCalendar *> getUserCalendars(const QString &userUuid = QString::null);
+    bool saveUserCalendar(Agenda::UserCalendar *calendar);
 
     QList<Appointement *> getCalendarEvents(const CalendarEventQuery &query);
     bool saveCalendarEvents(const QList<Appointement *> &events);
     bool saveCalendarEvent(Appointement *event);
 
-    QList<QDateTime> nextAvailableTime(const QDateTime &startSearch, const int durationInMinutes, const Calendar::UserCalendar &calendar, const int numberOfDates);
-    QDateTime nextAvailableTime(const QDateTime &startSearch, const int durationInMinutes, const Calendar::UserCalendar &calendar);
+    QList<QDateTime> nextAvailableTime(const QDateTime &startSearch, const int durationInMinutes, const Agenda::UserCalendar &calendar, const int numberOfDates);
+    QDateTime nextAvailableTime(const QDateTime &startSearch, const int durationInMinutes, const Agenda::UserCalendar &calendar);
 
     bool getPatientNames(const QList<Appointement *> &items);
     bool getPatientNames(Appointement *item);
 
 private:
-    bool saveCalendarAvailabilities(Calendar::UserCalendar *calendar);
+    bool saveCalendarAvailabilities(Agenda::UserCalendar *calendar);
     bool saveEventRelatedPeoples(const Appointement *event);
     bool getRelatedPeoples(Appointement *event);
     bool saveCommonEvent(Appointement *event);

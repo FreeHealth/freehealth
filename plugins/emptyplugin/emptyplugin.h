@@ -33,8 +33,8 @@
 /**
  * \file emptyplugin.h
  * \author Eric MAEKER <eric.maeker@gmail.com>
- * \version 0.4.0
- * \date 19 Apr 2010
+ * \version 0.6.0
+ * \date 01 Aug 2011
 */
 
 namespace Empty {
@@ -48,6 +48,9 @@ public:
 
     bool initialize(const QStringList &arguments, QString *errorString);
     void extensionsInitialized();
+
+private Q_SLOTS:
+    void postCoreInitialization();
 };
 
 

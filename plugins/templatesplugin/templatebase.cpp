@@ -207,24 +207,7 @@ TemplateBase::TemplateBase(QObject *parent)
     addField(Table_Templates, TEMPLATE_THEMEDICON,       "THEMED_ICON_FILENAME", FieldIsShortText);
     addField(Table_Templates, TEMPLATE_TRANSMISSIONDATE, "TRANSMISSION_DATE",    FieldIsDate);
 
-    /** \todo DB schema :: Update Templates::USER_UID from int to varchar */
-    /** \todo DB schema :: Add UserGroupUid */
-
-//            "CREATE TABLE IF NOT EXISTS `TEMPLATES` ("
-//            "`TEMPLATE_ID`              INTEGER        PRIMARY KEY AUTOINCREMENT,"
-//            "`TEMPLATE_UUID`            varchar(40)    NULL,"
-//            "`USER_UUID`                int(11)        NULL,"           //  NEEDS UPDATE FROM 0.3.0 TO 0.4.0
-//            "`ID_CATEGORY`              int(11)        DEFAULT -1,"
-//            "`LABEL`                    varchar(300)   NULL,"
-//            "`SUMMARY`                  varchar(500)   NULL,"
-//            "`CONTENT`                  blob           NULL,"
-//            "`CONTENT_MIMETYPES`        varchar(300)   NULL,"
-//            "`DATE_CREATION`            date           NULL,"
-//            "`DATE_MODIFICATION`        date           NULL,"
-//            "`THEMED_ICON_FILENAME`     varchar(50)    NULL,"
-//            "`TRANSMISSION_DATE`        date           NULL"
-//            ");"
-
+    /** \todo code here : use the category plugin */
     addField(Table_Categories,  CATEGORIES_ID,               "CATEGORY_ID",          FieldIsUniquePrimaryKey);
     addField(Table_Categories,  CATEGORIES_UUID,             "CATEGORY_UUID",        FieldIsUUID);
     addField(Table_Categories,  CATEGORIES_USER_UID,         "USER_UUID",            FieldIsUUID);
@@ -240,25 +223,7 @@ TemplateBase::TemplateBase(QObject *parent)
 
     /** \todo DB Schema :: Add USerGroupUid */
 
-//            "CREATE TABLE IF NOT EXISTS `CATEGORIES` ("
-//            "`CATEGORY_ID`              INTEGER        PRIMARY KEY AUTOINCREMENT,"
-//            "`CATEGORY_UUID`            varchar(40)    NULL,"
-//            "`USER_UUID`                int(11)        NULL,"          //  NEEDS UPDATE FROM 0.3.0 TO 0.4.0
-//            "`PARENT_CATEGORY`          int(11)        DEFAULT -1,"
-//            "`LABEL`                    varchar(300)   NULL,"
-//            "`SUMMARY`                  varchar(500)   NULL,"
-//            "`MIMETYPES`                varchar(300)   NULL,"
-//            "`DATE_CREATION`            date           NULL,"
-//            "`DATE_MODIFICATION`        date           NULL,"
-//            "`THEMED_ICON_FILENAME`     varchar(50)    NULL,"
-//            "`TRANSMISSION_DATE`        date           NULL"
-//            ");";
-
     addField(Table_Version, VERSION_ACTUAL, "ACTUAL", FieldIsShortText);
-
-//            "CREATE TABLE IF NOT EXISTS `VERSION` ("
-//            "`ACTUAL`                  varchar(10)"
-//            ");";
 
     connect(Core::ICore::instance(), SIGNAL(databaseServerChanged()), this, SLOT(onCoreDatabaseServerChanged()));
 
@@ -282,41 +247,6 @@ bool TemplateBase::init()
     createConnection(Templates::Constants::DB_TEMPLATES_NAME, Templates::Constants::DB_TEMPLATES_NAME,
                      settings()->databaseConnector(),
                      Utils::Database::CreateDatabase);
-
-//    // Check settings --> SQLite or MySQL ?
-//    if (settings()->value(Core::Constants::S_USE_EXTERNAL_DATABASE, false).toBool()) {
-//        if (!QSqlDatabase::isDriverAvailable("QMYSQL")) {
-//            LOG_ERROR(tkTr(Trans::Constants::DATABASE_DRIVER_1_NOT_AVAILABLE).arg("MySQL"));
-//            Utils::warningMessageBox(tkTr(Trans::Constants::APPLICATION_FAILURE),
-//                                     tkTr(Trans::Constants::DATABASE_DRIVER_1_NOT_AVAILABLE_DETAIL).arg("MySQL"),
-//                                     "", qApp->applicationName());
-//            return false;
-//        }
-//        createConnection(Templates::Constants::DB_TEMPLATES_NAME,
-//                         Templates::Constants::DB_TEMPLATES_NAME,
-//                         QString(QByteArray::fromBase64(settings()->value(Core::Constants::S_EXTERNAL_DATABASE_HOST, QByteArray("localhost").toBase64()).toByteArray())),
-//                         Utils::Database::ReadWrite,
-//                         Utils::Database::MySQL,
-//                         QString(QByteArray::fromBase64(settings()->value(Core::Constants::S_EXTERNAL_DATABASE_LOG, QByteArray("root").toBase64()).toByteArray())),
-//                         QString(QByteArray::fromBase64(settings()->value(Core::Constants::S_EXTERNAL_DATABASE_PASS, QByteArray("").toBase64()).toByteArray())),
-//                         QString(QByteArray::fromBase64(settings()->value(Core::Constants::S_EXTERNAL_DATABASE_PORT, QByteArray("").toBase64()).toByteArray())).toInt(),
-//                         Utils::Database::CreateDatabase);
-//    } else {
-//        if (!QSqlDatabase::isDriverAvailable("QSQLITE")) {
-//            LOG_ERROR(tkTr(Trans::Constants::DATABASE_DRIVER_1_NOT_AVAILABLE).arg("SQLite"));
-//            Utils::warningMessageBox(tkTr(Trans::Constants::APPLICATION_FAILURE),
-//                                     tkTr(Trans::Constants::DATABASE_DRIVER_1_NOT_AVAILABLE_DETAIL).arg("SQLite"),
-//                                     "", qApp->applicationName());
-//            return false;
-//        }
-//        createConnection(Templates::Constants::DB_TEMPLATES_NAME,
-//                         Templates::Constants::DB_TEMPLATES_FILENAME,
-//                         settings()->path(Core::ISettings::ReadWriteDatabasesPath) + QDir::separator() + QString(Templates::Constants::DB_TEMPLATES_NAME),
-//                         Utils::Database::ReadWrite,
-//                         Utils::Database::SQLite,
-//                         "log", "pas", 0,
-//                         Utils::Database::CreateDatabase);
-//    }
 
     if (!database().isOpen()) {
         if (!database().open()) {

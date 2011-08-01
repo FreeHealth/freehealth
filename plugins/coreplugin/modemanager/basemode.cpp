@@ -67,6 +67,7 @@ using namespace Core;
     \endcode
 */
 
+
 /*!
     \fn BaseMode::BaseMode(QObject *parent)
 
@@ -78,7 +79,8 @@ using namespace Core;
 BaseMode::BaseMode(QObject *parent):
     IMode(parent),
     m_priority(0),
-    m_widget(0)
+    m_widget(0),
+    m_PatientBarVisibility(true)
 {
 }
 
@@ -91,3 +93,4 @@ BaseMode::~BaseMode()
         delete m_widget;
     m_widget = 0;
 }
+

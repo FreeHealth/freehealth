@@ -272,6 +272,7 @@ enum TitleInterpret {
         const char* const VIEWINTERACTIONS_TEXT         = QT_TRANSLATE_NOOP("tkConstants", "View synthetic interactions");
         const char* const FROM                          = QT_TRANSLATE_NOOP("tkConstants", "from");
         const char* const TO                            = QT_TRANSLATE_NOOP("tkConstants", "to");
+        const char* const FROM_1_TO_2                   = QT_TRANSLATE_NOOP("tkConstants", "from %1 to %2");
         const char* const DURING                        = QT_TRANSLATE_NOOP("tkConstants", "during");
         const char* const EACH                          = QT_TRANSLATE_NOOP("tkConstants", "each");
         const char* const AND                           = QT_TRANSLATE_NOOP("tkConstants", "and");
@@ -531,6 +532,7 @@ enum TitleInterpret {
         const char * const AGENDA_EVENT = QT_TRANSLATE_NOOP("tkConstants", "Agenda event");
         const char * const AGENDA_EVENTS = QT_TRANSLATE_NOOP("tkConstants", "Agenda events");
         const char * const AGENDA_DATABASE_INFORMATIONS = QT_TRANSLATE_NOOP("tkConstants", "Agenda database informations");
+        const char * const NO_AVAILABILITY = QT_TRANSLATE_NOOP("tkConstants", "No availability");
         // Status
         const char * const ARRIVED = QT_TRANSLATE_NOOP("tkConstants", "Arrived");
         const char * const CANCELLED = QT_TRANSLATE_NOOP("tkConstants", "Cancelled");
@@ -564,13 +566,16 @@ enum TitleInterpret {
         const char* const FEMALE        = QT_TRANSLATE_NOOP("tkConstants", "Female");
         const char* const HERMAPHRODISM = QT_TRANSLATE_NOOP("tkConstants", "Hermaphrodism");
 
-        // Titles
+        // Titles && professions
         const char* const MISTER      = QT_TRANSLATE_NOOP("tkConstants", "Mister");
         const char* const MISS        = QT_TRANSLATE_NOOP("tkConstants", "Miss");
         const char* const MADAM       = QT_TRANSLATE_NOOP("tkConstants", "Madam");
         const char* const DOCTOR      = QT_TRANSLATE_NOOP("tkConstants", "Doctor");
         const char* const PROFESSOR   = QT_TRANSLATE_NOOP("tkConstants", "Professor");
         const char* const CAPTAIN     = QT_TRANSLATE_NOOP("tkConstants", "Captain");
+        const char* const NURSE       = QT_TRANSLATE_NOOP("tkConstants", "Nurse");
+        const char* const SECRETARY   = QT_TRANSLATE_NOOP("tkConstants", "Secertary");
+        const char* const CAREGIVER   = QT_TRANSLATE_NOOP("tkConstants", "Caregiver");
 
         // ShortCut keys
          /*: Text Align Left shortcut key */

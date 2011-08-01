@@ -56,6 +56,7 @@ FormManagerMode::FormManagerMode(QObject *parent) :
     setIcon(theme()->icon(Core::Constants::ICONPATIENTFILES, Core::ITheme::BigIcon));
     setPriority(Core::Constants::P_MODE_PATIENT_FILE);
     setUniqueModeName(Core::Constants::MODE_PATIENT_FILE);
+    setPatientBarVisibility(true);
 
     m_Holder = new FormPlaceHolder;
     m_Holder->setObjectName("EpisodesFormPlaceHolder");

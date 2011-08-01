@@ -356,7 +356,6 @@ public:
         if (!query.engineUid.isEmpty() && query.engineUid!=Constants::PIM_ENGINE_UID) {
             return QIcon();
         }
-        int levelOfWarning = query.levelOfWarningStaticAlert;
 //        int level = getMaximumTypeOfIAM(m_Result->interactions(), drug);
         Core::ITheme *th = theme();
         Core::ITheme::IconSize size = Core::ITheme::IconSize(query.iconSize);
@@ -433,7 +432,7 @@ public:
                     pim->warn();
 
                     // get the line related to the level of pim
-                    int typeId = pim->value(PimInteraction::PIM_Level).toInt();
+//                    int typeId = pim->value(PimInteraction::PIM_Level).toInt();
 
                     /** \todo manage levelOfWarning */
 
@@ -461,7 +460,7 @@ public:
                 // for each level
                 QString levelLine;
                 QString riskLine;
-                int rows = 0;
+//                int rows = 0;
                 foreach(const int level, levelLines.keys()) {
                     riskLine.clear();
                     levelLine = QString("<tr>\n"
@@ -673,7 +672,6 @@ int PimEngine::calculateInteractions(const QVector<IDrug *> &drugs)
 //    }
     int nbPimNonDoseRelated = 0;
     int nbPimDoseRelated = 0;
-    int icdRel = 0;
     d->m_TestedDrugs = drugs;
 
     // For all drugs, make ATC_ID / ICD_SID tests

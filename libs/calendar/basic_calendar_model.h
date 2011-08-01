@@ -30,8 +30,8 @@
 
 #include <QPair>
 
-#include "calendar_item.h"
-#include "abstract_calendar_model.h"
+#include <calendar/calendar_item.h>
+#include <calendar/abstract_calendar_model.h>
 
 namespace Calendar {
 	/**
@@ -56,14 +56,14 @@ namespace Calendar {
 
 		void clearAll();
 
-                Calendar::UserCalendar calendar(const Calendar::CalendarItem &item) const {return UserCalendar();}
-                bool updateUserCalendar(const Calendar::UserCalendar &calendar) {return false;}
-                Calendar::UserCalendar addUserCalendar(const Calendar::UserCalendar &userCalendar) {return UserCalendar();}
-                virtual Calendar::UserCalendar defaultUserCalendar() const {return UserCalendar();}
+//                Calendar::UserCalendar calendar(const Calendar::CalendarItem &item) const {return UserCalendar();}
+//                bool updateUserCalendar(const Calendar::UserCalendar &calendar) {return false;}
+//                Calendar::UserCalendar addUserCalendar(const Calendar::UserCalendar &userCalendar) {return UserCalendar();}
+//                virtual Calendar::UserCalendar defaultUserCalendar() const {return UserCalendar();}
 
-                QAbstractItemModel *userCalendarComboModel(QObject *) const {return 0;}
-                int defaultUserCalendarComboModelIndex() const {return -1;}
-                Calendar::UserCalendar calendarFromComboModelIndex(const int index) const {return UserCalendar();}
+//                QAbstractItemModel *userCalendarComboModel(QObject *) const {return 0;}
+//                int defaultUserCalendarComboModelIndex() const {return -1;}
+//                Calendar::UserCalendar calendarFromComboModelIndex(const int index) const {return UserCalendar();}
 
 	private:
 		QList<CalendarItem*> m_sortedByBeginList;

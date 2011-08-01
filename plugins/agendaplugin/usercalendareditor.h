@@ -19,51 +19,66 @@
  *  If not, see <http://www.gnu.org/licenses/>.                            *
  ***************************************************************************/
 /***************************************************************************
- *   Main Developper : Eric MAEKER, <eric.maeker@gmail.com>                *
+ *   Main Developpers :                                                    *
+ *       Guillaume Denry <guillaume.denry@gmail.com>                       *
+ *       Eric MAEKER, MD <eric.maeker@gmail.com>                           *
  *   Contributors :                                                        *
  *       NAME <MAIL@ADRESS>                                                *
  ***************************************************************************/
-#ifndef USERAGENDASVIEWER_H
-#define USERAGENDASVIEWER_H
+#ifndef USERCALENDAREDITOR_H
+#define USERCALENDAREDITOR_H
+
+#include <agendaplugin/agenda_exporter.h>
 
 #include <QWidget>
+#include <QDataWidgetMapper>
+
+/**
+ * \file usercalendareditor.h
+ * \author Eric MAEKER <eric.maeker@gmail.com>
+ * \version 0.6.0
+ * \date 25 Jul 2011
+*/
 
 namespace Calendar {
-    class UserCalendar;
+class AbstractCalendarModel;
 }
 
 namespace Agenda {
+class UserCalendar;
+class UserCalendarModel;
+class DayAvailabilityModel;
 
-namespace Internal {
-class UserAgendasViewerPrivate;
+namespace Ui {
+class UserCalendarEditorWidget;
+}
 
-class UserAgendasViewer : public QWidget
+class AGENDA_EXPORT UserCalendarEditorWidget : public QWidget
 {
     Q_OBJECT
 
 public:
-    enum AgendaOwner {
-        OwnAgendas = 0,
-        DelegatedAgendas
-    };
+    explicit UserCalendarEditorWidget(QWidget *parent = 0);
+    ~UserCalendarEditorWidget();
 
-    explicit UserAgendasViewer(QWidget *parent = 0);
-    ~UserAgendasViewer();
+    void setUserCalendarModel(UserCalendarModel *model);
 
-private Q_SLOTS:
-    void newEventAtAvailabity(QAction *action);
-    void recalculateAvailabilitiesWithDurationIndex(const int index);
-    void on_availableAgendasCombo_activated(const int index);
-    void userChanged();
+public Q_SLOTS:
+    void setCurrentIndex(const QModelIndex &index);
+    void submit();
+    void revert();
 
 protected:
     void changeEvent(QEvent *e);
 
 private:
-    UserAgendasViewerPrivate *d;
+    Ui::UserCalendarEditorWidget *ui;
+    UserCalendarModel *m_UserCalendarModel;
+    DayAvailabilityModel *m_AvailabilityModel;
+    QDataWidgetMapper *m_Mapper;
 };
 
-}  // End namespace Internal
 }  // End namespace Agenda
 
-#endif // USERAGENDASVIEWER_H
+
+#endif // USERCALENDAREDITOR_H

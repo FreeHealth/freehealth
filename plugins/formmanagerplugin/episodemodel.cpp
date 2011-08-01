@@ -269,7 +269,6 @@ namespace {
 namespace Form {
 namespace Internal {
 
-
     EpisodeModelCoreListener::EpisodeModelCoreListener(Form::EpisodeModel *parent) :
             Core::ICoreListener(parent)
     {
@@ -432,6 +431,7 @@ public:
         /** \todo add LIMIT to SQL command */
         QHash<int, QString> where;
         where.insert(Constants::EPISODES_PATIENT_UID, QString("='%1'").arg(m_CurrentPatient));
+        where.insert(Constants::EPISODES_ISVALID, "=1");
         foreach(Form::FormMain *f, formsItems.keys()) {
             TreeItem *parent = formsItems.value(f);
             where.insert(Constants::EPISODES_FORM_PAGE_UID, QString("='%1'").arg(f->uuid()));
@@ -451,6 +451,7 @@ public:
                 QList<TreeItem *> items;
                 while (query.next()) {
                     datas.insert(EpisodeModel::Id, query.value(0));
+                    datas.insert(EpisodeModel::IsValid, 1);
                     datas.insert(EpisodeModel::Date, query.value(1));
                     datas.insert(EpisodeModel::FormUuid, f->uuid());
                     datas.insert(EpisodeModel::Label, query.value(2));
@@ -515,6 +516,9 @@ public:
         query.bindValue(Constants::EPISODES_ID, QVariant());
         query.bindValue(Constants::EPISODES_PATIENT_UID, m_CurrentPatient);
         query.bindValue(Constants::EPISODES_LK_TOPRACT_LKID, m_LkIds.toInt());
+        /** \todo code here */
+        query.bindValue(Constants::EPISODES_ISVALID, 1);
+        /** */
         query.bindValue(Constants::EPISODES_FORM_PAGE_UID, formUid);
         query.bindValue(Constants::EPISODES_LABEL, item->data(EpisodeModel::Label));
         query.bindValue(Constants::EPISODES_DATE, item->data(EpisodeModel::Date));
@@ -1223,10 +1227,7 @@ QModelIndex EpisodeModel::indexForForm(const QString &formUid) const
     return QModelIndex();
 }
 
-/**
-  Save the whole model
-  \sa isDirty()
- */
+/** Save the whole model. \sa isDirty() */
 bool EpisodeModel::submit()
 {
     // No active patient ?
@@ -1317,6 +1318,7 @@ bool EpisodeModel::activateEpisode(const QModelIndex &index, const QString &form
     return true;
 }
 
+/** Save the episode pointed by the \e index to the database. */
 bool EpisodeModel::saveEpisode(const QModelIndex &index, const QString &formUid)
 {
     return d->saveEpisode(d->getItem(index), formUid);

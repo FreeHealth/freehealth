@@ -30,11 +30,13 @@
  *      NAME <MAIL@ADRESS>                                                 *
  ***************************************************************************/
 #include "receiptsIO.h"
+
 #include <accountbaseplugin/constants.h>
+
+#include <utils/database.h>
 
 #include <QSqlDriver>
 #include <QMessageBox>
-#include <QUuid>
 #include <QDate>
 #include <QSqlQuery>
 
@@ -121,8 +123,7 @@ QHash<QString,QVariant> receiptsEngine::getNamesAndValuesFromMP(){//obsolete
 
 bool receiptsEngine::insertInThesaurus(const QString &listOfValuesStr, const QString &userUuid){
     bool ret = true;
-    QUuid uuid;
-    QString uuidStr = uuid.createUuid();
+    QString uuidStr = Utils::Database::createUid();
     ThesaurusModel model(this);
     int rowBefore = model.ThesaurusModel::rowCount(QModelIndex());
     if (WarnDebugMessage)

@@ -48,7 +48,6 @@
 #include <QDir>
 #include <QLocale>
 #include <QDateTime>
-#include <QUuid>
 
 using namespace XmlForms;
 using namespace Internal;
@@ -98,6 +97,8 @@ XmlIOBase::XmlIOBase(QObject *parent) :
     addField(Table_FORMS, FORM_UUID,         "FORM_UUID",      FieldIsUUID);
     addField(Table_FORMS, FORM_ORIGINALUID,  "FORM_ORG_UUID",  FieldIsShortText);
     addField(Table_FORMS, FORM_ORIGINALDATE, "FORM_ORG_DATE",  FieldIsDate);
+    addIndex(Table_FORMS, FORM_UUID);
+    addIndex(Table_FORMS, FORM_ORIGINALUID);
 
     addField(Table_FORM_CONTENT, FORMCONTENT_ID,        "CONTENT_ID",     FieldIsUniquePrimaryKey);
     addField(Table_FORM_CONTENT, FORMCONTENT_FORM_ID,   "FORM_ID",        FieldIsInteger);
@@ -106,6 +107,8 @@ XmlIOBase::XmlIOBase(QObject *parent) :
     addField(Table_FORM_CONTENT, FORMCONTENT_ISVALID,   "ISVALID",        FieldIsBoolean);
     addField(Table_FORM_CONTENT, FORMCONTENT_ISORIGINAL,"ISORIGINAL",     FieldIsBoolean);
     addField(Table_FORM_CONTENT, FORMCONTENT_CONTENT,   "CONTENT",        FieldIsBlob);
+    addIndex(Table_FORM_CONTENT, FORMCONTENT_ID);
+    addIndex(Table_FORM_CONTENT, FORMCONTENT_FORM_ID);
 
     // informations
     addTable(Table_VERSION, "VERSION");

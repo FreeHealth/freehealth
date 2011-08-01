@@ -73,7 +73,6 @@ bool BaseWidgetsPlugin::initialize(const QStringList &arguments, QString *errorS
     Q_UNUSED(arguments);
     Q_UNUSED(errorString);
     m_Factory = new BaseWidgetsFactory(this);
-    m_OptionsPage = new Internal::BaseFormWidgetsOptionsPage(this);
     m_Factory->initialize(arguments,errorString);
     return true;
 }
@@ -82,6 +81,9 @@ void BaseWidgetsPlugin::extensionsInitialized()
 {
     if (Utils::Log::warnPluginsCreation())
         qWarning() << "BaseWidgetsPlugin::extensionsInitialized";
+
+    m_OptionsPage = new Internal::BaseFormWidgetsOptionsPage(this);
+    m_OptionsPage->checkSettingsValidity();
 
     addAutoReleasedObject(new Core::PluginAboutPage(pluginSpec(), this));
     addObject(m_Factory);

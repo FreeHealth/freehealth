@@ -69,7 +69,6 @@
 #include <QSqlError>
 #include <QApplication>
 #include <QStringList>
-#include <QUuid>
 #include <QDateTime>
 #include <QColor>
 #include <QLocale>
@@ -345,7 +344,7 @@ bool DosageModel::insertRows(int row, int count, const QModelIndex & parent)
             Utils::Log::addError(this, tr("Model Error : unable to insert a row"),__FILE__, __LINE__);
             toReturn = false;
         } else {
-            setData(index(createdRow, Dosages::Constants::Uuid), QUuid::createUuid().toString());
+            setData(index(createdRow, Dosages::Constants::Uuid), Utils::Database::createUid());
             if (drugsBase()->actualDatabaseInformations())
                 setData(index(createdRow, Dosages::Constants::DrugsDatabaseIdentifiant), drugsBase()->actualDatabaseInformations()->identifiant);
             setData(index(createdRow, Dosages::Constants::DrugUid_LK), m_UID);

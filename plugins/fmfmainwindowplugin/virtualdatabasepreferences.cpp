@@ -47,7 +47,6 @@
 #include <QDir>
 #include <QSqlDatabase>
 #include <QSqlQuery>
-#include <QUuid>
 #include <QProgressDialog>
 #include <QByteArray>
 #include <QBuffer>
@@ -122,7 +121,7 @@ static inline void createPatient(const QString &name, const QString &secondname,
         pix.save(&buffer, "PNG"); // writes image into ba in PNG format {6a247e73-c241-4556-8dc8-c5d532b8457e}
         query.prepare(patientBase()->prepareInsertQuery(Constants::Table_PATIENT_PHOTO));
         query.bindValue(Constants::PHOTO_ID, QVariant());
-        query.bindValue(Constants::PHOTO_UID, QUuid::createUuid().toString());
+        query.bindValue(Constants::PHOTO_UID, Utils::Database::createUid());
         query.bindValue(Constants::PHOTO_PATIENT_UID, uuid);
         query.bindValue(Constants::PHOTO_BLOB, ba);
         query.exec();
@@ -157,19 +156,19 @@ void VirtualDatabasePreferences::writeDefaultSettings(Core::ISettings *)
         int userLkId = 1; //userModel()->practionnerLkIds(userModel()->currentUserData(Core::IUser::Uuid).toString()).at(0);
         QString path = settings()->path(Core::ISettings::BigPixmapPath) + QDir::separator();
 
-        QString uid = QUuid::createUuid().toString();
+        QString uid = Utils::Database::createUid();
         createPatient("DOE", "Junior", "John", "M", 1, QDate(1990, 10, 20), "France", "Patient is lost...",
                       "21, street Doe", "21213", "NoWhereLand", uid, userLkId, path+"johndoe.jpg");
 
-        uid = QUuid::createUuid().toString();
+        uid = Utils::Database::createUid();
         createPatient("DOE", "ComicsGirl", "Jane", "F", 2, QDate(1985, 04, 20), "France", "SuperJane owns to an unknown user",
                       "21, street Jane", "21213", "JaneLand", uid, userLkId);
 
-        uid = QUuid::createUuid().toString();
+        uid = Utils::Database::createUid();
         createPatient("KIRK", "", "James Tiberius", "M", 6, QDate(1968, 04, 20), "USA", "USS Enterprise",
                       "21, StarFleet Command", "1968", "EarthTown", uid, userLkId, path+"captainkirk.jpg");
 
-        uid = QUuid::createUuid().toString();
+        uid = Utils::Database::createUid();
         createPatient("PICARD", "", "Jean-Luc", "M", 6, QDate(1968, 04, 20), "USA", "USS Enterprise",
                       "21, StarFleet Command", "1968", "EarthTown", uid, userLkId, path+"captainpicard.jpg");
 
@@ -226,7 +225,7 @@ void VirtualDatabasePreferences::on_populateDb_clicked()
         createPatient(name,sec, sur,g,title,
                       dob,"France","",r.getRandomString(65),
                       QString::number(p.first), p.second,
-                      QUuid::createUuid().toString(), lk, "", death);
+                      Utils::Database::createUid(), lk, "", death);
 
         if (i % 100 == 99)
             patientBase()->database().commit();

@@ -43,8 +43,6 @@
 #include <QSqlTableModel>
 #include <QSqlQuery>
 
-#include <QUuid>
-
 using namespace AccountDB;
 using namespace Constants;
 using namespace Trans::ConstantTranslations;
@@ -238,7 +236,7 @@ bool MedicalProcedureModel::insertRows(int row, int count, const QModelIndex &pa
 //        query.bindValue(AccountDB::Constants::MP_NAME, QVariant());
 //        query.bindValue(AccountDB::Constants::MP_REIMBOURSEMENT, QVariant());
 //        query.bindValue(AccountDB::Constants::MP_TYPE, QVariant());
-//        query.bindValue(AccountDB::Constants::MP_UID, QUuid::createUuid().toString());
+//        query.bindValue(AccountDB::Constants::MP_UID, Utils::Database::createUid());
 //        query.bindValue(AccountDB::Constants::MP_USER_UID, user()->uuid());
 //        if (!query.exec()) {
 //            Utils::Log::addQueryError(this, query, __FILE__, __LINE__);
@@ -259,7 +257,7 @@ bool MedicalProcedureModel::insertRows(int row, int count, const QModelIndex &pa
             }
             // Create MP UUID
             QModelIndex mpUid = d->m_SqlTable->index(row+i, Constants::MP_UID, parent);
-            if (!d->m_SqlTable->setData(mpUid, QUuid::createUuid().toString())) {
+            if (!d->m_SqlTable->setData(mpUid, Utils::Database::createUid())) {
                 qWarning() << "2" << d->m_SqlTable->database().lastError().text();
                 ok = false;
             }

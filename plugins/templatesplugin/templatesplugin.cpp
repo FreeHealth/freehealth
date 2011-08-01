@@ -67,12 +67,6 @@ bool TemplatesPlugin::initialize(const QStringList &arguments, QString *errorStr
     // Add Translator to the Application
     Core::ICore::instance()->translators()->addNewTranslator("templatesplugin");
 
-    // add plugin info page
-    addAutoReleasedObject(new Core::PluginAboutPage(pluginSpec(), this));
-    prefPage = new Internal::TemplatesPreferencesPage(this);
-    prefPage->checkSettingsValidity();
-    addObject(prefPage);
-
     return true;
 }
 
@@ -83,6 +77,13 @@ void TemplatesPlugin::extensionsInitialized()
 
     // Initialize template database
     Templates::TemplateBase::instance();
+
+    // add plugin info page
+    addAutoReleasedObject(new Core::PluginAboutPage(pluginSpec(), this));
+
+    prefPage = new Internal::TemplatesPreferencesPage(this);
+    prefPage->checkSettingsValidity();
+    addObject(prefPage);
 
     // Initialize TemplatesViewManager
     Templates::Internal::TemplatesViewManager::instance(this);

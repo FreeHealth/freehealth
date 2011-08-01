@@ -36,6 +36,7 @@
 
 #include <utils/log.h>
 #include <utils/global.h>
+#include <utils/database.h>
 #include <translationutils/constanttranslations.h>
 
 #include <coreplugin/icore.h>
@@ -50,10 +51,11 @@
 #include <QIODevice>
 #include <QRegExp>
 #include <QLocale>
-#include <QUuid>
 #include <QDir>
 #include <QFile>
+
 enum { WarnDebugMessage = false };
+
 using namespace Account;
 using namespace Account::Internal;
 using namespace Trans::ConstantTranslations;
@@ -255,7 +257,7 @@ void DistanceRulesWidget::changeEvent(QEvent *e)
 
 QString DistanceRulesWidget::calcDistanceRulesUid(){
     QString uuidStr;
-    uuidStr = QUuid::createUuid().toString();
+    uuidStr = Utils::Database::createUid();
     return uuidStr;
 }
 

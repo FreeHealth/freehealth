@@ -27,7 +27,7 @@
 #ifndef USERCALENDAR_H
 #define USERCALENDAR_H
 
-#include <calendar/calendar_exporter.h>
+#include <agendaplugin/agenda_exporter.h>
 
 #include <QVariant>
 #include <QVector>
@@ -35,11 +35,18 @@
 #include <QTime>
 #include <QStandardItemModel>
 
-namespace Calendar {
+/**
+ * \file usercalendar.h
+ * \author Eric MAEKER <eric.maeker@gmail.com>
+ * \version 0.6.0
+ * \date 25 Jul 2011
+*/
+
+namespace Agenda {
 
 class AbstractCalendarModel;
 
-struct CALENDAR_EXPORT TimeRange {
+struct AGENDA_EXPORT TimeRange {
     TimeRange() : id(-1) {}
 
     // the id is used for database accesses and should be modified
@@ -47,7 +54,7 @@ struct CALENDAR_EXPORT TimeRange {
     QTime from, to;
 };
 
-class CALENDAR_EXPORT DayAvailability
+class AGENDA_EXPORT DayAvailability
 {
 public:
     DayAvailability();
@@ -76,10 +83,9 @@ private:
 
 class DayAvailabilityModel;
 
-class CALENDAR_EXPORT UserCalendar
+class AGENDA_EXPORT UserCalendar
 {
-    friend class Calendar::AbstractCalendarModel;
-    friend class Calendar::DayAvailabilityModel;
+    friend class Agenda::DayAvailabilityModel;
 public:
     enum DataRepresentation {
         Uid = 0,
@@ -95,6 +101,7 @@ public:
         LocationUid,
         AbsPathIcon,
         DefaultDuration,
+        SortId,
         UserData = 10000
     };
 
@@ -117,9 +124,14 @@ public:
     void addAvailabilities(const DayAvailability &av);
     void setAvailabilities(const QList<DayAvailability> &availabilities);
     bool canBeAvailable(const QDateTime &date) const;
-    Calendar::DayAvailabilityModel *availabilitiesModel(QObject *parent) const;
 
     AbstractCalendarModel *model() {return m_model;}
+
+    // getters
+    QString uid() const {return data(Uid).toString();}
+    int sortId() const {return data(SortId).toInt();}
+
+    static bool lessThan(const UserCalendar *cal1, const UserCalendar *cal2);
 
 protected:
     void setModel(AbstractCalendarModel *model) {m_model=model;}
@@ -132,26 +144,6 @@ private:
 };
 
 
-namespace Internal {
-class DayAvailabilityModelPrivate;
-}
-
-class CALENDAR_EXPORT DayAvailabilityModel : public QStandardItemModel
-{
-public:
-    DayAvailabilityModel(QObject *parent = 0);
-    ~DayAvailabilityModel();
-
-    void setUserCalendar(const UserCalendar &calendar);
-    UserCalendar userCalendar() const;
-
-    void addAvailability(const DayAvailability &availability);
-
-private:
-    Internal::DayAvailabilityModelPrivate *d;
-};
-
-
-}  // End namespace Calendar
+}  // End namespace Agenda
 
 #endif // USERCALENDAR_H

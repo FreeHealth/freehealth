@@ -27,9 +27,7 @@
 #include "agendabase.h"
 #include "constants.h"
 #include "agendawidgetmanager.h"
-#include "agendamode.h"
-#include "calendaritemeditorpatientmapper.h"
-#include "agendauserviewerpages.h"
+#include "agendacore.h"
 
 // TEST
 #include "appointement.h"
@@ -40,9 +38,10 @@
 #include <QDir>
 #include <QFileInfo>
 #include <QProgressDialog>
-#include <calendar/usercalendar.h>
+//#include <calendar/usercalendar.h>
+#include <agendaplugin/usercalendar.h>
 #include <calendar/common.h>
-#include <calendar/usercalendar_editor_widget.h>
+//#include <calendar/usercalendar_editor_widget.h>
 #include <patientbaseplugin/patientbase.h>
 #include <patientbaseplugin/constants_db.h>
 // END TEST
@@ -70,14 +69,21 @@ static inline Patients::Internal::PatientBase *patientBase() {return Patients::I
 
 static inline Core::ISettings *settings() {return Core::ICore::instance()->settings();}
 
-AgendaPlugin::AgendaPlugin()
+AgendaPlugin::AgendaPlugin() :
+    m_Core(0)
 {
     if (Utils::Log::warnPluginsCreation())
         qWarning() << "creating AgendaPlugin";
+    // Create the core object
+    m_Core = new AgendaCore(this);
+    connect(Core::ICore::instance(), SIGNAL(coreOpened()), m_Core, SLOT(postCoreInitialization()));
 }
 
 AgendaPlugin::~AgendaPlugin()
 {
+    if (m_Core)
+        delete m_Core;
+    m_Core = 0;
 }
 
 bool AgendaPlugin::initialize(const QStringList &arguments, QString *errorString)
@@ -89,9 +95,6 @@ bool AgendaPlugin::initialize(const QStringList &arguments, QString *errorString
 
     // Add Translator to the Application
     Core::ICore::instance()->translators()->addNewTranslator("AgendaPlugin");
-
-    // Add Agenda's UserViewer editor page
-    addAutoReleasedObject(new Internal::AgendaUserViewerPage(this));
 
     return true;
 }
@@ -124,12 +127,6 @@ void AgendaPlugin::extensionsInitialized()
     th->setIconFileName(Calendar::CalendarTheme::NavigationMonthViewMode, Constants::I_VIEWMODE);
     th->setIconFileName(Calendar::CalendarTheme::NavigationNext, Core::Constants::ICONNEXT);
     th->setIconFileName(Calendar::CalendarTheme::NavigationPrevious, Core::Constants::ICONPREVIOUS);
-
-    // Add Agenda's mode
-    addAutoReleasedObject(new AgendaMode(this));
-
-    // Add Agenda's Calendar::CalendarItem extended editing widgets
-    addAutoReleasedObject(new CalendarItemEditorPatientMapper(this));
 }
 
 static int numberOfPatients()
@@ -175,31 +172,31 @@ void AgendaPlugin::testDatabase()
     Internal::AgendaBase *base = Internal::AgendaBase::instance();
 
     // Try to get calendar(s) for the current user
-    QList<Calendar::UserCalendar *> cals = base->getUserCalendars();
+    QList<Agenda::UserCalendar *> cals = base->getUserCalendars();
     qWarning() << "Number of user calendars" << cals.count();
 
     Utils::Randomizer r;
     r.setPathToFiles(settings()->path(Core::ISettings::BundleResourcesPath) + "/textfiles/");
     QDir pix(settings()->path(Core::ISettings::SmallPixmapPath));
 
-    Calendar::UserCalendar *ucal = 0;
+    Agenda::UserCalendar *ucal = 0;
     if (cals.count() == 0) {
         for(int i=0; i < 5; ++i) {
-            ucal = new Calendar::UserCalendar();
+            ucal = new Agenda::UserCalendar();
             // Create a calendar for the current user
             ucal->setData(Constants::Db_IsValid, 1);
-            ucal->setData(Calendar::UserCalendar::Password, r.getRandomString(r.randomInt(0,10)));
-            ucal->setData(Calendar::UserCalendar::Label, r.randomWords(r.randomInt(2,5)));
-            ucal->setData(Calendar::UserCalendar::IsPrivate, r.randomInt(0,1));
-            ucal->setData(Calendar::UserCalendar::IsDefault, 0);
-            ucal->setData(Calendar::UserCalendar::DefaultDuration, r.randomInt(10,120));
-            ucal->setData(Calendar::UserCalendar::Description, r.randomWords(r.randomInt(5,50)));
-            ucal->setData(Calendar::UserCalendar::AbsPathIcon, r.randomFile(pix, QStringList() << "*.png").fileName());
+            ucal->setData(Agenda::UserCalendar::Password, r.getRandomString(r.randomInt(0,10)));
+            ucal->setData(Agenda::UserCalendar::Label, r.randomWords(r.randomInt(2,5)));
+            ucal->setData(Agenda::UserCalendar::IsPrivate, r.randomInt(0,1));
+            ucal->setData(Agenda::UserCalendar::IsDefault, 0);
+            ucal->setData(Agenda::UserCalendar::DefaultDuration, r.randomInt(10,120));
+            ucal->setData(Agenda::UserCalendar::Description, r.randomWords(r.randomInt(5,50)));
+            ucal->setData(Agenda::UserCalendar::AbsPathIcon, r.randomFile(pix, QStringList() << "*.png").fileName());
             // Create availabilities
             for(int i = 1; i < 6; ++i) {
                 QTime from = r.randomTime(6, 12);
                 QTime to = r.randomTime(17, 20);
-                Calendar::DayAvailability av;
+                Agenda::DayAvailability av;
                 av.setWeekDay(i);
                 av.addTimeRange(from, to);
                 ucal->addAvailabilities(av);
@@ -210,7 +207,7 @@ void AgendaPlugin::testDatabase()
         }
         // one must be the default
         ucal = cals.at(2);
-        ucal->setData(Calendar::UserCalendar::IsDefault, 1);
+        ucal->setData(Agenda::UserCalendar::IsDefault, 1);
         base->saveUserCalendar(ucal);
     }
     ucal = cals.at(0);
@@ -220,7 +217,7 @@ void AgendaPlugin::testDatabase()
     // Test UserCalendar Widget Editor
 //    QDialog dlg;
 //    QGridLayout lay(&dlg);
-//    Calendar::UserCalendarEditorWidget w(&dlg);
+//    Agenda::UserCalendarEditorWidget w(&dlg);
 //    w.setUserCalendar(*ucal);
 //    lay.addWidget(&w);
 //    dlg.setLayout(&lay);
@@ -234,7 +231,7 @@ void AgendaPlugin::testDatabase()
     q.setDateRangeForCurrentWeek();
     q.setCalendarId(ucal->data(Constants::Db_CalId).toInt());
     QList<Appointement *> list = base->getCalendarEvents(q);
-    qWarning() << "Retreived" << list.count() << "events from the database for user" << ucal->data(Calendar::UserCalendar::UserOwnerUid).toString() << "dateRange" << q.dateStart().toString(Qt::ISODate)<< q.dateEnd().toString(Qt::ISODate) << "in" << chrono.elapsed() << "ms";
+    qWarning() << "Retreived" << list.count() << "events from the database for user" << ucal->data(Agenda::UserCalendar::UserOwnerUid).toString() << "dateRange" << q.dateStart().toString(Qt::ISODate)<< q.dateEnd().toString(Qt::ISODate) << "in" << chrono.elapsed() << "ms";
 
     qWarning() << "PatientBase count" << numberOfPatients();
 

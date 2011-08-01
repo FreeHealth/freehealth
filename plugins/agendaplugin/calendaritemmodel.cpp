@@ -28,13 +28,13 @@
 #include "agendabase.h"
 #include "constants.h"
 #include "appointement.h"
+#include <agendaplugin/usercalendar.h>
 
 #include <coreplugin/icore.h>
 #include <coreplugin/iuser.h>
 #include <coreplugin/itheme.h>
 
 #include <calendar/calendar_item.h>
-#include <calendar/usercalendar.h>
 
 #include <utils/log.h>
 
@@ -49,11 +49,12 @@ static inline Core::IUser *user() {return Core::ICore::instance()->user();}
 //static inline Core::IPatient *patient() {return Core::ICore::instance()->patient();}
 static inline Agenda::Internal::AgendaBase *base() {return Agenda::Internal::AgendaBase::instance();}
 
-CalendarItemModel::CalendarItemModel(QObject *parent) :
-        Calendar::AbstractCalendarModel(parent)
+CalendarItemModel::CalendarItemModel(const QVariant &calendarUid, QObject *parent) :
+    Calendar::AbstractCalendarModel(parent),
+    m_CalendarUid(calendarUid)
 {
     setObjectName("CalendarItemModel");
-    userChanged();
+//    userChanged();
 }
 
 CalendarItemModel::~CalendarItemModel()
@@ -75,7 +76,7 @@ Calendar::CalendarItem CalendarItemModel::getItemByUid(const QString &uid) const
     return toCalendarItem(item);
 }
 
-/** Return the filtred items between specified dates \e from and \e to. This function uses the default Calendar::UserCalendar or the first available. */
+/** Return the filtred items between specified dates \e from and \e to. This function uses the default Agenda::UserCalendar or the first available. */
 QList<Calendar::CalendarItem> CalendarItemModel::getItemsBetween(const QDate &from, const QDate &to) const
 {
     Q_ASSERT_X(from <= to, "CalendarItemModel::getItemsBetween", "<from> is strictly greater than <to>");
@@ -307,71 +308,14 @@ void CalendarItemModel::resumeEvents()
     Calendar::AbstractCalendarModel::resumeEvents();
 }
 
-Calendar::UserCalendar CalendarItemModel::calendar(const Calendar::CalendarItem &item) const
+/** Defines the UserCalendar to use as event filter according to its index in the userCalendarComboModel(). */
+bool CalendarItemModel::filterUserCalendarEvents(const QVariant &calendarUid)
 {
-    return Calendar::UserCalendar();
-}
-
-Calendar::UserCalendar CalendarItemModel::addUserCalendar(const Calendar::UserCalendar &userCalendar)
-{
-//    setCalendarIsMine();
-    return Calendar::UserCalendar();
-}
-
-bool CalendarItemModel::updateUserCalendar(const Calendar::UserCalendar &calendar)
-{
+    qWarning() << m_CalendarUid << calendarUid;
+    m_CalendarUid = calendarUid;
+    clearAll();
+    reset();
     return true;
-}
-
-Calendar::UserCalendar CalendarItemModel::defaultUserCalendar() const
-{
-    for(int i=0; i < m_UserCalendar.count(); ++i) {
-        if (m_UserCalendar.at(i)->data(Calendar::UserCalendar::IsDefault).toBool()) {
-            return Calendar::UserCalendar(*m_UserCalendar.at(i));
-        }
-    }
-    if (m_UserCalendar.count()) {
-        LOG_ERROR("No default calendar. Returning first UserCalendar");
-        return *m_UserCalendar.at(0);
-    }
-    LOG_ERROR("No calendar. Returning empty UserCalendar");
-    return Calendar::UserCalendar();
-}
-
-QAbstractItemModel *CalendarItemModel::userCalendarComboModel(QObject *parent) const
-{
-    QStandardItemModel *model = new QStandardItemModel(parent);
-    QStandardItem *root = model->invisibleRootItem();
-    for(int i = 0; i < m_UserCalendar.count(); ++i) {
-        Calendar::UserCalendar *ucal = m_UserCalendar.at(i);
-        QStandardItem *it = new QStandardItem;
-        if (!ucal->data(Calendar::UserCalendar::AbsPathIcon).isNull())
-            it->setIcon(theme()->icon(ucal->data(Calendar::UserCalendar::AbsPathIcon).toString()));
-        it->setText(ucal->data(Calendar::UserCalendar::Label).toString());
-        it->setToolTip(it->text());
-        root->appendRow(it);
-    }
-    return model;
-}
-
-int CalendarItemModel::defaultUserCalendarComboModelIndex() const
-{
-    for(int i=0; i < m_UserCalendar.count(); ++i) {
-        if (m_UserCalendar.at(i)->data(Calendar::UserCalendar::IsDefault).toBool())
-            return i;
-    }
-    LOG_ERROR("No default calendar. Returning empty UserCalendar");
-    return -1;
-}
-
-/** Return the Calendar::UserCalendar related to the userCalendarComboModel() \e index. \sa userCalendarComboModel() */
-Calendar::UserCalendar CalendarItemModel::calendarFromComboModelIndex(const int index) const
-{
-    Q_ASSERT(index>0);
-    Q_ASSERT(index<m_UserCalendar.count());
-    if (index < 0 || index >= m_UserCalendar.count())
-        return Calendar::UserCalendar();
-    return *m_UserCalendar.at(index);
 }
 
 /** Clear the model and reset. All Calendar::CalendarItem will be deleted without beeing saved into database, even if they are modified. */
@@ -508,22 +452,25 @@ int CalendarItemModel::createUid() const
 //    return propal;
 }
 
-void CalendarItemModel::userChanged()
-{
-    clearAll();
-    // get all UserCalendars
-    qDeleteAll(m_UserCalendar);
-    m_UserCalendar.clear();
-    m_UserCalendar = base()->getUserCalendars(user()->uuid());
-    for(int i = 0; i < m_UserCalendar.count(); ++i) {
-        setCalendarIsMine(m_UserCalendar.at(i));
-    }
+//void CalendarItemModel::userChanged()
+//{
+//    clearAll();
+
+//    // get all UserCalendars
+//    qDeleteAll(m_UserCalendar);
+//    m_UserCalendar.clear();
+//    m_UserCalendar = base()->getUserCalendars(user()->uuid());
+//    m_UserCalendarFilterIndex = this->defaultUserCalendarComboModelIndex();
+
+//    for(int i = 0; i < m_UserCalendar.count(); ++i) {
+//        setCalendarIsMine(m_UserCalendar.at(i));
+//    }
 
     // TEST
 //    // Find default user calendar
-//    Calendar::UserCalendar *cal = 0;
+//    Agenda::UserCalendar *cal = 0;
 //    for(int i=0; i < m_UserCalendar.count(); ++i) {
-//        if (m_UserCalendar.at(i)->data(Calendar::UserCalendar::IsDefault).toBool()) {
+//        if (m_UserCalendar.at(i)->data(Agenda::UserCalendar::IsDefault).toBool()) {
 //            cal = m_UserCalendar.at(i);
 //        }
 //    }
@@ -544,11 +491,11 @@ void CalendarItemModel::userChanged()
 //        m_sortedByEndList.insert(getInsertionIndex(false, item->ending(), m_sortedByEndList, 0, m_sortedByEndList.count() - 1), item);
 //    }
     // END TEST
-}
+//}
 
 void CalendarItemModel::getItemFromDatabase(const QDate &from, const QDate &to, const int calendarId) const
 {
-    /** \todo code here: manage calendarId */
+    /** \todo code here: manage calendarId ? */
     // appointements are already available ?
     QDate testDate = from;
     bool getFullRange = true;
@@ -573,7 +520,14 @@ void CalendarItemModel::getItemFromDatabase(const QDate &from, const QDate &to, 
     QList<Appointement *> items;
 
     CalendarEventQuery query;
-    query.setCalendarId(defaultUserCalendar().data(Constants::Db_CalId).toInt());
+//    if (m_UserCalendarFilterIndex>0 && m_UserCalendarFilterIndex<m_UserCalendar.count()) {
+//        query.setCalendarId(m_UserCalendar.at(m_UserCalendarFilterIndex)->data(Constants::Db_CalId).toInt());
+//    } else {
+//        query.setCalendarId(defaultUserCalendar().data(Constants::Db_CalId).toInt());
+//    }
+    if (!m_CalendarUid.isNull()) {
+        query.setCalendarId(m_CalendarUid.toInt());
+    }
 
     if (getFullRange) {
         query.setDateRange(from, to);

@@ -77,6 +77,7 @@ public:
 
     virtual void hidePatientBar();
     virtual void showPatientBar();
+    virtual bool isPatientBarVisible() const;
 
 private Q_SLOTS:
     void onCurrentPatientChanged(const QString &);

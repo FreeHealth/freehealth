@@ -44,11 +44,9 @@
 
 namespace Core {
 
-class CORE_EXPORT BaseMode
-  : public IMode
+class CORE_EXPORT BaseMode : public IMode
 {
     Q_OBJECT
-
 public:
     BaseMode(QObject *parent = 0);
     ~BaseMode();
@@ -60,6 +58,7 @@ public:
     QWidget *widget() { return m_widget; }
     const char *uniqueModeName() const { return m_uniqueModeName; }
     QList<int> context() const { return m_context; }
+    bool isPatientBarVisible() const {return m_PatientBarVisibility;}
 
     void setName(const QString &name) { m_name = name; }
     void setIcon(const QIcon &icon) { m_icon = icon; }
@@ -67,6 +66,7 @@ public:
     void setWidget(QWidget *widget) { m_widget = widget; }
     void setUniqueModeName(const char *uniqueModeName) { m_uniqueModeName = uniqueModeName; }
     void setContext(const QList<int> &context) { m_context = context; }
+    void setPatientBarVisibility(bool visible) {m_PatientBarVisibility=visible;}
 
 private:
     QString m_name;
@@ -75,6 +75,7 @@ private:
     QWidget *m_widget;
     const char * m_uniqueModeName;
     QList<int> m_context;
+    bool m_PatientBarVisibility;
 };
 
 } // namespace Core

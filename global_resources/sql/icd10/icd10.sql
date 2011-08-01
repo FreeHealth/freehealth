@@ -4,6 +4,7 @@ CREATE TABLE `chapter` (
   `SID` int(11) NOT NULL default '0',
   `rom` varchar(5) NOT NULL default ''
 );
+CREATE INDEX ChapterSIDIndex ON chapter (SID);
 
 -- TYPE=MyISAM COMMENT='Common attributes of certain codes' AUTO_INCREMENT=12312
 CREATE TABLE `common` (

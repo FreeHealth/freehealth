@@ -36,6 +36,7 @@
 
 #include <utils/log.h>
 #include <utils/global.h>
+#include <utils/database.h>
 #include <translationutils/constanttranslations.h>
 
 #include <coreplugin/icore.h>
@@ -50,8 +51,9 @@
 #include <QIODevice>
 #include <QRegExp>
 #include <QLocale>
-#include <QUuid>
+
 enum { WarnDebugMessage = false };
+
 using namespace Account;
 using namespace Account::Internal;
 using namespace Trans::ConstantTranslations;
@@ -265,7 +267,7 @@ void PercentagesWidget::changeEvent(QEvent *e)
 }
 
 QString PercentagesWidget::calcPercentagesUid(){
-    QString Uid = QUuid::createUuid().toString();
+    QString Uid = Utils::Database::createUid();
     /*if (WarnDebugMessage)
     	      qDebug() << __FILE__ << QString::number(__LINE__) << " rowCount =" << m_Model->rowCount() ;
     QModelIndex index = m_Model->index(m_Model->rowCount()-2,AccountDB::Constants::PERCENT_UID);

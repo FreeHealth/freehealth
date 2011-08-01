@@ -40,6 +40,8 @@ EmptyPlugin::EmptyPlugin()
 {
     if (Utils::Log::warnPluginsCreation())
         qWarning() << "creating EmptyPlugin";
+
+    // Add here the Core::IFirstConfigurationPage objects to the pluginmanager object pool
 }
 
 EmptyPlugin::~EmptyPlugin()
@@ -53,8 +55,14 @@ bool EmptyPlugin::initialize(const QStringList &arguments, QString *errorString)
     Q_UNUSED(arguments);
     Q_UNUSED(errorString);
 
+    // No user connected here
+
     // Add Translator to the Application
     Core::ICore::instance()->translators()->addNewTranslator("emptyplugin");
+
+    // Initialize database here
+    // Initialize the drugs engines
+    // Add your Form::IFormWidgetFactory here to the plugin manager object pool
 
     return true;
 }
@@ -64,7 +72,17 @@ void EmptyPlugin::extensionsInitialized()
     if (Utils::Log::warnPluginsCreation())
         qWarning() << "EmptyPlugin::extensionsInitialized";
 
+    // At this point, user is connected
+
+    // All preferences pages must be created in this part (after user connection)
+
     addAutoReleasedObject(new Core::PluginAboutPage(pluginSpec(), this));
+    connect(Core::ICore::instance(), SIGNAL(coreOpened()), this, SLOT(postCoreInitialization()));
+}
+
+void EmptyPlugin::postCoreInitialization()
+{
+    // Core is fully intialized as well as all plugins
 }
 
 

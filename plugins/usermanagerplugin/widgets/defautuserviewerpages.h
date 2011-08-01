@@ -54,7 +54,7 @@ class UserViewer_RightsUI;
 class UserViewer_ProfessionalUI;
 }
 
-class DefaultUserIdentityWidget : public QWidget
+class DefaultUserIdentityWidget : public UserPlugin::IUserViewerWidget
 {
     Q_OBJECT
 public:
@@ -90,19 +90,10 @@ public:
     QString title() const;
 
     QWidget *createPage(QWidget *parent);
-
-    void setUserModel(UserModel *model);
-    void setUserIndex(const int index);
-    bool clear();
-    bool submit();
-
-private:
-    QPointer<DefaultUserIdentityWidget> m_Widget;
-    UserModel *m_Model;
 };
 
 
-class DefaultUserContactWidget : public QWidget
+class DefaultUserContactWidget : public UserPlugin::IUserViewerWidget
 {
     Q_OBJECT
 public:
@@ -134,19 +125,10 @@ public:
     QString title() const;
 
     QWidget *createPage(QWidget *parent = 0);
-
-    void setUserModel(UserModel *model);
-    void setUserIndex(const int index);
-    bool clear();
-    bool submit();
-
-private:
-    QPointer<DefaultUserContactWidget> m_Widget;
-    UserModel *m_Model;
 };
 
 
-class DefaultUserProfessionalWidget : public QWidget
+class DefaultUserProfessionalWidget : public UserPlugin::IUserViewerWidget
 {
     Q_OBJECT
 public:
@@ -190,7 +172,7 @@ private:
 };
 
 
-class DefaultUserRightsWidget : public QWidget
+class DefaultUserRightsWidget : public UserPlugin::IUserViewerWidget
 {
     Q_OBJECT
 public:
@@ -234,7 +216,7 @@ private:
 };
 
 
-class DefaultUserPapersWidget : public QWidget
+class DefaultUserPapersWidget : public UserPlugin::IUserViewerWidget
 {
     Q_OBJECT
 public:

@@ -39,6 +39,7 @@
 
 #include <utils/log.h>
 #include <utils/global.h>
+#include <utils/database.h>
 #include <utils/randomizer.h>
 #include <translationutils/constanttranslations.h>
 
@@ -47,7 +48,6 @@
 #include <coreplugin/iuser.h>
 
 #include <QProgressDialog>
-#include <QUuid>
 
 using namespace Account;
 using namespace Account::Internal;
@@ -94,7 +94,7 @@ static inline void createMedicalProcedure(const QString &userUid, Utils::Randomi
     query.bindValue(AccountDB::Constants::MP_NAME, abstract.join(" "));
     query.bindValue(AccountDB::Constants::MP_REIMBOURSEMENT, QVariant());
     query.bindValue(AccountDB::Constants::MP_TYPE, QVariant());
-    query.bindValue(AccountDB::Constants::MP_UID, QUuid::createUuid().toString());
+    query.bindValue(AccountDB::Constants::MP_UID, Utils::Database::createUid());
     query.bindValue(AccountDB::Constants::MP_USER_UID, userUid);
     if (!query.exec()) {
         Utils::Log::addQueryError("VirtualDatabaseCreator", query, __FILE__, __LINE__);
@@ -149,7 +149,7 @@ static inline void createAccount(const QString &userUid, Utils::Randomizer *rand
     query.bindValue(AccountDB::Constants::ACCOUNT_PATIENT_UID, QVariant());
     query.bindValue(AccountDB::Constants::ACCOUNT_SITE_ID, QVariant());
     query.bindValue(AccountDB::Constants::ACCOUNT_TRACE, QVariant());
-    query.bindValue(AccountDB::Constants::ACCOUNT_UID, QUuid::createUuid().toString());
+    query.bindValue(AccountDB::Constants::ACCOUNT_UID, Utils::Database::createUid());
     query.bindValue(AccountDB::Constants::ACCOUNT_USER_UID, userUid);
     query.bindValue(AccountDB::Constants::ACCOUNT_VISAAMOUNT, random->randomInt(100));
     if (!query.exec()) {
@@ -316,7 +316,7 @@ void VirtualDatabaseCreator::on_populate_clicked()
 //        createPatient(name,sec, sur,g,title,
 //                      dob,"France","",r.getRandomString(65),
 //                      QString::number(p.first), p.second,
-//                      QUuid::createUuid().toString(), lk, "", death);
+//                      Utils::Database::createUid(), lk, "", death);
 
 //        if (i % 100 == 99)
 //            patientBase()->database().commit();

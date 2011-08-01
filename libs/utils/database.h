@@ -46,7 +46,7 @@ QT_END_NAMESPACE
  * \file database.h
  * \author Eric MAEKER <eric.maeker@gmail.com>
  * \version 0.6.0
- * \date 31 May 2011
+ * \date 01 Aug 2011
 */
 
 
@@ -201,7 +201,7 @@ public:
                                  Grant_Process|Grant_Trigger|Grant_ShowDatabases
 
     };
-    Q_DECLARE_FLAGS(Grants, Grant);
+    Q_DECLARE_FLAGS(Grants, Grant)
 
     Database();
     virtual ~Database();
@@ -241,15 +241,18 @@ public:
     // All drivers members
     virtual QSqlDatabase database() const;
     virtual QString connectionName() const;
+    static QString createUid();
 
+    // Grants
     Grants grants(const QString &connectionName) const;
     static Grants getConnectionGrants(const QString &connectionName);
 
-
-    // manage database scheme (use enums for the int references)
+    // Manage database scheme (use enums for the int references)
     virtual int addTable(const int &ref, const QString &name);
     virtual int addField(const int &tableref, const int &fieldref, const QString &name, TypeOfField type = FieldUndefined, const QString &defaultValue = "NULL");
     virtual void addPrimaryKey(const int &tableref, const int &fieldref);
+    virtual void addIndex(const int &tableref, const int &fieldref, const QString &name = QString::null);
+    virtual void addIndex(const Utils::Field &field, const QString &name = QString::null);
 
     virtual bool checkDatabaseScheme();
 
@@ -328,6 +331,6 @@ private:
 
 }
 
-Q_DECLARE_OPERATORS_FOR_FLAGS(Utils::Database::Grants);
+Q_DECLARE_OPERATORS_FOR_FLAGS(Utils::Database::Grants)
 
 #endif // UTILS_DATABASE_H

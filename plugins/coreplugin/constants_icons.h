@@ -174,6 +174,7 @@ const char * const  ICONUSERMANAGER   = "usermanager.png";
 const char * const  ICONEDITUSER      = "edituser.png";
 const char * const  ICONCLEARUSER     = "editclear.png";
 const char * const  ICONDELETEUSER    = "deleteuser.png";
+const char * const  ICONSEARCHUSER    = "searchuser.png";
 const char * const  ICONNEWUSER       = "adduser.png";
 const char * const  ICONNEWUSER_QUICK = "adduser-quick.png";
 const char * const  ICONDOCTOR        = "people-doctor.png";

@@ -71,11 +71,8 @@
 
 #include <printerplugin/textdocumentextra.h>
 
-
-// include Qt headers
 #include <QApplication>
 #include <QDateTime>
-#include <QUuid>
 #include <QHash>
 #include <QVariant>
 #include <QSet>
@@ -483,7 +480,7 @@ QHash<QString, int> UserDataPrivate::m_Link_PaperName_ModelIndex;
 
 /**
   \brief Constructor
-  Some default values are setted :
+  Some default values are defined :
   \li automatic uuid setting to a fresh new one
   \li rights for UserManager are setted to Core::IUser::ReadOwn and Core::IUser::WriteOwn
   \li no rights for Medical, paramedical, dosage management
@@ -619,7 +616,7 @@ bool UserData::createUuid()
         return false;
     if (!uuid().isEmpty())
         return true;
-    setUuid(QUuid::createUuid().toString());
+    setUuid(Utils::Database::createUid());
     return true;
 }
 
@@ -862,7 +859,7 @@ QVariant UserData::dynamicDataValue(const char*name) const
 */
 QVariant UserData::rightsValue(const QString &name, const int fieldref) const
 {
-    qWarning() << "rightsValue" << name << fieldref << d->m_Role_Rights.value(name).value(fieldref);
+//    qWarning() << "rightsValue" << name << fieldref << d->m_Role_Rights.value(name).value(fieldref);
     return d->m_Role_Rights.value(name).value(fieldref);
 }
 

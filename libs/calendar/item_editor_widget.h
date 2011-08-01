@@ -66,7 +66,7 @@ public:
     void toogleExtraInformations();
     bool isShowingExtraInformations() const;
 
-    void setAvailableUserCalendar(const QList<Calendar::UserCalendar *> &userCals);
+//    void setAvailableUserCalendar(const QList<Calendar::UserCalendar *> &userCals);
 
     void addCalendarDataWidget(Calendar::ICalendarItemDataWidget *dataWidget);
 

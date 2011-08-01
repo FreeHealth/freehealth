@@ -68,13 +68,15 @@ public:
     void setSettingKey(const QString &settingKey) {m_settingKey = settingKey;}
     void setStartingPage(const QString &initialCategory, const QString &initialPage) {m_currentCategory=initialCategory; m_currentPage=initialPage;}
 
-    void setupUi(bool treeView = true);
+    void setupUi(bool sortCategoryView = true);
 
     void expandAllCategories();
     void expandFirstCategories();
 
     IGenericPage *currentPage() const;
     void saveState();
+
+    QList<QWidget *> pageWidgets() const;
 
 private:
     QWidget *createPageWidget(IGenericPage *page);
@@ -90,6 +92,7 @@ private:
     QString m_currentCategory;
     QString m_currentPage;
     QString m_settingKey;
+    QList<QWidget *> m_AddedWidgets;
 };
 
 } // namespace Core

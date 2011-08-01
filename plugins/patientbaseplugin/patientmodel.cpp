@@ -56,7 +56,6 @@
 #include <QPixmap>
 #include <QBuffer>
 #include <QByteArray>
-#include <QUuid>
 
 using namespace Patients;
 using namespace Trans::ConstantTranslations;
@@ -643,7 +642,7 @@ bool PatientModel::insertRows(int row, int count, const QModelIndex &parent)
         QString uuid;
         while (!findUuid) {
             /** \todo Take care to inifinite looping... */
-            uuid = QUuid::createUuid().toString();
+            uuid = Utils::Database::createUid();
             QString f = QString("%1='%2'").arg(patientBase()->fieldName(Constants::Table_IDENT, Constants::IDENTITY_UID), uuid);
             findUuid = (patientBase()->count(Constants::Table_IDENT, Constants::IDENTITY_UID, f) == 0);
         }

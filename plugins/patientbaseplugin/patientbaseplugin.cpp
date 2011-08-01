@@ -97,11 +97,6 @@ bool PatientBasePlugin::initialize(const QStringList &arguments, QString *errorS
     // Add Translators
     Core::ICore::instance()->translators()->addNewTranslator("patientbaseplugin");
 
-    // add preference page
-    prefpage = new PatientBasePreferencesPage(this);
-    addObject(prefpage);
-    prefpage->checkSettingsValidity();
-
     // Initialize patient base
     patientBase();
     if (!patientBase()->isInitialized())
@@ -121,6 +116,11 @@ void PatientBasePlugin::extensionsInitialized()
 {
     if (Utils::Log::warnPluginsCreation())
         qWarning() << "PatientBasePlugin::extensionsInitialized";
+
+    // add preference page
+    prefpage = new PatientBasePreferencesPage(this);
+    addObject(prefpage);
+    prefpage->checkSettingsValidity();
 
     connect(Core::ICore::instance(), SIGNAL(coreOpened()), this, SLOT(postCoreInitialization()));
 }

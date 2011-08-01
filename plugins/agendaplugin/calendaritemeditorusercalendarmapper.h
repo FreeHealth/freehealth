@@ -19,82 +19,76 @@
  *  If not, see <http://www.gnu.org/licenses/>.                            *
  ***************************************************************************/
 /***************************************************************************
- *   Main Developper : Eric MAEKER, <eric.maeker@gmail.com>                *
+ *   Main Developpers :                                                    *
+ *       Guillaume Denry <guillaume.denry@gmail.com>                       *
+ *       Eric MAEKER, MD <eric.maeker@gmail.com>                           *
  *   Contributors :                                                        *
  *       NAME <MAIL@ADRESS>                                                *
- *       NAME <MAIL@ADRESS>                                                *
  ***************************************************************************/
-#ifndef AGENDAUSERVIEWERPAGES_H
-#define AGENDAUSERVIEWERPAGES_H
+#ifndef CALENDARITEMEDITORUSERCALENDARMAPPER_H
+#define CALENDARITEMEDITORUSERCALENDARMAPPER_H
 
-#include <usermanagerplugin/widgets/iuserviewerpage.h>
+#include <calendar/icalendaritemdatawidget.h>
 
 #include <QWidget>
+#include <QHash>
 #include <QPointer>
-class QDataWidgetMapper;
 
 /**
- * \file agendauserviewerpages.h
+ * \file calendaritemeditorusercalendarmapper.h
  * \author Eric MAEKER <eric.maeker@gmail.com>
  * \version 0.6.0
- * \date 12 Jul 2011
+ * \date 27 Jul 2011
 */
 
+
 namespace Agenda {
+class CalendarItemModel;
+
 namespace Internal {
 namespace Ui {
-class AgendaUserViewer;
+class CalendarItemEditorUserCalendarMapper;
 }
 
-class AgendaUserIdentityWidget : public QWidget
+class CalendarItemEditorUserCalendarMapperWidget : public QWidget
 {
     Q_OBJECT
 public:
-    AgendaUserIdentityWidget(QWidget *parent = 0);
-    ~AgendaUserIdentityWidget();
-
-    void setUserModel(UserPlugin::UserModel *model);
-    void setUserIndex(const int index);
+    CalendarItemEditorUserCalendarMapperWidget(QWidget *parent);
+    ~CalendarItemEditorUserCalendarMapperWidget();
 
     void clear();
-    bool submit();
+    void setCalendarItem(const Calendar::CalendarItem &item);
 
-//private Q_SLOTS:
-//    void on_but_changePassword_clicked();
-//    void on_but_viewHistory_clicked();
+private Q_SLOTS:
+    void onAgendaSelected(const int index);
 
 private:
-    Ui::AgendaUserViewer *ui;
-    QDataWidgetMapper *m_Mapper;
-    UserPlugin::UserModel *m_Model;
+    Internal::Ui::CalendarItemEditorUserCalendarMapper *ui;
+    Agenda::CalendarItemModel *m_Model;
 };
 
-class AgendaUserViewerPage : public UserPlugin::IUserViewerPage
+}  // End namespace Internal
+
+class CalendarItemEditorUserCalendarMapper : public Calendar::ICalendarItemDataWidget
 {
     Q_OBJECT
 public:
-    AgendaUserViewerPage(QObject *parent = 0);
-    ~AgendaUserViewerPage();
+    explicit CalendarItemEditorUserCalendarMapper(QObject *parent = 0);
+    ~CalendarItemEditorUserCalendarMapper();
 
-    QString id() const;
-    QString name() const;
-    QString category() const;
-    QString title() const;
+    int insertionPlace() const;
+    QWidget *createWidget(QWidget *parent = 0);
+    bool setCalendarItem(const Calendar::CalendarItem &item);
 
-    QWidget *createPage(QWidget *parent);
-
-    void setUserModel(UserPlugin::UserModel *model);
-    void setUserIndex(const int index);
     bool clear();
-    bool submit();
+    bool submitChangesToCalendarItem(Calendar::CalendarItem &item);
 
 private:
-    QPointer<AgendaUserIdentityWidget> m_Widget;
-    UserPlugin::UserModel *m_Model;
+    QPointer<Internal::CalendarItemEditorUserCalendarMapperWidget> m_Widget;
 };
 
 
-}  // End namespace Internal
 }  // End namespace Agenda
 
-#endif // AGENDAUSERVIEWERPAGES_H
+#endif // CALENDARITEMEDITORUSERCALENDARMAPPER_H

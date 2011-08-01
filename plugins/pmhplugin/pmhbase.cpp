@@ -131,6 +131,9 @@ PmhBase::PmhBase(QObject *parent) :
     addField(Table_MASTER, MASTER_ISVALID,       "VALID",          FieldIsBoolean, "1");
     addField(Table_MASTER, MASTER_PRIVATE,       "PRIV",           FieldIsBoolean);
     addField(Table_MASTER, MASTER_COMMENT,       "COMMENT",        FieldIsLongText);
+    addIndex(Table_MASTER, MASTER_ID);
+    addIndex(Table_MASTER, MASTER_PATIENT_UID);
+    addIndex(Table_MASTER, MASTER_USER_UID);
 
     addField(Table_EPISODE, EPISODE_ID,            "ID",             FieldIsUniquePrimaryKey);
     addField(Table_EPISODE, EPISODE_MASTER_ID,     "MASTER_ID",      FieldIsInteger);
@@ -142,6 +145,9 @@ PmhBase::PmhBase(QObject *parent) :
     addField(Table_EPISODE, EPISODE_ISVALID,       "VALID",          FieldIsBoolean, "1");
     addField(Table_EPISODE, EPISODE_COMMENT,       "COMMENT",        FieldIsLongText);
     addField(Table_EPISODE, EPISODE_TRACE_ID,      "TRACE_ID",       FieldIsInteger);
+    addIndex(Table_EPISODE, EPISODE_ID);
+    addIndex(Table_EPISODE, EPISODE_MASTER_ID);
+    addIndex(Table_EPISODE, EPISODE_TRACE_ID);
 
     connect(Core::ICore::instance(), SIGNAL(databaseServerChanged()), this, SLOT(onCoreDatabaseServerChanged()));
 }

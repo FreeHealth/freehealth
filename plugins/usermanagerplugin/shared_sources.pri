@@ -13,7 +13,8 @@ HEADERS += $${PWD}/usermanagerplugin.h \
     $${PWD}/userfistrunpage.h \
     $${PWD}/usermanagermode.h \
     $${PWD}/widgets/iuserviewerpage.h \
-    $${PWD}/widgets/defautuserviewerpages.h
+    $${PWD}/widgets/defautuserviewerpages.h \
+    iuserwizardpage.h
 
 SOURCES += $${PWD}/usermanagerplugin.cpp \
     $${PWD}/currentuserpreferencespage.cpp \

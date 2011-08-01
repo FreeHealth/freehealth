@@ -69,11 +69,6 @@ bool CorePlugin::initialize(const QStringList &arguments, QString *errorMessage)
     Core::ICore::instance()->translators()->addNewTranslator("medicalutils");
     Core::ICore::instance()->translators()->addNewTranslator("fmfcoreplugin");
 
-    // add preferences page
-    prefPage = new ApplicationGeneralPreferencesPage(this);
-    prefPage->checkSettingsValidity();
-    addObject(prefPage);
-
     return m_CoreImpl->initialize(arguments,errorMessage);
 //    Q_UNUSED(arguments);
 //    const bool success = m_mainWindow->init(errorMessage);
@@ -94,17 +89,25 @@ void CorePlugin::extensionsInitialized()
         qWarning() << "CorePlugin::extensionsInitialized";
 
     m_CoreImpl->extensionsInitialized();
+
     // add about pages
     this->addAutoReleasedObject(new AppAboutPage(this));
     this->addAutoReleasedObject(new TeamAboutPage(this));
     this->addAutoReleasedObject(new LicenseAboutPage(this));
     this->addAutoReleasedObject(new BuildAboutPage(this));
+
     // add debugging pages
     this->addAutoReleasedObject(new LogErrorDebugPage(this));
     this->addAutoReleasedObject(new LogMessageDebugPage(this));
     this->addAutoReleasedObject(new SettingDebugPage(this));
+
     // add plugin info page
     addAutoReleasedObject(new Core::PluginAboutPage(pluginSpec(), this));
+
+    // add preferences page
+    prefPage = new ApplicationGeneralPreferencesPage(this);
+    prefPage->checkSettingsValidity();
+    addObject(prefPage);
 }
 
 void CorePlugin::remoteArgument(const QString& arg)

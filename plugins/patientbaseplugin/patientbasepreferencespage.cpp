@@ -35,7 +35,6 @@
 #include <coreplugin/icore.h>
 #include <coreplugin/isettings.h>
 
-#include <QUuid>
 #include <QSqlDatabase>
 #include <QSqlQuery>
 #include <QProgressDialog>

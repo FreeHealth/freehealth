@@ -58,6 +58,8 @@ AccountMode::AccountMode(QObject *parent) :
     setIcon(theme()->icon(Core::Constants::ICONACCOUNTMODE, Core::ITheme::BigIcon));
     setPriority(Core::Constants::P_MODE_ACCOUNT);
     setUniqueModeName(Core::Constants::MODE_ACCOUNT);
+    setPatientBarVisibility(true);
+
 //    const QList<int> &context;
 //    setContext();
     m_Stack = new QStackedWidget;

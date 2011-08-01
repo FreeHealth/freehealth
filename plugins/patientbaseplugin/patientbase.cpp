@@ -44,7 +44,6 @@
 #include <QSqlRecord>
 #include <QSqlField>
 #include <QDir>
-#include <QUuid>
 #include <QProgressDialog>
 #include <QTreeWidgetItem>
 #include <QFont>
@@ -103,6 +102,9 @@ PatientBase::PatientBase(QObject *parent) :
     addField(Table_IDENT, IDENTITY_FAMILY_UID, "IDENT_FAMILY_UID", FieldIsUUID);
     addField(Table_IDENT, IDENTITY_ISACTIVE, "IDENT_ISACTIVE", FieldIsBoolean, "1");
     addField(Table_IDENT, IDENTITY_ISVIRTUAL, "IDENT_ISVIRTUAL", FieldIsBoolean, "0");
+    addIndex(Table_IDENT, IDENTITY_UID);
+    addIndex(Table_IDENT, IDENTITY_LK_TOPRACT_LKID);
+    addIndex(Table_IDENT, IDENTITY_FAMILY_UID);
 
     // Identity
     addField(Table_IDENT, IDENTITY_NAME, "NAME", FieldIsShortText);
@@ -114,6 +116,10 @@ PatientBase::PatientBase(QObject *parent) :
     addField(Table_IDENT, IDENTITY_MARITAL_STATUS, "MARITAL_STATUS", FieldIsOneChar, "NULL");
     addField(Table_IDENT, IDENTITY_DATEOFDEATH, "DATEOFDEATH", FieldIsDate, "NULL");
     addField(Table_IDENT, IDENTITY_PROFESSION, "PROFESSION", FieldIsShortText, "NULL");
+    addIndex(Table_IDENT, IDENTITY_NAME);
+    addIndex(Table_IDENT, IDENTITY_FIRSTNAME);
+    addIndex(Table_IDENT, IDENTITY_SECONDNAME);
+    addIndex(Table_IDENT, IDENTITY_DOB);
 
     // Contact
     addField(Table_IDENT, IDENTITY_ADDRESS_STREET, "STREET", FieldIsShortText);
@@ -136,6 +142,8 @@ PatientBase::PatientBase(QObject *parent) :
     addField(Table_PATIENT_PHOTO, PHOTO_UID, "PHOTO_UID", FieldIsUUID);
     addField(Table_PATIENT_PHOTO, PHOTO_PATIENT_UID, "PATIENT_UID", FieldIsUUID);
     addField(Table_PATIENT_PHOTO, PHOTO_BLOB, "PHOTO", FieldIsBlob);
+    addIndex(Table_PATIENT_PHOTO, PHOTO_UID);
+    addIndex(Table_PATIENT_PHOTO, PHOTO_PATIENT_UID);
 
     // Version
     addTable(Table_VERSION, "VERSION");

@@ -19,53 +19,82 @@
  *  If not, see <http://www.gnu.org/licenses/>.                            *
  ***************************************************************************/
 /***************************************************************************
- *   Main Developpers :                                                    *
- *       Guillaume Denry <guillaume.denry@gmail.com>                       *
- *       Eric MAEKER, MD <eric.maeker@gmail.com>                           *
+ *   Main Developper : Eric MAEKER, <eric.maeker@gmail.com>                *
  *   Contributors :                                                        *
  *       NAME <MAIL@ADRESS>                                                *
+ *       NAME <MAIL@ADRESS>                                                *
  ***************************************************************************/
-#ifndef USERCALENDARWIDGET_H
-#define USERCALENDARWIDGET_H
+#ifndef AGENDAPREFERENCESPAGE_H
+#define AGENDAPREFERENCESPAGE_H
 
-#include <calendar/calendar_exporter.h>
-#include <calendar/usercalendar.h>
+#include <coreplugin/ioptionspage.h>
 
-#include <QWidget>
+#include "ui_agendapreferencespage.h"
 
-namespace Calendar {
-class AbstractCalendarModel;
-class UserCalendar;
+#include <QPointer>
+#include <QObject>
 
-namespace Ui {
-    class UserCalendarEditorWidget;
+/**
+ * \file agendapreferencespage.h
+ * \author Eric MAEKER <eric.maeker@gmail.com>
+ * \version 0.6.0
+ * \date 01 Aug 2011
+*/
+
+namespace Core {
+class ISettings;
 }
 
-class CALENDAR_EXPORT UserCalendarEditorWidget : public QWidget
+namespace Agenda {
+namespace Internal {
+
+class AgendaPreferencesWidget : public QWidget, private Ui::AgendaPreferencesWidget
 {
     Q_OBJECT
+    Q_DISABLE_COPY(AgendaPreferencesWidget)
 
 public:
-    explicit UserCalendarEditorWidget(QWidget *parent = 0);
-    ~UserCalendarEditorWidget();
+    explicit AgendaPreferencesWidget(QWidget *parent = 0);
 
-    void setModel(AbstractCalendarModel *model);
-    void setUserCalendar(const Calendar::UserCalendar &calendar);
+    static void writeDefaultSettings(Core::ISettings *s);
+    void setDatasToUi();
 
 public Q_SLOTS:
-    void submit();
-    UserCalendar userCalendar() const;
+    void saveToSettings(Core::ISettings *s = 0);
 
 protected:
-    void changeEvent(QEvent *e);
-
-private:
-    Ui::UserCalendarEditorWidget *ui;
-    UserCalendar m_Calendar;
-    DayAvailabilityModel *m_AvailabilityModel;
+    virtual void changeEvent(QEvent *e);
 };
 
-}  // End namespace Calendar
+
+class AgendaPreferencesPage : public Core::IOptionsPage
+{
+    Q_OBJECT
+public:
+    AgendaPreferencesPage(QObject *parent = 0);
+    ~AgendaPreferencesPage();
+
+    QString id() const;
+    QString name() const;
+    QString category() const;
+    QString title() const;
+
+    void resetToDefaults();
+    void checkSettingsValidity();
+    void applyChanges();
+    void finish();
+
+    QString helpPage() {return QString();}
+
+    static void writeDefaultSettings(Core::ISettings *s) {AgendaPreferencesWidget::writeDefaultSettings(s);}
+
+    QWidget *createPage(QWidget *parent = 0);
+private:
+    QPointer<AgendaPreferencesWidget> m_Widget;
+};
+
+}  // End Internal
+}  // End Agenda
 
 
-#endif // USERCALENDARWIDGET_H
+#endif // AGENDAPREFERENCESPAGE_H
