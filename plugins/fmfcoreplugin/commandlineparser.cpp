@@ -62,11 +62,10 @@ CommandLine::CommandLine() : ICommandLine()
         case ClearUserDatabases : params.insert(ClearUserDatabases, true); break;
         default : break;
         }
-
-        if (!Utils::isDebugCompilation())
-            params.insert(ClearUserDatabases, false);
-
     }
+
+    if (!Utils::isDebugCompilation())
+        params.insert(ClearUserDatabases, false);
 }
 
 QVariant CommandLine::value(int param, const QVariant &def = QVariant()) const
