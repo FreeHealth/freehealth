@@ -20,7 +20,8 @@ HEADERS += coreplugin.h \
 SOURCES += coreplugin.cpp \
     coreimpl.cpp \
     appaboutpage.cpp \
-    appconfigwizard.cpp
+    appconfigwizard.cpp \
+    commandlineparser.cpp
 
 TRANSLATIONS += $${SOURCES_TRANSLATIONS_PATH}/fmfcoreplugin_fr.ts \
     $${SOURCES_TRANSLATIONS_PATH}/fmfcoreplugin_de.ts \

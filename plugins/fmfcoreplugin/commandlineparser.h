@@ -55,52 +55,9 @@ public:
         CL_TransmitDosage = 0
     };
 
-    CommandLine() : ICommandLine()
-    {
-        // known command line params
-        ref.insert(Chrono, "--chrono");
-        ref.insert(CL_TransmitDosage, "--transmit-dosage");
-        ref.insert(ConfigFile, "--config");
-        ref.insert(RunningUnderWine, "--wine");
-        ref.insert(ClearUserDatabases, "--clear-user-databases");
-
-        // set default values
-        params.insert(Chrono, false);
-        params.insert(CL_TransmitDosage, false);
-        params.insert(RunningUnderWine, false);
-        params.insert(ClearUserDatabases, false);
-
-        // read command line params
-        const QStringList &args = qApp->arguments();
-        foreach(const QString &a, args) {
-            QString k = a;
-            if (k.contains(" "))
-                k = k.left(k.indexOf(" "));
-            if (a.contains("="))
-                k = k.left(k.indexOf("="));
-            switch (ref.key(k,-1))
-            {
-            case Chrono : params.insert(Chrono, true); break;
-            case CL_TransmitDosage : params.insert(CL_TransmitDosage, true); break;
-            case ConfigFile : params.insert(ConfigFile, a.mid(a.indexOf("=")+1).remove("\"")); break;
-            case RunningUnderWine : params.insert(RunningUnderWine, true); break;
-            case ClearUserDatabases : params.insert(ClearUserDatabases, true); break;
-            default : break;
-            }
-        }
-    }
-
-    QVariant value(int param, const QVariant &def = QVariant()) const
-    {
-        return params.value(param,def);
-    }
-
-    QString paramName(int param) const
-    {
-        if (ref.keys().contains(param))
-            return ref.value(param);
-        return QString::number(param);
-    }
+    CommandLine();
+    QVariant value(int param, const QVariant &def = QVariant()) const;
+    QString paramName(int param) const;
 
 private:
     QHash<int,QVariant> params;
