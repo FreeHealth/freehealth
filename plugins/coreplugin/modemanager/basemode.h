@@ -49,7 +49,7 @@ class CORE_EXPORT BaseMode : public IMode
     Q_OBJECT
 public:
     BaseMode(QObject *parent = 0);
-    ~BaseMode();
+    virtual ~BaseMode();
 
     // IMode
     QString name() const { return m_name; }

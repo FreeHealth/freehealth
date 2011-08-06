@@ -42,7 +42,7 @@ public:
     QString name() const     { return tr("1. General"); }
     QString category() const { return tr("Application"); }
 
-    QWidget *widget();
+    QWidget *createPage(QWidget *parent = 0);
 };
 
 

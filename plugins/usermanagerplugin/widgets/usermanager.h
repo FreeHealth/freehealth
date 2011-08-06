@@ -68,7 +68,7 @@ class USER_EXPORT UserManagerDialog : public QDialog
     Q_OBJECT
     Q_DISABLE_COPY(UserManagerDialog)
 public:
-    explicit UserManagerDialog(QWidget *parent = 0); // work with tkUserModel
+    explicit UserManagerDialog(QWidget *parent = 0);
     ~UserManagerDialog();
 
     virtual bool initialize();

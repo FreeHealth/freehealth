@@ -89,7 +89,7 @@ public:
 //    FormManager *formManager() const;
     virtual ModeManager *modeManager() const;
 
-    CommandLine *commandLine() const;
+    ICommandLine *commandLine() const;
     Utils::UpdateChecker *updateChecker() const;
     FileManager *fileManager() const;
 

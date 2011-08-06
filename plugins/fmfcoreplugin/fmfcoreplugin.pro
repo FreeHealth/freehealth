@@ -8,7 +8,6 @@ BUILD_PATH_POSTFIXE = FreeMedForms
 # found in an unique pri file. The files may be included from <coreplugin/...> instead of
 # <fmfcoreplugin/...>
 include(../coreplugin/common_core.pri)
-include(../coreplugin/modemanager/modemanager.pri)
 DEFINES += FREEMEDFORMS
 
 # specific derivative files

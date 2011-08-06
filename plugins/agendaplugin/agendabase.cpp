@@ -52,10 +52,12 @@
 #include <coreplugin/constants_tokensandsettings.h>
 #include <printerplugin/textdocumentextra.h>
 #include <coreplugin/iuser.h>
+#include <coreplugin/icommandline.h>
 
 #include <patientbaseplugin/patientmodel.h>
 
 #include <usermanagerplugin/usermodel.h>
+
 
 #include <utils/log.h>
 #include <utils/global.h>
@@ -79,6 +81,7 @@ using namespace Trans::ConstantTranslations;
 static inline Core::ISettings *settings()  { return Core::ICore::instance()->settings(); }
 static inline Core::IUser *user() {return Core::ICore::instance()->user();}
 static inline UserPlugin::UserModel *userModel() {return UserPlugin::UserModel::instance();}
+static inline Core::ICommandLine *commandLine()  { return Core::ICore::instance()->commandLine(); }
 
 static inline bool connectDatabase(const QString &connectionName, const int line)
 {
@@ -334,9 +337,15 @@ bool AgendaBase::initialize()
         return true;
 
     // connect
-    createConnection(Constants::DB_NAME, Constants::DB_NAME,
-                     settings()->databaseConnector(),
-                     Utils::Database::CreateDatabase);
+    if (commandLine()->value(Core::ICommandLine::ClearUserDatabases).toBool()) {
+        createConnection(Constants::DB_NAME, Constants::DB_NAME,
+                         settings()->databaseConnector(),
+                         Utils::Database::DeleteAndRecreateDatabase);
+    } else {
+        createConnection(Constants::DB_NAME, Constants::DB_NAME,
+                         settings()->databaseConnector(),
+                         Utils::Database::CreateDatabase);
+    }
 
     if (!database().isOpen()) {
         if (!database().open()) {

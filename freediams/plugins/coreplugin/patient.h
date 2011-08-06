@@ -66,6 +66,10 @@ public:
     QString toXml() const;
     bool fromXml(const QString &xml);
 
+    void hidePatientBar() {}
+    void showPatientBar() {}
+    bool isPatientBarVisible() const {return false;}
+
 private:
     Internal::PatientPrivate *d;
 };

@@ -52,19 +52,25 @@ class CommandLine  : public Core::ICommandLine
 {
 public:
     enum Param {
-        CL_Chrono,
-        CL_TransmitDosage,
-        CL_ConfigFile,
-        CL_RunningUnderWine,
-        CL_MaxParam
+        CL_TransmitDosage = 0
     };
 
     CommandLine() : ICommandLine()
     {
-        ref.insert(CL_Chrono, "--chrono");
+        // known command line params
+        ref.insert(Chrono, "--chrono");
         ref.insert(CL_TransmitDosage, "--transmit-dosage");
-        ref.insert(CL_ConfigFile, "--config");
-        ref.insert(CL_RunningUnderWine, "--wine");
+        ref.insert(ConfigFile, "--config");
+        ref.insert(RunningUnderWine, "--wine");
+        ref.insert(ClearUserDatabases, "--clear-user-databases");
+
+        // set default values
+        params.insert(Chrono, false);
+        params.insert(CL_TransmitDosage, false);
+        params.insert(RunningUnderWine, false);
+        params.insert(ClearUserDatabases, false);
+
+        // read command line params
         const QStringList &args = qApp->arguments();
         foreach(const QString &a, args) {
             QString k = a;
@@ -74,11 +80,12 @@ public:
                 k = k.left(k.indexOf("="));
             switch (ref.key(k,-1))
             {
-                case CL_Chrono : params.insert(CL_Chrono, true); break;
-                case CL_TransmitDosage : params.insert(CL_TransmitDosage, true); break;
-                case CL_ConfigFile : params.insert(CL_ConfigFile, a.mid(a.indexOf("=")+1).remove("\"")); break;
-                case CL_RunningUnderWine : params.insert(CL_RunningUnderWine, true); break;
-                default : break;
+            case Chrono : params.insert(Chrono, true); break;
+            case CL_TransmitDosage : params.insert(CL_TransmitDosage, true); break;
+            case ConfigFile : params.insert(ConfigFile, a.mid(a.indexOf("=")+1).remove("\"")); break;
+            case RunningUnderWine : params.insert(RunningUnderWine, true); break;
+            case ClearUserDatabases : params.insert(ClearUserDatabases, true); break;
+            default : break;
             }
         }
     }
@@ -92,8 +99,7 @@ public:
     {
         if (ref.keys().contains(param))
             return ref.value(param);
-        else
-            return QString::number(param);
+        return QString::number(param);
     }
 
 private:

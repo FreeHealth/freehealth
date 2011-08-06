@@ -428,7 +428,7 @@ bool Database::createConnection(const QString &connectionName, const QString &no
     QString dbName = prefixedDatabaseName(d->m_Driver, nonPrefixedDbName);
 
     if (WarnLogMessages) {
-        qDebug() << __FILE__ << QString::number(__LINE__) << connectionName << dbName;
+        LOG_FOR("Database", connectionName + "  //  " + dbName);
         connector.warn();
     }
 
@@ -461,6 +461,50 @@ bool Database::createConnection(const QString &connectionName, const QString &no
         fileName += ".db";
     }
     QFileInfo sqliteFileInfo(fileName);
+
+    // if DeleteAndRecreateDatabase only for read/write databases
+    if (createOption == DeleteAndRecreateDatabase && connector.accessMode()==DatabaseConnector::ReadWrite) {
+        LOG_FOR("Database", "Delete database before re-creating it. Connection: " + connectionName + "; PathOrHost: " + dbName);
+        switch (connector.driver()) {
+        case SQLite:
+        {
+            if (sqliteFileInfo.exists()) {
+                QFile f(sqliteFileInfo.absoluteFilePath());
+                if (!f.rename(sqliteFileInfo.absolutePath() + QDir::separator() + sqliteFileInfo.baseName() + "-bkup" + QDateTime::currentDateTime().toString("yyyyMMddhhMMss") + "." + sqliteFileInfo.completeSuffix()))
+                    LOG_ERROR_FOR("Database", "Unable to rename file.");
+            }
+            break;
+        }
+        case MySQL:
+        case PostSQL:
+        {
+            /** \todo test this feature */
+            DB = QSqlDatabase::addDatabase("QMYSQL" , "__DB_DELETOR" + connectionName);
+            DB.setHostName(connector.host());
+            DB.setUserName(connector.clearLog());
+            DB.setPassword(connector.clearPass());
+            DB.setPort(connector.port());
+//            DB.setDatabaseName("mysql");
+            if (!DB.open()) {
+                LOG_ERROR_FOR("Database", QString("Unable to connect to the server %1 - %2")
+                                     .arg(connector.host()).arg(DB.lastError().text()));
+                return false;
+            }
+            QSqlQuery query(DB);
+            if (!query.exec("DROP DATABASE " + dbName)) {
+                LOG_QUERY_ERROR_FOR("Database", query);
+                LOG_ERROR_FOR("Database", "Unable to drop database");
+            }
+            if (WarnLogMessages)
+                LOG_FOR("Database", QString("Connected to host %1").arg(connector.host()));
+            break;
+        }
+        }
+        createOption = CreateDatabase;
+    }
+    if (QSqlDatabase::contains("__DB_DELETOR" + connectionName)) {
+        QSqlDatabase::removeDatabase("__DB_DELETOR" + connectionName);
+    }
 
     // check server connection
     switch (connector.driver()) {

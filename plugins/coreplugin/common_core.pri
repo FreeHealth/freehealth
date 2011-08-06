@@ -15,6 +15,7 @@ QT *= xml \
     sql
 
 include(actionmanager/actionmanager.pri)
+include(modemanager/modemanager.pri)
 include(contextmanager/contextmanager.pri)
 include(dialogs/dialogs.pri)
 include(generals.pri)

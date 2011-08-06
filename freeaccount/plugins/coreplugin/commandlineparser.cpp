@@ -35,6 +35,7 @@
 #include <QDebug>
 
 using namespace Core;
+using namespace Internal;
 
 namespace Core {
 namespace Internal {
@@ -97,7 +98,6 @@ public:
         params.insert(CommandLine::CL_EMR_Name,          "--emr-name");
         params.insert(CommandLine::CL_EMR_Uid,           "--emr-uid");
         params.insert(CommandLine::CL_SelectionOnly,     "--selection-only");
-        params.insert(CommandLine::CL_DrugsDatabaseUid,  "--drugsdb-uid");
         params.insert(CommandLine::CL_ExchangeOutFile,      "--exchange-out");
         params.insert(CommandLine::CL_ExchangeOutFileFormat,"--exchange-format");
         params.insert(CommandLine::CL_ExchangeInFile,    "--exchange-in");
@@ -106,25 +106,10 @@ public:
         params.insert(CommandLine::CL_PatientFirstname,  "--patientfirstname");
         params.insert(CommandLine::CL_PatientGender,     "--gender");
         params.insert(CommandLine::CL_DateOfBirth,       "--dateofbirth");
-        params.insert(CommandLine::CL_Weight,            "--weight");
-        params.insert(CommandLine::CL_Weight_Unit,       "--weight-unit");
-        params.insert(CommandLine::CL_Height,            "--height");
-        params.insert(CommandLine::CL_Height_Unit,       "--height-unit");
-        params.insert(CommandLine::CL_CrCl,              "--crcl");
-        params.insert(CommandLine::CL_CrCl_Unit,         "--crcl-unit");
-        params.insert(CommandLine::CL_Chrono,            "--chrono");
-        params.insert(CommandLine::CL_Creatinine,        "--creatinine");
-        params.insert(CommandLine::CL_Creatinine_Unit,   "--creatinine-unit");
-        params.insert(CommandLine::CL_DrugsAllergies,    "--drugs-uid-allergies");
-        params.insert(CommandLine::CL_InnAllergies,      "--inn-allergies");
-        params.insert(CommandLine::CL_InnIntolerances,   "--inn-intolerances");
-        params.insert(CommandLine::CL_DrugsIntolerances, "--drugs-uid-intolerances");
-        params.insert(CommandLine::CL_AtcAllergies,      "--atc-allergies");
-        params.insert(CommandLine::CL_AtcIntolerances,   "--atc-intolerances");
-        params.insert(CommandLine::CL_ICD10Diseases,     "--icd10diseases");
-        params.insert(CommandLine::CL_TransmitDosage,    "--transmit-dosage");
-        params.insert(CommandLine::CL_ConfigFile,        "--config");
-        params.insert(CommandLine::CL_RunningUnderWine,  "--wine");
+        params.insert(CommandLine::Chrono,               "--chrono");
+        params.insert(CommandLine::ConfigFile,           "--config");
+        params.insert(CommandLine::RunningUnderWine,     "--wine");
+        params.insert(CommandLine::ClearUserDatabases,   "--clear-user-databases");
         params.insert(CommandLine::CL_BlockPatientDatas, "--blockpatientdatas");
 
         // insert default values
@@ -153,7 +138,6 @@ public:
             case CommandLine::CL_EMR_Name :          value.insert(CommandLine::CL_EMR_Name, a.mid(a.indexOf("=")+1).remove("\"")); break;
             case CommandLine::CL_EMR_Uid :           value.insert(CommandLine::CL_EMR_Uid, a.mid(a.indexOf("=")+1).remove("\"")); break;
             case CommandLine::CL_SelectionOnly :     value.insert(CommandLine::CL_SelectionOnly, true); break;
-            case CommandLine::CL_DrugsDatabaseUid :  value.insert(CommandLine::CL_DrugsDatabaseUid, a.mid(a.indexOf("=")+1).remove("\"")); break;
             case CommandLine::CL_ExchangeOutFile :      value.insert(CommandLine::CL_ExchangeOutFile, a.mid(a.indexOf("=")+1).remove("\"")); break;
             case CommandLine::CL_ExchangeOutFileFormat: value.insert(CommandLine::CL_ExchangeOutFileFormat, a.mid(a.indexOf("=")+1).remove("\"")); break;
             case CommandLine::CL_ExchangeInFile :    value.insert(CommandLine::CL_ExchangeInFile, a.mid(a.indexOf("=")+1).remove("\"")); break;
@@ -162,37 +146,17 @@ public:
             case CommandLine::CL_PatientFirstname :  value.insert(CommandLine::CL_PatientFirstname, a.mid(a.indexOf("=")+1).remove("\"")); break;
             case CommandLine::CL_PatientGender :     value.insert(CommandLine::CL_PatientGender, a.mid(a.indexOf("=")+1).remove("\"")); break;
             case CommandLine::CL_DateOfBirth :       value.insert(CommandLine::CL_DateOfBirth, a.mid(a.indexOf("=")+1).remove("\"")); break;
-            case CommandLine::CL_Weight :            value.insert(CommandLine::CL_Weight, a.mid(a.indexOf("=")+1).remove("\"")); break;
-            case CommandLine::CL_Weight_Unit :       value.insert(CommandLine::CL_Weight_Unit, a.mid(a.indexOf("=")+1).remove("\"")); break;
-            case CommandLine::CL_Height :            value.insert(CommandLine::CL_Height, a.mid(a.indexOf("=")+1).remove("\"")); break;
-            case CommandLine::CL_Height_Unit :       value.insert(CommandLine::CL_Height_Unit, a.mid(a.indexOf("=")+1).remove("\"")); break;
-            case CommandLine::CL_CrCl :              value.insert(CommandLine::CL_CrCl, a.mid(a.indexOf("=")+1).remove("\"")); break;
-            case CommandLine::CL_CrCl_Unit :         value.insert(CommandLine::CL_CrCl_Unit, a.mid(a.indexOf("=")+1).remove("\"")); break;
-            case CommandLine::CL_Creatinine :        value.insert(CommandLine::CL_Creatinine, a.mid(a.indexOf("=")+1).remove("\"")); break;
-            case CommandLine::CL_Creatinine_Unit :   value.insert(CommandLine::CL_Creatinine_Unit, a.mid(a.indexOf("=")+1).remove("\"")); break;
-            case CommandLine::CL_Chrono :            value.insert(CommandLine::CL_Chrono, true); break;
-            case CommandLine::CL_TransmitDosage :    value.insert(CommandLine::CL_TransmitDosage, true); break;
-            case CommandLine::CL_ConfigFile :        value.insert(CommandLine::CL_ConfigFile, a.mid(a.indexOf("=")+1).remove("\"")); break;
-            case CommandLine::CL_RunningUnderWine:   value.insert(CommandLine::CL_RunningUnderWine, true); break;
+            case CommandLine::Chrono :            value.insert(CommandLine::Chrono, true); break;
+            case CommandLine::ConfigFile :        value.insert(CommandLine::ConfigFile, a.mid(a.indexOf("=")+1).remove("\"")); break;
+            case CommandLine::RunningUnderWine:   value.insert(CommandLine::RunningUnderWine, true); break;
             case CommandLine::CL_BlockPatientDatas:  value.insert(CommandLine::CL_BlockPatientDatas, true); break;
-
-            case CommandLine::CL_DrugsAllergies: value.insert(CommandLine::CL_DrugsAllergies, a.mid(a.indexOf("=")+1).remove("\"")); break;
-            case CommandLine::CL_InnAllergies : value.insert(CommandLine::CL_InnAllergies, a.mid(a.indexOf("=")+1).remove("\"")); break;
-            case CommandLine::CL_AtcAllergies: value.insert(CommandLine::CL_AtcAllergies, a.mid(a.indexOf("=")+1).remove("\"")); break;
-
-            case CommandLine::CL_DrugsIntolerances: value.insert(CommandLine::CL_DrugsIntolerances, a.mid(a.indexOf("=")+1).remove("\"")); break;
-            case CommandLine::CL_InnIntolerances : value.insert(CommandLine::CL_InnIntolerances, a.mid(a.indexOf("=")+1).remove("\"")); break;
-            case CommandLine::CL_AtcIntolerances: value.insert(CommandLine::CL_AtcIntolerances, a.mid(a.indexOf("=")+1).remove("\"")); break;
-
-            case CommandLine::CL_ICD10Diseases : value.insert(CommandLine::CL_ICD10Diseases, a.mid(a.indexOf("=")+1).remove("\"")); break;
-
             default : break;
         }
         }
 
         if (!value.value(CommandLine::CL_ExchangeInFile).isNull()) {
             QString file = value.value(CommandLine::CL_ExchangeInFile).toString();
-            Utils::Log::addMessage("Core", QCoreApplication::translate("CommandLine", "Passing exchange in file : %1").arg(file));
+            LOG_FOR("Core", QCoreApplication::translate("CommandLine", "Passing exchange in file : %1").arg(file));
             if (QDir::isRelativePath(file)) {
                 file.prepend(qApp->applicationDirPath() + QDir::separator());
                 file = QDir::cleanPath(file);
@@ -200,15 +164,14 @@ public:
             if (QFile::exists(file)) {
                 readInFileXml(file);
             } else {
-                Utils::Log::addError("Core", QCoreApplication::translate("CommandLine", "Passing %1 as exchange in file, but file does not exists.").arg(file),
-                                     __FILE__, __LINE__);
+                LOG_ERROR_FOR("Core", QCoreApplication::translate("CommandLine", "Passing %1 as exchange in file, but file does not exists.").arg(file));
             }
         }
     }
 
     bool readInFileXml(const QString &file)
     {
-        Utils::Log::addMessage("Core", QCoreApplication::translate("CommandLine", "Reading exchange in file : %1").arg(QFileInfo(file).absoluteFilePath()));
+        LOG_FOR("Core", QCoreApplication::translate("CommandLine", "Reading exchange in file : %1").arg(QFileInfo(file).absoluteFilePath()));
         // Read contents if necessary
         QString contents;
         contents = Utils::readTextFile(file, Utils::DontWarnUser);
@@ -255,12 +218,10 @@ public:
         QDomElement element = rootElement.firstChildElement();
         while (!element.isNull()) {
             if (element.tagName() == Internal::Constants::XML_CONFIG_FILE) {
-                value.insert(CommandLine::CL_ConfigFile, element.attribute(Internal::Constants::XML_ATTRIB_VALUE));
+                value.insert(CommandLine::ConfigFile, element.attribute(Internal::Constants::XML_ATTRIB_VALUE));
             } else if (element.tagName() == Internal::Constants::XML_OUT_FILE) {
                 value.insert(CommandLine::CL_ExchangeOutFile, element.attribute(Internal::Constants::XML_ATTRIB_VALUE));
                 value.insert(CommandLine::CL_ExchangeOutFileFormat, element.attribute(Internal::Constants::XML_ATTRIB_FORMAT));
-            } else if (element.tagName() == Internal::Constants::XML_DRUGS_DATABASE) {
-                value.insert(CommandLine::CL_DrugsDatabaseUid, element.attribute(Internal::Constants::XML_ATTRIB_UID));
             } else if (element.tagName() == Internal::Constants::XML_EMR) {
                 value.insert(CommandLine::CL_EMR_Name, element.attribute(Internal::Constants::XML_ATTRIB_NAME));
                 value.insert(CommandLine::CL_EMR_Uid, element.attribute(Internal::Constants::XML_ATTRIB_UID));
@@ -301,30 +262,6 @@ public:
                 value.insert(CommandLine::CL_PatientUid, element.attribute(Internal::Constants::XML_ATTRIB_UID));
                 value.insert(CommandLine::CL_PatientGender, element.attribute(Internal::Constants::XML_ATTRIB_GENDER));
                 value.insert(CommandLine::CL_DateOfBirth, QDate::fromString(element.attribute(Internal::Constants::XML_ATTRIB_DATEOFBIRTH),"yyyy/MM/dd"));
-            } else if (element.tagName() == Internal::Constants::XML_PATIENT_HEIGHT) {
-                value.insert(CommandLine::CL_Height, element.attribute(Internal::Constants::XML_ATTRIB_VALUE));
-                value.insert(CommandLine::CL_Height_Unit, element.attribute(Internal::Constants::XML_ATTRIB_UNIT));
-            } else if (element.tagName() == Internal::Constants::XML_PATIENT_WEIGHT) {
-                value.insert(CommandLine::CL_Weight, element.attribute(Internal::Constants::XML_ATTRIB_VALUE));
-                value.insert(CommandLine::CL_Weight_Unit, element.attribute(Internal::Constants::XML_ATTRIB_UNIT));
-            } else if (element.tagName() == Internal::Constants::XML_PATIENT_CREAT) {
-                value.insert(CommandLine::CL_Creatinine, element.attribute(Internal::Constants::XML_ATTRIB_VALUE));
-                value.insert(CommandLine::CL_Creatinine_Unit, element.attribute(Internal::Constants::XML_ATTRIB_UNIT));
-            } else if (element.tagName() == Internal::Constants::XML_PATIENT_CRCL) {
-                value.insert(CommandLine::CL_CrCl, element.attribute(Internal::Constants::XML_ATTRIB_VALUE));
-                value.insert(CommandLine::CL_CrCl_Unit, element.attribute(Internal::Constants::XML_ATTRIB_UNIT));
-            } else if (element.tagName() == Internal::Constants::XML_ATC_ALLERGIES) {
-                value.insert(CommandLine::CL_AtcAllergies, element.attribute(Internal::Constants::XML_ATTRIB_VALUE));
-            } else if (element.tagName() == Internal::Constants::XML_INN_ALLERGIES) {
-                value.insert(CommandLine::CL_InnAllergies, element.attribute(Internal::Constants::XML_ATTRIB_VALUE));
-            } else if (element.tagName() == Internal::Constants::XML_DRUGS_ALLERGIES) {
-                value.insert(CommandLine::CL_DrugsAllergies, element.attribute(Internal::Constants::XML_ATTRIB_VALUE));
-            } else if (element.tagName() == Internal::Constants::XML_ATC_INTOLERANCES) {
-                value.insert(CommandLine::CL_AtcIntolerances, element.attribute(Internal::Constants::XML_ATTRIB_VALUE));
-            } else if (element.tagName() == Internal::Constants::XML_INN_INTOLERANCES) {
-                value.insert(CommandLine::CL_InnIntolerances, element.attribute(Internal::Constants::XML_ATTRIB_VALUE));
-            } else if (element.tagName() == Internal::Constants::XML_DRUGS_INTOLERANCES) {
-                value.insert(CommandLine::CL_DrugsIntolerances, element.attribute(Internal::Constants::XML_ATTRIB_VALUE));
             }
             element = element.nextSiblingElement();
         }
@@ -335,17 +272,11 @@ public:
     {
         patient->setData(patient->index(0, IPatient::Uid),            value.value(CommandLine::CL_PatientUid));
         patient->setData(patient->index(0, IPatient::DateOfBirth),    value.value(CommandLine::CL_DateOfBirth));
-        patient->setData(patient->index(0, IPatient::Height),         value.value(CommandLine::CL_Height));
-        patient->setData(patient->index(0, IPatient::HeightUnit),     value.value(CommandLine::CL_Height_Unit));
-        patient->setData(patient->index(0, IPatient::Weight),         value.value(CommandLine::CL_Weight));
-        patient->setData(patient->index(0, IPatient::WeightUnit),     value.value(CommandLine::CL_Weight_Unit));
-        patient->setData(patient->index(0, IPatient::Creatinine),     value.value(CommandLine::CL_Creatinine));
-        patient->setData(patient->index(0, IPatient::CreatinineUnit), value.value(CommandLine::CL_Creatinine_Unit));
         patient->setData(patient->index(0, IPatient::BirthName),      value.value(CommandLine::CL_PatientName));
         patient->setData(patient->index(0, IPatient::Firstname),      value.value(CommandLine::CL_PatientFirstname));
         patient->setData(patient->index(0, IPatient::Gender),         value.value(CommandLine::CL_PatientGender));
 
-        QStringList tmp;
+//        QStringList tmp;
 //        // Allergies
 //        tmp = value.value(CommandLine::CL_AtcAllergies).toString().split(";");
 //        tmp.removeAll("");
@@ -391,7 +322,7 @@ QHash<int, QString> Internal::CommandLinePrivate::params;
 
 
 CommandLine::CommandLine() :
-        ICommandLine(), d(new Internal::CommandLinePrivate)
+        Core::ICommandLine(), d(new CommandLinePrivate)
 {
     d->parseCommandLine();
 }

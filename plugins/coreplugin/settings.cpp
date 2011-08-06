@@ -407,7 +407,6 @@ void SettingsPrivate::setUserSettings(const QString &content)
 {
     // create a temp file with the content
     QString fileName = path(ApplicationTempPath) + QDir::separator() + Utils::Database::createUid() + ".ini";
-    qWarning() << fileName;
     QFile f(fileName);
     while (f.exists()) {
         fileName = path(ApplicationTempPath) + QDir::separator() + Utils::Database::createUid() + ".ini";

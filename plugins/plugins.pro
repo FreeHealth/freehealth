@@ -112,6 +112,7 @@ formmanager.depends += core
 icd.subdir = icdplugin
 icd.depends += core
 icd.depends += formmanager
+icd.depends += listview
 
 pmh.subdir = pmhplugin
 pmh.depends += core

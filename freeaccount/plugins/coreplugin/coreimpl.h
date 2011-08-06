@@ -42,6 +42,7 @@ namespace Internal {
     class ActionManagerPrivate;
     class ContextManagerPrivate;
     class SettingsPrivate;
+    class CommandLine;
 }  // End Internal
 }  // End Core
 
@@ -76,7 +77,7 @@ public:
     bool initialize(const QStringList &arguments, QString *errorString);
     void extensionsInitialized();
 
-    CommandLine *commandLine() const;
+    ICommandLine *commandLine() const;
 
     Utils::UpdateChecker *updateChecker() const;
 

@@ -31,15 +31,19 @@
 #include <QString>
 #include <QVariant>
 
-
+/**
+ * \file commandlineparser.h
+ * \author Eric MAEKER <eric.maeker@gmail.com>
+ * \version 0.6.0
+ * \date 06 Aug 2011
+*/
 
 namespace Core {
     class IPatient;
+    class Patient;
 
 namespace Internal {
 class CommandLinePrivate;
-}
-class Patient;
 
 class CommandLine  : public Core::ICommandLine
 {
@@ -51,7 +55,6 @@ public:
         CL_EMR_Name,
         CL_EMR_Uid,
         CL_SelectionOnly,
-        CL_DrugsDatabaseUid,
         CL_ExchangeOutFile,
         CL_ExchangeOutFileFormat,
         CL_ExchangeInFile,
@@ -60,25 +63,6 @@ public:
         CL_PatientUid,
         CL_PatientGender,
         CL_DateOfBirth,
-        CL_Weight,
-        CL_Weight_Unit,
-        CL_Height,
-        CL_Height_Unit,
-        CL_CrCl,
-        CL_CrCl_Unit,
-        CL_Creatinine,
-        CL_Creatinine_Unit,
-        CL_DrugsAllergies,
-        CL_InnAllergies,
-        CL_AtcAllergies,
-        CL_DrugsIntolerances,
-        CL_InnIntolerances,
-        CL_AtcIntolerances,
-        CL_ICD10Diseases,
-        CL_Chrono,
-        CL_TransmitDosage,
-        CL_ConfigFile,
-        CL_RunningUnderWine,
         CL_BlockPatientDatas,
         CL_MaxParam
     };
@@ -92,9 +76,10 @@ public:
     void feedPatientDatas(Core::IPatient *patient);
 
 private:
-    Internal::CommandLinePrivate *d;
+    CommandLinePrivate *d;
 };
 
-}
+}  // End namespace Internal
+}  // End namespace Core
 
 #endif // FREEACCOUNT_COMMANDLINEPARSER_H

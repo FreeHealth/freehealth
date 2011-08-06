@@ -92,7 +92,7 @@ CoreImpl::CoreImpl(QObject *parent) :
 
     QTime chrono;
     chrono.start();
-    bool logChrono = m_CommandLine->value(CommandLine::CL_Chrono).toBool();
+    bool logChrono = m_CommandLine->value(ICommandLine::Chrono).toBool();
     if (logChrono)
         Utils::Log::logTimeElapsed(chrono, "Core", "command line parsing");
 
@@ -126,7 +126,7 @@ CoreImpl::CoreImpl(QObject *parent) :
     // WINE compatibility (only for testing under ubuntu when crosscompiling)
 #ifdef Q_OS_WIN
     // For WINE testings
-    if (m_CommandLine->value(Core::CommandLine::CL_RunningUnderWine).toBool()) {
+    if (m_CommandLine->value(Core::ICommandLine::RunningUnderWine).toBool()) {
         Utils::Log::addMessage("Core", "Running under Wine environnement.");
         QFont::insertSubstitution("MS Shell Dlg", "Tahoma");
         QFont::insertSubstitution("MS Shell Dlg 2", "Tahoma");
@@ -183,7 +183,7 @@ void CoreImpl::setMainWindow(IMainWindow *win)
 //FormManager *CoreImpl::formManager() const { return m_FormManager; }
 FileManager *CoreImpl::fileManager() const { return m_FileManager; }
 
-CommandLine *CoreImpl::commandLine() const { return m_CommandLine; }
+ICommandLine *CoreImpl::commandLine() const { return m_CommandLine; }
 Utils::UpdateChecker *CoreImpl::updateChecker() const { return m_UpdateChecker; }
 
 

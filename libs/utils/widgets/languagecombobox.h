@@ -66,7 +66,7 @@ public Q_SLOTS:
     void setCurrentLanguage(QLocale::Language lang);
     void setDisplayMode(DisplayMode mode);
 
-private Q_SLOTS:
+protected Q_SLOTS:
     void comboBoxCurrentIndexChanged(int id);
 
 Q_SIGNALS:

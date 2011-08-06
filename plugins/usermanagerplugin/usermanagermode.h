@@ -33,6 +33,8 @@
 
 #include <coreplugin/modemanager/basemode.h>
 
+#include <QtCore/QObject>
+
 namespace UserPlugin {
 namespace Internal {
 
@@ -40,7 +42,7 @@ class UserManagerMode : public Core::BaseMode
 {
     Q_OBJECT
 public:
-    explicit UserManagerMode(QObject *parent = 0);
+    UserManagerMode(QObject *parent = 0);
     ~UserManagerMode();
 
 private Q_SLOTS:

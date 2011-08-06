@@ -18,6 +18,7 @@ mainwindow.depends += printer
 
 icd.subdir = icdplugin
 icd.depends += core
+icd.depends += views
 
 printer.subdir   = printerplugin
 printer.depends += core

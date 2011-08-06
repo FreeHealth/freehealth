@@ -25,8 +25,8 @@
  *       NAME <MAIL@ADRESS>                                                *
  ***************************************************************************/
 #include "defautuserviewerpages.h"
-#include "usermodel.h"
 #include "userpassworddialog.h"
+#include <usermanagerplugin/usermodel.h>
 
 #include <printerplugin/printer.h>
 #include <printerplugin/textdocumentextra.h>

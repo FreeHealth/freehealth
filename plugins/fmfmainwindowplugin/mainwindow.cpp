@@ -59,7 +59,6 @@
 #include <formmanagerplugin/episodemodel.h>
 
 #include <fmfcoreplugin/coreimpl.h>
-#include <fmfcoreplugin/commandlineparser.h>
 
 #include <patientbaseplugin/patientbar.h>
 #include <patientbaseplugin/patientsearchmode.h>
@@ -91,7 +90,6 @@ using namespace Trans::ConstantTranslations;
 // Getting the Core instances
 static inline Utils::UpdateChecker *updateChecker() { return Core::ICore::instance()->updateChecker(); }
 
-static inline Core::CommandLine *commandLine() { return Core::ICore::instance()->commandLine(); }
 static inline Core::ISettings *settings()  { return Core::ICore::instance()->settings(); }
 static inline Core::ITheme *theme()  { return Core::ICore::instance()->theme(); }
 static inline Core::ActionManager *actionManager() { return Core::ICore::instance()->actionManager(); }

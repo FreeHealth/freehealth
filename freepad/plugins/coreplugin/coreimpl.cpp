@@ -183,7 +183,7 @@ void CoreImpl::setMainWindow(IMainWindow *win)
 //FormManager *CoreImpl::formManager() const { return m_FormManager; }
 FileManager *CoreImpl::fileManager() const { return m_FileManager; }
 
-CommandLine *CoreImpl::commandLine() const { return 0; }
+ICommandLine *CoreImpl::commandLine() const { return 0; }
 Utils::UpdateChecker *CoreImpl::updateChecker() const { return m_UpdateChecker; }
 
 bool CoreImpl::initialize(const QStringList &arguments, QString *errorString)

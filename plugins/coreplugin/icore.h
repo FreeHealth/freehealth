@@ -56,7 +56,7 @@ class ITheme;
 class ISettings;
 class IMainWindow;
 class ModeManager;
-class CommandLine;
+class ICommandLine;
 class IPatient;
 class IUser;
 class FileManager;
@@ -93,7 +93,7 @@ public:
     virtual Translators *translators() const = 0;
     virtual ISettings *settings() const = 0;
 
-    virtual CommandLine *commandLine() const = 0;
+    virtual ICommandLine *commandLine() const = 0;
     virtual Utils::UpdateChecker *updateChecker() const = 0;
 
     virtual void setMainWindow(IMainWindow *) = 0;

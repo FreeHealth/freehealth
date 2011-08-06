@@ -30,9 +30,6 @@
     AvailableActions param and setActions().\n
   * You can reimplement addItem(), removeItem() and on_edit_triggered()
     that are called by buttons and menu (add , remove). \n
-  * The getContextMenu() is automatically called when the contextMenu is requiered.\n
-    You can reimplement getContextMenu() in order to use your own contextMenu.\n
-    Remember that the poped menu will be deleted after execution. \n
   \todo There is a problem when including this widget into a QDataWidgetMapper, when this widget loses focus, datas are not retreived.
 */
 

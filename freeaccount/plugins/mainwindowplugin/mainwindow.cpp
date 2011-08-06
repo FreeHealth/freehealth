@@ -80,9 +80,11 @@ using namespace MainWin;
 using namespace MainWin::Internal;
 using namespace Trans::ConstantTranslations;
 
+enum { WarnLogMessage = false };
+
 // Getting the Core instances
 static inline Utils::UpdateChecker *updateChecker() { return Core::ICore::instance()->updateChecker(); }
-static inline Core::CommandLine *commandLine() { return Core::ICore::instance()->commandLine(); }
+static inline Core::ICommandLine *commandLine() { return Core::ICore::instance()->commandLine(); }
 static inline Core::ISettings *settings()  { return Core::ICore::instance()->settings(); }
 static inline Core::ITheme *theme()  { return Core::ICore::instance()->theme(); }
 static inline Core::ActionManager *actionManager() { return Core::ICore::instance()->actionManager(); }
@@ -161,7 +163,7 @@ void MainWindow::extensionsInitialized()
     // Update countdown to dosage transmission
     int count = settings()->value(Internal::SETTINGS_COUNTDOWN,0).toInt();
     ++count;
-//    if ((count==30) || (commandLine()->value(Core::CommandLine::CL_TransmitDosage).toBool())) {
+//    if ((count==30) || (commandLine()->value(Core::Internal::CommandLine::CL_TransmitDosage).toBool())) {
 //        messageSplash(tr("Transmitting posologies..."));
 //        settings()->setValue(Internal::SETTINGS_COUNTDOWN,0);
 //        transmitDosage();
@@ -175,17 +177,17 @@ void MainWindow::extensionsInitialized()
         setWindowTitle(qApp->applicationName() + " - " + qApp->applicationVersion());
 
     // Disable some actions when starting as medintux plugin
-    if (commandLine()->value(Core::CommandLine::CL_MedinTux).toBool()) {
+    if (commandLine()->value(Core::Internal::CommandLine::CL_MedinTux).toBool()) {
 //        this->aNew->setEnabled(false);
 //        this->aSave->setEnabled(false);
 //        this->aMedinTux->setEnabled(false);
     }
 
     // If needed read exchange out file
-    const QString &exfile = commandLine()->value(Core::CommandLine::CL_ExchangeOutFile).toString();
+    const QString &exfile = commandLine()->value(Core::Internal::CommandLine::CL_ExchangeOutFile).toString();
     if (!exfile.isEmpty()) {
         messageSplash(tr("Reading exchange file..."));
-//        if (commandLine()->value(Core::CommandLine::CL_MedinTux).toBool()) {
+//        if (commandLine()->value(Core::Internal::CommandLine::CL_MedinTux).toBool()) {
 //            Utils::Log::addMessage(this, tr("Reading a MedinTux exchange file."));
 //            QString tmp = Utils::readTextFile(exfile, Utils::DontWarnUser);
 //            Utils::Log::addMessage(this, "Content of the exchange file : " + tmp);
@@ -222,16 +224,16 @@ void MainWindow::extensionsInitialized()
 
 
     // Here we set the UI according to the commandline parser
-    if (commandLine()->value(Core::CommandLine::CL_ReceiptsCreator).toBool()) {
+    if (commandLine()->value(Core::Internal::CommandLine::CL_ReceiptsCreator).toBool()) {
         setCentralWidget(new ReceiptViewer::ReceiptViewer(this));
         setCentralWidget(new ReceiptViewer(this));
-        qDebug() << __FILE__ << QString::number(__LINE__) << " receiptGUI initialized";
+        if (WarnLogMessage)
+            LOG("receiptGUI initialized");
     } else {
         //setCentralWidget(new Account::AccountView(this));
         setCentralWidget(new ReceiptViewer::ReceiptViewer(this));
     }
 
-    connect(Core::ICore::instance()->user(), SIGNAL(userChanged()), this, SLOT(userChanged()));
     userChanged();
 
     createDockWindows();
@@ -240,6 +242,7 @@ void MainWindow::extensionsInitialized()
     setWindowIcon(theme()->icon(Core::Constants::ICONFREEACCOUNT));
 
     connect(Core::ICore::instance(), SIGNAL(coreOpened()), this, SLOT(postCoreOpened()));
+    connect(user(), SIGNAL(userChanged()), this, SLOT(userChanged()));
 }
 
 MainWindow::~MainWindow()
@@ -282,14 +285,14 @@ void MainWindow::closeEvent( QCloseEvent *event )
     //    }
 
     // Save exchange file
-//    QString exfile = commandLine()->value(Core::CommandLine::CL_ExchangeFileOut).toString();
+//    QString exfile = commandLine()->value(Core::Internal::CommandLine::CL_ExchangeFileOut).toString();
 //    if ((!exfile.isEmpty()) && (!QFile(exfile).exists())) {
 //        Utils::Log::addError(this,tkTr(Trans::Constants::FILE_1_DOESNOT_EXISTS).arg(exfile));
 //    } else if ((!exfile.isEmpty()) && (QFile(exfile).exists())) {
 //        Utils::Log::addMessage(this, QString("Exchange File : %1 ").arg(exfile));
-//        Utils::Log::addMessage(this, QString("Running as MedinTux plug : %1 ").arg(commandLine()->value(Core::CommandLine::CL_MedinTux).toString()));
+//        Utils::Log::addMessage(this, QString("Running as MedinTux plug : %1 ").arg(commandLine()->value(Core::Internal::CommandLine::CL_MedinTux).toString()));
 //        // if is a medintux plugins --> save prescription to exchange file
-//        if (commandLine()->value(Core::CommandLine::CL_MedinTux).toBool()) {
+//        if (commandLine()->value(Core::Internal::CommandLine::CL_MedinTux).toBool()) {
 //            QString tmp = DrugsDB::DrugsIO::instance()->prescriptionToHtml(drugModel());
 //            tmp.replace("font-weight:bold;", "font-weight:600;");
 //            Utils::saveStringToFile(Utils::toHtmlAccent(tmp) , exfile, Utils::DontWarnUser);
@@ -449,10 +452,10 @@ bool MainWindow::saveFile()
 bool MainWindow::savePrescription(const QString &fileName)
 {
 //    QString xmlExtra = patient()->toXml();
-//    if (commandLine()->value(Core::CommandLine::CL_EMR_Name).isValid()) {
-//        xmlExtra.append(QString("<EMR name=\"%1\"").arg(commandLine()->value(Core::CommandLine::CL_EMR_Name).toString()));
-//        if (commandLine()->value(Core::CommandLine::CL_EMR_Name).isValid()) {
-//            xmlExtra.append(QString(" uid=\"%1\"").arg(commandLine()->value(Core::CommandLine::CL_EMR_Uid).toString()));
+//    if (commandLine()->value(Core::Internal::CommandLine::CL_EMR_Name).isValid()) {
+//        xmlExtra.append(QString("<EMR name=\"%1\"").arg(commandLine()->value(Core::Internal::CommandLine::CL_EMR_Name).toString()));
+//        if (commandLine()->value(Core::Internal::CommandLine::CL_EMR_Name).isValid()) {
+//            xmlExtra.append(QString(" uid=\"%1\"").arg(commandLine()->value(Core::Internal::CommandLine::CL_EMR_Uid).toString()));
 //        }
 //        xmlExtra.append("/>");
 //    }

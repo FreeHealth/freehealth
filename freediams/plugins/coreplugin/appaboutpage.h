@@ -42,7 +42,7 @@ public:
     QString name() const     { return tr("1. General"); }
     QString category() const { return tr("Application"); }
 
-    QWidget *widget();
+    QWidget *createPage(QWidget *parent = 0);
 };
 
 class CommandLineAboutPage : public IAboutPage
@@ -56,7 +56,7 @@ public:
     QString name() const     { return tr("5. Command line"); }
     QString category() const { return tr("Application"); }
 
-    QWidget *widget();
+    QWidget *createPage(QWidget *parent = 0);
 };
 
 } // End Internal

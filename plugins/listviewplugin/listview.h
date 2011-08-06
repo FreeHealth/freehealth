@@ -44,7 +44,6 @@
  * \date 03 Feb 2011
 */
 
-
 namespace Views {
 namespace Internal {
 class ListViewPrivate;

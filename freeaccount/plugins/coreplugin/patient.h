@@ -65,6 +65,7 @@ public:
 
     void hidePatientBar() {}
     void showPatientBar() {}
+    bool isPatientBarVisible() const {return false;}
 
 private:
     Internal::PatientPrivate *d;

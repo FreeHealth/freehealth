@@ -36,13 +36,13 @@
  * \date 04 Dec 2010
 */
 
-
 namespace MedinTux {
 class Configuration;
 }
 
 namespace Core {
     class Patient;
+    class CommandLine;
 
 namespace Internal {
     class ThemePrivate;
@@ -85,7 +85,7 @@ public:
     bool initialize(const QStringList &arguments, QString *errorString);
     void extensionsInitialized();
 
-    CommandLine *commandLine() const;
+    ICommandLine *commandLine() const;
 
     Utils::UpdateChecker *updateChecker() const;
 

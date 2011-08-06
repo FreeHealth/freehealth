@@ -14,7 +14,7 @@ HEADERS += $${PWD}/usermanagerplugin.h \
     $${PWD}/usermanagermode.h \
     $${PWD}/widgets/iuserviewerpage.h \
     $${PWD}/widgets/defautuserviewerpages.h \
-    iuserwizardpage.h
+    $${PWD}/iuserwizardpage.h
 
 SOURCES += $${PWD}/usermanagerplugin.cpp \
     $${PWD}/currentuserpreferencespage.cpp \
@@ -37,7 +37,6 @@ HEADERS += \
     $${PWD}/widgets/userrightswidget.h \
     $${PWD}/widgets/userwizard.h \
     $${PWD}/widgets/userlineeditcompletersearch.h
-#    $${PWD}/widgets/userviewer_p.h \
 
 SOURCES += \
     $${PWD}/userdata.cpp \
@@ -65,7 +64,6 @@ FORMS += $${PWD}/widgets/userviewer.ui \
     $${PWD}/widgets/userviewer_papers.ui \
     $${PWD}/widgets/userviewer_medicalrights.ui \
     $${PWD}/widgets/userviewer_professional.ui
-#    $${PWD}/widgets/headersfootersviewerprivate.ui \
 
 # translators
 TRANSLATIONS += $${SOURCES_TRANSLATIONS_PATH}/usermanagerplugin_fr.ts \

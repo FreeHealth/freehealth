@@ -43,6 +43,13 @@ namespace Core {
 class CORE_EXPORT ICommandLine : public QObject
 {
 public:
+    enum Params {
+        Chrono = 1000,
+        ConfigFile,
+        RunningUnderWine,
+        ClearUserDatabases
+    };
+
     ICommandLine() {}
     virtual ~ICommandLine() {}
 

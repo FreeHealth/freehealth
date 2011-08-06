@@ -26,6 +26,7 @@
  ***************************************************************************/
 #include "coreimpl.h"
 #include "appconfigwizard.h"
+#include "commandlineparser.h"
 
 #include <coreplugin/settings_p.h>
 #include <coreplugin/isettings.h>
@@ -40,8 +41,6 @@
 #include <coreplugin/filemanager.h>
 #include <coreplugin/modemanager/modemanager.h>
 #include <coreplugin/constants_icons.h>
-
-#include <fmfcoreplugin/commandlineparser.h>
 
 #include <utils/log.h>
 #include <utils/global.h>
@@ -88,7 +87,7 @@ CoreImpl::CoreImpl(QObject *parent) :
 
     QTime chrono;
     chrono.start();
-    bool logChrono = m_CommandLine->value(CommandLine::CL_Chrono).toBool();
+    bool logChrono = m_CommandLine->value(ICommandLine::Chrono).toBool();
     if (logChrono)
         Utils::Log::logTimeElapsed(chrono, "Core", "command line parsing");
 
@@ -123,7 +122,7 @@ CoreImpl::CoreImpl(QObject *parent) :
     // WINE compatibility (only for testing under ubuntu when crosscompiling)
 #ifdef Q_OS_WIN
     // For WINE testings
-    if (m_CommandLine->value(Core::CommandLine::CL_RunningUnderWine).toBool()) {
+    if (m_CommandLine->value(Core::ICommandLine::RunningUnderWine).toBool()) {
         LOG("Running under Wine environnement." );
         QFont::insertSubstitution("MS Shell Dlg", "Tahoma" );
         QFont::insertSubstitution("MS Shell Dlg 2", "Tahoma" );
@@ -187,7 +186,7 @@ Translators *CoreImpl::translators() const { return m_Translators; }
 ISettings *CoreImpl::settings() const{ return m_Settings; }
 FileManager *CoreImpl::fileManager() const { return m_FileManager; }
 Utils::UpdateChecker *CoreImpl::updateChecker() const { return m_UpdateChecker; }
-CommandLine *CoreImpl::commandLine() const { return m_CommandLine; }
+ICommandLine *CoreImpl::commandLine() const { return m_CommandLine; }
 ModeManager *CoreImpl::modeManager() const {return m_ModeManager;}
 
 bool CoreImpl::initialize(const QStringList &arguments, QString *errorString)

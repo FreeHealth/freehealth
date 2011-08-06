@@ -42,7 +42,7 @@ public:
     QString name() const;
     QString category() const;
 
-    QWidget *widget();
+    QWidget *createPage(QWidget *parent = 0);
 };
 
 class CommandLineAboutPage : public IAboutPage
@@ -55,7 +55,7 @@ public:
     QString name() const;
     QString category() const;
 
-    QWidget *widget();
+    QWidget *createPage(QWidget *parent = 0);
 };
 
 } // End Internal

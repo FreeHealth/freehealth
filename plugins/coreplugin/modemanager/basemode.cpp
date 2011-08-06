@@ -31,7 +31,6 @@
  *   Contributors :                                                        *
  *       NAME <MAIL@ADRESS>                                                *
  ***************************************************************************/
-
 #include "basemode.h"
 
 #include <extensionsystem/pluginmanager.h>
@@ -76,7 +75,7 @@ using namespace Core;
 
     \a parent
 */
-BaseMode::BaseMode(QObject *parent):
+BaseMode::BaseMode(QObject *parent) :
     IMode(parent),
     m_priority(0),
     m_widget(0),

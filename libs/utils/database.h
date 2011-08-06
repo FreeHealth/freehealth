@@ -137,8 +137,9 @@ public:
     */
     enum CreationOption  // if database doesnot exist :
     {
-        WarnOnly = 0,        /*!< \brief Only warn user, don't try to create the database. */
-        CreateDatabase   /*!< \brief Don't warn user, try to create automatically the database. \sa createDatabase()*/
+        WarnOnly = 0,
+        CreateDatabase,
+        DeleteAndRecreateDatabase // connected to Core::ICommandLine -> --clear-user-databases param
     };
 
     /**

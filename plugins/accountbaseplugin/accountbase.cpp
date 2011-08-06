@@ -39,6 +39,7 @@
 
 #include <coreplugin/isettings.h>
 #include <coreplugin/icore.h>
+#include <coreplugin/icommandline.h>
 #include <coreplugin/constants.h>
 
 #ifdef FREEACCOUNT
@@ -64,7 +65,7 @@ using namespace AccountDB::Internal;
 using namespace Trans::ConstantTranslations;
 
 static inline Core::ISettings *settings()  { return Core::ICore::instance()->settings(); }
-static inline Core::CommandLine *commandLine()  { return Core::ICore::instance()->commandLine(); }
+static inline Core::ICommandLine *commandLine()  { return Core::ICore::instance()->commandLine(); }
 
 static inline bool connectDatabase(QSqlDatabase &DB, const QString &file, const int line)
 {
@@ -566,9 +567,15 @@ bool AccountBase::init()
         return true;
 
     // connect
-    createConnection(Constants::DB_ACCOUNTANCY, Constants::DB_ACCOUNTANCY,
-                     settings()->databaseConnector(),
-                     Utils::Database::CreateDatabase);
+    if (commandLine()->value(Core::ICommandLine::ClearUserDatabases).toBool()) {
+        createConnection(Constants::DB_ACCOUNTANCY, Constants::DB_ACCOUNTANCY,
+                         settings()->databaseConnector(),
+                         Utils::Database::DeleteAndRecreateDatabase);
+    } else {
+        createConnection(Constants::DB_ACCOUNTANCY, Constants::DB_ACCOUNTANCY,
+                         settings()->databaseConnector(),
+                         Utils::Database::CreateDatabase);
+    }
 
     if (!database().isOpen()) {
         if (!database().open()) {
@@ -579,36 +586,6 @@ bool AccountBase::init()
     } else {
         LOG(tkTr(Trans::Constants::CONNECTED_TO_DATABASE_1_DRIVER_2).arg(database().connectionName()).arg(database().driverName()));
     }
-
-    // log the path of the database
-//    QString pathToDb = settings()->path(Core::ISettings::ReadWriteDatabasesPath);
-//    LOG(tr("Searching databases into dir %1").arg(pathToDb));
-
-//#ifdef FREEACCOUNT
-//     if (commandLine()->value(Core::CommandLine::CL_Test).toBool()) {
-//         // check if database exists
-//         bool feed = !QFile(pathToDb + QDir::separator() + QString(Constants::DB_ACCOUNTANCY) + "-test.db").exists();
-
-//         // Connect normal Account Database
-//         createConnection(Constants::DB_ACCOUNTANCY, QString(Constants::DB_ACCOUNTANCY) + "-test.db", pathToDb,
-//                          Utils::Database::ReadWrite, Utils::Database::SQLite, "", "", 0, CreateDatabase);
-//         if (feed) {
-//             // send defaults datas to DB
-//             LOG("feeding test database with datas");
-//             QString content = Utils::readTextFile(settings()->path(Core::ISettings::BundleResourcesPath) + "/textfiles/freeaccount-testing-database.sql");
-//             if (!executeSQL(content, database()))
-//                 LOG_ERROR("can feed test database");
-//         }
-//     } else {
-//         // Connect normal Account Database
-//         createConnection(Constants::DB_ACCOUNTANCY, QString(Constants::DB_ACCOUNTANCY) + ".db", pathToDb,
-//                          Utils::Database::ReadWrite, Utils::Database::SQLite, "", "", 0, CreateDatabase);
-//     }
-//#else
-//     // Connect normal Account Database
-//     createConnection(Constants::DB_ACCOUNTANCY, QString(Constants::DB_ACCOUNTANCY) + ".db", pathToDb,
-//                      Utils::Database::ReadWrite, Utils::Database::SQLite, "", "", 0, CreateDatabase);
-//#endif
 
     if (!checkDatabaseScheme()) {
         LOG_ERROR(tkTr(Trans::Constants::DATABASE_1_SCHEMA_ERROR).arg(Constants::DB_ACCOUNTANCY));
