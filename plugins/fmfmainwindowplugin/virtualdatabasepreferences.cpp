@@ -86,7 +86,6 @@ void VirtualDatabasePreferences::on_populateDb_clicked()
     // Prepare virtual patients
     int nb = nbVirtualPatients->value();
     int userLkId = userModel()->practionnerLkIds(userModel()->currentUserData(Core::IUser::Uuid).toString()).at(0);
-    qWarning() << "eeeeeeeeeeeeeeeeeeee" << user() << userLkId;
     QProgressDialog dlg(tr("Creating %1 virtual patients").arg(nb), tr("Cancel"), 0, nb, qApp->activeWindow());
     dlg.setWindowModality(Qt::WindowModal);
 
@@ -95,8 +94,8 @@ void VirtualDatabasePreferences::on_populateDb_clicked()
 
     for(int i = 0; i < nb; ++i) {
         if (i % 100 == 0) {
-            dlg.setValue(i);
             patientBase()->database().transaction();
+            dlg.setValue(i);
         }
         QString name, sur, sec, g;
         int title, lk;
@@ -126,7 +125,7 @@ void VirtualDatabasePreferences::on_populateDb_clicked()
         else
             lk = userLkId;
 
-        createPatient(name,sec, sur,g,title,
+        patientBase()->createVirtualPatient(name,sec, sur,g,title,
                       dob,"France","",r.getRandomString(65),
                       QString::number(p.first), p.second,
                       Utils::Database::createUid(), lk, "", death);

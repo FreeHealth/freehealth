@@ -48,6 +48,8 @@
 #include <QProgressDialog>
 #include <QTreeWidgetItem>
 #include <QFont>
+#include <QByteArray>
+#include <QBuffer>
 
 using namespace Patients::Internal;
 using namespace Trans::ConstantTranslations;
@@ -201,7 +203,7 @@ bool PatientBase::init()
 
 static inline Patients::Internal::PatientBase *patientBase()  { return Patients::Internal::PatientBase::instance(); }
 
-void createVirtualPatient(const QString &name, const QString &secondname, const QString &firstname,
+void PatientBase::createVirtualPatient(const QString &name, const QString &secondname, const QString &firstname,
                           const QString &gender, const int title, const QDate &dob,
                           const QString &country, const QString &note,
                           const QString &street, const QString &zip, const QString &city,
@@ -245,7 +247,7 @@ void createVirtualPatient(const QString &name, const QString &secondname, const 
     query.bindValue(Constants::IDENTITY_FAXES, QVariant());
 
     if (!query.exec()) {
-        LOG_QUERY_ERROR(query);
+        LOG_QUERY_ERROR_FOR("PatientBase", query);
     }
     query.finish();
 
@@ -263,7 +265,7 @@ void createVirtualPatient(const QString &name, const QString &secondname, const 
         query.bindValue(Constants::PHOTO_PATIENT_UID, uuid);
         query.bindValue(Constants::PHOTO_BLOB, ba);
         if (!query.exec()) {
-            LOG_QUERY_ERROR(query);
+            LOG_QUERY_ERROR_FOR("PatientBase", query);
         }
     }
 }

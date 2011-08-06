@@ -34,12 +34,14 @@
 #include <patientbaseplugin/patientbase_exporter.h>
 
 #include <QObject>
+#include <QString>
+#include <QDate>
 
 /**
  * \file patientbase.h
  * \author Eric MAEKER <eric.maeker@gmail.com>
- * \version 0.4.0
- * \date 18 Apr 2010
+ * \version 0.6.0
+ * \date 06 Aug 2011
 */
 
 /** \todo create a sqlite db in memory to improve speed ? */
