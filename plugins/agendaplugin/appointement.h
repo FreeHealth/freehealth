@@ -28,6 +28,7 @@
 #define APPOINTEMENT_H
 
 #include <agendaplugin/constants.h>
+#include <calendar/calendar_people.h>
 
 #include <QVariant>
 #include <QHash>
@@ -39,22 +40,13 @@
  * \file appointement.h
  * \author Eric MAEKER <eric.maeker@gmail.com>
  * \version 0.6.0
- * \date 25 Jul 2011
+ * \date 01 Aug 2011
 */
 
 namespace Agenda {
 namespace Internal {
 
-struct PeopleStructPrivate {
-    PeopleStructPrivate(const int _type, const QString &_name, const QString &_uid) :
-            uid(_uid), name(_name), type(_type) {}
-    PeopleStructPrivate() {}
-
-    QString uid, name;
-    int type;
-};
-
-class Appointement
+class Appointement : public Calendar::CalendarPeople
 {
 public:
     // Data representation is the same as the Calendar::AbstractCalendarModel
@@ -69,20 +61,19 @@ public:
     virtual QVariant data(const int ref) const;
     virtual bool setData(const int ref, const QVariant &value);
 
-    // People
-    virtual void addPeople(const int people, const QString &name, const QString &uid = QString::null);
-    virtual void setPeopleName(const int people, const QString &uid, const QString &name);
-    virtual QStringList peopleNames(const int people, bool skipEmpty = false) const;
-    virtual QStringList peopleUids(const int people, bool skipEmpty = false) const;
-    virtual void removePeople(const QString &uid);
-    virtual void clearPeople(const int people);
-
     virtual bool isCycling() const {return false;}
 
     QDateTime beginning() const;
     QDateTime ending() const;
     int intersects(const QDate &firstDay, const QDate &lastDay) const;
 
+    // Calendar::CalendarPeople interface
+    void addPeople(const Calendar::People &people)  {setModified(true); Calendar::CalendarPeople::addPeople(people);}
+    void setPeopleName(const int people, const QString &uid, const QString &name) {setModified(true); Calendar::CalendarPeople::setPeopleName(people, uid, name);}
+    void removePeople(const QString &uid) {setModified(true); Calendar::CalendarPeople::removePeople(uid);}
+    void clearPeople(const int people)    {setModified(true); Calendar::CalendarPeople::clearPeople(people);}
+
+    // Private getters
     int calendarId() const {return data(Constants::Db_CalId).toInt();}
     int commonId() const {return data(Constants::Db_ComId).toInt();}
     int eventId() const {return data(Constants::Db_EvId).toInt();}
@@ -96,7 +87,6 @@ public:
 
 private:
     QHash<int, QVariant> m_Datas;
-    QVector<Internal::PeopleStructPrivate> m_People;
     bool m_Modified;
     int m_uid;
 };

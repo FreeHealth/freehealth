@@ -25,7 +25,8 @@ HEADERS = agendaplugin.h agenda_exporter.h \
     usercalendarwizardcreatorpage.h \
     usercalendarmodelfulleditorwidget.h \
     agendacore.h \
-    agendapreferencespage.h
+    agendapreferencespage.h \
+    usercalendardelegatesmapper.h
 
 SOURCES = agendaplugin.cpp \
     agendabase.cpp \
@@ -42,7 +43,8 @@ SOURCES = agendaplugin.cpp \
     usercalendarwizardcreatorpage.cpp \
     usercalendarmodelfulleditorwidget.cpp \
     agendacore.cpp \
-    agendapreferencespage.cpp
+    agendapreferencespage.cpp \
+    usercalendardelegatesmapper.cpp
 
 OTHER_FILES = Agenda.pluginspec
 
@@ -56,5 +58,6 @@ FORMS += \
     usercalendareditor.ui \
     usercalendarwizardcreatorpage.ui \
     usercalendarmodelfulleditorwidget.ui \
-    agendapreferencespage.ui
+    agendapreferencespage.ui \
+    usercalendardelegatesmapper.ui
 #    agendauserviewerwidget.ui \

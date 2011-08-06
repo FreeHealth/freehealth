@@ -214,8 +214,8 @@ void UserWizard::done(int r)
         m_User->setName(field("Name"));
         m_User->setSecondName(field("SecondName"));
         m_User->setFirstname(field("Firstname"));
-        m_User->setTitle(field("Title"));
-        m_User->setGender(field("Gender"));
+        m_User->setTitleIndex(field("Title"));
+        m_User->setGenderIndex(field("Gender"));
         m_User->setAddress(field("Address"));
         m_User->setZipcode(field("Zipcode"));
         m_User->setCity(field("City"));
@@ -464,7 +464,14 @@ UserProfilPage::UserProfilPage(QWidget *parent) :
 
     /** \todo code here = add new profiles */
     Views::StringListModel *model = new Views::StringListModel(this);
-    model->setStringList(QStringList() << tkTr(Trans::Constants::DOCTOR) << tr("Software administrator"));
+    model->setStringList(QStringList()
+                         << tkTr(Trans::Constants::DOCTOR)
+                         << tkTr(Trans::Constants::MEDICAL_STUDENT)
+                         << tkTr(Trans::Constants::NURSE)
+                         << tkTr(Trans::Constants::CAREGIVER)
+                         << tkTr(Trans::Constants::SECRETARY)
+                         << tkTr(Trans::Constants::SOFT_ADMIN)
+                         );
     model->setCheckable(true);
     model->setReadOnly(true);
     view = new Views::StringListView(this);
@@ -487,6 +494,7 @@ bool UserProfilPage::validatePage()
     UserWizard::setUserRights(Core::IUser::AdministrativeRights, Core::IUser::NoRights);
     next = UserWizard::SpecialiesQualificationsPage;
     QStringList result = view->getCheckedStringList().toStringList();
+
     if (result.contains(tkTr(Trans::Constants::DOCTOR))) {
         UserWizard::setUserRights(Core::IUser::ManagerRights, Core::IUser::NoRights);
         UserWizard::setUserRights(Core::IUser::DrugsRights, Core::IUser::AllRights);
@@ -494,6 +502,7 @@ bool UserProfilPage::validatePage()
         UserWizard::setUserRights(Core::IUser::ParamedicalRights, int(Core::IUser::ReadAll | Core::IUser::Print));
         UserWizard::setUserRights(Core::IUser::AdministrativeRights, Core::IUser::NoRights);
         next = UserWizard::SpecialiesQualificationsPage;
+
         // create default papers
         UserWizard::setUserPaper(Core::IUser::GenericHeader, defaultPaper("medicals", "header"));
         UserWizard::setUserPaper(Core::IUser::GenericFooter, defaultPaper("medicals", "footer"));
@@ -506,8 +515,16 @@ bool UserProfilPage::validatePage()
         UserWizard::setUserPaper(Core::IUser::AdministrativeHeader, defaultPaper("medicals", "header"));
         UserWizard::setUserPaper(Core::IUser::AdministrativeFooter, defaultPaper("medicals", "footer"));
         UserWizard::setUserPaper(Core::IUser::AdministrativeWatermark, defaultPaper("medicals", "watermark"));
+    } else if (result.contains(tkTr(Trans::Constants::MEDICAL_STUDENT))) {
+
+    } else if (result.contains(tkTr(Trans::Constants::NURSE))) {
+
+    } else if (result.contains(tkTr(Trans::Constants::CAREGIVER))) {
+
+    } else if (result.contains(tkTr(Trans::Constants::SECRETARY))) {
+
     }
-    if (result.contains(tr("Software administrator"))) {
+    if (result.contains(tkTr(Trans::Constants::SOFT_ADMIN))) {
         UserWizard::setUserRights(Core::IUser::ManagerRights, Core::IUser::AllRights);
     }
 

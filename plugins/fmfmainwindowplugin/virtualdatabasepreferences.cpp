@@ -40,8 +40,9 @@
 #include <coreplugin/isettings.h>
 #include <coreplugin/iuser.h>
 
-#include <utils/randomizer.h>
 #include <utils/log.h>
+#include <utils/global.h>
+#include <utils/randomizer.h>
 #include <translationutils/constanttranslations.h>
 
 #include <QDir>
@@ -340,21 +341,6 @@ void VirtualDatabasePreferences::changeEvent(QEvent *e)
 void VirtualDatabasePreferences::on_populateUsers_clicked()
 {
     int nb = nbVirtualUsers->value();
-    Utils::Randomizer r;
-    r.setPathToFiles(settings()->path(Core::ISettings::BundleResourcesPath) + "/textfiles/");
-
-    QProgressDialog dlg(tr("Creating %1 virtual users").arg(nb), tr("Cancel"), 0, nb, qApp->activeWindow());
-    dlg.setWindowModality(Qt::WindowModal);
-
-    for(int i = 0; i < nb ; ++i) {
-        dlg.setValue(i);
-        using namespace UserPlugin;
-        userModel()->insertRow(0);
-        int genderIndex = r.randomInt(1);
-        userModel()->setData(userModel()->index(0, Core::IUser::Name), r.getRandomName());
-        userModel()->setData(userModel()->index(0, Core::IUser::Firstname), r.getRandomFirstname(genderIndex==1));
-        userModel()->setData(userModel()->index(0, Core::IUser::TitleIndex), 4);
-        userModel()->setData(userModel()->index(0, Core::IUser::GenderIndex), genderIndex);
-        userModel()->submitUser(userModel()->index(0, Core::IUser::Uuid).data().toString());
-    }
+    userModel()->createVirtualUsers(nb);
 }
+

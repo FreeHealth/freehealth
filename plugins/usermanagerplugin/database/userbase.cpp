@@ -27,7 +27,7 @@
 
 /**
   \class UserPlugin::Internal::UserBase
-  \brief This class owns the user database mechanism. It should never be directly accessed. Use tkUserModel to access to the database.
+  This class owns the user database mechanism. It should never be directly accessed. Use tkUserModel to access to the database.
 
   1. Initialization\n
   This class owns a singleton. To instanciate it, use instance(). When instanciate for the first time,
@@ -86,7 +86,7 @@ QString  UserBase::m_LastPass = "";
 UserBase* UserBase::m_Instance = 0;
 
 /**
-  \brief Returns the unique instance of UserBase. If the instance does not exist it is created.
+  Returns the unique instance of UserBase. If the instance does not exist it is created.
   You should never construct a instance of this object using the constructor.
 */
 UserBase *UserBase::instance()
@@ -96,9 +96,7 @@ UserBase *UserBase::instance()
     return m_Instance;
 }
 
-/**
-  \brief Constructor, inform Utils::Database of the database scheme.
-*/
+/** Constructor, inform Utils::Database of the database scheme. */
 UserBase::UserBase(QObject *parent)
         : QObject(parent), Utils::Database()
 {
@@ -120,9 +118,12 @@ UserBase::UserBase(QObject *parent)
     addField(Table_USERS, USER_NAME,         "NAME",            FieldIsShortText);
     addField(Table_USERS, USER_SECONDNAME,   "SECONDNAME",      FieldIsShortText);
     addField(Table_USERS, USER_FIRSTNAME,    "SURNAME",         FieldIsShortText);
+    addField(Table_USERS, USER_TITLE,        "TITLE",           FieldIsInteger);
+    addField(Table_USERS, USER_GENDER,       "GENDER",          FieldIsInteger);
     addField(Table_USERS, USER_MAIL,         "MAIL",            FieldIsShortText);
     addField(Table_USERS, USER_LANGUAGE,     "LANGUAGE",        FieldIsLanguageText);
     addField(Table_USERS, USER_LOCKER,       "LOCKER",          FieldIsBoolean);
+
     addIndex(Table_USERS, USER_UUID);
     addIndex(Table_USERS, USER_LOGIN);
     addIndex(Table_USERS, USER_NAME);
@@ -173,7 +174,7 @@ UserBase::UserBase(QObject *parent)
 }
 
 /**
-  \brief Initialize users base using the \e settings values.
+  Initialize users base using the \e settings values.
   \sa Core::ISettings, Core::ISettings::ReadWriteDatabasesPath
 */
 bool UserBase::initialize(Core::ISettings *s)
@@ -235,8 +236,8 @@ bool UserBase::checkDatabaseVersion()
 //--------------------------------------------------------------------------------------------------------
 //------------------------------------------- Datas retreivers -------------------------------------------
 //--------------------------------------------------------------------------------------------------------
-/** \brief Retreive all users datas from the users' database. If an error occurs, it returns 0. */
-UserData *UserBase::getUser(const QHash<int, QString> & conditions) const
+/** Retreive all users datas from the users' database. If an error occurs, it returns 0. */
+UserData *UserBase::getUser(const QHash<int, QString> &conditions) const
 {
     QSqlDatabase DB = QSqlDatabase::database(USER_DB_CONNECTION);
     if (!DB.isOpen()) {
@@ -254,9 +255,6 @@ UserData *UserBase::getUser(const QHash<int, QString> & conditions) const
         QSqlQuery q(req , DB);
         if (q.isActive()) {
             if (q.next()) {
-                if (q.record().count() != USER_MaxParam)
-                    LOG_ERROR(QCoreApplication::translate("UserBase", "ERROR : will retreiving %1. Wrong number of fields")
-                                     .arg(USER_DB_CONNECTION));
                 int i = 0;
                 uuid = q.value(USER_UUID).toString();
                 toReturn = new UserData(uuid);
@@ -276,10 +274,6 @@ UserData *UserBase::getUser(const QHash<int, QString> & conditions) const
         QSqlQuery q(req , DB);
         if (q.isActive()) {
             while (q.next()) {
-                if (q.record().count() != RIGHTS_MaxParam)
-                    LOG_ERROR(QCoreApplication::translate("UserBase",
-                                                                                 "ERROR : will retreiving %1. Wrong number of fields")
-                                         .arg("users' rights"));
                 int i = 0;
                 QByteArray id = q.value(RIGHTS_ROLE).toByteArray();
                 for (i = 0; i < RIGHTS_MaxParam; ++i)
@@ -299,10 +293,6 @@ UserData *UserBase::getUser(const QHash<int, QString> & conditions) const
         QSqlQuery q(req , DB);
         if (q.isActive()) {
             while (q.next()) {
-                if (q.record().count() != DATAS_MaxParam)
-                    LOG_ERROR(QCoreApplication::translate("UserBase",
-                                                          "ERROR : will retreiving %1. Wrong number of fields")
-                              .arg("users' rights"));
                 int i = 0;
                 UserDynamicData *data = new UserDynamicData();
                 for (i = 0; i < DATAS_MaxParam; ++i) {
@@ -346,10 +336,7 @@ UserData *UserBase::getUser(const QHash<int, QString> & conditions) const
     return toReturn;
 }
 
-/**
-  \brief Retreive all users datas from the users' database. If an error occurs, it returns 0.
-  \sa getUser()
-*/
+/** Retreive all users datas from the users' database. If an error occurs, it returns 0. \sa getUser() */
 UserData *UserBase::getUserById(const QVariant & _id) const
 {
     // retreive corresponding user
@@ -361,10 +348,7 @@ UserData *UserBase::getUserById(const QVariant & _id) const
     return getUser(where);
 }
 
-/**
-  \brief Retreive all users datas from the users' database. If an error occurs, it returns 0.
-  \sa getUser()
-*/
+/** Retreive all users datas from the users' database. If an error occurs, it returns 0. \sa getUser() */
 UserData* UserBase::getUserByUuid(const QString & uuid) const
 {
     // retreive corresponding user
@@ -376,10 +360,7 @@ UserData* UserBase::getUserByUuid(const QString & uuid) const
     return getUser(where);
 }
 
-/**
-  \brief Retreive all users datas from the users' database. If an error occurs, it returns 0.
-  \sa getUser()
-*/
+/** Retreive all users datas from the users' database. If an error occurs, it returns 0. \sa getUser() */
 UserData *UserBase::getUserByLoginPassword(const QVariant &login, const QVariant &cryptedPassword) const
 {
     // retreive corresponding user
@@ -461,9 +442,7 @@ bool UserBase::checkLogin(const QString &clearLogin, const QString &clearPasswor
     return (!m_LastUuid.isEmpty());
 }
 
-/**
-  \brief Return the Uuid of the user identified with couple login/password. Returns a null QString if an error occurs.
-*/
+/** Return the Uuid of the user identified with couple login/password. Returns a null QString if an error occurs. */
 QString UserBase::getUuid(const QString &log64, const QString &cryptpass64)
 {
     if ((log64 == m_LastLogin) && (cryptpass64 == m_LastPass))
@@ -486,9 +465,7 @@ QString UserBase::getUuid(const QString &log64, const QString &cryptpass64)
     return m_LastUuid;
 }
 
-/**
-  \brief Return a new Uuid assuming that it is not already used in base.
-*/
+/** Return a new Uuid assuming that it is not already used in base. */
 QString UserBase::createNewUuid()
 {
     QString tmp;
@@ -512,6 +489,7 @@ QString UserBase::createNewUuid()
     return tmp;
 }
 
+/** Return the associated encrypted login for the user identified by the specified \e uid. */
 QString UserBase::getLogin64(const QString &uuid)
 {
     if (uuid == m_LastUuid)
@@ -635,6 +613,7 @@ bool UserBase::createDatabase(const QString &connectionName , const QString &dbN
     return true;
 }
 
+/** Create a default user when recreating the database. */
 bool UserBase::createDefaultUser()
 {
     UserData* user = new UserData;
@@ -715,10 +694,10 @@ bool UserBase::createDefaultUser()
 }
 
 /**
-  \brief Record the last login date for the user identified by couple login/password. The date is returned.
+  Record the last login date for the user identified by couple login/password. The date is returned.
   \todo add a locker for users
 */
-QDateTime UserBase::recordLastLogin(const QString & log, const QString & pass)
+QDateTime UserBase::recordLastLogin(const QString &log, const QString &pass)
 {
     // change last login value
     QDateTime now = QDateTime::currentDateTime();
@@ -747,7 +726,6 @@ QDateTime UserBase::recordLastLogin(const QString & log, const QString & pass)
 /** Creates a new user in the database according to the actual specified driver. */
 bool UserBase::createUser(UserData *user)
 {
-    qWarning() << Q_FUNC_INFO << user->name();
     // check current user grants
     /** \todo code here */
 
@@ -781,7 +759,7 @@ bool UserBase::createUser(UserData *user)
 }
 
 /**
-  \brief Save users datas to the database.
+  Save users datas to the database. \n
   You can use this function to save a newly created user or to update an already existing user. This function
   manages both cases.
 */
@@ -818,7 +796,7 @@ bool UserBase::saveUser(UserData *user)
         }
     }
     // construct query
-    QStringList req;
+//    QStringList req;
     bool error = false;
     if (toUpdate) {
         // update Table_USERS
@@ -828,13 +806,15 @@ bool UserBase::saveUser(UserData *user)
             q.prepare(prepareUpdateQuery(Table_USERS, where));
             q.bindValue(USER_ID, user->id());
             q.bindValue(USER_UUID, user->uuid());
-            q.bindValue(USER_VALIDITY, user->validity());
+            q.bindValue(USER_VALIDITY, (int)user->validity());
             q.bindValue(USER_LOGIN, user->login64());
             q.bindValue(USER_PASSWORD, user->cryptedPassword());
             q.bindValue(USER_LASTLOG, user->lastLogin());
             q.bindValue(USER_NAME, user->name());
             q.bindValue(USER_SECONDNAME, user->secondName());
             q.bindValue(USER_FIRSTNAME, user->firstname());
+            q.bindValue(USER_TITLE, user->titleIndex());
+            q.bindValue(USER_GENDER, user->genderIndex());
             q.bindValue(USER_MAIL, user->mail());
             q.bindValue(USER_LANGUAGE, user->language());
             q.bindValue(USER_LOCKER, user->locker());
@@ -876,8 +856,8 @@ bool UserBase::saveUser(UserData *user)
             }
         }
 
-        /** \todo --> update rights */
-        /** \todo --> update UserLkId */
+        /** \todo code here : --> update rights */
+        /** \todo code here : --> update UserLkId */
 
         if (!error) {
             LOG(QCoreApplication::translate("UserBase", "User %1 correctly updated.").arg(user->uuid()));
@@ -891,12 +871,14 @@ bool UserBase::saveUser(UserData *user)
             q.prepare(prepareInsertQuery(Table_USERS));
             q.bindValue(USER_ID,           QVariant());
             q.bindValue(USER_UUID,         user->uuid());
-            q.bindValue(USER_VALIDITY ,    user->validity());
+            q.bindValue(USER_VALIDITY ,    (int)user->validity());
             q.bindValue(USER_LOGIN ,       user->login64());
             q.bindValue(USER_PASSWORD ,    user->cryptedPassword());
             q.bindValue(USER_NAME ,        user->name());
             q.bindValue(USER_FIRSTNAME ,   user->firstname());
             q.bindValue(USER_SECONDNAME ,  user->secondName());
+            q.bindValue(USER_TITLE,        user->titleIndex());
+            q.bindValue(USER_GENDER,       user->genderIndex());
             q.bindValue(USER_MAIL ,        user->mail());
             q.bindValue(USER_LASTLOG ,     user->lastLogin());
             q.bindValue(USER_LANGUAGE,     user->language());
@@ -959,7 +941,7 @@ bool UserBase::saveUser(UserData *user)
 }
 
 /**
-  \brief Delete an user identified by its \e uuid from the database.
+  Delete an user identified by its \e uuid from the database.
   \todo delete the user's LKID
 */
 bool UserBase::deleteUser(const QString &uuid)

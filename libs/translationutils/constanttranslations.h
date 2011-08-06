@@ -533,6 +533,11 @@ enum TitleInterpret {
         const char * const AGENDA_EVENTS = QT_TRANSLATE_NOOP("tkConstants", "Agenda events");
         const char * const AGENDA_DATABASE_INFORMATIONS = QT_TRANSLATE_NOOP("tkConstants", "Agenda database informations");
         const char * const NO_AVAILABILITY = QT_TRANSLATE_NOOP("tkConstants", "No availability");
+        const char * const ATTENDEE = QT_TRANSLATE_NOOP("tkConstants", "Attendee");
+        const char * const ATTENDEES = QT_TRANSLATE_NOOP("tkConstants", "Attendees");
+        const char * const USER_DELEGATES = QT_TRANSLATE_NOOP("tkConstants", "User delegate");
+        const char * const OWNER = QT_TRANSLATE_NOOP("tkConstants", "Owner");
+
         // Status
         const char * const ARRIVED = QT_TRANSLATE_NOOP("tkConstants", "Arrived");
         const char * const CANCELLED = QT_TRANSLATE_NOOP("tkConstants", "Cancelled");
@@ -574,8 +579,10 @@ enum TitleInterpret {
         const char* const PROFESSOR   = QT_TRANSLATE_NOOP("tkConstants", "Professor");
         const char* const CAPTAIN     = QT_TRANSLATE_NOOP("tkConstants", "Captain");
         const char* const NURSE       = QT_TRANSLATE_NOOP("tkConstants", "Nurse");
-        const char* const SECRETARY   = QT_TRANSLATE_NOOP("tkConstants", "Secertary");
+        const char* const SECRETARY   = QT_TRANSLATE_NOOP("tkConstants", "Secretary");
         const char* const CAREGIVER   = QT_TRANSLATE_NOOP("tkConstants", "Caregiver");
+        const char* const MEDICAL_STUDENT = QT_TRANSLATE_NOOP("tkConstants", "Medical student");
+        const char* const SOFT_ADMIN  = QT_TRANSLATE_NOOP("tkConstants", "Software administrator");
 
         // ShortCut keys
          /*: Text Align Left shortcut key */

@@ -70,6 +70,7 @@ public:
 } // End namespace Internal
 } // End namespace Agenda
 
+
 /** Use the Agenda::AgendaCore::userCalendarModel() to create new Agenda::UserCalendarModel \sa Agenda::AgendaCore. */
 UserCalendarModel::UserCalendarModel(const QString &userUid, QObject *parent) :
     QAbstractTableModel(parent),
@@ -112,6 +113,15 @@ QVariant UserCalendarModel::data(const QModelIndex &index, int role) const
         switch (index.column()) {
         case Uid: return u->data(Constants::Db_CalId);
         case Label: return u->data(UserCalendar::Label);
+        case ExtraLabel:
+        {
+            if (u->isDelegated()) {
+                return QString("[%1] %2")
+                        .arg(u->data(UserCalendar::UserOwnerFullName).toString())
+                        .arg(u->data(UserCalendar::Label).toString());
+            }
+            return u->data(UserCalendar::Label);
+        }
         case Description: return u->data(UserCalendar::Description);
         case Type: return u->data(UserCalendar::Type);
         case Status: return u->data(UserCalendar::Status);
@@ -126,7 +136,11 @@ QVariant UserCalendarModel::data(const QModelIndex &index, int role) const
         case Label: return u->data(UserCalendar::Label);
         }
     } else if (role==Qt::FontRole) {
-        if (u->data(UserCalendar::IsDefault).toBool()) {
+        if (u->isDelegated()) {
+            QFont italic;
+            italic.setItalic(true);
+            return italic;
+        } else if (u->isDefault()) {
             QFont bold;
             bold.setBold(true);
             return bold;
@@ -170,7 +184,6 @@ bool UserCalendarModel::setData(const QModelIndex &index, const QVariant &value,
 /** Create new Agenda::UserCalendar by inserting new model rows. */
 bool UserCalendarModel::insertRows(int row, int count, const QModelIndex &parent)
 {
-    qWarning() << Q_FUNC_INFO << row << count << parent;
     beginInsertRows(parent, row, row+count);
     for(int i = 0 ; i < count; ++i) {
         UserCalendar *u = new UserCalendar();
@@ -187,7 +200,6 @@ bool UserCalendarModel::insertRows(int row, int count, const QModelIndex &parent
 /** Remove Agenda::UserCalendar by removing model rows. */
 bool UserCalendarModel::removeRows(int row, int count, const QModelIndex &parent)
 {
-    qWarning() << Q_FUNC_INFO << row << count << parent;
     beginRemoveRows(parent, row, row+count);
     for(int i = 0 ; i < count; ++i) {
         UserCalendar *u = d->m_UserCalendars.at(row);
@@ -197,6 +209,14 @@ bool UserCalendarModel::removeRows(int row, int count, const QModelIndex &parent
     }
     endRemoveRows();
     return true;
+}
+
+/** Return the Agenda::UserCalendar at the index \e row. Pointer must not be deleted. */
+UserCalendar *UserCalendarModel::userCalendarAt(const int row) const
+{
+    if (row < 0 || row >= d->m_UserCalendars.count())
+        return 0;
+    return d->m_UserCalendars.at(row);
 }
 
 /** Return the default Agenda::UserCalendar or the first Agenda::UserCalendar or 0 if no Agenda::UserCalendar are available. The pointer must not be deleted. */
@@ -243,6 +263,33 @@ DayAvailabilityModel *UserCalendarModel::availabilityModel(const QModelIndex &in
     return model;
 }
 
+/** Set the full list of user delegates to UserCalendars. */
+void UserCalendarModel::setPeopleList(const int row, const QList<Calendar::People> &peoples)
+{
+    if (row < 0 || row >= d->m_UserCalendars.count())
+        return;
+    UserCalendar *u = d->m_UserCalendars.at(row);
+    u->setPeopleList(peoples);
+}
+
+/** Add user delegates to UserCalendars. The only allowed type of Calendar::People is Calendar::People::PeopleUserDelegate. */
+void UserCalendarModel::addPeople(const int row, const Calendar::People &people)
+{
+    if (row < 0 || row >= d->m_UserCalendars.count())
+        return;
+    UserCalendar *u = d->m_UserCalendars.at(row);
+    u->addPeople(people);
+}
+
+/** Remove one UserDelegate to the UserCalendar. \sa  addPeople() */
+void UserCalendarModel::removePeople(const int row, const QString &uid)
+{
+    if (row < 0 || row >= d->m_UserCalendars.count())
+        return;
+    UserCalendar *u = d->m_UserCalendars.at(row);
+    u->removePeople(uid);
+}
+
 /** Submit all modifications to the database. */
 bool UserCalendarModel::submit()
 {
@@ -262,6 +309,7 @@ bool UserCalendarModel::submit()
 void UserCalendarModel::revert()
 {
     d->getUserCalendars();
+    reset();
 }
 
 

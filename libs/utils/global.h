@@ -130,7 +130,8 @@ UTILS_EXPORT void switchEchoMode( QLineEdit * l );
 // Some functions for HTML work
 UTILS_EXPORT QString fontToHtml( const QFont &font, const QColor &color = QColor("black") );
 UTILS_EXPORT QString textAlignmentToHtml( const Qt::Alignment &align );
-UTILS_EXPORT QString toHtmlAccent( const QString &html );
+UTILS_EXPORT QString toHtmlAccent(const QString &html);
+UTILS_EXPORT QString removeAccents(const QString &text);
 
 // Some functions for XML Handling
 UTILS_EXPORT QString createXml( const QString &mainTag, const QHash<QString,QString> &datas, const int indent = 0, const bool valueToBase64 = false );

@@ -42,8 +42,6 @@ namespace Constants {
     const char * const USER_DB_VERSION              = "0.4";
 
     // constants for DATAS table represent DATANAME field
-    const char * const USER_DATAS_TITLE             = "identity.title";
-    const char * const USER_DATAS_GENDER            = "identity.gender";
     const char * const USER_DATAS_ADRESS            = "identity.adress";
     const char * const USER_DATAS_ZIPCODE           = "identity.zip";
     const char * const USER_DATAS_CITY              = "identity.city";
@@ -77,6 +75,7 @@ namespace Constants {
     const char * const USER_ROLE_DOSAGES         = "role.dosage";
     const char * const USER_ROLE_PARAMEDICAL     = "role.paramedical";
     const char * const USER_ROLE_ADMINISTRATIVE  = "role.administrative";
+    const char * const USER_ROLE_AGENDA          = "role.agenda";
 
     const char * const DEFAULT_USER_UUID      = "{bff46aaa-5fed-481a-8af3-d5985c549e9c}";
     const char * const DEFAULT_USER_LOGIN     = "Zm1mX2FkbWlu";                  // fmf_admin
@@ -143,6 +142,7 @@ namespace Constants {
         USER_UUID, USER_VALIDITY,
         USER_LOGIN, USER_PASSWORD, USER_LASTLOG,
         USER_NAME, USER_SECONDNAME, USER_FIRSTNAME,
+        USER_TITLE, USER_GENDER,
         USER_MAIL, USER_LANGUAGE, USER_LOCKER,
         USER_MaxParam
     };

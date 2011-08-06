@@ -53,20 +53,22 @@ using namespace Agenda;
 using namespace Internal;
 using namespace Trans::ConstantTranslations;
 
+static inline Core::IUser *user() {return Core::ICore::instance()->user();}
 static inline Core::ITheme *theme() {return Core::ICore::instance()->theme();}
 static inline Agenda::Internal::AgendaBase *base() {return Agenda::Internal::AgendaBase::instance();}
 static inline Agenda::AgendaCore *agendaCore() {return Agenda::AgendaCore::instance();}
 
 UserCalendarPageForUserViewerWidget::UserCalendarPageForUserViewerWidget(QWidget *parent) :
     UserPlugin::IUserViewerWidget(parent),
-    m_Model(0),
-    m_Widget(new UserCalendarModelFullEditorWidget(this))
+    m_Widget(new UserCalendarModelFullEditorWidget(this)),
+    m_UserModel(0)
 {
     setObjectName("UserCalendarPageForUserViewerWidget");
     QHBoxLayout *l = new QHBoxLayout(this);
     setLayout(l);
     l->setMargin(0);
     l->addWidget(m_Widget);
+    connect(user(), SIGNAL(userChanged()), this, SLOT(userChanged()));
 }
 
 UserCalendarPageForUserViewerWidget::~UserCalendarPageForUserViewerWidget()
@@ -74,14 +76,14 @@ UserCalendarPageForUserViewerWidget::~UserCalendarPageForUserViewerWidget()
 
 void UserCalendarPageForUserViewerWidget::setUserModel(UserPlugin::UserModel *model)
 {
-    m_Model = model;
+    m_UserModel = model;
 }
 
 void UserCalendarPageForUserViewerWidget::setUserIndex(const int index)
 {
-    Q_ASSERT(m_Model);
-    if (m_Model) {
-        UserCalendarModel *model = agendaCore()->userCalendarModel(m_Model->index(index, Core::IUser::Uuid).data().toString());
+    Q_ASSERT(m_UserModel);
+    if (m_UserModel) {
+        UserCalendarModel *model = agendaCore()->userCalendarModel(m_UserModel->index(index, Core::IUser::Uuid).data().toString());
         m_Widget->setUserCalendarModel(model);
     }
 }
@@ -99,6 +101,13 @@ bool UserCalendarPageForUserViewerWidget::submit()
     return false;
 }
 
+void UserCalendarPageForUserViewerWidget::userChanged()
+{
+    if (m_Widget) {
+        m_Widget->clear();
+        m_Widget->setUserCalendarModel(agendaCore()->userCalendarModel());
+    }
+}
 
 UserCalendarPageForUserViewer::UserCalendarPageForUserViewer(QObject *parent) :
     UserPlugin::IUserViewerPage(parent)

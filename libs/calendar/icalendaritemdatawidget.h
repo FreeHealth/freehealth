@@ -43,7 +43,7 @@
 namespace Calendar {
 class CalendarItem;
 
-class ICalendarItemDataWidget : public QObject
+class CALENDAR_EXPORT ICalendarItemDataWidget : public QObject
 {
     Q_OBJECT
 public:
@@ -65,7 +65,7 @@ public:
     virtual bool setCalendarItem(const Calendar::CalendarItem &item) = 0;
 
     virtual bool clear() = 0;
-    virtual bool submitChangesToCalendarItem(Calendar::CalendarItem &item) = 0;
+    virtual bool submitChangesToCalendarItem(const Calendar::CalendarItem &item) = 0;
 };
 
 }  // End namespace Calendar

@@ -28,6 +28,7 @@
 #define USERCALENDAR_H
 
 #include <agendaplugin/agenda_exporter.h>
+#include <calendar/calendar_people.h>
 
 #include <QVariant>
 #include <QVector>
@@ -39,7 +40,7 @@
  * \file usercalendar.h
  * \author Eric MAEKER <eric.maeker@gmail.com>
  * \version 0.6.0
- * \date 25 Jul 2011
+ * \date 02 Aug 2011
 */
 
 namespace Agenda {
@@ -83,14 +84,14 @@ private:
 
 class DayAvailabilityModel;
 
-class AGENDA_EXPORT UserCalendar
+class AGENDA_EXPORT UserCalendar : public Calendar::CalendarPeople
 {
     friend class Agenda::DayAvailabilityModel;
 public:
     enum DataRepresentation {
         Uid = 0,
         UserOwnerUid,
-        UserName,
+        UserOwnerFullName,
         Label,
         Description,
         Type,
@@ -102,6 +103,7 @@ public:
         AbsPathIcon,
         DefaultDuration,
         SortId,
+        IsDelegated,
         UserData = 10000
     };
 
@@ -127,9 +129,17 @@ public:
 
     AbstractCalendarModel *model() {return m_model;}
 
+    // Calendar::CalendarPeople interface
+    void addPeople(const Calendar::People &people)  {setModified(true); Calendar::CalendarPeople::addPeople(people);}
+    void setPeopleName(const int people, const QString &uid, const QString &name) {setModified(true); Calendar::CalendarPeople::setPeopleName(people, uid, name);}
+    void removePeople(const QString &uid) {setModified(true); Calendar::CalendarPeople::removePeople(uid);}
+    void clearPeople(const int people)    {setModified(true); Calendar::CalendarPeople::clearPeople(people);}
+
     // getters
     QString uid() const {return data(Uid).toString();}
     int sortId() const {return data(SortId).toInt();}
+    bool isDefault() const {return data(IsDefault).toBool();}
+    bool isDelegated() const {return data(IsDelegated).toBool();}
 
     static bool lessThan(const UserCalendar *cal1, const UserCalendar *cal2);
 

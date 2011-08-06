@@ -30,6 +30,7 @@
 
 #include <calendar/calendar_exporter.h>
 #include <calendar/calendar_item.h>
+#include <calendar/calendar_people.h>
 
 #include <QObject>
 QT_BEGIN_NAMESPACE
@@ -40,7 +41,7 @@ QT_END_NAMESPACE
  * \file abstract_calendar_model.h
  * \author Guillaume Denry, Eric Maeker
  * \version 0.6.0
- * \date 11 Jul 2011
+ * \date 02 Aug 2011
 */
 
 namespace Calendar {
@@ -68,12 +69,6 @@ public:
         UserData = 10000
     };
 
-    enum PeopleType {
-        PeopleAttendee = 0,
-        PeopleOwner,
-        PeopleUser
-    };
-
     enum ItemStatus {  // synchronized with common.h -> availableStatus() stringlist
         Waiting = 0,
         Approved,
@@ -99,22 +94,11 @@ public:
     virtual QVariant data(const Calendar::CalendarItem &item, int dataRef, int role = Qt::DisplayRole) const;
     virtual bool setData(const Calendar::CalendarItem &item, int dataRef, const QVariant &value, int role = Qt::EditRole);
 
-    virtual void addPeople(const Calendar::CalendarItem &item, const PeopleType people, const QString &name, const QString &uid = QString::null);
-    virtual QStringList peopleNames(const Calendar::CalendarItem &item, const PeopleType people = PeopleAttendee, bool skipEmpty = false) const;
+    virtual void addPeople(const Calendar::CalendarItem &item, const People &people);
+    virtual void removePeople(const Calendar::CalendarItem &item, const int peopleType, const QString &uid);
 
     void stopEvents();
     void resumeEvents();
-
-
-//    // Management of Calendars
-//    virtual Calendar::UserCalendar calendar(const Calendar::CalendarItem &item) const = 0;
-//    virtual Calendar::UserCalendar addUserCalendar(const Calendar::UserCalendar &userCalendar) = 0;
-//    virtual bool updateUserCalendar(const Calendar::UserCalendar &calendar) = 0;
-//    virtual Calendar::UserCalendar defaultUserCalendar() const = 0;
-
-//    virtual QAbstractItemModel *userCalendarComboModel(QObject *parent) const = 0;
-//    virtual int defaultUserCalendarComboModelIndex() const = 0;
-//    virtual Calendar::UserCalendar calendarFromComboModelIndex(const int index) const = 0;
 
 public Q_SLOTS:
     virtual void clearAll() {}
@@ -139,7 +123,6 @@ protected:
     void endRemoveItem(const Calendar::CalendarItem &removedItem);
 
     void setItemIsMine(Calendar::CalendarItem *item) const;
-//    void setCalendarIsMine(Calendar::UserCalendar *item) const;
 };
 
 }  // End namespace Calendar

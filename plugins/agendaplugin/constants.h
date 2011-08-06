@@ -70,7 +70,8 @@ namespace Constants {
             CAL_LABEL,
             CAL_FULLCONTENT,
             CAL_THEMEDICON,
-            CAL_XMLOPTIONS
+            CAL_XMLOPTIONS,
+            CAL_MaxParam
     };
 
     enum FieldsAVAILABILITIES {
@@ -119,6 +120,7 @@ namespace Constants {
 
     enum fieldsPEOPLE {
         PEOPLE_ID = 0,
+        PEOPLE_CAL_ID,
         PEOPLE_EVENT_ID,
         PEOPLE_UID,
         PEOPLE_TYPE

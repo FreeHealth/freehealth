@@ -59,9 +59,12 @@ public:
     void clear();
     bool submit();
 
+private Q_SLOTS:
+    void userChanged();
+
 private:
     UserCalendarModelFullEditorWidget *m_Widget;
-    UserPlugin::UserModel *m_Model;
+    UserPlugin::UserModel *m_UserModel;
 };
 
 class UserCalendarPageForUserViewer : public UserPlugin::IUserViewerPage

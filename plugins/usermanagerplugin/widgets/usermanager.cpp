@@ -426,6 +426,7 @@ void UserManagerWidget::onCurrentUserChanged()
 {
     selectUserTableView(UserModel::instance()->currentUserIndex().row());
     analyseCurrentUserRights();
+    ui->userViewer->changeUserTo(UserModel::instance()->currentUserIndex().row());
 }
 
 /**

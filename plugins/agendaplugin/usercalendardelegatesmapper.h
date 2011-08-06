@@ -25,62 +25,73 @@
  *   Contributors :                                                        *
  *       NAME <MAIL@ADRESS>                                                *
  ***************************************************************************/
-#ifndef USERCALENDAREDITOR_H
-#define USERCALENDAREDITOR_H
+#ifndef USERCALENDARDELEGATESMAPPER_H
+#define USERCALENDARDELEGATESMAPPER_H
 
-#include <agendaplugin/agenda_exporter.h>
+#include <calendar/icalendaritemdatawidget.h>
 
 #include <QWidget>
-#include <QDataWidgetMapper>
+#include <QHash>
+#include <QPointer>
+#include <QModelIndex>
 
 /**
- * \file usercalendareditor.h
+ * \file usercalendardelegatesmapper.h
  * \author Eric MAEKER <eric.maeker@gmail.com>
  * \version 0.6.0
- * \date 25 Jul 2011
+ * \date 04 Aug 2011
 */
 
+namespace UserPlugin {
+class UserLineEditCompleterSearch;
+}
+
 namespace Calendar {
-class AbstractCalendarModel;
+class CalendarPeopleModel;
 }
 
 namespace Agenda {
-class UserCalendar;
 class UserCalendarModel;
-class DayAvailabilityModel;
 
+namespace Internal {
 namespace Ui {
-class UserCalendarEditorWidget;
+    class UserCalendarDelegatesMapperWidget;
 }
 
-class AGENDA_EXPORT UserCalendarEditorWidget : public QWidget
+class UserCalendarDelegatesMapperWidget : public QWidget
 {
     Q_OBJECT
-
 public:
-    explicit UserCalendarEditorWidget(QWidget *parent = 0);
-    ~UserCalendarEditorWidget();
+    UserCalendarDelegatesMapperWidget(QWidget *parent);
+    ~UserCalendarDelegatesMapperWidget();
 
     void clear();
-
     void setUserCalendarModel(UserCalendarModel *model);
 
 public Q_SLOTS:
-    void setCurrentIndex(const QModelIndex &index);
-    void submit();
-    void revert();
-
-protected:
-    void changeEvent(QEvent *e);
+    void setUserCalendarIndex(const int index);
+    bool submit();
 
 private:
-    Ui::UserCalendarEditorWidget *ui;
+    void addRow(const QString &name, const QString &uid);
+
+private Q_SLOTS:
+    void removePerson(QAction *action);
+    void onPersonSelected(const QString &name, const QString &uid);
+    void handlePressed(const QModelIndex &index);
+    void handleClicked(const QModelIndex &index);
+
+private:
+    Internal::Ui::UserCalendarDelegatesMapperWidget *ui;
+    UserPlugin::UserLineEditCompleterSearch *m_Completer;
+    QHash<QString, QWidget *> m_UserWidgets;
     UserCalendarModel *m_UserCalendarModel;
-    DayAvailabilityModel *m_AvailabilityModel;
-    QDataWidgetMapper *m_Mapper;
+    Calendar::CalendarPeopleModel *m_PeopleModel;
+    int m_Row;
 };
 
+}  // End namespace Internal
 }  // End namespace Agenda
 
+#endif // USERCALENDARDELEGATESMAPPER_H
 
-#endif // USERCALENDAREDITOR_H

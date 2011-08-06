@@ -47,6 +47,7 @@
 #include <utils/global.h>
 #include <utils/log.h>
 #include <utils/databaseconnector.h>
+#include <utils/randomizer.h>
 #include <translationutils/constanttranslations.h>
 
 #include <coreplugin/translators.h>
@@ -217,9 +218,9 @@ public:
         case Core::IUser::Password : toReturn = user->cryptedPassword(); break;
         case Core::IUser::LastLogin : toReturn = user->lastLogin(); break;
         case Core::IUser::GenderIndex : toReturn = user->genderIndex(); break;
-        case Core::IUser::TitleIndex : toReturn = user->title(); break;
-        case Core::IUser::Gender : toReturn = genders().at(user->genderIndex()); break;
-        case Core::IUser::Title : toReturn = titles().at(user->title()); break;
+        case Core::IUser::TitleIndex : toReturn = user->titleIndex(); break;
+        case Core::IUser::Gender : toReturn = user->gender(); break;
+        case Core::IUser::Title : toReturn = user->title(); break;
         case Core::IUser::Name : toReturn = user->name(); break;
         case Core::IUser::SecondName : toReturn = user->secondName(); break;
         case Core::IUser::Firstname : toReturn = user->firstname(); break;
@@ -325,6 +326,7 @@ public:
         case Core::IUser::DrugsRights : toReturn = user->rightsValue(USER_ROLE_DOSAGES); break;
         case Core::IUser::ParamedicalRights : toReturn = user->rightsValue(USER_ROLE_PARAMEDICAL); break;
         case Core::IUser::AdministrativeRights : toReturn = user->rightsValue(USER_ROLE_ADMINISTRATIVE); break;
+        case Core::IUser::AgendaRights : toReturn = user->rightsValue(USER_ROLE_AGENDA); break;
         case Core::IUser::LoginHistory : toReturn = user->loginHistory(); break;
         case Core::IUser::Warn : user->warn(); break;
         case Core::IUser::WarnText : toReturn = user->warnText(); break;
@@ -767,8 +769,8 @@ bool UserModel::setData(const QModelIndex &item, const QVariant &value, int role
     case Core::IUser::DecryptedLogin : user->setLogin64(value.toString().toAscii().toBase64()); break;
     case Core::IUser::Password :  user->setCryptedPassword(value); break;
     case Core::IUser::LastLogin :  user->setLastLogin(value); break;
-    case Core::IUser::GenderIndex : user->setGender(value); break;
-    case Core::IUser::TitleIndex : user->setTitle(value); break;
+    case Core::IUser::GenderIndex : user->setGenderIndex(value); break;
+    case Core::IUser::TitleIndex : user->setTitleIndex(value); break;
     case Core::IUser::Name :  user->setName(value); break;
     case Core::IUser::SecondName :  user->setSecondName(value); break;
     case Core::IUser::Firstname :  user->setFirstname(value); break;
@@ -821,6 +823,8 @@ bool UserModel::setData(const QModelIndex &item, const QVariant &value, int role
     case Core::IUser::DrugsRights : user->setRights(USER_ROLE_DOSAGES, Core::IUser::UserRights(value.toInt())); break;
     case Core::IUser::ParamedicalRights : user->setRights(USER_ROLE_PARAMEDICAL, Core::IUser::UserRights(value.toInt())); break;
     case Core::IUser::AdministrativeRights : user->setRights(USER_ROLE_ADMINISTRATIVE, Core::IUser::UserRights(value.toInt())); break;
+    case Core::IUser::AgendaRights : user->setRights(USER_ROLE_AGENDA, Core::IUser::UserRights(value.toInt())); break;
+
     default : return false;
     };
     Q_EMIT dataChanged(index(item.row(), 0), index(item.row(), Core::IUser::NumberOfColumns));
@@ -881,7 +885,7 @@ QVariant UserModel::data(const QModelIndex &item, int role) const
         if ((item.column() < Core::IUser::LanguageIndex)) {
             // here we suppose that it is the currentUser the ask for datas
 //            qWarning() << (bool)(d->m_CurrentUserRights & Core::IUser::ReadAll) << (bool)(d->m_CurrentUserRights & Core::IUser::ReadOwn) << (d->m_CurrentUserUuid == uuid);
-            /** \todo has delegates rights */
+            /** \todo code here : has delegates rights */
             if (d->m_CurrentUserRights & Core::IUser::ReadAll)
                 return d->m_Sql->data(item, role);
             else if (d->m_CurrentUserUuid == uuid)
@@ -1080,7 +1084,7 @@ int UserModel::practionnerLkId(const QString &uid)
         if (query.next())
             return query.value(0).toInt();
     } else {
-        Utils::Log::addQueryError("UserModel", query);
+        LOG_QUERY_ERROR(query);
     }
 //    qWarning() << "xxxxxxxxxxxxx database" << uid << lk_ids;
     return lk_id;
@@ -1112,6 +1116,74 @@ QList<int> UserModel::practionnerLkIds(const QString &uid)
     }
 //    qWarning() << "xxxxxxxxxxxxx database" << uid << lk_ids << "\n\n";
     return lk_ids;
+}
+
+/** Get all user's name from their \e uids. The returned QHash contains as key the uid of users, and as key their name. */
+QHash<QString, QString> UserModel::getUserNames(const QStringList &uids)
+{
+    QHash<QString, QString> toReturn;
+    QHash<int, QString> where;
+    userBase()->database().transaction();
+    QSqlQuery query(userBase()->database());
+    for(int i = 0; i < uids.count(); ++i) {
+        where.clear();
+        where.insert(Constants::USER_UUID, QString("='%1'").arg(uids.at(i)));
+        QString req = userBase()->select(Constants::Table_USERS,
+                                         QList<int>()
+                                         << Constants::USER_TITLE
+                                         << Constants::USER_NAME
+                                         << Constants::USER_FIRSTNAME
+                                         << Constants::USER_SECONDNAME
+                                         , where);
+        if (query.exec(req)) {
+            if (query.next()) {
+                QString name = QString("%1 %2 %3 %4")
+                        .arg(titles().at(query.value(0).toInt()))
+                        .arg(query.value(1).toString())
+                        .arg(query.value(2).toString())
+                        .arg(query.value(3).toString());
+                name = name.simplified();
+                toReturn.insert(uids.at(i), name);
+            }
+        } else {
+            LOG_QUERY_ERROR(query);
+        }
+        query.finish();
+    }
+    userBase()->database().commit();
+    return toReturn;
+}
+
+bool UserModel::createVirtualUsers(const int count)
+{
+    bool ok = true;
+    Utils::Randomizer r;
+    r.setPathToFiles(settings()->path(Core::ISettings::BundleResourcesPath) + "/textfiles/");
+
+    for(int i = 0; i < count ; ++i) {
+        Internal::UserData *u = new Internal::UserData;
+
+        int genderIndex = r.randomInt(1);
+        QString name = r.getRandomName();
+        QString surname = r.getRandomFirstname(genderIndex==1);
+
+        u->setName(name);
+        u->setFirstname(surname);
+        u->setTitleIndex(r.randomInt(0, 4));
+        u->setGenderIndex(genderIndex);
+        u->setValidity(true);
+
+        // Create log and pass
+        QString pass = name + "." + surname;
+        pass = pass.toLower();
+        pass = Utils::removeAccents(pass);
+        u->setLogin64(Utils::loginForSQL(pass));
+        u->setClearPassword(pass);
+
+        if (!userBase()->createUser(u))
+            return false;
+    }
+    return ok;
 }
 
 /** Returns the number of user stored into the memory. */

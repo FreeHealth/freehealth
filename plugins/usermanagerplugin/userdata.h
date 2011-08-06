@@ -151,8 +151,8 @@ public:
     void  setValidity(const QVariant & val)            { setValue(Table_USERS, USER_VALIDITY, val); }
     void  setLocker(const QVariant & val)              { setValue(Table_USERS, USER_LOCKER ,val); }
     void  setClearPassword(const QString &val);
-    void  setTitle(const QVariant & val)               { setDynamicDataValue(USER_DATAS_TITLE, val); }
-    void  setGender(const QVariant & val)              { setDynamicDataValue(USER_DATAS_GENDER, val); }
+    void  setTitleIndex(const QVariant &val)           { setValue(Table_USERS, USER_TITLE ,val); }
+    void  setGenderIndex(const QVariant &val)          { setValue(Table_USERS, USER_GENDER ,val); }
     void  setName(const QVariant & val)                { setValue(Table_USERS, USER_NAME, val); }
     void  setSecondName(const QVariant & val)          { setValue(Table_USERS, USER_SECONDNAME, val); }
     void  setFirstname(const QVariant & val)           { setValue(Table_USERS, USER_FIRSTNAME, val); }
@@ -200,8 +200,10 @@ public:
 //    QString lastLogin() const;
     QDateTime lastLogin() const          { return value(Table_USERS, USER_LASTLOG).toDateTime(); }
     QString fullName() const;
-    int     title() const                { return dynamicDataValue(USER_DATAS_TITLE).toInt(); }
-    int     genderIndex() const          { return dynamicDataValue(USER_DATAS_GENDER).toInt(); }
+    QString title() const;
+    int     titleIndex() const           { return value(Table_USERS, USER_TITLE).toInt(); }
+    QString gender() const;
+    int     genderIndex() const          { return value(Table_USERS, USER_GENDER).toInt(); }
     QString name() const                 { return value(Table_USERS, USER_NAME).toString(); }
     QString secondName() const           { return value(Table_USERS, USER_SECONDNAME).toString(); }
     QString firstname() const            { return value(Table_USERS, USER_FIRSTNAME).toString(); }

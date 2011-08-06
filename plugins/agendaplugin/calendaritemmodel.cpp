@@ -308,10 +308,19 @@ void CalendarItemModel::resumeEvents()
     Calendar::AbstractCalendarModel::resumeEvents();
 }
 
+void CalendarItemModel::addPeople(const Calendar::CalendarItem &item, const Calendar::People &people)
+{
+    /** \todo code here */
+}
+
+QStringList CalendarItemModel::peopleNames(const Calendar::CalendarItem &item, const int peopleType, bool skipEmpty) const
+{
+    /** \todo code here */
+}
+
 /** Defines the UserCalendar to use as event filter according to its index in the userCalendarComboModel(). */
 bool CalendarItemModel::filterUserCalendarEvents(const QVariant &calendarUid)
 {
-    qWarning() << m_CalendarUid << calendarUid;
     m_CalendarUid = calendarUid;
     clearAll();
     reset();

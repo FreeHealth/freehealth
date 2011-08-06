@@ -24,110 +24,107 @@
  *       NAME <MAIL@ADRESS>                                                *
  *       NAME <MAIL@ADRESS>                                                *
  ***************************************************************************/
-#ifndef USERCALENDARMODEL_H
-#define USERCALENDARMODEL_H
+#ifndef CALENDARPEOPLE_H
+#define CALENDARPEOPLE_H
 
-#include <calendar/calendar_people.h>
+#include <calendar/calendar_exporter.h>
 
+#include <QString>
+#include <QList>
 #include <QAbstractTableModel>
-#include <QStandardItemModel>
 
 /**
- * \file usercalendarmodel.h
+ * \file calendar_people.h
  * \author Eric MAEKER <eric.maeker@gmail.com>
  * \version 0.6.0
- * \date 02 Aug 2011
+ * \date 04 Aug 2011
 */
 
-namespace Agenda {
-class AgendaCore;
-class DayAvailabilityModel;
-class DayAvailability;
-class UserCalendar;
+namespace Calendar {
 
-namespace Internal {
-class UserCalendarModelPrivate;
-} // End namespace Internal
-
-class UserCalendarModel : public QAbstractTableModel
-{
-    Q_OBJECT
-    friend class Agenda::AgendaCore;
-
-protected:
-    explicit UserCalendarModel(const QString &userUid = QString::null, QObject *parent = 0);
-
-public:
-    enum DataRepresentation {
-        Label = 0,
-        ExtraLabel, // with user delegation
-        Description,
-        Type,
-        Status,
-        IsDefault,
-        IsPrivate,
-        Password,
-        LocationUid,
-        DefaultDuration,
-        Uid,
-        ColumnCount
+struct CALENDAR_EXPORT People {
+    // WARNING: keep this enum sync with Calendar::AbstractCalendarModel::PeopleType
+    enum TypeOfPeople {
+        PeopleAttendee = 0,
+        PeopleOwner,
+        PeopleUser,
+        PeopleUserDelegate,
+        PeopleCount
     };
 
-    ~UserCalendarModel();
+    People(const int _type, const QString &_name, const QString &_uid) :
+            uid(_uid), name(_name), type(_type) {}
+    People() {}
+
+    bool operator==(const People &other) const
+    {
+        if (type==other.type)
+            return (uid==other.uid);
+        return false;
+    }
+
+    QString uid, name;
+    int type;
+};
+
+class CalendarPeopleModel;
+
+class CALENDAR_EXPORT CalendarPeople
+{
+    friend class Calendar::CalendarPeopleModel;
+public:
+    CalendarPeople();
+    virtual ~CalendarPeople();
+
+    // People
+    virtual void setPeopleList(const QList<Calendar::People> &peoples);
+    virtual void addPeople(const Calendar::People &people);
+    virtual void insertPeople(const int index, const Calendar::People &people);
+    virtual void setPeopleName(const int people, const QString &uid, const QString &name);
+    virtual void removePeople(const QString &uid);
+    virtual void clearPeople(const int people);
+
+    virtual int peopleCount(const int type = -1) const;
+    virtual QStringList peopleNames(const int people, bool skipEmpty = false) const;
+    virtual QStringList peopleUids(const int people, bool skipEmpty = false) const;
+    virtual QList<Calendar::People> peopleList() const {return m_People;}
+
+protected:
+    QList<Calendar::People> m_People;
+};
+
+
+class CalendarPeopleModel : public QAbstractTableModel
+{
+    Q_OBJECT
+public:
+    enum DataRepresentation { PeopleTypeName = 0, FullName , Uid, EmptyColumn };
+
+    CalendarPeopleModel(QObject *parent = 0);
 
     int rowCount(const QModelIndex &parent = QModelIndex()) const;
     int columnCount(const QModelIndex &parent = QModelIndex()) const;
 
-    QVariant data(const QModelIndex &index, int role = Qt::DisplayRole) const;
+    void clear();
+
+    QVariant data(const QModelIndex &idx, int role) const;
     bool setData(const QModelIndex &index, const QVariant &value, int role = Qt::EditRole);
 
     bool insertRows(int row, int count, const QModelIndex &parent = QModelIndex());
     bool removeRows(int row, int count, const QModelIndex &parent = QModelIndex());
 
-    UserCalendar *userCalendarAt(const int row) const;
-    UserCalendar *defaultUserCalendar() const;
-    QModelIndex defaultUserCalendarModelIndex() const;
-
-    DayAvailabilityModel *availabilityModel(const QModelIndex &index, QObject *parent = 0) const;
-
-    void setPeopleList(const int row, const QList<Calendar::People> &peoples);
-    void addPeople(const int row, const Calendar::People &people);
-    void removePeople(const int row, const QString &uid);
-
-public Q_SLOTS:
-    bool submit();
-    void revert();
+    void addPeople(const Calendar::People &people);
+    void removePeople(const QString &uid);
+    void setPeopleList(const QList<Calendar::People> &list);
+    QList<Calendar::People> peopleList() const;
 
 private:
-    Internal::UserCalendarModelPrivate *d;
+    QString typeToString(const int type) const;
+
+    QList<Calendar::People> m_People;
 };
 
-
-namespace Internal {
-class DayAvailabilityModelPrivate;
-}
-
-class DayAvailabilityModel : public QStandardItemModel
-{
-    Q_OBJECT
-public:
-    DayAvailabilityModel(QObject *parent = 0);
-    ~DayAvailabilityModel();
-
-    void setUserCalendar(UserCalendar *calendar);
-    void addAvailability(const DayAvailability &availability);
-
-    bool insertRows(int row, int count, const QModelIndex &parent = QModelIndex());
-    bool removeRows(int row, int count, const QModelIndex &parent = QModelIndex());
-
-public Q_SLOTS:
-    bool submit();
-
-private:
-    Internal::DayAvailabilityModelPrivate *d;
-};
+}  // End namespace Calendar
 
 
-} // End namespace Agenda
-
-#endif // USERCALENDARMODEL_H
+#endif // CALENDARPEOPLE_H

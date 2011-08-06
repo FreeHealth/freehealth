@@ -40,6 +40,8 @@
 #include "defautuserviewerpages.h"
 #include "usermodel.h"
 
+#include <coreplugin/icore.h>
+#include <coreplugin/iuser.h>
 #include <coreplugin/dialogs/pagewidget.h>
 #include <extensionsystem/pluginmanager.h>
 
@@ -58,6 +60,7 @@ using namespace UserPlugin;
 using namespace Internal;
 using namespace Trans::ConstantTranslations;
 
+static inline Core::IUser *user() {return Core::ICore::instance()->user();}
 static inline ExtensionSystem::PluginManager *pluginManager() {return ExtensionSystem::PluginManager::instance();}
 
 namespace UserPlugin {
@@ -133,6 +136,7 @@ UserViewer::UserViewer(QWidget *parent) :
 
     connect(pluginManager(), SIGNAL(objectAdded(QObject*)), this, SLOT(pluginManagerObjectAdded(QObject*)));
     connect(pluginManager(), SIGNAL(aboutToRemoveObject(QObject*)), this, SLOT(pluginManagerObjectRemoved(QObject*)));
+//    connect(user(), SIGNAL(userChanged()), this, SLOT(userChanged()));
 }
 
 UserViewer::~UserViewer()

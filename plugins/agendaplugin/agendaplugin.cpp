@@ -290,7 +290,7 @@ void AgendaPlugin::testDatabase()
             // Add 1 to 3 patients
             for(int y = 0; y < r.randomInt(1, 3); ++y) {
                 int zz = r.randomInt(0, maxDb);
-                ev->addPeople(CalendarItemModel::PeopleAttendee, patientName(zz), patientUid(zz));
+                ev->addPeople(Calendar::People(Calendar::People::PeopleAttendee, patientName(zz), patientUid(zz)));
             }
 
             if (!base->saveCalendarEvent(ev))

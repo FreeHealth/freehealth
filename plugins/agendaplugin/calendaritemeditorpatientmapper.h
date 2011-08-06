@@ -29,6 +29,7 @@
 #define CALENDARITEMEDITORPATIENTMAPPER_H
 
 #include <calendar/icalendaritemdatawidget.h>
+#include <calendar/calendar_people.h>
 
 #include <QWidget>
 #include <QHash>
@@ -61,8 +62,7 @@ public:
     void clear();
     void setCalendarItem(const Calendar::CalendarItem &item);
 
-    QStringList selectedPatientUids() const {return m_SelectedPatientUids;}
-    QStringList selectedPatientsNames() const {return m_SelectedPatientsNames;}
+    QList<Calendar::People> selected() const {return m_Selected;}
 
 private:
     void addPatientRow(const QString &name, const QString &uid);
@@ -73,8 +73,7 @@ private Q_SLOTS:
 
 private:
     Internal::Ui::CalendarItemEditorPatientMapper *ui;
-    QStringList m_SelectedPatientUids;
-    QStringList m_SelectedPatientsNames;
+    QList<Calendar::People> m_Selected;
     Patients::PatientBaseCompleter *m_Completer;
     QHash<QString, QWidget *> m_PatientWidgets;
 };
@@ -91,7 +90,7 @@ public:
     bool setCalendarItem(const Calendar::CalendarItem &item);
 
     bool clear();
-    bool submitChangesToCalendarItem(Calendar::CalendarItem &item);
+    bool submitChangesToCalendarItem(const Calendar::CalendarItem &item);
 
 private:
     QPointer<Internal::CalendarItemEditorPatientMapperWidget> m_Widget;

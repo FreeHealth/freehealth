@@ -61,10 +61,17 @@ UserCalendarEditorWidget::~UserCalendarEditorWidget()
     m_AvailabilityModel = 0;
 }
 
+void UserCalendarEditorWidget::clear()
+{
+    /** \todo code here */
+    revert();
+}
+
 /** Define the Agenda::UserCalendarModel to use. */
 void UserCalendarEditorWidget::setUserCalendarModel(UserCalendarModel *model)
 {
     m_UserCalendarModel = model;
+    ui->userCalendarDelegatesWidget->setUserCalendarModel(model);
 }
 
 /** Define the \e index to use. You must firstly define the Agenda::UserCalendarModel with setUserCalendarModel(). */
@@ -96,18 +103,24 @@ void UserCalendarEditorWidget::setCurrentIndex(const QModelIndex &index)
     }
     m_AvailabilityModel = m_UserCalendarModel->availabilityModel(index, this);
     ui->availabilityView->setModel(m_AvailabilityModel);
+
+    // Set delegates
+    ui->userCalendarDelegatesWidget->setUserCalendarIndex(index.row());
 }
 
 /** Submit changes to the model. */
 void UserCalendarEditorWidget::submit()
 {
-    m_Mapper->submit();
+    ui->userCalendarDelegatesWidget->submit();
+    if (m_Mapper)
+        m_Mapper->submit();
 }
 
 /** Submit changes to the model. */
 void UserCalendarEditorWidget::revert()
 {
-    m_Mapper->revert();
+    if (m_Mapper)
+        m_Mapper->revert();
 }
 
 void UserCalendarEditorWidget::changeEvent(QEvent *e)

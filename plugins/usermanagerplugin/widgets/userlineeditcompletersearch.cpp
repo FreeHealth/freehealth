@@ -97,9 +97,9 @@ public:
 
         if (idx.column()==ColumnFullName) {
             if (role==Qt::DisplayRole || role==Qt::EditRole || role==Qt::ToolTipRole) {
-                QString name = QSqlQueryModel::data(QSqlQueryModel::index(idx.row(), 1, idx.parent())).toString();
-                QString firstName = QSqlQueryModel::data(QSqlQueryModel::index(idx.row(), 2, idx.parent())).toString();
-                QString secName = QSqlQueryModel::data(QSqlQueryModel::index(idx.row(), 3, idx.parent())).toString();
+                QString name = QSqlQueryModel::data(QSqlQueryModel::index(idx.row(), 0, idx.parent())).toString();
+                QString firstName = QSqlQueryModel::data(QSqlQueryModel::index(idx.row(), 1, idx.parent())).toString();
+                QString secName = QSqlQueryModel::data(QSqlQueryModel::index(idx.row(), 2, idx.parent())).toString();
                 QString r = QString("%1 %2 %3").arg(name).arg(firstName).arg(secName).simplified();
                 return r;
             }
@@ -124,7 +124,7 @@ public:
 //                return QIcon();
 //            }
         } else if (idx.column()==Uid && role==Qt::DisplayRole) {
-            return QSqlQueryModel::data(QSqlQueryModel::index(idx.row(), 6)).toString();
+            return QSqlQueryModel::data(QSqlQueryModel::index(idx.row(), 3)).toString();
         }
 
 
@@ -247,7 +247,7 @@ UserLineEditCompleterSearch::UserLineEditCompleterSearch(QWidget *parent) :
 {
     // Add the cancel button on the right
     QToolButton *cancel = new QToolButton;
-    cancel->setIcon(theme()->icon(Core::Constants::ICONCLOSEDARK));
+    cancel->setIcon(theme()->icon(Core::Constants::ICONCLEARLINEEDIT));
     cancel->setToolTip(tkTr(Trans::Constants::CLEAR));
     setRightButton(cancel);
     connect(cancel, SIGNAL(clicked()), this, SLOT(cancelSearch()));
@@ -258,7 +258,7 @@ UserLineEditCompleterSearch::UserLineEditCompleterSearch(QWidget *parent) :
     setValidator(m_Completer->validator());
 
     connect(this, SIGNAL(textChanged(QString)), this, SLOT(textChanged(QString)));
-    connect(m_Completer, SIGNAL(activated(QModelIndex)), this, SLOT(patientSelected(QModelIndex)));
+    connect(m_Completer, SIGNAL(activated(QModelIndex)), this, SLOT(userSelected(QModelIndex)));
 }
 
 UserLineEditCompleterSearch::~UserLineEditCompleterSearch()
@@ -287,7 +287,9 @@ void UserLineEditCompleterSearch::cancelSearch()
 
 void UserLineEditCompleterSearch::userSelected(const QModelIndex &index)
 {
+    qWarning() << Q_FUNC_INFO << index;
     QString uid = m_Completer->model()->index(index.row(), UserCompleter::Uid, index.parent()).data().toString();
+    qWarning() << index.data().toString() << uid;
     Q_EMIT selectedUser(index.data().toString(), uid);
 }
 

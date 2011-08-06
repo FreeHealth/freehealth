@@ -34,6 +34,8 @@
 #include <coreplugin/constants_icons.h>
 
 #include <calendar/calendar_item.h>
+#include <calendar/calendar_people.h>
+#include <calendar/abstract_calendar_model.h>
 #include <translationutils/constanttranslations.h>
 
 #include "ui_calendaritemeditorpatientmapper.h"
@@ -62,7 +64,12 @@ CalendarItemEditorPatientMapperWidget::~CalendarItemEditorPatientMapperWidget()
 void CalendarItemEditorPatientMapperWidget::setCalendarItem(const Calendar::CalendarItem &item)
 {
     clear();
-    // get peoples
+
+    Calendar::AbstractCalendarModel *model = item.model();
+    if (!model)
+        return;
+
+    /** \todo code here : get peoples from the model */
 //    m_SelectedPatientUids = item.peopleUids(Calendar::CalendarItem::PeopleAttendee);
 //    m_SelectedPatientsNames = item.peopleNames(Calendar::CalendarItem::PeopleAttendee);
 //    for(int i = 0; i < m_SelectedPatientUids.count(); ++i) {
@@ -75,10 +82,10 @@ void CalendarItemEditorPatientMapperWidget::clear()
     foreach(const QString &uid, m_PatientWidgets.keys()) {
         ui->groupGridLayout->removeWidget(m_PatientWidgets.value(uid));
     }
+    qDeleteAll(m_PatientWidgets);
     m_PatientWidgets.clear();
     ui->searchPatient->clear();
-    m_SelectedPatientUids.clear();
-    m_SelectedPatientsNames.clear();
+    m_Selected.clear();
 }
 
 void CalendarItemEditorPatientMapperWidget::addPatientRow(const QString &name, const QString &uid)
@@ -118,14 +125,14 @@ void CalendarItemEditorPatientMapperWidget::removePatient(QAction *action)
     ui->groupGridLayout->removeWidget(m_PatientWidgets.value(uid));
     delete m_PatientWidgets.value(uid);
     m_PatientWidgets.remove(uid);
+    m_Selected.removeAll(Calendar::People(Calendar::People::PeopleAttendee, "", uid));
 }
 
 void CalendarItemEditorPatientMapperWidget::onPatientSelected(const QString &name, const QString &uid)
 {
     if (!m_PatientWidgets.contains(uid)) {
         addPatientRow(name, uid);
-        m_SelectedPatientUids.append(uid);
-        m_SelectedPatientsNames.append(name);
+        m_Selected.append(Calendar::People(Calendar::People::PeopleAttendee, name, uid));
         ui->searchPatient->clear();
     }
 }
@@ -168,13 +175,19 @@ bool CalendarItemEditorPatientMapper::clear()
     return true;
 }
 
-bool CalendarItemEditorPatientMapper::submitChangesToCalendarItem(Calendar::CalendarItem &item)
+bool CalendarItemEditorPatientMapper::submitChangesToCalendarItem(const Calendar::CalendarItem &item)
 {
     if (!m_Widget) {
         return false;
     }
-//    for(int i = 0; i < m_Widget->selectedPatientUids().count(); ++i) {
-//        item.addPeople(Calendar::CalendarItem::PeopleAttendee, m_Widget->selectedPatientsNames().at(i), m_Widget->selectedPatientUids().at(i));
-//    }
+
+    Calendar::AbstractCalendarModel *model = item.model();
+    if (!model)
+        return false;
+
+    for(int i = 0; i < m_Widget->selected().count(); ++i) {
+        model->addPeople(item, m_Widget->selected().at(i));
+    }
+
     return true;
 }

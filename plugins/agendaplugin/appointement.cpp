@@ -80,69 +80,6 @@ bool Appointement::setData(const int ref, const QVariant &value)
     return true;
 }
 
-void Appointement::addPeople(const int people, const QString &name, const QString &uid)
-{
-    m_People.append(Internal::PeopleStructPrivate(people, name, uid));
-}
-
-void Appointement::setPeopleName(const int people, const QString &uid, const QString &name)
-{
-    for(int i = 0; i < m_People.count(); ++i) {
-        if (m_People.at(i).type==people && m_People.at(i).uid==uid) {
-            m_People[i].name = name;
-        }
-    }
-}
-
-QStringList Appointement::peopleNames(const int people, bool skipEmpty) const
-{
-    QStringList toReturn;
-    for(int i = 0; i < m_People.count(); ++i) {
-        if (m_People.at(i).type == people) {
-            if (skipEmpty) {
-                if (m_People.at(i).name.isEmpty())
-                    continue;
-            }
-            toReturn << m_People.at(i).name;
-        }
-    }
-    return toReturn;
-}
-
-QStringList Appointement::peopleUids(const int people, bool skipEmpty) const
-{
-    QStringList toReturn;
-    for(int i = 0; i < m_People.count(); ++i) {
-        if (m_People.at(i).type == people) {
-            if (skipEmpty) {
-                if (m_People.at(i).uid.isEmpty())
-                    continue;
-            }
-            toReturn << m_People.at(i).uid;
-        }
-    }
-    return toReturn;
-}
-
-void Appointement::removePeople(const QString &uid)
-{
-    for(int i = 0; i < m_People.count(); ++i) {
-        if (m_People.at(i).uid==uid) {
-            m_People.remove(i);
-            break;
-        }
-    }
-}
-
-void Appointement::clearPeople(const int people)
-{
-    for(int i = 0; i < m_People.count(); ++i) {
-        if (m_People.at(i).type==people) {
-            m_People.remove(i);
-        }
-    }
-}
-
 QDateTime Appointement::beginning() const
 {
     return data(CalendarItemModel::DateStart).toDateTime();

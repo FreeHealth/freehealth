@@ -28,6 +28,14 @@
 #define UserCalendarModelFullEditorWidget_H
 
 #include <QWidget>
+#include <QModelIndex>
+
+/**
+ * \file usercalendarmodelfulleditorwidget.h
+ * \author Eric MAEKER <eric.maeker@gmail.com>
+ * \version 0.6.0
+ * \date 04 Aug 2011
+*/
 
 namespace Agenda {
 class UserCalendarModel;
@@ -36,6 +44,7 @@ namespace Ui {
     class UserCalendarModelFullEditorWidget;
 }
 
+/** \todo code here : put this in Internal */
 class UserCalendarModelFullEditorWidget : public QWidget
 {
     Q_OBJECT
@@ -48,6 +57,9 @@ public:
 public Q_SLOTS:
     void clear();
     bool submit();
+
+private Q_SLOTS:
+    void setCurrentIndex(const QModelIndex &index);
 
 private:
     void changeEvent(QEvent *e);

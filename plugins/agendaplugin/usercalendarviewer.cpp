@@ -26,10 +26,10 @@
 
 /**
   \class Agenda::UserCalendarViewer
-  \brief Agenda::UserCalendar widget viewer for FreeMedForms.
+  Is a Agenda::UserCalendar widget viewer for FreeMedForms used in the Agenda mode.
   This widget presents:
   - a left bar with some usercalendar informations, plus automated next availabilities calculation
-  - a central Calendar::CalendarViewer
+  - a central Calendar::CalendarViewer for users to edit appointements
 */
 
 #include "usercalendarviewer.h"
@@ -188,15 +188,13 @@ void UserCalendarViewer::recalculateAvailabilitiesWithDurationIndex(const int in
 
 void UserCalendarViewer::on_availableAgendasCombo_activated(const int index)
 {
-    qWarning() << Q_FUNC_INFO;
     if (index > 0 && index < d->m_UserCalendarModel->rowCount()) {
-        QVariant uid = d->m_UserCalendarModel->index(index, UserCalendarModel::Uid).data();
-        if (uid.isNull())
+        QVariant calUid = d->m_UserCalendarModel->index(index, UserCalendarModel::Uid).data();
+        if (calUid.isNull())
             return;
-        if (!uid.isValid())
+        if (!calUid.isValid())
             return;
-        qWarning() << d->m_UserCalendarModel << d->m_CalendarItemModel << index << uid;
-        d->m_CalendarItemModel = agendaCore()->calendarItemModel(uid);
+        d->m_CalendarItemModel = agendaCore()->calendarItemModel(calUid);
     }
 //    d->populateCalendarWithCurrentWeek(d->m_UserCals.at(index));
 }
@@ -205,7 +203,9 @@ void UserCalendarViewer::userChanged()
 {
     d->ui->userNameLabel->setText(user()->value(Core::IUser::FullName).toString());
     // model is automatically updated and reseted but the userCalendar combo model
+    d->m_UserCalendarModel = agendaCore()->userCalendarModel();
     d->ui->availableAgendasCombo->setModel(d->m_UserCalendarModel);
+    d->ui->availableAgendasCombo->setModelColumn(UserCalendarModel::ExtraLabel);
     d->ui->availableAgendasCombo->setCurrentIndex(d->m_UserCalendarModel->defaultUserCalendarModelIndex().row());
 
     // Add availabilities

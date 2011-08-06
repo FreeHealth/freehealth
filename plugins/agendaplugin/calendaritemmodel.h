@@ -72,6 +72,9 @@ public:
     void stopEvents();
     void resumeEvents();
 
+    virtual void addPeople(const Calendar::CalendarItem &item, const Calendar::People &people);
+    virtual QStringList peopleNames(const Calendar::CalendarItem &item, const int peopleType = Calendar::People::PeopleAttendee, bool skipEmpty = false) const;
+
     // Filters
     bool filterUserCalendarEvents(const QVariant &calendarUid);
 

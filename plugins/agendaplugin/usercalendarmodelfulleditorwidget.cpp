@@ -24,6 +24,12 @@
  *       NAME <MAIL@ADRESS>                                                *
  *       NAME <MAIL@ADRESS>                                                *
  ***************************************************************************/
+/**
+  \class Agenda::UserCalendarModelFullEditorWidget
+  Is a full editor widget for Agenda::UserCalendar. A view on the left allow the user to select
+  the calendar to edit in the right part of the widget.
+*/
+
 #include "usercalendarmodelfulleditorwidget.h"
 #include "agendabase.h"
 #include "usercalendarmodel.h"
@@ -45,6 +51,7 @@ using namespace Agenda;
 using namespace Internal;
 using namespace Trans::ConstantTranslations;
 
+static inline Core::IUser *user() {return Core::ICore::instance()->user();}
 static inline Core::ITheme *theme() {return Core::ICore::instance()->theme();}
 static inline Agenda::Internal::AgendaBase *base() {return Agenda::Internal::AgendaBase::instance();}
 
@@ -59,11 +66,12 @@ UserCalendarModelFullEditorWidget::UserCalendarModelFullEditorWidget(QWidget *pa
     a->setToolTip(a->text());
 
     ui->setupUi(this);
+    ui->editor->setEnabled(false);
+
     ui->listView->setActions(Views::Constants::AddRemove);
 
-    connect(ui->listView, SIGNAL(activated(QModelIndex)), ui->editor, SLOT(setCurrentIndex(QModelIndex)));
+    connect(ui->listView, SIGNAL(activated(QModelIndex)), this, SLOT(setCurrentIndex(QModelIndex)));
 //    connect(ui->listView, SIGNAL(addRequested), ui->editor, SLOT(addUserCalendar()));
-
 }
 
 UserCalendarModelFullEditorWidget::~UserCalendarModelFullEditorWidget()
@@ -74,27 +82,34 @@ UserCalendarModelFullEditorWidget::~UserCalendarModelFullEditorWidget()
 void UserCalendarModelFullEditorWidget::setUserCalendarModel(UserCalendarModel *model)
 {
     Q_ASSERT(model);
-    qWarning() << Q_FUNC_INFO;
+    if (!model)
+        return;
+    if (m_UserCalendarModel==model)
+        return;
     m_UserCalendarModel = model;
     ui->listView->setModel(m_UserCalendarModel);
+    ui->listView->setModelColumn(UserCalendarModel::Label);
     ui->editor->setUserCalendarModel(m_UserCalendarModel);
 }
 
-//void UserCalendarModelFullEditorWidget::addUserCalendar()
-//{
-//    qWarning() << Q_FUNC_INFO;
-//}
+void UserCalendarModelFullEditorWidget::setCurrentIndex(const QModelIndex &index)
+{
+    // inform UserCalendarEditor
+    ui->editor->setEnabled(true);
+    ui->editor->setCurrentIndex(index);
+}
 
 void UserCalendarModelFullEditorWidget::clear()
 {
+    ui->editor->clear();
+    ui->editor->setEnabled(false);
     ui->listView->setModel(0);
-    if (m_UserCalendarModel)
-        delete m_UserCalendarModel;
     m_UserCalendarModel = 0;
 }
 
 bool UserCalendarModelFullEditorWidget::submit()
 {
+    ui->editor->submit();
     if (m_UserCalendarModel)
         return m_UserCalendarModel->submit();
     return false;

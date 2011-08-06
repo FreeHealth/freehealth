@@ -249,7 +249,7 @@ PatientLineEditCompleterSearch::PatientLineEditCompleterSearch(QWidget *parent) 
 {
     // Add the cancel button on the right
     QToolButton *cancel = new QToolButton;
-    cancel->setIcon(theme()->icon(Core::Constants::ICONCLOSEDARK));
+    cancel->setIcon(theme()->icon(Core::Constants::ICONCLEARLINEEDIT));
     cancel->setToolTip(tkTr(Trans::Constants::CLEAR));
     setRightButton(cancel);
     connect(cancel, SIGNAL(clicked()), this, SLOT(cancelSearch()));

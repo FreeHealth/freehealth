@@ -84,6 +84,7 @@ public:
     }
 
 public:
+    /** \todo use QPointers instead of pure pointers */
     QHash<QString, UserCalendarModel *> m_UCalModels;
     QHash<QString, CalendarItemModel *> m_CalItemModel;
     Internal::UserCalendarPageForUserViewer *m_UserViewerPage;
@@ -119,7 +120,7 @@ AgendaCore::~AgendaCore()
     delete d;
 }
 
-/** Create or get the Agenda::UserCalendarModel for the user \e userUid */
+/** Create or get the Agenda::UserCalendarModel for the user \e userUid. The return pointer \b MUST \b NOT be deleted. */
 UserCalendarModel *AgendaCore::userCalendarModel(const QString &userUid)
 {
     QString uid = userUid;
@@ -138,7 +139,6 @@ UserCalendarModel *AgendaCore::userCalendarModel(const QString &userUid)
 
 CalendarItemModel *AgendaCore::calendarItemModel(const QVariant &calendarUid)
 {
-    qWarning() << Q_FUNC_INFO << calendarUid;
     Q_ASSERT(!calendarUid.isNull());
     Q_ASSERT(calendarUid.isValid());
     if (calendarUid.isNull() || calendarUid.isValid())

@@ -64,7 +64,7 @@ public:
         FTV_RemoveRow    = 0x0008,
         FTV_PrintItem    = 0x0010
     };
-    Q_DECLARE_FLAGS(ButtonActions, ButtonAction);
+    Q_DECLARE_FLAGS(ButtonActions, ButtonAction)
 
 
     explicit FancyTreeView(QWidget *parent = 0);

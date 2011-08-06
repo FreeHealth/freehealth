@@ -44,9 +44,6 @@
 #include <coreplugin/constants_icons.h>
 #include <coreplugin/actionmanager/actionmanager.h>
 
-#include <listviewplugin/fancytreeview.h>
-#include <listviewplugin/simplecategorymodel.h>
-
 #include <categoryplugin/categoryitem.h>
 #include <categoryplugin/categorydialog.h>
 

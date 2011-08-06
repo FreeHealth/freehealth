@@ -64,9 +64,6 @@ namespace Views {
         static const char * A_SAVE_MODEL = "FancyTreeView.aSave";
         static const char * A_CREATE_NEW = "FancyTreeView.aCreate";
         static const char * A_REMOVE_ITEM = "FancyTreeView.aRemove";
-        static const char * A_REVERT_MODEL = "FancyTreeView.aRevert";
-
-        static const char * REVERT_TEXT = "Revert";
     }
 
 namespace Internal {

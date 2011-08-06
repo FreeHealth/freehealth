@@ -103,6 +103,7 @@ public:
         MedicalRights,
         ParamedicalRights,
         AdministrativeRights,
+        AgendaRights,
 
         DecryptedLogin,           /*!< \brief Clear human readable login. */
         LoginHistory,             /*!< \brief Full login history of the user. */
@@ -126,7 +127,7 @@ public:
         Delete         = 0x00000400,
         AllRights      = ReadOwn | ReadDelegates | ReadAll | WriteOwn | WriteDelegates | WriteAll | Print | Create | Delete
     };
-    Q_DECLARE_FLAGS(UserRights, UserRight);
+    Q_DECLARE_FLAGS(UserRights, UserRight)
 
     IUser(QObject *parent) : QObject(parent) {}
     virtual ~IUser() {}

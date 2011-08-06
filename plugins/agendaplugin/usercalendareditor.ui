@@ -120,7 +120,7 @@
    <item row="1" column="0">
     <widget class="QTabWidget" name="tabWidget">
      <property name="currentIndex">
-      <number>0</number>
+      <number>1</number>
      </property>
      <widget class="QWidget" name="tab">
       <attribute name="title">
@@ -154,24 +154,34 @@
          </property>
         </widget>
        </item>
-       <item row="1" column="0">
+       <item row="3" column="0">
         <widget class="QLabel" name="label_9">
          <property name="text">
           <string>Default location</string>
          </property>
         </widget>
        </item>
-       <item row="1" column="1" colspan="2">
+       <item row="3" column="1" colspan="2">
         <widget class="QLineEdit" name="defaultLocation"/>
        </item>
-       <item row="2" column="0" colspan="3">
+       <item row="6" column="1" colspan="2">
+        <widget class="QLineEdit" name="password"/>
+       </item>
+       <item row="1" column="1">
         <widget class="QCheckBox" name="isDefaultCheck">
          <property name="text">
-          <string>is the default calendar</string>
+          <string>is the default agenda</string>
          </property>
         </widget>
        </item>
-       <item row="3" column="0" colspan="3">
+       <item row="1" column="0">
+        <widget class="QLabel" name="label">
+         <property name="text">
+          <string>Default agenda</string>
+         </property>
+        </widget>
+       </item>
+       <item row="4" column="1">
         <widget class="QCheckBox" name="isPrivateCheck">
          <property name="text">
           <string>is private</string>
@@ -179,6 +189,13 @@
         </widget>
        </item>
        <item row="4" column="0">
+        <widget class="QLabel" name="label_6">
+         <property name="text">
+          <string>Privacy</string>
+         </property>
+        </widget>
+       </item>
+       <item row="6" column="0">
         <widget class="QLabel" name="label_4">
          <property name="text">
           <string>Password</string>
@@ -188,8 +205,22 @@
          </property>
         </widget>
        </item>
-       <item row="4" column="1" colspan="2">
-        <widget class="QLineEdit" name="password"/>
+      </layout>
+     </widget>
+     <widget class="QWidget" name="tabDelegates">
+      <attribute name="title">
+       <string>Shared</string>
+      </attribute>
+      <layout class="QGridLayout" name="gridLayout_5">
+       <item row="0" column="0">
+        <widget class="Agenda::Internal::UserCalendarDelegatesMapperWidget" name="userCalendarDelegatesWidget" native="true">
+         <property name="sizePolicy">
+          <sizepolicy hsizetype="Expanding" vsizetype="Expanding">
+           <horstretch>0</horstretch>
+           <verstretch>0</verstretch>
+          </sizepolicy>
+         </property>
+        </widget>
        </item>
       </layout>
      </widget>
@@ -228,6 +259,14 @@
    </item>
   </layout>
  </widget>
+ <customwidgets>
+  <customwidget>
+   <class>Agenda::Internal::UserCalendarDelegatesMapperWidget</class>
+   <extends>QWidget</extends>
+   <header location="global">agendaplugin/usercalendardelegatesmapper.h</header>
+   <container>1</container>
+  </customwidget>
+ </customwidgets>
  <resources/>
  <connections/>
 </ui>

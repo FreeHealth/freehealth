@@ -852,6 +852,7 @@ QString toHtmlAccent(const QString &html)
     accents.insert(QString::fromUtf8("ô"), "&ocirc;");
     accents.insert(QString::fromUtf8("û"), "&ucirc;");
 
+    accents.insert(QString::fromUtf8("ä"), "&auml;");
     accents.insert(QString::fromUtf8("ë"), "&euml;");
     accents.insert(QString::fromUtf8("ï"), "&iuml;");
     accents.insert(QString::fromUtf8("ö"), "&ouml;");
@@ -876,10 +877,16 @@ QString toHtmlAccent(const QString &html)
     accents.insert(QString::fromUtf8("Ô"), "&Ocirc;");
     accents.insert(QString::fromUtf8("Û"), "&Ucirc;");
 
+    accents.insert(QString::fromUtf8("Ä"), "&Auml;");
     accents.insert(QString::fromUtf8("Ë"), "&Euml;");
     accents.insert(QString::fromUtf8("Ï"), "&Iuml;");
     accents.insert(QString::fromUtf8("Ö"), "&Ouml;");
     accents.insert(QString::fromUtf8("Ü"), "&Uuml;");
+
+    accents.insert(QString::fromUtf8("ã"), "&atilde;");
+    accents.insert(QString::fromUtf8("õ"), "&otilde;");
+    accents.insert(QString::fromUtf8("Ã"), "&Atilde;");
+    accents.insert(QString::fromUtf8("Õ"), "&Otilde;");
 
     accents.insert(QString::fromUtf8("Œ"), "&OElig;");
     accents.insert(QString::fromUtf8("Æ"), "&AElig;");
@@ -895,7 +902,6 @@ QString toHtmlAccent(const QString &html)
     accents.insert(QString::fromUtf8("¤"), "&curren;");
     accents.insert(QString::fromUtf8("¥"), "&yen;");
     accents.insert(QString::fromUtf8("¦"), "&brvbar;");
-    accents.insert(QString::fromUtf8("Ã"), "&Atilde;");
     accents.insert(QString::fromUtf8("µ"), "&micro;");
     accents.insert(QString::fromUtf8("·"), "&middot;");
     accents.insert(QString::fromUtf8("»"), "&raquo;");
@@ -914,6 +920,70 @@ QString toHtmlAccent(const QString &html)
     accents.insert(QString::fromUtf8("ˆ"), "&#136;");
     accents.insert(QString::fromUtf8("—"), "&mdash;");
 
+    foreach(const QString &k, accents.keys()) {
+        toReturn.replace(k, accents.value(k));
+    }
+    return toReturn;
+}
+
+QString removeAccents(const QString &text)
+{
+    QHash< QString, QString > accents;
+    accents.insert(QString::fromUtf8("é"), "e;");
+    accents.insert(QString::fromUtf8("è"), "e");
+    accents.insert(QString::fromUtf8("à"), "a");
+    accents.insert(QString::fromUtf8("ù"), "u");
+
+    accents.insert(QString::fromUtf8("ê"), "e");
+    accents.insert(QString::fromUtf8("â"), "a");
+    accents.insert(QString::fromUtf8("î"), "i");
+    accents.insert(QString::fromUtf8("ô"), "o");
+    accents.insert(QString::fromUtf8("û"), "u");
+
+    accents.insert(QString::fromUtf8("ä"), "a");
+    accents.insert(QString::fromUtf8("ë"), "e");
+    accents.insert(QString::fromUtf8("ï"), "i");
+    accents.insert(QString::fromUtf8("ö"), "o");
+    accents.insert(QString::fromUtf8("ü"), "u");
+
+    accents.insert(QString::fromUtf8("œ"), "oe");
+    accents.insert(QString::fromUtf8("æ"), "ae");
+    accents.insert(QString::fromUtf8("ç"), "c");
+
+    accents.insert(QString::fromUtf8("ø"), "o");
+    accents.insert(QString::fromUtf8("Ø"), "O");
+
+    accents.insert(QString::fromUtf8("É"), "E");
+
+    accents.insert(QString::fromUtf8("È"), "E");
+    accents.insert(QString::fromUtf8("À"), "A");
+    accents.insert(QString::fromUtf8("Ù"), "U");
+
+    accents.insert(QString::fromUtf8("Â"), "A");
+    accents.insert(QString::fromUtf8("Ê"), "E");
+    accents.insert(QString::fromUtf8("Î"), "I");
+    accents.insert(QString::fromUtf8("Ô"), "O");
+    accents.insert(QString::fromUtf8("Û"), "U");
+
+    accents.insert(QString::fromUtf8("Ä"), "A");
+    accents.insert(QString::fromUtf8("Ë"), "E");
+    accents.insert(QString::fromUtf8("Ï"), "I");
+    accents.insert(QString::fromUtf8("Ö"), "O");
+    accents.insert(QString::fromUtf8("Ü"), "U");
+
+    accents.insert(QString::fromUtf8("Œ"), "OE");
+    accents.insert(QString::fromUtf8("Æ"), "AE");
+    accents.insert(QString::fromUtf8("Ç"), "C");
+
+    accents.insert(QString::fromUtf8("ø"), "o");
+    accents.insert(QString::fromUtf8("Ø"), "O");
+
+    accents.insert(QString::fromUtf8("ã"), "a");
+    accents.insert(QString::fromUtf8("õ"), "o");
+    accents.insert(QString::fromUtf8("Ã"), "A");
+    accents.insert(QString::fromUtf8("Õ"), "O");
+
+    QString toReturn = text;
     foreach(const QString &k, accents.keys()) {
         toReturn.replace(k, accents.value(k));
     }

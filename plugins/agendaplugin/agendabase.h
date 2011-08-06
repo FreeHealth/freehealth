@@ -106,6 +106,11 @@ protected:
     AgendaBase(QObject *parent = 0);
 
 public:
+    enum RelatedEventFor {
+        RelatedToCalendar = 0,
+        RelatedToAppointement
+    };
+
     // Constructor
     static AgendaBase *instance();
     virtual ~AgendaBase() {}
@@ -141,10 +146,10 @@ public:
 
 private:
     bool saveCalendarAvailabilities(Agenda::UserCalendar *calendar);
-    bool saveEventRelatedPeoples(const Appointement *event);
-    bool getRelatedPeoples(Appointement *event);
+    bool saveRelatedPeoples(RelatedEventFor relatedToCalendar, const int eventOrCalendarId, const Calendar::CalendarPeople *peopleClass);
     bool saveCommonEvent(Appointement *event);
     bool saveNonCyclingEvent(Appointement *event);
+    bool getRelatedPeoples(RelatedEventFor relatedTo, const int eventOrCalendarId, Calendar::CalendarPeople *event);
 
 private:
     static bool m_initialized;

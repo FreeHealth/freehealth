@@ -803,11 +803,22 @@ void UserData::setClearPassword(const QString &val)
     }
 }
 
+/** Return the translated human readable title of the user. */
+QString UserData::title() const
+{
+    return Trans::ConstantTranslations::titles().at(titleIndex());
+}
+
+/** Return the translated human readable gender of the user. */
+QString UserData::gender() const
+{
+    return Trans::ConstantTranslations::genders().at(genderIndex());
+}
+
 /**
    Define the crypted password. You should not use this function, but the setClearPassword() instead
    \sa setClearPassword(), isPasswordModified()
 */
-
 void UserData::setCryptedPassword(const QVariant &val)
 {
     if (val.toString() == value(Table_USERS, USER_PASSWORD).toString())
