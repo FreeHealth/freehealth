@@ -263,12 +263,20 @@
 <context>
     <name>Patients::Internal::PatientBase</name>
     <message>
-        <location filename="../../plugins/patientbaseplugin/patientbase.cpp" line="259"/>
         <location filename="../../plugins/patientbaseplugin/patientbase.cpp" line="267"/>
-        <location filename="../../plugins/patientbaseplugin/patientbase.cpp" line="273"/>
-        <location filename="../../plugins/patientbaseplugin/patientbase.cpp" line="283"/>
+        <location filename="../../plugins/patientbaseplugin/patientbase.cpp" line="275"/>
+        <location filename="../../plugins/patientbaseplugin/patientbase.cpp" line="281"/>
+        <location filename="../../plugins/patientbaseplugin/patientbase.cpp" line="291"/>
         <source>Please contact dev team.</source>
         <translation>Veuillez contacter l&apos;équipe de développement.</translation>
+    </message>
+</context>
+<context>
+    <name>Patients::Internal::PatientBasePreferencesPage</name>
+    <message>
+        <location filename="../../plugins/patientbaseplugin/patientbasepreferencespage.cpp" line="65"/>
+        <source>Patient database preferences</source>
+        <translation>Préférences pour la base de données patients</translation>
     </message>
 </context>
 <context>
@@ -279,37 +287,32 @@
         <translation></translation>
     </message>
     <message>
-        <location filename="../../plugins/patientbaseplugin/patientbasepreferencespage.ui" line="26"/>
-        <source>Patient database preferences</source>
-        <translation>Préférences pour la base de données patients</translation>
-    </message>
-    <message>
-        <location filename="../../plugins/patientbaseplugin/patientbasepreferencespage.ui" line="43"/>
+        <location filename="../../plugins/patientbaseplugin/patientbasepreferencespage.ui" line="20"/>
         <source>Virtual patients</source>
         <translation>Patients virtuels</translation>
     </message>
     <message>
-        <location filename="../../plugins/patientbaseplugin/patientbasepreferencespage.ui" line="49"/>
+        <location filename="../../plugins/patientbaseplugin/patientbasepreferencespage.ui" line="26"/>
         <source>Show virtual patients</source>
         <translation>Montrer les patients virtuels</translation>
     </message>
     <message>
-        <location filename="../../plugins/patientbaseplugin/patientbasepreferencespage.ui" line="59"/>
+        <location filename="../../plugins/patientbaseplugin/patientbasepreferencespage.ui" line="36"/>
         <source>Patient selector</source>
         <translation>Sélectionneur de patient</translation>
     </message>
     <message>
-        <location filename="../../plugins/patientbaseplugin/patientbasepreferencespage.ui" line="65"/>
+        <location filename="../../plugins/patientbaseplugin/patientbasepreferencespage.ui" line="42"/>
         <source>Use color to differentiate genders</source>
         <translation>Différentier les sexes par des couleurs différentes</translation>
     </message>
     <message>
-        <location filename="../../plugins/patientbaseplugin/patientbasepreferencespage.ui" line="88"/>
+        <location filename="../../plugins/patientbaseplugin/patientbasepreferencespage.ui" line="65"/>
         <source>Patient bar</source>
         <translation>Barre patient</translation>
     </message>
     <message>
-        <location filename="../../plugins/patientbaseplugin/patientbasepreferencespage.ui" line="94"/>
+        <location filename="../../plugins/patientbaseplugin/patientbasepreferencespage.ui" line="71"/>
         <source>Background color</source>
         <translation>Couleur de fond</translation>
     </message>

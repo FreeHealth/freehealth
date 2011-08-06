@@ -2,35 +2,20 @@
 <!DOCTYPE TS>
 <TS version="2.0" language="de_DE">
 <context>
-    <name>HeadersFootersViewerPrivate</name>
-    <message>
-        <location filename="../../plugins/usermanagerplugin/widgets/headersfootersviewerprivate.ui" line="14"/>
-        <source>Headers and Footers Editor</source>
-        <translation type="unfinished"></translation>
-    </message>
-</context>
-<context>
     <name>UserBase</name>
     <message>
-        <location filename="../../plugins/usermanagerplugin/database/userbase.cpp" line="248"/>
-        <location filename="../../plugins/usermanagerplugin/database/userbase.cpp" line="270"/>
-        <location filename="../../plugins/usermanagerplugin/database/userbase.cpp" line="293"/>
-        <source>ERROR : will retreiving %1. Wrong number of fields</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <location filename="../../plugins/usermanagerplugin/database/userbase.cpp" line="473"/>
-        <location filename="../../plugins/usermanagerplugin/database/userbase.cpp" line="497"/>
+        <location filename="../../plugins/usermanagerplugin/database/userbase.cpp" line="462"/>
+        <location filename="../../plugins/usermanagerplugin/database/userbase.cpp" line="484"/>
         <source>Can not create a new user&apos;s UUID, database access error</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../../plugins/usermanagerplugin/database/userbase.cpp" line="519"/>
+        <location filename="../../plugins/usermanagerplugin/database/userbase.cpp" line="507"/>
         <source>Can not retreive login from the uuid</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../../plugins/usermanagerplugin/database/userbase.cpp" line="553"/>
+        <location filename="../../plugins/usermanagerplugin/database/userbase.cpp" line="541"/>
         <source>Trying to create empty user database. 
        Location : %1 
        FileName: %2
@@ -38,7 +23,7 @@
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../../plugins/usermanagerplugin/database/userbase.cpp" line="873"/>
+        <location filename="../../plugins/usermanagerplugin/database/userbase.cpp" line="863"/>
         <source>User %1 correctly updated.</source>
         <translation type="unfinished"></translation>
     </message>
@@ -90,9 +75,17 @@
     </message>
 </context>
 <context>
+    <name>UserPlugin::CurrentUserPreferencesPage</name>
+    <message>
+        <location filename="../../plugins/usermanagerplugin/currentuserpreferencespage.cpp" line="60"/>
+        <source>Personnal preferences</source>
+        <translation type="unfinished"></translation>
+    </message>
+</context>
+<context>
     <name>UserPlugin::FirstRunUserCreationWidget</name>
     <message>
-        <location filename="../../plugins/usermanagerplugin/firstrunusercreationwidget.ui" line="14"/>
+        <location filename="../../plugins/usermanagerplugin/widgets/firstrunusercreationwidget.ui" line="14"/>
         <source>Form</source>
         <translation type="unfinished"></translation>
     </message>
@@ -100,20 +93,78 @@
 <context>
     <name>UserPlugin::Internal::CurrentUserPreferencesWidget</name>
     <message>
-        <location filename="../../plugins/usermanagerplugin/currentuserpreferenceswidget.ui" line="14"/>
+        <location filename="../../plugins/usermanagerplugin/widgets/currentuserpreferenceswidget.ui" line="14"/>
         <source>Form</source>
         <translation type="unfinished"></translation>
     </message>
+</context>
+<context>
+    <name>UserPlugin::Internal::DefaultUserContactPage</name>
     <message>
-        <location filename="../../plugins/usermanagerplugin/currentuserpreferenceswidget.ui" line="32"/>
-        <source>User preferences</source>
+        <location filename="../../plugins/usermanagerplugin/widgets/defautuserviewerpages.cpp" line="230"/>
+        <location filename="../../plugins/usermanagerplugin/widgets/defautuserviewerpages.cpp" line="240"/>
+        <source>Contact</source>
+        <translation type="unfinished"></translation>
+    </message>
+</context>
+<context>
+    <name>UserPlugin::Internal::DefaultUserIdentityPage</name>
+    <message>
+        <location filename="../../plugins/usermanagerplugin/widgets/defautuserviewerpages.cpp" line="154"/>
+        <source>User identity</source>
+        <translation type="unfinished"></translation>
+    </message>
+</context>
+<context>
+    <name>UserPlugin::Internal::DefaultUserIdentityWidget</name>
+    <message>
+        <location filename="../../plugins/usermanagerplugin/widgets/defautuserviewerpages.cpp" line="119"/>
+        <source>Login history.</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../../plugins/usermanagerplugin/widgets/defautuserviewerpages.cpp" line="120"/>
+        <source>User %1
+Last connection : %2</source>
+        <translation type="unfinished"></translation>
+    </message>
+</context>
+<context>
+    <name>UserPlugin::Internal::DefaultUserPapersPage</name>
+    <message>
+        <location filename="../../plugins/usermanagerplugin/widgets/defautuserviewerpages.cpp" line="539"/>
+        <source>Generic papers</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../../plugins/usermanagerplugin/widgets/defautuserviewerpages.cpp" line="540"/>
+        <source>Administrative papers</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../../plugins/usermanagerplugin/widgets/defautuserviewerpages.cpp" line="541"/>
+        <source>Prescription papers</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../../plugins/usermanagerplugin/widgets/defautuserviewerpages.cpp" line="548"/>
+        <source>Documents</source>
+        <translation type="unfinished"></translation>
+    </message>
+</context>
+<context>
+    <name>UserPlugin::Internal::DefaultUserProfessionalPage</name>
+    <message>
+        <location filename="../../plugins/usermanagerplugin/widgets/defautuserviewerpages.cpp" line="318"/>
+        <location filename="../../plugins/usermanagerplugin/widgets/defautuserviewerpages.cpp" line="328"/>
+        <source>Professional identifiants</source>
         <translation type="unfinished"></translation>
     </message>
 </context>
 <context>
     <name>UserPlugin::Internal::UserBase</name>
     <message>
-        <location filename="../../plugins/usermanagerplugin/database/userbase.cpp" line="733"/>
+        <location filename="../../plugins/usermanagerplugin/database/userbase.cpp" line="722"/>
         <source>Recorded User Last Login : %1 </source>
         <translation type="unfinished"></translation>
     </message>
@@ -199,49 +250,49 @@ p, li { white-space: pre-wrap; }
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../../plugins/usermanagerplugin/widgets/usermanager.ui" line="35"/>
+        <location filename="../../plugins/usermanagerplugin/widgets/usermanager.ui" line="51"/>
         <source>Memory Usage</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../../plugins/usermanagerplugin/widgets/usermanager.ui" line="41"/>
+        <location filename="../../plugins/usermanagerplugin/widgets/usermanager.ui" line="57"/>
         <source>TextLabel</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../../plugins/usermanagerplugin/widgets/usermanager.ui" line="79"/>
+        <location filename="../../plugins/usermanagerplugin/widgets/usermanager.ui" line="95"/>
         <source>User Manager Tool Bar</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../../plugins/usermanagerplugin/widgets/usermanager.ui" line="93"/>
+        <location filename="../../plugins/usermanagerplugin/widgets/usermanager.ui" line="109"/>
         <source>Create new user</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../../plugins/usermanagerplugin/widgets/usermanager.ui" line="98"/>
+        <location filename="../../plugins/usermanagerplugin/widgets/usermanager.ui" line="114"/>
         <source>Modify User</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../../plugins/usermanagerplugin/widgets/usermanager.ui" line="103"/>
+        <location filename="../../plugins/usermanagerplugin/widgets/usermanager.ui" line="119"/>
         <source>Save changes</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../../plugins/usermanagerplugin/widgets/usermanager.ui" line="108"/>
+        <location filename="../../plugins/usermanagerplugin/widgets/usermanager.ui" line="124"/>
         <source>Clear modifications</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../../plugins/usermanagerplugin/widgets/usermanager.ui" line="113"/>
-        <location filename="../../plugins/usermanagerplugin/widgets/usermanager.ui" line="116"/>
+        <location filename="../../plugins/usermanagerplugin/widgets/usermanager.ui" line="129"/>
+        <location filename="../../plugins/usermanagerplugin/widgets/usermanager.ui" line="132"/>
         <source>Delete User</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../../plugins/usermanagerplugin/widgets/usermanager.ui" line="121"/>
-        <location filename="../../plugins/usermanagerplugin/widgets/usermanager.ui" line="124"/>
+        <location filename="../../plugins/usermanagerplugin/widgets/usermanager.ui" line="137"/>
+        <location filename="../../plugins/usermanagerplugin/widgets/usermanager.ui" line="140"/>
         <source>Quit User Manager</source>
         <translation type="unfinished"></translation>
     </message>
@@ -249,84 +300,73 @@ p, li { white-space: pre-wrap; }
 <context>
     <name>UserPlugin::Internal::UserManagerWidget</name>
     <message>
-        <location filename="../../plugins/usermanagerplugin/widgets/usermanager.cpp" line="341"/>
+        <location filename="../../plugins/usermanagerplugin/widgets/usermanager.cpp" line="353"/>
         <source>You&apos;ve modified the users&apos; list.</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../../plugins/usermanagerplugin/widgets/usermanager.cpp" line="341"/>
+        <location filename="../../plugins/usermanagerplugin/widgets/usermanager.cpp" line="353"/>
         <source>Do you want to save your changes ?</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../../plugins/usermanagerplugin/widgets/usermanager.cpp" line="349"/>
+        <location filename="../../plugins/usermanagerplugin/widgets/usermanager.cpp" line="361"/>
         <source>Changes have been correctly saved.</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../../plugins/usermanagerplugin/widgets/usermanager.cpp" line="353"/>
+        <location filename="../../plugins/usermanagerplugin/widgets/usermanager.cpp" line="365"/>
         <source>Changes can not be correctly saved.</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../../plugins/usermanagerplugin/widgets/usermanager.cpp" line="385"/>
-        <source>Database usage : %1,
-Memory usage : %2</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <location filename="../../plugins/usermanagerplugin/widgets/usermanager.cpp" line="484"/>
+        <location filename="../../plugins/usermanagerplugin/widgets/usermanager.cpp" line="504"/>
         <source>User deleted</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../../plugins/usermanagerplugin/widgets/usermanager.cpp" line="486"/>
+        <location filename="../../plugins/usermanagerplugin/widgets/usermanager.cpp" line="506"/>
         <source>User can not be deleted</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../../plugins/usermanagerplugin/widgets/usermanager.cpp" line="516"/>
+        <location filename="../../plugins/usermanagerplugin/widgets/usermanager.cpp" line="550"/>
         <source>Search user by name</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../../plugins/usermanagerplugin/widgets/usermanager.cpp" line="517"/>
+        <location filename="../../plugins/usermanagerplugin/widgets/usermanager.cpp" line="551"/>
         <source>Search user by firstname</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../../plugins/usermanagerplugin/widgets/usermanager.cpp" line="518"/>
+        <location filename="../../plugins/usermanagerplugin/widgets/usermanager.cpp" line="552"/>
         <source>Search user by name and firstname</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../../plugins/usermanagerplugin/widgets/usermanager.cpp" line="519"/>
+        <location filename="../../plugins/usermanagerplugin/widgets/usermanager.cpp" line="553"/>
         <source>Search user by city</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../../plugins/usermanagerplugin/widgets/usermanager.cpp" line="533"/>
+        <location filename="../../plugins/usermanagerplugin/widgets/usermanager.cpp" line="567"/>
         <source>Clear modifications</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../../plugins/usermanagerplugin/widgets/usermanager.cpp" line="537"/>
+        <location filename="../../plugins/usermanagerplugin/widgets/usermanager.cpp" line="571"/>
         <source>Quit User Manager</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../../plugins/usermanagerplugin/usermanagerwidget.ui" line="20"/>
+        <location filename="../../plugins/usermanagerplugin/widgets/usermanager.cpp" line="573"/>
+        <source>Toggle search</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../../plugins/usermanagerplugin/widgets/usermanagerwidget.ui" line="20"/>
         <source>Form</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <location filename="../../plugins/usermanagerplugin/usermanagerwidget.ui" line="54"/>
-        <source>Memory Usage</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <location filename="../../plugins/usermanagerplugin/usermanagerwidget.ui" line="60"/>
-        <source>TextLabel</source>
         <translation type="unfinished"></translation>
     </message>
 </context>
@@ -361,57 +401,57 @@ Memory usage : %2</source>
 <context>
     <name>UserPlugin::Internal::UserRightsModel</name>
     <message>
-        <location filename="../../plugins/usermanagerplugin/widgets/userrightswidget.cpp" line="151"/>
+        <location filename="../../plugins/usermanagerplugin/widgets/userrightswidget.cpp" line="157"/>
         <source>No Rights</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../../plugins/usermanagerplugin/widgets/userrightswidget.cpp" line="152"/>
+        <location filename="../../plugins/usermanagerplugin/widgets/userrightswidget.cpp" line="158"/>
         <source>All Rights</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../../plugins/usermanagerplugin/widgets/userrightswidget.cpp" line="153"/>
+        <location filename="../../plugins/usermanagerplugin/widgets/userrightswidget.cpp" line="159"/>
         <source>Can read own datas</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../../plugins/usermanagerplugin/widgets/userrightswidget.cpp" line="154"/>
+        <location filename="../../plugins/usermanagerplugin/widgets/userrightswidget.cpp" line="160"/>
         <source>Can read delegates datas</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../../plugins/usermanagerplugin/widgets/userrightswidget.cpp" line="155"/>
+        <location filename="../../plugins/usermanagerplugin/widgets/userrightswidget.cpp" line="161"/>
         <source>Can read all datas</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../../plugins/usermanagerplugin/widgets/userrightswidget.cpp" line="156"/>
+        <location filename="../../plugins/usermanagerplugin/widgets/userrightswidget.cpp" line="162"/>
         <source>Can write own datas</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../../plugins/usermanagerplugin/widgets/userrightswidget.cpp" line="157"/>
+        <location filename="../../plugins/usermanagerplugin/widgets/userrightswidget.cpp" line="163"/>
         <source>Can write delegates datas</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../../plugins/usermanagerplugin/widgets/userrightswidget.cpp" line="158"/>
+        <location filename="../../plugins/usermanagerplugin/widgets/userrightswidget.cpp" line="164"/>
         <source>Can write all datas</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../../plugins/usermanagerplugin/widgets/userrightswidget.cpp" line="159"/>
+        <location filename="../../plugins/usermanagerplugin/widgets/userrightswidget.cpp" line="165"/>
         <source>Can print</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../../plugins/usermanagerplugin/widgets/userrightswidget.cpp" line="160"/>
+        <location filename="../../plugins/usermanagerplugin/widgets/userrightswidget.cpp" line="166"/>
         <source>Can create new datas</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../../plugins/usermanagerplugin/widgets/userrightswidget.cpp" line="161"/>
+        <location filename="../../plugins/usermanagerplugin/widgets/userrightswidget.cpp" line="167"/>
         <source>Can delete datas</source>
         <translation type="unfinished"></translation>
     </message>
@@ -423,277 +463,244 @@ Memory usage : %2</source>
         <source>Dialog</source>
         <translation type="unfinished"></translation>
     </message>
+</context>
+<context>
+    <name>UserPlugin::Internal::UserViewer_ContactUI</name>
     <message>
-        <location filename="../../plugins/usermanagerplugin/widgets/userviewer.ui" line="40"/>
-        <location filename="../../plugins/usermanagerplugin/widgets/userviewer.ui" line="141"/>
-        <source>Identity</source>
+        <location filename="../../plugins/usermanagerplugin/widgets/userviewer_contact.ui" line="14"/>
+        <source>Form</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../../plugins/usermanagerplugin/widgets/userviewer.ui" line="65"/>
-        <source>Login</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <location filename="../../plugins/usermanagerplugin/widgets/userviewer.ui" line="124"/>
-        <source>View login history</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <location filename="../../plugins/usermanagerplugin/widgets/userviewer.ui" line="131"/>
-        <source>Change password</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <location filename="../../plugins/usermanagerplugin/widgets/userviewer.ui" line="75"/>
-        <source>Last Login</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <location filename="../../plugins/usermanagerplugin/widgets/userviewer.ui" line="91"/>
-        <source>Date and time of the last connection</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <location filename="../../plugins/usermanagerplugin/widgets/userviewer.ui" line="107"/>
-        <source>Unique Identifant</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <location filename="../../plugins/usermanagerplugin/widgets/userviewer.ui" line="147"/>
-        <source>Name</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <location filename="../../plugins/usermanagerplugin/widgets/userviewer.ui" line="157"/>
-        <source>Second Name</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <location filename="../../plugins/usermanagerplugin/widgets/userviewer.ui" line="167"/>
-        <source>Firstname</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <location filename="../../plugins/usermanagerplugin/widgets/userviewer.ui" line="177"/>
-        <source>Title</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <location filename="../../plugins/usermanagerplugin/widgets/userviewer.ui" line="187"/>
-        <source>Gender</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <location filename="../../plugins/usermanagerplugin/widgets/userviewer.ui" line="235"/>
-        <source>Contact</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <location filename="../../plugins/usermanagerplugin/widgets/userviewer.ui" line="243"/>
+        <location filename="../../plugins/usermanagerplugin/widgets/userviewer_contact.ui" line="23"/>
         <source>Country</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../../plugins/usermanagerplugin/widgets/userviewer.ui" line="527"/>
-        <source>Documents</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <location filename="../../plugins/usermanagerplugin/widgets/userviewer.ui" line="197"/>
-        <source>Language</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <location filename="../../plugins/usermanagerplugin/widgets/userviewer.ui" line="59"/>
-        <source>Database identification</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <location filename="../../plugins/usermanagerplugin/widgets/userviewer.ui" line="257"/>
+        <location filename="../../plugins/usermanagerplugin/widgets/userviewer_contact.ui" line="33"/>
         <source>Address</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../../plugins/usermanagerplugin/widgets/userviewer.ui" line="267"/>
+        <location filename="../../plugins/usermanagerplugin/widgets/userviewer_contact.ui" line="43"/>
         <source>ZipCode</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../../plugins/usermanagerplugin/widgets/userviewer.ui" line="277"/>
+        <location filename="../../plugins/usermanagerplugin/widgets/userviewer_contact.ui" line="53"/>
         <source>City</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../../plugins/usermanagerplugin/widgets/userviewer.ui" line="287"/>
+        <location filename="../../plugins/usermanagerplugin/widgets/userviewer_contact.ui" line="63"/>
         <source>Tel 1</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../../plugins/usermanagerplugin/widgets/userviewer.ui" line="299"/>
+        <location filename="../../plugins/usermanagerplugin/widgets/userviewer_contact.ui" line="73"/>
         <source>Tel 2</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../../plugins/usermanagerplugin/widgets/userviewer.ui" line="311"/>
+        <location filename="../../plugins/usermanagerplugin/widgets/userviewer_contact.ui" line="83"/>
         <source>Tel 3</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../../plugins/usermanagerplugin/widgets/userviewer.ui" line="323"/>
+        <location filename="../../plugins/usermanagerplugin/widgets/userviewer_contact.ui" line="93"/>
         <source>Fax</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../../plugins/usermanagerplugin/widgets/userviewer.ui" line="335"/>
+        <location filename="../../plugins/usermanagerplugin/widgets/userviewer_contact.ui" line="103"/>
         <source>Mail</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <location filename="../../plugins/usermanagerplugin/widgets/userviewer.ui" line="361"/>
-        <source>Professional</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <location filename="../../plugins/usermanagerplugin/widgets/userviewer.ui" line="369"/>
-        <source>Specialty</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <location filename="../../plugins/usermanagerplugin/widgets/userviewer.ui" line="379"/>
-        <source>Qualifications</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <location filename="../../plugins/usermanagerplugin/widgets/userviewer.ui" line="392"/>
-        <source>Practitioner identifiant</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <location filename="../../plugins/usermanagerplugin/widgets/userviewer.ui" line="425"/>
-        <source>Rights</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <location filename="../../plugins/usermanagerplugin/widgets/userviewer.ui" line="437"/>
-        <source>User manager rights</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <location filename="../../plugins/usermanagerplugin/widgets/userviewer.ui" line="453"/>
-        <source>Medical rights</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <location filename="../../plugins/usermanagerplugin/widgets/userviewer.ui" line="475"/>
-        <source>Drugs dosage rights</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <location filename="../../plugins/usermanagerplugin/widgets/userviewer.ui" line="494"/>
-        <source>Paramedical rights</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <location filename="../../plugins/usermanagerplugin/widgets/userviewer.ui" line="510"/>
-        <source>Administrative rights</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <location filename="../../plugins/usermanagerplugin/widgets/userviewer.ui" line="542"/>
-        <source>Generic</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <location filename="../../plugins/usermanagerplugin/widgets/userviewer.ui" line="552"/>
-        <source>Administrative</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <location filename="../../plugins/usermanagerplugin/widgets/userviewer.ui" line="562"/>
-        <source>Prescriptions</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <location filename="../../plugins/usermanagerplugin/widgets/userviewer.ui" line="578"/>
-        <source>Alerts</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <location filename="../../plugins/usermanagerplugin/widgets/userviewer.ui" line="596"/>
-        <source>Only super-administrator can leave alerts to users.</source>
         <translation type="unfinished"></translation>
     </message>
 </context>
 <context>
-    <name>UserPlugin::Internal::UserViewerPrivate</name>
+    <name>UserPlugin::Internal::UserViewer_IdentityUI</name>
     <message>
-        <location filename="../../plugins/usermanagerplugin/widgets/userviewer.cpp" line="120"/>
-        <source>You can not access to these datas.</source>
+        <location filename="../../plugins/usermanagerplugin/widgets/userviewer_identity.ui" line="14"/>
+        <source>Form</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../../plugins/usermanagerplugin/widgets/userviewer.cpp" line="120"/>
-        <source>You don&apos;t have these rights.</source>
+        <location filename="../../plugins/usermanagerplugin/widgets/userviewer_identity.ui" line="23"/>
+        <source>Database identification</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../../plugins/usermanagerplugin/widgets/userviewer.cpp" line="270"/>
-        <source>Login history.</source>
+        <location filename="../../plugins/usermanagerplugin/widgets/userviewer_identity.ui" line="29"/>
+        <source>Login</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../../plugins/usermanagerplugin/widgets/userviewer.cpp" line="271"/>
-        <source>User %1
-Last connection : %2</source>
+        <location filename="../../plugins/usermanagerplugin/widgets/userviewer_identity.ui" line="39"/>
+        <source>Last Login</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../../plugins/usermanagerplugin/widgets/userviewer_identity.ui" line="55"/>
+        <source>Date and time of the last connection</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../../plugins/usermanagerplugin/widgets/userviewer_identity.ui" line="71"/>
+        <source>Unique Identifant</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../../plugins/usermanagerplugin/widgets/userviewer_identity.ui" line="88"/>
+        <source>View login history</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../../plugins/usermanagerplugin/widgets/userviewer_identity.ui" line="95"/>
+        <source>Change password</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../../plugins/usermanagerplugin/widgets/userviewer_identity.ui" line="105"/>
+        <source>Identity</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../../plugins/usermanagerplugin/widgets/userviewer_identity.ui" line="111"/>
+        <source>Name</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../../plugins/usermanagerplugin/widgets/userviewer_identity.ui" line="121"/>
+        <source>Second Name</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../../plugins/usermanagerplugin/widgets/userviewer_identity.ui" line="131"/>
+        <source>Firstname</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../../plugins/usermanagerplugin/widgets/userviewer_identity.ui" line="141"/>
+        <source>Title</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../../plugins/usermanagerplugin/widgets/userviewer_identity.ui" line="151"/>
+        <source>Gender</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../../plugins/usermanagerplugin/widgets/userviewer_identity.ui" line="161"/>
+        <source>Language</source>
+        <translation type="unfinished"></translation>
+    </message>
+</context>
+<context>
+    <name>UserPlugin::Internal::UserViewer_ProfessionalUI</name>
+    <message>
+        <location filename="../../plugins/usermanagerplugin/widgets/userviewer_professional.ui" line="14"/>
+        <source>Form</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../../plugins/usermanagerplugin/widgets/userviewer_professional.ui" line="29"/>
+        <source>Specialty</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../../plugins/usermanagerplugin/widgets/userviewer_professional.ui" line="48"/>
+        <source>Practitioner identifiant</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../../plugins/usermanagerplugin/widgets/userviewer_professional.ui" line="74"/>
+        <source>Qualifications</source>
+        <translation type="unfinished"></translation>
+    </message>
+</context>
+<context>
+    <name>UserPlugin::Internal::UserViewer_RightsUI</name>
+    <message>
+        <location filename="../../plugins/usermanagerplugin/widgets/userviewer_medicalrights.ui" line="14"/>
+        <source>Form</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../../plugins/usermanagerplugin/widgets/userviewer_medicalrights.ui" line="29"/>
+        <source>User manager rights</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../../plugins/usermanagerplugin/widgets/userviewer_medicalrights.ui" line="48"/>
+        <source>Medical rights</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../../plugins/usermanagerplugin/widgets/userviewer_medicalrights.ui" line="67"/>
+        <source>Drugs dosage rights</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../../plugins/usermanagerplugin/widgets/userviewer_medicalrights.ui" line="86"/>
+        <source>Paramedical rights</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../../plugins/usermanagerplugin/widgets/userviewer_medicalrights.ui" line="105"/>
+        <source>Agenda rights</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../../plugins/usermanagerplugin/widgets/userviewer_medicalrights.ui" line="124"/>
+        <source>Administrative rights</source>
         <translation type="unfinished"></translation>
     </message>
 </context>
 <context>
     <name>UserPlugin::Internal::UserWizardContactWidget</name>
     <message>
-        <location filename="../../plugins/usermanagerplugin/userwizardcontactwidget.ui" line="14"/>
+        <location filename="../../plugins/usermanagerplugin/widgets/userwizardcontactwidget.ui" line="14"/>
         <source>Form</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../../plugins/usermanagerplugin/userwizardcontactwidget.ui" line="24"/>
-        <location filename="../../plugins/usermanagerplugin/userwizardcontactwidget.ui" line="30"/>
+        <location filename="../../plugins/usermanagerplugin/widgets/userwizardcontactwidget.ui" line="24"/>
+        <location filename="../../plugins/usermanagerplugin/widgets/userwizardcontactwidget.ui" line="30"/>
         <source>Address</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../../plugins/usermanagerplugin/userwizardcontactwidget.ui" line="40"/>
+        <location filename="../../plugins/usermanagerplugin/widgets/userwizardcontactwidget.ui" line="40"/>
         <source>City</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../../plugins/usermanagerplugin/userwizardcontactwidget.ui" line="50"/>
+        <location filename="../../plugins/usermanagerplugin/widgets/userwizardcontactwidget.ui" line="50"/>
         <source>Zipcode</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../../plugins/usermanagerplugin/userwizardcontactwidget.ui" line="60"/>
+        <location filename="../../plugins/usermanagerplugin/widgets/userwizardcontactwidget.ui" line="60"/>
         <source>Country</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../../plugins/usermanagerplugin/userwizardcontactwidget.ui" line="71"/>
+        <location filename="../../plugins/usermanagerplugin/widgets/userwizardcontactwidget.ui" line="71"/>
         <source>Tels and mail</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../../plugins/usermanagerplugin/userwizardcontactwidget.ui" line="77"/>
+        <location filename="../../plugins/usermanagerplugin/widgets/userwizardcontactwidget.ui" line="77"/>
         <source>Telephon numbers</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../../plugins/usermanagerplugin/userwizardcontactwidget.ui" line="93"/>
+        <location filename="../../plugins/usermanagerplugin/widgets/userwizardcontactwidget.ui" line="93"/>
         <source>Fax number</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../../plugins/usermanagerplugin/userwizardcontactwidget.ui" line="103"/>
+        <location filename="../../plugins/usermanagerplugin/widgets/userwizardcontactwidget.ui" line="103"/>
         <source>Email</source>
         <translation type="unfinished"></translation>
     </message>
@@ -714,7 +721,7 @@ Last connection : %2</source>
 <context>
     <name>UserPlugin::UserCreationPage</name>
     <message>
-        <location filename="../../plugins/usermanagerplugin/userfistrunpage.cpp" line="134"/>
+        <location filename="../../plugins/usermanagerplugin/userfistrunpage.cpp" line="135"/>
         <source>You can use the full user manager dialog to create user or create simple users using the user wizard.</source>
         <translation type="unfinished"></translation>
     </message>
@@ -865,17 +872,28 @@ You must specify a different login/password.</source>
     <name>UserPlugin::UserManagerPlugin</name>
     <message>
         <location filename="../../plugins/usermanagerplugin/usermanagerplugin.cpp" line="166"/>
-        <location filename="../../plugins/usermanagerplugin/usermanagerplugin.cpp" line="193"/>
+        <location filename="../../plugins/usermanagerplugin/usermanagerplugin.cpp" line="194"/>
         <source>Initializing user manager plugin...</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../../plugins/usermanagerplugin/usermanagerplugin.cpp" line="181"/>
+        <location filename="../../plugins/usermanagerplugin/usermanagerplugin.cpp" line="174"/>
+        <source>Unable to connect to the user database.</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../../plugins/usermanagerplugin/usermanagerplugin.cpp" line="175"/>
+        <source>The user database is not reachable. Please check your configuration. 
+Application will stop.</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../../plugins/usermanagerplugin/usermanagerplugin.cpp" line="182"/>
         <source>User is not identified.</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../../plugins/usermanagerplugin/usermanagerplugin.cpp" line="243"/>
+        <location filename="../../plugins/usermanagerplugin/usermanagerplugin.cpp" line="244"/>
         <source>Change current user</source>
         <translation type="unfinished"></translation>
     </message>
@@ -883,38 +901,38 @@ You must specify a different login/password.</source>
 <context>
     <name>UserPlugin::UserModel</name>
     <message>
-        <location filename="../../plugins/usermanagerplugin/usermodel.cpp" line="430"/>
+        <location filename="../../plugins/usermanagerplugin/usermodel.cpp" line="441"/>
         <source>Unable to retreive user into the model using login and password.</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../../plugins/usermanagerplugin/usermodel.cpp" line="441"/>
-        <location filename="../../plugins/usermanagerplugin/usermodel.cpp" line="534"/>
+        <location filename="../../plugins/usermanagerplugin/usermodel.cpp" line="452"/>
+        <location filename="../../plugins/usermanagerplugin/usermodel.cpp" line="545"/>
         <source>Setting current user uuid to %1</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../../plugins/usermanagerplugin/usermodel.cpp" line="522"/>
+        <location filename="../../plugins/usermanagerplugin/usermodel.cpp" line="533"/>
         <source>Database server administrator</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../../plugins/usermanagerplugin/usermodel.cpp" line="621"/>
+        <location filename="../../plugins/usermanagerplugin/usermodel.cpp" line="628"/>
         <source>You can not delete your own user.</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../../plugins/usermanagerplugin/usermodel.cpp" line="620"/>
+        <location filename="../../plugins/usermanagerplugin/usermodel.cpp" line="627"/>
         <source>User can not be deleted.</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../../plugins/usermanagerplugin/usermodel.cpp" line="631"/>
+        <location filename="../../plugins/usermanagerplugin/usermodel.cpp" line="638"/>
         <source>You can not delete a modified user, save it before.</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../../plugins/usermanagerplugin/usermodel.cpp" line="642"/>
+        <location filename="../../plugins/usermanagerplugin/usermodel.cpp" line="649"/>
         <source>User can not be deleted from database.</source>
         <translation type="unfinished"></translation>
     </message>
@@ -950,13 +968,7 @@ You must specify a different login/password.</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../../plugins/usermanagerplugin/widgets/userwizard.cpp" line="473"/>
-        <location filename="../../plugins/usermanagerplugin/widgets/userwizard.cpp" line="516"/>
-        <source>Software administrator</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <location filename="../../plugins/usermanagerplugin/widgets/userwizard.cpp" line="480"/>
+        <location filename="../../plugins/usermanagerplugin/widgets/userwizard.cpp" line="481"/>
         <source>Define all rights</source>
         <translation type="unfinished"></translation>
     </message>
@@ -964,37 +976,37 @@ You must specify a different login/password.</source>
 <context>
     <name>UserPlugin::UserRightsPage</name>
     <message>
-        <location filename="../../plugins/usermanagerplugin/widgets/userwizard.cpp" line="560"/>
+        <location filename="../../plugins/usermanagerplugin/widgets/userwizard.cpp" line="571"/>
         <source>Define user&apos;s rights.</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../../plugins/usermanagerplugin/widgets/userwizard.cpp" line="561"/>
+        <location filename="../../plugins/usermanagerplugin/widgets/userwizard.cpp" line="572"/>
         <source>Role by role, define the user&apos;s rights.</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../../plugins/usermanagerplugin/widgets/userwizard.cpp" line="571"/>
+        <location filename="../../plugins/usermanagerplugin/widgets/userwizard.cpp" line="582"/>
         <source>Users</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../../plugins/usermanagerplugin/widgets/userwizard.cpp" line="572"/>
+        <location filename="../../plugins/usermanagerplugin/widgets/userwizard.cpp" line="583"/>
         <source>Drugs</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../../plugins/usermanagerplugin/widgets/userwizard.cpp" line="573"/>
+        <location filename="../../plugins/usermanagerplugin/widgets/userwizard.cpp" line="584"/>
         <source>Medicals</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../../plugins/usermanagerplugin/widgets/userwizard.cpp" line="574"/>
+        <location filename="../../plugins/usermanagerplugin/widgets/userwizard.cpp" line="585"/>
         <source>Paramedicals</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../../plugins/usermanagerplugin/widgets/userwizard.cpp" line="575"/>
+        <location filename="../../plugins/usermanagerplugin/widgets/userwizard.cpp" line="586"/>
         <source>Administrative</source>
         <translation type="unfinished"></translation>
     </message>
@@ -1002,85 +1014,106 @@ You must specify a different login/password.</source>
 <context>
     <name>UserPlugin::UserSpecialiesQualificationsPage</name>
     <message>
-        <location filename="../../plugins/usermanagerplugin/widgets/userwizard.cpp" line="530"/>
+        <location filename="../../plugins/usermanagerplugin/widgets/userwizard.cpp" line="541"/>
         <source>Define user&apos;s specialties and qualifications.</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../../plugins/usermanagerplugin/widgets/userwizard.cpp" line="531"/>
+        <location filename="../../plugins/usermanagerplugin/widgets/userwizard.cpp" line="542"/>
         <source>Use the context menu to add, remove, move up or down items.</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../../plugins/usermanagerplugin/widgets/userwizard.cpp" line="544"/>
+        <location filename="../../plugins/usermanagerplugin/widgets/userwizard.cpp" line="555"/>
         <source>Specialities</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../../plugins/usermanagerplugin/widgets/userwizard.cpp" line="545"/>
+        <location filename="../../plugins/usermanagerplugin/widgets/userwizard.cpp" line="556"/>
         <source>Qualifications</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../../plugins/usermanagerplugin/widgets/userwizard.cpp" line="546"/>
+        <location filename="../../plugins/usermanagerplugin/widgets/userwizard.cpp" line="557"/>
         <source>Identifiants</source>
+        <translation type="unfinished"></translation>
+    </message>
+</context>
+<context>
+    <name>UserPlugin::UserViewer</name>
+    <message>
+        <location filename="../../plugins/usermanagerplugin/widgets/userviewer.cpp" line="161"/>
+        <source>You can not access to these datas.</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../../plugins/usermanagerplugin/widgets/userviewer.cpp" line="161"/>
+        <source>You don&apos;t have these rights.</source>
         <translation type="unfinished"></translation>
     </message>
 </context>
 <context>
     <name>UserPlugin::UserWizard</name>
     <message>
-        <location filename="../../plugins/usermanagerplugin/widgets/userwizard.cpp" line="158"/>
+        <location filename="../../plugins/usermanagerplugin/widgets/userwizard.cpp" line="167"/>
         <source>User Creator Wizard</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../../plugins/usermanagerplugin/widgets/userwizard.cpp" line="190"/>
+        <location filename="../../plugins/usermanagerplugin/widgets/userwizard.cpp" line="199"/>
         <source>Data losing</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../../plugins/usermanagerplugin/widgets/userwizard.cpp" line="187"/>
+        <location filename="../../plugins/usermanagerplugin/widgets/userwizard.cpp" line="196"/>
         <source>WARNING ! You don&apos;t save this user.</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../../plugins/usermanagerplugin/widgets/userwizard.cpp" line="188"/>
+        <location filename="../../plugins/usermanagerplugin/widgets/userwizard.cpp" line="197"/>
         <source>If you continue changes will be lost.
 Do you really want to close this dialog ?</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../../plugins/usermanagerplugin/widgets/userwizard.cpp" line="245"/>
+        <location filename="../../plugins/usermanagerplugin/widgets/userwizard.cpp" line="254"/>
         <source>An error occured during database access.</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../../plugins/usermanagerplugin/widgets/userwizard.cpp" line="246"/>
+        <location filename="../../plugins/usermanagerplugin/widgets/userwizard.cpp" line="255"/>
         <source>Logged errors saved. Please refer to the %1 to manage this error.</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../../plugins/usermanagerplugin/widgets/userwizard.cpp" line="248"/>
+        <location filename="../../plugins/usermanagerplugin/widgets/userwizard.cpp" line="257"/>
         <source>Error during database access</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../../plugins/usermanagerplugin/widgets/userwizard.cpp" line="251"/>
-        <location filename="../../plugins/usermanagerplugin/widgets/userwizard.cpp" line="253"/>
+        <location filename="../../plugins/usermanagerplugin/widgets/userwizard.cpp" line="268"/>
+        <location filename="../../plugins/usermanagerplugin/widgets/userwizard.cpp" line="270"/>
         <source>User correctly saved into database.</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../../plugins/usermanagerplugin/widgets/userwizard.cpp" line="252"/>
+        <location filename="../../plugins/usermanagerplugin/widgets/userwizard.cpp" line="269"/>
         <source>The user was correctly created and saved into database.</source>
+        <translation type="unfinished"></translation>
+    </message>
+</context>
+<context>
+    <name>UserViewer_Papers</name>
+    <message>
+        <location filename="../../plugins/usermanagerplugin/widgets/userviewer_papers.ui" line="14"/>
+        <source>Form</source>
         <translation type="unfinished"></translation>
     </message>
 </context>
 <context>
     <name>tkUser</name>
     <message>
-        <location filename="../../plugins/usermanagerplugin/userdata.cpp" line="827"/>
+        <location filename="../../plugins/usermanagerplugin/userdata.cpp" line="835"/>
         <source>User logged at %1
 </source>
         <translation type="unfinished"></translation>

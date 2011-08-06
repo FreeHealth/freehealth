@@ -102,12 +102,12 @@
         <translation>Crée une copie PDF dans le répertoire cache</translation>
     </message>
     <message>
-        <location filename="../../plugins/printerplugin/printdialog.cpp" line="252"/>
+        <location filename="../../plugins/printerplugin/printdialog.cpp" line="251"/>
         <source>Save File</source>
         <translation>Sauvegarder le fichier</translation>
     </message>
     <message>
-        <location filename="../../plugins/printerplugin/printdialog.cpp" line="254"/>
+        <location filename="../../plugins/printerplugin/printdialog.cpp" line="253"/>
         <source>PDF file (*.pdf)</source>
         <translation>Fichier PDF (*.pdf)</translation>
     </message>
@@ -116,75 +116,82 @@
     <name>Print::Internal::PrinterPreferences</name>
     <message>
         <location filename="../../plugins/printerplugin/printerpreferences.ui" line="14"/>
-        <location filename="../../plugins/printerplugin/printerpreferences.ui" line="32"/>
         <source>Printing preferences</source>
         <translation>Préférences d&apos;impression</translation>
     </message>
     <message>
-        <location filename="../../plugins/printerplugin/printerpreferences.ui" line="49"/>
+        <location filename="../../plugins/printerplugin/printerpreferences.ui" line="20"/>
         <source>Default printer</source>
         <translation>Imprimante par défaut</translation>
     </message>
     <message>
-        <location filename="../../plugins/printerplugin/printerpreferences.ui" line="74"/>
+        <location filename="../../plugins/printerplugin/printerpreferences.ui" line="45"/>
         <source>Default printing options</source>
         <translation>Optionpar défaut pour l&apos;impression</translation>
     </message>
     <message>
-        <location filename="../../plugins/printerplugin/printerpreferences.ui" line="80"/>
+        <location filename="../../plugins/printerplugin/printerpreferences.ui" line="51"/>
         <source>Resolution</source>
         <translation>Résolution</translation>
     </message>
     <message>
-        <location filename="../../plugins/printerplugin/printerpreferences.ui" line="88"/>
+        <location filename="../../plugins/printerplugin/printerpreferences.ui" line="59"/>
         <source>Draft</source>
         <translation>Brouillon</translation>
     </message>
     <message>
-        <location filename="../../plugins/printerplugin/printerpreferences.ui" line="93"/>
+        <location filename="../../plugins/printerplugin/printerpreferences.ui" line="64"/>
         <source>Normal</source>
         <translation>Normale</translation>
     </message>
     <message>
-        <location filename="../../plugins/printerplugin/printerpreferences.ui" line="98"/>
+        <location filename="../../plugins/printerplugin/printerpreferences.ui" line="69"/>
         <source>High</source>
         <translation>Haute</translation>
     </message>
     <message>
-        <location filename="../../plugins/printerplugin/printerpreferences.ui" line="106"/>
+        <location filename="../../plugins/printerplugin/printerpreferences.ui" line="77"/>
         <source>Color</source>
         <translation>Couleur</translation>
     </message>
     <message>
-        <location filename="../../plugins/printerplugin/printerpreferences.ui" line="113"/>
+        <location filename="../../plugins/printerplugin/printerpreferences.ui" line="84"/>
         <source>Gray scale</source>
         <translation>Niveaux de gris</translation>
     </message>
     <message>
-        <location filename="../../plugins/printerplugin/printerpreferences.ui" line="120"/>
+        <location filename="../../plugins/printerplugin/printerpreferences.ui" line="91"/>
         <source>Always print two pages per paper</source>
         <translation>Toujours imprimer deux pages par feuilles</translation>
     </message>
     <message>
-        <location filename="../../plugins/printerplugin/printerpreferences.ui" line="133"/>
+        <location filename="../../plugins/printerplugin/printerpreferences.ui" line="104"/>
         <source>Automated copy</source>
         <translation>Copies automatiques</translation>
     </message>
     <message>
-        <location filename="../../plugins/printerplugin/printerpreferences.ui" line="142"/>
+        <location filename="../../plugins/printerplugin/printerpreferences.ui" line="113"/>
         <source>Always keep a PDF copy in</source>
         <translation>Toujours garder un exemplaire PDF dans</translation>
     </message>
     <message>
-        <location filename="../../plugins/printerplugin/printerpreferences.ui" line="159"/>
+        <location filename="../../plugins/printerplugin/printerpreferences.ui" line="130"/>
         <source>Select a folder</source>
         <translation>Sélectionnez un répertoire</translation>
     </message>
 </context>
 <context>
+    <name>Print::Internal::PrinterPreferencesPage</name>
+    <message>
+        <location filename="../../plugins/printerplugin/printerpreferences.cpp" line="61"/>
+        <source>Printer preferences</source>
+        <translation>Préférences de l&apos;impression</translation>
+    </message>
+</context>
+<context>
     <name>Print::Internal::PrinterPreferencesWidget</name>
     <message>
-        <location filename="../../plugins/printerplugin/printerpreferences.cpp" line="122"/>
+        <location filename="../../plugins/printerplugin/printerpreferences.cpp" line="123"/>
         <source>WARNING !
 No configurated printer found on your system.
 Printing and print preview should not work at all.
@@ -198,17 +205,17 @@ Veuillez configurer une imprimante.
 Référez-vous à la documentation de votre système d&apos;exploitation.</translation>
     </message>
     <message>
-        <location filename="../../plugins/printerplugin/printerpreferences.cpp" line="150"/>
+        <location filename="../../plugins/printerplugin/printerpreferences.cpp" line="151"/>
         <source>Always use system&apos;s default printer</source>
         <translation>Toujours utiliser l&apos;imprimante système par défaut</translation>
     </message>
     <message>
-        <location filename="../../plugins/printerplugin/printerpreferences.cpp" line="154"/>
+        <location filename="../../plugins/printerplugin/printerpreferences.cpp" line="155"/>
         <source>Always ask user for the printer</source>
         <translation>Toujours demander à l&apos;utilisateur</translation>
     </message>
     <message>
-        <location filename="../../plugins/printerplugin/printerpreferences.cpp" line="225"/>
+        <location filename="../../plugins/printerplugin/printerpreferences.cpp" line="226"/>
         <source>Select a directory</source>
         <translation>Sélectionnez un répertoire</translation>
     </message>

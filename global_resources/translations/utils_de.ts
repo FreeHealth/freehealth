@@ -2,158 +2,49 @@
 <!DOCTYPE TS>
 <TS version="2.0" language="de_DE">
 <context>
-    <name>BasicItemEditionDialog</name>
-    <message>
-        <location filename="../../libs/utils/widgets/calendar/basic_item_edition_dialog.ui" line="14"/>
-        <source>Calendar item edition</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <location filename="../../libs/utils/widgets/calendar/basic_item_edition_dialog.ui" line="29"/>
-        <source>to</source>
-        <translation type="unfinished"></translation>
-    </message>
-</context>
-<context>
-    <name>Calendar::CalendarNavbar</name>
-    <message>
-        <location filename="../../libs/utils/widgets/calendar/calendar_navbar.cpp" line="29"/>
-        <source>Day</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <location filename="../../libs/utils/widgets/calendar/calendar_navbar.cpp" line="30"/>
-        <source>Week</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <location filename="../../libs/utils/widgets/calendar/calendar_navbar.cpp" line="31"/>
-        <source>Month</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <location filename="../../libs/utils/widgets/calendar/calendar_navbar.cpp" line="45"/>
-        <source>Today</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <location filename="../../libs/utils/widgets/calendar/calendar_navbar.cpp" line="46"/>
-        <source>Yesterday</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <location filename="../../libs/utils/widgets/calendar/calendar_navbar.cpp" line="47"/>
-        <source>Tomorrow</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <location filename="../../libs/utils/widgets/calendar/calendar_navbar.cpp" line="154"/>
-        <location filename="../../libs/utils/widgets/calendar/calendar_navbar.cpp" line="156"/>
-        <location filename="../../libs/utils/widgets/calendar/calendar_navbar.cpp" line="158"/>
-        <source>d MMM yyyy</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <location filename="../../libs/utils/widgets/calendar/calendar_navbar.cpp" line="156"/>
-        <source>d MMM</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <location filename="../../libs/utils/widgets/calendar/calendar_navbar.cpp" line="158"/>
-        <source>d</source>
-        <translation type="unfinished"></translation>
-    </message>
-</context>
-<context>
-    <name>Calendar::DayItemWidget</name>
-    <message>
-        <location filename="../../libs/utils/widgets/calendar/day_item_widget.cpp" line="55"/>
-        <source>(untitled)</source>
-        <translation type="unfinished"></translation>
-    </message>
-</context>
-<context>
-    <name>Calendar::DayRangeBody</name>
-    <message>
-        <location filename="../../libs/utils/widgets/calendar/day_range_view.cpp" line="493"/>
-        <source>modify</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <location filename="../../libs/utils/widgets/calendar/day_range_view.cpp" line="495"/>
-        <source>remove</source>
-        <translation type="unfinished"></translation>
-    </message>
-</context>
-<context>
-    <name>Calendar::DayRangeHeader</name>
-    <message>
-        <location filename="../../libs/utils/widgets/calendar/day_range_view.cpp" line="181"/>
-        <source>(untitled)</source>
-        <translation type="unfinished"></translation>
-    </message>
-</context>
-<context>
-    <name>Calendar::MonthBody</name>
-    <message>
-        <location filename="../../libs/utils/widgets/calendar/month_view.cpp" line="86"/>
-        <source>d MMM</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <location filename="../../libs/utils/widgets/calendar/month_view.cpp" line="88"/>
-        <source>d</source>
-        <translation type="unfinished"></translation>
-    </message>
-</context>
-<context>
-    <name>Calendar::MonthDayWidget</name>
-    <message>
-        <location filename="../../libs/utils/widgets/calendar/month_day_widget.cpp" line="61"/>
-        <source>see others</source>
-        <translation type="unfinished"></translation>
-    </message>
-</context>
-<context>
     <name>Database</name>
     <message>
-        <location filename="../../libs/utils/database.cpp" line="433"/>
+        <location filename="../../libs/utils/database.cpp" line="444"/>
         <source>WARNING : %1 database already in use</source>
         <translation>%1 Datenbank bereits in benutzung</translation>
     </message>
     <message>
-        <location filename="../../libs/utils/database.cpp" line="531"/>
-        <location filename="../../libs/utils/database.cpp" line="549"/>
+        <location filename="../../libs/utils/database.cpp" line="562"/>
         <source>ERROR : Database %1 is not readable. Path : %2</source>
         <translation>Datenbank %1 ist nicht lesbar Pfad: %2</translation>
     </message>
     <message>
-        <location filename="../../libs/utils/database.cpp" line="541"/>
+        <location filename="../../libs/utils/database.cpp" line="554"/>
         <source>ERROR : Database %1 is not readable. Host: %2</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../../libs/utils/database.cpp" line="576"/>
+        <location filename="../../libs/utils/database.cpp" line="544"/>
+        <source>ERROR : Database `%1` is not readable. Path : %2</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../../libs/utils/database.cpp" line="589"/>
         <source>ERROR : Database %1 is not writable. Path : %2.</source>
         <translation>Datenbank %1 ist nicht schreibbar Pfad: %2.</translation>
     </message>
     <message>
-        <location filename="../../libs/utils/database.cpp" line="617"/>
+        <location filename="../../libs/utils/database.cpp" line="630"/>
         <source>INFO : database %1 connection = %2</source>
         <translation>Datenbank %1 verbindung= %2</translation>
     </message>
     <message>
-        <location filename="../../libs/utils/database.cpp" line="778"/>
+        <location filename="../../libs/utils/database.cpp" line="820"/>
         <source>Database Scheme Error : wrong number of fields for table %1</source>
         <translation>Datenbank Scheme Error: falsche Feldnummern für die Tabelle %1</translation>
     </message>
     <message>
-        <location filename="../../libs/utils/database.cpp" line="787"/>
+        <location filename="../../libs/utils/database.cpp" line="829"/>
         <source>Database Scheme Error : field number %1 differs : %2 instead of %3 in table %4</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../../libs/utils/database.cpp" line="1579"/>
+        <location filename="../../libs/utils/database.cpp" line="1621"/>
         <source>Can not create table %1</source>
         <translation type="unfinished"></translation>
     </message>
@@ -239,107 +130,107 @@
 <context>
     <name>Utils</name>
     <message>
-        <location filename="../../libs/utils/global.cpp" line="139"/>
-        <location filename="../../libs/utils/global.cpp" line="142"/>
+        <location filename="../../libs/utils/global.cpp" line="140"/>
+        <location filename="../../libs/utils/global.cpp" line="143"/>
         <source>Error while retrieve informations of uname under %1</source>
         <translation>Error wähend der Informationsannahme von uname unter %1</translation>
     </message>
     <message>
-        <location filename="../../libs/utils/global.cpp" line="238"/>
+        <location filename="../../libs/utils/global.cpp" line="267"/>
         <source>%1 : %2 does not exist. Trying to create it.</source>
         <translation>%1 %2 existiert nicht. Versuchen sie es neu anzulegen.</translation>
     </message>
     <message>
-        <location filename="../../libs/utils/global.cpp" line="241"/>
+        <location filename="../../libs/utils/global.cpp" line="270"/>
         <source>Unable to create the %1 : %2.</source>
         <translation>Kann leider nicht angelegt werden %1 %2.</translation>
     </message>
     <message>
-        <location filename="../../libs/utils/global.cpp" line="247"/>
+        <location filename="../../libs/utils/global.cpp" line="276"/>
         <source>%1 : %2 does not exist.</source>
         <translation>%1 %2 existiert nicht.</translation>
     </message>
     <message>
-        <location filename="../../libs/utils/global.cpp" line="279"/>
+        <location filename="../../libs/utils/global.cpp" line="308"/>
         <source>File %1 already exists. Do you want de replace it ?</source>
         <translation>Datei %1 existiert bereits. Möchten Sie es ersetzen?</translation>
     </message>
     <message>
-        <location filename="../../libs/utils/global.cpp" line="284"/>
-        <location filename="../../libs/utils/global.cpp" line="290"/>
-        <location filename="../../libs/utils/global.cpp" line="306"/>
+        <location filename="../../libs/utils/global.cpp" line="313"/>
+        <location filename="../../libs/utils/global.cpp" line="319"/>
+        <location filename="../../libs/utils/global.cpp" line="335"/>
         <source>Error %1 while trying to save file %2</source>
         <translation>Error %1 während dem Versuch die Datei %2 zu speichern</translation>
     </message>
     <message>
-        <location filename="../../libs/utils/global.cpp" line="298"/>
-        <location filename="../../libs/utils/global.cpp" line="311"/>
+        <location filename="../../libs/utils/global.cpp" line="327"/>
+        <location filename="../../libs/utils/global.cpp" line="340"/>
         <source>%1 correctly saved</source>
         <translation>%1 korrekt gespeichert</translation>
     </message>
     <message>
-        <location filename="../../libs/utils/global.cpp" line="300"/>
+        <location filename="../../libs/utils/global.cpp" line="329"/>
         <source>Save file aborted by user (file already exists) : </source>
         <translation>Speicherung vom Benutzer abgebrochen: {datei existiert bereits}:</translation>
     </message>
     <message>
-        <location filename="../../libs/utils/global.cpp" line="323"/>
+        <location filename="../../libs/utils/global.cpp" line="352"/>
         <source>Save to file</source>
         <translation>Speichern als Datei</translation>
     </message>
     <message>
-        <location filename="../../libs/utils/global.cpp" line="357"/>
+        <location filename="../../libs/utils/global.cpp" line="386"/>
         <source>File %1 does not exists or is not readable.</source>
         <translation>Datei %1 existiert nicht oder ist nicht lesbar.</translation>
     </message>
     <message>
-        <location filename="../../libs/utils/global.cpp" line="363"/>
+        <location filename="../../libs/utils/global.cpp" line="392"/>
         <source>Error %1 while trying to open file %2</source>
         <translation>Error %1 während des schreibens auf Datei %2</translation>
     </message>
     <message>
-        <location filename="../../libs/utils/global.cpp" line="518"/>
+        <location filename="../../libs/utils/global.cpp" line="547"/>
         <source>Cancel</source>
         <translation>Abbrechen</translation>
     </message>
     <message>
-        <location filename="../../libs/utils/global.cpp" line="593"/>
+        <location filename="../../libs/utils/global.cpp" line="622"/>
         <source>This function is not available in this version.</source>
         <translation>Diese Funktion ist nicht verfügbar in dieser Version.</translation>
     </message>
     <message>
-        <location filename="../../libs/utils/global.cpp" line="594"/>
+        <location filename="../../libs/utils/global.cpp" line="623"/>
         <source>You can send an email to developpers and explain your difficulties : freemedforms@googlegroups.com.</source>
         <translation>Du kannst den Entwicklern eine Email senden und Ihnen deine Schwierigkeiten erklären: freemedforms@googlegroups.com.</translation>
     </message>
     <message>
-        <location filename="../../libs/utils/global.cpp" line="635"/>
-        <location filename="../../libs/utils/global.cpp" line="636"/>
+        <location filename="../../libs/utils/global.cpp" line="664"/>
+        <location filename="../../libs/utils/global.cpp" line="665"/>
         <source>License agreement acceptation</source>
         <translation>Nehme die Lizenz an</translation>
     </message>
     <message>
-        <location filename="../../libs/utils/global.cpp" line="647"/>
+        <location filename="../../libs/utils/global.cpp" line="676"/>
         <source>&lt;b&gt;Before you can use this software, you must agree its license terms&lt;/b&gt;</source>
         <translation>&lt;b&gt;Bevor sie diese Software nutzen können, müssen sie die Lizenzbestimmungen annehmen&lt;/b&gt;</translation>
     </message>
     <message>
-        <location filename="../../libs/utils/global.cpp" line="655"/>
+        <location filename="../../libs/utils/global.cpp" line="684"/>
         <source>Do you agree these terms ?</source>
         <translation>Nehmen Sie diese Lizenz an?</translation>
     </message>
     <message>
-        <location filename="../../libs/utils/global.cpp" line="708"/>
+        <location filename="../../libs/utils/global.cpp" line="751"/>
         <source>%1 is now in fullScreen Mode.</source>
         <translation>%1 ist nun im Vollbildmodus.</translation>
     </message>
     <message>
-        <location filename="../../libs/utils/global.cpp" line="713"/>
+        <location filename="../../libs/utils/global.cpp" line="756"/>
         <source>%1 is now in non fullScreen Mode.</source>
         <translation>%1 ist nun in keinem Vollbildmodus.</translation>
     </message>
     <message>
-        <location filename="../../libs/utils/global.cpp" line="1083"/>
+        <location filename="../../libs/utils/global.cpp" line="1196"/>
         <source>Token replacement error (%1). Wrong number of parentheses.</source>
         <translation>Token ersetzungs Error (%1) Falsche Anzahl an Eltern.</translation>
     </message>

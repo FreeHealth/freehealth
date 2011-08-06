@@ -97,60 +97,67 @@
     </message>
 </context>
 <context>
+    <name>Templates::Internal::TemplatesPreferencesPage</name>
+    <message>
+        <location filename="../../plugins/templatesplugin/templatespreferencespages.cpp" line="66"/>
+        <source>Templates preferences</source>
+        <translation type="unfinished"></translation>
+    </message>
+</context>
+<context>
     <name>Templates::Internal::TemplatesPreferencesWidget</name>
     <message>
-        <location filename="../../plugins/templatesplugin/templatespreferenceswidget.ui" line="43"/>
+        <location filename="../../plugins/templatesplugin/templatespreferenceswidget.ui" line="20"/>
         <source>Data saving</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../../plugins/templatesplugin/templatespreferenceswidget.ui" line="49"/>
+        <location filename="../../plugins/templatesplugin/templatespreferenceswidget.ui" line="26"/>
         <source>Always ask for confirmation before deletion</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../../plugins/templatesplugin/templatespreferenceswidget.ui" line="59"/>
+        <location filename="../../plugins/templatesplugin/templatespreferenceswidget.ui" line="36"/>
         <source>Presentation</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../../plugins/templatesplugin/templatespreferenceswidget.ui" line="67"/>
+        <location filename="../../plugins/templatesplugin/templatespreferenceswidget.ui" line="44"/>
         <source>Font</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../../plugins/templatesplugin/templatespreferenceswidget.ui" line="82"/>
+        <location filename="../../plugins/templatesplugin/templatespreferenceswidget.ui" line="59"/>
         <source>Always expand categories and templates tree</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../../plugins/templatesplugin/templatespreferenceswidget.ui" line="96"/>
+        <location filename="../../plugins/templatesplugin/templatespreferenceswidget.ui" line="73"/>
         <source>Category background color</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../../plugins/templatesplugin/templatespreferenceswidget.ui" line="122"/>
+        <location filename="../../plugins/templatesplugin/templatespreferenceswidget.ui" line="99"/>
         <source>Category foreground color</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../../plugins/templatesplugin/templatespreferenceswidget.ui" line="174"/>
+        <location filename="../../plugins/templatesplugin/templatespreferenceswidget.ui" line="151"/>
         <source>Template foreground color</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../../plugins/templatesplugin/templatespreferenceswidget.ui" line="148"/>
+        <location filename="../../plugins/templatesplugin/templatespreferenceswidget.ui" line="125"/>
         <source>Template background color</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
         <location filename="../../plugins/templatesplugin/templatespreferenceswidget.ui" line="14"/>
-        <location filename="../../plugins/templatesplugin/templatespreferenceswidget.ui" line="26"/>
         <source>Templates preferences</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../../plugins/templatesplugin/templatespreferenceswidget.ui" line="89"/>
+        <location filename="../../plugins/templatesplugin/templatespreferenceswidget.ui" line="66"/>
         <source>Lock category view at startup</source>
         <translation type="unfinished"></translation>
     </message>
@@ -171,10 +178,10 @@
 <context>
     <name>Templates::TemplateBase</name>
     <message>
-        <location filename="../../plugins/templatesplugin/templatebase.cpp" line="384"/>
-        <location filename="../../plugins/templatesplugin/templatebase.cpp" line="392"/>
-        <location filename="../../plugins/templatesplugin/templatebase.cpp" line="398"/>
-        <location filename="../../plugins/templatesplugin/templatebase.cpp" line="408"/>
+        <location filename="../../plugins/templatesplugin/templatebase.cpp" line="314"/>
+        <location filename="../../plugins/templatesplugin/templatebase.cpp" line="322"/>
+        <location filename="../../plugins/templatesplugin/templatebase.cpp" line="328"/>
+        <location filename="../../plugins/templatesplugin/templatebase.cpp" line="338"/>
         <source>Please contact dev team.</source>
         <translation type="unfinished"></translation>
     </message>

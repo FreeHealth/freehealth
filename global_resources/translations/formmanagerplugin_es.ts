@@ -2,9 +2,28 @@
 <!DOCTYPE TS>
 <TS version="2.0" language="es_ES">
 <context>
+    <name>EpisodeModel</name>
+    <message>
+        <location filename="../../plugins/formmanagerplugin/episodemodel.cpp" line="592"/>
+        <source>Save episode ?</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../../plugins/formmanagerplugin/episodemodel.cpp" line="593"/>
+        <source>The actual episode has been modified. Do you want to save changes in your database ?
+Answering &apos;No&apos; will cause definitve data lose.</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../../plugins/formmanagerplugin/episodemodel.cpp" line="595"/>
+        <source>Save episode</source>
+        <translation type="unfinished"></translation>
+    </message>
+</context>
+<context>
     <name>Form::EpisodeModel</name>
     <message>
-        <location filename="../../plugins/formmanagerplugin/episodemodel.cpp" line="1172"/>
+        <location filename="../../plugins/formmanagerplugin/episodemodel.cpp" line="1274"/>
         <source>No user</source>
         <translation type="unfinished"></translation>
     </message>
@@ -27,17 +46,17 @@
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../../plugins/formmanagerplugin/formeditordialog.cpp" line="64"/>
+        <location filename="../../plugins/formmanagerplugin/formeditordialog.cpp" line="69"/>
         <source>Form Editor</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../../plugins/formmanagerplugin/formeditordialog.cpp" line="77"/>
+        <location filename="../../plugins/formmanagerplugin/formeditordialog.cpp" line="82"/>
         <source>Insert as root form ?</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../../plugins/formmanagerplugin/formeditordialog.cpp" line="77"/>
+        <location filename="../../plugins/formmanagerplugin/formeditordialog.cpp" line="82"/>
         <source>You did not selected a form, do you want to add the sub-form as root form ?</source>
         <translation type="unfinished"></translation>
     </message>
@@ -74,38 +93,34 @@
 <context>
     <name>Form::Internal::EpisodeBase</name>
     <message>
+        <location filename="../../plugins/formmanagerplugin/episodebase.cpp" line="241"/>
+        <location filename="../../plugins/formmanagerplugin/episodebase.cpp" line="249"/>
+        <location filename="../../plugins/formmanagerplugin/episodebase.cpp" line="255"/>
         <location filename="../../plugins/formmanagerplugin/episodebase.cpp" line="265"/>
-        <location filename="../../plugins/formmanagerplugin/episodebase.cpp" line="273"/>
-        <location filename="../../plugins/formmanagerplugin/episodebase.cpp" line="279"/>
-        <location filename="../../plugins/formmanagerplugin/episodebase.cpp" line="289"/>
         <source>Please contact dev team.</source>
-        <translation type="unfinished"></translation>
-    </message>
-</context>
-<context>
-    <name>Form::Internal::EpisodesCoreListener</name>
-    <message>
-        <location filename="../../plugins/formmanagerplugin/episodemodel.cpp" line="287"/>
-        <source>Save episodes.</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <location filename="../../plugins/formmanagerplugin/episodemodel.cpp" line="288"/>
-        <source>Some datas are not actually saved into database.Do you want to save them ?
- Answering &apos;No&apos; will cause definitive data lose.</source>
         <translation type="unfinished"></translation>
     </message>
 </context>
 <context>
     <name>Form::Internal::FirstRunFormManagerWizardPage</name>
     <message>
-        <location filename="../../plugins/formmanagerplugin/firstrunformmanager.cpp" line="49"/>
+        <location filename="../../plugins/formmanagerplugin/firstrunformmanager.cpp" line="51"/>
         <source>General patient form selection</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../../plugins/formmanagerplugin/firstrunformmanager.cpp" line="50"/>
+        <location filename="../../plugins/formmanagerplugin/firstrunformmanager.cpp" line="52"/>
         <source>You can define your own patient form file, or use the default one. Select it from here. All patients will have the same forms, but you can add subforms anywhere in the form.</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../../plugins/formmanagerplugin/firstrunformmanager.cpp" line="74"/>
+        <source>Please one (and only one) form for your default patient file.</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../../plugins/formmanagerplugin/firstrunformmanager.cpp" line="75"/>
+        <source>You must select one file to be used by default.</source>
         <translation type="unfinished"></translation>
     </message>
 </context>
@@ -120,7 +135,7 @@
 <context>
     <name>Form::Internal::FormManagerPlugin</name>
     <message>
-        <location filename="../../plugins/formmanagerplugin/formmanagerplugin.cpp" line="95"/>
+        <location filename="../../plugins/formmanagerplugin/formmanagerplugin.cpp" line="97"/>
         <source>Initializing form manager plugin...</source>
         <translation type="unfinished"></translation>
     </message>
@@ -137,6 +152,11 @@
         <source>Forms</source>
         <translation type="unfinished"></translation>
     </message>
+    <message>
+        <location filename="../../plugins/formmanagerplugin/formmanagerpreferencespage.cpp" line="63"/>
+        <source>Patient file form selector</source>
+        <translation type="unfinished"></translation>
+    </message>
 </context>
 <context>
     <name>Form::Internal::FormManagerPreferencesWidget</name>
@@ -146,12 +166,7 @@
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../../plugins/formmanagerplugin/formmanagerpreferenceswidget.ui" line="44"/>
-        <source>Global patient form</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <location filename="../../plugins/formmanagerplugin/formmanagerpreferenceswidget.ui" line="71"/>
+        <location filename="../../plugins/formmanagerplugin/formmanagerpreferenceswidget.ui" line="30"/>
         <source>Use the selected form for all patients</source>
         <translation type="unfinished"></translation>
     </message>
@@ -191,17 +206,17 @@
 <context>
     <name>FormIODescription</name>
     <message>
-        <location filename="../../plugins/formmanagerplugin/iformio.cpp" line="122"/>
+        <location filename="../../plugins/formmanagerplugin/iformio.cpp" line="144"/>
         <source>Complete form</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../../plugins/formmanagerplugin/iformio.cpp" line="124"/>
+        <location filename="../../plugins/formmanagerplugin/iformio.cpp" line="146"/>
         <source>Sub-form</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../../plugins/formmanagerplugin/iformio.cpp" line="126"/>
+        <location filename="../../plugins/formmanagerplugin/iformio.cpp" line="148"/>
         <source>Page only</source>
         <translation type="unfinished"></translation>
     </message>
@@ -209,40 +224,18 @@
 <context>
     <name>Forms</name>
     <message>
-        <location filename="../../plugins/formmanagerplugin/iformio.cpp" line="178"/>
+        <location filename="../../plugins/formmanagerplugin/iformio.cpp" line="200"/>
         <source>License</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../../plugins/formmanagerplugin/iformio.cpp" line="184"/>
+        <location filename="../../plugins/formmanagerplugin/iformio.cpp" line="206"/>
         <source>Creation date</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../../plugins/formmanagerplugin/iformio.cpp" line="186"/>
+        <location filename="../../plugins/formmanagerplugin/iformio.cpp" line="208"/>
         <source>Last modification date</source>
-        <translation type="unfinished"></translation>
-    </message>
-</context>
-<context>
-    <name>QApplication</name>
-    <message>
-        <location filename="../../plugins/formmanagerplugin/episodemodel.cpp" line="562"/>
-        <source>EpisodeModel</source>
-        <comment>Save episode ?</comment>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <location filename="../../plugins/formmanagerplugin/episodemodel.cpp" line="563"/>
-        <source>EpisodeModel</source>
-        <comment>The actual episode has been modified. Do you want to save changes in your database ?
-Answering &apos;No&apos; will cause definitve data lose.</comment>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <location filename="../../plugins/formmanagerplugin/episodemodel.cpp" line="565"/>
-        <source>EpisodeModel</source>
-        <comment>Save episode</comment>
         <translation type="unfinished"></translation>
     </message>
 </context>

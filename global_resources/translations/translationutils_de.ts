@@ -71,7 +71,7 @@
     </message>
     <message>
         <location filename="../../libs/translationutils/constanttranslations.h" line="151"/>
-        <location filename="../../libs/translationutils/constanttranslations.h" line="523"/>
+        <location filename="../../libs/translationutils/constanttranslations.h" line="553"/>
         <source>Plugins</source>
         <translation>Plugins</translation>
     </message>
@@ -259,7 +259,7 @@
     </message>
     <message>
         <location filename="../../libs/translationutils/constanttranslations.h" line="194"/>
-        <location filename="../../libs/translationutils/constanttranslations.h" line="437"/>
+        <location filename="../../libs/translationutils/constanttranslations.h" line="448"/>
         <source>Clear</source>
         <translation>Löschen</translation>
     </message>
@@ -315,7 +315,7 @@
     </message>
     <message>
         <location filename="../../libs/translationutils/constanttranslations.h" line="209"/>
-        <location filename="../../libs/translationutils/constanttranslations.h" line="297"/>
+        <location filename="../../libs/translationutils/constanttranslations.h" line="298"/>
         <source>PMHx</source>
         <translation type="unfinished"></translation>
     </message>
@@ -497,7 +497,7 @@
     </message>
     <message>
         <location filename="../../libs/translationutils/constanttranslations.h" line="251"/>
-        <location filename="../../libs/translationutils/constanttranslations.h" line="500"/>
+        <location filename="../../libs/translationutils/constanttranslations.h" line="512"/>
         <source>Translators</source>
         <translation>Übersetzer</translation>
     </message>
@@ -578,697 +578,852 @@
     </message>
     <message>
         <location filename="../../libs/translationutils/constanttranslations.h" line="275"/>
+        <source>from %1 to %2</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../../libs/translationutils/constanttranslations.h" line="276"/>
         <source>during</source>
         <translation>während</translation>
     </message>
     <message>
-        <location filename="../../libs/translationutils/constanttranslations.h" line="276"/>
+        <location filename="../../libs/translationutils/constanttranslations.h" line="277"/>
         <source>each</source>
         <translation>jeden</translation>
     </message>
     <message>
-        <location filename="../../libs/translationutils/constanttranslations.h" line="277"/>
+        <location filename="../../libs/translationutils/constanttranslations.h" line="278"/>
         <source>and</source>
         <translation>und</translation>
     </message>
     <message>
-        <location filename="../../libs/translationutils/constanttranslations.h" line="278"/>
+        <location filename="../../libs/translationutils/constanttranslations.h" line="279"/>
         <source>Allergy to %1</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../../libs/translationutils/constanttranslations.h" line="279"/>
+        <location filename="../../libs/translationutils/constanttranslations.h" line="280"/>
         <source>Intolerance to %1</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../../libs/translationutils/constanttranslations.h" line="280"/>
+        <location filename="../../libs/translationutils/constanttranslations.h" line="281"/>
         <source>No known allergies / intolerances</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../../libs/translationutils/constanttranslations.h" line="281"/>
+        <location filename="../../libs/translationutils/constanttranslations.h" line="282"/>
         <source>Known allergies</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../../libs/translationutils/constanttranslations.h" line="282"/>
+        <location filename="../../libs/translationutils/constanttranslations.h" line="283"/>
         <source>Known intolerances</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../../libs/translationutils/constanttranslations.h" line="285"/>
+        <location filename="../../libs/translationutils/constanttranslations.h" line="286"/>
         <source>Interaction</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../../libs/translationutils/constanttranslations.h" line="286"/>
+        <location filename="../../libs/translationutils/constanttranslations.h" line="287"/>
         <source>Take into account</source>
         <translation>Erhalte infos zum Account</translation>
     </message>
     <message>
-        <location filename="../../libs/translationutils/constanttranslations.h" line="287"/>
+        <location filename="../../libs/translationutils/constanttranslations.h" line="288"/>
         <source>Discouraged</source>
         <translation>Vermeidung</translation>
     </message>
     <message>
-        <location filename="../../libs/translationutils/constanttranslations.h" line="288"/>
+        <location filename="../../libs/translationutils/constanttranslations.h" line="289"/>
         <source>Contraindication</source>
         <translation>Gegenanzeigen</translation>
     </message>
     <message>
-        <location filename="../../libs/translationutils/constanttranslations.h" line="289"/>
+        <location filename="../../libs/translationutils/constanttranslations.h" line="290"/>
         <source>Cytochrome P450 interaction</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../../libs/translationutils/constanttranslations.h" line="290"/>
+        <location filename="../../libs/translationutils/constanttranslations.h" line="291"/>
         <source>Glycoprotein-P interaction</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../../libs/translationutils/constanttranslations.h" line="291"/>
+        <location filename="../../libs/translationutils/constanttranslations.h" line="292"/>
         <source>Precaution for use</source>
         <translation>Verordnungsplan</translation>
     </message>
     <message>
-        <location filename="../../libs/translationutils/constanttranslations.h" line="292"/>
+        <location filename="../../libs/translationutils/constanttranslations.h" line="293"/>
         <source>Information</source>
         <translation>Information</translation>
     </message>
     <message>
-        <location filename="../../libs/translationutils/constanttranslations.h" line="293"/>
+        <location filename="../../libs/translationutils/constanttranslations.h" line="294"/>
         <source>Molecule is duplicated</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../../libs/translationutils/constanttranslations.h" line="294"/>
+        <location filename="../../libs/translationutils/constanttranslations.h" line="295"/>
         <source>Class is duplicated</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../../libs/translationutils/constanttranslations.h" line="301"/>
+        <location filename="../../libs/translationutils/constanttranslations.h" line="302"/>
         <source>Bank details</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../../libs/translationutils/constanttranslations.h" line="302"/>
+        <location filename="../../libs/translationutils/constanttranslations.h" line="303"/>
         <source>Available movements</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../../libs/translationutils/constanttranslations.h" line="303"/>
+        <location filename="../../libs/translationutils/constanttranslations.h" line="304"/>
         <source>Medical procedures</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../../libs/translationutils/constanttranslations.h" line="304"/>
+        <location filename="../../libs/translationutils/constanttranslations.h" line="305"/>
         <source>Sites</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../../libs/translationutils/constanttranslations.h" line="305"/>
+        <location filename="../../libs/translationutils/constanttranslations.h" line="306"/>
         <source>Insurance</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../../libs/translationutils/constanttranslations.h" line="306"/>
+        <location filename="../../libs/translationutils/constanttranslations.h" line="307"/>
         <source>Percentages</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../../libs/translationutils/constanttranslations.h" line="307"/>
+        <location filename="../../libs/translationutils/constanttranslations.h" line="308"/>
         <source>Distance rules</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../../libs/translationutils/constanttranslations.h" line="308"/>
+        <location filename="../../libs/translationutils/constanttranslations.h" line="309"/>
         <source>Assets rates</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../../libs/translationutils/constanttranslations.h" line="311"/>
+        <location filename="../../libs/translationutils/constanttranslations.h" line="312"/>
         <source>The %1 driver is not available.</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../../libs/translationutils/constanttranslations.h" line="312"/>
+        <location filename="../../libs/translationutils/constanttranslations.h" line="313"/>
         <source>The %1 database driver is not installed or can not be found. Please report this error to the developper.</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../../libs/translationutils/constanttranslations.h" line="313"/>
+        <location filename="../../libs/translationutils/constanttranslations.h" line="314"/>
         <source>Database %1: Schema error.</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../../libs/translationutils/constanttranslations.h" line="316"/>
+        <location filename="../../libs/translationutils/constanttranslations.h" line="317"/>
         <source>Duration</source>
         <translation>Dauer</translation>
     </message>
     <message>
-        <location filename="../../libs/translationutils/constanttranslations.h" line="317"/>
+        <location filename="../../libs/translationutils/constanttranslations.h" line="318"/>
         <source>second(s)</source>
         <translation>Sekunden</translation>
     </message>
     <message>
-        <location filename="../../libs/translationutils/constanttranslations.h" line="318"/>
+        <location filename="../../libs/translationutils/constanttranslations.h" line="319"/>
         <source>minute(s)</source>
         <translation>Minuten</translation>
     </message>
     <message>
-        <location filename="../../libs/translationutils/constanttranslations.h" line="319"/>
+        <location filename="../../libs/translationutils/constanttranslations.h" line="320"/>
         <source>hour(s)</source>
         <translation>Stunden</translation>
     </message>
     <message>
-        <location filename="../../libs/translationutils/constanttranslations.h" line="320"/>
+        <location filename="../../libs/translationutils/constanttranslations.h" line="321"/>
         <source>day(s)</source>
         <translation>Tage</translation>
     </message>
     <message>
-        <location filename="../../libs/translationutils/constanttranslations.h" line="321"/>
+        <location filename="../../libs/translationutils/constanttranslations.h" line="322"/>
         <source>week(s)</source>
         <translation>Wochen</translation>
     </message>
     <message>
-        <location filename="../../libs/translationutils/constanttranslations.h" line="322"/>
+        <location filename="../../libs/translationutils/constanttranslations.h" line="323"/>
         <source>month(s)</source>
         <translation>Monate</translation>
     </message>
     <message>
-        <location filename="../../libs/translationutils/constanttranslations.h" line="323"/>
+        <location filename="../../libs/translationutils/constanttranslations.h" line="324"/>
         <source>quarter(s)</source>
         <translation>Quartale</translation>
     </message>
     <message>
-        <location filename="../../libs/translationutils/constanttranslations.h" line="325"/>
+        <location filename="../../libs/translationutils/constanttranslations.h" line="326"/>
         <source>decade(s)</source>
         <translation>Jahrzehnte</translation>
     </message>
     <message>
-        <location filename="../../libs/translationutils/constanttranslations.h" line="327"/>
+        <location filename="../../libs/translationutils/constanttranslations.h" line="328"/>
         <source>second</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../../libs/translationutils/constanttranslations.h" line="328"/>
+        <location filename="../../libs/translationutils/constanttranslations.h" line="329"/>
         <source>minute</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../../libs/translationutils/constanttranslations.h" line="329"/>
+        <location filename="../../libs/translationutils/constanttranslations.h" line="330"/>
         <source>hour</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../../libs/translationutils/constanttranslations.h" line="330"/>
+        <location filename="../../libs/translationutils/constanttranslations.h" line="331"/>
         <source>day</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../../libs/translationutils/constanttranslations.h" line="331"/>
+        <location filename="../../libs/translationutils/constanttranslations.h" line="332"/>
         <source>week</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../../libs/translationutils/constanttranslations.h" line="332"/>
+        <location filename="../../libs/translationutils/constanttranslations.h" line="333"/>
         <source>month</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../../libs/translationutils/constanttranslations.h" line="333"/>
+        <location filename="../../libs/translationutils/constanttranslations.h" line="334"/>
         <source>quarter</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../../libs/translationutils/constanttranslations.h" line="334"/>
+        <location filename="../../libs/translationutils/constanttranslations.h" line="335"/>
         <source>year</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../../libs/translationutils/constanttranslations.h" line="335"/>
+        <location filename="../../libs/translationutils/constanttranslations.h" line="336"/>
         <source>decade</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../../libs/translationutils/constanttranslations.h" line="337"/>
+        <location filename="../../libs/translationutils/constanttranslations.h" line="338"/>
         <source>seconds</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../../libs/translationutils/constanttranslations.h" line="338"/>
+        <location filename="../../libs/translationutils/constanttranslations.h" line="339"/>
         <source>minutes</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../../libs/translationutils/constanttranslations.h" line="339"/>
+        <location filename="../../libs/translationutils/constanttranslations.h" line="340"/>
         <source>hours</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../../libs/translationutils/constanttranslations.h" line="340"/>
+        <location filename="../../libs/translationutils/constanttranslations.h" line="341"/>
         <source>days</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../../libs/translationutils/constanttranslations.h" line="341"/>
+        <location filename="../../libs/translationutils/constanttranslations.h" line="342"/>
         <source>weeks</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../../libs/translationutils/constanttranslations.h" line="342"/>
+        <location filename="../../libs/translationutils/constanttranslations.h" line="343"/>
         <source>months</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../../libs/translationutils/constanttranslations.h" line="343"/>
+        <location filename="../../libs/translationutils/constanttranslations.h" line="344"/>
         <source>quarters</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../../libs/translationutils/constanttranslations.h" line="344"/>
+        <location filename="../../libs/translationutils/constanttranslations.h" line="345"/>
         <source>years</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../../libs/translationutils/constanttranslations.h" line="345"/>
+        <location filename="../../libs/translationutils/constanttranslations.h" line="346"/>
         <source>decades</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../../libs/translationutils/constanttranslations.h" line="348"/>
+        <location filename="../../libs/translationutils/constanttranslations.h" line="349"/>
         <source>wake up</source>
         <translation>Aufstehen</translation>
     </message>
     <message>
-        <location filename="../../libs/translationutils/constanttranslations.h" line="349"/>
+        <location filename="../../libs/translationutils/constanttranslations.h" line="350"/>
         <source>breakfast</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../../libs/translationutils/constanttranslations.h" line="351"/>
+        <location filename="../../libs/translationutils/constanttranslations.h" line="352"/>
         <source>morning</source>
         <translation>Morgen</translation>
     </message>
     <message>
-        <location filename="../../libs/translationutils/constanttranslations.h" line="352"/>
+        <location filename="../../libs/translationutils/constanttranslations.h" line="353"/>
         <source>midday</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../../libs/translationutils/constanttranslations.h" line="353"/>
+        <location filename="../../libs/translationutils/constanttranslations.h" line="354"/>
         <source>lunch</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../../libs/translationutils/constanttranslations.h" line="354"/>
+        <location filename="../../libs/translationutils/constanttranslations.h" line="355"/>
         <source>afternoon</source>
         <translation>Nachmittag</translation>
     </message>
     <message>
-        <location filename="../../libs/translationutils/constanttranslations.h" line="357"/>
+        <location filename="../../libs/translationutils/constanttranslations.h" line="358"/>
         <source>evening</source>
         <translation>Abend</translation>
     </message>
     <message>
-        <location filename="../../libs/translationutils/constanttranslations.h" line="358"/>
+        <location filename="../../libs/translationutils/constanttranslations.h" line="359"/>
         <source>bedtime</source>
         <translation>Schlafengehen</translation>
     </message>
     <message>
-        <location filename="../../libs/translationutils/constanttranslations.h" line="362"/>
+        <location filename="../../libs/translationutils/constanttranslations.h" line="363"/>
         <source>during meal</source>
         <translation>Während des Essens</translation>
     </message>
     <message>
-        <location filename="../../libs/translationutils/constanttranslations.h" line="363"/>
+        <location filename="../../libs/translationutils/constanttranslations.h" line="364"/>
         <source>after meal</source>
         <translation>Nach dem Essen</translation>
     </message>
     <message>
-        <location filename="../../libs/translationutils/constanttranslations.h" line="364"/>
+        <location filename="../../libs/translationutils/constanttranslations.h" line="365"/>
         <source>before meal</source>
         <translation>Vor dem Essen</translation>
     </message>
     <message>
-        <location filename="../../libs/translationutils/constanttranslations.h" line="365"/>
+        <location filename="../../libs/translationutils/constanttranslations.h" line="366"/>
         <source>not during meal</source>
         <translation>Nicht während des Essens</translation>
     </message>
     <message>
-        <location filename="../../libs/translationutils/constanttranslations.h" line="366"/>
+        <location filename="../../libs/translationutils/constanttranslations.h" line="367"/>
         <source>only if meal</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../../libs/translationutils/constanttranslations.h" line="367"/>
+        <location filename="../../libs/translationutils/constanttranslations.h" line="368"/>
         <source>separated from food (1-2 hours)</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../../libs/translationutils/constanttranslations.h" line="368"/>
+        <location filename="../../libs/translationutils/constanttranslations.h" line="369"/>
         <source>suggested with food</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../../libs/translationutils/constanttranslations.h" line="369"/>
+        <location filename="../../libs/translationutils/constanttranslations.h" line="370"/>
         <source>with or without food</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../../libs/translationutils/constanttranslations.h" line="372"/>
+        <location filename="../../libs/translationutils/constanttranslations.h" line="373"/>
         <source>Using library : %1</source>
         <translation>Benutzte Bibliothek %1</translation>
     </message>
     <message>
-        <location filename="../../libs/translationutils/constanttranslations.h" line="373"/>
+        <location filename="../../libs/translationutils/constanttranslations.h" line="374"/>
         <source>Starting application at %1</source>
         <translation>Start des Applikation um %1</translation>
     </message>
     <message>
-        <location filename="../../libs/translationutils/constanttranslations.h" line="374"/>
+        <location filename="../../libs/translationutils/constanttranslations.h" line="375"/>
         <source>Initializing Translations...</source>
         <translation>Initialisiere Übersetzungen...</translation>
     </message>
     <message>
-        <location filename="../../libs/translationutils/constanttranslations.h" line="375"/>
+        <location filename="../../libs/translationutils/constanttranslations.h" line="376"/>
         <source>Initializing libraries...</source>
         <translation>Initialisiere Libraries...</translation>
     </message>
     <message>
-        <location filename="../../libs/translationutils/constanttranslations.h" line="376"/>
+        <location filename="../../libs/translationutils/constanttranslations.h" line="377"/>
         <source>Needed Licence Agreement...</source>
         <translation>Benötigte Annahme der Lizenz...</translation>
     </message>
     <message>
-        <location filename="../../libs/translationutils/constanttranslations.h" line="377"/>
+        <location filename="../../libs/translationutils/constanttranslations.h" line="378"/>
         <source>Checking directory structure...</source>
         <translation>Untersuche Verzeichnisstruktur...</translation>
     </message>
     <message>
-        <location filename="../../libs/translationutils/constanttranslations.h" line="378"/>
+        <location filename="../../libs/translationutils/constanttranslations.h" line="379"/>
         <source>Initializing Default Parameters...</source>
         <translation>Initialisiere Voreinstellungs Parameter...</translation>
     </message>
     <message>
-        <location filename="../../libs/translationutils/constanttranslations.h" line="379"/>
+        <location filename="../../libs/translationutils/constanttranslations.h" line="380"/>
         <source>Initializing Plugins...</source>
         <translation>Initialisiere Plugins...</translation>
     </message>
     <message>
-        <location filename="../../libs/translationutils/constanttranslations.h" line="380"/>
+        <location filename="../../libs/translationutils/constanttranslations.h" line="381"/>
         <source>First time running</source>
         <translation>Erster Start</translation>
     </message>
     <message>
-        <location filename="../../libs/translationutils/constanttranslations.h" line="383"/>
+        <location filename="../../libs/translationutils/constanttranslations.h" line="384"/>
         <source>Check for update</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../../libs/translationutils/constanttranslations.h" line="388"/>
+        <location filename="../../libs/translationutils/constanttranslations.h" line="389"/>
         <source>Type</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../../libs/translationutils/constanttranslations.h" line="389"/>
+        <location filename="../../libs/translationutils/constanttranslations.h" line="390"/>
         <source>Status</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../../libs/translationutils/constanttranslations.h" line="390"/>
+        <location filename="../../libs/translationutils/constanttranslations.h" line="391"/>
         <source>ICD10</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../../libs/translationutils/constanttranslations.h" line="391"/>
+        <location filename="../../libs/translationutils/constanttranslations.h" line="392"/>
         <source>now</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../../libs/translationutils/constanttranslations.h" line="392"/>
+        <location filename="../../libs/translationutils/constanttranslations.h" line="393"/>
         <source>low</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../../libs/translationutils/constanttranslations.h" line="393"/>
+        <location filename="../../libs/translationutils/constanttranslations.h" line="394"/>
         <source>medium</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../../libs/translationutils/constanttranslations.h" line="394"/>
+        <location filename="../../libs/translationutils/constanttranslations.h" line="395"/>
         <source>high</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../../libs/translationutils/constanttranslations.h" line="397"/>
-        <location filename="../../libs/translationutils/constanttranslations.h" line="399"/>
+        <location filename="../../libs/translationutils/constanttranslations.h" line="398"/>
+        <location filename="../../libs/translationutils/constanttranslations.h" line="400"/>
         <source>Settings recovered</source>
         <translation>Einstellungen wiederhergestelt</translation>
     </message>
     <message>
-        <location filename="../../libs/translationutils/constanttranslations.h" line="412"/>
+        <location filename="../../libs/translationutils/constanttranslations.h" line="402"/>
+        <source>Show details</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../../libs/translationutils/constanttranslations.h" line="403"/>
+        <source>More informations</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../../libs/translationutils/constanttranslations.h" line="404"/>
+        <source>Hide extra informations</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../../libs/translationutils/constanttranslations.h" line="411"/>
+        <source>Users</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../../libs/translationutils/constanttranslations.h" line="413"/>
+        <source>Rights</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../../libs/translationutils/constanttranslations.h" line="414"/>
+        <source>User rights</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../../libs/translationutils/constanttranslations.h" line="415"/>
+        <source>Medical rights</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../../libs/translationutils/constanttranslations.h" line="416"/>
+        <source>Administrative rights</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../../libs/translationutils/constanttranslations.h" line="417"/>
+        <source>User manager rights</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../../libs/translationutils/constanttranslations.h" line="418"/>
+        <source>Drug rights</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../../libs/translationutils/constanttranslations.h" line="423"/>
         <source>Path</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../../libs/translationutils/constanttranslations.h" line="430"/>
+        <location filename="../../libs/translationutils/constanttranslations.h" line="441"/>
         <source>Wrong number of tags (%1)</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../../libs/translationutils/constanttranslations.h" line="431"/>
+        <location filename="../../libs/translationutils/constanttranslations.h" line="442"/>
         <source>Wrong root tag %1 %2.</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../../libs/translationutils/constanttranslations.h" line="432"/>
+        <location filename="../../libs/translationutils/constanttranslations.h" line="443"/>
         <source>Document type name mismatch.</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../../libs/translationutils/constanttranslations.h" line="471"/>
+        <location filename="../../libs/translationutils/constanttranslations.h" line="480"/>
+        <source>General preferences</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../../libs/translationutils/constanttranslations.h" line="483"/>
         <source>Connected to database %1 with driver %2</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../../libs/translationutils/constanttranslations.h" line="476"/>
+        <location filename="../../libs/translationutils/constanttranslations.h" line="488"/>
         <source>User %1 correctly created</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
+        <location filename="../../libs/translationutils/constanttranslations.h" line="531"/>
+        <source>Agenda</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../../libs/translationutils/constanttranslations.h" line="532"/>
+        <source>Agenda event</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../../libs/translationutils/constanttranslations.h" line="533"/>
+        <source>Agenda events</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../../libs/translationutils/constanttranslations.h" line="534"/>
+        <source>Agenda database informations</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../../libs/translationutils/constanttranslations.h" line="535"/>
+        <source>No availability</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
         <location filename="../../libs/translationutils/constanttranslations.h" line="536"/>
+        <source>Attendee</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../../libs/translationutils/constanttranslations.h" line="537"/>
+        <source>Attendees</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../../libs/translationutils/constanttranslations.h" line="538"/>
+        <source>User delegate</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../../libs/translationutils/constanttranslations.h" line="539"/>
+        <source>Owner</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../../libs/translationutils/constanttranslations.h" line="542"/>
+        <source>Arrived</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../../libs/translationutils/constanttranslations.h" line="543"/>
+        <source>Cancelled</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../../libs/translationutils/constanttranslations.h" line="544"/>
+        <source>Missed</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../../libs/translationutils/constanttranslations.h" line="545"/>
+        <source>Waiting</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../../libs/translationutils/constanttranslations.h" line="546"/>
+        <source>Changed</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../../libs/translationutils/constanttranslations.h" line="547"/>
+        <source>Approved</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../../libs/translationutils/constanttranslations.h" line="566"/>
         <source>Clear patient&apos;s information</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../../libs/translationutils/constanttranslations.h" line="596"/>
+        <location filename="../../libs/translationutils/constanttranslations.h" line="581"/>
+        <source>Nurse</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../../libs/translationutils/constanttranslations.h" line="583"/>
+        <source>Caregiver</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../../libs/translationutils/constanttranslations.h" line="584"/>
+        <source>Medical student</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../../libs/translationutils/constanttranslations.h" line="585"/>
+        <source>Software administrator</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../../libs/translationutils/constanttranslations.h" line="631"/>
         <source>All languages</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../../libs/translationutils/constanttranslations.h" line="597"/>
+        <location filename="../../libs/translationutils/constanttranslations.h" line="632"/>
         <source>All other languages</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../../libs/translationutils/constanttranslations.h" line="381"/>
+        <location filename="../../libs/translationutils/constanttranslations.h" line="382"/>
         <source>This feature is not yet implemented.</source>
         <translation>Dieses Feature ist noch nicht implementiert.</translation>
     </message>
     <message>
-        <location filename="../../libs/translationutils/constanttranslations.h" line="382"/>
+        <location filename="../../libs/translationutils/constanttranslations.h" line="383"/>
         <source>Raising Application...</source>
         <translation>Wecke Applikation...</translation>
     </message>
     <message>
-        <location filename="../../libs/translationutils/constanttranslations.h" line="384"/>
+        <location filename="../../libs/translationutils/constanttranslations.h" line="385"/>
         <source>Checking for updates...</source>
         <translation>Suche nach Updates...</translation>
     </message>
     <message>
-        <location filename="../../libs/translationutils/constanttranslations.h" line="385"/>
+        <location filename="../../libs/translationutils/constanttranslations.h" line="386"/>
         <source>Initializing databases...</source>
         <translation>Initialisiere Datenbanken...</translation>
     </message>
     <message>
-        <location filename="../../libs/translationutils/constanttranslations.h" line="403"/>
+        <location filename="../../libs/translationutils/constanttranslations.h" line="407"/>
         <source>Welcome to FreeMedForms, you are now connected.</source>
         <translation>Willkommen zu FreeMedForms, Sie sind nun verbunden.</translation>
     </message>
     <message>
-        <location filename="../../libs/translationutils/constanttranslations.h" line="405"/>
+        <location filename="../../libs/translationutils/constanttranslations.h" line="409"/>
         <source>No user connected.</source>
         <translation>Kein User verbunden.</translation>
     </message>
     <message>
-        <location filename="../../libs/translationutils/constanttranslations.h" line="413"/>
+        <location filename="../../libs/translationutils/constanttranslations.h" line="424"/>
         <source>Path %1 does not exist</source>
         <translation>Pfad %1 existiert nicht</translation>
     </message>
     <message>
-        <location filename="../../libs/translationutils/constanttranslations.h" line="414"/>
+        <location filename="../../libs/translationutils/constanttranslations.h" line="425"/>
         <source>Path %1 is not empty</source>
         <translation>Pfad %1 ist nicht leer</translation>
     </message>
     <message>
-        <location filename="../../libs/translationutils/constanttranslations.h" line="415"/>
+        <location filename="../../libs/translationutils/constanttranslations.h" line="426"/>
         <source>Path %1 contains dirs</source>
         <translation>Pfad %1 beinhaltet Verzeichnisse</translation>
     </message>
     <message>
-        <location filename="../../libs/translationutils/constanttranslations.h" line="416"/>
+        <location filename="../../libs/translationutils/constanttranslations.h" line="427"/>
         <source>Path %1 can not be removed</source>
         <translation>Pfad %1 kann nicht entfernt werden</translation>
     </message>
     <message>
-        <location filename="../../libs/translationutils/constanttranslations.h" line="419"/>
+        <location filename="../../libs/translationutils/constanttranslations.h" line="430"/>
         <source>File %1 does not exist</source>
         <translation>File %1 existiert nicht</translation>
     </message>
     <message>
-        <location filename="../../libs/translationutils/constanttranslations.h" line="420"/>
+        <location filename="../../libs/translationutils/constanttranslations.h" line="431"/>
         <source>File %1 is not readable</source>
         <translation>Datei %1 ist nicht lesbar</translation>
     </message>
     <message>
-        <location filename="../../libs/translationutils/constanttranslations.h" line="421"/>
+        <location filename="../../libs/translationutils/constanttranslations.h" line="432"/>
         <source>File %1 can not be removed</source>
         <translation>Dateil %1 kann nicht entfernt werden</translation>
     </message>
     <message>
-        <location filename="../../libs/translationutils/constanttranslations.h" line="422"/>
+        <location filename="../../libs/translationutils/constanttranslations.h" line="433"/>
         <source>File %1 loaded</source>
         <translation>File %1 geladen</translation>
     </message>
     <message>
-        <location filename="../../libs/translationutils/constanttranslations.h" line="425"/>
+        <location filename="../../libs/translationutils/constanttranslations.h" line="436"/>
         <source>Open file</source>
         <translation>Öffnen der Datei</translation>
     </message>
     <message>
-        <location filename="../../libs/translationutils/constanttranslations.h" line="426"/>
+        <location filename="../../libs/translationutils/constanttranslations.h" line="437"/>
         <source>Opening file %1</source>
         <translation>Öffne Datei %1</translation>
     </message>
     <message>
-        <location filename="../../libs/translationutils/constanttranslations.h" line="427"/>
+        <location filename="../../libs/translationutils/constanttranslations.h" line="438"/>
         <source>Saving file %1</source>
         <translation>Speichere Datei %1</translation>
     </message>
     <message>
-        <location filename="../../libs/translationutils/constanttranslations.h" line="435"/>
+        <location filename="../../libs/translationutils/constanttranslations.h" line="446"/>
         <source>Informations</source>
         <translation>Informationen</translation>
     </message>
     <message>
-        <location filename="../../libs/translationutils/constanttranslations.h" line="438"/>
+        <location filename="../../libs/translationutils/constanttranslations.h" line="449"/>
         <source>Version</source>
         <translation></translation>
     </message>
     <message>
-        <location filename="../../libs/translationutils/constanttranslations.h" line="439"/>
+        <location filename="../../libs/translationutils/constanttranslations.h" line="450"/>
         <source>Description</source>
         <translation>Beschreibung</translation>
     </message>
     <message>
-        <location filename="../../libs/translationutils/constanttranslations.h" line="442"/>
+        <location filename="../../libs/translationutils/constanttranslations.h" line="453"/>
         <source>Unknown</source>
         <translation>Unbekannt</translation>
     </message>
     <message>
-        <location filename="../../libs/translationutils/constanttranslations.h" line="443"/>
+        <location filename="../../libs/translationutils/constanttranslations.h" line="454"/>
         <source>Ready</source>
         <translation>Fertig</translation>
     </message>
     <message>
-        <location filename="../../libs/translationutils/constanttranslations.h" line="446"/>
+        <location filename="../../libs/translationutils/constanttranslations.h" line="457"/>
         <source>Messages</source>
         <translation>Nachrichten</translation>
     </message>
     <message>
-        <location filename="../../libs/translationutils/constanttranslations.h" line="447"/>
+        <location filename="../../libs/translationutils/constanttranslations.h" line="458"/>
         <source>Logged Messages</source>
         <translation>Geloggte Nachrichten</translation>
     </message>
     <message>
-        <location filename="../../libs/translationutils/constanttranslations.h" line="448"/>
+        <location filename="../../libs/translationutils/constanttranslations.h" line="459"/>
         <source>Errors</source>
         <translation>Fehler</translation>
     </message>
     <message>
-        <location filename="../../libs/translationutils/constanttranslations.h" line="449"/>
+        <location filename="../../libs/translationutils/constanttranslations.h" line="460"/>
         <source>Logged Errors</source>
         <translation>Geloggte Fehler</translation>
     </message>
     <message>
-        <location filename="../../libs/translationutils/constanttranslations.h" line="450"/>
+        <location filename="../../libs/translationutils/constanttranslations.h" line="461"/>
         <source>Informative message : %1</source>
         <translation>Informationsnachricht %1</translation>
     </message>
     <message>
-        <location filename="../../libs/translationutils/constanttranslations.h" line="451"/>
+        <location filename="../../libs/translationutils/constanttranslations.h" line="462"/>
         <source>Starting task : %1</source>
         <translation>Starte Aufgabe %1</translation>
     </message>
     <message>
-        <location filename="../../libs/translationutils/constanttranslations.h" line="452"/>
+        <location filename="../../libs/translationutils/constanttranslations.h" line="463"/>
         <source>posting message to : %1</source>
         <translation>Sende Nachricht zu %1</translation>
     </message>
     <message>
-        <location filename="../../libs/translationutils/constanttranslations.h" line="453"/>
+        <location filename="../../libs/translationutils/constanttranslations.h" line="464"/>
         <source>Error %1 occured while %2</source>
         <translation></translation>
     </message>
     <message>
-        <location filename="../../libs/translationutils/constanttranslations.h" line="454"/>
+        <location filename="../../libs/translationutils/constanttranslations.h" line="465"/>
         <source>Error %1 : line %2, column %3</source>
         <translation>Error %1 Reihe %2 Spalte %3</translation>
     </message>
     <message>
-        <location filename="../../libs/translationutils/constanttranslations.h" line="455"/>
+        <location filename="../../libs/translationutils/constanttranslations.h" line="466"/>
         <source>Can not create %1 : it already exists</source>
         <translation>Kann %1 nicht erstellen, es besteht bereits</translation>
     </message>
     <message>
-        <location filename="../../libs/translationutils/constanttranslations.h" line="456"/>
+        <location filename="../../libs/translationutils/constanttranslations.h" line="467"/>
         <source>Can not return %1 : it does not exists</source>
         <translation>Kann nicht return %1 es existiert nicht</translation>
     </message>
     <message>
-        <location filename="../../libs/translationutils/constanttranslations.h" line="457"/>
+        <location filename="../../libs/translationutils/constanttranslations.h" line="468"/>
         <source>Can not create %1 : no parent founded</source>
         <translation>Kann %1 nicht erstellen Keine Eltern gefunden</translation>
     </message>
     <message>
-        <location filename="../../libs/translationutils/constanttranslations.h" line="458"/>
+        <location filename="../../libs/translationutils/constanttranslations.h" line="469"/>
         <source>%1 is not avaible</source>
         <translation>%1 ist nicht verfügbar</translation>
     </message>
     <message>
-        <location filename="../../libs/translationutils/constanttranslations.h" line="459"/>
+        <location filename="../../libs/translationutils/constanttranslations.h" line="470"/>
         <source>%1 is not avaible and can not be created</source>
         <translation>%1 ist nicht verfügbar und kann nicht erstellt werden</translation>
     </message>
     <message>
-        <location filename="../../libs/translationutils/constanttranslations.h" line="460"/>
+        <location filename="../../libs/translationutils/constanttranslations.h" line="471"/>
         <source>%1 are not avaible</source>
         <translation>%1 ist nicht verfügbar</translation>
     </message>
     <message>
-        <location filename="../../libs/translationutils/constanttranslations.h" line="461"/>
+        <location filename="../../libs/translationutils/constanttranslations.h" line="472"/>
         <source>Setting %1 path to %2</source>
         <translation>Setze %1 pfad tu %2</translation>
     </message>
     <message>
-        <location filename="../../libs/translationutils/constanttranslations.h" line="462"/>
+        <location filename="../../libs/translationutils/constanttranslations.h" line="473"/>
         <source>Error %1 from database %2</source>
         <translation>Error %1 von Datenbank %2</translation>
     </message>
     <message>
-        <location filename="../../libs/translationutils/constanttranslations.h" line="400"/>
+        <location filename="../../libs/translationutils/constanttranslations.h" line="401"/>
         <source>Creating default settings for %1</source>
         <translation>Erstelle Voreinstellung für %1</translation>
     </message>
@@ -1308,410 +1463,415 @@
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../../libs/translationutils/constanttranslations.h" line="300"/>
+        <location filename="../../libs/translationutils/constanttranslations.h" line="301"/>
         <source>Accountancy</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../../libs/translationutils/constanttranslations.h" line="324"/>
+        <location filename="../../libs/translationutils/constanttranslations.h" line="325"/>
         <source>year(s)</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../../libs/translationutils/constanttranslations.h" line="350"/>
+        <location filename="../../libs/translationutils/constanttranslations.h" line="351"/>
         <source>mid-morning</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../../libs/translationutils/constanttranslations.h" line="355"/>
+        <location filename="../../libs/translationutils/constanttranslations.h" line="356"/>
         <source>mid-afternoon</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../../libs/translationutils/constanttranslations.h" line="356"/>
+        <location filename="../../libs/translationutils/constanttranslations.h" line="357"/>
         <source>dinner</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../../libs/translationutils/constanttranslations.h" line="361"/>
+        <location filename="../../libs/translationutils/constanttranslations.h" line="362"/>
         <source>no meal relation</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../../libs/translationutils/constanttranslations.h" line="398"/>
+        <location filename="../../libs/translationutils/constanttranslations.h" line="399"/>
         <source>Reading settings file</source>
         <translation>Lese Einstellungen</translation>
     </message>
     <message>
-        <location filename="../../libs/translationutils/constanttranslations.h" line="404"/>
+        <location filename="../../libs/translationutils/constanttranslations.h" line="408"/>
         <source>Connected as
   %1</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../../libs/translationutils/constanttranslations.h" line="406"/>
+        <location filename="../../libs/translationutils/constanttranslations.h" line="410"/>
         <source>User</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../../libs/translationutils/constanttranslations.h" line="407"/>
+        <location filename="../../libs/translationutils/constanttranslations.h" line="412"/>
         <source>User datas</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../../libs/translationutils/constanttranslations.h" line="409"/>
+        <location filename="../../libs/translationutils/constanttranslations.h" line="420"/>
         <source>Save and restore</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../../libs/translationutils/constanttranslations.h" line="417"/>
+        <location filename="../../libs/translationutils/constanttranslations.h" line="428"/>
         <source>Path %1 can not be created</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../../libs/translationutils/constanttranslations.h" line="418"/>
+        <location filename="../../libs/translationutils/constanttranslations.h" line="429"/>
         <source>Creating dir %1</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../../libs/translationutils/constanttranslations.h" line="423"/>
+        <location filename="../../libs/translationutils/constanttranslations.h" line="434"/>
         <source>File %1 is empty</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../../libs/translationutils/constanttranslations.h" line="436"/>
+        <location filename="../../libs/translationutils/constanttranslations.h" line="447"/>
         <source>Cancel</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../../libs/translationutils/constanttranslations.h" line="440"/>
+        <location filename="../../libs/translationutils/constanttranslations.h" line="451"/>
         <source>Author</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../../libs/translationutils/constanttranslations.h" line="441"/>
+        <location filename="../../libs/translationutils/constanttranslations.h" line="452"/>
         <source>Provider</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../../libs/translationutils/constanttranslations.h" line="444"/>
+        <location filename="../../libs/translationutils/constanttranslations.h" line="455"/>
         <source>Available</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../../libs/translationutils/constanttranslations.h" line="445"/>
+        <location filename="../../libs/translationutils/constanttranslations.h" line="456"/>
         <source>Unavailable</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../../libs/translationutils/constanttranslations.h" line="463"/>
+        <location filename="../../libs/translationutils/constanttranslations.h" line="474"/>
         <source>No object to translate</source>
         <translation>Kein Objekt zum übersetzen</translation>
     </message>
     <message>
-        <location filename="../../libs/translationutils/constanttranslations.h" line="464"/>
+        <location filename="../../libs/translationutils/constanttranslations.h" line="475"/>
         <source>No %1 found.</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../../libs/translationutils/constanttranslations.h" line="465"/>
+        <location filename="../../libs/translationutils/constanttranslations.h" line="476"/>
         <source>Please describe your problem.</source>
         <translation>Bitte beschreibe dein Problem.</translation>
     </message>
     <message>
-        <location filename="../../libs/translationutils/constanttranslations.h" line="466"/>
+        <location filename="../../libs/translationutils/constanttranslations.h" line="477"/>
         <source>Yes</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../../libs/translationutils/constanttranslations.h" line="467"/>
+        <location filename="../../libs/translationutils/constanttranslations.h" line="478"/>
         <source>No</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../../libs/translationutils/constanttranslations.h" line="468"/>
+        <location filename="../../libs/translationutils/constanttranslations.h" line="479"/>
         <source>General</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../../libs/translationutils/constanttranslations.h" line="469"/>
+        <location filename="../../libs/translationutils/constanttranslations.h" line="481"/>
         <source>Fatal error : Application failure. Please restart application.</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../../libs/translationutils/constanttranslations.h" line="472"/>
+        <location filename="../../libs/translationutils/constanttranslations.h" line="484"/>
         <source>Trying to create %1 
 Place : %2</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../../libs/translationutils/constanttranslations.h" line="473"/>
+        <location filename="../../libs/translationutils/constanttranslations.h" line="485"/>
         <source>Unable to open database %1 : Error : %2</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../../libs/translationutils/constanttranslations.h" line="474"/>
+        <location filename="../../libs/translationutils/constanttranslations.h" line="486"/>
         <source>Unable to save data in database %1.</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../../libs/translationutils/constanttranslations.h" line="475"/>
+        <location filename="../../libs/translationutils/constanttranslations.h" line="487"/>
         <source>Database %1 correctly created</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../../libs/translationutils/constanttranslations.h" line="477"/>
+        <location filename="../../libs/translationutils/constanttranslations.h" line="489"/>
         <source>Database %1 can not be created. Error: %2.</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../../libs/translationutils/constanttranslations.h" line="480"/>
+        <location filename="../../libs/translationutils/constanttranslations.h" line="492"/>
         <source>Starting to send message.</source>
         <translation>Starte einen Nachrichtenversand.</translation>
     </message>
     <message>
-        <location filename="../../libs/translationutils/constanttranslations.h" line="481"/>
+        <location filename="../../libs/translationutils/constanttranslations.h" line="493"/>
         <source>Message sended without error.</source>
         <translation>Nachricht ohne Fehler gesendet.</translation>
     </message>
     <message>
-        <location filename="../../libs/translationutils/constanttranslations.h" line="482"/>
+        <location filename="../../libs/translationutils/constanttranslations.h" line="494"/>
         <source>An error occured, message was not sended.</source>
         <translation>An Error passierte, Nachricht wurde nicht gesendet.</translation>
     </message>
     <message>
-        <location filename="../../libs/translationutils/constanttranslations.h" line="483"/>
+        <location filename="../../libs/translationutils/constanttranslations.h" line="495"/>
         <source>Checking for updates from %1</source>
         <translation>Überprüfe Updates von %1</translation>
     </message>
     <message>
-        <location filename="../../libs/translationutils/constanttranslations.h" line="484"/>
+        <location filename="../../libs/translationutils/constanttranslations.h" line="496"/>
         <source>Version up to date</source>
         <translation>Version ist auf dem neuesten Stand</translation>
     </message>
     <message>
-        <location filename="../../libs/translationutils/constanttranslations.h" line="485"/>
+        <location filename="../../libs/translationutils/constanttranslations.h" line="497"/>
         <source>Current version :</source>
         <translation>Aktuelle Version:</translation>
     </message>
     <message>
-        <location filename="../../libs/translationutils/constanttranslations.h" line="486"/>
+        <location filename="../../libs/translationutils/constanttranslations.h" line="498"/>
         <source>Lastest version :</source>
         <translation>Letzte Version:</translation>
     </message>
     <message>
-        <location filename="../../libs/translationutils/constanttranslations.h" line="487"/>
+        <location filename="../../libs/translationutils/constanttranslations.h" line="499"/>
         <source>Update Available</source>
         <translation>Update verfügbar</translation>
     </message>
     <message>
-        <location filename="../../libs/translationutils/constanttranslations.h" line="490"/>
+        <location filename="../../libs/translationutils/constanttranslations.h" line="502"/>
         <source>Creator and Main Developper</source>
         <translation></translation>
     </message>
     <message>
-        <location filename="../../libs/translationutils/constanttranslations.h" line="491"/>
+        <location filename="../../libs/translationutils/constanttranslations.h" line="503"/>
         <source>Developpers and Contributors</source>
         <translation>Entwickler und Unterstützer</translation>
     </message>
     <message>
-        <location filename="../../libs/translationutils/constanttranslations.h" line="492"/>
+        <location filename="../../libs/translationutils/constanttranslations.h" line="504"/>
         <source>Debugger advisor</source>
         <translation></translation>
     </message>
     <message>
-        <location filename="../../libs/translationutils/constanttranslations.h" line="493"/>
+        <location filename="../../libs/translationutils/constanttranslations.h" line="505"/>
         <source>Developper and debugger advisor</source>
         <translation>Entwickler und Debugger Advisor</translation>
     </message>
     <message>
-        <location filename="../../libs/translationutils/constanttranslations.h" line="494"/>
+        <location filename="../../libs/translationutils/constanttranslations.h" line="506"/>
         <source>Packager</source>
         <translation>Paketierer</translation>
     </message>
     <message>
-        <location filename="../../libs/translationutils/constanttranslations.h" line="495"/>
+        <location filename="../../libs/translationutils/constanttranslations.h" line="507"/>
         <source>Packager for %1</source>
         <translation>Paketierer für %1</translation>
     </message>
     <message>
-        <location filename="../../libs/translationutils/constanttranslations.h" line="496"/>
+        <location filename="../../libs/translationutils/constanttranslations.h" line="508"/>
         <source>Drugs Database Management</source>
         <translation>Medikamenten Datenbank Management</translation>
     </message>
     <message>
-        <location filename="../../libs/translationutils/constanttranslations.h" line="497"/>
+        <location filename="../../libs/translationutils/constanttranslations.h" line="509"/>
         <source>Medical advisors</source>
         <translation>Medizinische Advisors</translation>
     </message>
     <message>
-        <location filename="../../libs/translationutils/constanttranslations.h" line="498"/>
+        <location filename="../../libs/translationutils/constanttranslations.h" line="510"/>
         <source>Medical advisor</source>
         <translation>Medical advisor</translation>
     </message>
     <message>
-        <location filename="../../libs/translationutils/constanttranslations.h" line="499"/>
+        <location filename="../../libs/translationutils/constanttranslations.h" line="511"/>
         <source>Webmaster</source>
         <translation></translation>
     </message>
     <message>
-        <location filename="../../libs/translationutils/constanttranslations.h" line="503"/>
+        <location filename="../../libs/translationutils/constanttranslations.h" line="515"/>
         <source>Build informations</source>
         <translation>Bauinformation</translation>
     </message>
     <message>
-        <location filename="../../libs/translationutils/constanttranslations.h" line="504"/>
+        <location filename="../../libs/translationutils/constanttranslations.h" line="516"/>
         <source>Version informations</source>
         <translation>Version Informationen</translation>
     </message>
     <message>
-        <location filename="../../libs/translationutils/constanttranslations.h" line="505"/>
+        <location filename="../../libs/translationutils/constanttranslations.h" line="517"/>
         <source>Build on %1 %2</source>
         <translation>Gebaut auf %1 %2</translation>
     </message>
     <message>
-        <location filename="../../libs/translationutils/constanttranslations.h" line="506"/>
+        <location filename="../../libs/translationutils/constanttranslations.h" line="518"/>
         <source>Build version : %1</source>
         <translation>Bauversion %1</translation>
     </message>
     <message>
-        <location filename="../../libs/translationutils/constanttranslations.h" line="507"/>
+        <location filename="../../libs/translationutils/constanttranslations.h" line="519"/>
         <source>Full application</source>
         <translation>Volle Applikation</translation>
     </message>
     <message>
-        <location filename="../../libs/translationutils/constanttranslations.h" line="508"/>
+        <location filename="../../libs/translationutils/constanttranslations.h" line="520"/>
         <source>SVN application</source>
         <translation>SVN Applikation</translation>
     </message>
     <message>
-        <location filename="../../libs/translationutils/constanttranslations.h" line="509"/>
+        <location filename="../../libs/translationutils/constanttranslations.h" line="521"/>
         <source>Build in debug mode</source>
         <translation>Bau um debug Modus</translation>
     </message>
     <message>
-        <location filename="../../libs/translationutils/constanttranslations.h" line="510"/>
+        <location filename="../../libs/translationutils/constanttranslations.h" line="522"/>
         <source>Build in release mode</source>
         <translation>Gebaut im release Modus</translation>
     </message>
     <message>
-        <location filename="../../libs/translationutils/constanttranslations.h" line="513"/>
+        <location filename="../../libs/translationutils/constanttranslations.h" line="525"/>
         <source>Header</source>
         <translation>Kopfzeile</translation>
     </message>
     <message>
-        <location filename="../../libs/translationutils/constanttranslations.h" line="514"/>
+        <location filename="../../libs/translationutils/constanttranslations.h" line="526"/>
         <source>Footer</source>
         <translation>Fuß</translation>
     </message>
     <message>
-        <location filename="../../libs/translationutils/constanttranslations.h" line="515"/>
+        <location filename="../../libs/translationutils/constanttranslations.h" line="527"/>
         <source>Watermark</source>
         <translation>Wasserzeichen</translation>
     </message>
     <message>
-        <location filename="../../libs/translationutils/constanttranslations.h" line="516"/>
+        <location filename="../../libs/translationutils/constanttranslations.h" line="528"/>
         <source>Printing</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../../libs/translationutils/constanttranslations.h" line="520"/>
+        <location filename="../../libs/translationutils/constanttranslations.h" line="550"/>
         <source>Zip archive (*zip)</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../../libs/translationutils/constanttranslations.h" line="526"/>
+        <location filename="../../libs/translationutils/constanttranslations.h" line="556"/>
         <source>France</source>
         <translation>Frankreich</translation>
     </message>
     <message>
-        <location filename="../../libs/translationutils/constanttranslations.h" line="527"/>
+        <location filename="../../libs/translationutils/constanttranslations.h" line="557"/>
         <source>Germany</source>
         <translation>Deutschland</translation>
     </message>
     <message>
-        <location filename="../../libs/translationutils/constanttranslations.h" line="528"/>
+        <location filename="../../libs/translationutils/constanttranslations.h" line="558"/>
         <source>Canada</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../../libs/translationutils/constanttranslations.h" line="531"/>
+        <location filename="../../libs/translationutils/constanttranslations.h" line="561"/>
         <source>Patient Name</source>
         <translation>Patienten Name</translation>
     </message>
     <message>
-        <location filename="../../libs/translationutils/constanttranslations.h" line="532"/>
+        <location filename="../../libs/translationutils/constanttranslations.h" line="562"/>
         <source>Patient</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../../libs/translationutils/constanttranslations.h" line="533"/>
+        <location filename="../../libs/translationutils/constanttranslations.h" line="563"/>
         <source>Patients</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../../libs/translationutils/constanttranslations.h" line="534"/>
+        <location filename="../../libs/translationutils/constanttranslations.h" line="564"/>
         <source>Patient informations</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../../libs/translationutils/constanttranslations.h" line="535"/>
+        <location filename="../../libs/translationutils/constanttranslations.h" line="565"/>
         <source>Patient database</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../../libs/translationutils/constanttranslations.h" line="537"/>
+        <location filename="../../libs/translationutils/constanttranslations.h" line="567"/>
         <source>Toggle patient&apos;s information</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../../libs/translationutils/constanttranslations.h" line="540"/>
+        <location filename="../../libs/translationutils/constanttranslations.h" line="570"/>
         <source>Male</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../../libs/translationutils/constanttranslations.h" line="541"/>
+        <location filename="../../libs/translationutils/constanttranslations.h" line="571"/>
         <source>Female</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../../libs/translationutils/constanttranslations.h" line="542"/>
+        <location filename="../../libs/translationutils/constanttranslations.h" line="572"/>
         <source>Hermaphrodism</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../../libs/translationutils/constanttranslations.h" line="545"/>
+        <location filename="../../libs/translationutils/constanttranslations.h" line="575"/>
         <source>Mister</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../../libs/translationutils/constanttranslations.h" line="546"/>
+        <location filename="../../libs/translationutils/constanttranslations.h" line="576"/>
         <source>Miss</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../../libs/translationutils/constanttranslations.h" line="547"/>
+        <location filename="../../libs/translationutils/constanttranslations.h" line="577"/>
         <source>Madam</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../../libs/translationutils/constanttranslations.h" line="548"/>
+        <location filename="../../libs/translationutils/constanttranslations.h" line="578"/>
         <source>Doctor</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../../libs/translationutils/constanttranslations.h" line="549"/>
+        <location filename="../../libs/translationutils/constanttranslations.h" line="579"/>
         <source>Professor</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../../libs/translationutils/constanttranslations.h" line="550"/>
+        <location filename="../../libs/translationutils/constanttranslations.h" line="580"/>
         <source>Captain</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../../libs/translationutils/constanttranslations.h" line="554"/>
-        <location filename="../../libs/translationutils/constanttranslations.h" line="566"/>
+        <location filename="../../libs/translationutils/constanttranslations.h" line="582"/>
+        <source>Secretary</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../../libs/translationutils/constanttranslations.h" line="589"/>
+        <location filename="../../libs/translationutils/constanttranslations.h" line="601"/>
         <source>Ctrl+L</source>
         <extracomment>Text Align Left shortcut key
 ----------
@@ -1719,8 +1879,8 @@ Text Align Left shortcut key : Mac specific</extracomment>
         <translation></translation>
     </message>
     <message>
-        <location filename="../../libs/translationutils/constanttranslations.h" line="557"/>
-        <location filename="../../libs/translationutils/constanttranslations.h" line="569"/>
+        <location filename="../../libs/translationutils/constanttranslations.h" line="592"/>
+        <location filename="../../libs/translationutils/constanttranslations.h" line="604"/>
         <source>Ctrl+R</source>
         <extracomment>Text Align Right shortcut key
 ----------
@@ -1728,8 +1888,8 @@ Text Align Right shortcut key : Mac specific</extracomment>
         <translation></translation>
     </message>
     <message>
-        <location filename="../../libs/translationutils/constanttranslations.h" line="560"/>
-        <location filename="../../libs/translationutils/constanttranslations.h" line="572"/>
+        <location filename="../../libs/translationutils/constanttranslations.h" line="595"/>
+        <location filename="../../libs/translationutils/constanttranslations.h" line="607"/>
         <source>Ctrl+E</source>
         <extracomment>Text Align Center shortcut key
 ----------
@@ -1737,8 +1897,8 @@ Text Align Center shortcut key : Mac specific</extracomment>
         <translation></translation>
     </message>
     <message>
-        <location filename="../../libs/translationutils/constanttranslations.h" line="563"/>
-        <location filename="../../libs/translationutils/constanttranslations.h" line="575"/>
+        <location filename="../../libs/translationutils/constanttranslations.h" line="598"/>
+        <location filename="../../libs/translationutils/constanttranslations.h" line="610"/>
         <source>Ctrl+J</source>
         <extracomment>Text Align Justify shortcut key
 ----------
@@ -1746,33 +1906,33 @@ Text Align Justify shortcut key : Mac specific</extracomment>
         <translation></translation>
     </message>
     <message>
-        <location filename="../../libs/translationutils/constanttranslations.h" line="578"/>
+        <location filename="../../libs/translationutils/constanttranslations.h" line="613"/>
         <source>Ctrl+Shift+T</source>
         <extracomment>Add table Editor shortcut key</extracomment>
         <translation></translation>
     </message>
     <message>
-        <location filename="../../libs/translationutils/constanttranslations.h" line="583"/>
+        <location filename="../../libs/translationutils/constanttranslations.h" line="618"/>
         <source>Toggle toolbar</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../../libs/translationutils/constanttranslations.h" line="584"/>
+        <location filename="../../libs/translationutils/constanttranslations.h" line="619"/>
         <source>Open in editor</source>
         <translation>Öffnen in einem Editor</translation>
     </message>
     <message>
-        <location filename="../../libs/translationutils/constanttranslations.h" line="585"/>
+        <location filename="../../libs/translationutils/constanttranslations.h" line="620"/>
         <source>Save editor</source>
         <translation>Speichern in einem Editor</translation>
     </message>
     <message>
-        <location filename="../../libs/translationutils/constanttranslations.h" line="586"/>
+        <location filename="../../libs/translationutils/constanttranslations.h" line="621"/>
         <source>Rich Text Editor</source>
         <translation></translation>
     </message>
     <message>
-        <location filename="../../libs/translationutils/constanttranslations.h" line="591"/>
+        <location filename="../../libs/translationutils/constanttranslations.h" line="626"/>
         <source>Ctrl+Shift+P</source>
         <extracomment>ShortCut for &quot;Print prescription&quot;</extracomment>
         <translation></translation>

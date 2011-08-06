@@ -32,9 +32,9 @@
 <context>
     <name>PMH::Internal::PmhBase</name>
     <message>
-        <location filename="../../plugins/pmhplugin/pmhbase.cpp" line="233"/>
-        <location filename="../../plugins/pmhplugin/pmhbase.cpp" line="241"/>
+        <location filename="../../plugins/pmhplugin/pmhbase.cpp" line="239"/>
         <location filename="../../plugins/pmhplugin/pmhbase.cpp" line="247"/>
+        <location filename="../../plugins/pmhplugin/pmhbase.cpp" line="253"/>
         <source>Please contact dev team.</source>
         <translation>Veuillez contacter l&apos;équipe de développement.</translation>
     </message>
@@ -47,10 +47,18 @@
         <translation></translation>
     </message>
     <message>
-        <location filename="../../plugins/pmhplugin/pmhmode.cpp" line="93"/>
-        <location filename="../../plugins/pmhplugin/pmhmode.cpp" line="182"/>
+        <location filename="../../plugins/pmhplugin/pmhmode.cpp" line="95"/>
+        <location filename="../../plugins/pmhplugin/pmhmode.cpp" line="234"/>
         <source>Edit</source>
         <translation>Éditer</translation>
+    </message>
+</context>
+<context>
+    <name>PMH::Internal::PmhPreferencesPage</name>
+    <message>
+        <location filename="../../plugins/pmhplugin/pmhpreferencespage.cpp" line="68"/>
+        <source>PMHx preferences</source>
+        <translation>Préférences pour les antécédents</translation>
     </message>
 </context>
 <context>
@@ -61,67 +69,62 @@
         <translation></translation>
     </message>
     <message>
-        <location filename="../../plugins/pmhplugin/pmhpreferencespage.ui" line="26"/>
-        <source>Past medical history preferences</source>
-        <translation>Préférences pour les antécédents</translation>
-    </message>
-    <message>
-        <location filename="../../plugins/pmhplugin/pmhpreferencespage.ui" line="43"/>
+        <location filename="../../plugins/pmhplugin/pmhpreferencespage.ui" line="20"/>
         <source>Data saving</source>
         <translation>Sauvegarde des données</translation>
     </message>
     <message>
-        <location filename="../../plugins/pmhplugin/pmhpreferencespage.ui" line="49"/>
+        <location filename="../../plugins/pmhplugin/pmhpreferencespage.ui" line="26"/>
         <source>Always ask for confirmation before deletion</source>
         <translation>Toujours demander confirmation avant d&apos;effacer</translation>
     </message>
     <message>
-        <location filename="../../plugins/pmhplugin/pmhpreferencespage.ui" line="59"/>
+        <location filename="../../plugins/pmhplugin/pmhpreferencespage.ui" line="36"/>
         <source>Colors</source>
         <translation>Couleurs</translation>
     </message>
     <message>
-        <location filename="../../plugins/pmhplugin/pmhpreferencespage.ui" line="65"/>
-        <location filename="../../plugins/pmhplugin/pmhpreferencespage.ui" line="84"/>
+        <location filename="../../plugins/pmhplugin/pmhpreferencespage.ui" line="42"/>
+        <location filename="../../plugins/pmhplugin/pmhpreferencespage.ui" line="61"/>
         <source>Category background color</source>
         <translation>Couleur de fond pour les catégories</translation>
     </message>
     <message>
-        <location filename="../../plugins/pmhplugin/pmhpreferencespage.ui" line="94"/>
-        <location filename="../../plugins/pmhplugin/pmhpreferencespage.ui" line="113"/>
+        <location filename="../../plugins/pmhplugin/pmhpreferencespage.ui" line="71"/>
+        <location filename="../../plugins/pmhplugin/pmhpreferencespage.ui" line="90"/>
         <source>Category foreground color</source>
         <translation>Couleur de caractère pour les catégories</translation>
     </message>
     <message>
-        <location filename="../../plugins/pmhplugin/pmhpreferencespage.ui" line="123"/>
-        <location filename="../../plugins/pmhplugin/pmhpreferencespage.ui" line="126"/>
+        <location filename="../../plugins/pmhplugin/pmhpreferencespage.ui" line="100"/>
+        <location filename="../../plugins/pmhplugin/pmhpreferencespage.ui" line="103"/>
         <source>PMHx background color</source>
         <translation>Couleur de fond pour les ATCD</translation>
     </message>
     <message>
-        <location filename="../../plugins/pmhplugin/pmhpreferencespage.ui" line="152"/>
-        <location filename="../../plugins/pmhplugin/pmhpreferencespage.ui" line="171"/>
+        <location filename="../../plugins/pmhplugin/pmhpreferencespage.ui" line="129"/>
+        <location filename="../../plugins/pmhplugin/pmhpreferencespage.ui" line="148"/>
         <source>PMHx foreground color</source>
         <translation>Couleur de caractère pour les ATCD</translation>
     </message>
     <message>
-        <location filename="../../plugins/pmhplugin/pmhpreferencespage.ui" line="184"/>
+        <location filename="../../plugins/pmhplugin/pmhpreferencespage.ui" line="161"/>
         <source>Fonts</source>
         <translation>Polices de caractère</translation>
     </message>
     <message>
-        <location filename="../../plugins/pmhplugin/pmhpreferencespage.ui" line="190"/>
+        <location filename="../../plugins/pmhplugin/pmhpreferencespage.ui" line="167"/>
         <source>Category font</source>
         <translation>Catégories</translation>
     </message>
     <message>
-        <location filename="../../plugins/pmhplugin/pmhpreferencespage.ui" line="197"/>
-        <location filename="../../plugins/pmhplugin/pmhpreferencespage.ui" line="211"/>
+        <location filename="../../plugins/pmhplugin/pmhpreferencespage.ui" line="174"/>
+        <location filename="../../plugins/pmhplugin/pmhpreferencespage.ui" line="188"/>
         <source>Change...</source>
         <translation>Modifier...</translation>
     </message>
     <message>
-        <location filename="../../plugins/pmhplugin/pmhpreferencespage.ui" line="204"/>
+        <location filename="../../plugins/pmhplugin/pmhpreferencespage.ui" line="181"/>
         <source>PMHx font</source>
         <translation>Antécédents</translation>
     </message>
@@ -179,32 +182,32 @@
         <translation>Privatiser cet antécédent</translation>
     </message>
     <message>
-        <location filename="../../plugins/pmhplugin/pmhviewer.ui" line="144"/>
+        <location filename="../../plugins/pmhplugin/pmhviewer.ui" line="186"/>
         <source>Category</source>
         <translation>Catégorie</translation>
     </message>
     <message>
-        <location filename="../../plugins/pmhplugin/pmhviewer.ui" line="167"/>
+        <location filename="../../plugins/pmhplugin/pmhviewer.ui" line="148"/>
         <source>Episodes</source>
         <translation>Épisodes</translation>
     </message>
     <message>
-        <location filename="../../plugins/pmhplugin/pmhviewer.ui" line="192"/>
+        <location filename="../../plugins/pmhplugin/pmhviewer.ui" line="173"/>
         <source>Comment</source>
         <translation>Commentaire</translation>
     </message>
     <message>
-        <location filename="../../plugins/pmhplugin/pmhviewer.ui" line="177"/>
+        <location filename="../../plugins/pmhplugin/pmhviewer.ui" line="158"/>
         <source>Management</source>
         <translation>Prise en charge</translation>
     </message>
     <message>
-        <location filename="../../plugins/pmhplugin/pmhviewer.ui" line="182"/>
+        <location filename="../../plugins/pmhplugin/pmhviewer.ui" line="163"/>
         <source>Contacts</source>
         <translation></translation>
     </message>
     <message>
-        <location filename="../../plugins/pmhplugin/pmhviewer.ui" line="187"/>
+        <location filename="../../plugins/pmhplugin/pmhviewer.ui" line="168"/>
         <source>Links</source>
         <translation>Liens</translation>
     </message>
@@ -217,7 +220,7 @@
         <translation></translation>
     </message>
     <message>
-        <location filename="../../plugins/pmhplugin/pmhcreatordialog.cpp" line="50"/>
+        <location filename="../../plugins/pmhplugin/pmhcreatordialog.cpp" line="55"/>
         <source>Past Medical History Creator</source>
         <translation>Créateur d&apos;antécédents</translation>
     </message>
@@ -266,7 +269,7 @@
     <message>
         <location filename="../../plugins/pmhplugin/pmhviewer.cpp" line="209"/>
         <source>Replacing pmh data</source>
-        <translation type="unfinished"></translation>
+        <translation>Remplacement des données de l&apos;antécédent</translation>
     </message>
 </context>
 </TS>

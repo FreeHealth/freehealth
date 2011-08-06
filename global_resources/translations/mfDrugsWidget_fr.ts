@@ -4,17 +4,17 @@
 <context>
     <name>DatabaseSelectorWidget</name>
     <message>
-        <location filename="../../plugins/drugsplugin/drugspreferences/databaseselectorwidget.cpp" line="209"/>
+        <location filename="../../plugins/drugsplugin/drugspreferences/databaseselectorwidget.cpp" line="210"/>
         <source>Reset actual prescription</source>
         <translation>Effacer la prescription actuelle</translation>
     </message>
     <message>
-        <location filename="../../plugins/drugsplugin/drugspreferences/databaseselectorwidget.cpp" line="210"/>
+        <location filename="../../plugins/drugsplugin/drugspreferences/databaseselectorwidget.cpp" line="211"/>
         <source>You have selected a different drugs database than the currently-opened one. Your actual prescription will be resetted. Do you want to continue ?</source>
         <translation>Vous avez sélectionné une base de données thérapeutique différente de celle en cours d&apos;utilisation. Votre prescription actuelle va être effacée. Voulez-vous poursuivre ?</translation>
     </message>
     <message>
-        <location filename="../../plugins/drugsplugin/drugspreferences/databaseselectorwidget.cpp" line="212"/>
+        <location filename="../../plugins/drugsplugin/drugspreferences/databaseselectorwidget.cpp" line="213"/>
         <source>Drugs database selection</source>
         <translation>Sélectionneur de base de données</translation>
     </message>
@@ -69,24 +69,39 @@ Drug %1 is already in your prescription</source>
         <source>Database selector</source>
         <translation>Sélectionneur de base de données</translation>
     </message>
+    <message>
+        <location filename="../../plugins/drugsplugin/drugspreferences/databaseselectorwidget.cpp" line="75"/>
+        <source>Drug database selector</source>
+        <translation>Sélectionneur de base de données</translation>
+    </message>
 </context>
 <context>
     <name>DrugsWidget::DrugsExtraOptionsPage</name>
     <message>
-        <location filename="../../plugins/drugsplugin/drugspreferences/mfDrugsPreferences.cpp" line="366"/>
+        <location filename="../../plugins/drugsplugin/drugspreferences/mfDrugsPreferences.cpp" line="370"/>
         <source>Extras</source>
         <translation></translation>
+    </message>
+    <message>
+        <location filename="../../plugins/drugsplugin/drugspreferences/mfDrugsPreferences.cpp" line="372"/>
+        <source>Drug&apos;s extra preferences</source>
+        <translation>Préférences additionnelles pour les médicaments</translation>
     </message>
 </context>
 <context>
     <name>DrugsWidget::DrugsPrintOptionsPage</name>
     <message>
-        <location filename="../../plugins/drugsplugin/drugspreferences/mfDrugsPreferences.cpp" line="212"/>
+        <location filename="../../plugins/drugsplugin/drugspreferences/mfDrugsPreferences.cpp" line="214"/>
         <source>Printing</source>
         <translation>Impression</translation>
     </message>
     <message>
-        <location filename="../../plugins/drugsplugin/drugspreferences/mfDrugsPreferences.cpp" line="247"/>
+        <location filename="../../plugins/drugsplugin/drugspreferences/mfDrugsPreferences.cpp" line="216"/>
+        <source>Drug&apos;s printing preferences</source>
+        <translation>Impression des médicaments</translation>
+    </message>
+    <message>
+        <location filename="../../plugins/drugsplugin/drugspreferences/mfDrugsPreferences.cpp" line="250"/>
         <source>Updating posologic sentence.</source>
         <translation>Mise à jour de la phrase posologique.</translation>
     </message>
@@ -94,17 +109,27 @@ Drug %1 is already in your prescription</source>
 <context>
     <name>DrugsWidget::DrugsSelectorOptionsPage</name>
     <message>
-        <location filename="../../plugins/drugsplugin/drugspreferences/mfDrugsPreferences.cpp" line="144"/>
+        <location filename="../../plugins/drugsplugin/drugspreferences/mfDrugsPreferences.cpp" line="145"/>
         <source>Selector</source>
         <translation>Sélectionneur</translation>
+    </message>
+    <message>
+        <location filename="../../plugins/drugsplugin/drugspreferences/mfDrugsPreferences.cpp" line="147"/>
+        <source>Drug&apos;s selector preferences</source>
+        <translation>Préférences du sélectionneur de base de données thérapeutique</translation>
     </message>
 </context>
 <context>
     <name>DrugsWidget::DrugsUserOptionsPage</name>
     <message>
-        <location filename="../../plugins/drugsplugin/drugspreferences/mfDrugsPreferences.cpp" line="302"/>
+        <location filename="../../plugins/drugsplugin/drugspreferences/mfDrugsPreferences.cpp" line="305"/>
         <source>User&apos;s documents</source>
         <translation>Documents de l&apos;utilisateur</translation>
+    </message>
+    <message>
+        <location filename="../../plugins/drugsplugin/drugspreferences/mfDrugsPreferences.cpp" line="307"/>
+        <source>User preferences</source>
+        <translation>Préférences utilisateur</translation>
     </message>
 </context>
 <context>
@@ -114,33 +139,38 @@ Drug %1 is already in your prescription</source>
         <source>View</source>
         <translation>Affichage</translation>
     </message>
+    <message>
+        <location filename="../../plugins/drugsplugin/drugspreferences/mfDrugsPreferences.cpp" line="74"/>
+        <source>Drug&apos;s view preferences</source>
+        <translation>Préférences du visualisateur de médicament</translation>
+    </message>
 </context>
 <context>
     <name>DrugsWidget::DynamicAlert</name>
     <message>
         <location filename="../../plugins/drugsplugin/drugswidget/dynamicalert.ui" line="14"/>
         <source>Dialog</source>
-        <translation type="unfinished"></translation>
+        <translation></translation>
     </message>
     <message>
         <location filename="../../plugins/drugsplugin/drugswidget/dynamicalert.cpp" line="81"/>
         <source>Drug interaction alert</source>
-        <translation type="unfinished"></translation>
+        <translation>Alerte d&apos;interaction médicamenteuse</translation>
     </message>
     <message>
         <location filename="../../plugins/drugsplugin/drugswidget/dynamicalert.cpp" line="143"/>
         <source>Accept alert and cancel last action</source>
-        <translation type="unfinished"></translation>
+        <translation>Accepter l&apos;alerte et annuler la dernière action</translation>
     </message>
     <message>
         <location filename="../../plugins/drugsplugin/drugswidget/dynamicalert.cpp" line="150"/>
         <source>Override alert and go on</source>
-        <translation type="unfinished"></translation>
+        <translation>Passer outre l&apos;alerte et continuer</translation>
     </message>
     <message>
         <location filename="../../plugins/drugsplugin/drugswidget/dynamicalert.cpp" line="157"/>
         <source>Show full interactions information</source>
-        <translation type="unfinished"></translation>
+        <translation>Montrer toutes les informations d&apos;interaction</translation>
     </message>
 </context>
 <context>
@@ -173,7 +203,7 @@ Drug %1 is already in your prescription</source>
     <message>
         <location filename="../../plugins/drugsplugin/drugswidget/interactionsynthesisdialog.ui" line="63"/>
         <source>Informations</source>
-        <translation type="unfinished"></translation>
+        <translation></translation>
     </message>
     <message>
         <location filename="../../plugins/drugsplugin/drugswidget/interactionsynthesisdialog.ui" line="132"/>
@@ -193,7 +223,7 @@ Drug %1 is already in your prescription</source>
     <message>
         <location filename="../../plugins/drugsplugin/drugswidget/interactionsynthesisdialog.ui" line="182"/>
         <source>Show available bibliography</source>
-        <translation type="unfinished"></translation>
+        <translation>Montrer la bibliographie disponible</translation>
     </message>
     <message>
         <location filename="../../plugins/drugsplugin/drugswidget/interactionsynthesisdialog.ui" line="96"/>
@@ -208,27 +238,27 @@ Drug %1 is already in your prescription</source>
     <message>
         <location filename="../../plugins/drugsplugin/drugswidget/interactionsynthesisdialog.cpp" line="130"/>
         <source>Print all interactions</source>
-        <translation type="unfinished"></translation>
+        <translation>Imprimer toutes les interactions</translation>
     </message>
     <message>
         <location filename="../../plugins/drugsplugin/drugswidget/interactionsynthesisdialog.cpp" line="137"/>
         <source>Print selected interaction</source>
-        <translation type="unfinished"></translation>
+        <translation>Imprimer les interactions sélectionnées</translation>
     </message>
     <message>
         <location filename="../../plugins/drugsplugin/drugswidget/interactionsynthesisdialog.cpp" line="164"/>
         <source>Send a report</source>
-        <translation type="unfinished"></translation>
+        <translation>Envoyer un rapport</translation>
     </message>
     <message>
         <location filename="../../plugins/drugsplugin/drugswidget/interactionsynthesisdialog.cpp" line="286"/>
         <source>Tested drugs</source>
-        <translation type="unfinished"></translation>
+        <translation>Médicaments testés</translation>
     </message>
     <message>
         <location filename="../../plugins/drugsplugin/drugswidget/interactionsynthesisdialog.cpp" line="290"/>
         <source>Related to drugs</source>
-        <translation type="unfinished"></translation>
+        <translation>Lié aux médicaments</translation>
     </message>
     <message>
         <location filename="../../plugins/drugsplugin/drugswidget/interactionsynthesisdialog.cpp" line="260"/>
@@ -263,17 +293,12 @@ Drug %1 is already in your prescription</source>
         <translation>Forme</translation>
     </message>
     <message>
-        <location filename="../../plugins/drugsplugin/drugspreferences/databaseselectorwidget.ui" line="32"/>
-        <source>Drugs database selector</source>
-        <translation>Sélectionneur de base de données thérapeutiques</translation>
-    </message>
-    <message>
-        <location filename="../../plugins/drugsplugin/drugspreferences/databaseselectorwidget.ui" line="55"/>
+        <location filename="../../plugins/drugsplugin/drugspreferences/databaseselectorwidget.ui" line="26"/>
         <source>Available databases</source>
         <translation>Bases de données disponibles</translation>
     </message>
     <message>
-        <location filename="../../plugins/drugsplugin/drugspreferences/databaseselectorwidget.ui" line="84"/>
+        <location filename="../../plugins/drugsplugin/drugspreferences/databaseselectorwidget.ui" line="55"/>
         <source>Database informations</source>
         <translation>Informations de la base de données</translation>
     </message>
@@ -288,7 +313,7 @@ Drug %1 is already in your prescription</source>
     <message>
         <location filename="../../plugins/drugsplugin/dosagedialog/mfDosageCreatorDialog.ui" line="90"/>
         <source>Show interaction synthesis dialog</source>
-        <translation type="unfinished"></translation>
+        <translation>Montrer le dialogue de synthèse des interactions</translation>
     </message>
     <message>
         <location filename="../../plugins/drugsplugin/dosagedialog/mfDosageCreatorDialog.ui" line="118"/>
@@ -1015,22 +1040,17 @@ Voulez-vous réellement changer de mode d&apos;édition ?</translation>
         <translation>Forme</translation>
     </message>
     <message>
-        <location filename="../../plugins/drugsplugin/drugspreferences/drugsextraoptionspage.ui" line="33"/>
-        <source>Drugs Extra Preferences</source>
-        <translation>Extra-préférences médicaments</translation>
-    </message>
-    <message>
-        <location filename="../../plugins/drugsplugin/drugspreferences/drugsextraoptionspage.ui" line="56"/>
+        <location filename="../../plugins/drugsplugin/drugspreferences/drugsextraoptionspage.ui" line="26"/>
         <source>Hide laboratory name</source>
         <translation>Cacher le nom du laboratoire</translation>
     </message>
     <message>
-        <location filename="../../plugins/drugsplugin/drugspreferences/drugsextraoptionspage.ui" line="75"/>
+        <location filename="../../plugins/drugsplugin/drugspreferences/drugsextraoptionspage.ui" line="45"/>
         <source>Text before 100% therapeutic</source>
         <translation>Texte à mettre avant les traitements à 100%</translation>
     </message>
     <message>
-        <location filename="../../plugins/drugsplugin/drugspreferences/drugsextraoptionspage.ui" line="94"/>
+        <location filename="../../plugins/drugsplugin/drugspreferences/drugsextraoptionspage.ui" line="64"/>
         <source>Text after 100% therapeutic</source>
         <translation>Texte à mettre après les traitements à 100%</translation>
     </message>
@@ -1040,12 +1060,12 @@ Voulez-vous réellement changer de mode d&apos;édition ?</translation>
     <message>
         <location filename="../../plugins/drugsplugin/drugsmode.ui" line="14"/>
         <source>Form</source>
-        <translation type="unfinished">Forme</translation>
+        <translation>Forme</translation>
     </message>
     <message>
         <location filename="../../plugins/drugsplugin/drugsmode.cpp" line="55"/>
         <source>Drugs</source>
-        <translation type="unfinished"></translation>
+        <translation>Médicaments</translation>
     </message>
 </context>
 <context>
@@ -1053,7 +1073,7 @@ Voulez-vous réellement changer de mode d&apos;édition ?</translation>
     <message>
         <location filename="../../plugins/drugsplugin/drugsplugin.cpp" line="126"/>
         <source>Initializing drugs widgets plugin...</source>
-        <translation type="unfinished"></translation>
+        <translation>Initialisation du plugin médicament...</translation>
     </message>
 </context>
 <context>
@@ -1064,52 +1084,47 @@ Voulez-vous réellement changer de mode d&apos;édition ?</translation>
         <translation>Forme</translation>
     </message>
     <message>
-        <location filename="../../plugins/drugsplugin/drugspreferences/drugsprintoptionspage.ui" line="33"/>
-        <source>Drugs Printing Preferences</source>
-        <translation>Préférences d&apos;impression</translation>
-    </message>
-    <message>
-        <location filename="../../plugins/drugsplugin/drugspreferences/drugsprintoptionspage.ui" line="344"/>
+        <location filename="../../plugins/drugsplugin/drugspreferences/drugsprintoptionspage.ui" line="314"/>
         <source>Printing</source>
         <translation>Impression</translation>
     </message>
     <message>
-        <location filename="../../plugins/drugsplugin/drugspreferences/drugsprintoptionspage.ui" line="75"/>
+        <location filename="../../plugins/drugsplugin/drugspreferences/drugsprintoptionspage.ui" line="45"/>
         <source>Drug font</source>
         <translation>Police de caractère pour les médicaments</translation>
     </message>
     <message>
-        <location filename="../../plugins/drugsplugin/drugspreferences/drugsprintoptionspage.ui" line="63"/>
+        <location filename="../../plugins/drugsplugin/drugspreferences/drugsprintoptionspage.ui" line="33"/>
         <source>Old</source>
         <translation></translation>
     </message>
     <message>
-        <location filename="../../plugins/drugsplugin/drugspreferences/drugsprintoptionspage.ui" line="208"/>
+        <location filename="../../plugins/drugsplugin/drugspreferences/drugsprintoptionspage.ui" line="178"/>
         <source>Prescription font</source>
         <translation>Police de caractère pour les prescriptions</translation>
     </message>
     <message>
-        <location filename="../../plugins/drugsplugin/drugspreferences/drugsprintoptionspage.ui" line="366"/>
+        <location filename="../../plugins/drugsplugin/drugspreferences/drugsprintoptionspage.ui" line="336"/>
         <source>Add a line break between drugs when printing</source>
         <translation>Ajouter une ligne vierge entre les médicaments à l&apos;impression</translation>
     </message>
     <message>
-        <location filename="../../plugins/drugsplugin/drugspreferences/drugsprintoptionspage.ui" line="381"/>
+        <location filename="../../plugins/drugsplugin/drugspreferences/drugsprintoptionspage.ui" line="351"/>
         <source>Prescription formatting</source>
         <translation>Format de la prescription</translation>
     </message>
     <message>
-        <location filename="../../plugins/drugsplugin/drugspreferences/drugsprintoptionspage.ui" line="388"/>
+        <location filename="../../plugins/drugsplugin/drugspreferences/drugsprintoptionspage.ui" line="358"/>
         <source>Reset to default</source>
         <translation>Par défaut</translation>
     </message>
     <message>
-        <location filename="../../plugins/drugsplugin/drugspreferences/drugsprintoptionspage.ui" line="397"/>
+        <location filename="../../plugins/drugsplugin/drugspreferences/drugsprintoptionspage.ui" line="367"/>
         <source>Print duplicatas</source>
         <translation>Imprimer les duplicatas</translation>
     </message>
     <message>
-        <location filename="../../plugins/drugsplugin/drugspreferences/mfDrugsPreferences.cpp" line="640"/>
+        <location filename="../../plugins/drugsplugin/drugspreferences/mfDrugsPreferences.cpp" line="645"/>
         <source>This a note to take into account&lt;br /&gt;written in two lines...</source>
         <translation>Ceci est une note à prendre en compte&lt;br /&gt;écrite sur deux lignes...</translation>
     </message>
@@ -1179,11 +1194,6 @@ Voulez-vous réellement changer de mode d&apos;édition ?</translation>
         <location filename="../../plugins/drugsplugin/drugspreferences/drugsuseroptionspage.ui" line="14"/>
         <source>Form</source>
         <translation>Forme</translation>
-    </message>
-    <message>
-        <location filename="../../plugins/drugsplugin/drugspreferences/drugsuseroptionspage.ui" line="33"/>
-        <source>Drugs User Preferences</source>
-        <translation>Préférences utilisateur</translation>
     </message>
 </context>
 <context>
@@ -1353,24 +1363,32 @@ Voulez-vous réellement changer de mode d&apos;édition ?</translation>
         <translation>Quand le protocole a été modifié, change le bouton de validation en</translation>
     </message>
     <message>
-        <location filename="../../plugins/drugsplugin/drugspreferences/protocolpreferencespage.cpp" line="136"/>
+        <location filename="../../plugins/drugsplugin/drugspreferences/protocolpreferencespage.cpp" line="137"/>
         <source>Save protocol and prescribe</source>
         <translation>Sauvegarder et prescrire le protocole</translation>
     </message>
     <message>
-        <location filename="../../plugins/drugsplugin/drugspreferences/protocolpreferencespage.cpp" line="137"/>
+        <location filename="../../plugins/drugsplugin/drugspreferences/protocolpreferencespage.cpp" line="138"/>
         <source>Prescribe only</source>
         <translation>Prescrire uniquement</translation>
     </message>
     <message>
-        <location filename="../../plugins/drugsplugin/drugspreferences/protocolpreferencespage.cpp" line="138"/>
+        <location filename="../../plugins/drugsplugin/drugspreferences/protocolpreferencespage.cpp" line="139"/>
         <source>Save protocol only</source>
         <translation>Sauvegarder le protocole</translation>
     </message>
     <message>
-        <location filename="../../plugins/drugsplugin/drugspreferences/protocolpreferencespage.cpp" line="139"/>
+        <location filename="../../plugins/drugsplugin/drugspreferences/protocolpreferencespage.cpp" line="140"/>
         <source>Test interactions only</source>
         <translation>Tester les interactions uniquement</translation>
+    </message>
+</context>
+<context>
+    <name>DrugsWidget::ProtocolPreferencesPage</name>
+    <message>
+        <location filename="../../plugins/drugsplugin/drugspreferences/protocolpreferencespage.cpp" line="61"/>
+        <source>Drug&apos;s protocole preferences</source>
+        <translation>Préférences pour les protocoles thérapeutiques</translation>
     </message>
 </context>
 <context>
