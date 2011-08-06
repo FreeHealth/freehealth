@@ -35,6 +35,7 @@
 #include <coreplugin/isettings.h>
 #include <coreplugin/icore.h>
 #include <coreplugin/constants_tokensandsettings.h>
+#include <coreplugin/icommandline.h>
 
 #include <QCoreApplication>
 #include <QSqlDatabase>
@@ -49,9 +50,8 @@ using namespace Templates;
 //using namespace Templates::Internal;
 using namespace Trans::ConstantTranslations;
 
-
 static inline Core::ISettings *settings()  { return Core::ICore::instance()->settings(); }
-
+static inline Core::ICommandLine *commandLine()  { return Core::ICore::instance()->commandLine(); }
 
 namespace Templates {
 namespace Internal {
@@ -244,9 +244,15 @@ bool TemplateBase::init()
         return true;
 
     // connect
-    createConnection(Templates::Constants::DB_TEMPLATES_NAME, Templates::Constants::DB_TEMPLATES_NAME,
-                     settings()->databaseConnector(),
-                     Utils::Database::CreateDatabase);
+    if (commandLine()->value(Core::ICommandLine::ClearUserDatabases).toBool()) {
+        createConnection(Templates::Constants::DB_TEMPLATES_NAME, Templates::Constants::DB_TEMPLATES_NAME,
+                         settings()->databaseConnector(),
+                         Utils::Database::DeleteAndRecreateDatabase);
+    } else {
+        createConnection(Templates::Constants::DB_TEMPLATES_NAME, Templates::Constants::DB_TEMPLATES_NAME,
+                         settings()->databaseConnector(),
+                         Utils::Database::CreateDatabase);
+    }
 
     if (!database().isOpen()) {
         if (!database().open()) {

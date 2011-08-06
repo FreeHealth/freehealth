@@ -36,6 +36,7 @@
 #include <coreplugin/icore.h>
 #include <coreplugin/constants_tokensandsettings.h>
 #include <coreplugin/iuser.h>
+#include <coreplugin/icommandline.h>
 
 #include <QCoreApplication>
 #include <QSqlDatabase>
@@ -53,7 +54,7 @@ using namespace Trans::ConstantTranslations;
 
 static inline Core::ISettings *settings()  { return Core::ICore::instance()->settings(); }
 static inline Core::IUser *user() {return Core::ICore::instance()->user();}
-
+static inline Core::ICommandLine *commandLine()  { return Core::ICore::instance()->commandLine(); }
 
 /** \todo move getLkId into UserModel/UserBase */
 
@@ -167,44 +168,15 @@ bool PatientBase::init()
         return true;
 
     // connect
-    createConnection(Constants::DB_NAME, Constants::DB_NAME,
-                     settings()->databaseConnector(),
-                     Utils::Database::CreateDatabase);
-
-//    // Check settings --> SQLite or MySQL ?
-//    if (settings()->value(Core::Constants::S_USE_EXTERNAL_DATABASE, false).toBool()) {
-//        if (!QSqlDatabase::isDriverAvailable("QMYSQL")) {
-//            LOG_ERROR(tkTr(Trans::Constants::DATABASE_DRIVER_1_NOT_AVAILABLE).arg("MySQL"));
-//            Utils::warningMessageBox(tkTr(Trans::Constants::APPLICATION_FAILURE),
-//                                     tkTr(Trans::Constants::DATABASE_DRIVER_1_NOT_AVAILABLE_DETAIL).arg("MySQL"),
-//                                     "", qApp->applicationName());
-//            return false;
-//        }
-//        createConnection(Constants::DB_NAME,
-//                         Constants::DB_NAME,
-//                         QString(QByteArray::fromBase64(settings()->value(Core::Constants::S_EXTERNAL_DATABASE_HOST, QByteArray("localhost").toBase64()).toByteArray())),
-//                         Utils::Database::ReadWrite,
-//                         Utils::Database::MySQL,
-//                         QString(QByteArray::fromBase64(settings()->value(Core::Constants::S_EXTERNAL_DATABASE_LOG, QByteArray("root").toBase64()).toByteArray())),
-//                         QString(QByteArray::fromBase64(settings()->value(Core::Constants::S_EXTERNAL_DATABASE_PASS, QByteArray("").toBase64()).toByteArray())),
-//                         QString(QByteArray::fromBase64(settings()->value(Core::Constants::S_EXTERNAL_DATABASE_PORT, QByteArray("").toBase64()).toByteArray())).toInt(),
-//                         Utils::Database::CreateDatabase);
-//    } else {
-//        if (!QSqlDatabase::isDriverAvailable("QSQLITE")) {
-//            LOG_ERROR(tkTr(Trans::Constants::DATABASE_DRIVER_1_NOT_AVAILABLE).arg("SQLite"));
-//            Utils::warningMessageBox(tkTr(Trans::Constants::APPLICATION_FAILURE),
-//                                     tkTr(Trans::Constants::DATABASE_DRIVER_1_NOT_AVAILABLE_DETAIL).arg("SQLite"),
-//                                     "", qApp->applicationName());
-//            return false;
-//        }
-//        createConnection(Constants::DB_NAME,
-//                         Constants::DB_FILENAME,
-//                         settings()->path(Core::ISettings::ReadWriteDatabasesPath) + QDir::separator() + QString(Constants::DB_NAME),
-//                         Utils::Database::ReadWrite,
-//                         Utils::Database::SQLite,
-//                         "log", "pas", 0,
-//                         Utils::Database::CreateDatabase);
-//    }
+    if (commandLine()->value(Core::ICommandLine::ClearUserDatabases).toBool()) {
+        createConnection(Constants::DB_NAME, Constants::DB_NAME,
+                         settings()->databaseConnector(),
+                         Utils::Database::DeleteAndRecreateDatabase);
+    } else {
+        createConnection(Constants::DB_NAME, Constants::DB_NAME,
+                         settings()->databaseConnector(),
+                         Utils::Database::CreateDatabase);
+    }
 
     if (!database().isOpen()) {
         if (!database().open()) {
@@ -225,6 +197,75 @@ bool PatientBase::init()
 
     m_initialized = true;
     return true;
+}
+
+static inline Patients::Internal::PatientBase *patientBase()  { return Patients::Internal::PatientBase::instance(); }
+
+void createVirtualPatient(const QString &name, const QString &secondname, const QString &firstname,
+                          const QString &gender, const int title, const QDate &dob,
+                          const QString &country, const QString &note,
+                          const QString &street, const QString &zip, const QString &city,
+                          const QString &uuid, const int lkid,
+                          const QString &photoFile, const QDate &death)
+{
+    using namespace Patients;
+    QSqlQuery query(patientBase()->database());
+    query.prepare(patientBase()->prepareInsertQuery(Constants::Table_IDENT));
+    query.bindValue(Constants::IDENTITY_ID, QVariant());
+    query.bindValue(Constants::IDENTITY_UID, uuid);
+    query.bindValue(Constants::IDENTITY_LK_TOPRACT_LKID, lkid);
+    query.bindValue(Constants::IDENTITY_FAMILY_UID, "Not yet implemented");
+    query.bindValue(Constants::IDENTITY_ISVIRTUAL, 1);
+    query.bindValue(Constants::IDENTITY_NAME, name);
+    query.bindValue(Constants::IDENTITY_FIRSTNAME, firstname);
+    if (secondname.isEmpty())
+        query.bindValue(Constants::IDENTITY_SECONDNAME, QVariant());
+    else
+        query.bindValue(Constants::IDENTITY_SECONDNAME, secondname);
+    query.bindValue(Constants::IDENTITY_GENDER, gender);
+    query.bindValue(Constants::IDENTITY_TITLE, title);
+    query.bindValue(Constants::IDENTITY_DOB, dob);
+    query.bindValue(Constants::IDENTITY_MARITAL_STATUS, QVariant());
+    if (death.isValid()) {
+        query.bindValue(Constants::IDENTITY_ISACTIVE, 0);
+        query.bindValue(Constants::IDENTITY_DATEOFDEATH, death);
+    } else {
+        query.bindValue(Constants::IDENTITY_ISACTIVE, 1);
+        query.bindValue(Constants::IDENTITY_DATEOFDEATH, QVariant());
+    }
+    query.bindValue(Constants::IDENTITY_PROFESSION, QVariant());
+    query.bindValue(Constants::IDENTITY_ADDRESS_STREET, street);
+    query.bindValue(Constants::IDENTITY_ADDRESS_STREET_NUMBER, QVariant());
+    query.bindValue(Constants::IDENTITY_ADDRESS_ZIPCODE, zip);
+    query.bindValue(Constants::IDENTITY_ADRESS_CITY, city);
+    query.bindValue(Constants::IDENTITY_ADDRESS_COUNTRY, country);
+    query.bindValue(Constants::IDENTITY_ADDRESS_NOTE, note);
+    query.bindValue(Constants::IDENTITY_MAILS, QVariant());
+    query.bindValue(Constants::IDENTITY_TELS, QVariant());
+    query.bindValue(Constants::IDENTITY_FAXES, QVariant());
+
+    if (!query.exec()) {
+        LOG_QUERY_ERROR(query);
+    }
+    query.finish();
+
+    if (!photoFile.isEmpty()) {
+        QPixmap pix(photoFile);
+        if (pix.isNull())
+            return;
+        QByteArray ba;
+        QBuffer buffer(&ba);
+        buffer.open(QIODevice::WriteOnly);
+        pix.save(&buffer, "PNG"); // writes image into ba in PNG format {6a247e73-c241-4556-8dc8-c5d532b8457e}
+        query.prepare(patientBase()->prepareInsertQuery(Constants::Table_PATIENT_PHOTO));
+        query.bindValue(Constants::PHOTO_ID, QVariant());
+        query.bindValue(Constants::PHOTO_UID, Utils::Database::createUid());
+        query.bindValue(Constants::PHOTO_PATIENT_UID, uuid);
+        query.bindValue(Constants::PHOTO_BLOB, ba);
+        if (!query.exec()) {
+            LOG_QUERY_ERROR(query);
+        }
+    }
 }
 
 bool PatientBase::createDatabase(const QString &connectionName , const QString &dbName,
@@ -314,6 +355,26 @@ bool PatientBase::createDatabase(const QString &connectionName , const QString &
         LOG_QUERY_ERROR(query);
         return false;
     }
+
+    // Populate with some virtual patients
+    QString path = settings()->path(Core::ISettings::BigPixmapPath) + QDir::separator();
+    int userLkId = 1; //userModel()->practionnerLkIds(userModel()->currentUserData(Core::IUser::Uuid).toString()).at(0);
+
+    QString uid = Utils::Database::createUid();
+    createVirtualPatient("KIRK", "", "James Tiberius", "M", 6, QDate(1968, 04, 20), "USA", "USS Enterprise",
+                  "21, StarFleet Command", "1968", "EarthTown", uid, userLkId, path+"captainkirk.jpg");
+
+    uid = Utils::Database::createUid();
+    createVirtualPatient("PICARD", "", "Jean-Luc", "M", 6, QDate(1948, 04, 20), "USA", "USS Enterprise",
+                  "21, StarFleet Command", "1968", "EarthTown", uid, userLkId, path+"captainpicard.jpg");
+
+    uid = Utils::Database::createUid();
+    createVirtualPatient("ARCHER", "", "Jonathan", "M", 6, QDate(1928, 04, 20), "USA", "Enterprise (NX-01) commanding officer",
+                  "21, StarFleet Command", "1968", "EarthTown", uid, userLkId, path+"captainarcher.jpg");
+
+    uid = Utils::Database::createUid();
+    createVirtualPatient("JANEWAY", "", "Kathryn", "M", 6, QDate(1938, 04, 20), "USA", "USS Voyager",
+                  "21, StarFleet Command", "1968", "EarthTown", uid, userLkId, path+"captainjaneway.jpg");
 
     return true;
 }

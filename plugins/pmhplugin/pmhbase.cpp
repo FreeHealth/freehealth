@@ -46,6 +46,7 @@
 #include <coreplugin/constants.h>
 #include <coreplugin/ipatient.h>
 #include <coreplugin/iuser.h>
+#include <coreplugin/icommandline.h>
 
 #include <categoryplugin/categorycore.h>
 
@@ -64,7 +65,7 @@ static inline Core::ISettings *settings()  { return Core::ICore::instance()->set
 static inline Core::IPatient *patient()  { return Core::ICore::instance()->patient(); }
 static inline QString currentUserUuid() {return Core::ICore::instance()->user()->uuid();}
 static inline Category::CategoryCore *categoryCore() {return Category::CategoryCore::instance();}
-
+static inline Core::ICommandLine *commandLine()  { return Core::ICore::instance()->commandLine(); }
 
 PmhBase *PmhBase::m_Instance = 0;
 bool PmhBase::m_initialized = false;
@@ -112,6 +113,7 @@ PmhBase::PmhBase(QObject *parent) :
         QObject(parent), Utils::Database(), d(new Internal::PmhBasePrivate)
 
 {
+    setObjectName("PmhBase");
     using namespace PMH::Constants;
     addTable(Table_MASTER,        "PMH_MASTER");
     addTable(Table_EPISODE,       "PMH_EPISODE");
@@ -166,30 +168,15 @@ bool PmhBase::init()
         return true;
 
     // connect
-    createConnection(Constants::DB_NAME, Constants::DB_NAME,
-                     settings()->databaseConnector(),
-                     Utils::Database::CreateDatabase);
-
-//    // Check settings --> SQLite or MySQL ?
-//    if (settings()->value(Core::Constants::S_USE_EXTERNAL_DATABASE, false).toBool()) {
-//        createConnection(Constants::DB_NAME,
-//                         Constants::DB_NAME,
-//                         QString(QByteArray::fromBase64(settings()->value(Core::Constants::S_EXTERNAL_DATABASE_HOST, QByteArray("localhost").toBase64()).toByteArray())),
-//                         Utils::Database::ReadWrite,
-//                         Utils::Database::MySQL,
-//                         QString(QByteArray::fromBase64(settings()->value(Core::Constants::S_EXTERNAL_DATABASE_LOG, QByteArray("root").toBase64()).toByteArray())),
-//                         QString(QByteArray::fromBase64(settings()->value(Core::Constants::S_EXTERNAL_DATABASE_PASS, QByteArray("").toBase64()).toByteArray())),
-//                         QString(QByteArray::fromBase64(settings()->value(Core::Constants::S_EXTERNAL_DATABASE_PORT, QByteArray("").toBase64()).toByteArray())).toInt(),
-//                         Utils::Database::CreateDatabase);
-//    } else {
-//        createConnection(Constants::DB_NAME,
-//                         Constants::DB_FILENAME,
-//                         settings()->path(Core::ISettings::ReadWriteDatabasesPath) + QDir::separator() + QString(Constants::DB_NAME),
-//                         Utils::Database::ReadWrite,
-//                         Utils::Database::SQLite,
-//                         "", "", 0,
-//                         Utils::Database::CreateDatabase);
-//    }
+    if (commandLine()->value(Core::ICommandLine::ClearUserDatabases).toBool()) {
+        createConnection(Constants::DB_NAME, Constants::DB_NAME,
+                         settings()->databaseConnector(),
+                         Utils::Database::DeleteAndRecreateDatabase);
+    } else {
+        createConnection(Constants::DB_NAME, Constants::DB_NAME,
+                         settings()->databaseConnector(),
+                         Utils::Database::CreateDatabase);
+    }
 
     if (!checkDatabaseScheme()) {
         LOG_ERROR(tkTr(Trans::Constants::DATABASE_1_SCHEMA_ERROR).arg(Constants::DB_NAME));

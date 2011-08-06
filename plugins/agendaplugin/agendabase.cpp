@@ -58,7 +58,6 @@
 
 #include <usermanagerplugin/usermodel.h>
 
-
 #include <utils/log.h>
 #include <utils/global.h>
 #include <utils/databaseconnector.h>

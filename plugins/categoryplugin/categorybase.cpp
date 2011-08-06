@@ -35,6 +35,7 @@
 #include <coreplugin/isettings.h>
 #include <coreplugin/icore.h>
 #include <coreplugin/constants.h>
+#include <coreplugin/icommandline.h>
 
 #include <QCoreApplication>
 #include <QSqlDatabase>
@@ -50,6 +51,7 @@ using namespace Internal;
 using namespace Trans::ConstantTranslations;
 
 static inline Core::ISettings *settings()  { return Core::ICore::instance()->settings(); }
+static inline Core::ICommandLine *commandLine()  { return Core::ICore::instance()->commandLine(); }
 
 
 CategoryBase *CategoryBase::m_Instance = 0;
@@ -125,9 +127,15 @@ bool CategoryBase::init()
         return true;
 
     // connect
-    createConnection(Constants::DB_NAME, Constants::DB_NAME,
-                     settings()->databaseConnector(),
-                     Utils::Database::CreateDatabase);
+    if (commandLine()->value(Core::ICommandLine::ClearUserDatabases).toBool()) {
+        createConnection(Constants::DB_NAME, Constants::DB_NAME,
+                         settings()->databaseConnector(),
+                         Utils::Database::DeleteAndRecreateDatabase);
+    } else {
+        createConnection(Constants::DB_NAME, Constants::DB_NAME,
+                         settings()->databaseConnector(),
+                         Utils::Database::CreateDatabase);
+    }
 
     if (!database().isOpen()) {
         if (!database().open()) {

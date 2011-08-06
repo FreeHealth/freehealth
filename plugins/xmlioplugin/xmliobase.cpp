@@ -33,6 +33,7 @@
 #include <coreplugin/constants_tokensandsettings.h>
 #include <printerplugin/textdocumentextra.h>
 #include <coreplugin/iuser.h>
+#include <coreplugin/icommandline.h>
 
 #include <formmanagerplugin/iformio.h>
 
@@ -56,6 +57,7 @@ using namespace Trans::ConstantTranslations;
 
 static inline Core::ISettings *settings()  { return Core::ICore::instance()->settings(); }
 static inline XmlFormContentReader *reader() {return XmlFormContentReader::instance();}
+static inline Core::ICommandLine *commandLine()  { return Core::ICore::instance()->commandLine(); }
 
 static inline QString normalizedFormUid(const QString &formUid)
 {
@@ -126,9 +128,15 @@ bool XmlIOBase::initialize()
         return true;
 
     // connect
-    createConnection(Constants::DB_NAME, Constants::DB_NAME,
-                     settings()->databaseConnector(),
-                     Utils::Database::CreateDatabase);
+    if (commandLine()->value(Core::ICommandLine::ClearUserDatabases).toBool()) {
+        createConnection(Constants::DB_NAME, Constants::DB_NAME,
+                         settings()->databaseConnector(),
+                         Utils::Database::DeleteAndRecreateDatabase);
+    } else {
+        createConnection(Constants::DB_NAME, Constants::DB_NAME,
+                         settings()->databaseConnector(),
+                         Utils::Database::CreateDatabase);
+    }
 
     if (!database().isOpen()) {
         if (!database().open()) {

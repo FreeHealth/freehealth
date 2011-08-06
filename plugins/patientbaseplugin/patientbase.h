@@ -62,24 +62,17 @@ public:
     virtual ~PatientBase();
 
 //    // initialize
-    bool initialize(Core::ISettings *settings);
+//    bool initialize(Core::ISettings *settings);
     bool isInitialized() const {return m_initialized;}
 
-//    bool isNewlyCreated() const;
-//    bool isEmpty() const;
-//
-//    // retreivers (pointers)
-//    PatientData *getPatientByUuid(const QString &uuid) const;
-//
-//    // datas retrievers
-//    QString getUuid(const QString &name, const QString &firstname);
-//    QString createNewPatient();
-//
-//    // savers
-//    bool     savePatient(PatientData *patient);
-//    bool     deletePatient(const QString &uuid);
-//
-//private:
+    static void createVirtualPatient(const QString &name, const QString &secondname, const QString &firstname,
+                                     const QString &gender, const int title, const QDate &dob,
+                                     const QString &country, const QString &note,
+                                     const QString &street, const QString &zip, const QString &city,
+                                     const QString &uuid, const int lkid,
+                                     const QString &photoFile = QString(), const QDate &death = QDate());
+
+    //private:
     bool createDatabase(const QString &connectionName, const QString &dbName,
                           const QString &pathOrHostName,
                           TypeOfAccess access, AvailableDrivers driver,
@@ -87,9 +80,6 @@ public:
                           const int port,
                           CreationOption createOption
                          );
-
-//    // privates retreivers
-//    PatientData *getPatient(const QHash<int, QString> &conditions) const;
 
     void toTreeWidget(QTreeWidget *tree);
 

@@ -55,6 +55,7 @@
 #include <coreplugin/constants_tokensandsettings.h>
 #include <printerplugin/textdocumentextra.h>
 #include <coreplugin/iuser.h>
+#include <coreplugin/icommandline.h>
 
 #include <utils/log.h>
 #include <utils/global.h>
@@ -76,7 +77,7 @@ using namespace UserPlugin::Constants;
 using namespace Trans::ConstantTranslations;
 
 static inline Core::ISettings *settings()  { return Core::ICore::instance()->settings(); }
-
+static inline Core::ICommandLine *commandLine()  { return Core::ICore::instance()->commandLine(); }
 
 // Initializing static datas
 bool UserBase::m_initialized = false;
@@ -187,9 +188,15 @@ bool UserBase::initialize(Core::ISettings *s)
         return true;
 
     // connect
-    createConnection(USER_DB_CONNECTION, USER_DB_CONNECTION,
-                     settings()->databaseConnector(),
-                     Utils::Database::CreateDatabase);
+    if (commandLine()->value(Core::ICommandLine::ClearUserDatabases).toBool()) {
+        createConnection(USER_DB_CONNECTION, USER_DB_CONNECTION,
+                         settings()->databaseConnector(),
+                         Utils::Database::DeleteAndRecreateDatabase);
+    } else {
+        createConnection(USER_DB_CONNECTION, USER_DB_CONNECTION,
+                         settings()->databaseConnector(),
+                         Utils::Database::CreateDatabase);
+    }
 
     if (!database().isOpen()) {
         if (!database().open()) {
