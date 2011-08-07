@@ -134,6 +134,10 @@ UserViewer::UserViewer(QWidget *parent) :
         }
     }
 
+    int width = size().width();
+    int third = width/3;
+    d->m_Widget->setSplitterSizes(QList<int>() << third << width-third);
+
     connect(pluginManager(), SIGNAL(objectAdded(QObject*)), this, SLOT(pluginManagerObjectAdded(QObject*)));
     connect(pluginManager(), SIGNAL(aboutToRemoveObject(QObject*)), this, SLOT(pluginManagerObjectRemoved(QObject*)));
 //    connect(user(), SIGNAL(userChanged()), this, SLOT(userChanged()));
