@@ -14,6 +14,9 @@ ACTUAL_PATH=`pwd`
 
 # This script assumes that MySQL is installed with header files
 # Get it from : http://dev.mysql.com/downloads/mysql/
+# Get mysql binairies (adapt mirror)
+#    http://dev.mysql.com/get/Downloads/MySQL-5.5/mysql-5.5.11-osx10.6-x86.tar.gz/from/http://mirrors.ircam.fr/pub/mysql/
+#    http://dev.mysql.com/get/Downloads/MySQL-5.5/mysql-5.5.11-osx10.6-x86_64.tar.gz/from/http://mirrors.ircam.fr/pub/mysql/
 MYSQL_SOURCES=/usr/local/mysql-5.5.8-osx10.6-x86_64/include
 MYSQL_LIB=/usr/local/mysql-5.5.8-osx10.6-x86_64/lib
 
@@ -46,6 +49,9 @@ cd $PLUG_SRC
 qmake -spec macx-g++ LIBS+="-L\"$MYSQL_LIB\" -lmysqlclient_r" INCLUDEPATH+="\"$MYSQL_SOURCES\"" CONFIG+=build_all
 make
 make install
+
+# copy the libmysqlclient next to the plugin
+# name tool the plugin
 
 echo "Removing temporary path"
 cd $ACTUAL_PATH
