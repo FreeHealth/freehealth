@@ -72,10 +72,6 @@ public:
         m_UserCalendarModel(agendaCore()->userCalendarModel(user()->uuid())),
         q(parent)
     {
-        UserCalendar *u = m_UserCalendarModel->defaultUserCalendar();
-        if (u) {
-            agendaCore()->calendarItemModel(u->uid());
-        }
     }
 
     ~UserCalendarViewerPrivate()
@@ -117,7 +113,6 @@ UserCalendarViewer::UserCalendarViewer(QWidget *parent) :
 {
     d->ui->setupUi(this);
     d->ui->calendarViewer->setDate(QDate::currentDate().addDays(3));
-    d->ui->calendarViewer->setModel(d->m_CalendarItemModel);
 
     // populate the availabilities duration selector combo (every five minutes)
     for(int i = 1; i < 19; ++i) {
@@ -225,6 +220,11 @@ void UserCalendarViewer::userChanged()
         duration = (duration/5 - 1);
     d->ui->availDurationCombo->setCurrentIndex(duration);
     recalculateAvailabilitiesWithDurationIndex(duration);
+
+    if (cal) {
+        d->m_CalendarItemModel = agendaCore()->calendarItemModel(cal->uid());
+    }
+    d->ui->calendarViewer->setModel(d->m_CalendarItemModel);
 }
 
 void UserCalendarViewer::changeEvent(QEvent *e)
