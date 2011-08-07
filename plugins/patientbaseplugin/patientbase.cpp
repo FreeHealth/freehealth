@@ -367,8 +367,8 @@ bool PatientBase::createDatabase(const QString &connectionName , const QString &
                   "21, StarFleet Command", "1968", "EarthTown", uid, userLkId, path+"captainkirk.jpg");
 
     uid = Utils::Database::createUid();
-    createVirtualPatient("PICARD", "", "Jean-Luc", "M", 6, QDate(1948, 04, 20), "USA", "USS Enterprise",
-                  "21, StarFleet Command", "1968", "EarthTown", uid, userLkId, path+"captainpicard.jpg");
+    createVirtualPatient("PICARD", "", "Jean-Luc", "M", 6, QDate(1948, 04, 20), "USA", "USS Enterprise-D",
+                  "21, StarFleet Command", "1968", "EarthTown", uid, userLkId, path+"captainpicard.png");
 
     uid = Utils::Database::createUid();
     createVirtualPatient("ARCHER", "", "Jonathan", "M", 6, QDate(1928, 04, 20), "USA", "Enterprise (NX-01) commanding officer",
