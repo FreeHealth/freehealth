@@ -30,7 +30,8 @@ HEADERS = formmanagerplugin.h \
     firstrunformmanager.h \
     formiodescription.h \
     formioquery.h \
-    subforminsertionpoint.h
+    subforminsertionpoint.h \
+    episodedata.h
 SOURCES = formmanagerplugin.cpp \
     formmanager.cpp \
     iformitem.cpp \
@@ -45,7 +46,8 @@ SOURCES = formmanagerplugin.cpp \
     formcontextualwidget.cpp \
     formfile.cpp \
     formeditordialog.cpp \
-    firstrunformmanager.cpp
+    firstrunformmanager.cpp \
+    episodedata.cpp
 
 OTHER_FILES = FormManager.pluginspec
 

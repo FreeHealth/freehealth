@@ -27,19 +27,17 @@
 #ifndef EPISODEBASE_H
 #define EPISODEBASE_H
 
-#include <utils/database.h>
-
 #include <coreplugin/isettings.h>
-
-#include <formmanagerplugin/formmanager_exporter.h>
+#include <formmanagerplugin/formmanager_exporter.h> // Exporter needed by MainWindow::VirtualDatabasePreferences
+#include <utils/database.h>
 
 #include <QObject>
 
 /**
  * \file episodebase.h
  * \author Eric MAEKER <eric.maeker@gmail.com>
- * \version 0.5.0
- * \date 17 Mar 2011
+ * \version 0.6.0
+ * \date 07 Aug 2011
 */
 
 namespace Form {
@@ -48,6 +46,33 @@ class SubFormInsertionPoint;
 
 namespace Internal {
 class EpisodeBasePrivate;
+class EpisodeData;
+
+class EpisodeBaseQuery
+{
+public:
+    EpisodeBaseQuery();
+    ~EpisodeBaseQuery();
+
+    void setPatientUid(const QVariant &patientUid) {m_PatientUid= patientUid;}
+    void setUserUid(const QVariant &userUid) {m_UserUid = userUid;}
+    void setValidEpisodes(bool valid) {m_Valid=valid;}
+    void setDeletedEpisodes(bool del) {m_Deleted=del;}
+    void setValidatedEpisodes(bool v) {m_Validated=v;}
+    void setNonValidated(bool v) {m_NonValidated=v;}
+
+    QVariant patientUid() const {return m_PatientUid;}
+    QVariant userUid() const {return m_UserUid;}
+    bool validEpisodes() const {return m_Valid;}
+    bool deletedEpisodes() const {return m_Deleted;}
+    bool validatedEpisodes() const {return m_Validated;}
+    bool nonValidatedEpisodes() const {return m_NonValidated;}
+
+private:
+    QVariant m_UserUid, m_PatientUid;
+    bool m_Valid, m_Deleted, m_Validated, m_NonValidated;
+};
+
 
 class FORM_EXPORT EpisodeBase : public QObject, public Utils::Database
 {
@@ -64,10 +89,15 @@ public:
     // initialize
     bool isInitialized() const {return m_initialized;}
 
+    // Forms
     bool setGenericPatientFormFile(const QString &absPathOrUid);
     QString getGenericFormFile();
     QVector<SubFormInsertionPoint> getSubFormFiles();
     bool addSubForms(const QVector<SubFormInsertionPoint> &insertions);
+
+    // Episodes
+    bool saveEpisode(EpisodeData *episode);
+    QList<EpisodeData *> getEpisodes(const EpisodeBaseQuery &query);
 
 private:
     bool createDatabase(const QString &connectionName, const QString &dbName,

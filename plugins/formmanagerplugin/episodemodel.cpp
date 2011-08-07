@@ -437,13 +437,13 @@ public:
             where.insert(Constants::EPISODES_FORM_PAGE_UID, QString("='%1'").arg(f->uuid()));
             QString req = episodeBase()->select(Form::Constants::Table_EPISODES,
                                                 QList<int>() << Constants::EPISODES_ID
-                                                << Constants::EPISODES_DATE
+                                                << Constants::EPISODES_USERDATE
                                                 << Constants::EPISODES_LABEL,
                                                 where);
             int limit;
             f->episodePossibilities()==FormMain::UniqueEpisode ? limit=1 : limit=5;
             req += QString(" ORDER BY %1 ASC LIMIT %2;")
-                   .arg(episodeBase()->fieldName(Constants::Table_EPISODES, Constants::EPISODES_DATE))
+                   .arg(episodeBase()->fieldName(Constants::Table_EPISODES, Constants::EPISODES_USERDATE))
                    .arg(limit);
             query.exec(req);
             if (query.isActive()) {
@@ -521,11 +521,9 @@ public:
         /** */
         query.bindValue(Constants::EPISODES_FORM_PAGE_UID, formUid);
         query.bindValue(Constants::EPISODES_LABEL, item->data(EpisodeModel::Label));
-        query.bindValue(Constants::EPISODES_DATE, item->data(EpisodeModel::Date));
+        query.bindValue(Constants::EPISODES_USERDATE, item->data(EpisodeModel::Date));
         query.bindValue(Constants::EPISODES_DATEOFCREATION, item->data(EpisodeModel::Date));
         query.bindValue(Constants::EPISODES_DATEOFMODIFICATION, QVariant());
-        query.bindValue(Constants::EPISODES_DATEOFVALIDATION, QVariant());
-        query.bindValue(Constants::EPISODES_VALIDATED, QVariant());
         if (!query.exec()) {
             ok = false;
             LOG_QUERY_ERROR_FOR(q, query);
@@ -676,7 +674,7 @@ public:
             LOG_QUERY_ERROR_FOR(q, query);
         }
         query.finish();
-        query.prepare(episodeBase()->prepareUpdateQuery(Constants::Table_EPISODES, Constants::EPISODES_DATE, where));
+        query.prepare(episodeBase()->prepareUpdateQuery(Constants::Table_EPISODES, Constants::EPISODES_USERDATE, where));
         query.bindValue(0, itemToSave->data(EpisodeModel::Date));
         if (!query.exec()) {
             LOG_QUERY_ERROR_FOR(q, query);

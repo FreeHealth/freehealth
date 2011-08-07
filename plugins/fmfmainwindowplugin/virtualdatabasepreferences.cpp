@@ -195,11 +195,9 @@ void VirtualDatabasePreferences::on_populateEpisodes_clicked()
                 else
                     episodeQuery.bindValue(Constants::EPISODES_LK_TOPRACT_LKID, userLkId);
                 episodeQuery.bindValue(Constants::EPISODES_FORM_PAGE_UID, form);
-                episodeQuery.bindValue(Constants::EPISODES_DATE, date);
+                episodeQuery.bindValue(Constants::EPISODES_USERDATE, date);
                 episodeQuery.bindValue(Constants::EPISODES_DATEOFCREATION, date);
                 episodeQuery.bindValue(Constants::EPISODES_DATEOFMODIFICATION, QVariant());
-                episodeQuery.bindValue(Constants::EPISODES_DATEOFVALIDATION, QVariant());
-                episodeQuery.bindValue(Constants::EPISODES_VALIDATED, QVariant());
                 QString tmp;
                 for(int z=0; z < r.randomInt(6); ++z)
                     tmp += r.getRandomName() + " ";

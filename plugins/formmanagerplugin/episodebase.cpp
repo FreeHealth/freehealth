@@ -28,6 +28,7 @@
 #include "constants_db.h"
 #include "iformio.h"
 #include "subforminsertionpoint.h"
+#include "episodedata.h"
 
 #include <utils/global.h>
 #include <utils/log.h>
@@ -61,20 +62,20 @@ static inline Core::IUser *user() {return Core::ICore::instance()->user();}
 static inline Core::IPatient *patient() {return Core::ICore::instance()->patient();}
 static inline Core::ICommandLine *commandLine()  { return Core::ICore::instance()->commandLine(); }
 
-static inline bool connectDatabase(QSqlDatabase &DB, const QString &file, const int line)
+static inline bool connectDatabase(QSqlDatabase &DB, const int line)
 {
     if (!DB.isOpen()) {
         if (!DB.open()) {
             Utils::Log::addError("EpisodeBase", tkTr(Trans::Constants::UNABLE_TO_OPEN_DATABASE_1_ERROR_2)
                                  .arg(DB.connectionName()).arg(DB.lastError().text()),
-                                 file, line);
+                                 __FILE__, line);
             return false;
         }
     }
     return true;
 }
 
-//namespace Patients {
+//namespace Form {
 //namespace Internal {
 //class EpisodeBasePrivate
 //{
@@ -112,32 +113,40 @@ EpisodeBase::EpisodeBase(QObject *parent) :
     using namespace Form::Constants;
 
     addTable(Table_EPISODES, "EPISODES");
+    addTable(Table_VALIDATION, "VALIDATION");
+    addTable(Table_EPISODE_CONTENT, "EPISODES_CONTENT");
+    addTable(Table_FORM, "FORM_FILES");
+    addTable(Table_VERSION, "VERSION");
+
     addField(Table_EPISODES, EPISODES_ID, "EPISODE_ID", FieldIsUniquePrimaryKey);
     addField(Table_EPISODES, EPISODES_PATIENT_UID, "PATIENT_UID", FieldIsUUID);
     addField(Table_EPISODES, EPISODES_LK_TOPRACT_LKID, "LK_TOPRACT_LKID", FieldIsInteger);
     addField(Table_EPISODES, EPISODES_ISVALID, "ISVALID", FieldIsBoolean);
     addField(Table_EPISODES, EPISODES_FORM_PAGE_UID, "FORM_PAGE_UID", FieldIsUUID);
     addField(Table_EPISODES, EPISODES_LABEL, "LABEL", FieldIsShortText);
-    addField(Table_EPISODES, EPISODES_DATE, "DATE", FieldIsDate);
+    addField(Table_EPISODES, EPISODES_USERDATE, "USERDATE", FieldIsDate);
     addField(Table_EPISODES, EPISODES_DATEOFCREATION, "DATECREATION", FieldIsDate);
     addField(Table_EPISODES, EPISODES_DATEOFMODIFICATION, "DATEMODIF", FieldIsDate);
-    addField(Table_EPISODES, EPISODES_DATEOFVALIDATION, "DATEVALIDATION", FieldIsDate);
-    addField(Table_EPISODES, EPISODES_VALIDATED, "VALIDATED", FieldIsBoolean);
+    addField(Table_EPISODES, EPISODES_VALIDATION_ID, "VAL_ID", FieldIsInteger);
     addIndex(Table_EPISODES, EPISODES_ID);
     addIndex(Table_EPISODES, EPISODES_PATIENT_UID);
     addIndex(Table_EPISODES, EPISODES_FORM_PAGE_UID);
+    addIndex(Table_EPISODES, EPISODES_VALIDATION_ID);
 
-    /** \todo code here : add a valid field for the deletion of episodes */
+    addField(Table_VALIDATION, VALIDATION_ID, "VAL_ID", FieldIsUniquePrimaryKey);
+    addField(Table_VALIDATION, VALIDATION_EPISODE_ID, "EPISODE_ID", FieldIsInteger);
+    addField(Table_VALIDATION, VALIDATION_DATEOFVALIDATION, "VAL_DATE", FieldIsDate);
+    addField(Table_VALIDATION, VALIDATION_USERUID, "VAL_USERUUID", FieldIsUUID);
+    addField(Table_VALIDATION, VALIDATION_ISVALID, "VAL_ISVALID", FieldIsBoolean);
+    addIndex(Table_VALIDATION, VALIDATION_ID);
+    addIndex(Table_VALIDATION, VALIDATION_EPISODE_ID);
 
-    addTable(Table_EPISODE_CONTENT, "EPISODES_CONTENT");
     addField(Table_EPISODE_CONTENT, EPISODE_CONTENT_ID, "CONTENT_ID", FieldIsUniquePrimaryKey);
     addField(Table_EPISODE_CONTENT, EPISODE_CONTENT_EPISODE_ID, "EPISODE_ID", FieldIsLongInteger);
     addField(Table_EPISODE_CONTENT, EPISODE_CONTENT_XML, "XML_CONTENT", FieldIsBlob);
     addIndex(Table_EPISODE_CONTENT, EPISODE_CONTENT_ID);
     addIndex(Table_EPISODE_CONTENT, EPISODE_CONTENT_EPISODE_ID);
-    /** \todo code here : add a valid field for the deletion of episodes content */
 
-    addTable(Table_FORM, "FORM_FILES");
     addField(Table_FORM, FORM_ID,      "ID", FieldIsUniquePrimaryKey);
     addField(Table_FORM, FORM_VALID,   "VALID", FieldIsBoolean);
     addField(Table_FORM, FORM_GENERIC, "GENERIC", FieldIsShortText);
@@ -148,16 +157,14 @@ EpisodeBase::EpisodeBase(QObject *parent) :
     addField(Table_FORM, FORM_INSERTIONPOINT, "IP", FieldIsShortText);
     addField(Table_FORM, FORM_INSERTASCHILD, "CHILD", FieldIsBoolean, "true");
     addField(Table_FORM, FORM_APPEND, "APPEND", FieldIsBoolean, "false");
+    /** \todo code here : manage user access restriction Table_FORM, FORM_USER_RESTRICTION_ID*/
+    addField(Table_FORM, FORM_USER_RESTRICTION_ID, "USER_REST_ID", FieldIsInteger, "NULL");
     addIndex(Table_FORM, FORM_ID);
     addIndex(Table_FORM, FORM_PATIENTUID);
     addIndex(Table_FORM, FORM_SUBFORMUID);
     addIndex(Table_FORM, FORM_INSERTIONPOINT);
 
-    /** \todo code here : manage user access restriction */
-    /** \todo code here : add index */
-
     // Version
-    addTable(Table_VERSION, "VERSION");
     addField(Table_VERSION, VERSION_TEXT, "VERSION", FieldIsShortText);
 
     connect(Core::ICore::instance(), SIGNAL(databaseServerChanged()), this, SLOT(onCoreDatabaseServerChanged()));
@@ -302,7 +309,7 @@ bool EpisodeBase::createDatabase(const QString &connectionName , const QString &
     return true;
 }
 
-/** \brief Populate the database with the default value after its creation. */
+/** Populate the database with the default value after its creation. */
 void EpisodeBase::populateWithDefaultValues()
 {
     // set default patient FormFile
@@ -319,13 +326,13 @@ void EpisodeBase::onCoreDatabaseServerChanged()
 }
 
 /**
-  \brief Store the central patient form file into the database.
+  Store the central patient form file into the database.
   This Form File will be used for all patient as central form. Some sub-forms can then be added.
 */
 bool EpisodeBase::setGenericPatientFormFile(const QString &absPathOrUid)
 {
     QSqlDatabase DB = QSqlDatabase::database(Constants::DB_NAME);
-    if (!connectDatabase(DB, __FILE__, __LINE__)) {
+    if (!connectDatabase(DB, __LINE__)) {
         return false;
     }
     QHash<int, QString> where;
@@ -353,6 +360,7 @@ bool EpisodeBase::setGenericPatientFormFile(const QString &absPathOrUid)
         query.bindValue(Constants::FORM_INSERTIONPOINT, QVariant());
         query.bindValue(Constants::FORM_INSERTASCHILD, QVariant());
         query.bindValue(Constants::FORM_APPEND, QVariant());
+        query.bindValue(Constants::FORM_USER_RESTRICTION_ID, QVariant());
         if (!query.exec()) {
             LOG_QUERY_ERROR(query);
             return false;
@@ -362,13 +370,13 @@ bool EpisodeBase::setGenericPatientFormFile(const QString &absPathOrUid)
 }
 
 /**
-  \brief Return the central patient form file into the database.
+  Return the central patient form file into the database.
   This Form File will be used for all patient as central form. Some sub-forms can then be added.
 */
 QString EpisodeBase::getGenericFormFile()
 {
     QSqlDatabase DB = QSqlDatabase::database(Constants::DB_NAME);
-    if (!connectDatabase(DB, __FILE__, __LINE__)) {
+    if (!connectDatabase(DB, __LINE__)) {
         return QString();
     }
     QHash<int, QString> where;
@@ -396,7 +404,7 @@ QVector<Form::SubFormInsertionPoint> EpisodeBase::getSubFormFiles()
 {
     QVector<SubFormInsertionPoint> toReturn;
     QSqlDatabase DB = QSqlDatabase::database(Constants::DB_NAME);
-    if (!connectDatabase(DB, __FILE__, __LINE__)) {
+    if (!connectDatabase(DB, __LINE__)) {
         return toReturn;
     }
     QHash<int, QString> where;
@@ -432,7 +440,7 @@ QVector<Form::SubFormInsertionPoint> EpisodeBase::getSubFormFiles()
 bool EpisodeBase::addSubForms(const QVector<SubFormInsertionPoint> &insertions)
 {
     QSqlDatabase DB = QSqlDatabase::database(Constants::DB_NAME);
-    if (!connectDatabase(DB, __FILE__, __LINE__)) {
+    if (!connectDatabase(DB, __LINE__)) {
         return false;
     }
     // save
@@ -457,6 +465,149 @@ bool EpisodeBase::addSubForms(const QVector<SubFormInsertionPoint> &insertions)
     return success;
 }
 
+/** Save or update a Form::Internal::EpisodeData \e episode to the database. Return true if all goes fine. */
+bool EpisodeBase::saveEpisode(Internal::EpisodeData *episode)
+{
+    if (!episode->isModified())
+        return false;
+    QSqlDatabase DB = QSqlDatabase::database(Constants::DB_NAME);
+    if (!connectDatabase(DB, __LINE__)) {
+        return false;
+    }
+    bool ok = true;
+
+    if (episode->episodeId()==-1) {
+        // save
+        QSqlQuery query(DB);
+        query.prepare(prepareInsertQuery(Constants::Table_EPISODES));
+        query.bindValue(Constants::EPISODES_ID, QVariant());
+        query.bindValue(Constants::EPISODES_PATIENT_UID, episode->data(EpisodeData::PatientUuid));
+        query.bindValue(Constants::EPISODES_LK_TOPRACT_LKID, QVariant());
+        query.bindValue(Constants::EPISODES_ISVALID, episode->data(EpisodeData::IsValid));
+        query.bindValue(Constants::EPISODES_FORM_PAGE_UID, episode->data(EpisodeData::FormUuid));
+        query.bindValue(Constants::EPISODES_LABEL, episode->data(EpisodeData::Label));
+        query.bindValue(Constants::EPISODES_USERDATE, episode->data(EpisodeData::UserDate));
+        query.bindValue(Constants::EPISODES_DATEOFCREATION, episode->data(EpisodeData::CreationDate));
+        query.bindValue(Constants::EPISODES_DATEOFMODIFICATION, episode->data(EpisodeData::LastModificationDate));
+        if (!query.exec()) {
+            ok = false;
+            LOG_QUERY_ERROR(query);
+        } else {
+            episode->setData(EpisodeData::Id, query.lastInsertId());
+        }
+        query.finish();
+
+        // save content
+        query.prepare(prepareInsertQuery(Constants::Table_EPISODE_CONTENT));
+        query.bindValue(Constants::EPISODE_CONTENT_ID, QVariant());
+        query.bindValue(Constants::EPISODE_CONTENT_EPISODE_ID, episode->data(EpisodeData::Id));
+        query.bindValue(Constants::EPISODE_CONTENT_XML, episode->data(EpisodeData::XmlContent));
+        if (!query.exec()) {
+            LOG_QUERY_ERROR(query);
+            ok = false;
+        } else {
+            episode->setData(EpisodeData::ContentId, query.lastInsertId());
+        }
+        query.finish();
+
+        // save validation
+        for(int i = 0; i < episode->validations().count(); ++i) {
+            EpisodeValidationData &val = episode->validations()[i];
+            query.prepare(prepareInsertQuery(Constants::Table_VALIDATION));
+            query.bindValue(Constants::VALIDATION_ID, QVariant());
+            query.bindValue(Constants::VALIDATION_EPISODE_ID, val.data(EpisodeValidationData::EpisodeId));
+            query.bindValue(Constants::VALIDATION_DATEOFVALIDATION, val.data(EpisodeValidationData::ValidationDate));
+            query.bindValue(Constants::VALIDATION_USERUID, val.data(EpisodeValidationData::UserUid));
+            query.bindValue(Constants::VALIDATION_ISVALID, val.data(EpisodeValidationData::IsValid).toInt());
+            if (!query.exec()) {
+                LOG_QUERY_ERROR(query);
+                ok = false;
+            } else {
+                val.setData(EpisodeValidationData::ValidationId, query.lastInsertId());
+            }
+            query.finish();
+        }
+
+        if (ok) {
+            episode->setModified(false);
+        }
+    } else {
+        // update
+        bool ok = true;
+        QSqlQuery query(DB);
+        QHash<int, QString> where;
+        where.insert(Constants::EPISODES_ID, QString("=%1").arg(episode->episodeId()));
+        query.prepare(prepareUpdateQuery(Constants::Table_EPISODES,
+                                         QList<int>()
+                                         << Constants::EPISODES_PATIENT_UID
+                                         << Constants::EPISODES_ISVALID
+                                         << Constants::EPISODES_FORM_PAGE_UID
+                                         << Constants::EPISODES_LABEL
+                                         << Constants::EPISODES_USERDATE
+                                         << Constants::EPISODES_DATEOFCREATION
+                                         << Constants::EPISODES_DATEOFMODIFICATION
+                                         , where));
+        query.bindValue(0, episode->data(EpisodeData::PatientUuid));
+        query.bindValue(1, episode->data(EpisodeData::IsValid).toInt());
+        query.bindValue(2, episode->data(EpisodeData::FormUuid));
+        query.bindValue(3, episode->data(EpisodeData::Label));
+        query.bindValue(4, episode->data(EpisodeData::UserDate));
+        query.bindValue(5, episode->data(EpisodeData::CreationDate));
+        query.bindValue(6, episode->data(EpisodeData::LastModificationDate));
+        if (!query.exec()) {
+            LOG_QUERY_ERROR(query);
+            ok = false;
+        }
+
+        where.clear();
+        where.insert(Constants::EPISODE_CONTENT_ID, QString("=%1").arg(episode->contentId()));
+        query.prepare(prepareUpdateQuery(Constants::Table_EPISODE_CONTENT,
+                                         QList<int>()
+                                         << Constants::EPISODE_CONTENT_XML
+                                         , where));
+        query.bindValue(0, episode->data(EpisodeData::XmlContent));
+        if (!query.exec()) {
+            LOG_QUERY_ERROR(query);
+            ok = false;
+        }
+
+        for(int i = 0; i < episode->validations().count(); ++i) {
+            const EpisodeValidationData &val = episode->validations().at(i);
+            where.clear();
+            where.insert(Constants::VALIDATION_ID, QString("=%1").arg(val.validationId()));
+            query.prepare(prepareUpdateQuery(Constants::Table_VALIDATION,
+                                             QList<int>()
+                                             << Constants::VALIDATION_DATEOFVALIDATION
+                                             << Constants::VALIDATION_USERUID
+                                             << Constants::VALIDATION_ISVALID
+                                             , where));
+            query.bindValue(0, val.data(EpisodeValidationData::ValidationDate));
+            query.bindValue(1, val.data(EpisodeValidationData::UserUid));
+            query.bindValue(2, val.data(EpisodeValidationData::IsValid));
+            if (!query.exec()) {
+                LOG_QUERY_ERROR(query);
+                ok = false;
+            }
+        }
+
+        if (ok) {
+            episode->setModified(false);
+        }
+    }
+
+    return ok;
+}
+
+QList<EpisodeData *> EpisodeBase::getEpisodes(const EpisodeBaseQuery &query)
+{
+    QList<EpisodeData *> toReturn;
+    QSqlDatabase DB = QSqlDatabase::database(Constants::DB_NAME);
+    if (!connectDatabase(DB, __LINE__)) {
+        return toReturn;
+    }
+
+    return toReturn;
+}
 
 void EpisodeBase::toTreeWidget(QTreeWidget *tree)
 {

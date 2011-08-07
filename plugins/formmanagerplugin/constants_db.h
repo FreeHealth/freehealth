@@ -36,34 +36,45 @@ namespace Constants {
 
     // Tables
     enum Tables {
-      Table_EPISODES = 0,
-      Table_EPISODE_CONTENT,
-      Table_FORM,
-      Table_VERSION
+        Table_EPISODES = 0,
+        Table_VALIDATION,
+        Table_EPISODE_CONTENT,
+        Table_FORM,
+        Table_VERSION
     };
 
     // Fields
-    enum EpisodesFields {
+    enum fieldsEPISODES {
         EPISODES_ID = 0,
         EPISODES_PATIENT_UID,
         EPISODES_LK_TOPRACT_LKID,
         EPISODES_ISVALID,
         EPISODES_FORM_PAGE_UID,
         EPISODES_LABEL,
-        EPISODES_DATE,
+        EPISODES_USERDATE,
         EPISODES_DATEOFCREATION,
         EPISODES_DATEOFMODIFICATION,
-        EPISODES_DATEOFVALIDATION,
-        EPISODES_VALIDATED
+        EPISODES_VALIDATION_ID
     };
-    enum EpisodesContentFields {
+
+    enum fieldsEPISODE_CONTENT {
         EPISODE_CONTENT_ID = 0,
         EPISODE_CONTENT_EPISODE_ID,
         EPISODE_CONTENT_XML
     };
-    enum FormFields {
+
+    enum fieldsVALIDATION {
+        VALIDATION_ID = 0,
+        VALIDATION_EPISODE_ID = 0,
+        VALIDATION_DATEOFVALIDATION,
+        VALIDATION_USERUID,
+        VALIDATION_ISVALID
+    };
+
+    enum fieldsFORM {
         FORM_ID = 0, FORM_VALID, FORM_GENERIC, FORM_PATIENTUID,
         FORM_SUBFORMUID, FORM_INSERTIONPOINT, FORM_INSERTASCHILD, FORM_APPEND,
+        FORM_USER_RESTRICTION_ID,
         FORM_MaxParam
     };
     enum VersionFields {
