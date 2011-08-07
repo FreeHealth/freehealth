@@ -31,6 +31,7 @@
 #include <coreplugin/modemanager/basemode.h>
 
 #include <QStackedWidget>
+#include <QModelIndex>
 
 /**
  * \file agendamode.h
@@ -40,6 +41,8 @@
 */
 
 namespace Agenda {
+class UserCalendarModel;
+
 namespace Internal {
 class UserCalendarViewer;
 
@@ -52,10 +55,12 @@ public:
 private Q_SLOTS:
     void postCoreInitialization();
     void userChanged();
+    void rowsChanged(const QModelIndex &parent, int start, int end);
 
 private:
     QStackedWidget *m_Stack;
     UserCalendarViewer *m_Viewer;
+    UserCalendarModel *m_UserCalendarModel;
 };
 
 }  // End namespace Internal

@@ -28,6 +28,8 @@
 #include "agendamode.h"
 #include "usercalendarviewer.h"
 #include "agendabase.h"
+#include "agendacore.h"
+#include "usercalendarmodel.h"
 
 #include <coreplugin/icore.h>
 #include <coreplugin/isettings.h>
@@ -37,16 +39,19 @@
 #include <coreplugin/constants_menus.h>
 #include <coreplugin/constants_icons.h>
 
-using namespace Agenda::Internal;
+using namespace Agenda;
+using namespace Internal;
 
 static inline Core::ITheme *theme()  { return Core::ICore::instance()->theme(); }
 static inline Core::ISettings *settings() { return Core::ICore::instance()->settings(); }
 static inline Core::IPatient *patient() { return Core::ICore::instance()->patient(); }
 static inline Core::IUser *user() { return Core::ICore::instance()->user(); }
 static inline Agenda::Internal::AgendaBase *base() {return Agenda::Internal::AgendaBase::instance();}
+static inline Agenda::AgendaCore *agendaCore() {return Agenda::AgendaCore::instance();}
 
 AgendaMode::AgendaMode(QObject *parent) :
-        Core::BaseMode(parent)
+    Core::BaseMode(parent),
+    m_UserCalendarModel(0)
 {
     setName(tr("Agenda"));
     setIcon(theme()->icon(Core::Constants::ICONAGENDA, Core::ITheme::BigIcon));
@@ -61,6 +66,7 @@ AgendaMode::AgendaMode(QObject *parent) :
     setWidget(m_Viewer);
 
 //    connect(Core::ICore::instance(), SIGNAL(coreOpened()), this, SLOT(postCoreInitialization()));
+    connect(user(), SIGNAL(userChanged()), this, SLOT(userChanged()));
 }
 
 void AgendaMode::postCoreInitialization()
@@ -69,6 +75,30 @@ void AgendaMode::postCoreInitialization()
 
 void AgendaMode::userChanged()
 {
-    // get its calendars and set to calendarviewer
-//    m_Viewer->setUserCalendar(base()->getUserCalendars());
+    if (m_UserCalendarModel) {
+        disconnect(m_UserCalendarModel, SIGNAL(rowsInserted(QModelIndex,int,int)), this, SLOT(rowsChanged(QModelIndex,int,int)));
+        disconnect(m_UserCalendarModel, SIGNAL(rowsRemoved(QModelIndex,int,int)), this, SLOT(rowsChanged(QModelIndex,int,int)));
+    }
+    m_UserCalendarModel = agendaCore()->userCalendarModel();
+    int nbCals = m_UserCalendarModel->rowCount();
+    if (!nbCals) {
+        m_Viewer->setEnabled(false);
+    } else {
+        m_Viewer->setEnabled(true);
+    }
+    connect(m_UserCalendarModel, SIGNAL(rowsInserted(QModelIndex,int,int)), this, SLOT(rowsChanged(QModelIndex,int,int)));
+    connect(m_UserCalendarModel, SIGNAL(rowsRemoved(QModelIndex,int,int)), this, SLOT(rowsChanged(QModelIndex,int,int)));
+}
+
+void AgendaMode::rowsChanged(const QModelIndex &parent, int start, int end)
+{
+    Q_UNUSED(parent);
+    Q_UNUSED(start);
+    Q_UNUSED(end);
+    int nbCals = m_UserCalendarModel->rowCount();
+    if (!nbCals) {
+        m_Viewer->setEnabled(false);
+    } else {
+        m_Viewer->setEnabled(true);
+    }
 }

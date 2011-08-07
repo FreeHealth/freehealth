@@ -68,7 +68,7 @@ CommandLine::CommandLine() : ICommandLine()
         params.insert(ClearUserDatabases, false);
 }
 
-QVariant CommandLine::value(int param, const QVariant &def = QVariant()) const
+QVariant CommandLine::value(int param, const QVariant &def) const
 {
     return params.value(param,def);
 }
