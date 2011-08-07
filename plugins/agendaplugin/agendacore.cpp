@@ -141,7 +141,7 @@ CalendarItemModel *AgendaCore::calendarItemModel(const QVariant &calendarUid)
 {
     Q_ASSERT(!calendarUid.isNull());
     Q_ASSERT(calendarUid.isValid());
-    if (calendarUid.isNull() || calendarUid.isValid())
+    if (calendarUid.isNull() || !calendarUid.isValid())
         return 0;
 
     CalendarItemModel *model = 0;
@@ -151,7 +151,6 @@ CalendarItemModel *AgendaCore::calendarItemModel(const QVariant &calendarUid)
         model = new CalendarItemModel(calendarUid, this);
         d->m_CalItemModel.insert(calendarUid.toString(), model);
     }
-
     return model;
 }
 

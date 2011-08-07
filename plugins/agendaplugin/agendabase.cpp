@@ -1225,6 +1225,12 @@ bool AgendaBase::saveCalendarEvent(Appointement *event)
     return saveCalendarEvents(QList<Appointement *>() << event);
 }
 
+/** Return the next available appointements by searching for
+  - \e startSearch date time,
+  - a duration of \e duration minutes
+  - for the agenda \e calendar
+  - limiting search to \e numberOfDates appointements
+*/
 QList<QDateTime> AgendaBase::nextAvailableTime(const QDateTime &startSearch, const int durationInMinutes, const Agenda::UserCalendar &calendar, const int numberOfDates)
 {
     QList<QDateTime> toReturn;
@@ -1232,7 +1238,7 @@ QList<QDateTime> AgendaBase::nextAvailableTime(const QDateTime &startSearch, con
         return toReturn;
 
     if (WarnNextAvailableTimeWarnings)
-        qWarning() << Q_FUNC_INFO<< startSearch << durationInMinutes << calendar.data(Constants::Db_CalId).toInt();
+        qWarning() << Q_FUNC_INFO << startSearch << durationInMinutes << calendar.data(Constants::Db_CalId).toInt();
 
     QSqlQuery query(database());
     int limit = 0;
@@ -1266,6 +1272,7 @@ QList<QDateTime> AgendaBase::nextAvailableTime(const QDateTime &startSearch, con
     }
     if (lastEnd.isNull()) {
         // No events recorded -> use calendar dayAvailabilities only
+        /** \todo code here : No events recorded -> use calendar dayAvailabilities only*/
         if (WarnNextAvailableTimeWarnings)
             qWarning() << "  UseCal limits" << lastEnd << newStart << startSearch;
 
@@ -1326,6 +1333,11 @@ QList<QDateTime> AgendaBase::nextAvailableTime(const QDateTime &startSearch, con
     return toReturn;
 }
 
+/** Return the next available appointement by searching for
+  - \e startSearch date time,
+  - a duration of \e duration minutes
+  - for the agenda \e calendar
+*/
 QDateTime AgendaBase::nextAvailableTime(const QDateTime &startSearch, const int durationInMinutes, const Agenda::UserCalendar &calendar)
 {
     QList<QDateTime> l = nextAvailableTime(startSearch, durationInMinutes, calendar, 1);
