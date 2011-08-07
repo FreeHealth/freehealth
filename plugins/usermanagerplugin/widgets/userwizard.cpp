@@ -220,7 +220,7 @@ void UserWizard::done(int r)
         m_User->setZipcode(field("Zipcode"));
         m_User->setCity(field("City"));
         m_User->setCountry(field("Country"));
-        m_User->setLanguage(field("Language"));
+        m_User->setLocaleLanguage(QLocale::Language(field("Language").toInt()));
         m_User->setTel1(field("Tel1"));
         m_User->setTel2(field("Tel2"));
         m_User->setTel3(field("Tel3"));
@@ -322,7 +322,7 @@ UserIdentityAndLoginPage::UserIdentityAndLoginPage(QWidget *parent) :
     identLayout->addRow(lblGender, cbGender);
     identGroup->setLayout(identLayout);
 
-    registerField("Language", cbLanguage , "currentIndex");
+    registerField("Language", cbLanguage , "currentLanguage");
     registerField("Name", leName, "text");
     registerField("Firstname", leFirstName, "text");
     registerField("SecondName", leSecondName, "text");

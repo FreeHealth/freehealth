@@ -61,9 +61,9 @@ public:
         SecondName,     /*!< \brief Second name */
         Firstname,      /*!< \brief Firstname */
         Mail,           /*!< \brief Mail address */
-        Language,       /*!< \brief Language for interface */
+        LanguageISO,    /*!< \brief Language for interface */
         Locker,         /*!< \brief Locker */
-        LanguageIndex,  /*!< \brief Language index from Core::Translators::availableLanguages() */  //12
+        LocaleLanguage, /*!< \brief Language index from Core::Translators::availableLanguages() */  //12
 
         // ORDER CAN CHANGE
         ClearLogin,

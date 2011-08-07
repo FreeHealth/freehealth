@@ -629,7 +629,7 @@ bool UserBase::createDefaultUser()
     user->setValidity(true);
     user->setName(DEFAULT_USER_NAME);
     user->setFirstname(DEFAULT_USER_FIRSTNAME);
-    user->setLanguage(QLocale().language());
+    user->setLocaleLanguage(QLocale().language());
     user->setSpecialty(QStringList() << DEFAULT_USER_SPECIALTY);
     user->setAddress(DEFAULT_USER_ADRESS);
     user->setRights(Constants::USER_ROLE_USERMANAGER, Core::IUser::ReadOwn | Core::IUser::ReadDelegates | Core::IUser::ReadAll | Core::IUser::WriteAll | Core::IUser::Create | Core::IUser::Delete | Core::IUser::Print);
@@ -823,7 +823,7 @@ bool UserBase::saveUser(UserData *user)
             q.bindValue(USER_TITLE, user->titleIndex());
             q.bindValue(USER_GENDER, user->genderIndex());
             q.bindValue(USER_MAIL, user->mail());
-            q.bindValue(USER_LANGUAGE, user->language());
+            q.bindValue(USER_LANGUAGE, user->languageIso());
             q.bindValue(USER_LOCKER, user->locker());
             if (!q.exec()) {
                 error = true;
@@ -888,7 +888,7 @@ bool UserBase::saveUser(UserData *user)
             q.bindValue(USER_GENDER,       user->genderIndex());
             q.bindValue(USER_MAIL ,        user->mail());
             q.bindValue(USER_LASTLOG ,     user->lastLogin());
-            q.bindValue(USER_LANGUAGE,     user->language());
+            q.bindValue(USER_LANGUAGE,     user->languageIso());
             q.bindValue(USER_LOCKER,       user->locker());
             q.exec();
             if (! q.isActive())

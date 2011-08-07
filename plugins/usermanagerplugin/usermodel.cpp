@@ -226,10 +226,8 @@ public:
         case Core::IUser::Firstname : toReturn = user->firstname(); break;
         case Core::IUser::FullName : toReturn = user->fullName(); break;
         case Core::IUser::Mail : toReturn = user->mail(); break;
-        case Core::IUser::Language : toReturn = user->language(); break;
-            /** \todo language index must be modified */
-        case Core::IUser::LanguageIndex : toReturn = Core::Translators::availableLocales().indexOf(user->language()); break;
-        case Core::IUser::LocaleCodedLanguage: toReturn = QLocale(user->language()).language(); break;
+        case Core::IUser::LanguageISO : toReturn = user->languageIso(); break;
+        case Core::IUser::LocaleCodedLanguage: toReturn = user->localeLanguage(); break;
         case Core::IUser::Adress : toReturn = user->adress(); break;
         case Core::IUser::Zipcode : toReturn = user->zipcode(); break;
         case Core::IUser::City : toReturn = user->city(); break;
@@ -775,14 +773,8 @@ bool UserModel::setData(const QModelIndex &item, const QVariant &value, int role
     case Core::IUser::SecondName :  user->setSecondName(value); break;
     case Core::IUser::Firstname :  user->setFirstname(value); break;
     case Core::IUser::Mail :  user->setMail(value); break;
-    case Core::IUser::Language :  user->setLanguage(value); break;
-    case Core::IUser::LanguageIndex :
-        {
-            if (value.toInt() < Core::Translators::availableLocales().count())
-                user->setLanguage(Core::Translators::availableLocales().at(value.toInt()));
-            break;
-        }
-    case Core::IUser::LocaleCodedLanguage: user->setLanguage(QLocale(QLocale::Language(value.toInt())).name().left(2)); break;
+    case Core::IUser::LanguageISO :  user->setLanguageIso(value); break;
+    case Core::IUser::LocaleCodedLanguage: user->setLocaleLanguage(QLocale::Language(value.toInt())); break;
     case Core::IUser::Adress :  user->setAddress(value); break;
     case Core::IUser::Zipcode :  user->setZipcode(value); break;
     case Core::IUser::City :  user->setCity(value); break;
@@ -882,7 +874,7 @@ QVariant UserModel::data(const QModelIndex &item, int role) const
     }
     else if ((role == Qt::DisplayRole) || (role == Qt::EditRole)) {
         // Manage table USERS using the QSqlTableModel WITHOUT retreiving whole user from database
-        if ((item.column() < Core::IUser::LanguageIndex)) {
+        if ((item.column() < Core::IUser::LocaleLanguage)) {
             // here we suppose that it is the currentUser the ask for datas
 //            qWarning() << (bool)(d->m_CurrentUserRights & Core::IUser::ReadAll) << (bool)(d->m_CurrentUserRights & Core::IUser::ReadOwn) << (d->m_CurrentUserUuid == uuid);
             /** \todo code here : has delegates rights */

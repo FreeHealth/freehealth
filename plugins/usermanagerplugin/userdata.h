@@ -41,15 +41,16 @@
 #include <QVariant>
 #include <QDateTime>
 #include <QHash>
+#include <QLocale>
+QT_BEGIN_NAMESPACE
 class QSqlQuery;
-
-// include Private datas
+QT_END_NAMESPACE
 
 /**
  * \file userdata.h
  * \author Eric MAEKER <eric.maeker@gmail.com>
- * \version 0.0.16
- * \date 19 Sept 2009
+ * \version 0.6.0
+ * \date 07 Aug 2011
 */
 
 namespace Print {
@@ -156,7 +157,8 @@ public:
     void  setName(const QVariant & val)                { setValue(Table_USERS, USER_NAME, val); }
     void  setSecondName(const QVariant & val)          { setValue(Table_USERS, USER_SECONDNAME, val); }
     void  setFirstname(const QVariant & val)           { setValue(Table_USERS, USER_FIRSTNAME, val); }
-    void  setLanguage(const QVariant & val)            { setValue(Table_USERS, USER_LANGUAGE, val); }
+    void  setLanguageIso(const QVariant &val)         { setValue(Table_USERS, USER_LANGUAGE, val); }
+    void  setLocaleLanguage(QLocale::Language lang)    { setValue(Table_USERS, USER_LANGUAGE, QLocale(lang).name().left(2)); }
     void  setMail(const QVariant & val)                { setValue(Table_USERS, USER_MAIL, val); }
 
     void  setAddress(const QVariant & val)             { setDynamicDataValue(USER_DATAS_ADRESS , val); }
@@ -207,7 +209,8 @@ public:
     QString name() const                 { return value(Table_USERS, USER_NAME).toString(); }
     QString secondName() const           { return value(Table_USERS, USER_SECONDNAME).toString(); }
     QString firstname() const            { return value(Table_USERS, USER_FIRSTNAME).toString(); }
-    QString language() const             { return value(Table_USERS, USER_LANGUAGE).toString(); }
+    QString languageIso() const         { return value(Table_USERS, USER_LANGUAGE).toString(); }
+    QLocale::Language localeLanguage() const {return QLocale(languageIso()).language(); }
     QString mail() const                 { return value(Table_USERS, USER_MAIL).toString(); }
 
     QString adress() const               { return dynamicDataValue(USER_DATAS_ADRESS).toString(); }
