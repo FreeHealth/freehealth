@@ -191,6 +191,12 @@ bool UserCalendarModel::insertRows(int row, int count, const QModelIndex &parent
         u->setData(UserCalendar::UserOwnerUid, d->m_UserUid);
         u->setData(Constants::Db_IsValid, 1);
         u->setData(Constants::Db_UserCalId, -1);
+        for(int i=1; i < 8; ++i) {
+            DayAvailability av;
+            av.addTimeRange(QTime(06,00,00), QTime(20,00,00));
+            av.setWeekDay(i);
+            u->addAvailabilities(av);
+        }
         d->m_UserCalendars.insert(row+i, u);
     }
     endInsertRows();
