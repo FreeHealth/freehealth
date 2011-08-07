@@ -72,6 +72,7 @@ public:
 
     void expandAllCategories();
     void expandFirstCategories();
+    void setSplitterSizes(const QList<int> &sizes);
 
     IGenericPage *currentPage() const;
     void saveState();

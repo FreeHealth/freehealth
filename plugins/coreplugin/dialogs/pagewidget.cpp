@@ -178,9 +178,6 @@ void PageWidget::setupUi(bool sortCategoryView)
     if (sortCategoryView)
         m_ui->pageTree->sortItems(0, Qt::AscendingOrder);
 
-    m_ui->splitter->setStretchFactor(m_ui->splitter->indexOf(m_ui->pageTree), 0);
-    m_ui->splitter->setStretchFactor(m_ui->splitter->indexOf(m_ui->layoutWidget), 1);
-
     m_ui->stackedPages->layout()->setMargin(0);
     m_ui->layoutWidget->layout()->setContentsMargins(12,0,12,0);
 //    m_ui->stackedPages->layout()->setSpacing(0);
@@ -198,6 +195,12 @@ void PageWidget::expandAllCategories()
 void PageWidget::expandFirstCategories()
 {
 //    m_ui->pageTree->expandItem(m_ui->pageTree->);
+}
+
+/** Set the sizes to the splitter (sa QSplitter documentation) */
+void PageWidget::setSplitterSizes(const QList<int> &sizes)
+{
+    m_ui->splitter->setSizes(sizes);
 }
 
 PageWidget::~PageWidget()
