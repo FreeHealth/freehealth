@@ -80,7 +80,7 @@ public:
         ui->gender->setPixmap(icon.pixmap(QSize(16,16)));
         QPixmap photo = m_Model->index(m_Index->row(), Core::IPatient::Photo).data().value<QPixmap>();
         if (!photo.isNull())
-            photo = photo.scaled(QSize(32,32), Qt::KeepAspectRatio);
+            photo = photo.scaled(QSize(64,64), Qt::KeepAspectRatio);
         ui->photo->setPixmap(photo);
     }
 

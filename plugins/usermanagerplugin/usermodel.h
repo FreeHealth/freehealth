@@ -79,6 +79,8 @@ public:
 
     bool saveChanges();
 
+    QString fullNameOfUser(const QVariant &uid);
+
 private Q_SLOTS:
     void newUserConnected(const QString &uid);
 

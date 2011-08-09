@@ -66,6 +66,37 @@ private:
     bool m_Modified;
 };
 
+class EpisodeModificationData
+{
+    friend class Form::Internal::EpisodeBase;
+
+public:
+    enum DataRepresentation {
+        ModificationId = 0,
+        EpisodeId,
+        Date,
+        UserUid,
+        Trace,
+        IsValid
+    };
+
+    EpisodeModificationData();
+    ~EpisodeModificationData();
+
+    void setData(int ref, const QVariant &value);
+    QVariant data(int ref) const;
+
+    void setModified(bool state) {m_Modified = state;}
+    bool isModified() const {return m_Modified;}
+
+protected:
+    int episodeId() const {return m_Data.value(EpisodeId).toInt();}
+    int modificationId() const {return m_Data.value(ModificationId).toInt();}
+
+private:
+    QHash<int, QVariant> m_Data;
+    bool m_Modified;
+};
 
 class EpisodeData
 {
@@ -80,8 +111,8 @@ public:
         CreationDate,
         IsValid,
         IsNewlyCreated,
-        Summary,
-        FullContent,
+//        Summary,
+//        FullContent,
         UserUuid,
         PatientUuid,
         FormUuid,
@@ -100,8 +131,11 @@ public:
     void setModified(bool state) {m_Modified = state;}
     bool isModified() const {return m_Modified;}
 
-    void setEpisodeValidation(EpisodeValidationData &validation);
+    void addEpisodeValidation(EpisodeValidationData &validation);
     QVector<EpisodeValidationData> &validations() {return m_Validation;}
+
+    void addEpisodeModification(EpisodeModificationData &modification);
+    QVector<EpisodeModificationData> &modifications() {return m_Modification;}
 
 protected:
     int episodeId() const {return m_Data.value(Id).toInt();}
@@ -112,6 +146,7 @@ private:
     QHash<int, QVariant> m_Data;
     bool m_Modified;
     QVector<EpisodeValidationData> m_Validation;
+    QVector<EpisodeModificationData> m_Modification;
 };
 
 

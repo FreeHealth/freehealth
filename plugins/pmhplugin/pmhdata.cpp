@@ -174,7 +174,7 @@ PmhData::~PmhData()
 /** \brief Populate the PmhData with the current User Uid and the current Patient Uid. */
 void PmhData::populateWithCurrentData()
 {
-    d->m_Data.insert(PatientUid, patient()->data(Core::IPatient::Uid));
+    d->m_Data.insert(PatientUid, patient()->uuid());
     d->m_Data.insert(UserOwner, currentUserUuid());
 }
 

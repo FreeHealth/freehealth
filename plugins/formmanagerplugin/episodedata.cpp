@@ -26,9 +26,10 @@
  ***************************************************************************/
 #include "episodedata.h"
 
+#include <QDateTime>
+
 using namespace Form;
 using namespace Internal;
-
 
 EpisodeValidationData::EpisodeValidationData()
 {
@@ -52,6 +53,29 @@ QVariant EpisodeValidationData::data(int ref) const
 }
 
 
+EpisodeModificationData::EpisodeModificationData()
+{
+    m_Data.insert(EpisodeId, -1);
+    m_Data.insert(ModificationId, -1);
+    m_Modified = false;
+}
+
+EpisodeModificationData::~EpisodeModificationData()
+{}
+
+void EpisodeModificationData::setData(int ref, const QVariant &value)
+{
+    m_Data.insert(ref, value);
+    m_Modified = true;
+}
+
+QVariant EpisodeModificationData::data(int ref) const
+{
+    return m_Data.value(ref);
+}
+
+
+
 EpisodeData::EpisodeData()
 {
     m_Data.insert(Id, -1);
@@ -72,6 +96,9 @@ void EpisodeData::setData(int ref, const QVariant &value)
         for(int i = 0; i < m_Validation.count(); ++i) {
             m_Validation[i].setData(EpisodeValidationData::EpisodeId, value);
         }
+        for(int i = 0; i < m_Modification.count(); ++i) {
+            m_Modification[i].setData(EpisodeModificationData::EpisodeId, value);
+        }
     }
     m_Modified = true;
 }
@@ -81,8 +108,24 @@ QVariant EpisodeData::data(int ref) const
     return m_Data.value(ref);
 }
 
-void EpisodeData::setEpisodeValidation(EpisodeValidationData &validation)
+/** Add a validation record to the episode. */
+void EpisodeData::addEpisodeValidation(EpisodeValidationData &validation)
 {
     validation.setData(EpisodeValidationData::EpisodeId, m_Data.value(Id));
     m_Validation.append(validation);
 }
+
+/** Add modification records to the episode. The LastModificationDate is automatically updated. */
+void EpisodeData::addEpisodeModification(EpisodeModificationData &modification)
+{
+    modification.setData(EpisodeModificationData::EpisodeId, m_Data.value(Id));
+    m_Modification.append(modification);
+    // manage LastModificationDate
+    if (data(LastModificationDate).isNull()) {
+        setData(LastModificationDate, modification.data(EpisodeModificationData::Date));
+    } else {
+        if (modification.data(EpisodeModificationData::Date).toDateTime() > data(LastModificationDate).toDateTime())
+            setData(LastModificationDate, modification.data(EpisodeModificationData::Date));
+    }
+}
+

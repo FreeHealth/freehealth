@@ -473,10 +473,10 @@ void FormPlaceHolder::newEpisode()
 {
     if (!d->m_FileTree->selectionModel())
         return;
-    // get the parent form
-    QModelIndex index;
     if (!d->m_FileTree->selectionModel()->hasSelection())
         return;
+    // get the parent form
+    QModelIndex index;
     index = d->m_FileTree->selectionModel()->selectedIndexes().at(0);
     while (!d->m_EpisodeModel->isForm(index)) {
         index = index.parent();

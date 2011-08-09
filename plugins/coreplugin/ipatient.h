@@ -126,6 +126,8 @@ public:
     virtual void clear() = 0;
     virtual bool has(const int ref) const = 0;
 
+    QString uuid() const {return data(Uid).toString();}
+
     int	columnCount(const QModelIndex & = QModelIndex()) const {return NumberOfColumns;}
     int	rowCount(const QModelIndex & = QModelIndex()) const {return 1;}
 

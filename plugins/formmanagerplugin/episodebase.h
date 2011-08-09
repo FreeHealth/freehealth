@@ -32,6 +32,8 @@
 #include <utils/database.h>
 
 #include <QObject>
+#include <QDate>
+#include <QVariant>
 
 /**
  * \file episodebase.h
@@ -51,26 +53,53 @@ class EpisodeData;
 class EpisodeBaseQuery
 {
 public:
-    EpisodeBaseQuery();
-    ~EpisodeBaseQuery();
+    EpisodeBaseQuery() :
+        m_Valid(true), m_Deleted(false),
+        m_FilterValidated(false), m_Validated(true), m_NonValidated(true),
+        m_Limit(false), m_Start(0), m_End(-1),
+        m_UseUserDateRange(false)
+    {}
+
+    ~EpisodeBaseQuery() {}
 
     void setPatientUid(const QVariant &patientUid) {m_PatientUid= patientUid;}
     void setUserUid(const QVariant &userUid) {m_UserUid = userUid;}
+
     void setValidEpisodes(bool valid) {m_Valid=valid;}
     void setDeletedEpisodes(bool del) {m_Deleted=del;}
+
+    void seFilterValidated(bool v) {m_FilterValidated=v;}
     void setValidatedEpisodes(bool v) {m_Validated=v;}
     void setNonValidated(bool v) {m_NonValidated=v;}
 
+    void setUserDateRange(const QDate &start, const QDate &end) {m_UseUserDateRange=true; m_UserDateStart=start; m_UserDateEnd=end;}
+
+    void setLimitRange(int start, int end) {m_Start=start; m_End=end; m_Limit=true;}
+
     QVariant patientUid() const {return m_PatientUid;}
     QVariant userUid() const {return m_UserUid;}
+
     bool validEpisodes() const {return m_Valid;}
     bool deletedEpisodes() const {return m_Deleted;}
+
+    bool filterValidated() const {return m_FilterValidated;}
     bool validatedEpisodes() const {return m_Validated;}
     bool nonValidatedEpisodes() const {return m_NonValidated;}
 
+    bool useUserDateRange() const {return m_UseUserDateRange;}
+    QDate userDateStart() const {return m_UserDateStart;}
+    QDate userDateEnd() const {return m_UserDateEnd;}
+
+    bool useLimit() const {return m_Limit;}
+    int limitStart() const {return m_Start;}
+    int limitEnd() const {return m_End;}
+
 private:
     QVariant m_UserUid, m_PatientUid;
-    bool m_Valid, m_Deleted, m_Validated, m_NonValidated;
+    bool m_Valid, m_Deleted, m_FilterValidated, m_Validated, m_NonValidated, m_Limit;
+    int m_Start, m_End;
+    bool m_UseUserDateRange;
+    QDate m_UserDateStart, m_UserDateEnd;
 };
 
 
@@ -97,6 +126,7 @@ public:
 
     // Episodes
     bool saveEpisode(EpisodeData *episode);
+    bool saveEpisode(const QList<EpisodeData *> &episode);
     QList<EpisodeData *> getEpisodes(const EpisodeBaseQuery &query);
 
 private:
@@ -108,6 +138,10 @@ private:
                           CreationOption createOption
                          );
     void populateWithDefaultValues();
+
+    // Episodes
+    bool saveEpisodeValidations(Internal::EpisodeData *episode);
+    bool saveEpisodeModifications(Internal::EpisodeData *episode);
 
 public:
     void toTreeWidget(QTreeWidget *tree);

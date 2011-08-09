@@ -24,6 +24,12 @@
  *       NAME <MAIL@ADRESS>                                                *
  *       NAME <MAIL@ADRESS>                                                *
  ***************************************************************************/
+/**
+  \class Core::IUser
+  Is a model data for the currently logged user.
+  \a Core::ICore::user()
+*/
+
 #include "iuser.h"
 #include "constants_tokensandsettings.h"
 

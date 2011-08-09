@@ -76,12 +76,12 @@ public:
         Date,
         IsValid,
         Summary,
-        FullContent,
-        Id,
-        UserUuid,
-        PatientUuid,
+//        FullContent,
+//        Id,
+//        UserUuid,
+//        PatientUuid,
         FormUuid,
-        IsNewlyCreated,
+//        IsNewlyCreated,
         IsEpisode,
         XmlContent,
         Icon,
@@ -91,7 +91,7 @@ public:
     };
 
     EpisodeModel(Form::FormMain *rootEmptyForm, QObject *parent = 0);
-    ~EpisodeModel();
+    virtual ~EpisodeModel();
     void init();
     void refreshFormTree();
 
@@ -99,7 +99,7 @@ public:
     QModelIndex parent(const QModelIndex &index) const;
     Qt::ItemFlags flags(const QModelIndex &index) const;
 
-    int rowCount(const QModelIndex &parent = QModelIndex()) const;
+    virtual int rowCount(const QModelIndex &parent = QModelIndex()) const;
     int columnCount(const QModelIndex &parent = QModelIndex()) const;
 
     QVariant data(const QModelIndex &index, int role = Qt::DisplayRole) const;

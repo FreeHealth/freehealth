@@ -295,7 +295,7 @@ void MainWindow::onCurrentPatientChanged()
     formManager()->activateMode();
 
     // Store the uuids of the patient in the recent manager
-    const QString &uuid = patient()->data(Core::IPatient::Uid).toString();
+    const QString &uuid = patient()->uuid();
     m_RecentPatients->setCurrentFile(uuid);
     m_RecentPatients->addToRecentFiles(uuid);
 }

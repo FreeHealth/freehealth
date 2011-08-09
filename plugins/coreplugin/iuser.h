@@ -144,6 +144,8 @@ public:
 
     virtual bool saveChanges() = 0;
 
+    virtual QString fullNameOfUser(const QVariant &uid) = 0;
+
     void replaceTokens(QString &stringWillBeModified);
 
     // Some code easiers

@@ -135,7 +135,7 @@ void PmhModeWidget::currentChanged(const QModelIndex &current, const QModelIndex
         return;
 
     // No active patient ?
-    if (patient()->data(Core::IPatient::Uid).isNull()) {
+    if (patient()->uuid().isEmpty()) {
         return;
     }
 

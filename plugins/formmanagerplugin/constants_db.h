@@ -39,6 +39,7 @@ namespace Constants {
         Table_EPISODES = 0,
         Table_VALIDATION,
         Table_EPISODE_CONTENT,
+        Table_EPISODES_MODIF,
         Table_FORM,
         Table_VERSION
     };
@@ -52,9 +53,10 @@ namespace Constants {
         EPISODES_FORM_PAGE_UID,
         EPISODES_LABEL,
         EPISODES_USERDATE,
-        EPISODES_DATEOFCREATION,
-        EPISODES_DATEOFMODIFICATION,
-        EPISODES_VALIDATION_ID
+        EPISODES_DATEOFCREATION,       // OBSOLETE
+        EPISODES_DATEOFMODIFICATION,   // OBSOLETE
+        EPISODES_VALIDATION_ID,        // OBSOLETE
+        EPISODES_MaxParam
     };
 
     enum fieldsEPISODE_CONTENT {
@@ -65,7 +67,7 @@ namespace Constants {
 
     enum fieldsVALIDATION {
         VALIDATION_ID = 0,
-        VALIDATION_EPISODE_ID = 0,
+        VALIDATION_EPISODE_ID,
         VALIDATION_DATEOFVALIDATION,
         VALIDATION_USERUID,
         VALIDATION_ISVALID
@@ -77,6 +79,15 @@ namespace Constants {
         FORM_USER_RESTRICTION_ID,
         FORM_MaxParam
     };
+
+    enum fieldsMODIFTRACE {
+        EP_MODIF_ID = 0,
+        EP_MODIF_EPISODE_ID,
+        EP_MODIF_DATE,
+        EP_MODIF_USERUID,
+        EP_MODIF_TRACE
+    };
+
     enum VersionFields {
         VERSION_TEXT = 0
     };

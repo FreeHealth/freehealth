@@ -282,7 +282,7 @@ QVector<PmhData *> PmhBase::getPmh(const QString &patientUid) const
     /** \todo Manage User's Private PMHx */
     if (patientUid.isEmpty())
         where.insert(Constants::MASTER_PATIENT_UID,
-                     QString("='%1'").arg(patient()->data(Core::IPatient::Uid).toString()));
+                     QString("='%1'").arg(patient()->uuid()));
     else
         where.insert(Constants::MASTER_PATIENT_UID,
                      QString("='%1'").arg(patientUid));

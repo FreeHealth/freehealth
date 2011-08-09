@@ -1123,7 +1123,7 @@ void ReceiptViewer::save()
                                                                      << QString::number(due) 
                                                                      << "site uid = "+siteUid.toString()
                                                                      << "insurance uid = "+insuranceUid.toString();
-    QString patientUid = patient()->data(Core::IPatient::Uid).toString();
+    QString patientUid = patient()->uuid();
     if (patientUid.isEmpty())
     {
     	  patientUid = "no-patient-uid";

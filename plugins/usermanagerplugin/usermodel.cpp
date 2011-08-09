@@ -129,6 +129,15 @@ bool UserModelWrapper::saveChanges()
     return false;
 }
 
+QString UserModelWrapper::fullNameOfUser(const QVariant &uid)
+{
+    if (m_Model) {
+        QHash<QString, QString> s = m_Model->getUserNames(QStringList() << uid.toString());
+        return s.value(uid.toString());
+    }
+    return QString();
+}
+
 void UserModelWrapper::newUserConnected(const QString &uid)
 {
     Q_EMIT userChanged();
