@@ -362,19 +362,19 @@ bool PatientBase::createDatabase(const QString &connectionName , const QString &
     QString path = settings()->path(Core::ISettings::BigPixmapPath) + QDir::separator();
     int userLkId = 1; //userModel()->practionnerLkIds(userModel()->currentUserData(Core::IUser::Uuid).toString()).at(0);
 
-    QString uid = Utils::Database::createUid();
+    QString uid = "b04936fafccb4174a7a6af25dd2bb71c";
     createVirtualPatient("KIRK", "", "James Tiberius", "M", 6, QDate(1968, 04, 20), "USA", "USS Enterprise",
                   "21, StarFleet Command", "1968", "EarthTown", uid, userLkId, path+"captainkirk.jpg");
 
-    uid = Utils::Database::createUid();
+    uid = "2c49299b9b554300b46a6e3ef6d40a65";
     createVirtualPatient("PICARD", "", "Jean-Luc", "M", 6, QDate(1948, 04, 20), "USA", "USS Enterprise-D",
                   "21, StarFleet Command", "1968", "EarthTown", uid, userLkId, path+"captainpicard.png");
 
-    uid = Utils::Database::createUid();
+    uid = "ef97f37361824b6f826d5c9246f9dc49";
     createVirtualPatient("ARCHER", "", "Jonathan", "M", 6, QDate(1928, 04, 20), "USA", "Enterprise (NX-01) commanding officer",
                   "21, StarFleet Command", "1968", "EarthTown", uid, userLkId, path+"captainarcher.jpg");
 
-    uid = Utils::Database::createUid();
+    uid = "493aa06a1b8745b2ae6c79c531ef12a0";
     createVirtualPatient("JANEWAY", "", "Kathryn", "M", 6, QDate(1938, 04, 20), "USA", "USS Voyager",
                   "21, StarFleet Command", "1968", "EarthTown", uid, userLkId, path+"captainjaneway.jpg");
 
