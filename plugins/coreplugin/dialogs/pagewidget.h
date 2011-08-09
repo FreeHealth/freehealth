@@ -67,6 +67,7 @@ public:
     }
     void setSettingKey(const QString &settingKey) {m_settingKey = settingKey;}
     void setStartingPage(const QString &initialCategory, const QString &initialPage) {m_currentCategory=initialCategory; m_currentPage=initialPage;}
+    void setCategoryInBold(bool inBold) {m_categoryInBold=inBold;}
 
     void setupUi(bool sortCategoryView = true);
 
@@ -89,7 +90,7 @@ private Q_SLOTS:
 private:
     Internal::Ui::PageWidget *m_ui;
     QList<Core::IGenericPage*> m_pages;
-    bool m_applied;
+    bool m_applied, m_categoryInBold;
     QString m_currentCategory;
     QString m_currentPage;
     QString m_settingKey;

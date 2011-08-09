@@ -83,7 +83,7 @@ using namespace Core::Internal;
 static inline Core::ISettings *settings()  { return Core::ICore::instance()->settings(); }
 
 PageWidget::PageWidget(QWidget *parent) :
-        QWidget(parent), m_applied(false)
+    QWidget(parent), m_applied(false), m_categoryInBold(true)
 {
     m_ui = new Ui::PageWidget();
     m_ui->setupUi(this);
@@ -116,6 +116,8 @@ void PageWidget::setupUi(bool sortCategoryView)
     }
 
     QMap<QString, QTreeWidgetItem *> categories;
+    QFont bold;
+    bold.setBold(true);
 
     int index = 0;
     foreach(IGenericPage *page, m_pages) {
@@ -141,6 +143,9 @@ void PageWidget::setupUi(bool sortCategoryView)
             treeitem = new QTreeWidgetItem(m_ui->pageTree);
             treeitem->setText(0, trCategories.at(0));
             treeitem->setData(0, Qt::UserRole, qVariantFromValue(pageData));
+            if (m_categoryInBold) {
+                treeitem->setFont(0, bold);
+            }
             categories.insert(currentCategory, treeitem);
         }
 
