@@ -747,26 +747,26 @@ void DayRangeBody::mouseReleaseEvent(QMouseEvent *event) {
 
 void DayRangeBody::mouseDoubleClickEvent(QMouseEvent *) {
     m_pressItem = model()->insertItem(m_previousDateTime, m_previousDateTime.addSecs(m_itemDefaultDuration*60));
-        BasicItemEditionDialog dialog(model(), this);
-        dialog.init(m_pressItem);
-        dialog.exec();
-        if (WarnBodyMouseEvents) {
-            qWarning() << "DayBody::mousePressed" << m_pressItem.uid() << m_pressItem.beginning() << m_pressItem.ending();
-            qWarning() << "   pressed DateTime" << m_previousDateTime;
-        }
+    BasicItemEditionDialog dialog(model(), this);
+    dialog.init(m_pressItem);
+    dialog.exec();
+    if (WarnBodyMouseEvents) {
+        qWarning() << "DayBody::mousePressed" << m_pressItem.uid() << m_pressItem.beginning() << m_pressItem.ending();
+        qWarning() << "   pressed DateTime" << m_previousDateTime;
+    }
 }
 
-void DayRangeBody::itemInserted(const CalendarItem &item) {
-	// refresh the entire day band
-	refreshDayWidgets(item.beginning().date());
+void DayRangeBody::itemInserted(const Calendar::CalendarItem &item) {
+    // refresh the entire day band
+    refreshDayWidgets(item.beginning().date());
 }
 
-void DayRangeBody::itemRemoved(const CalendarItem &removedItem) {
-	// refresh the involved bands
-	refreshDayWidgets(removedItem.beginning().date());
+void DayRangeBody::itemRemoved(const Calendar::CalendarItem &removedItem) {
+    // refresh the involved bands
+    refreshDayWidgets(removedItem.beginning().date());
 }
 
-void DayRangeBody::itemModified(const CalendarItem &oldItem, const CalendarItem &newItem) {
+void DayRangeBody::itemModified(const Calendar::CalendarItem &oldItem, const Calendar::CalendarItem &newItem) {
 	QList<QDate> daysToRefresh;
 	if (!oldItem.intersects(firstDate(), firstDate().addDays(m_rangeWidth - 1))) { // collect all old item days
 		daysToRefresh << oldItem.beginning().date();
@@ -791,7 +791,7 @@ void DayRangeBody::resetItemWidgets() {
 }
 
 void DayRangeBody::refreshDayWidgets(const QDate &dayDate) {
-	if (dayDate < firstDate() || dayDate >= firstDate().addDays(m_rangeWidth)) // day is out of range
+        if (dayDate < firstDate() || dayDate >= firstDate().addDays(m_rangeWidth)) // day is out of range
 		return;
 
 	// at first remove all day widgets

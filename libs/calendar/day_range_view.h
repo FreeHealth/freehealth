@@ -133,9 +133,9 @@ namespace Calendar {
 		virtual void resetItemWidgets();
 
 	protected slots:
-		void itemInserted(const CalendarItem &item);
-		void itemModified(const CalendarItem &oldItem, const CalendarItem &newItem);
-		void itemRemoved(const CalendarItem &removedItem);
+                void itemInserted(const Calendar::CalendarItem &item);
+                void itemModified(const Calendar::CalendarItem &oldItem, const Calendar::CalendarItem &newItem);
+                void itemRemoved(const Calendar::CalendarItem &removedItem);
 
 	private:
 		enum MouseMode {
