@@ -27,12 +27,15 @@
 #define USERCALENDARVIEWER_H
 
 #include <QWidget>
+QT_BEGIN_NAMESPACE
+class QModelIndex;
+QT_END_NAMESPACE
 
 /**
  * \file usercalendarviewer.h
  * \author Eric MAEKER <eric.maeker@gmail.com>
  * \version 0.6.0
- * \date 25 Jul 2011
+ * \date 12 Aug 2011
 */
 
 namespace Agenda {
@@ -40,10 +43,12 @@ class UserCalendar;
 
 namespace Internal {
 class UserCalendarViewerPrivate;
+class AgendaMode;
 
 class UserCalendarViewer : public QWidget
 {
     Q_OBJECT
+    friend class Agenda::Internal::AgendaMode;
 
 public:
     enum AgendaOwner {
@@ -54,11 +59,15 @@ public:
     explicit UserCalendarViewer(QWidget *parent = 0);
     ~UserCalendarViewer();
 
+protected:
+    void recalculateComboAgendaIndex();
+
 private Q_SLOTS:
     void newEventAtAvailabity(QAction *action);
     void recalculateAvailabilitiesWithDurationIndex(const int index);
     void on_availableAgendasCombo_activated(const int index);
     void userChanged();
+//    void rowsChanged(const QModelIndex &,int,int);
 
 protected:
     void changeEvent(QEvent *e);

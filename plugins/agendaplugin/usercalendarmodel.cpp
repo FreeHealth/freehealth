@@ -197,6 +197,7 @@ bool UserCalendarModel::insertRows(int row, int count, const QModelIndex &parent
             av.setWeekDay(j);
             u->addAvailabilities(av);
         }
+        base()->saveUserCalendar(u);
         d->m_UserCalendars.insert(row+i, u);
     }
     endInsertRows();

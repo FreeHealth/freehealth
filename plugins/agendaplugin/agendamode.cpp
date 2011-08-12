@@ -96,9 +96,6 @@ void AgendaMode::rowsChanged(const QModelIndex &parent, int start, int end)
     Q_UNUSED(start);
     Q_UNUSED(end);
     int nbCals = m_UserCalendarModel->rowCount();
-    if (!nbCals) {
-        m_Viewer->setEnabled(false);
-    } else {
-        m_Viewer->setEnabled(true);
-    }
+    m_Viewer->setEnabled((nbCals>0));
+    m_Viewer->recalculateComboAgendaIndex();
 }

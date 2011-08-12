@@ -134,6 +134,7 @@ UserCalendarViewer::UserCalendarViewer(QWidget *parent) :
 
     connect(user(), SIGNAL(userChanged()), this, SLOT(userChanged()));
     connect(d->ui->availButton, SIGNAL(triggered(QAction*)), this, SLOT(newEventAtAvailabity(QAction*)));
+    connect(d->ui->availableAgendasCombo, SIGNAL(currentIndexChanged(int)), this, SLOT(on_availableAgendasCombo_activated(int)));
     userChanged();
 }
 
@@ -143,6 +144,11 @@ UserCalendarViewer::~UserCalendarViewer()
         delete d;
         d = 0;
     }
+}
+
+void UserCalendarViewer::recalculateComboAgendaIndex()
+{
+    d->ui->availableAgendasCombo->setCurrentIndex(d->m_UserCalendarModel->defaultUserCalendarModelIndex().row());
 }
 
 /** When the user select an availability in the toolButton, this slot is activated. Open a EventEditor dialog and save the item in the CalendarItemModel if the dialog is accepted. */
@@ -183,13 +189,14 @@ void UserCalendarViewer::recalculateAvailabilitiesWithDurationIndex(const int in
 
 void UserCalendarViewer::on_availableAgendasCombo_activated(const int index)
 {
-    if (index > 0 && index < d->m_UserCalendarModel->rowCount()) {
+    if (index >= 0 && index < d->m_UserCalendarModel->rowCount()) {
         QVariant calUid = d->m_UserCalendarModel->index(index, UserCalendarModel::Uid).data();
         if (calUid.isNull())
             return;
         if (!calUid.isValid())
             return;
         d->m_CalendarItemModel = agendaCore()->calendarItemModel(calUid);
+        d->ui->calendarViewer->setModel(d->m_CalendarItemModel);
     }
 //    d->populateCalendarWithCurrentWeek(d->m_UserCals.at(index));
 }
@@ -223,9 +230,22 @@ void UserCalendarViewer::userChanged()
 
     if (cal) {
         d->m_CalendarItemModel = agendaCore()->calendarItemModel(cal->uid());
+    } else {
+        d->m_CalendarItemModel = 0;
     }
     d->ui->calendarViewer->setModel(d->m_CalendarItemModel);
 }
+
+//void UserCalendarViewer::rowsChanged(const QModelIndex &parent, int start, int end)
+//{
+//    if (d->m_UserCalendarModel->rowCount()==0) {
+//        d
+//    }
+//    if (d->ui->availableAgendasCombo->currentIndex()==-1) {
+//        d->ui->availableAgendasCombo->setCurrentIndex(d->m_UserCalendarModel->defaultUserCalendarModelIndex().row());
+//    }
+//    d->ui->availableAgendasCombo->setCurrentIndex(d->m_UserCalendarModel->defaultUserCalendarModelIndex().row());
+//}
 
 void UserCalendarViewer::changeEvent(QEvent *e)
 {
