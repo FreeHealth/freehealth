@@ -29,6 +29,7 @@
 
 #include <fmfmainwindowplugin/mainwindow_exporter.h>
 #include <coreplugin/imainwindow.h>
+#include <usermanagerplugin/iuserlistener.h>
 
 #include <QCloseEvent>
 
@@ -59,8 +60,25 @@ class FileManager;
 }
 
 namespace MainWin {
+class MainWindow;
+
 namespace Internal {
 class PatientModelWrapper;
+
+class MainWindowUserListener : public UserPlugin::IUserListener
+{
+    Q_OBJECT
+public:
+    explicit MainWindowUserListener(MainWindow *parent);
+    virtual ~MainWindowUserListener();
+
+    virtual bool userAboutToChange();
+    virtual bool currentUserAboutToDisconnect();
+
+private:
+    MainWindow *m_MainWindow;
+};
+
 }  // End Internal
 
 class MAINWIN_EXPORT MainWindow: public Core::IMainWindow
@@ -131,8 +149,8 @@ public:
     int  m_TimerId;
     bool m_OpenLastOpenedForm;
     QByteArray windowState;
-
     Internal::PatientModelWrapper *m_PatientModelWrapper;
+    Internal::MainWindowUserListener *m_UserListener;
 };
 
 } // End Core

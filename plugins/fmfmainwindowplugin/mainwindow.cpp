@@ -110,14 +110,39 @@ static inline Patients::PatientModel *patientModel() {return Patients::PatientMo
 static inline void messageSplash(const QString &s) {theme()->messageSplashScreen(s); }
 static inline void finishSplash(QMainWindow *w) {theme()->finishSplashScreen(w); }
 
+
+
+MainWindowUserListener::MainWindowUserListener(MainWindow *parent) :
+    UserPlugin::IUserListener(parent), m_MainWindow(parent)
+{
+}
+
+MainWindowUserListener::~MainWindowUserListener()
+{
+}
+
+bool MainWindowUserListener::userAboutToChange()
+{
+    m_MainWindow->writeSettings();
+    return true;
+}
+
+bool MainWindowUserListener::currentUserAboutToDisconnect()
+{
+    m_MainWindow->writeSettings();
+    return true;
+}
+
+
 //--------------------------------------------------------------------------------------------------------
 //--------------------------------------- Constructor / Destructor ---------------------------------------
 //--------------------------------------------------------------------------------------------------------
 MainWindow::MainWindow(QWidget *parent) :
-        Core::IMainWindow(parent),
-        m_modeStack(0),
-        m_RecentPatients(0),
-        m_PatientModelWrapper(0)
+    Core::IMainWindow(parent),
+    m_modeStack(0),
+    m_RecentPatients(0),
+    m_PatientModelWrapper(0),
+    m_UserListener(0)
 {
     setObjectName("MainWindow");
     messageSplash(tr("Creating Main Window"));
@@ -248,6 +273,9 @@ void MainWindow::extensionsInitialized()
 MainWindow::~MainWindow()
 {
     qWarning() << "MainWindow::~MainWindow()";
+    if (m_UserListener) {
+        pluginManager()->removeObject(m_UserListener);
+    }
 //    if (m_PatientModelWrapper) {
 //        delete m_PatientModelWrapper;
 //        m_PatientModelWrapper = 0;
@@ -259,6 +287,7 @@ void MainWindow::postCoreInitialization()
 {
     // Manage current user and patient
     onCurrentUserChanged();
+    pluginManager()->addObject(m_UserListener = new MainWindowUserListener(this));
     connect(user(), SIGNAL(userChanged()), this, SLOT(onCurrentUserChanged()));
     connect(patient(), SIGNAL(currentPatientChanged()), this, SLOT(onCurrentPatientChanged()));
 
