@@ -153,8 +153,6 @@ CalendarItemEditorPatientMapperWidget::CalendarItemEditorPatientMapperWidget(QWi
         settings()->setValue(Patients::Constants::S_PATIENTCHANGEONCREATION, false);
         ui->createPatientToolButton->addAction(cmd->action());
         ui->createPatientToolButton->setDefaultAction(cmd->action());
-        ui->createPatientToolButton->setIcon(cmd->action()->icon());
-        qWarning() << cmd->action()->icon().name();
         connect(patient(), SIGNAL(patientCreated(QString)), this, SLOT(onPatientCreated(QString)));
     } else {
         ui->createPatientToolButton->hide();

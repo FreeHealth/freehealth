@@ -318,7 +318,7 @@ void MainWindowActionHandler::createGeneralActions(const int actions)
     if (actions & Core::MainWindowActions::A_Patients_New) {
         a = aGeneralPatientNew = new QAction(this);
         a->setObjectName("aGeneralPatientNew");
-        a->setIcon(theme()->icon(Constants::ICONPATIENTS));
+        a->setIcon(theme()->icon(Constants::ICONPATIENT));
         cmd = actionManager()->registerAction(a, Constants::A_PATIENT_NEW, ctx);
         cmd->setDefaultKeySequence(Qt::CTRL + Qt::Key_N);
         cmd->setTranslations(Trans::Constants::PATIENTNEW_TEXT);
@@ -328,7 +328,7 @@ void MainWindowActionHandler::createGeneralActions(const int actions)
     if (actions & Core::MainWindowActions::A_Patients_ViewIdentity) {
         a = aGeneralPatientViewIdentity = new QAction(this);
         a->setObjectName("aGeneralPatientViewIdentity");
-        a->setIcon(theme()->icon(Constants::ICONPATIENTS));
+        a->setIcon(theme()->icon(Constants::ICONPATIENT));
         cmd = actionManager()->registerAction(a, Constants::A_PATIENT_VIEWIDENTITY, ctx);
         cmd->setTranslations(Trans::Constants::PATIENTVIEWIDENTITY_TEXT);
         menu->addAction(cmd, group);
@@ -337,7 +337,7 @@ void MainWindowActionHandler::createGeneralActions(const int actions)
     if (actions & Core::MainWindowActions::A_Patients_Remove) {
         a = aGeneralPatientRemove = new QAction(this);
         a->setObjectName("aGeneralPatientRemove");
-        a->setIcon(theme()->icon(Constants::ICONPATIENTS));
+        a->setIcon(theme()->icon(Constants::ICONPATIENT));
         cmd = actionManager()->registerAction(a, Constants::A_PATIENT_REMOVE, ctx);
         cmd->setTranslations(Trans::Constants::PATIENTREMOVE_TEXT);
         menu->addAction(cmd, group);
@@ -914,7 +914,7 @@ void MainWindowActionHandler::createPatientsActions(int actions)
     if (actions & Core::MainWindowActions::A_Patients_New) {
         a = aPatientNew = new QAction(this);
         a->setObjectName("aPatientNew");
-        a->setIcon(theme()->icon(Constants::ICONPATIENTS));
+        a->setIcon(theme()->icon(Constants::ICONPATIENT));
         cmd = actionManager()->registerAction(a, Constants::A_PATIENT_NEW, ctx);
         cmd->setDefaultKeySequence(Qt::CTRL + Qt::Key_N);
         cmd->setTranslations(Trans::Constants::PATIENTNEW_TEXT);
@@ -923,7 +923,7 @@ void MainWindowActionHandler::createPatientsActions(int actions)
     if (actions & Core::MainWindowActions::A_Patients_ViewIdentity) {
         a = aPatientViewIdentity = new QAction(this);
         a->setObjectName("aPatientViewIdentity");
-        a->setIcon(theme()->icon(Constants::ICONPATIENTS));
+        a->setIcon(theme()->icon(Constants::ICONPATIENT));
         cmd = actionManager()->registerAction(a, Constants::A_PATIENT_VIEWIDENTITY, ctx);
         cmd->setTranslations(Trans::Constants::PATIENTVIEWIDENTITY_TEXT);
         menu->addAction(cmd, Constants::G_PATIENTS);
@@ -931,7 +931,7 @@ void MainWindowActionHandler::createPatientsActions(int actions)
     if (actions & Core::MainWindowActions::A_Patients_Remove) {
         a = aPatientRemove = new QAction(this);
         a->setObjectName("aPatientRemove");
-        a->setIcon(theme()->icon(Constants::ICONPATIENTS));
+        a->setIcon(theme()->icon(Constants::ICONPATIENT));
         cmd = actionManager()->registerAction(a, Constants::A_PATIENT_REMOVE, ctx);
         cmd->setTranslations(Trans::Constants::PATIENTREMOVE_TEXT);
         menu->addAction(cmd, Constants::G_PATIENTS);
