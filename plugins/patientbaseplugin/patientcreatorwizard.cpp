@@ -27,11 +27,13 @@
 #include "patientcreatorwizard.h"
 #include "identitywidget.h"
 #include "patientmodel.h"
+#include "constants_settings.h"
 
 #include <coreplugin/icore.h>
 #include <coreplugin/itheme.h>
 #include <coreplugin/constants_icons.h>
 #include <coreplugin/ipatient.h>
+#include <coreplugin/isettings.h>
 
 #include <utils/global.h>
 #include <utils/log.h>
@@ -46,6 +48,7 @@ using namespace Patients;
 
 static inline Core::ITheme *theme() { return Core::ICore::instance()->theme(); }
 static inline Core::IPatient *patient() { return Core::ICore::instance()->patient(); }
+static inline Core::ISettings *settings() { return Core::ICore::instance()->settings(); }
 
 
 PatientCreatorWizard::PatientCreatorWizard(QWidget *parent) :
@@ -80,12 +83,13 @@ void PatientCreatorWizard::done(int r)
     } else if (r==QDialog::Accepted) {
         if (!validateCurrentPage())
             return;
-        Patients::PatientModel *m = Patients::PatientModel::activeModel();
-        if (m) {
-            QString uid = m_Page->lastInsertedUuid();
-            qWarning() << uid;
-            m->setFilter("", "", uid, Patients::PatientModel::FilterOnUuid);
-            m->setCurrentPatient(m->index(0,0));
+        if (settings()->value(Constants::S_PATIENTCHANGEONCREATION).toBool()) {
+            Patients::PatientModel *m = Patients::PatientModel::activeModel();
+            if (m) {
+                QString uid = m_Page->lastInsertedUuid();
+                m->setFilter("", "", uid, Patients::PatientModel::FilterOnUuid);
+                m->setCurrentPatient(m->index(0,0));
+            }
         }
         QDialog::done(r);
     }
@@ -99,6 +103,7 @@ IdentityPage::IdentityPage(QWidget *parent)
     m_Identity = new IdentityWidget(this, IdentityWidget::ReadWriteMode);
     m_Model = new PatientModel(this);
     m_Model->setFilter("", "", "__", PatientModel::FilterOnUuid);
+    m_Model->emitUserCreationOnSubmit(true);
     m_Model->insertRow(0);
     m_uuid = m_Model->index(0, Core::IPatient::Uid).data().toString();
 
@@ -117,7 +122,9 @@ bool IdentityPage::validatePage()
     if (!m_Identity->isIdentityValid())
         return false;
     bool ok = true;
+    connect(m_Model, SIGNAL(patientCreated(QString)), Patients::PatientModel::activeModel(), SIGNAL(patientCreated(QString)));
     if (m_Identity->submit()) {
+        Patients::PatientModel::activeModel()->refreshModel();
         LOG("Patient correctly created");
     } else {
         LOG_ERROR("Unable to create patient. IdentityPage::validatePage()");

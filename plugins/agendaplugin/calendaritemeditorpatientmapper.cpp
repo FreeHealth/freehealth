@@ -30,7 +30,14 @@
 
 #include <coreplugin/icore.h>
 #include <coreplugin/itheme.h>
+#include <coreplugin/ipatient.h>
+#include <coreplugin/isettings.h>
 #include <coreplugin/constants_icons.h>
+#include <coreplugin/constants_menus.h>
+#include <coreplugin/actionmanager/actionmanager.h>
+
+#include <patientbaseplugin/patientmodel.h>
+#include <patientbaseplugin/constants_settings.h>
 
 #include <calendar/calendar_item.h>
 #include <calendar/calendar_people.h>
@@ -48,6 +55,9 @@ using namespace Internal;
 using namespace Trans::ConstantTranslations;
 
 static inline Core::ITheme *theme() {return Core::ICore::instance()->theme();}
+static inline Core::IPatient *patient() {return Core::ICore::instance()->patient();}
+static inline Core::ISettings *settings() {return Core::ICore::instance()->settings();}
+static inline Core::ActionManager *actionManager() {return Core::ICore::instance()->actionManager();}
 
 namespace {
 
@@ -135,6 +145,21 @@ CalendarItemEditorPatientMapperWidget::CalendarItemEditorPatientMapperWidget(QWi
     delegate->setModel(m_PeopleModel);
     delegate->setFancyColumn(Calendar::CalendarPeopleModel::EmptyColumn);
 
+    Core::Command *cmd = actionManager()->command(Core::Constants::A_PATIENT_NEW);
+    if (cmd) {
+        // change the Patient settings for autoselection of newly created patients
+        /** \todo improve this part -> don't select patient after its creation. */
+        m_StoredSettingsValue = settings()->value(Patients::Constants::S_PATIENTCHANGEONCREATION).toBool();
+        settings()->setValue(Patients::Constants::S_PATIENTCHANGEONCREATION, false);
+        ui->createPatientToolButton->addAction(cmd->action());
+        ui->createPatientToolButton->setDefaultAction(cmd->action());
+        ui->createPatientToolButton->setIcon(cmd->action()->icon());
+        qWarning() << cmd->action()->icon().name();
+        connect(patient(), SIGNAL(patientCreated(QString)), this, SLOT(onPatientCreated(QString)));
+    } else {
+        ui->createPatientToolButton->hide();
+    }
+
     connect(ui->selectedPatientView, SIGNAL(clicked(QModelIndex)), this, SLOT(handleClicked(QModelIndex)));
     connect(ui->selectedPatientView, SIGNAL(pressed(QModelIndex)), this, SLOT(handlePressed(QModelIndex)));
 
@@ -143,6 +168,7 @@ CalendarItemEditorPatientMapperWidget::CalendarItemEditorPatientMapperWidget(QWi
 
 CalendarItemEditorPatientMapperWidget::~CalendarItemEditorPatientMapperWidget()
 {
+    settings()->setValue(Patients::Constants::S_PATIENTCHANGEONCREATION, m_StoredSettingsValue);
     delete ui;
 }
 
@@ -187,8 +213,23 @@ bool CalendarItemEditorPatientMapperWidget::submitToItem(const Calendar::Calenda
 
 void CalendarItemEditorPatientMapperWidget::onPatientSelected(const QString &name, const QString &uid)
 {
-    addPatientRow(name, uid);
-    m_Selected.append(Calendar::People(Calendar::People::PeopleAttendee, name, uid));
+    if (name.isEmpty()) {
+        QHash<QString, QString> name = Patients::PatientModel::patientName(QStringList() << uid);
+        addPatientRow(name.value(uid), uid);
+        m_Selected.append(Calendar::People(Calendar::People::PeopleAttendee, name.value(uid), uid));
+    } else {
+        addPatientRow(name, uid);
+        m_Selected.append(Calendar::People(Calendar::People::PeopleAttendee, name, uid));
+    }
+    ui->searchPatient->clear();
+}
+
+void CalendarItemEditorPatientMapperWidget::onPatientCreated(const QString &uid)
+{
+    qWarning() << Q_FUNC_INFO;
+    QHash<QString, QString> name = Patients::PatientModel::patientName(QStringList() << uid);
+    addPatientRow(name.value(uid), uid);
+    m_Selected.append(Calendar::People(Calendar::People::PeopleAttendee, name.value(uid), uid));
     ui->searchPatient->clear();
 }
 

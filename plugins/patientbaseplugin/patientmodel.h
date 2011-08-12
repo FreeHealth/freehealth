@@ -71,28 +71,12 @@ public:
     QString filter() const;
     int numberOfFilteredPatients() const;
 
-//    QVariant headerData(int section, Qt::Orientation orientation,
-//                                int role = Qt::DisplayRole) const;
-
+    void emitUserCreationOnSubmit(bool state);
     bool insertRows(int row, int count, const QModelIndex &parent = QModelIndex());
     bool removeRows(int row, int count, const QModelIndex &parent = QModelIndex());
-//    bool removeColumns(int column, int count, const QModelIndex &parent = QModelIndex());
-
-    bool insertRow(int arow, const QModelIndex &aparent = QModelIndex())        { return insertRows(arow, 1, aparent); }
-    bool insertColumn(int acolumn, const QModelIndex &aparent = QModelIndex())  { return insertColumns(acolumn, 1, aparent); }
-    bool removeRow(int arow, const QModelIndex &aparent = QModelIndex())        { return removeRows(arow, 1, aparent); }
-    bool removeColumn(int acolumn, const QModelIndex &aparent = QModelIndex())  { return removeColumns(acolumn, 1, aparent); }
 
     void fetchMore(const QModelIndex &parent);
     bool canFetchMore(const QModelIndex &parent) const;
-//    Qt::ItemFlags flags(const QModelIndex &index) const;
-//    void sort(int column, Qt::SortOrder order = Qt::AscendingOrder);
-//    QModelIndex buddy(const QModelIndex &index) const;
-//    QModelIndexList match(const QModelIndex &start, int role,
-//                                  const QVariant &value, int hits = 1,
-//                                  Qt::MatchFlags flags =
-//                                  Qt::MatchFlags(Qt::MatchStartsWith|Qt::MatchWrap)) const;
-//    QSize span(const QModelIndex &index) const;
 
     static QHash<QString, QString> patientName(const QList<QString> &uuids);
 

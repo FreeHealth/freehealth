@@ -150,6 +150,7 @@ public:
 
 Q_SIGNALS:
     void currentPatientChanged();
+    void patientCreated(const QString &uuid);
 };
 
 }  // End Core

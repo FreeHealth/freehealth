@@ -77,6 +77,7 @@ private:
 private Q_SLOTS:
     void removePatient(QAction *action);
     void onPatientSelected(const QString &name, const QString &uid);
+    void onPatientCreated(const QString &uid);
     void handlePressed(const QModelIndex &index);
     void handleClicked(const QModelIndex &index);
 
@@ -86,6 +87,7 @@ private:
     Patients::PatientBaseCompleter *m_Completer;
     Calendar::CalendarPeopleModel *m_PeopleModel;
     Calendar::AbstractCalendarModel *m_ItemModel;
+    bool m_StoredSettingsValue;
 };
 
 class CalendarItemEditorPatientMapper : public Calendar::ICalendarItemDataWidget

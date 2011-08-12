@@ -50,6 +50,7 @@ PatientModelWrapper::PatientModelWrapper(Patients::PatientModel *model) :
         Core::IPatient(model), m_Model(model)
 {
     connect(model, SIGNAL(patientChanged(QString)), this, SLOT(onCurrentPatientChanged(QString)));
+    connect(model, SIGNAL(patientCreated(QString)), this, SIGNAL(patientCreated(QString)));
 }
 
 PatientModelWrapper::~PatientModelWrapper()

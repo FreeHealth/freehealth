@@ -77,9 +77,10 @@ class PatientModelPrivate
 {
 public:
     PatientModelPrivate(PatientModel *parent) :
-            m_SqlPatient(0),
-            m_SqlPhoto(0),
-            q(parent)
+        m_SqlPatient(0),
+        m_SqlPhoto(0),
+        m_EmitCreationAtSubmit(false),
+        q(parent)
     {
 //        m_UserUuid = user()->uuid();
 
@@ -236,6 +237,8 @@ public:
     QString m_ExtraFilter;
     QString m_LkIds;
     QString m_UserUuid;
+    QStringList m_CreatedPatientUid;
+    bool m_EmitCreationAtSubmit;
 
 private:
     PatientModel *q;
@@ -621,10 +624,17 @@ QString PatientModel::filter() const
     return QString();
 }
 
-//QVariant PatientModel::headerData(int section, Qt::Orientation orientation, int role) const
-//{
-//    return QVariant();
-//}
+void PatientModel::emitUserCreationOnSubmit(bool state)
+{
+    d->m_EmitCreationAtSubmit = state;
+    if (!state) {
+        // emit created uids
+        for(int i = 0; i < d->m_CreatedPatientUid.count(); ++i) {
+            Q_EMIT patientCreated(d->m_CreatedPatientUid.at(i));
+        }
+        d->m_CreatedPatientUid.clear();
+    }
+}
 
 bool PatientModel::insertRows(int row, int count, const QModelIndex &parent)
 {
@@ -648,12 +658,16 @@ bool PatientModel::insertRows(int row, int count, const QModelIndex &parent)
         }
         if (!d->m_SqlPatient->setData(d->m_SqlPatient->index(row+i, Constants::IDENTITY_UID), uuid)) {
             ok = false;
-            Utils::Log::addError(this, "Unable to setData to newly created patient.", __FILE__,__LINE__);
+            LOG_ERROR("Unable to setData to newly created patient.");
         }
-//        qWarning() << ",nnnnnnnnnnnn" << user()->value(Core::IUser::PersonalLinkId);
         if (!d->m_SqlPatient->setData(d->m_SqlPatient->index(row+i, Constants::IDENTITY_LK_TOPRACT_LKID), user()->value(Core::IUser::PersonalLinkId))) { // linkIds
             ok = false;
-            Utils::Log::addError(this, "Unable to setData to newly created patient.", __FILE__,__LINE__);
+            LOG_ERROR("Unable to setData to newly created patient.");
+        }
+        if (!d->m_EmitCreationAtSubmit) {
+            Q_EMIT patientCreated(uuid);
+        } else {
+            d->m_CreatedPatientUid << uuid;
         }
     }
     endInsertRows();
@@ -682,8 +696,15 @@ bool PatientModel::canFetchMore(const QModelIndex &parent) const
 bool PatientModel::submit()
 {
     bool ok = true;
-    if (!d->m_SqlPatient->submitAll())
+    if (!d->m_SqlPatient->submitAll()) {
         ok = false;
+    } else {
+        // emit created uids
+        for(int i = 0; i < d->m_CreatedPatientUid.count(); ++i) {
+            Q_EMIT patientCreated(d->m_CreatedPatientUid.at(i));
+        }
+        d->m_CreatedPatientUid.clear();
+    }
     return true;
 }
 

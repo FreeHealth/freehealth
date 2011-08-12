@@ -67,7 +67,6 @@ UserCalendarModelFullEditorWidget::UserCalendarModelFullEditorWidget(QWidget *pa
 
     ui->setupUi(this);
     ui->editor->setEnabled(false);
-
     ui->listView->setActions(Views::Constants::AddRemove);
 
     connect(ui->listView, SIGNAL(activated(QModelIndex)), this, SLOT(setCurrentIndex(QModelIndex)));
