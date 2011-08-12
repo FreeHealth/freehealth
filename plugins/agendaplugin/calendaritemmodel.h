@@ -95,7 +95,7 @@ private:
     Internal::Appointement *getItemPointerByUid(const int uid) const;
     int createUid() const;
     void getItemFromDatabase(const QDate &from, const QDate &to, const int calendarId) const;
-    void getPeopleNames(Internal::Appointement *appointement);
+    void getPeopleNames(Internal::Appointement *appointement) const;
 
 private:
     mutable QList<Internal::Appointement *> m_sortedByBeginList;

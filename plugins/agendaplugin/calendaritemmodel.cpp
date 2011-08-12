@@ -293,6 +293,17 @@ QVariant CalendarItemModel::data(const Calendar::CalendarItem &item, int dataRef
         case Cancelled: return QColor(200,100,0); break;
         case Missed: return QColor(200,0,0); break;
         }
+    } else if (role==Qt::ToolTipRole) {
+        getPeopleNames((Appointement *)pItem);
+        QStringList names = pItem->peopleNames(Calendar::People::PeopleAttendee);
+        if (names.count()) {
+            QString html;
+            html += QString("<b>%1</b><br />%2").arg(names.join("<br />")).arg(pItem->data(Label).toString());
+            return html;
+        }
+        if (!pItem->data(Label).toString().isEmpty())
+            return pItem->data(Label);
+        return tr("Empty");
     }
     return QVariant();
 }
@@ -605,7 +616,7 @@ void CalendarItemModel::getItemFromDatabase(const QDate &from, const QDate &to, 
     }
 }
 
-void CalendarItemModel::getPeopleNames(Appointement *appointement)
+void CalendarItemModel::getPeopleNames(Appointement *appointement) const
 {
     for(int i = 0; i < Calendar::People::PeopleCount; ++i) {
         if (!appointement->peopleNamesPopulated(i)) {
