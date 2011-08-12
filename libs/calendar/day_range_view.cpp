@@ -720,13 +720,18 @@ void DayRangeBody::mouseReleaseEvent(QMouseEvent *event) {
 	case MouseMode_Move:
 	case MouseMode_Resize:
 		if (!m_pressItemWidget->inMotion()) {
-			// display a menu
+                    if (!itemContextMenu()) {
+                        // display a default contextual menu
 			QMenu menu;
 			QAction *modifyAction = menu.addAction(tr("modify"));
 			connect(modifyAction, SIGNAL(triggered()), this, SLOT(modifyPressItem()));
 			QAction *removeAction = menu.addAction(tr("remove"));
 			connect(removeAction, SIGNAL(triggered()), this, SLOT(removePressItem()));
 			menu.exec(event->globalPos());
+                    } else {
+                        // use the specified menu
+                        itemContextMenu()->exec(event->globalPos());
+                    }
 		} else {
 			newItem = m_pressItem;
 			newItem.setBeginning(m_pressItemWidget->beginDateTime());

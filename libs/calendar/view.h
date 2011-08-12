@@ -30,6 +30,8 @@
 
 #include <QWidget>
 #include <QDate>
+#include <QPointer>
+#include <QMenu>
 
 #include "calendar_item_widget.h"
 #include "abstract_calendar_model.h"
@@ -37,6 +39,14 @@
 class QPainter;
 class QRect;
 class QScrollArea;
+
+
+/**
+ * \file view.h
+ * \author Guillaume Denry <guillaume.denry@gmail.com>
+ * \version 0.6.0
+ * \date 12 Aug 2011
+*/
 
 namespace Calendar {
 	/**
@@ -67,6 +77,9 @@ namespace Calendar {
 		/** set the master widget scrollarea used to paint (generally used for header to know how the body is painted) */
 		void setMasterScrollArea(QScrollArea *scrollArea);
 
+                /** set the context menu to use on items */
+                void setContextMenuForItems(QMenu *menu) {m_ItemContextMenu = menu;}
+
 	signals:
 		void firstDateChanged();
 
@@ -84,6 +97,8 @@ namespace Calendar {
 		virtual void resetItemWidgets() {}
 		bool eventFilter(QObject *obj, QEvent *event);
 
+                QMenu *itemContextMenu() const {return m_ItemContextMenu;}
+
 		CalendarItemWidget *getWidgetByUid(const QString &uid) const;
 		QList<CalendarItemWidget*> getWidgetsByDate(const QDate &dayDate) const;
 		void deleteAllWidgets();
@@ -98,6 +113,7 @@ namespace Calendar {
 		QDate m_firstDate;
 		bool m_refreshGrid;
 		AbstractCalendarModel *m_model;
+                QPointer<QMenu> m_ItemContextMenu;
 	};
 }
 
