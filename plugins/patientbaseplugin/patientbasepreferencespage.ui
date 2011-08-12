@@ -43,6 +43,13 @@
         </property>
        </widget>
       </item>
+      <item row="1" column="0">
+       <widget class="QCheckBox" name="selectNewlyCreatedBox">
+        <property name="text">
+         <string>Select newly created patients</string>
+        </property>
+       </widget>
+      </item>
      </layout>
     </widget>
    </item>
