@@ -34,7 +34,7 @@
  * \file calendaritemmodel.h
  * \author Eric MAEKER <eric.maeker@gmail.com>
  * \version 0.6.0
- * \date 25 Jun 2011
+ * \date 11 Aug 2011
 */
 
 namespace Agenda {
@@ -65,6 +65,7 @@ public:
     Calendar::CalendarItem addCalendarItem(const Calendar::CalendarItem &item);
     bool updateCalendarItem(const Calendar::CalendarItem &item);
     void removeItem(const QString &uid);
+    bool moveItem(const Calendar::CalendarItem &from, Calendar::CalendarItem &to);
 
     QVariant data(const Calendar::CalendarItem &item, int dataRef, int role = Qt::DisplayRole) const;
     bool setData(const Calendar::CalendarItem &item, int dataRef, const QVariant &value, int role = Qt::EditRole);
@@ -72,8 +73,9 @@ public:
     void stopEvents();
     void resumeEvents();
 
-    virtual void addPeople(const Calendar::CalendarItem &item, const Calendar::People &people);
-    virtual QStringList peopleNames(const Calendar::CalendarItem &item, const int peopleType = Calendar::People::PeopleAttendee, bool skipEmpty = false) const;
+    virtual bool setPeopleList(const Calendar::CalendarItem &item, const QList<Calendar::People> &peoples);
+    virtual bool addPeople(const Calendar::CalendarItem &item, const Calendar::People &people);
+    QList<Calendar::People> peopleList(const Calendar::CalendarItem &item);
 
     // Filters
     bool filterUserCalendarEvents(const QVariant &calendarUid);
@@ -82,20 +84,8 @@ public Q_SLOTS:
     void clearAll();
     bool submitAll();
     bool submit(const Calendar::CalendarItem &item);
+    bool revert(const Calendar::CalendarItem &item);
 
-Q_SIGNALS:
-    void itemInserted(const Calendar::CalendarItem &newItem);
-    void itemModified(const Calendar::CalendarItem &oldItem, const Calendar::CalendarItem &newItem);
-    void itemRemoved(const Calendar::CalendarItem &removedItem);
-    void reset();
-
-protected:
-    void beginInsertItem();
-    void endInsertItem(const Calendar::CalendarItem &newItem);
-    void beginModifyItem();
-    void endModifyItem(const Calendar::CalendarItem &oldItem, const Calendar::CalendarItem &newItem);
-    void beginRemoveItem();
-    void endRemoveItem(const Calendar::CalendarItem &removedItem);
 
 private:
     Calendar::CalendarItem toCalendarItem(Internal::Appointement *item) const;
@@ -105,9 +95,7 @@ private:
     Internal::Appointement *getItemPointerByUid(const int uid) const;
     int createUid() const;
     void getItemFromDatabase(const QDate &from, const QDate &to, const int calendarId) const;
-
-//private Q_SLOTS:
-//    void userChanged();
+    void getPeopleNames(Internal::Appointement *appointement);
 
 private:
     mutable QList<Internal::Appointement *> m_sortedByBeginList;

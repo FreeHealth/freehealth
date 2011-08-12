@@ -36,12 +36,13 @@
  * \file icalendaritemdatawidget.h
  * \author Eric MAEKER <eric.maeker@gmail.com>
  * \version 0.6.0
- * \date 05 Jul 2011
+ * \date 11 Aug 2011
 */
 
 
 namespace Calendar {
 class CalendarItem;
+class AbstractCalendarModel;
 
 class CALENDAR_EXPORT ICalendarItemDataWidget : public QObject
 {
@@ -62,6 +63,8 @@ public:
 
     virtual int insertionPlace() const = 0;
     virtual QWidget *createWidget(QWidget *parent = 0) = 0;
+
+    virtual bool setCalendarItemModel(Calendar::AbstractCalendarModel *model) = 0;
     virtual bool setCalendarItem(const Calendar::CalendarItem &item) = 0;
 
     virtual bool clear() = 0;

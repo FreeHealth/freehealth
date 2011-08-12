@@ -287,7 +287,6 @@ void UserLineEditCompleterSearch::cancelSearch()
 
 void UserLineEditCompleterSearch::userSelected(const QModelIndex &index)
 {
-    qWarning() << Q_FUNC_INFO << index;
     QString uid = m_Completer->model()->index(index.row(), UserCompleter::Uid, index.parent()).data().toString();
     qWarning() << index.data().toString() << uid;
     Q_EMIT selectedUser(index.data().toString(), uid);

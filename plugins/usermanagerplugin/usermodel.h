@@ -142,7 +142,7 @@ public:
     QList<int> practionnerLkIds(const QString &uid);
     int practionnerLkId(const QString &uid);
 
-    QHash<QString, QString> getUserNames(const QStringList &uid);
+    static QHash<QString, QString> getUserNames(const QStringList &uid);
     bool createVirtualUsers(const int count);
 
     int numberOfUsersInMemory();

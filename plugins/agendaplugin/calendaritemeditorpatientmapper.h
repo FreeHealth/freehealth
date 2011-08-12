@@ -42,6 +42,10 @@
  * \date 09 Jul 2011
 */
 
+namespace Calendar {
+class AbstractCalendarModel;
+}
+
 namespace Patients {
 class PatientBaseCompleter;
 }
@@ -60,9 +64,12 @@ public:
     ~CalendarItemEditorPatientMapperWidget();
 
     void clear();
+    void setCalendarItemModel(Calendar::AbstractCalendarModel *model);
     void setCalendarItem(const Calendar::CalendarItem &item);
 
+public Q_SLOTS:
     QList<Calendar::People> selected() const {return m_Selected;}
+    bool submitToItem(const Calendar::CalendarItem &item);
 
 private:
     void addPatientRow(const QString &name, const QString &uid);
@@ -70,12 +77,15 @@ private:
 private Q_SLOTS:
     void removePatient(QAction *action);
     void onPatientSelected(const QString &name, const QString &uid);
+    void handlePressed(const QModelIndex &index);
+    void handleClicked(const QModelIndex &index);
 
 private:
     Internal::Ui::CalendarItemEditorPatientMapper *ui;
     QList<Calendar::People> m_Selected;
     Patients::PatientBaseCompleter *m_Completer;
-    QHash<QString, QWidget *> m_PatientWidgets;
+    Calendar::CalendarPeopleModel *m_PeopleModel;
+    Calendar::AbstractCalendarModel *m_ItemModel;
 };
 
 class CalendarItemEditorPatientMapper : public Calendar::ICalendarItemDataWidget
@@ -87,6 +97,8 @@ public:
 
     int insertionPlace() const;
     QWidget *createWidget(QWidget *parent = 0);
+
+    bool setCalendarItemModel(Calendar::AbstractCalendarModel *model);
     bool setCalendarItem(const Calendar::CalendarItem &item);
 
     bool clear();
@@ -94,6 +106,7 @@ public:
 
 private:
     QPointer<Internal::CalendarItemEditorPatientMapperWidget> m_Widget;
+    Calendar::AbstractCalendarModel *m_ItemModel;
 };
 
 }  // End namespace Internal

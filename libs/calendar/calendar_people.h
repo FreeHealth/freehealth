@@ -87,6 +87,7 @@ public:
     virtual int peopleCount(const int type = -1) const;
     virtual QStringList peopleNames(const int people, bool skipEmpty = false) const;
     virtual QStringList peopleUids(const int people, bool skipEmpty = false) const;
+    virtual bool peopleNamesPopulated(const int peopleType) const;
     virtual QList<Calendar::People> peopleList() const {return m_People;}
 
 protected:

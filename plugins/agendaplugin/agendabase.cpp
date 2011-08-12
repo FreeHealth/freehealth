@@ -276,11 +276,6 @@ AgendaBase::AgendaBase(QObject *parent) :
     addField(Table_EVENTS, EVENT_ID, "EV_ID", FieldIsUniquePrimaryKey);
     addField(Table_EVENTS, EVENT_CAL_ID, "CAL_ID", FieldIsInteger);
     addField(Table_EVENTS, EVENT_COMMON_ID, "COM_ID", FieldIsInteger);
-
-    /** \todo code here : field obsolete */
-    addField(Table_EVENTS, EVENT_PATIENT_UID, "PATIENT_UID", FieldIsUUID);
-    /** end */
-
     addField(Table_EVENTS, EVENT_ISVALID, "ISVALID", FieldIsBoolean);
     addField(Table_EVENTS, EVENT_DATESTART, "DTSTART", FieldIsDate);
     addField(Table_EVENTS, EVENT_DATEEND, "DTEND", FieldIsDate);
@@ -617,17 +612,6 @@ QList<Agenda::UserCalendar *> AgendaBase::getUserCalendars(const QString &userUu
     return toReturn;
 }
 
-//QList<Agenda::UserCalendar *> AgendaBase::getDelegatedUserCalendars(const QString &userUuid)
-//{
-//    QList<Agenda::UserCalendar *> toReturn;
-//    if (!connectDatabase(Constants::DB_NAME, __LINE__))
-//        return toReturn;
-
-//    QString uid = userUuid;
-//    if (userUuid.isEmpty())
-//        uid = user()->uuid();
-//}
-
 /** Save the user's calendar availabilities for the specified \e calendar to database. The \e calendar is modified during this process (ids are set if needed). */
 bool AgendaBase::saveCalendarAvailabilities(Agenda::UserCalendar *calendar)
 {
@@ -832,46 +816,54 @@ QList<Appointement *> AgendaBase::getCalendarEvents(const CalendarEventQuery &ca
     Utils::FieldList conds;
     conds << Utils::Field(Constants::Table_CALENDAR, Constants::CAL_ISVALID, "=1");
     conds << Utils::Field(Constants::Table_EVENTS, Constants::EVENT_ISVALID, "=1");
-    // Date conditions
-    if (calQuery.hasDateRange()) {
-        /** \todo code here: better management of dates in filters */
-        conds << Utils::Field(Constants::Table_EVENTS, Constants::EVENT_DATESTART, QString(">='%1'").arg(calQuery.dateStart().toString(Qt::ISODate)));
-        conds << Utils::Field(Constants::Table_EVENTS, Constants::EVENT_DATEEND, QString("<='%1'").arg(calQuery.dateEnd().toString(Qt::ISODate)));
-    }
-    // Calendars && User conditions
-    if (calQuery.calendarIds().count() > 0) {
-        joins << Utils::Join(Constants::Table_EVENTS, Constants::EVENT_CAL_ID, Constants::Table_CALENDAR, Constants::CAL_ID);
-        const QList<int> &ids = calQuery.calendarIds();
-        Utils::Field calIdField = field(Constants::Table_CALENDAR, Constants::CAL_ID);
-        QString w = "=";
-        QString r = QString(" OR `%1`.`%2`=").arg(calIdField.tableName).arg(calIdField.fieldName);
-        for(int i = 0; i < ids.count(); ++i) {
-            w += QString::number(ids.at(i)) + r;
+    QString order;
+    // get a specific appointement ?
+    if (!calQuery.appointementId().isNull()) {
+        if (calQuery.appointementId().toInt() == -1)
+            return toReturn;
+        conds << Utils::Field(Constants::Table_EVENTS, Constants::EVENT_ID, QString("='%1'").arg(calQuery.appointementId().toString()));
+    } else {
+        // Date conditions
+        if (calQuery.hasDateRange()) {
+            /** \todo code here: better management of dates in filters */
+            conds << Utils::Field(Constants::Table_EVENTS, Constants::EVENT_DATESTART, QString(">='%1'").arg(calQuery.dateStart().toString(Qt::ISODate)));
+            conds << Utils::Field(Constants::Table_EVENTS, Constants::EVENT_DATEEND, QString("<='%1'").arg(calQuery.dateEnd().toString(Qt::ISODate)));
         }
-        w.chop(r.length());
-        conds << Utils::Field(Constants::Table_CALENDAR, Constants::CAL_ID, w);
-    } else if (calQuery.useCurrentUser()) {
-        joins << Utils::Join(Constants::Table_EVENTS, Constants::EVENT_CAL_ID, Constants::Table_USERCALENDARS, Constants::USERCAL_CAL_ID);
-        joins << Utils::Join(Constants::Table_CALENDAR, Constants::CAL_ID, Constants::Table_USERCALENDARS, Constants::USERCAL_CAL_ID);
-        conds << Utils::Field(Constants::Table_USERCALENDARS, Constants::USERCAL_USER_UUID, QString("='%1'").arg(user()->uuid()));
-        conds << Utils::Field(Constants::Table_CALENDAR, Constants::CAL_DEFAULT, "=1");
-    } else if (calQuery.usersUuid().count()) {
-        const QStringList &uids = calQuery.usersUuid();
-        Utils::Field uidField = field(Constants::Table_USERCALENDARS, Constants::USERCAL_USER_UUID);
-        joins << Utils::Join(Constants::Table_EVENTS, Constants::EVENT_CAL_ID, Constants::Table_USERCALENDARS, Constants::USERCAL_CAL_ID);
-        joins << Utils::Join(Constants::Table_CALENDAR, Constants::CAL_ID, Constants::Table_USERCALENDARS, Constants::USERCAL_CAL_ID);
-        QString w = "=";
-        QString r = QString(" OR `%1`.`%2`=").arg(uidField.tableName).arg(uidField.fieldName);
-        for(int i = 0; i < uids.count(); ++i) {
-            w += "'" + uids.at(i) + "'" + r;
+        // Calendars && User conditions
+        if (calQuery.calendarIds().count() > 0) {
+            joins << Utils::Join(Constants::Table_EVENTS, Constants::EVENT_CAL_ID, Constants::Table_CALENDAR, Constants::CAL_ID);
+            const QList<int> &ids = calQuery.calendarIds();
+            Utils::Field calIdField = field(Constants::Table_CALENDAR, Constants::CAL_ID);
+            QString w = "=";
+            QString r = QString(" OR `%1`.`%2`=").arg(calIdField.tableName).arg(calIdField.fieldName);
+            for(int i = 0; i < ids.count(); ++i) {
+                w += QString::number(ids.at(i)) + r;
+            }
+            w.chop(r.length());
+            conds << Utils::Field(Constants::Table_CALENDAR, Constants::CAL_ID, w);
+        } else if (calQuery.useCurrentUser()) {
+            joins << Utils::Join(Constants::Table_EVENTS, Constants::EVENT_CAL_ID, Constants::Table_USERCALENDARS, Constants::USERCAL_CAL_ID);
+            joins << Utils::Join(Constants::Table_CALENDAR, Constants::CAL_ID, Constants::Table_USERCALENDARS, Constants::USERCAL_CAL_ID);
+            conds << Utils::Field(Constants::Table_USERCALENDARS, Constants::USERCAL_USER_UUID, QString("='%1'").arg(user()->uuid()));
+            conds << Utils::Field(Constants::Table_CALENDAR, Constants::CAL_DEFAULT, "=1");
+        } else if (calQuery.usersUuid().count()) {
+            const QStringList &uids = calQuery.usersUuid();
+            Utils::Field uidField = field(Constants::Table_USERCALENDARS, Constants::USERCAL_USER_UUID);
+            joins << Utils::Join(Constants::Table_EVENTS, Constants::EVENT_CAL_ID, Constants::Table_USERCALENDARS, Constants::USERCAL_CAL_ID);
+            joins << Utils::Join(Constants::Table_CALENDAR, Constants::CAL_ID, Constants::Table_USERCALENDARS, Constants::USERCAL_CAL_ID);
+            QString w = "=";
+            QString r = QString(" OR `%1`.`%2`=").arg(uidField.tableName).arg(uidField.fieldName);
+            for(int i = 0; i < uids.count(); ++i) {
+                w += "'" + uids.at(i) + "'" + r;
+            }
+            w.chop(r.length());
+            conds << Utils::Field(Constants::Table_USERCALENDARS, Constants::USERCAL_USER_UUID, w);
         }
-        w.chop(r.length());
-        conds << Utils::Field(Constants::Table_USERCALENDARS, Constants::USERCAL_USER_UUID, w);
-    }
 
-    // Manage pagination
-    //     Add order
-    QString order = QString("\n ORDER BY `%1`.`%2` ASC").arg(table(Constants::Table_EVENTS)).arg(fieldName(Constants::Table_EVENTS, Constants::EVENT_ID));
+        // Manage pagination
+        //     Add order
+        order = QString("\n ORDER BY `%1`.`%2` ASC").arg(table(Constants::Table_EVENTS)).arg(fieldName(Constants::Table_EVENTS, Constants::EVENT_ID));
+    }
 
     // Get Event table
     req = select(Constants::Table_EVENTS, joins, conds) + order;
@@ -883,7 +875,6 @@ QList<Appointement *> AgendaBase::getCalendarEvents(const CalendarEventQuery &ca
             ev->setData(Constants::Db_CalId, query.value(Constants::EVENT_CAL_ID));
             ev->setData(Constants::Db_ComId, query.value(Constants::EVENT_COMMON_ID));
             ev->setData(Constants::Db_IsValid, query.value(Constants::EVENT_ISVALID));
-//            ev->setData(ICalendarEvent::PatientUid, query.value(Constants::EVENT_PATIENT_UID));
             ev->setData(CalendarItemModel::Uid, query.value(Constants::EVENT_ID));
             ev->setData(CalendarItemModel::DateStart, query.value(Constants::EVENT_DATESTART));
             ev->setData(CalendarItemModel::DateEnd, query.value(Constants::EVENT_DATEEND));
@@ -893,6 +884,8 @@ QList<Appointement *> AgendaBase::getCalendarEvents(const CalendarEventQuery &ca
         LOG_QUERY_ERROR(query);
     }
     query.finish();
+    if (toReturn.isEmpty())
+        return toReturn;
 
     // Get common data
     QHash<int, QString> where;
@@ -1134,6 +1127,7 @@ bool AgendaBase::getPatientNames(Appointement *item)
 /** Save or update a Calendar::CalendarItem to the agenda database */
 bool AgendaBase::saveNonCyclingEvent(Appointement *event)
 {
+//    qWarning() << Q_FUNC_INFO;
     if (!event->isModified())
         return true;
 
@@ -1150,8 +1144,7 @@ bool AgendaBase::saveNonCyclingEvent(Appointement *event)
         query.bindValue(Constants::EVENT_ID, QVariant());
         query.bindValue(Constants::EVENT_CAL_ID, event->data(Constants::Db_CalId));
         query.bindValue(Constants::EVENT_COMMON_ID, event->data(Constants::Db_ComId));
-        query.bindValue(Constants::EVENT_PATIENT_UID, QVariant()); //event->patients());
-        query.bindValue(Constants::EVENT_ISVALID, event->data(Constants::Db_IsValid));
+        query.bindValue(Constants::EVENT_ISVALID, event->data(Constants::Db_IsValid).toInt());
         query.bindValue(Constants::EVENT_DATESTART, event->beginning());
         query.bindValue(Constants::EVENT_DATEEND, event->ending());
         if (!query.exec()) {

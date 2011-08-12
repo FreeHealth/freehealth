@@ -112,7 +112,6 @@ namespace Constants {
         EVENT_ID = 0,
         EVENT_CAL_ID,
         EVENT_COMMON_ID,
-        EVENT_PATIENT_UID,
         EVENT_ISVALID,
         EVENT_DATESTART,
         EVENT_DATEEND

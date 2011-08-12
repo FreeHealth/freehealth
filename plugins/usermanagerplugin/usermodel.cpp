@@ -1120,7 +1120,7 @@ QList<int> UserModel::practionnerLkIds(const QString &uid)
 }
 
 /** Get all user's name from their \e uids. The returned QHash contains as key the uid of users, and as key their name. */
-QHash<QString, QString> UserModel::getUserNames(const QStringList &uids)
+QHash<QString, QString> UserModel::getUserNames(const QStringList &uids)  // static
 {
     QHash<QString, QString> toReturn;
     QHash<int, QString> where;
@@ -1147,7 +1147,7 @@ QHash<QString, QString> UserModel::getUserNames(const QStringList &uids)
                 toReturn.insert(uids.at(i), name);
             }
         } else {
-            LOG_QUERY_ERROR(query);
+            LOG_QUERY_ERROR_FOR("UserModel", query);
         }
         query.finish();
     }

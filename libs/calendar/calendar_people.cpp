@@ -72,7 +72,8 @@ void CalendarPeople::insertPeople(const int index, const Calendar::People &peopl
 void CalendarPeople::setPeopleName(const int people, const QString &uid, const QString &name)
 {
     for(int i = 0; i < m_People.count(); ++i) {
-        if (m_People.at(i).type==people && m_People.at(i).uid==uid) {
+        const People &p = m_People.at(i);
+        if (p.type==people && p.uid==uid) {
             m_People[i].name = name;
         }
     }
@@ -82,12 +83,13 @@ QStringList CalendarPeople::peopleNames(const int people, bool skipEmpty) const
 {
     QStringList toReturn;
     for(int i = 0; i < m_People.count(); ++i) {
-        if (m_People.at(i).type == people) {
+        const People &p = m_People.at(i);
+        if (p.type == people) {
             if (skipEmpty) {
-                if (m_People.at(i).name.isEmpty())
+                if (p.name.isEmpty())
                     continue;
             }
-            toReturn << m_People.at(i).name;
+            toReturn << p.name;
         }
     }
     return toReturn;
@@ -106,6 +108,19 @@ QStringList CalendarPeople::peopleUids(const int people, bool skipEmpty) const
         }
     }
     return toReturn;
+}
+
+bool CalendarPeople::peopleNamesPopulated(const int peopleType) const
+{
+    for(int i = 0; i < m_People.count(); ++i) {
+        const People &p = m_People.at(i);
+        if (p.type == peopleType) {
+            if (!p.uid.isEmpty() && p.name.isEmpty()) {
+                return false;
+            }
+        }
+    }
+    return true;
 }
 
 //void CalendarPeople::removePeople(const int index)
@@ -164,7 +179,7 @@ int CalendarPeopleModel::rowCount(const QModelIndex &) const
 
 int CalendarPeopleModel::columnCount(const QModelIndex &) const
 {
-    return 3;
+    return 4;
 }
 
 void CalendarPeopleModel::clear()

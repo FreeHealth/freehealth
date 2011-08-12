@@ -132,26 +132,24 @@ void QButtonLineEdit::setRightButton(QToolButton * button)
 
 void QButtonLineEdit::resizeEvent(QResizeEvent *)
 {
-    if (m_leftButton)
-    {
+    if (m_leftButton) {
         QSize sz = m_leftButton->sizeHint();
         int frameWidth = style()->pixelMetric(QStyle::PM_DefaultFrameWidth);
         m_leftButton->move(rect().left() + frameWidth ,
                           (rect().bottom() + 1 - sz.height()) / 2);
     }
-    if (m_rightButton)
-    {
+    if (m_rightButton) {
         QSize sz = m_rightButton->sizeHint();
         int frameWidth = style()->pixelMetric(QStyle::PM_DefaultFrameWidth);
         m_rightButton->move(rect().right() - frameWidth - sz.width(),
-                           (rect().bottom() + 1 - sz.height()) / 2);
+                           (rect().bottom() +2 - sz.height()) / 2);
     }
 }
 
 void QButtonLineEdit::prepareConnections()
 {
-    // Manage QToolButton Actions
-    connect(m_leftButton, SIGNAL(triggered(QAction*)), this, SLOT(leftTrig(QAction*)));
+    if (m_leftButton)
+        connect(m_leftButton, SIGNAL(triggered(QAction*)), this, SLOT(leftTrig(QAction*)));
 }
 
 void QButtonLineEdit::emitTextChangedSignal()

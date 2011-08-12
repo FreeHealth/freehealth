@@ -6,8 +6,8 @@
    <rect>
     <x>0</x>
     <y>0</y>
-    <width>455</width>
-    <height>448</height>
+    <width>460</width>
+    <height>473</height>
    </rect>
   </property>
   <property name="sizePolicy">
@@ -318,7 +318,7 @@
    <item row="6" column="0">
     <widget class="QTabWidget" name="tabWidget">
      <property name="currentIndex">
-      <number>0</number>
+      <number>1</number>
      </property>
      <widget class="QWidget" name="tab">
       <attribute name="title">
@@ -487,6 +487,24 @@
    </item>
   </layout>
  </widget>
+ <tabstops>
+  <tabstop>eventLabel</tabstop>
+  <tabstop>startDate</tabstop>
+  <tabstop>startTime</tabstop>
+  <tabstop>durationCombo</tabstop>
+  <tabstop>endDate</tabstop>
+  <tabstop>endTime</tabstop>
+  <tabstop>busyCheck</tabstop>
+  <tabstop>statusCombo</tabstop>
+  <tabstop>privateCheck</tabstop>
+  <tabstop>password</tabstop>
+  <tabstop>tabWidget</tabstop>
+  <tabstop>typeCombo</tabstop>
+  <tabstop>location</tabstop>
+  <tabstop>calendarCombo</tabstop>
+  <tabstop>fullInfo</tabstop>
+  <tabstop>selectIconButton</tabstop>
+ </tabstops>
  <resources/>
  <connections/>
 </ui>

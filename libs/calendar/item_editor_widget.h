@@ -60,7 +60,7 @@ public:
     void clear();
     void setModel(AbstractCalendarModel *model);
 
-    void setCalendarEvent(const Calendar::CalendarItem &event);
+    void setCalendarItem(const Calendar::CalendarItem &item);
     Calendar::CalendarItem calendarEvent() const;
 
     void toogleExtraInformations();

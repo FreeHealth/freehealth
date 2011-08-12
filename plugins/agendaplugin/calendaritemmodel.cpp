@@ -34,6 +34,10 @@
 #include <coreplugin/iuser.h>
 #include <coreplugin/itheme.h>
 
+#include <patientbaseplugin/patientmodel.h>
+
+#include <usermanagerplugin/usermodel.h>
+
 #include <calendar/calendar_item.h>
 
 #include <utils/log.h>
@@ -142,19 +146,21 @@ int CalendarItemModel::count() const
 Calendar::CalendarItem CalendarItemModel::insertItem(const QDateTime &beginning, const QDateTime &ending)
 {
     if (m_propagateEvents)
-            beginInsertItem();
+        beginInsertItem();
 
     // create the item once but insert it in two lists
     Appointement *item = new Appointement;
     item->setModelUid(createUid());
     item->setData(DateStart, beginning);
     item->setData(DateEnd, ending);
+    item->setData(Constants::Db_IsValid, 1);
+    item->setData(Constants::Db_CalId, m_CalendarUid);
 
     m_sortedByBeginList.insert(getInsertionIndex(true, beginning, m_sortedByBeginList, 0, m_sortedByBeginList.count() - 1), item);
     m_sortedByEndList.insert(getInsertionIndex(false, ending, m_sortedByEndList, 0, m_sortedByEndList.count() - 1), item);
 
     if (m_propagateEvents)
-            endInsertItem(toCalendarItem(item));
+        endInsertItem(toCalendarItem(item));
 
     return toCalendarItem(item);
 }
@@ -176,6 +182,8 @@ Calendar::CalendarItem CalendarItemModel::addCalendarItem(const Calendar::Calend
     pItem->setModelUid(createUid());
     pItem->setData(DateStart, item.beginning());
     pItem->setData(DateEnd, item.ending());
+    pItem->setData(Constants::Db_IsValid, 1);
+    pItem->setData(Constants::Db_CalId, m_CalendarUid);
 
     m_sortedByBeginList.insert(getInsertionIndex(true, item.beginning(), m_sortedByBeginList, 0, m_sortedByBeginList.count() - 1), pItem);
     m_sortedByEndList.insert(getInsertionIndex(false, item.ending(), m_sortedByEndList, 0, m_sortedByEndList.count() - 1), pItem);
@@ -207,6 +215,8 @@ void CalendarItemModel::setItemByUid(const QString &uid, const Calendar::Calenda
     Appointement *pItem = new Appointement;
     pItem->setData(DateStart, item.beginning());
     pItem->setData(DateEnd, item.ending());
+    pItem->setData(Constants::Db_IsValid, 1);
+    pItem->setData(Constants::Db_CalId, m_CalendarUid);
     pItem->setModelUid(uid.toInt());
 
     m_sortedByBeginList.insert(getInsertionIndex(true, item.beginning(), m_sortedByBeginList, 0, m_sortedByBeginList.count() - 1), pItem);
@@ -224,15 +234,34 @@ void CalendarItemModel::removeItem(const QString &uid)
     Appointement *oldItem = getItemPointerByUid(uid.toInt());
     if (!oldItem)
             return;
+    // remove from database
+    oldItem->setData(Constants::Db_IsValid, 0);
+    base()->saveCalendarEvent(oldItem);
 
+    // remove from model
     beginRemoveItem();
-
     m_sortedByBeginList.removeAt(m_sortedByBeginList.indexOf(oldItem));
     m_sortedByEndList.removeAt(m_sortedByEndList.indexOf(oldItem));
-
     endRemoveItem(toCalendarItem(oldItem));
 
     delete oldItem;
+}
+
+bool CalendarItemModel::moveItem(const Calendar::CalendarItem &from, Calendar::CalendarItem &to)
+{
+    qWarning() << Q_FUNC_INFO << from.isValid();
+    if (!from.isValid())
+        return false;
+
+    Appointement *item = getItemPointerByUid(from.uid().toInt());
+    if (!item) {
+        return false;
+    }
+
+    item->setData(DateStart, to.beginning());
+    item->setData(DateEnd, to.ending());
+    Q_EMIT itemModified(from, toCalendarItem(item));
+    return true;
 }
 
 QVariant CalendarItemModel::data(const Calendar::CalendarItem &item, int dataRef, int role) const
@@ -286,7 +315,6 @@ bool CalendarItemModel::setData(const Calendar::CalendarItem &item, int dataRef,
 
 
     if (role==Qt::EditRole) {
-        qWarning() << "SetData" << pItem->modelUid() << item.uid() << dataRef << value;
         pItem->setData(dataRef, value);
         if (dataRef==DateStart || dataRef==DateEnd) {
             Q_EMIT itemModified(item, toCalendarItem(pItem));
@@ -308,14 +336,33 @@ void CalendarItemModel::resumeEvents()
     Calendar::AbstractCalendarModel::resumeEvents();
 }
 
-void CalendarItemModel::addPeople(const Calendar::CalendarItem &item, const Calendar::People &people)
+bool CalendarItemModel::setPeopleList(const Calendar::CalendarItem &item, const QList<Calendar::People> &peoples)
 {
-    /** \todo code here */
+    if (!item.isValid())
+        return false;
+
+    Appointement *pItem = getItemPointerByUid(item.uid().toInt());
+    pItem->setPeopleList(peoples);
+    return true;
 }
 
-QStringList CalendarItemModel::peopleNames(const Calendar::CalendarItem &item, const int peopleType, bool skipEmpty) const
+bool CalendarItemModel::addPeople(const Calendar::CalendarItem &item, const Calendar::People &people)
 {
-    /** \todo code here */
+    if (!item.isValid())
+        return false;
+
+    Appointement *pItem = getItemPointerByUid(item.uid().toInt());
+    pItem->addPeople(people);
+    return true;
+}
+
+QList<Calendar::People> CalendarItemModel::peopleList(const Calendar::CalendarItem &item)
+{
+    if (!item.isValid())
+        return QList<Calendar::People>();
+    Appointement *pItem = getItemPointerByUid(item.uid().toInt());
+    getPeopleNames(pItem);
+    return pItem->peopleList();
 }
 
 /** Defines the UserCalendar to use as event filter according to its index in the userCalendarComboModel(). */
@@ -356,35 +403,35 @@ bool CalendarItemModel::submit(const Calendar::CalendarItem &item)
     return base()->saveCalendarEvent(pItem);
 }
 
-
-void CalendarItemModel::beginInsertItem()
+bool CalendarItemModel::revert(const Calendar::CalendarItem &item)
 {
-    Calendar::AbstractCalendarModel::beginInsertItem();
-}
+    if (!item.isValid())
+        return false;
 
-void CalendarItemModel::endInsertItem(const Calendar::CalendarItem &newItem)
-{
-    Calendar::AbstractCalendarModel::endInsertItem(newItem);
-}
+    Appointement *pItem = getItemPointerByUid(item.uid().toInt());
 
-void CalendarItemModel::beginModifyItem()
-{
-    Calendar::AbstractCalendarModel::beginModifyItem();
-}
+    if (!pItem)
+        return false;
 
-void CalendarItemModel::endModifyItem(const Calendar::CalendarItem &oldItem, const Calendar::CalendarItem &newItem)
-{
-    Calendar::AbstractCalendarModel::endModifyItem(oldItem, newItem);
-}
+    CalendarEventQuery query;
+    query.setAppointementId(pItem->data(Constants::Db_EvId));
+    QList<Appointement *> a = base()->getCalendarEvents(query);
 
-void CalendarItemModel::beginRemoveItem()
-{
-    Calendar::AbstractCalendarModel::beginRemoveItem();
-}
+    if (a.count()==1) {
+        beginModifyItem();
+        m_sortedByBeginList.removeAt(m_sortedByBeginList.indexOf(pItem));
+        m_sortedByEndList.removeAt(m_sortedByEndList.indexOf(pItem));
 
-void CalendarItemModel::endRemoveItem(const Calendar::CalendarItem &removedItem)
-{
-    Calendar::AbstractCalendarModel::endRemoveItem(removedItem);
+        Appointement *newItem = a.at(0);
+        m_sortedByBeginList.insert(getInsertionIndex(true, newItem->beginning(), m_sortedByBeginList, 0, m_sortedByBeginList.count() - 1), newItem);
+        m_sortedByEndList.insert(getInsertionIndex(false, newItem->ending(), m_sortedByEndList, 0, m_sortedByEndList.count() - 1), newItem);
+
+        endModifyItem(toCalendarItem(pItem), toCalendarItem(newItem));
+
+        delete pItem;
+        return true;
+    }
+    return false;
 }
 
 
@@ -555,5 +602,34 @@ void CalendarItemModel::getItemFromDatabase(const QDate &from, const QDate &to, 
 //        setItemIsMine(item);
         m_sortedByBeginList.insert(getInsertionIndex(true, item->beginning(), m_sortedByBeginList, 0, m_sortedByBeginList.count() - 1), item);
         m_sortedByEndList.insert(getInsertionIndex(false, item->ending(), m_sortedByEndList, 0, m_sortedByEndList.count() - 1), item);
+    }
+}
+
+void CalendarItemModel::getPeopleNames(Appointement *appointement)
+{
+    for(int i = 0; i < Calendar::People::PeopleCount; ++i) {
+        if (!appointement->peopleNamesPopulated(i)) {
+            // get names
+            switch (i) {
+            case Calendar::People::PeopleUser:
+            case Calendar::People::PeopleUserDelegate:
+            case Calendar::People::PeopleOwner:
+            {
+                QHash<QString, QString> names = UserPlugin::UserModel::getUserNames(appointement->peopleUids(i, false));
+                foreach(const QString &uid, names) {
+                    appointement->setPeopleName(i, uid, names.value(uid));
+                }
+                break;
+            }
+            case Calendar::People::PeopleAttendee:
+            {
+                QHash<QString, QString> names = Patients::PatientModel::patientName(appointement->peopleUids(i, false));
+                foreach(const QString &uid, names.keys()) {
+                    appointement->setPeopleName(i, uid, names.value(uid));
+                }
+                break;
+            }
+            }
+        }
     }
 }

@@ -41,7 +41,7 @@ QT_END_NAMESPACE
  * \file abstract_calendar_model.h
  * \author Guillaume Denry, Eric Maeker
  * \version 0.6.0
- * \date 02 Aug 2011
+ * \date 11 Aug 2011
 */
 
 namespace Calendar {
@@ -89,13 +89,16 @@ public:
     virtual CalendarItem insertItem(const QDateTime &begin, const QDateTime &end) = 0;
     virtual Calendar::CalendarItem addCalendarItem(const Calendar::CalendarItem &item) = 0;
     virtual void removeItem(const QString &uid) = 0;
+    virtual bool moveItem(const Calendar::CalendarItem &from, Calendar::CalendarItem &to) = 0;
 
     // Item data
     virtual QVariant data(const Calendar::CalendarItem &item, int dataRef, int role = Qt::DisplayRole) const;
     virtual bool setData(const Calendar::CalendarItem &item, int dataRef, const QVariant &value, int role = Qt::EditRole);
 
-    virtual void addPeople(const Calendar::CalendarItem &item, const People &people);
-    virtual void removePeople(const Calendar::CalendarItem &item, const int peopleType, const QString &uid);
+    virtual bool setPeopleList(const Calendar::CalendarItem &item, const QList<Calendar::People> &peoples);
+    virtual bool addPeople(const Calendar::CalendarItem &item, const People &people);
+    virtual bool removePeople(const Calendar::CalendarItem &item, const int peopleType, const QString &uid);
+    virtual QList<Calendar::People> peopleList(const Calendar::CalendarItem &item);
 
     void stopEvents();
     void resumeEvents();
@@ -104,6 +107,7 @@ public Q_SLOTS:
     virtual void clearAll() {}
     virtual bool submitAll() {return false;}
     virtual bool submit(const Calendar::CalendarItem &) {return false;}
+    virtual bool revert(const Calendar::CalendarItem &) {return false;}
 
 Q_SIGNALS:
     void dataChanged(const Calendar::CalendarItem &begin);

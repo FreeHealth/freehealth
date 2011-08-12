@@ -125,12 +125,6 @@ namespace Internal {
             m_Item.setData(CalendarItem::Description,ui->fullInfo->toHtml());
             m_Item.setData(CalendarItem::Status, ui->statusCombo->currentIndex());
 //            m_Item.setData(CalendarItem::ThemedIcon, QString());
-
-            // get user calendar
-//            if (ui->calendarCombo->currentIndex() <= m_UserCals.count()) {
-//                UserCalendar *ucal = m_UserCals.at(ui->calendarCombo->currentIndex());
-//                m_Item.setData(CalendarItem::DbOnly_CalId, ucal->calendarId());
-//            }
         }
 
     public:
@@ -199,7 +193,7 @@ void ItemEditorWidget::setModel(AbstractCalendarModel *model)
 }
 
 /** Define the Calendar::CalendarItem to use for the current edition. */
-void ItemEditorWidget::setCalendarEvent(const CalendarItem &item)
+void ItemEditorWidget::setCalendarItem(const CalendarItem &item)
 {
     d->m_Item = item;
     // Clear ui
@@ -262,6 +256,7 @@ bool ItemEditorWidget::isShowingExtraInformations() const
 */
 void ItemEditorWidget::addCalendarDataWidget(Calendar::ICalendarItemDataWidget *dataWidget)
 {
+    dataWidget->setCalendarItemModel(d->m_Model);
     d->m_AddedWidgets << dataWidget;
     QWidget *widget = dataWidget->createWidget(this);
     switch (dataWidget->insertionPlace()) {

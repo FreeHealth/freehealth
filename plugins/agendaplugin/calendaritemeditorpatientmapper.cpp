@@ -26,8 +26,7 @@
  *       NAME <MAIL@ADRESS>                                                *
  ***************************************************************************/
 #include "calendaritemeditorpatientmapper.h"
-
-//#include <patientbaseplugin/patientlineeditcompletersearch.h>
+#include "calendaritemmodel.h"
 
 #include <coreplugin/icore.h>
 #include <coreplugin/itheme.h>
@@ -40,6 +39,8 @@
 
 #include "ui_calendaritemeditorpatientmapper.h"
 
+#include <QStyledItemDelegate>
+#include <QAbstractTableModel>
 #include <QDebug>
 
 using namespace Agenda;
@@ -48,11 +49,95 @@ using namespace Trans::ConstantTranslations;
 
 static inline Core::ITheme *theme() {return Core::ICore::instance()->theme();}
 
+namespace {
+
+class TreeItemDelegate : public QStyledItemDelegate
+{
+public:
+    TreeItemDelegate(QObject *parent) : QStyledItemDelegate(parent), m_FancyColumn(-1)
+    {
+    }
+
+    void setModel(QAbstractItemModel *model) {m_Model = model;}
+    void setFancyColumn(int col) {m_FancyColumn=col;}
+    int fancyColumn() {return m_FancyColumn;}
+
+private:
+    void paint(QPainter *painter, const QStyleOptionViewItem &option,
+               const QModelIndex &index) const
+    {
+        if (m_FancyColumn==-1) {
+            QStyledItemDelegate::paint(painter, option, index);
+            return;
+        }
+
+        if (option.state & QStyle::State_MouseOver) {
+            if ((QApplication::mouseButtons() & Qt::LeftButton) == 0)
+                pressedIndex = QModelIndex();
+            QBrush brush = option.palette.alternateBase();
+            if (index == pressedIndex)
+                brush = option.palette.dark();
+            painter->fillRect(option.rect, brush);
+        }
+
+        QStyledItemDelegate::paint(painter, option, index);
+
+        if (index.column()==m_FancyColumn && option.state & QStyle::State_MouseOver) {
+            QIcon icon;
+            if (option.state & QStyle::State_Selected) {
+                icon = theme()->icon(Core::Constants::ICONCLOSELIGHT);
+            } else {
+                icon = theme()->icon(Core::Constants::ICONCLOSEDARK);
+            }
+
+            QRect iconRect(option.rect.right() - option.rect.height(),
+                           option.rect.top(),
+                           option.rect.height(),
+                           option.rect.height());
+
+            icon.paint(painter, iconRect, Qt::AlignRight | Qt::AlignVCenter);
+        }
+    }
+
+public:
+    mutable QModelIndex pressedIndex;
+    QAbstractItemModel *m_Model;
+    int m_FancyColumn;
+
+};
+
+}  // End anonymous namespace
+
 CalendarItemEditorPatientMapperWidget::CalendarItemEditorPatientMapperWidget(QWidget *parent) :
     QWidget(parent),
-    ui(new Internal::Ui::CalendarItemEditorPatientMapper)
+    ui(new Internal::Ui::CalendarItemEditorPatientMapper),
+    m_ItemModel(0)
 {
     ui->setupUi(this);
+    TreeItemDelegate *delegate = new ::TreeItemDelegate(this);
+    ui->selectedPatientView->viewport()->setAttribute(Qt::WA_Hover);
+    ui->selectedPatientView->setItemDelegate(delegate);
+    ui->selectedPatientView->setFrameStyle(QFrame::NoFrame);
+    ui->selectedPatientView->setAttribute(Qt::WA_MacShowFocusRect, false);
+    ui->selectedPatientView->setSelectionMode(QAbstractItemView::SingleSelection);
+    ui->selectedPatientView->setSelectionBehavior(QAbstractItemView::SelectRows);
+
+    m_PeopleModel = new Calendar::CalendarPeopleModel(this);
+    ui->selectedPatientView->setModel(m_PeopleModel);
+    ui->selectedPatientView->header()->setStretchLastSection(false);
+    ui->selectedPatientView->header()->setResizeMode(Calendar::CalendarPeopleModel::FullName, QHeaderView::Stretch);
+    ui->selectedPatientView->hideColumn(Calendar::CalendarPeopleModel::Uid);
+    ui->selectedPatientView->hideColumn(Calendar::CalendarPeopleModel::PeopleTypeName);
+    ui->selectedPatientView->header()->setResizeMode(Calendar::CalendarPeopleModel::EmptyColumn, QHeaderView::Fixed);
+    ui->selectedPatientView->setColumnWidth(Calendar::CalendarPeopleModel::EmptyColumn, 16);
+    ui->selectedPatientView->header()->hide();
+
+    delegate->setModel(m_PeopleModel);
+    delegate->setFancyColumn(Calendar::CalendarPeopleModel::EmptyColumn);
+
+    connect(ui->selectedPatientView, SIGNAL(clicked(QModelIndex)), this, SLOT(handleClicked(QModelIndex)));
+    connect(ui->selectedPatientView, SIGNAL(pressed(QModelIndex)), this, SLOT(handlePressed(QModelIndex)));
+
     connect(ui->searchPatient, SIGNAL(selectedPatient(QString,QString)), this, SLOT(onPatientSelected(QString,QString)));
 }
 
@@ -61,84 +146,79 @@ CalendarItemEditorPatientMapperWidget::~CalendarItemEditorPatientMapperWidget()
     delete ui;
 }
 
+void CalendarItemEditorPatientMapperWidget::setCalendarItemModel(Calendar::AbstractCalendarModel *model)
+{
+    m_ItemModel = model;
+}
+
 void CalendarItemEditorPatientMapperWidget::setCalendarItem(const Calendar::CalendarItem &item)
 {
     clear();
-
-    Calendar::AbstractCalendarModel *model = item.model();
-    if (!model)
+    if (!m_ItemModel)
         return;
 
-    /** \todo code here : get peoples from the model */
-//    m_SelectedPatientUids = item.peopleUids(Calendar::CalendarItem::PeopleAttendee);
-//    m_SelectedPatientsNames = item.peopleNames(Calendar::CalendarItem::PeopleAttendee);
-//    for(int i = 0; i < m_SelectedPatientUids.count(); ++i) {
-//        addPatientRow(m_SelectedPatientsNames.at(i), m_SelectedPatientUids.at(i));
-//    }
+    m_PeopleModel->setPeopleList(m_ItemModel->peopleList(item));
 }
 
 void CalendarItemEditorPatientMapperWidget::clear()
 {
-    foreach(const QString &uid, m_PatientWidgets.keys()) {
-        ui->groupGridLayout->removeWidget(m_PatientWidgets.value(uid));
-    }
-    qDeleteAll(m_PatientWidgets);
-    m_PatientWidgets.clear();
+    m_PeopleModel->clear();
     ui->searchPatient->clear();
     m_Selected.clear();
 }
 
 void CalendarItemEditorPatientMapperWidget::addPatientRow(const QString &name, const QString &uid)
 {
-    QWidget *w = new QWidget(this);
-    QHBoxLayout *layout = new QHBoxLayout(w);
-    w->setLayout(layout);
-    layout->setMargin(0);
-    // Remove button
-    QToolButton *b = new QToolButton(this);
-    b->setIconSize(QSize(16, 16));
-    b->setMinimumSize(QSize(20,20));
-    b->setMaximumSize(QSize(20,20));
-    QAction *a = new QAction(this);
-    a->setIcon(theme()->icon(Core::Constants::ICONCLOSEDARK));
-    a->setToolTip(QString("%1 %2").arg(tkTr(Trans::Constants::REMOVE_TEXT)).arg(tkTr(Trans::Constants::PATIENT)));
-    a->setData(uid);
-    b->addAction(a);
-    b->setDefaultAction(a);
-    connect(b, SIGNAL(triggered(QAction*)), this, SLOT(removePatient(QAction*)));
-    // Patient name
-    QLabel *l = new QLabel(this);
-    l->setText(name);
-    QFont bold;
-    bold.setBold(true);
-    l->setFont(bold);
-    // Add to layout
-    layout->addWidget(b);
-    layout->addWidget(l);
-    ui->groupGridLayout->addWidget(w);
-    m_PatientWidgets.insert(uid, w);
+    m_PeopleModel->addPeople(Calendar::People(Calendar::People::PeopleAttendee, name, uid));
 }
 
 void CalendarItemEditorPatientMapperWidget::removePatient(QAction *action)
 {
-    QString uid = action->data().toString();
-    ui->groupGridLayout->removeWidget(m_PatientWidgets.value(uid));
-    delete m_PatientWidgets.value(uid);
-    m_PatientWidgets.remove(uid);
-    m_Selected.removeAll(Calendar::People(Calendar::People::PeopleAttendee, "", uid));
+    m_PeopleModel->removePeople(action->data().toString());
+}
+
+bool CalendarItemEditorPatientMapperWidget::submitToItem(const Calendar::CalendarItem &item)
+{
+    if (m_ItemModel) {
+        m_ItemModel->setPeopleList(item, m_PeopleModel->peopleList());
+    }
+    return true;
 }
 
 void CalendarItemEditorPatientMapperWidget::onPatientSelected(const QString &name, const QString &uid)
 {
-    if (!m_PatientWidgets.contains(uid)) {
-        addPatientRow(name, uid);
-        m_Selected.append(Calendar::People(Calendar::People::PeopleAttendee, name, uid));
-        ui->searchPatient->clear();
+    addPatientRow(name, uid);
+    m_Selected.append(Calendar::People(Calendar::People::PeopleAttendee, name, uid));
+    ui->searchPatient->clear();
+}
+
+void CalendarItemEditorPatientMapperWidget::handlePressed(const QModelIndex &index)
+{
+    if (index.column() == Calendar::CalendarPeopleModel::EmptyColumn) {
+        TreeItemDelegate *delegate = static_cast<TreeItemDelegate*>(ui->selectedPatientView->itemDelegate());
+        if (delegate)
+            delegate->pressedIndex = index;
     }
 }
 
+void CalendarItemEditorPatientMapperWidget::handleClicked(const QModelIndex &index)
+{
+    if (index.column() == Calendar::CalendarPeopleModel::EmptyColumn) { // the funky button
+        // remove the string from the model
+        ui->selectedPatientView->model()->removeRow(index.row());
+        // work around a bug in itemviews where the delegate wouldn't get the QStyle::State_MouseOver
+        QPoint cursorPos = QCursor::pos();
+        QWidget *vp = ui->selectedPatientView->viewport();
+        QMouseEvent e(QEvent::MouseMove, vp->mapFromGlobal(cursorPos), cursorPos, Qt::NoButton, 0, 0);
+        QCoreApplication::sendEvent(vp, &e);
+    }
+}
+
+
+
 CalendarItemEditorPatientMapper::CalendarItemEditorPatientMapper(QObject *parent) :
-    Calendar::ICalendarItemDataWidget(parent)
+    Calendar::ICalendarItemDataWidget(parent),
+    m_ItemModel(0)
 {
 }
 
@@ -157,7 +237,17 @@ QWidget *CalendarItemEditorPatientMapper::createWidget(QWidget *parent)
         return m_Widget;
     }
     m_Widget = new Internal::CalendarItemEditorPatientMapperWidget(parent);
+    if (m_ItemModel)
+        m_Widget->setCalendarItemModel(m_ItemModel);
     return m_Widget;
+}
+
+bool CalendarItemEditorPatientMapper::setCalendarItemModel(Calendar::AbstractCalendarModel *model)
+{
+    m_ItemModel = model;
+    if (m_Widget)
+        m_Widget->setCalendarItemModel(m_ItemModel);
+    return true;
 }
 
 bool CalendarItemEditorPatientMapper::setCalendarItem(const Calendar::CalendarItem &item)
@@ -180,14 +270,9 @@ bool CalendarItemEditorPatientMapper::submitChangesToCalendarItem(const Calendar
     if (!m_Widget) {
         return false;
     }
-
-    Calendar::AbstractCalendarModel *model = item.model();
-    if (!model)
+    if (!m_ItemModel)
         return false;
-
-    for(int i = 0; i < m_Widget->selected().count(); ++i) {
-        model->addPeople(item, m_Widget->selected().at(i));
-    }
+    m_Widget->submitToItem(item);
 
     return true;
 }

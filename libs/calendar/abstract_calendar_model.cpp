@@ -152,18 +152,37 @@ bool AbstractCalendarModel::setData(const Calendar::CalendarItem &item, const in
     return true;
 }
 
-void AbstractCalendarModel::addPeople(const Calendar::CalendarItem &item, const People &people)
+bool AbstractCalendarModel::setPeopleList(const Calendar::CalendarItem &item, const QList<Calendar::People> &peoples)
+{
+    bool ok = true;
+    for(int i=0; i < peoples.count(); ++i) {
+        if (!addPeople(item, peoples.at(i)))
+            ok=false;
+    }
+    return ok;
+}
+
+bool AbstractCalendarModel::addPeople(const Calendar::CalendarItem &item, const People &people)
 {
     Q_UNUSED(item);
     Q_UNUSED(people);
+    return false;
 }
 
-void AbstractCalendarModel::removePeople(const Calendar::CalendarItem &item, const int peopleType, const QString &uid)
+bool AbstractCalendarModel::removePeople(const Calendar::CalendarItem &item, const int peopleType, const QString &uid)
 {
     Q_UNUSED(item);
     Q_UNUSED(peopleType);
     Q_UNUSED(uid);
+    return false;
 }
+
+QList<Calendar::People> AbstractCalendarModel::peopleList(const Calendar::CalendarItem &item)
+{
+    Q_UNUSED(item);
+    return QList<Calendar::People>();
+}
+
 
 void AbstractCalendarModel::beginInsertItem() {
 	// does nothing for now (maybe emit a signal in the future)

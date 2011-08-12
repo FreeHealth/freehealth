@@ -54,6 +54,10 @@ public:
     CalendarEventQuery();
     ~CalendarEventQuery();
 
+    /** Retreive a specific appointement, all other params are ignored */
+    void setAppointementId(const QVariant &id) {m_AppointementId=id;}
+    QVariant appointementId() const {return m_AppointementId;}
+
     void setUserFilter(const QString &userUid);
     void setPatientFilter(const QStringList &limitToPatientUids);
 
@@ -91,6 +95,7 @@ public:
     int calendarId() const {if (m_CalIds.count()>=1) return m_CalIds.at(0); return -1;}
 
 private:
+    QVariant m_AppointementId;
     int m_Limit, m_StartItem;
     QDateTime m_DateStart, m_DateEnd;
     bool m_UseCurrentUser;

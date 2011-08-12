@@ -168,8 +168,9 @@ void UserCalendarDelegatesMapperWidget::setUserCalendarIndex(const int index)
 
 bool UserCalendarDelegatesMapperWidget::submit()
 {
-    qWarning() << Q_FUNC_INFO;
-    m_UserCalendarModel->setPeopleList(m_Row, m_PeopleModel->peopleList());
+    if (m_UserCalendarModel) {
+        m_UserCalendarModel->setPeopleList(m_Row, m_PeopleModel->peopleList());
+    }
     return true;
 }
 
@@ -193,10 +194,8 @@ void UserCalendarDelegatesMapperWidget::removePerson(QAction *action)
 
 void UserCalendarDelegatesMapperWidget::onPersonSelected(const QString &name, const QString &uid)
 {
-    if (!m_UserWidgets.contains(uid)) {
-        addRow(name, uid);
-        ui->searchUser->clear();
-    }
+    addRow(name, uid);
+    ui->searchUser->clear();
 }
 
 void UserCalendarDelegatesMapperWidget::handlePressed(const QModelIndex &index)

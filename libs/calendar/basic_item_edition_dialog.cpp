@@ -73,9 +73,9 @@ using namespace Trans::ConstantTranslations;
 static inline ExtensionSystem::PluginManager *pluginManager() { return ExtensionSystem::PluginManager::instance(); }
 
 BasicItemEditionDialog::BasicItemEditionDialog(AbstractCalendarModel *model, QWidget *parent) :
-        QDialog(parent),
-        m_Model(model),
-        ui(new Internal::Ui::BasicItemEditionDialog)
+    QDialog(parent),
+    m_Model(model),
+    ui(new Internal::Ui::BasicItemEditionDialog)
 {
     Q_ASSERT(model);
     ui->setupUi(this);
@@ -100,10 +100,11 @@ BasicItemEditionDialog::~BasicItemEditionDialog()
 
 void BasicItemEditionDialog::done(int r)
 {
-    qWarning() << "DONE";
     if (r==QDialog::Accepted) {
         ui->viewer->submit();
         m_Model->submit(m_Item);
+    } else {
+        m_Model->revert(m_Item);
     }
     QDialog::done(r);
 }
@@ -122,7 +123,7 @@ void BasicItemEditionDialog::addCalendarDataWidget(Calendar::ICalendarItemDataWi
 void BasicItemEditionDialog::init(const CalendarItem &item)
 {
     m_Item = item;
-    ui->viewer->setCalendarEvent(item);
+    ui->viewer->setCalendarItem(item);
 }
 
 void BasicItemEditionDialog::showMoreTriggered()

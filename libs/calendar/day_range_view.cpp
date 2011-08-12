@@ -713,9 +713,9 @@ void DayRangeBody::mouseReleaseEvent(QMouseEvent *event) {
 			ending.setDate(m_pressDateTime.date());
 			delete m_pressItemWidget;
 		}
-		if (model()) {
-                        newItem = model()->insertItem(beginning, ending);
-		}
+//		if (model()) {
+//                        newItem = model()->insertItem(beginning, ending);
+//		}
 		break;
 	case MouseMode_Move:
 	case MouseMode_Resize:
@@ -731,6 +731,7 @@ void DayRangeBody::mouseReleaseEvent(QMouseEvent *event) {
 			newItem = m_pressItem;
 			newItem.setBeginning(m_pressItemWidget->beginDateTime());
 			newItem.setEnding(m_pressItemWidget->endDateTime());
+                        model()->moveItem(m_pressItem, newItem);
 		}
 		break;
 	default:;
@@ -749,7 +750,9 @@ void DayRangeBody::mouseDoubleClickEvent(QMouseEvent *) {
     m_pressItem = model()->insertItem(m_previousDateTime, m_previousDateTime.addSecs(m_itemDefaultDuration*60));
     BasicItemEditionDialog dialog(model(), this);
     dialog.init(m_pressItem);
-    dialog.exec();
+    if (dialog.exec()==QDialog::Rejected) {
+        removePressItem();
+    }
     if (WarnBodyMouseEvents) {
         qWarning() << "DayBody::mousePressed" << m_pressItem.uid() << m_pressItem.beginning() << m_pressItem.ending();
         qWarning() << "   pressed DateTime" << m_previousDateTime;
