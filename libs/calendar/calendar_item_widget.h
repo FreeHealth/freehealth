@@ -46,6 +46,8 @@ namespace Calendar {
 		const QDateTime &endDateTime() const { return m_endDateTime; }
 		void setEndDateTime(const QDateTime &dateTime);
 		AbstractCalendarModel *model() const { return m_model; }
+        private:
+                bool event(QEvent *);
 
 	private:
 		// TMP : all date will probably be moved into a pure data class for events/tasks, etc

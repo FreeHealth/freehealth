@@ -26,6 +26,9 @@
  *       NAME <MAIL@ADRESS>                                                *
  ***************************************************************************/
 #include "calendar_item_widget.h"
+#include "abstract_calendar_model.h"
+
+#include <QEvent>
 
 using namespace Calendar;
 
@@ -47,4 +50,17 @@ void CalendarItemWidget::setEndDateTime(const QDateTime &dateTime) {
 
 	m_endDateTime = dateTime;
 	update();
+}
+
+bool CalendarItemWidget::event(QEvent *event)
+{
+    if (m_model) {
+        if (event->type()==QEvent::ToolTip) {
+            // get the CalendarItem
+            CalendarItem item = m_model->getItemByUid(m_uid);
+            // get the tooltip
+            setToolTip(m_model->data(item, 0, Qt::ToolTipRole).toString());
+        }
+    }
+    return QWidget::event(event);
 }
