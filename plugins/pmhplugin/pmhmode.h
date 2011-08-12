@@ -81,8 +81,12 @@ public:
     explicit PmhMode(QObject *parent = 0);
     ~PmhMode();
 
+private Q_SLOTS:
+    void onPatientChanged();
+
 private:
     QWidget *m_Widget;
+    bool m_inPluginManager;
 };
 
 }  // End namespace Internal

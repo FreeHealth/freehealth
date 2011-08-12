@@ -55,6 +55,7 @@ private Q_SLOTS:
 
 private:
     FormPlaceHolder *m_Holder;
+    bool m_inPluginManager;
 };
 
 }  // End namespace Internal

@@ -51,6 +51,7 @@
 #include <formmanagerplugin/iformwidgetfactory.h>
 
 #include <translationutils/constanttranslations.h>
+#include <extensionsystem/pluginmanager.h>
 
 #include <QItemSelectionModel>
 #include <QToolBar>
@@ -62,6 +63,8 @@
 using namespace PMH;
 using namespace Internal;
 using namespace Trans::ConstantTranslations;
+
+static inline ExtensionSystem::PluginManager *pluginManager() { return ExtensionSystem::PluginManager::instance(); }
 
 static inline PmhCore *pmhCore() {return PmhCore::instance();}
 static inline PmhCategoryModel *catModel() {return PmhCore::instance()->pmhCategoryModel();}
@@ -106,6 +109,7 @@ PmhModeWidget::PmhModeWidget(QWidget *parent) :
     connect(ui->treeView->selectionModel(), SIGNAL(currentChanged (QModelIndex, QModelIndex)),
             this, SLOT(currentChanged(QModelIndex, QModelIndex)));
     connect(ui->buttonBox, SIGNAL(clicked(QAbstractButton*)), this, SLOT(onButtonClicked(QAbstractButton*)));
+
     connect(patient(), SIGNAL(currentPatientChanged()), this, SLOT(onPatientChanged()));
 }
 
@@ -242,7 +246,8 @@ void PmhModeWidget::changeEvent(QEvent *e)
 
 
 PmhMode::PmhMode(QObject *parent) :
-        Core::BaseMode(parent)
+    Core::BaseMode(parent),
+    m_inPluginManager(false)
 {
     setName(tkTr(Trans::Constants::PMHX));
     setIcon(theme()->icon(Core::Constants::ICONPATIENTHISTORY, Core::ITheme::BigIcon));
@@ -255,9 +260,21 @@ PmhMode::PmhMode(QObject *parent) :
 
     m_Widget = new PmhModeWidget;
     setWidget(m_Widget);
+    connect(patient(), SIGNAL(currentPatientChanged()), this, SLOT(onPatientChanged()));
 }
 
 PmhMode::~PmhMode()
 {
+    if (m_inPluginManager) {
+        pluginManager()->removeObject(this);
+    }
+}
+
+void PmhMode::onPatientChanged()
+{
+    if (!m_inPluginManager) {
+        pluginManager()->addObject(this);
+        m_inPluginManager = true;
+    }
 }
 

@@ -50,7 +50,8 @@ static inline Form::FormManager *formManager() {return Form::FormManager::instan
 static inline Core::ITheme *theme()  { return Core::ICore::instance()->theme(); }
 
 FormManagerMode::FormManagerMode(QObject *parent) :
-        Core::BaseMode(parent)
+    Core::BaseMode(parent),
+    m_inPluginManager(false)
 {
     setName(tr("Patients Files"));
     setIcon(theme()->icon(Core::Constants::ICONPATIENTFILES, Core::ITheme::BigIcon));
@@ -69,6 +70,9 @@ FormManagerMode::FormManagerMode(QObject *parent) :
 
 FormManagerMode::~FormManagerMode()
 {
+    if (m_inPluginManager) {
+        pluginManager()->removeObject(this);
+    }
     // m_Holder is deleted by Core::BaseMode
 }
 
@@ -78,6 +82,10 @@ FormManagerMode::~FormManagerMode()
 */
 bool FormManagerMode::getPatientForm()
 {
+    if (!m_inPluginManager) {
+        pluginManager()->addObject(this);
+        m_inPluginManager = true;
+    }
     Form::FormMain *root = formManager()->rootForm(Core::Constants::MODE_PATIENT_FILE);
     m_Holder->setRootForm(root);
     return (root);

@@ -62,11 +62,6 @@ PmhPlugin::PmhPlugin() : mode(0)
 PmhPlugin::~PmhPlugin()
 {
     qWarning() << "PmhPlugin::~PmhPlugin()";
-    if (mode) {
-        removeObject(mode);
-        delete mode;
-        mode = 0;
-    }
 }
 
 bool PmhPlugin::initialize(const QStringList &arguments, QString *errorString)
@@ -105,7 +100,6 @@ void PmhPlugin::postCoreInit()
 {
     PmhCore::instance(this);
     mode = new Internal::PmhMode(this);
-    addObject(mode);
 }
 
 

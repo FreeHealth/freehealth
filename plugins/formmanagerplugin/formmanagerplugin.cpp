@@ -74,11 +74,6 @@ FormManagerPlugin::FormManagerPlugin() :
 FormManagerPlugin::~FormManagerPlugin()
 {
     qWarning() << "FormManagerPlugin::~FormManagerPlugin()";
-    if (mode) {
-        removeObject(mode);
-        delete mode;
-        mode = 0;
-    }
     if (m_FirstRun) {
         removeObject(m_FirstRun);
         delete m_FirstRun;
@@ -127,7 +122,6 @@ void FormManagerPlugin::extensionsInitialized()
 
     // Add mode
     mode = new FormManagerMode(this);
-    addObject(mode);
 }
 
 
