@@ -204,7 +204,7 @@ bool DrugsWidgetData::setData(const int ref, const QVariant &data, const int rol
 
 QVariant DrugsWidgetData::data(const int ref, const int role) const
 {
-    qWarning() << "DrugsWidgetData::data(" << ref << role << ");" << Core::IPatient::DrugsInnAllergies;
+//    qWarning() << "DrugsWidgetData::data(" << ref << role << ");" << Core::IPatient::DrugsInnAllergies;
 
     if (role != Form::IFormItemData::ID_ForPatientModel)
         return QVariant();
@@ -234,7 +234,7 @@ QVariant DrugsWidgetData::data(const int ref, const int role) const
             }
             inns.removeAll("");
             inns.removeDuplicates();
-            qWarning() << inns;
+//            qWarning() << inns;
             return inns;
             break;
         }
