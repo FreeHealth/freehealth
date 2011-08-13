@@ -57,7 +57,8 @@ public:
         m_Valid(true), m_Deleted(false),
         m_FilterValidated(false), m_Validated(true), m_NonValidated(true),
         m_Limit(false), m_Start(0), m_End(-1),
-        m_UseUserDateRange(false)
+        m_UseUserDateRange(false),
+        m_GetContent(false)
     {}
 
     ~EpisodeBaseQuery() {}
@@ -73,6 +74,10 @@ public:
     void setNonValidated(bool v) {m_NonValidated=v;}
 
     void setUserDateRange(const QDate &start, const QDate &end) {m_UseUserDateRange=true; m_UserDateStart=start; m_UserDateEnd=end;}
+
+    void setFormUids(const QStringList &list) {m_FormUids=list;}
+
+    void setGetEpisodeContent(const bool get) {m_GetContent=get;}
 
     void setLimitRange(int start, int end) {m_Start=start; m_End=end; m_Limit=true;}
 
@@ -90,15 +95,20 @@ public:
     QDate userDateStart() const {return m_UserDateStart;}
     QDate userDateEnd() const {return m_UserDateEnd;}
 
+    QStringList formUids() const {return m_FormUids;}
+
+    bool getEpisodeContent() const {return m_GetContent;}
+
     bool useLimit() const {return m_Limit;}
     int limitStart() const {return m_Start;}
     int limitEnd() const {return m_End;}
 
 private:
     QVariant m_UserUid, m_PatientUid;
+    QStringList m_FormUids;
     bool m_Valid, m_Deleted, m_FilterValidated, m_Validated, m_NonValidated, m_Limit;
     int m_Start, m_End;
-    bool m_UseUserDateRange;
+    bool m_UseUserDateRange, m_GetContent;
     QDate m_UserDateStart, m_UserDateEnd;
 };
 
@@ -128,6 +138,7 @@ public:
     bool saveEpisode(EpisodeData *episode);
     bool saveEpisode(const QList<EpisodeData *> &episode);
     QList<EpisodeData *> getEpisodes(const EpisodeBaseQuery &query);
+    bool getEpisodeContent(EpisodeData *episode);
 
 private:
     bool createDatabase(const QString &connectionName, const QString &dbName,

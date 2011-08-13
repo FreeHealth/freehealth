@@ -113,10 +113,11 @@ public:
         IsNewlyCreated,
 //        Summary,
 //        FullContent,
-        UserUuid,
+        UserCreatorUuid,
         PatientUuid,
         FormUuid,
         ContentId,
+        IsXmlContentPopulated,
         XmlContent,
         ValidationId,
         ValidationDate
@@ -131,7 +132,7 @@ public:
     void setModified(bool state) {m_Modified = state;}
     bool isModified() const {return m_Modified;}
 
-    void addEpisodeValidation(EpisodeValidationData &validation);
+    void  addEpisodeValidation(EpisodeValidationData &validation);
     QVector<EpisodeValidationData> &validations() {return m_Validation;}
 
     void addEpisodeModification(EpisodeModificationData &modification);

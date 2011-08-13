@@ -82,6 +82,7 @@ EpisodeData::EpisodeData()
     m_Data.insert(ContentId, -1);
     m_Data.insert(ValidationId, -1);
     m_Data.insert(IsValid, 1);
+    m_Data.insert(IsXmlContentPopulated, false);
     m_Modified = false;
 }
 
@@ -91,6 +92,8 @@ EpisodeData::~EpisodeData()
 
 void EpisodeData::setData(int ref, const QVariant &value)
 {
+    if (value==m_Data.value(ref))
+        return;
     m_Data.insert(ref, value);
     if (ref==Id) {
         for(int i = 0; i < m_Validation.count(); ++i) {
@@ -112,7 +115,7 @@ QVariant EpisodeData::data(int ref) const
 void EpisodeData::addEpisodeValidation(EpisodeValidationData &validation)
 {
     validation.setData(EpisodeValidationData::EpisodeId, m_Data.value(Id));
-    m_Validation.append(validation);
+    m_Validation.append(validation) ;
 }
 
 /** Add modification records to the episode. The LastModificationDate is automatically updated. */

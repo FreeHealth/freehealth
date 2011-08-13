@@ -172,6 +172,7 @@ void VirtualDatabasePreferences::on_populateEpisodes_clicked()
     int userLkId = userModel()->practionnerLkIds(userModel()->currentUserData(Core::IUser::Uuid).toString()).at(0);
     QSqlQuery episodeQuery(episodeBase()->database());
 
+    const QString &userUid = user()->uuid();
     foreach(const QString &form, testingForms) {
         foreach(const QString &uid, patients) {
             using namespace Form;
@@ -197,7 +198,7 @@ void VirtualDatabasePreferences::on_populateEpisodes_clicked()
                 episodeQuery.bindValue(Constants::EPISODES_FORM_PAGE_UID, form);
                 episodeQuery.bindValue(Constants::EPISODES_USERDATE, date);
                 episodeQuery.bindValue(Constants::EPISODES_DATEOFCREATION, date);
-                episodeQuery.bindValue(Constants::EPISODES_DATEOFMODIFICATION, QVariant());
+                episodeQuery.bindValue(Constants::EPISODES_USERCREATOR, userUid);
                 QString tmp;
                 for(int z=0; z < r.randomInt(6); ++z)
                     tmp += r.getRandomName() + " ";

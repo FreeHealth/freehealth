@@ -363,6 +363,7 @@ public:
 
         // create root item
         m_RootItem = new TreeItem(0);
+        m_FormUids.clear();
 
         // getting Forms
         LOG_FOR(q, "Getting Forms");
@@ -371,6 +372,7 @@ public:
         foreach(Form::FormMain *form, m_RootForm->flattenFormMainChildren()) {
             TreeItem *item = new TreeItem(0);
             m_FormItems.insert(form, item);
+            m_FormUids << form->uuid();
         }
         // reparent items
         foreach(Form::FormMain *f, m_RootForm->flattenFormMainChildren()) {
@@ -419,14 +421,13 @@ public:
         m_Episodes.clear();
 
         // get Episodes
-        LOG_FOR(q, "Getting Episodes (refresh)");
         EpisodeBaseQuery query;
         query.setPatientUid(patient()->uuid());
         query.setValidEpisodes(true);
         query.setDeletedEpisodes(false);
+        query.setFormUids(m_FormUids);
         m_Episodes = episodeBase()->getEpisodes(query);
-
-        qWarning() << m_Episodes;
+        LOG_FOR(q, "Getting Episodes (refresh): " + QString::number(m_Episodes.count()));
 
         // create TreeItems and parent them
         for(int i = 0; i < m_Episodes.count(); ++i) {
@@ -440,11 +441,17 @@ public:
                     break;
                 }
             }
-            if (!formParent)
-                formParent = m_RootItem;
+            if (!formParent) {
+                qWarning() << "no valid formUid" << episode->data(EpisodeData::FormUuid).toString();
+                continue;
+            }
+//                formParent = m_RootItem;
             TreeItem *item = new TreeItem(formParent);
             item->setParent(formParent);
             formParent->appendChild(item);
+
+            qWarning() << episode->data(EpisodeData::FormUuid).toString() << formParent;
+
             m_EpisodeItems.insert(episode, item);
         }
     }
@@ -459,26 +466,14 @@ public:
     }
 
     /** \todo code here : limit memory usage by getting/saving XmlContent separately from base()->getEpisodes() */
-//    void getXmlContent(TreeItem *item)
-//    {
-////        qWarning() << "getXmlContent" << item->data(EpisodeModel::Label);
-//        /** \todo create a QCache system to avoid memory overusage */
-//        if (item->isNewlyCreated())
-//            return;
-//        QHash<int, QString> where;
-//        where.insert(Constants::EPISODE_CONTENT_EPISODE_ID, QString("=%1").arg(item->data(EpisodeModel::Id).toString()));
-//        QString req = episodeBase()->select(Constants::Table_EPISODE_CONTENT, Constants::EPISODE_CONTENT_XML, where);
-//        QSqlQuery query(episodeBase()->database());
-//        query.exec(req);
-//        if (query.isActive()) {
-//            if (query.next()) {
-//                item->setData(EpisodeModel::XmlContent, query.value(0));
-//            }
-//        } else {
-//            LOG_QUERY_ERROR_FOR(q, query);
-//        }
-//        query.finish();
-//    }
+    void getEpisodeContent(EpisodeData *episode)
+    {
+        if (episode->data(EpisodeData::Id).toInt()<0)
+            return;
+        if (episode->data(EpisodeData::IsXmlContentPopulated).toBool())
+            return;
+        episodeBase()->getEpisodeContent(episode);
+    }
 
     QString createXmlEpisode(const QString &formUid)
     {
@@ -492,24 +487,24 @@ public:
         foreach(FormItem *it, form->flattenFormItemChildren()) {
             /** \todo check nested items ??? */
             if (it->itemDatas()) {
-                if (it->itemDatas()->isModified()) {
+//                if (it->itemDatas()->isModified()) {
 //                    qWarning() << it->uuid() << "is modified";
-                    formIsModified = true;
-                }
+//                    formIsModified = true;
+//                }
                 items.insert(it->uuid(), it);
             }
         }
 
-        if (formIsModified) {
+//        if (formIsModified) {
             // create the XML episode file
             QHash<QString, QString> datas;
             foreach(FormItem *it, items) {
                 datas.insert(it->uuid(), it->itemDatas()->storableData().toString());
             }
             return Utils::createXml(Form::Constants::XML_FORM_GENERAL_TAG, datas, 2, false);
-        }
+//        }
 
-        return QString();
+//        return QString();
     }
 
     bool saveEpisode(TreeItem *item, const QString &formUid)
@@ -531,7 +526,9 @@ public:
         }
 
         if (episode && form) {
+            LOG_FOR("EpisodeModel", "Save episode: " + episode->data(EpisodeData::Label).toString());
             episode->setData(EpisodeData::XmlContent, createXmlEpisode(formUid));
+            episode->setData(EpisodeData::IsXmlContentPopulated, true);
             episode->setData(EpisodeData::Label, form->itemDatas()->data(0, IFormItemData::ID_EpisodeLabel));
             episode->setData(EpisodeData::UserDate, form->itemDatas()->data(0, IFormItemData::ID_EpisodeDate));
             if (!settings()->value(Core::Constants::S_ALWAYS_SAVE_WITHOUT_PROMPTING, true).toBool()) {
@@ -540,10 +537,19 @@ public:
                                                      "Answering 'No' will cause definitve data lose."),
                                                   "", QCoreApplication::translate("EpisodeModel", "Save episode"));
                 if (!yes) {
-//                    saveEpisodeHeaders(form, item);
                     return false;
                 }
             }
+
+            // inform the patient model
+            foreach(FormItem *it, form->flattenFormItemChildren()) {
+                if (!it->itemDatas())
+                    continue;
+//                qWarning() << "Feeding patientModel data with" << it->patientDataRepresentation() << it->itemDatas()->data(it->patientDataRepresentation(), IFormItemData::ID_ForPatientModel);
+                patient()->setValue(it->patientDataRepresentation(), it->itemDatas()->data(it->patientDataRepresentation(), IFormItemData::ID_ForPatientModel));
+            }
+
+            // save episode to database
             return episodeBase()->saveEpisode(episode);
         }
         return false;
@@ -552,7 +558,12 @@ public:
     void feedFormWithEpisodeContent(Form::FormMain *form, TreeItem *item, bool feedPatientModel = false)
     {
         EpisodeData *episode = m_EpisodeItems.key(item);
-//        getXmlContent(episode);
+        feedFormWithEpisodeContent(form, episode, feedPatientModel);
+    }
+
+    void feedFormWithEpisodeContent(Form::FormMain *form, EpisodeData *episode, bool feedPatientModel = false)
+    {
+        getEpisodeContent(episode);
         const QString &xml = episode->data(EpisodeData::XmlContent).toString();
         if (xml.isEmpty()) {
             return;
@@ -592,7 +603,6 @@ public:
         }
     }
 
-    /** \todo code here */
     void getLastEpisodesAndFeedPatientModel()
     {
         if (patient()->uuid().isEmpty())
@@ -615,43 +625,25 @@ public:
             // get the form's XML content for the last episode, feed it with the XML code
             TreeItem *formItem = m_FormItems.value(form);
             if (!formItem->childCount()) {
-                qWarning() << "<<<<<<<<<<<<   no episode";
                 continue;  // No episodes
             }
 
             // get last episode
-            /** \todo code here */
-//            int i = 0;
-//            TreeItem *lastEpisode = formItem->child(i);
-//            while (!lastEpisode->isEpisode() && i < formItem->childCount())
-//                lastEpisode = formItem->child(i);
-
-//            qWarning() << "Last episode" << lastEpisode->data(EpisodeModel::Label) << lastEpisode->isEpisode();
-
-//            if (lastEpisode->isEpisode()) {
-//                feedItemDatasWithXmlContent(form, lastEpisode, true);
-//            }
+            for(int i=0; i < m_Episodes.count(); ++i) {
+                if (m_Episodes.at(i)->data(EpisodeData::FormUuid).toString()==form->uuid()) {
+                    feedFormWithEpisodeContent(form, m_Episodes.at(i), true);
+//                    qWarning() << "ACTIVATE EPISODE" << m_Episodes.at(i)->data(EpisodeData::Label).toString();
+                }
+            }
         }
     }
-
-//    void feedPatientModelWithLastEpisodes()
-//    {
-//        /** \todo here --> read all last episodes and feed patient model with represented datas */
-//        foreach(Form::FormMain *f, formManager()->forms()) {
-//            foreach(Form::FormItem *item, f->formItemChildren()) {
-//                if (item->itemDatas()) {
-//                    if (item->patientDataRepresentation()!=-1)
-//                        patient()->setValue(item->patientDataRepresentation(), item->itemDatas()->data(item->patientDataRepresentation(), Form::IFormItemData::ID_ForPatientModel));
-//                }
-//            }
-//        }
-//    }
 
 public:
     FormMain *m_RootForm;
     TreeItem *m_RootItem;
     QString m_UserUuid, m_LkIds, m_CurrentPatient, m_CurrentForm;
     bool m_FormTreeCreated, m_ReadOnly;
+    QStringList m_FormUids;
 
     QMap<Form::FormMain *, TreeItem *> m_FormItems;
     QMap<Form::Internal::EpisodeData *, TreeItem *> m_EpisodeItems;
@@ -852,8 +844,11 @@ QVariant EpisodeModel::data(const QModelIndex &item, int role) const
         case IsEpisode:
             return (episode!=0);
         case XmlContent:
-            if (episode)
+            if (episode) {
+                if (!episode->data(EpisodeData::IsXmlContentPopulated).toBool())
+                    d->getEpisodeContent(episode);
                 return episode->data(EpisodeData::XmlContent);
+            }
             break;
         }
     }
@@ -865,7 +860,8 @@ QVariant EpisodeModel::data(const QModelIndex &item, int role) const
                 return QString("<p align=\"right\">%1&nbsp;-&nbsp;%2<br /><span style=\"color:gray;font-size:9pt\">%3</span></p>")
                         .arg(episode->data(EpisodeData::UserDate).toDate().toString(settings()->value(Constants::S_EPISODEMODEL_DATEFORMAT, "dd MMM yyyy").toString()).replace(" ", "&nbsp;"))
                         .arg(episode->data(EpisodeData::Label).toString().replace(" ", "&nbsp;"))
-                        .arg(user()->value(Core::IUser::FullName).toString());
+                        .arg(user()->value(Core::IUser::FullName).toString() + "<br/>" +
+                             tr("Created: ") +  episode->data(EpisodeData::CreationDate).toDateTime().toString(QLocale().dateTimeFormat(QLocale::ShortFormat)));
             if (form)
                 return form->spec()->label();
             break;
@@ -930,7 +926,7 @@ bool EpisodeModel::setData(const QModelIndex &index, const QVariant &value, int 
             case Date: episode->setData(EpisodeData::UserDate, value); break;
             case IsValid: episode->setData(EpisodeData::IsValid, value); break;
             case FormUuid: episode->setData(EpisodeData::FormUuid, value); break;
-            case XmlContent: episode->setData(EpisodeData::XmlContent, value); break;
+            case XmlContent: episode->setData(EpisodeData::XmlContent, value); episode->setData(EpisodeData::IsXmlContentPopulated, value); break;
             }
         }
 
@@ -976,7 +972,7 @@ bool EpisodeModel::insertRows(int row, int count, const QModelIndex &parent)
         Internal::EpisodeData *episode = new Internal::EpisodeData;
         episode->setData(Internal::EpisodeData::Label, tr("New episode"));
         episode->setData(Internal::EpisodeData::FormUuid, formUid);
-        episode->setData(Internal::EpisodeData::UserUuid, user()->uuid());
+        episode->setData(Internal::EpisodeData::UserCreatorUuid, user()->uuid());
         episode->setData(Internal::EpisodeData::PatientUuid, patient()->uuid());
         episode->setData(Internal::EpisodeData::CreationDate, QDateTime::currentDateTime());
         episode->setData(Internal::EpisodeData::UserDate, QDateTime::currentDateTime());
@@ -1139,7 +1135,9 @@ bool EpisodeModel::activateEpisode(const QModelIndex &index, const QString &form
 {
     qWarning() << "activateEpisode";
     // submit actual episode
-    submit();
+    if (!d->saveEpisode(d->m_ActualEpisode, d->m_ActualEpisode_FormUid)) {
+        LOG_ERROR("Unable to save actual episode before editing a new one");
+    }
 
     if (!index.isValid()) {
         d->m_ActualEpisode = 0;
@@ -1166,7 +1164,7 @@ bool EpisodeModel::activateEpisode(const QModelIndex &index, const QString &form
     form->clear();
     form->itemDatas()->setData(0, episode->data(EpisodeData::UserDate), IFormItemData::ID_EpisodeDate);
     form->itemDatas()->setData(0, episode->data(EpisodeData::Label), IFormItemData::ID_EpisodeLabel);
-    const QString &username = user()->fullNameOfUser(episode->data(EpisodeData::UserUuid)); //value(Core::IUser::FullName).toString();
+    const QString &username = user()->fullNameOfUser(episode->data(EpisodeData::UserCreatorUuid)); //value(Core::IUser::FullName).toString();
     if (username.isEmpty())
         form->itemDatas()->setData(0, tr("No user"), IFormItemData::ID_UserName);
     else
@@ -1176,12 +1174,8 @@ bool EpisodeModel::activateEpisode(const QModelIndex &index, const QString &form
 
 
     /** \todo move this part into a specific member of the private part */
-    QString xml = episode->data(EpisodeData::XmlContent).toString();
-    if (xml.isEmpty()) {
-//        d->getXmlContent(d->m_ActualEpisode);
-        xml = episode->data(EpisodeData::XmlContent).toString();
-    }
-
+    d->getEpisodeContent(episode);
+    const QString &xml = episode->data(EpisodeData::XmlContent).toString();
     if (xml.isEmpty())
         return true;
 

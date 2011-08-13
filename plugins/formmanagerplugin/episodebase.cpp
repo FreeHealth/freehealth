@@ -129,12 +129,10 @@ EpisodeBase::EpisodeBase(QObject *parent) :
     addField(Table_EPISODES, EPISODES_LABEL, "LABEL", FieldIsShortText);
     addField(Table_EPISODES, EPISODES_USERDATE, "USERDATE", FieldIsDate);
     addField(Table_EPISODES, EPISODES_DATEOFCREATION, "DATECREATION", FieldIsDate);
-    addField(Table_EPISODES, EPISODES_DATEOFMODIFICATION, "DATEMODIF", FieldIsDate);
-    addField(Table_EPISODES, EPISODES_VALIDATION_ID, "VAL_ID", FieldIsInteger);
+    addField(Table_EPISODES, EPISODES_USERCREATOR, "CREATOR", FieldIsUUID);
     addIndex(Table_EPISODES, EPISODES_ID);
     addIndex(Table_EPISODES, EPISODES_PATIENT_UID);
     addIndex(Table_EPISODES, EPISODES_FORM_PAGE_UID);
-    addIndex(Table_EPISODES, EPISODES_VALIDATION_ID);
 
     addField(Table_EPISODES_MODIF, EP_MODIF_ID, "MOD_ID", FieldIsUniquePrimaryKey);
     addField(Table_EPISODES_MODIF, EP_MODIF_EPISODE_ID, "EPISODE_ID", FieldIsInteger);
@@ -603,6 +601,7 @@ bool EpisodeBase::saveEpisode(Internal::EpisodeData *episode)
 /** Save or update a list of Form::Internal::EpisodeData \e episodes to the database. Return true if all goes fine. */
 bool EpisodeBase::saveEpisode(const QList<EpisodeData *> &episodes)
 {
+    qWarning() << Q_FUNC_INFO << episodes.count();
     if (episodes.isEmpty())
         return true;
 
@@ -616,6 +615,9 @@ bool EpisodeBase::saveEpisode(const QList<EpisodeData *> &episodes)
         EpisodeData *episode = episodes.at(i);
         if (!episode)
             continue;
+
+        qWarning() << "episodeId" << episode->episodeId() << "isModified" << episode->isModified();
+
         if (!episode->isModified())
             continue;
 
@@ -626,13 +628,12 @@ bool EpisodeBase::saveEpisode(const QList<EpisodeData *> &episodes)
             query.bindValue(EPISODES_ID, QVariant());
             query.bindValue(EPISODES_PATIENT_UID, episode->data(EpisodeData::PatientUuid));
             query.bindValue(EPISODES_LK_TOPRACT_LKID, QVariant());
-            query.bindValue(EPISODES_ISVALID, episode->data(EpisodeData::IsValid));
+            query.bindValue(EPISODES_ISVALID, episode->data(EpisodeData::IsValid).toInt());
             query.bindValue(EPISODES_FORM_PAGE_UID, episode->data(EpisodeData::FormUuid));
             query.bindValue(EPISODES_LABEL, episode->data(EpisodeData::Label));
             query.bindValue(EPISODES_USERDATE, episode->data(EpisodeData::UserDate));
             query.bindValue(EPISODES_DATEOFCREATION, episode->data(EpisodeData::CreationDate));
-            query.bindValue(EPISODES_DATEOFMODIFICATION, episode->data(EpisodeData::LastModificationDate));
-            query.bindValue(EPISODES_VALIDATION_ID, QVariant());
+            query.bindValue(EPISODES_USERCREATOR, episode->data(EpisodeData::UserCreatorUuid));
             if (!query.exec()) {
                 ok = false;
                 LOG_QUERY_ERROR(query);
@@ -642,17 +643,19 @@ bool EpisodeBase::saveEpisode(const QList<EpisodeData *> &episodes)
             query.finish();
 
             // save content
-            query.prepare(prepareInsertQuery(Table_EPISODE_CONTENT));
-            query.bindValue(EPISODE_CONTENT_ID, QVariant());
-            query.bindValue(EPISODE_CONTENT_EPISODE_ID, episode->data(EpisodeData::Id));
-            query.bindValue(EPISODE_CONTENT_XML, episode->data(EpisodeData::XmlContent));
-            if (!query.exec()) {
-                LOG_QUERY_ERROR(query);
-                ok = false;
-            } else {
-                episode->setData(EpisodeData::ContentId, query.lastInsertId());
+            if (episode->data(EpisodeData::IsXmlContentPopulated).toBool()) {
+                query.prepare(prepareInsertQuery(Table_EPISODE_CONTENT));
+                query.bindValue(EPISODE_CONTENT_ID, QVariant());
+                query.bindValue(EPISODE_CONTENT_EPISODE_ID, episode->data(EpisodeData::Id));
+                query.bindValue(EPISODE_CONTENT_XML, episode->data(EpisodeData::XmlContent));
+                if (!query.exec()) {
+                    LOG_QUERY_ERROR(query);
+                    ok = false;
+                } else {
+                    episode->setData(EpisodeData::ContentId, query.lastInsertId());
+                }
+                query.finish();
             }
-            query.finish();
 
             // save validation
             if (!saveEpisodeValidations(episode))
@@ -661,6 +664,8 @@ bool EpisodeBase::saveEpisode(const QList<EpisodeData *> &episodes)
             // save modifications (there should be no modifications at this point)
             if (!saveEpisodeModifications(episode))
                 ok = false;
+
+            qWarning() << "ok" << ok;
 
             if (ok) {
                 episode->setModified(false);
@@ -678,7 +683,7 @@ bool EpisodeBase::saveEpisode(const QList<EpisodeData *> &episodes)
                                              << EPISODES_LABEL
                                              << EPISODES_USERDATE
                                              << EPISODES_DATEOFCREATION
-                                             << EPISODES_DATEOFMODIFICATION
+                                             << EPISODES_USERCREATOR
                                              , where));
             query.bindValue(0, episode->data(EpisodeData::PatientUuid));
             query.bindValue(1, episode->data(EpisodeData::IsValid).toInt());
@@ -686,7 +691,7 @@ bool EpisodeBase::saveEpisode(const QList<EpisodeData *> &episodes)
             query.bindValue(3, episode->data(EpisodeData::Label));
             query.bindValue(4, episode->data(EpisodeData::UserDate));
             query.bindValue(5, episode->data(EpisodeData::CreationDate));
-            query.bindValue(6, episode->data(EpisodeData::LastModificationDate));
+            query.bindValue(6, episode->data(EpisodeData::UserCreatorUuid));
             if (!query.exec()) {
                 LOG_QUERY_ERROR(query);
                 ok = false;
@@ -694,17 +699,22 @@ bool EpisodeBase::saveEpisode(const QList<EpisodeData *> &episodes)
             query.finish();
 
             where.clear();
-            where.insert(EPISODE_CONTENT_EPISODE_ID, QString("=%1").arg(episode->episodeId()));
-            query.prepare(prepareUpdateQuery(Table_EPISODE_CONTENT,
-                                             QList<int>()
-                                             << EPISODE_CONTENT_XML
-                                             , where));
-            query.bindValue(0, episode->data(EpisodeData::XmlContent));
-            if (!query.exec()) {
-                LOG_QUERY_ERROR(query);
-                ok = false;
+            if (episode->data(EpisodeData::IsXmlContentPopulated).toBool()) {
+
+                qWarning() << "updating" << episode->data(EpisodeData::XmlContent);
+
+                where.insert(EPISODE_CONTENT_EPISODE_ID, QString("=%1").arg(episode->episodeId()));
+                query.prepare(prepareUpdateQuery(Table_EPISODE_CONTENT,
+                                                 QList<int>()
+                                                 << EPISODE_CONTENT_XML
+                                                 , where));
+                query.bindValue(0, episode->data(EpisodeData::XmlContent));
+                if (!query.exec()) {
+                    LOG_QUERY_ERROR(query);
+                    ok = false;
+                }
+                query.finish();
             }
-            query.finish();
 
             // save validation
             if (!saveEpisodeValidations(episode))
@@ -713,6 +723,8 @@ bool EpisodeBase::saveEpisode(const QList<EpisodeData *> &episodes)
             // save modifications
             if (!saveEpisodeModifications(episode))
                 ok = false;
+
+            qWarning() << "ok" << ok;
 
             if (ok) {
                 episode->setModified(false);
@@ -737,10 +749,13 @@ QList<EpisodeData *> EpisodeBase::getEpisodes(const EpisodeBaseQuery &baseQuery)
     QString order, limit, req;
     Utils::FieldList get;
     get << fields(Table_EPISODES);
-    get << fields(Table_EPISODE_CONTENT);
     Utils::JoinList joins;
-    joins << Utils::Join(Table_EPISODE_CONTENT, EPISODE_CONTENT_EPISODE_ID, Table_EPISODES, EPISODES_ID);
     Utils::FieldList conds;
+
+    if (baseQuery.getEpisodeContent()) {
+        joins << Utils::Join(Table_EPISODE_CONTENT, EPISODE_CONTENT_EPISODE_ID, Table_EPISODES, EPISODES_ID);
+        get << fields(Table_EPISODE_CONTENT);
+    }
 
     if (baseQuery.validEpisodes())
         conds << Utils::Field(Table_EPISODES, EPISODES_ISVALID, QString("=1"));
@@ -755,6 +770,15 @@ QList<EpisodeData *> EpisodeBase::getEpisodes(const EpisodeBaseQuery &baseQuery)
         conds << Utils::Field(Table_EPISODES_MODIF, EP_MODIF_USERUID, QString("='%1'").arg(baseQuery.userUid().toString()));
     }
 
+    if (!baseQuery.formUids().isEmpty()) {
+        QString f;
+        foreach(const QString &uid, baseQuery.formUids()) {
+            f += QString("'%1',").arg(uid);
+        }
+        f.chop(1);
+        conds << Utils::Field(Table_EPISODES, EPISODES_FORM_PAGE_UID, QString("IN (%1)").arg(f));
+    }
+
 //        joins << Utils::Join(Table_VALIDATION, VALIDATION_EPISODE_ID, Table_EPISODES, EPISODES_ID);
 
     order = QString(" ORDER BY `%1`.`%2`ASC \n").arg(table(Table_EPISODES)).arg(fieldName(Table_EPISODES, EPISODES_USERDATE));
@@ -763,6 +787,9 @@ QList<EpisodeData *> EpisodeBase::getEpisodes(const EpisodeBaseQuery &baseQuery)
     }
 
     req = select(get, joins, conds) + order + limit;
+
+//    qWarning() << req;
+
     QSqlQuery query(DB);
     if (query.exec(req)) {
         while (query.next()) {
@@ -775,11 +802,13 @@ QList<EpisodeData *> EpisodeBase::getEpisodes(const EpisodeBaseQuery &baseQuery)
             e->setData(EpisodeData::IsValid , query.value(EPISODES_ISVALID));
             e->setData(EpisodeData::IsNewlyCreated , false);
             e->setData(EpisodeData::FormUuid , query.value(EPISODES_FORM_PAGE_UID));
-//            e->setData(EpisodeData::Summary , query.value(EPISODES_));
-//            e->setData(EpisodeData::FullContent , query.value(EPISODES_));
+            e->setData(EpisodeData::UserCreatorUuid , query.value(EPISODES_USERCREATOR));
             // content
-            e->setData(EpisodeData::ContentId , query.value(EPISODES_MaxParam + EPISODE_CONTENT_EPISODE_ID));
-            e->setData(EpisodeData::XmlContent , query.value(EPISODES_MaxParam + EPISODE_CONTENT_XML));
+            if (baseQuery.getEpisodeContent()) {
+                e->setData(EpisodeData::ContentId , query.value(EPISODES_MaxParam + EPISODE_CONTENT_EPISODE_ID));
+                e->setData(EpisodeData::XmlContent , query.value(EPISODES_MaxParam + EPISODE_CONTENT_XML));
+                e->setData(EpisodeData::IsXmlContentPopulated, true);
+            }
 
             // modifications
             QSqlQuery query2(DB);
@@ -827,6 +856,32 @@ QList<EpisodeData *> EpisodeBase::getEpisodes(const EpisodeBaseQuery &baseQuery)
     }
     DB.commit();
     return toReturn;
+}
+
+bool EpisodeBase::getEpisodeContent(EpisodeData *episode)
+{
+    QSqlDatabase DB = QSqlDatabase::database(DB_NAME);
+    if (!connectDatabase(DB, __LINE__)) {
+        return false;
+    }
+    bool episodeWasModified = episode->isModified();
+    QHash<int, QString> where;
+    where.insert(Constants::EPISODE_CONTENT_EPISODE_ID, QString("=%1").arg(episode->data(EpisodeData::Id).toString()));
+    QString req = select(Constants::Table_EPISODE_CONTENT, Constants::EPISODE_CONTENT_XML, where);
+    QSqlQuery query(DB);
+    if (query.exec(req)) {
+        if (query.next()) {
+            episode->setData(EpisodeData::XmlContent, query.value(0));
+            episode->setData(EpisodeData::IsXmlContentPopulated, true);
+            return true;
+        }
+    } else {
+        LOG_QUERY_ERROR(query);
+    }
+    query.finish();
+    if (!episodeWasModified)
+        episode->setModified(false);
+    return false;
 }
 
 void EpisodeBase::toTreeWidget(QTreeWidget *tree)
