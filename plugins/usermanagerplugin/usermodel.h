@@ -109,7 +109,7 @@ public:
     bool setCurrentUser(const QString &clearLog, const QString &clearPassword, bool refreshCache = false);
     bool setCurrentUserIsServerManager();
 
-    bool hasCurrentUser();
+    bool hasCurrentUser() const;
     QModelIndex currentUserIndex() const;
 
     bool hasUserToSave();

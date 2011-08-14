@@ -37,7 +37,7 @@ class QAction;
  * \file usermanagerplugin.h
  * \author Eric MAEKER <eric.maeker@gmail.com>
  * \version 0.6.0
- * \date 11 May 2011
+ * \date 14 Aug 2011
 */
 
 namespace UserPlugin {
@@ -57,6 +57,9 @@ public:
 
     bool initialize(const QStringList &arguments, QString *errorString);
     void extensionsInitialized();
+
+private:
+    bool identifyUser();
 
 private Q_SLOTS:
     void postCoreInitialization();

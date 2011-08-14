@@ -113,6 +113,7 @@ UserBase::UserBase(QObject *parent)
     addField(Table_USERS, USER_ID,           "USER_ID",         FieldIsUniquePrimaryKey);
     addField(Table_USERS, USER_UUID,         "USER_UUID",       FieldIsUUID);
     addField(Table_USERS, USER_VALIDITY,     "VALIDITY",        FieldIsBoolean);
+    addField(Table_USERS, USER_ISVIRTUAL,    "ISVIRTUAL",       FieldIsBoolean);
     addField(Table_USERS, USER_LOGIN,        "LOGIN",           FieldIsShortText);
     addField(Table_USERS, USER_PASSWORD,     "PASSWORD",        FieldIsShortText);
     addField(Table_USERS, USER_LASTLOG,      "LASTLOGIN",       FieldIsDate);
@@ -627,6 +628,7 @@ bool UserBase::createDefaultUser()
     user->setLogin64(Utils::loginForSQL(DEFAULT_USER_CLEARLOGIN));
     user->setClearPassword(DEFAULT_USER_CLEARPASSWORD);
     user->setValidity(true);
+    user->setVirtual(false);
     user->setName(DEFAULT_USER_NAME);
     user->setFirstname(DEFAULT_USER_FIRSTNAME);
     user->setLocaleLanguage(QLocale().language());
@@ -637,6 +639,113 @@ bool UserBase::createDefaultUser()
     user->setRights(Constants::USER_ROLE_ADMINISTRATIVE, Core::IUser::ReadAll | Core::IUser::WriteAll | Core::IUser::Create | Core::IUser::Delete | Core::IUser::Print);
     user->setRights(Constants::USER_ROLE_PARAMEDICAL, Core::IUser::ReadAll | Core::IUser::WriteAll | Core::IUser::Create | Core::IUser::Delete | Core::IUser::Print);
     user->setPersonalLkId(1);
+
+    QList<UserDynamicData*> list;
+
+    // Create default header
+    Print::TextDocumentExtra *headerDoc = new Print::TextDocumentExtra();
+    headerDoc->setHtml(defaultHeader());
+    UserDynamicData *header = new UserDynamicData();
+    header->setName(USER_DATAS_GENERICHEADER);
+    header->setValue(headerDoc);
+    header->setUserUuid(user->uuid());
+    list << header;
+
+    // Create default footer
+    UserDynamicData *footer = new UserDynamicData();
+    Print::TextDocumentExtra *extraFooter = new Print::TextDocumentExtra();
+    extraFooter->setHtml(defaultFooter());
+    footer->setName(USER_DATAS_GENERICFOOTER);
+    footer->setValue(extraFooter);
+    footer->setUserUuid(user->uuid());
+    list << footer;
+
+    user->addDynamicDatasFromDatabase(list);
+
+    /** \todo add a transaction */
+    saveUser(user);
+
+    // create the linker
+    QSqlDatabase DB = QSqlDatabase::database(Constants::USER_DB_CONNECTION);
+    if (!DB.isOpen()) {
+        if (!DB.open()) {
+            LOG_ERROR(tkTr(Trans::Constants::UNABLE_TO_OPEN_DATABASE_1_ERROR_2).arg(DB.connectionName()).arg(DB.lastError().text()));
+            delete user; // list is deleted here
+            if (extraFooter)
+                delete extraFooter;
+            if (headerDoc)
+                delete headerDoc;
+            return false;
+        }
+    }
+    QSqlQuery query(DB);
+    query.prepare(prepareInsertQuery(Constants::Table_USER_LK_ID));
+    query.bindValue(Constants::LK_ID, QVariant());
+    query.bindValue(Constants::LK_GROUP_UUID, QVariant());
+    query.bindValue(Constants::LK_USER_UUID, user->uuid());
+    query.bindValue(Constants::LK_LKID, user->personalLinkId());
+    if (!query.exec()) {
+        LOG_QUERY_ERROR(query);
+        delete user; // list is deleted here
+        if (extraFooter)
+            delete extraFooter;
+        if (headerDoc)
+            delete headerDoc;
+        return false;
+    }
+
+    delete user; // list is deleted here
+    if (extraFooter)
+        delete extraFooter;
+    if (headerDoc)
+        delete headerDoc;
+    return true;
+}
+
+/** Create a virtual user. */
+bool UserBase::createVirtualUser(const QString &uid, const QString &name, const QString &firstName, int title, int gender,
+                                 const QStringList &specialties, const QStringList &qualifications,
+                                 int medicalRights, int adminRights, int userRights, int agendaRights, int paramedicRights,
+                                 QLocale::Language lang)  // static
+{
+    QHash<int, QString> where;
+    where.insert(USER_UUID, QString("='%1'").arg(uid));
+    int uidAlreadyInBase = count(Table_USERS, USER_UUID, getWhereClause(Table_USERS, where));
+    if (uidAlreadyInBase!=0) {
+        LOG_ERROR("User uuid is alreday used, virtual user not created");
+        return false;
+    }
+    UserData* user = 0;
+    if (uid.isEmpty())
+        user = new UserData;
+    else
+        user = new UserData(uid);
+    QString pass;
+    if (firstName.isEmpty())
+        pass = name.toLower();
+    else
+        pass = name.toLower() + '.' + firstName.toLower();
+    pass = pass.toLower();
+    pass = pass.simplified();
+    pass = pass.replace(" ", "_");
+    pass = Utils::removeAccents(pass);
+    user->setLogin64(Utils::loginForSQL(pass));
+    user->setClearPassword(pass);
+    user->setValidity(true);
+    user->setVirtual(true);
+    user->setName(name.toUpper());
+    user->setFirstname(firstName);
+    user->setTitleIndex(title);
+    user->setGenderIndex(gender);
+    user->setLocaleLanguage(lang);
+    user->setSpecialty(specialties);
+    user->setQualification(qualifications);
+    user->setRights(Constants::USER_ROLE_USERMANAGER, Core::IUser::UserRights(userRights));
+    user->setRights(Constants::USER_ROLE_MEDICAL, Core::IUser::UserRights(medicalRights));
+    user->setRights(Constants::USER_ROLE_ADMINISTRATIVE, Core::IUser::UserRights(adminRights));
+    user->setRights(Constants::USER_ROLE_PARAMEDICAL, Core::IUser::UserRights(paramedicRights));
+    user->setRights(Constants::USER_ROLE_AGENDA, Core::IUser::UserRights(agendaRights));
+//    user->setPersonalLkId(1);
 
     QList<UserDynamicData*> list;
 
@@ -814,6 +923,7 @@ bool UserBase::saveUser(UserData *user)
             q.bindValue(USER_ID, user->id());
             q.bindValue(USER_UUID, user->uuid());
             q.bindValue(USER_VALIDITY, (int)user->validity());
+            q.bindValue(USER_ISVIRTUAL, (int)user->isVirtual());
             q.bindValue(USER_LOGIN, user->login64());
             q.bindValue(USER_PASSWORD, user->cryptedPassword());
             q.bindValue(USER_LASTLOG, user->lastLogin());
@@ -879,6 +989,7 @@ bool UserBase::saveUser(UserData *user)
             q.bindValue(USER_ID,           QVariant());
             q.bindValue(USER_UUID,         user->uuid());
             q.bindValue(USER_VALIDITY ,    (int)user->validity());
+            q.bindValue(USER_ISVIRTUAL ,   (int)user->isVirtual());
             q.bindValue(USER_LOGIN ,       user->login64());
             q.bindValue(USER_PASSWORD ,    user->cryptedPassword());
             q.bindValue(USER_NAME ,        user->name());

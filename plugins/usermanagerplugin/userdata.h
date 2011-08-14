@@ -150,6 +150,7 @@ public:
     // simplified setters (TODO : some must be logged)
     void  setId(const QVariant & val)                  { setValue(Table_USERS, USER_ID, val); }
     void  setValidity(const QVariant & val)            { setValue(Table_USERS, USER_VALIDITY, val); }
+    void  setVirtual(const QVariant & val)             { setValue(Table_USERS, USER_ISVIRTUAL, val); }
     void  setLocker(const QVariant & val)              { setValue(Table_USERS, USER_LOCKER ,val); }
     void  setClearPassword(const QString &val);
     void  setTitleIndex(const QVariant &val)           { setValue(Table_USERS, USER_TITLE ,val); }
@@ -194,6 +195,7 @@ public:
     int id() const                       { return value(Table_USERS, USER_ID).toInt(); }
     QString uuid() const                 { return value(Table_USERS, USER_UUID).toString(); }
     bool    validity() const             { return value(Table_USERS, USER_VALIDITY).toBool(); }
+    bool isVirtual() const               { return value(Table_USERS, USER_ISVIRTUAL).toBool(); }
     bool    locker() const               { return value(Table_USERS, USER_LOCKER).toBool(); }
     QString login64() const              { return value(Table_USERS, USER_LOGIN).toString(); }
     QString clearLogin() const           { return QString(QByteArray::fromBase64(login64().toAscii())); }

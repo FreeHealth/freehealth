@@ -245,6 +245,10 @@ UserManagerWidget::UserManagerWidget(QWidget *parent) :
     aToggleSearchView->setObjectName(QString::fromUtf8("aToggleSearchView"));
 
     // prepare Search Line Edit
+    searchByNameAct = new QAction(m_SearchToolBut);
+    searchByFirstnameAct = new QAction(m_SearchToolBut);
+    searchByNameAndFirstnameAct = new QAction(m_SearchToolBut);
+    searchByCityAct = new QAction(m_SearchToolBut);
     m_SearchToolBut = new QToolButton(ui->searchLineEdit);
     ui->searchLineEdit->setLeftButton(m_SearchToolBut);
     m_SearchToolBut->addAction(searchByNameAct);
@@ -252,10 +256,6 @@ UserManagerWidget::UserManagerWidget(QWidget *parent) :
     //    m_SearchToolBut->addAction(searchByNameAndFirstnameAct);
     //    m_SearchToolBut->addAction(searchByCityAct);
     m_SearchToolBut->setPopupMode(QToolButton::InstantPopup);
-    searchByNameAct = new QAction(m_SearchToolBut);
-    searchByFirstnameAct = new QAction(m_SearchToolBut);
-    searchByNameAndFirstnameAct = new QAction(m_SearchToolBut);
-    searchByCityAct = new QAction(m_SearchToolBut);
 
     // manage theme / icons
     Core::ITheme *th = theme();
@@ -280,7 +280,6 @@ bool UserManagerWidget::initialize()
 {
 //    m_Context = new UserManagerContext(this);
 //    contextManager()->addContextObject(m_Context);
-
     m_ToolBar = new QToolBar(this);
     m_ToolBar->setToolButtonStyle(Qt::ToolButtonTextUnderIcon);
     m_ToolBar->addAction(aToggleSearchView);

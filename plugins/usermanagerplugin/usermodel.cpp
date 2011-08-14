@@ -549,7 +549,7 @@ bool UserModel::setCurrentUserIsServerManager()
         }
 
         // 4. Connect new user
-        LOG(tr("Setting current user uuid to %1").arg(uuid));
+        LOG(tr("Setting current user uuid to %1 (su)").arg(uuid));
         if (!d->m_CurrentUserUuid.isEmpty()) {
             Q_EMIT userAboutToDisconnect(d->m_CurrentUserUuid);
         }
@@ -571,7 +571,7 @@ bool UserModel::setCurrentUserIsServerManager()
 }
 
 /** Return true if a current user has been defined. */
-bool UserModel::hasCurrentUser()
+bool UserModel::hasCurrentUser() const
 {
     return (!d->m_CurrentUserUuid.isEmpty());
 }
@@ -601,6 +601,7 @@ void UserModel::clear()
 
 void UserModel::refresh()
 {
+    clear();
     d->m_Sql->select();
     reset();
 }

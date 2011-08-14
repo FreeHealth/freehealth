@@ -38,8 +38,8 @@
 /**
  * \file userbase.h
  * \author Eric MAEKER <eric.maeker@gmail.com>
- * \version 0.4.0
- * \date 05 Apr 2010
+ * \version 0.6.0
+ * \date 14 Aug 2011
 */
 
 namespace UserPlugin {
@@ -72,8 +72,12 @@ public:
                        );
     bool checkDatabaseVersion();
     bool isNewlyCreated() const;
-    bool createDefaultUser();
 
+    bool createDefaultUser();
+    bool createVirtualUser(const QString &uid, const QString &name, const QString &firstName, int title, int gender,
+                           const QStringList &specialties, const QStringList &qualifications,
+                           int medicalRights = 0, int adminRights = 0, int userRights = 0, int agendaRights = 0, int paramedicRights = 0,
+                           QLocale::Language lang = QLocale().language());
 
     // retreivers
     UserData *getUserById(const QVariant &_id) const;  // not used

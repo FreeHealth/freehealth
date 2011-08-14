@@ -493,6 +493,7 @@ UserData::UserData()
     d = new UserDataPrivate();
     d->m_Modifiable = true;
     setValue(Table_USERS, USER_ID, -1);
+    setValue(Table_USERS, USER_ISVIRTUAL, false);
     setRights(USER_ROLE_USERMANAGER, Core::IUser::ReadOwn | Core::IUser::WriteOwn);
     setRights(USER_ROLE_MEDICAL, Core::IUser::NoRights);
     setRights(USER_ROLE_DOSAGES, Core::IUser::NoRights);
@@ -524,6 +525,7 @@ UserData::UserData(const QString & uuid)
     d = new UserDataPrivate();
     d->m_Modifiable = true;
     setValue(Table_USERS, USER_ID, -1);
+    setValue(Table_USERS, USER_ISVIRTUAL, false);
     setUuid(uuid);
     setRights(USER_ROLE_USERMANAGER, Core::IUser::ReadOwn | Core::IUser::WriteOwn);
     setRights(USER_ROLE_MEDICAL, Core::IUser::NoRights);

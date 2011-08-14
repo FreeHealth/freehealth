@@ -54,6 +54,7 @@ public:
         Id = 0,
         Uuid,           /*!< \brief Unique identifier the each users */
         Validity,       /*!< \brief Validity of this user */
+        IsVirtual,      /*!< \brief User is virtual ?*/
         Login64,        /*!< \brief Crypted login \sa UserGlobal::loginForSQL() */
         Password,       /*!< \brief Crypted password \sa UserGlobal::crypt() */
         LastLogin,      /*!< \brief Date of the last correct login */

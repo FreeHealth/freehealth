@@ -54,6 +54,7 @@
 #include <coreplugin/contextmanager/contextmanager.h>
 #include <coreplugin/iuser.h>
 #include <coreplugin/itheme.h>
+#include <coreplugin/icommandline.h>
 
 #include <translationutils/constanttranslations.h>
 #include <utils/log.h>
@@ -75,65 +76,10 @@ static inline UserPlugin::UserModel *userModel() {return UserPlugin::UserModel::
 static inline UserPlugin::Internal::UserBase *userBase() {return UserPlugin::Internal::UserBase::instance();}
 static inline Core::ContextManager *contextManager() { return Core::ICore::instance()->contextManager(); }
 static inline Core::IUser *user() {return Core::ICore::instance()->user();}
+static inline Core::ICommandLine *commandLine() {return Core::ICore::instance()->commandLine();}
 
 static inline Core::ITheme *theme()  { return Core::ICore::instance()->theme(); }
 static inline void messageSplash(const QString &s) {theme()->messageSplashScreen(s); }
-
-static inline bool identifyUser()
-{
-    // instanciate user model
-    userModel();
-    QString log;
-    QString pass;
-    bool sqliteVersion = (settings()->databaseConnector().driver()==Utils::Database::SQLite);
-    if (sqliteVersion) {
-        log = settings()->databaseConnector().clearLog();
-        pass = settings()->databaseConnector().clearPass();
-    }
-    bool ask = true;
-    while (true) {
-        if (userModel()->isCorrectLogin(log, pass)) {
-            userModel()->setCurrentUser(log, pass);
-            if (ask) {
-                int r = Utils::withButtonsMessageBox(tkTr(Trans::Constants::CONNECTED_AS_1)
-                                                     .arg(userModel()->currentUserData(Core::IUser::FullName).toString()),
-                                                     QApplication::translate("UserManagerPlugin", "You can pursue with this user or connect with another one."),
-                                                     "", QStringList()
-                                                     << QApplication::translate("UserManagerPlugin", "Stay connected")
-                                                     << QApplication::translate("UserManagerPlugin", "Change the current user"));
-                if (r==1) {
-                    log.clear();
-                    pass.clear();
-                    userModel()->clear();
-                    ask = false;
-                    continue;
-                }
-                break;
-            }
-            break;
-        } else {
-            log.clear();
-            pass.clear();
-            Internal::UserIdentifier ident;
-            if (ident.exec() == QDialog::Rejected)
-                return false;
-            log = ident.login();
-            pass = ident.password();
-
-            if (sqliteVersion) {
-                Utils::DatabaseConnector c = settings()->databaseConnector();
-                c.setClearLog(log);
-                c.setClearPass(pass);
-                settings()->setDatabaseConnector(c);
-            }
-
-            ask = false;
-            break;
-        }
-    }
-    return true;
-}
-
 
 UserManagerPlugin::UserManagerPlugin() :
         aCreateUser(0), aChangeUser(0),
@@ -181,6 +127,38 @@ bool UserManagerPlugin::initialize(const QStringList &arguments, QString *errorS
     if (!identifyUser()) {
         *errorString = tr("User is not identified.");
         return false;
+    }
+
+    // manage virtual user creation
+    if (commandLine()->value(Core::ICommandLine::CreateVirtuals).toBool()) {
+        bool created = true;
+        // Doctors
+        created = userBase()->createVirtualUser("d1f29ad4a4ea4dabbe40ec888d153228", "McCoy", "Leonard", Trans::Constants::Doctor, genders().indexOf(tkTr(Trans::Constants::MALE)),
+                                      QStringList() << "Medical Doctor",
+                                      QStringList() << "Chief medical officer USS Enterprise",
+                                      Core::IUser::AllRights, Core::IUser::AllRights, 0, Core::IUser::AllRights, Core::IUser::AllRights);
+        if (!created) {
+            return true;
+        }
+
+        userBase()->createVirtualUser("b5caead635a246a2a87ce676e9d2ef4d", "Phlox", "", Trans::Constants::Doctor, genders().indexOf(tkTr(Trans::Constants::MALE)),
+                                      QStringList() << "Intergalactic medicine",
+                                      QStringList() << "Chief medical officer Enterprise NX-01",
+                                      Core::IUser::AllRights, Core::IUser::AllRights, 0, Core::IUser::AllRights, Core::IUser::AllRights);
+        // Secretaries or so :  Uhura  U.S.S. Enterprise
+        userBase()->createVirtualUser("0f148ea3de6e47b8bbf9c2cedea47511", "Uhura", "", Trans::Constants::Madam, genders().indexOf(tkTr(Trans::Constants::FEMALE)),
+                                      QStringList() << "Communications officer",
+                                      QStringList() << "Enterprise NX-01",
+                                      0, 0, 0, Core::IUser::AllRights, 0);
+        // Nurses : Christine Chapel U.S.S. Enterprise
+        userBase()->createVirtualUser("b94ad4ee401a4fada0bf29fc8f8f3597", "Chapel", "Christine", Trans::Constants::Madam, genders().indexOf(tkTr(Trans::Constants::FEMALE)),
+                                      QStringList() << "Space nurse",
+                                      QStringList() << "Nurse, Enterprise NX-01",
+                                      0, 0, 0, Core::IUser::AllRights, Core::IUser::AllRights);
+        // Admins
+
+        // refresh model
+        UserModel::instance()->refresh();
     }
 
     return true;
@@ -242,7 +220,7 @@ void UserManagerPlugin::extensionsInitialized()
     cmd = actionManager()->registerAction(aChangeUser, "aChangeCurrentUser", ctx);
     Q_ASSERT(cmd);
     cmd->setTranslations(tr("Change current user"));
-    menu->addAction(cmd, groupNew);
+    menu->addAction(cmd, groupUsers);
     cmd->retranslate();
     connect(aChangeUser, SIGNAL(triggered()), this, SLOT(changeCurrentUser()));
 
@@ -252,6 +230,61 @@ void UserManagerPlugin::extensionsInitialized()
     m_Mode = new Internal::UserManagerMode(this);
 
     connect(Core::ICore::instance(), SIGNAL(coreOpened()), this, SLOT(postCoreInitialization()));
+}
+
+bool UserManagerPlugin::identifyUser()
+{
+    // instanciate user model
+    userModel();
+    QString log;
+    QString pass;
+    bool sqliteVersion = (settings()->databaseConnector().driver()==Utils::Database::SQLite);
+    if (sqliteVersion) {
+        log = settings()->databaseConnector().clearLog();
+        pass = settings()->databaseConnector().clearPass();
+    }
+    bool ask = true;
+    while (true) {
+        if (userModel()->isCorrectLogin(log, pass)) {
+            userModel()->setCurrentUser(log, pass);
+            if (ask) {
+                int r = Utils::withButtonsMessageBox(tkTr(Trans::Constants::CONNECTED_AS_1)
+                                                     .arg(userModel()->currentUserData(Core::IUser::FullName).toString()),
+                                                     QApplication::translate("UserManagerPlugin", "You can pursue with this user or connect with another one."),
+                                                     "", QStringList()
+                                                     << QApplication::translate("UserManagerPlugin", "Stay connected")
+                                                     << QApplication::translate("UserManagerPlugin", "Change the current user"));
+                if (r==1) {
+                    log.clear();
+                    pass.clear();
+                    userModel()->clear();
+                    ask = false;
+                    continue;
+                }
+                break;
+            }
+            break;
+        } else {
+            log.clear();
+            pass.clear();
+            Internal::UserIdentifier ident;
+            if (ident.exec() == QDialog::Rejected)
+                return false;
+            log = ident.login();
+            pass = ident.password();
+
+            if (sqliteVersion) {
+                Utils::DatabaseConnector c = settings()->databaseConnector();
+                c.setClearLog(log);
+                c.setClearPass(pass);
+                settings()->setDatabaseConnector(c);
+            }
+
+            ask = false;
+            break;
+        }
+    }
+    return true;
 }
 
 void UserManagerPlugin::postCoreInitialization()
