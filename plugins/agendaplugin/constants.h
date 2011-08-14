@@ -60,6 +60,7 @@ namespace Constants {
             CAL_CATEGORYID,
             CAL_SORTID,
             CAL_ISVALID,
+            CAL_ISVIRTUAL,
             CAL_STATUS,
             CAL_TYPE,
             CAL_SITEUID,
@@ -96,6 +97,7 @@ namespace Constants {
         COMMON_TYPE_ID,
         COMMON_STATUS_ID, // (like draft, validated, rejected, need more info, need to send letter…)
         COMMON_SITE_UID, // (for a later use)
+        COMMON_ISVIRTUAL,
         COMMON_ISPRIVATE,
         COMMON_PASSWORD, // (private events can be protected by a password)
         COMMON_ISBUSY,
@@ -156,6 +158,7 @@ namespace Constants {
         Db_CyclingEvId,
         Db_ComId,
         Db_IsValid,
+        Db_IsVirtual,
         Db_SortId,
         Db_XmlViewOptions,
         Db_XmlOptions

@@ -53,12 +53,15 @@
 #include <coreplugin/icore.h>
 #include <coreplugin/translators.h>
 #include <coreplugin/iuser.h>
+#include <coreplugin/itheme.h>
 
 #include <QtCore/QtPlugin>
 #include <QDebug>
 
 using namespace Account;
 static inline Core::IUser *user() { return Core::ICore::instance()->user(); }
+static inline Core::ITheme *theme()  { return Core::ICore::instance()->theme(); }
+static inline void messageSplash(const QString &s) {theme()->messageSplashScreen(s); }
 
 AccountPlugin::AccountPlugin() :
         ExtensionSystem::IPlugin(),
@@ -117,6 +120,8 @@ void AccountPlugin::extensionsInitialized()
 
     if (!user())
         return;
+
+    messageSplash(tr("Initializing account plugin..."));
 
     // Add Translator to the Application
     Core::ICore::instance()->translators()->addNewTranslator("accountplugin");

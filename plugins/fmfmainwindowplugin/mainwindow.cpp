@@ -231,6 +231,7 @@ bool MainWindow::initialize(const QStringList &arguments, QString *errorString)
 
 void MainWindow::extensionsInitialized()
 {
+    qWarning() << Q_FUNC_INFO << "user ok" << user()->hasCurrentUser();
     // First check if there is a logged user
     if (!user()->hasCurrentUser()) {
         return;
@@ -248,7 +249,7 @@ void MainWindow::extensionsInitialized()
         settings()->setValue(Utils::Constants::S_LAST_CHECKUPDATE, QDate::currentDate());
     }
 
-    // Create IPatient
+//    // Create IPatient
     m_PatientModelWrapper = new Internal::PatientModelWrapper(patientModel());
     Core::ICore::instance()->setPatient(m_PatientModelWrapper);
     m_PatientModelWrapper->init();
@@ -285,6 +286,7 @@ MainWindow::~MainWindow()
 /** \brief Post core initialization of MainWindow. */
 void MainWindow::postCoreInitialization()
 {
+    qWarning() << Q_FUNC_INFO;
     // Manage current user and patient
     onCurrentUserChanged();
     pluginManager()->addObject(m_UserListener = new MainWindowUserListener(this));

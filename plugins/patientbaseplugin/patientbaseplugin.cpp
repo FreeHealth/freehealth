@@ -42,15 +42,20 @@
 #include "patientwidgetmanager.h"
 #include "patientsearchmode.h"
 #include "patientbasepreferencespage.h"
+#include "patientmodel.h"
 
 #include <coreplugin/icore.h>
 #include <coreplugin/itheme.h>
+#include <coreplugin/isettings.h>
 #include <coreplugin/translators.h>
 #include <coreplugin/modemanager/modemanager.h>
+#include <coreplugin/icommandline.h>
 
 #include <utils/log.h>
 
 #include <QtCore/QtPlugin>
+#include <QDir>
+
 #include <QDebug>
 
 
@@ -58,6 +63,8 @@ using namespace Patients;
 using namespace Internal;
 static inline Core::ITheme *theme()  { return Core::ICore::instance()->theme(); }
 static inline void messageSplash(const QString &s) {theme()->messageSplashScreen(s); }
+static inline Core::ISettings *settings()  { return Core::ICore::instance()->settings(); }
+static inline Core::ICommandLine *commandLine() {return Core::ICore::instance()->commandLine();}
 
 static inline Patients::Internal::PatientBase *patientBase() {return Patients::Internal::PatientBase::instance();}
 static inline Core::ModeManager *modeManager() { return Core::ICore::instance()->modeManager(); }
@@ -117,10 +124,36 @@ void PatientBasePlugin::extensionsInitialized()
     if (Utils::Log::warnPluginsCreation())
         qWarning() << "PatientBasePlugin::extensionsInitialized";
 
+    messageSplash(tr("Initializing patients plugin..."));
+
     // add preference page
     prefpage = new PatientBasePreferencesPage(this);
     addObject(prefpage);
     prefpage->checkSettingsValidity();
+
+    if (commandLine()->value(Core::ICommandLine::CreateVirtuals).toBool()) {
+        // Populate with some virtual patients
+        QString path = settings()->path(Core::ISettings::BigPixmapPath) + QDir::separator();
+        int userLkId = 1; //userModel()->practionnerLkIds(userModel()->currentUserData(Core::IUser::Uuid).toString()).at(0);
+
+        QString uid = "b04936fafccb4174a7a6af25dd2bb71c";
+        patientBase()->createVirtualPatient("KIRK", "", "James Tiberius", "M", 6, QDate(1968, 04, 20), "USA", "USS Enterprise",
+                      "21, StarFleet Command", "1968", "EarthTown", uid, userLkId, path+"captainkirk.jpg");
+
+        uid = "2c49299b9b554300b46a6e3ef6d40a65";
+        patientBase()->createVirtualPatient("PICARD", "", "Jean-Luc", "M", 6, QDate(1948, 04, 20), "USA", "USS Enterprise-D",
+                      "21, StarFleet Command", "1968", "EarthTown", uid, userLkId, path+"captainpicard.png");
+
+        uid = "ef97f37361824b6f826d5c9246f9dc49";
+        patientBase()->createVirtualPatient("ARCHER", "", "Jonathan", "M", 6, QDate(1928, 04, 20), "USA", "Enterprise (NX-01) commanding officer",
+                      "21, StarFleet Command", "1968", "EarthTown", uid, userLkId, path+"captainarcher.jpg");
+
+        uid = "493aa06a1b8745b2ae6c79c531ef12a0";
+        patientBase()->createVirtualPatient("JANEWAY", "", "Kathryn", "F", 6, QDate(1938, 04, 20), "USA", "USS Voyager",
+                      "21, StarFleet Command", "1968", "EarthTown", uid, userLkId, path+"captainjaneway.jpg");
+
+        PatientModel::activeModel()->refreshModel();
+    }
 
     connect(Core::ICore::instance(), SIGNAL(coreOpened()), this, SLOT(postCoreInitialization()));
 }

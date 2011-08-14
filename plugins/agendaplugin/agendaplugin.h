@@ -34,10 +34,12 @@
  * \file agendaplugin.h
  * \author Eric MAEKER <eric.maeker@gmail.com>
  * \version 0.6.0
- * \date 04 June 2011
+ * \date 14 Aug 2011
 */
 
 namespace Agenda {
+class UserCalendar;
+
 class AgendaCore;
 
 class AgendaPlugin : public ExtensionSystem::IPlugin
@@ -53,6 +55,9 @@ public:
     void testDatabase();
 
 private:
+    void createVirtualAppointements(UserCalendar *calendar);
+
+
     AgendaCore *m_Core;
 };
 

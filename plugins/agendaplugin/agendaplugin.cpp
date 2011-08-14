@@ -51,9 +51,11 @@
 
 #include <coreplugin/icore.h>
 #include <coreplugin/isettings.h>
+#include <coreplugin/itheme.h>
 #include <coreplugin/translators.h>
 #include <coreplugin/constants_icons.h>
 #include <coreplugin/dialogs/pluginaboutpage.h>
+#include <coreplugin/icommandline.h>
 
 #include <QtCore/QtPlugin>
 #include <QDialog>
@@ -68,6 +70,11 @@ static inline Patients::Internal::PatientBase *patientBase() {return Patients::I
 // END TEST
 
 static inline Core::ISettings *settings() {return Core::ICore::instance()->settings();}
+static inline Core::ICommandLine *commandLine() {return Core::ICore::instance()->commandLine();}
+static inline Agenda::Internal::AgendaBase *base() {return Agenda::Internal::AgendaBase::instance();}
+
+static inline Core::ITheme *theme()  { return Core::ICore::instance()->theme(); }
+static inline void messageSplash(const QString &s) {theme()->messageSplashScreen(s); }
 
 AgendaPlugin::AgendaPlugin() :
     m_Core(0)
@@ -104,6 +111,8 @@ void AgendaPlugin::extensionsInitialized()
     if (Utils::Log::warnPluginsCreation())
         qWarning() << "AgendaPlugin::extensionsInitialized";
 
+    messageSplash(tr("Initializing agenda plugin..."));
+
     addAutoReleasedObject(new Core::PluginAboutPage(pluginSpec(), this));
 
     // Initialize database
@@ -111,7 +120,6 @@ void AgendaPlugin::extensionsInitialized()
 
     // Initialize ActionHandler and WidgetManager
     AgendaWidgetManager::instance();
-
 //    testDatabase();
 
     // Inform Calendar lib of theme paths and icons
@@ -127,6 +135,27 @@ void AgendaPlugin::extensionsInitialized()
     th->setIconFileName(Calendar::CalendarTheme::NavigationMonthViewMode, Constants::I_VIEWMODE);
     th->setIconFileName(Calendar::CalendarTheme::NavigationNext, Core::Constants::ICONNEXT);
     th->setIconFileName(Calendar::CalendarTheme::NavigationPrevious, Core::Constants::ICONPREVIOUS);
+
+    if (commandLine()->value(Core::ICommandLine::CreateVirtuals).toBool()) {
+        QList<Calendar::People> peoples;
+        UserCalendar *u = 0;
+        // McCoy calendar (Uhura as delegate)
+        peoples.append(Calendar::People(Calendar::People::PeopleUserDelegate, "", "0f148ea3de6e47b8bbf9c2cedea47511"));
+        u = base()->createVirtualUserCalendar("d1f29ad4a4ea4dabbe40ec888d153228", "McCoy @Enterprise",
+                                          "Virtual calendar for the virtual user McCoy",
+                                          15, 0, 0, 0, true, false, "", "mccoy.png", peoples);
+        if (!u)
+            return;
+        createVirtualAppointements(u);
+
+        // Phlox calendar (no delegates)
+        peoples.clear();
+        u = base()->createVirtualUserCalendar("b5caead635a246a2a87ce676e9d2ef4d", "Phlox @Enterprise",
+                                          "Virtual calendar for the virtual user Phlox",
+                                          10, 0, 0, 0, true, false, "", "phlox.png", peoples);
+        if (u)
+            createVirtualAppointements(u);
+    }
 }
 
 static int numberOfPatients()
@@ -150,20 +179,85 @@ static QString patientUid(const int row)
     return QString();
 }
 
-static QString patientName(const int row)
+//static QString patientName(const int row)
+//{
+//    QSqlQuery query(patientBase()->database());
+//    QString req= patientBase()->select(Patients::Constants::Table_IDENT, Patients::Constants::IDENTITY_NAME);
+//    req += QString(" LIMIT %1,%1").arg(row);
+//    if (query.exec(req)) {
+//        if (query.next()) {
+//            return query.value(0).toString();
+//        }
+//    } else {
+//        LOG_QUERY_ERROR_FOR("AgendaPlugin", query);
+//        return QString();
+//    }
+//    return QString();
+//}
+
+void AgendaPlugin::createVirtualAppointements(UserCalendar *calendar)
 {
-    QSqlQuery query(patientBase()->database());
-    QString req= patientBase()->select(Patients::Constants::Table_IDENT, Patients::Constants::IDENTITY_NAME);
-    req += QString(" LIMIT %1,%1").arg(row);
-    if (query.exec(req)) {
-        if (query.next()) {
-            return query.value(0).toString();
+    QList<Appointement *> list;
+    Utils::Randomizer r;
+    r.setPathToFiles(settings()->path(Core::ISettings::BundleResourcesPath) + "/textfiles/");
+    QDir pix(settings()->path(Core::ISettings::SmallPixmapPath));
+    int maxStatus = Calendar::availableStatus().count() - 1;
+    bool ok = true;
+    int nbEvents = r.randomInt(50, 100);
+    QDateTime start = QDateTime::currentDateTime();
+    int maxDb = numberOfPatients();
+    int defaultDuration = calendar->data(UserCalendar::DefaultDuration).toInt();
+    int calendarId = calendar->data(Constants::Db_CalId).toInt();
+
+    for(int i = 0; i < nbEvents; ++i) {
+        Appointement *ev = 0;
+
+        // add a duration to last start date
+        start.setTime(start.addSecs(60*defaultDuration*r.randomInt(0, 5)).time());
+        if (start.time().hour() >= 18) {
+            start.setDate(start.addDays(1).date());
+            start.setTime(QTime(8,0,0));
+        } else {
         }
-    } else {
-        LOG_QUERY_ERROR_FOR("AgendaPlugin", query);
-        return QString();
+        QDateTime end = start.addSecs(60*defaultDuration);
+
+        ev = new Appointement;
+        ev->setData(Constants::Db_CalId, calendarId);
+        ev->setData(Constants::Db_IsValid, 1);
+        ev->setData(Constants::Db_IsVirtual, 1);
+        ev->setData(Constants::Db_EvId, -1);
+        ev->setData(Constants::Db_IsVirtual, 1);
+        ev->setData(Constants::Db_XmlViewOptions, "XmlViewOptions");
+        ev->setData(Constants::Db_XmlOptions, "XmlOptions");
+        //    ev->setData(Constants::DbOnly_ComId, );
+        ev->setData(Constants::Db_CatId, -1);
+        //            ev->setData(Calendar::CalendarItem::PatientUid, r.getRandomString(45));
+        ev->setData(CalendarItemModel::DateStart, start);
+        ev->setData(CalendarItemModel::DateEnd, end);
+        ev->setData(CalendarItemModel::Type, 1);
+        ev->setData(CalendarItemModel::Status, r.randomInt(0, maxStatus));
+        ev->setData(CalendarItemModel::LocationUid, "siteId");
+        ev->setData(CalendarItemModel::IsPrivate, r.randomInt(0,1));
+        ev->setData(CalendarItemModel::Password, "nopass");
+        ev->setData(CalendarItemModel::IsBusy, r.randomInt(0,1));
+        ev->setData(CalendarItemModel::IsAGroupEvent, r.randomInt(0,1));
+        ev->setData(CalendarItemModel::Label, r.randomWords(r.randomInt(2, 15)));
+        ev->setData(CalendarItemModel::Description, r.randomWords(r.randomInt(10, 500)));
+        ev->setData(CalendarItemModel::Location, r.getRandomString(r.randomInt(1,145)));
+        ev->setData(CalendarItemModel::IconPath, r.randomFile(pix, QStringList() << "*.png").fileName());
+
+        // Add 1 to 3 patients
+        for(int y = 0; y < r.randomInt(1, 3); ++y) {
+            int zz = r.randomInt(0, maxDb);
+            ev->addPeople(Calendar::People(Calendar::People::PeopleAttendee, "", patientUid(zz)));
+        }
+        list << ev;
     }
-    return QString();
+    if (!base()->saveCalendarEvents(list))
+        ok = false;
+
+    if (ok)
+        qWarning() << nbEvents << "events correctly created and saved";
 }
 
 void AgendaPlugin::testDatabase()
@@ -268,6 +362,7 @@ void AgendaPlugin::testDatabase()
             ev->setData(Constants::Db_CalId, ucal->data(Constants::Db_CalId));
             ev->setData(Constants::Db_IsValid, 1);
             ev->setData(Constants::Db_EvId, -1);
+            ev->setData(Constants::Db_IsVirtual, 1);
             ev->setData(Constants::Db_XmlViewOptions, "XmlViewOptions");
             ev->setData(Constants::Db_XmlOptions, "XmlOptions");
             //    ev->setData(Constants::DbOnly_ComId, );
@@ -290,7 +385,7 @@ void AgendaPlugin::testDatabase()
             // Add 1 to 3 patients
             for(int y = 0; y < r.randomInt(1, 3); ++y) {
                 int zz = r.randomInt(0, maxDb);
-                ev->addPeople(Calendar::People(Calendar::People::PeopleAttendee, patientName(zz), patientUid(zz)));
+                ev->addPeople(Calendar::People(Calendar::People::PeopleAttendee, "", patientUid(zz)));
             }
 
             if (!base->saveCalendarEvent(ev))

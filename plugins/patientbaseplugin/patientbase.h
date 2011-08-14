@@ -67,12 +67,12 @@ public:
 //    bool initialize(Core::ISettings *settings);
     bool isInitialized() const {return m_initialized;}
 
-    static void createVirtualPatient(const QString &name, const QString &secondname, const QString &firstname,
-                                     const QString &gender, const int title, const QDate &dob,
-                                     const QString &country, const QString &note,
-                                     const QString &street, const QString &zip, const QString &city,
-                                     const QString &uuid, const int lkid,
-                                     const QString &photoFile = QString(), const QDate &death = QDate());
+    void createVirtualPatient(const QString &name, const QString &secondname, const QString &firstname,
+                              const QString &gender, const int title, const QDate &dob,
+                              const QString &country, const QString &note,
+                              const QString &street, const QString &zip, const QString &city,
+                              QString uuid, const int lkid,
+                              const QString &photoFile = QString(), const QDate &death = QDate());
 
     //private:
     bool createDatabase(const QString &connectionName, const QString &dbName,

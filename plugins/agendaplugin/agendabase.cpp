@@ -73,7 +73,8 @@
 
 enum { WarnNextAvailableTimeWarnings = false };
 
-using namespace Agenda::Internal;
+using namespace Agenda;
+using namespace Internal;
 using namespace Agenda::Constants;
 using namespace Trans::ConstantTranslations;
 
@@ -222,6 +223,7 @@ AgendaBase::AgendaBase(QObject *parent) :
     addField(Table_CALENDAR, CAL_CATEGORYID, "CAT_ID", FieldIsInteger);
     addField(Table_CALENDAR, CAL_SORTID, "SORT_ID", FieldIsInteger);
     addField(Table_CALENDAR, CAL_ISVALID, "ISVALID", FieldIsBoolean);
+    addField(Table_CALENDAR, CAL_ISVIRTUAL, "ISVIRTUAL", FieldIsBoolean, "0");
     addField(Table_CALENDAR, CAL_STATUS, "STATUS", FieldIsInteger);
     addField(Table_CALENDAR, CAL_TYPE, "TYPE", FieldIsInteger);
     addField(Table_CALENDAR, CAL_SITEUID, "SITE_UUID", FieldIsUUID);
@@ -257,6 +259,7 @@ AgendaBase::AgendaBase(QObject *parent) :
     addField(Table_COMMON, COMMON_TYPE_ID, "TYPE_ID", FieldIsInteger);
     addField(Table_COMMON, COMMON_STATUS_ID, "STATUS_ID", FieldIsInteger); // (like draft, validated, rejected, need more info, need to send letter…)
     addField(Table_COMMON, COMMON_SITE_UID, "SITE_UID", FieldIsUUID); // (for a later use)
+    addField(Table_COMMON, COMMON_ISVIRTUAL, "ISVIRTUAL", FieldIsBoolean, "0");
     addField(Table_COMMON, COMMON_ISPRIVATE, "ISPRIVATE", FieldIsBoolean);
     addField(Table_COMMON, COMMON_PASSWORD, "PASSWORD", FieldIsShortText); // (private events can be protected by a password)
     addField(Table_COMMON, COMMON_ISBUSY, "ISBUSY", FieldIsBoolean);
@@ -709,6 +712,7 @@ bool AgendaBase::saveUserCalendar(Agenda::UserCalendar *calendar)
         query.bindValue(Constants::CAL_CATEGORYID, calendar->data(Constants::Db_CatId).toInt());
         query.bindValue(Constants::CAL_SORTID, calendar->data(Agenda::UserCalendar::SortId).toInt());
         query.bindValue(Constants::CAL_ISVALID, calendar->data(Constants::Db_IsValid).toInt());
+        query.bindValue(Constants::CAL_ISVIRTUAL, calendar->data(Constants::Db_IsVirtual).toInt());
         query.bindValue(Constants::CAL_STATUS, calendar->data(Agenda::UserCalendar::Type).toInt());
         query.bindValue(Constants::CAL_TYPE, calendar->data(Agenda::UserCalendar::Status).toInt());
         query.bindValue(Constants::CAL_DEFAULT, calendar->data(Agenda::UserCalendar::IsDefault).toInt());
@@ -770,6 +774,7 @@ bool AgendaBase::saveUserCalendar(Agenda::UserCalendar *calendar)
                                          << Constants::CAL_DEFAULTDURATION
                                          << Constants::CAL_FULLCONTENT
                                          << Constants::CAL_SORTID
+                                         << Constants::CAL_ISVIRTUAL
                                          , where));
         query.bindValue(0, calendar->data(Constants::Db_CalId));
         query.bindValue(1, calendar->data(Constants::Db_IsValid).toInt());
@@ -785,6 +790,7 @@ bool AgendaBase::saveUserCalendar(Agenda::UserCalendar *calendar)
         query.bindValue(11, calendar->data(Agenda::UserCalendar::DefaultDuration));
         query.bindValue(12, calendar->data(Agenda::UserCalendar::Description));
         query.bindValue(13, calendar->data(Agenda::UserCalendar::SortId));
+        query.bindValue(14, calendar->data(Constants::Db_IsVirtual).toInt());
         if (!query.exec()) {
             LOG_QUERY_ERROR(query);
             return false;
@@ -823,6 +829,7 @@ QList<Appointement *> AgendaBase::getCalendarEvents(const CalendarEventQuery &ca
             return toReturn;
         conds << Utils::Field(Constants::Table_EVENTS, Constants::EVENT_ID, QString("='%1'").arg(calQuery.appointementId().toString()));
     } else {
+        /** \todo add virtual appointement filtering */
         // Date conditions
         if (calQuery.hasDateRange()) {
             /** \todo code here: better management of dates in filters */
@@ -897,6 +904,7 @@ QList<Appointement *> AgendaBase::getCalendarEvents(const CalendarEventQuery &ca
             if (query.next()) {
                 ev->setData(Constants::Db_CatId, query.value(Constants::COMMON_CAT_ID));
                 ev->setData(CalendarItemModel::Type, query.value(Constants::COMMON_TYPE_ID));
+                ev->setData(Constants::Db_IsVirtual, query.value(Constants::COMMON_ISVIRTUAL));
                 ev->setData(CalendarItemModel::Status, query.value(Constants::COMMON_STATUS_ID));
                 ev->setData(CalendarItemModel::LocationUid, query.value(Constants::COMMON_SITE_UID));
                 ev->setData(CalendarItemModel::IsPrivate, query.value(Constants::COMMON_ISPRIVATE));
@@ -934,7 +942,8 @@ bool AgendaBase::saveCommonEvent(Appointement *event)
         query.bindValue(Constants::COMMON_ID, QVariant());
         query.bindValue(Constants::COMMON_CAT_ID, event->data(Constants::Db_CalId));
         query.bindValue(Constants::COMMON_TYPE_ID, event->data(CalendarItemModel::Type));
-        query.bindValue(Constants::COMMON_STATUS_ID, event->data(CalendarItemModel::Status));
+        query.bindValue(Constants::COMMON_ISVIRTUAL, event->data(Constants::Db_IsVirtual).toInt());
+        query.bindValue(Constants::COMMON_STATUS_ID, event->data(CalendarItemModel::Status).toInt());
         query.bindValue(Constants::COMMON_SITE_UID, event->data(CalendarItemModel::LocationUid));
         query.bindValue(Constants::COMMON_ISPRIVATE, event->data(CalendarItemModel::IsPrivate).toInt());
         query.bindValue(Constants::COMMON_PASSWORD, event->data(CalendarItemModel::Password));
@@ -973,6 +982,7 @@ bool AgendaBase::saveCommonEvent(Appointement *event)
                                          << Constants::COMMON_THEMEDICON
                                          << Constants::COMMON_XMLVIEWOPTIONS
                                          << Constants::COMMON_XMLCALOPTIONS
+                                         << Constants::COMMON_ISVIRTUAL
                                          , where));
         query.bindValue(0, event->calendarId());
         query.bindValue(1, event->data(CalendarItemModel::Type));
@@ -980,7 +990,7 @@ bool AgendaBase::saveCommonEvent(Appointement *event)
         query.bindValue(3, event->data(CalendarItemModel::LocationUid));
         query.bindValue(4, event->data(CalendarItemModel::IsPrivate).toInt());
         query.bindValue(5, event->data(CalendarItemModel::Password));
-        query.bindValue(6, event->data(CalendarItemModel::IsBusy));
+        query.bindValue(6, event->data(CalendarItemModel::IsBusy).toInt());
         query.bindValue(7, event->data(CalendarItemModel::IsAGroupEvent));
         query.bindValue(8, event->data(CalendarItemModel::Label));
         query.bindValue(9, event->data(CalendarItemModel::Description));
@@ -988,6 +998,7 @@ bool AgendaBase::saveCommonEvent(Appointement *event)
         query.bindValue(11, event->data(CalendarItemModel::IconPath));
         query.bindValue(12, event->data(Constants::Db_XmlViewOptions));
         query.bindValue(13, event->data(Constants::Db_XmlOptions));
+        query.bindValue(14, event->data(Constants::Db_IsVirtual).toInt());
         if (!query.exec()) {
             LOG_QUERY_ERROR(query);
             return false;
@@ -1122,6 +1133,52 @@ bool AgendaBase::getPatientNames(const QList<Appointement *> &items)
 bool AgendaBase::getPatientNames(Appointement *item)
 {
     return getPatientNames(QList<Appointement *>() << item);
+}
+
+/** Create a virtual UserCalendar and return it. Pointer must be deleted. */
+Agenda::UserCalendar *AgendaBase::createVirtualUserCalendar(const QString &ownerUid, const QString &label, const QString &description,
+                                           int defaultDurationInMinutes, int sortId,
+                                           int type, int status, bool isDefault, bool isPrivate,
+                                           const QString &password, const QString &iconPath,
+                                           const QList<Calendar::People> &peoples)
+{
+    QHash<int, QString> where;
+    where.insert(CAL_LABEL, QString("='%1'").arg(label));
+    where.insert(CAL_FULLCONTENT, QString("='%1'").arg(description));
+    where.insert(CAL_DEFAULTDURATION, QString("=%1").arg(defaultDurationInMinutes));
+    int alreadyInBase = count(Table_CALENDAR, CAL_ID, getWhereClause(Table_CALENDAR, where));
+    if (alreadyInBase!=0) {
+        LOG_ERROR("Calendar is alreday in base, virtual user calendar not created");
+        return 0;
+    }
+    UserCalendar *u = new UserCalendar;
+    u->setData(UserCalendar::Uid, -1);
+    u->setData(UserCalendar::UserOwnerUid, ownerUid);
+    u->setData(UserCalendar::Label, label);
+    u->setData(UserCalendar::Description, description);
+    u->setData(UserCalendar::Type, type);
+    u->setData(UserCalendar::Status, status);
+    u->setData(UserCalendar::IsDefault, isDefault);
+    u->setData(UserCalendar::IsPrivate, isPrivate);
+    u->setData(UserCalendar::Password, password);
+    u->setData(UserCalendar::AbsPathIcon, iconPath);
+    u->setData(UserCalendar::DefaultDuration, defaultDurationInMinutes);
+    u->setData(UserCalendar::SortId, sortId);
+    u->setData(Constants::Db_IsVirtual, true);
+    u->setData(Constants::Db_IsValid, true);
+    u->setPeopleList(peoples);
+    // Create availabilities
+    for(int i = 1; i < 6; ++i) {
+        Agenda::DayAvailability av;
+        av.setWeekDay(i);
+        av.addTimeRange(QTime(7,0,0), QTime(20,0,0));
+        u->addAvailabilities(av);
+    }
+    if (!saveUserCalendar(u)) {
+        delete u;
+        u = 0;
+    }
+    return u;
 }
 
 /** Save or update a Calendar::CalendarItem to the agenda database */

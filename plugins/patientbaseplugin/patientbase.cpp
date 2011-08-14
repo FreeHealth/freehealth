@@ -207,44 +207,55 @@ void PatientBase::createVirtualPatient(const QString &name, const QString &secon
                           const QString &gender, const int title, const QDate &dob,
                           const QString &country, const QString &note,
                           const QString &street, const QString &zip, const QString &city,
-                          const QString &uuid, const int lkid,
+                          QString uuid, const int lkid,
                           const QString &photoFile, const QDate &death)
 {
-    using namespace Patients;
-    QSqlQuery query(patientBase()->database());
-    query.prepare(patientBase()->prepareInsertQuery(Constants::Table_IDENT));
-    query.bindValue(Constants::IDENTITY_ID, QVariant());
-    query.bindValue(Constants::IDENTITY_UID, uuid);
-    query.bindValue(Constants::IDENTITY_LK_TOPRACT_LKID, lkid);
-    query.bindValue(Constants::IDENTITY_FAMILY_UID, "Not yet implemented");
-    query.bindValue(Constants::IDENTITY_ISVIRTUAL, 1);
-    query.bindValue(Constants::IDENTITY_NAME, name);
-    query.bindValue(Constants::IDENTITY_FIRSTNAME, firstname);
-    if (secondname.isEmpty())
-        query.bindValue(Constants::IDENTITY_SECONDNAME, QVariant());
-    else
-        query.bindValue(Constants::IDENTITY_SECONDNAME, secondname);
-    query.bindValue(Constants::IDENTITY_GENDER, gender);
-    query.bindValue(Constants::IDENTITY_TITLE, title);
-    query.bindValue(Constants::IDENTITY_DOB, dob);
-    query.bindValue(Constants::IDENTITY_MARITAL_STATUS, QVariant());
-    if (death.isValid()) {
-        query.bindValue(Constants::IDENTITY_ISACTIVE, 0);
-        query.bindValue(Constants::IDENTITY_DATEOFDEATH, death);
+    using namespace Patients::Constants;
+    if (uuid.isEmpty()) {
+        uuid = Utils::Database::createUid();
     } else {
-        query.bindValue(Constants::IDENTITY_ISACTIVE, 1);
-        query.bindValue(Constants::IDENTITY_DATEOFDEATH, QVariant());
+        QHash<int, QString> where;
+        where.insert(IDENTITY_UID, QString("='%1'").arg(uuid));
+        int alreadyInBase = count(Table_IDENT, IDENTITY_UID, getWhereClause(Table_IDENT, where));
+        if (alreadyInBase!=0) {
+            LOG_ERROR("Patient is alreday in base, virtual patient not created");
+            return;
+        }
     }
-    query.bindValue(Constants::IDENTITY_PROFESSION, QVariant());
-    query.bindValue(Constants::IDENTITY_ADDRESS_STREET, street);
-    query.bindValue(Constants::IDENTITY_ADDRESS_STREET_NUMBER, QVariant());
-    query.bindValue(Constants::IDENTITY_ADDRESS_ZIPCODE, zip);
-    query.bindValue(Constants::IDENTITY_ADRESS_CITY, city);
-    query.bindValue(Constants::IDENTITY_ADDRESS_COUNTRY, country);
-    query.bindValue(Constants::IDENTITY_ADDRESS_NOTE, note);
-    query.bindValue(Constants::IDENTITY_MAILS, QVariant());
-    query.bindValue(Constants::IDENTITY_TELS, QVariant());
-    query.bindValue(Constants::IDENTITY_FAXES, QVariant());
+    QSqlQuery query(patientBase()->database());
+    query.prepare(patientBase()->prepareInsertQuery(Table_IDENT));
+    query.bindValue(IDENTITY_ID, QVariant());
+    query.bindValue(IDENTITY_UID, uuid);
+    query.bindValue(IDENTITY_LK_TOPRACT_LKID, lkid);
+    query.bindValue(IDENTITY_FAMILY_UID, "Not yet implemented");
+    query.bindValue(IDENTITY_ISVIRTUAL, 1);
+    query.bindValue(IDENTITY_NAME, name);
+    query.bindValue(IDENTITY_FIRSTNAME, firstname);
+    if (secondname.isEmpty())
+        query.bindValue(IDENTITY_SECONDNAME, QVariant());
+    else
+        query.bindValue(IDENTITY_SECONDNAME, secondname);
+    query.bindValue(IDENTITY_GENDER, gender);
+    query.bindValue(IDENTITY_TITLE, title);
+    query.bindValue(IDENTITY_DOB, dob);
+    query.bindValue(IDENTITY_MARITAL_STATUS, QVariant());
+    if (death.isValid()) {
+        query.bindValue(IDENTITY_ISACTIVE, 0);
+        query.bindValue(IDENTITY_DATEOFDEATH, death);
+    } else {
+        query.bindValue(IDENTITY_ISACTIVE, 1);
+        query.bindValue(IDENTITY_DATEOFDEATH, QVariant());
+    }
+    query.bindValue(IDENTITY_PROFESSION, QVariant());
+    query.bindValue(IDENTITY_ADDRESS_STREET, street);
+    query.bindValue(IDENTITY_ADDRESS_STREET_NUMBER, QVariant());
+    query.bindValue(IDENTITY_ADDRESS_ZIPCODE, zip);
+    query.bindValue(IDENTITY_ADRESS_CITY, city);
+    query.bindValue(IDENTITY_ADDRESS_COUNTRY, country);
+    query.bindValue(IDENTITY_ADDRESS_NOTE, note);
+    query.bindValue(IDENTITY_MAILS, QVariant());
+    query.bindValue(IDENTITY_TELS, QVariant());
+    query.bindValue(IDENTITY_FAXES, QVariant());
 
     if (!query.exec()) {
         LOG_QUERY_ERROR_FOR("PatientBase", query);
@@ -259,11 +270,11 @@ void PatientBase::createVirtualPatient(const QString &name, const QString &secon
         QBuffer buffer(&ba);
         buffer.open(QIODevice::WriteOnly);
         pix.save(&buffer, "PNG"); // writes image into ba in PNG format {6a247e73-c241-4556-8dc8-c5d532b8457e}
-        query.prepare(patientBase()->prepareInsertQuery(Constants::Table_PATIENT_PHOTO));
-        query.bindValue(Constants::PHOTO_ID, QVariant());
-        query.bindValue(Constants::PHOTO_UID, Utils::Database::createUid());
-        query.bindValue(Constants::PHOTO_PATIENT_UID, uuid);
-        query.bindValue(Constants::PHOTO_BLOB, ba);
+        query.prepare(patientBase()->prepareInsertQuery(Table_PATIENT_PHOTO));
+        query.bindValue(PHOTO_ID, QVariant());
+        query.bindValue(PHOTO_UID, Utils::Database::createUid());
+        query.bindValue(PHOTO_PATIENT_UID, uuid);
+        query.bindValue(PHOTO_BLOB, ba);
         if (!query.exec()) {
             LOG_QUERY_ERROR_FOR("PatientBase", query);
         }
@@ -357,26 +368,6 @@ bool PatientBase::createDatabase(const QString &connectionName , const QString &
         LOG_QUERY_ERROR(query);
         return false;
     }
-
-    // Populate with some virtual patients
-    QString path = settings()->path(Core::ISettings::BigPixmapPath) + QDir::separator();
-    int userLkId = 1; //userModel()->practionnerLkIds(userModel()->currentUserData(Core::IUser::Uuid).toString()).at(0);
-
-    QString uid = "b04936fafccb4174a7a6af25dd2bb71c";
-    createVirtualPatient("KIRK", "", "James Tiberius", "M", 6, QDate(1968, 04, 20), "USA", "USS Enterprise",
-                  "21, StarFleet Command", "1968", "EarthTown", uid, userLkId, path+"captainkirk.jpg");
-
-    uid = "2c49299b9b554300b46a6e3ef6d40a65";
-    createVirtualPatient("PICARD", "", "Jean-Luc", "M", 6, QDate(1948, 04, 20), "USA", "USS Enterprise-D",
-                  "21, StarFleet Command", "1968", "EarthTown", uid, userLkId, path+"captainpicard.png");
-
-    uid = "ef97f37361824b6f826d5c9246f9dc49";
-    createVirtualPatient("ARCHER", "", "Jonathan", "M", 6, QDate(1928, 04, 20), "USA", "Enterprise (NX-01) commanding officer",
-                  "21, StarFleet Command", "1968", "EarthTown", uid, userLkId, path+"captainarcher.jpg");
-
-    uid = "493aa06a1b8745b2ae6c79c531ef12a0";
-    createVirtualPatient("JANEWAY", "", "Kathryn", "M", 6, QDate(1938, 04, 20), "USA", "USS Voyager",
-                  "21, StarFleet Command", "1968", "EarthTown", uid, userLkId, path+"captainjaneway.jpg");
 
     return true;
 }

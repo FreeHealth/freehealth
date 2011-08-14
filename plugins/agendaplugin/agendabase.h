@@ -149,6 +149,12 @@ public:
     bool getPatientNames(const QList<Appointement *> &items);
     bool getPatientNames(Appointement *item);
 
+    UserCalendar *createVirtualUserCalendar(const QString &ownerUid, const QString &label, const QString &description,
+                                   int defaultDurationInMinutes, int sortId,
+                                   int type, int status, bool isDefault, bool isPrivate,
+                                   const QString &password, const QString &iconPath,
+                                   const QList<Calendar::People> &peoples);
+
 private:
     bool saveCalendarAvailabilities(Agenda::UserCalendar *calendar);
     bool saveRelatedPeoples(RelatedEventFor relatedToCalendar, const int eventOrCalendarId, const Calendar::CalendarPeople *peopleClass);
