@@ -159,6 +159,9 @@ bool UserManagerPlugin::initialize(const QStringList &arguments, QString *errorS
 
         // refresh model
         UserModel::instance()->refresh();
+        // reconnect user
+        Utils::DatabaseConnector c = settings()->databaseConnector();
+        UserModel::instance()->setCurrentUser(c.clearLog(), c.clearPass(), true);
     }
 
     return true;
