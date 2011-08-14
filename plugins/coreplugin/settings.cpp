@@ -800,15 +800,18 @@ QString SettingsPrivate::getIniFile(const QString & appName, const QString & fil
   \fn void Core::ISettings::restoreState(QMainWindow * window, const QString & prefix)
   \brief Main windows restore state. \e prefix can be used if you store multiple main window in the same settings
 */
-void SettingsPrivate::restoreState(QMainWindow * window, const QString & prefix)
+#include <QDesktopWidget>
+void SettingsPrivate::restoreState(QMainWindow *window, const QString & prefix)
 {
     if (!window)
         return;
     QString keyGeo = prefix + "MainWindow/Geometry";
     QString keyState = prefix + "MainWindow/State";
     if (value(keyGeo).toByteArray().isEmpty()) {
-        window->setGeometry(100, 100, 600, 400);
-        Utils::centerWidget(window);
+        int height = qApp->desktop()->height() * 0.75;
+        int width = qApp->desktop()->width() * 0.75;
+        window->setGeometry(0, 0, width, height);
+        Utils::centerWidget(window, qApp->desktop());
     } else {
         window->restoreGeometry(value(keyGeo).toByteArray());
         window->restoreState(value(keyState).toByteArray());
