@@ -54,6 +54,7 @@
 #include <coreplugin/icore.h>
 #include <coreplugin/isettings.h>
 #include <coreplugin/icorelistener.h>
+#include <coreplugin/ioptionspage.h>
 
 #include <printerplugin/textdocumentextra.h>
 
@@ -501,6 +502,20 @@ bool UserModel::setCurrentUser(const QString &clearLog, const QString &clearPass
         Core::ICore::instance()->databaseServerLoginChanged(); // with this signal all databases should reconnect
     }
 
+    // Refresh the newly connected user's preferences
+    disconnect(settings(), SIGNAL(userSettingsSynchronized()), this, SLOT(updateUserPreferences()));
+    QList<Core::IOptionsPage *> prefs = pluginManager()->getObjects<Core::IOptionsPage>();
+    for(int i=0; i < prefs.count(); ++i) {
+        prefs.at(i)->checkSettingsValidity();
+    }
+    updateUserPreferences();
+    connect(settings(), SIGNAL(userSettingsSynchronized()), this, SLOT(updateUserPreferences()));
+
+    // Inform the listeners
+    foreach(IUserListener *l, listeners) {
+        l->newUserConnected(d->m_CurrentUserUuid);
+    }
+
     Q_EMIT memoryUsageChanged();
     Q_EMIT userConnected(uuid);
 
@@ -514,64 +529,64 @@ bool UserModel::setCurrentUser(const QString &clearLog, const QString &clearPass
 */
 bool UserModel::setCurrentUserIsServerManager()
 {
-//    if (userBase()->database().driverName()=="QSQLITE") {
-//        return false;
-//    }
+    //    if (userBase()->database().driverName()=="QSQLITE") {
+    //        return false;
+    //    }
     if (!d->m_Sql->database().isOpen()) {
         if (!d->m_Sql->database().open()) {
             LOG_ERROR(tkTr(Trans::Constants::UNABLE_TO_OPEN_DATABASE_1_ERROR_2).arg(d->m_Sql->database().connectionName().arg(d->m_Sql->database().lastError().text())));
             return false;
         }
     }
-//    qWarning() << Q_FUNC_INFO << log64 << cryptpass64;
-        QList<IUserListener *> listeners = pluginManager()->getObjects<IUserListener>();
+    //    qWarning() << Q_FUNC_INFO << log64 << cryptpass64;
+    QList<IUserListener *> listeners = pluginManager()->getObjects<IUserListener>();
 
-        // 1. Ask all listeners to prepare the current user disconnection
-        foreach(IUserListener *l, listeners) {
-            if (!l->userAboutToChange())
-                return false;
-        }
+    // 1. Ask all listeners to prepare the current user disconnection
+    foreach(IUserListener *l, listeners) {
+        if (!l->userAboutToChange())
+            return false;
+    }
 
-        // 2. Check "in memory" users
-        QString uuid = ::SERVER_ADMINISTRATOR_UUID;
-        Internal::UserData *u = d->m_Uuid_UserList.value(uuid);
-        if (!u) {
-            u = new Internal::UserData(uuid);
-            u->setName(tr("Database server administrator"));
-            u->setRights(Constants::USER_ROLE_USERMANAGER, Core::IUser::AllRights);
-            d->m_Uuid_UserList.insert(uuid, u);
-        }
+    // 2. Check "in memory" users
+    QString uuid = ::SERVER_ADMINISTRATOR_UUID;
+    Internal::UserData *u = d->m_Uuid_UserList.value(uuid);
+    if (!u) {
+        u = new Internal::UserData(uuid);
+        u->setName(tr("Database server administrator"));
+        u->setRights(Constants::USER_ROLE_USERMANAGER, Core::IUser::AllRights);
+        d->m_Uuid_UserList.insert(uuid, u);
+    }
 
-        // 3. Ask all listeners for the current user disconnection
-        foreach(IUserListener *l, listeners) {
-            if (!l->currentUserAboutToDisconnect())
-                return false;
-        }
+    // 3. Ask all listeners for the current user disconnection
+    foreach(IUserListener *l, listeners) {
+        if (!l->currentUserAboutToDisconnect())
+            return false;
+    }
 
-        // 4. Connect new user
-        LOG(tr("Setting current user uuid to %1 (su)").arg(uuid));
-        if (!d->m_CurrentUserUuid.isEmpty()) {
-            Q_EMIT userAboutToDisconnect(d->m_CurrentUserUuid);
-        }
-        d->m_CurrentUserUuid.clear();
-        d->m_CurrentUserRights = Core::IUser::AllRights;
-        d->m_CurrentUserUuid = uuid;
-        foreach(Internal::UserData *user, d->m_Uuid_UserList.values())
-            user->setCurrent(false);
-        u->setCurrent(true);
+    // 4. Connect new user
+    LOG(tr("Setting current user uuid to %1 (su)").arg(uuid));
+    if (!d->m_CurrentUserUuid.isEmpty()) {
+        Q_EMIT userAboutToDisconnect(d->m_CurrentUserUuid);
+    }
+    d->m_CurrentUserUuid.clear();
+    d->m_CurrentUserRights = Core::IUser::AllRights;
+    d->m_CurrentUserUuid = uuid;
+    foreach(Internal::UserData *user, d->m_Uuid_UserList.values())
+        user->setCurrent(false);
+    u->setCurrent(true);
 
-        Q_EMIT(userAboutToConnect(uuid));
+    Q_EMIT(userAboutToConnect(uuid));
 
-        u->setModified(false);
+    u->setModified(false);
 
-        foreach(IUserListener *l, listeners) {
-            l->newUserConnected(d->m_CurrentUserUuid);
-        }
+    foreach(IUserListener *l, listeners) {
+        l->newUserConnected(d->m_CurrentUserUuid);
+    }
 
-        LOG(tkTr(Trans::Constants::CONNECTED_AS_1).arg(u->fullName()));
-        Q_EMIT memoryUsageChanged();
-        Q_EMIT userConnected(uuid);
-        return true;
+    LOG(tkTr(Trans::Constants::CONNECTED_AS_1).arg(u->fullName()));
+    Q_EMIT memoryUsageChanged();
+    Q_EMIT userConnected(uuid);
+    return true;
 }
 
 /** Return true if a current user has been defined. */
@@ -1219,7 +1234,12 @@ void UserModel::updateUserPreferences()
     if (!d->m_CurrentUserUuid.isEmpty() && d->m_CurrentUserUuid!=::SERVER_ADMINISTRATOR_UUID) {
         // save user preferences
         Internal::UserData *user = d->m_Uuid_UserList[d->m_CurrentUserUuid];
-        user->setPreferences(settings()->userSettings());
-        userBase()->saveUser(user);
+        if (user) {
+            user->setPreferences(settings()->userSettings());
+            userBase()->saveUser(user);
+        } else {
+            LOG_ERROR("No user uuid");
+        }
     }
 }
+
