@@ -564,6 +564,10 @@ bool UserModel::setCurrentUserIsServerManager()
 
         u->setModified(false);
 
+        foreach(IUserListener *l, listeners) {
+            l->newUserConnected(d->m_CurrentUserUuid);
+        }
+
         LOG(tkTr(Trans::Constants::CONNECTED_AS_1).arg(u->fullName()));
         Q_EMIT memoryUsageChanged();
         Q_EMIT userConnected(uuid);

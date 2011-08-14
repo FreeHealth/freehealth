@@ -63,6 +63,7 @@ public:
 
     virtual bool userAboutToChange() { return true; }
     virtual bool currentUserAboutToDisconnect() { return true; }
+    virtual void newUserConnected(const QString &uuid) {Q_UNUSED(uuid);}
 };
 
 } // end namespace UserPlugin
