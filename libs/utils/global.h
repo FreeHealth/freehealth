@@ -23,8 +23,8 @@
  *   Contributors :                                                        *
  *       NAME <MAIL@ADRESS>                                                *
  ***************************************************************************/
-#ifndef UTILSGLOBAL_H
-#define UTILSGLOBAL_H
+#ifndef UTILS_GLOBAL_H
+#define UTILS_GLOBAL_H
 
 #include <utils/global_exporter.h>
 #include <utils/licenseterms.h>
@@ -70,6 +70,8 @@ enum IOMode {
 // Libs and OS informations
 /** \brief Return true if the application was build in debug mode. */
 UTILS_EXPORT bool isDebugCompilation();
+/** \brief Return true if the application was build in release mode. */
+UTILS_EXPORT bool isReleaseCompilation();
 /** \brief Return true if the application was build using the SVN. */
 UTILS_EXPORT bool isSvnBuild();
 /** \brief Return true if the application was build with all private parts. */
@@ -163,4 +165,4 @@ UTILS_EXPORT QString decrypt(const QByteArray &texte);
 
 }  // end Utils
 
-#endif  // UTILSGLOBAL_H
+#endif  // UTILS_GLOBAL_H

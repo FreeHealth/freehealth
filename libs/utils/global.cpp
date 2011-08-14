@@ -71,6 +71,7 @@ bool isDebugCompilation()
     return false;
 #endif
 }
+bool isReleaseCompilation() {return !isDebugCompilation();}
 bool isSvnBuild()
 {
 #ifdef FULLAPPLICATION_BUILD
