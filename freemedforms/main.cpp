@@ -66,6 +66,7 @@ static const QString VERSION_MESSAGE =
         .arg(QT_VERSION_STR)
         .arg(qVersion());
 
+static const QString HELP_MESSAGE = VERSION_MESSAGE;
 
 static inline QString getPluginPaths()
 {
@@ -130,6 +131,14 @@ int main( int argc, char *argv[] )
          std::cout << qPrintable(VERSION_MESSAGE);
          return 0;
      }
+
+     if (qApp->arguments().contains("--help") ||
+         qApp->arguments().contains("-help") ||
+         qApp->arguments().contains("-h")) {
+         std::cout << qPrintable(HELP_MESSAGE);
+         return 0;
+     }
+
     ExtensionSystem::PluginManager pluginManager;
     pluginManager.setFileExtension(QString("pluginspec"));
 
