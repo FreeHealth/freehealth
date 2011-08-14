@@ -32,8 +32,8 @@
 /**
  * \file icommandline.h
  * \author Eric MAEKER <eric.maeker@gmail.com>
- * \version 0.0.10
- * \date 09 Aug 2009
+ * \version 0.6.0
+ * \date 09 Aug 2011
  * \class Core::ICommandLine
  * \brief Command line parser interface.
 */
@@ -42,15 +42,17 @@ namespace Core {
 
 class CORE_EXPORT ICommandLine : public QObject
 {
+    Q_OBJECT
 public:
     enum Params {
         Chrono = 1000,
         ConfigFile,
         RunningUnderWine,
-        ClearUserDatabases
+        ClearUserDatabases,
+        CreateVirtuals
     };
 
-    ICommandLine() {}
+    ICommandLine(QObject *parent = 0) : QObject(parent) {}
     virtual ~ICommandLine() {}
 
     virtual QVariant value(int param, const QVariant &def = QVariant()) const = 0;

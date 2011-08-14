@@ -38,12 +38,14 @@ CommandLine::CommandLine() : ICommandLine()
     ref.insert(ConfigFile, "--config");
     ref.insert(RunningUnderWine, "--wine");
     ref.insert(ClearUserDatabases, "--clear-user-databases");
+    ref.insert(CreateVirtuals, "--create-virtuals");
 
     // set default values
     params.insert(Chrono, false);
     params.insert(CL_TransmitDosage, false);
     params.insert(RunningUnderWine, false);
     params.insert(ClearUserDatabases, false);
+    params.insert(CreateVirtuals, false);
 
     // read command line params
     const QStringList &args = qApp->arguments();
@@ -60,12 +62,15 @@ CommandLine::CommandLine() : ICommandLine()
         case ConfigFile : params.insert(ConfigFile, a.mid(a.indexOf("=")+1).remove("\"")); break;
         case RunningUnderWine : params.insert(RunningUnderWine, true); break;
         case ClearUserDatabases : params.insert(ClearUserDatabases, true); break;
+        case CreateVirtuals : params.insert(CreateVirtuals, true); break;
         default : break;
         }
     }
 
-    if (!Utils::isDebugCompilation())
+    if (Utils::isReleaseCompilation()) {
         params.insert(ClearUserDatabases, false);
+        params.insert(CreateVirtuals, false);
+    }
 }
 
 QVariant CommandLine::value(int param, const QVariant &def) const
