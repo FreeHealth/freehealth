@@ -380,7 +380,7 @@ bool AgendaBase::checkDatabaseVersion()
 }
 
 /** Create the default users database if it does not exists. */
-bool AgendaBase::createDatabase(const QString &connectionName , const QString &dbName,
+bool AgendaBase::createDatabase(const QString &connectionName, const QString &dbName,
                     const QString &pathOrHostName,
                     TypeOfAccess access, AvailableDrivers driver,
                     const QString &login, const QString &pass,
@@ -1290,11 +1290,13 @@ QList<QDateTime> AgendaBase::nextAvailableTime(const QDateTime &startSearch, con
     if (WarnNextAvailableTimeWarnings)
         qWarning() << Q_FUNC_INFO << startSearch << durationInMinutes << calendar.data(Constants::Db_CalId).toInt();
 
-    QSqlQuery query(database());
-    int limit = 0;
-    int durationInSeconds = durationInMinutes * 60;
-    QDateTime lastEnd, newStart;
-//    lastEnd = startSearch;
+    QSqlDatabase DB = database();
+    DB.transaction();
+
+    QDateTime start, currentStart, currentEnd;
+    start = Utils::roundDateTime(startSearch, calendar.data(UserCalendar::DefaultDuration).toInt());
+
+    QSqlQuery query(DB);
     Utils::FieldList get;
     get << Utils::Field(Table_EVENTS, EVENT_DATESTART);
     get << Utils::Field(Table_EVENTS, EVENT_DATEEND);
@@ -1303,82 +1305,71 @@ QList<QDateTime> AgendaBase::nextAvailableTime(const QDateTime &startSearch, con
     Utils::FieldList conds;
     conds << Utils::Field(Table_EVENTS, EVENT_ISVALID, "=1");
     conds << Utils::Field(Table_EVENTS, EVENT_CAL_ID, QString("=%1").arg(calendar.data(Constants::Db_CalId).toString()));
-    conds << Utils::Field(Table_EVENTS, EVENT_DATESTART, QString("> '%1'").arg(startSearch.toString(Qt::ISODate)));
+    conds << Utils::Field(Table_EVENTS, EVENT_DATESTART, QString("> '%1'").arg(start.toString(Qt::ISODate)));
     QString req = select(get, joins, conds);
-    req + QString("\n ORDER BY `%1`.`%2`\n")
+    QString order = QString("\n ORDER BY `%1`.`%2`")
             .arg(table(Table_EVENTS))
             .arg(fieldName(Table_EVENTS, EVENT_DATESTART));
+    QString limit = QString("\n LIMIT 0,1");
 
     // get the first event and make tests
-    QString l = QString(" LIMIT 0,1");
-    if (query.exec(req+l)) {
+    if (query.exec(req+order+limit)) {
         if (query.next()) {
-            newStart = query.value(0).toDateTime();
-            lastEnd = query.value(1).toDateTime();
+            currentStart = query.value(0).toDateTime();
+            currentEnd = query.value(1).toDateTime();
         }
     } else {
         LOG_QUERY_ERROR(query);
         return toReturn;
     }
-    if (lastEnd.isNull()) {
-        // No events recorded -> use calendar dayAvailabilities only
-        /** \todo code here : No events recorded -> use calendar dayAvailabilities only*/
-        if (WarnNextAvailableTimeWarnings)
-            qWarning() << "  UseCal limits" << lastEnd << newStart << startSearch;
 
-//    } else if (newStart.isValid() && startSearch.addSecs(durationInSeconds) < newStart)) {
-    }
+    int nbFound = 0;
+    int durationInSeconds = durationInMinutes * 60;
+    int limitComputation = 224640; // 10min, 6day a week, 12hours a day :: 1 full year == 12*6 *10 *6 *52 == 224640
 
-    ++limit;
+    while ((nbFound < numberOfDates) || (limitComputation==0)) {
+//        qWarning() << "start" << start << "currentStart" << currentStart << "currentEnd" << currentEnd << "duration" << durationInMinutes;
+        --limitComputation;
+        // add before the currentDate (enough time or no appointement) ?
+        if (start.secsTo(currentStart) >= durationInSeconds || currentStart.isNull()) {
+            // does it feet the userCalendar availability ?
+            if (calendar.canBeAvailable(start, durationInMinutes)) {
+                toReturn << start;
+//                qWarning() << "added" << start;
+                start = start.addSecs(durationInSeconds);
+                ++nbFound;
+                continue;
+            }
+        }
 
-    // Test with the next 100000 events
-    for(int i = 0; i < 1000; ++i) {
-        l = QString(" LIMIT %1, %2\n").arg(limit).arg(limit+100);
-        limit += 100;
-        if (!query.exec(req+l)) {
+        // get next appointement
+        //    remove the date from the SQL conditions
+        start = currentEnd;
+        conds.removeLast();
+        conds << Utils::Field(Table_EVENTS, EVENT_DATESTART, QString("> '%1'").arg(start.toString(Qt::ISODate)));
+        if (query.exec(select(get, joins, conds)+order+limit)) {
+            if (query.next()) {
+                currentStart = query.value(0).toDateTime();
+                currentEnd = query.value(1).toDateTime();
+            } else {
+                // no next appointement -> continue with usercalendar only
+                start = Utils::roundDateTime(start, calendar.data(UserCalendar::DefaultDuration).toInt());
+                currentStart = QDateTime();
+                continue;
+            }
+        } else {
             LOG_QUERY_ERROR(query);
-            break;
+            DB.rollback();
+            return toReturn;
         }
-        if (query.size()==0) {
-            break;
-        }
-        while (query.next()) {
-            newStart = query.value(0).toDateTime();
-
-            // Skip intersected date
-            if ((newStart < lastEnd) || (lastEnd > newStart)) {
-                lastEnd = query.value(1).toDateTime();
-                continue;
-            }
-
-            // time between the two dates >= duration ?
-            QDateTime supposedEnd = lastEnd.addSecs(durationInSeconds);
-
-            // supposedStart and supposedEnd must be the same day
-            if (newStart.date().dayOfWeek() != supposedEnd.date().dayOfWeek()) {
-                lastEnd = query.value(1).toDateTime();
-                continue;
-            }
-
-            if (WarnNextAvailableTimeWarnings)
-                qWarning() << "lastEnd" << lastEnd << "newStart" << newStart << "supposedEnd" << supposedEnd;
-
-            if (supposedEnd < newStart) {
-                if (calendar.canBeAvailable(lastEnd) && calendar.canBeAvailable(supposedEnd)) {
-                    if (WarnNextAvailableTimeWarnings)
-                        qWarning() << "   -> OK: start" << lastEnd  << "end" << supposedEnd;
-                    toReturn << lastEnd;
-                    if (toReturn.count() == numberOfDates)
-                        return toReturn;
-                }
-            }
-
-            lastEnd = query.value(1).toDateTime();
-        }
+        start = Utils::roundDateTime(start, calendar.data(UserCalendar::DefaultDuration).toInt());
     }
+
 
     if (WarnNextAvailableTimeWarnings)
         qWarning() << "No available time found";
+
+    DB.commit();
 
     return toReturn;
 }

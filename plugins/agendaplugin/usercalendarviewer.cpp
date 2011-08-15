@@ -167,14 +167,14 @@ void UserCalendarViewer::recalculateAvailabilitiesWithDurationIndex(const int in
 {
     /** \todo Create a tree model for the nextAvailableDates */
 
-    for(int i = 1; i < d->ui->availButton->actions().count(); ++i)
+    for(int i = d->ui->availButton->actions().count()-1; i > -1 ; --i)
         d->ui->availButton->removeAction(d->ui->availButton->actions().at(i));
 
     QList<QDateTime> dates;
     Agenda::UserCalendar *cal = d->m_UserCalendarModel->defaultUserCalendar();
     if (cal) {
         // Next available dates
-        dates = base()->nextAvailableTime(QDateTime::currentDateTime(), index*5, *cal, 5);
+        dates = base()->nextAvailableTime(QDateTime::currentDateTime(), (index+1)*5, *cal, 5);
     }
     d->ui->nextAvailCombo->clear();
     for(int i = 0; i < dates.count(); ++i) {
@@ -184,6 +184,9 @@ void UserCalendarViewer::recalculateAvailabilitiesWithDurationIndex(const int in
         a->setToolTip(a->text());
         d->ui->availButton->addAction(a);
         d->ui->nextAvailCombo->addItem(dates.at(i).toString(QLocale().dateTimeFormat(QLocale::ShortFormat)));
+    }
+    if (d->ui->availButton->actions().count() > 0) {
+        d->ui->availButton->setDefaultAction(d->ui->availButton->actions().at(0));
     }
 }
 
