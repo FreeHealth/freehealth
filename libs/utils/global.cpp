@@ -715,6 +715,8 @@ QString askUser(const QString &title, const QString &question)
 /** \brief Center the widget into the desktop. **/
 void centerWidget(QWidget *win, QWidget *reference)
 {
+    if (!win)
+        return;
     QPoint center;
     if (!reference) {
         // try to find the mainwindow
@@ -722,7 +724,7 @@ void centerWidget(QWidget *win, QWidget *reference)
         QWidgetList list = qApp->topLevelWidgets();
         for(int i = 0; i < list.count(); ++i) {
             win = qobject_cast<QMainWindow*>(list.at(i));
-            if (win) {
+            if (win && win->isVisible()) {
                 break;
             }
         }
@@ -784,6 +786,16 @@ void switchEchoMode(QLineEdit * l)
         l->setEchoMode(QLineEdit::Password);
     else
         l->setEchoMode(QLineEdit::Normal);
+}
+
+/** Rounds the \e date to the number of minutes \e minutesRound. */
+QDateTime roundDateTime(const QDateTime &date, const int minutesRound)
+{
+    QDateTime dt = QDateTime(date.date(), QTime(date.time().hour(), date.time().minute(), 0));
+    dt = dt.addSecs(60);
+    int minToRound = dt.time().minute()%minutesRound;
+    dt = dt.addSecs((minutesRound - minToRound)*60);
+    return dt;
 }
 
 //////////////////////////////////////////////////////////////////////////////////////////////////////////////

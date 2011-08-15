@@ -129,6 +129,9 @@ UTILS_EXPORT QString isFileExists(const QString &absPath);
 /** \brief Toggle the echomode of a QLineEdit. */
 UTILS_EXPORT void switchEchoMode( QLineEdit * l );
 
+// Some date functions
+UTILS_EXPORT QDateTime roundDateTime(const QDateTime &date, const int minutesRound);
+
 // Some functions for HTML work
 UTILS_EXPORT QString fontToHtml( const QFont &font, const QColor &color = QColor("black") );
 UTILS_EXPORT QString textAlignmentToHtml( const Qt::Alignment &align );
