@@ -140,6 +140,7 @@ void UserCalendar::setAvailabilities(const QList<DayAvailability> &availabilitie
     m_Availabilities = availabilities;
 }
 
+/** Return true if the calendar availabilities allow this date. */
 bool UserCalendar::canBeAvailable(const QDateTime &date) const
 {
     int day = date.date().dayOfWeek();
@@ -160,3 +161,31 @@ bool UserCalendar::canBeAvailable(const QDateTime &date) const
     return false;
 }
 
+/** Return true if the calendar availabilities allow this date for a duration of \e durationInMinutes. */
+bool UserCalendar::canBeAvailable(const QDateTime &start, const int durationInMinutes) const
+{
+    int day = start.date().dayOfWeek();
+    if (day==-1)
+        return false;
+    QDateTime end = start.addSecs(durationInMinutes*60);
+
+    // in the same day only
+    if (start.date().dayOfWeek() != end.date().dayOfWeek())
+        return false;
+
+    const QTime &startTime = start.time();
+    const QTime &endTime = end.time();
+    for(int i = 0; i < m_Availabilities.count(); ++i) {
+        if (m_Availabilities.at(i).weekDay()==day) {
+            for(int j = 0; j < m_Availabilities.at(i).timeRangeCount(); ++j) {
+                TimeRange range = m_Availabilities.at(i).timeRange(j);
+                // start and end are included in one unique timeRange ? --> return true
+                if ((startTime >= range.from && startTime <= range.to) &&
+                    (endTime >= range.from && endTime <= range.to)) {
+                    return true;
+                }
+            }
+        }
+    }
+    return false;
+}

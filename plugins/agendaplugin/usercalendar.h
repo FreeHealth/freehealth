@@ -126,6 +126,7 @@ public:
     void addAvailabilities(const DayAvailability &av);
     void setAvailabilities(const QList<DayAvailability> &availabilities);
     bool canBeAvailable(const QDateTime &date) const;
+    bool canBeAvailable(const QDateTime &date, const int durationInMinutes) const;
 
     AbstractCalendarModel *model() {return m_model;}
 
