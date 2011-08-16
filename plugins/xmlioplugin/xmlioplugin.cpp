@@ -45,14 +45,15 @@
 using namespace XmlForms;
 
 XmlFormIOPlugin::XmlFormIOPlugin() :
-        ExtensionSystem::IPlugin(),
-        m_XmlReader(0)
+    ExtensionSystem::IPlugin(),
+    m_XmlReader(0),
+    m_FormIo(0)
 {
     if (Utils::Log::warnPluginsCreation())
         qWarning() << "creating XmlIOPlugin";
     // create XML reader singleton
     m_XmlReader = Internal::XmlFormContentReader::instance();
-    addAutoReleasedObject(new XmlFormIO(this));
+    addObject(m_FormIo = new XmlFormIO(this));
 }
 
 XmlFormIOPlugin::~XmlFormIOPlugin()
@@ -62,6 +63,9 @@ XmlFormIOPlugin::~XmlFormIOPlugin()
     if (m_XmlReader)
         delete m_XmlReader;
     m_XmlReader = 0;
+    if (m_FormIo) {
+        removeObject(m_FormIo);
+    }
 }
 
 bool XmlFormIOPlugin::initialize(const QStringList &arguments, QString *errorString)

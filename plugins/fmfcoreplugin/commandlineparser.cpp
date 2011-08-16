@@ -78,6 +78,11 @@ QVariant CommandLine::value(int param, const QVariant &def) const
     return params.value(param,def);
 }
 
+void CommandLine::setValue(int ref, const QVariant &value)
+{
+    params.insert(ref, value);
+}
+
 QString CommandLine::paramName(int param) const
 {
     if (ref.keys().contains(param))

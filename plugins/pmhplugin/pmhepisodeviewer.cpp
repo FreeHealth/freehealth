@@ -69,17 +69,6 @@ PmhEpisodeViewer::PmhEpisodeViewer(QWidget *parent) :
 {
     ui->setupUi(this);
 
-    // Create date delegates
-    Utils::DateTimeDelegate *start = new Utils::DateTimeDelegate(this, true);
-    Utils::DateTimeDelegate *end = new Utils::DateTimeDelegate(this, true);
-    QDate birth = patient()->data(Core::IPatient::DateOfBirth).toDate();
-    if (birth.isValid()) {
-        start->setDateRange(birth, birth.addYears(150));
-        end->setDateRange(birth, birth.addYears(150));
-    }
-    ui->tableView->setItemDelegateForColumn(PmhEpisodeModel::DateStart, start);
-    ui->tableView->setItemDelegateForColumn(PmhEpisodeModel::DateEnd, end);
-
     // ICD10 coding
     connect(ui->tableView, SIGNAL(activated(QModelIndex)), this, SLOT(itemActivated(QModelIndex)));
 }
@@ -97,6 +86,19 @@ void PmhEpisodeViewer::setPmhData(Internal::PmhData *pmh)
     Q_ASSERT(pmh);
     if (!pmh)
         return;
+    if (patient()) {
+        // Create date delegates
+        Utils::DateTimeDelegate *start = new Utils::DateTimeDelegate(this, true);
+        Utils::DateTimeDelegate *end = new Utils::DateTimeDelegate(this, true);
+        ui->tableView->setItemDelegateForColumn(PmhEpisodeModel::DateStart, start);
+        ui->tableView->setItemDelegateForColumn(PmhEpisodeModel::DateEnd, end);
+
+        QDate birth = patient()->data(Core::IPatient::DateOfBirth).toDate();
+        if (birth.isValid()) {
+            start->setDateRange(birth, birth.addYears(150));
+            end->setDateRange(birth, birth.addYears(150));
+        }
+    }
     d->m_Pmh = pmh;
     ui->tableView->setModel(pmh->episodeModel());
     ui->tableView->hideColumn(PmhEpisodeModel::IcdXml);

@@ -39,6 +39,7 @@
 */
 
 namespace XmlForms {
+class XmlFormIO;
 namespace Internal {
 class XmlFormContentReader;
 }
@@ -55,6 +56,7 @@ public:
 
 private:
     Internal::XmlFormContentReader *m_XmlReader;
+    XmlFormIO *m_FormIo;
 };
 
 

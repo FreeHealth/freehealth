@@ -50,6 +50,7 @@
 namespace Core {
 class CommandLine  : public Core::ICommandLine
 {
+    Q_OBJECT
 public:
     enum Param {
         CL_TransmitDosage = 0
@@ -57,6 +58,7 @@ public:
 
     CommandLine();
     QVariant value(int param, const QVariant &def = QVariant()) const;
+    void setValue(int ref, const QVariant &value);
     QString paramName(int param) const;
 
 private:

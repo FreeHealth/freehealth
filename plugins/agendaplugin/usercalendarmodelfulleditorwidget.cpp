@@ -37,6 +37,9 @@
 #include <coreplugin/icore.h>
 #include <coreplugin/iuser.h>
 #include <coreplugin/itheme.h>
+#include <coreplugin/modemanager/modemanager.h>
+#include <coreplugin/actionmanager/actionmanager.h>
+#include <coreplugin/constants_menus.h>
 
 #include <usermanagerplugin/usermodel.h>
 
@@ -53,6 +56,8 @@ using namespace Trans::ConstantTranslations;
 
 static inline Core::IUser *user() {return Core::ICore::instance()->user();}
 static inline Core::ITheme *theme() {return Core::ICore::instance()->theme();}
+static inline Core::ModeManager *modeManager() {return Core::ICore::instance()->modeManager();}
+static inline Core::ActionManager *actionManager() {return Core::ICore::instance()->actionManager();}
 static inline Agenda::Internal::AgendaBase *base() {return Agenda::Internal::AgendaBase::instance();}
 
 UserCalendarModelFullEditorWidget::UserCalendarModelFullEditorWidget(QWidget *parent) :
@@ -68,6 +73,8 @@ UserCalendarModelFullEditorWidget::UserCalendarModelFullEditorWidget(QWidget *pa
     ui->setupUi(this);
     ui->editor->setEnabled(false);
     ui->listView->setActions(Views::Constants::AddRemove);
+
+//    modeManager()->addAction(actionManager()->command(Core::Constants::A_PATIENT_NEW), 0);
 
     connect(ui->listView, SIGNAL(activated(QModelIndex)), this, SLOT(setCurrentIndex(QModelIndex)));
 //    connect(ui->listView, SIGNAL(addRequested), ui->editor, SLOT(addUserCalendar()));

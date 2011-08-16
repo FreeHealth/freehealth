@@ -1148,3 +1148,13 @@ void UserBase::updateMaxLinkId(const int max)
     if (!query.exec())
         LOG_QUERY_ERROR(query);
 }
+
+void UserBase::onCoreDatabaseServerChanged()
+{
+    m_initialized = false;
+    if (QSqlDatabase::connectionNames().contains(Constants::USER_DB_CONNECTION)) {
+        QSqlDatabase::removeDatabase(Constants::USER_DB_CONNECTION);
+    }
+    initialize();
+}
+

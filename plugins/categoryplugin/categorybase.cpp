@@ -504,11 +504,10 @@ bool CategoryBase::removeAllExistingCategories(const QString &mime)
 
 void CategoryBase::onCoreDatabaseServerChanged()
 {
-    /** \todo code here */
-//    m_initialized = false;
-//    if (QSqlDatabase::connectionNames().contains(Templates::Constants::DB_TEMPLATES_NAME)) {
-//        QSqlDatabase::removeDatabase(Templates::Constants::DB_TEMPLATES_NAME);
-//    }
-//    init();
+    m_initialized = false;
+    if (QSqlDatabase::connectionNames().contains(Constants::DB_NAME)) {
+        QSqlDatabase::removeDatabase(Constants::DB_NAME);
+    }
+    init();
 }
 

@@ -51,7 +51,9 @@
 #include <QRegExp>
 #include <QLocale>
 #include <QDir>
+
 enum { WarnDebugMessage = false };
+
 using namespace Account;
 using namespace Account::Internal;
 using namespace Trans::ConstantTranslations;
@@ -85,7 +87,8 @@ void InsurancePage::resetToDefaults()
 }
 
 void InsurancePage::applyChanges()
-{if (WarnDebugMessage)
+{
+    if (WarnDebugMessage)
     	      qDebug() << __FILE__ << QString::number(__LINE__) << " applyChanges ";
     if (!m_Widget) {
         return;
@@ -119,7 +122,7 @@ InsuranceWidget::InsuranceWidget(QWidget *parent) :
         QWidget(parent), m_Model(0), m_Mapper(0)
 {
     //QCoreApplication::processEvents(QEventLoop::AllEvents);
-    QApplication::setOverrideCursor(QCursor(Qt::BusyCursor));
+//    QApplication::setOverrideCursor(QCursor(Qt::BusyCursor));
     setObjectName("InsuranceWidget");
     setupUi(this);
     m_user_uid = user()->uuid();
@@ -172,7 +175,7 @@ InsuranceWidget::InsuranceWidget(QWidget *parent) :
   
     setDatasToUi();
     connect(zipComboBox,SIGNAL(currentIndexChanged(const QString &)),this,SLOT(findCityFromZipCode(const QString &)));
-    QApplication::restoreOverrideCursor();
+//    QApplication::restoreOverrideCursor();
 }
 
 InsuranceWidget::~InsuranceWidget()
@@ -324,7 +327,7 @@ void InsuranceWidget::showEvent(QShowEvent *event){
 }
 
 void InsuranceWidget::findCityFromZipCode(const QString & zipCodeText){
-    cityEdit->setFocus();
+//    cityEdit->setFocus();
     QString city = m_hashTownZip.value(zipCodeText);
     cityEdit->setText(city);
 }

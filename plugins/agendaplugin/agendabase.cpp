@@ -1302,6 +1302,7 @@ QList<QDateTime> AgendaBase::nextAvailableTime(const QDateTime &startSearch, con
     get << Utils::Field(Table_EVENTS, EVENT_DATEEND);
     Utils::JoinList joins;
     // no joins
+    /** \todo code here : condition with the type/status of appointements */
     Utils::FieldList conds;
     conds << Utils::Field(Table_EVENTS, EVENT_ISVALID, "=1");
     conds << Utils::Field(Table_EVENTS, EVENT_CAL_ID, QString("=%1").arg(calendar.data(Constants::Db_CalId).toString()));

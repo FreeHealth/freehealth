@@ -35,6 +35,7 @@
 #include <coreplugin/ifirstconfigurationpage.h>
 #include <coreplugin/iuser.h>
 #include <coreplugin/dialogs/serverpreferenceswidget.h>
+#include <fmfcoreplugin/commandlineparser.h>
 
 #include <utils/log.h>
 #include <utils/global.h>
@@ -49,6 +50,8 @@
 #include <QLabel>
 #include <QGridLayout>
 #include <QDesktopWidget>
+#include <QCheckBox>
+#include <QGroupBox>
 
 using namespace Core;
 using namespace Trans::ConstantTranslations;
@@ -57,7 +60,7 @@ static inline ExtensionSystem::PluginManager *pluginManager() {return ExtensionS
 static inline Core::ISettings *settings() { return Core::ICore::instance()->settings(); }
 static inline Core::Translators *translators() { return Core::ICore::instance()->translators(); }
 static inline Core::ITheme *theme()  { return Core::ICore::instance()->theme(); }
-
+static inline Core::ICommandLine *commandLine()  { return Core::ICore::instance()->commandLine(); }
 static inline QString serverConfigurationSqlScript() {return settings()->path(Core::ISettings::BundleResourcesPath) + "/sql/server_config/config.sql";}
 
 namespace {
@@ -95,8 +98,8 @@ namespace {
     };
 }
 
-AppConfigWizard::AppConfigWizard(QWidget *parent)
-    : QWizard(parent)
+AppConfigWizard::AppConfigWizard(QWidget *parent) :
+    QWizard(parent)
 {
     // create pages
     QList<IFirstConfigurationPage *> pages = pluginManager()->getObjects<IFirstConfigurationPage>();
@@ -126,6 +129,8 @@ AppConfigWizard::AppConfigWizard(QWidget *parent)
     // Delete the login information in settings
     settings()->setValue(Core::Constants::S_LASTLOGIN, QVariant());
     settings()->setValue(Core::Constants::S_LASTPASSWORD, QVariant());
+
+    Utils::centerWidget(this, qApp->desktop());
 }
 
 void AppConfigWizard::done(int r)
@@ -147,7 +152,7 @@ void AppConfigWizard::done(int r)
 void AppConfigWizard::resizeEvent(QResizeEvent *event)
 {
     QWizard::resizeEvent(event);
-    Utils::centerWidget(this);
+    Utils::centerWidget(this, qApp->desktop());
 }
 
 ///////////////////////////////////////////////////////////////////////////////////////////////////
@@ -409,23 +414,62 @@ EndConfigPage::EndConfigPage(QWidget *parent) :
                    "If you have any question, you can ask them to "
                    "the mailing list."));
 
-    // add labels
-    QVBoxLayout *l = new QVBoxLayout(this);
+    QGridLayout *l = new QGridLayout(this);
     setLayout(l);
-    QLabel *lbl = new QLabel(tr("Default virtual patients were created (Kirk, Picard, Doe)."), this);
-    lbl->setOpenExternalLinks(true);
 
-    QLabel *lbl1 = new QLabel(tr("French/english mailing list : "
-                                "<a href=\"mailto:freemedforms@googlegroups.com\">"
-                                "freemedforms@googlegroups.com</a>"), this);
-    lbl1->setOpenExternalLinks(true);
-    QLabel *lbl2 = new QLabel(tr("Application main web site: "
-                                "<a href=\"%1\">"
-                                "%1</a>").arg(settings()->path(Core::ISettings::WebSiteUrl)), this);
+    // Ask for virtuals
+    if (Utils::isDebugCompilation()) {
+        // Database renew management
+//        QGroupBox *groupDb = new QGroupBox(tr("Database cleaning"), this);
+        QGridLayout *layDb = new QGridLayout(this);
+        QLabel *lblDb = new QLabel(tr("You can clean and recreate all your databases. Select the option above. If you select the clean option, all databases will be erased with <b>definitive data lose</b>."), this);
+        lblDb->setWordWrap(true);
+        QComboBox *comboDb = new QComboBox(this);
+        comboDb->addItems(QStringList() << tr("Don't clean databases") << tr("Clean and recreate database"));
+        if (commandLine()->value(Core::ICommandLine::ClearUserDatabases, false).toBool()) {
+            comboDb->setCurrentIndex(1);
+        } else {
+            comboDb->setCurrentIndex(0);
+        }
+        connect(comboDb, SIGNAL(activated(int)), this, SLOT(comboDbActivated(int)));
+        l->addWidget(lblDb, 0, 0, 1, 2);
+        l->addWidget(comboDb, 1, 1);
+//        l->addLayout(layDb);
+//        groupDb->setLayout(layDb);
+//        l->addWidget(groupDb);
+
+        // Virtual data management
+//        QGroupBox *group = new QGroupBox(tr("Virtual data"), this);
+//        QGridLayout *lay = new QGridLayout(this);
+        QLabel *lblVirtual = new QLabel(tr("You can create virtual data to test the application. Select the option above."), this);
+        lblVirtual->setWordWrap(true);
+        QComboBox *combo = new QComboBox(this);
+        combo->addItems(QStringList() << tr("Don't create virtual data") << tr("Create virtual data"));
+        if (commandLine()->value(Core::ICommandLine::CreateVirtuals, false).toBool()) {
+            combo->setCurrentIndex(1);
+        } else {
+            combo->setCurrentIndex(0);
+        }
+        connect(combo, SIGNAL(activated(int)), this, SLOT(comboVirtualActivated(int)));
+        l->addWidget(lblVirtual, 3, 0, 1, 2);
+        l->addWidget(combo, 4, 1);
+//        l->addLayout(lay);
+//        group->setLayout(lay);
+//        l->addWidget(group);
+    }
+
+    // add infos
+    QLabel *lbl1 = new QLabel(tr("French/english mailing list"), this);
+    QLabel *lbl1_1 = new QLabel("<a href=\"mailto:freemedforms@googlegroups.com\">"
+                                "freemedforms@googlegroups.com</a>", this);
+    lbl1_1->setOpenExternalLinks(true);
+    QLabel *lbl2 = new QLabel(tr("Application main web site"), this);
+    QLabel *lbl2_1 = new QLabel(QString("<a href=\"%1\">%1</a>").arg(settings()->path(Core::ISettings::WebSiteUrl)), this);
     lbl2->setOpenExternalLinks(true);
-    l->addWidget(lbl);
-    l->addWidget(lbl1);
-    l->addWidget(lbl2);
+    l->addWidget(lbl1, 5, 0, 1, 2);
+    l->addWidget(lbl1_1, 6, 1);
+    l->addWidget(lbl2, 8, 0, 1, 2);
+    l->addWidget(lbl2_1, 9, 1);
 }
 
 void EndConfigPage::initializePage()
@@ -438,3 +482,33 @@ void EndConfigPage::initializePage()
         }
     }
 }
+
+void EndConfigPage::comboDbActivated(int index)
+{
+    CommandLine *cmd = qobject_cast<CommandLine *>(commandLine());
+    if (!cmd)
+        return;
+    if (index==1) {
+        cmd->setValue(Core::ICommandLine::ClearUserDatabases, true);
+    } else {
+        cmd->setValue(Core::ICommandLine::ClearUserDatabases, false);
+    }
+}
+
+void EndConfigPage::comboVirtualActivated(int index)
+{
+    CommandLine *cmd = qobject_cast<CommandLine *>(commandLine());
+    if (!cmd)
+        return;
+    if (index==1) {
+        cmd->setValue(Core::ICommandLine::CreateVirtuals, true);
+    } else {
+        cmd->setValue(Core::ICommandLine::CreateVirtuals, false);
+    }
+}
+
+void EndConfigPage::showEvent(QShowEvent *event)
+{
+    adjustSize();
+}
+

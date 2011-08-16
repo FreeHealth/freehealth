@@ -106,6 +106,9 @@ private:
     // privates retreivers
     UserData *getUser(const QHash<int, QString> &conditions) const;
 
+private Q_SLOTS:
+    void onCoreDatabaseServerChanged();
+
 private:
     static bool m_initialized;
     static QString  m_LastUuid, m_LastLogin, m_LastPass;
