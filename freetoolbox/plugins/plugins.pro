@@ -7,6 +7,7 @@ SUBDIRS = \
     icd10db \
     druginfos \
     icd \
+    zip \
     listview
 
 
@@ -30,6 +31,9 @@ icd10db.depends += icd
 icd.subdir = icdplugin
 icd.depends += core
 icd.depends += listview
+
+zip.subdir = zipcodes
+zip.depends += core
 
 listview.subdir = listviewplugin
 listview.depends += core
