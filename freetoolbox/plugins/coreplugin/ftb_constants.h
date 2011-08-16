@@ -60,6 +60,7 @@ namespace Constants {
     const char * const  CATEGORY_DRUGINFOSDATABASE = QT_TRANSLATE_NOOP("FreeTools", "Drugs infos databases");
     const char * const  CATEGORY_ATC_HELPERS = QT_TRANSLATE_NOOP("FreeTools", "ATC Helpers");
     const char * const  CATEGORY_ICD10DATABASE = QT_TRANSLATE_NOOP("FreeTools", "ICD 10");
+    const char * const  CATEGORY_ZIPCODESDATABASE = QT_TRANSLATE_NOOP("FreeTools", "ZipCodes");
 
     const char * const  CREATEFULLRELEASE_TEXT = QT_TRANSLATE_NOOP("FreeTools", "Create full release data set");
 

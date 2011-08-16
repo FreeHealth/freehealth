@@ -50,6 +50,8 @@ namespace Internal {
 namespace Ui {
 class PathPreferencesWidget;
 }
+
+
 class PathPreferencesWidget : public QWidget
 {
     Q_OBJECT
@@ -84,6 +86,7 @@ public:
     QString id() const;
     QString name() const;
     QString category() const;
+    QString title() const {return name();}
 
     void resetToDefaults();
     void checkSettingsValidity();

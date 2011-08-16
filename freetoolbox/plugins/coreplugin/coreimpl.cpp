@@ -173,7 +173,7 @@ IMainWindow *CoreImpl::mainWindow() const { return m_MainWindow; }
 
 FileManager *CoreImpl::fileManager() const { return m_FileManager; }
 
-CommandLine *CoreImpl::commandLine() const { return 0; }
+ICommandLine *CoreImpl::commandLine() const { return 0; }
 Utils::UpdateChecker *CoreImpl::updateChecker() const { return m_UpdateChecker; }
 
 bool CoreImpl::initialize(const QStringList &arguments, QString *errorString)

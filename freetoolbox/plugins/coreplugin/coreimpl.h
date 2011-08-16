@@ -39,6 +39,7 @@
 
 namespace Core {
     class Patient;
+    class ICommandLine;
 
 namespace Internal {
     class ThemePrivate;
@@ -79,7 +80,7 @@ public:
     bool initialize(const QStringList &arguments, QString *errorString);
     void extensionsInitialized();
 
-    CommandLine *commandLine() const;
+    ICommandLine *commandLine() const;
 
     Utils::UpdateChecker *updateChecker() const;
 
@@ -99,7 +100,7 @@ private:
     ThemePrivate *m_Theme;
     Translators *m_Translators;
     SettingsPrivate *m_Settings;
-//    CommandLine *m_CommandLine;
+//    ICommandLine *m_CommandLine;
 //    Patient *m_Patient;
     IUser *m_User;
     Utils::UpdateChecker *m_UpdateChecker;

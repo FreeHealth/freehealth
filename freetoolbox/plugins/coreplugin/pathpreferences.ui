@@ -216,7 +216,6 @@
             <verstretch>0</verstretch>
            </sizepolicy>
           </property>
-          <zorder>tmplabel</zorder>
          </widget>
         </item>
        </layout>

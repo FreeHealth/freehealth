@@ -25,6 +25,7 @@
  ***************************************************************************/
 #include "coreplugin.h"
 #include "coreimpl.h"
+#include "pathpreferences.h"
 
 #include <extensionsystem/pluginmanager.h>
 #include <utils/log.h>

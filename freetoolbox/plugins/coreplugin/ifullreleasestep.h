@@ -16,6 +16,7 @@ public:
         DrugsDatabase,
         IcdDatabase,
         PimDatabase,
+        ZipCodes,
         TmpCleaning
     };
 
