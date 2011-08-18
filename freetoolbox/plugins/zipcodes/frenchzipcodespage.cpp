@@ -167,6 +167,11 @@ bool FrenchZipCodesStep::prepareDatas()
         Utils::warningMessageBox(tr("No source file found"), tr("Contact dev team."));
         return false;
     }
+//    // correcting wrong chars
+//    QString content = Utils::readTextFile(csvFileAbsPath(), "ISO-8859-1");
+//    qWarning() << content;
+//    content.remove("†");
+//    Utils::saveStringToFile(content, csvFileAbsPath());
 
     return true;
 }
@@ -228,8 +233,15 @@ bool FrenchZipCodesStep::populateDatabase()
     Utils::Database::executeSQL(req, db);
 
     // import new french codes
+    // 4 chars
+//    select * from zips where length(ZIP)>5;
+//    select substr('00000' || ZIP, -5, 5) from ZIPS where zip like'14%';
     req = "INSERT INTO `ZIPS` (`ZIP`,`CITY`,`EXTRACODE`, `COUNTRY`) \n"
-          "SELECT `ZIP`, `COMMUNE`, `CODEINSEE`, 'fr' FROM `ZIPS_IMPORT`;";
+          "SELECT substr('00000' || ZIP, -5, 5), `COMMUNE`, `CODEINSEE`, 'fr' FROM `ZIPS_IMPORT` WHERE LENGTH(ZIP)=4 ORDER BY `ZIP`;";
+    Utils::Database::executeSQL(req, db);
+    // 5 chars
+    req = "INSERT INTO `ZIPS` (`ZIP`,`CITY`,`EXTRACODE`, `COUNTRY`) \n"
+          "SELECT substr(`ZIP`, 1, 5) , `COMMUNE`, `CODEINSEE`, 'fr' FROM `ZIPS_IMPORT` WHERE LENGTH(ZIP)>=5 ORDER BY `ZIP`;";
     Utils::Database::executeSQL(req, db);
 
     // clean database
