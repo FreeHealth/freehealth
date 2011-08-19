@@ -41,6 +41,7 @@ QT_END_NAMESPACE
 #include <QString>
 #include <QHash>
 #include <QMessageBox>
+#include <QLocale>
 
 /**
  * \file global.h
@@ -131,6 +132,9 @@ UTILS_EXPORT void switchEchoMode( QLineEdit * l );
 
 // Some date functions
 UTILS_EXPORT QDateTime roundDateTime(const QDateTime &date, const int minutesRound);
+
+// Some locale functions
+UTILS_EXPORT QString countryToIso(QLocale::Country country);
 
 // Some functions for HTML work
 UTILS_EXPORT QString fontToHtml( const QFont &font, const QColor &color = QColor("black") );
