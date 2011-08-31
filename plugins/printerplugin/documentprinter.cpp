@@ -23,6 +23,14 @@
  *   Contributors :                                                        *
  *       NAME <MAIL@ADRESS>                                                *
  ***************************************************************************/
+ /** 
+   \class Print::Internal::DocumentPrinter
+   Wrapper to the Core::IDocumentPrinter. The instance is created by the 
+   PrinterPlugin class and can be accessed by the plugin manager object pool.\n
+   The patient tokens are managed by the Core::IPatient object before the 
+   print process starts.
+*/
+   
 #include "documentprinter.h"
 
 #include <coreplugin/icore.h>
