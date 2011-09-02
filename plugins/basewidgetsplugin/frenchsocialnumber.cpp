@@ -237,7 +237,7 @@ void FrenchSocialNumber::setCursorPosition(int currentLineEditId, int pos)
         if (currentLineEditId+1 < m_Edits.count()) {
             QLineEdit *l = m_Edits.at(currentLineEditId+1);
             l->setFocus();
-            l->setCursorPosition(0);
+            l->setCursorPosition(pos - m_NbChars.at(currentLineEditId));
         }
     } else {
         QLineEdit *l = m_Edits.at(currentLineEditId);
