@@ -8,7 +8,7 @@
     <authors>Eric Maeker, MD</authors>
     <version>0.5.0~alpha</version>
     <compatversion>0.5.0</compatversion>
-    <cdate>2011-03-15</cdate>
+    <cdate>2011-09-02</cdate>
     <icon>generalpractitioner.png</icon>
     <weblink></weblink>
     <bibliography/>
@@ -41,6 +41,27 @@
       <label lang="xx">Full Identity</label>
       <label lang="fr">Identité</label>
     </Item>
+
+    <Item>
+      <type>group</type>
+      <column>1</column>
+      <name>GP::Basic::Identity::ExtraFrench</name>
+      <label lang="xx">Extras</label>
+      <label lang="fr">Extras</label>
+      <Item>
+        <type>frenchnss</type>
+        <name>GP::Basic::Identity::NSS</name>
+        <label lang="xx">Social number</label>
+        <label lang="fr">Numéro de sécurité sociale</label>
+      </Item>
+      <Item>
+        <type>check</type>
+        <name>GP::Basic::Identity::IsNSSOwner</name>
+        <label lang="xx">Is the social number owner</label>
+        <label lang="fr">Est le propriétaire du numéro de sécurité sociale</label>
+      </Item>
+    </Item>
+
   </MedForm>
 
   <MedForm>

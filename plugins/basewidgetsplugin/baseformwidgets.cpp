@@ -25,6 +25,7 @@
  *       NAME <MAIL@ADRESS>                                                *
  ***************************************************************************/
 #include "baseformwidgets.h"
+#include "frenchsocialnumber.h"
 
 #include <coreplugin/icore.h>
 #include <coreplugin/ipatient.h>
@@ -76,6 +77,7 @@ namespace {
         Type_Date,
         Type_Button,
         Type_Sum,
+        Type_FrenchNSS,
         Type_MaxType
     };
 
@@ -84,7 +86,7 @@ namespace {
             QStringList() << "undef" << "form" << "radio" << "check" << "combo"
             << "multicheck" << "uniquelist" << "multilist" << "spin" << "doublespin"
             << "shorttext" << "longtext" << "helptext" << "file" << "group"
-            << "date" << "button" << "sum";
+            << "date" << "button" << "sum" << "frenchnss";
 
     const char * const  EXTRAS_KEY              = "option";
     const char * const  EXTRAS_KEY2             = "options";
@@ -223,6 +225,7 @@ Form::IFormWidget *BaseWidgetsFactory::createWidget(const QString &name, Form::F
     case ::Type_DoubleSpin : return new BaseSpin(formItem,parent,true);
     case ::Type_Button : return new BaseButton(formItem,parent);
     case ::Type_Sum : return new SumWidget(formItem,parent);
+    case ::Type_FrenchNSS : return new FrenchSocialNumberFormWidget(formItem,parent);
     default: return 0;
     }
     return 0;
@@ -440,8 +443,8 @@ void BaseGroup::retranslate()
 //--------------------------------------------------------------------------------------------------------
 //--------------------------------------------- BaseCheck ----------------------------------------------
 //--------------------------------------------------------------------------------------------------------
-BaseCheck::BaseCheck(Form::FormItem *formItem, QWidget *parent)
-        : Form::IFormWidget(formItem,parent), m_Check(0)
+BaseCheck::BaseCheck(Form::FormItem *formItem, QWidget *parent) :
+    Form::IFormWidget(formItem,parent), m_Check(0)
 {
     QHBoxLayout * hb = new QHBoxLayout(this);
     // Add Buttons
