@@ -1854,12 +1854,12 @@ bool Database::importCsvToDatabase(const QString &connectionName, const QString 
         if (!query.isActive()) {
             LOG_QUERY_ERROR_FOR("Database", query);
         }
-        else{
-            if (counter < 5)
-            {
-            	  qDebug() << __FILE__ << QString::number(__LINE__) << " query  =" << query.lastQuery() ;
-                }
-        }
+//        else{
+//            if (counter < 5)
+//            {
+//            	  qDebug() << __FILE__ << QString::number(__LINE__) << " query  =" << query.lastQuery() ;
+//                }
+//        }
 //        qWarning() << lines.at(i) << req + reqValues << values;
     }
 
