@@ -313,9 +313,13 @@ void UserManagerPlugin::changeCurrentUser()
     updateActions();
     QString log = ident.login64crypt();
     QString pass = ident.cryptedPassword();
-    /** \todo these 2 lines must disappear */
-    settings()->setValue(Core::Constants::S_LASTLOGIN, log);
-    settings()->setValue(Core::Constants::S_LASTPASSWORD, pass);
+    bool sqliteVersion = (settings()->databaseConnector().driver()==Utils::Database::SQLite);
+    if (sqliteVersion) {
+        Utils::DatabaseConnector c = settings()->databaseConnector();
+        c.setClearLog(log);
+        c.setClearPass(pass);
+        settings()->setDatabaseConnector(c);
+    }
     Utils::informativeMessageBox(tkTr(Trans::Constants::CONNECTED_AS_1)
                                  .arg(userModel()->currentUserData(Core::IUser::FullName).toString()),"","","");
 }
