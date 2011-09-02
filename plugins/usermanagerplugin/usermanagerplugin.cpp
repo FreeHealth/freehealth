@@ -311,8 +311,8 @@ void UserManagerPlugin::changeCurrentUser()
     if (ident.exec() == QDialog::Rejected)
         return;
     updateActions();
-    QString log = ident.login64crypt();
-    QString pass = ident.cryptedPassword();
+    const QString &log = ident.login();
+    const QString &pass = ident.password();
     bool sqliteVersion = (settings()->databaseConnector().driver()==Utils::Database::SQLite);
     if (sqliteVersion) {
         Utils::DatabaseConnector c = settings()->databaseConnector();
