@@ -138,6 +138,8 @@ account.depends += core
 account.depends += texteditor
 account.depends += printer
 account.depends += accountbase
+account.depends += zipcodes
+account.depends += listview
 
 zipcodes.subdir = zipcodesplugin
 zipcodes.depends += core

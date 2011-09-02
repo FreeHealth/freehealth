@@ -62,204 +62,178 @@
       <attribute name="title">
        <string>Adress</string>
       </attribute>
-      <widget class="QWidget" name="layoutWidget">
-       <property name="geometry">
-        <rect>
-         <x>10</x>
-         <y>11</y>
-         <width>371</width>
-         <height>191</height>
-        </rect>
-       </property>
-       <layout class="QGridLayout" name="gridLayout_2">
-        <item row="0" column="0">
-         <widget class="QLabel" name="nameLabel">
-          <property name="text">
-           <string>Name</string>
-          </property>
-          <property name="buddy">
-           <cstring>nameEdit</cstring>
-          </property>
-         </widget>
-        </item>
-        <item row="0" column="2">
-         <widget class="QLineEdit" name="nameEdit">
-          <property name="minimumSize">
-           <size>
-            <width>200</width>
-            <height>0</height>
-           </size>
-          </property>
-         </widget>
-        </item>
-        <item row="1" column="0">
-         <widget class="QLabel" name="adressLabel">
-          <property name="text">
-           <string>Adress</string>
-          </property>
-          <property name="buddy">
-           <cstring>adressEdit</cstring>
-          </property>
-         </widget>
-        </item>
-        <item row="1" column="2">
-         <widget class="QLineEdit" name="adressEdit"/>
-        </item>
-        <item row="3" column="0">
-         <widget class="QLabel" name="cityLabel">
-          <property name="text">
-           <string>City</string>
-          </property>
-          <property name="buddy">
-           <cstring>cityEdit</cstring>
-          </property>
-         </widget>
-        </item>
-        <item row="3" column="2">
-         <widget class="QLineEdit" name="cityEdit"/>
-        </item>
-        <item row="5" column="0">
-         <widget class="QLabel" name="countryLabel">
-          <property name="text">
-           <string>Country</string>
-          </property>
-          <property name="buddy">
-           <cstring>countryComboBox</cstring>
-          </property>
-         </widget>
-        </item>
-        <item row="5" column="2">
-         <widget class="QComboBox" name="countryComboBox"/>
-        </item>
-        <item row="2" column="0">
-         <widget class="QLabel" name="zipLabel">
-          <property name="text">
-           <string>ZIP</string>
-          </property>
-          <property name="buddy">
-           <cstring>zipComboBox</cstring>
-          </property>
-         </widget>
-        </item>
-        <item row="2" column="2">
-         <widget class="QComboBox" name="zipComboBox"/>
-        </item>
-       </layout>
-      </widget>
+      <layout class="QFormLayout" name="formLayout">
+       <item row="0" column="0">
+        <widget class="QLabel" name="nameLabel">
+         <property name="text">
+          <string>Name</string>
+         </property>
+         <property name="buddy">
+          <cstring>nameEdit</cstring>
+         </property>
+        </widget>
+       </item>
+       <item row="0" column="1">
+        <widget class="QLineEdit" name="nameEdit">
+         <property name="minimumSize">
+          <size>
+           <width>200</width>
+           <height>0</height>
+          </size>
+         </property>
+        </widget>
+       </item>
+       <item row="1" column="0">
+        <widget class="QLabel" name="adressLabel">
+         <property name="text">
+          <string>Adress</string>
+         </property>
+         <property name="buddy">
+          <cstring>adressEdit</cstring>
+         </property>
+        </widget>
+       </item>
+       <item row="1" column="1">
+        <widget class="QLineEdit" name="adressEdit"/>
+       </item>
+       <item row="2" column="0">
+        <widget class="QLabel" name="zipLabel">
+         <property name="text">
+          <string>ZIP</string>
+         </property>
+        </widget>
+       </item>
+       <item row="2" column="1">
+        <widget class="QLineEdit" name="zip"/>
+       </item>
+       <item row="3" column="0">
+        <widget class="QLabel" name="cityLabel">
+         <property name="text">
+          <string>City</string>
+         </property>
+         <property name="buddy">
+          <cstring>cityEdit</cstring>
+         </property>
+        </widget>
+       </item>
+       <item row="3" column="1">
+        <widget class="QLineEdit" name="cityEdit"/>
+       </item>
+       <item row="4" column="0">
+        <widget class="QLabel" name="countryLabel">
+         <property name="text">
+          <string>Country</string>
+         </property>
+         <property name="buddy">
+          <cstring>countryComboBox</cstring>
+         </property>
+        </widget>
+       </item>
+       <item row="4" column="1">
+        <widget class="Views::CountryComboBox" name="countryComboBox"/>
+       </item>
+      </layout>
      </widget>
      <widget class="QWidget" name="tabPhones">
       <attribute name="title">
        <string>Phones</string>
       </attribute>
-      <widget class="QWidget" name="layoutWidget">
-       <property name="geometry">
-        <rect>
-         <x>10</x>
-         <y>21</y>
-         <width>371</width>
-         <height>141</height>
-        </rect>
-       </property>
-       <layout class="QGridLayout" name="gridLayout_3">
-        <item row="0" column="0">
-         <widget class="QLabel" name="phoneLabel">
-          <property name="text">
-           <string>Phone</string>
-          </property>
-          <property name="wordWrap">
-           <bool>true</bool>
-          </property>
-          <property name="buddy">
-           <cstring>phoneEdit</cstring>
-          </property>
-         </widget>
-        </item>
-        <item row="0" column="1">
-         <widget class="QLineEdit" name="phoneEdit">
-          <property name="minimumSize">
-           <size>
-            <width>200</width>
-            <height>0</height>
-           </size>
-          </property>
-         </widget>
-        </item>
-        <item row="1" column="0">
-         <widget class="QLabel" name="faxLabel">
-          <property name="text">
-           <string>Fax</string>
-          </property>
-          <property name="wordWrap">
-           <bool>true</bool>
-          </property>
-          <property name="buddy">
-           <cstring>faxEdit</cstring>
-          </property>
-         </widget>
-        </item>
-        <item row="1" column="1">
-         <widget class="QLineEdit" name="faxEdit"/>
-        </item>
-        <item row="2" column="0">
-         <widget class="QLabel" name="mailLabel">
-          <property name="text">
-           <string>Mail</string>
-          </property>
-          <property name="wordWrap">
-           <bool>true</bool>
-          </property>
-          <property name="buddy">
-           <cstring>mailEdit</cstring>
-          </property>
-         </widget>
-        </item>
-        <item row="2" column="1">
-         <widget class="QLineEdit" name="mailEdit"/>
-        </item>
-       </layout>
-      </widget>
+      <layout class="QFormLayout" name="formLayout_2">
+       <item row="0" column="0">
+        <widget class="QLabel" name="phoneLabel">
+         <property name="text">
+          <string>Phone</string>
+         </property>
+         <property name="wordWrap">
+          <bool>true</bool>
+         </property>
+         <property name="buddy">
+          <cstring>phoneEdit</cstring>
+         </property>
+        </widget>
+       </item>
+       <item row="0" column="1">
+        <widget class="QLineEdit" name="phoneEdit">
+         <property name="minimumSize">
+          <size>
+           <width>200</width>
+           <height>0</height>
+          </size>
+         </property>
+        </widget>
+       </item>
+       <item row="1" column="0">
+        <widget class="QLabel" name="faxLabel">
+         <property name="text">
+          <string>Fax</string>
+         </property>
+         <property name="wordWrap">
+          <bool>true</bool>
+         </property>
+         <property name="buddy">
+          <cstring>faxEdit</cstring>
+         </property>
+        </widget>
+       </item>
+       <item row="1" column="1">
+        <widget class="QLineEdit" name="faxEdit"/>
+       </item>
+       <item row="2" column="0">
+        <widget class="QLabel" name="mailLabel">
+         <property name="text">
+          <string>Mail</string>
+         </property>
+         <property name="wordWrap">
+          <bool>true</bool>
+         </property>
+         <property name="buddy">
+          <cstring>mailEdit</cstring>
+         </property>
+        </widget>
+       </item>
+       <item row="2" column="1">
+        <widget class="QLineEdit" name="mailEdit"/>
+       </item>
+      </layout>
      </widget>
      <widget class="QWidget" name="tabContacts">
       <attribute name="title">
        <string>Contacts</string>
       </attribute>
-      <widget class="QWidget" name="layoutWidget">
-       <property name="geometry">
-        <rect>
-         <x>28</x>
-         <y>40</y>
-         <width>311</width>
-         <height>71</height>
-        </rect>
-       </property>
-       <layout class="QHBoxLayout" name="horizontalLayout">
-        <item>
-         <widget class="QLabel" name="contactLabel">
-          <property name="text">
-           <string>Contact</string>
-          </property>
-          <property name="wordWrap">
-           <bool>true</bool>
-          </property>
-         </widget>
-        </item>
-        <item>
-         <widget class="QLineEdit" name="contactEdit">
-          <property name="minimumSize">
-           <size>
-            <width>200</width>
-            <height>45</height>
-           </size>
-          </property>
-         </widget>
-        </item>
-       </layout>
-      </widget>
+      <layout class="QFormLayout" name="formLayout_3">
+       <item row="0" column="0">
+        <widget class="QLabel" name="contactLabel">
+         <property name="text">
+          <string>Contact</string>
+         </property>
+         <property name="wordWrap">
+          <bool>true</bool>
+         </property>
+        </widget>
+       </item>
+       <item row="0" column="1">
+        <widget class="QLineEdit" name="contactEdit">
+         <property name="minimumSize">
+          <size>
+           <width>200</width>
+           <height>45</height>
+          </size>
+         </property>
+        </widget>
+       </item>
+      </layout>
      </widget>
     </widget>
    </item>
   </layout>
  </widget>
+ <customwidgets>
+  <customwidget>
+   <class>Views::CountryComboBox</class>
+   <extends>QComboBox</extends>
+   <header location="global">listviewplugin/countrycombobox.h</header>
+  </customwidget>
+ </customwidgets>
  <resources/>
  <connections/>
 </ui>

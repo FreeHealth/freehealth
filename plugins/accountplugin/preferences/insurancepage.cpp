@@ -31,8 +31,9 @@
  ***************************************************************************/
 #include "insurancepage.h"
 #include <accountplugin/constants.h>
-
 #include <accountbaseplugin/constants.h>
+
+#include <zipcodesplugin/zipcodescompleters.h>
 
 #include <utils/log.h>
 #include <utils/global.h>
@@ -44,6 +45,8 @@
 #include <coreplugin/iuser.h>
 
 #include <coreplugin/constants_icons.h>
+
+#include "ui_insurancepage.h"
 
 #include <QFile>
 #include <QTextStream>
@@ -122,23 +125,28 @@ InsuranceWidget::InsuranceWidget(QWidget *parent) :
         QWidget(parent), m_Model(0), m_Mapper(0)
 {
     setObjectName("InsuranceWidget");
-    setupUi(this);
+    // Setup UI
+    ui = new Ui::InsuranceWidget;
+    ui->setupUi(this);
+    ui->tabWidget->setCurrentIndex(0);
+    ui->addButton->setIcon(theme()->icon(Core::Constants::ICONADD));
+    ui->addButton->setText(tkTr(Trans::Constants::ADD_TEXT));
+    ui->deleteButton->setIcon(theme()->icon(Core::Constants::ICONREMOVE));
+    ui->deleteButton->setText(tkTr(Trans::Constants::REMOVE_TEXT));
+
+    // Manage current user
     m_user_uid = user()->uuid();
     m_user_fullName = user()->value(Core::IUser::FullName).toString();
     if (m_user_fullName.isEmpty()) {
         m_user_fullName = "Admin_Test";
     }
-    m_hashTownZip = parseZipcodeCsv();
-    addButton->setIcon(theme()->icon(Core::Constants::ICONADD));
-    addButton->setText("New");
-    deleteButton->setIcon(theme()->icon(Core::Constants::ICONREMOVE));
-    deleteButton->setText("Delete");
-    zipComboBox->setEditable(true);
-    zipComboBox->setInsertPolicy(QComboBox::NoInsert);
-    
-    countryComboBox->setEditable(true);
-    countryComboBox->setInsertPolicy(QComboBox::NoInsert);
-        
+
+    // Add zipcodes auto-completer
+    ZipCodes::ZipCountryCompleters *c = new ZipCodes::ZipCountryCompleters(this);
+    c->setZipLineEdit(ui->zip);
+    c->setCityLineEdit(ui->cityEdit);
+    c->setCountryComboBox(ui->countryComboBox);
+
     m_Model = new AccountDB::InsuranceModel(this);
 //    if (m_Model->rowCount() < 1)  {
 //        if (!fillEmptyAvailableModel()) {
@@ -146,69 +154,72 @@ InsuranceWidget::InsuranceWidget(QWidget *parent) :
 //                                 QMessageBox::Ok);
 //        }
 //    }
+
     /** \todo  m_Model->setUserUuid(); */
     m_insuranceUidLabel = new QSpinBox(this);
     //m_insuranceUidLabel->setText("NULL");
     m_insuranceUidLabel->setValue(11111);
     //m_insuranceUidLabel->hide();
+
+    // Create mapper
     m_Mapper = new QDataWidgetMapper(this);
     m_Mapper->setSubmitPolicy(QDataWidgetMapper::AutoSubmit);
     m_Mapper->setModel(m_Model);
     m_Mapper->setCurrentModelIndex(QModelIndex());
-    m_Mapper->addMapping(m_insuranceUidLabel,1);// AccountDB::Constants::INSURANCE_UID);
-    m_Mapper->addMapping(nameEdit, AccountDB::Constants::INSURANCE_NAME);
-    m_Mapper->addMapping(adressEdit, AccountDB::Constants::INSURANCE_ADRESS);
-    m_Mapper->addMapping(cityEdit, AccountDB::Constants::INSURANCE_CITY,"text");
-    m_Mapper->addMapping(zipComboBox, AccountDB::Constants::INSURANCE_ZIPCODE,"currentText");
-    m_Mapper->addMapping(countryComboBox, AccountDB::Constants::INSURANCE_COUNTRY,"currentText");
+    m_Mapper->addMapping(m_insuranceUidLabel, AccountDB::Constants::INSURANCE_UID);
+    m_Mapper->addMapping(ui->nameEdit, AccountDB::Constants::INSURANCE_NAME);
+    m_Mapper->addMapping(ui->adressEdit, AccountDB::Constants::INSURANCE_ADRESS);
+    m_Mapper->addMapping(ui->cityEdit, AccountDB::Constants::INSURANCE_CITY,"text");
+    m_Mapper->addMapping(ui->zip, AccountDB::Constants::INSURANCE_ZIPCODE, "currentText");
+    m_Mapper->addMapping(ui->countryComboBox, AccountDB::Constants::INSURANCE_COUNTRY, "currentIsoCountry");
     
-    m_Mapper->addMapping(phoneEdit, AccountDB::Constants::INSURANCE_TEL);
-    m_Mapper->addMapping(faxEdit, AccountDB::Constants::INSURANCE_FAX);
-    m_Mapper->addMapping(mailEdit, AccountDB::Constants::INSURANCE_MAIL);
+    m_Mapper->addMapping(ui->phoneEdit, AccountDB::Constants::INSURANCE_TEL);
+    m_Mapper->addMapping(ui->faxEdit, AccountDB::Constants::INSURANCE_FAX);
+    m_Mapper->addMapping(ui->mailEdit, AccountDB::Constants::INSURANCE_MAIL);
     
-    m_Mapper->addMapping(contactEdit, AccountDB::Constants::INSURANCE_CONTACT);
+    m_Mapper->addMapping(ui->contactEdit, AccountDB::Constants::INSURANCE_CONTACT);
     m_Mapper->toFirst();
-    insuranceComboBox->setModel(m_Model);
-    insuranceComboBox->setModelColumn(AccountDB::Constants::INSURANCE_NAME);
+    ui->insuranceComboBox->setModel(m_Model);
+    ui->insuranceComboBox->setModelColumn(AccountDB::Constants::INSURANCE_NAME);
   
     setDatasToUi();
-    connect(zipComboBox,SIGNAL(currentIndexChanged(const QString &)),this,SLOT(findCityFromZipCode(const QString &)));
 }
 
 InsuranceWidget::~InsuranceWidget()
 {
+    delete ui;
     //saveModel();
 }
 
-void InsuranceWidget::fillComboBoxes()
-{
-    if (WarnDebugMessage)
-        LOG("fillcomboboxes");
-    QLocale local;
-    QString localCountry;
-    localCountry = QLocale::countryToString(local.country());
-    if (WarnDebugMessage)
-        qWarning() << __FILE__ << QString::number(__LINE__) << " country =" << localCountry ;
-    //zipcodes 
-    QStringList listOfZipcodes;
-    listOfZipcodes  = m_hashTownZip.keys();
-    listOfZipcodes.removeDuplicates();
-    listOfZipcodes.sort();
-    zipComboBox->addItems(listOfZipcodes);
-    //countries
-    QStringList listForCountry;
-    listForCountry = listOfCountries();
-    listForCountry.sort();
-    listForCountry.prepend(localCountry);
-    countryComboBox->addItems(listForCountry);
-    emit findCityFromZipCode(zipComboBox->currentText());    
-}
+//void InsuranceWidget::fillComboBoxes()
+//{
+//    if (WarnDebugMessage)
+//        LOG("fillcomboboxes");
+//    QLocale local;
+//    QString localCountry;
+//    localCountry = QLocale::countryToString(local.country());
+//    if (WarnDebugMessage)
+//        qWarning() << __FILE__ << QString::number(__LINE__) << " country =" << localCountry ;
+//    //zipcodes
+//    QStringList listOfZipcodes;
+//    listOfZipcodes  = m_hashTownZip.keys();
+//    listOfZipcodes.removeDuplicates();
+//    listOfZipcodes.sort();
+//    zipComboBox->addItems(listOfZipcodes);
+//    //countries
+//    QStringList listForCountry;
+//    listForCountry = listOfCountries();
+//    listForCountry.sort();
+//    listForCountry.prepend(localCountry);
+//    countryComboBox->addItems(listForCountry);
+//    emit findCityFromZipCode(zipComboBox->currentText());
+//}
 
 void InsuranceWidget::setDatasToUi()
 {
     if (WarnDebugMessage)
-        LOG("index row  = " + QString::number(insuranceComboBox->currentIndex()));
-    m_Mapper->setCurrentIndex(insuranceComboBox->currentIndex());
+        LOG("index row  = " + QString::number(ui->insuranceComboBox->currentIndex()));
+    m_Mapper->setCurrentIndex(ui->insuranceComboBox->currentIndex());
 }
 
 void InsuranceWidget::saveModel()
@@ -237,7 +248,7 @@ void InsuranceWidget::on_insuranceComboBox_currentIndexChanged(int index)
 {
     //saveModel();
     Q_UNUSED(index);
-    m_Mapper->setCurrentIndex(insuranceComboBox->currentIndex());
+    m_Mapper->setCurrentIndex(ui->insuranceComboBox->currentIndex());
 }
 
 void InsuranceWidget::on_addButton_clicked()
@@ -249,7 +260,7 @@ void InsuranceWidget::on_addButton_clicked()
         LOG_ERROR("Unable to add row");
     if (WarnDebugMessage)
         qDebug() << __FILE__ << QString::number(__LINE__) << " rowCount2 =" << QString::number(m_Model->rowCount());
-    insuranceComboBox->setCurrentIndex(m_Model->rowCount()-1);
+    ui->insuranceComboBox->setCurrentIndex(m_Model->rowCount()-1);
     m_insuranceUidLabel->setValue(calcInsuranceUid());
     m_insuranceUidLabel->setFocus();
     if (WarnDebugMessage) {
@@ -270,15 +281,12 @@ void InsuranceWidget::on_addButton_clicked()
 
 }
 
-
-
-
 void InsuranceWidget::on_deleteButton_clicked()
 {
-    if (!m_Model->removeRow(insuranceComboBox->currentIndex())) {
+    if (!m_Model->removeRow(ui->insuranceComboBox->currentIndex())) {
         LOG_ERROR("Unable to remove row");
     }
-    insuranceComboBox->setCurrentIndex(m_Model->rowCount() - 1);
+    ui->insuranceComboBox->setCurrentIndex(m_Model->rowCount() - 1);
 }
 
 void InsuranceWidget::saveToSettings(Core::ISettings *sets)
@@ -289,7 +297,7 @@ void InsuranceWidget::saveToSettings(Core::ISettings *sets)
         Utils::warningMessageBox(tr("Can not submit insurance to your personnal database."),
                                  tr("An error occured during insurance saving. Datas are corrupted."));
     }
-    connect(nameEdit,SIGNAL(textEdited(const QString &)),insuranceComboBox,SLOT(setEditText(const QString &)));
+    connect(ui->nameEdit,SIGNAL(textEdited(const QString &)), ui->insuranceComboBox,SLOT(setEditText(const QString &)));
     update();
 }
 
@@ -305,7 +313,7 @@ void InsuranceWidget::changeEvent(QEvent *e)
     QWidget::changeEvent(e);
     switch (e->type()) {
     case QEvent::LanguageChange:
-        retranslateUi(this);
+        ui->retranslateUi(this);
 //        int s = defaultCombo->currentIndex();
 //        defaultCombo->clear();
 //        defaultCombo->addItem(tkTr(Trans::Constants::NO));
@@ -317,83 +325,83 @@ void InsuranceWidget::changeEvent(QEvent *e)
     }
 }
 
-void InsuranceWidget::showEvent(QShowEvent *event)
-{
-    Q_UNUSED(event);
-    if (WarnDebugMessage)
-        LOG("insurance activated");
-    fillComboBoxes();
-    update();
-}
+//void InsuranceWidget::showEvent(QShowEvent *event)
+//{
+//    Q_UNUSED(event);
+//    if (WarnDebugMessage)
+//        LOG("insurance activated");
+//    fillComboBoxes();
+//    update();
+//}
 
-void InsuranceWidget::findCityFromZipCode(const QString & zipCodeText)
-{
-//    cityEdit->setFocus();
-    QString city = m_hashTownZip.value(zipCodeText);
-    cityEdit->setText(city);
-}
+//void InsuranceWidget::findCityFromZipCode(const QString & zipCodeText)
+//{
+////    cityEdit->setFocus();
+//    QString city = m_hashTownZip.value(zipCodeText);
+//    cityEdit->setText(city);
+//}
 
-QHash<QString,QString> InsuranceWidget::parseZipcodeCsv()
-{
-    QHash<QString,QString> hash;
-    QString zipcodeStr = global_resourcesPath+"/textfiles/zipcodes.csv";
-    QFile zipcodeFile(zipcodeStr);
-    if(!zipcodeFile.open(QIODevice::ReadOnly|QIODevice::Text)){
-        qWarning() << __FILE__ << QString::number(__LINE__) << "zipcode cannot open !" ;
-       }
-    QTextStream stream(&zipcodeFile);
-    while (!stream.atEnd())
-    {
-    	QString line = stream.readLine();
-    	QString line2 = line;
-    	if (line.contains("FIN")|| line.contains("<p"))
-    	{
-    		  break;	
-    	    }
-    	QString city = line.replace(QRegExp("[0-9]"),"").replace(",","").trimmed();
-        QString zip = line2.replace(QRegExp("[^0123456789]"),"").trimmed();
+//QHash<QString,QString> InsuranceWidget::parseZipcodeCsv()
+//{
+//    QHash<QString,QString> hash;
+//    QString zipcodeStr = global_resourcesPath+"/textfiles/zipcodes.csv";
+//    QFile zipcodeFile(zipcodeStr);
+//    if(!zipcodeFile.open(QIODevice::ReadOnly|QIODevice::Text)){
+//        qWarning() << __FILE__ << QString::number(__LINE__) << "zipcode cannot open !" ;
+//       }
+//    QTextStream stream(&zipcodeFile);
+//    while (!stream.atEnd())
+//    {
+//    	QString line = stream.readLine();
+//    	QString line2 = line;
+//    	if (line.contains("FIN")|| line.contains("<p"))
+//    	{
+//    		  break;
+//    	    }
+//    	QString city = line.replace(QRegExp("[0-9]"),"").replace(",","").trimmed();
+//        QString zip = line2.replace(QRegExp("[^0123456789]"),"").trimmed();
 
-    	    if (WarnDebugMessage)
-    	      qDebug() << __FILE__ << QString::number(__LINE__) << " zip city  =" << zip+","+city;
-    	    hash.insertMulti(zip,city);//zipcode,city
+//    	    if (WarnDebugMessage)
+//    	      qDebug() << __FILE__ << QString::number(__LINE__) << " zip city  =" << zip+","+city;
+//    	    hash.insertMulti(zip,city);//zipcode,city
 
-        }
-        if (WarnDebugMessage)
-    	      qDebug() << __FILE__ << QString::number(__LINE__) << " hash size =" << hash.size();
-    return hash;
-}
+//        }
+//        if (WarnDebugMessage)
+//    	      qDebug() << __FILE__ << QString::number(__LINE__) << " hash size =" << hash.size();
+//    return hash;
+//}
 
-QStringList InsuranceWidget::listOfCountries(){
-    QStringList list;
-    QString countryFileStr = global_resourcesPath+"/textfiles/pays.txt";
-    QFile file(countryFileStr);
-    if (!file.open(QIODevice::ReadOnly|QIODevice::Text)) {
-        qWarning() << __FILE__ << QString::number(__LINE__) << "pays.txt cannot open !" ;
-    }
-    QTextStream stream(&file);
-    while (!stream.atEnd())
-    {
-    	QString line = stream.readLine().trimmed();
-    	if (WarnDebugMessage)
-    	      qDebug() << __FILE__ << QString::number(__LINE__) << " country =" << line;
-        if (!line.isEmpty()) {
-            list << line;
-        }
-    }
-    return list;
-}
+//QStringList InsuranceWidget::listOfCountries(){
+//    QStringList list;
+//    QString countryFileStr = global_resourcesPath+"/textfiles/pays.txt";
+//    QFile file(countryFileStr);
+//    if (!file.open(QIODevice::ReadOnly|QIODevice::Text)) {
+//        qWarning() << __FILE__ << QString::number(__LINE__) << "pays.txt cannot open !" ;
+//    }
+//    QTextStream stream(&file);
+//    while (!stream.atEnd())
+//    {
+//    	QString line = stream.readLine().trimmed();
+//    	if (WarnDebugMessage)
+//    	      qDebug() << __FILE__ << QString::number(__LINE__) << " country =" << line;
+//        if (!line.isEmpty()) {
+//            list << line;
+//        }
+//    }
+//    return list;
+//}
 
 int InsuranceWidget::calcInsuranceUid(){
     QModelIndex index = m_Model->index(m_Model->rowCount()-2,AccountDB::Constants::INSURANCE_UID);
     if (!index.isValid()) {
-    	  qWarning() << __FILE__ << QString::number(__LINE__) << "index is not valid" ;
-        }
+        qWarning() << __FILE__ << QString::number(__LINE__) << "index is not valid" ;
+    }
     int siteUidBefore = m_Model->data(index,Qt::DisplayRole).toInt();
     if (WarnDebugMessage)
-    	      qDebug() << __FILE__ << QString::number(__LINE__) << " siteUidBefore =" << QString::number(siteUidBefore) ;
+        qDebug() << __FILE__ << QString::number(__LINE__) << " siteUidBefore =" << QString::number(siteUidBefore) ;
     int siteUid =  siteUidBefore + 1;
     if (WarnDebugMessage)
-    	      qDebug() << __FILE__ << QString::number(__LINE__) << " siteUid =" << QString::number(siteUid);
+        qDebug() << __FILE__ << QString::number(__LINE__) << " siteUid =" << QString::number(siteUid);
     return siteUid;
 }
 

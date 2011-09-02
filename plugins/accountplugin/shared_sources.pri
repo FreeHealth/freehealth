@@ -19,8 +19,7 @@ SOURCES = $${PWD}/accountplugin.cpp \
 FORMS = $${PWD}/accountview.ui
 
 #include preferences
-HEADERS += \
-    $${PWD}/preferences/accountpreferences.h \
+HEADERS += $${PWD}/preferences/accountpreferences.h \
     $${PWD}/preferences/bankdetailspage.h \
     $${PWD}/preferences/availablemovementpage.h \
     $${PWD}/preferences/medicalprocedurepage.h \
@@ -31,8 +30,7 @@ HEADERS += \
     $${PWD}/preferences/assetsratespage.h \
     $${PWD}/preferences/distancerulespage.h
 
-SOURCES += \
-    $${PWD}/preferences/accountpreferences.cpp \
+SOURCES += $${PWD}/preferences/accountpreferences.cpp \
     $${PWD}/preferences/bankdetailspage.cpp \
     $${PWD}/preferences/availablemovementpage.cpp \
     $${PWD}/preferences/medicalprocedurepage.cpp \
@@ -56,8 +54,7 @@ FORMS += $${PWD}/preferences/accountuseroptionspage.ui \
     $${PWD}/preferences/accountdatabasedefaultswidget.ui
 
 # include receipts
-HEADERS += \
-    $${PWD}/receipts/receiptsmanager.h \
+HEADERS += $${PWD}/receipts/receiptsmanager.h \
     $${PWD}/receipts/receiptsIO.h \
     $${PWD}/receipts/findReceiptsValues.h \
     $${PWD}/receipts/xmlcategoriesparser.h \
@@ -74,8 +71,7 @@ FORMS += $${PWD}/receipts/findValuesGUI.ui \
     $${PWD}/receipts/preferedreceipts.ui \
     $${PWD}/receipts/receiptviewer.ui
 
-SOURCES += \
-    $${PWD}/receipts/receiptsmanager.cpp \
+SOURCES += $${PWD}/receipts/receiptsmanager.cpp \
     $${PWD}/receipts/receiptsIO.cpp \
     $${PWD}/receipts/findReceiptsValues.cpp \
     $${PWD}/receipts/choiceDialog.cpp \

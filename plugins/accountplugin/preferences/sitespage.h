@@ -31,7 +31,7 @@
  ***************************************************************************/
 #ifndef SITESPAGE_H
 #define SITESPAGE_H
-#include "ui_sitespage.h"
+
 #include <coreplugin/ioptionspage.h>
 #include <accountbaseplugin/workingplacesmodel.h>
 
@@ -52,12 +52,15 @@ class SitesModel;
 
 namespace Account {
 namespace Internal {
+namespace Ui {
+class SitesWidget;
+}
 
 //////////////////////////////////////////////////////////////////////////////////////////////////////////////
 ////////////////////////////////////  SitesWidget  ////////////////////////////////////////////////
 //////////////////////////////////////////////////////////////////////////////////////////////////////////////
 
-class SitesWidget : public QWidget, private Ui::SitesWidget
+class SitesWidget : public QWidget
 {
     Q_OBJECT
     Q_DISABLE_COPY(SitesWidget)
@@ -74,20 +77,14 @@ public Q_SLOTS:
     void on_wpComboBox_currentIndexChanged(int index);
     void on_addButton_clicked();
     void on_deleteButton_clicked();
-    void findCityFromZipCode(const QString & zipCodeText);
-   // void on_name_textChanged(const QString & text);
 
 private:
     void changeEvent(QEvent *e);
-    void showEvent(QShowEvent *event);
     void saveModel();
-    QHash<QString,QString> parseZipcodeCsv();
-    QStringList listOfCountries();
-    QString findCityFromZipCode();
     int calcSitesUid();
-    void fillHugeWidgets();
 
 private:
+    Ui::SitesWidget *ui;
     AccountDB::WorkingPlacesModel *m_Model;
     QSpinBox *m_siteUidLabel;
     QDataWidgetMapper *m_Mapper;
@@ -101,6 +98,8 @@ private:
 
 class SitesPage : public Core::IOptionsPage
 {
+    Q_OBJECT
+
 public:
     SitesPage(QObject *parent = 0);
     ~SitesPage();
@@ -120,6 +119,7 @@ public:
     static void writeDefaultSettings(Core::ISettings *s) {Internal::SitesWidget::writeDefaultSettings(s);}
 
     QWidget *createPage(QWidget *parent = 0);
+
 private:
     QPointer<Internal::SitesWidget> m_Widget;
 };

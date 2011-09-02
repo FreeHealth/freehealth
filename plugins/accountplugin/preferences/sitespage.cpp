@@ -30,9 +30,11 @@
  *      NAME <MAIL@ADRESS>                                                 *
  ***************************************************************************/
 #include "sitespage.h"
-#include <accountplugin/constants.h>
 
+#include <accountplugin/constants.h>
 #include <accountbaseplugin/constants.h>
+
+#include <zipcodesplugin/zipcodescompleters.h>
 
 #include <utils/log.h>
 #include <utils/global.h>
@@ -44,6 +46,8 @@
 #include <coreplugin/iuser.h>
 
 #include <coreplugin/constants_icons.h>
+
+#include "ui_sitespage.h"
 
 #include <QFile>
 #include <QTextStream>
@@ -120,27 +124,30 @@ QWidget *SitesPage::createPage(QWidget *parent)
 SitesWidget::SitesWidget(QWidget *parent) :
         QWidget(parent), m_Model(0), m_Mapper(0)
 {
-    QApplication::setOverrideCursor(QCursor(Qt::BusyCursor));
     setObjectName("SitesWidget");
-    setupUi(this);
+    // Setup UI
+    ui = new Ui::SitesWidget;
+    ui->setupUi(this);
+    ui->tabWidget->setCurrentIndex(0);
+    ui->addButton->setIcon(theme()->icon(Core::Constants::ICONADD));
+    ui->addButton->setText(tkTr(Trans::Constants::ADD_TEXT));
+    ui->deleteButton->setIcon(theme()->icon(Core::Constants::ICONREMOVE));
+    ui->deleteButton->setText(tkTr(Trans::Constants::REMOVE_TEXT));
+
+    // Manage user
     m_user_uid = user()->uuid();
     m_user_fullName = user()->value(Core::IUser::FullName).toString();
     if (m_user_fullName.isEmpty()) {
         m_user_fullName = "Admin_Test";
     }
-    m_hashTownZip = parseZipcodeCsv();
-    addButton->setIcon(theme()->icon(Core::Constants::ICONADD));
-    addButton->setText("New");
-    deleteButton->setIcon(theme()->icon(Core::Constants::ICONREMOVE));
-    deleteButton->setText("Delete");
-    zipComboBox->setEditable(true);
-    zipComboBox->setInsertPolicy(QComboBox::NoInsert);
-    
-    
-    countryComboBox->setEditable(true);
-    countryComboBox->setInsertPolicy(QComboBox::NoInsert);
-    
-    
+
+    // Add zipcodes auto-completer
+    ZipCodes::ZipCountryCompleters *c = new ZipCodes::ZipCountryCompleters(this);
+    c->setZipLineEdit(ui->zip);
+    c->setCityLineEdit(ui->cityEdit);
+    c->setCountryComboBox(ui->countryComboBox);
+
+    // Create mapper
     m_Model = new AccountDB::WorkingPlacesModel(this);
         /** \todo  m_Model->setUserUuid(); */
     m_siteUidLabel = new QSpinBox(this);
@@ -151,61 +158,59 @@ SitesWidget::SitesWidget(QWidget *parent) :
     m_Mapper->setSubmitPolicy(QDataWidgetMapper::AutoSubmit);
     m_Mapper->setModel(m_Model);
     m_Mapper->setCurrentModelIndex(QModelIndex());
-    //m_Mapper->addMapping(mpIDLabel, AccountDB::Constants::SITE_ID, "ID");
+    //m_Mapper->addMapping(ui->mpIDLabel, AccountDB::Constants::SITE_ID, "ID");
     m_Mapper->addMapping(m_siteUidLabel,AccountDB::Constants::SITES_UID);// AccountDB::Constants::SITES_UID);
-    m_Mapper->addMapping(nameEdit, AccountDB::Constants::SITES_NAME);
-    //m_Mapper->addMapping(wpComboBox, AccountDB::Constants::SITES_NAME);
-    m_Mapper->addMapping(adressEdit, AccountDB::Constants::SITES_ADRESS);
-    m_Mapper->addMapping(cityEdit, AccountDB::Constants::SITES_CITY,"text");
-    m_Mapper->addMapping(zipComboBox, AccountDB::Constants::SITES_ZIPCODE,"currentText");
-    m_Mapper->addMapping(countryComboBox, AccountDB::Constants::SITES_COUNTRY,"currentText");
+    m_Mapper->addMapping(ui->nameEdit, AccountDB::Constants::SITES_NAME);
+    //m_Mapper->addMapping(ui->wpComboBox, AccountDB::Constants::SITES_NAME);
+    m_Mapper->addMapping(ui->adressEdit, AccountDB::Constants::SITES_ADRESS);
+    m_Mapper->addMapping(ui->cityEdit, AccountDB::Constants::SITES_CITY,"text");
+    m_Mapper->addMapping(ui->zip, AccountDB::Constants::SITES_ZIPCODE,"currentText");
+    m_Mapper->addMapping(ui->countryComboBox, AccountDB::Constants::SITES_COUNTRY,"currentIsoCountry");
     
-    m_Mapper->addMapping(phoneEdit, AccountDB::Constants::SITES_TEL);
-    m_Mapper->addMapping(faxEdit, AccountDB::Constants::SITES_FAX);
-    m_Mapper->addMapping(mailEdit, AccountDB::Constants::SITES_MAIL);
+    m_Mapper->addMapping(ui->phoneEdit, AccountDB::Constants::SITES_TEL);
+    m_Mapper->addMapping(ui->faxEdit, AccountDB::Constants::SITES_FAX);
+    m_Mapper->addMapping(ui->mailEdit, AccountDB::Constants::SITES_MAIL);
     
-    m_Mapper->addMapping(contactEdit, AccountDB::Constants::SITES_CONTACT);
+    m_Mapper->addMapping(ui->contactEdit, AccountDB::Constants::SITES_CONTACT);
     m_Mapper->toFirst();
-    wpComboBox->setModel(m_Model);
-    wpComboBox->setModelColumn(AccountDB::Constants::SITES_NAME);
+    ui->wpComboBox->setModel(m_Model);
+    ui->wpComboBox->setModelColumn(AccountDB::Constants::SITES_NAME);
     //hash of towns and zipcode
     
     setDatasToUi();
-    emit findCityFromZipCode(zipComboBox->currentText());
-    QApplication::restoreOverrideCursor();
-    connect(zipComboBox,SIGNAL(currentIndexChanged(const QString &)),this,SLOT(findCityFromZipCode(const QString &)));
 }
 
 SitesWidget::~SitesWidget()
 {
+    delete ui;
     //saveModel();
 }
 
-void SitesWidget::fillHugeWidgets(){
-    QStringList listOfZipcodes;
-    listOfZipcodes  = m_hashTownZip.keys();
-    listOfZipcodes.removeDuplicates();
-    listOfZipcodes.sort();
-    QLocale local;
-    QString localCountry;
-    localCountry = QLocale::countryToString(local.country());
-    if (WarnDebugMessage)
-        qDebug() << __FILE__ << QString::number(__LINE__) << " country =" << localCountry ;
-    QStringList listForCountry;
-    listForCountry = listOfCountries();
-    listForCountry.sort();
-    listForCountry.prepend(localCountry);
+//void SitesWidget::fillHugeWidgets(){
+//    QStringList listOfZipcodes;
+//    listOfZipcodes  = m_hashTownZip.keys();
+//    listOfZipcodes.removeDuplicates();
+//    listOfZipcodes.sort();
+//    QLocale local;
+//    QString localCountry;
+//    localCountry = QLocale::countryToString(local.country());
+//    if (WarnDebugMessage)
+//        qDebug() << __FILE__ << QString::number(__LINE__) << " country =" << localCountry ;
+//    QStringList listForCountry;
+//    listForCountry = listOfCountries();
+//    listForCountry.sort();
+//    listForCountry.prepend(localCountry);
     
-    zipComboBox->addItems(listOfZipcodes);
+//    zipComboBox->addItems(listOfZipcodes);
     
-    countryComboBox->addItems(listForCountry);
-}
+//    countryComboBox->addItems(listForCountry);
+//}
 
 void SitesWidget::setDatasToUi()
 {
     if (WarnDebugMessage)
-        qDebug() << __FILE__ << QString::number(__LINE__) << "index row  =" << QString::number(wpComboBox->currentIndex());
-    m_Mapper->setCurrentIndex(wpComboBox->currentIndex());
+        qDebug() << __FILE__ << QString::number(__LINE__) << "index row  =" << QString::number(ui->wpComboBox->currentIndex());
+    m_Mapper->setCurrentIndex(ui->wpComboBox->currentIndex());
 }
 
 void SitesWidget::saveModel()
@@ -234,7 +239,7 @@ void SitesWidget::on_wpComboBox_currentIndexChanged(int index)
 {
     Q_UNUSED(index);
     //saveModel();
-    m_Mapper->setCurrentIndex(wpComboBox->currentIndex());
+    m_Mapper->setCurrentIndex(ui->wpComboBox->currentIndex());
 }
 
 void SitesWidget::on_addButton_clicked()
@@ -245,7 +250,7 @@ void SitesWidget::on_addButton_clicked()
         LOG_ERROR("Unable to add row");
     if (WarnDebugMessage)
         qDebug() << __FILE__ << QString::number(__LINE__) << " rowCount2 =" << QString::number(m_Model->rowCount());
-    wpComboBox->setCurrentIndex(m_Model->rowCount()-1);
+    ui->wpComboBox->setCurrentIndex(m_Model->rowCount()-1);
     m_siteUidLabel->setValue(calcSitesUid());
     m_siteUidLabel->setFocus();
     if (WarnDebugMessage) {
@@ -256,10 +261,10 @@ void SitesWidget::on_addButton_clicked()
 
 void SitesWidget::on_deleteButton_clicked()
 {
-    if (!m_Model->removeRow(wpComboBox->currentIndex())) {
+    if (!m_Model->removeRow(ui->wpComboBox->currentIndex())) {
           LOG_ERROR("Unable to remove row");
     }
-    wpComboBox->setCurrentIndex(m_Model->rowCount() - 1);
+    ui->wpComboBox->setCurrentIndex(m_Model->rowCount() - 1);
 }
 
 void SitesWidget::saveToSettings(Core::ISettings *sets)
@@ -270,8 +275,8 @@ void SitesWidget::saveToSettings(Core::ISettings *sets)
         Utils::warningMessageBox(tr("Can not submit sites to your personnal database."),
                                  tr("An error occured during sites saving. Datas are corrupted."));
     }
-        connect(nameEdit,SIGNAL(textEdited(const QString &)),wpComboBox,SLOT(setEditText(const QString &)));
-        update();
+    connect(ui->nameEdit, SIGNAL(textEdited(const QString &)), ui->wpComboBox, SLOT(setEditText(const QString &)));
+    update();
 }
 
 void SitesWidget::writeDefaultSettings(Core::ISettings *s)
@@ -286,7 +291,7 @@ void SitesWidget::changeEvent(QEvent *e)
     QWidget::changeEvent(e);
     switch (e->type()) {
     case QEvent::LanguageChange:
-        retranslateUi(this);
+        ui->retranslateUi(this);
 //        int s = defaultCombo->currentIndex();
 //        defaultCombo->clear();
 //        defaultCombo->addItem(tkTr(Trans::Constants::NO));
@@ -298,85 +303,85 @@ void SitesWidget::changeEvent(QEvent *e)
     }
 }
 
-void SitesWidget::showEvent(QShowEvent *event){
-    Q_UNUSED(event);
-    if (WarnDebugMessage)
-        qWarning() << __FILE__ << QString::number(__LINE__) << " sites activated "   ;
-    fillHugeWidgets();
-    update();
-}
+//void SitesWidget::showEvent(QShowEvent *event){
+//    Q_UNUSED(event);
+//    if (WarnDebugMessage)
+//        qWarning() << __FILE__ << QString::number(__LINE__) << " sites activated "   ;
+//    fillHugeWidgets();
+//    update();
+//}
 
-void SitesWidget::findCityFromZipCode(const QString & zipCodeText){
-    cityEdit->setFocus();
-    QString city = m_hashTownZip.value(zipCodeText);
-    cityEdit->setText(city);
-}
+//void SitesWidget::findCityFromZipCode(const QString & zipCodeText){
+//    cityEdit->setFocus();
+//    QString city = m_hashTownZip.value(zipCodeText);
+//    cityEdit->setText(city);
+//}
 
-QHash<QString,QString> SitesWidget::parseZipcodeCsv(){
-    QHash<QString,QString> hash;
-    QString zipcodeStr = global_resourcesPath+"/textfiles/zipcodes.csv";
-    QFile zipcodeFile(zipcodeStr);
-    if(!zipcodeFile.open(QIODevice::ReadOnly|QIODevice::Text)){
-        qWarning() << __FILE__ << QString::number(__LINE__) << "zipcode cannot open !" ;
-        if (WarnDebugMessage)
-    	      qDebug() << __FILE__ << QString::number(__LINE__) << " zipcodeFile =" << zipcodeStr ;
-       }
-    QTextStream stream(&zipcodeFile);
-    while (!stream.atEnd())
-    {
-    	QString line = stream.readLine();
-    	QString line2 = line;
-    	if (line.contains("FIN")|| line.contains("<p"))
-    	{
-    		  break;	
-    	    }
-    	QString city = line.replace(QRegExp("[0-9]"),"").replace(",","").trimmed();
-        QString zip = line2.replace(QRegExp("[^0123456789]"),"").trimmed();
+//QHash<QString,QString> SitesWidget::parseZipcodeCsv(){
+//    QHash<QString,QString> hash;
+//    QString zipcodeStr = global_resourcesPath+"/textfiles/zipcodes.csv";
+//    QFile zipcodeFile(zipcodeStr);
+//    if(!zipcodeFile.open(QIODevice::ReadOnly|QIODevice::Text)){
+//        qWarning() << __FILE__ << QString::number(__LINE__) << "zipcode cannot open !" ;
+//        if (WarnDebugMessage)
+//    	      qDebug() << __FILE__ << QString::number(__LINE__) << " zipcodeFile =" << zipcodeStr ;
+//       }
+//    QTextStream stream(&zipcodeFile);
+//    while (!stream.atEnd())
+//    {
+//    	QString line = stream.readLine();
+//    	QString line2 = line;
+//    	if (line.contains("FIN")|| line.contains("<p"))
+//    	{
+//    		  break;
+//    	    }
+//    	QString city = line.replace(QRegExp("[0-9]"),"").replace(",","").trimmed();
+//        QString zip = line2.replace(QRegExp("[^0123456789]"),"").trimmed();
 
-    	   if (WarnDebugMessage)
-    	      qDebug() << __FILE__ << QString::number(__LINE__) << " zip city  =" << zip+","+city;
-    	    hash.insertMulti(zip,city);//zipcode,city
+//    	   if (WarnDebugMessage)
+//    	      qDebug() << __FILE__ << QString::number(__LINE__) << " zip city  =" << zip+","+city;
+//    	    hash.insertMulti(zip,city);//zipcode,city
 
-        }
-        if (WarnDebugMessage)
-    	      qDebug() << __FILE__ << QString::number(__LINE__) << " hash size =" << hash.size();
-    return hash;
-}
+//        }
+//        if (WarnDebugMessage)
+//    	      qDebug() << __FILE__ << QString::number(__LINE__) << " hash size =" << hash.size();
+//    return hash;
+//}
 
-QStringList SitesWidget::listOfCountries()
-{
-    QStringList list;
-    QString countryFileStr = global_resourcesPath+"/textfiles/pays.txt";
-    QFile file(countryFileStr);
-    if (!file.open(QIODevice::ReadOnly|QIODevice::Text)) {
-        qWarning() << __FILE__ << QString::number(__LINE__) << "pays.txt cannot open !" ;
-        if (WarnDebugMessage)
-    	      qDebug() << __FILE__ << QString::number(__LINE__) << " pays.txt =" << countryFileStr ;
-    }
-    QTextStream stream(&file);
-    while (!stream.atEnd())
-    {
-    	QString line = stream.readLine().trimmed();
-    	if (WarnDebugMessage)
-    	      qDebug() << __FILE__ << QString::number(__LINE__) << " country =" << line;
-        if (!line.isEmpty()) {
-            list << line;
-        }
-    }
-    return list;
-}
+//QStringList SitesWidget::listOfCountries()
+//{
+//    QStringList list;
+//    QString countryFileStr = global_resourcesPath+"/textfiles/pays.txt";
+//    QFile file(countryFileStr);
+//    if (!file.open(QIODevice::ReadOnly|QIODevice::Text)) {
+//        qWarning() << __FILE__ << QString::number(__LINE__) << "pays.txt cannot open !" ;
+//        if (WarnDebugMessage)
+//    	      qDebug() << __FILE__ << QString::number(__LINE__) << " pays.txt =" << countryFileStr ;
+//    }
+//    QTextStream stream(&file);
+//    while (!stream.atEnd())
+//    {
+//    	QString line = stream.readLine().trimmed();
+//    	if (WarnDebugMessage)
+//    	      qDebug() << __FILE__ << QString::number(__LINE__) << " country =" << line;
+//        if (!line.isEmpty()) {
+//            list << line;
+//        }
+//    }
+//    return list;
+//}
 
 int SitesWidget::calcSitesUid()
 {
     QModelIndex index = m_Model->index(m_Model->rowCount()-2,AccountDB::Constants::SITES_UID);
     if (!index.isValid()) {
-    	  qWarning() << __FILE__ << QString::number(__LINE__) << "index is not valid" ;
-        }
+        qWarning() << __FILE__ << QString::number(__LINE__) << "index is not valid" ;
+    }
     int siteUidBefore = m_Model->data(index,Qt::DisplayRole).toInt();
     if (WarnDebugMessage)
-    	      qDebug() << __FILE__ << QString::number(__LINE__) << " siteUidBefore =" << QString::number(siteUidBefore) ;
+        qDebug() << __FILE__ << QString::number(__LINE__) << " siteUidBefore =" << QString::number(siteUidBefore) ;
     int siteUid =  siteUidBefore + 1;
     if (WarnDebugMessage)
-    	      qDebug() << __FILE__ << QString::number(__LINE__) << " siteUid =" << QString::number(siteUid);
+        qDebug() << __FILE__ << QString::number(__LINE__) << " siteUid =" << QString::number(siteUid);
     return siteUid;
 }

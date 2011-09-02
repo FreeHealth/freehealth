@@ -31,7 +31,7 @@
  ***************************************************************************/
 #ifndef INSURANCEPAGE_H
 #define INSURANCEPAGE_H
-#include "ui_insurancepage.h"
+
 #include <coreplugin/ioptionspage.h>
 #include <accountbaseplugin/insurancemodel.h>
 
@@ -52,12 +52,15 @@ class InsuranceModel;
 
 namespace Account {
 namespace Internal {
+namespace Ui {
+class InsuranceWidget;
+}
 
 //////////////////////////////////////////////////////////////////////////////////////////////////////////////
 ////////////////////////////////////  InsuranceWidget  ////////////////////////////////////////////////
 //////////////////////////////////////////////////////////////////////////////////////////////////////////////
 
-class InsuranceWidget : public QWidget, private Ui::InsuranceWidget
+class InsuranceWidget : public QWidget
 {
     Q_OBJECT
     Q_DISABLE_COPY(InsuranceWidget)
@@ -74,22 +77,14 @@ public Q_SLOTS:
     void on_insuranceComboBox_currentIndexChanged(int index);
     void on_addButton_clicked();
     void on_deleteButton_clicked();
-    void findCityFromZipCode(const QString & zipCodeText);
-    void fillComboBoxes();
-    // void on_name_textChanged(const QString & text);
 
 private:
     void changeEvent(QEvent *e);
-    void showEvent(QShowEvent *event);
     void saveModel();
-    QHash<QString,QString> parseZipcodeCsv();
-    QStringList listOfCountries();
-    QString findCityFromZipCode();
     int calcInsuranceUid();
-//    QStandardItemModel * insuranceModelByLocale();
-//    bool fillEmptyAvailableModel();
 
 private:
+    Ui::InsuranceWidget *ui;
     AccountDB::InsuranceModel *m_Model;
     QSpinBox *m_insuranceUidLabel;
     QDataWidgetMapper *m_Mapper;
@@ -103,6 +98,8 @@ private:
 
 class InsurancePage : public Core::IOptionsPage
 {
+    Q_OBJECT
+
 public:
     InsurancePage(QObject *parent = 0);
     ~InsurancePage();
@@ -122,6 +119,7 @@ public:
     static void writeDefaultSettings(Core::ISettings *s) {Internal::InsuranceWidget::writeDefaultSettings(s);}
 
     QWidget *createPage(QWidget *parent = 0);
+
 private:
     QPointer<Internal::InsuranceWidget> m_Widget;
 };
