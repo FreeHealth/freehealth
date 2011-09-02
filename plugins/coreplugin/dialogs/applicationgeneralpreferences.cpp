@@ -25,6 +25,7 @@
  *       NAME <MAIL@ADRESS>                                                *
  ***************************************************************************/
 #include "applicationgeneralpreferences.h"
+
 #include "ui_applicationgeneralpreferences.h"
 
 #include <utils/log.h>
@@ -57,6 +58,7 @@ void ApplicationGeneralPreferencesWidget::setDatasToUi()
 {
     ui->autoSave->setChecked(settings()->value(Core::Constants::S_ALWAYS_SAVE_WITHOUT_PROMPTING).toBool());
     ui->updateCheckingCombo->setCurrentIndex(settings()->value(Utils::Constants::S_CHECKUPDATE).toInt());
+    ui->virtualDataCheck->setChecked(settings()->value(Core::Constants::S_ALLOW_VIRTUAL_DATA).toBool());
 }
 
 void ApplicationGeneralPreferencesWidget::saveToSettings(Core::ISettings *sets)
@@ -69,6 +71,7 @@ void ApplicationGeneralPreferencesWidget::saveToSettings(Core::ISettings *sets)
 
     s->setValue(Core::Constants::S_ALWAYS_SAVE_WITHOUT_PROMPTING, ui->autoSave->isChecked());
     s->setValue(Utils::Constants::S_CHECKUPDATE, ui->updateCheckingCombo->currentIndex());
+    s->setValue(Core::Constants::S_ALLOW_VIRTUAL_DATA, ui->virtualDataCheck->isChecked());
 }
 
 void ApplicationGeneralPreferencesWidget::writeDefaultSettings(Core::ISettings *s)
@@ -77,6 +80,8 @@ void ApplicationGeneralPreferencesWidget::writeDefaultSettings(Core::ISettings *
     Utils::Log::addMessage("ApplicationGeneralPreferencesWidget", tkTr(Trans::Constants::CREATING_DEFAULT_SETTINGS_FOR_1).arg("FreeDiamsMainWindow"));
     s->setValue(Core::Constants::S_ALWAYS_SAVE_WITHOUT_PROMPTING, true);
     s->setValue(Utils::Constants::S_CHECKUPDATE, Utils::UpdateChecker::Check_AtStartup);
+    s->setValue(Core::Constants::S_ALLOW_VIRTUAL_DATA, true);
+
     s->sync();
 }
 
@@ -130,6 +135,7 @@ void ApplicationGeneralPreferencesPage::checkSettingsValidity()
     QHash<QString, QVariant> defaultvalues;
     defaultvalues.insert(Core::Constants::S_ALWAYS_SAVE_WITHOUT_PROMPTING, true);
     defaultvalues.insert(Utils::Constants::S_CHECKUPDATE, Utils::UpdateChecker::Check_AtStartup);
+    defaultvalues.insert(Core::Constants::S_ALLOW_VIRTUAL_DATA, true);
 
     foreach(const QString &k, defaultvalues.keys()) {
         if (settings()->value(k) == QVariant())
