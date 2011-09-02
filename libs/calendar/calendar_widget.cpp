@@ -128,8 +128,10 @@ void CalendarWidget::setModel(AbstractCalendarModel *model) {
 }
 
 void CalendarWidget::firstDateChanged() {
+    if (m_d->m_header)
 	m_d->m_header->setFirstDate(m_d->m_navbar->firstDate());
-	m_d->m_body->setFirstDate(m_d->m_navbar->firstDate());
+    if (m_d->m_body)
+        m_d->m_body->setFirstDate(m_d->m_navbar->firstDate());
 }
 
 void CalendarWidget::viewTypeChanged() {
