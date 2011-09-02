@@ -1284,6 +1284,8 @@ bool AgendaBase::saveCalendarEvent(Appointement *event)
 QList<QDateTime> AgendaBase::nextAvailableTime(const QDateTime &startSearch, const int durationInMinutes, const Agenda::UserCalendar &calendar, const int numberOfDates)
 {
     QList<QDateTime> toReturn;
+    if (!calendar.isValid())
+        return toReturn;
     if (!connectDatabase(Constants::DB_NAME, __LINE__))
         return toReturn;
 
@@ -1328,15 +1330,21 @@ QList<QDateTime> AgendaBase::nextAvailableTime(const QDateTime &startSearch, con
     int durationInSeconds = durationInMinutes * 60;
     int limitComputation = 224640; // 10min, 6day a week, 12hours a day :: 1 full year == 12*6 *10 *6 *52 == 224640
 
-    while ((nbFound < numberOfDates) || (limitComputation==0)) {
-//        qWarning() << "start" << start << "currentStart" << currentStart << "currentEnd" << currentEnd << "duration" << durationInMinutes;
+    while (nbFound < numberOfDates) {
         --limitComputation;
+        if (limitComputation <= 0)
+            break;
+        if (start.isNull())
+            break;
+        if (WarnNextAvailableTimeWarnings)
+            qWarning() << "start" << start << "currentStart" << currentStart << "currentEnd" << currentEnd << "duration" << durationInMinutes << "limitation" << limitComputation;
         // add before the currentDate (enough time or no appointement) ?
         if (start.secsTo(currentStart) >= durationInSeconds || currentStart.isNull()) {
             // does it feet the userCalendar availability ?
             if (calendar.canBeAvailable(start, durationInMinutes)) {
                 toReturn << start;
-//                qWarning() << "added" << start;
+                if (WarnNextAvailableTimeWarnings)
+                    qWarning() << "added" << start;
                 start = start.addSecs(durationInSeconds);
                 ++nbFound;
                 continue;
@@ -1354,6 +1362,8 @@ QList<QDateTime> AgendaBase::nextAvailableTime(const QDateTime &startSearch, con
                 currentEnd = query.value(1).toDateTime();
             } else {
                 // no next appointement -> continue with usercalendar only
+                if (WarnNextAvailableTimeWarnings)
+                    qWarning() <<  "no next";
                 start = Utils::roundDateTime(start, calendar.data(UserCalendar::DefaultDuration).toInt());
                 currentStart = QDateTime();
                 continue;
@@ -1365,7 +1375,6 @@ QList<QDateTime> AgendaBase::nextAvailableTime(const QDateTime &startSearch, con
         }
         start = Utils::roundDateTime(start, calendar.data(UserCalendar::DefaultDuration).toInt());
     }
-
 
     if (WarnNextAvailableTimeWarnings)
         qWarning() << "No available time found";
