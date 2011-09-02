@@ -273,7 +273,8 @@ void MainWindow::extensionsInitialized()
 
 MainWindow::~MainWindow()
 {
-    qWarning() << "MainWindow::~MainWindow()";
+    if (Utils::Log::warnPluginsCreation())
+        qWarning() << "MainWindow::~MainWindow()";
     if (m_UserListener) {
         pluginManager()->removeObject(m_UserListener);
     }
@@ -286,7 +287,8 @@ MainWindow::~MainWindow()
 /** \brief Post core initialization of MainWindow. */
 void MainWindow::postCoreInitialization()
 {
-    qWarning() << Q_FUNC_INFO;
+    if (Utils::Log::warnPluginsCreation())
+        qWarning() << Q_FUNC_INFO;
     // Manage current user and patient
     onCurrentUserChanged();
     pluginManager()->addObject(m_UserListener = new MainWindowUserListener(this));
