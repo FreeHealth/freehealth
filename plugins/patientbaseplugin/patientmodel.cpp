@@ -209,17 +209,23 @@ public:
         return true;
     }
 
-    QPixmap getPatientPhoto(const QString &patientUid)
+    QPixmap getPatientPhoto(const QString &patientUid, const QString &gender)
     {
         QHash<int, QString> where;
         where.insert(Constants::PHOTO_PATIENT_UID, QString("='%1'").arg(patientUid));
-        if (patientBase()->count(Constants::Table_PATIENT_PHOTO, Constants::PHOTO_PATIENT_UID, patientBase()->getWhereClause(Constants::Table_PATIENT_PHOTO, where)) == 0)
+        if (patientBase()->count(Constants::Table_PATIENT_PHOTO, Constants::PHOTO_PATIENT_UID, patientBase()->getWhereClause(Constants::Table_PATIENT_PHOTO, where)) == 0) {
+            // load a generic icon according to the sex && age of the patient
+            if (gender=="M")
+                return QPixmap(theme()->iconFullPath(Core::Constants::ICONMALE, Core::ITheme::BigIcon));
+            else if (gender=="F")
+                return QPixmap(theme()->iconFullPath(Core::Constants::ICONFEMALE, Core::ITheme::BigIcon));
             return QPixmap();
+        }
 
         QSqlQuery query(patientBase()->database());
         QString req = patientBase()->select(Constants::Table_PATIENT_PHOTO, Constants::PHOTO_BLOB, where);
         if (!query.exec(req)) {
-            Utils::Log::addQueryError(q, query);
+            LOG_QUERY_ERROR_FOR(q, query);
             return QPixmap();
         } else {
             if (query.next()) {
@@ -417,10 +423,11 @@ QVariant PatientModel::data(const QModelIndex &index, int role) const
             }
         case IPatient::IconizedGender: return d->iconizedGender(index);
         case IPatient::Photo :
-            {
-                QString patientUid = d->m_SqlPatient->index(index.row(), Constants::IDENTITY_UID).data().toString();
-                return d->getPatientPhoto(patientUid);
-            }
+        {
+            const QString &gender = d->m_SqlPatient->data(d->m_SqlPatient->index(index.row(), Constants::IDENTITY_GENDER)).toString();
+            QString patientUid = d->m_SqlPatient->index(index.row(), Constants::IDENTITY_UID).data().toString();
+            return d->getPatientPhoto(patientUid, gender);
+        }
         case IPatient::PractitionnerLkID: return d->m_LkIds;
         }
         return d->m_SqlPatient->data(d->m_SqlPatient->index(index.row(), col), role);
@@ -501,6 +508,7 @@ bool PatientModel::setData(const QModelIndex &index, const QVariant &value, int 
         case IPatient::Mails:         col = Constants::IDENTITY_MAILS;            break;
         case IPatient::Tels:          col = Constants::IDENTITY_TELS;             break;
         case IPatient::Faxes:         col = Constants::IDENTITY_FAXES;            break;
+        case IPatient::TitleIndex :   col = Constants::IDENTITY_TITLE;            break;
         case IPatient::Title :
             {
                 QString t = value.toString();
