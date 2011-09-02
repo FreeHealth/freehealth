@@ -31,6 +31,7 @@
     The tooltip of the leftButton is shown in gray inside the line edit when the user does not tape in.
     To retreive the text of the QLineEdit use the function : searchText().
     You can delay the textChanged() signal using setDelayedSignals().
+  \todo Use the QLineEdit::placeholderText() (introduced in Qt4.7)
  */
 
 #include "qbuttonlineedit.h"
