@@ -881,10 +881,10 @@ bool UserBase::createUser(UserData *user)
 */
 bool UserBase::saveUser(UserData *user)
 {
+//    qWarning() << Q_FUNC_INFO;
+
     if (!user->isModified())
         return true;
-
-//    qWarning() << "save user" << user->name();
 
     // connect user database
     QSqlDatabase DB = database();
@@ -901,50 +901,46 @@ bool UserBase::saveUser(UserData *user)
     if (user->id() != -1) {
         where.insert(USER_UUID, QString("='%1'").arg(user->uuid()));
         QString querychecker = select(Table_USERS, USER_UUID, where);
-        {
-            QSqlQuery q(querychecker, DB);
-            if (q.isActive()) {
-                if (q.next())
-                    toUpdate = true;
-            } else {
-                LOG_QUERY_ERROR(q);
-            }
+        QSqlQuery q(querychecker, DB);
+        if (q.isActive()) {
+            if (q.next())
+                toUpdate = true;
+        } else {
+            LOG_QUERY_ERROR(q);
         }
     }
     // construct query
-//    QStringList req;
     bool error = false;
     if (toUpdate) {
         // update Table_USERS
         /** \todo update identifiers according to the driver. */
-        {
-            QSqlQuery q(DB);
-            q.prepare(prepareUpdateQuery(Table_USERS, where));
-            q.bindValue(USER_ID, user->id());
-            q.bindValue(USER_UUID, user->uuid());
-            q.bindValue(USER_VALIDITY, (int)user->validity());
-            q.bindValue(USER_ISVIRTUAL, (int)user->isVirtual());
-            q.bindValue(USER_LOGIN, user->login64());
-            q.bindValue(USER_PASSWORD, user->cryptedPassword());
-            q.bindValue(USER_LASTLOG, user->lastLogin());
-            q.bindValue(USER_NAME, user->name());
-            q.bindValue(USER_SECONDNAME, user->secondName());
-            q.bindValue(USER_FIRSTNAME, user->firstname());
-            q.bindValue(USER_TITLE, user->titleIndex());
-            q.bindValue(USER_GENDER, user->genderIndex());
-            q.bindValue(USER_MAIL, user->mail());
-            q.bindValue(USER_LANGUAGE, user->languageIso());
-            q.bindValue(USER_LOCKER, user->locker());
-            if (!q.exec()) {
-                error = true;
-                LOG_QUERY_ERROR(q);
-            }
+        QSqlQuery q(DB);
+        q.prepare(prepareUpdateQuery(Table_USERS, where));
+        q.bindValue(USER_ID, user->id());
+        q.bindValue(USER_UUID, user->uuid());
+        q.bindValue(USER_VALIDITY, (int)user->validity());
+        q.bindValue(USER_ISVIRTUAL, (int)user->isVirtual());
+        q.bindValue(USER_LOGIN, user->login64());
+        q.bindValue(USER_PASSWORD, user->cryptedPassword());
+        q.bindValue(USER_LASTLOG, user->lastLogin());
+        q.bindValue(USER_NAME, user->name());
+        q.bindValue(USER_SECONDNAME, user->secondName());
+        q.bindValue(USER_FIRSTNAME, user->firstname());
+        q.bindValue(USER_TITLE, user->titleIndex());
+        q.bindValue(USER_GENDER, user->genderIndex());
+        q.bindValue(USER_MAIL, user->mail());
+        q.bindValue(USER_LANGUAGE, user->languageIso());
+        q.bindValue(USER_LOCKER, user->locker());
+        if (!q.exec()) {
+            error = true;
+            LOG_QUERY_ERROR(q);
         }
+        q.finish();
+
         // update dynamic datas
         if (user->hasModifiedDynamicDatasToStore()) {
             const QList<UserDynamicData*> &datasToUpdate = user->modifiedDynamicDatas();
             foreach(UserDynamicData *dyn, datasToUpdate) {
-                QSqlQuery q(DB);
                 //                qWarning() << "SAVE UDD TO BASE" ;
                 //                dyn->warn();
                 if (dyn->id() == -1) {
@@ -970,6 +966,7 @@ bool UserBase::saveUser(UserData *user)
                 if (dyn->id() == -1) {
                     dyn->setId(q.lastInsertId().toInt());
                 }
+                q.finish();
             }
         }
 
@@ -983,34 +980,33 @@ bool UserBase::saveUser(UserData *user)
     } else {
         // INSERT USER
         // add Table USERS
-        {
-            QSqlQuery q(DB);
-            q.prepare(prepareInsertQuery(Table_USERS));
-            q.bindValue(USER_ID,           QVariant());
-            q.bindValue(USER_UUID,         user->uuid());
-            q.bindValue(USER_VALIDITY ,    (int)user->validity());
-            q.bindValue(USER_ISVIRTUAL ,   (int)user->isVirtual());
-            q.bindValue(USER_LOGIN ,       user->login64());
-            q.bindValue(USER_PASSWORD ,    user->cryptedPassword());
-            q.bindValue(USER_NAME ,        user->name());
-            q.bindValue(USER_FIRSTNAME ,   user->firstname());
-            q.bindValue(USER_SECONDNAME ,  user->secondName());
-            q.bindValue(USER_TITLE,        user->titleIndex());
-            q.bindValue(USER_GENDER,       user->genderIndex());
-            q.bindValue(USER_MAIL ,        user->mail());
-            q.bindValue(USER_LASTLOG ,     user->lastLogin());
-            q.bindValue(USER_LANGUAGE,     user->languageIso());
-            q.bindValue(USER_LOCKER,       user->locker());
-            q.exec();
-            if (! q.isActive())
-                LOG_QUERY_ERROR(q);
-            user->setId(q.lastInsertId());
-        }
+        QSqlQuery q(DB);
+        q.prepare(prepareInsertQuery(Table_USERS));
+        q.bindValue(USER_ID,           QVariant());
+        q.bindValue(USER_UUID,         user->uuid());
+        q.bindValue(USER_VALIDITY ,    (int)user->validity());
+        q.bindValue(USER_ISVIRTUAL ,   (int)user->isVirtual());
+        q.bindValue(USER_LOGIN ,       user->login64());
+        q.bindValue(USER_PASSWORD ,    user->cryptedPassword());
+        q.bindValue(USER_NAME ,        user->name());
+        q.bindValue(USER_FIRSTNAME ,   user->firstname());
+        q.bindValue(USER_SECONDNAME ,  user->secondName());
+        q.bindValue(USER_TITLE,        user->titleIndex());
+        q.bindValue(USER_GENDER,       user->genderIndex());
+        q.bindValue(USER_MAIL ,        user->mail());
+        q.bindValue(USER_LASTLOG ,     user->lastLogin());
+        q.bindValue(USER_LANGUAGE,     user->languageIso());
+        q.bindValue(USER_LOCKER,       user->locker());
+        q.exec();
+        if (! q.isActive())
+            LOG_QUERY_ERROR(q);
+        user->setId(q.lastInsertId());
+        q.finish();
+
         // add dynamic datas
         if (user->hasModifiedDynamicDatasToStore()) {
             const QList<UserDynamicData *> &datasToUpdate = user->modifiedDynamicDatas();
             foreach(UserDynamicData *dyn, datasToUpdate) {
-                QSqlQuery q (DB);
                 q.prepare(prepareInsertQuery(Table_DATAS));
                 q.bindValue(DATAS_ID, QVariant());
                 dyn->prepareQuery(q);
@@ -1021,14 +1017,15 @@ bool UserBase::saveUser(UserData *user)
                     dyn->setId(q.lastInsertId().toInt());
                     dyn->setDirty(false);
                 }
+                q.finish();
             }
         }
+        q.finish();
 
         // add Table RIGHTS
         if (user->hasModifiedRightsToStore()) {
             const QStringList & rolesToUpdate = user->modifiedRoles();
             foreach(const QString & s, rolesToUpdate) {
-                QSqlQuery q(DB);
                 q.prepare(prepareInsertQuery(Table_RIGHTS));
                 q.bindValue(RIGHTS_ID,         QVariant());
                 q.bindValue(RIGHTS_USER_UUID,  user->uuid());
@@ -1037,13 +1034,13 @@ bool UserBase::saveUser(UserData *user)
                 q.exec();
                 if (! q.isActive())
                     LOG_QUERY_ERROR(q);
+                q.finish();
             }
         }
 
         // create the USER_LK
         if (user->personalLinkId() == -1) {
             user->setPersonalLkId(getMaxLinkId() + 1);
-            QSqlQuery q(DB);
             q.prepare(prepareInsertQuery(Table_USER_LK_ID));
             q.bindValue(LK_ID,         QVariant());
             q.bindValue(LK_LKID,       user->personalLinkId());
@@ -1051,6 +1048,7 @@ bool UserBase::saveUser(UserData *user)
             q.bindValue(LK_GROUP_UUID, QVariant());
             if (!q.exec())
                 LOG_QUERY_ERROR(q);
+            q.finish();
         }
     }
 

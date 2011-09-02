@@ -31,15 +31,12 @@
   another user connection) IUserListener registered in the PluginManager are asked.
   Set filter with setFilter().
 
-  \sa UserData
-  \sa IUserListener
+  \sa UserPlugin::Internal::UserData
+  \sa UserPlugin::IUserListener
 
   \todo write documentation+++
   \todo code LOCKER
   \todo when QDataWidgetMapper (UserViewer) is setted, it calls ALL the datas of the user, even for the hidden widgets. This causes an important memory usage. This is to improve ++++
-
-  \ingroup usertoolkit object_usertoolkit
-  \ingroup usermanager
 */
 
 #include "usermodel.h"
@@ -148,7 +145,6 @@ void UserModelWrapper::newUserConnected(const QString &uid)
 /**
   Private Part.
   \internal
-  \ingroup usertoolkit widget_usertoolkit usermanager
 */
 class UserModelPrivate
 {
@@ -242,6 +238,7 @@ public:
         case Core::IUser::Zipcode : toReturn = user->zipcode(); break;
         case Core::IUser::City : toReturn = user->city(); break;
         case Core::IUser::Country : toReturn = user->country(); break;
+        case Core::IUser::IsoCountry : toReturn = user->countryIso(); break;
         case Core::IUser::Tel1 : toReturn = user->tels().at(0); break;
         case Core::IUser::Tel2 : toReturn = user->tels().at(1); break;
         case Core::IUser::Tel3 : toReturn = user->tels().at(2); break;
@@ -750,10 +747,8 @@ Qt::ItemFlags UserModel::flags(const QModelIndex &index) const
 /** Define the datas of users.  */
 bool UserModel::setData(const QModelIndex &item, const QVariant &value, int role)
 {
-    if (!value.isValid())
-        return false;
-
-    if(!item.isValid())
+//    qWarning() << Q_FUNC_INFO ;
+    if (!item.isValid())
         return false;
 
     // work only for EditRole
@@ -768,12 +763,17 @@ bool UserModel::setData(const QModelIndex &item, const QVariant &value, int role
     }
 
     Internal::UserData *user = d->m_Uuid_UserList[uuid];
+
+//    qWarning() << Q_FUNC_INFO << user;
+
     // check user write rights
     if (user->isCurrent()) {
         if (!d->m_CurrentUserRights & Core::IUser::WriteOwn)
             return false;
     } else if (!d->m_CurrentUserRights & Core::IUser::WriteAll)
         return false;
+
+
     /** \todo if user if a delegate of current user */
 
     // set datas directly into database using QSqlTableModel if possible
@@ -808,6 +808,7 @@ bool UserModel::setData(const QModelIndex &item, const QVariant &value, int role
     case Core::IUser::Zipcode :  user->setZipcode(value); break;
     case Core::IUser::City :  user->setCity(value); break;
     case Core::IUser::Country :  user->setCountry(value); break;
+    case Core::IUser::IsoCountry : user->setCountryIso(value); break;
     case Core::IUser::Tel1 :  user->setTel1(value); break;
     case Core::IUser::Tel2 :  user->setTel2(value); break;
     case Core::IUser::Tel3 :  user->setTel3(value); break;
@@ -848,7 +849,9 @@ bool UserModel::setData(const QModelIndex &item, const QVariant &value, int role
 
     default : return false;
     };
+
     Q_EMIT dataChanged(index(item.row(), 0), index(item.row(), Core::IUser::NumberOfColumns));
+
     return true;
 }
 
@@ -1003,25 +1006,35 @@ bool UserModel::submitAll()
 /** Submit only one user changes of the model into database according to the current user rights. */
 bool UserModel::submitUser(const QString &uuid)
 {
-    bool toReturn = true;
-    QModelIndexList list = match(index(0, Core::IUser::Uuid), Qt::DisplayRole, uuid, 1);
-    if (list.count() != 1)
+//    qWarning() << Q_FUNC_INFO << uuid << d->m_Uuid_UserList;
+    bool toReturn = false;
+//    QModelIndexList list = match(index(0, Core::IUser::Uuid), Qt::DisplayRole, uuid, 1);
+//    if (list.count() != 1) {
+//        return false;
+//    }
+    Internal::UserData *user = d->m_Uuid_UserList.value(uuid, 0);
+    if (!user)
         return false;
+
     // act only on modified users
-    if (d->m_Uuid_UserList.value(uuid)->isModified()) {
-        Internal::UserData *user = d->m_Uuid_UserList.value(uuid);
+    bool hasRights = false;
+    if (user->isModified()) {
         // check user write rights
-        if ((user->isCurrent()) &&
-            (!d->m_CurrentUserRights & Core::IUser::WriteOwn)) {
-            toReturn = false;
+        if (user->isCurrent() &&
+            (d->m_CurrentUserRights & Core::IUser::WriteOwn)) {
+            hasRights = true;
         } else if ((!user->isCurrent()) &&
-                   (!d->m_CurrentUserRights & Core::IUser::WriteAll)) {
-            toReturn = false;
-        } else if (!userBase()->saveUser(user)) {
-            toReturn = false;
+                   (d->m_CurrentUserRights & Core::IUser::WriteAll)) {
+            hasRights = true;
+        }
+//        qWarning() << hasRights << user->isCurrent() << d->m_CurrentUserRights;
+        if (hasRights) {
+            if (userBase()->saveUser(user)) {
+                toReturn = true;
+            }
         }
     }
-    Q_EMIT dataChanged(index(list.at(0).row(),0) , index(list.at(0).row(), Core::IUser::NumberOfColumns));
+//    Q_EMIT dataChanged(index(list.at(0).row(),0) , index(list.at(0).row(), Core::IUser::NumberOfColumns));
     return toReturn;
 }
 
@@ -1061,7 +1074,7 @@ void UserModel::revertRow(int row)
   Define the filter of the model.
   \sa Utils::Database::getWhereClause()
 */
-void UserModel::setFilter (const QHash<int,QString> &conditions)
+void UserModel::setFilter(const QHash<int,QString> &conditions)
 {
     /** \todo filter by name AND Firstname at the same time */
     QString filter = "";

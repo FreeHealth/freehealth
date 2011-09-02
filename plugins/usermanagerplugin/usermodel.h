@@ -95,9 +95,7 @@ class USER_EXPORT UserModel : public QAbstractTableModel
 {
     Q_OBJECT
     friend class UserPlugin::UserManagerPlugin;
-//    friend class UserPlugin::UserViewer;
 
-protected:
     UserModel(QObject *parent);
 
 public:

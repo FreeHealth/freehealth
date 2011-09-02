@@ -166,6 +166,7 @@ public:
     void  setZipcode(const QVariant & val)             { setDynamicDataValue(USER_DATAS_ZIPCODE , val); }
     void  setCity(const QVariant & val)                { setDynamicDataValue(USER_DATAS_CITY , val); }
     void  setCountry(const QVariant & val)             { setDynamicDataValue(USER_DATAS_COUNTRY , val); }
+    void  setCountryIso(const QVariant & val)          { setDynamicDataValue(USER_DATAS_COUNTRY , val); }
     void  setTel1(const QVariant & val)                { setDynamicDataValue(USER_DATAS_TEL1 , val); }
     void  setTel2(const QVariant & val)                { setDynamicDataValue(USER_DATAS_TEL2 , val); }
     void  setTel3(const QVariant & val)                { setDynamicDataValue(USER_DATAS_TEL3 , val); }
@@ -219,6 +220,7 @@ public:
     QString zipcode() const              { return dynamicDataValue(USER_DATAS_ZIPCODE).toString(); }
     QString city() const                 { return dynamicDataValue(USER_DATAS_CITY).toString(); }
     QString country() const              { return dynamicDataValue(USER_DATAS_COUNTRY).toString(); }
+    QString countryIso() const           { return dynamicDataValue(USER_DATAS_COUNTRY).toString(); }
     QStringList tels() const             { return QStringList()
                                            << dynamicDataValue(USER_DATAS_TEL1).toString()
                                            << dynamicDataValue(USER_DATAS_TEL2).toString()
