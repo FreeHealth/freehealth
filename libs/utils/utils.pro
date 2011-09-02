@@ -43,6 +43,7 @@ HEADERS += global_exporter.h \
     widgets/languagecomboboxdelegate.h \
     databaseconnector.h \
     versionnumber.h \
+    widgets/countrycombobox.h
 #    widgets/dialogbuttonbox.h
 
 SOURCES += global.cpp \
@@ -75,6 +76,7 @@ SOURCES += global.cpp \
     widgets/languagecomboboxdelegate.cpp \
     databaseconnector.cpp \
     versionnumber.cpp \
+    widgets/countrycombobox.cpp
 #    widgets/dialogbuttonbox.cpp
 
 macx {
