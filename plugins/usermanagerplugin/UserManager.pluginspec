@@ -9,5 +9,6 @@
         <dependency name="ListView" version="0.4.0"/>
         <dependency name="TextEditor" version="0.4.0"/>
         <dependency name="Printer" version="0.5.0"/>
+        <dependency name="ZipCodes" version="0.6.0"/>
     </dependencyList>
 </plugin>

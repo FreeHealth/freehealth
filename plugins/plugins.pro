@@ -93,6 +93,7 @@ usermanager.depends += core
 usermanager.depends += printer
 usermanager.depends += texteditor
 usermanager.depends += listview
+usermanager.depends += zipcodes
 
 patientbase.subdir   = patientbaseplugin
 patientbase.depends += core
