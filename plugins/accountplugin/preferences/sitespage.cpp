@@ -50,6 +50,7 @@
 #include <QIODevice>
 #include <QRegExp>
 #include <QLocale>
+
 enum { WarnDebugMessage = false };
 
 using namespace Account;
@@ -85,8 +86,9 @@ void SitesPage::resetToDefaults()
 }
 
 void SitesPage::applyChanges()
-{if (WarnDebugMessage)
-    	      qDebug() << __FILE__ << QString::number(__LINE__) << " applyChanges ";
+{
+    if (WarnDebugMessage)
+        LOG("applyChanges");
     if (!m_Widget) {
         return;
     }
@@ -118,7 +120,6 @@ QWidget *SitesPage::createPage(QWidget *parent)
 SitesWidget::SitesWidget(QWidget *parent) :
         QWidget(parent), m_Model(0), m_Mapper(0)
 {
-    //QCoreApplication::processEvents(QEventLoop::AllEvents);
     QApplication::setOverrideCursor(QCursor(Qt::BusyCursor));
     setObjectName("SitesWidget");
     setupUi(this);
@@ -189,7 +190,7 @@ void SitesWidget::fillHugeWidgets(){
     QString localCountry;
     localCountry = QLocale::countryToString(local.country());
     if (WarnDebugMessage)
-    	      qDebug() << __FILE__ << QString::number(__LINE__) << " country =" << localCountry ;
+        qDebug() << __FILE__ << QString::number(__LINE__) << " country =" << localCountry ;
     QStringList listForCountry;
     listForCountry = listOfCountries();
     listForCountry.sort();
@@ -203,21 +204,20 @@ void SitesWidget::fillHugeWidgets(){
 void SitesWidget::setDatasToUi()
 {
     if (WarnDebugMessage)
-    	      qDebug() << __FILE__ << QString::number(__LINE__) << "index row  =" << QString::number(wpComboBox->currentIndex());
+        qDebug() << __FILE__ << QString::number(__LINE__) << "index row  =" << QString::number(wpComboBox->currentIndex());
     m_Mapper->setCurrentIndex(wpComboBox->currentIndex());
 }
 
 void SitesWidget::saveModel()
 {
     if (WarnDebugMessage)
-    	      qDebug() << __FILE__ << QString::number(__LINE__) << " currentIndex =" << QString::number(m_Mapper->currentIndex());
+        qDebug() << __FILE__ << QString::number(__LINE__) << " currentIndex =" << QString::number(m_Mapper->currentIndex());
     if (m_Model->isDirty()) {
         bool yes = Utils::yesNoMessageBox(tr("Save changes ?"),
                                           tr("You make changes into the sites table.\n"
                                              "Do you want to save them ?"));
         if (yes) {
-           if (!m_Model->submit()) {if (WarnDebugMessage)
-    	      qDebug() << __FILE__ << QString::number(__LINE__) << " sites submit ";
+           if (!m_Model->submit()) {
                 LOG_ERROR(tkTr(Trans::Constants::UNABLE_TO_SAVE_DATA_IN_DATABASE_1).
                                                    arg(tr("sites")));
             }
@@ -227,7 +227,7 @@ void SitesWidget::saveModel()
         }
     }
     if (WarnDebugMessage)
-    	      qDebug() << __FILE__ << QString::number(__LINE__) << " site error =" << m_Model->lastError().text();
+        qDebug() << __FILE__ << QString::number(__LINE__) << " site error =" << m_Model->lastError().text();
 }
 
 void SitesWidget::on_wpComboBox_currentIndexChanged(int index)
@@ -240,26 +240,25 @@ void SitesWidget::on_wpComboBox_currentIndexChanged(int index)
 void SitesWidget::on_addButton_clicked()
 {
     if (WarnDebugMessage)
-    	      qDebug() << __FILE__ << QString::number(__LINE__) << " rowCount1 =" << QString::number(m_Model->rowCount());
+        qDebug() << __FILE__ << QString::number(__LINE__) << " rowCount1 =" << QString::number(m_Model->rowCount());
     if (!m_Model->insertRow(m_Model->rowCount()))
         LOG_ERROR("Unable to add row");
     if (WarnDebugMessage)
-    	      qDebug() << __FILE__ << QString::number(__LINE__) << " rowCount2 =" << QString::number(m_Model->rowCount());
+        qDebug() << __FILE__ << QString::number(__LINE__) << " rowCount2 =" << QString::number(m_Model->rowCount());
     wpComboBox->setCurrentIndex(m_Model->rowCount()-1);
     m_siteUidLabel->setValue(calcSitesUid());
     m_siteUidLabel->setFocus();
-    if (WarnDebugMessage)
-    	      qDebug() << __FILE__ << QString::number(__LINE__) << " m_siteUidLabel =" << m_siteUidLabel->text();
-    if (WarnDebugMessage)
-    	      qDebug() << __FILE__ << QString::number(__LINE__) << " currentIndex =" << QString::number(m_Mapper->currentIndex());
+    if (WarnDebugMessage) {
+        qDebug() << __FILE__ << QString::number(__LINE__) << " m_siteUidLabel =" << m_siteUidLabel->text();
+        qDebug() << __FILE__ << QString::number(__LINE__) << " currentIndex =" << QString::number(m_Mapper->currentIndex());
+    }
 }
 
 void SitesWidget::on_deleteButton_clicked()
 {
-    if (!m_Model->removeRow(wpComboBox->currentIndex()))
-    {
+    if (!m_Model->removeRow(wpComboBox->currentIndex())) {
           LOG_ERROR("Unable to remove row");
-        }
+    }
     wpComboBox->setCurrentIndex(m_Model->rowCount() - 1);
 }
 
@@ -301,7 +300,8 @@ void SitesWidget::changeEvent(QEvent *e)
 
 void SitesWidget::showEvent(QShowEvent *event){
     Q_UNUSED(event);
-    qWarning() << __FILE__ << QString::number(__LINE__) << " sites activated "   ;
+    if (WarnDebugMessage)
+        qWarning() << __FILE__ << QString::number(__LINE__) << " sites activated "   ;
     fillHugeWidgets();
     update();
 }

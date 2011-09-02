@@ -48,7 +48,9 @@
 #include <QFile>
 #include <QTextStream>
 #include <QCompleter>
+
 enum { WarnDebugMessage = false };
+
 using namespace Account;
 using namespace Account::Internal;
 using namespace Trans::ConstantTranslations;
@@ -57,11 +59,11 @@ static inline Core::ISettings *settings() { return Core::ICore::instance()->sett
 static inline Core::ITheme *theme()  { return Core::ICore::instance()->theme(); }
 
 
-/////////////////////////////////////////////////////////////////////////////////////////////////////
-//////////////////////////////////////  DrugsUserPage  //////////////////////////////////////////////
-/////////////////////////////////////////////////////////////////////////////////////////////////////
 AvailableMovementPage::AvailableMovementPage(QObject *parent) :
-        IOptionsPage(parent), m_Widget(0) { setObjectName("AvailableMovementPage"); }
+        IOptionsPage(parent), m_Widget(0)
+{
+    setObjectName("AvailableMovementPage");
+}
 
 AvailableMovementPage::~AvailableMovementPage()
 {
@@ -80,8 +82,9 @@ void AvailableMovementPage::resetToDefaults()
 }
 
 void AvailableMovementPage::applyChanges()
-{if (WarnDebugMessage)
-    	      qDebug() << __FILE__ << QString::number(__LINE__) << " applyChanges ";
+{
+    if (WarnDebugMessage)
+        LOG("applyChanges");
     if (!m_Widget) {
         return;
     }
@@ -196,7 +199,7 @@ void AvailableMovementWidget::on_addButton_clicked()
     if (!m_Model->insertRow(m_Model->rowCount()))
         LOG_ERROR("Unable to add row");
     if (WarnDebugMessage)
-    	      qDebug() << __FILE__ << QString::number(__LINE__) << " rowCount =" << QString::number(m_Model->rowCount()) ;
+        LOG("rowCount =" + QString::number(m_Model->rowCount()));
     movComboBox->setCurrentIndex(m_Model->rowCount() - 1);
     taxDeductibilityComboBox->setFocus();
     taxDeductibilityComboBox->setCurrentIndex(1);

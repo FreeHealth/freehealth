@@ -165,14 +165,14 @@ AssetsRatesWidget::~AssetsRatesWidget()
 void AssetsRatesWidget::setDatasToUi()
 {
     if (WarnDebugMessage)
-    	      qDebug() << __FILE__ << QString::number(__LINE__) << "index row  =" << QString::number(assetsNameComboBox->currentIndex());
+        qDebug() << __FILE__ << QString::number(__LINE__) << "index row  =" << QString::number(assetsNameComboBox->currentIndex());
     m_Mapper->setCurrentIndex(assetsNameComboBox->currentIndex());
 }
 
 void AssetsRatesWidget::saveModel()
 {
     if (WarnDebugMessage)
-    	      qDebug() << __FILE__ << QString::number(__LINE__) << " currentIndex =" << QString::number(m_Mapper->currentIndex());
+        qDebug() << __FILE__ << QString::number(__LINE__) << " currentIndex =" << QString::number(m_Mapper->currentIndex());
     if (m_Model->isDirty()) {
         bool yes = Utils::yesNoMessageBox(tr("Save changes ?"),
                                           tr("You make changes into the assetsrates table.\n"
@@ -187,7 +187,7 @@ void AssetsRatesWidget::saveModel()
         }
     }
     if (WarnDebugMessage)
-    	      qDebug() << __FILE__ << QString::number(__LINE__) << " assets rates error =" << m_Model->lastError().text();
+        qDebug() << __FILE__ << QString::number(__LINE__) << " assets rates error =" << m_Model->lastError().text();
 }
 
 void AssetsRatesWidget::on_assetsNameComboBox_currentIndexChanged(int index)
@@ -199,11 +199,11 @@ void AssetsRatesWidget::on_assetsNameComboBox_currentIndexChanged(int index)
 void AssetsRatesWidget::on_addButton_clicked()
 {
     if (WarnDebugMessage)
-    	      qDebug() << __FILE__ << QString::number(__LINE__) << " rowCount1 =" << QString::number(m_Model->rowCount());
+        qDebug() << __FILE__ << QString::number(__LINE__) << " rowCount1 =" << QString::number(m_Model->rowCount());
     if (!m_Model->insertRow(m_Model->rowCount()))
         LOG_ERROR( "Unable to add row");
     if (WarnDebugMessage)
-    	      qDebug() << __FILE__ << QString::number(__LINE__) << " rowCount2 =" << QString::number(m_Model->rowCount());
+        qDebug() << __FILE__ << QString::number(__LINE__) << " rowCount2 =" << QString::number(m_Model->rowCount());
     assetsNameComboBox->setCurrentIndex(m_Model->rowCount()-1);
     assetsRatesUidLabel->setText(m_user_uid);
     assetsRatesUidLabel->setFocus();
@@ -211,7 +211,7 @@ void AssetsRatesWidget::on_addButton_clicked()
     dateEdit->setDate(currentDate);
     dateEdit->setFocus();
     if (WarnDebugMessage)
-    	      qDebug() << __FILE__ << QString::number(__LINE__) << " currentIndex =" << QString::number(m_Mapper->currentIndex());
+        qDebug() << __FILE__ << QString::number(__LINE__) << " currentIndex =" << QString::number(m_Mapper->currentIndex());
 
 }
 
@@ -232,7 +232,7 @@ void AssetsRatesWidget::saveToSettings(Core::ISettings *sets)
                                  tr("An error occured during assetsrates saving. Datas are corrupted."));
     }
     if (!insertYearsRange()) {
-        qWarning() << __FILE__ << QString::number(__LINE__) << " Unable to insert years range !" ;
+        LOG_ERROR("Unable to insert years range");
     }
     connect(nameEdit,SIGNAL(textEdited(const QString &)),assetsNameComboBox,SLOT(setEditText(const QString &)));
     update();
@@ -277,12 +277,11 @@ bool AssetsRatesWidget::insertYearsRange()
     QString yearRange = QString("%1_%2").arg(beginYear,endYear);
     m_Model->setFilter("");
     if (WarnDebugMessage)
-    	      qDebug() << __FILE__ << QString::number(__LINE__) << " m_Model->rowCount =" << QString::number((m_Model->rowCount())) ;
+        qDebug() << __FILE__ << QString::number(__LINE__) << " m_Model->rowCount =" << QString::number((m_Model->rowCount())) ;
     
     if (!m_Model->setData(m_Model->index(m_Model->rowCount()-1,AccountDB::Constants::ASSETSRATES_YEARS),
                           yearRange,Qt::EditRole)) {
-        qWarning() << __FILE__ << QString::number(__LINE__) 
-                << "unable to insert years range "+m_Model->lastError().text();
+        LOG_ERROR("unable to insert years range " + m_Model->lastError().text());
     }
     return ret;
 }

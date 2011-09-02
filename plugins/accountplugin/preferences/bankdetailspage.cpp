@@ -45,7 +45,9 @@
 #include <coreplugin/itheme.h>
 #include <coreplugin/iuser.h>
 #include <coreplugin/constants_icons.h>
+
 enum { WarnDebugMessage = false };
+
 using namespace Account;
 using namespace Constants;
 using namespace Account::Internal;
@@ -56,11 +58,11 @@ static inline Core::ITheme *theme()  { return Core::ICore::instance()->theme(); 
 static inline Core::IUser *user() { return Core::ICore::instance()->user(); }
 
 
-/////////////////////////////////////////////////////////////////////////////////////////////////////
-//////////////////////////////////////  DrugsUserPage  //////////////////////////////////////////////
-/////////////////////////////////////////////////////////////////////////////////////////////////////
 BankDetailsPage::BankDetailsPage(QObject *parent) :
-        IOptionsPage(parent), m_Widget(0) { setObjectName("BankDetailsPage"); }
+        IOptionsPage(parent), m_Widget(0)
+{
+    setObjectName("BankDetailsPage");
+}
 
 BankDetailsPage::~BankDetailsPage()
 {
@@ -79,8 +81,9 @@ void BankDetailsPage::resetToDefaults()
 }
 
 void BankDetailsPage::applyChanges()
-{if (WarnDebugMessage)
-    	      qDebug() << __FILE__ << QString::number(__LINE__) << " applyChanges ";
+{
+    if (WarnDebugMessage)
+        LOG("applyChanges");
     if (!m_Widget) {
         return;
     }
@@ -112,7 +115,7 @@ QWidget *BankDetailsPage::createPage(QWidget *parent)
 BankDetailsWidget::BankDetailsWidget(QWidget *parent) :
         QWidget(parent), m_Model(0), m_Mapper(0)
 {
-    //QCoreApplication::processEvents(QEventLoop::AllEvents);
+    setObjectName("BankDetailWidget");
     setupUi(this);
     balanceDate->setDate(QDate::currentDate());
     m_user_uid = user()->uuid();
@@ -130,7 +133,7 @@ BankDetailsWidget::BankDetailsWidget(QWidget *parent) :
     m_Model = new AccountDB::BankAccountModel(this);
     if (m_Model->rowCount()<1)  {
         if (!setCashBox())  {
-            QMessageBox::warning(0,trUtf8("Warning"),trUtf8("Unable to create cash box."),QMessageBox::Ok);
+            LOG_ERROR("Unable to create cash box.");
         }
     }
     /** \todo  m_Model->setUserUuid(); */
@@ -239,7 +242,7 @@ void BankDetailsWidget::changeEvent(QEvent *e)
 bool BankDetailsWidget::setCashBox()
 {
     if (!m_Model->insertRows(m_Model->rowCount(),1,QModelIndex())) {
-        qWarning() << __FILE__ << QString::number(__LINE__) << QString::number(m_Model->rowCount()) ;
+        LOG_ERROR("Unable to insertRow in model");
     }
     QString label = trUtf8("cash box") ;
     QString comment = trUtf8("Your cash till");

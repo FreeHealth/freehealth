@@ -50,17 +50,19 @@
 #include <QMessageBox>
 #include <QSqlDatabase>
 #include <QSqlQuery>
+
 enum { WarnDebugMessage = false };
+
 static  QString freeaccount = "freeaccount";
 using namespace AccountDB;
 using namespace Constants;
 
 receiptsManager::receiptsManager()
 {
-    if (!getPreferedValues())
-    {
-    	  qWarning() << __FILE__ << QString::number(__LINE__) << "Unable to get preferred values !" ;
-        }
+    if (!getPreferedValues()) {
+        if (WarnDebugMessage)
+            qWarning() << __FILE__ << QString::number(__LINE__) << "Unable to get preferred values !" ;
+    }
 }
 
 receiptsManager::~receiptsManager()
@@ -84,183 +86,178 @@ QHash<QString,QVariant> receiptsManager::getParametersDatas(QString & userUid , 
 {
    QHash<QString,QVariant> hashForReturn;
    if (WarnDebugMessage)
-    	      qDebug() << __FILE__ << QString::number(__LINE__) << " receiptsManager : in getComboBoxesDatas";
-   if (table == "insurance")
+       qDebug() << __FILE__ << QString::number(__LINE__) << " receiptsManager : in getComboBoxesDatas";
+   if (table == "insurance") {
+       InsuranceModel  model(this);
+       for (int row = 0; row < model.rowCount(); row += 1) {
+           QString str = model.data(model.index(row,INSURANCE_NAME),Qt::DisplayRole).toString();
+           QVariant uid = model.data(model.index(row,INSURANCE_UID),Qt::DisplayRole);
+           if (WarnDebugMessage)
+               qDebug() << __FILE__ << QString::number(__LINE__) << " receiptsManager list = " << str;
+           hashForReturn.insert(str,uid);
+       }
+       if (hashForReturn.size()< 1){
+           hashForReturn.insert("patient","uid");
+       }
+   }
+   if (table == "sites") {
+       WorkingPlacesModel model(this);
+       for (int row = 0; row < model.rowCount(); row += 1) {
+           QString str = model.data(model.index(row,SITES_NAME),Qt::DisplayRole).toString();
+           QVariant uid = model.data(model.index(row,SITES_UID),Qt::DisplayRole);
+           if (WarnDebugMessage)
+               qDebug() << __FILE__ << QString::number(__LINE__) << " receiptsManager list = " << str;
+           if (WarnDebugMessage)
+               qDebug() << __FILE__ << QString::number(__LINE__) << " uid =" << uid.toString() ;
+           hashForReturn.insert(str,uid);
+
+
+       }
+       if(hashForReturn.size()< 1){
+           hashForReturn.insert("cabinet","uid");
+       }
+
+   }
+   if (table == "bank_details") {
+       BankAccountModel model(this);
+       for (int row = 0; row < model.rowCount(); row += 1) {
+           QString str = model.data(model.index(row,BANKDETAILS_LABEL),Qt::DisplayRole).toString();
+           QVariant uid = model.data(model.index(row,BANKDETAILS_ID),Qt::DisplayRole);
+           if (WarnDebugMessage)
+               qDebug() << __FILE__ << QString::number(__LINE__) << " receiptsManager list = " << str;
+           hashForReturn.insert(str,uid);
+       }
+       if(hashForReturn.size()< 1){
+           hashForReturn.insert("bank","uid");
+       }
+
+   }
+   if (table == "rules")
    {
-   	  InsuranceModel  model(this);
-   	  for (int row = 0; row < model.rowCount(); row += 1)
-   	  {
-   	  	QString str = model.data(model.index(row,INSURANCE_NAME),Qt::DisplayRole).toString();
-   	  	QVariant uid = model.data(model.index(row,INSURANCE_UID),Qt::DisplayRole);
-   	  	if (WarnDebugMessage)
-    	      qDebug() << __FILE__ << QString::number(__LINE__) << " receiptsManager list = " << str;
-   	  	hashForReturn.insert(str,uid);
-   	  }
-   	  if(hashForReturn.size()< 1){
-   	      hashForReturn.insert("patient","uid");
-   	      }
+       RulesModel model(this);
+       for (int row = 0; row < model.rowCount(); row += 1)
+       {
+           QString str = model.data(model.index(row,RULES_TYPE),Qt::DisplayRole).toString();
+           QVariant uid = model.data(model.index(row,RULES_UID),Qt::DisplayRole);
+           if (WarnDebugMessage)
+               qDebug() << __FILE__ << QString::number(__LINE__) << " receiptsManager list = " << str;
+           hashForReturn.insert(str,uid);
        }
-   if (table == "sites")
+       if(hashForReturn.size()< 1){
+           hashForReturn.insert("rule","uid");
+       }
+
+   }
+   if (table == "distance_rules")
    {
-   	  WorkingPlacesModel model(this);
-   	  for (int row = 0; row < model.rowCount(); row += 1)
-   	  {
-   	  	QString str = model.data(model.index(row,SITES_NAME),Qt::DisplayRole).toString();
-   	  	QVariant uid = model.data(model.index(row,SITES_UID),Qt::DisplayRole);
-   	  	//if (WarnDebugMessage)
-    	      qDebug() << __FILE__ << QString::number(__LINE__) << " receiptsManager list = " << str;
-   	  	//if (WarnDebugMessage)
-    	      qDebug() << __FILE__ << QString::number(__LINE__) << " uid =" << uid.toString() ;
-   	  	hashForReturn.insert(str,uid);
-   	  	
-   	  	  	  	
-   	  }
-   	  if(hashForReturn.size()< 1){
-   	      hashForReturn.insert("cabinet","uid");
-   	      }
-   	  
+       DistanceRulesModel model(this);
+       if (WarnDebugMessage)
+           qDebug() << __FILE__ << QString::number(__LINE__) << " distrules =" << QString::number(model.rowCount()) ;
+       for (int row = 0; row < model.rowCount(); row += 1)
+       {
+           QString str = model.data(model.index(row,DISTRULES_TYPE),Qt::DisplayRole).toString();
+           QVariant uid = model.data(model.index(row,DISTRULES_UID),Qt::DisplayRole);
+           if (WarnDebugMessage)
+               qDebug() << __FILE__ << QString::number(__LINE__) << " receiptsManager list = " << str;
+           hashForReturn.insertMulti(str,uid);
        }
-    if (table == "bank_details")
-    {
-   	  BankAccountModel model(this);
-   	  for (int row = 0; row < model.rowCount(); row += 1)
-   	  {
-   	  	QString str = model.data(model.index(row,BANKDETAILS_LABEL),Qt::DisplayRole).toString();
-   	  	QVariant uid = model.data(model.index(row,BANKDETAILS_ID),Qt::DisplayRole);
-   	  	if (WarnDebugMessage)
-    	      qDebug() << __FILE__ << QString::number(__LINE__) << " receiptsManager list = " << str;
-   	  	hashForReturn.insert(str,uid);
-   	  }
-   	  if(hashForReturn.size()< 1){
-   	      hashForReturn.insert("bank","uid");
-   	      }
-   	  
+       if(hashForReturn.size()< 1){
+           hashForReturn.insert("distance_rules","uid");
        }
-    if (table == "rules")
-    {
-   	  RulesModel model(this);
-   	  for (int row = 0; row < model.rowCount(); row += 1)
-   	  {
-   	  	QString str = model.data(model.index(row,RULES_TYPE),Qt::DisplayRole).toString();
-   	  	QVariant uid = model.data(model.index(row,RULES_UID),Qt::DisplayRole);
-   	  	if (WarnDebugMessage)
-    	      qDebug() << __FILE__ << QString::number(__LINE__) << " receiptsManager list = " << str;
-   	  	hashForReturn.insert(str,uid);
-   	  }
-   	  if(hashForReturn.size()< 1){
-   	      hashForReturn.insert("rule","uid");
-   	      }
-   	  
+
+   }
+   if (table == "thesaurus")
+   {
+       ThesaurusModel model(this);
+       QString userFilter = QString("%1 = '%2'").arg("THESAURUS_USERUID",userUid);
+       model.setFilter(userFilter);
+       for (int row = 0; row < model.rowCount(); row += 1)
+       {
+           QString str = model.data(model.index(row,THESAURUS_VALUES),Qt::DisplayRole).toString();
+           QVariant uid = model.data(model.index(row,THESAURUS_UID),Qt::DisplayRole);
+           if (WarnDebugMessage)
+               qDebug() << __FILE__ << QString::number(__LINE__) << " receiptsManager list = " << str;
+           hashForReturn.insert(str,uid);
        }
-    if (table == "distance_rules")
-    {
-   	  DistanceRulesModel model(this);
-   	  if (WarnDebugMessage)
-    	      qDebug() << __FILE__ << QString::number(__LINE__) << " distrules =" << QString::number(model.rowCount()) ;
-   	  for (int row = 0; row < model.rowCount(); row += 1)
-   	  {
-   	  	QString str = model.data(model.index(row,DISTRULES_TYPE),Qt::DisplayRole).toString();
-   	  	QVariant uid = model.data(model.index(row,DISTRULES_UID),Qt::DisplayRole);
-   	  	if (WarnDebugMessage)
-    	      qDebug() << __FILE__ << QString::number(__LINE__) << " receiptsManager list = " << str;
-   	  	hashForReturn.insertMulti(str,uid);
-   	  }
-   	  if(hashForReturn.size()< 1){
-   	      hashForReturn.insert("distance_rules","uid");
-   	      }
-   	  
+       if(hashForReturn.size()< 1){
+           hashForReturn.insert("thesaurus","uid");
        }
-    if (table == "thesaurus")
-    {
-   	  ThesaurusModel model(this);
-   	  QString userFilter = QString("%1 = '%2'").arg("THESAURUS_USERUID",userUid);
-   	  model.setFilter(userFilter);
-   	  for (int row = 0; row < model.rowCount(); row += 1)
-   	  {
-   	  	QString str = model.data(model.index(row,THESAURUS_VALUES),Qt::DisplayRole).toString();
-   	  	QVariant uid = model.data(model.index(row,THESAURUS_UID),Qt::DisplayRole);
-   	  	if (WarnDebugMessage)
-    	      qDebug() << __FILE__ << QString::number(__LINE__) << " receiptsManager list = " << str;
-   	  	hashForReturn.insert(str,uid);
-   	  }
-   	  if(hashForReturn.size()< 1){
-   	      hashForReturn.insert("thesaurus","uid");
-   	      }
-   	  
-       }
-       
+
+   }
+
    return hashForReturn;;
 }
 
 QHash<QString,QVariant> receiptsManager::getHashOfSites(){
     QHash<QString,QVariant> hash;
-       	  WorkingPlacesModel model(this);
-   	  for (int row = 0; row < model.rowCount(); row += 1)
-   	  {
-   	  	QString str = model.data(model.index(row,SITES_NAME),Qt::DisplayRole).toString();
-   	  	QVariant uid = model.data(model.index(row,SITES_UID),Qt::DisplayRole);
-   	  	//if (WarnDebugMessage)
-    	      qDebug() << __FILE__ << QString::number(__LINE__) << " receiptsManager list = " << str;
-   	  	//if (WarnDebugMessage)
-    	      qDebug() << __FILE__ << QString::number(__LINE__) << " uid =" << uid.toString() ;
-   	  	hash.insertMulti(str,uid);
-   	  	
-   	  	  	  	
-   	  }
-   	  if(hash.size()< 1){
-   	      hash.insert("cabinet","uid");
-   	      }
+    WorkingPlacesModel model(this);
+    for (int row = 0; row < model.rowCount(); row += 1)
+    {
+        QString str = model.data(model.index(row,SITES_NAME),Qt::DisplayRole).toString();
+        QVariant uid = model.data(model.index(row,SITES_UID),Qt::DisplayRole);
+        //if (WarnDebugMessage)
+        qDebug() << __FILE__ << QString::number(__LINE__) << " receiptsManager list = " << str;
+        //if (WarnDebugMessage)
+        qDebug() << __FILE__ << QString::number(__LINE__) << " uid =" << uid.toString() ;
+        hash.insertMulti(str,uid);
+
+
+    }
+    if(hash.size()< 1){
+        hash.insert("cabinet","uid");
+    }
     return hash; 
 }
 
-QHash<QString,QVariant> receiptsManager::getHashOfInsurance(){
+QHash<QString,QVariant> receiptsManager::getHashOfInsurance()
+{
     QHash<QString,QVariant> hash;
     InsuranceModel model(this);
-   	  for (int row = 0; row < model.rowCount(); row += 1)
-   	  {
-   	  	QString str = model.data(model.index(row,INSURANCE_NAME),Qt::DisplayRole).toString();
-   	  	if (WarnDebugMessage)
-    	      qDebug() << __FILE__ << QString::number(__LINE__) << " str =" << str ;
-   	  	QVariant uid = model.data(model.index(row,INSURANCE_UID),Qt::DisplayRole);
-   	  	hash.insertMulti(str,uid);
-    	  }
-   	  if(hash.size()< 1){
-   	      hash.insert("patient","uid");
-   	      }
+    for (int row = 0; row < model.rowCount(); row += 1) {
+        QString str = model.data(model.index(row,INSURANCE_NAME),Qt::DisplayRole).toString();
+        if (WarnDebugMessage)
+            qDebug() << __FILE__ << QString::number(__LINE__) << " str =" << str ;
+        QVariant uid = model.data(model.index(row,INSURANCE_UID),Qt::DisplayRole);
+        hash.insertMulti(str,uid);
+    }
+    if(hash.size()< 1) {
+        hash.insert("patient","uid");
+    }
     return hash; 
 }
 
-QHash<QString,QVariant> receiptsManager::getDistanceRules(){
+QHash<QString,QVariant> receiptsManager::getDistanceRules()
+{
     QHash<QString,QVariant> hash;
     DistanceRulesModel model(this);
-   	  for (int row = 0; row < model.rowCount(); row += 1)
-   	  {
-   	  	QString str = model.data(model.index(row,DISTRULES_TYPE),Qt::DisplayRole).toString();
-   	  	QVariant uid = model.data(model.index(row,DISTRULES_VALUES),Qt::DisplayRole);
-   	  	hash.insertMulti(str,uid);
-    	  }
-   	  if(hash.size()< 1){
-   	      hash.insert("DistPrice",0.50);
-   	      }
+    for (int row = 0; row < model.rowCount(); ++row) {
+        QString str = model.data(model.index(row,DISTRULES_TYPE),Qt::DisplayRole).toString();
+        QVariant uid = model.data(model.index(row,DISTRULES_VALUES),Qt::DisplayRole);
+        hash.insertMulti(str,uid);
+    }
+    if(hash.size()< 1){
+        hash.insert("DistPrice",0.50);
+    }
     return hash;
 }
 
-QHash<QString,QVariant> receiptsManager::getHashOfThesaurus(){
+QHash<QString,QVariant> receiptsManager::getHashOfThesaurus()
+{
     QHash<QString,QVariant> hash;
     ThesaurusModel model(this);
-    for (int row = 0; row < model.rowCount(); row += 1)
-   	  {
-   	  	QString str = model.data(model.index(row,THESAURUS_VALUES),Qt::DisplayRole).toString();
-   	  	QVariant uid = model.data(model.index(row,THESAURUS_USERUID),Qt::DisplayRole);
-   	  	//if (WarnDebugMessage)
-    	      qDebug() << __FILE__ << QString::number(__LINE__) << " receiptsManager list = " << str;
-   	  	//if (WarnDebugMessage)
-    	      qDebug() << __FILE__ << QString::number(__LINE__) << " uid =" << uid.toString() ;
-   	  	hash.insertMulti(str,uid);
-   	  }
-   	  if(hash.size()< 1){
-   	      hash.insert("thesaurus","userUuid");
-   	      }
+    for (int row = 0; row < model.rowCount(); ++row)
+    {
+        QString str = model.data(model.index(row,THESAURUS_VALUES),Qt::DisplayRole).toString();
+        QVariant uid = model.data(model.index(row,THESAURUS_USERUID),Qt::DisplayRole);
+        if (WarnDebugMessage)
+            qDebug() << __FILE__ << QString::number(__LINE__) << " receiptsManager list = " << str;
+        if (WarnDebugMessage)
+            qDebug() << __FILE__ << QString::number(__LINE__) << " uid =" << uid.toString() ;
+        hash.insertMulti(str,uid);
+    }
+    if (hash.size()< 1) {
+        hash.insert("thesaurus","userUuid");
+    }
     return hash;
 }
 

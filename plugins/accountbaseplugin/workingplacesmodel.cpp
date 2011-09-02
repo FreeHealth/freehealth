@@ -40,7 +40,7 @@
 
 #include <QDebug>
 
-
+enum { WarnDebugMessage = false };
 
 using namespace AccountDB;
 
@@ -105,19 +105,13 @@ int WorkingPlacesModel::columnCount(const QModelIndex &parent) const
 
 QVariant WorkingPlacesModel::data(const QModelIndex &index, int role) const
 {
-    QVariant data ;
-    if(!index.isValid()){
-       qWarning() << __FILE__ << QString::number(__LINE__) << "index is not valid" ;
-       data = QVariant();
-       }
-    if(role == Qt::DisplayRole){
-        data = d->m_SqlTable->data(index, Qt::DisplayRole);
-        }	
-    if (role == Qt::EditRole)
-    {
-    	data = d->m_SqlTable->data(index, Qt::EditRole);
-        }
-    return data;
+    if (!index.isValid()) {
+       return QVariant();
+    }
+    if (role == Qt::DisplayRole || role == Qt::EditRole) {
+        return d->m_SqlTable->data(index, role);
+    }
+    return QVariant();
 }
 
 bool WorkingPlacesModel::setData(const QModelIndex &index, const QVariant &value, int role)
@@ -164,7 +158,8 @@ QSqlError WorkingPlacesModel::lastError(){
     return d->m_SqlTable->lastError();
 }
 
-void WorkingPlacesModel::setFilter(const QString & filter){
+void WorkingPlacesModel::setFilter(const QString & filter)
+{
     d->m_SqlTable->setFilter(filter);
     d->m_SqlTable->select();
 }

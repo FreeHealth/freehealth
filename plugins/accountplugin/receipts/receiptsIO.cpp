@@ -41,11 +41,14 @@
 #include <QSqlQuery>
 
 #include <QDebug>
-enum { WarnDebugMessage = true };
+
+enum { WarnDebugMessage = false };
+
 using namespace AccountDB;
 using namespace Constants;
 
-receiptsEngine::receiptsEngine(){
+receiptsEngine::receiptsEngine()
+{
     m_mpmodel = new AccountModel(this);
     m_db = QSqlDatabase::database(Constants::DB_ACCOUNTANCY);
 }
@@ -111,7 +114,7 @@ QHash<QString,QVariant> receiptsEngine::getNamesAndValuesFromMP(){//obsolete
     MedicalProcedureModel model(this);
     int rows = model.rowCount(QModelIndex());
     if (WarnDebugMessage)
-    	      qDebug() << __FILE__ << QString::number(__LINE__) << " MP row count =" << QString::number(rows) ;
+        qDebug() << __FILE__ << QString::number(__LINE__) << " MP row count =" << QString::number(rows) ;
     for (int i = 0; i < rows; i += 1)
     {
     	QString name = model.data(model.index(i,MP_NAME),Qt::DisplayRole).toString();
@@ -128,8 +131,7 @@ bool receiptsEngine::insertInThesaurus(const QString &listOfValuesStr, const QSt
     int rowBefore = model.ThesaurusModel::rowCount(QModelIndex());
     if (WarnDebugMessage)
     	      qDebug() << __FILE__ << QString::number(__LINE__) << " rowCount thesaurus =" << QString::number(rowBefore) ;
-    if (model.insertRows(rowBefore,1,QModelIndex()))
-        {
+    if (model.insertRows(rowBefore,1,QModelIndex())) {
     	  qWarning() << __FILE__ << QString::number(__LINE__) << "Row inserted !" ;
         }
     if (WarnDebugMessage)

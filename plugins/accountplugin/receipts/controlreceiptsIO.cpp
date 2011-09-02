@@ -31,12 +31,17 @@
  ***************************************************************************/
 #include "controlreceiptsIO.h"
 #include "ui_controlreceipts.h"
+
 #include <QMessageBox>
 #include <QDebug>
-enum { WarnDebugMessage = true };
+
+enum { WarnDebugMessage = false };
+
 using namespace AccountDB;
 using namespace Constants;
-ControlReceipts::ControlReceipts(QWidget * parent):QWidget(parent),ui(new Ui::ControlReceiptsWidget){
+
+ControlReceipts::ControlReceipts(QWidget * parent):QWidget(parent),ui(new Ui::ControlReceiptsWidget)
+{
     ui->setupUi(this);
     int h = parent->height();
     int w = parent->width();
@@ -46,10 +51,11 @@ ControlReceipts::ControlReceipts(QWidget * parent):QWidget(parent),ui(new Ui::Co
     m_accountModel = new AccountModel(this);
     if (!m_accountModel->setHeaderData(ACCOUNT_PATIENT_NAME,Qt::Horizontal ,trUtf8("Patient") , Qt::EditRole))
     {
-    	  qWarning() << __FILE__ << QString::number(__LINE__) << "Unable to set header data" ;
-        }
+        if (WarnDebugMessage)
+            qWarning() << __FILE__ << QString::number(__LINE__) << "Unable to set header data" ;
+    }
     if (WarnDebugMessage)
-    	      qDebug() << __FILE__ << QString::number(__LINE__) << " headerData =" << m_accountModel->headerData(ACCOUNT_PATIENT_NAME,Qt::Horizontal, Qt::DisplayRole).toString() ;
+        qDebug() << __FILE__ << QString::number(__LINE__) << " headerData =" << m_accountModel->headerData(ACCOUNT_PATIENT_NAME,Qt::Horizontal, Qt::DisplayRole).toString() ;
     m_accountModel->setHeaderData(ACCOUNT_DATE,Qt::Horizontal ,trUtf8("Date") , Qt::EditRole);
     m_accountModel->setHeaderData(ACCOUNT_MEDICALPROCEDURE_TEXT,Qt::Horizontal ,trUtf8("Acts") , Qt::EditRole);
     m_accountModel->setHeaderData(ACCOUNT_COMMENT,Qt::Horizontal ,trUtf8("Comment") , Qt::EditRole);

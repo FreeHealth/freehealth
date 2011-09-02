@@ -61,7 +61,9 @@
 #include <QString>
 #include <QBrush>
 #include <QColor>
-enum { WarnDebugMessage = true };
+
+enum { WarnDebugMessage = false };
+
 static inline Core::IUser *user() { return Core::ICore::instance()->user(); }
 static inline Core::IPatient *patient() { return Core::ICore::instance()->patient(); }
 static inline Core::ISettings *settings() { return Core::ICore::instance()->settings(); }
@@ -596,9 +598,10 @@ void treeViewsActions::fillActionTreeView()
         	      }
         	  else
         	  {
-        	       qWarning() << __FILE__ << QString::number(__LINE__) 
-        	       << " No default value for "<< strKeysParameters ;
-        	       }
+                      if (WarnDebugMessage)
+                          qWarning() << __FILE__ << QString::number(__LINE__)
+                                     << " No default value for "<< strKeysParameters ;
+                  }
             }
     }
     QStandardItem *parentItem = treeModel()->invisibleRootItem();

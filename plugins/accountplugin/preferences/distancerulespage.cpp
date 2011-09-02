@@ -65,11 +65,11 @@ static inline Core::ITheme *theme()  { return Core::ICore::instance()->theme(); 
 static inline Core::IUser *user() { return Core::ICore::instance()->user(); }
 
 
-/////////////////////////////////////////////////////////////////////////////////////////////////////
-//////////////////////////////////////  AccountUserPage  //////////////////////////////////////////////
-/////////////////////////////////////////////////////////////////////////////////////////////////////
 DistanceRulesPage::DistanceRulesPage(QObject *parent) :
-        IOptionsPage(parent), m_Widget(0) { setObjectName("DistanceRulesPage"); }
+        IOptionsPage(parent), m_Widget(0)
+{
+    setObjectName("DistanceRulesPage");
+}
 
 DistanceRulesPage::~DistanceRulesPage()
 {
@@ -88,8 +88,9 @@ void DistanceRulesPage::resetToDefaults()
 }
 
 void DistanceRulesPage::applyChanges()
-{if (WarnDebugMessage)
-    	      qDebug() << __FILE__ << QString::number(__LINE__) << " applyChanges ";
+{
+    if (WarnDebugMessage)
+        LOG("applyChanges");
     if (!m_Widget) {
         return;
     }
@@ -121,7 +122,6 @@ QWidget *DistanceRulesPage::createPage(QWidget *parent)
 DistanceRulesWidget::DistanceRulesWidget(QWidget *parent) :
         QWidget(parent), m_Model(0), m_Mapper(0)
 {
-    //QCoreApplication::processEvents(QEventLoop::AllEvents);
     setObjectName("DistanceRulesWidget");
     setupUi(this);
     addButton->setIcon(theme()->icon(Core::Constants::ICONADD));
@@ -131,12 +131,6 @@ DistanceRulesWidget::DistanceRulesWidget(QWidget *parent) :
     preferedSpinBox->setRange(0,1);
     
     m_Model = new AccountDB::DistanceRulesModel(this);
-//    if (m_Model->rowCount() < 1) {
-//        if (!fillEmptyDistanceRulesModel()) {
-//            QMessageBox::warning(0,trUtf8("Warning"),trUtf8("Unable to fill availablemodel whith local .csv"),
-//                                 QMessageBox::Ok);
-//        }
-//    }
     /** \todo  m_Model->setUserUuid(); */
     distanceRulesUidLabel->setText("");
     m_Mapper = new QDataWidgetMapper(this);
@@ -162,14 +156,14 @@ DistanceRulesWidget::~DistanceRulesWidget()
 void DistanceRulesWidget::setDatasToUi()
 {
     if (WarnDebugMessage)
-    	      qDebug() << __FILE__ << QString::number(__LINE__) << "index row  =" << QString::number(distanceRulesComboBox->currentIndex());
+        LOG("index row  =" + QString::number(distanceRulesComboBox->currentIndex()));
     m_Mapper->setCurrentIndex(distanceRulesComboBox->currentIndex());
 }
 
 void DistanceRulesWidget::saveModel()
 {
     if (WarnDebugMessage)
-    	      qDebug() << __FILE__ << QString::number(__LINE__) << " currentIndex =" << QString::number(m_Mapper->currentIndex());
+        LOG("currentIndex =" + QString::number(m_Mapper->currentIndex()));
     if (m_Model->isDirty()) {
         bool yes = Utils::yesNoMessageBox(tr("Save changes ?"),
                                           tr("You make changes into the distancerules table.\n"
@@ -186,7 +180,7 @@ void DistanceRulesWidget::saveModel()
         }
     }
     if (WarnDebugMessage)
-    	      qDebug() << __FILE__ << QString::number(__LINE__) << " distanceRules error =" << m_Model->lastError().text();
+        LOG("distanceRules error =" + m_Model->lastError().text());
 }
 
 void DistanceRulesWidget::on_distanceRulesComboBox_currentIndexChanged(int index)
@@ -199,11 +193,11 @@ void DistanceRulesWidget::on_distanceRulesComboBox_currentIndexChanged(int index
 void DistanceRulesWidget::on_addButton_clicked()
 {
     if (WarnDebugMessage)
-    	      qDebug() << __FILE__ << QString::number(__LINE__) << " rowCount1 =" << QString::number(m_Model->rowCount());
+        LOG("rowCount1 =" + QString::number(m_Model->rowCount()));
     if (!m_Model->insertRow(m_Model->rowCount()))
         LOG_ERROR("Unable to add row");
     if (WarnDebugMessage)
-    	      qDebug() << __FILE__ << QString::number(__LINE__) << " rowCount2 =" << QString::number(m_Model->rowCount());
+        LOG("rowCount2 =" + QString::number(m_Model->rowCount()));
     distanceRulesComboBox->setCurrentIndex(m_Model->rowCount()-1);
     distanceRulesUidLabel->setText(calcDistanceRulesUid());
     distanceRulesUidLabel->setFocus();
@@ -212,10 +206,9 @@ void DistanceRulesWidget::on_addButton_clicked()
 
 void DistanceRulesWidget::on_deleteButton_clicked()
 {
-    if (!m_Model->removeRow(distanceRulesComboBox->currentIndex()))
-    {
-          LOG_ERROR("Unable to remove row");
-        }
+    if (!m_Model->removeRow(distanceRulesComboBox->currentIndex())) {
+        LOG_ERROR("Unable to remove row");
+    }
     distanceRulesComboBox->setCurrentIndex(m_Model->rowCount() - 1);
 }
 
@@ -227,8 +220,8 @@ void DistanceRulesWidget::saveToSettings(Core::ISettings *sets)
         Utils::warningMessageBox(tr("Can not submit distancerules to your personnal database."),
                                  tr("An error occured during distancerules saving. Datas are corrupted."));
     }
-        connect(typeEdit,SIGNAL(textEdited(const QString &)),distanceRulesComboBox,SLOT(setEditText(const QString &)));
-        update();
+    connect(typeEdit,SIGNAL(textEdited(const QString &)),distanceRulesComboBox,SLOT(setEditText(const QString &)));
+    update();
 }
 
 void DistanceRulesWidget::writeDefaultSettings(Core::ISettings *s)

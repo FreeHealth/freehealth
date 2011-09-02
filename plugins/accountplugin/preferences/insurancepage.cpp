@@ -64,11 +64,11 @@ static inline Core::IUser *user() { return Core::ICore::instance()->user(); }
 const QString global_resourcesPath = qApp->applicationDirPath()+"/../../global_resources";
 
 
-/////////////////////////////////////////////////////////////////////////////////////////////////////
-//////////////////////////////////////  AccountUserPage  //////////////////////////////////////////////
-/////////////////////////////////////////////////////////////////////////////////////////////////////
 InsurancePage::InsurancePage(QObject *parent) :
-        IOptionsPage(parent), m_Widget(0) { setObjectName("InsurancePage"); }
+        IOptionsPage(parent), m_Widget(0)
+{
+    setObjectName("InsurancePage");
+}
 
 InsurancePage::~InsurancePage()
 {
@@ -89,7 +89,7 @@ void InsurancePage::resetToDefaults()
 void InsurancePage::applyChanges()
 {
     if (WarnDebugMessage)
-    	      qDebug() << __FILE__ << QString::number(__LINE__) << " applyChanges ";
+        LOG("applyChanges");
     if (!m_Widget) {
         return;
     }
@@ -121,8 +121,6 @@ QWidget *InsurancePage::createPage(QWidget *parent)
 InsuranceWidget::InsuranceWidget(QWidget *parent) :
         QWidget(parent), m_Model(0), m_Mapper(0)
 {
-    //QCoreApplication::processEvents(QEventLoop::AllEvents);
-//    QApplication::setOverrideCursor(QCursor(Qt::BusyCursor));
     setObjectName("InsuranceWidget");
     setupUi(this);
     m_user_uid = user()->uuid();
@@ -175,7 +173,6 @@ InsuranceWidget::InsuranceWidget(QWidget *parent) :
   
     setDatasToUi();
     connect(zipComboBox,SIGNAL(currentIndexChanged(const QString &)),this,SLOT(findCityFromZipCode(const QString &)));
-//    QApplication::restoreOverrideCursor();
 }
 
 InsuranceWidget::~InsuranceWidget()
@@ -183,13 +180,15 @@ InsuranceWidget::~InsuranceWidget()
     //saveModel();
 }
 
-void InsuranceWidget::fillComboBoxes(){
+void InsuranceWidget::fillComboBoxes()
+{
     if (WarnDebugMessage)
-    	      qDebug() << __FILE__ << QString::number(__LINE__) << " in fillcomboboxes "  ;
+        LOG("fillcomboboxes");
     QLocale local;
     QString localCountry;
     localCountry = QLocale::countryToString(local.country());
-    qWarning() << __FILE__ << QString::number(__LINE__) << " country =" << localCountry ;
+    if (WarnDebugMessage)
+        qWarning() << __FILE__ << QString::number(__LINE__) << " country =" << localCountry ;
     //zipcodes 
     QStringList listOfZipcodes;
     listOfZipcodes  = m_hashTownZip.keys();
@@ -208,23 +207,22 @@ void InsuranceWidget::fillComboBoxes(){
 void InsuranceWidget::setDatasToUi()
 {
     if (WarnDebugMessage)
-    	      qDebug() << __FILE__ << QString::number(__LINE__) << "index row  =" << QString::number(insuranceComboBox->currentIndex());
+        LOG("index row  = " + QString::number(insuranceComboBox->currentIndex()));
     m_Mapper->setCurrentIndex(insuranceComboBox->currentIndex());
 }
 
 void InsuranceWidget::saveModel()
 {
     if (WarnDebugMessage)
-    	      qDebug() << __FILE__ << QString::number(__LINE__) << " currentIndex =" << QString::number(m_Mapper->currentIndex());
+        LOG("currentIndex = " + QString::number(m_Mapper->currentIndex()));
     if (m_Model->isDirty()) {
         bool yes = Utils::yesNoMessageBox(tr("Save changes ?"),
                                           tr("You make changes into the insurance table.\n"
                                              "Do you want to save them ?"));
         if (yes) {
-           if (!m_Model->submit()) {if (WarnDebugMessage)
-    	      qDebug() << __FILE__ << QString::number(__LINE__) << " insurance submit ";
+            if (!m_Model->submit()) {
                 LOG_ERROR(tkTr(Trans::Constants::UNABLE_TO_SAVE_DATA_IN_DATABASE_1).
-                                                   arg(tr("insurance")));
+                          arg(tr("insurance")));
             }
         } 
         else {
@@ -232,7 +230,7 @@ void InsuranceWidget::saveModel()
         }
     }
     if (WarnDebugMessage)
-    	      qDebug() << __FILE__ << QString::number(__LINE__) << " site error =" << m_Model->lastError().text();
+        LOG(" site error = " + m_Model->lastError().text());
 }
 
 void InsuranceWidget::on_insuranceComboBox_currentIndexChanged(int index)
@@ -245,18 +243,19 @@ void InsuranceWidget::on_insuranceComboBox_currentIndexChanged(int index)
 void InsuranceWidget::on_addButton_clicked()
 {
     if (WarnDebugMessage)
-    	      qDebug() << __FILE__ << QString::number(__LINE__) << " rowCount1 =" << QString::number(m_Model->rowCount());
+        qDebug() << __FILE__ << QString::number(__LINE__) << " rowCount1 =" << QString::number(m_Model->rowCount());
+
     if (!m_Model->insertRow(m_Model->rowCount()))
         LOG_ERROR("Unable to add row");
     if (WarnDebugMessage)
-    	      qDebug() << __FILE__ << QString::number(__LINE__) << " rowCount2 =" << QString::number(m_Model->rowCount());
+        qDebug() << __FILE__ << QString::number(__LINE__) << " rowCount2 =" << QString::number(m_Model->rowCount());
     insuranceComboBox->setCurrentIndex(m_Model->rowCount()-1);
     m_insuranceUidLabel->setValue(calcInsuranceUid());
     m_insuranceUidLabel->setFocus();
-    if (WarnDebugMessage)
-    	      qDebug() << __FILE__ << QString::number(__LINE__) << " m_insuranceUidLabel =" << m_insuranceUidLabel->text();
-    if (WarnDebugMessage)
-    	      qDebug() << __FILE__ << QString::number(__LINE__) << " currentIndex =" << QString::number(m_Mapper->currentIndex());
+    if (WarnDebugMessage) {
+        qDebug() << __FILE__ << QString::number(__LINE__) << " m_insuranceUidLabel =" << m_insuranceUidLabel->text();
+        qDebug() << __FILE__ << QString::number(__LINE__) << " currentIndex =" << QString::number(m_Mapper->currentIndex());
+    }
     /*nameEdit->setText("name");
     adressEdit->setText("adress");
     cityEdit->setText("city");
@@ -276,10 +275,9 @@ void InsuranceWidget::on_addButton_clicked()
 
 void InsuranceWidget::on_deleteButton_clicked()
 {
-    if (!m_Model->removeRow(insuranceComboBox->currentIndex()))
-    {
-          LOG_ERROR("Unable to remove row");
-        }
+    if (!m_Model->removeRow(insuranceComboBox->currentIndex())) {
+        LOG_ERROR("Unable to remove row");
+    }
     insuranceComboBox->setCurrentIndex(m_Model->rowCount() - 1);
 }
 
@@ -291,8 +289,8 @@ void InsuranceWidget::saveToSettings(Core::ISettings *sets)
         Utils::warningMessageBox(tr("Can not submit insurance to your personnal database."),
                                  tr("An error occured during insurance saving. Datas are corrupted."));
     }
-        connect(nameEdit,SIGNAL(textEdited(const QString &)),insuranceComboBox,SLOT(setEditText(const QString &)));
-        update();
+    connect(nameEdit,SIGNAL(textEdited(const QString &)),insuranceComboBox,SLOT(setEditText(const QString &)));
+    update();
 }
 
 void InsuranceWidget::writeDefaultSettings(Core::ISettings *s)
@@ -319,20 +317,24 @@ void InsuranceWidget::changeEvent(QEvent *e)
     }
 }
 
-void InsuranceWidget::showEvent(QShowEvent *event){
+void InsuranceWidget::showEvent(QShowEvent *event)
+{
     Q_UNUSED(event);
-    qWarning() << __FILE__ << QString::number(__LINE__) << " insurance activated "   ;
+    if (WarnDebugMessage)
+        LOG("insurance activated");
     fillComboBoxes();
     update();
 }
 
-void InsuranceWidget::findCityFromZipCode(const QString & zipCodeText){
+void InsuranceWidget::findCityFromZipCode(const QString & zipCodeText)
+{
 //    cityEdit->setFocus();
     QString city = m_hashTownZip.value(zipCodeText);
     cityEdit->setText(city);
 }
 
-QHash<QString,QString> InsuranceWidget::parseZipcodeCsv(){
+QHash<QString,QString> InsuranceWidget::parseZipcodeCsv()
+{
     QHash<QString,QString> hash;
     QString zipcodeStr = global_resourcesPath+"/textfiles/zipcodes.csv";
     QFile zipcodeFile(zipcodeStr);
