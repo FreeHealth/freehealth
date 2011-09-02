@@ -72,7 +72,8 @@ public:
         PersonalLinkId,
         FullName,
         GenderIndex, TitleIndex, Gender, Title,
-        Adress, Zipcode, City, Country, Tel1, Tel2, Tel3, Fax, PractitionerId,
+        Adress, Zipcode, City, Country, IsoCountry,
+        Tel1, Tel2, Tel3, Fax, PractitionerId,
         Specialities, Qualifications, Preferences,  // 31
 
         GenericHeader,
