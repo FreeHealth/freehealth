@@ -1041,6 +1041,8 @@ void switchEchoMode(QLineEdit * l)
 /** Rounds the \e date to the number of minutes \e minutesRound. */
 QDateTime roundDateTime(const QDateTime &date, const int minutesRound)
 {
+    if (date.isNull())
+        return QDateTime();
     QDateTime dt = QDateTime(date.date(), QTime(date.time().hour(), date.time().minute(), 0));
     dt = dt.addSecs(60);
     int minToRound = dt.time().minute()%minutesRound;

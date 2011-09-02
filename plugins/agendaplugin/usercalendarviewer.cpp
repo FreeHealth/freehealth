@@ -170,6 +170,9 @@ void UserCalendarViewer::recalculateAvailabilitiesWithDurationIndex(const int in
     for(int i = d->ui->availButton->actions().count()-1; i > -1 ; --i)
         d->ui->availButton->removeAction(d->ui->availButton->actions().at(i));
 
+    if (index<0)
+        return;
+
     QList<QDateTime> dates;
     Agenda::UserCalendar *cal = d->m_UserCalendarModel->defaultUserCalendar();
     if (cal) {

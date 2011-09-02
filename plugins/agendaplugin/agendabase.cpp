@@ -1284,11 +1284,18 @@ bool AgendaBase::saveCalendarEvent(Appointement *event)
 QList<QDateTime> AgendaBase::nextAvailableTime(const QDateTime &startSearch, const int durationInMinutes, const Agenda::UserCalendar &calendar, const int numberOfDates)
 {
     QList<QDateTime> toReturn;
+
+    // Some checkings
     if (!calendar.isValid())
+        return toReturn;
+    if (durationInMinutes <= 0)
+        return toReturn;
+    if (numberOfDates <= 0)
         return toReturn;
     if (!connectDatabase(Constants::DB_NAME, __LINE__))
         return toReturn;
 
+    // Here we can go on
     if (WarnNextAvailableTimeWarnings)
         qWarning() << Q_FUNC_INFO << startSearch << durationInMinutes << calendar.data(Constants::Db_CalId).toInt();
 
