@@ -308,7 +308,7 @@ void MainWindow::postCoreInitialization()
     show();
 
     // clear the focus of the mainwin so that the lineeditbuton show the tooltip
-    this->setFocus();
+    setFocus();
 }
 
 /** \brief Slot connected to Core::IUser::userChanged().*/

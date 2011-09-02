@@ -304,7 +304,7 @@ void PrinterPreviewerPrivate::setFooterPresence(const int presence)
 
 void PrinterPreviewerPrivate::setWatermarkPresence(const int presence)
 {
-    qWarning() << "setWatermarkPresence" << presence;
+//    qWarning() << "setWatermarkPresence" << presence;
     QComboBox *c = this->findChild<QComboBox *>(tkTr(Trans::Constants::WATERMARK));
     if (c)
         c->setCurrentIndex(presence);
@@ -330,7 +330,7 @@ int PrinterPreviewerPrivate::footerPresence() const
 
 int PrinterPreviewerPrivate::watermarkPresence() const
 {
-    qWarning() << "watermarkPresence";
+//    qWarning() << "watermarkPresence";
     QComboBox *c = this->findChild<QComboBox *>(tkTr(Trans::Constants::WATERMARK));
     if (c)
         return c->currentIndex();

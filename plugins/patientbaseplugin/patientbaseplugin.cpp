@@ -160,6 +160,8 @@ void PatientBasePlugin::extensionsInitialized()
 
 void PatientBasePlugin::postCoreInitialization()
 {
+    if (Utils::Log::warnPluginsCreation())
+        qWarning() << Q_FUNC_INFO;
     PatientWidgetManager::instance()->postCoreInitialization();
 }
 

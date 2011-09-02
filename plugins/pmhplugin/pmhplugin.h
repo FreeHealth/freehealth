@@ -54,7 +54,7 @@ public:
     void extensionsInitialized();
 
 private Q_SLOTS:
-    void postCoreInit();
+    void postCoreInitialization();
 
 private:
     Internal::PmhMode *mode;

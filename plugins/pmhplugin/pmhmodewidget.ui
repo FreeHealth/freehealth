@@ -69,7 +69,6 @@
             </property>
             <item>
              <widget class="PMH::PmhViewer" name="pmhViewer" native="true">
-              <zorder>buttonBox</zorder>
              </widget>
             </item>
             <item>

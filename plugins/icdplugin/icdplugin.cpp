@@ -104,6 +104,8 @@ void IcdPlugin::extensionsInitialized()
 
 void IcdPlugin::postCoreInitialization()
 {
+    if (Utils::Log::warnPluginsCreation())
+        qWarning() << Q_FUNC_INFO;
     // Create the widgetmanager instance (here because we need that MainWindow has done its initialization)
 #ifndef FREETOOLBOX
     IcdWidgetManager::instance();

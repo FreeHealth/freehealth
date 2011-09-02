@@ -93,11 +93,13 @@ void PmhPlugin::extensionsInitialized()
     prefPage->checkSettingsValidity();
     addAutoReleasedObject(prefPage);
 
-    connect(Core::ICore::instance(), SIGNAL(coreOpened()), this, SLOT(postCoreInit()));
+    connect(Core::ICore::instance(), SIGNAL(coreOpened()), this, SLOT(postCoreInitialization()));
 }
 
-void PmhPlugin::postCoreInit()
+void PmhPlugin::postCoreInitialization()
 {
+    if (Utils::Log::warnPluginsCreation())
+        qWarning() << Q_FUNC_INFO;
     PmhCore::instance(this);
     mode = new Internal::PmhMode(this);
 }
