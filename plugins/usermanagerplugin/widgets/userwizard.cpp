@@ -52,6 +52,8 @@
 #include <listviewplugin/stringlistview.h>
 #include <listviewplugin/stringlistmodel.h>
 
+#include <zipcodesplugin/zipcodescompleters.h>
+
 #include <coreplugin/icore.h>
 #include <coreplugin/isettings.h>
 #include <coreplugin/itheme.h>
@@ -435,13 +437,17 @@ UserContactPage::UserContactPage(QWidget *parent) :
     setSubTitle(tr("This represents your professional address."));
 
     ui->setupUi(this);
-    ui->country->setText(QLocale::countryToString(QLocale().country()));
     ui->tabWidget->setCurrentIndex(0);
+
+    ZipCodes::ZipCountryCompleters *c = new ZipCodes::ZipCountryCompleters(this);
+    c->setCountryComboBox(ui->comboBox);
+    c->setZipLineEdit(ui->zipcode);
+    c->setCityLineEdit(ui->city);
 
     registerField("Address", ui->address , "plainText");
     registerField("City", ui->city , "text");
     registerField("Zipcode", ui->zipcode , "text");
-    registerField("Country", ui->country , "text");
+    registerField("Country", ui->comboBox , "currentIsoCountry");
 
     registerField("Tel1", ui->tel1, "text");
     registerField("Tel2", ui->tel2, "text");
