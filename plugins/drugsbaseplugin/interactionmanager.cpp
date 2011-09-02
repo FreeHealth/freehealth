@@ -65,6 +65,8 @@
 #include <QLabel>
 #include <QStandardItemModel>
 
+enum { WarnComputations = false };
+
 namespace  {
     const char* const LIST_MASK =
             "<table border=1 cellpadding=2 cellspacing=2 width=100%>\n"
@@ -152,7 +154,8 @@ DrugInteractionResult *InteractionManager::checkInteractions(const DrugInteracti
     for(int i = 0; i < d->m_Engines.count(); ++i) {
         IDrugEngine *engine = d->m_Engines.at(i);
 
-        qWarning() << "DrugEngine" << engine->name() << "Compute" << (engine->isActive() && engine->canComputeInteractions()) << "nbDrugs" << query.drugsList().count();
+        if (WarnComputations)
+            qWarning() << "InteractionManager" << engine->name() << "Compute" << (engine->isActive() && engine->canComputeInteractions()) << "nbDrugs" << query.drugsList().count();
 
         if (!engine->isActive() || !engine->canComputeInteractions())
             continue;

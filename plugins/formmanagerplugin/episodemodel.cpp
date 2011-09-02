@@ -62,13 +62,15 @@ enum { base64MimeDatas = true  };
 enum {
     WarnDragAndDrop = false,
     WarnReparentItem = false,
-    WarnDatabaseSaving = false
+    WarnDatabaseSaving = false,
+    WarnFormAndEpisodeRetreiving = false
    };
 #else
 enum {
     WarnDragAndDrop = false,
     WarnReparentItem = false,
-    WarnDatabaseSaving = false
+    WarnDatabaseSaving = false,
+    WarnFormAndEpisodeRetreiving = false
    };
 #endif
 
@@ -366,7 +368,8 @@ public:
         m_FormUids.clear();
 
         // getting Forms
-        LOG_FOR(q, "Getting Forms");
+        if (WarnFormAndEpisodeRetreiving)
+            LOG_FOR(q, "Getting Forms");
         // create one item per form
         m_FormItems.clear();
         foreach(Form::FormMain *form, m_RootForm->flattenFormMainChildren()) {
@@ -427,7 +430,8 @@ public:
         query.setDeletedEpisodes(false);
         query.setFormUids(m_FormUids);
         m_Episodes = episodeBase()->getEpisodes(query);
-        LOG_FOR(q, "Getting Episodes (refresh): " + QString::number(m_Episodes.count()));
+        if (WarnFormAndEpisodeRetreiving)
+            LOG_FOR(q, "Getting Episodes (refresh): " + QString::number(m_Episodes.count()));
 
         // create TreeItems and parent them
         for(int i = 0; i < m_Episodes.count(); ++i) {
@@ -450,7 +454,7 @@ public:
             item->setParent(formParent);
             formParent->appendChild(item);
 
-            qWarning() << episode->data(EpisodeData::FormUuid).toString() << formParent;
+//            qWarning() << episode->data(EpisodeData::FormUuid).toString() << formParent;
 
             m_EpisodeItems.insert(episode, item);
         }
