@@ -41,6 +41,7 @@
 
 #include <QSqlTableModel>
 #include <QAbstractItemView>
+#include <QToolButton>
 
 using namespace UserPlugin;
 using namespace Internal;

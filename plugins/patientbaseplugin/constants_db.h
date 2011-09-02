@@ -55,7 +55,7 @@ namespace Constants {
         IDENTITY_FIRSTNAME,
         IDENTITY_SECONDNAME,
         IDENTITY_GENDER,
-        IDENTITY_TITLE,    // Encoded like = 1=Mister, 2=Miss, 3=Madam , 4=Doctor, 5=Professor, 6=Captain
+        IDENTITY_TITLE,    // Encoded using the Utils::titles() QStringList index
         IDENTITY_DOB,
         IDENTITY_MARITAL_STATUS,
         IDENTITY_DATEOFDEATH,
@@ -64,6 +64,7 @@ namespace Constants {
         IDENTITY_ADDRESS_STREET_NUMBER,
         IDENTITY_ADDRESS_ZIPCODE,
         IDENTITY_ADRESS_CITY,
+        IDENTITY_ADRESS_PROVINCE,
         IDENTITY_ADDRESS_COUNTRY,
         IDENTITY_ADDRESS_NOTE,
         IDENTITY_MAILS,

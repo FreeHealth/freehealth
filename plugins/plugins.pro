@@ -23,6 +23,7 @@ SUBDIRS = \
     accountbase \
     account \
     agenda \
+    zipcodes
 #    alerts \
 
 # root plugin
@@ -95,6 +96,8 @@ usermanager.depends += listview
 
 patientbase.subdir   = patientbaseplugin
 patientbase.depends += core
+patientbase.depends += listview
+patientbase.depends += zipcodes
 
 agenda.subdir = agendaplugin
 agenda.depends += core
@@ -134,3 +137,6 @@ account.depends += core
 account.depends += texteditor
 account.depends += printer
 account.depends += accountbase
+
+zipcodes.subdir = zipcodesplugin
+zipcodes.depends += core

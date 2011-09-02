@@ -170,17 +170,24 @@
         </property>
        </widget>
       </item>
-      <item row="3" column="1">
-       <widget class="QLineEdit" name="country"/>
-      </item>
       <item row="0" column="1">
        <widget class="QTextEdit" name="street"/>
+      </item>
+      <item row="3" column="1">
+       <widget class="Views::CountryComboBox" name="country"/>
       </item>
      </layout>
     </widget>
    </item>
   </layout>
  </widget>
+ <customwidgets>
+  <customwidget>
+   <class>Views::CountryComboBox</class>
+   <extends>QComboBox</extends>
+   <header location="global">listviewplugin/countrycombobox.h</header>
+  </customwidget>
+ </customwidgets>
  <tabstops>
   <tabstop>titleCombo</tabstop>
   <tabstop>birthName</tabstop>
@@ -192,7 +199,6 @@
   <tabstop>street</tabstop>
   <tabstop>city</tabstop>
   <tabstop>zipcode</tabstop>
-  <tabstop>country</tabstop>
  </tabstops>
  <resources/>
  <connections/>

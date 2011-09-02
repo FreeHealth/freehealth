@@ -43,6 +43,8 @@
 #include <coreplugin/constants_tokensandsettings.h>
 #include <coreplugin/ipatient.h>
 
+#include <zipcodesplugin/zipcodescompleters.h>
+
 #include <utils/global.h>
 #include <translationutils/constanttranslations.h>
 
@@ -70,7 +72,8 @@ class IdentityWidgetPrivate
 {
 public:
     IdentityWidgetPrivate(IdentityWidget *parent, IdentityWidget::EditMode mode) :
-            editUi(0), viewUi(0), m_Mapper(0), m_EditMode(mode), q(parent)
+        editUi(0), viewUi(0), m_Mapper(0), m_EditMode(mode), zipCompleter(0),
+        q(parent)
     {
         if (mode==IdentityWidget::ReadOnlyMode) {
             viewUi = new Ui::IdentityViewer;
@@ -80,6 +83,12 @@ public:
             editUi->setupUi(q);
             editUi->genderCombo->addItems(genders());
             editUi->titleCombo->addItems(titles());
+
+            zipCompleter = new ZipCodes::ZipCountryCompleters(q);
+            zipCompleter->setCityLineEdit(editUi->city);
+            zipCompleter->setZipLineEdit(editUi->zipcode);
+            zipCompleter->setCountryComboBox(editUi->country);
+
 //            editUi->dob->setDisplayFormat(QLocale().dateFormat(QLocale::LongFormat));
             q->connect(editUi->photoButton, SIGNAL(clicked()), q, SLOT(photoButton_clicked()));
         }
@@ -116,11 +125,11 @@ public:
             m_Mapper->addMapping(editUi->firstname, Core::IPatient::Firstname, "text");
             m_Mapper->addMapping(editUi->genderCombo, Core::IPatient::GenderIndex, "currentIndex");
             m_Mapper->addMapping(editUi->titleCombo, Core::IPatient::TitleIndex, "currentIndex");
-            m_Mapper->addMapping(editUi->dob, Core::IPatient::DateOfBirth);
+            m_Mapper->addMapping(editUi->dob, Core::IPatient::DateOfBirth, "date");
             m_Mapper->addMapping(editUi->street, Core::IPatient::Street, "plainText");
             m_Mapper->addMapping(editUi->city, Core::IPatient::City, "text");
             m_Mapper->addMapping(editUi->zipcode, Core::IPatient::ZipCode, "text");
-            m_Mapper->addMapping(editUi->country, Core::IPatient::Country, "text");
+            m_Mapper->addMapping(editUi->country, Core::IPatient::Country, "currentIsoCountry");
             m_Mapper->toFirst();
         }
     }
@@ -130,7 +139,7 @@ public:
     QDataWidgetMapper *m_Mapper;
     Patients::PatientModel *m_PatientModel;
     IdentityWidget::EditMode m_EditMode;
-
+    ZipCodes::ZipCountryCompleters *zipCompleter;
 private:
     IdentityWidget *q;
 };
@@ -173,6 +182,7 @@ void IdentityWidget::setCurrentIndex(const QModelIndex &patientIndex)
     if (d->m_Mapper) {
         d->m_Mapper->setCurrentModelIndex(patientIndex);
         d->editUi->photoButton->setIcon(photo);
+        d->zipCompleter->checkData();
     } else {
         d->viewUi->name->clear();
         d->viewUi->photoLabel->clear();

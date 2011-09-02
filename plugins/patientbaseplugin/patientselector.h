@@ -72,7 +72,7 @@ public:
         DateOfBirth = 0x4000,
         Default     = Title | FullName | Gender | FullAdress
     };
-    Q_DECLARE_FLAGS(FieldsToShow, FieldToShow);
+    Q_DECLARE_FLAGS(FieldsToShow, FieldToShow)
 
 
     PatientSelector(QWidget *parent = 0, const FieldsToShow fields = None);
