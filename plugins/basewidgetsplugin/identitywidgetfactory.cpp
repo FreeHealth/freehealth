@@ -135,6 +135,7 @@ IdentityFormWidget::IdentityFormWidget(Form::FormItem *formItem, QWidget *parent
     col = 0;
 
     connect(patient(), SIGNAL(currentPatientChanged()), this, SLOT(onCurrentPatientChanged()));
+    onCurrentPatientChanged();
 
     // create itemdata
     IdentityWidgetData *datas = new IdentityWidgetData(m_FormItem);
