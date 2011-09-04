@@ -454,12 +454,12 @@ bool UserModel::setCurrentUser(const QString &clearLog, const QString &clearPass
     }
 
     // 4. Connect new user
-    LOG(tr("Setting current user uuid to %1").arg(uuid));
+    LOG(tr("Setting current user uuid to \t\t\t %1").arg(uuid));
     if (!d->m_CurrentUserUuid.isEmpty()) {
         // save user preferences
         Internal::UserData *user = d->m_Uuid_UserList[d->m_CurrentUserUuid];
         user->setPreferences(settings()->userSettings());
-        userBase()->saveUser(user);
+        userBase()->saveUserPreferences(user->uuid(), user->preferences());
         Q_EMIT userAboutToDisconnect(d->m_CurrentUserUuid);
     }
     d->m_CurrentUserUuid.clear();
@@ -1249,7 +1249,8 @@ void UserModel::updateUserPreferences()
         Internal::UserData *user = d->m_Uuid_UserList[d->m_CurrentUserUuid];
         if (user) {
             user->setPreferences(settings()->userSettings());
-            userBase()->saveUser(user);
+            /** \todo code here : save only the preferences not the entire user */
+            userBase()->saveUserPreferences(user->uuid(), settings()->userSettings());
         } else {
             LOG_ERROR("No user uuid");
         }
