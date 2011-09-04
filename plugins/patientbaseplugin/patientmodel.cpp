@@ -44,6 +44,7 @@
 #include <coreplugin/iuser.h>
 #include <coreplugin/constants_icons.h>
 #include <coreplugin/ipatientlistener.h>
+#include <coreplugin/constants_tokensandsettings.h>
 
 #include <medicalutils/global.h>
 #include <utils/log.h>
@@ -134,7 +135,7 @@ public:
 
         // Manage virtual patients
         QHash<int, QString> where;
-        if (!settings()->value(Constants::S_SELECTOR_SHOWVIRTUALPATIENTS).toBool())
+        if (!settings()->value(Core::Constants::S_ALLOW_VIRTUAL_DATA).toBool())
             where.insert(Constants::IDENTITY_ISVIRTUAL, "=0");
 
         // All users share the same patients
