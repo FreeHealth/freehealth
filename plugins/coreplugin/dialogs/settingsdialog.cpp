@@ -45,6 +45,8 @@
 #include <QHeaderView>
 #include <QPushButton>
 
+#include <QDebug>
+
 using namespace Core;
 using namespace Core::Internal;
 
@@ -57,15 +59,16 @@ SettingsDialog::SettingsDialog(QWidget *parent, const QString &categoryId, const
     setWindowFlags(Qt::Window | Qt::CustomizeWindowHint | Qt::WindowSystemMenuHint | Qt::WindowCloseButtonHint);
     m_ui->setupUi(this);
     m_ui->buttonBox->button(QDialogButtonBox::Ok)->setDefault(true);
+    m_ui->buttonBox->button(QDialogButtonBox::Apply)->setToolTip(tr("Apply all changes (all pages)"));
+    m_ui->buttonBox->button(QDialogButtonBox::RestoreDefaults)->setToolTip(tr("Reset to default the current page"));
 
     connect(m_ui->buttonBox->button(QDialogButtonBox::Apply), SIGNAL(clicked()), this, SLOT(apply()));
     connect(m_ui->buttonBox->button(QDialogButtonBox::Help), SIGNAL(clicked()), this, SLOT(showHelp()));
     connect(m_ui->buttonBox->button(QDialogButtonBox::RestoreDefaults), SIGNAL(clicked()), this, SLOT(restoreDefaults()));
 
-    QList<IOptionsPage*> pages =
-        ExtensionSystem::PluginManager::instance()->getObjects<IOptionsPage>();
+    m_pages = ExtensionSystem::PluginManager::instance()->getObjects<IOptionsPage>();
 
-    m_ui->widget->setPages<IOptionsPage>(pages);
+    m_ui->widget->setPages<IOptionsPage>(m_pages);
     m_ui->widget->setSettingKey("Dialogs/Settings");
     m_ui->widget->setupUi();
 
@@ -98,14 +101,17 @@ void SettingsDialog::apply()
 {
     foreach (IOptionsPage *page, m_pages)
         page->applyChanges();
+    settings()->sync();
     m_applied = true;
 }
 
 void SettingsDialog::restoreDefaults()
 {
     IOptionsPage *page = qobject_cast<IOptionsPage*>(m_ui->widget->currentPage());
-    if (page)
+    if (page) {
         page->resetToDefaults();
+        settings()->sync();
+    }
 }
 
 void SettingsDialog::showHelp()
