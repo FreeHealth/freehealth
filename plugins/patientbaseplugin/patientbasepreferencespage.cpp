@@ -35,6 +35,8 @@
 #include <coreplugin/icore.h>
 #include <coreplugin/isettings.h>
 
+#include "ui_patientbasepreferencespage.h"
+
 #include <QSqlDatabase>
 #include <QSqlQuery>
 #include <QProgressDialog>
@@ -106,16 +108,22 @@ QWidget *PatientBasePreferencesPage::createPage(QWidget *parent)
 PatientBasePreferencesWidget::PatientBasePreferencesWidget(QWidget *parent) :
         QWidget(parent)
 {
+    ui = new Ui::PatientBasePreferencesWidget;
     setObjectName("PatientBasePreferencesWidget");
-    setupUi(this);
+    ui->setupUi(this);
     setDatasToUi();
+}
+
+PatientBasePreferencesWidget::~PatientBasePreferencesWidget()
+{
+    delete ui;
 }
 
 void PatientBasePreferencesWidget::setDatasToUi()
 {
-    selectNewlyCreatedBox->setChecked(settings()->value(Constants::S_PATIENTCHANGEONCREATION).toBool());
-    genderColor->setChecked(settings()->value(Constants::S_SELECTOR_USEGENDERCOLORS).toBool());
-    patientBarColor->setColor(QColor(settings()->value(Constants::S_PATIENTBARCOLOR).toString()));
+    ui->selectNewlyCreatedBox->setChecked(settings()->value(Constants::S_PATIENTCHANGEONCREATION).toBool());
+    ui->genderColor->setChecked(settings()->value(Constants::S_SELECTOR_USEGENDERCOLORS).toBool());
+    ui->patientBarColor->setColor(QColor(settings()->value(Constants::S_PATIENTBARCOLOR).toString()));
 }
 
 void PatientBasePreferencesWidget::saveToSettings(Core::ISettings *sets)
@@ -126,9 +134,9 @@ void PatientBasePreferencesWidget::saveToSettings(Core::ISettings *sets)
     else
         s = sets;
 
-    s->setValue(Constants::S_PATIENTCHANGEONCREATION, selectNewlyCreatedBox->isChecked());
-    s->setValue(Constants::S_SELECTOR_USEGENDERCOLORS, genderColor->isChecked());
-    s->setValue(Constants::S_PATIENTBARCOLOR, patientBarColor->color());
+    s->setValue(Constants::S_PATIENTCHANGEONCREATION, ui->selectNewlyCreatedBox->isChecked());
+    s->setValue(Constants::S_SELECTOR_USEGENDERCOLORS, ui->genderColor->isChecked());
+    s->setValue(Constants::S_PATIENTBARCOLOR, ui->patientBarColor->color());
 }
 
 void PatientBasePreferencesWidget::writeDefaultSettings(Core::ISettings *s)
@@ -146,7 +154,7 @@ void PatientBasePreferencesWidget::changeEvent(QEvent *e)
     QWidget::changeEvent(e);
     switch (e->type()) {
     case QEvent::LanguageChange:
-        retranslateUi(this);
+        ui->retranslateUi(this);
         break;
     default:
         break;

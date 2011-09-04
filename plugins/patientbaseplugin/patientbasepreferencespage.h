@@ -29,16 +29,14 @@
 
 #include <coreplugin/ioptionspage.h>
 
-#include "ui_patientbasepreferencespage.h"
-
 #include <QPointer>
 #include <QObject>
 
 /**
  * \file patientbasepreferencespage.h
  * \author Eric MAEKER <eric.maeker@gmail.com>
- * \version 0.4.0
- * \date 26 Apr 2010
+ * \version 0.6.0
+ * \date 03 Sept 2011
 */
 
 namespace Core {
@@ -47,14 +45,18 @@ class ISettings;
 
 namespace Patients {
 namespace Internal {
+namespace Ui {
+class PatientBasePreferencesWidget;
+}
 
-class PatientBasePreferencesWidget : public QWidget, private Ui::PatientBasePreferencesWidget
+class PatientBasePreferencesWidget : public QWidget
 {
     Q_OBJECT
     Q_DISABLE_COPY(PatientBasePreferencesWidget)
 
 public:
     explicit PatientBasePreferencesWidget(QWidget *parent = 0);
+    ~PatientBasePreferencesWidget();
 
     static void writeDefaultSettings(Core::ISettings *s);
     void setDatasToUi();
@@ -64,6 +66,9 @@ public Q_SLOTS:
 
 protected:
     virtual void changeEvent(QEvent *e);
+
+private:
+    Ui::PatientBasePreferencesWidget *ui;
 };
 
 
