@@ -232,8 +232,8 @@ void VirtualDatabaseCreator::saveToSettings(Core::ISettings *sets)
 void VirtualDatabaseCreator::writeDefaultSettings(Core::ISettings *s)
 {
 //    qWarning() << "---------> writedefaults";
-    Utils::Log::addMessage("AccountUserWidget", tkTr(Trans::Constants::CREATING_DEFAULT_SETTINGS_FOR_1).arg("VirtualDatabaseCreator"));
-    s->sync();
+    LOG_FOR("VirtualDatabaseCreator", tkTr(Trans::Constants::CREATING_DEFAULT_SETTINGS_FOR_1).arg("VirtualDatabaseCreator"));
+//    s->sync();
 }
 
 void VirtualDatabaseCreator::on_populate_clicked()

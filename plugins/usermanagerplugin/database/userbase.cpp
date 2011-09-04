@@ -1032,7 +1032,7 @@ bool UserBase::saveUser(UserData *user)
                 q.bindValue(RIGHTS_ROLE ,      s);
                 q.bindValue(RIGHTS_RIGHTS ,    user->rightsValue(s, RIGHTS_RIGHTS));
                 q.exec();
-                if (! q.isActive())
+                if (!q.isActive())
                     LOG_QUERY_ERROR(q);
                 q.finish();
             }
@@ -1123,6 +1123,57 @@ bool UserBase::deleteUser(const QString &uuid)
     }
     query.finish();
     return true;
+}
+
+/** Save the current preferences of the user. User is identified by its \e uid and the settings are stored into \e content. */
+bool UserBase::saveUserPreferences(const QString &uid, const QString &content)
+{
+    if (uid.isEmpty())
+        return false;
+    if (content.isEmpty())
+        return false;
+
+    // connect user database
+    QSqlDatabase DB = database();
+    if (!DB.isOpen()) {
+        if (!DB.open()) {
+            LOG_ERROR(tkTr(Trans::Constants::UNABLE_TO_OPEN_DATABASE_1_ERROR_2).arg(DB.connectionName()).arg(DB.lastError().text()));
+            return false;
+        }
+    }
+
+    // if user already exists ==> update   else ==> insert
+    QHash<int, QString> where;
+    where.insert(DATAS_USER_UUID, QString("='%1'").arg(uid));
+    where.insert(DATAS_DATANAME, QString("='%1'").arg(Constants::USER_DATAS_PREFERENCES));
+    if (count(Constants::Table_DATAS, Constants::DATAS_ID, getWhereClause(Constants::Table_DATAS, where))==0) {
+        // save
+        QSqlQuery query(DB);
+        query.prepare(prepareInsertQuery(Table_DATAS));
+        query.bindValue(DATAS_USER_UUID,  uid);
+        query.bindValue(DATAS_DATANAME ,  Constants::USER_DATAS_PREFERENCES);
+        query.bindValue(DATAS_STRING ,    QVariant());
+        query.bindValue(DATAS_LONGSTRING, QVariant());
+        query.bindValue(DATAS_FILE,       content);
+        query.bindValue(DATAS_NUMERIC,    QVariant());
+        query.bindValue(DATAS_DATE,       QVariant());
+        query.bindValue(DATAS_LANGUAGE,   QLocale().name().right(2));
+        query.bindValue(DATAS_LASTCHANGE, QDateTime::currentDateTime());
+        query.bindValue(DATAS_TRACE_ID,   QVariant());
+        if (!query.exec()) {
+            LOG_QUERY_ERROR(query);
+            return false;
+        }
+    } else {
+        // update
+        QSqlQuery query(DB);
+        query.prepare(prepareUpdateQuery(Table_DATAS, DATAS_FILE, where));
+        query.bindValue(0, content);
+        if (!query.exec()) {
+            LOG_QUERY_ERROR(query);
+            return false;
+        }
+    }
 }
 
 int UserBase::getMaxLinkId()

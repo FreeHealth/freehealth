@@ -159,7 +159,6 @@ void ProtocolPreferencesWidget::writeDefaultSettings(Core::ISettings *s)
     set->setValue(Constants::S_PROTOCOLCREATOR_DEFAULTBUTTON, Constants::S_VALUE_PRESCRIBEONLY);
     set->setValue(Constants::S_PROTOCOLCREATOR_AUTOCHANGE, true);
     set->setValue(Constants::S_PROTOCOLCREATOR_AUTOCHANGE_BUTTON, Constants::S_VALUE_SAVEPRESCRIBE);
-    set->sync();
 }
 
 void ProtocolPreferencesWidget::saveToSettings(Core::ISettings *s)

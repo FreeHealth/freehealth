@@ -51,7 +51,6 @@ TemplatesPreferencesPage::TemplatesPreferencesPage(QObject *parent) :
         IOptionsPage(parent), m_Widget(0)
 {
     setObjectName("TemplatesPreferencesPages");
-    checkSettingsValidity();
 }
 
 TemplatesPreferencesPage::~TemplatesPreferencesPage()
@@ -98,7 +97,6 @@ void TemplatesPreferencesPage::checkSettingsValidity()
         if (settings()->value(k) == QVariant())
             settings()->setValue(k, defaultvalues.value(k));
     }
-    settings()->sync();
 }
 
 QWidget *TemplatesPreferencesPage::createPage(QWidget *parent)

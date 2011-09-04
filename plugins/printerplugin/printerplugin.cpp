@@ -32,6 +32,7 @@
 
 #include <coreplugin/dialogs/pluginaboutpage.h>
 #include <coreplugin/icore.h>
+#include <coreplugin/isettings.h>
 #include <coreplugin/translators.h>
 
 #include <QtCore/QtPlugin>
@@ -40,6 +41,8 @@
 #include <QDebug>
 
 using namespace Print;
+
+static inline Core::ISettings *settings() { return Core::ICore::instance()->settings(); }
 
 PrinterPlugin::PrinterPlugin() :
         prefPage(0), docPrinter(0)
@@ -87,6 +90,7 @@ void PrinterPlugin::extensionsInitialized()
     addObject(prefPage);
     docPrinter = new Internal::DocumentPrinter(this);
     addObject(docPrinter);
+    settings()->sync();
 
     // Check system for existing printers
 //    if (QPrinterInfo::availablePrinters().isEmpty()) {

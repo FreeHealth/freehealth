@@ -130,6 +130,7 @@ void PatientBasePlugin::extensionsInitialized()
     prefpage = new PatientBasePreferencesPage(this);
     addObject(prefpage);
     prefpage->checkSettingsValidity();
+    settings()->sync();
 
     if (commandLine()->value(Core::ICommandLine::CreateVirtuals).toBool()) {
         // Populate with some virtual patients

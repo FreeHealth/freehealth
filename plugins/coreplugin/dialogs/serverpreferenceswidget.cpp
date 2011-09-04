@@ -188,7 +188,7 @@ void ServerPreferencesWidget::saveToSettings(Core::ISettings *sets)
 //        s->setValue(Core::Constants::S_EXTERNAL_DATABASE_PASS, QString(QString("fmf_admin").toAscii().toBase64()));
     }
     s->setDatabaseConnector(db);
-    s->sync();
+//    s->sync();
     Core::ICore::instance()->databaseServerLoginChanged();
 }
 

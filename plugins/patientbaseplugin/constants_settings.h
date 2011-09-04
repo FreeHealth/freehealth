@@ -32,7 +32,6 @@ namespace Constants {
 
     const char * const  S_GROUP                  = "Patients";                              /*!< \brief Key for settings. */
     const char * const  S_SELECTOR_FIELDSTOSHOW  = "Patients/Selector/Fields";              /*!< \brief Key for settings. */
-    const char * const  S_SELECTOR_SHOWVIRTUALPATIENTS  = "Patients/Selector/ShowVirtual";              /*!< \brief Key for settings. */
     const char * const  S_SELECTOR_USEGENDERCOLORS  = "Patients/Selector/UseGenderColors";
     const char * const  S_SEARCHMETHOD = "Patients/Selector/SearchMethod";
     const char * const  S_PATIENTBARCOLOR = "Patients/Bar/Color";

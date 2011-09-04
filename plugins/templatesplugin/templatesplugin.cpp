@@ -33,6 +33,7 @@
 
 #include <coreplugin/dialogs/pluginaboutpage.h>
 #include <coreplugin/icore.h>
+#include <coreplugin/isettings.h>
 #include <coreplugin/translators.h>
 
 #include <utils/log.h>
@@ -41,6 +42,8 @@
 #include <QDebug>
 
 using namespace Templates;
+
+static inline Core::ISettings *settings() { return Core::ICore::instance()->settings(); }
 
 TemplatesPlugin::TemplatesPlugin()
 {
@@ -84,6 +87,7 @@ void TemplatesPlugin::extensionsInitialized()
     prefPage = new Internal::TemplatesPreferencesPage(this);
     prefPage->checkSettingsValidity();
     addObject(prefPage);
+    settings()->sync();
 
     // Initialize TemplatesViewManager
     Templates::Internal::TemplatesViewManager::instance(this);

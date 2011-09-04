@@ -61,6 +61,7 @@
 using namespace DrugsWidget::Internal;
 
 static inline Core::ITheme *theme()  { return Core::ICore::instance()->theme(); }
+static inline Core::ISettings *settings()  { return Core::ICore::instance()->settings(); }
 static inline void messageSplash(const QString &s) {theme()->messageSplashScreen(s); }
 static inline DrugsDB::Internal::DrugsBase *drugsBase() {return DrugsDB::Internal::DrugsBase::instance();}
 
@@ -156,7 +157,7 @@ void DrugsPlugin::extensionsInitialized()
     protocolPage = new ProtocolPreferencesPage(this);
 
     // check settings
-    if (!Core::ICore::instance()->settings()->value(Constants::S_CONFIGURED, false).toBool()) {
+    if (!settings()->value(Constants::S_CONFIGURED, false).toBool()) {
         viewPage->writeDefaultSettings(Core::ICore::instance()->settings());
         selectorPage->writeDefaultSettings(Core::ICore::instance()->settings());
         printPage->writeDefaultSettings(Core::ICore::instance()->settings());
@@ -166,6 +167,8 @@ void DrugsPlugin::extensionsInitialized()
         extraPage->writeDefaultSettings(Core::ICore::instance()->settings());
         databaseSelectorPage->writeDefaultSettings(Core::ICore::instance()->settings());
         protocolPage->writeDefaultSettings(Core::ICore::instance()->settings());
+        settings()->setValue(Constants::S_CONFIGURED, true);
+        settings()->sync();
     } else {
         viewPage->checkSettingsValidity();
         selectorPage->checkSettingsValidity();

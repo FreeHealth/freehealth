@@ -83,7 +83,6 @@ void PatientBasePreferencesPage::checkSettingsValidity()
 {
     QHash<QString, QVariant> defaultvalues;
     defaultvalues.insert(Constants::S_SELECTOR_FIELDSTOSHOW, PatientSelector::Default);
-    defaultvalues.insert(Constants::S_SELECTOR_SHOWVIRTUALPATIENTS, true);
     defaultvalues.insert(Constants::S_SELECTOR_USEGENDERCOLORS, true);
     defaultvalues.insert(Constants::S_PATIENTBARCOLOR, Qt::white);
     defaultvalues.insert(Constants::S_PATIENTCHANGEONCREATION, true);
@@ -92,7 +91,6 @@ void PatientBasePreferencesPage::checkSettingsValidity()
         if (settings()->value(k) == QVariant())
             settings()->setValue(k, defaultvalues.value(k));
     }
-    settings()->sync();
 }
 
 QWidget *PatientBasePreferencesPage::createPage(QWidget *parent)
@@ -115,7 +113,6 @@ PatientBasePreferencesWidget::PatientBasePreferencesWidget(QWidget *parent) :
 
 void PatientBasePreferencesWidget::setDatasToUi()
 {
-    showVirtualPatients->setChecked(settings()->value(Constants::S_SELECTOR_SHOWVIRTUALPATIENTS).toBool());
     selectNewlyCreatedBox->setChecked(settings()->value(Constants::S_PATIENTCHANGEONCREATION).toBool());
     genderColor->setChecked(settings()->value(Constants::S_SELECTOR_USEGENDERCOLORS).toBool());
     patientBarColor->setColor(QColor(settings()->value(Constants::S_PATIENTBARCOLOR).toString()));
@@ -129,7 +126,6 @@ void PatientBasePreferencesWidget::saveToSettings(Core::ISettings *sets)
     else
         s = sets;
 
-    s->setValue(Constants::S_SELECTOR_SHOWVIRTUALPATIENTS, showVirtualPatients->isChecked());
     s->setValue(Constants::S_PATIENTCHANGEONCREATION, selectNewlyCreatedBox->isChecked());
     s->setValue(Constants::S_SELECTOR_USEGENDERCOLORS, genderColor->isChecked());
     s->setValue(Constants::S_PATIENTBARCOLOR, patientBarColor->color());
@@ -139,7 +135,6 @@ void PatientBasePreferencesWidget::writeDefaultSettings(Core::ISettings *s)
 {
     //    qWarning() << "---------> writedefaults";
     LOG_FOR("PatientBasePreferencesWidget", tkTr(Trans::Constants::CREATING_DEFAULT_SETTINGS_FOR_1).arg("Patient preferences"));
-    s->setValue(Constants::S_SELECTOR_SHOWVIRTUALPATIENTS, true);
     s->setValue(Constants::S_SELECTOR_USEGENDERCOLORS, true);
     s->setValue(Constants::S_PATIENTBARCOLOR, Qt::white);
     s->setValue(Constants::S_PATIENTCHANGEONCREATION, true);

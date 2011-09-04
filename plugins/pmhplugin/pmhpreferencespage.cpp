@@ -99,7 +99,6 @@ void PmhPreferencesPage::checkSettingsValidity()
         if (settings()->value(k) == QVariant())
             settings()->setValue(k, defaultvalues.value(k));
     }
-    settings()->sync();
 }
 
 QWidget *PmhPreferencesPage::createPage(QWidget *parent)

@@ -133,11 +133,12 @@ void AgendaPreferencesWidget::setDatasToUi()
 
 void AgendaPreferencesWidget::saveToSettings(Core::ISettings *sets)
 {
-    Core::ISettings *s;
-    if (!sets)
-        s = settings();
-    else
-        s = sets;
+    Q_UNUSED(sets);
+//    Core::ISettings *s;
+//    if (!sets)
+//        s = settings();
+//    else
+//        s = sets;
 
 //    s->setValue(Constants::S_SELECTOR_SHOWVIRTUALPATIENTS, showVirtualPatients->isChecked());
 //    s->setValue(Constants::S_SELECTOR_USEGENDERCOLORS, genderColor->isChecked());

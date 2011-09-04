@@ -317,8 +317,10 @@ using namespace Core::Internal;
   Users' writable resources are located in the dir of the config.ini file.
 */
 SettingsPrivate::SettingsPrivate(QObject *parent, const QString &appName, const QString &fileName) :
-        ISettings(parent),
-        m_NetworkSettings(0), m_UserSettings(0)
+    ISettings(parent),
+    m_NetworkSettings(0),
+    m_UserSettings(0),
+    m_NeedsSync(false)
 {
     setObjectName("SettingsPrivate");
 
@@ -422,6 +424,7 @@ void SettingsPrivate::setUserSettings(const QString &content)
         m_UserSettings = 0;
     }
     m_UserSettings = new QSettings(fileName, QSettings::IniFormat, this);
+    m_NeedsSync = false;
 }
 
 QString SettingsPrivate::userSettings() const
@@ -438,17 +441,20 @@ QSettings *SettingsPrivate::getQSettings()
     return m_UserSettings;
 }
 
-void SettingsPrivate::beginGroup(const QString &prefix) { m_UserSettings->beginGroup(prefix); }
+void SettingsPrivate::beginGroup(const QString &prefix) { m_UserSettings->beginGroup(prefix); m_NeedsSync=true; }
 QStringList SettingsPrivate::childGroups() const { return m_UserSettings->childGroups(); }
 QStringList SettingsPrivate::childKeys() const { return m_UserSettings->childKeys(); }
 bool SettingsPrivate::contains(const QString &key) const { return m_UserSettings->contains(key); }
-void SettingsPrivate::endGroup() { m_UserSettings->endGroup(); }
+void SettingsPrivate::endGroup() { m_UserSettings->endGroup(); m_NeedsSync=true; }
 QString SettingsPrivate::fileName() const { return m_UserSettings->fileName(); }
 QString SettingsPrivate::group() const { return m_UserSettings->group();}
 
 void SettingsPrivate::setValue(const QString &key, const QVariant &value)
 {
+    if (m_UserSettings->value(key, QVariant()) == value)
+        return;
     m_UserSettings->setValue(key, value);
+    m_NeedsSync=true;
 }
 
 QVariant SettingsPrivate::value(const QString &key, const QVariant &defaultValue) const
@@ -458,8 +464,13 @@ QVariant SettingsPrivate::value(const QString &key, const QVariant &defaultValue
 
 void SettingsPrivate::sync()
 {
-    m_UserSettings->sync();
-    m_NetworkSettings->sync();
+    if (!m_NeedsSync)
+        return;
+    if (m_UserSettings)
+        m_UserSettings->sync();
+    if (m_NetworkSettings)
+        m_NetworkSettings->sync();
+    m_NeedsSync = false;
     Q_EMIT userSettingsSynchronized();
 }
 
@@ -610,7 +621,7 @@ void SettingsPrivate::noMoreFirstTimeRunning(const QString &subProcess)
         m_FirstTime = false;
     } else {
         m_UserSettings->setValue("FirstTimeRunning/" + subProcess, false);
-        m_UserSettings->sync();
+        m_NeedsSync = true;
         Q_EMIT userSettingsSynchronized();
     }
 }
@@ -628,7 +639,7 @@ void SettingsPrivate::setFirstTimeRunning(const bool state, const QString &subPr
         m_FirstTime = false;
     } else {
         m_UserSettings->setValue("FirstTimeRunning/" + subProcess, state);
-        m_UserSettings->sync();
+        m_NeedsSync = true;
         Q_EMIT userSettingsSynchronized();
     }
 }

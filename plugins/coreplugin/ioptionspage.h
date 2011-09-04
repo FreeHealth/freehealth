@@ -51,7 +51,11 @@ public:
     virtual QString category() const = 0;
 
     virtual void resetToDefaults() = 0;
+
+    /** Check the validity of settings. You don't need to sync the settings. This will be automatically done. */
     virtual void checkSettingsValidity() = 0;
+
+    /** Apply changes to the settings. You don't need to sync the settings. This will be automatically done. */
     virtual void applyChanges() = 0;
     virtual void finish() = 0;
 

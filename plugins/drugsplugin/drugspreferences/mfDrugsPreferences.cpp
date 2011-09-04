@@ -503,7 +503,7 @@ void DrugsViewWidget::saveToSettings(Core::ISettings *sets)
 void DrugsViewWidget::writeDefaultSettings(Core::ISettings *s)
 {
 //    qWarning() << "---------> writedefaults";
-    Utils::Log::addMessage("DrugsViewWidget", tkTr(Trans::Constants::CREATING_DEFAULT_SETTINGS_FOR_1).arg("DrugsWidget"));
+    LOG_FOR("DrugsViewWidget", tkTr(Trans::Constants::CREATING_DEFAULT_SETTINGS_FOR_1).arg("DrugsWidget"));
     s->setValue(S_CONFIGURED, true);
     s->setValue(S_VIEWFONT , QFont());
     s->setValue(S_VIEWFONTSIZE, QFont().pointSize());
@@ -517,8 +517,6 @@ void DrugsViewWidget::writeDefaultSettings(Core::ISettings *s)
 
     s->setValue(S_DRUGFONT , QFont().toString());
     s->setValue(S_PRESCRIPTIONFONT , QFont().toString());
-
-    s->sync();
 }
 
 void DrugsViewWidget::changeEvent(QEvent *e)
@@ -576,7 +574,6 @@ void DrugsSelectorWidget::saveToSettings(Core::ISettings *sets)
     s->setValue(DrugsDB::Constants::S_ALLERGYBACKGROUNDCOLOR, backgroundAllergiesButton->color());
     s->setValue(DrugsDB::Constants::S_INTOLERANCEBACKGROUNDCOLOR, backgroundIntoleranceButton->color());
 
-    s->sync();
     if (DrugsWidget::DrugsWidgetManager::instance()->currentView())
         DrugsWidget::DrugsWidgetManager::instance()->currentView()->drugSelector()->updateDrugsViewColumns();
 }
@@ -597,9 +594,7 @@ void DrugsSelectorWidget::writeDefaultSettings(Core::ISettings *s)
     s->setValue(DrugsDB::Constants::S_ALLERGYBACKGROUNDCOLOR, "red");
     s->setValue(DrugsDB::Constants::S_INTOLERANCEBACKGROUNDCOLOR, "yellow");
 
-    s->sync();
-
-//    DrugsWidget::DrugsWidgetManager::instance()->currentView()->drugSelector()->updateDrugsViewColumns();
+    //    DrugsWidget::DrugsWidgetManager::instance()->currentView()->drugSelector()->updateDrugsViewColumns();
 }
 
 void DrugsSelectorWidget::changeEvent(QEvent *e)
@@ -699,7 +694,6 @@ void DrugsPrintWidget::saveToSettings(Core::ISettings *sets)
     s->setValue(DrugsDB::Constants::S_PRESCRIPTIONFORMATTING_PLAIN, prescriptionFormatting->textEdit()->toPlainText());
     s->setValue(DrugsDB::Constants::S_PRINTLINEBREAKBETWEENDRUGS, lineBreakCheck->isChecked());
     s->setValue(DrugsDB::Constants::S_PRINTDUPLICATAS, printDuplicataCheck->isChecked());
-    s->sync();
 }
 
 void DrugsPrintWidget::writeDefaultSettings(Core::ISettings *s)
@@ -713,7 +707,6 @@ void DrugsPrintWidget::writeDefaultSettings(Core::ISettings *s)
                 qApp->translate(Constants::DRUGCONSTANTS_TR_CONTEXT, DrugsDB::Constants::S_DEF_PRESCRIPTIONFORMATTING_PLAIN));
     s->setValue(DrugsDB::Constants::S_PRINTLINEBREAKBETWEENDRUGS, true);
     s->setValue(DrugsDB::Constants::S_PRINTDUPLICATAS, true);
-    s->sync();
 }
 
 void DrugsPrintWidget::changeEvent(QEvent *e)
@@ -774,7 +767,6 @@ void DrugsUserWidget::writeDefaultSettings(Core::ISettings *s)
     s->setValue(DrugsDB::Constants::S_WATERMARK_HTML, DrugsDB::Constants::S_DEF_WATEMARKHTML);
     s->setValue(DrugsDB::Constants::S_USERHEADER, DrugsDB::Constants::S_DEF_USERHEADER);
     s->setValue(DrugsDB::Constants::S_USERFOOTER, "");
-    s->sync();
 }
 
 void DrugsUserWidget::changeEvent(QEvent *e)
@@ -832,7 +824,6 @@ void DrugsExtraWidget::writeDefaultSettings(Core::ISettings *s)
 
     s->setValue(DrugsDB::Constants::S_ALD_PRE_HTML, DrugsDB::Constants::S_DEF_ALD_PRE_HTML);
     s->setValue(DrugsDB::Constants::S_ALD_POST_HTML, DrugsDB::Constants::S_DEF_ALD_POST_HTML);
-    s->sync();
 }
 
 void DrugsExtraWidget::changeEvent(QEvent *e)

@@ -116,6 +116,7 @@ private:
     QHash< int, QString > m_Enum_Path;
     bool m_FirstTime;
     Utils::DatabaseConnector m_DbConnector;
+    bool m_NeedsSync;
 };
 
 } // End Internal

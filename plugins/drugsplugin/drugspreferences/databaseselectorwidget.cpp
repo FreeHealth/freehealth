@@ -230,7 +230,6 @@ void DatabaseSelectorWidget::writeDefaultSettings(Core::ISettings *s)
     Utils::Log::addMessage("DatabaseSelectorWidget", tkTr(Trans::Constants::CREATING_DEFAULT_SETTINGS_FOR_1).arg("DatabaseSelectorWidget"));
     set->setValue(DrugsDB::Constants::S_DATABASE_PATHS, QVariant());
     changeDrugsDatabase(set, DrugsDB::Constants::DB_DEFAULT_IDENTIFIANT);
-    set->sync();
 }
 
 void DatabaseSelectorWidget::saveToSettings(Core::ISettings *s)

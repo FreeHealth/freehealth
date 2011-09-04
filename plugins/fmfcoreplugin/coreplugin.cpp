@@ -31,6 +31,7 @@
 #include <utils/log.h>
 
 #include <fmfcoreplugin/appaboutpage.h>
+#include <coreplugin/isettings.h>
 #include <coreplugin/dialogs/commonaboutpages.h>
 #include <coreplugin/dialogs/commondebugpages.h>
 #include <coreplugin/dialogs/pluginaboutpage.h>
@@ -108,6 +109,7 @@ void CorePlugin::extensionsInitialized()
     prefPage = new ApplicationGeneralPreferencesPage(this);
     prefPage->checkSettingsValidity();
     addObject(prefPage);
+    m_CoreImpl->settings()->sync();
 }
 
 void CorePlugin::remoteArgument(const QString& arg)

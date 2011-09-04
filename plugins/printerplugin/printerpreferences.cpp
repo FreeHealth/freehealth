@@ -46,7 +46,6 @@ PrinterPreferencesPage::PrinterPreferencesPage(QObject *parent) :
         IOptionsPage(parent), m_Widget(0)
 {
     setObjectName("PrinterPreferencesPage");
-    checkSettingsValidity();
 }
 
 PrinterPreferencesPage::~PrinterPreferencesPage()
@@ -90,7 +89,6 @@ void PrinterPreferencesPage::checkSettingsValidity()
         if (settings()->value(k) == QVariant())
             settings()->setValue(k, defaultvalues.value(k));
     }
-    settings()->sync();
 }
 
 QWidget *PrinterPreferencesPage::createPage(QWidget *parent)
