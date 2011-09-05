@@ -156,6 +156,7 @@ const char * const  ICONMEDINTUX    =  "medintux.png";
 const char * const  ICONPENCIL    =  "pencil.png";
 const char * const  ICONFORMS    =  "forms.png";
 const char * const  ICONCRITICAL    =  "critical.png";
+const char * const  ICONPATIENTSYNTHESIS  =  "patientsynthesis.png";
 
 // date and time Icons
 const char * const  ICONDATE        =  "date.png";
