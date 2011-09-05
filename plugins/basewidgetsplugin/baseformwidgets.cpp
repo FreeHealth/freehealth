@@ -262,9 +262,9 @@ BaseForm::BaseForm(Form::FormItem *formItem, QWidget *parent) :
     m_EpisodeDate->setDisplayFormat(QLocale().dateFormat(QLocale::LongFormat));
     m_EpisodeDate->setEnabled(false);
     m_EpisodeDate->setCalendarPopup(true);
+
     m_EpisodeLabel = m_Header->lineEdit;
     m_EpisodeLabel->setEnabled(false);
-    m_UserName = m_Header->label_2;
     m_Header->label->setText(m_FormItem->spec()->label());
 
     // create main widget
@@ -332,9 +332,9 @@ BaseFormData::~BaseFormData()
 
 void BaseFormData::clear()
 {
+    m_Data.clear();
     m_Form->m_EpisodeDate->setDate(QDate::currentDate());
     m_Form->m_EpisodeLabel->clear();
-    m_Form->m_UserName->clear();
     m_Form->m_EpisodeLabel->setEnabled(false);
     m_Form->m_EpisodeDate->setEnabled(false);
 }
@@ -347,31 +347,35 @@ bool BaseFormData::isModified() const
 
 bool BaseFormData::setData(const int ref, const QVariant &data, const int role)
 {
+    m_Data.insert(role, data);
     switch (role) {
     case ID_EpisodeDate:
-        {
-            m_Form->m_EpisodeDate->setDate(data.toDate());
-            m_Form->m_EpisodeDate->setEnabled(true);
-            break;
-        }
+        m_Form->m_EpisodeDate->setDate(m_Data.value(role).toDate());
+        m_Form->m_EpisodeDate->setEnabled(true);
+        break;
     case ID_EpisodeLabel:
-        {
-            m_Form->m_EpisodeLabel->setText(data.toString());
-            m_Form->m_EpisodeLabel->setEnabled(true);
-            break;
-        }
-    case ID_UserName: m_Form->m_UserName->setText(data.toString()); break;
+        m_Form->m_EpisodeLabel->setText(m_Data.value(role).toString());
+        m_Form->m_EpisodeLabel->setEnabled(true);
+        break;
     }
+    m_Form->m_EpisodeDate->setToolTip(QString("<p align=\"right\">%1&nbsp;-&nbsp;%2<br /><span style=\"color:gray;font-size:9pt\">%3</span></p>")
+                                       .arg(m_Data.value(ID_EpisodeDate).toDate().toString(QLocale().dateFormat(QLocale::ShortFormat)))
+                                       .arg(m_Data.value(ID_EpisodeLabel).toString().replace(" ", "&nbsp;"))
+                                       .arg(m_Data.value(ID_UserName).toString().replace(" ", "&nbsp;")));
+    m_Form->m_EpisodeLabel->setToolTip(QString("<p align=\"right\">%1&nbsp;-&nbsp;%2<br /><span style=\"color:gray;font-size:9pt\">%3</span></p>")
+                                       .arg(m_Data.value(ID_EpisodeDate).toDate().toString(QLocale().dateFormat(QLocale::ShortFormat)))
+                                       .arg(m_Data.value(ID_EpisodeLabel).toString().replace(" ", "&nbsp;"))
+                                       .arg(m_Data.value(ID_UserName).toString().replace(" ", "&nbsp;")));
     return true;
 }
 
 QVariant BaseFormData::data(const int ref, const int role) const
 {
     Q_UNUSED(ref);
+    /** \todo code here : IFormItemData should have a submit method */
     switch (role) {
-    case ID_EpisodeDate: return m_Form->m_EpisodeDate->date(); break;
-    case ID_EpisodeLabel: return m_Form->m_EpisodeLabel->text(); break;
-    case ID_UserName: return m_Form->m_UserName->text(); break;
+    case ID_EpisodeDate: return m_Form->m_EpisodeDate->date();
+    case ID_EpisodeLabel: return m_Form->m_EpisodeLabel->text();
     }
     return QVariant();
 }

@@ -100,7 +100,6 @@ public Q_SLOTS:
 public:
     QDateTimeEdit *m_EpisodeDate;
     QLineEdit *m_EpisodeLabel;
-    QLabel *m_UserName;
 
 private:
     QGridLayout *m_ContainerLayout;
@@ -132,7 +131,7 @@ public:
 private:
     Form::FormItem *m_FormItem;
     BaseForm *m_Form;
-    QHash<int, QVariant> m_OriginalValue;
+    QHash<int, QVariant> m_Data;
 };
 
 //--------------------------------------------------------------------------------------------------------
