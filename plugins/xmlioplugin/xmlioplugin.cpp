@@ -53,7 +53,7 @@ XmlFormIOPlugin::XmlFormIOPlugin() :
         qWarning() << "creating XmlIOPlugin";
     // create XML reader singleton
     m_XmlReader = Internal::XmlFormContentReader::instance();
-    addObject(m_FormIo = new XmlFormIO(this));
+    addObject(m_FormIo = new Internal::XmlFormIO(this));
 }
 
 XmlFormIOPlugin::~XmlFormIOPlugin()

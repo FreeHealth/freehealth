@@ -62,7 +62,7 @@ public:
     };
     Q_DECLARE_FLAGS(TypesOfForm, TypeOfForm)
 
-    FormIOQuery() : m_type(DefaultForms | CompleteForms) {}
+    FormIOQuery() : m_type(DefaultForms | CompleteForms), m_ForceFile(false) {}
     virtual ~FormIOQuery() {}
 
     void setTypeOfForms(const TypesOfForm type) {m_type=type;}
@@ -80,10 +80,15 @@ public:
     void setFormUuid(const QString &uuidOrAbsPath) {m_uuid=uuidOrAbsPath;}
     QString formUuid() const {return m_uuid;}
 
+    /** Use this to force the reader to get the informations (description, form content) directly from the file even if the form is already stored in the database. */
+    void setForceFileReading(const bool force) {m_ForceFile = force;}
+    bool forceFileReading() const {return m_ForceFile;}
+
 private:
     TypesOfForm m_type;
     QStringList m_langs, m_spe, m_authors;
     QString m_uuid;
+    bool m_ForceFile;
 };
 
 //class FORM_EXPORT FormIOResult
@@ -129,6 +134,7 @@ public:
         Category,
         ShortDescription,
         HtmlDescription,
+        HtmlSynthesis,
         License,
         GeneralIcon,
         Specialties,

@@ -96,6 +96,7 @@ const char* const TAG_SPEC_LASTMODIFDATE= "lmdate";
 const char* const TAG_SPEC_BIBLIOGRAPHY = "bibliography";
 const char* const TAG_SPEC_DESCRIPTION  = "description";
 const char* const TAG_SPEC_HTMLDESCRIPTION  = "htmldescription";
+const char* const TAG_SPEC_HTMLSYNTHESIS  = "htmlsynthesis";
 const char* const TAG_SPEC_LABEL        = "label";
 const char* const TAG_SPEC_PLUGINNAME   = "type";
 const char* const TAG_FORM_DESCRIPTION  = "formdescription";
@@ -110,6 +111,7 @@ const char* const TAG_VALUE              = "value";
 const char* const TAG_VALUE_UUID         = "uuid";
 const char* const TAG_VALUE_NUMERICAL    = "numerical";
 const char* const TAG_VALUE_POSSIBLE     = "possible";
+const char* const TAG_VALUE_PRINT        = "print";
 const char* const TAG_VALUE_SCRIPT       = "script";
 const char* const TAG_VALUE_DEPENDENCIES = "dependon";
 const char* const TAG_VALUE_DEFAULT      = "default";
@@ -137,6 +139,7 @@ const char* const ATTRIB_COMPLETION   = "completion";
 const char* const ATTRIB_ICON         = "icon";
 const char* const ATTRIB_OPTIONNAL    = "optional";
 const char* const ATTRIB_LANGUAGE     = "lang";
+const char* const ATTRIB_FILE         = "file";
 
 const char* const OPTION_PLUGIN_NAME  = "type";
 

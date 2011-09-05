@@ -24,42 +24,29 @@
  *       NAME <MAIL@ADRESS>                                                *
  *       NAME <MAIL@ADRESS>                                                *
  ***************************************************************************/
-#ifndef XMLIOTPLUGIN_H
-#define XMLIOTPLUGIN_H
+#ifndef XMLFORMNAME_H
+#define XMLFORMNAME_H
 
-#include <extensionsystem/iplugin.h>
-
-#include <QtCore/QObject>
+#include <QString>
 
 /**
- * \file xmlioplugin.h
+ * \file xmlformcontentreader.h
  * \author Eric MAEKER <eric.maeker@gmail.com>
- * \version 0.0.4
- * \date 11 Aug 2009
+ * \version 0.6.0
+ * \date 05 Sept 2011
 */
+
 
 namespace XmlForms {
 namespace Internal {
-class XmlFormIO;
-class XmlFormContentReader;
-}
 
-class XmlFormIOPlugin : public ExtensionSystem::IPlugin
-{
-    Q_OBJECT
-public:
-    XmlFormIOPlugin();
-    ~XmlFormIOPlugin();
-
-    bool initialize(const QStringList &arguments, QString *errorString);
-    void extensionsInitialized();
-
-private:
-    Internal::XmlFormContentReader *m_XmlReader;
-    Internal::XmlFormIO *m_FormIo;
+struct XmlFormName {
+    XmlFormName(const QString &uid);
+    bool isValid;
+    QString uid, absFileName;
 };
 
+}
+}
 
-} // end XmlForms
-
-#endif  // End XMLIOTPLUGIN_H
+#endif // XMLFORMNAME_H

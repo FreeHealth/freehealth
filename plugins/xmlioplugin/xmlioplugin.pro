@@ -16,11 +16,13 @@ HEADERS = xmlioplugin.h \
     xmlformioconstants.h \
     xmlformcontentreader.h \
     xmliobase.h \
-    constants.h
+    constants.h \
+    xmlformname.h
 
 SOURCES = xmlioplugin.cpp \
     xmlformio.cpp \
     xmlformcontentreader.cpp \
-    xmliobase.cpp
+    xmliobase.cpp \
+    xmlformname.cpp
 
 OTHER_FILES = XmlIO.pluginspec

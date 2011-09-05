@@ -72,6 +72,7 @@ public:
         Value_Script,
         Value_Numerical,
         Value_Default,
+        Value_Printing,
         Value_Dependency
     };
     FormItemValues(QObject *parent);

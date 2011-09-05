@@ -60,7 +60,8 @@ public:
         FullContent = 0,
         Description,
         Forms,
-        PmhCategories
+        PmhCategories,
+        ExtraFiles
     };
 
     // Constructor

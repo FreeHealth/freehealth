@@ -28,6 +28,7 @@
 #define XMLFORMIO_H
 
 #include <formmanagerplugin/iformio.h>
+#include <xmlioplugin/xmlformname.h>
 
 #include <QDomNode>
 #include <QObject>
@@ -37,7 +38,7 @@
  * \file xmlformio.h
  * \author Eric MAEKER <eric.maeker@gmail.com>
  * \version 0.6.0
- * \date 10 May 2011
+ * \date 05 Sept 2011
 */
 
 namespace Category {
@@ -51,6 +52,7 @@ class IFormWidgetFactory;
 }
 
 namespace XmlForms {
+namespace Internal {
 
 class XmlFormIO : public Form::IFormIO
 {
@@ -94,6 +96,7 @@ private:
      mutable QHash<QString, bool> m_ReadableForms;
 };
 
-}  // End XmlForms
+}  // End namespace Internal
+}  // End namespace XmlForms
 
 #endif  //  XMLFORMIO_H

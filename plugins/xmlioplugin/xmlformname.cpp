@@ -24,42 +24,34 @@
  *       NAME <MAIL@ADRESS>                                                *
  *       NAME <MAIL@ADRESS>                                                *
  ***************************************************************************/
-#ifndef XMLIOTPLUGIN_H
-#define XMLIOTPLUGIN_H
+#include "xmlformname.h"
 
-#include <extensionsystem/iplugin.h>
+#include <coreplugin/icore.h>
+#include <coreplugin/isettings.h>
+#include <coreplugin/constants_tokensandsettings.h>
 
-#include <QtCore/QObject>
+#include <QDir>
+#include <QFileInfo>
 
-/**
- * \file xmlioplugin.h
- * \author Eric MAEKER <eric.maeker@gmail.com>
- * \version 0.0.4
- * \date 11 Aug 2009
-*/
+using namespace XmlForms;
+using namespace Internal;
 
-namespace XmlForms {
-namespace Internal {
-class XmlFormIO;
-class XmlFormContentReader;
-}
+static inline Core::ISettings *settings()  { return Core::ICore::instance()->settings(); }
 
-class XmlFormIOPlugin : public ExtensionSystem::IPlugin
+XmlFormName::XmlFormName(const QString &_uid) :
+    uid(_uid), absFileName(_uid), isValid(false)
 {
-    Q_OBJECT
-public:
-    XmlFormIOPlugin();
-    ~XmlFormIOPlugin();
-
-    bool initialize(const QStringList &arguments, QString *errorString);
-    void extensionsInitialized();
-
-private:
-    Internal::XmlFormContentReader *m_XmlReader;
-    Internal::XmlFormIO *m_FormIo;
-};
-
-
-} // end XmlForms
-
-#endif  // End XMLIOTPLUGIN_H
+    if (uid.endsWith(".xml", Qt::CaseInsensitive)) {
+        uid = uid.left(uid.lastIndexOf("/"));
+    }
+    if (uid.startsWith(QString(Core::Constants::TAG_APPLICATION_COMPLETEFORMS_PATH).left(2))) {
+        absFileName.replace(Core::Constants::TAG_APPLICATION_COMPLETEFORMS_PATH, settings()->path(Core::ISettings::CompleteFormsPath));
+        absFileName.replace(Core::Constants::TAG_APPLICATION_SUBFORMS_PATH, settings()->path(Core::ISettings::SubFormsPath));
+        absFileName.replace(Core::Constants::TAG_APPLICATION_RESOURCES_PATH, settings()->path(Core::ISettings::BundleResourcesPath));
+    }
+    uid.replace(settings()->path(Core::ISettings::CompleteFormsPath), Core::Constants::TAG_APPLICATION_COMPLETEFORMS_PATH);
+    uid.replace(settings()->path(Core::ISettings::SubFormsPath), Core::Constants::TAG_APPLICATION_SUBFORMS_PATH);
+    uid.replace(settings()->path(Core::ISettings::BundleResourcesPath), Core::Constants::TAG_APPLICATION_RESOURCES_PATH);
+    absFileName = QDir::cleanPath(absFileName);
+    isValid = QFileInfo(absFileName).exists();
+}
