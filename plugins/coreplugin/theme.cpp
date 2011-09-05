@@ -168,8 +168,7 @@ QIcon ThemePrivate::icon(const QString &fileName, IconSize size)
             m_IconCache.insert(transformedFileName, i);
             return QIcon(*i);
         } else {
-            Utils::Log::addError("ThemePrivate", QCoreApplication::translate("ThemePrivate", "ERROR - Theme : Unable to load icon file %1").arg(fileName) ,
-                                  __FILE__, __LINE__);
+            LOG_ERROR(QCoreApplication::translate("ThemePrivate", "ERROR - Theme : Unable to load icon file %1").arg(fileName));
         }
     }
     return QIcon();
