@@ -967,7 +967,7 @@ void BaseListData::setStorableData(const QVariant &data)
     qSort(m_OriginalValue);
 }
 
-/** \brief Storable data of a List is the uuids of the selected items sorted in alphabetic order. */
+/** Storable data of a List is the uuids of the selected items sorted in alphabetic order. */
 QVariant BaseListData::storableData() const
 {
     QItemSelectionModel *selModel = m_List->m_List->selectionModel();

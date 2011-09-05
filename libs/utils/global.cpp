@@ -640,9 +640,8 @@ QString readTextFile(const QString &toRead, const QString &encoder, const Warn w
     } else {
         QFile file(correctFileName);
         if (!file.open(QFile::ReadOnly | QIODevice::Text)) {
-            Utils::Log::addError("Utils", QCoreApplication::translate("Utils", "Error %1 while trying to open file %2")
-                             .arg(correctFileName, file.errorString()),
-                             __FILE__, __LINE__);
+            LOG_ERROR_FOR("Utils", QCoreApplication::translate("Utils", "Error %1 while trying to open file %2")
+                          .arg(correctFileName, file.errorString()));
             return QString::null;
         }
         QByteArray data = file.readAll();

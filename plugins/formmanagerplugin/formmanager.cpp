@@ -365,7 +365,7 @@ FormActionHandler::FormActionHandler(QObject *parent) :
     Core::ActionContainer *menu = actionManager()->actionContainer(Core::Constants::M_PATIENTS);
     if (menu)
         menu->addAction(cmd, Patients::Constants::G_PATIENTS_INFORMATIONS);
-
+//    connect(cmd->action(), SIGNAL(triggered()), this, SLOT(showPatientSynthesis()));
 
     contextManager()->updateContext();
 }

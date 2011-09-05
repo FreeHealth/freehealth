@@ -272,6 +272,7 @@ FormPlaceHolder::FormPlaceHolder(QWidget *parent) :
     connect(cmd->action(), SIGNAL(triggered()), this, SLOT(newEpisode()));
     cmd = actionManager()->command(Constants::A_ADDFORM);
     connect(cmd->action(), SIGNAL(triggered()), this, SLOT(addForm()));
+//    connect(cmd->action(), SIGNAL(triggered()), this, SLOT(printCurrentItem()));
 
 //    connect(d->m_FileTree, SIGNAL(customContextMenuRequested(QPoint)),
 //            this, SLOT(contextMenuRequested(QPoint)));
@@ -458,6 +459,7 @@ void FormPlaceHolder::setCurrentEpisode(const QModelIndex &index)
         qobject_cast<QScrollArea*>(d->m_Stack->currentWidget())->widget()->setEnabled(true);
         d->m_EpisodeModel->activateEpisode(index, formUuid);
     } else {
+        /** \todo code here : show HtmlSynthesis in a label */
         d->m_EpisodeModel->activateEpisode(QModelIndex(), formUuid);
     }
 }
@@ -524,3 +526,35 @@ void FormPlaceHolder::addForm()
     dlg.exec();
 }
 
+void FormPlaceHolder::printCurrentItem()
+{
+    qWarning() << Q_FUNC_INFO;
+    if (!d->m_FileTree->selectionModel())
+        return;
+
+    // get the current index
+    QModelIndex index = d->m_FileTree->rootIndex();
+    if (d->m_FileTree->selectionModel()->hasSelection())
+        index = d->m_FileTree->selectionModel()->selectedIndexes().at(0);
+    QModelIndex form = index;
+    while (!d->m_EpisodeModel->isForm(form)) {
+        form = form.parent();
+    }
+
+    // Parent form has a print value ?
+    Form::FormMain *formMain = d->m_EpisodeModel->formForIndex(form);
+    if (!formMain)
+        return;
+
+    qWarning() << formMain->uuid();
+
+    QStringList vals = formMain->valueReferences()->values(Form::FormItemValues::Value_Printing);
+    if (vals.count()) {
+        // print using the printing value
+        qWarning() << "PRINT\n" << vals;
+    } else {
+        // print using the widget
+        qWarning() << "PRINT WIDGET";
+    }
+
+}
