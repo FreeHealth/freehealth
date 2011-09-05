@@ -601,7 +601,7 @@ bool EpisodeBase::saveEpisode(Internal::EpisodeData *episode)
 /** Save or update a list of Form::Internal::EpisodeData \e episodes to the database. Return true if all goes fine. */
 bool EpisodeBase::saveEpisode(const QList<EpisodeData *> &episodes)
 {
-    qWarning() << Q_FUNC_INFO << episodes.count();
+//    qWarning() << Q_FUNC_INFO << episodes.count();
     if (episodes.isEmpty())
         return true;
 
@@ -616,7 +616,7 @@ bool EpisodeBase::saveEpisode(const QList<EpisodeData *> &episodes)
         if (!episode)
             continue;
 
-        qWarning() << "episodeId" << episode->episodeId() << "isModified" << episode->isModified();
+//        qWarning() << "episodeId" << episode->episodeId() << "isModified" << episode->isModified();
 
         if (!episode->isModified())
             continue;
@@ -665,7 +665,7 @@ bool EpisodeBase::saveEpisode(const QList<EpisodeData *> &episodes)
             if (!saveEpisodeModifications(episode))
                 ok = false;
 
-            qWarning() << "ok" << ok;
+//            qWarning() << "ok" << ok;
 
             if (ok) {
                 episode->setModified(false);
@@ -701,7 +701,7 @@ bool EpisodeBase::saveEpisode(const QList<EpisodeData *> &episodes)
             where.clear();
             if (episode->data(EpisodeData::IsXmlContentPopulated).toBool()) {
 
-                qWarning() << "updating" << episode->data(EpisodeData::XmlContent);
+//                qWarning() << "updating" << episode->data(EpisodeData::XmlContent);
 
                 where.insert(EPISODE_CONTENT_EPISODE_ID, QString("=%1").arg(episode->episodeId()));
                 query.prepare(prepareUpdateQuery(Table_EPISODE_CONTENT,
@@ -724,7 +724,7 @@ bool EpisodeBase::saveEpisode(const QList<EpisodeData *> &episodes)
             if (!saveEpisodeModifications(episode))
                 ok = false;
 
-            qWarning() << "ok" << ok;
+//            qWarning() << "ok" << ok;
 
             if (ok) {
                 episode->setModified(false);
