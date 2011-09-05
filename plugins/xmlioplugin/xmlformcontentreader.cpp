@@ -704,12 +704,13 @@ QString XmlFormContentReader::readExtraFile(const XmlFormName &form, const QStri
     // try to get it from database
     QString content = getFileContentFromDatabase(form.uid, XmlIOBase::ExtraFiles, fileName);
     if (content.isEmpty()) {
-        QString name = QDir::cleanPath(fileName);
+        QString name = fileName;
         // not available in database -> read file, add to database
-        if (QFileInfo(name).isRelative())
+        if (QFileInfo(fileName).isRelative()) {
             name.prepend(QFileInfo(form.absFileName).absolutePath() + QDir::separator());
-        name = QDir::cleanPath(fileName);
+        }
         content = Utils::readTextFile(name, Utils::DontWarnUser);
         saveFormToDatabase(form, XmlIOBase::ExtraFiles, content, fileName);
     }
+    return content;
 }

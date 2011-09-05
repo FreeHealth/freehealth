@@ -265,6 +265,7 @@ public:
     QMap<int, QVariant> m_Possible;
     QMap<int, QVariant> m_Script;
     QMap<int, QVariant> m_Numerical;
+    QMap<int, QVariant> m_Printing;
     QMap<int, QVariant> m_Uuid;
     QVariant m_Default;
 };
@@ -310,6 +311,7 @@ void FormItemValues::setValue(int type, const int id, const QVariant &val, const
     case Value_Numerical : values->m_Numerical.insert(id,val); break;
     case Value_Script :    values->m_Script.insert(id,val); break;
     case Value_Possible :  values->m_Possible.insert(id,val); break;
+    case Value_Printing:   values->m_Printing.insert(id,val); break;
     case Value_Default :   values->m_Default = val; break;
     case Value_Dependency : break;
     }
@@ -389,6 +391,7 @@ QStringList FormItemValues::values(const int typeOfValues) const
         case Value_Numerical : map = values->m_Numerical; break;
         case Value_Script :    map = values->m_Script; break;
         case Value_Possible :  map = values->m_Possible; break;
+        case Value_Printing :  map = values->m_Printing; break;
         }
     }
     if (map.isEmpty()) {
@@ -401,6 +404,7 @@ QStringList FormItemValues::values(const int typeOfValues) const
         case Value_Numerical : map = values->m_Numerical; break;
         case Value_Script :    map = values->m_Script; break;
         case Value_Possible :  map = values->m_Possible; break;
+        case Value_Printing :  map = values->m_Printing; break;
         }
     }
     QStringList list;
