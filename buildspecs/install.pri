@@ -45,6 +45,7 @@ INSTALL_TEXTFILES_PATH    = $${INSTALL_RESOURCES_PATH}/textfiles
 INSTALL_SMALLPIX_PATH     = $${INSTALL_RESOURCES_PATH}/pixmap/16x16
 INSTALL_MEDIUMPIX_PATH    = $${INSTALL_RESOURCES_PATH}/pixmap/32x32
 INSTALL_BIGPIX_PATH       = $${INSTALL_RESOURCES_PATH}/pixmap/64x64
+INSTALL_SVGPIX_PATH       = $${INSTALL_RESOURCES_PATH}/pixmap/svg
 INSTALL_SPLASHPIX_PATH    = $${INSTALL_RESOURCES_PATH}/pixmap/splashscreens
 INSTALL_DOCS_PATH         = $${INSTALL_RESOURCES_PATH}/doc/$${BINARY_TARGET}
 
@@ -73,6 +74,7 @@ message( Translations : $${INSTALL_TRANSLATIONS_PATH} )
 message( Pixmaps - small : $${INSTALL_SMALLPIX_PATH} )
 message( Pixmaps - medium : $${INSTALL_MEDIUMPIX_PATH} )
 message( Pixmaps - big : $${INSTALL_BIGPIX_PATH} )
+message( Pixmaps - svg : $${INSTALL_SVGPIX_PATH} )
 message( Pixmaps - splashscreens : $${INSTALL_SPLASHPIX_PATH} )
 !isEmpty(INSTALL_DOCS_PATH):message( Documentation : $${INSTALL_DOCS_PATH} )
 !isEmpty(INSTALL_DESKTOP_FILES_PATH):message( DesktopFile : $${INSTALL_DESKTOP_FILES_PATH} )
@@ -173,9 +175,9 @@ pix32.path = $${INSTALL_MEDIUMPIX_PATH}
 pix32.files = $${SOURCES_GLOBAL_RESOURCES}/pixmap/32x32/*.png
 pix64.path = $${INSTALL_BIGPIX_PATH}
 pix64.files = $${SOURCES_GLOBAL_RESOURCES}/pixmap/64x64/*.png
-pixsvg.path = $${INSTALL_BIGPIX_PATH}/svg
+pixsvg.path = $${INSTALL_SVGPIX_PATH}
 pixsvg.files = $${SOURCES_GLOBAL_RESOURCES}/pixmap/svg/*.svg
-INSTALLS+=screens pix16 pix16flags pix32 pix64
+INSTALLS+=screens pix16 pix16flags pix32 pix64 pixsvg
 
 # Install desktop file
 !isEmpty(INSTALL_DESKTOP_FILES_PATH){

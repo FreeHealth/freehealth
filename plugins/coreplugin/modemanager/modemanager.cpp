@@ -44,6 +44,7 @@
 #include <coreplugin/contextmanager/contextmanager.h>
 #include <coreplugin/icore.h>
 #include <coreplugin/ipatient.h>
+#include <coreplugin/isettings.h>
 
 #include <extensionsystem/pluginmanager.h>
 
@@ -62,6 +63,7 @@ using namespace Core::Internal;
 static inline Core::ActionManager *actionManager() { return Core::ICore::instance()->actionManager(); }
 static inline Core::ContextManager *contextManager() { return Core::ICore::instance()->contextManager(); }
 static inline Core::IPatient *patient() {return Core::ICore::instance()->patient();}
+static inline Core::ISettings *settings() {return Core::ICore::instance()->settings();}
 
 ModeManager *ModeManager::m_instance = 0;
 
@@ -77,6 +79,7 @@ void ModeManager::init(Utils::FancyTabWidget *modeStack)
 {
     m_modeStack = modeStack;
     m_actionBar = new Utils::FancyActionBar(modeStack);
+    m_actionBar->setSvgIconPath(settings()->path(Core::ISettings::BigPixmapPath));
     m_modeStack->addCornerWidget(m_actionBar);
 
     connect(m_modeStack, SIGNAL(currentAboutToShow(int)), SLOT(currentTabAboutToChange(int)));

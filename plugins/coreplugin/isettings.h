@@ -75,6 +75,7 @@ public:
         SmallPixmapPath,
         MediumPixmapPath,
         BigPixmapPath,
+        SvgPixmapPath,
         SystemTempPath,
         ApplicationTempPath,
         CompleteFormsPath,

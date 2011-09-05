@@ -46,7 +46,7 @@ namespace Internal {
 class FancyToolButton : public QToolButton
 {
 public:
-    FancyToolButton(QWidget *parent = 0);
+    FancyToolButton(const QString &iconPath, QWidget *parent = 0);
 
     void paintEvent(QPaintEvent *event);
     QSize sizeHint() const;
@@ -65,13 +65,17 @@ class UTILS_EXPORT FancyActionBar : public QWidget
 public:
     FancyActionBar(QWidget *parent = 0);
 
+    void setSvgIconPath(const QString &iconpath) {m_IconPath=iconpath;}
+
     void paintEvent(QPaintEvent *event);
     void insertAction(int index, QAction *action, QMenu *menu = 0);
 
 private slots:
     void toolButtonContextMenuActionTriggered(QAction*);
+
 private:
     QVBoxLayout *m_actionsLayout;
+    QString m_IconPath;
 };
 
 } // namespace Utils

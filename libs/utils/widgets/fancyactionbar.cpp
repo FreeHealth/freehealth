@@ -36,6 +36,8 @@
 #include <QtSvg/QSvgRenderer>
 #include <QtGui/QAction>
 
+#include <QDebug>
+
 using namespace Utils;
 using namespace Internal;
 
@@ -57,11 +59,12 @@ static const char* const elementsSvgIds[] = {
     svgIdButtonHoverOverlay
 };
 
-const QMap<QString, QPicture> &buttonElementsMap()
+const QMap<QString, QPicture> &buttonElementsMap(const QString &iconPath)
 {
     static QMap<QString, QPicture> result;
     if (result.isEmpty()) {
-        QSvgRenderer renderer(QLatin1String(":/fancyactionbar/images/fancytoolbutton.svg"));
+        /** \todo code here : remove resources usage */
+        QSvgRenderer renderer(QString("%1/fancytoolbutton.svg").arg(iconPath));
         for (size_t i = 0; i < sizeof(elementsSvgIds)/sizeof(elementsSvgIds[0]); i++) {
             QString elementId(elementsSvgIds[i]);
             QPicture elementPicture;
@@ -73,9 +76,9 @@ const QMap<QString, QPicture> &buttonElementsMap()
     return result;
 }
 
-FancyToolButton::FancyToolButton(QWidget *parent)
+FancyToolButton::FancyToolButton(const QString &iconPath, QWidget *parent)
     : QToolButton(parent)
-    , m_buttonElements(buttonElementsMap())
+    , m_buttonElements(buttonElementsMap(iconPath))
 {
     setAttribute(Qt::WA_Hover, true);
     setSizePolicy(QSizePolicy::Preferred, QSizePolicy::Preferred);
@@ -150,7 +153,7 @@ FancyActionBar::FancyActionBar(QWidget *parent)
 
 void FancyActionBar::insertAction(int index, QAction *action, QMenu *menu)
 {
-    FancyToolButton *toolButton = new FancyToolButton(this);
+    FancyToolButton *toolButton = new FancyToolButton(m_IconPath, this);
     toolButton->setDefaultAction(action);
     if (menu) {
         toolButton->setMenu(menu);
