@@ -466,6 +466,7 @@ bool EpisodeBase::addSubForms(const QVector<SubFormInsertionPoint> &insertions)
         query.bindValue(FORM_INSERTIONPOINT, insertions.at(i).receiverUid());
         query.bindValue(FORM_INSERTASCHILD, insertions.at(i).addAsChild());
         query.bindValue(FORM_APPEND, insertions.at(i).appendToForm());
+        query.bindValue(FORM_USER_RESTRICTION_ID, QVariant());
         if (!query.exec()) {
             LOG_QUERY_ERROR(query);
             success = false;
