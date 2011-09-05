@@ -888,6 +888,7 @@ QTreeWidget* SettingsPrivate::getTreeWidget(QWidget *parent) const
 
     // add columns
     tree->setColumnCount(2);
+    tree->setHeaderLabels(QStringList() << tr("Name") << tr("Value"));
     QFont bold;
     bold.setBold(true);
 
@@ -943,8 +944,7 @@ QTreeWidget* SettingsPrivate::getTreeWidget(QWidget *parent) const
     relPathsItem->setFont(0,bold);
     new QTreeWidgetItem(relPathsItem, QStringList() << tr("Using Ini File") << appDir.relativeFilePath(QFileInfo(fileName()).absoluteFilePath()));
 
-    foreach(const QString & p, paths.keys())
-    {
+    foreach(const QString & p, paths.keys()) {
         new QTreeWidgetItem(relPathsItem, QStringList() << p << appDir.relativeFilePath(QFileInfo(paths[p]).absoluteFilePath()));
         new QTreeWidgetItem(absPathsItem, QStringList() << p << paths[p]);
     }
