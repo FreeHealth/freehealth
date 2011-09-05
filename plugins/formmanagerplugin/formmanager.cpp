@@ -54,6 +54,8 @@
 #include <coreplugin/itheme.h>
 #include <coreplugin/contextmanager/contextmanager.h>
 
+#include <patientbaseplugin/constants_menus.h>
+
 #include <utils/global.h>
 #include <utils/log.h>
 
@@ -318,6 +320,7 @@ FormActionHandler::FormActionHandler(QObject *parent) :
     Core::UniqueIDManager *uid = Core::ICore::instance()->uniqueIDManager();
     Core::ITheme *th = Core::ICore::instance()->theme();
     QList<int> formContext = QList<int>() << uid->uniqueIdentifier(Constants::C_FORM_PLUGINS);
+    QList<int> globalcontext = QList<int>() << Core::Constants::C_GLOBAL_ID;
 
     // Form's Contextual Menu
 //    Core::ActionContainer *editMenu = am->actionContainer(Core::Constants::M_EDIT);
@@ -353,6 +356,16 @@ FormActionHandler::FormActionHandler(QObject *parent) :
     cmd->setTranslations(Constants::ADDFORM_TEXT, Constants::ADDFORM_TEXT, Constants::FORM_TR_CONTEXT);
 //    cmenu->addAction(cmd, Core::Constants::G_EDIT_LIST);
 //    connect(a, SIGNAL(triggered()), this, SLOT(addItem()));
+
+    a = aShowPatientSynthesis = new QAction(this);
+    a->setObjectName("aShowPatientSynthesis");
+    a->setIcon(th->icon(Core::Constants::ICONPATIENTSYNTHESIS, Core::ITheme::MediumIcon));
+    cmd = am->registerAction(a, Constants::A_SHOWPATIENTSYNTHESIS, globalcontext);
+    cmd->setTranslations(Constants::SHOWPATIENTSYNTHESIS_TEXT, Constants::SHOWPATIENTSYNTHESIS_TEXT, Constants::FORM_TR_CONTEXT);
+    Core::ActionContainer *menu = actionManager()->actionContainer(Core::Constants::M_PATIENTS);
+    if (menu)
+        menu->addAction(cmd, Patients::Constants::G_PATIENTS_INFORMATIONS);
+
 
     contextManager()->updateContext();
 }

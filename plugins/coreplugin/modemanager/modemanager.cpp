@@ -79,7 +79,7 @@ void ModeManager::init(Utils::FancyTabWidget *modeStack)
 {
     m_modeStack = modeStack;
     m_actionBar = new Utils::FancyActionBar(modeStack);
-    m_actionBar->setSvgIconPath(settings()->path(Core::ISettings::BigPixmapPath));
+    m_actionBar->setSvgIconPath(settings()->path(Core::ISettings::SvgPixmapPath));
     m_modeStack->addCornerWidget(m_actionBar);
 
     connect(m_modeStack, SIGNAL(currentAboutToShow(int)), SLOT(currentTabAboutToChange(int)));

@@ -35,6 +35,8 @@
 #include <coreplugin/itheme.h>
 #include <coreplugin/constants_menus.h>
 #include <coreplugin/constants_icons.h>
+#include <coreplugin/modemanager/modemanager.h>
+#include <coreplugin/actionmanager/actionmanager.h>
 
 #include <extensionsystem/pluginmanager.h>
 
@@ -48,10 +50,13 @@ using namespace Internal;
 static inline ExtensionSystem::PluginManager *pluginManager() { return ExtensionSystem::PluginManager::instance(); }
 static inline Form::FormManager *formManager() {return Form::FormManager::instance();}
 static inline Core::ITheme *theme()  { return Core::ICore::instance()->theme(); }
+static inline Core::ModeManager *modeManager()  { return Core::ICore::instance()->modeManager(); }
+static inline Core::ActionManager *actionManager()  { return Core::ICore::instance()->actionManager(); }
 
 FormManagerMode::FormManagerMode(QObject *parent) :
     Core::BaseMode(parent),
-    m_inPluginManager(false)
+    m_inPluginManager(false),
+    m_actionInBar(false)
 {
     setName(tr("Patients Files"));
     setIcon(theme()->icon(Core::Constants::ICONPATIENTFILES, Core::ITheme::BigIcon));
@@ -85,6 +90,10 @@ bool FormManagerMode::getPatientForm()
     if (!m_inPluginManager) {
         pluginManager()->addObject(this);
         m_inPluginManager = true;
+    }
+    if (!m_actionInBar) {
+        Core::Command *cmd = actionManager()->command(Constants::A_SHOWPATIENTSYNTHESIS);
+        modeManager()->addAction(cmd, 100);
     }
     Form::FormMain *root = formManager()->rootForm(Core::Constants::MODE_PATIENT_FILE);
     m_Holder->setRootForm(root);
