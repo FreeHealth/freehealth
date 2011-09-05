@@ -142,6 +142,7 @@ bool XmlFormIO::canReadForms(const QString &uuidOrAbsPath) const
                 m_ReadableForms.insert(form.absFileName, true);
                 return true;
             } else {
+                LOG_ERROR("Form Content corrupted");
                 m_ReadableForms.insert(fileName, false);
                 m_ReadableForms.insert(form.absFileName, false);
                 return false;
@@ -163,6 +164,7 @@ Form::FormIODescription *XmlFormIO::readFileInformations(const QString &uuidOrAb
 
 void XmlFormIO::getAllFormsFromDir(const QString &absPath, QList<Form::FormIODescription *> *list)
 {
+//    qWarning() << Q_FUNC_INFO << absPath;
     QDir start(absPath);
     if (!start.exists()) {
         LOG_ERROR_FOR("XmlFormIO", tkTr(Trans::Constants::PATH_1_DOESNOT_EXISTS).arg(absPath) +
@@ -229,21 +231,21 @@ QList<Form::FormMain *> XmlFormIO::loadAllRootForms(const QString &uuidOrAbsPath
             uuid = m_AbsFileName;
         }
     }
-    if (!canReadForms(form.uid))
+    if (!canReadForms(form.uid)) {
+        LOG_ERROR("Can not read form " + form.uid);
         return toReturn;
+    }
 
-    // replace path TAGs
-//    QString file = uuid;
-//    file.replace(Core::Constants::TAG_APPLICATION_COMPLETEFORMS_PATH, settings()->path(Core::ISettings::CompleteFormsPath));
-//    file.replace(Core::Constants::TAG_APPLICATION_SUBFORMS_PATH, settings()->path(Core::ISettings::SubFormsPath));
-//    file.replace(Core::Constants::TAG_APPLICATION_RESOURCES_PATH, settings()->path(Core::ISettings::BundleResourcesPath));
-//    if (!file.endsWith("xml", Qt::CaseInsensitive))
-//        file += QDir::separator();
-    // now we work with m_AbsFileName which is defined by canReadForm()
-    QDir dir(QFileInfo(form.absFileName).absolutePath());
+    QFileInfo info(form.absFileName);
+    QDir dir;
+    if (info.isDir())
+        dir.setPath(info.absoluteFilePath());
+    else
+        dir.setPath(info.absolutePath());
 
     // Populate DB with all the files of this form if needed
     if (!base()->isFormExists(form.uid)) {
+        LOG("Saving forms to database " + form.uid);
         foreach(const QFileInfo &f, dir.entryInfoList(QStringList() << "*.xml", QDir::Files | QDir::Readable)) {
             QString modeName = f.baseName();
             reader()->saveFormToDatabase(form.uid, XmlIOBase::FullContent, Utils::readTextFile(f.absoluteFilePath(), Utils::DontWarnUser), modeName);

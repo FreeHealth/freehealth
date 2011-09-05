@@ -56,6 +56,8 @@
 #include <QMessageBox>
 #include <QTextCodec>
 #include <QFileInfo>
+#include <QDomDocument>
+#include <QDomElement>
 
 using namespace XmlForms;
 using namespace Internal;
@@ -169,7 +171,7 @@ bool XmlFormContentReader::checkFormFileContent(const QString &formUidOrFullAbsP
         m_Error.append(tkTr(Trans::Constants::FILE_1_ISEMPTY).arg(formUidOrFullAbsPath));
         return false;
     }
-    if (contents.count("<"+QString(Constants::TAG_NEW_FORM)+">") != contents.count("</"+QString(Constants::TAG_NEW_FORM)+">")) {
+    if (contents.count("<"+QString(Constants::TAG_NEW_FORM)) != contents.count("</"+QString(Constants::TAG_NEW_FORM)+">")) {
         ok = false;
         m_Error.append(tkTr(Trans::Constants::XML_WRONG_NUMBER_OF_TAG_1).arg(Constants::TAG_NEW_FORM));
         LOG_ERROR_FOR("XmlFormContentReader", Trans::ConstantTranslations::tkTr(Trans::Constants::FILE_1_ISNOT_READABLE).arg(formUidOrFullAbsPath));
@@ -318,6 +320,8 @@ QList<Form::FormIODescription *> XmlFormContentReader::getFormFileDescriptions(c
 
 bool XmlFormContentReader::loadForm(const XmlFormName &form, Form::FormMain *rootForm)
 {
+//    qWarning() << Q_FUNC_INFO ;
+
     QDomDocument *doc = 0;
     if (!m_DomDocFormCache.keys().contains(form.absFileName)) {
         LOG_ERROR_FOR("XmlFormContentReader","Form not in cache: " + form.absFileName);
@@ -338,8 +342,10 @@ bool XmlFormContentReader::loadForm(const XmlFormName &form, Form::FormMain *roo
     }
     m_ActualForm = rootForm;
 
-    if (!loadElement(rootForm, root, form))
+    if (!loadElement(rootForm, root, form)) {
+        LOG_ERROR_FOR("XmlFormContentReader", "Unable to load form " + form.uid);
         return false;
+    }
 
 //    rootForm->createDebugPage();
     createWidgets(rootForm);
@@ -401,7 +407,7 @@ bool XmlFormContentReader::loadElement(Form::FormItem *item, QDomElement &rootEl
         }
 
         // Name ?
-        if (element.tagName().compare("name",Qt::CaseInsensitive)==0) {
+        if (element.tagName().compare("name", Qt::CaseInsensitive)==0) {
             item->setUuid(element.text());
             element = element.nextSiblingElement();
             continue;
@@ -472,7 +478,24 @@ bool XmlFormContentReader::createElement(Form::FormItem *item, QDomElement &elem
     // new item
     if (element.tagName().compare(Constants::TAG_NEW_ITEM, Qt::CaseInsensitive)==0) {
         if (item) {
-            loadElement(item->createChildItem(), element, form);
+            Form::FormItem *child = item->createChildItem();
+            // read attributes (type, uid/name, patient representation...)
+            if (element.hasAttribute(Constants::ATTRIB_UUID))
+                child->setUuid(element.attribute(Constants::ATTRIB_UUID));
+
+            if (element.hasAttribute(Constants::ATTRIB_NAME))
+                child->setUuid(element.attribute(Constants::ATTRIB_NAME));
+
+            if (element.hasAttribute(Constants::ATTRIB_TYPE))
+                child->spec()->setValue(Form::FormItemSpec::Spec_Plugin, element.attribute(Constants::ATTRIB_TYPE), Trans::Constants::ALL_LANGUAGE);
+
+            if (element.hasAttribute(Constants::ATTRIB_PATIENTREPRESENTATION)) {
+                int i = m_PatientDatas.value(element.attribute(Constants::ATTRIB_PATIENTREPRESENTATION), -1);
+                if (i != -1) {
+                    child->setPatientDataRepresentation(i);
+                }
+            }
+            loadElement(child, element, form);
             return true;
         }
         else
@@ -487,6 +510,16 @@ bool XmlFormContentReader::createElement(Form::FormItem *item, QDomElement &elem
         m_ActualForm = m_ActualForm->createChildForm(element.firstChildElement(Constants::TAG_NAME).text());
         item = m_ActualForm;
         if (item) {
+            // read attributes (type, uid/name, patient representation...)
+            if (element.hasAttribute(Constants::ATTRIB_UUID))
+                item->setUuid(element.attribute(Constants::ATTRIB_UUID));
+
+            if (element.hasAttribute(Constants::ATTRIB_NAME))
+                item->setUuid(element.attribute(Constants::ATTRIB_NAME));
+
+            if (element.hasAttribute(Constants::ATTRIB_TYPE))
+                item->spec()->setValue(Form::FormItemSpec::Spec_Plugin, element.attribute(Constants::ATTRIB_TYPE), Trans::Constants::ALL_LANGUAGE);
+
             loadElement(item, element, form);
             // read specific form's datas
             m_ActualForm = oldRootForm;
@@ -501,6 +534,16 @@ bool XmlFormContentReader::createElement(Form::FormItem *item, QDomElement &elem
         item = item->createPage(element.firstChildElement(Constants::TAG_NAME).text());
         /** \todo add page to a form */
         if (item) {
+            // read attributes (type, uid/name, patient representation...)
+            if (element.hasAttribute(Constants::ATTRIB_UUID))
+                item->setUuid(element.attribute(Constants::ATTRIB_UUID));
+
+            if (element.hasAttribute(Constants::ATTRIB_NAME))
+                item->setUuid(element.attribute(Constants::ATTRIB_NAME));
+
+            if (element.hasAttribute(Constants::ATTRIB_TYPE))
+                item->spec()->setValue(Form::FormItemSpec::Spec_Plugin, element.attribute(Constants::ATTRIB_TYPE), Trans::Constants::ALL_LANGUAGE);
+
             loadElement(item, element, form);
             // read specific page's datas
             return true;
@@ -555,6 +598,8 @@ bool XmlFormContentReader::populateScripts(Form::FormItem *item, const QDomEleme
 
 bool XmlFormContentReader::createItemWidget(Form::FormItem *item, QWidget *parent)
 {
+//    qWarning() << Q_FUNC_INFO;
+//    qWarning() << item << item->uuid() << item->spec()->pluginName();
     // does plugin was inform in the xml file ?
     if (item->spec()->pluginName().isEmpty()) {
         LOG_ERROR_FOR("XmlFormContentReader", "No plugin name for item: " + item->uuid());
@@ -680,6 +725,7 @@ bool XmlFormContentReader::createCategory(const QDomElement &element, Category::
 /** Save the \e content of the form \e form to the database and return the used formUid. If the \e content is empty the form file is accessed */
 QString XmlFormContentReader::saveFormToDatabase(const XmlFormName &form, const int type, const QString &content, const QString &modeName)
 {
+//    qWarning() << Q_FUNC_INFO << form.uid << modeName;
     // add form to database
     if (content.isEmpty()) {
         base()->saveContent(form.uid, Utils::readTextFile(form.absFileName, Utils::DontWarnUser), type, modeName);

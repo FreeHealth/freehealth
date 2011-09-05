@@ -135,6 +135,10 @@ const char* const TAG_OPTIONS_UNIQUE_EPISODE    = "unique";
 const char* const TAG_OPTIONS_NO_EPISODE        = "noepisode";
 
 const char* const ATTRIB_ID           = "id";
+const char* const ATTRIB_UUID         = "uuid";
+const char* const ATTRIB_NAME         = "name";
+const char* const ATTRIB_TYPE         = "type";
+const char* const ATTRIB_PATIENTREPRESENTATION  = "patient";
 const char* const ATTRIB_COMPLETION   = "completion";
 const char* const ATTRIB_ICON         = "icon";
 const char* const ATTRIB_OPTIONNAL    = "optional";
