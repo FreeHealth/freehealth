@@ -320,7 +320,7 @@ QList<Form::FormIODescription *> XmlFormContentReader::getFormFileDescriptions(c
 
 bool XmlFormContentReader::loadForm(const XmlFormName &form, Form::FormMain *rootForm)
 {
-//    qWarning() << Q_FUNC_INFO ;
+//    qWarning() << Q_FUNC_INFO << form.uid << form.absFileName;
 
     QDomDocument *doc = 0;
     if (!m_DomDocFormCache.keys().contains(form.absFileName)) {
@@ -753,7 +753,11 @@ QString XmlFormContentReader::readExtraFile(const XmlFormName &form, const QStri
         QString name = fileName;
         // not available in database -> read file, add to database
         if (QFileInfo(fileName).isRelative()) {
-            name.prepend(QFileInfo(form.absFileName).absolutePath() + QDir::separator());
+            QFileInfo info(form.absFileName);
+            if (info.isDir())
+                name.prepend(info.absoluteFilePath() + QDir::separator());
+            else
+                name.prepend(info.absolutePath() + QDir::separator());
         }
         content = Utils::readTextFile(name, Utils::DontWarnUser);
         saveFormToDatabase(form, XmlIOBase::ExtraFiles, content, fileName);

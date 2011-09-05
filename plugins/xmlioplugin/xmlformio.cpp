@@ -265,7 +265,12 @@ QList<Form::FormMain *> XmlFormIO::loadAllRootForms(const QString &uuidOrAbsPath
         Form::FormMain *root = m_ActualForm = new Form::FormMain;
         root->setModeUniqueName(it.key());
         root->setUuid(form.uid);
-        QString fakeFileName = QFileInfo(form.absFileName).absolutePath() + "/" + it.key() + ".xml";
+        QString fakeFileName;
+        QFileInfo info(form.absFileName);
+        if (info.isDir())
+            fakeFileName = info.absoluteFilePath() + "/" + it.key() + ".xml";
+        else
+            fakeFileName = info.absolutePath() + "/" + it.key() + ".xml";
 
         if (!reader()->isInCache(fakeFileName)) {
             if (!reader()->checkFormFileContent(fakeFileName, it.value()))
@@ -273,6 +278,7 @@ QList<Form::FormMain *> XmlFormIO::loadAllRootForms(const QString &uuidOrAbsPath
         }
         XmlFormName mode(form.uid);
         mode.absFileName = fakeFileName;
+//        qWarning() << "MODE" << mode.absFileName << mode.uid;
         if (!reader()->loadForm(mode, root)) {
             LOG_ERROR("Form not readable: " + fakeFileName);
         } else {
