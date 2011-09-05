@@ -370,8 +370,10 @@ public:
         // getting Forms
         if (WarnFormAndEpisodeRetreiving)
             LOG_FOR(q, "Getting Forms");
+
+        // add the form synthesis item
+
         // create one item per form
-        m_FormItems.clear();
         foreach(Form::FormMain *form, m_RootForm->flattenFormMainChildren()) {
             TreeItem *item = new TreeItem(0);
             m_FormItems.insert(form, item);
@@ -530,11 +532,11 @@ public:
         }
 
         if (episode && form) {
-            LOG_FOR("EpisodeModel", "Save episode: " + episode->data(EpisodeData::Label).toString());
             episode->setData(EpisodeData::XmlContent, createXmlEpisode(formUid));
             episode->setData(EpisodeData::IsXmlContentPopulated, true);
             episode->setData(EpisodeData::Label, form->itemDatas()->data(0, IFormItemData::ID_EpisodeLabel));
             episode->setData(EpisodeData::UserDate, form->itemDatas()->data(0, IFormItemData::ID_EpisodeDate));
+            LOG_FOR("EpisodeModel", "Save episode: " + episode->data(EpisodeData::Label).toString());
             if (!settings()->value(Core::Constants::S_ALWAYS_SAVE_WITHOUT_PROMPTING, true).toBool()) {
                 bool yes = Utils::yesNoMessageBox(QCoreApplication::translate("EpisodeModel", "Save episode ?"),
                                                   QCoreApplication::translate("EpisodeModel", "The actual episode has been modified. Do you want to save changes in your database ?\n"
@@ -1194,7 +1196,7 @@ bool EpisodeModel::activateEpisode(const QModelIndex &index, const QString &form
     // XML content ==
     // <formitemuid>value</formitemuid>
     QHash<QString, FormItem *> items;
-    foreach(FormItem *it, form->formItemChildren()) {
+    foreach(FormItem *it, form->flattenFormItemChildren()) {
         /** \todo check nested items */
         items.insert(it->uuid(), it);
     }
