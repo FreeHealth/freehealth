@@ -466,7 +466,8 @@ public:
     {
         if (index.isValid()) {
             TreeItem *item = static_cast<TreeItem*>(index.internalPointer());
-            if (item) return item;
+            if (item)
+                return item;
         }
         return m_RootItem;
     }
@@ -744,12 +745,15 @@ void EpisodeModel::onUserChanged()
 //    foreach(int i, ids)
 //        d->m_LkIds.append(QString::number(i) + ",");
 //    d->m_LkIds.chop(1);
-    d->refreshEpisodes();
+//    d->refreshEpisodes();
 }
 
 void EpisodeModel::onPatientChanged()
 {
     d->m_CurrentPatient = patient()->uuid();
+
+    qWarning() << "CURRENT PATIENT" << d->m_CurrentPatient;
+
     d->refreshEpisodes();
     d->getLastEpisodesAndFeedPatientModel();
     reset();

@@ -739,6 +739,7 @@ bool EpisodeBase::saveEpisode(const QList<EpisodeData *> &episodes)
 /** Return all recorded episodes form the database according to the Form::Internal::EpisodeBaseQuery \e baseQuery. Episodes are sorted by UserDate. */
 QList<EpisodeData *> EpisodeBase::getEpisodes(const EpisodeBaseQuery &baseQuery)
 {
+//    qWarning() << Q_FUNC_INFO;
     QList<EpisodeData *> toReturn;
     QSqlDatabase DB = QSqlDatabase::database(DB_NAME);
     if (!connectDatabase(DB, __LINE__)) {
@@ -850,15 +851,20 @@ QList<EpisodeData *> EpisodeBase::getEpisodes(const EpisodeBaseQuery &baseQuery)
             query2.finish();
 
             e->setModified(false);
+
+//            qWarning() << e;
+//            qWarning() << e->data(EpisodeData::Label);
             toReturn << e;
         }
     } else {
         LOG_QUERY_ERROR(query);
     }
     DB.commit();
+//    qWarning() << toReturn;
     return toReturn;
 }
 
+/** Get the content of an episode. Return true if all goes fine. */
 bool EpisodeBase::getEpisodeContent(EpisodeData *episode)
 {
     QSqlDatabase DB = QSqlDatabase::database(DB_NAME);
@@ -874,14 +880,14 @@ bool EpisodeBase::getEpisodeContent(EpisodeData *episode)
         if (query.next()) {
             episode->setData(EpisodeData::XmlContent, query.value(0));
             episode->setData(EpisodeData::IsXmlContentPopulated, true);
+            if (!episodeWasModified)
+                episode->setModified(false);
             return true;
         }
     } else {
         LOG_QUERY_ERROR(query);
     }
     query.finish();
-    if (!episodeWasModified)
-        episode->setModified(false);
     return false;
 }
 

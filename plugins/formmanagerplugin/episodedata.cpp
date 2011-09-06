@@ -28,6 +28,8 @@
 
 #include <QDateTime>
 
+#include <QDebug>
+
 using namespace Form;
 using namespace Internal;
 
