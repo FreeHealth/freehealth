@@ -101,6 +101,7 @@ namespace Constants {
     const char * const A_VALIDATEEPISODE = "aForms.ValidateEpisode";
     const char * const A_ADDFORM = "aForm.AddForm";
     const char * const A_SHOWPATIENTSYNTHESIS = "aForm.PatientSynth";
+    const char * const PATIENTSYNTHESIS_UUID = "PatientSynthesis";
 
     const char * const FORM_TR_CONTEXT = "Forms";
     const char * const ADDEPISODE_TEXT = QT_TRANSLATE_NOOP("tkConstants", "Add Episode");

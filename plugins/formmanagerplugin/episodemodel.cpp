@@ -32,9 +32,11 @@
 
 #include <coreplugin/icore.h>
 #include <coreplugin/ipatient.h>
+#include <coreplugin/itheme.h>
 #include <coreplugin/iuser.h>
 #include <coreplugin/constants_menus.h>
 #include <coreplugin/constants_tokensandsettings.h>
+#include <coreplugin/constants_icons.h>
 #include <coreplugin/actionmanager/actionmanager.h>
 
 #include <formmanagerplugin/formmanager.h>
@@ -91,6 +93,7 @@ static inline Core::IUser *user() {return Core::ICore::instance()->user();}
 static inline Core::IPatient *patient() {return Core::ICore::instance()->patient();}
 
 static inline Core::ISettings *settings()  { return Core::ICore::instance()->settings(); }
+static inline Core::ITheme *theme()  { return Core::ICore::instance()->theme(); }
 static inline Core::ActionManager *actionManager() { return Core::ICore::instance()->actionManager(); }
 static inline ExtensionSystem::PluginManager *pluginManager() { return ExtensionSystem::PluginManager::instance(); }
 
@@ -324,13 +327,14 @@ class EpisodeModelPrivate
 {
 public:
     EpisodeModelPrivate(EpisodeModel *parent) :
-            m_RootItem(0),
-            m_FormTreeCreated(false),
-            m_ReadOnly(false),
-            m_ActualEpisode(0),
-            m_CoreListener(0),
-            m_PatientListener(0),
-            q(parent)
+        m_RootItem(0),
+//        m_SynthesisItem(0),
+        m_FormTreeCreated(false),
+        m_ReadOnly(false),
+        m_ActualEpisode(0),
+        m_CoreListener(0),
+        m_PatientListener(0),
+        q(parent)
     {
     }
 
@@ -372,6 +376,8 @@ public:
             LOG_FOR(q, "Getting Forms");
 
         // add the form synthesis item
+//        m_SynthesisItem = new TreeItem(m_RootItem);
+//        m_RootItem->appendChild(m_SynthesisItem);
 
         // create one item per form
         foreach(Form::FormMain *form, m_RootForm->flattenFormMainChildren()) {
@@ -647,7 +653,7 @@ public:
 
 public:
     FormMain *m_RootForm;
-    TreeItem *m_RootItem;
+    TreeItem *m_RootItem; //, *m_SynthesisItem;
     QString m_UserUuid, m_LkIds, m_CurrentPatient, m_CurrentForm;
     bool m_FormTreeCreated, m_ReadOnly;
     QStringList m_FormUids;
@@ -817,6 +823,27 @@ QVariant EpisodeModel::data(const QModelIndex &item, int role) const
     TreeItem *it = d->getItem(item);
     if (it==d->m_RootItem)
         return QVariant();
+
+//    if (it==d->m_SynthesisItem) {
+//        switch (role) {
+//        case Qt::DisplayRole:
+//        case Qt::EditRole:
+//            if (item.column() == FormUuid)
+//                return Constants::PATIENTSYNTHESIS_UUID;
+//            if (item.column() == Label)
+//                return QApplication::translate(Constants::FORM_TR_CONTEXT, Constants::SHOWPATIENTSYNTHESIS_TEXT);
+//            break;
+//        case Qt::FontRole:
+//        {
+//            QFont bold;
+//            bold.setBold(true);
+//            return bold;
+//        }
+//        case Qt::DecorationRole:
+//            return theme()->icon(Core::Constants::ICONPATIENTSYNTHESIS);
+//        }
+//        return QVariant();
+//    }
 
     EpisodeData *episode = d->m_EpisodeItems.key(it, 0);
     FormMain *form = d->m_FormItems.key(it, 0);
