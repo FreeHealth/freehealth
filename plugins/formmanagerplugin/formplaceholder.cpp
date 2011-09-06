@@ -120,9 +120,9 @@ public:
         clearStackLayout();
         foreach(FormMain *form, m_RootForm->flattenFormMainChildren()) {
             if (form->formWidget()) {
-                QScrollArea *sa = new QScrollArea;
+                QScrollArea *sa = new QScrollArea(m_Stack->parentWidget());
                 sa->setWidgetResizable(true);
-                QWidget *w = new QWidget();
+                QWidget *w = new QWidget(sa);
                 sa->setWidget(w);
                 QVBoxLayout *vl = new QVBoxLayout(w);
                 vl->setSpacing(0);
@@ -145,11 +145,9 @@ public:
     void clearStackLayout()
     {
         /** \todo check leaks */
-        for(int i = m_Stack->count(); i>0; --i) {
-            QWidget *w = m_Stack->widget(i);
-            m_Stack->removeWidget(w);
-            delete w;
-        }
+        QWidget *w = m_Stack->parentWidget();
+        delete m_Stack;
+        m_Stack = new QStackedLayout(w);
     }
 
 public:
@@ -523,7 +521,10 @@ void FormPlaceHolder::addForm()
     if (!isVisible())
         return;
     FormEditorDialog dlg(d->m_EpisodeModel, FormEditorDialog::DefaultMode, this);
-    dlg.exec();
+    if (dlg.exec()==QDialog::Accepted) {
+        // refresh stack widget
+        d->populateStackLayout();
+    }
 }
 
 void FormPlaceHolder::printCurrentItem()
