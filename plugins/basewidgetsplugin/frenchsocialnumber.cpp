@@ -86,9 +86,9 @@ FrenchSocialNumber::FrenchSocialNumber(QWidget *parent) :
         m_Edits.at(i)->installEventFilter(this);
     }
 
-    m_FullNumber = "299082B234349";
-    populateLineEdits();
-    checkControlKey();
+//    m_FullNumber = "299082B234349";
+//    populateLineEdits();
+//    checkControlKey();
 }
 
 FrenchSocialNumber::~FrenchSocialNumber()
