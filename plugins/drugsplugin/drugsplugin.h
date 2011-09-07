@@ -30,27 +30,25 @@
 #include <extensionsystem/iplugin.h>
 
 /**
- * \file drugswidgetmanager.h
+ * \file drugsplugin.h
  * \author Eric MAEKER <eric.maeker@gmail.com>
- * \version 0.2.1
- * \date 26 Oct 2009
+ * \version 0.6.0
+ * \date 07 Sept 2011
  * \internal
 */
 
 
 namespace DrugsWidget {
+namespace Internal {
 class DrugsViewOptionsPage;
 class DrugsSelectorOptionsPage;
 class DrugsPrintOptionsPage;
 class DrugsUserOptionsPage;
 class DrugsExtraOptionsPage;
-class DrugsDatabaseSelectorPage;
 class ProtocolPreferencesPage;
-}
+class DrugsDatabaseSelectorPage;
+class DrugEnginesPreferencesPage;
 
-
-namespace DrugsWidget {
-namespace Internal {
 
 class DrugsPlugin : public ExtensionSystem::IPlugin
 {
@@ -66,13 +64,14 @@ private Q_SLOTS:
     void postCoreOpened();
 
 private:
-    DrugsWidget::DrugsViewOptionsPage *viewPage;
-    DrugsWidget::DrugsSelectorOptionsPage *selectorPage;
-    DrugsWidget::DrugsPrintOptionsPage *printPage;
-    DrugsWidget::DrugsUserOptionsPage *userPage;
-    DrugsWidget::DrugsExtraOptionsPage *extraPage;
-    DrugsWidget::DrugsDatabaseSelectorPage *databaseSelectorPage;
-    DrugsWidget::ProtocolPreferencesPage *protocolPage;
+    DrugsViewOptionsPage *viewPage;
+    DrugsSelectorOptionsPage *selectorPage;
+    DrugsPrintOptionsPage *printPage;
+    DrugsUserOptionsPage *userPage;
+    DrugsExtraOptionsPage *extraPage;
+    DrugsDatabaseSelectorPage *databaseSelectorPage;
+    ProtocolPreferencesPage *protocolPage;
+    DrugEnginesPreferencesPage *enginePage;
 };
 
 } // namespace Internal

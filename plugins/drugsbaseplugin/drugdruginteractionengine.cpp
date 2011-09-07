@@ -775,6 +775,8 @@ DrugDrugInteractionEngine::DrugDrugInteractionEngine(QObject *parent) :
         IDrugEngine(parent), d(new DrugDrugInteractionEnginePrivate)
 {
     setObjectName("DrugDrugInteractionEngine");
+    m_IsActive = settings()->value(Constants::S_ACTIVATED_INTERACTION_ENGINES).toStringList().contains(Constants::DDI_ENGINE_UID);
+
 //    if (Utils::isDebugCompilation()) {
 //        d->m_LogChrono = true;
 //    } else {
@@ -823,6 +825,8 @@ bool DrugDrugInteractionEngine::init()
 QString DrugDrugInteractionEngine::name() const {return QCoreApplication::translate(Constants::DRUGSBASE_TR_CONTEXT, Constants::DDI_TEXT);}
 
 QString DrugDrugInteractionEngine::shortName() const {return QCoreApplication::translate(Constants::DRUGSBASE_TR_CONTEXT, Constants::DDI_SHORT_TEXT);}
+
+QString DrugDrugInteractionEngine::tooltip() const { return tr("Detects interaction between drugs"); }
 
 QString DrugDrugInteractionEngine::uid() const {return Constants::DDI_ENGINE_UID;}
 

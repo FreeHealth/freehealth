@@ -36,8 +36,8 @@
 /**
  * \file databaseselectorwidget.h
  * \author Eric MAEKER <eric.maeker@gmail.com>
- * \version 0.4.0
- * \date 02 Mar 2010
+ * \version 0.6.0
+ * \date 07 Sept 2011
 */
 
 
@@ -80,9 +80,6 @@ private:
     DatabaseSelectorWidgetPrivate *d;
 };
 
-}  // End namespace Internal
-
-
 class DrugsDatabaseSelectorPage : public Core::IOptionsPage
 {
     Q_OBJECT
@@ -110,6 +107,7 @@ private:
     QPointer<Internal::DatabaseSelectorWidget> m_Widget;
 };
 
+}  // End namespace Internal
 }  // End namespace DrugsWidget
 
 

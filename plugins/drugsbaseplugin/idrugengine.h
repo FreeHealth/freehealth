@@ -36,7 +36,7 @@
  * \file idrugengine.h
  * \author Eric MAEKER <eric.maeker@gmail.com>
  * \version 0.6.0
- * \date 12 Mar 2011
+ * \date 07 Sept 2011
 */
 
 namespace DrugsDB {
@@ -56,15 +56,15 @@ public:
     virtual bool init() = 0;
 
     bool isActive() const {return m_IsActive;}
-    void setActive(bool state) {m_IsActive = state;}
     virtual bool canComputeInteractions() const = 0;
 
     virtual bool isCalculatingDrugDrugInteractions() const = 0;
     virtual bool isCalculatingPatientDrugInteractions() const = 0;
 
+    virtual QString uid() const = 0;
     virtual QString name() const = 0;
     virtual QString shortName() const = 0;
-    virtual QString uid() const = 0;
+    virtual QString tooltip() const = 0;
     virtual QIcon icon(const int size = 0) const = 0;
     virtual QString iconFullPath(const int size = 0) const = 0;
 
@@ -72,7 +72,10 @@ public:
     virtual QVector<IDrugInteraction *> getAllInteractionsFound() = 0;
     virtual QVector<IDrugInteractionAlert *> getAllAlerts(DrugInteractionResult *addToResult) = 0;
 
-private:
+public Q_SLOTS:
+    void setActive(bool state) {m_IsActive = state;}
+
+protected:
     bool m_IsActive;
 };
 

@@ -24,26 +24,20 @@
  *       NAME <MAIL@ADRESS>                                                *
  *       NAME <MAIL@ADRESS>                                                *
  ***************************************************************************/
-#ifndef PROTOCOLPREFERENCESPAGE_H
-#define PROTOCOLPREFERENCESPAGE_H
+#ifndef DRUGSWIDGET_INTERNAL_DRUGENGINESPREFERENCES_H
+#define DRUGSWIDGET_INTERNAL_DRUGENGINESPREFERENCES_H
 
 #include <coreplugin/ioptionspage.h>
 
 #include <QPointer>
 #include <QWidget>
-#include <QStringListModel>
 
 /**
- * \file protocolpreferencespage.h
+ * \file drugenginespreferences.h
  * \author Eric MAEKER <eric.maeker@gmail.com>
  * \version 0.6.0
  * \date 07 Sept 2011
 */
-
-
-namespace DrugsDB {
-class DatabaseInfos;
-}
 
 namespace Core {
 class ISettings;
@@ -51,37 +45,34 @@ class ISettings;
 
 namespace DrugsWidget {
 namespace Internal {
+
 namespace Ui {
-class ProtocolPreferencesWidget;
+    class DrugEnginesPreferences;
 }
 
-class ProtocolPreferencesWidget : public QWidget
+class DrugEnginesPreferences : public QWidget
 {
     Q_OBJECT
+
 public:
-    ProtocolPreferencesWidget(QWidget *parent = 0);
-    ~ProtocolPreferencesWidget();
+    explicit DrugEnginesPreferences(QWidget *parent = 0);
+    ~DrugEnginesPreferences();
 
     void setDatasToUi();
-    static void writeDefaultSettings(Core::ISettings *s = 0);
+    void saveToSettings(Core::ISettings *sets = 0);
 
-public Q_SLOTS:
-    void saveToSettings(Core::ISettings *s = 0);
-
-protected:
-    void changeEvent(QEvent *e);
+    static void writeDefaultSettings(Core::ISettings *s);
 
 private:
-    Ui::ProtocolPreferencesWidget *ui;
-    QHash<QString, QString> m_ButtonChoices;
+    Ui::DrugEnginesPreferences *ui;
 };
 
-class ProtocolPreferencesPage : public Core::IOptionsPage
+class DrugEnginesPreferencesPage : public Core::IOptionsPage
 {
     Q_OBJECT
 public:
-    ProtocolPreferencesPage(QObject *parent = 0);
-    ~ProtocolPreferencesPage();
+    DrugEnginesPreferencesPage(QObject *parent = 0);
+    ~DrugEnginesPreferencesPage();
 
     QString id() const;
     QString name() const;
@@ -95,15 +86,14 @@ public:
 
     QString helpPage();
 
-    static void writeDefaultSettings(Core::ISettings *s) {Internal::ProtocolPreferencesWidget::writeDefaultSettings(s);}
-
+    static void writeDefaultSettings(Core::ISettings *s)  {Internal::DrugEnginesPreferences::writeDefaultSettings(s);}
     QWidget *createPage(QWidget *parent = 0);
-
 private:
-    QPointer<Internal::ProtocolPreferencesWidget> m_Widget;
+    QPointer<Internal::DrugEnginesPreferences> m_Widget;
 };
 
-}  // End namespace Internal
-}  // End namespace DrugsWidget
+} // namespace Internal
+} // namespace DrugsWidget
 
-#endif // PROTOCOLPREFERENCESPAGE_H
+
+#endif // DRUGSWIDGET_INTERNAL_DRUGENGINESPREFERENCES_H

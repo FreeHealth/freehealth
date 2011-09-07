@@ -40,8 +40,8 @@
 /**
  * \file mfDrugsPreferences.h
  * \author Eric MAEKER <eric.maeker@gmail.com>
- * \version 0.5.0
- * \date 11 Nov 2010
+ * \version 0.6.0
+ * \date 07 Sept 2011
 */
 
 namespace Core {
@@ -159,10 +159,6 @@ public Q_SLOTS:
 protected:
     virtual void changeEvent(QEvent *e);
 };
-
-
-}  // End Internal
-
 
 class DrugsViewOptionsPage : public Core::IOptionsPage
 {
@@ -296,6 +292,7 @@ private:
     QPointer<Internal::DrugsExtraWidget> m_Widget;
 };
 
-}  // End Drugs
+}  // End namespace Internal
+}  // End namespace Drugs
 
 #endif // MFDRUGSPREFERENCES_H

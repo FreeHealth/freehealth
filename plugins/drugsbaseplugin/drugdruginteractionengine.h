@@ -58,7 +58,7 @@ public:
         Deconseille      = 0x1000,
         ContreIndication = 0x8000
     };
-    Q_DECLARE_FLAGS(TypesOfIAM, TypeOfIAM);
+    Q_DECLARE_FLAGS(TypesOfIAM, TypeOfIAM)
 
     explicit DrugDrugInteractionEngine(QObject *parent = 0);
     ~DrugDrugInteractionEngine();
@@ -71,6 +71,7 @@ public:
 
     QString name() const;
     QString shortName() const;
+    QString tooltip() const;
     QString uid() const;
     QIcon icon(const int size = 0) const;
     QString iconFullPath(const int size = 0) const;

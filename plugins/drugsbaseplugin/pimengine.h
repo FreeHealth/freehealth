@@ -71,6 +71,7 @@ public:
 
     QString name() const;
     QString shortName() const;
+    QString tooltip() const;
     QString uid() const;
     QIcon icon(const int size = 0) const;
     QString iconFullPath(const int size = 0) const;

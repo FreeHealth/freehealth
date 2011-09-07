@@ -115,6 +115,9 @@ namespace Constants {
 
     const char * const S_PROTOCOL_DEFAULT_SCHEMA        ="Protocols/DefaultSchema";
 
+    const char * const S_ACTIVATED_INTERACTION_ENGINES  ="DrugsWidget/Engines/Activated";
+
+
     // ICONS
     const char * const  I_SEARCHCOMMERCIAL =  "pill.png";              /*!< \brief Themed icon name for Commercial search. */
     const char * const  I_SEARCHMOLS =        "molecule.png";          /*!< \brief Themed icon name for Molecules search. */

@@ -35,6 +35,7 @@
 #include <coreplugin/icore.h>
 #include <coreplugin/itheme.h>
 #include <coreplugin/ipatient.h>
+#include <coreplugin/isettings.h>
 
 #include <utils/log.h>
 #include <utils/global.h>
@@ -44,6 +45,7 @@
 static inline Core::ITheme *theme()  { return Core::ICore::instance()->theme(); }
 static inline Core::IPatient *patient()  { return Core::ICore::instance()->patient(); }
 static inline DrugsDB::Internal::DrugsBase *base() {return DrugsDB::Internal::DrugsBase::instance();}
+static inline Core::ISettings *settings() {return Core::ICore::instance()->settings();}
 
 using namespace DrugsDB;
 using namespace Internal;
@@ -563,6 +565,7 @@ PimEngine::PimEngine(QObject *parent) :
         d(new Internal::PimEnginePrivate)
 {
     setObjectName("PimEngine");
+    m_IsActive = settings()->value(Constants::S_ACTIVATED_INTERACTION_ENGINES).toStringList().contains(Constants::PIM_ENGINE_UID);
 }
 
 PimEngine::~PimEngine()
@@ -641,12 +644,17 @@ bool PimEngine::init()
 
 QString PimEngine::name() const
 {
-    return QCoreApplication::translate(Constants::DRUGSBASE_TR_CONTEXT, Constants::PIMENGINE_TEXT);
+    return QCoreApplication::translate(Constants::DRUGSBASE_TR_CONTEXT, Constants::PIMENGINE_TEXT) + " " + tr("(Experimental)");
 }
 
 QString PimEngine::shortName() const
 {
     return QCoreApplication::translate(Constants::DRUGSBASE_TR_CONTEXT, Constants::PIMENGINE_SHORT_TEXT);
+}
+
+QString PimEngine::tooltip() const
+{
+    return tr("Detects interaction between drugs and patient in elderly");
 }
 
 QString PimEngine::uid() const

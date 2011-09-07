@@ -169,7 +169,6 @@ void DatabaseSelectorWidget::setDatasToUi()
 {
     ui->databaseList->clear();
     d->m_Infos = base()->getAllDrugSourceInformations();
-    qWarning() << d->m_Infos;
     const DrugsDB::DatabaseInfos *actual = base()->actualDatabaseInformations();
     int row = 0;
     foreach(DrugsDB::DatabaseInfos *info, d->m_Infos) {

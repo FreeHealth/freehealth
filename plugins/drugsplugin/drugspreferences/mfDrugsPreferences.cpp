@@ -49,7 +49,7 @@
 #include <QPixmap>
 
 using namespace DrugsWidget;
-using namespace DrugsWidget::Internal;
+using namespace Internal;
 using namespace DrugsWidget::Constants;
 using namespace Trans::ConstantTranslations;
 

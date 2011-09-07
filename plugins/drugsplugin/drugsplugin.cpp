@@ -38,6 +38,7 @@
 #include "drugspreferences/mfDrugsPreferences.h"
 #include "drugspreferences/databaseselectorwidget.h"
 #include "drugspreferences/protocolpreferencespage.h"
+#include "drugspreferences/drugenginespreferences.h"
 
 #ifdef FREEMEDFORMS
 #    include "drugswidgetfactory.h"
@@ -66,14 +67,14 @@ static inline void messageSplash(const QString &s) {theme()->messageSplashScreen
 static inline DrugsDB::Internal::DrugsBase *drugsBase() {return DrugsDB::Internal::DrugsBase::instance();}
 
 DrugsPlugin::DrugsPlugin() :
-        viewPage(0),
-        selectorPage(0),
-        printPage(0),
-        userPage(0),
-        extraPage(0),
-        databaseSelectorPage(0),
-        protocolPage(0)
-
+    viewPage(0),
+    selectorPage(0),
+    printPage(0),
+    userPage(0),
+    extraPage(0),
+    databaseSelectorPage(0),
+    protocolPage(0),
+    enginePage(0)
 {
     setObjectName("DrugsPlugin");
     if (Utils::Log::warnPluginsCreation())
@@ -115,6 +116,10 @@ DrugsPlugin::~DrugsPlugin()
         removeObject(protocolPage);
         delete protocolPage; protocolPage=0;
     }
+    if (enginePage) {
+        removeObject(enginePage);
+        delete enginePage; enginePage=0;
+    }
 }
 
 bool DrugsPlugin::initialize(const QStringList &arguments, QString *errorMessage)
@@ -155,6 +160,7 @@ void DrugsPlugin::extensionsInitialized()
     extraPage = new DrugsExtraOptionsPage(this);
     databaseSelectorPage = new DrugsDatabaseSelectorPage(this);
     protocolPage = new ProtocolPreferencesPage(this);
+    enginePage = new DrugEnginesPreferencesPage(this);
 
     // check settings
     if (!settings()->value(Constants::S_CONFIGURED, false).toBool()) {
@@ -167,6 +173,7 @@ void DrugsPlugin::extensionsInitialized()
         extraPage->writeDefaultSettings(Core::ICore::instance()->settings());
         databaseSelectorPage->writeDefaultSettings(Core::ICore::instance()->settings());
         protocolPage->writeDefaultSettings(Core::ICore::instance()->settings());
+        enginePage->writeDefaultSettings(Core::ICore::instance()->settings());
         settings()->setValue(Constants::S_CONFIGURED, true);
         settings()->sync();
     } else {
@@ -179,6 +186,7 @@ void DrugsPlugin::extensionsInitialized()
         extraPage->checkSettingsValidity();
         databaseSelectorPage->checkSettingsValidity();
         protocolPage->checkSettingsValidity();
+        enginePage->checkSettingsValidity();
     }
 
     addObject(viewPage);
@@ -190,6 +198,7 @@ void DrugsPlugin::extensionsInitialized()
     addObject(extraPage);
     addObject(databaseSelectorPage);
     addObject(protocolPage);
+    addObject(enginePage);
 
     connect(Core::ICore::instance(), SIGNAL(coreOpened()), this, SLOT(postCoreOpened()));
 }
