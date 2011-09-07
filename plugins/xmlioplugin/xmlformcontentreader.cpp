@@ -506,10 +506,10 @@ bool XmlFormContentReader::createElement(Form::FormItem *item, QDomElement &elem
     if (element.tagName().compare(Constants::TAG_NEW_FORM, Qt::CaseInsensitive)==0) {
         // create a new form
         Form::FormMain *oldRootForm = m_ActualForm;
-        /** \todo add Forms' parent */
         m_ActualForm = m_ActualForm->createChildForm(element.firstChildElement(Constants::TAG_NAME).text());
         item = m_ActualForm;
         if (item) {
+            item->spec()->setValue(Form::FormItemSpec::Spec_Plugin, "form", Trans::Constants::ALL_LANGUAGE);
             // read attributes (type, uid/name, patient representation...)
             if (element.hasAttribute(Constants::ATTRIB_UUID))
                 item->setUuid(element.attribute(Constants::ATTRIB_UUID));
