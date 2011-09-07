@@ -469,10 +469,7 @@ void MedicalProcedureWidget::save(){
             test = false;
         }
         if (test == false) {
-            if (WarnDebugMessage)
-                qDebug() << __FILE__ << QString::number(__LINE__)   ;
-            QMessageBox::warning(0,trUtf8("Warning"),trUtf8("Error inserting datas ")
-                                 +modelMP->lastError().text(),QMessageBox::Ok);
+            LOG_ERROR("Error inserting datas " + modelMP->lastError().text());
         }
         fillMPCombo();
     }
