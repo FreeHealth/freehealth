@@ -301,8 +301,15 @@ void UserDynamicData::prepareQuery(QSqlQuery &bindedQuery) const
     bindedQuery.bindValue(DATAS_USER_UUID,  d->m_UserUuid);
     bindedQuery.bindValue(DATAS_DATANAME ,  d->m_Name);
 
-    switch (d->m_Value.type())
-    {
+    if (d->m_Name==Constants::USER_DATAS_PREFERENCES) {
+        bindedQuery.bindValue(DATAS_STRING ,    QVariant());
+        bindedQuery.bindValue(DATAS_LONGSTRING, QVariant());
+        bindedQuery.bindValue(DATAS_FILE,       d->m_Value);
+        bindedQuery.bindValue(DATAS_NUMERIC,    QVariant());
+        bindedQuery.bindValue(DATAS_DATE,       QVariant());
+    } else {
+        switch (d->m_Value.type())
+        {
         case QVariant::DateTime :
         {
 	    bindedQuery.bindValue(DATAS_STRING ,    QVariant());
@@ -343,6 +350,7 @@ void UserDynamicData::prepareQuery(QSqlQuery &bindedQuery) const
 	    bindedQuery.bindValue(DATAS_NUMERIC,    QVariant());
 	    bindedQuery.bindValue(DATAS_DATE,       QVariant());
             break;
+        }
         }
     }
     bindedQuery.bindValue(DATAS_LANGUAGE,   d->m_Language);

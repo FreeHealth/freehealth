@@ -1174,6 +1174,7 @@ bool UserBase::saveUserPreferences(const QString &uid, const QString &content)
             return false;
         }
     }
+    return true;
 }
 
 int UserBase::getMaxLinkId()
