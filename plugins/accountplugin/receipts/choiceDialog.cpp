@@ -533,7 +533,7 @@ void choiceDialog::actionsOfTreeView(const QModelIndex &index){
     QVariant  debtor;
     QVariant site;
     QVariant distrules;
-  
+
     if (manager.getDistanceRules().keys().contains(data))
     {
     	  m_distanceRuleValue = manager.getDistanceRules().value(data).toDouble();

@@ -114,12 +114,12 @@ inline static void defineLibraryPaths()
 }
 
 
-int main( int argc, char *argv[] )
+int main(int argc, char *argv[])
 {
-     QApplication app( argc, argv );
+     QApplication app(argc, argv);
 
-     QTextCodec::setCodecForTr( QTextCodec::codecForName( "UTF-8" ) );
-     QTextCodec::setCodecForCStrings( QTextCodec::codecForName( "UTF-8" ) );
+     QTextCodec::setCodecForTr(QTextCodec::codecForName("UTF-8"));
+     QTextCodec::setCodecForCStrings(QTextCodec::codecForName("UTF-8"));
 
      app.setApplicationName(BINARY_NAME);
      app.setOrganizationName(BINARY_NAME);
