@@ -10,7 +10,6 @@ SUBDIRS = \
     usermanager \
     mainwin \
     templates \
-    saverestore \
     xmlio \
     basewidgets \
     aggir \
@@ -23,8 +22,10 @@ SUBDIRS = \
     accountbase \
     account \
     agenda \
-    zipcodes
+    zipcodes \
+#    saverestore \
 #    alerts \
+
 
 # root plugin
 core.subdir = fmfcoreplugin
