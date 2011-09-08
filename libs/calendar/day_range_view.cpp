@@ -718,28 +718,30 @@ void DayRangeBody::mouseReleaseEvent(QMouseEvent *event) {
 //		}
 		break;
 	case MouseMode_Move:
-	case MouseMode_Resize:
-		if (!m_pressItemWidget->inMotion()) {
-                    if (!itemContextMenu()) {
-                        // display a default contextual menu
-			QMenu menu;
-			QAction *modifyAction = menu.addAction(tr("modify"));
-			connect(modifyAction, SIGNAL(triggered()), this, SLOT(modifyPressItem()));
-			QAction *removeAction = menu.addAction(tr("remove"));
-			connect(removeAction, SIGNAL(triggered()), this, SLOT(removePressItem()));
-			menu.exec(event->globalPos());
-                    } else {
-                        // use the specified menu
-                        itemContextMenu()->exec(event->globalPos());
-                    }
-		} else {
-			newItem = m_pressItem;
-			newItem.setBeginning(m_pressItemWidget->beginDateTime());
-			newItem.setEnding(m_pressItemWidget->endDateTime());
-                        model()->moveItem(m_pressItem, newItem);
-		}
-		break;
-	default:;
+        case MouseMode_Resize:
+            if (!m_pressItemWidget->inMotion()) {
+                if (!itemContextMenu()) {
+                    // display a default contextual menu
+                    QMenu menu;
+                    QAction *modifyAction = menu.addAction(tr("modify"));
+                    connect(modifyAction, SIGNAL(triggered()), this, SLOT(modifyPressItem()));
+                    QAction *removeAction = menu.addAction(tr("remove"));
+                    connect(removeAction, SIGNAL(triggered()), this, SLOT(removePressItem()));
+                    menu.exec(event->globalPos());
+                } else {
+                    // use the specified menu
+                    itemContextMenu()->exec(event->globalPos());
+                }
+            } else {
+                int durationInSeconds = m_pressItemWidget->durationInSeconds();
+                QDateTime end = m_pressItemWidget->beginDateTime().addSecs(durationInSeconds);
+                newItem = m_pressItem;
+                newItem.setBeginning(m_pressItemWidget->beginDateTime());
+                newItem.setEnding(end);
+                model()->moveItem(m_pressItem, newItem);
+            }
+            break;
+        default:;
 	}
 	m_pressDateTime = QDateTime();
 	m_pressItemWidget = 0;

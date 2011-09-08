@@ -64,3 +64,23 @@ bool CalendarItemWidget::event(QEvent *event)
     }
     return QWidget::event(event);
 }
+
+QDebug Calendar::operator<<(QDebug dbg, const Calendar::CalendarItemWidget &c)
+{
+    dbg.nospace() << "CalendarItemWidget("
+                  << c.beginDateTime().toString(QLocale().dateTimeFormat(QLocale::ShortFormat))
+                  << ", "
+                  << c.endDateTime().toString(QLocale().dateTimeFormat(QLocale::ShortFormat))
+                  << ", " << c.durationInSeconds() << "s, " << c.durationInSeconds()/60 << "m)";
+    return dbg.space();
+}
+
+QDebug Calendar::operator<<(QDebug dbg, const Calendar::CalendarItemWidget *c)
+{
+    dbg.nospace() << "CalendarItemWidget("
+                  << c->beginDateTime().toString(QLocale().dateTimeFormat(QLocale::ShortFormat))
+                  << ", "
+                  << c->endDateTime().toString(QLocale().dateTimeFormat(QLocale::ShortFormat))
+                  << ", " << c->durationInSeconds() << "s, " << c->durationInSeconds()/60 << "m)";
+    return dbg.space();
+}

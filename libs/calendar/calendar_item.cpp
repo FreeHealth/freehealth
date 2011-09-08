@@ -230,3 +230,14 @@ bool Calendar::calendarItemLessThan(const CalendarItem &item1, const CalendarIte
     else
         return item1.uid() > item2.uid();
 }
+
+QDebug Calendar::operator<<(QDebug dbg, const Calendar::CalendarItem &c)
+{
+    dbg.nospace() << "CalendarItem("
+                  << c.beginning().toString(QLocale().dateTimeFormat(QLocale::ShortFormat))
+                  << ", "
+                  << c.ending().toString(QLocale().dateTimeFormat(QLocale::ShortFormat))
+                  << ", " << c.model() << ")";
+    return dbg.space();
+}
+

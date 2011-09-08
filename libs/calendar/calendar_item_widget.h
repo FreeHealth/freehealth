@@ -43,8 +43,9 @@ namespace Calendar {
 		const QString &uid() const { return m_uid; }
 		const QDateTime &beginDateTime() const { return m_beginDateTime; }
 		void setBeginDateTime(const QDateTime &dateTime);
-		const QDateTime &endDateTime() const { return m_endDateTime; }
+                const QDateTime &endDateTime() const { return m_endDateTime; }
 		void setEndDateTime(const QDateTime &dateTime);
+                int durationInSeconds() const {return m_beginDateTime.secsTo(m_endDateTime);}
 		AbstractCalendarModel *model() const { return m_model; }
         private:
                 bool event(QEvent *);
@@ -56,6 +57,9 @@ namespace Calendar {
 		QString m_uid;
 		AbstractCalendarModel *m_model;
 	};
+
+        QDebug operator<<(QDebug dbg, const Calendar::CalendarItemWidget &c);
+        QDebug operator<<(QDebug dbg, const Calendar::CalendarItemWidget *c);
 }
 
 #endif
