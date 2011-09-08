@@ -494,7 +494,7 @@ public:
         FormMain *form = m_RootForm->formMainChild(formUid);
         if (!form)
             return false;
-        bool formIsModified = false;
+//        bool formIsModified = false;
 
         QHash<QString, FormItem *> items;
         foreach(FormItem *it, form->flattenFormItemChildren()) {

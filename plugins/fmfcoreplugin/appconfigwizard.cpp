@@ -421,7 +421,7 @@ EndConfigPage::EndConfigPage(QWidget *parent) :
     if (Utils::isDebugCompilation()) {
         // Database renew management
 //        QGroupBox *groupDb = new QGroupBox(tr("Database cleaning"), this);
-        QGridLayout *layDb = new QGridLayout(this);
+//        QGridLayout *layDb = new QGridLayout(this);
         QLabel *lblDb = new QLabel(tr("You can clean and recreate all your databases. Select the option above. If you select the clean option, all databases will be erased with <b>definitive data lose</b>."), this);
         lblDb->setWordWrap(true);
         QComboBox *comboDb = new QComboBox(this);
