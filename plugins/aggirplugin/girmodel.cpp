@@ -241,7 +241,7 @@ bool GirModel::setData(const QModelIndex &index, const QVariant &value, int role
     if (role==Qt::CheckStateRole) {
         if (index.column() >= Column_NFP && index.column() <= Column_PasProbleme) {
             // get the GirItem
-            QStandardItem *item = itemFromIndex(index);
+//            QStandardItem *item = itemFromIndex(index);
             QStandardItem *forGirItem = itemFromIndex(this->index(index.row(), Column_Label, index.parent()));
             if (!forGirItem->data(::ITEM_KEY).isValid())
                 return false;
@@ -320,7 +320,7 @@ QVariant GirModel::data(const QModelIndex &index, int role) const
         if (index.column() == Column_Result) {
             QStandardItem *item = itemFromIndex(index);
             if (item == m_score) {
-                if (m_GirScore->isComplete());
+                if (m_GirScore->isComplete())
                     return m_GirScore->resultingGir();
             }
             QStandardItem *forGirItem = itemFromIndex(this->index(index.row(), Column_Label, index.parent()));
