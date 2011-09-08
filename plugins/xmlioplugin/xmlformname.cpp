@@ -39,7 +39,7 @@ using namespace Internal;
 static inline Core::ISettings *settings()  { return Core::ICore::instance()->settings(); }
 
 XmlFormName::XmlFormName(const QString &_uid) :
-    uid(_uid), absFileName(_uid), isValid(false)
+    isValid(false), uid(_uid), absFileName(_uid)
 {
     if (uid.endsWith(".xml", Qt::CaseInsensitive)) {
         uid = uid.left(uid.lastIndexOf("/"));
