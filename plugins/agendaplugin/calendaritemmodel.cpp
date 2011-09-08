@@ -249,22 +249,19 @@ void CalendarItemModel::removeItem(const QString &uid)
 
 bool CalendarItemModel::moveItem(const Calendar::CalendarItem &from, Calendar::CalendarItem &to)
 {
-    qWarning() << Q_FUNC_INFO;
-    qWarning() << from << to;
-
+//    qWarning() << Q_FUNC_INFO;
+//    qWarning() << from << to;
     if (!from.isValid())
         return false;
-
 
     Appointement *item = getItemPointerByUid(from.uid().toInt());
     if (!item) {
         return false;
     }
 
-//    Q_EMIT itemRemoved(from);
+    Q_EMIT itemRemoved(from);
     item->setData(DateStart, to.beginning());
     item->setData(DateEnd, to.ending());
-    qWarning() << toCalendarItem(item);
     Q_EMIT itemInserted(toCalendarItem(item));
     return true;
 }
