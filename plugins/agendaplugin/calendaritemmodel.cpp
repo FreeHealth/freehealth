@@ -262,6 +262,7 @@ bool CalendarItemModel::moveItem(const Calendar::CalendarItem &from, Calendar::C
     Q_EMIT itemRemoved(from);
     item->setData(DateStart, to.beginning());
     item->setData(DateEnd, to.ending());
+    base()->saveCalendarEvent(item);
     Q_EMIT itemInserted(toCalendarItem(item));
     return true;
 }

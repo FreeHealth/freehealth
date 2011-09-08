@@ -188,6 +188,7 @@ bool UserCalendarModel::insertRows(int row, int count, const QModelIndex &parent
     for(int i = 0 ; i < count; ++i) {
         UserCalendar *u = new UserCalendar();
         u->setData(UserCalendar::Label, tr("New calendar"));
+        u->setData(UserCalendar::Uid, Utils::Database::createUid());
         u->setData(UserCalendar::UserOwnerUid, d->m_UserUid);
         u->setData(Constants::Db_IsValid, 1);
         u->setData(Constants::Db_UserCalId, -1);

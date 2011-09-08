@@ -57,6 +57,7 @@ namespace Constants {
 
     enum FieldsCALENDAR {
             CAL_ID = 0,
+            CAL_UID,
             CAL_CATEGORYID,
             CAL_SORTID,
             CAL_ISVALID,

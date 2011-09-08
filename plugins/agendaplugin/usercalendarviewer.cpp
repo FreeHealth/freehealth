@@ -196,13 +196,18 @@ void UserCalendarViewer::recalculateAvailabilitiesWithDurationIndex(const int in
 void UserCalendarViewer::on_availableAgendasCombo_activated(const int index)
 {
     if (index >= 0 && index < d->m_UserCalendarModel->rowCount()) {
-        QVariant calUid = d->m_UserCalendarModel->index(index, UserCalendarModel::Uid).data();
+        QModelIndex calIndex = d->m_UserCalendarModel->index(index, UserCalendarModel::Uid);
+        QVariant calUid = calIndex.data();
         if (calUid.isNull())
             return;
         if (!calUid.isValid())
             return;
         d->m_CalendarItemModel = agendaCore()->calendarItemModel(calUid);
         d->ui->calendarViewer->setModel(d->m_CalendarItemModel);
+
+        // Add availabilities
+        d->ui->availabilitiesView->setModel(d->m_UserCalendarModel->availabilityModel(calIndex, this));
+        d->ui->availabilitiesView->expandAll();
     }
 //    d->populateCalendarWithCurrentWeek(d->m_UserCals.at(index));
 }
@@ -214,12 +219,12 @@ void UserCalendarViewer::userChanged()
     d->m_UserCalendarModel = agendaCore()->userCalendarModel();
     d->ui->availableAgendasCombo->setModel(d->m_UserCalendarModel);
     d->ui->availableAgendasCombo->setModelColumn(UserCalendarModel::ExtraLabel);
-    d->ui->availableAgendasCombo->setCurrentIndex(d->m_UserCalendarModel->defaultUserCalendarModelIndex().row());
+    QModelIndex calIndex = d->m_UserCalendarModel->defaultUserCalendarModelIndex();
+    d->ui->availableAgendasCombo->setCurrentIndex(calIndex.row());
 
     // Add availabilities
-    /** \todo code here */
-//    d->ui->availabilitiesView->setModel(cal.availabilitiesModel(this));
-//    d->ui->availabilitiesView->expandAll();
+    d->ui->availabilitiesView->setModel(d->m_UserCalendarModel->availabilityModel(calIndex, this));
+    d->ui->availabilitiesView->expandAll();
 
     // Next available dates
     Agenda::UserCalendar *cal = d->m_UserCalendarModel->defaultUserCalendar();

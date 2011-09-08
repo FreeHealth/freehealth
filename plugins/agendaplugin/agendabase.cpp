@@ -220,6 +220,7 @@ AgendaBase::AgendaBase(QObject *parent) :
     addIndex(Table_USERCALENDARS, USERCAL_CAL_ID);
 
     addField(Table_CALENDAR, CAL_ID, "CAL_ID", FieldIsUniquePrimaryKey);
+    addField(Table_CALENDAR, CAL_UID, "CALUID", FieldIsUUID);
     addField(Table_CALENDAR, CAL_CATEGORYID, "CAT_ID", FieldIsInteger);
     addField(Table_CALENDAR, CAL_SORTID, "SORT_ID", FieldIsInteger);
     addField(Table_CALENDAR, CAL_ISVALID, "ISVALID", FieldIsBoolean);
@@ -514,7 +515,7 @@ QList<Agenda::UserCalendar *> AgendaBase::getUserCalendars(const QString &userUu
                 // set private datas
                 //            u->setData(IUserCalendar::DbOnly_UserCalId, query.value());
                 u->setData(Constants::Db_CalId, query.value(Constants::CAL_ID));
-                u->setData(Agenda::UserCalendar::Uid, query.value(Constants::CAL_ID));
+                u->setData(Agenda::UserCalendar::Uid, query.value(Constants::CAL_UID));
                 u->setData(Constants::Db_CatId, query.value(Constants::CAL_CATEGORYID));
                 u->setData(Agenda::UserCalendar::SortId, query.value(Constants::CAL_SORTID));
                 u->setData(Constants::Db_IsValid, 1);
@@ -709,6 +710,7 @@ bool AgendaBase::saveUserCalendar(Agenda::UserCalendar *calendar)
         QSqlQuery query(database());
         query.prepare(prepareInsertQuery(Constants::Table_CALENDAR));
         query.bindValue(Constants::CAL_ID, QVariant());
+        query.bindValue(Constants::CAL_UID, calendar->data(Agenda::UserCalendar::Uid).toString());
         query.bindValue(Constants::CAL_CATEGORYID, calendar->data(Constants::Db_CatId).toInt());
         query.bindValue(Constants::CAL_SORTID, calendar->data(Agenda::UserCalendar::SortId).toInt());
         query.bindValue(Constants::CAL_ISVALID, calendar->data(Constants::Db_IsValid).toInt());
@@ -874,6 +876,8 @@ QList<Appointement *> AgendaBase::getCalendarEvents(const CalendarEventQuery &ca
 
     // Get Event table
     req = select(Constants::Table_EVENTS, joins, conds) + order;
+
+//    qWarning() << req;
 
     if (query.exec(req)) {
         while (query.next()) {
@@ -1152,7 +1156,7 @@ Agenda::UserCalendar *AgendaBase::createVirtualUserCalendar(const QString &owner
         return 0;
     }
     UserCalendar *u = new UserCalendar;
-    u->setData(UserCalendar::Uid, -1);
+    u->setData(UserCalendar::Uid, Utils::Database::createUid());
     u->setData(UserCalendar::UserOwnerUid, ownerUid);
     u->setData(UserCalendar::Label, label);
     u->setData(UserCalendar::Description, description);
