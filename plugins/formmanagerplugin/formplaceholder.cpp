@@ -38,6 +38,7 @@
 
 #include <formmanagerplugin/formmanager.h>
 #include <formmanagerplugin/iformitem.h>
+#include <formmanagerplugin/iformitemdata.h>
 #include <formmanagerplugin/iformwidgetfactory.h>
 #include <formmanagerplugin/episodemodel.h>
 
@@ -46,13 +47,17 @@
 #include <coreplugin/isettings.h>
 #include <coreplugin/ipatient.h>
 #include <coreplugin/imainwindow.h>
+#include <coreplugin/idocumentprinter.h>
 #include <coreplugin/constants_icons.h>
+#include <coreplugin/constants_menus.h>
+#include <coreplugin/constants_tokensandsettings.h>
 #include <coreplugin/actionmanager/actionmanager.h>
 
 #include <listviewplugin/treeview.h>
 
-#include <utils/widgets/minisplitter.h>
 #include <utils/log.h>
+#include <utils/widgets/minisplitter.h>
+#include <extensionsystem/pluginmanager.h>
 
 #include <extensionsystem/pluginmanager.h>
 
@@ -78,6 +83,7 @@ static inline Core::ISettings *settings()  { return Core::ICore::instance()->set
 static inline Core::IMainWindow *mainWindow()  { return Core::ICore::instance()->mainWindow(); }
 static inline Core::IPatient *patient()  { return Core::ICore::instance()->patient(); }
 inline static Core::ActionManager *actionManager() {return Core::ICore::instance()->actionManager();}
+inline static Core::IDocumentPrinter *printer() {return ExtensionSystem::PluginManager::instance()->getObject<Core::IDocumentPrinter>();}
 
 
 namespace Form {
@@ -270,7 +276,10 @@ FormPlaceHolder::FormPlaceHolder(QWidget *parent) :
     connect(cmd->action(), SIGNAL(triggered()), this, SLOT(newEpisode()));
     cmd = actionManager()->command(Constants::A_ADDFORM);
     connect(cmd->action(), SIGNAL(triggered()), this, SLOT(addForm()));
-//    connect(cmd->action(), SIGNAL(triggered()), this, SLOT(printCurrentItem()));
+
+    /** \todo code here : use A_FILE_PRINTFORM */
+    cmd = actionManager()->command(Core::Constants::A_FILE_PRINT);
+    connect(cmd->action(), SIGNAL(triggered()), this, SLOT(printCurrentItem()));
 
 //    connect(d->m_FileTree, SIGNAL(customContextMenuRequested(QPoint)),
 //            this, SLOT(contextMenuRequested(QPoint)));
@@ -553,6 +562,26 @@ void FormPlaceHolder::printCurrentItem()
     if (vals.count()) {
         // print using the printing value
         qWarning() << "PRINT\n" << vals;
+        Core::IDocumentPrinter *p = printer();
+        if (!p) {
+            LOG_ERROR("No IDocumentPrinter found");
+            return;
+        }
+        p->clearTokens();
+        QHash<QString, QVariant> tokens;
+
+        tokens.insert(Core::Constants::TOKEN_DOCUMENTTITLE, formMain->spec()->label());
+
+        // create a token for each FormItem of the FormMain
+        foreach(FormItem *item, formMain->flattenFormItemChildren()) {
+            if (item->itemDatas())
+                tokens.insert(item->uuid(), item->itemDatas()->data(0, Form::IFormItemData::ID_Printable));
+        }
+        p->addTokens(Core::IDocumentPrinter::Tokens_Global, tokens);
+
+        // print
+        p->print(m_doc, m_typeOfPaper, m_duplicata);
+
     } else {
         // print using the widget
         qWarning() << "PRINT WIDGET";

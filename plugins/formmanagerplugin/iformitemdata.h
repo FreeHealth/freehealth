@@ -42,6 +42,7 @@ public:
         ID_EpisodeDate = 0,  // used by BaseFormData to set episode date
         ID_EpisodeLabel,     // used by BaseFormData to set episode label
         ID_UserName,         // used by BaseFormData to set episode label
+        ID_Printable,
         ID_ForPatientModel,
         ID_ForCalculations
     };
