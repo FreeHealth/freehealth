@@ -26,106 +26,82 @@
     <specialties lang="fr"></specialties>
     <specialties lang="xx"></specialties>
 
+    <htmlsynthesis lang="xx">synthesis_xx.html</htmlsynthesis>
+
   </formdescription>
 
-  <MedForm>
-    <name>GP::Basic::IdentityForm</name>
+  <MedForm name="GP::Basic::IdentityForm">
     <label lang="xx">Identity</label>
     <label lang="fr">Identité</label>
-    <type>form</type>
     <options>unique</options>
     <icon>__theme__/identity.png</icon>
-    <Item>
-      <type>identity</type>
-      <name>GP::Basic::IdentityItem</name>
+    <Item type="identity" name="GP::Basic::IdentityItem">
       <label lang="xx">Full Identity</label>
       <label lang="fr">Identité</label>
     </Item>
 
-    <Item>
-      <type>group</type>
+    <Item type="group" name="GP::Basic::Identity::ExtraFrench">
       <column>1</column>
-      <name>GP::Basic::Identity::ExtraFrench</name>
       <label lang="xx">Extras</label>
       <label lang="fr">Extras</label>
-      <Item>
-        <type>frenchnss</type>
-        <name>GP::Basic::Identity::NSS</name>
+      <Item type="frenchnss" name="GP::Basic::Identity::NSS">
         <label lang="xx">Social number</label>
         <label lang="fr">Numéro de sécurité sociale</label>
       </Item>
-      <Item>
-        <type>check</type>
-        <name>GP::Basic::Identity::IsNSSOwner</name>
+      <Item type="check" name="GP::Basic::Identity::IsNSSOwner">
         <label lang="xx">Is the social number owner</label>
         <label lang="fr">Est le propriétaire du numéro de sécurité sociale</label>
       </Item>
     </Item>
 
+    <value>
+      <print lang="fr" file="./print_identity_fr.html" />
+    </value>
+
   </MedForm>
 
-  <MedForm>
-    <type>form</type>
-    <name>GP::Basic::SOAP</name>
+  <MedForm name="GP::Basic::SOAP">
     <label>SOAP</label>
     <icon>__theme__/edit.png</icon>
-    <Item>
-      <name>GP::Basic::SOAP::S</name>
-      <type>texteditor</type>
+    <Item type="texteditor" name="GP::Basic::SOAP::S">
       <label lang="xx">Subjective</label>
       <label lang="fr">Subjectif</label>
     </Item>
-    <Item>
-      <name>GP::Basic::SOAP::O</name>
-      <type>texteditor</type>
+    <Item type="texteditor" name="GP::Basic::SOAP::O">
       <label lang="xx">Objective</label>
       <label lang="fr">Objectif</label>
     </Item>
-    <Item>
-      <name>GP::Basic::SOAP::A</name>
-      <type>texteditor</type>
+    <Item type="texteditor" name="GP::Basic::SOAP::A">
       <label lang="xx">Assessment</label>
       <label lang="fr">Appréciation clinique</label>
     </Item>
-    <Item>
-      <name>GP::Basic::SOAP::P</name>
-      <type>texteditor</type>
+    <Item type="texteditor" name="GP::Basic::SOAP::P">
       <label lang="xx">Plan</label>
       <label lang="fr">Prise en charge</label>
     </Item>
 
   </MedForm>
 
-  <MedForm>
-    <type>form</type>
-    <name>GP::Basic::Prescr</name>
+  <MedForm name="GP::Basic::Prescr">
     <label>Prescriptions</label>
     <icon>__theme__/edit.png</icon>
     <options>noepisode</options>
 
-    <MedForm>
-      <type>form</type>
-      <name>GP::Basic::Prescr::Text</name>
+    <MedForm name="GP::Basic::Prescr::Text">
       <label lang="xx">Textual prescriptions</label>
       <label lang="fr">Prescriptions textuelles</label>
 
-      <Item>
-        <name>GP::Basic::Prescr::Text::Content</name>
-        <type>texteditor</type>
+      <Item type="texteditor" name="GP::Basic::Prescr::Text::Content">
         <label lang="xx">Textual prescription</label>
         <label lang="fr">Prescription textuelle</label>
       </Item>
     </MedForm>
 
 
-    <MedForm>
-      <type>form</type>
-      <name>GP::Basic::Prescr::Drugs</name>
+    <MedForm name="GP::Basic::Prescr::Drugs">
       <label lang="xx">Drugs prescriptions</label>
       <label lang="fr">Prescriptions médicamenteuses</label>
-      <Item>
-        <name>GP::Basic::Prescr::Drugs::Content</name>
-        <type>prescriptor</type>
+      <Item type="prescriptor" name="GP::Basic::Prescr::Drugs::Content">
         <label lang="xx">Therapeutic prescription</label>
         <label lang="fr">Prescription médicamenteuse</label>
       </Item>
@@ -133,14 +109,10 @@
 
   </MedForm>
 
-  <MedForm>
-    <type>form</type>
-    <name>GP::Basic::ICD10</name>
+  <MedForm name="GP::Basic::ICD10">
     <label lang="xx">ICD10 coding</label>
     <label lang="fr">Codes CIM10</label>
-    <Item>
-      <name>GP::Basic::ICD10::Content</name>
-      <type>icd</type>
+    <Item type="icd" name="GP::Basic::ICD10::Content">
       <label lang="xx">ICD10 coding</label>
       <label lang="fr">Codes CIM10</label>
     </Item>
