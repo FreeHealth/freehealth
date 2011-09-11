@@ -14,48 +14,58 @@
    <string>Form</string>
   </property>
   <layout class="QFormLayout" name="formLayout">
+   <property name="fieldGrowthPolicy">
+    <enum>QFormLayout::FieldsStayAtSizeHint</enum>
+   </property>
    <property name="margin">
     <number>0</number>
    </property>
    <item row="0" column="0">
-    <widget class="QLabel" name="label_9">
-     <property name="text">
-      <string>Country</string>
-     </property>
-    </widget>
-   </item>
-   <item row="0" column="1">
-    <widget class="QLineEdit" name="countryLineEdit"/>
-   </item>
-   <item row="1" column="0">
     <widget class="QLabel" name="label_10">
      <property name="text">
       <string>Address</string>
      </property>
     </widget>
    </item>
-   <item row="1" column="1">
+   <item row="0" column="1">
     <widget class="QTextEdit" name="adressTextEdit"/>
    </item>
-   <item row="2" column="0">
+   <item row="1" column="0">
     <widget class="QLabel" name="label_11">
      <property name="text">
       <string>ZipCode</string>
      </property>
     </widget>
    </item>
-   <item row="2" column="1">
+   <item row="1" column="1">
     <widget class="QLineEdit" name="zipcodeLineEdit"/>
    </item>
-   <item row="3" column="0">
+   <item row="2" column="0">
     <widget class="QLabel" name="label_12">
      <property name="text">
       <string>City</string>
      </property>
     </widget>
    </item>
-   <item row="3" column="1">
+   <item row="2" column="1">
     <widget class="QLineEdit" name="cityLineEdit"/>
+   </item>
+   <item row="3" column="0">
+    <widget class="QLabel" name="label_9">
+     <property name="text">
+      <string>Country</string>
+     </property>
+    </widget>
+   </item>
+   <item row="3" column="1">
+    <widget class="Views::CountryComboBox" name="country">
+     <property name="sizePolicy">
+      <sizepolicy hsizetype="Preferred" vsizetype="Fixed">
+       <horstretch>0</horstretch>
+       <verstretch>0</verstretch>
+      </sizepolicy>
+     </property>
+    </widget>
    </item>
    <item row="4" column="0">
     <widget class="QLabel" name="label_13">
@@ -109,6 +119,13 @@
    </item>
   </layout>
  </widget>
+ <customwidgets>
+  <customwidget>
+   <class>Views::CountryComboBox</class>
+   <extends>QComboBox</extends>
+   <header location="global">listviewplugin/countrycombobox.h</header>
+  </customwidget>
+ </customwidgets>
  <resources/>
  <connections/>
 </ui>

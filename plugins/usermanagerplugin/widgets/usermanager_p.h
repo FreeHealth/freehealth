@@ -67,7 +67,6 @@ private Q_SLOTS:
     void onClearModificationRequested();
     void onDeleteUserRequested();
     void toggleSearchView();
-    void updateStatusBar();
 
     void showUserDebugDialog(const QModelIndex &id);
 
@@ -79,9 +78,6 @@ private:
 
 Q_SIGNALS:
     void closeRequested();
-
-protected:
-    virtual bool event(QEvent *event);
 
 private:
     Ui::UserManagerWidget *ui;

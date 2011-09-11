@@ -26,7 +26,7 @@
  ***************************************************************************/
 /**
   \class UserPlugin::UserManager
-  \brief This is the Users' Manager of FreeMedForms.
+  This is the Users' Manager of FreeMedForms.
 
   You can use it as main app or secondary mainWindow.\n
   You only need to instanciate the UserModel and define a current user before using this mainwindow.
@@ -108,7 +108,7 @@ private:
 
 
 /**
-  \brief Main user interface for User Manager.
+  Main user interface for User Manager.
   User Model must have been instanciated BEFORE this interface, and a current user must have been setted.\n
   You must instanciate this class as a pointer in order to avoid errors at deletion.
   \sa UserModel, UserModel::hasCurrentUser()
@@ -132,7 +132,7 @@ bool UserManager::initialize()
     return true;
 }
 
-/** \brief Close the usermanager. Check if modifications have to be saved and ask user. */
+/** Close the usermanager. Check if modifications have to be saved and ask user. */
 void UserManager::closeEvent(QCloseEvent *event)
 {
     if (m_Widget->canCloseParent()) {
@@ -142,7 +142,7 @@ void UserManager::closeEvent(QCloseEvent *event)
     }
 }
 
-/** \brief Destructor */
+/** Destructor */
 UserManager::~UserManager()
 {
     if (Utils::isDebugCompilation())
@@ -156,7 +156,7 @@ UserManager::~UserManager()
 
 
 /**
-  \brief Main user interface for User Manager.
+  Main user interface for User Manager.
   User Model must have been instanciated BEFORE this interface, and a current user must have been setted.\n
   You must instanciate this class as a pointer in order to avoid errors at deletion.
   \sa UserModel, UserModel::hasCurrentUser()
@@ -183,7 +183,7 @@ bool UserManagerDialog::initialize()
     return true;
 }
 
-/** \brief Close the usermanager. Check if modifications have to be saved and ask user. */
+/** Close the usermanager. Check if modifications have to be saved and ask user. */
 void UserManagerDialog::done(int r)
 {
     if (m_Widget->canCloseParent()) {
@@ -191,7 +191,7 @@ void UserManagerDialog::done(int r)
     }
 }
 
-/** \brief Destructor */
+/** Destructor */
 UserManagerDialog::~UserManagerDialog()
 {
     if (Utils::isDebugCompilation())
@@ -203,11 +203,7 @@ UserManagerDialog::~UserManagerDialog()
 }
 
 
-/**
-  \brief UserManager Main Ui interface.
-  \internal
-  \ingroup widget_usertoolkit usertoolkit usermanager
-*/
+/** UserManager Main Ui interface. */
 UserManagerWidget::UserManagerWidget(QWidget *parent) :
     QWidget(parent),
     ui(new Ui::UserManagerWidget),
@@ -273,13 +269,6 @@ UserManagerWidget::UserManagerWidget(QWidget *parent) :
     searchByNameAndFirstnameAct->setIcon(th->icon(Core::Constants::ICONSEARCH));
     searchByCityAct->setIcon(th->icon(Core::Constants::ICONSEARCH));
 
-    connect(user(), SIGNAL(userChanged()), this, SLOT(onCurrentUserChanged()));
-}
-
-bool UserManagerWidget::initialize()
-{
-//    m_Context = new UserManagerContext(this);
-//    contextManager()->addContextObject(m_Context);
     m_ToolBar = new QToolBar(this);
     m_ToolBar->setToolButtonStyle(Qt::ToolButtonTextUnderIcon);
     m_ToolBar->addAction(aToggleSearchView);
@@ -291,7 +280,10 @@ bool UserManagerWidget::initialize()
 //    m_ToolBar->addAction(aQuit);
     m_ToolBar->setSizePolicy(QSizePolicy::Preferred, QSizePolicy::Preferred);
     ui->toolbarLayout->addWidget(m_ToolBar);
+}
 
+bool UserManagerWidget::initialize()
+{
     UserModel *model = UserModel::instance();
     ui->userTableView->setModel(model);
     for(int i=0; i < model->columnCount(); ++i) {
@@ -310,34 +302,27 @@ bool UserManagerWidget::initialize()
 
     retranslate();
 
-    selectUserTableView(UserModel::instance()->currentUserIndex().row());
-    analyseCurrentUserRights();
-
     aSave->setShortcut(QKeySequence::Save);
     aCreateUser->setShortcut(QKeySequence::New);
 
-    // connect slots
+    // connect actions
     connect(aSave, SIGNAL(triggered()), this, SLOT(onSaveRequested()));
     connect(aCreateUser, SIGNAL(triggered()), this, SLOT(onCreateUserRequested()));
     connect(aRevert, SIGNAL(triggered()), this, SLOT(onClearModificationRequested()));
     connect(aDeleteUser,  SIGNAL(triggered()), this, SLOT(onDeleteUserRequested()));
     connect(aQuit,  SIGNAL(triggered()), this, SIGNAL(closeRequested()));
     connect(aToggleSearchView, SIGNAL(triggered()), this, SLOT(toggleSearchView()));
+
+    // connect tableView selector
     connect(ui->userTableView, SIGNAL(activated(const QModelIndex &)),
              this, SLOT(onUserActivated(const QModelIndex &)));
-    // connections for search line edit
+
+    // connect search line edit
     connect(ui->searchLineEdit, SIGNAL(textChanged(const QString &)), this, SLOT(onSearchRequested()));
     connect(m_SearchToolBut, SIGNAL(triggered(QAction*)), this, SLOT(onSearchToolButtonTriggered(QAction*)));
 
+    connect(user(), SIGNAL(userChanged()), this, SLOT(onCurrentUserChanged()));
 
-    connect(UserModel::instance(), SIGNAL(memoryUsageChanged()), this, SLOT(updateStatusBar()));
-
-//    if (Utils::isDebugCompilation())
-//        connect(userTableView,SIGNAL(activated(QModelIndex)), this, SLOT(showUserDebugDialog(QModelIndex)));
-
-    // TODO active userTableView on currentUser
-
-    updateStatusBar();
     return true;
 }
 
@@ -359,8 +344,7 @@ bool UserManagerWidget::canCloseParent()
         else if (UserModel::instance()->submitAll()) {
             QMessageBox::information(this, windowTitle(), tr("Changes have been correctly saved."));
             return true;
-        }
-        else {
+        } else {
             QMessageBox::information(this, windowTitle(), tr("Changes can not be correctly saved."));
             return false;
         }
@@ -380,6 +364,7 @@ void UserManagerWidget::analyseCurrentUserRights()
     m_CanDelete = (r & Core::IUser::Delete);
 
     // manage ui <-> rights
+    aToggleSearchView->setEnabled(m_CanViewAllUsers);
     aCreateUser->setEnabled(m_CanCreate);
     aModifyUser->setEnabled(m_CanModify);
     aDeleteUser->setEnabled(m_CanDelete);
@@ -389,26 +374,7 @@ void UserManagerWidget::analyseCurrentUserRights()
     ui->searchLineEdit->setVisible(m_CanViewAllUsers);
 }
 
-/** \brief upadet status bar for current user, and refresh memory usage group */
-void UserManagerWidget::updateStatusBar()
-{
-//    UserModel *m = UserModel::instance();
-//    ui->memoryUsageLabel->setText(tr("Database: %1,\nMemory: %2")
-//                                     .arg(m->rowCount())
-//                                     .arg(m->numberOfUsersInMemory()));
-//    if (! m_PermanentWidget) {
-//        m_PermanentWidget = new QWidget(m_Parent);
-//        QHBoxLayout * l = new QHBoxLayout(m_PermanentWidget);
-//        l->setMargin(0);
-//        if (!m_PermanentUserName)
-//            m_PermanentUserName = new QLabel(m_PermanentWidget);
-//        l->addWidget(m_PermanentUserName);
-//    }
-//    m_PermanentUserName->setText(m->index(m->currentUserIndex().row(), Core::IUser::Name).data().toString());
-//    m_Parent->statusBar()->addPermanentWidget(m_PermanentWidget);
-}
-
-/** \brief Change the search method for the users's model */
+/** Change the search method for the users's model */
 void UserManagerWidget::onSearchToolButtonTriggered(QAction *act)
 {
     if (act == searchByNameAct)
@@ -423,13 +389,16 @@ void UserManagerWidget::onSearchToolButtonTriggered(QAction *act)
 
 void UserManagerWidget::onCurrentUserChanged()
 {
-    selectUserTableView(UserModel::instance()->currentUserIndex().row());
+    int row = UserModel::instance()->currentUserIndex().row();
+    qWarning() << "CURRENT" << row;
+    ui->userTableView->setCurrentIndex(ui->userTableView->model()->index(row, Core::IUser::Name));
+    ui->userTableView->selectRow(row);
     analyseCurrentUserRights();
-    ui->userViewer->changeUserTo(UserModel::instance()->currentUserIndex().row());
+    ui->userViewer->changeUserTo(row);
 }
 
 /**
-  \brief Update the users' model filter
+  Update the users' model filter
   \todo Manage error when user select an action in the toolbutton
   \todo where can only be calculated by model
  */
@@ -440,7 +409,7 @@ void UserManagerWidget::onSearchRequested()
     UserModel::instance()->setFilter(where);
 }
 
-/** \brief Create a new user using UserPlugin::UserWizard. */
+/** Create a new user using UserPlugin::UserWizard. */
 void UserManagerWidget::onCreateUserRequested()
 {
     int createdRow = ui->userTableView->model()->rowCount();
@@ -449,7 +418,6 @@ void UserManagerWidget::onCreateUserRequested()
         return;
     }
     QModelIndex index = ui->userTableView->model()->index(createdRow, USER_NAME);
-//    userTableView->model()->setData(index, tr("New User"));
     UserWizard wiz(this);
     /** \todo code here */
 //    wiz.setModelRow(createdRow);
@@ -458,16 +426,11 @@ void UserManagerWidget::onCreateUserRequested()
         if (!ui->userTableView->model()->removeRows(createdRow, 1)) {
             LOG_ERROR("Cannot delete new user : can not delete row to model");
             return;
-        } else {
-//            m_Parent->statusBar()->showMessage(tr("No user created"), 2000);
         }
     } else {
         ui->userTableView->selectRow(createdRow);
         onUserActivated(index);
-//        m_Parent->statusBar()->showMessage(tr("User created"), 2000);
     }
-//    qApp->setActiveWindow(m_Parent);
-//    m_Parent->activateWindow();
 }
 
 void UserManagerWidget::onClearModificationRequested()
@@ -482,11 +445,16 @@ void UserManagerWidget::onSaveRequested()
 {
     if ((!m_CanModify) || (!m_CanCreate))
         return;
-    // redefine focus
-//    m_Parent->statusBar()->setFocus();
-    // save changes to database
-    if (UserModel::instance()->submitAll()) {
-//        m_Parent->statusBar()->showMessage(tr("User saved"), 2000);
+    qWarning() << Q_FUNC_INFO;
+    m_ToolBar->setFocus();
+
+    // tell all pages to submit data to the model
+    ui->userViewer->submitChangesToModel();
+
+    // submit user to database
+    QString uuid = ui->userTableView->model()->index(ui->userTableView->currentIndex().row(), Core::IUser::Uuid).data().toString();
+    if (!UserModel::instance()->submitUser(uuid)) {
+        LOG_ERROR("Unable to save user " + uuid);
     }
 }
 
@@ -525,12 +493,11 @@ void UserManagerWidget::onUserActivated(const QModelIndex &index)
 
 void UserManagerWidget::selectUserTableView(int row)
 {
-//    ui->userTableView->selectRow(row);
-    ui->userTableView->setCurrentIndex(ui->userTableView->model()->index(row, 0));
+    qWarning() << "SELECT" << row;
     ui->userViewer->changeUserTo(row);
 }
 
-/** \brief Assume retranslation of UI. */
+/** Assume retranslation of UI. */
 void UserManagerWidget::changeEvent(QEvent *e)
 {
     if ((e->type() == QEvent::LanguageChange)) {
@@ -582,21 +549,4 @@ void UserManagerWidget::showUserDebugDialog(const QModelIndex &id)
     QStringList list;
     list << UserModel::instance()->index(id.row(), Core::IUser::WarnText).data(Qt::DisplayRole).toStringList();
     Utils::quickDebugDialog(list);
-}
-
-bool UserManagerWidget::event(QEvent *event)
-{
-    if (patient()) {
-        switch (event->type()) {
-        case QEvent::Show:
-            patient()->hidePatientBar();
-            break;
-        case QEvent::Hide:
-            patient()->showPatientBar();
-            break;
-        default:
-            break;
-        }
-    }
-    return QWidget::event(event);
 }

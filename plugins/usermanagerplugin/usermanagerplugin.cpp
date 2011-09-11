@@ -292,6 +292,8 @@ bool UserManagerPlugin::identifyUser()
 
 void UserManagerPlugin::postCoreInitialization()
 {
+    if (Utils::Log::warnPluginsCreation())
+        qWarning() << Q_FUNC_INFO;
     // be sure everyone is informed of the currently connected user
     userModel()->emitUserConnected();
 }

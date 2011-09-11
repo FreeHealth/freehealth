@@ -45,6 +45,10 @@ class Printer;
 class PrinterPreviewer;
 }
 
+namespace ZipCodes {
+class ZipCountryCompleters;
+}
+
 namespace UserPlugin {
 namespace Internal {
 namespace Ui {
@@ -110,6 +114,7 @@ private:
     Ui::UserViewer_ContactUI *ui;
     QDataWidgetMapper *m_Mapper;
     UserModel *m_Model;
+    ZipCodes::ZipCountryCompleters *m_ZipCompleter;
 };
 
 class DefaultUserContactPage : public IUserViewerPage

@@ -51,7 +51,9 @@ class USER_EXPORT UserViewer : public QWidget
 public:
     explicit UserViewer(QWidget *parent = 0);
     ~UserViewer();
+
     void changeUserTo(const int modelRow);
+    void submitChangesToModel();
 
 private Q_SLOTS:
     void pluginManagerObjectAdded(QObject *o);

@@ -66,15 +66,8 @@ UserManagerMode::UserManagerMode(QObject *parent) :
     setUniqueModeName(Core::Constants::MODE_USERMANAGER);
     setPatientBarVisibility(false);
 
-//    const QList<int> &context;
-//    setContext();
-
-//    QWidget *central = new QWidget;
-//    QGridLayout *lay = new QGridLayout(central);
-//    central->setLayout(lay);
     UserManagerWidget *w = new UserManagerWidget;
     w->initialize();
-//    lay->addWidget(w);
 
     setWidget(w);
     connect(user(), SIGNAL(userChanged()), this, SLOT(onUserChanged()));

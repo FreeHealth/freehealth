@@ -31,6 +31,8 @@
 #include <printerplugin/printer.h>
 #include <printerplugin/textdocumentextra.h>
 
+#include <zipcodesplugin/zipcodescompleters.h>
+
 #include <utils/global.h>
 #include <translationutils/constanttranslations.h>
 
@@ -72,8 +74,9 @@ void DefaultUserIdentityWidget::setUserModel(UserModel *model)
     if (!m_Mapper) {
         m_Mapper = new QDataWidgetMapper(this);
     }
+    m_Model = model;
     m_Mapper->setModel(model);
-    m_Mapper->setSubmitPolicy(QDataWidgetMapper::AutoSubmit);
+    m_Mapper->setSubmitPolicy(QDataWidgetMapper::ManualSubmit);
     m_Mapper->addMapping(ui->uuidLineEdit, Core::IUser::Uuid);
     m_Mapper->addMapping(ui->titleCombo, Core::IUser::TitleIndex, "currentIndex");
     m_Mapper->addMapping(ui->genderCombo, Core::IUser::GenderIndex, "currentIndex");
@@ -98,14 +101,16 @@ void DefaultUserIdentityWidget::clear()
 
 bool DefaultUserIdentityWidget::submit()
 {
-    return m_Mapper->submit();
+    if (m_Mapper)
+        return m_Mapper->submit();
+    return false;
 }
 
 void DefaultUserIdentityWidget::on_but_changePassword_clicked()
 {
     int row = m_Mapper->currentIndex();
     UserPasswordDialog d(m_Model->index(row, Core::IUser::Password).data().toString(), this);
-    if (d.exec() == QDialog::Accepted){
+    if (d.exec() == QDialog::Accepted) {
         if (!d.canGetNewPassword())
             return;
         QModelIndex idx = m_Model->index(row, Core::IUser::Password);
@@ -165,7 +170,8 @@ DefaultUserContactWidget::DefaultUserContactWidget(QWidget *parent) :
     UserPlugin::IUserViewerWidget(parent),
     ui(new Ui::UserViewer_ContactUI),
     m_Mapper(0),
-    m_Model(0)
+    m_Model(0),
+    m_ZipCompleter(0)
 {
     ui->setupUi(this);
 }
@@ -184,7 +190,7 @@ void DefaultUserContactWidget::setUserModel(UserModel *model)
     m_Mapper->setModel(model);
     m_Mapper->setSubmitPolicy(QDataWidgetMapper::AutoSubmit);
     m_Mapper->addMapping(ui->adressTextEdit, Core::IUser::Adress, "plainText");
-    m_Mapper->addMapping(ui->countryLineEdit, Core::IUser::Country);
+    m_Mapper->addMapping(ui->country, Core::IUser::IsoCountry, "currentIsoCountry");
     m_Mapper->addMapping(ui->zipcodeLineEdit, Core::IUser::Zipcode);
     m_Mapper->addMapping(ui->cityLineEdit, Core::IUser::City);
     m_Mapper->addMapping(ui->tel1LineEdit, Core::IUser::Tel1);
@@ -192,12 +198,19 @@ void DefaultUserContactWidget::setUserModel(UserModel *model)
     m_Mapper->addMapping(ui->tel3LineEdit, Core::IUser::Tel3);
     m_Mapper->addMapping(ui->faxLineEdit, Core::IUser::Fax);
     m_Mapper->addMapping(ui->mailLineEdit, Core::IUser::Mail);
+    m_ZipCompleter = new ZipCodes::ZipCountryCompleters(this);
+    m_ZipCompleter->setCityLineEdit(ui->cityLineEdit);
+    m_ZipCompleter->setZipLineEdit(ui->zipcodeLineEdit);
+    m_ZipCompleter->setCountryComboBox(ui->country);
 }
 
 void DefaultUserContactWidget::setUserIndex(const int index)
 {
-    if (m_Mapper)
+    if (m_Mapper) {
         m_Mapper->setCurrentIndex(index);
+    }
+    if (m_ZipCompleter)
+        m_ZipCompleter->checkData();
 }
 
 void DefaultUserContactWidget::clear()
@@ -207,7 +220,9 @@ void DefaultUserContactWidget::clear()
 
 bool DefaultUserContactWidget::submit()
 {
-    return m_Mapper->submit();
+    if (m_Mapper)
+        return m_Mapper->submit();
+    return false;
 }
 
 
@@ -285,6 +300,7 @@ void DefaultUserProfessionalWidget::setUserIndex(const int index)
 {
     if (m_Mapper)
         m_Mapper->setCurrentIndex(index);
+    qWarning() << Q_FUNC_INFO << m_Mapper << m_Mapper->model() << m_Mapper->currentIndex();
 }
 
 void DefaultUserProfessionalWidget::clear()
@@ -294,7 +310,10 @@ void DefaultUserProfessionalWidget::clear()
 
 bool DefaultUserProfessionalWidget::submit()
 {
-    return m_Mapper->submit();
+    qWarning() << Q_FUNC_INFO << m_Mapper << m_Mapper->model() << m_Mapper->currentIndex();
+    if (m_Mapper)
+        return m_Mapper->submit();
+    return false;
 }
 
 
@@ -378,7 +397,9 @@ void DefaultUserRightsWidget::clear()
 
 bool DefaultUserRightsWidget::submit()
 {
-    return m_Mapper->submit();
+    if (m_Mapper)
+        return m_Mapper->submit();
+    return false;
 }
 
 

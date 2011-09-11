@@ -46,6 +46,7 @@
 #include <extensionsystem/pluginmanager.h>
 
 #include <utils/global.h>
+#include <utils/log.h>
 #include <translationutils/constanttranslations.h>
 #include <extensionsystem/pluginmanager.h>
 
@@ -129,7 +130,7 @@ UserViewer::UserViewer(QWidget *parent) :
     for(int i = 0; i < d->m_Widget->pageWidgets().count(); ++i) {
         IUserViewerWidget *w = qobject_cast<IUserViewerWidget *>(d->m_Widget->pageWidgets().at(i));
         if (w) {
-            w->setUserModel(d->m_Model);;
+            w->setUserModel(d->m_Model);
             w->setUserIndex(d->m_Model->currentUserIndex().row());
         }
     }
@@ -158,16 +159,29 @@ void UserViewer::changeUserTo(const int modelRow)
         d->m_CurrentRow = modelRow;
         for(int i = 0; i < d->m_Widget->pageWidgets().count(); ++i) {
             IUserViewerWidget *w = qobject_cast<IUserViewerWidget *>(d->m_Widget->pageWidgets().at(i));
-            if (w)
+            if (w) {
+                w->setUserModel(d->m_Model);
                 w->setUserIndex(modelRow);
+            }
         }
     } else {
         Utils::informativeMessageBox(tr("You can not access to these datas."), tr("You don't have these rights."), "");
     }
 }
 
-void UserViewer::pluginManagerObjectAdded(QObject *o)
+void UserViewer::submitChangesToModel()
 {
+    for(int i = 0; i < d->m_Widget->pageWidgets().count(); ++i) {
+        IUserViewerWidget *w = qobject_cast<IUserViewerWidget *>(d->m_Widget->pageWidgets().at(i));
+        if (w) {
+            if (!w->submit())
+                LOG_ERROR(w->objectName() + " submition error");
+        }
+    }
+}
+
+void UserViewer::pluginManagerObjectAdded(QObject *o)
+{    
     IUserViewerPage *page = qobject_cast<IUserViewerPage *>(o);
     if (page) {
         d->m_pages << page;
@@ -177,8 +191,8 @@ void UserViewer::pluginManagerObjectAdded(QObject *o)
         for(int i = 0; i < d->m_Widget->pageWidgets().count(); ++i) {
             IUserViewerWidget *w = qobject_cast<IUserViewerWidget *>(d->m_Widget->pageWidgets().at(i));
             if (w) {
-                w->setUserModel(d->m_Model);;
-                w->setUserIndex(d->m_Model->currentUserIndex().row());
+                w->setUserModel(d->m_Model);
+                w->setUserIndex(d->m_CurrentRow);
             }
         }
         d->m_Widget->expandAllCategories();
@@ -193,6 +207,14 @@ void UserViewer::pluginManagerObjectRemoved(QObject *o)
             d->m_pages.removeAll(page);
             d->m_Widget->setPages<IUserViewerPage>(d->m_pages);
             d->m_Widget->setupUi(false);
+        }
+
+        for(int i = 0; i < d->m_Widget->pageWidgets().count(); ++i) {
+            IUserViewerWidget *w = qobject_cast<IUserViewerWidget *>(d->m_Widget->pageWidgets().at(i));
+            if (w) {
+                w->setUserModel(d->m_Model);
+                w->setUserIndex(d->m_CurrentRow);
+            }
         }
         d->m_Widget->expandAllCategories();
     }
