@@ -46,7 +46,9 @@ class AbstractCalendarModel;
 class CALENDAR_EXPORT CalendarWidget : public QWidget
 {
     Q_OBJECT
+    /** The number of minutes used when we want to move of size items. Worth 15 by default. */
     Q_PROPERTY(int dayGranularity READ dayGranularity WRITE setDayGranularity)
+    /** default item duration. 30 minutes by default. */
     Q_PROPERTY(int dayItemDefaultDuration READ dayItemDefaultDuration WRITE setDayItemDefaultDuration)
 
 public:
@@ -60,7 +62,9 @@ public:
 
     void setDate(const QDate &date);
 
+    /** The number of minutes used when we want to move of size items. Worth 15 by default. */
     int dayGranularity() const;
+    /** default item duration. 30 minutes by default. */
     int dayItemDefaultDuration() const;
 
 public Q_SLOTS:
