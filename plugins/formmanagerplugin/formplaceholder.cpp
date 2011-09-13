@@ -558,33 +558,35 @@ void FormPlaceHolder::printCurrentItem()
 
     qWarning() << formMain->uuid();
 
-    QStringList vals = formMain->valueReferences()->values(Form::FormItemValues::Value_Printing);
-    if (vals.count()) {
-        // print using the printing value
-        qWarning() << "PRINT\n" << vals;
-        Core::IDocumentPrinter *p = printer();
-        if (!p) {
-            LOG_ERROR("No IDocumentPrinter found");
-            return;
-        }
-        p->clearTokens();
-        QHash<QString, QVariant> tokens;
+//    qWarning() << formMain->printableHtml(true);
 
-        tokens.insert(Core::Constants::TOKEN_DOCUMENTTITLE, formMain->spec()->label());
+//    QStringList vals = formMain->valueReferences()->values(Form::FormItemValues::Value_Printing);
+//    if (vals.count()) {
+//        // print using the printing value
+//        qWarning() << "PRINT\n" << vals;
+//        Core::IDocumentPrinter *p = printer();
+//        if (!p) {
+//            LOG_ERROR("No IDocumentPrinter found");
+//            return;
+//        }
+//        p->clearTokens();
+//        QHash<QString, QVariant> tokens;
 
-        // create a token for each FormItem of the FormMain
-        foreach(FormItem *item, formMain->flattenFormItemChildren()) {
-            if (item->itemDatas())
-                tokens.insert(item->uuid(), item->itemDatas()->data(0, Form::IFormItemData::ID_Printable));
-        }
-        p->addTokens(Core::IDocumentPrinter::Tokens_Global, tokens);
+//        tokens.insert(Core::Constants::TOKEN_DOCUMENTTITLE, formMain->spec()->label());
 
-        // print
-        p->print(m_doc, m_typeOfPaper, m_duplicata);
+//        // create a token for each FormItem of the FormMain
+//        foreach(FormItem *item, formMain->flattenFormItemChildren()) {
+//            if (item->itemDatas())
+//                tokens.insert(item->uuid(), item->itemDatas()->data(0, Form::IFormItemData::ID_Printable));
+//        }
+//        p->addTokens(Core::IDocumentPrinter::Tokens_Global, tokens);
 
-    } else {
-        // print using the widget
-        qWarning() << "PRINT WIDGET";
-    }
+//        // print
+//        p->print(m_doc, m_typeOfPaper, m_duplicata);
+
+//    } else {
+//        // print using the widget
+//        qWarning() << "PRINT WIDGET";
+//    }
 
 }
