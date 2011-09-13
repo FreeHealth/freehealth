@@ -135,7 +135,10 @@ freetoolbox/libs \
 freetoolbox/plugins/coreplugin \
 freetoolbox/plugins/drugsdb \
 freetoolbox/plugins/icd10db \
+freetoolbox/plugins/icdplugin \
 freetoolbox/plugins/interactiondb \
+freetoolbox/plugins/listviewplugin \
+freetoolbox/plugins/zipcodes \
 freetoolbox/plugins/*.pro \
 global_resources/doc/freetoolbox \
 global_resources/textfiles/freetoolbox.desktop \
@@ -149,6 +152,8 @@ libs \
 contrib \
 plugins/fmf_plugins.pri \
 plugins/coreplugin \
+plugins/icdplugin \
+plugins/listviewplugin \
 scripts"
 
 
@@ -158,6 +163,7 @@ updatetranslations.sh \
 buildspecs \
 doc \
 freeaccount \
+global_resources/databases/zipcodes/zipcodes.db \
 global_resources/doc/freeaccount \
 global_resources/textfiles/freeaccount.desktop \
 global_resources/pixmap \
@@ -185,6 +191,7 @@ plugins/printerplugin \
 plugins/texteditorplugin \
 plugins/listviewplugin \
 plugins/usermanagerplugin \
+plugins/zipcodesplugin \
 scripts"
 
 FREEMEDFORMS_SOURCES="freemedforms.pro config.pri checkqtversion.pri \
@@ -195,6 +202,7 @@ doc \
 freemedforms \
 global_resources/databases/drugs/master.db \
 global_resources/databases/icd10/icd10.db \
+global_resources/databases/zipcodes/zipcodes.db \
 global_resources/doc/freemedforms \
 global_resources/forms \
 global_resources/package_helpers \
@@ -241,6 +249,7 @@ plugins/templatesplugin \
 plugins/texteditorplugin \
 plugins/usermanagerplugin \
 plugins/xmlioplugin \
+plugins/zipcodesplugin \
 scripts \
 tests"
 
