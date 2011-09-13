@@ -218,7 +218,7 @@ void MainWindow::extensionsInitialized()
         statusBar()->addWidget(updateChecker()->progressBar(this),1);
         connect(updateChecker(), SIGNAL(updateFound()), this, SLOT(updateFound()));
         connect(updateChecker(), SIGNAL(done(bool)), this, SLOT(updateCheckerEnd()));
-        updateChecker()->check(Utils::Constants::FREEDIAMS_UPDATE_URL);
+        updateChecker()->check(Utils::Constants::FREEACCOUNT_UPDATE_URL);
         settings()->setValue(Utils::Constants::S_LAST_CHECKUPDATE, QDate::currentDate());
     }
 
