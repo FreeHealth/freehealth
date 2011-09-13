@@ -19,7 +19,7 @@ HEADERS += \
     $${PWD}/languagecombobox.h \
     $${PWD}/languagecomboboxdelegate.h \
     $${PWD}/deselectabletreeview.h \
-    countrycombobox.h
+    $${PWD}/countrycombobox.h
 
 
 SOURCES += \
@@ -34,7 +34,7 @@ SOURCES += \
     $${PWD}/treeview.cpp \
     $${PWD}/languagecombobox.cpp \
     $${PWD}/languagecomboboxdelegate.cpp \
-    countrycombobox.cpp
+    $${PWD}/countrycombobox.cpp
 
 FORMS += \
     $${PWD}/fancytreeview.ui \
