@@ -149,6 +149,7 @@ public:
             case CommandLine::Chrono :            value.insert(CommandLine::Chrono, true); break;
             case CommandLine::ConfigFile :        value.insert(CommandLine::ConfigFile, a.mid(a.indexOf("=")+1).remove("\"")); break;
             case CommandLine::RunningUnderWine:   value.insert(CommandLine::RunningUnderWine, true); break;
+            case CommandLine::ClearUserDatabases:   value.insert(CommandLine::ClearUserDatabases, true); break;
             case CommandLine::CL_BlockPatientDatas:  value.insert(CommandLine::CL_BlockPatientDatas, true); break;
             default : break;
         }
@@ -166,6 +167,10 @@ public:
             } else {
                 LOG_ERROR_FOR("Core", QCoreApplication::translate("CommandLine", "Passing %1 as exchange in file, but file does not exists.").arg(file));
             }
+        }
+
+        if (!Utils::isDebugCompilation()) {
+            value.insert(CommandLine::ClearUserDatabases, false);
         }
     }
 
