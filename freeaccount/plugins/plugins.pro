@@ -8,7 +8,8 @@ SUBDIRS = \
     printer \
     texteditor \
     listview \
-    usermanager
+    usermanager \
+    zipcodes
 
 core.subdir = coreplugin
 
@@ -25,7 +26,8 @@ account.depends += core
 account.depends += texteditor
 account.depends += printer
 account.depends += accountbase
-#account.depends += listview
+account.depends += zipcodes
+account.depends += listview
 
 printer.subdir   = printerplugin
 printer.depends += core
@@ -42,4 +44,7 @@ usermanager.depends += core
 usermanager.depends += printer
 usermanager.depends += texteditor
 usermanager.depends += listview
+usermanager.depends += zipcodes
 
+zipcodes.subdir = zipcodesplugin
+zipcodes.depends += core
