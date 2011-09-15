@@ -135,6 +135,7 @@ UTILS_EXPORT QDateTime roundDateTime(const QDateTime &date, const int minutesRou
 
 // Some locale functions
 UTILS_EXPORT QString countryToIso(QLocale::Country country);
+UTILS_EXPORT QString countryIsoToName(const QString &country);
 
 // Some functions for HTML work
 UTILS_EXPORT QString fontToHtml( const QFont &font, const QColor &color = QColor("black") );
