@@ -46,8 +46,9 @@
 #include <coreplugin/ipatientlistener.h>
 #include <coreplugin/constants_tokensandsettings.h>
 
-#include <medicalutils/global.h>
 #include <utils/log.h>
+#include <utils/global.h>
+#include <medicalutils/global.h>
 #include <translationutils/constanttranslations.h>
 #include <extensionsystem/pluginmanager.h>
 
@@ -415,13 +416,16 @@ QVariant PatientModel::data(const QModelIndex &index, int role) const
                 const QString &street = d->m_SqlPatient->data(d->m_SqlPatient->index(index.row(), Constants::IDENTITY_ADDRESS_STREET)).toString();
                 const QString &city = d->m_SqlPatient->data(d->m_SqlPatient->index(index.row(), Constants::IDENTITY_ADRESS_CITY)).toString();
                 const QString &zip = d->m_SqlPatient->data(d->m_SqlPatient->index(index.row(), Constants::IDENTITY_ADDRESS_ZIPCODE)).toString();
-                return QString("%1 %2 %3").arg(street, city, zip);
+                QString country = d->m_SqlPatient->data(d->m_SqlPatient->index(index.row(), Constants::IDENTITY_ADDRESS_COUNTRY)).toString();
+                country = Utils::countryIsoToName(country);
+                return QString("%1 %2 %3 %4").arg(street, city, zip, country).simplified();
             }
         case IPatient::Age:
             {
                 const QDate &dob = d->m_SqlPatient->data(d->m_SqlPatient->index(index.row(), Constants::IDENTITY_DOB)).toDate();
                 return MedicalUtils::readableAge(dob);
             }
+        case IPatient::YearsOld: return MedicalUtils::ageYears(d->m_SqlPatient->data(d->m_SqlPatient->index(index.row(), Constants::IDENTITY_DOB)).toDate());
         case IPatient::IconizedGender: return d->iconizedGender(index);
         case IPatient::Photo :
         {
