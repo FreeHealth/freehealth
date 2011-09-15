@@ -38,10 +38,17 @@ public:
     bool setData(const QModelIndex &index, const QVariant &value, int role = Qt::EditRole);
     QVariant data(const QModelIndex &index, int role = Qt::DisplayRole) const ;
 
+    Qt::ItemFlags flags(const QModelIndex &index) const;
+
     int rowCountWithChildren() const {return m_fullRowCount;}
+
+    QString toHtml() const;
 
 Q_SIGNALS:
     void girCalculated(const int score);
+
+private:
+    QString rowToHtml(int i, const QModelIndex &parent = QModelIndex(), bool discriminative = false) const;
 
 private:
     QMultiHash<int, GirItem> m_groups;

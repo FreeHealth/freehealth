@@ -77,7 +77,7 @@ static int getGIR(const QString &chaine)
     int rang;
     int groupe;
     if (chaine.length() != 8)
-        return 0;
+        return -1;
 
     QString chaineGIR = chaine;
 
@@ -437,6 +437,10 @@ public:
                     scores.append(sub->computedScore);
                 }
             }
+            if (!scores.contains(QRegExp("[ABC]"))) {
+                return '?';
+            }
+
             if (scores.length() < nbSub)
                 return '?';
             switch (item->item) {
@@ -709,7 +713,7 @@ int NewGirScore::resultingGir() const
         chaine += girItem->computedScore;
     }
     if (!isValidSubScore(chaine))
-        return 0;
+        return -1;
     int score = getGIR(chaine);
 //    qWarning() << "resultingGir chaine:" << chaine << "score" << score;
     return score;

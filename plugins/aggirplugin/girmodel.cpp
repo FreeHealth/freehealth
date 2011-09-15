@@ -349,7 +349,6 @@ QVariant GirModel::data(const QModelIndex &index, int role) const
         }
         return QVariant();
     }
-
     if (role==Qt::ToolTipRole) {
         if (index.column() >= Column_S && index.column() <= Column_H) {
             if (index.data(Qt::CheckStateRole).toInt()==Qt::Checked) {
@@ -362,3 +361,135 @@ QVariant GirModel::data(const QModelIndex &index, int role) const
     return QStandardItemModel::data(index, role);
 }
 
+Qt::ItemFlags GirModel::flags(const QModelIndex &index) const
+{
+    QStandardItem *item = itemFromIndex(index);
+    if (item->isCheckable())
+        return Qt::ItemIsEnabled | Qt::ItemIsSelectable | Qt::ItemIsUserCheckable;
+    return Qt::ItemIsEnabled | Qt::ItemIsSelectable;
+}
+
+QString GirModel::rowToHtml(int i, const QModelIndex &parent, bool discriminative) const
+{
+    QString nfp, s, t, c, h, ok, score, indent;
+    if (data(index(i, 1, parent), Qt::CheckStateRole).toInt()==Qt::Checked) {
+        nfp = "☑";
+    } else {
+        nfp = "⎕";
+    }
+
+    if (data(index(i, 2, parent), Qt::CheckStateRole).toInt()==Qt::Checked) {
+        s = "☑";
+    } else {
+        s = "⎕";
+    }
+
+    if (data(index(i, 3, parent), Qt::CheckStateRole).toInt()==Qt::Checked) {
+        t = "☑";
+    } else {
+        t = "⎕";
+    }
+
+    if (data(index(i, 4, parent), Qt::CheckStateRole).toInt()==Qt::Checked) {
+        c = "☑";
+    } else {
+        c = "⎕";
+    }
+
+    if (data(index(i, 5, parent), Qt::CheckStateRole).toInt()==Qt::Checked) {
+        h = "☑";
+    } else {
+        h = "⎕";
+    }
+
+    if (data(index(i, 6, parent), Qt::CheckStateRole).toInt()==Qt::Checked) {
+        ok = "☑";
+    } else {
+        ok = "⎕";
+    }
+
+    score = data(index(i, 7, parent)).toString();
+
+    if (parent.isValid()) {
+        indent = "&nbsp;&nbsp;&nbsp;&nbsp;";
+    }
+//    if (discriminative) {
+//        style += "font-weight: 600;";
+//    }
+
+    return QString("<td width=*>%9%1</span></td>"  // Label
+                    "<td width=4em><center>%2</center></td>"  // NFP
+                    "<td width=2em><center>%3</center></td>"  // S
+                    "<td width=2em><center>%4</center></td>"  // T
+                    "<td width=2em><center>%5</center></td>"  // C
+                    "<td width=2em><center>%6</center></td>"  // H
+                    "<td width=2em><center>%7</center></td>"  // Ok
+                    "<td width=2em><center>%8</center></td>"  // Score
+                    )
+             .arg(data(index(i, 0, parent)).toString())
+             .arg(nfp)
+             .arg(s)
+             .arg(t)
+             .arg(c)
+             .arg(h)
+             .arg(ok)
+             .arg(score.remove("?"))
+             .arg(indent)
+             ;
+}
+
+QString GirModel::toHtml() const
+{
+    QList<int> discriminatives;
+    discriminatives << 0 << 1 << 2 << 3 << 4 << 6 << 15 << 16;
+    // ⍌⎕☒☑
+    QStringList lines;
+    for(int i = 0; i < rowCount() - 1; ++i) {
+        if (hasChildren(index(i,0))) {
+            if (discriminatives.contains(i)) {
+                lines << QString("<td colspan=7><b>%1</b></td>"
+                                 "<td><center>%2</center></td>")
+                         .arg(data(index(i, 0)).toString())
+                         .arg(data(index(i, 7)).toString().remove("?"))
+                         ;
+            } else {
+                lines << QString("<td colspan=7>%1</td>"
+                                 "<td><center>%2</center></td>")
+                         .arg(data(index(i, 0)).toString())
+                         .arg(data(index(i, 7)).toString().remove("?"))
+                         ;
+            }
+            for(int j=0; j < rowCount(index(i,0)); ++j) {
+                lines << rowToHtml(j, index(i,0), discriminatives.contains(i));
+            }
+            continue;
+        }
+
+        lines << rowToHtml(i, QModelIndex(), discriminatives.contains(i));
+    }
+
+    // add score
+    lines << QString("<td colspan=7><b>%1</b></td>"
+                     "<td><b>%2</b></td>")
+             .arg(data(index(rowCount(), 0)).toString())
+             .arg(data(index(rowCount(), 7)).toString())
+             ;
+
+    QString content = QString("<table width=100% border=1 cellpadding=2 cellspacing=0 style=\"margin: 0.2em 0em 0.2em 0em\">"
+                              "<thead>"
+                              "<tr>"
+                              "<td style=\"vertical-align: top; font-weight: 600; padding: 5px\" colspan=8>"
+                              "<center>%1</center>"
+                              "</td>"
+                              "</tr>"
+                              "</thead>"
+                              "<tbody>"
+                              "<tr>"
+                              "%2"
+                              "</tr>"
+                              "</tbody>"
+                              "</table>")
+            .arg("AGGIR").arg(lines.join("</tr><tr>"));
+
+    return content;
+}
