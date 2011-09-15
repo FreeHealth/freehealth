@@ -11,7 +11,7 @@
     <cdate>2011-03-15</cdate>
     <icon>geriatrics.png</icon>
     <weblink>http://www.geriu.org/uploads/applications/gerilite_ADL_IADL/data/downloads/form_adl_iadl.pdf</weblink>
-    <bibliography/>
+    <bibliography pmid="6418786">Katz S. Assessing self-maintenance: activities of daily living, mobility, and instrumental activities of daily living. J Am Geriatr Soc. 1983 Dec;31(12):721-7.</bibliography>
 
     <!-- Translatable values -->
     <licence>GPLv3</licence>
