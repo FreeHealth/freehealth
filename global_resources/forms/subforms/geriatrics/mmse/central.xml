@@ -22,40 +22,12 @@
         <specialties lang="fr">Gériatrie</specialties>
         <specialties lang="xx">Geriatrics</specialties>
     </formdescription>
-    <MedForm>
-        <name>mmsForm</name>
-        <type>form</type>
-        <label>Mini-Mental Score</label>
-        <script>
-            <onload lang="fr">{
-       function calculateScore() {
-       var score = _mmsForm.sumOfChildren();
-       _mmsForm.score.value = score;
-       }
 
-       function optionComboExecute() {
-       var val = 0;
-       if ( _mmsForm.optionCombo.id == 0) return;
-       _mmsForm.valueChanged.disconnect( calculateScore );
-       val = _mmsForm.optionCombo.id - 1;
-       _mmsForm.orientation.setChildrenId( val );
-       _mmsForm.registration.setChildrenId( val );
-       _mmsForm.attention.setChildrenId( val );
-       _mmsForm.recall.setChildrenId( val );
-       _mmsForm.language.setChildrenId( val );
-       calculateScore();
-       _mmsForm.valueChanged.connect( calculateScore );
-       }
-
-       _mmsForm.valueChanged.connect( calculateScore );
-       _mmsForm.optionCombo.valueChanged.connect( optionComboExecute );
-       }
-     </onload>
-        </script>
-
+    <MedForm name="Subs::Geriatrics::MMSE">
+        <label lang="xx">Mini-Mental Score</label>
 
         <Item>
-            <name>optionCombo</name>
+            <name>Subs::Geriatrics::MMSE::OptionCombo</name>
             <type>combo</type>
             <label lang="fr">Options du formulaire</label>
             <label lang="en">Option of the form</label>
@@ -76,21 +48,21 @@
             </value>
         </Item>
         <Item>
-            <name>orientation</name>
+            <name>Subs::Geriatrics::MMSE::Orientation</name>
             <type>group</type>
             <label lang="fr">Orientation</label>
             <label lang="en">Orientation</label>
             <label lang="de">Orientierung</label>
             <column>1</column>
             <Item>
-                <name>helpOrientation</name>
+                <name>Subs::Geriatrics::MMSE::Orientation::Help</name>
                 <type>helptext</type>
                 <label lang="fr">Je vais vous poser quelques questions pour apprécier comment fonctionne votre mémoire. Les unes sont très simples, les autres un peu moins. Vous devez répondre du mieux que vous pouvez.&lt;br />Quelle est la date complète d'aujourd'hui ? &lt;br />Si la réponse est incorrecte ou incomplète, posées les questions restées sans réponse, dans l’ordre suivant :</label>
                 <label lang="de">Welchen Tag haben wir heute?</label>
                 <label lang="en">Approach the patient with respect and encouragement. &lt;br />Ask : Do you have trouble with your memory? Note the response.&lt;br />May I ask you some questions about your memory? Note response.</label>
             </Item>
             <Item>
-                <name>year</name>
+                <name>Subs::Geriatrics::MMSE::Orientation::Year</name>
                 <option>horizontal</option>
                 <type>radio</type>
                 <label lang="de">Jahr</label>
@@ -110,7 +82,7 @@
                 </value>
             </Item>
             <Item>
-                <name>season</name>
+                <name>Subs::Geriatrics::MMSE::Orientation::Season</name>
                 <option>horizontal</option>
                 <type>radio</type>
                 <label lang="de">Welche Jahreszeit haben wir nun ?</label>
@@ -130,7 +102,7 @@
                 </value>
             </Item>
             <Item>
-                <name>month</name>
+                <name>Subs::Geriatrics::MMSE::Orientation::Month</name>
                 <option>horizontal</option>
                 <type>radio</type>
                 <label lang="de">Monat</label>
@@ -150,7 +122,7 @@
                 </value>
             </Item>
             <Item>
-                <name>dayofmonth</name>
+                <name>Subs::Geriatrics::MMSE::Orientation::Dayofmonth</name>
                 <option>horizontal</option>
                 <type>radio</type>
                 <label lang="de">Datum</label>
@@ -170,7 +142,7 @@
                 </value>
             </Item>
             <Item>
-                <name>weekday</name>
+                <name>Subs::Geriatrics::MMSE::Orientation::Weekday</name>
                 <option>horizontal</option>
                 <type>radio</type>
                 <label lang="de">Welcher Wochentag ist heute?</label>
@@ -190,7 +162,7 @@
                 </value>
             </Item>
             <Item>
-                <name>state</name>
+                <name>Subs::Geriatrics::MMSE::Orientation::State</name>
                 <option>horizontal</option>
                 <type>radio</type>
                 <label lang="de">In welchem Krankenhaus sind Sie hier?</label>
@@ -210,7 +182,7 @@
                 </value>
             </Item>
             <Item>
-                <name>city</name>
+                <name>Subs::Geriatrics::MMSE::Orientation::City</name>
                 <option>horizontal</option>
                 <type>radio</type>
                 <label lang="de">In welcher Stadt ist dieses Krankenhaus?</label>
@@ -230,7 +202,7 @@
                 </value>
             </Item>
             <Item>
-                <name>partcity</name>
+                <name>Subs::Geriatrics::MMSE::Orientation::Partcity</name>
                 <option>horizontal</option>
                 <type>radio</type>
                 <label lang="de">Bundesland</label>
@@ -250,7 +222,7 @@
                 </value>
             </Item>
             <Item>
-                <name>building</name>
+                <name>Subs::Geriatrics::MMSE::Orientation::Building</name>
                 <option>horizontal</option>
                 <type>radio</type>
                 <label lang="de">In welchem Land befinden wir uns hier?</label>
@@ -270,7 +242,7 @@
                 </value>
             </Item>
             <Item>
-                <name>floor</name>
+                <name>Subs::Geriatrics::MMSE::Orientation::Floor</name>
                 <option>horizontal</option>
                 <type>radio</type>
                 <label lang="de">In welchem Stockwerk befinden wir uns?</label>
@@ -289,29 +261,27 @@
                     <numerical id="1">0</numerical>
                 </value>
             </Item>
-            <Item>
-              <name>orientationSubSum</name>
-              <type>sum</type>
-              <sumof>year;season;month;dayofmonth;weekday;state;city;partcity;building;floor</sumof>
+            <Item name="Subs::Geriatrics::MMSE::Orientation::Score" type="sum">
+              <sumof>Subs::Geriatrics::MMSE::Orientation::Year;Subs::Geriatrics::MMSE::Orientation::Season;Subs::Geriatrics::MMSE::Orientation::Month;Subs::Geriatrics::MMSE::Orientation::Dayofmonth;Subs::Geriatrics::MMSE::Orientation::Weekday;Subs::Geriatrics::MMSE::Orientation::State;Subs::Geriatrics::MMSE::Orientation::City;Subs::Geriatrics::MMSE::Orientation::Partcity;Subs::Geriatrics::MMSE::Orientation::Building;Subs::Geriatrics::MMSE::Orientation::Floor</sumof>
             </Item>
         </Item>
 
 
         <Item>
-            <name>registration</name>
+            <name>Subs::Geriatrics::MMSE::Registration</name>
             <type>group</type>
             <label lang="fr">Apprentissage</label>
             <label lang="en">Registration of three words</label>
             <label lang="de">Kurzzeitgedächtnis</label>
             <column>1</column>
             <Item>
-                <name>helpRegist</name>
+                <name>Subs::Geriatrics::MMSE::Registration::Help</name>
                 <type>helptext</type>
                 <label lang="fr">Je vais vous dire trois mots ; je vous voudrais que vous me les répétiez et que vous essayiez de les retenir car je vous les redemanderai tout à l’heure.</label>
                 <label lang="de">Der Untersucher nennt folgende drei Gegenstände und fordert den Patienten auf, die Begriffe zu wiederholen (1 Punkt für jede richtige Antwort). Der Untersucher wiederholt die Wörter solange, bis der Patient alle drei gelernt hat (höchstens 6 Wiederholungen).</label>
             </Item>
             <Item>
-                <name>firstWord</name>
+                <name>Subs::Geriatrics::MMSE::Registration::FirstWord</name>
                 <type>radio</type>
                 <option>horizontal</option>
                 <label lang="de">Auto</label>
@@ -331,7 +301,7 @@
                 </value>
             </Item>
             <Item>
-                <name>secondWord</name>
+                <name>Subs::Geriatrics::MMSE::Registration::SecondWord</name>
                 <option>horizontal</option>
                 <type>radio</type>
                 <label lang="de">Blume</label>
@@ -351,7 +321,7 @@
                 </value>
             </Item>
             <Item>
-                <name>thirdWord</name>
+                <name>Subs::Geriatrics::MMSE::Registration::ThirdWord</name>
                 <option>horizontal</option>
                 <type>radio</type>
                 <label lang="de">Kerze</label>
@@ -370,28 +340,26 @@
                     <numerical id="1">0</numerical>
                 </value>
             </Item>
-            <Item>
-              <name>apprentSubSum</name>
-              <type>sum</type>
-              <sumof>firstWord;secondWord;thirdWord</sumof>
+            <Item name="Subs::Geriatrics::MMSE::Registration::Score" type="sum">
+              <sumof>Subs::Geriatrics::MMSE::Registration::FirstWord;Subs::Geriatrics::MMSE::Registration::SecondWord;Subs::Geriatrics::MMSE::Registration::ThirdWord</sumof>
             </Item>
         </Item>
 
         <Item>
-            <name>attention</name>
+            <name>Subs::Geriatrics::MMSE::Attention</name>
             <type>group</type>
             <label lang="fr">Attention et calcul</label>
             <label lang="en"/>
             <label lang="de">Aufmerksamkeit und Rechenfähigkeit</label>
             <column>1</column>
             <Item>
-                <name>helpRegist</name>
+                <name>Subs::Geriatrics::MMSE::Attention::Help</name>
                 <type>helptext</type>
                 <label lang="fr">Voulez-vous compter à partir de 100 en retirant 7 à chaque fois ?</label>
                 <label lang="de">Von 100 an sind jeweils 7 abzuziehen. Falls ein Rechenfehler gemacht wird du die darauf folgenden Ergebnisse „verschoben“ sind, so wird nur ein Fehler gegeben.</label>
             </Item>
             <Item>
-                <name>calc93</name>
+                <name>Subs::Geriatrics::MMSE::Attention::calc93</name>
                 <option>horizontal</option>
                 <type>radio</type>
                 <label lang="de">93</label>
@@ -411,7 +379,7 @@
                 </value>
             </Item>
             <Item>
-                <name>calc86</name>
+                <name>Subs::Geriatrics::MMSE::Attention::calc86</name>
                 <type>radio</type>
                 <option>horizontal</option>
                 <label>86</label>
@@ -429,7 +397,7 @@
                 </value>
             </Item>
             <Item>
-                <name>calc79</name>
+                <name>Subs::Geriatrics::MMSE::Attention::calc79</name>
                 <type>radio</type>
                 <option>horizontal</option>
                 <label>79</label>
@@ -447,7 +415,7 @@
                 </value>
             </Item>
             <Item>
-                <name>calc72</name>
+                <name>Subs::Geriatrics::MMSE::Attention::calc72</name>
                 <type>radio</type>
                 <option>horizontal</option>
                 <label>72</label>
@@ -465,7 +433,7 @@
                 </value>
             </Item>
             <Item>
-                <name>calc65</name>
+                <name>Subs::Geriatrics::MMSE::Attention::calc65</name>
                 <type>radio</type>
                 <option>horizontal</option>
                 <label>65</label>
@@ -483,35 +451,33 @@
                 </value>
             </Item>
             <Item>
-                <name/>
+                <name>Subs::Geriatrics::MMSE::Attention::Help</name>
                 <type>helptext</type>
                 <label lang="fr">Pour tous les sujets, même pour ceux qui ont obtenu le maximum de points, demander : Voulez-vous épeler le mot MONDE à l’envers ?</label>
                 <label lang="de">ODER. Falls der Patient die Aufgabe nicht durchführen kann oder will, „Radio“ rückwärts buchstabieren lassen: O-I-D-A-R</label>
                 <label lang="en"/>
             </Item>
-            <Item>
-              <name>calcSubSum</name>
-              <type>sum</type>
-              <sumof>calc93;calc86;calc79;calc72;calc65</sumof>
+            <Item name="Subs::Geriatrics::MMSE::Attention::Score" type="sum">
+              <sumof>Subs::Geriatrics::MMSE::Attention::calc93;Subs::Geriatrics::MMSE::Attention::calc86;Subs::Geriatrics::MMSE::Attention::calc79;Subs::Geriatrics::MMSE::Attention::calc72;Subs::Geriatrics::MMSE::Attention::calc65</sumof>
             </Item>
         </Item>
 
 
         <Item>
-            <name>recall</name>
+            <name>Subs::Geriatrics::MMSE::Recall</name>
             <type>group</type>
             <label lang="fr">Rappel</label>
             <label lang="en">Recall of three words</label>
             <label lang="de">Gedächtnis</label>
             <column>1</column>
             <Item>
-                <name>helpRegist</name>
+                <name>Subs::Geriatrics::MMSE::Recall::Help</name>
                 <type>helptext</type>
                 <label lang="fr">Pouvez-vous me dire quels étaient les 3 mots que je vous ai demandés de répéter et de retenir tout à l’heure ?</label>
                 <label lang="de">Bitten Sie den Patienten, die drei Worte, die Sie ihm zuvor nannten (II), noch einmal zu wiederholen.</label>
             </Item>
             <Item>
-                <name>recall1</name>
+                <name>Subs::Geriatrics::MMSE::Recall::First</name>
                 <type>radio</type>
                 <option>horizontal</option>
                 <label lang="de"></label>
@@ -531,7 +497,7 @@
                 </value>
             </Item>
             <Item>
-                <name>recall2</name>
+                <name>Subs::Geriatrics::MMSE::Recall::Second</name>
                 <type>radio</type>
                 <option>horizontal</option>
                 <label lang="de"></label>
@@ -551,7 +517,7 @@
                 </value>
             </Item>
             <Item>
-                <name>recall3</name>
+                <name>Subs::Geriatrics::MMSE::Recall::Third</name>
                 <type>radio</type>
                 <option>horizontal</option>
                 <label lang="de"></label>
@@ -570,29 +536,27 @@
                     <numerical id="1">0</numerical>
                 </value>
             </Item>
-            <Item>
-              <name>recallSubSum</name>
-              <type>sum</type>
-              <sumof>recall1;recall2;recall3</sumof>
+            <Item name="Subs::Geriatrics::MMSE::Recall::Score" type="sum">
+              <sumof>Subs::Geriatrics::MMSE::Recall::First;Subs::Geriatrics::MMSE::Recall::Second;Subs::Geriatrics::MMSE::Recall::Third</sumof>
             </Item>
         </Item>
 
 
         <Item>
-            <name>language</name>
+            <name>Subs::Geriatrics::MMSE::Language</name>
             <type>group</type>
             <label lang="fr">Langage</label>
             <label lang="en">Language</label>
             <label lang="de">Sprache</label>
             <column>1</column>
             <Item>
-                <name>helpRegist</name>
+                <name>Subs::Geriatrics::MMSE::Language::Help</name>
                 <type>helptext</type>
                 <label lang="fr"/>
                 <label lang="de">Der Untersucher zeigt zwei Gegenstände und fordert den Patienten auf, sie zu benennen.</label>
             </Item>
             <Item>
-                <name>pen</name>
+                <name>Subs::Geriatrics::MMSE::Language::pen</name>
                 <type>radio</type>
                 <option>horizontal</option>
                 <label lang="de">Bleistift</label>
@@ -612,7 +576,7 @@
                 </value>
             </Item>
             <Item>
-                <name>watch</name>
+                <name>Subs::Geriatrics::MMSE::Language::watch</name>
                 <type>radio</type>
                 <option>horizontal</option>
                 <label lang="de">Armbanduhr</label>
@@ -632,7 +596,7 @@
                 </value>
             </Item>
             <Item>
-                <name>repeat</name>
+                <name>Subs::Geriatrics::MMSE::Language::repeat</name>
                 <type>radio</type>
                 <option>horizontal</option>
                 <label lang="de">Der Untersucher fordert den Patienten auf, 3. „Sie leiht ihm kein Geld mehr“ nachzusprechen.</label>
@@ -652,13 +616,13 @@
                 </value>
             </Item>
             <Item>
-                <name>helpIntruction</name>
+                <name>Subs::Geriatrics::MMSE::Language::HelpIntruction</name>
                 <type>helptext</type>
                 <label lang="fr">Poser une feuille de papier sur le bureau, la montrer au sujet en lui disant : « Ecoutez bien et faites ce que je vais vous dire :</label>
                 <label lang="de">Der Untersucher lässt den Patienten folgendes Kommando befolgen.</label>
             </Item>
             <Item>
-                <name>understanding1</name>
+                <name>Subs::Geriatrics::MMSE::Language::understanding1</name>
                 <type>radio</type>
                 <option>horizontal</option>
                 <label lang="de">„Nehmen Sie dieses Blatt in die rechte Hand“</label>
@@ -678,7 +642,7 @@
                 </value>
             </Item>
             <Item>
-                <name>understanding2</name>
+                <name>Subs::Geriatrics::MMSE::Language::understanding2</name>
                 <type>radio</type>
                 <option>horizontal</option>
                 <label lang="de">„Falten Sie es in der Mitte“</label>
@@ -698,7 +662,7 @@
                 </value>
             </Item>
             <Item>
-                <name>understanding3</name>
+                <name>Subs::Geriatrics::MMSE::Language::understanding3</name>
                 <type>radio</type>
                 <option>horizontal</option>
                 <label lang="de">„Legen Sie es auf den Boden“</label>
@@ -718,7 +682,7 @@
                 </value>
             </Item>
             <Item>
-                <name>reading</name>
+                <name>Subs::Geriatrics::MMSE::Language::reading</name>
                 <type>radio</type>
                 <option>horizontal</option>
                 <label lang="de">Der Untersucher bittet den Patienten, 7. Die Anweisung auf der Rückseite zu befolgen</label>
@@ -738,7 +702,7 @@
                 </value>
             </Item>
             <Item>
-                <name>writing</name>
+                <name>Subs::Geriatrics::MMSE::Language::writing</name>
                 <type>radio</type>
                 <option>horizontal</option>
                 <label lang="de">Der Untersucher dreht das Blatt um und fordert den einen vollständigen Satz zu Patienten auf,schreiben (Rückseite).</label>
@@ -758,7 +722,7 @@
                 </value>
             </Item>
             <Item>
-                <name>drawing</name>
+                <name>Subs::Geriatrics::MMSE::Space::drawing</name>
                 <type>radio</type>
                 <option>horizontal</option>
                 <label lang="de">Der Untersucher lässt den Patienten die auf der Rückseite vorgegebene Figur malen (1 Punkt, wenn alle Seiten und Winkel stimmen und die sich überschneidenden Linien ein Viereck bilden).</label>
@@ -777,18 +741,22 @@
                     <numerical id="1">0</numerical>
                 </value>
             </Item>
-            <Item>
-                <name>score</name>
-                <type>sum</type>
-                <sumof>pen;watch;repeat;understanding1;understanding2;understanding3;reading;writing;drawing</sumof>
+            <Item name="Subs::Geriatrics::MMSE::Language::Score" type="sum">
+                <sumof>Subs::Geriatrics::MMSE::Language::pen;Subs::Geriatrics::MMSE::Language::watch;Subs::Geriatrics::MMSE::Language::repeat;Subs::Geriatrics::MMSE::Language::understanding1;Subs::Geriatrics::MMSE::Language::understanding2;Subs::Geriatrics::MMSE::Language::understanding3;Subs::Geriatrics::MMSE::Language::reading;Subs::Geriatrics::MMSE::Language::writing;Subs::Geriatrics::MMSE::Space::drawing</sumof>
             </Item>
         </Item>
-        <Item>
-            <name>score</name>
-            <type>sum</type>
+
+        <Item name="Subs::Geriatrics::MMSE::FinalScore" type="sum">
             <label>Score = </label>
-            <sumof>year;season;month;dayofmonth;weekday;state;city;partcity;building;floor;firstWord;secondWord;thirdWord;calc93;calc86;calc79;calc72;calc65;recall1;recall2;recall3;pen;watch;repeat;understanding1;understanding2;understanding3;reading;writing;drawing</sumof>
+            <sumof>Subs::Geriatrics::MMSE::Orientation::Year;Subs::Geriatrics::MMSE::Orientation::Season;Subs::Geriatrics::MMSE::Orientation::Month;Subs::Geriatrics::MMSE::Orientation::Dayofmonth;Subs::Geriatrics::MMSE::Orientation::Weekday;Subs::Geriatrics::MMSE::Orientation::State;Subs::Geriatrics::MMSE::Orientation::City;Subs::Geriatrics::MMSE::Orientation::Partcity;Subs::Geriatrics::MMSE::Orientation::Building;Subs::Geriatrics::MMSE::Orientation::Floor;Subs::Geriatrics::MMSE::Registration::FirstWord;Subs::Geriatrics::MMSE::Registration::SecondWord;Subs::Geriatrics::MMSE::Registration::ThirdWord;Subs::Geriatrics::MMSE::Attention::calc93;Subs::Geriatrics::MMSE::Attention::calc86;Subs::Geriatrics::MMSE::Attention::calc79;Subs::Geriatrics::MMSE::Attention::calc72;Subs::Geriatrics::MMSE::Attention::calc65;Subs::Geriatrics::MMSE::Recall::First;Subs::Geriatrics::MMSE::Recall::Second;Subs::Geriatrics::MMSE::Recall::Third;Subs::Geriatrics::MMSE::Language::pen;Subs::Geriatrics::MMSE::Language::watch;Subs::Geriatrics::MMSE::Language::repeat;Subs::Geriatrics::MMSE::Language::understanding1;Subs::Geriatrics::MMSE::Language::understanding2;Subs::Geriatrics::MMSE::Language::understanding3;Subs::Geriatrics::MMSE::Language::reading;Subs::Geriatrics::MMSE::Language::writing;Subs::Geriatrics::MMSE::Space::drawing</sumof>
             <option>changeepisodelabel</option>
         </Item>
+
+      <Item name="Subs::Geriatrics::MMSE::Comment" type="texteditor">
+        <label lang="xx">Comments</label>
+        <label lang="fr">Remarques</label>
+        <options>DontPrintEmptyValues</options>
+      </Item>
+
     </MedForm>
 </FreeMedForms>

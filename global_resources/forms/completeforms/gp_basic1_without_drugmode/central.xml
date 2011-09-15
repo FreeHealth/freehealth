@@ -28,103 +28,75 @@
 
   </formdescription>
 
-  <MedForm>
-    <name>GP::Basic::IdentityForm</name>
+  <MedForm name="GP::Basic::IdentityForm">
     <label lang="xx">Identity</label>
     <label lang="fr">Identité</label>
-    <type>form</type>
     <options>unique</options>
     <icon>__theme__/identity.png</icon>
-    <Item>
-      <type>identity</type>
-      <name>GP::Basic::IdentityItem</name>
+    <Item name="GP::Basic::IdentityItem" type="identity">
       <label lang="xx">Full Identity</label>
       <label lang="fr">Identité</label>
     </Item>
   </MedForm>
 
-    <MedForm>
-      <type>form</type>
-      <name>GP::Basic::Drugs::Chronic</name>
+    <MedForm name="GP::Basic::Drugs::Chronic">
       <label lang="xx">Chronic therapeutic</label>
       <label lang="fr">Traitement chronique</label>
-      <Item>
-        <name>GP::Basic::Drugs::Chronic::Content</name>
-        <type>prescriptor</type>
+      <Item name="GP::Basic::Drugs::Chronic::Content" type="prescriptor">
         <label lang="xx">Chronic therapeutic</label>
         <label lang="fr">Traitement chronique</label>
         <patientdata>drugs::chronic</patientdata>
       </Item>
-      <Item>
-        <type>texteditor</type>
-        <name>GP::Basic::Drugs::Chronic::Comment</name>
+      <Item name="GP::Basic::Drugs::Chronic::Comment" type="texteditor">
         <label lang="xx">Comments</label>
         <label lang="fr">Remarques</label>
+        <options>DontPrintEmptyValues</options>
       </Item>
     </MedForm>
 
-    <MedForm>
-      <type>form</type>
-      <name>GP::Basic::Drugs::Allergies</name>
+    <MedForm name="GP::Basic::Drugs::Allergies">
       <label lang="xx">Allergies</label>
-      <Item>
-        <name>GP::Basic::Drugs::Allergies::Content</name>
-        <type>drugselector</type>
+      <Item name="GP::Basic::Drugs::Allergies::Content" type="drugselector">
         <label lang="xx">Known drugs allergies</label>
         <label lang="fr">Allergies médicamenteuses connues</label>
         <options>hideselector</options>
         <patientdata>drugs::allergies</patientdata>
       </Item>
-      <Item>
-        <type>texteditor</type>
-        <name>GP::Basic::Drugs::Allergies::Comment</name>
+      <Item name="GP::Basic::Drugs::Allergies::Comment" type="texteditor">
         <label lang="xx">Comments</label>
         <label lang="xx">Remarques</label>
+        <options>DontPrintEmptyValues</options>
       </Item>
     </MedForm>
 
-  <MedForm>
-    <type>form</type>
-    <name>GP::Basic::SOAP</name>
+  <MedForm name="GP::Basic::SOAP">
     <label>SOAP</label>
     <icon>__theme__/edit.png</icon>
-    <Item>
-      <name>GP::Basic::SOAP::S</name>
-      <type>texteditor</type>
+    <Item name="GP::Basic::SOAP::S" type="texteditor">
       <label lang="xx">Subjective</label>
       <label lang="fr">Subjectif</label>
     </Item>
-    <Item>
-      <name>GP::Basic::SOAP::O</name>
-      <type>texteditor</type>
+    <Item name="GP::Basic::SOAP::O" type="texteditor">
       <label lang="xx">Objective</label>
       <label lang="fr">Objectif</label>
     </Item>
-    <Item>
-      <name>GP::Basic::SOAP::A</name>
-      <type>texteditor</type>
+    <Item name="GP::Basic::SOAP::A" type="texteditor">
       <label lang="xx">Assessment</label>
       <label lang="fr">Appréciation clinique</label>
     </Item>
-    <Item>
-      <name>GP::Basic::SOAP::P</name>
-      <type>texteditor</type>
+    <Item name="GP::Basic::SOAP::P" type="texteditor">
       <label lang="xx">Plan</label>
       <label lang="fr">Prise en charge</label>
     </Item>
 
   </MedForm>
 
-  <MedForm>
-    <type>form</type>
-    <name>GP::Basic::Prescr</name>
+  <MedForm name="GP::Basic::Prescr">
     <label>Prescriptions</label>
     <icon>__theme__/edit.png</icon>
     <options>noepisode</options>
 
-    <MedForm>
-      <type>form</type>
-      <name>GP::Basic::Prescr::Text</name>
+    <MedForm name="GP::Basic::Prescr::Text">
       <label lang="xx">Textual prescriptions</label>
       <label lang="fr">Prescriptions textuelles</label>
 
@@ -137,9 +109,7 @@
     </MedForm>
 
 
-    <MedForm>
-      <type>form</type>
-      <name>GP::Basic::Prescr::Drugs</name>
+    <MedForm name="GP::Basic::Prescr::Drugs">
       <label lang="xx">Drugs prescriptions</label>
       <label lang="fr">Prescriptions médicamenteuses</label>
       <Item>
@@ -152,9 +122,7 @@
 
   </MedForm>
 
-  <MedForm>
-    <type>form</type>
-    <name>GP::Basic::ICD10</name>
+  <MedForm name="GP::Basic::ICD10">
     <label lang="xx">ICD10 coding</label>
     <label lang="fr">Codes CIM10</label>
     <Item>

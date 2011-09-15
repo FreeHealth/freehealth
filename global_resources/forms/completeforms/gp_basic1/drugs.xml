@@ -2,43 +2,33 @@
 <!DOCTYPE FreeMedForms>
 <FreeMedForms>
 
-    <MedForm>
-      <type>form</type>
-      <name>GP::Basic::Drugs::Chronic</name>
+    <MedForm name="GP::Basic::Drugs::Chronic">
       <label lang="xx">Chronic therapeutic</label>
       <label lang="fr">Traitement chronique</label>
-      <Item>
-        <name>GP::Basic::Drugs::Chronic::Content</name>
-        <type>prescriptor</type>
+      <Item name="GP::Basic::Drugs::Chronic::Content" type="prescriptor">
         <label lang="xx">Chronic therapeutic</label>
         <label lang="fr">Traitement chronique</label>
         <patientdata>drugs::chronic</patientdata>
       </Item>
-      <Item>
-        <type>texteditor</type>
-        <name>GP::Basic::Drugs::Chronic::Comment</name>
+      <Item name="GP::Basic::Drugs::Chronic::Comment" type="texteditor">
         <label lang="xx">Comments</label>
         <label lang="fr">Remarques</label>
+        <options>DontPrintEmptyValues</options>
       </Item>
     </MedForm>
 
-    <MedForm>
-      <type>form</type>
-      <name>GP::Basic::Drugs::Allergies</name>
+    <MedForm name="GP::Basic::Drugs::Allergies">
       <label lang="xx">Allergies</label>
-      <Item>
-        <name>GP::Basic::Drugs::Allergies::Content</name>
-        <type>drugselector</type>
+      <Item name="GP::Basic::Drugs::Allergies::Content" type="drugselector">
         <label lang="xx">Known drugs allergies</label>
         <label lang="fr">Allergies médicamenteuses connues</label>
         <options>hideselector</options>
         <patientdata>drugs::allergies</patientdata>
       </Item>
-      <Item>
-        <type>texteditor</type>
-        <name>GP::Basic::Drugs::Allergies::Comment</name>
+      <Item name="GP::Basic::Drugs::Allergies::Comment" type="texteditor">
         <label lang="xx">Comments</label>
         <label lang="xx">Remarques</label>
+        <options>DontPrintEmptyValues</options>
       </Item>
     </MedForm>
 

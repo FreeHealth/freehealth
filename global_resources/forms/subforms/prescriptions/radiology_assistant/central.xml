@@ -6,8 +6,8 @@
   <formdescription>
     <!-- Non translatable values -->
     <authors>Eric Maeker, MD</authors>
-    <version>0.5.0~alpha</version>
-    <compatversion>0.5.0</compatversion>
+    <version>0.6.0</version>
+    <compatversion>0.6.0</compatversion>
     <cdate>2011-09-05</cdate>
     <icon>xray.png</icon>
     <weblink>http://www.freemedforms.com</weblink>
@@ -52,10 +52,12 @@
       <Item type="check" name="Prescr::Helpers::Radiology::HarmRight">
         <label lang="xx">Left</label>
         <label lang="fr">Gauche</label>
+        <options>printonlychecked</options>
       </Item>
       <Item type="check" name="Prescr::Helpers::Radiology::HarmLeft">
         <label lang="xx">Right</label>
         <label lang="fr">Droit</label>
+        <options>printonlychecked</options>
       </Item>
       <Item type="multilist" name="Prescr::Helpers::Radiology::Harm">
         <label lang="xx">Harms</label>
@@ -110,10 +112,12 @@
       <Item type="check" name="Prescr::Helpers::Radiology::LegRight">
         <label lang="xx">Left</label>
         <label lang="fr">Gauche</label>
+        <options>printonlychecked</options>
       </Item>
       <Item type="check" name="Prescr::Helpers::Radiology::LegLeft">
         <label lang="xx">Right</label>
         <label lang="fr">Droit</label>
+        <options>printonlychecked</options>
       </Item>
       <Item type="multilist" name="Prescr::Helpers::Radiology::Leg">
         <label lang="xx">Legs</label>
