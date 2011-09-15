@@ -38,8 +38,8 @@
 /**
  * \file baseformwidgets.h
  * \author Eric MAEKER <eric.maeker@gmail.com>
- * \version 0.4.0
- * \date 05 Apr 2010
+ * \version 0.6.0
+ * \date 15 Sept 2011
 */
 
 QT_BEGIN_NAMESPACE
@@ -91,8 +91,11 @@ public:
     BaseForm(Form::FormItem *linkedObject, QWidget *parent = 0);
     ~BaseForm();
 
-    void addWidgetToContainer( Form::IFormWidget *widget );
+    void addWidgetToContainer(Form::IFormWidget *widget);
     bool isContainer() const {return true;}
+
+    // Printing
+    QString printableHtml(bool withValues = true) const;
 
 public Q_SLOTS:
     void retranslate();
@@ -144,8 +147,11 @@ public:
     BaseGroup(Form::FormItem *linkedObject, QWidget *parent = 0);
     ~BaseGroup();
 
-    void addWidgetToContainer( Form::IFormWidget *widget );
+    void addWidgetToContainer(Form::IFormWidget *widget);
     bool isContainer() const {return true;}
+
+    // Printing
+    QString printableHtml(bool withValues = true) const;
 
 public Q_SLOTS:
     void retranslate();
@@ -168,6 +174,9 @@ class BaseCheck : public Form::IFormWidget
 public:
     BaseCheck(Form::FormItem *formItem, QWidget *parent = 0);
     ~BaseCheck();
+
+    // Printing
+    QString printableHtml(bool withValues = true) const;
 
 public Q_SLOTS:
     void retranslate();
@@ -213,6 +222,8 @@ public:
     BaseRadio(Form::FormItem *linkedObject, QWidget *parent = 0);
     ~BaseRadio();
 
+    QString printableHtml(bool withValues = true) const;
+
 public Q_SLOTS:
     void retranslate();
     void buttonClicked(QAbstractButton *radio);
@@ -257,6 +268,8 @@ public:
      BaseSimpleText(Form::FormItem *linkedObject, QWidget *parent = 0, bool shortText = true);
      ~BaseSimpleText();
 
+     QString printableHtml(bool withValues = true) const;
+
 public Q_SLOTS:
      void retranslate();
 
@@ -300,6 +313,8 @@ public:
      BaseHelpText(Form::FormItem *linkedObject, QWidget *parent = 0);
      ~BaseHelpText();
 
+     QString printableHtml(bool withValues = true) const;
+
 public Q_SLOTS:
      void retranslate();
 };
@@ -313,6 +328,8 @@ class BaseList : public Form::IFormWidget
 public:
      BaseList(Form::FormItem *linkedObject, QWidget *parent = 0, bool uniqueList = true);
      ~BaseList();
+
+     QString printableHtml(bool withValues = true) const;
 
 public Q_SLOTS:
      void retranslate();
@@ -358,6 +375,8 @@ public:
      BaseCombo(Form::FormItem *linkedObject, QWidget *parent = 0);
      ~BaseCombo();
 
+     QString printableHtml(bool withValues = true) const;
+
 public Q_SLOTS:
      void retranslate();
 
@@ -400,6 +419,8 @@ class BaseDate : public Form::IFormWidget
 public:
      BaseDate(Form::FormItem *linkedObject, QWidget *parent = 0);
      ~BaseDate();
+
+     QString printableHtml(bool withValues = true) const;
 
  private Q_SLOTS:
      void onPatientChanged();
@@ -446,6 +467,8 @@ class BaseSpin : public Form::IFormWidget
 public:
      BaseSpin(Form::FormItem *linkedObject, QWidget *parent = 0, bool doubleSpin = false);
      ~BaseSpin();
+
+     QString printableHtml(bool withValues = true) const;
 
 public Q_SLOTS:
      void retranslate();
@@ -508,6 +531,8 @@ class SumWidget : public Form::IFormWidget
 public:
     SumWidget(Form::FormItem *formItem, QWidget *parent = 0);
     ~SumWidget();
+
+    QString printableHtml(bool withValues = true) const;
 
 private Q_SLOTS:
     void retranslate();

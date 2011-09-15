@@ -77,7 +77,7 @@
    <item row="0" column="7">
     <widget class="QLineEdit" name="controlKey">
      <property name="enabled">
-      <bool>false</bool>
+      <bool>true</bool>
      </property>
      <property name="toolTip">
       <string>Control key</string>

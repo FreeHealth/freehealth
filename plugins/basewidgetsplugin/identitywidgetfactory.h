@@ -38,8 +38,8 @@ QT_END_NAMESPACE
 /**
  * \file patientbaseplugin.h
  * \author Eric MAEKER <eric.maeker@gmail.com>
- * \version 0.0.4
- * \date 11 Aug 2009
+ * \version 0.6.0
+ * \date 15 Sept 2011
 */
 
 namespace Patients {
@@ -72,6 +72,8 @@ public:
     ~IdentityFormWidget();
 
     void addWidgetToContainer(IFormWidget * widget);
+
+    QString printableHtml(bool withValues = true) const;
 
 public Q_SLOTS:
     void retranslate();

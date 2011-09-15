@@ -41,8 +41,8 @@ QT_END_NAMESPACE
 /**
  * \file girwidget.h
  * \author Eric MAEKER <eric.maeker@gmail.com>
- * \version 0.5.0
- * \date 10 Apr 2011
+ * \version 0.6.0
+ * \date 15 Sept 2011
 */
 
 namespace Gir {
@@ -84,6 +84,8 @@ public:
     void setStringfiedGirScore(const QString &gir);
     QString stringfiedGirScore() const;
 
+    QString toHtml() const;
+
 public Q_SLOTS:
     void updateGirString(QAbstractButton *radio);
     void on_aButton_clicked();
@@ -115,6 +117,8 @@ public:
     void setStringfiedGirScore(const QString &gir);
     QString stringfiedGirScore() const;
 
+    QString printableHtml(bool withValues = true) const;
+
 public Q_SLOTS:
     void retranslate() {}
 
@@ -122,7 +126,7 @@ private:
     GirUi *m_ui;
 };
 
-class AGGIR_EXPORT GirItemData : public Form::IFormItemData
+class GirItemData : public Form::IFormItemData
 {
 public:
     explicit GirItemData(Form::FormItem *parent) : Form::IFormItemData(), m_Parent(parent), m_GirWidget(0) {}

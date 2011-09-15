@@ -163,6 +163,11 @@ QString GirUi::stringfiedGirScore() const
     return model->stringfiedGirScore();
 }
 
+QString GirUi::toHtml() const
+{
+    return model->toHtml();
+}
+
 //--------------------------------------------------------------------------------------------------------
 //---------------------------------------------- GirWidget -----------------------------------------------
 //--------------------------------------------------------------------------------------------------------
@@ -193,6 +198,11 @@ void GirWidget::setStringfiedGirScore(const QString &gir)
 QString GirWidget::stringfiedGirScore() const
 {
     return m_ui->stringfiedGirScore();
+}
+
+QString GirWidget::printableHtml(bool withValues) const
+{
+    return m_ui->toHtml();
 }
 
 //--------------------------------------------------------------------------------------------------------

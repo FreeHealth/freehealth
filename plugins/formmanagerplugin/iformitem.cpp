@@ -96,6 +96,7 @@
 
 #include <formmanagerplugin/formmanager.h>
 #include <formmanagerplugin/iformitemdata.h>
+#include <formmanagerplugin/iformwidgetfactory.h>
 
 #include <extensionsystem/pluginmanager.h>
 #include <utils/global.h>
@@ -524,6 +525,16 @@ void FormMain::clear()
         if (it->itemDatas())
             it->itemDatas()->clear();
     }
+}
+
+QString FormMain::printableHtml(bool withValues) const
+{
+    /** \todo code here : print a form with/wo item content */
+    QString html;
+
+    FormMain *f = (FormMain*)this;
+    return f->formWidget()->printableHtml(withValues);
+    return html;
 }
 
 void FormMain::createDebugPage()

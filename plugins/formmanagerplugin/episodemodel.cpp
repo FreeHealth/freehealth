@@ -610,7 +610,7 @@ public:
 
             it->itemDatas()->setStorableData(datas.value(it->uuid()));
             if (feedPatientModel) {
-                qWarning() << "Feeding patientModel data with" << it->patientDataRepresentation() << it->itemDatas()->data(it->patientDataRepresentation(), IFormItemData::ID_ForPatientModel);
+//                qWarning() << "Feeding patientModel data with" << it->patientDataRepresentation() << it->itemDatas()->data(it->patientDataRepresentation(), IFormItemData::ID_ForPatientModel);
                 patient()->setValue(it->patientDataRepresentation(), it->itemDatas()->data(it->patientDataRepresentation(), IFormItemData::ID_ForPatientModel));
             }
         }

@@ -29,6 +29,14 @@
 
 using namespace BaseWidgets;
 
+inline static QStringList getOptions(Form::FormItem *item)
+{
+    QStringList l;
+    l = item->extraDatas().value("options").split(";", QString::SkipEmptyParts);
+    l += item->extraDatas().value("option").split(";", QString::SkipEmptyParts);
+    return l;
+}
+
 TextEditorFactory::TextEditorFactory(QObject *parent) :
         IFormWidgetFactory(parent)
 {
@@ -77,15 +85,15 @@ TextEditorForm::TextEditorForm(Form::FormItem *formItem, QWidget *parent) :
     hb->addWidget(m_Label);
     hb->setMargin(0);
     hb->setSpacing(0);
-    const QString &options = formItem->extraDatas().value("options");
+    const QStringList &options = getOptions(formItem);
     Editor::TextEditor::Types t = Editor::TextEditor::Simple;
-    if (options.compare("FullEditor", Qt::CaseInsensitive) == 0) {
+    if (options.contains("FullEditor", Qt::CaseInsensitive)) {
         t = Editor::TextEditor::Full;
     } else {
-        if (options.compare("WithTable", Qt::CaseInsensitive) == 0) {
+        if (options.contains("WithTable", Qt::CaseInsensitive)) {
             t |= Editor::TextEditor::WithTables;
         }
-        if (options.compare("WithIO", Qt::CaseInsensitive) == 0) {
+        if (options.contains("WithIO", Qt::CaseInsensitive)) {
             t |= Editor::TextEditor::WithIO;
         }
     }
@@ -105,10 +113,56 @@ TextEditorForm::~TextEditorForm()
 {
 }
 
+QString TextEditorForm::printableHtml(bool withValues) const
+{
+    if (withValues) {
+        if (getOptions(m_FormItem).contains("DontPrintEmptyValues")) {
+            if (m_Text->textEdit()->toPlainText().isEmpty())
+                return QString();
+        }
+        return QString("<table width=100% border=1 cellpadding=0 cellspacing=0>"
+                   "<thead>"
+                   "<tr>"
+                   "<td style=\"vertical-align: top; font-weight: 600; padding: 5px\">"
+                    "%1"
+                   "</td>"
+                   "</tr>"
+                   "</thead>"
+                   "<tbody>"
+                   "<tr>"
+                   "<td style=\"vertical-align: top; padding-left:2em; padding-top:5px; padding-bottom: 5px; padding-right:2em\">"
+                   "%2"
+                   "</td>"
+                   "</tr>"
+                   "</tbody>"
+                   "</table>")
+            .arg(m_FormItem->spec()->label()).arg(m_Text->getHtml().remove("</body>").remove("</html>"));
+    } else {
+        return QString("<table width=100% border=1 cellpadding=0 cellspacing=0  style=\"margin: 1em 0em 1em 0em\">"
+                       "<thead>"
+                       "<tr>"
+                       "<td style=\"vertical-align: top; font-weight: 600; padding: 5px\">"
+                       "%1"
+                       "</td>"
+                       "</tr>"
+                       "</thead>"
+                       "<tbody>"
+                       "<tr>"
+                       "<td style=\"vertical-align: top; padding-left:2em; padding-top:5px; padding-bottom: 5px; padding-right:2em\">"
+                       "&nbsp;<br />&nbsp;<br />&nbsp;<br />&nbsp;<br />&nbsp;<br />"
+                       "&nbsp;<br />&nbsp;<br />&nbsp;<br />&nbsp;<br />&nbsp;<br />"
+                       "</td>"
+                       "</tr>"
+                       "</tbody>"
+                       "</table>")
+                .arg(m_FormItem->spec()->label());
+    }
+    return QString();
+}
+
 void TextEditorForm::retranslate()
 {
-    /** \todo iformitem --> one spec per language ? */
-    //     m_Label->setText( m_FormItem->spec()->label() );
+    m_Label->setText( m_FormItem->spec()->label() );
 }
 
 ////////////////////////////////////////// ItemData /////////////////////////////////////////////

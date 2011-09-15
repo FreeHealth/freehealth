@@ -108,6 +108,8 @@ namespace {
     const char * const  SPIN_EXTRAS_KEY_MAX         = "max";
     const char * const  SPIN_EXTRAS_KEY_STEP        = "step";
 
+    const char * const  LABEL_ALIGN_TOP   = "labelontop";
+    const char * const  LABEL_ALIGN_LEFT  = "labelonleft";
 }
 
 inline static QStringList getOptions(Form::FormItem *item)
@@ -116,6 +118,16 @@ inline static QStringList getOptions(Form::FormItem *item)
     l = item->extraDatas().value(::EXTRAS_KEY).split(";", QString::SkipEmptyParts);
     l += item->extraDatas().value(::EXTRAS_KEY2).split(";", QString::SkipEmptyParts);
     return l;
+}
+
+inline static Form::IFormWidget::LabelOptions labelAlignement(Form::FormItem *item, Form::IFormWidget::LabelOptions defaultValue = Form::IFormWidget::Label_OnLeft)
+{
+    const QStringList &o = getOptions(item);
+    if (o.contains(::LABEL_ALIGN_TOP, Qt::CaseInsensitive))
+        return Form::IFormWidget::Label_OnTop;
+    else if (o.contains(::LABEL_ALIGN_LEFT, Qt::CaseInsensitive))
+        return Form::IFormWidget::Label_OnLeft;
+    return defaultValue;
 }
 
 inline static int getNumberOfColumns(Form::FormItem *item, int defaultValue = 1)
@@ -128,34 +140,32 @@ inline static int getNumberOfColumns(Form::FormItem *item, int defaultValue = 1)
 
 inline static int isCompactView(Form::FormItem *item, bool defaultValue = false)
 {
-    if (item->extraDatas().value(::EXTRAS_KEY).contains(::EXTRAS_COMPACT_VIEW))
+    if (getOptions(item).contains(::EXTRAS_COMPACT_VIEW, Qt::CaseInsensitive))
         return true;
-    else
-        return defaultValue;
+    return defaultValue;
 }
 
 inline static int isGroupCheckable(Form::FormItem *item, bool defaultValue = false)
 {
-    if (item->extraDatas().value(::EXTRAS_KEY).contains(::EXTRAS_GROUP_CHECKABLE))
+    if (getOptions(item).contains(::EXTRAS_GROUP_CHECKABLE, Qt::CaseInsensitive))
         return true;
-    else
-        return defaultValue;
+    return defaultValue;
 }
 
 inline static int isGroupChecked(Form::FormItem *item, bool defaultValue = false)
 {
-    if (item->extraDatas().value(::EXTRAS_KEY).contains(::EXTRAS_GROUP_CHECKED))
+    if (getOptions(item).contains(::EXTRAS_GROUP_CHECKED, Qt::CaseInsensitive))
         return true;
-    else
-        return defaultValue;
+    return defaultValue;
 }
 
 inline static int isRadioHorizontalAlign(Form::FormItem *item, bool defaultValue = true)
 {
-    if (item->extraDatas().value(::EXTRAS_KEY).contains(::EXTRAS_ALIGN_HORIZONTAL))
+    if (getOptions(item).contains(::EXTRAS_ALIGN_HORIZONTAL, Qt::CaseInsensitive))
         return true;
-    else
-        return defaultValue;
+    else if (getOptions(item).contains(::EXTRAS_ALIGN_VERTICAL, Qt::CaseInsensitive))
+        return false;
+    return defaultValue;
 }
 
 inline static QString getDateFormat(Form::FormItem *item, const QString & defaultValue = "dd MM yyyy")
@@ -317,6 +327,58 @@ void BaseForm::addWidgetToContainer(IFormWidget * widget)
     i++;
 }
 
+QString BaseForm::printableHtml(bool withValues) const
+{
+    QString header, content;
+    // Start with the header of the form
+    header += QString("<table width=100% border=2 cellpadding=0 cellspacing=0  style=\"margin: 1em 0em 1em 0em\">"
+                    "<thead>"
+                    "<tr>"
+                    "<td style=\"vertical-align: top;padding: 5px\">"
+                    "<center><span style=\"font-weight: 600;\">%1</span><br />"
+                    "%2"
+                      "</center>"
+                    "</td>"
+                    "</tr>"
+                    "</thead>"
+                    "</table>")
+            .arg(m_FormItem->spec()->label())
+            .arg(m_EpisodeLabel->toolTip().replace("right", "center").replace("<p ", "<span ").replace("</p>", "</span>"));
+
+    QStringList html;
+    QList<Form::FormItem*> items = m_FormItem->formItemChildren();
+    for(int i = 0; i < items.count(); ++i) {
+        html << items.at(i)->formWidget()->printableHtml(withValues);
+    }
+    int i = 0;
+    int c = 0;
+    int r = 0;
+    int previousrow = 0;
+    // recreate the grid as an html table
+    foreach(const QString &s, html) {
+        c = (i % numberColumns);
+        r = (i / numberColumns);
+        if (r>previousrow) {
+            previousrow = r;
+            content += "</tr><tr>";
+        }
+        content += QString("<td style=\"vertical-align: top; align: left\">"
+                           "%1"
+                           "</td>").arg(s);
+        ++i;
+    }
+
+    return QString("%1"
+                   "<table width=100% border=0 cellpadding=0 cellspacing=0 style=\"margin:0px\">"
+                   "<tbody>"
+                   "<tr>"
+                   "%2"
+                   "</tr>"
+                   "</tbody>"
+                   "</table>")
+            .arg(header).arg(content);
+}
+
 void BaseForm::retranslate()
 {
     m_Header->label->setText(m_FormItem->spec()->label());
@@ -384,8 +446,8 @@ QVariant BaseFormData::data(const int ref, const int role) const
 //--------------------------------------------------------------------------------------------------------
 //-------------------------------------- BaseGroup implementation --------------------------------------
 //--------------------------------------------------------------------------------------------------------
-BaseGroup::BaseGroup(Form::FormItem *formItem, QWidget *parent)
-        : Form::IFormWidget(formItem,parent), m_Group(0), m_ContainerLayout(0)
+BaseGroup::BaseGroup(Form::FormItem *formItem, QWidget *parent) :
+    Form::IFormWidget(formItem,parent), m_Group(0), m_ContainerLayout(0)
 {
     QVBoxLayout * vblayout = new QVBoxLayout(this);
     m_Group = new QGroupBox(this);
@@ -438,6 +500,79 @@ void BaseGroup::addWidgetToContainer(IFormWidget * widget)
     i++;
 }
 
+QString BaseGroup::printableHtml(bool withValues) const
+{
+    QStringList html;
+    QString content;
+    QList<Form::FormItem*> items = m_FormItem->formItemChildren();
+    for(int i = 0; i < items.count(); ++i) {
+        html << items.at(i)->formWidget()->printableHtml(withValues);
+    }
+
+    // group is empty ?
+    if (withValues) {
+        bool empty = true;
+        foreach(const QString &s, html) {
+            if (!s.isEmpty()) {
+                empty = false;
+                break;
+            }
+        }
+        if (empty)
+            return QString();
+    }
+
+    // recreate the grid as an html table
+    int i = 0;
+    int c = 0;
+    int r = 0;
+    int previousrow = 0;
+    foreach(const QString &s, html) {
+        c = (i % numberColumns);
+        r = (i / numberColumns);
+        if (r>previousrow) {
+            previousrow = r;
+            content += "</tr><tr>";
+        }
+        ++i;
+        if (i==(html.count()-1)) {
+        content += QString("<td style=\"vertical-align: top; align: left; padding-left: 5px; padding-top: 5px; padding-right: 5px; padding-bottom: 0px\">"
+                           "%1"
+                           "</td>").arg(s);
+        } else {
+            content += QString("<td style=\"vertical-align: top; align: left; padding-left: 5px; padding-top: 5px; padding-right: 5px; padding-bottom: 5px\">"
+                               "%1"
+                               "</td>").arg(s);
+        }
+    }
+
+    return QString("<table width=100% border=1 cellpadding=0 cellspacing=0 style=\"margin: 1em 0em 1em 0em\">"
+                   "<thead>"
+                   "<tr>"
+                   "<td style=\"vertical-align: top; font-weight: 600; padding: 5px\" colspan=%1>"
+                    "%2"
+                   "</td>"
+                   "</tr>"
+                   "</thead>"
+                   "<tbody>"
+                   "<tr>"
+                   "<td>"
+                   "<table width=100% border=0 cellpadding=0 cellspacing=0 style=\"margin: 0px\">"
+                   "<tbody>"
+                   "<tr>"
+                   "%3"
+                   "</tr>"
+                   "</tbody>"
+                   "</table>"
+                   "</td>"
+                   "</tr>"
+                   "</tbody>"
+                   "</table>")
+            .arg(numberColumns)
+            .arg(m_FormItem->spec()->label())
+            .arg(content);
+}
+
 void BaseGroup::retranslate()
 {
     m_Group->setTitle(m_FormItem->spec()->label());
@@ -464,6 +599,20 @@ BaseCheck::BaseCheck(Form::FormItem *formItem, QWidget *parent) :
 
 BaseCheck::~BaseCheck()
 {
+}
+
+QString BaseCheck::printableHtml(bool withValues) const
+{
+    // ⍌⎕☒☑
+    if (withValues) {
+        if (m_Check->isChecked())
+            return QString("%1&nbsp;%2").arg("☒").arg(m_FormItem->spec()->label());
+        else if (!getOptions(m_FormItem).contains("printonlychecked", Qt::CaseInsensitive))
+            return QString("%1&nbsp;%2").arg("⎕").arg(m_FormItem->spec()->label());
+    } else {
+        return QString("%1&nbsp;%2").arg("⎕").arg(m_FormItem->spec()->label());
+    }
+    return QString();
 }
 
 void BaseCheck::retranslate()
@@ -540,11 +689,11 @@ QVariant BaseCheckData::storableData() const
 //--------------------------------------------- BaseRadio ----------------------------------------------
 //--------------------------------------------------------------------------------------------------------
 BaseRadio::BaseRadio(Form::FormItem *formItem, QWidget *parent) :
-        Form::IFormWidget(formItem,parent), m_ButGroup(0)
+    Form::IFormWidget(formItem,parent), m_ButGroup(0)
 {
     setObjectName("BaseRadio");
     // Prepare Widget Layout and label
-    QBoxLayout *hb = getBoxLayout(Label_OnLeft, m_FormItem->spec()->label(), this);
+    QBoxLayout *hb = getBoxLayout(labelAlignement(formItem, Label_OnTop), m_FormItem->spec()->label(), this);
 
     // Add QLabel
 //    m_Label->setSizePolicy(QSizePolicy::Preferred , QSizePolicy::Preferred);
@@ -563,6 +712,7 @@ BaseRadio::BaseRadio(Form::FormItem *formItem, QWidget *parent) :
     } else {
         radioLayout = new QBoxLayout(QBoxLayout::TopToBottom, gb);
     }
+    qWarning() << isRadioHorizontalAlign(m_FormItem);
     radioLayout->setContentsMargins(1, 0, 1, 0);
     QRadioButton *rb = 0;
     int i = 0;
@@ -599,7 +749,71 @@ BaseRadio::BaseRadio(Form::FormItem *formItem, QWidget *parent) :
 }
 
 BaseRadio::~BaseRadio()
-{ }
+{}
+
+QString BaseRadio::printableHtml(bool withValues) const
+{
+    // ⚪⚫
+    QStringList html;
+    bool horiz = isRadioHorizontalAlign(m_FormItem);
+    foreach (QRadioButton *button, m_RadioList) {
+        if (withValues) {
+            if (button->isChecked()) {
+                html << QString("%1&nbsp;%2<br />").arg("⚫").arg(button->text());
+                continue;
+            }
+        }
+        html << QString("%1&nbsp;%2<br />").arg("⚪").arg(button->text());
+    }
+    if (horiz) {
+        QString buttons;
+        foreach(const QString &s, html) {
+            buttons += QString("<td style=\"vertical-align: center; align: center\">"
+                               "%1"
+                               "</td>")
+                    .arg(s);
+
+        }
+        return QString("<table width=100% border=1 cellpadding=0 cellspacing=0 style=\"margin: 1em 0em 1em 0em\">"
+                       "<thead>"
+                       "<tr>"
+                       "<td style=\"vertical-align: top; font-weight: 600; padding: 5px\" colspan=%3>"
+                        "%1"
+                       "</td>"
+                       "</tr>"
+                       "</thead>"
+                       "<tbody>"
+                       "<tr>"
+                       "%2"
+                       "</tr>"
+                       "</tbody>"
+                       "</table>")
+                .arg(m_FormItem->spec()->label()).arg(buttons).arg(html.count());
+    } else {
+        QString buttons;
+        foreach(const QString &s, html) {
+            buttons += QString("<tr><td style=\"vertical-align: center; align: center\">"
+                               "%1"
+                               "</td></tr>")
+                    .arg(s);
+
+        }
+        return QString("<table width=100% border=1 cellpadding=0 cellspacing=0 style=\"margin: 1em 0em 1em 0em\">"
+                       "<thead>"
+                       "<tr>"
+                       "<td style=\"vertical-align: top; font-weight: 600; padding: 5px\">"
+                        "%1"
+                       "</td>"
+                       "</tr>"
+                       "</thead>"
+                       "<tbody>"
+                       "%2"
+                       "</tbody>"
+                       "</table>")
+                .arg(m_FormItem->spec()->label()).arg(buttons);
+    }
+    return QString();
+}
 
 void BaseRadio::retranslate()
 {
@@ -723,8 +937,8 @@ QVariant BaseRadioData::storableData() const
 //--------------------------------------------------------------------------------------------------------
 //------------------------------------------- BaseSimpleText -------------------------------------------
 //--------------------------------------------------------------------------------------------------------
-BaseSimpleText::BaseSimpleText(Form::FormItem *formItem, QWidget *parent, bool shortText)
-        : Form::IFormWidget(formItem,parent), m_Line(0), m_Text(0)
+BaseSimpleText::BaseSimpleText(Form::FormItem *formItem, QWidget *parent, bool shortText) :
+    Form::IFormWidget(formItem,parent), m_Line(0), m_Text(0)
 {
     // Prepare Widget Layout and label
     QBoxLayout * hb = getBoxLayout(Label_OnLeft, m_FormItem->spec()->label(), this);
@@ -761,6 +975,55 @@ BaseSimpleText::BaseSimpleText(Form::FormItem *formItem, QWidget *parent, bool s
 
 BaseSimpleText::~BaseSimpleText()
 {
+}
+
+QString BaseSimpleText::printableHtml(bool withValues) const
+{
+    if (withValues) {
+        if (getOptions(m_FormItem).contains("DontPrintEmptyValues")) {
+            if (m_Line && m_Line->text().isEmpty())
+                return QString();
+            else if (m_Text && m_Text->toPlainText().isEmpty())
+                return QString();
+        }
+        return QString("<table width=100% border=1 cellpadding=0 cellspacing=0  style=\"margin: 1em 0em 1em 0em\">"
+                       "<thead>"
+                       "<tr>"
+                       "<td style=\"vertical-align: top; font-weight: 600; padding: 5px\">"
+                       "%1"
+                       "</td>"
+                       "</tr>"
+                       "</thead>"
+                       "<tbody>"
+                       "<tr>"
+                       "<td style=\"vertical-align: top; padding-left:2em; padding-top:5px; padding-bottom: 5px; padding-right:2em\">"
+                       "%2"
+                       "</td>"
+                       "</tr>"
+                       "</tbody>"
+                       "</table>")
+                .arg(m_FormItem->spec()->label()).arg(m_Text->toHtml().remove("</body>").remove("</html>"));
+    } else {
+        return QString("<table width=100% border=1 cellpadding=0 cellspacing=0  style=\"margin: 1em 0em 1em 0em\">"
+                       "<thead>"
+                       "<tr>"
+                       "<td style=\"vertical-align: top; font-weight: 600; padding: 5px\">"
+                       "%1"
+                       "</td>"
+                       "</tr>"
+                       "</thead>"
+                       "<tbody>"
+                       "<tr>"
+                       "<td style=\"vertical-align: top; padding-left:2em; padding-top:5px; padding-bottom: 5px; padding-right:2em\">"
+                       "&nbsp;<br />&nbsp;<br />&nbsp;<br />&nbsp;<br />&nbsp;<br />"
+                       "&nbsp;<br />&nbsp;<br />&nbsp;<br />&nbsp;<br />&nbsp;<br />"
+                       "</td>"
+                       "</tr>"
+                       "</tbody>"
+                       "</table>")
+                .arg(m_FormItem->spec()->label());
+    }
+    return QString();
 }
 
 void BaseSimpleText::retranslate()
@@ -828,8 +1091,8 @@ QVariant BaseSimpleTextData::storableData() const
 //--------------------------------------------------------------------------------------------------------
 //----------------------------------------- BaseHelpText -----------------------------------------------
 //--------------------------------------------------------------------------------------------------------
-BaseHelpText::BaseHelpText(Form::FormItem *formItem, QWidget *parent)
-        : Form::IFormWidget(formItem,parent)
+BaseHelpText::BaseHelpText(Form::FormItem *formItem, QWidget *parent) :
+    Form::IFormWidget(formItem,parent)
 {
     QHBoxLayout * hb = new QHBoxLayout(this);
     // Add QLabel
@@ -843,6 +1106,24 @@ BaseHelpText::~BaseHelpText()
 {
 }
 
+QString BaseHelpText::printableHtml(bool withValues) const
+{
+    Q_UNUSED(withValues);
+    if (!getOptions(m_FormItem).contains("notprintable", Qt::CaseInsensitive)) {
+        return QString("<table width=100% border=0 cellpadding=0 cellspacing=0  style=\"margin: 0px\">"
+                       "<tbody>"
+                       "<tr>"
+                       "<td style=\"vertical-align: top; padding-left:2em; padding-top:5px; padding-bottom: 5px; padding-right:2em\">"
+                       "%2"
+                       "</td>"
+                       "</tr>"
+                       "</tbody>"
+                       "</table>")
+                .arg(m_FormItem->spec()->label());
+    }
+    return QString();
+}
+
 void BaseHelpText::retranslate()
 {
     m_Label->setText(m_FormItem->spec()->label());
@@ -851,8 +1132,8 @@ void BaseHelpText::retranslate()
 //--------------------------------------------------------------------------------------------------------
 //----------------------------------------- BaseLists --------------------------------------------------
 //--------------------------------------------------------------------------------------------------------
-BaseList::BaseList(Form::FormItem *formItem, QWidget *parent, bool uniqueList)
-        : Form::IFormWidget(formItem,parent), m_List(0)
+BaseList::BaseList(Form::FormItem *formItem, QWidget *parent, bool uniqueList) :
+    Form::IFormWidget(formItem,parent), m_List(0)
 {
     // Prepare Widget Layout and label
     QBoxLayout * hb = getBoxLayout(Label_OnLeft, m_FormItem->spec()->label(), this);
@@ -885,6 +1166,27 @@ BaseList::~BaseList()
 {
 }
 
+QString BaseList::printableHtml(bool withValues) const
+{
+    QString content;
+    if (!withValues) {
+        foreach(const QString &v, m_Model->stringList()) {
+            content += "<li>" + v + "</li>";
+        }
+    } else {
+        QModelIndexList indexes = m_List->selectionModel()->selectedIndexes();
+        qSort(indexes);
+        foreach(const QModelIndex &i, indexes) {
+            content += "<li>" + i.data().toString() + "</li>";
+        }
+    }
+    if (!content.isEmpty()) {
+        content.prepend("<ul>");
+        content.append("</ul>");
+    }
+    return content;
+}
+
 void BaseList::retranslate()
 {
     m_Label->setText(m_FormItem->spec()->label());
@@ -899,10 +1201,12 @@ void BaseList::retranslate()
                     .arg(QLocale().name(), m_FormItem->spec()->label()).arg(list.count()));
             return;
         }
-//        int i = 0;
-//        for (i = 0; i < m_List->count(); i++) {
-//            m_List->item(i)->setText(list[i]);
-//        }
+        // keep selection
+        QModelIndexList indexes = m_List->selectionModel()->selectedIndexes();
+        m_Model->setStringList(list);
+        foreach(const QModelIndex &i, indexes) {
+            m_List->selectionModel()->select(i, QItemSelectionModel::Select);
+        }
     }
 }
 
@@ -1011,6 +1315,25 @@ BaseCombo::~BaseCombo()
 {
 }
 
+QString BaseCombo::printableHtml(bool withValues) const
+{
+    QString content;
+    if (!withValues) {
+        for(int i = 0; i < m_Combo->count(); ++i) {
+            content += "<li>" + m_Combo->itemData(i).toString() + "</li>";
+        }
+    } else {
+        if (m_Combo->currentIndex()==-1)
+            return QString();
+        content += "<li>" + m_Combo->currentText() + "</li>";
+    }
+    if (!content.isEmpty()) {
+        content.prepend("<ul>");
+        content.append("</ul>");
+    }
+    return content;
+}
+
 void BaseCombo::retranslate()
 {
     m_Label->setText(m_FormItem->spec()->label());
@@ -1094,7 +1417,7 @@ QVariant BaseComboData::storableData() const
 //----------------------------------------- BaseDate ---------------------------------------------------
 //--------------------------------------------------------------------------------------------------------
 BaseDate::BaseDate(Form::FormItem *formItem, QWidget *parent) :
-        Form::IFormWidget(formItem,parent), m_Date(0)
+    Form::IFormWidget(formItem,parent), m_Date(0)
 {
     // Prepare Widget Layout and label
     QBoxLayout * hb = getBoxLayout(Label_OnLeft, m_FormItem->spec()->label(), this);
@@ -1110,9 +1433,9 @@ BaseDate::BaseDate(Form::FormItem *formItem, QWidget *parent) :
 
     // Manage options
     const QStringList &options = getOptions(formItem);
-    if (options.contains(::DATE_NOW))
+    if (options.contains(::DATE_NOW, Qt::CaseInsensitive))
         m_Date->setDateTime(QDateTime::currentDateTime());
-    if (options.contains(::DATE_PATIENTLIMITS)) {
+    if (options.contains(::DATE_PATIENTLIMITS, Qt::CaseInsensitive)) {
         connect(patient(), SIGNAL(currentPatientChanged()), this, SLOT(onPatientChanged()));
         onPatientChanged();
     }
@@ -1139,6 +1462,41 @@ void BaseDate::onPatientChanged()
     } else {
         m_Date->setMaximumDate(QDate::currentDate().addYears(200));
     }
+}
+
+QString BaseDate::printableHtml(bool withValues) const
+{
+    QString content;
+    if (!withValues) {
+        return QString("<table width=100% border=1 cellpadding=0 cellspacing=0  style=\"margin: 0px\">"
+                       "<tbody>"
+                       "<tr>"
+                       "<td style=\"vertical-align: top; padding-left:2em; padding-top:5px; padding-bottom: 5px; padding-right:2em\">"
+                       "%1"
+                       "</td>"
+                       "<td style=\"vertical-align: top;\" width=50%>"
+                       "&nbsp;"
+                       "</td>"
+                       "</tr>"
+                       "</tbody>"
+                       "</table>")
+                .arg(m_FormItem->spec()->label());
+    } else {
+        return QString("<table width=100% border=1 cellpadding=0 cellspacing=0  style=\"margin: 0px\">"
+                       "<tbody>"
+                       "<tr>"
+                       "<td style=\"vertical-align: top; padding-left:2em; padding-top:5px; padding-bottom: 5px; padding-right:2em\">"
+                       "%1"
+                       "</td>"
+                       "<td style=\"vertical-align: top;\">"
+                       "%2"
+                       "</td>"
+                       "</tr>"
+                       "</tbody>"
+                       "</table>")
+                .arg(m_FormItem->spec()->label()).arg(m_Date->date().toString(getDateFormat(m_FormItem)));
+    }
+    return content;
 }
 
 void BaseDate::retranslate()
@@ -1199,8 +1557,8 @@ QVariant BaseDateData::storableData() const
 //--------------------------------------------------------------------------------------------------------
 //------------------------------------------ BaseSpin --------------------------------------------------
 //--------------------------------------------------------------------------------------------------------
-BaseSpin::BaseSpin(Form::FormItem *formItem, QWidget *parent, bool doubleSpin)
-        : Form::IFormWidget(formItem,parent), m_Spin(0)
+BaseSpin::BaseSpin(Form::FormItem *formItem, QWidget *parent, bool doubleSpin) :
+    Form::IFormWidget(formItem,parent), m_Spin(0)
 {
     // Prepare Widget Layout and label
     QBoxLayout * hb = getBoxLayout(Label_OnLeft, m_FormItem->spec()->label(), this);
@@ -1242,6 +1600,51 @@ BaseSpin::BaseSpin(Form::FormItem *formItem, QWidget *parent, bool doubleSpin)
 
 BaseSpin::~BaseSpin()
 {}
+
+QString BaseSpin::printableHtml(bool withValues) const
+{
+    QString content;
+    if (!withValues) {
+        return QString("<table width=100% border=1 cellpadding=0 cellspacing=0  style=\"margin: 0px\">"
+                       "<tbody>"
+                       "<tr>"
+                       "<td style=\"vertical-align: top; padding-left:2em; padding-top:5px; padding-bottom: 5px; padding-right:2em\">"
+                       "%1"
+                       "</td>"
+                       "<td style=\"vertical-align: top;\" width=50%>"
+                       "&nbsp;"
+                       "</td>"
+                       "</tr>"
+                       "</tbody>"
+                       "</table>")
+                .arg(m_FormItem->spec()->label());
+    } else {
+        QSpinBox *spin = qobject_cast<QSpinBox*>(m_Spin);
+        QString value;
+        if (spin) {
+            value = QString::number(spin->value());
+        } else {
+            QDoubleSpinBox *dspin = qobject_cast<QDoubleSpinBox*>(m_Spin);
+            if (dspin) {
+                value = QString::number(dspin->value());
+            }
+        }
+        return QString("<table width=100% border=1 cellpadding=0 cellspacing=0  style=\"margin: 0px\">"
+                       "<tbody>"
+                       "<tr>"
+                       "<td style=\"vertical-align: top; padding-left:2em; padding-top:5px; padding-bottom: 5px; padding-right:2em\">"
+                       "%1"
+                       "</td>"
+                       "<td style=\"vertical-align: top;\">"
+                       "%2"
+                       "</td>"
+                       "</tr>"
+                       "</tbody>"
+                       "</table>")
+                .arg(m_FormItem->spec()->label()).arg(value);
+    }
+    return content;
+}
 
 void BaseSpin::retranslate()
 {
@@ -1318,8 +1721,8 @@ QVariant BaseSpinData::storableData() const
 //--------------------------------------------------------------------------------------------------------
 //------------------------------------------ BaseButton ------------------------------------------------
 //--------------------------------------------------------------------------------------------------------
-BaseButton::BaseButton(Form::FormItem *formItem, QWidget *parent)
-        : Form::IFormWidget(formItem,parent), m_Button(0)
+BaseButton::BaseButton(Form::FormItem *formItem, QWidget *parent) :
+    Form::IFormWidget(formItem,parent), m_Button(0)
 {
     QHBoxLayout * hb = new QHBoxLayout(this);
     hb->addStretch();
@@ -1350,8 +1753,8 @@ void BaseButton::retranslate()
 //--------------------------------------------------------------------------------------------------------
 //------------------------------------------ SumWidget ---------------------------------------------------
 //--------------------------------------------------------------------------------------------------------
-SumWidget::SumWidget(Form::FormItem *formItem, QWidget *parent)
-        : Form::IFormWidget(formItem, parent), line(0)
+SumWidget::SumWidget(Form::FormItem *formItem, QWidget *parent) :
+    Form::IFormWidget(formItem, parent), line(0)
 {
     setObjectName("SumWidget_"+formItem->uuid());
     // Prepare Widget Layout and label
@@ -1374,6 +1777,23 @@ SumWidget::SumWidget(Form::FormItem *formItem, QWidget *parent)
 
 SumWidget::~SumWidget()
 {
+}
+
+QString SumWidget::printableHtml(bool withValues) const
+{
+    return QString("<table width=100% border=1 cellpadding=0 cellspacing=0  style=\"margin: 1em 0em 1em 0em\">"
+                   "<tbody>"
+                   "<tr>"
+                   "<td style=\"vertical-align: top; font-weight: 600; padding: 5px\">"
+                    "%1"
+                   "</td>"
+                   "<td style=\"vertical-align: top; padding-left:2em; padding-top:5px; padding-bottom: 5px; padding-right:2em\">"
+                   "%2"
+                   "</td>"
+                   "</tr>"
+                   "</tbody>"
+                   "</table>")
+            .arg(m_FormItem->spec()->label()).arg(line->text());
 }
 
 void SumWidget::retranslate()

@@ -173,6 +173,39 @@ DrugsPrescriptorWidget::~DrugsPrescriptorWidget()
 {
 }
 
+QString DrugsPrescriptorWidget::printableHtml(bool withValues) const
+{
+    QString html = DrugsDB::DrugsIO().prescriptionToHtml(m_PrescriptionModel);
+    int begin = html.indexOf("<body");
+    begin = html.indexOf(">", begin) + 1;
+    int end = html.indexOf("</body>");
+    html = html.mid(begin, end-begin);
+    begin = html.indexOf("<a href");
+    if (begin!=-1) {
+        // remove the link
+        end = html.indexOf(">", begin) + 1;
+        html = html.left(begin) + html.mid(end);
+        html = html.remove("</a>");
+    }
+    return QString("<table width=100% border=1 cellspacing=0 style=\"margin: 1em 0em 1em 0em\">"
+                   "<thead>"
+                   "<tr>"
+                   "<td style=\"vertical-align: top; font-weight: 600; padding: 5px\">"
+                   "%1"
+                   "</td>"
+                   "</tr>"
+                   "</thead>"
+                   "<tbody>"
+                   "<tr>"
+                   "<td style=\"vertical-align: top; padding: 1px; margin: 0px\">"
+                   "%2"
+                   "</td>"
+                   "</tr>"
+                   "</tbody>"
+                   "</table>")
+            .arg(m_FormItem->spec()->label()).arg(html);
+}
+
 ////////////////////////////////////////// ItemData /////////////////////////////////////////////
 DrugsWidgetData::DrugsWidgetData(Form::FormItem *item) :
         Form::IFormItemData(), m_FormItem(item), m_Widget(0)

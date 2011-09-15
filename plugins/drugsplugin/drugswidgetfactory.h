@@ -93,6 +93,8 @@ public:
     DrugsPrescriptorWidget(const QString &name, Form::FormItem *linkedObject, QWidget *parent);
     ~DrugsPrescriptorWidget();
 
+    QString printableHtml(bool withValues = true) const;
+
 public:
     DrugsDB::DrugsModel *m_PrescriptionModel;
 

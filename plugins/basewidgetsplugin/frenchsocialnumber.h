@@ -36,6 +36,13 @@ QT_BEGIN_NAMESPACE
 class QLineEdit;
 QT_END_NAMESPACE
 
+/**
+ * \file frenchsocialnumber.h
+ * \author Eric MAEKER <eric.maeker@gmail.com>
+ * \version 0.6.0
+ * \date 15 Sept 2011
+*/
+
 namespace BaseWidgets {
 namespace Internal {
 
@@ -60,6 +67,12 @@ public:
 
     QString numberWithControlKey() const;
     QString numberWithoutControlKey() const;
+
+    QString emptyHtmlMask() const;
+    QString toHtml() const;
+
+public Q_SLOTS:
+    void populateWithPatientData();
 
 private:
     void populateLineEdits(QString number = QString::null);
@@ -89,6 +102,8 @@ class FrenchSocialNumberFormWidget: public Form::IFormWidget
 public:
     FrenchSocialNumberFormWidget(Form::FormItem *linkedObject, QWidget *parent = 0);
     ~FrenchSocialNumberFormWidget();
+
+    QString printableHtml(bool withValues = true) const;
 
     void addWidgetToContainer(Form::IFormWidget *) {}
     bool isContainer() const {return false;}

@@ -892,9 +892,6 @@ QString DrugsIO::prescriptionToXml(DrugsDB::DrugsModel *m, const QString &xmlExt
         IDrug *drug = drugs.at(i);
         d->drugPrescriptionToXml(drug, doc, fullPres);
     }
-
-    qWarning() << doc.toString(2);
-
     return doc.toString(2);
 
 //    QString xmldPrescription;

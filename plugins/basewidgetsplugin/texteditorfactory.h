@@ -33,6 +33,13 @@
 
 #include <QStringList>
 
+/**
+ * \file texteditorfactory.h
+ * \author Eric MAEKER <eric.maeker@gmail.com>
+ * \version 0.6.0
+ * \date 15 Sept 2011
+*/
+
 namespace BaseWidgets {
 
 class TextEditorFactory : public Form::IFormWidgetFactory
@@ -60,6 +67,8 @@ public:
 
     void addWidgetToContainer(Form::IFormWidget *) {}
     bool isContainer() const {return false;}
+
+    QString printableHtml(bool withValues = true) const;
 
 public Q_SLOTS:
     void retranslate();

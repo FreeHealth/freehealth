@@ -29,11 +29,16 @@
 
 #include <formmanagerplugin/iformitem.h>
 
+#include <coreplugin/icore.h>
+#include <coreplugin/ipatient.h>
+
 #include <QEvent>
 #include <QKeyEvent>
 #include <QRegExpValidator>
 
 #include <QDebug>
+
+static inline Core::IPatient *patient() {return Core::ICore::instance()->patient();}
 
 namespace {
 
@@ -86,6 +91,9 @@ FrenchSocialNumber::FrenchSocialNumber(QWidget *parent) :
         m_Edits.at(i)->installEventFilter(this);
     }
 
+    if (m_FullNumber.isEmpty())
+        populateWithPatientData();
+
 //    m_FullNumber = "299082B234349";
 //    populateLineEdits();
 //    checkControlKey();
@@ -99,6 +107,8 @@ FrenchSocialNumber::~FrenchSocialNumber()
 void FrenchSocialNumber::setNumberWithControlKey(const QString &number)
 {
     m_FullNumber = number;
+    if (m_FullNumber.isEmpty())
+        populateWithPatientData();
     populateLineEdits();
     checkControlKey();
 }
@@ -106,6 +116,8 @@ void FrenchSocialNumber::setNumberWithControlKey(const QString &number)
 void FrenchSocialNumber::setNumberWithoutControlKey(const QString &number)
 {
     m_FullNumber = number;
+    if (m_FullNumber.isEmpty())
+        populateWithPatientData();
     populateLineEdits();
     checkControlKey();
 }
@@ -156,6 +168,24 @@ QString FrenchSocialNumber::numberWithControlKey() const
 QString FrenchSocialNumber::numberWithoutControlKey() const
 {
     return m_FullNumber;
+}
+
+QString FrenchSocialNumber::emptyHtmlMask() const
+{
+    QStringList html;
+    for(int i = 0; i < m_NbChars.count(); ++i) {
+        html << QString().fill('_', m_NbChars.at(i));
+    }
+    return html.join("&nbsp;");
+}
+
+QString FrenchSocialNumber::toHtml() const
+{
+    QStringList html;
+    for(int i = 0; i < m_Edits.count(); ++i) {
+        html << m_Edits.at(i)->text();
+    }
+    return html.join("&nbsp;");
 }
 
 /** Calculate the control key and
@@ -392,6 +422,35 @@ bool FrenchSocialNumber::eventFilter(QObject *o, QEvent *e)
     return false;
 }
 
+void FrenchSocialNumber::populateWithPatientData()
+{
+    if (!m_FullNumber.isEmpty())
+        return;
+
+    m_FullNumber.fill(' ', 13);
+
+    // Add patient default values
+    if (patient()->data(Core::IPatient::Gender).toString()=="M") {
+        m_FullNumber[0] = '1';
+    } else if (patient()->data(Core::IPatient::Gender).toString()=="F") {
+        m_FullNumber[0] = '2';
+    }
+
+    // Birth date
+    QDate birth = patient()->data(Core::IPatient::DateOfBirth).toDate();
+    if (birth.isValid()) {
+        // year
+        m_FullNumber = m_FullNumber.left(1) + QString::number(birth.year()).right(2) + m_FullNumber.mid(3);
+        // month
+        QString month = QString::number(birth.month());
+        if (month.size()==1)
+            month.prepend("0");
+        m_FullNumber = m_FullNumber.left(3) + month + m_FullNumber.mid(5);
+    }
+
+    m_FullNumber = m_FullNumber.simplified();
+    qWarning() << "AUTO" << m_FullNumber;
+}
 
 
 ////////////////////////////////////////// FormItem /////////////////////////////////////////////
@@ -409,6 +468,9 @@ FrenchSocialNumberFormWidget::FrenchSocialNumberFormWidget(Form::FormItem *formI
     hb->addWidget(m_NSS);
     retranslate();
 
+    connect(patient(), SIGNAL(currentPatientChanged()), m_NSS, SLOT(populateWithPatientData()));
+    m_NSS->populateWithPatientData();
+
     // create itemdata
     m_ItemData = new FrenchSocialNumberFormData(formItem);
     m_ItemData->setWidget(m_NSS);
@@ -417,6 +479,21 @@ FrenchSocialNumberFormWidget::FrenchSocialNumberFormWidget(Form::FormItem *formI
 
 FrenchSocialNumberFormWidget::~FrenchSocialNumberFormWidget()
 {
+}
+
+QString FrenchSocialNumberFormWidget::printableHtml(bool withValues) const
+{
+    QString content;
+    if (!withValues) {
+        content += QString("%1&nbsp;:&nbsp;%2")
+                .arg(m_FormItem->spec()->label())
+                .arg(m_NSS->emptyHtmlMask());
+    } else {
+        content += QString("%1&nbsp;:&nbsp;%2")
+                .arg(m_FormItem->spec()->label())
+                .arg(m_NSS->toHtml());
+    }
+    return content;
 }
 
 void FrenchSocialNumberFormWidget::retranslate()

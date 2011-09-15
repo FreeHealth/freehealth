@@ -188,7 +188,7 @@ public:
     enum EpisodeCountPossibilities {
         NoEpisode = 0,
         UniqueEpisode,
-        MultiEpisode,
+        MultiEpisode
     };
 
     FormMain(QObject *parent = 0);
@@ -211,6 +211,9 @@ public:
     virtual void setEpisodePossibilities(const int i) {m_Episode = i;}
     virtual int episodePossibilities() const {return m_Episode;}
 
+    QString printableHtml(bool withValues = true) const;
+
+    // Specific to FormMain
     void createDebugPage();
     void toTreeWidget(QTreeWidget *tree);
 

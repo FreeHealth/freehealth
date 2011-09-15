@@ -72,6 +72,11 @@
 #include <QPainter>
 #include <QEvent>
 
+// Test
+#include <QTextBrowser>
+
+
+
 #include <QDebug>
 
 using namespace Form;
@@ -558,7 +563,15 @@ void FormPlaceHolder::printCurrentItem()
 
     qWarning() << formMain->uuid();
 
-//    qWarning() << formMain->printableHtml(true);
+    QDialog dlg;
+    QTextBrowser b(&dlg);
+    QVBoxLayout l(&dlg);
+    dlg.setLayout(&l);
+    l.addWidget(&b);
+    b.setHtml("<html><body>" + formMain->printableHtml(d->m_EpisodeModel->isEpisode(index)) + "</body></html>");
+    dlg.exec();
+
+    qWarning() << formMain->printableHtml(d->m_EpisodeModel->isEpisode(index));
 
 //    QStringList vals = formMain->valueReferences()->values(Form::FormItemValues::Value_Printing);
 //    if (vals.count()) {

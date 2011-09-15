@@ -40,8 +40,8 @@
 /**
  * \file iformwidgetfactory.h
  * \author Eric MAEKER <eric.maeker@gmail.com>
- * \version 0.5.0
- * \date 03 Apr 2011
+ * \version 0.6.0
+ * \date 13 Sept 2011
 */
 
 namespace Form {
@@ -100,6 +100,9 @@ public:
 
     virtual void setFormItem(Form::FormItem *link) { m_FormItem = link; }
     virtual Form::FormItem *formItem() { return m_FormItem; }
+
+    // Printing
+    virtual QString printableHtml(bool withValues = true) const {Q_UNUSED(withValues); return QString();}
 
 public Q_SLOTS:
     virtual void retranslate() {}
