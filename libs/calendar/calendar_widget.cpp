@@ -86,7 +86,7 @@ CalendarWidgetPrivate::CalendarWidgetPrivate(CalendarWidget *calendar) :
     m_dayGranularity = 15; // in minutes
     m_dayItemDefaultDuration = 30; // in minutes
     m_dayScaleHourDivider = 4;
-    m_hourHeight = 80; // in pixels
+    m_hourHeight = 40; // in pixels
 
     // navigation bar
     m_navbar = new CalendarNavbar(calendar);
