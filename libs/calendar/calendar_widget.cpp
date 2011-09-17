@@ -160,11 +160,12 @@ void CalendarWidget::viewTypeChanged() {
 		Q_ASSERT(true); // should never happend :)
 	}
 
-	if (qobject_cast<DayRangeBody*>(m_d->m_body)) {
-		qobject_cast<DayRangeBody*>(m_d->m_body)->setGranularity(m_d->m_dayGranularity);
-		qobject_cast<DayRangeBody*>(m_d->m_body)->setItemDefaultDuration(m_d->m_dayItemDefaultDuration);
-		qobject_cast<DayRangeBody*>(m_d->m_body)->setDayScaleHourDivider(m_d->m_dayScaleHourDivider);
-		qobject_cast<DayRangeBody*>(m_d->m_body)->setHourHeight(m_d->m_hourHeight);
+        DayRangeBody *body = qobject_cast<DayRangeBody*>(m_d->m_body);
+        if (body) {
+                body->setGranularity(m_d->m_dayGranularity);
+                body->setItemDefaultDuration(m_d->m_dayItemDefaultDuration);
+                body->setDayScaleHourDivider(m_d->m_dayScaleHourDivider);
+                body->setHourHeight(m_d->m_hourHeight);
 	}
 
     m_d->m_scrollArea->verticalScrollBar()->setSingleStep(50);
