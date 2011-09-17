@@ -40,6 +40,7 @@
 #include <coreplugin/icore.h>
 #include <coreplugin/ipatient.h>
 #include <coreplugin/iuser.h>
+#include <coreplugin/constants_tokensandsettings.h>
 
 #include <QHash>
 
@@ -168,6 +169,17 @@ bool CategoryItem::setData(const int ref, const QVariant &value)
 {
     if (d->m_Data.value(ref)==value)
         return true;
+    if (ref==ThemedIcon) {
+        QString name = value.toString();
+        if (name.startsWith(Core::Constants::TAG_APPLICATION_THEME_PATH)) {
+            name = name.remove(Core::Constants::TAG_APPLICATION_THEME_PATH);
+            if (name.startsWith("/"))
+                name = name.mid(1);
+        }
+        d->m_IsDirty = true;
+        d->m_Data.insert(ref, name);
+        return true;
+    }
     d->m_IsDirty = true;
     d->m_Data.insert(ref, value);
     return true;
