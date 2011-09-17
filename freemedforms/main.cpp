@@ -46,7 +46,12 @@ static const char* COREPLUGINSNAME = "Core";
 static const char* USERPLUGINSNAME = "UserManager";
 
 static const QString VERSION_MESSAGE =
-        QString("FreeMedForms %1 - %2 ; build on %3 %4 \n  SVN version: %5 \n  Compiled with Qt: %6 - Running with Qt: %7")
+        QString("FreeMedForms\n"
+                "     Version: %1 (%2 compilation)\n"
+                "     Build on %3 %4 \n"
+                "     SVN version: %5\n"
+                "     Compiled with Qt: %6\n"
+                "     Running with Qt: %7\n")
         .arg(PACKAGE_VERSION)
 #ifdef LINUX_INTEGRATED
 #  ifdef DEBUG
@@ -66,8 +71,41 @@ static const QString VERSION_MESSAGE =
         .arg(QT_VERSION_STR)
         .arg(qVersion());
 
-static const QString HELP_MESSAGE = VERSION_MESSAGE;
-
+static const QString HELP_MESSAGE =
+        QString("FreeMedForms %1 (%2 compilation) \n"
+                "Usage: freemedforms [--clear-user-databases] [--create-virtuals] [--config=...]\n"
+                "                    [--version,-version,-v] [--help,-help,-h]\n\n"
+                "FreeMedForms is free and open source an Electronic Medical Record manager.\n\n"
+                "Options:\n"
+                "  -h, -help, --help:         show this message\n"
+                "  -v, -version, --version:   show the version\n"
+                "  --config=/path/to/config.ini, --config=../../relative/path/config.ini\n"
+                "                             Define the configuration file to use.\n"
+                "                             In the case the specified file is found, in debug\n"
+                "                             mode, the application resources will be located\n"
+                "                             next to it (pixmaps, forms, user databases...)\n"
+                "  --clear-user-databases:    only available with debug compilations,\n"
+                "                             removes all user databases and recreate them. All\n"
+                "                             data will be lost.\n"
+                "  --create-virtuals:         create virtual data to ease tests only available\n"
+                "                             with debug compilation.\n"
+                "  --wine                     obsolete, ensure compatibility with wine\n"
+                )
+        .arg(PACKAGE_VERSION)
+#ifdef LINUX_INTEGRATED
+#  ifdef DEBUG
+        .arg("Debug (Linux Integrated)")
+#  else
+        .arg("Release (Linux Integrated)")
+#  endif
+#else  // NOT LINUX_INTEGRATED
+#  ifdef DEBUG
+        .arg("Debug")
+#  else
+        .arg("Release")
+#  endif
+#endif
+    ;
 static inline QString getPluginPaths()
 {
     QString app = qApp->applicationDirPath();
