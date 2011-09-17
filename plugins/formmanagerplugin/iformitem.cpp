@@ -451,6 +451,14 @@ void FormItem::addExtraData(const QString &id, const QString &data)
     }
 }
 
+QStringList FormItem::getOptions() const
+{
+    QStringList l;
+    l = m_ExtraDatas.value("options").split(";", QString::SkipEmptyParts);
+    l += m_ExtraDatas.value("option").split(";", QString::SkipEmptyParts);
+    return l;
+}
+
 FormItem *FormItem::createChildItem(const QString &uuid)
 {
     Form::FormItem *i = new Form::FormItem(this);

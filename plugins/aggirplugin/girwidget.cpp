@@ -243,3 +243,5 @@ QVariant GirItemData::storableData() const
     QString s = m_GirWidget->stringfiedGirScore();
     return s;
 }
+
+

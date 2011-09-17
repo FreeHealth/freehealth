@@ -240,6 +240,11 @@ void IcdCentralWidget::setIcdCollectionModel(IcdCollectionModel *model)
     ui->collectionView->setModel(model);
 }
 
+IcdCollectionModel *IcdCentralWidget::icdCollectionModel() const
+{
+    return d->m_CollectionModel;
+}
+
 void IcdCentralWidget::openFile(const QString &file)
 {
     if (d->m_CollectionModel->rowCount() > 0) {

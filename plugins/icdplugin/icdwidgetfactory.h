@@ -63,6 +63,8 @@ public:
     void addWidgetToContainer(Form::IFormWidget *) {}
     bool isContainer() const {return false;}
 
+    QString printableHtml(bool withValues = true) const;
+
 public Q_SLOTS:
     void retranslate();
 

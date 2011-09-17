@@ -69,6 +69,7 @@ public:
     CollectionModes collectionMode() const;
 
     void setIcdCollectionModel(IcdCollectionModel *model);
+    IcdCollectionModel *icdCollectionModel() const;
 
     void openFile(const QString &file);
     void readXmlCollection(const QString &xml);

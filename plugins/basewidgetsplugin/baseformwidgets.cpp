@@ -112,17 +112,9 @@ namespace {
     const char * const  LABEL_ALIGN_LEFT  = "labelonleft";
 }
 
-inline static QStringList getOptions(Form::FormItem *item)
-{
-    QStringList l;
-    l = item->extraDatas().value(::EXTRAS_KEY).split(";", QString::SkipEmptyParts);
-    l += item->extraDatas().value(::EXTRAS_KEY2).split(";", QString::SkipEmptyParts);
-    return l;
-}
-
 inline static Form::IFormWidget::LabelOptions labelAlignement(Form::FormItem *item, Form::IFormWidget::LabelOptions defaultValue = Form::IFormWidget::Label_OnLeft)
 {
-    const QStringList &o = getOptions(item);
+    const QStringList &o = item->getOptions();
     if (o.contains(::LABEL_ALIGN_TOP, Qt::CaseInsensitive))
         return Form::IFormWidget::Label_OnTop;
     else if (o.contains(::LABEL_ALIGN_LEFT, Qt::CaseInsensitive))
@@ -140,30 +132,30 @@ inline static int getNumberOfColumns(Form::FormItem *item, int defaultValue = 1)
 
 inline static int isCompactView(Form::FormItem *item, bool defaultValue = false)
 {
-    if (getOptions(item).contains(::EXTRAS_COMPACT_VIEW, Qt::CaseInsensitive))
+    if (item->getOptions().contains(::EXTRAS_COMPACT_VIEW, Qt::CaseInsensitive))
         return true;
     return defaultValue;
 }
 
 inline static int isGroupCheckable(Form::FormItem *item, bool defaultValue = false)
 {
-    if (getOptions(item).contains(::EXTRAS_GROUP_CHECKABLE, Qt::CaseInsensitive))
+    if (item->getOptions().contains(::EXTRAS_GROUP_CHECKABLE, Qt::CaseInsensitive))
         return true;
     return defaultValue;
 }
 
 inline static int isGroupChecked(Form::FormItem *item, bool defaultValue = false)
 {
-    if (getOptions(item).contains(::EXTRAS_GROUP_CHECKED, Qt::CaseInsensitive))
+    if (item->getOptions().contains(::EXTRAS_GROUP_CHECKED, Qt::CaseInsensitive))
         return true;
     return defaultValue;
 }
 
 inline static int isRadioHorizontalAlign(Form::FormItem *item, bool defaultValue = true)
 {
-    if (getOptions(item).contains(::EXTRAS_ALIGN_HORIZONTAL, Qt::CaseInsensitive))
+    if (item->getOptions().contains(::EXTRAS_ALIGN_HORIZONTAL, Qt::CaseInsensitive))
         return true;
-    else if (getOptions(item).contains(::EXTRAS_ALIGN_VERTICAL, Qt::CaseInsensitive))
+    else if (item->getOptions().contains(::EXTRAS_ALIGN_VERTICAL, Qt::CaseInsensitive))
         return false;
     return defaultValue;
 }
@@ -607,7 +599,7 @@ QString BaseCheck::printableHtml(bool withValues) const
     if (withValues) {
         if (m_Check->isChecked())
             return QString("%1&nbsp;%2").arg("☒").arg(m_FormItem->spec()->label());
-        else if (!getOptions(m_FormItem).contains("printonlychecked", Qt::CaseInsensitive))
+        else if (!m_FormItem->getOptions().contains("printonlychecked", Qt::CaseInsensitive))
             return QString("%1&nbsp;%2").arg("⎕").arg(m_FormItem->spec()->label());
     } else {
         return QString("%1&nbsp;%2").arg("⎕").arg(m_FormItem->spec()->label());
@@ -980,7 +972,7 @@ BaseSimpleText::~BaseSimpleText()
 QString BaseSimpleText::printableHtml(bool withValues) const
 {
     if (withValues) {
-        if (getOptions(m_FormItem).contains("DontPrintEmptyValues")) {
+        if (m_FormItem->getOptions().contains("DontPrintEmptyValues")) {
             if (m_Line && m_Line->text().isEmpty())
                 return QString();
             else if (m_Text && m_Text->toPlainText().isEmpty())
@@ -1109,7 +1101,7 @@ BaseHelpText::~BaseHelpText()
 QString BaseHelpText::printableHtml(bool withValues) const
 {
     Q_UNUSED(withValues);
-    if (!getOptions(m_FormItem).contains("notprintable", Qt::CaseInsensitive)) {
+    if (!m_FormItem->getOptions().contains("notprintable", Qt::CaseInsensitive)) {
         return QString("<table width=100% border=0 cellpadding=0 cellspacing=0  style=\"margin: 0px\">"
                        "<tbody>"
                        "<tr>"
@@ -1432,7 +1424,7 @@ BaseDate::BaseDate(Form::FormItem *formItem, QWidget *parent) :
     hb->addWidget(m_Date);
 
     // Manage options
-    const QStringList &options = getOptions(formItem);
+    const QStringList &options = formItem->getOptions();
     if (options.contains(::DATE_NOW, Qt::CaseInsensitive))
         m_Date->setDateTime(QDateTime::currentDateTime());
     if (options.contains(::DATE_PATIENTLIMITS, Qt::CaseInsensitive)) {

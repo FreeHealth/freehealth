@@ -26,11 +26,12 @@
 #include "icdwidgetfactory.h"
 #include "icdcentralwidget.h"
 
+#include <icdplugin/icdio.h>
+#include <icdplugin/icdcollectionmodel.h>
+
 #include <formmanagerplugin/iformitem.h>
 
-
 using namespace ICD;
-
 
 IcdWidgetFactory::IcdWidgetFactory(QObject *parent) :
         IFormWidgetFactory(parent)
@@ -67,30 +68,19 @@ Form::IFormWidget *IcdWidgetFactory::createWidget(const QString &name, Form::For
 }
 
 
-IcdFormWidget::IcdFormWidget(Form::FormItem *formItem, QWidget *parent)
-        : Form::IFormWidget(formItem, parent), m_CentralWidget(0)
+IcdFormWidget::IcdFormWidget(Form::FormItem *formItem, QWidget *parent) :
+    Form::IFormWidget(formItem, parent), m_CentralWidget(0)
 {
     // Prepare Widget Layout and label
     QBoxLayout * hb = getBoxLayout(Label_OnTop, m_FormItem->spec()->label(), this);
     hb->setSpacing(0);
     hb->setMargin(0);
-
-    // Add QLabel
     hb->addWidget(m_Label);
 
-    // Get options
-//    if (formItem->extraDatas().value("options").contains(OPTION_WITHPRESCRIBING, Qt::CaseInsensitive)) {
-//        m_WithPrescribing = true;
-//    } else if (name=="drugselector") {
-//        m_WithPrescribing = false;
-//    } else if (name=="prescription" || name=="prescriptor") {
-//        m_WithPrescribing = true;
-//    }
     // create main widget
     m_CentralWidget = new IcdCentralWidget(this);
 
     // set selector/collection
-
     hb->addWidget(m_CentralWidget);
 
     // create formitemdata
@@ -102,6 +92,56 @@ IcdFormWidget::IcdFormWidget(Form::FormItem *formItem, QWidget *parent)
 IcdFormWidget::~IcdFormWidget()
 {
 }
+
+QString IcdFormWidget::printableHtml(bool withValues) const
+{
+    if (withValues) {
+        if (m_FormItem->getOptions().contains("DontPrintEmptyValues")) {
+            if (m_CentralWidget->icdCollectionModel()->isEmpty())
+                return QString();
+        }
+        IcdIO io;
+        QString toPrint = io.icdCollectionToHtml(m_CentralWidget->icdCollectionModel());
+        return QString("<table width=100% border=1 cellpadding=0 cellspacing=0  style=\"margin: 1em 0em 1em 0em\">"
+                       "<thead>"
+                       "<tr>"
+                       "<td style=\"vertical-align: top; font-weight: 600; padding: 5px\">"
+                       "%1"
+                       "</td>"
+                       "</tr>"
+                       "</thead>"
+                       "<tbody>"
+                       "<tr>"
+                       "<td style=\"vertical-align: top; padding-left:2em; padding-top:5px; padding-bottom: 5px; padding-right:2em\">"
+                       "%2"
+                       "</td>"
+                       "</tr>"
+                       "</tbody>"
+                       "</table>")
+                .arg(m_FormItem->spec()->label()).arg(toPrint);
+    } else {
+        return QString("<table width=100% border=1 cellpadding=0 cellspacing=0  style=\"margin: 1em 0em 1em 0em\">"
+                       "<thead>"
+                       "<tr>"
+                       "<td style=\"vertical-align: top; font-weight: 600; padding: 5px\">"
+                       "%1"
+                       "</td>"
+                       "</tr>"
+                       "</thead>"
+                       "<tbody>"
+                       "<tr>"
+                       "<td style=\"vertical-align: top; padding-left:2em; padding-top:5px; padding-bottom: 5px; padding-right:2em\">"
+                       "&nbsp;<br />&nbsp;<br />&nbsp;<br />&nbsp;<br />&nbsp;<br />"
+                       "&nbsp;<br />&nbsp;<br />&nbsp;<br />&nbsp;<br />&nbsp;<br />"
+                       "</td>"
+                       "</tr>"
+                       "</tbody>"
+                       "</table>")
+                .arg(m_FormItem->spec()->label());
+    }
+    return QString();
+}
+
 
 void IcdFormWidget::retranslate()
 {

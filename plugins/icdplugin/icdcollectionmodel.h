@@ -55,7 +55,7 @@ public:
 
     void setCollectionIsSimpleList(bool state);
     bool isCollectionSimpleList() const;
-
+    bool isEmpty() const {return (rowCount()==0);}
 
     // Checking
     bool canAddThisCode(const QVariant &SID, bool checkDaget = true) const;

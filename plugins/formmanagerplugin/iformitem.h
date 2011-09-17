@@ -109,6 +109,7 @@ public:
     virtual void addExtraData(const QString &id, const QString &data);
     virtual QHash<QString,QString> extraDatas() const {return m_ExtraDatas;}
     virtual void clearExtraDatas() {m_ExtraDatas.clear();}
+    virtual QStringList getOptions() const;
 
     // Data representation
     virtual void setPatientDataRepresentation(const int ref) {m_PatientData = ref;}
