@@ -66,6 +66,7 @@ struct Calendar::CalendarWidgetPrivate
 	int m_dayGranularity;
 	int m_dayItemDefaultDuration;
     int m_dayScaleHourDivider;
+    int m_hourHeight;
 	QTimer m_timer; // used to refresh every date/time stuffs
 };
 
@@ -82,9 +83,10 @@ CalendarWidgetPrivate::CalendarWidgetPrivate(CalendarWidget *calendar) :
     m_scrollArea->setWidgetResizable(true);
     m_scrollArea->setFrameShape(QFrame::NoFrame);
 
-    m_dayGranularity = 15;
-    m_dayItemDefaultDuration = 30;
-    m_dayScaleHourDivider = 2;
+    m_dayGranularity = 15; // in minutes
+    m_dayItemDefaultDuration = 30; // in minutes
+    m_dayScaleHourDivider = 4;
+    m_hourHeight = 80; // in pixels
 
     // navigation bar
     m_navbar = new CalendarNavbar(calendar);
@@ -162,6 +164,7 @@ void CalendarWidget::viewTypeChanged() {
 		qobject_cast<DayRangeBody*>(m_d->m_body)->setGranularity(m_d->m_dayGranularity);
 		qobject_cast<DayRangeBody*>(m_d->m_body)->setItemDefaultDuration(m_d->m_dayItemDefaultDuration);
 		qobject_cast<DayRangeBody*>(m_d->m_body)->setDayScaleHourDivider(m_d->m_dayScaleHourDivider);
+		qobject_cast<DayRangeBody*>(m_d->m_body)->setHourHeight(m_d->m_hourHeight);
 	}
 
     m_d->m_scrollArea->verticalScrollBar()->setSingleStep(50);
@@ -230,4 +233,17 @@ void CalendarWidget::setDayScaleHourDivider(int value) {
 	m_d->m_dayScaleHourDivider = value;
 	if (qobject_cast<DayRangeBody*>(m_d->m_body))
 		qobject_cast<DayRangeBody*>(m_d->m_body)->setDayScaleHourDivider(value);
+}
+
+int CalendarWidget::hourHeight() const {
+    return m_d->m_hourHeight;
+}
+
+void CalendarWidget::setHourHeight(int value) {
+	if (m_d->m_hourHeight == value)
+		return;
+
+	m_d->m_hourHeight = value;
+	if (qobject_cast<DayRangeBody*>(m_d->m_body))
+		qobject_cast<DayRangeBody*>(m_d->m_body)->setHourHeight(value);
 }

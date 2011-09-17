@@ -121,7 +121,11 @@ namespace Calendar {
 		/** set the default duration of an item */
 		void setItemDefaultDuration(int value);
 
+        int dayScaleHourDivider() const { return m_dayScaleHourDivider; }
         void setDayScaleHourDivider(int value);
+
+        int hourHeight() const { return m_hourHeight; }
+        void setHourHeight(int value);
 
 		virtual QSize sizeHint() const;
 
@@ -149,7 +153,7 @@ namespace Calendar {
 
 		HourWidget *m_hourWidget;
 		static int m_leftScaleWidth;
-		static int m_hourHeight;
+//		static int m_hourHeight;
 		static int m_minimumItemHeight;
 		int m_rangeWidth;
 		QDateTime m_pressDateTime;
@@ -161,6 +165,7 @@ namespace Calendar {
 		int m_granularity;
 		int m_itemDefaultDuration;
         int m_dayScaleHourDivider;
+        int m_hourHeight;
 
 		// if end < begin, the end time will be considered as midnight
 		QRect getTimeIntervalRect(int day, const QTime &begin, const QTime &end) const;

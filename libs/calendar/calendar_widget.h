@@ -55,6 +55,8 @@ class CALENDAR_EXPORT CalendarWidget : public QWidget
      * Worth 2 by default.
      */
     Q_PROPERTY(int dayScaleHourDivider READ dayScaleHourDivider WRITE setDayScaleHourDivider)
+    /** Height (in pixels) of an hour. 40 by default. */
+    Q_PROPERTY(int hourHeight READ hourHeight WRITE setHourHeight)
 public:
     CalendarWidget(QWidget *parent = 0);
 
@@ -69,11 +71,13 @@ public:
     int dayGranularity() const;
     int dayItemDefaultDuration() const;
     int dayScaleHourDivider() const;
+    int hourHeight() const;
 
 public Q_SLOTS:
     void setDayGranularity(int value);
     void setDayItemDefaultDuration(int value);
     void setDayScaleHourDivider(int value);
+    void setHourHeight(int value);
 
 private Q_SLOTS:
     // navigation bar slots

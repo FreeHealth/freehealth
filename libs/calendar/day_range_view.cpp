@@ -50,7 +50,7 @@ enum { WarnBodyMouseEvents = false, WarnHeaderMouseEvents = false };
 using namespace Calendar;
 
 int DayRangeBody::m_leftScaleWidth = 60;
-int DayRangeBody::m_hourHeight = 40;
+//int DayRangeBody::m_hourHeight = 40;
 int DayRangeBody::m_minimumItemHeight = 20;
 
 /**
@@ -414,6 +414,15 @@ void DayRangeBody::setDayScaleHourDivider(int value) {
         return;
 
     m_dayScaleHourDivider = value;
+    update();
+}
+
+void DayRangeBody::setHourHeight(int value) {
+    if (value == m_hourHeight)
+        return;
+
+    m_hourHeight = value;
+    update();
 }
 
 QSize DayRangeBody::sizeHint() const {
