@@ -9,7 +9,7 @@
 # - installs the plugins
 # - clean the Qt sources
 
-QT_VERSION=4.7.1
+QT_VERSION=4.7.4
 ACTUAL_PATH=`pwd`
 
 # This script assumes that MySQL is installed with header files
@@ -17,8 +17,8 @@ ACTUAL_PATH=`pwd`
 # Get mysql binairies (adapt mirror)
 #    http://dev.mysql.com/get/Downloads/MySQL-5.5/mysql-5.5.11-osx10.6-x86.tar.gz/from/http://mirrors.ircam.fr/pub/mysql/
 #    http://dev.mysql.com/get/Downloads/MySQL-5.5/mysql-5.5.11-osx10.6-x86_64.tar.gz/from/http://mirrors.ircam.fr/pub/mysql/
-MYSQL_SOURCES=/usr/local/mysql-5.5.8-osx10.6-x86_64/include
-MYSQL_LIB=/usr/local/mysql-5.5.8-osx10.6-x86_64/lib
+MYSQL_SOURCES=/usr/local/mysql/include
+MYSQL_LIB=/usr/local/mysql/lib
 
 # Download Qt sources
 # curl http://get.qt.nokia.com/qt/source/qt-everywhere-opensource-src-4.6.2.tar.gz -o ~/Downloads/qt-everywhere-opensource-src-4.6.2.tar.gz -s
@@ -50,8 +50,13 @@ qmake -spec macx-g++ LIBS+="-L\"$MYSQL_LIB\" -lmysqlclient_r" INCLUDEPATH+="\"$M
 make
 make install
 
-# copy the libmysqlclient next to the plugin
 # name tool the plugin
+# install_name_tool -change libmysqlclient.18.dylib /usr/local/mysql/lib/libmysqlclient.18.dylib /Users/eric/QtSDK/Desktop/Qt/474/gcc/plugins/sqldrivers/libqsqlmysql.dylib
+QT_PLUGIN_PATH=`qmake -query QT_INSTALL_PLUGINS`
+install_name_tool -change \
+                    libmysqlclient.18.dylib \
+                    $MYSQL_LIB/libmysqlclient.18.dylib \
+                    $QT_PLUGIN_PATH/sqldrivers/libqsqlmysql.dylib
 
 echo "Removing temporary path"
 cd $ACTUAL_PATH
