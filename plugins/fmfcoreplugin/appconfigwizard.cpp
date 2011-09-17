@@ -206,8 +206,10 @@ void CoreConfigPage::retranslate()
 
     installCombo->clear();
     installCombo->addItem(theme()->icon(Constants::ICONCOMPUTER), tr("Single computer"));
-    installCombo->addItem(theme()->icon(Constants::ICONNETWORK), tr("Network (as client)"));
-    installCombo->addItem(theme()->icon(Constants::ICONNETWORK), tr("Network (as server)"));
+    if (QSqlDatabase::drivers().contains("QMYSQL")) {
+        installCombo->addItem(theme()->icon(Constants::ICONNETWORK), tr("Network (as client)"));
+        installCombo->addItem(theme()->icon(Constants::ICONNETWORK), tr("Network (as server)"));
+    }
 }
 
 bool CoreConfigPage::validatePage()
