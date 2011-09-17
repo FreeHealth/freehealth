@@ -50,7 +50,11 @@ class CALENDAR_EXPORT CalendarWidget : public QWidget
     Q_PROPERTY(int dayGranularity READ dayGranularity WRITE setDayGranularity)
     /** default item duration. 30 minutes by default. */
     Q_PROPERTY(int dayItemDefaultDuration READ dayItemDefaultDuration WRITE setDayItemDefaultDuration)
-
+    /** Divider for the vertical day scale in views.
+     * For instance, to have a line every half-hour, use 2. For a line every fifteen minutes, use 4.
+     * Worth 2 by default.
+     */
+    Q_PROPERTY(int dayScaleHourDivider READ dayScaleHourDivider WRITE setDayScaleHourDivider)
 public:
     CalendarWidget(QWidget *parent = 0);
 
@@ -62,14 +66,14 @@ public:
 
     void setDate(const QDate &date);
 
-    /** The number of minutes used when we want to move of size items. Worth 15 by default. */
     int dayGranularity() const;
-    /** default item duration. 30 minutes by default. */
     int dayItemDefaultDuration() const;
+    int dayScaleHourDivider() const;
 
 public Q_SLOTS:
     void setDayGranularity(int value);
     void setDayItemDefaultDuration(int value);
+    void setDayScaleHourDivider(int value);
 
 private Q_SLOTS:
     // navigation bar slots

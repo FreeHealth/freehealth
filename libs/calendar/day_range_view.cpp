@@ -387,7 +387,8 @@ DayRangeBody::DayRangeBody(QWidget *parent, int rangeWidth) :
 	m_pressItemWidget(0),
 	m_mouseMode(MouseMode_None),
 	m_granularity(30),
-	m_itemDefaultDuration(30) {
+	m_itemDefaultDuration(30),
+    m_dayScaleHourDivider(2) {
 	setSizePolicy(QSizePolicy::Expanding, QSizePolicy::Fixed);
 
 	setFirstDate(Calendar::getFirstDateByRandomDate(Calendar::View_Week, QDate::currentDate()));
@@ -406,6 +407,13 @@ void DayRangeBody::setItemDefaultDuration(int value) {
 		return;
 
 	m_itemDefaultDuration = value;
+}
+
+void DayRangeBody::setDayScaleHourDivider(int value) {
+    if (value == m_dayScaleHourDivider)
+        return;
+
+    m_dayScaleHourDivider = value;
 }
 
 QSize DayRangeBody::sizeHint() const {
@@ -441,7 +449,7 @@ void DayRangeBody::paintBody(QPainter *painter, const QRect &visibleRect) {
 						  visibleRect.width() - 1, (i + 1) * m_hourHeight);
 	}
 
-	// half-hours : optimization : just draw the first dashed line and copy it with drawPixmap because dashed lines are SLOOOW with X11
+	// between hours lines. Optimization: draw a single dashed line in a pixmap and copy it N times with drawPixmap because drawing dashed lines is VERY SLOW with X11
 	QPen oldPen = pen;
 	QPixmap dashPixmap(visibleRect.width(), 1);
 	QPainter dashPainter(&dashPixmap);
@@ -456,8 +464,9 @@ void DayRangeBody::paintBody(QPainter *painter, const QRect &visibleRect) {
 	pen.setDashPattern(QVector<qreal>() << 1 << 1);
 	painter->setPen(pen);
 	for (int i = 0; i < 24; ++i) {
-		painter->drawPixmap(m_leftScaleWidth, i * m_hourHeight + m_hourHeight / 2,
-							visibleRect.width(), 1, dashPixmap);
+        for (int j = 1; j < m_dayScaleHourDivider; j++)
+            painter->drawPixmap(m_leftScaleWidth, i * m_hourHeight + (j * m_hourHeight) / m_dayScaleHourDivider,
+                                visibleRect.width(), 1, dashPixmap);
 	}
 
 	painter->setPen(oldPen);

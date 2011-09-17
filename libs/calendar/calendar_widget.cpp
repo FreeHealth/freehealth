@@ -65,6 +65,7 @@ struct Calendar::CalendarWidgetPrivate
 	ViewWidget *m_body;
 	int m_dayGranularity;
 	int m_dayItemDefaultDuration;
+    int m_dayScaleHourDivider;
 	QTimer m_timer; // used to refresh every date/time stuffs
 };
 
@@ -83,6 +84,7 @@ CalendarWidgetPrivate::CalendarWidgetPrivate(CalendarWidget *calendar) :
 
     m_dayGranularity = 15;
     m_dayItemDefaultDuration = 30;
+    m_dayScaleHourDivider = 2;
 
     // navigation bar
     m_navbar = new CalendarNavbar(calendar);
@@ -90,7 +92,6 @@ CalendarWidgetPrivate::CalendarWidgetPrivate(CalendarWidget *calendar) :
     m_mainLayout->addWidget(m_navbar);
 
     m_mainLayout->addWidget(m_scrollArea);
-
 }
 
 // -----------------------------
@@ -160,16 +161,17 @@ void CalendarWidget::viewTypeChanged() {
 	if (qobject_cast<DayRangeBody*>(m_d->m_body)) {
 		qobject_cast<DayRangeBody*>(m_d->m_body)->setGranularity(m_d->m_dayGranularity);
 		qobject_cast<DayRangeBody*>(m_d->m_body)->setItemDefaultDuration(m_d->m_dayItemDefaultDuration);
+		qobject_cast<DayRangeBody*>(m_d->m_body)->setDayScaleHourDivider(m_d->m_dayScaleHourDivider);
 	}
 
-        m_d->m_scrollArea->verticalScrollBar()->setSingleStep(50);
-	m_d->m_scrollArea->setWidget(m_d->m_body);
-	m_d->m_body->setFirstDate(m_d->m_navbar->firstDate());
-	m_d->m_header->setMasterScrollArea(m_d->m_scrollArea);
-	m_d->m_mainLayout->insertWidget(1, m_d->m_header);
-	m_d->m_header->setFirstDate(m_d->m_navbar->firstDate());
-	m_d->m_header->setModel(m_model);
-	m_d->m_body->setModel(m_model);
+    m_d->m_scrollArea->verticalScrollBar()->setSingleStep(50);
+    m_d->m_scrollArea->setWidget(m_d->m_body);
+    m_d->m_body->setFirstDate(m_d->m_navbar->firstDate());
+    m_d->m_header->setMasterScrollArea(m_d->m_scrollArea);
+    m_d->m_mainLayout->insertWidget(1, m_d->m_header);
+    m_d->m_header->setFirstDate(m_d->m_navbar->firstDate());
+    m_d->m_header->setModel(m_model);
+    m_d->m_body->setModel(m_model);
 }
 
 /** Define the calendar view type \e viewType that can be: day view, week view and month view. */
@@ -191,12 +193,10 @@ ViewType CalendarWidget::viewType() const {
 	return m_d->m_navbar->viewType();
 }
 
-/** returns the day granularity (see granularity in day_range_view.h) */
 int CalendarWidget::dayGranularity() const {
 	return m_d->m_dayGranularity;
 }
 
-/** set the day granularity (only dividers of 24*60 are allowed) */
 void CalendarWidget::setDayGranularity(int value) {
 	if (m_d->m_dayGranularity == value)
 		return;
@@ -206,12 +206,10 @@ void CalendarWidget::setDayGranularity(int value) {
 		qobject_cast<DayRangeBody*>(m_d->m_body)->setGranularity(value);
 }
 
-/** returns the default item duration in day/week view */
 int CalendarWidget::dayItemDefaultDuration() const {
 	return m_d->m_dayItemDefaultDuration;
 }
 
-/** set the default item duration in day/week view */
 void CalendarWidget::setDayItemDefaultDuration(int value) {
 	if (m_d->m_dayItemDefaultDuration == value)
 		return;
@@ -219,4 +217,17 @@ void CalendarWidget::setDayItemDefaultDuration(int value) {
 	m_d->m_dayItemDefaultDuration = value;
 	if (qobject_cast<DayRangeBody*>(m_d->m_body))
 		qobject_cast<DayRangeBody*>(m_d->m_body)->setItemDefaultDuration(value);
+}
+
+int CalendarWidget::dayScaleHourDivider() const {
+    return m_d->m_dayScaleHourDivider;
+}
+
+void CalendarWidget::setDayScaleHourDivider(int value) {
+	if (m_d->m_dayScaleHourDivider == value)
+		return;
+
+	m_d->m_dayScaleHourDivider = value;
+	if (qobject_cast<DayRangeBody*>(m_d->m_body))
+		qobject_cast<DayRangeBody*>(m_d->m_body)->setDayScaleHourDivider(value);
 }

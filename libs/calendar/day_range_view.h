@@ -121,6 +121,8 @@ namespace Calendar {
 		/** set the default duration of an item */
 		void setItemDefaultDuration(int value);
 
+        void setDayScaleHourDivider(int value);
+
 		virtual QSize sizeHint() const;
 
 	protected:
@@ -133,9 +135,9 @@ namespace Calendar {
 		virtual void resetItemWidgets();
 
 	protected slots:
-                void itemInserted(const Calendar::CalendarItem &item);
-                void itemModified(const Calendar::CalendarItem &oldItem, const Calendar::CalendarItem &newItem);
-                void itemRemoved(const Calendar::CalendarItem &removedItem);
+        void itemInserted(const Calendar::CalendarItem &item);
+        void itemModified(const Calendar::CalendarItem &oldItem, const Calendar::CalendarItem &newItem);
+        void itemRemoved(const Calendar::CalendarItem &removedItem);
 
 	private:
 		enum MouseMode {
@@ -158,6 +160,7 @@ namespace Calendar {
 		MouseMode m_mouseMode;
 		int m_granularity;
 		int m_itemDefaultDuration;
+        int m_dayScaleHourDivider;
 
 		// if end < begin, the end time will be considered as midnight
 		QRect getTimeIntervalRect(int day, const QTime &begin, const QTime &end) const;

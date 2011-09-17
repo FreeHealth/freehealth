@@ -74,11 +74,11 @@ namespace Calendar {
 		/** called when a new model has been defined */
 		void setModel(AbstractCalendarModel *model);
 
-		/** set the master widget scrollarea used to paint (generally used for header to know how the body is painted) */
-		void setMasterScrollArea(QScrollArea *scrollArea);
+        /** set the master widget scrollarea used to paint (generally used for header to know how the body is painted) */
+        void setMasterScrollArea(QScrollArea *scrollArea);
 
-                /** set the context menu to use on items */
-                void setContextMenuForItems(QMenu *menu) {m_ItemContextMenu = menu;}
+        /** set the context menu to use on items */
+        void setContextMenuForItems(QMenu *menu) {m_ItemContextMenu = menu;}
 
 	signals:
 		void firstDateChanged();
@@ -89,7 +89,7 @@ namespace Calendar {
 		QPixmap generatePixmap();
 		void forceUpdate() { m_refreshGrid = true; update(); }
 
-                virtual void paintBody(QPainter *, const QRect &) {}
+        virtual void paintBody(QPainter *, const QRect &) {}
 		virtual void paintEvent(QPaintEvent *event);
 		virtual void resizeEvent(QResizeEvent *event);
 		virtual void refreshItemSizeAndPosition(CalendarItemWidget *) {}
@@ -97,7 +97,7 @@ namespace Calendar {
 		virtual void resetItemWidgets() {}
 		bool eventFilter(QObject *obj, QEvent *event);
 
-                QMenu *itemContextMenu() const {return m_ItemContextMenu;}
+        QMenu *itemContextMenu() const {return m_ItemContextMenu;}
 
 		CalendarItemWidget *getWidgetByUid(const QString &uid) const;
 		QList<CalendarItemWidget*> getWidgetsByDate(const QDate &dayDate) const;
@@ -113,7 +113,7 @@ namespace Calendar {
 		QDate m_firstDate;
 		bool m_refreshGrid;
 		AbstractCalendarModel *m_model;
-                QPointer<QMenu> m_ItemContextMenu;
+        QPointer<QMenu> m_ItemContextMenu;
 	};
 }
 
