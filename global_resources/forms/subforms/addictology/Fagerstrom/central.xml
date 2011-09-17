@@ -6,12 +6,12 @@
   <formdescription>
     <!-- Non translatable values -->
     <authors>Eric Maeker, MD</authors>
-    <version>0.5.0~alpha</version>
-    <compatversion>0.5.0</compatversion>
+    <version>0.6.0</version>
+    <compatversion>0.6.0</compatversion>
     <cdate>2011-03-15</cdate>
     <icon>addictology.png</icon>
     <weblink></weblink>
-    <bibliography pimd="1932883">Heatherton TF, Kozlowski LT, Frecker RC, Fagerstrom KO. The Fagerstrom Test for Nicotine Dependence : a revision of the Fagerstrom Tolerance Questionnaire. Br J Addict 1991;86(9):1119-27.</bibliography>
+    <bibliography pmid="1932883">Heatherton TF, Kozlowski LT, Frecker RC, Fagerstrom KO. The Fagerstrom Test for Nicotine Dependence : a revision of the Fagerstrom Tolerance Questionnaire. Br J Addict 1991;86(9):1119-27.</bibliography>
 
     <!-- Translatable values -->
     <licence>GPLv3</licence>
@@ -28,25 +28,21 @@
 
   </formdescription>
 
-  <MedForm>
-    <name>fagerstrom</name>
+  <MedForm name="Subs:Addictology::Smoking::Fagerstrom">
     <label lang="fr">Test de Fagerström</label>
     <label lang="de">Fagerström-Test</label>
     <label lang="xx">Fagerström test</label>
-    <type>form</type>
     <options>col=2</options>
 
-    <Item>
-      <name>cig_reveil</name>
+    <Item name="Subs:Addictology::Smoking::Fagerstrom::Wake" type="radio">
       <label lang="fr">Combien de temps après vous être réveillé, fumez-vous votre première cigarette ?</label>
       <label lang="de">Wann nach dem Aufwachen rauchst du Deine erste Zigarette?</label>
       <label lang="xx">How soon after you wake up do you have your first cigarette?</label>
-      <type>radio</type>
       <value>
-        <uuid id="0">cig_reveil0</uuid>
-        <uuid id="1">cig_reveil1</uuid>
-        <uuid id="2">cig_reveil2</uuid>
-        <uuid id="3">cig_reveil3</uuid>
+        <uuid id="0">wake0</uuid>
+        <uuid id="1">wake1</uuid>
+        <uuid id="2">wake2</uuid>
+        <uuid id="3">wake3</uuid>
         <possible id="0" lang="fr">moins de 5 minutes</possible>
         <possible id="1" lang="fr">entre 6 et 30 minutes</possible>
         <possible id="2" lang="fr">entre 31 et 60 minutes</possible>
@@ -66,15 +62,13 @@
       </value>
     </Item>
 
-    <Item>
-      <name>fum_interdit</name>
+    <Item name="Subs:Addictology::Smoking::Fagerstrom::Refrain" type="radio">
       <label lang="fr">Trouvez-vous difficile de ne pas fumer dans les endroits interdits (ex: cinémas, bibliothèques...) ?</label>
       <label lang="de">Findest du es schwierig, an Orten, wo das Rauchen verboten ist  (z.B. Kirche, Bücherei, Kino usw.), das Rauchen zu lassen?</label>
       <label lang="xx">Do you find it difficult to refrain from smoking in places where it is forbidden, e.g., in church, the library, the cinema, etc?</label>
-      <type>radio</type>
       <value>
-        <uuid id="0">fum_interdit0</uuid>
-        <uuid id="1">fum_interdit1</uuid>
+        <uuid id="0">refrain0</uuid>
+        <uuid id="1">refrain1</uuid>
         <possible id="0" lang="fr">oui</possible>
         <possible id="1" lang="fr">non</possible>
         <possible id="0" lang="de">ja</possible>
@@ -86,15 +80,13 @@
       </value>
     </Item>
 
-    <Item>
-      <name>cig_indispensable</name>
+    <Item name="Subs:Addictology::Smoking::Fagerstrom::GiveUp" type="radio">
       <label lang="fr">Quelle cigarette trouvez-vous la plus indispensable ?</label>
       <label lang="de">Auf welche Zigarette würdest du verzichten wollen?</label>
       <label lang="xx">Which cigarette would you hate most to give up?</label>
-      <type>radio</type>
       <value>
-        <uuid id="0">cig_indispensable0</uuid>
-        <uuid id="1">cig_indispensable1</uuid>
+        <uuid id="0">giveup0</uuid>
+        <uuid id="1">giveup1</uuid>
         <possible id="0" lang="fr">la première</possible>
         <possible id="1" lang="fr">une autre</possible>
         <possible id="0" lang="de">die erste am Morgen</possible>
@@ -106,17 +98,15 @@
       </value>
     </Item>
 
-    <Item>
-      <name>cig_par_jour</name>
+    <Item name="Subs:Addictology::Smoking::Fagerstrom::Amount" type="radio">
       <label lang="fr">Combien de cigarettes fumez-vous par jour en moyenne ?</label>
       <label lang="de">Wieviel Zigaretten rauchst du im allgemeinen pro Tag?</label>
       <label lang="xx">How many cigarettes do you smoke per day?</label>
-      <type>radio</type>
       <value>
-        <uuid id="0">cig_indispensable0</uuid>
-        <uuid id="1">cig_indispensable1</uuid>
-        <uuid id="2">cig_indispensable2</uuid>
-        <uuid id="3">cig_indispensable3</uuid>
+        <uuid id="0">amount0</uuid>
+        <uuid id="1">amount1</uuid>
+        <uuid id="2">amount2</uuid>
+        <uuid id="3">amount3</uuid>
         <possible id="0" lang="fr">10 ou moins</possible>
         <possible id="1" lang="fr">entre 11 et 20</possible>
         <possible id="2" lang="fr">entre 21 et 30</possible>
@@ -136,15 +126,13 @@
       </value>
     </Item>
 
-    <Item>
-      <name>premiere_heure</name>
+    <Item name="Subs:Addictology::Smoking::Fagerstrom::FirstHour" type="radio">
       <label lang="fr">Fumez-vous de façon plus rapprochée dans la première heure après le réveil que pendant le reste de la journée ?</label>
       <label lang="de">Rauchst du am Morgen im allgemeinen mehr als am Rest des Tages?</label>
       <label lang="xx">Do you smoke more often during the first hours after waking than during the rest of the day?</label>
-      <type>radio</type>
       <value>
-        <uuid id="0">premiere_heure0</uuid>
-        <uuid id="1">premiere_heure1</uuid>
+        <uuid id="0">firsthour0</uuid>
+        <uuid id="1">firsthour1</uuid>
         <possible id="0" lang="fr">oui</possible>
         <possible id="1" lang="fr">non</possible>
         <possible id="0" lang="de">ja</possible>
@@ -156,15 +144,13 @@
       </value>
     </Item>
 
-    <Item>
-      <name>maladie</name>
+    <Item name="Subs:Addictology::Smoking::Fagerstrom::EvenIll" type="radio">
       <label lang="fr">Fumez-vous même si une maladie vous oblige à rester au lit ?</label>
       <label lang="de">Kommt es vor, dass du rauchst, wenn du krank bist und tagsüber im Bett bleiben musst?</label>
       <label lang="xx">Do you smoke even if you are so ill that you are in bed most of the day?</label>
-      <type>radio</type>
       <value>
-        <uuid id="0">maladie0</uuid>
-        <uuid id="1">maladie1</uuid>
+        <uuid id="0">evenill0</uuid>
+        <uuid id="1">evenill1</uuid>
         <possible id="0" lang="fr">oui</possible>
         <possible id="1" lang="fr">non</possible>
         <possible id="0" lang="de">ja</possible>
@@ -176,22 +162,18 @@
       </value>
     </Item>
 
-    <Item>
-      <name>fagerstromScore</name>
+    <Item name="Subs:Addictology::Smoking::Fagerstrom::Score" type="sum">
       <label lang="fr">Score</label>
       <label lang="de">Gäste</label>
       <label lang="xx">Score</label>
-      <type>sum</type>
-      <sumof>cig_reveil;fum_interdit;cig_indispensable;cig_par_jour;premiere_heure;maladie</sumof>
+      <sumof>Subs:Addictology::Smoking::Fagerstrom::Wake;Subs:Addictology::Smoking::Fagerstrom::Refrain;Subs:Addictology::Smoking::Fagerstrom::GiveUp;Subs:Addictology::Smoking::Fagerstrom::Amount;Subs:Addictology::Smoking::Fagerstrom::FirstHour;Subs:Addictology::Smoking::Fagerstrom::EvenIll</sumof>
       <option>changeepisodelabel</option>
     </Item>
 
-    <Item>
-    <name>fagerstromScoreInterpret</name>
-    <type>helptext</type>
-    <label lang="fr">0-2 : Très faible&lt;br />3-4 : Faible&lt;br />5 : Moyenne&lt;br />6-7 : Forte&lt;br />8-10 : Très forte&lt;br /></label>
-    <label lang="de">0-2: Sehr niedrig&lt;br /> 3-4: Niedrige&lt;br /> 5: Durchschnittliche&lt;br /> 6-7: Starke&lt;br /> 8-10: Sehr hohe&lt;br /></label>
-    <label lang="xx">0-2: Very Low&lt;br /> 3-4: Low&lt;br /> 5: Average&lt;br /> 6-7: Strong&lt;br /> 8-10: Very high&lt;br /></label>
+    <Item name="Subs:Addictology::Smoking::Fagerstrom::ScoreInterpretation" type="helptext">
+      <label lang="fr">0-2 : Très faible&lt;br />3-4 : Faible&lt;br />5 : Moyenne&lt;br />6-7 : Forte&lt;br />8-10 : Très forte&lt;br /></label>
+      <label lang="de">0-2: Sehr niedrig&lt;br /> 3-4: Niedrige&lt;br /> 5: Durchschnittliche&lt;br /> 6-7: Starke&lt;br /> 8-10: Sehr hohe&lt;br /></label>
+      <label lang="xx">0-2: Very Low&lt;br /> 3-4: Low&lt;br /> 5: Average&lt;br /> 6-7: Strong&lt;br /> 8-10: Very high&lt;br /></label>
     </Item>
 
   </MedForm>
