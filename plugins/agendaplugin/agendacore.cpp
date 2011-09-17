@@ -156,6 +156,10 @@ CalendarItemModel *AgendaCore::calendarItemModel(const QVariant &calendarUid)
 
 void AgendaCore::postCoreInitialization()
 {
+    if (!user())
+        return;
+    if (user()->uuid().isEmpty())
+        return;
     // Add Agenda's UserViewer editor page
     pluginManager()->addObject(d->m_UserViewerPage = new Internal::UserCalendarPageForUserViewer(this));
 
