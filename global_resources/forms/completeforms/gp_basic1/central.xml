@@ -26,8 +26,6 @@
     <specialties lang="fr"></specialties>
     <specialties lang="xx"></specialties>
 
-    <htmlsynthesis lang="xx">synthesis_xx.html</htmlsynthesis>
-
   </formdescription>
 
   <MedForm name="GP::Basic::IdentityForm">
@@ -53,10 +51,6 @@
         <label lang="fr">Est le propriétaire du numéro de sécurité sociale</label>
       </Item>
     </Item>
-
-    <value>
-      <print lang="fr" file="./print_identity_fr.html" />
-    </value>
 
   </MedForm>
 
