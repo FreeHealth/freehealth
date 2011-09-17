@@ -52,6 +52,7 @@ make install
 
 # name tool the plugin
 # install_name_tool -change libmysqlclient.18.dylib /usr/local/mysql/lib/libmysqlclient.18.dylib /Users/eric/QtSDK/Desktop/Qt/474/gcc/plugins/sqldrivers/libqsqlmysql.dylib
+echo "Linking to MySQL lib"
 QT_PLUGIN_PATH=`qmake -query QT_INSTALL_PLUGINS`
 install_name_tool -change \
                     libmysqlclient.18.dylib \
