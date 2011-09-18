@@ -59,6 +59,8 @@ class QTreeWidget;
 #define LOG_FOR(object, message) Utils::Log::addMessage(object, message)
 #define LOG(message) Utils::Log::addMessage(this, message)
 
+#define LOG_DATABASE_FOR(object, message) Utils::Log::addDatabaseLog(object, message,__FILE__,__LINE__)
+#define LOG_DATABASE(message) Utils::Log::addDatabaseLog(this, message,__FILE__,__LINE__)
 
 namespace Utils {
 
@@ -115,6 +117,9 @@ public:
 
     static void addQueryError( const QObject * o, const QSqlQuery & q, const QString &file = QString::null, const int line = -1, bool forceWarning = false );
     static void addQueryError( const QString & o, const QSqlQuery & q, const QString &file = QString::null, const int line = -1, bool forceWarning = false );
+
+    static void addDatabaseLog( const QObject * o, const QSqlDatabase & q, const QString &file = QString::null, const int line = -1, bool forceWarning = false );
+    static void addDatabaseLog( const QString & o, const QSqlDatabase & q, const QString &file = QString::null, const int line = -1, bool forceWarning = false );
 
     /** \brief Add a message to tkLog containing the elapsed time of \t and restart it. Used for debugging purpose. */
     static void logTimeElapsed( QTime &t, const QString &object, const QString &forDoingThis );

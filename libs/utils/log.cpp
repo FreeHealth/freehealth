@@ -104,28 +104,44 @@ void Log::addErrors(const QString &o, const QStringList &err, const QString &fil
 
 void Log::addQueryError(const QObject *o, const QSqlQuery &q, const QString &file, const int line, bool forceWarning)
 {
-    if (!m_MuteConsole || forceWarning) {
-        qWarning() << QCoreApplication::translate("Log", "SQL Error : Driver : %1, Database : %2, Query : %3").arg(q.lastError().driverText(), q.lastError().databaseText(), q.lastQuery());
-    }
-    addError(o, QCoreApplication::translate("Log", "%1 : %2 - SQL Error : Driver : %3, Database : %4, Query : %5")
-             .arg(o->objectName(), QDateTime::currentDateTime().toString())
-             .arg(q.lastError().driverText())
-             .arg(q.lastError().databaseText())
-             .arg(q.lastQuery()), file, line, forceWarning);
+    addQueryError(o->objectName(), q, file, line, forceWarning);
 }
 
 void Log::addQueryError(const QString &o, const QSqlQuery &q, const QString &file, const int line, bool forceWarning)
 {
     if (!m_MuteConsole || forceWarning) {
-        qWarning() << QCoreApplication::translate("Log", "SQL Error : Driver : %1, Database : %2, Query : %3").arg(q.lastError().driverText(), q.lastError().databaseText(), q.lastQuery());
+        qWarning() << QCoreApplication::translate("Log", "SQL Error : Driver : %1, Database : %2, Query : %3")
+                      .arg(q.lastError().driverText())
+                      .arg(q.lastError().databaseText())
+                      .arg(q.lastQuery());
     }
     addError(o, QCoreApplication::translate("Log", "%1 : %2 - SQL Error : Driver : %3, Database : %4, Query : %5")
-             .arg(o)
-             .arg(QDateTime::currentDateTime().toString())
+             .arg(o, QDateTime::currentDateTime().toString())
              .arg(q.lastError().driverText())
              .arg(q.lastError().databaseText())
              .arg(q.lastQuery()), file, line, forceWarning);
 }
+
+void Log::addDatabaseLog( const QObject * o, const QSqlDatabase & q, const QString &file, const int line, bool forceWarning)
+{
+    addDatabaseLog(o->objectName(), q, file, line, forceWarning);
+}
+
+void Log::addDatabaseLog( const QString & o, const QSqlDatabase & q, const QString &file, const int line, bool forceWarning)
+{
+    if (!m_MuteConsole || forceWarning) {
+        qWarning() << q << "user" << q.userName() << "pass" << q.password();
+    }
+    addError(o, QCoreApplication::translate("Log", "%1 : %2 - SQL Error : Driver : %3, Database : %4, Query : %5")
+             .arg(o, QDateTime::currentDateTime().toString())
+             .arg(q.driverName())
+             .arg(q.hostName())
+             .arg(q.port())
+             .arg(q.userName())
+             .arg(q.password())
+             , file, line, forceWarning);
+}
+
 
 /** \brief Add a message to tkLog containing the elapsed time of \t and restart it. Used for debugging purpose. */
 void Log::logTimeElapsed(QTime &t, const QString &object, const QString &forDoingThis)
