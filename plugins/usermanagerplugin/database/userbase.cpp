@@ -787,7 +787,7 @@ bool UserBase::createVirtualUser(const QString &uid, const QString &name, const 
     // Create the user on the server
     if (driver()==MySQL) {
         /** \todo this can be a serious security problem */
-        createMySQLUser(pass, pass, Grant_Select|Grant_Update|Grant_Insert|Grant_Delete);
+        createMySQLUser(pass, pass, Grant_Select|Grant_Update|Grant_Insert|Grant_Delete|Grant_Create|Grant_Index);
     }
 
     QSqlQuery query(DB);

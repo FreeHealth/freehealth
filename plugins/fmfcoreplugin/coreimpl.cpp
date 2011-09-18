@@ -195,7 +195,10 @@ bool CoreImpl::initialize(const QStringList &arguments, QString *errorString)
     Q_UNUSED(errorString);
 
     // Test Versions
-    Utils::VersionNumber approved(m_Settings->licenseApprovedApplicationNumber());
+    QString appr = m_Settings->licenseApprovedApplicationNumber();
+    if (appr.isEmpty())
+        appr="0.0.0";
+    Utils::VersionNumber approved(appr);
     Utils::VersionNumber app(qApp->applicationVersion());
     // End
 

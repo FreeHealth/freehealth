@@ -214,7 +214,9 @@ void CoreConfigPage::retranslate()
 
 bool CoreConfigPage::validatePage()
 {
-    if (installCombo->currentIndex()==0) {
+    switch (installCombo->currentIndex()) {
+    case 0: // SQLite
+    {
         // Define the default database connector for the SQLite version
         Utils::DatabaseConnector connector;
         connector.setClearLog("fmf_admin");
@@ -223,6 +225,11 @@ bool CoreConfigPage::validatePage()
         connector.setAccessMode(Utils::DatabaseConnector::ReadWrite);
         // Path are automatically informed by settings()
         settings()->setDatabaseConnector(connector);
+        break;
+    }
+    case 1: // MySQL Client
+    case 2: // MySQL Server
+        break;
     }
     return true;
 }
@@ -378,14 +385,26 @@ bool ServerConfigPage::validatePage()
             QSqlDatabase::removeDatabase("__APP_CONNECTION_TESTER");
             return false;
         }
+
+        // execute script : server configurator
         LOG("Executing server configuration SQL script");
         if (!Utils::Database::executeSqlFile("__APP_CONNECTION_TESTER", serverConfigurationSqlScript()))
             LOG_ERROR("Server configuration script not processed");
         else
             LOG("Server correctly configurated");
+
+//        // recreate server connector
+//        Utils::DatabaseConnector connector;
+//        connector.setClearLog();
+//        connector.setClearPass();
+//        connector.setHost(serverWidget->hostName());
+//        connector.setPort(serverWidget->port());
+//        connector.setDriver(Utils::Database::MySQL);
+//        connector.setAccessMode(Utils::DatabaseConnector::ReadWrite);
+//        settings()->setDatabaseConnector(connector);
+//        Core::ICore::instance()->databaseServerLoginChanged();
     }
     QSqlDatabase::removeDatabase("__APP_CONNECTION_TESTER");
-
     return true;
 }
 

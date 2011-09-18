@@ -112,6 +112,7 @@ public:
 
     bool hasUserToSave();
 
+    virtual void forceReset();
     virtual void clear();
     virtual void refresh();
 

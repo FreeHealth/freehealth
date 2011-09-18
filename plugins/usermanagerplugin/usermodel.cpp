@@ -437,6 +437,7 @@ bool UserModel::setCurrentUser(const QString &clearLog, const QString &clearPass
     foreach(Internal::UserData *u, d->m_Uuid_UserList.values()) {
         if (!u || u->uuid().isEmpty()) {
             // paranoid code -> if one user is corrupt -> clear all
+            LOG_ERROR("Null user in model");
             qDeleteAll(d->m_Uuid_UserList);
             d->m_Uuid_UserList.clear();
             break;
@@ -490,15 +491,17 @@ bool UserModel::setCurrentUser(const QString &clearLog, const QString &clearPass
     Q_EMIT(userAboutToConnect(uuid));
 
     // 6. Feed Core::ISettings with the user's settings
-    Internal::UserData *user = d->m_Uuid_UserList[d->m_CurrentUserUuid];
-    settings()->setUserSettings(user->preferences());
+    Internal::UserData *user = d->m_Uuid_UserList.value(d->m_CurrentUserUuid);
+    if (user) {
+        settings()->setUserSettings(user->preferences());
 
-    // 7. Trace log
-    user->setCurrent(true);
-    user->setLastLogin(QDateTime::currentDateTime());
-    user->addLoginToHistory();
-    userBase()->saveUser(user);
-    user->setModified(false);
+        // 7. Trace log
+        user->setCurrent(true);
+        user->setLastLogin(QDateTime::currentDateTime());
+        user->addLoginToHistory();
+        userBase()->saveUser(user);
+        user->setModified(false);
+    }
     d->m_CurrentUserUuid = uuid;
 
     /** \todo this is not the usermanger role if asked uuid == currentuser */
@@ -593,8 +596,12 @@ bool UserModel::setCurrentUserIsServerManager()
     foreach(Internal::UserData *user, d->m_Uuid_UserList.values()) {
         if (!user || user->uuid().isEmpty()) {
             // paranoid code -> if one user is corrupt -> clear all
+            LOG_ERROR("Null user in model");
             qDeleteAll(d->m_Uuid_UserList);
             d->m_Uuid_UserList.clear();
+            u = new Internal::UserData(uuid);
+            u->setName(tr("Database server administrator"));
+            u->setRights(Constants::USER_ROLE_USERMANAGER, Core::IUser::AllRights);
             d->m_Uuid_UserList.insert(uuid, u);
             break;
         }
@@ -632,6 +639,12 @@ QModelIndex UserModel::currentUserIndex() const
         return list.at(0);
     }
     return QModelIndex();
+}
+
+void UserModel::forceReset()
+{
+    d->m_Sql->select();
+    reset();
 }
 
 /** Clears the content of the model. Silently save users if needed. */
@@ -913,6 +926,9 @@ QVariant UserModel::data(const QModelIndex &item, int role) const
 
     // get user
     QString uuid = d->m_Sql->data(d->m_Sql->index(item.row(), USER_UUID), Qt::DisplayRole).toString();
+    if (uuid.isEmpty())
+        return QVariant();
+
     if (uuid==d->m_CurrentUserUuid && (role==Qt::DisplayRole || role==Qt::EditRole)) {
         return currentUserData(item.column());
     }
@@ -1021,9 +1037,18 @@ Print::TextDocumentExtra *UserModel::paper(const int row, const int ref)
 /** Returns true if model has dirty rows that need to be saved into database. */
 bool UserModel::hasUserToSave()
 {
-    foreach(const Internal::UserData *u, d->m_Uuid_UserList.values())
+    foreach(const Internal::UserData *u, d->m_Uuid_UserList.values()) {
+        if (!u || u->uuid().isEmpty()) {
+            // paranoid code
+            LOG_ERROR("Null user in model");
+            qWarning() << d->m_Uuid_UserList;
+            qDeleteAll(d->m_Uuid_UserList.values(""));
+            d->m_Uuid_UserList.remove(0);
+            continue;
+        }
         if (u->isModified())
             return true;
+    }
     return false;
 }
 

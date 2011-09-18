@@ -84,13 +84,17 @@ static inline Core::ITheme *theme()  { return Core::ICore::instance()->theme(); 
 static inline void messageSplash(const QString &s) {theme()->messageSplashScreen(s); }
 
 UserManagerPlugin::UserManagerPlugin() :
-        aCreateUser(0), aChangeUser(0),
-        m_FirstCreation(new FirstRun_UserCreation(this)),
-        m_Mode(0)
+    aCreateUser(0), aChangeUser(0),
+    m_FirstCreation(new FirstRun_UserCreation(this)),
+    m_Mode(0)
 {
     setObjectName("UserManagerPlugin");
     if (Utils::Log::warnPluginsCreation())
         qWarning() << "creating UserManagerPlugin";
+
+    // Add Translator to the Application
+    Core::ICore::instance()->translators()->addNewTranslator("usermanagerplugin");
+
     addObject(m_FirstCreation);
 }
 
@@ -111,8 +115,6 @@ bool UserManagerPlugin::initialize(const QStringList &arguments, QString *errorS
     Q_UNUSED(arguments);
     Q_UNUSED(errorString);
 
-    // Add Translator to the Application
-    Core::ICore::instance()->translators()->addNewTranslator("usermanagerplugin");
     messageSplash(tr("Initializing user manager plugin..."));
 
     // is UserBase reachable ?
@@ -124,12 +126,6 @@ bool UserManagerPlugin::initialize(const QStringList &arguments, QString *errorS
         return false;
     }
 
-    // Ask for User login
-    if (!identifyUser()) {
-        *errorString = tr("User is not identified.");
-        return false;
-    }
-
     // manage virtual user creation
     if (commandLine()->value(Core::ICommandLine::CreateVirtuals).toBool()) {
         bool created = true;
@@ -138,31 +134,35 @@ bool UserManagerPlugin::initialize(const QStringList &arguments, QString *errorS
                                       QStringList() << "Medical Doctor",
                                       QStringList() << "Chief medical officer USS Enterprise",
                                       Core::IUser::AllRights, Core::IUser::AllRights, 0, Core::IUser::AllRights, Core::IUser::AllRights);
-        if (!created) {
-            return true;
+        if (created) {
+            userBase()->createVirtualUser("b5caead635a246a2a87ce676e9d2ef4d", "Phlox", "", Trans::Constants::Doctor, genders().indexOf(tkTr(Trans::Constants::MALE)),
+                                          QStringList() << "Intergalactic medicine",
+                                          QStringList() << "Chief medical officer Enterprise NX-01",
+                                          Core::IUser::AllRights, Core::IUser::AllRights, 0, Core::IUser::AllRights, Core::IUser::AllRights);
+            // Secretaries or so :  Uhura  U.S.S. Enterprise
+            userBase()->createVirtualUser("0f148ea3de6e47b8bbf9c2cedea47511", "Uhura", "", Trans::Constants::Madam, genders().indexOf(tkTr(Trans::Constants::FEMALE)),
+                                          QStringList() << "Communications officer",
+                                          QStringList() << "Enterprise NX-01",
+                                          0, 0, 0, Core::IUser::AllRights, 0);
+            // Nurses : Christine Chapel U.S.S. Enterprise
+            userBase()->createVirtualUser("b94ad4ee401a4fada0bf29fc8f8f3597", "Chapel", "Christine", Trans::Constants::Madam, genders().indexOf(tkTr(Trans::Constants::FEMALE)),
+                                          QStringList() << "Space nurse",
+                                          QStringList() << "Nurse, Enterprise NX-01",
+                                          0, 0, 0, Core::IUser::AllRights, Core::IUser::AllRights);
+            // Admins
+
+            // refresh model
+            UserModel::instance()->refresh();
+            // reconnect user
+            Utils::DatabaseConnector c = settings()->databaseConnector();
+            UserModel::instance()->setCurrentUser(c.clearLog(), c.clearPass(), true);
         }
+    }
 
-        userBase()->createVirtualUser("b5caead635a246a2a87ce676e9d2ef4d", "Phlox", "", Trans::Constants::Doctor, genders().indexOf(tkTr(Trans::Constants::MALE)),
-                                      QStringList() << "Intergalactic medicine",
-                                      QStringList() << "Chief medical officer Enterprise NX-01",
-                                      Core::IUser::AllRights, Core::IUser::AllRights, 0, Core::IUser::AllRights, Core::IUser::AllRights);
-        // Secretaries or so :  Uhura  U.S.S. Enterprise
-        userBase()->createVirtualUser("0f148ea3de6e47b8bbf9c2cedea47511", "Uhura", "", Trans::Constants::Madam, genders().indexOf(tkTr(Trans::Constants::FEMALE)),
-                                      QStringList() << "Communications officer",
-                                      QStringList() << "Enterprise NX-01",
-                                      0, 0, 0, Core::IUser::AllRights, 0);
-        // Nurses : Christine Chapel U.S.S. Enterprise
-        userBase()->createVirtualUser("b94ad4ee401a4fada0bf29fc8f8f3597", "Chapel", "Christine", Trans::Constants::Madam, genders().indexOf(tkTr(Trans::Constants::FEMALE)),
-                                      QStringList() << "Space nurse",
-                                      QStringList() << "Nurse, Enterprise NX-01",
-                                      0, 0, 0, Core::IUser::AllRights, Core::IUser::AllRights);
-        // Admins
-
-        // refresh model
-        UserModel::instance()->refresh();
-        // reconnect user
-        Utils::DatabaseConnector c = settings()->databaseConnector();
-        UserModel::instance()->setCurrentUser(c.clearLog(), c.clearPass(), true);
+    // Ask for User login
+    if (!identifyUser()) {
+        *errorString = tr("User is not identified.");
+        return false;
     }
 
     return true;

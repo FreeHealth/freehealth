@@ -58,10 +58,9 @@ UserCreationPage::UserCreationPage(QWidget *parent) :
     ui->setupUi(this);
     ui->userManagerButton->setIcon(theme()->icon(Core::Constants::ICONUSERMANAGER, Core::ITheme::MediumIcon));
     ui->completeWizButton->setIcon(theme()->icon(Core::Constants::ICONNEWUSER, Core::ITheme::MediumIcon));
-//    ui->quickWizButton->setIcon(theme()->icon(Core::Constants::ICONNEWUSER_QUICK, Core::ITheme::MediumIcon));
-//    ui->quickDocWizButton->setIcon(theme()->icon(Core::Constants::ICONDOCTOR, Core::ITheme::MediumIcon));
-//    ui->quickSecWizButton->setIcon(theme()->icon(Core::Constants::ICONSECRETARY, Core::ITheme::MediumIcon));
-//    ui->quickAdminWizButton->setIcon(theme()->icon(Core::Constants::ICONSERVERADMIN, Core::ITheme::MediumIcon));
+
+    ui->userManagerButton->setEnabled(false);
+    ui->completeWizButton->setEnabled(false);
 
     QPixmap pix = theme()->splashScreenPixmap("freemedforms-wizard-users.png");
     setPixmap(QWizard::BackgroundPixmap, pix);
@@ -69,10 +68,6 @@ UserCreationPage::UserCreationPage(QWidget *parent) :
 
     connect(ui->userManagerButton, SIGNAL(clicked()), this, SLOT(userManager()));
     connect(ui->completeWizButton, SIGNAL(clicked()), this, SLOT(userWizard()));
-//    connect(ui->quickWizButton, SIGNAL(clicked()), this, SLOT());
-//    connect(ui->quickDocWizButton, SIGNAL(clicked()), this, SLOT());
-//    connect(ui->quickSecWizButton, SIGNAL(clicked()), this, SLOT());
-//    connect(ui->quickAdminWizButton, SIGNAL(clicked()), this, SLOT());
 }
 
 UserCreationPage::~UserCreationPage()
@@ -97,9 +92,15 @@ void UserCreationPage::initializePage()
 {
     // Create the user database
     userBase()->initialize();
+    return;
 
     const Utils::DatabaseConnector &db = settings()->databaseConnector();
     if (db.driver()==Utils::Database::SQLite) {
+        if (!userModel()->setCurrentUser(Constants::DEFAULT_USER_CLEARLOGIN, Constants::DEFAULT_USER_CLEARPASSWORD)) {
+            LOG_ERROR("Unable to connect has default admin user");
+            ui->userManagerButton->setEnabled(false);
+        }
+    } else if (db.driver()==Utils::Database::MySQL) {
         if (!userModel()->setCurrentUser(Constants::DEFAULT_USER_CLEARLOGIN, Constants::DEFAULT_USER_CLEARPASSWORD)) {
             LOG_ERROR("Unable to connect has default admin user");
             ui->userManagerButton->setEnabled(false);
@@ -114,6 +115,7 @@ void UserCreationPage::initializePage()
 
 bool UserCreationPage::validatePage()
 {
+    return true;
     /** \todo code here */
     // Are there user created ? no -> can not validate
     // disconnected user database ?
@@ -122,17 +124,19 @@ bool UserCreationPage::validatePage()
 
     // remove login/pass from settings()
     Utils::DatabaseConnector db = settings()->databaseConnector();
-    db.setClearLog("");
-    db.setClearPass("");
+    db.setClearLog(Constants::DEFAULT_USER_CLEARLOGIN);
+    db.setClearPass(Constants::DEFAULT_USER_CLEARPASSWORD);
     settings()->setDatabaseConnector(db);
     settings()->sync();
+    Core::ICore::instance()->databaseServerLoginChanged();
     return true;
 }
 
 void UserCreationPage::retranslate()
 {
     setTitle(QCoreApplication::translate(Constants::TR_CONTEXT_USERS, Constants::CREATE_USER));
-    setSubTitle(tr("You can use the full user manager dialog to create user or create simple users using the user wizard."));
+//    setSubTitle(tr("You can use the full user manager dialog to create user or create simple users using the user wizard."));
+    setSubTitle(tr("You can create user inside FreeMedForms at the end of the configuration."));
     ui->userManagerButton->setText(tkTr(Trans::Constants::USERMANAGER_TEXT));
     ui->completeWizButton->setText(QCoreApplication::translate(Constants::TR_CONTEXT_USERS, Constants::USER_WIZARD));
 }

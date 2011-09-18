@@ -198,8 +198,7 @@ bool PmhBase::createDatabase(const QString &connectionName , const QString &dbNa
     if (connectionName != Constants::DB_NAME)
         return false;
 
-    LOG(tkTr(Trans::Constants::TRYING_TO_CREATE_1_PLACE_2)
-        .arg(dbName).arg(pathOrHostName));
+    LOG(tkTr(Trans::Constants::TRYING_TO_CREATE_1_PLACE_2).arg(dbName).arg(pathOrHostName));
 
     // create an empty database and connect
     QSqlDatabase DB;
@@ -215,18 +214,18 @@ bool PmhBase::createDatabase(const QString &connectionName , const QString &dbNa
     else if (driver == MySQL) {
         DB = QSqlDatabase::database(connectionName);
         if (!DB.open()) {
-            QSqlDatabase d = QSqlDatabase::addDatabase("QMYSQL", "__PMH_CREATOR");
-            d.setHostName(pathOrHostName);
-            d.setUserName(login);
-            d.setPassword(pass);
-            d.setPort(port);
-            if (!d.open()) {
+            QSqlDatabase dbcreate = QSqlDatabase::addDatabase("QMYSQL", "__PMH_CREATOR");
+            dbcreate.setHostName(pathOrHostName);
+            dbcreate.setUserName(login);
+            dbcreate.setPassword(pass);
+            dbcreate.setPort(port);
+            if (!dbcreate.open()) {
                 Utils::warningMessageBox(tkTr(Trans::Constants::UNABLE_TO_OPEN_DATABASE_1_ERROR_2)
                                          .arg(DB.connectionName()).arg(DB.lastError().text()),
                                          tr("Please contact dev team."));
                 return false;
             }
-            QSqlQuery q(QString("CREATE DATABASE `%1`").arg(dbName), d);
+            QSqlQuery q(QString("CREATE DATABASE `%1`").arg(dbName), dbcreate);
             if (!q.isActive()) {
                 LOG_QUERY_ERROR(q);
                 Utils::warningMessageBox(tkTr(Trans::Constants::DATABASE_1_CANNOT_BE_CREATED_ERROR_2)

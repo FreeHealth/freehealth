@@ -260,7 +260,7 @@ void UserWizard::done(int r)
                 QDialog::done(QDialog::Rejected);
             } else {
                 // Reset the usermodel
-                userModel()->refresh();
+                userModel()->forceReset();
 
                 // Submit extra-pages
                 for(int i = 0; i < m_ExtraPages.count(); ++i) {
