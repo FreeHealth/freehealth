@@ -84,13 +84,12 @@ public:
     DatabaseConnector &operator=(const DatabaseConnector &in);
     bool operator==(const DatabaseConnector &other) const;
 
-    void warn() const;
-
 private:
     Internal::DatabaseConnectorPrivate *d;
 };
 
 }  // End namespace Utils
 
+QDebug operator<<(QDebug dbg, const Utils::DatabaseConnector &c);
 
 #endif // UTILS_DATABASECONNECTOR_H

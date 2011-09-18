@@ -270,32 +270,33 @@ bool DatabaseConnector::operator==(const DatabaseConnector &other) const
     return false;
 }
 
-void DatabaseConnector::warn() const
+QDebug operator<<(QDebug dbg, const Utils::DatabaseConnector &c)
 {
     QString dr;
-    if (d->m_Driver==Database::SQLite) {
+    if (c.driver()==Database::SQLite) {
         dr = "SQLite";
-    } else if (d->m_Driver==Database::MySQL) {
+    } else if (c.driver()==Database::MySQL) {
         dr = "MySQL";
     }
-    if (d->m_DriverIsValid) {
+    if (c.isDriverValid()) {
         dr += "(Ok)";
     } else {
-        dr += "(**Error**)";
+        dr += "(**Invalid**)";
     }
     QString t = QString("DatabaseConnector(Log:%1; Pass:%2; Host:%3; Port:%4; Driver:%5")
-                .arg(d->m_ClearLog).arg(d->m_ClearPass).arg(d->m_HostName).arg(d->m_Port).arg(dr);
-    if (d->m_AccessMode==ReadWrite) {
+                .arg(c.clearLog()).arg(c.clearPass()).arg(c.host()).arg(c.port()).arg(dr);
+    if (c.accessMode()==Utils::DatabaseConnector::ReadWrite) {
         t += "; RW";
     } else {
         t += "; RO";
     }
-    if (d->m_Driver==Database::SQLite) {
+    if (c.driver()==Database::SQLite) {
         t += QString("\n                   RO:%1"
                      "\n                   RW:%2")
-                .arg(d->m_AbsPathToReadOnlySQLiteDb)
-                .arg(d->m_AbsPathToReadWriteSQLiteDb);
+                .arg(c.absPathToSqliteReadOnlyDatabase())
+                .arg(c.absPathToSqliteReadWriteDatabase());
     }
     t += ")";
-    qWarning() << t;
+    dbg.nospace() << t;
+    return dbg.space();
 }
