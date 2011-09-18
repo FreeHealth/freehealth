@@ -190,7 +190,7 @@ public:
     {
         // get user from database
         QString uuid = userBase()->getUuid(log64, pass64);
-        if (uuid.isEmpty())
+         if (uuid.isEmpty())
             return QString();
         // make sure it is not already in the hash
         if (m_Uuid_UserList.keys().contains(uuid)) {
@@ -373,16 +373,15 @@ UserModel::UserModel(QObject *parent) :
 {
     setObjectName("UserModel");
     d = new Internal::UserModelPrivate(this);
-    d->m_Sql = new QSqlTableModel(this, userBase()->database());
-    d->m_Sql->setTable(userBase()->table(Table_USERS));
-    d->m_Sql->setEditStrategy(QSqlTableModel::OnManualSubmit);
-    d->m_Sql->select();
 
     // install the Core Patient wrapper
     Core::ICore::instance()->setUser(d->m_UserModelWrapper);
     connect(settings(), SIGNAL(userSettingsSynchronized()), this, SLOT(updateUserPreferences()));
     if (!parent)
         setParent(qApp);
+
+    onCoreDatabaseServerChanged();
+//    connect(Core::ICore::instance(), SIGNAL(databaseServerChanged()), this, SLOT(onCoreDatabaseServerChanged()));
 }
 
 /** Destructor */
@@ -402,6 +401,16 @@ UserModel::~UserModel()
         delete d;
         d=0;
     }
+}
+
+void UserModel::onCoreDatabaseServerChanged()
+{
+    if (d->m_Sql)
+        delete d->m_Sql;
+    d->m_Sql = new QSqlTableModel(this, userBase()->database());
+    d->m_Sql->setTable(userBase()->table(Table_USERS));
+    d->m_Sql->setEditStrategy(QSqlTableModel::OnManualSubmit);
+    d->m_Sql->select();
 }
 
 /**
@@ -426,6 +435,12 @@ bool UserModel::setCurrentUser(const QString &clearLog, const QString &clearPass
     // 2. Check "in memory" users
     QString uuid;
     foreach(Internal::UserData *u, d->m_Uuid_UserList.values()) {
+        if (!u || u->uuid().isEmpty()) {
+            // paranoid code -> if one user is corrupt -> clear all
+            qDeleteAll(d->m_Uuid_UserList);
+            d->m_Uuid_UserList.clear();
+            break;
+        }
         if (u->login64()==log64 && u->cryptedPassword()==cryptpass64) {
             if (!refreshCache) {
                 uuid = u->uuid();
@@ -497,6 +512,12 @@ bool UserModel::setCurrentUser(const QString &clearLog, const QString &clearPass
         connector.setClearLog(clearLog);
         connector.setClearPass(clearPassword);
         settings()->setDatabaseConnector(connector);
+        // refresh userbase and model
+        delete d->m_Sql;
+        d->m_Sql = 0;
+        userBase()->onCoreDatabaseServerChanged();
+        onCoreDatabaseServerChanged();
+        // emit core signal for server login changed
         Core::ICore::instance()->databaseServerLoginChanged(); // with this signal all databases should reconnect
     }
 
@@ -569,8 +590,16 @@ bool UserModel::setCurrentUserIsServerManager()
     d->m_CurrentUserUuid.clear();
     d->m_CurrentUserRights = Core::IUser::AllRights;
     d->m_CurrentUserUuid = uuid;
-    foreach(Internal::UserData *user, d->m_Uuid_UserList.values())
+    foreach(Internal::UserData *user, d->m_Uuid_UserList.values()) {
+        if (!user || user->uuid().isEmpty()) {
+            // paranoid code -> if one user is corrupt -> clear all
+            qDeleteAll(d->m_Uuid_UserList);
+            d->m_Uuid_UserList.clear();
+            d->m_Uuid_UserList.insert(uuid, u);
+            break;
+        }
         user->setCurrent(false);
+    }
     u->setCurrent(true);
 
     Q_EMIT(userAboutToConnect(uuid));
@@ -923,6 +952,7 @@ QVariant UserModel::data(const QModelIndex &item, int role) const
                 return d->m_Sql->data(item, role);
             else if (d->m_CurrentUserUuid == uuid)
                 return d->m_Sql->data(item, role);
+            return QVariant();
         }
 
         // Here we must get values from complete user, so retreive it from database if necessary

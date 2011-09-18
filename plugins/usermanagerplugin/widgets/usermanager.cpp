@@ -294,8 +294,10 @@ bool UserManagerWidget::initialize()
     ui->userTableView->showColumn(Core::IUser::Name);
     ui->userTableView->showColumn(Core::IUser::SecondName);
     ui->userTableView->showColumn(Core::IUser::Firstname);
-    ui->userTableView->resizeColumnsToContents();
     ui->userTableView->horizontalHeader()->setStretchLastSection(true);
+    ui->userTableView->horizontalHeader()->setResizeMode(Core::IUser::Name, QHeaderView::ResizeToContents);
+    ui->userTableView->horizontalHeader()->setResizeMode(Core::IUser::SecondName, QHeaderView::ResizeToContents);
+    ui->userTableView->horizontalHeader()->setResizeMode(Core::IUser::Firstname, QHeaderView::ResizeToContents);
     ui->userTableView->horizontalHeader()->hide();
     ui->userTableView->verticalHeader()->hide();
     ui->userTableView->setEditTriggers(QAbstractItemView::NoEditTriggers);

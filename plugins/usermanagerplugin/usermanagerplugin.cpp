@@ -50,11 +50,12 @@
 #include <coreplugin/isettings.h>
 #include <coreplugin/constants.h>
 #include <coreplugin/translators.h>
-#include <coreplugin/actionmanager/actionmanager.h>
-#include <coreplugin/contextmanager/contextmanager.h>
 #include <coreplugin/iuser.h>
 #include <coreplugin/itheme.h>
 #include <coreplugin/icommandline.h>
+#include <coreplugin/modemanager/modemanager.h>
+#include <coreplugin/actionmanager/actionmanager.h>
+#include <coreplugin/contextmanager/contextmanager.h>
 
 #include <translationutils/constanttranslations.h>
 #include <utils/log.h>
@@ -75,6 +76,7 @@ static inline Core::ISettings *settings() {return Core::ICore::instance()->setti
 static inline UserPlugin::UserModel *userModel() {return UserPlugin::UserModel::instance();}
 static inline UserPlugin::Internal::UserBase *userBase() {return UserPlugin::Internal::UserBase::instance();}
 static inline Core::ContextManager *contextManager() { return Core::ICore::instance()->contextManager(); }
+static inline Core::ModeManager *modeManager() { return Core::ICore::instance()->modeManager(); }
 static inline Core::IUser *user() {return Core::ICore::instance()->user();}
 static inline Core::ICommandLine *commandLine() {return Core::ICore::instance()->commandLine();}
 
@@ -322,6 +324,7 @@ void UserManagerPlugin::changeCurrentUser()
         c.setClearPass(pass);
         settings()->setDatabaseConnector(c);
     }
+    modeManager()->activateMode(Core::Constants::MODE_PATIENT_SEARCH);
     Utils::informativeMessageBox(tkTr(Trans::Constants::CONNECTED_AS_1)
                                  .arg(userModel()->currentUserData(Core::IUser::FullName).toString()),"","","");
 }

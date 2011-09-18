@@ -113,7 +113,9 @@ void DefaultUserIdentityWidget::on_but_changePassword_clicked()
     if (d.exec() == QDialog::Accepted) {
         if (!d.canGetNewPassword())
             return;
-        d.applyChanges(m_Model, row);
+        if (d.applyChanges(m_Model, row)) {
+            Utils::informativeMessageBox(tr("Password saved"), tr("Password correctly modified and saved into database."), "", tr("Password saved"));
+        }
     }
 }
 

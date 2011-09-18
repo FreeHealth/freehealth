@@ -216,6 +216,8 @@ bool UserBase::initialize(Core::ISettings *s)
     if (!checkDatabaseVersion())
         return false;
 
+//    connect(Core::ICore::instance(), SIGNAL(databaseServerChanged()), this, SLOT(onCoreDatabaseServerChanged()));
+
     m_initialized = true;
     return true;
 }
@@ -424,18 +426,19 @@ bool UserBase::checkLogin(const QString &clearLogin, const QString &clearPasswor
     where.insert(USER_LOGIN, QString("='%1'").arg(Utils::loginForSQL(clearLogin)));
     where.insert(USER_PASSWORD, QString("='%1'").arg(Utils::cryptPassword(clearPassword)));
     QString req = select(Table_USERS, list, where);
-
-    {
-        QSqlQuery q(req , QSqlDatabase::database(USER_DB_CONNECTION));
-        if (q.isActive()) {
-            if (q.next()) {
-                m_LastUuid = q.value(0).toString();
-                m_LastLogin = q.value(1).toString();
-                m_LastPass = q.value(2).toString();
-            }
+    QSqlQuery query(QSqlDatabase::database(USER_DB_CONNECTION));
+    if (query.exec(req)) {
+        if (query.next()) {
+            m_LastUuid = query.value(0).toString();
+            m_LastLogin = query.value(1).toString();
+            m_LastPass = query.value(2).toString();
         } else {
-            LOG_QUERY_ERROR(q);
+            LOG_ERROR("No FreeMedForms user. Unable to connect user.");
         }
+    } else {
+        LOG_ERROR("Unable to connect user.");
+        LOG_QUERY_ERROR(query);
+        LOG_DATABASE(QSqlDatabase::database(USER_DB_CONNECTION));
     }
 
     if (QSqlDatabase::connectionNames().contains("__ConnectionTest__")) {
@@ -851,7 +854,7 @@ bool UserBase::createUser(UserData *user)
     case Utils::Database::MySQL:
         {
             // create user grants
-            Utils::Database::Grants grants = Grant_Select | Grant_Update | Grant_Insert | Grant_Delete | Grant_Create | Grant_Drop | Grant_Alter;
+            Utils::Database::Grants grants = Grant_Select | Grant_Update | Grant_Insert | Grant_Delete | Grant_Create | Grant_Drop | Grant_Alter | Grant_Index;
             if (user->hasRight(Constants::USER_ROLE_USERMANAGER, Core::IUser::Create)) {
                 grants |= Grant_CreateUser;
             }
@@ -1243,6 +1246,7 @@ void UserBase::onCoreDatabaseServerChanged()
     if (QSqlDatabase::connectionNames().contains(Constants::USER_DB_CONNECTION)) {
         QSqlDatabase::removeDatabase(Constants::USER_DB_CONNECTION);
     }
+    qWarning() << settings()->databaseConnector();
     initialize();
 }
 

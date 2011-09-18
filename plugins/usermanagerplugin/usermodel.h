@@ -165,6 +165,7 @@ protected:
     void emitUserConnected() const;
 
 private Q_SLOTS:
+    void onCoreDatabaseServerChanged();
     void updateUserPreferences();
 
 private:
