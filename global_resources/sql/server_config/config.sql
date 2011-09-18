@@ -45,10 +45,10 @@ DROP USER 'fmf_admin';
 CREATE USER 'fmf_admin' IDENTIFIED BY 'fmf_admin';
 
 GRANT CREATE USER, GRANT OPTION, RELOAD, SHOW DATABASES ON *.* TO 'fmf_admin'@'%' IDENTIFIED BY 'fmf_admin';
-GRANT SELECT, UPDATE, INSERT, DELETE, CREATE, DROP, ALTER, GRANT OPTION ON `fmf\_%`.* TO 'fmf_admin'@'%' IDENTIFIED BY 'fmf_admin';
+GRANT SELECT, UPDATE, INSERT, DELETE, CREATE, DROP, ALTER, INDEX, GRANT OPTION ON `fmf\_%`.* TO 'fmf_admin'@'%' IDENTIFIED BY 'fmf_admin';
 
 GRANT CREATE USER, GRANT OPTION, RELOAD, SHOW DATABASES ON *.* TO 'fmf_admin'@'localhost' IDENTIFIED BY 'fmf_admin';
-GRANT SELECT, UPDATE, INSERT, DELETE, CREATE, DROP, ALTER, GRANT OPTION ON `fmf\_%`.* TO 'fmf_admin'@'localhost' IDENTIFIED BY 'fmf_admin';
+GRANT SELECT, UPDATE, INSERT, DELETE, CREATE, DROP, ALTER, INDEX, GRANT OPTION ON `fmf\_%`.* TO 'fmf_admin'@'localhost' IDENTIFIED BY 'fmf_admin';
 
 GRANT SELECT, UPDATE, INSERT, DELETE, CREATE ON `mysql`.`user` TO 'fmf_admin'@'localhost' IDENTIFIED BY 'fmf_admin';
 GRANT SELECT, UPDATE, INSERT, DELETE, CREATE ON `mysql`.`user` TO 'fmf_admin'@'%' IDENTIFIED BY 'fmf_admin';
