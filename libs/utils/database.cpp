@@ -262,6 +262,7 @@ bool Database::createMySQLUser(const QString &log, const QString &password,
 
     if (!(userGrants & Grant_CreateUser)) {
         LOG_ERROR_FOR("Database", "Trying to create user, no suffisant rights.");
+        LOG_DATABASE_FOR("Database", database());
         return false;
     }
     // Creating grants string
@@ -316,6 +317,7 @@ bool Database::createMySQLUser(const QString &log, const QString &password,
     req = QString("CREATE USER '%1'@'%2' IDENTIFIED BY '%3';").arg(log).arg(uh).arg(password);
     if (!query.exec(req)) {
         LOG_QUERY_ERROR_FOR("Database", query);
+        LOG_DATABASE_FOR("Database", database());
         return false;
     }
     query.finish();
@@ -324,14 +326,15 @@ bool Database::createMySQLUser(const QString &log, const QString &password,
     req = QString("GRANT %1, GRANT OPTION ON `%2`.* TO '%3'@'%';").arg(g).arg(udb).arg(log);
     if (!query.exec(req)) {
         LOG_QUERY_ERROR_FOR("Database", query);
+        LOG_DATABASE_FOR("Database", database());
         query.finish();
         req = QString("DROP USER '%1'@'%2'").arg(log).arg(uh);
         if (!query.exec(req)) {
             LOG_QUERY_ERROR_FOR("Database", query);
+            LOG_DATABASE_FOR("Database", database());
         } else {
             LOG_ERROR_FOR("Database", QString("User %1 removed").arg(log));
         }
-        LOG_QUERY_ERROR_FOR("Database", query);
         return false;
     }
     query.finish();
@@ -340,14 +343,15 @@ bool Database::createMySQLUser(const QString &log, const QString &password,
         req = QString("GRANT CREATE USER, GRANT OPTION ON *.* TO '%1'@'%';").arg(log);
         if (!query.exec(req)) {
             LOG_QUERY_ERROR_FOR("Database", query);
+            LOG_DATABASE_FOR("Database", database());
             query.finish();
             req = QString("DROP USER '%1'@'%2'").arg(log).arg(uh);
             if (!query.exec(req)) {
                 LOG_QUERY_ERROR_FOR("Database", query);
+                LOG_DATABASE_FOR("Database", database());
             } else {
                 LOG_ERROR_FOR("Database", QString("User %1 removed").arg(log));
             }
-            LOG_QUERY_ERROR_FOR("Database", query);
             return false;
         }
         query.finish();
@@ -392,6 +396,7 @@ bool Database::dropMySQLUser(const QString &log, const QString &userHost)
     QSqlQuery query(database());
     if (!query.exec(req)) {
         LOG_QUERY_ERROR_FOR("Database", query);
+        LOG_DATABASE_FOR("Database", database());
         return false;
     } else {
         LOG_FOR("Database", QString("User %1 removed").arg(log));
