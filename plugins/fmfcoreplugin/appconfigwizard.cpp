@@ -378,9 +378,11 @@ bool ServerConfigPage::validatePage()
             QSqlDatabase::removeDatabase("__APP_CONNECTION_TESTER");
             return false;
         }
-//        qWarning() << test;
         LOG("Executing server configuration SQL script");
-        Utils::Database::executeSqlFile("__APP_CONNECTION_TESTER", serverConfigurationSqlScript());
+        if (!Utils::Database::executeSqlFile("__APP_CONNECTION_TESTER", serverConfigurationSqlScript()))
+            LOG_ERROR("Server configuration script not processed");
+        else
+            LOG("Server correctly configurated");
     }
     QSqlDatabase::removeDatabase("__APP_CONNECTION_TESTER");
 
