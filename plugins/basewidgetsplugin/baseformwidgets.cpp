@@ -323,7 +323,7 @@ QString BaseForm::printableHtml(bool withValues) const
 {
     QString header, content;
     // Start with the header of the form
-    header += QString("<table width=100% border=2 cellpadding=0 cellspacing=0  style=\"margin: 1em 0em 1em 0em\">"
+    header += QString("<table width=100% border=2 cellpadding=0 cellspacing=0  style=\"margin: 5px 0px 0px 0px\">"
                     "<thead>"
                     "<tr>"
                     "<td style=\"vertical-align: top;padding: 5px\">"
@@ -500,17 +500,12 @@ QString BaseGroup::printableHtml(bool withValues) const
     for(int i = 0; i < items.count(); ++i) {
         html << items.at(i)->formWidget()->printableHtml(withValues);
     }
+    // remove empty values
+    html.removeAll("");
 
     // group is empty ?
     if (withValues) {
-        bool empty = true;
-        foreach(const QString &s, html) {
-            if (!s.isEmpty()) {
-                empty = false;
-                break;
-            }
-        }
-        if (empty)
+        if (html.isEmpty())
             return QString();
     }
 
@@ -538,7 +533,7 @@ QString BaseGroup::printableHtml(bool withValues) const
         }
     }
 
-    return QString("<table width=100% border=1 cellpadding=0 cellspacing=0 style=\"margin: 1em 0em 1em 0em\">"
+    return QString("<table width=100% border=1 cellpadding=0 cellspacing=0 style=\"margin: 5px 0px 0px 0px\">"
                    "<thead>"
                    "<tr>"
                    "<td style=\"vertical-align: top; font-weight: 600; padding: 5px\" colspan=%1>"
@@ -751,22 +746,22 @@ QString BaseRadio::printableHtml(bool withValues) const
     foreach (QRadioButton *button, m_RadioList) {
         if (withValues) {
             if (button->isChecked()) {
-                html << QString("%1&nbsp;%2<br />").arg("⚫").arg(button->text());
+                html << QString("%1&nbsp;%2").arg("⚫").arg(button->text());
                 continue;
             }
         }
-        html << QString("%1&nbsp;%2<br />").arg("⚪").arg(button->text());
+        html << QString("%1&nbsp;%2").arg("⚪").arg(button->text());
     }
     if (horiz) {
         QString buttons;
         foreach(const QString &s, html) {
-            buttons += QString("<td style=\"vertical-align: center; align: center\">"
+            buttons += QString("<td style=\"vertical-align: center; align: center; padding: 2px\">"
                                "%1"
                                "</td>")
                     .arg(s);
 
         }
-        return QString("<table width=100% border=1 cellpadding=0 cellspacing=0 style=\"margin: 1em 0em 1em 0em\">"
+        return QString("<table width=100% border=1 cellpadding=0 cellspacing=0 style=\"margin: 5px 0px 0px 0px\">"
                        "<thead>"
                        "<tr>"
                        "<td style=\"vertical-align: top; font-weight: 600; padding: 5px\" colspan=%3>"
@@ -790,7 +785,7 @@ QString BaseRadio::printableHtml(bool withValues) const
                     .arg(s);
 
         }
-        return QString("<table width=100% border=1 cellpadding=0 cellspacing=0 style=\"margin: 1em 0em 1em 0em\">"
+        return QString("<table width=100% border=1 cellpadding=0 cellspacing=0 style=\"margin: 5px 0px 0px 0px\">"
                        "<thead>"
                        "<tr>"
                        "<td style=\"vertical-align: top; font-weight: 600; padding: 5px\">"
@@ -978,7 +973,7 @@ QString BaseSimpleText::printableHtml(bool withValues) const
             else if (m_Text && m_Text->toPlainText().isEmpty())
                 return QString();
         }
-        return QString("<table width=100% border=1 cellpadding=0 cellspacing=0  style=\"margin: 1em 0em 1em 0em\">"
+        return QString("<table width=100% border=1 cellpadding=0 cellspacing=0  style=\"margin: 5px 0px 0px 0px\">"
                        "<thead>"
                        "<tr>"
                        "<td style=\"vertical-align: top; font-weight: 600; padding: 5px\">"
@@ -996,7 +991,7 @@ QString BaseSimpleText::printableHtml(bool withValues) const
                        "</table>")
                 .arg(m_FormItem->spec()->label()).arg(m_Text->toHtml().remove("</body>").remove("</html>"));
     } else {
-        return QString("<table width=100% border=1 cellpadding=0 cellspacing=0  style=\"margin: 1em 0em 1em 0em\">"
+        return QString("<table width=100% border=1 cellpadding=0 cellspacing=0  style=\"margin: 5px 0px 0px 0px\">"
                        "<thead>"
                        "<tr>"
                        "<td style=\"vertical-align: top; font-weight: 600; padding: 5px\">"
@@ -1773,7 +1768,7 @@ SumWidget::~SumWidget()
 
 QString SumWidget::printableHtml(bool withValues) const
 {
-    return QString("<table width=100% border=1 cellpadding=0 cellspacing=0  style=\"margin: 1em 0em 1em 0em\">"
+    return QString("<table width=100% border=1 cellpadding=0 cellspacing=0  style=\"margin: 5px 0px 0px 0px\">"
                    "<tbody>"
                    "<tr>"
                    "<td style=\"vertical-align: top; font-weight: 600; padding: 5px\">"
