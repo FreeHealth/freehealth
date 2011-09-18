@@ -68,6 +68,7 @@ public:
 
         // ORDER CAN CHANGE
         ClearLogin,
+        ClearPassword,
         LocaleCodedLanguage,
         PersonalLinkId,
         FullName,
