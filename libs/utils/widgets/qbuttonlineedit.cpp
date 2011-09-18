@@ -183,7 +183,7 @@ void QButtonLineEdit::leftTrig(QAction *action)
 
 QString QButtonLineEdit::emptyTextWithExtraText() const
 {
-    if (m_leftButton->actions().count()>0)
+    if (m_leftButton && m_leftButton->actions().count()>0)
         return m_emptyString + " " + tr("(press Alt up/down cursor to cycle)");
     else
         return m_emptyString;
