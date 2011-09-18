@@ -413,16 +413,14 @@ bool Database::changeMySQLUserPassword(const QString &login, const QString &newP
         }
     }
 
-    // Testing current connected user grants
-    Grants userGrants = d->m_Grants.value(d->m_ConnectionName, Grant_NoGrant);
+    /** \todo manage user grants */
+//    // Testing current connected user grants
+//    Grants userGrants = d->m_Grants.value(d->m_ConnectionName, Grant_NoGrant);
 
-//    qWarning() << "xxxxxxxxxxxxxxxxxxxxxxx check";
-//    qWarning() << grants << (grants & Grant_All);
-
-    if (!(userGrants & Grant_CreateUser)) {
-        LOG_ERROR_FOR("Database", "Trying to create user, no suffisant rights.");
-        return false;
-    }
+//    if (!(userGrants & Grant_CreateUser)) {
+//        LOG_ERROR_FOR("Database", "Trying to create user, no suffisant rights.");
+//        return false;
+//    }
     LOG_FOR("Database", QString("Trying to change MySQL user password: \n"
                                 "       user: %1\n"
                                 "       host: %2(%3)\n"
@@ -436,9 +434,13 @@ bool Database::changeMySQLUserPassword(const QString &login, const QString &newP
     if (!query.exec(req)) {
         LOG_QUERY_ERROR_FOR("Database", query);
         return false;
-    } else {
-        LOG_FOR("Database", QString("User %1 password modified").arg(login));
     }
+    query.finish();
+    if (!query.exec("FLUSH PRIVILEGES;")) {
+        LOG_QUERY_ERROR_FOR("Database", query);
+        return false;
+    }
+    LOG_FOR("Database", QString("User %1 password modified").arg(login));
     return true;
 }
 
