@@ -433,11 +433,13 @@ bool Database::changeMySQLUserPassword(const QString &login, const QString &newP
     QSqlQuery query(database());
     if (!query.exec(req)) {
         LOG_QUERY_ERROR_FOR("Database", query);
+        LOG_DATABASE_FOR("Database", database());
         return false;
     }
     query.finish();
     if (!query.exec("FLUSH PRIVILEGES;")) {
         LOG_QUERY_ERROR_FOR("Database", query);
+        LOG_DATABASE_FOR("Database", database());
         return false;
     }
     LOG_FOR("Database", QString("User %1 password modified").arg(login));
@@ -474,7 +476,7 @@ bool Database::createConnection(const QString &connectionName, const QString &no
 
     if (WarnLogMessages) {
         LOG_FOR("Database", connectionName + "  //  " + dbName);
-        connector.warn();
+        qWarning() << connector;
     }
 
     // does driver is available
@@ -521,9 +523,7 @@ bool Database::createConnection(const QString &connectionName, const QString &no
             break;
         }
         case MySQL:
-        case PostSQL:
         {
-            /** \todo test this feature */
             DB = QSqlDatabase::addDatabase("QMYSQL" , "__DB_DELETOR" + connectionName);
             DB.setHostName(connector.host());
             DB.setUserName(connector.clearLog());
@@ -544,6 +544,7 @@ bool Database::createConnection(const QString &connectionName, const QString &no
                 LOG_FOR("Database", QString("Connected to host %1").arg(connector.host()));
             break;
         }
+        case PostSQL: break;
         }
         createOption = CreateDatabase;
     }
