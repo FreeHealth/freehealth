@@ -69,6 +69,7 @@ private:
     QAction *aAddEpisode;
     QAction *aValidateEpisode;
     QAction *aAddForm;
+    QAction *aPrintForm;
     QAction *aShowPatientSynthesis;
 };
 }

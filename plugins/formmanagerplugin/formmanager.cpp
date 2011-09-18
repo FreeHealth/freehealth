@@ -311,10 +311,11 @@ bool FormManager::readPmhxCategories(const QString &formUuidOrAbsPath)
 }
 
 FormActionHandler::FormActionHandler(QObject *parent) :
-        QObject(parent),
-        aAddEpisode(0),
-        aValidateEpisode(0),
-        aAddForm(0)
+    QObject(parent),
+    aAddEpisode(0),
+    aValidateEpisode(0),
+    aAddForm(0),
+    aPrintForm(0)
 {
     Core::ActionManager *am = actionManager();
     Core::UniqueIDManager *uid = Core::ICore::instance()->uniqueIDManager();
@@ -354,6 +355,14 @@ FormActionHandler::FormActionHandler(QObject *parent) :
     a->setIcon(th->icon(Core::Constants::ICONFORMS));
     cmd = am->registerAction(a, Constants::A_ADDFORM, formContext);
     cmd->setTranslations(Constants::ADDFORM_TEXT, Constants::ADDFORM_TEXT, Constants::FORM_TR_CONTEXT);
+//    cmenu->addAction(cmd, Core::Constants::G_EDIT_LIST);
+//    connect(a, SIGNAL(triggered()), this, SLOT(addItem()));
+
+    a = aPrintForm = new QAction(this);
+    a->setObjectName("aPrintForm");
+    a->setIcon(th->icon(Core::Constants::ICONPRINT));
+    cmd = am->registerAction(a, Constants::A_PRINTFORM, formContext);
+    cmd->setTranslations(Constants::PRINTFORM_TEXT, Constants::PRINTFORM_TEXT, Constants::FORM_TR_CONTEXT);
 //    cmenu->addAction(cmd, Core::Constants::G_EDIT_LIST);
 //    connect(a, SIGNAL(triggered()), this, SLOT(addItem()));
 

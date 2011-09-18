@@ -257,7 +257,11 @@ FormPlaceHolder::FormPlaceHolder(QWidget *parent) :
 //    d->m_FileTree = new QTreeView(this);
     d->m_FileTree = new Views::TreeView(this,0);
     d->m_FileTree->setActions(0);
-    d->m_FileTree->setCommands(QStringList() << Constants::A_ADDEPISODE << Constants::A_VALIDATEEPISODE << Constants::A_ADDFORM);
+    d->m_FileTree->setCommands(QStringList()
+                               << Constants::A_ADDEPISODE
+                               << Constants::A_VALIDATEEPISODE
+                               << Constants::A_ADDFORM
+                               << Constants::A_PRINTFORM);
     d->m_FileTree->addContexts(contexts());
     d->m_FileTree->setDeselectable(false);
     d->m_FileTree->disconnectActionsToDefaultSlots();
@@ -281,10 +285,9 @@ FormPlaceHolder::FormPlaceHolder(QWidget *parent) :
     connect(cmd->action(), SIGNAL(triggered()), this, SLOT(newEpisode()));
     cmd = actionManager()->command(Constants::A_ADDFORM);
     connect(cmd->action(), SIGNAL(triggered()), this, SLOT(addForm()));
-
-    /** \todo code here : use A_FILE_PRINTFORM */
-    cmd = actionManager()->command(Core::Constants::A_FILE_PRINT);
+    cmd = actionManager()->command(Constants::A_PRINTFORM);
     connect(cmd->action(), SIGNAL(triggered()), this, SLOT(printCurrentItem()));
+
 
 //    connect(d->m_FileTree, SIGNAL(customContextMenuRequested(QPoint)),
 //            this, SLOT(contextMenuRequested(QPoint)));
@@ -560,6 +563,29 @@ void FormPlaceHolder::printCurrentItem()
     Form::FormMain *formMain = d->m_EpisodeModel->formForIndex(form);
     if (!formMain)
         return;
+
+    // If episode selected -> activate episode
+    if (d->m_EpisodeModel->isEpisode(index))
+        setCurrentEpisode(index);
+
+    Core::IDocumentPrinter *p = printer();
+    if (!p) {
+        LOG_ERROR("No IDocumentPrinter found");
+        return;
+    }
+    p->clearTokens();
+    QHash<QString, QVariant> tokens;
+
+    tokens.insert(Core::Constants::TOKEN_DOCUMENTTITLE, formMain->spec()->label());
+//    // create a token for each FormItem of the FormMain
+//    foreach(FormItem *item, formMain->flattenFormItemChildren()) {
+//        if (item->itemDatas())
+//            tokens.insert(item->uuid(), item->itemDatas()->data(0, Form::IFormItemData::ID_Printable));
+//    }
+    p->addTokens(Core::IDocumentPrinter::Tokens_Global, tokens);
+
+    // print
+    p->print("<html><body>" + formMain->printableHtml(d->m_EpisodeModel->isEpisode(index)) + "</body></html>", Core::IDocumentPrinter::Papers_Generic_User, false);
 
     qWarning() << formMain->uuid();
 

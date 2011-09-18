@@ -100,6 +100,7 @@ namespace Constants {
     const char * const A_ADDEPISODE = "aForms.AddEpisode";
     const char * const A_VALIDATEEPISODE = "aForms.ValidateEpisode";
     const char * const A_ADDFORM = "aForm.AddForm";
+    const char * const A_PRINTFORM = "aForm.PrintForm";
     const char * const A_SHOWPATIENTSYNTHESIS = "aForm.PatientSynth";
     const char * const PATIENTSYNTHESIS_UUID = "PatientSynthesis";
 
@@ -107,6 +108,7 @@ namespace Constants {
     const char * const ADDEPISODE_TEXT = QT_TRANSLATE_NOOP("tkConstants", "Add Episode");
     const char * const VALIDATEEPISODE_TEXT = QT_TRANSLATE_NOOP("tkConstants", "Validate Episode");
     const char * const ADDFORM_TEXT = QT_TRANSLATE_NOOP("tkConstants", "Add Form");
+    const char * const PRINTFORM_TEXT = QT_TRANSLATE_NOOP("tkConstants", "Print Form");
     const char * const SHOWPATIENTSYNTHESIS_TEXT = QT_TRANSLATE_NOOP("tkConstants", "Show patient synthesis");
 
 }  // End namespace Form::Constants
