@@ -97,6 +97,9 @@ Q_SIGNALS:
 protected Q_SLOTS:
     void changeUserUuid();
 
+private Q_SLOTS:
+    void onCoreDatabaseServerChanged();
+
 private:
     Internal::PatientModelPrivate *d;
     static PatientModel *m_ActiveModel;

@@ -163,6 +163,7 @@ void PatientBasePlugin::postCoreInitialization()
 {
     if (Utils::Log::warnPluginsCreation())
         qWarning() << Q_FUNC_INFO;
+    PatientModel::activeModel()->refreshModel();
     PatientWidgetManager::instance()->postCoreInitialization();
 }
 

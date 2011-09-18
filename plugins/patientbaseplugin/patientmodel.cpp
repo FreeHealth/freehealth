@@ -59,6 +59,8 @@
 #include <QBuffer>
 #include <QByteArray>
 
+enum { WarnDatabaseFilter = true };
+
 using namespace Patients;
 using namespace Trans::ConstantTranslations;
 
@@ -150,7 +152,8 @@ public:
 
         filter += QString(" ORDER BY `%1` ASC").arg(patientBase()->fieldName(Constants::Table_IDENT, Constants::IDENTITY_NAME));
 
-//        qWarning() << filter;
+        if (WarnDatabaseFilter)
+            LOG_FOR(q, "Filtering patient database with: " + filter);
 
         m_SqlPatient->setFilter(filter);
         m_SqlPatient->select();
@@ -262,18 +265,9 @@ PatientModel::PatientModel(QObject *parent) :
 {
     setObjectName("PatientModel");
 
-    d->m_SqlPatient = new QSqlTableModel(this, patientBase()->database());
-    d->m_SqlPatient->setTable(patientBase()->table(Constants::Table_IDENT));
+    onCoreDatabaseServerChanged();
 
-    d->m_SqlPhoto = new QSqlTableModel(this, patientBase()->database());
-    d->m_SqlPhoto->setTable(patientBase()->table(Constants::Table_PATIENT_PHOTO));
-
-    d->connectSqlPatientSignals();
-//    changeUserUuid();
-    d->refreshFilter();
-//    d->m_SqlPatient->select();
-
-    connect(user(), SIGNAL(userChanged()), this, SLOT(changeUserUuid()));
+    connect(Core::ICore::instance(), SIGNAL(databaseServerChanged()), this, SLOT(onCoreDatabaseServerChanged()));
 }
 
 PatientModel::~PatientModel()
@@ -295,6 +289,23 @@ void PatientModel::changeUserUuid()
 
 //    qWarning() << Q_FUNC_INFO << d->m_LkIds << userModel()->practionnerLkIds(uuid);
 
+    d->refreshFilter();
+}
+
+void PatientModel::onCoreDatabaseServerChanged()
+{
+    if (d->m_SqlPatient) {
+        disconnect(d->m_SqlPatient);
+        delete d->m_SqlPatient;
+    }
+    d->m_SqlPatient = new QSqlTableModel(this, patientBase()->database());
+    d->m_SqlPatient->setTable(patientBase()->table(Constants::Table_IDENT));
+    d->connectSqlPatientSignals();
+
+    if (d->m_SqlPhoto)
+        delete d->m_SqlPhoto;
+    d->m_SqlPhoto = new QSqlTableModel(this, patientBase()->database());
+    d->m_SqlPhoto->setTable(patientBase()->table(Constants::Table_PATIENT_PHOTO));
     d->refreshFilter();
 }
 
