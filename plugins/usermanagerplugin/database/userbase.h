@@ -94,6 +94,7 @@ public:
     bool saveUser(UserData *user);
     bool deleteUser(const QString &uuid);
     bool saveUserPreferences(const QString &uid, const QString &content);
+    bool changeUserPassword(UserData *user, const QString &clearPassword);
 
     // datas checkers
     bool checkLogin(const QString &clearLogin, const QString &clearPassword) const;

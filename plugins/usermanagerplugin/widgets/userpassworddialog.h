@@ -34,7 +34,7 @@
 /**
  * \file userpassworddialog.h
  * \author Eric MAEKER <eric.maeker@gmail.com>
- * \version 0.0.2
+ * \version 0.6.0
  * \date 18 Sept 2009
 */
 
@@ -54,8 +54,9 @@ public:
     explicit UserPasswordDialog(const QString &actualCryptedPassword, QWidget *parent = 0);
 
     void changeTitle(const QString &title);
-    bool canGetNewPassword();
-    QString cryptedPassword();
+    bool canGetNewPassword() const;
+    QString cryptedPassword() const;
+    QString clearPassword() const;
 
 private Q_SLOTS:
     void accept();

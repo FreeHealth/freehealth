@@ -399,6 +399,49 @@ bool Database::dropMySQLUser(const QString &log, const QString &userHost)
     return true;
 }
 
+/** Change the password to \e newPassword for a MySQL user identified by his \e login. */
+bool Database::changeMySQLUserPassword(const QString &login, const QString &newPassword)
+{
+    if (login.isEmpty())
+        return false;
+
+    if (!database().isOpen()) {
+        if (!database().open()) {
+            LOG_ERROR_FOR("Database", tkTr(Trans::Constants::UNABLE_TO_OPEN_DATABASE_1_ERROR_2)
+                          .arg(database().connectionName()).arg(database().lastError().text()));
+            return false;
+        }
+    }
+
+    // Testing current connected user grants
+    Grants userGrants = d->m_Grants.value(d->m_ConnectionName, Grant_NoGrant);
+
+//    qWarning() << "xxxxxxxxxxxxxxxxxxxxxxx check";
+//    qWarning() << grants << (grants & Grant_All);
+
+    if (!(userGrants & Grant_CreateUser)) {
+        LOG_ERROR_FOR("Database", "Trying to create user, no suffisant rights.");
+        return false;
+    }
+    LOG_FOR("Database", QString("Trying to change MySQL user password: \n"
+                                "       user: %1\n"
+                                "       host: %2(%3)\n"
+                                "       new password: %4")
+            .arg(login).arg(database().hostName()).arg(database().port()).arg(newPassword));
+
+    QString req;
+    req = QString("UPDATE `mysql`.`user` SET `Password` = PASSWORD('%1') WHERE `User` = '%2';")
+            .arg(newPassword).arg(login);
+    QSqlQuery query(database());
+    if (!query.exec(req)) {
+        LOG_QUERY_ERROR_FOR("Database", query);
+        return false;
+    } else {
+        LOG_FOR("Database", QString("User %1 password modified").arg(login));
+    }
+    return true;
+}
+
 /** Return the pointer to the QSqlDatabase in use. */
 QSqlDatabase Database::database() const
 { return QSqlDatabase::database(d->m_ConnectionName); }
@@ -826,7 +869,7 @@ void Database::addIndex(const Utils::Field &field, const QString &name)
 {
     Internal::DbIndex index;
     // Get the correct field with field and table names
-    index.field = this->field( field.table, field.field);
+    index.field = this->field(field.table, field.field);
     // Recreate index' name
     if (name.isEmpty()) {
         index.name = index.field.tableName + "__" + index.field.fieldName;
@@ -1999,6 +2042,12 @@ QString DatabasePrivate::getTypeOfField(const int &fieldref) const
         case Database::FieldIsDate :
             toReturn = "date";
             break;
+    case Database::FieldIsTime:
+        toReturn = "time";
+        break;
+    case Database::FieldIsDateTime:
+        toReturn = "datetime";
+        break;
     case Database::FieldIsOneChar :
             toReturn = "varchar(1)";
             break;

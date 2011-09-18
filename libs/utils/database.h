@@ -156,6 +156,8 @@ public:
         FieldIsOneChar,
         FieldIsLanguageText,
         FieldIsDate,
+        FieldIsTime,
+        FieldIsDateTime,
         FieldIsBlob,
         FieldIsUUID,
         FieldIsBoolean,
@@ -238,6 +240,7 @@ public:
     virtual bool createMySQLDatabase(const QString &dbName);
     virtual bool createMySQLUser(const QString &log, const QString &clearPass, const Grants grants, const QString &userHost = QString::null, const QString &userDatabases = QString::null);
     virtual bool dropMySQLUser(const QString &log, const QString &userHost = QString::null);
+    virtual bool changeMySQLUserPassword(const QString &login, const QString &newPassword);
 
     // All drivers members
     virtual QSqlDatabase database() const;

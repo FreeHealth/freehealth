@@ -46,7 +46,7 @@ class  UserIdentifier;
 class USER_EXPORT UserIdentifier : public QDialog
 {
     Q_OBJECT
-    Q_DISABLE_COPY(UserIdentifier);
+    Q_DISABLE_COPY(UserIdentifier)
 
     enum { MaxNumberOfTries = 4 };
 

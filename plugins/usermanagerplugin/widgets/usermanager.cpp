@@ -223,7 +223,7 @@ UserManagerWidget::UserManagerWidget(QWidget *parent) :
     m_Context(0)
 {
     ui->setupUi(this);
-    ui->splitter->setSizes(QList<int>() << 0 << 1);
+    ui->splitter->setSizes(QList<int>() << 1 << 3);
     m_SearchBy = Core::IUser::Name;
     aCreateUser = new QAction(this);
     aCreateUser->setObjectName(QString::fromUtf8("aCreateUser"));
@@ -280,6 +280,8 @@ UserManagerWidget::UserManagerWidget(QWidget *parent) :
 //    m_ToolBar->addAction(aQuit);
     m_ToolBar->setSizePolicy(QSizePolicy::Preferred, QSizePolicy::Preferred);
     ui->toolbarLayout->addWidget(m_ToolBar);
+
+    ui->userViewer->setEnabled(false);
 }
 
 bool UserManagerWidget::initialize()
@@ -390,7 +392,6 @@ void UserManagerWidget::onSearchToolButtonTriggered(QAction *act)
 void UserManagerWidget::onCurrentUserChanged()
 {
     int row = UserModel::instance()->currentUserIndex().row();
-    qWarning() << "CURRENT" << row;
     ui->userTableView->setCurrentIndex(ui->userTableView->model()->index(row, Core::IUser::Name));
     ui->userTableView->selectRow(row);
     analyseCurrentUserRights();
@@ -445,7 +446,6 @@ void UserManagerWidget::onSaveRequested()
 {
     if ((!m_CanModify) || (!m_CanCreate))
         return;
-    qWarning() << Q_FUNC_INFO;
     m_ToolBar->setFocus();
 
     // tell all pages to submit data to the model
@@ -489,11 +489,11 @@ void UserManagerWidget::toggleSearchView()
 void UserManagerWidget::onUserActivated(const QModelIndex &index)
 {
     ui->userViewer->changeUserTo(index.row());
+    ui->userViewer->setEnabled(true);
 }
 
 void UserManagerWidget::selectUserTableView(int row)
 {
-    qWarning() << "SELECT" << row;
     ui->userViewer->changeUserTo(row);
 }
 

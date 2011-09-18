@@ -300,7 +300,6 @@ void DefaultUserProfessionalWidget::setUserIndex(const int index)
 {
     if (m_Mapper)
         m_Mapper->setCurrentIndex(index);
-    qWarning() << Q_FUNC_INFO << m_Mapper << m_Mapper->model() << m_Mapper->currentIndex();
 }
 
 void DefaultUserProfessionalWidget::clear()
@@ -310,7 +309,6 @@ void DefaultUserProfessionalWidget::clear()
 
 bool DefaultUserProfessionalWidget::submit()
 {
-    qWarning() << Q_FUNC_INFO << m_Mapper << m_Mapper->model() << m_Mapper->currentIndex();
     if (m_Mapper)
         return m_Mapper->submit();
     return false;

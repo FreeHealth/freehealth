@@ -125,7 +125,6 @@ UserBase::UserBase(QObject *parent)
     addField(Table_USERS, USER_MAIL,         "MAIL",            FieldIsShortText);
     addField(Table_USERS, USER_LANGUAGE,     "LANGUAGE",        FieldIsLanguageText);
     addField(Table_USERS, USER_LOCKER,       "LOCKER",          FieldIsBoolean);
-
     addIndex(Table_USERS, USER_UUID);
     addIndex(Table_USERS, USER_LOGIN);
     addIndex(Table_USERS, USER_NAME);
@@ -259,59 +258,55 @@ UserData *UserBase::getUser(const QHash<int, QString> &conditions) const
     QString req = select(Table_USERS, conditions);
     UserData *toReturn = 0;
     QString uuid = "";
-    {
-        QSqlQuery q(req , DB);
-        if (q.isActive()) {
-            if (q.next()) {
-                int i = 0;
-                uuid = q.value(USER_UUID).toString();
-                toReturn = new UserData(uuid);
-                for (i = 0; i < USER_MaxParam; ++i)
-                    toReturn->setValue(Table_USERS, i , q.value(i));
-            }
-        } else {
-            LOG_QUERY_ERROR(q);
+    QSqlQuery query(req , DB);
+    if (query.isActive()) {
+        if (query.next()) {
+            int i = 0;
+            uuid = query.value(USER_UUID).toString();
+            toReturn = new UserData(uuid);
+            for (i = 0; i < USER_MaxParam; ++i)
+                toReturn->setValue(Table_USERS, i , query.value(i));
         }
+    } else {
+        LOG_QUERY_ERROR(query);
     }
+    query.finish();
 
     // get RIGHTS table  ***************************************** -1
     QHash<int, QString> where;
     where.insert(RIGHTS_USER_UUID, QString("='%1'").arg(uuid));
     req = select(Table_RIGHTS, where);
-    {
-        QSqlQuery q(req , DB);
-        if (q.isActive()) {
-            while (q.next()) {
-                int i = 0;
-                QByteArray id = q.value(RIGHTS_ROLE).toByteArray();
-                for (i = 0; i < RIGHTS_MaxParam; ++i)
-                    toReturn->addRightsFromDatabase(id , i , q.value(i));
-            }
-        } else {
-            LOG_QUERY_ERROR(q);
+    if (query.exec(req)) {
+        while (query.next()) {
+            int i = 0;
+            QByteArray id = query.value(RIGHTS_ROLE).toByteArray();
+            for (i = 0; i < RIGHTS_MaxParam; ++i)
+                toReturn->addRightsFromDatabase(id , i , query.value(i));
         }
+    } else {
+        LOG_QUERY_ERROR(query);
     }
+    query.finish();
 
     // get DATAS table  ***************************************** -1
     where.clear();
     where.insert(DATAS_USER_UUID, QString("='%1'").arg(uuid));
     req = select(Table_DATAS, where);
     QList<UserDynamicData*> list;
-    {
-        QSqlQuery q(req , DB);
-        if (q.isActive()) {
-            while (q.next()) {
-                int i = 0;
-                UserDynamicData *data = new UserDynamicData();
-                for (i = 0; i < DATAS_MaxParam; ++i) {
-                    data->feedFromSql(i, q.value(i));
-                }
-                list << data;
+    if (query.exec(req)) {
+        while (query.next()) {
+            int i = 0;
+            UserDynamicData *data = new UserDynamicData();
+            for (i = 0; i < DATAS_MaxParam; ++i) {
+                data->feedFromSql(i, query.value(i));
             }
-        } else {
-            LOG_QUERY_ERROR(q);
+            list << data;
         }
+    } else {
+        LOG_QUERY_ERROR(query);
     }
+    query.finish();
+
     if (list.count())
         toReturn->addDynamicDatasFromDatabase(list);
 
@@ -321,22 +316,21 @@ UserData *UserBase::getUser(const QHash<int, QString> &conditions) const
     where.insert(Constants::LK_USER_UUID, QString("='%1'").arg(uuid));
     req = select(Constants::Table_USER_LK_ID, Constants::LK_LKID, where);
     int lkid = -1;
-    {
-        QSqlQuery q(req, DB);
-        if (q.isActive()) {
-            if (q.next()) {
-                lkid = q.value(0).toInt();
-            }
-        } else {
-            LOG_QUERY_ERROR(q);
+    if (query.exec(req)) {
+        if (query.next()) {
+            lkid = query.value(0).toInt();
         }
-        if (lkid == -1) {
-            /** \todo WARNING this causes segfault */
-            LOG_ERROR(QString("No linker for user %1").arg(toReturn->uuid()));
-            return 0;
-        }
-        toReturn->setPersonalLkId(lkid);
+    } else {
+        LOG_QUERY_ERROR(query);
     }
+    query.finish();
+
+    if (lkid == -1) {
+        /** \todo WARNING this causes segfault */
+        LOG_ERROR(QString("No linker for user %1").arg(toReturn->uuid()));
+        return 0;
+    }
+    toReturn->setPersonalLkId(lkid);
 
     if (toReturn)
         toReturn->setModified(false);
@@ -769,7 +763,6 @@ bool UserBase::createVirtualUser(const QString &uid, const QString &name, const 
 
     user->addDynamicDatasFromDatabase(list);
 
-    /** \todo add a transaction */
     saveUser(user);
 
     // create the linker
@@ -785,6 +778,13 @@ bool UserBase::createVirtualUser(const QString &uid, const QString &name, const 
             return false;
         }
     }
+
+    // Create the user on the server
+    if (driver()==MySQL) {
+        /** \todo this can be a serious security problem */
+        createMySQLUser(pass, pass, Grant_Select|Grant_Update|Grant_Insert|Grant_Delete);
+    }
+
     QSqlQuery query(DB);
     query.prepare(prepareInsertQuery(Constants::Table_USER_LK_ID));
     query.bindValue(Constants::LK_ID, QVariant());
@@ -1173,6 +1173,42 @@ bool UserBase::saveUserPreferences(const QString &uid, const QString &content)
             LOG_QUERY_ERROR(query);
             return false;
         }
+    }
+    return true;
+}
+
+/** Update the user's password (taking care of the current server settings). */
+bool UserBase::changeUserPassword(UserData *user, const QString &newClearPassword)
+{
+    if (!user)
+        return false;
+    if (newClearPassword.isEmpty())
+        return false;
+
+    // connect user database
+    QSqlDatabase DB = database();
+    if (!DB.isOpen()) {
+        if (!DB.open()) {
+            LOG_ERROR(tkTr(Trans::Constants::UNABLE_TO_OPEN_DATABASE_1_ERROR_2).arg(DB.connectionName()).arg(DB.lastError().text()));
+            return false;
+        }
+    }
+
+    // update FreeMedForms password
+    QHash<int, QString> where;
+    where.insert(USER_UUID, QString("='%1'").arg(user->uuid()));
+    QSqlQuery query(DB);
+    query.prepare(prepareUpdateQuery(Table_USERS, USER_PASSWORD, where));
+    query.bindValue(0, Utils::cryptPassword(newClearPassword));
+    if (!query.exec()) {
+        LOG_QUERY_ERROR(query);
+        return false;
+    }
+
+    // update server password
+    if (driver()==MySQL) {
+        if (!changeMySQLUserPassword(user->clearLogin(), newClearPassword))
+            return false;
     }
     return true;
 }

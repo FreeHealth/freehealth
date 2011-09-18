@@ -30,10 +30,10 @@
   \brief Dialog for password changing.
   With this dialog, user can change its password. He's asked of the actual password once, and of the new password
   twice. When user accept the dialog a verification is done, no changes are saved into database or users' model. \n
-  \li canGetNewPassword() return the verification state. If it's true, all is good : old password was verified, and
+  - canGetNewPassword() return the verification state. If it's true, all is good : old password was verified, and
   new password was correctly confirmed.
-  \li cryptedPassword() return the crypted new password to use.
-  \ingroup usertoolkit widget_usertoolkit usermanager
+  - cryptedPassword() return the crypted new password to use.
+  You have to send the new password to the user model by yourself.
 */
 
 #include "userpassworddialog.h"
@@ -73,17 +73,25 @@ void UserPasswordDialog::changeTitle(const QString &title)
 }
 
 /** \brief Return the state of verification. Verification is done when user accepts the dialog. */
-bool UserPasswordDialog::canGetNewPassword()
+bool UserPasswordDialog::canGetNewPassword() const
 {
     return m_AllIsGood;
 }
 
-/** \brief Returns the crypted password */
-QString UserPasswordDialog::cryptedPassword()
+/** Returns the crypted new password. The dialog must be accepted before. */
+QString UserPasswordDialog::cryptedPassword() const
 {
     if (m_AllIsGood)
         return m_CryptedNewPass;
-    return QString::null;
+    return QString();
+}
+
+/** Returns the clear new password. The dialog must be accepted before. */
+QString UserPasswordDialog::clearPassword() const
+{
+    if (m_AllIsGood)
+        return m_ui->newPass->lineEdit()->text();
+    return QString();
 }
 
 void UserPasswordDialog::accept()

@@ -158,7 +158,7 @@ public:
     void  setName(const QVariant & val)                { setValue(Table_USERS, USER_NAME, val); }
     void  setSecondName(const QVariant & val)          { setValue(Table_USERS, USER_SECONDNAME, val); }
     void  setFirstname(const QVariant & val)           { setValue(Table_USERS, USER_FIRSTNAME, val); }
-    void  setLanguageIso(const QVariant &val)         { setValue(Table_USERS, USER_LANGUAGE, val); }
+    void  setLanguageIso(const QVariant &val)          { setValue(Table_USERS, USER_LANGUAGE, val); }
     void  setLocaleLanguage(QLocale::Language lang)    { setValue(Table_USERS, USER_LANGUAGE, QLocale(lang).name().left(2)); }
     void  setMail(const QVariant & val)                { setValue(Table_USERS, USER_MAIL, val); }
 
