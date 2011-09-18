@@ -121,10 +121,10 @@ void AccountPlugin::extensionsInitialized()
     if (!user())
         return;
 
-    messageSplash(tr("Initializing account plugin..."));
-
     // Add Translator to the Application
     Core::ICore::instance()->translators()->addNewTranslator("accountplugin");
+    messageSplash(tr("Initializing accountancy plugin..."));
+
     addAutoReleasedObject(new Core::PluginAboutPage(pluginSpec(), this));
 
     // FreeAccount specific code

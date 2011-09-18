@@ -124,7 +124,7 @@ void PatientBasePlugin::extensionsInitialized()
     if (Utils::Log::warnPluginsCreation())
         qWarning() << "PatientBasePlugin::extensionsInitialized";
 
-    messageSplash(tr("Initializing patients plugin..."));
+    messageSplash(tr("Initializing patients database plugin..."));
 
     // add preference page
     prefpage = new PatientBasePreferencesPage(this);

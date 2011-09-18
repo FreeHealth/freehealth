@@ -75,12 +75,11 @@ bool IcdPlugin::initialize(const QStringList &arguments, QString *errorString)
     Q_UNUSED(arguments);
     Q_UNUSED(errorString);
 
+    // Add Translator to the Application
+    Core::ICore::instance()->translators()->addNewTranslator("icdplugin");
     messageSplash(tr("Initializing ICD10 plugin..."));
 
     m_PlugVersion = pluginSpec()->version();
-
-    // Add Translator to the Application
-    Core::ICore::instance()->translators()->addNewTranslator("icdplugin");
 
     return true;
 }
@@ -89,6 +88,8 @@ void IcdPlugin::extensionsInitialized()
 {
     if (Utils::Log::warnPluginsCreation())
         qWarning() << "IcdPlugin::extensionsInitialized";
+
+    messageSplash(tr("Initializing ICD10 plugin..."));
 
     // Create the database instance
     IcdDatabase::instance();

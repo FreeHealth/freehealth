@@ -100,9 +100,6 @@ bool AgendaPlugin::initialize(const QStringList &arguments, QString *errorString
     Q_UNUSED(arguments);
     Q_UNUSED(errorString);
 
-    // Add Translator to the Application
-    Core::ICore::instance()->translators()->addNewTranslator("AgendaPlugin");
-
     return true;
 }
 
@@ -111,6 +108,8 @@ void AgendaPlugin::extensionsInitialized()
     if (Utils::Log::warnPluginsCreation())
         qWarning() << "AgendaPlugin::extensionsInitialized";
 
+    // Add Translator to the Application
+    Core::ICore::instance()->translators()->addNewTranslator("AgendaPlugin");
     messageSplash(tr("Initializing agenda plugin..."));
 
     addAutoReleasedObject(new Core::PluginAboutPage(pluginSpec(), this));

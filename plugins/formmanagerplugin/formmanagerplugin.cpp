@@ -89,10 +89,9 @@ bool FormManagerPlugin::initialize(const QStringList &arguments, QString *errorS
     Q_UNUSED(arguments);
     Q_UNUSED(errorString);
 
-    messageSplash(tr("Initializing form manager plugin..."));
-
     // Add Translator to the Application
     Core::ICore::instance()->translators()->addNewTranslator("formmanagerplugin");
+    messageSplash(tr("Initializing form manager plugin..."));
 
     return true;
 }
@@ -101,6 +100,8 @@ void FormManagerPlugin::extensionsInitialized()
 {
     if (Utils::Log::warnPluginsCreation())
         qWarning() << "FormManagerPlugin::extensionsInitialized";
+
+    messageSplash(tr("Initializing form manager plugin..."));
 
     // Initialize patient base and manager
     episodeBase();

@@ -82,10 +82,9 @@ bool DrugsBasePlugin::initialize(const QStringList &arguments, QString *errorStr
     Q_UNUSED(arguments);
     Q_UNUSED(errorString);
 
-    messageSplash(tr("Initializing drugs database plugin..."));
-
     // Add Translator to the Application
     Core::ICore::instance()->translators()->addNewTranslator("drugsbaseplugin");
+    messageSplash(tr("Initializing drugs database plugin..."));
 
     return true;
 }
@@ -94,6 +93,8 @@ void DrugsBasePlugin::extensionsInitialized()
 {
     if (Utils::Log::warnPluginsCreation())
         qWarning() << "DrugsBasePlugin::extensionsInitialized";
+
+    messageSplash(tr("Initializing drugs database plugin..."));
 
     // initialize DrugsBase
     Internal::DrugsBase::instance();

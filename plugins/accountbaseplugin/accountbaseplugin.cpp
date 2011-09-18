@@ -37,11 +37,15 @@
 #include <coreplugin/dialogs/pluginaboutpage.h>
 #include <coreplugin/icore.h>
 #include <coreplugin/translators.h>
+#include <coreplugin/itheme.h>
 
 #include <QtCore/QtPlugin>
 #include <QDebug>
 
 using namespace AccountDB;
+
+static inline Core::ITheme *theme()  { return Core::ICore::instance()->theme(); }
+static inline void messageSplash(const QString &s) {theme()->messageSplashScreen(s); }
 
 AccountBasePlugin::AccountBasePlugin()
 {
@@ -69,11 +73,13 @@ void AccountBasePlugin::extensionsInitialized()
     if (Utils::Log::warnPluginsCreation())
         qWarning() << "AccountBasePlugin::extensionsInitialized";
 
+    // Add Translator to the Application
+    Core::ICore::instance()->translators()->addNewTranslator("accountbaseplugin");
+    messageSplash(tr("Initializing accountancy plugin..."));
+
     // Initialize Account Database
     AccountBase::instance();
 
-    // Add Translator to the Application
-    Core::ICore::instance()->translators()->addNewTranslator("accountbaseplugin");
     addAutoReleasedObject(new Core::PluginAboutPage(pluginSpec(), this));
 }
 

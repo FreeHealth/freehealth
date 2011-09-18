@@ -30,6 +30,7 @@
 
 #include <coreplugin/dialogs/pluginaboutpage.h>
 #include <coreplugin/icore.h>
+#include <coreplugin/itheme.h>
 #include <coreplugin/translators.h>
 
 #include <utils/log.h>
@@ -39,6 +40,9 @@
 #include <QDebug>
 
 using namespace MainWin;
+
+static inline Core::ITheme *theme()  { return Core::ICore::instance()->theme(); }
+static inline void messageSplash(const QString &s) {theme()->messageSplashScreen(s); }
 
 MainWinPlugin::MainWinPlugin() :
         m_MainWindow(0), prefPage(0), virtualBasePage(0)
@@ -72,6 +76,7 @@ bool MainWinPlugin::initialize(const QStringList &arguments, QString *errorStrin
 
     // Add Translator to the Application
     Core::ICore::instance()->translators()->addNewTranslator("fmfmainwindowplugin");
+    messageSplash(tr("Initializing main window plugin..."));
 
     m_MainWindow->initialize(arguments, errorString);
     return true;
@@ -82,6 +87,7 @@ void MainWinPlugin::extensionsInitialized()
     if (Utils::Log::warnPluginsCreation())
         qWarning() << "FREEMEDFORMS::MainWinPlugin::extensionsInitialized";
 
+    messageSplash(tr("Initializing main window plugin..."));
     addAutoReleasedObject(new Core::PluginAboutPage(pluginSpec(), this));
 
     // Add preferences pages

@@ -71,10 +71,9 @@ bool PmhPlugin::initialize(const QStringList &arguments, QString *errorString)
     Q_UNUSED(arguments);
     Q_UNUSED(errorString);
 
-    messageSplash(tr("Initializing PMHx database plugin..."));
-
     // Add Translator to the Application
     Core::ICore::instance()->translators()->addNewTranslator("PmhPlugin");
+    messageSplash(tr("Initializing PMHx database plugin..."));
 
     return true;
 }
@@ -83,6 +82,8 @@ void PmhPlugin::extensionsInitialized()
 {
     if (Utils::Log::warnPluginsCreation())
         qWarning() << "PmhPlugin::extensionsInitialized";
+
+    messageSplash(tr("Initializing PMHx database plugin..."));
 
     // Initialize Base
     Internal::PmhBase::instance();

@@ -111,10 +111,9 @@ bool UserManagerPlugin::initialize(const QStringList &arguments, QString *errorS
     Q_UNUSED(arguments);
     Q_UNUSED(errorString);
 
-    messageSplash(tr("Initializing user manager plugin..."));
-
     // Add Translator to the Application
     Core::ICore::instance()->translators()->addNewTranslator("usermanagerplugin");
+    messageSplash(tr("Initializing user manager plugin..."));
 
     // is UserBase reachable ?
     userBase();

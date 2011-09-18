@@ -129,10 +129,10 @@ bool DrugsPlugin::initialize(const QStringList &arguments, QString *errorMessage
     if (Utils::Log::warnPluginsCreation())
         qWarning() << "DrugsPlugin::initialize";
 
-    messageSplash(tr("Initializing drugs widgets plugin..."));
-
     // Add Translator to the Application
     Core::ICore::instance()->translators()->addNewTranslator("mfDrugsWidget");
+    messageSplash(tr("Initializing drugs plugin..."));
+
 
     addAutoReleasedObject(new Core::PluginAboutPage(this->pluginSpec(), this));
 
@@ -150,6 +150,8 @@ void DrugsPlugin::extensionsInitialized()
 {
     if (Utils::Log::warnPluginsCreation())
         qWarning() << "DrugsPlugin::extensionsInitialized";
+
+    messageSplash(tr("Initializing drugs plugin..."));
 
     viewPage = new DrugsViewOptionsPage(this);
     selectorPage = new DrugsSelectorOptionsPage(this);

@@ -31,6 +31,8 @@
 #include <utils/log.h>
 
 #include <fmfcoreplugin/appaboutpage.h>
+#include <coreplugin/icore.h>
+#include <coreplugin/itheme.h>
 #include <coreplugin/isettings.h>
 #include <coreplugin/dialogs/commonaboutpages.h>
 #include <coreplugin/dialogs/commondebugpages.h>
@@ -41,6 +43,9 @@
 #include <QtCore/QtPlugin>
 
 using namespace Core::Internal;
+
+static inline Core::ITheme *theme()  { return Core::ICore::instance()->theme(); }
+static inline void messageSplash(const QString &s) {theme()->messageSplashScreen(s); }
 
 CorePlugin::CorePlugin() :
         m_CoreImpl(0), prefPage(0)
@@ -70,6 +75,8 @@ bool CorePlugin::initialize(const QStringList &arguments, QString *errorMessage)
     Core::ICore::instance()->translators()->addNewTranslator("medicalutils");
     Core::ICore::instance()->translators()->addNewTranslator("fmfcoreplugin");
 
+    messageSplash(tr("Initializing core plugin..."));
+
     return m_CoreImpl->initialize(arguments,errorMessage);
 //    Q_UNUSED(arguments);
 //    const bool success = m_mainWindow->init(errorMessage);
@@ -88,6 +95,8 @@ void CorePlugin::extensionsInitialized()
 {
     if (Utils::Log::warnPluginsCreation())
         qWarning() << "CorePlugin::extensionsInitialized";
+
+    messageSplash(tr("Initializing core plugin..."));
 
     m_CoreImpl->extensionsInitialized();
 
