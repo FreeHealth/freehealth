@@ -113,8 +113,7 @@ void DefaultUserIdentityWidget::on_but_changePassword_clicked()
     if (d.exec() == QDialog::Accepted) {
         if (!d.canGetNewPassword())
             return;
-        QModelIndex idx = m_Model->index(row, Core::IUser::Password);
-        m_Model->setData(idx, d.cryptedPassword());
+        d.applyChanges(m_Model, row);
     }
 }
 

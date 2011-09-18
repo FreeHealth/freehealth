@@ -400,8 +400,9 @@ bool UserBase::checkLogin(const QString &clearLogin, const QString &clearPasswor
             connectionTest.setUserName(clearLogin);
             connectionTest.setPassword(clearPassword);
             if (!connectionTest.open()) {
-                qWarning() << connectionTest;
+                qWarning() << connectionTest << clearLogin << clearPassword << DB.lastError().text();
                 LOG_ERROR(QString("Unable to connect to the MySQL server, with user %1 : %2").arg(clearLogin).arg(clearPassword));
+                LOG_ERROR(DB.lastError().text());
                 return false;
             }
             LOG("Database server identifiers are correct");
@@ -618,6 +619,7 @@ bool UserBase::createDatabase(const QString &connectionName , const QString &dbN
 /** Create a default user when recreating the database. */
 bool UserBase::createDefaultUser()
 {
+    // MySQL user is created during the Core::FirstRunWizard -> Core::ServerConfigPage::validatePage() using an external SQL script
     UserData* user = new UserData;
     user->setLogin64(Utils::loginForSQL(DEFAULT_USER_CLEARLOGIN));
     user->setClearPassword(DEFAULT_USER_CLEARPASSWORD);

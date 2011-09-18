@@ -44,6 +44,7 @@ namespace Ui {
 class  UserPasswordDialog;
 }  // End ui
 }  // End Internal
+class UserModel;
 
 class USER_EXPORT UserPasswordDialog : public QDialog
 {
@@ -58,7 +59,11 @@ public:
     QString cryptedPassword() const;
     QString clearPassword() const;
 
+    bool applyChanges(UserModel *model, int userRow) const;
+
 private Q_SLOTS:
+    void checkControlPassword(const QString &text);
+    void checkNewPassword(const QString &text);
     void accept();
 
 private:

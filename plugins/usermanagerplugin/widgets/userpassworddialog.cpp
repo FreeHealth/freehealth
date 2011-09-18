@@ -33,21 +33,29 @@
   - canGetNewPassword() return the verification state. If it's true, all is good : old password was verified, and
   new password was correctly confirmed.
   - cryptedPassword() return the crypted new password to use.
+  - clearPassword() return the new password (non crypted).
+  - applyChanges() call it after dialog validation to submit the new password to the database and server.
   You have to send the new password to the user model by yourself.
 */
 
 #include "userpassworddialog.h"
 
+#include <usermanagerplugin/usermodel.h>
+#include <usermanagerplugin/database/userbase.h>
+
+#include <utils/log.h>
 #include <utils/global.h>
 #include <utils/widgets/lineeditechoswitcher.h>
-
-//#include <usermanagerplugin/global.h>
+#include <translationutils/constanttranslations.h>
 
 #include "ui_userpassworddialog.h"
 
 #include <QDebug>
 
 using namespace UserPlugin;
+using namespace Trans::ConstantTranslations;
+
+static inline UserPlugin::Internal::UserBase *userBase() {return UserPlugin::Internal::UserBase::instance();}
 
 UserPasswordDialog::UserPasswordDialog(const QString &actualCryptedPassword, QWidget *parent) :
     QDialog(parent)
@@ -57,19 +65,50 @@ UserPasswordDialog::UserPasswordDialog(const QString &actualCryptedPassword, QWi
        return;
    m_ui = new Internal::Ui::UserPasswordDialog();
    m_ui->setupUi(this);
+
+   changeTitle(Trans::Constants::CHANGE_PASSWORD);
+
    m_ActualPass = actualCryptedPassword;
    m_ui->newPass->toogleEchoMode();
    m_ui->newControl->toogleEchoMode();
    m_ui->oldPass->toogleEchoMode();
    m_AllIsGood = false;
+
    // connect buttons
    connect(m_ui->buttonBox, SIGNAL(accepted()), this, SLOT(accept()));
    m_ui->oldPass->lineEdit()->setFocus();
+
+   connect(m_ui->newControl->lineEdit(), SIGNAL(textChanged(QString)), this, SLOT(checkControlPassword(QString)));
+   connect(m_ui->newPass->lineEdit(), SIGNAL(textChanged(QString)), this, SLOT(checkNewPassword(QString)));
+   checkNewPassword("");
 }
 
 void UserPasswordDialog::changeTitle(const QString &title)
 {
     m_ui->label->setText(title);
+}
+
+void UserPasswordDialog::checkControlPassword(const QString &text)
+{
+    if (text==m_ui->newPass->text()) {
+        m_ui->labelControlPassword->setStyleSheet("color:black");
+    } else {
+        m_ui->labelControlPassword->setStyleSheet("color:red");
+    }
+}
+
+void UserPasswordDialog::checkNewPassword(const QString &text)
+{
+    if (text.size() >= 5) {
+        m_ui->labelNewPassword->setStyleSheet("color:black");
+        m_ui->labelNewPassword->setToolTip("");
+        m_ui->newPass->lineEdit()->setToolTip("");
+    } else {
+        m_ui->labelNewPassword->setStyleSheet("color:red");
+        m_ui->labelNewPassword->setToolTip(tr("Password must have at least 5 chars."));
+        m_ui->newPass->lineEdit()->setToolTip(tr("Password must have at least 5 chars."));
+    }
+    checkControlPassword(m_ui->newControl->text());
 }
 
 /** \brief Return the state of verification. Verification is done when user accepts the dialog. */
@@ -94,8 +133,22 @@ QString UserPasswordDialog::clearPassword() const
     return QString();
 }
 
+bool UserPasswordDialog::applyChanges(UserModel *model, int userRow) const
+{
+    Q_ASSERT(m_AllIsGood);
+    if (!m_AllIsGood) {
+        LOG_ERROR("Dialog must be validated before");
+        return false;
+    }
+    return model->setData(model->index(userRow, Core::IUser::ClearPassword), clearPassword());
+}
+
+
 void UserPasswordDialog::accept()
 {
+    if (m_ui->newPass->text().size()<5) {
+        return;
+    }
     const QString &cryptedNewPass = Utils::cryptPassword(m_ui->newPass->lineEdit()->text());
     const QString &oldPass = Utils::cryptPassword(m_ui->oldPass->lineEdit()->text());
 
