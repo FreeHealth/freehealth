@@ -59,7 +59,7 @@
 #include <QBuffer>
 #include <QByteArray>
 
-enum { WarnDatabaseFilter = false };
+enum { WarnDatabaseFilter = true };
 
 using namespace Patients;
 using namespace Trans::ConstantTranslations;
@@ -138,7 +138,7 @@ public:
 
         // Manage virtual patients
         QHash<int, QString> where;
-        if (!settings()->value(Core::Constants::S_ALLOW_VIRTUAL_DATA).toBool())
+        if (!settings()->value(Core::Constants::S_ALLOW_VIRTUAL_DATA, true).toBool())
             where.insert(Constants::IDENTITY_ISVIRTUAL, "=0");
 
         // All users share the same patients
@@ -160,7 +160,7 @@ public:
 
 //        qWarning() << m_SqlPatient->query().lastQuery();
 
-        q->reset();
+//        q->reset();
     }
 
     QIcon iconizedGender(const QModelIndex &index)
