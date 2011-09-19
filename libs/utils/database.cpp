@@ -1783,8 +1783,6 @@ bool Database::executeSqlFile(const QString &connectionName, const QString &file
         }
     }
 
-    qWarning() << getConnectionGrants(connectionName);
-
 //    if (!DB.transaction()) {
 //        LOG_ERROR_FOR("Tools", "Can not create transaction. Tools::executeSqlFile()", __FILE__, __LINE__);
 //        return false;
