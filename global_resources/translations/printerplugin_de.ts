@@ -4,7 +4,7 @@
 <context>
     <name>Print</name>
     <message>
-        <location filename="../../plugins/printerplugin/documentprinter.cpp" line="141"/>
+        <location filename="../../plugins/printerplugin/documentprinter.cpp" line="149"/>
         <source>Made with %1.</source>
         <translation type="unfinished"></translation>
     </message>
@@ -183,7 +183,7 @@
 <context>
     <name>Print::Internal::PrinterPreferencesPage</name>
     <message>
-        <location filename="../../plugins/printerplugin/printerpreferences.cpp" line="61"/>
+        <location filename="../../plugins/printerplugin/printerpreferences.cpp" line="60"/>
         <source>Printer preferences</source>
         <translation type="unfinished"></translation>
     </message>
@@ -191,7 +191,7 @@
 <context>
     <name>Print::Internal::PrinterPreferencesWidget</name>
     <message>
-        <location filename="../../plugins/printerplugin/printerpreferences.cpp" line="123"/>
+        <location filename="../../plugins/printerplugin/printerpreferences.cpp" line="121"/>
         <source>WARNING !
 No configurated printer found on your system.
 Printing and print preview should not work at all.
@@ -200,17 +200,17 @@ Refer to your operating system documentation.</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../../plugins/printerplugin/printerpreferences.cpp" line="151"/>
+        <location filename="../../plugins/printerplugin/printerpreferences.cpp" line="149"/>
         <source>Always use system&apos;s default printer</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../../plugins/printerplugin/printerpreferences.cpp" line="155"/>
+        <location filename="../../plugins/printerplugin/printerpreferences.cpp" line="153"/>
         <source>Always ask user for the printer</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../../plugins/printerplugin/printerpreferences.cpp" line="226"/>
+        <location filename="../../plugins/printerplugin/printerpreferences.cpp" line="224"/>
         <source>Select a directory</source>
         <translation type="unfinished"></translation>
     </message>

@@ -99,7 +99,7 @@
 <context>
     <name>Templates::Internal::TemplatesPreferencesPage</name>
     <message>
-        <location filename="../../plugins/templatesplugin/templatespreferencespages.cpp" line="66"/>
+        <location filename="../../plugins/templatesplugin/templatespreferencespages.cpp" line="65"/>
         <source>Templates preferences</source>
         <translation type="unfinished"></translation>
     </message>
@@ -178,10 +178,10 @@
 <context>
     <name>Templates::TemplateBase</name>
     <message>
-        <location filename="../../plugins/templatesplugin/templatebase.cpp" line="314"/>
-        <location filename="../../plugins/templatesplugin/templatebase.cpp" line="322"/>
+        <location filename="../../plugins/templatesplugin/templatebase.cpp" line="320"/>
         <location filename="../../plugins/templatesplugin/templatebase.cpp" line="328"/>
-        <location filename="../../plugins/templatesplugin/templatebase.cpp" line="338"/>
+        <location filename="../../plugins/templatesplugin/templatebase.cpp" line="334"/>
+        <location filename="../../plugins/templatesplugin/templatebase.cpp" line="344"/>
         <source>Please contact dev team.</source>
         <translation type="unfinished"></translation>
     </message>

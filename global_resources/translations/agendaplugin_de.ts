@@ -4,15 +4,31 @@
 <context>
     <name>Agenda</name>
     <message>
-        <location filename="../../plugins/agendaplugin/constants.h" line="186"/>
+        <location filename="../../plugins/agendaplugin/constants.h" line="189"/>
         <source>Print current selection</source>
+        <translation type="unfinished"></translation>
+    </message>
+</context>
+<context>
+    <name>Agenda::AgendaPlugin</name>
+    <message>
+        <location filename="../../plugins/agendaplugin/agendaplugin.cpp" line="113"/>
+        <source>Initializing agenda plugin...</source>
+        <translation type="unfinished"></translation>
+    </message>
+</context>
+<context>
+    <name>Agenda::CalendarItemModel</name>
+    <message>
+        <location filename="../../plugins/agendaplugin/calendaritemmodel.cpp" line="309"/>
+        <source>Empty</source>
         <translation type="unfinished"></translation>
     </message>
 </context>
 <context>
     <name>Agenda::Internal::AgendaMode</name>
     <message>
-        <location filename="../../plugins/agendaplugin/agendamode.cpp" line="51"/>
+        <location filename="../../plugins/agendaplugin/agendamode.cpp" line="56"/>
         <source>Agenda</source>
         <translation type="unfinished"></translation>
     </message>
@@ -126,26 +142,27 @@
     </message>
     <message>
         <location filename="../../plugins/agendaplugin/usercalendarviewer.ui" line="68"/>
+        <location filename="../../plugins/agendaplugin/usercalendarviewer.ui" line="100"/>
         <source>Availabilities</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../../plugins/agendaplugin/usercalendarviewer.ui" line="74"/>
+        <location filename="../../plugins/agendaplugin/usercalendarviewer.ui" line="80"/>
         <source>Duration (mins)</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../../plugins/agendaplugin/usercalendarviewer.ui" line="108"/>
+        <location filename="../../plugins/agendaplugin/usercalendarviewer.ui" line="134"/>
         <source>Time</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../../plugins/agendaplugin/usercalendarviewer.ui" line="114"/>
+        <location filename="../../plugins/agendaplugin/usercalendarviewer.ui" line="140"/>
         <source>Default duration (in minutes)</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../../plugins/agendaplugin/usercalendarviewer.ui" line="135"/>
+        <location filename="../../plugins/agendaplugin/usercalendarviewer.ui" line="161"/>
         <source>Description</source>
         <translation type="unfinished"></translation>
     </message>
@@ -331,8 +348,8 @@
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../../plugins/agendaplugin/usercalendarmodelfulleditorwidget.cpp" line="65"/>
-        <location filename="../../plugins/agendaplugin/usercalendarmodelfulleditorwidget.cpp" line="121"/>
+        <location filename="../../plugins/agendaplugin/usercalendarmodelfulleditorwidget.cpp" line="70"/>
+        <location filename="../../plugins/agendaplugin/usercalendarmodelfulleditorwidget.cpp" line="127"/>
         <source>Create a new calendar</source>
         <translation type="unfinished"></translation>
     </message>
@@ -340,7 +357,7 @@
 <context>
     <name>AgendaBase</name>
     <message>
-        <location filename="../../plugins/agendaplugin/agendabase.cpp" line="391"/>
+        <location filename="../../plugins/agendaplugin/agendabase.cpp" line="398"/>
         <source>Trying to create empty database. 
        Location : %1 
        FileName: %2

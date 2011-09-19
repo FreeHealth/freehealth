@@ -4,19 +4,19 @@
 <context>
     <name>EpisodeModel</name>
     <message>
-        <location filename="../../plugins/formmanagerplugin/episodemodel.cpp" line="592"/>
+        <location filename="../../plugins/formmanagerplugin/episodemodel.cpp" line="548"/>
         <source>Save episode ?</source>
         <translation>Sauvegarder l&apos;épisode ?</translation>
     </message>
     <message>
-        <location filename="../../plugins/formmanagerplugin/episodemodel.cpp" line="593"/>
+        <location filename="../../plugins/formmanagerplugin/episodemodel.cpp" line="549"/>
         <source>The actual episode has been modified. Do you want to save changes in your database ?
 Answering &apos;No&apos; will cause definitve data lose.</source>
         <translation>L&apos;épisode actuel a été modifié. Voulez-vous sauvegarder les modifications dans la base de données ?
 Répondre &apos;non&apos; causera une perte de données irréversible.</translation>
     </message>
     <message>
-        <location filename="../../plugins/formmanagerplugin/episodemodel.cpp" line="595"/>
+        <location filename="../../plugins/formmanagerplugin/episodemodel.cpp" line="551"/>
         <source>Save episode</source>
         <translation>Sauvegarder l&apos;épisode</translation>
     </message>
@@ -24,7 +24,17 @@ Répondre &apos;non&apos; causera une perte de données irréversible.</translat
 <context>
     <name>Form::EpisodeModel</name>
     <message>
-        <location filename="../../plugins/formmanagerplugin/episodemodel.cpp" line="1274"/>
+        <location filename="../../plugins/formmanagerplugin/episodemodel.cpp" line="901"/>
+        <source>Created: </source>
+        <translation>Créé : </translation>
+    </message>
+    <message>
+        <location filename="../../plugins/formmanagerplugin/episodemodel.cpp" line="1010"/>
+        <source>New episode</source>
+        <translation>Nouvel épisode</translation>
+    </message>
+    <message>
+        <location filename="../../plugins/formmanagerplugin/episodemodel.cpp" line="1206"/>
         <source>No user</source>
         <translation>Pas d&apos;utilisateur</translation>
     </message>
@@ -78,7 +88,7 @@ Répondre &apos;non&apos; causera une perte de données irréversible.</translat
 <context>
     <name>Form::FormMain</name>
     <message>
-        <location filename="../../plugins/formmanagerplugin/iformitem.cpp" line="546"/>
+        <location filename="../../plugins/formmanagerplugin/iformitem.cpp" line="569"/>
         <source>Form : </source>
         <translation>Formulaire : </translation>
     </message>
@@ -86,7 +96,7 @@ Répondre &apos;non&apos; causera une perte de données irréversible.</translat
 <context>
     <name>Form::FormMainDebugPage</name>
     <message>
-        <location filename="../../plugins/formmanagerplugin/iformitem.cpp" line="671"/>
+        <location filename="../../plugins/formmanagerplugin/iformitem.cpp" line="694"/>
         <source>Forms : </source>
         <translation>Formulaires : </translation>
     </message>
@@ -94,10 +104,10 @@ Répondre &apos;non&apos; causera une perte de données irréversible.</translat
 <context>
     <name>Form::Internal::EpisodeBase</name>
     <message>
-        <location filename="../../plugins/formmanagerplugin/episodebase.cpp" line="241"/>
-        <location filename="../../plugins/formmanagerplugin/episodebase.cpp" line="249"/>
-        <location filename="../../plugins/formmanagerplugin/episodebase.cpp" line="255"/>
-        <location filename="../../plugins/formmanagerplugin/episodebase.cpp" line="265"/>
+        <location filename="../../plugins/formmanagerplugin/episodebase.cpp" line="266"/>
+        <location filename="../../plugins/formmanagerplugin/episodebase.cpp" line="274"/>
+        <location filename="../../plugins/formmanagerplugin/episodebase.cpp" line="280"/>
+        <location filename="../../plugins/formmanagerplugin/episodebase.cpp" line="290"/>
         <source>Please contact dev team.</source>
         <translation>Veuillez contacter l&apos;équipe de développement.</translation>
     </message>
@@ -128,7 +138,7 @@ Répondre &apos;non&apos; causera une perte de données irréversible.</translat
 <context>
     <name>Form::Internal::FormManagerMode</name>
     <message>
-        <location filename="../../plugins/formmanagerplugin/formmanagermode.cpp" line="55"/>
+        <location filename="../../plugins/formmanagerplugin/formmanagermode.cpp" line="61"/>
         <source>Patients Files</source>
         <translation>Formulaires patient</translation>
     </message>
@@ -136,7 +146,8 @@ Répondre &apos;non&apos; causera une perte de données irréversible.</translat
 <context>
     <name>Form::Internal::FormManagerPlugin</name>
     <message>
-        <location filename="../../plugins/formmanagerplugin/formmanagerplugin.cpp" line="97"/>
+        <location filename="../../plugins/formmanagerplugin/formmanagerplugin.cpp" line="94"/>
+        <location filename="../../plugins/formmanagerplugin/formmanagerplugin.cpp" line="104"/>
         <source>Initializing form manager plugin...</source>
         <translation>Initialisation du plugin formulaire...</translation>
     </message>
@@ -243,19 +254,29 @@ Répondre &apos;non&apos; causera une perte de données irréversible.</translat
 <context>
     <name>tkConstants</name>
     <message>
-        <location filename="../../plugins/formmanagerplugin/constants_db.h" line="84"/>
+        <location filename="../../plugins/formmanagerplugin/constants_db.h" line="108"/>
         <source>Add Episode</source>
         <translation>Ajouter un épisode</translation>
     </message>
     <message>
-        <location filename="../../plugins/formmanagerplugin/constants_db.h" line="85"/>
+        <location filename="../../plugins/formmanagerplugin/constants_db.h" line="109"/>
         <source>Validate Episode</source>
         <translation>Valider un épisode</translation>
     </message>
     <message>
-        <location filename="../../plugins/formmanagerplugin/constants_db.h" line="86"/>
+        <location filename="../../plugins/formmanagerplugin/constants_db.h" line="110"/>
         <source>Add Form</source>
         <translation>Ajouter un formulaire</translation>
+    </message>
+    <message>
+        <location filename="../../plugins/formmanagerplugin/constants_db.h" line="111"/>
+        <source>Print Form</source>
+        <translation>Imprimer le formulaire</translation>
+    </message>
+    <message>
+        <location filename="../../plugins/formmanagerplugin/constants_db.h" line="112"/>
+        <source>Show patient synthesis</source>
+        <translation>Montrer la synthèse du dossier patient</translation>
     </message>
 </context>
 </TS>

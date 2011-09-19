@@ -32,9 +32,9 @@
 <context>
     <name>PMH::Internal::PmhBase</name>
     <message>
+        <location filename="../../plugins/pmhplugin/pmhbase.cpp" line="225"/>
+        <location filename="../../plugins/pmhplugin/pmhbase.cpp" line="233"/>
         <location filename="../../plugins/pmhplugin/pmhbase.cpp" line="239"/>
-        <location filename="../../plugins/pmhplugin/pmhbase.cpp" line="247"/>
-        <location filename="../../plugins/pmhplugin/pmhbase.cpp" line="253"/>
         <source>Please contact dev team.</source>
         <translation>Veuillez contacter l&apos;équipe de développement.</translation>
     </message>
@@ -47,8 +47,8 @@
         <translation></translation>
     </message>
     <message>
-        <location filename="../../plugins/pmhplugin/pmhmode.cpp" line="95"/>
-        <location filename="../../plugins/pmhplugin/pmhmode.cpp" line="234"/>
+        <location filename="../../plugins/pmhplugin/pmhmode.cpp" line="98"/>
+        <location filename="../../plugins/pmhplugin/pmhmode.cpp" line="238"/>
         <source>Edit</source>
         <translation>Éditer</translation>
     </message>
@@ -259,7 +259,8 @@
 <context>
     <name>PMH::PmhPlugin</name>
     <message>
-        <location filename="../../plugins/pmhplugin/pmhplugin.cpp" line="79"/>
+        <location filename="../../plugins/pmhplugin/pmhplugin.cpp" line="76"/>
+        <location filename="../../plugins/pmhplugin/pmhplugin.cpp" line="86"/>
         <source>Initializing PMHx database plugin...</source>
         <translation>Initialisation de la base de données des antécédents...</translation>
     </message>

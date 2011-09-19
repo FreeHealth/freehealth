@@ -32,7 +32,7 @@ Please verify your daily scheme prescriptions and relations to meal.</source>
 <context>
     <name>DrugsBase</name>
     <message>
-        <location filename="../../plugins/drugsbaseplugin/drugdruginteractionengine.cpp" line="943"/>
+        <location filename="../../plugins/drugsbaseplugin/drugdruginteractionengine.cpp" line="947"/>
         <source>FreeDiams Interactions Engine</source>
         <translation type="unfinished"></translation>
     </message>
@@ -53,7 +53,8 @@ Please verify your daily scheme prescriptions and relations to meal.</source>
 <context>
     <name>DrugsDB::DrugsBasePlugin</name>
     <message>
-        <location filename="../../plugins/drugsbaseplugin/drugsbaseplugin.cpp" line="85"/>
+        <location filename="../../plugins/drugsbaseplugin/drugsbaseplugin.cpp" line="87"/>
+        <location filename="../../plugins/drugsbaseplugin/drugsbaseplugin.cpp" line="97"/>
         <source>Initializing drugs database plugin...</source>
         <translation type="unfinished"></translation>
     </message>
@@ -130,8 +131,8 @@ Do you want to add them to the file ?</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../../plugins/drugsbaseplugin/drugsio.cpp" line="1093"/>
-        <location filename="../../plugins/drugsbaseplugin/drugsio.cpp" line="1107"/>
+        <location filename="../../plugins/drugsbaseplugin/drugsio.cpp" line="1090"/>
+        <location filename="../../plugins/drugsbaseplugin/drugsio.cpp" line="1104"/>
         <source>Drugs Prescription</source>
         <translation type="unfinished"></translation>
     </message>
@@ -281,6 +282,14 @@ Do you want to add them to the file ?</source>
     </message>
 </context>
 <context>
+    <name>DrugsDB::Internal::DrugDrugInteractionEngine</name>
+    <message>
+        <location filename="../../plugins/drugsbaseplugin/drugdruginteractionengine.cpp" line="829"/>
+        <source>Detects interaction between drugs</source>
+        <translation type="unfinished"></translation>
+    </message>
+</context>
+<context>
     <name>DrugsDB::Internal::DrugsBase</name>
     <message>
         <location filename="../../plugins/drugsbaseplugin/drugsbase.cpp" line="613"/>
@@ -392,6 +401,19 @@ Do you want to add them to the file ?</source>
     </message>
 </context>
 <context>
+    <name>DrugsDB::Internal::PimEngine</name>
+    <message>
+        <location filename="../../plugins/drugsbaseplugin/pimengine.cpp" line="647"/>
+        <source>(Experimental)</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../../plugins/drugsbaseplugin/pimengine.cpp" line="657"/>
+        <source>Detects interaction between drugs and patient in elderly</source>
+        <translation type="unfinished"></translation>
+    </message>
+</context>
+<context>
     <name>DrugsData</name>
     <message>
         <location filename="../../plugins/drugsbaseplugin/idrug.cpp" line="767"/>
@@ -450,34 +472,34 @@ Minimum interval between intakes: [MIN_INTERVAL]][
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../../plugins/drugsbaseplugin/constants.h" line="251"/>
+        <location filename="../../plugins/drugsbaseplugin/constants.h" line="254"/>
         <source>Nature of risk</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../../plugins/drugsbaseplugin/constants.h" line="252"/>
+        <location filename="../../plugins/drugsbaseplugin/constants.h" line="255"/>
         <source>Management</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../../plugins/drugsbaseplugin/constants.h" line="253"/>
+        <location filename="../../plugins/drugsbaseplugin/constants.h" line="256"/>
         <source>Drug-drug interactions</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../../plugins/drugsbaseplugin/constants.h" line="256"/>
+        <location filename="../../plugins/drugsbaseplugin/constants.h" line="259"/>
         <source>DDI</source>
         <extracomment>This is the short name of the Drug-drug interactions engine.</extracomment>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../../plugins/drugsbaseplugin/constants.h" line="258"/>
-        <location filename="../../plugins/drugsbaseplugin/constants.h" line="262"/>
+        <location filename="../../plugins/drugsbaseplugin/constants.h" line="261"/>
+        <location filename="../../plugins/drugsbaseplugin/constants.h" line="265"/>
         <source>Potentially inappropriate medications</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../../plugins/drugsbaseplugin/constants.h" line="261"/>
+        <location filename="../../plugins/drugsbaseplugin/constants.h" line="264"/>
         <source>PIM</source>
         <extracomment>This is the short name of the Potentially inappropriate medications engine.</extracomment>
         <translation type="unfinished"></translation>

@@ -41,18 +41,18 @@
         <translation>Créer des utilisateurs virtuels</translation>
     </message>
     <message>
-        <location filename="../../plugins/fmfmainwindowplugin/virtualdatabasepreferences.cpp" line="187"/>
+        <location filename="../../plugins/fmfmainwindowplugin/virtualdatabasepreferences.cpp" line="89"/>
         <source>Creating %1 virtual patients</source>
         <translation>Création de %1 patients virtuels</translation>
     </message>
     <message>
-        <location filename="../../plugins/fmfmainwindowplugin/virtualdatabasepreferences.cpp" line="187"/>
-        <location filename="../../plugins/fmfmainwindowplugin/virtualdatabasepreferences.cpp" line="262"/>
+        <location filename="../../plugins/fmfmainwindowplugin/virtualdatabasepreferences.cpp" line="89"/>
+        <location filename="../../plugins/fmfmainwindowplugin/virtualdatabasepreferences.cpp" line="164"/>
         <source>Cancel</source>
         <translation>Annuler</translation>
     </message>
     <message>
-        <location filename="../../plugins/fmfmainwindowplugin/virtualdatabasepreferences.cpp" line="262"/>
+        <location filename="../../plugins/fmfmainwindowplugin/virtualdatabasepreferences.cpp" line="164"/>
         <source>Creating %1 virtual episodes</source>
         <translation>Création de %1 épisodes virtuels</translation>
     </message>
@@ -67,14 +67,23 @@
     </message>
 </context>
 <context>
+    <name>MainWin::MainWinPlugin</name>
+    <message>
+        <location filename="../../plugins/fmfmainwindowplugin/mainwindowplugin.cpp" line="79"/>
+        <location filename="../../plugins/fmfmainwindowplugin/mainwindowplugin.cpp" line="90"/>
+        <source>Initializing main window plugin...</source>
+        <translation>Initialisation du plugin fenêtre principale...</translation>
+    </message>
+</context>
+<context>
     <name>MainWin::MainWindow</name>
     <message>
-        <location filename="../../plugins/fmfmainwindowplugin/mainwindow.cpp" line="125"/>
+        <location filename="../../plugins/fmfmainwindowplugin/mainwindow.cpp" line="148"/>
         <source>Creating Main Window</source>
         <translation>Création de la fenêtre principale</translation>
     </message>
     <message>
-        <location filename="../../plugins/fmfmainwindowplugin/mainwindow.cpp" line="354"/>
+        <location filename="../../plugins/fmfmainwindowplugin/mainwindow.cpp" line="385"/>
         <source>Choose a patient file directory</source>
         <translation>Sélectionnez un répertoire</translation>
     </message>
