@@ -126,4 +126,39 @@ bool Appointement::dateLessThan(const Appointement *item1, const Appointement *i
     return false;
 }
 
+QDebug operator<<(QDebug dbg, const Agenda::Internal::Appointement &c)
+{
+    dbg.nospace() << "Appointement("
+                  << c.beginning().toString(QLocale().dateTimeFormat(QLocale::ShortFormat))
+                  << ", "
+                  << c.ending().toString(QLocale().dateTimeFormat(QLocale::ShortFormat))
+                  << ", "
+                  << "Valid:" << c.isValid()
+                  << ", "
+                  << "Virtual:" << c.data(Agenda::Constants::Db_IsVirtual).toBool()
+                  << ", "
+                  << "CalId:" << c.calendarId()
+                  << ", "
+                  << "Peoples:" << c.peopleUids(Calendar::People::PeopleAttendee).join(",")
+                  << ")";
+    return dbg.space();
+}
+
+QDebug operator<<(QDebug dbg, const Agenda::Internal::Appointement *c)
+{
+    dbg.nospace() << "Appointement("
+                  << c->beginning().toString(QLocale().dateTimeFormat(QLocale::ShortFormat))
+                  << ", "
+                  << c->ending().toString(QLocale().dateTimeFormat(QLocale::ShortFormat))
+                  << ", "
+                  << "Valid:" << c->isValid()
+                  << ", "
+                  << "Virtual:" << c->data(Agenda::Constants::Db_IsVirtual).toBool()
+                  << ", "
+                  << "CalId:" << c->calendarId()
+                  << ", "
+                  << "Peoples:" << c->peopleUids(Calendar::People::PeopleAttendee).join(",")
+                  << ")";
+    return dbg.space();
+}
 

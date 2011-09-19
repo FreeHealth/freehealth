@@ -40,7 +40,7 @@
  * \file appointement.h
  * \author Eric MAEKER <eric.maeker@gmail.com>
  * \version 0.6.0
- * \date 01 Aug 2011
+ * \date 18 Sept 2011
 */
 
 namespace Agenda {
@@ -93,5 +93,8 @@ private:
 
 }  // End namespace Internal
 }  // End namespace Agenda
+
+QDebug operator<<(QDebug dbg, const Agenda::Internal::Appointement &c);
+QDebug operator<<(QDebug dbg, const Agenda::Internal::Appointement *c);
 
 #endif // APPOINTEMENT_H
