@@ -240,7 +240,7 @@ void ServerPreferencesWidget::on_testButton_clicked()
             ui->testConnectionLabel->setText(tr("Connected"));
             m_ConnectionSucceeded = true;
             m_Grants = Utils::Database::getConnectionGrants("__APP_CONNECTION_TESTER");
-            qWarning() << "GRANTS" << m_Grants;
+//            qWarning() << "GRANTS" << m_Grants;
             saveToSettings();
         }
     }
