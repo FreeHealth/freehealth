@@ -93,7 +93,7 @@ QList<Calendar::CalendarItem> CalendarItemModel::getItemsBetween(const QDate &fr
     int pivot = searchForIntersectedItem(m_sortedByBeginList, from, to, 0, m_sortedByBeginList.count() - 1);
 
     if (pivot == -1)
-            return list;
+        return list;
 
     list << toCalendarItem(m_sortedByBeginList[pivot]);
     added.insert(m_sortedByBeginList[pivot], true);
@@ -508,60 +508,7 @@ int CalendarItemModel::createUid() const
     static int handle = 0;
     ++handle;
     return handle;
-//    // at first, get the date
-//    QString nowStr = QDateTime::currentDateTime().toString("yyyyMMddThhmmsszz");
-//    int index = 0;
-//    QString propal;
-//    do {
-//        if (!index)
-//            propal = nowStr;
-//        else
-//            propal = nowStr + QString("-%1").arg(index);
-//        index++;
-//    } while (getItemByUid(propal).isValid());
-//    return propal;
 }
-
-//void CalendarItemModel::userChanged()
-//{
-//    clearAll();
-
-//    // get all UserCalendars
-//    qDeleteAll(m_UserCalendar);
-//    m_UserCalendar.clear();
-//    m_UserCalendar = base()->getUserCalendars(user()->uuid());
-//    m_UserCalendarFilterIndex = this->defaultUserCalendarComboModelIndex();
-
-//    for(int i = 0; i < m_UserCalendar.count(); ++i) {
-//        setCalendarIsMine(m_UserCalendar.at(i));
-//    }
-
-    // TEST
-//    // Find default user calendar
-//    Agenda::UserCalendar *cal = 0;
-//    for(int i=0; i < m_UserCalendar.count(); ++i) {
-//        if (m_UserCalendar.at(i)->data(Agenda::UserCalendar::IsDefault).toBool()) {
-//            cal = m_UserCalendar.at(i);
-//        }
-//    }
-//    if (!cal) {
-//        LOG_ERROR("No default");
-//        return;
-//    }
-
-//    // get all items from database
-//    CalendarEventQuery query;
-//    query.setDateRangeForCurrentYear();
-//    query.setCalendarId(cal->data(Constants::Db_CalId).toInt());
-//    QList<Calendar::CalendarItem *> items = base()->getCalendarEvents(query);
-//    for(int i = 0; i < items.count(); ++i) {
-//        Calendar::CalendarItem *item = items.at(i);
-//        setItemIsMine(item);
-//        m_sortedByBeginList.insert(getInsertionIndex(true, item->beginning(), m_sortedByBeginList, 0, m_sortedByBeginList.count() - 1), item);
-//        m_sortedByEndList.insert(getInsertionIndex(false, item->ending(), m_sortedByEndList, 0, m_sortedByEndList.count() - 1), item);
-//    }
-    // END TEST
-//}
 
 void CalendarItemModel::getItemFromDatabase(const QDate &from, const QDate &to, const int calendarId) const
 {
@@ -613,7 +560,6 @@ void CalendarItemModel::getItemFromDatabase(const QDate &from, const QDate &to, 
     for(int i = 0; i < items.count(); ++i) {
         Appointement *item = items.at(i);
         item->setModelUid(createUid());
-//        setItemIsMine(item);
         m_sortedByBeginList.insert(getInsertionIndex(true, item->beginning(), m_sortedByBeginList, 0, m_sortedByBeginList.count() - 1), item);
         m_sortedByEndList.insert(getInsertionIndex(false, item->ending(), m_sortedByEndList, 0, m_sortedByEndList.count() - 1), item);
     }
