@@ -113,6 +113,9 @@ UserCalendarViewer::UserCalendarViewer(QWidget *parent) :
 {
     d->ui->setupUi(this);
     d->ui->calendarViewer->setDate(QDate::currentDate().addDays(3));
+    d->ui->calendarViewer->setDayScaleHourDivider(2);
+    d->ui->calendarViewer->setDayGranularity(15);
+    d->ui->calendarViewer->setHourHeight(4*20); //
 
     // populate the availabilities duration selector combo (every five minutes)
     for(int i = 1; i < 19; ++i) {
@@ -245,18 +248,10 @@ void UserCalendarViewer::userChanged()
         d->m_CalendarItemModel = 0;
     }
     d->ui->calendarViewer->setModel(d->m_CalendarItemModel);
-}
 
-//void UserCalendarViewer::rowsChanged(const QModelIndex &parent, int start, int end)
-//{
-//    if (d->m_UserCalendarModel->rowCount()==0) {
-//        d
-//    }
-//    if (d->ui->availableAgendasCombo->currentIndex()==-1) {
-//        d->ui->availableAgendasCombo->setCurrentIndex(d->m_UserCalendarModel->defaultUserCalendarModelIndex().row());
-//    }
-//    d->ui->availableAgendasCombo->setCurrentIndex(d->m_UserCalendarModel->defaultUserCalendarModelIndex().row());
-//}
+    // Activate calendar
+    on_availableAgendasCombo_activated(calIndex.row());
+}
 
 void UserCalendarViewer::changeEvent(QEvent *e)
 {
