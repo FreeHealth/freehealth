@@ -74,10 +74,10 @@ public:
     int hourHeight() const;
 
 public Q_SLOTS:
-    void setDayGranularity(int value);
-    void setDayItemDefaultDuration(int value);
+    void setDayGranularity(int valueInMinutes);
+    void setDayItemDefaultDuration(int valueInMinutes);
     void setDayScaleHourDivider(int value);
-    void setHourHeight(int value);
+    void setHourHeight(int heightInPixels);
 
 private Q_SLOTS:
     // navigation bar slots
