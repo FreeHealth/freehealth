@@ -6,8 +6,8 @@
   <formdescription>
     <!-- Non translatable values -->
     <authors>Eric Maeker, MD</authors>
-    <version>0.5.0~alpha</version>
-    <compatversion>0.5.0</compatversion>
+    <version>0.6.0</version>
+    <compatversion>0.6.0</compatversion>
     <cdate>2011-03-15</cdate>
     <icon>geriatrics.png</icon>
     <weblink>http://www.geriu.org/uploads/applications/gerilite_ADL_IADL/data/downloads/form_adl_iadl.pdf</weblink>

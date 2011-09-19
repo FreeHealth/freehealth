@@ -5,6 +5,7 @@
     <MedForm name="GP::Basic::Drugs::Chronic">
       <label lang="xx">Chronic therapeutic</label>
       <label lang="fr">Traitement chronique</label>
+      <icon>__theme__/drugs.png</icon>
       <Item name="GP::Basic::Drugs::Chronic::Content" type="prescriptor">
         <label lang="xx">Chronic therapeutic</label>
         <label lang="fr">Traitement chronique</label>
@@ -19,6 +20,7 @@
 
     <MedForm name="GP::Basic::Drugs::Allergies">
       <label lang="xx">Allergies</label>
+      <icon>__theme__/drugs.png</icon>
       <Item name="GP::Basic::Drugs::Allergies::Content" type="drugselector">
         <label lang="xx">Known drugs allergies</label>
         <label lang="fr">Allergies médicamenteuses connues</label>

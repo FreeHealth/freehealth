@@ -31,8 +31,8 @@
   <MedForm name="GP::Basic::IdentityForm">
     <label lang="xx">Identity</label>
     <label lang="fr">Identité</label>
-    <options>unique</options>
     <icon>__theme__/identity.png</icon>
+    <options>unique</options>
     <Item name="GP::Basic::IdentityItem" type="identity">
       <label lang="xx">Full Identity</label>
       <label lang="fr">Identité</label>
@@ -42,6 +42,7 @@
     <MedForm name="GP::Basic::Drugs::Chronic">
       <label lang="xx">Chronic therapeutic</label>
       <label lang="fr">Traitement chronique</label>
+      <icon>__theme__/drugs.png</icon>
       <Item name="GP::Basic::Drugs::Chronic::Content" type="prescriptor">
         <label lang="xx">Chronic therapeutic</label>
         <label lang="fr">Traitement chronique</label>
@@ -56,6 +57,7 @@
 
     <MedForm name="GP::Basic::Drugs::Allergies">
       <label lang="xx">Allergies</label>
+      <icon>__theme__/drugs.png</icon>
       <Item name="GP::Basic::Drugs::Allergies::Content" type="drugselector">
         <label lang="xx">Known drugs allergies</label>
         <label lang="fr">Allergies médicamenteuses connues</label>
@@ -112,6 +114,7 @@
     <MedForm name="GP::Basic::Prescr::Drugs">
       <label lang="xx">Drugs prescriptions</label>
       <label lang="fr">Prescriptions médicamenteuses</label>
+      <icon>__theme__/drugs.png</icon>
       <Item>
         <name>GP::Basic::Prescr::Drugs::Content</name>
         <type>prescriptor</type>

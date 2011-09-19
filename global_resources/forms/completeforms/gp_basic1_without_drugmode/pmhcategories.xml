@@ -2,32 +2,32 @@
 <!DOCTYPE FreeMedForms>
 <FreeMedForms>
   <PMHx>
-    <Category icon="">
+    <Category icon="__theme__/stethoscope.png">
       <label lang="xx">Risk factors</label>
       <label lang="fr">Facteurs de risque</label>
       <label lang="de">Risikofaktoren</label>
     </Category>
-    <Category icon="">
+    <Category icon="__theme__/stethoscope.png">
       <label lang="xx">Personnal</label>
       <label lang="fr">Personnel</label>
       <label lang="de">Personal</label>
-      <Category icon="">
+      <Category icon="__theme__/stethoscope.png">
         <label lang="xx">Medical</label>
         <label lang="fr">Médicaux</label>
         <label lang="de">Medizinische</label>
       </Category>
-      <Category icon="">
+      <Category icon="__theme__/stethoscope.png">
         <label lang="xx">Surgical</label>
         <label lang="fr">Chirurgicaux</label>
         <label lang="de">Chirurgische</label>
       </Category>
-      <Category icon="">
+      <Category icon="__theme__/stethoscope.png">
         <label lang="xx">Obstetric</label>
         <label lang="fr">Obstétricaux</label>
         <label lang="de">Geburtshilfe</label>
       </Category>
     </Category>
-    <Category icon="">
+    <Category icon="__theme__/stethoscope.png">
       <label lang="xx">Family</label>
       <label lang="fr">Familaux</label>
       <label lang="de">Familale</label>
