@@ -251,8 +251,8 @@ AgendaBase::AgendaBase(QObject *parent) :
     addIndex(Table_AVAIL_TO_TIMERANGE, AVTOTR_TRID);
 
     addField(Table_TIMERANGE, TIMERANGE_ID, "TR_ID", FieldIsUniquePrimaryKey);
-    addField(Table_TIMERANGE, TIMERANGE_FROM, "FROM", FieldIsShortText);
-    addField(Table_TIMERANGE, TIMERANGE_TO, "TO", FieldIsShortText);
+    addField(Table_TIMERANGE, TIMERANGE_FROM, "FROM", FieldIsTime);
+    addField(Table_TIMERANGE, TIMERANGE_TO, "TO", FieldIsTime);
     addIndex(Table_TIMERANGE, TIMERANGE_ID);
 
     addField(Table_COMMON, COMMON_ID, "COM_ID", FieldIsUniquePrimaryKey);
@@ -281,8 +281,8 @@ AgendaBase::AgendaBase(QObject *parent) :
     addField(Table_EVENTS, EVENT_CAL_ID, "CAL_ID", FieldIsInteger);
     addField(Table_EVENTS, EVENT_COMMON_ID, "COM_ID", FieldIsInteger);
     addField(Table_EVENTS, EVENT_ISVALID, "ISVALID", FieldIsBoolean);
-    addField(Table_EVENTS, EVENT_DATESTART, "DTSTART", FieldIsDate);
-    addField(Table_EVENTS, EVENT_DATEEND, "DTEND", FieldIsDate);
+    addField(Table_EVENTS, EVENT_DATESTART, "DTSTART", FieldIsDateTime);
+    addField(Table_EVENTS, EVENT_DATEEND, "DTEND", FieldIsDateTime);
     addIndex(Table_EVENTS, EVENT_ID);
     addIndex(Table_EVENTS, EVENT_CAL_ID);
     addIndex(Table_EVENTS, EVENT_COMMON_ID);
@@ -1296,20 +1296,24 @@ QList<QDateTime> AgendaBase::nextAvailableTime(const QDateTime &startSearch, con
         return toReturn;
     if (numberOfDates <= 0)
         return toReturn;
+    if (calendar.data(Constants::Db_CalId).toString().isEmpty())
+        return toReturn;
+    if (calendar.data(Constants::Db_CalId).toString()=="-1")
+        return toReturn;
+
     if (!connectDatabase(Constants::DB_NAME, __LINE__))
         return toReturn;
 
     // Here we can go on
-    if (WarnNextAvailableTimeWarnings)
-        qWarning() << Q_FUNC_INFO << startSearch << durationInMinutes << calendar.data(Constants::Db_CalId).toInt();
-
-    QSqlDatabase DB = database();
-    DB.transaction();
+    if (WarnNextAvailableTimeWarnings) {
+        qWarning() << Q_FUNC_INFO;
+        qWarning() << "start" << startSearch << "duration" << durationInMinutes
+                   << "calendarId" << calendar.data(Constants::Db_CalId);
+    }
 
     QDateTime start, currentStart, currentEnd;
     start = Utils::roundDateTime(startSearch, calendar.data(UserCalendar::DefaultDuration).toInt());
 
-    QSqlQuery query(DB);
     Utils::FieldList get;
     get << Utils::Field(Table_EVENTS, EVENT_DATESTART);
     get << Utils::Field(Table_EVENTS, EVENT_DATEEND);
@@ -1327,6 +1331,9 @@ QList<QDateTime> AgendaBase::nextAvailableTime(const QDateTime &startSearch, con
     QString limit = QString("\n LIMIT 0,1");
 
     // get the first event and make tests
+    QSqlDatabase DB = database();
+    DB.transaction();
+    QSqlQuery query(DB);
     if (query.exec(req+order+limit)) {
         if (query.next()) {
             currentStart = query.value(0).toDateTime();
@@ -1348,14 +1355,18 @@ QList<QDateTime> AgendaBase::nextAvailableTime(const QDateTime &startSearch, con
         if (start.isNull())
             break;
         if (WarnNextAvailableTimeWarnings)
-            qWarning() << "start" << start << "currentStart" << currentStart << "currentEnd" << currentEnd << "duration" << durationInMinutes << "limitation" << limitComputation;
+            qWarning() << "start" << start
+                       << "\n  currentStart" << currentStart
+                       << "\n  currentEnd" << currentEnd
+                       << "      duration" << durationInMinutes
+                       << "      limitation" << limitComputation << "\n";
         // add before the currentDate (enough time or no appointement) ?
         if (start.secsTo(currentStart) >= durationInSeconds || currentStart.isNull()) {
             // does it feet the userCalendar availability ?
             if (calendar.canBeAvailable(start, durationInMinutes)) {
                 toReturn << start;
                 if (WarnNextAvailableTimeWarnings)
-                    qWarning() << "added" << start;
+                    qWarning() << "      added" << start;
                 start = start.addSecs(durationInSeconds);
                 ++nbFound;
                 continue;
