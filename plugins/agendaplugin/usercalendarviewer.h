@@ -68,9 +68,10 @@ private Q_SLOTS:
     void on_availableAgendasCombo_activated(const int index);
     void userChanged();
 //    void rowsChanged(const QModelIndex &,int,int);
+    void on_scroll_activated(int index);
 
 protected:
-    void changeEvent(QEvent *e);
+    bool event(QEvent *e);
 
 private:
     UserCalendarViewerPrivate *d;

@@ -98,6 +98,7 @@ public:
     CalendarItemModel *m_CalendarItemModel;
     UserCalendarModel *m_UserCalendarModel;
     QHash<QString, int> m_UidToListIndex;
+    bool scrollOnShow;
 
 private:
     UserCalendarViewer *q;
@@ -213,10 +214,8 @@ void UserCalendarViewer::on_availableAgendasCombo_activated(const int index)
         d->ui->availabilitiesView->expandAll();
 
         // Reset the Calendar View properties
-        int defaultDuration = d->m_UserCalendarModel->index(calUid.row(), UserCalendarModel::DefaultDuration).toInt();
+        int defaultDuration = d->m_UserCalendarModel->index(index, UserCalendarModel::DefaultDuration).data().toInt();
         d->ui->calendarViewer->setDayScaleHourDivider(60/defaultDuration);
-//        d->ui->calendarViewer->setDayGranularity(5);
-//        d->ui->calendarViewer->setHourHeight(4*20); // 20pixels per minutes
     }
 //    d->populateCalendarWithCurrentWeek(d->m_UserCals.at(index));
 }
@@ -257,16 +256,43 @@ void UserCalendarViewer::userChanged()
 
     // Activate calendar
     on_availableAgendasCombo_activated(calIndex.row());
+
+    // Scroll the view to now
+    if (isVisible()) {
+        d->ui->calendarViewer->scrollToTime(QTime(17,0,0));
+        d->scrollOnShow = false;
+    } else {
+        d->scrollOnShow = true;
+    }
 }
 
-void UserCalendarViewer::changeEvent(QEvent *e)
+void UserCalendarViewer::on_scroll_activated(int index)
 {
-    QWidget::changeEvent(e);
+   d->ui->calendarViewer->scrollToTime(QTime(index+1,0,0));
+}
+
+bool UserCalendarViewer::event(QEvent *e)
+{
     switch (e->type()) {
     case QEvent::LanguageChange:
+    {
         d->ui->retranslateUi(this);
+        // populate the availabilities duration selector combo (every five minutes)
+        int idx = d->ui->availDurationCombo->currentIndex();
+        d->ui->availDurationCombo->clear();
+        for(int i = 1; i < 19; ++i) {
+            d->ui->availDurationCombo->addItem(QString("%1 %2").arg(i*5).arg(tkTr(Trans::Constants::MINUTES)));
+        }
+        d->ui->availDurationCombo->setCurrentIndex(idx);
         break;
+    }
+    case QEvent::Show:
+        if (d->scrollOnShow) {
+            d->ui->calendarViewer->scrollToTime(QTime::currentTime());
+            d->scrollOnShow = false;
+        }
     default:
         break;
     }
+    return QWidget::event(e);
 }
