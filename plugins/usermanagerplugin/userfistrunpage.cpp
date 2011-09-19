@@ -59,8 +59,8 @@ UserCreationPage::UserCreationPage(QWidget *parent) :
     ui->userManagerButton->setIcon(theme()->icon(Core::Constants::ICONUSERMANAGER, Core::ITheme::MediumIcon));
     ui->completeWizButton->setIcon(theme()->icon(Core::Constants::ICONNEWUSER, Core::ITheme::MediumIcon));
 
-    ui->userManagerButton->setEnabled(false);
-    ui->completeWizButton->setEnabled(false);
+//    ui->userManagerButton->setEnabled(false);
+//    ui->completeWizButton->setEnabled(false);
 
     QPixmap pix = theme()->splashScreenPixmap("freemedforms-wizard-users.png");
     setPixmap(QWizard::BackgroundPixmap, pix);
@@ -92,7 +92,6 @@ void UserCreationPage::initializePage()
 {
     // Create the user database
     userBase()->initialize();
-    return;
 
     const Utils::DatabaseConnector &db = settings()->databaseConnector();
     if (db.driver()==Utils::Database::SQLite) {
@@ -100,12 +99,13 @@ void UserCreationPage::initializePage()
             LOG_ERROR("Unable to connect has default admin user");
             ui->userManagerButton->setEnabled(false);
         }
-    } else if (db.driver()==Utils::Database::MySQL) {
-        if (!userModel()->setCurrentUser(Constants::DEFAULT_USER_CLEARLOGIN, Constants::DEFAULT_USER_CLEARPASSWORD)) {
-            LOG_ERROR("Unable to connect has default admin user");
-            ui->userManagerButton->setEnabled(false);
-        }
     }
+//    else if (db.driver()==Utils::Database::MySQL) {
+//        if (!userModel()->setCurrentUser(Constants::DEFAULT_USER_CLEARLOGIN, Constants::DEFAULT_USER_CLEARPASSWORD)) {
+//            LOG_ERROR("Unable to connect has default admin user");
+//            ui->userManagerButton->setEnabled(false);
+//        }
+//    }
 
     // Set current user into user model
     userModel()->setCurrentUserIsServerManager();
@@ -115,7 +115,6 @@ void UserCreationPage::initializePage()
 
 bool UserCreationPage::validatePage()
 {
-    return true;
     /** \todo code here */
     // Are there user created ? no -> can not validate
     // disconnected user database ?
