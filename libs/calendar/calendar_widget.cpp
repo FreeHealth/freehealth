@@ -40,14 +40,13 @@
 #include "basic_calendar_model.h"
 #include "calendar_navbar.h"
 
-#include <QPainter>
-#include <QPaintEvent>
 #include <QRect>
 #include <QPushButton>
 #include <QVBoxLayout>
 #include <QScrollBar>
 
 #include <QDebug>
+#include <QLabel>
 
 using namespace Calendar;
 
@@ -241,10 +240,15 @@ int CalendarWidget::hourHeight() const {
 }
 
 void CalendarWidget::setHourHeight(int value) {
-	if (m_d->m_hourHeight == value)
-		return;
+    if (m_d->m_hourHeight == value)
+        return;
 
-	m_d->m_hourHeight = value;
-	if (qobject_cast<DayRangeBody*>(m_d->m_body))
-		qobject_cast<DayRangeBody*>(m_d->m_body)->setHourHeight(value);
+    m_d->m_hourHeight = value;
+    if (qobject_cast<DayRangeBody*>(m_d->m_body))
+        qobject_cast<DayRangeBody*>(m_d->m_body)->setHourHeight(value);
+}
+
+void CalendarWidget::scrollToTime(const QTime &time) {
+    int y = (time.hour()-1)*m_d->m_hourHeight;
+    m_d->m_scrollArea->verticalScrollBar()->setValue(y);
 }

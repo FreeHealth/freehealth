@@ -79,6 +79,8 @@ public Q_SLOTS:
     void setDayScaleHourDivider(int value);
     void setHourHeight(int heightInPixels);
 
+    void scrollToTime(const QTime &time);
+
 private Q_SLOTS:
     // navigation bar slots
     void firstDateChanged();
