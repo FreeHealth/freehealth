@@ -123,6 +123,10 @@ public:
 
     bool validatePage();
 
+private Q_SLOTS:
+    void checkLogin();
+    void checkControlPassword(const QString &text);
+
 private:
     void changeEvent(QEvent *e);
     void retranslate();

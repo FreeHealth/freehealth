@@ -27,7 +27,7 @@
 /**
   \class UserPlugin::UserWizard
   \brief Wizard for user creation.
-  You can tell tkWiz to create the user itself or use a defined user. createUser() define the
+  You can tell UserWizrd to create the user itself or use a defined user. createUser() define the
   creation mode. If you set it to false, inform the row of the model to use with setModelRow(). By default,
   UserWizard create itself a new user.\n
   You can extend the wizard with the UserPlugin::IUserWizardPage interface. The wizard will catch all
@@ -277,7 +277,7 @@ void UserWizard::done(int r)
 
 #ifdef DEBUG
         // warn user
-        m_User->warn();
+//        m_User->warn();
 #endif
     }
 }
@@ -332,8 +332,12 @@ UserIdentityAndLoginPage::UserIdentityAndLoginPage(QWidget *parent) :
     registerField("Gender", cbGender, "currentIndex");
 
     lblL = new QLabel(tr("Login"), this);
+    lblL->setToolTip(tr("Your login must be 5 chars length at least"));
+    lblL->setStyleSheet("color:red");
     lblP = new QLabel(tr("Password"), this);
+    lblP->setStyleSheet("color:red");
     lblCP = new QLabel(tr("Confirm Password"), this);
+    lblCP->setStyleSheet("color:red");
 
     leLogin = new Utils::LineEditEchoSwitcher(this);
     lePassword = new Utils::LineEditEchoSwitcher(this);
@@ -361,6 +365,24 @@ UserIdentityAndLoginPage::UserIdentityAndLoginPage(QWidget *parent) :
     lay->addWidget(logGroup);
 
     retranslate();
+
+    connect(leLogin->lineEdit(), SIGNAL(editingFinished()), this, SLOT(checkLogin()));
+    connect(lePasswordConfirm->lineEdit(), SIGNAL(textChanged(QString)), this, SLOT(checkControlPassword(QString)));
+}
+
+void UserIdentityAndLoginPage::checkLogin()
+{
+    // user login must be unique in the FreeMedForms database
+    // user login must be unique on the server
+}
+
+void UserIdentityAndLoginPage::checkControlPassword(const QString &text)
+{
+    if (text==lePassword->text()) {
+        lblCP->setStyleSheet("color:black");
+    } else {
+        lblCP->setStyleSheet("color:red");
+    }
 }
 
 void UserIdentityAndLoginPage::changeEvent(QEvent *e)

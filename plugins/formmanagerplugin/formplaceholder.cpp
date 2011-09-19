@@ -546,7 +546,7 @@ void FormPlaceHolder::addForm()
 
 void FormPlaceHolder::printCurrentItem()
 {
-    qWarning() << Q_FUNC_INFO;
+//    qWarning() << Q_FUNC_INFO;
     if (!d->m_FileTree->selectionModel())
         return;
 
@@ -587,45 +587,15 @@ void FormPlaceHolder::printCurrentItem()
     // print
     p->print("<html><body>" + formMain->printableHtml(d->m_EpisodeModel->isEpisode(index)) + "</body></html>", Core::IDocumentPrinter::Papers_Generic_User, false);
 
-    qWarning() << formMain->uuid();
+//    qWarning() << formMain->uuid();
 
-    QDialog dlg;
-    QTextBrowser b(&dlg);
-    QVBoxLayout l(&dlg);
-    dlg.setLayout(&l);
-    l.addWidget(&b);
-    b.setHtml("<html><body>" + formMain->printableHtml(d->m_EpisodeModel->isEpisode(index)) + "</body></html>");
-    dlg.exec();
+//    QDialog dlg;
+//    QTextBrowser b(&dlg);
+//    QVBoxLayout l(&dlg);
+//    dlg.setLayout(&l);
+//    l.addWidget(&b);
+//    b.setHtml("<html><body>" + formMain->printableHtml(d->m_EpisodeModel->isEpisode(index)) + "</body></html>");
+//    dlg.exec();
 
-    qWarning() << formMain->printableHtml(d->m_EpisodeModel->isEpisode(index));
-
-//    QStringList vals = formMain->valueReferences()->values(Form::FormItemValues::Value_Printing);
-//    if (vals.count()) {
-//        // print using the printing value
-//        qWarning() << "PRINT\n" << vals;
-//        Core::IDocumentPrinter *p = printer();
-//        if (!p) {
-//            LOG_ERROR("No IDocumentPrinter found");
-//            return;
-//        }
-//        p->clearTokens();
-//        QHash<QString, QVariant> tokens;
-
-//        tokens.insert(Core::Constants::TOKEN_DOCUMENTTITLE, formMain->spec()->label());
-
-//        // create a token for each FormItem of the FormMain
-//        foreach(FormItem *item, formMain->flattenFormItemChildren()) {
-//            if (item->itemDatas())
-//                tokens.insert(item->uuid(), item->itemDatas()->data(0, Form::IFormItemData::ID_Printable));
-//        }
-//        p->addTokens(Core::IDocumentPrinter::Tokens_Global, tokens);
-
-//        // print
-//        p->print(m_doc, m_typeOfPaper, m_duplicata);
-
-//    } else {
-//        // print using the widget
-//        qWarning() << "PRINT WIDGET";
-//    }
-
+//    qWarning() << formMain->printableHtml(d->m_EpisodeModel->isEpisode(index));
 }

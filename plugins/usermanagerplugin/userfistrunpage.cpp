@@ -134,8 +134,8 @@ bool UserCreationPage::validatePage()
 void UserCreationPage::retranslate()
 {
     setTitle(QCoreApplication::translate(Constants::TR_CONTEXT_USERS, Constants::CREATE_USER));
-//    setSubTitle(tr("You can use the full user manager dialog to create user or create simple users using the user wizard."));
-    setSubTitle(tr("You can create user inside FreeMedForms at the end of the configuration."));
+    setSubTitle(tr("You can use the full user manager dialog to create user or create simple users using the user wizard."));
+//    setSubTitle(tr("You can create user inside FreeMedForms at the end of the configuration."));
     ui->userManagerButton->setText(tkTr(Trans::Constants::USERMANAGER_TEXT));
     ui->completeWizButton->setText(QCoreApplication::translate(Constants::TR_CONTEXT_USERS, Constants::USER_WIZARD));
 }
