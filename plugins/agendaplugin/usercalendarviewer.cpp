@@ -115,7 +115,7 @@ UserCalendarViewer::UserCalendarViewer(QWidget *parent) :
     d->ui->calendarViewer->setDate(QDate::currentDate().addDays(3));
     d->ui->calendarViewer->setDayScaleHourDivider(2);
     d->ui->calendarViewer->setDayGranularity(15);
-    d->ui->calendarViewer->setHourHeight(4*20); //
+    d->ui->calendarViewer->setHourHeight(4*20); // 20pixels per minutes
 
     // populate the availabilities duration selector combo (every five minutes)
     for(int i = 1; i < 19; ++i) {
@@ -211,6 +211,12 @@ void UserCalendarViewer::on_availableAgendasCombo_activated(const int index)
         // Add availabilities
         d->ui->availabilitiesView->setModel(d->m_UserCalendarModel->availabilityModel(calIndex, this));
         d->ui->availabilitiesView->expandAll();
+
+        // Reset the Calendar View properties
+        int defaultDuration = d->m_UserCalendarModel->index(calUid.row(), UserCalendarModel::DefaultDuration).toInt();
+        d->ui->calendarViewer->setDayScaleHourDivider(60/defaultDuration);
+//        d->ui->calendarViewer->setDayGranularity(5);
+//        d->ui->calendarViewer->setHourHeight(4*20); // 20pixels per minutes
     }
 //    d->populateCalendarWithCurrentWeek(d->m_UserCals.at(index));
 }
