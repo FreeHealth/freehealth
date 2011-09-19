@@ -68,6 +68,9 @@
 #include <QHash>
 #include <QSqlTableModel>
 
+enum { WarnAllProcesses = false, WarnUserConnection = true };
+
+
 using namespace UserPlugin;
 using namespace UserPlugin::Constants;
 using namespace Trans::ConstantTranslations;
@@ -172,6 +175,8 @@ public:
     */
     bool addUserFromDatabase(const QString &uuid)
     {
+        if (WarnAllProcesses)
+            qWarning() << Q_FUNC_INFO << uuid;
         // make sure it is not already in the hash
         if (m_Uuid_UserList.keys().contains(uuid))
             return true;
@@ -190,6 +195,8 @@ public:
     {
         // get user from database
         QString uuid = userBase()->getUuid(log64, pass64);
+        if (WarnAllProcesses)
+            qWarning() << Q_FUNC_INFO << log64 << pass64 << uuid;
          if (uuid.isEmpty())
             return QString();
         // make sure it is not already in the hash
@@ -205,6 +212,8 @@ public:
     {
         // 1. create an empty user into the hash
         QString uuid = userBase()->createNewUuid();
+        if (WarnAllProcesses)
+            qWarning() << Q_FUNC_INFO << uuid;
         m_Uuid_UserList.insert(uuid, new UserData(uuid));
         return uuid;
     }
@@ -341,6 +350,17 @@ public:
         return toReturn;
     }
 
+    void checkNullUser()
+    {
+        foreach(const Internal::UserData *u, m_Uuid_UserList.values()) {
+            if (!u || u->uuid().isEmpty()) {
+                LOG_ERROR_FOR("UserModel", "Null user in model");
+                qWarning() << m_Uuid_UserList;
+                continue;
+            }
+        }
+    }
+
 public:
     UserModelWrapper *m_UserModelWrapper;
     QSqlTableModel *m_Sql;
@@ -381,6 +401,7 @@ UserModel::UserModel(QObject *parent) :
         setParent(qApp);
 
     onCoreDatabaseServerChanged();
+    d->checkNullUser();
 //    connect(Core::ICore::instance(), SIGNAL(databaseServerChanged()), this, SLOT(onCoreDatabaseServerChanged()));
 }
 
@@ -389,13 +410,11 @@ UserModel::~UserModel()
 {
 //    if (!d->m_CurrentUserUuid.isEmpty() && d->m_CurrentUserUuid != ::SERVER_ADMINISTRATOR_UUID) {
 //        // save user preferences
-//        if (d->m_Uuid_UserList.contains(d->m_CurrentUserUuid)) {
-//            Internal::UserData *user = d->m_Uuid_UserList[d->m_CurrentUserUuid];
+//            Internal::UserData *user = d->m_Uuid_UserList.value(d->m_CurrentUserUuid,0);
 //            if (user) {
 //                user->setPreferences(settings()->userSettings());
 //                userBase()->saveUser(user);
 //            }
-//        }
 //    }
     if (d) {
         delete d;
@@ -405,12 +424,15 @@ UserModel::~UserModel()
 
 void UserModel::onCoreDatabaseServerChanged()
 {
+    if (WarnAllProcesses)
+        qWarning() << Q_FUNC_INFO << d->m_Sql;
     if (d->m_Sql)
         delete d->m_Sql;
     d->m_Sql = new QSqlTableModel(this, userBase()->database());
     d->m_Sql->setTable(userBase()->table(Table_USERS));
     d->m_Sql->setEditStrategy(QSqlTableModel::OnManualSubmit);
     d->m_Sql->select();
+    d->checkNullUser();
 }
 
 /**
@@ -419,7 +441,9 @@ void UserModel::onCoreDatabaseServerChanged()
 */
 bool UserModel::setCurrentUser(const QString &clearLog, const QString &clearPassword, bool refreshCache)
 {
-    qWarning() << Q_FUNC_INFO << clearLog << clearPassword;
+    if (WarnAllProcesses || WarnUserConnection)
+        qWarning() << Q_FUNC_INFO << clearLog << clearPassword;
+    d->checkNullUser();
 
     QString log64 = Utils::loginForSQL(clearLog);
     QString cryptpass64 = Utils::cryptPassword(clearPassword);
@@ -474,10 +498,14 @@ bool UserModel::setCurrentUser(const QString &clearLog, const QString &clearPass
     LOG(tr("Setting current user uuid to \t\t\t %1").arg(uuid));
     if (!d->m_CurrentUserUuid.isEmpty()) {
         // save user preferences
-        Internal::UserData *user = d->m_Uuid_UserList[d->m_CurrentUserUuid];
-        user->setPreferences(settings()->userSettings());
-        userBase()->saveUserPreferences(user->uuid(), user->preferences());
-        Q_EMIT userAboutToDisconnect(d->m_CurrentUserUuid);
+        Internal::UserData *user = d->m_Uuid_UserList.value(d->m_CurrentUserUuid, 0);
+        if (user) {
+            if (WarnUserConnection)
+                qWarning() << "Saving user peferences" << d->m_CurrentUserUuid;
+            user->setPreferences(settings()->userSettings());
+            userBase()->saveUserPreferences(user->uuid(), user->preferences());
+            Q_EMIT userAboutToDisconnect(d->m_CurrentUserUuid);
+        }
     }
     d->m_CurrentUserUuid.clear();
     d->m_CurrentUserRights = Core::IUser::NoRights;
@@ -491,7 +519,7 @@ bool UserModel::setCurrentUser(const QString &clearLog, const QString &clearPass
     Q_EMIT(userAboutToConnect(uuid));
 
     // 6. Feed Core::ISettings with the user's settings
-    Internal::UserData *user = d->m_Uuid_UserList.value(d->m_CurrentUserUuid);
+    Internal::UserData *user = d->m_Uuid_UserList.value(d->m_CurrentUserUuid, 0);
     if (user) {
         settings()->setUserSettings(user->preferences());
 
@@ -502,12 +530,12 @@ bool UserModel::setCurrentUser(const QString &clearLog, const QString &clearPass
         userBase()->saveUser(user);
         user->setModified(false);
     }
-    d->m_CurrentUserUuid = uuid;
 
     /** \todo this is not the usermanger role if asked uuid == currentuser */
     d->m_CurrentUserRights = Core::IUser::UserRights(user->rightsValue(USER_ROLE_USERMANAGER).toInt());
 
-    LOG(tkTr(Trans::Constants::CONNECTED_AS_1).arg(user->fullName()));
+    if (WarnAllProcesses || WarnUserConnection)
+        LOG(tkTr(Trans::Constants::CONNECTED_AS_1).arg(user->fullName()));
 
     // If we are running with a server, we need to reconnect all databases
     if (settings()->databaseConnector().driver()==Utils::Database::MySQL) {
@@ -541,6 +569,7 @@ bool UserModel::setCurrentUser(const QString &clearLog, const QString &clearPass
     Q_EMIT memoryUsageChanged();
     Q_EMIT userConnected(uuid);
 
+    d->checkNullUser();
     return true;
 }
 
@@ -551,6 +580,10 @@ bool UserModel::setCurrentUser(const QString &clearLog, const QString &clearPass
 */
 bool UserModel::setCurrentUserIsServerManager()
 {
+    if (WarnAllProcesses)
+        qWarning() << Q_FUNC_INFO;
+    d->checkNullUser();
+
     //    if (userBase()->database().driverName()=="QSQLITE") {
     //        return false;
     //    }
@@ -560,7 +593,6 @@ bool UserModel::setCurrentUserIsServerManager()
             return false;
         }
     }
-    //    qWarning() << Q_FUNC_INFO << log64 << cryptpass64;
     QList<IUserListener *> listeners = pluginManager()->getObjects<IUserListener>();
 
     // 1. Ask all listeners to prepare the current user disconnection
@@ -571,11 +603,12 @@ bool UserModel::setCurrentUserIsServerManager()
 
     // 2. Check "in memory" users
     QString uuid = ::SERVER_ADMINISTRATOR_UUID;
-    Internal::UserData *u = d->m_Uuid_UserList.value(uuid);
+    Internal::UserData *u = d->m_Uuid_UserList.value(uuid, 0);
     if (!u) {
         u = new Internal::UserData(uuid);
         u->setName(tr("Database server administrator"));
         u->setRights(Constants::USER_ROLE_USERMANAGER, Core::IUser::AllRights);
+        u->setModified(false);
         d->m_Uuid_UserList.insert(uuid, u);
     }
 
@@ -620,12 +653,16 @@ bool UserModel::setCurrentUserIsServerManager()
     LOG(tkTr(Trans::Constants::CONNECTED_AS_1).arg(u->fullName()));
     Q_EMIT memoryUsageChanged();
     Q_EMIT userConnected(uuid);
+    d->checkNullUser();
     return true;
 }
 
 /** Return true if a current user has been defined. */
 bool UserModel::hasCurrentUser() const
 {
+    if (WarnAllProcesses)
+        qWarning() << Q_FUNC_INFO << (!d->m_CurrentUserUuid.isEmpty());
+    d->checkNullUser();
     return (!d->m_CurrentUserUuid.isEmpty());
 }
 
@@ -634,6 +671,7 @@ QModelIndex UserModel::currentUserIndex() const
 {
     if (d->m_CurrentUserUuid.isEmpty())
         return QModelIndex();
+    d->checkNullUser();
     QModelIndexList list = match(this->index(0, Core::IUser::Uuid), Qt::DisplayRole, d->m_CurrentUserUuid, 1);
     if (list.count() == 1) {
         return list.at(0);
@@ -643,6 +681,7 @@ QModelIndex UserModel::currentUserIndex() const
 
 void UserModel::forceReset()
 {
+    d->checkNullUser();
     d->m_Sql->select();
     reset();
 }
@@ -650,6 +689,9 @@ void UserModel::forceReset()
 /** Clears the content of the model. Silently save users if needed. */
 void UserModel::clear()
 {
+    if (WarnAllProcesses)
+        qWarning() << Q_FUNC_INFO;
+    d->checkNullUser();
     // d->m_Sql ?
     submitAll();
     d->m_CurrentUserRights = 0;
@@ -660,6 +702,9 @@ void UserModel::clear()
 
 void UserModel::refresh()
 {
+    if (WarnAllProcesses)
+        qWarning() << Q_FUNC_INFO;
+    d->checkNullUser();
     clear();
     d->m_Sql->select();
     reset();
@@ -668,6 +713,7 @@ void UserModel::refresh()
 /** Check login/password validity. \sa UserBase::checkLogin(). */
 bool UserModel::isCorrectLogin(const QString &clearLog, const QString &clearPassword)
 {
+    d->checkNullUser();
     return userBase()->checkLogin(clearLog, clearPassword);
 }
 
@@ -677,10 +723,18 @@ bool UserModel::isCorrectLogin(const QString &clearLog, const QString &clearPass
 */
 bool UserModel::removeRows(int row, int count, const QModelIndex &)
 {
-    Internal::UserData *user = d->m_Uuid_UserList[d->m_CurrentUserUuid];
-    Core::IUser::UserRights umRights = Core::IUser::UserRights(user->rightsValue(USER_ROLE_USERMANAGER).toInt());
-    if (!umRights & Core::IUser::Delete)
+    if (WarnAllProcesses)
+        qWarning() << Q_FUNC_INFO;
+    d->checkNullUser();
+    Internal::UserData *user = d->m_Uuid_UserList.value(d->m_CurrentUserUuid,0);
+    if (user) {
+        Core::IUser::UserRights umRights = Core::IUser::UserRights(user->rightsValue(USER_ROLE_USERMANAGER).toInt());
+        if (!umRights & Core::IUser::Delete)
+            return false;
+    } else {
+        LOG_ERROR("No current user");
         return false;
+    }
 
     bool noError = true;
     beginRemoveRows(QModelIndex(), row, row+count);
@@ -705,8 +759,9 @@ bool UserModel::removeRows(int row, int count, const QModelIndex &)
                LOG_ERROR(tr("You can not delete a modified user, save it before."));
                 noError = false;
             } else {
-                delete d->m_Uuid_UserList[uuid];
-                d->m_Uuid_UserList[uuid] = 0;
+                Internal::UserData *deleteme = d->m_Uuid_UserList.value(uuid,0);
+                delete deleteme;
+                deleteme = 0;
                 d->m_Uuid_UserList.remove(uuid);
             }
         }
@@ -719,14 +774,18 @@ bool UserModel::removeRows(int row, int count, const QModelIndex &)
     }
     endRemoveRows();
     d->m_Sql->select();
-    reset(); // needed ?
+    reset();
     Q_EMIT memoryUsageChanged();
+    d->checkNullUser();
     return noError;
 }
 
 /** Create a new row (new user) into the model. */
 bool UserModel::insertRows(int row, int count, const QModelIndex &parent)
 {
+    if (WarnAllProcesses)
+        qWarning() << Q_FUNC_INFO;
+    d->checkNullUser();
     if (!d->m_CurrentUserRights & Core::IUser::Create)
         return false;
     int i=0;
@@ -738,7 +797,7 @@ bool UserModel::insertRows(int row, int count, const QModelIndex &parent)
         }
         // feed the QSqlTableModel with uuid and crypted empty password
         QString uuid = d->createNewEmptyUser(this, row+i);
-        Internal::UserData *user = d->m_Uuid_UserList.value(uuid);
+        Internal::UserData *user = d->m_Uuid_UserList.value(uuid, 0);
         QModelIndex newIndex = index(row+i, Core::IUser::Uuid);
         if (!d->m_Sql->setData(newIndex, uuid, Qt::EditRole)) {
            LOG_ERROR(QString("Can not add user's uuid into the new user into SQL Table. Row = %1 , UUID = %2 ")
@@ -767,6 +826,7 @@ bool UserModel::insertRows(int row, int count, const QModelIndex &parent)
         user->setLkIds(QList<int>() << maxLkId+1);
     }
     Q_EMIT memoryUsageChanged();
+    d->checkNullUser();
     return i;
 }
 
@@ -800,12 +860,20 @@ bool UserModel::setData(const QModelIndex &item, const QVariant &value, int role
 
     // get uuid from real database
     QString uuid = d->m_Sql->data(d->m_Sql->index(item.row(), USER_UUID), Qt::DisplayRole).toString();
+    if (uuid.isEmpty()) {
+        LOG_ERROR(QString("Wrong uuid, Index(%1,%2)").arg(item.row()).arg(item.column()));
+        return false;
+    }
     if (!d->m_Uuid_UserList.keys().contains(uuid)) {
         d->addUserFromDatabase(uuid);
         Q_EMIT memoryUsageChanged();
     }
 
-    Internal::UserData *user = d->m_Uuid_UserList[uuid];
+    Internal::UserData *user = d->m_Uuid_UserList.value(uuid, 0);
+    if (!user) {
+        LOG_ERROR("No user for uuid " + uuid);
+        return false;
+    }
 
 //    qWarning() << Q_FUNC_INFO << user;
 
@@ -908,10 +976,13 @@ bool UserModel::setData(const QModelIndex &item, const QVariant &value, int role
 
 QVariant UserModel::currentUserData(const int column) const
 {
+    if (WarnAllProcesses)
+        qWarning() << Q_FUNC_INFO << column;
+    d->checkNullUser();
     if (d->m_CurrentUserUuid.isEmpty()) {
         return QVariant();
     }
-    const Internal::UserData *user = d->m_Uuid_UserList.value(d->m_CurrentUserUuid);
+    const Internal::UserData *user = d->m_Uuid_UserList.value(d->m_CurrentUserUuid, 0);
     if (!user)
         return QVariant();
     return d->getUserData(user, column);
@@ -926,8 +997,10 @@ QVariant UserModel::data(const QModelIndex &item, int role) const
 
     // get user
     QString uuid = d->m_Sql->data(d->m_Sql->index(item.row(), USER_UUID), Qt::DisplayRole).toString();
-    if (uuid.isEmpty())
+    if (uuid.isEmpty()) {
+        LOG_ERROR(QString("Wrong uuid, Index(%1,%2)").arg(item.row()).arg(item.column()));
         return QVariant();
+    }
 
     if (uuid==d->m_CurrentUserUuid && (role==Qt::DisplayRole || role==Qt::EditRole)) {
         return currentUserData(item.column());
@@ -938,7 +1011,9 @@ QVariant UserModel::data(const QModelIndex &item, int role) const
     if (role == Qt::FontRole) {
         QFont font;
         if (d->m_Uuid_UserList.keys().contains(uuid)) {
-            Internal::UserData *user = d->m_Uuid_UserList.value(uuid);
+            Internal::UserData *user = d->m_Uuid_UserList.value(uuid,0);
+            if (!user)
+                return QVariant();
             if (user->isModified())
                  font.setBold(true);
              else
@@ -976,7 +1051,8 @@ QVariant UserModel::data(const QModelIndex &item, int role) const
             d->addUserFromDatabase(uuid);
             Q_EMIT memoryUsageChanged();
         }
-        const Internal::UserData *user = d->m_Uuid_UserList.value(uuid);
+        const Internal::UserData *user = d->m_Uuid_UserList.value(uuid,0);
+        Q_ASSERT(user);
 
         // check user write rights
         if (user->isCurrent()) {
@@ -1014,7 +1090,10 @@ void UserModel::setFilter(const QString &/*filter*/)
 
 bool UserModel::setPaper(const QString &uuid, const int ref, Print::TextDocumentExtra *extra)
 {
-    Internal::UserData *user = d->m_Uuid_UserList[uuid];
+    if (WarnAllProcesses)
+        qWarning() << Q_FUNC_INFO << uuid << ref << extra;
+    d->checkNullUser();
+    Internal::UserData *user = d->m_Uuid_UserList.value(uuid,0);
     if (!user)
         return false;
     user->setExtraDocument(extra, ref);
@@ -1027,8 +1106,11 @@ bool UserModel::setPaper(const QString &uuid, const int ref, Print::TextDocument
 
 Print::TextDocumentExtra *UserModel::paper(const int row, const int ref)
 {
+    d->checkNullUser();
     QString uuid = d->m_Sql->data(d->m_Sql->index(row, USER_UUID), Qt::DisplayRole).toString();
-    Internal::UserData *user = d->m_Uuid_UserList[uuid];
+    if (WarnAllProcesses)
+        qWarning() << Q_FUNC_INFO << uuid << ref << uuid;
+    Internal::UserData *user = d->m_Uuid_UserList.value(uuid,0);
     if (!user)
         return 0;
     return user->extraDocument(ref);
@@ -1037,6 +1119,9 @@ Print::TextDocumentExtra *UserModel::paper(const int row, const int ref)
 /** Returns true if model has dirty rows that need to be saved into database. */
 bool UserModel::hasUserToSave()
 {
+    if (WarnAllProcesses)
+        qWarning() << Q_FUNC_INFO;
+    d->checkNullUser();
     foreach(const Internal::UserData *u, d->m_Uuid_UserList.values()) {
         if (!u || u->uuid().isEmpty()) {
             // paranoid code
@@ -1046,8 +1131,11 @@ bool UserModel::hasUserToSave()
             d->m_Uuid_UserList.remove(0);
             continue;
         }
-        if (u->isModified())
+        if (u->isModified()) {
+            if (WarnAllProcesses)
+                qWarning() << u->uuid() << "isModified";
             return true;
+        }
     }
     return false;
 }
@@ -1055,13 +1143,13 @@ bool UserModel::hasUserToSave()
 /** Submit all changes of the model into database */
 bool UserModel::submitAll()
 {
+    if (WarnAllProcesses)
+        qWarning() << Q_FUNC_INFO;
+    d->checkNullUser();
     bool toReturn = true;
-    int i = 0;
     foreach(const QString &s, d->m_Uuid_UserList.keys()) {
         if (!submitUser(s))
             toReturn = false;
-        else
-            i++;
     }
     Q_EMIT memoryUsageChanged();
     return toReturn;
@@ -1070,15 +1158,24 @@ bool UserModel::submitAll()
 /** Submit only one user changes of the model into database according to the current user rights. */
 bool UserModel::submitUser(const QString &uuid)
 {
-//    qWarning() << Q_FUNC_INFO << uuid << d->m_Uuid_UserList;
-    bool toReturn = false;
-//    QModelIndexList list = match(index(0, Core::IUser::Uuid), Qt::DisplayRole, uuid, 1);
-//    if (list.count() != 1) {
-//        return false;
-//    }
+    if (WarnAllProcesses)
+        qWarning() << Q_FUNC_INFO << uuid;
+    d->checkNullUser();
+
+    if (uuid==::SERVER_ADMINISTRATOR_UUID)
+        return true;
+
+    bool toReturn = true;
+
     Internal::UserData *user = d->m_Uuid_UserList.value(uuid, 0);
+    if (WarnAllProcesses)
+        qWarning() << user;
+
     if (!user)
         return false;
+
+    if (WarnAllProcesses)
+        qWarning() << "modified" << user->isModified();
 
     // act only on modified users
     bool hasRights = false;
@@ -1091,14 +1188,21 @@ bool UserModel::submitUser(const QString &uuid)
                    (d->m_CurrentUserRights & Core::IUser::WriteAll)) {
             hasRights = true;
         }
-//        qWarning() << hasRights << user->isCurrent() << d->m_CurrentUserRights;
+
+        if (WarnAllProcesses)
+            qWarning() << "isCurrent" << user->isCurrent() << "hasRights" << hasRights;
+
         if (hasRights) {
-            if (userBase()->saveUser(user)) {
-                toReturn = true;
+            if (!userBase()->saveUser(user)) {
+                toReturn = false;
             }
         }
     }
-//    Q_EMIT dataChanged(index(list.at(0).row(),0) , index(list.at(0).row(), Core::IUser::NumberOfColumns));
+
+    if (WarnAllProcesses)
+        qWarning() << "saved" << toReturn;
+
+    d->checkNullUser();
     return toReturn;
 }
 
@@ -1110,28 +1214,36 @@ bool UserModel::submitRow(const int row)
 /** Reverts the model. */
 bool UserModel::revertAll()
 {
+    if (WarnAllProcesses)
+        qWarning() << Q_FUNC_INFO;
+    d->checkNullUser();
     /** \todo ASSERT failure in QSqlTableModelPrivate::revertCachedRow(): "Invalid entry in cache map", file models\qsqltablemodel.cpp, line 151 */
     int i = 0;
     for(i=0; i < rowCount() ; i++)
         revertRow(i);
     d->m_Sql->select();
     reset();
+    d->checkNullUser();
     return true;
 }
 
 /** Revert a row */
 void UserModel::revertRow(int row)
 {
+    d->checkNullUser();
     QString uuid = d->m_Sql->index(row, USER_UUID).data().toString();
+    if (WarnAllProcesses)
+        qWarning() << Q_FUNC_INFO << row << uuid;
     d->m_Sql->revertRow(row);
     if (d->m_Uuid_UserList.keys().contains(uuid)) {
-        delete d->m_Uuid_UserList[uuid];
-        d->m_Uuid_UserList[uuid] = 0;
+        Internal::UserData *deleteme = d->m_Uuid_UserList.value(uuid,0);
+        delete deleteme;
+        deleteme = 0;
         d->m_Uuid_UserList.remove(uuid);
     }
-//    select();
     reset();
     Q_EMIT memoryUsageChanged();
+    d->checkNullUser();
 }
 
 /**
@@ -1140,6 +1252,7 @@ void UserModel::revertRow(int row)
 */
 void UserModel::setFilter(const QHash<int,QString> &conditions)
 {
+    d->checkNullUser();
     /** \todo filter by name AND Firstname at the same time */
     QString filter = "";
     const Internal::UserBase *b = userBase();
@@ -1158,6 +1271,7 @@ void UserModel::setFilter(const QHash<int,QString> &conditions)
     d->m_Sql->setFilter(filter);
     reset();
 //    qWarning() << filter;
+    d->checkNullUser();
 }
 
 /** Return the LinkId for the user with uuid \e uid */
@@ -1165,7 +1279,7 @@ int UserModel::practionnerLkId(const QString &uid)
 {
     /** \todo manage user's groups */
     if (d->m_Uuid_UserList.keys().contains(uid)) {
-        Internal::UserData *user = d->m_Uuid_UserList.value(uid);
+        Internal::UserData *user = d->m_Uuid_UserList.value(uid, 0);
 //        qWarning() << "xxxxxxxxxxxxx memory" << uid << user->linkIds();
         return user->personalLinkId();
     }
@@ -1193,7 +1307,7 @@ QList<int> UserModel::practionnerLkIds(const QString &uid)
 //    qWarning() << "\n\n" << Q_FUNC_INFO << uid;
     /** \todo manage user's groups */
     if (d->m_Uuid_UserList.keys().contains(uid)) {
-        Internal::UserData *user = d->m_Uuid_UserList.value(uid);
+        Internal::UserData *user = d->m_Uuid_UserList.value(uid, 0);
 //        qWarning() << "xxxxxxxxxxxxx memory" << uid << user->linkIds();
         return user->linkIds();
     }
@@ -1308,9 +1422,12 @@ void UserModel::emitUserConnected() const
 
 void UserModel::updateUserPreferences()
 {
+    if (WarnAllProcesses)
+        qWarning() << Q_FUNC_INFO;
+    d->checkNullUser();
     if (!d->m_CurrentUserUuid.isEmpty() && d->m_CurrentUserUuid!=::SERVER_ADMINISTRATOR_UUID) {
         // save user preferences
-        Internal::UserData *user = d->m_Uuid_UserList[d->m_CurrentUserUuid];
+        Internal::UserData *user = d->m_Uuid_UserList.value(d->m_CurrentUserUuid, 0);
         if (user) {
             user->setPreferences(settings()->userSettings());
             /** \todo code here : save only the preferences not the entire user */
