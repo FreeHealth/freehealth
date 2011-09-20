@@ -689,7 +689,7 @@ public:
                     return QString();
                 QMap<int, QString>::const_iterator i = lines.constEnd();
                 --i;
-                while (i != lines.constBegin()) {
+                while (true) {
                     if (!i.value().isEmpty()) {
                         tmp += QString("<ul compact>"
                                        "  <li><b>%1</b></li>\n"
@@ -702,6 +702,8 @@ public:
                                 .arg(DrugsInteraction::typeToString(i.key()))
                                 .arg(i.value());
                     }
+                    if (i==lines.constBegin())
+                        break;
                     --i;
                 }
                 toReturn = QString("<br /><table widht=100% border=1><tr><td align=center width=100%><b>%1</b></td></tr><tr><td>%2</td></tr></table>")

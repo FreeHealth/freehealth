@@ -165,6 +165,10 @@ public:
         where << Utils::Field(Constants::Table_LABELSLINK, Constants::LABELSLINK_MASTERLID, QString("=%1").arg(masterLid));
         where << Utils::Field(Constants::Table_LABELS, Constants::LABELS_LANG, QString("='%1'").arg(lang));
 
+        //         SELECT `LABELS`.`LID`, `LABELS`.`LANG`, `LABELS`.`LABEL` FROM `LABELS_LINK`
+        //         JOIN `LABELS` ON `LABELS`.`LID`=`LABELS_LINK`.`LID`
+        //         WHERE ( (`LABELS_LINK`.`MASTER_LID` =187156) AND  (`LABELS`.`LANG` ='en'))
+
         QString req = q->select(Constants::Table_LABELS, join, where);
         QSqlQuery query(QSqlDatabase::database(Constants::DB_DRUGS_NAME));
         if (query.exec(req)) {

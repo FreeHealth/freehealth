@@ -95,6 +95,12 @@ public:
         PIM_PubMed_PMID
     };
 
+    enum InteractionLevel {
+        InteractionLevel_High = 3,
+        InteractionLevel_Medium = 2,
+        InteractionLevel_Low = 1
+    };
+
     PimInteraction(IDrugEngine *parentEngine) : IDrugInteraction(parentEngine), m_Engine(parentEngine) {}
     ~PimInteraction() {}
 
@@ -105,6 +111,13 @@ public:
 
     QVariant value(const int ref) const
     {
+        if (ref==PIM_TypeName) {
+            QString l = QLocale().name().right(2).toLower();
+            if (l=="fr")
+                return base()->getLabel(m_Infos.value(PIM_TypeMasterLid).toInt(), l);
+            else
+                return base()->getLabel(m_Infos.value(PIM_TypeMasterLid).toInt(), "en");
+        }
         return m_Infos.value(ref);
     }
 
@@ -126,9 +139,9 @@ public:
     QString header(const QString &separator = QString::null) const
     {
         // for non ICD10 related
-        return QString("%1 (%2)")
-            .arg(interactingAtcLabels().join(";"))
-            .arg(patient()->data(Core::IPatient::Age).toString());
+        return QString("%1 %2")
+                .arg(interactingAtcLabels().join(";"))
+                .arg(separator);
     }
 
     QString risk(const QString &lang = QString::null) const
@@ -278,18 +291,19 @@ public:
     {
         QString tmp = QString("PimInteraction:\n"
                               "    (ID: %1; SID: %2; TID: %3)\n"
-                              "    (SourceName: %4; TypeName: %5)\n"
+                              "    (SourceName: %4; TypeName: %5; TypeMastrLid: %10)\n"
                               "    (Level:%6; Country: %7; PMID: %8; WWW: %9)"
                               )
                 .arg(m_Infos.value(PIM_ID).toString())
                 .arg(m_Infos.value(PIM_SID).toString())
                 .arg(m_Infos.value(PIM_TID).toString())
                 .arg(m_Infos.value(PIM_SourceName).toString())
-                .arg(m_Infos.value(PIM_TypeName).toString())
+                .arg(value(PIM_TypeName).toString())
                 .arg(m_Infos.value(PIM_Level).toString())
                 .arg(m_Infos.value(PIM_CountryRelated).toString())
                 .arg(m_Infos.value(PIM_PubMed_PMID).toString())
                 .arg(m_Infos.value(PIM_ReferencesLink).toString())
+                .arg(m_Infos.value(PIM_TypeMasterLid).toInt())
                 ;
         for(int i = 0; i < m_InteractingDrugs.count(); ++i) {
             tmp += "\n    (Drug:" + m_InteractingDrugs.at(i)->brandName() + ")";
@@ -327,6 +341,7 @@ public:
     {
         return levelToString(pim->value(PimInteraction::PIM_Level).toInt());
     }
+
 
 private:
     IDrugEngine *m_Engine;
@@ -366,7 +381,6 @@ public:
 
     QString message(const IDrug *drug, const DrugInteractionInformationQuery &query) const
     {
-        qWarning() << Q_FUNC_INFO;
         QString toReturn;
         if (!m_Result->testedDrugs().contains((IDrug*)drug))
             return toReturn;
@@ -374,14 +388,103 @@ public:
         // get all interactions related to the drug
         QVector<IDrugInteraction *> interactions = m_Result->getInteractions(drug, Constants::PIM_ENGINE_UID);
 
-        qWarning() << "ici" << interactions << query.messageType;
-
         QString tmp;
         switch (query.messageType)
         {
         case DrugInteractionInformationQuery::DetailledToolTip:
+        {
+            qWarning() << "****** DetailledTooltip";
+
+            // get all different types
+            QStringList types;
+            for(int j=0; j < interactions.count(); ++j) {
+                IDrugInteraction *di = interactions.at(j);
+                PimInteraction *pim = static_cast<PimInteraction *>(di);
+                Q_ASSERT(pim);
+                QString t = pim->value(PimInteraction::PIM_TypeName).toString();
+                if (!types.contains(t))
+                    types << t;
+            }
+
+            // foreach types construct the html output
+            foreach(const QString &type, types) {
+                QMap<int, QString> lines; // K=level - V=html
+                QVector<int> pimIds;
+                for(int j=0; j < interactions.count(); ++j) {
+                    IDrugInteraction *di = interactions.at(j);
+                    PimInteraction *pim = static_cast<PimInteraction *>(di);
+                    Q_ASSERT(pim);
+                    if (pim->value(PimInteraction::PIM_TypeName).toString()!=type)
+                        continue;
+
+                    if (pimIds.contains(pim->value(PimInteraction::PIM_ID).toInt()))
+                        continue;
+                    pimIds << pim->value(PimInteraction::PIM_ID).toInt();
+
+                    int level = pim->value(PimInteraction::PIM_Level).toInt();
+                    int typeId = -1;
+
+                    // Minimal alerts (only High levels)
+                    if (level==PimInteraction::InteractionLevel_High && (query.levelOfWarningStaticAlert <= Constants::MinimumLevelOfWarning))
+                        typeId = PimInteraction::InteractionLevel_High;
+                    // Moderate alerts (medium alerts)
+                    else if (level==PimInteraction::InteractionLevel_Medium && (query.levelOfWarningStaticAlert <= Constants::ModerateLevelOfWarning))
+                        typeId = PimInteraction::InteractionLevel_Medium;
+                    // Maximum alerts (all alerts)
+                    else if (level==PimInteraction::InteractionLevel_Low && (query.levelOfWarningStaticAlert <= Constants::MaximumLevelOfWarning))
+                        typeId = PimInteraction::InteractionLevel_Low;
+
+                    if (typeId==-1)
+                        continue;
+
+//                    pim->warn();
+
+                    QString &ditmp = lines[typeId];
+                    if (!ditmp.contains(pim->header())) {
+                        ditmp += QString("    <li>%1</li>\n")
+                                .arg(pim->header());
+                    }
+                }
+
+                qWarning() << type << lines;
+
+                if (lines.isEmpty())
+                    continue;
+
+                QString html;
+                QMap<int, QString>::const_iterator i = lines.constEnd();
+                --i;
+                while (true) {
+                    if (!i.value().isEmpty()) {
+                        html += QString("<ul compact>"
+                                       "  <li><b>%1</b></li>\n"
+                                       "  <ul>\n"
+                                       "%2"
+                                       "  </ul>\n"
+                                       "</ul>\n"
+                                       )
+                                .arg(PimInteraction::levelToString(i.key()))
+                                .arg(i.value());
+                    }
+                    if (i==lines.constBegin())
+                        break;
+                    --i;
+                }
+                tmp += QString("<tr><td align=center width=100%><b>%1</b></td></tr><tr><td>%2</td></tr>")
+                        .arg(type)
+                        .arg(html);
+            }
+            if (tmp.isEmpty())
+                return QString();
+
+            tmp = QString("<br /><table widht=100% border=1>%1</table>")
+                    .arg(tmp);
+
+            break;
+        }
         case DrugInteractionInformationQuery::ShortToolTip:
         {
+            qWarning() << "****** ShortToolTip";
             for(int j=0; j < interactions.count(); ++j) {
                 IDrugInteraction *di = interactions.at(j);
                 PimInteraction *pim = static_cast<PimInteraction *>(di);
@@ -399,6 +502,7 @@ public:
         }
         case DrugInteractionInformationQuery::InformationAlert:
         {
+            qWarning() << "****** InformationAlert";
             QHash<int, QString> riskLines; //k=riskMasterLid, line
             QMultiHash<int, int> levelLines; //k=level, v=riskMasterLid
             QVector<int> interactionAtcIds;
@@ -494,9 +598,6 @@ public:
             break;
         }
         }
-
-        qWarning() << tmp;
-
         toReturn = tmp;
         return toReturn;
     }
@@ -609,7 +710,8 @@ bool PimEngine::init()
             get << Utils::Field(Constants::Table_PIMS_RELATED_ATC, Constants::PIMS_RELATC_ATC_ID);
             get << Utils::Field(Constants::Table_PIMS_RELATED_ATC, Constants::PIMS_RELATC_MAXDAYDOSE);
             join << Utils::Join(Constants::Table_PIMS, Constants::PIMS_ID, Constants::Table_PIMS_RELATED_ATC, Constants::PIMS_RELATC_PIM_ID);
-            Utils::Field sourceCond(Constants::Table_PIMS, Constants::PIMS_SID, QString("=%1").arg(pimSource.sourceId));
+            Utils::FieldList conds;
+            conds << Utils::Field(Constants::Table_PIMS, Constants::PIMS_SID, QString("=%1").arg(pimSource.sourceId));
             req = base()->select(get, join, sourceCond);
             QSqlQuery atc(DB);
             if (atc.exec(req)) {
@@ -704,6 +806,7 @@ int PimEngine::calculateInteractions(const QVector<IDrug *> &drugs)
         IDrug *drug = drugs.at(i);
         // foreach pim sources
         foreach(const PimSource &source, d->m_SourcesById.values()) {
+
             // test all pims atcId non dose dependant
             const QList<int> &atcIds = source.m_AtcIdsByPimId.values();
             for(int j = 0; j < atcIds.count(); ++j) {
@@ -728,6 +831,7 @@ int PimEngine::calculateInteractions(const QVector<IDrug *> &drugs)
                 }
             }
         }
+
 //        foreach(const int source, d->m_AtcIdsPimDoseRelatedBySources.uniqueKeys()) {
 //            const QList<int> &atcIds = d->m_AtcIdsPimDoseRelatedBySources.values(source);
 //            for(int j = 0; j < atcIds.count(); ++j) {
@@ -738,6 +842,7 @@ int PimEngine::calculateInteractions(const QVector<IDrug *> &drugs)
 //            }
 //        }
     }
+
 //    qWarning() << "nbPims doseRelated" << nbPimDoseRelated << "nonDoseRelated" << nbPimNonDoseRelated << "Found AtcIds" << d->m_FoundPimIdsBySources;
     return nbPimNonDoseRelated + nbPimDoseRelated;
 }
@@ -766,12 +871,15 @@ static PimInteraction *getPimInteractionFromDb(const int sourceId, const int pim
     where << Utils::Field(Constants::Table_PIM_SOURCES, Constants::PIM_SOURCES_SID, QString("=%1").arg(sourceId));
     where << Utils::Field(Constants::Table_PIMS, Constants::PIMS_ID, QString("=%1").arg(pimId));
 
-    //    select PIMS.*, PIM_SOURCES.*, PIM_TYPES.* from  PIMS
-    //    JOIN PIM_SOURCES ON PIM_SOURCES.PIM_SID=PIMS.PIM_SID
-    //    JOIN PIM_TYPES ON PIM_TYPES.PIM_TID=PIMS.PIM_TID
-    //    where PIMS.PIM_ID=28 AND PIMS.PIM_SID=1;
+//        select PIMS.*, PIM_SOURCES.*, PIM_TYPES.* from  PIMS
+//        JOIN PIM_SOURCES ON PIM_SOURCES.PIM_SID=PIMS.PIM_SID
+//        JOIN PIM_TYPES ON PIM_TYPES.PIM_TID=PIMS.PIM_TID
+//        where PIMS.PIM_ID=28 AND PIMS.PIM_SID=1;
 
     QString req = base()->select(get, joins, where);
+
+//    qWarning() << req;
+
     QSqlQuery query(QSqlDatabase::database(Constants::DB_DRUGS_NAME));
     if (query.exec(req)) {
         if (query.next()) {
