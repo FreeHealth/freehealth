@@ -165,7 +165,6 @@ void DrugEnginesPreferencesPage::applyChanges()
 
 void DrugEnginesPreferencesPage::checkSettingsValidity()
 {
-    qWarning() << Q_FUNC_INFO;
     // get default activated drug engines
     QList<DrugsDB::IDrugEngine *> engines = pluginManager()->getObjects<DrugsDB::IDrugEngine>();
     QStringList uids;
@@ -180,7 +179,6 @@ void DrugEnginesPreferencesPage::checkSettingsValidity()
     defaultvalues.insert(DrugsDB::Constants::S_ACTIVATED_INTERACTION_ENGINES, uids);
 
     foreach(const QString &k, defaultvalues.keys()) {
-        qWarning() << settings()->value(k);
         if (settings()->value(k) == QVariant())
             settings()->setValue(k, defaultvalues.value(k));
     }

@@ -366,6 +366,7 @@ public:
 
     QString message(const IDrug *drug, const DrugInteractionInformationQuery &query) const
     {
+        qWarning() << Q_FUNC_INFO;
         QString toReturn;
         if (!m_Result->testedDrugs().contains((IDrug*)drug))
             return toReturn;
@@ -373,123 +374,128 @@ public:
         // get all interactions related to the drug
         QVector<IDrugInteraction *> interactions = m_Result->getInteractions(drug, Constants::PIM_ENGINE_UID);
 
-        qWarning() << "ici" << interactions;
+        qWarning() << "ici" << interactions << query.messageType;
 
         QString tmp;
         switch (query.messageType)
         {
+        case DrugInteractionInformationQuery::DetailledToolTip:
         case DrugInteractionInformationQuery::ShortToolTip:
-            {
-                for(int j=0; j < interactions.count(); ++j) {
-                    IDrugInteraction *di = interactions.at(j);
-                    PimInteraction *pim = static_cast<PimInteraction *>(di);
-                    if (!pim)
-                        continue;
-                    tmp += "-&nbsp;" + pim->interactingAtcLabels().join(";") + "<br />";
-                }
-                if (!tmp.isEmpty()) {
-                    tmp.chop(6);
-                    toReturn.append(QString(LIST_MASK)
-                                    .arg(QCoreApplication::translate(Constants::DRUGSBASE_TR_CONTEXT, Constants::PIMENGINE_TEXT))
-                                    .arg(tmp));
-                }
+        {
+            for(int j=0; j < interactions.count(); ++j) {
+                IDrugInteraction *di = interactions.at(j);
+                PimInteraction *pim = static_cast<PimInteraction *>(di);
+                if (!pim)
+                    continue;
+                tmp += "-&nbsp;" + pim->interactingAtcLabels().join(";") + "<br />";
             }
-        case DrugInteractionInformationQuery::InformationAlert:
-            {
-                QHash<int, QString> riskLines; //k=riskMasterLid, line
-                QMultiHash<int, int> levelLines; //k=level, v=riskMasterLid
-                QVector<int> interactionAtcIds;
-                QVector<int> interactionIds;
-                for(int j=0; j < interactions.count(); ++j) {
-                    // Get interaction
-                    IDrugInteraction *di = interactions.at(j);
-                    PimInteraction *pim = static_cast<PimInteraction *>(di);
-                    Q_ASSERT(pim);
-                    if (!pim)
-                        continue;
-
-                    // interaction with this interactor already included ?
-                    const QVector<int> &pimRelAtc = pim->allAtcRelated();
-                    bool includeIt = false;
-                    for(int aa = 0; aa < pimRelAtc.count(); ++aa) {
-                        int testAtc = pimRelAtc.at(aa);
-                        int interactorAtcId = -1;
-                        if (drug->allInnAndInteractingClassesIds().contains(testAtc)) {
-                            interactorAtcId = testAtc;
-                        }
-                        if (interactionAtcIds.contains(interactorAtcId))
-                            continue;
-                        else
-                            includeIt = true;
-                        interactionAtcIds << interactorAtcId;
-                    }
-                    if (!includeIt)
-                        continue;
-
-                    // interaction already included ?
-                    if (interactionIds.contains(pim->value(PimInteraction::PIM_ID).toInt()))
-                        continue;
-                    interactionIds << pim->value(PimInteraction::PIM_ID).toInt();
-
-                    pim->warn();
-
-                    // get the line related to the level of pim
-//                    int typeId = pim->value(PimInteraction::PIM_Level).toInt();
-
-                    /** \todo manage levelOfWarning */
-
-                    int riskId = pim->value(PimInteraction::PIM_RiskMasterLid).toInt();
-                    int level =  pim->value(PimInteraction::PIM_Level).toInt();
-                    // construct line of risk content
-                    QString riskLine;
-                    foreach(IDrug *drug, pim->drugs()) {
-                        riskLine = QString("&nbsp;&nbsp;*&nbsp;%1: %2<br />\n")
-                                .arg(drug->brandName())
-                                .arg(pim->interactingAtcLabels().join(";"));
-
-                        QString &ditmp = riskLines[riskId];
-
-                        // no double
-                        if (!riskLines.values().contains(riskLine))
-                            ditmp += riskLine;
-                    }
-
-                    // add riskMasterLid to level
-                    levelLines.insertMulti(level, riskId);
-                }
-
-                // construct full message
-                // for each level
-                QString levelLine;
-                QString riskLine;
-//                int rows = 0;
-                foreach(const int level, levelLines.keys()) {
-                    riskLine.clear();
-                    levelLine = QString("<tr>\n"
-                                        "  <td colspan=2><b>%1</b></td>\n"
-                                        "</tr>\n")
-                            .arg(PimInteraction::levelToString(level).toUpper());
-                    foreach(const int riskId, levelLines.values(level)) {
-                        if (riskLines.value(riskId).isEmpty())
-                            continue;
-                        riskLine = QString(
-                                           "<tr>\n"
-                                           "  <td width=\"100%\">%2</td>\n"
-                                           "</tr>")
-                                .arg(riskLines.value(riskId));
-                    }
-                    if (riskLine.isEmpty())
-                        continue;
-                    tmp += QString("<table border=\"0\" width=\"100%\">\n"
-                                   "%1\n"
-                                   "%2\n"
-                                   "</table>\n<br />"
-                                   )
-                            .arg(levelLine)
-                            .arg(riskLine);
-                }
+            if (!tmp.isEmpty()) {
+                tmp.chop(6);
+                toReturn.append(QString(LIST_MASK)
+                                .arg(QCoreApplication::translate(Constants::DRUGSBASE_TR_CONTEXT, Constants::PIMENGINE_TEXT))
+                                .arg(tmp));
             }
+            break;
         }
+        case DrugInteractionInformationQuery::InformationAlert:
+        {
+            QHash<int, QString> riskLines; //k=riskMasterLid, line
+            QMultiHash<int, int> levelLines; //k=level, v=riskMasterLid
+            QVector<int> interactionAtcIds;
+            QVector<int> interactionIds;
+            for(int j=0; j < interactions.count(); ++j) {
+                // Get interaction
+                IDrugInteraction *di = interactions.at(j);
+                PimInteraction *pim = static_cast<PimInteraction *>(di);
+                Q_ASSERT(pim);
+                if (!pim)
+                    continue;
+
+                // interaction with this interactor already included ?
+                const QVector<int> &pimRelAtc = pim->allAtcRelated();
+                bool includeIt = false;
+                for(int aa = 0; aa < pimRelAtc.count(); ++aa) {
+                    int testAtc = pimRelAtc.at(aa);
+                    int interactorAtcId = -1;
+                    if (drug->allInnAndInteractingClassesIds().contains(testAtc)) {
+                        interactorAtcId = testAtc;
+                    }
+                    if (interactionAtcIds.contains(interactorAtcId))
+                        continue;
+                    else
+                        includeIt = true;
+                    interactionAtcIds << interactorAtcId;
+                }
+                if (!includeIt)
+                    continue;
+
+                // interaction already included ?
+                if (interactionIds.contains(pim->value(PimInteraction::PIM_ID).toInt()))
+                    continue;
+                interactionIds << pim->value(PimInteraction::PIM_ID).toInt();
+
+                pim->warn();
+
+                // get the line related to the level of pim
+                //                    int typeId = pim->value(PimInteraction::PIM_Level).toInt();
+
+                /** \todo manage levelOfWarning */
+
+                int riskId = pim->value(PimInteraction::PIM_RiskMasterLid).toInt();
+                int level =  pim->value(PimInteraction::PIM_Level).toInt();
+                // construct line of risk content
+                QString riskLine;
+                foreach(IDrug *drug, pim->drugs()) {
+                    riskLine = QString("&nbsp;&nbsp;*&nbsp;%1: %2<br />\n")
+                            .arg(drug->brandName())
+                            .arg(pim->interactingAtcLabels().join(";"));
+
+                    QString &ditmp = riskLines[riskId];
+
+                    // no double
+                    if (!riskLines.values().contains(riskLine))
+                        ditmp += riskLine;
+                }
+
+                // add riskMasterLid to level
+                levelLines.insertMulti(level, riskId);
+            }
+
+            // construct full message
+            // for each level
+            QString levelLine;
+            QString riskLine;
+            //                int rows = 0;
+            foreach(const int level, levelLines.keys()) {
+                riskLine.clear();
+                levelLine = QString("<tr>\n"
+                                    "  <td colspan=2><b>%1</b></td>\n"
+                                    "</tr>\n")
+                        .arg(PimInteraction::levelToString(level).toUpper());
+                foreach(const int riskId, levelLines.values(level)) {
+                    if (riskLines.value(riskId).isEmpty())
+                        continue;
+                    riskLine = QString(
+                                "<tr>\n"
+                                "  <td width=\"100%\">%2</td>\n"
+                                "</tr>")
+                            .arg(riskLines.value(riskId));
+                }
+                if (riskLine.isEmpty())
+                    continue;
+                tmp += QString("<table border=\"0\" width=\"100%\">\n"
+                               "%1\n"
+                               "%2\n"
+                               "</table>\n<br />"
+                               )
+                        .arg(levelLine)
+                        .arg(riskLine);
+            }
+            break;
+        }
+        }
+
+        qWarning() << tmp;
 
         toReturn = tmp;
         return toReturn;
@@ -497,6 +503,7 @@ public:
 
     QString message(const DrugInteractionInformationQuery &query) const
     {
+        qWarning() << Q_FUNC_INFO;
         if (!m_Result->testedDrugs().isEmpty())
             return QString();
         return QString();

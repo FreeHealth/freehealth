@@ -124,6 +124,9 @@ QString DrugInteractionResult::alertMessagesToHtml(const IDrug *drug, const Drug
     for(int i=0; i < m_Alerts.count(); ++i) {
         IDrugInteractionAlert *alert = m_Alerts.at(i);
         if (query.engineUid.isEmpty() || alert->engineUid()==query.engineUid) {
+
+            qWarning() << "ici" << query.engineUid;
+
             QString &msg = msgs[alert->engineUid()];
             if (drug)
                 msg += alert->message(drug, query);
