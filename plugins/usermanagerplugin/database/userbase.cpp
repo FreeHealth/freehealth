@@ -72,6 +72,8 @@
 #include <QLocale>
 #include <QDateTime>
 
+enum { WarnUserPreferences = false };
+
 using namespace UserPlugin::Internal;
 using namespace UserPlugin::Constants;
 using namespace Trans::ConstantTranslations;
@@ -1133,16 +1135,28 @@ bool UserBase::deleteUser(const QString &uuid)
 /** Save the current preferences of the user. User is identified by its \e uid and the settings are stored into \e content. */
 bool UserBase::saveUserPreferences(const QString &uid, const QString &content)
 {
-    if (uid.isEmpty())
+    if (WarnUserPreferences) {
+        qWarning() << Q_FUNC_INFO << uid;
+        qWarning() << content << "\n\n\n";
+    }
+    if (uid.isEmpty()) {
+        if (WarnUserPreferences)
+            qWarning() << "    ****** Not saved";
         return false;
-    if (content.isEmpty())
+    }
+    if (content.isEmpty()) {
+        if (WarnUserPreferences)
+            qWarning() << "    ****** Not saved";
         return false;
+    }
 
     // connect user database
     QSqlDatabase DB = database();
     if (!DB.isOpen()) {
         if (!DB.open()) {
             LOG_ERROR(tkTr(Trans::Constants::UNABLE_TO_OPEN_DATABASE_1_ERROR_2).arg(DB.connectionName()).arg(DB.lastError().text()));
+            if (WarnUserPreferences)
+                qWarning() << "    ****** Not saved";
             return false;
         }
     }
@@ -1179,6 +1193,8 @@ bool UserBase::saveUserPreferences(const QString &uid, const QString &content)
             return false;
         }
     }
+    if (WarnUserPreferences)
+        qWarning() << "    Correctly saved";
     return true;
 }
 
