@@ -685,9 +685,11 @@ public:
                                  .arg(di->header("//"));
                     }
                 }
+                if (lines.isEmpty())
+                    return QString();
                 QMap<int, QString>::const_iterator i = lines.constEnd();
                 --i;
-                while (true) {
+                while (i != lines.constBegin()) {
                     if (!i.value().isEmpty()) {
                         tmp += QString("<ul compact>"
                                        "  <li><b>%1</b></li>\n"
@@ -700,8 +702,6 @@ public:
                                 .arg(DrugsInteraction::typeToString(i.key()))
                                 .arg(i.value());
                     }
-                    if (i == lines.constBegin())
-                        break;
                     --i;
                 }
                 toReturn = QString("<br /><table widht=100% border=1><tr><td align=center width=100%><b>%1</b></td></tr><tr><td>%2</td></tr></table>")
@@ -820,6 +820,11 @@ bool DrugDrugInteractionEngine::init()
     }
 
     return true;
+}
+
+bool DrugDrugInteractionEngine::isActive() const
+{
+    return settings()->value(Constants::S_ACTIVATED_INTERACTION_ENGINES).toStringList().contains(Constants::DDI_ENGINE_UID);
 }
 
 QString DrugDrugInteractionEngine::name() const {return QCoreApplication::translate(Constants::DRUGSBASE_TR_CONTEXT, Constants::DDI_TEXT);}
@@ -1058,3 +1063,16 @@ QVector<IDrugInteractionAlert *> DrugDrugInteractionEngine::getAllAlerts(DrugInt
     return alerts;
 }
 
+void DrugDrugInteractionEngine::setActive(bool activate)
+{
+    if (isActive()==activate)
+        return;
+    // update settings
+    if (activate) {
+        settings()->appendToValue(Constants::S_ACTIVATED_INTERACTION_ENGINES, Constants::DDI_ENGINE_UID);
+    } else {
+        QStringList l = settings()->value(Constants::S_ACTIVATED_INTERACTION_ENGINES).toStringList();
+        l.removeAll(Constants::DDI_ENGINE_UID);
+        settings()->setValue(Constants::S_ACTIVATED_INTERACTION_ENGINES, l);
+    }
+}

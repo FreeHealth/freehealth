@@ -42,6 +42,8 @@
 #include <QTextBrowser>
 #include <QGridLayout>
 
+#include <QDebug>
+
 using namespace DrugsWidget;
 using namespace Internal;
 using namespace Trans::ConstantTranslations;
@@ -91,8 +93,24 @@ void DrugEnginesPreferences::setDatasToUi()
     scrollLayout->addItem(s, engines.count()+1, 0);
 }
 
-void DrugEnginesPreferences::writeDefaultSettings(Core::ISettings *)
+void DrugEnginesPreferences::writeDefaultSettings(Core::ISettings *sets)
 {
+    Core::ISettings *s;
+    if (!sets)
+        s = settings();
+    else
+        s = sets;
+
+    // get default activated drug engines
+    QList<DrugsDB::IDrugEngine *> engines = pluginManager()->getObjects<DrugsDB::IDrugEngine>();
+    QStringList uids;
+    uids << "__";
+    for(int i=0; i < engines.count(); ++i) {
+        DrugsDB::IDrugEngine *engine = engines.at(i);
+        if (engine->isActiveByDefault())
+            uids << engine->uid();
+    }
+    s->setValue(DrugsDB::Constants::S_ACTIVATED_INTERACTION_ENGINES, uids);
 }
 
 void DrugEnginesPreferences::saveToSettings(Core::ISettings *sets)
@@ -105,6 +123,7 @@ void DrugEnginesPreferences::saveToSettings(Core::ISettings *sets)
 
     QList<DrugsDB::IDrugEngine *> engines = pluginManager()->getObjects<DrugsDB::IDrugEngine>();
     QStringList uids;
+    uids << "__"; // uids must not be empty is defined by the user
     for(int i=0; i < engines.count(); ++i) {
         DrugsDB::IDrugEngine *engine = engines.at(i);
         if (engine->isActive())
@@ -146,10 +165,22 @@ void DrugEnginesPreferencesPage::applyChanges()
 
 void DrugEnginesPreferencesPage::checkSettingsValidity()
 {
+    qWarning() << Q_FUNC_INFO;
+    // get default activated drug engines
+    QList<DrugsDB::IDrugEngine *> engines = pluginManager()->getObjects<DrugsDB::IDrugEngine>();
+    QStringList uids;
+    uids << "__";
+    for(int i=0; i < engines.count(); ++i) {
+        DrugsDB::IDrugEngine *engine = engines.at(i);
+        if (engine->isActiveByDefault())
+            uids << engine->uid();
+    }
+
     QHash<QString, QVariant> defaultvalues;
-//    defaultvalues.insert(DrugsDB::Constants::S_ACTIVATED_INTERACTION_ENGINES, Print::Printer::DuplicataOnly);
+    defaultvalues.insert(DrugsDB::Constants::S_ACTIVATED_INTERACTION_ENGINES, uids);
 
     foreach(const QString &k, defaultvalues.keys()) {
+        qWarning() << settings()->value(k);
         if (settings()->value(k) == QVariant())
             settings()->setValue(k, defaultvalues.value(k));
     }

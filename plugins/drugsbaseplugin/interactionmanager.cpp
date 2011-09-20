@@ -65,7 +65,7 @@
 #include <QLabel>
 #include <QStandardItemModel>
 
-enum { WarnComputations = false };
+enum { WarnComputations = true };
 
 namespace  {
     const char* const LIST_MASK =
@@ -154,13 +154,20 @@ DrugInteractionResult *InteractionManager::checkInteractions(const DrugInteracti
     for(int i = 0; i < d->m_Engines.count(); ++i) {
         IDrugEngine *engine = d->m_Engines.at(i);
 
-        if (WarnComputations)
-            qWarning() << "InteractionManager" << engine->name() << "Compute" << (engine->isActive() && engine->canComputeInteractions()) << "nbDrugs" << query.drugsList().count();
+        if (WarnComputations) {
+            qWarning() << "DrugEngine" << engine->name()
+                       << "Active" << engine->isActive()
+                       << "CanCompute" <<  engine->canComputeInteractions()
+                       << "nbDrugs" << query.drugsList().count();
+        }
 
         if (!engine->isActive() || !engine->canComputeInteractions())
             continue;
 
         nbInteractions += engine->calculateInteractions(query.drugsList());
+        if (WarnComputations) {
+            qWarning() << "Found" << nbInteractions;
+        }
 
         if (engine->isCalculatingDrugDrugInteractions())
             result->setDDITested(true);

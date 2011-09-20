@@ -33,7 +33,7 @@
  * \file drugdruginteractionengine.h
  * \author Eric MAEKER <eric.maeker@gmail.com>
  * \version 0.6.0
- * \date 12 Mar 2011
+ * \date 20 Sept 2011
 */
 
 namespace DrugsDB {
@@ -64,6 +64,8 @@ public:
     ~DrugDrugInteractionEngine();
 
     bool init();
+    bool isActive() const;
+    bool isActiveByDefault() const {return true;}
     bool canComputeInteractions() const {return true;}
 
     bool isCalculatingDrugDrugInteractions() const {return true;}
@@ -83,6 +85,9 @@ public:
     // Private hidden part
     bool checkDrugInteraction(IDrug *drug, const QVector<IDrug *> &drugsList);
     QVector<IDrugInteraction *> getInteractionsFromDatabase(const int & _id1, const int & _id2);
+
+public Q_SLOTS:
+    void setActive(bool state);
 
 private:
     DrugDrugInteractionEnginePrivate *d;

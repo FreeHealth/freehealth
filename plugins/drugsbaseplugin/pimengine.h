@@ -33,7 +33,7 @@
  * \file pimengine.h
  * \author Eric MAEKER <eric.maeker@gmail.com>
  * \version 0.6.0
- * \date 24 Apr 2011
+ * \date 20 Sept 2011
 */
 
 namespace DrugsDB {
@@ -64,7 +64,9 @@ public:
     ~PimEngine();
 
     bool init();
-    bool canComputeInteractions() const {return true;}
+    bool isActive() const;
+    bool isActiveByDefault() const {return false;}
+    bool canComputeInteractions() const;
 
     bool isCalculatingDrugDrugInteractions() const {return false;}
     bool isCalculatingPatientDrugInteractions() const {return true;}
@@ -81,8 +83,11 @@ public:
     QVector<IDrugInteractionAlert *> getAllAlerts(DrugInteractionResult *addToResult);
 
     // Private hidden part
-    bool checkDrugInteraction(IDrug *drug, const QVector<IDrug *> &drugsList);
-    QVector<IDrugInteraction *> getInteractionsFromDatabase(const int & _id1, const int & _id2);
+//    bool checkDrugInteraction(IDrug *drug, const QVector<IDrug *> &drugsList);
+//    QVector<IDrugInteraction *> getInteractionsFromDatabase(const int & _id1, const int & _id2);
+
+public Q_SLOTS:
+    void setActive(bool state);
 
 private:
     PimEnginePrivate *d;

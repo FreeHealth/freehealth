@@ -642,6 +642,16 @@ bool PimEngine::init()
     return true;
 }
 
+bool PimEngine::isActive() const
+{
+    return settings()->value(Constants::S_ACTIVATED_INTERACTION_ENGINES).toStringList().contains(Constants::PIM_ENGINE_UID);
+}
+
+bool PimEngine::canComputeInteractions() const
+{
+    return (patient()->data(Core::IPatient::YearsOld).toInt() >= 75);
+}
+
 QString PimEngine::name() const
 {
     return QCoreApplication::translate(Constants::DRUGSBASE_TR_CONTEXT, Constants::PIMENGINE_TEXT) + " " + tr("(Experimental)");
@@ -675,9 +685,9 @@ QString PimEngine::iconFullPath(const int size) const
 int PimEngine::calculateInteractions(const QVector<IDrug *> &drugs)
 {
     d->m_FoundPimIdsBySources.clear();
-//    if (patient()->data(Core::IPatient::YearsOld).toInt() < 75) {
-//        return 0;
-//    }
+    if (!canComputeInteractions()) {
+        return 0;
+    }
     int nbPimNonDoseRelated = 0;
     int nbPimDoseRelated = 0;
     d->m_TestedDrugs = drugs;
@@ -853,3 +863,19 @@ QVector<IDrugInteractionAlert *> PimEngine::getAllAlerts(DrugInteractionResult *
     alerts << new Alert(addToResult, this);
     return alerts;
 }
+
+void PimEngine::setActive(bool activate)
+{
+    if (isActive()==activate)
+        return;
+    // update settings
+    if (activate) {
+        settings()->appendToValue(Constants::S_ACTIVATED_INTERACTION_ENGINES, Constants::PIM_ENGINE_UID);
+    } else {
+        QStringList l = settings()->value(Constants::S_ACTIVATED_INTERACTION_ENGINES).toStringList();
+        l.removeAll(Constants::PIM_ENGINE_UID);
+        settings()->setValue(Constants::S_ACTIVATED_INTERACTION_ENGINES, l);
+    }
+}
+
+
