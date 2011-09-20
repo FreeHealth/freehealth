@@ -60,20 +60,21 @@ public:
         UsersUidList,
         GroupsUidList,
         FamilyUid,
-        IconizedGender,
         Title,
         TitleIndex,
         FullName,
         BirthName,
-        SecondName,
+        SecondName,  // 10
         Firstname,
         Gender,
         GenderIndex,
+        IconizedGender,
+        GenderPixmap,
         DateOfBirth,
         Age,
         YearsOld,
         MaritalStatus,
-        Profession,
+        Profession,  // 20
         DateOfDeath,
         Photo,
 
@@ -85,7 +86,7 @@ public:
         AddressNote,
         FullAddress,
         Mails,
-        Tels,
+        Tels,  // 30
         Faxes,
 
         // Biometrics
@@ -97,7 +98,7 @@ public:
         Creatinine,
         CreatinineUnit,
         CreatinClearance,
-        CreatinClearanceUnit,
+        CreatinClearanceUnit,  // 40
 
         // Drugs and diseases
         // Allergies
