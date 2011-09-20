@@ -59,10 +59,12 @@ namespace Internal {
 class PatientBarPrivate
 {
 public:
-    PatientBarPrivate() :
-            ui(new Ui::PatientBar),
-            m_Model(0),
-            m_Index(0)
+    PatientBarPrivate(PatientBar *parent) :
+        ui(new Ui::PatientBar),
+        m_Model(0),
+        m_Mapper(0),
+        m_Index(0),
+        q(parent)
     {
     }
 
@@ -74,20 +76,32 @@ public:
     void setUi()
     {
         Q_ASSERT(m_Model);
-        QIcon icon = m_Model->index(m_Index->row(), Core::IPatient::IconizedGender).data().value<QIcon>();
-        ui->names->setText(m_Model->index(m_Index->row(), Core::IPatient::FullName).data().toString());
-        ui->age->setText(m_Model->index(m_Index->row(), Core::IPatient::Age).data().toString());
-        ui->gender->setPixmap(icon.pixmap(QSize(16,16)));
-        QPixmap photo = m_Model->index(m_Index->row(), Core::IPatient::Photo).data().value<QPixmap>();
-        if (!photo.isNull())
-            photo = photo.scaled(QSize(64,64), Qt::KeepAspectRatio);
-        ui->photo->setPixmap(photo);
+        if (m_Mapper)
+            return;
+        m_Mapper = new QDataWidgetMapper(q);
+        m_Mapper->setModel(m_Model);
+        m_Mapper->addMapping(ui->names, Core::IPatient::FullName, "text");
+        m_Mapper->addMapping(ui->age, Core::IPatient::Age, "text");
+        m_Mapper->addMapping(ui->gender, Core::IPatient::GenderPixmap, "pixmap");
+        m_Mapper->addMapping(ui->photo, Core::IPatient::Photo, "pixmap");
+//        QIcon icon = m_Model->index(m_Index->row(), Core::IPatient::IconizedGender).data().value<QIcon>();
+//        ui->names->setText(m_Model->index(m_Index->row(), Core::IPatient::FullName).data().toString());
+//        ui->age->setText(m_Model->index(m_Index->row(), Core::IPatient::Age).data().toString());
+//        ui->gender->setPixmap(icon.pixmap(QSize(16,16)));
+//        QPixmap photo = m_Model->index(m_Index->row(), Core::IPatient::Photo).data().value<QPixmap>();
+//        if (!photo.isNull())
+//            photo = photo.scaled(QSize(64,64), Qt::KeepAspectRatio);
+//        ui->photo->setPixmap(photo);
     }
 
 public:
     Ui::PatientBar *ui;
     PatientModel *m_Model;
+    QDataWidgetMapper *m_Mapper;
     QPersistentModelIndex *m_Index;
+
+private:
+    PatientBar *q;
 };
 }
 }
@@ -103,7 +117,7 @@ PatientBar *PatientBar::instance(QWidget *parent)
 
 PatientBar::PatientBar(QWidget *parent) :
     QWidget(parent),
-    d(new Internal::PatientBarPrivate)
+    d(new Internal::PatientBarPrivate(this))
 {
     d->ui->setupUi(this);
     if (!PatientModel::activeModel()) {
@@ -111,6 +125,7 @@ PatientBar::PatientBar(QWidget *parent) :
     }
     setPatientModel(PatientModel::activeModel());
     connect(patient(), SIGNAL(currentPatientChanged()), this, SLOT(onCurrentPatientChanged()));
+//    connect(patient(), SIGNAL(dataChanged(QModelIndex,QModelIndex)), this, SLOT(patientDataChanged(QModelIndex, QModelIndex)));
 }
 
 PatientBar::~PatientBar()
@@ -120,6 +135,8 @@ PatientBar::~PatientBar()
 void PatientBar::setPatientModel(PatientModel *model)
 {
     d->m_Model = model;
+    d->setUi();
+    d->m_Mapper->setModel(model);
 }
 
 void PatientBar::setCurrentIndex(const QModelIndex &index)
@@ -127,13 +144,33 @@ void PatientBar::setCurrentIndex(const QModelIndex &index)
     if (d->m_Index)
         delete d->m_Index;
     d->m_Index = new QPersistentModelIndex(index);
-    d->setUi();
+//    d->setUi();
+    d->m_Mapper->setCurrentModelIndex(index);
 }
 
 void PatientBar::onCurrentPatientChanged()
 {
     setCurrentIndex(d->m_Model->currentPatient());
 }
+
+static bool indexesIncludeColumn(const QModelIndex &left, const QModelIndex &right, int column)
+{
+    if (left.column()==column || right.column()==column) {
+        return true;
+    }
+    if (left.column() < column)
+        return false;
+    if (right.column() > column)
+        return false;
+    return true;
+}
+
+//void PatientBar::patientDataChanged(const QModelIndex &topLeft, const QModelIndex &bottomRight)
+//{
+//    if (indexesIncludeColumn(topLeft, bottomRight, Core::IPatient::DateOfBirth)) {
+
+//    }
+//}
 
 void PatientBar::paintEvent(QPaintEvent *)
 {

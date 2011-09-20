@@ -415,10 +415,24 @@ QVariant PatientModel::data(const QModelIndex &index, int role) const
                 const QString &name = d->m_SqlPatient->data(d->m_SqlPatient->index(index.row(), Constants::IDENTITY_NAME)).toString();
                 const QString &sec = d->m_SqlPatient->data(d->m_SqlPatient->index(index.row(), Constants::IDENTITY_SECONDNAME)).toString();
                 const QString &sur = d->m_SqlPatient->data(d->m_SqlPatient->index(index.row(), Constants::IDENTITY_FIRSTNAME)).toString();
+                QString title;
+                // add title
+                int t = d->m_SqlPatient->data(d->m_SqlPatient->index(index.row(), Constants::IDENTITY_TITLE)).toInt();
+                switch (t) {
+                case Trans::Constants::Mister:    title = tkTr(Trans::Constants::MISTER);
+                case Trans::Constants::Miss :     title = tkTr(Trans::Constants::MISS);
+                case Trans::Constants::Madam :    title = tkTr(Trans::Constants::MADAM);
+                case Trans::Constants::Doctor :   title = tkTr(Trans::Constants::DOCTOR);
+                case Trans::Constants::Professor: title = tkTr(Trans::Constants::PROFESSOR);
+                case Trans::Constants::Captain :  title = tkTr(Trans::Constants::CAPTAIN);
+                }
+                if (!title.isEmpty())
+                    title.append(" ");
+
                 if (!sec.isEmpty()) {
-                    return QString("%1 - %2 %3").arg(name, sec, sur);
+                    return QString("%1 - %2 %3").arg(title+name, sec, sur);
                 } else {
-                    return QString("%1 %2").arg(name, sur);
+                    return QString("%1 %2").arg(title+name, sur);
                 }
                 break;
             }
@@ -438,6 +452,7 @@ QVariant PatientModel::data(const QModelIndex &index, int role) const
             }
         case IPatient::YearsOld: return MedicalUtils::ageYears(d->m_SqlPatient->data(d->m_SqlPatient->index(index.row(), Constants::IDENTITY_DOB)).toDate());
         case IPatient::IconizedGender: return d->iconizedGender(index);
+        case IPatient::GenderPixmap: return d->iconizedGender(index).pixmap(16,16);
         case IPatient::Photo :
         {
             const QString &gender = d->m_SqlPatient->data(d->m_SqlPatient->index(index.row(), Constants::IDENTITY_GENDER)).toString();
@@ -472,8 +487,6 @@ bool PatientModel::setData(const QModelIndex &index, const QVariant &value, int 
     if (!index.isValid())
         return false;
 
-//    qWarning() << index << value << role << Qt::EditRole;
-
     if (role == Qt::EditRole) {
         using namespace Core;
         int col = -1;
@@ -485,7 +498,7 @@ bool PatientModel::setData(const QModelIndex &index, const QVariant &value, int 
         case IPatient::FamilyUid:     col = Constants::IDENTITY_FAMILY_UID;       break;
         case IPatient::BirthName:     col = Constants::IDENTITY_NAME;             break;
         case IPatient::SecondName:    col = Constants::IDENTITY_SECONDNAME;       break;
-        case IPatient::Firstname:     col = Constants::IDENTITY_FIRSTNAME;          break;
+        case IPatient::Firstname:     col = Constants::IDENTITY_FIRSTNAME;        break;
         case IPatient::GenderIndex:
             {
                 col = Constants::IDENTITY_GENDER;
@@ -496,7 +509,13 @@ bool PatientModel::setData(const QModelIndex &index, const QVariant &value, int 
                 case 1: g = "F"; break;
                 case 2: g = "H"; break;
                 }
-                return d->m_SqlPatient->setData(d->m_SqlPatient->index(index.row(), Constants::IDENTITY_GENDER), g, role);
+                d->m_SqlPatient->setData(d->m_SqlPatient->index(index.row(), Constants::IDENTITY_GENDER), g, role);
+                Q_EMIT dataChanged(index, index);
+                QModelIndex idx = this->index(index.row(), Core::IPatient::Gender, index.parent());
+                Q_EMIT dataChanged(idx, idx);
+                idx = this->index(index.row(), Core::IPatient::GenderPixmap, index.parent());
+                Q_EMIT dataChanged(idx, idx);
+                return true;
                 break;
             }
         case IPatient::Gender:
@@ -507,9 +526,15 @@ bool PatientModel::setData(const QModelIndex &index, const QVariant &value, int 
                 case 0 : toSave = "M"; break;
                 case 1 : toSave = "F"; break;
                 case 2:  toSave = "H"; break;
-                default: Utils::Log::addError(this, "Unknown gender " + g);
+                default: LOG_ERROR("Unknown gender " + g);
                 }
-                return d->m_SqlPatient->setData(d->m_SqlPatient->index(index.row(), Constants::IDENTITY_GENDER), toSave, role);
+                d->m_SqlPatient->setData(d->m_SqlPatient->index(index.row(), Constants::IDENTITY_GENDER), toSave, role);
+                Q_EMIT dataChanged(index, index);
+                QModelIndex idx = this->index(index.row(), Core::IPatient::GenderIndex, index.parent());
+                Q_EMIT dataChanged(idx, idx);
+                idx = this->index(index.row(), Core::IPatient::GenderPixmap, index.parent());
+                Q_EMIT dataChanged(idx, idx);
+                return true;
                 break;
             }
         case IPatient::DateOfBirth:   col = Constants::IDENTITY_DOB;              break;
@@ -544,26 +569,76 @@ bool PatientModel::setData(const QModelIndex &index, const QVariant &value, int 
                     id = Trans::Constants::Captain;
                 }
                 if (id != -1) {
-                    return d->m_SqlPatient->setData(d->m_SqlPatient->index(index.row(), col), id, role);
+                    d->m_SqlPatient->setData(d->m_SqlPatient->index(index.row(), col), id, role);
+                    Q_EMIT dataChanged(index, index);
+                    QModelIndex idx = this->index(index.row(), Core::IPatient::TitleIndex, index.parent());
+                    Q_EMIT dataChanged(idx, idx);
+                    return true;
                 }
-            }
-        case IPatient::FullName:
-            {
-                /** \todo code here */
-                return true;
             }
         case IPatient::Photo:
             {
                 QPixmap pix = value.value<QPixmap>();
                 QString patientUid = d->m_SqlPatient->index(index.row(), Constants::IDENTITY_UID).data().toString();
-                return d->savePatientPhoto(pix, patientUid);
+                d->savePatientPhoto(pix, patientUid);
+                Q_EMIT dataChanged(index, index);
+                return true;
             }
         }
         if (col != -1) {
             bool ok = d->m_SqlPatient->setData(d->m_SqlPatient->index(index.row(), col), value, role);
             if (!ok)
                 LOG_QUERY_ERROR(d->m_SqlPatient->query());
-//            qWarning() << d->m_SqlPatient->index(index.row(), col).data() << d->m_SqlPatient->index(index.row(), Constants::IDENTITY_UID).data();
+
+            // Emit data changed signals
+            Q_EMIT dataChanged(index, index);
+            switch (index.column()) {
+            case Core::IPatient::DateOfBirth:
+            {
+                QModelIndex idx = this->index(index.row(), Core::IPatient::Age, index.parent());
+                Q_EMIT dataChanged(idx, idx);
+                idx = this->index(index.row(), Core::IPatient::YearsOld, index.parent());
+                Q_EMIT dataChanged(idx, idx);
+                break;
+            }
+            case Core::IPatient::BirthName:
+            case Core::IPatient::SecondName:
+            case Core::IPatient::Firstname:
+            {
+                QModelIndex idx = this->index(index.row(), Core::IPatient::FullName, index.parent());
+                Q_EMIT dataChanged(idx, idx);
+                break;
+            }
+            case Core::IPatient::Title:
+            case Core::IPatient::TitleIndex:
+            {
+                QModelIndex idx = this->index(index.row(), Core::IPatient::FullName, index.parent());
+                Q_EMIT dataChanged(idx, idx);
+                idx = this->index(index.row(), Core::IPatient::TitleIndex, index.parent());
+                Q_EMIT dataChanged(idx, idx);
+                idx = this->index(index.row(), Core::IPatient::Title, index.parent());
+                Q_EMIT dataChanged(idx, idx);
+                break;
+            }
+            case IPatient::Street:
+            case IPatient::ZipCode:
+            case IPatient::City:
+            case IPatient::Country:
+            {
+                QModelIndex idx = this->index(index.row(), Core::IPatient::FullAddress, index.parent());
+                Q_EMIT dataChanged(idx, idx);
+                break;
+            }
+            case IPatient::GenderIndex:
+            case IPatient::Gender:
+            {
+                QModelIndex idx = this->index(index.row(), Core::IPatient::IconizedGender, index.parent());
+                Q_EMIT dataChanged(idx, idx);
+                idx = this->index(index.row(), Core::IPatient::GenderPixmap, index.parent());
+                Q_EMIT dataChanged(idx, idx);
+                break;
+            }
+            } // end switch
             return ok;
         }
     }
