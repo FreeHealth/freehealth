@@ -55,6 +55,8 @@
 
 #include <listviewplugin/treeview.h>
 
+#include <patientbaseplugin/constants_db.h>
+
 #include <utils/log.h>
 #include <utils/widgets/minisplitter.h>
 #include <extensionsystem/pluginmanager.h>
@@ -128,7 +130,31 @@ public:
         Q_ASSERT(m_Stack);
         if (!m_Stack)
             return;
+
         clearStackLayout();
+
+        // Add the synthesis form
+        QScrollArea *sa = new QScrollArea(m_Stack->parentWidget());
+        sa->setWidgetResizable(true);
+        QWidget *w = new QWidget(sa);
+        QPalette palette = w->palette();
+        QString gender = patient()->data(Core::IPatient::Gender).toString();
+        if (gender=="M")
+            palette.setColor(QPalette::Background, Patients::Constants::maleColor.lighter(140));
+        else if (gender=="F")
+            palette.setColor(QPalette::Background, Patients::Constants::femaleColor.lighter(140));
+        else
+            palette.setColor(QPalette::Background, Patients::Constants::hermaColor.lighter());
+        w->setPalette(palette);
+        sa->setWidget(w);
+        QVBoxLayout *vl = new QVBoxLayout(w);
+        vl->setSpacing(0);
+        vl->setMargin(0);
+        vl->addWidget(new QLabel(w));
+        int id = m_Stack->addWidget(sa);
+        m_StackId_FormUuid.insert(id, Constants::PATIENTLASTEPISODES_UUID);
+
+        // add all form's widgets
         foreach(FormMain *form, m_RootForm->flattenFormMainChildren()) {
             if (form->formWidget()) {
                 QScrollArea *sa = new QScrollArea(m_Stack->parentWidget());
@@ -407,6 +433,8 @@ void FormPlaceHolder::setRootForm(Form::FormMain *rootForm)
 
     d->m_FileTree->expandAll();
     d->populateStackLayout();
+    d->m_FileTree->setCurrentIndex(d->m_EpisodeModel->index(0,0));
+    setCurrentForm(Constants::PATIENTLASTEPISODES_UUID);
 }
 
 void FormPlaceHolder::handlePressed(const QModelIndex &index)
@@ -454,8 +482,14 @@ void FormPlaceHolder::addBottomWidget(QWidget *bottom)
 void FormPlaceHolder::setCurrentForm(const QString &formUuid)
 {
     d->m_Stack->setCurrentIndex(d->m_StackId_FormUuid.key(formUuid));
-    if (d->m_Stack->currentWidget())
+    if (d->m_Stack->currentWidget()) {
         qobject_cast<QScrollArea*>(d->m_Stack->currentWidget())->widget()->setEnabled(false);
+        if (formUuid==Constants::PATIENTLASTEPISODES_UUID) {
+            QLabel *label = d->m_Stack->currentWidget()->findChild<QLabel*>();
+            label->setText(d->m_EpisodeModel->lastEpisodesSynthesis());
+            qWarning() << label;
+        }
+    }
 }
 
 void FormPlaceHolder::setCurrentEpisode(const QModelIndex &index)

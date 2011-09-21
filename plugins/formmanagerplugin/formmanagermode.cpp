@@ -53,6 +53,10 @@ static inline Core::ITheme *theme()  { return Core::ICore::instance()->theme(); 
 static inline Core::ModeManager *modeManager()  { return Core::ICore::instance()->modeManager(); }
 static inline Core::ActionManager *actionManager()  { return Core::ICore::instance()->actionManager(); }
 
+/**
+  \class Form::Internal::FormManagerMode
+  Mode for the central form files (called "Patient files").
+*/
 FormManagerMode::FormManagerMode(QObject *parent) :
     Core::BaseMode(parent),
     m_inPluginManager(false),

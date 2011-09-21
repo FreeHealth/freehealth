@@ -4,18 +4,18 @@
 <context>
     <name>EpisodeModel</name>
     <message>
-        <location filename="../../plugins/formmanagerplugin/episodemodel.cpp" line="548"/>
+        <location filename="../../plugins/formmanagerplugin/episodemodel.cpp" line="552"/>
         <source>Save episode ?</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../../plugins/formmanagerplugin/episodemodel.cpp" line="549"/>
+        <location filename="../../plugins/formmanagerplugin/episodemodel.cpp" line="553"/>
         <source>The actual episode has been modified. Do you want to save changes in your database ?
 Answering &apos;No&apos; will cause definitve data lose.</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../../plugins/formmanagerplugin/episodemodel.cpp" line="551"/>
+        <location filename="../../plugins/formmanagerplugin/episodemodel.cpp" line="555"/>
         <source>Save episode</source>
         <translation type="unfinished"></translation>
     </message>
@@ -23,17 +23,17 @@ Answering &apos;No&apos; will cause definitve data lose.</source>
 <context>
     <name>Form::EpisodeModel</name>
     <message>
-        <location filename="../../plugins/formmanagerplugin/episodemodel.cpp" line="901"/>
+        <location filename="../../plugins/formmanagerplugin/episodemodel.cpp" line="915"/>
         <source>Created: </source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../../plugins/formmanagerplugin/episodemodel.cpp" line="1010"/>
+        <location filename="../../plugins/formmanagerplugin/episodemodel.cpp" line="1024"/>
         <source>New episode</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../../plugins/formmanagerplugin/episodemodel.cpp" line="1206"/>
+        <location filename="../../plugins/formmanagerplugin/episodemodel.cpp" line="1220"/>
         <source>No user</source>
         <translation type="unfinished"></translation>
     </message>
@@ -137,7 +137,7 @@ Answering &apos;No&apos; will cause definitve data lose.</source>
 <context>
     <name>Form::Internal::FormManagerMode</name>
     <message>
-        <location filename="../../plugins/formmanagerplugin/formmanagermode.cpp" line="61"/>
+        <location filename="../../plugins/formmanagerplugin/formmanagermode.cpp" line="65"/>
         <source>Patients Files</source>
         <translation type="unfinished"></translation>
     </message>
@@ -253,28 +253,33 @@ Answering &apos;No&apos; will cause definitve data lose.</source>
 <context>
     <name>tkConstants</name>
     <message>
-        <location filename="../../plugins/formmanagerplugin/constants_db.h" line="108"/>
+        <location filename="../../plugins/formmanagerplugin/constants_db.h" line="109"/>
         <source>Add Episode</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../../plugins/formmanagerplugin/constants_db.h" line="109"/>
+        <location filename="../../plugins/formmanagerplugin/constants_db.h" line="110"/>
         <source>Validate Episode</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../../plugins/formmanagerplugin/constants_db.h" line="110"/>
+        <location filename="../../plugins/formmanagerplugin/constants_db.h" line="111"/>
         <source>Add Form</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../../plugins/formmanagerplugin/constants_db.h" line="111"/>
+        <location filename="../../plugins/formmanagerplugin/constants_db.h" line="112"/>
         <source>Print Form</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../../plugins/formmanagerplugin/constants_db.h" line="112"/>
+        <location filename="../../plugins/formmanagerplugin/constants_db.h" line="113"/>
         <source>Show patient synthesis</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../../plugins/formmanagerplugin/constants_db.h" line="114"/>
+        <source>Show patient last episodes</source>
         <translation type="unfinished"></translation>
     </message>
 </context>

@@ -141,6 +141,7 @@ private Q_SLOTS:
 public Q_SLOTS:
     bool activateEpisode(const QModelIndex &index, const QString &formUid); //const int id, const QString &formUid, const QString &xmlcontent);
     bool saveEpisode(const QModelIndex &index, const QString &formUid = QString::null);
+    QString lastEpisodesSynthesis() const;
 
     void onCoreDatabaseServerChanged();
 

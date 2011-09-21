@@ -102,7 +102,7 @@ namespace {
             qDeleteAll(m_Children);
             m_Children.clear();
 //            delete m_Form;
-            delete m_EpisodeModel;
+//            delete m_EpisodeModel;
             m_Pmh=0;m_Cat=0;m_Parent=0;m_Form=0;m_EpisodeModel=0;
         }
 
