@@ -54,7 +54,7 @@ QString Translators::m_PathToTranslations = "";
 Translators * Translators::m_Instance = 0;
 
 /** \brief Get the unique instance of Translators */
-Translators *Translators::instance( QObject *parent )
+Translators *Translators::instance(QObject *parent)
 {
     if (!m_Instance) {
         if (parent)
@@ -66,12 +66,12 @@ Translators *Translators::instance( QObject *parent )
 }
 
 /** \brief Protected constructor. Call instance() to get the pointer to this class. */
-Translators::Translators( QObject * parent )
-          : QObject( parent )
+Translators::Translators(QObject * parent)
+          : QObject(parent)
 {
-    setObjectName( "Translators" );
+    setObjectName("Translators");
     m_Translators.clear();
-    setPathToTranslations( qApp->applicationDirPath() );
+    setPathToTranslations(qApp->applicationDirPath());
     m_Instance = this;
 }
 
@@ -84,9 +84,9 @@ Translators::~Translators()
   \brief Defines the path to translations
   \sa tkSettings::Paths, tkSettings::setPath()
 */
-bool Translators::setPathToTranslations( const QString & path )
+bool Translators::setPathToTranslations(const QString & path)
 {
-    if ( QDir( path ).exists() ) {
+    if (QDir(path).exists()) {
         m_PathToTranslations = QDir::cleanPath(path);
         if (WarnTranslatorsErrors) {
             Utils::Log::addMessage("Translators", Trans::ConstantTranslations::tkTr(Trans::Constants::SETTING_1_PATH_TO_2)
@@ -112,7 +112,7 @@ QString Translators::pathToTranslations()
 
 /**
   \brief change the default langage for the application and reload all translators.
-  You can retreive langage using QLocale().name().left( 2 ) anywhere in the program.
+  You can retreive langage using QLocale().name().left(2) anywhere in the program.
 */
 void Translators::changeLanguage(const QString &lang)
 {
@@ -125,18 +125,18 @@ void Translators::changeLanguage(const QString &lang)
 //        foreach(QTranslator *t, m_Translators.values())
 //            qApp->removeTranslator(t);
 //    } else {
-        foreach( const QString & fileMask, m_Translators.keys() ) {
-            QFileInfo f( fileMask );
+        foreach(const QString & fileMask, m_Translators.keys()) {
+            QFileInfo f(fileMask);
             // this automatically send a QEvent::LanguageChange
             QString path = "";
-            if ( fileMask.contains( QDir::separator() ) )
+            if (fileMask.contains(QDir::separator()))
                 path = f.absolutePath();
             else
                 path = m_PathToTranslations;
 
-            if (!m_Translators[fileMask]->load( f.fileName() + "_" + lang, path)) {
+            if (!m_Translators[fileMask]->load(f.fileName() + "_" + lang, path)) {
                 if (WarnTranslatorsErrors)
-                    Utils::Log::addError(this, tr( "Can not load %1, path : %2" ).arg( f.fileName() + "_" + lang , path),
+                    Utils::Log::addError(this, tr("Can not load %1, path : %2").arg(f.fileName() + "_" + lang , path),
                                          __FILE__, __LINE__);
             } else {
                 if (WarnTranslatorsErrors) {
@@ -159,34 +159,34 @@ void Translators::changeLanguage(QLocale::Language lang)
  * @param fileMask : full path to qm file. Like this: "/path/to/qm/file" without "_en.qm" for example.
  * @return  true if all gone ok, false in the other case
  */
-bool Translators::addNewTranslator( const QString & fileMask, bool fromDefaultPath )
+bool Translators::addNewTranslator(const QString & fileMask, bool fromDefaultPath)
 {
     QTranslator *t = new QTranslator(qApp);
-    QString lang = QLocale().name().left(2);
+    QString lang = QLocale().name().right(2).toLower();
     QString path;
     QFileInfo file(fileMask);
 
     // manage path
-    if ( fromDefaultPath )
+    if (fromDefaultPath)
         path = m_PathToTranslations;
     else
         path = file.absolutePath();
 
     // if translator loads
-    if ( t->load( file.fileName() + "_" + lang, path  ) ) {
+    if (t->load(file.fileName() + "_" + lang, path )) {
         // add it to the map and the application
-        if ( !m_Translators.contains( QDir::cleanPath( fileMask ) ) ) {
-            m_Translators.insert( QDir::cleanPath( fileMask ) , t );
-            qApp->installTranslator( t );
+        if (!m_Translators.contains(QDir::cleanPath(fileMask))) {
+            m_Translators.insert(QDir::cleanPath(fileMask) , t);
+            qApp->installTranslator(t);
             if (WarnTranslatorsErrors) {
-                Utils::Log::addMessage( this, tr("Add Translator %1.").arg(file.fileName() + "_" + lang));
+                LOG(tr("Add Translator %1.").arg(file.fileName() + "_" + lang));
             }
             return true;
         }
     }
     else {
         if (WarnTranslatorsErrors) {
-            Utils::Log::addMessage(this, tr("WARNING : Can not be loaded %1 or already loaded.").arg(file.absoluteFilePath() + "_" + lang));
+            LOG(tr("WARNING : Can not be loaded %1 or already loaded.").arg(file.absoluteFilePath() + "_" + lang));
         }
     }
 
@@ -196,9 +196,9 @@ bool Translators::addNewTranslator( const QString & fileMask, bool fromDefaultPa
 }
 
 /** \brief Adds a new translator from the \e path and with the template filename \e fileTemplate */
-bool Translators::addNewTranslator( const QString & path, const QString & fileTemplate )
+bool Translators::addNewTranslator(const QString & path, const QString & fileTemplate)
 {
-    return addNewTranslator( path + QDir::separator() + fileTemplate, false );
+    return addNewTranslator(path + QDir::separator() + fileTemplate, false);
 }
 
 /** \brief Returns the availables translated locales for the application. */
@@ -227,10 +227,10 @@ QMap<QString, QString> Translators::availableLocalesAndLanguages()
 
     QDir dir(m_PathToTranslations);
     QStringList fileNames = dir.entryList(QStringList() << QString("%1_*.qm").arg(Trans::Constants::CONSTANTS_TRANSLATOR_NAME));
-    foreach( QString s, fileNames ) {
+    foreach(QString s, fileNames) {
         QString locale = s;
-        locale.remove( 0, locale.indexOf( '_' ) + 1 );
-        locale.truncate( locale.lastIndexOf( '.' ) );
+        locale.remove(0, locale.indexOf('_') + 1);
+        locale.truncate(locale.lastIndexOf('.'));
         QTranslator translator;
 	translator.load(s, m_PathToTranslations);
 	QString lang = translator.translate(Trans::Constants::CONSTANTS_TR_CONTEXT, Trans::Constants::ENGLISH);

@@ -4,18 +4,18 @@
 <context>
     <name>UserBase</name>
     <message>
-        <location filename="../../plugins/usermanagerplugin/database/userbase.cpp" line="468"/>
-        <location filename="../../plugins/usermanagerplugin/database/userbase.cpp" line="490"/>
+        <location filename="../../plugins/usermanagerplugin/database/userbase.cpp" line="470"/>
+        <location filename="../../plugins/usermanagerplugin/database/userbase.cpp" line="492"/>
         <source>Can not create a new user&apos;s UUID, database access error</source>
         <translation>Impossible de créer un nouvel UUID d&apos;utilisateur, erreur d&apos;accès à la base de données</translation>
     </message>
     <message>
-        <location filename="../../plugins/usermanagerplugin/database/userbase.cpp" line="513"/>
+        <location filename="../../plugins/usermanagerplugin/database/userbase.cpp" line="515"/>
         <source>Can not retreive login from the uuid</source>
         <translation>Impossible de récupérer le login depuis l&apos;UUID</translation>
     </message>
     <message>
-        <location filename="../../plugins/usermanagerplugin/database/userbase.cpp" line="547"/>
+        <location filename="../../plugins/usermanagerplugin/database/userbase.cpp" line="549"/>
         <source>Trying to create empty user database. 
        Location : %1 
        FileName: %2
@@ -23,7 +23,7 @@
         <translation></translation>
     </message>
     <message>
-        <location filename="../../plugins/usermanagerplugin/database/userbase.cpp" line="982"/>
+        <location filename="../../plugins/usermanagerplugin/database/userbase.cpp" line="984"/>
         <source>User %1 correctly updated.</source>
         <translation>Utilisateur %1 correctement mis ) jour.</translation>
     </message>
@@ -175,7 +175,7 @@ Dernière connexion : %2</translation>
 <context>
     <name>UserPlugin::Internal::UserBase</name>
     <message>
-        <location filename="../../plugins/usermanagerplugin/database/userbase.cpp" line="843"/>
+        <location filename="../../plugins/usermanagerplugin/database/userbase.cpp" line="845"/>
         <source>Recorded User Last Login : %1 </source>
         <translation>Enregistrement de l&apos;historique de connexion : %1.</translation>
     </message>

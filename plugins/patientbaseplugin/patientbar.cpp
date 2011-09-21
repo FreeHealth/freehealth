@@ -83,7 +83,7 @@ public:
         m_Mapper->addMapping(ui->names, Core::IPatient::FullName, "text");
         m_Mapper->addMapping(ui->age, Core::IPatient::Age, "text");
         m_Mapper->addMapping(ui->gender, Core::IPatient::GenderPixmap, "pixmap");
-        m_Mapper->addMapping(ui->photo, Core::IPatient::Photo, "pixmap");
+        m_Mapper->addMapping(ui->photo, Core::IPatient::Photo_64x64, "pixmap");
 //        QIcon icon = m_Model->index(m_Index->row(), Core::IPatient::IconizedGender).data().value<QIcon>();
 //        ui->names->setText(m_Model->index(m_Index->row(), Core::IPatient::FullName).data().toString());
 //        ui->age->setText(m_Model->index(m_Index->row(), Core::IPatient::Age).data().toString());

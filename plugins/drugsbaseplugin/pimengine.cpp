@@ -706,13 +706,13 @@ bool PimEngine::init()
             // get all related ATC_ID
             Utils::FieldList get;
             Utils::JoinList join;
+            Utils::FieldList conds;
             get << Utils::Field(Constants::Table_PIMS_RELATED_ATC, Constants::PIMS_RELATC_PIM_ID);
             get << Utils::Field(Constants::Table_PIMS_RELATED_ATC, Constants::PIMS_RELATC_ATC_ID);
             get << Utils::Field(Constants::Table_PIMS_RELATED_ATC, Constants::PIMS_RELATC_MAXDAYDOSE);
             join << Utils::Join(Constants::Table_PIMS, Constants::PIMS_ID, Constants::Table_PIMS_RELATED_ATC, Constants::PIMS_RELATC_PIM_ID);
-            Utils::FieldList conds;
             conds << Utils::Field(Constants::Table_PIMS, Constants::PIMS_SID, QString("=%1").arg(pimSource.sourceId));
-            req = base()->select(get, join, sourceCond);
+            req = base()->select(get, join, conds);
             QSqlQuery atc(DB);
             if (atc.exec(req)) {
                 while (atc.next()) {
@@ -732,7 +732,7 @@ bool PimEngine::init()
             get << Utils::Field(Constants::Table_PIMS_RELATED_ICD, Constants::PIMS_RELICD_PIM_ID);
             get << Utils::Field(Constants::Table_PIMS_RELATED_ICD, Constants::PIMS_RELICD_ICD_SID);
             join << Utils::Join(Constants::Table_PIMS, Constants::PIMS_ID, Constants::Table_PIMS_RELATED_ICD, Constants::PIMS_RELICD_PIM_ID);
-            req = base()->select(get, join, sourceCond);
+            req = base()->select(get, join, conds);
             if (atc.exec(req)) {
                 while (atc.next()) {
                     pimSource.m_AtcIdsIcdRelatedByPimId.insert(atc.value(0).toInt(), atc.value(1).toInt());

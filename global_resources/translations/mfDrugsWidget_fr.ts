@@ -735,8 +735,8 @@ p, li { white-space: pre-wrap; }
 <context>
     <name>DrugsWidget::Internal::DrugEnginesPreferencesPage</name>
     <message>
-        <location filename="../../plugins/drugsplugin/drugspreferences/drugenginespreferences.cpp" line="129"/>
-        <location filename="../../plugins/drugsplugin/drugspreferences/drugenginespreferences.cpp" line="131"/>
+        <location filename="../../plugins/drugsplugin/drugspreferences/drugenginespreferences.cpp" line="148"/>
+        <location filename="../../plugins/drugsplugin/drugspreferences/drugenginespreferences.cpp" line="150"/>
         <source>Interaction engines</source>
         <translation>Moteurs d&apos;interaction</translation>
     </message>
@@ -1118,7 +1118,7 @@ Voulez-vous réellement changer de mode d&apos;édition ?</translation>
     <message>
         <location filename="../../plugins/drugsplugin/drugspreferences/mfDrugsPreferences.cpp" line="147"/>
         <source>Drug&apos;s selector preferences</source>
-        <translation>Préférences du sélectionneur de base de données thérapeutique</translation>
+        <translation>Préférences du sélectionneur de thérapeutiques</translation>
     </message>
 </context>
 <context>

@@ -9,7 +9,7 @@
         <translation></translation>
     </message>
     <message>
-        <location filename="../../plugins/patientbaseplugin/patientbar.ui" line="138"/>
+        <location filename="../../plugins/patientbaseplugin/patientbar.ui" line="135"/>
         <source>Name, Secondname - firstname</source>
         <translation></translation>
     </message>

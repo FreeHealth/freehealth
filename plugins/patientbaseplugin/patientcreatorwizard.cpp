@@ -61,10 +61,9 @@ PatientCreatorWizard::PatientCreatorWizard(QWidget *parent) :
     layout << QWizard::CancelButton << QWizard::Stretch << QWizard::BackButton
             << QWizard::NextButton << QWizard::FinishButton;
     setButtonLayout(layout);
-    setPixmap(QWizard::WatermarkPixmap, theme()->icon(Core::Constants::ICONPATIENTS).pixmap(QSize(64,64)));
-    setPixmap(QWizard::BackgroundPixmap, theme()->icon(Core::Constants::ICONPATIENTS).pixmap(QSize(64,64)));
-    setPixmap(QWizard::BannerPixmap, theme()->icon(Core::Constants::ICONPATIENTS).pixmap(QSize(64,64)));
-    setPixmap(QWizard::LogoPixmap, theme()->icon(Core::Constants::ICONPATIENTS).pixmap(QSize(64,64)));
+    QPixmap pix = theme()->splashScreenPixmap("newpatient-wizard.png");
+    setPixmap(QWizard::BackgroundPixmap, pix);
+    setPixmap(QWizard::WatermarkPixmap, pix);
 }
 
 void PatientCreatorWizard::done(int r)

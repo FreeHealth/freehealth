@@ -178,7 +178,7 @@ Patients::PatientModel *IdentityWidget::patientModel() const
 /** \brief Change the current identity to the model index \e patientIndex. */
 void IdentityWidget::setCurrentIndex(const QModelIndex &patientIndex)
 {
-    QPixmap photo = d->m_PatientModel->index(patientIndex.row(), Core::IPatient::Photo).data().value<QPixmap>();
+    QPixmap photo = d->m_PatientModel->index(patientIndex.row(), Core::IPatient::Photo_64x64).data().value<QPixmap>();
     if (d->m_Mapper) {
         d->m_Mapper->setCurrentModelIndex(patientIndex);
         d->editUi->photoButton->setIcon(photo);
@@ -300,13 +300,13 @@ void IdentityWidget::photoButton_clicked()
         return;
 
     // resize pixmap
-    photo = photo.scaled(QSize(50,50), Qt::KeepAspectRatio, Qt::SmoothTransformation);
+    photo = photo.scaled(QSize(64,64), Qt::KeepAspectRatio, Qt::SmoothTransformation);
 
     // change button pixmap
     QIcon icon(photo);
     d->editUi->photoButton->setIcon(icon);
 
     // save to DB
-    d->m_PatientModel->setData(d->m_PatientModel->index(d->m_Mapper->currentIndex(), Core::IPatient::Photo), photo);
+    d->m_PatientModel->setData(d->m_PatientModel->index(d->m_Mapper->currentIndex(), Core::IPatient::Photo_64x64), photo);
 }
 

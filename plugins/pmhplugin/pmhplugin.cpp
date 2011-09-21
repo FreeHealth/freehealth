@@ -57,6 +57,9 @@ PmhPlugin::PmhPlugin() : mode(0)
 {
     if (Utils::Log::warnPluginsCreation())
         qWarning() << "creating PmhPlugin";
+
+    // Add Translator to the Application
+    Core::ICore::instance()->translators()->addNewTranslator("pmhplugin");
 }
 
 PmhPlugin::~PmhPlugin()
@@ -71,8 +74,6 @@ bool PmhPlugin::initialize(const QStringList &arguments, QString *errorString)
     Q_UNUSED(arguments);
     Q_UNUSED(errorString);
 
-    // Add Translator to the Application
-    Core::ICore::instance()->translators()->addNewTranslator("PmhPlugin");
     messageSplash(tr("Initializing PMHx database plugin..."));
 
     return true;

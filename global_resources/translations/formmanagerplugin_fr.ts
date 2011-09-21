@@ -146,8 +146,8 @@ Répondre &apos;non&apos; causera une perte de données irréversible.</translat
 <context>
     <name>Form::Internal::FormManagerPlugin</name>
     <message>
-        <location filename="../../plugins/formmanagerplugin/formmanagerplugin.cpp" line="94"/>
-        <location filename="../../plugins/formmanagerplugin/formmanagerplugin.cpp" line="104"/>
+        <location filename="../../plugins/formmanagerplugin/formmanagerplugin.cpp" line="96"/>
+        <location filename="../../plugins/formmanagerplugin/formmanagerplugin.cpp" line="106"/>
         <source>Initializing form manager plugin...</source>
         <translation>Initialisation du plugin formulaire...</translation>
     </message>

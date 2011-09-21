@@ -453,11 +453,25 @@ QVariant PatientModel::data(const QModelIndex &index, int role) const
         case IPatient::YearsOld: return MedicalUtils::ageYears(d->m_SqlPatient->data(d->m_SqlPatient->index(index.row(), Constants::IDENTITY_DOB)).toDate());
         case IPatient::IconizedGender: return d->iconizedGender(index);
         case IPatient::GenderPixmap: return d->iconizedGender(index).pixmap(16,16);
-        case IPatient::Photo :
+        case IPatient::Photo_32x32 :
         {
             const QString &gender = d->m_SqlPatient->data(d->m_SqlPatient->index(index.row(), Constants::IDENTITY_GENDER)).toString();
             QString patientUid = d->m_SqlPatient->index(index.row(), Constants::IDENTITY_UID).data().toString();
-            return d->getPatientPhoto(patientUid, gender);
+            QPixmap pix = d->getPatientPhoto(patientUid, gender);
+            if (pix.size()==QSize(32,32)) {
+                return pix;
+            }
+            return pix.scaled(QSize(32,32));
+        }
+        case IPatient::Photo_64x64 :
+        {
+            const QString &gender = d->m_SqlPatient->data(d->m_SqlPatient->index(index.row(), Constants::IDENTITY_GENDER)).toString();
+            QString patientUid = d->m_SqlPatient->index(index.row(), Constants::IDENTITY_UID).data().toString();
+            QPixmap pix = d->getPatientPhoto(patientUid, gender);
+            if (pix.size()==QSize(64,64)) {
+                return pix;
+            }
+            return pix.scaled(QSize(64,64));
         }
         case IPatient::PractitionnerLkID: return d->m_LkIds;
         }
@@ -576,7 +590,8 @@ bool PatientModel::setData(const QModelIndex &index, const QVariant &value, int 
                     return true;
                 }
             }
-        case IPatient::Photo:
+        case IPatient::Photo_32x32:
+        case IPatient::Photo_64x64:
             {
                 QPixmap pix = value.value<QPixmap>();
                 QString patientUid = d->m_SqlPatient->index(index.row(), Constants::IDENTITY_UID).data().toString();

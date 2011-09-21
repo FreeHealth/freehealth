@@ -208,6 +208,7 @@ enum TitleInterpret {
 
         const char * const  PMHX                  = QT_TRANSLATE_NOOP("tkConstants", "PMHx");
         const char * const  PASTMEDICALHISTORY    = QT_TRANSLATE_NOOP("tkConstants", "Past medical history");
+        const char * const  PMHX_PREFERENCES      = QT_TRANSLATE_NOOP("tkConstants", "PMHx preferences");
 
         const char * const  FORMATBOLD_TEXT       = QT_TRANSLATE_NOOP("tkConstants", "Bold");
         const char * const  FORMATITALIC_TEXT     = QT_TRANSLATE_NOOP("tkConstants", "Italic");

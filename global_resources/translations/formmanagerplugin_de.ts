@@ -145,8 +145,8 @@ Answering &apos;No&apos; will cause definitve data lose.</source>
 <context>
     <name>Form::Internal::FormManagerPlugin</name>
     <message>
-        <location filename="../../plugins/formmanagerplugin/formmanagerplugin.cpp" line="94"/>
-        <location filename="../../plugins/formmanagerplugin/formmanagerplugin.cpp" line="104"/>
+        <location filename="../../plugins/formmanagerplugin/formmanagerplugin.cpp" line="96"/>
+        <location filename="../../plugins/formmanagerplugin/formmanagerplugin.cpp" line="106"/>
         <source>Initializing form manager plugin...</source>
         <translation type="unfinished"></translation>
     </message>

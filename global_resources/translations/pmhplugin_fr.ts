@@ -54,14 +54,6 @@
     </message>
 </context>
 <context>
-    <name>PMH::Internal::PmhPreferencesPage</name>
-    <message>
-        <location filename="../../plugins/pmhplugin/pmhpreferencespage.cpp" line="68"/>
-        <source>PMHx preferences</source>
-        <translation>Préférences pour les antécédents</translation>
-    </message>
-</context>
-<context>
     <name>PMH::Internal::PmhPreferencesWidget</name>
     <message>
         <location filename="../../plugins/pmhplugin/pmhpreferencespage.ui" line="14"/>
@@ -259,8 +251,8 @@
 <context>
     <name>PMH::PmhPlugin</name>
     <message>
-        <location filename="../../plugins/pmhplugin/pmhplugin.cpp" line="76"/>
-        <location filename="../../plugins/pmhplugin/pmhplugin.cpp" line="86"/>
+        <location filename="../../plugins/pmhplugin/pmhplugin.cpp" line="77"/>
+        <location filename="../../plugins/pmhplugin/pmhplugin.cpp" line="87"/>
         <source>Initializing PMHx database plugin...</source>
         <translation>Initialisation de la base de données des antécédents...</translation>
     </message>

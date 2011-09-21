@@ -76,7 +76,8 @@ public:
         MaritalStatus,
         Profession,  // 20
         DateOfDeath,
-        Photo,
+        Photo_32x32,
+        Photo_64x64,
 
         // Contact
         Street,

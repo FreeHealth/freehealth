@@ -65,7 +65,7 @@ PmhPreferencesPage::~PmhPreferencesPage()
 QString PmhPreferencesPage::id() const { return objectName(); }
 QString PmhPreferencesPage::name() const { return tkTr(Trans::Constants::PASTMEDICALHISTORY); }
 QString PmhPreferencesPage::category() const { return tkTr(Trans::Constants::PMHX); }
-QString PmhPreferencesPage::title() const {return tr("PMHx preferences");}
+QString PmhPreferencesPage::title() const {return tkTr(Trans::Constants::PMHX_PREFERENCES);}
 
 void PmhPreferencesPage::resetToDefaults()
 {
@@ -115,6 +115,7 @@ QWidget *PmhPreferencesPage::createPage(QWidget *parent)
 PmhPreferencesWidget::PmhPreferencesWidget(QWidget *parent) :
         QWidget(parent)
 {
+    setObjectName("PmhPreferencesWidget");
     setupUi(this);
     setDatasToUi();
 }
@@ -161,7 +162,7 @@ void PmhPreferencesWidget::applyToModel()
 
 void PmhPreferencesWidget::writeDefaultSettings(Core::ISettings *s)
 {
-    Utils::Log::addMessage("PmhPreferencesWidget", tkTr(Trans::Constants::CREATING_DEFAULT_SETTINGS_FOR_1).arg("PmhPreferencesWidget"));
+    LOG_FOR("PmhPreferencesWidget", tkTr(Trans::Constants::CREATING_DEFAULT_SETTINGS_FOR_1).arg("PmhPreferencesWidget"));
     QHash<QString, QVariant> defaultvalues;
     QFont bold;
     bold.setBold(true);
