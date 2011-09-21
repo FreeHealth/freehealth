@@ -67,6 +67,10 @@ FormManagerPlugin::FormManagerPlugin() :
 {
     if (Utils::Log::warnPluginsCreation())
         qWarning() << "creating FormManagerPlugin";
+
+    // Add Translator to the Application
+    Core::ICore::instance()->translators()->addNewTranslator("formmanagerplugin");
+
     m_FirstRun = new Internal::FirstRunFormManagerConfigPage(this);
     addObject(m_FirstRun);
 }
@@ -89,8 +93,6 @@ bool FormManagerPlugin::initialize(const QStringList &arguments, QString *errorS
     Q_UNUSED(arguments);
     Q_UNUSED(errorString);
 
-    // Add Translator to the Application
-    Core::ICore::instance()->translators()->addNewTranslator("formmanagerplugin");
     messageSplash(tr("Initializing form manager plugin..."));
 
     return true;
