@@ -74,10 +74,10 @@ public:
     int hourHeight() const;
 
 public Q_SLOTS:
-    void setDayGranularity(int valueInMinutes);
-    void setDayItemDefaultDuration(int valueInMinutes);
-    void setDayScaleHourDivider(int value);
-    void setHourHeight(int heightInPixels);
+    void setDayGranularity(int minutes);
+    void setDayItemDefaultDuration(int minutes);
+    void setDayScaleHourDivider(int divider);
+    void setHourHeight(int pixels);
 
     void scrollToTime(const QTime &time);
 

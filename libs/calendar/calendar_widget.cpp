@@ -200,52 +200,52 @@ int CalendarWidget::dayGranularity() const {
 	return m_d->m_dayGranularity;
 }
 
-void CalendarWidget::setDayGranularity(int value) {
-	if (m_d->m_dayGranularity == value)
+void CalendarWidget::setDayGranularity(int minutes) {
+	if (m_d->m_dayGranularity == minutes)
 		return;
 
-	m_d->m_dayGranularity = value;
+	m_d->m_dayGranularity = minutes;
 	if (qobject_cast<DayRangeBody*>(m_d->m_body))
-		qobject_cast<DayRangeBody*>(m_d->m_body)->setGranularity(value);
+		qobject_cast<DayRangeBody*>(m_d->m_body)->setGranularity(minutes);
 }
 
 int CalendarWidget::dayItemDefaultDuration() const {
 	return m_d->m_dayItemDefaultDuration;
 }
 
-void CalendarWidget::setDayItemDefaultDuration(int value) {
-	if (m_d->m_dayItemDefaultDuration == value)
+void CalendarWidget::setDayItemDefaultDuration(int minutes) {
+	if (m_d->m_dayItemDefaultDuration == minutes)
 		return;
 
-	m_d->m_dayItemDefaultDuration = value;
+	m_d->m_dayItemDefaultDuration = minutes;
 	if (qobject_cast<DayRangeBody*>(m_d->m_body))
-		qobject_cast<DayRangeBody*>(m_d->m_body)->setItemDefaultDuration(value);
+		qobject_cast<DayRangeBody*>(m_d->m_body)->setItemDefaultDuration(minutes);
 }
 
 int CalendarWidget::dayScaleHourDivider() const {
     return m_d->m_dayScaleHourDivider;
 }
 
-void CalendarWidget::setDayScaleHourDivider(int value) {
-	if (m_d->m_dayScaleHourDivider == value)
+void CalendarWidget::setDayScaleHourDivider(int divider) {
+	if (m_d->m_dayScaleHourDivider == divider)
 		return;
 
-	m_d->m_dayScaleHourDivider = value;
+	m_d->m_dayScaleHourDivider = divider;
 	if (qobject_cast<DayRangeBody*>(m_d->m_body))
-		qobject_cast<DayRangeBody*>(m_d->m_body)->setDayScaleHourDivider(value);
+		qobject_cast<DayRangeBody*>(m_d->m_body)->setDayScaleHourDivider(divider);
 }
 
 int CalendarWidget::hourHeight() const {
     return m_d->m_hourHeight;
 }
 
-void CalendarWidget::setHourHeight(int value) {
-    if (m_d->m_hourHeight == value)
+void CalendarWidget::setHourHeight(int pixels) {
+    if (m_d->m_hourHeight == pixels)
         return;
 
-    m_d->m_hourHeight = value;
+    m_d->m_hourHeight = pixels;
     if (qobject_cast<DayRangeBody*>(m_d->m_body))
-        qobject_cast<DayRangeBody*>(m_d->m_body)->setHourHeight(value);
+        qobject_cast<DayRangeBody*>(m_d->m_body)->setHourHeight(pixels);
 }
 
 void CalendarWidget::scrollToTime(const QTime &time) {
