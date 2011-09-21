@@ -140,6 +140,8 @@ public:
     Patients::PatientModel *m_PatientModel;
     IdentityWidget::EditMode m_EditMode;
     ZipCodes::ZipCountryCompleters *zipCompleter;
+    QPixmap m_Photo;
+
 private:
     IdentityWidget *q;
 };
@@ -261,8 +263,13 @@ bool IdentityWidget::isModified() const
 /** \brief Submit the Identity to the model and the database. */
 bool IdentityWidget::submit()
 {
-    if ((d->m_EditMode == ReadWriteMode) && (d->m_Mapper))
-            return d->m_Mapper->submit();
+    if ((d->m_EditMode == ReadWriteMode) && (d->m_Mapper)) {
+        // save photo
+        if (!d->m_Photo.isNull())
+            d->m_PatientModel->setData(d->m_PatientModel->index(d->m_Mapper->currentIndex(), Core::IPatient::Photo_64x64), d->m_Photo);
+        // submit mapper
+        return d->m_Mapper->submit();
+    }
     return false;
 }
 
@@ -295,18 +302,15 @@ void IdentityWidget::photoButton_clicked()
         return;
 
     // load pixmap
-    QPixmap photo(file);
-    if (photo.isNull())
+    d->m_Photo.load(file);
+    if (d->m_Photo.isNull())
         return;
 
     // resize pixmap
-    photo = photo.scaled(QSize(64,64), Qt::KeepAspectRatio, Qt::SmoothTransformation);
+    d->m_Photo = d->m_Photo.scaled(QSize(64,64), Qt::KeepAspectRatio, Qt::SmoothTransformation);
 
     // change button pixmap
-    QIcon icon(photo);
+    QIcon icon(d->m_Photo);
     d->editUi->photoButton->setIcon(icon);
-
-    // save to DB
-    d->m_PatientModel->setData(d->m_PatientModel->index(d->m_Mapper->currentIndex(), Core::IPatient::Photo_64x64), photo);
 }
 

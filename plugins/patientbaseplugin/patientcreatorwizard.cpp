@@ -94,8 +94,8 @@ void PatientCreatorWizard::done(int r)
     }
 }
 
-IdentityPage::IdentityPage(QWidget *parent)
-    : QWizardPage(parent)
+IdentityPage::IdentityPage(QWidget *parent) :
+    QWizardPage(parent)
 {
     setObjectName("IdentityPage");
     setTitle(tr("Please enter the patient's identity."));
