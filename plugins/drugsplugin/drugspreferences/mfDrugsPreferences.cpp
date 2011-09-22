@@ -789,8 +789,8 @@ DrugsExtraWidget::DrugsExtraWidget(QWidget *parent) :
         QWidget(parent)
 {
     setupUi(this);
-    ALDBefore->setTypes(Editor::TextEditor::Full);
-    ALDAfter->setTypes(Editor::TextEditor::Full);
+    ALDBefore->setTypes(Editor::TextEditor::Simple | Editor::TextEditor::WithIO | Editor::TextEditor::WithTables);
+    ALDAfter->setTypes(Editor::TextEditor::Simple | Editor::TextEditor::WithIO | Editor::TextEditor::WithTables);
     setDatasToUi();
 }
 

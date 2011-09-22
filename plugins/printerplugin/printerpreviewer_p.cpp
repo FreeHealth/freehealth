@@ -83,15 +83,15 @@ void PrinterPreviewerPrivate::initialize()
 {
     setupUi(this);
     if (!m_EditorHeader) {
-        m_EditorHeader = new Editor::TextEditor(this, Editor::TextEditor::Full);
+        m_EditorHeader = new Editor::TextEditor(this, Editor::TextEditor::Simple | Editor::TextEditor::WithIO | Editor::TextEditor::WithTables);
         editorLayout->insertWidget(0, createEditor(this, m_EditorHeader, tkTr(Trans::Constants::HEADER)));
     }
     if (!m_EditorFooter) {
-        m_EditorFooter = new Editor::TextEditor(this, Editor::TextEditor::Full);
+        m_EditorFooter = new Editor::TextEditor(this, Editor::TextEditor::Simple | Editor::TextEditor::WithIO | Editor::TextEditor::WithTables);
         editorLayout->insertWidget(1, createEditor(this, m_EditorFooter, tkTr(Trans::Constants::FOOTER)));
     }
     if (!m_EditorWatermark) {
-        m_EditorWatermark = new Editor::TextEditor(this, Editor::TextEditor::Full);
+        m_EditorWatermark = new Editor::TextEditor(this, Editor::TextEditor::Simple | Editor::TextEditor::WithIO | Editor::TextEditor::WithTables);
         editorLayout->insertWidget(2, createEditor(this, m_EditorWatermark, tkTr(Trans::Constants::WATERMARK)));
     }
 }
@@ -127,7 +127,7 @@ QComboBox *PrinterPreviewerPrivate::watermarkPresenceCombo() const
 void PrinterPreviewerPrivate::setHeaderHtml(const QString &html)
 {
     if (!m_EditorHeader) {
-        m_EditorHeader = new Editor::TextEditor(this, Editor::TextEditor::Full);
+        m_EditorHeader = new Editor::TextEditor(this, Editor::TextEditor::Simple | Editor::TextEditor::WithIO | Editor::TextEditor::WithTables);
         editorLayout->insertWidget(0, createEditor(this, m_EditorHeader, tkTr(Trans::Constants::HEADER)));
     }
 //    qWarning() << html;
@@ -142,7 +142,7 @@ void PrinterPreviewerPrivate::setHeaderHtml(const QString &html)
 void PrinterPreviewerPrivate::setFooterHtml(const QString &html)
 {
     if (!m_EditorFooter) {
-        m_EditorFooter = new Editor::TextEditor(this, Editor::TextEditor::Full);
+        m_EditorFooter = new Editor::TextEditor(this, Editor::TextEditor::Simple | Editor::TextEditor::WithIO | Editor::TextEditor::WithTables);
         editorLayout->insertWidget(1, createEditor(this, m_EditorFooter, tkTr(Trans::Constants::FOOTER)));
     }
 //    printer.setFooter(html,p);
@@ -153,7 +153,7 @@ void PrinterPreviewerPrivate::setFooterHtml(const QString &html)
 void PrinterPreviewerPrivate::setWatermarkHtml(const QString &html)
 {
     if (!m_EditorWatermark) {
-        m_EditorWatermark = new Editor::TextEditor(this, Editor::TextEditor::Full);
+        m_EditorWatermark = new Editor::TextEditor(this, Editor::TextEditor::Simple | Editor::TextEditor::WithIO | Editor::TextEditor::WithTables);
         editorLayout->insertWidget(2, createEditor(this, m_EditorWatermark, tkTr(Trans::Constants::WATERMARK)));
     }
 //    printer.addHtmlWatermark(html,p);
