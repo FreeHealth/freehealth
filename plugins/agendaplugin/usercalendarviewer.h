@@ -67,8 +67,6 @@ private Q_SLOTS:
     void recalculateAvailabilitiesWithDurationIndex(const int index);
     void on_availableAgendasCombo_activated(const int index);
     void userChanged();
-//    void rowsChanged(const QModelIndex &,int,int);
-    void on_scroll_activated(int index);
 
 protected:
     bool event(QEvent *e);

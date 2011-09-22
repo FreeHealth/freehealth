@@ -266,11 +266,6 @@ void UserCalendarViewer::userChanged()
     }
 }
 
-void UserCalendarViewer::on_scroll_activated(int index)
-{
-   d->ui->calendarViewer->scrollToTime(QTime(index+1,0,0));
-}
-
 bool UserCalendarViewer::event(QEvent *e)
 {
     switch (e->type()) {
