@@ -1932,18 +1932,38 @@ Text Align Justify shortcut key : Mac specific</extracomment>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../../libs/translationutils/constanttranslations.h" line="628"/>
+        <location filename="../../libs/translationutils/constanttranslations.h" line="624"/>
+        <source>Add current date</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../../libs/translationutils/constanttranslations.h" line="625"/>
+        <source>Add user name</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../../libs/translationutils/constanttranslations.h" line="626"/>
+        <source>Add patient name</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../../libs/translationutils/constanttranslations.h" line="627"/>
+        <source>Add text</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../../libs/translationutils/constanttranslations.h" line="631"/>
         <source>Ctrl+Shift+P</source>
         <extracomment>ShortCut for &quot;Print prescription&quot;</extracomment>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../../libs/translationutils/constanttranslations.h" line="633"/>
+        <location filename="../../libs/translationutils/constanttranslations.h" line="636"/>
         <source>All languages</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../../libs/translationutils/constanttranslations.h" line="634"/>
+        <location filename="../../libs/translationutils/constanttranslations.h" line="637"/>
         <source>All other languages</source>
         <translation type="unfinished"></translation>
     </message>

@@ -39,6 +39,7 @@
 #include <coreplugin/idocumentprinter.h>
 
 #include <extensionsystem/pluginmanager.h>
+#include <utils/log.h>
 
 #include <QAction>
 #include <QApplication>
@@ -116,19 +117,22 @@ static inline QAction *createAction(QObject *parent, const QString &name, const 
 }
 
 EditorActionHandler::EditorActionHandler(QObject *parent) :
-        QObject(parent),
-        aOpen(0), aSave(0), aPrint(0),
-        aUndo(0), aRedo(0),
-        aCut(0), aCopy(0), aPaste(0),
-        aBold(0), aUnderline(0), aStrike(0),
-        aItalic(0), aColor(0),
-        aFontFormat(0), aFontBigger(0), aFontSmaller(0),
-        aLeft(0), aCenter(0), aRight(0), aJustify(0),
-        aAddTable(0), aTableProperties(0),
-        aAddRow(0),aAddCol(0),
-        aRemoveRow(0), aRemoveCol(0),
-        aMergeCells(0), aSplitCells(0),
-        m_CurrentEditor(0)
+    QObject(parent),
+    aOpen(0), aSave(0), aPrint(0),
+    aUndo(0), aRedo(0),
+    aCut(0), aCopy(0), aPaste(0),
+    aBold(0), aUnderline(0), aStrike(0),
+    aItalic(0), aColor(0),
+    aFontFormat(0), aFontBigger(0), aFontSmaller(0),
+    aLeft(0), aCenter(0), aRight(0), aJustify(0),
+    aAddTable(0), aTableProperties(0),
+    aAddRow(0),aAddCol(0),
+    aRemoveRow(0), aRemoveCol(0),
+    aMergeCells(0), aSplitCells(0),
+    aAddDate(0),
+    aAddUserName(0),
+    aAddPatientName(0),
+    m_CurrentEditor(0)
 {
     createContexts();
     createMenus();
@@ -145,6 +149,7 @@ void EditorActionHandler::createContexts()
     basicContext = QList<int>() << uid()->uniqueIdentifier(Core::Constants::C_EDITOR_BASIC);
     ioContext = QList<int>() << uid()->uniqueIdentifier(Core::Constants::C_EDITOR_IO);
     tableContext = QList<int>() << uid()->uniqueIdentifier(Core::Constants::C_EDITOR_TABLE);
+    textAdderContext = QList<int>() << uid()->uniqueIdentifier(Core::Constants::C_EDITOR_ADDTEXT);
     allContexts = QList<int>() << basicContext << ioContext << tableContext;
 }
 
@@ -158,26 +163,35 @@ void EditorActionHandler::createMenus()
     // Menu structure -- rootMenu is menubar if exists otherwise it is a specific editor's menu Core::Constants::M_EDITOR
     Core::ActionContainer *rootMenu;
 
-    if ((actionManager()->actionContainer(Core::Constants::MENUBAR)) && (!actionManager()->actionContainer(Core::Constants::M_EDITOR))) {
-        rootMenu = m_ContextualMenu;//actionManager()->createMenu(Core::Constants::M_EDITOR);
-        rootMenu->appendGroup(Core::Constants::G_EDIT);
-        m_EditMenu = actionManager()->createMenu(Core::Constants::M_EDITOR_EDIT);
-        m_EditMenu->setTranslations(Trans::Constants::M_EDIT_TEXT);
-        rootMenu->addMenu(m_EditMenu, Core::Constants::G_EDIT);
-        m_EditMenu->appendGroup(Core::Constants::G_EDIT_UNDOREDO);
-        m_EditMenu->appendGroup(Core::Constants::G_EDIT_COPYPASTE);
-        m_EditMenu->appendGroup(Core::Constants::G_EDIT_FIND);
-        m_FileMenu = actionManager()->createMenu(Core::Constants::M_EDITOR_FILE);
-        m_FileMenu->appendGroup(Core::Constants::G_FILE_OPEN);
-        m_FileMenu->appendGroup(Core::Constants::G_FILE_SAVE);
-        m_FileMenu->appendGroup(Core::Constants::G_FILE_PRINT);
-        // create edition actions
-    } else {
+//    if ((actionManager()->actionContainer(Core::Constants::MENUBAR)) && (!actionManager()->actionContainer(Core::Constants::M_EDITOR))) {
+////        qWarning() << "using contextual menu";
+//        rootMenu = m_ContextualMenu;//actionManager()->createMenu(Core::Constants::M_EDITOR);
+//        rootMenu->appendGroup(Core::Constants::G_EDIT);
+//        m_EditMenu = actionManager()->createMenu(Core::Constants::M_EDITOR_EDIT);
+//        m_EditMenu->setTranslations(Trans::Constants::M_EDIT_TEXT);
+//        rootMenu->addMenu(m_EditMenu, Core::Constants::G_EDIT);
+//        m_EditMenu->appendGroup(Core::Constants::G_EDIT_UNDOREDO);
+//        m_EditMenu->appendGroup(Core::Constants::G_EDIT_COPYPASTE);
+//        m_EditMenu->appendGroup(Core::Constants::G_EDIT_FIND);
+//        m_EditMenu->appendGroup(Core::Constants::G_EDIT_EDITOR);
+//        m_FileMenu = actionManager()->createMenu(Core::Constants::M_EDITOR_FILE);
+//        m_FileMenu->appendGroup(Core::Constants::G_FILE_OPEN);
+//        m_FileMenu->appendGroup(Core::Constants::G_FILE_SAVE);
+//        m_FileMenu->appendGroup(Core::Constants::G_FILE_PRINT);
+//        // create edition actions
+//    } else {
+//        qWarning() << "using menubar menus";
         rootMenu = actionManager()->actionContainer(Core::Constants::MENUBAR);
         m_EditMenu = actionManager()->actionContainer(Core::Constants::M_EDIT);
         m_FileMenu = actionManager()->actionContainer(Core::Constants::M_FILE);
-        qWarning() << rootMenu << m_EditMenu << m_FileMenu;
-    }
+        if (!m_FileMenu)
+            m_FileMenu = actionManager()->actionContainer(Core::Constants::M_GENERAL);
+        if (!m_EditMenu || !m_FileMenu || !rootMenu) {
+            LOG_ERROR("No menu for texteditor widgets");
+        }
+//        qWarning() << rootMenu << m_EditMenu << m_FileMenu;
+//    }
+
     // Menu Edit --> text formats
     m_FormatMenu = actionManager()->actionContainer(Core::Constants::M_FORMAT);
     if (!m_FormatMenu) {
@@ -217,6 +231,13 @@ void EditorActionHandler::createMenus()
         m_TableMenu->setTranslations(Trans::Constants::M_FORMAT_TABLE_TEXT);
         m_TableMenu->appendGroup(Core::Constants::G_FORMAT_TABLE);
 //        m_TableMenu->setEmptyAction(ActionContainer::EA_Hide);
+    }
+
+    m_AddTextMenu = actionManager()->actionContainer(Core::Constants::M_EDITOR_ADDTEXT);
+    if (!m_AddTextMenu) {
+        m_AddTextMenu = actionManager()->createMenu(Core::Constants::M_EDITOR_ADDTEXT);
+        m_EditMenu->addMenu(m_AddTextMenu, Core::Constants::G_EDIT_EDITOR);
+        m_AddTextMenu->setTranslations(Trans::Constants::EDITOR_ADDTEXTMENU_TEXT);
     }
 }
 
@@ -329,6 +350,11 @@ void EditorActionHandler::createActions()
     aSave = createAction(this, "aSave", ICONSAVE, A_EDITOR_FILESAVE, ioContext, EDITOR_FILESAVE_TEXT, cmd, m_FileMenu, G_FILE_SAVE);
     actionManager()->command(A_FORMAT_FONTCOLOR)->setAttribute(Core::Command::CA_UpdateText);
 
+    // Text autocompletion
+    aAddDate = createAction(this, "aAddDate", "", A_EDITOR_ADDDATE, textAdderContext, EDITOR_ADDDATE_TEXT, cmd, m_AddTextMenu, Core::Constants::G_DEFAULT_ONE);
+    aAddUserName = createAction(this, "aAddUserName", "", A_EDITOR_ADDUSERNAME, textAdderContext, EDITOR_ADDUSERNAME_TEXT, cmd, m_AddTextMenu, Core::Constants::G_DEFAULT_ONE);
+    aAddPatientName = createAction(this, "aAddPatientName", "", A_EDITOR_ADDPATIENTNAME, textAdderContext, EDITOR_ADDPATIENTNAME_TEXT, cmd, m_AddTextMenu, Core::Constants::G_DEFAULT_ONE);
+
     actionManager()->retranslateMenusAndActions();
 }
 
@@ -363,6 +389,10 @@ void EditorActionHandler::connectActions()
     connect(aSplitCells, SIGNAL(triggered()), this, SLOT(tableSplitCells()));
     connect(aOpen, SIGNAL(triggered()), this, SLOT(fileOpen()));
     connect(aSave, SIGNAL(triggered()), this, SLOT(saveAs()));
+    connect(aAddDate, SIGNAL(triggered()), this, SLOT(addDate()));
+    connect(aAddUserName, SIGNAL(triggered()), this, SLOT(addUserName()));
+    connect(aAddPatientName, SIGNAL(triggered()), this, SLOT(addPatientName()));
+
     connect(QApplication::clipboard(), SIGNAL(dataChanged()), this, SLOT(clipboardDataChanged()));
 }
 
@@ -412,7 +442,6 @@ void EditorActionHandler::updateActions()
     fontChanged(m_CurrentEditor->textEdit()->currentFont());
     updateTableActions();
 }
-
 
 void EditorActionHandler::updateColorActions()
 {
@@ -465,7 +494,6 @@ void EditorActionHandler::setCurrentEditor(TextEditor *editor)
     updateActions();
     updateColorActions();
 }
-
 
 void EditorActionHandler::currentCharFormatChanged( const QTextCharFormat &format )
 {
@@ -675,4 +703,24 @@ void EditorActionHandler::tableMergeCells()
 { if (m_CurrentEditor) m_CurrentEditor->tableMergeCells (); }
 void EditorActionHandler::tableSplitCells()
 { if (m_CurrentEditor) m_CurrentEditor->tableSplitCells (); }
+
+void EditorActionHandler::addDate()
+{
+    if (m_CurrentEditor)
+        m_CurrentEditor->addDate();
+}
+
+void EditorActionHandler::addUserName()
+{
+    if (m_CurrentEditor) {
+        m_CurrentEditor->addUserName();
+    }
+}
+
+void EditorActionHandler::addPatientName()
+{
+    if (m_CurrentEditor) {
+        m_CurrentEditor->addPatientName();
+    }
+}
 

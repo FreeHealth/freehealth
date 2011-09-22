@@ -86,7 +86,7 @@ TextEditorForm::TextEditorForm(Form::FormItem *formItem, QWidget *parent) :
     hb->setMargin(0);
     hb->setSpacing(0);
     const QStringList &options = getOptions(formItem);
-    Editor::TextEditor::Types t = Editor::TextEditor::Simple;
+    Editor::TextEditor::Types t = Editor::TextEditor::Simple | Editor::TextEditor::WithTextCompleter;
     if (options.contains("FullEditor", Qt::CaseInsensitive)) {
         t = Editor::TextEditor::Full;
     } else {

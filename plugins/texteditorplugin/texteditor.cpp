@@ -46,6 +46,8 @@
 #include <coreplugin/actionmanager/actionmanager.h>
 #include <coreplugin/icore.h>
 #include <coreplugin/itheme.h>
+#include <coreplugin/iuser.h>
+#include <coreplugin/ipatient.h>
 #include <coreplugin/uniqueidmanager.h>
 #include <coreplugin/constants_menus.h>
 
@@ -76,6 +78,9 @@
 using namespace Editor;
 using namespace Editor::Internal;
 using namespace Trans::ConstantTranslations;
+
+static inline Core::IUser *user() {return Core::ICore::instance()->user();}
+static inline Core::IPatient *patient() {return Core::ICore::instance()->patient();}
 
 namespace Editor {
 namespace Internal {
@@ -108,7 +113,7 @@ public:
     {
         textEdit = new QTextEdit(m_Parent);
         //textEdit = new TextEditorHtmlPaster(m_Parent);
-        textEdit->setContextMenuPolicy( Qt::CustomContextMenu );
+        textEdit->setContextMenuPolicy(Qt::CustomContextMenu);
     }
 
     ~TextEditorPrivate()
@@ -205,13 +210,13 @@ public:
     }
 
 
-    void mergeFormatOnWordOrSelection( const QTextCharFormat &format )
+    void mergeFormatOnWordOrSelection(const QTextCharFormat &format)
     {
         QTextCursor cursor = textEdit->textCursor();
-        if ( !cursor.hasSelection() )
-            cursor.select( QTextCursor::WordUnderCursor );
-        cursor.mergeCharFormat( format );
-        textEdit->mergeCurrentCharFormat( format );
+        if (!cursor.hasSelection())
+            cursor.select(QTextCursor::WordUnderCursor);
+        cursor.mergeCharFormat(format);
+        textEdit->mergeCurrentCharFormat(format);
     }           
     
 public:
@@ -236,7 +241,7 @@ TextEditor::TextEditor(QWidget *parent, Types type)
 {
     static int handler = 0;
     handler++;
-    setObjectName( "TextEditor_" + QString::number(handler) );
+    setObjectName("TextEditor_" + QString::number(handler));
 
     // instanciate private part
     d = new TextEditorPrivate(this, type);
@@ -254,13 +259,13 @@ TextEditor::TextEditor(QWidget *parent, Types type)
     toogleToolbar(false);
 
     // create QWidget
-    QVBoxLayout * vb = new QVBoxLayout( this );
-    vb->setObjectName( "TextEditorLayout" );
-    vb->setSpacing( 0 );
-    vb->setMargin( 0 );
+    QVBoxLayout * vb = new QVBoxLayout(this);
+    vb->setObjectName("TextEditorLayout");
+    vb->setSpacing(0);
+    vb->setMargin(0);
 
-    vb->addWidget( d->m_ToolBar );
-    vb->addWidget( d->textEdit );
+    vb->addWidget(d->m_ToolBar);
+    vb->addWidget(d->textEdit);
 }
 
 TextEditor::~TextEditor()
@@ -287,6 +292,9 @@ void TextEditor::setTypes(Types type)
     if (type & TextEditor::WithIO) {
         d->m_Context->addContext(uid->uniqueIdentifier(Core::Constants::C_EDITOR_IO));
     }
+    if (type & TextEditor::WithTextCompleter) {
+        d->m_Context->addContext(uid->uniqueIdentifier(Core::Constants::C_EDITOR_ADDTEXT));
+    }
 }
 
 QMenu* TextEditor::getContextMenu()
@@ -308,6 +316,25 @@ QMenu* TextEditor::getContextMenu()
         mc->addAction(cmd->action());
         mc->addSeparator();
     }
+
+    if (d->m_Type & WithTextCompleter) {
+        QMenu *m = new QMenu(this);
+        m->setTitle(tkTr(Trans::Constants::EDITOR_ADDTEXTMENU_TEXT));
+        actions << Core::Constants::A_EDITOR_ADDDATE
+                << Core::Constants::A_EDITOR_ADDUSERNAME
+                << Core::Constants::A_EDITOR_ADDPATIENTNAME
+                ;
+        foreach(const QString &a, actions) {
+            cmd = am->command(a);
+            if (cmd)
+                m->addAction(cmd->action());
+        }
+        mc->addMenu(m);
+    }
+    mc->addSeparator();
+    actions.clear();
+
+    actions.clear();
 
     if (d->m_Type & WithIO) {
         QMenu *m = new QMenu(this);
@@ -385,7 +412,7 @@ QMenu* TextEditor::getContextMenu()
     return mc;
 }
 
-void TextEditor::contextMenu( const QPoint &pos )
+void TextEditor::contextMenu(const QPoint &pos)
 {
     QMenu * p = getContextMenu();
     p->exec(mapToGlobal(pos));
@@ -420,12 +447,12 @@ void TextEditor::fileOpen()
         title = tkTr(Trans::Constants::EDITORMENU_TEXT);
     else
         title = a->text();
-    QString file = QFileDialog::getOpenFileName( this, title,
-                                               QString(), tr( "HTML files (*.htm *.html);;Text files (*.txt);;All Files (*)" ) );
-    if ( file.isEmpty() )
+    QString file = QFileDialog::getOpenFileName(this, title,
+                                               QString(), tr("HTML files (*.htm *.html);;Text files (*.txt);;All Files (*)"));
+    if (file.isEmpty())
         return;
     QString str = Utils::readTextFile(file, Utils::WarnUser, this);
-    if ( Qt::mightBeRichText(str) ) {
+    if (Qt::mightBeRichText(str)) {
         textEdit()->setHtml(str);
     } else {
         textEdit()->setPlainText(str);
@@ -440,13 +467,13 @@ void TextEditor::saveAs()
         title = tkTr(Trans::Constants::EDITORMENU_TEXT);
     else
         title = a->text();
-    QString fileName = QFileDialog::getSaveFileName( this, title,
-                                                     QString(), tr( "HTML-Files (*.htm *.html);;All Files (*)" ) );
-    if ( fileName.isEmpty() )
+    QString fileName = QFileDialog::getSaveFileName(this, title,
+                                                     QString(), tr("HTML-Files (*.htm *.html);;All Files (*)"));
+    if (fileName.isEmpty())
         return ;
     if (Utils::saveStringToFile(Utils::toHtmlAccent(textEdit()->document()->toHtml("UTF-8")),
-                                fileName, Utils::Overwrite, Utils::WarnUser, this ))
-        textEdit()->document()->setModified( false );
+                                fileName, Utils::Overwrite, Utils::WarnUser, this))
+        textEdit()->document()->setModified(false);
 }
 
 //--------------------------------------------------------------------------------------------------------
@@ -466,8 +493,8 @@ void TextEditor::fontFormat()
     // 3. apply, if accepted, font style
     if (ok) {
         QTextCharFormat fmt;
-        fmt.setFont( selectedfont );
-        d->mergeFormatOnWordOrSelection( fmt );
+        fmt.setFont(selectedfont);
+        d->mergeFormatOnWordOrSelection(fmt);
     }
 }
 
@@ -475,69 +502,69 @@ void TextEditor::fontBigger()
 {
     QFont font = textEdit()->textCursor().charFormat().font();
     QTextCharFormat fmt;
-    font.setPointSize( font.pointSize() + 1 );
-    fmt.setFont( font);
-    d->mergeFormatOnWordOrSelection( fmt );
+    font.setPointSize(font.pointSize() + 1);
+    fmt.setFont(font);
+    d->mergeFormatOnWordOrSelection(fmt);
 }
 
 void TextEditor::fontSmaller()
 {
     QFont font = textEdit()->textCursor().charFormat().font();
     QTextCharFormat fmt;
-    font.setPointSize( font.pointSize() - 1 );
-    fmt.setFont( font);
-    d->mergeFormatOnWordOrSelection( fmt );
+    font.setPointSize(font.pointSize() - 1);
+    fmt.setFont(font);
+    d->mergeFormatOnWordOrSelection(fmt);
 }
 
-void TextEditor::textBold( bool checked )
+void TextEditor::textBold(bool checked)
 {
     QTextCharFormat fmt;
-    fmt.setFontWeight( checked ? QFont::Bold : QFont::Normal );
-    d->mergeFormatOnWordOrSelection( fmt );
+    fmt.setFontWeight(checked ? QFont::Bold : QFont::Normal);
+    d->mergeFormatOnWordOrSelection(fmt);
 }
 
-void TextEditor::textUnderline( bool checked )
+void TextEditor::textUnderline(bool checked)
 {
     QTextCharFormat fmt;
-    fmt.setFontUnderline( checked );
-    d->mergeFormatOnWordOrSelection( fmt );
+    fmt.setFontUnderline(checked);
+    d->mergeFormatOnWordOrSelection(fmt);
 }
 
-void TextEditor::textItalic( bool checked )
+void TextEditor::textItalic(bool checked)
 {
     QTextCharFormat fmt;
-    fmt.setFontItalic( checked );
-    d->mergeFormatOnWordOrSelection( fmt );
+    fmt.setFontItalic(checked);
+    d->mergeFormatOnWordOrSelection(fmt);
 }
 
-void TextEditor::textStrike( bool checked )
+void TextEditor::textStrike(bool checked)
 {
     QTextCharFormat fmt;
-    fmt.setFontStrikeOut( checked );
-    d->mergeFormatOnWordOrSelection( fmt );
+    fmt.setFontStrikeOut(checked);
+    d->mergeFormatOnWordOrSelection(fmt);
 }
 
-//void TextEditor::textFamily( const QString &f )
+//void TextEditor::textFamily(const QString &f)
 //{
 //    QTextCharFormat fmt;
-//    fmt.setFontFamily( f );
-//    mergeFormatOnWordOrSelection( fmt );
+//    fmt.setFontFamily(f);
+//    mergeFormatOnWordOrSelection(fmt);
 //}
 //
-//void TextEditor::textSize( const QString &p )
+//void TextEditor::textSize(const QString &p)
 //{
 //    QTextCharFormat fmt;
-//    fmt.setFontPointSize( p.toFloat() );
-//    mergeFormatOnWordOrSelection( fmt );
+//    fmt.setFontPointSize(p.toFloat());
+//    mergeFormatOnWordOrSelection(fmt);
 //}
 //
-//void TextEditor::textStyle( int styleIndex )
+//void TextEditor::textStyle(int styleIndex)
 //{
 //    QTextCursor cursor = textEdit->textCursor();
 //
-//    if ( styleIndex != 0 )  {
+//    if (styleIndex != 0)  {
 //        QTextListFormat::Style style = QTextListFormat::ListDisc;
-//        switch ( styleIndex )
+//        switch (styleIndex)
 //        {
 //               default:
 //               case 1:
@@ -566,45 +593,60 @@ void TextEditor::textStrike( bool checked )
 //
 //        QTextListFormat listFmt;
 //
-//        if ( cursor.currentList() ) {
+//        if (cursor.currentList()) {
 //            listFmt = cursor.currentList()->format();
 //        } else {
-//            listFmt.setIndent( blockFmt.indent() + 1 );
-//            blockFmt.setIndent( 0 );
-//            cursor.setBlockFormat( blockFmt );
+//            listFmt.setIndent(blockFmt.indent() + 1);
+//            blockFmt.setIndent(0);
+//            cursor.setBlockFormat(blockFmt);
 //        }
-//        listFmt.setStyle( style );
-//        cursor.createList( listFmt );
+//        listFmt.setStyle(style);
+//        cursor.createList(listFmt);
 //        cursor.endEditBlock();
 //    } else {
 //        // ####
 //        QTextBlockFormat bfmt;
-//        bfmt.setObjectIndex( -1 );
-//        cursor.mergeBlockFormat( bfmt );
+//        bfmt.setObjectIndex(-1);
+//        cursor.mergeBlockFormat(bfmt);
 //    }
 //}
 
 void TextEditor::textColor()
 {
-    QColor col = QColorDialog::getColor( textEdit()->textColor(), this );
-    if ( !col.isValid() )
+    QColor col = QColorDialog::getColor(textEdit()->textColor(), this);
+    if (!col.isValid())
         return;
     QTextCharFormat fmt;
-    fmt.setForeground( col );
-    d->mergeFormatOnWordOrSelection( fmt );
+    fmt.setForeground(col);
+    d->mergeFormatOnWordOrSelection(fmt);
+}
+
+void TextEditor::addDate()
+{
+    textEdit()->insertHtml(QDateTime::currentDateTime().toString(QLocale().dateTimeFormat(QLocale::LongFormat)));
+}
+
+void TextEditor::addUserName()
+{
+    textEdit()->insertHtml(user()->value(Core::IUser::FullName).toString());
+}
+
+void TextEditor::addPatientName()
+{
+    textEdit()->insertHtml(patient()->data(Core::IPatient::FullName).toString());
 }
 
 //void TextEditorPrivate::about()
 //{
-//    QMessageBox::about( m_Parent, tkTr(ABOUT_TEXT),
-//                        tr( "This rich text editor is part of FreeMedForms Project. " ) );
+//    QMessageBox::about(m_Parent, tkTr(ABOUT_TEXT),
+//                        tr("This rich text editor is part of FreeMedForms Project. "));
 //}
 
 
-//void TextEditorPrivate::colorChanged( const QColor &c )
+//void TextEditorPrivate::colorChanged(const QColor &c)
 //{
-//    QPixmap pix( 16, 16 );
-//    pix.fill( c );
-////    actionTextColor->setIcon( pix );
+//    QPixmap pix(16, 16);
+//    pix.fill(c);
+////    actionTextColor->setIcon(pix);
 //}
 

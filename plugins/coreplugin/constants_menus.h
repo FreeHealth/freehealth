@@ -319,17 +319,23 @@ const int           C_GLOBAL_ID          = 0;
 const char* const   C_EDITOR_BASIC       = "context.Editor";
 const char* const   C_EDITOR_TABLE       = "context.Editor.Table";
 const char* const   C_EDITOR_IO          = "context.Editor.IO";
+const char* const   C_EDITOR_ADDTEXT     = "context.Editor.AddText";
 const char* const   C_USERMANAGER        = "context.UserManager";
 
 // EDITOR
 const char * const A_EDITOR_TOOGLETOOLBAR= "actionEditorToggleToolbar";
 const char * const M_EDITOR              = "menu.Editor";
 const char * const M_EDITOR_CONTEXT      = "menu.Popup.Editor";
+const char * const M_EDITOR_ADDTEXT      = "menu.Editor.AddText";
 const char * const G_EDITOR_FILE         = "group.Editor.File";
 const char * const G_EDITOR_CONTEXT      = "group.Editor.Context";
+const char * const G_EDITOR_ADDTEXT      = "group.Editor.AddText";
 const char * const A_EDITOR_FILEOPEN     = "action.Editor.Open";
 const char * const A_EDITOR_FILESAVE     = "action.Editor.Save";
 const char * const A_EDITOR_FILEPRINT    = "action.Editor.Print";
+const char * const A_EDITOR_ADDDATE      = "action.Editor.AddDate";
+const char * const A_EDITOR_ADDUSERNAME    = "action.Editor.AddUserName";
+const char * const A_EDITOR_ADDPATIENTNAME = "action.Editor.AddPatientName";
 
 }  // end Constants
 } // end Core

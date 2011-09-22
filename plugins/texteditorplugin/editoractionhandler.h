@@ -45,8 +45,8 @@
 /**
  * \file editoractionhandler.h
  * \author Eric MAEKER <eric.maeker@gmail.com>
- * \version 0.4.0
- * \date 29 Apr 2010
+ * \version 0.6.0
+ * \date 22 Sept 2011
 */
 
 
@@ -117,6 +117,10 @@ private Q_SLOTS:
     void tableMergeCells();
     void tableSplitCells();
 
+    void addDate();
+    void addUserName();
+    void addPatientName();
+
 private:
     QAction *aToggleToolBar;
 
@@ -152,6 +156,10 @@ private:
     QAction *aMergeCells;
     QAction *aSplitCells;
 
+    QAction *aAddDate;
+    QAction *aAddUserName;
+    QAction *aAddPatientName;
+
     Core::ActionContainer *m_ContextualMenu;
     Core::ActionContainer *m_FileMenu;
     Core::ActionContainer *m_EditMenu;
@@ -159,8 +167,9 @@ private:
     Core::ActionContainer *m_FontMenu;
     Core::ActionContainer *m_ParagraphMenu;
     Core::ActionContainer *m_TableMenu;
+    Core::ActionContainer *m_AddTextMenu;
 
-    QList<int> basicContext, ioContext, tableContext, allContexts;
+    QList<int> basicContext, ioContext, tableContext, textAdderContext, allContexts;
 
 private:
     void createContexts();

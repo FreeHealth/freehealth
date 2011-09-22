@@ -1228,12 +1228,32 @@
         <translation>Administrateur logiciel</translation>
     </message>
     <message>
-        <location filename="../../libs/translationutils/constanttranslations.h" line="633"/>
+        <location filename="../../libs/translationutils/constanttranslations.h" line="624"/>
+        <source>Add current date</source>
+        <translation>Ajouter la date du jour</translation>
+    </message>
+    <message>
+        <location filename="../../libs/translationutils/constanttranslations.h" line="625"/>
+        <source>Add user name</source>
+        <translation>Ajouter le nom de l&apos;utilisateur</translation>
+    </message>
+    <message>
+        <location filename="../../libs/translationutils/constanttranslations.h" line="626"/>
+        <source>Add patient name</source>
+        <translation>Ajouter le nom du patient</translation>
+    </message>
+    <message>
+        <location filename="../../libs/translationutils/constanttranslations.h" line="627"/>
+        <source>Add text</source>
+        <translation>Ajouter du texte</translation>
+    </message>
+    <message>
+        <location filename="../../libs/translationutils/constanttranslations.h" line="636"/>
         <source>All languages</source>
         <translation>Tous les langages</translation>
     </message>
     <message>
-        <location filename="../../libs/translationutils/constanttranslations.h" line="634"/>
+        <location filename="../../libs/translationutils/constanttranslations.h" line="637"/>
         <source>All other languages</source>
         <translation>Tous les autres langages</translation>
     </message>
@@ -1944,7 +1964,7 @@ Text Align Justify shortcut key : Mac specific</extracomment>
         <translation>Éditeur de texte enrichi</translation>
     </message>
     <message>
-        <location filename="../../libs/translationutils/constanttranslations.h" line="628"/>
+        <location filename="../../libs/translationutils/constanttranslations.h" line="631"/>
         <source>Ctrl+Shift+P</source>
         <extracomment>ShortCut for &quot;Print prescription&quot;</extracomment>
         <translation></translation>

@@ -65,12 +65,13 @@ class EDITOR_EXPORT TextEditor : public TableEditor
 public:
     enum Type
     {
-        Simple     = 0x01,
-        WithTables = 0x02,
-        WithIO     = 0x04,
-        Full       = Simple | WithTables | WithIO
+        Simple            = 0x01,
+        WithTables        = 0x02,
+        WithIO            = 0x04,
+        WithTextCompleter = 0x08,
+        Full       = Simple | WithTables | WithIO | WithTextCompleter
     };
-    Q_DECLARE_FLAGS(Types, Type);
+    Q_DECLARE_FLAGS(Types, Type)
 
     TextEditor(QWidget *parent = 0, Types type = Simple);
     ~TextEditor();
@@ -104,6 +105,10 @@ protected Q_SLOTS:
     void textStrike( bool checked );
     void textColor();
     void fontFormat();
+
+    void addDate();
+    void addUserName();
+    void addPatientName();
 
     virtual void contextMenu(const QPoint &pos);
 

@@ -621,7 +621,10 @@ const char * const EDITOR_TOGGLETOOLBAR_TEXT  = QT_TRANSLATE_NOOP("tkConstants",
 const char * const EDITOR_FILEOPEN_TEXT  = QT_TRANSLATE_NOOP("tkConstants", "Open in editor");
 const char * const EDITOR_FILESAVE_TEXT  = QT_TRANSLATE_NOOP("tkConstants", "Save editor");
 const char * const EDITORMENU_TEXT       = QT_TRANSLATE_NOOP("tkConstants", "Rich Text Editor");
-
+const char * const EDITOR_ADDDATE_TEXT  = QT_TRANSLATE_NOOP("tkConstants", "Add current date");
+const char * const EDITOR_ADDUSERNAME_TEXT  = QT_TRANSLATE_NOOP("tkConstants", "Add user name");
+const char * const EDITOR_ADDPATIENTNAME_TEXT  = QT_TRANSLATE_NOOP("tkConstants", "Add patient name");
+const char * const EDITOR_ADDTEXTMENU_TEXT       = QT_TRANSLATE_NOOP("tkConstants", "Add text");
 
 // ShortCuts
 //: ShortCut for "Print prescription"
