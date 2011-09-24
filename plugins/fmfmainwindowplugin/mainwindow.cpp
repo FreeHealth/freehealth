@@ -331,6 +331,8 @@ void MainWindow::onCurrentPatientChanged()
     const QString &uuid = patient()->uuid();
     m_RecentPatients->setCurrentFile(uuid);
     m_RecentPatients->addToRecentFiles(uuid);
+    // refresh the navigation menu
+    aboutToShowRecentPatients();
 }
 
 /** \brief Close the main window and the application */

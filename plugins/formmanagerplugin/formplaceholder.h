@@ -91,6 +91,7 @@ protected Q_SLOTS:
     void handlePressed(const QModelIndex &index);
     void handleClicked(const QModelIndex &index);
 
+    void showLastEpisodeSynthesis();
     void newEpisode();
     void removeEpisode();
     void validateEpisode();

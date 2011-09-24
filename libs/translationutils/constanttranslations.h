@@ -263,7 +263,7 @@ enum TitleInterpret {
         const char* const DRUGS_DATABASE_INFORMATIONS   = QT_TRANSLATE_NOOP("tkConstants", "Drugs database informations");
         const char* const DOSAGES_DATABASE_INFORMATIONS   = QT_TRANSLATE_NOOP("tkConstants", "Protocols database informations");
         const char* const INTERACTIONS_DATABASE_INFORMATIONS   = QT_TRANSLATE_NOOP("tkConstants", "Interactions database informations");
-        const char* const PMH_DATABASE_INFORMATIONS     = QT_TRANSLATE_NOOP("tkConstants", "PMHx database informations");
+        const char* const PMH_DATABASE_INFORMATIONS     = QT_TRANSLATE_NOOP("tkConstants", "Past medical history database informations");
         const char* const INTERACTIONS_DATABASE         = QT_TRANSLATE_NOOP("tkConstants", "Interactions database");
         const char* const DRUGS                         = QT_TRANSLATE_NOOP("tkConstants", "Drugs");
         const char* const PROTOCOLS                     = QT_TRANSLATE_NOOP("tkConstants", "Protocols");
@@ -296,7 +296,7 @@ enum TitleInterpret {
         const char* const CLASS_DUPLICATION             = QT_TRANSLATE_NOOP("tkConstants", "Class is duplicated");
 
         // PMHx
-        const char* const PMHMENU_TEXT                  = QT_TRANSLATE_NOOP("tkConstants", "PMHx");
+        const char* const PMHMENU_TEXT                  = QT_TRANSLATE_NOOP("tkConstants", "Past medical history");
 
         // Account
         const char* const ACCOUNTANCY  = QT_TRANSLATE_NOOP("tkConstants", "Accountancy");

@@ -140,11 +140,11 @@ namespace Constants {
 
     // Translations
     const char * const  PMHCONSTANTS_TR_CONTEXT = "PMH";
-    const char * const  CREATEPMH_TEXT          = QT_TRANSLATE_NOOP("PMH", "Create a new PMHx");
-    const char * const  REMOVEPMH_TEXT          = QT_TRANSLATE_NOOP("PMH", "Remove PMH");
+    const char * const  CREATEPMH_TEXT          = QT_TRANSLATE_NOOP("PMH", "New past medical history");
+    const char * const  REMOVEPMH_TEXT          = QT_TRANSLATE_NOOP("PMH", "Remove past medical history");
     const char * const  CREATECATEGORY_TEXT     = QT_TRANSLATE_NOOP("PMH", "Create a new category");
     const char * const  REMOVECATEGORY_TEXT     = QT_TRANSLATE_NOOP("PMH", "Remove category");
-    const char * const  CATEGORYMANAGER_TEXT    = QT_TRANSLATE_NOOP("PMH", "PMHx category manager");
+    const char * const  CATEGORYMANAGER_TEXT    = QT_TRANSLATE_NOOP("PMH", "Past medical history category manager");
 
 
 }  // End namespace Constants

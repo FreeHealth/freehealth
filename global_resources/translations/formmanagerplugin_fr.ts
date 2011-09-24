@@ -254,32 +254,32 @@ Répondre &apos;non&apos; causera une perte de données irréversible.</translat
 <context>
     <name>tkConstants</name>
     <message>
-        <location filename="../../plugins/formmanagerplugin/constants_db.h" line="109"/>
+        <location filename="../../plugins/formmanagerplugin/constants_db.h" line="110"/>
         <source>Add Episode</source>
         <translation>Ajouter un épisode</translation>
     </message>
     <message>
-        <location filename="../../plugins/formmanagerplugin/constants_db.h" line="110"/>
+        <location filename="../../plugins/formmanagerplugin/constants_db.h" line="111"/>
         <source>Validate Episode</source>
         <translation>Valider un épisode</translation>
     </message>
     <message>
-        <location filename="../../plugins/formmanagerplugin/constants_db.h" line="111"/>
+        <location filename="../../plugins/formmanagerplugin/constants_db.h" line="112"/>
         <source>Add Form</source>
         <translation>Ajouter un formulaire</translation>
     </message>
     <message>
-        <location filename="../../plugins/formmanagerplugin/constants_db.h" line="112"/>
+        <location filename="../../plugins/formmanagerplugin/constants_db.h" line="113"/>
         <source>Print Form</source>
         <translation>Imprimer le formulaire</translation>
     </message>
     <message>
-        <location filename="../../plugins/formmanagerplugin/constants_db.h" line="113"/>
+        <location filename="../../plugins/formmanagerplugin/constants_db.h" line="114"/>
         <source>Show patient synthesis</source>
         <translation>Montrer la synthèse du dossier patient</translation>
     </message>
     <message>
-        <location filename="../../plugins/formmanagerplugin/constants_db.h" line="114"/>
+        <location filename="../../plugins/formmanagerplugin/constants_db.h" line="115"/>
         <source>Show patient last episodes</source>
         <translation type="unfinished"></translation>
     </message>

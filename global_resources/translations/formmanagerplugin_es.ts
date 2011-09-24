@@ -253,32 +253,32 @@ Answering &apos;No&apos; will cause definitve data lose.</source>
 <context>
     <name>tkConstants</name>
     <message>
-        <location filename="../../plugins/formmanagerplugin/constants_db.h" line="109"/>
+        <location filename="../../plugins/formmanagerplugin/constants_db.h" line="110"/>
         <source>Add Episode</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../../plugins/formmanagerplugin/constants_db.h" line="110"/>
+        <location filename="../../plugins/formmanagerplugin/constants_db.h" line="111"/>
         <source>Validate Episode</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../../plugins/formmanagerplugin/constants_db.h" line="111"/>
+        <location filename="../../plugins/formmanagerplugin/constants_db.h" line="112"/>
         <source>Add Form</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../../plugins/formmanagerplugin/constants_db.h" line="112"/>
+        <location filename="../../plugins/formmanagerplugin/constants_db.h" line="113"/>
         <source>Print Form</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../../plugins/formmanagerplugin/constants_db.h" line="113"/>
+        <location filename="../../plugins/formmanagerplugin/constants_db.h" line="114"/>
         <source>Show patient synthesis</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../../plugins/formmanagerplugin/constants_db.h" line="114"/>
+        <location filename="../../plugins/formmanagerplugin/constants_db.h" line="115"/>
         <source>Show patient last episodes</source>
         <translation type="unfinished"></translation>
     </message>

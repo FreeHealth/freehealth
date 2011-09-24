@@ -44,6 +44,7 @@
 #include <coreplugin/isettings.h>
 #include <coreplugin/itheme.h>
 #include <coreplugin/imainwindow.h>
+#include <coreplugin/ipatient.h>
 #include <coreplugin/contextmanager/contextmanager.h>
 #include <coreplugin/actionmanager/actionmanager.h>
 #include <coreplugin/uniqueidmanager.h>
@@ -62,7 +63,7 @@ static inline Core::ContextManager *contextManager() { return Core::ICore::insta
 static inline Core::IMainWindow *mainWindow() { return Core::ICore::instance()->mainWindow(); }
 static inline PMH::PmhCore *pmhCore() { return PMH::PmhCore::instance(); }
 static inline PMH::Internal::PmhBase *pmhBase() { return PMH::Internal::PmhBase::instance(); }
-
+static inline Core::IPatient *patient() {return Core::ICore::instance()->patient();}
 
 ///////////////////////////////////////////////////////////////////////////////////////////////////////////
 /////////////////////////////////////////      MANAGER      ///////////////////////////////////////////////
@@ -156,6 +157,7 @@ PmhActionHandler::PmhActionHandler(QObject *parent) :
 
     // Create local actions
     a = aAddPmh = new QAction(this);
+    aAddPmh->setEnabled(false);
     a->setObjectName("aAddPmh");
     a->setIcon(th->icon(Core::Constants::ICONADD));
     cmd = actionManager()->registerAction(a, Constants::A_PMH_NEW, globalcontext);
@@ -203,6 +205,8 @@ PmhActionHandler::PmhActionHandler(QObject *parent) :
 
     contextManager()->updateContext();
     actionManager()->retranslateMenusAndActions();
+
+    connect(patient(), SIGNAL(currentPatientChanged()), this, SLOT(patientChanged()));
 }
 
 void PmhActionHandler::setCurrentView(PmhContextualWidget *view)
@@ -240,6 +244,12 @@ void PmhActionHandler::setCurrentView(PmhContextualWidget *view)
 
 void PmhActionHandler::updateActions()
 {
+}
+
+void PmhActionHandler::patientChanged()
+{
+    qWarning() << Q_FUNC_INFO;
+    aAddPmh->setEnabled(true);
 }
 
 void PmhActionHandler::showPmhDatabaseInformations()

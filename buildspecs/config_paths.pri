@@ -79,8 +79,8 @@ win32:OBJECTS_DIR  = $${SOURCES_BUILD_PATH}/$${BINARY_TARGET}/.obj/win32
 mac:OBJECTS_DIR    = $${SOURCES_BUILD_PATH}/$${BINARY_TARGET}/.obj/mac
 CONFIG(crosscompil):OBJECTS_DIR = $${SOURCES_BUILD_PATH}/$${BINARY_TARGET}/.obj/win-x
 UI_DIR	           = $${SOURCES_BUILD_PATH}/.ui
-MOC_DIR	           = $${SOURCES_BUILD_PATH}/$${TARGET}/.moc
-RCC_DIR	           = $${SOURCES_BUILD_PATH}/$${TARGET}/.rcc
+MOC_DIR	           = $${SOURCES_BUILD_PATH}/$${BINARY_TARGET}/.moc
+RCC_DIR	           = $${SOURCES_BUILD_PATH}/$${BINARY_TARGET}/.rcc
 
 # define some usefull values
 QMAKE_TARGET_COMPANY       = "Eric MAEKER and the FreeMedForms Team"

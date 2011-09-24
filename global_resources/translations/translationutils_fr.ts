@@ -315,12 +315,12 @@
     </message>
     <message>
         <location filename="../../libs/translationutils/constanttranslations.h" line="209"/>
-        <location filename="../../libs/translationutils/constanttranslations.h" line="299"/>
         <source>PMHx</source>
         <translation>ATCD</translation>
     </message>
     <message>
         <location filename="../../libs/translationutils/constanttranslations.h" line="210"/>
+        <location filename="../../libs/translationutils/constanttranslations.h" line="299"/>
         <source>Past medical history</source>
         <translation>Antécédents</translation>
     </message>
@@ -540,11 +540,6 @@
         <location filename="../../libs/translationutils/constanttranslations.h" line="265"/>
         <source>Interactions database informations</source>
         <translation>Informations base : Interactions</translation>
-    </message>
-    <message>
-        <location filename="../../libs/translationutils/constanttranslations.h" line="266"/>
-        <source>PMHx database informations</source>
-        <translation>Informations base : Antécédents</translation>
     </message>
     <message>
         <location filename="../../libs/translationutils/constanttranslations.h" line="267"/>
@@ -1481,6 +1476,11 @@
         <location filename="../../libs/translationutils/constanttranslations.h" line="263"/>
         <source>Drugs database informations</source>
         <translation>Informations de la base de données thérapeutiques</translation>
+    </message>
+    <message>
+        <location filename="../../libs/translationutils/constanttranslations.h" line="266"/>
+        <source>Past medical history database informations</source>
+        <translation>Informations de la base de données antécédents</translation>
     </message>
     <message>
         <location filename="../../libs/translationutils/constanttranslations.h" line="268"/>

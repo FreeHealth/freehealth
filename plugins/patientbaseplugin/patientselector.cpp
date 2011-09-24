@@ -122,9 +122,6 @@ public:
         m_NavigationToolButton->setPopupMode(QToolButton::InstantPopup);
         m_NavigationToolButton->setIcon(theme()->icon(Core::Constants::ICONPATIENT));
         m_NavigationMenu = new QMenu(m_NavigationToolButton);
-        cmd = actionManager()->command(Core::Constants::A_PATIENT_NEW);
-        m_NavigationMenu->addAction(cmd->action());
-        m_NavigationMenu->addSeparator();
         m_NavigationToolButton->setMenu(m_NavigationMenu);
 
 //        // add buttons to search line
@@ -201,10 +198,12 @@ void PatientSelector::init()
 
 void PatientSelector::updateNavigationButton()
 {
-    // remove all actions from the second
-    for(int i = 2; i < d->m_NavigationToolButton->actions().count(); ++i) {
-        d->m_NavigationMenu->removeAction(d->m_NavigationMenu->actions().at(i));
-    }
+    d->m_NavigationMenu->clear();
+
+    Core::Command *cmd = actionManager()->command(Core::Constants::A_PATIENT_NEW);
+    d->m_NavigationMenu->addAction(cmd->action());
+    d->m_NavigationMenu->addSeparator();
+
     // add navigation actions
     Core::ActionContainer *navMenu = actionManager()->actionContainer(Core::Constants::M_PATIENTS_NAVIGATION);
     if (!navMenu)

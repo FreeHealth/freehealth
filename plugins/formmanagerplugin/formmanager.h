@@ -65,12 +65,17 @@ public:
     FormActionHandler(QObject *parent = 0);
     ~FormActionHandler();
 
+private Q_SLOTS:
+    void showPatientLastEpisode();
+    void updateActions();
+
 private:
     QAction *aAddEpisode;
     QAction *aValidateEpisode;
     QAction *aAddForm;
     QAction *aPrintForm;
     QAction *aShowPatientSynthesis;
+    QAction *aShowPatientLastEpisode;
 };
 }
 

@@ -43,6 +43,7 @@
 #include <coreplugin/icore.h>
 #include <coreplugin/iuser.h>
 #include <coreplugin/ipatient.h>
+#include <coreplugin/actionmanager/actionmanager.h>
 
 #include <calendar/basic_item_edition_dialog.h>
 
@@ -60,6 +61,7 @@ static inline Core::IUser *user() {return Core::ICore::instance()->user();}
 static inline Core::IPatient *patient() {return Core::ICore::instance()->patient();}
 static inline Agenda::Internal::AgendaBase *base() {return Agenda::Internal::AgendaBase::instance();}
 static inline Agenda::AgendaCore *agendaCore() {return Agenda::AgendaCore::instance();}
+inline static Core::ActionManager *actionManager() {return Core::ICore::instance()->actionManager();}
 
 namespace Agenda {
 namespace Internal {
@@ -140,6 +142,10 @@ UserCalendarViewer::UserCalendarViewer(QWidget *parent) :
     connect(d->ui->availButton, SIGNAL(triggered(QAction*)), this, SLOT(newEventAtAvailabity(QAction*)));
     connect(d->ui->availableAgendasCombo, SIGNAL(currentIndexChanged(int)), this, SLOT(on_availableAgendasCombo_activated(int)));
     userChanged();
+
+    // Connect menu actions
+    Core::Command *cmd = actionManager()->command(Constants::A_NEW_AGENDAEVENT);
+    connect(cmd->action(),SIGNAL(triggered()), this, SLOT(newEvent()));
 }
 
 UserCalendarViewer::~UserCalendarViewer()
@@ -155,11 +161,25 @@ void UserCalendarViewer::recalculateComboAgendaIndex()
     d->ui->availableAgendasCombo->setCurrentIndex(d->m_UserCalendarModel->defaultUserCalendarModelIndex().row());
 }
 
+void UserCalendarViewer::newEvent()
+{
+    newEventAtAvailabity(0);
+}
+
 /** When the user select an availability in the toolButton, this slot is activated. Open a EventEditor dialog and save the item in the CalendarItemModel if the dialog is accepted. */
 void UserCalendarViewer::newEventAtAvailabity(QAction *action)
 {
     Calendar::BasicItemEditionDialog dlg(d->m_CalendarItemModel, this);
-    QDateTime start = action->data().toDateTime();
+    QDateTime start = QDateTime::currentDateTime();
+    if (!action) {
+        if (d->ui->availButton->actions().count() > 0) {
+            action = d->ui->availButton->actions().at(0);
+        }
+    }
+    if (action) {
+        start = action->data().toDateTime();
+    }
+
     Calendar::CalendarItem item = d->m_CalendarItemModel->insertItem(start, start.addSecs((d->ui->availDurationCombo->currentIndex()+1)*5*60));
     dlg.init(item);
     if (dlg.exec() != QDialog::Accepted) {
@@ -222,6 +242,7 @@ void UserCalendarViewer::on_availableAgendasCombo_activated(const int index)
 
 void UserCalendarViewer::userChanged()
 {
+    // Update ui
     d->ui->userNameLabel->setText(user()->value(Core::IUser::FullName).toString());
     // model is automatically updated and reseted but the userCalendar combo model
     d->m_UserCalendarModel = agendaCore()->userCalendarModel();
@@ -256,6 +277,13 @@ void UserCalendarViewer::userChanged()
 
     // Activate calendar
     on_availableAgendasCombo_activated(calIndex.row());
+
+    // Manage menu action
+    // Connect menu actions
+    if (d->m_UserCalendarModel->rowCount() == 0) {
+        Core::Command *cmd = actionManager()->command(Constants::A_NEW_AGENDAEVENT);
+        cmd->action()->setEnabled(false);
+    }
 
     // Scroll the view to now
     if (isVisible()) {

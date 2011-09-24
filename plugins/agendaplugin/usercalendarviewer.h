@@ -35,7 +35,7 @@ QT_END_NAMESPACE
  * \file usercalendarviewer.h
  * \author Eric MAEKER <eric.maeker@gmail.com>
  * \version 0.6.0
- * \date 12 Aug 2011
+ * \date 24 Sept 2011
 */
 
 namespace Agenda {
@@ -63,6 +63,7 @@ protected:
     void recalculateComboAgendaIndex();
 
 private Q_SLOTS:
+    void newEvent();
     void newEventAtAvailabity(QAction *action);
     void recalculateAvailabilitiesWithDurationIndex(const int index);
     void on_availableAgendasCombo_activated(const int index);

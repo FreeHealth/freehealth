@@ -71,7 +71,7 @@ public:
 
 private Q_SLOTS:
     void clear();
-    void newEvent();
+//    void newEvent();
     void printSelection();
     void printPreviewSelection();
 

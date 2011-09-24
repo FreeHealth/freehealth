@@ -526,11 +526,6 @@
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../../libs/translationutils/constanttranslations.h" line="266"/>
-        <source>PMHx database informations</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
         <location filename="../../libs/translationutils/constanttranslations.h" line="267"/>
         <source>Interactions database</source>
         <translation type="unfinished"></translation>
@@ -738,12 +733,12 @@
     </message>
     <message>
         <location filename="../../libs/translationutils/constanttranslations.h" line="209"/>
-        <location filename="../../libs/translationutils/constanttranslations.h" line="299"/>
         <source>PMHx</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
         <location filename="../../libs/translationutils/constanttranslations.h" line="210"/>
+        <location filename="../../libs/translationutils/constanttranslations.h" line="299"/>
         <source>Past medical history</source>
         <translation type="unfinished"></translation>
     </message>
@@ -760,6 +755,11 @@
     <message>
         <location filename="../../libs/translationutils/constanttranslations.h" line="263"/>
         <source>Drugs database informations</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../../libs/translationutils/constanttranslations.h" line="266"/>
+        <source>Past medical history database informations</source>
         <translation type="unfinished"></translation>
     </message>
     <message>

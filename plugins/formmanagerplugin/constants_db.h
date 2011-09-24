@@ -102,6 +102,7 @@ namespace Constants {
     const char * const A_ADDFORM = "aForm.AddForm";
     const char * const A_PRINTFORM = "aForm.PrintForm";
     const char * const A_SHOWPATIENTSYNTHESIS = "aForm.PatientSynth";
+    const char * const A_SHOWPATIENTLASTEPISODES = "aForm.PatientLastEpisodes";
     const char * const PATIENTLASTEPISODES_UUID = "PatientLastEpisodes";
     const char * const PATIENTSYNTHESIS_UUID = "PatientSynthesis";
 

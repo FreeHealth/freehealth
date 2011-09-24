@@ -36,6 +36,7 @@
 #include <coreplugin/icore.h>
 #include <coreplugin/isettings.h>
 #include <coreplugin/itheme.h>
+#include <coreplugin/ipatient.h>
 #include <coreplugin/contextmanager/contextmanager.h>
 #include <coreplugin/actionmanager/actionmanager.h>
 #include <coreplugin/uniqueidmanager.h>
@@ -53,6 +54,7 @@ using namespace Trans::ConstantTranslations;
 inline static Core::ActionManager *actionManager() {return Core::ICore::instance()->actionManager();}
 static inline Core::ContextManager *contextManager() { return Core::ICore::instance()->contextManager(); }
 static inline Core::ISettings *settings() {return Core::ICore::instance()->settings();}
+static inline Core::IPatient *patient() {return Core::ICore::instance()->patient();}
 
 ///////////////////////////////////////////////////////////////////////////////////////////////////////////
 /////////////////////////////////////////      MANAGER      ///////////////////////////////////////////////
@@ -209,7 +211,7 @@ AgendaActionHandler::AgendaActionHandler(QObject *parent) :
     if (fmenu) {
         fmenu->addAction(cmd, Core::Constants::G_GENERAL_NEW);
     }
-    connect(aNewEvent,SIGNAL(triggered()), this, SLOT(newEvent()));
+//    connect(aNewEvent,SIGNAL(triggered()), this, SLOT(newEvent()));
 
     a = aPrintSelection = new QAction(this);
     a->setIcon(th->icon(Core::Constants::ICONPRINT));
@@ -308,9 +310,9 @@ void AgendaActionHandler::clear()
 //    }
 }
 
-void AgendaActionHandler::newEvent()
-{
-}
+//void AgendaActionHandler::newEvent()
+//{
+//}
 
 void AgendaActionHandler::printSelection()
 {

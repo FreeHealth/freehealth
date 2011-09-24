@@ -1346,7 +1346,7 @@ QList<QDateTime> AgendaBase::nextAvailableTime(const QDateTime &startSearch, con
 
     int nbFound = 0;
     int durationInSeconds = durationInMinutes * 60;
-    int limitComputation = 224640; // 10min, 6day a week, 12hours a day :: 1 full year == 12*6 *10 *6 *52 == 224640
+    int limitComputation = 10;//224640; // 10min, 6day a week, 12hours a day :: 1 full year == 12*6 *10 *6 *52 == 224640
 
     while (nbFound < numberOfDates) {
         --limitComputation;
@@ -1358,8 +1358,8 @@ QList<QDateTime> AgendaBase::nextAvailableTime(const QDateTime &startSearch, con
             qWarning() << "start" << start
                        << "\n  currentStart" << currentStart
                        << "\n  currentEnd" << currentEnd
-                       << "      duration" << durationInMinutes
-                       << "      limitation" << limitComputation << "\n";
+                       << "\n     duration" << durationInMinutes
+                       << "\n     limitation" << limitComputation << "\n";
         // add before the currentDate (enough time or no appointement) ?
         if (start.secsTo(currentStart) >= durationInSeconds || currentStart.isNull()) {
             // does it feet the userCalendar availability ?

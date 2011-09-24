@@ -83,7 +83,7 @@
         <translation>Création de la fenêtre principale</translation>
     </message>
     <message>
-        <location filename="../../plugins/fmfmainwindowplugin/mainwindow.cpp" line="385"/>
+        <location filename="../../plugins/fmfmainwindowplugin/mainwindow.cpp" line="387"/>
         <source>Choose a patient file directory</source>
         <translation>Sélectionnez un répertoire</translation>
     </message>

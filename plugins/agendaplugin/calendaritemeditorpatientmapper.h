@@ -68,6 +68,7 @@ public:
     void setCalendarItem(const Calendar::CalendarItem &item);
 
 public Q_SLOTS:
+    void addCurrentPatient();
     QList<Calendar::People> selected() const {return m_Selected;}
     bool submitToItem(const Calendar::CalendarItem &item);
 
@@ -81,6 +82,9 @@ private Q_SLOTS:
     void handlePressed(const QModelIndex &index);
     void handleClicked(const QModelIndex &index);
 
+protected:
+    void changeEvent(QEvent *e);
+
 private:
     Internal::Ui::CalendarItemEditorPatientMapper *ui;
     QList<Calendar::People> m_Selected;
@@ -88,6 +92,7 @@ private:
     Calendar::CalendarPeopleModel *m_PeopleModel;
     Calendar::AbstractCalendarModel *m_ItemModel;
     bool m_StoredSettingsValue;
+    QAction *aUseCurrentPatient;
 };
 
 class CalendarItemEditorPatientMapper : public Calendar::ICalendarItemDataWidget

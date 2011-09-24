@@ -5,13 +5,13 @@
     <name>PMH</name>
     <message>
         <location filename="../../plugins/pmhplugin/constants.h" line="143"/>
-        <source>Create a new PMHx</source>
-        <translation>Créer un nouvel ATCD</translation>
+        <source>New past medical history</source>
+        <translation>Nouvel antécédent</translation>
     </message>
     <message>
         <location filename="../../plugins/pmhplugin/constants.h" line="144"/>
-        <source>Remove PMH</source>
-        <translation>Retirer l&apos;ATCD</translation>
+        <source>Remove past medical history</source>
+        <translation>Enlever l&apos;antécédent</translation>
     </message>
     <message>
         <location filename="../../plugins/pmhplugin/constants.h" line="145"/>
@@ -25,8 +25,8 @@
     </message>
     <message>
         <location filename="../../plugins/pmhplugin/constants.h" line="147"/>
-        <source>PMHx category manager</source>
-        <translation>Gestionnaire de catégories pour les ATCD</translation>
+        <source>Past medical history category manager</source>
+        <translation>Gestionnaire des catégories pour les antécédents</translation>
     </message>
 </context>
 <context>

@@ -433,6 +433,11 @@ void FormPlaceHolder::setRootForm(Form::FormMain *rootForm)
 
     d->m_FileTree->expandAll();
     d->populateStackLayout();
+
+    Core::Command *cmd = actionManager()->command(Constants::A_SHOWPATIENTLASTEPISODES);
+    connect(cmd->action(), SIGNAL(triggered()), this, SLOT(showLastEpisodeSynthesis()));
+
+    // start on the Last Episode Synthesis view
     d->m_FileTree->setCurrentIndex(d->m_EpisodeModel->index(0,0));
     setCurrentForm(Constants::PATIENTLASTEPISODES_UUID);
 }
@@ -479,6 +484,11 @@ void FormPlaceHolder::addBottomWidget(QWidget *bottom)
     d->m_GeneralLayout->addWidget(bottom, d->m_GeneralLayout->rowCount(), 0, 0, d->m_GeneralLayout->columnCount());
 }
 
+void FormPlaceHolder::showLastEpisodeSynthesis()
+{
+    setCurrentForm(Constants::PATIENTLASTEPISODES_UUID);
+}
+
 void FormPlaceHolder::setCurrentForm(const QString &formUuid)
 {
     d->m_Stack->setCurrentIndex(d->m_StackId_FormUuid.key(formUuid));
@@ -487,7 +497,6 @@ void FormPlaceHolder::setCurrentForm(const QString &formUuid)
         if (formUuid==Constants::PATIENTLASTEPISODES_UUID) {
             QLabel *label = d->m_Stack->currentWidget()->findChild<QLabel*>();
             label->setText(d->m_EpisodeModel->lastEpisodesSynthesis());
-            qWarning() << label;
         }
     }
 }

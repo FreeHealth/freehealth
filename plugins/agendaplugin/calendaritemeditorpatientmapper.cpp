@@ -121,7 +121,8 @@ public:
 CalendarItemEditorPatientMapperWidget::CalendarItemEditorPatientMapperWidget(QWidget *parent) :
     QWidget(parent),
     ui(new Internal::Ui::CalendarItemEditorPatientMapper),
-    m_ItemModel(0)
+    m_ItemModel(0),
+    aUseCurrentPatient(0)
 {
     ui->setupUi(this);
     TreeItemDelegate *delegate = new ::TreeItemDelegate(this);
@@ -145,23 +146,30 @@ CalendarItemEditorPatientMapperWidget::CalendarItemEditorPatientMapperWidget(QWi
     delegate->setModel(m_PeopleModel);
     delegate->setFancyColumn(Calendar::CalendarPeopleModel::EmptyColumn);
 
+    // populate toolbutton
+    aUseCurrentPatient = new QAction(this);
+    aUseCurrentPatient->setObjectName("aUseCurrentPatient");
+    aUseCurrentPatient->setIcon(theme()->icon(Core::Constants::ICONPATIENT));
+    aUseCurrentPatient->setText("Add current patient");
+    aUseCurrentPatient->setToolTip("Add current patient");
+    ui->createPatientToolButton->addAction(aUseCurrentPatient);
+
     Core::Command *cmd = actionManager()->command(Core::Constants::A_PATIENT_NEW);
     if (cmd) {
         // change the Patient settings for autoselection of newly created patients
-        /** \todo improve this part -> don't select patient after its creation. */
         m_StoredSettingsValue = settings()->value(Patients::Constants::S_PATIENTCHANGEONCREATION).toBool();
         settings()->setValue(Patients::Constants::S_PATIENTCHANGEONCREATION, false);
         ui->createPatientToolButton->addAction(cmd->action());
         ui->createPatientToolButton->setDefaultAction(cmd->action());
         connect(patient(), SIGNAL(patientCreated(QString)), this, SLOT(onPatientCreated(QString)));
-    } else {
-        ui->createPatientToolButton->hide();
     }
+    ui->createPatientToolButton->setDefaultAction(aUseCurrentPatient);
 
     connect(ui->selectedPatientView, SIGNAL(clicked(QModelIndex)), this, SLOT(handleClicked(QModelIndex)));
     connect(ui->selectedPatientView, SIGNAL(pressed(QModelIndex)), this, SLOT(handlePressed(QModelIndex)));
 
     connect(ui->searchPatient, SIGNAL(selectedPatient(QString,QString)), this, SLOT(onPatientSelected(QString,QString)));
+    connect(aUseCurrentPatient, SIGNAL(triggered()), this, SLOT(addCurrentPatient()));
 }
 
 CalendarItemEditorPatientMapperWidget::~CalendarItemEditorPatientMapperWidget()
@@ -189,6 +197,11 @@ void CalendarItemEditorPatientMapperWidget::clear()
     m_PeopleModel->clear();
     ui->searchPatient->clear();
     m_Selected.clear();
+}
+
+void CalendarItemEditorPatientMapperWidget::addCurrentPatient()
+{
+    onPatientSelected(patient()->data(Core::IPatient::FullName).toString() ,patient()->uuid());
 }
 
 void CalendarItemEditorPatientMapperWidget::addPatientRow(const QString &name, const QString &uid)
@@ -224,7 +237,6 @@ void CalendarItemEditorPatientMapperWidget::onPatientSelected(const QString &nam
 
 void CalendarItemEditorPatientMapperWidget::onPatientCreated(const QString &uid)
 {
-    qWarning() << Q_FUNC_INFO;
     QHash<QString, QString> name = Patients::PatientModel::patientName(QStringList() << uid);
     addPatientRow(name.value(uid), uid);
     m_Selected.append(Calendar::People(Calendar::People::PeopleAttendee, name.value(uid), uid));
@@ -253,7 +265,15 @@ void CalendarItemEditorPatientMapperWidget::handleClicked(const QModelIndex &ind
     }
 }
 
-
+void CalendarItemEditorPatientMapperWidget::changeEvent(QEvent *e)
+{
+    QWidget::changeEvent(e);
+    if (e->type()==QEvent::LanguageChange) {
+        ui->retranslateUi(this);
+        aUseCurrentPatient->setText("Add current patient");
+        aUseCurrentPatient->setToolTip("Add current patient");
+    }
+}
 
 CalendarItemEditorPatientMapper::CalendarItemEditorPatientMapper(QObject *parent) :
     Calendar::ICalendarItemDataWidget(parent),

@@ -169,7 +169,7 @@ PatientActionHandler::PatientActionHandler(QObject *parent) :
     }
     Q_ASSERT(searchmenu);
 
-    /** \todo create seearch icons */
+    /** \todo create search icons */
     gSearchMethod = new QActionGroup(this);
     a = aSearchName = new QAction(this);
     a->setObjectName("aSearchName");
@@ -214,13 +214,13 @@ PatientActionHandler::PatientActionHandler(QObject *parent) :
     connect(gSearchMethod, SIGNAL(triggered(QAction*)), this, SLOT(searchActionChanged(QAction*)));
 
 
-    a = aViewPatientInformations = new QAction(this);
-    a->setObjectName("aViewPatientInformations");
-//    a->setIcon(th->icon(Core::Constants::ICONCLEAR));
-    cmd = actionManager()->registerAction(a, Constants::A_VIEWPATIENT_INFOS, globalcontext);
-    cmd->setTranslations(Trans::Constants::PATIENT_INFORMATION);
-    menu->addAction(cmd, Constants::G_PATIENTS_INFORMATIONS);
-//    connect(a, SIGNAL(triggered()), this, SLOT(clear()));
+//    a = aViewPatientInformations = new QAction(this);
+//    a->setObjectName("aViewPatientInformations");
+////    a->setIcon(th->icon(Core::Constants::ICONCLEAR));
+//    cmd = actionManager()->registerAction(a, Constants::A_VIEWPATIENT_INFOS, globalcontext);
+//    cmd->setTranslations(Trans::Constants::PATIENT_INFORMATION);
+//    menu->addAction(cmd, Constants::G_PATIENTS_INFORMATIONS);
+////    connect(a, SIGNAL(triggered()), this, SLOT(clear()));
 
     // Databases informations
     Core::ActionContainer *hmenu = actionManager()->actionContainer(Core::Constants::M_HELP_DATABASES);

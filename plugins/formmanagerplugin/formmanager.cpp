@@ -42,16 +42,16 @@
 #include <formmanagerplugin/iformitemdata.h>
 
 #include <coreplugin/icore.h>
+#include <coreplugin/itheme.h>
+#include <coreplugin/ipatient.h>
 #include <coreplugin/isettings.h>
-#include <coreplugin/constants_tokensandsettings.h>
 #include <coreplugin/uniqueidmanager.h>
-#include <coreplugin/modemanager/modemanager.h>
 #include <coreplugin/constants_menus.h>
 #include <coreplugin/constants_icons.h>
-#include <coreplugin/ipatient.h>
+#include <coreplugin/constants_tokensandsettings.h>
+#include <coreplugin/modemanager/modemanager.h>
 #include <coreplugin/actionmanager/command.h>
 #include <coreplugin/actionmanager/actionmanager.h>
-#include <coreplugin/itheme.h>
 #include <coreplugin/contextmanager/contextmanager.h>
 
 #include <patientbaseplugin/constants_menus.h>
@@ -315,7 +315,8 @@ FormActionHandler::FormActionHandler(QObject *parent) :
     aAddEpisode(0),
     aValidateEpisode(0),
     aAddForm(0),
-    aPrintForm(0)
+    aPrintForm(0),
+    aShowPatientLastEpisode(0)
 {
     Core::ActionManager *am = actionManager();
     Core::UniqueIDManager *uid = Core::ICore::instance()->uniqueIDManager();
@@ -367,6 +368,7 @@ FormActionHandler::FormActionHandler(QObject *parent) :
 //    connect(a, SIGNAL(triggered()), this, SLOT(addItem()));
 
     a = aShowPatientSynthesis = new QAction(this);
+    a->setEnabled(false);
     a->setObjectName("aShowPatientSynthesis");
     a->setIcon(th->icon(Core::Constants::ICONPATIENTSYNTHESIS, Core::ITheme::MediumIcon));
     cmd = am->registerAction(a, Constants::A_SHOWPATIENTSYNTHESIS, globalcontext);
@@ -376,9 +378,32 @@ FormActionHandler::FormActionHandler(QObject *parent) :
         menu->addAction(cmd, Patients::Constants::G_PATIENTS_INFORMATIONS);
 //    connect(cmd->action(), SIGNAL(triggered()), this, SLOT(showPatientSynthesis()));
 
+    a = aShowPatientLastEpisode = new QAction(this);
+    a->setEnabled(false);
+    a->setObjectName("aShowPatientLastEpisode");
+    a->setIcon(th->icon(Core::Constants::ICONPATIENTSYNTHESIS, Core::ITheme::MediumIcon));
+    cmd = am->registerAction(a, Constants::A_SHOWPATIENTLASTEPISODES, globalcontext);
+    cmd->setTranslations(Constants::SHOWPATIENTLASTEPISODES_TEXT, Constants::SHOWPATIENTLASTEPISODES_TEXT, Constants::FORM_TR_CONTEXT);
+    if (menu)
+        menu->addAction(cmd, Patients::Constants::G_PATIENTS_INFORMATIONS);
+    connect(cmd->action(), SIGNAL(triggered()), this, SLOT(showPatientLastEpisode()));
+
     contextManager()->updateContext();
+    connect(patient(), SIGNAL(currentPatientChanged()), this, SLOT(updateActions()));
 }
 
 FormActionHandler::~FormActionHandler()
 {
+}
+
+void FormActionHandler::showPatientLastEpisode()
+{
+    FormManager::instance()->activateMode();
+}
+
+void FormActionHandler::updateActions()
+{
+    aShowPatientLastEpisode->setEnabled(true);
+    /** \todo remove when patient synthesis will be available */
+    aShowPatientSynthesis->setEnabled(false);
 }

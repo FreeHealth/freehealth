@@ -5,12 +5,12 @@
     <name>PMH</name>
     <message>
         <location filename="../../plugins/pmhplugin/constants.h" line="143"/>
-        <source>Create a new PMHx</source>
+        <source>New past medical history</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
         <location filename="../../plugins/pmhplugin/constants.h" line="144"/>
-        <source>Remove PMH</source>
+        <source>Remove past medical history</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
@@ -25,7 +25,7 @@
     </message>
     <message>
         <location filename="../../plugins/pmhplugin/constants.h" line="147"/>
-        <source>PMHx category manager</source>
+        <source>Past medical history category manager</source>
         <translation type="unfinished"></translation>
     </message>
 </context>
