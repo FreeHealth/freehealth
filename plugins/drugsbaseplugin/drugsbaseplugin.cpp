@@ -25,7 +25,7 @@
   The DrugsDB namespace includes:
   - All database accesses
   - All constants related to drugs
-  - Interaction engine
+  - Interaction engines
   - Save/Load abilities (XML prescription files)
   - Print abilities
 */
@@ -34,8 +34,10 @@
 #include "drugstemplateprinter.h"
 #include "drugsbase.h"
 #include "drugsdatabaseselector.h"
-#include "drugdruginteractionengine.h"
-#include "pimengine.h"
+
+#include "engines/drugdruginteractionengine.h"
+#include "engines/pimengine.h"
+//#include "engines/allergyengine.h"
 
 #include <utils/log.h>
 
