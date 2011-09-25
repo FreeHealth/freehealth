@@ -328,12 +328,12 @@ public:
         qWarning() << tmp;
     }
 
-    static QString levelToString(const int level)
+    QString levelToString(const int level)
     {
         switch (level) {
-        case 3: return tkTr(Trans::Constants::HIGH);
-        case 2: return tkTr(Trans::Constants::MEDIUM);
-        case 1: return tkTr(Trans::Constants::LOW);
+        case InteractionLevel_High: return tkTr(Trans::Constants::HIGH);
+        case InteractionLevel_Medium: return tkTr(Trans::Constants::MEDIUM);
+        case InteractionLevel_Low: return tkTr(Trans::Constants::LOW);
         }
         return QString();
     }
