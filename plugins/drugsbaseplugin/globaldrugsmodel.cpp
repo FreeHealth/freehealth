@@ -245,14 +245,6 @@ public:
                 tmp.replace("FORM", q->data(q->index(row, GlobalDrugsModel::Forms)).toString());
                 tmp.replace("ROUTE", q->data(q->index(row, GlobalDrugsModel::Routes)).toString());
                 QString s = q->QSqlQueryModel::data(q->index(row, Priv_Strength)).toString();
-
-//                qWarning() << "xxxxxxxxxxxx\n"
-//                           << "  DID" <<q->data(q->index(row, GlobalDrugsModel::DrugId)).toString()
-//                           <<   "\n  Form:" << q->data(q->index(row, GlobalDrugsModel::Forms)).toString()
-//                           <<   "\n  Route" << q->data(q->index(row, GlobalDrugsModel::Routes)).toString()
-//                             << "\n  Strength" << s;
-
-
                 if (s.count(";") > 3)
                     s.clear();
                 tmp.replace(base()->fieldName(Constants::Table_DRUGS, Constants::DRUGS_STRENGTH), s);

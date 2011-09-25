@@ -147,9 +147,6 @@ DatabaseSelectorWidget::DatabaseSelectorWidget(QWidget *parent) :
 {
     d = new Internal::DatabaseSelectorWidgetPrivate;
     d->m_SelectedDatabaseUid = settings()->value(DrugsDB::Constants::S_SELECTED_DATABASE_FILENAME).toString();
-//    if (d->m_SelectedDatabaseUid.startsWith(Core::Constants::TAG_APPLICATION_RESOURCES_PATH)) {
-//        d->m_SelectedDatabaseUid.replace(Core::Constants::TAG_APPLICATION_RESOURCES_PATH, settings()->path(Core::ISettings::ReadOnlyDatabasesPath));
-//    }
 
     ui->setupUi(this);
     connect(ui->databaseList, SIGNAL(currentRowChanged(int)), this, SLOT(updateDatabaseInfos(int)));
@@ -170,12 +167,14 @@ void DatabaseSelectorWidget::setDatasToUi()
     ui->databaseList->clear();
     d->m_Infos = base()->getAllDrugSourceInformations();
     const DrugsDB::DatabaseInfos *actual = base()->actualDatabaseInformations();
+    if (!actual)
+        return;
     int row = 0;
     foreach(DrugsDB::DatabaseInfos *info, d->m_Infos) {
-        ui->databaseList->addItem(info->translatedName());
-        if (!actual)
+        if (!info)
             continue;
-        if (info->drugsUidName==actual->drugsUidName) {
+        ui->databaseList->addItem(info->translatedName());
+        if (info->identifiant == actual->identifiant) {
             ui->databaseList->setCurrentRow(row, QItemSelectionModel::Select);
         }
         ++row;
@@ -193,13 +192,14 @@ void DatabaseSelectorWidget::updateDatabaseInfos(int row)
     if (row >= d->m_Infos.count())
         return;
     d->m_Infos.at(row)->toTreeWidget(ui->infoTree);
-    d->m_SelectedDatabaseUid = d->m_Infos.at(row)->fileName;
+    d->m_SelectedDatabaseUid = d->m_Infos.at(row)->identifiant;
 }
 
 static void changeDrugsDatabase(Core::ISettings *set, const QString &drugBaseUid)
 {
     if (!DrugsDB::DrugsModel::activeModel()) {
         set->setValue(DrugsDB::Constants::S_SELECTED_DATABASE_FILENAME, drugBaseUid);
+        base()->refreshDrugsBase();
         return;
     }
 
@@ -250,7 +250,7 @@ void DatabaseSelectorWidget::saveToSettings(Core::ISettings *s)
 //    }
 
     // 2. check if user changes the database
-//    changeDrugsDatabase(set, tmp);
+    changeDrugsDatabase(set, d->m_SelectedDatabaseUid);
 }
 
 void DatabaseSelectorWidget::changeEvent(QEvent *e)

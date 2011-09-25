@@ -141,7 +141,7 @@ bool DrugsPlugin::initialize(const QStringList &arguments, QString *errorMessage
 #endif
 
     // Initialize drugs database after the settings where checked
-    drugsBase();
+//    drugsBase();
 
     return true;
 }

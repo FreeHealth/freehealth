@@ -86,6 +86,16 @@ bool DrugsBasePlugin::initialize(const QStringList &arguments, QString *errorStr
     Core::ICore::instance()->translators()->addNewTranslator("drugsbaseplugin");
     messageSplash(tr("Initializing drugs database plugin..."));
 
+    return true;
+}
+
+void DrugsBasePlugin::extensionsInitialized()
+{
+    if (Utils::Log::warnPluginsCreation())
+        qWarning() << "DrugsBasePlugin::extensionsInitialized";
+
+    messageSplash(tr("Initializing drugs database plugin..."));
+
     // initialize DrugsBase
     Internal::DrugsBase::instance();
 
@@ -96,16 +106,6 @@ bool DrugsBasePlugin::initialize(const QStringList &arguments, QString *errorStr
     m_PimEngine = new DrugsDB::Internal::PimEngine(this);
     m_PimEngine->init();
     addObject(m_PimEngine);
-
-    return true;
-}
-
-void DrugsBasePlugin::extensionsInitialized()
-{
-    if (Utils::Log::warnPluginsCreation())
-        qWarning() << "DrugsBasePlugin::extensionsInitialized";
-
-    messageSplash(tr("Initializing drugs database plugin..."));
 
     addAutoReleasedObject(new Core::PluginAboutPage(pluginSpec(), this));
     addAutoReleasedObject(new DrugsDB::Internal::DrugsTemplatePrinter(this));
