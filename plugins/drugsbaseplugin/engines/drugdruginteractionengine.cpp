@@ -25,12 +25,13 @@
  *       NAME <MAIL@ADRESS>                                                *
  ***************************************************************************/
 #include "drugdruginteractionengine.h"
-#include "idruginteractionalert.h"
-#include "druginteractionresult.h"
-#include "drugsbase.h"
-#include "idrug.h"
-#include "idruginteraction.h"
-#include "constants.h"
+
+#include <drugsbaseplugin/drugsbase.h>
+#include <drugsbaseplugin/constants.h>
+#include <drugsbaseplugin/idruginteraction.h>
+#include <drugsbaseplugin/druginteractionresult.h>
+#include <drugsbaseplugin/idruginteractionalert.h>
+#include <drugsbaseplugin/idrug.h>
 
 #include <coreplugin/icore.h>
 #include <coreplugin/itheme.h>

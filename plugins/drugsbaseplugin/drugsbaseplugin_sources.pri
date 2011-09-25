@@ -22,7 +22,6 @@ HEADERS += $${PWD}/drugsbaseplugin.h \
     $${PWD}/idrugengine.h \
     $${PWD}/idruginteraction.h \
     $${PWD}/idrug.h \
-    $${PWD}/drugdruginteractionengine.h \
     $${PWD}/drugbasecore.h \
     $${PWD}/protocolsbase.h \
     $${PWD}/druginteractionquery.h \
@@ -32,7 +31,8 @@ HEADERS += $${PWD}/drugsbaseplugin.h \
     $${PWD}/idruginteractionalert.h \
     $${PWD}/druginteractioninformationquery.h \
     $${PWD}/iprescription.h \
-    $${PWD}/pimengine.h
+    $${PWD}/engines/drugdruginteractionengine.h \
+    $${PWD}/engines/pimengine.h
 
 #    $${PWD}/interactionsbase.h \
 #    $${PWD}/drugsdatabaseaboutpage.h \
@@ -52,14 +52,14 @@ SOURCES += $${PWD}/drugsbaseplugin.cpp \
     $${PWD}/atctreemodel.cpp \
     $${PWD}/drugsearchengine.cpp \
     $${PWD}/idrug.cpp \
-    $${PWD}/drugdruginteractionengine.cpp \
     $${PWD}/drugbasecore.cpp \
     $${PWD}/protocolsbase.cpp \
     $${PWD}/idruginteractionalert.cpp \
     $${PWD}/druginteractionquery.cpp \
     $${PWD}/druginteractionresult.cpp \
     $${PWD}/druginteractioninformationquery.cpp \
-    $${PWD}/pimengine.cpp
+    $${PWD}/engines/drugdruginteractionengine.cpp \
+    $${PWD}/engines/pimengine.cpp
 
 #    $${PWD}/interactionsbase.cpp \
 #    $${PWD}/drugsdatabaseaboutpage.cpp \
