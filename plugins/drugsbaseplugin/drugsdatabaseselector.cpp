@@ -99,7 +99,7 @@ DatabaseInfos::DatabaseInfos() :
 void DatabaseInfos::setDrugsNameConstructor(const QString &s)
 {
     drugsNameConstructor = s;
-    QRegExp rx("\\b(NAME|FORM|ROUTE|GLOBAL_STRENGTH)\\b");
+    QRegExp rx("\\b(NAME|FORM|ROUTE|STRENGTH)\\b");
     QStringList list;
     int pos = 0;
     while ((pos = rx.indexIn(s, pos)) != -1) {

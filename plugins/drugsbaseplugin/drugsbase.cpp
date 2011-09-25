@@ -1433,7 +1433,7 @@ IDrug *DrugsBase::getDrugByUID(const QVariant &uid1, const QVariant &uid2, const
             tmp.replace("FORM", toReturn->forms().join(","));
             tmp.replace("ROUTE", toReturn->routes().join(","));
             // limit strength to three maximum --> if > 3 do not add strength
-            if (toReturn->strength().count(";") >= 3)
+            if (toReturn->strength().count(";") > 3)
                 tmp.replace(fieldName(Constants::Table_DRUGS, Constants::DRUGS_STRENGTH), "");
             else
                 tmp.replace(fieldName(Constants::Table_DRUGS, Constants::DRUGS_STRENGTH), toReturn->strength());
