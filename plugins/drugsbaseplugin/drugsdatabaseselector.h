@@ -51,7 +51,7 @@ class DRUGSBASE_EXPORT DatabaseInfos
 
 public:
     DatabaseInfos();
-    void warn();
+//    void warn();
 
     QString translatedName() const;
 
@@ -105,6 +105,13 @@ private:
 //
 //};
 
+QDebug operator<<(QDebug dbg, const DrugsDB::DatabaseInfos &c);
+QDebug operator<<(QDebug dbg, const DrugsDB::DatabaseInfos *c);
+
+
 }  // End namespace DrugsDB
+
+
+
 
 #endif // DRUGSDATABASESELECTOR_H

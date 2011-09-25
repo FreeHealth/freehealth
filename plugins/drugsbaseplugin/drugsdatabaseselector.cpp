@@ -194,33 +194,6 @@ void DatabaseInfos::toTreeWidget(QTreeWidget *tree) const
     tree->resizeColumnToContents(1);
 }
 
-void DatabaseInfos::warn()
-{
-    QString tmp;
-    foreach(const QString &lang, names.keys()) {
-        tmp += QString("%1 - %2; ").arg(lang).arg(names.value(lang));
-    }
-    tmp.chop(2);
-    qWarning() << "DatabaseInfos"
-            << "\n  Name" << tmp.replace("\n", "   ;;   ")
-            << "\n  Translated name"  << translatedName()
-            << "\n  Country" << lang_country
-            << "\n  FileName" << fileName
-            << "\n  Version" << version
-            << "\n  CompatVersion" << compatVersion
-            << "\n  Provider" << provider
-            << "\n  Author" << author
-            << "\n  License" << license
-            << "\n  licenseTerms" << licenseTerms
-            << "\n  drugsUidName" << drugsUidName
-            << "\n  packUidName" << packUidName
-            << "\n  weblink" << weblink
-            << "\n  atcCompatible" << atcCompatible
-            << "\n  iamCompatible" << iamCompatible
-            << "\n  date" << date
-            ;
-}
-
 QString DatabaseInfos::translatedName() const
 {
     QString lang = QLocale().name().left(2);
@@ -276,3 +249,60 @@ QVector<DatabaseInfos *> DrugsDatabaseSelector::availableDatabases() const
 {
     return d->m_Infos;
 }
+
+QDebug DrugsDB::operator<<(QDebug dbg, const DrugsDB::DatabaseInfos &c)
+{
+    QString tmp;
+    foreach(const QString &lang, c.names.keys()) {
+        tmp += QString("%1 - %2; ").arg(lang).arg(c.names.value(lang));
+    }
+    tmp.chop(2);
+    dbg.nospace() << "DatabaseInfos("
+                  << c.identifiant
+                  << "; "  << c.translatedName()
+                  << "; " << c.lang_country
+                  << "\n  FileName: " << c.fileName
+                  << "\n  Version: " << c.version
+                  << "\n  CompatVersion: " << c.compatVersion
+                  << "\n  Provider: " << c.provider
+                  << "\n  Author: " << c.author
+                  << "\n  License: " << c.license
+                  << "\n  licenseTerms: " << c.licenseTerms
+                  << "\n  packUidName: " << c.packUidName
+                  << "\n  weblink: " << c.weblink
+                  << "\n  atcCompatible: " << c.atcCompatible
+                  << "\n  iamCompatible: " << c.iamCompatible
+                  << "\n  date: " << c.date
+                  << ")"
+                  ;
+    return dbg.space();
+}
+
+QDebug DrugsDB::operator<<(QDebug dbg, const DrugsDB::DatabaseInfos *c)
+{
+    QString tmp;
+    foreach(const QString &lang, c->names.keys()) {
+        tmp += QString("%1 - %2; ").arg(lang).arg(c->names.value(lang));
+    }
+    tmp.chop(2);
+    dbg.nospace() << "DatabaseInfos("
+                  << c->identifiant
+                  << "; "  << c->translatedName()
+                  << "; " << c->lang_country
+                  << "\n  FileName: " << c->fileName
+                  << "\n  Version: " << c->version
+                  << "\n  CompatVersion: " << c->compatVersion
+                  << "\n  Provider: " << c->provider
+                  << "\n  Author: " << c->author
+                  << "\n  License: " << c->license
+                  << "\n  licenseTerms: " << c->licenseTerms
+                  << "\n  packUidName: " << c->packUidName
+                  << "\n  weblink: " << c->weblink
+                  << "\n  atcCompatible: " << c->atcCompatible
+                  << "\n  iamCompatible: " << c->iamCompatible
+                  << "\n  date: " << c->date
+                  << ")"
+                  ;
+    return dbg.space();
+}
+
