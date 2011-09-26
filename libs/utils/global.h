@@ -35,6 +35,7 @@ class QDir;
 class QFont;
 class QDomElement;
 class QWidget;
+class QModelIndex;
 QT_END_NAMESPACE
 
 #include <QFileInfo>
@@ -130,8 +131,10 @@ UTILS_EXPORT QString isFileExists(const QString &absPath);
 /** \brief Toggle the echomode of a QLineEdit. */
 UTILS_EXPORT void switchEchoMode( QLineEdit * l );
 
-// Some date functions
+// Some date & numbering functions
 UTILS_EXPORT QDateTime roundDateTime(const QDateTime &date, const int minutesRound);
+UTILS_EXPORT bool inRange(const int min, const int max, const int value);
+UTILS_EXPORT bool inRange(const QModelIndex &topLeft, const QModelIndex &bottomRight, const QModelIndex &value);
 
 // Some locale functions
 UTILS_EXPORT QString countryToIso(QLocale::Country country);

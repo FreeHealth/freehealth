@@ -49,6 +49,7 @@
 #include <QTextDocument>
 #include <QCryptographicHash>
 #include <QMainWindow>
+#include <QModelIndex>
 
 /**
   \namespace Utils
@@ -1047,6 +1048,22 @@ QDateTime roundDateTime(const QDateTime &date, const int minutesRound)
     int minToRound = dt.time().minute()%minutesRound;
     dt = dt.addSecs((minutesRound - minToRound)*60);
     return dt;
+}
+
+bool inRange(const int min, const int max, const int value)
+{
+    return ((value >= min) && (value <= max));
+}
+
+bool inRange(const QModelIndex &topLeft, const QModelIndex &bottomRight, const QModelIndex &value)
+{
+    // row in range ?
+    if (!inRange(topLeft.row(), bottomRight.row(), value.row()))
+        return false;
+    int min = (topLeft.row() * 1000) + topLeft.column();
+    int max = (bottomRight.row() * 1000) + bottomRight.column();
+    int val = (value.row() * 1000) + value.column();
+    return inRange(min, max, val);
 }
 
 /** Return the ISO 2 char encoded of the \e country */
