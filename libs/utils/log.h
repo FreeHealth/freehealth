@@ -62,6 +62,8 @@ class QTreeWidget;
 #define LOG_DATABASE_FOR(object, message) Utils::Log::addDatabaseLog(object, message,__FILE__,__LINE__)
 #define LOG_DATABASE(message) Utils::Log::addDatabaseLog(this, message,__FILE__,__LINE__)
 
+#define WARN_FUNC qWarning() << Q_FUNC_INFO
+
 namespace Utils {
 
 class UTILS_EXPORT LogData
