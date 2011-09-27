@@ -31,18 +31,27 @@
 #include <drugsplugin/drugswidget/prescriptionviewer.h>
 #include <drugsplugin/drugswidget/drugselector.h>
 
-#include <utils/log.h>
-#include <utils/global.h>
-#include <translationutils/constanttranslations.h>
+#include <drugsbaseplugin/engines/allergyengine.h>
 
 #include <coreplugin/constants_icons.h>
 #include <coreplugin/constants_menus.h>
 #include <coreplugin/icore.h>
 #include <coreplugin/isettings.h>
 #include <coreplugin/itheme.h>
+#include <coreplugin/imainwindow.h>
 #include <coreplugin/contextmanager/contextmanager.h>
 #include <coreplugin/actionmanager/actionmanager.h>
 #include <coreplugin/uniqueidmanager.h>
+
+#include <utils/log.h>
+#include <utils/global.h>
+#include <translationutils/constanttranslations.h>
+#include <extensionsystem/pluginmanager.h>
+
+#include <QDockWidget>
+#include <QGridLayout>
+#include <QTreeView>
+#include <QStandardItemModel>
 
 using namespace DrugsWidget::Constants;
 using namespace DrugsWidget;
@@ -52,6 +61,7 @@ using namespace Trans::ConstantTranslations;
 inline static Core::ActionManager *actionManager() {return Core::ICore::instance()->actionManager();}
 static inline Core::ContextManager *contextManager() { return Core::ICore::instance()->contextManager(); }
 static inline Core::ISettings *settings() {return Core::ICore::instance()->settings();}
+static inline ExtensionSystem::PluginManager *pluginManager() {return ExtensionSystem::PluginManager::instance();}
 
 ///////////////////////////////////////////////////////////////////////////////////////////////////////////
 /////////////////////////////////////////      MANAGER      ///////////////////////////////////////////////
@@ -144,7 +154,9 @@ DrugsActionHandler::DrugsActionHandler(QObject *parent) :
         aOpenDosageDialog(0),
         aOpenPrescriptionSentencePreferences(0),
         aResetPrescriptionSentenceToDefault(0),
-        m_CurrentView(0)
+        aShowDrugPrecautions(0),
+        m_CurrentView(0),
+        m_PrecautionDock(0)
 {
     setObjectName("DrugsActionHandler");
 //    Utils::Log::addMessage(this, "Instance created");
@@ -403,6 +415,14 @@ DrugsActionHandler::DrugsActionHandler(QObject *parent) :
     cmd->setTranslations(Constants::RESETPRESCRIPTIONSENTENCETODEFAULT_TEXT, Constants::RESETPRESCRIPTIONSENTENCETODEFAULT_TEXT, Constants::DRUGCONSTANTS_TR_CONTEXT);
     menu->addAction(cmd, G_PLUGINS_DRUGS);
     connect(aResetPrescriptionSentenceToDefault,SIGNAL(triggered()),this,SLOT(resetPrescriptionSentenceToDefault()));
+
+    a = aShowDrugPrecautions = new QAction(this);
+    a->setObjectName("aShowDrugPrecautions");
+        a->setIcon(th->icon(Constants::I_SHOWDRUGPRECAUTIONS));
+    cmd = actionManager()->registerAction(a, Constants::A_SHOWDRUGPRECAUTIONS, ctx);
+    cmd->setTranslations(Constants::SHOWDRUGPRECAUTIONS_TEXT, Constants::SHOWDRUGPRECAUTIONS_TEXT, Constants::DRUGCONSTANTS_TR_CONTEXT);
+    menu->addAction(cmd, G_PLUGINS_DRUGS);
+    connect(aShowDrugPrecautions, SIGNAL(triggered()), this, SLOT(showDrugPrecautions()));
 
     contextManager()->updateContext();
     actionManager()->retranslateMenusAndActions();
@@ -689,4 +709,25 @@ void DrugsActionHandler::resetPrescriptionSentenceToDefault()
                                  Constants::DRUGCONSTANTS_TR_CONTEXT,
                                  DrugsDB::Constants::S_DEF_PRESCRIPTIONFORMATTING_PLAIN));
     DrugsDB::DrugsModel::activeModel()->resetModel();
+}
+
+void DrugsActionHandler::showDrugPrecautions()
+{
+    DrugsDB::Internal::DrugAllergyEngine *engine = pluginManager()->getObject<DrugsDB::Internal::DrugAllergyEngine>();
+    if (!engine) {
+        LOG_ERROR("No allergy engine");
+        return;
+    }
+    if (!m_PrecautionDock) {
+        m_PrecautionDock = new QDockWidget(QCoreApplication::translate(Constants::DRUGCONSTANTS_TR_CONTEXT, Constants::DRUGPRECAUTIONS_TEXT), Core::ICore::instance()->mainWindow());
+        QTreeView *tree = new QTreeView(m_PrecautionDock);
+        tree->header()->hide();
+        tree->setModel(engine->drugPrecautionModel());
+        tree->expandAll();
+        m_PrecautionDock->setWidget(tree);
+        m_PrecautionDock->setFloating(false);
+        m_PrecautionDock->setAllowedAreas(Qt::RightDockWidgetArea);
+        Core::ICore::instance()->mainWindow()->addDockWidget(Qt::RightDockWidgetArea, m_PrecautionDock);
+    }
+    m_PrecautionDock->show();
 }

@@ -38,12 +38,13 @@
 #include <QObject>
 #include <QAction>
 #include <QPointer>
+#include <QDockWidget>
 
 /**
  * \file drugswidgetmanager.h
  * \author Eric MAEKER <eric.maeker@gmail.com>
- * \version 0.4.0
- * \date 06 Mar 2010
+ * \version 0.6.0
+ * \date 27 Sept 2011
  * \internal
 */
 
@@ -109,6 +110,8 @@ private Q_SLOTS:
     void openProtocolPreferencesDialog();
     void resetPrescriptionSentenceToDefault();
 
+    void showDrugPrecautions();
+
 private:
     bool canMoveUp();
     bool canMoveDown();
@@ -142,10 +145,13 @@ protected:
     QAction *aOpenDosageDialog;
     QAction *aOpenPrescriptionSentencePreferences;
     QAction *aResetPrescriptionSentenceToDefault;
+    QAction *aShowDrugPrecautions;
 
     QPointer<DrugsCentralWidget> m_CurrentView;
 
     bool m_SelectionOnlyMode;
+
+    QDockWidget *m_PrecautionDock;
 };
 
 }  // End Internal

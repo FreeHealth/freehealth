@@ -264,6 +264,12 @@ namespace Constants {
     const char * const  PIMENGINE_SHORT_TEXT = QT_TRANSLATE_NOOP("mfDrugsConstants", "PIM");
     const char * const  PIM_TEXT = QT_TRANSLATE_NOOP("mfDrugsConstants", "Potentially inappropriate medications");
 
+
+    const char * const  ALLERGYENGINE_TEXT = QT_TRANSLATE_NOOP("mfDrugsConstants", "Allergy / Intolerances to medications");
+
+    /*: This is the short name of the Potentially inappropriate medications engine. */
+    const char * const  ALLERGY_TEXT = QT_TRANSLATE_NOOP("mfDrugsConstants", "Allergy");
+
     // Some usefull enums
     enum LevelOfInteractionWarnings {
         MaximumLevelOfWarning = 0,
@@ -274,6 +280,7 @@ namespace Constants {
     // Drugs engines uid
     const char * const  DDI_ENGINE_UID = "ddiEngine";
     const char * const  PIM_ENGINE_UID = "pimEngine";
+    const char * const  ALLERGY_ENGINE_UID = "allergyEngine";
 
     //--------------------------------------------------------------------------------------------------------
     //------------------------------------- Enums for Models Management --------------------------------------

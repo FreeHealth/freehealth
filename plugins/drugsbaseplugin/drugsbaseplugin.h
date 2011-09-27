@@ -33,15 +33,16 @@
 /**
  * \file drugsbaseplugin.h
  * \author Eric MAEKER <eric.maeker@gmail.com>
- * \version 0.2.1
- * \date 25 Oct 2009
+ * \version 0.6.0
+ * \date 25 Sept 2011
 */
 
 namespace DrugsDB {
-    namespace Internal {
-        class DrugDrugInteractionEngine;
-        class PimEngine;
-    }
+namespace Internal {
+class DrugDrugInteractionEngine;
+class PimEngine;
+class DrugAllergyEngine;
+}
 
 class DrugsBasePlugin : public ExtensionSystem::IPlugin
 {
@@ -56,6 +57,7 @@ public:
 private:
     DrugsDB::Internal::DrugDrugInteractionEngine *m_DDIEngine;
     DrugsDB::Internal::PimEngine *m_PimEngine;
+    DrugsDB::Internal::DrugAllergyEngine *m_AllergyEngine;
 };
 
 

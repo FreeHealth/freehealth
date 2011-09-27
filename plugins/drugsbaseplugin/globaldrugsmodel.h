@@ -77,10 +77,7 @@ public:
 
     static void updateAvailableDosages();
 
-    static bool hasAllergy(const IDrug *drug);
-    static bool hasIntolerance(const IDrug *drug);
-
-    static QStandardItemModel *drugsPrecautionsModel();
+//    static QStandardItemModel *drugsPrecautionsModel();
 
     int columnCount(const QModelIndex & = QModelIndex()) const { return ColumnCount; }
 
@@ -95,7 +92,7 @@ public Q_SLOTS:
     void onDrugsDatabaseChanged();
 
 private Q_SLOTS:
-    void refreshDrugsPrecautions(const QModelIndex &topleft, const QModelIndex &bottomright);
+    void refreshDrugsPrecautions(const QModelIndex &topleft, const QModelIndex &bottomright) {}
 //    void physiologyProcessed();
 //    void processPhysiology();
 

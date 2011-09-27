@@ -249,29 +249,33 @@ QVariant DrugsWidgetData::data(const int ref, const int role) const
 //    if (ref==Core::IPatient::DrugsAllergiesWithoutPrecision)
 
     switch (ref) {
-//    case :
-//        {
-//            // setting inns
-//            QStringList inns;
-//            for(int i=0; i < rowCount; ++i) {
-//                inns.append(model->index(i, DrugsDB::Constants::Drug::Inns).data().toStringList());
-//            }
-//            return inns;
-//            break;
-//        }
-    case Core::IPatient::DrugsInnAllergies:
-        {
-            QStringList inns;
-            for(int i=0; i < rowCount; ++i) {
-                inns.append(model->index(i, DrugsDB::Constants::Drug::Inns).data().toStringList());
-            }
-            inns.removeAll("");
-            inns.removeDuplicates();
-//            qWarning() << inns;
-            return inns;
-            break;
+    case Core::IPatient::DrugsAtcAllergies:
+    case Core::IPatient::DrugsAtcIntolerances:
+    {
+        // setting inn codes
+        QStringList atcs;
+        for(int i=0; i < rowCount; ++i) {
+            atcs.append(model->index(i, DrugsDB::Constants::Drug::InnsATCcodes).data().toStringList());
         }
+        atcs.removeAll("");
+        atcs.removeDuplicates();
+        return atcs;
+        break;
     }
+    case Core::IPatient::DrugsInnAllergies:
+    case Core::IPatient::DrugsInnIntolerances:
+    {
+        QStringList inns;
+        for(int i=0; i < rowCount; ++i) {
+            inns.append(model->index(i, DrugsDB::Constants::Drug::Inns).data().toStringList());
+        }
+        inns.removeAll("");
+        inns.removeDuplicates();
+        //            qWarning() << inns;
+        return inns;
+        break;
+    }
+    }  // End switch
 
     return QVariant();
 }

@@ -145,10 +145,13 @@ InteractionManager::~InteractionManager()
 
 DrugInteractionResult *InteractionManager::checkInteractions(const DrugInteractionQuery &query)
 {
+    if (query.drugsList().isEmpty())
+        return new DrugInteractionResult(this);
+
     QTime t;
     t.start();
     int nbInteractions = 0;
-    DrugInteractionResult *result = new DrugInteractionResult;
+    DrugInteractionResult *result = new DrugInteractionResult(this);
     result->setTestedDrugs(query.drugsList());
 
     for(int i = 0; i < d->m_Engines.count(); ++i) {

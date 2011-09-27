@@ -147,7 +147,8 @@ void PrescriptionViewer::createActionsAndToolbar()
     actionsToAdd
             << DrugsWidget::Constants::A_TOGGLE_TESTINGDRUGS
             << DrugsWidget::Constants::A_VIEW_INTERACTIONS
-            << DrugsWidget::Constants::A_CHANGE_DURATION;
+            << DrugsWidget::Constants::A_CHANGE_DURATION
+            << DrugsWidget::Constants::A_SHOWDRUGPRECAUTIONS;
 
     foreach(const QString &s, actionsToAdd) {
         cmd = actionManager()->command(s);

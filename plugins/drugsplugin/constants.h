@@ -68,6 +68,7 @@ namespace Constants {
     const char* const   A_OPENDOSAGEDIALOG      = "a.Drugs.OpenDosage";
     const char* const   A_OPENDOSAGEPREFERENCES = "a.Drugs.OpenDosagePreferences";
     const char* const   A_RESETPRESCRIPTIONSENTENCE_TODEFAULT = "a.Drugs.ResetPrescriptionSentenceToDefault";
+    const char* const   A_SHOWDRUGPRECAUTIONS = "a.Drugs.ShowPrecautions";
 
 
     const char* const   DRUGSMENU_TEXT          = QT_TRANSLATE_NOOP("mfDrugsConstants", "Prescription");
@@ -83,9 +84,12 @@ namespace Constants {
     const char* const   OPENDOSAGEDIALOG_TEXT      = QT_TRANSLATE_NOOP("mfDrugsConstants", "Open protocol dialog");
     const char* const   OPENDOSAGEPREFERENCES_TEXT = QT_TRANSLATE_NOOP("mfDrugsConstants", "Open posologic sentence preferences");
     const char* const   RESETPRESCRIPTIONSENTENCETODEFAULT_TEXT = QT_TRANSLATE_NOOP("mfDrugsConstants", "Reset the prescription sentence to the default one");
+    const char* const   SHOWDRUGPRECAUTIONS_TEXT = QT_TRANSLATE_NOOP("mfDrugsConstants", "Show drug precautions");
+    const char* const   DRUGPRECAUTIONS_TEXT = QT_TRANSLATE_NOOP("mfDrugsConstants", "Drug precautions");
 
     const char * const  I_TOGGLETESTINGDRUGS       =  "pill_hidden.png";       /*!< \brief Themed icon name for Commercial search. */
     const char * const  I_TOGGLEDRUGSELECTOR       =  "drugselector.png";       /*!< \brief Themed icon name for Commercial search. */
+    const char * const  I_SHOWDRUGPRECAUTIONS      =  "drugprecautions.png";       /*!< \brief Themed icon name for Commercial search. */
 
     // Search Method
     enum SearchMethod {

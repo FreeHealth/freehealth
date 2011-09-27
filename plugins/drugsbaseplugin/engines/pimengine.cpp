@@ -328,7 +328,7 @@ public:
         qWarning() << tmp;
     }
 
-    QString levelToString(const int level)
+    static QString levelToString(const int level)
     {
         switch (level) {
         case InteractionLevel_High: return tkTr(Trans::Constants::HIGH);
