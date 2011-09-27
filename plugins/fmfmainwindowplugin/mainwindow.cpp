@@ -466,12 +466,10 @@ void MainWindow::aboutToShowRecentPatients()
     bool hasRecentFiles = false;
     const QStringList &uuids = m_RecentPatients->recentFiles();
     const QHash<QString, QString> &names = Patients::PatientModel::patientName(uuids);
-    QHashIterator<QString, QString> i(names);
-    while (i.hasNext()) {
-        i.next();
+    for(int i = 0; i < uuids.count(); ++i) {
         hasRecentFiles = true;
-        QAction *action = recentsMenu->menu()->addAction(i.value());
-        action->setData(i.key());
+        QAction *action = recentsMenu->menu()->addAction(names.value(uuids.at(i)));
+        action->setData(uuids.at(i));
         connect(action, SIGNAL(triggered()), this, SLOT(openRecentPatient()));
     }
 
