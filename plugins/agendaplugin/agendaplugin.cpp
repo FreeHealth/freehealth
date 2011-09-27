@@ -81,9 +81,6 @@ AgendaPlugin::AgendaPlugin() :
 {
     if (Utils::Log::warnPluginsCreation())
         qWarning() << "creating AgendaPlugin";
-    // Create the core object
-    m_Core = new AgendaCore(this);
-    connect(Core::ICore::instance(), SIGNAL(coreOpened()), m_Core, SLOT(postCoreInitialization()));
 }
 
 AgendaPlugin::~AgendaPlugin()
@@ -113,6 +110,9 @@ void AgendaPlugin::extensionsInitialized()
     messageSplash(tr("Initializing agenda plugin..."));
 
     addAutoReleasedObject(new Core::PluginAboutPage(pluginSpec(), this));
+
+    // Create the core object
+    m_Core = new AgendaCore(this);
 
     // Initialize database
     Internal::AgendaBase::instance();

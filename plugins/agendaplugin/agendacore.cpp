@@ -57,6 +57,7 @@ class AgendaCorePrivate
 {
 public:
     AgendaCorePrivate() :
+        m_Initialized(false),
         m_UserViewerPage(0),
         m_UserCreatorPage(0),
         m_CalItemMapper(0),
@@ -84,6 +85,7 @@ public:
     }
 
 public:
+    bool m_Initialized;
     /** \todo use QPointers instead of pure pointers */
     QHash<QString, UserCalendarModel *> m_UCalModels;
     QHash<QString, CalendarItemModel *> m_CalItemModel;
@@ -108,6 +110,7 @@ AgendaCore::AgendaCore(QObject *parent) :
     d(new Internal::AgendaCorePrivate)
 {
     m_Instance = this;
+    connect(user(), SIGNAL(userChanged()), this, SLOT(postCoreInitialization()));
 }
 
 AgendaCore::~AgendaCore()
@@ -156,10 +159,13 @@ CalendarItemModel *AgendaCore::calendarItemModel(const QVariant &calendarUid)
 
 void AgendaCore::postCoreInitialization()
 {
+    if (d->m_Initialized)
+        return;
     if (!user())
         return;
     if (user()->uuid().isEmpty())
         return;
+
     // Add Agenda's UserViewer editor page
     pluginManager()->addObject(d->m_UserViewerPage = new Internal::UserCalendarPageForUserViewer(this));
 
@@ -171,4 +177,7 @@ void AgendaCore::postCoreInitialization()
 
     // Add Agenda's mode
     pluginManager()->addObject(d->m_AgendaMode = new Internal::AgendaMode(this));
+
+    d->m_Initialized = true;
+    disconnect(user(), SIGNAL(userChanged()), this, SLOT(postCoreInitialization()));
 }
