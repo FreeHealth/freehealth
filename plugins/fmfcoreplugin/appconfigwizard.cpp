@@ -442,12 +442,12 @@ EndConfigPage::EndConfigPage(QWidget *parent) :
     // Ask for virtuals
     if (Utils::isDebugCompilation()) {
         // Database renew management
-//        QGroupBox *groupDb = new QGroupBox(tr("Database cleaning"), this);
-//        QGridLayout *layDb = new QGridLayout(this);
         QLabel *lblDb = new QLabel(tr("You can clean and recreate all your databases. Select the option above. If you select the clean option, all databases will be erased with <b>definitive data lose</b>."), this);
         lblDb->setWordWrap(true);
+        lblDb->setSizePolicy(QSizePolicy::Expanding, QSizePolicy::Fixed);
         QComboBox *comboDb = new QComboBox(this);
         comboDb->addItems(QStringList() << tr("Don't clean databases") << tr("Clean and recreate database"));
+        comboDb->setSizePolicy(QSizePolicy::Preferred, QSizePolicy::Preferred);
         if (commandLine()->value(Core::ICommandLine::ClearUserDatabases, false).toBool()) {
             comboDb->setCurrentIndex(1);
         } else {
@@ -456,46 +456,40 @@ EndConfigPage::EndConfigPage(QWidget *parent) :
         connect(comboDb, SIGNAL(activated(int)), this, SLOT(comboDbActivated(int)));
         l->addWidget(lblDb, 0, 0, 1, 2);
         l->addWidget(comboDb, 1, 1);
-//        l->addLayout(layDb);
-//        groupDb->setLayout(layDb);
-//        l->addWidget(groupDb);
-
-        // Virtual data management
-//        QGroupBox *group = new QGroupBox(tr("Virtual data"), this);
-//        QGridLayout *lay = new QGridLayout(this);
-        QLabel *lblVirtual = new QLabel(tr("You can create virtual data to test the application. Select the option above."), this);
-        lblVirtual->setWordWrap(true);
-        QComboBox *combo = new QComboBox(this);
-        combo->addItems(QStringList() << tr("Don't create virtual data") << tr("Create virtual data"));
-        if (commandLine()->value(Core::ICommandLine::CreateVirtuals, false).toBool()) {
-            combo->setCurrentIndex(1);
-        } else {
-            combo->setCurrentIndex(0);
-        }
-        connect(combo, SIGNAL(activated(int)), this, SLOT(comboVirtualActivated(int)));
-        l->addWidget(lblVirtual, 3, 0, 1, 2);
-        l->addWidget(combo, 4, 1);
-//        l->addLayout(lay);
-//        group->setLayout(lay);
-//        l->addWidget(group);
     }
+
+    // Virtual data management
+    QLabel *lblVirtual = new QLabel(tr("You can create virtual data to test the application. Select the option above."), this);
+    lblVirtual->setWordWrap(true);
+    lblVirtual->setSizePolicy(QSizePolicy::Expanding, QSizePolicy::Fixed);
+    QComboBox *combo = new QComboBox(this);
+    combo->addItems(QStringList() << tr("Don't create virtual data") << tr("Create virtual data"));
+    combo->setSizePolicy(QSizePolicy::Preferred, QSizePolicy::Preferred);
+    if (commandLine()->value(Core::ICommandLine::CreateVirtuals, false).toBool()) {
+        combo->setCurrentIndex(1);
+    } else {
+        combo->setCurrentIndex(0);
+    }
+    connect(combo, SIGNAL(activated(int)), this, SLOT(comboVirtualActivated(int)));
+    l->addWidget(lblVirtual, 3, 0, 1, 2);
+    l->addWidget(combo, 4, 1);
 
     // add infos
     QLabel *lbl1 = new QLabel(tr("French/english mailing list"), this);
+    lbl1->setSizePolicy(QSizePolicy::Expanding, QSizePolicy::Fixed);
     QLabel *lbl1_1 = new QLabel("<a href=\"mailto:freemedforms@googlegroups.com\">"
                                 "freemedforms@googlegroups.com</a>", this);
     lbl1_1->setOpenExternalLinks(true);
+    lbl1_1->setSizePolicy(QSizePolicy::Preferred, QSizePolicy::Preferred);
     QLabel *lbl2 = new QLabel(tr("Application main web site"), this);
+    lbl2->setSizePolicy(QSizePolicy::Preferred, QSizePolicy::Preferred);
     QLabel *lbl2_1 = new QLabel(QString("<a href=\"%1\">%1</a>").arg(settings()->path(Core::ISettings::WebSiteUrl)), this);
-    lbl2->setOpenExternalLinks(true);
+    lbl2_1->setOpenExternalLinks(true);
+    lbl2_1->setSizePolicy(QSizePolicy::Preferred, QSizePolicy::Preferred);
     l->addWidget(lbl1, 5, 0, 1, 2);
     l->addWidget(lbl1_1, 6, 1);
     l->addWidget(lbl2, 8, 0, 1, 2);
     l->addWidget(lbl2_1, 9, 1);
-
-    // Clear database connector identifiants
-    qWarning() << "wwwwwwwwwwwwwwwwwwwwwwwwww";
-    // remove connection identifiants
 }
 
 void EndConfigPage::initializePage()
@@ -531,16 +525,5 @@ void EndConfigPage::comboVirtualActivated(int index)
     } else {
         cmd->setValue(Core::ICommandLine::CreateVirtuals, false);
     }
-}
-
-bool EndConfigPage::validatePage()
-{
-    return true;
-}
-
-void EndConfigPage::showEvent(QShowEvent *event)
-{
-    QWidget::showEvent(event);
-    adjustSize();
 }
 

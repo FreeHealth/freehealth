@@ -126,13 +126,10 @@ public:
 
 public:
     void initializePage();
-    bool validatePage();
 
 private Q_SLOTS:
     void comboDbActivated(int);
     void comboVirtualActivated(int);
-
-    void showEvent(QShowEvent *event);
 };
 
 
