@@ -946,12 +946,12 @@ Voulez-vous les envoyer ?</translation>
 <context>
     <name>DrugsWidget::Internal::DrugsActionHandler</name>
     <message>
-        <location filename="../../plugins/drugsplugin/drugswidgetmanager.cpp" line="623"/>
+        <location filename="../../plugins/drugsplugin/drugswidgetmanager.cpp" line="643"/>
         <source>Prescription is not empty. Clear it ?</source>
         <translation>La prescription n&apos;est pas vide. Voulez-vous l&apos;effacer ?</translation>
     </message>
     <message>
-        <location filename="../../plugins/drugsplugin/drugswidgetmanager.cpp" line="624"/>
+        <location filename="../../plugins/drugsplugin/drugswidgetmanager.cpp" line="644"/>
         <source>You select another editing mode than the actual one. Changing of mode during edition may cause prescription lose.
 Do you really want to change the editing mode ?</source>
         <translation>Vous avez sélectionné un autre mode d&apos;édition que le mode actuel. Changer de mode d&apos;édition va causer la perte de la prescription.
@@ -1446,69 +1446,79 @@ Voulez-vous réellement changer de mode d&apos;édition ?</translation>
 <context>
     <name>mfDrugsConstants</name>
     <message>
-        <location filename="../../plugins/drugsplugin/constants.h" line="73"/>
+        <location filename="../../plugins/drugsplugin/constants.h" line="74"/>
         <source>Prescription</source>
         <translation>Prescription</translation>
     </message>
     <message>
-        <location filename="../../plugins/drugsplugin/constants.h" line="74"/>
+        <location filename="../../plugins/drugsplugin/constants.h" line="75"/>
         <source>Toggle drug selector</source>
         <translation>Afficher/Cacher le sélectionneur de médicaments</translation>
     </message>
     <message>
-        <location filename="../../plugins/drugsplugin/constants.h" line="75"/>
+        <location filename="../../plugins/drugsplugin/constants.h" line="76"/>
         <source>Search by commercial name</source>
         <translation>Rechercher par nom commercial</translation>
     </message>
     <message>
-        <location filename="../../plugins/drugsplugin/constants.h" line="76"/>
+        <location filename="../../plugins/drugsplugin/constants.h" line="77"/>
         <source>Search by INN</source>
         <translation>Rechercher par DCI</translation>
     </message>
     <message>
-        <location filename="../../plugins/drugsplugin/constants.h" line="77"/>
+        <location filename="../../plugins/drugsplugin/constants.h" line="78"/>
         <source>Search by molecules</source>
         <translation>Rechercher par molécules</translation>
     </message>
     <message>
-        <location filename="../../plugins/drugsplugin/constants.h" line="78"/>
+        <location filename="../../plugins/drugsplugin/constants.h" line="79"/>
         <source>Edition modes</source>
         <translation>Mode d&apos;édition</translation>
     </message>
     <message>
-        <location filename="../../plugins/drugsplugin/constants.h" line="79"/>
+        <location filename="../../plugins/drugsplugin/constants.h" line="80"/>
         <source>Full prescriber</source>
         <translation>Prescripteur</translation>
     </message>
     <message>
-        <location filename="../../plugins/drugsplugin/constants.h" line="80"/>
+        <location filename="../../plugins/drugsplugin/constants.h" line="81"/>
         <source>Select only</source>
         <translation>Sélection seulement</translation>
     </message>
     <message>
-        <location filename="../../plugins/drugsplugin/constants.h" line="81"/>
+        <location filename="../../plugins/drugsplugin/constants.h" line="82"/>
         <source>Print prescription</source>
         <translation>Imprimer la prescription</translation>
     </message>
     <message>
-        <location filename="../../plugins/drugsplugin/constants.h" line="82"/>
+        <location filename="../../plugins/drugsplugin/constants.h" line="83"/>
         <source>Toggle testing drugs</source>
         <translation>Afficher/cacher les médicaments tests</translation>
     </message>
     <message>
-        <location filename="../../plugins/drugsplugin/constants.h" line="83"/>
+        <location filename="../../plugins/drugsplugin/constants.h" line="84"/>
         <source>Open protocol dialog</source>
         <translation>Ouvrir le dialogue du protocole</translation>
     </message>
     <message>
-        <location filename="../../plugins/drugsplugin/constants.h" line="84"/>
+        <location filename="../../plugins/drugsplugin/constants.h" line="85"/>
         <source>Open posologic sentence preferences</source>
         <translation>Ouvrir les préférences de la phrase posologique</translation>
     </message>
     <message>
-        <location filename="../../plugins/drugsplugin/constants.h" line="85"/>
+        <location filename="../../plugins/drugsplugin/constants.h" line="86"/>
         <source>Reset the prescription sentence to the default one</source>
         <translation>Réinitialiser la phrase posologique</translation>
+    </message>
+    <message>
+        <location filename="../../plugins/drugsplugin/constants.h" line="87"/>
+        <source>Show drug precautions</source>
+        <translation>Montrer les précautions thérapeutiques</translation>
+    </message>
+    <message>
+        <location filename="../../plugins/drugsplugin/constants.h" line="88"/>
+        <source>Drug precautions</source>
+        <translation>Précautions thérapeutiques</translation>
     </message>
 </context>
 </TS>

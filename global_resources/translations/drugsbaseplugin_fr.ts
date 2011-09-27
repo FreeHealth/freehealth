@@ -37,7 +37,7 @@ Veuillez vérifier vos répartitions journalières et vos relations avec le repa
 <context>
     <name>DrugsBase</name>
     <message>
-        <location filename="../../plugins/drugsbaseplugin/drugdruginteractionengine.cpp" line="954"/>
+        <location filename="../../plugins/drugsbaseplugin/engines/drugdruginteractionengine.cpp" line="955"/>
         <source>FreeDiams Interactions Engine</source>
         <translation>Moteur d&apos;interaction de FreeDiams</translation>
     </message>
@@ -58,7 +58,7 @@ Veuillez vérifier vos répartitions journalières et vos relations avec le repa
 <context>
     <name>DrugsDB::DrugsBasePlugin</name>
     <message>
-        <location filename="../../plugins/drugsbaseplugin/drugsbaseplugin.cpp" line="87"/>
+        <location filename="../../plugins/drugsbaseplugin/drugsbaseplugin.cpp" line="98"/>
         <location filename="../../plugins/drugsbaseplugin/drugsbaseplugin.cpp" line="108"/>
         <source>Initializing drugs database plugin...</source>
         <translation>Initialisation du plugin des bases de données thérapeutique...</translation>
@@ -148,7 +148,7 @@ Voulez-vous les ajouter au fichier ?</translation>
 <context>
     <name>DrugsDB::DrugsModel</name>
     <message>
-        <location filename="../../plugins/drugsbaseplugin/drugsmodel.cpp" line="506"/>
+        <location filename="../../plugins/drugsbaseplugin/drugsmodel.cpp" line="513"/>
         <source>KNOWN ALLERGY</source>
         <translation>ALLERGIE CONNUE</translation>
     </message>
@@ -156,27 +156,27 @@ Voulez-vous les ajouter au fichier ?</translation>
 <context>
     <name>DrugsDB::GlobalDrugsModel</name>
     <message>
-        <location filename="../../plugins/drugsbaseplugin/globaldrugsmodel.cpp" line="869"/>
+        <location filename="../../plugins/drugsbaseplugin/globaldrugsmodel.cpp" line="390"/>
         <source>KNOWN ALLERGY</source>
         <translation>ALLERGIE CONNUE</translation>
     </message>
     <message>
-        <location filename="../../plugins/drugsbaseplugin/globaldrugsmodel.cpp" line="873"/>
+        <location filename="../../plugins/drugsbaseplugin/globaldrugsmodel.cpp" line="394"/>
         <source>KNOWN INTOLERANCE</source>
         <translation>INTOLÉRANCE CONNUE</translation>
     </message>
     <message>
-        <location filename="../../plugins/drugsbaseplugin/globaldrugsmodel.cpp" line="913"/>
+        <location filename="../../plugins/drugsbaseplugin/globaldrugsmodel.cpp" line="434"/>
         <source>Identifier(s): </source>
         <translation>Identifiant(s) : </translation>
     </message>
     <message>
-        <location filename="../../plugins/drugsbaseplugin/globaldrugsmodel.cpp" line="911"/>
+        <location filename="../../plugins/drugsbaseplugin/globaldrugsmodel.cpp" line="432"/>
         <source>Form(s): </source>
         <translation>Forme(s) : </translation>
     </message>
     <message>
-        <location filename="../../plugins/drugsbaseplugin/globaldrugsmodel.cpp" line="912"/>
+        <location filename="../../plugins/drugsbaseplugin/globaldrugsmodel.cpp" line="433"/>
         <source>Route(s): </source>
         <translation>Voie(s) d&apos;administration : </translation>
     </message>
@@ -290,9 +290,17 @@ Voulez-vous les ajouter au fichier ?</translation>
     </message>
 </context>
 <context>
+    <name>DrugsDB::Internal::DrugAllergyEngine</name>
+    <message>
+        <location filename="../../plugins/drugsbaseplugin/engines/allergyengine.cpp" line="507"/>
+        <source>Detects allergies and intolerances to medications</source>
+        <translation>Détecte les allergies et intolérances médicamenteuses</translation>
+    </message>
+</context>
+<context>
     <name>DrugsDB::Internal::DrugDrugInteractionEngine</name>
     <message>
-        <location filename="../../plugins/drugsbaseplugin/drugdruginteractionengine.cpp" line="836"/>
+        <location filename="../../plugins/drugsbaseplugin/engines/drugdruginteractionengine.cpp" line="837"/>
         <source>Detects interaction between drugs</source>
         <translation>Détecte les interaction entre les médicaments</translation>
     </message>
@@ -356,7 +364,7 @@ Voulez-vous les ajouter au fichier ?</translation>
     <message>
         <location filename="../../plugins/drugsbaseplugin/drugsbase.cpp" line="1485"/>
         <source>Unable to find drug with DID %1</source>
-        <translation type="unfinished"></translation>
+        <translation>Impossible de trouver le médicament avec le DID %1</translation>
     </message>
 </context>
 <context>
@@ -411,12 +419,12 @@ Voulez-vous les ajouter au fichier ?</translation>
 <context>
     <name>DrugsDB::Internal::PimEngine</name>
     <message>
-        <location filename="../../plugins/drugsbaseplugin/pimengine.cpp" line="766"/>
+        <location filename="../../plugins/drugsbaseplugin/engines/pimengine.cpp" line="767"/>
         <source>(Experimental)</source>
         <translation>(Expérimental)</translation>
     </message>
     <message>
-        <location filename="../../plugins/drugsbaseplugin/pimengine.cpp" line="776"/>
+        <location filename="../../plugins/drugsbaseplugin/engines/pimengine.cpp" line="777"/>
         <source>Detects interaction between drugs and patient in elderly</source>
         <translation>Détecte les interactions entre médicaments et personnes âgées</translation>
     </message>
@@ -424,27 +432,27 @@ Voulez-vous les ajouter au fichier ?</translation>
 <context>
     <name>DrugsData</name>
     <message>
-        <location filename="../../plugins/drugsbaseplugin/idrug.cpp" line="767"/>
+        <location filename="../../plugins/drugsbaseplugin/idrug.cpp" line="777"/>
         <source>No INN found.</source>
         <translation>Pas de DCI connue.</translation>
     </message>
     <message>
-        <location filename="../../plugins/drugsbaseplugin/idrug.cpp" line="772"/>
+        <location filename="../../plugins/drugsbaseplugin/idrug.cpp" line="782"/>
         <source>No interaction class found.</source>
         <translation>Pas de classe d&apos;interaction connue.</translation>
     </message>
     <message>
-        <location filename="../../plugins/drugsbaseplugin/idrug.cpp" line="810"/>
+        <location filename="../../plugins/drugsbaseplugin/idrug.cpp" line="820"/>
         <source>Form(s): </source>
         <translation>Forme(s) : </translation>
     </message>
     <message>
-        <location filename="../../plugins/drugsbaseplugin/idrug.cpp" line="811"/>
+        <location filename="../../plugins/drugsbaseplugin/idrug.cpp" line="821"/>
         <source>Route(s): </source>
         <translation>Voie(s) d&apos;administration : </translation>
     </message>
     <message>
-        <location filename="../../plugins/drugsbaseplugin/idrug.cpp" line="812"/>
+        <location filename="../../plugins/drugsbaseplugin/idrug.cpp" line="822"/>
         <source>Identifier(s): </source>
         <translation>Identifiant(s) : </translation>
     </message>
@@ -452,12 +460,12 @@ Voulez-vous les ajouter au fichier ?</translation>
 <context>
     <name>DrugsModel</name>
     <message>
-        <location filename="../../plugins/drugsbaseplugin/drugsmodel.cpp" line="243"/>
+        <location filename="../../plugins/drugsbaseplugin/drugsmodel.cpp" line="245"/>
         <source>x %1 of %2</source>
         <translation>x %1 de %2</translation>
     </message>
     <message>
-        <location filename="../../plugins/drugsbaseplugin/drugsmodel.cpp" line="252"/>
+        <location filename="../../plugins/drugsbaseplugin/drugsmodel.cpp" line="254"/>
         <source>Available Dosages</source>
         <translation>Dosages disponibles</translation>
     </message>
@@ -485,37 +493,48 @@ Intervalle minimum entre les prises : [MIN_INTERVAL]][
 [NOTE] ]</translation>
     </message>
     <message>
-        <location filename="../../plugins/drugsbaseplugin/constants.h" line="254"/>
+        <location filename="../../plugins/drugsbaseplugin/constants.h" line="255"/>
         <source>Nature of risk</source>
         <translation>Nature du risque</translation>
     </message>
     <message>
-        <location filename="../../plugins/drugsbaseplugin/constants.h" line="255"/>
+        <location filename="../../plugins/drugsbaseplugin/constants.h" line="256"/>
         <source>Management</source>
         <translation>Prise en charge</translation>
     </message>
     <message>
-        <location filename="../../plugins/drugsbaseplugin/constants.h" line="256"/>
+        <location filename="../../plugins/drugsbaseplugin/constants.h" line="257"/>
         <source>Drug-drug interactions</source>
         <translation>Interactions médicamenteuses</translation>
     </message>
     <message>
-        <location filename="../../plugins/drugsbaseplugin/constants.h" line="259"/>
+        <location filename="../../plugins/drugsbaseplugin/constants.h" line="260"/>
         <source>DDI</source>
         <extracomment>This is the short name of the Drug-drug interactions engine.</extracomment>
         <translation>IAM</translation>
     </message>
     <message>
-        <location filename="../../plugins/drugsbaseplugin/constants.h" line="261"/>
-        <location filename="../../plugins/drugsbaseplugin/constants.h" line="265"/>
+        <location filename="../../plugins/drugsbaseplugin/constants.h" line="262"/>
+        <location filename="../../plugins/drugsbaseplugin/constants.h" line="266"/>
         <source>Potentially inappropriate medications</source>
         <translation>Médications potentiellement inappropriés</translation>
     </message>
     <message>
-        <location filename="../../plugins/drugsbaseplugin/constants.h" line="264"/>
+        <location filename="../../plugins/drugsbaseplugin/constants.h" line="265"/>
         <source>PIM</source>
         <extracomment>This is the short name of the Potentially inappropriate medications engine.</extracomment>
         <translation>MPI</translation>
+    </message>
+    <message>
+        <location filename="../../plugins/drugsbaseplugin/constants.h" line="269"/>
+        <source>Allergy / Intolerances to medications</source>
+        <translation>Allergies / intolerances aux médicaments</translation>
+    </message>
+    <message>
+        <location filename="../../plugins/drugsbaseplugin/constants.h" line="272"/>
+        <source>Allergy</source>
+        <extracomment>This is the short name of the Potentially inappropriate medications engine.</extracomment>
+        <translation>Allergies</translation>
     </message>
 </context>
 </TS>

@@ -12,7 +12,7 @@
 <context>
     <name>Agenda::AgendaPlugin</name>
     <message>
-        <location filename="../../plugins/agendaplugin/agendaplugin.cpp" line="113"/>
+        <location filename="../../plugins/agendaplugin/agendaplugin.cpp" line="110"/>
         <source>Initializing agenda plugin...</source>
         <translation type="unfinished"></translation>
     </message>
