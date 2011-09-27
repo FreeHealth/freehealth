@@ -342,16 +342,6 @@ public:
     {
         qDeleteAll(m_Episodes);
         m_Episodes.clear();
-        if (m_CoreListener) {
-            pluginManager()->removeObject(m_CoreListener);
-            delete m_CoreListener;
-            m_CoreListener = 0;
-        }
-        if (m_PatientListener) {
-            pluginManager()->removeObject(m_PatientListener);
-            delete m_PatientListener;
-            m_PatientListener = 0;
-        }
     }
 
     bool isEpisode(EpisodeModelTreeItem *item) { return (m_EpisodeItems.key(item, 0)!=0); }
@@ -741,6 +731,12 @@ void EpisodeModel::refreshFormTree()
 
 EpisodeModel::~EpisodeModel()
 {
+    if (d->m_CoreListener) {
+        pluginManager()->removeObject(d->m_CoreListener);
+    }
+    if (d->m_PatientListener) {
+        pluginManager()->removeObject(d->m_PatientListener);
+    }
     if (d) {
         delete d;
         d=0;
