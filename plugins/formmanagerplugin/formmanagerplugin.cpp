@@ -46,6 +46,7 @@
 #include <coreplugin/icore.h>
 #include <coreplugin/isettings.h>
 #include <coreplugin/itheme.h>
+#include <coreplugin/iuser.h>
 #include <coreplugin/translators.h>
 
 #include <QtCore/QtPlugin>
@@ -54,6 +55,7 @@
 
 static inline Core::ITheme *theme()  { return Core::ICore::instance()->theme(); }
 static inline Core::ISettings *settings()  { return Core::ICore::instance()->settings(); }
+static inline Core::IUser *user()  { return Core::ICore::instance()->user(); }
 static inline void messageSplash(const QString &s) {theme()->messageSplashScreen(s); }
 
 using namespace Form;
@@ -102,6 +104,12 @@ void FormManagerPlugin::extensionsInitialized()
 {
     if (Utils::Log::warnPluginsCreation())
         qWarning() << "FormManagerPlugin::extensionsInitialized";
+
+    // no user -> end
+    if (!user())
+        return;
+    if (user()->uuid().isEmpty())
+        return;
 
     messageSplash(tr("Initializing form manager plugin..."));
 
