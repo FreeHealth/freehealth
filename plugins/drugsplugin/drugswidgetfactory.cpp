@@ -255,7 +255,7 @@ QVariant DrugsWidgetData::data(const int ref, const int role) const
         // setting inn codes
         QStringList atcs;
         for(int i=0; i < rowCount; ++i) {
-            atcs.append(model->index(i, DrugsDB::Constants::Drug::InnsATCcodes).data().toStringList());
+            atcs.append(model->index(i, DrugsDB::Constants::Drug::InnCodes).data().toStringList());
         }
         atcs.removeAll("");
         atcs.removeDuplicates();

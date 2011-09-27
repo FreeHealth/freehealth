@@ -174,7 +174,7 @@ public:
 ////        int level = getMaximumTypeOfIAM(m_Result->interactions(), drug);
 //        Core::ITheme *th = theme();
         Core::ITheme::IconSize size = Core::ITheme::IconSize(query.iconSize);
-        return theme()->icon(Constants::I_DRUGENGINE, size);
+        return theme()->icon(DrugsDB::Constants::I_ALLERGYENGINE, size);
     }
 
     QString message(const IDrug *drug, const DrugInteractionInformationQuery &query) const
@@ -494,7 +494,7 @@ bool DrugAllergyEngine::isActive() const
 
 QString DrugAllergyEngine::name() const
 {
-    return QCoreApplication::translate(Constants::DRUGSBASE_TR_CONTEXT, Constants::ALLERGYENGINE_TEXT) + " " + tr("(Experimental)");
+    return QCoreApplication::translate(Constants::DRUGSBASE_TR_CONTEXT, Constants::ALLERGYENGINE_TEXT);
 }
 
 QString DrugAllergyEngine::shortName() const
@@ -514,12 +514,12 @@ QString DrugAllergyEngine::uid() const
 
 QIcon DrugAllergyEngine::icon(const int size) const
 {
-    return theme()->icon(Constants::I_DRUGENGINE, Core::ITheme::IconSize(size));
+    return theme()->icon(DrugsDB::Constants::I_ALLERGYENGINE, Core::ITheme::IconSize(size));
 }
 
 QString DrugAllergyEngine::iconFullPath(const int size) const
 {
-    return theme()->iconFullPath(Constants::I_DRUGENGINE, Core::ITheme::IconSize(size));
+    return theme()->iconFullPath(DrugsDB::Constants::I_ALLERGYENGINE, Core::ITheme::IconSize(size));
 }
 
 int DrugAllergyEngine::calculateInteractions(const QVector<IDrug *> &drugs)
@@ -581,22 +581,27 @@ void DrugAllergyEngine::setActive(bool activate)
 
 void DrugAllergyEngine::clearDrugAllergyCache()
 {
-    QHashIterator<QString, int> i(m_ComputedInteractionCache);
-    while (i.hasNext()) {
-        i.next();
-        if (i.value()==Allergy || i.value()==SuspectedAllergy)
-            m_ComputedInteractionCache.remove(i.key());
-    }
+    m_ComputedInteractionCache.clear();
+//    QHashIterator<QString, int> i(m_ComputedInteractionCache);
+//    while (i.hasNext()) {
+//        i.next();
+//        if (i.value()==Allergy || i.value()==SuspectedAllergy) {
+//            m_ComputedInteractionCache.remove(i.key());
+//        }
+//    }
+    Q_EMIT allergiesUpdated();
 }
 
 void DrugAllergyEngine::clearDrugIntoleranceCache()
 {
-    QHashIterator<QString, int> i(m_ComputedInteractionCache);
-    while (i.hasNext()) {
-        i.next();
-        if (i.value()==Intolerance || i.value()==SuspectedIntolerance)
-            m_ComputedInteractionCache.remove(i.key());
-    }
+    m_ComputedInteractionCache.clear();
+//    QHashIterator<QString, int> i(m_ComputedInteractionCache);
+//    while (i.hasNext()) {
+//        i.next();
+//        if (i.value()==Intolerance || i.value()==SuspectedIntolerance)
+//            m_ComputedInteractionCache.remove(i.key());
+//    }
+    Q_EMIT intolerancesUpdated();
 }
 
 /** Return true if the engine must compute interaction according to the \e typeOfInteraction and \e typeOfSubstrat. */
@@ -717,6 +722,8 @@ void DrugAllergyEngine::patientChanged()
     m_Cache.clear();
     m_ComputedInteractionCache.clear();
     m_ProcessedUid.clear();
+    int currentRow = patient()->currentPatientIndex().row();
+    refreshDrugsPrecautions(patient()->index(currentRow, 0), patient()->index(currentRow, patient()->columnCount()));
 }
 
 
@@ -733,6 +740,9 @@ void DrugAllergyEngine::refreshDrugsPrecautions(const QModelIndex &topleft, cons
 //        d->m_testUidAllergies = !d->uidAllergies.isEmpty();
 //        d->clearm_ComputedInteractionCache();
 //        refreshModel = true;
+
+        // clear old testing values and emit allergiesUpdated
+        clearDrugAllergyCache();
     }
 
     if (Utils::inRange(topleft.column(), bottomright.column(), Core::IPatient::DrugsInnAllergies)) {
@@ -745,6 +755,9 @@ void DrugAllergyEngine::refreshDrugsPrecautions(const QModelIndex &topleft, cons
 //        d->clearm_ComputedInteractionCache();
 ////        qWarning() << "  -----> DrugsInnAllergies" << d->innAllergies;
 //        refreshModel = true;
+
+        // clear old testing values and emit allergiesUpdated
+        clearDrugAllergyCache();
     }
 
     if (Utils::inRange(topleft.column(), bottomright.column(), Core::IPatient::DrugsAtcAllergies)) {
@@ -758,9 +771,6 @@ void DrugAllergyEngine::refreshDrugsPrecautions(const QModelIndex &topleft, cons
             test.typeOfSubstrat = InnCode;
             m_DoTests.append(test);
         }
-
-        // clear old testing values
-        clearDrugAllergyCache();
 
         // add the testing values
         bool updated = false;
@@ -791,6 +801,8 @@ void DrugAllergyEngine::refreshDrugsPrecautions(const QModelIndex &topleft, cons
 //            else
 //                d->classAtcAllergies.append(atc);
 
+        // clear old testing values and emit allergiesUpdated
+        clearDrugAllergyCache();
     }
 
     //    if (ref == Core::IPatient::DrugsAtcIntolerances) {

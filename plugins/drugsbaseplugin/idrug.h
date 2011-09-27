@@ -216,6 +216,7 @@ public:
         AllInnsKnown,
         //        AllAtcIds,
         All7CharsAtcLabels,
+        All7CharsAtcCodes,
         AllAtcCodes,
         AllInteractingClasses,
         //        AllInteractingClassesIds,
@@ -252,7 +253,7 @@ public:
     int numberOfInn() const { return allSevenCharsAtcIds().count(); }
 
     QStringList listOfMolecules() const {return data(AllMoleculeNames).toStringList();}
-    QStringList listOfInn() const {return data(All7CharsAtcLabels).toStringList();}
+    QStringList listOfInnLabels() const {return data(All7CharsAtcLabels).toStringList();}
     QStringList listOfInteractingClasses() const {return data(AllInteractingClasses).toStringList();}
 
     QStringList allSevenCharsAtcCodes() const {return data(All7CharsAtcLabels).toStringList();}
@@ -336,8 +337,8 @@ public:
     QString toXml() const;
 };
 
-
-
 }  // End namespace DrugsDB
+
+QDebug operator<<(QDebug dbg, const DrugsDB::IDrug *c);
 
 #endif // DRUGSDB_IDRUG_H

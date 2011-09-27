@@ -132,6 +132,7 @@ namespace Constants {
     const char * const  I_DRUGENGINE = "drugengines.png";
     const char * const  I_DRUGDRUGINTERACTIONENGINE = "drugengine_ddi.png";
     const char * const  I_PIMENGINE = "pimengine.png";
+    const char * const  I_ALLERGYENGINE = "drugengines_allergies.png";
 
     const char * const  I_DRUGALERT_ACCEPT = "drugalert_accept.png";
     const char * const  I_DRUGALERT_OVERRIDE = "drugalert_override.png";
@@ -306,7 +307,8 @@ namespace Drug
         CodeMoleculesList,
         AllInnsKnown,
         Inns,                    // names
-        InnsATCcodes,
+        InnCodes,                // all INN in ATC format (classes not included)
+        InnsATCcodes,            // all INN in ATC format (classes are included)
         InnClasses,              // names
         MainInnCode,             // -1 if no INN known or more than one INN
         MainInnName,             // -1 if no INN known or more than one INN

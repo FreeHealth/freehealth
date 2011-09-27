@@ -208,8 +208,9 @@ public:
         case Drug::GlobalStrength :     return drug->strength();
         case Drug::Molecules :          return drug->listOfMolecules();
         case Drug::AllInnsKnown :       return drug->data(IDrug::AllInnsKnown);
-        case Drug::Inns :               return drug->listOfInn();
+        case Drug::Inns :               return drug->listOfInnLabels();
         case Drug::InnsATCcodes :       return drug->allAtcCodes();
+        case Drug::InnCodes :           return drug->data(IDrug::All7CharsAtcCodes);
         case Drug::MainInnCode :        return drug->mainInnCode();
         case Drug::MainInnDosage :      return drug->mainInnDosage();
         case Drug::MainInnName :        return drug->mainInnName();
@@ -283,7 +284,7 @@ public:
         if (!drug)
             return QVariant();
         if (column ==  Prescription::ToHtml) {
-            return ::DrugsDB::DrugsModel::getFullPrescription(drug,true);
+            return ::DrugsDB::DrugsModel::getFullPrescription(drug, true);
         } else {
             return drug->prescriptionValue(column);
         }
@@ -309,7 +310,7 @@ public:
                     return m_InteractionResult->alertMessagesToHtml(drug, query);
 //                    display.append(interactionManager()->listToHtml(m_InteractionResult->getInteractions(drug), false));
                 } else if (drug->data(IDrug::AllInnsKnown).toBool()) {
-                    display = drug->listOfInn().join("<br />") + "<br />" + drug->listOfInteractingClasses().join("<br />");
+                    display = drug->listOfInnLabels().join("<br />") + "<br />" + drug->listOfInteractingClasses().join("<br />");
                 } else {
                     display = tkTr(Trans::Constants::NO_1_FOUND).arg(tkTr(Trans::Constants::INN));
                 }
@@ -390,6 +391,8 @@ DrugsModel::DrugsModel(QObject * parent) :
 
     d->m_InteractionResult = interactionManager()->checkInteractions(d->m_InteractionQuery);
     connect(drugsBase(), SIGNAL(dosageBaseHasChanged()), this, SLOT(dosageDatabaseChanged()));
+    connect(d->m_AllergyEngine, SIGNAL(allergiesUpdated()), this, SLOT(resetModel()));
+    connect(d->m_AllergyEngine, SIGNAL(intolerancesUpdated()), this, SLOT(resetModel()));
 }
 
 /** Destructor */
@@ -549,10 +552,7 @@ QVariant DrugsModel::data(const QModelIndex &index, int role) const
     return QVariant();
 }
 
-/**
-  At anytime, you can get all values of drugs inside the prescription model using the CIS as row index.
-  \sa data()
-*/
+/** At anytime, you can get all values of drugs inside the prescription model using the \e drugId as row index. \sa data() */
 QVariant DrugsModel::drugData(const QVariant &drugId, const int column)
 {
     IDrug *drug = d->getDrug(drugId);
@@ -596,10 +596,7 @@ bool DrugsModel::removeRows(int row, int count, const QModelIndex &parent)
     return toReturn;
 }
 
-/**
- Add a textual drug to the prescription.
- \sa DrugsWidget::TextualPrescriptionDialog, DrugsWidget::Internal::DrugSelector
-*/
+/** Add a textual drug to the prescription. \sa DrugsWidget::TextualPrescriptionDialog, DrugsWidget::Internal::DrugSelector */
 int DrugsModel::addTextualPrescription(const QString &drugLabel, const QString &drugNote)
 {
     ITextualDrug *drug = new ITextualDrug();
@@ -612,10 +609,7 @@ int DrugsModel::addTextualPrescription(const QString &drugLabel, const QString &
     return d->m_DrugsList.indexOf(drug);
 }
 
-/**
- Add a drug to the prescription.
- \sa addDrug()
-*/
+/** Add a drug to the prescription. \sa addDrug() */
 int DrugsModel::addDrug(IDrug *drug, bool automaticInteractionChecking)
 {
     if (!drug)
@@ -648,6 +642,7 @@ int DrugsModel::addDrug(const QVariant &drugId, bool automaticInteractionCheckin
     return addDrug(drugsBase()->getDrugByDrugId(drugId), automaticInteractionChecking);
 }
 
+/** Add multiple drugs to the prescription with or without checking interactions according to the \e automaticInteractionChecking boolean. */
 int DrugsModel::addDrugs(const QVector<IDrug *> &drugs, bool automaticInteractionChecking)
 {
     d->m_DrugsList << drugs.toList();
@@ -657,10 +652,7 @@ int DrugsModel::addDrugs(const QVector<IDrug *> &drugs, bool automaticInteractio
     return drugs.count();
 }
 
-/**
-  Clear the prescription. Clear all interactions too.
-  Calling this causes a model reset.
-*/
+/** Clear the prescription. Clear all interactions too. Calling this causes a model reset. */
 void DrugsModel::clearDrugsList()
 {
     d->m_LastDrugRequiered = 0;
@@ -739,20 +731,14 @@ bool DrugsModel::prescriptionHasAllergies()
     return false;
 }
 
-/**
-  Sort the drugs inside prescription. \sa DrugsDB::lessThan().
-  Calling this causes a model reset.
-*/
+/** Sort the drugs inside prescription. \sa DrugsDB::lessThan(). Calling this causes a model reset. */
 void DrugsModel::sort(int, Qt::SortOrder)
 {
     qSort(d->m_DrugsList.begin(), d->m_DrugsList.end(), IDrug::lessThan);
     reset();
 }
 
-/**
-  Moves a drug up.
-  Calling this causes a model reset.
-*/
+/** Moves a drug up. Calling this causes a model reset. */
 bool DrugsModel::moveUp(const QModelIndex &item)
 {
     if (!item.isValid())
@@ -766,10 +752,7 @@ bool DrugsModel::moveUp(const QModelIndex &item)
     return false;
 }
 
-/**
-  Moves a drug down.
-  Calling this causes a model reset.
-*/
+/** Moves a drug down. Calling this causes a model reset. */
 bool DrugsModel::moveDown(const QModelIndex &item)
 {
     if (!item.isValid())
@@ -783,10 +766,7 @@ bool DrugsModel::moveDown(const QModelIndex &item)
     return false;
 }
 
-/**
-  Defines the model to show or hide the drugs only used for interaction testing only.
-  Calling this causes a model reset.
-*/
+/** Defines the model to show or hide the drugs only used for interaction testing only. Calling this causes a model reset. */
 void DrugsModel::showTestingDrugs(bool state)
 {
    if (state) {
@@ -898,15 +878,6 @@ int DrugsModel::removeLastInsertedDrug()
     d->m_IsDirty = true;
     Q_EMIT numberOfRowsChanged();
     return 1;
-}
-
-/**  Only for debugging purpose. */
-void DrugsModel::warn()
-{
-    if (!Utils::isDebugCompilation())
-        return;
-    qWarning() << "drugs in memory" << d->m_DrugsList.count();
-    qWarning() << "dosagemodels in memory" << d->m_DosageModelList.count();
 }
 
 /** Starts the interactions checking */
@@ -1102,3 +1073,12 @@ bool DrugsModel::dropMimeData(const QMimeData *data, Qt::DropAction action, int 
 
     return true;
 }
+
+QDebug operator<<(QDebug dbg, const DrugsDB::DrugsModel *c)
+{
+    dbg.nospace() << "DrugsModel("
+                  << "Memory: " << c->drugsList().count()
+                  << ")";
+    return dbg.space();
+}
+

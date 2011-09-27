@@ -106,6 +106,10 @@ public:
 public Q_SLOTS:
     void setActive(bool state);
 
+Q_SIGNALS:
+    void allergiesUpdated();
+    void intolerancesUpdated();
+
 private:
     void clearDrugAllergyCache();
     void clearDrugIntoleranceCache();

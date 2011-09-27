@@ -262,7 +262,7 @@ void DrugsPrintOptionsPage::checkSettingsValidity()
     if (settings()->value(DrugsDB::Constants::S_PRESCRIPTIONFORMATTING_PLAIN).isNull() ||
         settings()->value(DrugsDB::Constants::S_PRESCRIPTIONFORMATTING_HTML).isNull() ||
         t.toPlainText().simplified().isEmpty()) {
-        Utils::Log::addMessage(this, "Restoring prescription sentence to its defaults");
+        LOG("Restoring prescription sentence to its defaults");
         settings()->setValue(DrugsDB::Constants::S_PRESCRIPTIONFORMATTING_PLAIN,
                              qApp->translate(Constants::DRUGCONSTANTS_TR_CONTEXT, DrugsDB::Constants::S_DEF_PRESCRIPTIONFORMATTING));
         settings()->setValue(DrugsDB::Constants::S_PRESCRIPTIONFORMATTING_HTML,
@@ -699,7 +699,7 @@ void DrugsPrintWidget::saveToSettings(Core::ISettings *sets)
 void DrugsPrintWidget::writeDefaultSettings(Core::ISettings *s)
 {
 //    qWarning() << "---------> writedefaults";
-    Utils::Log::addMessage("DrugsPrintWidget", tkTr(Trans::Constants::CREATING_DEFAULT_SETTINGS_FOR_1).arg("DrugsPrintWidget"));
+    LOG_FOR("DrugsPrintWidget", tkTr(Trans::Constants::CREATING_DEFAULT_SETTINGS_FOR_1).arg("DrugsPrintWidget"));
     s->setValue(S_CONFIGURED, true);
     s->setValue(DrugsDB::Constants::S_PRESCRIPTIONFORMATTING_HTML,
                 qApp->translate(Constants::DRUGCONSTANTS_TR_CONTEXT, DrugsDB::Constants::S_DEF_PRESCRIPTIONFORMATTING));

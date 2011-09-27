@@ -37,7 +37,7 @@ class QStandardItemModel;
  * \file globaldrugsmodel.h
  * \author Eric MAEKER <eric.maeker@gmail.com>
  * \version 0.6.0
- * \date 28 Feb 2011
+ * \date 27 Sept 2011
 */
 
 namespace DrugsDB {
@@ -93,8 +93,7 @@ public Q_SLOTS:
 
 private Q_SLOTS:
     void refreshDrugsPrecautions(const QModelIndex &topleft, const QModelIndex &bottomright) {}
-//    void physiologyProcessed();
-//    void processPhysiology();
+    void updateAllergies();
 
 private:
     Internal::GlobalDrugsModelPrivate *d;

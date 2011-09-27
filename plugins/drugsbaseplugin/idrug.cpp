@@ -616,6 +616,16 @@ QVariant IDrug::data(const int ref, const QString &lang) const
             toReturn.removeDuplicates();
             return toReturn;
         }
+    case All7CharsAtcCodes:
+    {
+        QStringList toReturn;
+        for(int i = 0; i < d_drug->m_7CharsAtc.count(); ++i) {
+            toReturn << base()->getAtcCode(d_drug->m_7CharsAtc.at(i));
+        }
+        toReturn.removeDuplicates();
+        return toReturn;
+
+        }
     case AllInteractingClasses:
         {
             QStringList names;
@@ -760,7 +770,7 @@ QString IDrug::toHtml() const
 {
     QString msg;
 
-    const QStringList &iams = this->listOfInn();
+    const QStringList &iams = this->listOfInnLabels();
     const QStringList &iamClass = this->listOfInteractingClasses();
     QString textIams, textClass;
     if (iams.isEmpty())
@@ -993,7 +1003,7 @@ QString IDrug::warnText() const
     tmp += QString("     (LinkScp: %1)\n").arg(linkToSCP());
     tmp += QString("     (NbMols: %1; NbInns: %2)\n").arg(numberOfCodeMolecules()).arg(numberOfInn());
     tmp += QString("     (Mols: %1)\n").arg(listOfMolecules().join(";"));
-    tmp += QString("     (Inns: %1)\n").arg(listOfInn().join(";"));
+    tmp += QString("     (Inns: %1)\n").arg(listOfInnLabels().join(";"));
     tmp += QString("     (InteractingClasses: %1)\n").arg(listOfInteractingClasses().join(";"));
     tmp += QString("     (MainInnName: %1; MainInnDosage: %2;\n      innComposition: %3)\n").arg(mainInnName()).arg(mainInnDosage()).arg(innComposition());
 
@@ -1049,4 +1059,12 @@ IVirtualDrug *IVirtualDrug::fromXml(const QString &xml)
 QString IVirtualDrug::toXml() const
 {
     return QString();
+}
+
+
+///////////////////////////////////////////////////////////////////////////////////////////////////
+QDebug operator<<(QDebug dbg, const DrugsDB::IDrug *c)
+{
+    dbg.nospace() << c->warnText();
+    return dbg.space();
 }

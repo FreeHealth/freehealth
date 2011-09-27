@@ -36,8 +36,15 @@
  * \file drugsmodel.h
  * \author Eric MAEKER <eric.maeker@gmail.com>
  * \version 0.6.0
- * \date 09 Mar 2011
+ * \date 27 Sept 2011
 */
+
+namespace DrugsWidget {
+namespace Internal {
+class DrugsActionHandler;
+}
+}
+
 namespace DrugsDB {
 class DrugsIO;
 class InteractionManager;
@@ -57,8 +64,10 @@ namespace DrugsDB {
 class DRUGSBASE_EXPORT DrugsModel : public QAbstractTableModel
 {
     Q_OBJECT
-    friend class Internal::DosageModel;
-    friend class DrugsIO;
+    friend class DrugsDB::Internal::DosageModel;
+    friend class DrugsDB::DrugsIO;
+    friend class DrugsWidget::Internal::DrugsActionHandler;
+
 public:
     enum PrescriptionDeserializer {
         AddPrescription,
@@ -83,7 +92,6 @@ public:
     QVariant data(const QModelIndex &index, int role) const;
     QVariant drugData(const QVariant &drugId, const int column);
     bool setDrugData(const QVariant &drugId, const int column, const QVariant &value);
-    void resetModel();
     Qt::ItemFlags flags(const QModelIndex &index) const;
 
     // GET INTERACTIONS SPECIFIC STRUCTURED DATAS
@@ -134,14 +142,15 @@ public:
     // FOR PRESCRIPTION FORMATTING
     static QString getFullPrescription(const IDrug *drug, bool toHtml = false, const QString &mask = QString::null);
 
-    void warn();
-
 Q_SIGNALS:
     void prescriptionResultChanged(const QString & html);
     void numberOfRowsChanged();
 
 protected:
     void checkInteractions();
+
+protected Q_SLOTS:
+    void resetModel();
 
 private Q_SLOTS:
     void dosageDatabaseChanged();
@@ -152,5 +161,9 @@ private:
 };
 
 }  // End DrugsDB
+
+QDebug operator<<(QDebug dbg, const DrugsDB::DrugsModel *c);
+
+
 
 #endif
