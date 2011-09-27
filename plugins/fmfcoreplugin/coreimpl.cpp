@@ -228,6 +228,15 @@ bool CoreImpl::initialize(const QStringList &arguments, QString *errorString)
             return false;
         }
         m_Settings->noMoreFirstTimeRunning();
+        /** \todo code here: if alpha -> delete old configuration && databases */
+        m_Settings->setLicenseApprovedApplicationNumber(qApp->applicationVersion());
+        // Clear identifiants
+        Utils::DatabaseConnector connector = settings()->databaseConnector();
+        connector.setClearLog("_");
+        connector.setClearPass("_");
+        settings()->setDatabaseConnector(connector);
+        qWarning() << connector;
+
 //        // show the license agreement dialog
 //#ifndef LINUX_INTEGRATED
 //        if (!Utils::defaultLicenceAgreementDialog("", Utils::LicenseTerms::GPLv3))
@@ -242,8 +251,6 @@ bool CoreImpl::initialize(const QStringList &arguments, QString *errorString)
 //                Utils::LicenseTerms::GPLv3 ))
 //            return false;
 //#endif
-        /** \todo code here: if alpha -> delete old configuration && databases */
-        m_Settings->setLicenseApprovedApplicationNumber(qApp->applicationVersion());
     }
 
     return true;

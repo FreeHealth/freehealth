@@ -69,12 +69,6 @@ bool CorePlugin::initialize(const QStringList &arguments, QString *errorMessage)
     if (Utils::Log::warnPluginsCreation())
         qWarning() << "CorePlugin::initialize";
 
-    // Add Translator to the Application
-    Core::ICore::instance()->translators()->addNewTranslator("utils");
-    Core::ICore::instance()->translators()->addNewTranslator("translationutils");
-    Core::ICore::instance()->translators()->addNewTranslator("medicalutils");
-    Core::ICore::instance()->translators()->addNewTranslator("fmfcoreplugin");
-
     messageSplash(tr("Initializing core plugin..."));
 
     return m_CoreImpl->initialize(arguments,errorMessage);

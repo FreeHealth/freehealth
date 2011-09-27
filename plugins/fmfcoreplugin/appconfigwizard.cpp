@@ -137,15 +137,14 @@ void AppConfigWizard::done(int r)
 {
     if (r == QDialog::Rejected) {
         /** \todo code here */
-//        bool yes = Utils::yesNoMessageBox(tr("WARNING ! You don't save this user."),
-//                               tr("If you continue changes will be lost.\n"
-//                                  "Do you really want to close this dialog ?"),
-//                               "", tr("Data losing"));
-//        if (yes)
-            QDialog::done(r);
+        //        bool yes = Utils::yesNoMessageBox(tr("WARNING ! You don't save this user."),
+        //                               tr("If you continue changes will be lost.\n"
+        //                                  "Do you really want to close this dialog ?"),
+        //                               "", tr("Data losing"));
+        //        if (yes)
+        QDialog::done(r);
     } else {
-
-            QDialog::done(r);
+        QDialog::done(r);
     }
 }
 
@@ -493,6 +492,10 @@ EndConfigPage::EndConfigPage(QWidget *parent) :
     l->addWidget(lbl1_1, 6, 1);
     l->addWidget(lbl2, 8, 0, 1, 2);
     l->addWidget(lbl2_1, 9, 1);
+
+    // Clear database connector identifiants
+    qWarning() << "wwwwwwwwwwwwwwwwwwwwwwwwww";
+    // remove connection identifiants
 }
 
 void EndConfigPage::initializePage()
@@ -530,8 +533,14 @@ void EndConfigPage::comboVirtualActivated(int index)
     }
 }
 
+bool EndConfigPage::validatePage()
+{
+    return true;
+}
+
 void EndConfigPage::showEvent(QShowEvent *event)
 {
+    QWidget::showEvent(event);
     adjustSize();
 }
 
