@@ -54,7 +54,8 @@ CREATE TABLE IF NOT EXISTS BIBLIOGRAPHY (
   LINK      varchar(200),
   TEXTUAL_REFERENCE varchar(1000),
   ABSTRACT  varchar(4000),
-  EXPLANATION varchar(4000)
+  EXPLANATION varchar(4000),
+  XML varchar(10000)
 );
 CREATE INDEX BibsIndexPk ON BIBLIOGRAPHY (BIB_ID);
 
@@ -330,4 +331,5 @@ INSERT INTO DB_SCHEMA_VERSION VALUES (NULL,"0.5.2","2010-14-10","Interactions: A
 INSERT INTO DB_SCHEMA_VERSION VALUES (NULL,"0.5.5","2011-01-10","Interactions: Totally redefined schema");
 INSERT INTO DB_SCHEMA_VERSION VALUES (NULL,"0.6.0","2011-04-21","Interactions: Adding duplication warnings for all ATC including interacting classes");
 INSERT INTO DB_SCHEMA_VERSION VALUES (NULL,"0.6.0","2011-04-22","Interactions: Starting implementation of DDI formalized risks");
+INSERT INTO DB_SCHEMA_VERSION VALUES (NULL,"0.6.0","2011-09-27","Biblio: adding XML formatted bibliography from pubmed");
 

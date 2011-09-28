@@ -94,7 +94,7 @@ namespace Constants {
     };
 
     enum BIBFields {
-        BIB_BIBID = 0, BIB_TYPE, BIB_LINK, BIB_TEXTREF, BIB_ABSTRACT, BIB_EXPLAIN,
+        BIB_BIBID = 0, BIB_TYPE, BIB_LINK, BIB_TEXTREF, BIB_ABSTRACT, BIB_EXPLAIN, BIB_XML,
         BIB_MaxParam
     };
 

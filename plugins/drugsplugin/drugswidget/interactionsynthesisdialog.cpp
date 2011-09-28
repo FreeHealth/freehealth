@@ -42,6 +42,7 @@
 
 #include <utils/log.h>
 #include <medicalutils/ebmdata.h>
+#include <medicalutils/ebmmodel.h>
 #include <translationutils/constanttranslations.h>
 
 #include <extensionsystem/pluginmanager.h>
@@ -101,6 +102,7 @@ public:
     QStandardItemModel *m_InteractionModel, *m_InteractionQueryModel;
     DrugsDB::DrugInteractionResult *m_InteractionResult;
     QToolButton *close, *report, *print, *help;
+    MedicalUtils::EbmModel *m_EbmModel;
 };
 }
 }
@@ -184,10 +186,20 @@ InteractionSynthesisDialog::InteractionSynthesisDialog(DrugsDB::DrugsModel *drug
     d->ui->interactionQueryView->setModel(d->m_InteractionQueryModel);
     d->ui->interactionResultView->setModel(d->m_InteractionModel);
     d->ui->interactionResultView->expandAll();
+    d->ui->interactionResultView->setEditTriggers(QAbstractItemView::NoEditTriggers);
+    d->ui->interactionQueryView->setEditTriggers(QAbstractItemView::NoEditTriggers);
 
     d->ui->classgroup->hide();
 
     d->ui->tabWidget->setCurrentWidget(d->ui->tabInfo);
+
+    // Create EBM view/model management
+    d->m_EbmModel = new MedicalUtils::EbmModel(this);
+    d->ui->biblioReferences->setModel(d->m_EbmModel);
+    d->ui->biblioReferences->setModelColumn(MedicalUtils::EbmModel::ShortReferences);
+    d->ui->biblioReferences->setAlternatingRowColors(true);
+    d->ui->biblio->setReadOnly(true);
+    connect(d->ui->biblioReferences, SIGNAL(activated(QModelIndex)), this, SLOT(showEbm(QModelIndex)));
 
     connect(d->ui->interactionResultView->selectionModel(), SIGNAL(currentChanged(QModelIndex,QModelIndex)), this, SLOT(interactionActivated(QModelIndex,QModelIndex)));
 }
@@ -217,7 +229,7 @@ void InteractionSynthesisDialog::interactionActivated(const QModelIndex &current
     d->ui->riskBrowser->clear();
     d->ui->managementBrowser->clear();
     d->ui->biblio->clear();
-    d->ui->biblioReferences->clear();
+    d->m_EbmModel->clear();
 
     DrugsDB::IDrugInteraction *interaction = d->m_InteractionResult->interactions().at(id);
     d->ui->riskBrowser->setPlainText(interaction->risk().replace("<br />","\n").replace("<br>","\n"));
@@ -246,35 +258,41 @@ void InteractionSynthesisDialog::on_getBiblio_clicked()
     bool show = false;
     if (d->m_Biblio.values(interaction).count()==0) {
         foreach(const DrugsDB::IDrug *drug, interaction->drugs()) {
-            QVector<MedicalUtils::EbmData *> v = drugsBase()->getAllSourcesFromTree(drug->allInnAndInteractingClassesIds().toList());
+            QVector<MedicalUtils::EbmData *> v = drugsBase()->getAllBibliographyFromTree(drug->allInnAndInteractingClassesIds().toList());
             for(int i=0; i< v.count(); ++i) {
                 MedicalUtils::EbmData *data = v.at(i);
                 d->m_Biblio.insertMulti(interaction, data);
             }
         }
     }
+    d->m_EbmModel->setEbmData(d->m_Biblio.values(interaction).toVector());
 
-    QString reftable = "<table width=100% border=1>";
-    QString bibtable = "<table width=100% border=1>";
-    if (d->m_Biblio.values(interaction).count()==0) {
-        reftable += QString("<tr><td>%1</td></tr>").arg(tr("No bibliography available"));
-        bibtable += QString("<tr><td>%1</td></tr>").arg(tr("No bibliography available"));
-    } else {
-        foreach(MedicalUtils::EbmData *data, d->m_Biblio.values(interaction)) {
-            show = true;
-            QString link = data->link();
-            link.replace("http://www.ncbi.nlm.nih.gov/pubmed/", "PMID ");
-            reftable += QString("<tr><td width=70%>%1</td><td width=30%>%2</td></tr>")
-                        .arg(data->references())
-                        .arg(link);
-            bibtable += QString("<tr><td>%1</td></tr>")
-                        .arg(data->abstract());
-        }
-    }
-    reftable += "</table>";
-    bibtable += "</table>";
-    d->ui->biblio->setHtml(bibtable.replace("\n","<br />"));
-    d->ui->biblioReferences->setHtml(reftable.replace("\n","<br />"));
+//    QString reftable = "<table width=100% border=1>";
+//    QString bibtable = "<table width=100% border=1>";
+//    if (d->m_Biblio.values(interaction).count()==0) {
+//        reftable += QString("<tr><td>%1</td></tr>").arg(tr("No bibliography available"));
+//        bibtable += QString("<tr><td>%1</td></tr>").arg(tr("No bibliography available"));
+//    } else {
+//        foreach(MedicalUtils::EbmData *data, d->m_Biblio.values(interaction)) {
+//            show = true;
+//            QString link = data->link();
+//            link.replace("http://www.ncbi.nlm.nih.gov/pubmed/", "PMID ");
+//            reftable += QString("<tr><td width=70%>%1</td><td width=30%>%2</td></tr>")
+//                        .arg(data->references())
+//                        .arg(link);
+//            bibtable += QString("<tr><td>%1</td></tr>")
+//                        .arg(data->abstract());
+//        }
+//    }
+//    reftable += "</table>";
+//    bibtable += "</table>";
+//    d->ui->biblio->setHtml(bibtable.replace("\n","<br />"));
+//    d->ui->biblioReferences->setHtml(reftable.replace("\n","<br />"));
+}
+
+void InteractionSynthesisDialog::showEbm(const QModelIndex &index)
+{
+    d->ui->biblio->setHtml(d->m_EbmModel->index(index.row(), MedicalUtils::EbmModel::Abstract).data().toString().replace("\n","<br />"));
 }
 
 void InteractionSynthesisDialog::print(QAction *action)

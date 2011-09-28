@@ -1,7 +1,8 @@
 # toolkit library project file
 TEMPLATE        = lib
 TARGET          = MedicalUtils
-PACKAGE_VERSION = 0.0.2
+
+QT *= xml
 
 DEFINES *= MEDICALUTILS_LIBRARY
 
@@ -13,7 +14,11 @@ include(aggir/aggir.pri)
 
 HEADERS += global.h \
            medical_exporter.h \
-    ebmdata.h
+    ebmdata.h \
+    ebmmodel.h
 
 SOURCES += global.cpp \
-    ebmdata.cpp
+    ebmdata.cpp \
+    ebmmodel.cpp
+
+

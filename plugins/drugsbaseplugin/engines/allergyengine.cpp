@@ -398,7 +398,8 @@ public:
 //        }
 //        toReturn = tmp;
 //        return toReturn;
-        return QString("MESSAGE");
+//        return QString("MESSAGE");
+        return QString();
     }
 
     QString message(const DrugInteractionInformationQuery &query) const

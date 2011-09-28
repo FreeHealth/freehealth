@@ -25,12 +25,14 @@
  ***************************************************************************/
 #include "pubmeddownloader.h"
 
-#include <utils/log.h>
+//#include <utils/log.h>
 
 #include <QNetworkAccessManager>
 #include <QNetworkReply>
 #include <QNetworkRequest>
 #include <QNetworkProxy>
+#include <QRegExp>
+#include <QDomDocument>
 
 using namespace Utils;
 //
@@ -40,6 +42,7 @@ using namespace Utils;
 
 static const char *REFERENCE_URL = "http://www.ncbi.nlm.nih.gov/pubmed/%1?dopt=docsum&format=text";
 static const char *ABSTRACT_URL  = "http://www.ncbi.nlm.nih.gov/pubmed/%1?dopt=Abstract&format=text";
+static const char *XML_URL       = "http://www.ncbi.nlm.nih.gov/pubmed/%1?dopt=xml&format=text";
 
 
 PubMedDownloader::PubMedDownloader(QObject *parent) :
@@ -60,7 +63,7 @@ bool PubMedDownloader::setFullLink(const QString &link)
     m_Abstract.clear();
     m_Pmid.clear();
     if (!link.startsWith("http://www.ncbi.nlm.nih.gov/pubmed/")) {
-        Utils::Log::addError(this, tr("Wrong PubMed link %1").arg(link));
+//        LOG_ERROR(tr("Wrong PubMed link %1").arg(link));
         return false;
     }
     m_Pmid = link;
@@ -69,7 +72,7 @@ bool PubMedDownloader::setFullLink(const QString &link)
         m_Pmid = m_Pmid.mid(m_Pmid.indexOf("?"));
     }
     if (m_Pmid.contains(QRegExp("\\D"))) {
-        Utils::Log::addError(this, tr("Wrong PubMed link %1. Extract PMID %2").arg(link).arg(m_Pmid));
+//        LOG_ERROR(tr("Wrong PubMed link %1. Extract PMID %2").arg(link).arg(m_Pmid));
         m_Pmid.clear();
         return false;
     }
@@ -82,7 +85,7 @@ void PubMedDownloader::startDownload()
         Q_EMIT downloadFinished();
         return;
     }
-    qWarning() << "PubMedDownloader start" << QString(REFERENCE_URL).arg(m_Pmid);
+    qWarning() << "PubMedDownloader starts downloading of: " + QString(REFERENCE_URL).arg(m_Pmid);
     m_Reference.clear();
     m_Abstract.clear();
     manager->disconnect();
@@ -114,5 +117,26 @@ void PubMedDownloader::abstractFinished(QNetworkReply *reply)
     m_Abstract.replace("&gt;", ">");
     m_Abstract = m_Abstract.mid(b, e-b);
     manager->disconnect();
+    connect(manager, SIGNAL(finished(QNetworkReply*)), this, SLOT(xmlFinished(QNetworkReply*)));
+    manager->get(QNetworkRequest(QUrl(QString(XML_URL).arg(m_Pmid))));
+}
+
+void PubMedDownloader::xmlFinished(QNetworkReply *reply)
+{
+    qWarning() << "PubMedDownloader xml" << reply->url();
+    QDomDocument doc;
+    QString content = reply->readAll();
+    content.remove("<pre>");
+    content.remove("</pre>");
+    content.replace("&lt;","<");
+    content.replace("&gt;",">");
+    QString error;
+    int line, col;
+    if (!doc.setContent(content, &error, &line, &col)) {
+        qWarning() << Q_FUNC_INFO << error << line << col;
+    }
+    m_Xml = doc.toString(2);
+    manager->disconnect();
     Q_EMIT downloadFinished();
 }
+

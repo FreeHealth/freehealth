@@ -28,37 +28,51 @@
 
 #include <medicalutils/medical_exporter.h>
 #include <QVariant>
+#include <QDomDocument>
 
 namespace MedicalUtils {
 
 class MEDICALUTILS_EXPORT EbmData
 {
 public:
+    enum DataReference {
+        Link = 0,
+        PMID,
+        IsAPubMedExtraction,
+        AbstractPlainText,
+        CompleteReferences,
+        ShortReferences,
+        ReferencesCount
+    };
+
     EbmData();
     ~EbmData();
-
-    // QVector integration
-//    EbmData(const EbmData &other);
-//    EbmData &operator=(const EbmData &other);
 
     void setId(const QVariant &id) {m_Id = id;}
     QVariant id() const {return m_Id;}
 
-    void setAbstract(const QString &plainText);
-    void setReferences(const QString &plainText);
-    void setLink(const QString &url);
+    void setAbstract(const QString &plainText) {m_Abstract = plainText;}
+    void setReferences(const QString &plainText) {m_Ref = plainText;}
+    bool setPubMedXml(const QString &xml);
+    void setLink(const QString &url) {m_Link=url;}
+
+    QString data(const int reference) const;
 
     QString abstract() const {return m_Abstract;}
     QString references() const {return m_Ref;}
     QString link() const {return m_Link;}
-
-    void warn() const;
+    QString xmlEncoded() const {return m_PubMedXml;}
 
 private:
     QVariant m_Id;
-    QString m_Abstract, m_Ref, m_Link;
+    QString m_Abstract, m_Ref, m_Link, m_PubMedXml;
+    QDomDocument m_Doc;
 };
 
 }  // End namespace MedicalUtils
+
+QDebug operator<<(QDebug dbg, const MedicalUtils::EbmData &c);
+QDebug operator<<(QDebug dbg, const MedicalUtils::EbmData *c);
+
 
 #endif // EBMDATA_H

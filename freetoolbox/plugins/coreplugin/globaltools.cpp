@@ -497,7 +497,7 @@ int createNewDrugsSource(const QString &connection, const QString &uid, QMultiHa
     QSqlDatabase db = QSqlDatabase::database(connection);
     if (!db.isOpen()) {
         if (!db.open()) {
-            Utils::Log::addError("Tools","Unable to connection database", __FILE__, __LINE__);
+            LOG_ERROR_FOR("Tools","Unable to connection database");
             return -1;
         }
     }
@@ -514,7 +514,7 @@ int createNewDrugsSource(const QString &connection, const QString &uid, QMultiHa
             return sid;
         }
     } else {
-        Utils::Log::addQueryError("Tools", query, __FILE__, __LINE__);
+        LOG_QUERY_ERROR_FOR("Tools", query);
         return -1;
     }
     query.finish();
@@ -522,7 +522,7 @@ int createNewDrugsSource(const QString &connection, const QString &uid, QMultiHa
     // insert labels
     int masterLid = addLabels(connection, -1, trLabels);
     if (masterLid == -1) {
-        Utils::Log::addError("Tools","Unable to add source", __FILE__, __LINE__);
+        LOG_ERROR_FOR("Tools","Unable to add source");
         return -1;
     }
 
@@ -534,7 +534,7 @@ int createNewDrugsSource(const QString &connection, const QString &uid, QMultiHa
     if (query.exec(req)) {
         return query.lastInsertId().toInt();
     } else {
-        Utils::Log::addQueryError("Tools", query, __FILE__, __LINE__);
+        LOG_QUERY_ERROR_FOR("Tools", query);
     }
 
     return -1;
@@ -628,15 +628,16 @@ bool addRoutesToDatabase(const QString &connection, const QString &absFileName)
     QSqlDatabase db = QSqlDatabase::database(connection);
     if (!db.isOpen()) {
         if (!db.open()) {
-            Utils::Log::addError("Tools","Unable to connection database", __FILE__, __LINE__);
+            LOG_ERROR_FOR("Tools","Unable to connection database");
             return false;
         }
     }
     QString content = Utils::readTextFile(absFileName);
     if (content.isEmpty()) {
-        Utils::Log::addError("Tools","Routes file does not exist.\n" + absFileName, __FILE__, __LINE__);
+        LOG_ERROR_FOR("Tools","Routes file does not exist.\n" + absFileName);
         return false;
     }
+    LOG_FOR("Tools", "Adding routes to database from " + absFileName);
     db.transaction();
     // Read file
     foreach(const QString &line, content.split("\n", QString::SkipEmptyParts)) {
@@ -667,7 +668,7 @@ bool addRoutesToDatabase(const QString &connection, const QString &absFileName)
         // Push to database
         int masterLid = Tools::addLabels(connection, -1, trLabels);
         if (masterLid == -1) {
-            Utils::Log::addError("Tools", "Route not integrated", __FILE__, __LINE__);
+            LOG_ERROR_FOR("Tools", "Route not integrated");
             continue;
         }
         QString req = QString("INSERT INTO ROUTES (RID, MASTER_LID) VALUES (NULL, %1)")

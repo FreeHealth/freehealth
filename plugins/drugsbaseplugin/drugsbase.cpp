@@ -435,6 +435,7 @@ DrugsBase::DrugsBase(QObject *parent)
     addField(Table_BIB, BIB_TEXTREF, "TEXTUAL_REFERENCE");
     addField(Table_BIB, BIB_ABSTRACT, "ABSTRACT");
     addField(Table_BIB, BIB_EXPLAIN, "EXPLANATION");
+    addField(Table_BIB, BIB_XML, "XML");
 
     addField(Table_BIB_LINK, BIB_LINK_MASTERID, "BIB_MASTER_ID");
     addField(Table_BIB_LINK, BIB_LINK_BIBID, "BIB_ID");
@@ -1918,7 +1919,7 @@ QVector<int> DrugsBase::getAllMoleculeCodeWithAtcStartingWith(const QString &cod
     return getLinkedMoleculeCodes(atcIds);
 }
 
-QVector<MedicalUtils::EbmData *> DrugsBase::getAllSourcesFromTree(const QList<int> &allInnAndInteractingClassesIds)
+QVector<MedicalUtils::EbmData *> DrugsBase::getAllBibliographyFromTree(const QList<int> &allInnAndInteractingClassesIds)
 {
     QVector<MedicalUtils::EbmData *> ret;
     if (allInnAndInteractingClassesIds.isEmpty())
@@ -1953,6 +1954,7 @@ QVector<MedicalUtils::EbmData *> DrugsBase::getAllSourcesFromTree(const QList<in
             ebm->setLink(query.value(Constants::BIB_LINK).toString());
             ebm->setReferences(query.value(Constants::BIB_TEXTREF).toString());
             ebm->setAbstract(query.value(Constants::BIB_ABSTRACT).toString());
+            ebm->setPubMedXml(query.value(Constants::BIB_XML).toString());
             ret << ebm;
         }
     } else {

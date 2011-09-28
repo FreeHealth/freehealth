@@ -22,62 +22,68 @@
  *   Main Developper : Eric MAEKER, <eric.maeker@gmail.com>                *
  *   Contributors :                                                        *
  *       NAME <MAIL@ADRESS>                                                *
- *       NAME <MAIL@ADRESS>                                                *
  ***************************************************************************/
-#ifndef INTERACTIONSYNTHESISDIALOG_H
-#define INTERACTIONSYNTHESISDIALOG_H
+#include "ebmmodel.h"
+#include "ebmdata.h"
 
-#include <QDialog>
-QT_BEGIN_NAMESPACE
-class QTableWidgetItem;
-class QModelIndex;
-QT_END_NAMESPACE
+#include <QDebug>
 
-/**
- * \file interactionsynthesisdialog.h
- * \author Eric MAEKER <eric.maeker@gmail.com>
- * \version 0.6.0
- * \date 09 Mar 2011
-*/
+using namespace MedicalUtils;
 
-namespace DrugsDB {
-class DrugsModel;
-}
-
-namespace DrugsWidget {
-namespace Internal {
-class InteractionSynthesisDialogPrivate;
-}
-
-namespace Ui {
-    class InteractionSynthesisDialog;
-}
-
-class InteractionSynthesisDialog : public QDialog
+EbmModel::EbmModel(QObject *parent) :
+    QAbstractListModel(parent)
 {
-    Q_OBJECT
+}
 
-public:
-    explicit InteractionSynthesisDialog(DrugsDB::DrugsModel *drugModel, QWidget *parent = 0);
-    ~InteractionSynthesisDialog();
+EbmModel::~EbmModel()
+{
+}
 
-protected Q_SLOTS:
-//    void levelActivated(QAction *a);
-    void interactionActivated(const QModelIndex &current, const QModelIndex &previous);
-//    void interactorsActivated(QTableWidgetItem *item);
-    void on_getBiblio_clicked();
-    void showEbm(const QModelIndex &index);
-    void print(QAction *action);
-    void drugReportRequested();
+void EbmModel::clear()
+{
+    m_Ebms.clear();
+    reset();
+}
 
-protected:
-    void changeEvent(QEvent *e);
+QVariant EbmModel::data(const QModelIndex &index, int role) const
+{
+    if (!index.isValid())
+        return QVariant();
 
-private:
-    Internal::InteractionSynthesisDialogPrivate *d;
-};
+    if (index.row() >= m_Ebms.count())
+        return QVariant();
 
 
-}  // End namespace DrugsWidget
+    if (role==Qt::DisplayRole) {
 
-#endif // INTERACTIONSYNTHESISDIALOG_H
+        EbmData *e = m_Ebms.at(index.row());
+        if (!e) // should never the case
+            return QVariant();
+
+        switch (index.column()) {
+        case Link: return e->link();
+        {
+            QString t = e->link();
+            t = t.replace("http://www.ncbi.nlm.nih.gov/pubmed/", "PMID: ");
+            return t;
+        }
+        case References: return e->references();
+        case Abstract: return  e->abstract();
+        case ShortReferences: return e->data(EbmData::ShortReferences);
+        }
+    }
+    return QVariant();
+}
+
+Qt::ItemFlags EbmModel::flags(const QModelIndex &index) const
+{
+    Q_UNUSED(index);
+    return Qt::ItemIsEnabled | Qt::ItemIsSelectable;
+}
+
+void EbmModel::setEbmData(const QVector<EbmData *> &ebms)
+{
+    m_Ebms = ebms;
+    reset();
+}
+

@@ -130,7 +130,7 @@ public:
 
     QVector<int> getAllMoleculeCodeWithAtcStartingWith(const QString &code) const;
 
-    QVector<MedicalUtils::EbmData *> getAllSourcesFromTree(const QList<int> &allInnAndInteractingClassesIds);
+    QVector<MedicalUtils::EbmData *> getAllBibliographyFromTree(const QList<int> &allInnAndInteractingClassesIds);
 
 
 //protected:

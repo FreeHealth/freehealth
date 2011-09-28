@@ -22,62 +22,46 @@
  *   Main Developper : Eric MAEKER, <eric.maeker@gmail.com>                *
  *   Contributors :                                                        *
  *       NAME <MAIL@ADRESS>                                                *
- *       NAME <MAIL@ADRESS>                                                *
  ***************************************************************************/
-#ifndef INTERACTIONSYNTHESISDIALOG_H
-#define INTERACTIONSYNTHESISDIALOG_H
+#ifndef EBMMODEL_H
+#define EBMMODEL_H
 
-#include <QDialog>
-QT_BEGIN_NAMESPACE
-class QTableWidgetItem;
-class QModelIndex;
-QT_END_NAMESPACE
+#include <QAbstractListModel>
+#include <QVector>
 
-/**
- * \file interactionsynthesisdialog.h
- * \author Eric MAEKER <eric.maeker@gmail.com>
- * \version 0.6.0
- * \date 09 Mar 2011
-*/
+namespace MedicalUtils {
+class EbmData;
 
-namespace DrugsDB {
-class DrugsModel;
-}
-
-namespace DrugsWidget {
-namespace Internal {
-class InteractionSynthesisDialogPrivate;
-}
-
-namespace Ui {
-    class InteractionSynthesisDialog;
-}
-
-class InteractionSynthesisDialog : public QDialog
+class EbmModel : public QAbstractListModel
 {
     Q_OBJECT
-
 public:
-    explicit InteractionSynthesisDialog(DrugsDB::DrugsModel *drugModel, QWidget *parent = 0);
-    ~InteractionSynthesisDialog();
+    enum DataRepresentation {
+        Link = 0,
+        References,
+        ShortReferences,
+        Abstract,
+        ColumnCount
+    };
 
-protected Q_SLOTS:
-//    void levelActivated(QAction *a);
-    void interactionActivated(const QModelIndex &current, const QModelIndex &previous);
-//    void interactorsActivated(QTableWidgetItem *item);
-    void on_getBiblio_clicked();
-    void showEbm(const QModelIndex &index);
-    void print(QAction *action);
-    void drugReportRequested();
+    EbmModel(QObject *parent = 0);
+    ~EbmModel();
 
-protected:
-    void changeEvent(QEvent *e);
+    void clear();
+
+    int rowCount(const QModelIndex &parent = QModelIndex()) const {return m_Ebms.count();}
+    int columnCount(const QModelIndex &parent = QModelIndex()) const {return ColumnCount;}
+
+    QVariant data(const QModelIndex &index, int role = Qt::DisplayRole) const;
+    bool setData(const QModelIndex &index, const QVariant &value, int role = Qt::EditRole) {Q_UNUSED(index); Q_UNUSED(value); Q_UNUSED(role); return false;}
+    virtual Qt::ItemFlags flags(const QModelIndex &index) const;
+
+    void setEbmData(const QVector<EbmData *> &ebms);
 
 private:
-    Internal::InteractionSynthesisDialogPrivate *d;
+    QVector<EbmData *> m_Ebms;
 };
 
+}  // End namespace MedicalUtils
 
-}  // End namespace DrugsWidget
-
-#endif // INTERACTIONSYNTHESISDIALOG_H
+#endif // EBMMODEL_H

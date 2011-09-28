@@ -590,12 +590,14 @@ void InteractionStep::downloadNextSource()
     if (m_ActiveDownloadId == -1) {
         LOG("Gettings bibliographies to download");
         m_SourceToDownload.clear();
-        QString req = "SELECT `BIB_ID` FROM `BIBLIOGRAPHY` WHERE (`TEXTUAL_REFERENCE`='' AND `ABSTRACT`='');";
+        QString req = "SELECT `BIB_ID` FROM `BIBLIOGRAPHY` WHERE (`BIBLIOGRAPHY`.`XML` IS NULL);";
         QSqlQuery query(QSqlDatabase::database(Core::Constants::MASTER_DATABASE_NAME));
         if (query.exec(req)) {
             while (query.next()) {
                 m_SourceToDownload << query.value(0).toInt();
             }
+        } else {
+            LOG_QUERY_ERROR(query);
         }
         LOG(QString("Got %1 bibliographies to download").arg(m_SourceToDownload.count()));
         if (m_SourceToDownload.isEmpty()) {
@@ -610,11 +612,13 @@ void InteractionStep::downloadNextSource()
     } else {
         // Source retrieved
         QString req = QString("UPDATE `BIBLIOGRAPHY` SET "
-                              "`TEXTUAL_REFERENCE`=\"%1\", "
-                              "`ABSTRACT`=\"%2\" "
-                              "WHERE `BIB_ID`=%3;")
-                .arg(m_Downloader->reference().replace("\"","'"))
-                .arg(m_Downloader->abstract().replace("\"","'"))
+                              "`TEXTUAL_REFERENCE`='%1', "
+                              "`ABSTRACT`='%2', "
+                              "`XML`='%3' "
+                              "WHERE `BIB_ID`=%4;")
+                .arg(m_Downloader->reference().replace("'","''"))
+                .arg(m_Downloader->abstract().replace("'","''"))
+                .arg(m_Downloader->xmlEncoded().replace("'","''"))
                 .arg(m_ActiveDownloadId)
                 ;
         Core::Tools::executeSqlQuery(req, Core::Constants::MASTER_DATABASE_NAME, __FILE__, __LINE__);

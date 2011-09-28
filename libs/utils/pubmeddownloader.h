@@ -27,6 +27,7 @@
 #define PUBMEDDOWNLOADER_H
 
 #include <utils/global_exporter.h>
+
 #include <QObject>
 QT_BEGIN_NAMESPACE
 class QNetworkAccessManager;
@@ -48,6 +49,7 @@ public:
 
     QString reference() const {return m_Reference;}
     QString abstract() const {return m_Abstract;}
+    QString xmlEncoded() const {return m_Xml;}
 
 Q_SIGNALS:
     void downloadFinished();
@@ -58,10 +60,11 @@ public Q_SLOTS:
 private Q_SLOTS:
     void referencesFinished(QNetworkReply *reply);
     void abstractFinished(QNetworkReply *reply);
+    void xmlFinished(QNetworkReply *reply);
 
 private:
     QNetworkAccessManager *manager;
-    QString m_Pmid, m_Abstract, m_Reference;
+    QString m_Pmid, m_Abstract, m_Reference, m_Xml;
     bool m_DownloadingReferences;
 };
 
