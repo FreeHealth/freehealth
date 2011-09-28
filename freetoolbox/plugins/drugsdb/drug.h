@@ -45,11 +45,11 @@ public:
         Name,
         AtcCode,
         AtcId,
-        Strength,
+        Strength,     // 10
         Forms,
-        Routes,
+        Routes,       // 12
         FormsId,
-        RoutesId,
+        RoutesId,     // 14
         Authorization,
         Valid,
         Marketed,
@@ -75,5 +75,8 @@ public:
 private:
     DrugPrivate *d;
 };
+
+QDebug operator<<(QDebug dbg, const Drug *d);
+
 
 #endif // DRUG_H

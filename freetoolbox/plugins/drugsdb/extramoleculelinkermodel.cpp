@@ -699,7 +699,20 @@ QMultiHash<int, int> ExtraMoleculeLinkerModel::moleculeLinker
                         }
                     }
                 }
-
+                if (atcIds.count()==0) {
+                    // Manage (DINITRATE D')
+                    if (molName.contains("(DINITRATE D')")) {
+                        QString tmp = molName;
+                        tmp = tmp.remove("(DINITRATE D')");
+                        tmp += "DINITRATE";
+                        atcIds = atcName_id.values(tmp);
+                        if (atcIds.count()) {
+                            molName = tmp;
+                            qWarning() << "With DINITRATE"<< molName << ">>>>>>>>" << tmp << atcIds;
+                            break;
+                        }
+                    }
+                }
             }
             bool found = false;
             foreach(int id, atcIds) {

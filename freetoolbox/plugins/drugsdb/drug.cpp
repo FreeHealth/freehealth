@@ -76,10 +76,14 @@ bool Drug::setData(const int ref, const QVariant &value, const QString &lang)
     switch (ref) {
     case Routes:
         {
-            d->m_Content[Drug::Routes].insertMulti(lang, value);
             // calculate RIDs
             QList<QVariant> rids;
-            foreach(const QString &route, value.toStringList()) {
+            QStringList routes = value.toStringList();
+            routes.removeAll("");
+            routes.removeDuplicates();
+            d->m_Content[Drug::Routes].insertMulti(lang, routes);
+            foreach(QString route, routes) {
+                route = route.toLower().simplified();
                 QSqlDatabase db = QSqlDatabase::database(Core::Constants::MASTER_DATABASE_NAME);
                 QString req;
                 QSqlQuery query(db);
@@ -97,9 +101,10 @@ bool Drug::setData(const int ref, const QVariant &value, const QString &lang)
                 } else {
                     LOG_QUERY_ERROR_FOR("Drug", query);
                 }
-                if (rids.count()) {
+                if (rids.count() > 0) {
                     d->m_Content[Drug::RoutesId].insertMulti(lang, rids);
-                    continue;
+                } else {
+                    LOG_ERROR_FOR("Drug", "RouteID not found for " + route);
                 }
             }
             break;
@@ -154,7 +159,7 @@ bool Drug::toDatabase(const QString &dbConnection,
     if (query.exec(req)) {
         setData(DID, query.lastInsertId());
     } else {
-        Utils::Log::addQueryError("Drugs", query, __FILE__, __LINE__);
+        LOG_QUERY_ERROR_FOR("Drugs", query);
         db.rollback();
         return false;
     }
@@ -186,7 +191,7 @@ bool Drug::toDatabase(const QString &dbConnection,
     req.replace(",,", ", NULL ,");
 
     if (!query.exec(req)) {
-        Utils::Log::addQueryError("Drugs", query, __FILE__, __LINE__);
+        LOG_QUERY_ERROR_FOR("Drugs", query);
         db.rollback();
         return false;
     }
@@ -207,7 +212,7 @@ bool Drug::toDatabase(const QString &dbConnection,
                 .arg(compo->data(Component::NatureLink).toString())
                 ;
         if (!query.exec(req)) {
-            Utils::Log::addQueryError("Drugs", query, __FILE__, __LINE__);
+            LOG_QUERY_ERROR_FOR("Drugs", query);
             db.rollback();
             return false;
         }
@@ -223,7 +228,7 @@ bool Drug::toDatabase(const QString &dbConnection,
                   .arg(data(Drug::DID).toInt())
                   .arg(rid.toString());
             if (!query.exec(req)) {
-                Utils::Log::addQueryError("Drugs", query, __FILE__, __LINE__);
+                LOG_QUERY_ERROR_FOR("Drugs", query);
                 db.rollback();
             }
             query.finish();
@@ -235,13 +240,13 @@ bool Drug::toDatabase(const QString &dbConnection,
     if (!d->m_Content.value(Drug::Forms).isEmpty()) {
         int formsMasterId = Core::Tools::addLabels(Core::Constants::MASTER_DATABASE_NAME, -1, d->m_Content.value(Drug::Forms));
         if (formsMasterId==-1) {
-            Utils::Log::addError("Drug", "Forms not saved", __FILE__, __LINE__);
+            LOG_ERROR_FOR("Drug", "Forms not saved");
         }
         // Add formsMasterId to DRUGS record
         req = QString("INSERT INTO DRUG_FORMS (DID,MASTER_LID) VALUES (%1,%2)")
               .arg(data(DID).toString()).arg(formsMasterId);
         if (!query.exec(req)) {
-            Utils::Log::addQueryError("Drugs", query, __FILE__, __LINE__);
+            LOG_QUERY_ERROR_FOR("Drugs", query);
             db.rollback();
             return false;
         }
@@ -262,7 +267,7 @@ bool Drug::saveDrugsIntoDatabase(const QString &connection, QVector<Drug *> drug
 {
     int sid = Core::Tools::getSourceId(connection, dbUid);
     if (sid==-1) {
-        Utils::Log::addError("Drug", "NO SID DEFINED", __FILE__, __LINE__);
+        LOG_ERROR_FOR("Drug", "NO SID DEFINED");
         return false;
     }
 
@@ -298,3 +303,19 @@ bool Drug::saveDrugsIntoDatabase(const QString &connection, QVector<Drug *> drug
     }
     return true;
 }
+
+QDebug operator<<(QDebug dbg, const Drug *d)
+{
+    dbg.nospace() << "Drug(Uids:" << d->data(Drug::Uid1).toString() << ";" << d->data(Drug::Uid2).toString() << ";"<< d->data(Drug::Uid3).toString() << ";" << d->data(Drug::OldUid).toString()
+                  << "; DID:" << d->data(Drug::DID).toString()
+                  << "; SID:" << d->data(Drug::SID).toString()
+                  << "\n   Name:" << d->data(Drug::Name).toString()
+                  << "\n   Strength:" << d->data(Drug::Strength).toString()
+                  << "\n   Forms:" << d->data(Drug::Forms).toStringList().join(",")
+                  << "\n   Routes:" << d->data(Drug::Routes).toStringList().join(",")
+                  << "\n   FormsId:" << d->data(Drug::FormsId).toStringList().join(",")
+                  << "\n   RoutesId:" << d->data(Drug::RoutesId).toStringList().join(",")
+                  << ")";
+    return dbg.space();
+}
+

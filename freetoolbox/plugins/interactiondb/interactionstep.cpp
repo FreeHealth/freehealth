@@ -573,7 +573,7 @@ bool InteractionStep::computeModelsAndPopulateDatabase()
 void InteractionStep::downloadNextSource()
 {
     static int maxDownloads = 0;
-    qWarning() << "download" << m_ActiveDownloadId;
+    WARN_FUNC << m_ActiveDownloadId;
     if (!m_Downloader) {
         Q_EMIT progressLabelChanged(tr("Downloading bibliographic data"));
         Q_EMIT progressRangeChanged(0, 1);
@@ -588,14 +588,16 @@ void InteractionStep::downloadNextSource()
 
     // If first call --> get all sources to download
     if (m_ActiveDownloadId == -1) {
+        LOG("Gettings bibliographies to download");
         m_SourceToDownload.clear();
-        QString req = "SELECT `ID` FROM `SOURCES` WHERE (`TEXTUAL_REFERENCE` IS NULL AND `ABSTRACT` IS NULL);";
+        QString req = "SELECT `BIB_ID` FROM `BIBLIOGRAPHY` WHERE (`TEXTUAL_REFERENCE`='' AND `ABSTRACT`='');";
         QSqlQuery query(QSqlDatabase::database(Core::Constants::MASTER_DATABASE_NAME));
         if (query.exec(req)) {
             while (query.next()) {
                 m_SourceToDownload << query.value(0).toInt();
             }
         }
+        LOG(QString("Got %1 bibliographies to download").arg(m_SourceToDownload.count()));
         if (m_SourceToDownload.isEmpty()) {
             delete m_Downloader;
             m_Downloader = 0;
@@ -607,10 +609,10 @@ void InteractionStep::downloadNextSource()
         m_ActiveDownloadId = m_SourceToDownload.first();
     } else {
         // Source retrieved
-        QString req = QString("UPDATE `SOURCES` SET "
+        QString req = QString("UPDATE `BIBLIOGRAPHY` SET "
                               "`TEXTUAL_REFERENCE`=\"%1\", "
                               "`ABSTRACT`=\"%2\" "
-                              "WHERE `ID`=%3;")
+                              "WHERE `BIB_ID`=%3;")
                 .arg(m_Downloader->reference().replace("\"","'"))
                 .arg(m_Downloader->abstract().replace("\"","'"))
                 .arg(m_ActiveDownloadId)
@@ -638,7 +640,7 @@ void InteractionStep::downloadNextSource()
 
     // Get link
     QString link;
-    QString req = QString("SELECT `LINK` FROM `SOURCES` WHERE (`ID`=%1 AND `LINK` NOT NULL) LIMIT 1;").arg(m_ActiveDownloadId);
+    QString req = QString("SELECT `LINK` FROM `BIBLIOGRAPHY` WHERE (`BIB_ID`=%1 AND `LINK` NOT NULL) LIMIT 1;").arg(m_ActiveDownloadId);
     QSqlQuery query(QSqlDatabase::database(Core::Constants::MASTER_DATABASE_NAME));
     if (query.exec(req)) {
         if (query.next()) {
@@ -657,6 +659,7 @@ void InteractionStep::downloadNextSource()
 
     // Start pubmed downloader
     if (m_Downloader->setFullLink(link)) {
+        LOG(QString("Downloading (id:%1) link: %2").arg(m_ActiveDownloadId).arg(link));
         m_Downloader->startDownload();
     } else {
         LOG_ERROR("Unable to download pubmed link " + link);

@@ -3,71 +3,81 @@
 -- [EN] http://www.freemedforms.com/en/manuals/freediams/database_routes_schema
 
 1, "fr:auriculaire","en:auricular","en:otic","de:aurikulär","systemic:no"
-2, "fr:buccale","en:buccal","de:buccal","systemic:"
-3, "fr:cutanée","en:dermal","de:dermal","en:topical","en:topical (hospital/hc facilities)","en:topical (household)","systemic:"
-4, "fr:dentaire","en:dental","de:dental","systemic:"
-5, "fr:endocanalaire","en:intraductal","de:intraduktal","systemic:"
-6, "fr:endocervicale","en:endocervical","de:endozervikal","systemic:"
-7, "fr:endosinusale","en:endosinusale","de:endosinusal","systemic:"
+2, "fr:buccale","en:buccal","en:buccal/sublingual","de:buccal","systemic:partial"
+3, "fr:cutanée","en:dermal","de:dermal","en:topical","en:topical (hospital/hc facilities)","en:topical (household)","systemic:partial"
+4, "fr:dentaire","en:dental","de:dental","systemic:no"
+5, "fr:endocanalaire","en:intraductal","de:intraduktal","systemic:unknown"
+6, "fr:endocervicale","en:endocervical","de:endozervikal","systemic:unknown"
+7, "fr:endosinusale","en:endosinusale","de:endosinusal","systemic:unknown"
 8, "fr:endotrachéobronchique","en:endotracheobronchial","en:intrapulmonary","de:endotracheobronchial","systemic:yes"
-9, "fr:gastrique","en:gastric","de:gastral","systemic:"
-10, "fr:gastro-entérale","en:gastro-enteral","de:gastroenteral","systemic:"
-11, "fr:gingivale","en:gingival","de:gingival","systemic:"
-12, "fr:hémodialyse","en:hemodialysis","en:dialysis","de:hämodialyse","systemic:"
-13, "fr:hémofiltration","en:hemofiltration","de:hämofiltration","systemic:"
-14, "fr:implantation","en:implantation","en:implant","de:implantation","systemic:"
-15, "fr:infiltration","en:infiltration","en:block/infiltration","de:infiltration","systemic:"
+9, "fr:gastrique","en:gastric","de:gastral","systemic:yes"
+10, "fr:gastro-entérale","en:gastro-enteral","de:gastroenteral","systemic:yes"
+11, "fr:gingivale","en:gingival","de:gingival","systemic:partial"
+12, "fr:hémodialyse","en:hemodialysis","en:dialysis","de:hämodialyse","systemic:yes"
+13, "fr:hémofiltration","en:hemofiltration","de:hämofiltration","systemic:yes"
+14, "fr:implantation","en:implantation","en:implant","de:implantation","systemic:yes"
+15, "fr:infiltration","en:infiltration","en:block/infiltration","de:infiltration","systemic:partial"
 16, "fr:inhalée","en:inhaled","en:inhalation","de:inhalativ","systemic:yes"
-17, "fr:intestinale","en:intestinal","de:intestinal","systemic:"
-18, "fr:intra-articulaire","en:intra-articular","de:intraartikulär","systemic:"
-19, "fr:intra-artérielle","en:intra-arterial","en:intravascular","de:intraarteriell","systemic:"
-20, "fr:intra-gingivale","en:intra-gingival","de:intragingival","systemic:"
-21, "fr:intra-murale","en:intramural","de:intramural","systemic:"
-22, "fr:intra-oculaire","en:intraocular","de:intraokulär","systemic:"
-23, "fr:intra-utérine","en:intrauterine","de:intrauterin","systemic:"
-24, "fr:intrabursale","en:intrabursal","de:intrabursal","systemic:"
-25, "fr:intracardiaque","en:intracardiac","de:intrakardial","systemic:yes"
-26, "fr:intracaverneuse","en:intracavernous","en:intracavernosal","de:intrakavernal","systemic:"
-27, "fr:intracervicale","en:intracervical","de:intrazervikal","systemic:"
-28, "fr:intracisternale","en:intracisternal","de:intrazisternal","systemic:"
+17, "fr:intestinale","en:intestinal","de:intestinal","systemic:yes"
+18, "fr:intra-articulaire","en:intra-articular","de:intraartikulär","systemic:partial"
+19, "fr:intra-artérielle","en:intra-arterial","en:intravascular","de:intraarteriell","systemic:yes"
+20, "fr:intra-gingivale","en:intra-gingival","de:intragingival","systemic:partial"
+21, "fr:intra-murale","en:intramural","de:intramural","systemic:partial"
+22, "fr:intra-oculaire","en:intraocular","de:intraokulär","systemic:partial"
+23, "fr:intra-utérine","en:intrauterine","de:intrauterin","systemic:no"
+24, "fr:intrabursale","en:intrabursal","de:intrabursal","systemic:no"
+25, "fr:intracardiaque","en:intracardiac","en:cardiac","de:intrakardial","systemic:yes"
+26, "fr:intracaverneuse","en:intracavernous","en:intracavernosal","de:intrakavernal","systemic:yes"
+27, "fr:intracervicale","en:intracervical","de:intrazervikal","systemic:no"
+28, "fr:intracisternale","en:intracisternal","de:intrazisternal","systemic:unknown"
 29, "fr:intracoronaire","en:intracoronary","de:intrakoronär","systemic:yes"
-30, "fr:intradermique","en:intradermal","de:intradermal","systemic:"
-31, "fr:intradiscale","en:intradiscal","de:intradiskal","systemic:"
-32, "fr:intradurale","en:intradural","de:intradural","systemic:"
+30, "fr:intradermique","en:intradermal","de:intradermal","systemic:partial"
+31, "fr:intradiscale","en:intradiscal","de:intradiskal","systemic:no"
+32, "fr:intradurale","en:intradural","de:intradural","systemic:partial"
 33, "fr:intralymphatique","en:intralymphatic","en:intraganglional","de:intralymphatisch","systemic:yes"
 34, "fr:intralésionnelle","en:intralesional","de:intraläsional","systemic:yes"
-35, "fr:intramusculaire","en:intramuscular","de:intramuskulär","systemic:yes"
+35, "fr:intramusculaire","en:intramuscular","en:im-sc","en:im-iv","en:im-iv-sc","de:intramuskulär","systemic:yes"
 36, "fr:intrapleurale","en:intrapleural","de:interpleural","systemic:yes"
 37, "fr:intrapéricardiaque","en:intrapericardial","de:intraperikardial","systemic:yes"
 38, "fr:intrapéritonéale","en:intraperitoneal","de:intraperitoneal","systemic:yes"
-39, "fr:intraséreuse","en:intraseral","de:intraseral","systemic:"
+39, "fr:intraséreuse","en:intraseral","de:intraseral","systemic:no"
 40, "fr:intrathécale","en:intrathecal","de:intrathekal","systemic:yes"
 41, "fr:intratumorale","en:intratumoral","de:intratumoral","systemic:yes"
-42, "fr:intraveineuse","en:intravenous","de:intravenös","systemic:yes"
-43, "fr:intraventriculaire cérébrale","en:intraventricular (cerebral)","de:intraventrikulär (Gehirn)","systemic:"
-44, "fr:intravitréenne","en:intravitreal","de:intravitreal","systemic:"
-45, "fr:intravésicale","en:intravesical","de:intravesikal","systemic:"
-46, "fr:nasale","en:nasal","nasal","systemic:"
-47, "fr:ophtalmique","en:ophthalmic","de:opthalmisch","systemic:"
-48, "fr:orale","en:oral","de:oral","systemic:yes"
-49, "fr:oropharyngée","en:oropharyngeal","de:oropharyngeal","systemic:"
-50, "fr:périarticulaire","en:periarticular","de:periartikulär","systemic:"
-51, "fr:péribulbaire","en:peribulbar","de:peribulbär","systemic:"
-52, "fr:péridurale","en:epidural","de:epidural","systemic:"
-53, "fr:périneurale","en:perineural","de:perineural","systemic:"
-54, "fr:périoculaire","en:periocular","de:periokulär","systemic:"
+42, "fr:intraveineuse","en:intravenous","en:im-iv","en:iv-sc","en:im-iv-sc","de:intravenös","systemic:yes"
+43, "fr:intraventriculaire cérébrale","en:intraventricular (cerebral)","de:intraventrikulär (Gehirn)","systemic:yes"
+44, "fr:intravitréenne","en:intravitreal","de:intravitreal","systemic:partial"
+45, "fr:intravésicale","en:intravesical","de:intravesikal","systemic:no"
+46, "fr:nasale","en:nasal","nasal","systemic:yes"
+47, "fr:ophtalmique","en:ophthalmic","de:opthalmisch","systemic:partial"
+48, "fr:orale","en:oral","en:oral-20","en:oral-21","en:oral-28","en:orally disintegrating","de:oral","systemic:yes"
+49, "fr:oropharyngée","en:oropharyngeal","de:oropharyngeal","systemic:partial"
+50, "fr:périarticulaire","en:periarticular","de:periartikulär","systemic:partial"
+51, "fr:péribulbaire","en:peribulbar","de:peribulbär","systemic:yes"
+52, "fr:péridurale","en:epidural","de:epidural","systemic:yes"
+53, "fr:périneurale","en:perineural","de:perineural","systemic:yes"
+54, "fr:périoculaire","en:periocular","de:periokulär","systemic:unknown"
 55, "fr:rectale","en:rectal","de:rektal","systemic:yes"
-56, "fr:sous-cutanée","en:subcutaneous","de:subkutan","systemic:yes"
-57, "fr:sublinguale","en:sublingual","de:sublingual","systemic:yes"
+56, "fr:sous-cutanée","en:subcutaneous","en:im-sc","en:iv-sc","en:iv (infusion)-sc","en:im-iv-sc","de:subkutan","systemic:yes"
+57, "fr:sublinguale","en:sublingual","en:buccal/sublingual","de:sublingual","systemic:yes"
 58, "fr:transdermique","en:transdermal","de:transdermal","systemic:yes"
-59, "fr:urétrale","en:urethral","de:urethral","systemic:"
-60, "fr:vaginale","en:vaginal","de:vaginal","systemic:"
-61, "fr:voie extra corporelle autre","en:other extra-corporal","de:anderweitig extrakorporal","systemic:"
+59, "fr:urétrale","en:urethral","de:urethral","systemic:no"
+60, "fr:vaginale","en:vaginal","de:vaginal","systemic:partial"
+61, "fr:voie extra corporelle autre","en:other extra-corporal","de:anderweitig extrakorporal","systemic:no"
 62, "fr:voie parentérale autre","en:other parenteral","en:parenteral (unspecified)","de:anderweitig parenteral","systemic:yes"
-63, "fr:épilésionnelle","en:epilesional","de:epiläsional","systemic:"
-64, "fr:percutanée","en:percutaneous","de:perkutan","systemic:"
-65, "fr:intratendineuse","en:intratendinous","de:intratendinös","systemic:"
-1000, "fr:Non assigné","en:0-unassigned","en:unassigned","de:nicht zugeordnet","systemic:"
+63, "fr:épilésionnelle","en:epilesional","de:epiläsional","systemic:yes"
+64, "fr:percutanée","en:percutaneous","de:perkutan","systemic:yes"
+65, "fr:intratendineuse","en:intratendinous","de:intratendinös","systemic:partial"
+66, "fr:injection","en:injection","en:dilution injection","de:injektion","systemic:yes"
+67, "fr:intramammaire","en:intramammary","de:intramammären","systemic:yes"
+68, "fr:intracavitaire","en:intracavitary","de:intrakavitäre","systematic:partial"
+69, "fr:intra-amniotique","en:intra-amniotic","de:intra-fruchtwasser","systematic:unknown"
+70, "fr:instillation","en:instillation","de:instillation","systematic:unknown"
+71, "fr:intratrachéal","en:intratracheal","de:intratrachealer","systematic:yes"
+72, "fr:intraveineux (infusion)","en:intravenous (infusion)","en:iv (infusion)-sc","en:iv (infusion)","de:intravenös (infusion)","systematic:yes"
+73, "fr:urétérale","en:ureteral","de:harnleiter","systemic:unknown"
+74, "fr:irrigation","en:irrigation","de:bewässerung","systematic:no"
+75, "fr:trans-muqueux","en:transmucosal","de:transmukosale","systemic:partial"
+1000, "fr:Non assigné","en:0-unassigned","en:unassigned","en:n/a","en:miscellaneous","en:******","en:single-use","en:multidose","de:nicht zugeordnet","systemic:no"
 
 
 
@@ -79,16 +89,11 @@
 -- DISINFECTANT (Hospital/HC Facilities)
 -- DISINFECTANT (Institutional/Industrial)
 -- DISINFECTANT (Medical Instruments)
--- INTRAMAMMARY
--- IRRIGATION
--- INSTILLATION
--- INTRA-AMNIOTIC
 -- INTRABRACHIAL
 -- INTRACAUDAL
--- INTRACAVITARY
--- INTRACRANIAL
+-- INTRACRANIAL  //  intracranial
 -- INTRAINTESTINAL (UPPER)
--- INTRASPINAL
+-- INTRASPINAL  // spinal
 -- INTRASYNOVIAL
 -- INTRAVESICULAR
 -- LABORATORY TEST
@@ -101,3 +106,7 @@
 -- UDDER WASH
 -- REFER (SEE DOSAGE FORM)
 -- SOFT TISSUE INJECTION
+-- iontophoresis
+-- biliary
+-- for rx compounding
+-- intra-anal

@@ -103,6 +103,20 @@ QStringList SearchAtcInDatabaseDialog::getSelectedCodes()
     QModelIndexList list = ui->tableView->selectionModel()->selectedIndexes();
     QStringList ret;
     foreach(const QModelIndex &idx, list) {
+        ret << d->m_Model->index(idx.row(), 0).data().toString();
+    }
+    ret.removeDuplicates();
+    qSort(ret);
+    return ret;
+}
+
+QStringList SearchAtcInDatabaseDialog::getSelectedLabels()
+{
+    if (!ui->tableView->selectionModel()->hasSelection())
+        return QStringList();
+    QModelIndexList list = ui->tableView->selectionModel()->selectedIndexes();
+    QStringList ret;
+    foreach(const QModelIndex &idx, list) {
         ret << d->m_Model->index(idx.row(), 1).data().toString();
     }
     ret.removeDuplicates();

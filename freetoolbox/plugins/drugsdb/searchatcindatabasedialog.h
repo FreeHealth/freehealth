@@ -20,6 +20,7 @@ public:
     ~SearchAtcInDatabaseDialog();
 
     QStringList getSelectedCodes();
+    QStringList getSelectedLabels();
 
 private Q_SLOTS:
     void setFilter();

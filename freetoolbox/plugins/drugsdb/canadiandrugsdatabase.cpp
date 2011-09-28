@@ -397,12 +397,15 @@ bool CaDrugDatatabaseStep::populateDatabase()
     pos = 0;
     foreach(const int uid, uid_drugs.keys()) {
         Drug *drug = uid_drugs[uid];
+        QStringList strength;
         int i = 0;
         foreach(Component *c, uid_compos.values(uid)) {
             ++i;
             c->setData(Component::NatureLink, i);
             drug->addComponent(c);
+            strength.append(c->data(Component::Strength).toString() + c->data(Component::StrengthUnit).toString());
         }
+        drug->setData(Drug::Strength, strength.join(";"));
         drugsVector << drug;
         ++ pos;
         if (pos % 10 == 0)

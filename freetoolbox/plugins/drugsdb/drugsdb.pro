@@ -60,7 +60,8 @@ FORMS += \
 OTHER_FILES += \
     ../global_resources/sql/drugs_schema.sql \
     ../global_resources/sql/moleculetoatclinker.xml \
-    ../global_resources/sql/atc_utf8.csv \
+    ../global_resources/sql/ia/atc_utf8.csv \
+    ../global_resources/sql/drugdb/routes.txt \
     ../global_resources/sql/drugdb/newdbschema.sql \
     ../global_resources/sql/drugdb/dbschema060_queries.sql \
     ../global_resources/sql/drugdb/be/be_db_finalize.sql \

@@ -186,10 +186,11 @@ public:
 
         // Get form
         QString forms = vals.at(2);
+
         if (forms.contains(";")) {
             int begin = forms.lastIndexOf(";") + 2;
-            route = forms.mid(begin);
-            form = forms.left(begin - 2);
+            route = forms.mid(begin).toLower().simplified();
+            form = forms.left(begin - 2).toLower().simplified();
         } else {
             form = vals.at(2);
         }
@@ -245,7 +246,8 @@ public:
         drug->setData(Drug::OldUid, uid1 + uid2);
         drug->setData(Drug::Name, name);
         drug->setData(Drug::Forms, form);
-        drug->setData(Drug::Routes, route);
+        drug->setData(Drug::Routes, route.split(","));
+        drug->setData(Drug::Strength, globalStrength);
         drug->setData(Drug::Authorization, "");
         drug->setData(Drug::Marketed, "");
         drug->setData(Drug::Spc, "");
@@ -262,10 +264,6 @@ public:
             drug->addComponent(compo);
         }
         return drug;
-    }
-
-    void warn() {
-        qWarning() << uid1 << uid2 << name << globalStrength << form << route << mols_strength;
     }
 
     bool operator<(const Parser &other) const
@@ -388,6 +386,16 @@ bool FdaDrugDatatabaseStep::populateDatabase()
 
 bool FdaDrugDatatabaseStep::linkMolecules()
 {
+    // 28 Sept 2011 (using EN translations of ATC labels)
+    //    NUMBER OF MOLECULES 2014
+    //    CORRECTED BY NAME 11
+    //    CORRECTED BY ATC 0
+    //    FOUNDED 1529 "
+    //    LINKERMODEL (WithATC:262;WithoutATC:1) 263"
+    //    LINKERNATURE 0
+    //    LEFT 484
+    //    CONFIDENCE INDICE 75
+
     // 28 APR 2011
     //    NUMBER OF MOLECULES 2000
     //    CORRECTED BY NAME 11
@@ -456,7 +464,7 @@ bool FdaDrugDatatabaseStep::linkMolecules()
 
     // Associate Mol <-> ATC for drugs with one molecule only
     QStringList unfound;
-    QMultiHash<int, int> mol_atc = ExtraMoleculeLinkerModel::instance()->moleculeLinker(FDA_DRUGS_DATABASE_NAME, "fr", &unfound, corrected, QMultiHash<QString, QString>());
+    QMultiHash<int, int> mol_atc = ExtraMoleculeLinkerModel::instance()->moleculeLinker(FDA_DRUGS_DATABASE_NAME, "en", &unfound, corrected, QMultiHash<QString, QString>());
     qWarning() << "unfound" << unfound.count();
 
     Q_EMIT progress(1);
