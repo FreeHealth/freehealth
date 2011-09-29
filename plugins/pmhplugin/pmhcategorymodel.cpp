@@ -270,6 +270,8 @@ public:
             // Do not include the episodes
             if (!model->isForm(idx))
                 continue;
+            if (model->isLastEpisodeIndex(idx))
+                continue;
             TreeItem *newItem = new TreeItem(parentItem);
             newItem->setLabel(idx.data().toString());
             newItem->setForm(model->formForIndex(idx), model);
@@ -299,6 +301,7 @@ public:
                 if (!forms.isEmpty()) {
                     // Create the EpisodeModel with the form
                     Form::EpisodeModel *model = new Form::EpisodeModel(forms.at(0), q);
+                    model->init(false);
                     // Translate all modelindex to TreeItem
                     episodeModelToTreeItem(forms.at(0), item, model);
                 }

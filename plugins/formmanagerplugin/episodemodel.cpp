@@ -334,6 +334,7 @@ public:
         m_ActualEpisode(0),
         m_CoreListener(0),
         m_PatientListener(0),
+        m_AddLastEpisodeIndex(true),
         q(parent)
     {
     }
@@ -370,8 +371,10 @@ public:
             LOG_FOR(q, "Getting Forms");
 
         // add the form synthesis item
-        m_ShowLastEpisodes = new EpisodeModelTreeItem(m_RootItem);
-        m_RootItem->appendChild(m_ShowLastEpisodes);
+        if (m_AddLastEpisodeIndex) {
+            m_ShowLastEpisodes = new EpisodeModelTreeItem(m_RootItem);
+            m_RootItem->appendChild(m_ShowLastEpisodes);
+        }
 
         // create one item per form
         foreach(Form::FormMain *form, m_RootForm->flattenFormMainChildren()) {
@@ -673,6 +676,8 @@ public:
     EpisodeModelCoreListener *m_CoreListener;
     EpisodeModelPatientListener *m_PatientListener;
 
+    bool m_AddLastEpisodeIndex;
+
 private:
     EpisodeModel *q;
 };
@@ -700,10 +705,10 @@ EpisodeModel::EpisodeModel(FormMain *rootEmptyForm, QObject *parent) :
     init();
 }
 
-void EpisodeModel::init()
+void EpisodeModel::init(bool addLastEpisodeIndex)
 {
     d->m_UserUuid = user()->uuid();
-
+    d->m_AddLastEpisodeIndex = addLastEpisodeIndex;
     d->m_CurrentPatient = patient()->uuid();
     d->createFormTree();
 
@@ -1111,6 +1116,16 @@ bool EpisodeModel::isReadOnly() const
 /** Return true if the model has unsaved data */
 bool EpisodeModel::isDirty() const
 {
+    return false;
+}
+
+bool EpisodeModel::isLastEpisodeIndex(const QModelIndex &index) const
+{
+    if (!index.isValid())
+        return false;
+    EpisodeModelTreeItem *it = d->getItem(index);
+    if (it==d->m_ShowLastEpisodes)
+        return true;
     return false;
 }
 

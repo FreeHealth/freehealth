@@ -92,7 +92,7 @@ public:
 
     EpisodeModel(Form::FormMain *rootEmptyForm, QObject *parent = 0);
     virtual ~EpisodeModel();
-    void init();
+    void init(bool addLastEpisodeIndex = true);
     void refreshFormTree();
 
     QModelIndex index(int row, int column, const QModelIndex &parent = QModelIndex()) const;
@@ -119,6 +119,7 @@ public:
     void setReadOnly(const bool state);
     bool isReadOnly() const;
     bool isDirty() const;
+    bool isLastEpisodeIndex(const QModelIndex &index) const;
 
     Form::FormMain *formForIndex(const QModelIndex &index) const;
     QModelIndex indexForForm(const QString &formUid) const;
