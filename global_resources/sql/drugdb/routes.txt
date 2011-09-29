@@ -3,8 +3,8 @@
 -- [EN] http://www.freemedforms.com/en/manuals/freediams/database_routes_schema
 
 1, "fr:auriculaire","en:auricular","en:otic","de:aurikulär","systemic:no"
-2, "fr:buccale","en:buccal","en:buccal/sublingual","de:buccal","systemic:partial"
-3, "fr:cutanée","en:dermal","de:dermal","en:topical","en:topical (hospital/hc facilities)","en:topical (household)","systemic:partial"
+2, "fr:buccale","fr:voie buccale autre","en:buccal","en:buccal/sublingual","de:buccal","systemic:partial"
+3, "fr:cutanée","en:dermal","de:dermal","en:topical","en:topical (hospital/hc facilities)","en:topical (household)","en:topical (commercial)","systemic:partial"
 4, "fr:dentaire","en:dental","de:dental","systemic:no"
 5, "fr:endocanalaire","en:intraductal","de:intraduktal","systemic:unknown"
 6, "fr:endocervicale","en:endocervical","de:endozervikal","systemic:unknown"
@@ -62,7 +62,7 @@
 58, "fr:transdermique","en:transdermal","de:transdermal","systemic:yes"
 59, "fr:urétrale","en:urethral","de:urethral","systemic:no"
 60, "fr:vaginale","en:vaginal","de:vaginal","systemic:partial"
-61, "fr:voie extra corporelle autre","en:other extra-corporal","de:anderweitig extrakorporal","systemic:no"
+61, "fr:voie extra corporelle autre","fr:voie extracorporelle autre","en:other extra-corporal","de:anderweitig extrakorporal","systemic:no"
 62, "fr:voie parentérale autre","en:other parenteral","en:parenteral (unspecified)","de:anderweitig parenteral","systemic:yes"
 63, "fr:épilésionnelle","en:epilesional","de:epiläsional","systemic:yes"
 64, "fr:percutanée","en:percutaneous","de:perkutan","systemic:yes"
