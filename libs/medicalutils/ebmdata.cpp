@@ -281,7 +281,9 @@ bool EbmData::setPubMedXml(const QString &xml)
     int line, col;
     if (!m_Doc.setContent(xml, &error, &line, &col)) {
         qWarning() << "ERROR" << error << line << col;
+        return false;
     }
+    return true;
 }
 
 QString EbmData::data(const int reference) const
