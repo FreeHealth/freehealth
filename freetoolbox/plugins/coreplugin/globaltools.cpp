@@ -659,8 +659,9 @@ bool addRoutesToDatabase(const QString &connection, const QString &absFileName)
             value = value.remove("\"");
             int sep = value.indexOf(":");
             QString lang = value.left(sep);
+            QString systemic;
             if (lang.compare("systemic") == 0) {
-                /** \todo Code systemic extraction of routes */
+                systemic = value.mid(sep + 1);
             } else {
                 trLabels.insertMulti(lang, value.mid(sep + 1));
             }
@@ -671,9 +672,10 @@ bool addRoutesToDatabase(const QString &connection, const QString &absFileName)
             LOG_ERROR_FOR("Tools", "Route not integrated");
             continue;
         }
-        QString req = QString("INSERT INTO ROUTES (RID, MASTER_LID) VALUES (NULL, %1)")
-                      .arg(masterLid)
-                      ;
+        QString req = QString("INSERT INTO ROUTES (RID, MASTER_LID, SYSTEMIC_STATUS) VALUES (NULL, %1, '%2')")
+                .arg(masterLid)
+                .arg(systemic)
+                ;
         Tools::executeSqlQuery(req, connection, __FILE__, __LINE__);
     }
     db.commit();
