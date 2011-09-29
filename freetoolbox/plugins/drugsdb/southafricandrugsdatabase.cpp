@@ -676,6 +676,16 @@ bool ZaDrugDatatabaseStep::populateDatabase()
 
 bool ZaDrugDatatabaseStep::linkMolecules()
 {
+    // 29 Sept 2011
+    //    NUMBER OF MOLECULES 1148
+    //    CORRECTED BY NAME 23
+    //    CORRECTED BY ATC 0
+    //    FOUNDED 658 "
+    //    LINKERMODEL (WithATC:137;WithoutATC:2) 139"
+    //    LINKERNATURE 0
+    //    LEFT 488
+    //    CONFIDENCE INDICE 57
+
     // 29 APR 2011
     //    NUMBER OF MOLECULES 1148
     //    CORRECTED BY NAME 23

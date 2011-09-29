@@ -386,15 +386,15 @@ bool FdaDrugDatatabaseStep::populateDatabase()
 
 bool FdaDrugDatatabaseStep::linkMolecules()
 {
-    // 28 Sept 2011 (using EN translations of ATC labels)
+    // 28 Sept 2011 (using EN translations of ATC labels + new ATC 2011 && 2012)
     //    NUMBER OF MOLECULES 2014
     //    CORRECTED BY NAME 11
     //    CORRECTED BY ATC 0
-    //    FOUNDED 1529 "
-    //    LINKERMODEL (WithATC:262;WithoutATC:1) 263"
+    //    FOUNDED 1558 "
+    //    LINKERMODEL (WithATC:261;WithoutATC:1) 262"
     //    LINKERNATURE 0
-    //    LEFT 484
-    //    CONFIDENCE INDICE 75
+    //    LEFT 455
+    //    CONFIDENCE INDICE 77
 
     // 28 APR 2011
     //    NUMBER OF MOLECULES 2000
