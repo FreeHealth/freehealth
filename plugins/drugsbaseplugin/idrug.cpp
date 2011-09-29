@@ -149,7 +149,7 @@ class DrugRoutePrivate
 {
 public:
     QHash<QString, QString> m_Labels;
-    bool m_Syst;
+    DrugRoute::SystemicEffects m_Syst;
     IDrug *m_Drug;
     int m_Rid;
 };
@@ -366,7 +366,7 @@ DrugRoute::DrugRoute(IDrug *drug) :
     d->m_Drug = drug;
     if (d->m_Drug)
         d->m_Drug->addRoute(this);
-    d->m_Syst = false;
+    d->m_Syst = UnknownSystemicEffect;
 }
 
 DrugRoute::~DrugRoute()
@@ -395,8 +395,24 @@ QString DrugRoute::label(const QString &lang) const
     return QString();
 }
 
-bool DrugRoute::isSystemic() const {return d->m_Syst;}
-void DrugRoute::setIsSystemic(bool systemic) {d->m_Syst = systemic;}
+DrugRoute::SystemicEffects DrugRoute::systemicEffect() const
+{
+    return d->m_Syst;
+}
+
+void DrugRoute::setSystemicDatabaseTag(const QString &systemic)
+{
+    WARN_FUNC << systemic << d->m_Drug->brandName();
+    if (systemic.compare("yes", Qt::CaseInsensitive)==0) {
+        d->m_Syst = HasSystemicEffect;
+    } else if (systemic.compare("no", Qt::CaseInsensitive)==0) {
+        d->m_Syst = NoSystemicEffect;
+    } else if (systemic.compare("partial", Qt::CaseInsensitive)==0) {
+        d->m_Syst = PartialSystemicEffect;
+    } else {
+        d->m_Syst = UnknownSystemicEffect;
+    }
+}
 
 void DrugRoute::setLabel(const QString &label, const QString &lang)
 {
@@ -417,6 +433,23 @@ void DrugRoute::setRouteId(const int rid)
     d->m_Rid = rid;
 }
 
+DrugRoute::SystemicEffects DrugRoute::maximumSystemicEffect(const QVector<DrugRoute *> &routes)  // Static
+{
+    if (routes.isEmpty())
+        return UnknownSystemicEffect;
+    DrugRoute::SystemicEffects max = NoSystemicEffect;
+    for(int i = 0; i < routes.count(); ++i) {
+        DrugRoute *r = routes.at(i);
+        if (r->systemicEffect() > max)
+            max = r->systemicEffect();
+    }
+    return max;
+}
+
+DrugRoute::SystemicEffects DrugRoute::maximumSystemicEffect(const IDrug *drug)  // Static
+{
+    return DrugRoute::maximumSystemicEffect(drug->drugRoutes());
+}
 
 
 ///////////////////////////////////////////////////////////////////////////////////////////////////
@@ -1068,3 +1101,10 @@ QDebug operator<<(QDebug dbg, const DrugsDB::IDrug *c)
     dbg.nospace() << c->warnText();
     return dbg.space();
 }
+
+QDebug operator<<(QDebug dbg, const DrugsDB::IDrug &c)
+{
+    dbg.nospace() << c.warnText();
+    return dbg.space();
+}
+

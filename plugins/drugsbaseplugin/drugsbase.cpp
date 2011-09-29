@@ -312,7 +312,7 @@ public:
         if (query.exec(q->select(Constants::Table_ROUTES, j, cond))) {
             while (query.next()) {
                 DrugRoute *route = new DrugRoute(drug);
-                route->setIsSystemic(query.value(Constants::ROUTES_SYSTEMIC).toBool());
+                route->setSystemicDatabaseTag(query.value(Constants::ROUTES_SYSTEMIC).toString());
                 route->setRouteId(query.value(Constants::ROUTES_RID).toInt());
                 QHash<QString, QString> labels = getAllLabels(query.value(Constants::ROUTES_MASTERLID).toInt());
                 foreach(const QString &lang, labels) {
@@ -490,7 +490,7 @@ DrugsBase::DrugsBase(QObject *parent)
 
     addField(Table_ROUTES, ROUTES_RID, "RID");
     addField(Table_ROUTES, ROUTES_MASTERLID, "MASTER_LID");
-    addField(Table_ROUTES, ROUTES_SYSTEMIC, "IS_SYSTEMIC");
+    addField(Table_ROUTES, ROUTES_SYSTEMIC, "SYSTEMIC_STATUS");
 
     addField(Table_SEARCHENGINES, SEARCHENGINE_ID, "ID");
     addField(Table_SEARCHENGINES, SEARCHENGINE_LABEL, "LABEL");

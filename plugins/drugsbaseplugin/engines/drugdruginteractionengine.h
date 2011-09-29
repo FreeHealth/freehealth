@@ -84,7 +84,7 @@ public:
 
     // Private hidden part
     bool checkDrugInteraction(IDrug *drug, const QVector<IDrug *> &drugsList);
-    QVector<IDrugInteraction *> getInteractionsFromDatabase(const int & _id1, const int & _id2);
+    QVector<IDrugInteraction *> getInteractionsFromDatabase(IDrugInteraction *fromFirstPassInteraction);
 
 public Q_SLOTS:
     void setActive(bool state);

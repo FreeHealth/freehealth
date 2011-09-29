@@ -151,17 +151,27 @@ class DRUGSBASE_EXPORT DrugRoute
     friend class DrugsDB::Internal::DrugsBasePrivate;
 
 public:
+    enum SystemicEffects {
+        NoSystemicEffect = 0,
+        UnknownSystemicEffect,
+        PartialSystemicEffect,
+        HasSystemicEffect
+    };
+
     DrugRoute(IDrug *drug);
     ~DrugRoute();
 
     IDrug *drug() const;
     QString label(const QString &lang = QString::null) const;
-    bool isSystemic() const;
+    SystemicEffects systemicEffect() const;
     int routeId() const;
+
+    static SystemicEffects maximumSystemicEffect(const QVector<DrugRoute *> &routes);
+    static SystemicEffects maximumSystemicEffect(const IDrug *drug);
 
 protected:
     void setLabel(const QString &label, const QString &lang = QString::null);
-    void setIsSystemic(bool systemic);
+    void setSystemicDatabaseTag(const QString &systemic);
     void setRouteId(const int rid);
 
 private:
@@ -340,5 +350,6 @@ public:
 }  // End namespace DrugsDB
 
 QDebug operator<<(QDebug dbg, const DrugsDB::IDrug *c);
+QDebug operator<<(QDebug dbg, const DrugsDB::IDrug &c);
 
 #endif // DRUGSDB_IDRUG_H
