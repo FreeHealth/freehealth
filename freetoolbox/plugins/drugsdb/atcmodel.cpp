@@ -156,22 +156,29 @@ public:
             }
             QString tmp;
             AtcItem *item = new AtcItem();
-            tmp = vals.at(0);
+            tmp = vals.at(0).toUpper();
             tmp.remove("\"");
             item->setData(AtcModel::ATC_Code, tmp);
-            tmp = vals.at(1);
+            QString en = vals.at(1).toUpper();
+            en.remove("\"");
+            item->setData(AtcModel::ATC_EnglishLabel, en);
+            tmp = vals.at(2).toUpper();
             tmp.remove("\"");
-            item->setData(AtcModel::ATC_EnglishLabel, tmp);
-            tmp = vals.at(2);
-            tmp.remove("\"");
-            item->setData(AtcModel::ATC_FrenchLabel, tmp);
+            if (tmp.isEmpty())
+                item->setData(AtcModel::ATC_FrenchLabel, en);
+            else
+                item->setData(AtcModel::ATC_FrenchLabel, tmp);
             tmp = vals.at(3);
-            tmp.remove("\"");
-            item->setData(AtcModel::ATC_DeutschLabel, tmp);
+            tmp.remove("\"").toUpper();
+            if (tmp.isEmpty())
+                item->setData(AtcModel::ATC_DeutschLabel, en);
+            else
+                item->setData(AtcModel::ATC_DeutschLabel, tmp);
             m_ItemsList.append(item);
         }
 
         qWarning() << "get" << m_ItemsList.count() << "ATC";
+        qSort(m_ItemsList.begin(), m_ItemsList.end(), AtcItem::lessThan);
 
         QList<AtcItem *> three, four, five, six;
         AtcItem *last = 0;

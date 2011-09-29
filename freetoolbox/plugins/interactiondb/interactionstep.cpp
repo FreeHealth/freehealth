@@ -312,11 +312,24 @@ bool InteractionStep::computeModelsAndPopulateDatabase()
                 return false;
             const QStringList &list = content.split("\n", QString::SkipEmptyParts);
             foreach(const QString &s, list) {
+                if (s.startsWith("--")) {
+                    qWarning() << s;
+                    continue;
+                }
                 QStringList values = s.split("\";\"");
                 QMultiHash<QString, QVariant> labels;
-                labels.insert("en", values[1].remove("\""));
-                labels.insert("fr", values[2].remove("\""));
-                labels.insert("de", values[3].remove("\""));
+                QString en = values[1].remove("\"").toUpper();
+                labels.insert("en", en);
+                QString fr = values[2].remove("\"").toUpper();
+                if (fr.isEmpty())
+                    labels.insert("fr", en);
+                else
+                    labels.insert("fr", fr);
+                QString de = values[3].remove("\"").toUpper();
+                if (de.isEmpty())
+                    labels.insert("fr", en);
+                else
+                    labels.insert("fr", de);
                 if (!Core::Tools::createAtc(Core::Constants::MASTER_DATABASE_NAME, values[0].remove("\""), labels)) {
                     return false;
                 }

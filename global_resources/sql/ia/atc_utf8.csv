@@ -2262,7 +2262,6 @@
 "G03AC09";"DESOGESTREL";"DESOGESTREL";"DESOGESTREL"
 "G03AD";"EMERGENCY CONTRACEPTIVES";"CONTRACEPTIFS D'URGENCE";"EMERGENCY VERHÜTUNGSMITTEL NEHMEN"
 "G03AD01";"LEVONORGESTREL";"LEVONORGESTREL";"LEVONORGESTREL"
-"G03AD02";"ULIPRISTAL";"ULIPRISTAL";"ULIPRISTAL"
 "G03B";"ANDROGENS";"ANDROGENES";"ANDROGENE"
 "G03BA";"3-OXOANDROSTEN (4) DERIVATIVES";"DERIVES DU 3 OXOANDROSTENE";"3-OXOANDROSTEN-4-DERIVATE"
 "G03BA01";"FLUOXYMESTERONE";"FLUOXYMESTERONE";"FLUOXYMESTERON"
@@ -5485,6 +5484,159 @@
 "V10XX01";"SODIUM PHOSPHATE (32P)";"32P-PHOSPHORE PHOSPHATE SODIQUE";"[32P]NATRIUMPHOSPHAT"
 "V10XX02";"IBRITUMOMAB TIUXETAN (90Y)";"IBRITUMOMAB TIUXETAN (90Y)";"IBRITUMOMAB TIUXETAN (90Y)"
 "V20";"SURGICAL DRESSINGS";"PANSEMENTS CHIRURGICAUX";"WUNDVERBÄNDE"
+--
+--
+-- Upper is ATC Updated to end 2009
+--
+--
 "Z";"FREEDIAMS SPECIFIC CODES";"CODES SPECIFIQUES A FREEDIAMS";"FREEDIAMS-SPEZIFISCHE CODES"
 "Z00";"FREEDIAMS INTERACTING MOLECULES";"MOLECULES AVEC INTERACTIONS FREEDIAMS";"FREEDIAMS: INTERAGIERENDE STOFFE"
 "ZXX";"FREEDIAMS INTERACTING CLASSES";"CLASSES D'INTERACTIONS FREEDIAMS";"FREEDIAMS-INTERAKTIONSKLASSEN"
+--
+--
+-- ATC 2011 Additions
+--
+--
+"A02BD08";"bismuth subcitrate, tetracycline and metronidazole";"Bismuth subcitrate, tetracycline et metronidazole";""
+"A10BH05";"linagliptin";"Linagliptine";""
+"A16AB10";"velaglucerase alfa";"Velaglucerase alfa";""
+"A16AB11";"taliglucerase alfa";"";""
+"B01AC23";"cilostazol";"";""
+"B01AC24";"ticagrelor";"";""
+"B01AC56";"acetylsalicylic acid and esomeprazole";"Acide acetylsalicylique et esomeprazole";""
+"C01BD07";"dronedarone";"";""
+"C01BG11";"vernakalant";"";""
+"C01CA25";"amezinium metilsulfate";"Amezinium methylsulfate";""
+"C05AA12";"triamcinolone";"";""
+"C05CX02";"naftazone";"";""
+"C07BB12";"nebivolol and thiazides";"nebivolol et thiazidiques";""
+"C07FB07";"bisoprolol and other antihypertensives";"Bisoprolol et autres antihypertenseurs";""
+"C08CA16";"clevidipine";"";""
+"C09BB06";"enalapril and nitrendipine";"Enalapril et nitrendipine";""
+"C09DB05";"irbesartan and amlodipine";"irbesartan et amlodipine";""
+"C09DX03";"olmesartan medoxomil, amlodipine and hydrochlorothiazide";"olmesartan, amlodipine et hydrochlorothiazide";""
+"C09XA53";"aliskiren and amlodipine";"aliskiren et amlodipine";""
+"C09XA54";"aliskiren, amlodipine and hydrochlorothiazide";"aliskiren, amlodipine et hydrochlorothiazide";""
+"C10AB11";"choline fenofibrate";"";""
+"C10BX04";"simvastatin, acetylsalicylic acid and ramipril";"Simvastatine, acide acetylsalicylique et ramipril";""
+"G03AA15";"chlormadinone and estrogen";"Chlormadinone et estrogene";""
+"G03AB08";"dienogest and estrogen";"dienogest and estrogene";""
+"G03AD02";"ULIPRISTAL";"ULIPRISTAL";"ULIPRISTAL"
+"G03XC03";"lasofoxifene";"";""
+"J01DI02";"ceftaroline fosamil";"";""
+"J01MA21";"sitafloxacin";"sitafloxacine";"sitafloxacin"
+"L01DB10";"amrubicin";"amrubicine";""
+"L01DB11";"pixantrone";"";""
+"L01XA05";"polyplatillen";"";""
+"L01XE12";"vandetanib";"";""
+"L01XE13";"afatinib";"";""
+"L01XX40";"omacetaxine mepesuccinate";"";""
+"L01XX41";"eribulin";"eribuline";""
+"L03AB12";"albinterferon alfa-2b";"albinterferon alfa-2b";""
+"L04AA26";"belimumab";"";""
+"L04AA27";"fingolimod";"";""
+"L04AA28";"belatacept";"";""
+"L04AC09";"briakinumab";"";""
+"L04AD03";"voclosporin";"voclosporine";""
+"M01AE18";"naproxcinod";"";""
+"M01AE52";"naproxen and esomeprazole";"naproxene et esomeprazole";""
+"M01AX26";"avocado and soyabean oil, unsaponifiables";"Huiles d'avocat et de soja, insaponifiables";""
+"M02AA26";"nimesulide";"";""
+"M02AX05";"idrocilamide";"";""
+"M05BB05";"alendronic acid, calcium and colecalciferol, sequential";"Acide alendronique, calcium, colecalciferol, administration sequentielle";""
+"M09AB02";"collagenase clostridium histolyticum";"";""
+"M09AX02";"chondrocytes, autologous";"Chondrocytes autologues";""
+"N03AX21";"retigabine";"";""
+"N06BA12";"lisdexamfetamine";"";""
+"N07XX07";"fampridine";"";""
+"P01BF02";"artesunate and mefloquine";"artesunate et mefloquine";""
+"P01BF03";"artesunate and amodiaquine";"artesunate et amodiaquine";""
+"P01BF04";"artesunate, sulphamethopyrazine and pyrimethamine";"artesunate, sulphamethopyrazine et pyrimethamine";""
+"P01BF05";"artenimol and piperaquine";"artenimol et piperaquine";""
+"P01BF06";"artesunate and pyronaridine";"artesunate et pyronaridine";""
+"R05CB16";"mannitol";"";""
+"R06AX29";"bilastine";"";""
+"S01AX23";"besifloxacin";"";""
+"V09IA07";"technetium (99mTc) hynic-octreotide";"Technetium (99m Tc) hynic-octreotide";""
+"V09IX08";"fluoroethylcholine (18F)";"18F-Fluoroethylcholine";""
+--
+--
+-- ATC 2012 Additions
+--
+--
+"A02BC06";"dexlansoprazole";"";""
+"A10BD10";"metformin and saxagliptin";"metformine et saxagliptine";""
+"A10BD11";"metformin and linagliptin";"metformine and linagliptine";""
+"A10BX09";"dapagliflozin";"dapagliflozine";""
+"A16AX08";"teduglutide";"";""
+"B01AA12";"fluindione";"";""
+"B02BD10";"von Willebrand factor";"Facteur Von Willebrand";""
+"B02BD11";"catridecacog";"";""
+"B06AC";"Drugs used in hereditary angioedema";"Autres medicaments utilises dans l'angio-oedeme hereditaire";""
+"B06AC03";"ecallantide";"";""
+"B06AC04";"conestat alfa";"";""
+"C05CX03";"Horse chestnut seeds";"";""
+"C09BB07";"ramipril and amlodipine";"ramipril et amlodipine";""
+"C09CA09";"azilsartan medoxomil";"";""
+"C09DB06";"losartan and amlodipine";"losartan et amlodipine";""
+"C10AX11";"mipomersen";"mipomersen";""
+"D03AX11";"tetrachlorodecaoxide";"";""
+"D06BB12";"sinecatechins";"";""
+"G03DB08";"dienogest";"";""
+"G04BX15";"pentosan polysulfate sodium";"Pentosane polysulfate de sodium";""
+"H01AC06";"tesamorelin";"";""
+"H01CB05";"pasireotide";"";""
+"J01CA19";"aspoxicillin";"aspoxicilline";""
+"J01DC12";"cefminox";"";""
+"J01DC13";"cefbuperazone";"";""
+"J01DC14";"flomoxef";"";""
+"J01DF02";"carumonam";"";""
+"J01GB13";"bekanamycin";"bekanamycine";""
+"J05AE11";"telaprevir";"";""
+"J05AG05";"rilpivirine";"";""
+"J05AR08";"emtricitabine, tenofovir disoproxil and rilpivirine";"emtricitabine, tenofovir disoproxil et rilpivirine";""
+"J06BB17";"motavizumab";"";""
+"J07AH09";"meningococcus B, multicomponent vaccine";"";""
+"L01CD04";"cabazitaxel";"";""
+"L01XC11";"ipilimumab";"";""
+"L01XC12";"brentuximab vedotin";"";""
+"L01XE14";"bosutinib";"";""
+"L01XE15";"vemurafenib";"";""
+"L01XE16";"crizotinib";"";""
+"L01XE17";"axitinib";"";""
+"L01XE18";"ruxolitinib";"";""
+"L01XX42";"panobinostat";"";""
+"L02BX03";"abiraterone";"";""
+"L03AX17";"sipuleucel-T";"";""
+"L04AC10";"secukinumab";"";""
+"L04AX05";"pirfenidone";"";""
+"M01AC56";"meloxicam, combinations";"";""
+"M01AE56";"naproxen and misoprostol";"naproxene et misoprostol";""
+"N03AX22";"perampanel";"";""
+"N05AX14";"iloperidone";"";""
+"N06AX24";"vilazodone";"";""
+"N06AX25";"St. John’s Wort";"millepertuis";""
+"N06DA52";"donepezil and memantine";"donepezil et memantine";""
+"N07BC05";"levomethadone";"";""
+"N07XX08";"tafamidis";"";""
+"P03AX05";"dimeticone";"";""
+"R06AA59";"doxylamine, combinations";"";""
+"S01LA05";"aflibercept";"";""
+"S02DA04";"cinchocaine";"";""
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
