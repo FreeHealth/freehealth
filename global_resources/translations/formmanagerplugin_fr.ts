@@ -281,7 +281,7 @@ Répondre &apos;non&apos; causera une perte de données irréversible.</translat
     <message>
         <location filename="../../plugins/formmanagerplugin/constants_db.h" line="115"/>
         <source>Show patient last episodes</source>
-        <translation type="unfinished"></translation>
+        <translation>Montrer le dernier épisode</translation>
     </message>
 </context>
 </TS>
