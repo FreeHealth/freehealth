@@ -190,9 +190,9 @@ INSTALLS+= desk desk_icon
 
 # Install textfiles (mostly used in debug mode)
 !isEmpty(INSTALL_TEXTFILES_PATH){
-tf.path=$${INSTALL_TEXTFILES_PATH}
-tf.files=$${SOURCES_GLOBAL_RESOURCES}/textfiles/*
-INSTALLS+= tf
+textfiles.path=$${INSTALL_TEXTFILES_PATH}
+textfiles.files=$${SOURCES_GLOBAL_RESOURCES}/textfiles/*
+INSTALLS+= textfiles
 }
 
 # Documentation
@@ -223,6 +223,12 @@ eval(INSTALL_ACCOUNT_FILES=1){
 account_sqlfile.path=$${INSTALL_RESOURCES_PATH}/sql/account
 account_sqlfile.files=$${SOURCES_GLOBAL_RESOURCES}/sql/account/*
 INSTALLS+=account_sqlfile
+}
+# Install FreeAccount SQL files
+eval(INSTALL_ZIPCODES=1){
+zipcodes_db.path=$${INSTALL_DATABASES_PATH}/zipcodes
+zipcodes_db.files=$${SOURCES_DATABASES}/zipcodes/zipcodes.db
+INSTALLS+=zipcodes_db
 }
 
 # configuration for non-integrated solutions (everything is included inside the bundle)
