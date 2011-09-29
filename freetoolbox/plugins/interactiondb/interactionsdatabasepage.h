@@ -151,6 +151,7 @@ public:
     ~InteractionDatabaseCreator();
 
 protected Q_SLOTS:
+    void on_recreateRoutes_clicked();
     void on_checkDatas_clicked();
     void on_createAndSave_clicked();
 

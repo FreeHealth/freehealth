@@ -313,6 +313,11 @@ InteractionDatabaseCreator::~InteractionDatabaseCreator()
     delete d; d=0;
 }
 
+void InteractionDatabaseCreator::on_recreateRoutes_clicked()
+{
+    Core::Tools::recreateRoutes();
+}
+
 void InteractionDatabaseCreator::on_createAndSave_clicked()
 {
     d->m_Step->process();

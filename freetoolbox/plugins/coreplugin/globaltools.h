@@ -70,6 +70,7 @@ CORE_EXPORT bool signDatabase(const QString &connectionName);
 CORE_EXPORT int getSourceId(const QString &connection, const QString &dbUid);
 CORE_EXPORT int createNewDrugsSource(const QString &connection, const QString &uid, QMultiHash<QString, QVariant> trLabels);
 CORE_EXPORT int addLabels(const QString &connection, const int masterLid, QMultiHash<QString, QVariant> trLabels);
+CORE_EXPORT bool recreateRoutes();
 CORE_EXPORT bool addRoutesToDatabase(const QString &connection, const QString &absFileName);
 CORE_EXPORT QHash<int, QString> generateMids(const QStringList &molnames, const int sid, const QString &connection);
 

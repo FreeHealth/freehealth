@@ -623,6 +623,17 @@ int addLabels(const QString &connection, const int masterLid, QMultiHash<QString
     return mid;
 }
 
+bool recreateRoutes()
+{
+    if (!connectDatabase(Core::Constants::MASTER_DATABASE_NAME, databaseAbsPath())) {
+        LOG_ERROR_FOR("Tools", "Unable to create master database");
+        return false;
+    }
+    QSqlDatabase db = QSqlDatabase::database(Core::Constants::MASTER_DATABASE_NAME);
+    Tools::executeSqlQuery("DELETE FROM ROUTES;", Core::Constants::MASTER_DATABASE_NAME);
+    addRoutesToDatabase(Core::Constants::MASTER_DATABASE_NAME, routesCsvAbsFile());
+}
+
 bool addRoutesToDatabase(const QString &connection, const QString &absFileName)
 {
     QSqlDatabase db = QSqlDatabase::database(connection);
@@ -646,6 +657,7 @@ bool addRoutesToDatabase(const QString &connection, const QString &absFileName)
         int id = 0;
         int rid = 0;
         QMultiHash<QString, QVariant> trLabels;
+        QString systemic;
         // Parse line
         foreach(QString value, line.split(",")) {
             value = value.trimmed();
@@ -659,7 +671,6 @@ bool addRoutesToDatabase(const QString &connection, const QString &absFileName)
             value = value.remove("\"");
             int sep = value.indexOf(":");
             QString lang = value.left(sep);
-            QString systemic;
             if (lang.compare("systemic") == 0) {
                 systemic = value.mid(sep + 1);
             } else {
