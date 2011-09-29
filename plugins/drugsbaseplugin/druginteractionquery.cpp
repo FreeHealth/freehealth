@@ -116,7 +116,7 @@ QStandardItemModel *DrugInteractionQuery::toStandardModel() const
     return m_StandardModel;
 }
 
-void DrugInteractionQuery::warn() const
+QString DrugInteractionQuery::warnText() const
 {
     QString tmp;
     for(int i=0; i < m_Drugs.count(); ++i) {
@@ -130,7 +130,19 @@ void DrugInteractionQuery::warn() const
           .arg(tmp)
           .arg(m_TestDDI)
           .arg(m_TestPDI);
-    qWarning() << tmp;
+    return tmp;
+}
+
+QDebug operator<<(QDebug dbg, const DrugsDB::DrugInteractionQuery *c)
+{
+    dbg.nospace() << c->warnText();
+    return dbg.space();
+}
+
+QDebug operator<<(QDebug dbg, const DrugsDB::DrugInteractionQuery &c)
+{
+    dbg.nospace() << c.warnText();
+    return dbg.space();
 }
 
 

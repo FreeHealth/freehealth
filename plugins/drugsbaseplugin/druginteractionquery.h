@@ -69,7 +69,7 @@ public:
     void setTestDrugDrugInteractions(bool test) {m_TestDDI = test;}
     void setTestPatientDrugInteractions(bool test) {m_TestPDI = test;}
 
-    void warn() const;
+    QString warnText() const;
 
 private:
     QVector<IDrug *> m_Drugs;
@@ -79,5 +79,9 @@ private:
 
 
 }  // End namespace DrugsDB
+
+
+QDebug operator<<(QDebug dbg, const DrugsDB::DrugInteractionQuery *c);
+QDebug operator<<(QDebug dbg, const DrugsDB::DrugInteractionQuery &c);
 
 #endif // DRUGINTERACTIONRESULT_H
