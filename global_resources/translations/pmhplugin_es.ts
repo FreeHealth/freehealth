@@ -28,6 +28,51 @@
         <source>Past medical history category manager</source>
         <translation type="unfinished"></translation>
     </message>
+    <message>
+        <location filename="../../plugins/pmhplugin/constants.h" line="149"/>
+        <source>Not defined</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../../plugins/pmhplugin/constants.h" line="150"/>
+        <source>Chronic disease</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../../plugins/pmhplugin/constants.h" line="151"/>
+        <source>Chronic disease without acute episode</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../../plugins/pmhplugin/constants.h" line="152"/>
+        <source>Acute disease</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../../plugins/pmhplugin/constants.h" line="153"/>
+        <source>Risk factor</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../../plugins/pmhplugin/constants.h" line="155"/>
+        <source>Active</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../../plugins/pmhplugin/constants.h" line="156"/>
+        <source>In remission</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../../plugins/pmhplugin/constants.h" line="157"/>
+        <source>Quiescent</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../../plugins/pmhplugin/constants.h" line="158"/>
+        <source>Cured</source>
+        <translation type="unfinished"></translation>
+    </message>
 </context>
 <context>
     <name>PMH::Internal::PmhBase</name>
@@ -251,8 +296,8 @@
 <context>
     <name>PMH::PmhPlugin</name>
     <message>
-        <location filename="../../plugins/pmhplugin/pmhplugin.cpp" line="77"/>
-        <location filename="../../plugins/pmhplugin/pmhplugin.cpp" line="87"/>
+        <location filename="../../plugins/pmhplugin/pmhplugin.cpp" line="79"/>
+        <location filename="../../plugins/pmhplugin/pmhplugin.cpp" line="95"/>
         <source>Initializing PMHx database plugin...</source>
         <translation type="unfinished"></translation>
     </message>

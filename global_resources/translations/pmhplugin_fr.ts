@@ -28,6 +28,51 @@
         <source>Past medical history category manager</source>
         <translation>Gestionnaire des catégories pour les antécédents</translation>
     </message>
+    <message>
+        <location filename="../../plugins/pmhplugin/constants.h" line="149"/>
+        <source>Not defined</source>
+        <translation>Non défini</translation>
+    </message>
+    <message>
+        <location filename="../../plugins/pmhplugin/constants.h" line="150"/>
+        <source>Chronic disease</source>
+        <translation>Maladie chronique</translation>
+    </message>
+    <message>
+        <location filename="../../plugins/pmhplugin/constants.h" line="151"/>
+        <source>Chronic disease without acute episode</source>
+        <translation>Maladie chronique avec épisodes aigus</translation>
+    </message>
+    <message>
+        <location filename="../../plugins/pmhplugin/constants.h" line="152"/>
+        <source>Acute disease</source>
+        <translation>Maladie aiguë</translation>
+    </message>
+    <message>
+        <location filename="../../plugins/pmhplugin/constants.h" line="153"/>
+        <source>Risk factor</source>
+        <translation>Facteur de risque</translation>
+    </message>
+    <message>
+        <location filename="../../plugins/pmhplugin/constants.h" line="155"/>
+        <source>Active</source>
+        <translation>Actif</translation>
+    </message>
+    <message>
+        <location filename="../../plugins/pmhplugin/constants.h" line="156"/>
+        <source>In remission</source>
+        <translation>En rémission</translation>
+    </message>
+    <message>
+        <location filename="../../plugins/pmhplugin/constants.h" line="157"/>
+        <source>Quiescent</source>
+        <translation>Quiescent</translation>
+    </message>
+    <message>
+        <location filename="../../plugins/pmhplugin/constants.h" line="158"/>
+        <source>Cured</source>
+        <translation>Guéri</translation>
+    </message>
 </context>
 <context>
     <name>PMH::Internal::PmhBase</name>
@@ -251,8 +296,8 @@
 <context>
     <name>PMH::PmhPlugin</name>
     <message>
-        <location filename="../../plugins/pmhplugin/pmhplugin.cpp" line="77"/>
-        <location filename="../../plugins/pmhplugin/pmhplugin.cpp" line="87"/>
+        <location filename="../../plugins/pmhplugin/pmhplugin.cpp" line="79"/>
+        <location filename="../../plugins/pmhplugin/pmhplugin.cpp" line="95"/>
         <source>Initializing PMHx database plugin...</source>
         <translation>Initialisation de la base de données des antécédents...</translation>
     </message>

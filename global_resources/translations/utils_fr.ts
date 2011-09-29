@@ -378,19 +378,6 @@ To %2</source>
     </message>
 </context>
 <context>
-    <name>Utils::PubMedDownloader</name>
-    <message>
-        <location filename="../../libs/utils/pubmeddownloader.cpp" line="63"/>
-        <source>Wrong PubMed link %1</source>
-        <translation>Lien PubMed erroné %1</translation>
-    </message>
-    <message>
-        <location filename="../../libs/utils/pubmeddownloader.cpp" line="72"/>
-        <source>Wrong PubMed link %1. Extract PMID %2</source>
-        <translation>Lien PubMed erroné %1. PMID extrait %2</translation>
-    </message>
-</context>
-<context>
     <name>Utils::QButtonLineEdit</name>
     <message>
         <location filename="../../libs/utils/widgets/qbuttonlineedit.cpp" line="187"/>

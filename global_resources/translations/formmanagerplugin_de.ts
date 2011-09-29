@@ -4,18 +4,18 @@
 <context>
     <name>EpisodeModel</name>
     <message>
-        <location filename="../../plugins/formmanagerplugin/episodemodel.cpp" line="552"/>
+        <location filename="../../plugins/formmanagerplugin/episodemodel.cpp" line="545"/>
         <source>Save episode ?</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../../plugins/formmanagerplugin/episodemodel.cpp" line="553"/>
+        <location filename="../../plugins/formmanagerplugin/episodemodel.cpp" line="546"/>
         <source>The actual episode has been modified. Do you want to save changes in your database ?
 Answering &apos;No&apos; will cause definitve data lose.</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../../plugins/formmanagerplugin/episodemodel.cpp" line="555"/>
+        <location filename="../../plugins/formmanagerplugin/episodemodel.cpp" line="548"/>
         <source>Save episode</source>
         <translation type="unfinished"></translation>
     </message>
@@ -23,17 +23,17 @@ Answering &apos;No&apos; will cause definitve data lose.</source>
 <context>
     <name>Form::EpisodeModel</name>
     <message>
-        <location filename="../../plugins/formmanagerplugin/episodemodel.cpp" line="915"/>
+        <location filename="../../plugins/formmanagerplugin/episodemodel.cpp" line="916"/>
         <source>Created: </source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../../plugins/formmanagerplugin/episodemodel.cpp" line="1024"/>
+        <location filename="../../plugins/formmanagerplugin/episodemodel.cpp" line="1025"/>
         <source>New episode</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../../plugins/formmanagerplugin/episodemodel.cpp" line="1220"/>
+        <location filename="../../plugins/formmanagerplugin/episodemodel.cpp" line="1231"/>
         <source>No user</source>
         <translation type="unfinished"></translation>
     </message>
@@ -145,8 +145,8 @@ Answering &apos;No&apos; will cause definitve data lose.</source>
 <context>
     <name>Form::Internal::FormManagerPlugin</name>
     <message>
-        <location filename="../../plugins/formmanagerplugin/formmanagerplugin.cpp" line="96"/>
-        <location filename="../../plugins/formmanagerplugin/formmanagerplugin.cpp" line="106"/>
+        <location filename="../../plugins/formmanagerplugin/formmanagerplugin.cpp" line="98"/>
+        <location filename="../../plugins/formmanagerplugin/formmanagerplugin.cpp" line="114"/>
         <source>Initializing form manager plugin...</source>
         <translation type="unfinished"></translation>
     </message>

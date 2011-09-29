@@ -37,7 +37,7 @@ Veuillez vérifier vos répartitions journalières et vos relations avec le repa
 <context>
     <name>DrugsBase</name>
     <message>
-        <location filename="../../plugins/drugsbaseplugin/engines/drugdruginteractionengine.cpp" line="955"/>
+        <location filename="../../plugins/drugsbaseplugin/engines/drugdruginteractionengine.cpp" line="988"/>
         <source>FreeDiams Interactions Engine</source>
         <translation>Moteur d&apos;interaction de FreeDiams</translation>
     </message>
@@ -292,7 +292,7 @@ Voulez-vous les ajouter au fichier ?</translation>
 <context>
     <name>DrugsDB::Internal::DrugAllergyEngine</name>
     <message>
-        <location filename="../../plugins/drugsbaseplugin/engines/allergyengine.cpp" line="507"/>
+        <location filename="../../plugins/drugsbaseplugin/engines/allergyengine.cpp" line="508"/>
         <source>Detects allergies and intolerances to medications</source>
         <translation>Détecte les allergies et intolérances médicamenteuses</translation>
     </message>
@@ -308,61 +308,61 @@ Voulez-vous les ajouter au fichier ?</translation>
 <context>
     <name>DrugsDB::Internal::DrugsBase</name>
     <message>
-        <location filename="../../plugins/drugsbaseplugin/drugsbase.cpp" line="617"/>
+        <location filename="../../plugins/drugsbaseplugin/drugsbase.cpp" line="618"/>
         <source>Searching databases into dir %1</source>
         <translation>Recherche des bases de données dans le répertoire %1</translation>
     </message>
     <message>
-        <location filename="../../plugins/drugsbaseplugin/drugsbase.cpp" line="630"/>
+        <location filename="../../plugins/drugsbaseplugin/drugsbase.cpp" line="631"/>
         <source>No drugs database found.</source>
         <translation>Pas de base de données thérapeutique trouvée.</translation>
     </message>
     <message>
-        <location filename="../../plugins/drugsbaseplugin/drugsbase.cpp" line="641"/>
+        <location filename="../../plugins/drugsbaseplugin/drugsbase.cpp" line="642"/>
         <source>Drug database source does not exists.</source>
         <translation>La source de données n&apos;existe pas.</translation>
     </message>
     <message>
-        <location filename="../../plugins/drugsbaseplugin/drugsbase.cpp" line="642"/>
+        <location filename="../../plugins/drugsbaseplugin/drugsbase.cpp" line="643"/>
         <source>Switching to the default drugs database source.</source>
         <translation>Revenir à la base de données par défaut</translation>
     </message>
     <message>
-        <location filename="../../plugins/drugsbaseplugin/drugsbase.cpp" line="989"/>
-        <location filename="../../plugins/drugsbaseplugin/drugsbase.cpp" line="995"/>
-        <location filename="../../plugins/drugsbaseplugin/drugsbase.cpp" line="1000"/>
+        <location filename="../../plugins/drugsbaseplugin/drugsbase.cpp" line="990"/>
+        <location filename="../../plugins/drugsbaseplugin/drugsbase.cpp" line="996"/>
+        <location filename="../../plugins/drugsbaseplugin/drugsbase.cpp" line="1001"/>
         <source>Unable to create the Protocol database.</source>
         <translation>Impossible de créer la base de données Protocoles.</translation>
     </message>
     <message>
-        <location filename="../../plugins/drugsbaseplugin/drugsbase.cpp" line="989"/>
-        <location filename="../../plugins/drugsbaseplugin/drugsbase.cpp" line="995"/>
-        <location filename="../../plugins/drugsbaseplugin/drugsbase.cpp" line="1000"/>
+        <location filename="../../plugins/drugsbaseplugin/drugsbase.cpp" line="990"/>
+        <location filename="../../plugins/drugsbaseplugin/drugsbase.cpp" line="996"/>
+        <location filename="../../plugins/drugsbaseplugin/drugsbase.cpp" line="1001"/>
         <source>Please contact dev team.</source>
         <translation>Veuillez contacter l&apos;équipe de développement.</translation>
     </message>
     <message>
-        <location filename="../../plugins/drugsbaseplugin/drugsbase.cpp" line="1113"/>
+        <location filename="../../plugins/drugsbaseplugin/drugsbase.cpp" line="1114"/>
         <source>Unable to update the protocol&apos;s transmission date.</source>
         <translation>Impossible de mettre à jour la date de transmission des protocoles.</translation>
     </message>
     <message>
-        <location filename="../../plugins/drugsbaseplugin/drugsbase.cpp" line="1342"/>
+        <location filename="../../plugins/drugsbaseplugin/drugsbase.cpp" line="1343"/>
         <source>No drug database source selected</source>
         <translation>Pas de source pour la base de données thérapeutique sélectionné</translation>
     </message>
     <message>
-        <location filename="../../plugins/drugsbaseplugin/drugsbase.cpp" line="1344"/>
+        <location filename="../../plugins/drugsbaseplugin/drugsbase.cpp" line="1345"/>
         <source>No drugs database loaded.</source>
         <translation>Pas de base de données thérapeutique chargée.</translation>
     </message>
     <message>
-        <location filename="../../plugins/drugsbaseplugin/drugsbase.cpp" line="1362"/>
+        <location filename="../../plugins/drugsbaseplugin/drugsbase.cpp" line="1363"/>
         <source>Asking for a drug without UID</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../../plugins/drugsbaseplugin/drugsbase.cpp" line="1485"/>
+        <location filename="../../plugins/drugsbaseplugin/drugsbase.cpp" line="1486"/>
         <source>Unable to find drug with DID %1</source>
         <translation>Impossible de trouver le médicament avec le DID %1</translation>
     </message>
@@ -432,27 +432,27 @@ Voulez-vous les ajouter au fichier ?</translation>
 <context>
     <name>DrugsData</name>
     <message>
-        <location filename="../../plugins/drugsbaseplugin/idrug.cpp" line="777"/>
+        <location filename="../../plugins/drugsbaseplugin/idrug.cpp" line="810"/>
         <source>No INN found.</source>
         <translation>Pas de DCI connue.</translation>
     </message>
     <message>
-        <location filename="../../plugins/drugsbaseplugin/idrug.cpp" line="782"/>
+        <location filename="../../plugins/drugsbaseplugin/idrug.cpp" line="815"/>
         <source>No interaction class found.</source>
         <translation>Pas de classe d&apos;interaction connue.</translation>
     </message>
     <message>
-        <location filename="../../plugins/drugsbaseplugin/idrug.cpp" line="820"/>
+        <location filename="../../plugins/drugsbaseplugin/idrug.cpp" line="853"/>
         <source>Form(s): </source>
         <translation>Forme(s) : </translation>
     </message>
     <message>
-        <location filename="../../plugins/drugsbaseplugin/idrug.cpp" line="821"/>
+        <location filename="../../plugins/drugsbaseplugin/idrug.cpp" line="854"/>
         <source>Route(s): </source>
         <translation>Voie(s) d&apos;administration : </translation>
     </message>
     <message>
-        <location filename="../../plugins/drugsbaseplugin/idrug.cpp" line="822"/>
+        <location filename="../../plugins/drugsbaseplugin/idrug.cpp" line="855"/>
         <source>Identifier(s): </source>
         <translation>Identifiant(s) : </translation>
     </message>
