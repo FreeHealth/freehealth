@@ -35,37 +35,39 @@ namespace Constants {
 QString typeToString(int type)
 {
     if (type == NoTypeDefined)
-        return QCoreApplication::translate(MH_CONSTANTS_TR_CONTEXT, "Not defined");
+        return QCoreApplication::translate(MH_CONSTANTS_TR_CONTEXT, NOTDEFINED);
     if (type == ChronicDisease)
-        return QCoreApplication::translate(MH_CONSTANTS_TR_CONTEXT, "Chronic disease");
+        return QCoreApplication::translate(MH_CONSTANTS_TR_CONTEXT, TYPE_CHRONICDISEASE);
     if (type == ChronicDiseaseWithoutAcuteEpisodes)
-        return QCoreApplication::translate(MH_CONSTANTS_TR_CONTEXT, "Chronic disease without acute episode");
+        return QCoreApplication::translate(MH_CONSTANTS_TR_CONTEXT, TYPE_CHRONICDISEASE_WO_ACUTE);
     if (type == AcuteDisease)
-        return QCoreApplication::translate(MH_CONSTANTS_TR_CONTEXT, "Acute disease");
+        return QCoreApplication::translate(MH_CONSTANTS_TR_CONTEXT, TYPE_ACUTE);
+    if (type == RiskFactor)
+        return QCoreApplication::translate(MH_CONSTANTS_TR_CONTEXT, RISK_FACTOR);
     return QString();
 }
 
 QStringList availableTypes()
 {
     return QStringList()
-            << QCoreApplication::translate(MH_CONSTANTS_TR_CONTEXT, "Not defined")
-            << QCoreApplication::translate(MH_CONSTANTS_TR_CONTEXT, "Chronic disease")
-            << QCoreApplication::translate(MH_CONSTANTS_TR_CONTEXT, "Chronic disease without acute episode")
-            << QCoreApplication::translate(MH_CONSTANTS_TR_CONTEXT, "Acute disease")
-            << QCoreApplication::translate(MH_CONSTANTS_TR_CONTEXT, "Risk factor");
+            << QCoreApplication::translate(MH_CONSTANTS_TR_CONTEXT, NOTDEFINED)
+            << QCoreApplication::translate(MH_CONSTANTS_TR_CONTEXT, TYPE_CHRONICDISEASE)
+            << QCoreApplication::translate(MH_CONSTANTS_TR_CONTEXT, TYPE_CHRONICDISEASE_WO_ACUTE)
+            << QCoreApplication::translate(MH_CONSTANTS_TR_CONTEXT, TYPE_ACUTE)
+            << QCoreApplication::translate(MH_CONSTANTS_TR_CONTEXT, RISK_FACTOR);
 }
 
 int stringToType(const QString &type)
 {
-    if (type.compare(QCoreApplication::translate(MH_CONSTANTS_TR_CONTEXT, "Not defined"), Qt::CaseInsensitive)==0)
+    if (type.compare(QCoreApplication::translate(MH_CONSTANTS_TR_CONTEXT, NOTDEFINED), Qt::CaseInsensitive)==0)
         return NoTypeDefined;
-    if (type.compare(QCoreApplication::translate(MH_CONSTANTS_TR_CONTEXT, "Chronic disease"), Qt::CaseInsensitive)==0)
+    if (type.compare(QCoreApplication::translate(MH_CONSTANTS_TR_CONTEXT, TYPE_CHRONICDISEASE), Qt::CaseInsensitive)==0)
         return ChronicDisease;
-    if (type.compare(QCoreApplication::translate(MH_CONSTANTS_TR_CONTEXT, "Chronic disease without acute episode"), Qt::CaseInsensitive)==0)
+    if (type.compare(QCoreApplication::translate(MH_CONSTANTS_TR_CONTEXT, TYPE_CHRONICDISEASE_WO_ACUTE), Qt::CaseInsensitive)==0)
         return ChronicDiseaseWithoutAcuteEpisodes;
-    if (type.compare(QCoreApplication::translate(MH_CONSTANTS_TR_CONTEXT, "Acute disease"), Qt::CaseInsensitive)==0)
+    if (type.compare(QCoreApplication::translate(MH_CONSTANTS_TR_CONTEXT, TYPE_ACUTE), Qt::CaseInsensitive)==0)
         return AcuteDisease;
-    if (type.compare(QCoreApplication::translate(MH_CONSTANTS_TR_CONTEXT, "Risk factor"), Qt::CaseInsensitive)==0)
+    if (type.compare(QCoreApplication::translate(MH_CONSTANTS_TR_CONTEXT, RISK_FACTOR), Qt::CaseInsensitive)==0)
         return RiskFactor;
     return NoTypeDefined;
 }
@@ -73,39 +75,39 @@ int stringToType(const QString &type)
 QString statusToString(int state)
 {
     if (state == NoStatusDefined)
-        return QCoreApplication::translate(MH_CONSTANTS_TR_CONTEXT, "Not defined");
+        return QCoreApplication::translate(MH_CONSTANTS_TR_CONTEXT, NOTDEFINED);
     if (state == IsActive)
-        return QCoreApplication::translate(MH_CONSTANTS_TR_CONTEXT, "Active");
+        return QCoreApplication::translate(MH_CONSTANTS_TR_CONTEXT, STATUS_ACTIVE);
     if (state == IsInRemission)
-        return QCoreApplication::translate(MH_CONSTANTS_TR_CONTEXT, "In remission");
+        return QCoreApplication::translate(MH_CONSTANTS_TR_CONTEXT, STATUS_INREMISSION);
     if (state == IsQuiescent)
-        return QCoreApplication::translate(MH_CONSTANTS_TR_CONTEXT, "Quiescent");
+        return QCoreApplication::translate(MH_CONSTANTS_TR_CONTEXT, STATUS_QUIESCENT);
     if (state == IsCured)
-        return QCoreApplication::translate(MH_CONSTANTS_TR_CONTEXT, "Cured");
+        return QCoreApplication::translate(MH_CONSTANTS_TR_CONTEXT, STATUS_CURED);
     return QString();
 }
 
 QStringList availableStatus()
 {
     return QStringList()
-            << QCoreApplication::translate(MH_CONSTANTS_TR_CONTEXT, "Not defined")
-            << QCoreApplication::translate(MH_CONSTANTS_TR_CONTEXT, "Active")
-            << QCoreApplication::translate(MH_CONSTANTS_TR_CONTEXT, "In remission")
-            << QCoreApplication::translate(MH_CONSTANTS_TR_CONTEXT, "Quiescent")
-            << QCoreApplication::translate(MH_CONSTANTS_TR_CONTEXT, "Cured");
+            << QCoreApplication::translate(MH_CONSTANTS_TR_CONTEXT, NOTDEFINED)
+            << QCoreApplication::translate(MH_CONSTANTS_TR_CONTEXT, STATUS_ACTIVE)
+            << QCoreApplication::translate(MH_CONSTANTS_TR_CONTEXT, STATUS_INREMISSION)
+            << QCoreApplication::translate(MH_CONSTANTS_TR_CONTEXT, STATUS_QUIESCENT)
+            << QCoreApplication::translate(MH_CONSTANTS_TR_CONTEXT, STATUS_CURED);
 }
 
 int stringToStatus(const QString &status)
 {
-    if (status.compare(QCoreApplication::translate(MH_CONSTANTS_TR_CONTEXT, "Not defined"), Qt::CaseInsensitive)==0)
+    if (status.compare(QCoreApplication::translate(MH_CONSTANTS_TR_CONTEXT, NOTDEFINED), Qt::CaseInsensitive)==0)
         return NoStatusDefined;
-    if (status.compare(QCoreApplication::translate(MH_CONSTANTS_TR_CONTEXT, "Active"), Qt::CaseInsensitive)==0)
+    if (status.compare(QCoreApplication::translate(MH_CONSTANTS_TR_CONTEXT, STATUS_ACTIVE), Qt::CaseInsensitive)==0)
         return IsActive;
-    if (status.compare(QCoreApplication::translate(MH_CONSTANTS_TR_CONTEXT, "In remission"), Qt::CaseInsensitive)==0)
+    if (status.compare(QCoreApplication::translate(MH_CONSTANTS_TR_CONTEXT, STATUS_INREMISSION), Qt::CaseInsensitive)==0)
         return IsInRemission;
-    if (status.compare(QCoreApplication::translate(MH_CONSTANTS_TR_CONTEXT, "Quiescent"), Qt::CaseInsensitive)==0)
+    if (status.compare(QCoreApplication::translate(MH_CONSTANTS_TR_CONTEXT, STATUS_QUIESCENT), Qt::CaseInsensitive)==0)
         return IsQuiescent;
-    if (status.compare(QCoreApplication::translate(MH_CONSTANTS_TR_CONTEXT, "Cured"), Qt::CaseInsensitive)==0)
+    if (status.compare(QCoreApplication::translate(MH_CONSTANTS_TR_CONTEXT, STATUS_CURED), Qt::CaseInsensitive)==0)
         return IsCured;
     return NoStatusDefined;
 }

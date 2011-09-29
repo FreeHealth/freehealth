@@ -146,6 +146,16 @@ namespace Constants {
     const char * const  REMOVECATEGORY_TEXT     = QT_TRANSLATE_NOOP("PMH", "Remove category");
     const char * const  CATEGORYMANAGER_TEXT    = QT_TRANSLATE_NOOP("PMH", "Past medical history category manager");
 
+    const char * const  NOTDEFINED                      = QT_TRANSLATE_NOOP("PMH", "Not defined");
+    const char * const  TYPE_CHRONICDISEASE             = QT_TRANSLATE_NOOP("PMH", "Chronic disease");
+    const char * const  TYPE_CHRONICDISEASE_WO_ACUTE    = QT_TRANSLATE_NOOP("PMH", "Chronic disease without acute episode");
+    const char * const  TYPE_ACUTE                      = QT_TRANSLATE_NOOP("PMH", "Acute disease");
+    const char * const  RISK_FACTOR                     = QT_TRANSLATE_NOOP("PMH", "Risk factor");
+
+    const char * const  STATUS_ACTIVE        = QT_TRANSLATE_NOOP("PMH", "Active");
+    const char * const  STATUS_INREMISSION   = QT_TRANSLATE_NOOP("PMH", "In remission");
+    const char * const  STATUS_QUIESCENT     = QT_TRANSLATE_NOOP("PMH", "Quiescent");
+    const char * const  STATUS_CURED         = QT_TRANSLATE_NOOP("PMH", "Cured");
 
 }  // End namespace Constants
 }  // End namespace History
