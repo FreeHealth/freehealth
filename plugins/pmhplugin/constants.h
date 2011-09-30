@@ -34,7 +34,7 @@ namespace PMH {
 namespace Constants {
 
     // Translate context
-    const char * const  MH_CONSTANTS_TR_CONTEXT = "PMHx";
+    const char * const  PMH_CONSTANTS_TR_CONTEXT = "PMH";
 
     // Database
     const char * const  DB_NAME            = "pmh";

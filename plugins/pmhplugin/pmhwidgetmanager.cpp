@@ -165,7 +165,7 @@ PmhActionHandler::PmhActionHandler(QObject *parent) :
     pmhMenu->addAction(cmd, Constants::G_PMH_NEW);
     if (newmenu)
         newmenu->addAction(cmd, Core::Constants::G_GENERAL_NEW);
-    connect(a, SIGNAL(triggered()), this, SLOT(createPmh()));
+//    connect(a, SIGNAL(triggered()), this, SLOT(createPmh()));
 
     a = aRemovePmh= new QAction(this);
     a->setObjectName("aRemovePmh");
@@ -248,7 +248,9 @@ void PmhActionHandler::updateActions()
 
 void PmhActionHandler::patientChanged()
 {
-    qWarning() << Q_FUNC_INFO;
+    if (aAddPmh->isEnabled()) {
+        disconnect(patient(), SIGNAL(currentPatientChanged()), this, SLOT(patientChanged()));
+    }
     aAddPmh->setEnabled(true);
 }
 
@@ -263,12 +265,6 @@ void PmhActionHandler::showPmhDatabaseInformations()
     pmhBase()->toTreeWidget(&tree);
     lay.addWidget(&tree);
     Utils::resizeAndCenter(&dlg);
-    dlg.exec();
-}
-
-void PmhActionHandler::createPmh()
-{
-    PmhCreatorDialog dlg(mainWindow());
     dlg.exec();
 }
 

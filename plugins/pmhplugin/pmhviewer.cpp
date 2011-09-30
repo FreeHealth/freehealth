@@ -42,15 +42,19 @@
 #include "pmhcore.h"
 #include "pmhcategorymodel.h"
 
-#include <utils/global.h>
-#include <utils/log.h>
-
 #include <coreplugin/icore.h>
 #include <coreplugin/ipatient.h>
 
+#include <icdplugin/icdcollectiondialog.h>
+
 #include <categoryplugin/categoryonlyproxymodel.h>
 
+#include <utils/global.h>
+#include <utils/log.h>
+
 #include "ui_pmhviewer.h"
+
+#include <QStringListModel>
 
 using namespace PMH;
 using namespace Internal;
@@ -96,8 +100,18 @@ public:
         cat = pmhCore()->pmhCategoryModel()->categoryOnlyModel()->mapFromSource(cat);
         ui->categoryTreeView->setCurrentIndex(cat);
 
-        // Populate EpisodeView
+        // ExtendedView -> Populate EpisodeView
         ui->episodeViewer->setPmhData(pmh);
+
+        // SimpleView -> Populate SimpleGroup widgets
+        ui->simple_date->clear();
+        m_IcdLabelModel->setStringList(QStringList());
+        if (pmh->episodeModel()->rowCount()) {
+            /** \todo improve this */
+            // use only the first row
+            ui->simple_date->setDate(pmh->episodeModel()->index(0, PmhEpisodeModel::DateStart).data().toDate());
+            m_IcdLabelModel->setStringList(pmh->episodeModel()->index(0, PmhEpisodeModel::IcdLabelStringList).data().toStringList());
+        }
 
         // Populate Link viewer
     }
@@ -128,8 +142,10 @@ public:
 public:
     Internal::Ui::PmhViewer *ui;
     PmhViewer::EditMode m_Mode;
+    PmhViewer::ViewMode m_ViewMode;
     PmhData *m_Pmh;
     bool m_ShowPatient;
+    QStringListModel *m_IcdLabelModel;
 };
 
 } // End namespace Internal
@@ -137,12 +153,13 @@ public:
 
 
 /** \brief Creates a new PMH::PmhViewer with the specified \e editMode. \sa PMH::PmhViewer::EditMode */
-PmhViewer::PmhViewer(QWidget *parent, EditMode editMode) :
+PmhViewer::PmhViewer(QWidget *parent, EditMode editMode, ViewMode viewMode) :
     QWidget(parent), d(new PmhViewerPrivate)
 {
     // Create Ui
     d->ui = new Internal::Ui::PmhViewer;
     d->ui->setupUi(this);
+    d->m_IcdLabelModel = new QStringListModel(this);
 
     // Populate combos
     d->ui->typeCombo->addItems(Constants::availableTypes());
@@ -156,11 +173,22 @@ PmhViewer::PmhViewer(QWidget *parent, EditMode editMode) :
     d->setEditMode(editMode);
     setShowPatientInformations(d->m_ShowPatient);
 
+    // Manage View Mode
+    d->m_ViewMode = viewMode;
+    if (viewMode==ExtendedMode) {
+        d->ui->simpleBox->hide();
+    } else {  // SimpleMode
+        d->ui->tabWidget->hide();
+        d->ui->icdCodes->setModel(d->m_IcdLabelModel);
+        connect(d->ui->personalLabel, SIGNAL(textChanged(QString)), this, SLOT(onSimpleViewLabelChanged(QString)));
+    }
+
     // add models to views
     d->ui->categoryTreeView->setModel(pmhCore()->pmhCategoryModel()->categoryOnlyModel());
     d->ui->categoryTreeView->expandAll();
     connect(pmhCore()->pmhCategoryModel()->categoryOnlyModel(), SIGNAL(layoutChanged()),
             d->ui->categoryTreeView, SLOT(expandAll()));
+    connect(d->ui->simple_icd10, SIGNAL(clicked()), this, SLOT(onSimpleViewIcdClicked()));
 }
 
 PmhViewer::~PmhViewer()
@@ -202,6 +230,19 @@ void PmhViewer::setPmhData(Internal::PmhData *pmh)
     d->populateUiWithPmh(pmh);
 }
 
+void PmhViewer::setCategoryForPmh(Category::CategoryItem *category)
+{
+    Q_ASSERT(d->m_Pmh);
+    if (!d->m_Pmh)
+        return;
+    d->m_Pmh->setCategory(category);
+    // update ui
+    // Get category
+    QModelIndex cat = pmhCore()->pmhCategoryModel()->indexForCategory(d->m_Pmh->category());
+    cat = pmhCore()->pmhCategoryModel()->categoryOnlyModel()->mapFromSource(cat);
+    d->ui->categoryTreeView->setCurrentIndex(cat);
+}
+
 /** \brief Create a new PMH::Internal::PmhData pointer and use it in the view. Equivalent to setPmhData(new PMH::Internal::PmhData) */
 void PmhViewer::createNewPmh()
 {
@@ -227,10 +268,34 @@ Internal::PmhData *PmhViewer::modifiedPmhData() const
     if (d->m_Mode==ReadOnlyMode) {
         return d->m_Pmh;
     }
+
     // Apply changes to PmhData
     d->populatePmhWithUi();
     return d->m_Pmh;
 }
+
+void PmhViewer::onSimpleViewIcdClicked()
+{
+    // create an ICD10 collection dialog
+    ICD::IcdCollectionDialog dlg(this);
+    // get the XML ICD10 coding
+    PmhEpisodeModel *model = d->m_Pmh->episodeModel();
+    QString xml = model->index(0, PmhEpisodeModel::IcdXml).data(Qt::EditRole).toString();
+//    LOG(xml);
+    dlg.setXmlIcdCollection(xml);
+    if (dlg.exec()==QDialog::Accepted) {
+        // retrieve selected codes to the PmhEpisodeModel
+        d->m_Pmh->episodeModel()->setData(model->index(0, PmhEpisodeModel::IcdXml), dlg.xmlIcdCollection());
+        // update the icdCodesLineEdit
+       d->m_IcdLabelModel->setStringList(d->m_Pmh->episodeModel()->index(0, PmhEpisodeModel::IcdLabelStringList).data().toStringList());
+    }
+}
+
+void PmhViewer::onSimpleViewLabelChanged(const QString &text)
+{
+    d->m_Pmh->episodeModel()->setData(d->m_Pmh->episodeModel()->index(0, PmhEpisodeModel::Label), text);
+}
+
 
 void PmhViewer::changeEvent(QEvent *e)
 {

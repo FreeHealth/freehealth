@@ -50,7 +50,6 @@ public:
 private Q_SLOTS:
     void patientChanged();
     void showPmhDatabaseInformations();
-    void createPmh();
     void categoryManager();
 
 private:

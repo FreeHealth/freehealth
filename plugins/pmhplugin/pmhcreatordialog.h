@@ -30,6 +30,9 @@
 #include <QDialog>
 class QAbstractButton;
 
+namespace Category {
+class CategoryItem;
+}
 
 namespace PMH {
 namespace Ui {
@@ -43,6 +46,8 @@ class PmhCreatorDialog : public QDialog
 public:
     explicit PmhCreatorDialog(QWidget *parent = 0);
     ~PmhCreatorDialog();
+
+    void setCategory(Category::CategoryItem *category);
 
 private Q_SLOTS:
     void on_buttonBox_clicked(QAbstractButton *button);

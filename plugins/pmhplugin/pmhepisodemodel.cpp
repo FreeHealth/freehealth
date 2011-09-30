@@ -120,6 +120,7 @@ QVariant PmhEpisodeModel::data(const QModelIndex &index, int role) const
             case DateEnd: return ep->data(PmhEpisodeData::DateEnd);
             case Label: return ep->data(PmhEpisodeData::Label);
             case IcdCodeList: return ep->data(PmhEpisodeData::IcdCodeList);
+            case IcdLabelStringList : return ep->data(PmhEpisodeData::IcdLabelStringList);
             case IcdXml: return ep->data(PmhEpisodeData::IcdXml);
             }
             break;
@@ -132,6 +133,8 @@ QVariant PmhEpisodeModel::data(const QModelIndex &index, int role) const
             case DateEnd: return ep->data(PmhEpisodeData::DateEnd).toDate().toString(QLocale().dateFormat());
             case Label: return ep->data(PmhEpisodeData::Label);
             case IcdCodeList: return ep->data(PmhEpisodeData::IcdCodeList);
+            case IcdLabelStringList : return ep->data(PmhEpisodeData::IcdLabelStringList);
+            default : return QVariant();
             }
             break;
         }
@@ -228,7 +231,7 @@ bool PmhEpisodeModel::removeRows(int row, int count, const QModelIndex &parent)
             if (!toRemove.contains(data))
                 toRemove << data;
         } else {
-            Utils::Log::addError(this, "Unable to remove data, out of range.", __FILE__, __LINE__);
+            LOG_ERROR("Unable to remove data, out of range.");
         }
     }
 

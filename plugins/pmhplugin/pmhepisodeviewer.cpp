@@ -100,6 +100,10 @@ void PmhEpisodeViewer::setPmhData(Internal::PmhData *pmh)
         }
     }
     d->m_Pmh = pmh;
+    // If SimpleView -> test pmhepisodedata -> create a default one
+    if (pmh->episodeModel()->rowCount()==0) {
+        pmh->episodeModel()->insertRow(0);
+    }
     ui->tableView->setModel(pmh->episodeModel());
     ui->tableView->hideColumn(PmhEpisodeModel::IcdXml);
     ui->tableView->hideColumn(PmhEpisodeModel::Contact);
@@ -121,7 +125,7 @@ void PmhEpisodeViewer::itemActivated(const QModelIndex &item)
         ICD::IcdCollectionDialog dlg(this);
         // get the XML ICD10 coding
         QString xml = item.model()->index(item.row(), PmhEpisodeModel::IcdXml).data(Qt::EditRole).toString();
-        LOG(xml);
+//        LOG(xml);
         dlg.setXmlIcdCollection(xml);
         if (dlg.exec()==QDialog::Accepted) {
             // retrieve selected codes to the PmhEpisodeModel

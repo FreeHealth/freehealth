@@ -36,6 +36,7 @@
 #include "pmhdata.h"
 #include "constants.h"
 #include "pmhcore.h"
+#include "pmhepisodemodel.h"
 
 #include <coreplugin/icore.h>
 #include <coreplugin/ipatient.h>
@@ -43,6 +44,7 @@
 #include <coreplugin/itheme.h>
 #include <coreplugin/isettings.h>
 #include <coreplugin/translators.h>
+#include <coreplugin/constants_icons.h>
 
 #include <formmanagerplugin/iformitem.h>
 #include <formmanagerplugin/formmanager.h>
@@ -98,7 +100,6 @@ namespace {
         ~TreeItem()
         {
             m_Label.clear();
-            m_Icon.clear();
             qDeleteAll(m_Children);
             m_Children.clear();
 //            delete m_Form;
@@ -149,15 +150,15 @@ namespace {
         QString label() const {return m_Label;}
         void setLabel(QString label) {m_Label = label;}
 
-        QString icon() const {return m_Icon;}
-        void setIcon(QString icon) {m_Icon = icon;}
+        QIcon icon() const {return m_Icon;}
+        void setIcon(QIcon icon) {m_Icon = icon;}
 
         // Category / PMH
         void setPmhCategory(Category::CategoryItem *cat)
         {
             m_Cat = cat;
             setLabel(cat->label());
-            setIcon(cat->iconName());
+            setIcon(theme()->icon(cat->iconName()));
         }
         Category::CategoryItem *pmhCategory() const {return m_Cat;}
 
@@ -207,7 +208,8 @@ namespace {
     private:
         TreeItem *m_Parent;
         QList<TreeItem*> m_Children;
-        QString m_Label, m_Icon;
+        QString m_Label;
+        QIcon m_Icon;
         QVector<int> m_DirtyRows;
         bool m_IsModified;
         Category::CategoryItem *m_Cat;
@@ -330,25 +332,53 @@ public:
         child->setPmhData(pmh);
 
         // Add episodes
-        foreach(PmhEpisodeData *episode, pmh->episodes()) {
+        if (pmh->episodeModel()->rowCount() == 1) {
+            // One episodeData PMHx
+            PmhEpisodeData *episode = pmh->episodes().at(0);
+            QString label = episode->data(PmhEpisodeData::Label).toString();
             child = new TreeItem(item);
-            child->setLabel(episode->data(PmhEpisodeData::Label).toString());
             child->setPmhData(pmh);
-            QString label;
-            QString dateEnd = tkTr(Trans::Constants::NOW);
-            if (!episode->data(PmhEpisodeData::DateEnd).isNull())
-                dateEnd = episode->data(PmhEpisodeData::DateEnd).toDate().toString(QLocale().dateFormat());
-            label = QString("%1 to %2")
-                    .arg(episode->data(PmhEpisodeData::DateStart).toDate().toString(QLocale().dateFormat()))
-                    .arg(dateEnd);
-            child = new TreeItem(child);
+            if (!episode->data(PmhEpisodeData::DateEnd).isNull()) {
+                label += QString(" (%1 %2 %3)")
+                        .arg(episode->data(PmhEpisodeData::DateStart).toDate().toString(QLocale().dateFormat(QLocale::ShortFormat)))
+                        .arg(tkTr(Trans::Constants::TO))
+                        .arg(episode->data(PmhEpisodeData::DateEnd).toDate().toString(QLocale().dateFormat(QLocale::ShortFormat)));
+            } else {
+                label += QString(" (%1)")
+                        .arg(episode->data(PmhEpisodeData::DateStart).toDate().toString(QLocale().dateFormat(QLocale::ShortFormat)));
+            }
             child->setLabel(label);
-            child->setPmhData(pmh);
+
             // Add ICD codings
             foreach(const QString &icd, episode->data(PmhEpisodeData::IcdLabelStringList).toStringList()) {
                 child = new TreeItem(child);
                 child->setLabel(icd);
                 child->setPmhData(pmh);
+                child->setIcon(theme()->icon(Core::Constants::ICONFREEICD));
+            }
+
+        } else {
+            // Multiple episodeData PMHx
+            foreach(PmhEpisodeData *episode, pmh->episodes()) {
+                child = new TreeItem(item);
+                child->setLabel(episode->data(PmhEpisodeData::Label).toString());
+                child->setPmhData(pmh);
+                QString label;
+                QString dateEnd = tkTr(Trans::Constants::NOW);
+                if (!episode->data(PmhEpisodeData::DateEnd).isNull())
+                    dateEnd = episode->data(PmhEpisodeData::DateEnd).toDate().toString(QLocale().dateFormat());
+                label = QString("%1 to %2")
+                        .arg(episode->data(PmhEpisodeData::DateStart).toDate().toString(QLocale().dateFormat()))
+                        .arg(dateEnd);
+                child = new TreeItem(child);
+                child->setLabel(label);
+                child->setPmhData(pmh);
+                // Add ICD codings
+                foreach(const QString &icd, episode->data(PmhEpisodeData::IcdLabelStringList).toStringList()) {
+                    child = new TreeItem(child);
+                    child->setLabel(icd);
+                    child->setPmhData(pmh);
+                }
             }
         }
 
@@ -612,6 +642,8 @@ QVariant PmhCategoryModel::data(const QModelIndex &index, int role) const
             if (it->isCategory()) {
                 return theme()->icon(it->pmhCategory()->iconName(), Core::ITheme::SmallIcon);
             }
+            if (!it->icon().isNull())
+                return it->icon();
         }
     }
 

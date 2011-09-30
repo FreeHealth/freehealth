@@ -63,6 +63,7 @@ private Q_SLOTS:
     void createCategory();
     void removeItem();
     void onPatientChanged();
+    void createPmh();
 
 private:
     void changeEvent(QEvent *e);

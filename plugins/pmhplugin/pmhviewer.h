@@ -29,6 +29,10 @@
 
 #include <QWidget>
 
+namespace Category {
+class CategoryItem;
+}
+
 namespace PMH {
 namespace Internal {
 class PmhViewerPrivate;
@@ -44,17 +48,26 @@ public:
         ReadOnlyMode,
         ReadWriteMode
     };
+    enum ViewMode {
+        ExtendedMode,
+        SimpleMode
+    };
 
-    PmhViewer(QWidget *parent = 0, EditMode editMode = ReadOnlyMode);
+    PmhViewer(QWidget *parent = 0, EditMode editMode = ReadOnlyMode, ViewMode viewMode = SimpleMode);
     ~PmhViewer();
 
     void setShowPatientInformations(bool show);
     void setEditMode(EditMode mode);
     void setPmhData(Internal::PmhData *pmh);
+    void setCategoryForPmh(Category::CategoryItem *category);
     void createNewPmh();
     void revert();
 
     Internal::PmhData *modifiedPmhData() const;
+
+protected Q_SLOTS:
+    void onSimpleViewIcdClicked();
+    void onSimpleViewLabelChanged(const QString &text);
 
 protected:
     void changeEvent(QEvent *e);

@@ -72,6 +72,11 @@ PmhCreatorDialog::~PmhCreatorDialog()
     delete ui;
 }
 
+void PmhCreatorDialog::setCategory(Category::CategoryItem *category)
+{
+    ui->pmhViewer->setCategoryForPmh(category);
+}
+
 void PmhCreatorDialog::on_buttonBox_clicked(QAbstractButton *button)
 {
     switch (ui->buttonBox->standardButton(button)) {

@@ -45,6 +45,7 @@ public:
         DateEnd,
         Label,
         IcdCodeList,
+        IcdLabelStringList,
         IcdXml,
         Contact,
         EmptyColumn,

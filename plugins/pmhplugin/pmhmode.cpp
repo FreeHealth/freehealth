@@ -106,6 +106,10 @@ PmhModeWidget::PmhModeWidget(QWidget *parent) :
     ui->treeView->header()->setStretchLastSection(false);
     ui->treeView->header()->setResizeMode(PmhCategoryModel::Label, QHeaderView::Stretch);
 
+    // connect the aAddPmh action
+    cmd = actionManager()->command(Constants::A_PMH_NEW);
+    connect(cmd->action(), SIGNAL(triggered()), this, SLOT(createPmh()));
+
     connect(ui->treeView->selectionModel(), SIGNAL(currentChanged (QModelIndex, QModelIndex)),
             this, SLOT(currentChanged(QModelIndex, QModelIndex)));
     connect(ui->buttonBox, SIGNAL(clicked(QAbstractButton*)), this, SLOT(onButtonClicked(QAbstractButton*)));
@@ -222,11 +226,22 @@ void PmhModeWidget::removeItem()
 
 void PmhModeWidget::onPatientChanged()
 {
+    ui->treeView->expandAll();
     for(int i = 1; i < ui->stackedWidget->count(); ++i) {
         // Remove all form's widgets
         ui->stackedWidget->removeWidget(ui->stackedWidget->widget(i));
     }
     m_FormUid_StackId.clear();
+}
+
+void PmhModeWidget::createPmh()
+{
+    PmhCreatorDialog dlg(this);
+    if (ui->treeView->selectionModel()->hasSelection()) {
+        QModelIndex item = ui->treeView->selectionModel()->currentIndex();
+        dlg.setCategory(catModel()->categoryForIndex(item));
+    }
+    dlg.exec();
 }
 
 void PmhModeWidget::changeEvent(QEvent *e)

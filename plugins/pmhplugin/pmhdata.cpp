@@ -34,6 +34,8 @@
 #include <icdplugin/icdcollectionmodel.h>
 #include <icdplugin/icdio.h>
 
+#include <utils/log.h>
+
 #include <QHash>
 #include <QDate>
 

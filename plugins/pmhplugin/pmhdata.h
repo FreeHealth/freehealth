@@ -59,7 +59,7 @@ public:
         Comment,
         DbOnly_Id,
         DbOnly_IsValid,
-        DbOnly_MasterId,
+        DbOnly_MasterId
     };
 
     PmhEpisodeData();
