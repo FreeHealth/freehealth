@@ -93,7 +93,7 @@
     </message>
     <message>
         <location filename="../../plugins/pmhplugin/pmhmode.cpp" line="98"/>
-        <location filename="../../plugins/pmhplugin/pmhmode.cpp" line="238"/>
+        <location filename="../../plugins/pmhplugin/pmhmode.cpp" line="252"/>
         <source>Edit</source>
         <translation>Éditer</translation>
     </message>
@@ -185,6 +185,7 @@
     </message>
     <message>
         <location filename="../../plugins/pmhplugin/pmhviewer.ui" line="62"/>
+        <location filename="../../plugins/pmhplugin/pmhviewer.ui" line="205"/>
         <source>General information</source>
         <translation>Informations générales</translation>
     </message>
@@ -222,6 +223,21 @@
         <location filename="../../plugins/pmhplugin/pmhviewer.ui" line="186"/>
         <source>Category</source>
         <translation>Catégorie</translation>
+    </message>
+    <message>
+        <location filename="../../plugins/pmhplugin/pmhviewer.ui" line="211"/>
+        <source>Date</source>
+        <translation></translation>
+    </message>
+    <message>
+        <location filename="../../plugins/pmhplugin/pmhviewer.ui" line="218"/>
+        <source>dd/MM/yyyy</source>
+        <translation></translation>
+    </message>
+    <message>
+        <location filename="../../plugins/pmhplugin/pmhviewer.ui" line="225"/>
+        <source>Manage ICD10 Codes</source>
+        <translation>Gérer les codes CIM10</translation>
     </message>
     <message>
         <location filename="../../plugins/pmhplugin/pmhviewer.ui" line="148"/>
@@ -265,22 +281,22 @@
 <context>
     <name>PMH::PmhEpisodeModel</name>
     <message>
-        <location filename="../../plugins/pmhplugin/pmhepisodemodel.cpp" line="260"/>
+        <location filename="../../plugins/pmhplugin/pmhepisodemodel.cpp" line="263"/>
         <source>Starting date</source>
         <translation>Date de début</translation>
     </message>
     <message>
-        <location filename="../../plugins/pmhplugin/pmhepisodemodel.cpp" line="261"/>
+        <location filename="../../plugins/pmhplugin/pmhepisodemodel.cpp" line="264"/>
         <source>Ending date</source>
         <translation>Date de fin</translation>
     </message>
     <message>
-        <location filename="../../plugins/pmhplugin/pmhepisodemodel.cpp" line="262"/>
+        <location filename="../../plugins/pmhplugin/pmhepisodemodel.cpp" line="265"/>
         <source>Label</source>
         <translation>Libellé</translation>
     </message>
     <message>
-        <location filename="../../plugins/pmhplugin/pmhepisodemodel.cpp" line="263"/>
+        <location filename="../../plugins/pmhplugin/pmhepisodemodel.cpp" line="266"/>
         <source>ICD10 coding</source>
         <translation>Codage CIM10</translation>
     </message>
@@ -305,7 +321,7 @@
 <context>
     <name>PMH::PmhViewer</name>
     <message>
-        <location filename="../../plugins/pmhplugin/pmhviewer.cpp" line="209"/>
+        <location filename="../../plugins/pmhplugin/pmhviewer.cpp" line="250"/>
         <source>Replacing pmh data</source>
         <translation>Remplacement des données de l&apos;antécédent</translation>
     </message>
