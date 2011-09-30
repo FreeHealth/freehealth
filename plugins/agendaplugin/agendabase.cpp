@@ -1346,7 +1346,8 @@ QList<QDateTime> AgendaBase::nextAvailableTime(const QDateTime &startSearch, con
 
     int nbFound = 0;
     int durationInSeconds = durationInMinutes * 60;
-    int limitComputation = 10;//224640; // 10min, 6day a week, 12hours a day :: 1 full year == 12*6 *10 *6 *52 == 224640
+    /** \todo manage algorythm error here */
+    int limitComputation = 100;//224640; // 10min, 6day a week, 12hours a day :: 1 full year == 12*6 *10 *6 *52 == 224640
 
     while (nbFound < numberOfDates) {
         --limitComputation;
