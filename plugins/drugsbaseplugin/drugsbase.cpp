@@ -1361,21 +1361,34 @@ IDrug *DrugsBase::getDrugByUID(const QVariant &uid1, const QVariant &uid2, const
     QString newUid3 = uid3.toString();
     if ((newUid1 == "-1" || newUid1.isEmpty()) && oldUid.toString().isEmpty()) {
         LOG(tr("Asking for a drug without UID"));
+        QHash<int, QString> where;
+        where.insert(Constants::MASTER_SID, QString("=%1").arg(d->m_DbUids.value(sourceUid)));
         QString req = select(Constants::Table_MASTER, QList<int>()
                              << Constants::MASTER_UID1
                              << Constants::MASTER_UID2
-                             << Constants::MASTER_UID3) + " LIMIT 1";
-        QSqlQuery q(req,DB);
-        if (q.isActive()) {
+                             << Constants::MASTER_UID3
+                             , where) + " LIMIT 1";
+        QSqlQuery q(DB);
+        if (q.exec(req)) {
             if (q.next()) {
                 newUid1 = q.value(0).toString();
                 newUid2 = q.value(1).toString();
                 newUid3 = q.value(2).toString();
             }
         } else {
-            LOG_ERROR("Can find a valid DRUGS_UID in getDrugByUID where uid==-1");
             LOG_QUERY_ERROR(q);
+        }
+        // not found ?? --> log error
+        if (newUid1.isEmpty() || newUid1=="-1") {
+            LOG_ERROR("Unable to retreive a random drug when uid==-1");
+            LOG_ERROR(QString("    --> Uid1=%1; uid2=%2; uid3= %3; newUid1=%4; newUid2=%5; newUid3=%6; Source:%7")
+                      .arg(uid1.toString()).arg(uid2.toString()).arg(uid3.toString())
+                      .arg(newUid1).arg(newUid2).arg(newUid3).arg(sourceUid));
             return 0;
+        } else {
+            LOG(QString("Getting random drug with params: Uid1=%1; uid2=%2; uid3= %3; newUid1=%4; newUid2=%5; newUid3=%6; Source:%7")
+                      .arg(uid1.toString()).arg(uid2.toString()).arg(uid3.toString())
+                      .arg(newUid1).arg(newUid2).arg(newUid3).arg(sourceUid));
         }
     }
 
@@ -1401,8 +1414,8 @@ IDrug *DrugsBase::getDrugByUID(const QVariant &uid1, const QVariant &uid2, const
     joins << Utils::Join(Constants::Table_MASTER, Constants::MASTER_DID, Constants::Table_DRUGS, Constants::DRUGS_DID);
     QString req = select(get, joins, condition);
     IDrug *toReturn = 0;
-    QSqlQuery q(req , DB);
-    if (q.isActive()) {
+    QSqlQuery q(DB);
+    if (q.exec(req)) {
         if (q.next()) {
 //            Utils::Log::logTimeElapsed(time, "DrugsBase", "Query.next()");
             toReturn = new IDrug();
