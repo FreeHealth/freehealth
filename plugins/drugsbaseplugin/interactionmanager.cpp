@@ -65,7 +65,7 @@
 #include <QLabel>
 #include <QStandardItemModel>
 
-enum { WarnComputations = true };
+enum { WarnComputations = false };
 
 namespace  {
     const char* const LIST_MASK =
