@@ -783,7 +783,7 @@ QList<EpisodeData *> EpisodeBase::getEpisodes(const EpisodeBaseQuery &baseQuery)
 
 //        joins << Utils::Join(Table_VALIDATION, VALIDATION_EPISODE_ID, Table_EPISODES, EPISODES_ID);
 
-    order = QString(" ORDER BY `%1`.`%2`ASC \n").arg(table(Table_EPISODES)).arg(fieldName(Table_EPISODES, EPISODES_USERDATE));
+    order = QString(" ORDER BY `%1`.`%2` DESC \n").arg(table(Table_EPISODES)).arg(fieldName(Table_EPISODES, EPISODES_USERDATE));
     if (baseQuery.useLimit()) {
         limit = QString(" LIMIT %1, %2 \n").arg(baseQuery.limitStart()).arg(baseQuery.limitEnd());
     }
