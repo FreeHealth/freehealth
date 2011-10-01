@@ -84,6 +84,28 @@ DrugsPlugin::DrugsPlugin() :
 #ifdef FREEDIAMS
         qWarning() << "creating FREEDIAMS::DrugsPlugin";
 #endif
+
+    viewPage = new DrugsViewOptionsPage(this);
+    selectorPage = new DrugsSelectorOptionsPage(this);
+    printPage = new DrugsPrintOptionsPage(this);
+#ifdef FREEDIAMS
+    userPage = new DrugsUserOptionsPage(this);
+#endif
+    extraPage = new DrugsExtraOptionsPage(this);
+    databaseSelectorPage = new DrugsDatabaseSelectorPage(this);
+    protocolPage = new ProtocolPreferencesPage(this);
+    enginePage = new DrugEnginesPreferencesPage(this);
+
+    addObject(viewPage);
+    addObject(selectorPage);
+    addObject(printPage);
+#ifdef FREEDIAMS
+    addObject(userPage);
+#endif
+    addObject(extraPage);
+    addObject(databaseSelectorPage);
+    addObject(protocolPage);
+    addObject(enginePage);
 }
 
 DrugsPlugin::~DrugsPlugin()
@@ -152,17 +174,6 @@ void DrugsPlugin::extensionsInitialized()
 
     messageSplash(tr("Initializing drugs plugin..."));
 
-    viewPage = new DrugsViewOptionsPage(this);
-    selectorPage = new DrugsSelectorOptionsPage(this);
-    printPage = new DrugsPrintOptionsPage(this);
-#ifdef FREEDIAMS
-    userPage = new DrugsUserOptionsPage(this);
-#endif
-    extraPage = new DrugsExtraOptionsPage(this);
-    databaseSelectorPage = new DrugsDatabaseSelectorPage(this);
-    protocolPage = new ProtocolPreferencesPage(this);
-    enginePage = new DrugEnginesPreferencesPage(this);
-
     // check settings
     if (!settings()->value(Constants::S_CONFIGURED, false).toBool()) {
         viewPage->writeDefaultSettings(Core::ICore::instance()->settings());
@@ -189,17 +200,6 @@ void DrugsPlugin::extensionsInitialized()
         protocolPage->checkSettingsValidity();
         enginePage->checkSettingsValidity();
     }
-
-    addObject(viewPage);
-    addObject(selectorPage);
-    addObject(printPage);
-#ifdef FREEDIAMS
-    addObject(userPage);
-#endif
-    addObject(extraPage);
-    addObject(databaseSelectorPage);
-    addObject(protocolPage);
-    addObject(enginePage);
 
     connect(Core::ICore::instance(), SIGNAL(coreOpened()), this, SLOT(postCoreOpened()));
 }
