@@ -168,7 +168,7 @@ public:
     {
 //        if (!m_Result->testedDrugs().contains((IDrug*)drug))
 //            return QIcon();
-//        if (!query.engineUid.isEmpty() && query.engineUid!=Constants::PIM_ENGINE_UID) {
+//        if (!query.engineUid.isEmpty() && query.engineUid!=Constants::ALLERGY_ENGINE_UID) {
 //            return QIcon();
 //        }
 ////        int level = getMaximumTypeOfIAM(m_Result->interactions(), drug);
@@ -184,7 +184,7 @@ public:
 //            return toReturn;
 
 //        // get all interactions related to the drug
-//        QVector<IDrugInteraction *> interactions = m_Result->getInteractions(drug, Constants::PIM_ENGINE_UID);
+//        QVector<IDrugInteraction *> interactions = m_Result->getInteractions(drug, Constants::ALLERGY_ENGINE_UID);
 
 //        QString tmp;
 //        switch (query.messageType)
@@ -418,9 +418,9 @@ public:
 //            return false;
 //        QVector<IDrugInteraction *> interactions;
 //        if (query.relatedDrug) {
-//            interactions = query.result->getInteractions(query.relatedDrug, Constants::PIM_ENGINE_UID);
+//            interactions = query.result->getInteractions(query.relatedDrug, Constants::ALLERGY_ENGINE_UID);
 //        } else {
-//            interactions = query.result->interactions(Constants::PIM_ENGINE_UID);
+//            interactions = query.result->interactions(Constants::ALLERGY_ENGINE_UID);
 //        }
 //        // No interactions ?
 //        if (interactions.isEmpty())
@@ -490,7 +490,7 @@ bool DrugAllergyEngine::init()
 
 bool DrugAllergyEngine::isActive() const
 {
-    return settings()->value(Constants::S_ACTIVATED_INTERACTION_ENGINES).toStringList().contains(Constants::PIM_ENGINE_UID);
+    return settings()->value(Constants::S_ACTIVATED_INTERACTION_ENGINES).toStringList().contains(Constants::ALLERGY_ENGINE_UID);
 }
 
 QString DrugAllergyEngine::name() const
@@ -572,10 +572,10 @@ void DrugAllergyEngine::setActive(bool activate)
         return;
     // update settings
     if (activate) {
-        settings()->appendToValue(Constants::S_ACTIVATED_INTERACTION_ENGINES, Constants::PIM_ENGINE_UID);
+        settings()->appendToValue(Constants::S_ACTIVATED_INTERACTION_ENGINES, Constants::ALLERGY_ENGINE_UID);
     } else {
         QStringList l = settings()->value(Constants::S_ACTIVATED_INTERACTION_ENGINES).toStringList();
-        l.removeAll(Constants::PIM_ENGINE_UID);
+        l.removeAll(Constants::ALLERGY_ENGINE_UID);
         settings()->setValue(Constants::S_ACTIVATED_INTERACTION_ENGINES, l);
     }
 }
