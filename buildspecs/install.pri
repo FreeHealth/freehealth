@@ -175,9 +175,11 @@ pix32.path = $${INSTALL_MEDIUMPIX_PATH}
 pix32.files = $${SOURCES_GLOBAL_RESOURCES}/pixmap/32x32/*.png
 pix64.path = $${INSTALL_BIGPIX_PATH}
 pix64.files = $${SOURCES_GLOBAL_RESOURCES}/pixmap/64x64/*.png
+pix64jpg.path = $${INSTALL_BIGPIX_PATH}
+pix64jpg.files = $${SOURCES_GLOBAL_RESOURCES}/pixmap/64x64/*.jpg
 pixsvg.path = $${INSTALL_SVGPIX_PATH}
 pixsvg.files = $${SOURCES_GLOBAL_RESOURCES}/pixmap/svg/*.svg
-INSTALLS+=screens pix16 pix16flags pix32 pix64 pixsvg
+INSTALLS+=screens pix16 pix16flags pix32 pix64 pix64jpg pixsvg
 
 # Install desktop file
 !isEmpty(INSTALL_DESKTOP_FILES_PATH){
