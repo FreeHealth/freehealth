@@ -188,7 +188,6 @@ void DrugEnginesPreferencesPage::checkSettingsValidity()
             settings()->setValue(k, defaultvalues.value(k));
         }
     }
-    settings()->sync();
 }
 
 void DrugEnginesPreferencesPage::finish() { delete m_Widget; }
