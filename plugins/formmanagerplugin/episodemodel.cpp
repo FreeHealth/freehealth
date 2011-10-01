@@ -429,6 +429,7 @@ public:
         m_Episodes.clear();
 
         // get Episodes
+        /** \todo code here : add limit to episode retreiving. */
         EpisodeBaseQuery query;
         query.setPatientUid(patient()->uuid());
         query.setValidEpisodes(true);
@@ -648,13 +649,27 @@ public:
                 continue;  // No episodes
             }
 
-            // get last episode
+            // find last episode of the form
+            WARN_FUNC;
+            EpisodeData *lastOne = 0;
             for(int i=0; i < m_Episodes.count(); ++i) {
-                if (m_Episodes.at(i)->data(EpisodeData::FormUuid).toString()==form->uuid()) {
-                    feedFormWithEpisodeContent(form, m_Episodes.at(i), andFeedPatientModel);
-//                    qWarning() << "ACTIVATE EPISODE" << m_Episodes.at(i)->data(EpisodeData::Label).toString();
+                EpisodeData *episode = m_Episodes.at(i);
+                if (episode->data(EpisodeData::FormUuid).toString()==form->uuid()) {
+                    if (!lastOne) {
+                        lastOne = episode;
+                        continue;
+                    }
+                    if (lastOne->data(EpisodeData::UserDate).toDateTime() < episode->data(EpisodeData::UserDate).toDateTime()) {
+                        lastOne = episode;
+                    }
                 }
             }
+
+            // feed episode and activate it
+            if (lastOne) {
+                feedFormWithEpisodeContent(form, lastOne, andFeedPatientModel);
+            }
+
         }
     }
 
@@ -772,8 +787,6 @@ void EpisodeModel::onUserChanged()
 void EpisodeModel::onPatientChanged()
 {
     d->m_CurrentPatient = patient()->uuid();
-
-    qWarning() << "CURRENT PATIENT" << d->m_CurrentPatient;
 
     d->refreshEpisodes();
     d->getLastEpisodes(true);
@@ -1289,7 +1302,7 @@ QString EpisodeModel::lastEpisodesSynthesis() const
 
     d->getLastEpisodes(false);
     QString html;
-    foreach(FormMain *f, d->m_RootForm->flattenFormMainChildren()) {
+    foreach(FormMain *f, d->m_RootForm->firstLevelFormMainChildren()) {
         if (!f) {
             LOG_ERROR("??");
             continue;
