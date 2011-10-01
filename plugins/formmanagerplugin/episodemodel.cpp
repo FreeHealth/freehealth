@@ -650,7 +650,6 @@ public:
             }
 
             // find last episode of the form
-            WARN_FUNC;
             EpisodeData *lastOne = 0;
             for(int i=0; i < m_Episodes.count(); ++i) {
                 EpisodeData *episode = m_Episodes.at(i);
