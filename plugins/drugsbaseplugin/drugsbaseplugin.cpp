@@ -97,6 +97,17 @@ bool DrugsBasePlugin::initialize(const QStringList &arguments, QString *errorStr
     Core::ICore::instance()->translators()->addNewTranslator("drugsbaseplugin");
     messageSplash(tr("Initializing drugs database plugin..."));
 
+    // Initialize the drugs engines
+    m_DDIEngine = new DrugsDB::Internal::DrugDrugInteractionEngine(this);
+    m_DDIEngine->init();
+    addObject(m_DDIEngine);
+    m_PimEngine = new DrugsDB::Internal::PimEngine(this);
+    m_PimEngine->init();
+    addObject(m_PimEngine);
+    m_AllergyEngine = new DrugsDB::Internal::DrugAllergyEngine(this);
+    m_AllergyEngine->init();
+    addObject(m_AllergyEngine);
+
     return true;
 }
 
@@ -109,17 +120,6 @@ void DrugsBasePlugin::extensionsInitialized()
 
     // initialize DrugsBase
     Internal::DrugsBase::instance();
-
-    // Initialize the drugs engines
-    m_DDIEngine = new DrugsDB::Internal::DrugDrugInteractionEngine(this);
-    m_DDIEngine->init();
-    addObject(m_DDIEngine);
-    m_PimEngine = new DrugsDB::Internal::PimEngine(this);
-    m_PimEngine->init();
-    addObject(m_PimEngine);
-    m_AllergyEngine = new DrugsDB::Internal::DrugAllergyEngine(this);
-    m_AllergyEngine->init();
-    addObject(m_AllergyEngine);
 
     addAutoReleasedObject(new Core::PluginAboutPage(pluginSpec(), this));
     addAutoReleasedObject(new DrugsDB::Internal::DrugsTemplatePrinter(this));

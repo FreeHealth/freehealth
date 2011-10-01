@@ -402,7 +402,6 @@ DrugRoute::SystemicEffects DrugRoute::systemicEffect() const
 
 void DrugRoute::setSystemicDatabaseTag(const QString &systemic)
 {
-    WARN_FUNC << systemic << d->m_Drug->brandName();
     if (systemic.compare("yes", Qt::CaseInsensitive)==0) {
         d->m_Syst = HasSystemicEffect;
     } else if (systemic.compare("no", Qt::CaseInsensitive)==0) {

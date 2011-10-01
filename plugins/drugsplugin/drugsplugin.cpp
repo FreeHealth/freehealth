@@ -133,7 +133,6 @@ bool DrugsPlugin::initialize(const QStringList &arguments, QString *errorMessage
     Core::ICore::instance()->translators()->addNewTranslator("mfDrugsWidget");
     messageSplash(tr("Initializing drugs plugin..."));
 
-
     addAutoReleasedObject(new Core::PluginAboutPage(this->pluginSpec(), this));
 
 #ifdef FREEMEDFORMS

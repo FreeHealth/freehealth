@@ -32,6 +32,7 @@
 #include <coreplugin/icore.h>
 #include <coreplugin/isettings.h>
 
+#include <utils/log.h>
 #include <translationutils/constanttranslations.h>
 
 #include <extensionsystem/pluginmanager.h>
@@ -100,6 +101,7 @@ void DrugEnginesPreferences::writeDefaultSettings(Core::ISettings *sets)
         s = settings();
     else
         s = sets;
+    WARN_FUNC;
 
     // get default activated drug engines
     QList<DrugsDB::IDrugEngine *> engines = pluginManager()->getObjects<DrugsDB::IDrugEngine>();
@@ -110,6 +112,8 @@ void DrugEnginesPreferences::writeDefaultSettings(Core::ISettings *sets)
         if (engine->isActiveByDefault())
             uids << engine->uid();
     }
+
+    LOG_FOR("DrugEnginesPreferences", "Activating default drug engines: " + uids.join("; "));
     s->setValue(DrugsDB::Constants::S_ACTIVATED_INTERACTION_ENGINES, uids);
 }
 
@@ -179,8 +183,10 @@ void DrugEnginesPreferencesPage::checkSettingsValidity()
     defaultvalues.insert(DrugsDB::Constants::S_ACTIVATED_INTERACTION_ENGINES, uids);
 
     foreach(const QString &k, defaultvalues.keys()) {
-        if (settings()->value(k) == QVariant())
+        if (settings()->value(k).toString().simplified().isEmpty()) {
+            LOG("Activating default drugs engines: " + uids.join("; "));
             settings()->setValue(k, defaultvalues.value(k));
+        }
     }
     settings()->sync();
 }
