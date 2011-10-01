@@ -327,9 +327,9 @@ bool InteractionStep::computeModelsAndPopulateDatabase()
                     labels.insert("fr", fr);
                 QString de = values[3].remove("\"").toUpper();
                 if (de.isEmpty())
-                    labels.insert("fr", en);
+                    labels.insert("de", en);
                 else
-                    labels.insert("fr", de);
+                    labels.insert("de", de);
                 if (!Core::Tools::createAtc(Core::Constants::MASTER_DATABASE_NAME, values[0].remove("\""), labels)) {
                     return false;
                 }
