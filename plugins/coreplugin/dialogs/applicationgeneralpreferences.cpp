@@ -136,6 +136,8 @@ void ApplicationGeneralPreferencesPage::checkSettingsValidity()
     defaultvalues.insert(Core::Constants::S_ALWAYS_SAVE_WITHOUT_PROMPTING, true);
     defaultvalues.insert(Utils::Constants::S_CHECKUPDATE, Utils::UpdateChecker::Check_AtStartup);
     defaultvalues.insert(Core::Constants::S_ALLOW_VIRTUAL_DATA, true);
+    defaultvalues.insert("Dialogs/Settings/LastPage", id());
+    defaultvalues.insert("Dialogs/Settings/LastCategory", category());
 
     foreach(const QString &k, defaultvalues.keys()) {
         if (settings()->value(k) == QVariant())
