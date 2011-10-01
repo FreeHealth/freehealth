@@ -59,7 +59,7 @@ Veuillez vérifier vos répartitions journalières et vos relations avec le repa
     <name>DrugsDB::DrugsBasePlugin</name>
     <message>
         <location filename="../../plugins/drugsbaseplugin/drugsbaseplugin.cpp" line="98"/>
-        <location filename="../../plugins/drugsbaseplugin/drugsbaseplugin.cpp" line="108"/>
+        <location filename="../../plugins/drugsbaseplugin/drugsbaseplugin.cpp" line="119"/>
         <source>Initializing drugs database plugin...</source>
         <translation>Initialisation du plugin des bases de données thérapeutique...</translation>
     </message>
@@ -362,7 +362,7 @@ Voulez-vous les ajouter au fichier ?</translation>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../../plugins/drugsbaseplugin/drugsbase.cpp" line="1486"/>
+        <location filename="../../plugins/drugsbaseplugin/drugsbase.cpp" line="1499"/>
         <source>Unable to find drug with DID %1</source>
         <translation>Impossible de trouver le médicament avec le DID %1</translation>
     </message>
@@ -432,27 +432,27 @@ Voulez-vous les ajouter au fichier ?</translation>
 <context>
     <name>DrugsData</name>
     <message>
-        <location filename="../../plugins/drugsbaseplugin/idrug.cpp" line="810"/>
+        <location filename="../../plugins/drugsbaseplugin/idrug.cpp" line="809"/>
         <source>No INN found.</source>
         <translation>Pas de DCI connue.</translation>
     </message>
     <message>
-        <location filename="../../plugins/drugsbaseplugin/idrug.cpp" line="815"/>
+        <location filename="../../plugins/drugsbaseplugin/idrug.cpp" line="814"/>
         <source>No interaction class found.</source>
         <translation>Pas de classe d&apos;interaction connue.</translation>
     </message>
     <message>
-        <location filename="../../plugins/drugsbaseplugin/idrug.cpp" line="853"/>
+        <location filename="../../plugins/drugsbaseplugin/idrug.cpp" line="852"/>
         <source>Form(s): </source>
         <translation>Forme(s) : </translation>
     </message>
     <message>
-        <location filename="../../plugins/drugsbaseplugin/idrug.cpp" line="854"/>
+        <location filename="../../plugins/drugsbaseplugin/idrug.cpp" line="853"/>
         <source>Route(s): </source>
         <translation>Voie(s) d&apos;administration : </translation>
     </message>
     <message>
-        <location filename="../../plugins/drugsbaseplugin/idrug.cpp" line="855"/>
+        <location filename="../../plugins/drugsbaseplugin/idrug.cpp" line="854"/>
         <source>Identifier(s): </source>
         <translation>Identifiant(s) : </translation>
     </message>

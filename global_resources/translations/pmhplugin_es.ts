@@ -93,7 +93,7 @@
     </message>
     <message>
         <location filename="../../plugins/pmhplugin/pmhmode.cpp" line="98"/>
-        <location filename="../../plugins/pmhplugin/pmhmode.cpp" line="252"/>
+        <location filename="../../plugins/pmhplugin/pmhmode.cpp" line="253"/>
         <source>Edit</source>
         <translation type="unfinished"></translation>
     </message>

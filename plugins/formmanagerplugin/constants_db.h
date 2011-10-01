@@ -107,12 +107,12 @@ namespace Constants {
     const char * const PATIENTSYNTHESIS_UUID = "PatientSynthesis";
 
     const char * const FORM_TR_CONTEXT = "Forms";
-    const char * const ADDEPISODE_TEXT = QT_TRANSLATE_NOOP("tkConstants", "Add Episode");
-    const char * const VALIDATEEPISODE_TEXT = QT_TRANSLATE_NOOP("tkConstants", "Validate Episode");
-    const char * const ADDFORM_TEXT = QT_TRANSLATE_NOOP("tkConstants", "Add Form");
-    const char * const PRINTFORM_TEXT = QT_TRANSLATE_NOOP("tkConstants", "Print Form");
-    const char * const SHOWPATIENTSYNTHESIS_TEXT = QT_TRANSLATE_NOOP("tkConstants", "Show patient synthesis");
-    const char * const SHOWPATIENTLASTEPISODES_TEXT = QT_TRANSLATE_NOOP("tkConstants", "Show patient last episodes");
+    const char * const ADDEPISODE_TEXT = QT_TRANSLATE_NOOP("Forms", "Add Episode");
+    const char * const VALIDATEEPISODE_TEXT = QT_TRANSLATE_NOOP("Forms", "Validate Episode");
+    const char * const ADDFORM_TEXT = QT_TRANSLATE_NOOP("Forms", "Add Form");
+    const char * const PRINTFORM_TEXT = QT_TRANSLATE_NOOP("Forms", "Print Form");
+    const char * const SHOWPATIENTSYNTHESIS_TEXT = QT_TRANSLATE_NOOP("Forms", "Show patient synthesis");
+    const char * const SHOWPATIENTLASTEPISODES_TEXT = QT_TRANSLATE_NOOP("Forms", "Show patient last episodes");
 
 }  // End namespace Form::Constants
 }  // End namespace Form
