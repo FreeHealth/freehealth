@@ -41,6 +41,7 @@
 namespace PMH {
 namespace Internal {
 class PmhMode;
+class PmhPreferencesPage;
 }  // End namespace Internal
 
 class PmhPlugin : public ExtensionSystem::IPlugin
@@ -58,7 +59,7 @@ private Q_SLOTS:
 
 private:
     Internal::PmhMode *mode;
-
+    Internal::PmhPreferencesPage *m_PrefPage;
 };
 
 

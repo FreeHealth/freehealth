@@ -54,6 +54,9 @@ MainWinPlugin::MainWinPlugin() :
     m_MainWindow = new MainWindow;
     Core::ICore::instance()->setMainWindow(m_MainWindow);
     m_MainWindow->init();
+
+    virtualBasePage = new Internal::VirtualPatientBasePage();
+    addObject(virtualBasePage);
 }
 
 MainWinPlugin::~MainWinPlugin()
@@ -91,9 +94,7 @@ void MainWinPlugin::extensionsInitialized()
     addAutoReleasedObject(new Core::PluginAboutPage(pluginSpec(), this));
 
     // Add preferences pages
-    virtualBasePage = new Internal::VirtualPatientBasePage();
     virtualBasePage->checkSettingsValidity();
-    addObject(virtualBasePage);
 
     m_MainWindow->extensionsInitialized();
 }

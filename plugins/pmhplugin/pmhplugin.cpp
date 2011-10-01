@@ -55,13 +55,17 @@ static inline Core::ITheme *theme()  { return Core::ICore::instance()->theme(); 
 static inline Core::IUser *user()  { return Core::ICore::instance()->user(); }
 static inline void messageSplash(const QString &s) {theme()->messageSplashScreen(s); }
 
-PmhPlugin::PmhPlugin() : mode(0)
+PmhPlugin::PmhPlugin() :
+    mode(0)
 {
     if (Utils::Log::warnPluginsCreation())
         qWarning() << "creating PmhPlugin";
 
     // Add Translator to the Application
     Core::ICore::instance()->translators()->addNewTranslator("pmhplugin");
+
+    m_PrefPage = new Internal::PmhPreferencesPage(this);
+    addAutoReleasedObject(m_PrefPage);
 }
 
 PmhPlugin::~PmhPlugin()
@@ -99,9 +103,7 @@ void PmhPlugin::extensionsInitialized()
 
     addAutoReleasedObject(new Core::PluginAboutPage(pluginSpec(), this));
 
-    Internal::PmhPreferencesPage *prefPage = new Internal::PmhPreferencesPage(this);
-    prefPage->checkSettingsValidity();
-    addAutoReleasedObject(prefPage);
+    m_PrefPage->checkSettingsValidity();
 
     connect(Core::ICore::instance(), SIGNAL(coreOpened()), this, SLOT(postCoreInitialization()));
 }

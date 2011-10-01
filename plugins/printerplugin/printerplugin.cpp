@@ -50,6 +50,12 @@ PrinterPlugin::PrinterPlugin() :
     setObjectName("PrinterPlugin");
     if (Utils::Log::warnPluginsCreation())
         qWarning() << "creating PrinterPlugin";
+
+    // Add preferences pages, printer manager
+    prefPage = new Print::Internal::PrinterPreferencesPage(this);
+    addObject(prefPage);
+    docPrinter = new Internal::DocumentPrinter(this);
+    addObject(docPrinter);
 }
 
 PrinterPlugin::~PrinterPlugin()
@@ -84,13 +90,6 @@ void PrinterPlugin::extensionsInitialized()
         qWarning() << "PrinterPlugin::extensionsInitialized";
 
     addAutoReleasedObject(new Core::PluginAboutPage(pluginSpec(), this));
-
-    // Add preferences pages, printer manager
-    prefPage = new Print::Internal::PrinterPreferencesPage(this);
-    addObject(prefPage);
-    docPrinter = new Internal::DocumentPrinter(this);
-    addObject(docPrinter);
-    settings()->sync();
 
     // Check system for existing printers
 //    if (QPrinterInfo::availablePrinters().isEmpty()) {

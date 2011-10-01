@@ -49,6 +49,9 @@ TemplatesPlugin::TemplatesPlugin()
 {
     if (Utils::Log::warnPluginsCreation())
         qWarning() << "creating TemplatesPlugin";
+
+    prefPage = new Internal::TemplatesPreferencesPage(this);
+    addObject(prefPage);
 }
 
 TemplatesPlugin::~TemplatesPlugin()
@@ -84,10 +87,7 @@ void TemplatesPlugin::extensionsInitialized()
     // add plugin info page
     addAutoReleasedObject(new Core::PluginAboutPage(pluginSpec(), this));
 
-    prefPage = new Internal::TemplatesPreferencesPage(this);
     prefPage->checkSettingsValidity();
-    addObject(prefPage);
-    settings()->sync();
 
     // Initialize TemplatesViewManager
     Templates::Internal::TemplatesViewManager::instance(this);

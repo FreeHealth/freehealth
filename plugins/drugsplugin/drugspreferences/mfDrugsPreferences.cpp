@@ -179,8 +179,8 @@ void DrugsSelectorOptionsPage::checkSettingsValidity()
     defaultvalues.insert(DrugsDB::Constants::S_SELECTOR_SHOWMOLECULES, false);
     defaultvalues.insert(DrugsDB::Constants::S_MARKDRUGSWITHAVAILABLEDOSAGES,true);
     defaultvalues.insert(DrugsDB::Constants::S_AVAILABLEDOSAGESBACKGROUNGCOLOR, DrugsDB::Constants::S_DEF_AVAILABLEDOSAGESBACKGROUNGCOLOR);
-    defaultvalues.insert(DrugsDB::Constants::S_ALLERGYBACKGROUNDCOLOR, "red");
-    defaultvalues.insert(DrugsDB::Constants::S_INTOLERANCEBACKGROUNDCOLOR, "yellow");
+    defaultvalues.insert(DrugsDB::Constants::S_ALLERGYBACKGROUNDCOLOR, QColor("red"));
+    defaultvalues.insert(DrugsDB::Constants::S_INTOLERANCEBACKGROUNDCOLOR, QColor("yellow"));
 
     foreach(const QString &k, defaultvalues.keys()) {
         if (settings()->value(k) == QVariant())
@@ -581,7 +581,7 @@ void DrugsSelectorWidget::saveToSettings(Core::ISettings *sets)
 void DrugsSelectorWidget::writeDefaultSettings(Core::ISettings *s)
 {
 //    qWarning() << "---------> writedefaults";
-    Utils::Log::addMessage("DrugsSelectorWidget", tkTr(Trans::Constants::CREATING_DEFAULT_SETTINGS_FOR_1).arg("DrugsSelectorWidget"));
+    LOG_FOR("DrugsSelectorWidget", tkTr(Trans::Constants::CREATING_DEFAULT_SETTINGS_FOR_1).arg("DrugsSelectorWidget"));
 
     s->setValue(DrugsDB::Constants::S_SELECTOR_SHOWDRUGSNAME, true);
     s->setValue(DrugsDB::Constants::S_SELECTOR_SHOWROUTE, false);
@@ -591,8 +591,8 @@ void DrugsSelectorWidget::writeDefaultSettings(Core::ISettings *s)
 
     s->setValue(DrugsDB::Constants::S_MARKDRUGSWITHAVAILABLEDOSAGES,true);
     s->setValue(DrugsDB::Constants::S_AVAILABLEDOSAGESBACKGROUNGCOLOR, DrugsDB::Constants::S_DEF_AVAILABLEDOSAGESBACKGROUNGCOLOR);
-    s->setValue(DrugsDB::Constants::S_ALLERGYBACKGROUNDCOLOR, "red");
-    s->setValue(DrugsDB::Constants::S_INTOLERANCEBACKGROUNDCOLOR, "yellow");
+    s->setValue(DrugsDB::Constants::S_ALLERGYBACKGROUNDCOLOR, QColor("red"));
+    s->setValue(DrugsDB::Constants::S_INTOLERANCEBACKGROUNDCOLOR, QColor("yellow"));
 
     //    DrugsWidget::DrugsWidgetManager::instance()->currentView()->drugSelector()->updateDrugsViewColumns();
 }

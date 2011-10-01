@@ -42,7 +42,8 @@
 
 #include <QtCore/QtPlugin>
 
-using namespace Core::Internal;
+using namespace Core;
+using namespace Internal;
 
 static inline Core::ITheme *theme()  { return Core::ICore::instance()->theme(); }
 static inline void messageSplash(const QString &s) {theme()->messageSplashScreen(s); }
@@ -53,6 +54,9 @@ CorePlugin::CorePlugin() :
     if (Utils::Log::warnPluginsCreation())
         qWarning() << "creating CorePlugin";
     m_CoreImpl =  new CoreImpl(this);
+
+    prefPage = new ApplicationGeneralPreferencesPage(this);
+    addObject(prefPage);
 }
 
 CorePlugin::~CorePlugin()
@@ -109,9 +113,7 @@ void CorePlugin::extensionsInitialized()
     addAutoReleasedObject(new Core::PluginAboutPage(pluginSpec(), this));
 
     // add preferences page
-    prefPage = new ApplicationGeneralPreferencesPage(this);
     prefPage->checkSettingsValidity();
-    addObject(prefPage);
     m_CoreImpl->settings()->sync();
 }
 

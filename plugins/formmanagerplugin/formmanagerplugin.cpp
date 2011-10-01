@@ -75,6 +75,9 @@ FormManagerPlugin::FormManagerPlugin() :
 
     m_FirstRun = new Internal::FirstRunFormManagerConfigPage(this);
     addObject(m_FirstRun);
+
+    m_PrefPage = new Internal::FormManagerPreferencesPage(this);
+    addAutoReleasedObject(m_PrefPage);
 }
 
 FormManagerPlugin::~FormManagerPlugin()
@@ -127,9 +130,7 @@ void FormManagerPlugin::extensionsInitialized()
 
     addAutoReleasedObject(new Core::PluginAboutPage(pluginSpec(), this));
 
-    Internal::FormManagerPreferencesPage *prefPage = new Internal::FormManagerPreferencesPage(this);
-    prefPage->checkSettingsValidity();
-    addAutoReleasedObject(prefPage);
+    m_PrefPage->checkSettingsValidity();
 
     // Add mode
     mode = new FormManagerMode(this);

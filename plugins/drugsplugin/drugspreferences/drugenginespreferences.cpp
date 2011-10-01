@@ -101,7 +101,6 @@ void DrugEnginesPreferences::writeDefaultSettings(Core::ISettings *sets)
         s = settings();
     else
         s = sets;
-    WARN_FUNC;
 
     // get default activated drug engines
     QList<DrugsDB::IDrugEngine *> engines = pluginManager()->getObjects<DrugsDB::IDrugEngine>();
