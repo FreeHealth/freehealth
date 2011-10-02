@@ -27,6 +27,7 @@
 #ifndef DRUGALLERGYENGINE_H
 #define DRUGALLERGYENGINE_H
 
+#include <drugsbaseplugin/drugsbase_exporter.h>
 #include <drugsbaseplugin/idrugengine.h>
 
 #include <QMultiHash>
@@ -56,7 +57,7 @@ struct DrugAllergyEngineDoTest {
     int typeOfSubstrat;
 };
 
-class DrugAllergyEngine : public IDrugEngine
+class DRUGSBASE_EXPORT DrugAllergyEngine : public IDrugEngine
 {
     Q_OBJECT
 public:

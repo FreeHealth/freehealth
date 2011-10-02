@@ -25,7 +25,7 @@
  *       NAME <MAIL@ADRESS>                                                *
  ***************************************************************************/
 #include "countrycombobox.h"
-#include "global.h"
+#include <utils/global.h>
 
 #include <QLocale>
 #include <QMap>

@@ -27,11 +27,12 @@
 #ifndef COUNTRYCOMBOBOX_H
 #define COUNTRYCOMBOBOX_H
 
+#include <utils/global_exporter.h>
 #include <QComboBox>
 
 namespace Utils {
 
-class CountryComboBox : public QComboBox
+class UTILS_EXPORT CountryComboBox : public QComboBox
 {
     Q_OBJECT
     Q_PROPERTY(QLocale::Country currentCountry READ currentCountry WRITE setCurrentCountry NOTIFY currentCountryChanged)

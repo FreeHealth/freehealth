@@ -71,8 +71,8 @@ private:
 
 }  // End namespace MedicalUtils
 
-QDebug operator<<(QDebug dbg, const MedicalUtils::EbmData &c);
-QDebug operator<<(QDebug dbg, const MedicalUtils::EbmData *c);
+MEDICALUTILS_EXPORT QDebug operator<<(QDebug dbg, const MedicalUtils::EbmData &c);
+MEDICALUTILS_EXPORT QDebug operator<<(QDebug dbg, const MedicalUtils::EbmData *c);
 
 
 #endif // EBMDATA_H

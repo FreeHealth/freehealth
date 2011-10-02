@@ -105,8 +105,8 @@ private:
 //
 //};
 
-QDebug operator<<(QDebug dbg, const DrugsDB::DatabaseInfos &c);
-QDebug operator<<(QDebug dbg, const DrugsDB::DatabaseInfos *c);
+DRUGSBASE_EXPORT QDebug operator<<(QDebug dbg, const DrugsDB::DatabaseInfos &c);
+DRUGSBASE_EXPORT QDebug operator<<(QDebug dbg, const DrugsDB::DatabaseInfos *c);
 
 
 }  // End namespace DrugsDB

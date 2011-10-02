@@ -81,7 +81,7 @@ private:
 }  // End namespace DrugsDB
 
 
-QDebug operator<<(QDebug dbg, const DrugsDB::DrugInteractionQuery *c);
-QDebug operator<<(QDebug dbg, const DrugsDB::DrugInteractionQuery &c);
+DRUGSBASE_EXPORT QDebug operator<<(QDebug dbg, const DrugsDB::DrugInteractionQuery *c);
+DRUGSBASE_EXPORT QDebug operator<<(QDebug dbg, const DrugsDB::DrugInteractionQuery &c);
 
 #endif // DRUGINTERACTIONRESULT_H

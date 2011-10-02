@@ -90,6 +90,6 @@ private:
 
 }  // End namespace Utils
 
-QDebug operator<<(QDebug dbg, const Utils::DatabaseConnector &c);
+UTILS_EXPORT QDebug operator<<(QDebug dbg, const Utils::DatabaseConnector &c);
 
 #endif // UTILS_DATABASECONNECTOR_H

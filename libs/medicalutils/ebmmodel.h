@@ -26,13 +26,14 @@
 #ifndef EBMMODEL_H
 #define EBMMODEL_H
 
+#include <medicalutils/medical_exporter.h>
 #include <QAbstractListModel>
 #include <QVector>
 
 namespace MedicalUtils {
 class EbmData;
 
-class EbmModel : public QAbstractListModel
+class MEDICALUTILS_EXPORT EbmModel : public QAbstractListModel
 {
     Q_OBJECT
 public:

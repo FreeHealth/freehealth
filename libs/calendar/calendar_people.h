@@ -95,7 +95,7 @@ protected:
 };
 
 
-class CalendarPeopleModel : public QAbstractTableModel
+class CALENDAR_EXPORT CalendarPeopleModel : public QAbstractTableModel
 {
     Q_OBJECT
 public:

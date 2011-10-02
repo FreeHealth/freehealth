@@ -349,7 +349,7 @@ public:
 
 }  // End namespace DrugsDB
 
-QDebug operator<<(QDebug dbg, const DrugsDB::IDrug *c);
-QDebug operator<<(QDebug dbg, const DrugsDB::IDrug &c);
+DRUGSBASE_EXPORT QDebug operator<<(QDebug dbg, const DrugsDB::IDrug *c);
+DRUGSBASE_EXPORT QDebug operator<<(QDebug dbg, const DrugsDB::IDrug &c);
 
 #endif // DRUGSDB_IDRUG_H
