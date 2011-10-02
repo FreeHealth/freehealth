@@ -271,8 +271,8 @@
 <context>
     <name>Core::Internal::CorePlugin</name>
     <message>
-        <location filename="../../plugins/fmfcoreplugin/coreplugin.cpp" line="72"/>
-        <location filename="../../plugins/fmfcoreplugin/coreplugin.cpp" line="93"/>
+        <location filename="../../plugins/fmfcoreplugin/coreplugin.cpp" line="76"/>
+        <location filename="../../plugins/fmfcoreplugin/coreplugin.cpp" line="97"/>
         <source>Initializing core plugin...</source>
         <translation type="unfinished"></translation>
     </message>

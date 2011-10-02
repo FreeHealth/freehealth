@@ -69,8 +69,8 @@
 <context>
     <name>MainWin::MainWinPlugin</name>
     <message>
-        <location filename="../../plugins/fmfmainwindowplugin/mainwindowplugin.cpp" line="79"/>
-        <location filename="../../plugins/fmfmainwindowplugin/mainwindowplugin.cpp" line="90"/>
+        <location filename="../../plugins/fmfmainwindowplugin/mainwindowplugin.cpp" line="82"/>
+        <location filename="../../plugins/fmfmainwindowplugin/mainwindowplugin.cpp" line="93"/>
         <source>Initializing main window plugin...</source>
         <translation type="unfinished"></translation>
     </message>

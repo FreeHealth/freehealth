@@ -315,8 +315,8 @@
 <context>
     <name>Patients::PatientBasePlugin</name>
     <message>
-        <location filename="../../plugins/patientbaseplugin/patientbaseplugin.cpp" line="102"/>
-        <location filename="../../plugins/patientbaseplugin/patientbaseplugin.cpp" line="149"/>
+        <location filename="../../plugins/patientbaseplugin/patientbaseplugin.cpp" line="106"/>
+        <location filename="../../plugins/patientbaseplugin/patientbaseplugin.cpp" line="153"/>
         <source>Initializing patients database plugin...</source>
         <translation type="unfinished"></translation>
     </message>

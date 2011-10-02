@@ -312,8 +312,8 @@
 <context>
     <name>PMH::PmhPlugin</name>
     <message>
-        <location filename="../../plugins/pmhplugin/pmhplugin.cpp" line="79"/>
-        <location filename="../../plugins/pmhplugin/pmhplugin.cpp" line="95"/>
+        <location filename="../../plugins/pmhplugin/pmhplugin.cpp" line="83"/>
+        <location filename="../../plugins/pmhplugin/pmhplugin.cpp" line="99"/>
         <source>Initializing PMHx database plugin...</source>
         <translation>Initialisation de la base de données des antécédents...</translation>
     </message>

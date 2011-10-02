@@ -729,8 +729,8 @@ p, li { white-space: pre-wrap; }
 <context>
     <name>DrugsWidget::Internal::DrugEnginesPreferencesPage</name>
     <message>
-        <location filename="../../plugins/drugsplugin/drugspreferences/drugenginespreferences.cpp" line="152"/>
-        <location filename="../../plugins/drugsplugin/drugspreferences/drugenginespreferences.cpp" line="154"/>
+        <location filename="../../plugins/drugsplugin/drugspreferences/drugenginespreferences.cpp" line="151"/>
+        <location filename="../../plugins/drugsplugin/drugspreferences/drugenginespreferences.cpp" line="153"/>
         <source>Interaction engines</source>
         <translation type="unfinished"></translation>
     </message>
@@ -1014,8 +1014,8 @@ Do you really want to change the editing mode ?</source>
 <context>
     <name>DrugsWidget::Internal::DrugsPlugin</name>
     <message>
-        <location filename="../../plugins/drugsplugin/drugsplugin.cpp" line="134"/>
-        <location filename="../../plugins/drugsplugin/drugsplugin.cpp" line="153"/>
+        <location filename="../../plugins/drugsplugin/drugsplugin.cpp" line="156"/>
+        <location filename="../../plugins/drugsplugin/drugsplugin.cpp" line="175"/>
         <source>Initializing drugs plugin...</source>
         <translation type="unfinished"></translation>
     </message>
