@@ -325,7 +325,7 @@ Voulez-vous les ajouter au fichier ?</translation>
     <message>
         <location filename="../../plugins/drugsbaseplugin/drugsbase.cpp" line="643"/>
         <source>Switching to the default drugs database source.</source>
-        <translation>Revenir à la base de données par défaut</translation>
+        <translation>Revenir à la base de données par défaut.</translation>
     </message>
     <message>
         <location filename="../../plugins/drugsbaseplugin/drugsbase.cpp" line="990"/>
@@ -359,7 +359,7 @@ Voulez-vous les ajouter au fichier ?</translation>
     <message>
         <location filename="../../plugins/drugsbaseplugin/drugsbase.cpp" line="1363"/>
         <source>Asking for a drug without UID</source>
-        <translation type="unfinished"></translation>
+        <translation>Requête d&apos;un médicament sant UID</translation>
     </message>
     <message>
         <location filename="../../plugins/drugsbaseplugin/drugsbase.cpp" line="1499"/>
