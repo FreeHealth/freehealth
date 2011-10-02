@@ -38,7 +38,8 @@ echo "**** PREPARE SOURCES PACKAGE ****"
 FREEDIAMS_SOURCES="freediams.pro config.pri checkqtversion.pri \
 README.txt COPYING.txt INSTALL \
 updatetranslations.sh \
-buildspecs \
+buildspecs/*.pri \
+buildspecs/freediams_debian \
 doc \
 freediams \
 global_resources/databases/drugs/master.db \
@@ -76,7 +77,7 @@ tests"
 FREEICD_SOURCES="freeicd.pro config.pri checkqtversion.pri \
 README.txt COPYING.txt INSTALL \
 updatetranslations.sh \
-buildspecs \
+buildspecs/*.pri \
 doc \
 freeicd \
 global_resources/doc/freeicd \
@@ -104,7 +105,7 @@ scripts"
 FREEPAD_SOURCES="freepad.pro config.pri checkqtversion.pri \
 README.txt COPYING.txt INSTALL \
 updatetranslations.sh \
-buildspecs \
+buildspecs/*.pri \
 doc \
 freepad \
 global_resources/doc/freepad \
@@ -126,7 +127,7 @@ scripts"
 FREETOOLBOX_SOURCES="freetoolbox.pro config.pri checkqtversion.pri \
 README.txt COPYING.txt INSTALL \
 updatetranslations.sh \
-buildspecs \
+buildspecs/*.pri \
 doc \
 freetoolbox/free* \
 freetoolbox/main.cpp \
@@ -160,7 +161,7 @@ scripts"
 FREEACCOUNT_SOURCES="freeaccount.pro config.pri checkqtversion.pri \
 README.txt COPYING.txt INSTALL \
 updatetranslations.sh \
-buildspecs \
+buildspecs/*.pri \
 doc \
 freeaccount \
 global_resources/databases/zipcodes/zipcodes.db \
@@ -197,7 +198,8 @@ scripts"
 FREEMEDFORMS_SOURCES="freemedforms.pro config.pri checkqtversion.pri \
 README.txt COPYING.txt INSTALL \
 updatetranslations.sh \
-buildspecs \
+buildspecs/*.pri \
+buildspecs/freemedforms_debian \
 doc \
 freemedforms \
 global_resources/databases/drugs/master.db \
@@ -280,7 +282,8 @@ fi
 
 tar -cf $PACKPATH/sources.tar \
 --exclude '.svn' --exclude '.cvsignore' --exclude 'qtc-gdbmacros' \
---exclude '_protected' --exclude 'build' --exclude 'bin' --exclude 'packages' --exclude 'rushes' \
+--exclude '_protected' --exclude 'build' --exclude 'bin' --exclude 'packages' \
+--exclude 'rushes' --exclude 'doxygen' \
 --exclude 'Makefile*' --exclude '*.pro.user*' \
 --exclude 'dosages.db' --exclude 'users.db' --exclude '*.mdb' --exclude '.*' --exclude '._*' \
 --exclude '*.tgz' --exclude '*.app' --exclude '*.zip' --exclude '*.a' \
