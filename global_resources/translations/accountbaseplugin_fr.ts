@@ -6,52 +6,52 @@
     <message>
         <location filename="../../plugins/accountbaseplugin/constants.h" line="320"/>
         <source>Account book</source>
-        <translation type="unfinished"></translation>
+        <translation>Livre des comptes</translation>
     </message>
     <message>
         <location filename="../../plugins/accountbaseplugin/constants.h" line="321"/>
         <source>Revenues</source>
-        <translation type="unfinished"></translation>
+        <translation>Revenus</translation>
     </message>
     <message>
         <location filename="../../plugins/accountbaseplugin/constants.h" line="322"/>
         <source>Expenses</source>
-        <translation type="unfinished"></translation>
+        <translation>Dépenses</translation>
     </message>
     <message>
         <location filename="../../plugins/accountbaseplugin/constants.h" line="324"/>
         <source>Cash</source>
-        <translation type="unfinished"></translation>
+        <translation>Cash</translation>
     </message>
     <message>
         <location filename="../../plugins/accountbaseplugin/constants.h" line="325"/>
         <source>Cheques</source>
-        <translation type="unfinished"></translation>
+        <translation>Chèques</translation>
     </message>
     <message>
         <location filename="../../plugins/accountbaseplugin/constants.h" line="326"/>
         <source>VISA</source>
-        <translation type="unfinished"></translation>
+        <translation></translation>
     </message>
     <message>
         <location filename="../../plugins/accountbaseplugin/constants.h" line="327"/>
         <source>Money</source>
-        <translation type="unfinished"></translation>
+        <translation>Espèce</translation>
     </message>
     <message>
         <location filename="../../plugins/accountbaseplugin/constants.h" line="328"/>
         <source>Due</source>
-        <translation type="unfinished"></translation>
+        <translation>Due</translation>
     </message>
     <message>
         <location filename="../../plugins/accountbaseplugin/constants.h" line="329"/>
         <source>Insurance</source>
-        <translation type="unfinished"></translation>
+        <translation>Assurance</translation>
     </message>
     <message>
         <location filename="../../plugins/accountbaseplugin/constants.h" line="330"/>
         <source>Other</source>
-        <translation type="unfinished"></translation>
+        <translation>Autre</translation>
     </message>
 </context>
 <context>
@@ -61,7 +61,7 @@
         <location filename="../../plugins/accountbaseplugin/accountbase.cpp" line="647"/>
         <location filename="../../plugins/accountbaseplugin/accountbase.cpp" line="653"/>
         <source>Please contact dev team.</source>
-        <translation type="unfinished"></translation>
+        <translation>Veuillez contacter l&apos;équipe de développement.</translation>
     </message>
 </context>
 <context>
@@ -69,7 +69,7 @@
     <message>
         <location filename="../../plugins/accountbaseplugin/accountbaseplugin.cpp" line="78"/>
         <source>Initializing accountancy plugin...</source>
-        <translation type="unfinished"></translation>
+        <translation>Initialisation du plugin de comptabilité (base de données)...</translation>
     </message>
 </context>
 <context>
@@ -77,12 +77,12 @@
     <message>
         <location filename="../../plugins/accountbaseplugin/actsmodel.cpp" line="180"/>
         <source>Comments</source>
-        <translation type="unfinished"></translation>
+        <translation>Commentaires</translation>
     </message>
     <message>
         <location filename="../../plugins/accountbaseplugin/actsmodel.cpp" line="181"/>
         <source>Date</source>
-        <translation type="unfinished"></translation>
+        <translation></translation>
     </message>
 </context>
 <context>
@@ -90,42 +90,42 @@
     <message>
         <location filename="../../plugins/accountbaseplugin/amountmodel.cpp" line="99"/>
         <source>Cash</source>
-        <translation type="unfinished"></translation>
+        <translation></translation>
     </message>
     <message>
         <location filename="../../plugins/accountbaseplugin/amountmodel.cpp" line="100"/>
         <source>Visa</source>
-        <translation type="unfinished"></translation>
+        <translation>VISA</translation>
     </message>
     <message>
         <location filename="../../plugins/accountbaseplugin/amountmodel.cpp" line="101"/>
         <source>Cheque</source>
-        <translation type="unfinished"></translation>
+        <translation>Chèque</translation>
     </message>
     <message>
         <location filename="../../plugins/accountbaseplugin/amountmodel.cpp" line="102"/>
         <source>Banking</source>
-        <translation type="unfinished"></translation>
+        <translation>Encaissement</translation>
     </message>
     <message>
         <location filename="../../plugins/accountbaseplugin/amountmodel.cpp" line="103"/>
         <source>Other</source>
-        <translation type="unfinished"></translation>
+        <translation>Autre</translation>
     </message>
     <message>
         <location filename="../../plugins/accountbaseplugin/amountmodel.cpp" line="104"/>
         <source>Du</source>
-        <translation type="unfinished"></translation>
+        <translation>Du</translation>
     </message>
     <message>
         <location filename="../../plugins/accountbaseplugin/amountmodel.cpp" line="108"/>
         <source>Value</source>
-        <translation type="unfinished"></translation>
+        <translation>Valeur</translation>
     </message>
     <message>
         <location filename="../../plugins/accountbaseplugin/amountmodel.cpp" line="109"/>
         <source>Currency</source>
-        <translation type="unfinished"></translation>
+        <translation>Devise</translation>
     </message>
 </context>
 </TS>
