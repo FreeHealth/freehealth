@@ -162,7 +162,7 @@ private:
 
 }  // End DrugsDB
 
-QDebug operator<<(QDebug dbg, const DrugsDB::DrugsModel *c);
+DRUGSBASE_EXPORT QDebug operator<<(QDebug dbg, const DrugsDB::DrugsModel *c);
 
 
 

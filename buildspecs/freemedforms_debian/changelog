@@ -1,3 +1,9 @@
+freemedforms (0.5.9-1ubuntu1) testing; urgency=low
+
+  * New upstream : First beta release of FreeMedForms
+
+ -- Eric Maeker <eric.maeker@gmail.com>  Thu, 29 Sep 2011 16:37:32 +0200
+
 freemedforms (0.5.9~alpha2-1ubuntu1) testing; urgency=low
 
   * New upstream : third alpha release
