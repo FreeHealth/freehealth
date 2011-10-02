@@ -474,9 +474,6 @@ DrugAllergyEngine::DrugAllergyEngine(QObject *parent) :
     m_DrugPrecautionModel(0)
 {
     setObjectName("DrugAllergyEngine");
-    m_IsActive = settings()->value(Constants::S_ACTIVATED_INTERACTION_ENGINES).toStringList().contains(Constants::ALLERGY_ENGINE_UID);
-    connect(patient(), SIGNAL(currentPatientChanged()), this, SLOT(patientChanged()));
-    connect(patient(), SIGNAL(dataChanged(QModelIndex,QModelIndex)), this, SLOT(refreshDrugsPrecautions(QModelIndex,QModelIndex)));
 }
 
 DrugAllergyEngine::~DrugAllergyEngine()
@@ -485,6 +482,9 @@ DrugAllergyEngine::~DrugAllergyEngine()
 
 bool DrugAllergyEngine::init()
 {
+    m_IsActive = settings()->value(Constants::S_ACTIVATED_INTERACTION_ENGINES).toStringList().contains(Constants::ALLERGY_ENGINE_UID);
+    connect(patient(), SIGNAL(currentPatientChanged()), this, SLOT(patientChanged()));
+    connect(patient(), SIGNAL(dataChanged(QModelIndex,QModelIndex)), this, SLOT(refreshDrugsPrecautions(QModelIndex,QModelIndex)));
     return true;
 }
 
