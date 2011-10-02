@@ -105,11 +105,6 @@ bool DrugsBasePlugin::initialize(const QStringList &arguments, QString *errorStr
     Core::ICore::instance()->translators()->addNewTranslator("drugsbaseplugin");
     messageSplash(tr("Initializing drugs database plugin..."));
 
-    // Initialize the drugs engines
-    m_DDIEngine->init();
-    m_PimEngine->init();
-    m_AllergyEngine->init();
-
     return true;
 }
 
@@ -125,6 +120,11 @@ void DrugsBasePlugin::extensionsInitialized()
 
     addAutoReleasedObject(new Core::PluginAboutPage(pluginSpec(), this));
     addAutoReleasedObject(new DrugsDB::Internal::DrugsTemplatePrinter(this));
+
+    // Initialize the drugs engines
+    m_DDIEngine->init();
+    m_PimEngine->init();
+    m_AllergyEngine->init();
 }
 
 
