@@ -39,6 +39,7 @@ CommandLine::CommandLine() : ICommandLine()
     ref.insert(RunningUnderWine, "--wine");
     ref.insert(ClearUserDatabases, "--clear-user-databases");
     ref.insert(CreateVirtuals, "--create-virtuals");
+    ref.insert(ResetUserPreferences, "--reset-users-preferences");
 
     // set default values
     params.insert(Chrono, false);
@@ -46,6 +47,7 @@ CommandLine::CommandLine() : ICommandLine()
     params.insert(RunningUnderWine, false);
     params.insert(ClearUserDatabases, false);
     params.insert(CreateVirtuals, false);
+    params.insert(ResetUserPreferences, false);
 
     // read command line params
     const QStringList &args = qApp->arguments();
@@ -63,13 +65,14 @@ CommandLine::CommandLine() : ICommandLine()
         case RunningUnderWine : params.insert(RunningUnderWine, true); break;
         case ClearUserDatabases : params.insert(ClearUserDatabases, true); break;
         case CreateVirtuals : params.insert(CreateVirtuals, true); break;
+        case ResetUserPreferences : params.insert(ResetUserPreferences, true); break;
         default : break;
         }
     }
 
     if (Utils::isReleaseCompilation()) {
         params.insert(ClearUserDatabases, false);
-        params.insert(CreateVirtuals, false);
+//        params.insert(CreateVirtuals, false);
     }
 }
 

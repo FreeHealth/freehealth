@@ -49,7 +49,8 @@ public:
         ConfigFile,
         RunningUnderWine,
         ClearUserDatabases,
-        CreateVirtuals
+        CreateVirtuals,
+        ResetUserPreferences
     };
 
     ICommandLine(QObject *parent = 0) : QObject(parent) {}

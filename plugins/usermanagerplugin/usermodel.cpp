@@ -52,6 +52,7 @@
 #include <coreplugin/isettings.h>
 #include <coreplugin/icorelistener.h>
 #include <coreplugin/ioptionspage.h>
+#include <coreplugin/icommandline.h>
 
 #include <printerplugin/textdocumentextra.h>
 
@@ -78,6 +79,7 @@ using namespace Trans::ConstantTranslations;
 static inline ExtensionSystem::PluginManager *pluginManager() {return ExtensionSystem::PluginManager::instance();}
 static inline UserPlugin::Internal::UserBase *userBase() {return UserPlugin::Internal::UserBase::instance();}
 static inline Core::ISettings *settings() {return Core::ICore::instance()->settings();}
+static inline Core::ICommandLine *commandLine() {return Core::ICore::instance()->commandLine();}
 
 namespace {
     const char * const SERVER_ADMINISTRATOR_UUID = "serverAdmin";
@@ -555,8 +557,14 @@ bool UserModel::setCurrentUser(const QString &clearLog, const QString &clearPass
     // Refresh the newly connected user's preferences
     disconnect(settings(), SIGNAL(userSettingsSynchronized()), this, SLOT(updateUserPreferences()));
     QList<Core::IOptionsPage *> prefs = pluginManager()->getObjects<Core::IOptionsPage>();
-    for(int i=0; i < prefs.count(); ++i) {
-        prefs.at(i)->checkSettingsValidity();
+    if (commandLine()->value(Core::ICommandLine::ResetUserPreferences).toBool()) {
+        for(int i=0; i < prefs.count(); ++i) {
+            prefs.at(i)->resetToDefaults();
+        }
+    } else {
+        for(int i=0; i < prefs.count(); ++i) {
+            prefs.at(i)->checkSettingsValidity();
+        }
     }
     updateUserPreferences();
     connect(settings(), SIGNAL(userSettingsSynchronized()), this, SLOT(updateUserPreferences()));
