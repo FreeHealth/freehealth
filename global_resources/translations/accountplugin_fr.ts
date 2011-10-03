@@ -215,7 +215,7 @@ pour la fenêtre des immobilisations,ALT+Z,
 pour la fenêtre des analyses,ALT+L.
 Avant la première utilisation, ouvrez le menu Configuration &gt; Preferences &gt; Comptabilité &gt; Defauts,\n
 et créez les valeurs par défaut.
-Ensuite paramétrez vos utilisateurs,sites,banque,etc ...</translation>
+Ensuite paramétrez vos utilisateurs,sites,banque,etc ... .</translation>
     </message>
     <message>
         <location filename="../../plugins/accountplugin/accountmode.cpp" line="114"/>
@@ -1840,9 +1840,20 @@ Autrement le résultat sera faux!</translation>
         <translation>Mouvements par année et type</translation>
     </message>
     <message>
+        <location filename="../../plugins/accountplugin/ledger/ledgerviewer.cpp" line="86"/>
         <location filename="../../plugins/accountplugin/ledger/ledgerviewer.cpp" line="127"/>
         <source>&amp;Ledger</source>
         <translation>Grand &amp;Livre</translation>
+    </message>
+    <message>
+        <location filename="../../plugins/accountplugin/ledger/ledgerviewer.cpp" line="77"/>
+        <source>&amp;File</source>
+        <translation>&amp;Fichier</translation>
+    </message>
+    <message>
+        <location filename="../../plugins/accountplugin/ledger/ledgerviewer.cpp" line="79"/>
+        <source>&amp;Analyse</source>
+        <translation>&amp;Analyse</translation>
     </message>
     <message>
         <location filename="../../plugins/accountplugin/ledger/ledgerviewer.cpp" line="128"/>
@@ -2669,6 +2680,49 @@ et la choisir comme préférée.</translation>
         <location filename="../../plugins/accountplugin/receipts/receiptviewer.cpp" line="528"/>
         <source>Cannot change value bool in thesaurus :</source>
         <translation>Impossible de changer la valeur bool dans thésaurus :</translation>
+    </message>
+    <message>
+        <location filename="../../plugins/accountplugin/receipts/receiptviewer.cpp" line="557"/>
+        <source>thesaurus</source>
+        <translation>thésaurus</translation>
+    </message>
+    <message>
+        <location filename="../../plugins/accountplugin/receipts/receiptviewer.cpp" line="557"/>
+        <location filename="../../plugins/accountplugin/receipts/receiptviewer.cpp" line="587"/>
+        <location filename="../../plugins/accountplugin/receipts/receiptviewer.cpp" line="588"/>
+        <source>Thesaurus</source>
+        <translation>Thésaurus</translation>
+    </message>
+    <message>
+        <location filename="../../plugins/accountplugin/receipts/receiptviewer.cpp" line="558"/>
+        <source>values</source>
+        <translation>valeur</translation>
+    </message>
+    <message>
+        <location filename="../../plugins/accountplugin/receipts/receiptviewer.cpp" line="558"/>
+        <source>Values</source>
+        <translation>Valeurs</translation>
+    </message>
+    <message>
+        <location filename="../../plugins/accountplugin/receipts/receiptviewer.cpp" line="560"/>
+        <source>Preferred Value</source>
+        <translation>Valeur préférentielle</translation>
+    </message>
+    <message>
+        <location filename="../../plugins/accountplugin/receipts/receiptviewer.cpp" line="561"/>
+        <source>Round trip</source>
+        <translation>Déplacement</translation>
+    </message>
+    <message>
+        <location filename="../../plugins/accountplugin/receipts/receiptviewer.cpp" line="592"/>
+        <location filename="../../plugins/accountplugin/receipts/receiptviewer.cpp" line="593"/>
+        <source>Sites</source>
+        <translation>Sites</translation>
+    </message>
+    <message>
+        <location filename="../../plugins/accountplugin/receipts/receiptviewer.cpp" line="597"/>
+        <source>Distance rules</source>
+        <translation>Règles de distance</translation>
     </message>
     <message>
         <location filename="../../plugins/accountplugin/receipts/receiptviewer.cpp" line="681"/>

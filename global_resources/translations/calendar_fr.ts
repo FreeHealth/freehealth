@@ -44,20 +44,19 @@
 <context>
     <name>Calendar::DayAvailabilityModel</name>
     <message>
-        <location filename="../../libs/calendar/usercalendar.cpp" line="226"/>
         <source>No availability defined</source>
-        <translation>Pas de disponibilité définie</translation>
+        <translation type="obsolete">Pas de disponibilité définie</translation>
     </message>
 </context>
 <context>
     <name>Calendar::DayRangeBody</name>
     <message>
-        <location filename="../../libs/calendar/day_range_view.cpp" line="667"/>
+        <location filename="../../libs/calendar/day_range_view.cpp" line="744"/>
         <source>modify</source>
         <translation>modifier</translation>
     </message>
     <message>
-        <location filename="../../libs/calendar/day_range_view.cpp" line="669"/>
+        <location filename="../../libs/calendar/day_range_view.cpp" line="746"/>
         <source>remove</source>
         <translation>retirer</translation>
     </message>
@@ -65,12 +64,12 @@
 <context>
     <name>Calendar::DayRangeHeader</name>
     <message>
-        <location filename="../../libs/calendar/day_range_view.cpp" line="286"/>
+        <location filename="../../libs/calendar/day_range_view.cpp" line="319"/>
         <source>modify</source>
         <translation>modifier</translation>
     </message>
     <message>
-        <location filename="../../libs/calendar/day_range_view.cpp" line="288"/>
+        <location filename="../../libs/calendar/day_range_view.cpp" line="321"/>
         <source>remove</source>
         <translation>retirer</translation>
     </message>
@@ -78,7 +77,7 @@
 <context>
     <name>Calendar::DayWidget</name>
     <message>
-        <location filename="../../libs/calendar/day_widget.cpp" line="42"/>
+        <location filename="../../libs/calendar/day_widget.cpp" line="69"/>
         <source>(untitled)</source>
         <translation>(sans titre)</translation>
     </message>
@@ -86,7 +85,7 @@
 <context>
     <name>Calendar::HourRangeWidget</name>
     <message>
-        <location filename="../../libs/calendar/hour_range_widget.cpp" line="56"/>
+        <location filename="../../libs/calendar/hour_range_widget.cpp" line="90"/>
         <source>(untitled)</source>
         <translation>(sans titre)</translation>
     </message>
@@ -216,12 +215,12 @@
 <context>
     <name>Calendar::MonthBody</name>
     <message>
-        <location filename="../../libs/calendar/month_view.cpp" line="86"/>
+        <location filename="../../libs/calendar/month_view.cpp" line="113"/>
         <source>d MMM</source>
         <translation>d MMM</translation>
     </message>
     <message>
-        <location filename="../../libs/calendar/month_view.cpp" line="88"/>
+        <location filename="../../libs/calendar/month_view.cpp" line="115"/>
         <source>d</source>
         <translation></translation>
     </message>
@@ -229,7 +228,7 @@
 <context>
     <name>Calendar::MonthDayWidget</name>
     <message>
-        <location filename="../../libs/calendar/month_day_widget.cpp" line="61"/>
+        <location filename="../../libs/calendar/month_day_widget.cpp" line="88"/>
         <source>see others</source>
         <translation>voir les autres</translation>
     </message>
@@ -237,80 +236,52 @@
 <context>
     <name>Calendar::UserCalendarEditorWidget</name>
     <message>
-        <location filename="../../libs/calendar/usercalendar_editor_widget.ui" line="14"/>
-        <source>Form</source>
-        <translation></translation>
-    </message>
-    <message>
-        <location filename="../../libs/calendar/usercalendar_editor_widget.ui" line="20"/>
-        <location filename="../../libs/calendar/usercalendar_editor_widget.ui" line="61"/>
-        <source>Description</source>
-        <translation></translation>
-    </message>
-    <message>
-        <location filename="../../libs/calendar/usercalendar_editor_widget.ui" line="32"/>
         <source>Label</source>
-        <translation>Libellé</translation>
+        <translation type="obsolete">Libellé</translation>
     </message>
     <message>
-        <location filename="../../libs/calendar/usercalendar_editor_widget.ui" line="90"/>
         <source>Icon</source>
-        <translation>Icône</translation>
+        <translation type="obsolete">Icône</translation>
     </message>
     <message>
-        <location filename="../../libs/calendar/usercalendar_editor_widget.ui" line="113"/>
         <source>Select</source>
-        <translation>Sélectionner</translation>
+        <translation type="obsolete">Sélectionner</translation>
     </message>
     <message>
-        <location filename="../../libs/calendar/usercalendar_editor_widget.ui" line="127"/>
         <source>General</source>
-        <translation>Général</translation>
+        <translation type="obsolete">Général</translation>
     </message>
     <message>
-        <location filename="../../libs/calendar/usercalendar_editor_widget.ui" line="133"/>
         <source>Default event duration</source>
-        <translation>Durée par défaut des rendez-vous</translation>
+        <translation type="obsolete">Durée par défaut des rendez-vous</translation>
     </message>
     <message>
-        <location filename="../../libs/calendar/usercalendar_editor_widget.ui" line="153"/>
-        <source>minutes</source>
-        <translation></translation>
-    </message>
-    <message>
-        <location filename="../../libs/calendar/usercalendar_editor_widget.ui" line="160"/>
         <source>Default location for events</source>
-        <translation>Localisation par défaut des rendez-vous</translation>
+        <translation type="obsolete">Localisation par défaut des rendez-vous</translation>
     </message>
     <message>
-        <location filename="../../libs/calendar/usercalendar_editor_widget.ui" line="170"/>
         <source>is the default calendar</source>
-        <translation>est l&apos;agenda par défaut</translation>
+        <translation type="obsolete">est l&apos;agenda par défaut</translation>
     </message>
     <message>
-        <location filename="../../libs/calendar/usercalendar_editor_widget.ui" line="177"/>
         <source>is private</source>
-        <translation>est privé</translation>
+        <translation type="obsolete">est privé</translation>
     </message>
     <message>
-        <location filename="../../libs/calendar/usercalendar_editor_widget.ui" line="184"/>
         <source>Password</source>
-        <translation>Mot de passe</translation>
+        <translation type="obsolete">Mot de passe</translation>
     </message>
     <message>
-        <location filename="../../libs/calendar/usercalendar_editor_widget.ui" line="198"/>
         <source>Availabilities</source>
-        <translation>Disponibilités</translation>
+        <translation type="obsolete">Disponibilités</translation>
     </message>
     <message>
-        <location filename="../../libs/calendar/usercalendar_editor_widget.ui" line="207"/>
         <source>Add</source>
-        <translation>Ajouter</translation>
+        <translation type="obsolete">Ajouter</translation>
     </message>
     <message>
-        <location filename="../../libs/calendar/usercalendar_editor_widget.ui" line="214"/>
         <source>Remove</source>
-        <translation>Enlever</translation>
+        <translation type="obsolete">Enlever</translation>
     </message>
 </context>
 </TS>

@@ -74,16 +74,16 @@ void LedgerViewer::fillMenuBar(){
 }
 
 void LedgerViewer::createMenus(){
-    m_menuWidgetAction = new QMenu("&File",this);
+    m_menuWidgetAction = new QMenu(tr("&File"),this);
     m_menuWidgetAction->addAction(m_closeAction);
-    m_menuAnalyze = new QMenu("&Analyse",this);
+    m_menuAnalyze = new QMenu(tr("&Analyse"),this);
     m_menuAnalyze->addAction(m_monthlyReceiptsAnalysis);
     m_menuAnalyze->addAction(m_monthlyAndTypeReceiptsAnalysis);
     m_menuAnalyze->addAction(m_yearlyAndTypeReceiptsAnalysis);
     m_menuAnalyze->addAction(m_monthlyMovementsAnalysis);
     m_menuAnalyze->addAction(m_monthlyAndTypeMovementsAnalysis);
     m_menuAnalyze->addAction(m_yearlyAndTypeMovementsAnalysis);
-    m_ledger = new QMenu("&Ledger",this);
+    m_ledger = new QMenu(tr("&Ledger"),this);
     m_ledger->addAction(m_ledgerActionShow);
 }
 

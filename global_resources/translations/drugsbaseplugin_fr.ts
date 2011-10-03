@@ -59,7 +59,7 @@ Veuillez vérifier vos répartitions journalières et vos relations avec le repa
     <name>DrugsDB::DrugsBasePlugin</name>
     <message>
         <location filename="../../plugins/drugsbaseplugin/drugsbaseplugin.cpp" line="106"/>
-        <location filename="../../plugins/drugsbaseplugin/drugsbaseplugin.cpp" line="121"/>
+        <location filename="../../plugins/drugsbaseplugin/drugsbaseplugin.cpp" line="116"/>
         <source>Initializing drugs database plugin...</source>
         <translation>Initialisation du plugin des bases de données thérapeutique...</translation>
     </message>

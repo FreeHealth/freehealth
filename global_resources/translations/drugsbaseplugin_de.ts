@@ -54,7 +54,7 @@ Please verify your daily scheme prescriptions and relations to meal.</source>
     <name>DrugsDB::DrugsBasePlugin</name>
     <message>
         <location filename="../../plugins/drugsbaseplugin/drugsbaseplugin.cpp" line="106"/>
-        <location filename="../../plugins/drugsbaseplugin/drugsbaseplugin.cpp" line="121"/>
+        <location filename="../../plugins/drugsbaseplugin/drugsbaseplugin.cpp" line="116"/>
         <source>Initializing drugs database plugin...</source>
         <translation type="unfinished"></translation>
     </message>

@@ -1805,8 +1805,19 @@ Otherwise result will be wrong !</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
+        <location filename="../../plugins/accountplugin/ledger/ledgerviewer.cpp" line="86"/>
         <location filename="../../plugins/accountplugin/ledger/ledgerviewer.cpp" line="127"/>
         <source>&amp;Ledger</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../../plugins/accountplugin/ledger/ledgerviewer.cpp" line="77"/>
+        <source>&amp;File</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../../plugins/accountplugin/ledger/ledgerviewer.cpp" line="79"/>
+        <source>&amp;Analyse</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
@@ -2621,6 +2632,49 @@ and choose it as preferred.</source>
     <message>
         <location filename="../../plugins/accountplugin/receipts/receiptviewer.cpp" line="528"/>
         <source>Cannot change value bool in thesaurus :</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../../plugins/accountplugin/receipts/receiptviewer.cpp" line="557"/>
+        <source>thesaurus</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../../plugins/accountplugin/receipts/receiptviewer.cpp" line="557"/>
+        <location filename="../../plugins/accountplugin/receipts/receiptviewer.cpp" line="587"/>
+        <location filename="../../plugins/accountplugin/receipts/receiptviewer.cpp" line="588"/>
+        <source>Thesaurus</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../../plugins/accountplugin/receipts/receiptviewer.cpp" line="558"/>
+        <source>values</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../../plugins/accountplugin/receipts/receiptviewer.cpp" line="558"/>
+        <source>Values</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../../plugins/accountplugin/receipts/receiptviewer.cpp" line="560"/>
+        <source>Preferred Value</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../../plugins/accountplugin/receipts/receiptviewer.cpp" line="561"/>
+        <source>Round trip</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../../plugins/accountplugin/receipts/receiptviewer.cpp" line="592"/>
+        <location filename="../../plugins/accountplugin/receipts/receiptviewer.cpp" line="593"/>
+        <source>Sites</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../../plugins/accountplugin/receipts/receiptviewer.cpp" line="597"/>
+        <source>Distance rules</source>
         <translation type="unfinished"></translation>
     </message>
     <message>

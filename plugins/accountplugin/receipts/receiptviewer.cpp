@@ -554,11 +554,11 @@ void treeViewsActions::fillActionTreeView()
     QStringList listOfMainActions;
     QMap<QString,QString> parametersMap;
     //parametersMap.insert("Debtor","insurance");
-    parametersMap.insert("Thesaurus","thesaurus");
-    parametersMap.insert("Values","values");
+    parametersMap.insert(tr("Thesaurus"),tr("thesaurus"));
+    parametersMap.insert(tr("Values"),tr("values"));
     //parametersMap.insert("Sites","sites");
-    parametersMap.insert("Preferred Value","Preferred Value");
-    parametersMap.insert("Round trip","Round trip");
+    parametersMap.insert(tr("Preferred Value"),trUtf8("Preferred Value"));
+    parametersMap.insert(tr("Round trip"),trUtf8("Round trip"));
     //parametersMap.insert("Distance rules","distance_rules");
     listOfMainActions = parametersMap.keys();
     //insert items from tables if available
@@ -584,17 +584,17 @@ void treeViewsActions::fillActionTreeView()
         	      }
         	  else if (strKeysParameters == "Thesaurus")
         	  {
-        	       m_mapSubItems.insertMulti("Thesaurus","CS");
-                       m_mapSubItems.insertMulti("Thesaurus","V");  
+        	       m_mapSubItems.insertMulti(tr("Thesaurus"),"CS");
+                       m_mapSubItems.insertMulti(tr("Thesaurus"),"V");  
         	      }
         	  else if (strKeysParameters == "Sites")
         	  {
-        	       m_mapSubItems.insertMulti("Sites","cabinet");
-                       m_mapSubItems.insertMulti("Sites","clinique");  
+        	       m_mapSubItems.insertMulti(tr("Sites"),"cabinet");
+                       m_mapSubItems.insertMulti(tr("Sites"),"clinique");  
         	      }
         	  else if (strKeysParameters == "Distance rules")
         	  {
-        	  	  m_mapSubItems.insertMulti("Distance rules","DistPrice");
+        	  	  m_mapSubItems.insertMulti(tr("Distance rules"),"DistPrice");
         	      }
         	  else
         	  {
