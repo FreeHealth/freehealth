@@ -82,6 +82,9 @@ private Q_SLOTS:
     void userIsChanged();
 
 private:
+    void changeEvent(QEvent *e);
+
+private:
     /** \create a pimpl */
     QAction *m_choosePreferedValue;
     QAction *m_deleteThesaurusValue;
