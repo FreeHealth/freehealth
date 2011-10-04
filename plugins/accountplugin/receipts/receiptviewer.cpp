@@ -667,6 +667,9 @@ bool treeViewsActions::deleteItemFromThesaurus(QModelIndex &index){
 void treeViewsActions::changeEvent(QEvent *e) {
     QWidget::changeEvent(e);
     if (e->type()==QEvent::LanguageChange) {
+        delete m_actionsTreeModel;
+            qDebug() << __FILE__ << QString::number(__LINE__) << " langage changed " ;
+        fillActionTreeView();
         m_deleteThesaurusValue = new QAction(trUtf8("Delete this value."),this);
         m_choosePreferedValue = new QAction(trUtf8("Choose this value like the preferred."),this);
     }
