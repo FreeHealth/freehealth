@@ -24,6 +24,11 @@
  *       NAME <MAIL@ADRESS>                                                *
  *       NAME <MAIL@ADRESS>                                                *
  ***************************************************************************/
+/**
+  \class Utils::GoogleTranslator
+  Small connector to the Google API for translation.
+*/
+
 #include "googletranslator.h"
 
 #include <QUrl>
@@ -35,6 +40,7 @@
 
 using namespace Utils;
 
+/** Create a Google translator object. */
 GoogleTranslator::GoogleTranslator(QObject *parent) :
     QObject(parent)
 {
@@ -43,6 +49,7 @@ GoogleTranslator::GoogleTranslator(QObject *parent) :
     connect(manager, SIGNAL(finished(QNetworkReply*)), this, SLOT(replyFinished(QNetworkReply*)));
 }
 
+/** Define the proxy settings. */
 int GoogleTranslator::setProxy(const QString & host, int port, const QString & username , const QString & password )
 {
     QNetworkProxy prox(QNetworkProxy::HttpProxy, host, port, username, password);
@@ -50,7 +57,13 @@ int GoogleTranslator::setProxy(const QString & host, int port, const QString & u
     return 0;
 }
 
-void GoogleTranslator::startTranslation(const QString &from, const QString &to, const QString &text)
+/**
+  Starts a translation from the language \e from to the language \e to of the \e text.
+  You can define an unique identifier for your request. Use the \e uid param.\n
+  When the translation is done, a signal is emitted translationComplete() with the translated string and
+  the translationCompleteWithUid() with the identifier of the translation.
+*/
+void GoogleTranslator::startTranslation(const QString &from, const QString &to, const QString &text, const QString &uid)
 {
     QUrl url("http://ajax.googleapis.com/", QUrl::TolerantMode);
     url.setEncodedPath("/ajax/services/language/translate");
@@ -58,6 +71,8 @@ void GoogleTranslator::startTranslation(const QString &from, const QString &to, 
     url.addQueryItem("q", text);
     url.addEncodedQueryItem("langpair",QString("%1|%2").arg(from).arg(to).toUtf8());
 //    qWarning() << "Trans" << text;
+    if (!uid.isEmpty())
+        uidToUrl.insert(uid, url);
     manager->get(QNetworkRequest(url));
 }
 
@@ -78,6 +93,10 @@ void GoogleTranslator::replyFinished(QNetworkReply *reply)
     text.replace(QString("\\x3c"), "<");
     text.replace(QString("\\x3e"), ">");
     Q_EMIT translationComplete(text);
+    if (uidToUrl.values().contains(reply->url())) {
+        Q_EMIT translationCompleteWithUid(text, uidToUrl.key(reply->url()));
+        uidToUrl.remove(uidToUrl.key(reply->url()));
+    }
 }
 
 void GoogleTranslator::textTranslated()

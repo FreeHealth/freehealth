@@ -29,8 +29,10 @@
 
 #include <translationutils/translationutils_exporter.h>
 #include <QObject>
+#include <QHash>
 class QNetworkReply;
 class QNetworkAccessManager;
+#include <QUrl>
 
 namespace Utils {
 
@@ -44,14 +46,15 @@ public:
 public Q_SLOTS:
     void replyFinished(QNetworkReply *reply);
     void textTranslated();
-    void startTranslation(const QString &from,const QString &to, const QString &text);
+    void startTranslation(const QString &from,const QString &to, const QString &text, const QString &uid = QString::null);
 
 Q_SIGNALS:
     void translationComplete(const QString &text);
+    void translationCompleteWithUid(const QString &text, const QString &uid);
 
 private:
     QNetworkAccessManager *manager;
-
+    QHash<QString, QUrl> uidToUrl;
 };
 
 }  // End namespace Utils
