@@ -92,6 +92,8 @@ void GoogleTranslator::replyFinished(QNetworkReply *reply)
     text.replace("\\u003cbr\\u003e","<br />");
     text.replace(QString("\\x3c"), "<");
     text.replace(QString("\\x3e"), ">");
+    text.replace(QString("\\u003c"),QString("<"));
+    text.replace(QString("\\u003e"),QString(">"));
     Q_EMIT translationComplete(text);
     if (uidToUrl.values().contains(reply->url())) {
         Q_EMIT translationCompleteWithUid(text, uidToUrl.key(reply->url()));
@@ -108,7 +110,9 @@ void GoogleTranslator::textTranslated()
     text = text.replace(QString("\\n"),QString("\n"));
     text = text.replace(QString("\n "),QString("\n"));
     text = text.replace(QString("\\x3c"),QString("<"));
+    text = text.replace(QString("\\u003c"),QString("<"));
     text = text.replace(QString("\\x3e"),QString(">"));
+    text = text.replace(QString("\\u003e"),QString(">"));
 
     if (text.startsWith(QString("\""))) {
         // This is a text
