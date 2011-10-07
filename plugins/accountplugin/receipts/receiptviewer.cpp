@@ -352,9 +352,9 @@ namespace InternalAmount {
                     case Col_Banking: return trUtf8("Banking");
                     case Col_Other: return trUtf8("Other");
                     case Col_Du: return trUtf8("Du");
-                    case Col_Debtor : return "debtor";
-                    case Col_Site : return "site";
-                    case Col_DistRule : return "distRule";
+                    case Col_Debtor : return tr("debtor");
+                    case Col_Site : return tr("site");
+                    case Col_DistRule : return tr("distRule");
                      
                     }
                 } else if (orientation==Qt::Vertical) {
@@ -574,11 +574,14 @@ void treeViewsActions::fillActionTreeView()
         }
         //default values if unavailables :
         if (listOfItemsOfTable.size()<1) {
+            qDebug() << __FILE__ << QString::number(__LINE__) << "listOfItemsOfTable.size()<1"  ;
+            qDebug() << __FILE__ << QString::number(__LINE__) << "strKeysParameters  =" << strKeysParameters ;
             if (strKeysParameters == "Debtor") {
                 m_mapSubItems.insertMulti(strKeysParameters,"Patient");
                 m_mapSubItems.insertMulti(strKeysParameters,"CPAM28");
             }
-            else if (strKeysParameters == "Thesaurus") {
+            else if (strKeysParameters == tr("Thesaurus")) {
+                qDebug() << __FILE__ << QString::number(__LINE__) << " in thesaurus " ;
                 m_mapSubItems.insertMulti(tr("Thesaurus"),"CS");
                 m_mapSubItems.insertMulti(tr("Thesaurus"),"V");
             }
@@ -608,7 +611,7 @@ void treeViewsActions::fillActionTreeView()
         if (strMainActions == "Debtor") {
             QBrush green(Qt::darkGreen);
             actionItem->setForeground(green);
-        } else if (strMainActions == "Preferred Value") {
+        } else if (strMainActions == tr("Preferred Value")) {
             QBrush red(Qt::red);
             actionItem->setForeground(red);
         } else if (strMainActions == "Sites") {
@@ -772,11 +775,11 @@ ReceiptViewer::ReceiptViewer(QWidget *parent) :
     ui->returnedListView->setModel(m_modelReturnedList);
     ui->returnedListView->setEnabled(true);
     ui->returnedListView->show();
-    actionTreeView = new treeViewsActions(this);
-    QVBoxLayout *vbox = new QVBoxLayout;
-    vbox->addWidget(actionTreeView);
-    ui->actionsBox->setLayout(vbox);
-    actionTreeView->fillActionTreeView();
+    m_actionTreeView = new treeViewsActions(this);
+    m_vbox = new QVBoxLayout;
+    m_vbox->addWidget(m_actionTreeView);
+    ui->actionsBox->setLayout(m_vbox);
+    m_actionTreeView->fillActionTreeView();
     //preferential choices in the tree view.
     QString site = QString("Sites");
     QString distRule = QString("Distance rules");
@@ -809,7 +812,7 @@ ReceiptViewer::ReceiptViewer(QWidget *parent) :
     connect(ui->thesaurusButton,SIGNAL(pressed()),this,SLOT(saveInThesaurus()));
     connect(ui->displayRadioButton,SIGNAL(clicked(bool)),this,SLOT(showControlReceipts(bool)));
     
-    connect(actionTreeView,SIGNAL(clicked(const QModelIndex&)),this,SLOT(actionsOfTreeView(const QModelIndex&)));
+    connect(m_actionTreeView,SIGNAL(clicked(const QModelIndex&)),this,SLOT(actionsOfTreeView(const QModelIndex&)));
     connect(m_clear,SIGNAL(triggered(bool)),this,SLOT(clearAll(bool)));
     connect(m_control,SIGNAL(isClosing()),this,SLOT(controlReceiptsDestroyed()));
     connect(user(), SIGNAL(userChanged()), this, SLOT(userUid()));
@@ -827,6 +830,14 @@ void ReceiptViewer::changeEvent(QEvent *e)
     switch (e->type()) {
     case QEvent::LanguageChange:
         ui->retranslateUi(this);
+        delete m_actionTreeView;
+        delete m_vbox;
+        qDebug() << __FILE__ << QString::number(__LINE__) << " in  ReceiptViewer::changeEvent(QEvent *e)"  ;
+        m_actionTreeView = new treeViewsActions(this);
+        m_vbox = new QVBoxLayout;
+        m_vbox->addWidget(m_actionTreeView);
+        ui->actionsBox->setLayout(m_vbox);
+        m_actionTreeView->fillActionTreeView();
         break;
     default:
         break;
@@ -1178,7 +1189,7 @@ void ReceiptViewer::saveInThesaurus(){
     if(r.insertInThesaurus(listOfValuesStr,m_userUuid)){
         QMessageBox::information(0,trUtf8("Information"),trUtf8("Saved in thesaurus."),QMessageBox::Ok);
         }
-    actionTreeView->fillActionTreeView();
+    m_actionTreeView->fillActionTreeView();
 }
 
 void ReceiptViewer::clearAll(bool b)

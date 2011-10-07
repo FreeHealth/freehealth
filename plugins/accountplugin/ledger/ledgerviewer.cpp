@@ -39,10 +39,12 @@
 enum { WarnDebugMessage = false };
 LedgerViewer::LedgerViewer(QWidget * parent): QWidget(parent),ui(new Ui::LedgerViewerWidget){
     ui->setupUi(this);
-    m_currency = "euro";
+    m_currency = tr("euro");
     m_lm = new LedgerManager(this);
     m_ledgerEdit = new LedgerEdit(this);
     m_ledgerEdit->hide();
+    m_menuBar = new QMenuBar(this);
+    
     QStringList listOfMonths;
     listOfMonths = m_lm->getListOfMonths();
     ui->monthsComboBox->addItems(listOfMonths);
@@ -53,9 +55,10 @@ LedgerViewer::LedgerViewer(QWidget * parent): QWidget(parent),ui(new Ui::LedgerV
     listOfYears.removeDuplicates();
     ui->yearsComboBox->addItems(listOfYears);
     ui->tableView->setShowGrid(false);
-    createActions();
-    createMenus();
-    fillMenuBar();
+    if(createActions()){
+        createMenus();
+        fillMenuBar();
+        }
     connect(ui->monthsComboBox,SIGNAL(activated(const QString&)),this,
                                SLOT(monthsComboBoxcurrentIndexChanged(const QString&)));
     
@@ -63,8 +66,18 @@ LedgerViewer::LedgerViewer(QWidget * parent): QWidget(parent),ui(new Ui::LedgerV
 
 LedgerViewer::~LedgerViewer(){}
 
+void LedgerViewer::changeEvent(QEvent *e) {
+    QWidget::changeEvent(e);
+    if (e->type()==QEvent::LanguageChange) {
+        qDebug() << __FILE__ << QString::number(__LINE__) << "LedgerViewer::changeEvent(QEvent *e)"  ;
+        m_menuWidgetAction = new QMenu(QObject::tr("&Program","Ledger file"),this);
+        m_menuAnalyze = new QMenu(tr("&Analyse"),this);
+        m_ledger = new QMenu(tr("&Ledger"),this);
+    }
+}
+
 void LedgerViewer::fillMenuBar(){
-    m_menuBar = new QMenuBar(this);
+    
     m_menuBar->setAttribute(Qt::WA_TranslucentBackground);
     m_menuBar->setWindowOpacity(0.0);
     m_menuBar->addMenu(m_menuWidgetAction);
@@ -74,7 +87,8 @@ void LedgerViewer::fillMenuBar(){
 }
 
 void LedgerViewer::createMenus(){
-    m_menuWidgetAction = new QMenu(tr("&File"),this);
+    
+    m_menuWidgetAction = new QMenu(QObject::tr("&Program","Ledger file"),this);
     m_menuWidgetAction->addAction(m_closeAction);
     m_menuAnalyze = new QMenu(tr("&Analyse"),this);
     m_menuAnalyze->addAction(m_monthlyReceiptsAnalysis);
@@ -87,48 +101,49 @@ void LedgerViewer::createMenus(){
     m_ledger->addAction(m_ledgerActionShow);
 }
 
-void LedgerViewer::createActions(){
+bool LedgerViewer::createActions(){
+    bool b = true;
     m_closeAction = new QAction(trUtf8("E&xit"),this);
-    m_closeAction->setShortcuts(QKeySequence::Close);
+    m_closeAction->setShortcut(QKeySequence::Close);
     m_closeAction->setStatusTip(trUtf8("Close Ledger"));
     m_hashTextAndAction.insert(m_closeAction->text(),m_closeAction);
-    connect(m_closeAction, SIGNAL(triggered()), this, SLOT(close()));
+    b = connect(m_closeAction, SIGNAL(triggered()), this, SLOT(close()));
     
     m_monthlyReceiptsAnalysis = new QAction(trUtf8("Receipts by month"),this);
     m_monthlyReceiptsAnalysis->setStatusTip(trUtf8("See receipts by month."));
     m_hashTextAndAction.insert(m_monthlyReceiptsAnalysis->text(),m_monthlyReceiptsAnalysis);
-    connect(m_monthlyReceiptsAnalysis, SIGNAL(triggered()), this, SLOT(monthlyReceiptsAnalysis()));
+    b = connect(m_monthlyReceiptsAnalysis, SIGNAL(triggered()), this, SLOT(monthlyReceiptsAnalysis()));
     
     m_monthlyAndTypeReceiptsAnalysis = new QAction(trUtf8("Receipts by month and type"),this);
     m_monthlyAndTypeReceiptsAnalysis->setStatusTip(trUtf8("See receipts by month and type."));
     m_hashTextAndAction.insert(m_monthlyAndTypeReceiptsAnalysis->text(),m_monthlyAndTypeReceiptsAnalysis);
-    connect(m_monthlyAndTypeReceiptsAnalysis, SIGNAL(triggered()), this, SLOT(monthlyAndTypeReceiptsAnalysis()));
+    b = connect(m_monthlyAndTypeReceiptsAnalysis, SIGNAL(triggered()), this, SLOT(monthlyAndTypeReceiptsAnalysis()));
     
     m_yearlyAndTypeReceiptsAnalysis = new QAction(trUtf8("Receipts by year and type"),this);
     m_yearlyAndTypeReceiptsAnalysis->setStatusTip(trUtf8("See receipts by year and type."));
     m_hashTextAndAction.insert(m_yearlyAndTypeReceiptsAnalysis->text(),m_yearlyAndTypeReceiptsAnalysis);
-    connect(m_yearlyAndTypeReceiptsAnalysis, SIGNAL(triggered()), this, SLOT(yearlyAndTypeReceiptsAnalysis()));
+    b = connect(m_yearlyAndTypeReceiptsAnalysis, SIGNAL(triggered()), this, SLOT(yearlyAndTypeReceiptsAnalysis()));
     
     m_monthlyMovementsAnalysis = new QAction(trUtf8("Movements by month"),this);
     m_monthlyMovementsAnalysis->setStatusTip(trUtf8("See receipts by month."));
     m_hashTextAndAction.insert(m_monthlyMovementsAnalysis->text(),m_monthlyMovementsAnalysis);
-    connect(m_monthlyMovementsAnalysis, SIGNAL(triggered()), this, SLOT(monthlyMovementsAnalysis()));
+    b = connect(m_monthlyMovementsAnalysis, SIGNAL(triggered()), this, SLOT(monthlyMovementsAnalysis()));
     
     m_monthlyAndTypeMovementsAnalysis = new QAction(trUtf8("Movements by month and type"),this);
     m_monthlyAndTypeMovementsAnalysis->setStatusTip(trUtf8("See receipts by month and type."));
     m_hashTextAndAction.insert(m_monthlyAndTypeMovementsAnalysis->text(),m_monthlyAndTypeMovementsAnalysis);
-    connect(m_monthlyAndTypeMovementsAnalysis, SIGNAL(triggered()), this, SLOT(monthlyAndTypeMovementsAnalysis()));
+    b = connect(m_monthlyAndTypeMovementsAnalysis, SIGNAL(triggered()), this, SLOT(monthlyAndTypeMovementsAnalysis()));
     
     m_yearlyAndTypeMovementsAnalysis = new QAction(trUtf8("Movements by year and type"),this);
     m_yearlyAndTypeMovementsAnalysis->setStatusTip(trUtf8("See receipts by year and type."));
     m_hashTextAndAction.insert(m_monthlyAndTypeMovementsAnalysis->text(),m_monthlyAndTypeMovementsAnalysis);
-    connect(m_yearlyAndTypeMovementsAnalysis, SIGNAL(triggered()), this, SLOT(yearlyAndTypeMovementsAnalysis()));
+    b = connect(m_yearlyAndTypeMovementsAnalysis, SIGNAL(triggered()), this, SLOT(yearlyAndTypeMovementsAnalysis()));
     
     m_ledgerActionShow = new QAction(trUtf8("&Ledger"),this);
     m_ledgerActionShow->setStatusTip(trUtf8("See ledger."));
     m_hashTextAndAction.insert(m_ledgerActionShow->text(),m_ledgerActionShow);
-    connect(m_ledgerActionShow, SIGNAL(triggered()), this, SLOT(ledgerActionShow()));
-    
+    b = connect(m_ledgerActionShow, SIGNAL(triggered()), this, SLOT(ledgerActionShow()));
+    return b;
 }
 
 void LedgerViewer::monthlyReceiptsAnalysis(){

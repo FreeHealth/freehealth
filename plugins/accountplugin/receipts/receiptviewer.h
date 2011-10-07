@@ -46,6 +46,8 @@
 #include <QStringListModel>
 #include <QTreeView>
 #include <QFile>
+#include <QVBoxLayout>
+
 
 namespace Ui {
     class ReceiptViewer;
@@ -105,7 +107,7 @@ public:
     void setPosition(QWidget *parent);
     
     QString m_userUuid;
-    treeViewsActions *actionTreeView;
+    treeViewsActions *m_actionTreeView;
 
 protected:
     void changeEvent(QEvent *e);
@@ -120,6 +122,7 @@ protected:
     /** \todo remove this using the Core::ActionManager. */
     QAction *m_clear;
     QMenu *m_menu;
+    QVBoxLayout *m_vbox;
 
 private:
     void mousePressEvent(QMouseEvent *event);

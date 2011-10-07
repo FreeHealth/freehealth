@@ -62,8 +62,9 @@ class LedgerViewer : public QWidget {
     private :
         void fillMenuBar();
         void createMenus();
-        void createActions();
+        bool createActions();
         void resizeEvent(QResizeEvent *event);
+        void changeEvent(QEvent *e);
         LedgerEdit * m_ledgerEdit;
         LedgerManager *m_lm;
         QMenuBar * m_menuBar;

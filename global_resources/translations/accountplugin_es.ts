@@ -1702,6 +1702,21 @@ Otherwise result will be wrong !</source>
         <source>Du</source>
         <translation type="unfinished"></translation>
     </message>
+    <message>
+        <location filename="../../plugins/accountplugin/receipts/receiptviewer.cpp" line="355"/>
+        <source>debtor</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../../plugins/accountplugin/receipts/receiptviewer.cpp" line="356"/>
+        <source>site</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../../plugins/accountplugin/receipts/receiptviewer.cpp" line="357"/>
+        <source>distRule</source>
+        <translation type="unfinished"></translation>
+    </message>
 </context>
 <context>
     <name>LedgerEditWidget</name>
@@ -1747,127 +1762,129 @@ Otherwise result will be wrong !</source>
 <context>
     <name>LedgerViewer</name>
     <message>
-        <location filename="../../plugins/accountplugin/ledger/ledgerviewer.cpp" line="91"/>
+        <location filename="../../plugins/accountplugin/ledger/ledgerviewer.cpp" line="42"/>
+        <source>euro</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../../plugins/accountplugin/ledger/ledgerviewer.cpp" line="106"/>
         <source>E&amp;xit</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../../plugins/accountplugin/ledger/ledgerviewer.cpp" line="93"/>
+        <location filename="../../plugins/accountplugin/ledger/ledgerviewer.cpp" line="108"/>
         <source>Close Ledger</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../../plugins/accountplugin/ledger/ledgerviewer.cpp" line="97"/>
+        <location filename="../../plugins/accountplugin/ledger/ledgerviewer.cpp" line="112"/>
         <source>Receipts by month</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../../plugins/accountplugin/ledger/ledgerviewer.cpp" line="98"/>
         <location filename="../../plugins/accountplugin/ledger/ledgerviewer.cpp" line="113"/>
+        <location filename="../../plugins/accountplugin/ledger/ledgerviewer.cpp" line="128"/>
         <source>See receipts by month.</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../../plugins/accountplugin/ledger/ledgerviewer.cpp" line="102"/>
+        <location filename="../../plugins/accountplugin/ledger/ledgerviewer.cpp" line="117"/>
         <source>Receipts by month and type</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../../plugins/accountplugin/ledger/ledgerviewer.cpp" line="103"/>
         <location filename="../../plugins/accountplugin/ledger/ledgerviewer.cpp" line="118"/>
+        <location filename="../../plugins/accountplugin/ledger/ledgerviewer.cpp" line="133"/>
         <source>See receipts by month and type.</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../../plugins/accountplugin/ledger/ledgerviewer.cpp" line="107"/>
+        <location filename="../../plugins/accountplugin/ledger/ledgerviewer.cpp" line="122"/>
         <source>Receipts by year and type</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../../plugins/accountplugin/ledger/ledgerviewer.cpp" line="108"/>
         <location filename="../../plugins/accountplugin/ledger/ledgerviewer.cpp" line="123"/>
+        <location filename="../../plugins/accountplugin/ledger/ledgerviewer.cpp" line="138"/>
         <source>See receipts by year and type.</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../../plugins/accountplugin/ledger/ledgerviewer.cpp" line="112"/>
+        <location filename="../../plugins/accountplugin/ledger/ledgerviewer.cpp" line="127"/>
         <source>Movements by month</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../../plugins/accountplugin/ledger/ledgerviewer.cpp" line="117"/>
+        <location filename="../../plugins/accountplugin/ledger/ledgerviewer.cpp" line="132"/>
         <source>Movements by month and type</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../../plugins/accountplugin/ledger/ledgerviewer.cpp" line="122"/>
+        <location filename="../../plugins/accountplugin/ledger/ledgerviewer.cpp" line="137"/>
         <source>Movements by year and type</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../../plugins/accountplugin/ledger/ledgerviewer.cpp" line="86"/>
-        <location filename="../../plugins/accountplugin/ledger/ledgerviewer.cpp" line="127"/>
+        <location filename="../../plugins/accountplugin/ledger/ledgerviewer.cpp" line="75"/>
+        <location filename="../../plugins/accountplugin/ledger/ledgerviewer.cpp" line="100"/>
+        <location filename="../../plugins/accountplugin/ledger/ledgerviewer.cpp" line="142"/>
         <source>&amp;Ledger</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../../plugins/accountplugin/ledger/ledgerviewer.cpp" line="77"/>
-        <source>&amp;File</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <location filename="../../plugins/accountplugin/ledger/ledgerviewer.cpp" line="79"/>
+        <location filename="../../plugins/accountplugin/ledger/ledgerviewer.cpp" line="74"/>
+        <location filename="../../plugins/accountplugin/ledger/ledgerviewer.cpp" line="93"/>
         <source>&amp;Analyse</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../../plugins/accountplugin/ledger/ledgerviewer.cpp" line="128"/>
+        <location filename="../../plugins/accountplugin/ledger/ledgerviewer.cpp" line="143"/>
         <source>See ledger.</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../../plugins/accountplugin/ledger/ledgerviewer.cpp" line="141"/>
+        <location filename="../../plugins/accountplugin/ledger/ledgerviewer.cpp" line="156"/>
         <source>PATIENT NAME</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../../plugins/accountplugin/ledger/ledgerviewer.cpp" line="142"/>
+        <location filename="../../plugins/accountplugin/ledger/ledgerviewer.cpp" line="157"/>
         <source>SITE ID</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../../plugins/accountplugin/ledger/ledgerviewer.cpp" line="143"/>
+        <location filename="../../plugins/accountplugin/ledger/ledgerviewer.cpp" line="158"/>
         <source>INSURANCE ID</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../../plugins/accountplugin/ledger/ledgerviewer.cpp" line="144"/>
+        <location filename="../../plugins/accountplugin/ledger/ledgerviewer.cpp" line="159"/>
         <source>TEXT</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../../plugins/accountplugin/ledger/ledgerviewer.cpp" line="172"/>
-        <location filename="../../plugins/accountplugin/ledger/ledgerviewer.cpp" line="183"/>
-        <location filename="../../plugins/accountplugin/ledger/ledgerviewer.cpp" line="216"/>
-        <location filename="../../plugins/accountplugin/ledger/ledgerviewer.cpp" line="227"/>
+        <location filename="../../plugins/accountplugin/ledger/ledgerviewer.cpp" line="187"/>
+        <location filename="../../plugins/accountplugin/ledger/ledgerviewer.cpp" line="198"/>
+        <location filename="../../plugins/accountplugin/ledger/ledgerviewer.cpp" line="231"/>
+        <location filename="../../plugins/accountplugin/ledger/ledgerviewer.cpp" line="242"/>
         <source>TYPE</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../../plugins/accountplugin/ledger/ledgerviewer.cpp" line="173"/>
-        <location filename="../../plugins/accountplugin/ledger/ledgerviewer.cpp" line="184"/>
-        <location filename="../../plugins/accountplugin/ledger/ledgerviewer.cpp" line="217"/>
-        <location filename="../../plugins/accountplugin/ledger/ledgerviewer.cpp" line="228"/>
+        <location filename="../../plugins/accountplugin/ledger/ledgerviewer.cpp" line="188"/>
+        <location filename="../../plugins/accountplugin/ledger/ledgerviewer.cpp" line="199"/>
+        <location filename="../../plugins/accountplugin/ledger/ledgerviewer.cpp" line="232"/>
+        <location filename="../../plugins/accountplugin/ledger/ledgerviewer.cpp" line="243"/>
         <source>VALUE</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../../plugins/accountplugin/ledger/ledgerviewer.cpp" line="253"/>
+        <location filename="../../plugins/accountplugin/ledger/ledgerviewer.cpp" line="268"/>
         <source>Warning</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../../plugins/accountplugin/ledger/ledgerviewer.cpp" line="253"/>
+        <location filename="../../plugins/accountplugin/ledger/ledgerviewer.cpp" line="268"/>
         <source>Choose an action.</source>
         <translation type="unfinished"></translation>
     </message>
@@ -2270,6 +2287,16 @@ if you don&apos;t have one, save the next value in thesaurus and chose it in the
     </message>
 </context>
 <context>
+    <name>QObject</name>
+    <message>
+        <location filename="../../plugins/accountplugin/ledger/ledgerviewer.cpp" line="73"/>
+        <location filename="../../plugins/accountplugin/ledger/ledgerviewer.cpp" line="91"/>
+        <source>&amp;Program</source>
+        <comment>Ledger file</comment>
+        <translation type="unfinished"></translation>
+    </message>
+</context>
+<context>
     <name>ReceiptViewer</name>
     <message>
         <location filename="../../plugins/accountplugin/receipts/receiptviewer.ui" line="20"/>
@@ -2337,7 +2364,7 @@ if you don&apos;t have one, save the next value in thesaurus and chose it in the
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../../plugins/accountplugin/receipts/receiptviewer.cpp" line="804"/>
+        <location filename="../../plugins/accountplugin/receipts/receiptviewer.cpp" line="798"/>
         <source>Clear all.</source>
         <translation type="unfinished"></translation>
     </message>
@@ -2585,6 +2612,11 @@ and choose it as preferred.</source>
 <context>
     <name>receiptsManager</name>
     <message>
+        <location filename="../../plugins/accountplugin/receipts/receiptsmanager.cpp" line="169"/>
+        <source>thesaurus</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
         <location filename="../../plugins/accountplugin/receipts/receiptsmanager.cpp" line="293"/>
         <source>NAME</source>
         <translation type="unfinished"></translation>
@@ -2608,77 +2640,81 @@ and choose it as preferred.</source>
 <context>
     <name>treeViewsActions</name>
     <message>
-        <location filename="../../plugins/accountplugin/receipts/receiptviewer.cpp" line="419"/>
+        <location filename="../../plugins/accountplugin/receipts/receiptviewer.cpp" line="417"/>
+        <location filename="../../plugins/accountplugin/receipts/receiptviewer.cpp" line="676"/>
         <source>Delete this value.</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../../plugins/accountplugin/receipts/receiptviewer.cpp" line="420"/>
+        <location filename="../../plugins/accountplugin/receipts/receiptviewer.cpp" line="418"/>
+        <location filename="../../plugins/accountplugin/receipts/receiptviewer.cpp" line="677"/>
         <source>Choose this value like the preferred.</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../../plugins/accountplugin/receipts/receiptviewer.cpp" line="513"/>
-        <location filename="../../plugins/accountplugin/receipts/receiptviewer.cpp" line="528"/>
-        <location filename="../../plugins/accountplugin/receipts/receiptviewer.cpp" line="681"/>
+        <location filename="../../plugins/accountplugin/receipts/receiptviewer.cpp" line="511"/>
+        <location filename="../../plugins/accountplugin/receipts/receiptviewer.cpp" line="526"/>
+        <location filename="../../plugins/accountplugin/receipts/receiptviewer.cpp" line="663"/>
         <source>Warning</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../../plugins/accountplugin/receipts/receiptviewer.cpp" line="513"/>
+        <location filename="../../plugins/accountplugin/receipts/receiptviewer.cpp" line="511"/>
         <source>Unable to choose this item.</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../../plugins/accountplugin/receipts/receiptviewer.cpp" line="528"/>
+        <location filename="../../plugins/accountplugin/receipts/receiptviewer.cpp" line="526"/>
         <source>Cannot change value bool in thesaurus :</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../../plugins/accountplugin/receipts/receiptviewer.cpp" line="557"/>
+        <location filename="../../plugins/accountplugin/receipts/receiptviewer.cpp" line="555"/>
         <source>thesaurus</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../../plugins/accountplugin/receipts/receiptviewer.cpp" line="557"/>
-        <location filename="../../plugins/accountplugin/receipts/receiptviewer.cpp" line="587"/>
-        <location filename="../../plugins/accountplugin/receipts/receiptviewer.cpp" line="588"/>
+        <location filename="../../plugins/accountplugin/receipts/receiptviewer.cpp" line="555"/>
+        <location filename="../../plugins/accountplugin/receipts/receiptviewer.cpp" line="583"/>
+        <location filename="../../plugins/accountplugin/receipts/receiptviewer.cpp" line="585"/>
+        <location filename="../../plugins/accountplugin/receipts/receiptviewer.cpp" line="586"/>
         <source>Thesaurus</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../../plugins/accountplugin/receipts/receiptviewer.cpp" line="558"/>
+        <location filename="../../plugins/accountplugin/receipts/receiptviewer.cpp" line="556"/>
         <source>values</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../../plugins/accountplugin/receipts/receiptviewer.cpp" line="558"/>
+        <location filename="../../plugins/accountplugin/receipts/receiptviewer.cpp" line="556"/>
         <source>Values</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../../plugins/accountplugin/receipts/receiptviewer.cpp" line="560"/>
+        <location filename="../../plugins/accountplugin/receipts/receiptviewer.cpp" line="558"/>
+        <location filename="../../plugins/accountplugin/receipts/receiptviewer.cpp" line="614"/>
         <source>Preferred Value</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../../plugins/accountplugin/receipts/receiptviewer.cpp" line="561"/>
+        <location filename="../../plugins/accountplugin/receipts/receiptviewer.cpp" line="559"/>
         <source>Round trip</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../../plugins/accountplugin/receipts/receiptviewer.cpp" line="592"/>
-        <location filename="../../plugins/accountplugin/receipts/receiptviewer.cpp" line="593"/>
+        <location filename="../../plugins/accountplugin/receipts/receiptviewer.cpp" line="589"/>
+        <location filename="../../plugins/accountplugin/receipts/receiptviewer.cpp" line="590"/>
         <source>Sites</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../../plugins/accountplugin/receipts/receiptviewer.cpp" line="597"/>
+        <location filename="../../plugins/accountplugin/receipts/receiptviewer.cpp" line="593"/>
         <source>Distance rules</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../../plugins/accountplugin/receipts/receiptviewer.cpp" line="681"/>
+        <location filename="../../plugins/accountplugin/receipts/receiptviewer.cpp" line="663"/>
         <source>Cannot delete in thesaurus :</source>
         <translation type="unfinished"></translation>
     </message>

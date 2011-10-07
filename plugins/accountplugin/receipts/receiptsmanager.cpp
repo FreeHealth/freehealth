@@ -166,7 +166,7 @@ QHash<QString,QVariant> receiptsManager::getParametersDatas(QString & userUid , 
        }
 
    }
-   if (table == "thesaurus")
+   if (table == tr("thesaurus"))
    {
        ThesaurusModel model(this);
        QString userFilter = QString("%1 = '%2'").arg("THESAURUS_USERUID",userUid);
