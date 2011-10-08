@@ -180,6 +180,7 @@ bool MainWindow::initialize(const QStringList &, QString *)
 
     ui = new Ui::MainWindow;
     ui->setupUi(this);
+    ui->centralWidget->layout()->setMargin(0);
     setMenuBar(actionManager()->actionContainer(Constants::MENUBAR)->menuBar());
     ui->mainToolBar->insertAction(0, a);
 
@@ -190,11 +191,11 @@ bool MainWindow::initialize(const QStringList &, QString *)
     if (updateChecker()->needsUpdateChecking(settings()->getQSettings())) {
         messageSplash(tkTr(Trans::Constants::CHECKING_UPDATES));
         LOG(tkTr(Trans::Constants::CHECKING_UPDATES));
-        statusBar()->addWidget(new QLabel(tkTr(Trans::Constants::CHECKING_UPDATES), this));
-        statusBar()->addWidget(updateChecker()->progressBar(this),1);
+//        statusBar()->addWidget(new QLabel(tkTr(Trans::Constants::CHECKING_UPDATES), this));
+//        statusBar()->addWidget(updateChecker()->progressBar(this),1);
         connect(updateChecker(), SIGNAL(updateFound()), this, SLOT(updateFound()));
         connect(updateChecker(), SIGNAL(done(bool)), this, SLOT(updateCheckerEnd()));
-        updateChecker()->check(Utils::Constants::FREEICD_UPDATE_URL);
+        updateChecker()->check(Utils::Constants::FREETOOLBOX_UPDATE_URL);
         settings()->setValue(Utils::Constants::S_LAST_CHECKUPDATE, QDate::currentDate());
     }
 
@@ -222,6 +223,7 @@ void MainWindow::postCoreInitialization()
 
     setWindowIcon(theme()->icon(Constants::ICONFREETOOLBOX));
     setWindowTitle(qApp->applicationName() + " - " + qApp->applicationVersion());
+    setStatusBar(0);
 }
 
 void MainWindow::closeEvent(QCloseEvent *event)

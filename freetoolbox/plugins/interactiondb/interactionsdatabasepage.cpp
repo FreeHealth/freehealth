@@ -27,6 +27,8 @@
 #include "interactionsdatabasepage.h"
 #include "afssapsintegrator.h"
 #include "interactionstep.h"
+#include "drugdruginteraction.h"
+#include "drugdruginteractionmodel.h"
 
 #include <coreplugin/icore.h>
 #include <coreplugin/imainwindow.h>
@@ -51,10 +53,13 @@
 #include <QApplication>
 #include <QDir>
 #include <QProgressDialog>
+#include <QDataWidgetMapper>
+#include <QToolBar>
 
-#include "ui_interactiondatabasebuilder.h"
 #include "ui_interactiondatabasecreator.h"
 #include "ui_interactiondatabasechecker.h"
+
+#include <QDebug>
 
 using namespace IAMDb;
 using namespace Trans::ConstantTranslations;
@@ -68,6 +73,8 @@ static inline QString workingPath()         {return QDir::cleanPath(settings()->
 
 static inline QString translationsCorrectionsFile()  {return QDir::cleanPath(settings()->value(Core::Constants::S_SVNFILES_PATH).toString() + Core::Constants::INTERACTIONS_ENGLISHCORRECTIONS_FILENAME);}
 static inline QString afssapsIamXmlFile()  {return QDir::cleanPath(settings()->value(Core::Constants::S_SVNFILES_PATH).toString() + Core::Constants::AFSSAPS_INTERACTIONS_FILENAME);}
+static inline QString afssapsNewIamXmlFile()  {return QDir::cleanPath(settings()->value(Core::Constants::S_SVNFILES_PATH).toString() + Core::Constants::NEW_AFSSAPS_INTERACTIONS_FILENAME);}
+
 static inline QString atcCsvFile()          {return QDir::cleanPath(settings()->value(Core::Constants::S_SVNFILES_PATH).toString() + Core::Constants::ATC_FILENAME);}
 
 
@@ -93,41 +100,6 @@ static QString typeToString(const QString &type)
     return tmp.join( ", " );
 }
 
-static void levelToListWidget(QListWidget *listWidget, const QString &type)
-{
-    listWidget->clear();
-    QListWidgetItem *item;
-    item = new QListWidgetItem(tkTr(Trans::Constants::CONTRAINDICATION), listWidget);
-    if (type.contains("C")) {
-        item->setCheckState(Qt::Checked);
-    } else {
-        item->setCheckState(Qt::Unchecked);
-    }
-    item = new QListWidgetItem(tkTr(Trans::Constants::DISCOURAGED), listWidget);
-    if (type.contains("D")) {
-        item->setCheckState(Qt::Checked);
-    } else {
-        item->setCheckState(Qt::Unchecked);
-    }
-    item = new QListWidgetItem(tkTr(Trans::Constants::TAKE_INTO_ACCOUNT), listWidget);
-    if (type.contains("T")) {
-        item->setCheckState(Qt::Checked);
-    } else {
-        item->setCheckState(Qt::Unchecked);
-    }
-    item = new QListWidgetItem(tkTr(Trans::Constants::PRECAUTION_FOR_USE), listWidget);
-    if (type.contains("P")) {
-        item->setCheckState(Qt::Checked);
-    } else {
-        item->setCheckState(Qt::Unchecked);
-    }
-    item = new QListWidgetItem(tkTr(Trans::Constants::INFORMATION), listWidget);
-    if (type.contains("I")) {
-        item->setCheckState(Qt::Checked);
-    } else {
-        item->setCheckState(Qt::Unchecked);
-    }
-}
 
 static QIcon typeToIcon(const QString &type)
 {
@@ -145,145 +117,14 @@ static QIcon typeToIcon(const QString &type)
 }
 
 
-QWidget *InteractionsDatabasePage::createPage(QWidget *parent)
-{
-    return new InteractionsDatabaseBuilder(parent);
-}
-
 QWidget *InteractionsDatabaseCreatorPage::createPage(QWidget *parent)
 {
     return new InteractionDatabaseCreator(parent);
 }
 
-namespace IAMDb {
-
-class InteractionsDatabaseBuilderPrivate
-{
-public:
-    QPersistentModelIndex m_EditingIndex;
-    bool m_ReviewModified;
-};
-
-} // namespace IAMDb
-
-InteractionsDatabaseBuilder::InteractionsDatabaseBuilder(QWidget *parent) :
-        QWidget(parent), ui(new Ui::InteractionDatabaseBuilder), d(new InteractionsDatabaseBuilderPrivate)
-{
-    ui->setupUi(this);
-    ui->save->setIcon(theme()->icon(Core::Constants::ICONSAVE));
-    ui->modify->setIcon(theme()->icon(Core::Constants::ICONEDIT));
-    ui->makeCorrections->setEnabled(false);
-//    ui->translate->setEnabled(false);
-
-    InteractionModel *model = InteractionModel::instance();
-
-    ui->treeView->setModel(model);
-    ui->treeView->setWordWrap(true);
-    ui->treeView->header()->setResizeMode(0, QHeaderView::ResizeToContents);
-    ui->treeView->header()->setResizeMode(1, QHeaderView::ResizeToContents);
-    ui->treeView->header()->setResizeMode(2, QHeaderView::ResizeToContents);
-    ui->treeView->setEditTriggers(QAbstractItemView::NoEditTriggers);
-    connect(ui->treeView->selectionModel(), SIGNAL(currentChanged(QModelIndex,QModelIndex)), this, SLOT(interactionActivated(QModelIndex)));
-}
-
-InteractionsDatabaseBuilder::~InteractionsDatabaseBuilder()
-{
-    delete ui; ui=0;
-    delete d; d=0;
-}
-
-void InteractionsDatabaseBuilder::on_modify_clicked()
-{
-    ui->groupBox->setEnabled(!ui->groupBox->isEnabled());
-    ui->groupBox_2->setEnabled(!ui->groupBox_2->isEnabled());
-    ui->groupBox_4->setEnabled(!ui->groupBox_4->isEnabled());
-    ui->groupReview->setEnabled(!ui->groupReview->isEnabled());
-}
-
-void InteractionsDatabaseBuilder::interactionActivated(const QModelIndex &index)
-{
-    if (d->m_EditingIndex==index)
-        return;
-
-    // save ?
-    InteractionModel *model = InteractionModel::instance();
-    /** \todo Save only if suficient rights */
-    if (d->m_EditingIndex.isValid() &&
-        (ui->risk->document()->isModified() ||
-         ui->management->document()->isModified() ||
-         ui->risk_en->document()->isModified() ||
-         ui->management_en->document()->isModified()
-         || (ui->checkBox->isChecked() != model->getReviewState(d->m_EditingIndex))
-        )) {
-        if (Utils::yesNoMessageBox(tr("Data changed but not saved."), tr("Do you want to save changes to the file ?")))
-            on_save_clicked();
-    }
-
-    ui->groupBox->setEnabled(false);
-    ui->groupBox_2->setEnabled(false);
-    ui->groupBox_4->setEnabled(false);
-    ui->groupReview->setEnabled(false);
-
-    // clear
-    ui->risk->clear();
-    ui->management->clear();
-    ui->risk_en->clear();
-    ui->management_en->clear();
-
-    if (model->tagName(index) != "Interactor")
-        return;
-
-    // set datas
-    ui->risk->setPlainText(model->getRisk(index, "fr").replace("<br />", "\n"));
-    ui->management->setPlainText(model->getManagement(index, "fr").replace("<br />", "\n"));
-    ui->risk_en->setPlainText(model->getRisk(index, "en").replace("<br />", "\n"));
-    ui->management_en->setPlainText(model->getManagement(index, "en").replace("<br />", "\n"));
-    levelToListWidget(ui->listWidget, model->getLevel(index, "fr"));
-    int reviewer = ui->comboBox->findText(model->getReviewer(index));
-    if (reviewer==-1)
-        ++reviewer;
-    ui->comboBox->setCurrentIndex(reviewer);
-    ui->checkBox->setChecked(model->getReviewState(index));
-    d->m_EditingIndex = index;
-}
-
-void InteractionsDatabaseBuilder::on_save_clicked()
-{
-    InteractionModel *model = InteractionModel::instance();
-    if (d->m_EditingIndex.isValid()) {
-        if (ui->risk->document()->isModified())
-            model->setRisk(d->m_EditingIndex, "fr", ui->risk->toPlainText().replace("\n", "<br />"));
-        if (ui->management->document()->isModified())
-            model->setManagement(d->m_EditingIndex, "fr", ui->management->toPlainText().replace("\n", "<br />"));
-        if (ui->risk_en->document()->isModified())
-            model->setRisk(d->m_EditingIndex, "en", ui->risk_en->toPlainText().replace("\n", "<br />"));
-        if (ui->management_en->document()->isModified())
-            model->setManagement(d->m_EditingIndex, "en", ui->management_en->toPlainText().replace("\n", "<br />"));
-//        if (ui->level->isModified())
-//            model->setLevel(d->m_EditingIndex, "fr", ui->level->text());
-        model->setReviewer(d->m_EditingIndex, ui->comboBox->itemText(ui->comboBox->currentIndex()));
-        model->setReviewState(d->m_EditingIndex, ui->checkBox->isChecked());
-    }
-    model->saveModel();
-
-    ui->groupBox->setEnabled(false);
-    ui->groupBox_2->setEnabled(false);
-    ui->groupBox_4->setEnabled(false);
-}
-
-void InteractionsDatabaseBuilder::on_translate_clicked()
-{
-    InteractionModel *model = InteractionModel::instance();
-    model->startTranslations();
-}
-
-void InteractionsDatabaseBuilder::on_makeCorrections_clicked()
-{
-    InteractionModel *model = InteractionModel::instance();
-    model->correctTranslations();
-}
 
 
+///////////////////////////////////////////////////////////////////////////////////////////////////
 namespace IAMDb {
 
 class InteractionDatabaseCreatorPrivate

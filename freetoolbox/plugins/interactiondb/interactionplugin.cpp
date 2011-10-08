@@ -24,8 +24,10 @@
  *       NAME <MAIL@ADRESS>                                                *
  ***************************************************************************/
 #include "interactionplugin.h"
+#include "drugdruginteractioncore.h"
 #include "afssapsintegrator.h"
 #include "interactionsdatabasepage.h"
+#include "interactioneditorpage.h"
 //#include "cytochromep450interactionspage.h"
 
 #include <coreplugin/dialogs/pluginaboutpage.h>
@@ -57,9 +59,12 @@ bool InteractionPlugin::initialize(const QStringList &arguments, QString *errorM
     // add plugin info page
     addAutoReleasedObject(new Core::PluginAboutPage(pluginSpec(), this));
 
+    // Create the core object
+    DrugDrugInteractionCore::instance();
+
     addAutoReleasedObject(new AfssapsIntegratorPage(this));
 //    addAutoReleasedObject(new AfssapsClassTreePage(this));
-    addAutoReleasedObject(new InteractionsDatabasePage(this));
+    addAutoReleasedObject(new InteractionEditorPage(this));
     addAutoReleasedObject(new InteractionsDatabaseCreatorPage(this));
 //    addAutoReleasedObject(new CytochromeP450InteractionsPage(this));
 

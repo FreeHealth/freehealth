@@ -31,6 +31,7 @@
 #include <coreplugin/ftb_constants.h>
 
 #include <utils/global.h>
+#include <utils/log.h>
 
 #include <QFile>
 #include <QFileInfo>
@@ -51,16 +52,12 @@
 #include <quazip/quazip/quazip.h>
 #include <quazip/quazip/quazipfile.h>
 
-#include <utils/log.h>
-
 static inline Core::ISettings *settings()  { return Core::ICore::instance()->settings(); }
 static inline QString databaseAbsPath() {return QDir::cleanPath(settings()->value(Core::Constants::S_DBOUTPUT_PATH).toString() + Core::Constants::MASTER_DATABASE_FILENAME);}
 static inline QString masterDatabaseSqlSchema() {return settings()->value(Core::Constants::S_SVNFILES_PATH).toString() + QString(Core::Constants::FILE_MASTER_DATABASE_SCHEME);}
 static inline QString routesCsvAbsFile() {return settings()->value(Core::Constants::S_SVNFILES_PATH).toString() + QString(Core::Constants::FILE_DRUGS_ROUTES);}
 
-
 namespace Core {
-
 namespace Tools
 {
 
@@ -631,7 +628,7 @@ bool recreateRoutes()
     }
     QSqlDatabase db = QSqlDatabase::database(Core::Constants::MASTER_DATABASE_NAME);
     Tools::executeSqlQuery("DELETE FROM ROUTES;", Core::Constants::MASTER_DATABASE_NAME);
-    addRoutesToDatabase(Core::Constants::MASTER_DATABASE_NAME, routesCsvAbsFile());
+    return addRoutesToDatabase(Core::Constants::MASTER_DATABASE_NAME, routesCsvAbsFile());
 }
 
 bool addRoutesToDatabase(const QString &connection, const QString &absFileName)

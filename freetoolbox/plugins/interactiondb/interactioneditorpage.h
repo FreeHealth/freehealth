@@ -23,36 +23,76 @@
  *   Contributors :                                                        *
  *       NAME <MAIL@ADRESS>                                                *
  ***************************************************************************/
-#ifndef FREETOOLBOX_INTERACTIONPLUGIN_H
-#define FREETOOLBOX_INTERACTIONPLUGIN_H
+#ifndef INTERACTIONEDITORPAGE_H
+#define INTERACTIONEDITORPAGE_H
 
-#include <extensionsystem/iplugin.h>
+#include <coreplugin/itoolpage.h>
 
-/**
- * \file interactionplugin.h
- * \author Eric MAEKER <eric.maeker@gmail.com>
- * \version 0.1.0
- * \date 27 Oct 2010
-*/
-
+#include <QObject>
+#include <QIcon>
+QT_BEGIN_NAMESPACE
+class QModelIndex;
+QT_END_NAMESPACE
 
 namespace IAMDb {
 
-namespace Internal {
+class InteractionEditorPage : public Core::IToolPage
+{
+    Q_OBJECT
 
-class InteractionPlugin : public ExtensionSystem::IPlugin
+public:
+    InteractionEditorPage(QObject *parent = 0) : IToolPage(parent) {}
+    ~InteractionEditorPage() {}
+
+    virtual QString id() const {return "InteractionEditorPage";}
+    virtual QString name() const {return "Interactions editor";}
+    virtual QString category() const {return tr("Interaction database");}
+    virtual QIcon icon() const {return QIcon();}
+
+    // widget will be deleted after the show
+    virtual QWidget *createPage(QWidget *parent = 0);
+};
+
+
+
+namespace Ui {
+class InteractionEditorWidget;
+}
+
+class InteractionEditorWidgetPrivate;
+
+class InteractionEditorWidget : public QWidget
 {
     Q_OBJECT
 public:
-    InteractionPlugin();
-    ~InteractionPlugin();
+    InteractionEditorWidget(QWidget *parent = 0);
+    ~InteractionEditorWidget();
 
-    bool initialize(const QStringList &arguments, QString *errorMessage = 0);
-    void extensionsInitialized();
+protected Q_SLOTS:
+    void createNewDDI();
+    void edit();
+    void interactionActivated(const QModelIndex &index);
+    void save();
+    void removeCurrent();
+    void translateCurrent();
+    void translateAll();
+    void reformatOldXmlSource();
+    void splitCurrent();
 
+protected Q_SLOTS:
+    void translationDone(const QString &trans);
+
+private:
+    void setEditorsEnabled(bool state);
+
+protected:
+    void changeEvent(QEvent *e);
+
+private:
+    Ui::InteractionEditorWidget *ui;
+    InteractionEditorWidgetPrivate *d;
 };
 
-} // namespace Internal
-} // namespace IAMDb
+}  //  End namespace IAMDb
 
-#endif // FREETOOLBOX_INTERACTIONPLUGIN_H
+#endif // INTERACTIONEDITORPAGE_H

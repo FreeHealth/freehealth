@@ -19,40 +19,62 @@
  *  If not, see <http://www.gnu.org/licenses/>.                            *
  ***************************************************************************/
 /***************************************************************************
- *   Main Developper : Eric MAEKER, <eric.maeker@gmail.com>                *
+ *   Main Developper : Eric MAEKER, MD <eric.maeker@gmail.com>             *
  *   Contributors :                                                        *
  *       NAME <MAIL@ADRESS>                                                *
+ *       NAME <MAIL@ADRESS>                                                *
  ***************************************************************************/
-#ifndef FREETOOLBOX_INTERACTIONPLUGIN_H
-#define FREETOOLBOX_INTERACTIONPLUGIN_H
+#ifndef FORMALIZEDITEMMODEL_H
+#define FORMALIZEDITEMMODEL_H
 
-#include <extensionsystem/iplugin.h>
-
-/**
- * \file interactionplugin.h
- * \author Eric MAEKER <eric.maeker@gmail.com>
- * \version 0.1.0
- * \date 27 Oct 2010
-*/
-
+#include <QAbstractTableModel>
+#include <QStringList>
 
 namespace IAMDb {
 
-namespace Internal {
-
-class InteractionPlugin : public ExtensionSystem::IPlugin
+class AvailableFormalizedItemNameModel : public QAbstractListModel
 {
     Q_OBJECT
 public:
-    InteractionPlugin();
-    ~InteractionPlugin();
+    AvailableFormalizedItemNameModel(QObject *parent = 0);
+    ~AvailableFormalizedItemNameModel();
 
-    bool initialize(const QStringList &arguments, QString *errorMessage = 0);
-    void extensionsInitialized();
+    int rowCount(const QModelIndex &) const {return m_ItemNames.count();}
 
+    QVariant data(const QModelIndex &index, int role = Qt::DisplayRole) const;
+
+private:
+    QStringList m_ItemNames;
+    QStringList m_ItemNamesTooltip;
 };
 
-} // namespace Internal
-} // namespace IAMDb
 
-#endif // FREETOOLBOX_INTERACTIONPLUGIN_H
+//class FormalizedItemModel : public QAbstractTableModel
+//{
+//    Q_OBJECT
+//public:
+//    enum DataRepresentation {
+//        ItemName = 0,
+//        ItemValue
+//    };
+
+//    FormalizedItemModel(QObject *parent = 0);
+//    ~FormalizedItemModel();
+
+//    int rowCount(const QModelIndex &parent = QModelIndex()) const;
+//    int columnCount(const QModelIndex &parent = QModelIndex()) const;
+
+//    QVariant data(const QModelIndex &index, int role = Qt::DisplayRole) const;
+//    bool setData(const QModelIndex &index, const QVariant &value, int role = Qt::EditRole);
+
+//    bool insertRows(int row, int count, const QModelIndex &parent = QModelIndex());
+//    bool removeRows(int row, int count, const QModelIndex &parent = QModelIndex());
+
+//    Qt::ItemFlags flags(const QModelIndex &index) const;
+
+
+//};
+
+}  // End namespace IAMDb
+
+#endif // FORMALIZEDITEMMODEL_H

@@ -32,24 +32,6 @@
 
 namespace IAMDb {
 
-class InteractionsDatabasePage : public Core::IToolPage
-{
-    Q_OBJECT
-
-public:
-    InteractionsDatabasePage(QObject *parent = 0) : IToolPage(parent) {}
-    ~InteractionsDatabasePage() {}
-
-    virtual QString id() const {return "InteractionsDatabasePage";}
-    virtual QString name() const {return "Interactions Database Builder";}
-    virtual QString category() const {return tr("Interaction database");}
-    virtual QIcon icon() const {return QIcon();}
-
-    // widget will be deleted after the show
-    virtual QWidget *createPage(QWidget *parent = 0);
-};
-
-
 class InteractionsDatabaseCreatorPage : public Core::IToolPage
 {
     Q_OBJECT
@@ -158,34 +140,6 @@ protected Q_SLOTS:
 private:
     Ui::InteractionDatabaseCreator *ui;
     InteractionDatabaseCreatorPrivate *d;
-};
-
-
-
-
-namespace Ui {
-class InteractionDatabaseBuilder;
-}
-
-class InteractionsDatabaseBuilderPrivate;
-
-class InteractionsDatabaseBuilder : public QWidget
-{
-    Q_OBJECT
-public:
-    InteractionsDatabaseBuilder(QWidget *parent = 0);
-    ~InteractionsDatabaseBuilder();
-
-protected Q_SLOTS:
-    void on_modify_clicked();
-    void interactionActivated(const QModelIndex &index);
-    void on_save_clicked();
-    void on_translate_clicked();
-    void on_makeCorrections_clicked();
-
-private:
-    Ui::InteractionDatabaseBuilder *ui;
-    InteractionsDatabaseBuilderPrivate *d;
 };
 
 

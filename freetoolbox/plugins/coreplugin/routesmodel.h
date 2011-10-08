@@ -19,40 +19,72 @@
  *  If not, see <http://www.gnu.org/licenses/>.                            *
  ***************************************************************************/
 /***************************************************************************
- *   Main Developper : Eric MAEKER, <eric.maeker@gmail.com>                *
+ *   Main Developper : Eric MAEKER, MD <eric.maeker@gmail.com>             *
  *   Contributors :                                                        *
  *       NAME <MAIL@ADRESS>                                                *
+ *       NAME <MAIL@ADRESS>                                                *
  ***************************************************************************/
-#ifndef FREETOOLBOX_INTERACTIONPLUGIN_H
-#define FREETOOLBOX_INTERACTIONPLUGIN_H
+#ifndef ROUTESMODEL_H
+#define ROUTESMODEL_H
 
-#include <extensionsystem/iplugin.h>
+#include <QAbstractTableModel>
+#include <QMultiHash>
+#include <QString>
+#include <QList>
 
-/**
- * \file interactionplugin.h
- * \author Eric MAEKER <eric.maeker@gmail.com>
- * \version 0.1.0
- * \date 27 Oct 2010
-*/
-
-
-namespace IAMDb {
-
+namespace Core {
 namespace Internal {
+struct Route {
+    Route() : id(-1), isHelper(false), checkState(Qt::Unchecked){}
 
-class InteractionPlugin : public ExtensionSystem::IPlugin
+    bool operator<(const Route &second) const;
+
+    int id;
+    QMultiHash<QString, QString> trLabels;
+    bool isHelper;
+    Qt::CheckState checkState;
+};
+}
+
+class RoutesModel : public QAbstractTableModel
 {
     Q_OBJECT
+    Q_PROPERTY(QList<int> checkedRouteIds READ checkedRouteIds WRITE setCheckedRouteIds)
+
 public:
-    InteractionPlugin();
-    ~InteractionPlugin();
+    enum DataRepresentation {
+        Id = 0,
+        FirstTranslatedName,
+        AllTranslatedNames,
+        ColumnCount
+    };
 
-    bool initialize(const QStringList &arguments, QString *errorMessage = 0);
-    void extensionsInitialized();
+    RoutesModel(QObject *parent = 0);
+    ~RoutesModel();
 
+    void initialize();
+    void clear();
+
+    int rowCount(const QModelIndex &parent = QModelIndex()) const;
+    int columnCount(const QModelIndex &) const {return ColumnCount;}
+
+    QVariant data(const QModelIndex &index, int role = Qt::DisplayRole) const;
+    bool setData(const QModelIndex &index, const QVariant &value, int role = Qt::EditRole);
+
+    Qt::ItemFlags flags(const QModelIndex &index) const;
+
+    QList<int> checkedRouteIds() const;
+    QList<QVariant> checkedRouteIdsInVariant() const;
+    void setCheckedRouteIds(const QList<int> &ids);
+    void setCheckedRouteIds(const QList<QVariant> &ids);
+
+private:
+    QList<Internal::Route> m_Routes;
+    QList<int> m_CheckedIds;
 };
 
-} // namespace Internal
-} // namespace IAMDb
+}  // End namespace Core
 
-#endif // FREETOOLBOX_INTERACTIONPLUGIN_H
+QDebug operator<<(QDebug debug, const Core::Internal::Route &route);
+
+#endif // ROUTESMODEL_H

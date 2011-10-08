@@ -22,7 +22,8 @@ HEADERS += coreimpl.h \
     globaltools.h \
     pathpreferences.h \
     ifullreleasestep.h \
-    fullreleasepage.h
+    fullreleasepage.h \
+    routesmodel.h
 
 SOURCES += coreimpl.cpp \
     appaboutpage.cpp \
@@ -31,10 +32,13 @@ SOURCES += coreimpl.cpp \
     globaltools.cpp \
     pathpreferences.cpp \
     ifullreleasestep.cpp \
-    fullreleasepage.cpp
+    fullreleasepage.cpp \
+    routesmodel.cpp
 
 FORMS += mainwindow.ui \
     pathpreferences.ui \
     fullreleasepage.ui
 
 OTHER_FILES += Core.pluginspec
+
+

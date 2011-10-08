@@ -395,6 +395,7 @@ enum TitleInterpret {
         const char* const LOW                                = QT_TRANSLATE_NOOP("tkConstants", "low");
         const char* const MEDIUM                             = QT_TRANSLATE_NOOP("tkConstants", "medium");
         const char* const HIGH                               = QT_TRANSLATE_NOOP("tkConstants", "high");
+        const char* const MODIFY                             = QT_TRANSLATE_NOOP("tkConstants", "modify");
 
         // Settings related messages
         const char* const SETTINGS_RECOVERED                = QT_TRANSLATE_NOOP("tkConstants", "Settings recovered" );

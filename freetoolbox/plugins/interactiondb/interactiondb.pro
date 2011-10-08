@@ -16,11 +16,21 @@ INCLUDEPATH += ../
 DEPENDPATH += ../
 
 HEADERS += interactionplugin.h \
-    interactionstep.h
+    interactionstep.h \
+    drugdruginteraction.h \
+    drugdruginteractionmodel.h \
+    drugdruginteractioncore.h \
+    interactioneditorpage.h \
+    formalizeditemmodel.h
 #    cytochromep450interactionspage.h \
 
 SOURCES += interactionplugin.cpp \
-    interactionstep.cpp
+    interactionstep.cpp \
+    drugdruginteraction.cpp \
+    drugdruginteractionmodel.cpp \
+    drugdruginteractioncore.cpp \
+    interactioneditorpage.cpp \
+    formalizeditemmodel.cpp
 #    cytochromep450interactionspage.cpp \
 
 SOURCES += \
@@ -35,7 +45,7 @@ HEADERS  += \
 
 FORMS    += afssapslinkerwidget.ui \
     afssapstreewidget.ui \
-    interactiondatabasebuilder.ui \
+    interactioneditorwidget.ui \
     interactiondatabasecreator.ui \
     interactiondatabasechecker.ui \
     afssapsintegratorwidget.ui
@@ -53,3 +63,13 @@ OTHER_FILES += \
 
 
 OTHER_FILES += InteractionDB.pluginspec
+
+
+
+
+
+
+
+
+
+

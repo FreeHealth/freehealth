@@ -19,40 +19,43 @@
  *  If not, see <http://www.gnu.org/licenses/>.                            *
  ***************************************************************************/
 /***************************************************************************
- *   Main Developper : Eric MAEKER, <eric.maeker@gmail.com>                *
+ *   Main Developper : Eric MAEKER, MD <eric.maeker@gmail.com>             *
  *   Contributors :                                                        *
  *       NAME <MAIL@ADRESS>                                                *
+ *       NAME <MAIL@ADRESS>                                                *
  ***************************************************************************/
-#ifndef FREETOOLBOX_INTERACTIONPLUGIN_H
-#define FREETOOLBOX_INTERACTIONPLUGIN_H
+#ifndef DRUGDRUGINTERACTIONCORE_H
+#define DRUGDRUGINTERACTIONCORE_H
 
-#include <extensionsystem/iplugin.h>
-
-/**
- * \file interactionplugin.h
- * \author Eric MAEKER <eric.maeker@gmail.com>
- * \version 0.1.0
- * \date 27 Oct 2010
-*/
-
+#include <QObject>
+#include <QHash>
+#include <QDomNode>
 
 namespace IAMDb {
+class DrugDrugInteraction;
 
-namespace Internal {
-
-class InteractionPlugin : public ExtensionSystem::IPlugin
+class DrugDrugInteractionCore : public QObject
 {
     Q_OBJECT
+    explicit DrugDrugInteractionCore(QObject *parent = 0);
 public:
-    InteractionPlugin();
-    ~InteractionPlugin();
+    static DrugDrugInteractionCore *instance();
 
-    bool initialize(const QStringList &arguments, QString *errorMessage = 0);
-    void extensionsInitialized();
+    int createInternalUuid() const;
+    QList<DrugDrugInteraction *> getDrugDrugInteractions() const;
 
+Q_SIGNALS:
+
+public Q_SLOTS:
+    void updateXmlFileForDrugDrugInteraction(DrugDrugInteraction *ddi);
+    void saveCompleteList(QList<DrugDrugInteraction *> ddis);
+
+
+private:
+    static DrugDrugInteractionCore *m_Instance;
+    mutable QHash<DrugDrugInteraction *, QDomNode> m_ddisToNode;
 };
 
-} // namespace Internal
-} // namespace IAMDb
+}  // End namespace IAMDb
 
-#endif // FREETOOLBOX_INTERACTIONPLUGIN_H
+#endif // DRUGDRUGINTERACTIONCORE_H
