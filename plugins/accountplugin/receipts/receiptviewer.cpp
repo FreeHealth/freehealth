@@ -346,33 +346,42 @@ namespace InternalAmount {
             if (role==Qt::DisplayRole) {
                 if (orientation==Qt::Horizontal) {
                     switch (section) {
-                    case Col_Cash: return tr("Cash");
-                    case Col_Cheque: return trUtf8("Cheque");
-                    case Col_Visa: return trUtf8("Visa");
-                    case Col_Banking: return trUtf8("Banking");
-                    case Col_Other: return trUtf8("Other");
-                    case Col_Du: return trUtf8("Du");
-                    case Col_Debtor : return tr("debtor");
-                    case Col_Site : return tr("site");
-                    case Col_DistRule : return tr("distRule");
-                     
+                    case Col_Cash: return m_headersColumns.value(Col_Cash);//"Cash";
+                    case Col_Cheque: return m_headersColumns.value(Col_Cheque);//"Cheque";
+                    case Col_Visa: return m_headersColumns.value(Col_Visa);//return "Visa";
+                    case Col_Banking: return m_headersColumns.value(Col_Banking);//"Banking";
+                    case Col_Other: return m_headersColumns.value(Col_Other);//"Other";
+                    case Col_Du: return m_headersColumns.value(Col_Du);//"Du";
+                    case Col_Debtor : return m_headersColumns.value(Col_Debtor);//"debtor";
+                    case Col_Site : return m_headersColumns.value(Col_Site);//"site";
+                    case Col_DistRule : return m_headersColumns.value(Col_DistRule);//"distRule";
+                     //return QVariant(m_headersColumns[section]);
                     }
-                } else if (orientation==Qt::Vertical) {
+                    }
+                else if (orientation==Qt::Vertical) {
                     return QVariant(m_headersRows[section]);
-                }
+                   }
             }
-            return QVariant();
+         
+                return QVariant();
+                
+            
         }
         
         bool setHeaderData( int section, Qt::Orientation orientation, const QVariant & value, int role = Qt::EditRole )
         {
-            if (role==Qt::EditRole||role == Qt::DisplayRole) {
+            if (role == Qt::EditRole||role == Qt::DisplayRole) {
                 if (orientation == Qt::Vertical) {
                     m_headersRows.insert(section,value.toString());
-                }
-            } else {
+                    }
+                else if (orientation == Qt::Horizontal){
+                    m_headersColumns.insert(section,value.toString());
+                        }
+                     } 
+              
+            else {
                 return false;
-            }
+                }
 
             Q_EMIT QAbstractTableModel::headerDataChanged(orientation, section, section) ;
             return true;
@@ -403,6 +412,7 @@ namespace InternalAmount {
     private:
         QVector<QList<QVariant> > *m_listsOfValuesbyRows;
         QStringList m_headersRows;
+        QStringList m_headersColumns;
         int m_rows ;
         
     };
@@ -608,25 +618,25 @@ void treeViewsActions::fillActionTreeView()
             qDebug() << __FILE__ << QString::number(__LINE__) << " strMainActions =" << strMainActions ;
         QStandardItem *actionItem = new QStandardItem(strMainActions);
         //treeViewsActions colors
-        if (strMainActions == "Debtor") {
+        if (strMainActions == tr("Debtor")) {
             QBrush green(Qt::darkGreen);
             actionItem->setForeground(green);
         } else if (strMainActions == tr("Preferred Value")) {
             QBrush red(Qt::red);
             actionItem->setForeground(red);
-        } else if (strMainActions == "Sites") {
+        } else if (strMainActions == tr("Sites")) {
             QBrush green(Qt::darkGreen);
             actionItem->setForeground(green);
-        } else if (strMainActions == "Thesaurus") {
+        } else if (strMainActions == tr("Thesaurus")) {
             QBrush red(Qt::red);
             actionItem->setForeground(red);
-        } else if (strMainActions == "Values") {
+        } else if (strMainActions == tr("Values")) {
             QBrush blue(Qt::blue);
             actionItem->setForeground(blue);
-        } else if (strMainActions == "Round trip") {
+        } else if (strMainActions == tr("Round trip")) {
             QBrush blue(Qt::blue);
             actionItem->setForeground(blue);
-        } else if (strMainActions == "Distance rules") {
+        } else if (strMainActions == tr("Distance rules")) {
             QBrush green(Qt::darkGreen);
             actionItem->setForeground(green);
         } else {
@@ -671,6 +681,7 @@ void treeViewsActions::changeEvent(QEvent *e) {
     QWidget::changeEvent(e);
     if (e->type()==QEvent::LanguageChange) {
         delete m_actionsTreeModel;
+            if (WarnDebugMessage)
             qDebug() << __FILE__ << QString::number(__LINE__) << " langage changed " ;
         fillActionTreeView();
         m_deleteThesaurusValue = new QAction(trUtf8("Delete this value."),this);
@@ -745,6 +756,13 @@ ReceiptViewer::ReceiptViewer(QWidget *parent) :
     ui->amountsView->horizontalHeader()->setResizeMode(QHeaderView::Interactive);
     ui->amountsView->horizontalHeader()->setCascadingSectionResizes (true);
     //ui->amountsView->horizontalHeader()->setStretchLastSection ( true );
+    m_model->setHeaderData(int(Cash),Qt::Horizontal,tr("Cash"));
+    m_model->setHeaderData(Check,Qt::Horizontal,tr("Check"));
+    m_model->setHeaderData(Visa,Qt::Horizontal,tr("Visa"));
+    m_model->setHeaderData(Banking,Qt::Horizontal,tr("Banking"));
+    m_model->setHeaderData(Other,Qt::Horizontal,tr("Other"));
+    m_model->setHeaderData(Due,Qt::Horizontal,tr("Du"));
+
     ui->amountsView->setModel(m_model);
     ui->amountsView->setItemDelegateForColumn(Cash, new Utils::SpinBoxDelegate(this,0.00,100.00,true));
     ui->amountsView->setItemDelegateForColumn(Check, new Utils::SpinBoxDelegate(this,0.00,100.00,true));
@@ -755,6 +773,9 @@ ReceiptViewer::ReceiptViewer(QWidget *parent) :
     ui->amountsView->setColumnHidden(InternalAmount::AmountModel::Col_Debtor,true);
     ui->amountsView->setColumnHidden(InternalAmount::AmountModel::Col_Site,true);
     ui->amountsView->setColumnHidden(InternalAmount::AmountModel::Col_DistRule,true);
+    
+
+    
     ui->amountsView->resizeRowsToContents();
     ui->dateExecution->setDisplayFormat("yyyy-MM-dd");
     ui->dateExecution->setDate(QDate::currentDate());
@@ -832,6 +853,7 @@ void ReceiptViewer::changeEvent(QEvent *e)
         ui->retranslateUi(this);
         delete m_actionTreeView;
         delete m_vbox;
+        if (WarnDebugMessage)
         qDebug() << __FILE__ << QString::number(__LINE__) << " in  ReceiptViewer::changeEvent(QEvent *e)"  ;
         m_actionTreeView = new treeViewsActions(this);
         m_vbox = new QVBoxLayout;

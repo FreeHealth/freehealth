@@ -42,6 +42,18 @@ namespace ReceiptsConstants{
         Due,
         MaxOfTypeOfPayments        
     };
+    enum HeaderDatas{
+        HDCash = 0,
+        HDCheck,
+        HDVisa,
+        HDBanking,
+        HDOther,
+        HDDue,
+        HDDebtor,
+        HDSite,
+        HDDistRules,
+        MaxOfHeaderDatas
+    };
 
 }
 
