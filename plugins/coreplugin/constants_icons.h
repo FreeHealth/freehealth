@@ -96,6 +96,7 @@ const char * const  ICONOK =           "ok.png";
 const char * const  ICONERROR =        "warning.png";
 const char * const  ICONWARNING =      "warning.png";
 const char * const  ICONFORBIDDEN =    "deconseille.png";
+const char * const  ICONTRANSLATE =    "translate.png";
 
 // menu Navigation
 const char * const  ICONNEXT =         "next.png";
