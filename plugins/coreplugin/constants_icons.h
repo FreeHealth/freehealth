@@ -108,6 +108,7 @@ const char * const  ICONONELEFTARROW = "1leftarrow.png";
 const char * const  ICONTWOLEFTARROW = "2leftarrow.png";
 const char * const  ICONONERIGHTARROW = "1rightarrow.png";
 const char * const  ICONTWORIGHTARROW = "2rightarrow.png";
+const char * const  ICONBOOKMARK      = "bookmark_add.png";
 
 // menu View
 const char * const  ICONEYES =         "eyes.png";
