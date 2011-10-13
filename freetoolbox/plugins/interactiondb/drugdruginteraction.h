@@ -118,6 +118,11 @@ public:
     QIcon levelIcon() const;
     void addReviewer(const QString &name);
 
+    bool isValid() const {return data(IsValid).toBool();}
+    bool isReviewed() const {return data(IsReviewed).toBool();}
+    bool isDuplicated() const {return data(IsDuplicated).toBool();}
+
+
     // Draft
     void addFormalized(const QString &attr, const QString &value);
     // End Draft

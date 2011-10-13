@@ -158,6 +158,7 @@ CoreImpl::CoreImpl(QObject *parent) :
 CoreImpl::~CoreImpl()
 {
     delete m_UID;
+    delete m_MainWindow->centralWidget();
     delete m_MainWindow;
     m_MainWindow = 0;
 //    delete m_CommandLine;

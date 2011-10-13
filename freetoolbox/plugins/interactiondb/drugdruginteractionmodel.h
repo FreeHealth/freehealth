@@ -112,6 +112,7 @@ public:
 signals:
 
 public Q_SLOTS:
+    void filterInteractionsForInteractor(const QString &interactorName);
     void setActualReviewer(const QString &name);
     bool saveModel();
 

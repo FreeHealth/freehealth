@@ -16,7 +16,7 @@ class SearchAtcInDatabaseDialog : public QDialog
     Q_OBJECT
 
 public:
-    explicit SearchAtcInDatabaseDialog(QWidget *parent = 0, const QString &term= QString::null);
+    explicit SearchAtcInDatabaseDialog(QWidget *parent = 0, const QString &term = QString::null);
     ~SearchAtcInDatabaseDialog();
 
     QStringList getSelectedCodes();

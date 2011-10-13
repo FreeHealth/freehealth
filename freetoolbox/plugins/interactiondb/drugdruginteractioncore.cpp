@@ -26,6 +26,7 @@
  ***************************************************************************/
 #include "drugdruginteractioncore.h"
 #include "drugdruginteraction.h"
+#include "druginteractor.h"
 
 #include <coreplugin/icore.h>
 #include <coreplugin/imainwindow.h>
@@ -55,7 +56,8 @@ static inline Core::IMainWindow *mainwindow() {return Core::ICore::instance()->m
 static inline Core::ISettings *settings()  { return Core::ICore::instance()->settings(); }
 static inline Core::ITheme *theme()  { return Core::ICore::instance()->theme(); }
 
-static inline QString afssapsNewIamXmlFile()  {return QDir::cleanPath(settings()->value(Core::Constants::S_SVNFILES_PATH).toString() + Core::Constants::NEW_AFSSAPS_INTERACTIONS_FILENAME);}
+static inline QString ddiNewXmlFile()  {return QDir::cleanPath(settings()->value(Core::Constants::S_SVNFILES_PATH).toString() + Core::Constants::NEW_AFSSAPS_INTERACTIONS_FILENAME);}
+static inline QString newInteractorsFile() {return QDir::cleanPath(settings()->value(Core::Constants::S_SVNFILES_PATH).toString() + Core::Constants::NEW_INTERACTORS_FILENAME);}
 
 
 using namespace IAMDb;
@@ -72,6 +74,7 @@ DrugDrugInteractionCore *DrugDrugInteractionCore::instance()
 DrugDrugInteractionCore::DrugDrugInteractionCore(QObject *parent) :
     QObject(parent)
 {
+    setObjectName("DrugDrugInteractionCore");
 }
 
 int DrugDrugInteractionCore::createInternalUuid() const
@@ -86,7 +89,7 @@ QList<DrugDrugInteraction *> DrugDrugInteractionCore::getDrugDrugInteractions() 
     if (m_ddisToNode.isEmpty()) {
         QDomDocument domDocument;
         // Read the file
-        QFile file(afssapsNewIamXmlFile());
+        QFile file(ddiNewXmlFile());
         if (file.open(QIODevice::ReadOnly)) {
             QString error;
             int line, col;
@@ -115,6 +118,56 @@ QList<DrugDrugInteraction *> DrugDrugInteractionCore::getDrugDrugInteractions() 
     return m_ddisToNode.keys();
 }
 
+QList<DrugInteractor *> DrugDrugInteractionCore::getDrugInteractors() const
+{
+    if (m_interactorsToNode.isEmpty()) {
+        QDomDocument domDocument;
+        // Read the file
+        QFile file(newInteractorsFile());
+        if (file.open(QIODevice::ReadOnly)) {
+            QString error;
+            int line, col;
+            if (!domDocument.setContent(&file, &error,&line,&col)) {
+                LOG_ERROR(tr("Can not read XML file content %1").arg(file.fileName()));
+                LOG_ERROR(QString("DOM(%1;%2): %3").arg(line).arg(col).arg(error));
+            } else {
+                LOG(tr("Reading file: %1").arg(file.fileName()));
+            }
+            file.close();
+        } else {
+            LOG_ERROR(tr("Can not open XML file %1").arg(file.fileName()));
+        }
+
+        // Create the m_ddisToNode content
+        QDomElement root = domDocument.firstChildElement("DDI_Interactors");
+        QDomElement iNode = root.firstChildElement("I");
+        QHash<QString, DrugInteractor *> initialLabelToDI;
+        while (!iNode.isNull()) {
+            DrugInteractor *di = new DrugInteractor(iNode);
+            di->setData(DrugInteractor::Id, createInternalUuid());
+            m_interactorsToNode.insert(di, iNode);
+            initialLabelToDI.insert(di->data(DrugInteractor::InitialLabel).toString(), di);
+            iNode = iNode.nextSiblingElement("I");
+        }
+
+        // reparent items
+        for(int i=0;i<m_interactorsToNode.count();++i) {
+            DrugInteractor *di = m_interactorsToNode.keys().at(i);
+            const QString &parentInitialLabel = di->data(DrugInteractor::InitialLabel).toString();
+
+            foreach(const QString &child, di->childrenIds()) {
+                DrugInteractor *childInteractor = initialLabelToDI.value(child, 0);
+                if (childInteractor) {
+                    childInteractor->addParentId(parentInitialLabel);
+                }
+            }
+        }
+
+        LOG(tr("Getting %1 interactors and interacting classes").arg(m_interactorsToNode.keys().count()));
+    }
+    return m_interactorsToNode.keys();
+}
+
 /** Update the XML file for the specified DrugDrugInteraction pointer. This pointer should be extracted from the list created using the getDrugDrugInteractions(). \sa getDrugDrugInteractions() */
 void DrugDrugInteractionCore::updateXmlFileForDrugDrugInteraction(DrugDrugInteraction *ddi)
 {
@@ -122,8 +175,8 @@ void DrugDrugInteractionCore::updateXmlFileForDrugDrugInteraction(DrugDrugIntera
 
 }
 
-/** While overwrite the thesaurus file with a new one created on the basis of the \e ddis. All precedent datas will be lost. */
-void DrugDrugInteractionCore::saveCompleteList(QList<DrugDrugInteraction *> ddis)
+/** Will overwrite the thesaurus file with a new one created on the basis of the \e ddis. All precedent datas will be lost. */
+void DrugDrugInteractionCore::saveCompleteList(const QList<DrugDrugInteraction *> &ddis)
 {
     QString xml = "<?xml version='1.0' encoding='UTF-8'?>\n"
             "<!-- date format = yyyy-MM-dd -->\n"
@@ -142,5 +195,32 @@ void DrugDrugInteractionCore::saveCompleteList(QList<DrugDrugInteraction *> ddis
         xml += ddis.at(i)->toXml();
     }
     xml += "\n</DrugDrugInteractions>\n";
-    Utils::saveStringToFile(xml, afssapsNewIamXmlFile(), Utils::Overwrite, Utils::DontWarnUser);
+    Utils::saveStringToFile(xml, ddiNewXmlFile(), Utils::Overwrite, Utils::DontWarnUser);
+}
+
+/** Will overwrite the thesaurus file with a new one created on the basis of the \e interactors. All precedent datas will be lost. */
+void DrugDrugInteractionCore::saveCompleteList(const QList<DrugInteractor *> &interactors)
+{
+    QString xml = "<?xml version='1.0' encoding='UTF-8'?>\n"
+            "<!-- date format = yyyy-MM-dd -->\n"
+            "<DDI_Interactors>\n";
+    for(int i=0; i < interactors.count(); ++i) {
+        xml += interactors.at(i)->toXml();
+    }
+    xml += "\n</DDI_Interactors>\n";
+    Utils::saveStringToFile(xml, newInteractorsFile(), Utils::Overwrite, Utils::DontWarnUser);
+}
+
+/** Create a new DrugInteractor with the \e initialLabel as \e isClass. */
+DrugInteractor *DrugDrugInteractionCore::createNewInteractor(const QString &initialLabel, const bool isClass)
+{
+    DrugInteractor *di = new DrugInteractor;
+    di->setData(DrugInteractor::IsValid, true);
+    di->setData(DrugInteractor::InitialLabel, Utils::removeAccents(initialLabel.toUpper()));
+    di->setData(DrugInteractor::FrLabel, initialLabel.toUpper());
+    di->setData(DrugInteractor::IsClass, isClass);
+    di->setData(DrugInteractor::DateOfCreation, QDate::currentDate());
+    di->setData(DrugInteractor::IsDuplicated, false);
+    Q_EMIT interactorCreated(di);
+    return di;
 }

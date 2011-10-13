@@ -352,10 +352,14 @@ Qt::ItemFlags AtcModel::flags(const QModelIndex &index) const
 QStringList AtcModel::getAtcLabel(const QStringList &codes)
 {
     QStringList list;
+    bool fr = QLocale().name().right(2).toLower()=="fr";
     foreach(const QString &code, codes) {
         foreach(AtcItem *item, d->m_ItemsList) {
             if (item->code() == code) {
-                list << item->english();
+                if (fr)
+                    list << item->french();
+                else
+                    list << item->english();
                 break;
             }
         }

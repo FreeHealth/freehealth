@@ -101,6 +101,8 @@ public:
     QAction *aTranslateThis;
     QAction *aReformatOldXmlSources;
     QAction *aSplitInteractionAccordingToLevel;
+    QAction *aExpandAll;
+    QAction *aCollapseAll;
 
     Utils::GoogleTranslator *googleTranslator;
 
@@ -156,15 +158,10 @@ InteractionEditorWidget::InteractionEditorWidget(QWidget *parent) :
     ui->bilbioTableView->horizontalHeader()->hide();
     ui->bilbioTableView->verticalHeader()->hide();
 
-    // manage search line
-    ui->searchLine->setDelayedSignals(true);
-    QToolButton *button = new QToolButton(this);
-    button->setIcon(theme()->icon(Core::Constants::ICONSEARCH));
-    ui->searchLine->setLeftButton(button);
-
     // Create the toolbar and actions
     QToolBar *b = new QToolBar(this);
     ui->toolbarLayout->addWidget(b);
+    b->setIconSize(QSize(16,16));
 
     d->aSave = new QAction(this);
     d->aRemoveCurrent = new QAction(this);
@@ -174,6 +171,8 @@ InteractionEditorWidget::InteractionEditorWidget(QWidget *parent) :
     d->aReformatOldXmlSources = new QAction(this);
     d->aCreateNew = new QAction(this);
     d->aSplitInteractionAccordingToLevel = new QAction(this);
+    d->aExpandAll = new QAction(this);
+    d->aCollapseAll = new QAction(this);
 
     d->aSave->setEnabled(false);
     d->aEdit->setEnabled(false);
@@ -185,10 +184,12 @@ InteractionEditorWidget::InteractionEditorWidget(QWidget *parent) :
     d->aRemoveCurrent->setIcon(theme()->icon(Core::Constants::ICONREMOVE));
     d->aEdit->setIcon(theme()->icon(Core::Constants::ICONEDIT));
     d->aTranslateAll->setIcon(theme()->icon(Core::Constants::ICONPROCESS));
-    d->aTranslateThis->setIcon(theme()->icon(Core::Constants::ICONEYES));
+    d->aTranslateThis->setIcon(theme()->icon(Core::Constants::ICONTRANSLATE));
     d->aReformatOldXmlSources->setIcon(theme()->icon(Core::Constants::ICONPROCESS));
     d->aCreateNew->setIcon(theme()->icon(Core::Constants::ICONADD));
     d->aSplitInteractionAccordingToLevel->setIcon(theme()->icon("splitfile.png"));
+    d->aExpandAll->setIcon(theme()->icon(Core::Constants::ICONMOVEDOWNLIGHT));
+    d->aCollapseAll->setIcon(theme()->icon(Core::Constants::ICONMOVEUPLIGHT));
 
     b->addAction(d->aCreateNew);
     b->addAction(d->aRemoveCurrent);
@@ -207,6 +208,20 @@ InteractionEditorWidget::InteractionEditorWidget(QWidget *parent) :
     connect(d->aTranslateThis, SIGNAL(triggered()), this, SLOT(translateCurrent()));
     connect(d->aReformatOldXmlSources, SIGNAL(triggered()), this, SLOT(reformatOldXmlSource()));
     connect(d->aSplitInteractionAccordingToLevel, SIGNAL(triggered()), this, SLOT(splitCurrent()));
+    connect(d->aExpandAll, SIGNAL(triggered()), ui->treeView, SLOT(expandAll()));
+    connect(d->aCollapseAll, SIGNAL(triggered()), ui->treeView, SLOT(collapseAll()));
+
+    // manage search line
+    ui->searchLine->setDelayedSignals(true);
+    QToolButton *left = new QToolButton(this);
+    left->setIcon(theme()->icon(Core::Constants::ICONSEARCH));
+    ui->searchLine->setLeftButton(left);
+    QToolButton *right = new QToolButton(this);
+    right->addAction(d->aExpandAll);
+    right->addAction(d->aCollapseAll);
+    right->setDefaultAction(d->aExpandAll);
+    ui->searchLine->setRightButton(right);
+
 
     // Create DDI Model && manage Mapper
     d->m_DDIModel = new DrugDrugInteractionModel(this);
@@ -235,6 +250,7 @@ InteractionEditorWidget::InteractionEditorWidget(QWidget *parent) :
     d->m_Mapper->addMapping(ui->secondDoseToUnits, DrugDrugInteractionModel::SecondDoseToUnits, "currentIndex");
     d->m_Mapper->addMapping(ui->secondDoseToRepart, DrugDrugInteractionModel::SecondDoseToRepartition, "currentIndex");
 
+    d->m_Mapper->addMapping(ui->humanSynthesis, DrugDrugInteractionModel::HumanReadableSynthesis, "html");
 
     //    d->m_Mapper->addMapping(ui->comboFirstInteractorRoute, DrugDrugInteractionModel::FirstInteractorRouteIndex, "currentIndex");
 //    d->m_Mapper->addMapping(ui->comboSecondInteractorRoute, DrugDrugInteractionModel::SecondInteractorRouteIndex, "currentIndex");
@@ -252,6 +268,7 @@ InteractionEditorWidget::InteractionEditorWidget(QWidget *parent) :
     connect(ui->treeView->selectionModel(), SIGNAL(currentChanged(QModelIndex,QModelIndex)), this, SLOT(interactionActivated(QModelIndex)));
 
     setEditorsEnabled(false);
+    connect(ui->searchLine, SIGNAL(textChanged(QString)), SLOT(filterDrugDrugInteractionModel(QString)));
 }
 
 InteractionEditorWidget::~InteractionEditorWidget()
@@ -309,6 +326,12 @@ void InteractionEditorWidget::createNewDDI()
                                         );
     QModelIndex second = d->m_DDIModel->index(0, DrugDrugInteractionModel::SecondInteractorName, index);
     d->m_DDIModel->setData(second, interactor);
+}
+
+void InteractionEditorWidget::filterDrugDrugInteractionModel(const QString &filter)
+{
+    d->m_DDIModel->filterInteractionsForInteractor(filter);
+    ui->treeView->expandAll();
 }
 
 void InteractionEditorWidget::edit()
@@ -372,9 +395,7 @@ void InteractionEditorWidget::interactionActivated(const QModelIndex &index)
     d->biblioModel->setStringList(pmids.data().toStringList());
 
     // Manage readonly data
-    QModelIndex ro = d->m_DDIModel->index(index.row(), DrugDrugInteractionModel::HumanReadableSynthesis, index.parent());
-    ui->humanSynthesis->setHtml(ro.data().toString());
-    ro = d->m_DDIModel->index(index.row(), DrugDrugInteractionModel::InternalUidWithInteractors, index.parent());
+    QModelIndex ro = d->m_DDIModel->index(index.row(), DrugDrugInteractionModel::InternalUidWithInteractors, index.parent());
     ui->generalGroupBox->setTitle(ro.data().toString());
     ro = d->m_DDIModel->index(index.row(), DrugDrugInteractionModel::FirstInteractorName, index.parent());
     ui->firstInteractorLabel->setText(ro.data().toString());
@@ -478,14 +499,14 @@ void InteractionEditorWidget::reformatOldXmlSource()
         QString error;
         int line, col;
         if (!doc.setContent(&file, &error,&line,&col)) {
-            LOG_ERROR(tr("InteractionModel","Can not read XML file content %1").arg(file.fileName()));
+            LOG_ERROR(tr("Can not read XML file content %1").arg(file.fileName()));
             LOG_ERROR(QString("DOM(%1;%2): %3").arg(line).arg(col).arg(error));
         } else {
-            LOG(tr("InteractionModel","Reading file: %1").arg(file.fileName()));
+            LOG(tr("Reading file: %1").arg(file.fileName()));
         }
         file.close();
     } else {
-        LOG_ERROR(tr("InteractionModel","Can not open XML file %1").arg(file.fileName()));
+        LOG_ERROR(tr("Can not open XML file %1").arg(file.fileName()));
     }
     QDomElement rootNode = doc.firstChildElement("InteractionModel");
     QDomElement mainNode = rootNode.firstChildElement("MainInteractor");
@@ -660,6 +681,8 @@ void InteractionEditorWidget::changeEvent(QEvent *e)
         d->aTranslateThis->setText(tr("Translate current"));
         d->aReformatOldXmlSources->setText(tr("Reformat old XML thesaurus"));
         d->aSplitInteractionAccordingToLevel->setText(tr("Split interaction of multi-level to one interaction by level"));
+        d->aCollapseAll->setText(tr("Collapse all"));
+        d->aExpandAll->setText(tr("Expand all"));
         ui->retranslateUi(this);
         int current = ui->comboLevel->currentIndex();
         setLevelNamesToCombo(ui->comboLevel);

@@ -28,6 +28,7 @@
 #include "afssapsintegrator.h"
 #include "interactionsdatabasepage.h"
 #include "interactioneditorpage.h"
+#include "interactoreditorpage.h"
 //#include "cytochromep450interactionspage.h"
 
 #include <coreplugin/dialogs/pluginaboutpage.h>
@@ -40,7 +41,9 @@
 
 using namespace IAMDb::Internal;
 
-InteractionPlugin::InteractionPlugin()
+InteractionPlugin::InteractionPlugin() :
+    m_DDIPage(0),
+    m_InteractorsPage(0)
 {
     if (Utils::Log::warnPluginsCreation())
         qWarning() << "Creating InteractionPlugin";
@@ -49,6 +52,16 @@ InteractionPlugin::InteractionPlugin()
 InteractionPlugin::~InteractionPlugin()
 {
     qWarning() << "InteractionPlugin::~InteractionPlugin()";
+    if (m_DDIPage) {
+        removeObject(m_DDIPage);
+        delete m_DDIPage;
+        m_DDIPage = 0;
+    }
+    if (m_InteractorsPage) {
+        removeObject(m_InteractorsPage);
+        delete m_InteractorsPage;
+        m_InteractorsPage = 0;
+    }
 }
 
 bool InteractionPlugin::initialize(const QStringList &arguments, QString *errorMessage)
@@ -64,7 +77,8 @@ bool InteractionPlugin::initialize(const QStringList &arguments, QString *errorM
 
     addAutoReleasedObject(new AfssapsIntegratorPage(this));
 //    addAutoReleasedObject(new AfssapsClassTreePage(this));
-    addAutoReleasedObject(new InteractionEditorPage(this));
+    addObject(m_DDIPage = new InteractionEditorPage(this));
+    addObject(m_InteractorsPage = new InteractorEditorPage(this));
     addAutoReleasedObject(new InteractionsDatabaseCreatorPage(this));
 //    addAutoReleasedObject(new CytochromeP450InteractionsPage(this));
 

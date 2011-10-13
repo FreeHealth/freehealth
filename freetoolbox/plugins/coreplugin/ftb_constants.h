@@ -74,6 +74,7 @@ namespace Constants {
     const char * const  MOL_LINK_FILENAME                        = "/global_resources/sql/ia/moleculetoatclinker.xml";
     const char * const  ATC_FILENAME                             = "/global_resources/sql/ia/atc_utf8.csv";
 
+    const char * const  NEW_INTERACTORS_FILENAME                 = "/global_resources/sql/ia/ddi_interactors_2011.xml";
     const char * const  AFSSAPS_MOLECULE_LINK_FILENAME           = "/global_resources/sql/ia/afssaps_links.xml";
     const char * const  AFSSAPS_CLASSTREE_FILENAME               = "/global_resources/sql/ia/afssaps_classtree.xml";
     const char * const  AFSSAPS_INTERACTIONS_FILENAME            = "/global_resources/sql/ia/thesaurus_interactions.xml";

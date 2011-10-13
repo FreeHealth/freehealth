@@ -7,7 +7,7 @@
     <x>0</x>
     <y>0</y>
     <width>767</width>
-    <height>692</height>
+    <height>591</height>
    </rect>
   </property>
   <property name="windowTitle">
@@ -81,6 +81,15 @@
            <font>
             <pointsize>10</pointsize>
            </font>
+          </property>
+          <property name="textInteractionFlags">
+           <set>Qt::LinksAccessibleByKeyboard|Qt::LinksAccessibleByMouse|Qt::TextBrowserInteraction|Qt::TextSelectableByKeyboard|Qt::TextSelectableByMouse</set>
+          </property>
+          <property name="openExternalLinks">
+           <bool>true</bool>
+          </property>
+          <property name="openLinks">
+           <bool>true</bool>
           </property>
          </widget>
         </widget>
@@ -167,7 +176,7 @@
        <item row="1" column="0">
         <widget class="QTabWidget" name="tabWidget">
          <property name="currentIndex">
-          <number>2</number>
+          <number>1</number>
          </property>
          <widget class="QWidget" name="riskTab">
           <attribute name="title">
@@ -454,7 +463,7 @@
              </property>
              <layout class="QGridLayout" name="gridLayout_8">
               <item row="0" column="0">
-               <widget class="Views::TableView" name="formRiskTableView"/>
+               <widget class="QTableView" name="formRiskTableView"/>
               </item>
              </layout>
             </widget>

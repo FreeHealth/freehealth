@@ -37,6 +37,8 @@
 
 
 namespace IAMDb {
+class InteractionEditorPage;
+class InteractorEditorPage;
 
 namespace Internal {
 
@@ -49,6 +51,10 @@ public:
 
     bool initialize(const QStringList &arguments, QString *errorMessage = 0);
     void extensionsInitialized();
+
+private:
+    InteractionEditorPage *m_DDIPage;
+    InteractorEditorPage *m_InteractorsPage;
 
 };
 

@@ -27,6 +27,7 @@
 #include "drugdruginteractionmodel.h"
 #include "drugdruginteractioncore.h"
 #include "drugdruginteraction.h"
+#include "druginteractor.h"
 
 #include <coreplugin/icore.h>
 #include <coreplugin/imainwindow.h>
@@ -140,6 +141,7 @@ public:
 
     ~DrugDrugInteractionModelPrivate()
     {
+        delete rootItem;
     }
 
     DDITreeItem *getItem(const QModelIndex &index) const
@@ -151,22 +153,19 @@ public:
          }
          return rootItem;
      }
-    void filter(const QString &interactor = QString::null)
+
+    void createTree(const QList<DrugDrugInteraction *> &ddis, const QString &filterInteractor = QString::null, bool createMirroredDDI = true)
     {
-        delete rootItem;
-        rootItem = new DDITreeItem(0,0);
-        QFont bold;
-        bold.setBold(true);
         QHash<QString, DDITreeItem *> categories;
-        if (interactor.isEmpty()) {
-            // first pass == create categories
-            for(int i=0; i < m_ddis.count(); ++i) {
-                DrugDrugInteraction *ddi = m_ddis.at(i);
-                if (!ddi->data(DrugDrugInteraction::IsValid).toBool())
-                    continue;
-                const QString &firstInteractor = ddi->data(DrugDrugInteraction::FirstInteractorName).toString();
-                const QString &secondInteractor = ddi->data(DrugDrugInteraction::SecondInteractorName).toString();
-                DDITreeItem *cat = 0;
+        // first pass == create categories
+        for(int i=0; i < ddis.count(); ++i) {
+            DrugDrugInteraction *ddi = ddis.at(i);
+            if (!ddi->data(DrugDrugInteraction::IsValid).toBool())
+                continue;
+            const QString &firstInteractor = ddi->data(DrugDrugInteraction::FirstInteractorName).toString();
+            const QString &secondInteractor = ddi->data(DrugDrugInteraction::SecondInteractorName).toString();
+            DDITreeItem *cat = 0;
+            if (filterInteractor.isEmpty()) {
                 if (!categories.keys().contains(firstInteractor)) {
                     cat = new DDITreeItem(0, rootItem);
                     cat->setText(firstInteractor);
@@ -177,44 +176,76 @@ public:
                     cat->setText(secondInteractor);
                     categories.insert(secondInteractor, cat);
                 }
+            } else {
+                if (firstInteractor.startsWith(filterInteractor, Qt::CaseInsensitive) &&
+                        !categories.keys().contains(firstInteractor)) {
+                    cat = new DDITreeItem(0, rootItem);
+                    cat->setText(firstInteractor);
+                    categories.insert(firstInteractor, cat);
+                }
+                if (secondInteractor.startsWith(filterInteractor, Qt::CaseInsensitive) &&
+                        !categories.keys().contains(secondInteractor)) {
+                    cat = new DDITreeItem(0, rootItem);
+                    cat->setText(secondInteractor);
+                    categories.insert(secondInteractor, cat);
+                }
             }
-            // second pass = add interactors to categories
-            for(int i=0; i < m_ddis.count(); ++i) {
-                DrugDrugInteraction *ddi = m_ddis.at(i);
-                if (!ddi->data(DrugDrugInteraction::IsValid).toBool())
-                    continue;
-                const QString &firstInteractor = ddi->data(DrugDrugInteraction::FirstInteractorName).toString();
-                const QString &secondInteractor = ddi->data(DrugDrugInteraction::SecondInteractorName).toString();
-                DDITreeItem *cat = 0;
-                cat = categories.value(firstInteractor);
+        }
+        // second pass = add interactors to categories
+        for(int i=0; i < ddis.count(); ++i) {
+            DrugDrugInteraction *ddi = ddis.at(i);
+            if (!ddi->isValid())
+                continue;
+            const QString &firstInteractor = ddi->data(DrugDrugInteraction::FirstInteractorName).toString();
+            const QString &secondInteractor = ddi->data(DrugDrugInteraction::SecondInteractorName).toString();
+            // create DDI
+            DDITreeItem *cat = 0;
+            if (createMirroredDDI) {
+                cat = categories.value(firstInteractor, 0);
                 DDITreeItem *it = new DDITreeItem(ddi, cat);
                 it->setText(secondInteractor);
+                // create mirrored DDI
                 cat = categories.value(secondInteractor);
                 it = new DDITreeItem(ddi, cat);
                 it->setText(firstInteractor);
+            } else {
+                cat = categories.value(firstInteractor, 0);
+                if (!cat) {
+                    cat = categories.value(secondInteractor, 0);
+                    DDITreeItem *it = new DDITreeItem(ddi, cat);
+                    it->setText(firstInteractor);
+                } else {
+                    DDITreeItem *it = new DDITreeItem(ddi, cat);
+                    it->setText(secondInteractor);
+                }
             }
+        }
+    }
+
+    void filter(const QString &interactor = QString::null)
+    {
+        delete rootItem;
+        rootItem = new DDITreeItem(0,0);
+        QFont bold;
+        bold.setBold(true);
+        if (interactor.isEmpty()) {
+            createTree(m_ddis);
         } else {
             // find all DDI related to the interactor
-            DDITreeItem *cat = 0;
-            cat = new DDITreeItem(0, rootItem);
-            cat->setText(interactor);
-
+            QList<DrugDrugInteraction *> keepMe;
             for(int i=0; i < m_ddis.count(); ++i) {
                 DrugDrugInteraction *ddi = m_ddis.at(i);
-                if (!ddi->data(DrugDrugInteraction::IsValid).toBool())
+                if (!ddi->isValid())
                     continue;
                 const QString &firstInteractor = ddi->data(DrugDrugInteraction::FirstInteractorName).toString();
                 const QString &secondInteractor = ddi->data(DrugDrugInteraction::SecondInteractorName).toString();
-                if (firstInteractor.compare(interactor, Qt::CaseInsensitive)==0) {
-                    // add the interactor
-                    DDITreeItem *it = new DDITreeItem(ddi, cat);
-                    it->setText(secondInteractor);
-                } else if (secondInteractor.compare(interactor, Qt::CaseInsensitive)==0) {
-                    // add the interactor
-                    DDITreeItem *it = new DDITreeItem(ddi, cat);
-                    it->setText(firstInteractor);
+                if (firstInteractor.startsWith(interactor, Qt::CaseInsensitive)) {
+                    keepMe << ddi;
+                } else if (secondInteractor.startsWith(interactor, Qt::CaseInsensitive)) {
+                    keepMe << ddi;
                 }
             }
+            createTree(keepMe, interactor, false);
         }
         rootItem->sortChildren();
     }
@@ -264,8 +295,7 @@ public:
             tmp += QString("<br /><span style=\"color:#666600\"><u>Second Molecule Dose:</u> %1</span><br />").arg(dose);
             dose.clear();
         }
-        tmp.chop(6);
-        dose.clear();
+//        dose.clear();
 //        const QStringList &routes = ddi->data(DrugDrugInteractionModel::FirstInteractorRouteOfAdministrationIds).toStringList();
 //        if (routes.count() > 0) {
 //            if (!routes.at(0).isEmpty()) {
@@ -273,12 +303,79 @@ public:
 //                        .arg(routes.join(";"));
 //            }
 //        }
+        dose.clear();
+        const QStringList &pmids = ddi->data(DrugDrugInteraction::PMIDsStringList).toStringList();
+        if (pmids.count() > 0) {
+            if (!pmids.at(0).isEmpty()) {
+                foreach(const QString &pmid, pmids) {
+                    dose += QString("<br />* PMID: <a href=\"http://www.ncbi.nlm.nih.gov/pubmed/%1\">%1</a>").arg(pmid);
+                }
+            }
+        }
+        if (!dose.isEmpty())
+            tmp += QString("<br /><span style=\"color:#003333\"><u>Bibliography:</u> %1</span><br />").arg(dose);
+        dose.clear();
+
+        // Add model errors
+        QStringList errors = m_ddiError.values(ddi);
+        if (errors.count()) {
+            tmp += QString("<br /><span style=\"color:#FF2020\"><u>Model Errors:</u> %1</span><br />").arg(errors.join("<br />"));
+        }
+
+        tmp.chop(6);
         return tmp;
+    }
+
+    bool noInteractorsError(DrugDrugInteraction *ddi)
+    {
+        if (m_interactorChecking.keys().contains(ddi)) {
+            if (!m_interactorChecking.value(ddi))
+                return false;
+        } else {
+            bool firstFound = false;
+            bool secondFound = false;
+            const QString &first = ddi->data(DrugDrugInteraction::FirstInteractorName).toString();
+            const QString &second = ddi->data(DrugDrugInteraction::SecondInteractorName).toString();
+            for(int i=0; i<m_interactors.count();++i) {
+                const QString &id = m_interactors.at(i)->data(DrugInteractor::InitialLabel).toString();
+                if (!firstFound) {
+                    if (id.compare(first, Qt::CaseInsensitive)==0) {
+                        firstFound = true;
+                    }
+                }
+                if (!secondFound) {
+                    if (id.compare(second, Qt::CaseInsensitive)==0) {
+                        secondFound = true;
+                    }
+                }
+                if (firstFound && secondFound)
+                    break;
+            }
+            bool ok = (firstFound && secondFound);
+            m_interactorChecking.insert(ddi, ok);
+            if (!ok) {
+                const QString &first = ddi->data(DrugDrugInteraction::FirstInteractorName).toString();
+                const QString &second = ddi->data(DrugDrugInteraction::SecondInteractorName).toString();
+                if (!firstFound) {
+                    if (!m_ddiError.values(ddi).contains("First interactor not found"))
+                        m_ddiError.insertMulti(ddi, "First interactor not found");
+                }
+                if (!secondFound) {
+                    if (!m_ddiError.values(ddi).contains("Second interactor not found"))
+                        m_ddiError.insertMulti(ddi, "Second interactor not found");
+                }
+                return false;
+            }
+        }
+        return true;
     }
 
 public:
     DDITreeItem *rootItem;
     QList<DrugDrugInteraction *> m_ddis;
+    QList<DrugInteractor *> m_interactors;
+    QMap<DrugDrugInteraction *, bool> m_interactorChecking;
+    QMultiMap<DrugDrugInteraction *, QString> m_ddiError;
     QString reviewer;
 
 private:
@@ -294,6 +391,7 @@ DrugDrugInteractionModel::DrugDrugInteractionModel(QObject *parent) :
 {
     setObjectName("DrugDrugInteractionModel");
     d->m_ddis = core()->getDrugDrugInteractions();
+    d->m_interactors = core()->getDrugInteractors();
     d->filter();
 }
 
@@ -302,6 +400,12 @@ DrugDrugInteractionModel::~DrugDrugInteractionModel()
     if (d)
         delete d;
     d = 0;
+}
+
+void DrugDrugInteractionModel::filterInteractionsForInteractor(const QString &interactorName)
+{
+    d->filter(interactorName);
+    reset();
 }
 
 void DrugDrugInteractionModel::setActualReviewer(const QString &name)
@@ -366,6 +470,10 @@ QVariant DrugDrugInteractionModel::data(const QModelIndex &index, int role) cons
             for(int i = 0; i < item->childCount(); ++i) {
                 if (!item->child(i)->ddi()->levelValidity())
                     return QColor(255,50,50,150);
+            }
+            for(int i = 0; i < item->childCount(); ++i) {
+                if (!d->noInteractorsError(item->child(i)->ddi()))
+                    return QColor(50,255,50, 150);
             }
             for(int i = 0; i < item->childCount(); ++i) {
                 if (item->child(i)->ddi()->risk("en").isEmpty())
@@ -531,9 +639,16 @@ QVariant DrugDrugInteractionModel::data(const QModelIndex &index, int role) cons
         return d->getTooltip(ddi);
     } else if (role==Qt::ForegroundRole) {
         if (!ddi->levelValidity()) {
+            if (!d->m_ddiError.values(ddi).contains(tr("Level is not valid")))
+                d->m_ddiError.insertMulti(ddi, tr("Level is not valid"));
             return QColor(255,50,50,150);
         }
+        if (!d->noInteractorsError(ddi)) {
+            return QColor(50,255,50, 150);
+        }
         if (ddi->risk("en").isEmpty()) {
+            if (!d->m_ddiError.values(ddi).contains(tr("Not translated")))
+                d->m_ddiError.insertMulti(ddi, tr("Not translated"));
             return QColor(50,50,255,150);
         }
     } else if (role == Qt::DecorationRole) {
@@ -749,8 +864,10 @@ bool DrugDrugInteractionModel::setData(const QModelIndex &index, const QVariant 
         // DateLastUpdate -> automatic
         ddi->setData(DrugDrugInteraction::DateLastUpdate, QDate::currentDate());
         QModelIndex date = this->index(index.row(), DateLastUpdate, index.parent());
+        QModelIndex synth = this->index(index.row(), HumanReadableSynthesis, index.parent());
         Q_EMIT dataChanged(index, index);
         Q_EMIT dataChanged(date, date);
+        Q_EMIT dataChanged(synth, synth);
         return true;
     } else if (role==Qt::CheckStateRole && index.column()==IsReviewed) {
         ddi->setData(DrugDrugInteraction::IsReviewed, (value.toInt() == Qt::Checked));

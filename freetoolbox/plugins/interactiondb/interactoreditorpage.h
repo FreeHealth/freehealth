@@ -19,33 +19,26 @@
  *  If not, see <http://www.gnu.org/licenses/>.                            *
  ***************************************************************************/
 /***************************************************************************
- *   Main Developper : Eric MAEKER, <eric.maeker@gmail.com>                *
+ *   Main Developper : Eric MAEKER, MD <eric.maeker@gmail.com>             *
  *   Contributors :                                                        *
  *       NAME <MAIL@ADRESS>                                                *
+ *       NAME <MAIL@ADRESS>                                                *
  ***************************************************************************/
-#ifndef INTERACTIONEDITORPAGE_H
-#define INTERACTIONEDITORPAGE_H
+#ifndef INTERACTOREDITORPAGE_H
+#define INTERACTOREDITORPAGE_H
 
 #include <coreplugin/itoolpage.h>
-
-#include <QObject>
-#include <QIcon>
-QT_BEGIN_NAMESPACE
 class QModelIndex;
-QT_END_NAMESPACE
 
 namespace IAMDb {
 
-class InteractionEditorPage : public Core::IToolPage
+class InteractorEditorPage : public Core::IToolPage
 {
-    Q_OBJECT
-
 public:
-    InteractionEditorPage(QObject *parent = 0) : IToolPage(parent) {}
-    ~InteractionEditorPage() {}
+    InteractorEditorPage(QObject *parent = 0) : IToolPage(parent) { setObjectName("InteractorEditorPage"); }
 
-    virtual QString id() const {return "InteractionEditorPage";}
-    virtual QString name() const {return "Interactions editor";}
+    virtual QString id() const {return "InteractorEditorPage";}
+    virtual QString name() const {return "Interactors Editor";}
     virtual QString category() const {return tr("Interaction database");}
     virtual QIcon icon() const {return QIcon();}
 
@@ -53,47 +46,48 @@ public:
     virtual QWidget *createPage(QWidget *parent = 0);
 };
 
-
-
+namespace Internal {
+class InteractorEditorWidgetPrivate;
 namespace Ui {
-class InteractionEditorWidget;
+class InteractorEditorWidget;
 }
 
-class InteractionEditorWidgetPrivate;
-
-class InteractionEditorWidget : public QWidget
+class InteractorEditorWidget : public QWidget
 {
     Q_OBJECT
 public:
-    InteractionEditorWidget(QWidget *parent = 0);
-    ~InteractionEditorWidget();
-
-protected Q_SLOTS:
-    void createNewDDI();
-    void filterDrugDrugInteractionModel(const QString &filter);
-    void edit();
-    void interactionActivated(const QModelIndex &index);
-    void save();
-    void removeCurrent();
-    void translateCurrent();
-    void translateAll();
-    void reformatOldXmlSource();
-    void splitCurrent();
-
-protected Q_SLOTS:
-    void translationDone(const QString &trans);
+    InteractorEditorWidget(QWidget *parent = 0);
+    ~InteractorEditorWidget();
 
 private:
     void setEditorsEnabled(bool state);
 
-protected:
+private Q_SLOTS:
+    void reformatOldSource();
+    void save();
+    void filterDrugInteractorModel(const QString &text);
+    void createButtonActivated(QAction *selected);
+    void removeCurrent();
+    void edit();
+    void interactorActivated(const QModelIndex &index);
+    void buttonActivated(QAction*);
+    void bookmarkClassesFromCurrent();
+    void updateCounts();
+    void nextUnreviewedOrUnlinked();
+
+private:
     void changeEvent(QEvent *e);
 
 private:
-    Ui::InteractionEditorWidget *ui;
-    InteractionEditorWidgetPrivate *d;
+//    bool event(QEvent *e);
+//    void showEvent(QShowEvent *e);
+//    void hideEvent(QHideEvent *e);
+
+private:
+    Internal::InteractorEditorWidgetPrivate *d;
 };
 
-}  //  End namespace IAMDb
+}  // End namespace Internal
+}  // End namespace IAMDb
 
-#endif // INTERACTIONEDITORPAGE_H
+#endif // INTERACTOREDITORPAGE_H

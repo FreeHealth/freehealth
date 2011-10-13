@@ -21,7 +21,9 @@ HEADERS += interactionplugin.h \
     drugdruginteractionmodel.h \
     drugdruginteractioncore.h \
     interactioneditorpage.h \
-    formalizeditemmodel.h
+    formalizeditemmodel.h \
+    druginteractor.h \
+    interactoreditorpage.h
 #    cytochromep450interactionspage.h \
 
 SOURCES += interactionplugin.cpp \
@@ -30,7 +32,9 @@ SOURCES += interactionplugin.cpp \
     drugdruginteractionmodel.cpp \
     drugdruginteractioncore.cpp \
     interactioneditorpage.cpp \
-    formalizeditemmodel.cpp
+    formalizeditemmodel.cpp \
+    druginteractor.cpp \
+    interactoreditorpage.cpp
 #    cytochromep450interactionspage.cpp \
 
 SOURCES += \
@@ -48,7 +52,8 @@ FORMS    += afssapslinkerwidget.ui \
     interactioneditorwidget.ui \
     interactiondatabasecreator.ui \
     interactiondatabasechecker.ui \
-    afssapsintegratorwidget.ui
+    afssapsintegratorwidget.ui \
+    interactoreditorwidget.ui
 #    cytochromep450interactionspage.ui \
 
 OTHER_FILES += \
@@ -63,6 +68,11 @@ OTHER_FILES += \
 
 
 OTHER_FILES += InteractionDB.pluginspec
+
+
+
+
+
 
 
 

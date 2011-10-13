@@ -33,6 +33,7 @@
 
 namespace IAMDb {
 class DrugDrugInteraction;
+class DrugInteractor;
 
 class DrugDrugInteractionCore : public QObject
 {
@@ -43,17 +44,25 @@ public:
 
     int createInternalUuid() const;
     QList<DrugDrugInteraction *> getDrugDrugInteractions() const;
+    /** \todo createInteraction() ? */
+
+    QList<DrugInteractor *> getDrugInteractors() const;
 
 Q_SIGNALS:
+    void interactorCreated(DrugInteractor *di);
 
 public Q_SLOTS:
     void updateXmlFileForDrugDrugInteraction(DrugDrugInteraction *ddi);
-    void saveCompleteList(QList<DrugDrugInteraction *> ddis);
+    void saveCompleteList(const QList<DrugDrugInteraction *> &ddis);
+    void saveCompleteList(const QList<DrugInteractor *> &interactors);
+
+    DrugInteractor *createNewInteractor(const QString &initialLabel, const bool isClass);
 
 
 private:
     static DrugDrugInteractionCore *m_Instance;
     mutable QHash<DrugDrugInteraction *, QDomNode> m_ddisToNode;
+    mutable QHash<DrugInteractor *, QDomNode> m_interactorsToNode;
 };
 
 }  // End namespace IAMDb
