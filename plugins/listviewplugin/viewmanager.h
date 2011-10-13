@@ -111,7 +111,7 @@ class ViewManager : public ViewActionHandler
 {
     Q_OBJECT
 public:
-    static ViewManager *instance();
+    static ViewManager *instance(QObject *parent = 0);
     ~ViewManager() {}
 
 private Q_SLOTS:

@@ -24,6 +24,7 @@
 */
 
 #include "listviewplugin.h"
+#include "viewmanager.h"
 
 #include <coreplugin/dialogs/pluginaboutpage.h>
 #include <utils/log.h>
@@ -50,6 +51,7 @@ bool ListViewPlugin::initialize(const QStringList &arguments, QString *errorStri
         qWarning() << "ListViewPlugin::initialize";
     Q_UNUSED(arguments);
     Q_UNUSED(errorString);
+    Internal::ViewManager::instance(this);
     return true;
 }
 

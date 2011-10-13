@@ -64,10 +64,14 @@ static inline Core::ContextManager *contextManager() { return Core::ICore::insta
 /////////////////////////////////////////////////////////////////////////// List View Manager
 ViewManager *ViewManager::m_Instance = 0;
 
-ViewManager *ViewManager::instance()
+ViewManager *ViewManager::instance(QObject *parent)
 {
-    if (!m_Instance)
-        m_Instance = new ViewManager(qApp);
+    if (!m_Instance)  {
+        if (parent)
+            m_Instance = new ViewManager(qApp);
+        else
+            m_Instance = new ViewManager(qApp);
+    }
     return m_Instance;
 }
 
