@@ -5623,8 +5623,9 @@
 "R06AA59";"doxylamine, combinations";"";""
 "S01LA05";"aflibercept";"";""
 "S02DA04";"cinchocaine";"";""
-
-
+-- Corrections
+"P01BF";"Artemisinin and derivatives, combinations";"Artémisinine et dérivés en association";""
+"P01BF01";"artemether and lumefantrine";"artemether et lumefantrine";"artemether und lumefantrine"
 
 
 
