@@ -26,6 +26,7 @@
  ***************************************************************************/
 #include "druginteractor.h"
 #include "drugdruginteractioncore.h"
+#include "drugdruginteraction.h"
 
 #include <utils/log.h>
 #include <translationutils/constanttranslations.h>
@@ -384,9 +385,64 @@ public:
         rootItem->sortChildren();
     }
 
+    QString getTooltip(DITreeItem *item)
+    {
+        QStringList msg;
+        DrugInteractor *di = item->di();
+        msg << QString("<b><u>UID:</b></u><br />&nbsp;&nbsp;%1").arg(di->data(DrugInteractor::InitialLabel).toString());
+
+        // check errors
+        QStringList errors;
+        if (!di->isClass() && di->data(DrugInteractor::ATCCodeStringList).toStringList().isEmpty()) {
+            errors << QString("Missing ATC link");
+        }
+        if (di->isClass()) {
+            for(int i=0; i < item->childCount();++i) {
+                if (item->child(i)->di()->data(DrugInteractor::ATCCodeStringList).toStringList().isEmpty()) {
+                    errors << QString("One child at least is missing ATC link");
+                }
+            }
+        }
+        if (!di->isReviewed()) {
+            errors << QString("Item is not reviewed");
+        } else if (di->isClass()) {
+            for(int i=0; i < item->childCount();++i) {
+                if (!item->child(i)->di()->isReviewed())
+                    errors << QString("One child at least is not reviewed");
+            }
+        }
+        if (errors.count())
+            msg << QString("<span style=\"color:#FF2020\"><b><u>Errors:</b></u><br />&nbsp;&nbsp;* %1</span>").arg(errors.join("<br />&nbsp;&nbsp;* "));
+
+
+        // get related DDI
+        QStringList ddis;
+        for(int i=0; i < m_ddis.count(); ++i) {
+            DrugDrugInteraction *ddi = m_ddis.at(i);
+            const QString &id = di->data(DrugInteractor::InitialLabel).toString();
+            if (ddi->data(DrugDrugInteraction::FirstInteractorName).toString()==id) {
+                ddis << QString("&nbsp;&nbsp;* %1 (%2)")
+                       .arg(ddi->data(DrugDrugInteraction::SecondInteractorName).toString())
+                       .arg(ddi->data(DrugDrugInteraction::LevelName).toString());
+            } else if (ddi->data(DrugDrugInteraction::SecondInteractorName).toString()==id) {
+                ddis << QString("&nbsp;&nbsp;* %1 (%2)")
+                        .arg(ddi->data(DrugDrugInteraction::FirstInteractorName).toString())
+                        .arg(ddi->data(DrugDrugInteraction::LevelName).toString());
+            }
+        }
+        if (ddis.count()) {
+            msg << QString("<br /><span style=\"color:#FF2020\"><b><u>DDI:</b></u><br />%1</span>").arg(ddis.join("<br />"));
+        }
+
+        /** \todo get pims */
+
+        return msg.join("<br />");
+    }
+
 public:
     DITreeItem *rootItem;
     QList<DrugInteractor *> m_interactors;
+    QList<DrugDrugInteraction *> m_ddis;
     QString reviewer;
     DrugInteractorModel::ShowData m_ShowData;
 
@@ -403,6 +459,7 @@ DrugInteractorModel::DrugInteractorModel(ShowData show, QObject *parent) :
 {
     setObjectName("DrugInteractorModel");
     d->m_interactors = core()->getDrugInteractors();
+    d->m_ddis = core()->getDrugDrugInteractions();
     d->m_ShowData = show;
     d->filter();
     connect(core(), SIGNAL(interactorCreated(DrugInteractor*)), this, SLOT(onInteractorCreated(DrugInteractor*)));
@@ -487,27 +544,7 @@ QVariant DrugInteractorModel::data(const QModelIndex &index, int role) const
         case Reference: return di->data(DrugInteractor::Reference);
         } // End switch
     } else if (role == Qt::ToolTipRole) {
-        QStringList msg;
-        msg << tr("Initial label (used as UUID): ") + di->data(DrugInteractor::InitialLabel).toString();
-        if (!di->isClass() && di->data(DrugInteractor::ATCCodeStringList).toStringList().isEmpty()) {
-            msg << tr("Missing ATC link");
-        }
-        if (di->isClass()) {
-            for(int i=0; i < item->childCount();++i) {
-                if (item->child(i)->di()->data(DrugInteractor::ATCCodeStringList).toStringList().isEmpty()) {
-                    msg << tr("One child at least is missing ATC link");
-                }
-            }
-        }
-        if (!di->isReviewed()) {
-            msg << tr("Item is not reviewed");
-        } else if (di->isClass()) {
-            for(int i=0; i < item->childCount();++i) {
-                if (!item->child(i)->di()->isReviewed())
-                    msg << tr("One child at least is not reviewed");
-            }
-        }
-        return msg.join("\n");
+        return d->getTooltip(item);
     } else if (role==Qt::ForegroundRole) {        
         if (!di->isClass() && di->data(DrugInteractor::ATCCodeStringList).toStringList().isEmpty()) {
             return QColor(255,50,50,150);
