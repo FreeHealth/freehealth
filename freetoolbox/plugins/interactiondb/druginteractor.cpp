@@ -416,22 +416,48 @@ public:
 
 
         // get related DDI
-        QStringList ddis;
+        QStringList directDdis;
+        QMultiHash<QString, QString> parentDdis;  // key=parent value=second interactor
         for(int i=0; i < m_ddis.count(); ++i) {
+            // direct ddis
             DrugDrugInteraction *ddi = m_ddis.at(i);
             const QString &id = di->data(DrugInteractor::InitialLabel).toString();
             if (ddi->data(DrugDrugInteraction::FirstInteractorName).toString()==id) {
-                ddis << QString("&nbsp;&nbsp;* %1 (%2)")
+                directDdis << QString("&nbsp;&nbsp;* %1 (%2)")
                        .arg(ddi->data(DrugDrugInteraction::SecondInteractorName).toString())
                        .arg(ddi->data(DrugDrugInteraction::LevelName).toString());
             } else if (ddi->data(DrugDrugInteraction::SecondInteractorName).toString()==id) {
-                ddis << QString("&nbsp;&nbsp;* %1 (%2)")
+                directDdis << QString("&nbsp;&nbsp;* %1 (%2)")
                         .arg(ddi->data(DrugDrugInteraction::FirstInteractorName).toString())
                         .arg(ddi->data(DrugDrugInteraction::LevelName).toString());
             }
+            // parent ddis
+            if (di->parentIds().contains(ddi->data(DrugDrugInteraction::FirstInteractorName).toString())) {
+                parentDdis.insertMulti(ddi->data(DrugDrugInteraction::FirstInteractorName).toString(),
+                                       QString("%1 (%2)")
+                                       .arg(ddi->data(DrugDrugInteraction::SecondInteractorName).toString())
+                                       .arg(ddi->data(DrugDrugInteraction::LevelName).toString()));
+            } else if (di->parentIds().contains(ddi->data(DrugDrugInteraction::SecondInteractorName).toString())) {
+                parentDdis.insertMulti(ddi->data(DrugDrugInteraction::SecondInteractorName).toString(),
+                                       QString("%1 (%2)")
+                                       .arg(ddi->data(DrugDrugInteraction::FirstInteractorName).toString())
+                                       .arg(ddi->data(DrugDrugInteraction::LevelName).toString()));
+            }
         }
-        if (ddis.count()) {
-            msg << QString("<br /><span style=\"color:#FF2020\"><b><u>DDI:</b></u><br />%1</span>").arg(ddis.join("<br />"));
+        QString ddisText;
+        if (directDdis.count()) {
+            ddisText = QString("<span style=\"color:#AA10AA\"><b><u>DDI (own):</u></b><br />%1").arg(directDdis.join("<br />"));
+        } // <br /><span style=\"color:#FF2020\"><b><u>DDI:</b></u><br />%1</span>
+        if (parentDdis.count()) {
+            ddisText = QString("<span style=\"color:#AA10AA\"><b><u>DDI (from parents):</u></b><br />");
+            foreach(const QString &parent, parentDdis.uniqueKeys()) {
+                const QStringList &l = parentDdis.values(parent);
+                ddisText += QString("&nbsp;&nbsp;<b>* %1</b><br/>&nbsp;&nbsp;&nbsp;&nbsp;* %2<br/>").arg(parent).arg(l.join("<br/>&nbsp;&nbsp;&nbsp;&nbsp;* "));
+            }
+        }
+        if (!ddisText.isEmpty()) {
+            ddisText += "</span>";
+            msg << ddisText;
         }
 
         /** \todo get pims */

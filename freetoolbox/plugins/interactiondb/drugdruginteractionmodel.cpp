@@ -368,15 +368,14 @@ public:
                 }
                 m_interactorChecking.insert(ddi, 1);  // 1=InteractorUnknown
             } else {
-                if (!firstInteractor->isClass() && firstInteractor->data(DrugInteractor::ATCCodeStringList).toStringList().isEmpty()) {
-                    m_ddiError.insertMulti(ddi, "First interactor does not have ATC link");
-                    m_interactorChecking.insert(ddi, 2);  // 2=InteractorNoATC
-                }
-                if (!secondInteractor->isClass() && secondInteractor->data(DrugInteractor::ATCCodeStringList).toStringList().isEmpty()) {
-                    m_ddiError.insertMulti(ddi, "Second interactor does not have ATC link");
-                    m_interactorChecking.insert(ddi, 2);  // 2=InteractorNoATC
-                }
-
+//                if (!firstInteractor->isClass() && firstInteractor->data(DrugInteractor::ATCCodeStringList).toStringList().isEmpty()) {
+//                    m_ddiError.insertMulti(ddi, "First interactor does not have ATC link");
+//                    m_interactorChecking.insert(ddi, 2);  // 2=InteractorNoATC
+//                }
+//                if (!secondInteractor->isClass() && secondInteractor->data(DrugInteractor::ATCCodeStringList).toStringList().isEmpty()) {
+//                    m_ddiError.insertMulti(ddi, "Second interactor does not have ATC link");
+//                    m_interactorChecking.insert(ddi, 2);  // 2=InteractorNoATC
+//                }
             }
         }
         switch (m_interactorChecking.value(ddi, 0)) {

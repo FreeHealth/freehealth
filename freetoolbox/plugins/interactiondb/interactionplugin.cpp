@@ -75,7 +75,7 @@ bool InteractionPlugin::initialize(const QStringList &arguments, QString *errorM
     // Create the core object
     DrugDrugInteractionCore::instance();
 
-    addAutoReleasedObject(new AfssapsIntegratorPage(this));
+//    addAutoReleasedObject(new AfssapsIntegratorPage(this));
 //    addAutoReleasedObject(new AfssapsClassTreePage(this));
     addObject(m_DDIPage = new InteractionEditorPage(this));
     addObject(m_InteractorsPage = new InteractorEditorPage(this));
