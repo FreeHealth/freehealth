@@ -7,7 +7,7 @@
     <x>0</x>
     <y>0</y>
     <width>469</width>
-    <height>453</height>
+    <height>573</height>
    </rect>
   </property>
   <property name="windowTitle">
@@ -156,6 +156,53 @@
            </item>
           </layout>
          </widget>
+         <widget class="QWidget" name="tabClassInfo">
+          <attribute name="title">
+           <string>ClassInfo</string>
+          </attribute>
+          <layout class="QGridLayout" name="gridLayout_6">
+           <item row="0" column="0">
+            <widget class="QLabel" name="label_5">
+             <property name="text">
+              <string>Fr</string>
+             </property>
+            </widget>
+           </item>
+           <item row="0" column="1">
+            <widget class="QPlainTextEdit" name="classInfoFr"/>
+           </item>
+           <item row="1" column="0">
+            <widget class="QLabel" name="label_6">
+             <property name="text">
+              <string>En</string>
+             </property>
+            </widget>
+           </item>
+           <item row="1" column="1">
+            <widget class="QPlainTextEdit" name="classInfoEn"/>
+           </item>
+           <item row="2" column="0">
+            <widget class="QLabel" name="label_7">
+             <property name="text">
+              <string>De</string>
+             </property>
+            </widget>
+           </item>
+           <item row="2" column="1">
+            <widget class="QPlainTextEdit" name="classInfoDe"/>
+           </item>
+           <item row="3" column="0">
+            <widget class="QLabel" name="label_8">
+             <property name="text">
+              <string>Es</string>
+             </property>
+            </widget>
+           </item>
+           <item row="3" column="1">
+            <widget class="QPlainTextEdit" name="classInfoEs"/>
+           </item>
+          </layout>
+         </widget>
          <widget class="QWidget" name="tabChildren">
           <attribute name="title">
            <string>Children</string>
@@ -188,10 +235,17 @@
          </widget>
         </widget>
        </item>
-       <item row="4" column="0" colspan="2">
+       <item row="4" column="0">
         <widget class="QLineEdit" name="reference">
          <property name="toolTip">
           <string>Reference (default is FreeMedForms)</string>
+         </property>
+        </widget>
+       </item>
+       <item row="4" column="1">
+        <widget class="QCheckBox" name="notWarnDuplicated">
+         <property name="text">
+          <string>Do not warn duplication</string>
          </property>
         </widget>
        </item>

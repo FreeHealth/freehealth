@@ -285,6 +285,11 @@ void InteractorEditorWidget::setEditorsEnabled(bool state)
     d->ui->deLabel->setEnabled(state);
     d->ui->esLabel->setEnabled(state);
     d->ui->reference->setEnabled(state);
+    d->ui->classInfoDe->setEnabled(state);
+    d->ui->classInfoEn->setEnabled(state);
+    d->ui->classInfoEs->setEnabled(state);
+    d->ui->classInfoFr->setEnabled(state);
+    d->ui->notWarnDuplicated->setEnabled(state);
     d->m_ToolButton->setEnabled(state);
 }
 
@@ -523,6 +528,8 @@ void InteractorEditorWidget::save()
         // bug with mapper / checkbox in macos
         QModelIndex reviewed = model->index(d->m_EditingIndex.row(), DrugInteractorModel::IsReviewed, d->m_EditingIndex.parent());
         model->setData(reviewed, d->ui->isReviewed->isChecked());
+        QModelIndex notWarnDuplication = model->index(d->m_EditingIndex.row(), DrugInteractorModel::DoNotWarnDuplicated, d->m_EditingIndex.parent());
+        model->setData(notWarnDuplication, d->ui->notWarnDuplicated->isChecked());
 
         // manage ATC / PMIDs
         QModelIndex atc = model->index(d->m_EditingIndex.row(), DrugInteractorModel::ATCCodeStringList, d->m_EditingIndex.parent());
@@ -602,6 +609,11 @@ void InteractorEditorWidget::interactorActivated(const QModelIndex &index)
     d->m_Mapper->addMapping(d->ui->esLabel, DrugInteractorModel::EsLabel, "text");
     d->m_Mapper->addMapping(d->ui->reference, DrugInteractorModel::Reference, "text");
 
+    d->m_Mapper->addMapping(d->ui->classInfoFr, DrugInteractorModel::ClassInformationFr, "plainText");
+    d->m_Mapper->addMapping(d->ui->classInfoEn, DrugInteractorModel::ClassInformationEn, "plainText");
+    d->m_Mapper->addMapping(d->ui->classInfoDe, DrugInteractorModel::ClassInformationDe, "plainText");
+//    d->m_Mapper->addMapping(d->ui->classInfoEs, DrugInteractorModel::ClassInformationEs, "plainText");
+
 //    d->m_Mapper->addMapping(d->ui->atcTableView, DrugInteractorModel:, "");
 //    d->m_Mapper->addMapping(d->ui->classChildrenTableView, DrugInteractorModel:, "");
 //    d->m_Mapper->addMapping(d->ui, DrugInteractorModel:, "");
@@ -614,6 +626,8 @@ void InteractorEditorWidget::interactorActivated(const QModelIndex &index)
     d->ui->isReviewed->setChecked(rev.data().toBool());
     QModelIndex autoFound = model->index(index.row(), DrugInteractorModel::IsAutoFound, index.parent());
     d->ui->isAutoFound->setChecked(autoFound.data().toBool());
+    QModelIndex notWarnDuplication = model->index(index.row(), DrugInteractorModel::DoNotWarnDuplicated, index.parent());
+    d->ui->notWarnDuplicated->setChecked(notWarnDuplication.data().toBool());
 
     // set data to (sub)models
     QModelIndex atcCodesIndex = model->index(index.row(), DrugInteractorModel::ATCCodeStringList, index.parent());

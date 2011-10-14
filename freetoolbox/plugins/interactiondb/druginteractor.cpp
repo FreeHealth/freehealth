@@ -46,6 +46,7 @@ DrugInteractor::DrugInteractor()
 {
     setData(IsValid, false);
     setData(IsDuplicated, false);
+    setData(DoNotWarnDuplicated, false);
 }
 
 DrugInteractor::DrugInteractor(const QDomElement &element)
@@ -58,21 +59,42 @@ DrugInteractor::DrugInteractor(const QDomElement &element)
     // get attribs
     setData(InitialLabel, element.attribute("id"));
     setData(IsValid, element.attribute("v").toInt());
-    setData(IsClass, element.attribute("c").toInt());
+    bool isClass = element.attribute("c").toInt();
+    setData(IsClass, isClass);
+    setData(DoNotWarnDuplicated, element.attribute("nwd").toInt());
     setData(Reference, element.attribute("r"));
     setData(PMIDsStringList, element.attribute("p").split(";"));
     setData(DateOfCreation, QDate::fromString(element.attribute("dc"), Qt::ISODate));
     setData(DateLastUpdate, QDate::fromString(element.attribute("lu"), Qt::ISODate));
+
+    // get class information
+    if (isClass) {
+        QDomElement ci = element.firstChildElement("CI");
+        while (!ci.isNull()) {
+            const QString &l = ci.attribute("l");
+            if (l == "fr")
+                setData(ClassInformationFr, ci.attribute("t"));
+            else if (l == "en")
+                setData(ClassInformationEn, ci.attribute("t"));
+            else if (l == "de")
+                setData(ClassInformationDe, ci.attribute("t"));
+//            else if (l == "es")
+//                setData(ClassInformationEs, ci.attribute("t"));
+            ci = ci.nextSiblingElement("CI");
+        }
+    }
+
     // get Labels
     QDomElement label = element.firstChildElement("L");
     while (!label.isNull()) {
-        if (label.attribute("l") == "fr")
+        const QString &l = label.attribute("l");
+        if (l == "fr")
             setData(FrLabel, label.attribute("n"));
-        else if (label.attribute("l") == "en")
+        else if (l == "en")
             setData(EnLabel, label.attribute("n"));
-        else if (label.attribute("l") == "de")
+        else if (l == "de")
             setData(DeLabel, label.attribute("n"));
-        else if (label.attribute("l") == "es")
+        else if (l == "es")
             setData(EsLabel, label.attribute("n"));
         label = label.nextSiblingElement("L");
     }
@@ -149,7 +171,7 @@ void DrugInteractor::addAtcLink(const QString &atcCode)
 
 QString DrugInteractor::toXml() const
 {
-    QString xml = QString("\n  <I id=\"%1\" v=\"%2\" c=\"%3\" r=\"%4\" p=\"%5\" dc=\"%6\" lu=\"%7\">")
+    QString xml = QString("\n  <I id=\"%1\" v=\"%2\" c=\"%3\" r=\"%4\" p=\"%5\" dc=\"%6\" lu=\"%7\" nwd=\"%8\">")
             .arg(data(InitialLabel).toString())
             .arg(data(IsValid).toBool())
             .arg(data(IsClass).toBool())
@@ -157,7 +179,21 @@ QString DrugInteractor::toXml() const
             .arg(data(PMIDsStringList).toStringList().join(";"))
             .arg(data(DateOfCreation).toDate().toString(Qt::ISODate))
             .arg(data(DateLastUpdate).toDate().toString(Qt::ISODate))
+            .arg(data(DoNotWarnDuplicated).toInt())
             ;
+
+    // add class information
+    if (isClass()) {
+        if (!data(ClassInformationFr).isNull()) {
+            xml += QString("\n  <CI l=\"fr\" t=\"%1\"/>").arg(data(ClassInformationFr).toString());
+        }
+        if (!data(ClassInformationEn).isNull()) {
+            xml += QString("\n  <CI l=\"en\" t=\"%1\"/>").arg(data(ClassInformationEn).toString());
+        }
+        if (!data(ClassInformationDe).isNull()) {
+            xml += QString("\n  <CI l=\"de\" t=\"%1\"/>").arg(data(ClassInformationDe).toString());
+        }
+    }
 
     // Add labels
     QHash<int, QString> langsForLabels;
@@ -559,6 +595,10 @@ QVariant DrugInteractorModel::data(const QModelIndex &index, int role) const
         case DeLabel : return di->data(DrugInteractor::DeLabel);
         case EsLabel : return di->data(DrugInteractor::EsLabel);
         case IsInteractingClass : return di->data(DrugInteractor::IsClass);
+        case DoNotWarnDuplicated: return di->data(DrugInteractor::DoNotWarnDuplicated);
+        case ClassInformationFr : return di->data(DrugInteractor::ClassInformationFr).toString();
+        case ClassInformationEn : return di->data(DrugInteractor::ClassInformationEn).toString();
+        case ClassInformationDe : return di->data(DrugInteractor::ClassInformationDe).toString();
         case ATCCodeStringList : return di->data(DrugInteractor::ATCCodeStringList);
         case IsReviewed : return di->data(DrugInteractor::IsReviewed);
         case DateOfCreation : return di->data(DrugInteractor::DateOfCreation);
@@ -648,6 +688,10 @@ bool DrugInteractorModel::setData(const QModelIndex &index, const QVariant &valu
             break;
         }
         case IsInteractingClass : di->setData(DrugInteractor::IsClass, value); break;
+        case DoNotWarnDuplicated: di->setData(DrugInteractor::DoNotWarnDuplicated, value); break;
+        case ClassInformationFr : di->setData(DrugInteractor::ClassInformationFr, value.toString().replace("\"", "'")); break;
+        case ClassInformationEn : di->setData(DrugInteractor::ClassInformationEn, value.toString().replace("\"", "'")); break;
+        case ClassInformationDe : di->setData(DrugInteractor::ClassInformationDe, value.toString().replace("\"", "'")); break;
         case ATCCodeStringList :
             di->setData(DrugInteractor::ATCCodeStringList, value);
             Q_EMIT unlinkedCountChanged();
