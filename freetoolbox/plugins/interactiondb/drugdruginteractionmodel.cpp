@@ -331,6 +331,7 @@ public:
     QColor interactorsColor(DrugDrugInteraction *ddi)
     {
         if (!m_interactorChecking.keys().contains(ddi)) {
+            m_interactorChecking.insert(ddi, 0);  // 0=Ok
             bool firstFound = false;
             bool secondFound = false;
             const QString &first = ddi->data(DrugDrugInteraction::FirstInteractorName).toString();
@@ -340,13 +341,13 @@ public:
             for(int i=0; i<m_interactors.count();++i) {
                 const QString &id = m_interactors.at(i)->data(DrugInteractor::InitialLabel).toString();
                 if (!firstFound) {
-                    if (id.compare(first, Qt::CaseInsensitive)==0) {
+                    if (id==first) {
                         firstFound = true;
                         firstInteractor = m_interactors.at(i);
                     }
                 }
                 if (!secondFound) {
-                    if (id.compare(second, Qt::CaseInsensitive)==0) {
+                    if (id==second) {
                         secondFound = true;
                         secondInteractor = m_interactors.at(i);
                     }
@@ -368,14 +369,14 @@ public:
                 }
                 m_interactorChecking.insert(ddi, 1);  // 1=InteractorUnknown
             } else {
-//                if (!firstInteractor->isClass() && firstInteractor->data(DrugInteractor::ATCCodeStringList).toStringList().isEmpty()) {
-//                    m_ddiError.insertMulti(ddi, "First interactor does not have ATC link");
-//                    m_interactorChecking.insert(ddi, 2);  // 2=InteractorNoATC
-//                }
-//                if (!secondInteractor->isClass() && secondInteractor->data(DrugInteractor::ATCCodeStringList).toStringList().isEmpty()) {
-//                    m_ddiError.insertMulti(ddi, "Second interactor does not have ATC link");
-//                    m_interactorChecking.insert(ddi, 2);  // 2=InteractorNoATC
-//                }
+                if (!firstInteractor->isClass() && firstInteractor->data(DrugInteractor::ATCCodeStringList).toStringList().isEmpty()) {
+                    m_ddiError.insertMulti(ddi, "First interactor does not have ATC link");
+                    m_interactorChecking.insert(ddi, 2);  // 2=InteractorNoATC
+                }
+                if (!secondInteractor->isClass() && secondInteractor->data(DrugInteractor::ATCCodeStringList).toStringList().isEmpty()) {
+                    m_ddiError.insertMulti(ddi, "Second interactor does not have ATC link");
+                    m_interactorChecking.insert(ddi, 2);  // 2=InteractorNoATC
+                }
             }
         }
         switch (m_interactorChecking.value(ddi, 0)) {
@@ -484,6 +485,8 @@ QVariant DrugDrugInteractionModel::data(const QModelIndex &index, int role) cons
     }
     DrugDrugInteraction *ddi = item->ddi();
     if (!ddi) {
+        if (!index.isValid())
+            return QVariant();
         // Working on categories
         if (role==Qt::DisplayRole && index.column()==0) {
             return item->text();
@@ -495,14 +498,15 @@ QVariant DrugDrugInteractionModel::data(const QModelIndex &index, int role) cons
             }
             // test all interactors
             for(int i = 0; i < item->childCount(); ++i) {
-                if (d->interactorsColor(item->child(i)->ddi()) != QColor())
-                    return d->interactorsColor(item->child(i)->ddi());
+                const QColor &c = d->interactorsColor(item->child(i)->ddi());
+                if (c.isValid())
+                    return c;
             }
+            // test translations
             for(int i = 0; i < item->childCount(); ++i) {
                 if (item->child(i)->ddi()->risk("en").isEmpty())
                     return QColor(50,50,255,150);
             }
-
         } else if (role == Qt::FontRole) {
             if (item->childCount() > 0) {
                 QFont bold;
