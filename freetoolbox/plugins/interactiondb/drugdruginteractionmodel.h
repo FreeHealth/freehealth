@@ -109,7 +109,8 @@ public:
     static QString unit(int index);
     static QString repartition(int index);
 
-signals:
+//    bool canFetchMore(const QModelIndex &parent = QModelIndex()) const;
+//    void fetchMore(const QModelIndex &parent = QModelIndex());
 
 public Q_SLOTS:
     void filterInteractionsForInteractor(const QString &interactorName);

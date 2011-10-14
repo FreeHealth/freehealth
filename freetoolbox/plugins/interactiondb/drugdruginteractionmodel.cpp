@@ -55,6 +55,8 @@ static inline IAMDb::DrugDrugInteractionCore *core() {return IAMDb::DrugDrugInte
 
 
 namespace {
+const int FETCH_LIMIT = 50;
+
 class DDITreeItem
 {
 public:
@@ -326,33 +328,33 @@ public:
         return tmp;
     }
 
-    bool noInteractorsError(DrugDrugInteraction *ddi)
+    QColor interactorsColor(DrugDrugInteraction *ddi)
     {
-        if (m_interactorChecking.keys().contains(ddi)) {
-            if (!m_interactorChecking.value(ddi))
-                return false;
-        } else {
+        if (!m_interactorChecking.keys().contains(ddi)) {
             bool firstFound = false;
             bool secondFound = false;
             const QString &first = ddi->data(DrugDrugInteraction::FirstInteractorName).toString();
             const QString &second = ddi->data(DrugDrugInteraction::SecondInteractorName).toString();
+            DrugInteractor *firstInteractor = 0;
+            DrugInteractor *secondInteractor = 0;
             for(int i=0; i<m_interactors.count();++i) {
                 const QString &id = m_interactors.at(i)->data(DrugInteractor::InitialLabel).toString();
                 if (!firstFound) {
                     if (id.compare(first, Qt::CaseInsensitive)==0) {
                         firstFound = true;
+                        firstInteractor = m_interactors.at(i);
                     }
                 }
                 if (!secondFound) {
                     if (id.compare(second, Qt::CaseInsensitive)==0) {
                         secondFound = true;
+                        secondInteractor = m_interactors.at(i);
                     }
                 }
                 if (firstFound && secondFound)
                     break;
             }
             bool ok = (firstFound && secondFound);
-            m_interactorChecking.insert(ddi, ok);
             if (!ok) {
                 const QString &first = ddi->data(DrugDrugInteraction::FirstInteractorName).toString();
                 const QString &second = ddi->data(DrugDrugInteraction::SecondInteractorName).toString();
@@ -364,19 +366,38 @@ public:
                     if (!m_ddiError.values(ddi).contains("Second interactor not found"))
                         m_ddiError.insertMulti(ddi, "Second interactor not found");
                 }
-                return false;
+                m_interactorChecking.insert(ddi, 1);  // 1=InteractorUnknown
+            } else {
+                if (!firstInteractor->isClass() && firstInteractor->data(DrugInteractor::ATCCodeStringList).toStringList().isEmpty()) {
+                    m_ddiError.insertMulti(ddi, "First interactor does not have ATC link");
+                    m_interactorChecking.insert(ddi, 2);  // 2=InteractorNoATC
+                }
+                if (!secondInteractor->isClass() && secondInteractor->data(DrugInteractor::ATCCodeStringList).toStringList().isEmpty()) {
+                    m_ddiError.insertMulti(ddi, "Second interactor does not have ATC link");
+                    m_interactorChecking.insert(ddi, 2);  // 2=InteractorNoATC
+                }
+
             }
         }
-        return true;
+        switch (m_interactorChecking.value(ddi, 0)) {
+        case 0:  // 0=OK
+            return QColor();
+        case 1:  // 1=InteractorUnknown  // red
+            return QColor(255,50,50,125);
+        case 2:  // 2=InteractorNoATC    // purple
+            return QColor(255,50,255,125);
+        }
+        return QColor();
     }
 
 public:
     DDITreeItem *rootItem;
     QList<DrugDrugInteraction *> m_ddis;
     QList<DrugInteractor *> m_interactors;
-    QMap<DrugDrugInteraction *, bool> m_interactorChecking;
+    QMap<DrugDrugInteraction *, int> m_interactorChecking;  // value: 0=OK; 1=InteractorUnknown; 2=InteractorNoATC
     QMultiMap<DrugDrugInteraction *, QString> m_ddiError;
     QString reviewer;
+    int m_FetchedRows;
 
 private:
     DrugDrugInteractionModel *q;
@@ -393,6 +414,7 @@ DrugDrugInteractionModel::DrugDrugInteractionModel(QObject *parent) :
     d->m_ddis = core()->getDrugDrugInteractions();
     d->m_interactors = core()->getDrugInteractors();
     d->filter();
+    d->m_FetchedRows = 0;
 }
 
 DrugDrugInteractionModel::~DrugDrugInteractionModel()
@@ -405,6 +427,7 @@ DrugDrugInteractionModel::~DrugDrugInteractionModel()
 void DrugDrugInteractionModel::filterInteractionsForInteractor(const QString &interactorName)
 {
     d->filter(interactorName);
+    d->m_FetchedRows = 0;
     reset();
 }
 
@@ -466,14 +489,15 @@ QVariant DrugDrugInteractionModel::data(const QModelIndex &index, int role) cons
         if (role==Qt::DisplayRole && index.column()==0) {
             return item->text();
         } else if (role==Qt::ForegroundRole) {
-            // test all child level validity
+            // test all child DDI level validity
             for(int i = 0; i < item->childCount(); ++i) {
                 if (!item->child(i)->ddi()->levelValidity())
                     return QColor(255,50,50,150);
             }
+            // test all interactors
             for(int i = 0; i < item->childCount(); ++i) {
-                if (!d->noInteractorsError(item->child(i)->ddi()))
-                    return QColor(50,255,50, 150);
+                if (d->interactorsColor(item->child(i)->ddi()) != QColor())
+                    return d->interactorsColor(item->child(i)->ddi());
             }
             for(int i = 0; i < item->childCount(); ++i) {
                 if (item->child(i)->ddi()->risk("en").isEmpty())
@@ -643,8 +667,8 @@ QVariant DrugDrugInteractionModel::data(const QModelIndex &index, int role) cons
                 d->m_ddiError.insertMulti(ddi, tr("Level is not valid"));
             return QColor(255,50,50,150);
         }
-        if (!d->noInteractorsError(ddi)) {
-            return QColor(50,255,50, 150);
+        if (d->interactorsColor(ddi) != QColor()) {
+            return d->interactorsColor(ddi);
         }
         if (ddi->risk("en").isEmpty()) {
             if (!d->m_ddiError.values(ddi).contains(tr("Not translated")))
@@ -1065,205 +1089,35 @@ QString DrugDrugInteractionModel::repartition(int index)
     return QString();
 }
 
-
-
-//QVariant DrugDrugInteractionModel::headerData(int section, Qt::Orientation orientation, int role) const
+//bool DrugDrugInteractionModel::canFetchMore(const QModelIndex &parent) const
 //{
-//    if (orientation == Qt::Horizontal && role == Qt::DisplayRole) {
-//        switch (section) {
-//        case Review:
-//            return tr("Review state");
-//        case Reviewer:
-//            return tr("Reviewer");
-//        case References:
-//            return tr("References");
-//        case Comments:
-//            return tr("Comments");
-//        case Date:
-//            return tr("Date of review");
-//        default:
-//            return QVariant();
-//        }
-//    }
+//    int nbItemRows = 0;
+//    DDITreeItem *parentItem = d->getItem(parent);
 
-//    return QVariant();
+//    if (parentItem)
+//        nbItemRows = parentItem->childCount();
+
+//    qWarning() << Q_FUNC_INFO << (d->m_FetchedRows < nbItemRows) << parent << nbItemRows << d->m_FetchedRows;
+
+//    return (d->m_FetchedRows < nbItemRows);
+//}
+
+//void DrugDrugInteractionModel::fetchMore(const QModelIndex &parent)
+//{
+//    int nbItemRows = 0;
+//    DDITreeItem *parentItem = d->getItem(parent);
+
+//    if (parentItem)
+//        nbItemRows = parentItem->childCount();
+
+//    int remainder = nbItemRows - d->m_FetchedRows;
+//    int itemsToFetch = qMin(FETCH_LIMIT, remainder);
+
+//    qWarning() << Q_FUNC_INFO << parent << d->m_FetchedRows << itemsToFetch;
+
+//    beginInsertRows(parent, d->m_FetchedRows, d->m_FetchedRows + itemsToFetch);
+//    d->m_FetchedRows += itemsToFetch;
+//    endInsertRows();
 //}
 
 
-//void DrugDrugInteractionModel::startTranslations()
-//{
-//    d->m_From = "fr";
-//    d->m_ToLang = "en";
-//    d->google = new Utils::GoogleTranslator(this);
-//    connect(d->google, SIGNAL(translationComplete(QString)), this, SLOT(translationDone(QString)));
-//    connect(this, SIGNAL(needTranslationSaving()), this, SLOT(saveTranslations()));
-//    d->m_TranslatingDataId = 0;
-//    d->getUntranslated();
-//    translateNextData();
-//}
-
-//void DrugDrugInteractionModel::translateNextData()
-//{
-//    qWarning() << d->m_TranslatingDataId;
-//    // No more translations ?
-//    if (d->m_TranslatingDataId == d->m_NumberOfTranslationsNeeded) {
-//        saveTranslations();
-//        return;
-//    }
-
-//    ToTranslate *t = d->m_Main_ToTranslate.values().at(d->m_TranslatingDataId);
-//    QString trans = t->risk_fr + ".........." + t->management_fr;
-
-//    // skip empty translations
-//    if (!trans.isEmpty()) {
-//        qWarning() << "startingTranslationDone" << trans;
-//        d->google->startTranslation(d->m_From, d->m_ToLang, trans);
-//    } else {
-//        ++d->m_TranslatingDataId;
-//        translateNextData();
-//    }
-//}
-
-//void DrugDrugInteractionModel::translationDone(const QString &trans)
-//{
-//    qWarning() << "translationDone" << trans;
-//    if (trans.startsWith(" null")) {
-//        saveTranslations();
-//        return;
-//    }
-
-//    ToTranslate *t = d->m_Main_ToTranslate.values().at(d->m_TranslatingDataId);
-//    QString tmp = trans;
-//    tmp.replace("...........", ".||");
-//    tmp.replace("..........", "||");
-//    QStringList val = tmp.split("||");
-//    t->risk_en = val.at(0).simplified();
-//    if (val.count() == 2)
-//        t->management_en = val.at(1).simplified();
-//    ++d->m_TranslatingDataId;
-//    translateNextData();
-//}
-
-//void DrugDrugInteractionModel::correctTranslations()
-//{
-//    // read resource file
-//    QFile file(qApp->applicationDirPath() + Core::Constants::MACBUNDLE + Core::Constants::INTERACTIONS_ENGLISHCORRECTIONS_FILENAME);
-//    QString content;
-//    file.open(QIODevice::ReadOnly | QIODevice::Text);
-//    content = QString::fromUtf8(file.readAll());
-//    QStringList lines = content.split("\n");
-//    QHash<QString, QString> corrections;
-//    foreach(const QString &line, lines) {
-//        if (line.startsWith("//"))
-//            continue;
-//        QStringList values = line.split(";");
-//        if (values.count() != 2)
-//            continue;
-//        corrections.insert(values.at(0), values.at(1));
-//    }
-//    qWarning() << "getting"<<corrections.count() << "corrections";
-
-//    // get english translations item by item
-//    QString html;
-//    for(int i = 0; i < rowCount(); ++i) {
-//        QModelIndex parent = index(i,0);
-
-//        for(int j = 0; j < rowCount(parent); ++j) {
-//            QModelIndex item = index(j,0,parent);
-//            DomItem *domItem = static_cast<DomItem*>(item.internalPointer());
-//            QDomNode node = domItem->node();
-
-//            if (node.toElement().tagName()=="Interactor") {
-//                QString risk = getRisk(item, "en");
-//                QString management = getManagement(item, "en");
-
-//                foreach(const QString &uncorrect, corrections.keys()) {
-//                    if (risk.contains(uncorrect)) {
-//                        risk.replace(uncorrect, corrections.value(uncorrect));
-//                    }
-//                    if (management.contains(uncorrect)) {
-//                        management.replace(uncorrect, corrections.value(uncorrect));
-//                    }
-//                }
-//                const QString &r = getRisk(item, "en");
-//                const QString &m = getManagement(item, "en");
-
-//                if (risk!=r) {
-//                    html += QString("<tr><td>%1</td><td>%2</td>")
-//                            .arg(r)
-//                            .arg(risk);
-//                } else {
-//                    html += "<tr><td></td><td></td>";
-//                }
-//                if (management!=m) {
-//                    html += QString("<td>%1</td><td>%2</td></tr>")
-//                            .arg(m)
-//                            .arg(management);
-//                } else {
-//                    html += "<td></td><td></td></tr>";
-//                }
-//                html += "\n";
-
-//            }
-//        }
-//    }
-//    html.prepend("<html><body><table border=1>");
-//    html.append("</table></body></html>");
-//    Utils::saveStringToFile(html, qApp->applicationDirPath() + Core::Constants::MACBUNDLE + "/../global_resources/sql/trans.html");
-//    saveModel();
-//}
-
-//void DrugDrugInteractionModel::saveTranslations()
-//{
-//    qWarning() << "saveTranslations" << d->m_TranslatingDataId;
-
-//    for(int i=0; i < d->m_TranslatingDataId; ++i) {
-//        ToTranslate *t = d->m_Main_ToTranslate.values().at(i);
-//        const QString &mainName = d->m_Main_ToTranslate.key(t);
-
-//        qWarning() << "main" << mainName;
-
-//        if (!t->risk_en.isEmpty() || !t->management_en.isEmpty()) {
-//            // find the related node
-//            QDomElement main = d->m_RootNode.firstChildElement("MainInteractor");
-//            while (!main.isNull()) {
-
-//                // Find the main interactor
-//                if (main.attribute("name") != mainName) {
-//                    main = main.nextSiblingElement("MainInteractor");
-//                    continue;
-//                }
-
-//                qWarning() << "found main";
-
-//                // Find the interactor
-//                QDomElement interactor = main.firstChildElement("Interactor");
-
-//                while (!interactor.isNull()) {
-//                    if (interactor.attribute("name") != t->interactor) {
-//                        interactor = interactor.nextSiblingElement("Interactor");
-//                        continue;
-//                    }
-//                    qWarning() << "Set data to XML";
-
-//                    // set risk
-//                    QDomElement risk = d->domDocument.createElement("Risk");
-//                    risk.setAttribute("lang", "en");
-//                    risk.setAttribute("text", t->risk_en);
-//                    interactor.appendChild(risk);
-
-//                    // set management
-//                    QDomElement management = d->domDocument.createElement("Management");
-//                    management.setAttribute("lang", "en");
-//                    management.setAttribute("text", t->management_en);
-//                    interactor.appendChild(management);
-
-//                    break;
-//                }
-//                break;
-//            }
-//        }
-//    }
-
-//    saveModel();
-//}
