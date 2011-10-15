@@ -43,9 +43,11 @@ public:
     explicit PubMedDownloader(QObject *parent = 0);
     ~PubMedDownloader();
 
+    void setDownloadXmlOnly() {m_XmlOnly=true;}
     void setPMID(const int pmid) {m_Pmid = QString::number(pmid);}
     void setPMID(const QString &pmid) {m_Pmid = pmid;}
     bool setFullLink(const QString &link);
+    QString pmid() {return m_Pmid;}
 
     QString reference() const {return m_Reference;}
     QString abstract() const {return m_Abstract;}
@@ -65,7 +67,7 @@ private Q_SLOTS:
 private:
     QNetworkAccessManager *manager;
     QString m_Pmid, m_Abstract, m_Reference, m_Xml;
-    bool m_DownloadingReferences;
+    bool m_DownloadingReferences, m_XmlOnly;
 };
 
 }  // End namespace Utils

@@ -19,53 +19,56 @@
  *  If not, see <http://www.gnu.org/licenses/>.                            *
  ***************************************************************************/
 /***************************************************************************
- *   Main Developper : Eric MAEKER, MD <eric.maeker@gmail.com>             *
+ *   Main Developper : Eric MAEKER, <eric.maeker@gmail.com>                *
  *   Contributors :                                                        *
  *       NAME <MAIL@ADRESS>                                                *
- *       NAME <MAIL@ADRESS>                                                *
  ***************************************************************************/
-#ifndef DRUGDRUGINTERACTIONCORE_H
-#define DRUGDRUGINTERACTIONCORE_H
+#ifndef BIBLIOCORE_H
+#define BIBLIOCORE_H
 
 #include <QObject>
-#include <QHash>
-#include <QDomNode>
+#include <QStringList>
 
-namespace IAMDb {
-class DrugDrugInteraction;
-class DrugInteractor;
+/**
+ * \file bibliocore.h
+ * \author Eric MAEKER <eric.maeker@gmail.com>
+ * \version 0.6.0
+ * \date 14 Oct 2011
+*/
 
-class DrugDrugInteractionCore : public QObject
+namespace Utils {
+class PubMedDownloader;
+}
+
+namespace Biblio {
+namespace Internal {
+class BiblioPlugin;
+class BiblioBase;
+}
+
+class BiblioCore : public QObject
 {
     Q_OBJECT
-    explicit DrugDrugInteractionCore(QObject *parent = 0);
+    friend class Biblio::Internal::BiblioPlugin;
+
+protected:
+    explicit BiblioCore(QObject *parent = 0);
+
 public:
-    static DrugDrugInteractionCore *instance();
+    static BiblioCore *instance() {return m_Instance;}
 
-    int createInternalUuid() const;
-    QList<DrugDrugInteraction *> getDrugDrugInteractions() const;
-    /** \todo createInteraction() ? */
+    void downloadPubMedData(const QStringList &pmids);
 
-    QList<DrugInteractor *> getDrugInteractors() const;
-
-Q_SIGNALS:
-    void interactorCreated(DrugInteractor *di);
-
-public Q_SLOTS:
-    void updateXmlFileForDrugDrugInteraction(DrugDrugInteraction *ddi);
-    void saveCompleteList(const QList<DrugDrugInteraction *> &ddis);
-    void saveCompleteList(const QList<DrugInteractor *> &interactors);
-
-    DrugInteractor *createNewInteractor(const QString &initialLabel, const bool isClass);
-    void downloadAllPmids();
-
+private Q_SLOTS:
+    void downloadNext();
 
 private:
-    static DrugDrugInteractionCore *m_Instance;
-    mutable QHash<DrugDrugInteraction *, QDomNode> m_ddisToNode;
-    mutable QHash<DrugInteractor *, QDomNode> m_interactorsToNode;
+    static BiblioCore *m_Instance;
+    Internal::BiblioBase *m_Base;
+    Utils::PubMedDownloader *m_dld;
+    QStringList m_ToDownload;
 };
 
-}  // End namespace IAMDb
+}  // End namespace Biblio
 
-#endif // DRUGDRUGINTERACTIONCORE_H
+#endif // BIBLIOCORE_H

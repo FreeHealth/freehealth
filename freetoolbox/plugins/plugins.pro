@@ -8,7 +8,8 @@ SUBDIRS = \
     druginfos \
     icd \
     zip \
-    listview
+    listview \
+    biblio
 
 
 core.subdir = coreplugin
@@ -18,6 +19,7 @@ drugsdb.depends += core
 
 interactiondb.subdir = interactiondb
 interactiondb.depends += core
+interactiondb.depends += biblio
 
 druginfos.subdir = druginfos
 druginfos.depends += core
@@ -38,3 +40,5 @@ zip.depends += core
 listview.subdir = listviewplugin
 listview.depends += core
 
+biblio.subdir = biblio
+biblio.depends += core

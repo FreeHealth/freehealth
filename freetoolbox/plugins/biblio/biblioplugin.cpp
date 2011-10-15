@@ -19,53 +19,55 @@
  *  If not, see <http://www.gnu.org/licenses/>.                            *
  ***************************************************************************/
 /***************************************************************************
- *   Main Developper : Eric MAEKER, MD <eric.maeker@gmail.com>             *
+ *   Main Developper : Eric MAEKER, <eric.maeker@gmail.com>                *
  *   Contributors :                                                        *
  *       NAME <MAIL@ADRESS>                                                *
- *       NAME <MAIL@ADRESS>                                                *
  ***************************************************************************/
-#ifndef DRUGDRUGINTERACTIONCORE_H
-#define DRUGDRUGINTERACTIONCORE_H
+#include "biblioplugin.h"
+#include "bibliocore.h"
 
-#include <QObject>
-#include <QHash>
-#include <QDomNode>
+#include <coreplugin/dialogs/pluginaboutpage.h>
 
-namespace IAMDb {
-class DrugDrugInteraction;
-class DrugInteractor;
+#include <extensionsystem/pluginmanager.h>
+#include <utils/log.h>
 
-class DrugDrugInteractionCore : public QObject
+#include <QtCore/QtPlugin>
+#include <QDebug>
+
+using namespace Biblio;
+using namespace Internal;
+
+BiblioPlugin::BiblioPlugin()
 {
-    Q_OBJECT
-    explicit DrugDrugInteractionCore(QObject *parent = 0);
-public:
-    static DrugDrugInteractionCore *instance();
+    if (Utils::Log::warnPluginsCreation())
+        qWarning() << "Creating BiblioPlugin";
+}
 
-    int createInternalUuid() const;
-    QList<DrugDrugInteraction *> getDrugDrugInteractions() const;
-    /** \todo createInteraction() ? */
+BiblioPlugin::~BiblioPlugin()
+{
+    qWarning() << "BiblioPlugin::~BiblioPlugin()";
+}
 
-    QList<DrugInteractor *> getDrugInteractors() const;
+bool BiblioPlugin::initialize(const QStringList &arguments, QString *errorMessage)
+{
+    Q_UNUSED(arguments);
+    Q_UNUSED(errorMessage);
+    if (Utils::Log::warnPluginsCreation())
+        qWarning() << "BiblioPlugin::initialize";
 
-Q_SIGNALS:
-    void interactorCreated(DrugInteractor *di);
+    BiblioCore *c = new BiblioCore(this);
 
-public Q_SLOTS:
-    void updateXmlFileForDrugDrugInteraction(DrugDrugInteraction *ddi);
-    void saveCompleteList(const QList<DrugDrugInteraction *> &ddis);
-    void saveCompleteList(const QList<DrugInteractor *> &interactors);
+    // add plugin info page
+    addAutoReleasedObject(new Core::PluginAboutPage(pluginSpec(), this));
 
-    DrugInteractor *createNewInteractor(const QString &initialLabel, const bool isClass);
-    void downloadAllPmids();
+    return true;
+}
+
+void BiblioPlugin::extensionsInitialized()
+{
+    if (Utils::Log::warnPluginsCreation())
+        qWarning() << "BiblioPlugin::extensionsInitialized";
+}
 
 
-private:
-    static DrugDrugInteractionCore *m_Instance;
-    mutable QHash<DrugDrugInteraction *, QDomNode> m_ddisToNode;
-    mutable QHash<DrugInteractor *, QDomNode> m_interactorsToNode;
-};
-
-}  // End namespace IAMDb
-
-#endif // DRUGDRUGINTERACTIONCORE_H
+Q_EXPORT_PLUGIN(BiblioPlugin)

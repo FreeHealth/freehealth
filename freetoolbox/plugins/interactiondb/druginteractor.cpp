@@ -111,6 +111,9 @@ DrugInteractor::DrugInteractor(const QDomElement &element)
     QDomElement child = element.firstChildElement("M");
     while (!child.isNull()) {
         addChildId(child.attribute("n"));
+        if (!child.attribute("p").isEmpty()) {
+            addChildClassificationPMIDs(child.attribute("n"), child.attribute("p").split(";"));
+        }
         child = child.nextSiblingElement("M");
     }
 
@@ -169,6 +172,17 @@ void DrugInteractor::addAtcLink(const QString &atcCode)
     m_AtcLinks.sort();
 }
 
+void DrugInteractor::addChildClassificationPMIDs(const QString &childId, const QStringList &pmids)
+{
+    foreach(const QString &pmid, pmids)
+        m_ChildClassifPMIDs.insertMulti(childId, pmid);
+}
+
+QStringList DrugInteractor::allNeededPMIDs() const
+{
+    return m_ChildClassifPMIDs.values();
+}
+
 QString DrugInteractor::toXml() const
 {
     QString xml = QString("\n  <I id=\"%1\" v=\"%2\" c=\"%3\" r=\"%4\" p=\"%5\" dc=\"%6\" lu=\"%7\" nwd=\"%8\">")
@@ -185,13 +199,13 @@ QString DrugInteractor::toXml() const
     // add class information
     if (isClass()) {
         if (!data(ClassInformationFr).isNull()) {
-            xml += QString("\n  <CI l=\"fr\" t=\"%1\"/>").arg(data(ClassInformationFr).toString());
+            xml += QString("\n    <CI l=\"fr\" t=\"%1\"/>").arg(data(ClassInformationFr).toString());
         }
         if (!data(ClassInformationEn).isNull()) {
-            xml += QString("\n  <CI l=\"en\" t=\"%1\"/>").arg(data(ClassInformationEn).toString());
+            xml += QString("\n    <CI l=\"en\" t=\"%1\"/>").arg(data(ClassInformationEn).toString());
         }
         if (!data(ClassInformationDe).isNull()) {
-            xml += QString("\n  <CI l=\"de\" t=\"%1\"/>").arg(data(ClassInformationDe).toString());
+            xml += QString("\n    <CI l=\"de\" t=\"%1\"/>").arg(data(ClassInformationDe).toString());
         }
     }
 

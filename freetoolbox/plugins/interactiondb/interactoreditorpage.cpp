@@ -36,6 +36,8 @@
 #include <coreplugin/constants_icons.h>
 #include <coreplugin/ftb_constants.h>
 
+#include <biblio/bibliocore.h>
+
 #include <drugsdb/atcmodel.h>
 #include <drugsdb/searchatcindatabasedialog.h>
 
@@ -97,6 +99,7 @@ public:
     QAction *aTranslateThis;
     QAction *aAddClassReviewMark;
     QAction *aNextUnreviewedOrUnlinked;
+    QAction *aDownloadAllNeededPmids;
 
     QToolButton *m_ToolButton, *m_CreateNewToolButton;
     QAction *google;
@@ -109,7 +112,7 @@ public:
 }
 
 InteractorEditorWidget::InteractorEditorWidget(QWidget *parent) :
-    d(new InteractorEditorWidgetPrivate)
+    QWidget(parent), d(new InteractorEditorWidgetPrivate)
 {
     setObjectName("InteractorEditorWidget");
     d->ui = new Ui::InteractorEditorWidget;
@@ -158,6 +161,7 @@ InteractorEditorWidget::InteractorEditorWidget(QWidget *parent) :
     d->aCreateNewInteractor = new QAction(this);
     d->aTranslateThis = new QAction(this);
     d->aAddClassReviewMark = new QAction(this);
+    d->aDownloadAllNeededPmids = new QAction(this);
     d->aExpandAll->setIcon(theme()->icon(Core::Constants::ICONMOVEDOWNLIGHT));
     d->aCollapseAll->setIcon(theme()->icon(Core::Constants::ICONMOVEUPLIGHT));
     d->aAddClassReviewMark->setIcon(theme()->icon(Core::Constants::ICONBOOKMARK));
@@ -168,6 +172,7 @@ InteractorEditorWidget::InteractorEditorWidget(QWidget *parent) :
     d->aRemoveCurrent->setIcon(theme()->icon(Core::Constants::ICONREMOVE));
     d->aTranslateThis->setIcon(theme()->icon(Core::Constants::ICONTRANSLATE));
     d->aNextUnreviewedOrUnlinked->setIcon(theme()->icon(Core::Constants::ICONNEXT));
+    d->aDownloadAllNeededPmids->setIcon(theme()->icon(Core::Constants::ICONDOCTOR));
     d->aSave->setEnabled(false);
     d->aEdit->setEnabled(false);
     d->aRemoveCurrent->setEnabled(false);
@@ -197,6 +202,7 @@ InteractorEditorWidget::InteractorEditorWidget(QWidget *parent) :
     d->m_CreateNewToolButton->setPopupMode(QToolButton::InstantPopup);
 
     d->m_ToolBar = new QToolBar(this);
+    d->m_ToolBar->addAction(d->aDownloadAllNeededPmids);
     d->m_ToolBar->addAction(d->aAddClassReviewMark);
     d->m_ToolBar->addWidget(d->m_CreateNewToolButton);
     d->m_ToolBar->addAction(d->aNextUnreviewedOrUnlinked);
@@ -218,6 +224,7 @@ InteractorEditorWidget::InteractorEditorWidget(QWidget *parent) :
     connect(d->aTranslateThis, SIGNAL(triggered()), this, SLOT(translateCurrent()));
     connect(d->aAddClassReviewMark, SIGNAL(triggered()), this, SLOT(bookmarkClassesFromCurrent()));
     connect(d->aNextUnreviewedOrUnlinked, SIGNAL(triggered()), this, SLOT(nextUnreviewedOrUnlinked()));
+    connect(d->aDownloadAllNeededPmids, SIGNAL(triggered()), core(), SLOT(downloadAllPmids()));
 
     connect(d->m_ToolButton, SIGNAL(triggered(QAction*)), this, SLOT(buttonActivated(QAction*)));
     connect(d->m_CreateNewToolButton, SIGNAL(triggered(QAction*)), this, SLOT(createButtonActivated(QAction*)));
@@ -297,73 +304,73 @@ void InteractorEditorWidget::reformatOldSource()
 {
     // read the old XML molecule infos
     QDomDocument doc;
-    QFile file(oldMolLinkFile());
-    if (file.open(QIODevice::ReadOnly)) {
-        QString error;
-        int line, col;
-        if (!doc.setContent(&file, &error,&line,&col)) {
-            LOG_ERROR(tr("Can not read XML file content %1").arg(file.fileName()));
-            LOG_ERROR(QString("DOM(%1;%2): %3").arg(line).arg(col).arg(error));
-        } else {
-            LOG(tr("Reading file: %1").arg(file.fileName()));
-        }
-        file.close();
-    } else {
-        LOG_ERROR(tr("Can not open XML file %1").arg(file.fileName()));
-    }
+//    QFile file(oldMolLinkFile());
+//    if (file.open(QIODevice::ReadOnly)) {
+//        QString error;
+//        int line, col;
+//        if (!doc.setContent(&file, &error,&line,&col)) {
+//            LOG_ERROR(tr("Can not read XML file content %1").arg(file.fileName()));
+//            LOG_ERROR(QString("DOM(%1;%2): %3").arg(line).arg(col).arg(error));
+//        } else {
+//            LOG(tr("Reading file: %1").arg(file.fileName()));
+//        }
+//        file.close();
+//    } else {
+//        LOG_ERROR(tr("Can not open XML file %1").arg(file.fileName()));
+//    }
 
-    QDomElement rootNode = doc.firstChildElement("AfssapsLinkerModel");
-    QDomElement mainNode = rootNode.firstChildElement("Labels");
-    mainNode = mainNode.firstChildElement("Label");
+//    QDomElement rootNode = doc.firstChildElement("AfssapsLinkerModel");
+//    QDomElement mainNode = rootNode.firstChildElement("Labels");
+//    mainNode = mainNode.firstChildElement("Label");
 
-    // <Label de="" references="FreeMedForms" atcCodes="J05AG02" comments="" en="" review="true" id="" fr="DELAVIRDINE" reviewer="" es="" category="mols" autoFound="" dateofreview=""/>
+//    // <Label de="" references="FreeMedForms" atcCodes="J05AG02" comments="" en="" review="true" id="" fr="DELAVIRDINE" reviewer="" es="" category="mols" autoFound="" dateofreview=""/>
 
-    QList<DrugInteractor> interactors;
-    QHash<QString, int> interactorsIds;  // All including mols and classes
-    QHash<QString, int> classesIds;
-    QTime chrono;
-    chrono.start();
+//    QList<DrugInteractor> interactors;
+//    QHash<QString, int> interactorsIds;  // All including mols and classes
+//    QHash<QString, int> classesIds;
+//    QTime chrono;
+//    chrono.start();
 
-    // create the drugdruginteractions objects
-    while (!mainNode.isNull()) {
-        DrugInteractor interactor;
-        interactor.setData(DrugInteractor::IsValid, true);
-        interactor.setData(DrugInteractor::Id, core()->createInternalUuid());
-        interactor.setData(DrugInteractor::Reference, mainNode.attribute("references"));
-        interactor.setData(DrugInteractor::DeLabel, mainNode.attribute("de"));
-        interactor.setData(DrugInteractor::ATCCodeStringList, mainNode.attribute("atcCodes").split(","));
-        interactor.setData(DrugInteractor::Comment, mainNode.attribute("comments"));
-        interactor.setData(DrugInteractor::EnLabel, mainNode.attribute("en"));
-        if (mainNode.attribute("review")=="true")
-            interactor.setData(DrugInteractor::IsReviewed, true);
-        else
-            interactor.setData(DrugInteractor::IsReviewed, false);
-        interactor.setData(DrugInteractor::FrLabel, mainNode.attribute("fr").toUpper());
-        interactor.setData(DrugInteractor::InitialLabel, Utils::removeAccents(mainNode.attribute("fr")).toUpper());
-        interactor.setData(DrugInteractor::ReviewersStringList, mainNode.attribute("reviewer").split(";"));
-        interactor.setData(DrugInteractor::EsLabel, mainNode.attribute("es"));
-        if (mainNode.attribute("category")=="mols") {
-            interactor.setData(DrugInteractor::IsClass, false);
-        } else {
-            interactor.setData(DrugInteractor::IsClass, true);
-            classesIds.insert(interactor.data(DrugInteractor::InitialLabel).toString(), interactors.count());
-        }
-        interactor.setData(DrugInteractor::IsAutoFound, mainNode.attribute("autoFound"));
-        interactor.setData(DrugInteractor::DateOfReview, mainNode.attribute("dateofreview"));
-        interactor.setData(DrugInteractor::DateOfCreation, QDate(2010,01,01));
-        interactor.setData(DrugInteractor::IsDuplicated, false);
+//    // create the drugdruginteractions objects
+//    while (!mainNode.isNull()) {
+//        DrugInteractor interactor;
+//        interactor.setData(DrugInteractor::IsValid, true);
+//        interactor.setData(DrugInteractor::Id, core()->createInternalUuid());
+//        interactor.setData(DrugInteractor::Reference, mainNode.attribute("references"));
+//        interactor.setData(DrugInteractor::DeLabel, mainNode.attribute("de"));
+//        interactor.setData(DrugInteractor::ATCCodeStringList, mainNode.attribute("atcCodes").split(","));
+//        interactor.setData(DrugInteractor::Comment, mainNode.attribute("comments"));
+//        interactor.setData(DrugInteractor::EnLabel, mainNode.attribute("en"));
+//        if (mainNode.attribute("review")=="true")
+//            interactor.setData(DrugInteractor::IsReviewed, true);
+//        else
+//            interactor.setData(DrugInteractor::IsReviewed, false);
+//        interactor.setData(DrugInteractor::FrLabel, mainNode.attribute("fr").toUpper());
+//        interactor.setData(DrugInteractor::InitialLabel, Utils::removeAccents(mainNode.attribute("fr")).toUpper());
+//        interactor.setData(DrugInteractor::ReviewersStringList, mainNode.attribute("reviewer").split(";"));
+//        interactor.setData(DrugInteractor::EsLabel, mainNode.attribute("es"));
+//        if (mainNode.attribute("category")=="mols") {
+//            interactor.setData(DrugInteractor::IsClass, false);
+//        } else {
+//            interactor.setData(DrugInteractor::IsClass, true);
+//            classesIds.insert(interactor.data(DrugInteractor::InitialLabel).toString(), interactors.count());
+//        }
+//        interactor.setData(DrugInteractor::IsAutoFound, mainNode.attribute("autoFound"));
+//        interactor.setData(DrugInteractor::DateOfReview, mainNode.attribute("dateofreview"));
+//        interactor.setData(DrugInteractor::DateOfCreation, QDate(2010,01,01));
+//        interactor.setData(DrugInteractor::IsDuplicated, false);
 
-        interactorsIds.insert(interactor.data(DrugInteractor::InitialLabel).toString(), interactors.count());
-        interactors << interactor;
-        // go next maininteractor
-        mainNode = mainNode.nextSiblingElement("Label");
-    }
+//        interactorsIds.insert(interactor.data(DrugInteractor::InitialLabel).toString(), interactors.count());
+//        interactors << interactor;
+//        // go next maininteractor
+//        mainNode = mainNode.nextSiblingElement("Label");
+//    }
 
-    Utils::Log::logTimeElapsed(chrono, "DDI_Interactors", QString("Sources reading (%1)").arg(interactors.count()));
-    chrono.restart();
+//    Utils::Log::logTimeElapsed(chrono, "DDI_Interactors", QString("Sources reading (%1)").arg(interactors.count()));
+//    chrono.restart();
 
     // read the old XML class tree
-    file.setFileName(oldTreeXmlFile());
+    QFile file(oldTreeXmlFile());
     if (file.open(QIODevice::ReadOnly)) {
         QString error;
         int line, col;
@@ -377,68 +384,36 @@ void InteractorEditorWidget::reformatOldSource()
     } else {
         LOG_ERROR(tr("Can not open XML file %1").arg(file.fileName()));
     }
-    rootNode = doc.firstChildElement("AfssapsTree");
-    mainNode = rootNode.firstChildElement("Class");
+    QDomElement rootNode = doc.firstChildElement("AfssapsTree");
+    QDomElement mainNode = rootNode.firstChildElement("Class");
+    QList<DrugInteractor *> interactors = core()->getDrugInteractors();
     while (!mainNode.isNull()) {
-        // Get class interactor
-        if (!classesIds.keys().contains(Utils::removeAccents(mainNode.attribute("name")).toUpper())) {
-            qWarning() << "** Missing one class" << Utils::removeAccents(mainNode.attribute("name")).toUpper();
-
-            DrugInteractor interactor;
-            interactor.setData(DrugInteractor::IsValid, true);
-            interactor.setData(DrugInteractor::Id, core()->createInternalUuid());
-            interactor.setData(DrugInteractor::Reference, "FreeMedForms");
-            interactor.setData(DrugInteractor::IsReviewed, false);
-            interactor.setData(DrugInteractor::FrLabel, mainNode.attribute("name").toUpper());
-            interactor.setData(DrugInteractor::InitialLabel, Utils::removeAccents(mainNode.attribute("name")).toUpper());
-            interactor.setData(DrugInteractor::IsClass, true);
-            interactor.setData(DrugInteractor::IsAutoFound, 0);
-            interactor.setData(DrugInteractor::DateOfCreation, QDate::currentDate());
-            interactor.setData(DrugInteractor::IsDuplicated, false);
-
-            classesIds.insert(interactor.data(DrugInteractor::InitialLabel).toString(), interactors.count());
-            interactorsIds.insert(interactor.data(DrugInteractor::InitialLabel).toString(), interactors.count());
-            interactors << interactor;
+        QString classId = Utils::removeAccents(mainNode.attribute("name")).toUpper();
+        qWarning() << "processing" << classId;
+        DrugInteractor *interactingClass = 0;
+        for(int i=0; i < interactors.count(); ++i) {
+            if (interactors.at(i)->isClass() && interactors.at(i)->data(DrugInteractor::InitialLabel).toString()==classId) {
+                interactingClass = interactors.at(i);
+            }
         }
-        DrugInteractor &interactingClass = interactors[classesIds.value(Utils::removeAccents(mainNode.attribute("name")).toUpper())];
-        const QString &parentId = interactingClass.data(DrugInteractor::InitialLabel).toString();
+        if (!interactingClass) {
+            qWarning() << "**** ERROR" << classId;
+            mainNode = mainNode.nextSiblingElement("Class");
+            continue;
+        }
 
-        // Get all children ids
         QDomElement child = mainNode.firstChildElement("Molecule");
         while (!child.isNull()) {
-            if (!interactorsIds.keys().contains(Utils::removeAccents(child.attribute("name")).toUpper())) {
-                qWarning() << "** Missing one molecule" << Utils::removeAccents(child.attribute("name"));
-
-                DrugInteractor interactor;
-                interactor.setData(DrugInteractor::IsValid, true);
-                interactor.setData(DrugInteractor::Id, core()->createInternalUuid());
-                interactor.setData(DrugInteractor::Reference, "FreeMedForms");
-                interactor.setData(DrugInteractor::IsReviewed, false);
-                interactor.setData(DrugInteractor::FrLabel, child.attribute("name").toUpper());
-                interactor.setData(DrugInteractor::InitialLabel, Utils::removeAccents(child.attribute("name")).toUpper());
-                interactor.setData(DrugInteractor::IsClass, false);
-                interactor.setData(DrugInteractor::IsAutoFound, 0);
-                interactor.setData(DrugInteractor::DateOfCreation, QDate::currentDate());
-                interactor.setData(DrugInteractor::IsDuplicated, false);
-
-                classesIds.insert(interactor.data(DrugInteractor::InitialLabel).toString(), interactors.count());
-                interactorsIds.insert(interactor.data(DrugInteractor::InitialLabel).toString(), interactors.count());
-                interactors << interactor;
-            }
-            DrugInteractor &childInteractor = interactors[interactorsIds.value(Utils::removeAccents(child.attribute("name")).toUpper())];
-            const QString &childId = childInteractor.data(DrugInteractor::InitialLabel).toString();
-
-            interactingClass.addChildId(childId);
-            childInteractor.addParentId(parentId);
-
+            QString childId = Utils::removeAccents(child.attribute("name")).toUpper();
             // Get PMIDS
             //       <Source type="pubmed" link="http://www.ncbi.nlm.nih.gov/pubmed/14662625"/>
             QDomElement pmids = child.firstChildElement("Source");
             while (!pmids.isNull()) {
                 if (pmids.attribute("type")=="pubmed") {
-                    interactingClass.addChildClassificationPMID(childId, pmids.attribute("link").remove("http://www.ncbi.nlm.nih.gov/pubmed/"));
+                    qWarning() << "hasSource" << childId ;
+                    interactingClass->addChildClassificationPMID(childId, pmids.attribute("link").remove("http://www.ncbi.nlm.nih.gov/pubmed/"));
                 } else {
-                    qWarning() << "** unknown link" << parentId << childId << pmids.attribute("link");
+                    qWarning() << "** unknown link" << interactingClass->data(DrugInteractor::InitialLabel).toString() << childId << pmids.attribute("link");
                 }
                 pmids = pmids.nextSiblingElement("Source");
             }
@@ -446,61 +421,20 @@ void InteractorEditorWidget::reformatOldSource()
             child = child.nextSiblingElement("Molecule");
         }
 
-//        qWarning() << parentId << interactingClass.childrenIds();
-
         mainNode = mainNode.nextSiblingElement("Class");
     }
 
-    // check duplicates
-    int removed = 0;
-    for(int i=0; i < interactors.count(); ++i) {
-        DrugInteractor &interactor = interactors[i];
-        if (interactor.data(DrugInteractor::IsDuplicated).toBool()) {
-            continue;
-        }
-
-        for(int j=0; j < interactors.count(); ++j) {
-            // don't test the same interactor...
-            if (i==j) {
-                continue;
-            }
-            DrugInteractor &second = interactors[j];
-            if (second.data(DrugInteractor::IsDuplicated).toBool()) {
-                continue;
-            }
-            if (interactor.data(DrugInteractor::InitialLabel).toString() == second.data(DrugInteractor::InitialLabel).toString()) {
-                qWarning() << "** Duplication" << interactor.data(DrugInteractor::InitialLabel).toString() << second.data(DrugInteractor::InitialLabel).toString();
-                // Test the interactor with atcCodes linked
-                const QStringList &firstAtc = interactor.data(DrugInteractor::ATCCodeStringList).toStringList();
-                const QStringList &secondAtc = second.data(DrugInteractor::ATCCodeStringList).toStringList();
-                if (firstAtc.count() > secondAtc.count()) {
-                    // keep first
-                    second.setData(DrugInteractor::IsDuplicated, true);
-                } else {
-                    // keep second
-                    interactor.setData(DrugInteractor::IsDuplicated, true);
-//                    break;
-                }
-                ++removed;
-            }
-        }
-    }
-
-    Utils::Log::logTimeElapsed(chrono, "DDI_Interactors", QString("Remove duplicates: %1/%2").arg(removed).arg(interactors.count()));
-    chrono.restart();
-
-    qSort(interactors.begin(), interactors.end(), DrugInteractor::lowerThan);
+    qWarning() << "DONE";
 
     // save the resulting XML
     QString xml;
     for(int i=0; i < interactors.count(); ++i) {
-        if (interactors.at(i).data(DrugInteractor::IsDuplicated).toBool()) {
+        if (interactors.at(i)->data(DrugInteractor::IsDuplicated).toBool()) {
             continue;
         }
-        xml += interactors.at(i).toXml();
+        xml += interactors.at(i)->toXml();
     }
 
-    Utils::Log::logTimeElapsed(chrono, "DDI_Interactors", "to Xml");
     xml.prepend("<?xml version='1.0' encoding='UTF-8'?>\n"
             "<!-- date format = yyyy-MM-dd -->\n"
             "<!--\n"
@@ -749,6 +683,7 @@ void InteractorEditorWidget::changeEvent(QEvent *e)
         d->aExpandAll->setText(tr("Expand all"));
         d->aAddClassReviewMark->setText(tr("Mark all classes under the current as unreviewed"));
         d->aNextUnreviewedOrUnlinked->setText(tr("Go to next unreviewed or unlinked"));
+        d->aDownloadAllNeededPmids->setText(tr("Download all needed publications"));
         d->ui->retranslateUi(this);
         updateCounts();
     }

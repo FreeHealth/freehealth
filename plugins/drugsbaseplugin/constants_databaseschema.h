@@ -189,7 +189,7 @@ namespace Constants {
     };
 
     enum IAM_TREEFields {
-        IAM_TREE_ID_CLASS = 0, IAM_TREE_ID_ATC, IAM_TREE_BIBMASTERID,
+        IAM_TREE_ID = 0, IAM_TREE_ID_CLASS, IAM_TREE_ID_ATC, IAM_TREE_BIBMASTERID,
         IAM_TREE_MaxParam
     };
 

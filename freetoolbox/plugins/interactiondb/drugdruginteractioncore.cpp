@@ -36,6 +36,8 @@
 #include <coreplugin/isettings.h>
 #include <coreplugin/ftb_constants.h>
 
+#include <biblio/bibliocore.h>
+
 #include <utils/log.h>
 #include <utils/global.h>
 #include <utils/httpdownloader.h>
@@ -223,4 +225,22 @@ DrugInteractor *DrugDrugInteractionCore::createNewInteractor(const QString &init
     di->setData(DrugInteractor::IsDuplicated, false);
     Q_EMIT interactorCreated(di);
     return di;
+}
+
+/** Start the download of all needed pubmed references and store to the BiblioPlugin database. */
+void DrugDrugInteractionCore::downloadAllPmids()
+{
+    // get all pmids to download
+    QStringList pmids;
+    foreach(DrugDrugInteraction *ddi, getDrugDrugInteractions()) {
+        pmids.append(ddi->data(DrugDrugInteraction::PMIDsStringList).toStringList());
+    }
+    foreach(DrugInteractor *di, getDrugInteractors()) {
+        pmids.append(di->data(DrugInteractor::PMIDsStringList).toStringList());
+        if (di->isClass())
+            pmids.append(di->allNeededPMIDs());
+    }
+    pmids.removeAll("");
+    pmids.removeDuplicates();
+    Biblio::BiblioCore::instance()->downloadPubMedData(pmids);
 }

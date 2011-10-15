@@ -245,6 +245,7 @@ CREATE TABLE IF NOT EXISTS ATC_LABELS (
 CREATE INDEX AtcLabelsK ON ATC_LABELS (ATC_ID, MASTER_LID);
 
 CREATE TABLE IF NOT EXISTS IAM_TREE (
+  ID_TREE        INTEGER PRIMARY KEY,
   ID_CLASS       integer not null,
   ID_ATC         integer not null,
   BIB_MASTER_ID  integer default -1,

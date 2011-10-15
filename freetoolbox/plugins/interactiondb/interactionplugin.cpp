@@ -93,4 +93,5 @@ void InteractionPlugin::extensionsInitialized()
 //    Core::ICore::instance()->translators()->addNewTranslator("freetoolbox-interactionplugin");
 }
 
+
 Q_EXPORT_PLUGIN(InteractionPlugin)

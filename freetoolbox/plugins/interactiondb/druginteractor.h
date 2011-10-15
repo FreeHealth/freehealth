@@ -91,12 +91,16 @@ public:
     void removeChildId(const QString &id) {m_ChildrenId.removeAll(id);}
 
     void addChildClassificationPMID(const QString &childId, const QString &pmid) {m_ChildClassifPMIDs.insertMulti(childId, pmid);}
+    void addChildClassificationPMIDs(const QString &childId, const QStringList &pmids);
+
+    QStringList allNeededPMIDs() const;
 
     // Xml members
     QString toXml() const;
 
     bool operator==(const DrugInteractor &other) const;
     static bool lowerThan(const DrugInteractor &d1, const DrugInteractor &d2);
+    static bool lowerThan(DrugInteractor *d1, DrugInteractor *d2) {return lowerThan(*d1, *d2);}
 
 private:
     QHash<int, QHash<QString, QVariant> > m_TrData;

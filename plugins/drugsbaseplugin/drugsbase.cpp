@@ -523,6 +523,7 @@ DrugsBase::DrugsBase(QObject *parent)
     addField(Table_ATC_LABELS, ATC_LABELS_ATCID, "ATC_ID");
     addField(Table_ATC_LABELS, ATC_LABELS_MASTERLID, "MASTER_LID");
 
+    addField(Table_IAM_TREE, IAM_TREE_ID, "ID_TREE");
     addField(Table_IAM_TREE, IAM_TREE_ID_CLASS, "ID_CLASS");
     addField(Table_IAM_TREE, IAM_TREE_ID_ATC, "ID_ATC");
     addField(Table_IAM_TREE, IAM_TREE_BIBMASTERID, "BIB_MASTER_ID");

@@ -357,8 +357,8 @@ public:
             }
             bool ok = (firstFound && secondFound);
             if (!ok) {
-                const QString &first = ddi->data(DrugDrugInteraction::FirstInteractorName).toString();
-                const QString &second = ddi->data(DrugDrugInteraction::SecondInteractorName).toString();
+//                const QString &first = ddi->data(DrugDrugInteraction::FirstInteractorName).toString();
+//                const QString &second = ddi->data(DrugDrugInteraction::SecondInteractorName).toString();
                 if (!firstFound) {
                     if (!m_ddiError.values(ddi).contains("First interactor not found"))
                         m_ddiError.insertMulti(ddi, "First interactor not found");
@@ -442,7 +442,7 @@ int DrugDrugInteractionModel::rowCount(const QModelIndex &parent) const
     return parentItem->childCount();
 }
 
-int DrugDrugInteractionModel::columnCount(const QModelIndex &parent) const
+int DrugDrugInteractionModel::columnCount(const QModelIndex &) const
 {
     return ColumnCount;
 }

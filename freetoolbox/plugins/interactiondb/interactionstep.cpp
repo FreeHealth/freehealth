@@ -26,6 +26,9 @@
 #include "interactionstep.h"
 #include "afssapsintegrator.h"
 #include "interactionsdatabasepage.h"
+#include "drugdruginteraction.h"
+#include "drugdruginteractioncore.h"
+#include "druginteractor.h"
 
 #include <coreplugin/icore.h>
 #include <coreplugin/imainwindow.h>
@@ -56,6 +59,7 @@ using namespace Trans::ConstantTranslations;
 static inline Core::IMainWindow *mainwindow() {return Core::ICore::instance()->mainWindow();}
 static inline Core::ISettings *settings()  { return Core::ICore::instance()->settings(); }
 static inline Core::ITheme *theme()  { return Core::ICore::instance()->theme(); }
+static inline IAMDb::DrugDrugInteractionCore *core() {return IAMDb::DrugDrugInteractionCore::instance();}
 
 static inline QString workingPath()         {return QDir::cleanPath(settings()->value(Core::Constants::S_TMP_PATH).toString() + "/Interactions/") + QDir::separator();}
 static inline QString databaseAbsPath()  {return QDir::cleanPath(settings()->value(Core::Constants::S_DBOUTPUT_PATH).toString() + Core::Constants::MASTER_DATABASE_FILENAME);}
@@ -341,233 +345,270 @@ bool InteractionStep::computeModelsAndPopulateDatabase()
     // add FreeDiams ATC specific codes
     Q_EMIT progressLabelChanged(tr("Creating interactions database (add specific ATC codes)"));
     iam.transaction();
-    QStringList molsWithoutAtc, molsClassWithoutWarnDuplicates;
-    QStringList afssapsClass, afssapsClassEn;
-    QMultiHash<QString, QString> molsToAtc;
-    QMultiHash<QString, QString> class_mols;
-    QString req;
+    QList<DrugInteractor *> interactors = core()->getDrugInteractors();
 
+//    QStringList molsWithoutAtc, molsClassWithoutWarnDuplicates;
+//    QStringList afssapsClass, afssapsClassEn;
+//    QMultiHash<QString, QString> molsToAtc;
+//    QMultiHash<QString, QString> class_mols;
+//    QString req;
+    // Add Interacting classes && molecules without ATC code
     {
-        // getting datas from models
-        AfssapsLinkerModel *molLinkModel = AfssapsLinkerModel::instance();
-        while (molLinkModel->canFetchMore(QModelIndex()))
-            molLinkModel->fetchMore(QModelIndex());
-        int nb = molLinkModel->rowCount();
-        for(int i = 0; i < nb; ++i) {
-            // get row informations
-            const QString &mol = molLinkModel->index(i, AfssapsLinkerModel::AfssapsName).data().toString();
-            if (mol.isEmpty())
-                continue;
-            const QString &molEn = molLinkModel->index(i, AfssapsLinkerModel::En_Label).data().toString();
-            const QString &links = molLinkModel->index(i, AfssapsLinkerModel::AtcCodes).data().toString();
-            const QString &type = molLinkModel->index(i, AfssapsLinkerModel::AffapsCategory).data().toString();
-            bool warnDuplicates = true;
-            if (molLinkModel->index(i, AfssapsLinkerModel::WarnDuplicates).data().toString()=="false")
-                warnDuplicates = false;
+        // 100 000 < ID < 199 999  == Interacting molecules without ATC code
+        // 200 000 < ID < 299 999  == Interactings classes
+        int molId = 100000;
+        int classId = 200000;
+        foreach(DrugInteractor *di, interactors) {
+            if (!di->data(DrugInteractor::ATCCodeStringList).toStringList().count()) {
+                // Create new ATC code for mols and/or interacting classes
+                QMultiHash<QString, QVariant> labels;
+                labels.insert("fr", di->data(DrugInteractor::FrLabel));
+                if (!di->data(DrugInteractor::EnLabel).isNull())
+                    labels.insert("en", di->data(DrugInteractor::EnLabel));
+                else
+                    labels.insert("en", di->data(DrugInteractor::FrLabel));
+                if (!di->data(DrugInteractor::DeLabel).isNull())
+                    labels.insert("de", di->data(DrugInteractor::DeLabel));
+                else
+                    labels.insert("de", di->data(DrugInteractor::FrLabel));
 
-            if (type=="class") {
-                afssapsClass << Core::Tools::noAccent(mol).toUpper();
-                afssapsClassEn << molEn;
-                if (!warnDuplicates)
-                    molsClassWithoutWarnDuplicates << Core::Tools::noAccent(mol).toUpper();
-            } else if (links.isEmpty()) {
-                molsWithoutAtc << mol.toUpper();
-                if (!warnDuplicates)
-                    molsClassWithoutWarnDuplicates << mol.toUpper();
-            } else {
-                foreach(const QString &atcCode, links.split(",", QString::SkipEmptyParts)) {
-                    molsToAtc.insertMulti(mol.toUpper(), atcCode.toUpper());
+                if (di->isClass()) {
+                    ++classId;
+                    QString n = QString::number(classId-200000);
+                    n = n.rightJustified(4, '0');
+                    if (!Core::Tools::createAtc(Core::Constants::MASTER_DATABASE_NAME, "ZXX" + n, labels, classId, !di->data(DrugInteractor::DoNotWarnDuplicated).toBool()))
+                        return false;
+                } else {
+                    ++molId;
+                    QString n = QString::number(molId-100000);
+                    n = n.rightJustified(2, '0');
+                    if (!Core::Tools::createAtc(Core::Constants::MASTER_DATABASE_NAME, "Z01AA" + n, labels, molId, !di->data(DrugInteractor::DoNotWarnDuplicated).toBool()))
+                        return false;
                 }
             }
         }
-        Q_EMIT progress(2);
-
-//        qWarning() << molsClassWithoutWarnDuplicates;
-//        qWarning();
-//        qWarning() << molsWithoutAtc;
-//        qWarning();
-//        qWarning() << afssapsClass;
-
-
-        // Add Interacting molecules without ATC code
-        // 100 000 < ID < 199 999  == Interacting molecules without ATC code
-        for (int i=0; i < molsWithoutAtc.count(); i++) {
-            QString n = QString::number(i+1);
-            if (i<9)
-                n.prepend("0");
-            QMultiHash<QString, QVariant> labels;
-            labels.insert("fr", molsWithoutAtc.at(i));
-            labels.insert("en", molsWithoutAtc.at(i));
-            labels.insert("de", molsWithoutAtc.at(i));
-            if (!Core::Tools::createAtc(Core::Constants::MASTER_DATABASE_NAME, "Z01AA" + n, labels, i+100000, !molsClassWithoutWarnDuplicates.contains(molsWithoutAtc.at(i).toUpper())))
-                return false;
-        }
-        Q_EMIT progress(3);
-
-        // Add classes
-        // 200 000 < ID < 299 999  == Interactings classes
-        for (int i=0; i < afssapsClass.count(); i++) {
-            QString n = QString::number(i+1);
-            n = n.rightJustified(4, '0');
-            QMultiHash<QString, QVariant> labels;
-            labels.insert("fr", afssapsClass.at(i));
-            labels.insert("en", afssapsClassEn.at(i));
-            labels.insert("de", afssapsClassEn.at(i));
-            if (!Core::Tools::createAtc(Core::Constants::MASTER_DATABASE_NAME, "ZXX" + n, labels, i+200000, !molsClassWithoutWarnDuplicates.contains(Core::Tools::noAccent(afssapsClass.at(i)).toUpper())))
-                return false;
-        }
-        Q_EMIT progress(4);
-
-        // Warn AFSSAPS molecules with multiples ATC
-        //        if (WarnTests) {
-        //            foreach(const QString &inn, innToAtc.uniqueKeys()) {
-        //                const QStringList &atc = innToAtc.values(inn);
-        //                if (atc.count() <= 1)
-        //                    continue;
-        //                qWarning() << inn << atc;
-        //            }
-        //        }
     }
+
+//        // getting datas from models
+//        AfssapsLinkerModel *molLinkModel = AfssapsLinkerModel::instance();
+//        while (molLinkModel->canFetchMore(QModelIndex()))
+//            molLinkModel->fetchMore(QModelIndex());
+//        int nb = molLinkModel->rowCount();
+//        for(int i = 0; i < nb; ++i) {
+//            // get row informations
+//            const QString &mol = molLinkModel->index(i, AfssapsLinkerModel::AfssapsName).data().toString();
+//            if (mol.isEmpty())
+//                continue;
+//            const QString &molEn = molLinkModel->index(i, AfssapsLinkerModel::En_Label).data().toString();
+//            const QString &links = molLinkModel->index(i, AfssapsLinkerModel::AtcCodes).data().toString();
+//            const QString &type = molLinkModel->index(i, AfssapsLinkerModel::AffapsCategory).data().toString();
+//            bool warnDuplicates = true;
+//            if (molLinkModel->index(i, AfssapsLinkerModel::WarnDuplicates).data().toString()=="false")
+//                warnDuplicates = false;
+
+//            if (type=="class") {
+//                afssapsClass << Core::Tools::noAccent(mol).toUpper();
+//                afssapsClassEn << molEn;
+//                if (!warnDuplicates)
+//                    molsClassWithoutWarnDuplicates << Core::Tools::noAccent(mol).toUpper();
+//            } else if (links.isEmpty()) {
+//                molsWithoutAtc << mol.toUpper();
+//                if (!warnDuplicates)
+//                    molsClassWithoutWarnDuplicates << mol.toUpper();
+//            } else {
+//                foreach(const QString &atcCode, links.split(",", QString::SkipEmptyParts)) {
+//                    molsToAtc.insertMulti(mol.toUpper(), atcCode.toUpper());
+//                }
+//            }
+//        }
+//        Q_EMIT progress(2);
+
+////        qWarning() << molsClassWithoutWarnDuplicates;
+////        qWarning();
+////        qWarning() << molsWithoutAtc;
+////        qWarning();
+////        qWarning() << afssapsClass;
+
+
+//        // Add Interacting molecules without ATC code
+//        // 100 000 < ID < 199 999  == Interacting molecules without ATC code
+//        for (int i=0; i < molsWithoutAtc.count(); i++) {
+//            QString n = QString::number(i+1);
+//            if (i<9)
+//                n.prepend("0");
+//            QMultiHash<QString, QVariant> labels;
+//            labels.insert("fr", molsWithoutAtc.at(i));
+//            labels.insert("en", molsWithoutAtc.at(i));
+//            labels.insert("de", molsWithoutAtc.at(i));
+//            if (!Core::Tools::createAtc(Core::Constants::MASTER_DATABASE_NAME, "Z01AA" + n, labels, i+100000, !molsClassWithoutWarnDuplicates.contains(molsWithoutAtc.at(i).toUpper())))
+//                return false;
+//        }
+//        Q_EMIT progress(3);
+
+//        // Add classes
+//        // 200 000 < ID < 299 999  == Interactings classes
+//        for (int i=0; i < afssapsClass.count(); i++) {
+//            QString n = QString::number(i+1);
+//            n = n.rightJustified(4, '0');
+//            QMultiHash<QString, QVariant> labels;
+//            labels.insert("fr", afssapsClass.at(i));
+//            labels.insert("en", afssapsClassEn.at(i));
+//            labels.insert("de", afssapsClassEn.at(i));
+//            if (!Core::Tools::createAtc(Core::Constants::MASTER_DATABASE_NAME, "ZXX" + n, labels, i+200000, !molsClassWithoutWarnDuplicates.contains(Core::Tools::noAccent(afssapsClass.at(i)).toUpper())))
+//                return false;
+//        }
+//        Q_EMIT progress(4);
+
+//        // Warn AFSSAPS molecules with multiples ATC
+//        //        if (WarnTests) {
+//        //            foreach(const QString &inn, innToAtc.uniqueKeys()) {
+//        //                const QStringList &atc = innToAtc.values(inn);
+//        //                if (atc.count() <= 1)
+//        //                    continue;
+//        //                qWarning() << inn << atc;
+//        //            }
+//        //        }
+//    }
 
     QMultiHash<QString, Source> class_sources;
     // Add interacting classes tree
-    Q_EMIT progressLabelChanged(tr("Creating interactions database (create IA.Classes tree)"));
+    Q_EMIT progressLabelChanged(tr("Creating interactions database (create DDI.Classes tree)"));
     {
-        // Prepare computation
-        req = "DELETE FROM IAM_TREE;";
-        Core::Tools::executeSqlQuery(req, Core::Constants::MASTER_DATABASE_NAME, __FILE__, __LINE__);
+//        // Prepare computation
+//        QString req = "DELETE FROM IAM_TREE;";
+//        Core::Tools::executeSqlQuery(req, Core::Constants::MASTER_DATABASE_NAME, __FILE__, __LINE__);
 
-        // retreive AFSSAPS class tree from model
-        AfssapsClassTreeModel *afssapsTreeModel = AfssapsClassTreeModel::instance();
-        while (afssapsTreeModel->canFetchMore(QModelIndex()))
-            afssapsTreeModel->fetchMore(QModelIndex());
-        int nb = afssapsTreeModel->rowCount();
-        for(int i = 0; i < nb; ++i) {
-            int j = 0;
-            // Get class name
-            QModelIndex parent = afssapsTreeModel->index(i, AfssapsClassTreeModel::Name);
-            // Get mols
-            while (afssapsTreeModel->hasIndex(j, 0, parent)) {
-                QModelIndex molIndex = afssapsTreeModel->index(j, AfssapsClassTreeModel::Name, parent);
-                const QString &mol = molIndex.data().toString();
-                class_mols.insertMulti(parent.data().toString(), mol);
-                ++j;
-                // catch source
-                if (afssapsTreeModel->hasIndex(0, 0, molIndex)) {
-                    for(int k = 0; k < afssapsTreeModel->rowCount(molIndex); ++k) {
-                        Source s;
-                        s.m_Link = afssapsTreeModel->index(k, AfssapsClassTreeModel::Name, molIndex).data().toString();
-                        s.m_TreeClass = Core::Tools::noAccent(parent.data().toString()).toUpper();
-                        s.m_Inn = Core::Tools::noAccent(mol).toUpper();
-                        if (s.m_Link.startsWith("http://www.ncbi.nlm.nih.gov/pubmed/")) {
-                            s.m_TypeOfLink = "pubmed";
-                        } else {
-                            s.m_TypeOfLink = "web";
-                        }
-                        class_sources.insertMulti(s.m_TreeClass, s);
-                    }
-                }
-            }
-        }
+//        // retreive AFSSAPS class tree from model
+//        AfssapsClassTreeModel *afssapsTreeModel = AfssapsClassTreeModel::instance();
+//        while (afssapsTreeModel->canFetchMore(QModelIndex()))
+//            afssapsTreeModel->fetchMore(QModelIndex());
+//        int nb = afssapsTreeModel->rowCount();
+//        for(int i = 0; i < nb; ++i) {
+//            int j = 0;
+//            // Get class name
+//            QModelIndex parent = afssapsTreeModel->index(i, AfssapsClassTreeModel::Name);
+//            // Get mols
+//            while (afssapsTreeModel->hasIndex(j, 0, parent)) {
+//                QModelIndex molIndex = afssapsTreeModel->index(j, AfssapsClassTreeModel::Name, parent);
+//                const QString &mol = molIndex.data().toString();
+//                class_mols.insertMulti(parent.data().toString(), mol);
+//                ++j;
+//                // catch source
+//                if (afssapsTreeModel->hasIndex(0, 0, molIndex)) {
+//                    for(int k = 0; k < afssapsTreeModel->rowCount(molIndex); ++k) {
+//                        Source s;
+//                        s.m_Link = afssapsTreeModel->index(k, AfssapsClassTreeModel::Name, molIndex).data().toString();
+//                        s.m_TreeClass = Core::Tools::noAccent(parent.data().toString()).toUpper();
+//                        s.m_Inn = Core::Tools::noAccent(mol).toUpper();
+//                        if (s.m_Link.startsWith("http://www.ncbi.nlm.nih.gov/pubmed/")) {
+//                            s.m_TypeOfLink = "pubmed";
+//                        } else {
+//                            s.m_TypeOfLink = "web";
+//                        }
+//                        class_sources.insertMulti(s.m_TreeClass, s);
+//                    }
+//                }
+//            }
+//        }
         Q_EMIT progress(5);
 
         qWarning() << "sources=" << class_sources.count() << class_sources.uniqueKeys().count();
 
         // Computation
-        Q_EMIT progressLabelChanged(tr("Creating interactions database (save IA.Classes tree)"));
-        QMultiHash<QString, QString> buggyIncludes;
-        foreach(const QString &iclass, afssapsClass) {
-            setClassTreeToDatabase(iclass, class_mols, molsToAtc, afssapsClass, molsWithoutAtc, class_sources, &buggyIncludes);
-        }
-        Q_EMIT progress(6);
-        afssapsTreeModel->addBuggyInclusions(buggyIncludes);
+        Q_EMIT progressLabelChanged(tr("Creating interactions database (save DDI.Classes tree)"));
+//        QMultiHash<QString, QString> buggyIncludes;
+//        foreach(const QString &iclass, afssapsClass) {
+//            setClassTreeToDatabase(iclass, class_mols, molsToAtc, afssapsClass, molsWithoutAtc, class_sources, &buggyIncludes);
+//        }
+//        Q_EMIT progress(6);
+//        afssapsTreeModel->addBuggyInclusions(buggyIncludes);
     }
 
 
     // Add interaction knowledges
-    Q_EMIT progressLabelChanged(tr("Creating interactions database (add IA knowledge)"));
-    {
-        // Prepare computation
-        req = "DELETE FROM INTERACTIONS";
-        Core::Tools::executeSqlQuery(req, Core::Constants::MASTER_DATABASE_NAME, __FILE__, __LINE__);
-        req = "DELETE FROM IAKNOWLEDGE";
-        Core::Tools::executeSqlQuery(req, Core::Constants::MASTER_DATABASE_NAME, __FILE__, __LINE__);
-        req = "DELETE FROM IA_IAK";
-        Core::Tools::executeSqlQuery(req, Core::Constants::MASTER_DATABASE_NAME, __FILE__, __LINE__);
+//    Q_EMIT progressLabelChanged(tr("Creating interactions database (add IA knowledge)"));
+//    {
+//        // Prepare computation
+//        req = "DELETE FROM INTERACTIONS";
+//        Core::Tools::executeSqlQuery(req, Core::Constants::MASTER_DATABASE_NAME, __FILE__, __LINE__);
+//        req = "DELETE FROM IAKNOWLEDGE";
+//        Core::Tools::executeSqlQuery(req, Core::Constants::MASTER_DATABASE_NAME, __FILE__, __LINE__);
+//        req = "DELETE FROM IA_IAK";
+//        Core::Tools::executeSqlQuery(req, Core::Constants::MASTER_DATABASE_NAME, __FILE__, __LINE__);
 
-        InteractionModel *interactionModel = InteractionModel::instance();
-        int nb = interactionModel->rowCount();
-        int interactionId = 0;
+//        InteractionModel *interactionModel = InteractionModel::instance();
+//        int nb = interactionModel->rowCount();
+//        int interactionId = 0;
 
-        for(int i = 0; i < nb; ++i) {
-            // get interactions row by row
-            int j = 1;
-            QModelIndex parent = interactionModel->index(i, InteractionModel::Name);
-            // get all ATC related to interactors
-            const QString &main = parent.data().toString();
-            QStringList mainCodes;
-            if (!molsToAtc.uniqueKeys().contains(main)) {
-                if (!afssapsClass.contains(main)) {
-                    if (!molsWithoutAtc.contains(main)) {
-                        LOG_ERROR(tr("Main Interactor not found: %1").arg(main));
-                    } else {
-                        int id = molsWithoutAtc.indexOf(main);
-                        QString n = QString::number(id+1);
-                        if (id<9)
-                            n.prepend("0");
-                        mainCodes.append("Z01AA" + n);
-                    }
-                } else {
-                    QString n = QString::number(afssapsClass.indexOf(main)+1);
-                    n = n.rightJustified(4, '0');
-                    mainCodes.append("ZXX"+n);
-                }
-            } else {
-                mainCodes.append(molsToAtc.values(main));
-            }
+//        for(int i = 0; i < nb; ++i) {
+//            // get interactions row by row
+//            int j = 1;
+//            QModelIndex parent = interactionModel->index(i, InteractionModel::Name);
+//            // get all ATC related to interactors
+//            const QString &main = parent.data().toString();
+//            QStringList mainCodes;
+//            if (!molsToAtc.uniqueKeys().contains(main)) {
+//                if (!afssapsClass.contains(main)) {
+//                    if (!molsWithoutAtc.contains(main)) {
+//                        LOG_ERROR(tr("Main Interactor not found: %1").arg(main));
+//                    } else {
+//                        int id = molsWithoutAtc.indexOf(main);
+//                        QString n = QString::number(id+1);
+//                        if (id<9)
+//                            n.prepend("0");
+//                        mainCodes.append("Z01AA" + n);
+//                    }
+//                } else {
+//                    QString n = QString::number(afssapsClass.indexOf(main)+1);
+//                    n = n.rightJustified(4, '0');
+//                    mainCodes.append("ZXX"+n);
+//                }
+//            } else {
+//                mainCodes.append(molsToAtc.values(main));
+//            }
 
-            //            qWarning() << "MAIN" << parent.data().toString();
+//            //            qWarning() << "MAIN" << parent.data().toString();
 
-            while (interactionModel->hasIndex(j, 0, parent)) {
-                QModelIndex childItem = interactionModel->index(j, InteractionModel::Name, parent);
-                const QString &child = childItem.data().toString();
-                //                qWarning() << "      " << child;
+//            while (interactionModel->hasIndex(j, 0, parent)) {
+//                QModelIndex childItem = interactionModel->index(j, InteractionModel::Name, parent);
+//                const QString &child = childItem.data().toString();
+//                //                qWarning() << "      " << child;
 
-                QStringList secondCodes;
-                if (!molsToAtc.uniqueKeys().contains(child)) {
-                    if (!afssapsClass.contains(child)) {
-                        if (!molsWithoutAtc.contains(child)) {
-                            LOG_ERROR(tr("Child Interactor not found: %1").arg(child));
-                        } else {
-                            int id = molsWithoutAtc.indexOf(child);
-                            QString n = QString::number(id+1);
-                            if (id<9)
-                                n.prepend("0");
-                            secondCodes.append("Z01AA" + n);
-                        }
-                    } else {
-                        QString n = QString::number(afssapsClass.indexOf(child)+1);
-                        n = n.rightJustified(4, '0');
-                        secondCodes.append("ZXX"+n);
-                    }
-                } else {
-                    secondCodes.append(molsToAtc.values(child));
-                }
+//                QStringList secondCodes;
+//                if (!molsToAtc.uniqueKeys().contains(child)) {
+//                    if (!afssapsClass.contains(child)) {
+//                        if (!molsWithoutAtc.contains(child)) {
+//                            LOG_ERROR(tr("Child Interactor not found: %1").arg(child));
+//                        } else {
+//                            int id = molsWithoutAtc.indexOf(child);
+//                            QString n = QString::number(id+1);
+//                            if (id<9)
+//                                n.prepend("0");
+//                            secondCodes.append("Z01AA" + n);
+//                        }
+//                    } else {
+//                        QString n = QString::number(afssapsClass.indexOf(child)+1);
+//                        n = n.rightJustified(4, '0');
+//                        secondCodes.append("ZXX"+n);
+//                    }
+//                } else {
+//                    secondCodes.append(molsToAtc.values(child));
+//                }
 
-                // Add IA to database
-                QMultiHash<QString, QVariant> risk;
-                QMultiHash<QString, QVariant> man;
-                risk.insert("fr", interactionModel->getRisk(childItem, "fr"));
-                risk.insert("en", interactionModel->getRisk(childItem, "en"));
-                man.insert("fr", interactionModel->getManagement(childItem, "fr"));
-                man.insert("en", interactionModel->getManagement(childItem, "en"));
-                Core::Tools::addInteraction(Core::Constants::MASTER_DATABASE_NAME, mainCodes, secondCodes, interactionModel->getLevel(childItem, "fr"), risk, man);
+//                // Add IA to database
+//                QMultiHash<QString, QVariant> risk;
+//                QMultiHash<QString, QVariant> man;
+//                risk.insert("fr", interactionModel->getRisk(childItem, "fr"));
+//                risk.insert("en", interactionModel->getRisk(childItem, "en"));
+//                man.insert("fr", interactionModel->getManagement(childItem, "fr"));
+//                man.insert("en", interactionModel->getManagement(childItem, "en"));
+//                Core::Tools::addInteraction(Core::Constants::MASTER_DATABASE_NAME, mainCodes, secondCodes, interactionModel->getLevel(childItem, "fr"), risk, man);
 
-                ++j;
-                ++interactionId;
-            }
-        }
-    }
+//                ++j;
+//                ++interactionId;
+//            }
+//        }
+//    }
     Q_EMIT progress(7);
 
     iam.commit();

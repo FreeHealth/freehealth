@@ -46,7 +46,7 @@ static const char *XML_URL       = "http://www.ncbi.nlm.nih.gov/pubmed/%1?dopt=x
 
 
 PubMedDownloader::PubMedDownloader(QObject *parent) :
-        QObject(parent), manager(0), m_DownloadingReferences(false)
+    QObject(parent), manager(0), m_DownloadingReferences(false), m_XmlOnly(false)
 {
     manager = new QNetworkAccessManager(this);
 //    QNetworkProxy prox(QNetworkProxy::HttpProxy, "chaisa1", 8080, "urg", "debut1");
@@ -89,8 +89,13 @@ void PubMedDownloader::startDownload()
     m_Reference.clear();
     m_Abstract.clear();
     manager->disconnect();
-    connect(manager, SIGNAL(finished(QNetworkReply*)), this, SLOT(referencesFinished(QNetworkReply*)));
-    manager->get(QNetworkRequest(QUrl(QString(REFERENCE_URL).arg(m_Pmid))));
+    if (m_XmlOnly) {
+        connect(manager, SIGNAL(finished(QNetworkReply*)), this, SLOT(xmlFinished(QNetworkReply*)));
+        manager->get(QNetworkRequest(QUrl(QString(XML_URL).arg(m_Pmid))));
+    } else {
+        connect(manager, SIGNAL(finished(QNetworkReply*)), this, SLOT(referencesFinished(QNetworkReply*)));
+        manager->get(QNetworkRequest(QUrl(QString(REFERENCE_URL).arg(m_Pmid))));
+    }
 }
 
 void PubMedDownloader::referencesFinished(QNetworkReply *reply)
