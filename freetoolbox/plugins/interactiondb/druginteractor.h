@@ -92,6 +92,7 @@ public:
 
     void addChildClassificationPMID(const QString &childId, const QString &pmid) {m_ChildClassifPMIDs.insertMulti(childId, pmid);}
     void addChildClassificationPMIDs(const QString &childId, const QStringList &pmids);
+    QStringList childClassificationPMIDs(const QString &childId) const;
 
     QStringList allNeededPMIDs() const;
 

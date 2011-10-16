@@ -59,6 +59,8 @@ public:
 
     void downloadPubMedData(const QStringList &pmids);
 
+    QString xml(const QString &pmid);
+
 private Q_SLOTS:
     void downloadNext();
 

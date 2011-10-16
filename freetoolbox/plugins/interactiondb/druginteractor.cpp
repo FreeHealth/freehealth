@@ -178,6 +178,12 @@ void DrugInteractor::addChildClassificationPMIDs(const QString &childId, const Q
         m_ChildClassifPMIDs.insertMulti(childId, pmid);
 }
 
+QStringList DrugInteractor::childClassificationPMIDs(const QString &childId) const
+{
+    return m_ChildClassifPMIDs.values(childId);
+}
+
+
 QStringList DrugInteractor::allNeededPMIDs() const
 {
     return m_ChildClassifPMIDs.values();

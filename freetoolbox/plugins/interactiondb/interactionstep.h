@@ -29,12 +29,16 @@
 #include <coreplugin/ifullreleasestep.h>
 #include <QStringList>
 #include <QVector>
+#include <QMultiMap>
+class QSqlDatabase;
 
 namespace Utils {
     class PubMedDownloader;
 }
 
 namespace IAMDb {
+class DrugInteractor;
+class DrugDrugInteraction;
 
 class InteractionStep : public Core::IFullReleaseStep
 {
@@ -52,7 +56,7 @@ public:
     bool computeModelsAndPopulateDatabase();
     QString processMessage() const {return tr("Drug-Drug Interactions database creation");}
 
-    bool postProcessDownload() {m_ActiveDownloadId = -1; downloadNextSource(); return true;}
+    bool postProcessDownload() {return true;} //{m_ActiveDownloadId = -1; downloadNextSource(); return true;}
 
     QStringList errors() const {return m_Errors;}
 
@@ -60,10 +64,16 @@ public Q_SLOTS:
     void downloadNextSource();
 
 private:
+    bool saveAtcClassification(const QList<DrugInteractor *> &interactor);
+    bool saveClassDrugInteractor(DrugInteractor *interactor, const QList<DrugInteractor *> &completeList, QSqlDatabase &db, DrugInteractor *parent = 0);
+    bool saveDrugDrugInteractions(const QList<DrugInteractor *> &interactor, const QList<DrugDrugInteraction *> ddis);
+    bool saveBibliographicReferences();
+
+private:
     QStringList m_Errors;
     bool m_UseProgressDialog;
-    int m_ActiveDownloadId;
-    QVector<int> m_SourceToDownload;
+    QMultiMap<int, QString> m_iamTreePmids; //K=IAM_ID  ;  V=PMIDs
+    QMultiMap<int, QString> m_ddiPmids;     //K=IAK_ID  ;  V=PMIDs
     Utils::PubMedDownloader *m_Downloader;
 };
 

@@ -73,3 +73,7 @@ void BiblioCore::downloadNext()
     m_dld->startDownload();
 }
 
+QString BiblioCore::xml(const QString &pmid)
+{
+    return m_Base->getXmlForPMID(pmid);
+}

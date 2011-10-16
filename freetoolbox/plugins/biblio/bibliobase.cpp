@@ -167,3 +167,24 @@ void BiblioBase::save(const QString &pmid, const QString &xml)
         LOG_QUERY_ERROR(query);
     }
 }
+
+QString BiblioBase::getXmlForPMID(const QString &pmid)
+{
+    if (!database().isOpen()) {
+        if (!database().open()) {
+            LOG_ERROR(tkTr(Trans::Constants::UNABLE_TO_OPEN_DATABASE_1_ERROR_2)
+                      .arg(database().connectionName()).arg(database().lastError().text()));
+            return false;
+        }
+    }
+    QHash<int, QString> where;
+    where.insert(BIB_PMID, QString("='%1'").arg(pmid));
+    QSqlQuery query(database());
+    if (query.exec(select(Table_BIB, BIB_XML, where))) {
+        if (query.next())
+            return query.value(0).toString();
+    } else {
+        LOG_QUERY_ERROR(query);
+    }
+    return QString();
+}

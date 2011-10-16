@@ -41,6 +41,7 @@ public:
 
     bool hasPmid(const QString &pmid);
     void save(const QString &pmid, const QString &xml);
+    QString getXmlForPMID(const QString &pmid);
 
 private:
     bool createDatabase(const QString &connectionName, const QString &dbName,

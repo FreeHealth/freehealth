@@ -333,4 +333,5 @@ INSERT INTO DB_SCHEMA_VERSION VALUES (NULL,"0.5.5","2011-01-10","Interactions: T
 INSERT INTO DB_SCHEMA_VERSION VALUES (NULL,"0.6.0","2011-04-21","Interactions: Adding duplication warnings for all ATC including interacting classes");
 INSERT INTO DB_SCHEMA_VERSION VALUES (NULL,"0.6.0","2011-04-22","Interactions: Starting implementation of DDI formalized risks");
 INSERT INTO DB_SCHEMA_VERSION VALUES (NULL,"0.6.0","2011-09-27","Biblio: adding XML formatted bibliography from pubmed");
+INSERT INTO DB_SCHEMA_VERSION VALUES (NULL,"0.6.0","2011-10-14","Interactions: adding primkey to IAM_TREE");
 
