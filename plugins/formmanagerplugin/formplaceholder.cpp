@@ -137,20 +137,23 @@ public:
         QScrollArea *sa = new QScrollArea(m_Stack->parentWidget());
         sa->setWidgetResizable(true);
         QWidget *w = new QWidget(sa);
-        QPalette palette = w->palette();
-        QString gender = patient()->data(Core::IPatient::Gender).toString();
-        if (gender=="M")
-            palette.setColor(QPalette::Background, Patients::Constants::maleColor.lighter(140));
-        else if (gender=="F")
-            palette.setColor(QPalette::Background, Patients::Constants::femaleColor.lighter(140));
-        else
-            palette.setColor(QPalette::Background, Patients::Constants::hermaColor.lighter());
-        w->setPalette(palette);
+//        QPalette palette = w->palette();
+//        QString gender = patient()->data(Core::IPatient::Gender).toString();
+//        if (gender=="M")
+//            palette.setColor(QPalette::Background, Patients::Constants::maleColor.lighter(140));
+//        else if (gender=="F")
+//            palette.setColor(QPalette::Background, Patients::Constants::femaleColor.lighter(140));
+//        else
+//            palette.setColor(QPalette::Background, Patients::Constants::hermaColor.lighter());
+//        w->setPalette(palette);
         sa->setWidget(w);
         QVBoxLayout *vl = new QVBoxLayout(w);
         vl->setSpacing(0);
         vl->setMargin(0);
-        vl->addWidget(new QLabel(w));
+        QTextBrowser *t = new QTextBrowser(w);
+        t->setReadOnly(true);
+        t->setEnabled(true);
+        vl->addWidget(t);
         int id = m_Stack->addWidget(sa);
         m_StackId_FormUuid.insert(id, Constants::PATIENTLASTEPISODES_UUID);
 
@@ -496,10 +499,10 @@ void FormPlaceHolder::setCurrentForm(const QString &formUuid)
 {
     d->m_Stack->setCurrentIndex(d->m_StackId_FormUuid.key(formUuid));
     if (d->m_Stack->currentWidget()) {
-        qobject_cast<QScrollArea*>(d->m_Stack->currentWidget())->widget()->setEnabled(false);
+//        qobject_cast<QScrollArea*>(d->m_Stack->currentWidget())->widget()->setEnabled(false);
         if (formUuid==Constants::PATIENTLASTEPISODES_UUID) {
-            QLabel *label = d->m_Stack->currentWidget()->findChild<QLabel*>();
-            label->setText(d->m_EpisodeModel->lastEpisodesSynthesis());
+            QTextBrowser *browser = d->m_Stack->currentWidget()->findChild<QTextBrowser*>();
+            browser->setText(d->m_EpisodeModel->lastEpisodesSynthesis());
         }
     }
 }
