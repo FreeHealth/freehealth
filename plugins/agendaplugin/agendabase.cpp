@@ -475,6 +475,25 @@ void AgendaBase::onCoreDatabaseServerChanged()
     initialize();
 }
 
+/** Return true if the user \e userUid has recorded calendar(s) in the database. */
+bool AgendaBase::hasCalendar(const QString &userUuid)
+{
+    if (!connectDatabase(Constants::DB_NAME, __LINE__))
+        return false;
+    QString uid = userUuid;
+    if (uid.isEmpty())
+        uid = user()->uuid();
+    Utils::Field get(Constants::Table_CALENDAR, Constants::CAL_ID);
+    Utils::Join join(Constants::Table_CALENDAR, Constants::USERCAL_USER_UUID, Constants::Table_CALENDAR, Constants::CAL_ID);
+    Utils::Field cond(Constants::Table_USERCALENDARS, Constants::USERCAL_USER_UUID, QString("='%1'").arg(uid));
+    QSqlQuery query(database());
+    if (query.exec(select(get, join, cond))) {
+        if (query.next())
+            return true;
+    }
+    return false;
+}
+
 /** Retreive all calendars of the user (own calendars and delegated ones) defined by its uuid \e userUuid. If the \e userUuid is empty, retrieve all calendars of the currently connected user. */
 QList<Agenda::UserCalendar *> AgendaBase::getUserCalendars(const QString &userUuid)
 {

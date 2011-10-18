@@ -40,7 +40,7 @@
  * \file agendabase.h
  * \author Eric MAEKER <eric.maeker@gmail.com>
  * \version 0.6.0
- * \date 10 Jul 2011
+ * \date 18 Oct 2011
 */
 
 namespace Agenda {
@@ -136,6 +136,7 @@ private Q_SLOTS:
     void onCoreDatabaseServerChanged();
 
 public:
+    bool hasCalendar(const QString &userUuid = QString::null);
     QList<Agenda::UserCalendar *> getUserCalendars(const QString &userUuid = QString::null);
     bool saveUserCalendar(Agenda::UserCalendar *calendar);
 
