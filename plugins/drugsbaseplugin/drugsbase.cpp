@@ -1944,7 +1944,7 @@ QVector<MedicalUtils::EbmData *> DrugsBase::getAllBibliographyFromTree(const QLi
         if (id >= 200000)
             classIds << QString::number(id);
         else
-            innIds <<QString::number(id);
+            innIds << QString::number(id);
     }
 
     // get all source_link
@@ -1956,6 +1956,9 @@ QVector<MedicalUtils::EbmData *> DrugsBase::getAllBibliographyFromTree(const QLi
     where << Utils::Field(Constants::Table_IAM_TREE, Constants::IAM_TREE_ID_CLASS, QString("IN (%1)").arg(classIds.join(",")));
 
     QString req = select(Constants::Table_BIB, join, where);
+
+    qWarning() << req;
+
     QStringList links;
     QSqlQuery query(req, QSqlDatabase::database(Constants::DB_DRUGS_NAME));
     if (query.isActive()) {
@@ -1966,14 +1969,13 @@ QVector<MedicalUtils::EbmData *> DrugsBase::getAllBibliographyFromTree(const QLi
             MedicalUtils::EbmData *ebm = new MedicalUtils::EbmData;
             ebm->setId(query.value(Constants::BIB_BIBID));
             ebm->setLink(query.value(Constants::BIB_LINK).toString());
-            ebm->setReferences(query.value(Constants::BIB_TEXTREF).toString());
-            ebm->setAbstract(query.value(Constants::BIB_ABSTRACT).toString());
+//            ebm->setReferences(query.value(Constants::BIB_TEXTREF).toString());
+//            ebm->setAbstract(query.value(Constants::BIB_ABSTRACT).toString());
             ebm->setPubMedXml(query.value(Constants::BIB_XML).toString());
             ret << ebm;
         }
     } else {
         LOG_QUERY_ERROR(query);
     }
-
     return ret;
 }

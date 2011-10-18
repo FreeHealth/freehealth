@@ -555,6 +555,9 @@ bool DrugsIO::isSendingDosage()
 bool DrugsIO::prescriptionFromXml(DrugsDB::DrugsModel *m, const QString &xmlContent, Loader loader)
 {
     Q_ASSERT(m);
+    if (xmlContent.isEmpty())
+        return false;
+
     QString xml = xmlContent;
 
     QTime time;

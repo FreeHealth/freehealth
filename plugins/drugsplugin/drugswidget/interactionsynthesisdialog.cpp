@@ -102,7 +102,7 @@ public:
     QStandardItemModel *m_InteractionModel, *m_InteractionQueryModel;
     DrugsDB::DrugInteractionResult *m_InteractionResult;
     QToolButton *close, *report, *print, *help;
-    MedicalUtils::EbmModel *m_EbmModel;
+    MedicalUtils::EbmModel *m_TreeEbmModel, *m_DdiEbmModel;
 };
 }
 }
@@ -194,12 +194,18 @@ InteractionSynthesisDialog::InteractionSynthesisDialog(DrugsDB::DrugsModel *drug
     d->ui->tabWidget->setCurrentWidget(d->ui->tabInfo);
 
     // Create EBM view/model management
-    d->m_EbmModel = new MedicalUtils::EbmModel(this);
-    d->ui->biblioReferences->setModel(d->m_EbmModel);
-    d->ui->biblioReferences->setModelColumn(MedicalUtils::EbmModel::ShortReferences);
-    d->ui->biblioReferences->setAlternatingRowColors(true);
+    d->m_TreeEbmModel = new MedicalUtils::EbmModel(this);
+    d->ui->treeReferences->setModel(d->m_TreeEbmModel);
+    d->ui->treeReferences->setModelColumn(MedicalUtils::EbmModel::ShortReferences);
+    d->ui->treeReferences->setAlternatingRowColors(true);
+    connect(d->ui->treeReferences, SIGNAL(activated(QModelIndex)), this, SLOT(showEbm(QModelIndex)));
+
+    d->m_DdiEbmModel = new MedicalUtils::EbmModel(this);
+    d->ui->ddiReferences->setModel(d->m_DdiEbmModel);
+    d->ui->ddiReferences->setModelColumn(MedicalUtils::EbmModel::ShortReferences);
+    d->ui->ddiReferences->setAlternatingRowColors(true);
+    connect(d->ui->ddiReferences, SIGNAL(activated(QModelIndex)), this, SLOT(showEbm(QModelIndex)));
     d->ui->biblio->setReadOnly(true);
-    connect(d->ui->biblioReferences, SIGNAL(activated(QModelIndex)), this, SLOT(showEbm(QModelIndex)));
 
     connect(d->ui->interactionResultView->selectionModel(), SIGNAL(currentChanged(QModelIndex,QModelIndex)), this, SLOT(interactionActivated(QModelIndex,QModelIndex)));
 }
@@ -229,7 +235,8 @@ void InteractionSynthesisDialog::interactionActivated(const QModelIndex &current
     d->ui->riskBrowser->clear();
     d->ui->managementBrowser->clear();
     d->ui->biblio->clear();
-    d->m_EbmModel->clear();
+    d->m_TreeEbmModel->clear();
+    d->m_DdiEbmModel->clear();
 
     DrugsDB::IDrugInteraction *interaction = d->m_InteractionResult->interactions().at(id);
     d->ui->riskBrowser->setPlainText(interaction->risk().replace("<br />","\n").replace("<br>","\n"));
@@ -246,15 +253,16 @@ void InteractionSynthesisDialog::on_getBiblio_clicked()
     if (!d->m_InteractionModel || !d->m_InteractionResult)
         return;
 
+    // Get the related DrugInteraction
     const int id = d->m_InteractionModel->itemFromIndex(d->ui->interactionResultView->selectionModel()->currentIndex())->data(Qt::UserRole).toInt();
     if (id==-1)
         return;
     if (id >= d->m_InteractionResult->interactions().count())
         return;
-
     d->ui->getBiblio->setEnabled(false);
     DrugsDB::IDrugInteraction *interaction = d->m_InteractionResult->interactions().at(id);
 
+    // Populate models with EbmData
     bool show = false;
     if (d->m_Biblio.values(interaction).count()==0) {
         foreach(const DrugsDB::IDrug *drug, interaction->drugs()) {
@@ -265,34 +273,12 @@ void InteractionSynthesisDialog::on_getBiblio_clicked()
             }
         }
     }
-    d->m_EbmModel->setEbmData(d->m_Biblio.values(interaction).toVector());
-
-//    QString reftable = "<table width=100% border=1>";
-//    QString bibtable = "<table width=100% border=1>";
-//    if (d->m_Biblio.values(interaction).count()==0) {
-//        reftable += QString("<tr><td>%1</td></tr>").arg(tr("No bibliography available"));
-//        bibtable += QString("<tr><td>%1</td></tr>").arg(tr("No bibliography available"));
-//    } else {
-//        foreach(MedicalUtils::EbmData *data, d->m_Biblio.values(interaction)) {
-//            show = true;
-//            QString link = data->link();
-//            link.replace("http://www.ncbi.nlm.nih.gov/pubmed/", "PMID ");
-//            reftable += QString("<tr><td width=70%>%1</td><td width=30%>%2</td></tr>")
-//                        .arg(data->references())
-//                        .arg(link);
-//            bibtable += QString("<tr><td>%1</td></tr>")
-//                        .arg(data->abstract());
-//        }
-//    }
-//    reftable += "</table>";
-//    bibtable += "</table>";
-//    d->ui->biblio->setHtml(bibtable.replace("\n","<br />"));
-//    d->ui->biblioReferences->setHtml(reftable.replace("\n","<br />"));
+    d->m_TreeEbmModel->setEbmData(d->m_Biblio.values(interaction).toVector());
 }
 
 void InteractionSynthesisDialog::showEbm(const QModelIndex &index)
 {
-    d->ui->biblio->setHtml(d->m_EbmModel->index(index.row(), MedicalUtils::EbmModel::Abstract).data().toString().replace("\n","<br />"));
+    d->ui->biblio->setHtml(d->m_TreeEbmModel->index(index.row(), MedicalUtils::EbmModel::AbstractWithReferencesHtml).data().toString());
 }
 
 void InteractionSynthesisDialog::print(QAction *action)
