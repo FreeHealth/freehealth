@@ -57,6 +57,9 @@
 #include <QSqlTableModel>
 #include <QSqlDatabase>
 #include <QSqlQuery>
+#include <QFutureWatcher>
+#include <QFuture>
+#include <QtConcurrentRun>
 
 enum { base64MimeDatas = true  };
 
@@ -65,14 +68,16 @@ enum {
     WarnDragAndDrop = false,
     WarnReparentItem = false,
     WarnDatabaseSaving = false,
-    WarnFormAndEpisodeRetreiving = false
+    WarnFormAndEpisodeRetreiving = false,
+    WarnLogChronos = true
    };
 #else
 enum {
     WarnDragAndDrop = false,
     WarnReparentItem = false,
     WarnDatabaseSaving = false,
-    WarnFormAndEpisodeRetreiving = false
+    WarnFormAndEpisodeRetreiving = false,
+    WarnLogChronos = false
    };
 #endif
 
@@ -335,6 +340,7 @@ public:
         m_CoreListener(0),
         m_PatientListener(0),
         m_AddLastEpisodeIndex(true),
+        m_RecomputeLastEpisodeSynthesis(true),
         q(parent)
     {
     }
@@ -417,6 +423,10 @@ public:
     /** Clear the EpisodeModelTreeItems of episode and repopulate with freshly extracted episodes from database */
     void refreshEpisodes()
     {
+        QTime chrono;
+        if (WarnLogChronos)
+            chrono.start();
+
         // make sure that all actual episodes are saved into database
         if (!saveEpisode(m_ActualEpisode, m_ActualEpisode_FormUid))
             LOG_ERROR_FOR(q, "Unable to save actual episode");
@@ -464,6 +474,8 @@ public:
 
             m_EpisodeItems.insert(episode, item);
         }
+        if (WarnLogChronos)
+            Utils::Log::logTimeElapsed(chrono, q->objectName(), "refreshEpisodes()");
     }
 
     EpisodeModelTreeItem *getItem(const QModelIndex &index) const
@@ -574,6 +586,10 @@ public:
 
     void feedFormWithEpisodeContent(Form::FormMain *form, EpisodeData *episode, bool feedPatientModel = false)
     {
+        QTime chrono;
+        if (WarnLogChronos)
+            chrono.start();
+
         getEpisodeContent(episode);
         const QString &xml = episode->data(EpisodeData::XmlContent).toString();
         if (xml.isEmpty()) {
@@ -617,15 +633,26 @@ public:
             it->itemDatas()->setStorableData(datas.value(it->uuid()));
             if (feedPatientModel) {
 //                qWarning() << "Feeding patientModel data with" << it->patientDataRepresentation() << it->itemDatas()->data(it->patientDataRepresentation(), IFormItemData::ID_ForPatientModel);
-                patient()->setValue(it->patientDataRepresentation(), it->itemDatas()->data(it->patientDataRepresentation(), IFormItemData::ID_ForPatientModel));
+                if (it->patientDataRepresentation() >= 0) {
+                    if (WarnLogChronos)
+                        Utils::Log::logTimeElapsed(chrono, q->objectName(), "feedFormWithEpisodeContent: feed patient model: " + it->uuid());
+                    patient()->setValue(it->patientDataRepresentation(), it->itemDatas()->data(it->patientDataRepresentation(), IFormItemData::ID_ForPatientModel));
+                }
             }
         }
+        if (WarnLogChronos)
+            Utils::Log::logTimeElapsed(chrono, q->objectName(), "feedFormWithEpisodeContent");
+
     }
 
     void getLastEpisodes(bool andFeedPatientModel = true)
     {
         if (patient()->uuid().isEmpty())
             return;
+
+        QTime chrono;
+        if (WarnLogChronos)
+            chrono.start();
 
         foreach(Form::FormMain *form, m_FormItems.keys()) {
 //            if (andFeedPatientModel) {
@@ -668,8 +695,9 @@ public:
             if (lastOne) {
                 feedFormWithEpisodeContent(form, lastOne, andFeedPatientModel);
             }
-
         }
+        if (WarnLogChronos)
+            Utils::Log::logTimeElapsed(chrono, q->objectName(), "getLastEpisodes");
     }
 
 public:
@@ -690,7 +718,9 @@ public:
     EpisodeModelCoreListener *m_CoreListener;
     EpisodeModelPatientListener *m_PatientListener;
 
-    bool m_AddLastEpisodeIndex;
+    bool m_AddLastEpisodeIndex, m_RecomputeLastEpisodeSynthesis;
+
+//    QFutureWatcher<void> *m_GetLastEpisodeWatcher;
 
 private:
     EpisodeModel *q;
@@ -715,6 +745,10 @@ EpisodeModel::EpisodeModel(FormMain *rootEmptyForm, QObject *parent) :
     //    Patient change listener
     d->m_PatientListener = new Internal::EpisodeModelPatientListener(this);
     pluginManager()->addObject(d->m_PatientListener);
+
+    // concurrent programming
+//    d->m_GetLastEpisodeWatcher = new QFutureWatcher<void>;
+//    connect(d->m_GetLastEpisodeWatcher, SIGNAL(finished()), this, SLOT(lastEpisodeRetreived()));
 
     init();
 }
@@ -786,9 +820,17 @@ void EpisodeModel::onUserChanged()
 void EpisodeModel::onPatientChanged()
 {
     d->m_CurrentPatient = patient()->uuid();
-
     d->refreshEpisodes();
+    // trying multithread
+//    if (d->m_GetLastEpisodeWatcher->isRunning()) {
+//        d->m_GetLastEpisodeWatcher->cancel();
+//    }
+    // Start the computation.
+//    QFuture<int> future = QtConcurrent::run(getLastEpisodes, true);
+//    d->m_GetLastEpisodeWatcher->setFuture(future);
+
     d->getLastEpisodes(true);
+    d->m_RecomputeLastEpisodeSynthesis = false;
     reset();
 }
 
@@ -1213,6 +1255,8 @@ bool EpisodeModel::activateEpisode(const QModelIndex &index, const QString &form
         LOG_ERROR("Unable to save actual episode before editing a new one");
     }
 
+    d->m_RecomputeLastEpisodeSynthesis = true;
+
     if (!index.isValid()) {
         d->m_ActualEpisode = 0;
         return false;
@@ -1292,14 +1336,17 @@ bool EpisodeModel::saveEpisode(const QModelIndex &index, const QString &formUid)
 /** Return the HTML formatted synthesis of all the last recorded episodes for each forms in the model. */
 QString EpisodeModel::lastEpisodesSynthesis() const
 {
-    // submit actual episode
-    if (!d->saveEpisode(d->m_ActualEpisode, d->m_ActualEpisode_FormUid)) {
-        LOG_ERROR("Unable to save actual episode before editing a new one");
-    }
-    d->m_ActualEpisode = 0;
-    d->m_ActualEpisode_FormUid.clear();
+    if (d->m_RecomputeLastEpisodeSynthesis) {
+        // submit actual episode
+        if (!d->saveEpisode(d->m_ActualEpisode, d->m_ActualEpisode_FormUid)) {
+            LOG_ERROR("Unable to save actual episode before editing a new one");
+        }
+        d->m_ActualEpisode = 0;
+        d->m_ActualEpisode_FormUid.clear();
 
-    d->getLastEpisodes(false);
+        d->getLastEpisodes(false);
+    }
+
     QString html;
     foreach(FormMain *f, d->m_RootForm->firstLevelFormMainChildren()) {
         if (!f) {
