@@ -27,6 +27,8 @@
 
 #include <formmanagerplugin/iformitem.h>
 
+#include <utils/log.h>
+
 using namespace BaseWidgets;
 
 inline static QStringList getOptions(Form::FormItem *item)
@@ -175,6 +177,7 @@ TextEditorData::~TextEditorData()
 
 void TextEditorData::clear()
 {
+    WARN_FUNC;
     setStorableData(m_FormItem->valueReferences()->defaultValue());
 }
 
@@ -197,8 +200,6 @@ QVariant TextEditorData::data(const int ref, const int role) const
 void TextEditorData::setStorableData(const QVariant &data)
 {
 //    qWarning() << "TextEditorData::setStorableData" << data;
-    if (!data.isValid()) 
-        return;
     if (data.isNull() || (data.toString().size()==1 && data.toString() == "0")) {
         m_OriginalValue.clear();
         m_Editor->textEdit()->clear();

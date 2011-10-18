@@ -529,7 +529,7 @@ void FormMain::languageChanged()
 
 void FormMain::clear()
 {
-    foreach(FormItem *it, this->formItemChildren()) {
+    foreach(FormItem *it, this->flattenFormItemChildren()) {
         if (it->itemDatas())
             it->itemDatas()->clear();
     }
