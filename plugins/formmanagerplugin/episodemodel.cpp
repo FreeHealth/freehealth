@@ -362,9 +362,6 @@ public:
         if (m_RootItem) {
             delete m_RootItem;
             m_RootItem = 0;
-        }
-        if (m_ShowLastEpisodes) {
-            delete m_ShowLastEpisodes;
             m_ShowLastEpisodes = 0;
         }
 
