@@ -69,7 +69,7 @@ enum {
     WarnReparentItem = false,
     WarnDatabaseSaving = false,
     WarnFormAndEpisodeRetreiving = false,
-    WarnLogChronos = true
+    WarnLogChronos = false
    };
 #else
 enum {
@@ -1333,6 +1333,10 @@ bool EpisodeModel::saveEpisode(const QModelIndex &index, const QString &formUid)
 /** Return the HTML formatted synthesis of all the last recorded episodes for each forms in the model. */
 QString EpisodeModel::lastEpisodesSynthesis() const
 {
+    QTime chrono;
+    if (WarnLogChronos)
+        chrono.start();
+
     if (d->m_RecomputeLastEpisodeSynthesis) {
         // submit actual episode
         if (!d->saveEpisode(d->m_ActualEpisode, d->m_ActualEpisode_FormUid)) {
@@ -1343,6 +1347,8 @@ QString EpisodeModel::lastEpisodesSynthesis() const
 
         d->getLastEpisodes(false);
     }
+    if (WarnLogChronos)
+        Utils::Log::logTimeElapsed(chrono, objectName(), "Compute last episode Part 1");
 
     QString html;
     foreach(FormMain *f, d->m_RootForm->firstLevelFormMainChildren()) {
@@ -1352,6 +1358,10 @@ QString EpisodeModel::lastEpisodesSynthesis() const
         }
         html += f->printableHtml();
     }
+
+    if (WarnLogChronos)
+        Utils::Log::logTimeElapsed(chrono, objectName(), "Compute last episode Part 2 (getting html code)");
+
     return html;
 }
 
