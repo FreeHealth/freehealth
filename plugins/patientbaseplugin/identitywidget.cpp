@@ -193,9 +193,6 @@ void IdentityWidget::setCurrentIndex(const QModelIndex &patientIndex)
         d->viewUi->fullAdress1->clear();
         d->viewUi->fullAdress2->clear();
         QString name = d->m_PatientModel->index(patientIndex.row(), Core::IPatient::FullName).data().toString();
-        const QString &title = d->m_PatientModel->index(patientIndex.row(), Core::IPatient::Title).data().toString();
-        if (!title.isEmpty())
-            name.prepend(title + " ");
         d->viewUi->name->setText(name);
         d->viewUi->photoLabel->setPixmap(photo);
         const QString &age = d->m_PatientModel->index(patientIndex.row(), Core::IPatient::Age).data().toString();

@@ -398,14 +398,14 @@ QVariant PatientModel::data(const QModelIndex &index, int role) const
         case IPatient::Title:
             {
                 col = Constants::IDENTITY_TITLE;
-                int t = d->m_SqlPatient->data(d->m_SqlPatient->index(index.row(), col)).toInt();
-                switch (t) {
-                case Trans::Constants::Mister:    return tkTr(Trans::Constants::MISTER);
-                case Trans::Constants::Miss :     return tkTr(Trans::Constants::MISS);
-                case Trans::Constants::Madam :    return tkTr(Trans::Constants::MADAM);
-                case Trans::Constants::Doctor :   return tkTr(Trans::Constants::DOCTOR);
-                case Trans::Constants::Professor: return tkTr(Trans::Constants::PROFESSOR);
-                case Trans::Constants::Captain :  return tkTr(Trans::Constants::CAPTAIN);
+                int titleIndex = d->m_SqlPatient->data(d->m_SqlPatient->index(index.row(), col)).toInt();
+                switch (titleIndex) {
+                case Trans::Constants::Mister:    return tkTr(Trans::Constants::MISTER); break;
+                case Trans::Constants::Miss :     return tkTr(Trans::Constants::MISS); break;
+                case Trans::Constants::Madam :    return tkTr(Trans::Constants::MADAM); break;
+                case Trans::Constants::Doctor :   return tkTr(Trans::Constants::DOCTOR); break;
+                case Trans::Constants::Professor: return tkTr(Trans::Constants::PROFESSOR); break;
+                case Trans::Constants::Captain :  return tkTr(Trans::Constants::CAPTAIN); break;
                 default :       return QString();
                 }
                 return QString();
@@ -417,14 +417,14 @@ QVariant PatientModel::data(const QModelIndex &index, int role) const
                 const QString &sur = d->m_SqlPatient->data(d->m_SqlPatient->index(index.row(), Constants::IDENTITY_FIRSTNAME)).toString();
                 QString title;
                 // add title
-                int t = d->m_SqlPatient->data(d->m_SqlPatient->index(index.row(), Constants::IDENTITY_TITLE)).toInt();
-                switch (t) {
-                case Trans::Constants::Mister:    title = tkTr(Trans::Constants::MISTER);
-                case Trans::Constants::Miss :     title = tkTr(Trans::Constants::MISS);
-                case Trans::Constants::Madam :    title = tkTr(Trans::Constants::MADAM);
-                case Trans::Constants::Doctor :   title = tkTr(Trans::Constants::DOCTOR);
-                case Trans::Constants::Professor: title = tkTr(Trans::Constants::PROFESSOR);
-                case Trans::Constants::Captain :  title = tkTr(Trans::Constants::CAPTAIN);
+                int titleIndex = d->m_SqlPatient->data(d->m_SqlPatient->index(index.row(), Constants::IDENTITY_TITLE)).toInt();
+                switch (titleIndex) {
+                case Trans::Constants::Mister:    title = tkTr(Trans::Constants::MISTER); break;
+                case Trans::Constants::Miss :     title = tkTr(Trans::Constants::MISS); break;
+                case Trans::Constants::Madam :    title = tkTr(Trans::Constants::MADAM); break;
+                case Trans::Constants::Doctor :   title = tkTr(Trans::Constants::DOCTOR); break;
+                case Trans::Constants::Professor: title = tkTr(Trans::Constants::PROFESSOR); break;
+                case Trans::Constants::Captain :  title = tkTr(Trans::Constants::CAPTAIN); break;
                 }
                 if (!title.isEmpty())
                     title.append(" ");
@@ -587,6 +587,8 @@ bool PatientModel::setData(const QModelIndex &index, const QVariant &value, int 
                     Q_EMIT dataChanged(index, index);
                     QModelIndex idx = this->index(index.row(), Core::IPatient::TitleIndex, index.parent());
                     Q_EMIT dataChanged(idx, idx);
+                    idx = this->index(index.row(), Core::IPatient::FullName, index.parent());
+                    Q_EMIT dataChanged(idx, idx);
                     return true;
                 }
             }
@@ -600,6 +602,7 @@ bool PatientModel::setData(const QModelIndex &index, const QVariant &value, int 
                 return true;
             }
         }
+
         if (col != -1) {
             bool ok = d->m_SqlPatient->setData(d->m_SqlPatient->index(index.row(), col), value, role);
             if (!ok)
@@ -644,15 +647,15 @@ bool PatientModel::setData(const QModelIndex &index, const QVariant &value, int 
                 Q_EMIT dataChanged(idx, idx);
                 break;
             }
-            case IPatient::GenderIndex:
-            case IPatient::Gender:
-            {
-                QModelIndex idx = this->index(index.row(), Core::IPatient::IconizedGender, index.parent());
-                Q_EMIT dataChanged(idx, idx);
-                idx = this->index(index.row(), Core::IPatient::GenderPixmap, index.parent());
-                Q_EMIT dataChanged(idx, idx);
-                break;
-            }
+//            case IPatient::GenderIndex:
+//            case IPatient::Gender:
+//            {
+//                QModelIndex idx = this->index(index.row(), Core::IPatient::IconizedGender, index.parent());
+//                Q_EMIT dataChanged(idx, idx);
+//                idx = this->index(index.row(), Core::IPatient::GenderPixmap, index.parent());
+//                Q_EMIT dataChanged(idx, idx);
+//                break;
+//            }
             } // end switch
             return ok;
         }

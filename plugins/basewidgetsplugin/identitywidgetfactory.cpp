@@ -178,9 +178,8 @@ void IdentityFormWidget::retranslate()
 
 QString IdentityFormWidget::printableHtml(bool withValues) const
 {
-    qWarning() << Q_FUNC_INFO << withValues;
     if (withValues) {
-        QString n = patient()->data(Core::IPatient::Title).toString() + " " + patient()->data(Core::IPatient::FullName).toString();
+        QString n = patient()->data(Core::IPatient::FullName).toString();
         n = n.simplified();
         QString age;
         // For pediatrics show full age
