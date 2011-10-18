@@ -177,7 +177,7 @@ TextEditorData::~TextEditorData()
 
 void TextEditorData::clear()
 {
-    WARN_FUNC;
+//    WARN_FUNC;
     setStorableData(m_FormItem->valueReferences()->defaultValue());
 }
 
@@ -188,7 +188,7 @@ bool TextEditorData::isModified() const
 
 bool TextEditorData::setData(const int ref, const QVariant &data, const int role)
 {
-    qWarning() << "TextEditorData::setData" << data << role;
+//    qWarning() << "TextEditorData::setData" << data << role;
     return true;
 }
 
