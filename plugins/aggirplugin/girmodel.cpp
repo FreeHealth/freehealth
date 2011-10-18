@@ -57,10 +57,10 @@ namespace {
 
     // Checks
     const char * const NFP = "Ne fait pas";
-    const char * const S = "Spontanément";
-    const char * const T = "Totalement";
-    const char * const H = "Habituellement";
-    const char * const C = "Correctement";
+    const char * const S = "Spontanément : si la case est coché, signifie que le patient ne fait pas spontanément";
+    const char * const T = "Totalement : si la case est coché, signifie que le patient ne fait pas totalement";
+    const char * const H = "Habituellement : si la case est coché, signifie que le patient ne fait pas habituellement";
+    const char * const C = "Correctement : si la case est coché, signifie que le patient ne fait pas correctement";
     const char * const NOPB = "Aucun problème";
 
     // Datas references
@@ -120,11 +120,20 @@ GirModel::GirModel(QObject *parent) :
     setColumnCount(Column_Count);
     setHeaderData(Column_Label, Qt::Horizontal, "Items et sous-items");
     setHeaderData(Column_NFP, Qt::Horizontal, "Ne fait pas");
+    setHeaderData(Column_NFP, Qt::Horizontal, "Ne réalise pas l'activité", Qt::ToolTipRole);
+
     setHeaderData(Column_S, Qt::Horizontal, "S");
     setHeaderData(Column_T, Qt::Horizontal, "T");
     setHeaderData(Column_C, Qt::Horizontal, "C");
     setHeaderData(Column_H, Qt::Horizontal, "H");
+
+    setHeaderData(Column_S, Qt::Horizontal, ::S, Qt::ToolTipRole);
+    setHeaderData(Column_T, Qt::Horizontal, ::T, Qt::ToolTipRole);
+    setHeaderData(Column_C, Qt::Horizontal, ::C, Qt::ToolTipRole);
+    setHeaderData(Column_H, Qt::Horizontal, ::H, Qt::ToolTipRole);
+
     setHeaderData(Column_PasProbleme, Qt::Horizontal, "Aucun problème");
+    setHeaderData(Column_PasProbleme, Qt::Horizontal, "Aucun problème", Qt::ToolTipRole);
     setHeaderData(Column_Result, Qt::Horizontal, "Score");
 
     for(int i = 0; i < Column_Count; ++i) {
