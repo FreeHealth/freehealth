@@ -67,10 +67,19 @@ QVariant EbmModel::data(const QModelIndex &index, int role) const
             t = t.replace("http://www.ncbi.nlm.nih.gov/pubmed/", "PMID: ");
             return t;
         }
-        case References: return e->references();
-        case Abstract: return  e->abstract();
+        case References: if (e->references().isEmpty()) return e->data(EbmData::ShortReferences); return e->references();
+        case Abstract: if (e->abstract().isEmpty()) return e->data(EbmData::AbstractPlainText); return e->abstract();
         case ShortReferences: return e->data(EbmData::ShortReferences);
+        case AbstractWithReferences:
+            return QString("%1\n\n%2")
+                    .arg(e->data(EbmData::CompleteReferences))
+                    .arg(e->abstract());
+        case AbstractWithReferencesHtml:
+            return QString("<b>%1</b><br/><br/>%2")
+                    .arg(e->data(EbmData::CompleteReferences))
+                    .arg(e->abstract());
         }
+
     }
     return QVariant();
 }

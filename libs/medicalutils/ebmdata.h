@@ -42,6 +42,8 @@ public:
         AbstractPlainText,
         CompleteReferences,
         ShortReferences,
+        Title,
+        Authors,
         ReferencesCount
     };
 
@@ -65,7 +67,7 @@ public:
 
 private:
     QVariant m_Id;
-    QString m_Abstract, m_Ref, m_Link, m_PubMedXml;
+    QString m_Abstract, m_ShortRef, m_Ref, m_Link, m_Title, m_PubMedXml, m_Authors;
     QDomDocument m_Doc;
 };
 

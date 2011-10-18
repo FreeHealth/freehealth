@@ -42,6 +42,8 @@ public:
         References,
         ShortReferences,
         Abstract,
+        AbstractWithReferences,
+        AbstractWithReferencesHtml,
         ColumnCount
     };
 
@@ -50,8 +52,8 @@ public:
 
     void clear();
 
-    int rowCount(const QModelIndex &parent = QModelIndex()) const {return m_Ebms.count();}
-    int columnCount(const QModelIndex &parent = QModelIndex()) const {return ColumnCount;}
+    int rowCount(const QModelIndex & = QModelIndex()) const {return m_Ebms.count();}
+    int columnCount(const QModelIndex & = QModelIndex()) const {return ColumnCount;}
 
     QVariant data(const QModelIndex &index, int role = Qt::DisplayRole) const;
     bool setData(const QModelIndex &index, const QVariant &value, int role = Qt::EditRole) {Q_UNUSED(index); Q_UNUSED(value); Q_UNUSED(role); return false;}

@@ -32,6 +32,7 @@
 
 #include <QString>
 #include <QDomDocument>
+#include <QStringList>
 
 #include <QDebug>
 
@@ -283,6 +284,97 @@ bool EbmData::setPubMedXml(const QString &xml)
         qWarning() << "ERROR" << error << line << col;
         return false;
     }
+    //        ARTICLE_TAG = "Article";
+    //            JOURNAL_TAG = "Journal";
+    //                JOURNAL_ISSN_TAG = "ISSN";
+    //                JOURNALISSUE_TAG = "JournalIssue";
+    //                    VOLUME_TAG = "Volume";
+    //                    ISSUE_TAG = "Issue";
+    //                    PUBDATE_TAG = "PubDate";
+    //                        PUBDATE_YEAR_TAG = "Year";
+    //                        PUBDATE_MONTH_TAG = "Month";
+    //                    TITLE_TAG = "Title";
+    //                    ISO_ABBREV_TITLE_TAG = "ISOAbbreviation";
+    //                    ISSUE_TAG = "Issue";
+
+    //            ARTICLETITLE_TAG = "ArticleTitle";
+    //            PAGIN_TAG = "Pagination";
+    //                MEDLINEPAGIN_TAG = "MedlinePgn";
+    //            ABSTRACT_TAG = "Abstract";
+    //                ABSTRACT_TEXT_TAG = "AbstractText";
+
+    //            AUTHORLIST_TAG = "AuthorList";
+    //                AUTHOR_TAG = "Author";
+    //                AUTHOR_VALID_ATTRIB = "ValidYN";
+    //                    AUTHORLASTNAME_TAG = "LastName";
+    //                    AUTHORFORENAME_TAG = "ForeName";
+    //                    AUTHORINITIALS_TAG = "Initials";
+
+    // extract complete reference
+    QDomElement art = m_Doc.firstChildElement(::ROOT_TAG);
+    art = art.firstChildElement(::MEDLINE_CITATION);
+    art = art.firstChildElement(::ARTICLE_TAG);
+    // go journal
+    QDomElement w = art.firstChildElement(::JOURNAL_TAG);
+    QString journalFull = w.firstChildElement(::TITLE_TAG).text();
+    QString journalIso = w.firstChildElement(::ISO_ABBREV_TITLE_TAG).text();
+    // go journalIssue
+    w = w.firstChildElement(::JOURNALISSUE_TAG);
+    QString vol = w.firstChildElement(::VOLUME_TAG).text();
+    QString issue = w.firstChildElement(::ISSUE_TAG).text();
+    // go pubDate
+    w = w.firstChildElement(::PUBDATE_TAG);
+    QString year = w.firstChildElement(::PUBDATE_YEAR_TAG).text();
+    QString month = w.firstChildElement(::PUBDATE_MONTH_TAG).text();
+    // go Article/Pagination
+    w = art.firstChildElement(::PAGIN_TAG);
+    QString pagin = w.firstChildElement(::MEDLINEPAGIN_TAG ).text();
+    // Journal abbrev. Year month;Vol(Issue):pages.
+    m_ShortRef = QString("%1 %2 %3;%4(%5):%6")
+            .arg(journalFull)
+            .arg(year)
+            .arg(month)
+            .arg(vol)
+            .arg(issue)
+            .arg(pagin);
+
+    // Full reference
+    // Authors. Journal full title. Year month;Vol(Issue):pages.
+    QDomElement authors = art.firstChildElement(::AUTHORLIST_TAG);
+    //            AUTHORLIST_TAG = "AuthorList";
+    //                AUTHOR_TAG = "Author";
+    //                AUTHOR_VALID_ATTRIB = "ValidYN";
+    //                    AUTHORLASTNAME_TAG = "LastName";
+    //                    AUTHORFORENAME_TAG = "ForeName";
+    //                    AUTHORINITIALS_TAG = "Initials";
+    w = authors.firstChildElement(::AUTHOR_TAG); // if ValidYN == Y go on
+    QStringList authorsList;
+    while (!w.isNull()) {
+        if (w.attribute(::AUTHOR_VALID_ATTRIB)=="Y") {
+            QString name = w.firstChildElement(::AUTHORLASTNAME_TAG).text();
+            QString foreName = w.firstChildElement(::AUTHORFORENAME_TAG).text();
+//            QString initials = w.firstChildElement(::AUTHORINITIALS_TAG).text();
+            authorsList.append(name + " " + foreName);
+        }
+        w = w.nextSiblingElement(::AUTHOR_TAG);
+    }
+    m_Authors = authorsList.join(". ");
+
+    m_Title = art.firstChildElement(::ARTICLETITLE_TAG).text();
+
+    m_Ref = QString("%1. %2\n   %3 %4 %5;%6(%7):%8")
+            .arg(authorsList.join("; "))
+            .arg(m_Title)
+            .arg(journalIso)
+            .arg(year)
+            .arg(month)
+            .arg(vol)
+            .arg(issue)
+            .arg(pagin);
+
+    // extract abstract
+    m_Abstract = art.firstChildElement(::ABSTRACT_TAG).firstChildElement(::ABSTRACT_TEXT_TAG).text();
+
     return true;
 }
 
@@ -295,58 +387,7 @@ QString EbmData::data(const int reference) const
     case PMID: return QString();
     case ShortReferences:
     {
-        //        ARTICLE_TAG = "Article";
-        //            JOURNAL_TAG = "Journal";
-        //                JOURNAL_ISSN_TAG = "ISSN";
-        //                JOURNALISSUE_TAG = "JournalIssue";
-        //                    VOLUME_TAG = "Volume";
-        //                    ISSUE_TAG = "Issue";
-        //                    PUBDATE_TAG = "PubDate";
-        //                        PUBDATE_YEAR_TAG = "Year";
-        //                        PUBDATE_MONTH_TAG = "Month";
-        //                    TITLE_TAG = "Title";
-        //                    ISO_ABBREV_TITLE_TAG = "ISOAbbreviation";
-        //                    ISSUE_TAG = "Issue";
-
-        //            ARTICLETITLE_TAG = "ArticleTitle";
-        //            PAGIN_TAG = "Pagination";
-        //                MEDLINEPAGIN_TAG = "MedlinePgn";
-        //            ABSTRACT_TAG = "Abstract";
-        //                ABSTRACT_TEXT_TAG = "AbstractText";
-
-        //            AUTHORLIST_TAG = "AuthorList";
-        //                AUTHOR_TAG = "Author";
-        //                AUTHOR_VALID_ATTRIB = "ValidYN";
-        //                    AUTHORLASTNAME_TAG = "LastName";
-        //                    AUTHORFORENAME_TAG = "ForeName";
-        //                    AUTHORINITIALS_TAG = "Initials";
-
-        QDomElement art = m_Doc.firstChildElement(::ROOT_TAG);
-        art = art.firstChildElement(::MEDLINE_CITATION);
-        art = art.firstChildElement(::ARTICLE_TAG);
-        // go journal
-        QDomElement w = art.firstChildElement(::JOURNAL_TAG);
-        QString journal = w.firstChildElement(::ISO_ABBREV_TITLE_TAG).text();
-        // go journalIssue
-        w = w.firstChildElement(::JOURNALISSUE_TAG);
-        QString vol = w.firstChildElement(::VOLUME_TAG).text();
-        QString issue = w.firstChildElement(::ISSUE_TAG).text();
-        // go pubDate
-        w = w.firstChildElement(::PUBDATE_TAG);
-        QString year = w.firstChildElement(::PUBDATE_YEAR_TAG).text();
-        QString month = w.firstChildElement(::PUBDATE_MONTH_TAG).text();
-        // go Article/Pagination
-        w = art.firstChildElement(::PAGIN_TAG);
-        QString pagin = w.firstChildElement(::MEDLINEPAGIN_TAG ).text();
-
-        // Journal abbrev. Year month;Vol(Issue):pages.
-        return QString("%1 %2 %3;%4(%5):%6")
-                .arg(journal)
-                .arg(year)
-                .arg(month)
-                .arg(vol)
-                .arg(issue)
-                .arg(pagin);
+        return m_ShortRef;
     }
     case AbstractPlainText:
     {
@@ -363,6 +404,8 @@ QString EbmData::data(const int reference) const
     {
         return m_Ref;
     }
+    case Title: return m_Title;
+    case Authors: return m_Authors;
     }
     return QString();
 }
