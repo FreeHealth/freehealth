@@ -64,6 +64,7 @@ AgendaMode::AgendaMode(QObject *parent) :
 //    setWidget(m_Stack);
     m_Viewer = new UserCalendarViewer;
     setWidget(m_Viewer);
+    userChanged();
 
 //    connect(Core::ICore::instance(), SIGNAL(coreOpened()), this, SLOT(postCoreInitialization()));
     connect(user(), SIGNAL(userChanged()), this, SLOT(userChanged()));
@@ -81,11 +82,7 @@ void AgendaMode::userChanged()
     }
     m_UserCalendarModel = agendaCore()->userCalendarModel();
     int nbCals = m_UserCalendarModel->rowCount();
-    if (!nbCals) {
-        m_Viewer->setEnabled(false);
-    } else {
-        m_Viewer->setEnabled(true);
-    }
+    m_Viewer->setEnabled(nbCals>0);
     connect(m_UserCalendarModel, SIGNAL(rowsInserted(QModelIndex,int,int)), this, SLOT(rowsChanged(QModelIndex,int,int)));
     connect(m_UserCalendarModel, SIGNAL(rowsRemoved(QModelIndex,int,int)), this, SLOT(rowsChanged(QModelIndex,int,int)));
 }
