@@ -517,26 +517,6 @@ public:
         switch (query.messageType)
         {
         case DrugInteractionInformationQuery::ShortToolTip:
-            {
-                QVector<int> drugInteractionIds;
-                QStringList list;
-                for(int j=0; j < interactions.count(); ++j) {
-                    IDrugInteraction *di = interactions.at(j);
-                    DrugsInteraction *ddi = static_cast<DrugsInteraction *>(di);
-                    if (!ddi)
-                        continue;
-                    if (!drugInteractionIds.contains(ddi->value(DrugsInteraction::DI_Id).toInt()))
-                        list << "-&nbsp;" + di->type();
-                    drugInteractionIds << ddi->value(DrugsInteraction::DI_Id).toInt();
-                }
-                if (!list.isEmpty()) {
-                    tmp += list.join("<br />");
-                    toReturn.append(QString(LIST_MASK)
-                                    .arg(QCoreApplication::translate(Constants::DRUGSBASE_TR_CONTEXT, Constants::DDI_TEXT))
-                                    .arg(tmp));
-                }
-                break;
-            }
         case DrugInteractionInformationQuery::InformationAlert:
             {
             QMap<int, QString> lines;
