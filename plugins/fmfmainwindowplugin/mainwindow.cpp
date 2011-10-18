@@ -218,7 +218,7 @@ void MainWindow::init()
     connectHelpActions();
 
     // Create Mode stack
-    m_modeStack = new Utils::FancyTabWidget;
+    m_modeStack = new Utils::FancyTabWidget(this);
     modeManager()->init(m_modeStack);
 }
 
@@ -231,7 +231,7 @@ bool MainWindow::initialize(const QStringList &arguments, QString *errorString)
 
 void MainWindow::extensionsInitialized()
 {
-    qWarning() << Q_FUNC_INFO << "user ok" << user()->hasCurrentUser();
+//    qWarning() << Q_FUNC_INFO << "user ok" << user()->hasCurrentUser();
     // First check if there is a logged user
     if (!user()->hasCurrentUser()) {
         return;
@@ -278,10 +278,13 @@ MainWindow::~MainWindow()
     if (m_UserListener) {
         pluginManager()->removeObject(m_UserListener);
     }
-//    if (m_PatientModelWrapper) {
-//        delete m_PatientModelWrapper;
-//        m_PatientModelWrapper = 0;
-//    }
+    // delete ui components
+    delete m_modeStack;
+    m_modeStack = 0;
+    if (m_PatientModelWrapper) {
+        delete m_PatientModelWrapper;
+        m_PatientModelWrapper = 0;
+    }
 }
 
 /** \brief Post core initialization of MainWindow. */

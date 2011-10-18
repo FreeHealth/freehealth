@@ -71,6 +71,7 @@ PmhPlugin::PmhPlugin() :
 PmhPlugin::~PmhPlugin()
 {
     qWarning() << "PmhPlugin::~PmhPlugin()";
+    delete PmhCore::instance();
 }
 
 bool PmhPlugin::initialize(const QStringList &arguments, QString *errorString)

@@ -104,7 +104,11 @@ namespace {
             m_Children.clear();
 //            delete m_Form;
 //            delete m_EpisodeModel;
-            m_Pmh=0;m_Cat=0;m_Parent=0;m_Form=0;m_EpisodeModel=0;
+            m_Pmh=0;
+            m_Cat=0;
+            m_Parent=0;
+            m_Form=0;
+            m_EpisodeModel=0;
         }
 
 
@@ -248,7 +252,8 @@ public:
     void clearTree()
     {
         if (m_Root) {
-            delete m_Root; m_Root = 0;
+            delete m_Root;
+            m_Root = 0;
         }
         m_Root = new TreeItem;
         m_Root->setLabel("ROOT CATEGORY");

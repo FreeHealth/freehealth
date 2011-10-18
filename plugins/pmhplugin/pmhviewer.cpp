@@ -193,7 +193,8 @@ PmhViewer::PmhViewer(QWidget *parent, EditMode editMode, ViewMode viewMode) :
 
 PmhViewer::~PmhViewer()
 {
-    delete d; d = 0;
+    delete d;
+    d = 0;
 }
 
 /** \brief Show or hide the patient informations (title, name, age) inside the dialog. */

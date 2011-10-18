@@ -46,8 +46,8 @@ static inline Core::IPatient *patient()  { return Core::ICore::instance()->patie
 
 using namespace MainWin::Internal;
 
-PatientModelWrapper::PatientModelWrapper(Patients::PatientModel *model) :
-        Core::IPatient(model), m_Model(model)
+PatientModelWrapper::PatientModelWrapper(Patients::PatientModel *model, QObject *parent) :
+        Core::IPatient(parent), m_Model(model)
 {
     connect(model, SIGNAL(patientChanged(QString)), this, SLOT(onCurrentPatientChanged(QString)));
     connect(model, SIGNAL(patientCreated(QString)), this, SIGNAL(patientCreated(QString)));

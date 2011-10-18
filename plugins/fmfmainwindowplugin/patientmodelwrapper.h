@@ -54,7 +54,7 @@ class PatientModelWrapper : public Core::IPatient
 {
     Q_OBJECT
 public:
-    PatientModelWrapper(Patients::PatientModel *model);
+    PatientModelWrapper(Patients::PatientModel *model, QObject *parent = 0);
     ~PatientModelWrapper();
     void init();
 

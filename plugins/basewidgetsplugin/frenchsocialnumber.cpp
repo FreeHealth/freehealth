@@ -449,7 +449,7 @@ void FrenchSocialNumber::populateWithPatientData()
     }
 
     m_FullNumber = m_FullNumber.simplified();
-    qWarning() << "AUTO" << m_FullNumber;
+//    qWarning() << "AUTO" << m_FullNumber;
 }
 
 
