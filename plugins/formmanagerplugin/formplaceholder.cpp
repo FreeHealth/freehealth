@@ -373,6 +373,8 @@ FormPlaceHolder::~FormPlaceHolder()
 void FormPlaceHolder::setObjectName(const QString &name)
 {
     QObject::setObjectName(name);
+    if (d->m_EpisodeModel)
+        d->m_EpisodeModel->setObjectName(name+"EpisodeModel");
 //    QList<QVariant> sizesVar = settings()->value(QString("%1/%2").arg(Constants::S_PLACEHOLDERSPLITTER_SIZES).arg(objectName())).toList();
 //    QList<int> sizes;
 //    foreach(const QVariant &v, sizesVar) {
@@ -417,6 +419,7 @@ void FormPlaceHolder::setRootForm(Form::FormMain *rootForm)
 
     // Create models
     d->m_EpisodeModel = new EpisodeModel(rootForm, this);
+    d->m_EpisodeModel->setObjectName(objectName()+"EpisodeModel");
     d->m_Delegate->setEpisodeModel(d->m_EpisodeModel);
     d->m_FileTree->setModel(d->m_EpisodeModel);
     d->m_FileTree->setSelectionMode(QAbstractItemView::SingleSelection);

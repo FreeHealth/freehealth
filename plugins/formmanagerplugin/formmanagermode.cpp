@@ -33,6 +33,7 @@
 
 #include <coreplugin/icore.h>
 #include <coreplugin/itheme.h>
+#include <coreplugin/imainwindow.h>
 #include <coreplugin/constants_menus.h>
 #include <coreplugin/constants_icons.h>
 #include <coreplugin/modemanager/modemanager.h>
@@ -52,6 +53,7 @@ static inline Form::FormManager *formManager() {return Form::FormManager::instan
 static inline Core::ITheme *theme()  { return Core::ICore::instance()->theme(); }
 static inline Core::ModeManager *modeManager()  { return Core::ICore::instance()->modeManager(); }
 static inline Core::ActionManager *actionManager()  { return Core::ICore::instance()->actionManager(); }
+static inline Core::IMainWindow *mainWindow()  { return Core::ICore::instance()->mainWindow(); }
 
 /**
   \class Form::Internal::FormManagerMode
@@ -70,6 +72,7 @@ FormManagerMode::FormManagerMode(QObject *parent) :
 
     m_Holder = new FormPlaceHolder;
     m_Holder->setObjectName("EpisodesFormPlaceHolder");
+//    m_Holder->installEventFilter(this);
 
 //    const QList<int> &context;
 //    setContext();
@@ -106,5 +109,15 @@ bool FormManagerMode::getPatientForm()
     return (root);
 }
 
-
-
+//bool FormManagerMode::eventFilter(QObject *obj, QEvent *event)
+//{
+//    qWarning() << obj << event->type();
+//    if (obj==m_Holder) {
+//        qWarning() << "GET HOLDER";
+//        if (event->type()==QEvent::Show) {
+//            qWarning() << "GET SHOW";
+//            mainWindow()->endProcessingSpinner();
+//        }
+//    }
+//    return QObject::eventFilter(obj, event);
+//}

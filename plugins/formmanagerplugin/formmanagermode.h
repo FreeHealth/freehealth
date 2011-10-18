@@ -54,6 +54,9 @@ private Q_SLOTS:
     bool getPatientForm();
 
 private:
+//    bool eventFilter(QObject *obj, QEvent *event);
+
+private:
     FormPlaceHolder *m_Holder;
     bool m_inPluginManager, m_actionInBar;
 };

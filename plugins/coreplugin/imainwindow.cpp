@@ -25,13 +25,69 @@
  ***************************************************************************/
 #include "imainwindow.h"
 
+#include <coreplugin/icore.h>
+#include <coreplugin/itheme.h>
+#include <coreplugin/constants_icons.h>
+
+#include <utils/global.h>
+
+#include <QWidget>
+#include <QLabel>
+#include <QGridLayout>
+#include <QMovie>
+#include <QApplication>
+
+#include <QDebug>
+
 /**
   \class Core::IMainWindow
   Main window of the Core.
 */
 
+
 using namespace Core;
 using namespace Core::Internal;
 
+static inline Core::ITheme *theme() {return Core::ICore::instance()->theme();}
+
+namespace {
+    QDialog *dlg = 0;
+    QWidget *widget = 0;
+}
+
 //IMainWindow::IMainWindow() : MainWindowActionHandler() {}
 
+void IMainWindow::startProcessingSpinner()
+{
+    QApplication::setOverrideCursor(QCursor(Qt::WaitCursor));
+//    if (dlg)
+//        delete dlg;
+//    dlg = new QDialog(this);
+//    QGridLayout *lay = new QGridLayout(dlg);
+//    QLabel *mov = new QLabel(this);
+//    QMovie *movie = new QMovie(theme()->iconFullPath(Core::Constants::ICONSPINNER));
+//    movie->start();
+//    mov->setMovie(movie);
+//    QLabel *t = new QLabel(this);
+//    t->setText(tr("Loading data"));
+//    dlg->setLayout(lay);
+//    lay->addWidget(mov, 1, 0);
+//    lay->addWidget(t, 1, 1);
+//    dlg->show();
+//    Utils::centerWidget(dlg, this);
+}
+
+void IMainWindow::endProcessingSpinner()
+{
+    QApplication::restoreOverrideCursor();
+    if (widget) {
+        widget->hide();
+        delete widget;
+        widget = 0;
+    }
+    if (dlg) {
+        dlg->hide();
+        delete dlg;
+        dlg = 0;
+    }
+}

@@ -43,6 +43,7 @@
 #include <coreplugin/itheme.h>
 #include <coreplugin/actionmanager/actionmanager.h>
 #include <coreplugin/ipatient.h>
+#include <coreplugin/imainwindow.h>
 #include <coreplugin/constants_icons.h>
 #include <coreplugin/constants_menus.h>
 
@@ -63,6 +64,7 @@ using namespace Trans::ConstantTranslations;
 
 static inline Core::ISettings *settings() {return Core::ICore::instance()->settings();}
 static inline Core::ITheme *theme() {return Core::ICore::instance()->theme();}
+static inline Core::IMainWindow *mainWindow() {return Core::ICore::instance()->mainWindow();}
 static inline Core::ActionManager *actionManager() { return Core::ICore::instance()->actionManager(); }
 
 
@@ -314,6 +316,7 @@ void PatientSelector::refreshFilter(const QString &)
 /** \brief Slot activated when the user select a patient from the selector. \sa setSelectedPatient()*/
 void PatientSelector::onPatientSelected(const QModelIndex &index)
 {
+    mainWindow()->startProcessingSpinner();
     // Inform Core::IPatient model wrapper
     if (!d->m_Model)
         PatientModel::activeModel()->setCurrentPatient(index);

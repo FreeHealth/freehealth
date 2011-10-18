@@ -37,8 +37,8 @@
 /**
  * \file imainwindow.h
  * \author Eric MAEKER <eric.maeker@gmail.com>
- * \version 0.4.0
- * \date 29 Apr 2010
+ * \version 0.6.0
+ * \date 18 Oct 2011
 */
 
 namespace Core {
@@ -54,6 +54,9 @@ public:
     virtual void extensionsInitialized() = 0;
 
 //    virtual void postCoreInitialization() = 0;
+
+    void startProcessingSpinner();
+    void endProcessingSpinner();
 
 };
 

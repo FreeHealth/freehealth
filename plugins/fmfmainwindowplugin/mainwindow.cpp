@@ -333,6 +333,8 @@ void MainWindow::onCurrentPatientChanged()
     m_RecentPatients->addToRecentFiles(uuid);
     // refresh the navigation menu
     aboutToShowRecentPatients();
+
+    endProcessingSpinner();
 }
 
 /** \brief Close the main window and the application */
