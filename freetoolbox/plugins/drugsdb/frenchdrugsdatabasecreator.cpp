@@ -328,6 +328,16 @@ bool FrDrugDatatabaseStep::populateDatabase()
 
 bool FrDrugDatatabaseStep::linkMolecules()
 {
+    // 18 Oct 2011
+    //    NUMBER OF MOLECULES 5211
+    //    CORRECTED BY NAME 0
+    //    CORRECTED BY ATC 0
+    //    FOUNDED 3114 "
+    //    LINKERMODEL (WithATC:617;WithoutATC:833) 1450"
+    //    LINKERNATURE 470
+    //    LEFT 1263
+    //    CONFIDENCE INDICE 75
+
     // 29 Sept 2011 (ATC 2011 && ATC 2012)
     //    NUMBER OF MOLECULES 5194
     //    CORRECTED BY NAME 0
