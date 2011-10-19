@@ -593,7 +593,7 @@ void treeViewsActions::fillActionTreeView()
                 m_mapSubItems.insertMulti(strKeysParameters,"CPAM28");
             }
             else if (strKeysParameters == tr("Thesaurus")) {
-                if (WarnDebugMessage) {
+                if (WarnDebugMessage)
                     qDebug() << __FILE__ << QString::number(__LINE__) << " in thesaurus " ;
                 m_mapSubItems.insertMulti(tr("Thesaurus"),"CS");
                 m_mapSubItems.insertMulti(tr("Thesaurus"),"V");
