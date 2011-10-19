@@ -49,7 +49,7 @@ const int ALL_ORAL_ID = 100002;
 
 bool Internal::Route::operator<(const Internal::Route &second) const
 {
-    QString l = QLocale().name().right(2).toLower();
+    QString l = QLocale().name().left(2).toLower();
     return this->trLabels.value(l) < second.trLabels.value(l);
 }
 
@@ -134,8 +134,8 @@ QVariant RoutesModel::data(const QModelIndex &index, int role) const
     if (role==Qt::DisplayRole || role==Qt::EditRole) {
         switch (index.column()) {
         case Id: return route.id; break;
-        case FirstTranslatedName: return route.trLabels.value(QLocale().name().right(2).toLower()); break;
-//        case AllTranslatedNames: return route.trLabels.values(QLocale().name().right(2).toLower()); break;
+        case FirstTranslatedName: return route.trLabels.value(QLocale().name().left(2).toLower()); break;
+//        case AllTranslatedNames: return route.trLabels.values(QLocale().name().left(2).toLower()); break;
         }
     } else if (role==Qt::CheckStateRole) {
         // Store the (un)checked ids m_CheckedIds

@@ -135,7 +135,7 @@ QVariant DrugInteractor::data(const int reference, const QString &lang) const
     if (lang.isEmpty())
         l = Trans::Constants::ALL_LANGUAGE;
     if (reference == TranslatedLabel) {
-        QString loc = QLocale().name().right(2).toLower();
+        QString loc = QLocale().name().left(2).toLower();
         if (loc=="en")
             return m_TrData.value(EnLabel).value(l);
         else if (loc=="fr")
