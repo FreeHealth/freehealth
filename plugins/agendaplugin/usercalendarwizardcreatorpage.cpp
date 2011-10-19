@@ -108,6 +108,7 @@ UserCalendar *UserCalendarWizardPage::getUserCalendar()
 {
     UserCalendar *u = new UserCalendar;
     u->setData(Constants::Db_IsValid, 1);
+    u->setData(UserCalendar::Uid, Utils::Database::createUid());
     u->setData(UserCalendar::Label, ui->calendarLabel->text());
     u->setData(UserCalendar::DefaultDuration, ui->defaultDuration->value());
     u->setData(UserCalendar::Description, ui->description->toHtml());

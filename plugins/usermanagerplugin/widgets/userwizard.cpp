@@ -372,6 +372,7 @@ UserIdentityAndLoginPage::UserIdentityAndLoginPage(QWidget *parent) :
 
 void UserIdentityAndLoginPage::checkLogin()
 {
+    /** \todo code here */
     // user login must be unique in the FreeMedForms database
     // user login must be unique on the server
 }

@@ -81,6 +81,11 @@ AgendaPlugin::AgendaPlugin() :
 {
     if (Utils::Log::warnPluginsCreation())
         qWarning() << "creating AgendaPlugin";
+    // Add Translator to the Application
+    Core::ICore::instance()->translators()->addNewTranslator("AgendaPlugin");
+
+    // Create the core object
+    m_Core = new AgendaCore(this);
 }
 
 AgendaPlugin::~AgendaPlugin()
@@ -105,14 +110,11 @@ void AgendaPlugin::extensionsInitialized()
     if (Utils::Log::warnPluginsCreation())
         qWarning() << "AgendaPlugin::extensionsInitialized";
 
-    // Add Translator to the Application
-    Core::ICore::instance()->translators()->addNewTranslator("AgendaPlugin");
     messageSplash(tr("Initializing agenda plugin..."));
 
-    addAutoReleasedObject(new Core::PluginAboutPage(pluginSpec(), this));
+    m_Core->extensionsInitialized();
 
-    // Create the core object
-    m_Core = new AgendaCore(this);
+    addAutoReleasedObject(new Core::PluginAboutPage(pluginSpec(), this));
 
     // Initialize database
     Internal::AgendaBase::instance();

@@ -236,6 +236,7 @@ void UserCalendarViewer::on_availableAgendasCombo_activated(const int index)
         // Reset the Calendar View properties
         int defaultDuration = d->m_UserCalendarModel->index(index, UserCalendarModel::DefaultDuration).data().toInt();
         d->ui->calendarViewer->setDayScaleHourDivider(60/defaultDuration);
+        d->ui->calendarViewer->setDayItemDefaultDuration(defaultDuration);
     }
 //    d->populateCalendarWithCurrentWeek(d->m_UserCals.at(index));
 }
@@ -259,6 +260,7 @@ void UserCalendarViewer::userChanged()
     Agenda::UserCalendar *cal = d->m_UserCalendarModel->defaultUserCalendar();
     int duration = 5;
     if (cal) {
+        qWarning() << cal << cal->uid() << cal->isNull() << cal->isValid();
          duration = cal->data(Agenda::UserCalendar::DefaultDuration).toInt();
     }
     if (duration%5)

@@ -110,7 +110,12 @@ AgendaCore::AgendaCore(QObject *parent) :
     d(new Internal::AgendaCorePrivate)
 {
     m_Instance = this;
-    connect(user(), SIGNAL(userChanged()), this, SLOT(postCoreInitialization()));
+
+    // Add Agenda's UserViewer editor page
+    pluginManager()->addObject(d->m_UserViewerPage = new Internal::UserCalendarPageForUserViewer(this));
+
+    // Add the UserCreator wizard page
+    pluginManager()->addObject(d->m_UserCreatorPage = new Internal::UserCalendarWizardCreatorPage(this));
 }
 
 AgendaCore::~AgendaCore()
@@ -121,6 +126,11 @@ AgendaCore::~AgendaCore()
     pluginManager()->removeObject(d->m_CalItemMapper);
     pluginManager()->removeObject(d->m_AgendaMode);
     delete d;
+}
+
+void AgendaCore::extensionsInitialized()
+{
+    connect(user(), SIGNAL(userChanged()), this, SLOT(postCoreInitialization()));
 }
 
 /** Create or get the Agenda::UserCalendarModel for the user \e userUid. The return pointer \b MUST \b NOT be deleted. */
@@ -165,12 +175,6 @@ void AgendaCore::postCoreInitialization()
         return;
     if (user()->uuid().isEmpty())
         return;
-
-    // Add Agenda's UserViewer editor page
-    pluginManager()->addObject(d->m_UserViewerPage = new Internal::UserCalendarPageForUserViewer(this));
-
-    // Add the UserCreator wizard page
-    pluginManager()->addObject(d->m_UserCreatorPage = new Internal::UserCalendarWizardCreatorPage(this));
 
     // Add Agenda's Calendar::CalendarItem extended editing widgets
     pluginManager()->addObject(d->m_CalItemMapper = new Internal::CalendarItemEditorPatientMapper(this));

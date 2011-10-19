@@ -63,6 +63,7 @@ protected Q_SLOTS:
 
 protected:
     explicit AgendaCore(QObject *parent = 0);
+    void extensionsInitialized();
 
 private:
     static AgendaCore *m_Instance;
