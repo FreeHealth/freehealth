@@ -70,6 +70,11 @@ AgendaMode::AgendaMode(QObject *parent) :
     connect(user(), SIGNAL(userChanged()), this, SLOT(userChanged()));
 }
 
+QString AgendaMode::name() const
+{
+    return tr("Agenda");
+}
+
 void AgendaMode::postCoreInitialization()
 {
 }

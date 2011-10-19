@@ -285,6 +285,11 @@ PmhMode::~PmhMode()
     }
 }
 
+QString PmhMode::name() const
+{
+    return tkTr(Trans::Constants::PMHX);
+}
+
 void PmhMode::onPatientChanged()
 {
     if (!m_inPluginManager) {

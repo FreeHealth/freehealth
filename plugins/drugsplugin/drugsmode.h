@@ -44,6 +44,8 @@ public:
     explicit DrugsMode(QObject *parent = 0);
     ~DrugsMode();
 
+    QString name() const;
+
 public Q_SLOTS:
     void getPatientForm();
 

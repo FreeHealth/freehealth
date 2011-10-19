@@ -57,6 +57,7 @@ public:
 
     int currentSelectedCategory() const;
 
+
 private Q_SLOTS:
     void currentChanged(const QModelIndex &current, const QModelIndex &previous);
     void onButtonClicked(QAbstractButton *button);
@@ -81,6 +82,8 @@ class PmhMode : public Core::BaseMode
 public:
     explicit PmhMode(QObject *parent = 0);
     ~PmhMode();
+
+    QString name() const;
 
 private Q_SLOTS:
     void onPatientChanged();

@@ -45,6 +45,8 @@ public:
     UserManagerMode(QObject *parent = 0);
     ~UserManagerMode();
 
+    QString name() const;
+
 private Q_SLOTS:
     void onUserChanged();
 

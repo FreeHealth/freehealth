@@ -80,6 +80,11 @@ UserManagerMode::~UserManagerMode()
         pluginManager()->removeObject(this);
 }
 
+QString UserManagerMode::name() const
+{
+    return tkTr(Trans::Constants::PMHX);
+}
+
 void UserManagerMode::onUserChanged()
 {
     Core::IUser::UserRights r = Core::IUser::UserRights(user()->value(Core::IUser::ManagerRights).toInt());

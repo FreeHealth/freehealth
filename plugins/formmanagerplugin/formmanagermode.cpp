@@ -88,6 +88,11 @@ FormManagerMode::~FormManagerMode()
     // m_Holder is deleted by Core::BaseMode
 }
 
+QString FormManagerMode::name() const
+{
+    return tr("Patients Files");
+}
+
 /**
   \brief Get the patient form from the episode database, send the load signal with the form absPath and load it.
   \sa Core::ICore::loadPatientForms()

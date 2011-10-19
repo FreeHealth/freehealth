@@ -98,6 +98,9 @@ protected Q_SLOTS:
     void addForm();
     void printCurrentItem();
 
+protected:
+    void changeEvent(QEvent *event);
+
 private:
     Internal::FormPlaceHolderPrivate *d;
 };

@@ -52,7 +52,7 @@ public:
     virtual ~BaseMode();
 
     // IMode
-    QString name() const { return m_name; }
+    virtual QString name() const { return m_name; }
     QIcon icon() const { return m_icon; }
     int priority() const { return m_priority; }
     QWidget *widget() { return m_widget; }

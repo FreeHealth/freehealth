@@ -648,3 +648,18 @@ void FormPlaceHolder::printCurrentItem()
 
 //    qWarning() << formMain->printableHtml(d->m_EpisodeModel->isEpisode(index));
 }
+
+void FormPlaceHolder::changeEvent(QEvent *event)
+{
+    if (event->type()==QEvent::LanguageChange) {
+        // if showing patient synthesis or last episode -> retranslate by querying the model
+        if (d->m_FileTree->selectionModel()) {
+            QModelIndex index = d->m_FileTree->selectionModel()->currentIndex();
+            const QString &formUuid = d->m_EpisodeModel->index(index.row(), EpisodeModel::FormUuid, index.parent()).data().toString();
+            if (formUuid==Constants::PATIENTLASTEPISODES_UUID) {
+                setCurrentForm(formUuid);
+            }
+        }
+    }
+    QWidget::changeEvent(event);
+}

@@ -52,6 +52,8 @@ class AgendaMode : public Core::BaseMode
 public:
     explicit AgendaMode(QObject *parent = 0);
 
+    QString name() const;
+
 private Q_SLOTS:
     void postCoreInitialization();
     void userChanged();

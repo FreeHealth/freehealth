@@ -70,6 +70,11 @@ DrugsMode::~DrugsMode()
         pluginManager()->removeObject(this);
 }
 
+QString DrugsMode::name() const
+{
+    return tr("Drugs");
+}
+
 void DrugsMode::getPatientForm()
 {
 //    qWarning() << Q_FUNC_INFO;

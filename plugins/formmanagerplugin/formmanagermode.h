@@ -50,6 +50,8 @@ public:
     FormManagerMode(QObject *parent);
     ~FormManagerMode();
 
+    QString name() const;
+
 private Q_SLOTS:
     bool getPatientForm();
 
