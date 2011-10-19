@@ -199,7 +199,6 @@ void FancyTabBar::mousePressEvent(QMouseEvent *e)
 
 void FancyTabBar::paintTab(QPainter *painter, int tabIndex) const
 {
-    qWarning() << Q_FUNC_INFO << tabIndex << this->tabText(tabIndex);
     painter->save();
 
     QRect rect = tabRect(tabIndex);
