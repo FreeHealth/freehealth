@@ -783,7 +783,7 @@ Using Url : %1
 <context>
     <name>Core::ModeManager</name>
     <message>
-        <location filename="../../plugins/coreplugin/modemanager/modemanager.cpp" line="164"/>
+        <location filename="../../plugins/coreplugin/modemanager/modemanager.cpp" line="168"/>
         <source>Switch to %1 mode</source>
         <translation type="unfinished"></translation>
     </message>

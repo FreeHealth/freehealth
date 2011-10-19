@@ -180,12 +180,12 @@
 <context>
     <name>Account::Internal::AccountMode</name>
     <message>
-        <location filename="../../plugins/accountplugin/accountmode.cpp" line="57"/>
+        <location filename="../../plugins/accountplugin/accountmode.cpp" line="77"/>
         <source>Accountancy</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../../plugins/accountplugin/accountmode.cpp" line="97"/>
+        <location filename="../../plugins/accountplugin/accountmode.cpp" line="102"/>
         <source>Please read this explanation before using FreeAccount.
 FreeAccount is composed of :
 Receipts to get your earnings,
@@ -204,12 +204,12 @@ Then parametrize your user, sites, bank and so on.</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../../plugins/accountplugin/accountmode.cpp" line="114"/>
+        <location filename="../../plugins/accountplugin/accountmode.cpp" line="119"/>
         <source>Read me.</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../../plugins/accountplugin/accountmode.cpp" line="118"/>
+        <location filename="../../plugins/accountplugin/accountmode.cpp" line="123"/>
         <source>Do not show this message again.</source>
         <translation type="unfinished"></translation>
     </message>
@@ -2302,6 +2302,7 @@ if you don&apos;t have one, save the next value in thesaurus and chose it in the
     </message>
     <message>
         <location filename="../../plugins/accountplugin/receipts/receiptviewer.ui" line="179"/>
+        <location filename="../../plugins/accountplugin/receipts/receiptviewer.cpp" line="766"/>
         <source>Other</source>
         <translation type="unfinished"></translation>
     </message>
@@ -2316,83 +2317,82 @@ if you don&apos;t have one, save the next value in thesaurus and chose it in the
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../../plugins/accountplugin/receipts/receiptviewer.cpp" line="759"/>
+        <location filename="../../plugins/accountplugin/receipts/receiptviewer.cpp" line="762"/>
         <source>Cash</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../../plugins/accountplugin/receipts/receiptviewer.cpp" line="760"/>
+        <location filename="../../plugins/accountplugin/receipts/receiptviewer.cpp" line="763"/>
         <source>Check</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../../plugins/accountplugin/receipts/receiptviewer.cpp" line="761"/>
+        <location filename="../../plugins/accountplugin/receipts/receiptviewer.cpp" line="764"/>
         <source>Visa</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../../plugins/accountplugin/receipts/receiptviewer.cpp" line="762"/>
-        <location filename="../../plugins/accountplugin/receipts/receiptviewer.cpp" line="763"/>
+        <location filename="../../plugins/accountplugin/receipts/receiptviewer.cpp" line="765"/>
         <source>Banking</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../../plugins/accountplugin/receipts/receiptviewer.cpp" line="764"/>
+        <location filename="../../plugins/accountplugin/receipts/receiptviewer.cpp" line="767"/>
         <source>Du</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../../plugins/accountplugin/receipts/receiptviewer.cpp" line="818"/>
+        <location filename="../../plugins/accountplugin/receipts/receiptviewer.cpp" line="822"/>
         <source>Clear all.</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../../plugins/accountplugin/receipts/receiptviewer.cpp" line="951"/>
-        <location filename="../../plugins/accountplugin/receipts/receiptviewer.cpp" line="989"/>
-        <location filename="../../plugins/accountplugin/receipts/receiptviewer.cpp" line="1183"/>
+        <location filename="../../plugins/accountplugin/receipts/receiptviewer.cpp" line="955"/>
+        <location filename="../../plugins/accountplugin/receipts/receiptviewer.cpp" line="993"/>
+        <location filename="../../plugins/accountplugin/receipts/receiptviewer.cpp" line="1187"/>
         <source>Warning</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../../plugins/accountplugin/receipts/receiptviewer.cpp" line="951"/>
+        <location filename="../../plugins/accountplugin/receipts/receiptviewer.cpp" line="955"/>
         <source>You have to insert your preferred value
 in thesaurus
 and choose it as preferred.</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../../plugins/accountplugin/receipts/receiptviewer.cpp" line="987"/>
+        <location filename="../../plugins/accountplugin/receipts/receiptviewer.cpp" line="991"/>
         <source>No distance rule value available !
 You should create one in Preferences.</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../../plugins/accountplugin/receipts/receiptviewer.cpp" line="1002"/>
+        <location filename="../../plugins/accountplugin/receipts/receiptviewer.cpp" line="1006"/>
         <source>Kilometers</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../../plugins/accountplugin/receipts/receiptviewer.cpp" line="1043"/>
+        <location filename="../../plugins/accountplugin/receipts/receiptviewer.cpp" line="1047"/>
         <source>NAME</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../../plugins/accountplugin/receipts/receiptviewer.cpp" line="1047"/>
+        <location filename="../../plugins/accountplugin/receipts/receiptviewer.cpp" line="1051"/>
         <source>thesaurus</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../../plugins/accountplugin/receipts/receiptviewer.cpp" line="1183"/>
+        <location filename="../../plugins/accountplugin/receipts/receiptviewer.cpp" line="1187"/>
         <source>Error inserting into AccountModel!</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../../plugins/accountplugin/receipts/receiptviewer.cpp" line="1211"/>
+        <location filename="../../plugins/accountplugin/receipts/receiptviewer.cpp" line="1215"/>
         <source>Information</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../../plugins/accountplugin/receipts/receiptviewer.cpp" line="1211"/>
+        <location filename="../../plugins/accountplugin/receipts/receiptviewer.cpp" line="1215"/>
         <source>Saved in thesaurus.</source>
         <translation type="unfinished"></translation>
     </message>
@@ -2619,20 +2619,20 @@ and choose it as preferred.</source>
     <name>treeViewsActions</name>
     <message>
         <location filename="../../plugins/accountplugin/receipts/receiptviewer.cpp" line="427"/>
-        <location filename="../../plugins/accountplugin/receipts/receiptviewer.cpp" line="687"/>
+        <location filename="../../plugins/accountplugin/receipts/receiptviewer.cpp" line="690"/>
         <source>Delete this value.</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
         <location filename="../../plugins/accountplugin/receipts/receiptviewer.cpp" line="428"/>
-        <location filename="../../plugins/accountplugin/receipts/receiptviewer.cpp" line="688"/>
+        <location filename="../../plugins/accountplugin/receipts/receiptviewer.cpp" line="691"/>
         <source>Choose this value like the preferred.</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
         <location filename="../../plugins/accountplugin/receipts/receiptviewer.cpp" line="521"/>
         <location filename="../../plugins/accountplugin/receipts/receiptviewer.cpp" line="536"/>
-        <location filename="../../plugins/accountplugin/receipts/receiptviewer.cpp" line="673"/>
+        <location filename="../../plugins/accountplugin/receipts/receiptviewer.cpp" line="676"/>
         <source>Warning</source>
         <translation type="unfinished"></translation>
     </message>
@@ -2653,10 +2653,10 @@ and choose it as preferred.</source>
     </message>
     <message>
         <location filename="../../plugins/accountplugin/receipts/receiptviewer.cpp" line="565"/>
-        <location filename="../../plugins/accountplugin/receipts/receiptviewer.cpp" line="593"/>
         <location filename="../../plugins/accountplugin/receipts/receiptviewer.cpp" line="595"/>
-        <location filename="../../plugins/accountplugin/receipts/receiptviewer.cpp" line="596"/>
-        <location filename="../../plugins/accountplugin/receipts/receiptviewer.cpp" line="630"/>
+        <location filename="../../plugins/accountplugin/receipts/receiptviewer.cpp" line="598"/>
+        <location filename="../../plugins/accountplugin/receipts/receiptviewer.cpp" line="599"/>
+        <location filename="../../plugins/accountplugin/receipts/receiptviewer.cpp" line="633"/>
         <source>Thesaurus</source>
         <translation type="unfinished"></translation>
     </message>
@@ -2667,42 +2667,42 @@ and choose it as preferred.</source>
     </message>
     <message>
         <location filename="../../plugins/accountplugin/receipts/receiptviewer.cpp" line="566"/>
-        <location filename="../../plugins/accountplugin/receipts/receiptviewer.cpp" line="633"/>
+        <location filename="../../plugins/accountplugin/receipts/receiptviewer.cpp" line="636"/>
         <source>Values</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
         <location filename="../../plugins/accountplugin/receipts/receiptviewer.cpp" line="568"/>
-        <location filename="../../plugins/accountplugin/receipts/receiptviewer.cpp" line="624"/>
+        <location filename="../../plugins/accountplugin/receipts/receiptviewer.cpp" line="627"/>
         <source>Preferred Value</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
         <location filename="../../plugins/accountplugin/receipts/receiptviewer.cpp" line="569"/>
-        <location filename="../../plugins/accountplugin/receipts/receiptviewer.cpp" line="636"/>
+        <location filename="../../plugins/accountplugin/receipts/receiptviewer.cpp" line="639"/>
         <source>Round trip</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../../plugins/accountplugin/receipts/receiptviewer.cpp" line="599"/>
-        <location filename="../../plugins/accountplugin/receipts/receiptviewer.cpp" line="600"/>
-        <location filename="../../plugins/accountplugin/receipts/receiptviewer.cpp" line="627"/>
+        <location filename="../../plugins/accountplugin/receipts/receiptviewer.cpp" line="602"/>
+        <location filename="../../plugins/accountplugin/receipts/receiptviewer.cpp" line="603"/>
+        <location filename="../../plugins/accountplugin/receipts/receiptviewer.cpp" line="630"/>
         <source>Sites</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../../plugins/accountplugin/receipts/receiptviewer.cpp" line="603"/>
-        <location filename="../../plugins/accountplugin/receipts/receiptviewer.cpp" line="639"/>
+        <location filename="../../plugins/accountplugin/receipts/receiptviewer.cpp" line="606"/>
+        <location filename="../../plugins/accountplugin/receipts/receiptviewer.cpp" line="642"/>
         <source>Distance rules</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../../plugins/accountplugin/receipts/receiptviewer.cpp" line="621"/>
+        <location filename="../../plugins/accountplugin/receipts/receiptviewer.cpp" line="624"/>
         <source>Debtor</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../../plugins/accountplugin/receipts/receiptviewer.cpp" line="673"/>
+        <location filename="../../plugins/accountplugin/receipts/receiptviewer.cpp" line="676"/>
         <source>Cannot delete in thesaurus :</source>
         <translation type="unfinished"></translation>
     </message>

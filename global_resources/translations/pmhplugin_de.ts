@@ -312,8 +312,8 @@
 <context>
     <name>PMH::PmhPlugin</name>
     <message>
-        <location filename="../../plugins/pmhplugin/pmhplugin.cpp" line="83"/>
-        <location filename="../../plugins/pmhplugin/pmhplugin.cpp" line="99"/>
+        <location filename="../../plugins/pmhplugin/pmhplugin.cpp" line="84"/>
+        <location filename="../../plugins/pmhplugin/pmhplugin.cpp" line="100"/>
         <source>Initializing PMHx database plugin...</source>
         <translation type="unfinished"></translation>
     </message>
@@ -321,7 +321,7 @@
 <context>
     <name>PMH::PmhViewer</name>
     <message>
-        <location filename="../../plugins/pmhplugin/pmhviewer.cpp" line="250"/>
+        <location filename="../../plugins/pmhplugin/pmhviewer.cpp" line="251"/>
         <source>Replacing pmh data</source>
         <translation type="unfinished"></translation>
     </message>

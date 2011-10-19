@@ -81,72 +81,72 @@
 <context>
     <name>Patients::IdentityWidget</name>
     <message>
-        <location filename="../../plugins/patientbaseplugin/identitywidget.cpp" line="204"/>
+        <location filename="../../plugins/patientbaseplugin/identitywidget.cpp" line="201"/>
         <source>born on</source>
         <translation>né(e) le</translation>
     </message>
     <message>
-        <location filename="../../plugins/patientbaseplugin/identitywidget.cpp" line="218"/>
+        <location filename="../../plugins/patientbaseplugin/identitywidget.cpp" line="215"/>
         <source>You must specify a birthname.</source>
         <translation>Vous devez spécifier un nom de naissance.</translation>
     </message>
     <message>
-        <location filename="../../plugins/patientbaseplugin/identitywidget.cpp" line="219"/>
+        <location filename="../../plugins/patientbaseplugin/identitywidget.cpp" line="216"/>
         <source>You can not create a patient without a birthname</source>
         <translation>Vous ne pouvez pas créer un patient sans nom de naissance</translation>
     </message>
     <message>
-        <location filename="../../plugins/patientbaseplugin/identitywidget.cpp" line="220"/>
+        <location filename="../../plugins/patientbaseplugin/identitywidget.cpp" line="217"/>
         <source>No birthname</source>
         <translation>Pas de nom de naissance</translation>
     </message>
     <message>
-        <location filename="../../plugins/patientbaseplugin/identitywidget.cpp" line="224"/>
+        <location filename="../../plugins/patientbaseplugin/identitywidget.cpp" line="221"/>
         <source>You must specify a firstname.</source>
         <translation>Vous devez spécifier un prénom.</translation>
     </message>
     <message>
-        <location filename="../../plugins/patientbaseplugin/identitywidget.cpp" line="225"/>
+        <location filename="../../plugins/patientbaseplugin/identitywidget.cpp" line="222"/>
         <source>You can not create a patient without a firstname</source>
         <translation>Vous ne pouvez pas créer un patient sans prénom</translation>
     </message>
     <message>
-        <location filename="../../plugins/patientbaseplugin/identitywidget.cpp" line="226"/>
+        <location filename="../../plugins/patientbaseplugin/identitywidget.cpp" line="223"/>
         <source>No firstname</source>
         <translation>Pas de prénom</translation>
     </message>
     <message>
-        <location filename="../../plugins/patientbaseplugin/identitywidget.cpp" line="230"/>
+        <location filename="../../plugins/patientbaseplugin/identitywidget.cpp" line="227"/>
         <source>You must specify a date of birth.</source>
         <translation>Vous devez spécifier une date de naissance.</translation>
     </message>
     <message>
-        <location filename="../../plugins/patientbaseplugin/identitywidget.cpp" line="231"/>
+        <location filename="../../plugins/patientbaseplugin/identitywidget.cpp" line="228"/>
         <source>You can not create a patient without a date of birth</source>
         <translation>Vous ne pouvez pas créer un patient sans date de naissance</translation>
     </message>
     <message>
-        <location filename="../../plugins/patientbaseplugin/identitywidget.cpp" line="232"/>
+        <location filename="../../plugins/patientbaseplugin/identitywidget.cpp" line="229"/>
         <source>No date of birth</source>
         <translation>Pas de date de naissance</translation>
     </message>
     <message>
-        <location filename="../../plugins/patientbaseplugin/identitywidget.cpp" line="236"/>
+        <location filename="../../plugins/patientbaseplugin/identitywidget.cpp" line="233"/>
         <source>You must specify a gender.</source>
         <translation>Vous devez spécifier un sexe.</translation>
     </message>
     <message>
-        <location filename="../../plugins/patientbaseplugin/identitywidget.cpp" line="237"/>
+        <location filename="../../plugins/patientbaseplugin/identitywidget.cpp" line="234"/>
         <source>You can not create a patient without a gender</source>
         <translation>Vous ne pouvez pas créer un patient sans sexe</translation>
     </message>
     <message>
-        <location filename="../../plugins/patientbaseplugin/identitywidget.cpp" line="238"/>
+        <location filename="../../plugins/patientbaseplugin/identitywidget.cpp" line="235"/>
         <source>No gender</source>
         <translation>Pas de sexe</translation>
     </message>
     <message>
-        <location filename="../../plugins/patientbaseplugin/identitywidget.cpp" line="298"/>
+        <location filename="../../plugins/patientbaseplugin/identitywidget.cpp" line="295"/>
         <source>Choose a photo</source>
         <translation>Choisissez une photographie</translation>
     </message>

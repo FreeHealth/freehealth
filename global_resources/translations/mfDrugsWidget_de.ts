@@ -98,52 +98,57 @@ Drug %1 is already in your prescription</source>
         <translation type="unfinished">Dialog</translation>
     </message>
     <message>
-        <location filename="../../plugins/drugsplugin/drugswidget/interactionsynthesisdialog.ui" line="114"/>
+        <location filename="../../plugins/drugsplugin/drugswidget/interactionsynthesisdialog.ui" line="116"/>
         <source>Risk and management</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../../plugins/drugsplugin/drugswidget/interactionsynthesisdialog.ui" line="120"/>
+        <location filename="../../plugins/drugsplugin/drugswidget/interactionsynthesisdialog.ui" line="122"/>
         <source>Risk</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../../plugins/drugsplugin/drugswidget/interactionsynthesisdialog.ui" line="127"/>
+        <location filename="../../plugins/drugsplugin/drugswidget/interactionsynthesisdialog.ui" line="129"/>
         <source>Management</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../../plugins/drugsplugin/drugswidget/interactionsynthesisdialog.ui" line="87"/>
+        <location filename="../../plugins/drugsplugin/drugswidget/interactionsynthesisdialog.ui" line="159"/>
+        <source>Drug-drug interaction</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../../plugins/drugsplugin/drugswidget/interactionsynthesisdialog.ui" line="208"/>
+        <source>Tree classification</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../../plugins/drugsplugin/drugswidget/interactionsynthesisdialog.ui" line="89"/>
         <source>Class information</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../../plugins/drugsplugin/drugswidget/interactionsynthesisdialog.ui" line="69"/>
+        <location filename="../../plugins/drugsplugin/drugswidget/interactionsynthesisdialog.ui" line="71"/>
         <source>Informations</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../../plugins/drugsplugin/drugswidget/interactionsynthesisdialog.ui" line="138"/>
+        <location filename="../../plugins/drugsplugin/drugswidget/interactionsynthesisdialog.ui" line="140"/>
         <source>Bibliography</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../../plugins/drugsplugin/drugswidget/interactionsynthesisdialog.ui" line="162"/>
-        <source>References</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <location filename="../../plugins/drugsplugin/drugswidget/interactionsynthesisdialog.ui" line="175"/>
+        <location filename="../../plugins/drugsplugin/drugswidget/interactionsynthesisdialog.ui" line="192"/>
         <source>Abstracts</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../../plugins/drugsplugin/drugswidget/interactionsynthesisdialog.ui" line="185"/>
+        <location filename="../../plugins/drugsplugin/drugswidget/interactionsynthesisdialog.ui" line="146"/>
         <source>Show available bibliography</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../../plugins/drugsplugin/drugswidget/interactionsynthesisdialog.ui" line="102"/>
+        <location filename="../../plugins/drugsplugin/drugswidget/interactionsynthesisdialog.ui" line="104"/>
         <source>Interacting drugs</source>
         <translation type="unfinished"></translation>
     </message>
@@ -168,12 +173,12 @@ Drug %1 is already in your prescription</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../../plugins/drugsplugin/drugswidget/interactionsynthesisdialog.cpp" line="304"/>
+        <location filename="../../plugins/drugsplugin/drugswidget/interactionsynthesisdialog.cpp" line="290"/>
         <source>Tested drugs</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../../plugins/drugsplugin/drugswidget/interactionsynthesisdialog.cpp" line="308"/>
+        <location filename="../../plugins/drugsplugin/drugswidget/interactionsynthesisdialog.cpp" line="294"/>
         <source>Related to drugs</source>
         <translation type="unfinished"></translation>
     </message>
@@ -1011,6 +1016,7 @@ Do you really want to change the editing mode ?</source>
     </message>
     <message>
         <location filename="../../plugins/drugsplugin/drugsmode.cpp" line="55"/>
+        <location filename="../../plugins/drugsplugin/drugsmode.cpp" line="75"/>
         <source>Drugs</source>
         <translation type="unfinished"></translation>
     </message>
