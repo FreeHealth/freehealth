@@ -118,7 +118,7 @@ void Translators::changeLanguage(const QString &lang)
 {
     QString l = lang.left(2);
     QLocale::setDefault(l);
-    qWarning() << Q_FUNC_INFO << lang << QLocale().languageToString(QLocale().language());
+    WARN_FUNC << lang << QLocale().languageToString(QLocale().language());
 
     // load translations
 //    if (l.toLower()=="en") {
@@ -136,16 +136,16 @@ void Translators::changeLanguage(const QString &lang)
 
             if (!m_Translators[fileMask]->load(f.fileName() + "_" + lang, path)) {
                 if (WarnTranslatorsErrors)
-                    Utils::Log::addError(this, tr("Can not load %1, path : %2").arg(f.fileName() + "_" + lang , path),
-                                         __FILE__, __LINE__);
+                    LOG_ERROR(tr("Can not load %1, path : %2").arg(f.fileName() + "_" + lang , path));
             } else {
                 if (WarnTranslatorsErrors) {
-                    Utils::Log::addMessage(this, Trans::ConstantTranslations::tkTr(Trans::Constants::FILE_1_LOADED).arg(f.fileName() + "_" + lang));
+                    LOG(Trans::ConstantTranslations::tkTr(Trans::Constants::FILE_1_LOADED).arg(f.fileName() + "_" + lang));
                 }
             }
         }
 //    }
-    emit languageChanged();
+
+    Q_EMIT languageChanged();
 }
 
 void Translators::changeLanguage(QLocale::Language lang)

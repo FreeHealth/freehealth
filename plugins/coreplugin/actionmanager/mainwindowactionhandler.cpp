@@ -1013,7 +1013,7 @@ void MainWindowActionHandler::createConfigurationActions(int actions)
 
         QString lang = settings()->value(Constants::S_PREFEREDLANGUAGE, QLocale().name().left(2)).toString();
         foreach( const QString &loc, loc_lang.keys() ) {
-            i++;
+            ++i;
             QAction *action = new QAction(this);  // QString("&%1 %2").arg(QString::number(i), loc_lang.value(loc)), this);
             action->setText(loc_lang.value(loc));
             action->setObjectName(loc);
