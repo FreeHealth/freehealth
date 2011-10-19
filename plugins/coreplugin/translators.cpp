@@ -162,7 +162,7 @@ void Translators::changeLanguage(QLocale::Language lang)
 bool Translators::addNewTranslator(const QString & fileMask, bool fromDefaultPath)
 {
     QTranslator *t = new QTranslator(qApp);
-    QString lang = QLocale().name().right(2).toLower();
+    QString lang = QLocale().name().left(2).toLower();
     QString path;
     QFileInfo file(fileMask);
 

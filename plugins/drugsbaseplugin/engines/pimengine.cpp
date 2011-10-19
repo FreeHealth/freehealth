@@ -113,7 +113,7 @@ public:
     QVariant value(const int ref) const
     {
         if (ref==PIM_TypeName) {
-            QString l = QLocale().name().right(2).toLower();
+            QString l = QLocale().name().left(2).toLower();
             if (l=="fr")
                 return base()->getLabel(m_Infos.value(PIM_TypeMasterLid).toInt(), l);
             else

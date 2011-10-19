@@ -1176,7 +1176,7 @@ bool UserBase::saveUserPreferences(const QString &uid, const QString &content)
         query.bindValue(DATAS_FILE,       content);
         query.bindValue(DATAS_NUMERIC,    QVariant());
         query.bindValue(DATAS_DATE,       QVariant());
-        query.bindValue(DATAS_LANGUAGE,   QLocale().name().right(2));
+        query.bindValue(DATAS_LANGUAGE,   QLocale().name().left(2));
         query.bindValue(DATAS_LASTCHANGE, QDateTime::currentDateTime());
         query.bindValue(DATAS_TRACE_ID,   QVariant());
         if (!query.exec()) {
