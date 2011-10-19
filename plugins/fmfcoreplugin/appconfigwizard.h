@@ -130,6 +130,18 @@ public:
 private Q_SLOTS:
     void comboDbActivated(int);
     void comboVirtualActivated(int);
+
+private:
+    void retranslate();
+    void changeEvent(QEvent *e);
+
+private:
+    QLabel *lblDb;
+    QComboBox *comboDb;
+    QLabel *lblVirtual;
+    QComboBox *comboVirtual;
+    QLabel *lbl1, *lbl1_1, *lbl2, *lbl2_1;
+
 };
 
 

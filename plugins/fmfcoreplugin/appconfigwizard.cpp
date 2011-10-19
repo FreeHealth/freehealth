@@ -429,67 +429,69 @@ void ServerConfigPage::changeEvent(QEvent *e)
 ///////////////////////////////////////  EndConfigPage  ///////////////////////////////////////////
 ///////////////////////////////////////////////////////////////////////////////////////////////////
 EndConfigPage::EndConfigPage(QWidget *parent) :
-        QWizardPage(parent)//, m_Wizard(parent)
+    QWizardPage(parent),
+    lblDb(0),
+    comboDb(0),
+    lblVirtual(0),
+    comboVirtual(0)
 {
-    setTitle(tr("%1 is now configured").arg(qApp->applicationName() + " v"+qApp->applicationVersion()));
-    setSubTitle(tr("Please read the user's manual. "
-                   "If you have any question, you can ask them to "
-                   "the mailing list."));
-
     QGridLayout *l = new QGridLayout(this);
     setLayout(l);
 
     // Ask for virtuals
     if (Utils::isDebugCompilation()) {
         // Database renew management
-        QLabel *lblDb = new QLabel(tr("You can clean and recreate all your databases. Select the option above. If you select the clean option, all databases will be erased with <b>definitive data lose</b>."), this);
+        lblDb = new QLabel(this);
         lblDb->setWordWrap(true);
         lblDb->setSizePolicy(QSizePolicy::Expanding, QSizePolicy::Fixed);
-        QComboBox *comboDb = new QComboBox(this);
-        comboDb->addItems(QStringList() << tr("Don't clean databases") << tr("Clean and recreate database"));
+        comboDb = new QComboBox(this);
         comboDb->setSizePolicy(QSizePolicy::Preferred, QSizePolicy::Preferred);
-        if (commandLine()->value(Core::ICommandLine::ClearUserDatabases, false).toBool()) {
-            comboDb->setCurrentIndex(1);
-        } else {
-            comboDb->setCurrentIndex(0);
-        }
-        connect(comboDb, SIGNAL(activated(int)), this, SLOT(comboDbActivated(int)));
         l->addWidget(lblDb, 0, 0, 1, 2);
         l->addWidget(comboDb, 1, 1);
     }
 
     // Virtual data management
-    QLabel *lblVirtual = new QLabel(tr("You can create virtual data to test the application. Select the option above."), this);
+    lblVirtual = new QLabel(this);
     lblVirtual->setWordWrap(true);
     lblVirtual->setSizePolicy(QSizePolicy::Expanding, QSizePolicy::Fixed);
-    QComboBox *combo = new QComboBox(this);
-    combo->addItems(QStringList() << tr("Don't create virtual data") << tr("Create virtual data"));
-    combo->setSizePolicy(QSizePolicy::Preferred, QSizePolicy::Preferred);
-    if (commandLine()->value(Core::ICommandLine::CreateVirtuals, false).toBool()) {
-        combo->setCurrentIndex(1);
-    } else {
-        combo->setCurrentIndex(0);
-    }
-    connect(combo, SIGNAL(activated(int)), this, SLOT(comboVirtualActivated(int)));
+    comboVirtual = new QComboBox(this);
+    comboVirtual->setSizePolicy(QSizePolicy::Preferred, QSizePolicy::Preferred);
     l->addWidget(lblVirtual, 3, 0, 1, 2);
-    l->addWidget(combo, 4, 1);
+    l->addWidget(comboVirtual, 4, 1);
 
     // add infos
-    QLabel *lbl1 = new QLabel(tr("French/english mailing list"), this);
+    lbl1 = new QLabel(this);
     lbl1->setSizePolicy(QSizePolicy::Expanding, QSizePolicy::Fixed);
-    QLabel *lbl1_1 = new QLabel("<a href=\"mailto:freemedforms@googlegroups.com\">"
-                                "freemedforms@googlegroups.com</a>", this);
+    lbl1_1 = new QLabel(this);
     lbl1_1->setOpenExternalLinks(true);
     lbl1_1->setSizePolicy(QSizePolicy::Preferred, QSizePolicy::Preferred);
-    QLabel *lbl2 = new QLabel(tr("Application main web site"), this);
+    lbl2 = new QLabel(this);
     lbl2->setSizePolicy(QSizePolicy::Preferred, QSizePolicy::Preferred);
-    QLabel *lbl2_1 = new QLabel(QString("<a href=\"%1\">%1</a>").arg(settings()->path(Core::ISettings::WebSiteUrl)), this);
+    lbl2_1 = new QLabel(this);
     lbl2_1->setOpenExternalLinks(true);
     lbl2_1->setSizePolicy(QSizePolicy::Preferred, QSizePolicy::Preferred);
     l->addWidget(lbl1, 5, 0, 1, 2);
     l->addWidget(lbl1_1, 6, 1);
     l->addWidget(lbl2, 8, 0, 1, 2);
     l->addWidget(lbl2_1, 9, 1);
+    retranslate();
+    // Set indexes to combos
+    if (comboDb) {
+        connect(comboDb, SIGNAL(activated(int)), this, SLOT(comboDbActivated(int)));
+        if (commandLine()->value(Core::ICommandLine::ClearUserDatabases, false).toBool()) {
+            comboDb->setCurrentIndex(1);
+        } else {
+            comboDb->setCurrentIndex(0);
+        }
+    }
+    if (comboVirtual) {
+        connect(comboVirtual, SIGNAL(activated(int)), this, SLOT(comboVirtualActivated(int)));
+        if (commandLine()->value(Core::ICommandLine::CreateVirtuals, false).toBool()) {
+            comboVirtual->setCurrentIndex(1);
+        } else {
+            comboVirtual->setCurrentIndex(0);
+        }
+    }
 }
 
 void EndConfigPage::initializePage()
@@ -524,6 +526,45 @@ void EndConfigPage::comboVirtualActivated(int index)
         cmd->setValue(Core::ICommandLine::CreateVirtuals, true);
     } else {
         cmd->setValue(Core::ICommandLine::CreateVirtuals, false);
+    }
+}
+
+void EndConfigPage::retranslate()
+{
+    setTitle(tr("%1 is now configured").arg(qApp->applicationName() + " v"+qApp->applicationVersion()));
+    setSubTitle(tr("Please read the user's manual. "
+                   "If you have any question, you can ask them to "
+                   "the mailing list."));
+    if (lblDb)
+        lblDb->setText(tr("You can clean and recreate all your databases. Select the option above. If you select the clean option, all databases will be erased with <b>definitive data lose</b>."));
+    int current = 0;
+    if (comboDb) {
+        current = comboDb->currentIndex();
+        comboDb->clear();
+        comboDb->addItems(QStringList() << tr("Don't clean databases") << tr("Clean and recreate database"));
+        comboDb->setCurrentIndex(current);
+    }
+    lblVirtual->setText(tr("You can create virtual data to test the application. Select the option above."));
+    current = comboVirtual->currentIndex();
+    comboVirtual->clear();
+    comboVirtual->addItems(QStringList() << tr("Don't create virtual data") << tr("Create virtual data"));
+    comboVirtual->setCurrentIndex(current);
+    lbl1->setText(tr("French/english mailing list"));
+    lbl1_1->setText("<a href=\"mailto:freemedforms@googlegroups.com\">"
+                                "freemedforms@googlegroups.com</a>");
+    lbl2->setText(tr("Application main web site"));
+    lbl2_1->setText(QString("<a href=\"%1\">%1</a>").arg(settings()->path(Core::ISettings::WebSiteUrl)));
+}
+
+void EndConfigPage::changeEvent(QEvent *e)
+{
+    QWidget::changeEvent(e);
+    switch (e->type()) {
+    case QEvent::LanguageChange:
+        retranslate();
+        break;
+    default:
+        break;
     }
 }
 

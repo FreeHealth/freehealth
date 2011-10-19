@@ -576,7 +576,7 @@ bool UserModel::setCurrentUser(const QString &clearLog, const QString &clearPass
     }
 
     // Update UI Language to the user's language
-    Core::ICore::instance()->translators()->changeLanguage(settings()->value(Core::Constants::S_PREFEREDLANGUAGE).toString());
+    Core::ICore::instance()->translators()->changeLanguage(settings()->value(Core::Constants::S_PREFEREDLANGUAGE, user->languageIso()).toString());
 
     Q_EMIT memoryUsageChanged();
     Q_EMIT userConnected(uuid);

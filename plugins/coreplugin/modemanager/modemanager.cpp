@@ -280,9 +280,11 @@ void ModeManager::setFocusToCurrentMode()
 
 void ModeManager::languageChanged()
 {
+//    qWarning() << Q_FUNC_INFO;
     for(int i = 0; i<m_modes.count(); ++i) {
+//        qWarning() << i << m_modes.at(i)->name();
         m_modeStack->updateTabLabel(i, m_modes.at(i)->name());
-//        m_modeStack->setTabToolTip(index, cmd->stringWithAppendedShortcut(cmd->shortcut()->whatsThis()));
+//        m_modeStack->setTabToolTip(i, cmd->stringWithAppendedShortcut(cmd->shortcut()->whatsThis()));
     }
     m_modeStack->repaint();
 }

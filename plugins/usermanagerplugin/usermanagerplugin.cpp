@@ -297,6 +297,8 @@ void UserManagerPlugin::postCoreInitialization()
         qWarning() << Q_FUNC_INFO;
     // be sure everyone is informed of the currently connected user
     userModel()->emitUserConnected();
+    // and be sure that ui is translated in the correct language
+    Core::ICore::instance()->translators()->changeLanguage(settings()->value(Core::Constants::S_PREFEREDLANGUAGE, user()->value(Core::IUser::LanguageISO).toString()).toString());
 }
 
 /** \brief Create a new user is connected to Core::Constants::A_CREATEUSER. */
