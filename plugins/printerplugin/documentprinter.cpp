@@ -102,12 +102,17 @@ void DocumentPrinter::prepareHeader(Print::Printer *p, const int papers) const
 {
     QString header;
     if (user()) {
-        /** \todo wrong papers */
 #ifdef FREEDIAMS
         header = user()->value(Core::IUser::PrescriptionHeader).toString();
 #else
 #ifdef FREEICD
         header = user()->value(Core::IUser::GenericHeader).toString();
+#else  // ALL OTHERS
+        switch (papers) {
+        case Core::IDocumentPrinter::Papers_Administrative_User: header = user()->value(Core::IUser::AdministrativeHeader).toString(); break;
+        case Core::IDocumentPrinter::Papers_Prescription_User: header = user()->value(Core::IUser::PrescriptionHeader).toString(); break;
+        case Core::IDocumentPrinter::Papers_Generic_User: header = user()->value(Core::IUser::GenericHeader).toString(); break;
+        }
 #endif
 #endif
         // replace user's tokens
@@ -134,6 +139,12 @@ void DocumentPrinter::prepareFooter(Print::Printer *p, const int papers) const
 #else
 #ifdef FREEICD
         footer = user()->value(Core::IUser::GenericFooter).toString();
+#else  // ALL OTHERS
+        switch (papers) {
+        case Core::IDocumentPrinter::Papers_Administrative_User: footer = user()->value(Core::IUser::AdministrativeFooter).toString(); break;
+        case Core::IDocumentPrinter::Papers_Prescription_User: footer = user()->value(Core::IUser::PrescriptionFooter).toString(); break;
+        case Core::IDocumentPrinter::Papers_Generic_User: footer = user()->value(Core::IUser::GenericFooter).toString(); break;
+        }
 #endif
 #endif
         // replace user's tokens
@@ -166,6 +177,24 @@ void DocumentPrinter::prepareWatermark(Print::Printer *p, const int papers) cons
         align = user()->value(Core::IUser::GenericWatermarkAlignement).toInt();
         presence = user()->value(Core::IUser::GenericWatermarkPresence).toInt();
         html = user()->value(Core::IUser::GenericWatermark).toString();
+#else  // ALL OTHERS
+        switch (papers) {
+        case Core::IDocumentPrinter::Papers_Administrative_User:
+            html = user()->value(Core::IUser::AdministrativeWatermark).toString();
+            align = user()->value(Core::IUser::AdministrativeWatermarkAlignement).toInt();
+            presence = user()->value(Core::IUser::AdministrativeWatermarkPresence).toInt();
+            break;
+        case Core::IDocumentPrinter::Papers_Prescription_User:
+            html = user()->value(Core::IUser::PrescriptionWatermark).toString();
+            align = user()->value(Core::IUser::PrescriptionWatermarkAlignement).toInt();
+            presence = user()->value(Core::IUser::PrescriptionWatermarkPresence).toInt();
+            break;
+        case Core::IDocumentPrinter::Papers_Generic_User:
+            html = user()->value(Core::IUser::GenericWatermark).toString();
+            align = user()->value(Core::IUser::GenericWatermarkAlignement).toInt();
+            presence = user()->value(Core::IUser::GenericWatermarkPresence).toInt();
+            break;
+        }
 #endif
 #endif
     }
