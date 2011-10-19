@@ -116,6 +116,13 @@ UserCalendar *UserCalendarWizardPage::getUserCalendar()
     u->setData(UserCalendar::IsDefault, 1);
     u->setData(Constants::Db_IsValid, 1);
     u->setData(Constants::Db_UserCalId, -1);
+    // Create day availabilities
+    for(int j=1; j < 8; ++j) {
+        DayAvailability av;
+        av.addTimeRange(QTime(06,00,00), QTime(20,00,00));
+        av.setWeekDay(j);
+        u->addAvailabilities(av);
+    }
     return u;
 }
 
