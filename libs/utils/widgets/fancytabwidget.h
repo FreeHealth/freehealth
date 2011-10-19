@@ -88,8 +88,10 @@ public:
     void setTabToolTip(int index, QString toolTip) { m_tabs[index].toolTip = toolTip; }
     QString tabToolTip(int index) const { return m_tabs.at(index).toolTip; }
 
-    QIcon tabIcon(int index) const {return m_tabs.at(index).icon; }
+    void setTabText(int index, const QString &text);
     QString tabText(int index) const { return m_tabs.at(index).text; }
+
+    QIcon tabIcon(int index) const {return m_tabs.at(index).icon; }
     int count() const {return m_tabs.count(); }
     QRect tabRect(int index) const;
 
@@ -131,6 +133,7 @@ public:
     void insertTopWidget(int pos, QWidget *widget);
     int cornerWidgetCount() const;
     void setTabToolTip(int index, const QString &toolTip);
+    void updateTabLabel(int index, const QString &label);
 
     void paintEvent(QPaintEvent *event);
 

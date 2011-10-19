@@ -199,6 +199,7 @@ void FancyTabBar::mousePressEvent(QMouseEvent *e)
 
 void FancyTabBar::paintTab(QPainter *painter, int tabIndex) const
 {
+    qWarning() << Q_FUNC_INFO << tabIndex << this->tabText(tabIndex);
     painter->save();
 
     QRect rect = tabRect(tabIndex);
@@ -267,6 +268,11 @@ void FancyTabBar::setCurrentIndex(int index) {
     m_currentIndex = index;
     update();
     emit currentChanged(index);
+}
+
+void FancyTabBar::setTabText(int index, const QString &text)
+{
+    m_tabs[index].text = text;
 }
 
 //////
@@ -428,4 +434,9 @@ void FancyTabWidget::showWidget(int index)
 void FancyTabWidget::setTabToolTip(int index, const QString &toolTip)
 {
     m_tabBar->setTabToolTip(index, toolTip);
+}
+
+void FancyTabWidget::updateTabLabel(int index, const QString &label)
+{
+    m_tabBar->setTabText(index, label);
 }

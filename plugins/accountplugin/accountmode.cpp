@@ -54,7 +54,7 @@ static inline Core::ModeManager *modeManager() {return Core::ICore::instance()->
 AccountMode::AccountMode(QObject *parent) :
     Core::BaseMode(parent)
 {
-    setName(tr("Accountancy"));
+//    setName(tr("Accountancy"));
     setIcon(theme()->icon(Core::Constants::ICONACCOUNTMODE, Core::ITheme::BigIcon));
     setPriority(Core::Constants::P_MODE_ACCOUNT);
     setUniqueModeName(Core::Constants::MODE_ACCOUNT);
@@ -70,6 +70,11 @@ AccountMode::AccountMode(QObject *parent) :
 
     /** \todo connect actions from the account menu */
     /** \todo connect patient changed and refresh views ? */
+}
+
+QString AccountMode::name() const
+{
+    return tr("Accountancy");
 }
 
 void AccountMode::setCentralWidget(QWidget *widget)

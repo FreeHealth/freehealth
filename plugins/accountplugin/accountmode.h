@@ -46,6 +46,8 @@ public:
     explicit AccountMode(QObject *parent = 0);
     void setCentralWidget(QWidget *widget);
     
+    QString name() const;
+
 private Q_SLOTS:
     void postCoreInitialization();
     void modeActivated(Core::IMode *mode);
