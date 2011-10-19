@@ -53,6 +53,7 @@
 #include <coreplugin/icorelistener.h>
 #include <coreplugin/ioptionspage.h>
 #include <coreplugin/icommandline.h>
+#include <coreplugin/constants_tokensandsettings.h>
 
 #include <printerplugin/textdocumentextra.h>
 
@@ -573,6 +574,9 @@ bool UserModel::setCurrentUser(const QString &clearLog, const QString &clearPass
     foreach(IUserListener *l, listeners) {
         l->newUserConnected(d->m_CurrentUserUuid);
     }
+
+    // Update UI Language to the user's language
+    Core::ICore::instance()->translators()->changeLanguage(settings()->value(Core::Constants::S_PREFEREDLANGUAGE).toString());
 
     Q_EMIT memoryUsageChanged();
     Q_EMIT userConnected(uuid);
