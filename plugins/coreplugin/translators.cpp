@@ -150,7 +150,7 @@ void Translators::changeLanguage(const QString &lang)
 
 void Translators::changeLanguage(QLocale::Language lang)
 {
-    changeLanguage(QLocale(lang).name());
+    changeLanguage(QLocale(lang).name().left(2));
 }
 
 /**

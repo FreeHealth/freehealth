@@ -35,6 +35,7 @@
 #include <coreplugin/itheme.h>
 #include <coreplugin/constants_icons.h>
 #include <coreplugin/isettings.h>
+#include <coreplugin/translators.h>
 
 #include <utils/databaseconnector.h>
 #include <utils/log.h>
@@ -95,10 +96,14 @@ void UserCreationPage::initializePage()
 
     const Utils::DatabaseConnector &db = settings()->databaseConnector();
     if (db.driver()==Utils::Database::SQLite) {
+        // keep language
+        QLocale::Language l = QLocale().language();
         if (!userModel()->setCurrentUser(Constants::DEFAULT_USER_CLEARLOGIN, Constants::DEFAULT_USER_CLEARPASSWORD)) {
             LOG_ERROR("Unable to connect has default admin user");
             ui->userManagerButton->setEnabled(false);
         }
+        // return to the selected language
+        Core::ICore::instance()->translators()->changeLanguage(l);
     }
 //    else if (db.driver()==Utils::Database::MySQL) {
 //        if (!userModel()->setCurrentUser(Constants::DEFAULT_USER_CLEARLOGIN, Constants::DEFAULT_USER_CLEARPASSWORD)) {
