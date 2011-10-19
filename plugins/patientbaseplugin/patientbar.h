@@ -58,7 +58,7 @@ private Q_SLOTS:
 
 protected:
     void paintEvent(QPaintEvent *);
-
+    void changeEvent(QEvent *event);
 
 private:
     Internal::PatientBarPrivate *d;

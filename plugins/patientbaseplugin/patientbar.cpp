@@ -43,6 +43,8 @@
 #include <coreplugin/icore.h>
 #include <coreplugin/isettings.h>
 
+#include <utils/log.h>
+
 #include <QDataWidgetMapper>
 #include <QIcon>
 #include <QPainter>
@@ -144,7 +146,7 @@ void PatientBar::setCurrentIndex(const QModelIndex &index)
     if (d->m_Index)
         delete d->m_Index;
     d->m_Index = new QPersistentModelIndex(index);
-//    d->setUi();
+    d->m_Mapper->setCurrentModelIndex(QModelIndex());
     d->m_Mapper->setCurrentModelIndex(index);
 }
 
@@ -193,4 +195,12 @@ void PatientBar::paintEvent(QPaintEvent *)
     p.drawLine(rect.topLeft(), rect.topRight());
     p.setPen(QColor(150, 160, 200));
     p.drawLine(rect.bottomLeft(), rect.bottomRight());
+}
+
+void PatientBar::changeEvent(QEvent *event)
+{
+    if (event->type()==QEvent::LanguageChange) {
+        onCurrentPatientChanged();
+    }
+    QWidget::changeEvent(event);
 }
