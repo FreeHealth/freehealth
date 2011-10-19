@@ -584,14 +584,17 @@ void treeViewsActions::fillActionTreeView()
         }
         //default values if unavailables :
         if (listOfItemsOfTable.size()<1) {
-            qDebug() << __FILE__ << QString::number(__LINE__) << "listOfItemsOfTable.size()<1"  ;
-            qDebug() << __FILE__ << QString::number(__LINE__) << "strKeysParameters  =" << strKeysParameters ;
+            if (WarnDebugMessage) {
+                qDebug() << __FILE__ << QString::number(__LINE__) << "listOfItemsOfTable.size()<1"  ;
+                qDebug() << __FILE__ << QString::number(__LINE__) << "strKeysParameters  =" << strKeysParameters ;
+            }
             if (strKeysParameters == "Debtor") {
                 m_mapSubItems.insertMulti(strKeysParameters,"Patient");
                 m_mapSubItems.insertMulti(strKeysParameters,"CPAM28");
             }
             else if (strKeysParameters == tr("Thesaurus")) {
-                qDebug() << __FILE__ << QString::number(__LINE__) << " in thesaurus " ;
+                if (WarnDebugMessage) {
+                    qDebug() << __FILE__ << QString::number(__LINE__) << " in thesaurus " ;
                 m_mapSubItems.insertMulti(tr("Thesaurus"),"CS");
                 m_mapSubItems.insertMulti(tr("Thesaurus"),"V");
             }
