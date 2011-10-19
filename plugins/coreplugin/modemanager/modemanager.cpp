@@ -45,6 +45,7 @@
 #include <coreplugin/icore.h>
 #include <coreplugin/ipatient.h>
 #include <coreplugin/isettings.h>
+#include <coreplugin/translators.h>
 
 #include <extensionsystem/pluginmanager.h>
 
@@ -64,6 +65,7 @@ static inline Core::ActionManager *actionManager() { return Core::ICore::instanc
 static inline Core::ContextManager *contextManager() { return Core::ICore::instance()->contextManager(); }
 static inline Core::IPatient *patient() {return Core::ICore::instance()->patient();}
 static inline Core::ISettings *settings() {return Core::ICore::instance()->settings();}
+static inline Core::Translators *translators() {return Core::ICore::instance()->translators();}
 
 ModeManager *ModeManager::m_instance = 0;
 
@@ -90,6 +92,8 @@ void ModeManager::init(Utils::FancyTabWidget *modeStack)
                      this, SLOT(objectAdded(QObject*)));
     QObject::connect(ExtensionSystem::PluginManager::instance(), SIGNAL(aboutToRemoveObject(QObject*)),
                      this, SLOT(aboutToRemoveObject(QObject*)));
+
+    connect(translators(), SIGNAL(languageChanged()), this, SLOT(languageChanged()));
 }
 
 void ModeManager::addWidget(QWidget *widget)
@@ -272,4 +276,15 @@ void ModeManager::setFocusToCurrentMode()
         else
             widget->setFocus();
     }
+}
+
+void ModeManager::languageChanged()
+{
+    qWarning() << Q_FUNC_INFO;
+    for(int i = 0; i<m_modes.count(); ++i) {
+        qWarning() << i << m_modes.at(i)->name();
+        m_modeStack->updateTabLabel(i, m_modes.at(i)->name());
+//        m_modeStack->setTabToolTip(index, cmd->stringWithAppendedShortcut(cmd->shortcut()->whatsThis()));
+    }
+    m_modeStack->repaint();
 }

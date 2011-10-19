@@ -88,6 +88,7 @@ private slots:
     void currentTabAboutToChange(int index);
     void currentTabChanged(int index);
     void updateModeToolTip();
+    void languageChanged();
 
 private:
     int indexOf(const QString &id) const;
