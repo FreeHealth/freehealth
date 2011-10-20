@@ -835,7 +835,6 @@ void SettingsPrivate::restoreState(QMainWindow *window, const QString & prefix)
         QRect appScreen(QPoint(0,0), ratio);
         QRect rect = qApp->desktop()->rect();
         appScreen.moveCenter(rect.center());
-        qWarning() << ratio << result << rect << appScreen;
         window->setGeometry(appScreen);
     } else {
         window->restoreGeometry(value(keyGeo).toByteArray());
