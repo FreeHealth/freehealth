@@ -822,8 +822,21 @@ void SettingsPrivate::restoreState(QMainWindow *window, const QString & prefix)
     if (value(keyGeo).toByteArray().isEmpty()) {
         int height = qApp->desktop()->height() * 0.75;
         int width = qApp->desktop()->width() * 0.75;
-        window->setGeometry(0, 0, width, height);
-        Utils::centerWidget(window, qApp->desktop());
+        // screen is 4/3 ?
+        double screenRatio = (double)width/(double)height;
+        QSize ratio;
+        if (screenRatio < 1.5) {
+            ratio = QSize(4,3);
+        } else {
+            ratio = QSize(16, 9);
+        }
+        QSize result(width, height);
+        ratio.scale(result, Qt::KeepAspectRatio);
+        QRect appScreen(QPoint(0,0), ratio);
+        QRect rect = qApp->desktop()->rect();
+        appScreen.moveCenter(rect.center());
+        qWarning() << ratio << result << rect << appScreen;
+        window->setGeometry(appScreen);
     } else {
         window->restoreGeometry(value(keyGeo).toByteArray());
         window->restoreState(value(keyState).toByteArray());
