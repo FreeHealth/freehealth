@@ -77,18 +77,22 @@
     <Item name="GP::Basic::SOAP::S" type="texteditor">
       <label lang="xx">Subjective</label>
       <label lang="fr">Subjectif</label>
+      <options>FullEditor;DontPrintEmptyValues</options>
     </Item>
     <Item name="GP::Basic::SOAP::O" type="texteditor">
       <label lang="xx">Objective</label>
       <label lang="fr">Objectif</label>
+      <options>FullEditor;DontPrintEmptyValues</options>
     </Item>
     <Item name="GP::Basic::SOAP::A" type="texteditor">
       <label lang="xx">Assessment</label>
       <label lang="fr">Appréciation clinique</label>
+      <options>FullEditor;DontPrintEmptyValues</options>
     </Item>
     <Item name="GP::Basic::SOAP::P" type="texteditor">
       <label lang="xx">Plan</label>
       <label lang="fr">Prise en charge</label>
+      <options>FullEditor;DontPrintEmptyValues</options>
     </Item>
 
   </MedForm>
@@ -107,6 +111,7 @@
         <type>texteditor</type>
         <label lang="xx">Textual prescription</label>
         <label lang="fr">Prescription textuelle</label>
+        <options>FullEditor;DontPrintEmptyValues</options>
       </Item>
     </MedForm>
 
@@ -133,6 +138,7 @@
       <type>icd</type>
       <label lang="xx">ICD10 coding</label>
       <label lang="fr">Codes CIM10</label>
+      <options>DontPrintEmptyValues</options>
     </Item>
   </MedForm>
 
