@@ -82,7 +82,7 @@ UserManagerMode::~UserManagerMode()
 
 QString UserManagerMode::name() const
 {
-    return tkTr(Trans::Constants::PMHX);
+    return tkTr(Trans::Constants::USERS);
 }
 
 void UserManagerMode::onUserChanged()
