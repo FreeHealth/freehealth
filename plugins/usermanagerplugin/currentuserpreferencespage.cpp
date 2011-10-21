@@ -109,6 +109,7 @@ void CurrentUserPreferencesWidget::saveToSettings(Core::ISettings *)
 {
     if (userModel()->hasCurrentUser()) {
         this->setFocus();
+        m_Viewer->submitChangesToModel();
         userModel()->submitRow(userModel()->currentUserIndex().row());
     }
 }

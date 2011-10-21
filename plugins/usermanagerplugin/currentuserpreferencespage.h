@@ -35,8 +35,8 @@
 /**
  * \file currentuserpreferencespage.h
  * \author Eric MAEKER <eric.maeker@gmail.com>
- * \version 0.1.0
- * \date 28 Nov 2010
+ * \version 0.6.0
+ * \date 21 Oct 2011
 */
 
 namespace Core {
@@ -97,6 +97,7 @@ public:
     static void writeDefaultSettings(Core::ISettings *s) {Internal::CurrentUserPreferencesWidget::writeDefaultSettings(s);}
 
     QWidget *createPage(QWidget *parent = 0);
+
 private:
     QPointer<Internal::CurrentUserPreferencesWidget> m_Widget;
 };
