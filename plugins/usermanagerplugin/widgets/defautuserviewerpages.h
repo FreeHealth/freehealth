@@ -76,6 +76,9 @@ private Q_SLOTS:
     void on_but_viewHistory_clicked();
 
 private:
+    void changeEvent(QEvent *e);
+
+private:
     Ui::UserViewer_IdentityUI *ui;
     QDataWidgetMapper *m_Mapper;
     UserModel *m_Model;
@@ -109,6 +112,9 @@ public:
 
     void clear();
     bool submit();
+
+private:
+    void changeEvent(QEvent *e);
 
 private:
     Ui::UserViewer_ContactUI *ui;
@@ -145,6 +151,9 @@ public:
 
     void clear();
     bool submit();
+
+private:
+    void changeEvent(QEvent *e);
 
 private:
     Ui::UserViewer_ProfessionalUI *ui;
@@ -191,6 +200,9 @@ public:
     bool submit();
 
 private:
+    void changeEvent(QEvent *e);
+
+private:
     Ui::UserViewer_RightsUI *ui;
     QDataWidgetMapper *m_Mapper;
     UserModel *m_Model;
@@ -233,6 +245,9 @@ public:
 
     void clear();
     bool submit();
+
+private:
+//    void changeEvent(QEvent *e);
 
 private:
     Print::PrinterPreviewer *preview;

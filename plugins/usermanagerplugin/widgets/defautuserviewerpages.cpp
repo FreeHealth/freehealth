@@ -130,6 +130,13 @@ void DefaultUserIdentityWidget::on_but_viewHistory_clicked()
                             qApp->applicationName());
 }
 
+void DefaultUserIdentityWidget::changeEvent(QEvent *e)
+{
+    if (e->type()==QEvent::LanguageChange) {
+        ui->retranslateUi(this);
+    }
+}
+
 
 DefaultUserIdentityPage::DefaultUserIdentityPage(QObject *parent) :
     IUserViewerPage(parent)
@@ -226,6 +233,12 @@ bool DefaultUserContactWidget::submit()
     return false;
 }
 
+void DefaultUserContactWidget::changeEvent(QEvent *e)
+{
+    if (e->type()==QEvent::LanguageChange) {
+        ui->retranslateUi(this);
+    }
+}
 
 DefaultUserContactPage::DefaultUserContactPage(QObject *parent) :
     IUserViewerPage(parent)
@@ -315,6 +328,12 @@ bool DefaultUserProfessionalWidget::submit()
     return false;
 }
 
+void DefaultUserProfessionalWidget::changeEvent(QEvent *e)
+{
+    if (e->type()==QEvent::LanguageChange) {
+        ui->retranslateUi(this);
+    }
+}
 
 
 DefaultUserProfessionalPage::DefaultUserProfessionalPage(QObject *parent) :
@@ -399,6 +418,13 @@ bool DefaultUserRightsWidget::submit()
     if (m_Mapper)
         return m_Mapper->submit();
     return false;
+}
+
+void DefaultUserRightsWidget::changeEvent(QEvent *e)
+{
+    if (e->type()==QEvent::LanguageChange) {
+        ui->retranslateUi(this);
+    }
 }
 
 
@@ -536,6 +562,13 @@ bool DefaultUserPapersWidget::submit()
     }
     return true;
 }
+
+//void DefaultUserRightsWidget::changeEvent(QEvent *e)
+//{
+//    if (e->type()==QEvent::LanguageChange) {
+//        ui->retranslateUi(this);
+//    }
+//}
 
 
 DefaultUserPapersPage::DefaultUserPapersPage(const PaperType type, QObject *parent) :
