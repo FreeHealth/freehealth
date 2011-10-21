@@ -37,8 +37,9 @@
 #include <coreplugin/isettings.h>
 #include <coreplugin/translators.h>
 
-#include <utils/databaseconnector.h>
+#include <utils/global.h>
 #include <utils/log.h>
+#include <utils/databaseconnector.h>
 #include <translationutils/constanttranslations.h>
 
 #include "ui_firstrunusercreationwidget.h"
@@ -116,6 +117,7 @@ void UserCreationPage::initializePage()
     userModel()->setCurrentUserIsServerManager();
 
     adjustSize();
+    Utils::centerWidget(this);
 }
 
 bool UserCreationPage::validatePage()
