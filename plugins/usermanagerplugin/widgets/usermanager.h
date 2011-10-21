@@ -77,6 +77,9 @@ protected:
     void done(int r);
 
 private:
+    void showEvent(QShowEvent *event);
+
+private:
     Internal::UserManagerWidget *m_Widget;
 };
 

@@ -191,6 +191,13 @@ void UserManagerDialog::done(int r)
     }
 }
 
+void UserManagerDialog::showEvent(QShowEvent *event)
+{
+    QWidget::showEvent(event);
+    Utils::centerWidget(this);
+}
+
+
 /** Destructor */
 UserManagerDialog::~UserManagerDialog()
 {

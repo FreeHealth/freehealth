@@ -105,6 +105,9 @@ protected Q_SLOTS:
     void done(int r);
 
 private:
+    void showEvent(QShowEvent *event);
+
+private:
     Internal::UserData *m_User;
     int m_Row;
     bool m_Saved, m_CreateUser;

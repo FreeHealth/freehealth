@@ -282,6 +282,12 @@ void UserWizard::done(int r)
     }
 }
 
+void UserWizard::showEvent(QShowEvent *event)
+{
+    QWidget::showEvent(event);
+    Utils::centerWidget(this);
+}
+
 QString UserWizard::createdUuid() const
 {
     if (m_User) {
