@@ -2,7 +2,7 @@
 TEMPLATE = app
 macx:win32:TARGET = $$quote(FreeMedForms)
 else:TARGET = $$quote(freemedforms)
-PACKAGE_VERSION = 0.5.9
+PACKAGE_VERSION = 0.6.0
 
 # Prepare installation
 FMF_BUILD = 1

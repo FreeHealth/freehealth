@@ -550,7 +550,13 @@ enum TitleInterpret {
         const char * const APPROVED = QT_TRANSLATE_NOOP("tkConstants", "Approved");
 
         // File filters
-        const char * const FILE_FILTER_ZIP = QT_TRANSLATE_NOOP("tkConstants", "Zip archive (*zip)");
+        const char * const FILE_FILTER_ZIP = QT_TRANSLATE_NOOP("tkConstants", "Zip archive (*.zip)");
+        const char * const FILE_FILTER_HTML = QT_TRANSLATE_NOOP("tkConstants", "HTML files (*.htm *.html)");
+        const char * const FILE_FILTER_XML = QT_TRANSLATE_NOOP("tkConstants", "XML files (*.xml)");
+        const char * const FILE_FILTER_TXT = QT_TRANSLATE_NOOP("tkConstants", "Text files (*.txt)");
+        const char * const FILE_FILTER_RTF = QT_TRANSLATE_NOOP("tkConstants", "Rich text files (*.rtf)");
+        const char * const FILE_FILTER_ODT = QT_TRANSLATE_NOOP("tkConstants", "OpenOffice document (*.odt)");
+        const char * const FILE_FILTER_ALL_FILES = QT_TRANSLATE_NOOP("tkConstants", "All files(*)");
 
         // Plugins related
         const char* const PLUGINS_CATEGORY = QT_TRANSLATE_NOOP("tkConstants", "Plugins");

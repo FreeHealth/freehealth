@@ -71,7 +71,7 @@
     </message>
     <message>
         <location filename="../../libs/translationutils/constanttranslations.h" line="151"/>
-        <location filename="../../libs/translationutils/constanttranslations.h" line="556"/>
+        <location filename="../../libs/translationutils/constanttranslations.h" line="562"/>
         <source>Plugins</source>
         <translation></translation>
     </message>
@@ -1203,57 +1203,87 @@
         <translation>Approuvé</translation>
     </message>
     <message>
-        <location filename="../../libs/translationutils/constanttranslations.h" line="569"/>
+        <location filename="../../libs/translationutils/constanttranslations.h" line="553"/>
+        <source>Zip archive (*.zip)</source>
+        <translation>Archive ZIP (*.zip)</translation>
+    </message>
+    <message>
+        <location filename="../../libs/translationutils/constanttranslations.h" line="554"/>
+        <source>HTML files (*.htm *.html)</source>
+        <translation>Fichiers HTML (*.htm *.html)</translation>
+    </message>
+    <message>
+        <location filename="../../libs/translationutils/constanttranslations.h" line="555"/>
+        <source>XML files (*.xml)</source>
+        <translation>Fichiers XML (*.xml)</translation>
+    </message>
+    <message>
+        <location filename="../../libs/translationutils/constanttranslations.h" line="557"/>
+        <source>Rich text files (*.rtf)</source>
+        <translation>Fichiers texte enrichi (*.rtf)</translation>
+    </message>
+    <message>
+        <location filename="../../libs/translationutils/constanttranslations.h" line="558"/>
+        <source>OpenOffice document (*.odt)</source>
+        <translation>Document OpenOffice (*.odt)</translation>
+    </message>
+    <message>
+        <location filename="../../libs/translationutils/constanttranslations.h" line="559"/>
+        <source>All files(*)</source>
+        <translation>Tous les fichiers (*)</translation>
+    </message>
+    <message>
+        <location filename="../../libs/translationutils/constanttranslations.h" line="575"/>
         <source>Clear patient&apos;s information</source>
         <translation>Effacer les informations concernant le patient</translation>
     </message>
     <message>
-        <location filename="../../libs/translationutils/constanttranslations.h" line="584"/>
+        <location filename="../../libs/translationutils/constanttranslations.h" line="590"/>
         <source>Nurse</source>
         <translation>Infirmière</translation>
     </message>
     <message>
-        <location filename="../../libs/translationutils/constanttranslations.h" line="586"/>
+        <location filename="../../libs/translationutils/constanttranslations.h" line="592"/>
         <source>Caregiver</source>
         <translation>Aide-soignant</translation>
     </message>
     <message>
-        <location filename="../../libs/translationutils/constanttranslations.h" line="587"/>
+        <location filename="../../libs/translationutils/constanttranslations.h" line="593"/>
         <source>Medical student</source>
         <translation>Etudiant en médecine</translation>
     </message>
     <message>
-        <location filename="../../libs/translationutils/constanttranslations.h" line="588"/>
+        <location filename="../../libs/translationutils/constanttranslations.h" line="594"/>
         <source>Software administrator</source>
         <translation>Administrateur logiciel</translation>
     </message>
     <message>
-        <location filename="../../libs/translationutils/constanttranslations.h" line="625"/>
+        <location filename="../../libs/translationutils/constanttranslations.h" line="631"/>
         <source>Add current date</source>
         <translation>Ajouter la date du jour</translation>
     </message>
     <message>
-        <location filename="../../libs/translationutils/constanttranslations.h" line="626"/>
+        <location filename="../../libs/translationutils/constanttranslations.h" line="632"/>
         <source>Add user name</source>
         <translation>Ajouter le nom de l&apos;utilisateur</translation>
     </message>
     <message>
-        <location filename="../../libs/translationutils/constanttranslations.h" line="627"/>
+        <location filename="../../libs/translationutils/constanttranslations.h" line="633"/>
         <source>Add patient name</source>
         <translation>Ajouter le nom du patient</translation>
     </message>
     <message>
-        <location filename="../../libs/translationutils/constanttranslations.h" line="628"/>
+        <location filename="../../libs/translationutils/constanttranslations.h" line="634"/>
         <source>Add text</source>
         <translation>Ajouter du texte</translation>
     </message>
     <message>
-        <location filename="../../libs/translationutils/constanttranslations.h" line="637"/>
+        <location filename="../../libs/translationutils/constanttranslations.h" line="643"/>
         <source>All languages</source>
         <translation>Tous les langages</translation>
     </message>
     <message>
-        <location filename="../../libs/translationutils/constanttranslations.h" line="638"/>
+        <location filename="../../libs/translationutils/constanttranslations.h" line="644"/>
         <source>All other languages</source>
         <translation>Tous les autres langages</translation>
     </message>
@@ -1807,108 +1837,108 @@ Localisation : %2</translation>
         <translation>Impression</translation>
     </message>
     <message>
-        <location filename="../../libs/translationutils/constanttranslations.h" line="553"/>
-        <source>Zip archive (*zip)</source>
-        <translation>Archive Zip (*.zip)</translation>
+        <location filename="../../libs/translationutils/constanttranslations.h" line="556"/>
+        <source>Text files (*.txt)</source>
+        <translation>Fichiers texte (*.txt)</translation>
     </message>
     <message>
-        <location filename="../../libs/translationutils/constanttranslations.h" line="559"/>
+        <location filename="../../libs/translationutils/constanttranslations.h" line="565"/>
         <source>France</source>
         <translation></translation>
     </message>
     <message>
-        <location filename="../../libs/translationutils/constanttranslations.h" line="560"/>
+        <location filename="../../libs/translationutils/constanttranslations.h" line="566"/>
         <source>Germany</source>
         <translation>Allemagne</translation>
     </message>
     <message>
-        <location filename="../../libs/translationutils/constanttranslations.h" line="561"/>
+        <location filename="../../libs/translationutils/constanttranslations.h" line="567"/>
         <source>Canada</source>
         <translation></translation>
     </message>
     <message>
-        <location filename="../../libs/translationutils/constanttranslations.h" line="564"/>
+        <location filename="../../libs/translationutils/constanttranslations.h" line="570"/>
         <source>Patient Name</source>
         <translation>Nom du patient</translation>
     </message>
     <message>
-        <location filename="../../libs/translationutils/constanttranslations.h" line="565"/>
+        <location filename="../../libs/translationutils/constanttranslations.h" line="571"/>
         <source>Patient</source>
         <translation>Patient</translation>
     </message>
     <message>
-        <location filename="../../libs/translationutils/constanttranslations.h" line="566"/>
+        <location filename="../../libs/translationutils/constanttranslations.h" line="572"/>
         <source>Patients</source>
         <translation>Patients</translation>
     </message>
     <message>
-        <location filename="../../libs/translationutils/constanttranslations.h" line="567"/>
+        <location filename="../../libs/translationutils/constanttranslations.h" line="573"/>
         <source>Patient informations</source>
         <translation>Informations sur le patient</translation>
     </message>
     <message>
-        <location filename="../../libs/translationutils/constanttranslations.h" line="568"/>
+        <location filename="../../libs/translationutils/constanttranslations.h" line="574"/>
         <source>Patient database</source>
         <translation>Base de données patient</translation>
     </message>
     <message>
-        <location filename="../../libs/translationutils/constanttranslations.h" line="570"/>
+        <location filename="../../libs/translationutils/constanttranslations.h" line="576"/>
         <source>Toggle patient&apos;s information</source>
         <translation>Afficher/cacher les informations concernant le patient</translation>
     </message>
     <message>
-        <location filename="../../libs/translationutils/constanttranslations.h" line="573"/>
+        <location filename="../../libs/translationutils/constanttranslations.h" line="579"/>
         <source>Male</source>
         <translation>Masculin</translation>
     </message>
     <message>
-        <location filename="../../libs/translationutils/constanttranslations.h" line="574"/>
+        <location filename="../../libs/translationutils/constanttranslations.h" line="580"/>
         <source>Female</source>
         <translation>Féminin</translation>
     </message>
     <message>
-        <location filename="../../libs/translationutils/constanttranslations.h" line="575"/>
+        <location filename="../../libs/translationutils/constanttranslations.h" line="581"/>
         <source>Hermaphrodism</source>
         <translation>Hémaphrodisme</translation>
     </message>
     <message>
-        <location filename="../../libs/translationutils/constanttranslations.h" line="578"/>
+        <location filename="../../libs/translationutils/constanttranslations.h" line="584"/>
         <source>Mister</source>
         <translation>Monsieur</translation>
     </message>
     <message>
-        <location filename="../../libs/translationutils/constanttranslations.h" line="579"/>
+        <location filename="../../libs/translationutils/constanttranslations.h" line="585"/>
         <source>Miss</source>
         <translation>Mademoiselle</translation>
     </message>
     <message>
-        <location filename="../../libs/translationutils/constanttranslations.h" line="580"/>
+        <location filename="../../libs/translationutils/constanttranslations.h" line="586"/>
         <source>Madam</source>
         <translation>Madame</translation>
     </message>
     <message>
-        <location filename="../../libs/translationutils/constanttranslations.h" line="581"/>
+        <location filename="../../libs/translationutils/constanttranslations.h" line="587"/>
         <source>Doctor</source>
         <translation>Docteur</translation>
     </message>
     <message>
-        <location filename="../../libs/translationutils/constanttranslations.h" line="582"/>
+        <location filename="../../libs/translationutils/constanttranslations.h" line="588"/>
         <source>Professor</source>
         <translation>Professeur</translation>
     </message>
     <message>
-        <location filename="../../libs/translationutils/constanttranslations.h" line="583"/>
+        <location filename="../../libs/translationutils/constanttranslations.h" line="589"/>
         <source>Captain</source>
         <translation>Capitaine</translation>
     </message>
     <message>
-        <location filename="../../libs/translationutils/constanttranslations.h" line="585"/>
+        <location filename="../../libs/translationutils/constanttranslations.h" line="591"/>
         <source>Secretary</source>
         <translation>Secrétaire</translation>
     </message>
     <message>
-        <location filename="../../libs/translationutils/constanttranslations.h" line="592"/>
-        <location filename="../../libs/translationutils/constanttranslations.h" line="604"/>
+        <location filename="../../libs/translationutils/constanttranslations.h" line="598"/>
+        <location filename="../../libs/translationutils/constanttranslations.h" line="610"/>
         <source>Ctrl+L</source>
         <extracomment>Text Align Left shortcut key
 ----------
@@ -1916,8 +1946,8 @@ Text Align Left shortcut key : Mac specific</extracomment>
         <translation></translation>
     </message>
     <message>
-        <location filename="../../libs/translationutils/constanttranslations.h" line="595"/>
-        <location filename="../../libs/translationutils/constanttranslations.h" line="607"/>
+        <location filename="../../libs/translationutils/constanttranslations.h" line="601"/>
+        <location filename="../../libs/translationutils/constanttranslations.h" line="613"/>
         <source>Ctrl+R</source>
         <extracomment>Text Align Right shortcut key
 ----------
@@ -1925,8 +1955,8 @@ Text Align Right shortcut key : Mac specific</extracomment>
         <translation></translation>
     </message>
     <message>
-        <location filename="../../libs/translationutils/constanttranslations.h" line="598"/>
-        <location filename="../../libs/translationutils/constanttranslations.h" line="610"/>
+        <location filename="../../libs/translationutils/constanttranslations.h" line="604"/>
+        <location filename="../../libs/translationutils/constanttranslations.h" line="616"/>
         <source>Ctrl+E</source>
         <extracomment>Text Align Center shortcut key
 ----------
@@ -1934,8 +1964,8 @@ Text Align Center shortcut key : Mac specific</extracomment>
         <translation></translation>
     </message>
     <message>
-        <location filename="../../libs/translationutils/constanttranslations.h" line="601"/>
-        <location filename="../../libs/translationutils/constanttranslations.h" line="613"/>
+        <location filename="../../libs/translationutils/constanttranslations.h" line="607"/>
+        <location filename="../../libs/translationutils/constanttranslations.h" line="619"/>
         <source>Ctrl+J</source>
         <extracomment>Text Align Justify shortcut key
 ----------
@@ -1943,33 +1973,33 @@ Text Align Justify shortcut key : Mac specific</extracomment>
         <translation></translation>
     </message>
     <message>
-        <location filename="../../libs/translationutils/constanttranslations.h" line="616"/>
+        <location filename="../../libs/translationutils/constanttranslations.h" line="622"/>
         <source>Ctrl+Shift+T</source>
         <extracomment>Add table Editor shortcut key</extracomment>
         <translation></translation>
     </message>
     <message>
-        <location filename="../../libs/translationutils/constanttranslations.h" line="621"/>
+        <location filename="../../libs/translationutils/constanttranslations.h" line="627"/>
         <source>Toggle toolbar</source>
         <translation>Afficher/cacher la barre d&apos;outil</translation>
     </message>
     <message>
-        <location filename="../../libs/translationutils/constanttranslations.h" line="622"/>
+        <location filename="../../libs/translationutils/constanttranslations.h" line="628"/>
         <source>Open in editor</source>
         <translation>Ouvrir dans l&apos;éditeur</translation>
     </message>
     <message>
-        <location filename="../../libs/translationutils/constanttranslations.h" line="623"/>
+        <location filename="../../libs/translationutils/constanttranslations.h" line="629"/>
         <source>Save editor</source>
         <translation>Sauvegarder l&apos;éditeur</translation>
     </message>
     <message>
-        <location filename="../../libs/translationutils/constanttranslations.h" line="624"/>
+        <location filename="../../libs/translationutils/constanttranslations.h" line="630"/>
         <source>Rich Text Editor</source>
         <translation>Éditeur de texte enrichi</translation>
     </message>
     <message>
-        <location filename="../../libs/translationutils/constanttranslations.h" line="632"/>
+        <location filename="../../libs/translationutils/constanttranslations.h" line="638"/>
         <source>Ctrl+Shift+P</source>
         <extracomment>ShortCut for &quot;Print prescription&quot;</extracomment>
         <translation></translation>
