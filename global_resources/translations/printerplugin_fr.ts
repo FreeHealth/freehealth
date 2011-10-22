@@ -4,7 +4,7 @@
 <context>
     <name>Print</name>
     <message>
-        <location filename="../../plugins/printerplugin/documentprinter.cpp" line="149"/>
+        <location filename="../../plugins/printerplugin/documentprinter.cpp" line="160"/>
         <source>Made with %1.</source>
         <translation>Réalisé avec %1.</translation>
     </message>

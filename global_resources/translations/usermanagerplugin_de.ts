@@ -101,8 +101,8 @@
 <context>
     <name>UserPlugin::Internal::DefaultUserContactPage</name>
     <message>
-        <location filename="../../plugins/usermanagerplugin/widgets/defautuserviewerpages.cpp" line="246"/>
-        <location filename="../../plugins/usermanagerplugin/widgets/defautuserviewerpages.cpp" line="256"/>
+        <location filename="../../plugins/usermanagerplugin/widgets/defautuserviewerpages.cpp" line="259"/>
+        <location filename="../../plugins/usermanagerplugin/widgets/defautuserviewerpages.cpp" line="269"/>
         <source>Contact</source>
         <translation type="unfinished"></translation>
     </message>
@@ -110,7 +110,7 @@
 <context>
     <name>UserPlugin::Internal::DefaultUserIdentityPage</name>
     <message>
-        <location filename="../../plugins/usermanagerplugin/widgets/defautuserviewerpages.cpp" line="160"/>
+        <location filename="../../plugins/usermanagerplugin/widgets/defautuserviewerpages.cpp" line="167"/>
         <source>User identity</source>
         <translation type="unfinished"></translation>
     </message>
@@ -142,22 +142,22 @@ Last connection : %2</source>
 <context>
     <name>UserPlugin::Internal::DefaultUserPapersPage</name>
     <message>
-        <location filename="../../plugins/usermanagerplugin/widgets/defautuserviewerpages.cpp" line="559"/>
+        <location filename="../../plugins/usermanagerplugin/widgets/defautuserviewerpages.cpp" line="592"/>
         <source>Generic papers</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../../plugins/usermanagerplugin/widgets/defautuserviewerpages.cpp" line="560"/>
+        <location filename="../../plugins/usermanagerplugin/widgets/defautuserviewerpages.cpp" line="593"/>
         <source>Administrative papers</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../../plugins/usermanagerplugin/widgets/defautuserviewerpages.cpp" line="561"/>
+        <location filename="../../plugins/usermanagerplugin/widgets/defautuserviewerpages.cpp" line="594"/>
         <source>Prescription papers</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../../plugins/usermanagerplugin/widgets/defautuserviewerpages.cpp" line="568"/>
+        <location filename="../../plugins/usermanagerplugin/widgets/defautuserviewerpages.cpp" line="601"/>
         <source>Documents</source>
         <translation type="unfinished"></translation>
     </message>
@@ -165,8 +165,8 @@ Last connection : %2</source>
 <context>
     <name>UserPlugin::Internal::DefaultUserProfessionalPage</name>
     <message>
-        <location filename="../../plugins/usermanagerplugin/widgets/defautuserviewerpages.cpp" line="336"/>
-        <location filename="../../plugins/usermanagerplugin/widgets/defautuserviewerpages.cpp" line="346"/>
+        <location filename="../../plugins/usermanagerplugin/widgets/defautuserviewerpages.cpp" line="355"/>
+        <location filename="../../plugins/usermanagerplugin/widgets/defautuserviewerpages.cpp" line="365"/>
         <source>Professional identifiants</source>
         <translation type="unfinished"></translation>
     </message>
@@ -310,67 +310,67 @@ p, li { white-space: pre-wrap; }
 <context>
     <name>UserPlugin::Internal::UserManagerWidget</name>
     <message>
-        <location filename="../../plugins/usermanagerplugin/widgets/usermanager.cpp" line="341"/>
+        <location filename="../../plugins/usermanagerplugin/widgets/usermanager.cpp" line="348"/>
         <source>You&apos;ve modified the users&apos; list.</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../../plugins/usermanagerplugin/widgets/usermanager.cpp" line="341"/>
+        <location filename="../../plugins/usermanagerplugin/widgets/usermanager.cpp" line="348"/>
         <source>Do you want to save your changes ?</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../../plugins/usermanagerplugin/widgets/usermanager.cpp" line="349"/>
+        <location filename="../../plugins/usermanagerplugin/widgets/usermanager.cpp" line="356"/>
         <source>Changes have been correctly saved.</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../../plugins/usermanagerplugin/widgets/usermanager.cpp" line="352"/>
+        <location filename="../../plugins/usermanagerplugin/widgets/usermanager.cpp" line="359"/>
         <source>Changes can not be correctly saved.</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../../plugins/usermanagerplugin/widgets/usermanager.cpp" line="473"/>
+        <location filename="../../plugins/usermanagerplugin/widgets/usermanager.cpp" line="480"/>
         <source>User deleted</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../../plugins/usermanagerplugin/widgets/usermanager.cpp" line="475"/>
+        <location filename="../../plugins/usermanagerplugin/widgets/usermanager.cpp" line="482"/>
         <source>User can not be deleted</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../../plugins/usermanagerplugin/widgets/usermanager.cpp" line="518"/>
+        <location filename="../../plugins/usermanagerplugin/widgets/usermanager.cpp" line="525"/>
         <source>Search user by name</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../../plugins/usermanagerplugin/widgets/usermanager.cpp" line="519"/>
+        <location filename="../../plugins/usermanagerplugin/widgets/usermanager.cpp" line="526"/>
         <source>Search user by firstname</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../../plugins/usermanagerplugin/widgets/usermanager.cpp" line="520"/>
+        <location filename="../../plugins/usermanagerplugin/widgets/usermanager.cpp" line="527"/>
         <source>Search user by name and firstname</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../../plugins/usermanagerplugin/widgets/usermanager.cpp" line="521"/>
+        <location filename="../../plugins/usermanagerplugin/widgets/usermanager.cpp" line="528"/>
         <source>Search user by city</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../../plugins/usermanagerplugin/widgets/usermanager.cpp" line="535"/>
+        <location filename="../../plugins/usermanagerplugin/widgets/usermanager.cpp" line="542"/>
         <source>Clear modifications</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../../plugins/usermanagerplugin/widgets/usermanager.cpp" line="539"/>
+        <location filename="../../plugins/usermanagerplugin/widgets/usermanager.cpp" line="546"/>
         <source>Quit User Manager</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../../plugins/usermanagerplugin/widgets/usermanager.cpp" line="541"/>
+        <location filename="../../plugins/usermanagerplugin/widgets/usermanager.cpp" line="548"/>
         <source>Toggle search</source>
         <translation type="unfinished"></translation>
     </message>
@@ -718,12 +718,12 @@ p, li { white-space: pre-wrap; }
 <context>
     <name>UserPlugin::UserContactPage</name>
     <message>
-        <location filename="../../plugins/usermanagerplugin/widgets/userwizard.cpp" line="458"/>
+        <location filename="../../plugins/usermanagerplugin/widgets/userwizard.cpp" line="465"/>
         <source>Please enter your complete address.</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../../plugins/usermanagerplugin/widgets/userwizard.cpp" line="459"/>
+        <location filename="../../plugins/usermanagerplugin/widgets/userwizard.cpp" line="466"/>
         <source>This represents your professional address.</source>
         <translation type="unfinished"></translation>
     </message>
@@ -731,7 +731,7 @@ p, li { white-space: pre-wrap; }
 <context>
     <name>UserPlugin::UserCreationPage</name>
     <message>
-        <location filename="../../plugins/usermanagerplugin/userfistrunpage.cpp" line="137"/>
+        <location filename="../../plugins/usermanagerplugin/userfistrunpage.cpp" line="144"/>
         <source>You can use the full user manager dialog to create user or create simple users using the user wizard.</source>
         <translation type="unfinished"></translation>
     </message>
@@ -739,146 +739,146 @@ p, li { white-space: pre-wrap; }
 <context>
     <name>UserPlugin::UserIdentityAndLoginPage</name>
     <message>
-        <location filename="../../plugins/usermanagerplugin/widgets/userwizard.cpp" line="299"/>
-        <location filename="../../plugins/usermanagerplugin/widgets/userwizard.cpp" line="399"/>
+        <location filename="../../plugins/usermanagerplugin/widgets/userwizard.cpp" line="305"/>
+        <location filename="../../plugins/usermanagerplugin/widgets/userwizard.cpp" line="406"/>
         <source>Language</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../../plugins/usermanagerplugin/widgets/userwizard.cpp" line="300"/>
-        <location filename="../../plugins/usermanagerplugin/widgets/userwizard.cpp" line="400"/>
+        <location filename="../../plugins/usermanagerplugin/widgets/userwizard.cpp" line="306"/>
+        <location filename="../../plugins/usermanagerplugin/widgets/userwizard.cpp" line="407"/>
         <source>Title</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../../plugins/usermanagerplugin/widgets/userwizard.cpp" line="301"/>
-        <location filename="../../plugins/usermanagerplugin/widgets/userwizard.cpp" line="401"/>
+        <location filename="../../plugins/usermanagerplugin/widgets/userwizard.cpp" line="307"/>
+        <location filename="../../plugins/usermanagerplugin/widgets/userwizard.cpp" line="408"/>
         <source>Name</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../../plugins/usermanagerplugin/widgets/userwizard.cpp" line="302"/>
-        <location filename="../../plugins/usermanagerplugin/widgets/userwizard.cpp" line="402"/>
+        <location filename="../../plugins/usermanagerplugin/widgets/userwizard.cpp" line="308"/>
+        <location filename="../../plugins/usermanagerplugin/widgets/userwizard.cpp" line="409"/>
         <source>Firstname</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../../plugins/usermanagerplugin/widgets/userwizard.cpp" line="303"/>
-        <location filename="../../plugins/usermanagerplugin/widgets/userwizard.cpp" line="403"/>
+        <location filename="../../plugins/usermanagerplugin/widgets/userwizard.cpp" line="309"/>
+        <location filename="../../plugins/usermanagerplugin/widgets/userwizard.cpp" line="410"/>
         <source>Second Name</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../../plugins/usermanagerplugin/widgets/userwizard.cpp" line="304"/>
-        <location filename="../../plugins/usermanagerplugin/widgets/userwizard.cpp" line="404"/>
+        <location filename="../../plugins/usermanagerplugin/widgets/userwizard.cpp" line="310"/>
+        <location filename="../../plugins/usermanagerplugin/widgets/userwizard.cpp" line="411"/>
         <source>Gender</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../../plugins/usermanagerplugin/widgets/userwizard.cpp" line="334"/>
-        <location filename="../../plugins/usermanagerplugin/widgets/userwizard.cpp" line="407"/>
+        <location filename="../../plugins/usermanagerplugin/widgets/userwizard.cpp" line="340"/>
+        <location filename="../../plugins/usermanagerplugin/widgets/userwizard.cpp" line="414"/>
         <source>Login</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../../plugins/usermanagerplugin/widgets/userwizard.cpp" line="335"/>
+        <location filename="../../plugins/usermanagerplugin/widgets/userwizard.cpp" line="341"/>
         <source>Your login must be 5 chars length at least</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../../plugins/usermanagerplugin/widgets/userwizard.cpp" line="337"/>
-        <location filename="../../plugins/usermanagerplugin/widgets/userwizard.cpp" line="408"/>
+        <location filename="../../plugins/usermanagerplugin/widgets/userwizard.cpp" line="343"/>
+        <location filename="../../plugins/usermanagerplugin/widgets/userwizard.cpp" line="415"/>
         <source>Password</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../../plugins/usermanagerplugin/widgets/userwizard.cpp" line="339"/>
-        <location filename="../../plugins/usermanagerplugin/widgets/userwizard.cpp" line="409"/>
+        <location filename="../../plugins/usermanagerplugin/widgets/userwizard.cpp" line="345"/>
+        <location filename="../../plugins/usermanagerplugin/widgets/userwizard.cpp" line="416"/>
         <source>Confirm Password</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../../plugins/usermanagerplugin/widgets/userwizard.cpp" line="396"/>
+        <location filename="../../plugins/usermanagerplugin/widgets/userwizard.cpp" line="403"/>
         <source>Create a new user.</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../../plugins/usermanagerplugin/widgets/userwizard.cpp" line="397"/>
+        <location filename="../../plugins/usermanagerplugin/widgets/userwizard.cpp" line="404"/>
         <source>Enter your identity.</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../../plugins/usermanagerplugin/widgets/userwizard.cpp" line="410"/>
+        <location filename="../../plugins/usermanagerplugin/widgets/userwizard.cpp" line="417"/>
         <source>Identity</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../../plugins/usermanagerplugin/widgets/userwizard.cpp" line="411"/>
+        <location filename="../../plugins/usermanagerplugin/widgets/userwizard.cpp" line="418"/>
         <source>Database connection</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../../plugins/usermanagerplugin/widgets/userwizard.cpp" line="418"/>
-        <location filename="../../plugins/usermanagerplugin/widgets/userwizard.cpp" line="421"/>
+        <location filename="../../plugins/usermanagerplugin/widgets/userwizard.cpp" line="425"/>
+        <location filename="../../plugins/usermanagerplugin/widgets/userwizard.cpp" line="428"/>
         <source>Forbidden anonymous user.</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../../plugins/usermanagerplugin/widgets/userwizard.cpp" line="419"/>
+        <location filename="../../plugins/usermanagerplugin/widgets/userwizard.cpp" line="426"/>
         <source>All users must have at least a name and a firstname.
 You can not poursue with an anonymous user.</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../../plugins/usermanagerplugin/widgets/userwizard.cpp" line="425"/>
+        <location filename="../../plugins/usermanagerplugin/widgets/userwizard.cpp" line="432"/>
         <source>Password confirmation error.</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../../plugins/usermanagerplugin/widgets/userwizard.cpp" line="426"/>
+        <location filename="../../plugins/usermanagerplugin/widgets/userwizard.cpp" line="433"/>
         <source>You must correctly confirm your password to go throw this page.</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../../plugins/usermanagerplugin/widgets/userwizard.cpp" line="427"/>
+        <location filename="../../plugins/usermanagerplugin/widgets/userwizard.cpp" line="434"/>
         <source>Wrong password</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../../plugins/usermanagerplugin/widgets/userwizard.cpp" line="431"/>
-        <location filename="../../plugins/usermanagerplugin/widgets/userwizard.cpp" line="437"/>
+        <location filename="../../plugins/usermanagerplugin/widgets/userwizard.cpp" line="438"/>
+        <location filename="../../plugins/usermanagerplugin/widgets/userwizard.cpp" line="444"/>
         <source>Login error.</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../../plugins/usermanagerplugin/widgets/userwizard.cpp" line="432"/>
+        <location filename="../../plugins/usermanagerplugin/widgets/userwizard.cpp" line="439"/>
         <source>You must specify a valid login. Empty login is forbidden.</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../../plugins/usermanagerplugin/widgets/userwizard.cpp" line="433"/>
-        <location filename="../../plugins/usermanagerplugin/widgets/userwizard.cpp" line="439"/>
+        <location filename="../../plugins/usermanagerplugin/widgets/userwizard.cpp" line="440"/>
+        <location filename="../../plugins/usermanagerplugin/widgets/userwizard.cpp" line="446"/>
         <source>Wrong login</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../../plugins/usermanagerplugin/widgets/userwizard.cpp" line="438"/>
+        <location filename="../../plugins/usermanagerplugin/widgets/userwizard.cpp" line="445"/>
         <source>You must specify a valid login. Login must be more than 3 chars.</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../../plugins/usermanagerplugin/widgets/userwizard.cpp" line="445"/>
+        <location filename="../../plugins/usermanagerplugin/widgets/userwizard.cpp" line="452"/>
         <source>Login and password already used</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../../plugins/usermanagerplugin/widgets/userwizard.cpp" line="446"/>
+        <location filename="../../plugins/usermanagerplugin/widgets/userwizard.cpp" line="453"/>
         <source>The users&apos; database already contains the same login/password couple.
 You must specify a different login/password.</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../../plugins/usermanagerplugin/widgets/userwizard.cpp" line="448"/>
+        <location filename="../../plugins/usermanagerplugin/widgets/userwizard.cpp" line="455"/>
         <source>Login/Password already used</source>
         <translation type="unfinished"></translation>
     </message>
@@ -984,17 +984,17 @@ Application will stop.</source>
 <context>
     <name>UserPlugin::UserProfilPage</name>
     <message>
-        <location filename="../../plugins/usermanagerplugin/widgets/userwizard.cpp" line="490"/>
+        <location filename="../../plugins/usermanagerplugin/widgets/userwizard.cpp" line="497"/>
         <source>Select a profil</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../../plugins/usermanagerplugin/widgets/userwizard.cpp" line="491"/>
+        <location filename="../../plugins/usermanagerplugin/widgets/userwizard.cpp" line="498"/>
         <source>FreeMedForms allows you to create users using predefined profils. Select your profil and options.</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../../plugins/usermanagerplugin/widgets/userwizard.cpp" line="509"/>
+        <location filename="../../plugins/usermanagerplugin/widgets/userwizard.cpp" line="516"/>
         <source>Define all rights</source>
         <translation type="unfinished"></translation>
     </message>
@@ -1002,37 +1002,37 @@ Application will stop.</source>
 <context>
     <name>UserPlugin::UserRightsPage</name>
     <message>
-        <location filename="../../plugins/usermanagerplugin/widgets/userwizard.cpp" line="599"/>
+        <location filename="../../plugins/usermanagerplugin/widgets/userwizard.cpp" line="606"/>
         <source>Define user&apos;s rights.</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../../plugins/usermanagerplugin/widgets/userwizard.cpp" line="600"/>
+        <location filename="../../plugins/usermanagerplugin/widgets/userwizard.cpp" line="607"/>
         <source>Role by role, define the user&apos;s rights.</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../../plugins/usermanagerplugin/widgets/userwizard.cpp" line="610"/>
+        <location filename="../../plugins/usermanagerplugin/widgets/userwizard.cpp" line="617"/>
         <source>Users</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../../plugins/usermanagerplugin/widgets/userwizard.cpp" line="611"/>
+        <location filename="../../plugins/usermanagerplugin/widgets/userwizard.cpp" line="618"/>
         <source>Drugs</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../../plugins/usermanagerplugin/widgets/userwizard.cpp" line="612"/>
+        <location filename="../../plugins/usermanagerplugin/widgets/userwizard.cpp" line="619"/>
         <source>Medicals</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../../plugins/usermanagerplugin/widgets/userwizard.cpp" line="613"/>
+        <location filename="../../plugins/usermanagerplugin/widgets/userwizard.cpp" line="620"/>
         <source>Paramedicals</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../../plugins/usermanagerplugin/widgets/userwizard.cpp" line="614"/>
+        <location filename="../../plugins/usermanagerplugin/widgets/userwizard.cpp" line="621"/>
         <source>Administrative</source>
         <translation type="unfinished"></translation>
     </message>
@@ -1040,27 +1040,27 @@ Application will stop.</source>
 <context>
     <name>UserPlugin::UserSpecialiesQualificationsPage</name>
     <message>
-        <location filename="../../plugins/usermanagerplugin/widgets/userwizard.cpp" line="569"/>
+        <location filename="../../plugins/usermanagerplugin/widgets/userwizard.cpp" line="576"/>
         <source>Define user&apos;s specialties and qualifications.</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../../plugins/usermanagerplugin/widgets/userwizard.cpp" line="570"/>
+        <location filename="../../plugins/usermanagerplugin/widgets/userwizard.cpp" line="577"/>
         <source>Use the context menu to add, remove, move up or down items.</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../../plugins/usermanagerplugin/widgets/userwizard.cpp" line="583"/>
+        <location filename="../../plugins/usermanagerplugin/widgets/userwizard.cpp" line="590"/>
         <source>Specialities</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../../plugins/usermanagerplugin/widgets/userwizard.cpp" line="584"/>
+        <location filename="../../plugins/usermanagerplugin/widgets/userwizard.cpp" line="591"/>
         <source>Qualifications</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../../plugins/usermanagerplugin/widgets/userwizard.cpp" line="585"/>
+        <location filename="../../plugins/usermanagerplugin/widgets/userwizard.cpp" line="592"/>
         <source>Identifiants</source>
         <translation type="unfinished"></translation>
     </message>

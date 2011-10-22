@@ -12,7 +12,7 @@
 <context>
     <name>Agenda::AgendaPlugin</name>
     <message>
-        <location filename="../../plugins/agendaplugin/agendaplugin.cpp" line="110"/>
+        <location filename="../../plugins/agendaplugin/agendaplugin.cpp" line="113"/>
         <source>Initializing agenda plugin...</source>
         <translation>Initialisation du plugin agenda...</translation>
     </message>
@@ -229,12 +229,12 @@
 <context>
     <name>Agenda::Internal::UserCalendarWizardPage</name>
     <message>
-        <location filename="../../plugins/agendaplugin/usercalendarwizardcreatorpage.cpp" line="124"/>
+        <location filename="../../plugins/agendaplugin/usercalendarwizardcreatorpage.cpp" line="132"/>
         <source>Manage an agenda.</source>
         <translation>Gérer un agenda.</translation>
     </message>
     <message>
-        <location filename="../../plugins/agendaplugin/usercalendarwizardcreatorpage.cpp" line="125"/>
+        <location filename="../../plugins/agendaplugin/usercalendarwizardcreatorpage.cpp" line="133"/>
         <source>You can quickly define an agenda for this user. This agenda will be the default one.</source>
         <translation>Vous pouvez rapidement définir un agenda pour cet utilisateur. Cet agenda sera l&apos;agenda par défaut.</translation>
     </message>
