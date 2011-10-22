@@ -57,7 +57,8 @@
 #include <coreplugin/imainwindow.h>
 #include <coreplugin/isettings.h>
 #include <coreplugin/igenericpage.h>
-// #include <coreplugin/dialogs/helpdialog.h>
+#include <coreplugin/itheme.h>
+#include <coreplugin/constants_icons.h>
 
 #include <QHeaderView>
 #include <QPushButton>
@@ -81,12 +82,14 @@ using namespace Core;
 using namespace Core::Internal;
 
 static inline Core::ISettings *settings()  { return Core::ICore::instance()->settings(); }
+static inline Core::ITheme *theme()  { return Core::ICore::instance()->theme(); }
 
 PageWidget::PageWidget(QWidget *parent) :
     QWidget(parent), m_applied(false), m_categoryInBold(true)
 {
     m_ui = new Ui::PageWidget();
     m_ui->setupUi(this);
+    m_ui->splitter->setCollapsible(0, true);
     m_ui->splitter->setCollapsible(1, false);
     m_ui->pageTree->header()->setVisible(false);
 
@@ -99,6 +102,9 @@ void PageWidget::setupUi(bool sortCategoryView)
 {
     // clear ui
     m_ui->pageTree->clear();
+    m_Categories.clear();
+    m_Labels.clear();
+    m_Items.clear();
     m_AddedWidgets.clear();  // widgets are deleted with the "delete w" above.
     for(int i = m_ui->stackedPages->count(); i > -1; --i) {
         QWidget *w = m_ui->stackedPages->widget(i);
@@ -129,6 +135,7 @@ void PageWidget::setupUi(bool sortCategoryView)
         QTreeWidgetItem *item = new QTreeWidgetItem;
         item->setText(0, page->name());
         item->setData(0, Qt::UserRole, qVariantFromValue(pageData));
+        m_Items.insert(page, item);
 
         QIcon icon = page->icon();
         if (!icon.isNull())
@@ -147,6 +154,7 @@ void PageWidget::setupUi(bool sortCategoryView)
                 treeitem->setFont(0, bold);
             }
             categories.insert(currentCategory, treeitem);
+            m_Categories.insert(page, treeitem);
         }
 
         int catCount = 1;
@@ -188,7 +196,7 @@ void PageWidget::setupUi(bool sortCategoryView)
 //    m_ui->stackedPages->layout()->setSpacing(0);
 
     // resize and center window
-    Utils::resizeAndCenter(this);
+//    Utils::resizeAndCenter(this);
 }
 
 /** Expand all categories in the category treeView. */
@@ -221,21 +229,30 @@ QWidget *PageWidget::createPageWidget(IGenericPage *page)
     w->setLayout(lay);
 
     // add title and line
+    QHBoxLayout *titleLayout = new QHBoxLayout;
+    titleLayout->setMargin(0);
     QFont bold;
     bold.setBold(true);
     bold.setPointSize(bold.pointSize()+1);
     QLabel *title = new QLabel(w);
+    title->setSizePolicy(QSizePolicy::Expanding, QSizePolicy::Fixed);
     title->setFont(bold);
     title->setText(page->title());
     title->setIndent(5);
     title->setContentsMargins(5,5,5,5);
-//    title->setAlignment(Qt::AlignCenter);
-//    title->setStyleSheet("background:qlineargradient(spread:pad, x1:0, y1:0, x2:1, y2:0, stop:0.464 rgba(176, 246, 255, 149), stop:1 rgba(255, 255, 255, 0))");
     title->setStyleSheet("background:qlineargradient(spread:pad, x1:0, y1:0, x2:1, y2:0, stop:0.464 rgba(255, 255, 176, 149), stop:1 rgba(255, 255, 255, 0))");
+    m_Labels.insert(page, title);
+    QToolButton *button = new QToolButton(w);
+    button->setIcon(theme()->icon(Core::Constants::ICONFULLSCREEN));
+    connect(button, SIGNAL(clicked()), this, SLOT(expandView()));
+    m_Buttons.append(button);
+    titleLayout->addWidget(title);
+    titleLayout->addWidget(button);
+
     QFrame *line = new QFrame(w);
     line->setFrameShape(QFrame::HLine);
     line->setFrameShadow(QFrame::Sunken);
-    lay->addWidget(title);
+    lay->addLayout(titleLayout);
     lay->addWidget(line);
 
     // add a scrollarea with the widget's page to add
@@ -270,6 +287,13 @@ void PageWidget::pageSelected()
     m_ui->stackedPages->setCurrentIndex(index);
 }
 
+void PageWidget::expandView()
+{
+    qWarning() << "iioiuoiu" << m_ui->splitter->sizes();
+    setViewExpanded(!isViewExpanded());
+    qWarning() << "________" << m_ui->splitter->sizes();
+}
+
 /** Return the current selected and activated page. */
 IGenericPage *PageWidget::currentPage() const
 {
@@ -295,15 +319,51 @@ QList<QWidget *> PageWidget::pageWidgets() const
     return m_AddedWidgets;
 }
 
+/** Return true if page widget are full sized */
+bool PageWidget::isViewExpanded() const
+{
+    return (m_ui->splitter->sizes().at(0)==0);
+}
+
+/** Define the page widget to be full sized according to the \e expand param */
+void PageWidget::setViewExpanded(bool expand)
+{
+    if (expand) {
+        QList<int> sizes;
+        sizes << 0 << this->width();
+        m_ui->splitter->setSizes(sizes);
+    } else {
+        if (isViewExpanded()) {
+            QList<int> sizes;
+            sizes << 1 << 3;
+            m_ui->splitter->setSizes(sizes);
+        }
+    }
+}
+
 void PageWidget::changeEvent(QEvent *event)
 {
+    QWidget::changeEvent(event);
     if (event->type()==QEvent::LanguageChange) {
-        /** \todo code here: PageWidget::changeEvent(QEvent *event) */
-//        // recreate the widget
-//        m_ui->pageTree->clear();
-//        for(int i = 0; i < m_ui->stackedPages->count(); ++i) {
-//            m_ui->stackedPages->removeWidget(m_ui->stackedPages->widget(i));
-//        }
-//        setupUi();
+        for(int i = 0; i < m_Buttons.count(); ++i) {
+            m_Buttons[i]->setToolTip(tr("Full view"));
+        }
+        QHashIterator<Core::IGenericPage*, QLabel *> it(m_Labels);
+        while (it.hasNext()) {
+            it.next();
+            it.value()->setText(it.key()->name());
+        }
+
+        QHashIterator<Core::IGenericPage*, QTreeWidgetItem *> it1(m_Items);
+        while (it1.hasNext()) {
+            it1.next();
+            it1.value()->setText(0, it1.key()->name());
+        }
+
+        QHashIterator<Core::IGenericPage*, QTreeWidgetItem *> it2(m_Categories);
+        while (it2.hasNext()) {
+            it2.next();
+            it2.value()->setText(0, it2.key()->name());
+        }
     }
 }

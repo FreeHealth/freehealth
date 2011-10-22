@@ -31,13 +31,16 @@
 
 #include <QWidget>
 #include <QList>
+#include <QHash>
 #include <QLabel>
+#include <QToolButton>
+class QTreeWidgetItem;
 
 /**
  * \file pagewidget.h
  * \author Eric MAEKER <eric.maeker@gmail.com>
  * \version 0.6.0
- * \date 12 Jul 2011
+ * \date 21 Oct 2011
 */
 
 namespace Core {
@@ -80,12 +83,16 @@ public:
 
     QList<QWidget *> pageWidgets() const;
 
+    bool isViewExpanded() const;
+    void setViewExpanded(bool expand);
+
 private:
     QWidget *createPageWidget(IGenericPage *page);
     void changeEvent(QEvent *event);
 
 private Q_SLOTS:
     void pageSelected();
+    void expandView();
 
 private:
     Internal::Ui::PageWidget *m_ui;
@@ -95,6 +102,9 @@ private:
     QString m_currentPage;
     QString m_settingKey;
     QList<QWidget *> m_AddedWidgets;
+    QVector<QToolButton *> m_Buttons;
+    QHash<Core::IGenericPage*, QLabel *> m_Labels;
+    QHash<Core::IGenericPage*, QTreeWidgetItem *> m_Items, m_Categories;
 };
 
 } // namespace Core
