@@ -71,6 +71,7 @@ public:
         QtPlugInsPath,
         QtFrameWorksPath,
         FMFPlugInsPath,
+        UserDocumentsPath,
         ThemeRootPath,
         SmallPixmapPath,
         MediumPixmapPath,

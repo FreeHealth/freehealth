@@ -50,6 +50,7 @@
 #include <coreplugin/ipatient.h>
 #include <coreplugin/uniqueidmanager.h>
 #include <coreplugin/constants_menus.h>
+#include <coreplugin/isettings.h>
 
 // include Qt headers
 #include <QLocale>
@@ -81,6 +82,7 @@ using namespace Trans::ConstantTranslations;
 
 static inline Core::IUser *user() {return Core::ICore::instance()->user();}
 static inline Core::IPatient *patient() {return Core::ICore::instance()->patient();}
+static inline Core::ISettings *settings() {return Core::ICore::instance()->settings();}
 
 namespace Editor {
 namespace Internal {
@@ -447,8 +449,17 @@ void TextEditor::fileOpen()
         title = tkTr(Trans::Constants::EDITORMENU_TEXT);
     else
         title = a->text();
+    QStringList filters;
+    filters << tkTr(Trans::Constants::FILE_FILTER_HTML)
+            << tkTr(Trans::Constants::FILE_FILTER_TXT)
+            << tkTr(Trans::Constants::FILE_FILTER_RTF)
+            << tkTr(Trans::Constants::FILE_FILTER_ALL_FILES);
+    QString selected = tkTr(Trans::Constants::FILE_FILTER_HTML);
+
     QString file = QFileDialog::getOpenFileName(this, title,
-                                               QString(), tr("HTML files (*.htm *.html);;Text files (*.txt);;All Files (*)"));
+                                                settings()->path(Core::ISettings::UserDocumentsPath),
+                                                filters.join(";;"),
+                                                &selected);
     if (file.isEmpty())
         return;
     QString str = Utils::readTextFile(file, Utils::WarnUser, this);
@@ -467,13 +478,32 @@ void TextEditor::saveAs()
         title = tkTr(Trans::Constants::EDITORMENU_TEXT);
     else
         title = a->text();
+    QStringList filters;
+    filters << tkTr(Trans::Constants::FILE_FILTER_HTML)
+            << tkTr(Trans::Constants::FILE_FILTER_TXT);
+    QString selected = tkTr(Trans::Constants::FILE_FILTER_HTML);
     QString fileName = QFileDialog::getSaveFileName(this, title,
-                                                     QString(), tr("HTML-Files (*.htm *.html);;All Files (*)"));
+                                                    settings()->path(Core::ISettings::UserDocumentsPath),
+                                                    filters.join(";;"),
+                                                    &selected);
     if (fileName.isEmpty())
-        return ;
-    if (Utils::saveStringToFile(Utils::toHtmlAccent(textEdit()->document()->toHtml("UTF-8")),
-                                fileName, Utils::Overwrite, Utils::WarnUser, this))
-        textEdit()->document()->setModified(false);
+        return;
+    if (selected==tkTr(Trans::Constants::FILE_FILTER_HTML)) {
+        if (Utils::saveStringToFile(Utils::toHtmlAccent(textEdit()->document()->toHtml("UTF-8")),
+                                    fileName, Utils::Overwrite, Utils::WarnUser, this))
+            textEdit()->document()->setModified(false);
+    } else if (selected==tkTr(Trans::Constants::FILE_FILTER_TXT)) {
+        bool yes = Utils::yesNoMessageBox(tr("Save in pure textual format ?"),
+                                          tr("The conversion of the document to a pure textual format will cause "
+                                             "the lost of the paragraph and characters format. Do you really want "
+                                             "to save in pure textual format ?"));
+        if (yes) {
+            if (Utils::saveStringToFile(textEdit()->document()->toPlainText(),
+                                        fileName, Utils::Overwrite, Utils::WarnUser, this))
+                textEdit()->document()->setModified(false);
+        }
+
+    }
 }
 
 //--------------------------------------------------------------------------------------------------------

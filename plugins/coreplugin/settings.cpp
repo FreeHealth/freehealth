@@ -347,6 +347,12 @@ SettingsPrivate::SettingsPrivate(QObject *parent, const QString &appName, const 
     setPath(ApplicationTempPath, QDir::tempPath());
     setPath(SystemTempPath, QDir::tempPath());
     setPath(WebSiteUrl, WEBSITE);
+    setPath(UserDocumentsPath, QDir::homePath() + QDir::separator() + applicationName.remove("-alpha").remove("_alpha").remove("_debug").remove("-debug") + QDir::separator() + "Documents");
+
+    // Create UserDocumentsPath
+    if (!QDir(path(UserDocumentsPath)).exists()) {
+        QDir().mkpath(path(UserDocumentsPath));
+    }
 
 //    if (Utils::isRunningOnLinux())
 //        setPath(FMFPluginsPath, LIBRARY_BASENAME);
