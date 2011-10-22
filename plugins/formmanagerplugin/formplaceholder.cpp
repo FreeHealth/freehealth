@@ -170,6 +170,7 @@ public:
                 vl->addWidget(form->formWidget());
                 int id = m_Stack->addWidget(sa);
                 m_StackId_FormUuid.insert(id, form->uuid());
+                form->formWidget()->setEnabled(false);
             }
         }
     }
@@ -519,12 +520,19 @@ void FormPlaceHolder::setCurrentEpisode(const QModelIndex &index)
 
     const QString &formUuid = d->m_EpisodeModel->index(index.row(), EpisodeModel::FormUuid, index.parent()).data().toString();
     setCurrentForm(formUuid);
-    if (d->m_EpisodeModel->isEpisode(index)) {
+    bool isEpisode = d->m_EpisodeModel->isEpisode(index);
+    if (isEpisode) {
         qobject_cast<QScrollArea*>(d->m_Stack->currentWidget())->widget()->setEnabled(true);
         d->m_EpisodeModel->activateEpisode(index, formUuid);
     } else {
         /** \todo code here : show HtmlSynthesis in a label */
         d->m_EpisodeModel->activateEpisode(QModelIndex(), formUuid);
+    }
+    foreach(Form::FormMain *form, d->m_RootForm->flattenFormMainChildren()) {
+        if (form->uuid()==formUuid) {
+            form->formWidget()->setEnabled(isEpisode);
+            break;
+        }
     }
 }
 
@@ -566,6 +574,12 @@ void FormPlaceHolder::newEpisode()
     setCurrentForm(formUuid);
     qobject_cast<QScrollArea*>(d->m_Stack->currentWidget())->widget()->setEnabled(true);
     d->m_EpisodeModel->activateEpisode(d->m_EpisodeModel->index(0,0,index), formUuid);
+    foreach(Form::FormMain *form, d->m_RootForm->flattenFormMainChildren()) {
+        if (form->uuid()==formUuid) {
+            form->formWidget()->setEnabled(true);
+            break;
+        }
+    }
 }
 
 void FormPlaceHolder::removeEpisode()
