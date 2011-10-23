@@ -289,9 +289,7 @@ void PageWidget::pageSelected()
 
 void PageWidget::expandView()
 {
-    qWarning() << "iioiuoiu" << m_ui->splitter->sizes();
     setViewExpanded(!isViewExpanded());
-    qWarning() << "________" << m_ui->splitter->sizes();
 }
 
 /** Return the current selected and activated page. */
