@@ -113,7 +113,7 @@ protected Q_SLOTS:
     virtual void contextMenu(const QPoint &pos);
 
 protected:
-    virtual QMenu* getContextMenu();
+    virtual QMenu *getContextMenu();
     virtual bool toolbarIsVisible() const;
     virtual void hideToolbar();
 

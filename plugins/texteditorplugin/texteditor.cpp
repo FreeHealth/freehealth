@@ -299,7 +299,7 @@ void TextEditor::setTypes(Types type)
     }
 }
 
-QMenu* TextEditor::getContextMenu()
+QMenu *TextEditor::getContextMenu()
 {
     QMenu *mc = new QMenu(this);
     Core::ActionManager *am = Core::ICore::instance()->actionManager();
@@ -416,7 +416,11 @@ QMenu* TextEditor::getContextMenu()
 
 void TextEditor::contextMenu(const QPoint &pos)
 {
-    QMenu * p = getContextMenu();
+    if (textEdit()->underMouse()) {
+        QTextCursor c = textEdit()->cursorForPosition(pos);
+        textEdit()->setTextCursor(c);
+    }
+    QMenu *p = getContextMenu();
     p->exec(mapToGlobal(pos));
 }
 

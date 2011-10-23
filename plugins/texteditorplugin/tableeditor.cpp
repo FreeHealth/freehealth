@@ -18,6 +18,12 @@
  *  along with this program (COPYING.FREEMEDFORMS file).                   *
  *  If not, see <http://www.gnu.org/licenses/>.                            *
  ***************************************************************************/
+/***************************************************************************
+ *   Main Developper : Eric MAEKER, <eric.maeker@gmail.com>                *
+ *   Contributors :                                                        *
+ *       NAME <MAIL@ADRESS>                                                *
+ *       NAME <MAIL@ADRESS>                                                *
+ ***************************************************************************/
 #include "tableeditor.h"
 #include "tabledialog.h"
 #include "tablepropertieswidget.h"
@@ -26,7 +32,7 @@
 #include <QTextCursor>
 #include <QTextTable>
 #include <QTextTableFormat>
-
+#include <QMouseEvent>
 
 #include <QDebug>
 
@@ -45,9 +51,9 @@ void TableEditor::addTable()
     TableDialog dialog(this);
     if ( dialog.exec() == QDialog::Rejected ) return;
 
-    QTextCursor cursor( textEdit()->textCursor() );
+    QTextCursor cursor(textEdit()->textCursor());
 
-    QTextTable *table = cursor.insertTable( dialog.rows(), dialog.cols(), dialog.format() );
+    QTextTable *table = cursor.insertTable(dialog.rows(), dialog.cols(), dialog.format());
 
     // Set Font Header to bold
     if ( dialog.format().headerRowCount() ) {

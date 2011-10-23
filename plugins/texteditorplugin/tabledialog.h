@@ -18,6 +18,12 @@
  *  along with this program (COPYING.FREEMEDFORMS file).                   *
  *  If not, see <http://www.gnu.org/licenses/>.                            *
  ***************************************************************************/
+/***************************************************************************
+ *   Main Developper : Eric MAEKER, <eric.maeker@gmail.com>                *
+ *   Contributors :                                                        *
+ *       NAME <MAIL@ADRESS>                                                *
+ *       NAME <MAIL@ADRESS>                                                *
+ ***************************************************************************/
 #ifndef TEXTEDITORTABLEDIALOG_H
 #define TEXTEDITORTABLEDIALOG_H
 

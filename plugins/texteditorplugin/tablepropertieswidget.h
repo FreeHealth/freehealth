@@ -60,6 +60,7 @@ public:
 
 private:
     Ui::TablePropertiesWidget *m_ui;
+    QTextTableFormat m_InitialFormat;
 };
 
 

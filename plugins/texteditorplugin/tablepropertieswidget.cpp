@@ -18,9 +18,17 @@
  *  along with this program (COPYING.FREEMEDFORMS file).                   *
  *  If not, see <http://www.gnu.org/licenses/>.                            *
  ***************************************************************************/
+/***************************************************************************
+ *   Main Developper : Eric MAEKER, <eric.maeker@gmail.com>                *
+ *   Contributors :                                                        *
+ *       NAME <MAIL@ADRESS>                                                *
+ *       NAME <MAIL@ADRESS>                                                *
+ ***************************************************************************/
 #include "tablepropertieswidget.h"
 #include "ui_tablepropertieswidget.h"
 #include "ui_tablepropertiesdialog.h"
+
+#include <QDebug>
 
 using namespace Editor::Internal;
 
@@ -53,6 +61,7 @@ TablePropertiesWidget::~TablePropertiesWidget()
 
 void TablePropertiesWidget::setFormat(const QTextTableFormat &format)
 {
+    m_InitialFormat = format;
     m_ui->borderWidthSpin->setValue(format.border());
     m_ui->borderStyleCombo->setCurrentIndex(format.borderStyle());
     m_ui->cellPaddingSpin->setValue(format.cellPadding());
@@ -68,8 +77,16 @@ void TablePropertiesWidget::setFormat(const QTextTableFormat &format)
         m_ui->topMarginSpin->setValue(format.topMargin());
         m_ui->bottomMarginSpin->setValue(format.bottomMargin());
     }
-    m_ui->borderColorButton->setColor(format.borderBrush().color());
-    m_ui->cellBackgroundColorButton->setColor(format.background().color());
+    if (format.borderBrush().style()==Qt::NoBrush) {
+        m_ui->borderColorButton->setColor(QColor(255,255,255,255));
+    } else {
+        m_ui->borderColorButton->setColor(format.borderBrush().color());
+    }
+    if (format.background().style()==Qt::NoBrush) {
+        m_ui->cellBackgroundColorButton->setColor(QColor(255,255,255,255));
+    } else {
+        m_ui->cellBackgroundColorButton->setColor(format.background().color());
+    }
 }
 
 int TablePropertiesWidget::cellPadding() const
@@ -92,7 +109,7 @@ int TablePropertiesWidget::borderWidth() const
 
 QTextTableFormat TablePropertiesWidget::format() const
 {
-    QTextTableFormat format;
+    QTextTableFormat format = m_InitialFormat;
 
     // Border
     format.setBorder(borderWidth());

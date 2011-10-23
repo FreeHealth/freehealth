@@ -18,6 +18,12 @@
  *  along with this program (COPYING.FREEMEDFORMS file).                   *
  *  If not, see <http://www.gnu.org/licenses/>.                            *
  ***************************************************************************/
+/***************************************************************************
+ *   Main Developper : Eric MAEKER, <eric.maeker@gmail.com>                *
+ *   Contributors :                                                        *
+ *       NAME <MAIL@ADRESS>                                                *
+ *       NAME <MAIL@ADRESS>                                                *
+ ***************************************************************************/
 #ifndef TABLEEDITOR_H
 #define TABLEEDITOR_H
 
@@ -27,8 +33,8 @@
 /**
  * \file tableeditor.h
  * \author Eric MAEKER <eric.maeker@gmail.com>
- * \version 0.2.1
- * \date 25 Oct 2009
+ * \version 0.6.0
+ * \date 22 Oct 2011
 */
 
 namespace Editor {
@@ -51,6 +57,7 @@ public Q_SLOTS:
     void tableRemoveCol();
     void tableMergeCells();
     void tableSplitCells();
+
 };
 
 }  // End Editor
