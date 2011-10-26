@@ -212,13 +212,44 @@ void FormIODescription::toTreeWidget(QTreeWidget *tree) const
     tree->resizeColumnToContents(1);
 }
 
-void FormIODescription::warn() const
+
+QDebug operator<<(QDebug dbg, const Form::FormIODescription &c)
 {
     QString tmp = "FormIODescription(";
-    if (m_reader)
-        tmp += "reader: " + m_reader->name() + "\n";
-    for(int i=0; i < MaxParam; ++i) {
-        tmp += QString("%1:%2\n").arg(i).arg(data(i).toString());
+    QStringList attribs;
+    if (c.data(Form::FormIODescription::IsCompleteForm).toBool())
+        attribs << "isComplete";
+    else if (c.data(Form::FormIODescription::IsSubForm).toBool())
+        attribs << "isSub";
+    else if (c.data(Form::FormIODescription::IsPage).toBool())
+        attribs << "isPage";
+    if (c.reader())
+        attribs << "reader: " + c.reader()->name();
+    attribs << "uid: " + c.data(Form::FormIODescription::UuidOrAbsPath).toString();
+    attribs << "author: " + c.data(Form::FormIODescription::Author).toString();
+    attribs << "country: " + c.data(Form::FormIODescription::Country).toString();
+    attribs << "languages: " + c.data(Form::FormIODescription::AvailableLanguages).toString();
+    attribs << "v: " + c.data(Form::FormIODescription::Version).toString();
+    attribs << "compat: " + c.data(Form::FormIODescription::FreeMedFormsCompatVersion).toString();
+    attribs << "cdate: " + c.data(Form::FormIODescription::CreationDate).toString();
+    attribs << "ludate: " + c.data(Form::FormIODescription::LastModificationDate).toString();
+    attribs << "cat: " + c.data(Form::FormIODescription::Category).toString();
+    attribs << "spe: " + c.data(Form::FormIODescription::Specialties).toString();
+    attribs << "license: " + c.data(Form::FormIODescription::License).toString();
+    attribs << "icon: " + c.data(Form::FormIODescription::GeneralIcon).toString();
+    attribs << "web: " + c.data(Form::FormIODescription::WebLink).toString();
+    attribs << "shotpath: " + c.data(Form::FormIODescription::ScreenShotsPath).toString();
+    attribs << c.data(Form::FormIODescription::ShortDescription).toString();
+
+    dbg.nospace() << tmp << attribs.join("; ");
+    return dbg.space();
+}
+
+QDebug operator<<(QDebug dbg, const Form::FormIODescription *c)
+{
+    if (!c) {
+        dbg.nospace() << "FormIODescription(0x0)";
+        return dbg.space();
     }
-    qWarning() << tmp;
+    return operator<<(dbg, *c);
 }

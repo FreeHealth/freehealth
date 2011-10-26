@@ -155,8 +155,6 @@ public:
 
     void toTreeWidget(QTreeWidget *tree) const;
 
-    void warn() const;
-
 private:
     Internal::FormIODescriptionPrivate *d;
     IFormIO *m_reader;
@@ -175,11 +173,11 @@ public:
 
     virtual bool canReadForms(const QString &uuidOrAbsPath) const = 0;
 
-    virtual FormIODescription *readFileInformations(const QString &uuidOrAbsPath) = 0;
-    virtual QList<FormIODescription *> getFormFileDescriptions(const FormIOQuery &query) = 0;
+    virtual FormIODescription *readFileInformations(const QString &uuidOrAbsPath) const = 0;
+    virtual QList<FormIODescription *> getFormFileDescriptions(const FormIOQuery &query) const = 0;
 
-    virtual QList<Form::FormMain *> loadAllRootForms(const QString &uuidOrAbsPath = QString::null) = 0;
-    virtual bool loadPmhCategories(const QString &uuidOrAbsPath) = 0; // must invalidate all existing mime before insertion of new categories
+    virtual QList<Form::FormMain *> loadAllRootForms(const QString &uuidOrAbsPath = QString::null) const = 0;
+    virtual bool loadPmhCategories(const QString &uuidOrAbsPath) const = 0; // must invalidate all existing mime before insertion of new categories
 
     virtual bool saveForm(QObject *treeRoot) = 0;
 
@@ -187,5 +185,8 @@ public:
 };
 
 } // end Form
+
+FORM_EXPORT QDebug operator<<(QDebug dbg, const Form::FormIODescription &c);
+FORM_EXPORT QDebug operator<<(QDebug dbg, const Form::FormIODescription *c);
 
 #endif // IFORMIO_H
