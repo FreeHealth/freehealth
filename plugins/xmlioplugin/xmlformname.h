@@ -43,7 +43,7 @@ namespace Internal {
 struct XmlFormName {
     XmlFormName(const QString &uid);
     bool isValid;
-    QString uid, absFileName;
+    QString uid, absFileName, modeName;
 };
 
 }

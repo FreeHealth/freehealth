@@ -295,6 +295,9 @@ bool XmlIOBase::isFormExists(const QString &formUid, const int type, const QStri
         conds << Utils::Field(Constants::Table_FORM_CONTENT, Constants::FORMCONTENT_MODENAME, QString("='%1'").arg(modeName));
     }
     QString req = select(gets, joins, conds);
+
+    qWarning() << req;
+
     QSqlQuery query(DB);
     if (query.exec(req)) {
         if (query.next()) {

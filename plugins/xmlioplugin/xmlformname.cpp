@@ -42,7 +42,11 @@ XmlFormName::XmlFormName(const QString &_uid) :
     isValid(false), uid(_uid), absFileName(_uid)
 {
     if (uid.endsWith(".xml", Qt::CaseInsensitive)) {
-        uid = uid.left(uid.lastIndexOf("/"));
+        int begin = uid.lastIndexOf("/");
+        uid = uid.left(begin);
+        modeName = _uid.mid(begin+1);
+        if (modeName.endsWith(".xml"))
+            modeName.chop(4);
     }
     if (uid.startsWith(QString(Core::Constants::TAG_APPLICATION_COMPLETEFORMS_PATH).left(2))) {
         absFileName.replace(Core::Constants::TAG_APPLICATION_COMPLETEFORMS_PATH, settings()->path(Core::ISettings::CompleteFormsPath));

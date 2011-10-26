@@ -278,8 +278,10 @@ Form::FormIODescription *XmlFormContentReader::readFileInformations(const QStrin
 {
     // Get the QDomDocument from cache
     QDomDocument *doc = m_DomDocFormCache[formUidOrFullAbsPath];
-    if (!doc)
+    if (!doc) {
+        LOG_ERROR_FOR("XmlFormContentReader", "No document in cache call canReadForm before. Form: " + formUidOrFullAbsPath);
         return 0;
+    }
     QDomElement root = doc->documentElement();
     root = root.firstChildElement(Constants::TAG_FORM_DESCRIPTION);
     return readXmlDescription(root, formUidOrFullAbsPath);

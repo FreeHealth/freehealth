@@ -69,12 +69,13 @@ public:
     void muteUserWarnings(bool state) {m_Mute = state;}
 
     bool canReadForms(const QString &uuidOrAbsPath) const;
+    bool canReadForms(const Form::FormIOQuery &query) const;
 
-    Form::FormIODescription *readFileInformations(const QString &uuidOrAbsPath);
-    QList<Form::FormIODescription *> getFormFileDescriptions(const Form::FormIOQuery &query);
+    Form::FormIODescription *readFileInformations(const QString &uuidOrAbsPath) const;
+    QList<Form::FormIODescription *> getFormFileDescriptions(const Form::FormIOQuery &query) const;
 
-    QList<Form::FormMain *> loadAllRootForms(const QString &uuidOrAbsPath = QString::null);
-    bool loadPmhCategories(const QString &uuidOrAbsPath);
+    QList<Form::FormMain *> loadAllRootForms(const QString &uuidOrAbsPath = QString::null) const;
+    bool loadPmhCategories(const QString &uuidOrAbsPath) const;
 
     bool saveForm(QObject *treeRoot) { Q_UNUSED(treeRoot); return true; }
 
@@ -82,15 +83,15 @@ public:
     // End Form::IForm interface
 
 private:
-    void getAllFormsFromDir(const QString &absPath, QList<Form::FormIODescription *> *list);
-    bool createCategory(const QDomElement &element, Category::CategoryItem *parent, const QString &readingAbsPathFile);
+//    void getAllFormsFromDir(const QString &absPath, QList<Form::FormIODescription *> *list) const;
+    bool createCategory(const QDomElement &element, Category::CategoryItem *parent, const QString &readingAbsPathFile) const;
 
 private:
      mutable QString m_AbsFileName;
      mutable QStringList m_Error;
      mutable QDomDocument m_MainDoc;
      bool m_Mute;
-     Form::FormMain *m_ActualForm;
+     mutable Form::FormMain *m_ActualForm;
 
      // Caching some data for speed improvements
      mutable QHash<QString, bool> m_ReadableForms;
