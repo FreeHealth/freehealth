@@ -57,8 +57,6 @@ public:
     bool operator==(const VersionNumber &b) const;
     bool operator!=(const VersionNumber &b) const;
 
-    void warn() const;
-
 private:
     QString m_Version;
     int m_Major, m_Minor, m_Debug, m_Alpha, m_Beta, m_RC;
@@ -66,5 +64,9 @@ private:
 };
 
 }  // End namespace Utils
+
+UTILS_EXPORT QDebug operator<<(QDebug dbg, const Utils::VersionNumber &c);
+UTILS_EXPORT QDebug operator<<(QDebug dbg, const Utils::VersionNumber *c);
+
 
 #endif // VERSIONNUMBER_H

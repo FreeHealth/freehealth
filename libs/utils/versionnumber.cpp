@@ -153,13 +153,23 @@ bool VersionNumber::operator!=(const VersionNumber &b) const
     return (!(*this == b));
 }
 
-void VersionNumber::warn() const
+QDebug operator<<(QDebug dbg, const Utils::VersionNumber &c)
 {
-    QString t = QString("VersionNumber(maj:%1; min%2; deb:%3").arg(m_Major).arg(m_Minor).arg(m_Debug);
-    if (m_Alpha)
-        t += "; alpha:" + QString::number(m_Alpha);
-    if (m_Beta)
-        t += "; beta:" + QString::number(m_Beta);
+    QString t = QString("VersionNumber(maj:%1; min%2; deb:%3").arg(c.majorNumber()).arg(c.minorNumber()).arg(c.debugNumber());
+    if (c.isAlpha())
+        t += "; alpha:" + QString::number(c.alphaNumber());
+    if (c.isBeta())
+        t += "; beta:" + QString::number(c.betaNumber());
     t += ")";
-    qWarning() << t;
+    dbg.nospace() << t;
+    return dbg.space();
+}
+
+QDebug operator<<(QDebug dbg, const Utils::VersionNumber *c)
+{
+    if (!c) {
+        dbg.nospace() << "Utils::VersionNumber(0x0)";
+        return dbg.space();
+    }
+    return operator<<(dbg, *c);
 }
