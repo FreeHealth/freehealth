@@ -115,9 +115,9 @@ UserCalendarViewer::UserCalendarViewer(QWidget *parent) :
     d(new UserCalendarViewerPrivate(this))
 {
     d->ui->setupUi(this);
-    d->ui->calendarViewer->setDate(QDate::currentDate().addDays(3));
+    d->ui->calendarViewer->setDate(QDate::currentDate());
     d->ui->calendarViewer->setDayScaleHourDivider(2);
-    d->ui->calendarViewer->setDayGranularity(15);
+    d->ui->calendarViewer->setDayGranularity(5);
     d->ui->calendarViewer->setHourHeight(4*20); // 20pixels per minutes
 
     // populate the availabilities duration selector combo (every five minutes)
