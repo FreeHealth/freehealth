@@ -95,6 +95,7 @@ public:
     Qt::ItemFlags flags(const QModelIndex &index) const;
 
     // GET INTERACTIONS SPECIFIC STRUCTURED DATAS
+    void setComputeDrugInteractions(bool compute);
     bool prescriptionHasInteractions();
     DrugInteractionQuery *drugInteractionQuery() const;
     DrugInteractionResult *drugInteractionResult() const;

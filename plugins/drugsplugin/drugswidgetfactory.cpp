@@ -146,7 +146,14 @@ DrugsPrescriptorWidget::DrugsPrescriptorWidget(const QString &name, Form::FormIt
 
     // Add QLabel
     hb->addWidget(m_Label);
+    // create main widget
+    m_CentralWidget = new DrugsCentralWidget(this);
+    m_CentralWidget->initialize(formItem->extraDatas().value("options").contains(OPTION_HIDESELECTOR, Qt::CaseInsensitive));
+    m_PrescriptionModel = m_CentralWidget->currentDrugsModel();
+    m_PrescriptionModel->setSelectionOnlyMode(!m_WithPrescribing);
+    hb->addWidget(m_CentralWidget);
 
+    // Manage options
     const QStringList &options = getOptions(formItem);
     if (options.contains(OPTION_WITHPRESCRIBING, Qt::CaseInsensitive)) {
         m_WithPrescribing = true;
@@ -156,12 +163,9 @@ DrugsPrescriptorWidget::DrugsPrescriptorWidget(const QString &name, Form::FormIt
                name.compare("prescriptor", Qt::CaseInsensitive)==0) {
         m_WithPrescribing = true;
     }
-    // create main widget
-    m_CentralWidget = new DrugsCentralWidget(this);
-    m_CentralWidget->initialize(formItem->extraDatas().value("options").contains(OPTION_HIDESELECTOR, Qt::CaseInsensitive));
-    m_PrescriptionModel = m_CentralWidget->currentDrugsModel();
-    m_PrescriptionModel->setSelectionOnlyMode(!m_WithPrescribing);
-    hb->addWidget(m_CentralWidget);
+    if (options.contains("nointeractionchecking", Qt::CaseInsensitive)) {
+        m_PrescriptionModel->setComputeDrugInteractions(false);
+    }
 
     // create formitemdata
     DrugsWidgetData *datas = new DrugsWidgetData(formItem);

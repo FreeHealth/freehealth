@@ -98,9 +98,9 @@ class DrugsModelPrivate
 {
 public:
     DrugsModelPrivate() :
-            m_LastDrugRequiered(0), m_ShowTestingDrugs(true),
-            m_SelectionOnlyMode(false), m_IsDirty(false),
-            m_InteractionResult(0)
+        m_LastDrugRequiered(0), m_ShowTestingDrugs(true),
+        m_SelectionOnlyMode(false), m_IsDirty(false),
+        m_InteractionResult(0), m_ComputeInteraction(true)
     {
     }
 
@@ -364,6 +364,7 @@ public:
     DrugInteractionResult *m_InteractionResult;
     DrugInteractionQuery *m_InteractionQuery;
     DrugAllergyEngine *m_AllergyEngine;
+    bool m_ComputeInteraction;
 };
 }  // End Internal
 }  // End DrugsDB
@@ -506,23 +507,27 @@ QVariant DrugsModel::data(const QModelIndex &index, int role) const
     }
     else if (role == Qt::ToolTipRole) {
         QString display;
-        d->m_AllergyEngine->check(DrugsDB::Internal::DrugAllergyEngine::Allergy, drug->drugId().toString());
-        if (d->m_AllergyEngine->has(DrugsDB::Internal::DrugAllergyEngine::Allergy, drug->drugId().toString())) {
-            display += QString("<table width=100%><tr><td><img src=\"%1\"></td><td width=100% align=center><span style=\"color:red;font-weight:600\">%2</span></td><td><img src=\"%1\"></span></td></tr></table><br>")
-                   .arg(settings()->path(Core::ISettings::SmallPixmapPath) + QDir::separator() + QString(Core::Constants::ICONFORBIDDEN))
-                   .arg(tr("KNOWN ALLERGY"));
+        if (d->m_ComputeInteraction) {
+            d->m_AllergyEngine->check(DrugsDB::Internal::DrugAllergyEngine::Allergy, drug->drugId().toString());
+            if (d->m_AllergyEngine->has(DrugsDB::Internal::DrugAllergyEngine::Allergy, drug->drugId().toString())) {
+                display += QString("<table width=100%><tr><td><img src=\"%1\"></td><td width=100% align=center><span style=\"color:red;font-weight:600\">%2</span></td><td><img src=\"%1\"></span></td></tr></table><br>")
+                        .arg(settings()->path(Core::ISettings::SmallPixmapPath) + QDir::separator() + QString(Core::Constants::ICONFORBIDDEN))
+                        .arg(tr("KNOWN ALLERGY"));
+            }
         }
         display += drug->toHtml();
-        if (d->m_InteractionResult->drugHaveInteraction(drug)) {
-            // ask all available engines
-            QList<DrugsDB::IDrugEngine *> engines = pluginManager()->getObjects<DrugsDB::IDrugEngine>();
-            for(int i=0; i < engines.count(); ++i) {
-                DrugsDB::IDrugEngine *engine = engines.at(i);
-                if (engine->isActive()) {
-                    DrugInteractionInformationQuery query;
-                    query.engineUid = engine->uid();
-                    query.messageType = DrugInteractionInformationQuery::DetailledToolTip;
-                    display += d->m_InteractionResult->alertMessagesToHtml(drug, query);
+        if (d->m_ComputeInteraction) {
+            if (d->m_InteractionResult->drugHaveInteraction(drug)) {
+                // ask all available engines
+                QList<DrugsDB::IDrugEngine *> engines = pluginManager()->getObjects<DrugsDB::IDrugEngine>();
+                for(int i=0; i < engines.count(); ++i) {
+                    DrugsDB::IDrugEngine *engine = engines.at(i);
+                    if (engine->isActive()) {
+                        DrugInteractionInformationQuery query;
+                        query.engineUid = engine->uid();
+                        query.messageType = DrugInteractionInformationQuery::DetailledToolTip;
+                        display += d->m_InteractionResult->alertMessagesToHtml(drug, query);
+                    }
                 }
             }
         }
@@ -536,13 +541,15 @@ QVariant DrugsModel::data(const QModelIndex &index, int role) const
         if (drug->prescriptionValue(Constants::Prescription::OnlyForTest).toBool())
             return QColor(FORTEST_BACKGROUND_COLOR);
         // Allergy / Intolerances
-        d->m_AllergyEngine->check(DrugsDB::Internal::DrugAllergyEngine::Allergy, drug->drugId().toString());
-        if (d->m_AllergyEngine->has(DrugsDB::Internal::DrugAllergyEngine::Allergy, drug->drugId().toString())) {
-            return QColor(settings()->value(DrugsDB::Constants::S_ALLERGYBACKGROUNDCOLOR).toString());
-        }
-        d->m_AllergyEngine->check(DrugsDB::Internal::DrugAllergyEngine::Intolerance, drug->drugId().toString());
-        if (d->m_AllergyEngine->has(DrugsDB::Internal::DrugAllergyEngine::Intolerance, drug->drugId().toString())) {
-            return QColor(settings()->value(DrugsDB::Constants::S_INTOLERANCEBACKGROUNDCOLOR).toString());
+        if (d->m_ComputeInteraction) {
+            d->m_AllergyEngine->check(DrugsDB::Internal::DrugAllergyEngine::Allergy, drug->drugId().toString());
+            if (d->m_AllergyEngine->has(DrugsDB::Internal::DrugAllergyEngine::Allergy, drug->drugId().toString())) {
+                return QColor(settings()->value(DrugsDB::Constants::S_ALLERGYBACKGROUNDCOLOR).toString());
+            }
+            d->m_AllergyEngine->check(DrugsDB::Internal::DrugAllergyEngine::Intolerance, drug->drugId().toString());
+            if (d->m_AllergyEngine->has(DrugsDB::Internal::DrugAllergyEngine::Intolerance, drug->drugId().toString())) {
+                return QColor(settings()->value(DrugsDB::Constants::S_INTOLERANCEBACKGROUNDCOLOR).toString());
+            }
         }
     }
     else if (role == Qt::ForegroundRole) {
@@ -701,6 +708,11 @@ bool DrugsModel::containsDrug(const QVariant &drugId) const
 IDrug *DrugsModel::getDrug(const QVariant &drugUid) const
 {
     return d->getDrug(drugUid);
+}
+
+void DrugsModel::setComputeDrugInteractions(bool compute)
+{
+    d->m_ComputeInteraction = compute;
 }
 
 /** Returns true if the actual prescription has interaction(s). */
@@ -883,6 +895,8 @@ int DrugsModel::removeLastInsertedDrug()
 /** Starts the interactions checking */
 void DrugsModel::checkInteractions()
 {
+    if (!d->m_ComputeInteraction)
+        return;
     if (d->m_InteractionResult)
         delete d->m_InteractionResult;
     d->m_InteractionResult = interactionManager()->checkInteractions(*d->m_InteractionQuery);
