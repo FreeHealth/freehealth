@@ -98,21 +98,16 @@ void PmhPlugin::extensionsInitialized()
         return;
 
     messageSplash(tr("Initializing PMHx database plugin..."));
-
     // Initialize Base
     Internal::PmhBase::instance();
-
     addAutoReleasedObject(new Core::PluginAboutPage(pluginSpec(), this));
-
-    m_PrefPage->checkSettingsValidity();
-
     connect(Core::ICore::instance(), SIGNAL(coreOpened()), this, SLOT(postCoreInitialization()));
 }
 
 void PmhPlugin::postCoreInitialization()
 {
     if (Utils::Log::warnPluginsCreation())
-        qWarning() << Q_FUNC_INFO;
+        WARN_FUNC;
     PmhCore::instance(this);
     mode = new Internal::PmhMode(this);
 }

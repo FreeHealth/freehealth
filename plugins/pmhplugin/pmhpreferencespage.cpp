@@ -53,7 +53,6 @@ PmhPreferencesPage::PmhPreferencesPage(QObject *parent) :
         IOptionsPage(parent), m_Widget(0)
 {
     setObjectName("PmhPreferencesPages");
-    checkSettingsValidity();
 }
 
 PmhPreferencesPage::~PmhPreferencesPage()

@@ -460,7 +460,6 @@ private:
 PmhCategoryModel::PmhCategoryModel(QObject *parent) :
         Category::ICategoryModelHelper(parent), d(new Internal::PmhCategoryModelPrivate(this))
 {
-    d->getCategories(true);
     connect(patient(), SIGNAL(currentPatientChanged()), this, SLOT(patientChanged()));
     connect(translators(), SIGNAL(languageChanged()), this, SLOT(retranslate()));
 }

@@ -129,8 +129,8 @@ QVariant PmhEpisodeModel::data(const QModelIndex &index, int role) const
         {
             switch (index.column())
             {
-            case DateStart: return ep->data(PmhEpisodeData::DateStart).toDate().toString(QLocale().dateFormat());
-            case DateEnd: return ep->data(PmhEpisodeData::DateEnd).toDate().toString(QLocale().dateFormat());
+            case DateStart: return ep->data(PmhEpisodeData::DateStart).toDate();
+            case DateEnd: return ep->data(PmhEpisodeData::DateEnd).toDate();
             case Label: return ep->data(PmhEpisodeData::Label);
             case IcdCodeList: return ep->data(PmhEpisodeData::IcdCodeList);
             case IcdLabelStringList : return ep->data(PmhEpisodeData::IcdLabelStringList);

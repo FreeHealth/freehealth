@@ -84,6 +84,9 @@ public:
         ui->statusCombo->setEnabled(enable);
         ui->categoryTreeView->setEnabled(enable);
         ui->episodeViewer->setEnabled(enable);
+        ui->icdCodes->setEnabled(enable);
+        ui->simple_date->setEnabled(enable);
+        ui->simple_icd10->setEnabled(enable);
     }
 
     void populateUiWithPmh(PmhData *pmh)
@@ -128,6 +131,13 @@ public:
         QModelIndex cat = pmhCore()->pmhCategoryModel()->categoryOnlyModel()->mapToSource(ui->categoryTreeView->currentIndex());
         cat = pmhCore()->pmhCategoryModel()->index(cat.row(), PmhCategoryModel::Id, cat.parent());
         m_Pmh->setData(PmhData::CategoryId, cat.data().toInt());
+        /** \todo improve this : pmhx only manages one episode */
+        if (m_Pmh->episodeModel()->rowCount() == 0) {
+            m_Pmh->episodeModel()->insertRow(0);
+        }
+        // use only the first row
+        m_Pmh->episodeModel()->setData(m_Pmh->episodeModel()->index(0, PmhEpisodeModel::DateStart), ui->simple_date->date());
+        m_Pmh->episodeModel()->setData(m_Pmh->episodeModel()->index(0, PmhEpisodeModel::IcdLabelStringList), m_IcdLabelModel->stringList());
     }
 
     void clearUi()
