@@ -145,6 +145,7 @@ QString IcdFormWidget::printableHtml(bool withValues) const
 
 void IcdFormWidget::retranslate()
 {
+    m_Label->setText(m_FormItem->spec()->label());
 }
 
 ////////////////////////////////////////// ItemData /////////////////////////////////////////////

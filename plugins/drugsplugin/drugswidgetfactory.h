@@ -95,6 +95,8 @@ public:
 
     QString printableHtml(bool withValues = true) const;
 
+    void retranslate();
+
 public:
     DrugsDB::DrugsModel *m_PrescriptionModel;
 

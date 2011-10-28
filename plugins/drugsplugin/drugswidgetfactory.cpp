@@ -210,6 +210,11 @@ QString DrugsPrescriptorWidget::printableHtml(bool withValues) const
             .arg(m_FormItem->spec()->label()).arg(html);
 }
 
+void DrugsPrescriptorWidget::retranslate()
+{
+    m_Label->setText(m_FormItem->spec()->label());
+}
+
 ////////////////////////////////////////// ItemData /////////////////////////////////////////////
 DrugsWidgetData::DrugsWidgetData(Form::FormItem *item) :
         Form::IFormItemData(), m_FormItem(item), m_Widget(0)
