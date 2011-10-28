@@ -134,6 +134,16 @@ bool VersionNumber::operator<(const VersionNumber &b) const
     return (b > *this);
 }
 
+bool VersionNumber::operator>=(const VersionNumber &b) const
+{
+    return (*this > b || *this == b);
+}
+
+bool VersionNumber::operator<=(const VersionNumber &b) const
+{
+    return (*this < b || *this == b);
+}
+
 bool VersionNumber::operator==(const VersionNumber &b) const
 {
     if (m_Major==b.majorNumber() && m_Minor==b.minorNumber() && m_Debug==b.debugNumber()) {

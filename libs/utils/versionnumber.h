@@ -54,6 +54,9 @@ public:
     bool operator>(const VersionNumber &b) const;
     bool operator<(const VersionNumber &b) const;
 
+    bool operator>=(const VersionNumber &b) const;
+    bool operator<=(const VersionNumber &b) const;
+
     bool operator==(const VersionNumber &b) const;
     bool operator!=(const VersionNumber &b) const;
 

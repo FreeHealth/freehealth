@@ -745,6 +745,8 @@ bool yesNoMessageBox(const QString &text, const QString&infoText, const QString&
         mb.setWindowTitle(qApp->applicationName());
     else
         mb.setWindowTitle(title);
+    mb.setStandardButtons(QMessageBox::Yes | QMessageBox::No);
+    mb.setDefaultButton(QMessageBox::Yes);
     mb.setText(text);
     mb.setInformativeText(infoText);
     if (!detail.isEmpty()) {
@@ -756,8 +758,6 @@ bool yesNoMessageBox(const QString &text, const QString&infoText, const QString&
             mb.setDetailedText(detail);
         }
     }
-    mb.setStandardButtons(QMessageBox::Yes | QMessageBox::No);
-    mb.setDefaultButton(QMessageBox::Yes);
     int r = mb.exec();
     qApp->setActiveWindow(parent);
     if (r==QMessageBox::Yes)
@@ -1240,6 +1240,13 @@ QString toHtmlAccent(const QString &html)
         toReturn.replace(k, accents.value(k));
     }
     return toReturn;
+}
+
+QString firstLetterUpperCase(const QString &s)
+{
+    QString tmp = s;
+    tmp[0] = tmp[0].toUpper();
+    return tmp;
 }
 
 QString removeAccents(const QString &text)

@@ -148,6 +148,7 @@ UTILS_EXPORT QString countryIsoToName(const QString &country);
 UTILS_EXPORT QString fontToHtml( const QFont &font, const QColor &color = QColor("black") );
 UTILS_EXPORT QString textAlignmentToHtml( const Qt::Alignment &align );
 UTILS_EXPORT QString toHtmlAccent(const QString &html);
+UTILS_EXPORT QString firstLetterUpperCase(const QString &s);
 UTILS_EXPORT QString removeAccents(const QString &text);
 
 // Some functions for XML Handling
