@@ -7,7 +7,7 @@
     <x>0</x>
     <y>0</y>
     <width>400</width>
-    <height>561</height>
+    <height>761</height>
    </rect>
   </property>
   <property name="windowTitle">
@@ -216,6 +216,9 @@
        <widget class="QDateEdit" name="simple_date">
         <property name="displayFormat">
          <string>dd/MM/yyyy</string>
+        </property>
+        <property name="calendarPopup">
+         <bool>true</bool>
         </property>
        </widget>
       </item>

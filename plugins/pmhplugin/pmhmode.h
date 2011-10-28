@@ -33,6 +33,7 @@
 #include <QObject>
 #include <QHash>
 #include <QString>
+#include <QStyledItemDelegate>
 
 QT_BEGIN_NAMESPACE
 class QModelIndex;
@@ -42,7 +43,24 @@ class QToolBar;
 QT_END_NAMESPACE
 
 namespace PMH {
+//class PmhCategoryModel;
 namespace Internal {
+//class PmhItemDelegate : public QStyledItemDelegate
+//{
+//    Q_OBJECT
+//public:
+//    PmhItemDelegate(QObject *parent);
+
+//    void drawHovered();
+
+////    void setPmhCategoryModel(PmhCategoryModel *model);
+
+////    void paint(QPainter *painter, const QStyleOptionViewItem &option, const QModelIndex &index) const;
+
+//private:
+////    PmhCategoryModel *m_PmhModel;
+//};
+
 namespace Ui {
 class PmhModeWidget;
 }
@@ -50,7 +68,6 @@ class PmhModeWidget;
 class PmhModeWidget : public PMH::PmhContextualWidget
 {
     Q_OBJECT
-
 public:
     PmhModeWidget(QWidget *parent = 0);
     ~PmhModeWidget();
@@ -68,6 +85,7 @@ private Q_SLOTS:
 
 private:
     void changeEvent(QEvent *e);
+//    bool eventFilter(QObject *o, QEvent *e);
 
 private:
     Ui::PmhModeWidget *ui;

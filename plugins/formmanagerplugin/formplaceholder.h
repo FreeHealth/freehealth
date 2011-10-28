@@ -51,7 +51,6 @@ class FormPlaceHolderPrivate;
 class FormItemDelegate : public QStyledItemDelegate
 {
     Q_OBJECT
-
 public:
     FormItemDelegate(QObject *parent = 0);
     void setEpisodeModel(EpisodeModel *model);

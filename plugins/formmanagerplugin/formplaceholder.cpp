@@ -92,7 +92,41 @@ static inline Core::IPatient *patient()  { return Core::ICore::instance()->patie
 inline static Core::ActionManager *actionManager() {return Core::ICore::instance()->actionManager();}
 inline static Core::IDocumentPrinter *printer() {return ExtensionSystem::PluginManager::instance()->getObject<Core::IDocumentPrinter>();}
 
+namespace {
+const char * const TREEVIEW_SHEET =
+        " QTreeView {"
+        "    show-decoration-selected: 1;"
+        "}"
 
+        "QTreeView::item {"
+        "    border: 0px solid #d9d9d9;"
+//        "    border-top-color: transparent;"
+//        "    border-bottom-color: transparent;"
+        "}"
+
+        "QTreeView::item:hover {"
+        "    background: qlineargradient(x1: 0, y1: 0, x2: 0, y2: 1, stop: 0 #e7effd, stop: 1 #cbdaf1);"
+//        "    border: 0px solid #bfcde4;"
+        "}"
+
+//        "QTreeView::branch:hover {"
+//        "    background: qlineargradient(x1: 0, y1: 0, x2: 0, y2: 1, stop: 0 #e7effd, stop: 1 #cbdaf1);"
+//        "    border: 1px solid #bfcde4;"
+//        "}"
+
+//        "QTreeView::item:selected {"
+//        "    border: 0px solid #567dbc;"
+//        "}"
+
+        "QTreeView::item:selected:active {"
+        "    background: qlineargradient(x1: 0, y1: 0, x2: 0, y2: 1, stop: 0 #6ea1f1, stop: 1 #567dbc);"
+        "}"
+
+        "QTreeView::item:selected:!active {"
+        "    background: qlineargradient(x1: 0, y1: 0, x2: 0, y2: 1, stop: 0 #6b9be8, stop: 1 #577fbf);"
+        "}";
+
+}
 namespace Form {
 namespace Internal {
 
@@ -303,7 +337,7 @@ FormPlaceHolder::FormPlaceHolder(QWidget *parent) :
     d->m_FileTree->setAttribute(Qt::WA_MacShowFocusRect, false);
     d->m_FileTree->setSelectionMode(QAbstractItemView::SingleSelection);
     d->m_FileTree->setSelectionBehavior(QAbstractItemView::SelectRows);
-//    d->m_FileTree->setStyleSheet("QTreeView#FormTree{background:#dee4ea}");
+    d->m_FileTree->setStyleSheet(::TREEVIEW_SHEET);
 
     connect(d->m_FileTree, SIGNAL(clicked(QModelIndex)), this, SLOT(handleClicked(QModelIndex)));
     connect(d->m_FileTree, SIGNAL(pressed(QModelIndex)), this, SLOT(handlePressed(QModelIndex)));

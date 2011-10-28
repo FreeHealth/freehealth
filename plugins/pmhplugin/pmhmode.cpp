@@ -56,6 +56,7 @@
 #include <QItemSelectionModel>
 #include <QToolBar>
 #include <QPushButton>
+#include <QHoverEvent>
 
 #include "ui_pmhmodewidget.h"
 
@@ -72,6 +73,121 @@ static inline Core::ITheme *theme()  { return Core::ICore::instance()->theme(); 
 static inline Core::IPatient *patient()  { return Core::ICore::instance()->patient(); }
 static inline Core::ActionManager *actionManager() {return Core::ICore::instance()->actionManager();}
 
+namespace {
+
+const char * const TREEVIEW_SHEET =
+        " QTreeView {"
+        "    show-decoration-selected: 1;"
+        "}"
+
+        "QTreeView::item {"
+        "    border: 0px solid #d9d9d9;"
+//        "    border-top-color: transparent;"
+//        "    border-bottom-color: transparent;"
+        "}"
+
+        "QTreeView::item:hover {"
+        "    background: qlineargradient(x1: 0, y1: 0, x2: 0, y2: 1, stop: 0 #e7effd, stop: 1 #cbdaf1);"
+//        "    border: 1px solid #bfcde4;"
+        "}"
+
+//        "QTreeView::branch:hover {"
+//        "    background: qlineargradient(x1: 0, y1: 0, x2: 0, y2: 1, stop: 0 #e7effd, stop: 1 #cbdaf1);"
+//        "    border: 1px solid #bfcde4;"
+//        "}"
+
+//        "QTreeView::item:selected {"
+//        "    border: 1px solid #567dbc;"
+//        "}"
+
+        "QTreeView::item:selected:active {"
+        "    background: qlineargradient(x1: 0, y1: 0, x2: 0, y2: 1, stop: 0 #6ea1f1, stop: 1 #567dbc);"
+        "}"
+
+        "QTreeView::item:selected:!active {"
+        "    background: qlineargradient(x1: 0, y1: 0, x2: 0, y2: 1, stop: 0 #6b9be8, stop: 1 #577fbf);"
+        "}";
+}
+
+//namespace PMH {
+//namespace Internal {
+//PmhItemDelegate::PmhItemDelegate(QObject *parent) :
+//        QStyledItemDelegate(parent)
+//{
+//}
+
+//void PmhItemDelegate::drawHovered()
+//{
+//}
+
+////void PmhItemDelegate::setPmhCategoryModel(PmhCategoryModel *model)
+////{
+////    m_PmhModel = model;
+////}
+
+////void PmhItemDelegate::paint(QPainter *painter, const QStyleOptionViewItem &option, const QModelIndex &index) const
+////{
+////    if (option.state & QStyle::State_MouseOver) {
+////        if ((QApplication::mouseButtons() & Qt::LeftButton) == 0)
+////            pressedIndex = QModelIndex();
+////        QBrush brush = option.palette.alternateBase();
+////        if (index == pressedIndex)
+////            brush = option.palette.dark();
+////        painter->fillRect(option.rect, brush);
+////    }
+
+////    // If item is PMHx -> draw all children
+////    if (m_PmhModel->isPmhx(index)) {
+////        for(int i = 0; i < m_PmhModel->rowCount(); ++i) {
+////            paint()
+////        }
+////    }
+////    // If parent item is PMHx -> draw it
+
+////    QModelIndex pmhParent = index;
+////    while (m_PmhModel->isPmhx(pmhParent)) {
+////        pmhParent = pmhParent.parent();
+////    }
+
+////    QStyledItemDelegate::paint(painter, option, index);
+
+////    if (index.column()==EpisodeModel::EmptyColumn1 && option.state & QStyle::State_MouseOver) {
+////        QIcon icon;
+////        if (option.state & QStyle::State_Selected) {
+////            if (m_EpisodeModel->isEpisode(index)) {
+////                icon = theme()->icon(Core::Constants::ICONVALIDATELIGHT);
+////            } else {
+////                // test the form to be unique or multiple episode
+////                if (m_EpisodeModel->isUniqueEpisode(index) && m_EpisodeModel->rowCount(index) == 1)
+////                    return;
+////                if (m_EpisodeModel->isNoEpisode(index))
+////                    return;
+////                icon = theme()->icon(Core::Constants::ICONADDLIGHT);
+////            }
+////        } else {
+////            if (m_EpisodeModel->isEpisode(index)) {
+////                icon = theme()->icon(Core::Constants::ICONVALIDATEDARK);
+////            } else {
+////                // test the form to be unique or multiple episode
+////                if (m_EpisodeModel->isUniqueEpisode(index) && m_EpisodeModel->rowCount(index) == 1)
+////                    return;
+////                if (m_EpisodeModel->isNoEpisode(index))
+////                    return;
+////                icon = theme()->icon(Core::Constants::ICONADDDARK);
+////            }
+////        }
+
+////        QRect iconRect(option.rect.right() - option.rect.height(),
+////                       option.rect.top(),
+////                       option.rect.height(),
+////                       option.rect.height());
+
+////        icon.paint(painter, iconRect, Qt::AlignRight | Qt::AlignVCenter);
+////    }
+////}
+//}
+//}
+
 
 PmhModeWidget::PmhModeWidget(QWidget *parent) :
         PmhContextualWidget(parent), ui(new Ui::PmhModeWidget), m_EditButton(0)
@@ -87,6 +203,8 @@ PmhModeWidget::PmhModeWidget(QWidget *parent) :
     ui->treeView->addContexts(contexts());
     ui->treeView->setModel(catModel());
     ui->treeView->header()->hide();
+    ui->treeView->setStyleSheet(::TREEVIEW_SHEET);
+//    ui->treeView->installEventFilter(this);
 
     // Actions connected in local widget context
     Core::Command *cmd = 0;
@@ -258,6 +376,31 @@ void PmhModeWidget::changeEvent(QEvent *e)
 }
 
 
+//static void drawItemHovered(const QModelIndex &index, QTreeView *view)
+//{
+//    QHoverEvent *e = new QHoverEvent(QEvent::HoverMove, view->visualRect(index).center(), QPoint(0, 0));
+//    qApp->sendEvent(view, e);
+//    qApp->processEvents();
+////    for(int i = 0;)
+//}
+
+//bool PmhModeWidget::eventFilter(QObject *o, QEvent *e)
+//{
+//    if (o==ui->treeView && e->type()==QEvent::HoverMove) {
+//        QHoverEvent* h = static_cast<QHoverEvent*>(e);
+//        QModelIndex parent = ui->treeView->indexAt(h->pos());
+//        if (catModel()->isPmhx(parent)) {
+//            // find the first parent
+//            while (catModel()->isPmhx(parent.parent())) {
+//                parent = parent.parent();
+//            }
+//            drawItemHovered(parent, ui->treeView);
+//            qWarning() << "hover" << parent.data().toString();
+//            return true;
+//        }
+//    }
+//    return false;
+//}
 
 
 PmhMode::PmhMode(QObject *parent) :
