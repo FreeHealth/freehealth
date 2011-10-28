@@ -236,7 +236,7 @@ bool CoreImpl::initialize(const QStringList &arguments, QString *errorString)
         connector.setClearLog("_");
         connector.setClearPass("_");
         settings()->setDatabaseConnector(connector);
-        qWarning() << connector;
+//        qWarning() << connector;
 
 //        // show the license agreement dialog
 //#ifndef LINUX_INTEGRATED
