@@ -65,6 +65,8 @@ public:
     static XmlFormContentReader *instance();
     ~XmlFormContentReader();
 
+    void clearCache();
+
     void refreshPluginFactories();
 
     bool isInCache(const QString &formUid) const;

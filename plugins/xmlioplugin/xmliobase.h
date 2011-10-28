@@ -59,8 +59,8 @@ public:
     enum TypeOfContent {
         FullContent = 0,
         Description,
-        Forms,
-        PmhCategories,
+//        Forms,
+//        PmhCategories,
         ExtraFiles
     };
 

@@ -86,6 +86,9 @@ private:
 //    void getAllFormsFromDir(const QString &absPath, QList<Form::FormIODescription *> *list) const;
     bool createCategory(const QDomElement &element, Category::CategoryItem *parent, const QString &readingAbsPathFile) const;
 
+public:
+    bool checkDatabaseFormFileForUpdates();
+
 private:
      mutable QString m_AbsFileName;
      mutable QStringList m_Error;

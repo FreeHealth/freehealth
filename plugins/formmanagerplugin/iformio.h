@@ -43,8 +43,12 @@
  * \file iformio.h
  * \author Eric MAEKER <eric.maeker@gmail.com>
  * \version 0.6.0
- * \date 08 Apr 2011
+ * \date 28 Oct 2011
 */
+
+namespace Utils {
+class VersionNumber;
+}
 
 namespace Form {
 class FormMain;
@@ -62,7 +66,7 @@ public:
     };
     Q_DECLARE_FLAGS(TypesOfForm, TypeOfForm)
 
-    FormIOQuery() : m_type(DefaultForms | CompleteForms), m_ForceFile(false) {}
+    FormIOQuery() : m_type(DefaultForms | CompleteForms), m_ForceFile(false), m_AllForms(false), m_AllDescr(false) {}
     virtual ~FormIOQuery() {}
 
     void setTypeOfForms(const TypesOfForm type) {m_type=type;}
@@ -84,11 +88,17 @@ public:
     void setForceFileReading(const bool force) {m_ForceFile = force;}
     bool forceFileReading() const {return m_ForceFile;}
 
+    void setGetAllAvailableForms(bool state) {m_AllForms=state;}
+    bool getAllAvailableForms() {return m_AllForms;}
+
+    void setGetAllAvailableFormDescriptions(bool state) {m_AllDescr=state;}
+    bool getAllAvailableFormDescriptions() const {return m_AllDescr;}
+
 private:
     TypesOfForm m_type;
     QStringList m_langs, m_spe, m_authors;
     QString m_uuid;
-    bool m_ForceFile;
+    bool m_ForceFile, m_AllForms, m_AllDescr;
 };
 
 //class FORM_EXPORT FormIOResult
@@ -114,7 +124,34 @@ namespace Form {
 class IFormIO;
 namespace Internal {
 class FormIODescriptionPrivate;
+class FormIOUpdateInformationsPrivate;
 }
+
+class FORM_EXPORT FormIOUpdateInformations
+{
+public:
+    enum DataRepresentation {
+        FormUid = 0,
+        FromVersion,
+        ToVersion,
+        UpdateText
+    };
+
+    FormIOUpdateInformations();
+    virtual ~FormIOUpdateInformations();
+
+    QVariant data(const int ref, const QString &lang = QString::null) const;
+    bool setData(const int ref, const QVariant &value, const QString &lang = QString::null);
+
+    QString fromVersion() const {return data(FromVersion).toString();}
+    QString toVersion() const {return data(ToVersion).toString();}
+    QString text(const QString lang = QString::null) const {return data(UpdateText, lang).toString();}
+
+    static bool lessThan(const FormIOUpdateInformations *one, const FormIOUpdateInformations *two);
+
+private:
+    Internal::FormIOUpdateInformationsPrivate *d;
+};
 
 class FORM_EXPORT FormIODescription
 {
@@ -153,11 +190,18 @@ public:
     QVariant data(const int ref, const QString &lang = QString::null) const;
     bool setData(const int ref, const QVariant &value, const QString &lang = QString::null);
 
+    void addUpdateInformation(FormIOUpdateInformations *updateInfo) {m_UpdateInfos.append(updateInfo);}
+    QList<FormIOUpdateInformations *> updateInformation() const {return m_UpdateInfos;}
+    QList<FormIOUpdateInformations *> updateInformationForVersion(const QString &version) const;
+    QList<FormIOUpdateInformations *> updateInformationForVersion(const Utils::VersionNumber &version) const;
+//    QList<FormIOUpdateInformations *> updateInformation(const QString &fromVersion, const QString &toVersion) const;
+
     void toTreeWidget(QTreeWidget *tree) const;
 
 private:
     Internal::FormIODescriptionPrivate *d;
     IFormIO *m_reader;
+    QList<FormIOUpdateInformations *> m_UpdateInfos;
 };
 
 class FORM_EXPORT IFormIO : public QObject
@@ -188,5 +232,7 @@ public:
 
 FORM_EXPORT QDebug operator<<(QDebug dbg, const Form::FormIODescription &c);
 FORM_EXPORT QDebug operator<<(QDebug dbg, const Form::FormIODescription *c);
+FORM_EXPORT QDebug operator<<(QDebug dbg, const Form::FormIOUpdateInformations &u);
+FORM_EXPORT QDebug operator<<(QDebug dbg, const Form::FormIOUpdateInformations *u);
 
 #endif // IFORMIO_H

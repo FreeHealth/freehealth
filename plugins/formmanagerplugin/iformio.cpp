@@ -77,6 +77,7 @@
 
 #include "iformio.h"
 
+#include <utils/versionnumber.h>
 #include <translationutils/constanttranslations.h>
 
 #include <QDate>
@@ -103,6 +104,83 @@ using namespace Trans::ConstantTranslations;
 //{
 //    return m_Query.formUuid();
 //}
+
+
+/////////////////////////////////////////////////////////////////////////////////////////
+/////////////////////////////////  FormIOUpdateInformations /////////////////////////////
+/////////////////////////////////////////////////////////////////////////////////////////
+namespace Form {
+namespace Internal {
+class UpdateBook
+{
+public:
+    QHash<int, QVariant> m_Datas;
+};
+
+class FormIOUpdateInformationsPrivate : public Trans::MultiLingualClass<UpdateBook>
+{
+public:
+    FormIOUpdateInformationsPrivate() {}
+    ~FormIOUpdateInformationsPrivate() {}
+};
+}
+}
+
+FormIOUpdateInformations::FormIOUpdateInformations() :
+        d(new FormIOUpdateInformationsPrivate)
+{
+}
+
+FormIOUpdateInformations::~FormIOUpdateInformations()
+{
+    if (d)
+        delete d;
+    d = 0;
+}
+
+QVariant FormIOUpdateInformations::data(const int ref, const QString &lang) const
+{
+    QString l = lang;
+    if (lang.isEmpty()) {
+        l = QLocale().name().left(2);
+        UpdateBook *book = d->getLanguage(l);
+        if (book) {
+            QVariant val = book->m_Datas.value(ref, QVariant());
+            if (!val.isNull())
+                return val;
+        }
+        l = Trans::Constants::ALL_LANGUAGE;
+        book = d->getLanguage(l);
+        if (book) {
+            QVariant val = book->m_Datas.value(ref, QVariant());
+            if (!val.isNull())
+                return val;
+        }
+    }
+    UpdateBook *book = d->getLanguage(l);
+    if (book) {
+        QVariant val = book->m_Datas.value(ref, QVariant());
+        if (!val.isNull())
+            return val;
+    }
+    return QVariant();
+}
+
+bool FormIOUpdateInformations::setData(const int ref, const QVariant &value, const QString &lang)
+{
+    QString l = lang;
+    if (lang.isEmpty())
+        l = Trans::Constants::ALL_LANGUAGE;
+    UpdateBook *book = d->createLanguage(l);
+    book->m_Datas.insert(ref, value);
+    return true;
+}
+
+bool FormIOUpdateInformations::lessThan(const FormIOUpdateInformations *one, const FormIOUpdateInformations *two)
+{
+    return (one->fromVersion() < two->fromVersion());
+}
+
 
 
 /////////////////////////////////////////////////////////////////////////////////////////
@@ -185,6 +263,24 @@ bool FormIODescription::setData(const int ref, const QVariant &value, const QStr
     return true;
 }
 
+QList<FormIOUpdateInformations *> FormIODescription::updateInformationForVersion(const QString &version) const
+{
+    Utils::VersionNumber v(version);
+    return updateInformationForVersion(v);
+}
+
+QList<FormIOUpdateInformations *> FormIODescription::updateInformationForVersion(const Utils::VersionNumber &version) const
+{
+    QList<FormIOUpdateInformations *> toReturn;
+    foreach(FormIOUpdateInformations *u, m_UpdateInfos) {
+        Utils::VersionNumber f(u->fromVersion());
+        if (version<=f)
+            toReturn << u;
+    }
+    qSort(toReturn.begin(), toReturn.end(), Form::FormIOUpdateInformations::lessThan);
+    return toReturn;
+}
+
 void FormIODescription::toTreeWidget(QTreeWidget *tree) const
 {
     /** \todo code here */
@@ -249,6 +345,26 @@ QDebug operator<<(QDebug dbg, const Form::FormIODescription *c)
 {
     if (!c) {
         dbg.nospace() << "FormIODescription(0x0)";
+        return dbg.space();
+    }
+    return operator<<(dbg, *c);
+}
+
+QDebug operator<<(QDebug dbg, const Form::FormIOUpdateInformations &c)
+{
+    QString tmp = "FormIOUpdateInformations(";
+    tmp += "f: " + c.fromVersion();
+    tmp += "; t: " + c.toVersion();
+    tmp += "; text: " + c.text();
+    tmp += ")";
+    dbg.nospace() << tmp;
+    return dbg.space();
+}
+
+QDebug operator<<(QDebug dbg, const Form::FormIOUpdateInformations *c)
+{
+    if (!c) {
+        dbg.nospace() << "FormIOUpdateInformations(0x0)";
         return dbg.space();
     }
     return operator<<(dbg, *c);

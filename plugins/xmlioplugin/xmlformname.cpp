@@ -33,6 +33,8 @@
 #include <QDir>
 #include <QFileInfo>
 
+#include <QDebug>
+
 using namespace XmlForms;
 using namespace Internal;
 
@@ -57,5 +59,20 @@ XmlFormName::XmlFormName(const QString &_uid) :
     uid.replace(settings()->path(Core::ISettings::SubFormsPath), Core::Constants::TAG_APPLICATION_SUBFORMS_PATH);
     uid.replace(settings()->path(Core::ISettings::BundleResourcesPath), Core::Constants::TAG_APPLICATION_RESOURCES_PATH);
     absFileName = QDir::cleanPath(absFileName);
-    isValid = QFileInfo(absFileName).exists();
+    QFileInfo info(absFileName);
+    if (info.isDir()) {
+        absFileName += "/central.xml";
+    }
+    absPath = info.absolutePath();
+    isValid = info.exists();
+}
+
+QDebug XmlForms::Internal::operator<<(QDebug dbg, const XmlFormName &c)
+{
+    dbg.nospace() << "XmlFormName(Valid:" << c.isValid
+                  << "Uid: " << c.uid
+                  << "; Mode: " << c.modeName
+                  << "; File: " << c.absFileName
+                     ;
+    return dbg.space();
 }

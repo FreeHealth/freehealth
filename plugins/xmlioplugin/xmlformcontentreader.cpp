@@ -38,7 +38,6 @@
 #include <coreplugin/isettings.h>
 #include <coreplugin/constants_tokensandsettings.h>
 
-//#include <formmanagerplugin/formmanager.h>
 #include <formmanagerplugin/iformitem.h>
 #include <formmanagerplugin/iformwidgetfactory.h>
 #include <formmanagerplugin/iformio.h>
@@ -119,6 +118,13 @@ XmlFormContentReader::XmlFormContentReader()
 
 XmlFormContentReader::~XmlFormContentReader()
 {}
+
+void XmlFormContentReader::clearCache()
+{
+    m_ReadableForms.clear();
+    m_DomDocFormCache.clear();
+    m_ActualForm = 0;
+}
 
 /** Refresh the IFormWidgetFactories from the plugin manager */
 void XmlFormContentReader::refreshPluginFactories()
@@ -267,6 +273,23 @@ Form::FormIODescription *XmlFormContentReader::readXmlDescription(const QDomElem
             QString content = readExtraFile(form, desc.text());
             ioDesc->setData(i.key(), content, desc.attribute(Constants::ATTRIB_LANGUAGE, Trans::Constants::ALL_LANGUAGE));
             desc = desc.nextSiblingElement(i.value());
+        }
+    }
+    // read update informations
+    QDomElement update = xmlDescr.firstChildElement(Constants::TAG_SPEC_UPDATEINFO);
+    if (!update.isNull()) {
+        update = update.firstChildElement(Constants::TAG_SPEC_UPDATEINFOVERSION);
+        while (!update.isNull()) {
+            QDomElement updateText = update.firstChildElement(Constants::TAG_SPEC_UPDATEINFOVERSIONTEXT);
+            Form::FormIOUpdateInformations *ioUpdate = new Form::FormIOUpdateInformations;
+            ioUpdate->setData(Form::FormIOUpdateInformations::FromVersion, update.attribute(Constants::ATTRIB_UPDATEINFOVERSION_FROM));
+            ioUpdate->setData(Form::FormIOUpdateInformations::ToVersion, update.attribute(Constants::ATTRIB_UPDATEINFOVERSION_TO));
+            while (!updateText.isNull()) {
+                ioUpdate->setData(Form::FormIOUpdateInformations::UpdateText, updateText.text(), updateText.attribute(Constants::ATTRIB_LANGUAGE));
+                updateText = updateText.nextSiblingElement(Constants::TAG_SPEC_UPDATEINFOVERSIONTEXT);
+            }
+            ioDesc->addUpdateInformation(ioUpdate);
+            update = update.nextSiblingElement(Constants::TAG_SPEC_UPDATEINFOVERSION);
         }
     }
     setPathToDescription(formUid, ioDesc);

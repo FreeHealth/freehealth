@@ -43,10 +43,13 @@ namespace Internal {
 struct XmlFormName {
     XmlFormName(const QString &uid);
     bool isValid;
-    QString uid, absFileName, modeName;
+    QString uid, absFileName, absPath, modeName;
 };
+
+QDebug operator<<(QDebug dbg, const XmlFormName &c);
 
 }
 }
+
 
 #endif // XMLFORMNAME_H

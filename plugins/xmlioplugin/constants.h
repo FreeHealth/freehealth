@@ -106,6 +106,11 @@ const char* const TAG_SPEC_WEBLINK      = "weblink";
 const char* const TAG_SPEC_ICON         = "icon";
 const char* const TAG_SPEC_TOOLTIP      = "tooltip";
 const char* const TAG_SPEC_EXTRA        = "extra";
+const char* const TAG_SPEC_UPDATEINFO   = "updateinfo";
+const char* const TAG_SPEC_UPDATEINFOVERSION  = "updateversion";
+const char* const ATTRIB_UPDATEINFOVERSION_FROM  = "from";
+const char* const ATTRIB_UPDATEINFOVERSION_TO    = "to";
+const char* const TAG_SPEC_UPDATEINFOVERSIONTEXT  = "text";
 
 const char* const TAG_VALUE              = "value";
 const char* const TAG_VALUE_UUID         = "uuid";

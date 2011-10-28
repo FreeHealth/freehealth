@@ -295,9 +295,6 @@ bool XmlIOBase::isFormExists(const QString &formUid, const int type, const QStri
         conds << Utils::Field(Constants::Table_FORM_CONTENT, Constants::FORMCONTENT_MODENAME, QString("='%1'").arg(modeName));
     }
     QString req = select(gets, joins, conds);
-
-    qWarning() << req;
-
     QSqlQuery query(DB);
     if (query.exec(req)) {
         if (query.next()) {
@@ -329,17 +326,20 @@ QList<Form::FormIODescription *> XmlIOBase::getFormDescription(const Form::FormI
     Utils::JoinList joins;
     joins << Utils::Join(Constants::Table_FORMS, Constants::FORM_ID, Constants::Table_FORM_CONTENT, Constants::FORMCONTENT_FORM_ID);
     Utils::FieldList conds;
-    if (formQuery.typeOfForms() & Form::FormIOQuery::CompleteForms) {
-        conds << Utils::Field(Constants::Table_FORMS, Constants::FORM_UUID, QString("like '%1%'").arg(Core::Constants::TAG_APPLICATION_COMPLETEFORMS_PATH));
-    }
-    if (formQuery.typeOfForms() & Form::FormIOQuery::SubForms) {
-        conds << Utils::Field(Constants::Table_FORMS, Constants::FORM_UUID, QString("like '%1%'").arg(Core::Constants::TAG_APPLICATION_SUBFORMS_PATH));
+    if (formQuery.getAllAvailableFormDescriptions()) {
+        conds << Utils::Field(Constants::Table_FORMS, Constants::FORM_UUID, QString("like '%'"));
+    } else {
+        if (formQuery.typeOfForms() & Form::FormIOQuery::CompleteForms) {
+            conds << Utils::Field(Constants::Table_FORMS, Constants::FORM_UUID, QString("like '%1%'").arg(Core::Constants::TAG_APPLICATION_COMPLETEFORMS_PATH));
+        }
+        if (formQuery.typeOfForms() & Form::FormIOQuery::SubForms) {
+            conds << Utils::Field(Constants::Table_FORMS, Constants::FORM_UUID, QString("like '%1%'").arg(Core::Constants::TAG_APPLICATION_SUBFORMS_PATH));
+        }
     }
     conds << Utils::Field(Constants::Table_FORM_CONTENT, Constants::FORMCONTENT_TYPE, QString("=%1").arg(Description));
     conds << Utils::Field(Constants::Table_FORM_CONTENT, Constants::FORMCONTENT_ISVALID, QString("=1"));
 
     QString req = select(gets, joins, conds);
-
     if (query.exec(req)) {
         while (query.next()) {
             QDomDocument doc;
@@ -471,6 +471,7 @@ bool XmlIOBase::saveContent(const QString &formUid, const QString &xmlContent, c
     if (mode.isEmpty()) {
         mode = "central";
     }
+    mode.remove(".xml");
 
     QHash<int, QString> where;
     // create in form table ?
@@ -506,6 +507,8 @@ bool XmlIOBase::saveContent(const QString &formUid, const QString &xmlContent, c
     }
 
     // update or insert content table ?
+    where.clear();
+    where.insert(FORMCONTENT_FORM_ID, QString("=%1").arg(formId));
     where.insert(FORMCONTENT_TYPE, QString("=%1").arg(type));
     where.insert(FORMCONTENT_MODENAME, QString("='%1'").arg(mode));
     where.insert(FORMCONTENT_CONTENT, "IS NOT NULL");
@@ -576,7 +579,7 @@ bool XmlIOBase::saveContent(const QString &formUid, const QString &xmlContent, c
             QString descr = xmlContent.mid(beg, end-beg);
 
             where.insert(FORMCONTENT_TYPE, QString("=%1").arg(Description));
-            req = prepareUpdateQuery(Table_FORM_CONTENT, FORMCONTENT_CONTENT);
+            req = prepareUpdateQuery(Table_FORM_CONTENT, FORMCONTENT_CONTENT, where);
             query.prepare(req);
             query.bindValue(0, descr);
             if (!query.exec()) {
