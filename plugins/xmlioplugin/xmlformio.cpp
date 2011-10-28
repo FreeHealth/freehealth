@@ -475,7 +475,7 @@ bool XmlFormIO::checkDatabaseFormFileForUpdates()
         }
     }
 
-    if (!readError) {
+    if (!readError && !formUidToUpdate.isEmpty()) {
         // Ask user for update
         bool yes = Utils::yesNoMessageBox(tr("Form update detected."),
                                           tr("A form update has been detected. Do you want to update the forms ?"),
