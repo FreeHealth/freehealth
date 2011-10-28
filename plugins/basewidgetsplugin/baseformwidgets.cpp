@@ -88,6 +88,7 @@ namespace {
             << "shorttext" << "longtext" << "helptext" << "file" << "group"
             << "date" << "button" << "sum" << "frenchnss";
 
+    const char * const  EXTRAS_COUNTRY          = "country";
     const char * const  EXTRAS_KEY              = "option";
     const char * const  EXTRAS_KEY2             = "options";
     const char * const  EXTRAS_KEY_COLUMN       = "column";
@@ -120,6 +121,13 @@ inline static Form::IFormWidget::LabelOptions labelAlignement(Form::FormItem *it
     else if (o.contains(::LABEL_ALIGN_LEFT, Qt::CaseInsensitive))
         return Form::IFormWidget::Label_OnLeft;
     return defaultValue;
+}
+
+inline static QStringList getCountries(Form::FormItem *item)
+{
+    if (!item->extraDatas().value(::EXTRAS_COUNTRY).isEmpty())
+        return item->extraDatas().value(::EXTRAS_COUNTRY).split(";");
+    return QStringList();
 }
 
 inline static int getNumberOfColumns(Form::FormItem *item, int defaultValue = 1)
@@ -462,6 +470,13 @@ BaseGroup::BaseGroup(Form::FormItem *formItem, QWidget *parent) :
         m_ContainerLayout->setSpacing(2);
     }
 
+    // Check country specific options
+    const QStringList &countries = getCountries(formItem);
+    if (!countries.isEmpty()) {
+        if (!countries.contains(QLocale().name().right(2), Qt::CaseInsensitive))
+            this->hide();
+    }
+
     if (isGroupCheckable(m_FormItem, false)) {
         m_Group->setCheckable(true);
         m_Group->setChecked(isGroupChecked(m_FormItem,false));
@@ -494,6 +509,13 @@ void BaseGroup::addWidgetToContainer(IFormWidget * widget)
 
 QString BaseGroup::printableHtml(bool withValues) const
 {
+    // Check country specific options
+    const QStringList &countries = getCountries(m_FormItem);
+    if (!countries.isEmpty()) {
+        if (!countries.contains(QLocale().name().right(2), Qt::CaseInsensitive))
+            return QString();
+    }
+
     QStringList html;
     QString content;
     QList<Form::FormItem*> items = m_FormItem->formItemChildren();

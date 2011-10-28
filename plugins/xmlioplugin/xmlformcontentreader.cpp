@@ -489,8 +489,8 @@ bool XmlFormContentReader::loadElement(Form::FormItem *item, QDomElement &rootEl
         }
 
         // All others add them in extraData
-//        qWarning() << "XML adding other tag" << element.tagName() << element.text();
         item->addExtraData(element.tagName(), element.text());
+//        qWarning() << "°°°°°°°°°°°°°° XML adding other tag" << element.tagName() << element.text() << item->extraDatas();
 
         element = element.nextSiblingElement();
     }

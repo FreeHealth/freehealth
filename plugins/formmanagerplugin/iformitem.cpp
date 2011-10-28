@@ -443,7 +443,7 @@ FormItem::~FormItem()
 
 void FormItem::addExtraData(const QString &id, const QString &data)
 {
-    if (m_ExtraDatas.keys().indexOf(id,Qt::CaseInsensitive)!=-1) {
+    if (m_ExtraDatas.keys().indexOf(id, Qt::CaseInsensitive) != -1) {
         QString add = m_ExtraDatas.value(id) + ";" + data;
         m_ExtraDatas.insert(id, add);
     } else {
