@@ -807,11 +807,23 @@ bool PmhCategoryModel::addPmhData(PmhData *pmh)
 
         return true;
     } else {
+        QModelIndex newParentIndex;
+        for(int i=0; i < d->m_Cats.count(); ++i) {
+            Category::CategoryItem *cat = d->m_Cats.at(i);
+            if (cat->id() == pmh->categoryId()) {
+                newParentIndex = indexForCategory(cat);
+                break;
+            }
+        }
         // Save PMH to database
         base()->savePmhData(pmh);
         // insert the pmh to the model
-        d->pmhToItem(pmh, new TreeItem);
-        reset();
+        beginInsertRows(newParentIndex, rowCount(newParentIndex), rowCount(newParentIndex));
+        TreeItem *item = new TreeItem;
+        d->pmhToItem(pmh, item, rowCount(newParentIndex));
+        endInsertRows();
+//        d->pmhToItem(pmh, new TreeItem);
+//        reset();
     }
     return true;
 }
