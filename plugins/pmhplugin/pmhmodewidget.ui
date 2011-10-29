@@ -15,25 +15,15 @@
   </property>
   <layout class="QGridLayout" name="gridLayout">
    <item row="0" column="0">
-    <layout class="QHBoxLayout" name="patientBarLayout">
-     <property name="spacing">
-      <number>0</number>
-     </property>
-    </layout>
-   </item>
-   <item row="1" column="0">
-    <widget class="QSplitter" name="splitter">
+    <widget class="Utils::MiniSplitter" name="splitter">
      <property name="orientation">
       <enum>Qt::Horizontal</enum>
      </property>
      <widget class="QWidget" name="layoutWidget">
-      <layout class="QVBoxLayout" name="verticalLayout_2">
+      <layout class="QVBoxLayout" name="treeViewLayout">
        <property name="spacing">
-        <number>2</number>
+        <number>0</number>
        </property>
-       <item>
-        <layout class="QHBoxLayout" name="toolBarLayout"/>
-       </item>
        <item>
         <widget class="Views::TreeView" name="treeView">
          <property name="editTriggers">
@@ -50,10 +40,10 @@
       <widget class="QWidget" name="scrollAreaWidgetContents_3">
        <property name="geometry">
         <rect>
-         <x>-131</x>
+         <x>0</x>
          <y>0</y>
-         <width>207</width>
-         <height>181</height>
+         <width>238</width>
+         <height>274</height>
         </rect>
        </property>
        <layout class="QGridLayout" name="gridLayout_2">
@@ -68,8 +58,7 @@
              <number>0</number>
             </property>
             <item>
-             <widget class="PMH::PmhViewer" name="pmhViewer" native="true">
-             </widget>
+             <widget class="PMH::PmhViewer" name="pmhViewer" native="true"/>
             </item>
             <item>
              <widget class="QDialogButtonBox" name="buttonBox">
@@ -90,6 +79,12 @@
   </layout>
  </widget>
  <customwidgets>
+  <customwidget>
+   <class>Utils::MiniSplitter</class>
+   <extends>QSplitter</extends>
+   <header location="global">utils/widgets/minisplitter.h</header>
+   <container>1</container>
+  </customwidget>
   <customwidget>
    <class>Views::TreeView</class>
    <extends>QTreeView</extends>
