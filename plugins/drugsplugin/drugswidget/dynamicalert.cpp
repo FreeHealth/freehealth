@@ -93,7 +93,7 @@ DynamicAlert::DynamicAlert(const DrugsDB::DrugInteractionInformationQuery &query
     // No alerts -> should never be the case ==> assert
     Q_ASSERT(!alertsToUse.isEmpty());
 
-    qWarning() << "nbOfDynAlerts" << alertsToUse.count();
+//    qWarning() << "nbOfDynAlerts" << alertsToUse.count();
 
     if (alertsToUse.count()==1) {
         // No tabwidget

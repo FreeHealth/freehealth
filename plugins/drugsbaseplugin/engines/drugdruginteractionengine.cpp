@@ -507,6 +507,7 @@ public:
 
     QString message(const IDrug *drug, const DrugInteractionInformationQuery &query) const
     {
+        /** \todo manage in the query level usage : static or dynamic ??? */
         QString toReturn;
         if (!m_Result->testedDrugs().contains((IDrug*)drug))
             return toReturn;
@@ -549,10 +550,10 @@ public:
                 // get the line related to the level of DDI
                 int typeId = -1;
                 DrugDrugInteractionEngine::TypesOfIAM r = DrugDrugInteractionEngine::TypesOfIAM(ddi->typeId());
-                if (!typeInLevel(r, query.levelOfWarningDynamicAlert))
+                if (!typeInLevel(r, query.levelOfWarningStaticAlert))
                     continue;
                 // Minimal alerts
-                if (r & DrugDrugInteractionEngine::ContreIndication && (query.levelOfWarningDynamicAlert <= Constants::MinimumLevelOfWarning))
+                if (r & DrugDrugInteractionEngine::ContreIndication && (query.levelOfWarningStaticAlert <= Constants::MinimumLevelOfWarning))
                     typeId = DrugDrugInteractionEngine::ContreIndication;
                 else if (r & DrugDrugInteractionEngine::Deconseille && (query.levelOfWarningStaticAlert <= Constants::MinimumLevelOfWarning))
                     typeId = DrugDrugInteractionEngine::Deconseille;
@@ -575,6 +576,7 @@ public:
                 else if (query.levelOfWarningStaticAlert & DrugDrugInteractionEngine::NoIAM)
                     typeId = DrugDrugInteractionEngine::NoIAM;
 
+
                 // construct line of the alert
                 QString line;
                 QString drug2;
@@ -596,6 +598,9 @@ public:
             }
 
             // construct full message
+            if (lines.isEmpty())
+                return QString();
+
             QMap<int, QString>::const_iterator i = lines.constEnd();
             --i;
             while (true) {
@@ -661,10 +666,11 @@ public:
                         typeId = DrugDrugInteractionEngine::ClassDuplication;
                     else if (level & DrugDrugInteractionEngine::NoIAM)
                         typeId = DrugDrugInteractionEngine::NoIAM;
+
                     QString &ditmp = lines[typeId];
                     if (!ditmp.contains(di->header("//"))) {
-                        ditmp += QString("    <li>%1</li>\n")
-                                 .arg(di->header("//"));
+                        ditmp += QString("<li>%1</li>\n")
+                                .arg(di->header("//"));
                     }
                 }
                 if (lines.isEmpty())
