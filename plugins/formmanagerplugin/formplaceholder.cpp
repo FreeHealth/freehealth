@@ -109,16 +109,20 @@ const char * const TREEVIEW_SHEET =
 //        "    border: 0px solid #bfcde4;"
         "}"
 
-//        "QTreeView::branch:hover {"
-//        "    background: qlineargradient(x1: 0, y1: 0, x2: 0, y2: 1, stop: 0 #e7effd, stop: 1 #cbdaf1);"
-//        "    border: 1px solid #bfcde4;"
-//        "}"
+        "QTreeView::branch:hover {"
+        "    background: qlineargradient(x1: 0, y1: 0, x2: 0, y2: 1, stop: 0 #e7effd, stop: 1 #cbdaf1);"
+        "    border: 0px solid #bfcde4;"
+        "}"
 
 //        "QTreeView::item:selected {"
 //        "    border: 0px solid #567dbc;"
 //        "}"
 
         "QTreeView::item:selected {"
+        "    background: qlineargradient(x1: 0, y1: 0, x2: 0, y2: 1, stop: 0 #6ea1f1, stop: 1 #567dbc);"
+        "}"
+
+        "QTreeView::branch:selected {"
         "    background: qlineargradient(x1: 0, y1: 0, x2: 0, y2: 1, stop: 0 #6ea1f1, stop: 1 #567dbc);"
         "}"
 
