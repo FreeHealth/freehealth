@@ -150,7 +150,6 @@ DrugsPrescriptorWidget::DrugsPrescriptorWidget(const QString &name, Form::FormIt
     m_CentralWidget = new DrugsCentralWidget(this);
     m_CentralWidget->initialize(formItem->extraDatas().value("options").contains(OPTION_HIDESELECTOR, Qt::CaseInsensitive));
     m_PrescriptionModel = m_CentralWidget->currentDrugsModel();
-    m_PrescriptionModel->setSelectionOnlyMode(!m_WithPrescribing);
     hb->addWidget(m_CentralWidget);
 
     // Manage options
@@ -163,6 +162,8 @@ DrugsPrescriptorWidget::DrugsPrescriptorWidget(const QString &name, Form::FormIt
                name.compare("prescriptor", Qt::CaseInsensitive)==0) {
         m_WithPrescribing = true;
     }
+    m_PrescriptionModel->setSelectionOnlyMode(!m_WithPrescribing);
+
     if (options.contains("nointeractionchecking", Qt::CaseInsensitive)) {
         m_PrescriptionModel->setComputeDrugInteractions(false);
     }
