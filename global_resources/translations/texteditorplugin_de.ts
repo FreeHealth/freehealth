@@ -151,57 +151,57 @@
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../../plugins/texteditorplugin/tablepropertieswidget.cpp" line="36"/>
+        <location filename="../../plugins/texteditorplugin/tablepropertieswidget.cpp" line="44"/>
         <source>None</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../../plugins/texteditorplugin/tablepropertieswidget.cpp" line="37"/>
+        <location filename="../../plugins/texteditorplugin/tablepropertieswidget.cpp" line="45"/>
         <source>Dotted</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../../plugins/texteditorplugin/tablepropertieswidget.cpp" line="38"/>
+        <location filename="../../plugins/texteditorplugin/tablepropertieswidget.cpp" line="46"/>
         <source>Dashed</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../../plugins/texteditorplugin/tablepropertieswidget.cpp" line="39"/>
+        <location filename="../../plugins/texteditorplugin/tablepropertieswidget.cpp" line="47"/>
         <source>Solid</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../../plugins/texteditorplugin/tablepropertieswidget.cpp" line="40"/>
+        <location filename="../../plugins/texteditorplugin/tablepropertieswidget.cpp" line="48"/>
         <source>Double</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../../plugins/texteditorplugin/tablepropertieswidget.cpp" line="41"/>
+        <location filename="../../plugins/texteditorplugin/tablepropertieswidget.cpp" line="49"/>
         <source>Dot dash</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../../plugins/texteditorplugin/tablepropertieswidget.cpp" line="42"/>
+        <location filename="../../plugins/texteditorplugin/tablepropertieswidget.cpp" line="50"/>
         <source>Dot dot dash</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../../plugins/texteditorplugin/tablepropertieswidget.cpp" line="43"/>
+        <location filename="../../plugins/texteditorplugin/tablepropertieswidget.cpp" line="51"/>
         <source>Groove</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../../plugins/texteditorplugin/tablepropertieswidget.cpp" line="44"/>
+        <location filename="../../plugins/texteditorplugin/tablepropertieswidget.cpp" line="52"/>
         <source>Rigde</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../../plugins/texteditorplugin/tablepropertieswidget.cpp" line="45"/>
+        <location filename="../../plugins/texteditorplugin/tablepropertieswidget.cpp" line="53"/>
         <source>Inset</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../../plugins/texteditorplugin/tablepropertieswidget.cpp" line="46"/>
+        <location filename="../../plugins/texteditorplugin/tablepropertieswidget.cpp" line="54"/>
         <source>Outset</source>
         <translation type="unfinished"></translation>
     </message>
@@ -209,18 +209,18 @@
 <context>
     <name>Editor::TextEditor</name>
     <message>
-        <location filename="../../plugins/texteditorplugin/texteditor.cpp" line="494"/>
+        <location filename="../../plugins/texteditorplugin/texteditor.cpp" line="500"/>
         <source>Save in pure textual format ?</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../../plugins/texteditorplugin/texteditor.cpp" line="495"/>
+        <location filename="../../plugins/texteditorplugin/texteditor.cpp" line="501"/>
         <source>The conversion of the document to a pure textual format will cause the lost of the paragraph and characters format. Do you really want to save in pure textual format ?</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../../plugins/texteditorplugin/texteditor.cpp" line="517"/>
-        <location filename="../../plugins/texteditorplugin/texteditor.cpp" line="519"/>
+        <location filename="../../plugins/texteditorplugin/texteditor.cpp" line="523"/>
+        <location filename="../../plugins/texteditorplugin/texteditor.cpp" line="525"/>
         <source>Font format</source>
         <translation type="unfinished"></translation>
     </message>

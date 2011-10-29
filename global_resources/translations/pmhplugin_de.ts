@@ -92,9 +92,13 @@
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../../plugins/pmhplugin/pmhmode.cpp" line="98"/>
-        <location filename="../../plugins/pmhplugin/pmhmode.cpp" line="253"/>
-        <source>Edit</source>
+        <location filename="../../plugins/pmhplugin/pmhmode.cpp" line="368"/>
+        <source>Remove PMHx</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../../plugins/pmhplugin/pmhmode.cpp" line="369"/>
+        <source>Do you really want to remove the PMHx called &lt;br /&gt;&amp;nbsp;&amp;nbsp;&amp;nbsp;&lt;b&gt;%1&lt;/b&gt; ?</source>
         <translation type="unfinished"></translation>
     </message>
 </context>
@@ -235,7 +239,7 @@
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../../plugins/pmhplugin/pmhviewer.ui" line="225"/>
+        <location filename="../../plugins/pmhplugin/pmhviewer.ui" line="228"/>
         <source>Manage ICD10 Codes</source>
         <translation type="unfinished"></translation>
     </message>
@@ -321,7 +325,7 @@
 <context>
     <name>PMH::PmhViewer</name>
     <message>
-        <location filename="../../plugins/pmhplugin/pmhviewer.cpp" line="251"/>
+        <location filename="../../plugins/pmhplugin/pmhviewer.cpp" line="257"/>
         <source>Replacing pmh data</source>
         <translation type="unfinished"></translation>
     </message>

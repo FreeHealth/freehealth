@@ -218,17 +218,17 @@ Answering &apos;No&apos; will cause definitve data lose.</source>
 <context>
     <name>FormIODescription</name>
     <message>
-        <location filename="../../plugins/formmanagerplugin/iformio.cpp" line="144"/>
+        <location filename="../../plugins/formmanagerplugin/iformio.cpp" line="222"/>
         <source>Complete form</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../../plugins/formmanagerplugin/iformio.cpp" line="146"/>
+        <location filename="../../plugins/formmanagerplugin/iformio.cpp" line="224"/>
         <source>Sub-form</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../../plugins/formmanagerplugin/iformio.cpp" line="148"/>
+        <location filename="../../plugins/formmanagerplugin/iformio.cpp" line="226"/>
         <source>Page only</source>
         <translation type="unfinished"></translation>
     </message>
@@ -236,17 +236,17 @@ Answering &apos;No&apos; will cause definitve data lose.</source>
 <context>
     <name>Forms</name>
     <message>
-        <location filename="../../plugins/formmanagerplugin/iformio.cpp" line="200"/>
+        <location filename="../../plugins/formmanagerplugin/iformio.cpp" line="296"/>
         <source>License</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../../plugins/formmanagerplugin/iformio.cpp" line="206"/>
+        <location filename="../../plugins/formmanagerplugin/iformio.cpp" line="302"/>
         <source>Creation date</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../../plugins/formmanagerplugin/iformio.cpp" line="208"/>
+        <location filename="../../plugins/formmanagerplugin/iformio.cpp" line="304"/>
         <source>Last modification date</source>
         <translation type="unfinished"></translation>
     </message>
