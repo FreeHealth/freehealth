@@ -91,22 +91,27 @@ const char * const TREEVIEW_SHEET =
 //        "    border: 1px solid #bfcde4;"
         "}"
 
-//        "QTreeView::branch:hover {"
-//        "    background: qlineargradient(x1: 0, y1: 0, x2: 0, y2: 1, stop: 0 #e7effd, stop: 1 #cbdaf1);"
-//        "    border: 1px solid #bfcde4;"
-//        "}"
+        "QTreeView::branch:hover {"
+        "    background: qlineargradient(x1: 0, y1: 0, x2: 0, y2: 1, stop: 0 #e7effd, stop: 1 #cbdaf1);"
+        "    border: 0px solid #bfcde4;"
+        "}"
 
 //        "QTreeView::item:selected {"
 //        "    border: 1px solid #567dbc;"
 //        "}"
 
-        "QTreeView::item:selected:active {"
+        "QTreeView::item:selected {"
         "    background: qlineargradient(x1: 0, y1: 0, x2: 0, y2: 1, stop: 0 #6ea1f1, stop: 1 #567dbc);"
         "}"
 
-        "QTreeView::item:selected:!active {"
-        "    background: qlineargradient(x1: 0, y1: 0, x2: 0, y2: 1, stop: 0 #6b9be8, stop: 1 #577fbf);"
-        "}";
+        "QTreeView::branch:selected {"
+        "    background: qlineargradient(x1: 0, y1: 0, x2: 0, y2: 1, stop: 0 #6ea1f1, stop: 1 #567dbc);"
+        "}"
+
+//        "QTreeView::item:selected:!active {"
+//        "    background: qlineargradient(x1: 0, y1: 0, x2: 0, y2: 1, stop: 0 #6b9be8, stop: 1 #577fbf);"
+//        "}"
+        ;
 }
 
 //namespace PMH {
