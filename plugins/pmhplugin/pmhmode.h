@@ -82,6 +82,7 @@ private Q_SLOTS:
     void removeItem();
     void onPatientChanged();
     void createPmh();
+    void pmhModelRowsInserted(const QModelIndex &parent, int start, int end);
 
 private:
     void changeEvent(QEvent *e);

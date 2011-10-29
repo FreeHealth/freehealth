@@ -68,7 +68,7 @@ namespace Internal {
 
 class PmhViewerPrivate {
 public:
-    PmhViewerPrivate() : ui(0), m_Pmh(0), m_ShowPatient(false) {}
+    PmhViewerPrivate(PmhViewer *parent) : ui(0), m_Pmh(0), m_ShowPatient(false), q(parent) {}
     ~PmhViewerPrivate()
     {
         delete ui; ui=0;
@@ -79,14 +79,7 @@ public:
         m_Mode = mode;
         Q_ASSERT(ui);
         bool enable = (mode == PmhViewer::ReadWriteMode);
-        ui->personalLabel->setEnabled(enable);
-        ui->typeCombo->setEnabled(enable);
-        ui->statusCombo->setEnabled(enable);
-        ui->categoryTreeView->setEnabled(enable);
-        ui->episodeViewer->setEnabled(enable);
-        ui->icdCodes->setEnabled(enable);
-        ui->simple_date->setEnabled(enable);
-        ui->simple_icd10->setEnabled(enable);
+        q->setEnabled(enable);
     }
 
     void populateUiWithPmh(PmhData *pmh)
@@ -156,6 +149,9 @@ public:
     PmhData *m_Pmh;
     bool m_ShowPatient;
     QStringListModel *m_IcdLabelModel;
+
+private:
+    PmhViewer *q;
 };
 
 } // End namespace Internal
@@ -164,7 +160,7 @@ public:
 
 /** \brief Creates a new PMH::PmhViewer with the specified \e editMode. \sa PMH::PmhViewer::EditMode */
 PmhViewer::PmhViewer(QWidget *parent, EditMode editMode, ViewMode viewMode) :
-    QWidget(parent), d(new PmhViewerPrivate)
+    QWidget(parent), d(new PmhViewerPrivate(this))
 {
     // Create Ui
     d->ui = new Internal::Ui::PmhViewer;

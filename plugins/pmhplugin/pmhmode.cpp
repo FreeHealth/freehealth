@@ -50,13 +50,15 @@
 #include <formmanagerplugin/iformitem.h>
 #include <formmanagerplugin/iformwidgetfactory.h>
 
+#include <utils/global.h>
+#include <utils/log.h>
 #include <translationutils/constanttranslations.h>
 #include <extensionsystem/pluginmanager.h>
 
 #include <QItemSelectionModel>
 #include <QToolBar>
 #include <QPushButton>
-#include <QHoverEvent>
+#include <QScrollBar>
 
 #include "ui_pmhmodewidget.h"
 
@@ -220,7 +222,7 @@ PmhModeWidget::PmhModeWidget(QWidget *parent) :
 
     // Populate ToolBar and create specific buttons
     m_EditButton = new QPushButton(ui->buttonBox);
-    m_EditButton->setText(tr("Edit"));
+    m_EditButton->setText(tkTr(Trans::Constants::M_EDIT_TEXT));
     ui->buttonBox->addButton(m_EditButton, QDialogButtonBox::YesRole);
     ui->buttonBox->button(QDialogButtonBox::Save)->setEnabled(false);
     ui->buttonBox->button(QDialogButtonBox::Cancel)->setEnabled(false);
@@ -237,6 +239,8 @@ PmhModeWidget::PmhModeWidget(QWidget *parent) :
 
     connect(ui->treeView->selectionModel(), SIGNAL(currentChanged (QModelIndex, QModelIndex)),
             this, SLOT(currentChanged(QModelIndex, QModelIndex)));
+    connect(ui->treeView->model(), SIGNAL(rowsInserted(QModelIndex,int,int)),
+            this, SLOT(pmhModelRowsInserted(QModelIndex,int,int)));
     connect(ui->buttonBox, SIGNAL(clicked(QAbstractButton*)), this, SLOT(onButtonClicked(QAbstractButton*)));
 
     connect(patient(), SIGNAL(currentPatientChanged()), this, SLOT(onPatientChanged()));
@@ -294,6 +298,8 @@ void PmhModeWidget::currentChanged(const QModelIndex &current, const QModelIndex
     } else if (catModel()->isPmhx(current)) {
         ui->pmhViewer->setPmhData(catModel()->pmhDataforIndex(current));
     }
+    ui->scrollArea->horizontalScrollBar()->setValue(0);
+    ui->scrollArea->verticalScrollBar()->setValue(0);
 }
 
 void PmhModeWidget::onButtonClicked(QAbstractButton *button)
@@ -346,7 +352,23 @@ void PmhModeWidget::removeItem()
     if (!ui->treeView->selectionModel()->hasSelection())
         return;
     QModelIndex item = ui->treeView->selectionModel()->currentIndex();
-    catModel()->removeRow(item.row(), item.parent());
+
+    // Do not delete categories this way (use the CategoryManagerDialog)
+    if (catModel()->isCategory(item) || catModel()->isForm(item))
+        return;
+
+    // Get the Root PMHx index
+    while (true) {
+        if (catModel()->isCategory(item.parent()))
+            break;
+        item = item.parent();
+    }
+
+    // Ask user
+    bool yes = Utils::yesNoMessageBox(tr("Remove PMHx"),
+                                      tr("Do you really want to remove the PMHx called <br />&nbsp;&nbsp;&nbsp;<b>%1</b> ?").arg(item.data().toString()));
+    if (yes)
+        catModel()->removeRow(item.row(), item.parent());
 }
 
 void PmhModeWidget::onPatientChanged()
@@ -364,9 +386,20 @@ void PmhModeWidget::createPmh()
     PmhCreatorDialog dlg(this);
     if (ui->treeView->selectionModel()->hasSelection()) {
         QModelIndex item = ui->treeView->selectionModel()->currentIndex();
+        while (!catModel()->isCategory(item)) {
+            item = item.parent();
+        }
         dlg.setCategory(catModel()->categoryForIndex(item));
     }
     dlg.exec();
+}
+
+void PmhModeWidget::pmhModelRowsInserted(const QModelIndex &parent, int start, int end)
+{
+    ui->treeView->expand(parent);
+    for(int i=start; i != end+1; ++i) {
+        ui->treeView->expand(catModel()->index(i, PmhCategoryModel::Label, parent));
+    }
 }
 
 void PmhModeWidget::changeEvent(QEvent *e)
@@ -375,7 +408,7 @@ void PmhModeWidget::changeEvent(QEvent *e)
     switch (e->type()) {
     case QEvent::LanguageChange:
         ui->retranslateUi(this);
-        m_EditButton->setText(tr("Edit"));
+        m_EditButton->setText(tkTr(Trans::Constants::M_EDIT_TEXT));
         break;
     default:
         break;

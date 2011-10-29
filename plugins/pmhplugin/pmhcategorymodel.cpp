@@ -777,6 +777,7 @@ bool PmhCategoryModel::addPmhData(PmhData *pmh)
             Category::CategoryItem *cat = d->m_Cats.at(i);
             if (cat->id() == pmh->categoryId()) {
                 newParentIndex = indexForCategory(cat);
+                pmh->setCategory(cat);
                 break;
             }
         }
@@ -786,6 +787,8 @@ bool PmhCategoryModel::addPmhData(PmhData *pmh)
         }
 
         QModelIndex pmhOldIndex = indexForPmhData(pmh);
+
+        qWarning() << oldItem->label() << pmhOldIndex;
 
         beginInsertRows(newParentIndex, rowCount(newParentIndex), rowCount(newParentIndex));
         TreeItem *item = new TreeItem;
@@ -802,28 +805,28 @@ bool PmhCategoryModel::addPmhData(PmhData *pmh)
         // Send to database
         base()->savePmhData(pmh);
 
-        /** \todo improve the reset() */
-        reset();
-
         return true;
     } else {
+        // Add PMH
         QModelIndex newParentIndex;
         for(int i=0; i < d->m_Cats.count(); ++i) {
             Category::CategoryItem *cat = d->m_Cats.at(i);
             if (cat->id() == pmh->categoryId()) {
                 newParentIndex = indexForCategory(cat);
+                pmh->setCategory(cat);
                 break;
             }
         }
+
         // Save PMH to database
         base()->savePmhData(pmh);
+        d->m_Pmhs.append(pmh);
+
         // insert the pmh to the model
         beginInsertRows(newParentIndex, rowCount(newParentIndex), rowCount(newParentIndex));
         TreeItem *item = new TreeItem;
         d->pmhToItem(pmh, item, rowCount(newParentIndex));
         endInsertRows();
-//        d->pmhToItem(pmh, new TreeItem);
-//        reset();
     }
     return true;
 }
