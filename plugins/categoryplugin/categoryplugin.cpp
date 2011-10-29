@@ -50,6 +50,8 @@ CategoryPlugin::CategoryPlugin()
 {
     if (Utils::Log::warnPluginsCreation())
         qWarning() << "creating CategoryPlugin";
+    // Add Translator to the Application
+    Core::ICore::instance()->translators()->addNewTranslator("categoryplugin");
 }
 
 CategoryPlugin::~CategoryPlugin()

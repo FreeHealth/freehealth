@@ -32,3 +32,7 @@ SOURCES += \
 FORMS += \
     $${PWD}/categorydialog.ui \
 
+
+TRANSLATIONS += $${SOURCES_TRANSLATIONS_PATH}/categoryplugin_fr.ts \
+                $${SOURCES_TRANSLATIONS_PATH}/categoryplugin_de.ts \
+                $${SOURCES_TRANSLATIONS_PATH}/categoryplugin_es.ts
