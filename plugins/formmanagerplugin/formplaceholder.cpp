@@ -118,13 +118,14 @@ const char * const TREEVIEW_SHEET =
 //        "    border: 0px solid #567dbc;"
 //        "}"
 
-        "QTreeView::item:selected:active {"
+        "QTreeView::item:selected {"
         "    background: qlineargradient(x1: 0, y1: 0, x2: 0, y2: 1, stop: 0 #6ea1f1, stop: 1 #567dbc);"
         "}"
 
-        "QTreeView::item:selected:!active {"
-        "    background: qlineargradient(x1: 0, y1: 0, x2: 0, y2: 1, stop: 0 #6b9be8, stop: 1 #577fbf);"
-        "}";
+//        "QTreeView::item:selected:!active {"
+//        "    background: qlineargradient(x1: 0, y1: 0, x2: 0, y2: 1, stop: 0 #6b9be8, stop: 1 #577fbf);"
+//        "}"
+        ;
 
 }
 namespace Form {
@@ -603,7 +604,7 @@ void FormPlaceHolder::newEpisode()
     }
     // activate the newly created main episode
     d->m_FileTree->selectionModel()->clearSelection();
-    d->m_FileTree->selectionModel()->setCurrentIndex(d->m_EpisodeModel->index(0,0,index), QItemSelectionModel::Select);
+    d->m_FileTree->selectionModel()->setCurrentIndex(d->m_EpisodeModel->index(0,0,index), QItemSelectionModel::Select | QItemSelectionModel::Rows);
     const QString &formUuid = d->m_EpisodeModel->index(index.row(), Form::EpisodeModel::FormUuid, index.parent()).data().toString();
     setCurrentForm(formUuid);
     qobject_cast<QScrollArea*>(d->m_Stack->currentWidget())->widget()->setEnabled(true);
