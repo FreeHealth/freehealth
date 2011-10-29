@@ -895,8 +895,10 @@ int DrugsModel::removeLastInsertedDrug()
 /** Starts the interactions checking */
 void DrugsModel::checkInteractions()
 {
-    if (!d->m_ComputeInteraction)
+    if (!d->m_ComputeInteraction) {
+        reset();
         return;
+    }
     if (d->m_InteractionResult)
         delete d->m_InteractionResult;
     d->m_InteractionResult = interactionManager()->checkInteractions(*d->m_InteractionQuery);
