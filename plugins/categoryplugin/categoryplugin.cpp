@@ -39,6 +39,9 @@
 #include "categorycore.h"
 
 #include <coreplugin/dialogs/pluginaboutpage.h>
+#include <coreplugin/icore.h>
+#include <coreplugin/translators.h>
+
 #include <utils/log.h>
 
 #include <QtCore/QtPlugin>
