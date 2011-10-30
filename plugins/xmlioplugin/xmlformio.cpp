@@ -198,10 +198,12 @@ QList<Form::FormIODescription *> XmlFormIO::getFormFileDescriptions(const Form::
         /** \todo manage user forms path and default path */
     }
 
+//    qWarning() << query.formUuid() << query.forceFileReading();
+
     if (!query.forceFileReading()) {
         // Get from database
         toReturn = base()->getFormDescription(query);
-        if (!toReturn.isEmpty())
+        if (!toReturn.isEmpty() && !query.getAllAvailableFormDescriptions())
             return toReturn;
     }
 
@@ -218,6 +220,7 @@ QList<Form::FormIODescription *> XmlFormIO::getFormFileDescriptions(const Form::
         }
         return toReturn;
     }
+
     // Get all form files
     if (query.typeOfForms() & Form::FormIOQuery::CompleteForms) {
         startPath = settings()->path(Core::ISettings::CompleteFormsPath);
@@ -225,13 +228,14 @@ QList<Form::FormIODescription *> XmlFormIO::getFormFileDescriptions(const Form::
         // get all forms included in this path
         foreach(const QFileInfo &file, Utils::getFiles(start, "central.xml", Utils::Recursively)) {
             const QString &fileName = file.absoluteFilePath();
-            if (canReadForms(query)) {
+            qWarning() << "TESTING" << fileName;
+            if (canReadForms(fileName)) {
+                qWarning() << "   ADDED";
                 Form::FormIODescription *desc = reader()->readFileInformations(fileName);
                 if (desc) {
                     desc->setData(Form::FormIODescription::IsCompleteForm, true);
                     toReturn.append(desc);
                 }
-//                qWarning() << fileName << desc;
             }
         }
     }
@@ -484,7 +488,7 @@ bool XmlFormIO::checkDatabaseFormFileForUpdates()
             // Update all checked forms
             foreach(const QString &formUid, formUidToUpdate.uniqueKeys()) {
                 foreach(const QFileInfo &file, formUidToUpdate.values(formUid)) {
-                    //                        qWarning() << "UPDATING" << file.baseName();
+                    //                    qWarning() << "UPDATING" << file.baseName();
                     QDomDocument *doc = reader()->fromCache(file.absoluteFilePath());
                     if (!doc) {
                         LOG_ERROR("Wrong cache");
@@ -493,6 +497,8 @@ bool XmlFormIO::checkDatabaseFormFileForUpdates()
                     //                        qWarning() << "CACHE OK" << file.absoluteFilePath();
                     if (!base()->saveContent(formUid, doc->toString(2), XmlIOBase::FullContent, file.baseName(), QDateTime::currentDateTime())) {
                         LOG_ERROR("Unable to update form database. Form: " + formUid + " " + file.baseName());
+                    } else {
+                        LOG("Form updated: " + formUid + " " + file.baseName());
                     }
                 }
             }
