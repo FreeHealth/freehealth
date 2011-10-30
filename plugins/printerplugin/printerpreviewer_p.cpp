@@ -212,7 +212,6 @@ void PrinterPreviewerPrivate::setFooter(const TextDocumentExtra *extra)
 
 void PrinterPreviewerPrivate::setWatermark(const TextDocumentExtra *extra)
 {
-    WARN_FUNC << extra->presence();
     if (extra) {
         setWatermarkHtml(extra->toHtml());
         setWatermarkPresence(extra->presence());
@@ -301,7 +300,7 @@ void PrinterPreviewerPrivate::setFooterPresence(const int presence)
 void PrinterPreviewerPrivate::setWatermarkPresence(const int presence)
 {
     QComboBox *c = this->watermarkPresenceCombo();
-    qWarning() << "setWatermarkPresence" << presence << c;
+//    qWarning() << "setWatermarkPresence" << presence << c;
     if (c)
         c->setCurrentIndex(presence);
 }
