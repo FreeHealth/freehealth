@@ -228,9 +228,7 @@ QList<Form::FormIODescription *> XmlFormIO::getFormFileDescriptions(const Form::
         // get all forms included in this path
         foreach(const QFileInfo &file, Utils::getFiles(start, "central.xml", Utils::Recursively)) {
             const QString &fileName = file.absoluteFilePath();
-            qWarning() << "TESTING" << fileName;
             if (canReadForms(fileName)) {
-                qWarning() << "   ADDED";
                 Form::FormIODescription *desc = reader()->readFileInformations(fileName);
                 if (desc) {
                     desc->setData(Form::FormIODescription::IsCompleteForm, true);
