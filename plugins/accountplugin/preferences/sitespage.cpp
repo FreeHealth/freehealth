@@ -130,9 +130,7 @@ SitesWidget::SitesWidget(QWidget *parent) :
     ui->setupUi(this);
     ui->tabWidget->setCurrentIndex(0);
     ui->addButton->setIcon(theme()->icon(Core::Constants::ICONADD));
-    ui->addButton->setText(tkTr(Trans::Constants::ADD_TEXT));
     ui->deleteButton->setIcon(theme()->icon(Core::Constants::ICONREMOVE));
-    ui->deleteButton->setText(tkTr(Trans::Constants::REMOVE_TEXT));
 
     // Manage user
     m_user_uid = user()->uuid();
@@ -153,7 +151,8 @@ SitesWidget::SitesWidget(QWidget *parent) :
     m_siteUidLabel = new QSpinBox(this);
     //m_siteUidLabel->setText("NULL");
     m_siteUidLabel->setValue(11111);
-    //m_siteUidLabel->hide();
+    if (Utils::isReleaseCompilation())
+            m_siteUidLabel->hide();
     m_Mapper = new QDataWidgetMapper(this);
     m_Mapper->setSubmitPolicy(QDataWidgetMapper::AutoSubmit);
     m_Mapper->setModel(m_Model);
@@ -292,6 +291,8 @@ void SitesWidget::changeEvent(QEvent *e)
     switch (e->type()) {
     case QEvent::LanguageChange:
         ui->retranslateUi(this);
+        ui->addButton->setToolTip(tkTr(Trans::Constants::FILENEW_TEXT));
+        ui->deleteButton->setToolTip(tkTr(Trans::Constants::REMOVE_TEXT));
 //        int s = defaultCombo->currentIndex();
 //        defaultCombo->clear();
 //        defaultCombo->addItem(tkTr(Trans::Constants::NO));

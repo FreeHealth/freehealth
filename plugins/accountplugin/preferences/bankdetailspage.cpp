@@ -127,9 +127,7 @@ BankDetailsWidget::BankDetailsWidget(QWidget *parent) :
     defaultCombo->addItem(tkTr(Trans::Constants::NO));
     defaultCombo->addItem(tkTr(Trans::Constants::YES));
     addButton->setIcon(theme()->icon(Core::Constants::ICONADD));
-    addButton->setText("New");
     deleteButton->setIcon(theme()->icon(Core::Constants::ICONREMOVE));
-    deleteButton->setText("Delete");
     m_Model = new AccountDB::BankAccountModel(this);
     if (m_Model->rowCount()<1)  {
         if (!setCashBox())  {
@@ -227,6 +225,8 @@ void BankDetailsWidget::changeEvent(QEvent *e)
     case QEvent::LanguageChange:
         {
             retranslateUi(this);
+            addButton->setToolTip(tkTr(Trans::Constants::FILENEW_TEXT));
+            deleteButton->setToolTip(tkTr(Trans::Constants::REMOVE_TEXT));
             int s = defaultCombo->currentIndex();
             defaultCombo->clear();
             defaultCombo->addItem(tkTr(Trans::Constants::NO));

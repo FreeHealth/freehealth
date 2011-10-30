@@ -126,9 +126,7 @@ AssetsRatesWidget::AssetsRatesWidget(QWidget *parent) :
     setupUi(this);
     m_user_uid = user()->uuid();
     addButton->setIcon(theme()->icon(Core::Constants::ICONADD));
-    addButton->setText("New");
     deleteButton->setIcon(theme()->icon(Core::Constants::ICONREMOVE));
-    deleteButton->setText("Delete");
     beginSpinBox->setRange(0,1000);
     endSpinBox->setRange(0,1000);
     rateDoubleSpinBox->setRange(0.00,1000.00);
@@ -251,6 +249,8 @@ void AssetsRatesWidget::changeEvent(QEvent *e)
     switch (e->type()) {
     case QEvent::LanguageChange:
         retranslateUi(this);
+        addButton->setToolTip(tkTr(Trans::Constants::FILENEW_TEXT));
+        deleteButton->setToolTip(tkTr(Trans::Constants::REMOVE_TEXT));
 //        int s = defaultCombo->currentIndex();
 //        defaultCombo->clear();
 //        defaultCombo->addItem(tkTr(Trans::Constants::NO));

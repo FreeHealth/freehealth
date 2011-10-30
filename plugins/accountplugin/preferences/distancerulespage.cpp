@@ -125,9 +125,7 @@ DistanceRulesWidget::DistanceRulesWidget(QWidget *parent) :
     setObjectName("DistanceRulesWidget");
     setupUi(this);
     addButton->setIcon(theme()->icon(Core::Constants::ICONADD));
-    addButton->setText("New");
     deleteButton->setIcon(theme()->icon(Core::Constants::ICONREMOVE));
-    deleteButton->setText("Delete");
     preferedSpinBox->setRange(0,1);
     
     m_Model = new AccountDB::DistanceRulesModel(this);
@@ -237,6 +235,8 @@ void DistanceRulesWidget::changeEvent(QEvent *e)
     switch (e->type()) {
     case QEvent::LanguageChange:
         retranslateUi(this);
+        addButton->setToolTip(tkTr(Trans::Constants::FILENEW_TEXT));
+        deleteButton->setToolTip(tkTr(Trans::Constants::REMOVE_TEXT));
 //        int s = defaultCombo->currentIndex();
 //        defaultCombo->clear();
 //        defaultCombo->addItem(tkTr(Trans::Constants::NO));

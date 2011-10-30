@@ -133,9 +133,7 @@ MedicalProcedureWidget::MedicalProcedureWidget(QWidget *parent) :
         m_user_fullName = "Admin_Test";
     }
     addButton->setIcon(theme()->icon(Core::Constants::ICONADD));
-    addButton->setText("New");
     removeButton->setIcon(theme()->icon(Core::Constants::ICONREMOVE));
-    removeButton->setText("Delete");
     ownersComboBox->addItem(m_user_fullName,QVariant());
     dateEdit->setDisplayFormat("yyyy-MM-dd");
     dateEdit->setDate(QDate::currentDate());
@@ -317,6 +315,8 @@ void MedicalProcedureWidget::changeEvent(QEvent *e)
     switch (e->type()) {
     case QEvent::LanguageChange:
         retranslateUi(this);
+        addButton->setToolTip(tkTr(Trans::Constants::FILENEW_TEXT));
+        removeButton->setToolTip(tkTr(Trans::Constants::REMOVE_TEXT));
 //        int s = defaultCombo->currentIndex();
 //        defaultCombo->clear();
 //        defaultCombo->addItem(tkTr(Trans::Constants::NO));

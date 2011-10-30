@@ -130,9 +130,7 @@ InsuranceWidget::InsuranceWidget(QWidget *parent) :
     ui->setupUi(this);
     ui->tabWidget->setCurrentIndex(0);
     ui->addButton->setIcon(theme()->icon(Core::Constants::ICONADD));
-    ui->addButton->setText(tkTr(Trans::Constants::ADD_TEXT));
     ui->deleteButton->setIcon(theme()->icon(Core::Constants::ICONREMOVE));
-    ui->deleteButton->setText(tkTr(Trans::Constants::REMOVE_TEXT));
 
     // Manage current user
     m_user_uid = user()->uuid();
@@ -159,7 +157,8 @@ InsuranceWidget::InsuranceWidget(QWidget *parent) :
     m_insuranceUidLabel = new QSpinBox(this);
     //m_insuranceUidLabel->setText("NULL");
     m_insuranceUidLabel->setValue(11111);
-    //m_insuranceUidLabel->hide();
+    if (Utils::isReleaseCompilation())
+        m_insuranceUidLabel->hide();
 
     // Create mapper
     m_Mapper = new QDataWidgetMapper(this);
@@ -314,6 +313,8 @@ void InsuranceWidget::changeEvent(QEvent *e)
     switch (e->type()) {
     case QEvent::LanguageChange:
         ui->retranslateUi(this);
+        ui->addButton->setToolTip(tkTr(Trans::Constants::FILENEW_TEXT));
+        ui->deleteButton->setToolTip(tkTr(Trans::Constants::REMOVE_TEXT));
 //        int s = defaultCombo->currentIndex();
 //        defaultCombo->clear();
 //        defaultCombo->addItem(tkTr(Trans::Constants::NO));
