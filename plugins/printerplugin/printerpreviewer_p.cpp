@@ -212,6 +212,7 @@ void PrinterPreviewerPrivate::setFooter(const TextDocumentExtra *extra)
 
 void PrinterPreviewerPrivate::setWatermark(const TextDocumentExtra *extra)
 {
+    WARN_FUNC << extra->presence();
     if (extra) {
         setWatermarkHtml(extra->toHtml());
         setWatermarkPresence(extra->presence());
@@ -285,29 +286,29 @@ void PrinterPreviewerPrivate::connectPreview(Editor::TextEditor * t)
 
 void PrinterPreviewerPrivate::setHeaderPresence(const int presence)
 {
-    QComboBox *c = this->findChild<QComboBox *>(tkTr(Trans::Constants::HEADER));
+    QComboBox *c = this->headerPresenceCombo();
     if (c)
         c->setCurrentIndex(presence);
 }
 
 void PrinterPreviewerPrivate::setFooterPresence(const int presence)
 {
-    QComboBox *c = this->findChild<QComboBox *>(tkTr(Trans::Constants::FOOTER));
+    QComboBox *c = this->footerPresenceCombo();
     if (c)
         c->setCurrentIndex(presence);
 }
 
 void PrinterPreviewerPrivate::setWatermarkPresence(const int presence)
 {
-//    qWarning() << "setWatermarkPresence" << presence;
-    QComboBox *c = this->findChild<QComboBox *>(tkTr(Trans::Constants::WATERMARK));
+    QComboBox *c = this->watermarkPresenceCombo();
+    qWarning() << "setWatermarkPresence" << presence << c;
     if (c)
         c->setCurrentIndex(presence);
 }
 
 int PrinterPreviewerPrivate::headerPresence() const
 {
-    QComboBox *c = this->findChild<QComboBox *>(tkTr(Trans::Constants::HEADER));
+    QComboBox *c = this->headerPresenceCombo();
     if (c)
         return c->currentIndex();
     return 0;
@@ -316,7 +317,7 @@ int PrinterPreviewerPrivate::headerPresence() const
 
 int PrinterPreviewerPrivate::footerPresence() const
 {
-    QComboBox *c = this->findChild<QComboBox *>(tkTr(Trans::Constants::FOOTER));
+    QComboBox *c = this->footerPresenceCombo();
     if (c)
         return c->currentIndex();
     return 0;
@@ -326,7 +327,7 @@ int PrinterPreviewerPrivate::footerPresence() const
 int PrinterPreviewerPrivate::watermarkPresence() const
 {
 //    qWarning() << "watermarkPresence";
-    QComboBox *c = this->findChild<QComboBox *>(tkTr(Trans::Constants::WATERMARK));
+    QComboBox *c = this->watermarkPresenceCombo();
     if (c)
         return c->currentIndex();
     return 0;
