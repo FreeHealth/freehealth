@@ -1834,7 +1834,7 @@ Localisation : %2</translation>
     <message>
         <location filename="../../libs/translationutils/constanttranslations.h" line="531"/>
         <source>Watermark</source>
-        <translation>Tatouage d&apos;impression</translation>
+        <translation>Filigrane</translation>
     </message>
     <message>
         <location filename="../../libs/translationutils/constanttranslations.h" line="532"/>
