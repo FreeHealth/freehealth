@@ -235,48 +235,47 @@ Then parametrize your user, sites, bank and so on.</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../../plugins/accountplugin/preferences/assetsratespage.ui" line="50"/>
-        <location filename="../../plugins/accountplugin/preferences/assetsratespage.ui" line="57"/>
-        <source>PushButton</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <location filename="../../plugins/accountplugin/preferences/assetsratespage.ui" line="66"/>
+        <location filename="../../plugins/accountplugin/preferences/assetsratespage.ui" line="88"/>
         <source>Uid</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../../plugins/accountplugin/preferences/assetsratespage.ui" line="73"/>
+        <location filename="../../plugins/accountplugin/preferences/assetsratespage.ui" line="95"/>
         <source>uuid</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../../plugins/accountplugin/preferences/assetsratespage.ui" line="80"/>
+        <location filename="../../plugins/accountplugin/preferences/assetsratespage.ui" line="102"/>
         <source>Name of rate</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../../plugins/accountplugin/preferences/assetsratespage.ui" line="99"/>
+        <location filename="../../plugins/accountplugin/preferences/assetsratespage.ui" line="123"/>
         <source>Period</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../../plugins/accountplugin/preferences/assetsratespage.ui" line="106"/>
+        <location filename="../../plugins/accountplugin/preferences/assetsratespage.ui" line="130"/>
         <source>Between</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../../plugins/accountplugin/preferences/assetsratespage.ui" line="126"/>
+        <location filename="../../plugins/accountplugin/preferences/assetsratespage.ui" line="150"/>
         <source>years and</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../../plugins/accountplugin/preferences/assetsratespage.ui" line="136"/>
+        <location filename="../../plugins/accountplugin/preferences/assetsratespage.ui" line="170"/>
+        <source>years</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../../plugins/accountplugin/preferences/assetsratespage.ui" line="184"/>
         <source>Rate</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../../plugins/accountplugin/preferences/assetsratespage.ui" line="149"/>
+        <location filename="../../plugins/accountplugin/preferences/assetsratespage.ui" line="209"/>
         <source>&lt;!DOCTYPE HTML PUBLIC &quot;-//W3C//DTD HTML 4.0//EN&quot; &quot;http://www.w3.org/TR/REC-html40/strict.dtd&quot;&gt;
 &lt;html&gt;&lt;head&gt;&lt;meta name=&quot;qrichtext&quot; content=&quot;1&quot; /&gt;&lt;style type=&quot;text/css&quot;&gt;
 p, li { white-space: pre-wrap; }
@@ -287,39 +286,34 @@ p, li { white-space: pre-wrap; }
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../../plugins/accountplugin/preferences/assetsratespage.ui" line="162"/>
+        <location filename="../../plugins/accountplugin/preferences/assetsratespage.ui" line="197"/>
         <source>Date</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../../plugins/accountplugin/preferences/assetsratespage.ui" line="169"/>
-        <source>Years</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <location filename="../../plugins/accountplugin/preferences/assetsratespage.cpp" line="177"/>
+        <location filename="../../plugins/accountplugin/preferences/assetsratespage.cpp" line="175"/>
         <source>Save changes ?</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../../plugins/accountplugin/preferences/assetsratespage.cpp" line="178"/>
+        <location filename="../../plugins/accountplugin/preferences/assetsratespage.cpp" line="176"/>
         <source>You make changes into the assetsrates table.
 Do you want to save them ?</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../../plugins/accountplugin/preferences/assetsratespage.cpp" line="183"/>
-        <location filename="../../plugins/accountplugin/preferences/assetsratespage.cpp" line="230"/>
+        <location filename="../../plugins/accountplugin/preferences/assetsratespage.cpp" line="181"/>
+        <location filename="../../plugins/accountplugin/preferences/assetsratespage.cpp" line="228"/>
         <source>assetsrates</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../../plugins/accountplugin/preferences/assetsratespage.cpp" line="231"/>
+        <location filename="../../plugins/accountplugin/preferences/assetsratespage.cpp" line="229"/>
         <source>Can not submit assetsrates to your personnal database.</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../../plugins/accountplugin/preferences/assetsratespage.cpp" line="232"/>
+        <location filename="../../plugins/accountplugin/preferences/assetsratespage.cpp" line="230"/>
         <source>An error occured during assetsrates saving. Datas are corrupted.</source>
         <translation type="unfinished"></translation>
     </message>
@@ -427,74 +421,74 @@ Do you want to save them ?</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../../plugins/accountplugin/preferences/bankdetailspage.ui" line="26"/>
+        <location filename="../../plugins/accountplugin/preferences/bankdetailspage.ui" line="88"/>
         <source>Owner</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../../plugins/accountplugin/preferences/bankdetailspage.ui" line="36"/>
+        <location filename="../../plugins/accountplugin/preferences/bankdetailspage.ui" line="98"/>
         <source>Owner adress</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../../plugins/accountplugin/preferences/bankdetailspage.ui" line="46"/>
+        <location filename="../../plugins/accountplugin/preferences/bankdetailspage.ui" line="108"/>
         <source>IBAN</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../../plugins/accountplugin/preferences/bankdetailspage.ui" line="56"/>
+        <location filename="../../plugins/accountplugin/preferences/bankdetailspage.ui" line="118"/>
         <source>Bank account number</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../../plugins/accountplugin/preferences/bankdetailspage.ui" line="66"/>
+        <location filename="../../plugins/accountplugin/preferences/bankdetailspage.ui" line="128"/>
         <source>Balance</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../../plugins/accountplugin/preferences/bankdetailspage.ui" line="76"/>
+        <location filename="../../plugins/accountplugin/preferences/bankdetailspage.ui" line="150"/>
         <source>on</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../../plugins/accountplugin/preferences/bankdetailspage.ui" line="96"/>
+        <location filename="../../plugins/accountplugin/preferences/bankdetailspage.ui" line="78"/>
         <source>Label</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../../plugins/accountplugin/preferences/bankdetailspage.ui" line="106"/>
+        <location filename="../../plugins/accountplugin/preferences/bankdetailspage.ui" line="162"/>
         <source>Use by default</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../../plugins/accountplugin/preferences/bankdetailspage.ui" line="116"/>
+        <location filename="../../plugins/accountplugin/preferences/bankdetailspage.ui" line="26"/>
         <source>Available bank account</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../../plugins/accountplugin/preferences/bankdetailspage.cpp" line="171"/>
+        <location filename="../../plugins/accountplugin/preferences/bankdetailspage.cpp" line="169"/>
         <source>Save changes ?</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../../plugins/accountplugin/preferences/bankdetailspage.cpp" line="172"/>
+        <location filename="../../plugins/accountplugin/preferences/bankdetailspage.cpp" line="170"/>
         <source>You make changes into the bank account details.
 Do you want to save them ?</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../../plugins/accountplugin/preferences/bankdetailspage.cpp" line="176"/>
-        <location filename="../../plugins/accountplugin/preferences/bankdetailspage.cpp" line="210"/>
+        <location filename="../../plugins/accountplugin/preferences/bankdetailspage.cpp" line="174"/>
+        <location filename="../../plugins/accountplugin/preferences/bankdetailspage.cpp" line="208"/>
         <source>bank account details</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../../plugins/accountplugin/preferences/bankdetailspage.cpp" line="211"/>
+        <location filename="../../plugins/accountplugin/preferences/bankdetailspage.cpp" line="209"/>
         <source>Can not submit bank account details to your personnal database.</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../../plugins/accountplugin/preferences/bankdetailspage.cpp" line="212"/>
+        <location filename="../../plugins/accountplugin/preferences/bankdetailspage.cpp" line="210"/>
         <source>An error occured during bank account details saving. Datas are corrupted.</source>
         <translation type="unfinished"></translation>
     </message>
@@ -517,33 +511,27 @@ Do you want to save them ?</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../../plugins/accountplugin/preferences/distancerulespage.ui" line="28"/>
+        <location filename="../../plugins/accountplugin/preferences/distancerulespage.ui" line="26"/>
         <source>Types</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../../plugins/accountplugin/preferences/distancerulespage.ui" line="50"/>
-        <location filename="../../plugins/accountplugin/preferences/distancerulespage.ui" line="57"/>
-        <source>PushButton</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <location filename="../../plugins/accountplugin/preferences/distancerulespage.ui" line="72"/>
+        <location filename="../../plugins/accountplugin/preferences/distancerulespage.ui" line="108"/>
         <source>Rule</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../../plugins/accountplugin/preferences/distancerulespage.ui" line="108"/>
+        <location filename="../../plugins/accountplugin/preferences/distancerulespage.ui" line="128"/>
         <source>Value</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../../plugins/accountplugin/preferences/distancerulespage.ui" line="118"/>
+        <location filename="../../plugins/accountplugin/preferences/distancerulespage.ui" line="88"/>
         <source>Uid</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../../plugins/accountplugin/preferences/distancerulespage.ui" line="132"/>
+        <location filename="../../plugins/accountplugin/preferences/distancerulespage.ui" line="177"/>
         <source>&lt;!DOCTYPE HTML PUBLIC &quot;-//W3C//DTD HTML 4.0//EN&quot; &quot;http://www.w3.org/TR/REC-html40/strict.dtd&quot;&gt;
 &lt;html&gt;&lt;head&gt;&lt;meta name=&quot;qrichtext&quot; content=&quot;1&quot; /&gt;&lt;style type=&quot;text/css&quot;&gt;
 p, li { white-space: pre-wrap; }
@@ -556,42 +544,42 @@ p, li { white-space: pre-wrap; }
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../../plugins/accountplugin/preferences/distancerulespage.ui" line="147"/>
+        <location filename="../../plugins/accountplugin/preferences/distancerulespage.ui" line="154"/>
         <source>Prefered: 
 yes = 1
 no = 0</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../../plugins/accountplugin/preferences/distancerulespage.ui" line="159"/>
+        <location filename="../../plugins/accountplugin/preferences/distancerulespage.ui" line="166"/>
         <source>Minimum
 kilometers</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../../plugins/accountplugin/preferences/distancerulespage.cpp" line="168"/>
+        <location filename="../../plugins/accountplugin/preferences/distancerulespage.cpp" line="166"/>
         <source>Save changes ?</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../../plugins/accountplugin/preferences/distancerulespage.cpp" line="169"/>
+        <location filename="../../plugins/accountplugin/preferences/distancerulespage.cpp" line="167"/>
         <source>You make changes into the distancerules table.
 Do you want to save them ?</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../../plugins/accountplugin/preferences/distancerulespage.cpp" line="175"/>
-        <location filename="../../plugins/accountplugin/preferences/distancerulespage.cpp" line="219"/>
+        <location filename="../../plugins/accountplugin/preferences/distancerulespage.cpp" line="173"/>
+        <location filename="../../plugins/accountplugin/preferences/distancerulespage.cpp" line="217"/>
         <source>distancerules</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../../plugins/accountplugin/preferences/distancerulespage.cpp" line="220"/>
+        <location filename="../../plugins/accountplugin/preferences/distancerulespage.cpp" line="218"/>
         <source>Can not submit distancerules to your personnal database.</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../../plugins/accountplugin/preferences/distancerulespage.cpp" line="221"/>
+        <location filename="../../plugins/accountplugin/preferences/distancerulespage.cpp" line="219"/>
         <source>An error occured during distancerules saving. Datas are corrupted.</source>
         <translation type="unfinished"></translation>
     </message>
@@ -609,95 +597,85 @@ Do you want to save them ?</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../../plugins/accountplugin/preferences/insurancepage.ui" line="41"/>
-        <source>New</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <location filename="../../plugins/accountplugin/preferences/insurancepage.ui" line="48"/>
-        <source>Delete</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <location filename="../../plugins/accountplugin/preferences/insurancepage.ui" line="63"/>
-        <location filename="../../plugins/accountplugin/preferences/insurancepage.ui" line="89"/>
+        <location filename="../../plugins/accountplugin/preferences/insurancepage.ui" line="83"/>
+        <location filename="../../plugins/accountplugin/preferences/insurancepage.ui" line="109"/>
         <source>Adress</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../../plugins/accountplugin/preferences/insurancepage.ui" line="69"/>
+        <location filename="../../plugins/accountplugin/preferences/insurancepage.ui" line="89"/>
         <source>Name</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../../plugins/accountplugin/preferences/insurancepage.ui" line="112"/>
+        <location filename="../../plugins/accountplugin/preferences/insurancepage.ui" line="132"/>
         <source>City</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../../plugins/accountplugin/preferences/insurancepage.ui" line="125"/>
+        <location filename="../../plugins/accountplugin/preferences/insurancepage.ui" line="145"/>
         <source>Country</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../../plugins/accountplugin/preferences/insurancepage.ui" line="102"/>
+        <location filename="../../plugins/accountplugin/preferences/insurancepage.ui" line="122"/>
         <source>ZIP</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../../plugins/accountplugin/preferences/insurancepage.ui" line="139"/>
+        <location filename="../../plugins/accountplugin/preferences/insurancepage.ui" line="159"/>
         <source>Phones</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../../plugins/accountplugin/preferences/insurancepage.ui" line="145"/>
+        <location filename="../../plugins/accountplugin/preferences/insurancepage.ui" line="165"/>
         <source>Phone</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../../plugins/accountplugin/preferences/insurancepage.ui" line="168"/>
+        <location filename="../../plugins/accountplugin/preferences/insurancepage.ui" line="188"/>
         <source>Fax</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../../plugins/accountplugin/preferences/insurancepage.ui" line="184"/>
+        <location filename="../../plugins/accountplugin/preferences/insurancepage.ui" line="204"/>
         <source>Mail</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../../plugins/accountplugin/preferences/insurancepage.ui" line="201"/>
+        <location filename="../../plugins/accountplugin/preferences/insurancepage.ui" line="221"/>
         <source>Contacts</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../../plugins/accountplugin/preferences/insurancepage.ui" line="207"/>
+        <location filename="../../plugins/accountplugin/preferences/insurancepage.ui" line="227"/>
         <source>Contact</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../../plugins/accountplugin/preferences/insurancepage.cpp" line="230"/>
+        <location filename="../../plugins/accountplugin/preferences/insurancepage.cpp" line="229"/>
         <source>Save changes ?</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../../plugins/accountplugin/preferences/insurancepage.cpp" line="231"/>
+        <location filename="../../plugins/accountplugin/preferences/insurancepage.cpp" line="230"/>
         <source>You make changes into the insurance table.
 Do you want to save them ?</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../../plugins/accountplugin/preferences/insurancepage.cpp" line="236"/>
-        <location filename="../../plugins/accountplugin/preferences/insurancepage.cpp" line="296"/>
+        <location filename="../../plugins/accountplugin/preferences/insurancepage.cpp" line="235"/>
+        <location filename="../../plugins/accountplugin/preferences/insurancepage.cpp" line="295"/>
         <source>insurance</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../../plugins/accountplugin/preferences/insurancepage.cpp" line="297"/>
+        <location filename="../../plugins/accountplugin/preferences/insurancepage.cpp" line="296"/>
         <source>Can not submit insurance to your personnal database.</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../../plugins/accountplugin/preferences/insurancepage.cpp" line="298"/>
+        <location filename="../../plugins/accountplugin/preferences/insurancepage.cpp" line="297"/>
         <source>An error occured during insurance saving. Datas are corrupted.</source>
         <translation type="unfinished"></translation>
     </message>
@@ -710,78 +688,77 @@ Do you want to save them ?</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../../plugins/accountplugin/preferences/medicalprocedurepage.ui" line="26"/>
+        <location filename="../../plugins/accountplugin/preferences/medicalprocedurepage.ui" line="28"/>
+        <source>Medical Procedure</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../../plugins/accountplugin/preferences/medicalprocedurepage.ui" line="106"/>
         <source>Account details</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../../plugins/accountplugin/preferences/medicalprocedurepage.ui" line="32"/>
+        <location filename="../../plugins/accountplugin/preferences/medicalprocedurepage.ui" line="112"/>
         <source>Name</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../../plugins/accountplugin/preferences/medicalprocedurepage.ui" line="52"/>
+        <location filename="../../plugins/accountplugin/preferences/medicalprocedurepage.ui" line="132"/>
         <source>Abstract</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../../plugins/accountplugin/preferences/medicalprocedurepage.ui" line="72"/>
+        <location filename="../../plugins/accountplugin/preferences/medicalprocedurepage.ui" line="152"/>
         <source>Owner</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../../plugins/accountplugin/preferences/medicalprocedurepage.ui" line="82"/>
+        <location filename="../../plugins/accountplugin/preferences/medicalprocedurepage.ui" line="162"/>
         <source>Type</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../../plugins/accountplugin/preferences/medicalprocedurepage.ui" line="102"/>
+        <location filename="../../plugins/accountplugin/preferences/medicalprocedurepage.ui" line="182"/>
         <source>Amount</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../../plugins/accountplugin/preferences/medicalprocedurepage.ui" line="151"/>
+        <location filename="../../plugins/accountplugin/preferences/medicalprocedurepage.ui" line="231"/>
         <source>User UUID</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../../plugins/accountplugin/preferences/medicalprocedurepage.ui" line="158"/>
+        <location filename="../../plugins/accountplugin/preferences/medicalprocedurepage.ui" line="238"/>
         <source>Reinbursment rate</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../../plugins/accountplugin/preferences/medicalprocedurepage.ui" line="178"/>
+        <location filename="../../plugins/accountplugin/preferences/medicalprocedurepage.ui" line="258"/>
         <source>Date</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../../plugins/accountplugin/preferences/medicalprocedurepage.ui" line="201"/>
+        <location filename="../../plugins/accountplugin/preferences/medicalprocedurepage.ui" line="281"/>
         <source>Insurance</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../../plugins/accountplugin/preferences/medicalprocedurepage.ui" line="243"/>
-        <source>Medical 
-Procedure</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <location filename="../../plugins/accountplugin/preferences/medicalprocedurepage.cpp" line="148"/>
+        <location filename="../../plugins/accountplugin/preferences/medicalprocedurepage.cpp" line="146"/>
         <source>ABCDEFGHIJKLMNOPQRSTUVWXYZ</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../../plugins/accountplugin/preferences/medicalprocedurepage.cpp" line="156"/>
+        <location filename="../../plugins/accountplugin/preferences/medicalprocedurepage.cpp" line="154"/>
         <source>Insurances are created in another preference widget.</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../../plugins/accountplugin/preferences/medicalprocedurepage.cpp" line="274"/>
+        <location filename="../../plugins/accountplugin/preferences/medicalprocedurepage.cpp" line="272"/>
         <source>Information</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../../plugins/accountplugin/preferences/medicalprocedurepage.cpp" line="274"/>
+        <location filename="../../plugins/accountplugin/preferences/medicalprocedurepage.cpp" line="272"/>
         <source> has been deleted.</source>
         <translation type="unfinished"></translation>
     </message>
@@ -881,95 +858,85 @@ Do you want to save them ?</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../../plugins/accountplugin/preferences/sitespage.ui" line="41"/>
-        <source>New</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <location filename="../../plugins/accountplugin/preferences/sitespage.ui" line="48"/>
-        <source>Delete</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <location filename="../../plugins/accountplugin/preferences/sitespage.ui" line="63"/>
-        <location filename="../../plugins/accountplugin/preferences/sitespage.ui" line="79"/>
+        <location filename="../../plugins/accountplugin/preferences/sitespage.ui" line="96"/>
+        <location filename="../../plugins/accountplugin/preferences/sitespage.ui" line="112"/>
         <source>Adress</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../../plugins/accountplugin/preferences/sitespage.ui" line="69"/>
+        <location filename="../../plugins/accountplugin/preferences/sitespage.ui" line="102"/>
         <source>Name</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../../plugins/accountplugin/preferences/sitespage.ui" line="99"/>
+        <location filename="../../plugins/accountplugin/preferences/sitespage.ui" line="132"/>
         <source>City</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../../plugins/accountplugin/preferences/sitespage.ui" line="128"/>
+        <location filename="../../plugins/accountplugin/preferences/sitespage.ui" line="161"/>
         <source>Country</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../../plugins/accountplugin/preferences/sitespage.ui" line="89"/>
+        <location filename="../../plugins/accountplugin/preferences/sitespage.ui" line="122"/>
         <source>ZIP</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../../plugins/accountplugin/preferences/sitespage.ui" line="139"/>
+        <location filename="../../plugins/accountplugin/preferences/sitespage.ui" line="172"/>
         <source>Phones</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../../plugins/accountplugin/preferences/sitespage.ui" line="145"/>
+        <location filename="../../plugins/accountplugin/preferences/sitespage.ui" line="178"/>
         <source>Phone</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../../plugins/accountplugin/preferences/sitespage.ui" line="174"/>
+        <location filename="../../plugins/accountplugin/preferences/sitespage.ui" line="207"/>
         <source>Fax</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../../plugins/accountplugin/preferences/sitespage.ui" line="190"/>
+        <location filename="../../plugins/accountplugin/preferences/sitespage.ui" line="223"/>
         <source>Mail</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../../plugins/accountplugin/preferences/sitespage.ui" line="207"/>
+        <location filename="../../plugins/accountplugin/preferences/sitespage.ui" line="240"/>
         <source>Contacts</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../../plugins/accountplugin/preferences/sitespage.ui" line="222"/>
+        <location filename="../../plugins/accountplugin/preferences/sitespage.ui" line="246"/>
         <source>Contact</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../../plugins/accountplugin/preferences/sitespage.cpp" line="221"/>
+        <location filename="../../plugins/accountplugin/preferences/sitespage.cpp" line="220"/>
         <source>Save changes ?</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../../plugins/accountplugin/preferences/sitespage.cpp" line="222"/>
+        <location filename="../../plugins/accountplugin/preferences/sitespage.cpp" line="221"/>
         <source>You make changes into the sites table.
 Do you want to save them ?</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../../plugins/accountplugin/preferences/sitespage.cpp" line="227"/>
-        <location filename="../../plugins/accountplugin/preferences/sitespage.cpp" line="274"/>
+        <location filename="../../plugins/accountplugin/preferences/sitespage.cpp" line="226"/>
+        <location filename="../../plugins/accountplugin/preferences/sitespage.cpp" line="273"/>
         <source>sites</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../../plugins/accountplugin/preferences/sitespage.cpp" line="275"/>
+        <location filename="../../plugins/accountplugin/preferences/sitespage.cpp" line="274"/>
         <source>Can not submit sites to your personnal database.</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../../plugins/accountplugin/preferences/sitespage.cpp" line="276"/>
+        <location filename="../../plugins/accountplugin/preferences/sitespage.cpp" line="275"/>
         <source>An error occured during sites saving. Datas are corrupted.</source>
         <translation type="unfinished"></translation>
     </message>

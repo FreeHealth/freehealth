@@ -150,9 +150,11 @@ CalendarItemEditorPatientMapperWidget::CalendarItemEditorPatientMapperWidget(QWi
     aUseCurrentPatient = new QAction(this);
     aUseCurrentPatient->setObjectName("aUseCurrentPatient");
     aUseCurrentPatient->setIcon(theme()->icon(Core::Constants::ICONPATIENT));
-    aUseCurrentPatient->setText("Add current patient");
-    aUseCurrentPatient->setToolTip("Add current patient");
-    ui->createPatientToolButton->addAction(aUseCurrentPatient);
+    aUseCurrentPatient->setText(tr("Add current patient"));
+    aUseCurrentPatient->setToolTip(tr("Add current patient"));
+
+    if (!patient()->uuid().isEmpty())
+        ui->createPatientToolButton->addAction(aUseCurrentPatient);
 
     Core::Command *cmd = actionManager()->command(Core::Constants::A_PATIENT_NEW);
     if (cmd) {
@@ -162,14 +164,16 @@ CalendarItemEditorPatientMapperWidget::CalendarItemEditorPatientMapperWidget(QWi
         ui->createPatientToolButton->addAction(cmd->action());
         ui->createPatientToolButton->setDefaultAction(cmd->action());
         connect(patient(), SIGNAL(patientCreated(QString)), this, SLOT(onPatientCreated(QString)));
+    } else {
+        ui->createPatientToolButton->setDefaultAction(aUseCurrentPatient);
     }
-    ui->createPatientToolButton->setDefaultAction(aUseCurrentPatient);
 
     connect(ui->selectedPatientView, SIGNAL(clicked(QModelIndex)), this, SLOT(handleClicked(QModelIndex)));
     connect(ui->selectedPatientView, SIGNAL(pressed(QModelIndex)), this, SLOT(handlePressed(QModelIndex)));
 
     connect(ui->searchPatient, SIGNAL(selectedPatient(QString,QString)), this, SLOT(onPatientSelected(QString,QString)));
     connect(aUseCurrentPatient, SIGNAL(triggered()), this, SLOT(addCurrentPatient()));
+    connect(patient(), SIGNAL(currentPatientChanged()), this, SLOT(patientChanged()));
 }
 
 CalendarItemEditorPatientMapperWidget::~CalendarItemEditorPatientMapperWidget()
@@ -243,6 +247,13 @@ void CalendarItemEditorPatientMapperWidget::onPatientCreated(const QString &uid)
     ui->searchPatient->clear();
 }
 
+void CalendarItemEditorPatientMapperWidget::patientChanged()
+{
+    disconnect(patient(), SIGNAL(currentPatientChanged()), this, SLOT(patientChanged()));
+    ui->createPatientToolButton->addAction(aUseCurrentPatient);
+}
+
+
 void CalendarItemEditorPatientMapperWidget::handlePressed(const QModelIndex &index)
 {
     if (index.column() == Calendar::CalendarPeopleModel::EmptyColumn) {
@@ -270,8 +281,8 @@ void CalendarItemEditorPatientMapperWidget::changeEvent(QEvent *e)
     QWidget::changeEvent(e);
     if (e->type()==QEvent::LanguageChange) {
         ui->retranslateUi(this);
-        aUseCurrentPatient->setText("Add current patient");
-        aUseCurrentPatient->setToolTip("Add current patient");
+        aUseCurrentPatient->setText(tr("Add current patient"));
+        aUseCurrentPatient->setToolTip(tr("Add current patient"));
     }
 }
 

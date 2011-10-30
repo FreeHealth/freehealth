@@ -79,6 +79,7 @@ private Q_SLOTS:
     void removePatient(QAction *action);
     void onPatientSelected(const QString &name, const QString &uid);
     void onPatientCreated(const QString &uid);
+    void patientChanged();
     void handlePressed(const QModelIndex &index);
     void handleClicked(const QModelIndex &index);
 

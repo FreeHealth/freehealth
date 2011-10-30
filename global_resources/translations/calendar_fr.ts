@@ -42,13 +42,6 @@
     </message>
 </context>
 <context>
-    <name>Calendar::DayAvailabilityModel</name>
-    <message>
-        <source>No availability defined</source>
-        <translation type="obsolete">Pas de disponibilité définie</translation>
-    </message>
-</context>
-<context>
     <name>Calendar::DayRangeBody</name>
     <message>
         <location filename="../../libs/calendar/day_range_view.cpp" line="744"/>
@@ -231,57 +224,6 @@
         <location filename="../../libs/calendar/month_day_widget.cpp" line="88"/>
         <source>see others</source>
         <translation>voir les autres</translation>
-    </message>
-</context>
-<context>
-    <name>Calendar::UserCalendarEditorWidget</name>
-    <message>
-        <source>Label</source>
-        <translation type="obsolete">Libellé</translation>
-    </message>
-    <message>
-        <source>Icon</source>
-        <translation type="obsolete">Icône</translation>
-    </message>
-    <message>
-        <source>Select</source>
-        <translation type="obsolete">Sélectionner</translation>
-    </message>
-    <message>
-        <source>General</source>
-        <translation type="obsolete">Général</translation>
-    </message>
-    <message>
-        <source>Default event duration</source>
-        <translation type="obsolete">Durée par défaut des rendez-vous</translation>
-    </message>
-    <message>
-        <source>Default location for events</source>
-        <translation type="obsolete">Localisation par défaut des rendez-vous</translation>
-    </message>
-    <message>
-        <source>is the default calendar</source>
-        <translation type="obsolete">est l&apos;agenda par défaut</translation>
-    </message>
-    <message>
-        <source>is private</source>
-        <translation type="obsolete">est privé</translation>
-    </message>
-    <message>
-        <source>Password</source>
-        <translation type="obsolete">Mot de passe</translation>
-    </message>
-    <message>
-        <source>Availabilities</source>
-        <translation type="obsolete">Disponibilités</translation>
-    </message>
-    <message>
-        <source>Add</source>
-        <translation type="obsolete">Ajouter</translation>
-    </message>
-    <message>
-        <source>Remove</source>
-        <translation type="obsolete">Enlever</translation>
     </message>
 </context>
 </TS>

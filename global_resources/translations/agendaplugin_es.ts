@@ -99,6 +99,17 @@
     </message>
 </context>
 <context>
+    <name>Agenda::Internal::CalendarItemEditorPatientMapperWidget</name>
+    <message>
+        <location filename="../../plugins/agendaplugin/calendaritemeditorpatientmapper.cpp" line="153"/>
+        <location filename="../../plugins/agendaplugin/calendaritemeditorpatientmapper.cpp" line="154"/>
+        <location filename="../../plugins/agendaplugin/calendaritemeditorpatientmapper.cpp" line="284"/>
+        <location filename="../../plugins/agendaplugin/calendaritemeditorpatientmapper.cpp" line="285"/>
+        <source>Add current patient</source>
+        <translation type="unfinished"></translation>
+    </message>
+</context>
+<context>
     <name>Agenda::Internal::UserCalendarDelegatesMapperWidget</name>
     <message>
         <location filename="../../plugins/agendaplugin/usercalendardelegatesmapper.ui" line="14"/>
@@ -143,7 +154,7 @@
     </message>
     <message>
         <location filename="../../plugins/agendaplugin/usercalendarviewer.ui" line="68"/>
-        <location filename="../../plugins/agendaplugin/usercalendarviewer.ui" line="100"/>
+        <location filename="../../plugins/agendaplugin/usercalendarviewer.ui" line="104"/>
         <source>Availabilities</source>
         <translation type="unfinished"></translation>
     </message>
@@ -153,17 +164,7 @@
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../../plugins/agendaplugin/usercalendarviewer.ui" line="134"/>
-        <source>Time</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <location filename="../../plugins/agendaplugin/usercalendarviewer.ui" line="140"/>
-        <source>Default duration (in minutes)</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <location filename="../../plugins/agendaplugin/usercalendarviewer.ui" line="161"/>
+        <location filename="../../plugins/agendaplugin/usercalendarviewer.ui" line="148"/>
         <source>Description</source>
         <translation type="unfinished"></translation>
     </message>

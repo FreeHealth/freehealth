@@ -203,14 +203,14 @@ void UserCalendarViewer::recalculateAvailabilitiesWithDurationIndex(const int in
         // Next available dates
         dates = base()->nextAvailableTime(QDateTime::currentDateTime(), (index+1)*5, *cal, 5);
     }
-    d->ui->nextAvailCombo->clear();
+//    d->ui->nextAvailCombo->clear();
     for(int i = 0; i < dates.count(); ++i) {
         QAction *a = new QAction(d->ui->availButton);
         a->setData(dates.at(i));
         a->setText(dates.at(i).toString(QLocale().dateTimeFormat(QLocale::ShortFormat)));
         a->setToolTip(a->text());
         d->ui->availButton->addAction(a);
-        d->ui->nextAvailCombo->addItem(dates.at(i).toString(QLocale().dateTimeFormat(QLocale::ShortFormat)));
+//        d->ui->nextAvailCombo->addItem(dates.at(i).toString(QLocale().dateTimeFormat(QLocale::ShortFormat)));
     }
     if (d->ui->availButton->actions().count() > 0) {
         d->ui->availButton->setDefaultAction(d->ui->availButton->actions().at(0));
@@ -237,6 +237,9 @@ void UserCalendarViewer::on_availableAgendasCombo_activated(const int index)
         int defaultDuration = d->m_UserCalendarModel->index(index, UserCalendarModel::DefaultDuration).data().toInt();
         d->ui->calendarViewer->setDayScaleHourDivider(60/defaultDuration);
         d->ui->calendarViewer->setDayItemDefaultDuration(defaultDuration);
+
+        d->ui->durationLabel->setText(QString::number(defaultDuration) + " " + tkTr(Trans::Constants::MINUTES));
+        d->ui->description->setHtml(d->m_UserCalendarModel->index(index, UserCalendarModel::Description).data().toString());
     }
 //    d->populateCalendarWithCurrentWeek(d->m_UserCals.at(index));
 }

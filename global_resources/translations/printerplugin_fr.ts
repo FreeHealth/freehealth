@@ -102,12 +102,12 @@
         <translation>Crée une copie PDF dans le répertoire cache</translation>
     </message>
     <message>
-        <location filename="../../plugins/printerplugin/printdialog.cpp" line="251"/>
+        <location filename="../../plugins/printerplugin/printdialog.cpp" line="253"/>
         <source>Save File</source>
         <translation>Sauvegarder le fichier</translation>
     </message>
     <message>
-        <location filename="../../plugins/printerplugin/printdialog.cpp" line="253"/>
+        <location filename="../../plugins/printerplugin/printdialog.cpp" line="255"/>
         <source>PDF file (*.pdf)</source>
         <translation>Fichier PDF (*.pdf)</translation>
     </message>

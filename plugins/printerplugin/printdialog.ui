@@ -9,7 +9,7 @@
    <rect>
     <x>0</x>
     <y>0</y>
-    <width>687</width>
+    <width>689</width>
     <height>359</height>
    </rect>
   </property>
@@ -243,7 +243,7 @@
       </widget>
      </item>
      <item row="1" column="0">
-      <widget class="QLabel" name="label_7">
+      <widget class="QLabel" name="labelPresets">
        <property name="text">
         <string>Presets :</string>
        </property>
