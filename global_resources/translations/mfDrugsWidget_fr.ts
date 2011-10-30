@@ -1222,100 +1222,95 @@ Voulez-vous réellement changer de mode d&apos;édition ?</translation>
         <translation>Forme</translation>
     </message>
     <message>
-        <location filename="../../plugins/drugsplugin/drugspreferences/drugsviewoptionspage.ui" line="33"/>
-        <source>Drugs View Preferences</source>
-        <translation>Préférences de visualisation des médicaments</translation>
-    </message>
-    <message>
-        <location filename="../../plugins/drugsplugin/drugspreferences/drugsviewoptionspage.ui" line="56"/>
+        <location filename="../../plugins/drugsplugin/drugspreferences/drugsviewoptionspage.ui" line="26"/>
         <source>View</source>
         <translation>Affichage</translation>
     </message>
     <message>
-        <location filename="../../plugins/drugsplugin/drugspreferences/drugsviewoptionspage.ui" line="74"/>
+        <location filename="../../plugins/drugsplugin/drugspreferences/drugsviewoptionspage.ui" line="44"/>
         <source>Font</source>
         <translation>Police de caractère</translation>
     </message>
     <message>
-        <location filename="../../plugins/drugsplugin/drugspreferences/drugsviewoptionspage.ui" line="152"/>
+        <location filename="../../plugins/drugsplugin/drugspreferences/drugsviewoptionspage.ui" line="122"/>
         <source>Patient&apos;s names order (needs restart)</source>
         <translation>Ordre d&apos;affichage (nécessite un redémarrage de l&apos;application)</translation>
     </message>
     <message>
-        <location filename="../../plugins/drugsplugin/drugspreferences/drugsviewoptionspage.ui" line="160"/>
+        <location filename="../../plugins/drugsplugin/drugspreferences/drugsviewoptionspage.ui" line="130"/>
         <source>Lastnames - Firstnames</source>
         <translation>Noms - Prénoms</translation>
     </message>
     <message>
-        <location filename="../../plugins/drugsplugin/drugspreferences/drugsviewoptionspage.ui" line="165"/>
+        <location filename="../../plugins/drugsplugin/drugspreferences/drugsviewoptionspage.ui" line="135"/>
         <source>Firstnames - Lastnames</source>
         <translation>Prénoms - Noms</translation>
     </message>
     <message>
-        <location filename="../../plugins/drugsplugin/drugspreferences/drugsviewoptionspage.ui" line="240"/>
+        <location filename="../../plugins/drugsplugin/drugspreferences/drugsviewoptionspage.ui" line="210"/>
         <source>Interactions warnings</source>
         <translation>Alertes d&apos;interactions</translation>
     </message>
     <message>
-        <location filename="../../plugins/drugsplugin/drugspreferences/drugsviewoptionspage.ui" line="246"/>
+        <location filename="../../plugins/drugsplugin/drugspreferences/drugsviewoptionspage.ui" line="216"/>
         <source>Global level of passive notification</source>
         <translation>Niveau d&apos;alerte statique</translation>
     </message>
     <message>
-        <location filename="../../plugins/drugsplugin/drugspreferences/drugsviewoptionspage.ui" line="260"/>
-        <location filename="../../plugins/drugsplugin/drugspreferences/drugsviewoptionspage.ui" line="289"/>
+        <location filename="../../plugins/drugsplugin/drugspreferences/drugsviewoptionspage.ui" line="230"/>
+        <location filename="../../plugins/drugsplugin/drugspreferences/drugsviewoptionspage.ui" line="259"/>
         <source>Maximal information</source>
         <translation>Information maximale</translation>
     </message>
     <message>
-        <location filename="../../plugins/drugsplugin/drugspreferences/drugsviewoptionspage.ui" line="265"/>
-        <location filename="../../plugins/drugsplugin/drugspreferences/drugsviewoptionspage.ui" line="294"/>
+        <location filename="../../plugins/drugsplugin/drugspreferences/drugsviewoptionspage.ui" line="235"/>
+        <location filename="../../plugins/drugsplugin/drugspreferences/drugsviewoptionspage.ui" line="264"/>
         <source>Moderate information</source>
         <translation>Information moyenne</translation>
     </message>
     <message>
-        <location filename="../../plugins/drugsplugin/drugspreferences/drugsviewoptionspage.ui" line="270"/>
-        <location filename="../../plugins/drugsplugin/drugspreferences/drugsviewoptionspage.ui" line="299"/>
+        <location filename="../../plugins/drugsplugin/drugspreferences/drugsviewoptionspage.ui" line="240"/>
+        <location filename="../../plugins/drugsplugin/drugspreferences/drugsviewoptionspage.ui" line="269"/>
         <source>Minimal information</source>
         <translation>Information minimum</translation>
     </message>
     <message>
-        <location filename="../../plugins/drugsplugin/drugspreferences/drugsviewoptionspage.ui" line="278"/>
+        <location filename="../../plugins/drugsplugin/drugspreferences/drugsviewoptionspage.ui" line="248"/>
         <source>Global level of dynamic notification</source>
         <translation>Niveau d&apos;alerte dynamique</translation>
     </message>
     <message>
-        <location filename="../../plugins/drugsplugin/drugspreferences/drugsviewoptionspage.ui" line="307"/>
+        <location filename="../../plugins/drugsplugin/drugspreferences/drugsviewoptionspage.ui" line="277"/>
         <source>Show interactions icons in the prescription window (static alerts)</source>
         <translation>Montrer les icônes d&apos;interaction dans la fenêtre de prescription (alertes statiques)</translation>
     </message>
     <message>
-        <location filename="../../plugins/drugsplugin/drugspreferences/drugsviewoptionspage.ui" line="314"/>
+        <location filename="../../plugins/drugsplugin/drugspreferences/drugsviewoptionspage.ui" line="284"/>
         <source>Enable alerts needing acceptance (dynamic alerts)</source>
         <translation>Activer les alertes nécessitant une validation (alertes dynamiques)</translation>
     </message>
     <message>
-        <location filename="../../plugins/drugsplugin/drugspreferences/drugsviewoptionspage.ui" line="125"/>
+        <location filename="../../plugins/drugsplugin/drugspreferences/drugsviewoptionspage.ui" line="95"/>
         <source>Font size</source>
         <translation>Taille de la police</translation>
     </message>
     <message>
-        <location filename="../../plugins/drugsplugin/drugspreferences/drugsviewoptionspage.ui" line="132"/>
+        <location filename="../../plugins/drugsplugin/drugspreferences/drugsviewoptionspage.ui" line="102"/>
         <source>Size of historic</source>
         <translation>Taille de l&apos;historique</translation>
     </message>
     <message>
-        <location filename="../../plugins/drugsplugin/drugspreferences/drugsviewoptionspage.ui" line="176"/>
+        <location filename="../../plugins/drugsplugin/drugspreferences/drugsviewoptionspage.ui" line="146"/>
         <source>Testers</source>
         <translation>Testeurs</translation>
     </message>
     <message>
-        <location filename="../../plugins/drugsplugin/drugspreferences/drugsviewoptionspage.ui" line="194"/>
+        <location filename="../../plugins/drugsplugin/drugspreferences/drugsviewoptionspage.ui" line="164"/>
         <source>Name</source>
         <translation>Nom</translation>
     </message>
     <message>
-        <location filename="../../plugins/drugsplugin/drugspreferences/drugsviewoptionspage.ui" line="210"/>
+        <location filename="../../plugins/drugsplugin/drugspreferences/drugsviewoptionspage.ui" line="180"/>
         <source>Password</source>
         <translation>Mot de passe</translation>
     </message>
@@ -1344,47 +1339,42 @@ Voulez-vous réellement changer de mode d&apos;édition ?</translation>
         <translation>Forme</translation>
     </message>
     <message>
-        <location filename="../../plugins/drugsplugin/drugspreferences/protocolpreferencespage.ui" line="32"/>
-        <source>Protocols preferences</source>
-        <translation>Préférences pour les protocoles</translation>
-    </message>
-    <message>
-        <location filename="../../plugins/drugsplugin/drugspreferences/protocolpreferencespage.ui" line="49"/>
+        <location filename="../../plugins/drugsplugin/drugspreferences/protocolpreferencespage.ui" line="20"/>
         <source>Default intake schema</source>
         <translation>Schéma de prise par défaut</translation>
     </message>
     <message>
-        <location filename="../../plugins/drugsplugin/drugspreferences/protocolpreferencespage.ui" line="55"/>
+        <location filename="../../plugins/drugsplugin/drugspreferences/protocolpreferencespage.ui" line="26"/>
         <source>When creating a new protocol, use the following default intake schema</source>
         <translation>Quand un nouveau protocole est créé, utilise par défaut le schéma de prise suivant</translation>
     </message>
     <message>
-        <location filename="../../plugins/drugsplugin/drugspreferences/protocolpreferencespage.ui" line="62"/>
+        <location filename="../../plugins/drugsplugin/drugspreferences/protocolpreferencespage.ui" line="33"/>
         <source>drugs form</source>
         <translation>Forme du médicament</translation>
     </message>
     <message>
-        <location filename="../../plugins/drugsplugin/drugspreferences/protocolpreferencespage.ui" line="69"/>
+        <location filename="../../plugins/drugsplugin/drugspreferences/protocolpreferencespage.ui" line="40"/>
         <source>the word: Intake(s)</source>
         <translation>le mot &apos;prise(s)&apos;</translation>
     </message>
     <message>
-        <location filename="../../plugins/drugsplugin/drugspreferences/protocolpreferencespage.ui" line="76"/>
+        <location filename="../../plugins/drugsplugin/drugspreferences/protocolpreferencespage.ui" line="47"/>
         <source>other word:</source>
         <translation>un autre mot :</translation>
     </message>
     <message>
-        <location filename="../../plugins/drugsplugin/drugspreferences/protocolpreferencespage.ui" line="93"/>
+        <location filename="../../plugins/drugsplugin/drugspreferences/protocolpreferencespage.ui" line="64"/>
         <source>Validation buttons</source>
         <translation>Boutons de validation</translation>
     </message>
     <message>
-        <location filename="../../plugins/drugsplugin/drugspreferences/protocolpreferencespage.ui" line="99"/>
+        <location filename="../../plugins/drugsplugin/drugspreferences/protocolpreferencespage.ui" line="70"/>
         <source>Default validation button</source>
         <translation>Bouton de validation par défaut</translation>
     </message>
     <message>
-        <location filename="../../plugins/drugsplugin/drugspreferences/protocolpreferencespage.ui" line="109"/>
+        <location filename="../../plugins/drugsplugin/drugspreferences/protocolpreferencespage.ui" line="80"/>
         <source>When protocol has changed, toggle the validation button to</source>
         <translation>Quand le protocole a été modifié, change le bouton de validation en</translation>
     </message>

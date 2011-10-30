@@ -18,14 +18,6 @@
     </message>
 </context>
 <context>
-    <name>Core::ApplicationGeneralPreferencesPage</name>
-    <message>
-        <location filename="../../plugins/coreplugin/dialogs/applicationgeneralpreferences.cpp" line="116"/>
-        <source>Application general preferences</source>
-        <translation>Préférences générales de l&apos;application</translation>
-    </message>
-</context>
-<context>
     <name>Core::ClientConfigPage</name>
     <message>
         <location filename="../../plugins/fmfcoreplugin/appconfigwizard.cpp" line="272"/>
@@ -186,57 +178,52 @@
         <translation></translation>
     </message>
     <message>
-        <location filename="../../plugins/coreplugin/dialogs/applicationgeneralpreferences.ui" line="38"/>
-        <source>General preferences</source>
-        <translation>Préférences générales</translation>
-    </message>
-    <message>
-        <location filename="../../plugins/coreplugin/dialogs/applicationgeneralpreferences.ui" line="61"/>
+        <location filename="../../plugins/coreplugin/dialogs/applicationgeneralpreferences.ui" line="20"/>
         <source>Update engine</source>
         <translation>Moteur de mise à jour</translation>
     </message>
     <message>
-        <location filename="../../plugins/coreplugin/dialogs/applicationgeneralpreferences.ui" line="73"/>
+        <location filename="../../plugins/coreplugin/dialogs/applicationgeneralpreferences.ui" line="32"/>
         <source>Update checking</source>
         <translation>Vérification des mises à jour</translation>
     </message>
     <message>
-        <location filename="../../plugins/coreplugin/dialogs/applicationgeneralpreferences.ui" line="81"/>
+        <location filename="../../plugins/coreplugin/dialogs/applicationgeneralpreferences.ui" line="40"/>
         <source>At startup</source>
         <translation>Au démarrage</translation>
     </message>
     <message>
-        <location filename="../../plugins/coreplugin/dialogs/applicationgeneralpreferences.ui" line="86"/>
+        <location filename="../../plugins/coreplugin/dialogs/applicationgeneralpreferences.ui" line="45"/>
         <source>Each weeks</source>
         <translation>Toutes les semaines</translation>
     </message>
     <message>
-        <location filename="../../plugins/coreplugin/dialogs/applicationgeneralpreferences.ui" line="91"/>
+        <location filename="../../plugins/coreplugin/dialogs/applicationgeneralpreferences.ui" line="50"/>
         <source>Each months</source>
         <translation>Tous les mois</translation>
     </message>
     <message>
-        <location filename="../../plugins/coreplugin/dialogs/applicationgeneralpreferences.ui" line="96"/>
+        <location filename="../../plugins/coreplugin/dialogs/applicationgeneralpreferences.ui" line="55"/>
         <source>Each quarters</source>
         <translation>Tous les trimestres</translation>
     </message>
     <message>
-        <location filename="../../plugins/coreplugin/dialogs/applicationgeneralpreferences.ui" line="101"/>
+        <location filename="../../plugins/coreplugin/dialogs/applicationgeneralpreferences.ui" line="60"/>
         <source>Never (on user&apos;s demand)</source>
         <translation>Jamais (à la demande)</translation>
     </message>
     <message>
-        <location filename="../../plugins/coreplugin/dialogs/applicationgeneralpreferences.ui" line="125"/>
+        <location filename="../../plugins/coreplugin/dialogs/applicationgeneralpreferences.ui" line="84"/>
         <source>Database Management</source>
         <translation>Pilotage des bases de données</translation>
     </message>
     <message>
-        <location filename="../../plugins/coreplugin/dialogs/applicationgeneralpreferences.ui" line="143"/>
+        <location filename="../../plugins/coreplugin/dialogs/applicationgeneralpreferences.ui" line="102"/>
         <source>Automatically save data without prompting users</source>
         <translation>Toujours sauvegarder automatiquement les données</translation>
     </message>
     <message>
-        <location filename="../../plugins/coreplugin/dialogs/applicationgeneralpreferences.ui" line="150"/>
+        <location filename="../../plugins/coreplugin/dialogs/applicationgeneralpreferences.ui" line="109"/>
         <source>Allow and use virtual data</source>
         <translation>Autoriser l&apos;utilisation des données virtuelles</translation>
     </message>

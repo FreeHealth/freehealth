@@ -75,14 +75,6 @@
     </message>
 </context>
 <context>
-    <name>UserPlugin::CurrentUserPreferencesPage</name>
-    <message>
-        <location filename="../../plugins/usermanagerplugin/currentuserpreferencespage.cpp" line="60"/>
-        <source>Personnal preferences</source>
-        <translation type="unfinished"></translation>
-    </message>
-</context>
-<context>
     <name>UserPlugin::FirstRunUserCreationWidget</name>
     <message>
         <location filename="../../plugins/usermanagerplugin/widgets/firstrunusercreationwidget.ui" line="14"/>

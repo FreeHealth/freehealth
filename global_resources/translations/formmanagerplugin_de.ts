@@ -210,7 +210,7 @@ Answering &apos;No&apos; will cause definitve data lose.</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../../plugins/formmanagerplugin/formfilesselectorwidget.cpp" line="150"/>
+        <location filename="../../plugins/formmanagerplugin/formfilesselectorwidget.cpp" line="151"/>
         <source>Default Forms</source>
         <translation type="unfinished"></translation>
     </message>

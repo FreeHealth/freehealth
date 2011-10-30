@@ -211,7 +211,7 @@ Répondre &apos;non&apos; causera une perte de données irréversible.</translat
         <translation>par type</translation>
     </message>
     <message>
-        <location filename="../../plugins/formmanagerplugin/formfilesselectorwidget.cpp" line="150"/>
+        <location filename="../../plugins/formmanagerplugin/formfilesselectorwidget.cpp" line="151"/>
         <source>Default Forms</source>
         <translation>Formulaires par défaut</translation>
     </message>

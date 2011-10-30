@@ -323,12 +323,12 @@
         <translation>Disponibilités</translation>
     </message>
     <message>
-        <location filename="../../plugins/agendaplugin/usercalendareditor.ui" line="238"/>
+        <location filename="../../plugins/agendaplugin/usercalendareditor.ui" line="242"/>
         <source>Add</source>
         <translation>Ajouter</translation>
     </message>
     <message>
-        <location filename="../../plugins/agendaplugin/usercalendareditor.ui" line="245"/>
+        <location filename="../../plugins/agendaplugin/usercalendareditor.ui" line="249"/>
         <source>Remove</source>
         <translation>Enlever</translation>
     </message>
