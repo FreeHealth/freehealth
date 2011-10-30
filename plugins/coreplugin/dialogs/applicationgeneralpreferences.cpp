@@ -113,7 +113,7 @@ ApplicationGeneralPreferencesPage::~ApplicationGeneralPreferencesPage()
 QString ApplicationGeneralPreferencesPage::id() const { return objectName(); }
 QString ApplicationGeneralPreferencesPage::name() const { return tkTr(Trans::Constants::GENERAL); }
 QString ApplicationGeneralPreferencesPage::title() const {return tkTr(Trans::Constants::GENERAL_PREFERENCES);}
-QString ApplicationGeneralPreferencesPage::category() const { return tr("Application general preferences"); }
+QString ApplicationGeneralPreferencesPage::category() const { return tkTr(Trans::Constants::GENERAL_PREFERENCES); }
 
 void ApplicationGeneralPreferencesPage::resetToDefaults()
 {

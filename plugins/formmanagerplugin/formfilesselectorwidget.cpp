@@ -115,6 +115,7 @@ public:
         m_FormDescr.clear();
         ios = refreshIOPlugs();
         Form::FormIOQuery query;
+        query.setGetAllAvailableFormDescriptions(true);
         switch (m_Type) {
         case FormFilesSelectorWidget::AllForms: query.setTypeOfForms(Form::FormIOQuery::CompleteForms | Form::FormIOQuery::SubForms | Form::FormIOQuery::Pages);break;
         case FormFilesSelectorWidget::CompleteForms: query.setTypeOfForms(Form::FormIOQuery::CompleteForms); break;
