@@ -65,6 +65,8 @@ PrintDialog::PrintDialog(QWidget *parent) :
 {
     ui->setupUi(this);
 //    setSizePolicy(QSizePolicy::Minimum, QSizePolicy::Minimum);
+    ui->labelPresets->hide();
+    ui->presetsCombo->hide();
 
     // Set icons
     ui->nextButton->setIcon(theme()->icon(Core::Constants::ICONONERIGHTARROW));
