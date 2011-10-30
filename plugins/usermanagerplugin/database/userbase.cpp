@@ -80,6 +80,7 @@ using namespace Trans::ConstantTranslations;
 
 static inline Core::ISettings *settings()  { return Core::ICore::instance()->settings(); }
 static inline Core::ICommandLine *commandLine()  { return Core::ICore::instance()->commandLine(); }
+static inline QString bundlePath()  { return settings()->path(Core::ISettings::BundleResourcesPath); }
 
 // Initializing static datas
 bool UserBase::m_initialized = false;
@@ -521,14 +522,50 @@ QString UserBase::getLogin64(const QString &uuid)
 //--------------------------------------------------------------------------------------------------------
 //--------------------------------------------- Datas savers ---------------------------------------------
 //--------------------------------------------------------------------------------------------------------
-static inline QString defaultHeader()
+static inline QString defaultPaper(const QString &profession, const QString &paper, const QString &paperType = QString::null)
 {
-    return Utils::readTextFile(settings()->path(Core::ISettings::BundleResourcesPath) + "/textfiles/default_user_header.htm");
+    QString lang = QLocale().name().left(2).toLower();
+    QString fileName;
+    if (paperType.isEmpty()) {
+        fileName = QString(bundlePath() + "/profiles/%1/default/user_%2_%3.xml").arg(profession).arg(paper).arg(lang);
+    } else {
+        fileName = QString(bundlePath() + "/profiles/%1/default/user_%2_%3_%4.xml").arg(profession).arg(paper).arg(paperType).arg(lang);
+    }
+    if (QFileInfo(fileName).exists()) {
+        return Utils::readTextFile(fileName);
+    }
+    lang = Trans::Constants::ALL_LANGUAGE;
+    if (paperType.isEmpty()) {
+        fileName = QString(bundlePath() + "/profiles/%1/default/user_%2_%3.xml").arg(profession).arg(paper).arg(lang);
+    } else {
+        fileName = QString(bundlePath() + "/profiles/%1/default/user_%2_%3_%4.xml").arg(profession).arg(paper).arg(paperType).arg(lang);
+    }
+    if (QFileInfo(fileName).exists()) {
+        return Utils::readTextFile(fileName);
+    }
+    if (!paperType.isEmpty()) {
+        fileName = QString(bundlePath() + "/profiles/%1/default/user_%2_%3.xml").arg(profession).arg(paper).arg(lang);
+        if (QFileInfo(fileName).exists()) {
+            return Utils::readTextFile(fileName);
+        }
+    }
+    return QString();
 }
 
-static inline QString defaultFooter()
+static inline QString defaultHeader(const QString &profession)
 {
-    return Utils::readTextFile(settings()->path(Core::ISettings::BundleResourcesPath) + "/textfiles/default_user_footer.htm");
+    return defaultPaper(profession, "header");
+}
+
+static inline QString defaultFooter(const QString &profession)
+{
+    return defaultPaper(profession, "footer");
+}
+
+// paperType == "prescriptions" "administrative" "generic"
+static inline QString defaultWatermark(const QString &profession, const QString &paperType = QString::null)
+{
+    return defaultPaper(profession, "watermark", paperType);
 }
 
 /** Create the default users database if it does not exists. */
@@ -641,27 +678,13 @@ bool UserBase::createDefaultUser()
     user->setRights(Constants::USER_ROLE_PARAMEDICAL, Core::IUser::ReadAll | Core::IUser::WriteAll | Core::IUser::Create | Core::IUser::Delete | Core::IUser::Print);
     user->setPersonalLkId(1);
 
-    QList<UserDynamicData*> list;
+    user->setExtraDocument(Print::TextDocumentExtra::fromXml(defaultHeader("admin")), Core::IUser::GenericHeader);
+    user->setExtraDocument(Print::TextDocumentExtra::fromXml(defaultFooter("admin")), Core::IUser::GenericFooter);
+    user->setExtraDocument(Print::TextDocumentExtra::fromXml(defaultWatermark("admin", "generic")), Core::IUser::GenericWatermark);
 
-    // Create default header
-    Print::TextDocumentExtra *headerDoc = new Print::TextDocumentExtra();
-    headerDoc->setHtml(defaultHeader());
-    UserDynamicData *header = new UserDynamicData();
-    header->setName(USER_DATAS_GENERICHEADER);
-    header->setValue(headerDoc);
-    header->setUserUuid(user->uuid());
-    list << header;
-
-    // Create default footer
-    UserDynamicData *footer = new UserDynamicData();
-    Print::TextDocumentExtra *extraFooter = new Print::TextDocumentExtra();
-    extraFooter->setHtml(defaultFooter());
-    footer->setName(USER_DATAS_GENERICFOOTER);
-    footer->setValue(extraFooter);
-    footer->setUserUuid(user->uuid());
-    list << footer;
-
-    user->addDynamicDatasFromDatabase(list);
+    user->setExtraDocument(Print::TextDocumentExtra::fromXml(defaultHeader("admin")), Core::IUser::AdministrativeHeader);
+    user->setExtraDocument(Print::TextDocumentExtra::fromXml(defaultFooter("admin")), Core::IUser::AdministrativeFooter);
+    user->setExtraDocument(Print::TextDocumentExtra::fromXml(defaultWatermark("admin", "administrative")), Core::IUser::AdministrativeWatermark);
 
     /** \todo add a transaction */
     saveUser(user);
@@ -671,11 +694,7 @@ bool UserBase::createDefaultUser()
     if (!DB.isOpen()) {
         if (!DB.open()) {
             LOG_ERROR(tkTr(Trans::Constants::UNABLE_TO_OPEN_DATABASE_1_ERROR_2).arg(DB.connectionName()).arg(DB.lastError().text()));
-            delete user; // list is deleted here
-            if (extraFooter)
-                delete extraFooter;
-            if (headerDoc)
-                delete headerDoc;
+            delete user;
             return false;
         }
     }
@@ -687,19 +706,11 @@ bool UserBase::createDefaultUser()
     query.bindValue(Constants::LK_LKID, user->personalLinkId());
     if (!query.exec()) {
         LOG_QUERY_ERROR(query);
-        delete user; // list is deleted here
-        if (extraFooter)
-            delete extraFooter;
-        if (headerDoc)
-            delete headerDoc;
+        delete user;
         return false;
     }
 
-    delete user; // list is deleted here
-    if (extraFooter)
-        delete extraFooter;
-    if (headerDoc)
-        delete headerDoc;
+    delete user;
     return true;
 }
 
@@ -748,27 +759,17 @@ bool UserBase::createVirtualUser(const QString &uid, const QString &name, const 
     user->setRights(Constants::USER_ROLE_AGENDA, Core::IUser::UserRights(agendaRights));
 //    user->setPersonalLkId(1);
 
-    QList<UserDynamicData*> list;
+    user->setExtraDocument(Print::TextDocumentExtra::fromXml(defaultHeader("medicals")), Core::IUser::GenericHeader);
+    user->setExtraDocument(Print::TextDocumentExtra::fromXml(defaultFooter("medicals")), Core::IUser::GenericFooter);
+    user->setExtraDocument(Print::TextDocumentExtra::fromXml(defaultWatermark("medicals", "generic")), Core::IUser::GenericWatermark);
 
-    // Create default header
-    Print::TextDocumentExtra *headerDoc = new Print::TextDocumentExtra();
-    headerDoc->setHtml(defaultHeader());
-    UserDynamicData *header = new UserDynamicData();
-    header->setName(USER_DATAS_GENERICHEADER);
-    header->setValue(headerDoc);
-    header->setUserUuid(user->uuid());
-    list << header;
+    user->setExtraDocument(Print::TextDocumentExtra::fromXml(defaultHeader("medicals")), Core::IUser::AdministrativeHeader);
+    user->setExtraDocument(Print::TextDocumentExtra::fromXml(defaultFooter("medicals")), Core::IUser::AdministrativeFooter);
+    user->setExtraDocument(Print::TextDocumentExtra::fromXml(defaultWatermark("medicals", "administrative")), Core::IUser::AdministrativeWatermark);
 
-    // Create default footer
-    UserDynamicData *footer = new UserDynamicData();
-    Print::TextDocumentExtra *extraFooter = new Print::TextDocumentExtra();
-    extraFooter->setHtml(defaultFooter());
-    footer->setName(USER_DATAS_GENERICFOOTER);
-    footer->setValue(extraFooter);
-    footer->setUserUuid(user->uuid());
-    list << footer;
-
-    user->addDynamicDatasFromDatabase(list);
+    user->setExtraDocument(Print::TextDocumentExtra::fromXml(defaultHeader("medicals")), Core::IUser::PrescriptionHeader);
+    user->setExtraDocument(Print::TextDocumentExtra::fromXml(defaultFooter("medicals")), Core::IUser::PrescriptionFooter);
+    user->setExtraDocument(Print::TextDocumentExtra::fromXml(defaultWatermark("medicals", "prescriptions")), Core::IUser::PrescriptionWatermark);
 
     saveUser(user);
 
@@ -777,11 +778,7 @@ bool UserBase::createVirtualUser(const QString &uid, const QString &name, const 
     if (!DB.isOpen()) {
         if (!DB.open()) {
             LOG_ERROR(tkTr(Trans::Constants::UNABLE_TO_OPEN_DATABASE_1_ERROR_2).arg(DB.connectionName()).arg(DB.lastError().text()));
-            delete user; // list is deleted here
-            if (extraFooter)
-                delete extraFooter;
-            if (headerDoc)
-                delete headerDoc;
+            delete user;
             return false;
         }
     }
@@ -800,19 +797,11 @@ bool UserBase::createVirtualUser(const QString &uid, const QString &name, const 
     query.bindValue(Constants::LK_LKID, user->personalLinkId());
     if (!query.exec()) {
         LOG_QUERY_ERROR(query);
-        delete user; // list is deleted here
-        if (extraFooter)
-            delete extraFooter;
-        if (headerDoc)
-            delete headerDoc;
+        delete user;
         return false;
     }
 
-    delete user; // list is deleted here
-    if (extraFooter)
-        delete extraFooter;
-    if (headerDoc)
-        delete headerDoc;
+    delete user;
     return true;
 }
 
