@@ -38,68 +38,73 @@ class QPushButton;
 class QToolButton;
 class QLabel;
 class QComboBox;
+class QMenu;
 QT_END_NAMESPACE
 
 namespace Calendar {
-	class CalendarNavbar : public QWidget
-	{
-		Q_OBJECT
-	public:
-		CalendarNavbar(QWidget *parent = 0);
+class CalendarNavbar : public QWidget
+{
+    Q_OBJECT
+public:
+    CalendarNavbar(QWidget *parent = 0);
 
-		void setViewType(ViewType viewType);
-		ViewType viewType() const { return m_viewType; }
+    void setViewType(ViewType viewType);
+    ViewType viewType() const { return m_viewType; }
 
-		const QDate &firstDate() const { return m_firstDate; }
-		void setDate(const QDate &date);
+    const QDate &firstDate() const { return m_firstDate; }
+    void setDate(const QDate &date);
 
-        public Q_SLOTS:
-                void setDayGranularity(const int durationInMinutes);
+public Q_SLOTS:
+    void setDayGranularity(const int durationInMinutes);
 
-        Q_SIGNALS:
-		void firstDateChanged();
-		void viewTypeChanged();
-                void granularityChanged(int);
+Q_SIGNALS:
+    void firstDateChanged();
+    void viewTypeChanged();
+    void granularityChanged(int);
 
-        private Q_SLOTS:
-		void todayPage();
-		void yesterdayPage();
-		void tomorrowPage();
-                void currentWeekPage();
-                void nextWeekPage();
-                void currentMonthPage();
-                void nextMonthPage();
-                void previousPage();
-		void nextPage();
-                void changeViewMode(QAction *action);
-                void changeMonths(QAction *action);
-                void changeWeek(QAction *action);
-                void dayMode();
-		void weekMode();
-		void monthMode();
-                void changeGranularity(QAction *action);
+private Q_SLOTS:
+    void todayPage();
+    void yesterdayPage();
+    void tomorrowPage();
+    void currentWeekPage();
+    void nextWeekPage();
+    void currentMonthPage();
+    void nextMonthPage();
+    void previousPage();
+    void nextPage();
+    void changeViewMode(QAction *action);
+    void changeMonths(QAction *action);
+    void changeWeek(QAction *action);
+    void dayMode();
+    void weekMode();
+    void monthMode();
+    void changeGranularity(QAction *action);
 
-	private:
-		ViewType m_viewType;
-		QDate m_firstDate;
-		QToolButton *m_todayButton;
-                QToolButton *m_previousPageButton;
-                QToolButton *m_nextPageButton;
-                QAction *m_dayView;
-                QAction *m_weekView;
-                QAction *m_monthView;
-                QToolButton *m_viewModeNav;
-                QLabel *m_dateLabel; // replace with a toolButton
-                QToolButton *m_currentDateViewButton;
+private:
+    ViewType m_viewType;
+    QDate m_firstDate;
+    QToolButton *m_todayButton;
+    QToolButton *m_previousPageButton;
+    QToolButton *m_nextPageButton;
+
+    QAction *aDayView, *aWeekView, *aMonthView;
+    QAction *aToday, *aTomorrow, *aYesterday, *aCurrentWeek, *aCurrentMonth, *aNextWeek, *aNextMonth;
+    QMenu *mViewRange, *mMonths, *mWeeks;
+
+    QToolButton *m_viewModeNav;
+    QLabel *m_dateLabel; // replace with a toolButton
+    QToolButton *m_currentDateViewButton;
 
 
-		void refreshInfos();
-		QString getDateIntervalString();
-                QWidget *createNavigationButtons();
-                QToolButton *createNavigationModeButton();
-                QToolButton *createTodayButton();
-                QToolButton *createCurrentDateViewButton();
-	};
-}
+    void refreshInfos();
+    QString getDateIntervalString();
+    QWidget *createNavigationButtons();
+    QToolButton *createNavigationModeButton();
+    QToolButton *createTodayButton();
+    QToolButton *createCurrentDateViewButton();
+    void changeEvent(QEvent *e);
+};
+
+}  // End namespace Calendar
 
 #endif

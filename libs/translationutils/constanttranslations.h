@@ -49,7 +49,7 @@ namespace Physiology {
         UsableWithWarn      = 0x00010000,
         PregnancyOk         = 0x00100000
     };
-    Q_DECLARE_FLAGS( PregnancyLimits, PregnancyLimit );
+    Q_DECLARE_FLAGS( PregnancyLimits, PregnancyLimit )
 
     enum PhysiologicalLimit // QFlag
     {
@@ -62,7 +62,7 @@ namespace Physiology {
         ManOnly      = 0x01000000,
         WomanOnly    = 0x10000000
     };
-    Q_DECLARE_FLAGS( PhysiologicalLimits, PhysiologicalLimit );
+    Q_DECLARE_FLAGS( PhysiologicalLimits, PhysiologicalLimit )
 
 }
 Q_DECLARE_OPERATORS_FOR_FLAGS( Physiology::PregnancyLimits)
@@ -541,6 +541,15 @@ enum TitleInterpret {
         const char * const ATTENDEES = QT_TRANSLATE_NOOP("tkConstants", "Attendees");
         const char * const USER_DELEGATES = QT_TRANSLATE_NOOP("tkConstants", "User delegate");
         const char * const OWNER = QT_TRANSLATE_NOOP("tkConstants", "Owner");
+        const char * const TODAY = QT_TRANSLATE_NOOP("tkConstants", "Today");
+        const char * const TOMORROW = QT_TRANSLATE_NOOP("tkConstants", "Tomorrow");
+        const char * const YESTERDAY = QT_TRANSLATE_NOOP("tkConstants", "Yesterday");
+        const char * const CURRENT_WEEK = QT_TRANSLATE_NOOP("tkConstants", "Current week");
+        const char * const NEXT_WEEK = QT_TRANSLATE_NOOP("tkConstants", "Next week");
+        const char * const PREVIOUS_WEEK = QT_TRANSLATE_NOOP("tkConstants", "Previous week");
+        const char * const CURRENT_MONTH = QT_TRANSLATE_NOOP("tkConstants", "Current month");
+        const char * const NEXT_MONTH = QT_TRANSLATE_NOOP("tkConstants", "Next month");
+        const char * const PREVIOUS_MONTH = QT_TRANSLATE_NOOP("tkConstants", "Previous month");
 
         // Status
         const char * const ARRIVED = QT_TRANSLATE_NOOP("tkConstants", "Arrived");

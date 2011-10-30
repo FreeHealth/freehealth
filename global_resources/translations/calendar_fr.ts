@@ -4,39 +4,25 @@
 <context>
     <name>Calendar::CalendarNavbar</name>
     <message>
-        <location filename="../../libs/calendar/calendar_navbar.cpp" line="143"/>
-        <source>Today</source>
-        <translation>Aujourd&apos;hui</translation>
-    </message>
-    <message>
-        <location filename="../../libs/calendar/calendar_navbar.cpp" line="144"/>
-        <source>Tomorrow</source>
-        <translation>Demain</translation>
-    </message>
-    <message>
-        <location filename="../../libs/calendar/calendar_navbar.cpp" line="145"/>
-        <source>Yesterday</source>
-        <translation>Hier</translation>
-    </message>
-    <message>
-        <location filename="../../libs/calendar/calendar_navbar.cpp" line="154"/>
+        <location filename="../../libs/calendar/calendar_navbar.cpp" line="155"/>
+        <location filename="../../libs/calendar/calendar_navbar.cpp" line="419"/>
         <source>View range</source>
         <translation>Voir les bornes</translation>
     </message>
     <message>
-        <location filename="../../libs/calendar/calendar_navbar.cpp" line="383"/>
-        <location filename="../../libs/calendar/calendar_navbar.cpp" line="385"/>
-        <location filename="../../libs/calendar/calendar_navbar.cpp" line="387"/>
+        <location filename="../../libs/calendar/calendar_navbar.cpp" line="384"/>
+        <location filename="../../libs/calendar/calendar_navbar.cpp" line="386"/>
+        <location filename="../../libs/calendar/calendar_navbar.cpp" line="388"/>
         <source>d MMM yyyy</source>
         <translation>d MMM yyyy</translation>
     </message>
     <message>
-        <location filename="../../libs/calendar/calendar_navbar.cpp" line="385"/>
+        <location filename="../../libs/calendar/calendar_navbar.cpp" line="386"/>
         <source>d MMM</source>
         <translation>d MMM</translation>
     </message>
     <message>
-        <location filename="../../libs/calendar/calendar_navbar.cpp" line="387"/>
+        <location filename="../../libs/calendar/calendar_navbar.cpp" line="388"/>
         <source>d</source>
         <translation>d</translation>
     </message>
