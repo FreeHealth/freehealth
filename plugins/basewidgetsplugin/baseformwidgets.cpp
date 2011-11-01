@@ -865,6 +865,11 @@ BaseRadioData::~BaseRadioData()
 void BaseRadioData::clear()
 {
     QString id = m_FormItem->valueReferences()->defaultValue().toString();
+    m_Radio->m_ButGroup->setExclusive(false);
+    foreach(QRadioButton *b, m_Radio->m_RadioList) {
+        b->setChecked(false);
+    }
+    m_Radio->m_ButGroup->setExclusive(true);
     foreach(QRadioButton *b, m_Radio->m_RadioList) {
         if (b->property("id").toString()==id) {
             b->setChecked(true);
@@ -917,8 +922,8 @@ QVariant BaseRadioData::data(const int ref, const int role) const
 void BaseRadioData::setStorableData(const QVariant &data)
 {
     // Storable data == id of the selected radio button
-    if (!data.isValid())
-        return;
+//    if (!data.isValid())
+//        return;
     QString id = data.toString();
     foreach(QRadioButton *b, m_Radio->m_RadioList) {
         if (b->property("id").toString()==id) {
