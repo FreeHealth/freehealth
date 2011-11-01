@@ -1031,8 +1031,8 @@ Voulez-vous réellement changer de mode d&apos;édition ?</translation>
 <context>
     <name>DrugsWidget::Internal::DrugsPlugin</name>
     <message>
-        <location filename="../../plugins/drugsplugin/drugsplugin.cpp" line="156"/>
-        <location filename="../../plugins/drugsplugin/drugsplugin.cpp" line="175"/>
+        <location filename="../../plugins/drugsplugin/drugsplugin.cpp" line="157"/>
+        <location filename="../../plugins/drugsplugin/drugsplugin.cpp" line="176"/>
         <source>Initializing drugs plugin...</source>
         <translation>Initialisation du plugin médicament...</translation>
     </message>

@@ -178,10 +178,10 @@
 <context>
     <name>Templates::TemplateBase</name>
     <message>
-        <location filename="../../plugins/templatesplugin/templatebase.cpp" line="320"/>
-        <location filename="../../plugins/templatesplugin/templatebase.cpp" line="328"/>
-        <location filename="../../plugins/templatesplugin/templatebase.cpp" line="334"/>
-        <location filename="../../plugins/templatesplugin/templatebase.cpp" line="344"/>
+        <location filename="../../plugins/templatesplugin/templatebase.cpp" line="321"/>
+        <location filename="../../plugins/templatesplugin/templatebase.cpp" line="329"/>
+        <location filename="../../plugins/templatesplugin/templatebase.cpp" line="335"/>
+        <location filename="../../plugins/templatesplugin/templatebase.cpp" line="345"/>
         <source>Please contact dev team.</source>
         <translation type="unfinished"></translation>
     </message>
