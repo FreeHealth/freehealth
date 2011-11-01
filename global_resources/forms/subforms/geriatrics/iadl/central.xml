@@ -6,9 +6,10 @@
   <formdescription>
     <!-- Non translatable values -->
     <authors>Eric Maeker, MD</authors>
-    <version>0.6.0</version>
+    <version>0.6.01</version>
     <compatversion>0.6.0</compatversion>
     <cdate>2011-03-15</cdate>
+    <lmdate>2011-11-01</lmdate>
     <icon>geriatrics.png</icon>
     <weblink>http://www.geriu.org/uploads/applications/gerilite_ADL_IADL/data/downloads/form_adl_iadl.pdf</weblink>
     <bibliography pmid="6418786">Katz S. Assessing self-maintenance: activities of daily living, mobility, and instrumental activities of daily living. J Am Geriatr Soc. 1983 Dec;31(12):721-7.</bibliography>
@@ -19,12 +20,14 @@
     <description lang="xx">Instrumental Activities of Daily Living</description>
     <category lang="xx">Geriatrics</category>
     <category lang="fr">Gériatrie</category>
-    <tooltip lang="fr">French tooltip</tooltip>
-    <tooltip lang="xx">All other languages tooltip</tooltip>
-    <htmldescription lang="fr"></htmldescription>
-    <htmldescription lang="xx"></htmldescription>
     <specialties lang="fr">Gériatrie</specialties>
     <specialties lang="xx">Geriatrics</specialties>
+    <updateinfo>
+      <updateversion from="0.6.0" to="0.6.01">
+        <text lang="fr">Amélioration du processus d'impression.</text>
+        <text lang="en">Improvements in the printing process.</text>
+      </updateversion>
+    </updateinfo>
 
   </formdescription>
 
@@ -32,11 +35,11 @@
   <MedForm name="Subs::Geriatrics::Autonomy::IADL">
     <label lang="xx">Instrumental Activities of Daily Living</label>
     <label lang="fr">Activités instrumentales de la vie quotidienne (IADL)</label>
-    <options>col=2</options>
+    <options>col=2;DontPrintEmptyValues</options>
 
     <Item name="Subs::Geriatrics::Autonomy::IADL::Phone" type="radio">
       <label lang="xx">&lt;b&gt;Téléphone&lt;/b&gt;</label>
-      <options>vertical;labelontop</options>
+      <options>vertical;labelontop;DontPrintEmptyValues</options>
       <value>
         <uuid id="0">P0</uuid>
         <uuid id="1">P1</uuid>
@@ -63,7 +66,7 @@
     <Item name="Subs::Geriatrics::Autonomy::IADL::Shopping" type="radio">
       <label lang="xx">&lt;b&gt;Shopping&lt;/b&gt;</label>
       <label lang="fr">&lt;b&gt;Courses&lt;/b&gt;</label>
-      <options>vertical;labelontop</options>
+      <options>vertical;labelontop;DontPrintEmptyValues</options>
       <value>
         <uuid id="0">S0</uuid>
         <uuid id="1">S1</uuid>
@@ -90,7 +93,7 @@
     <Item name="Subs::Geriatrics::Autonomy::IADL::Food" type="radio">
       <label lang="xx">&lt;b&gt;Preparing food&lt;/b&gt;</label>
       <label lang="fr">&lt;b&gt;Préparer les repas&lt;/b&gt;</label>
-      <options>vertical;labelontop</options>
+      <options>vertical;labelontop;DontPrintEmptyValues</options>
       <value>
         <uuid id="0">Fd0</uuid>
         <uuid id="1">Fd1</uuid>
@@ -117,7 +120,7 @@
     <Item name="Subs::Geriatrics::Autonomy::IADL::HouseKeeping" type="radio">
       <label lang="xx">&lt;b&gt;Housekeeping&lt;/b&gt;</label>
       <label lang="fr">&lt;b&gt;Préparer les repas&lt;/b&gt;</label>
-      <options>vertical;labelontop</options>
+      <options>vertical;labelontop;DontPrintEmptyValues</options>
       <value>
         <uuid id="0">HK0</uuid>
         <uuid id="1">HK1</uuid>
@@ -148,7 +151,7 @@
     <Item name="Subs::Geriatrics::Autonomy::IADL::Laundry" type="radio">
       <label lang="xx">&lt;b&gt;Doing laundry&lt;/b&gt;</label>
       <label lang="fr">&lt;b&gt;Faire la lessive&lt;/b&gt;</label>
-      <options>vertical;labelontop</options>
+      <options>vertical;labelontop;DontPrintEmptyValues</options>
       <value>
         <uuid id="0">L0</uuid>
         <uuid id="1">L1</uuid>
@@ -171,7 +174,7 @@
     <Item name="Subs::Geriatrics::Autonomy::IADL::Transportation" type="radio">
       <label lang="xx">&lt;b&gt;Using transportation&lt;/b&gt;</label>
       <label lang="fr">&lt;b&gt;Utilisation des transports&lt;/b&gt;</label>
-      <options>vertical;labelontop</options>
+      <options>vertical;labelontop;DontPrintEmptyValues</options>
       <value>
         <uuid id="0">T0</uuid>
         <uuid id="1">T1</uuid>
@@ -202,7 +205,7 @@
     <Item name="Subs::Geriatrics::Autonomy::IADL::Medication" type="radio">
       <label lang="xx">&lt;b&gt;Taking own medications&lt;/b&gt;</label>
       <label lang="fr">&lt;b&gt;Prendre ses médicaments&lt;/b&gt;</label>
-      <options>vertical;labelontop</options>
+      <options>vertical;labelontop;DontPrintEmptyValues</options>
       <value>
         <uuid id="0">M0</uuid>
         <uuid id="1">M1</uuid>
@@ -225,7 +228,7 @@
     <Item name="Subs::Geriatrics::Autonomy::IADL::Finances" type="radio">
       <label lang="xx">&lt;b&gt;Handling own finances&lt;/b&gt;</label>
       <label lang="fr">&lt;b&gt;Gérer son budget&lt;/b&gt;</label>
-      <options>vertical;labelontop</options>
+      <options>vertical;labelontop;DontPrintEmptyValues</options>
       <value>
         <uuid id="0">Fi0</uuid>
         <uuid id="1">Fi1</uuid>
@@ -248,7 +251,7 @@
     <Item name="Subs::Geriatrics::Autonomy::IADL::Total" type="sum">
       <label lang="fr">&lt;b&gt;Résultat&lt;/b&gt;</label>
       <label lang="xx">&lt;b&gt;Total&lt;/b&gt;</label>
-      <options>vertical;labelontop;changeepisodelabel</options>
+      <options>vertical;labelontop;changeepisodelabel;DontPrintEmptyValues</options>
       <sumof>Subs::Geriatrics::Autonomy::IADL::Phone;Subs::Geriatrics::Autonomy::IADL::Shopping;Subs::Geriatrics::Autonomy::IADL::Food;Subs::Geriatrics::Autonomy::IADL::HouseKeeping;Subs::Geriatrics::Autonomy::IADL::Laundry;Subs::Geriatrics::Autonomy::IADL::Transportation;Subs::Geriatrics::Autonomy::IADL::Medication;Subs::Geriatrics::Autonomy::IADL::Finances</sumof>
     </Item>
 

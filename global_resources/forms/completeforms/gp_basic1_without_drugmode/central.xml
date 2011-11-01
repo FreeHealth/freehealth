@@ -6,10 +6,10 @@
   <formdescription>
     <!-- Non translatable values -->
     <authors>Eric Maeker, MD</authors>
-    <version>0.6.0</version>
+    <version>0.6.01</version>
     <compatversion>0.6.0</compatversion>
     <cdate>2011-03-15</cdate>
-    <lmdate>2011-10-26</lmdate>
+    <lmdate>2011-11-01</lmdate>
     <icon>generalpractitioner.png</icon>
     <weblink></weblink>
     <bibliography/>
@@ -20,13 +20,13 @@
     <description lang="xx">Generic patient file in one unique page</description>
     <category lang="xx">General practice</category>
     <category lang="fr">Médecine générale</category>
-    <tooltip lang="fr"></tooltip>
-    <tooltip lang="xx"></tooltip>
-    <htmldescription lang="fr"></htmldescription>
-    <htmldescription lang="xx"></htmldescription>
-    <specialties lang="fr"></specialties>
-    <specialties lang="xx"></specialties>
+    <specialties lang="fr">Médecine générale</specialties>
+    <specialties lang="xx">General practice</specialties>
     <updateinfo>
+      <updateversion from="0.6.0" to="0.6.01">
+        <text lang="fr">Amélioration du processus d'impression.</text>
+        <text lang="en">Improvements in the printing process.</text>
+      </updateversion>
       <updateversion from="0.5.0~alpha" to="0.6.0">
         <text lang="fr">Amélioration du nommage des items grâce à l'utilisation d'espace de nom.&lt;br>Ajout du numéro de sécurité dociale française dans l'identité.&lt;br>Amélioration du processus d'impression.&lt;Ne vérifie plus les interactions médicamenteuses pour les allergies.</text>
         <text lang="en">Improving naming of items by using namespace.&lt;br>Adding the french social number in the identiy form.&lt;>Improvements in the printing process.&lt;No more drug interactions checking for the allergies selector.</text>
@@ -66,9 +66,11 @@
       <label lang="xx">Chronic therapeutic</label>
       <label lang="fr">Traitement chronique</label>
       <icon>__theme__/drugs.png</icon>
+      <options>DontPrintEmptyValues</options>
       <Item name="GP::Basic::Drugs::Chronic::Content" type="prescriptor">
         <label lang="xx">Chronic therapeutic</label>
         <label lang="fr">Traitement chronique</label>
+        <options>DontPrintEmptyValues</options>
         <patientdata>drugs::chronic</patientdata>
       </Item>
       <Item name="GP::Basic::Drugs::Chronic::Comment" type="texteditor">
@@ -81,10 +83,11 @@
     <MedForm name="GP::Basic::Drugs::Allergies">
       <label lang="xx">Allergies</label>
       <icon>__theme__/drugs.png</icon>
+      <options>DontPrintEmptyValues</options>
       <Item name="GP::Basic::Drugs::Allergies::Content" type="drugselector">
         <label lang="xx">Known drugs allergies</label>
         <label lang="fr">Allergies médicamenteuses connues</label>
-        <options>hideselector;nointeractionchecking</options>
+        <options>hideselector;nointeractionchecking;DontPrintEmptyValues</options>
         <patientdata>drugs::allergies</patientdata>
       </Item>
       <Item name="GP::Basic::Drugs::Allergies::Comment" type="texteditor">

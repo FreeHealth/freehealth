@@ -6,7 +6,7 @@
   <formdescription>
     <!-- Non translatable values -->
     <authors>Eric Maeker, MD</authors>
-    <version>0.6.01</version>
+    <version>0.6.03</version>
     <compatversion>0.6.0</compatversion>
     <cdate>2011-03-15</cdate>
     <icon>addictology.png</icon>
@@ -28,12 +28,13 @@
     <label lang="fr">Test de Fagerström</label>
     <label lang="de">Fagerström-Test</label>
     <label lang="xx">Fagerström test</label>
-    <options>col=2</options>
+    <options>col=2;DontPrintEmptyValues</options>
 
     <Item name="Subs:Addictology::Smoking::Fagerstrom::Wake" type="radio">
       <label lang="fr">Combien de temps après vous être réveillé, fumez-vous votre première cigarette ?</label>
       <label lang="de">Wann nach dem Aufwachen rauchst du Deine erste Zigarette?</label>
       <label lang="xx">How soon after you wake up do you have your first cigarette?</label>
+      <options>DontPrintEmptyValues</options>
       <value>
         <uuid id="0">wake0</uuid>
         <uuid id="1">wake1</uuid>
@@ -62,6 +63,7 @@
       <label lang="fr">Trouvez-vous difficile de ne pas fumer dans les endroits interdits (ex: cinémas, bibliothèques...) ?</label>
       <label lang="de">Findest du es schwierig, an Orten, wo das Rauchen verboten ist  (z.B. Kirche, Bücherei, Kino usw.), das Rauchen zu lassen?</label>
       <label lang="xx">Do you find it difficult to refrain from smoking in places where it is forbidden, e.g., in church, the library, the cinema, etc?</label>
+      <options>DontPrintEmptyValues</options>
       <value>
         <uuid id="0">refrain0</uuid>
         <uuid id="1">refrain1</uuid>
@@ -80,6 +82,7 @@
       <label lang="fr">Quelle cigarette trouvez-vous la plus indispensable ?</label>
       <label lang="de">Auf welche Zigarette würdest du verzichten wollen?</label>
       <label lang="xx">Which cigarette would you hate most to give up?</label>
+      <options>DontPrintEmptyValues</options>
       <value>
         <uuid id="0">giveup0</uuid>
         <uuid id="1">giveup1</uuid>
@@ -98,6 +101,7 @@
       <label lang="fr">Combien de cigarettes fumez-vous par jour en moyenne ?</label>
       <label lang="de">Wieviel Zigaretten rauchst du im allgemeinen pro Tag?</label>
       <label lang="xx">How many cigarettes do you smoke per day?</label>
+      <options>DontPrintEmptyValues</options>
       <value>
         <uuid id="0">amount0</uuid>
         <uuid id="1">amount1</uuid>
@@ -126,6 +130,7 @@
       <label lang="fr">Fumez-vous de façon plus rapprochée dans la première heure après le réveil que pendant le reste de la journée ?</label>
       <label lang="de">Rauchst du am Morgen im allgemeinen mehr als am Rest des Tages?</label>
       <label lang="xx">Do you smoke more often during the first hours after waking than during the rest of the day?</label>
+      <options>DontPrintEmptyValues</options>
       <value>
         <uuid id="0">firsthour0</uuid>
         <uuid id="1">firsthour1</uuid>
@@ -144,6 +149,7 @@
       <label lang="fr">Fumez-vous même si une maladie vous oblige à rester au lit ?</label>
       <label lang="de">Kommt es vor, dass du rauchst, wenn du krank bist und tagsüber im Bett bleiben musst?</label>
       <label lang="xx">Do you smoke even if you are so ill that you are in bed most of the day?</label>
+      <options>DontPrintEmptyValues</options>
       <value>
         <uuid id="0">evenill0</uuid>
         <uuid id="1">evenill1</uuid>
@@ -163,13 +169,14 @@
       <label lang="de">Gäste</label>
       <label lang="xx">Score</label>
       <sumof>Subs:Addictology::Smoking::Fagerstrom::Wake;Subs:Addictology::Smoking::Fagerstrom::Refrain;Subs:Addictology::Smoking::Fagerstrom::GiveUp;Subs:Addictology::Smoking::Fagerstrom::Amount;Subs:Addictology::Smoking::Fagerstrom::FirstHour;Subs:Addictology::Smoking::Fagerstrom::EvenIll</sumof>
-      <option>changeepisodelabel</option>
+      <options>DontPrintEmptyValues;changeepisodelabel</options>
     </Item>
 
     <Item name="Subs:Addictology::Smoking::Fagerstrom::ScoreInterpretation" type="helptext">
       <label lang="fr">0-2 : Très faible&lt;br />3-4 : Faible&lt;br />5 : Moyenne&lt;br />6-7 : Forte&lt;br />8-10 : Très forte&lt;br /></label>
       <label lang="de">0-2: Sehr niedrig&lt;br /> 3-4: Niedrige&lt;br /> 5: Durchschnittliche&lt;br /> 6-7: Starke&lt;br /> 8-10: Sehr hohe&lt;br /></label>
       <label lang="xx">0-2: Very Low&lt;br /> 3-4: Low&lt;br /> 5: Average&lt;br /> 6-7: Strong&lt;br /> 8-10: Very high&lt;br /></label>
+      <options>notprintable</options>
     </Item>
 
   </MedForm>

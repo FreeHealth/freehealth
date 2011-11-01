@@ -6,7 +6,7 @@
   <formdescription>
     <!-- Non translatable values -->
     <authors>Eric Maeker, MD</authors>
-    <version>0.6.0</version>
+    <version>0.6.01</version>
     <compatversion>0.6.0</compatversion>
     <cdate>2011-09-02</cdate>
     <lmdate>2011-10-26</lmdate>
@@ -20,13 +20,13 @@
     <description lang="xx">Generic patient file with drugs page</description>
     <category lang="xx">General practice</category>
     <category lang="fr">Médecine générale</category>
-    <tooltip lang="fr">French tooltip</tooltip>
-    <tooltip lang="xx">All other languages tooltip</tooltip>
-    <htmldescription lang="fr"></htmldescription>
-    <htmldescription lang="xx"></htmldescription>
-    <specialties lang="fr"></specialties>
-    <specialties lang="xx"></specialties>
+    <specialties lang="fr">Médecine générale</specialties>
+    <specialties lang="xx">General practice</specialties>
     <updateinfo>
+      <updateversion from="0.6.0" to="0.6.01">
+        <text lang="fr">Amélioration du processus d'impression.</text>
+        <text lang="en">Improvements in the printing process.</text>
+      </updateversion>
       <updateversion from="0.5.0~alpha" to="0.6.0">
         <text lang="fr">Amélioration du nommage des items grâce à l'utilisation d'espace de nom.&lt;br>Ajout du numéro de sécurité dociale française dans l'identité.&lt;br>Amélioration du processus d'impression.&lt;Ne vérifie plus les interactions médicamenteuses pour les allergies.</text>
         <text lang="en">Improving naming of items by using namespace.&lt;br>Adding the french social number in the identiy form.&lt;>Improvements in the printing process.&lt;No more drug interactions checking for the allergies selector.</text>
@@ -65,6 +65,7 @@
   <MedForm name="GP::Basic::SOAP">
     <label>SOAP</label>
     <icon>__theme__/edit.png</icon>
+    <options>DontPrintEmptyValues</options>
     <Item type="texteditor" name="GP::Basic::SOAP::S">
       <label lang="xx">Subjective</label>
       <label lang="fr">Subjectif</label>
@@ -91,11 +92,12 @@
   <MedForm name="GP::Basic::Prescr">
     <label>Prescriptions</label>
     <icon>__theme__/edit.png</icon>
-    <options>noepisode</options>
+    <options>NoEpisode;DontPrintEmptyValues</options>
 
     <MedForm name="GP::Basic::Prescr::Text">
       <label lang="xx">Textual prescriptions</label>
       <label lang="fr">Prescriptions textuelles</label>
+      <options>DontPrintEmptyValues</options>
 
       <Item type="texteditor" name="GP::Basic::Prescr::Text::Content">
         <label lang="xx">Textual prescription</label>
@@ -109,9 +111,11 @@
       <label lang="xx">Drugs prescriptions</label>
       <label lang="fr">Prescriptions médicamenteuses</label>
       <icon>__theme__/drugs.png</icon>
+      <options>DontPrintEmptyValues</options>
       <Item type="prescriptor" name="GP::Basic::Prescr::Drugs::Content">
         <label lang="xx">Therapeutic prescription</label>
         <label lang="fr">Prescription médicamenteuse</label>
+        <options>DontPrintEmptyValues</options>
       </Item>
     </MedForm>
 
@@ -120,6 +124,7 @@
   <MedForm name="GP::Basic::ICD10">
     <label lang="xx">ICD10 coding</label>
     <label lang="fr">Codes CIM10</label>
+    <options>DontPrintEmptyValues</options>
     <Item type="icd" name="GP::Basic::ICD10::Content">
       <label lang="xx">ICD10 coding</label>
       <label lang="fr">Codes CIM10</label>
