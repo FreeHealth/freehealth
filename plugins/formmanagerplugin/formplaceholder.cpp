@@ -660,15 +660,29 @@ void FormPlaceHolder::printCurrentItem()
     while (!d->m_EpisodeModel->isForm(form)) {
         form = form.parent();
     }
-
-    // Parent form has a print value ?
-    Form::FormMain *formMain = d->m_EpisodeModel->formForIndex(form);
-    if (!formMain)
+    if (!form.isValid())
         return;
 
-    // If episode selected -> activate episode
-    if (d->m_EpisodeModel->isEpisode(index))
-        setCurrentEpisode(index);
+    QString htmlToPrint;
+    QString title;
+    QModelIndex formUid = d->m_EpisodeModel->index(form.row(), Form::EpisodeModel::FormUuid, form.parent());
+    if (formUid.data().toString()==Constants::PATIENTLASTEPISODES_UUID) {
+        // Print patient synthesis
+        htmlToPrint = d->m_EpisodeModel->lastEpisodesSynthesis();
+        title = QApplication::translate(Constants::FORM_TR_CONTEXT, Constants::PATIENTLASTEPISODES_TEXT);
+    } else {
+        // Print episode
+        if (d->m_EpisodeModel->isEpisode(index))
+            setCurrentEpisode(index);
+        Form::FormMain *formMain = d->m_EpisodeModel->formForIndex(form);
+        if (formMain) {
+            htmlToPrint = "<html><body>" + formMain->printableHtml(d->m_EpisodeModel->isEpisode(index)) + "</body></html>";
+            title = formMain->spec()->label();
+        }
+    }
+
+    if (htmlToPrint.isEmpty())
+        return;
 
     Core::IDocumentPrinter *p = printer();
     if (!p) {
@@ -678,7 +692,7 @@ void FormPlaceHolder::printCurrentItem()
     p->clearTokens();
     QHash<QString, QVariant> tokens;
 
-    tokens.insert(Core::Constants::TOKEN_DOCUMENTTITLE, formMain->spec()->label());
+    tokens.insert(Core::Constants::TOKEN_DOCUMENTTITLE, title);
 //    // create a token for each FormItem of the FormMain
 //    foreach(FormItem *item, formMain->flattenFormItemChildren()) {
 //        if (item->itemDatas())
@@ -687,7 +701,7 @@ void FormPlaceHolder::printCurrentItem()
     p->addTokens(Core::IDocumentPrinter::Tokens_Global, tokens);
 
     // print
-    p->print("<html><body>" + formMain->printableHtml(d->m_EpisodeModel->isEpisode(index)) + "</body></html>", Core::IDocumentPrinter::Papers_Generic_User, false);
+    p->print(htmlToPrint, Core::IDocumentPrinter::Papers_Generic_User, false);
 
 //    qWarning() << formMain->uuid();
 

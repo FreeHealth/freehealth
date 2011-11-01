@@ -113,6 +113,7 @@ namespace Constants {
     const char * const PRINTFORM_TEXT = QT_TRANSLATE_NOOP("Forms", "Print Form");
     const char * const SHOWPATIENTSYNTHESIS_TEXT = QT_TRANSLATE_NOOP("Forms", "Show patient synthesis");
     const char * const SHOWPATIENTLASTEPISODES_TEXT = QT_TRANSLATE_NOOP("Forms", "Show patient last episodes");
+    const char * const PATIENTLASTEPISODES_TEXT = QT_TRANSLATE_NOOP("Forms", "Patient last episodes");
 
 }  // End namespace Form::Constants
 }  // End namespace Form
