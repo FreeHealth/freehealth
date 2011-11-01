@@ -60,17 +60,18 @@ void IFormWidget::createLabel(const QString &text, Qt::Alignment horizAlign)
 
 QBoxLayout *IFormWidget::getBoxLayout(const int labelOption, const QString &text, QWidget *parent)
 {
-    QBoxLayout * hb;
+    QBoxLayout *hb;
     m_Label = new QLabel(this);
+    m_Label->setSizePolicy(QSizePolicy::Expanding, QSizePolicy::Preferred);
     if (labelOption == Label_OnTop) {
         hb = new QBoxLayout(QBoxLayout::TopToBottom, parent);
         createLabel(text, Qt::AlignTop | Qt::AlignLeft);
         hb->setSpacing(5);
     } else {
         /** \todo Code specific label options */
-        hb = new QBoxLayout(QBoxLayout::LeftToRight, parent);
+        hb = new QHBoxLayout(parent);
         if (labelOption != Label_NoLabel) {
-            createLabel(text, Qt::AlignTop | Qt::AlignRight);
+            createLabel(text, Qt::AlignTop | Qt::AlignLeft);
         }
         hb->setSpacing(5);
         hb->setMargin(5);

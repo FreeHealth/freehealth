@@ -83,7 +83,7 @@ public:
         Label_OnTop,
         Label_OnBottom,
         Label_OnLeft,
-        Label_OnRigth,
+        Label_OnRight,
         Label_OnTopCentered
     };
 
