@@ -49,6 +49,7 @@
 #include <drugsbaseplugin/globaldrugsmodel.h>
 #include <drugsbaseplugin/drugsmodel.h>
 #include <drugsbaseplugin/interactionmanager.h>
+#include <drugsbaseplugin/engines/allergyengine.h>
 
 #include <templatesplugin/templatesview.h>
 
@@ -61,6 +62,7 @@
 #include <utils/global.h>
 #include <utils/updatechecker.h>
 #include <utils/iconbadgealert.h>
+#include <extensionsystem/pluginmanager.h>
 
 #include "ui_mainwindow.h"
 
@@ -96,6 +98,7 @@ static inline Core::FileManager *fileManager() { return Core::ICore::instance()-
 inline static DrugsDB::DrugsModel *drugModel() { return DrugsWidget::DrugsWidgetManager::instance()->currentDrugsModel(); }
 static inline Core::IDocumentPrinter *printer() {return ExtensionSystem::PluginManager::instance()->getObject<Core::IDocumentPrinter>();}
 static inline DrugsDB::Internal::DrugsBase *drugsBase() {return DrugsDB::Internal::DrugsBase::instance();}
+static inline ExtensionSystem::PluginManager *pluginManager() {return ExtensionSystem::PluginManager::instance();}
 
 // SplashScreen Messagers
 static inline void messageSplash(const QString &s) {theme()->messageSplashScreen(s); }
@@ -180,8 +183,12 @@ public:
 
     void createPrecautionsModelAndView(QTreeView *treeview, QComboBox *combo)
     {
-        QStandardItemModel *model = DrugsDB::GlobalDrugsModel::drugsPrecautionsModel();
-        // Create the view
+        DrugsDB::Internal::DrugAllergyEngine *engine = pluginManager()->getObject<DrugsDB::Internal::DrugAllergyEngine>();
+        if (!engine) {
+            LOG_ERROR_FOR("MainWindow", "No allergy engine");
+            return;
+        }
+        QAbstractItemModel *model = engine->drugPrecautionModel();
         if (!treeview) {
             treeview = new QTreeView(q);
             combo->setModel(model);
@@ -420,7 +427,6 @@ void MainWindow::extensionsInitialized()
     }
 
     createDockWindows();
-    finishSplash(this);
     readSettings();
     show();
     raise();
@@ -857,10 +863,18 @@ void MainWindow::createDockWindows()
     dock->setObjectName("precautionsDock");
     dock->setAllowedAreas(Qt::LeftDockWidgetArea | Qt::RightDockWidgetArea);
     addDockWidget(Qt::RightDockWidgetArea, dock);
+
+    DrugsDB::Internal::DrugAllergyEngine *engine = pluginManager()->getObject<DrugsDB::Internal::DrugAllergyEngine>();
+    if (!engine) {
+        LOG_ERROR_FOR("MainWindow", "No allergy engine");
+        return;
+    }
+    QAbstractItemModel *model = engine->drugPrecautionModel();
+
     d->m_PrecautionView = new QTreeView(dock);
+    d->m_PrecautionView->setModel(model);
     d->m_PrecautionView->header()->hide();
     d->m_PrecautionView->expandAll();
-    d->m_PrecautionView->setModel(DrugsDB::GlobalDrugsModel::drugsPrecautionsModel());
     d->m_PrecautionView->setEditTriggers(QAbstractItemView::NoEditTriggers);
     dock->setWidget(d->m_PrecautionView);
     // aShowPrecautionsDock

@@ -24,7 +24,10 @@
 #include <coreplugin/core_exporter.h>
 #include <coreplugin/iuser.h>
 
-class CORE_EXPORT User : public Core::IUser
+namespace Core {
+namespace Internal {
+
+class User : public Core::IUser
 {
     Q_OBJECT
 public:
@@ -35,6 +38,8 @@ public:
     bool has(const int ref) const;
     virtual bool hasCurrentUser() const {return true;}
 
+    QString fullNameOfUser(const QVariant &uid) {Q_UNUSED(uid); return QString();}
+
     QVariant value(const int ref) const;
     bool setValue(const int ref, const QVariant &value);
 
@@ -44,5 +49,8 @@ public:
     bool fromXml(const QString &xml);
 
 };
+
+}
+}
 
 #endif // USER_H

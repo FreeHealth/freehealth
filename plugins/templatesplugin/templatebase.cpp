@@ -288,6 +288,7 @@ bool TemplateBase::createDatabase(const QString &connectionName , const QString 
                     CreationOption /*createOption*/
                    )
 {
+    Q_UNUSED(access);
     if (connectionName != Templates::Constants::DB_TEMPLATES_NAME)
         return false;
 

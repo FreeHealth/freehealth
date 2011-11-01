@@ -37,7 +37,7 @@ namespace Constants {
 }
 
 using namespace Core;
-
+using namespace Internal;
 
 User::User(QObject *parent) :
         Core::IUser(parent)

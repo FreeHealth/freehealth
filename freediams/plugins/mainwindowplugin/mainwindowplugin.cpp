@@ -37,6 +37,8 @@ MainWinPlugin::MainWinPlugin() :
 {
     if (Utils::Log::warnPluginsCreation())
         qWarning() << "creating FREEDIAMS::MainWinPlugin";
+    m_MainWindow = new MainWindow();
+    Core::ICore::instance()->setMainWindow(m_MainWindow);
 }
 
 MainWinPlugin::~MainWinPlugin()
@@ -55,8 +57,6 @@ bool MainWinPlugin::initialize(const QStringList &arguments, QString *errorStrin
         qWarning() << "MainWinPlugin::initialize";
     Q_UNUSED(arguments);
     Q_UNUSED(errorString);
-    m_MainWindow = new MainWindow();
-    Core::ICore::instance()->setMainWindow(m_MainWindow);
 
     // Add Translator to the Application
     Core::ICore::instance()->translators()->addNewTranslator("fdmainwindowplugin");

@@ -67,13 +67,16 @@ DrugsBasePlugin::DrugsBasePlugin() :
 #endif
     }
 
+    // Add Translator to the Application
+    Core::ICore::instance()->translators()->addNewTranslator("drugsbaseplugin");
+
     // Create the drugs engines
+    m_AllergyEngine = new DrugsDB::Internal::DrugAllergyEngine(this);
+    addObject(m_AllergyEngine);
     m_DDIEngine = new DrugsDB::Internal::DrugDrugInteractionEngine(this);
     addObject(m_DDIEngine);
     m_PimEngine = new DrugsDB::Internal::PimEngine(this);
     addObject(m_PimEngine);
-    m_AllergyEngine = new DrugsDB::Internal::DrugAllergyEngine(this);
-    addObject(m_AllergyEngine);
 }
 
 DrugsBasePlugin::~DrugsBasePlugin()
@@ -100,10 +103,6 @@ bool DrugsBasePlugin::initialize(const QStringList &arguments, QString *errorStr
         qWarning() << "DrugsBasePlugin::initialize";
     Q_UNUSED(arguments);
     Q_UNUSED(errorString);
-
-    // Add Translator to the Application
-    Core::ICore::instance()->translators()->addNewTranslator("drugsbaseplugin");
-    messageSplash(tr("Initializing drugs database plugin..."));
 
     return true;
 }

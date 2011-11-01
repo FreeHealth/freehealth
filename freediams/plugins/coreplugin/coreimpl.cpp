@@ -67,7 +67,7 @@ namespace Internal {
 
 
 using namespace Core;
-using namespace Core::Internal;
+using namespace Internal;
 using namespace Trans::ConstantTranslations;
 
 ICore* ICore::instance()
@@ -85,7 +85,7 @@ CoreImpl::CoreImpl(QObject *parent) :
         m_UID(new UniqueIDManager),
         m_MedinTux(0),
         m_Patient(new Patient(this)),
-        m_User(new User(this))
+        m_User(new Internal::User(this))
 {
     m_Settings = new SettingsPrivate(this);
     m_Settings->setPath(ISettings::UpdateUrl, Utils::Constants::FREEDIAMS_UPDATE_URL);

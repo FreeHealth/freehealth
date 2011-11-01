@@ -85,6 +85,9 @@ DrugsPlugin::DrugsPlugin() :
         qWarning() << "creating FREEDIAMS::DrugsPlugin";
 #endif
 
+    // Add Translator to the Application
+    Core::ICore::instance()->translators()->addNewTranslator("mfDrugsWidget");
+
     viewPage = new DrugsViewOptionsPage(this);
     selectorPage = new DrugsSelectorOptionsPage(this);
     printPage = new DrugsPrintOptionsPage(this);
@@ -151,8 +154,6 @@ bool DrugsPlugin::initialize(const QStringList &arguments, QString *errorMessage
     if (Utils::Log::warnPluginsCreation())
         qWarning() << "DrugsPlugin::initialize";
 
-    // Add Translator to the Application
-    Core::ICore::instance()->translators()->addNewTranslator("mfDrugsWidget");
     messageSplash(tr("Initializing drugs plugin..."));
 
     addAutoReleasedObject(new Core::PluginAboutPage(this->pluginSpec(), this));
