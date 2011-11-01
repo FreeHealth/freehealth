@@ -6,9 +6,10 @@
   <formdescription>
     <!-- Non translatable values -->
     <authors>Eric Maeker, MD</authors>
-    <version>0.5.0~alpha</version>
-    <compatversion>0.5.0</compatversion>
+    <version>0.6.0</version>
+    <compatversion>0.6.0</compatversion>
     <cdate>2011-09-02</cdate>
+    <lmdate>2011-10-26</lmdate>
     <icon>generalpractitioner.png</icon>
     <weblink></weblink>
     <bibliography/>
@@ -25,6 +26,12 @@
     <htmldescription lang="xx"></htmldescription>
     <specialties lang="fr"></specialties>
     <specialties lang="xx"></specialties>
+    <updateinfo>
+      <updateversion from="0.5.0~alpha" to="0.6.0">
+        <text lang="fr">Amélioration du nommage des items grâce à l'utilisation d'espace de nom.&lt;br>Ajout du numéro de sécurité dociale française dans l'identité.&lt;br>Amélioration du processus d'impression.&lt;Ne vérifie plus les interactions médicamenteuses pour les allergies.</text>
+        <text lang="en">Improving naming of items by using namespace.&lt;br>Adding the french social number in the identiy form.&lt;>Improvements in the printing process.&lt;No more drug interactions checking for the allergies selector.</text>
+      </updateversion>
+    </updateinfo>
 
   </formdescription>
 
@@ -39,6 +46,7 @@
     </Item>
 
     <Item type="group" name="GP::Basic::Identity::ExtraFrench">
+      <country>FR</country>
       <column>1</column>
       <label lang="xx">Extras</label>
       <label lang="fr">Extras</label>

@@ -24,7 +24,7 @@
       <Item name="GP::Basic::Drugs::Allergies::Content" type="drugselector">
         <label lang="xx">Known drugs allergies</label>
         <label lang="fr">Allergies médicamenteuses connues</label>
-        <options>hideselector</options>
+        <options>hideselector;nointeractionchecking</options>
         <patientdata>drugs::allergies</patientdata>
       </Item>
       <Item name="GP::Basic::Drugs::Allergies::Comment" type="texteditor">
