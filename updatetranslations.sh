@@ -12,6 +12,6 @@ do
 echo
 echo "********* Updating translation for libs : "$i
 echo
-echo `lupdate libs/$i/*utils.pro -no-obsolete`
+echo `lupdate libs/$i/*.pro -no-obsolete`
 done
 
