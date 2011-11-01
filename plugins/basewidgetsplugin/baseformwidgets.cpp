@@ -111,6 +111,7 @@ namespace {
 
     const char * const  LABEL_ALIGN_TOP   = "labelontop";
     const char * const  LABEL_ALIGN_LEFT  = "labelonleft";
+    const char * const  DONTPRINTEMPTYVALUES = "DontPrintEmptyValues";
 }
 
 inline static Form::IFormWidget::LabelOptions labelAlignement(Form::FormItem *item, Form::IFormWidget::LabelOptions defaultValue = Form::IFormWidget::Label_OnLeft)
@@ -176,6 +177,10 @@ inline static QString getDateFormat(Form::FormItem *item, const QString & defaul
     return defaultValue;
 }
 
+inline static bool dontPrintEmptyValues(Form::FormItem *item)
+{
+    return item->getOptions().contains(::DONTPRINTEMPTYVALUES, Qt::CaseInsensitive);
+}
 
 BaseWidgetsFactory::BaseWidgetsFactory(QObject *parent) :
         IFormWidgetFactory(parent)
@@ -329,6 +334,25 @@ void BaseForm::addWidgetToContainer(IFormWidget * widget)
 
 QString BaseForm::printableHtml(bool withValues) const
 {
+    QStringList html;
+    QList<Form::FormItem*> items = m_FormItem->formItemChildren();
+    for(int i = 0; i < items.count(); ++i) {
+        html << items.at(i)->formWidget()->printableHtml(withValues);
+    }
+    html.removeAll("");
+
+//    qWarning() << m_FormItem->spec()->label() << dontPrintEmptyValues(m_FormItem) << html.count();
+//    qWarning() << m_FormItem->getOptions();
+
+    if (html.isEmpty() && dontPrintEmptyValues(m_FormItem))
+        return QString();
+
+//    qWarning() << html;
+
+    int i = 0;
+    int c = 0;
+    int r = 0;
+    int previousrow = 0;
     QString header, content;
     // Start with the header of the form
     header += QString("<table width=100% border=2 cellpadding=0 cellspacing=0  style=\"margin: 5px 0px 0px 0px\">"
@@ -345,15 +369,6 @@ QString BaseForm::printableHtml(bool withValues) const
             .arg(m_FormItem->spec()->label())
             .arg(m_EpisodeLabel->toolTip().replace("right", "center").replace("<p ", "<span ").replace("</p>", "</span>"));
 
-    QStringList html;
-    QList<Form::FormItem*> items = m_FormItem->formItemChildren();
-    for(int i = 0; i < items.count(); ++i) {
-        html << items.at(i)->formWidget()->printableHtml(withValues);
-    }
-    int i = 0;
-    int c = 0;
-    int r = 0;
-    int previousrow = 0;
     // recreate the grid as an html table
     foreach(const QString &s, html) {
         c = (i % numberColumns);
@@ -530,6 +545,8 @@ QString BaseGroup::printableHtml(bool withValues) const
         if (html.isEmpty())
             return QString();
     }
+    if (html.isEmpty() && dontPrintEmptyValues(m_FormItem))
+        return QString();
 
     // recreate the grid as an html table
     int i = 0;
@@ -762,6 +779,9 @@ BaseRadio::~BaseRadio()
 
 QString BaseRadio::printableHtml(bool withValues) const
 {
+    if (dontPrintEmptyValues(m_FormItem) && m_ButGroup->checkedButton()==0)
+        return QString();
+
     // ⚪⚫
     QStringList html;
     bool horiz = isRadioHorizontalAlign(m_FormItem);
@@ -994,7 +1014,7 @@ BaseSimpleText::~BaseSimpleText()
 QString BaseSimpleText::printableHtml(bool withValues) const
 {
     if (withValues) {
-        if (m_FormItem->getOptions().contains("DontPrintEmptyValues")) {
+        if (dontPrintEmptyValues(m_FormItem)) {
             if (m_Line && m_Line->text().isEmpty())
                 return QString();
             else if (m_Text && m_Text->toPlainText().isEmpty())
@@ -1189,6 +1209,8 @@ QString BaseList::printableHtml(bool withValues) const
         }
     } else {
         QModelIndexList indexes = m_List->selectionModel()->selectedIndexes();
+        if (dontPrintEmptyValues(m_FormItem) && indexes.isEmpty())
+            return QString();
         qSort(indexes);
         foreach(const QModelIndex &i, indexes) {
             content += "<li>" + i.data().toString() + "</li>";
@@ -1496,6 +1518,8 @@ QString BaseDate::printableHtml(bool withValues) const
                        "</table>")
                 .arg(m_FormItem->spec()->label());
     } else {
+        if (dontPrintEmptyValues(m_FormItem) && m_Date->date().isNull())
+            return QString();
         return QString("<table width=100% border=1 cellpadding=0 cellspacing=0  style=\"margin: 0px\">"
                        "<tbody>"
                        "<tr>"
@@ -1795,19 +1819,37 @@ SumWidget::~SumWidget()
 
 QString SumWidget::printableHtml(bool withValues) const
 {
-    return QString("<table width=100% border=1 cellpadding=0 cellspacing=0  style=\"margin: 5px 0px 0px 0px\">"
-                   "<tbody>"
-                   "<tr>"
-                   "<td style=\"vertical-align: top; font-weight: 600; padding: 5px\">"
-                    "%1"
-                   "</td>"
-                   "<td style=\"vertical-align: top; padding-left:2em; padding-top:5px; padding-bottom: 5px; padding-right:2em\">"
-                   "%2"
-                   "</td>"
-                   "</tr>"
-                   "</tbody>"
-                   "</table>")
-            .arg(m_FormItem->spec()->label()).arg(line->text());
+    if (!withValues) {
+        return QString("<table width=100% border=1 cellpadding=0 cellspacing=0  style=\"margin: 5px 0px 0px 0px\">"
+                       "<tbody>"
+                       "<tr>"
+                       "<td style=\"vertical-align: top; font-weight: 600; padding: 5px\">"
+                       "%1"
+                       "</td>"
+                       "<td style=\"vertical-align: top; padding-left:2em; padding-top:5px; padding-bottom: 5px; padding-right:2em\">"
+                       "&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;"
+                       "</td>"
+                       "</tr>"
+                       "</tbody>"
+                       "</table>")
+                .arg(m_FormItem->spec()->label());
+    } else {
+        if (dontPrintEmptyValues(m_FormItem) && line->text().isEmpty())
+            return QString();
+        return QString("<table width=100% border=1 cellpadding=0 cellspacing=0  style=\"margin: 5px 0px 0px 0px\">"
+                       "<tbody>"
+                       "<tr>"
+                       "<td style=\"vertical-align: top; font-weight: 600; padding: 5px\">"
+                       "%1"
+                       "</td>"
+                       "<td style=\"vertical-align: top; padding-left:2em; padding-top:5px; padding-bottom: 5px; padding-right:2em\">"
+                       "%2"
+                       "</td>"
+                       "</tr>"
+                       "</tbody>"
+                       "</table>")
+                .arg(m_FormItem->spec()->label()).arg(line->text());
+    }
 }
 
 void SumWidget::retranslate()

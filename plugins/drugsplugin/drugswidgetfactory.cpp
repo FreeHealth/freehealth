@@ -74,8 +74,7 @@ namespace {
     const char* const OPTION_WITHPRESCRIBING  = "withprescribing";
     const char* const OPTION_WITHPRINTING     = "withprinting";
 
-    const char * const  EXTRAS_KEY              = "option";
-    const char * const  EXTRAS_KEY2             = "options";
+    const char * const  DONTPRINTEMPTYVALUES = "DontPrintEmptyValues";
 }
 
 using namespace DrugsWidget;
@@ -84,12 +83,9 @@ using namespace Internal;
 static inline DrugsDB::Internal::DrugsBase *drugsBase() {return DrugsDB::Internal::DrugsBase::instance();}
 static inline Core::ISettings *settings() {return Core::ICore::instance()->settings();}
 
-inline static QStringList getOptions(Form::FormItem *item)
+inline static bool dontPrintEmptyValues(Form::FormItem *item)
 {
-    QStringList l;
-    l = item->extraDatas().value(::EXTRAS_KEY).split(";", QString::SkipEmptyParts);
-    l += item->extraDatas().value(::EXTRAS_KEY2).split(";", QString::SkipEmptyParts);
-    return l;
+    return item->getOptions().contains(::DONTPRINTEMPTYVALUES, Qt::CaseInsensitive);
 }
 
 //--------------------------------------------------------------------------------------------------------
@@ -153,7 +149,7 @@ DrugsPrescriptorWidget::DrugsPrescriptorWidget(const QString &name, Form::FormIt
     hb->addWidget(m_CentralWidget);
 
     // Manage options
-    const QStringList &options = getOptions(formItem);
+    const QStringList &options = formItem->getOptions();
     if (options.contains(OPTION_WITHPRESCRIBING, Qt::CaseInsensitive)) {
         m_WithPrescribing = true;
     } else if (name.compare("drugselector",Qt::CaseInsensitive)==0) {
@@ -180,6 +176,9 @@ DrugsPrescriptorWidget::~DrugsPrescriptorWidget()
 
 QString DrugsPrescriptorWidget::printableHtml(bool withValues) const
 {
+    if (withValues && dontPrintEmptyValues(m_FormItem) && m_PrescriptionModel->rowCount()==0) {
+        return QString();
+    }
     QString html = DrugsDB::DrugsIO().prescriptionToHtml(m_PrescriptionModel);
     int begin = html.indexOf("<body");
     begin = html.indexOf(">", begin) + 1;
