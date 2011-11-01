@@ -51,7 +51,6 @@
 
 #include <coreplugin/icore.h>
 #include <coreplugin/isettings.h>
-#include <coreplugin/translators.h>
 #include <coreplugin/ipatient.h>
 
 #include <formmanagerplugin/iformitem.h>
@@ -67,6 +66,7 @@
 #include <QTextEdit>
 #include <QGridLayout>
 #include <QModelIndex>
+#include <QSpacerItem>
 
 
 namespace {
@@ -75,6 +75,7 @@ namespace {
     const char* const OPTION_WITHPRINTING     = "withprinting";
 
     const char * const  DONTPRINTEMPTYVALUES = "DontPrintEmptyValues";
+    const char * const  ADDCHRONICTHERAPY = "AddChronicTherapyButton";
 }
 
 using namespace DrugsWidget;
@@ -82,10 +83,16 @@ using namespace Internal;
 
 static inline DrugsDB::Internal::DrugsBase *drugsBase() {return DrugsDB::Internal::DrugsBase::instance();}
 static inline Core::ISettings *settings() {return Core::ICore::instance()->settings();}
+static inline Core::IPatient *patient() {return Core::ICore::instance()->patient();}
 
 inline static bool dontPrintEmptyValues(Form::FormItem *item)
 {
     return item->getOptions().contains(::DONTPRINTEMPTYVALUES, Qt::CaseInsensitive);
+}
+
+inline static bool addChronicButton(Form::FormItem *item)
+{
+    return item->getOptions().contains(::ADDCHRONICTHERAPY, Qt::CaseInsensitive);
 }
 
 //--------------------------------------------------------------------------------------------------------
@@ -132,21 +139,27 @@ Form::IFormWidget *DrugsWidgetsFactory::createWidget(const QString &name, Form::
 //--------------------------------- DrugsPrescriptorWidget implementation --------------------------------
 //--------------------------------------------------------------------------------------------------------
 DrugsPrescriptorWidget::DrugsPrescriptorWidget(const QString &name, Form::FormItem *formItem, QWidget *parent) :
-        Form::IFormWidget(formItem,parent),
-        m_PrescriptionModel(0)
+    Form::IFormWidget(formItem,parent),
+    m_PrescriptionModel(0),
+    m_AddChronic(0)
 {
     // Prepare Widget Layout and label
-    QBoxLayout * hb = getBoxLayout(Label_OnTop, m_FormItem->spec()->label(), this );
+    QWidget *labelWidget = new QWidget(this);
+    QBoxLayout *labelBox = getBoxLayout(Label_OnLeft, m_FormItem->spec()->label(), labelWidget);
+    labelBox->setSpacing(0);
+    labelBox->setMargin(0);
+    labelBox->addWidget(m_Label);
+
+    // Label always on top...
+    QVBoxLayout *hb = new QVBoxLayout(this);
     hb->setSpacing(0);
     hb->setMargin(0);
+    hb->addWidget(labelWidget);
 
-    // Add QLabel
-    hb->addWidget(m_Label);
     // create main widget
     m_CentralWidget = new DrugsCentralWidget(this);
     m_CentralWidget->initialize(formItem->extraDatas().value("options").contains(OPTION_HIDESELECTOR, Qt::CaseInsensitive));
     m_PrescriptionModel = m_CentralWidget->currentDrugsModel();
-    hb->addWidget(m_CentralWidget);
 
     // Manage options
     const QStringList &options = formItem->getOptions();
@@ -159,6 +172,14 @@ DrugsPrescriptorWidget::DrugsPrescriptorWidget(const QString &name, Form::FormIt
         m_WithPrescribing = true;
     }
     m_PrescriptionModel->setSelectionOnlyMode(!m_WithPrescribing);
+
+    if (addChronicButton(formItem)) {
+        labelBox->addSpacerItem(new QSpacerItem(20,1, QSizePolicy::Expanding, QSizePolicy::Minimum));
+        m_AddChronic = new QPushButton(tr("Add chronic therapeutics"), this);
+        labelBox->addWidget(m_AddChronic);
+        connect(m_AddChronic, SIGNAL(clicked()), this, SLOT(addChronicTherapeutics()));
+    }
+    hb->addWidget(m_CentralWidget);
 
     if (options.contains("nointeractionchecking", Qt::CaseInsensitive)) {
         m_PrescriptionModel->setComputeDrugInteractions(false);
@@ -210,9 +231,20 @@ QString DrugsPrescriptorWidget::printableHtml(bool withValues) const
             .arg(m_FormItem->spec()->label()).arg(html);
 }
 
+void DrugsPrescriptorWidget::addChronicTherapeutics()
+{
+    const QString &chronic = patient()->data(Core::IPatient::DrugsChronicTherapeutics).toString();
+    if (!chronic.isEmpty()) {
+        DrugsDB::DrugsIO io;
+        io.prescriptionFromXml(m_PrescriptionModel, chronic, DrugsDB::DrugsIO::AppendPrescription);
+    }
+}
+
 void DrugsPrescriptorWidget::retranslate()
 {
     m_Label->setText(m_FormItem->spec()->label());
+    if (m_AddChronic)
+        m_AddChronic->setText(tr("Add chronic therapeutics"));
 }
 
 ////////////////////////////////////////// ItemData /////////////////////////////////////////////
@@ -284,6 +316,12 @@ QVariant DrugsWidgetData::data(const int ref, const int role) const
         return inns;
         break;
     }
+    case Core::IPatient::DrugsChronicTherapeutics:
+    {
+        DrugsDB::DrugsIO io;
+        return io.prescriptionToXml(model);
+    }
+
     }  // End switch
 
     return QVariant();

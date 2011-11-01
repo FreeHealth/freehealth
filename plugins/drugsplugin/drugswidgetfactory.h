@@ -44,22 +44,22 @@
 #include <formmanagerplugin/iformwidgetfactory.h>
 #include <formmanagerplugin/iformitemdata.h>
 
-namespace DrugsDB {
-class DrugsModel;
-}
-
-// include Qt headers
 #include <QWidget>
 QT_BEGIN_NAMESPACE
 class QModelIndex;
+class QPushButton;
 QT_END_NAMESPACE
 
 /**
  * \file drugswidget.h
  * \author Eric MAEKER <eric.maeker@gmail.com>
- * \version 0.4.0
- * \date 05 Apr 2010
+ * \version 0.6.0
+ * \date 01 Nov 2011
 */
+
+namespace DrugsDB {
+class DrugsModel;
+}
 
 namespace DrugsWidget {
 class DrugsCentralWidget;
@@ -97,13 +97,17 @@ public:
 
     void retranslate();
 
+private Q_SLOTS:
+    void addChronicTherapeutics();
+
 public:
     DrugsDB::DrugsModel *m_PrescriptionModel;
 
 private:
     DrugsWidget::DrugsCentralWidget *m_CentralWidget;
-    QString     m_iniPath;
-    bool        m_WithPrescribing, m_WithPrinting;
+    QString m_iniPath;
+    bool m_WithPrescribing, m_WithPrinting;
+    QPushButton *m_AddChronic;
 };
 
 //--------------------------------------------------------------------------------------------------------
