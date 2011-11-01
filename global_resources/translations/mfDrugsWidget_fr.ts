@@ -1038,6 +1038,15 @@ Voulez-vous réellement changer de mode d&apos;édition ?</translation>
     </message>
 </context>
 <context>
+    <name>DrugsWidget::Internal::DrugsPrescriptorWidget</name>
+    <message>
+        <location filename="../../plugins/drugsplugin/drugswidgetfactory.cpp" line="178"/>
+        <location filename="../../plugins/drugsplugin/drugswidgetfactory.cpp" line="247"/>
+        <source>Add chronic therapeutics</source>
+        <translation>Ajouter le traitement chronique</translation>
+    </message>
+</context>
+<context>
     <name>DrugsWidget::Internal::DrugsPrintOptionsPage</name>
     <message>
         <location filename="../../plugins/drugsplugin/drugspreferences/mfDrugsPreferences.cpp" line="214"/>

@@ -280,5 +280,10 @@ Answering &apos;No&apos; will cause definitve data lose.</source>
         <source>Show patient last episodes</source>
         <translation type="unfinished"></translation>
     </message>
+    <message>
+        <location filename="../../plugins/formmanagerplugin/constants_db.h" line="116"/>
+        <source>Patient last episodes</source>
+        <translation type="unfinished"></translation>
+    </message>
 </context>
 </TS>

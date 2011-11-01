@@ -250,12 +250,12 @@
 <context>
     <name>Patients::Internal::PatientActionHandler</name>
     <message>
-        <location filename="../../plugins/patientbaseplugin/patientwidgetmanager.cpp" line="147"/>
+        <location filename="../../plugins/patientbaseplugin/patientwidgetmanager.cpp" line="149"/>
         <source>Fatal Error</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../../plugins/patientbaseplugin/patientwidgetmanager.cpp" line="147"/>
+        <location filename="../../plugins/patientbaseplugin/patientwidgetmanager.cpp" line="149"/>
         <source>%1 : Unable to retreive patients menu.</source>
         <translation type="unfinished"></translation>
     </message>

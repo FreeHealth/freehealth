@@ -180,12 +180,12 @@
 <context>
     <name>Account::Internal::AccountMode</name>
     <message>
-        <location filename="../../plugins/accountplugin/accountmode.cpp" line="77"/>
+        <location filename="../../plugins/accountplugin/accountmode.cpp" line="79"/>
         <source>Accountancy</source>
         <translation>Comptabilité</translation>
     </message>
     <message>
-        <location filename="../../plugins/accountplugin/accountmode.cpp" line="102"/>
+        <location filename="../../plugins/accountplugin/accountmode.cpp" line="106"/>
         <source>Please read this explanation before using FreeAccount.
 FreeAccount is composed of :
 Receipts to get your earnings,
@@ -218,12 +218,12 @@ et créez les valeurs par défaut.
 Ensuite paramétrez vos utilisateurs,sites,banque,etc ... .</translation>
     </message>
     <message>
-        <location filename="../../plugins/accountplugin/accountmode.cpp" line="119"/>
+        <location filename="../../plugins/accountplugin/accountmode.cpp" line="123"/>
         <source>Read me.</source>
         <translation>Lisez moi.</translation>
     </message>
     <message>
-        <location filename="../../plugins/accountplugin/accountmode.cpp" line="123"/>
+        <location filename="../../plugins/accountplugin/accountmode.cpp" line="127"/>
         <source>Do not show this message again.</source>
         <translation>Ne me montrez pas ce message de nouveau.</translation>
     </message>

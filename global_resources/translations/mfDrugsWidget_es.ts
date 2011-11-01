@@ -1027,6 +1027,15 @@ Do you really want to change the editing mode ?</source>
     </message>
 </context>
 <context>
+    <name>DrugsWidget::Internal::DrugsPrescriptorWidget</name>
+    <message>
+        <location filename="../../plugins/drugsplugin/drugswidgetfactory.cpp" line="178"/>
+        <location filename="../../plugins/drugsplugin/drugswidgetfactory.cpp" line="247"/>
+        <source>Add chronic therapeutics</source>
+        <translation type="unfinished"></translation>
+    </message>
+</context>
+<context>
     <name>DrugsWidget::Internal::DrugsPrintOptionsPage</name>
     <message>
         <location filename="../../plugins/drugsplugin/drugspreferences/mfDrugsPreferences.cpp" line="214"/>
