@@ -248,7 +248,7 @@
     <Item name="Subs::Geriatrics::Autonomy::IADL::Total" type="sum">
       <label lang="fr">&lt;b&gt;Résultat&lt;/b&gt;</label>
       <label lang="xx">&lt;b&gt;Total&lt;/b&gt;</label>
-      <options>vertical;labelontop</options>
+      <options>vertical;labelontop;changeepisodelabel</options>
       <sumof>Subs::Geriatrics::Autonomy::IADL::Phone;Subs::Geriatrics::Autonomy::IADL::Shopping;Subs::Geriatrics::Autonomy::IADL::Food;Subs::Geriatrics::Autonomy::IADL::HouseKeeping;Subs::Geriatrics::Autonomy::IADL::Laundry;Subs::Geriatrics::Autonomy::IADL::Transportation;Subs::Geriatrics::Autonomy::IADL::Medication;Subs::Geriatrics::Autonomy::IADL::Finances</sumof>
     </Item>
 

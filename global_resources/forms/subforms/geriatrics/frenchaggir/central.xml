@@ -28,7 +28,8 @@
   </formdescription>
 
   <MedForm name="Subs::Geraitrics::Autonomy::AGGIR">
-    <label>AGGIR</label>
+    <label lang="fr">AGGIR</label>
+    <label lang="en">AGGIR (French specific)</label>
     <options>compact</options>
 
     <Item name="Subs::Geraitrics::Autonomy::AGGIR::Widget" type="gir">
