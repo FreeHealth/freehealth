@@ -39,6 +39,7 @@
 #include <coreplugin/icore.h>
 #include <coreplugin/iuser.h>
 
+#include <utils/log.h>
 #include <extensionsystem/pluginmanager.h>
 
 #include <QHash>
@@ -169,6 +170,8 @@ CalendarItemModel *AgendaCore::calendarItemModel(const QVariant &calendarUid)
 
 void AgendaCore::postCoreInitialization()
 {
+    if (Utils::Log::warnPluginsCreation())
+        qWarning() << Q_FUNC_INFO;
     if (d->m_Initialized)
         return;
     if (!user())

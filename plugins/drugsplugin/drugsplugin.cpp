@@ -206,6 +206,8 @@ void DrugsPlugin::extensionsInitialized()
 
 void DrugsPlugin::postCoreOpened()
 {
+    if (Utils::Log::warnPluginsCreation())
+        qWarning() << Q_FUNC_INFO;
 #ifdef FREEMEDFORMS
     // Add drug mode. DrugsMode manages its inclusion in pluginManager itself.
     DrugsMode *mode = new DrugsMode(this);

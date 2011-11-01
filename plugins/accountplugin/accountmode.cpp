@@ -41,6 +41,8 @@
 #include <coreplugin/constants_icons.h>
 #include <coreplugin/modemanager/modemanager.h>
 
+#include <utils/log.h>
+
 #include <QMessageBox>
 #include <QFile>
 #include <QPushButton>
@@ -89,6 +91,8 @@ void AccountMode::setCentralWidget(QWidget *widget)
 
 void AccountMode::postCoreInitialization()
 {
+    if (Utils::Log::warnPluginsCreation())
+        qWarning() << Q_FUNC_INFO;
     if (m_Stack)
         m_Stack->addWidget(new ReceiptViewer);
 }
