@@ -95,7 +95,7 @@ public:
         Correctement    = 0x0010,
         AucunProbleme   = 0x1000
     };
-    Q_DECLARE_FLAGS(Reponses, Reponse);
+    Q_DECLARE_FLAGS(Reponses, Reponse)
 
     NewGirScore();
     ~NewGirScore();
@@ -103,6 +103,8 @@ public:
     bool isNull() const;
     bool isValid() const;
     bool isComplete() const;
+
+    void clear();
 
     // Variables
     void setValue(Item item, SubItem subItem, const Reponses &reponses);

@@ -83,6 +83,7 @@ public:
 
     void setStringfiedGirScore(const QString &gir);
     QString stringfiedGirScore() const;
+    void clearModel();
 
     QString toHtml() const;
 
@@ -116,6 +117,7 @@ public:
 
     void setStringfiedGirScore(const QString &gir);
     QString stringfiedGirScore() const;
+    void clearModel();
 
     QString printableHtml(bool withValues = true) const;
 

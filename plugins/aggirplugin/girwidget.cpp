@@ -163,6 +163,11 @@ QString GirUi::stringfiedGirScore() const
     return model->stringfiedGirScore();
 }
 
+void GirUi::clearModel()
+{
+    model->clearGirScore();
+}
+
 QString GirUi::toHtml() const
 {
     return model->toHtml();
@@ -200,6 +205,11 @@ QString GirWidget::stringfiedGirScore() const
     return m_ui->stringfiedGirScore();
 }
 
+void GirWidget::clearModel()
+{
+    m_ui->clearModel();
+}
+
 QString GirWidget::printableHtml(bool withValues) const
 {
     return m_ui->toHtml();
@@ -215,7 +225,7 @@ bool GirItemData::isModified() const
 
 void GirItemData::clear()
 {
-    /** \todo code here */
+    m_GirWidget->clearModel();
 }
 
 bool GirItemData::setData(const int ref, const QVariant &data, const int role)
@@ -230,10 +240,10 @@ QVariant GirItemData::data(const int ref, const int role) const
 
 void GirItemData::setStorableData(const QVariant &data)
 {
-    if (data.toString().compare(m_OriginalValue, Qt::CaseInsensitive)==0) {
-        // do nothing
-        return;
-    }
+//    if (data.toString().compare(m_OriginalValue, Qt::CaseInsensitive)==0) {
+//        // do nothing
+//        return;
+//    }
     m_OriginalValue = data.toString();
     m_GirWidget->setStringfiedGirScore(m_OriginalValue);
 }

@@ -633,6 +633,12 @@ bool NewGirScore::isComplete() const
     return true;
 }
 
+void NewGirScore::clear()
+{
+    qDeleteAll(d->m_Items);
+    d->m_Items.clear();
+}
+
 static NewGirScore::Reponses correctedReponse(const NewGirScore::Reponses &rep)
 {
     if (rep == NewGirScore::NeFaitPas) {

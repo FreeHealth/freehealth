@@ -224,6 +224,12 @@ GirModel::~GirModel()
     delete m_GirScore;
 }
 
+void GirModel::clearGirScore()
+{
+    m_GirScore->clear();
+    reset();
+}
+
 void GirModel::setStringfiedGirScore(const QString &score)
 {
     if (m_GirScore) {

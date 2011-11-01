@@ -32,6 +32,7 @@ public:
     explicit GirModel(QObject *parent = 0);
     ~GirModel();
 
+    void clearGirScore();
     void setStringfiedGirScore(const QString &score);
     QString stringfiedGirScore() const;
 
