@@ -666,7 +666,7 @@ bool BaseCheckData::isModified() const
 
 bool BaseCheckData::setData(const int ref, const QVariant &data, const int role)
 {
-    qWarning() << "BaseCheckData::setData" << data << role;
+//    qWarning() << "BaseCheckData::setData" << data << role;
     if (role==Qt::EditRole || role==Qt::DisplayRole) {
         if (data.canConvert(QVariant::Int))  { // Tristate
             m_Check->setCheckState(Qt::CheckState(data.toInt()));
@@ -721,7 +721,7 @@ BaseRadio::BaseRadio(Form::FormItem *formItem, QWidget *parent) :
     } else {
         radioLayout = new QBoxLayout(QBoxLayout::TopToBottom, gb);
     }
-    qWarning() << isRadioHorizontalAlign(m_FormItem);
+//    qWarning() << isRadioHorizontalAlign(m_FormItem);
     radioLayout->setContentsMargins(1, 0, 1, 0);
     QRadioButton *rb = 0;
     int i = 0;
@@ -887,7 +887,7 @@ bool BaseRadioData::isModified() const
 bool BaseRadioData::setData(const int ref, const QVariant &data, const int role)
 {
     // receive ref=0; data=uid of activated radio; role=IFormItemData::RoleRepresentation
-    qWarning() << "BaseRadioData::setData" << data << role;
+//    qWarning() << "BaseRadioData::setData" << data << role;
     if (role==Form::IFormItemData::ID_ForCalculations) {
         Q_EMIT dataChanged(ref); // just emit the dataChanged signal
     }
