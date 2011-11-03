@@ -1908,7 +1908,7 @@ void SumWidget::recalculate(const int modifiedRef)
 
     }
     line->setText(QString::number(sum));
-    if (formItem()->extraDatas().value(::EXTRAS_KEY).contains(::CHANGE_EPISODE_LABEL, Qt::CaseInsensitive)) {
+    if (formItem()->getOptions().contains(::CHANGE_EPISODE_LABEL, Qt::CaseInsensitive)) {
         QString episodeLabel = p->itemDatas()->data(0, Form::IFormItemData::ID_EpisodeLabel).toString();
         QString add = QString("[[%1 %2]]").arg(m_Label->text()).arg(sum);
         if (episodeLabel.contains("[[") && episodeLabel.contains("]]")) {
