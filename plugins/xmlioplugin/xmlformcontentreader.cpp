@@ -386,7 +386,7 @@ bool XmlFormContentReader::loadElement(Form::FormItem *item, QDomElement &rootEl
 
         // Do not proceed form description here
         if (!descriptionPassed) {
-            if (element.tagName().compare(::Constants::TAG_FORM_DESCRIPTION)==0) {
+            if (element.tagName().compare(::Constants::TAG_FORM_DESCRIPTION, Qt::CaseInsensitive)==0) {
                 descriptionPassed = true; // speed improvements
                 element = element.nextSiblingElement();
                 continue;
@@ -474,11 +474,11 @@ bool XmlFormContentReader::loadElement(Form::FormItem *item, QDomElement &rootEl
         }
 
         // Options
-        if (element.tagName().compare(Constants::TAG_OPTIONS)==0) {
-            if (element.text().contains(Constants::TAG_OPTIONS_UNIQUE_EPISODE)) {
+        if (element.tagName().compare(Constants::TAG_OPTIONS, Qt::CaseInsensitive)==0) {
+            if (element.text().contains(Constants::TAG_OPTIONS_UNIQUE_EPISODE, Qt::CaseInsensitive)) {
                 if (item==m_ActualForm)
                     m_ActualForm->setEpisodePossibilities(Form::FormMain::UniqueEpisode);
-            } else if (element.text().contains(Constants::TAG_OPTIONS_NO_EPISODE)) {
+            } else if (element.text().contains(Constants::TAG_OPTIONS_NO_EPISODE, Qt::CaseInsensitive)) {
                 if (item==m_ActualForm)
                     m_ActualForm->setEpisodePossibilities(Form::FormMain::NoEpisode);
             } else {
