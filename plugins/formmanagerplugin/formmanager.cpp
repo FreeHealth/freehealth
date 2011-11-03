@@ -251,9 +251,9 @@ bool FormManager::insertSubForm(const SubFormInsertionPoint &insertionPoint)
     QList<Form::FormMain *> subFormsRoot = loadFormFile(insertionPoint.subFormUid());
 
     // insert sub-forms
+    const QString &insertIntoUuid = insertionPoint.receiverUid();
     for(int i=0; i < subFormsRoot.count(); ++i) {
         FormMain *sub = subFormsRoot.at(i);
-        const QString &insertIntoUuid = insertionPoint.receiverUid();
 //        qWarning() << "insert" << sub->uuid() << "to" << insertIntoUuid;
         if (insertIntoUuid == Constants::ROOT_FORM_TAG) {
             // insert into its mode root form

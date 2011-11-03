@@ -537,12 +537,15 @@ void FormPlaceHolder::showLastEpisodeSynthesis()
 
 void FormPlaceHolder::setCurrentForm(const QString &formUuid)
 {
+    // change the stack and populate as needed
     d->m_Stack->setCurrentIndex(d->m_StackId_FormUuid.key(formUuid));
     if (d->m_Stack->currentWidget()) {
 //        qobject_cast<QScrollArea*>(d->m_Stack->currentWidget())->widget()->setEnabled(false);
         if (formUuid==Constants::PATIENTLASTEPISODES_UUID) {
+            qApp->setOverrideCursor(QCursor(Qt::BusyCursor));
             QTextBrowser *browser = d->m_Stack->currentWidget()->findChild<QTextBrowser*>();
             browser->setText(d->m_EpisodeModel->lastEpisodesSynthesis());
+            qApp->restoreOverrideCursor();
         }
     }
 }
@@ -558,6 +561,9 @@ void FormPlaceHolder::setCurrentEpisode(const QModelIndex &index)
     }
 
     const QString &formUuid = d->m_EpisodeModel->index(index.row(), EpisodeModel::FormUuid, index.parent()).data().toString();
+    if (formUuid==Constants::PATIENTLASTEPISODES_UUID && d->m_Stack->currentIndex()==0) {
+        return;
+    }
     setCurrentForm(formUuid);
     bool isEpisode = d->m_EpisodeModel->isEpisode(index);
     if (isEpisode) {
@@ -639,10 +645,28 @@ void FormPlaceHolder::addForm()
 {
     if (!isVisible())
         return;
+    // save current episode
+    if (d->m_FileTree->selectionModel()->hasSelection()) {
+        // something to save ?
+        QModelIndex index = d->m_FileTree->selectionModel()->selectedIndexes().at(0);
+        if (d->m_EpisodeModel->isEpisode(index)) {
+            // get the parent form
+            QModelIndex formIndex = index.parent();
+            while (!d->m_EpisodeModel->isForm(formIndex)) {
+                formIndex = formIndex.parent();
+            }
+            d->m_EpisodeModel->saveEpisode(d->m_FileTree->currentIndex(), d->m_EpisodeModel->index(formIndex.row(), EpisodeModel::FormUuid, formIndex.parent()).data().toString());
+        }
+    }
+    // open the form editor dialog
     FormEditorDialog dlg(d->m_EpisodeModel, FormEditorDialog::DefaultMode, this);
     if (dlg.exec()==QDialog::Accepted) {
         // refresh stack widget
         d->populateStackLayout();
+        // activate last episode synthesis
+        d->m_FileTree->setCurrentIndex(d->m_EpisodeModel->index(0,0));
+        showLastEpisodeSynthesis();
+//        d->m_Stack->setCurrentIndex(d->m_StackId_FormUuid.key(dlg.lastInsertedFormUid()));
     }
 }
 

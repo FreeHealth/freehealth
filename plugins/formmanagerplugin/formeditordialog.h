@@ -55,6 +55,8 @@ public:
     explicit FormEditorDialog(EpisodeModel *model, EditionModes mode = DefaultMode, QWidget *parent = 0);
     ~FormEditorDialog();
 
+//    QString lastInsertedFormUid() const {return m_LastInsertedFormUid;}
+
 protected:
     void changeEvent(QEvent *e);
 
@@ -65,9 +67,10 @@ private:
     Ui::FormEditorDialog *ui;
     QSortFilterProxyModel *proxyModel;
     Form::EpisodeModel *m_EpisodeModel;
+//    QString m_LastInsertedFormUid;
 };
 
 }  // End namespace Form
-Q_DECLARE_OPERATORS_FOR_FLAGS(Form::FormEditorDialog::EditionModes);
+Q_DECLARE_OPERATORS_FOR_FLAGS(Form::FormEditorDialog::EditionModes)
 
 #endif // FORMEDITORDIALOG_H

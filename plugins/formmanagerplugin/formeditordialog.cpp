@@ -97,6 +97,7 @@ void FormEditorDialog::on_addForm_clicked()
     QVector<SubFormInsertionPoint> insertions;
     for(int i=0; i < selected.count(); ++i) {
         Form::FormIODescription *insert = selected.at(i);
+//        m_LastInsertedFormUid = ;
         SubFormInsertionPoint point(insertTo, insert->data(Form::FormIODescription::UuidOrAbsPath).toString());
         insertions << point;
         formManager()->insertSubForm(point);
