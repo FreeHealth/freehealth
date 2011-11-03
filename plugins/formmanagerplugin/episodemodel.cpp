@@ -213,6 +213,7 @@ namespace {
                 if (item->isEpisode()) {
                     m_Children.removeAll(item);
                     delete item;
+                    item = 0;
                 }
             }
             return true;
@@ -407,8 +408,15 @@ public:
             return;
         if (isEpisode(item)) {
             item->parent()->removeChild(item);
+            foreach(Form::Internal::EpisodeData  *dataChild, m_EpisodeItems.keys(item))
+                m_EpisodeItems.remove(dataChild);
             delete item;
             return;
+        }
+        for(int i = 0; i < item->childCount(); ++i) {
+            EpisodeModelTreeItem *child = item->child(i);
+            foreach(Form::Internal::EpisodeData  *dataChild, m_EpisodeItems.keys(child))
+                m_EpisodeItems.remove(dataChild);
         }
         item->removeEpisodes();
         int nb = item->childCount();
@@ -434,6 +442,7 @@ public:
         m_ActualEpisode_FormUid = "";
         qDeleteAll(m_Episodes);
         m_Episodes.clear();
+        m_EpisodeItems.clear();
 
         // get Episodes
         /** \todo code here : add limit to episode retreiving. */
