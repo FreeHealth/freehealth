@@ -1044,7 +1044,7 @@ QDateTime roundDateTime(const QDateTime &date, const int minutesRound)
     if (date.isNull())
         return QDateTime();
     if (date.time().minute() % minutesRound == 0)
-        return date;
+        return QDateTime(date.date(), QTime(date.time().hour(), date.time().minute(), 0));
     QDateTime dt = QDateTime(date.date(), QTime(date.time().hour(), date.time().minute(), 0));
     dt = dt.addSecs(60);
     int minToRound = dt.time().minute() % minutesRound;
