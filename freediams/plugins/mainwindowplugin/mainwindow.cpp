@@ -111,8 +111,11 @@ namespace Internal {
 class MainWinPrivate {
 public:
     MainWinPrivate(MainWindow *parent) :
-            m_Mapper(0), m_AllergiesModel(0), m_AllergiesView(0), m_PrecautionView(0),
-            m_TemplatesDock(0), m_PrecautionsDock(0), m_NameOrder(-1), q(parent)
+        m_Mapper(0), m_AllergiesModel(0), m_AllergiesView(0), m_PrecautionView(0),
+        m_TemplatesDock(0),
+//        m_PrecautionsDock(0),
+        m_NameOrder(-1),
+        q(parent)
     {}
 
     ~MainWinPrivate()
@@ -207,7 +210,7 @@ public:
     QStandardItemModel *m_AllergiesModel;
     QTreeView *m_AllergiesView;
     QTreeView *m_PrecautionView;
-    QDockWidget *m_TemplatesDock, *m_PrecautionsDock;
+    QDockWidget *m_TemplatesDock; //, *m_PrecautionsDock;
     int m_NameOrder;
 
 private:
@@ -444,10 +447,10 @@ MainWindow::~MainWindow()
         delete d->m_TemplatesDock;
         d->m_TemplatesDock = 0;
     }
-    if (d->m_PrecautionsDock) {
-        delete d->m_PrecautionsDock;
-        d->m_PrecautionsDock = 0;
-    }
+//    if (d->m_PrecautionsDock) {
+//        delete d->m_PrecautionsDock;
+//        d->m_PrecautionsDock = 0;
+//    }
     if (d)
         delete d;
     d = 0;
@@ -460,6 +463,7 @@ void MainWindow::postCoreInitialization()
     actionManager()->retranslateMenusAndActions();
     refreshPatient();
     updateIconBadgeOnMacOs();
+    finishSplash(this);
 }
 
 /**
@@ -859,30 +863,30 @@ void MainWindow::createDockWindows()
     menu->addAction(dock->toggleViewAction());
 
     // Create patient's precautions dock
-    dock = d->m_PrecautionsDock = new QDockWidget(tkTr(Trans::Constants::PATIENT_INFORMATION), this);
-    dock->setObjectName("precautionsDock");
-    dock->setAllowedAreas(Qt::LeftDockWidgetArea | Qt::RightDockWidgetArea);
-    addDockWidget(Qt::RightDockWidgetArea, dock);
+//    dock = d->m_PrecautionsDock = new QDockWidget(tkTr(Trans::Constants::PATIENT_INFORMATION), this);
+//    dock->setObjectName("precautionsDock");
+//    dock->setAllowedAreas(Qt::LeftDockWidgetArea | Qt::RightDockWidgetArea);
+//    addDockWidget(Qt::RightDockWidgetArea, dock);
 
-    DrugsDB::Internal::DrugAllergyEngine *engine = pluginManager()->getObject<DrugsDB::Internal::DrugAllergyEngine>();
-    if (!engine) {
-        LOG_ERROR_FOR("MainWindow", "No allergy engine");
-        return;
-    }
-    QAbstractItemModel *model = engine->drugPrecautionModel();
+//    DrugsDB::Internal::DrugAllergyEngine *engine = pluginManager()->getObject<DrugsDB::Internal::DrugAllergyEngine>();
+//    if (!engine) {
+//        LOG_ERROR_FOR("MainWindow", "No allergy engine");
+//        return;
+//    }
+//    QAbstractItemModel *model = engine->drugPrecautionModel();
 
-    d->m_PrecautionView = new QTreeView(dock);
-    d->m_PrecautionView->setModel(model);
-    d->m_PrecautionView->header()->hide();
-    d->m_PrecautionView->expandAll();
-    d->m_PrecautionView->setEditTriggers(QAbstractItemView::NoEditTriggers);
-    dock->setWidget(d->m_PrecautionView);
-    // aShowPrecautionsDock
-    QAction *a = dock->toggleViewAction();
-    a->setObjectName("aShowPrecautionsDock");
-    Core::Command *cmd = actionManager()->registerAction(a, "aShowPrecautionsDock", QList<int>() << Core::Constants::C_GLOBAL_ID);
-    cmd->setTranslations(tr("Toggle patient's precautions"));
-    Core::ActionContainer *plugmenu = actionManager()->actionContainer(DrugsWidget::Constants::M_PLUGINS_DRUGS);
-    plugmenu->addAction(cmd, DrugsWidget::Constants::G_PLUGINS_VIEWS);
+//    d->m_PrecautionView = new QTreeView(dock);
+//    d->m_PrecautionView->setModel(model);
+//    d->m_PrecautionView->header()->hide();
+//    d->m_PrecautionView->expandAll();
+//    d->m_PrecautionView->setEditTriggers(QAbstractItemView::NoEditTriggers);
+//    dock->setWidget(d->m_PrecautionView);
+//    // aShowPrecautionsDock
+//    QAction *a = dock->toggleViewAction();
+//    a->setObjectName("aShowPrecautionsDock");
+//    Core::Command *cmd = actionManager()->registerAction(a, "aShowPrecautionsDock", QList<int>() << Core::Constants::C_GLOBAL_ID);
+//    cmd->setTranslations(tr("Toggle patient's precautions"));
+//    Core::ActionContainer *plugmenu = actionManager()->actionContainer(DrugsWidget::Constants::M_PLUGINS_DRUGS);
+//    plugmenu->addAction(cmd, DrugsWidget::Constants::G_PLUGINS_VIEWS);
 }
 
