@@ -43,6 +43,8 @@
 #include <coreplugin/icore.h>
 #include <coreplugin/iuser.h>
 #include <coreplugin/ipatient.h>
+#include <coreplugin/itheme.h>
+#include <coreplugin/constants_icons.h>
 #include <coreplugin/actionmanager/actionmanager.h>
 
 #include <calendar/basic_item_edition_dialog.h>
@@ -62,6 +64,11 @@ static inline Core::IPatient *patient() {return Core::ICore::instance()->patient
 static inline Agenda::Internal::AgendaBase *base() {return Agenda::Internal::AgendaBase::instance();}
 static inline Agenda::AgendaCore *agendaCore() {return Agenda::AgendaCore::instance();}
 inline static Core::ActionManager *actionManager() {return Core::ICore::instance()->actionManager();}
+inline static Core::ITheme *theme() {return Core::ICore::instance()->theme();}
+
+namespace {
+    const int S_NUMBEROFAVAILABILITIESTOSHOW = 10;
+}
 
 namespace Agenda {
 namespace Internal {
@@ -115,6 +122,8 @@ UserCalendarViewer::UserCalendarViewer(QWidget *parent) :
     d(new UserCalendarViewerPrivate(this))
 {
     d->ui->setupUi(this);
+    this->layout()->setMargin(0);
+    d->ui->refreshAvailabilities->setIcon(theme()->icon(Core::Constants::ICONSOFTWAREUPDATEAVAILABLE));
     d->ui->calendarViewer->setDate(QDate::currentDate());
     d->ui->calendarViewer->setDayScaleHourDivider(2);
     d->ui->calendarViewer->setDayGranularity(5);
@@ -141,6 +150,7 @@ UserCalendarViewer::UserCalendarViewer(QWidget *parent) :
     connect(user(), SIGNAL(userChanged()), this, SLOT(userChanged()));
     connect(d->ui->availButton, SIGNAL(triggered(QAction*)), this, SLOT(newEventAtAvailabity(QAction*)));
     connect(d->ui->availableAgendasCombo, SIGNAL(currentIndexChanged(int)), this, SLOT(on_availableAgendasCombo_activated(int)));
+    connect(d->ui->refreshAvailabilities, SIGNAL(clicked()), this, SLOT(refreshAvailabilities()));
     userChanged();
 
     // Connect menu actions
@@ -185,6 +195,12 @@ void UserCalendarViewer::newEventAtAvailabity(QAction *action)
     if (dlg.exec() != QDialog::Accepted) {
         d->m_CalendarItemModel->removeItem(item.uid());
     }
+    recalculateAvailabilitiesWithDurationIndex((d->ui->availDurationCombo->currentIndex()+1)*5);
+}
+
+void UserCalendarViewer::refreshAvailabilities()
+{
+    recalculateAvailabilitiesWithDurationIndex(d->ui->availDurationCombo->currentIndex());
 }
 
 void UserCalendarViewer::recalculateAvailabilitiesWithDurationIndex(const int index)
@@ -201,7 +217,7 @@ void UserCalendarViewer::recalculateAvailabilitiesWithDurationIndex(const int in
     Agenda::UserCalendar *cal = d->m_UserCalendarModel->defaultUserCalendar();
     if (cal) {
         // Next available dates
-        dates = base()->nextAvailableTime(QDateTime::currentDateTime(), (index+1)*5, *cal, 5);
+        dates = base()->nextAvailableTime(QDateTime::currentDateTime(), (index+1)*5, *cal, S_NUMBEROFAVAILABILITIESTOSHOW);
     }
 //    d->ui->nextAvailCombo->clear();
     for(int i = 0; i < dates.count(); ++i) {
@@ -263,8 +279,7 @@ void UserCalendarViewer::userChanged()
     Agenda::UserCalendar *cal = d->m_UserCalendarModel->defaultUserCalendar();
     int duration = 5;
     if (cal) {
-        qWarning() << cal << cal->uid() << cal->isNull() << cal->isValid();
-         duration = cal->data(Agenda::UserCalendar::DefaultDuration).toInt();
+        duration = cal->data(Agenda::UserCalendar::DefaultDuration).toInt();
     }
     if (duration%5)
         duration = (duration/5);

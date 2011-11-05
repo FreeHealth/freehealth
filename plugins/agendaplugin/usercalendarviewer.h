@@ -65,6 +65,7 @@ protected:
 private Q_SLOTS:
     void newEvent();
     void newEventAtAvailabity(QAction *action);
+    void refreshAvailabilities();
     void recalculateAvailabilitiesWithDurationIndex(const int index);
     void on_availableAgendasCombo_activated(const int index);
     void userChanged();

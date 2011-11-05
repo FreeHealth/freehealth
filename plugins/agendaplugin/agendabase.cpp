@@ -1207,7 +1207,7 @@ Agenda::UserCalendar *AgendaBase::createVirtualUserCalendar(const QString &owner
 /** Save or update a Calendar::CalendarItem to the agenda database */
 bool AgendaBase::saveNonCyclingEvent(Appointement *event)
 {
-//    qWarning() << Q_FUNC_INFO;
+//    WARN_FUNC << event->eventId();
     if (!event->isModified())
         return true;
 
@@ -1298,6 +1298,76 @@ bool AgendaBase::saveCalendarEvent(Appointement *event)
     return saveCalendarEvents(QList<Appointement *>() << event);
 }
 
+///////////////////////////////////////////////////////////////////////////////////////////////////
+
+static bool rectLessThan(const QRect &r1, const QRect &r2)
+{
+    return r1.top() < r2.top();
+}
+
+static QRect dateToRect(const QDateTime &date, const int durationInMinutes)
+{
+    const int day = (date.date().dayOfWeek()-1) * 1440;
+    const int top = date.time().hour() * 60 + date.time().minute() + day;
+    return QRect(0, top, 50, durationInMinutes);
+}
+
+static QRect dateToRect(const QDateTime &begin, const QDateTime &end)
+{
+    return dateToRect(begin, begin.secsTo(end)/60);
+}
+
+static QList<QRect> availabilitiesToRect(const QVector<DayAvailability> &list)
+{
+    QList<QRect> toReturn;
+    // 1px = 1minute
+    // linear Monday to Sunday
+    // 1 day = 1440 minutes
+    foreach(const Agenda::DayAvailability &av, list) {
+        const int day = (av.weekDay()-1) * 1440;  // 1: monday 7: sunday
+        for(int i = 0; i < av.timeRangeCount(); ++i) {
+            const Agenda::TimeRange &t = av.timeRange(i);
+            // construct QRect top = day-1*minutesInDays + timeRange.from  ; height = to-from
+            int top = t.from.hour() * 60 + t.from.minute();
+            const int height = (t.to.hour() * 60 + t.to.minute()) - top;
+            top = top + day;
+            toReturn << QRect(0, top, 50, height);
+        }
+    }
+    qSort(toReturn.begin(), toReturn.end(), rectLessThan);
+    return toReturn;
+}
+
+static bool isInAvailabilities(const QList<QRect> &avList, const QRect &testDate)
+{
+    for(int i = 0; i < avList.count(); ++i) {
+        const QRect &av = avList.at(i);
+        if (testDate.top() >= av.top()) {
+            if (av.contains(testDate))
+                return true;
+        }
+    }
+    return false;
+}
+
+static int minutesToNextAvailability(const QList<QRect> &avList, const QRect &testDate)
+{
+    QRect next;
+    const int dateTop = (testDate.top() % 10080);
+    for(int i = 0; i < avList.count(); ++i) {
+        const QRect &av = avList.at(i);
+        if (dateTop < av.top()) {
+            next = avList.at(i);
+        }
+    }
+    if (next.isNull()) {
+        next = avList.at(0);
+        next.setTop(next.top() + 10080);  // add a full week for the computations
+    }
+    return (next.top() - testDate.bottom() - 1);
+}
+
+
 /** Return the next available appointements by searching for
   - \e startSearch date time,
   - a duration of \e duration minutes
@@ -1353,10 +1423,12 @@ QList<QDateTime> AgendaBase::nextAvailableTime(const QDateTime &startSearch, con
     QSqlDatabase DB = database();
     DB.transaction();
     QSqlQuery query(DB);
+    QRect nextAppointement;
     if (query.exec(req+order+limit)) {
         if (query.next()) {
             currentStart = query.value(0).toDateTime();
             currentEnd = query.value(1).toDateTime();
+            nextAppointement = dateToRect(currentStart, currentEnd);
         }
     } else {
         LOG_QUERY_ERROR(query);
@@ -1366,7 +1438,8 @@ QList<QDateTime> AgendaBase::nextAvailableTime(const QDateTime &startSearch, con
     int nbFound = 0;
     int durationInSeconds = durationInMinutes * 60;
     /** \todo manage algorythm error here */
-    int limitComputation = 100;//224640; // 10min, 6day a week, 12hours a day :: 1 full year == 12*6 *10 *6 *52 == 224640
+    int limitComputation = 10000;//224640; // 10min, 6day a week, 12hours a day :: 1 full year == 12*6 *10 *6 *52 == 224640
+    QList<QRect> avList = availabilitiesToRect(calendar.availabilities());
 
     while (nbFound < numberOfDates) {
         --limitComputation;
@@ -1374,34 +1447,81 @@ QList<QDateTime> AgendaBase::nextAvailableTime(const QDateTime &startSearch, con
             break;
         if (start.isNull())
             break;
-        if (WarnNextAvailableTimeWarnings)
-            qWarning() << "start" << start
-                       << "\n  currentStart" << currentStart
-                       << "\n  currentEnd" << currentEnd
-                       << "\n     duration" << durationInMinutes
-                       << "\n     limitation" << limitComputation << "\n";
-        // add before the currentDate (enough time or no appointement) ?
-        if (start.secsTo(currentStart) >= durationInSeconds || currentStart.isNull()) {
-            // does it feet the userCalendar availability ?
-            if (calendar.canBeAvailable(start, durationInMinutes)) {
-                toReturn << start;
+//        if (WarnNextAvailableTimeWarnings)
+//            qWarning() << "start" << start
+//                       << "\n  currentStart" << currentStart
+//                       << "\n  currentEnd" << currentEnd
+//                       << "\n     duration" << durationInMinutes
+//                       << "\n     limitation" << limitComputation << "\n";
+
+        QRect testDate = dateToRect(start, durationInMinutes);
+
+        // rect does not intersect the next recorded appointement ? -> go next appointement
+        while (testDate.intersect(nextAppointement).height() < 1) {
+
+            if (WarnNextAvailableTimeWarnings)
+                qWarning() << "\ntest" << testDate << "next" << nextAppointement << testDate.intersect(nextAppointement).height();
+
+            if (nbFound == numberOfDates) {
+                DB.commit();
+                return toReturn;
+            }
+            if (nextAppointement.top() <= testDate.top())
+                break;
+
+            // rect in availabilities ?
+            bool inAvail = isInAvailabilities(avList, testDate);
+
+            if (WarnNextAvailableTimeWarnings)
+                qWarning() << "inAvail" << inAvail;
+
+            if (inAvail) {
+                // Add date
                 if (WarnNextAvailableTimeWarnings)
-                    qWarning() << "      added" << start;
-                start = start.addSecs(durationInSeconds);
+                    qWarning() << "Adding" << start;
+                toReturn << start;
                 ++nbFound;
-                continue;
+                // Add duration to start and/or go to beginning of next availability and cycle
+                start = start.addSecs(durationInSeconds);
+                testDate = dateToRect(start, durationInMinutes);
+            } else {
+                // go to the next avail beginning
+                int minutesToNextAvail = minutesToNextAvailability(avList, testDate);
+                start = start.addSecs(minutesToNextAvail*60 + testDate.height()*60);
+                currentEnd = start;
+                if (WarnNextAvailableTimeWarnings)
+                    qWarning() << "minToAv" << minutesToNextAvail << start << dateToRect(start, durationInMinutes);
+                break;
             }
         }
+
+        // go at the end of nextAppointement and retry
+
+        // go next week ?
+
+//        // add before the currentDate (enough time or no appointement) ?
+//        if (start.secsTo(currentStart) >= durationInSeconds || currentStart.isNull()) {
+//            // does it feet the userCalendar availability ?
+//            if (calendar.canBeAvailable(start, durationInMinutes)) {
+//                toReturn << start;
+//                if (WarnNextAvailableTimeWarnings)
+//                    qWarning() << "      added" << start;
+//                start = start.addSecs(durationInSeconds);
+//                ++nbFound;
+//                continue;
+//            }
+//        }
 
         // get next appointement
         //    remove the date from the SQL conditions
         start = currentEnd;
         conds.removeLast();
-        conds << Utils::Field(Table_EVENTS, EVENT_DATESTART, QString("> '%1'").arg(start.toString(Qt::ISODate)));
+        conds << Utils::Field(Table_EVENTS, EVENT_DATESTART, QString(">= '%1'").arg(start.toString(Qt::ISODate)));
         if (query.exec(select(get, joins, conds)+order+limit)) {
             if (query.next()) {
                 currentStart = query.value(0).toDateTime();
                 currentEnd = query.value(1).toDateTime();
+                nextAppointement = dateToRect(currentStart, currentEnd);
             } else {
                 // no next appointement -> continue with usercalendar only
                 if (WarnNextAvailableTimeWarnings)
