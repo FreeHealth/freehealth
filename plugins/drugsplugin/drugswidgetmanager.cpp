@@ -421,7 +421,7 @@ DrugsActionHandler::DrugsActionHandler(QObject *parent) :
         a->setIcon(th->icon(DrugsDB::Constants::I_ALLERGYENGINE));
     cmd = actionManager()->registerAction(a, Constants::A_SHOWDRUGPRECAUTIONS, ctx);
     cmd->setTranslations(Constants::SHOWDRUGPRECAUTIONS_TEXT, Constants::SHOWDRUGPRECAUTIONS_TEXT, Constants::DRUGCONSTANTS_TR_CONTEXT);
-    menu->addAction(cmd, G_PLUGINS_DRUGS);
+    menu->addAction(cmd, DrugsWidget::Constants::G_PLUGINS_VIEWS);
     connect(aShowDrugPrecautions, SIGNAL(triggered()), this, SLOT(showDrugPrecautions()));
 
     contextManager()->updateContext();
