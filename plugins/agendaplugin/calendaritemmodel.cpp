@@ -41,12 +41,14 @@
 #include <calendar/calendar_item.h>
 
 #include <utils/log.h>
+#include <translationutils/constanttranslations.h>
 
 #include <QStandardItemModel>
 #include <QStandardItem>
 
 using namespace Agenda;
 using namespace Internal;
+using namespace Trans::ConstantTranslations;
 
 static inline Core::ITheme *theme() {return Core::ICore::instance()->theme();}
 static inline Core::IUser *user() {return Core::ICore::instance()->user();}
@@ -297,15 +299,23 @@ QVariant CalendarItemModel::data(const Calendar::CalendarItem &item, int dataRef
         case Missed: return QColor(200,0,0); break;
         }
     } else if (role==Qt::ToolTipRole) {
+        QString time = QString(tkTr(Trans::Constants::FROM_1_TO_2)
+                               .arg(pItem->beginning().time().toString("hh:mm"))
+                               .arg(pItem->ending().time().toString("hh:mm")));
         getPeopleNames((Appointement *)pItem);
         QStringList names = pItem->peopleNames(Calendar::People::PeopleAttendee);
         if (names.count()) {
             QString html;
-            html += QString("<b>%1</b><br />%2").arg(names.join("<br />")).arg(pItem->data(Label).toString());
+            html += QString("<b>%1</b><br />%2<br />%3")
+                    .arg(names.join("<br />"))
+                    .arg(time)
+                    .arg(pItem->data(Label).toString());
             return html;
         }
         if (!pItem->data(Label).toString().isEmpty())
-            return pItem->data(Label);
+            return QString("<b>%1</b><br />%2")
+                    .arg(pItem->data(Label).toString())
+                    .arg(time);
         return tr("Empty");
     }
     return QVariant();
