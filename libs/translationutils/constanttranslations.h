@@ -314,6 +314,8 @@ enum TitleInterpret {
         const char *const DATABASE_DRIVER_1_NOT_AVAILABLE_DETAIL = QT_TRANSLATE_NOOP("tkConstants", "The %1 database driver is not installed or can not be found. Please report this error to the developper.");
         const char *const DATABASE_1_SCHEMA_ERROR = QT_TRANSLATE_NOOP("tkConstants", "Database %1: Schema error.");
         const char *const CHANGE_PASSWORD = QT_TRANSLATE_NOOP("tkConstants", "Change password");
+        const char *const LOGIN = QT_TRANSLATE_NOOP("tkConstants", "Login");
+        const char *const PASSWORD = QT_TRANSLATE_NOOP("tkConstants", "Password");
 
         // Time and periods
         const char* const DURATION   = QT_TRANSLATE_NOOP("tkConstants", "Duration");
@@ -577,6 +579,8 @@ enum TitleInterpret {
         const char* const COUNTRY_CANADA      = QT_TRANSLATE_NOOP( "tkConstants", "Canada" );
 
         // Patient related
+        const char* const NAME = QT_TRANSLATE_NOOP("tkConstants", "Name");
+        const char* const TITLE = QT_TRANSLATE_NOOP("tkConstants", "Title");
         const char* const PATIENT_NAME = QT_TRANSLATE_NOOP("tkConstants", "Patient Name");
         const char* const PATIENT      = QT_TRANSLATE_NOOP("tkConstants", "Patient");
         const char* const PATIENTS     = QT_TRANSLATE_NOOP("tkConstants", "Patients");
@@ -586,6 +590,7 @@ enum TitleInterpret {
         const char* const TOGGLE_PATIENT_INFORMATIONS = QT_TRANSLATE_NOOP("tkConstants", "Toggle patient's information");
 
         // Genders
+        const char* const GENDER        = QT_TRANSLATE_NOOP("tkConstants", "Gender");
         const char* const MALE          = QT_TRANSLATE_NOOP("tkConstants", "Male");
         const char* const FEMALE        = QT_TRANSLATE_NOOP("tkConstants", "Female");
         const char* const HERMAPHRODISM = QT_TRANSLATE_NOOP("tkConstants", "Hermaphrodism");

@@ -20,7 +20,7 @@
 <context>
     <name>Agenda::CalendarItemModel</name>
     <message>
-        <location filename="../../plugins/agendaplugin/calendaritemmodel.cpp" line="309"/>
+        <location filename="../../plugins/agendaplugin/calendaritemmodel.cpp" line="319"/>
         <source>Empty</source>
         <translation>Vide</translation>
     </message>
@@ -48,36 +48,6 @@
         <location filename="../../plugins/agendaplugin/agendapreferencespage.ui" line="14"/>
         <source>Form</source>
         <translation></translation>
-    </message>
-    <message>
-        <location filename="../../plugins/agendaplugin/agendapreferencespage.ui" line="20"/>
-        <source>Virtual patients</source>
-        <translation>Patients virtuels</translation>
-    </message>
-    <message>
-        <location filename="../../plugins/agendaplugin/agendapreferencespage.ui" line="26"/>
-        <source>Show virtual patients</source>
-        <translation>Montrer les patients virtuels</translation>
-    </message>
-    <message>
-        <location filename="../../plugins/agendaplugin/agendapreferencespage.ui" line="36"/>
-        <source>Patient selector</source>
-        <translation>Sélectionneur de patient</translation>
-    </message>
-    <message>
-        <location filename="../../plugins/agendaplugin/agendapreferencespage.ui" line="42"/>
-        <source>Use color to differentiate genders</source>
-        <translation>Utiliser une couleur différent pour le sexe</translation>
-    </message>
-    <message>
-        <location filename="../../plugins/agendaplugin/agendapreferencespage.ui" line="65"/>
-        <source>Patient bar</source>
-        <translation>Barre patient</translation>
-    </message>
-    <message>
-        <location filename="../../plugins/agendaplugin/agendapreferencespage.ui" line="71"/>
-        <source>Background color</source>
-        <translation>Couleur de fond</translation>
     </message>
 </context>
 <context>
@@ -164,7 +134,7 @@
         <translation>Durée en minutes</translation>
     </message>
     <message>
-        <location filename="../../plugins/agendaplugin/usercalendarviewer.ui" line="148"/>
+        <location filename="../../plugins/agendaplugin/usercalendarviewer.ui" line="174"/>
         <source>Description</source>
         <translation></translation>
     </message>
@@ -172,9 +142,9 @@
 <context>
     <name>Agenda::Internal::UserCalendarWizardCreatorPage</name>
     <message>
-        <location filename="../../plugins/agendaplugin/usercalendarwizardcreatorpage.cpp" line="60"/>
-        <location filename="../../plugins/agendaplugin/usercalendarwizardcreatorpage.cpp" line="65"/>
-        <location filename="../../plugins/agendaplugin/usercalendarwizardcreatorpage.cpp" line="70"/>
+        <location filename="../../plugins/agendaplugin/usercalendarwizardcreatorpage.cpp" line="62"/>
+        <location filename="../../plugins/agendaplugin/usercalendarwizardcreatorpage.cpp" line="67"/>
+        <location filename="../../plugins/agendaplugin/usercalendarwizardcreatorpage.cpp" line="72"/>
         <source>User&apos;s agendas</source>
         <translation>Agendas de l&apos;utilisateur</translation>
     </message>
@@ -230,12 +200,27 @@
 <context>
     <name>Agenda::Internal::UserCalendarWizardPage</name>
     <message>
-        <location filename="../../plugins/agendaplugin/usercalendarwizardcreatorpage.cpp" line="132"/>
+        <location filename="../../plugins/agendaplugin/usercalendarwizardcreatorpage.cpp" line="136"/>
+        <source>Please specify a label for this agenda.</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../../plugins/agendaplugin/usercalendarwizardcreatorpage.cpp" line="139"/>
+        <source>The default duration can not be null.</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../../plugins/agendaplugin/usercalendarwizardcreatorpage.cpp" line="142"/>
+        <source>Error detected</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../../plugins/agendaplugin/usercalendarwizardcreatorpage.cpp" line="152"/>
         <source>Manage an agenda.</source>
         <translation>Gérer un agenda.</translation>
     </message>
     <message>
-        <location filename="../../plugins/agendaplugin/usercalendarwizardcreatorpage.cpp" line="133"/>
+        <location filename="../../plugins/agendaplugin/usercalendarwizardcreatorpage.cpp" line="153"/>
         <source>You can quickly define an agenda for this user. This agenda will be the default one.</source>
         <translation>Vous pouvez rapidement définir un agenda pour cet utilisateur. Cet agenda sera l&apos;agenda par défaut.</translation>
     </message>

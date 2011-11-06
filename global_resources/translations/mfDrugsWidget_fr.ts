@@ -1015,35 +1015,12 @@ Voulez-vous réellement changer de mode d&apos;édition ?</translation>
     </message>
 </context>
 <context>
-    <name>DrugsWidget::Internal::DrugsMode</name>
-    <message>
-        <location filename="../../plugins/drugsplugin/drugsmode.ui" line="14"/>
-        <source>Form</source>
-        <translation>Forme</translation>
-    </message>
-    <message>
-        <location filename="../../plugins/drugsplugin/drugsmode.cpp" line="55"/>
-        <location filename="../../plugins/drugsplugin/drugsmode.cpp" line="75"/>
-        <source>Drugs</source>
-        <translation>Médicaments</translation>
-    </message>
-</context>
-<context>
     <name>DrugsWidget::Internal::DrugsPlugin</name>
     <message>
         <location filename="../../plugins/drugsplugin/drugsplugin.cpp" line="157"/>
         <location filename="../../plugins/drugsplugin/drugsplugin.cpp" line="176"/>
         <source>Initializing drugs plugin...</source>
         <translation>Initialisation du plugin médicament...</translation>
-    </message>
-</context>
-<context>
-    <name>DrugsWidget::Internal::DrugsPrescriptorWidget</name>
-    <message>
-        <location filename="../../plugins/drugsplugin/drugswidgetfactory.cpp" line="178"/>
-        <location filename="../../plugins/drugsplugin/drugswidgetfactory.cpp" line="247"/>
-        <source>Add chronic therapeutics</source>
-        <translation>Ajouter le traitement chronique</translation>
     </message>
 </context>
 <context>

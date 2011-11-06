@@ -4,19 +4,19 @@
 <context>
     <name>EpisodeModel</name>
     <message>
-        <location filename="../../plugins/formmanagerplugin/episodemodel.cpp" line="555"/>
+        <location filename="../../plugins/formmanagerplugin/episodemodel.cpp" line="564"/>
         <source>Save episode ?</source>
         <translation>Sauvegarder l&apos;épisode ?</translation>
     </message>
     <message>
-        <location filename="../../plugins/formmanagerplugin/episodemodel.cpp" line="556"/>
+        <location filename="../../plugins/formmanagerplugin/episodemodel.cpp" line="565"/>
         <source>The actual episode has been modified. Do you want to save changes in your database ?
 Answering &apos;No&apos; will cause definitve data lose.</source>
         <translation>L&apos;épisode actuel a été modifié. Voulez-vous sauvegarder les modifications dans la base de données ?
 Répondre &apos;non&apos; causera une perte de données irréversible.</translation>
     </message>
     <message>
-        <location filename="../../plugins/formmanagerplugin/episodemodel.cpp" line="558"/>
+        <location filename="../../plugins/formmanagerplugin/episodemodel.cpp" line="567"/>
         <source>Save episode</source>
         <translation>Sauvegarder l&apos;épisode</translation>
     </message>
@@ -24,17 +24,17 @@ Répondre &apos;non&apos; causera une perte de données irréversible.</translat
 <context>
     <name>Form::EpisodeModel</name>
     <message>
-        <location filename="../../plugins/formmanagerplugin/episodemodel.cpp" line="967"/>
+        <location filename="../../plugins/formmanagerplugin/episodemodel.cpp" line="976"/>
         <source>Created: </source>
         <translation>Créé : </translation>
     </message>
     <message>
-        <location filename="../../plugins/formmanagerplugin/episodemodel.cpp" line="1076"/>
+        <location filename="../../plugins/formmanagerplugin/episodemodel.cpp" line="1085"/>
         <source>New episode</source>
         <translation>Nouvel épisode</translation>
     </message>
     <message>
-        <location filename="../../plugins/formmanagerplugin/episodemodel.cpp" line="1284"/>
+        <location filename="../../plugins/formmanagerplugin/episodemodel.cpp" line="1293"/>
         <source>No user</source>
         <translation>Pas d&apos;utilisateur</translation>
     </message>

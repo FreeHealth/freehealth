@@ -4,18 +4,18 @@
 <context>
     <name>EpisodeModel</name>
     <message>
-        <location filename="../../plugins/formmanagerplugin/episodemodel.cpp" line="555"/>
+        <location filename="../../plugins/formmanagerplugin/episodemodel.cpp" line="564"/>
         <source>Save episode ?</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../../plugins/formmanagerplugin/episodemodel.cpp" line="556"/>
+        <location filename="../../plugins/formmanagerplugin/episodemodel.cpp" line="565"/>
         <source>The actual episode has been modified. Do you want to save changes in your database ?
 Answering &apos;No&apos; will cause definitve data lose.</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../../plugins/formmanagerplugin/episodemodel.cpp" line="558"/>
+        <location filename="../../plugins/formmanagerplugin/episodemodel.cpp" line="567"/>
         <source>Save episode</source>
         <translation type="unfinished"></translation>
     </message>
@@ -23,17 +23,17 @@ Answering &apos;No&apos; will cause definitve data lose.</source>
 <context>
     <name>Form::EpisodeModel</name>
     <message>
-        <location filename="../../plugins/formmanagerplugin/episodemodel.cpp" line="967"/>
+        <location filename="../../plugins/formmanagerplugin/episodemodel.cpp" line="976"/>
         <source>Created: </source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../../plugins/formmanagerplugin/episodemodel.cpp" line="1076"/>
+        <location filename="../../plugins/formmanagerplugin/episodemodel.cpp" line="1085"/>
         <source>New episode</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../../plugins/formmanagerplugin/episodemodel.cpp" line="1284"/>
+        <location filename="../../plugins/formmanagerplugin/episodemodel.cpp" line="1293"/>
         <source>No user</source>
         <translation type="unfinished"></translation>
     </message>
