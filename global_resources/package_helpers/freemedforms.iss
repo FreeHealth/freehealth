@@ -5,11 +5,11 @@
 [Setup]
 AppName=FreeMedForms
 AppId=FreeMedForms
-AppVerName=FreeMedForms,0.5.9~alpha
+AppVerName=FreeMedForms,0.6.0
 DefaultDirName={pf}\FreeMedForms
 DefaultGroupName=FreeMedForms
 UninstallDisplayIcon={app}\freemedforms.exe
-VersionInfoDescription=FreeMedForms 0.5.9~alpha
+VersionInfoDescription=FreeMedForms 0.6.0
 VersionInfoProductName=FreeMedForms
 OutputDir=FreeMedForms
 ;ShowLanguageDialog=no
@@ -21,10 +21,10 @@ ChangesAssociations=yes
 ;LicenseFile=
 ;OutputDir=SourceDir
 ;WizardSmallImageFile=mysmallimage.bmp
-SourceDir=e:\freemedforms-0.5.9~alpha1\packages\win\freemedforms
-SetupIconFile=e:\freemedforms-0.5.9~alpha1\freemedforms\freemedforms.ico
-;WizardSmallImageFile=e:\freemedforms-0.5.9~alpha1\global_resources\pixmap\svg\freemedforms-128.bmp
-;WizardImageFile=e:\freemedforms-0.5.9~alpha1\global_resources\pixmap\svg\freemedforms-128.bmp
+SourceDir=e:\freemedforms-0.6.0\packages\win\freemedforms
+SetupIconFile=e:\freemedforms-0.6.0\freemedforms\freemedforms.ico
+;WizardSmallImageFile=e:\freemedforms-0.6.0\global_resources\pixmap\svg\freemedforms-128.bmp
+;WizardImageFile=e:\freemedforms-0.6.0\global_resources\pixmap\svg\freemedforms-128.bmp
 ;WizardImageStretch=no
 Compression=lzma/normal
 
