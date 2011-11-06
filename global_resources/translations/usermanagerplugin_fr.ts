@@ -883,12 +883,72 @@ Vous devez en utiliser un différent.</translation>
     <message>
         <location filename="../../plugins/usermanagerplugin/widgets/userwizard.cpp" line="653"/>
         <source>User creation</source>
-        <translation type="unfinished"></translation>
+        <translation>Création d&apos;utilisateur</translation>
     </message>
     <message>
         <location filename="../../plugins/usermanagerplugin/widgets/userwizard.cpp" line="654"/>
         <source>The user will be created.</source>
-        <translation type="unfinished"></translation>
+        <translation>L&apos;utilisateur suivant va être créé.</translation>
+    </message>
+    <message>
+        <location filename="../../plugins/usermanagerplugin/widgets/userwizard.cpp" line="677"/>
+        <source>Contact</source>
+        <translation>Contact</translation>
+    </message>
+    <message>
+        <location filename="../../plugins/usermanagerplugin/widgets/userwizard.cpp" line="680"/>
+        <source>Zip code</source>
+        <translation>Code postal</translation>
+    </message>
+    <message>
+        <location filename="../../plugins/usermanagerplugin/widgets/userwizard.cpp" line="681"/>
+        <source>City</source>
+        <translation>Ville</translation>
+    </message>
+    <message>
+        <location filename="../../plugins/usermanagerplugin/widgets/userwizard.cpp" line="682"/>
+        <source>Country</source>
+        <translation>Pays</translation>
+    </message>
+    <message>
+        <location filename="../../plugins/usermanagerplugin/widgets/userwizard.cpp" line="683"/>
+        <source>Tel1</source>
+        <translation></translation>
+    </message>
+    <message>
+        <location filename="../../plugins/usermanagerplugin/widgets/userwizard.cpp" line="684"/>
+        <source>Tel2</source>
+        <translation></translation>
+    </message>
+    <message>
+        <location filename="../../plugins/usermanagerplugin/widgets/userwizard.cpp" line="685"/>
+        <source>Tel3</source>
+        <translation></translation>
+    </message>
+    <message>
+        <location filename="../../plugins/usermanagerplugin/widgets/userwizard.cpp" line="686"/>
+        <source>Fax</source>
+        <translation>Fax</translation>
+    </message>
+    <message>
+        <location filename="../../plugins/usermanagerplugin/widgets/userwizard.cpp" line="687"/>
+        <source>Mail</source>
+        <translation>Courriel</translation>
+    </message>
+    <message>
+        <location filename="../../plugins/usermanagerplugin/widgets/userwizard.cpp" line="689"/>
+        <source>Specialties</source>
+        <translation>Spécialités</translation>
+    </message>
+    <message>
+        <location filename="../../plugins/usermanagerplugin/widgets/userwizard.cpp" line="696"/>
+        <source>Qualifications</source>
+        <translation>Qualifications</translation>
+    </message>
+    <message>
+        <location filename="../../plugins/usermanagerplugin/widgets/userwizard.cpp" line="703"/>
+        <source>Professionnal identifiants</source>
+        <translation>Identifiants professionnels</translation>
     </message>
 </context>
 <context>

@@ -882,6 +882,66 @@ You must specify a different login/password.</source>
         <source>The user will be created.</source>
         <translation type="unfinished"></translation>
     </message>
+    <message>
+        <location filename="../../plugins/usermanagerplugin/widgets/userwizard.cpp" line="677"/>
+        <source>Contact</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../../plugins/usermanagerplugin/widgets/userwizard.cpp" line="680"/>
+        <source>Zip code</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../../plugins/usermanagerplugin/widgets/userwizard.cpp" line="681"/>
+        <source>City</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../../plugins/usermanagerplugin/widgets/userwizard.cpp" line="682"/>
+        <source>Country</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../../plugins/usermanagerplugin/widgets/userwizard.cpp" line="683"/>
+        <source>Tel1</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../../plugins/usermanagerplugin/widgets/userwizard.cpp" line="684"/>
+        <source>Tel2</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../../plugins/usermanagerplugin/widgets/userwizard.cpp" line="685"/>
+        <source>Tel3</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../../plugins/usermanagerplugin/widgets/userwizard.cpp" line="686"/>
+        <source>Fax</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../../plugins/usermanagerplugin/widgets/userwizard.cpp" line="687"/>
+        <source>Mail</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../../plugins/usermanagerplugin/widgets/userwizard.cpp" line="689"/>
+        <source>Specialties</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../../plugins/usermanagerplugin/widgets/userwizard.cpp" line="696"/>
+        <source>Qualifications</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../../plugins/usermanagerplugin/widgets/userwizard.cpp" line="703"/>
+        <source>Professionnal identifiants</source>
+        <translation type="unfinished"></translation>
+    </message>
 </context>
 <context>
     <name>UserPlugin::UserManagerPlugin</name>

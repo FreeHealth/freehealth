@@ -283,7 +283,7 @@ Do you want to add them to the file ?</source>
 <context>
     <name>DrugsDB::Internal::DrugAllergyEngine</name>
     <message>
-        <location filename="../../plugins/drugsbaseplugin/engines/allergyengine.cpp" line="508"/>
+        <location filename="../../plugins/drugsbaseplugin/engines/allergyengine.cpp" line="514"/>
         <source>Detects allergies and intolerances to medications</source>
         <translation type="unfinished"></translation>
     </message>
