@@ -278,6 +278,7 @@ const char * const  A_CREATEUSER      = "aCreateUser";      /*!< \brief Default 
 
 // About Menu Action's name
 const char * const  A_ABOUT              = "actionAbout";             /*!< \brief Default action object name  \ingroup constants_actionmanager */
+const char * const  A_APPWEBSITE         = "actionWebSite";             /*!< \brief Default action object name  \ingroup constants_actionmanager */
 const char * const  A_ABOUTPLUGINS       = "actionPluginsAbout";      /*!< \brief Default action object name  \ingroup constants_actionmanager */
 const char * const  A_ABOUTQT            = "actionAboutQt";           /*!< \brief Default action object name  \ingroup constants_actionmanager */
 const char * const  A_ABOUTFORM          = "actionAboutThisForm";     /*!< \brief Default action object name  \ingroup constants_actionmanager */

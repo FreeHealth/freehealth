@@ -83,12 +83,13 @@ public:
         A_DebugDialog            = 0x00010000,
         A_PluginsAbout           = 0x00020000,
         A_FormsAbout             = 0x00040000,
-        A_CheckUpdate            = 0x00080000
+        A_CheckUpdate            = 0x00080000,
+        A_AppGoToWebSite         = 0x00100000
     };
     enum TemplatesAction {
-        A_Templates_New          = 0x00100000,
-        A_Templates_Manager      = 0x00200000,
-        A_Templates_ToogleViewer = 0x00400000
+        A_Templates_New          = 0x00200000,
+        A_Templates_Manager      = 0x00400000,
+        A_Templates_ToogleViewer = 0x00800000
     };
     enum PatientsAction {
         A_Patients_New           = 0x08000000,

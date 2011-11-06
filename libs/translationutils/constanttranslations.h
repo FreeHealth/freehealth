@@ -193,6 +193,7 @@ enum TitleInterpret {
         const char * const  LISTMOVEDOWN_TEXT     = QT_TRANSLATE_NOOP("tkConstants", "Move item down");
         const char * const  LISTCLEAR_TEXT        = QT_TRANSLATE_NOOP("tkConstants", "Clear");
         const char * const  LISTSORT_TEXT         = QT_TRANSLATE_NOOP("tkConstants", "Sort");
+        const char * const  WEBSITE_TEXT          = QT_TRANSLATE_NOOP("tkConstants", "Web site");
 
         const char * const  TEMPLATES             = QT_TRANSLATE_NOOP("tkConstants", "Templates");
         const char * const  CREATETEMPLATE_TEXT   = QT_TRANSLATE_NOOP("tkConstants", "Create a new template");

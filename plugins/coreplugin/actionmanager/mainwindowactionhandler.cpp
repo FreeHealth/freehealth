@@ -64,6 +64,7 @@
 #include <QLocale>
 #include <QStatusBar>
 #include <QLabel>
+#include <QDesktopServices>
 
 using namespace Core;
 using namespace Core::Internal;
@@ -106,6 +107,7 @@ MainWindowActionHandler::MainWindowActionHandler(QWidget *parent) :
         aMedinTux(0),
         aLanguageGroup(0),
         aAppAbout(0),
+        aAppGoToWebSite(0),
         aPlugsAbout(0),
         aAppHelp(0),
         aQtAbout(0),
@@ -1077,6 +1079,13 @@ void MainWindowActionHandler::createHelpActions(int actions)
         cmd->setTranslations(Trans::Constants::ABOUT_TEXT);
         menu->addAction(cmd, Constants::G_HELP_ABOUT);
     }
+    if (actions & Core::MainWindowActions::A_AppGoToWebSite) {
+        a = aAppGoToWebSite = new QAction(this);
+        a->setIcon(theme()->icon(Constants::ICONINTERNET));
+        cmd = actionManager()->registerAction(a, Constants::A_APPWEBSITE, ctx);
+        cmd->setTranslations(Trans::Constants::WEBSITE_TEXT);
+        menu->addAction(cmd, Constants::G_HELP_ABOUT);
+    }
     if (actions & Core::MainWindowActions::A_PluginsAbout) {
         a = aPlugsAbout = new QAction(this);
         a->setIcon(theme()->icon(Constants::ICONHELP));
@@ -1146,6 +1155,9 @@ void MainWindowActionHandler::connectHelpActions()
 
     if (aCheckUpdate)
         connect(aCheckUpdate, SIGNAL(triggered()), this, SLOT(checkUpdate()));
+
+    if (aAppGoToWebSite)
+        connect(aAppGoToWebSite, SIGNAL(triggered()), this, SLOT(goToAppWebSite()));
 }
 
 void MainWindowActionHandler::createTemplatesActions(int actions)
@@ -1208,7 +1220,7 @@ bool MainWindowActionHandler::aboutApplication()
     dlg.exec();
     return true;
 }
-/** \shows the standard About Plugins dialog. \sa Core::PluginDialog */
+/** \brief Shows the standard About Plugins dialog. \sa Core::PluginDialog */
 bool MainWindowActionHandler::aboutPlugins()
 {
     Core::PluginDialog dlg(this);
@@ -1280,3 +1292,11 @@ void MainWindowActionHandler::updateCheckerEnd(bool error)
     /** \todo improve this for FreeMedForms (delete only label and progressbar) */
     delete statusBar();
 }
+
+/** \brief If the Core::ISettings::WebSiteUrl is informed in the Core::ISettings::path(), opens the URL. */
+void MainWindowActionHandler::goToAppWebSite()
+{
+    if (!settings()->path(Core::ISettings::WebSiteUrl).isEmpty())
+        QDesktopServices::openUrl(QUrl(settings()->path(Core::ISettings::WebSiteUrl)));
+}
+

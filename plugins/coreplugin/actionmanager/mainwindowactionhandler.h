@@ -35,8 +35,8 @@
 /**
  * \file MainWindowActionHandler.h
  * \author Eric MAEKER <eric.maeker@gmail.com>
- * \version 0.0.8
- * \date 20 Oct 2009
+ * \version 0.6.0
+ * \date 06 Nov 2011
 */
 
 namespace Utils {
@@ -122,6 +122,7 @@ public Q_SLOTS: // Slots automatically connected to actions is requiered
     virtual bool aboutQt()          {return false;}
     virtual bool debugDialog();
     virtual bool checkUpdate();
+    virtual void goToAppWebSite();
 
 public Q_SLOTS:
     virtual void switchLanguage(QAction * action);
@@ -162,6 +163,7 @@ protected:
     QActionGroup *aLanguageGroup;
 
     QAction *aAppAbout;
+    QAction *aAppGoToWebSite;
     QAction *aPlugsAbout;
     QAction *aAppHelp;
     QAction *aQtAbout;
