@@ -84,6 +84,8 @@
 #include <QList>
 #include <QCheckBox>
 #include <QGroupBox>
+#include <QTreeWidget>
+#include <QTreeWidgetItem>
 
 #include "ui_userwizardcontactwidget.h"
 
@@ -166,12 +168,13 @@ UserWizard::UserWizard(QWidget *parent) :
         setPage(ExtraPages + i, m_ExtraPages.at(i)->createWizardPage(this));
     }
 
+    setPage(LastPage, new UserLastPage(this));
+
     setWindowTitle(tr("User Creator Wizard"));
     QList<QWizard::WizardButton> layout;
     layout << QWizard::CancelButton << QWizard::Stretch << QWizard::BackButton
             << QWizard::NextButton << QWizard::FinishButton;
     setButtonLayout(layout);
-    //    setAttribute(Qt::WA_DeleteOnClose);
 }
 
 UserWizard::~UserWizard()
@@ -262,7 +265,7 @@ void UserWizard::done(int r)
                 // Reset the usermodel
                 userModel()->forceReset();
 
-                // Submit extra-pages
+                // Submit extra-pages ?
                 for(int i = 0; i < m_ExtraPages.count(); ++i) {
                     m_ExtraPages.at(i)->submit(m_User->uuid());
                 }
@@ -404,15 +407,15 @@ void UserIdentityAndLoginPage::retranslate()
     setSubTitle(tr("Enter your identity."));
     if (langLbl) {
         langLbl->setText(tr("Language"));
-        lblTitle->setText(tr("Title"));
-        lblName->setText(tr("Name"));
+        lblTitle->setText(tkTr(Trans::Constants::TITLE));
+        lblName->setText(tkTr(Trans::Constants::NAME));
         lblFirstName->setText(tr("Firstname"));
         lblSecondName->setText(tr("Second Name"));
-        lblGender->setText(tr("Gender"));
+        lblGender->setText(tkTr(Trans::Constants::GENDER));
         cbTitle->addItems(titles());
         cbGender->addItems(genders());
-        lblL->setText(tr("Login"));
-        lblP->setText(tr("Password"));
+        lblL->setText(tkTr(Trans::Constants::LOGIN));
+        lblP->setText(tkTr(Trans::Constants::PASSWORD));
         lblCP->setText(tr("Confirm Password"));
         identGroup->setTitle(tr("Identity"));
         logGroup->setTitle(tr("Database connection"));
@@ -645,3 +648,66 @@ bool UserRightsPage::validatePage()
     return true;
 }
 
+UserLastPage::UserLastPage(QWidget *parent) : QWizardPage(parent)
+{
+    setTitle(tr("User creation"));
+    setSubTitle(tr("The user will be created."));
+    tree = new QTreeWidget(this);
+    tree->header()->hide();
+    QVBoxLayout *lay = new QVBoxLayout(this);
+    this->setLayout(lay);
+    lay->addWidget(tree);
+}
+
+void UserLastPage::initializePage()
+{
+    tree->clear();
+    tree->setColumnCount(2);
+    QFont bold;
+    bold.setBold(true);
+    QTreeWidgetItem *general = new QTreeWidgetItem(tree, QStringList() << tkTr(Trans::Constants::GENERAL));
+    general->setFont(0, bold);
+    new QTreeWidgetItem(general, QStringList() << tkTr(Trans::Constants::LOGIN) << field("Login").toString());
+    new QTreeWidgetItem(general, QStringList() << tkTr(Trans::Constants::PASSWORD) << field("Password").toString());
+    new QTreeWidgetItem(general, QStringList() << tkTr(Trans::Constants::TITLE) << titles().at(field("Title").toInt()));
+    new QTreeWidgetItem(general, QStringList() << tkTr(Trans::Constants::NAME) << field("Name").toString() + " " + field("SecondName").toString() + " " + field("Firstname").toString());
+    new QTreeWidgetItem(general, QStringList() << tkTr(Trans::Constants::GENDER) << genders().at(field("Gender").toInt()));
+    new QTreeWidgetItem(general, QStringList() << tkTr(Trans::Constants::M_LANGUAGES_TEXT) << QLocale::languageToString(QLocale::Language(field("Language").toInt())) );
+
+    QTreeWidgetItem *contact = new QTreeWidgetItem(tree, QStringList() << tr("Contact"));
+    contact->setFont(0, bold);
+    new QTreeWidgetItem(contact, QStringList() << tkTr(Trans::Constants::ADRESS) << field("Address").toString());
+    new QTreeWidgetItem(contact, QStringList() << tr("Zip code") << field("Zipcode").toString());
+    new QTreeWidgetItem(contact, QStringList() << tr("City") << field("City").toString());
+    new QTreeWidgetItem(contact, QStringList() << tr("Country") << field("Country").toString());
+    new QTreeWidgetItem(contact, QStringList() << tr("Tel1") << field("Tel1").toString());
+    new QTreeWidgetItem(contact, QStringList() << tr("Tel2") << field("Tel2").toString());
+    new QTreeWidgetItem(contact, QStringList() << tr("Tel3") << field("Tel3").toString());
+    new QTreeWidgetItem(contact, QStringList() << tr("Fax") << field("Fax").toString());
+    new QTreeWidgetItem(contact, QStringList() << tr("Mail") << field("Mail").toString());
+
+    QTreeWidgetItem *spe = new QTreeWidgetItem(tree, QStringList() << tr("Specialties"));
+    spe->setFont(0, bold);
+    const QStringList &spes =  field("Specialities").toStringList();
+    foreach(const QString &s, spes) {
+        new QTreeWidgetItem(spe, QStringList() << s);
+    }
+
+    QTreeWidgetItem *qual = new QTreeWidgetItem(tree, QStringList() << tr("Qualifications"));
+    qual->setFont(0, bold);
+    const QStringList &quals =  field("Qualifications").toStringList();
+    foreach(const QString &s, quals) {
+        new QTreeWidgetItem(qual, QStringList() << s);
+    }
+
+    QTreeWidgetItem *idents = new QTreeWidgetItem(tree, QStringList() << tr("Professionnal identifiants"));
+    idents->setFont(0, bold);
+    const QStringList &ids =  field("Identifiants").toStringList();
+    foreach(const QString &s, ids) {
+        new QTreeWidgetItem(idents, QStringList() << s);
+    }
+
+    tree->resizeColumnToContents(0);
+    tree->resizeColumnToContents(1);
+    tree->expandAll();
+}

@@ -44,6 +44,7 @@ class QPushButton;
 class QCheckBox;
 class QComboBox;
 class QGroupBox;
+class QTreeWidget;
 QT_END_NAMESPACE
 
 /**
@@ -89,7 +90,8 @@ public:
         ProfilPage,
         RightsPage,
         SpecialiesQualificationsPage,
-        ExtraPages
+        ExtraPages,
+        LastPage = 10000
     };
 
     UserWizard(QWidget *parent = 0);
@@ -185,6 +187,15 @@ private:
     Internal::UserRightsWidget *um, *drugs, *med, *paramed, *administ;
 };
 
+class UserLastPage: public QWizardPage
+{
+    Q_OBJECT
+public:
+    UserLastPage(QWidget *parent = 0);
+    void initializePage();
+private:
+    QTreeWidget *tree;
+};
 
 }  // End UserPlugin
 

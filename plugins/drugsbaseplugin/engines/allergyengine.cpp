@@ -101,33 +101,39 @@ public:
 
     QIcon icon(const int levelOfWarning, const int iconsize) const
     {
+        Q_UNUSED(levelOfWarning);
         return theme()->icon(Constants::I_DRUGENGINE, Core::ITheme::IconSize(iconsize));
     }
 
     QString header(const QString &separator = QString::null) const
     {
-        return QString("bli bli");
+        Q_UNUSED(separator);
+        return QString("Allergy");
     }
 
     QString risk(const QString &lang = QString::null) const
     {
+        Q_UNUSED(lang);
         return QString();
     }
 
     QString management(const QString &lang = QString::null) const
     {
+        Q_UNUSED(lang);
         return QString();
     }
 
     QString referencesLink(const QString &lang = QString::null) const
     {
+        Q_UNUSED(lang);
 //        return m_Infos.value(PIM_ReferencesLink).toString();
         return QString();
     }
 
     QString toHtml(bool detailled = false) const
     {
-            return QString();
+        Q_UNUSED(detailled);
+        return QString();
     }
 
     int sortIndex() const {return 1;} //return m_Infos.value(Level).toInt();}

@@ -34,6 +34,8 @@
 #include "constants.h"
 #include "agendabase.h"
 
+#include <utils/global.h>
+
 #include "ui_usercalendarwizardcreatorpage.h"
 
 using namespace Agenda;
@@ -124,6 +126,24 @@ UserCalendar *UserCalendarWizardPage::getUserCalendar()
         u->addAvailabilities(av);
     }
     return u;
+}
+
+bool UserCalendarWizardPage::validatePage()
+{
+    if (ui->useAgenda->isChecked()) {
+        QStringList msg;
+        if (ui->calendarLabel->text().simplified().isEmpty()) {
+            msg << tr("Please specify a label for this agenda.");
+        }
+        if (ui->defaultDuration->value()==0) {
+            msg << tr("The default duration can not be null.");
+        }
+        if (!msg.isEmpty()) {
+            Utils::warningMessageBox(tr("Error detected"), msg.join("\n"));
+            return false;
+        }
+    }
+    return true;
 }
 
 void UserCalendarWizardPage::retranslate()

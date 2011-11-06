@@ -57,6 +57,8 @@ public:
 
     UserCalendar *getUserCalendar();
 
+    bool validatePage();
+
 private:
     void retranslate();
     void changeEvent(QEvent *event);

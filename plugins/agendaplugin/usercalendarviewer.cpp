@@ -251,7 +251,7 @@ void UserCalendarViewer::on_availableAgendasCombo_activated(const int index)
 
         // Reset the Calendar View properties
         int defaultDuration = d->m_UserCalendarModel->index(index, UserCalendarModel::DefaultDuration).data().toInt();
-        d->ui->calendarViewer->setDayScaleHourDivider(60/defaultDuration);
+        d->ui->calendarViewer->setDayScaleHourDivider(defaultDuration/60);
         d->ui->calendarViewer->setDayItemDefaultDuration(defaultDuration);
 
         d->ui->durationLabel->setText(QString::number(defaultDuration) + " " + tkTr(Trans::Constants::MINUTES));
