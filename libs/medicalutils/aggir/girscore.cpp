@@ -770,11 +770,13 @@ bool NewGirScore::setSerializedScore(const QString &score) const
     NewGirItem *girItem = 0;
     foreach(const QString &l, lines) {
         QStringList vals = l.split(":");
-        if (!vals.count()==2)
+        if (vals.count()!=2)
             return false;
         if (l.contains(",")) {
             // Item + subItem
             QStringList items = vals.at(0).split(",");
+            if (items.count()!=2)
+                return false;
             girItem = d->girItem(NewGirScore::Item(items.at(0).toInt()),
                                  NewGirScore::SubItem(items.at(1).toInt()));
             girItem->reponses = NewGirScore::Reponses(vals.at(1).toInt());
