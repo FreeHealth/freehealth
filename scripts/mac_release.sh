@@ -40,13 +40,12 @@ PACKAGES_PATH=$SCRIPT_PATH"../packages"
 showHelp()
 {
   echo $SCRIPT_NAME" builds FreeMedForms applications into Mac bundle in release mode."
-  echo "Usage : $SCRIPT_NAME <options>"
+  echo "Usage : $SCRIPT_NAME -b CaseSensitiveBundle <options>"
   echo "Options :"
   echo "          -b  Bundle name"
   echo "          -s  Build from source package (you need to create the source package)"
   echo "          -h  show this help"
   echo "Win32 port can be build under Linux using crosscompilation"
-  exit 0
 }
 
 buildFromSourcePackage()
@@ -205,23 +204,26 @@ echo "(-- option:$option  $OPTIND - '$OPTARG' --)"
                    # get version number of FreeDiams from the project file
                    VERSION=`cat $SOURCES_PATH$PROJECT/$PROJECT.pro | grep "PACKAGE_VERSION" -m 1 | cut -d = -s -f2 | tr -d ' '`
                 ;;
-		h) showHelp
-		;;
+                h) showHelp
+                    exit 0
+                ;;
                 s) buildFromSourcePackage
         esac
 done
 
 if [ -z "$PROJECT_FILE" ] ; then
-    echo "Error: you must specify the project file to compile"
+    echo "ERROR: you must specify the project file to compile."
+    showHelp
     exit 123
 fi
 if [ -z "$BUNDLE_NAME" ] ; then
-    echo "Error: you must specify the bundle name of the project"
+    echo "ERROR: you must specify the bundle name of the project."
+    showHelp
     exit 123
 fi
 
 if [ -z $VERSION ] ; then
-   echo "No version number found"
+   echo "ERROR: No version number found."
    exit
 fi
 
