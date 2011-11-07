@@ -119,6 +119,7 @@ DrugSelector::DrugSelector(QWidget *parent) :
         m_DrugsHistoricButton(0),
         m_HistoryAct(0)
 {
+    setupUi(this);
 }
 
 DrugSelector::~DrugSelector()
@@ -128,7 +129,6 @@ DrugSelector::~DrugSelector()
 
 void DrugSelector::initialize()
 {
-    setupUi(this);
     textButton->setIcon(theme()->icon(Core::Constants::ICONPENCIL));
 
     m_WinTitle = mainWindow()->windowTitle();
@@ -206,7 +206,7 @@ void DrugSelector::createToolButtons()
 
 void DrugSelector::createAvailableDrugsDatabaseButtons()
 {
-    for(int i=drugsDatabaseSelectorButton->actions().count()-1; i > -1 ; --i) {
+    for(int i= drugsDatabaseSelectorButton->actions().count()-1; i > -1 ; --i) {
         drugsDatabaseSelectorButton->removeAction(drugsDatabaseSelectorButton->actions().at(i));
     }
 
