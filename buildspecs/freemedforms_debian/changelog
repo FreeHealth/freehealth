@@ -1,8 +1,14 @@
-freemedforms (0.5.9-1ubuntu1) testing; urgency=low
+freemedforms (0.6.0-ubuntu1) testing; urgency=low
+
+  * New upstream : First stable release of FreeMedForms
+
+ -- Eric Maeker <eric.maeker@gmail.com>  Mon, 07 Nov 2011 00:49:48 +0100
+
+freemedforms (0.5.9-natty1) natty; urgency=low
 
   * New upstream : First beta release of FreeMedForms
 
- -- Eric Maeker <eric.maeker@gmail.com>  Thu, 29 Sep 2011 16:37:32 +0200
+ -- Eric Maeker <eric.maeker@gmail.com>   Sun, 02 Oct 2011 21:24:19 +0200
 
 freemedforms (0.5.9~alpha2-1ubuntu1) testing; urgency=low
 
