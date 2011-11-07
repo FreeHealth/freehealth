@@ -174,9 +174,9 @@ public:
     {
 //        if (!m_Result->testedDrugs().contains((IDrug*)drug))
 //            return QIcon();
-//        if (!query.engineUid.isEmpty() && query.engineUid!=Constants::ALLERGY_ENGINE_UID) {
-//            return QIcon();
-//        }
+        if (!query.engineUid.isEmpty() && query.engineUid!=Constants::ALLERGY_ENGINE_UID) {
+            return QIcon();
+        }
 ////        int level = getMaximumTypeOfIAM(m_Result->interactions(), drug);
 //        Core::ITheme *th = theme();
         Core::ITheme::IconSize size = Core::ITheme::IconSize(query.iconSize);

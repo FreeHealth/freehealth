@@ -55,6 +55,9 @@ static inline Core::ISettings *settings()  { return Core::ICore::instance()->set
 SettingsDialog::SettingsDialog(QWidget *parent, const QString &categoryId, const QString &pageId) :
         QDialog(parent), m_applied(false)
 {
+    Q_UNUSED(categoryId);
+    Q_UNUSED(pageId);
+    /** \todo allow users to open SettingsDialog with a specific page */
     m_ui = new Ui::SettingsDialog();
     setWindowFlags(Qt::Window | Qt::CustomizeWindowHint | Qt::WindowSystemMenuHint | Qt::WindowCloseButtonHint);
     m_ui->setupUi(this);

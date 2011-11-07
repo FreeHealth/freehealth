@@ -103,9 +103,11 @@ void DocumentPrinter::prepareHeader(Print::Printer *p, const int papers) const
     QString header;
     if (user()) {
 #ifdef FREEDIAMS
+        Q_UNUSED(papers);
         header = user()->value(Core::IUser::PrescriptionHeader).toString();
 #else
 #ifdef FREEICD
+        Q_UNUSED(papers);
         header = user()->value(Core::IUser::GenericHeader).toString();
 #else  // ALL OTHERS
         switch (papers) {

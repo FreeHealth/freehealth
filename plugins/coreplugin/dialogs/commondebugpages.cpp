@@ -55,7 +55,7 @@ QString LogErrorDebugPage::category() const { return Trans::ConstantTranslations
 
 QWidget *LogErrorDebugPage::createPage(QWidget *parent)
 {
-    QWidget *m_Widget = new QWidget();
+    QWidget *m_Widget = new QWidget(parent);
     QGridLayout *layout = new QGridLayout(m_Widget);
     layout->setSpacing(0);
     layout->setMargin(0);
