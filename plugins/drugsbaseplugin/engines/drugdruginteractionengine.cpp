@@ -732,6 +732,8 @@ public:
 
     QWidget *dynamicAlertWidget(const DrugInteractionInformationQuery &query, QWidget *parent = 0)
     {
+        Q_UNUSED(query);
+        Q_UNUSED(parent);
         return 0;
     }
 
