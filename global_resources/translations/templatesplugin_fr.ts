@@ -19,7 +19,7 @@
     </message>
     <message>
         <location filename="../../plugins/templatesplugin/templatesmodel.cpp" line="111"/>
-        <source>Some datas are not actually saved into database.Do you want to save them ?
+        <source>Some data are not actually saved into database.Do you want to save them ?
  Answering &apos;No&apos; will cause definitive data lose.</source>
         <translation>Certaines données ne sont pas encore sauvegardées dans la base de données. Voulez-vous les sauvegarder ?
 Répondre &apos;Non&apos; causera une perte de données définitive.</translation>
@@ -209,7 +209,7 @@ Répondre &apos;Non&apos; causera une perte de données définitive.</translatio
     </message>
     <message>
         <location filename="../../plugins/templatesplugin/templatesview.cpp" line="612"/>
-        <source>This action is definitive and all informations will be lost. Children of this item will be deleted as well.</source>
+        <source>This action is definitive and all information will be lost. Children of this item will be deleted as well.</source>
         <translation>Cette action est définitive. Toutes les informations de ces modèles seront perdues. Toutes les sous-catégories, s&apos;il en existe, seront effacées aussi.</translation>
     </message>
 </context>

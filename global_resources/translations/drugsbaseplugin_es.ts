@@ -32,7 +32,7 @@ Please verify your daily scheme prescriptions and relations to meal.</source>
 <context>
     <name>DrugsBase</name>
     <message>
-        <location filename="../../plugins/drugsbaseplugin/engines/drugdruginteractionengine.cpp" line="975"/>
+        <location filename="../../plugins/drugsbaseplugin/engines/drugdruginteractionengine.cpp" line="977"/>
         <source>FreeDiams Interactions Engine</source>
         <translation type="unfinished"></translation>
     </message>
@@ -291,7 +291,7 @@ Do you want to add them to the file ?</source>
 <context>
     <name>DrugsDB::Internal::DrugDrugInteractionEngine</name>
     <message>
-        <location filename="../../plugins/drugsbaseplugin/engines/drugdruginteractionengine.cpp" line="824"/>
+        <location filename="../../plugins/drugsbaseplugin/engines/drugdruginteractionengine.cpp" line="826"/>
         <source>Detects interaction between drugs</source>
         <translation type="unfinished"></translation>
     </message>

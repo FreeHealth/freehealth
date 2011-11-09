@@ -314,11 +314,6 @@
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../../libs/translationutils/constanttranslations.h" line="208"/>
-        <source>Templates database informations</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
         <location filename="../../libs/translationutils/constanttranslations.h" line="210"/>
         <source>PMHx</source>
         <translation type="unfinished"></translation>
@@ -496,11 +491,6 @@
         <translation>Konfiguriere MedinTux</translation>
     </message>
     <message>
-        <location filename="../../libs/translationutils/constanttranslations.h" line="251"/>
-        <source>View update informations</source>
-        <translation>Zeige Updateinformationen an</translation>
-    </message>
-    <message>
         <location filename="../../libs/translationutils/constanttranslations.h" line="252"/>
         <source>Print Preview</source>
         <translation>Druckvorschau</translation>
@@ -534,16 +524,6 @@
     <message>
         <location filename="../../libs/translationutils/constanttranslations.h" line="263"/>
         <source>Drugs database</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <location filename="../../libs/translationutils/constanttranslations.h" line="265"/>
-        <source>Protocols database informations</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <location filename="../../libs/translationutils/constanttranslations.h" line="266"/>
-        <source>Interactions database informations</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
@@ -663,6 +643,7 @@
     </message>
     <message>
         <location filename="../../libs/translationutils/constanttranslations.h" line="295"/>
+        <location filename="../../libs/translationutils/constanttranslations.h" line="452"/>
         <source>Information</source>
         <translation>Information</translation>
     </message>
@@ -1063,16 +1044,6 @@
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../../libs/translationutils/constanttranslations.h" line="409"/>
-        <source>More informations</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <location filename="../../libs/translationutils/constanttranslations.h" line="410"/>
-        <source>Hide extra informations</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
         <location filename="../../libs/translationutils/constanttranslations.h" line="417"/>
         <source>Users</source>
         <translation type="unfinished"></translation>
@@ -1148,6 +1119,16 @@
         <translation type="unfinished"></translation>
     </message>
     <message>
+        <location filename="../../libs/translationutils/constanttranslations.h" line="522"/>
+        <source>Build information</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../../libs/translationutils/constanttranslations.h" line="523"/>
+        <source>Version information</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
         <location filename="../../libs/translationutils/constanttranslations.h" line="538"/>
         <source>Agenda</source>
         <translation type="unfinished"></translation>
@@ -1160,11 +1141,6 @@
     <message>
         <location filename="../../libs/translationutils/constanttranslations.h" line="540"/>
         <source>Agenda events</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <location filename="../../libs/translationutils/constanttranslations.h" line="541"/>
-        <source>Agenda database informations</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
@@ -1303,6 +1279,11 @@
         <translation type="unfinished"></translation>
     </message>
     <message>
+        <location filename="../../libs/translationutils/constanttranslations.h" line="588"/>
+        <source>Patient information</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
         <location filename="../../libs/translationutils/constanttranslations.h" line="590"/>
         <source>Clear patient&apos;s information</source>
         <translation type="unfinished"></translation>
@@ -1371,6 +1352,36 @@
         <location filename="../../libs/translationutils/constanttranslations.h" line="387"/>
         <source>This feature is not yet implemented.</source>
         <translation>Dieses Feature ist noch nicht implementiert.</translation>
+    </message>
+    <message>
+        <location filename="../../libs/translationutils/constanttranslations.h" line="208"/>
+        <source>Templates database information</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../../libs/translationutils/constanttranslations.h" line="251"/>
+        <source>View update information</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../../libs/translationutils/constanttranslations.h" line="264"/>
+        <source>Drugs database information</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../../libs/translationutils/constanttranslations.h" line="265"/>
+        <source>Protocols database information</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../../libs/translationutils/constanttranslations.h" line="266"/>
+        <source>Interactions database information</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../../libs/translationutils/constanttranslations.h" line="267"/>
+        <source>Past medical history database information</source>
+        <translation type="unfinished"></translation>
     </message>
     <message>
         <location filename="../../libs/translationutils/constanttranslations.h" line="388"/>
@@ -1451,11 +1462,6 @@
         <location filename="../../libs/translationutils/constanttranslations.h" line="444"/>
         <source>Saving file %1</source>
         <translation>Speichere Datei %1</translation>
-    </message>
-    <message>
-        <location filename="../../libs/translationutils/constanttranslations.h" line="452"/>
-        <source>Informations</source>
-        <translation>Informationen</translation>
     </message>
     <message>
         <location filename="../../libs/translationutils/constanttranslations.h" line="455"/>
@@ -1588,16 +1594,6 @@
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../../libs/translationutils/constanttranslations.h" line="264"/>
-        <source>Drugs database informations</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <location filename="../../libs/translationutils/constanttranslations.h" line="267"/>
-        <source>Past medical history database informations</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
         <location filename="../../libs/translationutils/constanttranslations.h" line="269"/>
         <source>Drugs</source>
         <translation type="unfinished"></translation>
@@ -1641,6 +1637,16 @@
         <location filename="../../libs/translationutils/constanttranslations.h" line="405"/>
         <source>Reading settings file</source>
         <translation>Lese Einstellungen</translation>
+    </message>
+    <message>
+        <location filename="../../libs/translationutils/constanttranslations.h" line="409"/>
+        <source>More information</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../../libs/translationutils/constanttranslations.h" line="410"/>
+        <source>Hide extra information</source>
+        <translation type="unfinished"></translation>
     </message>
     <message>
         <location filename="../../libs/translationutils/constanttranslations.h" line="414"/>
@@ -1855,16 +1861,6 @@ Place : %2</source>
         <translation></translation>
     </message>
     <message>
-        <location filename="../../libs/translationutils/constanttranslations.h" line="522"/>
-        <source>Build informations</source>
-        <translation>Bauinformation</translation>
-    </message>
-    <message>
-        <location filename="../../libs/translationutils/constanttranslations.h" line="523"/>
-        <source>Version informations</source>
-        <translation>Version Informationen</translation>
-    </message>
-    <message>
         <location filename="../../libs/translationutils/constanttranslations.h" line="524"/>
         <source>Build on %1 %2</source>
         <translation>Gebaut auf %1 %2</translation>
@@ -1915,6 +1911,11 @@ Place : %2</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
+        <location filename="../../libs/translationutils/constanttranslations.h" line="541"/>
+        <source>Agenda database information</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
         <location filename="../../libs/translationutils/constanttranslations.h" line="555"/>
         <source>Previous month</source>
         <translation type="unfinished"></translation>
@@ -1952,11 +1953,6 @@ Place : %2</source>
     <message>
         <location filename="../../libs/translationutils/constanttranslations.h" line="587"/>
         <source>Patients</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <location filename="../../libs/translationutils/constanttranslations.h" line="588"/>
-        <source>Patient informations</source>
         <translation type="unfinished"></translation>
     </message>
     <message>

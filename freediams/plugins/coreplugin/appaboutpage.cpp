@@ -48,7 +48,7 @@ static const char *ABOUT_TEXT = QT_TRANSLATE_NOOP("AboutDialog",
         "(C) 2008-%1 by Eric MAEKER, MD</p>"
         "<p align=left>This application is a stable release but can still contains some bugs.<br />"
         "This software is release without any warranty and only for test purposal.<br />"
-        "Please refer to web site for more informations.<br />"
+        "Please refer to web site for more information.<br />"
         "<a href=\"%2\">Web site</a>"
         "</p>"
         );

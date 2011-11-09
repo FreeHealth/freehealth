@@ -57,7 +57,7 @@
    <item row="3" column="0">
     <widget class="QTabWidget" name="chkAllIAM">
      <property name="currentIndex">
-      <number>1</number>
+      <number>0</number>
      </property>
      <widget class="QWidget" name="tab">
       <attribute name="title">
@@ -119,7 +119,7 @@
           <item>
            <widget class="QRadioButton" name="rbINNOk">
             <property name="text">
-             <string>All informations are exact</string>
+             <string>All information are exact</string>
             </property>
            </widget>
           </item>
@@ -152,7 +152,7 @@
           <item>
            <widget class="QPushButton" name="butSendINN">
             <property name="text">
-             <string>Send this informations</string>
+             <string>Send this information</string>
             </property>
            </widget>
           </item>
@@ -306,7 +306,7 @@
           <item>
            <widget class="QPushButton" name="butIAMSend">
             <property name="text">
-             <string>Send this informations</string>
+             <string>Send this information</string>
             </property>
            </widget>
           </item>

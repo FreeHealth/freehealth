@@ -37,7 +37,7 @@ Veuillez vérifier vos répartitions journalières et vos relations avec le repa
 <context>
     <name>DrugsBase</name>
     <message>
-        <location filename="../../plugins/drugsbaseplugin/engines/drugdruginteractionengine.cpp" line="975"/>
+        <location filename="../../plugins/drugsbaseplugin/engines/drugdruginteractionengine.cpp" line="977"/>
         <source>FreeDiams Interactions Engine</source>
         <translation>Moteur d&apos;interaction de FreeDiams</translation>
     </message>
@@ -299,7 +299,7 @@ Voulez-vous les ajouter au fichier ?</translation>
 <context>
     <name>DrugsDB::Internal::DrugDrugInteractionEngine</name>
     <message>
-        <location filename="../../plugins/drugsbaseplugin/engines/drugdruginteractionengine.cpp" line="824"/>
+        <location filename="../../plugins/drugsbaseplugin/engines/drugdruginteractionengine.cpp" line="826"/>
         <source>Detects interaction between drugs</source>
         <translation>Détecte les interaction entre les médicaments</translation>
     </message>

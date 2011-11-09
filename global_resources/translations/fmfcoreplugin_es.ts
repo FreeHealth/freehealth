@@ -237,7 +237,7 @@
     </message>
     <message>
         <location filename="../../plugins/coreplugin/dialogs/commonaboutpages.h" line="43"/>
-        <source>4. Build informations</source>
+        <source>4. Build information</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
@@ -293,24 +293,24 @@
     </message>
     <message>
         <location filename="../../plugins/coreplugin/dialogs/debugdialog.cpp" line="101"/>
-        <source>Sending debugging informations to dev team</source>
+        <source>Sending debugging information to dev team</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
         <location filename="../../plugins/coreplugin/dialogs/debugdialog.cpp" line="102"/>
-        <source>Trying to send informations to dev team.
+        <source>Trying to send information to dev team.
 Using Url : %1 
 Please wait...</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
         <location filename="../../plugins/coreplugin/dialogs/debugdialog.cpp" line="123"/>
-        <source>Debugging informations correctly sent.</source>
+        <source>Debugging information correctly sent.</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
         <location filename="../../plugins/coreplugin/dialogs/debugdialog.cpp" line="126"/>
-        <source>Debugging informations correctly send to dev team.
+        <source>Debugging information correctly send to dev team.
 Using Url : %1 
 %2</source>
         <translation type="unfinished"></translation>
@@ -475,11 +475,6 @@ Using Url : %1
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../../plugins/coreplugin/settings.cpp" line="915"/>
-        <source>System informations</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
         <location filename="../../plugins/coreplugin/settings.cpp" line="917"/>
         <source>Operating System</source>
         <translation type="unfinished"></translation>
@@ -630,6 +625,11 @@ Using Url : %1
         <location filename="../../plugins/coreplugin/settings.cpp" line="956"/>
         <location filename="../../plugins/coreplugin/settings.cpp" line="1063"/>
         <source>DocumentationPath</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../../plugins/coreplugin/settings.cpp" line="915"/>
+        <source>System information</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
@@ -881,12 +881,12 @@ Please contact your server administrator.</source>
 <context>
     <name>Core::SettingsDialog</name>
     <message>
-        <location filename="../../plugins/coreplugin/dialogs/settingsdialog.cpp" line="62"/>
+        <location filename="../../plugins/coreplugin/dialogs/settingsdialog.cpp" line="65"/>
         <source>Apply all changes (all pages)</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../../plugins/coreplugin/dialogs/settingsdialog.cpp" line="63"/>
+        <location filename="../../plugins/coreplugin/dialogs/settingsdialog.cpp" line="66"/>
         <source>Reset to default the current page</source>
         <translation type="unfinished"></translation>
     </message>

@@ -102,7 +102,7 @@ Voulez-vous réellement restaurer vos données et préférences ?</translation>
     </message>
     <message>
         <location filename="../../plugins/saverestoreplugin/saverestorepage.cpp" line="274"/>
-        <source>Unable to get informations about archived file. Error %1</source>
+        <source>Unable to get information about archived file. Error %1</source>
         <translation>Impossible de récupérer les données depuis l&apos;archive. Erreur %1</translation>
     </message>
     <message>

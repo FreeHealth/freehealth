@@ -5,7 +5,7 @@
     <name>AboutDialog</name>
     <message>
         <location filename="../../freediams/plugins/coreplugin/appaboutpage.cpp" line="46"/>
-        <source>&lt;p align=center&gt;&lt;b&gt;Welcome to FreeDiams&lt;/b&gt;&lt;br /&gt;(C) 2008-%1 by Eric MAEKER, MD&lt;/p&gt;&lt;p align=left&gt;This application is a stable release but can still contains some bugs.&lt;br /&gt;This software is release without any warranty and only for test purposal.&lt;br /&gt;Please refer to web site for more informations.&lt;br /&gt;&lt;a href=&quot;%2&quot;&gt;Web site&lt;/a&gt;&lt;/p&gt;</source>
+        <source>&lt;p align=center&gt;&lt;b&gt;Welcome to FreeDiams&lt;/b&gt;&lt;br /&gt;(C) 2008-%1 by Eric MAEKER, MD&lt;/p&gt;&lt;p align=left&gt;This application is a stable release but can still contains some bugs.&lt;br /&gt;This software is release without any warranty and only for test purposal.&lt;br /&gt;Please refer to web site for more information.&lt;br /&gt;&lt;a href=&quot;%2&quot;&gt;Web site&lt;/a&gt;&lt;/p&gt;</source>
         <translation>&lt;p align=center&gt;&lt;b&gt;Bienvenu dans FreeDiams&lt;/b&gt;&lt;br /&gt;(C) 2008-%1 par Eric MAEKER, MD&lt;/p&gt;&lt;p align=left&gt;Cette application est stable mais peut encore contenir bogues et erreurs.&lt;br /&gt;Ce logiciel est distribué sans aucune garantie et uniquement à des fins de test.&lt;br /&gt;Veuillez-vous référer au site Internet de la suite FreeMedForms pour de plus amples informations.&lt;br /&gt;&lt;a href=&quot;%2&quot;&gt;Site Internet&lt;/a&gt;&lt;/p&gt;</translation>
     </message>
 </context>
@@ -177,7 +177,7 @@
     </message>
     <message>
         <location filename="../../plugins/coreplugin/dialogs/commonaboutpages.h" line="43"/>
-        <source>4. Build informations</source>
+        <source>4. Build information</source>
         <translation>4. Informations de compilation</translation>
     </message>
     <message>
@@ -228,12 +228,12 @@
     </message>
     <message>
         <location filename="../../plugins/coreplugin/dialogs/debugdialog.cpp" line="101"/>
-        <source>Sending debugging informations to dev team</source>
+        <source>Sending debugging information to dev team</source>
         <translation>Envoi des informations de déboggage à l&apos;équipe de développement</translation>
     </message>
     <message>
         <location filename="../../plugins/coreplugin/dialogs/debugdialog.cpp" line="102"/>
-        <source>Trying to send informations to dev team.
+        <source>Trying to send information to dev team.
 Using Url : %1 
 Please wait...</source>
         <translation>Essaie d&apos;envoyer les informations à l&apos;équipe de développement.
@@ -242,12 +242,12 @@ Veuillez patienter...</translation>
     </message>
     <message>
         <location filename="../../plugins/coreplugin/dialogs/debugdialog.cpp" line="123"/>
-        <source>Debugging informations correctly sent.</source>
+        <source>Debugging information correctly sent.</source>
         <translation>Les informations de déboggage ont correctement été envoyées.</translation>
     </message>
     <message>
         <location filename="../../plugins/coreplugin/dialogs/debugdialog.cpp" line="126"/>
-        <source>Debugging informations correctly send to dev team.
+        <source>Debugging information correctly send to dev team.
 Using Url : %1 
 %2</source>
         <translation>Les informations de déboggage ont été correctement envoyées.
@@ -415,7 +415,7 @@ URL : %1
     </message>
     <message>
         <location filename="../../plugins/coreplugin/settings.cpp" line="915"/>
-        <source>System informations</source>
+        <source>System information</source>
         <translation>Informations du système</translation>
     </message>
     <message>
@@ -821,12 +821,12 @@ URL : %1
 <context>
     <name>Core::SettingsDialog</name>
     <message>
-        <location filename="../../plugins/coreplugin/dialogs/settingsdialog.cpp" line="62"/>
+        <location filename="../../plugins/coreplugin/dialogs/settingsdialog.cpp" line="65"/>
         <source>Apply all changes (all pages)</source>
         <translation>Appliquer toutes les modifications (toutes les pages)</translation>
     </message>
     <message>
-        <location filename="../../plugins/coreplugin/dialogs/settingsdialog.cpp" line="63"/>
+        <location filename="../../plugins/coreplugin/dialogs/settingsdialog.cpp" line="66"/>
         <source>Reset to default the current page</source>
         <translation>Remettre les valeurs par défaut sur la page courante</translation>
     </message>

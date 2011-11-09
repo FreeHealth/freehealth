@@ -107,7 +107,7 @@ bool DrugInfoPrivate::checkSent()
            (!INNMessage->toPlainText().isEmpty())) &&
          (!m_INNSent)) {
         if (QMessageBox::warning(m_Parent, qApp->applicationName(),
-                                   tr("INN Informations will be lost.\nDo you want to send them ?"),
+                                   tr("INN Information will be lost.\nDo you want to send them ?"),
                                    QMessageBox::No | QMessageBox::Yes) == QMessageBox::Yes) {
             on_butIAMSend_clicked();
             sendingMessage = true;

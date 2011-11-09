@@ -271,7 +271,7 @@ bool SaveRestoreWidget::on_restoreButton_clicked()
     for (bool more=zip.goToFirstFile(); more; more=zip.goToNextFile()) {
 
         if (!zip.getCurrentFileInfo(&info)) {
-            Utils::Log::addError(this, tr("Unable to get informations about archived file. Error %1").arg(zip.getZipError()));
+            Utils::Log::addError(this, tr("Unable to get information about archived file. Error %1").arg(zip.getZipError()));
             return false;
         }
 

@@ -315,8 +315,8 @@
     </message>
     <message>
         <location filename="../../libs/translationutils/constanttranslations.h" line="208"/>
-        <source>Templates database informations</source>
-        <translation>Informations base : Modèles</translation>
+        <source>Templates database information</source>
+        <translation>Informations de la base de données des modèles</translation>
     </message>
     <message>
         <location filename="../../libs/translationutils/constanttranslations.h" line="210"/>
@@ -497,7 +497,7 @@
     </message>
     <message>
         <location filename="../../libs/translationutils/constanttranslations.h" line="251"/>
-        <source>View update informations</source>
+        <source>View update information</source>
         <translation>Voir les informations de mise à jour</translation>
     </message>
     <message>
@@ -538,13 +538,13 @@
     </message>
     <message>
         <location filename="../../libs/translationutils/constanttranslations.h" line="265"/>
-        <source>Protocols database informations</source>
-        <translation>Informations base : Protocoles</translation>
+        <source>Protocols database information</source>
+        <translation>Informations de la base de données des protocoles</translation>
     </message>
     <message>
         <location filename="../../libs/translationutils/constanttranslations.h" line="266"/>
-        <source>Interactions database informations</source>
-        <translation>Informations base : Interactions</translation>
+        <source>Interactions database information</source>
+        <translation>Informations de la base de données des interactions</translation>
     </message>
     <message>
         <location filename="../../libs/translationutils/constanttranslations.h" line="268"/>
@@ -663,6 +663,7 @@
     </message>
     <message>
         <location filename="../../libs/translationutils/constanttranslations.h" line="295"/>
+        <location filename="../../libs/translationutils/constanttranslations.h" line="452"/>
         <source>Information</source>
         <translation></translation>
     </message>
@@ -1064,12 +1065,12 @@
     </message>
     <message>
         <location filename="../../libs/translationutils/constanttranslations.h" line="409"/>
-        <source>More informations</source>
+        <source>More information</source>
         <translation>Plus d&apos;informations</translation>
     </message>
     <message>
         <location filename="../../libs/translationutils/constanttranslations.h" line="410"/>
-        <source>Hide extra informations</source>
+        <source>Hide extra information</source>
         <translation>Cacher les informations additionnelles</translation>
     </message>
     <message>
@@ -1164,8 +1165,8 @@
     </message>
     <message>
         <location filename="../../libs/translationutils/constanttranslations.h" line="541"/>
-        <source>Agenda database informations</source>
-        <translation>Informations de la base de données Agenda</translation>
+        <source>Agenda database information</source>
+        <translation>Informations de la base de données des agendas</translation>
     </message>
     <message>
         <location filename="../../libs/translationutils/constanttranslations.h" line="542"/>
@@ -1453,11 +1454,6 @@
         <translation>Sauvegarde le fichier %1</translation>
     </message>
     <message>
-        <location filename="../../libs/translationutils/constanttranslations.h" line="452"/>
-        <source>Informations</source>
-        <translation></translation>
-    </message>
-    <message>
         <location filename="../../libs/translationutils/constanttranslations.h" line="455"/>
         <source>Version</source>
         <translation></translation>
@@ -1589,13 +1585,13 @@
     </message>
     <message>
         <location filename="../../libs/translationutils/constanttranslations.h" line="264"/>
-        <source>Drugs database informations</source>
+        <source>Drugs database information</source>
         <translation>Informations de la base de données thérapeutiques</translation>
     </message>
     <message>
         <location filename="../../libs/translationutils/constanttranslations.h" line="267"/>
-        <source>Past medical history database informations</source>
-        <translation>Informations de la base de données antécédents</translation>
+        <source>Past medical history database information</source>
+        <translation>Informations de la base de données des antécédents</translation>
     </message>
     <message>
         <location filename="../../libs/translationutils/constanttranslations.h" line="269"/>
@@ -1858,12 +1854,12 @@ Localisation : %2</translation>
     </message>
     <message>
         <location filename="../../libs/translationutils/constanttranslations.h" line="522"/>
-        <source>Build informations</source>
+        <source>Build information</source>
         <translation>Information de compilation</translation>
     </message>
     <message>
         <location filename="../../libs/translationutils/constanttranslations.h" line="523"/>
-        <source>Version informations</source>
+        <source>Version information</source>
         <translation>Informations de version</translation>
     </message>
     <message>
@@ -1958,7 +1954,7 @@ Localisation : %2</translation>
     </message>
     <message>
         <location filename="../../libs/translationutils/constanttranslations.h" line="588"/>
-        <source>Patient informations</source>
+        <source>Patient information</source>
         <translation>Informations sur le patient</translation>
     </message>
     <message>

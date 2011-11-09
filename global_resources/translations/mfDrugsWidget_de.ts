@@ -98,6 +98,11 @@ Drug %1 is already in your prescription</source>
         <translation type="unfinished">Dialog</translation>
     </message>
     <message>
+        <location filename="../../plugins/drugsplugin/drugswidget/interactionsynthesisdialog.ui" line="71"/>
+        <source>Information</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
         <location filename="../../plugins/drugsplugin/drugswidget/interactionsynthesisdialog.ui" line="116"/>
         <source>Risk and management</source>
         <translation type="unfinished"></translation>
@@ -125,11 +130,6 @@ Drug %1 is already in your prescription</source>
     <message>
         <location filename="../../plugins/drugsplugin/drugswidget/interactionsynthesisdialog.ui" line="89"/>
         <source>Class information</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <location filename="../../plugins/drugsplugin/drugswidget/interactionsynthesisdialog.ui" line="71"/>
-        <source>Informations</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
@@ -215,7 +215,7 @@ Drug %1 is already in your prescription</source>
     </message>
     <message>
         <location filename="../../plugins/drugsplugin/drugspreferences/databaseselectorwidget.ui" line="55"/>
-        <source>Database informations</source>
+        <source>Database information</source>
         <translation type="unfinished"></translation>
     </message>
 </context>
@@ -248,12 +248,12 @@ Drug %1 is already in your prescription</source>
     </message>
     <message>
         <location filename="../../plugins/drugsplugin/dosagedialog/mfDosageCreatorDialog.cpp" line="260"/>
-        <source>Help and Infos</source>
+        <source>Current database website</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
         <location filename="../../plugins/drugsplugin/dosagedialog/mfDosageCreatorDialog.cpp" line="260"/>
-        <source>Current database website</source>
+        <source>Help and Info</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
@@ -778,11 +778,6 @@ p, li { white-space: pre-wrap; }
         <translation>Tester</translation>
     </message>
     <message>
-        <location filename="../../plugins/drugsplugin/drugswidget/druginfo.ui" line="122"/>
-        <source>All informations are exact</source>
-        <translation>Alle Informationen sind exakt</translation>
-    </message>
-    <message>
         <location filename="../../plugins/drugsplugin/drugswidget/druginfo.ui" line="129"/>
         <source>Something is wrong</source>
         <translation>Etwas ist falsch</translation>
@@ -794,15 +789,20 @@ p, li { white-space: pre-wrap; }
         <translation>Erkläre was falsch ist</translation>
     </message>
     <message>
-        <location filename="../../plugins/drugsplugin/drugswidget/druginfo.ui" line="155"/>
-        <location filename="../../plugins/drugsplugin/drugswidget/druginfo.ui" line="309"/>
-        <source>Send this informations</source>
-        <translation>Sende diese Information</translation>
-    </message>
-    <message>
         <location filename="../../plugins/drugsplugin/drugswidget/druginfo.ui" line="173"/>
         <source>Drug interaction class</source>
         <translation>Medikamenten Interaktionsklasse</translation>
+    </message>
+    <message>
+        <location filename="../../plugins/drugsplugin/drugswidget/druginfo.ui" line="122"/>
+        <source>All information are exact</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../../plugins/drugsplugin/drugswidget/druginfo.ui" line="155"/>
+        <location filename="../../plugins/drugsplugin/drugswidget/druginfo.ui" line="309"/>
+        <source>Send this information</source>
+        <translation type="unfinished"></translation>
     </message>
     <message>
         <location filename="../../plugins/drugsplugin/drugswidget/druginfo.ui" line="189"/>
@@ -849,7 +849,7 @@ p, li { white-space: pre-wrap; }
     <name>DrugsWidget::Internal::DrugInfoPrivate</name>
     <message>
         <location filename="../../plugins/drugsplugin/drugswidget/druginfo.cpp" line="110"/>
-        <source>INN Informations will be lost.
+        <source>INN Information will be lost.
 Do you want to send them ?</source>
         <translation type="unfinished"></translation>
     </message>
@@ -1110,7 +1110,7 @@ Do you really want to change the editing mode ?</source>
     </message>
     <message>
         <location filename="../../plugins/drugsplugin/drugspreferences/drugselectorwidget.ui" line="20"/>
-        <source>Available informations</source>
+        <source>Available information</source>
         <translation type="unfinished"></translation>
     </message>
     <message>

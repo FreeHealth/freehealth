@@ -7,7 +7,7 @@
         <location filename="../../plugins/templatesplugin/templatescontenteditor.ui" line="14"/>
         <location filename="../../plugins/templatesplugin/templatescontenteditor.ui" line="26"/>
         <source>Content editor</source>
-        <translation type="unfinished"></translation>
+        <translation>Éditeur de contenu</translation>
     </message>
 </context>
 <context>
@@ -15,11 +15,11 @@
     <message>
         <location filename="../../plugins/templatesplugin/templatesmodel.cpp" line="110"/>
         <source>Save templates .</source>
-        <translation type="unfinished"></translation>
+        <translation>Sauvegarder le modèle.</translation>
     </message>
     <message>
         <location filename="../../plugins/templatesplugin/templatesmodel.cpp" line="111"/>
-        <source>Some datas are not actually saved into database.Do you want to save them ?
+        <source>Some data are not actually saved into database.Do you want to save them ?
  Answering &apos;No&apos; will cause definitive data lose.</source>
         <translation type="unfinished"></translation>
     </message>
@@ -208,7 +208,7 @@
     </message>
     <message>
         <location filename="../../plugins/templatesplugin/templatesview.cpp" line="612"/>
-        <source>This action is definitive and all informations will be lost. Children of this item will be deleted as well.</source>
+        <source>This action is definitive and all information will be lost. Children of this item will be deleted as well.</source>
         <translation type="unfinished"></translation>
     </message>
 </context>

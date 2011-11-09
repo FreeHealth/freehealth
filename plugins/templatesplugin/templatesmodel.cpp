@@ -108,7 +108,7 @@ public:
     {
         if (m_Model->isDirty()) {
             bool yes = Utils::yesNoMessageBox(tr("Save templates ."),
-                                   tr("Some datas are not actually saved into database."
+                                   tr("Some data are not actually saved into database."
                                       "Do you want to save them ?\n Answering 'No' will cause definitive data lose."),
                                    "");
             if (yes) {

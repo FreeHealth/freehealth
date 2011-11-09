@@ -912,7 +912,7 @@ QTreeWidget* SettingsPrivate::getTreeWidget(QWidget *parent) const
     bold.setBold(true);
 
     // add system informations
-    QTreeWidgetItem * sysItem = new QTreeWidgetItem(tree, QStringList() << tr("System informations"));
+    QTreeWidgetItem * sysItem = new QTreeWidgetItem(tree, QStringList() << tr("System information"));
     sysItem->setFont(0,bold);
     new QTreeWidgetItem(sysItem, QStringList() << tr("Operating System") << Utils::osName());
 #ifndef Q_OS_WIN32

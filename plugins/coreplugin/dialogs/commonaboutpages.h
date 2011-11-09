@@ -40,7 +40,7 @@ public:
     ~BuildAboutPage();
 
     QString id() const       { return objectName();   }
-    QString name() const     { return tr("4. Build informations"); }
+    QString name() const     { return tr("4. Build information"); }
     QString category() const { return tr("Application"); }
 
     QWidget *createPage(QWidget *parent = 0);

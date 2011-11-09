@@ -205,7 +205,7 @@ enum TitleInterpret {
         const char * const  UNLOCK_TEXT           = QT_TRANSLATE_NOOP("tkConstants", "Unlock");
         const char * const  LOCKED_TEXT           = QT_TRANSLATE_NOOP("tkConstants", "Locked");
         const char * const  UNLOCKED_TEXT         = QT_TRANSLATE_NOOP("tkConstants", "Unlocked");
-        const char * const  TEMPLATES_DATABASE_INFORMATIONS_TEXT         = QT_TRANSLATE_NOOP("tkConstants", "Templates database informations");
+        const char * const  TEMPLATES_DATABASE_INFORMATIONS_TEXT         = QT_TRANSLATE_NOOP("tkConstants", "Templates database information");
 
         const char * const  PMHX                  = QT_TRANSLATE_NOOP("tkConstants", "PMHx");
         const char * const  PASTMEDICALHISTORY    = QT_TRANSLATE_NOOP("tkConstants", "Past medical history");
@@ -248,7 +248,7 @@ enum TitleInterpret {
         const char * const  PREFERENCES_TEXT      = QT_TRANSLATE_NOOP("tkConstants", "Preferences");
         const char * const  APPCONFIGURATOR_TEXT  = QT_TRANSLATE_NOOP("tkConstants", "Application global configurator");
         const char* const   CONFIGMEDINTUX_TEXT   = QT_TRANSLATE_NOOP("tkConstants", "Configure MedinTux");
-        const char * const  VIEWUPDATE_TEXT       = QT_TRANSLATE_NOOP("tkConstants", "View update informations");
+        const char * const  VIEWUPDATE_TEXT       = QT_TRANSLATE_NOOP("tkConstants", "View update information");
         const char * const  PRINT_PREVIEW_TEXT    = QT_TRANSLATE_NOOP("tkConstants", "Print Preview");
         const char * const  TRANSLATORS_TEXT      = QT_TRANSLATE_NOOP("tkConstants", "Translators");
 
@@ -261,10 +261,10 @@ enum TitleInterpret {
 
         // Drugs
         const char* const DRUGS_DATABASE                = QT_TRANSLATE_NOOP("tkConstants", "Drugs database");
-        const char* const DRUGS_DATABASE_INFORMATIONS   = QT_TRANSLATE_NOOP("tkConstants", "Drugs database informations");
-        const char* const DOSAGES_DATABASE_INFORMATIONS   = QT_TRANSLATE_NOOP("tkConstants", "Protocols database informations");
-        const char* const INTERACTIONS_DATABASE_INFORMATIONS   = QT_TRANSLATE_NOOP("tkConstants", "Interactions database informations");
-        const char* const PMH_DATABASE_INFORMATIONS     = QT_TRANSLATE_NOOP("tkConstants", "Past medical history database informations");
+        const char* const DRUGS_DATABASE_INFORMATIONS   = QT_TRANSLATE_NOOP("tkConstants", "Drugs database information");
+        const char* const DOSAGES_DATABASE_INFORMATIONS   = QT_TRANSLATE_NOOP("tkConstants", "Protocols database information");
+        const char* const INTERACTIONS_DATABASE_INFORMATIONS   = QT_TRANSLATE_NOOP("tkConstants", "Interactions database information");
+        const char* const PMH_DATABASE_INFORMATIONS     = QT_TRANSLATE_NOOP("tkConstants", "Past medical history database information");
         const char* const INTERACTIONS_DATABASE         = QT_TRANSLATE_NOOP("tkConstants", "Interactions database");
         const char* const DRUGS                         = QT_TRANSLATE_NOOP("tkConstants", "Drugs");
         const char* const PROTOCOLS                     = QT_TRANSLATE_NOOP("tkConstants", "Protocols");
@@ -406,8 +406,8 @@ enum TitleInterpret {
         const char* const SAVING_SETTINGS                   = QT_TRANSLATE_NOOP("tkConstants", "Settings recovered" );
         const char* const CREATING_DEFAULT_SETTINGS_FOR_1   = QT_TRANSLATE_NOOP("tkConstants", "Creating default settings for %1");
         const char* const SHOW_DETAILS                      = QT_TRANSLATE_NOOP("tkConstants", "Show details");
-        const char* const MORE_INFORMATIONS                 = QT_TRANSLATE_NOOP("tkConstants", "More informations");
-        const char* const HIDE_EXTRA_INFORMATIONS           = QT_TRANSLATE_NOOP("tkConstants", "Hide extra informations");
+        const char* const MORE_INFORMATIONS                 = QT_TRANSLATE_NOOP("tkConstants", "More information");
+        const char* const HIDE_EXTRA_INFORMATIONS           = QT_TRANSLATE_NOOP("tkConstants", "Hide extra information");
 
         // Users related message
         const char* const WELCOME_USER                      = QT_TRANSLATE_NOOP("tkConstants", "Welcome to FreeMedForms, you are now connected.");
@@ -449,7 +449,7 @@ enum TitleInterpret {
         const char* const XML_DOCUMENT_TYPE_MISMATCH         = QT_TRANSLATE_NOOP("tkConstants", "Document type name mismatch.");
 
         // Messages and errors
-        const char* const INFORMATIONS                       = QT_TRANSLATE_NOOP("tkConstants", "Informations");
+        const char* const INFORMATIONS                       = QT_TRANSLATE_NOOP("tkConstants", "Information");
         const char* const CANCEL                             = QT_TRANSLATE_NOOP("tkConstants", "Cancel");
         const char* const CLEAR                              = QT_TRANSLATE_NOOP("tkConstants", "Clear");
         const char* const VERSION                            = QT_TRANSLATE_NOOP("tkConstants", "Version");
@@ -519,8 +519,8 @@ enum TitleInterpret {
 	const char* const TEAM_TRANSLATORS = QT_TRANSLATE_NOOP("tkConstants", "Translators");
 
         // Build related
-        const char* const BUILD_INFORMATIONS = QT_TRANSLATE_NOOP("tkConstants", "Build informations");
-        const char* const BUILD_VERSION_INFORMATIONS = QT_TRANSLATE_NOOP("tkConstants", "Version informations");
+        const char* const BUILD_INFORMATIONS = QT_TRANSLATE_NOOP("tkConstants", "Build information");
+        const char* const BUILD_VERSION_INFORMATIONS = QT_TRANSLATE_NOOP("tkConstants", "Version information");
         const char* const BUILD_DATE_TIME_1_2 = QT_TRANSLATE_NOOP("tkConstants", "Build on %1 %2");
         const char* const BUILD_VERSION_1 = QT_TRANSLATE_NOOP("tkConstants", "Build version : %1");
         const char* const BUILD_FULLAPP = QT_TRANSLATE_NOOP("tkConstants", "Full application");
@@ -538,7 +538,7 @@ enum TitleInterpret {
         const char * const AGENDA = QT_TRANSLATE_NOOP("tkConstants", "Agenda");
         const char * const AGENDA_EVENT = QT_TRANSLATE_NOOP("tkConstants", "Agenda event");
         const char * const AGENDA_EVENTS = QT_TRANSLATE_NOOP("tkConstants", "Agenda events");
-        const char * const AGENDA_DATABASE_INFORMATIONS = QT_TRANSLATE_NOOP("tkConstants", "Agenda database informations");
+        const char * const AGENDA_DATABASE_INFORMATIONS = QT_TRANSLATE_NOOP("tkConstants", "Agenda database information");
         const char * const NO_AVAILABILITY = QT_TRANSLATE_NOOP("tkConstants", "No availability");
         const char * const ATTENDEE = QT_TRANSLATE_NOOP("tkConstants", "Attendee");
         const char * const ATTENDEES = QT_TRANSLATE_NOOP("tkConstants", "Attendees");
@@ -585,7 +585,7 @@ enum TitleInterpret {
         const char* const PATIENT_NAME = QT_TRANSLATE_NOOP("tkConstants", "Patient Name");
         const char* const PATIENT      = QT_TRANSLATE_NOOP("tkConstants", "Patient");
         const char* const PATIENTS     = QT_TRANSLATE_NOOP("tkConstants", "Patients");
-        const char* const PATIENT_INFORMATION  = QT_TRANSLATE_NOOP("tkConstants", "Patient informations");
+        const char* const PATIENT_INFORMATION  = QT_TRANSLATE_NOOP("tkConstants", "Patient information");
         const char* const PATIENT_DATABASE  = QT_TRANSLATE_NOOP("tkConstants", "Patient database");
         const char* const CLEAR_PATIENT_INFOS = QT_TRANSLATE_NOOP("tkConstants", "Clear patient's information");
         const char* const TOGGLE_PATIENT_INFORMATIONS = QT_TRANSLATE_NOOP("tkConstants", "Toggle patient's information");

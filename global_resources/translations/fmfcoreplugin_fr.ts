@@ -237,7 +237,7 @@
     </message>
     <message>
         <location filename="../../plugins/coreplugin/dialogs/commonaboutpages.h" line="43"/>
-        <source>4. Build informations</source>
+        <source>4. Build information</source>
         <translation>4. Informations de compilation</translation>
     </message>
     <message>
@@ -293,30 +293,30 @@
     </message>
     <message>
         <location filename="../../plugins/coreplugin/dialogs/debugdialog.cpp" line="101"/>
-        <source>Sending debugging informations to dev team</source>
-        <translation>Envoi des informations de déboggage à l&apos;équipe de développement</translation>
+        <source>Sending debugging information to dev team</source>
+        <translation>Envoyer les informations de déboggage à l&apos;équipe de développement</translation>
     </message>
     <message>
         <location filename="../../plugins/coreplugin/dialogs/debugdialog.cpp" line="102"/>
-        <source>Trying to send informations to dev team.
+        <source>Trying to send information to dev team.
 Using Url : %1 
 Please wait...</source>
-        <translation>Essaie d&apos;envoyer les informations à l&apos;équipe de développement.
-En utilisant l&apos;URL : %1
+        <translation>Essaye d&apos;envoyer les informations à l&apos;équipe de développement.
+Url : %1
 Veuillez patienter...</translation>
     </message>
     <message>
         <location filename="../../plugins/coreplugin/dialogs/debugdialog.cpp" line="123"/>
-        <source>Debugging informations correctly sent.</source>
-        <translation>Les informations de déboggage ont correctement été envoyées.</translation>
+        <source>Debugging information correctly sent.</source>
+        <translation>Informations de déboggage correctement envoyées.</translation>
     </message>
     <message>
         <location filename="../../plugins/coreplugin/dialogs/debugdialog.cpp" line="126"/>
-        <source>Debugging informations correctly send to dev team.
+        <source>Debugging information correctly send to dev team.
 Using Url : %1 
 %2</source>
-        <translation>Les informations de déboggage ont été correctement envoyées.
-URL : %1
+        <translation>Informations de déboggage correctement envoyées à l&apos;équipe de développement.
+Url: %1
 %2</translation>
     </message>
 </context>
@@ -479,11 +479,6 @@ URL : %1
         <translation>Valeur</translation>
     </message>
     <message>
-        <location filename="../../plugins/coreplugin/settings.cpp" line="915"/>
-        <source>System informations</source>
-        <translation>Informations du système</translation>
-    </message>
-    <message>
         <location filename="../../plugins/coreplugin/settings.cpp" line="917"/>
         <source>Operating System</source>
         <translation>Système d&apos;exploitation</translation>
@@ -636,6 +631,11 @@ URL : %1
         <location filename="../../plugins/coreplugin/settings.cpp" line="1063"/>
         <source>DocumentationPath</source>
         <translation></translation>
+    </message>
+    <message>
+        <location filename="../../plugins/coreplugin/settings.cpp" line="915"/>
+        <source>System information</source>
+        <translation>Informations système</translation>
     </message>
     <message>
         <location filename="../../plugins/coreplugin/settings.cpp" line="933"/>
@@ -895,12 +895,12 @@ Veuillez contacter votre administrateur réseau.</translation>
 <context>
     <name>Core::SettingsDialog</name>
     <message>
-        <location filename="../../plugins/coreplugin/dialogs/settingsdialog.cpp" line="62"/>
+        <location filename="../../plugins/coreplugin/dialogs/settingsdialog.cpp" line="65"/>
         <source>Apply all changes (all pages)</source>
         <translation>Appliquer tous les changements (toutes les pages)</translation>
     </message>
     <message>
-        <location filename="../../plugins/coreplugin/dialogs/settingsdialog.cpp" line="63"/>
+        <location filename="../../plugins/coreplugin/dialogs/settingsdialog.cpp" line="66"/>
         <source>Reset to default the current page</source>
         <translation>Réinitialiser les valeurs par défaut sur la page courante</translation>
     </message>

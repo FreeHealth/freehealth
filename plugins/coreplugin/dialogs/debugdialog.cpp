@@ -98,8 +98,8 @@ void DebugDialog::on_butSend_clicked()
         m_sending = true;
         // showing a messagebox
         m_infoMessageBox = new QMessageBox(this);
-        m_infoMessageBox->setText( tr( "Sending debugging informations to dev team") );
-        m_infoMessageBox->setInformativeText( tr("Trying to send informations to dev team.\n"
+        m_infoMessageBox->setText( tr( "Sending debugging information to dev team") );
+        m_infoMessageBox->setInformativeText( tr("Trying to send information to dev team.\n"
                                                  "Using Url : %1 \n"
                                                  "Please wait..." ).arg( m_sender.usedUrl() ) );
         m_infoMessageBox->setWindowTitle( qApp->applicationName() );
@@ -120,10 +120,10 @@ bool DebugDialog::on_butSave_clicked()
 
 void DebugDialog::onSendMessage_done()
 {
-    Utils::Log::addMessage( this, tr( "Debugging informations correctly sent." ) );
+    Utils::Log::addMessage( this, tr( "Debugging information correctly sent." ) );
     if ( m_infoMessageBox )
     {
-        m_infoMessageBox->setInformativeText( tr("Debugging informations correctly send to dev team.\n"
+        m_infoMessageBox->setInformativeText( tr("Debugging information correctly send to dev team.\n"
                                              "Using Url : %1 \n"
                                              "%2" ).arg( m_sender.usedUrl(), m_sender.resultMessage() ) );
         m_infoMessageBox->exec();
