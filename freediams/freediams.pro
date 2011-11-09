@@ -9,6 +9,9 @@ PACKAGE_VERSION  = 0.6.0
 FREEDIAMS = 1
 INSTALL_DRUGS = 1
 INSTALL_ICD_DATABASE = 1
+INSTALL_ACCOUNT_FILES = 0
+INSTALL_ZIPCODES = 0
+INSTALL_PROFILES_FILES = 0
 
 include( ../config.pri )
 !CONFIG(debug, release|debug):include( ../buildspecs/install.pri )
