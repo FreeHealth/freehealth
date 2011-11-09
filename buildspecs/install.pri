@@ -79,6 +79,12 @@ message( Pixmaps - splashscreens : $${INSTALL_SPLASHPIX_PATH} )
 !isEmpty(INSTALL_DOCS_PATH):message( Documentation : $${INSTALL_DOCS_PATH} )
 !isEmpty(INSTALL_DESKTOP_FILES_PATH):message( DesktopFile : $${INSTALL_DESKTOP_FILES_PATH} )
 !isEmpty(INSTALL_DESKTOP_ICON_PATH):message( DesktopIcon : $${INSTALL_DESKTOP_ICON_PATH} )
+eval(INSTALL_DRUGS=1):message( Installing drugs database )
+eval(INSTALL_PROFILES_FILES=1):message( Installing user default Profiles files)
+eval(INSTALL_ICD_DATABASE=1):message( Installing ICD10 database )
+eval(INSTALL_ACCOUNT_FILES=1):message( Installing Account files )
+eval(INSTALL_ZIPCODES=1):message( Installing ZipCodes database )
+
 
 # Install target
 !isEmpty(INSTALL_BINARY_PATH):!isEmpty(BUILD_BINARY_PATH){
@@ -95,7 +101,6 @@ macx {
  mac10_6.files=$$[QT_INSTALL_LIBS]/QtGui.framework/Resources/qt_menu.nib
  INSTALLS+=mac10_6
 }
-
 
 # manage binary wrapper
 !isEmpty(INSTALL_BINARY_WRAPPER_NAME){
@@ -160,9 +165,11 @@ INSTALLS += usersdb
 }
 
 # Install profiles
+eval(INSTALL_PROFILES_FILES=1):!isEmpty(INSTALL_PROFILES_PATH){
 profiles_resources.path = $${INSTALL_PROFILES_PATH}
 profiles_resources.files = $${SOURCES_PROFILES}
 INSTALLS += profiles_resources
+}
 
 # Install theme
 screens.path = $${INSTALL_SPLASHPIX_PATH}
@@ -220,13 +227,15 @@ freeicd_db.path=$${INSTALL_DATABASES_PATH}/icd10
 freeicd_db.files=$${SOURCES_DATABASES}/icd10/icd10.db
 INSTALLS+=freeicd_sqlfile freeicd_db
 }
+
 # Install FreeAccount SQL files
 eval(INSTALL_ACCOUNT_FILES=1){
 account_sqlfile.path=$${INSTALL_RESOURCES_PATH}/sql/account
 account_sqlfile.files=$${SOURCES_GLOBAL_RESOURCES}/sql/account/*
 INSTALLS+=account_sqlfile
 }
-# Install FreeAccount SQL files
+
+# Install Zipcodes db
 eval(INSTALL_ZIPCODES=1){
 zipcodes_db.path=$${INSTALL_DATABASES_PATH}/zipcodes
 zipcodes_db.files=$${SOURCES_DATABASES}/zipcodes/zipcodes.db
@@ -275,5 +284,5 @@ INSTALLS+=zipcodes_db
    qt_accessibleplugins.files = $${QTPLUGINS_PATH}/accessible
    INSTALLS+=qt_sqlplugins qt_imagesplugins qt_accessibleplugins
    message(Bundle : Qt Plugins will be installed from $${QTPLUGINS_PATH} to $${INSTALL_QT_PLUGINS_PATH} )
-  }
+ }
 
