@@ -24,6 +24,12 @@
  *       NAME <MAIL@ADRESS>                                                *
  *       NAME <MAIL@ADRESS>                                                *
  ***************************************************************************/
+/**
+  \class Form::FormEditorDialog
+  Dialog that allows users to add sub-forms to the current patient file
+*/
+
+
 #include "formeditordialog.h"
 #include "episodemodel.h"
 #include "constants_db.h"
@@ -35,6 +41,7 @@
 #include <coreplugin/icore.h>
 #include <coreplugin/itheme.h>
 #include <coreplugin/constants_icons.h>
+#include <coreplugin/imainwindow.h>
 
 #include <utils/global.h>
 
@@ -46,6 +53,7 @@ using namespace Form;
 static inline Form::Internal::EpisodeBase *episodeBase() { return Form::Internal::EpisodeBase::instance(); }
 static inline Core::ITheme *theme()  { return Core::ICore::instance()->theme(); }
 static inline Form::FormManager *formManager() {return Form::FormManager::instance();}
+static inline Core::IMainWindow *mainWindow() {return Core::ICore::instance()->mainWindow();}
 
 FormEditorDialog::FormEditorDialog(EpisodeModel *model, EditionModes mode, QWidget *parent) :
     QDialog(parent),
@@ -68,6 +76,8 @@ FormEditorDialog::FormEditorDialog(EpisodeModel *model, EditionModes mode, QWidg
 
     setWindowTitle(tr("Form Editor"));
     setWindowIcon(theme()->icon(Core::Constants::ICONFORMS));
+
+    Utils::resizeAndCenter(this, mainWindow());
 }
 
 FormEditorDialog::~FormEditorDialog()
