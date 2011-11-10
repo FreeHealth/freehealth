@@ -102,6 +102,11 @@ TextEditorForm::TextEditorForm(Form::FormItem *formItem, QWidget *parent) :
     m_Text = new Editor::TextEditor(this, t);
     m_Text->setObjectName("TextEditor_" + m_FormItem->uuid());
     hb->addWidget(m_Text);
+    if (options.contains("expanded", Qt::CaseInsensitive)) {
+        /** \todo add a filterEvent and resize the textEditor to the maximum of the parent's scroolbar content. */
+        m_Text->setSizePolicy(QSizePolicy::Expanding, QSizePolicy::Expanding);
+        m_Text->setMinimumHeight(1000);
+    }
 
     // create item data
     TextEditorData *data = new TextEditorData(formItem);
