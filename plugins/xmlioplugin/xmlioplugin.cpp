@@ -36,6 +36,8 @@
 #include "xmliobase.h"
 
 #include <coreplugin/dialogs/pluginaboutpage.h>
+#include <coreplugin/icore.h>
+#include <coreplugin/translators.h>
 
 #include <utils/log.h>
 
@@ -51,6 +53,10 @@ XmlFormIOPlugin::XmlFormIOPlugin() :
 {
     if (Utils::Log::warnPluginsCreation())
         qWarning() << "creating XmlIOPlugin";
+
+    // Add Translator to the Application
+    Core::ICore::instance()->translators()->addNewTranslator("xmlioplugin");
+
     // create XML reader singleton
     m_XmlReader = Internal::XmlFormContentReader::instance();
     addObject(m_FormIo = new Internal::XmlFormIO(this));
