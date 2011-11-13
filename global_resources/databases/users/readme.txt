@@ -1,1 +1,1 @@
-Database will be autoatically created at first time running
+Database will be automatically created at first time running
