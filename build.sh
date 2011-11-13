@@ -28,15 +28,15 @@ echo
 
 createTranslations()
 {
-  echo release global_resources/translations/*.ts
+  release global_resources/translations/*.ts
 }
 
 # $1 = lowered case bundle name
 doCompilation() 
 {
   echo "*** Building application : $1 ***"
-  echo qmake $1.pro -r -config debug LOWERED_APPNAME=$1
-  echo make
+  qmake $1.pro -r -config debug LOWERED_APPNAME=$1
+  make
 }
 
 #########################################################################################
