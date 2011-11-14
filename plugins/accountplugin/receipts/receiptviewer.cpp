@@ -557,7 +557,6 @@ bool treeViewsActions::isChildOfThesaurus() {
 
 void treeViewsActions::fillActionTreeView()
 {
-    // ERIC -> Ici y a rien de traduit ??
     m_actionsTreeModel = new QStandardItemModel;
     QStringList listOfMainActions;
     QMap<QString,QString> parametersMap;
@@ -892,7 +891,7 @@ void ReceiptViewer::actionsOfTreeView(const QModelIndex &index) {
     QVariant  debtor;
     QVariant site;
     QVariant distrules;
-    if(data == "Values"){
+    if(data == tr("Values")){
         findReceiptsValues *rv = new findReceiptsValues(this);
         if (WarnDebugMessage)
     	      qDebug() << __FILE__ << QString::number(__LINE__) << " in findReceiptsValues "  ;
@@ -918,7 +917,7 @@ void ReceiptViewer::actionsOfTreeView(const QModelIndex &index) {
                }
              }
          }
-    if(data == "Preferred Value"){// preferential act of payment
+    if(data == tr("Preferred Value")){// preferential act of payment
         
         choiceDialog choice(this,false);
         if(choice.exec() == QDialog::Accepted){
@@ -973,7 +972,7 @@ void ReceiptViewer::actionsOfTreeView(const QModelIndex &index) {
     	  if (WarnDebugMessage)
     	      qDebug() << __FILE__ << QString::number(__LINE__) << " m_distanceRuleType =" << m_distanceRuleType ;
         }
-    if (data == "Round trip")
+    if (data == tr("Round trip"))
     {
     	  choiceDialog dist(this,true);
     	  if (dist.exec()== QDialog::Accepted)
