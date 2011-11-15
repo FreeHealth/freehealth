@@ -302,7 +302,6 @@ void UserCalendarModel::removePeople(const int row, const QString &uid)
 /** Submit all modifications to the database. */
 bool UserCalendarModel::submit()
 {
-    WARN_FUNC << d->m_UserUid;
     bool ok = true;
     for(int i = 0; i < d->m_UserCalendars.count(); ++i) {
         if (!base()->saveUserCalendar(d->m_UserCalendars.at(i)))
