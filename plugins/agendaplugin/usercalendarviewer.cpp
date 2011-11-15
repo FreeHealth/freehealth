@@ -48,7 +48,7 @@
 #include <coreplugin/actionmanager/actionmanager.h>
 
 #include <calendar/basic_item_edition_dialog.h>
-
+#include <utils/log.h>
 #include <translationutils/constanttranslations.h>
 
 #include "ui_usercalendarviewer.h"
@@ -168,7 +168,9 @@ UserCalendarViewer::~UserCalendarViewer()
 
 void UserCalendarViewer::recalculateComboAgendaIndex()
 {
+    WARN_FUNC << d->m_UserCalendarModel->defaultUserCalendarModelIndex();
     d->ui->availableAgendasCombo->setCurrentIndex(d->m_UserCalendarModel->defaultUserCalendarModelIndex().row());
+    on_availableAgendasCombo_activated(d->m_UserCalendarModel->defaultUserCalendarModelIndex().row());
 }
 
 void UserCalendarViewer::newEvent()
@@ -264,8 +266,12 @@ void UserCalendarViewer::userChanged()
 {
     // Update ui
     d->ui->userNameLabel->setText(user()->value(Core::IUser::FullName).toString());
+    if (d->m_UserCalendarModel) {
+        disconnect(d->m_UserCalendarModel, SIGNAL(dataChanged(QModelIndex,QModelIndex)), this, SLOT(updateCalendarData(QModelIndex,QModelIndex)));
+    }
     // model is automatically updated and reseted but the userCalendar combo model
     d->m_UserCalendarModel = agendaCore()->userCalendarModel();
+    connect(d->m_UserCalendarModel, SIGNAL(dataChanged(QModelIndex,QModelIndex)), this, SLOT(updateCalendarData(QModelIndex,QModelIndex)));
     d->ui->availableAgendasCombo->setModel(d->m_UserCalendarModel);
     d->ui->availableAgendasCombo->setModelColumn(UserCalendarModel::ExtraLabel);
     QModelIndex calIndex = d->m_UserCalendarModel->defaultUserCalendarModelIndex();
@@ -311,6 +317,24 @@ void UserCalendarViewer::userChanged()
         d->scrollOnShow = false;
     } else {
         d->scrollOnShow = true;
+    }
+}
+
+void UserCalendarViewer::updateCalendarData(const QModelIndex &top, const QModelIndex &bottom)
+{
+    Q_UNUSED(top);
+    Q_UNUSED(bottom);
+    if (top.column()==UserCalendarModel::DefaultDuration) {
+        int defaultDuration = d->m_UserCalendarModel->index(top.row(), UserCalendarModel::DefaultDuration, top.parent()).data().toInt();
+        d->ui->calendarViewer->setDayScaleHourDivider(defaultDuration/60);
+        d->ui->calendarViewer->setDayItemDefaultDuration(defaultDuration);
+        d->ui->durationLabel->setText(QString::number(defaultDuration) + " " + tkTr(Trans::Constants::MINUTES));
+        if (defaultDuration%5)
+            defaultDuration = (defaultDuration/5);
+        else
+            defaultDuration = (defaultDuration/5 - 1);
+        d->ui->availDurationCombo->setCurrentIndex(defaultDuration);
+        recalculateAvailabilitiesWithDurationIndex(defaultDuration);
     }
 }
 

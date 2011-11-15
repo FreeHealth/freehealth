@@ -69,6 +69,7 @@ private Q_SLOTS:
     void recalculateAvailabilitiesWithDurationIndex(const int index);
     void on_availableAgendasCombo_activated(const int index);
     void userChanged();
+    void updateCalendarData(const QModelIndex &top, const QModelIndex &bottom);
 
 protected:
     bool event(QEvent *e);
