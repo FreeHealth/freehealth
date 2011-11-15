@@ -648,13 +648,63 @@ bool AgendaBase::saveCalendarAvailabilities(Agenda::UserCalendar *calendar)
         return false;
     }
 
+    // delete all recorded availabilities of this calendar
+    // get all availIds for the calId
+    database().transaction();
+    QSqlQuery query(database());
+    QHash<int, QString> where;
+    QStringList availIds;
+    // select avail_id from avail where cal_id=6
+    where.insert(Constants::AVAIL_CAL_ID, QString("=%1").arg(calendar->data(Constants::Db_CalId).toInt()));
+    if (query.exec(this->select(Constants::Table_AVAILABILITIES, Constants::AVAIL_ID, where))) {
+        while (query.next()) {
+            availIds << query.value(0).toString();
+        }
+    } else {
+        LOG_QUERY_ERROR(query);
+    }
+    query.finish();
+
+    // get all tr_id for deleted availIds
+    QStringList trIds;
+    where.clear();
+    where.insert(Constants::AVTOTR_AVID, QString("IN (%1)").arg(availIds.join(",")));
+    if (query.exec(this->select(Constants::Table_AVAIL_TO_TIMERANGE, Constants::AVTOTR_TRID, where))) {
+        while (query.next()) {
+            trIds << query.value(0).toString();
+        }
+    } else {
+        LOG_QUERY_ERROR(query);
+    }
+    query.finish();
+
+    // delete records
+    where.clear();
+    where.insert(Constants::AVAIL_ID, QString("IN (%1)").arg(availIds.join(",")));
+    if (!query.exec(this->prepareDeleteQuery(Constants::Table_AVAILABILITIES, where))) {
+        LOG_QUERY_ERROR(query);
+    }
+    query.finish();
+    where.clear();
+    where.insert(Constants::AVTOTR_AVID, QString("IN (%1)").arg(availIds.join(",")));
+    if (!query.exec(this->prepareDeleteQuery(Constants::Table_AVAIL_TO_TIMERANGE, where))) {
+        LOG_QUERY_ERROR(query);
+    }
+    query.finish();
+    where.clear();
+    where.insert(Constants::TIMERANGE_ID, QString("IN (%1)").arg(trIds.join(",")));
+    if (!query.exec(this->prepareDeleteQuery(Constants::Table_TIMERANGE, where))) {
+        LOG_QUERY_ERROR(query);
+    }
+    query.finish();
+    database().commit();
+
+    // No availabilities -> finished
     if (!calendar->hasAvailability()) {
-        return false;
+        return true;
     }
 
-    /** \todo code here : manage update calendar availabilities */
-
-    QSqlQuery query(database());
+    // recreate availabilities
     QVector<Agenda::DayAvailability> av = calendar->availabilities();
     QHash<int, Agenda::DayAvailability> hashAv;
     // fusion availabilties by days
