@@ -74,6 +74,26 @@ static inline Internal::XmlFormContentReader *reader() {return Internal::XmlForm
 static inline Internal::XmlIOBase *base() {return Internal::XmlIOBase::instance();}
 
 
+static void saveScreenShots(const QString &absPathDir, const QString &formUid, Internal::XmlFormContentReader *reader)
+{
+    QDir shotPath(absPathDir + QDir::separator() + "shots");
+    if (shotPath.exists()) {
+        LOG_FOR("XmlFormIO","Saving attached screenshots to database " + formUid);
+        QFileInfoList files = Utils::getFiles(shotPath, "*.png");
+        foreach(const QFileInfo &f, files) {
+            QString fp = f.absoluteFilePath();
+            QFile file(fp);
+            // mode = last dir (lang) + fileName.extension
+            int end = fp.lastIndexOf("/");
+            int begin = fp.lastIndexOf("/", end - 1) + 1;
+            QString mode = fp.mid(begin, end-begin) + "/" + f.fileName();
+            if (file.open(QFile::ReadOnly)) {
+                QByteArray ba = file.readAll();
+                reader->saveFormToDatabase(formUid, XmlIOBase::ScreenShot, ba.toBase64(), mode);
+            }
+        }
+    }
+}
 ////////////////////////////////////////////////////////////////////////////////////////////////////////////
 //////////////////////////////////////////////  XmlFormIO  /////////////////////////////////////////////////
 ////////////////////////////////////////////////////////////////////////////////////////////////////////////
@@ -211,7 +231,7 @@ QList<Form::FormIODescription *> XmlFormIO::getFormFileDescriptions(const Form::
     if (!query.formUuid().isEmpty()) {
         XmlFormName form(query.formUuid());
         if (canReadForms(query)) {
-            Form::FormIODescription *desc = reader()->readFileInformations(form.absFileName);
+            Form::FormIODescription *desc = reader()->readFileInformations(form.absFileName, query);
             if (desc) {
                 desc->setData(Form::FormIODescription::IsCompleteForm, true);
                 toReturn.append(desc);
@@ -289,10 +309,19 @@ QList<Form::FormMain *> XmlFormIO::loadAllRootForms(const QString &uuidOrAbsPath
     // Populate DB with all the files of this form if needed
     if (!base()->isFormExists(form.uid)) {
         LOG("Saving forms to database " + form.uid);
+        // save XML forms
+        /** \todo catch all included files and be sure that they are saved to DB. Eg: <file>__subforms__/gyneco/machin.xml</file>... Idem for update ???*/
         foreach(const QFileInfo &f, dir.entryInfoList(QStringList() << "*.xml", QDir::Files | QDir::Readable)) {
             QString modeName = f.baseName();
             reader()->saveFormToDatabase(form.uid, XmlIOBase::FullContent, Utils::readTextFile(f.absoluteFilePath(), Utils::DontWarnUser), modeName);
         }
+//        // save HTML contents
+//        foreach(const QFileInfo &f, dir.entryInfoList(QStringList() << "*.html", QDir::Files | QDir::Readable)) {
+//            QString modeName = f.baseName();
+//            reader()->saveFormToDatabase(form.uid, XmlIOBase::FullContent, Utils::readTextFile(f.absoluteFilePath(), Utils::DontWarnUser), modeName);
+//        }
+        // save screenshots
+        saveScreenShots(dir.absolutePath(), form.uid, reader());
     }
 
     QHash<QString, QString> mode_contents = base()->getAllFormFullContent(form.uid);
@@ -498,6 +527,8 @@ bool XmlFormIO::checkDatabaseFormFileForUpdates()
                     } else {
                         LOG("Form updated: " + formUid + " " + file.baseName());
                     }
+                    // save screenshots
+                    saveScreenShots(file.absoluteFilePath(), formUid, reader());
                 }
             }
         }

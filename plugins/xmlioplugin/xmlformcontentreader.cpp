@@ -297,17 +297,45 @@ Form::FormIODescription *XmlFormContentReader::readXmlDescription(const QDomElem
 }
 
 /** Return the Form description. Call this member just after the checkFormFileContent() so that the form xml content will be cached */
-Form::FormIODescription *XmlFormContentReader::readFileInformations(const QString &formUidOrFullAbsPath)
+Form::FormIODescription *XmlFormContentReader::readFileInformations(const QString &formUidOrFullAbsPath, const Form::FormIOQuery &query)
 {
+    Form::FormIODescription *toReturn = 0;
     // Get the QDomDocument from cache
     QDomDocument *doc = m_DomDocFormCache[formUidOrFullAbsPath];
     if (!doc) {
         LOG_ERROR_FOR("XmlFormContentReader", "No document in cache call canReadForm before. Form: " + formUidOrFullAbsPath);
-        return 0;
+        return toReturn;
     }
+
+    // get from cache and read description
     QDomElement root = doc->documentElement();
     root = root.firstChildElement(Constants::TAG_FORM_DESCRIPTION);
-    return readXmlDescription(root, formUidOrFullAbsPath);
+    toReturn = readXmlDescription(root, formUidOrFullAbsPath);
+
+    // get screenshots if requiered
+    if (query.getScreenShots()) {
+        XmlFormName form(formUidOrFullAbsPath);
+        QString shotPath = form.absPath + QDir::separator() + "shots" + QDir::separator();
+        QStringList lang;
+        lang << QLocale().name().left(2).toLower() << "en" << "xx" << "all";
+        bool found = false;
+        foreach(const QString &l, lang) {
+            if (QDir(shotPath + l).exists()) {
+                found = true;
+                shotPath = shotPath + l;
+                break;
+            }
+        }
+        if (found) {
+            QDir dir(shotPath);
+            qWarning() << "Trying to read shots" << dir.absolutePath();
+            foreach(const QFileInfo &file, dir.entryInfoList(QStringList() << "*.png" << "*.jpg" << "*.jpeg" << "*.gif")) {
+                QPixmap pix(file.absoluteFilePath());
+                toReturn->addScreenShot(pix);
+            }
+        }
+    }
+    return toReturn;
 }
 
 QList<Form::FormIODescription *> XmlFormContentReader::getFormFileDescriptions(const Form::FormIOQuery &query)

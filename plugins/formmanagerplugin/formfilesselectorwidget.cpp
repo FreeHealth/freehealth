@@ -35,6 +35,7 @@
 #include <coreplugin/constants_icons.h>
 #include <coreplugin/constants_tokensandsettings.h>
 
+#include <utils/widgets/imageviewer.h>
 #include <extensionsystem/pluginmanager.h>
 
 #include <QFileSystemModel>
@@ -210,6 +211,7 @@ FormFilesSelectorWidget::FormFilesSelectorWidget(QWidget *parent, const FormType
 
     // connect actions, buttons...
     connect(d->ui->treeView, SIGNAL(activated(QModelIndex)),this, SLOT(on_treeView_activated(QModelIndex)));
+    connect(d->ui->screenshots, SIGNAL(clicked()), this, SLOT(showScreenShot()));
 }
 
 FormFilesSelectorWidget::~FormFilesSelectorWidget()
@@ -284,6 +286,21 @@ void FormFilesSelectorWidget::onFilterSelected()
         d->createTreeModel(Form::FormIODescription::TypeName);
     }
     d->ui->toolButton->setDefaultAction(action);
+}
+
+void FormFilesSelectorWidget::showScreenShot()
+{
+    // Get screenshots from FormIOReader
+    int id = d->ui->treeView->currentIndex().data(Qt::UserRole+1).toInt();
+    if (id >= 0 && id < d->m_FormDescr.count()) {
+        Form::FormIODescription *descr = d->m_FormDescr.at(id);
+
+        // Create ImageViewer dialog
+        Utils::ImageViewer dlg(this);
+        dlg.setPixmaps(descr->screenShots());
+        dlg.exec();
+    }
+
 }
 
 void FormFilesSelectorWidget::changeEvent(QEvent *e)

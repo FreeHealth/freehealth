@@ -347,6 +347,27 @@ QList<Form::FormIODescription *> XmlIOBase::getFormDescription(const Form::FormI
             Form::FormIODescription *descr = reader()->readXmlDescription(doc.firstChildElement(Constants::TAG_FORM_DESCRIPTION), query.value(0).toString());
             if (descr) {
                 descr->setData(Form::FormIODescription::Category, "db: " + descr->data(Form::FormIODescription::Category).toString(), QLocale().name().left(2));
+
+                if (formQuery.getScreenShots()) {
+                    // Get the base64 content for the formUid
+                    QHash<int, QString> where;
+                    where.insert(Constants::FORMCONTENT_TYPE, QString("=%1").arg(ScreenShot));
+                    where.insert(Constants::FORMCONTENT_FORM_ID, QString("='%1'").arg(formQuery.formUuid()));
+                    req = select(Constants::Table_FORM_CONTENT, QList<int>()
+                                 << Constants::FORMCONTENT_MODENAME << Constants::FORMCONTENT_CONTENT, where);
+                    QSqlQuery shot(database());
+                    if (shot.exec(req)) {
+                        while (shot.next()) {
+                            QPixmap pix;
+                            pix.loadFromData(QByteArray::fromBase64(shot.value(1).toString().toUtf8()));
+
+                        }
+                    } else {
+                        LOG_QUERY_ERROR(shot);
+                    }
+                    shot.finish();
+                }
+
                 toReturn << descr;
             }
         }
@@ -354,6 +375,7 @@ QList<Form::FormIODescription *> XmlIOBase::getFormDescription(const Form::FormI
         LOG_QUERY_ERROR(query);
     }
     query.finish();
+
     return toReturn;
 }
 
@@ -409,7 +431,6 @@ QHash<QString, QString> XmlIOBase::getAllFormFullContent(const QString &formUid)
         }
         query.finish();
     }
-
     return toReturn;
 }
 

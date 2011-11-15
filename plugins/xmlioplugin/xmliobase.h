@@ -36,7 +36,7 @@
  * \file xmliobase.h
  * \author Eric MAEKER <eric.maeker@gmail.com>
  * \version 0.6.0
- * \date 09 Jun 2011
+ * \date 10 Nov 2011
 */
 
 namespace Form {
@@ -59,6 +59,7 @@ public:
     enum TypeOfContent {
         FullContent = 0,
         Description,
+        ScreenShot,
 //        Forms,
 //        PmhCategories,
         ExtraFiles

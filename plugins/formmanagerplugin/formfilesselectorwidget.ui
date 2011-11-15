@@ -55,6 +55,13 @@
        </property>
       </spacer>
      </item>
+     <item>
+      <widget class="QPushButton" name="screenshots">
+       <property name="text">
+        <string>Screenshots</string>
+       </property>
+      </widget>
+     </item>
     </layout>
    </item>
    <item row="1" column="0">

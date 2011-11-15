@@ -28,6 +28,7 @@
 #define XMLFORMCONTENTREADER_H
 
 #include <xmlioplugin/xmlformname.h>
+#include <formmanagerplugin/formioquery.h>
 
 #include <QString>
 #include <QStringList>
@@ -40,7 +41,7 @@
  * \file xmlformcontentreader.h
  * \author Eric MAEKER <eric.maeker@gmail.com>
  * \version 0.6.0
- * \date 05 Sept 2011
+ * \date 10 Nov 2011
 */
 
 namespace Category {
@@ -79,7 +80,7 @@ public:
     bool checkFormFileContent(const QString &formUidOrFullAbsPath, const QString &contents) const;
 
     Form::FormIODescription *readXmlDescription(const QDomElement &xmlDescr, const QString &formUid);
-    Form::FormIODescription *readFileInformations(const QString &formUidOrFullAbsPath);
+    Form::FormIODescription *readFileInformations(const QString &formUidOrFullAbsPath, const Form::FormIOQuery &query = Form::FormIOQuery());
 
     QList<Form::FormIODescription *> getFormFileDescriptions(const Form::FormIOQuery &query);
 

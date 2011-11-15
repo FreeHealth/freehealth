@@ -42,7 +42,6 @@
 #include <QPointer>
 #include <QHash>
 
-
 #include <QDebug>
 
 QT_BEGIN_NAMESPACE
@@ -229,6 +228,7 @@ private:
     FormMainDebugPage *m_DebugPage;
     int m_Episode;
     QString m_ModeName;
+    QList<QPixmap> m_Shots;
 };
 inline QList<Form::FormMain *> Form::FormMain::flattenFormMainChildren() const
 {

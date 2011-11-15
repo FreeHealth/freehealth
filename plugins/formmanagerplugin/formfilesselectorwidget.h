@@ -78,6 +78,7 @@ public:
 private Q_SLOTS:
     void on_treeView_activated(const QModelIndex &index);
     void onFilterSelected();
+    void showScreenShot();
 
 protected:
     void changeEvent(QEvent *e);

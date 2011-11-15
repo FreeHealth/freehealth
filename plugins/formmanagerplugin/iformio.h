@@ -38,6 +38,8 @@
 #include <QTreeWidget>
 #include <QHash>
 #include <QVariant>
+#include <QList>
+#include <QPixmap>
 
 /**
  * \file iformio.h
@@ -66,7 +68,7 @@ public:
     };
     Q_DECLARE_FLAGS(TypesOfForm, TypeOfForm)
 
-    FormIOQuery() : m_type(DefaultForms | CompleteForms), m_ForceFile(false), m_AllForms(false), m_AllDescr(false) {}
+    FormIOQuery();
     virtual ~FormIOQuery() {}
 
     void setTypeOfForms(const TypesOfForm type) {m_type=type;}
@@ -94,11 +96,14 @@ public:
     void setGetAllAvailableFormDescriptions(bool state) {m_AllDescr=state;}
     bool getAllAvailableFormDescriptions() const {return m_AllDescr;}
 
+    void setGetScreenShots(bool get) {m_GetShots=get;}
+    bool getScreenShots() const {return m_GetShots;}
+
 private:
     TypesOfForm m_type;
     QStringList m_langs, m_spe, m_authors;
     QString m_uuid;
-    bool m_ForceFile, m_AllForms, m_AllDescr;
+    bool m_ForceFile, m_AllForms, m_AllDescr, m_GetShots;
 };
 
 //class FORM_EXPORT FormIOResult
@@ -190,11 +195,16 @@ public:
     QVariant data(const int ref, const QString &lang = QString::null) const;
     bool setData(const int ref, const QVariant &value, const QString &lang = QString::null);
 
+    // Manage update informations
     void addUpdateInformation(FormIOUpdateInformations *updateInfo) {m_UpdateInfos.append(updateInfo);}
     QList<FormIOUpdateInformations *> updateInformation() const {return m_UpdateInfos;}
     QList<FormIOUpdateInformations *> updateInformationForVersion(const QString &version) const;
     QList<FormIOUpdateInformations *> updateInformationForVersion(const Utils::VersionNumber &version) const;
 //    QList<FormIOUpdateInformations *> updateInformation(const QString &fromVersion, const QString &toVersion) const;
+
+    // Manage screenshots
+    void addScreenShot(const QPixmap &shot) {m_Shots.append(shot);}
+    QList<QPixmap> screenShots() const {return m_Shots;}
 
     void toTreeWidget(QTreeWidget *tree) const;
 
@@ -202,6 +212,7 @@ private:
     Internal::FormIODescriptionPrivate *d;
     IFormIO *m_reader;
     QList<FormIOUpdateInformations *> m_UpdateInfos;
+    QList<QPixmap> m_Shots;
 };
 
 class FORM_EXPORT IFormIO : public QObject
