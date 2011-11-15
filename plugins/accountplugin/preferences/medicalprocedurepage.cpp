@@ -122,7 +122,7 @@ QWidget *MedicalProcedurePage::createPage(QWidget *parent)
 MedicalProcedureWidget::MedicalProcedureWidget(QWidget *parent) :
         QWidget(parent)
 {
-    QCoreApplication::processEvents(QEventLoop::AllEvents);
+//    QCoreApplication::processEvents(QEventLoop::AllEvents);
     setObjectName("MedicalProcedureWidget");
     setupUi(this);
     m_db = QSqlDatabase::database(AccountDB::Constants::DB_ACCOUNTANCY);
