@@ -152,7 +152,7 @@ bool IcdCollectionModel::canAddThisCode(const QVariant &SID, bool checkDaget) co
         return false;
     foreach(const int sid, icdBase()->getHeadersSID(SID)) {
         if (d->m_ExcludedSIDs.contains(sid)) {
-            qWarning() << "asso header excluded" << d->m_ExcludedSIDs << sid;
+//            qWarning() << "asso header excluded" << d->m_ExcludedSIDs << sid;
             return false;
         }
     }
@@ -175,7 +175,7 @@ bool IcdCollectionModel::canAddThisAssociation(const Internal::IcdAssociation &a
 {
     // Association valid ?
     if (!asso.isValid()) {
-        qWarning() << "not valid";
+//        qWarning() << "not valid";
         return false;
     }
 
@@ -184,29 +184,29 @@ bool IcdCollectionModel::canAddThisAssociation(const Internal::IcdAssociation &a
 
     // in exclusions ?
     if (d->m_ExcludedSIDs.contains(asso.mainSid().toInt())) {
-        qWarning() << "main excluded" << d->m_ExcludedSIDs << asso.mainSid().toInt();
+//        qWarning() << "main excluded" << d->m_ExcludedSIDs << asso.mainSid().toInt();
         return false;
     }
     foreach(const int sid, icdBase()->getHeadersSID(asso.mainSid().toInt())) {
         if (d->m_ExcludedSIDs.contains(sid)) {
-            qWarning() << "main header excluded" << d->m_ExcludedSIDs << sid;
+//            qWarning() << "main header excluded" << d->m_ExcludedSIDs << sid;
             return false;
         }
     }
 
     // already included ?
     if (d->m_SIDs.contains(asso.associatedSid().toInt())) {
-        qWarning() << "asso already";
+//        qWarning() << "asso already";
         return false;
     }
     // in exclusions ?
     if (d->m_ExcludedSIDs.contains(asso.associatedSid().toInt())) {
-        qWarning() << "asso excluded" << d->m_ExcludedSIDs << asso.associatedSid().toInt();
+//        qWarning() << "asso excluded" << d->m_ExcludedSIDs << asso.associatedSid().toInt();
         return false;
     }
     foreach(const int sid, icdBase()->getHeadersSID(asso.associatedSid().toInt())) {
         if (d->m_ExcludedSIDs.contains(sid)) {
-            qWarning() << "asso header excluded" << d->m_ExcludedSIDs << sid;
+//            qWarning() << "asso header excluded" << d->m_ExcludedSIDs << sid;
             return false;
         }
     }
