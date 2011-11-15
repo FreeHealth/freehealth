@@ -277,6 +277,12 @@ QVariant IComponent::data(const int ref, const QString &lang) const
                 return QString();
             return base()->getAtcLabel(d_component->m_7CharAtcIds.at(0));
         }
+    case AtcCode:
+        {
+            if (d_component->m_7CharAtcIds.isEmpty())
+                return QString();
+            return base()->getAtcCode(d_component->m_7CharAtcIds.at(0));
+        }
     case InteractingClassNames:
         {
             QStringList names;
