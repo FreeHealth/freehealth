@@ -166,16 +166,17 @@ bool UserCalendarModel::setData(const QModelIndex &index, const QVariant &value,
 
     if (role==Qt::EditRole) {
         switch (index.column()) {
-        case Label: return u->setData(UserCalendar::Label, value); break;
-        case Description: return u->setData(UserCalendar::Description, value); break;
-        case Type: return u->setData(UserCalendar::Type, value); break;
-        case Status: return u->setData(UserCalendar::Status, value); break;
-        case IsDefault: return u->setData(UserCalendar::IsDefault, value); break;
-        case IsPrivate: return u->setData(UserCalendar::IsPrivate, value); break;
-        case Password: return u->setData(UserCalendar::Password, value); break;
-        case LocationUid: return u->setData(UserCalendar::LocationUid, value); break;
-        case DefaultDuration: return u->setData(UserCalendar::DefaultDuration, value); break;
+        case Label: u->setData(UserCalendar::Label, value); break;
+        case Description: u->setData(UserCalendar::Description, value); break;
+        case Type: u->setData(UserCalendar::Type, value); break;
+        case Status: u->setData(UserCalendar::Status, value); break;
+        case IsDefault: u->setData(UserCalendar::IsDefault, value); break;
+        case IsPrivate: u->setData(UserCalendar::IsPrivate, value); break;
+        case Password: u->setData(UserCalendar::Password, value); break;
+        case LocationUid: u->setData(UserCalendar::LocationUid, value); break;
+        case DefaultDuration: u->setData(UserCalendar::DefaultDuration, value); break;
         }
+        Q_EMIT dataChanged(index, index);
     }
 
     return true;
@@ -301,6 +302,7 @@ void UserCalendarModel::removePeople(const int row, const QString &uid)
 /** Submit all modifications to the database. */
 bool UserCalendarModel::submit()
 {
+    WARN_FUNC << d->m_UserUid;
     bool ok = true;
     for(int i = 0; i < d->m_UserCalendars.count(); ++i) {
         if (!base()->saveUserCalendar(d->m_UserCalendars.at(i)))
