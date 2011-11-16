@@ -1,3 +1,19 @@
+version=0.6.2
+{
+    * November 16, 2011
+    * Debug release
+
+    * Full changelog at:
+        * http://www.freemedforms.com/
+}
+version=0.6.0
+{
+    * November 7, 2011
+    * New stable release
+
+    * Full changelog at:
+        * http://www.freemedforms.com/
+}
 version=0.5.4
 {
     * Jan 2011
