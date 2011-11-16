@@ -74,6 +74,7 @@ global_resources/pixmap/splashscreens \
 global_resources/pixmap/svg/*.svg \
 global_resources/pixmap/svg/*.icns \
 global_resources/pixmap/svg/*.ico \
+global_resources/pixmap/svg/*.bmp \
 global_resources/textfiles/freediams.desktop \
 global_resources/textfiles/boys_surnames.csv \
 global_resources/textfiles/default_user_footer.htm \
@@ -122,6 +123,7 @@ global_resources/pixmap/splashscreens \
 global_resources/pixmap/svg/*.svg \
 global_resources/pixmap/svg/*.icns \
 global_resources/pixmap/svg/*.ico \
+global_resources/pixmap/svg/*.bmp \
 global_resources/package_helpers/freeicd* \
 global_resources/package_helpers/freemedforms.url \
 global_resources/translations/*.ts \
@@ -161,6 +163,7 @@ global_resources/pixmap/splashscreens \
 global_resources/pixmap/svg/*.svg \
 global_resources/pixmap/svg/*.icns \
 global_resources/pixmap/svg/*.ico \
+global_resources/pixmap/svg/*.bmp \
 global_resources/package_helpers/freepad* \
 global_resources/package_helpers/freemedforms.url \
 global_resources/translations/*.ts \
@@ -201,6 +204,7 @@ global_resources/pixmap/splashscreens \
 global_resources/pixmap/svg/*.svg \
 global_resources/pixmap/svg/*.icns \
 global_resources/pixmap/svg/*.ico \
+global_resources/pixmap/svg/*.bmp \
 global_resources/package_helpers/freetool* \
 global_resources/package_helpers/freemedforms.url \
 global_resources/translations/*.ts \
@@ -232,6 +236,7 @@ global_resources/pixmap/splashscreens \
 global_resources/pixmap/svg/*.svg \
 global_resources/pixmap/svg/*.icns \
 global_resources/pixmap/svg/*.ico \
+global_resources/pixmap/svg/*.bmp \
 global_resources/package_helpers/freeaccount* \
 global_resources/package_helpers/freemedforms.url \
 global_resources/profiles \
@@ -285,6 +290,8 @@ global_resources/pixmap/splashscreens \
 global_resources/pixmap/svg/*.svg \
 global_resources/pixmap/svg/*.icns \
 global_resources/pixmap/svg/*.ico \
+global_resources/pixmap/svg/*.bmp \
+global_resources/pixmap/svg/*.bmp \
 global_resources/profiles \
 global_resources/sql/account \
 global_resources/sql/server_config \
