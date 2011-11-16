@@ -28,6 +28,8 @@
  ***************************************************************************/
 #include "imageviewer.h"
 
+#include <utils/global.h>
+
 #include <QLabel>
 #include <QScrollBar>
 #include <QScrollArea>
@@ -51,7 +53,7 @@ ImageViewer::ImageViewer(QWidget *parent) :
     setLayout(l);
     l->addWidget(scrollArea);
 
-    resize(500, 400);
+    Utils::resizeAndCenter(this, parent);
 }
 
 void ImageViewer::setPixmap(const QPixmap &pixmap)
