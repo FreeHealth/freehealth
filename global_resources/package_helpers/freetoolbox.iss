@@ -5,11 +5,11 @@
 [Setup]
 AppName=FreeToolBox
 AppId=FreeToolBox
-AppVerName=FreeToolBox,0.1.0~beta
+AppVerName=FreeToolBox,__version__
 DefaultDirName={pf}\FreeToolBox
 DefaultGroupName=FreeToolBox
 UninstallDisplayIcon={app}FreeToolBox.exe
-VersionInfoDescription=FreeToolBox 0.1.0~beta
+VersionInfoDescription=FreeToolBox __version__
 VersionInfoProductName=FreeToolBox
 OutputDir=FreeToolBox
 ;ShowLanguageDialog=no
@@ -21,10 +21,10 @@ ChangesAssociations=yes
 ;LicenseFile=
 ;OutputDir=SourceDir
 ;WizardSmallImageFile=mysmallimage.bmp
-SourceDir=e:\FreeToolBox-0.1.0~beta\packages\win\FreeToolBox
-SetupIconFile=e:\FreeToolBox-0.1.0~beta\FreeToolBox\freetoolbox.ico
-WizardSmallImageFile=e:\FreeToolBox-0.1.0~beta\global_resources\pixmap\svg\freetoolbox-128.bmp
-WizardImageFile=e:\FreeToolBox-0.1.0~beta\global_resources\pixmap\svg\freetoolbox-128.bmp
+SourceDir=e:\FreeToolBox-__version__\packages\win\FreeToolBox
+SetupIconFile=e:\FreeToolBox-__version__\FreeToolBox\freetoolbox.ico
+WizardSmallImageFile=e:\FreeToolBox-__version__\global_resources\pixmap\svg\freetoolbox-128.bmp
+WizardImageFile=e:\FreeToolBox-__version__\global_resources\pixmap\svg\freetoolbox-128.bmp
 ;WizardImageStretch=no
 Compression=lzma/normal
 

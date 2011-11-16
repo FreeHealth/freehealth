@@ -5,11 +5,11 @@
 [Setup]
 AppName=FreeICD
 AppId=FreeICD
-AppVerName=FreeICD,0.1.0
+AppVerName=FreeICD,__version__
 DefaultDirName={pf}\FreeICD
 DefaultGroupName=FreeICD
 UninstallDisplayIcon={app}\FreeICD.exe
-VersionInfoDescription=FreeICD 0.1.0
+VersionInfoDescription=FreeICD __version__
 VersionInfoProductName=FreeICD
 OutputDir=FreeICD
 ;ShowLanguageDialog=no
@@ -21,10 +21,10 @@ ChangesAssociations=yes
 ;LicenseFile=
 ;OutputDir=SourceDir
 ;WizardSmallImageFile=mysmallimage.bmp
-SourceDir=e:\FreeICD-0.1.0\packages\win\FreeICD
-SetupIconFile=e:\FreeICD-0.1.0\FreeICD\freeicd.ico
-WizardSmallImageFile=e:\FreeICD-0.1.0\global_resources\pixmap\svg\freeicd-128.bmp
-WizardImageFile=e:\FreeICD-0.1.0\global_resources\pixmap\svg\freeicd-128.bmp
+SourceDir=e:\FreeICD-__version__\packages\win\FreeICD
+SetupIconFile=e:\FreeICD-__version__\FreeICD\freeicd.ico
+WizardSmallImageFile=e:\FreeICD-__version__\global_resources\pixmap\svg\freeicd-128.bmp
+WizardImageFile=e:\FreeICD-__version__\global_resources\pixmap\svg\freeicd-128.bmp
 ;WizardImageStretch=no
 Compression=lzma/normal
 

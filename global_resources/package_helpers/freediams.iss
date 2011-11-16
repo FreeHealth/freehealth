@@ -5,11 +5,11 @@
 [Setup]
 AppName=FreeDiams
 AppId=FreeDiams
-AppVerName=FreeDiams,0.6.2
+AppVerName=FreeDiams,__version__
 DefaultDirName={pf}\FreeDiams
 DefaultGroupName=FreeDiams
 UninstallDisplayIcon={app}\freediams.exe
-VersionInfoDescription=FreeDiams 0.6.2
+VersionInfoDescription=FreeDiams __version__
 VersionInfoProductName=FreeDiams
 OutputDir=FreeDiams
 ;ShowLanguageDialog=no
@@ -21,10 +21,10 @@ ChangesAssociations=yes
 ;LicenseFile=
 ;OutputDir=SourceDir
 ;WizardSmallImageFile=mysmallimage.bmp
-SourceDir=e:\freediams-0.6.2\packages\win\freediams
-SetupIconFile=e:\freediams-0.6.2\freediams\freediams.ico
-WizardSmallImageFile=e:\freediams-0.6.2\global_resources\pixmap\svg\freediams-128.bmp
-WizardImageFile=e:\freediams-0.6.2\global_resources\pixmap\svg\freediams-128.bmp
+SourceDir=e:\freediams-__version__\packages\win\freediams
+SetupIconFile=e:\freediams-__version__\freediams\freediams.ico
+WizardSmallImageFile=e:\freediams-__version__\global_resources\pixmap\svg\freediams-128.bmp
+WizardImageFile=e:\freediams-__version__\global_resources\pixmap\svg\freediams-128.bmp
 ;WizardImageStretch=no
 Compression=lzma/normal
 

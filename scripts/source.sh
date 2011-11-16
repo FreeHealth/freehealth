@@ -403,6 +403,12 @@ echo "**** UNPACK SOURCES PACKAGE TO CREATED DIR ****"
 tar xf $PACKPATH/sources.tar -C $PACKPATH
 rm $PACKPATH/sources.tar
 find $PACKPATH -type f -exec chmod -R 666 {} \;
+
+echo "   * DEFINING *.ISS FILES APP VERSION"
+cd $PACKPATH/global_resources/package_helpers
+sed -i "bkup" 's#__version__#'$APP_VERSION'#' $1.iss
+rm *.*bkup
+
 echo "   * ADDING SVN VERSION NUMBER"
 cd $PACKPATH/buildspecs
 SVN=`svn info -r HEAD $SCRIPT_PATH"/.." | grep 'Changed\ Rev' | cut -b 19-`
