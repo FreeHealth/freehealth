@@ -110,7 +110,7 @@ buildApp()
      echo "   *** QMake done"
    fi
 
-   MAKE_STEP=`make`
+   MAKE_STEP=`make -j 4`
    MAKE_STEP=$?
    if [ ! $MAKE_STEP = 0 ]; then
      echo "   *** Error: make step wrong ***"
