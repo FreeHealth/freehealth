@@ -170,7 +170,6 @@ void DocumentPrinter::prepareWatermark(Print::Printer *p, const int papers) cons
     int presence = Printer::DuplicataOnly;
     QString html;
     if (user()) {
-        /** \todo wrong papers */
 #ifdef FREEDIAMS
         align = user()->value(Core::IUser::PrescriptionWatermarkAlignement).toInt();
         presence = user()->value(Core::IUser::PrescriptionWatermarkPresence).toInt();
