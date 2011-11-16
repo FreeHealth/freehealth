@@ -45,6 +45,7 @@
 #include <printerplugin/printdialog.h>
 
 #include <utils/global.h>
+#include <utils/log.h>
 
 #include <QTextDocument>
 #include <QString>
@@ -231,7 +232,7 @@ bool DocumentPrinter::print(const QTextDocument &text, const int papers, bool pr
     p.setPrintWithDuplicata(printDuplicata);
 
     if (!p.preparePages()) {
-        qWarning() << "prepare pages wrong";
+        LOG_ERROR("Prepare pages process is wrong");
     }
 
     QWidget *parent = qApp->activeModalWidget();
