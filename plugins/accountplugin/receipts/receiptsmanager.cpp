@@ -51,7 +51,7 @@
 #include <QSqlDatabase>
 #include <QSqlQuery>
 
-enum { WarnDebugMessage = false };
+enum { WarnDebugMessage = true };
 
 static  QString freeaccount = "freeaccount";
 using namespace AccountDB;
@@ -166,7 +166,7 @@ QHash<QString,QVariant> receiptsManager::getParametersDatas(QString & userUid , 
        }
 
    }
-   if (table == tr("thesaurus"))
+   if (table == "thesaurus")
    {
        ThesaurusModel model(this);
        QString userFilter = QString("%1 = '%2'").arg("THESAURUS_USERUID",userUid);

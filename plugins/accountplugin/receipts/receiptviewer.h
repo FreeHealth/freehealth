@@ -68,15 +68,18 @@ public:
     ~treeViewsActions();
 
     void reset() {QTreeView::reset();}
-    void fillActionTreeView();
+    bool fillActionTreeView();
     QStandardItemModel *treeModel() const {return m_actionsTreeModel;}
 
 private:
-    //void mousePressEvent(QMouseEvent *event);
+    void mousePressEvent(QMouseEvent *event);
     void mouseReleaseEvent(QMouseEvent *event);
     bool deleteItemFromThesaurus(QModelIndex &index);
     bool addPreferedItem(QModelIndex &index);
     bool isChildOfThesaurus();
+    
+/*Q_SIGNALS :
+    void pressed(const QModelIndex&) { emit QAbstractItemView::pressed(const QModelIndex&);}*/
 
 private Q_SLOTS:
     void choosePreferedValue(bool b);
@@ -133,7 +136,7 @@ private Q_SLOTS:
     void deleteLine();
     void save();
     void saveAndQuit();
-    void actionsOfTreeView(const QModelIndex &);
+    void actionsOfTreeView(const QModelIndex& );
     void saveInThesaurus();
     void showControlReceipts(bool b);
     void clearAll(bool b);

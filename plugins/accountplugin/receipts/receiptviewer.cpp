@@ -62,7 +62,7 @@
 #include <QBrush>
 #include <QColor>
 
-enum { WarnDebugMessage = false };
+enum { WarnDebugMessage = true };
 
 static inline Core::IUser *user() { return Core::ICore::instance()->user(); }
 static inline Core::IPatient *patient() { return Core::ICore::instance()->patient(); }
@@ -436,13 +436,16 @@ treeViewsActions::~treeViewsActions(){}
 
 void treeViewsActions::userIsChanged(){
     m_userUuid = user()->uuid();
-    fillActionTreeView();
+    if (!fillActionTreeView())
+        {
+        	qWarning()  << __FILE__ << QString::number(__LINE__) << "index is not valid";
+        }
 }
 
-/*void treeViewsActions::mousePressEvent(QMouseEvent *event){
+void treeViewsActions::mousePressEvent(QMouseEvent *event){
     if (WarnDebugMessage)
     	      qDebug() << __FILE__ << QString::number(__LINE__) << " in  tree clicked" ;
-    if(event->button() == Qt::RightButton){
+    /*if(event->button() == Qt::RightButton){
         if(isChildOfThesaurus()){
             blockSignals(true);
             if (WarnDebugMessage)
@@ -454,14 +457,14 @@ void treeViewsActions::userIsChanged(){
             blockSignals(false);
         }
 
-    }
+    }*/
     if(event->button() == Qt::LeftButton){
             if (WarnDebugMessage)
-    	      qDebug() << __FILE__ << QString::number(__LINE__) << " in left button " ;
+    	      qDebug() << __FILE__ << QString::number(__LINE__) << " in left press button " ;
             blockSignals(false);
             QTreeView::mousePressEvent(event);
     }
-}*/
+}
 
 void treeViewsActions::mouseReleaseEvent(QMouseEvent *event){
     if (WarnDebugMessage)
@@ -484,6 +487,7 @@ void treeViewsActions::mouseReleaseEvent(QMouseEvent *event){
             qDebug() << __FILE__ << QString::number(__LINE__) << " in left button " ;
         blockSignals(false);
         QTreeView::mouseReleaseEvent(event);
+        
     }
 }
 
@@ -555,17 +559,18 @@ bool treeViewsActions::isChildOfThesaurus() {
     return ret;
 }
 
-void treeViewsActions::fillActionTreeView()
+bool treeViewsActions::fillActionTreeView()
 {
+    bool b = true;
     m_actionsTreeModel = new QStandardItemModel;
     QStringList listOfMainActions;
     QMap<QString,QString> parametersMap;
     //parametersMap.insert("Debtor","insurance");
-    parametersMap.insert(tr("Thesaurus"),tr("thesaurus"));
-    parametersMap.insert(tr("Values"),tr("values"));
+    parametersMap.insert(tr("Thesaurus"),"thesaurus");
+    parametersMap.insert(tr("Values"),"values");
     //parametersMap.insert("Sites","sites");
-    parametersMap.insert(tr("Preferred Value"),trUtf8("Preferred Value"));
-    parametersMap.insert(tr("Round trip"),trUtf8("Round trip"));
+    parametersMap.insert(tr("Preferred Value"),"Preferred Value");
+    parametersMap.insert(tr("Round trip"),"Round trip");
     //parametersMap.insert("Distance rules","distance_rules");
     listOfMainActions = parametersMap.keys();
     //insert items from tables if available
@@ -575,6 +580,8 @@ void treeViewsActions::fillActionTreeView()
     QString strKeysParameters;
     foreach(strKeysParameters,listOfMainActions){
         QString table = parametersMap.value(strKeysParameters);
+        if (WarnDebugMessage)
+        qDebug() << __FILE__ << QString::number(__LINE__) << "table" << table;
         QStringList listOfItemsOfTable;
         listOfItemsOfTable = manager.getParametersDatas(m_userUuid,table).keys();//QHash<QString,QVariant> name,uid
         QString strItemsOfTable;
@@ -614,11 +621,17 @@ void treeViewsActions::fillActionTreeView()
 
 
     QStandardItem *parentItem = treeModel()->invisibleRootItem();
+    if (!parentItem->index().isValid())
+    {
+    	qWarning() << __FILE__ << QString::number(__LINE__) << "parentItem is not valid";
+    }
     QString strMainActions;
     foreach(strMainActions,listOfMainActions) {
         if (WarnDebugMessage)
             qDebug() << __FILE__ << QString::number(__LINE__) << " strMainActions =" << strMainActions ;
         QStandardItem *actionItem = new QStandardItem(strMainActions);
+        actionItem->setEditable(false);
+        actionItem->setEnabled(true);
         //treeViewsActions colors
         if (strMainActions == tr("Debtor")) {
             QBrush green(Qt::darkGreen);
@@ -646,24 +659,45 @@ void treeViewsActions::fillActionTreeView()
         }
         
         parentItem->appendRow(actionItem);
+        if (!actionItem->index().isValid())
+        {
+    	    qWarning() << __FILE__ << QString::number(__LINE__) << "actionItem is not valid";
+    	    b = false;
+            }
+        else{
+            QModelIndex index = actionItem->index();
+            //actionItem->setCheckable(true);
+            if (WarnDebugMessage)
+                qDebug() << __FILE__ << QString::number(__LINE__) << "row = " << QString::number( index.row());
+                qDebug() << __FILE__ << QString::number(__LINE__) << "column = " << QString::number( index.column());
+            }
         QStringList listSubActions;
         listSubActions = m_mapSubItems.values(strMainActions);
         QString strSubActions;
         foreach(strSubActions,listSubActions){
             if (WarnDebugMessage)
-                qDebug() << __FILE__ << QString::number(__LINE__) << " strSubActions =" << strSubActions ;
+                qDebug() << __FILE__ << QString::number(__LINE__) << " strSubActions =" << 
+                         strSubActions ;
             QStandardItem *subActionItem = new QStandardItem(strSubActions);
             actionItem->appendRow(subActionItem);
+            if (!subActionItem->index().isValid())
+            {    	
+                qWarning() << __FILE__ << QString::number(__LINE__) << "subActionItem is not valid";
+                b = false;
+                }
         }
     }
     if (WarnDebugMessage)
         qDebug() << __FILE__ << QString::number(__LINE__)  ;
     setHeaderHidden(true);
+    setSortingEnabled ( false );
+
     setStyleSheet("background-color: rgb(201, 201, 201)");
     // actionsTreeView->setStyleSheet("foreground-color: red");
     setModel(treeModel());
     if (WarnDebugMessage)
-        qDebug() << __FILE__ << QString::number(__LINE__)  ;
+        qDebug() << __FILE__ << QString::number(__LINE__) << "ACTION TREEVIEW FILLED UP"  ;
+    return b;
 }
 
 bool treeViewsActions::deleteItemFromThesaurus(QModelIndex &index){
@@ -685,7 +719,11 @@ void treeViewsActions::changeEvent(QEvent *e) {
         delete m_actionsTreeModel;
             if (WarnDebugMessage)
             qDebug() << __FILE__ << QString::number(__LINE__) << " langage changed " ;
-        fillActionTreeView();
+        if (!fillActionTreeView())
+        {
+        	qWarning() << __FILE__ << QString::number(__LINE__) << "index is not valid";
+        }
+        reset();
         m_deleteThesaurusValue = new QAction(trUtf8("Delete this value."),this);
         m_choosePreferedValue = new QAction(trUtf8("Choose this value like the preferred."),this);
     }
@@ -775,10 +813,9 @@ ReceiptViewer::ReceiptViewer(QWidget *parent) :
     ui->amountsView->setColumnHidden(InternalAmount::AmountModel::Col_Debtor,true);
     ui->amountsView->setColumnHidden(InternalAmount::AmountModel::Col_Site,true);
     ui->amountsView->setColumnHidden(InternalAmount::AmountModel::Col_DistRule,true);
-    
-
-    
+       
     ui->amountsView->resizeRowsToContents();
+    
     ui->dateExecution->setDisplayFormat("yyyy-MM-dd");
     ui->dateExecution->setDate(QDate::currentDate());
     ui->datePayment->setDisplayFormat("yyyy-MM-dd");
@@ -802,7 +839,11 @@ ReceiptViewer::ReceiptViewer(QWidget *parent) :
     m_vbox = new QVBoxLayout;
     m_vbox->addWidget(m_actionTreeView);
     ui->actionsBox->setLayout(m_vbox);
-    m_actionTreeView->fillActionTreeView();
+    if (!m_actionTreeView->fillActionTreeView())
+        {
+        	qWarning() << __FILE__ << QString::number(__LINE__) << "index is not valid";
+        }
+    
     //preferential choices in the tree view.
     QString site = QString("Sites");
     QString distRule = QString("Distance rules");
@@ -834,8 +875,11 @@ ReceiptViewer::ReceiptViewer(QWidget *parent) :
     connect(ui->saveAndQuitButton,SIGNAL(pressed()),this,SLOT(saveAndQuit()));
     connect(ui->thesaurusButton,SIGNAL(pressed()),this,SLOT(saveInThesaurus()));
     connect(ui->displayRadioButton,SIGNAL(clicked(bool)),this,SLOT(showControlReceipts(bool)));
+    if (!connect(m_actionTreeView,SIGNAL(clicked(const QModelIndex&)),this,SLOT(actionsOfTreeView(const QModelIndex&))))
+    {
+    	qWarning() << __FILE__ << QString::number(__LINE__) << "unable to connect m_actionTreeView"; 
+    }
     
-    connect(m_actionTreeView,SIGNAL(clicked(const QModelIndex&)),this,SLOT(actionsOfTreeView(const QModelIndex&)));
     connect(m_clear,SIGNAL(triggered(bool)),this,SLOT(clearAll(bool)));
     connect(m_control,SIGNAL(isClosing()),this,SLOT(controlReceiptsDestroyed()));
     connect(user(), SIGNAL(userChanged()), this, SLOT(userUid()));
@@ -857,11 +901,26 @@ void ReceiptViewer::changeEvent(QEvent *e)
         delete m_vbox;
         if (WarnDebugMessage)
         qDebug() << __FILE__ << QString::number(__LINE__) << " in  ReceiptViewer::changeEvent(QEvent *e)"  ;
+        //treeViewsActions
         m_actionTreeView = new treeViewsActions(this);
         m_vbox = new QVBoxLayout;
         m_vbox->addWidget(m_actionTreeView);
         ui->actionsBox->setLayout(m_vbox);
-        m_actionTreeView->fillActionTreeView();
+        if (!m_actionTreeView->fillActionTreeView())
+        {
+        	qWarning()  << __FILE__ << QString::number(__LINE__) << "index is not valid";
+        }
+        if (!connect(m_actionTreeView,SIGNAL(clicked(const QModelIndex&)),this,SLOT(actionsOfTreeView(const QModelIndex&))))
+        {
+    	qWarning() << __FILE__ << QString::number(__LINE__) << "unable to connect m_actionTreeView"; 
+        }
+        //amountsView
+        m_model->setHeaderData(int(Cash),Qt::Horizontal,tr("Cash"));
+        m_model->setHeaderData(Check,Qt::Horizontal,tr("Check"));
+        m_model->setHeaderData(Visa,Qt::Horizontal,tr("Visa"));
+        m_model->setHeaderData(Banking,Qt::Horizontal,tr("Banking"));
+        m_model->setHeaderData(Other,Qt::Horizontal,tr("Other"));
+        m_model->setHeaderData(Due,Qt::Horizontal,tr("Du"));
         break;
     default:
         break;
@@ -880,10 +939,12 @@ void ReceiptViewer::deleteLine()
 
 
 
-void ReceiptViewer::actionsOfTreeView(const QModelIndex &index) {
+void ReceiptViewer::actionsOfTreeView(const QModelIndex & index) {
+    if (WarnDebugMessage)
+        qDebug() << __FILE__ << QString::number(__LINE__) << "in actionsOfTreeView(const QModelIndex& index) ";
     QString data = index.data(Qt::DisplayRole).toString();
     if (WarnDebugMessage)
-        qDebug() << __FILE__ << QString::number(__LINE__) << " data =" << data;
+        qDebug() << __FILE__ << QString::number(__LINE__) << " DATA =" << data;
     receiptsManager manager;
     QHash<QString,QString> hashOfValues;
     int typeOfPayment = ReceiptsConstants::Cash;
