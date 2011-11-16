@@ -4,7 +4,7 @@
 
 TEMPLATE = lib
 CONFIG *= staticlib
-win32:TARGET = ../../z  #under win32 leaving 'release' dir
+win32:TARGET = ../z
 else:TARGET = ../z
 
 # CONFIG += qt warn_on staticlib
