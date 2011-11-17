@@ -952,7 +952,7 @@ void ReceiptViewer::actionsOfTreeView(const QModelIndex & index) {
     QVariant  debtor;
     QVariant site;
     QVariant distrules;
-    if(data == tr("Values")){
+    if(data .contains( tr("Values"))){
         findReceiptsValues *rv = new findReceiptsValues(this);
         if (WarnDebugMessage)
     	      qDebug() << __FILE__ << QString::number(__LINE__) << " in findReceiptsValues "  ;
@@ -978,7 +978,7 @@ void ReceiptViewer::actionsOfTreeView(const QModelIndex & index) {
                }
              }
          }
-    if(data == tr("Preferred Value")){// preferential act of payment
+    if(data .contains( tr("Preferred Value"))){// preferential act of payment
         
         choiceDialog choice(this,false);
         if(choice.exec() == QDialog::Accepted){
@@ -1033,7 +1033,7 @@ void ReceiptViewer::actionsOfTreeView(const QModelIndex & index) {
     	  if (WarnDebugMessage)
     	      qDebug() << __FILE__ << QString::number(__LINE__) << " m_distanceRuleType =" << m_distanceRuleType ;
         }
-    if (data == tr("Round trip"))
+    if (data .contains( tr("Round trip")))
     {
     	  choiceDialog dist(this,true);
     	  if (dist.exec()== QDialog::Accepted)

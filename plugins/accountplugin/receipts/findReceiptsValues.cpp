@@ -32,7 +32,7 @@
 #include "findReceiptsValues.h"
 #include <QSqlQuery>
 #include <QSqlTableModel>
-enum { WarnDebugMessage = false };
+enum { WarnDebugMessage = true };
 using namespace AccountDB;
 using namespace Constants;
 
@@ -158,11 +158,13 @@ void findReceiptsValues::fillComboCategories(){
 
 void findReceiptsValues::fillListViewValues(const QString & comboItem){
     QList<int> counterList;
-    const QString baseName = trUtf8("medical_procedure");
+    const QString baseName = "medical_procedure";
     const QString strItem = comboItem.trimmed();
-    const QString name = trUtf8("NAME");
-    const QString amount = trUtf8("AMOUNT");
-    const QString type = trUtf8("TYPE");
+    if (WarnDebugMessage)
+    	      qDebug() << __FILE__ << QString::number(__LINE__) << strItem  ;
+    const QString name = "NAME";
+    const QString amount = "AMOUNT";
+    const QString type = "TYPE";
     QString filter = QString("WHERE %1 = '%2'").arg(type,strItem);
     QString req = QString("SELECT %1,%2 FROM %3 ").arg(name,amount,baseName )+filter;
     QStandardItemModel *model = new QStandardItemModel(0,2,this);
