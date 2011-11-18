@@ -167,15 +167,15 @@ bool MessageSender::postMessage()
         s.append("user=anomynous");
     else
         s.append("user=" + d->m_User);
-    s.append("&msg=" + d->m_Msg);
+    if (d->m_type==InformationToDevelopper)
+        s.append("&msg=" + d->m_Msg.toUtf8().toBase64());
+    else
+        s.append("&msg=" + d->m_Msg);
 
     d->http.setHost(d->url.host());
     d->m_Buffer = new QBuffer(qApp);
     d->m_Buffer->open(QBuffer::ReadWrite);
-    if (d->m_type==InformationToDevelopper)
-        d->http.request(header, s.toUtf8().toBase64(), d->m_Buffer);
-    else
-        d->http.request(header, s.toUtf8(), d->m_Buffer);
+    d->http.request(header, s.toUtf8(), d->m_Buffer);
     d->m_IsSending = true;
     return true;
 }
@@ -190,11 +190,12 @@ void MessageSender::httpDone(bool error)
     QString ret = "";
     if (!error) {
         ret = tkTr(Trans::Constants::MESSAGE_SENDED_OK);
-        Utils::Log::addMessage(this, ret);
+        LOG(ret);
+        LOG(d->m_Buffer->data());
     } else {
         ret = tkTr(Trans::Constants::ERROR_1_OCCURED_WHILE_2).arg(tkTr(Trans::Constants::POST_TO_1).arg(d->http.errorString()));
-        Utils::Log::addError(this, ret, __FILE__, __LINE__);
-        Utils::Log::addError(this, d->m_Buffer->data() , __FILE__, __LINE__);
+        LOG_ERROR(ret);
+        LOG_ERROR(d->m_Buffer->data());
     }
 
     d->m_LastResult = QString(d->m_Buffer->data());
@@ -204,7 +205,8 @@ void MessageSender::httpDone(bool error)
         Utils::informativeMessageBox(ret , tkTr(Trans::Constants::INFORMATIVE_MESSAGE_1).arg(d->m_LastResult), "");
     }
 
-    if (d->m_Buffer) delete d->m_Buffer;
+    if (d->m_Buffer)
+        delete d->m_Buffer;
     d->m_Buffer = 0;
     d->m_IsSending = false;
 

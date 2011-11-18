@@ -229,56 +229,52 @@ QString Log::saveLog(const QString &fileName)
     return f;
 }
 
-/** \brief Transforms log to a readable string. */
+/** \brief Transforms log to a readable wiki string. */
 QString Log::toString(const QString &settingsLog)
 {
     QString tmp;
-    tmp = "********************\n";
-    tmp += QCoreApplication::translate("Log", "Debugging informations");
-    tmp += "\n********************\n\n";
+    tmp = "===== ";
+    tmp += QCoreApplication::translate("Log", "LOG");
+    tmp += "=====\n\n";
 
     // add logs
-    tmp.append("********************\n");
-    tmp.append(QCoreApplication::translate("Log", "********** ERRORS *********\n"));
-    tmp.append("********************\n\n");
+    tmp.append("====");
+    tmp.append(QCoreApplication::translate("Log", "ERRORS"));
+    tmp.append("==== \n");
     QString prec;
+
+    tmp += "\n^ Object ^ Message ^ Date ^";
     foreach(const LogData &v, m_Messages) {
         if (v.isError()) {
             if (v.object!=prec) {
-                tmp += "\n" + v.object;
-                tmp += "\n\t";
+                tmp += "\n| " + v.object + " |";
                 prec = v.object;
             } else {
-                tmp += "\t";
+                tmp += "\n| ::: |";
             }
-            tmp += v.message;
-            tmp += "\t";
-            tmp += v.date.toString("dd/MM/yyyy hh:mm:ss:ms");
-            tmp += "\n";
+            tmp += "<nowiki>" + v.message + "</nowiki> |" + v.date.toString("dd/MM/yyyy hh:mm:ss:ms") + "|";
         }
     }
-    tmp.append("********************\n");
-    tmp.append(QCoreApplication::translate("Log", "********** MESSAGES *********\n"));
-    tmp.append("********************\n\n");
+    tmp.append("\n====");
+    tmp.append(QCoreApplication::translate("Log", "MESSAGES"));
+    tmp.append("====\n");
     prec.clear();
+
+    tmp += "\n^ Object ^ Message ^ Date ^";
     foreach(const LogData &v, m_Messages) {
         if (!v.isError()) {
             if (v.object!=prec) {
-                tmp += "\n" + v.object;
-                tmp += "\n\t";
+                tmp += "\n| " + v.object + " |";
                 prec = v.object;
             } else {
-                tmp += "\t";
+                tmp += "\n| ::: |";
             }
-            tmp += v.message.leftJustified(100,' ');;
-            tmp += "\t";
-            tmp += v.date.toString("dd/MM/yyyy hh:mm:ss:ms");
-            tmp += "\n";
+            tmp += "<nowiki>" + v.message + "</nowiki> |" + v.date.toString("dd/MM/yyyy hh:mm:ss:ms") + "|";
         }
     }
 
     // add settings
-    tmp += settingsLog + "\n";
+    tmp += "\n\n\n" + settingsLog + "\n";
 
     return tmp;
 }

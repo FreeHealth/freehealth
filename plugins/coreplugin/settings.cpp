@@ -1013,29 +1013,30 @@ QString SettingsPrivate::toString() const
     tmp += "===== SETTINGS =====\n";
 
     // add building informations
-    tmp += "\n  * " + tr("Running version : %1\n").arg(qApp->applicationName());
-    tmp += "\n  * " + tr("Build date : %1 %2\n").arg(__DATE__, __TIME__);
-    tmp += "\n  * " + tr("Qt Build version : %1\n").arg(QT_VERSION_STR);
-    tmp += "\n  * " + tr("Qt running version : %1\n").arg(qVersion());
-    tmp += "\n  * " + tr("Application Version : %1\n").arg(qApp->applicationVersion());
+    tmp += "\n^ Object ^ Value ^";
+    tmp += "\n| " + tr("Running version : %1").arg(qApp->applicationName()).replace(":", "|") + " |";
+    tmp += "\n| " + tr("Build date | %1 %2").arg(__DATE__, __TIME__) + " |";
+    tmp += "\n| " + tr("Qt Build version : %1").arg(QT_VERSION_STR).replace(":", "|") + " |";
+    tmp += "\n| " + tr("Qt running version : %1").arg(qVersion()).replace(":", "|") + " |";
+    tmp += "\n| " + tr("Application Version : %1").arg(qApp->applicationVersion()).replace(":", "|") + " |";
     if (Utils::isDebugCompilation())
-        tmp += "\n  * " + tr("Actual build : Debug\n");
+        tmp += "\n| " + tr("Actual build : Debug").replace(":", "|") + " |";
     else
-        tmp += "\n  * " + tr("Actual build : Release\n");
-    tmp += "\n  * " + tr("SVN version : %1\n").arg(SVN_VERSION);
-    tmp += "\n  * " + tr("Application path : %1\n").arg(qApp->applicationDirPath());
-    tmp += "\n  * " + QString("Ini File Name\t%2").arg(fileName());
-    tmp += "\n  * " + tr("Using Ini File") + "\t" + fileName();
+        tmp += "\n| " + tr("Actual build : Release").replace(":", "|") + " |";
+    tmp += "\n| " + tr("SVN version : %1").arg(SVN_VERSION).replace(":", "|") + " |";
+    tmp += "\n| " + tr("Application path : %1").arg(qApp->applicationDirPath()).replace(":", "|") + " |";
+    tmp += "\n| " + QString("Ini File Name : %2").arg(fileName()).replace(":", "|") + " |";
+    tmp += "\n| " + tr("Using Ini File") + " | " + fileName() + " |";
     if (Utils::isRunningOnLinux()) {
-        tmp.append("\n  * " + tr("Running on Linux"));
-        tmp += "\n    * " + tr("   uname returns : %1").arg(Utils::uname());
+        tmp.append("\n| " + tr("Running on Linux"));
+        tmp += "| " + tr("uname returns : %1").arg(Utils::uname()).replace("\n"," ") + " |";
     }
     else if (Utils::isRunningOnMac()) {
-        tmp.append("\n  * " + tr("Running on MacOs"));
-        tmp += "\n    * " + tr("   uname returns : %1").arg(Utils::uname());
+        tmp.append("\n| " + tr("Running on MacOs"));
+        tmp += "| " + tr("uname returns : %1").arg(Utils::uname()).replace("\n"," ") + " |";
     }
     else if (Utils::isRunningOnWin())
-        tmp.append("\n  * " + tr("Running on Windows"));
+        tmp.append("| " + tr("Running on Windows"))+ " | |";
 
     tmp += "\n\n";
 
@@ -1067,11 +1068,16 @@ QString SettingsPrivate::toString() const
 
     // add all values of the inifile
 
-    tmp += "===== INI VALUES =====\n\n";
+    tmp += "===== USER INI VALUES =====\n\n";
     tmp += "^ Name ^ Value ^\n";
-    foreach(QString k, m_UserSettings->allKeys())
-        tmp += QString("| %1 | %2 |\n").arg(k, value(k).toString());
+    foreach(const QString &k, m_UserSettings->allKeys())
+        tmp += QString("| %1 | <nowiki>%2</nowiki> |\n").arg(k, m_UserSettings->value(k).toString());
     tmp += "\n\n";
+
+    tmp += "===== NETWORK INI VALUES =====\n\n";
+    tmp += "^ Name ^ Value ^\n";
+    foreach(const QString &k, m_NetworkSettings->allKeys())
+        tmp += QString("| %1 | <nowiki>%2</nowiki> |\n").arg(k, m_NetworkSettings->value(k).toString());
 
     return tmp;
 }

@@ -91,7 +91,7 @@ void DebugDialog::on_butSend_clicked()
     msg += "{{tag>bugreport}}\n\n";
     msg += "====== BUG REPORT SENDED $<%DATE%>$ ======\n\n";
 
-    msg += "====== USER OUTPUT ======\n\n";
+    msg += "===== USER OUTPUT =====\n\n";
     msg += Utils::askUser(tkTr(Trans::Constants::START_MESSAGE_SENDING), tkTr(Trans::Constants::PLEASE_DESCRIBE_PROBLEM));
 
     // get full log including settings and logs
