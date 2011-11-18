@@ -96,7 +96,7 @@ bool receiptsEngine::insertIntoAccount(const QHash<int,QVariant> &hashValues, co
         }
         if (!m_mpmodel->submit())
         {
-        	  qWarning() << __FILE__ << QString::number(__LINE__) << "submit error = " 
+        	  qWarning() << __FILE__ << QString::number(__LINE__) << " submit error = " 
         	                         << m_mpmodel->lastError().text() ;
             }
 
@@ -311,9 +311,9 @@ QHash<int,QVariant> receiptsEngine::getListOfPreferedValues(QString & userUuid,
 QHash<QString,double> receiptsEngine::getFilteredValueFromMedicalProcedure(const QString & act, 
                                                                               const QString & field){
     QHash<QString,double> hash;
-    const QString baseName = trUtf8("medical_procedure");
+    const QString baseName = "medical_procedure";
     const QString name = act;
-    const QString amount = trUtf8("AMOUNT");
+    const QString amount = "AMOUNT";
     const QString type = field;
     QString filter = QString("WHERE %1 = '%2'").arg(type,act);
     QString req = QString("SELECT %1 FROM %2 ").arg(amount,baseName )+filter;
@@ -321,7 +321,7 @@ QHash<QString,double> receiptsEngine::getFilteredValueFromMedicalProcedure(const
     if (!q.exec(req))
     {
     	 qWarning() << __FILE__ << QString::number(__LINE__) 
-    	                        << "Error __FILE__"+QString::number(__LINE__)+q.lastError().text() ; 
+    	                        << "Error "+QString::number(__LINE__)+" "+q.lastError().text() ; 
         }
     while (q.next())
     {
@@ -338,16 +338,16 @@ QHash<QString,double> receiptsEngine::getFilteredValueFromMedicalProcedure(const
 
 QString receiptsEngine::getStringFromInsuranceUid(const QVariant & insuranceUid){
     QString debtor;
-    const QString baseName = trUtf8("insurance");    
-    const QString insuranceUidField = trUtf8("INSURANCE_UID");
-    const QString name = trUtf8("NAME");
+    const QString baseName = "insurance";    
+    const QString insuranceUidField = "INSURANCE_UID";
+    const QString name = "NAME";
     QString filter = QString("WHERE %1 = '%2'").arg(insuranceUidField,insuranceUid.toString());
     QString req = QString("SELECT %1 FROM %2 ").arg(name,baseName )+filter;
     QSqlQuery q(m_db);
     if (!q.exec(req))
     {
     	 qWarning() << __FILE__ << QString::number(__LINE__) 
-    	                        << "Error __FILE__"+QString::number(__LINE__)+q.lastError().text() ; 
+    	                        << "Error "+QString::number(__LINE__)+" "+q.lastError().text() ; 
         }
     while (q.next())
     { 
@@ -358,16 +358,16 @@ QString receiptsEngine::getStringFromInsuranceUid(const QVariant & insuranceUid)
 
 QVariant receiptsEngine::getSiteUidFromSite(const QString & site){
     QVariant uid = QVariant();
-    const QString baseName = trUtf8("sites");    
-    const QString uidField = trUtf8("SITE_UID");
-    const QString name = trUtf8("NAME");
+    const QString baseName = "sites";    
+    const QString uidField = "SITE_UID";
+    const QString name = "NAME";
     QString filter = QString("WHERE %1 = '%2'").arg(name,site);
     QString req = QString("SELECT %1 FROM %2 ").arg(uidField,baseName )+filter;
     QSqlQuery q(m_db);
     if (!q.exec(req))
     {
     	 qWarning() << __FILE__ << QString::number(__LINE__) 
-    	                        << "Error __FILE__"+QString::number(__LINE__)+q.lastError().text() ; 
+    	                        << "Error "+QString::number(__LINE__)+" "+q.lastError().text() ; 
         }
     while (q.next())
     { 
@@ -378,16 +378,16 @@ QVariant receiptsEngine::getSiteUidFromSite(const QString & site){
 
 QVariant receiptsEngine::getInsuranceUidFromInsurance(const QString & insurance){
     QVariant uid = QVariant();
-    const QString baseName = trUtf8("insurance");    
-    const QString uidField = trUtf8("INSURANCE_UID");
-    const QString name = trUtf8("NAME");
+    const QString baseName = "insurance";    
+    const QString uidField = "INSURANCE_UID";
+    const QString name = "NAME";
     QString filter = QString("WHERE %1 = '%2'").arg(name,insurance);
     QString req = QString("SELECT %1 FROM %2 ").arg(uidField,baseName )+filter;
     QSqlQuery q(m_db);
     if (!q.exec(req))
     {
     	 qWarning() << __FILE__ << QString::number(__LINE__) 
-    	                        << "Error __FILE__"+QString::number(__LINE__)+q.lastError().text() ; 
+    	                        << "Error "+QString::number(__LINE__)+" "+q.lastError().text() ; 
         }
     while (q.next())
     { 

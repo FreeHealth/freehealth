@@ -73,129 +73,6 @@ using namespace Constants;
 
 namespace InternalAmount {
 
-    /*class AmountModel : public QAbstractTableModel
-    {
-    public:
-        enum ColumnRepresentation {
-            Col_Value = 0,
-            Col_Currency,  // Devise monétaire
-            ColCount
-        };
-
-        enum RowRepresentation {
-            Row_Cash = 0,
-            Row_Cheque,
-            Row_Visa,
-            Row_Banking,  // Virement banquaire
-            Row_Other,
-            Row_Du,
-            RowCount
-        };
-
-        AmountModel(QObject *parent = 0) : QAbstractTableModel(parent)
-        {
-            for(int i=0; i < rowCount(); ++i)
-                m_Values.append(0.0);
-        }
-
-        int rowCount(const QModelIndex &parent = QModelIndex()) const {return RowCount;}
-        int columnCount(const QModelIndex &parent = QModelIndex()) const {return ColCount;}
-
-        bool submit(){
-        return QAbstractTableModel::submit();
-        }
-
-
-        QVariant data(const QModelIndex &index, int role = Qt::DisplayRole) const
-        {
-            if (!index.isValid())
-                return QVariant();
-
-            if (role==Qt::EditRole || role==Qt::DisplayRole) {
-                switch (index.column()) {
-                case Col_Value:
-                    return m_Values[index.row()];
-                    break;
-                case Col_Currency:
-                    return trUtf8("euros");
-                    break;
-                default: return QVariant();
-                }
-            }
-            return QVariant();
-        }
-
-        bool setData(const QModelIndex &index, const QVariant &value, int role = Qt::EditRole)
-        {
-            if (!index.isValid())
-                return false;
-
-            if (role==Qt::EditRole) {
-                switch (index.column()) {
-                case Col_Value:
-                    {
-                        m_Values[index.row()] = value.toDouble();//toFloat();
-                        Q_EMIT dataChanged(index, index);
-                        return true;
-                    }
-                    break;
-                case Col_Currency:
-                    if (WarnDebugMessage)
-    	      qDebug() << __FILE__ << QString::number(__LINE__) << " dataChanged =" << value.toString() ;
-                    QAbstractTableModel::setData(index,value,role);
-                    Q_EMIT dataChanged(index, index);
-                    return true;
-                    break;
-                 default:
-                    return false;
-                    break;
-                }
-            }
-            return false;
-        }
-
-        QVariant headerData(int section, Qt::Orientation orientation, int role = Qt::DisplayRole) const
-        {
-            if (role==Qt::DisplayRole) {
-                if (orientation==Qt::Vertical) {
-                    switch (section) {
-                    case Row_Cash: return tr("Cash");
-                    case Row_Visa: return "Visa";
-                    case Row_Cheque: return "Cheque";
-                    case Row_Banking: return "Banking";
-                    case Row_Other: return "Other";
-                    case Row_Du: return "Du";
-                    }
-                } else if (orientation==Qt::Horizontal) {
-                    switch (section) {
-                    case Col_Value: return "Value";
-                    case Col_Currency : return "Currency";
-                    }
-                }
-            }
-            return QVariant();
-        }
-
-        QSqlError lastError(){
-            return lastError();
-            }
-
-        Qt::ItemFlags flags(const QModelIndex &index) const
-        {
-            if (index.column()==Col_Value) {
-                return Qt::ItemIsEnabled | Qt::ItemIsEditable | Qt::ItemIsSelectable;
-            } else {
-                return Qt::ItemIsEnabled | Qt::ItemIsSelectable;
-            }
-        }
-
-
-    private:
-        QList<float> m_Values;
-    };*/
-
-
-
     class AmountModel : public QAbstractTableModel
     {
     public:
@@ -565,13 +442,11 @@ bool treeViewsActions::fillActionTreeView()
     m_actionsTreeModel = new QStandardItemModel;
     QStringList listOfMainActions;
     QMap<QString,QString> parametersMap;
-    //parametersMap.insert("Debtor","insurance");
     parametersMap.insert(tr("Thesaurus"),"thesaurus");
     parametersMap.insert(tr("Values"),"values");
-    //parametersMap.insert("Sites","sites");
     parametersMap.insert(tr("Preferred Value"),"Preferred Value");
     parametersMap.insert(tr("Round trip"),"Round trip");
-    //parametersMap.insert("Distance rules","distance_rules");
+
     listOfMainActions = parametersMap.keys();
     //insert items from tables if available
     //QMap<QString,QString> m_mapSubItems;
@@ -594,22 +469,11 @@ bool treeViewsActions::fillActionTreeView()
                 qDebug() << __FILE__ << QString::number(__LINE__) << "listOfItemsOfTable.size()<1"  ;
                 qDebug() << __FILE__ << QString::number(__LINE__) << "strKeysParameters  =" << strKeysParameters ;
             }
-            if (strKeysParameters == "Debtor") {
-                m_mapSubItems.insertMulti(strKeysParameters,"Patient");
-                m_mapSubItems.insertMulti(strKeysParameters,"CPAM28");
-            }
-            else if (strKeysParameters == tr("Thesaurus")) {
+            if (strKeysParameters == tr("Thesaurus")) {
                 if (WarnDebugMessage)
                     qDebug() << __FILE__ << QString::number(__LINE__) << " in thesaurus " ;
                 m_mapSubItems.insertMulti(tr("Thesaurus"),"CS");
                 m_mapSubItems.insertMulti(tr("Thesaurus"),"V");
-            }
-            else if (strKeysParameters == "Sites") {
-                m_mapSubItems.insertMulti(tr("Sites"),"cabinet");
-                m_mapSubItems.insertMulti(tr("Sites"),"clinique");
-            }
-            else if (strKeysParameters == "Distance rules") {
-                m_mapSubItems.insertMulti(tr("Distance rules"),"DistPrice");
             }
             else {
                 if (WarnDebugMessage)
@@ -626,77 +490,75 @@ bool treeViewsActions::fillActionTreeView()
     	qWarning() << __FILE__ << QString::number(__LINE__) << "parentItem is not valid";
     }
     QString strMainActions;
+    QMap<int,QStandardItem*> mapOfMainItems;
     foreach(strMainActions,listOfMainActions) {
         if (WarnDebugMessage)
             qDebug() << __FILE__ << QString::number(__LINE__) << " strMainActions =" << strMainActions ;
         QStandardItem *actionItem = new QStandardItem(strMainActions);
         actionItem->setEditable(false);
         actionItem->setEnabled(true);
+        int row = 0;
         //treeViewsActions colors
-        if (strMainActions == tr("Debtor")) {
-            QBrush green(Qt::darkGreen);
-            actionItem->setForeground(green);
-        } else if (strMainActions == tr("Preferred Value")) {
+        if (strMainActions == tr("Preferred Value")) {
             QBrush red(Qt::red);
             actionItem->setForeground(red);
-        } else if (strMainActions == tr("Sites")) {
-            QBrush green(Qt::darkGreen);
-            actionItem->setForeground(green);
+            mapOfMainItems.insert(PREFERENTIAL_VALUE,actionItem);
+            row = 0;
         } else if (strMainActions == tr("Thesaurus")) {
             QBrush red(Qt::red);
             actionItem->setForeground(red);
+            mapOfMainItems.insert(THESAURUS,actionItem);
+            row = 1;
         } else if (strMainActions == tr("Values")) {
             QBrush blue(Qt::blue);
             actionItem->setForeground(blue);
+            mapOfMainItems.insert(VALUES,actionItem);
+            row = 2;
         } else if (strMainActions == tr("Round trip")) {
             QBrush blue(Qt::blue);
             actionItem->setForeground(blue);
-        } else if (strMainActions == tr("Distance rules")) {
-            QBrush green(Qt::darkGreen);
-            actionItem->setForeground(green);
+            mapOfMainItems.insert(ROUND_TRIP,actionItem);
+            row = 3;
         } else {
             qWarning() << __FILE__ << QString::number(__LINE__) << "Error color treeViewsActions." ;
         }
         
-        parentItem->appendRow(actionItem);
-        if (!actionItem->index().isValid())
+            qDebug() << __FILE__ << QString::number(__LINE__) << QString::number(row);
+        
+        }//
+        
+        for (int i = 0; i < rows_MaxParam; i += 1)
         {
-    	    qWarning() << __FILE__ << QString::number(__LINE__) << "actionItem is not valid";
-    	    b = false;
-            }
-        else{
-            QModelIndex index = actionItem->index();
-            //actionItem->setCheckable(true);
-            if (WarnDebugMessage)
-                qDebug() << __FILE__ << QString::number(__LINE__) << "row = " << QString::number( index.row());
-                qDebug() << __FILE__ << QString::number(__LINE__) << "column = " << QString::number( index.column());
-            }
-        QStringList listSubActions;
-        listSubActions = m_mapSubItems.values(strMainActions);
-        QString strSubActions;
-        foreach(strSubActions,listSubActions){
-            if (WarnDebugMessage)
-                qDebug() << __FILE__ << QString::number(__LINE__) << " strSubActions =" << 
+        	QStandardItem *actionItem = mapOfMainItems.value(i);
+        	treeModel()->insertRow(i,actionItem);
+                QStringList listSubActions;
+                listSubActions = m_mapSubItems.values(actionItem->text());
+                if (WarnDebugMessage)
+                qDebug() << __FILE__ << QString::number(__LINE__) << "listSubActions" << QString::number(listSubActions.size())
+                << " " << actionItem->text();
+                QString strSubActions;
+                foreach(strSubActions,listSubActions){
+                    if (WarnDebugMessage)
+                        qDebug() << __FILE__ << QString::number(__LINE__) << " strSubActions =" << 
                          strSubActions ;
-            QStandardItem *subActionItem = new QStandardItem(strSubActions);
-            actionItem->appendRow(subActionItem);
-            if (!subActionItem->index().isValid())
-            {    	
-                qWarning() << __FILE__ << QString::number(__LINE__) << "subActionItem is not valid";
-                b = false;
-                }
-        }
-    }
+                    QStandardItem *subActionItem = new QStandardItem(strSubActions);
+                    actionItem->appendRow(subActionItem);
+                    if (!subActionItem->index().isValid())
+                    {    	
+                        qWarning() << __FILE__ << QString::number(__LINE__) << "subActionItem is not valid";
+                        b = false;
+                        }
+                    }
+        }//end of  actionItem
     if (WarnDebugMessage)
-        qDebug() << __FILE__ << QString::number(__LINE__)  ;
+            qDebug() << __FILE__ << QString::number(__LINE__)  ;
     setHeaderHidden(true);
     setSortingEnabled ( false );
-
     setStyleSheet("background-color: rgb(201, 201, 201)");
     // actionsTreeView->setStyleSheet("foreground-color: red");
     setModel(treeModel());
     if (WarnDebugMessage)
-        qDebug() << __FILE__ << QString::number(__LINE__) << "ACTION TREEVIEW FILLED UP"  ;
+            qDebug() << __FILE__ << QString::number(__LINE__) << "ACTION TREEVIEW FILLED UP"  ;
     return b;
 }
 
@@ -749,43 +611,6 @@ ReceiptViewer::ReceiptViewer(QWidget *parent) :
     ui->setupUi(this);
     ui->saveAndQuitButton->hide();
     ui->quitButton->hide();
-    /*ui->bankedLabel->hide();
-    ui->dateBanked->hide();
-    ui->bookLabel->hide();
-    ui->dateBook->hide();*/
-    //explanation for shortcuts at first time
-    /*QString fileFirstTimeString = settings()->path(Core::ISettings::BundleResourcesPath) + "/textfiles/accountNotFirstTime.txt";
-    m_fileFirstTime = new QFile(fileFirstTimeString,this);
-    if (!m_fileFirstTime->exists())
-    {
-    	  QString firstExplanationText = trUtf8("Please read this explanation before using FreeAccount.\n"
-    	                                 "FreeAccount is composed of :\n"
-    	                                 "Receipts to get your earnings,\n"
-    	                                 "Movements in your accountancy,\n"
-    	                                 "Asset for your assets,\n"
-    	                                 "Ledger to analyse your accountancy and produce and print your ledger.\n"
-    	                                 "The shortcuts for those programs are :\n"
-    	                                 "for your rapid receipt, CTRL+R,\n"
-    	                                 "for the receipts widget, Maj+R,\n"
-    	                                 "for the movements widget, CTRL+M,\n"
-    	                                 "for assets widget, ALT+Z,\n"
-    	                                 "for ledger and analysis widget, ALT+L.\n"
-    	                                 "To avoid to see this message again, click the check box.");
-    	  
-    	  QMessageBox mess ;
-    	  mess.setWindowTitle(trUtf8("Read me."));
-    	  mess.setInformativeText(firstExplanationText);
-    	  mess.setStandardButtons(QMessageBox::Ok);
-    	  mess.setDefaultButton(QMessageBox::Ok);
-    	  QPushButton * notAgain = mess.addButton(trUtf8("Do not show me this message again."),QMessageBox::ActionRole);
-    	  mess.exec();
-    	  if (mess.clickedButton() == notAgain )
-    	  {
-    	  	  if (WarnDebugMessage)
-    	      qDebug() << __FILE__ << QString::number(__LINE__) << " action " ;
-    	  	  emit createFirstTimeTxt();
-    	      }
-    	  }*/
     ui->amountsView->setShowGrid(false);
     /*ui->amountsView->verticalHeader()->setResizeMode(QHeaderView::Interactive);
     ui->amountsView->verticalHeader()->setDefaultSectionSize(10);
@@ -825,7 +650,6 @@ ReceiptViewer::ReceiptViewer(QWidget *parent) :
     ui->dateBook->setDisplayFormat("yyyy-MM-dd");
     ui->dateBook->setDate(QDate::currentDate());*/
     ui->inputRadioButton->setChecked(true);
-    //ui->saveAndQuitButton->setShortcut(QKeySequence::InsertParagraphSeparator);
     ui->saveButton->setShortcut(QKeySequence::InsertParagraphSeparator);
     ui->quitButton->setShortcut(QKeySequence("Ctrl+q"));
     ui->thesaurusButton->setShortcut(QKeySequence("Ctrl+t"));
@@ -863,9 +687,6 @@ ReceiptViewer::ReceiptViewer(QWidget *parent) :
     //ui_controlreceipts
     m_control = new ControlReceipts(this);
     m_control->hide();
-    /*QStringList othersList;
-    othersList << trUtf8("Ledger");
-    ui->othersBox->addItems(othersList);*/
     ui->othersBox->hide();
     ui->othersLabel->hide();
     ui->displayRadioButton->setCheckable(true);
@@ -952,7 +773,7 @@ void ReceiptViewer::actionsOfTreeView(const QModelIndex & index) {
     QVariant  debtor;
     QVariant site;
     QVariant distrules;
-    if(data .contains( tr("Values"))){
+    if(index.row() == VALUES && index.column() == 0 ){ //values
         findReceiptsValues *rv = new findReceiptsValues(this);
         if (WarnDebugMessage)
     	      qDebug() << __FILE__ << QString::number(__LINE__) << " in findReceiptsValues "  ;
@@ -978,7 +799,7 @@ void ReceiptViewer::actionsOfTreeView(const QModelIndex & index) {
                }
              }
          }
-    if(data .contains( tr("Preferred Value"))){// preferential act of payment
+    if(index.row() == PREFERENTIAL_VALUE && index.column() == 0){// preferential act of payment
         
         choiceDialog choice(this,false);
         if(choice.exec() == QDialog::Accepted){
@@ -1033,7 +854,7 @@ void ReceiptViewer::actionsOfTreeView(const QModelIndex & index) {
     	  if (WarnDebugMessage)
     	      qDebug() << __FILE__ << QString::number(__LINE__) << " m_distanceRuleType =" << m_distanceRuleType ;
         }
-    if (data .contains( tr("Round trip")))
+    if (index.row() == ROUND_TRIP && index.column() == 0)
     {
     	  choiceDialog dist(this,true);
     	  if (dist.exec()== QDialog::Accepted)

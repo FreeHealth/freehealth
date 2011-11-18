@@ -178,10 +178,10 @@ QHash<QString,QVariant> receiptsManager::getParametersDatas(QString & userUid , 
            if (WarnDebugMessage)
                qDebug() << __FILE__ << QString::number(__LINE__) << " receiptsManager list = " << str;
            hashForReturn.insert(str,uid);
-       }
+           }
        if(hashForReturn.size()< 1){
            hashForReturn.insert("thesaurus","uid");
-       }
+           }
 
    }
 

@@ -58,12 +58,20 @@ namespace InternalAmount {
 class AmountModel;
 }  // End namespace Internal
 
+enum Rows {
+        PREFERENTIAL_VALUE = 0,
+        THESAURUS,
+        VALUES,
+        ROUND_TRIP,
+        rows_MaxParam
+        };
 
 class treeViewsActions: public QTreeView
 {
     Q_OBJECT
 
 public:
+    
     treeViewsActions(QWidget *parent);
     ~treeViewsActions();
 
