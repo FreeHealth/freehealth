@@ -33,17 +33,11 @@
 /**
  * \file messagesender.h
  * \author Eric MAEKER <eric.maeker@gmail.com>
- * \version 0.0.5
- * \date 09 Sept 2009
+ * \version 0.6.2
+ * \date 17 Nov 2011
 */
 
 namespace Utils {
-namespace Constants {
-const char * const URL_DOSAGETRANSMISSION     = "http://www.ericmaeker.fr/FreeMedForms/FMF_DosagesToStore.php";
-const char * const URL_DRUGSARECORRECT        = "http://www.ericmaeker.fr/FreeMedForms/FMF_Correct.php";
-const char * const URL_DRUGSAREINCORRECT      = "http://www.ericmaeker.fr/FreeMedForms/FMF_Uncorrect.php";
-const char * const URL_DEVELOPPERMAILSENDING  = "http://www.ericmaeker.fr/FreeMedForms/FMF_Mail.php";
-}  // End Constants
 
 namespace Internal {
 class MessageSenderPrivate;
@@ -53,22 +47,22 @@ class UTILS_EXPORT MessageSender : public QObject
 {
     Q_OBJECT
 public:
-    enum typeOfMessage{
+    enum TypeOfMessage{
         CorrectDrugsCoding,
         UncorrectDrugsCoding,
         InformationToDevelopper,
         DosageTransmission
     };
 
-    MessageSender( QObject *parent = 0 );
+    MessageSender(QObject *parent = 0);
     ~MessageSender();
 
     // setters
-    bool setTypeOfMessage( const typeOfMessage & t );
-    void setParent( QWidget * parent );
-    void setUser( const QString & usr);
-    void setMessage( const QString & msg );
-    void showResultingMessageBox( bool state );
+    bool setTypeOfMessage(const TypeOfMessage &t);
+    void setParent(QWidget *parent);
+    void setUser(const QString &usr);
+    void setMessage(const QString &msg);
+    void showResultingMessageBox(bool state);
 
     // getters
     QString resultMessage() const;
@@ -83,7 +77,7 @@ Q_SIGNALS:
     void sent();
 
 private Q_SLOTS:
-    void httpDone( bool error );
+    void httpDone(bool error);
 
 private:
     Internal::MessageSenderPrivate *d;

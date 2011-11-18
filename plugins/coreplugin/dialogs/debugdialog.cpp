@@ -84,16 +84,23 @@ void DebugDialog::on_butSend_clicked()
         if (!Utils::Log::hasError())  // this should never be in this member
             return;
     }
-    Utils::Log::addMessage(this, tkTr(Trans::Constants::START_MESSAGE_SENDING) );
+    LOG(tkTr(Trans::Constants::START_MESSAGE_SENDING));
 
-    QString msg = Utils::askUser( tkTr(Trans::Constants::START_MESSAGE_SENDING), tkTr(Trans::Constants::PLEASE_DESCRIBE_PROBLEM) );
+    QString msg;
+
+    msg += "{{tag>bugreport}}\n\n";
+    msg += "====== BUG REPORT SENDED $<%DATE%>$ ======\n\n";
+
+    msg += "====== USER OUTPUT ======\n\n";
+    msg += Utils::askUser(tkTr(Trans::Constants::START_MESSAGE_SENDING), tkTr(Trans::Constants::PLEASE_DESCRIBE_PROBLEM));
+
     // get full log including settings and logs
     msg += "\n\n" + Utils::Log::toString( Core::ICore::instance()->settings()->toString() );
 
     // send informations
-    connect( &m_sender, SIGNAL(sent()), this, SLOT(onSendMessage_done()));
+    connect(&m_sender, SIGNAL(sent()), this, SLOT(onSendMessage_done()));
     m_sender.setTypeOfMessage( Utils::MessageSender::InformationToDevelopper );
-    m_sender.setMessage( msg );
+    m_sender.setMessage(msg);
     if (m_sender.postMessage()) {
         m_sending = true;
         // showing a messagebox
@@ -120,9 +127,8 @@ bool DebugDialog::on_butSave_clicked()
 
 void DebugDialog::onSendMessage_done()
 {
-    Utils::Log::addMessage( this, tr( "Debugging information correctly sent." ) );
-    if ( m_infoMessageBox )
-    {
+    LOG(tr("Debugging information correctly sent."));
+    if (m_infoMessageBox) {
         m_infoMessageBox->setInformativeText( tr("Debugging information correctly send to dev team.\n"
                                              "Using Url : %1 \n"
                                              "%2" ).arg( m_sender.usedUrl(), m_sender.resultMessage() ) );

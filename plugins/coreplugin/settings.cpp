@@ -1009,39 +1009,38 @@ QTreeWidget* SettingsPrivate::getTreeWidget(QWidget *parent) const
 /** \brief For debugging purpose. */
 QString SettingsPrivate::toString() const
 {
-    QString tmp = "\n\n";
-    tmp += "********************\n";
-    tmp += "**    SETTINGS    **\n";
-    tmp += "********************\n\n";
+    QString tmp;
+    tmp += "===== SETTINGS =====\n";
 
     // add building informations
-    tmp += tr("Running version : %1\n").arg(qApp->applicationName());
-    tmp += tr("Build date : %1 %2\n").arg(__DATE__, __TIME__);
-    tmp += tr("Qt Build version : %1\n").arg(QT_VERSION_STR);
-    tmp += tr("Qt running version : %1\n").arg(qVersion());
-    tmp += tr("Application Version : %1\n").arg(qApp->applicationVersion());
+    tmp += "\n  * " + tr("Running version : %1\n").arg(qApp->applicationName());
+    tmp += "\n  * " + tr("Build date : %1 %2\n").arg(__DATE__, __TIME__);
+    tmp += "\n  * " + tr("Qt Build version : %1\n").arg(QT_VERSION_STR);
+    tmp += "\n  * " + tr("Qt running version : %1\n").arg(qVersion());
+    tmp += "\n  * " + tr("Application Version : %1\n").arg(qApp->applicationVersion());
     if (Utils::isDebugCompilation())
-        tmp += tr("Actual build : Debug\n");
+        tmp += "\n  * " + tr("Actual build : Debug\n");
     else
-        tmp += tr("Actual build : Release\n");
-    tmp += tr("SVN version : %1\n").arg(SVN_VERSION);
-    tmp += tr("Application path : %1\n").arg(qApp->applicationDirPath());
-    tmp += QString("Ini File Name\t%2").arg(fileName()) + "\n";
-    tmp += tr("Using Ini File") + "\t" + fileName() + "\n";
+        tmp += "\n  * " + tr("Actual build : Release\n");
+    tmp += "\n  * " + tr("SVN version : %1\n").arg(SVN_VERSION);
+    tmp += "\n  * " + tr("Application path : %1\n").arg(qApp->applicationDirPath());
+    tmp += "\n  * " + QString("Ini File Name\t%2").arg(fileName());
+    tmp += "\n  * " + tr("Using Ini File") + "\t" + fileName();
     if (Utils::isRunningOnLinux()) {
-        tmp.append(tr("Running on Linux"));
-        tmp += tr("   uname returns : %1").arg(Utils::uname());
+        tmp.append("\n  * " + tr("Running on Linux"));
+        tmp += "\n    * " + tr("   uname returns : %1").arg(Utils::uname());
     }
     else if (Utils::isRunningOnMac()) {
-        tmp.append(tr("Running on MacOs"));
-        tmp += tr("   uname returns : %1").arg(Utils::uname());
+        tmp.append("\n  * " + tr("Running on MacOs"));
+        tmp += "\n    * " + tr("   uname returns : %1").arg(Utils::uname());
     }
     else if (Utils::isRunningOnWin())
-        tmp.append(tr("Running on Windows"));
+        tmp.append("\n  * " + tr("Running on Windows"));
 
     tmp += "\n\n";
 
     // add paths
+    tmp += "===== PATH =====\n\n";
     QMap<QString, QString> paths;
     paths.insert(tr("Binary"), path(ApplicationPath));
     paths.insert(tr("Resources"), path(ResourcesPath));
@@ -1062,12 +1061,16 @@ QString SettingsPrivate::toString() const
     paths.insert(tr("SampleFormsPath"), path(SubFormsPath));
     paths.insert(tr("DocumentationPath"), path(DocumentationPath));
     paths.insert(tr("WebSiteUrl"), path(WebSiteUrl));
-    foreach(const QString & p, paths.keys())
-        tmp += p + "\t" + paths[p] + "\n";
+    tmp += "^ Resource ^ Path ^\n";
+    foreach(const QString &p, paths.keys())
+        tmp += "| " + p + " | " + paths[p] + " |\n";
 
     // add all values of the inifile
+
+    tmp += "===== INI VALUES =====\n\n";
+    tmp += "^ Name ^ Value ^\n";
     foreach(QString k, m_UserSettings->allKeys())
-        tmp += QString("%1\t%2\n").arg(k, value(k).toString());
+        tmp += QString("| %1 | %2 |\n").arg(k, value(k).toString());
     tmp += "\n\n";
 
     return tmp;
