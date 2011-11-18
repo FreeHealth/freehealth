@@ -10,7 +10,7 @@
 
   // saving posted base64 to a file in the server
   $today = date("Ymd") . date("His");
-  $fileName = getcwd() . '/../data/pages/bugreport/bugreport' . $today . '.txt';
+  $fileName = getcwd() . '/../data/pages/en/bugreport/bugreport' . $today . '.txt';
   if (!file_exists($fileName)) {
       touch($fileName);
   }
@@ -20,7 +20,7 @@
   fwrite($fp , $message);
   fclose ($fp);
 
-  $dokuwikiUrl = 'http://www.freemedforms.com/bugreport/bugreport' . $today;
+  $dokuwikiUrl = 'http://www.freemedforms.com/en/bugreport/bugreport' . $today;
   if (mail('eric.maeker@gmail.com', '[FreeMedForms - Bug report]', $dokuwikiUrl)) {
       echo 'Debug report ' . $dokuwikiUrl;
   } else {
