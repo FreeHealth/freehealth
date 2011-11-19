@@ -110,11 +110,11 @@ void BaseFormWidgetsOptionsPage::applyChanges()
 void BaseFormWidgetsOptionsPage::checkSettingsValidity()
 {
     if (settings()->value(::SETTINGS_COMPACTVIEW_MARGIN,QVariant())==QVariant()) {
-        settings()->setValue(::SETTINGS_COMPACTVIEW_MARGIN,0);
+        settings()->setValue(::SETTINGS_COMPACTVIEW_MARGIN, 0);
     }
 
     if (settings()->value(::SETTINGS_COMPACTVIEW_SPACING,QVariant())==QVariant()) {
-        settings()->setValue(::SETTINGS_COMPACTVIEW_SPACING,2);
+        settings()->setValue(::SETTINGS_COMPACTVIEW_SPACING, 2);
     }
 }
 

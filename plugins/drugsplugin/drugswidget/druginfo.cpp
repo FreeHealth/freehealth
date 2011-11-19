@@ -226,7 +226,7 @@ void DrugInfoPrivate::on_butSendINN_clicked()
 {
     // prepare message to send
     QString msg;
-    Utils::MessageSender::typeOfMessage t;
+    Utils::MessageSender::TypeOfMessage t;
 
     if (rbINNOk->isChecked()) {
         foreach(QVariant code,  drugModel()->drugData(m_DrugUid, DrugsDB::Constants::Drug::CodeMoleculesList).toList()) //m_Drug->listOfCodeMolecules().toList())
