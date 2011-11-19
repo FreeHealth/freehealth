@@ -105,6 +105,7 @@ private:
     QStandardItemModel *m_actionsTreeModel;
     QString m_userUuid;
     QMap<QString,QString> m_mapSubItems;
+    QMap<int,QStandardItem*> m_mapOfMainItems;
 };
 
 

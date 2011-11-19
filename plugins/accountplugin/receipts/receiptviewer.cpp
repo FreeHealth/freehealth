@@ -322,8 +322,8 @@ void treeViewsActions::userIsChanged(){
 void treeViewsActions::mousePressEvent(QMouseEvent *event){
     if (WarnDebugMessage)
     	      qDebug() << __FILE__ << QString::number(__LINE__) << " in  tree clicked" ;
-    /*if(event->button() == Qt::RightButton){
-        if(isChildOfThesaurus()){
+    if(event->button() == Qt::RightButton){
+        /*if(isChildOfThesaurus()){
             blockSignals(true);
             if (WarnDebugMessage)
     	      qDebug() << __FILE__ << QString::number(__LINE__) << " in treeview right button " ;
@@ -332,9 +332,9 @@ void treeViewsActions::mousePressEvent(QMouseEvent *event){
             m_menuRightClic-> addAction(m_deleteThesaurusValue);
             m_menuRightClic->exec(event->globalPos());
             blockSignals(false);
-        }
+        }*/
 
-    }*/
+    }
     if(event->button() == Qt::LeftButton){
             if (WarnDebugMessage)
     	      qDebug() << __FILE__ << QString::number(__LINE__) << " in left press button " ;
@@ -350,7 +350,7 @@ void treeViewsActions::mouseReleaseEvent(QMouseEvent *event){
         if(isChildOfThesaurus()){
             blockSignals(true);
             if (WarnDebugMessage)
-                qDebug() << __FILE__ << QString::number(__LINE__) << " in treeview right button " ;
+                qDebug() << __FILE__ << QString::number(__LINE__) << " in treeview release right button " ;
             m_menuRightClic = new QMenu(this);
             m_menuRightClic -> addAction(m_choosePreferedValue);
             m_menuRightClic-> addAction(m_deleteThesaurusValue);
@@ -388,6 +388,7 @@ void treeViewsActions::deleteBox(bool b){
 
 void treeViewsActions::choosePreferedValue(bool b){
     Q_UNUSED(b);
+    qDebug() << __FILE__ << QString::number(__LINE__) << "in choosePreferedValue";
     QMessageBox msgBox;
     msgBox.setText("Do you want to choose this item as preferred value ?");
     msgBox.setStandardButtons(QMessageBox::Yes | QMessageBox::No);
@@ -490,7 +491,7 @@ bool treeViewsActions::fillActionTreeView()
     	qWarning() << __FILE__ << QString::number(__LINE__) << "parentItem is not valid";
     }
     QString strMainActions;
-    QMap<int,QStandardItem*> mapOfMainItems;
+    /*QMap<int,QStandardItem*>*/ m_mapOfMainItems.clear();
     foreach(strMainActions,listOfMainActions) {
         if (WarnDebugMessage)
             qDebug() << __FILE__ << QString::number(__LINE__) << " strMainActions =" << strMainActions ;
@@ -502,22 +503,22 @@ bool treeViewsActions::fillActionTreeView()
         if (strMainActions == tr("Preferred Value")) {
             QBrush red(Qt::red);
             actionItem->setForeground(red);
-            mapOfMainItems.insert(PREFERENTIAL_VALUE,actionItem);
+            m_mapOfMainItems.insert(PREFERENTIAL_VALUE,actionItem);
             row = 0;
         } else if (strMainActions == tr("Thesaurus")) {
             QBrush red(Qt::red);
             actionItem->setForeground(red);
-            mapOfMainItems.insert(THESAURUS,actionItem);
+            m_mapOfMainItems.insert(THESAURUS,actionItem);
             row = 1;
         } else if (strMainActions == tr("Values")) {
             QBrush blue(Qt::blue);
             actionItem->setForeground(blue);
-            mapOfMainItems.insert(VALUES,actionItem);
+            m_mapOfMainItems.insert(VALUES,actionItem);
             row = 2;
         } else if (strMainActions == tr("Round trip")) {
             QBrush blue(Qt::blue);
             actionItem->setForeground(blue);
-            mapOfMainItems.insert(ROUND_TRIP,actionItem);
+            m_mapOfMainItems.insert(ROUND_TRIP,actionItem);
             row = 3;
         } else {
             qWarning() << __FILE__ << QString::number(__LINE__) << "Error color treeViewsActions." ;
@@ -529,7 +530,7 @@ bool treeViewsActions::fillActionTreeView()
         
         for (int i = 0; i < rows_MaxParam; i += 1)
         {
-        	QStandardItem *actionItem = mapOfMainItems.value(i);
+        	QStandardItem *actionItem = m_mapOfMainItems.value(i);
         	treeModel()->insertRow(i,actionItem);
                 QStringList listSubActions;
                 listSubActions = m_mapSubItems.values(actionItem->text());
@@ -584,11 +585,9 @@ void treeViewsActions::changeEvent(QEvent *e) {
         if (!fillActionTreeView())
         {
         	qWarning() << __FILE__ << QString::number(__LINE__) << "index is not valid";
-        }
+            }
         reset();
-        m_deleteThesaurusValue = new QAction(trUtf8("Delete this value."),this);
-        m_choosePreferedValue = new QAction(trUtf8("Choose this value like the preferred."),this);
-    }
+        }
 }
 
 ////////////////////////////////////////////////////////////////////////////////////////////////////////////////
@@ -893,18 +892,18 @@ void ReceiptViewer::actionsOfTreeView(const QModelIndex & index) {
     	      }
     	  
         }
-    if (manager.getHashOfSites().keys().contains(data))
+   /* if (manager.getHashOfSites().keys().contains(data))
     {
     	  m_siteUid = manager.getHashOfSites().value(data);
     	  if (WarnDebugMessage)
     	      qDebug() << __FILE__ << QString::number(__LINE__) << " m_siteUid =" << m_siteUid.toString() ;
-        }
-    if (manager.getHashOfInsurance().keys().contains(data))
+        }*/
+    /*if (manager.getHashOfInsurance().keys().contains(data))
     {
     	  m_insuranceUid = manager.getHashOfInsurance().value(data);
     	  if (WarnDebugMessage)
     	      qDebug() << __FILE__ << QString::number(__LINE__) << " m_insuranceUid =" << m_insuranceUid.toString() ;
-        }
+        }*/
     if (manager.getHashOfThesaurus().keys().contains(data))
     {
         if (WarnDebugMessage)
