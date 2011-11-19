@@ -1006,6 +1006,26 @@ QTreeWidget* SettingsPrivate::getTreeWidget(QWidget *parent) const
     return tree;
 }
 
+//static QString cupsInfo()
+//{
+//    QString tmp;
+//    QProcess cups;
+//    cups.start("cups-config", QStringList() << "--version");
+//    if (!cups.waitForStarted())
+//        LOG_ERROR_FOR("Utils", QApplication::translate("Utils", "Error while retrieve informations of uname under %1").arg(system));
+//    if (!cups.waitForFinished())
+//        LOG_ERROR_FOR("Utils", QApplication::translate("Utils", "Error while retrieve informations of uname under %1").arg(system));
+//    tmp += "| Version | " + cups.readAll() + " |";
+
+//    cups.start("cups-config", QStringList() << "--datadir");
+//    if (!cups.waitForStarted())
+//        LOG_ERROR_FOR("Utils", QApplication::translate("Utils", "Error while retrieve informations of uname under %1").arg(system));
+//    if (!cups.waitForFinished())
+//        LOG_ERROR_FOR("Utils", QApplication::translate("Utils", "Error while retrieve informations of uname under %1").arg(system));
+//    tmp += "| DataDir | " + cups.readAll() + " |";
+//    return tmp;
+//}
+
 /** \brief For debugging purpose. */
 QString SettingsPrivate::toString() const
 {
@@ -1069,9 +1089,31 @@ QString SettingsPrivate::toString() const
     // add all values of the inifile
 
     tmp += "===== USER INI VALUES =====\n\n";
-    tmp += "^ Name ^ Value ^\n";
-    foreach(const QString &k, m_UserSettings->allKeys())
-        tmp += QString("| %1 | <nowiki>%2</nowiki> |\n").arg(k, m_UserSettings->value(k).toString());
+    tmp += "^ Group ^ Name ^ Value ^\n";
+    QStringList keys = m_UserSettings->childKeys();
+    keys.sort();
+    foreach(const QString &k, keys)
+        tmp += QString("| RootKeys | %1 | <nowiki>%2</nowiki> |\n").arg(k, m_UserSettings->value(k).toString());
+
+    QStringList groups = m_UserSettings->childGroups();
+    groups.sort();
+    foreach(const QString &g, groups) {
+        keys.clear();
+        m_UserSettings->beginGroup(g);
+        keys = m_UserSettings->allKeys();
+        keys.sort();
+        QString groupName;
+        foreach(const QString &k, keys) {
+            if (groupName.isEmpty())
+                groupName = g;
+            tmp += QString("| %1 | %2 | <nowiki>%3</nowiki> |\n")
+                    .arg(groupName)
+                    .arg(k).arg(m_UserSettings->value(k).toString());
+            groupName = ":::";
+        }
+        m_UserSettings->endGroup();
+    }
+
     tmp += "\n\n";
 
     tmp += "===== NETWORK INI VALUES =====\n\n";
