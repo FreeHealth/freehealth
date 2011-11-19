@@ -638,6 +638,7 @@ QList<Agenda::UserCalendar *> AgendaBase::getUserCalendars(const QString &userUu
 /** Save the user's calendar availabilities for the specified \e calendar to database. The \e calendar is modified during this process (ids are set if needed). */
 bool AgendaBase::saveCalendarAvailabilities(Agenda::UserCalendar *calendar)
 {
+    WARN_FUNC << calendar->uid();
     if (!connectDatabase(Constants::DB_NAME, __LINE__))
         return false;
 
@@ -678,7 +679,7 @@ bool AgendaBase::saveCalendarAvailabilities(Agenda::UserCalendar *calendar)
     }
     query.finish();
 
-    // delete records
+    // delete availabilities records
     where.clear();
     where.insert(Constants::AVAIL_ID, QString("IN (%1)").arg(availIds.join(",")));
     if (!query.exec(this->prepareDeleteQuery(Constants::Table_AVAILABILITIES, where))) {
@@ -709,9 +710,10 @@ bool AgendaBase::saveCalendarAvailabilities(Agenda::UserCalendar *calendar)
     QHash<int, Agenda::DayAvailability> hashAv;
     // fusion availabilties by days
     for(int i = 0; i < av.count(); ++i) {
-        if (hashAv.contains(av.at(i).weekDay())) {
+        int weekDay = av.at(i).weekDay();
+        if (hashAv.contains(weekDay)) {
             for(int z = 0; z < av.at(i).timeRangeCount(); ++z) {
-                hashAv[i].addTimeRange(av.at(i).timeRange(z));
+                hashAv[weekDay].addTimeRange(av.at(i).timeRange(z));
             }
         } else {
             hashAv.insert(av.at(i).weekDay(), av.at(i));
