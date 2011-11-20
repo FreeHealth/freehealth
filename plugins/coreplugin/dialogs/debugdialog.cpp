@@ -32,6 +32,7 @@
 
 #include <coreplugin/idebugpage.h>
 #include <coreplugin/icore.h>
+#include <coreplugin/iuser.h>
 #include <coreplugin/imainwindow.h>
 #include <coreplugin/isettings.h>
 
@@ -42,6 +43,8 @@
 using namespace Core;
 using namespace Core::Internal;
 using namespace Trans::ConstantTranslations;
+
+static inline Core::IUser *user() {return Core::ICore::instance()->user();}
 
 DebugDialog::DebugDialog(QWidget *parent) :
     QDialog(parent), m_ui(new Core::Internal::Ui::DebugDialog)
@@ -89,7 +92,10 @@ void DebugDialog::on_butSend_clicked()
     QString msg;
 
     msg += "{{tag>bugreport}}\n\n";
-    msg += "====== BUG REPORT SENDED $<%DATE%>$ ======\n\n";
+    msg += "====== BUG REPORT ======\n\n";
+    msg += "  * Date of report: $<%DATE%>$ \n";
+    msg += "  * User: " + user()->value(Core::IUser::FullName).toString() + " \n";
+    msg += "  * User Uid: " + user()->uuid() + " \n";
 
     msg += "===== USER OUTPUT =====\n\n";
     msg += Utils::askUser(tkTr(Trans::Constants::START_MESSAGE_SENDING), tkTr(Trans::Constants::PLEASE_DESCRIBE_PROBLEM));
