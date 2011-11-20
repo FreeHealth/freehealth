@@ -62,7 +62,7 @@
 #include <QBrush>
 #include <QColor>
 
-enum { WarnDebugMessage = true };
+enum { WarnDebugMessage = false };
 
 static inline Core::IUser *user() { return Core::ICore::instance()->user(); }
 static inline Core::IPatient *patient() { return Core::ICore::instance()->patient(); }
@@ -772,7 +772,7 @@ void ReceiptViewer::actionsOfTreeView(const QModelIndex & index) {
     QVariant  debtor;
     QVariant site;
     QVariant distrules;
-    if(index.row() == VALUES && index.column() == 0 ){ //values
+    if(index.row() == VALUES && index.parent() == QModelIndex() ){ //values
         findReceiptsValues *rv = new findReceiptsValues(this);
         if (WarnDebugMessage)
     	      qDebug() << __FILE__ << QString::number(__LINE__) << " in findReceiptsValues "  ;
@@ -798,8 +798,9 @@ void ReceiptViewer::actionsOfTreeView(const QModelIndex & index) {
                }
              }
          }
-    if(index.row() == PREFERENTIAL_VALUE && index.column() == 0){// preferential act of payment
-        
+    if(index.row() == PREFERENTIAL_VALUE && index.parent() == QModelIndex()){// preferential act of payment
+        if (WarnDebugMessage)
+            	qDebug() << __FILE__ << QString::number(__LINE__) << " PREFERENTIAL_VALUE";
         choiceDialog choice(this,false);
         if(choice.exec() == QDialog::Accepted){
             QStandardItemModel * model = choice.getChoicePercentageDebtorSiteDistruleModel();
@@ -846,6 +847,8 @@ void ReceiptViewer::actionsOfTreeView(const QModelIndex & index) {
         
     if (manager.getDistanceRules().keys().contains(data))
     {
+    	  if (WarnDebugMessage)
+            	qDebug() << __FILE__ << QString::number(__LINE__) << " in getDistanceRules";
     	  m_distanceRuleValue = manager.getDistanceRules().value(data).toDouble();
     	  m_distanceRuleType = data;
     	  if (WarnDebugMessage)
@@ -853,8 +856,10 @@ void ReceiptViewer::actionsOfTreeView(const QModelIndex & index) {
     	  if (WarnDebugMessage)
     	      qDebug() << __FILE__ << QString::number(__LINE__) << " m_distanceRuleType =" << m_distanceRuleType ;
         }
-    if (index.row() == ROUND_TRIP && index.column() == 0)
+    if (index.row() == ROUND_TRIP && index.parent() == QModelIndex())
     {
+    	  if (WarnDebugMessage)
+            	qDebug() << __FILE__ << QString::number(__LINE__) << " in ROUND_TRIP";
     	  choiceDialog dist(this,true);
     	  if (dist.exec()== QDialog::Accepted)
     	  {
@@ -924,7 +929,7 @@ void ReceiptViewer::actionsOfTreeView(const QModelIndex & index) {
                 list = data.split("+");
                 receiptsEngine r;
                 QHash<QString,double> hashFromMp ;
-                const QString field = trUtf8("NAME");
+                const QString field = "NAME";
                 QString str;
                 foreach(str,list){
                     qDebug() << __FILE__ << QString::number(__LINE__) << " str =" << str ;

@@ -51,7 +51,7 @@
 #include <QSqlDatabase>
 #include <QSqlQuery>
 
-enum { WarnDebugMessage = true };
+enum { WarnDebugMessage = false };
 
 static  QString freeaccount = "freeaccount";
 using namespace AccountDB;
@@ -290,7 +290,7 @@ QHash<QString,QString> receiptsManager::getPreferentialActFromThesaurus(const QS
             }
         QString str;
         foreach(str,list){
-            const QString field = trUtf8("NAME");
+            const QString field = "NAME";
             QHash<QString,double> hashActAmount = rIO.getFilteredValueFromMedicalProcedure(str,field); 
             if (WarnDebugMessage)
     	      qDebug() << __FILE__ << QString::number(__LINE__) << " str =" << str ;

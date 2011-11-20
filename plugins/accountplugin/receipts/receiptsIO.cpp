@@ -322,6 +322,8 @@ QHash<QString,double> receiptsEngine::getFilteredValueFromMedicalProcedure(const
     {
     	 qWarning() << __FILE__ << QString::number(__LINE__) 
     	                        << "Error "+QString::number(__LINE__)+" "+q.lastError().text() ; 
+    	 if (WarnDebugMessage)
+    	      qDebug() << __FILE__ << QString::number(__LINE__) << " " << q.lastQuery();
         }
     while (q.next())
     {

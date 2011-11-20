@@ -42,7 +42,7 @@
 #include <QBrush>
 #include <QColor>
 #include <QMouseEvent>
-enum { WarnDebugMessage = true };
+enum { WarnDebugMessage = false };
 static inline Core::IUser *user() { return Core::ICore::instance()->user(); }
 using namespace ChoiceActions;
 treeViewsActions::treeViewsActions(QWidget *parent):QTreeView(parent){
