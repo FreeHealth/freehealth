@@ -1,3 +1,29 @@
+/***************************************************************************
+ *  The FreeMedForms project is a set of free, open source medical         *
+ *  applications.                                                          *
+ *  (C) 2008-2011 by Eric MAEKER, MD (France) <eric.maeker@gmail.com>      *
+ *  All rights reserved.                                                   *
+ *                                                                         *
+ *  This program is free software: you can redistribute it and/or modify   *
+ *  it under the terms of the GNU General Public License as published by   *
+ *  the Free Software Foundation, either version 3 of the License, or      *
+ *  (at your option) any later version.                                    *
+ *                                                                         *
+ *  This program is distributed in the hope that it will be useful,        *
+ *  but WITHOUT ANY WARRANTY; without even the implied warranty of         *
+ *  MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the          *
+ *  GNU General Public License for more details.                           *
+ *                                                                         *
+ *  You should have received a copy of the GNU General Public License      *
+ *  along with this program (COPYING.FREEMEDFORMS file).                   *
+ *  If not, see <http://www.gnu.org/licenses/>.                            *
+ ***************************************************************************/
+/***************************************************************************
+ *   Main Developper : Eric MAEKER, <eric.maeker@gmail.com>                *
+ *   Contributors :                                                        *
+ *       NAME <MAIL@ADRESS>                                                *
+ *       NAME <MAIL@ADRESS>                                                *
+ ***************************************************************************/
 #include "nextavailabiliystepviewer.h"
 #include "ui_nextavailabiliystepviewer.h"
 
@@ -152,6 +178,21 @@ QRect NextAvailabiliyManager::dateToRect(const QDateTime &date, const int durati
     return QRect(month, top, year-2000, durationInMinutes);
 }
 
+QRect NextAvailabiliyManager::simplifiedDateToRect(const int weekDay, const QTime &start, const QTime &end)
+{
+    // TOP : day of week
+    //   1px = 1minute
+    //   linear Monday to Sunday
+    //   1 day = 1440 minutes
+    // X = month + day
+    // WIDTH = year
+    // HEIGHT = durationInMinutes
+    int day = (weekDay-1) * 1440;
+    int top = start.hour() * 60 + start.minute() + day;
+    int durationInMinutes = start.secsTo(end) / 60;
+    return QRect(0, top, 11, durationInMinutes);
+}
+
 QRect NextAvailabiliyManager::dateToRect(const QDateTime &begin, const QDateTime &end)
 {
     return dateToRect(begin, begin.secsTo(end)/60);
@@ -207,7 +248,7 @@ int NextAvailabiliyManager::minutesToNextAvailability(const QList<QRect> &avList
         if (WarnDebugs)
             qWarning() <<"        " << i << rectToDateStart(av) << diff << minDiff << (diff < minDiff);
 
-        if (diff < minDiff) {
+        if (diff > 0 && diff < minDiff) {
             minDiff = diff;
             firstAv = i;
         }
@@ -259,7 +300,7 @@ QList<QDateTime> NextAvailabiliyManager::nextAvailableTime(const QDateTime &star
         m_ReachedNextAppointement = true;
         QDateTime nextEnd = rectToDateEnd(nextAppointement);
         if (nextEnd > startSearch)
-            m_NeedLaterThan = nextEnd, calendarDurationInMinutes;
+            m_NeedLaterThan = nextEnd;//, calendarDurationInMinutes;
         else
             m_NeedLaterThan = Utils::roundDateTime(startSearch, calendarDurationInMinutes);
         return toReturn;
