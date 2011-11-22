@@ -62,7 +62,7 @@
 #include <QBrush>
 #include <QColor>
 
-enum { WarnDebugMessage = false };
+enum { WarnDebugMessage = true };
 
 static inline Core::IUser *user() { return Core::ICore::instance()->user(); }
 static inline Core::IPatient *patient() { return Core::ICore::instance()->patient(); }
@@ -808,6 +808,7 @@ void ReceiptViewer::actionsOfTreeView(const QModelIndex & index) {
             	qDebug() << __FILE__ << QString::number(__LINE__) << " model->rowCount() =" << QString::number(model->rowCount()) ;
 
             for (int i = 0; i < model->rowCount(); ++i) {
+                QHash<QString,QString> hashOfValues;
                 const QString userUuid = m_userUuid;
                 typeOfPayment = model->data(model->index(i,choice.TYPE_OF_CHOICE),Qt::DisplayRole).toInt();
                 if (WarnDebugMessage)
@@ -866,6 +867,7 @@ void ReceiptViewer::actionsOfTreeView(const QModelIndex & index) {
               QStandardItemModel * model = dist.getChoicePercentageDebtorSiteDistruleModel();
               for (int i = 0; i < model->rowCount(); i += 1)
               {
+    	          QHash<QString,QString> hashOfValues;
     	          m_kilometers = dist.getDistanceNumber(m_distanceRuleType);
                   double value = m_kilometers *m_distanceRuleValue;
                   if (WarnDebugMessage)
@@ -918,6 +920,7 @@ void ReceiptViewer::actionsOfTreeView(const QModelIndex & index) {
             QStandardItemModel * model = choice.getChoicePercentageDebtorSiteDistruleModel();
             for (int i = 0; i < model->rowCount(); i += 1)
             {
+                QHash<QString,QString> hashOfValues;
                 if (WarnDebugMessage)
                     qDebug() << __FILE__ << QString::number(__LINE__) << " IN THESAURUS FOR "  ;
                 typeOfPayment = model->data(model->index(i,choice.TYPE_OF_CHOICE),Qt::DisplayRole).toInt();
@@ -932,15 +935,24 @@ void ReceiptViewer::actionsOfTreeView(const QModelIndex & index) {
                 const QString field = "NAME";
                 QString str;
                 foreach(str,list){
+                    if (WarnDebugMessage)
                     qDebug() << __FILE__ << QString::number(__LINE__) << " str =" << str ;
-                    if (str == trUtf8("thesaurus"))
+                    if (str .contains( trUtf8("thesaurus")))
                     {
                     	  qWarning() << __FILE__ << QString::number(__LINE__) << "no thesaurus value available" ;
                     	  return;
                         }
                     hashFromMp = r.getFilteredValueFromMedicalProcedure(str,field);
+                    if (WarnDebugMessage)
+                    qDebug() << __FILE__ << QString::number(__LINE__) << " hashFromMp.size() " << QString::number(hashFromMp.size());
                     QString value = QString::number(hashFromMp.value(str));
+                    if (WarnDebugMessage)
+                    qDebug() << __FILE__ << QString::number(__LINE__) << value;
+                    if (WarnDebugMessage)
+                    qDebug() << __FILE__ << QString::number(__LINE__) << QString::number(percentage);
                     hashOfValues.insertMulti(str,value);
+                    if (WarnDebugMessage)
+                    qDebug() << __FILE__ << QString::number(__LINE__) << " hashOfValues.size() in getHashOfThesaurus " << QString::number(hashOfValues.size());
                     }
                 fillModel(hashOfValues,typeOfPayment,percentage,debtor,site,distrules,i);
                 }
@@ -967,6 +979,8 @@ void ReceiptViewer::fillModel(QHash<QString,QString> &hashOfValues,
     while(it.hasNext()){
         it.next();
         value += it.value().toDouble();
+        if (WarnDebugMessage)
+    	      qDebug() << __FILE__ << QString::number(__LINE__) << QString::number(value);
     }
     value = value*percentage/100.00;
     if (WarnDebugMessage)

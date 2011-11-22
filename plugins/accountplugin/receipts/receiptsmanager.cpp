@@ -51,7 +51,7 @@
 #include <QSqlDatabase>
 #include <QSqlQuery>
 
-enum { WarnDebugMessage = false };
+enum { WarnDebugMessage = true };
 
 static  QString freeaccount = "freeaccount";
 using namespace AccountDB;

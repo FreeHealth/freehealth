@@ -42,7 +42,7 @@
 #include <QBrush>
 #include <QColor>
 #include <QMouseEvent>
-enum { WarnDebugMessage = false };
+enum { WarnDebugMessage = true };
 static inline Core::IUser *user() { return Core::ICore::instance()->user(); }
 using namespace ChoiceActions;
 treeViewsActions::treeViewsActions(QWidget *parent):QTreeView(parent){
@@ -528,8 +528,8 @@ void choiceDialog::actionsOfTreeView(const QModelIndex &index){
     	      qDebug() << __FILE__ << QString::number(__LINE__) << " data =" << data;
     receiptsManager manager;
     QHash<QString,QString> hashOfValues;
-    int typeOfPayment = ReceiptsConstants::Cash;
-    double percentage = 100.00;
+    //int typeOfPayment = ReceiptsConstants::Cash;
+    //double percentage = 100.00;
     QVariant  debtor;
     QVariant site;
     QVariant distrules;
