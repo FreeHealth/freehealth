@@ -48,6 +48,7 @@ ControlReceipts::ControlReceipts(QWidget * parent):QWidget(parent),ui(new Ui::Co
     resize(w,h);
     setAutoFillBackground(true);
     ui->resultLabel->setText("");
+    ui->resultLabel->setWordWrap(true);
     m_accountModel = new AccountModel(this);
     if (!m_accountModel->setHeaderData(ACCOUNT_PATIENT_NAME,Qt::Horizontal ,trUtf8("Patient") , Qt::EditRole))
     {
@@ -166,6 +167,8 @@ QString ControlReceipts::textOfSums(AccountModel * model){
     double cash = 0.00;
     double chq = 0.00;
     double visa = 0.00;
+    double banking = 0.00;
+    double other = 0.00;
     double dues = 0.00;
     double totalReceived = 0.00;
     double totals = 0.00;
@@ -177,15 +180,19 @@ QString ControlReceipts::textOfSums(AccountModel * model){
        cash  += rowRecord.value(ACCOUNT_CASHAMOUNT).toDouble();
        chq  += rowRecord.value(ACCOUNT_CHEQUEAMOUNT).toDouble();
        visa += rowRecord.value(ACCOUNT_VISAAMOUNT).toDouble();
+       banking += rowRecord.value(ACCOUNT_INSURANCEAMOUNT).toDouble();
+       other += rowRecord.value(ACCOUNT_OTHERAMOUNT).toDouble();
        dues  += rowRecord.value(ACCOUNT_DUEAMOUNT).toDouble();
        }
-    totals = cash + chq + visa + dues;
-    totalReceived = cash + chq + visa;
-    QString totStr = "<font size = 3 color = ""blue"">Totaux = </font><font size = 3 color = ""red"">"+QString::number(totals)+" "+m_typeOfMoney+" </font><br/>";
+    totals = cash + chq + visa + banking + other + dues;
+    totalReceived = cash + chq + banking + other + visa;
+    QString totStr = "<font size = 3 color = ""blue"">Totaux = </font><font size = 3 color = ""red"">"+QString::number(totals)+" "+m_typeOfMoney+" </font>  ";
     QString totReceived = "<font size = 3 color = ""blue"">Totaux reçus = </font><font size = 3 color = ""red"">"+QString::number(totalReceived)+" "+m_typeOfMoney+" </font><br/>";
     QString sumsStr = "<font size = 3 color = ""blue"">Esp = </font><font size = 3 color = ""red"">"+QString::number(cash)+" "+m_typeOfMoney+"  </font>"+
                 "<font size = 3 color = ""blue"">Chq = </font><font size = 3 color = ""red"">"+QString::number(chq)+" "+m_typeOfMoney+"  </font>"+
                 "<font size = 3 color = ""blue"">CB = </font><font size = 3 color = ""red"">"+QString::number(visa)+" "+m_typeOfMoney+"  </font>"+
+                "<font size = 3 color = ""blue"">Banking = </font><font size = 3 color = ""red"">"+QString::number(banking)+" "+m_typeOfMoney+"  </font><br/>"+
+                "<font size = 3 color = ""blue"">Other = </font><font size = 3 color = ""red"">"+QString::number(other)+" "+m_typeOfMoney+"  </font>"+
                 "<font size = 3 color = ""blue"">dues = </font><font size = 3 color = ""red"">"+QString::number(dues)+" "+m_typeOfMoney+"</font>";
     labelTextStr = totStr+totReceived+sumsStr;
     labelText = "<html><body>"+labelTextStr+"</body></html>";

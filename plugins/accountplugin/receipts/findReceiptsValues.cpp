@@ -32,7 +32,7 @@
 #include "findReceiptsValues.h"
 #include <QSqlQuery>
 #include <QSqlTableModel>
-enum { WarnDebugMessage = true };
+enum { WarnDebugMessage = false };
 using namespace AccountDB;
 using namespace Constants;
 
@@ -278,10 +278,10 @@ void findReceiptsValues::on_lineEditFilter_textChanged(const QString & text){
     QString comboChoice = ui->comboBoxCategories->currentText();
     QString filterText ;
     QString filter; 
-    const QString baseName = trUtf8("medical_procedure");
-    const QString name = trUtf8("NAME");
-    const QString amount = trUtf8("AMOUNT");
-    const QString type = trUtf8("TYPE");
+    const QString baseName = "medical_procedure";
+    const QString name = "NAME";
+    const QString amount = "AMOUNT";
+    const QString type = "TYPE";
     if (ui->nameRadioButton->isChecked())
     {
     	  filterText = ""+text+"%";
