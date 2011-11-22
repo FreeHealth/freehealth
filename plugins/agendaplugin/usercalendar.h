@@ -154,7 +154,9 @@ private:
     AbstractCalendarModel *m_model;
 };
 
-
 }  // End namespace Agenda
+
+QDebug operator<<(QDebug dbg, const Agenda::DayAvailability &c);
+QDebug operator<<(QDebug dbg, const Agenda::DayAvailability *c);
 
 #endif // USERCALENDAR_H

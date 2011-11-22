@@ -26,7 +26,9 @@ HEADERS = agendaplugin.h agenda_exporter.h \
     usercalendarmodelfulleditorwidget.h \
     agendacore.h \
     agendapreferencespage.h \
-    usercalendardelegatesmapper.h
+    usercalendardelegatesmapper.h \
+    availabilitycreatordialog.h \
+    nextavailabiliystepviewer.h
 
 SOURCES = agendaplugin.cpp \
     agendabase.cpp \
@@ -44,7 +46,9 @@ SOURCES = agendaplugin.cpp \
     usercalendarmodelfulleditorwidget.cpp \
     agendacore.cpp \
     agendapreferencespage.cpp \
-    usercalendardelegatesmapper.cpp
+    usercalendardelegatesmapper.cpp \
+    availabilitycreatordialog.cpp \
+    nextavailabiliystepviewer.cpp
 
 OTHER_FILES = Agenda.pluginspec
 
@@ -59,5 +63,13 @@ FORMS += \
     usercalendarwizardcreatorpage.ui \
     usercalendarmodelfulleditorwidget.ui \
     agendapreferencespage.ui \
-    usercalendardelegatesmapper.ui
+    usercalendardelegatesmapper.ui \
+    availabilitycreatordialog.ui \
+    nextavailabiliystepviewer.ui
 #    agendauserviewerwidget.ui \
+
+
+
+
+
+

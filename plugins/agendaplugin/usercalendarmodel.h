@@ -35,8 +35,8 @@
 /**
  * \file usercalendarmodel.h
  * \author Eric MAEKER <eric.maeker@gmail.com>
- * \version 0.6.0
- * \date 02 Aug 2011
+ * \version 0.6.2
+ * \date 18 Nov 2011
 */
 
 namespace Agenda {
@@ -87,8 +87,10 @@ public:
     UserCalendar *userCalendarAt(const int row) const;
     UserCalendar *defaultUserCalendar() const;
     QModelIndex defaultUserCalendarModelIndex() const;
+    void updateUserCalendarChanged(const int row);
 
     DayAvailabilityModel *availabilityModel(const QModelIndex &index, QObject *parent = 0) const;
+    DayAvailabilityModel *availabilityModel(const int index, QObject *parent = 0) const;
 
     void setPeopleList(const int row, const QList<Calendar::People> &peoples);
     void addPeople(const int row, const Calendar::People &people);

@@ -54,6 +54,8 @@
 #include "ui_usercalendarviewer.h"
 
 #include <QStandardItemModel>
+#include <QStandardItem>
+#include <QHash>
 
 using namespace Agenda;
 using namespace Internal;
@@ -79,6 +81,7 @@ public:
         ui(new Ui::UserCalendarViewer),
         m_CalendarItemModel(0),
         m_UserCalendarModel(agendaCore()->userCalendarModel(user()->uuid())),
+        m_AvailModel(0),
         q(parent)
     {
     }
@@ -109,6 +112,9 @@ public:
     QHash<QString, int> m_UidToListIndex;
     bool scrollOnShow;
 
+    QAction *aToday, *aTomorrow, *aNextWeek, *aNextMonth;
+    QStandardItemModel *m_AvailModel;
+
 private:
     UserCalendarViewer *q;
 };
@@ -123,6 +129,24 @@ UserCalendarViewer::UserCalendarViewer(QWidget *parent) :
 {
     d->ui->setupUi(this);
     this->layout()->setMargin(0);
+    d->ui->startDate->setDate(QDate::currentDate());
+    d->ui->startDate->setDisplayFormat(QLocale().dateFormat(QLocale::LongFormat));
+
+    d->aToday = new QAction(this);
+    d->aTomorrow = new QAction(this);
+    d->aNextWeek = new QAction(this);
+    d->aNextMonth = new QAction(this);
+    d->aToday->setIcon(theme()->icon(Core::Constants::ICONDATE));
+    d->aTomorrow->setIcon(theme()->icon(Core::Constants::ICONDATE));
+    d->aNextWeek->setIcon(theme()->icon(Core::Constants::ICONDATE));
+    d->aNextMonth->setIcon(theme()->icon(Core::Constants::ICONDATE));
+    d->ui->startDateSelector->addAction(d->aToday);
+    d->ui->startDateSelector->addAction(d->aTomorrow);
+    d->ui->startDateSelector->addAction(d->aNextWeek);
+    d->ui->startDateSelector->addAction(d->aNextMonth);
+    d->ui->startDateSelector->setDefaultAction(d->aToday);
+    connect(d->ui->startDateSelector, SIGNAL(triggered(QAction*)), this, SLOT(quickDateSelection(QAction*)));
+
     d->ui->refreshAvailabilities->setIcon(theme()->icon(Core::Constants::ICONSOFTWAREUPDATEAVAILABLE));
     d->ui->calendarViewer->setDate(QDate::currentDate());
     d->ui->calendarViewer->setDayScaleHourDivider(2);
@@ -148,9 +172,10 @@ UserCalendarViewer::UserCalendarViewer(QWidget *parent) :
     d->ui->splitter->setSizes(QList<int>() << third << width-third);
 
     connect(user(), SIGNAL(userChanged()), this, SLOT(userChanged()));
-    connect(d->ui->availButton, SIGNAL(triggered(QAction*)), this, SLOT(newEventAtAvailabity(QAction*)));
+    connect(d->ui->availabilitiesView, SIGNAL(activated(QModelIndex)), this, SLOT(newEventAtAvailabity(QModelIndex)));
     connect(d->ui->availableAgendasCombo, SIGNAL(currentIndexChanged(int)), this, SLOT(on_availableAgendasCombo_activated(int)));
     connect(d->ui->refreshAvailabilities, SIGNAL(clicked()), this, SLOT(refreshAvailabilities()));
+    connect(d->ui->startDate, SIGNAL(dateChanged(QDate)), this, SLOT(onStartDateChenged(QDate)));
     userChanged();
 
     // Connect menu actions
@@ -168,29 +193,36 @@ UserCalendarViewer::~UserCalendarViewer()
 
 void UserCalendarViewer::recalculateComboAgendaIndex()
 {
-    WARN_FUNC << d->m_UserCalendarModel->defaultUserCalendarModelIndex();
     d->ui->availableAgendasCombo->setCurrentIndex(d->m_UserCalendarModel->defaultUserCalendarModelIndex().row());
     on_availableAgendasCombo_activated(d->m_UserCalendarModel->defaultUserCalendarModelIndex().row());
 }
 
 void UserCalendarViewer::newEvent()
 {
-    newEventAtAvailabity(0);
+    newEventAtAvailabity(QModelIndex());
 }
 
 /** When the user select an availability in the toolButton, this slot is activated. Open a EventEditor dialog and save the item in the CalendarItemModel if the dialog is accepted. */
-void UserCalendarViewer::newEventAtAvailabity(QAction *action)
+void UserCalendarViewer::newEventAtAvailabity(const QModelIndex &index)
 {
+    QModelIndex idx = index;
+    if (!index.isValid()) {
+        // use the first available date
+        idx = d->m_AvailModel->index(0,0);
+        idx = d->m_AvailModel->index(0,0, idx);
+    }
     Calendar::BasicItemEditionDialog dlg(d->m_CalendarItemModel, this);
-    QDateTime start = QDateTime::currentDateTime();
-    if (!action) {
-        if (d->ui->availButton->actions().count() > 0) {
-            action = d->ui->availButton->actions().at(0);
-        }
-    }
-    if (action) {
-        start = action->data().toDateTime();
-    }
+    QDateTime start = d->m_AvailModel->itemFromIndex(idx)->data().toDateTime();
+    if (start.isNull())
+        return;
+//    if (!action) {
+//        if (d->ui->availButton->actions().count() > 0) {
+//            action = d->ui->availButton->actions().at(0);
+//        }
+//    }
+//    if (action) {
+//        start = action->data().toDateTime();
+//    }
 
     Calendar::CalendarItem item = d->m_CalendarItemModel->insertItem(start, start.addSecs((d->ui->availDurationCombo->currentIndex()+1)*5*60));
     dlg.init(item);
@@ -205,34 +237,84 @@ void UserCalendarViewer::refreshAvailabilities()
     recalculateAvailabilitiesWithDurationIndex(d->ui->availDurationCombo->currentIndex());
 }
 
+void UserCalendarViewer::quickDateSelection(QAction *a)
+{
+    if (a==d->aToday)
+        d->ui->startDate->setDate(QDate::currentDate());
+    if (a==d->aTomorrow)
+        d->ui->startDate->setDate(QDate::currentDate().addDays(1));
+    if (a==d->aNextWeek)
+        d->ui->startDate->setDate(QDate::currentDate().addDays(QDate::currentDate().dayOfWeek() - 7));
+    if (a==d->aNextMonth)
+        d->ui->startDate->setDate(QDate(QDate::currentDate().year(), QDate::currentDate().month(), 1).addMonths(1));
+    onStartDateChanged(d->ui->startDate->date());
+}
+
+void UserCalendarViewer::onStartDateChanged(const QDate &start)
+{
+    recalculateAvailabilitiesWithDurationIndex(d->ui->availDurationCombo->currentIndex());
+}
+
 void UserCalendarViewer::recalculateAvailabilitiesWithDurationIndex(const int index)
 {
     /** \todo Create a tree model for the nextAvailableDates */
 
-    for(int i = d->ui->availButton->actions().count()-1; i > -1 ; --i)
-        d->ui->availButton->removeAction(d->ui->availButton->actions().at(i));
+//    for(int i = d->ui->availButton->actions().count()-1; i > -1 ; --i)
+//        d->ui->availButton->removeAction(d->ui->availButton->actions().at(i));
 
     if (index<0)
         return;
 
+    // get current selected calendar
+    int calId = d->ui->availableAgendasCombo->currentIndex();
+    Agenda::UserCalendar *cal = 0;
+    if (calId > 0)
+        cal = d->m_UserCalendarModel->userCalendarAt(calId);
+    else
+        cal = d->m_UserCalendarModel->defaultUserCalendar();
+
+    // Get the next available dates
     QList<QDateTime> dates;
-    Agenda::UserCalendar *cal = d->m_UserCalendarModel->defaultUserCalendar();
     if (cal) {
-        // Next available dates
-        dates = base()->nextAvailableTime(QDateTime::currentDateTime(), (index+1)*5, *cal, S_NUMBEROFAVAILABILITIESTOSHOW);
+        dates = base()->nextAvailableTime(QDateTime(d->ui->startDate->date(), QTime(0,0)), (index+1)*5, *cal, S_NUMBEROFAVAILABILITIESTOSHOW);
     }
-//    d->ui->nextAvailCombo->clear();
+
+    // Create a simple QStandardItemModel
+    if (!d->m_AvailModel)
+        d->m_AvailModel = new QStandardItemModel(this);
+    d->m_AvailModel->clear();
+    d->ui->availabilitiesView->setModel(d->m_AvailModel);
+
+    QHash<QString, QStandardItem *> main;
+    QFont bold;
+    bold.setBold(true);
     for(int i = 0; i < dates.count(); ++i) {
-        QAction *a = new QAction(d->ui->availButton);
-        a->setData(dates.at(i));
-        a->setText(dates.at(i).toString(QLocale().dateTimeFormat(QLocale::ShortFormat)));
-        a->setToolTip(a->text());
-        d->ui->availButton->addAction(a);
-//        d->ui->nextAvailCombo->addItem(dates.at(i).toString(QLocale().dateTimeFormat(QLocale::ShortFormat)));
+        QDate dt = dates.at(i).date();
+        QStandardItem *parent = main.value(dt.toString(Qt::ISODate), 0);
+        if (!parent) {
+            parent = new QStandardItem(dt.toString(QLocale().dateFormat(QLocale::LongFormat)));
+            parent->setFont(bold);
+            d->m_AvailModel->invisibleRootItem()->appendRow(parent);
+            main.insert(dt.toString(Qt::ISODate), parent);
+        }
+        QStandardItem *item = new QStandardItem(dates.at(i).time().toString("HH:mm"));
+        item->setData(dates.at(i));
+        parent->appendRow(item);
     }
-    if (d->ui->availButton->actions().count() > 0) {
-        d->ui->availButton->setDefaultAction(d->ui->availButton->actions().at(0));
-    }
+    d->ui->availabilitiesView->expandAll();
+
+
+//    for(int i = 0; i < dates.count(); ++i) {
+//        QAction *a = new QAction(d->ui->availButton);
+//        a->setData(dates.at(i));
+//        a->setText(dates.at(i).toString(QLocale().dateTimeFormat(QLocale::ShortFormat)));
+//        a->setToolTip(a->text());
+//        d->ui->availButton->addAction(a);
+////        d->ui->nextAvailCombo->addItem(dates.at(i).toString(QLocale().dateTimeFormat(QLocale::ShortFormat)));
+//    }
+//    if (d->ui->availButton->actions().count() > 0) {
+//        d->ui->availButton->setDefaultAction(d->ui->availButton->actions().at(0));
+//    }
 }
 
 void UserCalendarViewer::on_availableAgendasCombo_activated(const int index)
@@ -248,8 +330,7 @@ void UserCalendarViewer::on_availableAgendasCombo_activated(const int index)
         d->ui->calendarViewer->setModel(d->m_CalendarItemModel);
 
         // Add availabilities
-        d->ui->availabilitiesView->setModel(d->m_UserCalendarModel->availabilityModel(calIndex, this));
-        d->ui->availabilitiesView->expandAll();
+//        d->ui->availabilitiesView->setModel(d->m_UserCalendarModel->availabilityModel(calIndex, this));
 
         // Reset the Calendar View properties
         int defaultDuration = d->m_UserCalendarModel->index(index, UserCalendarModel::DefaultDuration).data().toInt();
@@ -351,6 +432,14 @@ bool UserCalendarViewer::event(QEvent *e)
             d->ui->availDurationCombo->addItem(QString("%1 %2").arg(i*5).arg(tkTr(Trans::Constants::MINUTES)));
         }
         d->ui->availDurationCombo->setCurrentIndex(idx);
+        d->aToday->setText(tkTr(Trans::Constants::TODAY));
+        d->aToday->setToolTip(d->aToday->text());
+        d->aTomorrow->setText(tkTr(Trans::Constants::TOMORROW));
+        d->aTomorrow->setToolTip(d->aTomorrow->text());
+        d->aNextWeek->setText(tkTr(Trans::Constants::NEXT_WEEK));
+        d->aNextWeek->setToolTip(d->aNextWeek->text());
+        d->aNextMonth->setText(tkTr(Trans::Constants::NEXT_MONTH));
+        d->aNextMonth->setToolTip(d->aNextMonth->text());
         break;
     }
     case QEvent::Show:

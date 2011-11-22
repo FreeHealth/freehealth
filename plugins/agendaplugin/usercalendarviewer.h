@@ -29,6 +29,7 @@
 #include <QWidget>
 QT_BEGIN_NAMESPACE
 class QModelIndex;
+class QDate;
 QT_END_NAMESPACE
 
 /**
@@ -64,8 +65,10 @@ protected:
 
 private Q_SLOTS:
     void newEvent();
-    void newEventAtAvailabity(QAction *action);
+    void newEventAtAvailabity(const QModelIndex &index);
     void refreshAvailabilities();
+    void quickDateSelection(QAction *a);
+    void onStartDateChanged(const QDate &start);
     void recalculateAvailabilitiesWithDurationIndex(const int index);
     void on_availableAgendasCombo_activated(const int index);
     void userChanged();

@@ -26,12 +26,15 @@
  ***************************************************************************/
 #include "usercalendar.h"
 
+#include <translationutils/constanttranslations.h>
+
 #include <QDate>
 #include <QStandardItem>
 
 #include <QDebug>
 
 using namespace Agenda;
+using namespace Trans::ConstantTranslations;
 
 DayAvailability::DayAvailability() :
         m_id(-1),
@@ -188,4 +191,23 @@ bool UserCalendar::canBeAvailable(const QDateTime &start, const int durationInMi
         }
     }
     return false;
+}
+
+QDebug operator<<(QDebug dbg, const Agenda::DayAvailability &c)
+{
+    QStringList t;
+    for(int i=0; i < c.timeRangeCount(); ++i) {
+        const TimeRange &tr = c.timeRange(i);
+        t << QString("%1-%2").arg(tr.from.toString()).arg(tr.to.toString());
+    }
+    dbg.nospace() << "DayAvailability("
+                  << QDate::shortDayName(c.weekDay())
+                  << t.join("; ")
+                  << ")";
+    return dbg.space();
+}
+
+QDebug operator<<(QDebug dbg, const Agenda::DayAvailability *c)
+{
+    return operator<<(dbg, *c);
 }

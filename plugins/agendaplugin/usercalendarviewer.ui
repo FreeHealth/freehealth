@@ -68,44 +68,7 @@
            <string>Availabilities</string>
           </attribute>
           <layout class="QGridLayout" name="gridLayout_6">
-           <item row="0" column="0">
-            <widget class="QLabel" name="label_2">
-             <property name="sizePolicy">
-              <sizepolicy hsizetype="Preferred" vsizetype="Preferred">
-               <horstretch>0</horstretch>
-               <verstretch>0</verstretch>
-              </sizepolicy>
-             </property>
-             <property name="text">
-              <string>Duration (mins)</string>
-             </property>
-            </widget>
-           </item>
-           <item row="0" column="1" colspan="3">
-            <layout class="QHBoxLayout" name="horizontalLayout">
-             <item>
-              <widget class="QComboBox" name="availDurationCombo">
-               <property name="sizePolicy">
-                <sizepolicy hsizetype="Expanding" vsizetype="Fixed">
-                 <horstretch>0</horstretch>
-                 <verstretch>0</verstretch>
-                </sizepolicy>
-               </property>
-              </widget>
-             </item>
-             <item>
-              <widget class="QLabel" name="durationLabel"/>
-             </item>
-            </layout>
-           </item>
-           <item row="1" column="0">
-            <widget class="QLabel" name="label_3">
-             <property name="text">
-              <string>Availabilities</string>
-             </property>
-            </widget>
-           </item>
-           <item row="2" column="0" colspan="4">
+           <item row="3" column="0" colspan="4">
             <widget class="QTreeView" name="availabilitiesView">
              <property name="editTriggers">
               <set>QAbstractItemView::NoEditTriggers</set>
@@ -115,7 +78,7 @@
              </attribute>
             </widget>
            </item>
-           <item row="3" column="0">
+           <item row="4" column="0">
             <spacer name="verticalSpacer">
              <property name="orientation">
               <enum>Qt::Vertical</enum>
@@ -128,43 +91,97 @@
              </property>
             </spacer>
            </item>
-           <item row="1" column="2" colspan="2">
-            <layout class="QHBoxLayout" name="horizontalLayout_2">
-             <property name="spacing">
-              <number>0</number>
+           <item row="0" column="0" colspan="4">
+            <widget class="QGroupBox" name="groupBox_3">
+             <property name="title">
+              <string>Search params</string>
              </property>
-             <item>
-              <widget class="QToolButton" name="availButton">
-               <property name="sizePolicy">
-                <sizepolicy hsizetype="Expanding" vsizetype="Fixed">
-                 <horstretch>0</horstretch>
-                 <verstretch>0</verstretch>
-                </sizepolicy>
-               </property>
-               <property name="popupMode">
-                <enum>QToolButton::MenuButtonPopup</enum>
-               </property>
-              </widget>
-             </item>
-            </layout>
-           </item>
-           <item row="1" column="1">
-            <widget class="QPushButton" name="refreshAvailabilities">
-             <property name="minimumSize">
-              <size>
-               <width>22</width>
-               <height>22</height>
-              </size>
-             </property>
-             <property name="maximumSize">
-              <size>
-               <width>22</width>
-               <height>22</height>
-              </size>
-             </property>
-             <property name="text">
-              <string/>
-             </property>
+             <layout class="QGridLayout" name="gridLayout_5">
+              <item row="0" column="0">
+               <widget class="QLabel" name="label_2">
+                <property name="sizePolicy">
+                 <sizepolicy hsizetype="Preferred" vsizetype="Preferred">
+                  <horstretch>0</horstretch>
+                  <verstretch>0</verstretch>
+                 </sizepolicy>
+                </property>
+                <property name="text">
+                 <string>Duration (mins)</string>
+                </property>
+               </widget>
+              </item>
+              <item row="0" column="1">
+               <widget class="QComboBox" name="availDurationCombo">
+                <property name="sizePolicy">
+                 <sizepolicy hsizetype="Expanding" vsizetype="Fixed">
+                  <horstretch>0</horstretch>
+                  <verstretch>0</verstretch>
+                 </sizepolicy>
+                </property>
+               </widget>
+              </item>
+              <item row="0" column="2">
+               <widget class="QLabel" name="durationLabel"/>
+              </item>
+              <item row="1" column="0" colspan="3">
+               <layout class="QHBoxLayout" name="horizontalLayout_3">
+                <property name="spacing">
+                 <number>0</number>
+                </property>
+                <item>
+                 <widget class="QToolButton" name="refreshAvailabilities">
+                  <property name="minimumSize">
+                   <size>
+                    <width>22</width>
+                    <height>22</height>
+                   </size>
+                  </property>
+                  <property name="maximumSize">
+                   <size>
+                    <width>22</width>
+                    <height>22</height>
+                   </size>
+                  </property>
+                  <property name="text">
+                   <string/>
+                  </property>
+                 </widget>
+                </item>
+                <item>
+                 <widget class="QToolButton" name="startDateSelector">
+                  <property name="minimumSize">
+                   <size>
+                    <width>22</width>
+                    <height>22</height>
+                   </size>
+                  </property>
+                  <property name="maximumSize">
+                   <size>
+                    <width>22</width>
+                    <height>22</height>
+                   </size>
+                  </property>
+                  <property name="popupMode">
+                   <enum>QToolButton::InstantPopup</enum>
+                  </property>
+                 </widget>
+                </item>
+                <item>
+                 <widget class="QDateEdit" name="startDate">
+                  <property name="sizePolicy">
+                   <sizepolicy hsizetype="Minimum" vsizetype="Minimum">
+                    <horstretch>0</horstretch>
+                    <verstretch>0</verstretch>
+                   </sizepolicy>
+                  </property>
+                  <property name="calendarPopup">
+                   <bool>true</bool>
+                  </property>
+                 </widget>
+                </item>
+               </layout>
+              </item>
+             </layout>
             </widget>
            </item>
           </layout>

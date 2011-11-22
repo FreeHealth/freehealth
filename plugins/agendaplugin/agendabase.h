@@ -39,14 +39,15 @@
 /**
  * \file agendabase.h
  * \author Eric MAEKER <eric.maeker@gmail.com>
- * \version 0.6.0
- * \date 18 Oct 2011
+ * \version 0.6.2
+ * \date 22 Nov 2011
 */
 
 namespace Agenda {
 
 namespace Internal {
 class Appointement;
+class NextAvailabiliyManager;
 
 class CalendarEventQuery
 {
@@ -118,7 +119,7 @@ public:
 
     // Constructor
     static AgendaBase *instance();
-    virtual ~AgendaBase() {}
+    virtual ~AgendaBase();
 
     // initialize
     bool initialize();
@@ -166,6 +167,8 @@ private:
 private:
     static bool m_initialized;
     static AgendaBase *m_Instance;
+    NextAvailabiliyManager *m_Next;
+
 };
 
 }  // End namespace Internal

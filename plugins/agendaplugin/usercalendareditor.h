@@ -36,8 +36,8 @@
 /**
  * \file usercalendareditor.h
  * \author Eric MAEKER <eric.maeker@gmail.com>
- * \version 0.6.0
- * \date 25 Jul 2011
+ * \version 0.6.2
+ * \date 18 Nov 2011
 */
 
 namespace Calendar {
@@ -67,6 +67,8 @@ public:
 
 public Q_SLOTS:
     void setCurrentIndex(const QModelIndex &index);
+    void addAvailability();
+    void clearAvailabilities();
     void submit();
     void revert();
 

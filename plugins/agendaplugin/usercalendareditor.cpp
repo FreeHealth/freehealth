@@ -33,6 +33,9 @@
 #include "usercalendareditor.h"
 #include "usercalendarmodel.h"
 #include "usercalendar.h"
+#include "availabilitycreatordialog.h"
+
+#include <utils/log.h>
 
 #include "ui_usercalendareditor.h"
 
@@ -51,6 +54,9 @@ UserCalendarEditorWidget::UserCalendarEditorWidget(QWidget *parent) :
     connect(ui->buttonBox, SIGNAL(clicked(QAbstractButton*)), this, SLOT(setFocus()));
     connect(ui->buttonBox, SIGNAL(accepted()), this, SLOT(submit()));
     connect(ui->buttonBox, SIGNAL(rejected()), this, SLOT(revert()));
+    connect(ui->clearAvail, SIGNAL(clicked()), this, SLOT(clearAvailabilities()));
+//    connect(ui->removeAvail, SIGNAL(clicked()), this, SLOT(removeAvailabilities()));
+    connect(ui->addAvailability, SIGNAL(clicked()), this, SLOT(addAvailability()));
 }
 
 UserCalendarEditorWidget::~UserCalendarEditorWidget()
@@ -108,10 +114,33 @@ void UserCalendarEditorWidget::setCurrentIndex(const QModelIndex &index)
     ui->userCalendarDelegatesWidget->setUserCalendarIndex(index.row());
 }
 
+void UserCalendarEditorWidget::addAvailability()
+{
+    if (!m_Mapper)
+        return;
+    if (!m_AvailabilityModel)
+        return;
+    AvailabilityCreatorDialog dlg(this);
+    if (dlg.exec() == QDialog::Accepted) {
+        // save availabilities to the userCalendar or cache them
+        const QList<DayAvailability> &av = dlg.getAvailability();
+        for(int i = 0 ; i < av.count(); ++i) {
+            m_AvailabilityModel->addAvailability(av.at(i));
+        }
+//        m_UserCalendarModel->updateUserCalendarChanged(m_Mapper->currentIndex());
+    }
+}
+
+void UserCalendarEditorWidget::clearAvailabilities()
+{
+}
+
 /** Submit changes to the model. */
 void UserCalendarEditorWidget::submit()
 {
     ui->userCalendarDelegatesWidget->submit();
+    if (m_AvailabilityModel)
+        m_AvailabilityModel->submit();
     if (m_Mapper)
         m_Mapper->submit();
 }
