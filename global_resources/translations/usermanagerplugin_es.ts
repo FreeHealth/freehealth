@@ -474,47 +474,47 @@ p, li { white-space: pre-wrap; }
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../../plugins/usermanagerplugin/widgets/userviewer_contact.ui" line="56"/>
+        <location filename="../../plugins/usermanagerplugin/widgets/userviewer_contact.ui" line="50"/>
         <source>Country</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../../plugins/usermanagerplugin/widgets/userviewer_contact.ui" line="26"/>
+        <location filename="../../plugins/usermanagerplugin/widgets/userviewer_contact.ui" line="20"/>
         <source>Address</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../../plugins/usermanagerplugin/widgets/userviewer_contact.ui" line="36"/>
+        <location filename="../../plugins/usermanagerplugin/widgets/userviewer_contact.ui" line="30"/>
         <source>ZipCode</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../../plugins/usermanagerplugin/widgets/userviewer_contact.ui" line="46"/>
+        <location filename="../../plugins/usermanagerplugin/widgets/userviewer_contact.ui" line="40"/>
         <source>City</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../../plugins/usermanagerplugin/widgets/userviewer_contact.ui" line="73"/>
+        <location filename="../../plugins/usermanagerplugin/widgets/userviewer_contact.ui" line="67"/>
         <source>Tel 1</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../../plugins/usermanagerplugin/widgets/userviewer_contact.ui" line="83"/>
+        <location filename="../../plugins/usermanagerplugin/widgets/userviewer_contact.ui" line="77"/>
         <source>Tel 2</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../../plugins/usermanagerplugin/widgets/userviewer_contact.ui" line="93"/>
+        <location filename="../../plugins/usermanagerplugin/widgets/userviewer_contact.ui" line="87"/>
         <source>Tel 3</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../../plugins/usermanagerplugin/widgets/userviewer_contact.ui" line="103"/>
+        <location filename="../../plugins/usermanagerplugin/widgets/userviewer_contact.ui" line="97"/>
         <source>Fax</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../../plugins/usermanagerplugin/widgets/userviewer_contact.ui" line="113"/>
+        <location filename="../../plugins/usermanagerplugin/widgets/userviewer_contact.ui" line="107"/>
         <source>Mail</source>
         <translation type="unfinished"></translation>
     </message>

@@ -56,17 +56,17 @@ Answering &apos;No&apos; will cause definitve data lose.</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../../plugins/formmanagerplugin/formeditordialog.cpp" line="69"/>
+        <location filename="../../plugins/formmanagerplugin/formeditordialog.cpp" line="77"/>
         <source>Form Editor</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../../plugins/formmanagerplugin/formeditordialog.cpp" line="82"/>
+        <location filename="../../plugins/formmanagerplugin/formeditordialog.cpp" line="92"/>
         <source>Insert as root form ?</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../../plugins/formmanagerplugin/formeditordialog.cpp" line="82"/>
+        <location filename="../../plugins/formmanagerplugin/formeditordialog.cpp" line="92"/>
         <source>You did not selected a form, do you want to add the sub-form as root form ?</source>
         <translation type="unfinished"></translation>
     </message>
@@ -81,6 +81,11 @@ Answering &apos;No&apos; will cause definitve data lose.</source>
     <message>
         <location filename="../../plugins/formmanagerplugin/formfilesselectorwidget.ui" line="28"/>
         <source>View by</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../../plugins/formmanagerplugin/formfilesselectorwidget.ui" line="61"/>
+        <source>Screenshots</source>
         <translation type="unfinished"></translation>
     </message>
 </context>
@@ -186,31 +191,31 @@ Answering &apos;No&apos; will cause definitve data lose.</source>
 <context>
     <name>FormFilesSelectorWidget</name>
     <message>
-        <location filename="../../plugins/formmanagerplugin/formfilesselectorwidget.cpp" line="87"/>
         <location filename="../../plugins/formmanagerplugin/formfilesselectorwidget.cpp" line="88"/>
+        <location filename="../../plugins/formmanagerplugin/formfilesselectorwidget.cpp" line="89"/>
         <source>by category</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../../plugins/formmanagerplugin/formfilesselectorwidget.cpp" line="93"/>
         <location filename="../../plugins/formmanagerplugin/formfilesselectorwidget.cpp" line="94"/>
+        <location filename="../../plugins/formmanagerplugin/formfilesselectorwidget.cpp" line="95"/>
         <source>by author</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../../plugins/formmanagerplugin/formfilesselectorwidget.cpp" line="99"/>
         <location filename="../../plugins/formmanagerplugin/formfilesselectorwidget.cpp" line="100"/>
+        <location filename="../../plugins/formmanagerplugin/formfilesselectorwidget.cpp" line="101"/>
         <source>by specialty</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../../plugins/formmanagerplugin/formfilesselectorwidget.cpp" line="105"/>
         <location filename="../../plugins/formmanagerplugin/formfilesselectorwidget.cpp" line="106"/>
+        <location filename="../../plugins/formmanagerplugin/formfilesselectorwidget.cpp" line="107"/>
         <source>by type</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../../plugins/formmanagerplugin/formfilesselectorwidget.cpp" line="151"/>
+        <location filename="../../plugins/formmanagerplugin/formfilesselectorwidget.cpp" line="152"/>
         <source>Default Forms</source>
         <translation type="unfinished"></translation>
     </message>
@@ -218,17 +223,17 @@ Answering &apos;No&apos; will cause definitve data lose.</source>
 <context>
     <name>FormIODescription</name>
     <message>
-        <location filename="../../plugins/formmanagerplugin/iformio.cpp" line="222"/>
+        <location filename="../../plugins/formmanagerplugin/iformio.cpp" line="232"/>
         <source>Complete form</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../../plugins/formmanagerplugin/iformio.cpp" line="224"/>
+        <location filename="../../plugins/formmanagerplugin/iformio.cpp" line="234"/>
         <source>Sub-form</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../../plugins/formmanagerplugin/iformio.cpp" line="226"/>
+        <location filename="../../plugins/formmanagerplugin/iformio.cpp" line="236"/>
         <source>Page only</source>
         <translation type="unfinished"></translation>
     </message>
@@ -236,17 +241,17 @@ Answering &apos;No&apos; will cause definitve data lose.</source>
 <context>
     <name>Forms</name>
     <message>
-        <location filename="../../plugins/formmanagerplugin/iformio.cpp" line="296"/>
+        <location filename="../../plugins/formmanagerplugin/iformio.cpp" line="306"/>
         <source>License</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../../plugins/formmanagerplugin/iformio.cpp" line="302"/>
+        <location filename="../../plugins/formmanagerplugin/iformio.cpp" line="312"/>
         <source>Creation date</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../../plugins/formmanagerplugin/iformio.cpp" line="304"/>
+        <location filename="../../plugins/formmanagerplugin/iformio.cpp" line="314"/>
         <source>Last modification date</source>
         <translation type="unfinished"></translation>
     </message>

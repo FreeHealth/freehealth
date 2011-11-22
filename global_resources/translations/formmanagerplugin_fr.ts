@@ -57,17 +57,17 @@ Répondre &apos;non&apos; causera une perte de données irréversible.</translat
         <translation>Ajouter ce formulaire</translation>
     </message>
     <message>
-        <location filename="../../plugins/formmanagerplugin/formeditordialog.cpp" line="69"/>
+        <location filename="../../plugins/formmanagerplugin/formeditordialog.cpp" line="77"/>
         <source>Form Editor</source>
         <translation>Editeur de formulaire</translation>
     </message>
     <message>
-        <location filename="../../plugins/formmanagerplugin/formeditordialog.cpp" line="82"/>
+        <location filename="../../plugins/formmanagerplugin/formeditordialog.cpp" line="92"/>
         <source>Insert as root form ?</source>
         <translation>Insérer le formulaire en tant que formulaire racine ?</translation>
     </message>
     <message>
-        <location filename="../../plugins/formmanagerplugin/formeditordialog.cpp" line="82"/>
+        <location filename="../../plugins/formmanagerplugin/formeditordialog.cpp" line="92"/>
         <source>You did not selected a form, do you want to add the sub-form as root form ?</source>
         <translation>Vous n&apos;avez pas sélectionné de formulaire, voulez-vous ajouter le sous-formulaire à la racine ?</translation>
     </message>
@@ -83,6 +83,11 @@ Répondre &apos;non&apos; causera une perte de données irréversible.</translat
         <location filename="../../plugins/formmanagerplugin/formfilesselectorwidget.ui" line="28"/>
         <source>View by</source>
         <translation>Visualisé par</translation>
+    </message>
+    <message>
+        <location filename="../../plugins/formmanagerplugin/formfilesselectorwidget.ui" line="61"/>
+        <source>Screenshots</source>
+        <translation type="unfinished"></translation>
     </message>
 </context>
 <context>
@@ -187,31 +192,31 @@ Répondre &apos;non&apos; causera une perte de données irréversible.</translat
 <context>
     <name>FormFilesSelectorWidget</name>
     <message>
-        <location filename="../../plugins/formmanagerplugin/formfilesselectorwidget.cpp" line="87"/>
         <location filename="../../plugins/formmanagerplugin/formfilesselectorwidget.cpp" line="88"/>
+        <location filename="../../plugins/formmanagerplugin/formfilesselectorwidget.cpp" line="89"/>
         <source>by category</source>
         <translation>par catégory</translation>
     </message>
     <message>
-        <location filename="../../plugins/formmanagerplugin/formfilesselectorwidget.cpp" line="93"/>
         <location filename="../../plugins/formmanagerplugin/formfilesselectorwidget.cpp" line="94"/>
+        <location filename="../../plugins/formmanagerplugin/formfilesselectorwidget.cpp" line="95"/>
         <source>by author</source>
         <translation>par auteur</translation>
     </message>
     <message>
-        <location filename="../../plugins/formmanagerplugin/formfilesselectorwidget.cpp" line="99"/>
         <location filename="../../plugins/formmanagerplugin/formfilesselectorwidget.cpp" line="100"/>
+        <location filename="../../plugins/formmanagerplugin/formfilesselectorwidget.cpp" line="101"/>
         <source>by specialty</source>
         <translation>par spécialité</translation>
     </message>
     <message>
-        <location filename="../../plugins/formmanagerplugin/formfilesselectorwidget.cpp" line="105"/>
         <location filename="../../plugins/formmanagerplugin/formfilesselectorwidget.cpp" line="106"/>
+        <location filename="../../plugins/formmanagerplugin/formfilesselectorwidget.cpp" line="107"/>
         <source>by type</source>
         <translation>par type</translation>
     </message>
     <message>
-        <location filename="../../plugins/formmanagerplugin/formfilesselectorwidget.cpp" line="151"/>
+        <location filename="../../plugins/formmanagerplugin/formfilesselectorwidget.cpp" line="152"/>
         <source>Default Forms</source>
         <translation>Formulaires par défaut</translation>
     </message>
@@ -219,17 +224,17 @@ Répondre &apos;non&apos; causera une perte de données irréversible.</translat
 <context>
     <name>FormIODescription</name>
     <message>
-        <location filename="../../plugins/formmanagerplugin/iformio.cpp" line="222"/>
+        <location filename="../../plugins/formmanagerplugin/iformio.cpp" line="232"/>
         <source>Complete form</source>
         <translation>Formulaires complets</translation>
     </message>
     <message>
-        <location filename="../../plugins/formmanagerplugin/iformio.cpp" line="224"/>
+        <location filename="../../plugins/formmanagerplugin/iformio.cpp" line="234"/>
         <source>Sub-form</source>
         <translation>Sous-formulaires</translation>
     </message>
     <message>
-        <location filename="../../plugins/formmanagerplugin/iformio.cpp" line="226"/>
+        <location filename="../../plugins/formmanagerplugin/iformio.cpp" line="236"/>
         <source>Page only</source>
         <translation>Page uniquement</translation>
     </message>
@@ -237,17 +242,17 @@ Répondre &apos;non&apos; causera une perte de données irréversible.</translat
 <context>
     <name>Forms</name>
     <message>
-        <location filename="../../plugins/formmanagerplugin/iformio.cpp" line="296"/>
+        <location filename="../../plugins/formmanagerplugin/iformio.cpp" line="306"/>
         <source>License</source>
         <translation>Licence</translation>
     </message>
     <message>
-        <location filename="../../plugins/formmanagerplugin/iformio.cpp" line="302"/>
+        <location filename="../../plugins/formmanagerplugin/iformio.cpp" line="312"/>
         <source>Creation date</source>
         <translation>Date de création</translation>
     </message>
     <message>
-        <location filename="../../plugins/formmanagerplugin/iformio.cpp" line="304"/>
+        <location filename="../../plugins/formmanagerplugin/iformio.cpp" line="314"/>
         <source>Last modification date</source>
         <translation>Date de dernière modification</translation>
     </message>
