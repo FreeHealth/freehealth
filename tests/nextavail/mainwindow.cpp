@@ -140,8 +140,12 @@ MainWindow::MainWindow(QWidget *parent) :
 //    QDateTime start = QDateTime(QDate(2011,11,22), QTime(00,00));
 
     int appointementId = 0;
-    int numberOfEvents = 150;
+    int numberOfEvents = 50;
+    int limitComputation = 10000;//224640; // 10min, 6day a week, 12hours a day :: 1 full year == 12*6 *10 *6 *52 == 224640
     while (free.count() < numberOfEvents) {
+        --limitComputation;
+        if (limitComputation <= 0)
+            break;
 
         QList<QDateTime> dates = m_Next->nextAvailableTime(start, defaultDuration, defaultDuration, aps.at(appointementId), numberOfEvents-free.count());
         for(int i = 0; i < dates.count(); ++i) {
