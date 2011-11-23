@@ -65,6 +65,7 @@ private:
     void fillBankComboBox();
     void refresh();
     void showAssets();
+    void changeEvent(QEvent *e);
     Ui::AssetsViewerWidget *ui;
 };
 

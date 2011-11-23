@@ -80,6 +80,18 @@ void AssetsViewer::showAssets()
 {
     AssetsIO  mov(this) ;
     AssetModel * model = mov.getModelAssets();
+    model->setHeaderData(ASSETS_ACCOUNT_ID,Qt::Horizontal,trUtf8("Account id"));
+    model->setHeaderData(ASSETS_LABEL,Qt::Horizontal,trUtf8("Label"));
+    model->setHeaderData(ASSETS_DATE,Qt::Horizontal,trUtf8("Date"));
+    model->setHeaderData(ASSETS_DURATION,Qt::Horizontal,trUtf8("Duration"));
+    model->setHeaderData(ASSETS_MODE,Qt::Horizontal,trUtf8("Mode"));
+    model->setHeaderData(ASSETS_VALUE,Qt::Horizontal,trUtf8("Value"));
+    model->setHeaderData(ASSETS_YEARLY_RESULT,Qt::Horizontal,trUtf8("Yearly value"));
+    model->setHeaderData(ASSETS_RESIDUAL_VALUE,Qt::Horizontal,trUtf8("Residual value"));
+    model->setHeaderData(ASSETS_YEARS,Qt::Horizontal,trUtf8("Years to run"));
+    model->setHeaderData(ASSETS_RATE,Qt::Horizontal,trUtf8("Rate"));
+    model->setHeaderData(ASSETS_MOVEMENT,Qt::Horizontal,trUtf8("Movement"));
+    model->setHeaderData(ASSETS_COMMENT,Qt::Horizontal,trUtf8("Comment"));
     ui->tableView->setModel(model);
     ui->tableView->setSelectionBehavior(QAbstractItemView::SelectRows);
     ui->tableView->setSelectionMode(QAbstractItemView::SingleSelection);
@@ -210,6 +222,7 @@ void AssetsViewer::deleteAsset(){
 void AssetsViewer::fillModeComboBox(){
     AssetsManager manager;
     QStringList list = manager.getHashForModeComboBox().values();
+    ui->modeComboBox->clear();
     ui->modeComboBox->addItems(list);
 }
 
@@ -254,4 +267,14 @@ void AssetsViewer::writeLabelByRow(const QModelIndex& index){
                                                                            label,
                                                                            QString::number(yearlyValue));
     ui->declareLabel->setText(textLabel);    
+}
+
+void AssetsViewer::changeEvent(QEvent *e){
+    QWidget::changeEvent(e);
+    if (e->type()== QEvent::LanguageChange)
+    {
+    	  ui->retranslateUi(this);
+    	  //fillBankComboBox();
+    	  fillModeComboBox();
+        }
 }
