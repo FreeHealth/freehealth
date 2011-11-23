@@ -156,6 +156,7 @@ QVariant UserCalendarModel::data(const QModelIndex &index, int role) const
 
 bool UserCalendarModel::setData(const QModelIndex &index, const QVariant &value, int role)
 {
+    WARN_FUNC << index << value << role;
     if (!index.isValid())
         return false;
 
@@ -175,11 +176,14 @@ bool UserCalendarModel::setData(const QModelIndex &index, const QVariant &value,
         case Password: u->setData(UserCalendar::Password, value); break;
         case LocationUid: u->setData(UserCalendar::LocationUid, value); break;
         case DefaultDuration: u->setData(UserCalendar::DefaultDuration, value); break;
+        default: return false;
         }
+        qWarning() << "DONE";
         Q_EMIT dataChanged(index, index);
+        return true;
     }
 
-    return true;
+    return false;
 }
 
 /** Create new Agenda::UserCalendar by inserting new model rows. */
@@ -342,6 +346,9 @@ namespace Internal {
 
 const int WeekDayRole = Qt::UserRole + 1;
 const int HourFromRole = Qt::UserRole + 2;
+const int HourToRole = Qt::UserRole + 3;
+const int TimeRangeIdRole = Qt::UserRole + 4;
+const int AvailIdRole = Qt::UserRole + 5;
 
 class DayAvailabilityModelPrivate
 {
@@ -370,6 +377,9 @@ public:
                     TimeRange range = avail.at(j).timeRange(k);
                     QStandardItem *time = new QStandardItem(tkTr(Trans::Constants::FROM_1_TO_2).arg(range.from.toString()).arg(range.to.toString()));
                     time->setData(range.from, HourFromRole);
+                    time->setData(range.to, HourToRole);
+                    time->setData(k, TimeRangeIdRole);
+                    time->setData(j, AvailIdRole);
                     time->setToolTip(time->text());
                     day->appendRow(time);
                 }
@@ -404,6 +414,14 @@ DayAvailabilityModel::~DayAvailabilityModel()
     if (d) {
         delete d;
         d = 0;
+    }
+}
+
+void DayAvailabilityModel::clearAvailabilities()
+{
+    if (d->m_UserCalendar) {
+        d->m_UserCalendar->setAvailabilities(QList<DayAvailability>());
+        clear();
     }
 }
 
@@ -472,6 +490,27 @@ void DayAvailabilityModel::addAvailability(const DayAvailability &availability)
             dayItem->appendRow(time);
         }
         dayItem->sortChildren(0);
+    }
+}
+
+void DayAvailabilityModel::removeAvailability(const QModelIndex &index)
+{
+    if (d->m_UserCalendar) {
+        if (index.parent()==QModelIndex()) {
+            // delete all availabilities for a specific weekDay
+            QStandardItem *item = itemFromIndex(index);
+            int weekDay = item->data(WeekDayRole).toInt();
+            d->m_UserCalendar->removeAvailabilitiesForWeekDay(weekDay);
+            invisibleRootItem()->removeRow(index.row());
+        } else {
+            // delete a specific time range
+            QStandardItem *parent = itemFromIndex(index.parent());
+            int weekDay = parent->data(WeekDayRole).toInt();
+            const QTime &from = itemFromIndex(index)->data(HourFromRole).toTime();
+            const QTime &to = itemFromIndex(index)->data(HourToRole).toTime();
+            d->m_UserCalendar->removeAvailabilitiesTimeRange(weekDay, from, to);
+            parent->removeRow(index.row());
+        }
     }
 }
 

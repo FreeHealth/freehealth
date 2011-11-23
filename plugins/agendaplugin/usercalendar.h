@@ -74,6 +74,7 @@ public:
 
     int timeRangeCount() const {return timeRanges.count();}
     TimeRange timeRange(const int index) const;
+    void removeTimeRangeAt(const int index);
 
 private:
     int m_id;
@@ -125,6 +126,11 @@ public:
     QVector<DayAvailability> availabilities(const int day = -1) const;
     void addAvailabilities(const DayAvailability &av);
     void setAvailabilities(const QList<DayAvailability> &availabilities);
+    void clearAvailabilities();
+    void removeAvailabilitiesForWeekDay(const int weekday);
+    void removeAvailabilitiesTimeRange(const int weekday, const QTime &from, const QTime &to);
+
+
     bool canBeAvailable(const QDateTime &date) const;
     bool canBeAvailable(const QDateTime &date, const int durationInMinutes) const;
 

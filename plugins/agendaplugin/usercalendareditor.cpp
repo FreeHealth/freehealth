@@ -36,6 +36,7 @@
 #include "availabilitycreatordialog.h"
 
 #include <utils/log.h>
+#include <utils/global.h>
 
 #include "ui_usercalendareditor.h"
 
@@ -51,11 +52,12 @@ UserCalendarEditorWidget::UserCalendarEditorWidget(QWidget *parent) :
     m_Mapper(0)
 {
     ui->setupUi(this);
+    ui->clearAvail->setVisible(false);
     connect(ui->buttonBox, SIGNAL(clicked(QAbstractButton*)), this, SLOT(setFocus()));
     connect(ui->buttonBox, SIGNAL(accepted()), this, SLOT(submit()));
     connect(ui->buttonBox, SIGNAL(rejected()), this, SLOT(revert()));
-    connect(ui->clearAvail, SIGNAL(clicked()), this, SLOT(clearAvailabilities()));
-//    connect(ui->removeAvail, SIGNAL(clicked()), this, SLOT(removeAvailabilities()));
+//    connect(ui->clearAvail, SIGNAL(clicked()), this, SLOT(clearAvailabilities()));
+    connect(ui->removeAvail, SIGNAL(clicked()), this, SLOT(removeAvailabilities()));
     connect(ui->addAvailability, SIGNAL(clicked()), this, SLOT(addAvailability()));
 }
 
@@ -133,16 +135,50 @@ void UserCalendarEditorWidget::addAvailability()
 
 void UserCalendarEditorWidget::clearAvailabilities()
 {
+//    if (m_AvailabilityModel)
+//        m_AvailabilityModel->clearAvailabilities();
 }
+
+void UserCalendarEditorWidget::removeAvailabilities()
+{
+    if (m_AvailabilityModel) {
+        QModelIndex idx = ui->availabilityView->currentIndex();
+        if (idx.parent()==QModelIndex()) {
+            if (m_AvailabilityModel->rowCount()==1) {
+                Utils::warningMessageBox(tr("Can not delete all availabilities"),
+                                         tr("Agenda must have at least one availability. "
+                                            "You can not delete all its availabilities."));
+                return;
+            }
+            bool yes = Utils::yesNoMessageBox(tr("Delete full day."),
+                                              tr("You are about to delete all recorded time range for one specific day of the week (%1). "
+                                                 "Do you really want to delete all time range ?").arg(idx.data().toString()));
+            if (!yes)
+                return;
+        } else {
+            if ((m_AvailabilityModel->rowCount()==1) && (m_AvailabilityModel->rowCount(idx)==1)) {
+                Utils::warningMessageBox(tr("Can not delete all availabilities"),
+                                         tr("Agenda must have at least one availability. You can not delete all its availabilities."));
+                return;
+            }
+        }
+        m_AvailabilityModel->removeAvailability(idx);
+    }
+}
+
 
 /** Submit changes to the model. */
 void UserCalendarEditorWidget::submit()
 {
+    qWarning() <<"1";
     ui->userCalendarDelegatesWidget->submit();
+    qWarning() <<"2";
     if (m_AvailabilityModel)
         m_AvailabilityModel->submit();
+    qWarning() <<"3";
     if (m_Mapper)
         m_Mapper->submit();
+    qWarning() <<"4";
 }
 
 /** Submit changes to the model. */

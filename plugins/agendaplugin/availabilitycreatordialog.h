@@ -48,7 +48,6 @@ public:
 
 private Q_SLOTS:
     void on_startTime_timeChanged(const QTime &from);
-    void on_endTime_timeChanged(const QTime &to);
 
 private:
     Ui::AvailabilityCreatorDialog *ui;

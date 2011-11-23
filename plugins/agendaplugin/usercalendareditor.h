@@ -69,6 +69,7 @@ public Q_SLOTS:
     void setCurrentIndex(const QModelIndex &index);
     void addAvailability();
     void clearAvailabilities();
+    void removeAvailabilities();
     void submit();
     void revert();
 

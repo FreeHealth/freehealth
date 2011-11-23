@@ -54,11 +54,6 @@ void AvailabilityCreatorDialog::on_startTime_timeChanged(const QTime &from)
     ui->endTime->setMinimumTime(from);
 }
 
-void AvailabilityCreatorDialog::on_endTime_timeChanged(const QTime &to)
-{
-    ui->startTime->setMaximumTime(to);
-}
-
 QList<DayAvailability> AvailabilityCreatorDialog::getAvailability() const
 {
     QList<DayAvailability> toReturn;

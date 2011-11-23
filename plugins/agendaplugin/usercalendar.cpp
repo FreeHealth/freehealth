@@ -66,6 +66,12 @@ TimeRange DayAvailability::timeRange(const int index) const
         return timeRanges.at(index);
     return TimeRange();
 }
+void DayAvailability::removeTimeRangeAt(const int index)
+{
+    if (index > timeRanges.count())
+        return;
+    timeRanges.remove(index);
+}
 
 UserCalendar::UserCalendar() :
         m_Modified(false)
@@ -117,7 +123,7 @@ QString UserCalendar::xmlOptions() const
 
 bool UserCalendar::hasAvailability() const
 {
-    return m_Availabilities.count();
+    return (m_Availabilities.count() > 0);
 }
 
 QVector<DayAvailability> UserCalendar::availabilities(const int day) const
@@ -136,11 +142,44 @@ QVector<DayAvailability> UserCalendar::availabilities(const int day) const
 void UserCalendar::addAvailabilities(const DayAvailability &av)
 {
     m_Availabilities.append(av);
+    m_Modified = true;
 }
 
 void UserCalendar::setAvailabilities(const QList<DayAvailability> &availabilities)
 {
+    m_Modified = true;
     m_Availabilities = availabilities;
+}
+
+void UserCalendar::clearAvailabilities()
+{
+    m_Availabilities.clear();
+    m_Modified = true;
+}
+
+void UserCalendar::removeAvailabilitiesForWeekDay(const int weekday)
+{
+    for(int i = m_Availabilities.count() - 1; i >= 0; --i) {
+        if (m_Availabilities.at(i).weekDay() == weekday) {
+            m_Availabilities.removeAt(i);
+            m_Modified = true;
+        }
+    }
+}
+
+void UserCalendar::removeAvailabilitiesTimeRange(const int weekday, const QTime &from, const QTime &to)
+{
+    for(int i = m_Availabilities.count() - 1; i >= 0; --i) {
+        DayAvailability &av = m_Availabilities[i];
+        if (av.weekDay() == weekday) {
+            for(int j = av.timeRangeCount() - 1; j >= 0; --j) {
+                if (av.timeRange(j).from == from && av.timeRange(j).to == to) {
+                    av.removeTimeRangeAt(j);
+                    m_Modified = true;
+                }
+            }
+        }
+    }
 }
 
 /** Return true if the calendar availabilities allow this date. */

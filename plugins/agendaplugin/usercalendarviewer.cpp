@@ -175,7 +175,7 @@ UserCalendarViewer::UserCalendarViewer(QWidget *parent) :
     connect(d->ui->availabilitiesView, SIGNAL(activated(QModelIndex)), this, SLOT(newEventAtAvailabity(QModelIndex)));
     connect(d->ui->availableAgendasCombo, SIGNAL(currentIndexChanged(int)), this, SLOT(on_availableAgendasCombo_activated(int)));
     connect(d->ui->refreshAvailabilities, SIGNAL(clicked()), this, SLOT(refreshAvailabilities()));
-    connect(d->ui->startDate, SIGNAL(dateChanged(QDate)), this, SLOT(onStartDateChenged(QDate)));
+    connect(d->ui->startDate, SIGNAL(dateChanged(QDate)), this, SLOT(onStartDateChanged(QDate)));
     userChanged();
 
     // Connect menu actions
