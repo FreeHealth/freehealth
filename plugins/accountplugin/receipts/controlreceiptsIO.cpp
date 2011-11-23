@@ -50,24 +50,6 @@ ControlReceipts::ControlReceipts(QWidget * parent):QWidget(parent),ui(new Ui::Co
     ui->resultLabel->setText("");
     ui->resultLabel->setWordWrap(true);
     m_accountModel = new AccountModel(this);
-    if (!m_accountModel->setHeaderData(ACCOUNT_PATIENT_NAME,Qt::Horizontal ,trUtf8("Patient") , Qt::EditRole))
-    {
-        if (WarnDebugMessage)
-            qWarning() << __FILE__ << QString::number(__LINE__) << "Unable to set header data" ;
-    }
-    if (WarnDebugMessage)
-        qDebug() << __FILE__ << QString::number(__LINE__) << " headerData =" << m_accountModel->headerData(ACCOUNT_PATIENT_NAME,Qt::Horizontal, Qt::DisplayRole).toString() ;
-    m_accountModel->setHeaderData(ACCOUNT_DATE,Qt::Horizontal ,trUtf8("Date") , Qt::EditRole);
-    m_accountModel->setHeaderData(ACCOUNT_MEDICALPROCEDURE_TEXT,Qt::Horizontal ,trUtf8("Acts") , Qt::EditRole);
-    m_accountModel->setHeaderData(ACCOUNT_COMMENT,Qt::Horizontal ,trUtf8("Comment") , Qt::EditRole);
-    m_accountModel->setHeaderData(ACCOUNT_CASHAMOUNT,Qt::Horizontal ,trUtf8("Cash") , Qt::EditRole);
-    m_accountModel->setHeaderData(ACCOUNT_CHEQUEAMOUNT,Qt::Horizontal ,trUtf8("Checks") , Qt::EditRole);
-    m_accountModel->setHeaderData(ACCOUNT_VISAAMOUNT,Qt::Horizontal ,trUtf8("Credit card") , Qt::EditRole);
-    m_accountModel->setHeaderData(ACCOUNT_INSURANCEAMOUNT,Qt::Horizontal ,trUtf8("Insurance") , Qt::EditRole);
-    m_accountModel->setHeaderData(ACCOUNT_OTHERAMOUNT,Qt::Horizontal ,trUtf8("Other") , Qt::EditRole);
-    m_accountModel->setHeaderData(ACCOUNT_DUEAMOUNT,Qt::Horizontal ,trUtf8("Due") , Qt::EditRole);
-    m_accountModel->setHeaderData(ACCOUNT_DUEBY,Qt::Horizontal ,trUtf8("by") , Qt::EditRole);
-    m_accountModel->setHeaderData(ACCOUNT_ISVALID,Qt::Horizontal ,trUtf8("Valid") , Qt::EditRole);
     m_userUuid = m_accountModel->getUserUuid();
     m_typeOfMoney = trUtf8("Euros");
     ui->beginDateEdit->setDate(QDate::currentDate());
@@ -75,20 +57,6 @@ ControlReceipts::ControlReceipts(QWidget * parent):QWidget(parent),ui(new Ui::Co
     ui->searchButton->setShortcut(QKeySequence::InsertParagraphSeparator);
     ui->deleteButton->setShortcut(QKeySequence::Delete);
     ui->quitButton->setShortcut(QKeySequence("Ctrl+q"));
-    m_mapCombo.insert(trUtf8("Patient"),"PATIENT_NAME");
-    m_mapCombo.insert(trUtf8("Cash"),"CASH");
-    m_mapCombo.insert(trUtf8("Check"),"CHEQUE");
-    m_mapCombo.insert(trUtf8("Credit card"),"VISA");
-    m_mapCombo.insert(trUtf8("Banking"),"BANKING");
-    m_mapCombo.insert(trUtf8("Other"),"OTHER");
-    m_mapCombo.insert(trUtf8("Due"),"DUE");
-    m_mapCombo.insert(trUtf8("Due by"),"DUE_BY");
-    QStringList listForCombo;
-    listForCombo = m_mapCombo.keys();
-    listForCombo.prepend(trUtf8("Patient"));
-    listForCombo.removeDuplicates();
-    ui->fieldComboBox->addItems(listForCombo);
-    ui->fieldComboBox->setEditText(trUtf8("Patient"));
     search();
     connect(ui->searchButton,SIGNAL(pressed()),this,SLOT(search()));
     connect(ui->deleteButton,SIGNAL(pressed()),this,SLOT(deleteLine()));
@@ -186,14 +154,20 @@ QString ControlReceipts::textOfSums(AccountModel * model){
        }
     totals = cash + chq + visa + banking + other + dues;
     totalReceived = cash + chq + banking + other + visa;
+    QString cashStr = trUtf8("Cash");
+    QString chqStr = trUtf8("Chq");
+    QString visaStr = trUtf8("CB");
+    QString bankingStr = trUtf8("Banking");
+    QString otherStr = trUtf8("Others");
+    QString duesStr = trUtf8("Dues");
     QString totStr = "<font size = 3 color = ""blue"">Totaux = </font><font size = 3 color = ""red"">"+QString::number(totals)+" "+m_typeOfMoney+" </font>  ";
     QString totReceived = "<font size = 3 color = ""blue"">Totaux reçus = </font><font size = 3 color = ""red"">"+QString::number(totalReceived)+" "+m_typeOfMoney+" </font><br/>";
-    QString sumsStr = "<font size = 3 color = ""blue"">Esp = </font><font size = 3 color = ""red"">"+QString::number(cash)+" "+m_typeOfMoney+"  </font>"+
-                "<font size = 3 color = ""blue"">Chq = </font><font size = 3 color = ""red"">"+QString::number(chq)+" "+m_typeOfMoney+"  </font>"+
-                "<font size = 3 color = ""blue"">CB = </font><font size = 3 color = ""red"">"+QString::number(visa)+" "+m_typeOfMoney+"  </font>"+
-                "<font size = 3 color = ""blue"">Banking = </font><font size = 3 color = ""red"">"+QString::number(banking)+" "+m_typeOfMoney+"  </font><br/>"+
-                "<font size = 3 color = ""blue"">Other = </font><font size = 3 color = ""red"">"+QString::number(other)+" "+m_typeOfMoney+"  </font>"+
-                "<font size = 3 color = ""blue"">dues = </font><font size = 3 color = ""red"">"+QString::number(dues)+" "+m_typeOfMoney+"</font>";
+    QString sumsStr = "<font size = 3 color = ""blue"">"+cashStr+" = </font><font size = 3 color = ""red"">"+QString::number(cash)+" "+m_typeOfMoney+"  </font>"+
+                "<font size = 3 color = ""blue"">"+chqStr+" = </font><font size = 3 color = ""red"">"+QString::number(chq)+" "+m_typeOfMoney+"  </font>"+
+                "<font size = 3 color = ""blue"">"+visaStr+" = </font><font size = 3 color = ""red"">"+QString::number(visa)+" "+m_typeOfMoney+"  </font>"+
+                "<font size = 3 color = ""blue"">"+bankingStr+" = </font><font size = 3 color = ""red"">"+QString::number(banking)+" "+m_typeOfMoney+"  </font><br/>"+
+                "<font size = 3 color = ""blue"">"+otherStr+" = </font><font size = 3 color = ""red"">"+QString::number(other)+" "+m_typeOfMoney+"  </font>"+
+                "<font size = 3 color = ""blue"">"+duesStr+" = </font><font size = 3 color = ""red"">"+QString::number(dues)+" "+m_typeOfMoney+"</font>";
     labelTextStr = totStr+totReceived+sumsStr;
     labelText = "<html><body>"+labelTextStr+"</body></html>";
     return labelText;
@@ -212,6 +186,37 @@ void ControlReceipts::coloringDoubles(){}
 void ControlReceipts::refresh(){
     delete m_accountModel;
     m_accountModel = new AccountModel(this);
+    if (!m_accountModel->setHeaderData(ACCOUNT_PATIENT_NAME,Qt::Horizontal ,trUtf8("Patient") , Qt::EditRole))
+    {
+            qWarning() << __FILE__ << QString::number(__LINE__) << "Unable to set header data" ;
+        }
+    m_accountModel->setHeaderData(ACCOUNT_DATE,Qt::Horizontal ,trUtf8("Date") , Qt::EditRole);
+    m_accountModel->setHeaderData(ACCOUNT_MEDICALPROCEDURE_TEXT,Qt::Horizontal ,trUtf8("Acts") , Qt::EditRole);
+    m_accountModel->setHeaderData(ACCOUNT_COMMENT,Qt::Horizontal ,trUtf8("Comment") , Qt::EditRole);
+    m_accountModel->setHeaderData(ACCOUNT_CASHAMOUNT,Qt::Horizontal ,trUtf8("Cash") , Qt::EditRole);
+    m_accountModel->setHeaderData(ACCOUNT_CHEQUEAMOUNT,Qt::Horizontal ,trUtf8("Checks") , Qt::EditRole);
+    m_accountModel->setHeaderData(ACCOUNT_VISAAMOUNT,Qt::Horizontal ,trUtf8("Credit card") , Qt::EditRole);
+    m_accountModel->setHeaderData(ACCOUNT_INSURANCEAMOUNT,Qt::Horizontal ,trUtf8("Insurance") , Qt::EditRole);
+    m_accountModel->setHeaderData(ACCOUNT_OTHERAMOUNT,Qt::Horizontal ,trUtf8("Other") , Qt::EditRole);
+    m_accountModel->setHeaderData(ACCOUNT_DUEAMOUNT,Qt::Horizontal ,trUtf8("Due") , Qt::EditRole);
+    m_accountModel->setHeaderData(ACCOUNT_DUEBY,Qt::Horizontal ,trUtf8("by") , Qt::EditRole);
+    m_accountModel->setHeaderData(ACCOUNT_ISVALID,Qt::Horizontal ,trUtf8("Valid") , Qt::EditRole);
+    m_mapCombo.clear();
+    m_mapCombo.insert(trUtf8("Patient"),"PATIENT_NAME");
+    m_mapCombo.insert(trUtf8("Cash"),"CASH");
+    m_mapCombo.insert(trUtf8("Check"),"CHEQUE");
+    m_mapCombo.insert(trUtf8("Credit card"),"VISA");
+    m_mapCombo.insert(trUtf8("Banking"),"BANKING");
+    m_mapCombo.insert(trUtf8("Other"),"OTHER");
+    m_mapCombo.insert(trUtf8("Due"),"DUE");
+    m_mapCombo.insert(trUtf8("Due by"),"DUE_BY");
+    QStringList listForCombo;
+    listForCombo.clear();
+    listForCombo = m_mapCombo.keys();
+    listForCombo.prepend(trUtf8("Patient"));
+    listForCombo.removeDuplicates();
+    ui->fieldComboBox->addItems(listForCombo);
+    ui->fieldComboBox->setEditText(trUtf8("Patient"));
 }
 
 void ControlReceipts::refreshFilter(const QString & filter){
@@ -234,4 +239,14 @@ void ControlReceipts::refreshFilter(const QString & filter){
 void ControlReceipts::closeAction(){
     emit isClosing();
     emit close();
+}
+
+void ControlReceipts::changeEvent(QEvent *e) {
+    QWidget::changeEvent(e);
+    if (e->type()==QEvent::LanguageChange) {
+        ui->retranslateUi(this);
+        if (WarnDebugMessage)
+            qDebug() << __FILE__ << QString::number(__LINE__) << " langage changed " ;
+        search();
+        }
 }

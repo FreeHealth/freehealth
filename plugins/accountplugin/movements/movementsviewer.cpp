@@ -92,6 +92,13 @@ void MovementsViewer::showMovements()
     MovementsIODb  mov(this) ;
     QString year = ui->yearComboBox->currentText();
     MovementModel * model = mov.getModelMovements(year);
+    model->setHeaderData(MOV_LABEL,Qt::Horizontal,tr("Label"));
+    model->setHeaderData(MOV_DATE,Qt::Horizontal,tr("Date"));
+    model->setHeaderData(MOV_DATEOFVALUE,Qt::Horizontal,tr("Date of value"));
+    model->setHeaderData(MOV_AMOUNT,Qt::Horizontal,tr("Acts"));
+    model->setHeaderData(MOV_VALIDITY,Qt::Horizontal,tr("Validity"));
+    model->setHeaderData(MOV_ISVALID,Qt::Horizontal,tr("Valid"));
+    model->setHeaderData(MOV_DETAILS,Qt::Horizontal,tr("Details"));
     ui->tableView->setModel(model);
     ui->tableView->setSelectionBehavior(QAbstractItemView::SelectRows);
     ui->tableView->setSelectionMode(QAbstractItemView::SingleSelection);
