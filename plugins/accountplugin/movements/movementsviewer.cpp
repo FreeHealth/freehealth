@@ -242,4 +242,12 @@ void MovementsViewer::fillBankComboBox(){
     ui->bankComboBox->setModel(mov.getBankComboBoxModel(this));
 }
 
-
+void MovementsViewer::changeEvent(QEvent * e){
+    QWidget::changeEvent(e);
+    if (e->type()==QEvent::LanguageChange) {
+        ui->retranslateUi(this);
+        if (WarnDebugMessage)
+            qDebug() << __FILE__ << QString::number(__LINE__) << " langage changed " ;
+        showMovements();
+        }
+}

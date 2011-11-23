@@ -63,6 +63,7 @@ class LedgerEdit : public QWidget {
         int m_typeOfPaper;
         bool m_duplicata;
         QDate m_date;
+        void changeEvent(QEvent * e);
 };
 
 #endif

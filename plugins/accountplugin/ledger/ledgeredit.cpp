@@ -60,12 +60,13 @@ LedgerEdit::LedgerEdit(QWidget * parent):QWidget(parent),ui(new Ui::LedgerEditWi
     qDebug() << __FILE__ << QString::number(__LINE__) << " listOfYears.size() =" <<QString::number(listOfYears.size())  ;
     for (int i = 0; i < listOfYears.size(); i += 1)
     {
-    	//if (WarnDebugMessage)
+    	if (WarnDebugMessage)
     	    	qDebug() << __FILE__ << QString::number(__LINE__) << " listOfYears[i] =" << listOfYears[i] ;
         }
     ui->yearComboBox->addItems(listOfYears);
     ui->infoLabel->setText("");
     emit choosenDate(currentDate);
+    fillInfoLabel("");
     m_doc = new QTextDocument(ui->textEdit);
     QPalette p = palette();
     p.setColor(QPalette::Active, QPalette::Base, QColor ("#DDDDDD"));
@@ -154,4 +155,13 @@ void LedgerEdit::resizeLedgerEdit(QWidget * parent){
     int h = parent->height();
     int w = parent->width();
     resize(w,h);
+}
+
+void LedgerEdit::changeEvent(QEvent * e){
+    QWidget::changeEvent(e);
+    if (e->type()== QEvent::LanguageChange)
+    {
+    	  ui->retranslateUi(this);
+    	  fillInfoLabel("");
+        }
 }

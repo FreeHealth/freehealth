@@ -55,11 +55,12 @@ class ACCOUNT_EXPORT MovementsViewer : public QWidget
         void setMovementsComboBoxToolTips(int);
         void userIsChanged();
     private:
-        Ui::MovementsViewerWidget * ui;
         void fillMovementsComboBox();
         void fillYearComboBox();
         void fillBankComboBox();
+        void changeEvent(QEvent * e);
         int m_valid ;
+        Ui::MovementsViewerWidget * ui;
 };
 
 #endif

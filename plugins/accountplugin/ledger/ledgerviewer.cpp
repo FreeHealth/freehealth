@@ -69,10 +69,18 @@ LedgerViewer::~LedgerViewer(){}
 void LedgerViewer::changeEvent(QEvent *e) {
     QWidget::changeEvent(e);
     if (e->type()==QEvent::LanguageChange) {
+        ui->retranslateUi(this);
         qDebug() << __FILE__ << QString::number(__LINE__) << "LedgerViewer::changeEvent(QEvent *e)"  ;
-        m_menuWidgetAction = new QMenu(QObject::tr("&Program","Ledger file"),this);
+        /*m_menuWidgetAction = new QMenu(QObject::tr("&Program","Ledger file"),this);
         m_menuAnalyze = new QMenu(tr("&Analyse"),this);
-        m_ledger = new QMenu(tr("&Ledger"),this);
+        m_ledger = new QMenu(tr("&Ledger"),this);*/
+        delete m_menuWidgetAction;
+        delete m_menuAnalyze;
+        delete m_ledger;
+        if(createActions()){
+        createMenus();
+        fillMenuBar();
+        }
     }
 }
 
