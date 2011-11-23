@@ -170,15 +170,11 @@ void UserCalendarEditorWidget::removeAvailabilities()
 /** Submit changes to the model. */
 void UserCalendarEditorWidget::submit()
 {
-    qWarning() <<"1";
     ui->userCalendarDelegatesWidget->submit();
-    qWarning() <<"2";
     if (m_AvailabilityModel)
         m_AvailabilityModel->submit();
-    qWarning() <<"3";
     if (m_Mapper)
         m_Mapper->submit();
-    qWarning() <<"4";
 }
 
 /** Submit changes to the model. */
