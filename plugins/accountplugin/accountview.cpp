@@ -75,8 +75,7 @@ AccountView::AccountView(QWidget *parent) :
 {
     setObjectName("AccountView");
     m_ui->setupUi(this);
-    m_Model = new AccountDB::AccountModel(this);
-    m_Model->select();
+    setHeadersOfTable();
     m_ui->tableView->setModel(m_Model);
     m_ui->tableView->horizontalHeader()->setResizeMode(QHeaderView::Interactive);
     m_ui->tableView->horizontalHeader()->setResizeMode(QHeaderView::ResizeToContents);
@@ -97,6 +96,25 @@ AccountView::~AccountView()
             m_ui = 0;}    
 }
 
+void AccountView::setHeadersOfTable(){
+    if(m_Model)
+    m_Model = NULL;
+    m_Model = new AccountDB::AccountModel(this);
+    m_Model->select();
+    m_Model->setHeaderData(AccountDB::Constants::ACCOUNT_PATIENT_NAME,Qt::Horizontal,trUtf8("Name"));
+    m_Model->setHeaderData(AccountDB::Constants::ACCOUNT_SITE_ID,Qt::Horizontal,trUtf8("Site id"));
+    m_Model->setHeaderData(AccountDB::Constants::ACCOUNT_DATE,Qt::Horizontal,trUtf8("Date"));
+    m_Model->setHeaderData(AccountDB::Constants::ACCOUNT_MEDICALPROCEDURE_TEXT,Qt::Horizontal,trUtf8("Act"));
+    m_Model->setHeaderData(AccountDB::Constants::ACCOUNT_COMMENT,Qt::Horizontal,trUtf8("Comment"));
+    m_Model->setHeaderData(AccountDB::Constants::ACCOUNT_CASHAMOUNT,Qt::Horizontal,trUtf8("Cash"));
+    m_Model->setHeaderData(AccountDB::Constants::ACCOUNT_CHEQUEAMOUNT,Qt::Horizontal,trUtf8("Check"));
+    m_Model->setHeaderData(AccountDB::Constants::ACCOUNT_VISAAMOUNT,Qt::Horizontal,trUtf8("Credit Card"));
+    m_Model->setHeaderData(AccountDB::Constants::ACCOUNT_INSURANCEAMOUNT,Qt::Horizontal,trUtf8("Banking"));
+    m_Model->setHeaderData(AccountDB::Constants::ACCOUNT_OTHERAMOUNT,Qt::Horizontal,trUtf8("Other"));
+    m_Model->setHeaderData(AccountDB::Constants::ACCOUNT_DUEAMOUNT,Qt::Horizontal,trUtf8("Due"));
+    m_Model->setHeaderData(AccountDB::Constants::ACCOUNT_DUEBY,Qt::Horizontal,trUtf8("Due by"));
+}
+
 void AccountView::refresh(){
     QString dateBeginStr = m_ui->startDate->date().toString("yyyy-MM-dd");
     QString dateEndStr = m_ui->endDate->date().toString("yyyy-MM-dd");
@@ -104,11 +122,14 @@ void AccountView::refresh(){
     filter += " AND ";
     filter += QString("DATE BETWEEN '%1' AND '%2'").arg(dateBeginStr,dateEndStr);
     qDebug() << __FILE__ << QString::number(__LINE__) << " filter =" << filter ;
-    AccountDB::AccountModel *model = new AccountDB::AccountModel(this);
-    model->setFilter(filter);
-    qDebug() << __FILE__ << QString::number(__LINE__) << " filter =" << model->filter() ;
-    qDebug() << __FILE__ << QString::number(__LINE__) << " rowCount =" << QString::number(model->rowCount()) ;
-    m_ui->tableView->setModel(model);
+    //AccountDB::AccountModel *model = new AccountDB::AccountModel(this);
+    
+    m_Model->setFilter(filter);
+    if(WarnDebugMessage)
+    qDebug() << __FILE__ << QString::number(__LINE__) << " filter =" << m_Model->filter() ;
+    if(WarnDebugMessage)
+    qDebug() << __FILE__ << QString::number(__LINE__) << " rowCount =" << QString::number(m_Model->rowCount()) ;
+    m_ui->tableView->setModel(m_Model);
        
     QList<int> hide;
     hide
@@ -130,6 +151,7 @@ void AccountView::filterChanged()
     // Filter model
     //m_Model->setStartDate(m_ui->startDate->date());
     //m_Model->setEndDate(m_ui->endDate->date());
+    if(WarnDebugMessage)
     qDebug() << __FILE__ << QString::number(__LINE__) << " in filterChanged " ;
     // Calculate sums of paiements
     /*m_ui->cash->setText(QString::number(m_Model->sum(AccountDB::Constants::ACCOUNT_CASHAMOUNT)));
@@ -240,4 +262,11 @@ void AccountView::calc(){
         }
 }
 
-
+void AccountView::changeEvent(QEvent *e){
+    QWidget::changeEvent(e);
+    if (e->type()== QEvent::LanguageChange)
+    {
+    	  m_ui->retranslateUi(this);
+    	  setHeadersOfTable();
+        }
+}

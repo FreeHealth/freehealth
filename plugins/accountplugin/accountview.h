@@ -67,6 +67,8 @@ private:
     void filterChanged();
     void refresh();
     void calc();
+    void setHeadersOfTable();
+    void changeEvent(QEvent *e);
 
 private Q_SLOTS:
     void on_startDate_dateChanged(const QDate &date);
