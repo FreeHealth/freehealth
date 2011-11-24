@@ -38,6 +38,8 @@ class UTILS_EXPORT VersionNumber
 public:
     VersionNumber(const QString &versionNumber);
 
+    QString versionString() const {return m_Version;}
+
     int majorNumber() const {return m_Major;}
     int minorNumber() const {return m_Minor;}
     int debugNumber() const {return m_Debug;}

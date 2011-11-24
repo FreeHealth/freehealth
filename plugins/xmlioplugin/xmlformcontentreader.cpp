@@ -31,6 +31,7 @@
 #include <extensionsystem/pluginmanager.h>
 #include <utils/log.h>
 #include <utils/global.h>
+#include <utils/genericupdateinformation.h>
 #include <translationutils/constanttranslations.h>
 
 #include <coreplugin/icore.h>
@@ -277,21 +278,7 @@ Form::FormIODescription *XmlFormContentReader::readXmlDescription(const QDomElem
     }
     // read update informations
     QDomElement update = xmlDescr.firstChildElement(Constants::TAG_SPEC_UPDATEINFO);
-    if (!update.isNull()) {
-        update = update.firstChildElement(Constants::TAG_SPEC_UPDATEINFOVERSION);
-        while (!update.isNull()) {
-            QDomElement updateText = update.firstChildElement(Constants::TAG_SPEC_UPDATEINFOVERSIONTEXT);
-            Form::FormIOUpdateInformations *ioUpdate = new Form::FormIOUpdateInformations;
-            ioUpdate->setData(Form::FormIOUpdateInformations::FromVersion, update.attribute(Constants::ATTRIB_UPDATEINFOVERSION_FROM));
-            ioUpdate->setData(Form::FormIOUpdateInformations::ToVersion, update.attribute(Constants::ATTRIB_UPDATEINFOVERSION_TO));
-            while (!updateText.isNull()) {
-                ioUpdate->setData(Form::FormIOUpdateInformations::UpdateText, updateText.text(), updateText.attribute(Constants::ATTRIB_LANGUAGE));
-                updateText = updateText.nextSiblingElement(Constants::TAG_SPEC_UPDATEINFOVERSIONTEXT);
-            }
-            ioDesc->addUpdateInformation(ioUpdate);
-            update = update.nextSiblingElement(Constants::TAG_SPEC_UPDATEINFOVERSION);
-        }
-    }
+    ioDesc->addUpdateInformation(Utils::GenericUpdateInformation::fromXml(update));
     setPathToDescription(formUid, ioDesc);
     return ioDesc;
 }

@@ -45,7 +45,8 @@ HEADERS += global_exporter.h \
     versionnumber.h \
     widgets/countrycombobox.h \
     idatabasedumper.h \
-    widgets/imageviewer.h
+    widgets/imageviewer.h \
+    genericupdateinformation.h
 #    widgets/dialogbuttonbox.h
 
 SOURCES += global.cpp \
@@ -80,7 +81,8 @@ SOURCES += global.cpp \
     versionnumber.cpp \
     widgets/countrycombobox.cpp \
     idatabasedumper.cpp \
-    widgets/imageviewer.cpp
+    widgets/imageviewer.cpp \
+    genericupdateinformation.cpp
 #    widgets/dialogbuttonbox.cpp
 
 macx {

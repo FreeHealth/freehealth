@@ -33,6 +33,7 @@
 #include <utils/log.h>
 #include <utils/global.h>
 #include <utils/versionnumber.h>
+#include <utils/genericupdateinformation.h>
 #include <translationutils/constanttranslations.h>
 
 #include <coreplugin/icore.h>
@@ -462,6 +463,7 @@ bool XmlFormIO::checkDatabaseFormFileForUpdates()
 {
     QList<Form::FormIODescription *> fromFiles;
     QList<Form::FormIODescription *> fromDb;
+    LOG("Checking for form update");
 
     // get all available descriptions from database
     Form::FormIOQuery querydb;
@@ -487,9 +489,10 @@ bool XmlFormIO::checkDatabaseFormFileForUpdates()
                 // update database
                 XmlFormName form(descFile->data(Form::FormIODescription::UuidOrAbsPath).toString());
                 // Construct the detailled text of the user's question messagebox
-                msg << tr("Form: ") + descFile->data(Form::FormIODescription::ShortDescription).toString() + "<br>";
-                foreach(Form::FormIOUpdateInformations *u, descFile->updateInformationForVersion(db)) {
-                    msg << Utils::firstLetterUpperCase(tkTr(Trans::Constants::FROM_1_TO_2).arg(u->fromVersion()).arg(u->toVersion())) + "<br>" + u->text();
+                msg << tr("Form: ") + descFile->data(Form::FormIODescription::ShortDescription).toString() + "<br />";
+                msg << tr("Database version: %1").arg(db.versionString()) + "<br />";
+                foreach(const Utils::GenericUpdateInformation &u, descFile->updateInformationForVersion(db)) {
+                    msg << Utils::firstLetterUpperCase(tkTr(Trans::Constants::FROM_1_TO_2).arg(u.fromVersion()).arg(u.toVersion())) + "<br>" + u.text();
                 }
                 // test all modes of the form
                 QDir start(form.absPath);

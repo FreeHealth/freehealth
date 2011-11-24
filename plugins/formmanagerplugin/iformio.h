@@ -44,12 +44,13 @@
 /**
  * \file iformio.h
  * \author Eric MAEKER <eric.maeker@gmail.com>
- * \version 0.6.0
- * \date 28 Oct 2011
+ * \version 0.6.2
+ * \date 25 Nov 2011
 */
 
 namespace Utils {
 class VersionNumber;
+class GenericUpdateInformation;
 }
 
 namespace Form {
@@ -129,34 +130,7 @@ namespace Form {
 class IFormIO;
 namespace Internal {
 class FormIODescriptionPrivate;
-class FormIOUpdateInformationsPrivate;
 }
-
-class FORM_EXPORT FormIOUpdateInformations
-{
-public:
-    enum DataRepresentation {
-        FormUid = 0,
-        FromVersion,
-        ToVersion,
-        UpdateText
-    };
-
-    FormIOUpdateInformations();
-    virtual ~FormIOUpdateInformations();
-
-    QVariant data(const int ref, const QString &lang = QString::null) const;
-    bool setData(const int ref, const QVariant &value, const QString &lang = QString::null);
-
-    QString fromVersion() const {return data(FromVersion).toString();}
-    QString toVersion() const {return data(ToVersion).toString();}
-    QString text(const QString lang = QString::null) const {return data(UpdateText, lang).toString();}
-
-    static bool lessThan(const FormIOUpdateInformations *one, const FormIOUpdateInformations *two);
-
-private:
-    Internal::FormIOUpdateInformationsPrivate *d;
-};
 
 class FORM_EXPORT FormIODescription
 {
@@ -196,11 +170,11 @@ public:
     bool setData(const int ref, const QVariant &value, const QString &lang = QString::null);
 
     // Manage update informations
-    void addUpdateInformation(FormIOUpdateInformations *updateInfo) {m_UpdateInfos.append(updateInfo);}
-    QList<FormIOUpdateInformations *> updateInformation() const {return m_UpdateInfos;}
-    QList<FormIOUpdateInformations *> updateInformationForVersion(const QString &version) const;
-    QList<FormIOUpdateInformations *> updateInformationForVersion(const Utils::VersionNumber &version) const;
-//    QList<FormIOUpdateInformations *> updateInformation(const QString &fromVersion, const QString &toVersion) const;
+    void addUpdateInformation(const Utils::GenericUpdateInformation &updateInfo);
+    void addUpdateInformation(const QList<Utils::GenericUpdateInformation> &updateInfo);
+    QList<Utils::GenericUpdateInformation> updateInformation() const;
+    QList<Utils::GenericUpdateInformation> updateInformationForVersion(const QString &version) const;
+    QList<Utils::GenericUpdateInformation> updateInformationForVersion(const Utils::VersionNumber &version) const;
 
     // Manage screenshots
     void addScreenShot(const QPixmap &shot) {m_Shots.append(shot);}
@@ -210,8 +184,8 @@ public:
 
 private:
     Internal::FormIODescriptionPrivate *d;
+    QList<Utils::GenericUpdateInformation> m_UpdateInfos;
     IFormIO *m_reader;
-    QList<FormIOUpdateInformations *> m_UpdateInfos;
     QList<QPixmap> m_Shots;
 };
 
@@ -243,7 +217,5 @@ public:
 
 FORM_EXPORT QDebug operator<<(QDebug dbg, const Form::FormIODescription &c);
 FORM_EXPORT QDebug operator<<(QDebug dbg, const Form::FormIODescription *c);
-FORM_EXPORT QDebug operator<<(QDebug dbg, const Form::FormIOUpdateInformations &u);
-FORM_EXPORT QDebug operator<<(QDebug dbg, const Form::FormIOUpdateInformations *u);
 
 #endif // IFORMIO_H
