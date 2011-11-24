@@ -76,10 +76,7 @@ AccountView::AccountView(QWidget *parent) :
     setObjectName("AccountView");
     m_ui->setupUi(this);
     setHeadersOfTable();
-    m_ui->tableView->setModel(m_Model);
-    m_ui->tableView->horizontalHeader()->setResizeMode(QHeaderView::Interactive);
-    m_ui->tableView->horizontalHeader()->setResizeMode(QHeaderView::ResizeToContents);
-    m_ui->tableView->show();
+
     m_userUuid = m_Model->getUserUuid();
     m_ui->startDate->setDate(QDate(2000,01,01));
     m_ui->endDate->setDate(QDate::currentDate()); 
@@ -113,6 +110,10 @@ void AccountView::setHeadersOfTable(){
     m_Model->setHeaderData(AccountDB::Constants::ACCOUNT_OTHERAMOUNT,Qt::Horizontal,trUtf8("Other"));
     m_Model->setHeaderData(AccountDB::Constants::ACCOUNT_DUEAMOUNT,Qt::Horizontal,trUtf8("Due"));
     m_Model->setHeaderData(AccountDB::Constants::ACCOUNT_DUEBY,Qt::Horizontal,trUtf8("Due by"));
+    m_ui->tableView->setModel(m_Model);
+    m_ui->tableView->horizontalHeader()->setResizeMode(QHeaderView::Interactive);
+    m_ui->tableView->horizontalHeader()->setResizeMode(QHeaderView::ResizeToContents);
+    m_ui->tableView->show();
 }
 
 void AccountView::refresh(){
