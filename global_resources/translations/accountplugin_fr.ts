@@ -2236,12 +2236,12 @@ si vous n&apos;en n&apos;avez pas, sauvegarder la valeur suivante dans le thésa
     <message>
         <location filename="../../plugins/accountplugin/receipts/preferedreceipts.cpp" line="114"/>
         <source>The value </source>
-        <translation>La valeur</translation>
+        <translation>La valeur </translation>
     </message>
     <message>
         <location filename="../../plugins/accountplugin/receipts/preferedreceipts.cpp" line="119"/>
         <source> has been inserted.</source>
-        <translation>a été insérée.</translation>
+        <translation> a été insérée.</translation>
     </message>
 </context>
 <context>
@@ -2370,7 +2370,7 @@ rapide</translation>
     <message>
         <location filename="../../plugins/accountplugin/ledger/mythread.cpp" line="388"/>
         <source>Month of </source>
-        <translation>Mois de</translation>
+        <translation>Mois de </translation>
     </message>
     <message>
         <location filename="../../plugins/accountplugin/ledger/mythread.cpp" line="391"/>

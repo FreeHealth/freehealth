@@ -1111,7 +1111,7 @@ void ReceiptViewer::saveInThesaurus(){
     QString listOfValuesStr = m_listOfValues.join("+");
     receiptsEngine r;
     if(r.insertInThesaurus(listOfValuesStr,m_userUuid)){
-        QMessageBox::information(0,trUtf8("Information"),trUtf8("Saved in thesaurus."),QMessageBox::Ok);
+        QMessageBox::information(0,trUtf8("Information"),listOfValuesStr+"\n"+trUtf8(" has been saved in thesaurus !"),QMessageBox::Ok);
         }
     m_actionTreeView->fillActionTreeView();
 }

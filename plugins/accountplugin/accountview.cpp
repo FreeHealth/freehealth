@@ -160,6 +160,7 @@ void AccountView::filterChanged()
     m_ui->du->setText(QString::number(m_Model->sum(AccountDB::Constants::ACCOUNT_DUEAMOUNT)));
     m_ui->insurance->setText(QString::number(m_Model->sum(AccountDB::Constants::ACCOUNT_INSURANCEAMOUNT)));
     m_ui->visa->setText(QString::number(m_Model->sum(AccountDB::Constants::ACCOUNT_VISAAMOUNT)));*/
+    setHeadersOfTable();
     refresh();
     calc();
 }

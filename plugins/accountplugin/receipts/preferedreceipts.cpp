@@ -62,11 +62,17 @@ void PreferedReceipts::insertPreferedValuesIntoAccount(){
     if (patientUid.isEmpty())
     {
     	  patientUid = "no-patient-uid";
+    	  qWarning() << __FILE__ << QString::number(__LINE__) << " no-patient-uid";
         }
     QString patientName = patient()->data(Core::IPatient::FullName).toString();
+    if (WarnDebugMessage)
+    {
+    	  qDebug() << __FILE__ << QString::number(__LINE__) << " patientName = "<< patientName;
+        }
     if (patientName.isEmpty())
     {
     	  patientName = "Patient Name";
+    	  qWarning() << __FILE__ << QString::number(__LINE__) << " Patient Name";
         }
     QList<double> listOfPercentages;
     listOfPercentages = m_choiceAndPercentagesHash.values();
@@ -76,7 +82,10 @@ void PreferedReceipts::insertPreferedValuesIntoAccount(){
     for (int i = 0; i < listOfPercentages.size(); i += 1)
     {
     	int typeOfChoice = m_choiceAndPercentagesHash.key(listOfPercentages[i]);
-    	QHash <int,QVariant> hashOfPrefValues = receiptsIO.getListOfPreferedValues(userUuid,typeOfChoice); 
+    	QHash <int,QVariant> hashOfPrefValues = receiptsIO.getListOfPreferedValues(userUuid,
+    	                                                                           patientUid,
+    	                                                                           patientName,
+    	                                                                           typeOfChoice); 
     	preferedAct = hashOfPrefValues.value(Constants::ACCOUNT_MEDICALPROCEDURE_TEXT).toString();
         double preferedValue = hashOfPrefValues.value(Constants::ACCOUNT_CHEQUEAMOUNT+typeOfChoice-1).toDouble();
         if (WarnDebugMessage)

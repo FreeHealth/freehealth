@@ -57,7 +57,10 @@ public:
     bool deleteFromThesaurus(const QString & data , const QString & userUid );
     bool addBoolTrue(QString & data);
     double getMinDistanceValue(const QString & data);
-    QHash<int,QVariant> getListOfPreferedValues(QString & userUuid,int choice);
+    QHash<int,QVariant> getListOfPreferedValues(QString & userUuid,
+                                                QString & patientUid,
+                                                QString & patientName,
+                                                int choice);
     QHash<QString,double> getFilteredValueFromMedicalProcedure(const QString & string, const QString & field);
     QString getStringFromInsuranceUid(const QVariant & insuranceUid);
     QVariant getSiteUidFromSite(const QString & site);

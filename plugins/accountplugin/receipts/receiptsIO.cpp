@@ -209,6 +209,8 @@ double receiptsEngine::getMinDistanceValue(const QString & data){
 }
 
 QHash<int,QVariant> receiptsEngine::getListOfPreferedValues(QString & userUuid,
+                                                           QString & patientUid,
+                                                           QString & patientName,
                                                            int choice){
     QHash<int,QVariant> hash;
     double cash = 0.00;
@@ -288,8 +290,8 @@ QHash<int,QVariant> receiptsEngine::getListOfPreferedValues(QString & userUuid,
     QVariant comment = QVariant(trUtf8("preferred act"));
     hash.insert(ACCOUNT_UID,"UID");
     hash.insert(ACCOUNT_USER_UID,userUuid);
-    hash.insert(ACCOUNT_PATIENT_UID,"patientUid");
-    hash.insert(ACCOUNT_PATIENT_NAME,"patientName");
+    hash.insert(ACCOUNT_PATIENT_UID,patientUid);
+    hash.insert(ACCOUNT_PATIENT_NAME,patientName);
     hash.insert(ACCOUNT_SITE_ID,preferedSiteUid);//AccountDB::Constants::SITES_UID
     hash.insert(ACCOUNT_INSURANCE_ID,preferedInsuranceUid);
     hash.insert(ACCOUNT_DATE,dateThisDay);

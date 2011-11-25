@@ -187,7 +187,7 @@ void AssetsViewer::recordAsset(){
     	  QMessageBox::warning(0,trUtf8("Error"),trUtf8("Asset not recorded."),QMessageBox::Ok);
         }
     else{
-          QMessageBox::warning(0,trUtf8("Error"),trUtf8("Asset recorded."),QMessageBox::Ok);
+          QMessageBox::information(0,trUtf8("Information"),trUtf8("Asset recorded."),QMessageBox::Ok);
     }
     showAssets();
     yearDateChanged(year);
