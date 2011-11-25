@@ -31,6 +31,7 @@
 
 #include <QDate>
 #include <QHash>
+#include <QString>
 QT_BEGIN_NAMESPACE
 class QDomElement;
 QT_END_NAMESPACE
