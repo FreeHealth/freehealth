@@ -35,6 +35,8 @@
 #include <datapackutils/packdescription.h>
 
 #include <QObject>
+#include <QNetworkAccessManager>
+#include <QNetworkReply>
 
 /**
  * \file servermanager.h
@@ -54,19 +56,48 @@ public:
 
     bool isInternetConnexionAvailable();
 
-    void connectServer(const Server &server, const ServerIdentification &ident = ServerIdentification());
+    void connectServer(const Server &server, const ServerIdentification &ident = ServerIdentification()); // will be deprecated with the updateInfos function appearance
+
+    /**
+     * Add a new server
+     * \param url the URL of the target server
+     * \return a server ID or an integer < 0 if an error occured. TODO: specify all error codes.
+     */
+    int addServer(const QUrl &url);
+    /**
+     * Remove a server
+     * \param id the ID of the server to remove
+     */
+    void removeServer(int id);
+
+    /**
+     * Connect and update a server infos. Asynchronous.
+     * When the server is updated, the signal "serverInfosUpdated" is emitted.
+     * \param id the ID of the server to update infos of
+     * \return an error (< 0) if ID is unknown or another error
+     */
+    int connectAndUpdate(int id);
 
     ServerDescription downloadServerDescription(const Server &server);
     QList<PackDescription> downloadPackDescription(const Server &server, const Pack &pack);
-    Pack downloadAndUnzipdPack(const Server &server, const Pack &pack);
+    Pack downloadAndUnzipPack(const Server &server, const Pack &pack);
 
     bool installDataPack(const Server &server, const Pack &pack);
 
 Q_SIGNALS:
     void serverConnected(const Server &server, const ServerIdentification &ident);
+    void serverInfosUpdated(int serverId); // emitted when a server infos have been updated
 
 private:
+    QHash<int,Server> m_servers;
+    QNetworkAccessManager m_networkAccessManager;
 
+    // return a non used server id candidate (starts to 0, ends to the upper int bound)
+    int getFreeServerId() const;
+
+private Q_SLOTS:
+    void requestReadyRead();
+    void requestError(QNetworkReply::NetworkError error);
 };
 
 }  // End namespace DataPack

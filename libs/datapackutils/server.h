@@ -29,7 +29,7 @@
 
 #include <datapackutils/datapack_exporter.h>
 
-#include <QString>
+#include <QUrl>
 
 /**
  * \file server.h
@@ -44,10 +44,11 @@ class DATAPACK_EXPORT Server
 {
 public:
     Server();
+    Server(const QUrl &url);
     virtual ~Server();
 
-    void setUrl(const QString &url) {m_Url = url;}
-    QString url() const {return m_Url;}
+    void setUrl(const QUrl &url) { m_Url = url; }
+    const QUrl &url() const {return m_Url;}
     bool isLocalPath() const;
 
     void setConnected(const bool connected) {m_Connected=connected;}
@@ -55,7 +56,7 @@ public:
 
 private:
     bool m_Connected;
-    QString m_Url;
+    QUrl m_Url;
 };
 
 }  // End namespace DataPack

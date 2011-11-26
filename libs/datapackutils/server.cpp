@@ -33,18 +33,25 @@ using namespace DataPack;
 Server::Server()
 {}
 
+Server::Server(const QUrl &url) :
+    m_Url(url)
+{
+}
+
 Server::~Server()
 {}
 
 /** Return true if server's url starts with \e file:// and path exists. */
 bool Server::isLocalPath() const
 {
-    if (m_Url.startsWith("file://", Qt::CaseInsensitive)) {
+    // TODO
+    return false;
+/*    if (m_Url.startsWith("file://", Qt::CaseInsensitive)) {
         QString t = m_Url;
         QFileInfo file(t.replace("file:/", ""));
         if (file.exists() && file.isDir()) {
             return true;
         }
     }
-    return false;
+    return false;*/
 }
