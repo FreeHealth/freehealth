@@ -26,39 +26,16 @@
  ***************************************************************************/
 #include "serverdescription.h"
 
-#include <utils/genericupdateinformation.h>
+#include <QDebug>
 
 using namespace DataPack;
 
-ServerDescription::ServerDescription()
+ServerDescription::ServerDescription() :
+    Utils::GenericDescription()
 {
 }
 
 ServerDescription::~ServerDescription()
-{}
-
-QVariant ServerDescription::data(const int ref, const QString &lang) const
-{}
-
-bool ServerDescription::setData(const int ref, const QVariant &value, const QString &lang)
-{}
-
-
-void ServerDescription::addUpdateInformation(Utils::GenericUpdateInformation updateInfo)
 {
-    m_UpdateInfos.append(updateInfo);
 }
 
-QList<Utils::GenericUpdateInformation> ServerDescription::updateInformation() const
-{
-    return m_UpdateInfos;
-}
-
-QList<Utils::GenericUpdateInformation> ServerDescription::updateInformationForVersion(const QString &version) const
-{}
-
-QList<Utils::GenericUpdateInformation> ServerDescription::updateInformationForVersion(const Utils::VersionNumber &version) const
-{}
-
-void ServerDescription::toTreeWidget(QTreeWidget *tree) const
-{}

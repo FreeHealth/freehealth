@@ -28,7 +28,7 @@
 #define DATAPACK_SERVERDESCRIPTION_H
 
 #include <datapackutils/datapack_exporter.h>
-#include <utils/genericupdateinformation.h>
+#include <utils/genericdescription.h>
 
 #include <QVariant>
 #include <QList>
@@ -43,55 +43,17 @@ QT_END_NAMESPACE
  * \date 25 Nov 2011
 */
 
-namespace Utils {
-class GenericUpdateInformation;
-class VersionNumber;
-}
-
 namespace DataPack {
 namespace Internal {
 }
 
-class DATAPACK_EXPORT ServerDescription
+class DATAPACK_EXPORT ServerDescription : public Utils::GenericDescription
 {
 public:
-    enum DataRepresentation {
-        Uuid= 0,
-        URL,
-        Vendor,
-        Validity,
-        Category,
-        ServerVersion,
-        FreeMedFormsCompatVersion,
-        FreeDiamsCompatVersion,
-        FreeAccountCompatVersion,
-        CreationDate,
-        LastModificationDate,
-        ShortDescription,
-        HtmlDescription,
-        HtmlSynthesis,
-        GlobalLicense,
-        GeneralIcon,
-        MaxParam
-    };
-
     ServerDescription();
-    virtual ~ServerDescription();
-
-    QVariant data(const int ref, const QString &lang = QString::null) const;
-    bool setData(const int ref, const QVariant &value, const QString &lang = QString::null);
-
-    // Manage update informations
-    void addUpdateInformation(Utils::GenericUpdateInformation updateInfo);
-    QList<Utils::GenericUpdateInformation> updateInformation() const;
-    QList<Utils::GenericUpdateInformation> updateInformationForVersion(const QString &version) const;
-    QList<Utils::GenericUpdateInformation> updateInformationForVersion(const Utils::VersionNumber &version) const;
-
-    void toTreeWidget(QTreeWidget *tree) const;
+    ~ServerDescription();
 
 private:
-//    Internal::ServerDescriptionPrivate *d;
-    QList<Utils::GenericUpdateInformation> m_UpdateInfos;
 };
 
 }  // End namespace DataPack
