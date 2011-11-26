@@ -13,6 +13,7 @@ if [ "`echo $0 | cut -c1`" = "/" ]; then
 else
   SCRIPT_PATH=`pwd`/`echo $0 | sed -e s/$SCRIPT_NAME//`
 fi
+TEST=""
 
 showHelp()
 {
@@ -22,6 +23,7 @@ echo
 echo "Options :"
 echo "          -b  Application name (freemedforms, freediams, freeaccount, freeicd, freetoolbox...)"
 echo "          -t  Create translations"
+echo "          -x  Create a test project (in the test path)"
 echo "          -h  Show this help"
 echo
 }
@@ -35,18 +37,26 @@ createTranslations()
 doCompilation() 
 {
   echo "*** Building application : $1 ***"
+  if [ ! -e $TEST ]; then
+    echo "      Building a test application"
+    cd ./tests/$1/
+  fi
   qmake $1.pro -r -config debug LOWERED_APPNAME=$1
   make
+  echo "On LINUX: Start application with: ./bin/"$1"/"$1"_debug --config=../global_resources/"$1"_config.ini"
+  echo "On MACOS: Start application with: ./bin/"$1"/"$1"_debug.app/Contents/MacOs/"$1"_debug --config=../global_resources/"$1"_config.ini"
 }
 
 #########################################################################################
 ## Analyse options
 #########################################################################################
-while getopts "htb:" option
+while getopts "hxtb:" option
 do
   case $option in
     h) showHelp
       exit 0
+    ;;
+    x) TEST="y"
     ;;
     t) createTranslations
     ;;
