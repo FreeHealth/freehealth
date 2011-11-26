@@ -14,6 +14,7 @@ else
   SCRIPT_PATH=`pwd`/`echo $0 | sed -e s/$SCRIPT_NAME//`
 fi
 TEST=""
+CLEAR=""
 
 showHelp()
 {
@@ -24,6 +25,7 @@ echo "Options :"
 echo "          -b  Application name (freemedforms, freediams, freeaccount, freeicd, freetoolbox...)"
 echo "          -t  Create translations"
 echo "          -x  Create a test project (in the test path)"
+echo "          -c  Make clear before compiling"
 echo "          -h  Show this help"
 echo
 }
@@ -38,25 +40,32 @@ doCompilation()
 {
   echo "*** Building application : $1 ***"
   if [ ! -e $TEST ]; then
-    echo "      Building a test application"
+    echo "    *** Building a test application"
     cd ./tests/$1/
+  fi
+  if [ ! -e $CLEAR ]; then
+    echo "    *** Make clear"
+    make clear
+    rm -R $SCRIPT_PATH/bin/$1
   fi
   qmake $1.pro -r -config debug LOWERED_APPNAME=$1
   make
   echo "On LINUX: Start application with: ./bin/"$1"/"$1"_debug --config=../global_resources/"$1"_config.ini"
-  echo "On MACOS: Start application with: ./bin/"$1"/"$1"_debug.app/Contents/MacOs/"$1"_debug --config=../global_resources/"$1"_config.ini"
+  echo "On MACOS: Start application with: ./bin/"$1"/"$1"_debug.app/Contents/MacOs/"$1"_debug --config=../../../../../global_resources/"$1"_config.ini"
 }
 
 #########################################################################################
 ## Analyse options
 #########################################################################################
-while getopts "hxtb:" option
+while getopts "hcxtb:" option
 do
   case $option in
     h) showHelp
       exit 0
     ;;
     x) TEST="y"
+    ;;
+    c) CLEAR="y"
     ;;
     t) createTranslations
     ;;
