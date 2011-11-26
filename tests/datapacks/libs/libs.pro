@@ -1,6 +1,8 @@
 TEMPLATE = subdirs
 
 SUBDIRS = \
-    ../../../libs/utils \
     ../../../libs/translationutils \
+    ../../../libs/utils \
     ../../../libs/datapackutils \
+
+CONFIG *= ordered
