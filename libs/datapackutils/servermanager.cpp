@@ -30,6 +30,7 @@
 
 #include <QDebug>
 #include <QNetworkRequest>
+#include <QDir>
 
 using namespace DataPack;
 
@@ -119,12 +120,17 @@ int ServerManager::getFreeServerId() const
 
 int ServerManager::connectAndUpdate(int id)
 {
-    if (m_servers.find(id) == m_servers.end()) // id unknown?
+    if (m_servers.find(id) == m_servers.end()) // server id unknown?
         return -1;
 
     const Server &server = m_servers[id];
 
-    QNetworkRequest request(server.url()); // TODO ADD THE FILES TO THE URL
+    // Forge the server config filename
+    QUrl requestUrl = server.url();
+    QDir dir(server.url().path());
+    requestUrl.setPath(dir.filePath("server.conf.xml"));
+
+    QNetworkRequest request(requestUrl); // TODO ADD THE FILES TO THE URL
     request.setRawHeader("User-Agent", "FreeMedForms"); // TODO specify the version?
     QNetworkReply *reply = m_networkAccessManager.get(request);
     connect(reply, SIGNAL(readyRead()), this, SLOT(requestReadyRead()));
