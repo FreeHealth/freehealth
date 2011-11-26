@@ -15,17 +15,19 @@ else
 fi
 TEST=""
 CLEAR=""
+SPEC=""
 
 showHelp()
 {
 echo $SCRIPT_NAME" builds the *debug* Linux versions of the FreeMedForms applications project."
-echo "Usage : $SCRIPT_NAME -b applicationlowcase -t"
+echo "Usage : $SCRIPT_NAME -txch -s <qt.spec> -b <applicationlowcase>"
 echo
 echo "Options :"
 echo "          -b  Application name (freemedforms, freediams, freeaccount, freeicd, freetoolbox...)"
 echo "          -t  Create translations"
 echo "          -x  Create a test project (in the test path)"
 echo "          -c  Make clear before compiling"
+echo "          -s  Use the specified spec file"
 echo "          -h  Show this help"
 echo
 }
@@ -48,7 +50,11 @@ doCompilation()
     make clear
     rm -R $SCRIPT_PATH/bin/$1
   fi
-  qmake $1.pro -r -config debug LOWERED_APPNAME=$1
+  if [ ! -e $SPEC ]; then
+    SPEC="-spec "$SPEC
+  fi
+
+  qmake $1.pro -r -config debug $SPEC LOWERED_APPNAME=$1
   make
   echo "On LINUX: Start application with: ./bin/"$1"/"$1"_debug --config=../global_resources/"$1"_config.ini"
   echo "On MACOS: Start application with: ./bin/"$1"/"$1"_debug.app/Contents/MacOs/"$1"_debug --config=../../../../../global_resources/"$1"_config.ini"
@@ -66,6 +72,8 @@ do
     x) TEST="y"
     ;;
     c) CLEAR="y"
+    ;;
+    s) SPEC=$OPTARG
     ;;
     t) createTranslations
     ;;
