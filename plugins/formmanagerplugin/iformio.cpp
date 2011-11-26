@@ -85,7 +85,6 @@
 #include <QDebug>
 
 using namespace Form;
-using namespace Internal;
 using namespace Trans::ConstantTranslations;
 
 
@@ -101,33 +100,13 @@ FormIOQuery::FormIOQuery() :
 /////////////////////////////////////////////////////////////////////////////////////////
 ////////////////////////////////////  FormIODescription /////////////////////////////////
 /////////////////////////////////////////////////////////////////////////////////////////
-namespace Form {
-namespace Internal {
-class DescriptionBook
-{
-public:
-    QHash<int, QVariant> m_Datas;
-};
-
-class FormIODescriptionPrivate : public Trans::MultiLingualClass<DescriptionBook>
-{
-public:
-    FormIODescriptionPrivate() {}
-    ~FormIODescriptionPrivate() {}
-};
-}
-}
-
 FormIODescription::FormIODescription() :
-        d(new FormIODescriptionPrivate),
-        m_reader(0)
+    Utils::GenericDescription(),
+    m_reader(0)
 {}
 
 FormIODescription::~FormIODescription()
 {
-    if (d)
-        delete d;
-    d = 0;
 }
 
 QVariant FormIODescription::data(const int ref, const QString &lang) const
@@ -142,66 +121,12 @@ QVariant FormIODescription::data(const int ref, const QString &lang) const
         }
         return QVariant();
     }
-    QString l = lang;
-    if (lang.isEmpty()) {
-        l = QLocale().name().left(2);
-        DescriptionBook *book = d->getLanguage(l);
-        if (book) {
-            QVariant val = book->m_Datas.value(ref, QVariant());
-            if (!val.isNull())
-                return val;
-        }
-        l = Trans::Constants::ALL_LANGUAGE;
-        book = d->getLanguage(l);
-        if (book) {
-            QVariant val = book->m_Datas.value(ref, QVariant());
-            if (!val.isNull())
-                return val;
-        }
-    }
-    DescriptionBook *book = d->getLanguage(l);
-    if (book) {
-        QVariant val = book->m_Datas.value(ref, QVariant());
-        if (!val.isNull())
-            return val;
-    }
-    return QVariant();
+    return Utils::GenericDescription::data(ref, lang);
 }
 
 bool FormIODescription::setData(const int ref, const QVariant &value, const QString &lang)
 {
-    QString l = lang;
-    if (lang.isEmpty())
-        l = Trans::Constants::ALL_LANGUAGE;
-    DescriptionBook *book = d->createLanguage(l);
-    book->m_Datas.insert(ref, value);
-    return true;
-}
-
-void FormIODescription::addUpdateInformation(const Utils::GenericUpdateInformation &updateInfo)
-{
-    m_UpdateInfos.append(updateInfo);
-}
-
-void FormIODescription::addUpdateInformation(const QList<Utils::GenericUpdateInformation> &updateInfo)
-{
-    m_UpdateInfos.append(updateInfo);
-}
-
-QList<Utils::GenericUpdateInformation> FormIODescription::updateInformation() const
-{
-    return m_UpdateInfos;
-}
-
-
-QList<Utils::GenericUpdateInformation> FormIODescription::updateInformationForVersion(const QString &version) const
-{
-    return Utils::GenericUpdateInformation::updateInformationForVersion(m_UpdateInfos, version);
-}
-
-QList<Utils::GenericUpdateInformation> FormIODescription::updateInformationForVersion(const Utils::VersionNumber &version) const
-{
-    return Utils::GenericUpdateInformation::updateInformationForVersion(m_UpdateInfos, version);
+    return Utils::GenericDescription::setData(ref, value, lang);
 }
 
 void FormIODescription::toTreeWidget(QTreeWidget *tree) const
@@ -216,7 +141,7 @@ void FormIODescription::toTreeWidget(QTreeWidget *tree) const
     general->setFont(0, bold);
     new QTreeWidgetItem(general, QStringList() << "Uuid" << data(FormIODescription::UuidOrAbsPath).toString());
     new QTreeWidgetItem(general, QStringList() << tkTr(Trans::Constants::AUTHOR) << data(FormIODescription::Author).toString());
-    new QTreeWidgetItem(general, QStringList() << QCoreApplication::translate("Forms", "License") << data(FormIODescription::License).toString());
+    new QTreeWidgetItem(general, QStringList() << QCoreApplication::translate("Forms", "License") << data(FormIODescription::GlobalLicense).toString());
     new QTreeWidgetItem(general, QStringList() << tkTr(Trans::Constants::DESCRIPTION) << data(FormIODescription::ShortDescription).toString());
 
     QTreeWidgetItem *version = new QTreeWidgetItem(tree, QStringList() << tkTr(Trans::Constants::VERSION));
@@ -247,14 +172,14 @@ QDebug operator<<(QDebug dbg, const Form::FormIODescription &c)
     attribs << "uid: " + c.data(Form::FormIODescription::UuidOrAbsPath).toString();
     attribs << "author: " + c.data(Form::FormIODescription::Author).toString();
     attribs << "country: " + c.data(Form::FormIODescription::Country).toString();
-    attribs << "languages: " + c.data(Form::FormIODescription::AvailableLanguages).toString();
+//    attribs << "languages: " + c.data(Form::FormIODescription::AvailableLanguages).toString();
     attribs << "v: " + c.data(Form::FormIODescription::Version).toString();
     attribs << "compat: " + c.data(Form::FormIODescription::FreeMedFormsCompatVersion).toString();
     attribs << "cdate: " + c.data(Form::FormIODescription::CreationDate).toString();
     attribs << "ludate: " + c.data(Form::FormIODescription::LastModificationDate).toString();
     attribs << "cat: " + c.data(Form::FormIODescription::Category).toString();
     attribs << "spe: " + c.data(Form::FormIODescription::Specialties).toString();
-    attribs << "license: " + c.data(Form::FormIODescription::License).toString();
+    attribs << "license: " + c.data(Form::FormIODescription::GlobalLicense).toString();
     attribs << "icon: " + c.data(Form::FormIODescription::GeneralIcon).toString();
     attribs << "web: " + c.data(Form::FormIODescription::WebLink).toString();
     attribs << "shotpath: " + c.data(Form::FormIODescription::ScreenShotsPath).toString();

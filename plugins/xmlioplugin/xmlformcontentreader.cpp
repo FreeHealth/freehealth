@@ -231,54 +231,9 @@ static void setPathToDescription(QString path, Form::FormIODescription *desc)
 /** Return the Form::FormIODescription according to the XML QDomElement \e xmlDescr. The \e xmlDescr must point to the first description tag of the document. */
 Form::FormIODescription *XmlFormContentReader::readXmlDescription(const QDomElement &xmlDescr, const QString &formUid)
 {
-    XmlFormName form(formUid);
     Form::FormIODescription *ioDesc = new Form::FormIODescription;
-    QHash<int, QString> elements;
-    // get non translatable items
-    elements.insert(Form::FormIODescription::Version, Constants::TAG_SPEC_VERSION);
-    elements.insert(Form::FormIODescription::Author, Constants::TAG_SPEC_AUTHORS);
-    elements.insert(Form::FormIODescription::CreationDate, Constants::TAG_SPEC_CREATIONDATE);
-    elements.insert(Form::FormIODescription::LastModificationDate, Constants::TAG_SPEC_LASTMODIFDATE);
-    elements.insert(Form::FormIODescription::GeneralIcon, Constants::TAG_SPEC_ICON);
-    elements.insert(Form::FormIODescription::WebLink, Constants::TAG_SPEC_WEBLINK);
-    elements.insert(Form::FormIODescription::FreeMedFormsCompatVersion, Constants::TAG_SPEC_COMPTAVERSION);
-    QHashIterator<int, QString> i(elements);
-    while (i.hasNext()) {
-        i.next();
-        ioDesc->setData(i.key(), xmlDescr.firstChildElement(i.value()).text());
-    }
-    // get translatable contents
-    elements.clear();
-    elements.insert(Form::FormIODescription::Category, Constants::TAG_SPEC_CATEGORY);
-    elements.insert(Form::FormIODescription::ShortDescription, Constants::TAG_SPEC_DESCRIPTION);
-    elements.insert(Form::FormIODescription::License, Constants::TAG_SPEC_LICENSE);
-    elements.insert(Form::FormIODescription::Specialties, Constants::TAG_SPEC_SPECIALTIES);
-    i = elements;
-    while (i.hasNext()) {
-        i.next();
-        QDomElement desc = xmlDescr.firstChildElement(i.value());
-        while (!desc.isNull()) {
-            ioDesc->setData(i.key(), desc.text(), desc.attribute(Constants::ATTRIB_LANGUAGE, Trans::Constants::ALL_LANGUAGE));
-            desc = desc.nextSiblingElement(i.value());
-        }
-    }
-    // get translatable files
-    elements.clear();
-    elements.insert(Form::FormIODescription::HtmlDescription, Constants::TAG_SPEC_HTMLDESCRIPTION);
-    elements.insert(Form::FormIODescription::HtmlSynthesis, Constants::TAG_SPEC_HTMLSYNTHESIS);
-    i = elements;
-    while (i.hasNext()) {
-        i.next();
-        QDomElement desc = xmlDescr.firstChildElement(i.value());
-        while (!desc.isNull()) {
-            QString content = readExtraFile(form, desc.text());
-            ioDesc->setData(i.key(), content, desc.attribute(Constants::ATTRIB_LANGUAGE, Trans::Constants::ALL_LANGUAGE));
-            desc = desc.nextSiblingElement(i.value());
-        }
-    }
-    // read update informations
-    QDomElement update = xmlDescr.firstChildElement(Constants::TAG_SPEC_UPDATEINFO);
-    ioDesc->addUpdateInformation(Utils::GenericUpdateInformation::fromXml(update));
+    ioDesc->setRootTag(Constants::TAG_FORM_DESCRIPTION);
+    ioDesc->fromDomElement(xmlDescr);
     setPathToDescription(formUid, ioDesc);
     return ioDesc;
 }

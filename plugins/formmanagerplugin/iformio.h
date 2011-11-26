@@ -29,6 +29,7 @@
 
 #include <formmanagerplugin/formmanager_exporter.h>
 
+#include <utils/genericdescription.h>
 #include <translationutils/multilingualclasstemplate.h>
 #include <translationutils/constanttranslations.h>
 
@@ -128,34 +129,15 @@ Q_DECLARE_OPERATORS_FOR_FLAGS(Form::FormIOQuery::TypesOfForm)
 
 namespace Form {
 class IFormIO;
-namespace Internal {
-class FormIODescriptionPrivate;
-}
 
-class FORM_EXPORT FormIODescription
+class FORM_EXPORT FormIODescription : public Utils::GenericDescription
 {
 public:
-    enum DataRepresentation {
-        UuidOrAbsPath= 0,
-        Author,
-        Country,
-        AvailableLanguages,
-        Version,
+    enum ExtraDataRepresentation {
+        UuidOrAbsPath = Utils::GenericDescription::MaxParam + 1,
         IsCompleteForm,
         IsSubForm,
         IsPage,
-        CreationDate,
-        LastModificationDate,
-        FreeMedFormsCompatVersion,
-        Category,
-        ShortDescription,
-        HtmlDescription,
-        HtmlSynthesis,
-        License,
-        GeneralIcon,
-        Specialties,
-        TypeName,
-        WebLink,
         ScreenShotsPath,
         MaxParam
     };
@@ -169,13 +151,6 @@ public:
     QVariant data(const int ref, const QString &lang = QString::null) const;
     bool setData(const int ref, const QVariant &value, const QString &lang = QString::null);
 
-    // Manage update informations
-    void addUpdateInformation(const Utils::GenericUpdateInformation &updateInfo);
-    void addUpdateInformation(const QList<Utils::GenericUpdateInformation> &updateInfo);
-    QList<Utils::GenericUpdateInformation> updateInformation() const;
-    QList<Utils::GenericUpdateInformation> updateInformationForVersion(const QString &version) const;
-    QList<Utils::GenericUpdateInformation> updateInformationForVersion(const Utils::VersionNumber &version) const;
-
     // Manage screenshots
     void addScreenShot(const QPixmap &shot) {m_Shots.append(shot);}
     QList<QPixmap> screenShots() const {return m_Shots;}
@@ -183,7 +158,6 @@ public:
     void toTreeWidget(QTreeWidget *tree) const;
 
 private:
-    Internal::FormIODescriptionPrivate *d;
     QList<Utils::GenericUpdateInformation> m_UpdateInfos;
     IFormIO *m_reader;
     QList<QPixmap> m_Shots;
