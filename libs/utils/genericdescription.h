@@ -81,6 +81,10 @@ public:
         WebLink,
         MaxParam
     };
+    enum ExtraDataReference {
+        NonTranslatableExtraData = 20000,
+        TranslatableExtraData = 40000
+    };
 
     GenericDescription(const QString &rootTag = QString::null);
     virtual ~GenericDescription();
@@ -98,12 +102,14 @@ public:
     QList<Utils::GenericUpdateInformation> updateInformationForVersion(const QString &version) const;
     QList<Utils::GenericUpdateInformation> updateInformationForVersion(const Utils::VersionNumber &version) const;
 
-    void toTreeWidget(QTreeWidget *tree) const;
+    // Manage extra data
+    void addNonTranslatableExtraData(const int ref, const QString &tagName);
+    void addTranslatableExtraData(const int ref, const QString &tagName);
+
+    virtual void toTreeWidget(QTreeWidget *tree) const;
 
 private:
     Internal::GenericDescriptionPrivate *d;
-    QList<Utils::GenericUpdateInformation> m_UpdateInfos;
-    QString m_RootTag;
 };
 
 }  // End namespace DataPack

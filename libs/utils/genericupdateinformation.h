@@ -34,6 +34,7 @@
 #include <QString>
 QT_BEGIN_NAMESPACE
 class QDomElement;
+class QDomDocument;
 QT_END_NAMESPACE
 
 /**
@@ -71,6 +72,7 @@ public:
 
     static QList<GenericUpdateInformation> fromXml(const QDomElement &xml);
     static QString xmlTagName();
+    bool toDomElement(QDomElement *root, QDomDocument *document) const;
 
 private:
     QString m_From, m_To, m_Date;

@@ -32,6 +32,7 @@
 #include "genericupdateinformation.h"
 #include "versionnumber.h"
 
+#include <utils/log.h>
 #include <translationutils/constanttranslations.h>
 
 #include <QDomElement>
@@ -139,6 +140,40 @@ QList<GenericUpdateInformation> GenericUpdateInformation::fromXml(const QDomElem
 QString GenericUpdateInformation::xmlTagName()
 {
     return ::TAG_SPEC_UPDATEINFO;
+}
+
+bool GenericUpdateInformation::toDomElement(QDomElement *root, QDomDocument *document) const
+{
+    Q_ASSERT(root);
+    Q_ASSERT(document);
+    if (!root || !document)
+        return false;
+    if (root->tagName().compare(xmlTagName(), Qt::CaseInsensitive)!=0) {
+        LOG_ERROR_FOR("GenericUpdateInformation",QString("Wrong root tag. Got %1, requiered %2").arg(root->tagName()).arg(xmlTagName()));
+        return false;
+    }
+    // Create the version branch
+    QDomElement e = document->createElement(TAG_SPEC_UPDATEINFOVERSION);
+    root->appendChild(e);
+    if (!m_From.isEmpty()) {
+        e.setAttribute(::ATTRIB_UPDATEINFOVERSION_FROM, m_From);
+    }
+    if (!m_To.isEmpty()) {
+        e.setAttribute(::ATTRIB_UPDATEINFOVERSION_TO, m_To);
+    }
+    if (!m_Date.isEmpty()) {
+        e.setAttribute(::ATTRIB_UPDATEINFOVERSION_FROM, m_Date);
+    }
+    QHashIterator<QString, QString> i(m_TrText);
+    while (i.hasNext()) {
+        i.next();
+        QDomElement et = document->createElement(::TAG_SPEC_UPDATEINFOVERSIONTEXT);
+        e.appendChild(et);
+        et.setAttribute(::ATTRIB_LANGUAGE, i.key());
+        QDomText t = document->createTextNode(i.value());
+        et.appendChild(t);
+    }
+    return true;
 }
 
 QDebug operator<<(QDebug dbg, const Utils::GenericUpdateInformation &c)

@@ -26,12 +26,15 @@
  ***************************************************************************/
 #include "genericdescription.h"
 
+#include <utils/log.h>
 #include <utils/global.h>
 #include <utils/genericupdateinformation.h>
 #include <translationutils/multilingualclasstemplate.h>
 
 #include <QDomDocument>
 #include <QDomElement>
+#include <QHash>
+#include <QString>
 
 #include <QDebug>
 
@@ -84,17 +87,62 @@ class GenericDescriptionPrivate : public Trans::MultiLingualClass<DescriptionBoo
 public:
     GenericDescriptionPrivate() {}
     ~GenericDescriptionPrivate() {}
+
+    QHash<int, QString> nonTranslatableTagsDataReference()
+    {
+        QHash<int, QString> elements;
+        // get non translatable items
+        elements.insert(GenericDescription::Version, TAG_VERSION);
+        elements.insert(GenericDescription::Author, TAG_AUTHORS);
+        elements.insert(GenericDescription::Vendor, TAG_VENDOR);
+        elements.insert(GenericDescription::Validity, TAG_VALIDITY);
+        elements.insert(GenericDescription::FreeMedFormsCompatVersion, TAG_FMF_COMPAT_VERSION);
+        elements.insert(GenericDescription::FreeDiamsCompatVersion, TAG_FD_COMPAT_VERSION);
+        elements.insert(GenericDescription::FreeAccountCompatVersion, TAG_FA_COMPAT_VERSION);
+        elements.insert(GenericDescription::CreationDate, TAG_CREATIONDATE);
+        elements.insert(GenericDescription::LastModificationDate, TAG_LASTMODIFDATE);
+        elements.insert(GenericDescription::GeneralIcon, TAG_ICON);
+        // add extra tags
+        QHashIterator<int, QString> i(m_NonTranslatableExtra);
+        while (i.hasNext()) {
+            i.next();
+            elements.insert(i.key(), i.value());
+        }
+        return elements;
+    }
+
+    QHash<int, QString> translatableTagsDataReference()
+    {
+        QHash<int, QString> elements;
+        elements.insert(GenericDescription::Category, TAG_CATEGORY);
+        elements.insert(GenericDescription::ShortDescription, TAG_DESCRIPTION);
+        elements.insert(GenericDescription::HtmlDescription, TAG_HTMLDESCRIPTION);
+        elements.insert(GenericDescription::HtmlSynthesis, TAG_HTMLSYNTHESIS);
+        elements.insert(GenericDescription::GlobalLicense, TAG_LICENSE);
+        elements.insert(GenericDescription::WebLink, TAG_WEBLINK);
+        // add extra tags
+        QHashIterator<int, QString> i(m_TranslatableExtra);
+        while (i.hasNext()) {
+            i.next();
+            elements.insert(i.key(), i.value());
+        }
+        return elements;
+    }
+
+    QList<Utils::GenericUpdateInformation> m_UpdateInfos;
+    QString m_RootTag;
+    QHash<int, QString> m_TranslatableExtra, m_NonTranslatableExtra;
+
 };
 }  // End namespace Internal
 }  // End namespace Utils
 
 
 GenericDescription::GenericDescription(const QString &rootTag) :
-    d(new GenericDescriptionPrivate),
-    m_RootTag(rootTag)
+    d(new GenericDescriptionPrivate)
 {
-    if (m_RootTag.isEmpty())
-        m_RootTag = XML_ROOT_TAG;
+    if (d->m_RootTag.isEmpty())
+        d->m_RootTag = XML_ROOT_TAG;
 }
 
 GenericDescription::~GenericDescription()
@@ -145,7 +193,46 @@ bool GenericDescription::setData(const int ref, const QVariant &value, const QSt
 /** Populate the description using a xml content \e xmlContent. */
 bool GenericDescription::fromXmlContent(const QString &xmlContent)
 {
-    return false;
+    d->clear();
+    if (xmlContent.isEmpty())
+        return true;
+
+    QDomDocument doc;
+    if (!doc.setContent(xmlContent)) {
+        LOG_ERROR_FOR("GenericDescription", "Wrong XML");
+        return false;
+    }
+    QDomNodeList els = doc.elementsByTagName(d->m_RootTag);
+    if (els.count() == 0) {
+        LOG_ERROR_FOR("GenericDescription", "Wrong XML. No root tag: " + d->m_RootTag);
+        return false;
+    }
+    QDomElement root = els.at(0).toElement();
+
+    QHash<int, QString> elements;
+    elements = d->nonTranslatableTagsDataReference();
+    QHashIterator<int, QString> i(elements);
+    while (i.hasNext()) {
+        i.next();
+        setData(i.key(), root.firstChildElement(i.value()).text());
+    }
+
+    elements = d->translatableTagsDataReference();
+    i = elements;
+    while (i.hasNext()) {
+        i.next();
+        QDomElement desc = root.firstChildElement(i.value());
+        while (!desc.isNull()) {
+            setData(i.key(), desc.text(), desc.attribute(::ATTRIB_LANG, Trans::Constants::ALL_LANGUAGE));
+            desc = desc.nextSiblingElement(i.value());
+        }
+    }
+
+    // read update informations
+    QDomElement update = root.firstChildElement(GenericUpdateInformation::xmlTagName());
+    d->m_UpdateInfos.clear();
+    d->m_UpdateInfos = Utils::GenericUpdateInformation::fromXml(update);
+    return true;
 }
 
 /** Populate the description using a specific local file \e absFileName. */
@@ -159,57 +246,6 @@ bool GenericDescription::fromXmlFile(const QString &absFileName)
 }
 
 
-//XmlFormName form(formUid);
-//Form::FormIODescription *ioDesc = new Form::FormIODescription;
-//QHash<int, QString> elements;
-//// get non translatable items
-//elements.insert(Form::FormIODescription::Version, Constants::TAG_SPEC_VERSION);
-//elements.insert(Form::FormIODescription::Author, Constants::TAG_SPEC_AUTHORS);
-//elements.insert(Form::FormIODescription::CreationDate, Constants::TAG_SPEC_CREATIONDATE);
-//elements.insert(Form::FormIODescription::LastModificationDate, Constants::TAG_SPEC_LASTMODIFDATE);
-//elements.insert(Form::FormIODescription::GeneralIcon, Constants::TAG_SPEC_ICON);
-//elements.insert(Form::FormIODescription::WebLink, Constants::TAG_SPEC_WEBLINK);
-//elements.insert(Form::FormIODescription::FreeMedFormsCompatVersion, Constants::TAG_SPEC_COMPTAVERSION);
-//QHashIterator<int, QString> i(elements);
-//while (i.hasNext()) {
-//    i.next();
-//    ioDesc->setData(i.key(), xmlDescr.firstChildElement(i.value()).text());
-//}
-//// get translatable contents
-//elements.clear();
-//elements.insert(Form::FormIODescription::Category, Constants::TAG_SPEC_CATEGORY);
-//elements.insert(Form::FormIODescription::ShortDescription, Constants::TAG_SPEC_DESCRIPTION);
-//elements.insert(Form::FormIODescription::License, Constants::TAG_SPEC_LICENSE);
-//elements.insert(Form::FormIODescription::Specialties, Constants::TAG_SPEC_SPECIALTIES);
-//i = elements;
-//while (i.hasNext()) {
-//    i.next();
-//    QDomElement desc = xmlDescr.firstChildElement(i.value());
-//    while (!desc.isNull()) {
-//        ioDesc->setData(i.key(), desc.text(), desc.attribute(Constants::ATTRIB_LANGUAGE, Trans::Constants::ALL_LANGUAGE));
-//        desc = desc.nextSiblingElement(i.value());
-//    }
-//}
-//// get translatable files
-//elements.clear();
-//elements.insert(Form::FormIODescription::HtmlDescription, Constants::TAG_SPEC_HTMLDESCRIPTION);
-//elements.insert(Form::FormIODescription::HtmlSynthesis, Constants::TAG_SPEC_HTMLSYNTHESIS);
-//i = elements;
-//while (i.hasNext()) {
-//    i.next();
-//    QDomElement desc = xmlDescr.firstChildElement(i.value());
-//    while (!desc.isNull()) {
-//        QString content = readExtraFile(form, desc.text());
-//        ioDesc->setData(i.key(), content, desc.attribute(Constants::ATTRIB_LANGUAGE, Trans::Constants::ALL_LANGUAGE));
-//        desc = desc.nextSiblingElement(i.value());
-//    }
-//}
-//// read update informations
-//QDomElement update = xmlDescr.firstChildElement(Constants::TAG_SPEC_UPDATEINFO);
-//ioDesc->addUpdateInformation(Utils::GenericUpdateInformation::fromXml(update));
-//setPathToDescription(formUid, ioDesc);
-
-
 /** Transform the actual description into XML. */
 QString GenericDescription::toXml() const
 {
@@ -217,23 +253,14 @@ QString GenericDescription::toXml() const
     QHash<int, QString> elements;
 
     // Create the main description tag
-    QDomElement root = doc.createElement(m_RootTag);
+    QDomElement root = doc.createElement(d->m_RootTag);
     doc.appendChild(root);
 
     QDomComment comment = doc.createComment("Non translatable values");
     root.appendChild(comment);
 
     // Set non translatable items
-    elements.insert(Version, TAG_VERSION);
-    elements.insert(Author, TAG_AUTHORS);
-    elements.insert(Vendor, TAG_VENDOR);
-    elements.insert(Validity, TAG_VALIDITY);
-    elements.insert(FreeMedFormsCompatVersion, TAG_FMF_COMPAT_VERSION);
-    elements.insert(FreeDiamsCompatVersion, TAG_FD_COMPAT_VERSION);
-    elements.insert(FreeAccountCompatVersion, TAG_FA_COMPAT_VERSION);
-    elements.insert(CreationDate, TAG_CREATIONDATE);
-    elements.insert(LastModificationDate, TAG_LASTMODIFDATE);
-    elements.insert(GeneralIcon, TAG_ICON);
+    elements = d->nonTranslatableTagsDataReference();
     QHashIterator<int, QString> i(elements);
     while (i.hasNext()) {
         i.next();
@@ -247,14 +274,8 @@ QString GenericDescription::toXml() const
     // Set translatable contents
     comment = doc.createComment("Translatable values");
     root.appendChild(comment);
-
     elements.clear();
-    elements.insert(Category, TAG_CATEGORY);
-    elements.insert(ShortDescription, TAG_DESCRIPTION);
-    elements.insert(HtmlDescription, TAG_HTMLDESCRIPTION);
-    elements.insert(HtmlSynthesis, TAG_HTMLSYNTHESIS);
-    elements.insert(GlobalLicense, TAG_LICENSE);
-    elements.insert(WebLink, TAG_WEBLINK);
+    elements = d->translatableTagsDataReference();
     i = elements;
     while (i.hasNext()) {
         i.next();
@@ -269,17 +290,28 @@ QString GenericDescription::toXml() const
             e.appendChild(t);
         }
     }
+
+    // Add update informations
+    if (d->m_UpdateInfos.count() > 0) {
+        comment = doc.createComment("Update information");
+        root.appendChild(comment);
+        QDomElement e = doc.createElement(GenericUpdateInformation::xmlTagName());
+        root.appendChild(e);
+        for(int i=0; i < d->m_UpdateInfos.count(); ++i) {
+            d->m_UpdateInfos.at(i).toDomElement(&e, &doc);
+        }
+    }
     return doc.toString(2);
 }
 
 void GenericDescription::addUpdateInformation(Utils::GenericUpdateInformation updateInfo)
 {
-    m_UpdateInfos.append(updateInfo);
+    d->m_UpdateInfos.append(updateInfo);
 }
 
 QList<Utils::GenericUpdateInformation> GenericDescription::updateInformation() const
 {
-    return m_UpdateInfos;
+    return d->m_UpdateInfos;
 }
 
 QList<Utils::GenericUpdateInformation> GenericDescription::updateInformationForVersion(const QString &version) const
@@ -287,6 +319,24 @@ QList<Utils::GenericUpdateInformation> GenericDescription::updateInformationForV
 
 QList<Utils::GenericUpdateInformation> GenericDescription::updateInformationForVersion(const Utils::VersionNumber &version) const
 {}
+
+/** You can add untranslatable extra-data. \e ref must be greated than GenericDescription::NonTranslatableExtraData and lower than GenericDescription::TranslatableExtraData. */
+void GenericDescription::addNonTranslatableExtraData(const int ref, const QString &tagName)
+{
+    Q_ASSERT(ref>NonTranslatableExtraData && ref<TranslatableExtraData);
+    if (ref>NonTranslatableExtraData && ref<TranslatableExtraData) {
+        d->m_NonTranslatableExtra.insert(ref, tagName);
+    }
+}
+
+/** You can add translatable extra-data. \e ref must be greated than GenericDescription::TranslatableExtraData. */
+void GenericDescription::addTranslatableExtraData(const int ref, const QString &tagName)
+{
+    Q_ASSERT(ref>TranslatableExtraData);
+    if (ref>TranslatableExtraData) {
+        d->m_TranslatableExtra.insert(ref, tagName);
+    }
+}
 
 void GenericDescription::toTreeWidget(QTreeWidget *tree) const
 {}
