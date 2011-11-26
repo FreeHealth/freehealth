@@ -124,6 +124,13 @@ public:
         return s;
     }
 
+    /** Clear all recorded data and languages. */
+    void clear()
+    {
+        qDeleteAll(m_Hash_T_Lang);
+        m_Hash_T_Lang.clear();
+    }
+
     /** For debugging purpose */
     void toTreeWidget(QTreeWidgetItem *tree) const
     {
