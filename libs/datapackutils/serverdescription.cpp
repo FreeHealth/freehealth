@@ -31,7 +31,7 @@
 using namespace DataPack;
 
 ServerDescription::ServerDescription() :
-    Utils::GenericDescription()
+    Utils::GenericDescription("ServerDescription")
 {
 }
 

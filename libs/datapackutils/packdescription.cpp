@@ -29,6 +29,8 @@
 using namespace DataPack;
 
 
-PackDescription::PackDescription()
+PackDescription::PackDescription() :
+    Utils::GenericDescription("PackDescription")
 {
 }
+

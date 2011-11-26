@@ -28,7 +28,7 @@
 #define PACKDESCRIPTION_H
 
 #include <datapackutils/datapack_exporter.h>
-#include <utils/genericupdateinformation.h>
+#include <utils/genericdescription.h>.h>
 
 QT_BEGIN_NAMESPACE
 class QTreeWidget;
@@ -45,40 +45,12 @@ namespace DataPack {
 namespace Internal {
 }
 
-class DATAPACK_EXPORT PackDescription
+class DATAPACK_EXPORT PackDescription : public Utils::GenericDescription
 {
 public:
-    enum DataRepresentation {
-        Uuid= 0,
-        URL,
-        Vendor,
-        Validity,
-        Category,
-        ServerVersion,
-        FreeMedFormsCompatVersion,
-        FreeDiamsCompatVersion,
-        FreeAccountCompatVersion,
-        CreationDate,
-        LastModificationDate,
-        ShortDescription,
-        HtmlDescription,
-        HtmlSynthesis,
-        GlobalLicense,
-        GeneralIcon,
-        MaxParam
-    };
-
     PackDescription();
 //    virtual ~PackDescription();
 
-//    QVariant data(const int ref, const QString &lang = QString::null) const;
-//    bool setData(const int ref, const QVariant &value, const QString &lang = QString::null);
-
-//    void toTreeWidget(QTreeWidget *tree) const;
-
-private:
-//    Internal::ServerDescriptionPrivate *d;
-    QList<Utils::GenericUpdateInformation> m_UpdateInfos;
 };
 
 
