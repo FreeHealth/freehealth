@@ -1,7 +1,7 @@
 QT += xml network core gui
 
 TEMPLATE = app
-TARGET = DataPackTest
+TARGET = datapacks
 
 include(../../../config.pri)
 include(../../../libs/utils.pri)
