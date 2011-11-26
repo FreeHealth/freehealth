@@ -86,6 +86,12 @@ public:
         return m_Hash_T_Lang.contains(lang.left(2));
     }
 
+    /** Return all included language. */
+    QStringList languages() const
+    {
+        return m_Hash_T_Lang.uniqueKeys();
+    }
+
     /**
         Return a pointer to the datas class for one unique \e language, or if it does not exist for
         the default common language.
