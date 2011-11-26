@@ -144,6 +144,7 @@ public:
 GenericDescription::GenericDescription(const QString &rootTag) :
     d(new GenericDescriptionPrivate)
 {
+    d->m_RootTag = rootTag;
     if (d->m_RootTag.isEmpty())
         d->m_RootTag = XML_ROOT_TAG;
 }
