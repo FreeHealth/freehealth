@@ -61,6 +61,7 @@ public:
         Uuid= 0,
         Version,
         Author,
+        Country,
         URL,
         AbsFileName,
         Vendor,
@@ -74,6 +75,9 @@ public:
 
         // Translatable data
         Category,
+        ToolTip,
+        Specialties,
+        TypeName,
         ShortDescription,
         HtmlDescription,
         HtmlSynthesis,
@@ -89,12 +93,16 @@ public:
     GenericDescription(const QString &rootTag = QString::null);
     virtual ~GenericDescription();
 
+    void setRootTag(const QString &rootTag);
+
     virtual QVariant data(const int ref, const QString &lang = QString::null) const;
     virtual bool setData(const int ref, const QVariant &value, const QString &lang = QString::null);
 
     virtual bool fromXmlContent(const QString &xmlContent);
     virtual bool fromXmlFile(const QString &absFileName);
+    virtual bool fromDomElement(const QDomElement &root);
     virtual QString toXml() const;
+    virtual bool toDomElement(QDomElement *root, QDomDocument *doc) const;
 
     // Manage update informations
     void addUpdateInformation(Utils::GenericUpdateInformation updateInfo);
