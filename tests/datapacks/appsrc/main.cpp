@@ -9,7 +9,7 @@ int main(int argc, char *argv[])
 {
     QApplication a(argc, argv);
 
-    DataPack::ServerManager *manager = new DataPack::ServerManager;
+    DataPack::ServerManager *manager = new DataPack::ServerManager("/tmp/");
     manager->isInternetConnexionAvailable();
 
     MainWindow w;
