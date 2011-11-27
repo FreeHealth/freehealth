@@ -70,6 +70,20 @@ public:
     bool addServer(const QUrl &url);
 
     /**
+     * Get the server at a specific index
+     * \param index the server index
+     * \return the server
+     */
+    const Server &getServerAt(int index) const;
+
+    /**
+     * Get the index of the server for a specific URL
+     * \param url the url from which we want the server index
+     * \return the server index matching the url parameter or -1 if not found
+     */
+    int getServerIndex(const QUrl &url) const;
+
+    /**
      * Remove a server
      * \param id the ID of the server to remove
      */

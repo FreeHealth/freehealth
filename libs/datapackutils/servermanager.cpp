@@ -114,6 +114,22 @@ bool ServerManager::addServer(const QUrl &url)
     return true;
 }
 
+const Server &ServerManager::getServerAt(int index) const
+{
+    return m_servers[index];
+}
+
+int ServerManager::getServerIndex(const QUrl &url) const
+{
+    for (int i = 0; i < m_servers.count(); i++)
+    {
+        const Server &server = m_servers[i];
+        if (server.url() == url)
+            return i;
+    }
+    return -1;
+}
+
 void ServerManager::removeServerAt(int index)
 {
     // TODO stop all jobs linked to the server if there are running ones
