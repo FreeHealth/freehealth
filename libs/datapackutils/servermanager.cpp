@@ -26,17 +26,26 @@
  ***************************************************************************/
 #include "servermanager.h"
 
-#include <QNetworkConfigurationManager>
+#include <utils/log.h>
+#include <translationutils/constanttranslations.h>
 
-#include <QDebug>
+#include <QNetworkConfigurationManager>
 #include <QNetworkRequest>
 #include <QDir>
 
-using namespace DataPack;
+#include <QDebug>
 
-ServerManager::ServerManager(QObject *parent) :
+using namespace DataPack;
+using namespace Trans::ConstantTranslations;
+
+ServerManager::ServerManager(const QString &backUpPath, QObject *parent) :
     QObject(parent)
 {
+    setObjectName("ServerManager");
+    if (!QDir(backUpPath).exists()) {
+        LOG_ERROR(tkTr(Trans::Constants::PATH_1_DOESNOT_EXISTS).arg(backUpPath));
+    }
+    m_BackUpPath = QDir::cleanPath(backUpPath);
 }
 
 bool ServerManager::isInternetConnexionAvailable()
@@ -146,4 +155,5 @@ void ServerManager::requestReadyRead()
 void ServerManager::requestError(QNetworkReply::NetworkError error)
 {
     // TODO
+    // Save the config file to the m_BackUpPath
 }

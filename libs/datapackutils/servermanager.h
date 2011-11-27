@@ -52,7 +52,11 @@ class DATAPACK_EXPORT ServerManager : public QObject
 {
     Q_OBJECT
 public:
-    explicit ServerManager(QObject *parent = 0);
+    /**
+     * Construct an empty valid object with the back up path set to \e backUpPath.
+     * This path must exist. All downloaded configuration files will be stored in this place.
+    */
+    explicit ServerManager(const QString &backUpPath, QObject *parent = 0);
 
     bool isInternetConnexionAvailable();
 
@@ -91,6 +95,7 @@ Q_SIGNALS:
 private:
     QHash<int,Server> m_servers;
     QNetworkAccessManager m_networkAccessManager;
+    QString m_BackUpPath;
 
     // return a non used server id candidate (starts to 0, ends to the upper int bound)
     int getFreeServerId() const;
