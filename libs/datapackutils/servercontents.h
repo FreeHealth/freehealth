@@ -44,6 +44,9 @@ class DATAPACK_EXPORT ServerContents
 {
 public:
     ServerContents();
+
 };
+
+}  // End namespace DataPack
 
 #endif // SERVERCONTENTS_H
