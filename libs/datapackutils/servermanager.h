@@ -65,22 +65,22 @@ public:
     /**
      * Add a new server
      * \param url the URL of the target server
-     * \return a server ID or an integer < 0 if an error occured. TODO: specify all error codes.
+     * \return false if a server with the same URL already exists
      */
-    int addServer(const QUrl &url);
+    bool addServer(const QUrl &url);
     /**
      * Remove a server
      * \param id the ID of the server to remove
      */
-    void removeServer(int id);
+    void removeServerAt(int index);
 
     /**
      * Connect and update a server infos. Asynchronous.
      * When the server is updated, the signal "serverInfosUpdated" is emitted.
-     * \param id the ID of the server to update infos of
-     * \return an error (< 0) if ID is unknown or another error
+     * \param index the index of the server to update infos of
+     * \return false if index is out of bounds
      */
-    int connectAndUpdate(int id);
+    bool connectAndUpdate(int index);
 
     ServerDescription downloadServerDescription(const Server &server);
     QList<PackDescription> downloadPackDescription(const Server &server, const Pack &pack);
@@ -93,12 +93,9 @@ Q_SIGNALS:
     void serverInfosUpdated(int serverId); // emitted when a server infos have been updated
 
 private:
-    QHash<int,Server> m_servers;
+    QList<Server> m_servers;
     QNetworkAccessManager m_networkAccessManager;
     QString m_BackUpPath;
-
-    // return a non used server id candidate (starts to 0, ends to the upper int bound)
-    int getFreeServerId() const;
 
 private Q_SLOTS:
     void requestReadyRead();

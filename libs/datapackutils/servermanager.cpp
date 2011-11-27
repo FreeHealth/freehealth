@@ -103,36 +103,29 @@ bool ServerManager::installDataPack(const Server &server, const Pack &pack)
     return false;
 }
 
-int ServerManager::addServer(const QUrl &url)
+bool ServerManager::addServer(const QUrl &url)
 {
-    // TODO check if a server already exists with the same URL
-    int id = getFreeServerId();
-    m_servers.insert(id, Server(url));
-    return id;
+    // check if a server already exists with the same URL
+    foreach (const Server &server, m_servers)
+        if (server.url() == url)
+            return false;
+
+    m_servers << Server(url);
+    return true;
 }
 
-int ServerManager::getFreeServerId() const
+void ServerManager::removeServerAt(int index)
 {
-    bool free;
-    int id = 0;
-    do {
-        free = true;
-        foreach (int idLoop, m_servers.keys()){
-            if (idLoop == id) {
-                free = false;
-                break;
-            }
-        }
-    } while (!free);
-    return id;
+    // TODO stop all jobs linked to the server if there are running ones
+    m_servers.removeAt(index);
 }
 
-int ServerManager::connectAndUpdate(int id)
+bool ServerManager::connectAndUpdate(int index)
 {
-    if (m_servers.find(id) == m_servers.end()) // server id unknown?
-        return -1;
+    if (index < 0 || index >= m_servers.count()) // index out-of-bounds
+        return false;
 
-    const Server &server = m_servers[id];
+    const Server &server = m_servers[index];
 
     // Forge the server config filename
     QUrl requestUrl = server.url();

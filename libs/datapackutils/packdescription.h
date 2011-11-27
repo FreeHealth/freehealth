@@ -28,7 +28,7 @@
 #define PACKDESCRIPTION_H
 
 #include <datapackutils/datapack_exporter.h>
-#include <utils/genericdescription.h>.h>
+#include <utils/genericdescription.h>
 
 QT_BEGIN_NAMESPACE
 class QTreeWidget;
