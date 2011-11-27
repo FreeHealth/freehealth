@@ -152,14 +152,37 @@ QVariant AccountModel::data(const QModelIndex &index, int role) const
     if (!index.isValid()) {
         return QVariant();
     }
-
-    if (role==Qt::DisplayRole) {
+    int row = index.row();
+    /*if (role==Qt::DisplayRole) {
         if (index.column()==Constants::ACCOUNT_DATE) {
             QDate date = d->m_SqlTable->data(index, role).toDate();
             return date.toString(settings()->value(Core::Constants::S_DATEFORMAT, QLocale().dateFormat(QLocale::LongFormat)).toString());
         }
         return d->m_SqlTable->data(index, role);
     }
+    return QVariant();*/
+    switch(role){
+        case Qt::DisplayRole :
+            if (index.column()==Constants::ACCOUNT_DATE) {
+            QDate date = d->m_SqlTable->data(index, role).toDate();
+            return date.toString(settings()->value(Core::Constants::S_DATEFORMAT, QLocale().dateFormat(QLocale::LongFormat)).toString());
+                }
+            return d->m_SqlTable->data(index, role);
+            break;
+        case Qt::BackgroundRole :
+            if(getDoublesRows.contains(row)){
+                QColor color("blue");
+                color.setAlpha(025);
+                return color;
+                }
+            else{
+                return QColor("white");
+                }
+            break;
+        default :
+            return QVariant();
+            break;
+        }
     return QVariant();
 }
 

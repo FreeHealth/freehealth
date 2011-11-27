@@ -37,6 +37,7 @@
 #include <QAbstractTableModel>
 #include <QSqlRecord>
 #include <QSqlError>
+#include <QColor>
 
 namespace AccountDB {
 namespace Internal {
@@ -89,6 +90,9 @@ public:
 
     // Sums
     double sum(const int &fieldRef);
+    
+    //list of doubles rows
+    QList<int> getDoublesRows;
 
 public Q_SLOTS:
     bool submit();

@@ -106,6 +106,7 @@ void ControlReceipts::search(){
     ui->tableView->horizontalHeader()->setCascadingSectionResizes (true);
     ui->tableView->horizontalHeader()->setStretchLastSection(true);
     //ui->tableView->resizeColumnsToContents();
+    coloringDoubles();
     QString textResult = textOfSums(m_accountModel);
     ui->resultLabel->setText(textResult);
     //refreshFilter(filter);
@@ -117,16 +118,26 @@ void ControlReceipts::deleteLine(){
       QMessageBox::warning(0,trUtf8("Error"),trUtf8("Please select a line to delete."),QMessageBox::Ok);
       return;
       }
-  int i = index.row();
-  if(m_accountModel->removeRows(i,1,QModelIndex())){
+  int rowToDelete = index.row();
+  if(m_accountModel->getDoublesRows.contains(rowToDelete)){
+          m_accountModel->getDoublesRows.removeAll(rowToDelete);
+          if (m_accountModel->getDoublesRows.size()<1)
+          {
+          	m_accountModel->getDoublesRows.clear();
+                }
+          }
+  if(m_accountModel->removeRows(rowToDelete,1,QModelIndex())){
           QMessageBox::information(0,trUtf8("Information"),trUtf8("Line is deleted."),QMessageBox::Ok);
+                   
       }
   QString textResult = textOfSums(m_accountModel);
   ui->resultLabel->setText(textResult);
   const QString filter = m_accountModel->filter();
+  coloringDoubles();
+          search();
   if (WarnDebugMessage)
     	      qDebug() << __FILE__ << QString::number(__LINE__) << " filter =" << filter ;
-  refreshFilter(filter);
+  //refreshFilter(filter);
 }
 
 QString ControlReceipts::textOfSums(AccountModel * model){
@@ -181,7 +192,48 @@ void ControlReceipts::print(){
     QMessageBox::information(0,trUtf8("Information"),trUtf8("Not yet"),QMessageBox::Ok);	
 }
 
-void ControlReceipts::coloringDoubles(){}
+void ControlReceipts::coloringDoubles(){
+    int rowCount = m_accountModel->rowCount();
+    int columnCount = m_accountModel->columnCount();
+    qDebug() << __FILE__ << QString::number(__LINE__) << QString::number(rowCount) << " " << QString::number(columnCount);
+    QList<int> listRows;
+    for (int i = 0; i < rowCount; i += 1)
+    {
+    	QList<QVariant> dataRow ;
+
+    	for (int c = 1; c < columnCount; c += 1)
+    	{
+    	        QModelIndex index = m_accountModel->index(i,c,QModelIndex());
+    		dataRow << m_accountModel->data(index,Qt::DisplayRole);
+    	}
+    	qDebug() << __FILE__ << QString::number(__LINE__) << " dataRow.size =" << QString::number(dataRow.size());
+    	for (int j = i; j < rowCount ; j += 1)
+    	{
+    	           if(j!=i){
+    		    	QList<QVariant> dataAfterRow ;
+    	                for (int c = 1; c < columnCount; c += 1)
+    	                {
+    	                        QModelIndex indexAfter = m_accountModel->index(j,c,QModelIndex());
+    		                dataAfterRow += m_accountModel->data(indexAfter,Qt::DisplayRole);
+    	                }
+    	                
+    	                qDebug() << __FILE__ << QString::number(__LINE__) << " dataAfterRow.size =" << QString::number(dataAfterRow.size());
+    	                if (dataAfterRow == dataRow)
+    	                {
+    	                        qDebug() << __FILE__ << QString::number(__LINE__) << " dataAfterRow= "<< dataAfterRow;
+    	                        qDebug() << __FILE__ << QString::number(__LINE__) << QString::number(i) << QString::number(j);
+    	                	listRows << i << j;
+    	                }
+    	                else{}
+    	           }
+    	}
+
+    }
+    m_accountModel->getDoublesRows = listRows;
+    qDebug() << __FILE__ << QString::number(__LINE__) << " listRows = " << QString::number(listRows.size());
+
+    m_accountModel->submit();
+}
 
 void ControlReceipts::refresh(){
     delete m_accountModel;
