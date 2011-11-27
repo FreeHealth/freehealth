@@ -47,7 +47,8 @@ HEADERS += global_exporter.h \
     idatabasedumper.h \
     widgets/imageviewer.h \
     genericupdateinformation.h \
-    genericdescription.h
+    genericdescription.h \
+    widgets/genericdescriptioneditor.h
 #    widgets/dialogbuttonbox.h
 
 SOURCES += global.cpp \
@@ -84,7 +85,8 @@ SOURCES += global.cpp \
     idatabasedumper.cpp \
     widgets/imageviewer.cpp \
     genericupdateinformation.cpp \
-    genericdescription.cpp
+    genericdescription.cpp \
+    widgets/genericdescriptioneditor.cpp
 #    widgets/dialogbuttonbox.cpp
 
 macx {
@@ -101,6 +103,12 @@ TRANSLATIONS += $${SOURCES_TRANSLATIONS_PATH}/utils_fr.ts \
 
 # resources
 #RESOURCES += $${SOURCES_GLOBAL_RESOURCES}/pixmap/svg/fancytoolbutton.svg
+
+FORMS += \
+    widgets/genericdescriptioneditor.ui
+
+
+
 
 
 
