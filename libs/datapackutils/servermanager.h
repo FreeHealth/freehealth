@@ -60,7 +60,7 @@ public:
 
     bool isInternetConnexionAvailable();
 
-    void connectServer(const Server &server, const ServerIdentification &ident = ServerIdentification()); // will be deprecated with the updateInfos function appearance
+    void connectServer(const Server &server, const ServerIdentification &ident = ServerIdentification()); // will be deprecated regarding the connectAndUpdate function
 
     /**
      * Add a new server
@@ -68,6 +68,7 @@ public:
      * \return false if a server with the same URL already exists
      */
     bool addServer(const QUrl &url);
+
     /**
      * Remove a server
      * \param id the ID of the server to remove
