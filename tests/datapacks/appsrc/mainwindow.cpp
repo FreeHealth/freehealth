@@ -2,12 +2,13 @@
 #include "ui_mainwindow.h"
 
 #include <datapackutils/serverdescription.h>
+#include <utils/widgets/genericdescriptioneditor.h>
 
+#include <QLayout>
 #include <QDebug>
 
-static void testServerDescription()
+static DataPack::ServerDescription getDescription()
 {
-    // Test ServerDescription
     DataPack::ServerDescription desc;
     desc.setData(DataPack::ServerDescription::Uuid, "uuuid");
     desc.setData(DataPack::ServerDescription::Version, "myversion");
@@ -41,6 +42,13 @@ static void testServerDescription()
     up.setText(QString::fromUtf8("Mon texte en français"), "fr");
     up.setText("My text in english (xx)", "xx");
     desc.addUpdateInformation(up);
+    return desc;
+}
+
+static void testServerDescription()
+{
+    // Test ServerDescription
+    DataPack::ServerDescription desc = getDescription();
 
     DataPack::ServerDescription descCheck;
     descCheck.addNonTranslatableExtraData(DataPack::ServerDescription::NonTranslatableExtraData + 1, "TrucNonTrans");
@@ -53,6 +61,7 @@ static void testServerDescription()
         qWarning() << "     Ok";
     else
         qWarning() << "     Wrong";
+    qWarning() << descCheck.toXml();
 }
 
 
@@ -63,6 +72,10 @@ MainWindow::MainWindow(QWidget *parent) :
     ui->setupUi(this);
     qWarning();
     testServerDescription();
+    serverDescr = getDescription();
+    Utils::GenericDescriptionEditor *editor = new Utils::GenericDescriptionEditor(this);
+    editor->setDescription(serverDescr);
+    layout()->addWidget(editor);
 }
 
 MainWindow::~MainWindow()
