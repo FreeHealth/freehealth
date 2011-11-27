@@ -24,14 +24,17 @@
  *   Contributors :                                                        *
  *       NAME <MAIL@ADRESS>                                                *
  ***************************************************************************/
-#ifndef DATAPACK_GenericDescription_H
-#define DATAPACK_GenericDescription_H
+#ifndef DATAPACK_GENERICDESCRIPTION_H
+#define DATAPACK_GENERICDESCRIPTION_H
 
 #include <datapackutils/datapack_exporter.h>
 #include <utils/genericupdateinformation.h>
+#include <translationutils/multilingualclasstemplate.h>
 
 #include <QVariant>
+#include <QHash>
 #include <QList>
+#include <QString>
 QT_BEGIN_NAMESPACE
 class QTreeWidget;
 QT_END_NAMESPACE
@@ -49,9 +52,6 @@ class VersionNumber;
 }
 
 namespace Utils {
-namespace Internal {
-class GenericDescriptionPrivate;
-}
 
 class DATAPACK_EXPORT GenericDescription
 {
@@ -91,6 +91,7 @@ public:
     };
 
     GenericDescription(const QString &rootTag = QString::null);
+
     virtual ~GenericDescription();
 
     void setRootTag(const QString &rootTag);
@@ -117,10 +118,17 @@ public:
     virtual void toTreeWidget(QTreeWidget *tree) const;
 
 private:
-    Internal::GenericDescriptionPrivate *d;
+    QHash<int, QString> nonTranslatableTagsDataReference() const;
+    QHash<int, QString> translatableTagsDataReference() const;
+
+private:
+    QList<Utils::GenericUpdateInformation> m_UpdateInfos;
+    QString m_RootTag;
+    QHash<int, QString> m_TranslatableExtra, m_NonTranslatableExtra;
+    QHash<QString, QHash<int, QVariant> > m_Data;
 };
 
 }  // End namespace DataPack
 
 
-#endif // DATAPACKSERVER_H
+#endif // DATAPACK_GENERICDESCRIPTION_H
