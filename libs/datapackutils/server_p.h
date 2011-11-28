@@ -31,24 +31,28 @@
 #include <QNetworkReply>
 #include <QNetworkAccessManager>
 
-namespace DataPack
-{
+namespace DataPack {
+namespace Internal {
+
 class ServerPrivate : public QObject
 {
-	Q_OBJECT
+    Q_OBJECT
 public:
-	ServerPrivate(const QUrl &url = QUrl());
+    ServerPrivate(const QUrl &url = QUrl());
+
     bool connected;
     QUrl url;
-	QNetworkAccessManager *networkAccessManager;
+    QNetworkAccessManager *networkAccessManager;
 
-	void connectAndUpdate();
+    void connectAndUpdate();
 
 public Q_SLOTS:
     void requestReadyRead();
-	void requestFinished();
+    void requestFinished();
     void requestError(QNetworkReply::NetworkError error);
 };
-}
+
+}  // End namespace Internal
+}  // End namespace DataPack
 
 #endif // DATAPACK_SERVER_P_H

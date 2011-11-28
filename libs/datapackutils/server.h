@@ -39,8 +39,9 @@
 */
 
 namespace DataPack {
-
+namespace Internal {
 class ServerPrivate;
+}
 
 class DATAPACK_EXPORT Server : public QObject
 {
@@ -58,7 +59,7 @@ public:
     bool isConnected() const;
 
 private:
-	ServerPrivate *m_d;
+    Internal::ServerPrivate *m_d;
 };
 
 }  // End namespace DataPack

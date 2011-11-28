@@ -31,6 +31,7 @@
 #include <QFileInfo>
 
 using namespace DataPack;
+using namespace Internal;
 
 Server::Server(const QUrl &url, QObject *parent) : QObject(parent),
 	m_d(new ServerPrivate(url))
