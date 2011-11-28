@@ -27,9 +27,9 @@
 #ifndef DATAPACK_SERVER_H
 #define DATAPACK_SERVER_H
 
-#include <datapackutils/datapack_exporter.h>
-
 #include <QUrl>
+
+#include <datapackutils/datapack_exporter.h>
 
 /**
  * \file server.h
@@ -40,23 +40,25 @@
 
 namespace DataPack {
 
-class DATAPACK_EXPORT Server
+class ServerPrivate;
+
+class DATAPACK_EXPORT Server : public QObject
 {
+	Q_OBJECT
 public:
-    Server();
-    Server(const QUrl &url);
+    Server(const QUrl &url = QUrl(), QObject *parent = 0);
     virtual ~Server();
 
-    void setUrl(const QUrl &url) { m_Url = url; }
-    const QUrl &url() const {return m_Url;}
+    void setUrl(const QUrl &url);
+    const QUrl &url() const;
     bool isLocalPath() const;
 
-    void setConnected(const bool connected) {m_Connected=connected;}
-    bool isConnected() const {return m_Connected;}
+	void connectAndUpdate();
+
+    bool isConnected() const;
 
 private:
-    bool m_Connected;
-    QUrl m_Url;
+	ServerPrivate *m_d;
 };
 
 }  // End namespace DataPack

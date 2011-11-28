@@ -34,10 +34,6 @@
 #include <datapackutils/serverdescription.h>
 #include <datapackutils/packdescription.h>
 
-#include <QObject>
-#include <QNetworkAccessManager>
-#include <QNetworkReply>
-
 /**
  * \file servermanager.h
  * \author Eric MAEKER <eric.maeker@gmail.com>
@@ -48,15 +44,17 @@
 
 namespace DataPack {
 
+class ServerManagerPrivate;
+
 class DATAPACK_EXPORT ServerManager : public QObject
 {
     Q_OBJECT
 public:
     /**
-     * Construct an empty valid object with the back up path set to \e backUpPath.
-     * This path must exist. All downloaded configuration files will be stored in this place.
+     * Construct an empty valid object with the back up path set to \e filesCachePath.
+	 * \param filesCachePath All downloaded files will be stored in this place.
     */
-    explicit ServerManager(const QString &backUpPath, QObject *parent = 0);
+    explicit ServerManager(const QString &filesCachePath, QObject *parent = 0);
 
     bool isInternetConnexionAvailable();
 
@@ -74,7 +72,7 @@ public:
      * \param index the server index
      * \return the server
      */
-    const Server &getServerAt(int index) const;
+    Server *getServerAt(int index) const;
 
     /**
      * Get the index of the server for a specific URL
@@ -93,9 +91,8 @@ public:
      * Connect and update a server infos. Asynchronous.
      * When the server is updated, the signal "serverInfosUpdated" is emitted.
      * \param index the index of the server to update infos of
-     * \return false if index is out of bounds
      */
-    bool connectAndUpdate(int index);
+    void connectAndUpdate(int index);
 
     ServerDescription downloadServerDescription(const Server &server);
     QList<PackDescription> downloadPackDescription(const Server &server, const Pack &pack);
@@ -108,13 +105,7 @@ Q_SIGNALS:
     void serverInfosUpdated(int serverId); // emitted when a server infos have been updated
 
 private:
-    QList<Server> m_servers;
-    QNetworkAccessManager m_networkAccessManager;
-    QString m_BackUpPath;
-
-private Q_SLOTS:
-    void requestReadyRead();
-    void requestError(QNetworkReply::NetworkError error);
+	ServerManagerPrivate *m_d;
 };
 
 }  // End namespace DataPack

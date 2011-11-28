@@ -24,6 +24,8 @@
  *   Contributors :                                                        *
  *       NAME <MAIL@ADRESS>                                                *
  ***************************************************************************/
+
+#include "servermanager_p.h"
 #include "servermanager.h"
 
 #include <utils/log.h>
@@ -38,14 +40,15 @@
 using namespace DataPack;
 using namespace Trans::ConstantTranslations;
 
-ServerManager::ServerManager(const QString &backUpPath, QObject *parent) :
-    QObject(parent)
+ServerManager::ServerManager(const QString &filesCachePath, QObject *parent) :
+    QObject(parent),
+	m_d(new ServerManagerPrivate)
 {
     setObjectName("ServerManager");
-    if (!QDir(backUpPath).exists()) {
-        LOG_ERROR(tkTr(Trans::Constants::PATH_1_DOESNOT_EXISTS).arg(backUpPath));
+    if (!QDir(filesCachePath).exists()) {
+        LOG_ERROR(tkTr(Trans::Constants::PATH_1_DOESNOT_EXISTS).arg(filesCachePath));
     }
-    m_BackUpPath = QDir::cleanPath(backUpPath);
+	m_d->filesCachePath = QDir::cleanPath(filesCachePath);
 }
 
 bool ServerManager::isInternetConnexionAvailable()
@@ -105,64 +108,26 @@ bool ServerManager::installDataPack(const Server &server, const Pack &pack)
 
 bool ServerManager::addServer(const QUrl &url)
 {
-    // check if a server already exists with the same URL
-    foreach (const Server &server, m_servers)
-        if (server.url() == url)
-            return false;
-
-    m_servers << Server(url);
-    return true;
+	return m_d->addServer(url);
 }
 
-const Server &ServerManager::getServerAt(int index) const
+Server *ServerManager::getServerAt(int index) const
 {
-    return m_servers[index];
+	return qobject_cast<Server*>(m_d->children()[index]);
+//    return m_d->servers[index];
 }
 
 int ServerManager::getServerIndex(const QUrl &url) const
 {
-    for (int i = 0; i < m_servers.count(); i++)
-    {
-        const Server &server = m_servers[i];
-        if (server.url() == url)
-            return i;
-    }
-    return -1;
+	return m_d->getServerIndex(url);
 }
 
 void ServerManager::removeServerAt(int index)
 {
-    // TODO stop all jobs linked to the server if there are running ones
-    m_servers.removeAt(index);
+	delete m_d->children()[index];
 }
 
-bool ServerManager::connectAndUpdate(int index)
+void ServerManager::connectAndUpdate(int index)
 {
-    if (index < 0 || index >= m_servers.count()) // index out-of-bounds
-        return false;
-
-    const Server &server = m_servers[index];
-
-    // Forge the server config filename
-    QUrl requestUrl = server.url();
-    QDir dir(server.url().path());
-    requestUrl.setPath(dir.filePath("server.conf.xml"));
-
-    QNetworkRequest request(requestUrl); // TODO ADD THE FILES TO THE URL
-    request.setRawHeader("User-Agent", "FreeMedForms"); // TODO specify the version?
-    QNetworkReply *reply = m_networkAccessManager.get(request);
-    connect(reply, SIGNAL(readyRead()), this, SLOT(requestReadyRead()));
-    connect(reply, SIGNAL(error(QNetworkReply::NetworkError)),
-            this, SLOT(requestError(QNetworkReply::NetworkError)));
-}
-
-void ServerManager::requestReadyRead()
-{
-    // TODO
-}
-
-void ServerManager::requestError(QNetworkReply::NetworkError error)
-{
-    // TODO
-    // Save the config file to the m_BackUpPath
+	m_d->connectAndUpdate(index);
 }

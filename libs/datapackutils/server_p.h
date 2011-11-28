@@ -22,58 +22,33 @@
  *   Main Developpers :                                                    *
  *       Eric MAEKER, MD <eric.maeker@gmail.com>                           *
  *   Contributors :                                                        *
- *       NAME <MAIL@ADRESS>                                                *
+ *       Guillaume DENRY <guillaume.denry@gmail.com>                       *
  ***************************************************************************/
-#include "server.h"
-#include "server_p.h"
-#include "servermanager_p.h"
+#ifndef DATAPACK_SERVER_P_H
+#define DATAPACK_SERVER_P_H
 
-#include <QFileInfo>
+#include <QUrl>
+#include <QNetworkReply>
+#include <QNetworkAccessManager>
 
-using namespace DataPack;
-
-Server::Server(const QUrl &url, QObject *parent) : QObject(parent),
-	m_d(new ServerPrivate(url))
+namespace DataPack
 {
-	m_d->networkAccessManager = qobject_cast<ServerManagerPrivate*>(parent)->networkAccessManager;
+class ServerPrivate : public QObject
+{
+	Q_OBJECT
+public:
+	ServerPrivate(const QUrl &url = QUrl());
+    bool connected;
+    QUrl url;
+	QNetworkAccessManager *networkAccessManager;
+
+	void connectAndUpdate();
+
+public Q_SLOTS:
+    void requestReadyRead();
+	void requestFinished();
+    void requestError(QNetworkReply::NetworkError error);
+};
 }
 
-Server::~Server()
-{
-    // TODO stop all jobs linked to the server if there are running ones
-}
-
-void Server::setUrl(const QUrl &url)
-{
-	m_d->url = url;
-}
-
-const QUrl &Server::url() const
-{
-	return m_d->url;
-}
-
-bool Server::isConnected() const
-{
-	return m_d->connected;
-}
-
-/** Return true if server's url starts with \e file:// and path exists. */
-bool Server::isLocalPath() const
-{
-    // TODO
-    return false;
-/*    if (m_Url.startsWith("file://", Qt::CaseInsensitive)) {
-        QString t = m_Url;
-        QFileInfo file(t.replace("file:/", ""));
-        if (file.exists() && file.isDir()) {
-            return true;
-        }
-    }
-    return false;*/
-}
-
-void Server::connectAndUpdate()
-{
-	m_d->connectAndUpdate();
-}
+#endif // DATAPACK_SERVER_P_H
