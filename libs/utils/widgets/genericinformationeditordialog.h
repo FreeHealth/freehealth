@@ -24,43 +24,46 @@
  *   Contributors :                                                        *
  *       NAME <MAIL@ADRESS>                                                *
  ***************************************************************************/
-#ifndef GENERICDESCRIPTIONEDITOR_H
-#define GENERICDESCRIPTIONEDITOR_H
+#ifndef UTILS_GENERICINFORMATIONEDITORDIALOG_H
+#define UTILS_GENERICINFORMATIONEDITORDIALOG_H
 
 #include <utils/global_exporter.h>
 #include <utils/genericdescription.h>
 
-#include <QWidget>
+#include <QDialog>
+
+/**
+ * \file genericdescsriptioneditordialog.h
+ * \author Eric MAEKER <eric.maeker@gmail.com>
+ * \version 0.6.2
+ * \date 28 Nov 2011
+*/
 
 namespace Utils {
-class GenericDescription;
-namespace Internal {
-namespace Ui {
-    class GenericDescriptionEditor;
-}  // End namespace Ui
-}  // End namespace Internal
 
-class UTILS_EXPORT GenericDescriptionEditor : public QWidget
+namespace Ui {
+    class GenericInformationEditorDialog;
+}
+
+class UTILS_EXPORT GenericInformationEditorDialog : public QDialog
 {
     Q_OBJECT
+
 public:
-    explicit GenericDescriptionEditor(QWidget *parent = 0);
-    ~GenericDescriptionEditor();
+    explicit GenericInformationEditorDialog(QWidget *parent = 0);
+    ~GenericInformationEditorDialog();
 
     void setDescription(const Utils::GenericDescription &desc);
 
-public Q_SLOTS:
-    Utils::GenericDescription submit();
-
-private Q_SLOTS:
-    void on_langSelector_activated(const QString &text);
+private:
+    void done(int r);
 
 private:
-    Internal::Ui::GenericDescriptionEditor *ui;
-    Utils::GenericDescription m_desc;
-    QString m_PreviousLang;
+    Ui::GenericInformationEditorDialog *ui;
 };
 
-}  // End namespace Utils
 
-#endif // GENERICDESCRIPTIONEDITOR_H
+} // namespace Utils
+
+
+#endif // UTILS_GENERICINFORMATIONEDITORDIALOG_H

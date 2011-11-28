@@ -17,7 +17,7 @@
    <item row="0" column="0">
     <widget class="QTabWidget" name="tabWidget">
      <property name="currentIndex">
-      <number>2</number>
+      <number>3</number>
      </property>
      <widget class="QWidget" name="tab">
       <attribute name="title">
@@ -277,6 +277,11 @@
         <widget class="QTextEdit" name="license"/>
        </item>
       </layout>
+     </widget>
+     <widget class="QWidget" name="updateTab">
+      <attribute name="title">
+       <string>Update</string>
+      </attribute>
      </widget>
     </widget>
    </item>

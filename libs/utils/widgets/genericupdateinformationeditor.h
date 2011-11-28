@@ -24,43 +24,47 @@
  *   Contributors :                                                        *
  *       NAME <MAIL@ADRESS>                                                *
  ***************************************************************************/
-#ifndef GENERICDESCRIPTIONEDITOR_H
-#define GENERICDESCRIPTIONEDITOR_H
+#ifndef GENERICUPDATEINFORMATIONEDITOR_H
+#define GENERICUPDATEINFORMATIONEDITOR_H
 
 #include <utils/global_exporter.h>
-#include <utils/genericdescription.h>
+#include <utils/genericupdateinformation.h>
 
 #include <QWidget>
 
-namespace Utils {
-class GenericDescription;
-namespace Internal {
-namespace Ui {
-    class GenericDescriptionEditor;
-}  // End namespace Ui
-}  // End namespace Internal
+/**
+ * \file genericupdateinformationeditor.h
+ * \author Eric MAEKER <eric.maeker@gmail.com>
+ * \version 0.6.2
+ * \date 27 Nov 2011
+*/
 
-class UTILS_EXPORT GenericDescriptionEditor : public QWidget
+namespace Utils {
+namespace Ui {
+    class GenericUpdateInformationEditor;
+}
+
+class UTILS_EXPORT GenericUpdateInformationEditor : public QWidget
 {
     Q_OBJECT
 public:
-    explicit GenericDescriptionEditor(QWidget *parent = 0);
-    ~GenericDescriptionEditor();
+    explicit GenericUpdateInformationEditor(QWidget *parent = 0);
+    ~GenericUpdateInformationEditor();
 
-    void setDescription(const Utils::GenericDescription &desc);
+    void setUpdateInformation(const Utils::GenericUpdateInformation &info);
 
 public Q_SLOTS:
-    Utils::GenericDescription submit();
+    GenericUpdateInformation submit();
 
 private Q_SLOTS:
     void on_langSelector_activated(const QString &text);
 
 private:
-    Internal::Ui::GenericDescriptionEditor *ui;
-    Utils::GenericDescription m_desc;
+    Ui::GenericUpdateInformationEditor *ui;
+    GenericUpdateInformation m_info;
     QString m_PreviousLang;
 };
 
 }  // End namespace Utils
 
-#endif // GENERICDESCRIPTIONEDITOR_H
+#endif // GENERICUPDATEINFORMATIONEDITOR_H

@@ -24,43 +24,48 @@
  *   Contributors :                                                        *
  *       NAME <MAIL@ADRESS>                                                *
  ***************************************************************************/
-#ifndef GENERICDESCRIPTIONEDITOR_H
-#define GENERICDESCRIPTIONEDITOR_H
+#include "genericupdateinformationeditor.h"
+#include "ui_genericupdateinformationeditor.h"
 
-#include <utils/global_exporter.h>
-#include <utils/genericdescription.h>
+using namespace Utils;
 
-#include <QWidget>
-
-namespace Utils {
-class GenericDescription;
-namespace Internal {
-namespace Ui {
-    class GenericDescriptionEditor;
-}  // End namespace Ui
-}  // End namespace Internal
-
-class UTILS_EXPORT GenericDescriptionEditor : public QWidget
+GenericUpdateInformationEditor::GenericUpdateInformationEditor(QWidget *parent) :
+    QWidget(parent),
+    ui(new Ui::GenericUpdateInformationEditor)
 {
-    Q_OBJECT
-public:
-    explicit GenericDescriptionEditor(QWidget *parent = 0);
-    ~GenericDescriptionEditor();
+    ui->setupUi(this);
+    ui->langSelector->addItems(QStringList() << "xx" << "en" << "fr" << "de" << "es");
+}
 
-    void setDescription(const Utils::GenericDescription &desc);
+GenericUpdateInformationEditor::~GenericUpdateInformationEditor()
+{
+    delete ui;
+}
 
-public Q_SLOTS:
-    Utils::GenericDescription submit();
+void GenericUpdateInformationEditor::setUpdateInformation(const Utils::GenericUpdateInformation &info)
+{
+    m_info = info;
 
-private Q_SLOTS:
-    void on_langSelector_activated(const QString &text);
+    on_langSelector_activated(ui->langSelector->currentText());
+}
 
-private:
-    Internal::Ui::GenericDescriptionEditor *ui;
-    Utils::GenericDescription m_desc;
-    QString m_PreviousLang;
-};
+void GenericUpdateInformationEditor::on_langSelector_activated(const QString &text)
+{
+    if (m_PreviousLang.isEmpty()) {
+        m_PreviousLang = ui->langSelector->currentText();
+    } else {
+        // Save changes to our private description
+        m_info.setText(ui->updateText->toHtml(), m_PreviousLang);
+        m_PreviousLang = text;
+    }
+    ui->updateText->setHtml(m_info.text(text));
+}
 
-}  // End namespace Utils
-
-#endif // GENERICDESCRIPTIONEDITOR_H
+GenericUpdateInformation GenericUpdateInformationEditor::submit()
+{
+    m_info.setFromVersion(ui->from->text());
+    m_info.setToVersion(ui->to->text());
+    m_info.setIsoDate(ui->date->date().toString(Qt::ISODate));
+    m_info.setText(ui->updateText->toHtml(), ui->langSelector->currentText());
+    return m_info;
+}

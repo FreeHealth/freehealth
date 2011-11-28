@@ -53,9 +53,8 @@ GenericDescriptionEditor::~GenericDescriptionEditor()
 void GenericDescriptionEditor::setDescription(const Utils::GenericDescription &descr)
 {
     m_desc = descr;
-    qWarning() << descr.toXml();
 
-    // Setup ui
+    // Setup Non translated
     ui->uuid->setText(descr.data(Utils::GenericDescription::Uuid).toString());
     ui->currentVersion->setText(descr.data(Utils::GenericDescription::Version).toString());
     ui->authors->setText(descr.data(Utils::GenericDescription::Author).toString());
@@ -64,19 +63,33 @@ void GenericDescriptionEditor::setDescription(const Utils::GenericDescription &d
     ui->creationDate->setDate(descr.data(Utils::GenericDescription::CreationDate).toDate());
     ui->icon->setText(descr.data(Utils::GenericDescription::GeneralIcon).toString());
 
+    // Setup translated
     ui->url->setText(descr.data(Utils::GenericDescription::URL).toString());
     ui->absFileName->setText(descr.data(Utils::GenericDescription::AbsFileName).toString());
     ui->fmfCompat->setText(descr.data(Utils::GenericDescription::FreeMedFormsCompatVersion).toString());
     ui->fdCompat->setText(descr.data(Utils::GenericDescription::FreeDiamsCompatVersion).toString());
     ui->faCompat->setText(descr.data(Utils::GenericDescription::FreeAccountCompatVersion).toString());
+    m_PreviousLang.clear();
     on_langSelector_activated(ui->langSelector->currentText());
+
+    // Setup Update
+
 }
 
 void GenericDescriptionEditor::on_langSelector_activated(const QString &text)
 {
-//    Q_ASSERT(m_desc);
-//    if (!m_desc)
-//        return;
+    if (m_PreviousLang.isEmpty()) {
+        m_PreviousLang = ui->langSelector->currentText();
+    } else {
+        // Save changes to our private description
+        m_desc.setData(Utils::GenericDescription::Category, ui->category->text(), m_PreviousLang);
+        m_desc.setData(Utils::GenericDescription::HtmlDescription, ui->htmlDescr->toHtml(), m_PreviousLang);
+        m_desc.setData(Utils::GenericDescription::GlobalLicense, ui->license->toPlainText(), m_PreviousLang);
+        m_desc.setData(Utils::GenericDescription::ShortDescription, ui->shortDescr->toPlainText(), m_PreviousLang);
+        m_desc.setData(Utils::GenericDescription::Specialties, ui->spe->text(), m_PreviousLang);
+        m_desc.setData(Utils::GenericDescription::ToolTip, ui->tooltip->text(), m_PreviousLang);
+        m_PreviousLang = text;
+    }
     ui->category->setText(m_desc.data(Utils::GenericDescription::Category, text).toString());
     ui->htmlDescr->setHtml(m_desc.data(Utils::GenericDescription::HtmlDescription, text).toString());
     ui->license->setPlainText(m_desc.data(Utils::GenericDescription::GlobalLicense, text).toString());
@@ -85,7 +98,28 @@ void GenericDescriptionEditor::on_langSelector_activated(const QString &text)
     ui->tooltip->setText(m_desc.data(Utils::GenericDescription::ToolTip, text).toString());
 }
 
-bool GenericDescriptionEditor::submit()
+Utils::GenericDescription GenericDescriptionEditor::submit()
 {
-    return true;
+    m_desc.setData(Utils::GenericDescription::Uuid, ui->uuid->text());
+    m_desc.setData(Utils::GenericDescription::Version, ui->currentVersion->text());
+    m_desc.setData(Utils::GenericDescription::Author, ui->authors->text());
+    m_desc.setData(Utils::GenericDescription::Country, ui->countries->text());
+    m_desc.setData(Utils::GenericDescription::Vendor, ui->vendor->text());
+    m_desc.setData(Utils::GenericDescription::CreationDate, ui->creationDate->date());
+    m_desc.setData(Utils::GenericDescription::GeneralIcon, ui->icon->text());
+
+    m_desc.setData(Utils::GenericDescription::URL, ui->url->text());
+    m_desc.setData(Utils::GenericDescription::AbsFileName, ui->absFileName->text());
+    m_desc.setData(Utils::GenericDescription::FreeMedFormsCompatVersion, ui->fmfCompat->text());
+    m_desc.setData(Utils::GenericDescription::FreeDiamsCompatVersion, ui->fdCompat->text());
+    m_desc.setData(Utils::GenericDescription::FreeAccountCompatVersion, ui->faCompat->text());
+
+    m_desc.setData(Utils::GenericDescription::Category, ui->category->text(), ui->langSelector->currentText());
+    m_desc.setData(Utils::GenericDescription::HtmlDescription, ui->htmlDescr->toHtml(), ui->langSelector->currentText());
+    m_desc.setData(Utils::GenericDescription::GlobalLicense, ui->license->toPlainText(), ui->langSelector->currentText());
+    m_desc.setData(Utils::GenericDescription::ShortDescription, ui->shortDescr->toPlainText(), ui->langSelector->currentText());
+    m_desc.setData(Utils::GenericDescription::Specialties, ui->spe->text(), ui->langSelector->currentText());
+    m_desc.setData(Utils::GenericDescription::ToolTip, ui->tooltip->text(), ui->langSelector->currentText());
+
+    return m_desc;
 }

@@ -48,7 +48,9 @@ HEADERS += global_exporter.h \
     widgets/imageviewer.h \
     genericupdateinformation.h \
     genericdescription.h \
-    widgets/genericdescriptioneditor.h
+    widgets/genericdescriptioneditor.h \
+    widgets/genericupdateinformationeditor.h \
+    widgets/genericinformationeditordialog.h
 #    widgets/dialogbuttonbox.h
 
 SOURCES += global.cpp \
@@ -86,7 +88,9 @@ SOURCES += global.cpp \
     widgets/imageviewer.cpp \
     genericupdateinformation.cpp \
     genericdescription.cpp \
-    widgets/genericdescriptioneditor.cpp
+    widgets/genericdescriptioneditor.cpp \
+    widgets/genericupdateinformationeditor.cpp \
+    widgets/genericinformationeditordialog.cpp
 #    widgets/dialogbuttonbox.cpp
 
 macx {
@@ -105,7 +109,15 @@ TRANSLATIONS += $${SOURCES_TRANSLATIONS_PATH}/utils_fr.ts \
 #RESOURCES += $${SOURCES_GLOBAL_RESOURCES}/pixmap/svg/fancytoolbutton.svg
 
 FORMS += \
-    widgets/genericdescriptioneditor.ui
+    widgets/genericdescriptioneditor.ui \
+    widgets/genericupdateinformationeditor.ui \
+    widgets/genericinformationeditordialog.ui
+
+
+
+
+
+
 
 
 
