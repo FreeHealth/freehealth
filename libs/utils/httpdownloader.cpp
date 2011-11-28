@@ -89,9 +89,9 @@ void HttpDownloader::startRequest(const QUrl &url)
     if (!url.isValid())
         return;
     if (m_LabelText.isEmpty()) {
-        Utils::Log::addMessage(this, tr("Start downloading: %1 to %2").arg(m_Url.toString()).arg(m_Path));
+        LOG(tr("Start downloading: %1 to %2").arg(m_Url.toString()).arg(m_Path));
     } else {
-        Utils::Log::addMessage(this, m_LabelText);
+        LOG(m_LabelText);
     }
     reply = qnam.get(QNetworkRequest(url));
     connect(reply, SIGNAL(finished()), this, SLOT(httpFinished()));
