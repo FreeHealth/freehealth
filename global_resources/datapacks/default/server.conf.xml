@@ -1,0 +1,36 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE FreeMedForms>
+
+<DataPackServer>
+
+  <ServerDescription>
+    <!-- Non translatable values -->
+    <authors>Eric Maeker, MD</authors>
+    <version>0.6.0</version>
+    <fmfv>0.6.2</fmfv>
+    <fdv>0.6.4</fdv>
+    <cdate>2011-11-26</cdate>
+    <lmdate>2011-11-26</lmdate>
+    <icon>__theme__/freemedforms.png</icon>
+    <weblink></weblink>
+    <bibliography/>
+
+    <!-- Translatable values -->
+    <licence>GPLv3</licence>
+    <description lang="fr">Données par défaut pour FreeMedForms</description>
+    <description lang="xx">Default data for FreeMedForms</description>
+    <updateinfo>
+      <updateversion from="0.6.0">
+        <text lang="fr">Première mise à disposition.</text>
+        <text lang="en">First release.</text>
+      </updateversion>
+    </updateinfo>
+
+  </ServerDescription>
+
+  <ServerContents>
+    <Pack afn="" m="" s="" df="" as=""/>
+    <Pack afn="" m="" s="" df="" as=""/>
+  </ServerContents>
+
+</DataPackServer>
