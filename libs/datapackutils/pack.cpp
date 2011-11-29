@@ -28,11 +28,25 @@
 
 using namespace DataPack;
 
-Pack::Pack()
+Pack::Pack() :
+    m_Sha1Checked(false), m_Md5Checked(false)
 {
 }
 
 Pack::~Pack()
 {
+}
+
+bool Pack::isSha1Checked() const
+{
+    // TODO
+    // Une fois le fichier télécharger, vérifie la sha1 locale avec celle donnée par le serveur
+}
+
+bool Pack::isMd5Checked() const
+{
+    // TODO
+    // Une fois le fichier télécharger, vérifie la md5 locale avec celle donnée par le serveur
+
 }
 

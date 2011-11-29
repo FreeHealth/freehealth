@@ -49,12 +49,7 @@ class DATAPACK_EXPORT PackDescription : public Utils::GenericDescription
 {
 public:
     PackDescription();
-//    virtual ~PackDescription();
-
 };
-
-
-
 
 }  // End namespace DataPack
 
