@@ -19,3 +19,4 @@ OTHER_FILES += update-fmf.txt \
                global_resources/textfiles/FreeMedForms.desktop \
                freemedforms/Info.plist
 
+
