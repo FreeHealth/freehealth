@@ -255,9 +255,22 @@ bool GenericDescription::toDomElement(QDomElement *root, QDomDocument *doc) cons
     return true;
 }
 
-void GenericDescription::addUpdateInformation(Utils::GenericUpdateInformation updateInfo)
+void GenericDescription::addUpdateInformation(const Utils::GenericUpdateInformation &updateInfo)
 {
     m_UpdateInfos.append(updateInfo);
+    qSort(m_UpdateInfos.begin(), m_UpdateInfos.end(), Utils::GenericUpdateInformation::greaterThan);
+}
+
+void GenericDescription::removeUpdateInformation(int index)
+{
+    if (index >= 0 && index < m_UpdateInfos.count()) {
+        m_UpdateInfos.removeAt(index);
+    }
+}
+
+void GenericDescription::insertUpdateInformation(int index, const Utils::GenericUpdateInformation &updateInfo)
+{
+    m_UpdateInfos.insert(index, updateInfo);
 }
 
 QList<Utils::GenericUpdateInformation> GenericDescription::updateInformation() const

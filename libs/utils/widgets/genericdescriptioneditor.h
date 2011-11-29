@@ -53,12 +53,16 @@ public Q_SLOTS:
     Utils::GenericDescription submit();
 
 private Q_SLOTS:
+    void on_updateVersions_activated(const int index);
     void on_langSelector_activated(const QString &text);
+    void on_langSelectorUpdate_activated(const QString &text);
+    void setUpdateInformation();
 
 private:
     Internal::Ui::GenericDescriptionEditor *ui;
     Utils::GenericDescription m_desc;
-    QString m_PreviousLang;
+    QString m_PreviousLang, m_PreviousUpdateLang;
+    int m_LastEditingUpdateIndex;
 };
 
 }  // End namespace Utils

@@ -106,7 +106,9 @@ public:
     virtual bool toDomElement(QDomElement *root, QDomDocument *doc) const;
 
     // Manage update informations
-    void addUpdateInformation(Utils::GenericUpdateInformation updateInfo);
+    void addUpdateInformation(const Utils::GenericUpdateInformation &updateInfo);
+    void removeUpdateInformation(int index);
+    void insertUpdateInformation(int index, const Utils::GenericUpdateInformation &updateInfo);
     QList<Utils::GenericUpdateInformation> updateInformation() const;
     QList<Utils::GenericUpdateInformation> updateInformationForVersion(const QString &version) const;
     QList<Utils::GenericUpdateInformation> updateInformationForVersion(const Utils::VersionNumber &version) const;

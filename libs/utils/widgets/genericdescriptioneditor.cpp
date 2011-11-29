@@ -27,6 +27,7 @@
 #include "genericdescriptioneditor.h"
 
 #include <utils/genericdescription.h>
+#include <translationutils/constanttranslations.h>
 
 #include "ui_genericdescriptioneditor.h"
 
@@ -34,15 +35,18 @@
 
 using namespace Utils;
 using namespace Internal;
+using namespace Trans::ConstantTranslations;
 
 GenericDescriptionEditor::GenericDescriptionEditor(QWidget *parent) :
     QWidget(parent),
-    ui(new Ui::GenericDescriptionEditor),
-    m_desc(0)
+    ui(new Internal::Ui::GenericDescriptionEditor),
+    m_desc(0),
+    m_LastEditingUpdateIndex(-1)
 {
     ui->setupUi(this);
     // populate combo
     ui->langSelector->addItems(QStringList() << "xx" << "en" << "fr" << "de" << "es");
+    ui->langSelectorUpdate->addItems(QStringList() << "xx" << "en" << "fr" << "de" << "es");
 }
 
 GenericDescriptionEditor::~GenericDescriptionEditor()
@@ -73,7 +77,49 @@ void GenericDescriptionEditor::setDescription(const Utils::GenericDescription &d
     on_langSelector_activated(ui->langSelector->currentText());
 
     // Setup Update
+    setUpdateInformation();
+}
 
+void GenericDescriptionEditor::setUpdateInformation()
+{
+    ui->updateVersions->clear();
+    for(int i = 0; i < m_desc.updateInformation().count(); ++i) {
+        ui->updateVersions->addItem(tkTr(Trans::Constants::FROM_1_TO_2)
+                                    .arg(m_desc.updateInformation().at(i).fromVersion())
+                                    .arg(m_desc.updateInformation().at(i).toVersion()));
+    }
+    if (m_desc.updateInformation().count() > 0)
+        on_updateVersions_activated(0);
+    else
+        m_LastEditingUpdateIndex = -1;
+}
+
+void GenericDescriptionEditor::on_updateVersions_activated(const int index)
+{
+    int count = m_desc.updateInformation().count();
+    if (index < count && index >= 0) {
+        // get changes
+        if (m_LastEditingUpdateIndex < count && m_LastEditingUpdateIndex >= 0) {
+            GenericUpdateInformation info = m_desc.updateInformation().at(m_LastEditingUpdateIndex);;
+            info.setFromVersion(ui->from->text());
+            info.setToVersion(ui->to->text());
+            info.setToVersion(ui->updateAuthor->text());
+            info.setIsoDate(ui->date->date().toString(Qt::ISODate));
+            info.setAuthor(ui->updateAuthor->text());
+            info.setText(ui->updateText->toPlainText(), ui->langSelectorUpdate->currentText());
+            m_desc.removeUpdateInformation(m_LastEditingUpdateIndex);
+            m_desc.insertUpdateInformation(m_LastEditingUpdateIndex, info);
+        }
+        // update view
+        const GenericUpdateInformation &info = m_desc.updateInformation().at(index);
+        ui->from->setText(info.fromVersion());
+        ui->to->setText(info.toVersion());
+        ui->date->setDate(info.date());
+        ui->updateAuthor->setText(info.author());
+        ui->updateText->setText(info.text(ui->langSelectorUpdate->currentText()));
+        m_LastEditingUpdateIndex = index;
+    }
+    ui->xml->setText(m_desc.toXml());
 }
 
 void GenericDescriptionEditor::on_langSelector_activated(const QString &text)
@@ -98,6 +144,28 @@ void GenericDescriptionEditor::on_langSelector_activated(const QString &text)
     ui->tooltip->setText(m_desc.data(Utils::GenericDescription::ToolTip, text).toString());
 }
 
+void GenericDescriptionEditor::on_langSelectorUpdate_activated(const QString &text)
+{
+    int count = m_desc.updateInformation().count();
+    if (m_PreviousUpdateLang.isEmpty()) {
+        m_PreviousUpdateLang = ui->langSelectorUpdate->currentText();
+    } else {
+        // Save changes to our private description
+        if (m_LastEditingUpdateIndex < count && m_LastEditingUpdateIndex >= 0) {
+            GenericUpdateInformation info = m_desc.updateInformation().at(m_LastEditingUpdateIndex);
+            info.setText(ui->updateText->toPlainText(), m_PreviousUpdateLang);
+            m_desc.removeUpdateInformation(m_LastEditingUpdateIndex);
+            m_desc.insertUpdateInformation(m_LastEditingUpdateIndex, info);
+        }
+        m_PreviousUpdateLang = text;
+    }
+    if (m_LastEditingUpdateIndex < count && m_LastEditingUpdateIndex >= 0) {
+        const GenericUpdateInformation &info = m_desc.updateInformation().at(m_LastEditingUpdateIndex);
+        ui->updateText->setText(info.text(text));
+    }
+    ui->xml->setText(m_desc.toXml());
+}
+
 Utils::GenericDescription GenericDescriptionEditor::submit()
 {
     m_desc.setData(Utils::GenericDescription::Uuid, ui->uuid->text());
@@ -120,6 +188,19 @@ Utils::GenericDescription GenericDescriptionEditor::submit()
     m_desc.setData(Utils::GenericDescription::ShortDescription, ui->shortDescr->toPlainText(), ui->langSelector->currentText());
     m_desc.setData(Utils::GenericDescription::Specialties, ui->spe->text(), ui->langSelector->currentText());
     m_desc.setData(Utils::GenericDescription::ToolTip, ui->tooltip->text(), ui->langSelector->currentText());
+
+    int count = m_desc.updateInformation().count();
+    if (m_LastEditingUpdateIndex < count && m_LastEditingUpdateIndex >= 0) {
+        GenericUpdateInformation info = m_desc.updateInformation().at(m_LastEditingUpdateIndex);;
+        info.setFromVersion(ui->from->text());
+        info.setToVersion(ui->to->text());
+        info.setToVersion(ui->updateAuthor->text());
+        info.setIsoDate(ui->date->date().toString(Qt::ISODate));
+        info.setAuthor(ui->updateAuthor->text());
+        info.setText(ui->updateText->toPlainText(), ui->langSelectorUpdate->currentText());
+        m_desc.removeUpdateInformation(m_LastEditingUpdateIndex);
+        m_desc.insertUpdateInformation(m_LastEditingUpdateIndex, info);
+    }
 
     return m_desc;
 }

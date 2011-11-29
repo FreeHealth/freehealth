@@ -56,16 +56,19 @@ public:
     void setFromVersion(const QString &version) {m_From = version;}
     void setToVersion(const QString &version) {m_To = version;}
     void setIsoDate(const QString &date) {m_Date = date;}
+    void setAuthor(const QString &a) {m_Author = a;}
     void setText(const QString &text, const QString &lang = QString::null);
 
     QString fromVersion() const {return m_From;}
     QString toVersion() const {return m_To;}
     QString dateIso() const {return m_Date;}
+    QString author() const {return m_Author;}
     QDate date() const {return QDate::fromString(m_Date, Qt::ISODate);}
     QString text(const QString lang = QString::null) const;
 
 //    static bool lessThan(const GenericUpdateInformation *one, const GenericUpdateInformation *two);
     static bool lessThan(const GenericUpdateInformation &one, const GenericUpdateInformation &two);
+    static bool greaterThan(const GenericUpdateInformation &one, const GenericUpdateInformation &two);
 
     static QList<GenericUpdateInformation> updateInformationForVersion(const QList<GenericUpdateInformation> &list, const QString &version);
     static QList<GenericUpdateInformation> updateInformationForVersion(const QList<GenericUpdateInformation> &list, const Utils::VersionNumber &version);
@@ -75,7 +78,7 @@ public:
     bool toDomElement(QDomElement *root, QDomDocument *document) const;
 
 private:
-    QString m_From, m_To, m_Date;
+    QString m_From, m_To, m_Date, m_Author;
     QHash<QString, QString> m_TrText;
 };
 

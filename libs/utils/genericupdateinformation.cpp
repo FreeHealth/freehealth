@@ -80,6 +80,11 @@ bool GenericUpdateInformation::lessThan(const GenericUpdateInformation &one, con
     return (one.fromVersion() < two.fromVersion());
 }
 
+bool GenericUpdateInformation::greaterThan(const GenericUpdateInformation &one, const GenericUpdateInformation &two)
+{
+    return (one.fromVersion() > two.fromVersion());
+}
+
 /** Return the information related to specified \e version and higher */
 QList<GenericUpdateInformation> GenericUpdateInformation::updateInformationForVersion(const QList<GenericUpdateInformation> &list, const QString &version)
 {

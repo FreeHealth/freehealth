@@ -56,10 +56,12 @@ public:
     void setDescription(const Utils::GenericDescription &desc);
 
 private:
+    Utils::GenericDescription submit();
     void done(int r);
 
 private:
     Ui::GenericInformationEditorDialog *ui;
+    Utils::GenericDescription m_desc;
 };
 
 

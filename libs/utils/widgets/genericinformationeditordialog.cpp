@@ -42,7 +42,16 @@ GenericInformationEditorDialog::~GenericInformationEditorDialog()
 }
 
 void GenericInformationEditorDialog::setDescription(const Utils::GenericDescription &desc)
-{}
+{
+    m_desc = desc;
+    ui->widget->setDescription(desc);
+}
+
+Utils::GenericDescription GenericInformationEditorDialog::submit()
+{
+}
 
 void GenericInformationEditorDialog::done(int r)
-{}
+{
+    QDialog::done(r);
+}
