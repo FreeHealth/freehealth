@@ -34,6 +34,8 @@
 #include <QNetworkConfigurationManager>
 #include <QNetworkRequest>
 #include <QDir>
+#include <QDomDocument>
+#include <QDomElement>
 
 #include <QDebug>
 
@@ -42,9 +44,16 @@ using namespace Trans::ConstantTranslations;
 
 namespace {
 
-const char * const TAG_ROOT = "ServerManager";
-const char * const TAG_SERVER = "Server";
+const char * const TAG_ROOT                 = "ServerManagerConfig";
+const char * const TAG_SERVER               = "Server";
 
+const char * const TAG_PACK                 = "Pack";
+
+const char * const ATTRIB_URL               = "url";
+const char * const ATTRIB_LASTCHECK         = "lastChk";
+const char * const ATTRIB_RECORDEDVERSION   = "recVer";
+const char * const ATTRIB_INSTALLED         = "inst";
+const char * const ATTRIB_INSTALLPATH       = "instPath";
 
 }  // End namespace Anonymous
 
@@ -66,30 +75,43 @@ ServerManager::~ServerManager()
     // Servers are delete by the QObject inheritance
 }
 
-bool ServerManager::setGlobalConfiguration(const QString &xmlContent, QString *errorMsg = 0)
+bool ServerManager::setGlobalConfiguration(const QString &xmlContent, QString *errorMsg)
 {
+    QDomDocument doc;
+    QString msg;
+    int col, line;
+    if (!doc.setContent(xmlContent, &msg, &line, &col)) {
+        if (errorMsg) {
+            errorMsg->append(QString("XML Error (l:%1;c:%2): %3.").arg(line).arg(col).arg(msg));
+        }
+        return false;
+    }
+
+    QDomElement root = doc.firstChildElement(::TAG_ROOT);
+    // Read servers
+    QDomElement server = root.firstChildElement(::TAG_SERVER);
+    while (!server.isNull()) {
+        Server s;
+        s.setUrl(server.attribute(::ATTRIB_URL));
+
+        server = server.nextSiblingElement(::TAG_SERVER);
+    }
 }
 
 QString ServerManager::xmlConfiguration() const
-{}
+{
+}
 
 void ServerManager::connectServer(const Server &server, const ServerIdentification &ident)
 {
     // TODO
     Q_UNUSED(server);
     Q_UNUSED(ident);
-    if (server.isLocalPath()) {
-//        server.setConnected(true);
-        return;
-    }
 }
 
 ServerDescription ServerManager::downloadServerDescription(const Server &server)
 {
     // TODO
-    if (server.isLocalPath()) {
-
-    }
     ServerDescription desc;
     return desc;
 }

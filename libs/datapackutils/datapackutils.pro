@@ -11,7 +11,6 @@ DEFINES *= DATAPACKUTILS_LIBRARY
 HEADERS += datapack_exporter.h \
     servermanager.h \
     server.h \
-    server_p.h \
     serverdescription.h \
     packdescription.h \
     pack.h \
@@ -24,7 +23,6 @@ HEADERS += datapack_exporter.h \
 SOURCES += \
     servermanager.cpp \
     server.cpp \
-    server_p.cpp \
     serverdescription.cpp \
     packdescription.cpp \
     pack.cpp \

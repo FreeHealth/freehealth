@@ -26,10 +26,10 @@
  ***************************************************************************/
 #ifndef DATAPACK_SERVER_H
 #define DATAPACK_SERVER_H
-
-#include <QUrl>
-
 #include <datapackutils/datapack_exporter.h>
+
+#include <QString>
+#include <QDateTime>
 
 /**
  * \file server.h
@@ -39,27 +39,35 @@
 */
 
 namespace DataPack {
-namespace Internal {
-class ServerPrivate;
-}
 
-class DATAPACK_EXPORT Server : public QObject
+class DATAPACK_EXPORT Server
 {
-	Q_OBJECT
 public:
     Server(const QString &url = QString::null, QObject *parent = 0);
-    virtual ~Server();
+    virtual ~Server() {}
 
     void setUrl(const QString &url);
-    const QString &url() const;
-    bool isLocalPath() const;
+    const QString &url() const {return m_Url;}
 
-    void connectAndUpdate();
+    void setLocalVersion(const QString &version) {m_LocalVersion=version;}
+    const QString &localVersion() const {return m_LocalVersion;}
 
-    bool isConnected() const;
+    void setLastChecked(const QDateTime &dt) {m_LastCheck=dt;}
+    const QDateTime &lastChecked() const {return m_LastCheck;}
+
+    void setConnected(bool connected) {m_Connected=connected;}
+    bool isConnected() const {return m_Connected;}
+
+    void setIsLocalServer(bool isLocal) {m_IsLocal=isLocal;}
+    bool isLocalServer() const {return m_IsLocal;}
+
+    // OBSOLETE
+    void connectAndUpdate() {}
 
 private:
-    Internal::ServerPrivate *m_d;
+    QString m_Url, m_LocalVersion;
+    QDateTime m_LastCheck;
+    bool m_Connected, m_IsLocal;
 };
 
 }  // End namespace DataPack

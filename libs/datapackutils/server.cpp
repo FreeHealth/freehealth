@@ -25,7 +25,6 @@
  *       NAME <MAIL@ADRESS>                                                *
  ***************************************************************************/
 #include "server.h"
-#include "server_p.h"
 
 #include <utils/log.h>
 #include <translationutils/constanttranslations.h>
@@ -35,61 +34,32 @@
 #include <QDebug>
 
 using namespace DataPack;
-using namespace Internal;
 using namespace Trans::ConstantTranslations;
 
-Server::Server(const QString &url, QObject *parent) : QObject(parent),
-	m_d(new ServerPrivate(url))
+Server::Server(const QString &url, QObject *parent) :
+    m_Connected(false), m_IsLocal(false)
 {
-    setObjectName("DataPack::Server");
     setUrl(url);
-}
-
-Server::~Server()
-{
-    // TODO stop all jobs linked to the server if there are running ones
 }
 
 void Server::setUrl(const QString &url)
 {
-    m_d->m_IsLocal = false;
-    m_d->url.clear();
-    qWarning() << url;
+    m_IsLocal = false;
+    m_Url.clear();
     if (url.startsWith("file://", Qt::CaseInsensitive)) {
         QString t = url;
         QFileInfo file(t.replace("file:/", ""));
         if (file.exists() && file.isDir()) {
-            m_d->url = url;
-            m_d->m_IsLocal = true;
-            m_d->connected = true;
-            LOG("Local server added. Path: " + t.replace("file:/", ""));
+            m_Url = url;
+            m_IsLocal = true;
+            m_Connected = true;
+            LOG_FOR("DataPackServer", "Local server added. Path: " + t.replace("file:/", ""));
         } else {
-            LOG_ERROR(tkTr(Trans::Constants::PATH_1_DOESNOT_EXISTS).arg(url));
-            m_d->connected = false;
+            LOG_ERROR_FOR("DataPackServer", tkTr(Trans::Constants::PATH_1_DOESNOT_EXISTS).arg(url));
+            m_Connected = false;
             return;
         }
     }
-    m_d->url = url;
+    m_Url = url;
 }
 
-const QString &Server::url() const
-{
-    return m_d->url;
-}
-
-bool Server::isConnected() const
-{
-    return m_d->connected;
-}
-
-/** Return true if server's url starts with \e file:// and path exists. */
-bool Server::isLocalPath() const
-{
-    return m_d->m_IsLocal;
-}
-
-void Server::connectAndUpdate()
-{
-    if (!m_d->m_IsLocal)
-        m_d->connectAndUpdate();
-}
