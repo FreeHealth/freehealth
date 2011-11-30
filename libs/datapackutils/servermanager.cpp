@@ -42,7 +42,7 @@ using namespace Trans::ConstantTranslations;
 
 ServerManager::ServerManager(QObject *parent) :
     IServerManager(parent),
-    networkAccessManager(new QNetworkAccessManager(this))
+    m_NetworkAccessManager(new QNetworkAccessManager(this))
 {
     setObjectName("ServerManager");
 //    if (!QDir(filesCachePath).exists()) {
@@ -53,7 +53,8 @@ ServerManager::ServerManager(QObject *parent) :
 
 ServerManager::~ServerManager()
 {
-    delete networkAccessManager;
+    delete m_NetworkAccessManager;
+    // Servers are delete by the QObject inheritance
 }
 
 void ServerManager::connectServer(const Server &server, const ServerIdentification &ident)
@@ -107,7 +108,7 @@ QString ServerManager::cachePath() const
     return filesCachePath;
 }
 
-bool ServerManager::addServer(const QUrl &url)
+bool ServerManager::addServer(const QString &url)
 {
     // check if a server already exists with the same URL
     foreach (Server *child, m_Servers)
@@ -126,7 +127,7 @@ Server *ServerManager::getServerAt(int index) const
     return 0;
 }
 
-int ServerManager::getServerIndex(const QUrl &url) const
+int ServerManager::getServerIndex(const QString &url) const
 {
     for (int i = 0; i < m_Servers.count(); i++)
         if (m_Servers.at(i)->url() == url)

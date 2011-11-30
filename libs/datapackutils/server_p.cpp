@@ -25,6 +25,7 @@
  *       Guillaume DENRY <guillaume.denry@gmail.com>                       *
  ***************************************************************************/
 #include "server_p.h"
+#include "servermanager.h"
 #include "core.h"
 
 #include <utils/log.h>
@@ -35,13 +36,14 @@
 using namespace DataPack;
 using namespace Internal;
 
-
-ServerPrivate::ServerPrivate(const QUrl &url) :
-    QObject(), m_IsLocal(false)
+ServerPrivate::ServerPrivate(const QString &url) :
+    QObject(), m_IsLocal(false), networkAccessManager(0)
 {
-    setObjectName("DataPack::Server");
+    setObjectName("DataPack::ServerPrivate");
     this->url = url;
-    networkAccessManager = DataPack::Core::instance()->networkManager();
+    ServerManager * s = qobject_cast<ServerManager*>(DataPack::Core::instance()->serverManager());
+    if (s)
+        networkAccessManager = s->networkAccessManager();
 }
 
 void ServerPrivate::connectAndUpdate()

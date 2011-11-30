@@ -27,17 +27,22 @@
 #include "server.h"
 #include "server_p.h"
 
+#include <utils/log.h>
 #include <translationutils/constanttranslations.h>
 
 #include <QFileInfo>
 
+#include <QDebug>
+
 using namespace DataPack;
 using namespace Internal;
+using namespace Trans::ConstantTranslations;
 
-Server::Server(const QUrl &url, QObject *parent) : QObject(parent),
+Server::Server(const QString &url, QObject *parent) : QObject(parent),
 	m_d(new ServerPrivate(url))
 {
-//    m_d->networkAccessManager = qobject_cast<ServerManagerPrivate*>(parent)->networkAccessManager;
+    setObjectName("DataPack::Server");
+    setUrl(url);
 }
 
 Server::~Server()
@@ -45,27 +50,29 @@ Server::~Server()
     // TODO stop all jobs linked to the server if there are running ones
 }
 
-void Server::setUrl(const QUrl &url)
+void Server::setUrl(const QString &url)
 {
     m_d->m_IsLocal = false;
     m_d->url.clear();
-//    if (url.startsWith("file://", Qt::CaseInsensitive)) {
-//        QString t = url;
-//        QFileInfo file(t.replace("file:/", ""));
-//        if (file.exists() && file.isDir()) {
-//            m_d->url = url;
-//            m_d->m_IsLocal = true;
-//            m_d->connected = true;
-//        } else {
-//            LOG_ERROR(tkTr(Trans::Constants::PATH_1_DOESNOT_EXISTS).arg(url));
-//            m_d->connected = false;
-//            return;
-//        }
-//    }
+    qWarning() << url;
+    if (url.startsWith("file://", Qt::CaseInsensitive)) {
+        QString t = url;
+        QFileInfo file(t.replace("file:/", ""));
+        if (file.exists() && file.isDir()) {
+            m_d->url = url;
+            m_d->m_IsLocal = true;
+            m_d->connected = true;
+            LOG("Local server added. Path: " + t.replace("file:/", ""));
+        } else {
+            LOG_ERROR(tkTr(Trans::Constants::PATH_1_DOESNOT_EXISTS).arg(url));
+            m_d->connected = false;
+            return;
+        }
+    }
     m_d->url = url;
 }
 
-const QUrl &Server::url() const
+const QString &Server::url() const
 {
     return m_d->url;
 }

@@ -67,7 +67,7 @@ public:
      * \param url the URL of the target server
      * \return false if a server with the same URL already exists
      */
-    virtual bool addServer(const QUrl &url) = 0;
+    virtual bool addServer(const QString &url) = 0;
 
     /**
      * Get the server at a specific index
@@ -81,7 +81,7 @@ public:
      * \param url the url from which we want the server index
      * \return the server index matching the url parameter or -1 if not found
      */
-    virtual int getServerIndex(const QUrl &url) const = 0;
+    virtual int getServerIndex(const QString &url) const = 0;
 
     /**
      * Remove a server

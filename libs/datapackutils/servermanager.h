@@ -51,11 +51,12 @@ public:
     explicit ServerManager(QObject *parent = 0);
     ~ServerManager();
 
+    // IServerManager interface
     void connectServer(const Server &server, const ServerIdentification &ident = ServerIdentification()); // will be deprecated regarding the connectAndUpdate function
 
-    bool addServer(const QUrl &url);
+    bool addServer(const QString &url);
     Server *getServerAt(int index) const;
-    int getServerIndex(const QUrl &url) const;
+    int getServerIndex(const QString &url) const;
     void removeServerAt(int index);
     void connectAndUpdate(int index);
 
@@ -65,6 +66,10 @@ public:
 
     bool installDataPack(const Server &server, const Pack &pack);
 
+    // Private part
+    QNetworkAccessManager *networkAccessManager() const {return m_NetworkAccessManager;}
+
+
 protected:
     QString cachePath() const;
 
@@ -73,7 +78,7 @@ Q_SIGNALS:
     void serverInfosUpdated(int serverId); // emitted when a server infos have been updated
 
 private:
-    QNetworkAccessManager *networkAccessManager;
+    QNetworkAccessManager *m_NetworkAccessManager;
     QString filesCachePath;
     QVector<Server *> m_Servers;
 };

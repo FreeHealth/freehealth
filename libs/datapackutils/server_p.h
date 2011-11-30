@@ -38,12 +38,12 @@ class ServerPrivate : public QObject
 {
     Q_OBJECT
 public:
-    ServerPrivate(const QUrl &url = QUrl());
+    ServerPrivate(const QString &url = QString::null);
 
     bool connected;
-    QUrl url;
-    QNetworkAccessManager *networkAccessManager;
+    QString url;
     bool m_IsLocal;
+    QNetworkAccessManager *networkAccessManager;
 
     void connectAndUpdate();
 

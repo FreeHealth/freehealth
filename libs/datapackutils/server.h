@@ -47,11 +47,11 @@ class DATAPACK_EXPORT Server : public QObject
 {
 	Q_OBJECT
 public:
-    Server(const QUrl &url = QUrl(), QObject *parent = 0);
+    Server(const QString &url = QString::null, QObject *parent = 0);
     virtual ~Server();
 
-    void setUrl(const QUrl &url);
-    const QUrl &url() const;
+    void setUrl(const QString &url);
+    const QString &url() const;
     bool isLocalPath() const;
 
     void connectAndUpdate();
