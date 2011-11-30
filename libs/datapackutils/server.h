@@ -54,7 +54,7 @@ public:
     const QUrl &url() const;
     bool isLocalPath() const;
 
-	void connectAndUpdate();
+    void connectAndUpdate();
 
     bool isConnected() const;
 

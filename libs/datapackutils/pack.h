@@ -28,6 +28,7 @@
 #define DATAPACK_PACK_H
 
 #include <datapackutils/datapack_exporter.h>
+#include <QString>
 
 namespace DataPack {
 
@@ -38,6 +39,7 @@ public:
     virtual ~Pack();
 
     QString serverFileName() const {return m_ServerFileName;}
+    QString serverLicenceFileName() const {return m_ServerLicenceFileName;}
     QString md5ControlChecksum() const {return m_Md5;}
     QString sha1ControlChecksum() const {return m_Sha1;}
 
@@ -53,7 +55,7 @@ public:
     void setDownloadedFileName(const QString &f) {m_DownFileName=f;}
 
 private:
-    QString m_ServerFileName, m_Md5, m_Sha1, m_DownFileName;
+    QString m_ServerFileName, m_ServerLicenceFileName, m_Md5, m_Sha1, m_DownFileName;
     bool m_Sha1Checked, m_Md5Checked;
 };
 
