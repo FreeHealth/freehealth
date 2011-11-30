@@ -18,7 +18,9 @@ HEADERS += datapack_exporter.h \
     pack.h \
     serveridentification.h \
     constants.h \
-    servercontents.h
+    servercontents.h \
+    core.h \
+    iservermanager.h
 
 SOURCES += \
     servermanager.cpp \
@@ -29,7 +31,11 @@ SOURCES += \
     packdescription.cpp \
     pack.cpp \
     serveridentification.cpp \
-    servercontents.cpp
+    servercontents.cpp \
+    core.cpp
+
+
+
 
 
 

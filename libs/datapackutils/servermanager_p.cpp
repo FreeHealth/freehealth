@@ -35,6 +35,7 @@ bool ServerManagerPrivate::addServer(const QUrl &url)
 
 void ServerManagerPrivate::connectAndUpdate(int index)
 {
+    // Houla dangereux si index > children().count --> segfault...
 	qobject_cast<Server*>(children()[index])->connectAndUpdate();
 }
 

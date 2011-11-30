@@ -22,38 +22,65 @@
  *   Main Developpers :                                                    *
  *       Eric MAEKER, MD <eric.maeker@gmail.com>                           *
  *   Contributors :                                                        *
- *       Guillaume DENRY <guillaume.denry@gmail.com>                       *
+ *       NAME <MAIL@ADRESS>                                                *
  ***************************************************************************/
-#ifndef DATAPACK_SERVER_P_H
-#define DATAPACK_SERVER_P_H
+#include "core.h"
+#include "servermanager.h"
 
-#include <QUrl>
-#include <QNetworkReply>
 #include <QNetworkAccessManager>
+
+using namespace DataPack;
+
+namespace  {
+static DataPack::Core *m_instance = 0;
+} // namespace anonymous
+
+DataPack::Core* DataPack::Core::instance(QObject *parent)
+{
+    if (!m_instance)
+        m_instance = new Core(parent);
+    return m_instance;
+}
+
 
 namespace DataPack {
 namespace Internal {
-
-class ServerPrivate : public QObject
+class CorePrivate
 {
-    Q_OBJECT
 public:
-    ServerPrivate(const QUrl &url = QUrl());
+    CorePrivate() : m_ServerManager(0), networkManager(0) {}
 
-    bool connected;
-    QUrl url;
-    QNetworkAccessManager *networkAccessManager;
-    bool m_IsLocal;
-
-    void connectAndUpdate();
-
-public Q_SLOTS:
-    void requestReadyRead();
-    void requestFinished();
-    void requestError(QNetworkReply::NetworkError error);
+public:
+    ServerManager *m_ServerManager;
+    QNetworkAccessManager *networkManager;
 };
-
 }  // End namespace Internal
 }  // End namespace DataPack
 
-#endif // DATAPACK_SERVER_P_H
+Core::Core(QObject *parent) :
+    QObject(parent),
+    d(new Internal::CorePrivate)
+{
+    d->m_ServerManager = new ServerManager(this);
+    d->networkManager = new QNetworkAccessManager(this);
+}
+
+bool Core::isInternetConnexionAvailable()
+{
+//    foreach(const QNetworkConfiguration &conf, QNetworkConfigurationManager().allConfigurations()) {
+//        qWarning() << conf.bearerName() << conf.bearerTypeName() << conf.state() << conf.identifier() << conf.name();
+//    }
+    // TODO
+    return true;
+}
+
+IServerManager *Core::serverManager() const
+{
+    return d->m_ServerManager;
+}
+
+QNetworkAccessManager *Core::networkManager() const
+{
+    return d->networkManager;
+}
+

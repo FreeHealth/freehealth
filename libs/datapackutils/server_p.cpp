@@ -25,6 +25,7 @@
  *       Guillaume DENRY <guillaume.denry@gmail.com>                       *
  ***************************************************************************/
 #include "server_p.h"
+#include "core.h"
 
 #include <utils/log.h>
 #include <utils/global.h>
@@ -34,11 +35,13 @@
 using namespace DataPack;
 using namespace Internal;
 
+
 ServerPrivate::ServerPrivate(const QUrl &url) :
-    QObject()
+    QObject(), m_IsLocal(false)
 {
     setObjectName("DataPack::Server");
     this->url = url;
+    networkAccessManager = DataPack::Core::instance()->networkManager();
 }
 
 void ServerPrivate::connectAndUpdate()
@@ -60,7 +63,13 @@ void ServerPrivate::connectAndUpdate()
 void ServerPrivate::requestReadyRead()
 {
     WARN_FUNC;
-
+    Q_ASSERT(networkAccessManager);
+    QNetworkReply *reply = qobject_cast<QNetworkReply*>(sender());
+    if (!reply) {
+        LOG_ERROR("BUGGGG");
+        return;
+    }
+//    QString content = reply->readAll();
 }
 
 void ServerPrivate::requestFinished()

@@ -24,60 +24,94 @@
  *   Contributors :                                                        *
  *       NAME <MAIL@ADRESS>                                                *
  ***************************************************************************/
-#ifndef DATAPACK_SERVERMANAGER_H
-#define DATAPACK_SERVERMANAGER_H
+#ifndef DATAPACK_ISERVERMANAGER_H
+#define DATAPACK_ISERVERMANAGER_H
 
-#include <datapackutils/iservermanager.h>
-QT_BEGIN_NAMESPACE
-class QNetworkAccessManager;
-QT_END_NAMESPACE
+#include <datapackutils/datapack_exporter.h>
+
+// IMPROVE THIS
+#include <datapackutils/server.h>
+#include <datapackutils/pack.h>
+#include <datapackutils/serveridentification.h>
+#include <datapackutils/serverdescription.h>
+#include <datapackutils/packdescription.h>
+
+#include <QObject>
 
 /**
- * \file servermanager.h
+ * \file iservermanager.h
  * \author Eric MAEKER <eric.maeker@gmail.com>
  * \version 0.6.2
- * \date 25 Nov 2011
+ * \date 30 Nov 2011
  * Needs Qt >= 4.7
 */
 
 namespace DataPack {
+class Core;
 
-class ServerManagerPrivate;
-
-class ServerManager : public IServerManager
+class DATAPACK_EXPORT IServerManager : public QObject
 {
     Q_OBJECT
-public:
-    explicit ServerManager(QObject *parent = 0);
-    ~ServerManager();
-
-    void connectServer(const Server &server, const ServerIdentification &ident = ServerIdentification()); // will be deprecated regarding the connectAndUpdate function
-
-    bool addServer(const QUrl &url);
-    Server *getServerAt(int index) const;
-    int getServerIndex(const QUrl &url) const;
-    void removeServerAt(int index);
-    void connectAndUpdate(int index);
-
-    ServerDescription downloadServerDescription(const Server &server);
-    QList<PackDescription> downloadPackDescription(const Server &server, const Pack &pack);
-    Pack downloadAndUnzipPack(const Server &server, const Pack &pack);
-
-    bool installDataPack(const Server &server, const Pack &pack);
+    friend class DataPack::Core;
 
 protected:
-    QString cachePath() const;
+    explicit IServerManager(QObject *parent = 0) : QObject(parent) {}
+
+public:
+    virtual ~IServerManager() {}
+
+    virtual void connectServer(const Server &server, const ServerIdentification &ident = ServerIdentification()) = 0;
+
+    /**
+     * Add a new server
+     * \param url the URL of the target server
+     * \return false if a server with the same URL already exists
+     */
+    virtual bool addServer(const QUrl &url) = 0;
+
+    /**
+     * Get the server at a specific index
+     * \param index the server index
+     * \return the server
+     */
+    virtual Server *getServerAt(int index) const = 0;
+
+    /**
+     * Get the index of the server for a specific URL
+     * \param url the url from which we want the server index
+     * \return the server index matching the url parameter or -1 if not found
+     */
+    virtual int getServerIndex(const QUrl &url) const = 0;
+
+    /**
+     * Remove a server
+     * \param id the ID of the server to remove
+     */
+    virtual void removeServerAt(int index) = 0;
+
+    /**
+     * Connect and update a server infos. Asynchronous.
+     * When the server is updated, the signal "serverInfosUpdated" is emitted.
+     * \param index the index of the server to update infos of
+     */
+    virtual void connectAndUpdate(int index) = 0;
+
+    virtual ServerDescription downloadServerDescription(const Server &server) = 0;
+    virtual QList<PackDescription> downloadPackDescription(const Server &server, const Pack &pack) = 0;
+    virtual Pack downloadAndUnzipPack(const Server &server, const Pack &pack) = 0;
+
+    virtual bool installDataPack(const Server &server, const Pack &pack) = 0;
+
+protected:
+    virtual QString cachePath() const = 0;
 
 Q_SIGNALS:
     void serverConnected(const Server &server, const ServerIdentification &ident);
     void serverInfosUpdated(int serverId); // emitted when a server infos have been updated
 
-private:
-    QNetworkAccessManager *networkAccessManager;
-    QString filesCachePath;
-    QVector<Server *> m_Servers;
 };
 
 }  // End namespace DataPack
 
-#endif // DATAPACK_SERVERMANAGER_H
+
+#endif // DATAPACK_ISERVERMANAGER_H

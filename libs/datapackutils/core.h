@@ -22,38 +22,48 @@
  *   Main Developpers :                                                    *
  *       Eric MAEKER, MD <eric.maeker@gmail.com>                           *
  *   Contributors :                                                        *
- *       Guillaume DENRY <guillaume.denry@gmail.com>                       *
+ *       NAME <MAIL@ADRESS>                                                *
  ***************************************************************************/
-#ifndef DATAPACK_SERVER_P_H
-#define DATAPACK_SERVER_P_H
+#ifndef DATAPACK_CORE_H
+#define DATAPACK_CORE_H
 
-#include <QUrl>
-#include <QNetworkReply>
-#include <QNetworkAccessManager>
+#include <datapackutils/datapack_exporter.h>
+#include <QObject>
+class QNetworkAccessManager;
+
+
+/**
+ * \file core.h
+ * \author Eric MAEKER <eric.maeker@gmail.com>
+ * \version 0.6.2
+ * \date 30 Nov 2011
+ * Needs Qt >= 4.7
+*/
 
 namespace DataPack {
+class IServerManager;
 namespace Internal {
+class CorePrivate;
+}
 
-class ServerPrivate : public QObject
+
+class DATAPACK_EXPORT Core : public QObject
 {
     Q_OBJECT
+    explicit Core(QObject *parent = 0);
+
 public:
-    ServerPrivate(const QUrl &url = QUrl());
+    static Core *instance(QObject *parent = 0);
 
-    bool connected;
-    QUrl url;
-    QNetworkAccessManager *networkAccessManager;
-    bool m_IsLocal;
+    bool isInternetConnexionAvailable();
+    IServerManager *serverManager() const;
 
-    void connectAndUpdate();
+    QNetworkAccessManager *networkManager() const;
 
-public Q_SLOTS:
-    void requestReadyRead();
-    void requestFinished();
-    void requestError(QNetworkReply::NetworkError error);
+private:
+    Internal::CorePrivate *d;
 };
 
-}  // End namespace Internal
 }  // End namespace DataPack
 
-#endif // DATAPACK_SERVER_P_H
+#endif // DATAPACK_CORE_H

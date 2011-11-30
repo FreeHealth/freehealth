@@ -24,13 +24,13 @@
  *   Contributors :                                                        *
  *       NAME <MAIL@ADRESS>                                                *
  ***************************************************************************/
-
-#include "servermanager_p.h"
+//#include "servermanager_p.h"
 #include "servermanager.h"
 
 #include <utils/log.h>
 #include <translationutils/constanttranslations.h>
 
+#include <QNetworkAccessManager>
 #include <QNetworkConfigurationManager>
 #include <QNetworkRequest>
 #include <QDir>
@@ -40,24 +40,20 @@
 using namespace DataPack;
 using namespace Trans::ConstantTranslations;
 
-ServerManager::ServerManager(const QString &filesCachePath, QObject *parent) :
-    QObject(parent),
-	m_d(new ServerManagerPrivate)
+ServerManager::ServerManager(QObject *parent) :
+    IServerManager(parent),
+    networkAccessManager(new QNetworkAccessManager(this))
 {
     setObjectName("ServerManager");
-    if (!QDir(filesCachePath).exists()) {
-        LOG_ERROR(tkTr(Trans::Constants::PATH_1_DOESNOT_EXISTS).arg(filesCachePath));
-    }
-	m_d->filesCachePath = QDir::cleanPath(filesCachePath);
+//    if (!QDir(filesCachePath).exists()) {
+//        LOG_ERROR(tkTr(Trans::Constants::PATH_1_DOESNOT_EXISTS).arg(filesCachePath));
+//    }
+//    m_d->filesCachePath = QDir::cleanPath(filesCachePath);
 }
 
-bool ServerManager::isInternetConnexionAvailable()
+ServerManager::~ServerManager()
 {
-//    foreach(const QNetworkConfiguration &conf, QNetworkConfigurationManager().allConfigurations()) {
-//        qWarning() << conf.bearerName() << conf.bearerTypeName() << conf.state() << conf.identifier() << conf.name();
-//    }
-    // TODO
-    return true;
+    delete networkAccessManager;
 }
 
 void ServerManager::connectServer(const Server &server, const ServerIdentification &ident)
@@ -106,28 +102,46 @@ bool ServerManager::installDataPack(const Server &server, const Pack &pack)
     return false;
 }
 
+QString ServerManager::cachePath() const
+{
+    return filesCachePath;
+}
+
 bool ServerManager::addServer(const QUrl &url)
 {
-	return m_d->addServer(url);
+    // check if a server already exists with the same URL
+    foreach (Server *child, m_Servers)
+        if (child->url() == url)
+            return false;
+
+    Server *server = new Server(url, this);
+    m_Servers.append(server);
+    return true;
 }
 
 Server *ServerManager::getServerAt(int index) const
 {
-	return qobject_cast<Server*>(m_d->children()[index]);
-//    return m_d->servers[index];
+    if (index < m_Servers.count() && index >= 0)
+        return m_Servers.at(index);
+    return 0;
 }
 
 int ServerManager::getServerIndex(const QUrl &url) const
 {
-	return m_d->getServerIndex(url);
+    for (int i = 0; i < m_Servers.count(); i++)
+        if (m_Servers.at(i)->url() == url)
+            return i;
+    return -1;
 }
 
 void ServerManager::removeServerAt(int index)
 {
-	delete m_d->children()[index];
+    delete m_Servers.at(index);
+    m_Servers.remove(index);
 }
 
 void ServerManager::connectAndUpdate(int index)
 {
-	m_d->connectAndUpdate(index);
+    if (index < m_Servers.count() && index >= 0)
+        m_Servers.at(index)->connectAndUpdate();
 }

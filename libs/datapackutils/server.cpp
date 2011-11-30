@@ -26,7 +26,8 @@
  ***************************************************************************/
 #include "server.h"
 #include "server_p.h"
-#include "servermanager_p.h"
+
+#include <translationutils/constanttranslations.h>
 
 #include <QFileInfo>
 
@@ -36,7 +37,7 @@ using namespace Internal;
 Server::Server(const QUrl &url, QObject *parent) : QObject(parent),
 	m_d(new ServerPrivate(url))
 {
-	m_d->networkAccessManager = qobject_cast<ServerManagerPrivate*>(parent)->networkAccessManager;
+//    m_d->networkAccessManager = qobject_cast<ServerManagerPrivate*>(parent)->networkAccessManager;
 }
 
 Server::~Server()
@@ -46,35 +47,42 @@ Server::~Server()
 
 void Server::setUrl(const QUrl &url)
 {
-	m_d->url = url;
+    m_d->m_IsLocal = false;
+    m_d->url.clear();
+//    if (url.startsWith("file://", Qt::CaseInsensitive)) {
+//        QString t = url;
+//        QFileInfo file(t.replace("file:/", ""));
+//        if (file.exists() && file.isDir()) {
+//            m_d->url = url;
+//            m_d->m_IsLocal = true;
+//            m_d->connected = true;
+//        } else {
+//            LOG_ERROR(tkTr(Trans::Constants::PATH_1_DOESNOT_EXISTS).arg(url));
+//            m_d->connected = false;
+//            return;
+//        }
+//    }
+    m_d->url = url;
 }
 
 const QUrl &Server::url() const
 {
-	return m_d->url;
+    return m_d->url;
 }
 
 bool Server::isConnected() const
 {
-	return m_d->connected;
+    return m_d->connected;
 }
 
 /** Return true if server's url starts with \e file:// and path exists. */
 bool Server::isLocalPath() const
 {
-    // TODO
-    return false;
-/*    if (m_Url.startsWith("file://", Qt::CaseInsensitive)) {
-        QString t = m_Url;
-        QFileInfo file(t.replace("file:/", ""));
-        if (file.exists() && file.isDir()) {
-            return true;
-        }
-    }
-    return false;*/
+    return m_d->m_IsLocal;
 }
 
 void Server::connectAndUpdate()
 {
-	m_d->connectAndUpdate();
+    if (!m_d->m_IsLocal)
+        m_d->connectAndUpdate();
 }
