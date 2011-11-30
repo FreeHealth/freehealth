@@ -94,6 +94,15 @@ void GenericDescription::setRootTag(const QString &rootTag)
         m_RootTag = XML_ROOT_TAG;
 }
 
+/** Clear all data but rootTag */
+void GenericDescription::clear()
+{
+    m_UpdateInfos.clear();
+    m_TranslatableExtra.clear();
+    m_NonTranslatableExtra.clear();
+    m_Data.clear();
+}
+
 /** Return the data of the description. \sa addNonTranslatableExtraData(), addTranslatableExtraData() */
 QVariant GenericDescription::data(const int ref, const QString &lang) const
 {
