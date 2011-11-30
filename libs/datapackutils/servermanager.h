@@ -51,6 +51,9 @@ public:
     explicit ServerManager(QObject *parent = 0);
     ~ServerManager();
 
+    bool setGlobalConfiguration(const QString &xmlContent, QString *errorMsg = 0);
+    QString xmlConfiguration() const;
+
     // IServerManager interface
     void connectServer(const Server &server, const ServerIdentification &ident = ServerIdentification()); // will be deprecated regarding the connectAndUpdate function
 

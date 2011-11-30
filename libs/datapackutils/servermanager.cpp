@@ -40,6 +40,15 @@
 using namespace DataPack;
 using namespace Trans::ConstantTranslations;
 
+namespace {
+
+const char * const TAG_ROOT = "ServerManager";
+const char * const TAG_SERVER = "Server";
+
+
+}  // End namespace Anonymous
+
+
 ServerManager::ServerManager(QObject *parent) :
     IServerManager(parent),
     m_NetworkAccessManager(new QNetworkAccessManager(this))
@@ -56,6 +65,13 @@ ServerManager::~ServerManager()
     delete m_NetworkAccessManager;
     // Servers are delete by the QObject inheritance
 }
+
+bool ServerManager::setGlobalConfiguration(const QString &xmlContent, QString *errorMsg = 0)
+{
+}
+
+QString ServerManager::xmlConfiguration() const
+{}
 
 void ServerManager::connectServer(const Server &server, const ServerIdentification &ident)
 {

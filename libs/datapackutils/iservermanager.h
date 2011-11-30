@@ -60,6 +60,15 @@ protected:
 public:
     virtual ~IServerManager() {}
 
+    /**
+     * Initialize all params of the DataPack::ServerManager using a XML'd content.
+     * \return true is all goes fine
+     * \param xmlContent the xml content of the configuration
+     * \param errorMsg error message
+     */
+    virtual bool setGlobalConfiguration(const QString &xmlContent, QString *errorMsg = 0) = 0;
+    virtual QString xmlConfiguration() const = 0;
+
     virtual void connectServer(const Server &server, const ServerIdentification &ident = ServerIdentification()) = 0;
 
     /**
