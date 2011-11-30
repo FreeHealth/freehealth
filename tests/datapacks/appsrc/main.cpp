@@ -16,7 +16,11 @@ int main(int argc, char *argv[])
 
     DataPack::ServerManager *manager = new DataPack::ServerManager("/tmp/");
     manager->isInternetConnexionAvailable();
-    manager->addServer(QUrl("ftp://anonymous:ok@localhost:/"));
+#ifdef Q_OS_MAC
+    manager->addServer(QUrl("file://Users/eric/Public/datapacks"));
+#elif
+    manager->addServer(QUrl("ftp://192.168.0.12/"));
+#endif
     manager->connectAndUpdate(0);
 
     MainWindow w;
