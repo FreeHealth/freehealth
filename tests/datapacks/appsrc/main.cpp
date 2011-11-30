@@ -4,6 +4,11 @@
 
 #include <QtGui/QApplication>
 
+// Sur MacOsX : créé un compte FTP Anonyme
+// sudo dscl . -create /Users/ftp
+// sudo dscl . -create /Users/ftp NFSHomeDirectory /path/to/ftp/folder
+// Effacer compte anonyme
+// sudo dscl . -delete /Users/ftp
 
 int main(int argc, char *argv[])
 {

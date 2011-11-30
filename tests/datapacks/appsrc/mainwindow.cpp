@@ -3,6 +3,7 @@
 
 #include <datapackutils/serverdescription.h>
 #include <utils/widgets/genericdescriptioneditor.h>
+#include <utils/widgets/genericinformationeditordialog.h>
 
 #include <QLayout>
 #include <QDebug>
@@ -42,6 +43,12 @@ static DataPack::ServerDescription getDescription()
     up.setText(QString::fromUtf8("Mon texte en français"), "fr");
     up.setText("My text in english (xx)", "xx");
     desc.addUpdateInformation(up);
+
+    up.setFromVersion("0.4.0");
+    up.setToVersion("0.4.4");
+    up.setText(QString::fromUtf8("Wawww 0.4.4 ?"), "fr");
+    up.setText("Four point four", "xx");
+    desc.addUpdateInformation(up);
     return desc;
 }
 
@@ -61,7 +68,6 @@ static void testServerDescription()
         qWarning() << "     Ok";
     else
         qWarning() << "     Wrong";
-    qWarning() << descCheck.toXml();
 }
 
 
@@ -75,7 +81,10 @@ MainWindow::MainWindow(QWidget *parent) :
     serverDescr = getDescription();
     Utils::GenericDescriptionEditor *editor = new Utils::GenericDescriptionEditor(this);
     editor->setDescription(serverDescr);
-    layout()->addWidget(editor);
+    setCentralWidget(editor);
+//    Utils::GenericInformationEditorDialog dlg(this);
+//    dlg.setDescription(serverDescr);
+//    dlg.exec();
 }
 
 MainWindow::~MainWindow()
