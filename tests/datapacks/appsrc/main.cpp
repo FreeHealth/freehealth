@@ -1,6 +1,7 @@
 #include "mainwindow.h"
 
-#include <datapackutils/servermanager.h>
+#include <datapackutils/core.h>
+#include <datapackutils/iservermanager.h>
 
 #include <QtGui/QApplication>
 
@@ -14,17 +15,18 @@ int main(int argc, char *argv[])
 {
     QApplication a(argc, argv);
 
-    DataPack::ServerManager *manager = new DataPack::ServerManager("/tmp/");
-    manager->isInternetConnexionAvailable();
+    DataPack::Core *core = DataPack::Core::instance();
+    core->isInternetConnexionAvailable();
+
 #ifdef Q_OS_MAC
-    manager->addServer(QUrl("file://Users/eric/Public/datapacks"));
+    core->serverManager()->addServer("file://Users/eric/Public/datapacks");
 #elif
-    manager->addServer(QUrl("ftp://192.168.0.12/"));
+    core->serverManager()->addServer("ftp://localhost/");
 #endif
-    manager->connectAndUpdate(0);
+    core->serverManager()->connectAndUpdate(0);
 
     MainWindow w;
-	w.show();
+    w.show();
 
     return a.exec();
 }
