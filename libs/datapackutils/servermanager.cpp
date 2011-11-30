@@ -46,12 +46,14 @@ namespace {
 
 const char * const TAG_ROOT                 = "ServerManagerConfig";
 const char * const TAG_SERVER               = "Server";
-
 const char * const TAG_PACK                 = "Pack";
 
+// Server attribs
 const char * const ATTRIB_URL               = "url";
 const char * const ATTRIB_LASTCHECK         = "lastChk";
 const char * const ATTRIB_RECORDEDVERSION   = "recVer";
+
+// Pack specific attribs
 const char * const ATTRIB_INSTALLED         = "inst";
 const char * const ATTRIB_INSTALLPATH       = "instPath";
 
@@ -93,13 +95,35 @@ bool ServerManager::setGlobalConfiguration(const QString &xmlContent, QString *e
     while (!server.isNull()) {
         Server s;
         s.setUrl(server.attribute(::ATTRIB_URL));
-
+        s.setLastChecked(QDateTime::fromString(server.attribute(::ATTRIB_LASTCHECK), Qt::ISODate));
+        s.setLocalVersion(server.attribute(::ATTRIB_RECORDEDVERSION));
+        m_Servers.append(s);
         server = server.nextSiblingElement(::TAG_SERVER);
     }
+    // Read packs
+//    QDomElement pack = root.firstChildElement(::TAG_PACK);
+//    while (!server.isNull()) {
+//        Pack p;
+//        /** \todo here */
+//        pack = pack.nextSiblingElement(::TAG_PACK);
+//    }
+    return true;
 }
 
 QString ServerManager::xmlConfiguration() const
 {
+    QDomDocument doc;
+    QDomElement root = doc.createElement(::TAG_ROOT);
+    doc.appendChild(root);
+    for(int i = 0; i < m_Servers.count(); ++i) {
+        const Server &s = m_Servers.at(i);
+        QDomElement e = doc.createElement(::TAG_SERVER);
+        root.appendChild(e);
+        e.setAttribute(::ATTRIB_URL, s.url());
+        e.setAttribute(::ATTRIB_RECORDEDVERSION, s.localVersion());
+        e.setAttribute(::ATTRIB_LASTCHECK, s.lastChecked().toString(Qt::ISODate));
+    }
+    return doc.toString(2);
 }
 
 void ServerManager::connectServer(const Server &server, const ServerIdentification &ident)
@@ -149,38 +173,37 @@ QString ServerManager::cachePath() const
 bool ServerManager::addServer(const QString &url)
 {
     // check if a server already exists with the same URL
-    foreach (Server *child, m_Servers)
-        if (child->url() == url)
+    foreach (Server child, m_Servers)
+        if (child.url() == url)
             return false;
 
-    Server *server = new Server(url, this);
+    Server server(url);
     m_Servers.append(server);
     return true;
 }
 
-Server *ServerManager::getServerAt(int index) const
+Server ServerManager::getServerAt(int index) const
 {
     if (index < m_Servers.count() && index >= 0)
         return m_Servers.at(index);
-    return 0;
+    return Server();
 }
 
 int ServerManager::getServerIndex(const QString &url) const
 {
     for (int i = 0; i < m_Servers.count(); i++)
-        if (m_Servers.at(i)->url() == url)
+        if (m_Servers.at(i).url() == url)
             return i;
     return -1;
 }
 
 void ServerManager::removeServerAt(int index)
 {
-    delete m_Servers.at(index);
     m_Servers.remove(index);
 }
 
 void ServerManager::connectAndUpdate(int index)
 {
-    if (index < m_Servers.count() && index >= 0)
-        m_Servers.at(index)->connectAndUpdate();
+//    if (index < m_Servers.count() && index >= 0)
+//        m_Servers.at(index).connectAndUpdate();
 }

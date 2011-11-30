@@ -58,7 +58,7 @@ public:
     void connectServer(const Server &server, const ServerIdentification &ident = ServerIdentification()); // will be deprecated regarding the connectAndUpdate function
 
     bool addServer(const QString &url);
-    Server *getServerAt(int index) const;
+    Server getServerAt(int index) const;
     int getServerIndex(const QString &url) const;
     void removeServerAt(int index);
     void connectAndUpdate(int index);
@@ -83,7 +83,7 @@ Q_SIGNALS:
 private:
     QNetworkAccessManager *m_NetworkAccessManager;
     QString filesCachePath;
-    QVector<Server *> m_Servers;
+    QVector<Server> m_Servers;
 };
 
 }  // End namespace DataPack

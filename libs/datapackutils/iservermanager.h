@@ -83,7 +83,7 @@ public:
      * \param index the server index
      * \return the server
      */
-    virtual Server *getServerAt(int index) const = 0;
+    virtual Server getServerAt(int index) const = 0;
 
     /**
      * Get the index of the server for a specific URL
