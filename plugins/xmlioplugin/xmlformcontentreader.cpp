@@ -114,7 +114,14 @@ XmlFormContentReader::XmlFormContentReader()
    m_PatientDatas.insert(Constants::TAG_DATAPATIENT_DRUGSALLERGIES, Core::IPatient::DrugsAtcAllergies);
    m_PatientDatas.insert(Constants::TAG_DATAPATIENT_DRUGSCHRONIC, Core::IPatient::DrugsChronicTherapeutics);
    m_PatientDatas.insert(Constants::TAG_DATAPATIENT_WEIGHT, Core::IPatient::Weight);
+   m_PatientDatas.insert(Constants::TAG_DATAPATIENT_WEIGHTUNIT, Core::IPatient::WeightUnit);
    m_PatientDatas.insert(Constants::TAG_DATAPATIENT_HEIGHT, Core::IPatient::Height);
+   m_PatientDatas.insert(Constants::TAG_DATAPATIENT_HEIGHTUNIT, Core::IPatient::HeightUnit);
+   m_PatientDatas.insert(Constants::TAG_DATAPATIENT_CREAT, Core::IPatient::Creatinine);
+   m_PatientDatas.insert(Constants::TAG_DATAPATIENT_CREATUNIT, Core::IPatient::CreatinineUnit);
+
+   m_PatientDatas.insert(Constants::TAG_DATAPATIENT_EMAIL, Core::IPatient::Mails);
+   m_PatientDatas.insert(Constants::TAG_DATAPATIENT_FAX, Core::IPatient::Faxes);
 }
 
 XmlFormContentReader::~XmlFormContentReader()

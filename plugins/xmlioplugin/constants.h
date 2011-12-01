@@ -130,8 +130,16 @@ const char* const TAG_SCRIPT_ONVALUEREQUIERED   = "onvaluerequiered";
 const char* const TAG_SCRIPT_ONDEPENDENCIESCHANGED = "ondependencieschanged";
 
 const char* const TAG_DATAPATIENT                = "patientdata";
-const char* const TAG_DATAPATIENT_WEIGHT         = "weight";
-const char* const TAG_DATAPATIENT_HEIGHT         = "height";
+const char* const TAG_DATAPATIENT_WEIGHT         = "patient::weight";
+const char* const TAG_DATAPATIENT_WEIGHTUNIT     = "patient::weightunit";
+const char* const TAG_DATAPATIENT_HEIGHT         = "patient::height";
+const char* const TAG_DATAPATIENT_HEIGHTUNIT     = "patient::heightunit";
+const char* const TAG_DATAPATIENT_EMAIL          = "patient::email";
+const char* const TAG_DATAPATIENT_FAX            = "patient::fax";
+
+const char* const TAG_DATAPATIENT_CREAT          = "patient::creatinin";
+const char* const TAG_DATAPATIENT_CREATUNIT      = "patient::creatininunit";
+
 const char* const TAG_DATAPATIENT_DRUGSALLERGIES = "drugs::allergies";
 const char* const TAG_DATAPATIENT_DRUGSCHRONIC   = "drugs::chronic";
 
