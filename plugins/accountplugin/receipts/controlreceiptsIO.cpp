@@ -263,10 +263,10 @@ void ControlReceipts::refresh(){
     m_mapCombo.insert(trUtf8("Due"),"DUE");
     m_mapCombo.insert(trUtf8("Due by"),"DUE_BY");
     QStringList listForCombo;
-    listForCombo.clear();
     listForCombo = m_mapCombo.keys();
     listForCombo.prepend(trUtf8("Patient"));
     listForCombo.removeDuplicates();
+    ui->fieldComboBox->clear();
     ui->fieldComboBox->addItems(listForCombo);
     ui->fieldComboBox->setEditText(trUtf8("Patient"));
 }
