@@ -63,6 +63,8 @@ public:
     void removeServerAt(int index);
     void connectAndUpdate(int index);
 
+    void checkServerUpdates();
+
     ServerDescription downloadServerDescription(const Server &server);
     QList<PackDescription> downloadPackDescription(const Server &server, const Pack &pack);
     Pack downloadAndUnzipPack(const Server &server, const Pack &pack);
@@ -72,9 +74,11 @@ public:
     // Private part
     QNetworkAccessManager *networkAccessManager() const {return m_NetworkAccessManager;}
 
-
 protected:
     QString cachePath() const;
+
+private:
+    void checkServerUpdatesAfterDownload();
 
 Q_SIGNALS:
     void serverConnected(const Server &server, const ServerIdentification &ident);

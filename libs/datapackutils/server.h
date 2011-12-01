@@ -26,16 +26,19 @@
  ***************************************************************************/
 #ifndef DATAPACK_SERVER_H
 #define DATAPACK_SERVER_H
+
 #include <datapackutils/datapack_exporter.h>
+#include <datapackutils/serverdescription.h>
 
 #include <QString>
 #include <QDateTime>
+#include <QStringList>
 
 /**
  * \file server.h
  * \author Eric MAEKER <eric.maeker@gmail.com>
  * \version 0.6.2
- * \date 25 Nov 2011
+ * \date 30 Nov 2011
 */
 
 namespace DataPack {
@@ -43,6 +46,12 @@ namespace DataPack {
 class DATAPACK_EXPORT Server
 {
 public:
+    enum UpdateState {
+        UpdateAvailable = 0,
+        UpToDate,
+        UpdateInfoNotAvailable
+    };
+
     Server(const QString &url = QString::null, QObject *parent = 0);
     virtual ~Server() {}
 
@@ -61,6 +70,15 @@ public:
     void setIsLocalServer(bool isLocal) {m_IsLocal=isLocal;}
     bool isLocalServer() const {return m_IsLocal;}
 
+    void setXmlDescription(const QString &xml);
+    ServerDescription description() const {return m_Desc;}
+
+    UpdateState updateState() const;
+
+    void addErrorMessage(const QString &error) {m_Errors.append(error);}
+    QStringList errors() const {return m_Errors;}
+
+
     // OBSOLETE
     void connectAndUpdate() {}
 
@@ -68,6 +86,8 @@ private:
     QString m_Url, m_LocalVersion;
     QDateTime m_LastCheck;
     bool m_Connected, m_IsLocal;
+    ServerDescription m_Desc;
+    QStringList m_Errors;
 };
 
 }  // End namespace DataPack

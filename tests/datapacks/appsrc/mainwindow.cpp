@@ -1,11 +1,16 @@
 #include "mainwindow.h"
 #include "ui_mainwindow.h"
 
+#include <datapackutils/core.h>
+#include <datapackutils/iservermanager.h>
 #include <datapackutils/serverdescription.h>
+
 #include <utils/widgets/genericdescriptioneditor.h>
 #include <utils/widgets/genericinformationeditordialog.h>
+#include <utils/global.h>
 
-#include <QLayout>
+#include <QDir>
+
 #include <QDebug>
 
 static DataPack::ServerDescription getDescription()
@@ -77,6 +82,20 @@ MainWindow::MainWindow(QWidget *parent) :
 {
     ui->setupUi(this);
     qWarning();
+
+    DataPack::Core *core = DataPack::Core::instance();
+    core->serverManager()->setGlobalConfiguration(Utils::readTextFile(QDir::homePath() + "/servers.conf.xml"));
+    qWarning() << core->serverManager()->xmlConfiguration();
+
+    core->isInternetConnexionAvailable();
+
+#ifdef Q_OS_MAC
+    core->serverManager()->addServer("file://Users/eric/Desktop/Programmation/freemedforms/global_resources/datapacks/default/");
+#else
+    core->serverManager()->addServer("ftp://localhost/");
+#endif
+    core->serverManager()->checkServerUpdates();
+
     testServerDescription();
     serverDescr = getDescription();
     Utils::GenericDescriptionEditor *editor = new Utils::GenericDescriptionEditor(this);
@@ -89,5 +108,7 @@ MainWindow::MainWindow(QWidget *parent) :
 
 MainWindow::~MainWindow()
 {
+    DataPack::Core *core = DataPack::Core::instance();
+    Utils::saveStringToFile(core->serverManager()->xmlConfiguration(), QDir::homePath() + "/servers.conf.xml", Utils::Overwrite, Utils::DontWarnUser);
     delete ui;
 }

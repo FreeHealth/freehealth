@@ -105,6 +105,14 @@ public:
      */
     virtual void connectAndUpdate(int index) = 0;
 
+    /**
+     * Connect all servers, download to tmp dir descriptions (if needed -> check file date before ?)
+     * and check if there is an update available. Get server to update with serverToUpdate().
+     * \sa serverToUpdate()
+     */
+    virtual void checkServerUpdates() = 0;
+
+
     virtual ServerDescription downloadServerDescription(const Server &server) = 0;
     virtual QList<PackDescription> downloadPackDescription(const Server &server, const Pack &pack) = 0;
     virtual Pack downloadAndUnzipPack(const Server &server, const Pack &pack) = 0;
@@ -118,6 +126,11 @@ Q_SIGNALS:
     void serverConnected(const Server &server, const ServerIdentification &ident);
     void serverInfosUpdated(int serverId); // emitted when a server infos have been updated
 
+    /**
+     * Signal emitted when all server configuration have been downloaded and version checked.
+     * \sa checkServerUpdates()
+     */
+    void serverUpdateChecked();
 };
 
 }  // End namespace DataPack

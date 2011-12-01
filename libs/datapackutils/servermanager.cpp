@@ -28,6 +28,7 @@
 #include "servermanager.h"
 
 #include <utils/log.h>
+#include <utils/global.h>
 #include <translationutils/constanttranslations.h>
 
 #include <QNetworkAccessManager>
@@ -56,6 +57,8 @@ const char * const ATTRIB_RECORDEDVERSION   = "recVer";
 // Pack specific attribs
 const char * const ATTRIB_INSTALLED         = "inst";
 const char * const ATTRIB_INSTALLPATH       = "instPath";
+
+const char * const SERVER_CONFIG_FILENAME   = "server.conf.xml";
 
 }  // End namespace Anonymous
 
@@ -206,4 +209,38 @@ void ServerManager::connectAndUpdate(int index)
 {
 //    if (index < m_Servers.count() && index >= 0)
 //        m_Servers.at(index).connectAndUpdate();
+}
+
+void ServerManager::checkServerUpdates()
+{
+    WARN_FUNC;
+    for(int i=0; i < m_Servers.count(); ++i) {
+        Server &s = m_Servers[i];
+        if (s.isLocalServer()) {
+            // check directly
+            QString t = s.url();
+            t = QDir::cleanPath(t.replace("file:/", "")) + "/";
+            t += ::SERVER_CONFIG_FILENAME;
+            s.setXmlDescription(Utils::readTextFile(t, Utils::DontWarnUser));
+        } else {
+            // FTP | HTTP
+            // Download server.conf.xml and add server XML description to the server
+            // When all descriptions are downloaded call -> checkServerUpdatesAfterDownload()
+        }
+    }
+    // TODO THIS LINE IS ONLY FOR TESTING PURPOSE
+    checkServerUpdatesAfterDownload();
+}
+
+void ServerManager::checkServerUpdatesAfterDownload()
+{
+    for(int i=0; i < m_Servers.count(); ++i) {
+        Server &s = m_Servers[i];
+        if (s.updateState() == Server::UpdateAvailable) {
+            qWarning() << "UPDATE" << s.url() << s.localVersion() << s.description().data(ServerDescription::Version).toString();
+        }
+        s.setLastChecked(QDateTime::currentDateTime());
+//        s.setLocalVersion();
+    }
+    Q_EMIT serverUpdateChecked();
 }

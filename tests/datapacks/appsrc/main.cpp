@@ -15,15 +15,6 @@ int main(int argc, char *argv[])
 {
     QApplication a(argc, argv);
 
-    DataPack::Core *core = DataPack::Core::instance();
-    core->isInternetConnexionAvailable();
-
-#ifdef Q_OS_MAC
-    core->serverManager()->addServer("file://Users/eric/Public/datapacks");
-#elif
-    core->serverManager()->addServer("ftp://localhost/");
-#endif
-    core->serverManager()->connectAndUpdate(0);
 
     MainWindow w;
     w.show();

@@ -27,6 +27,7 @@
 #include "server.h"
 
 #include <utils/log.h>
+#include <utils/versionnumber.h>
 #include <translationutils/constanttranslations.h>
 
 #include <QFileInfo>
@@ -63,3 +64,24 @@ void Server::setUrl(const QString &url)
     m_Url = url;
 }
 
+void Server::setXmlDescription(const QString &xml)
+{
+    if (!m_Desc.fromXmlContent(xml)) {
+        LOG_ERROR_FOR("DataPackServer", "Wrong XML description");
+        m_Desc.clear();
+    }
+}
+
+Server::UpdateState Server::updateState() const
+{
+    if (m_LocalVersion.isEmpty())
+        return Server::UpdateInfoNotAvailable;
+    const QString &v = m_Desc.data(ServerDescription::Version).toString();
+    if (v.isEmpty())
+        return Server::UpdateInfoNotAvailable;
+    Utils::VersionNumber local(m_LocalVersion);
+    Utils::VersionNumber remote(v);
+    if (local < remote)
+        return Server::UpdateAvailable;
+    return Server::UpToDate;
+}
