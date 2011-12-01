@@ -29,47 +29,75 @@
 #include "imageviewer.h"
 
 #include <utils/global.h>
+#include <translationutils/constanttranslations.h>
 
 #include <QLabel>
 #include <QScrollBar>
 #include <QScrollArea>
-#include <QHBoxLayout>
+#include <QVBoxLayout>
+#include <QPushButton>
+#include <QDialogButtonBox>
 
 using namespace Utils;
+using namespace Trans::ConstantTranslations;
 
 ImageViewer::ImageViewer(QWidget *parent) :
-    QDialog(parent)
+    QDialog(parent), m_CurrentIndex(-1)
 {
     imageLabel = new QLabel;
     imageLabel->setBackgroundRole(QPalette::Base);
     imageLabel->setSizePolicy(QSizePolicy::Ignored, QSizePolicy::Ignored);
-    imageLabel->setScaledContents(true);
+    imageLabel->setScaledContents(false);
 
     scrollArea = new QScrollArea;
     scrollArea->setBackgroundRole(QPalette::Dark);
     scrollArea->setWidget(imageLabel);
+    scrollArea->setHorizontalScrollBarPolicy(Qt::ScrollBarAsNeeded);
+    scrollArea->setVerticalScrollBarPolicy(Qt::ScrollBarAsNeeded);
 
-    QHBoxLayout *l = new QHBoxLayout(this);
+    m_ButBox = new QDialogButtonBox(this);
+//    QAbstractButton *zin = m_ButBox->addButton(tkTr(Trans::Constants::ZOOMIN_TEXT), QDialogButtonBox::ActionRole);
+//    QAbstractButton *zout = m_ButBox->addButton(tkTr(Trans::Constants::ZOOMOUT_TEXT), QDialogButtonBox::ActionRole);
+
+    QAbstractButton *previous = m_ButBox->addButton(tkTr(Trans::Constants::PREVIOUS_TEXT), QDialogButtonBox::ActionRole);
+    QAbstractButton *next = m_ButBox->addButton(tkTr(Trans::Constants::NEXT_TEXT), QDialogButtonBox::ActionRole);
+    QAbstractButton *close = m_ButBox->addButton(QDialogButtonBox::Close);
+
+    QVBoxLayout *l = new QVBoxLayout(this);
     setLayout(l);
     l->addWidget(scrollArea);
+    l->addWidget(m_ButBox);
 
-    Utils::resizeAndCenter(this, parent);
+    connect(zin, SIGNAL(clicked()), this, SLOT(zoomIn()));
+    connect(zout, SIGNAL(clicked()), this, SLOT(zoomOut()));
+
+    connect(next, SIGNAL(clicked()), this, SLOT(next()));
+    connect(previous, SIGNAL(clicked()), this, SLOT(previous()));
+    connect(close, SIGNAL(clicked()), this, SLOT(accept()));
+
+    Utils::resizeAndCenter(this);
 }
 
 void ImageViewer::setPixmap(const QPixmap &pixmap)
 {
+    setPixmaps(QList<QPixmap>() << pixmap);
 }
 
 void ImageViewer::setPixmaps(const QList<QPixmap> &pixmaps)
 {
     if (pixmaps.count()==0)
         return;
+    m_pixmaps = pixmaps;
     imageLabel->setPixmap(pixmaps.at(0));
+    normalSize();
     fitToWindow();
+    m_CurrentIndex = 0;
+    Utils::resizeAndCenter(this);
 }
 
 void ImageViewer::showPixmapFile(const QString &absFilePath)
 {
+    /** \todo code here ImageViewer::showPixmapFile(const QString &absFilePath) */
 }
 
 void ImageViewer::zoomIn()
@@ -91,9 +119,29 @@ void ImageViewer::normalSize()
 void ImageViewer::fitToWindow()
 {
 //    bool fitToWindow = fitToWindowAct->isChecked();
-    scrollArea->setWidgetResizable(true);
+//    scrollArea->setWidgetResizable(true);
 //        normalSize();
 //    updateActions();
+}
+
+void ImageViewer::next()
+{
+    if (m_CurrentIndex < (m_pixmaps.count() - 1)) {
+        m_CurrentIndex = ++m_CurrentIndex;
+        imageLabel->setPixmap(m_pixmaps.at(m_CurrentIndex));
+        normalSize();
+        fitToWindow();
+    }
+}
+
+void ImageViewer::previous()
+{
+    if (m_CurrentIndex >= 1) {
+        m_CurrentIndex = --m_CurrentIndex;
+        imageLabel->setPixmap(m_pixmaps.at(m_CurrentIndex));
+        normalSize();
+        fitToWindow();
+    }
 }
 
 void ImageViewer::scaleImage(double factor)

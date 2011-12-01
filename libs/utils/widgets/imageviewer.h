@@ -30,10 +30,12 @@
 #include <QPixmap>
 #include <QString>
 #include <QList>
+
 QT_BEGIN_NAMESPACE
 class QLabel;
 class QScrollArea;
 class QScrollBar;
+class QDialogButtonBox;
 QT_END_NAMESPACE
 
 namespace Utils {
@@ -53,7 +55,8 @@ private Q_SLOTS:
     void zoomOut();
     void normalSize();
     void fitToWindow();
-
+    void next();
+    void previous();
 
 private:
     void scaleImage(double factor);
@@ -62,6 +65,9 @@ private:
     QLabel *imageLabel;
     QScrollArea *scrollArea;
     int scaleFactor;
+    QDialogButtonBox *m_ButBox;
+    QList<QPixmap> m_pixmaps;
+    int m_CurrentIndex;
 };
 
 }  // End namespace Utils
