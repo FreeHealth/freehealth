@@ -17,7 +17,7 @@
    <item row="0" column="0">
     <widget class="QTabWidget" name="tabWidget">
      <property name="currentIndex">
-      <number>4</number>
+      <number>1</number>
      </property>
      <widget class="QWidget" name="tab">
       <attribute name="title">
@@ -144,7 +144,7 @@
        <item row="2" column="0" colspan="2">
         <widget class="QGroupBox" name="groupBox">
          <property name="title">
-          <string>Comptatibility</string>
+          <string>Compatibility</string>
          </property>
          <layout class="QGridLayout" name="gridLayout_3">
           <item row="0" column="0">

@@ -87,17 +87,17 @@
     <message>
         <location filename="../../libs/utils/log.cpp" line="237"/>
         <source>LOG</source>
-        <translation type="unfinished"></translation>
+        <translation></translation>
     </message>
     <message>
         <location filename="../../libs/utils/log.cpp" line="242"/>
         <source>ERRORS</source>
-        <translation type="unfinished"></translation>
+        <translation>ERREURS</translation>
     </message>
     <message>
         <location filename="../../libs/utils/log.cpp" line="259"/>
         <source>MESSAGES</source>
-        <translation type="unfinished"></translation>
+        <translation></translation>
     </message>
 </context>
 <context>
@@ -265,6 +265,57 @@
     </message>
 </context>
 <context>
+    <name>Utils::GenericInformationEditorDialog</name>
+    <message>
+        <location filename="../../libs/utils/widgets/genericinformationeditordialog.ui" line="14"/>
+        <source>Dialog</source>
+        <translation></translation>
+    </message>
+</context>
+<context>
+    <name>Utils::GenericUpdateInformationEditor</name>
+    <message>
+        <location filename="../../libs/utils/widgets/genericupdateinformationeditor.ui" line="14"/>
+        <source>Form</source>
+        <translation></translation>
+    </message>
+    <message>
+        <location filename="../../libs/utils/widgets/genericupdateinformationeditor.ui" line="20"/>
+        <source>Version and date</source>
+        <translation>Date et version</translation>
+    </message>
+    <message>
+        <location filename="../../libs/utils/widgets/genericupdateinformationeditor.ui" line="26"/>
+        <source>From</source>
+        <translation>De</translation>
+    </message>
+    <message>
+        <location filename="../../libs/utils/widgets/genericupdateinformationeditor.ui" line="36"/>
+        <source>To</source>
+        <translation>À</translation>
+    </message>
+    <message>
+        <location filename="../../libs/utils/widgets/genericupdateinformationeditor.ui" line="46"/>
+        <source>Release date</source>
+        <translation>Date</translation>
+    </message>
+    <message>
+        <location filename="../../libs/utils/widgets/genericupdateinformationeditor.ui" line="53"/>
+        <source>dd/MM/yyyy</source>
+        <translation></translation>
+    </message>
+    <message>
+        <location filename="../../libs/utils/widgets/genericupdateinformationeditor.ui" line="63"/>
+        <source>Author</source>
+        <translation>Auteur</translation>
+    </message>
+    <message>
+        <location filename="../../libs/utils/widgets/genericupdateinformationeditor.ui" line="76"/>
+        <source>Update text</source>
+        <translation>Texte de mise à jour</translation>
+    </message>
+</context>
+<context>
     <name>Utils::HttpDownloader</name>
     <message>
         <location filename="../../libs/utils/httpdownloader.cpp" line="92"/>
@@ -311,6 +362,175 @@ To %2</source>
         <location filename="../../libs/utils/httpdownloader.cpp" line="208"/>
         <source>Downloaded %1 to current directory.</source>
         <translation>Téléchargement terminé de %1 dans le répertoire courant.</translation>
+    </message>
+</context>
+<context>
+    <name>Utils::Internal::GenericDescriptionEditor</name>
+    <message>
+        <location filename="../../libs/utils/widgets/genericdescriptioneditor.ui" line="14"/>
+        <source>Form</source>
+        <translation></translation>
+    </message>
+    <message>
+        <location filename="../../libs/utils/widgets/genericdescriptioneditor.ui" line="24"/>
+        <source>General information</source>
+        <translation>Informations générales</translation>
+    </message>
+    <message>
+        <location filename="../../libs/utils/widgets/genericdescriptioneditor.ui" line="30"/>
+        <source>UUID</source>
+        <translation></translation>
+    </message>
+    <message>
+        <location filename="../../libs/utils/widgets/genericdescriptioneditor.ui" line="40"/>
+        <source>Current version</source>
+        <translation>Version actuelle</translation>
+    </message>
+    <message>
+        <location filename="../../libs/utils/widgets/genericdescriptioneditor.ui" line="50"/>
+        <source>Authors</source>
+        <translation>Auteurs</translation>
+    </message>
+    <message>
+        <location filename="../../libs/utils/widgets/genericdescriptioneditor.ui" line="60"/>
+        <source>Countries limitation</source>
+        <translation>Limitation de pays</translation>
+    </message>
+    <message>
+        <location filename="../../libs/utils/widgets/genericdescriptioneditor.ui" line="70"/>
+        <source>Vendor</source>
+        <translation>Vendeur</translation>
+    </message>
+    <message>
+        <location filename="../../libs/utils/widgets/genericdescriptioneditor.ui" line="80"/>
+        <source>Creation date</source>
+        <translation>Date de création</translation>
+    </message>
+    <message>
+        <location filename="../../libs/utils/widgets/genericdescriptioneditor.ui" line="87"/>
+        <location filename="../../libs/utils/widgets/genericdescriptioneditor.ui" line="367"/>
+        <source>dd/MM/yyyy</source>
+        <translation></translation>
+    </message>
+    <message>
+        <location filename="../../libs/utils/widgets/genericdescriptioneditor.ui" line="97"/>
+        <source>Icon</source>
+        <translation>Icône</translation>
+    </message>
+    <message>
+        <location filename="../../libs/utils/widgets/genericdescriptioneditor.ui" line="121"/>
+        <source>Compatibility &amp;&amp; places</source>
+        <translation>Compatibilité &amp;&amp; lieux</translation>
+    </message>
+    <message>
+        <location filename="../../libs/utils/widgets/genericdescriptioneditor.ui" line="127"/>
+        <source>URL</source>
+        <translation></translation>
+    </message>
+    <message>
+        <location filename="../../libs/utils/widgets/genericdescriptioneditor.ui" line="137"/>
+        <source>AbsoluteFileName</source>
+        <translation></translation>
+    </message>
+    <message>
+        <location filename="../../libs/utils/widgets/genericdescriptioneditor.ui" line="147"/>
+        <source>Compatibility</source>
+        <translation>Compatibilité</translation>
+    </message>
+    <message>
+        <location filename="../../libs/utils/widgets/genericdescriptioneditor.ui" line="153"/>
+        <source>FreeMedForms</source>
+        <translation></translation>
+    </message>
+    <message>
+        <location filename="../../libs/utils/widgets/genericdescriptioneditor.ui" line="163"/>
+        <source>FreeDiams</source>
+        <translation></translation>
+    </message>
+    <message>
+        <location filename="../../libs/utils/widgets/genericdescriptioneditor.ui" line="173"/>
+        <source>FreeAccount</source>
+        <translation></translation>
+    </message>
+    <message>
+        <location filename="../../libs/utils/widgets/genericdescriptioneditor.ui" line="200"/>
+        <source>Descriptions</source>
+        <translation></translation>
+    </message>
+    <message>
+        <location filename="../../libs/utils/widgets/genericdescriptioneditor.ui" line="206"/>
+        <source>Category</source>
+        <translation>Catégorie</translation>
+    </message>
+    <message>
+        <location filename="../../libs/utils/widgets/genericdescriptioneditor.ui" line="232"/>
+        <source>Tooltip</source>
+        <translation>Bulle d&apos;aide</translation>
+    </message>
+    <message>
+        <location filename="../../libs/utils/widgets/genericdescriptioneditor.ui" line="242"/>
+        <source>Specialties</source>
+        <translation>Spécialités</translation>
+    </message>
+    <message>
+        <location filename="../../libs/utils/widgets/genericdescriptioneditor.ui" line="252"/>
+        <source>Short description</source>
+        <translation>Courte description</translation>
+    </message>
+    <message>
+        <location filename="../../libs/utils/widgets/genericdescriptioneditor.ui" line="262"/>
+        <source>Long description</source>
+        <translation>Longue description</translation>
+    </message>
+    <message>
+        <location filename="../../libs/utils/widgets/genericdescriptioneditor.ui" line="272"/>
+        <source>License terms</source>
+        <translation>Termes de la licence</translation>
+    </message>
+    <message>
+        <location filename="../../libs/utils/widgets/genericdescriptioneditor.ui" line="283"/>
+        <source>Update</source>
+        <translation>Mise à jour</translation>
+    </message>
+    <message>
+        <location filename="../../libs/utils/widgets/genericdescriptioneditor.ui" line="289"/>
+        <source>Selection</source>
+        <translation>Sélection</translation>
+    </message>
+    <message>
+        <location filename="../../libs/utils/widgets/genericdescriptioneditor.ui" line="301"/>
+        <source>Versions</source>
+        <translation>V</translation>
+    </message>
+    <message>
+        <location filename="../../libs/utils/widgets/genericdescriptioneditor.ui" line="324"/>
+        <source>Version</source>
+        <translation></translation>
+    </message>
+    <message>
+        <location filename="../../libs/utils/widgets/genericdescriptioneditor.ui" line="330"/>
+        <source>From</source>
+        <translation>De</translation>
+    </message>
+    <message>
+        <location filename="../../libs/utils/widgets/genericdescriptioneditor.ui" line="340"/>
+        <source>To</source>
+        <translation>À</translation>
+    </message>
+    <message>
+        <location filename="../../libs/utils/widgets/genericdescriptioneditor.ui" line="350"/>
+        <source>Author</source>
+        <translation>Auteur</translation>
+    </message>
+    <message>
+        <location filename="../../libs/utils/widgets/genericdescriptioneditor.ui" line="360"/>
+        <source>Date</source>
+        <translation></translation>
+    </message>
+    <message>
+        <location filename="../../libs/utils/widgets/genericdescriptioneditor.ui" line="381"/>
+        <source>XML</source>
+        <translation></translation>
     </message>
 </context>
 <context>
