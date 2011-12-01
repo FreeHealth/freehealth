@@ -953,7 +953,10 @@ void ReceiptViewer::actionsOfTreeView(const QModelIndex & index) {
                     hashOfValues.insertMulti(str,value);
                     if (WarnDebugMessage)
                     qDebug() << __FILE__ << QString::number(__LINE__) << " hashOfValues.size() in getHashOfThesaurus " << QString::number(hashOfValues.size());
+                    m_listOfValues << str;
                     }
+                m_listOfValues.removeDuplicates();
+                m_modelReturnedList->setStringList(m_listOfValues);
                 fillModel(hashOfValues,typeOfPayment,percentage,debtor,site,distrules,i);
                 }
                 delete model;

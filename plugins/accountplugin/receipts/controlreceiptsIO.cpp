@@ -132,12 +132,12 @@ void ControlReceipts::deleteLine(){
       }
   QString textResult = textOfSums(m_accountModel);
   ui->resultLabel->setText(textResult);
-  const QString filter = m_accountModel->filter();
+  //const QString filter = m_accountModel->filter();
   coloringDoubles();
           search();
-  if (WarnDebugMessage)
+  /*if (WarnDebugMessage)
     	      qDebug() << __FILE__ << QString::number(__LINE__) << " filter =" << filter ;
-  //refreshFilter(filter);
+  refreshFilter(filter);*/
 }
 
 QString ControlReceipts::textOfSums(AccountModel * model){
