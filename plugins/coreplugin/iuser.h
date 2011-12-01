@@ -74,7 +74,9 @@ public:
         FullName,
         GenderIndex, TitleIndex, Gender, Title,
         Adress, Zipcode, City, Country, IsoCountry,
+        FullHtmlAdress,
         Tel1, Tel2, Tel3, Fax, PractitionerId,
+        FullHtmlContact,
         Specialities, Qualifications, Preferences,  // 31
 
         GenericHeader,

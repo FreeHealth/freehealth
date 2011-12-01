@@ -247,18 +247,49 @@ public:
         case Core::IUser::Mail : toReturn = user->mail(); break;
         case Core::IUser::LanguageISO : toReturn = user->languageIso(); break;
         case Core::IUser::LocaleCodedLanguage: toReturn = user->localeLanguage(); break;
+
         case Core::IUser::Adress : toReturn = user->adress(); break;
         case Core::IUser::Zipcode : toReturn = user->zipcode(); break;
         case Core::IUser::City : toReturn = user->city(); break;
         case Core::IUser::Country : toReturn = user->country(); break;
         case Core::IUser::IsoCountry : toReturn = user->countryIso(); break;
+        case Core::IUser::FullHtmlAdress :
+        {
+            QString t;
+            if (!user->adress().isEmpty())
+                toReturn = QString("%1<br />%2 %3, %4")
+                        .arg(user->adress())
+                        .arg(user->zipcode())
+                        .arg(user->city())
+                        .arg(user->country()).simplified();
+            break;
+        }
+
         case Core::IUser::Tel1 : toReturn = user->tels().at(0); break;
         case Core::IUser::Tel2 : toReturn = user->tels().at(1); break;
         case Core::IUser::Tel3 : toReturn = user->tels().at(2); break;
         case Core::IUser::Fax : toReturn = user->fax(); break;
+        case Core::IUser::FullHtmlContact :
+        {
+            QString t;
+            QStringList tels = user->tels();
+            tels.removeAll("");
+            if (!tels.isEmpty())
+                t = tkTr(Trans::Constants::TELEPHONE) + " " + tels.join("; ") + "<br />";
+            if (!user->fax().isEmpty())
+                t += tkTr(Trans::Constants::FAX) + " " + user->fax() + "<br />";
+            if (!user->mail().isEmpty())
+                t += tkTr(Trans::Constants::MAIL) + " " + user->mail() + "<br />";
+            if (t.size()>0)
+                t.chop(6);
+            toReturn = t;
+            break;
+        }
+
         case Core::IUser::PractitionerId : toReturn = user->practitionerId(); break;
         case Core::IUser::Specialities : toReturn = user->specialty(); break;
         case Core::IUser::Qualifications : toReturn = user->qualifications(); break;
+
         case Core::IUser::Preferences : toReturn = user->preferences(); break;
 
         case Core::IUser::GenericHeader : toReturn = user->extraDocumentHtml(Core::IUser::GenericHeader); break;

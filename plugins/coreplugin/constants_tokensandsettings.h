@@ -73,6 +73,13 @@ const char * const  TOKEN_USERFIRSTNAME      = "USERFIRSTNAME";
 const char * const  TOKEN_USERSPECIALITIES   = "USERSPECIALITIES";
 const char * const  TOKEN_USERIDENTIFIANTS   = "USERIDENTIFIANTS";
 const char * const  TOKEN_USERQUALIFICATIONS = "USERQUALIFICATIONS";
+const char * const  TOKEN_USERADRESS         = "USERADRESS";
+const char * const  TOKEN_USERMAIL           = "USERMAIL";
+const char * const  TOKEN_USERTEL1           = "USERTEL1";
+const char * const  TOKEN_USERTEL2           = "USERTEL2";
+const char * const  TOKEN_USERTEL3           = "USERTEL3";
+const char * const  TOKEN_USERFAX            = "USERFAX";
+
 const char * const  TOKEN_USERFULLADRESS     = "USERFULLADRESS";
 const char * const  TOKEN_USERFULLCONTACT    = "USERFULLCONTACT";
 

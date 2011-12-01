@@ -423,6 +423,10 @@ enum TitleInterpret {
         const char* const RIGHTS_USERMANAGER                = QT_TRANSLATE_NOOP("tkConstants", "User manager rights");
         const char* const RIGHTS_DRUGS                      = QT_TRANSLATE_NOOP("tkConstants", "Drug rights");
 
+        const char* const TELEPHONE                         = QT_TRANSLATE_NOOP("tkConstants", "Telephone");
+        const char* const FAX                               = QT_TRANSLATE_NOOP("tkConstants", "Fax");
+        const char* const MAIL                              = QT_TRANSLATE_NOOP("tkConstants", "E-Mail");
+
         const char* const SAVE_AND_RESTORE                  = QT_TRANSLATE_NOOP("tkConstants", "Save and restore");
 
         // Files and Paths
