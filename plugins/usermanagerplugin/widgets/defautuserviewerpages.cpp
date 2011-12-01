@@ -28,6 +28,9 @@
 #include "userpassworddialog.h"
 #include <usermanagerplugin/usermodel.h>
 
+#include <coreplugin/icore.h>
+#include <coreplugin/isettings.h>
+
 #include <printerplugin/printer.h>
 #include <printerplugin/textdocumentextra.h>
 
@@ -48,8 +51,8 @@ using namespace UserPlugin;
 using namespace Internal;
 using namespace Trans::ConstantTranslations;
 
-namespace {
-}  // End anonymous namespace
+static inline Core::ISettings *settings() {return Core::ICore::instance()->settings();}
+
 
 DefaultUserIdentityWidget::DefaultUserIdentityWidget(QWidget *parent) :
     UserPlugin::IUserViewerWidget(parent),
@@ -559,6 +562,8 @@ bool DefaultUserPapersWidget::submit()
             m_Model->setPaper(uid, Core::IUser::PrescriptionWatermark, text);
             break;
         }
+        // sync settings to save user papers
+        settings()->sync();
     }
     return true;
 }

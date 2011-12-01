@@ -966,7 +966,33 @@ bool UserBase::saveUser(UserData *user)
             }
         }
 
-        /** \todo code here : --> update rights */
+        // add Table RIGHTS
+        if (user->hasModifiedRightsToStore()) {
+            const QStringList &rolesToUpdate = user->modifiedRoles();
+            foreach(const QString &s, rolesToUpdate) {
+                QHash<int , QString> w;
+                w.insert(RIGHTS_ROLE, QString("='%1'").arg(s));
+                if (count(Table_RIGHTS, RIGHTS_ID, getWhereClause(Table_RIGHTS, w)) == 0) {
+                    q.prepare(prepareInsertQuery(Table_RIGHTS));
+                    q.bindValue(RIGHTS_ID,         QVariant());
+                    q.bindValue(RIGHTS_USER_UUID,  user->uuid());
+                    q.bindValue(RIGHTS_ROLE ,      s);
+                    q.bindValue(RIGHTS_RIGHTS ,    user->rightsValue(s, RIGHTS_RIGHTS));
+                    if (!q.exec())
+                        LOG_QUERY_ERROR(q);
+                    q.finish();
+                } else {
+                    q.prepare(prepareUpdateQuery(Table_RIGHTS,
+                                                 QList<int>()
+                                                 << RIGHTS_RIGHTS, where));
+                    q.bindValue(0,  user->rightsValue(s, RIGHTS_RIGHTS));
+                    if (!q.exec())
+                        LOG_QUERY_ERROR(q);
+                    q.finish();
+                }
+            }
+        }
+
         /** \todo code here : --> update UserLkId */
 
         if (!error) {
@@ -1182,9 +1208,73 @@ bool UserBase::saveUserPreferences(const QString &uid, const QString &content)
             return false;
         }
     }
+
     if (WarnUserPreferences)
         qWarning() << "    Correctly saved";
     return true;
+}
+
+bool UserBase::savePapers(UserData *user)
+{
+    if (!user->isModified())
+        return true;
+
+    // connect user database
+    QSqlDatabase DB = database();
+    if (!DB.isOpen()) {
+        if (!DB.open()) {
+            LOG_ERROR(tkTr(Trans::Constants::UNABLE_TO_OPEN_DATABASE_1_ERROR_2).arg(DB.connectionName()).arg(DB.lastError().text()));
+            return false;
+        }
+    }
+
+    bool error = false;
+    QSqlQuery q(DB);
+    QStringList papersId;
+    papersId.append(USER_DATAS_GENERICHEADER);
+    papersId.append(USER_DATAS_GENERICFOOTER);
+    papersId.append(USER_DATAS_GENERICWATERMARK);
+    papersId.append(USER_DATAS_ADMINISTRATIVEHEADER);
+    papersId.append(USER_DATAS_ADMINISTRATIVEFOOTER);
+    papersId.append(USER_DATAS_ADMINISTRATIVEWATERMARK);
+    papersId.append(USER_DATAS_PRESCRIPTIONHEADER);
+    papersId.append(USER_DATAS_PRESCRIPTIONFOOTER);
+    papersId.append(USER_DATAS_PRESCRIPTIONWATERMARK);
+
+    if (user->hasModifiedDynamicDatasToStore()) {
+        const QList<UserDynamicData*> &datasToUpdate = user->modifiedDynamicDatas();
+        foreach(UserDynamicData *dyn, datasToUpdate) {
+            if (!papersId.contains(dyn->name()))
+                continue;
+            //            qWarning() << "SAVE PAPER TO BASE" << dyn->name();
+            //                dyn->warn();
+            if (dyn->id() == -1) {
+                // create the dynamic data
+                q.prepare(prepareInsertQuery(Table_DATAS));
+                q.bindValue(DATAS_ID, QVariant()); // auto-id
+            } else {
+                // update the dynamic data
+                QHash<int , QString> w;
+                w.insert(DATAS_USER_UUID, QString("='%1'").arg(user->uuid()));
+                w.insert(DATAS_ID, QString ("=%1").arg(dyn->id()));
+                w.insert(DATAS_DATANAME, QString("='%1'").arg(dyn->name()));
+                q.prepare(prepareUpdateQuery(Table_DATAS, w));
+                q.bindValue(DATAS_ID, dyn->id());
+            }
+            dyn->prepareQuery(q);
+            if (!q.exec()) {
+                error = true;
+                LOG_QUERY_ERROR(q);
+            } else {
+                dyn->setDirty(false);
+            }
+            if (dyn->id() == -1) {
+                dyn->setId(q.lastInsertId().toInt());
+            }
+            q.finish();
+        }
+    }
+    return !error;
 }
 
 /** Update the user's password (taking care of the current server settings). */

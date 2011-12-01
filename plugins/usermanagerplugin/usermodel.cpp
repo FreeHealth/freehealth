@@ -1442,8 +1442,11 @@ void UserModel::updateUserPreferences()
         Internal::UserData *user = d->m_Uuid_UserList.value(d->m_CurrentUserUuid, 0);
         if (user) {
             user->setPreferences(settings()->userSettings());
-            /** \todo code here : save only the preferences not the entire user */
             userBase()->saveUserPreferences(user->uuid(), settings()->userSettings());
+            if (user->hasModifiedDynamicDatasToStore()) {
+                // save papers ?
+                userBase()->savePapers(user);
+            }
         } else {
             LOG_ERROR("No user uuid");
         }

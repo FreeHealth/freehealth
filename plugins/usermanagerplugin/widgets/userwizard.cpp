@@ -528,15 +528,17 @@ bool UserProfilPage::validatePage()
     UserWizard::setUserRights(Core::IUser::ManagerRights, Core::IUser::NoRights);
     UserWizard::setUserRights(Core::IUser::DrugsRights, Core::IUser::NoRights);
     UserWizard::setUserRights(Core::IUser::MedicalRights, Core::IUser::NoRights);
+    UserWizard::setUserRights(Core::IUser::AgendaRights, Core::IUser::NoRights);
     UserWizard::setUserRights(Core::IUser::ParamedicalRights, Core::IUser::NoRights);
     UserWizard::setUserRights(Core::IUser::AdministrativeRights, Core::IUser::NoRights);
     next = UserWizard::SpecialiesQualificationsPage;
     QStringList result = view->getCheckedStringList().toStringList();
 
-    if (result.contains(tkTr(Trans::Constants::DOCTOR))) {
-        UserWizard::setUserRights(Core::IUser::ManagerRights, Core::IUser::NoRights);
+    if (result.contains(tkTr(Trans::Constants::DOCTOR)) || result.contains(tkTr(Trans::Constants::MEDICAL_STUDENT))) {
+        UserWizard::setUserRights(Core::IUser::ManagerRights, Core::IUser::ReadOwn | Core::IUser::ReadDelegates | Core::IUser::WriteOwn | Core::IUser::WriteDelegates | Core::IUser::Print);
         UserWizard::setUserRights(Core::IUser::DrugsRights, Core::IUser::AllRights);
         UserWizard::setUserRights(Core::IUser::MedicalRights, Core::IUser::AllRights);
+        UserWizard::setUserRights(Core::IUser::AgendaRights, Core::IUser::AllRights);
         UserWizard::setUserRights(Core::IUser::ParamedicalRights, int(Core::IUser::ReadAll | Core::IUser::Print));
         UserWizard::setUserRights(Core::IUser::AdministrativeRights, Core::IUser::NoRights);
         next = UserWizard::SpecialiesQualificationsPage;
@@ -553,14 +555,13 @@ bool UserProfilPage::validatePage()
         UserWizard::setUserPaper(Core::IUser::AdministrativeHeader, defaultPaper("medicals", "header"));
         UserWizard::setUserPaper(Core::IUser::AdministrativeFooter, defaultPaper("medicals", "footer"));
         UserWizard::setUserPaper(Core::IUser::AdministrativeWatermark, defaultPaper("medicals", "watermark"));
-    } else if (result.contains(tkTr(Trans::Constants::MEDICAL_STUDENT))) {
-
     } else if (result.contains(tkTr(Trans::Constants::NURSE))) {
 
     } else if (result.contains(tkTr(Trans::Constants::CAREGIVER))) {
 
     } else if (result.contains(tkTr(Trans::Constants::SECRETARY))) {
-
+        UserWizard::setUserRights(Core::IUser::MedicalRights, Core::IUser::ReadAll);
+        UserWizard::setUserRights(Core::IUser::AgendaRights, Core::IUser::ReadAll | Core::IUser::WriteAll | Core::IUser::Print);
     }
     if (result.contains(tkTr(Trans::Constants::SOFT_ADMIN))) {
         UserWizard::setUserRights(Core::IUser::ManagerRights, Core::IUser::AllRights);
