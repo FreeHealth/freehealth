@@ -825,12 +825,17 @@ bool Printer::askForPrinter(QWidget *parent)
 }
 
 /** \brief Defines the printer to use. */
-void Printer::setPrinter(QPrinter * printer)
+void Printer::setPrinter(QPrinter *printer)
 {
-    if (printer)
+    if (printer) {
+        if (d->m_Printer) {
+            delete d->m_Printer;
+            d->m_Printer = 0;
+        }
         d->m_Printer = printer;
-    else
+    } else {
         d->renewPrinter();
+    }
 }
 
 /** \brief Returns the printer in use. */

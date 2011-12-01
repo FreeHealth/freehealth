@@ -22,12 +22,14 @@
 #define PRINTDIALOG_H
 
 #include <QDialog>
+#include <QList>
+#include <QPrinterInfo>
 
 /**
  * \file printdialog.h
  * \author Eric Maeker
- * \version 0.4.2
- * \date 13 July 2010
+ * \version 0.6.2
+ * \date 01 Dec 2011
 */
 
 namespace Print {
@@ -70,11 +72,14 @@ private Q_SLOTS:
     void on_lastButton_clicked();
     void on_pageFrom_valueChanged(int);
     void on_pageTo_valueChanged(int);
+    void on_printerCombo_currentIndexChanged(int index);
+
 
 private:
     Ui::PrintDialog *ui;
     Print::Printer *m_Printer;
     int m_PreviewingPage;
+    QList<QPrinterInfo> m_AvailPrinterAtDialogOpens;
 };
 
 }  // End namespace Internal

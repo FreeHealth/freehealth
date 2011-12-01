@@ -33,6 +33,7 @@
 #include <printerplugin/printer.h>
 #include <printerplugin/constants.h>
 
+#include <utils/log.h>
 #include <utils/database.h>
 #include <translationutils/constanttranslations.h>
 
@@ -75,7 +76,8 @@ PrintDialog::PrintDialog(QWidget *parent) :
     ui->lastButton->setIcon(theme()->icon(Core::Constants::ICONTWORIGHTARROW));
 
     // Fill printer combo
-    foreach(const QPrinterInfo &info, QPrinterInfo::availablePrinters()) {
+    m_AvailPrinterAtDialogOpens = QPrinterInfo::availablePrinters();
+    foreach(const QPrinterInfo &info, m_AvailPrinterAtDialogOpens) {
         ui->printerCombo->addItem(info.printerName());
     }
 
@@ -106,9 +108,13 @@ void PrintDialog::accept()
         m_Printer->printer()->setFromTo(ui->pageFrom->value(), ui->pageTo->value());
     }
 
-    // Print to printer
-    if (!m_Printer->reprint(m_Printer->printer()))
+    // Print to printer    
+    if (!m_Printer->reprint(m_Printer->printer())) {
+        LOG_FOR("Printer", "Printing error on device " + m_Printer->printer()->printerName());
         return;
+    } else {
+        LOG_FOR("Printer", "Printing correctly on device " + m_Printer->printer()->printerName());
+    }
 
     // Duplicate to a pdf file
     if (settings()->value(Constants::S_KEEP_PDF).toBool()) {
@@ -321,6 +327,18 @@ void PrintDialog::on_pageFrom_valueChanged(int)
 void PrintDialog::on_pageTo_valueChanged(int)
 {
     ui->pagesRange->setChecked(true);
+}
+
+void PrintDialog::on_printerCombo_currentIndexChanged(int index)
+{
+    if (!m_Printer)
+        return;
+    if (index < m_AvailPrinterAtDialogOpens.count() && index >= 0) {
+        if (m_Printer->printer()->printerName() == m_AvailPrinterAtDialogOpens.at(index).printerName())
+            return;
+        QPrinter *printer = new QPrinter(m_AvailPrinterAtDialogOpens.at(index), QPrinter::ScreenResolution);
+        m_Printer->setPrinter(printer);
+    }
 }
 
 void PrintDialog::changeEvent(QEvent *e)
