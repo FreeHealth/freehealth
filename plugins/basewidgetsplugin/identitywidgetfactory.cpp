@@ -136,6 +136,10 @@ IdentityFormWidget::IdentityFormWidget(Form::FormItem *formItem, QWidget *parent
         m_Identity = new Patients::IdentityWidget(this);
     else
         m_Identity = new Patients::IdentityWidget(this, Patients::IdentityWidget::ReadWriteMode);
+    if (formItem->getOptions().contains("compact", Qt::CaseInsensitive)) {
+        m_Identity->layout()->setMargin(0);
+        m_Identity->layout()->setMargin(2);
+    }
     m_Identity->setCurrentPatientModel(Patients::PatientModel::activeModel());
     m_ContainerLayout->addWidget(m_Identity, 1, 0,  1, numberColumns);
     i = numberColumns;

@@ -464,6 +464,15 @@ QVariant BaseFormData::data(const int ref, const int role) const
 BaseGroup::BaseGroup(Form::FormItem *formItem, QWidget *parent) :
     Form::IFormWidget(formItem,parent), m_Group(0), m_ContainerLayout(0)
 {
+//    bool useGrid = true;
+//    bool useFormGrid = false;
+//    if (formItem->getOptions().contains("form", Qt::CaseInsensitive)) {
+//        useGrid = false;
+//        useFormGrid = true;
+//    } else if (formItem->getOptions().contains("nogrid", Qt::CaseInsensitive)) {
+//        useGrid = false;
+//        useFormGrid = false;
+//    }
     QVBoxLayout * vblayout = new QVBoxLayout(this);
     m_Group = new QGroupBox(this);
     m_Group->setTitle(m_FormItem->spec()->label());
