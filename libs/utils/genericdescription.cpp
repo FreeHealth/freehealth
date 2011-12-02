@@ -344,6 +344,7 @@ QHash<int, QString> GenericDescription::nonTranslatableTagsDataReference() const
 QHash<int, QString> GenericDescription::translatableTagsDataReference() const
 {
     QHash<int, QString> elements;
+    elements.insert(GenericDescription::Label, TAG_LABEL);
     elements.insert(GenericDescription::Category, TAG_CATEGORY);
     elements.insert(GenericDescription::ToolTip, TAG_TOOLTIP);
     elements.insert(GenericDescription::Specialties, TAG_SPECIALTIES);

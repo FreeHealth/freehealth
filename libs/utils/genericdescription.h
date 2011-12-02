@@ -74,6 +74,7 @@ public:
         GeneralIcon,
 
         // Translatable data
+        Label,
         Category,
         ToolTip,
         Specialties,
