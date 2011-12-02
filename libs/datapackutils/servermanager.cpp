@@ -246,8 +246,6 @@ void ServerManager::checkServerUpdates()
 QList<PackDescription> ServerManager::getPackDescription(const Server &server)
 {
     WARN_FUNC;
-    QList<PackDescription> toReturn;
-
     // If PackDescription list already known return it
     const QStringList keys = m_PackDescriptions.uniqueKeys();
     if (keys.contains(server.url(), Qt::CaseInsensitive)) {
@@ -255,14 +253,19 @@ QList<PackDescription> ServerManager::getPackDescription(const Server &server)
     }
 
     // Get the server config
-    // Foreach included pack
     foreach(const QString &file, server.content().packDescriptionFileNames()) {
         qWarning() << "PackageDescription @" << file;
+        QString path = server.url();
+        path = path.replace("file:/", "") + QDir::separator() + file;
+        QFileInfo f(path); // relative path
+        PackDescription desc;
+        // Read the packDescription
+        desc.fromXmlFile(f.absoluteFilePath());
+        // Store in the cache
+        m_PackDescriptions.insertMulti(server.url(), desc);
     }
 
-    // Read the packDescription
-    // Store in the Server class
-    return toReturn;
+    return m_PackDescriptions.values(server.url());
 }
 
 void ServerManager::checkServerUpdatesAfterDownload()
