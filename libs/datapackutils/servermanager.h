@@ -58,7 +58,7 @@ public:
     void connectServer(const Server &server, const ServerIdentification &ident = ServerIdentification()); // will be deprecated regarding the connectAndUpdate function
 
     bool addServer(const QString &url);
-    int countServer() const;
+    int serverCount() const;
     Server getServerAt(int index) const;
     int getServerIndex(const QString &url) const;
     void removeServerAt(int index);

@@ -185,7 +185,7 @@ bool ServerManager::addServer(const QString &url)
     return true;
 }
 
-int ServerManager::countServer() const
+int ServerManager::serverCount() const
 {
     return m_Servers.count();
 }

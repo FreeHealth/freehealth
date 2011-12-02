@@ -75,7 +75,7 @@
 
 
 /**
- * \fn virtual int DataPack::IServerManager::countServer() const
+ * \fn virtual int DataPack::IServerManager::serverCount() const
  * Return the number of managed servers.
  */
 
