@@ -68,8 +68,8 @@ ImageViewer::ImageViewer(QWidget *parent) :
     l->addWidget(scrollArea);
     l->addWidget(m_ButBox);
 
-    connect(zin, SIGNAL(clicked()), this, SLOT(zoomIn()));
-    connect(zout, SIGNAL(clicked()), this, SLOT(zoomOut()));
+//    connect(zin, SIGNAL(clicked()), this, SLOT(zoomIn()));
+//    connect(zout, SIGNAL(clicked()), this, SLOT(zoomOut()));
 
     connect(next, SIGNAL(clicked()), this, SLOT(next()));
     connect(previous, SIGNAL(clicked()), this, SLOT(previous()));
