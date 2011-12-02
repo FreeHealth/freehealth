@@ -491,6 +491,9 @@ enum TitleInterpret {
         const char* const USER_PREFERENCES                   = QT_TRANSLATE_NOOP("tkConstants", "User preferences");
         const char* const APPLICATION_FAILURE                = QT_TRANSLATE_NOOP("tkConstants", "Fatal error : Application failure. Please restart application.");
 
+        const char* const LAST_CHECK                         = QT_TRANSLATE_NOOP("tkConstants", "Last check");
+        const char* const CONNECTED                          = QT_TRANSLATE_NOOP("tkConstants", "Connected");
+        const char* const NOT_CONNECTED                      = QT_TRANSLATE_NOOP("tkConstants", "Not connected");
         const char* const CONNECTED_TO_DATABASE_1_DRIVER_2   = QT_TRANSLATE_NOOP("tkConstants", "Connected to database %1 with driver %2");
         const char* const TRYING_TO_CREATE_1_PLACE_2         = QT_TRANSLATE_NOOP("tkConstants", "Trying to create %1 \nPlace : %2");
         const char* const UNABLE_TO_OPEN_DATABASE_1_ERROR_2  = QT_TRANSLATE_NOOP("tkConstants", "Unable to open database %1 : Error : %2");
