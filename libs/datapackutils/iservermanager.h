@@ -75,6 +75,8 @@ public:
     virtual void connectAndUpdate(int index) = 0;
     virtual void checkServerUpdates() = 0;
 
+    virtual QList<PackDescription> getPackDescription(const Server &server) = 0;
+
     // Not actually in use
     virtual ServerDescription downloadServerDescription(const Server &server) = 0;
     virtual QList<PackDescription> downloadPackDescription(const Server &server, const Pack &pack) = 0;

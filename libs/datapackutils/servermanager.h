@@ -66,6 +66,8 @@ public:
 
     void checkServerUpdates();
 
+    QList<PackDescription> getPackDescription(const Server &server);
+
     ServerDescription downloadServerDescription(const Server &server);
     QList<PackDescription> downloadPackDescription(const Server &server, const Pack &pack);
     Pack downloadAndUnzipPack(const Server &server, const Pack &pack);

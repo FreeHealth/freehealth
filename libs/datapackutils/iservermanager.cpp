@@ -120,6 +120,12 @@
 
 
 /**
+ * \fn virtual QList<PackDescription> DataPack::IServerManager::getPackDescription(const Server &server)
+ * Assuming that server is connected and its description files were downloaded, return the pack description list.
+*/
+
+
+/**
  * \fn void DataPack::IServerManager::serverUpdateChecked()
  * Signal emitted when all server configuration have been downloaded and version checked.
  * \sa checkServerUpdates()

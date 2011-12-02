@@ -238,6 +238,17 @@ void ServerManager::checkServerUpdates()
     checkServerUpdatesAfterDownload();
 }
 
+QList<PackDescription> ServerManager::getPackDescription(const Server &server)
+{
+    QList<PackDescription> toReturn;
+    // If the Server class contains PackDescription list return it
+    // Get the server config
+    // Foreach included pack
+    // Read the packDescription
+    // Store in the Server class
+    return toReturn;
+}
+
 void ServerManager::checkServerUpdatesAfterDownload()
 {
     for(int i=0; i < m_Servers.count(); ++i) {
