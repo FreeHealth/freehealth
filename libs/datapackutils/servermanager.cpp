@@ -226,11 +226,16 @@ void ServerManager::checkServerUpdates()
             QString t = s.url();
             t = QDir::cleanPath(t.replace("file:/", "")) + "/";
             t += ::SERVER_CONFIG_FILENAME;
-            s.setXmlDescription(Utils::readTextFile(t, Utils::DontWarnUser));
+            s.fromXml(Utils::readTextFile(t, Utils::DontWarnUser));
             // move a copy of the description in the working path of server manager
         } else {
             // FTP | HTTP
-            // Download server.conf.xml and add server XML description to the server
+            // Download server.conf.xml
+
+            // When done
+            // add server XML description to the server
+            // s.fromXml(xml);
+            // Download all linked packagedescription -> see ServerContent --> server.content().packDescriptionFileNames()
             // When all descriptions are downloaded call -> checkServerUpdatesAfterDownload()
         }
     }
@@ -240,10 +245,21 @@ void ServerManager::checkServerUpdates()
 
 QList<PackDescription> ServerManager::getPackDescription(const Server &server)
 {
+    WARN_FUNC;
     QList<PackDescription> toReturn;
-    // If the Server class contains PackDescription list return it
+
+    // If PackDescription list already known return it
+    const QStringList keys = m_PackDescriptions.uniqueKeys();
+    if (keys.contains(server.url(), Qt::CaseInsensitive)) {
+        return m_PackDescriptions.values(server.url());
+    }
+
     // Get the server config
     // Foreach included pack
+    foreach(const QString &file, server.content().packDescriptionFileNames()) {
+        qWarning() << "PackageDescription @" << file;
+    }
+
     // Read the packDescription
     // Store in the Server class
     return toReturn;

@@ -48,6 +48,12 @@ namespace Internal {
 class DATAPACK_EXPORT PackDescription : public Utils::GenericDescription
 {
 public:
+    enum ExtraNonTranslated {
+        Size = NonTranslatableExtraData + 1,
+        Md5,
+        Sha1
+    };
+
     PackDescription();
 };
 

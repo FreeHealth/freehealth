@@ -59,4 +59,4 @@ private:
 }  // End namespace DataPack
 
 
-#endif // DATAPACKSERVER_H
+#endif // DATAPACK_SERVERDESCRIPTION_H

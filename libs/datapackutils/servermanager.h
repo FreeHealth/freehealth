@@ -92,6 +92,7 @@ private:
     QNetworkAccessManager *m_NetworkAccessManager;
     QString filesCachePath;
     QVector<Server> m_Servers;
+    QMultiHash<QString, PackDescription> m_PackDescriptions;
 };
 
 }  // End namespace DataPack

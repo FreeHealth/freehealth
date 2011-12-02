@@ -32,5 +32,8 @@ using namespace DataPack;
 PackDescription::PackDescription() :
     Utils::GenericDescription("PackDescription")
 {
+    addNonTranslatableExtraData(Size, "size");
+    addNonTranslatableExtraData(Md5, "md5");
+    addNonTranslatableExtraData(Sha1, "sha1");
 }
 

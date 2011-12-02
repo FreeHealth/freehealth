@@ -31,18 +31,29 @@
 #include <translationutils/constanttranslations.h>
 
 #include <QFileInfo>
+#include <QDomDocument>
+#include <QDomElement>
 
 #include <QDebug>
 
 using namespace DataPack;
 using namespace Trans::ConstantTranslations;
 
-Server::Server(const QString &url, QObject *parent) :
-    m_Connected(false), m_IsLocal(false)
+namespace {
+const char *const TAG_ROOT = "DataPackServer";
+const char *const TAG_SERVERDESCRIPTION = "ServerDescription";
+const char *const TAG_SERVERCONTENT = "ServerContents";
+}
+
+/** Create a server pointing to the URL \e url. The URL must be unique in the server's pool. */
+Server::Server(const QString &url) :
+    m_Connected(false),
+    m_IsLocal(false)
 {
     setUrl(url);
 }
 
+/** Define the URL of the server. All URL must be unique (url is used as uuid). */
 void Server::setUrl(const QString &url)
 {
     m_IsLocal = false;
@@ -64,14 +75,45 @@ void Server::setUrl(const QString &url)
     m_Url = url;
 }
 
-void Server::setXmlDescription(const QString &xml)
+/**
+ * Reads the XML configuration content of the server and
+ * create the DataPack::ServerDescription and the DataPack::ServerContent
+ * related to this server.
+*/
+void Server::fromXml(const QString &fullServerConfigXml)
 {
-    if (!m_Desc.fromXmlContent(xml)) {
-        LOG_ERROR_FOR("DataPackServer", "Wrong XML description");
-        m_Desc.clear();
+    QDomDocument doc;
+    if (!doc.setContent(fullServerConfigXml)) {
+        LOG_ERROR_FOR("Server", "Wrong XML");
+        return;
     }
+    QDomElement root = doc.firstChildElement(::TAG_ROOT);
+    QDomElement descr = root.firstChildElement(::TAG_SERVERDESCRIPTION);
+    QDomElement content = root.firstChildElement(::TAG_SERVERCONTENT);
+    m_Desc.fromDomElement(descr);
+    m_Content.fromDomElement(content);
 }
 
+//void Server::setXmlDescription(const QString &xml)
+//{
+//    if (!m_Desc.fromXmlContent(xml)) {
+//        LOG_ERROR_FOR("DataPackServer", "Wrong XML description");
+//        m_Desc.clear();
+//    }
+//}
+
+//void Server::setXmlContent(const QString &xml)
+//{
+//    if (!m_Content.fromXml(xml)) {
+//        LOG_ERROR_FOR("DataPackServer", "Wrong XML content");
+//        m_Content.clear();
+//    }
+//}
+
+/**
+ * Return the DataPack::Server::UpdateState of the server according to
+ * its description and the serverManager's data.
+ */
 Server::UpdateState Server::updateState() const
 {
     if (m_LocalVersion.isEmpty())

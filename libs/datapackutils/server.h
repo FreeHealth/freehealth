@@ -29,6 +29,7 @@
 
 #include <datapackutils/datapack_exporter.h>
 #include <datapackutils/serverdescription.h>
+#include <datapackutils/servercontent.h>
 
 #include <QString>
 #include <QDateTime>
@@ -38,7 +39,7 @@
  * \file server.h
  * \author Eric MAEKER <eric.maeker@gmail.com>
  * \version 0.6.2
- * \date 30 Nov 2011
+ * \date 02 Dec 2011
 */
 
 namespace DataPack {
@@ -52,7 +53,7 @@ public:
         UpdateInfoNotAvailable
     };
 
-    Server(const QString &url = QString::null, QObject *parent = 0);
+    Server(const QString &url = QString::null);
     virtual ~Server() {}
 
     void setUrl(const QString &url);
@@ -70,8 +71,11 @@ public:
     void setIsLocalServer(bool isLocal) {m_IsLocal=isLocal;}
     bool isLocalServer() const {return m_IsLocal;}
 
-    void setXmlDescription(const QString &xml);
+    void fromXml(const QString &fullServerConfigXml);
+
     ServerDescription description() const {return m_Desc;}
+
+    ServerContent content() const {return m_Content;}
 
     UpdateState updateState() const;
 
@@ -82,11 +86,16 @@ public:
     // OBSOLETE
     void connectAndUpdate() {}
 
+//private:
+//    void setXmlDescription(const QString &xml);
+//    void setXmlContent(const QString &xml);
+
 private:
     QString m_Url, m_LocalVersion;
     QDateTime m_LastCheck;
     bool m_Connected, m_IsLocal;
     ServerDescription m_Desc;
+    ServerContent m_Content;
     QStringList m_Errors;
 };
 
