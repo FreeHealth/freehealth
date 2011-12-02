@@ -29,6 +29,24 @@
 /**
  * \class DataPack::IServerManager
  * Virtual interface of the server manager.
+ * Usage:
+ \code
+   // Define the configuration of the manager
+   manager->setGlobalConfiguration(xml);
+   // manager->setLocalOutputPath();
+
+   // If needed
+   manager->addServer("http://my.url.com/");
+
+   // Start the update screening process
+   manager->checkServerUpdates();
+
+   // [...]
+
+   // Before deleting the manager
+   save(manager->xmlConfiguration());  // This is important
+
+ \endcode
  * \sa DataPack::Core, DataPack::Core::serverManager()
  */
 
@@ -53,6 +71,12 @@
  * Add a new server
  * \param url the URL of the target server
  * \return false if a server with the same URL already exists
+ */
+
+
+/**
+ * \fn virtual int DataPack::IServerManager::countServer() const
+ * Return the number of managed servers.
  */
 
 

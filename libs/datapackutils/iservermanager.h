@@ -43,7 +43,7 @@
  * \author Eric MAEKER <eric.maeker@gmail.com>
  * \version 0.6.2
  * \date 30 Nov 2011
- * Needs Qt >= 4.7
+ * \warning Needs Qt >= 4.7
 */
 
 namespace DataPack {
@@ -67,6 +67,7 @@ public:
     virtual void connectServer(const Server &server, const ServerIdentification &ident = ServerIdentification()) = 0;
 
     virtual bool addServer(const QString &url) = 0;
+    virtual int countServer() const = 0;
     virtual Server getServerAt(int index) const = 0;
     virtual int getServerIndex(const QString &url) const = 0;
     virtual void removeServerAt(int index) = 0;

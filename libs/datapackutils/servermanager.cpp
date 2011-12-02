@@ -185,6 +185,11 @@ bool ServerManager::addServer(const QString &url)
     return true;
 }
 
+int ServerManager::countServer() const
+{
+    return m_Servers.count();
+}
+
 Server ServerManager::getServerAt(int index) const
 {
     if (index < m_Servers.count() && index >= 0)
@@ -222,6 +227,7 @@ void ServerManager::checkServerUpdates()
             t = QDir::cleanPath(t.replace("file:/", "")) + "/";
             t += ::SERVER_CONFIG_FILENAME;
             s.setXmlDescription(Utils::readTextFile(t, Utils::DontWarnUser));
+            // move a copy of the description in the working path of server manager
         } else {
             // FTP | HTTP
             // Download server.conf.xml and add server XML description to the server

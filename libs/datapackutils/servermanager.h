@@ -36,8 +36,8 @@ QT_END_NAMESPACE
  * \file servermanager.h
  * \author Eric MAEKER <eric.maeker@gmail.com>
  * \version 0.6.2
- * \date 25 Nov 2011
- * Needs Qt >= 4.7
+ * \date 02 Dec 2011
+ * \warning Needs Qt >= 4.7
 */
 
 namespace DataPack {
@@ -58,6 +58,7 @@ public:
     void connectServer(const Server &server, const ServerIdentification &ident = ServerIdentification()); // will be deprecated regarding the connectAndUpdate function
 
     bool addServer(const QString &url);
+    int countServer() const;
     Server getServerAt(int index) const;
     int getServerIndex(const QString &url) const;
     void removeServerAt(int index);
@@ -73,6 +74,7 @@ public:
 
     // Private part
     QNetworkAccessManager *networkAccessManager() const {return m_NetworkAccessManager;}
+    const QVector<Server> &servers() const {return m_Servers;}
 
 protected:
     QString cachePath() const;
