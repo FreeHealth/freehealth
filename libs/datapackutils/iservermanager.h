@@ -60,59 +60,21 @@ protected:
 public:
     virtual ~IServerManager() {}
 
-    /**
-     * Initialize all params of the DataPack::ServerManager using a XML'd content.
-     * \return true is all goes fine
-     * \param xmlContent the xml content of the configuration
-     * \param errorMsg error message
-     */
+    // In use
     virtual bool setGlobalConfiguration(const QString &xmlContent, QString *errorMsg = 0) = 0;
     virtual QString xmlConfiguration() const = 0;
 
     virtual void connectServer(const Server &server, const ServerIdentification &ident = ServerIdentification()) = 0;
 
-    /**
-     * Add a new server
-     * \param url the URL of the target server
-     * \return false if a server with the same URL already exists
-     */
     virtual bool addServer(const QString &url) = 0;
-
-    /**
-     * Get the server at a specific index
-     * \param index the server index
-     * \return the server
-     */
     virtual Server getServerAt(int index) const = 0;
-
-    /**
-     * Get the index of the server for a specific URL
-     * \param url the url from which we want the server index
-     * \return the server index matching the url parameter or -1 if not found
-     */
     virtual int getServerIndex(const QString &url) const = 0;
-
-    /**
-     * Remove a server
-     * \param id the ID of the server to remove
-     */
     virtual void removeServerAt(int index) = 0;
 
-    /**
-     * Connect and update a server infos. Asynchronous.
-     * When the server is updated, the signal "serverInfosUpdated" is emitted.
-     * \param index the index of the server to update infos of
-     */
     virtual void connectAndUpdate(int index) = 0;
-
-    /**
-     * Connect all servers, download to tmp dir descriptions (if needed -> check file date before ?)
-     * and check if there is an update available. Get server to update with serverToUpdate().
-     * \sa serverToUpdate()
-     */
     virtual void checkServerUpdates() = 0;
 
-
+    // Not actually in use
     virtual ServerDescription downloadServerDescription(const Server &server) = 0;
     virtual QList<PackDescription> downloadPackDescription(const Server &server, const Pack &pack) = 0;
     virtual Pack downloadAndUnzipPack(const Server &server, const Pack &pack) = 0;
@@ -126,10 +88,7 @@ Q_SIGNALS:
     void serverConnected(const Server &server, const ServerIdentification &ident);
     void serverInfosUpdated(int serverId); // emitted when a server infos have been updated
 
-    /**
-     * Signal emitted when all server configuration have been downloaded and version checked.
-     * \sa checkServerUpdates()
-     */
+    // In use
     void serverUpdateChecked();
 };
 

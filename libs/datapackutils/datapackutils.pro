@@ -28,7 +28,9 @@ SOURCES += \
     pack.cpp \
     serveridentification.cpp \
     servercontents.cpp \
-    core.cpp
+    core.cpp \
+    iservermanager.cpp
+
 
 
 
