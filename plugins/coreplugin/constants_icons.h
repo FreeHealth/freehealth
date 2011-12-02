@@ -173,6 +173,12 @@ const char * const  ICONCATEGORY_REMOVE  =  "category_remove.png";
 const char * const  ICONAGENDA =  "x-office-calendar.png";
 const char * const  ICONAGENDA_NEW =  "appointment-new.png";
 
+// Servers && Packs && Connections
+const char *const   ICON_SERVER_CONNECTED = "connect_established.png";
+const char *const   ICON_SERVER_NOT_CONNECTED = "connect_no.png";
+const char *const   ICON_SERVER_ASKING_CONNECTION = "connect_creating.png";
+const char *const   ICON_PACKAGE = "package.png";
+
 // menu Users --> MediumSize
 const char * const  ICONUSER          = "user.png";
 const char * const  ICONPERSONAL      = "personal.png";
