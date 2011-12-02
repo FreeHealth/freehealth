@@ -48,11 +48,11 @@ namespace Internal {
 class CorePrivate
 {
 public:
-    CorePrivate() : m_ServerManager(0), networkManager(0) {}
+    CorePrivate() : m_ServerManager(0) {}
 
 public:
     ServerManager *m_ServerManager;
-    QNetworkAccessManager *networkManager;
+    QHash<int, QString> m_ThemePath;
 };
 }  // End namespace Internal
 }  // End namespace DataPack
@@ -62,7 +62,6 @@ Core::Core(QObject *parent) :
     d(new Internal::CorePrivate)
 {
     d->m_ServerManager = new ServerManager(this);
-    d->networkManager = new QNetworkAccessManager(this);
 }
 
 bool Core::isInternetConnexionAvailable()
@@ -79,8 +78,13 @@ IServerManager *Core::serverManager() const
     return d->m_ServerManager;
 }
 
-QNetworkAccessManager *Core::networkManager() const
+void Core::setThemePath(ThemePath path, const QString &absPath)
 {
-    return d->networkManager;
+    d->m_ThemePath.insert(path, absPath);
+}
+
+QString Core::icon(const QString &name, ThemePath path)
+{
+    return QString("%1/%2").arg(d->m_ThemePath.value(path)).arg(name);
 }
 

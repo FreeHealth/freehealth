@@ -53,12 +53,20 @@ class DATAPACK_EXPORT Core : public QObject
     explicit Core(QObject *parent = 0);
 
 public:
+    enum ThemePath {
+        SmallPixmaps = 0,
+        MediumPixmaps,
+        BigPixmaps
+    };
+
     static Core *instance(QObject *parent = 0);
 
     bool isInternetConnexionAvailable();
     IServerManager *serverManager() const;
 
-    QNetworkAccessManager *networkManager() const;
+    // Theme path
+    void setThemePath(ThemePath path, const QString &absPath);
+    QString icon(const QString &name, ThemePath path = SmallPixmaps);
 
 private:
     Internal::CorePrivate *d;
