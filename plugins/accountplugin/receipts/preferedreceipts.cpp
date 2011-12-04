@@ -40,7 +40,9 @@
 #include <accountbaseplugin/constants.h>
 
 #include <QMessageBox>
-enum { WarnDebugMessage = true };
+
+enum { WarnDebugMessage = false };
+
 static inline Core::IUser *user() { return Core::ICore::instance()->user(); }
 static inline Core::IPatient *patient() { return Core::ICore::instance()->patient(); }
 
