@@ -24,17 +24,17 @@ Répondre &apos;non&apos; causera une perte de données irréversible.</translat
 <context>
     <name>Form::EpisodeModel</name>
     <message>
-        <location filename="../../plugins/formmanagerplugin/episodemodel.cpp" line="976"/>
+        <location filename="../../plugins/formmanagerplugin/episodemodel.cpp" line="986"/>
         <source>Created: </source>
         <translation>Créé : </translation>
     </message>
     <message>
-        <location filename="../../plugins/formmanagerplugin/episodemodel.cpp" line="1085"/>
+        <location filename="../../plugins/formmanagerplugin/episodemodel.cpp" line="1096"/>
         <source>New episode</source>
         <translation>Nouvel épisode</translation>
     </message>
     <message>
-        <location filename="../../plugins/formmanagerplugin/episodemodel.cpp" line="1293"/>
+        <location filename="../../plugins/formmanagerplugin/episodemodel.cpp" line="1304"/>
         <source>No user</source>
         <translation>Pas d&apos;utilisateur</translation>
     </message>
@@ -87,7 +87,7 @@ Répondre &apos;non&apos; causera une perte de données irréversible.</translat
     <message>
         <location filename="../../plugins/formmanagerplugin/formfilesselectorwidget.ui" line="61"/>
         <source>Screenshots</source>
-        <translation type="unfinished"></translation>
+        <translation>Écrans</translation>
     </message>
 </context>
 <context>
@@ -152,32 +152,22 @@ Répondre &apos;non&apos; causera une perte de données irréversible.</translat
 <context>
     <name>Form::Internal::FormManagerPlugin</name>
     <message>
-        <location filename="../../plugins/formmanagerplugin/formmanagerplugin.cpp" line="101"/>
-        <location filename="../../plugins/formmanagerplugin/formmanagerplugin.cpp" line="117"/>
+        <location filename="../../plugins/formmanagerplugin/formmanagerplugin.cpp" line="103"/>
+        <location filename="../../plugins/formmanagerplugin/formmanagerplugin.cpp" line="119"/>
         <source>Initializing form manager plugin...</source>
         <translation>Initialisation du plugin formulaire...</translation>
     </message>
 </context>
 <context>
-    <name>Form::Internal::FormManagerPreferencesPage</name>
+    <name>Form::Internal::FormPreferencesFileSelectorPage</name>
     <message>
-        <location filename="../../plugins/formmanagerplugin/formmanagerpreferencespage.cpp" line="61"/>
-        <source>Selector</source>
-        <translation>Sélectionneur</translation>
-    </message>
-    <message>
-        <location filename="../../plugins/formmanagerplugin/formmanagerpreferencespage.cpp" line="62"/>
-        <source>Forms</source>
-        <translation>Formulaires</translation>
-    </message>
-    <message>
-        <location filename="../../plugins/formmanagerplugin/formmanagerpreferencespage.cpp" line="63"/>
+        <location filename="../../plugins/formmanagerplugin/formmanagerpreferencespage.cpp" line="73"/>
         <source>Patient file form selector</source>
         <translation>Sélectionneur de formulaire patient</translation>
     </message>
 </context>
 <context>
-    <name>Form::Internal::FormManagerPreferencesWidget</name>
+    <name>Form::Internal::FormPreferencesFileSelectorWidget</name>
     <message>
         <location filename="../../plugins/formmanagerplugin/formmanagerpreferenceswidget.ui" line="14"/>
         <source>Form</source>
@@ -187,6 +177,107 @@ Répondre &apos;non&apos; causera une perte de données irréversible.</translat
         <location filename="../../plugins/formmanagerplugin/formmanagerpreferenceswidget.ui" line="30"/>
         <source>Use the selected form for all patients</source>
         <translation>Utiliser le formulaire sélectionné pour tous les patients</translation>
+    </message>
+</context>
+<context>
+    <name>Form::Internal::FormPreferencesPage</name>
+    <message>
+        <location filename="../../plugins/formmanagerplugin/formmanagerpreferencespage.cpp" line="160"/>
+        <source>Form and episode tree viewer</source>
+        <translation>Visualisateur des formulaires et épisodes</translation>
+    </message>
+</context>
+<context>
+    <name>Form::Internal::FormPreferencesWidget</name>
+    <message>
+        <location filename="../../plugins/formmanagerplugin/formpreferenceswidget.ui" line="14"/>
+        <source>Form</source>
+        <translation>Formulaire</translation>
+    </message>
+    <message>
+        <location filename="../../plugins/formmanagerplugin/formpreferenceswidget.ui" line="20"/>
+        <source>Colors in the view</source>
+        <translation>Couleurs dans la vue</translation>
+    </message>
+    <message>
+        <location filename="../../plugins/formmanagerplugin/formpreferenceswidget.ui" line="26"/>
+        <source>Use alternate row colors</source>
+        <translation>Utiliser les couleurs alternées</translation>
+    </message>
+    <message>
+        <location filename="../../plugins/formmanagerplugin/formpreferenceswidget.ui" line="33"/>
+        <source>Use specific foreground for root forms</source>
+        <translation>Utiliser une couleur spécifique pour les formulaires racines</translation>
+    </message>
+    <message>
+        <location filename="../../plugins/formmanagerplugin/formpreferenceswidget.ui" line="40"/>
+        <source>Select the foreground color</source>
+        <translation>Sélectionnez la couleur du texte</translation>
+    </message>
+    <message>
+        <location filename="../../plugins/formmanagerplugin/formpreferenceswidget.ui" line="69"/>
+        <source>Select a foreground color for episodes</source>
+        <translation>Sélectionnez la couleur du texte des épisodes</translation>
+    </message>
+    <message>
+        <location filename="../../plugins/formmanagerplugin/formpreferenceswidget.ui" line="95"/>
+        <source>Select a foreground color for all forms</source>
+        <translation>Sélectionnez la couleur du texte des formulaires</translation>
+    </message>
+    <message>
+        <location filename="../../plugins/formmanagerplugin/formpreferenceswidget.ui" line="124"/>
+        <source>Episode presentation</source>
+        <translation>Présentation des épisodes</translation>
+    </message>
+    <message>
+        <location filename="../../plugins/formmanagerplugin/formpreferenceswidget.ui" line="130"/>
+        <source>Select label content</source>
+        <translation>Sélectionnez un libellé</translation>
+    </message>
+    <message>
+        <location filename="../../plugins/formmanagerplugin/formpreferenceswidget.ui" line="147"/>
+        <source>Long date format</source>
+        <translation>Format de date long</translation>
+    </message>
+    <message>
+        <location filename="../../plugins/formmanagerplugin/formpreferenceswidget.ui" line="157"/>
+        <source>Short date format</source>
+        <translation>Format de date court</translation>
+    </message>
+    <message>
+        <location filename="../../plugins/formmanagerplugin/formmanagerpreferencespage.cpp" line="222"/>
+        <source>Label</source>
+        <translation>Libellé</translation>
+    </message>
+    <message>
+        <location filename="../../plugins/formmanagerplugin/formmanagerpreferencespage.cpp" line="223"/>
+        <source>Label - User date (small)</source>
+        <translation>Libellé - Date (courte)</translation>
+    </message>
+    <message>
+        <location filename="../../plugins/formmanagerplugin/formmanagerpreferencespage.cpp" line="224"/>
+        <source>Label - User date (full)</source>
+        <translation>Libellé - Date (longue)</translation>
+    </message>
+    <message>
+        <location filename="../../plugins/formmanagerplugin/formmanagerpreferencespage.cpp" line="225"/>
+        <source>User date (small)</source>
+        <translation>Date (courte)</translation>
+    </message>
+    <message>
+        <location filename="../../plugins/formmanagerplugin/formmanagerpreferencespage.cpp" line="226"/>
+        <source>User date (full)</source>
+        <translation>Date( longue)</translation>
+    </message>
+    <message>
+        <location filename="../../plugins/formmanagerplugin/formmanagerpreferencespage.cpp" line="227"/>
+        <source>User date (small) - Label</source>
+        <translation>Date (courte) - Libellé</translation>
+    </message>
+    <message>
+        <location filename="../../plugins/formmanagerplugin/formmanagerpreferencespage.cpp" line="228"/>
+        <source>User date (full) - Label</source>
+        <translation>Date (longue) - Libellé</translation>
     </message>
 </context>
 <context>
@@ -224,17 +315,17 @@ Répondre &apos;non&apos; causera une perte de données irréversible.</translat
 <context>
     <name>FormIODescription</name>
     <message>
-        <location filename="../../plugins/formmanagerplugin/iformio.cpp" line="232"/>
+        <location filename="../../plugins/formmanagerplugin/iformio.cpp" line="116"/>
         <source>Complete form</source>
         <translation>Formulaires complets</translation>
     </message>
     <message>
-        <location filename="../../plugins/formmanagerplugin/iformio.cpp" line="234"/>
+        <location filename="../../plugins/formmanagerplugin/iformio.cpp" line="118"/>
         <source>Sub-form</source>
         <translation>Sous-formulaires</translation>
     </message>
     <message>
-        <location filename="../../plugins/formmanagerplugin/iformio.cpp" line="236"/>
+        <location filename="../../plugins/formmanagerplugin/iformio.cpp" line="120"/>
         <source>Page only</source>
         <translation>Page uniquement</translation>
     </message>
@@ -242,17 +333,17 @@ Répondre &apos;non&apos; causera une perte de données irréversible.</translat
 <context>
     <name>Forms</name>
     <message>
-        <location filename="../../plugins/formmanagerplugin/iformio.cpp" line="306"/>
+        <location filename="../../plugins/formmanagerplugin/iformio.cpp" line="144"/>
         <source>License</source>
         <translation>Licence</translation>
     </message>
     <message>
-        <location filename="../../plugins/formmanagerplugin/iformio.cpp" line="312"/>
+        <location filename="../../plugins/formmanagerplugin/iformio.cpp" line="150"/>
         <source>Creation date</source>
         <translation>Date de création</translation>
     </message>
     <message>
-        <location filename="../../plugins/formmanagerplugin/iformio.cpp" line="314"/>
+        <location filename="../../plugins/formmanagerplugin/iformio.cpp" line="152"/>
         <source>Last modification date</source>
         <translation>Date de dernière modification</translation>
     </message>

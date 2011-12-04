@@ -985,43 +985,43 @@ L&apos;application va s&apos;arrêter.</translation>
 <context>
     <name>UserPlugin::UserModel</name>
     <message>
-        <location filename="../../plugins/usermanagerplugin/usermodel.cpp" line="518"/>
+        <location filename="../../plugins/usermanagerplugin/usermodel.cpp" line="521"/>
         <source>Unable to retreive user into the model using login and password.</source>
         <translation>Impossible de récupérer les utilisateur avec l&apos;identifiant et le mot de passe.</translation>
     </message>
     <message>
-        <location filename="../../plugins/usermanagerplugin/usermodel.cpp" line="649"/>
-        <location filename="../../plugins/usermanagerplugin/usermodel.cpp" line="676"/>
+        <location filename="../../plugins/usermanagerplugin/usermodel.cpp" line="652"/>
+        <location filename="../../plugins/usermanagerplugin/usermodel.cpp" line="679"/>
         <source>Database server administrator</source>
         <translation>Administrateur de la base de données</translation>
     </message>
     <message>
-        <location filename="../../plugins/usermanagerplugin/usermodel.cpp" line="789"/>
+        <location filename="../../plugins/usermanagerplugin/usermodel.cpp" line="792"/>
         <source>You can not delete your own user.</source>
         <translation>Vous ne pouvez pas effacer votre propre utilisateur.</translation>
     </message>
     <message>
-        <location filename="../../plugins/usermanagerplugin/usermodel.cpp" line="788"/>
+        <location filename="../../plugins/usermanagerplugin/usermodel.cpp" line="791"/>
         <source>User can not be deleted.</source>
         <translation>L&apos;utilisateur ne peut pas être effacé.</translation>
     </message>
     <message>
-        <location filename="../../plugins/usermanagerplugin/usermodel.cpp" line="529"/>
+        <location filename="../../plugins/usermanagerplugin/usermodel.cpp" line="532"/>
         <source>Setting current user uuid to 			 %1</source>
         <translation></translation>
     </message>
     <message>
-        <location filename="../../plugins/usermanagerplugin/usermodel.cpp" line="662"/>
+        <location filename="../../plugins/usermanagerplugin/usermodel.cpp" line="665"/>
         <source>Setting current user uuid to %1 (su)</source>
         <translation></translation>
     </message>
     <message>
-        <location filename="../../plugins/usermanagerplugin/usermodel.cpp" line="799"/>
+        <location filename="../../plugins/usermanagerplugin/usermodel.cpp" line="802"/>
         <source>You can not delete a modified user, save it before.</source>
         <translation>Vous ne pouvez pas effacer un utilisateur modifié, vous devez d&apos;abord le sauvegarder.</translation>
     </message>
     <message>
-        <location filename="../../plugins/usermanagerplugin/usermodel.cpp" line="811"/>
+        <location filename="../../plugins/usermanagerplugin/usermodel.cpp" line="814"/>
         <source>User can not be deleted from database.</source>
         <translation>L&apos;utilisateur ne peut pas être effacé de la base de données.</translation>
     </message>

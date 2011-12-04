@@ -354,20 +354,42 @@
         <translation>Ajouter</translation>
     </message>
     <message>
-        <location filename="../../plugins/agendaplugin/usercalendareditor.ui" line="279"/>
+        <location filename="../../plugins/agendaplugin/usercalendareditor.ui" line="282"/>
         <source>Clear</source>
         <translation>Effacer</translation>
     </message>
     <message>
-        <location filename="../../plugins/agendaplugin/usercalendareditor.ui" line="286"/>
+        <location filename="../../plugins/agendaplugin/usercalendareditor.ui" line="289"/>
         <source>Remove</source>
         <translation>Enlever</translation>
+    </message>
+    <message>
+        <location filename="../../plugins/agendaplugin/usercalendareditor.cpp" line="148"/>
+        <location filename="../../plugins/agendaplugin/usercalendareditor.cpp" line="160"/>
+        <source>Can not delete all availabilities</source>
+        <translation>Impossible d&apos;effacer les disponibilités</translation>
+    </message>
+    <message>
+        <location filename="../../plugins/agendaplugin/usercalendareditor.cpp" line="149"/>
+        <location filename="../../plugins/agendaplugin/usercalendareditor.cpp" line="161"/>
+        <source>Agenda must have at least one availability. You can not delete all its availabilities.</source>
+        <translation>L&apos;agenda doit avoir au moins une disponibilité. Vous ne pouvez pas effacer toutes ses disponibilités.</translation>
+    </message>
+    <message>
+        <location filename="../../plugins/agendaplugin/usercalendareditor.cpp" line="153"/>
+        <source>Delete full day.</source>
+        <translation>Effacer une journée entière.</translation>
+    </message>
+    <message>
+        <location filename="../../plugins/agendaplugin/usercalendareditor.cpp" line="154"/>
+        <source>You are about to delete all recorded time range for one specific day of the week (%1). Do you really want to delete all time range ?</source>
+        <translation>Vous allez effacer toutes les plages horaires pour une journée spécifique (%1). Voulez-vous vraiment effaer toutes ses plages ?</translation>
     </message>
 </context>
 <context>
     <name>Agenda::UserCalendarModel</name>
     <message>
-        <location filename="../../plugins/agendaplugin/usercalendarmodel.cpp" line="191"/>
+        <location filename="../../plugins/agendaplugin/usercalendarmodel.cpp" line="195"/>
         <source>New calendar</source>
         <translation>Nouvel agenda</translation>
     </message>
