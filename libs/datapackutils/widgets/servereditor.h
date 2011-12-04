@@ -29,6 +29,8 @@
 
 #include <datapackutils/datapack_exporter.h>
 #include <QWidget>
+class QStandardItemModel;
+class QModelIndex;
 
 /**
  * \file servereditor.h
@@ -52,8 +54,14 @@ public:
 public Q_SLOTS:
     bool submitChanges();
 
+private Q_SLOTS:
+    void populateServerView(const int serverId);
+    void populatePackView();
+    void onIndexActivated(const QModelIndex &index, const QModelIndex &previous);
+
 private:
     Ui::ServerEditor *ui;
+    QStandardItemModel *m_Model;
 };
 
 }  // End namespace DataPack

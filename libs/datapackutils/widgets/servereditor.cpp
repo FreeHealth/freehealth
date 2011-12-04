@@ -54,6 +54,10 @@ const char *const ICON_SERVER_NOT_CONNECTED = "connect_no.png";
 const char *const ICON_SERVER_ASKING_CONNECTION = "connect_creating.png";
 const char *const ICON_PACKAGE = "package.png";
 
+const int IS_SERVER = 1;
+
+const char * const TITLE_CSS = "text-indent:5px;padding:5px;font-weight:bold;background:qlineargradient(spread:pad, x1:0, y1:0, x2:1, y2:0, stop:0.464 rgba(255, 255, 176, 149), stop:1 rgba(255, 255, 255, 0))";
+
 const char * const CSS =
         "QTreeView::item:hover {"
         "background: qlineargradient(x1: 0, y1: 0, x2: 0, y2: 1, stop: 0 #e7effd, stop: 1 #cbdaf1);"
@@ -148,8 +152,9 @@ static void managerToModel(QStandardItemModel *model)
         }
 
         QStandardItem *server = new QStandardItem(label);
+        server->setData(::IS_SERVER);
         root->appendRow(server);
-        root->appendRow(new QStandardItem("<b>bla<br />bla</b>"));
+
         if (s.isConnected()) {
             server->setIcon(icon(::ICON_SERVER_CONNECTED));
             // Add packdescriptions
@@ -175,15 +180,28 @@ ServerEditor::ServerEditor(QWidget *parent) :
     ui(new Ui::ServerEditor)
 {
     ui->setupUi(this);
-    QStandardItemModel *model = new QStandardItemModel(this);
-    model->setColumnCount(1);
-    managerToModel(model);
-    ui->treeView->setModel(model);
+    m_Model = new QStandardItemModel(this);
+    m_Model->setColumnCount(1);
+    managerToModel(m_Model);
+    ui->treeView->setModel(m_Model);
     ui->treeView->header()->hide();
     Delegate *delegate = new Delegate;
     ui->treeView->setItemDelegate(delegate);
     ui->treeView->setStyleSheet(::CSS);
+    ui->treeView->expandAll();
+    ui->treeView->setAlternatingRowColors(true);
+    ui->treeView->setEditTriggers(QTreeView::NoEditTriggers);
 
+    ui->stackedWidget->setCurrentIndex(0);
+    QFont bold;
+    bold.setBold(true);
+    bold.setPointSize(bold.pointSize()+1);
+    ui->serverName->setFont(bold);
+    ui->packName->setFont(bold);
+    ui->serverName->setStyleSheet(::TITLE_CSS);
+    ui->packName->setStyleSheet(::TITLE_CSS);
+
+    connect(ui->treeView->selectionModel(), SIGNAL(currentChanged(QModelIndex,QModelIndex)), this, SLOT(onIndexActivated(QModelIndex,QModelIndex)));
 }
 
 ServerEditor::~ServerEditor()
@@ -194,4 +212,39 @@ ServerEditor::~ServerEditor()
 bool ServerEditor::submitChanges()
 {
     return true;
+}
+
+void ServerEditor::populateServerView(const int serverId)
+{
+    const QString &format = QLocale().dateTimeFormat(QLocale::LongFormat);
+    const Server &server = serverManager()->getServerAt(serverId);
+    ui->serverName->setText(server.description().data(ServerDescription::Label).toString());
+    ui->shortServerDescription->setText(server.description().data(ServerDescription::ShortDescription).toString());
+    ui->serverVersion->setText(server.description().data(ServerDescription::Version).toString());
+    ui->serverDate->setText(server.description().data(ServerDescription::LastModificationDate).toDateTime().toString(format));
+    ui->serverDescription->setText(server.description().data(ServerDescription::ShortDescription).toString());
+    ui->lastCheck->setText(server.lastChecked().toString(format));
+    ui->serverVendor->setText(server.description().data(ServerDescription::Vendor).toString());
+    if (server.isConnected() || server.isLocalServer()) {
+        ui->serverState->setText(tkTr(Trans::Constants::CONNECTED));
+    } else {
+        ui->serverState->setText(tkTr(Trans::Constants::NOT_CONNECTED));
+    }
+}
+
+void ServerEditor::populatePackView()
+{
+}
+
+void ServerEditor::onIndexActivated(const QModelIndex &index, const QModelIndex &previous)
+{
+    if (m_Model->itemFromIndex(index)->data().toInt()==::IS_SERVER) {
+        // Activate the Server Page
+        ui->stackedWidget->setCurrentWidget(ui->serverPage);
+        populateServerView(index.row());
+    } else {
+        // Activate the Pack Page
+        ui->stackedWidget->setCurrentWidget(ui->packPage);
+        populateServerView(index.row());
+    }
 }
