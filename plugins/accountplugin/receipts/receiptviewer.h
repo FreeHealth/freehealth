@@ -80,7 +80,7 @@ public:
     QStandardItemModel *treeModel() const {return m_actionsTreeModel;}
 
 private:
-    void mousePressEvent(QMouseEvent *event);
+    //void mousePressEvent(QMouseEvent *event);
     void mouseReleaseEvent(QMouseEvent *event);
     bool deleteItemFromThesaurus(QModelIndex &index);
     bool addPreferedItem(QModelIndex &index);

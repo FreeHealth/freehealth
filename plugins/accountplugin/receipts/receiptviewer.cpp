@@ -62,7 +62,7 @@
 #include <QBrush>
 #include <QColor>
 
-enum { WarnDebugMessage = false };
+enum { WarnDebugMessage = true };
 
 static inline Core::IUser *user() { return Core::ICore::instance()->user(); }
 static inline Core::IPatient *patient() { return Core::ICore::instance()->patient(); }
@@ -319,11 +319,11 @@ void treeViewsActions::userIsChanged(){
         }
 }
 
-void treeViewsActions::mousePressEvent(QMouseEvent *event){
+/*void treeViewsActions::mousePressEvent(QMouseEvent *event){
     if (WarnDebugMessage)
     	      qDebug() << __FILE__ << QString::number(__LINE__) << " in  tree clicked" ;
     if(event->button() == Qt::RightButton){
-        /*if(isChildOfThesaurus()){
+        if(isChildOfThesaurus()){
             blockSignals(true);
             if (WarnDebugMessage)
     	      qDebug() << __FILE__ << QString::number(__LINE__) << " in treeview right button " ;
@@ -332,7 +332,7 @@ void treeViewsActions::mousePressEvent(QMouseEvent *event){
             m_menuRightClic-> addAction(m_deleteThesaurusValue);
             m_menuRightClic->exec(event->globalPos());
             blockSignals(false);
-        }*/
+        }
 
     }
     if(event->button() == Qt::LeftButton){
@@ -341,7 +341,7 @@ void treeViewsActions::mousePressEvent(QMouseEvent *event){
             blockSignals(false);
             QTreeView::mousePressEvent(event);
     }
-}
+}*/
 
 void treeViewsActions::mouseReleaseEvent(QMouseEvent *event){
     if (WarnDebugMessage)
@@ -431,7 +431,7 @@ bool treeViewsActions::isChildOfThesaurus() {
     QStringList valuesOfThesaurus = m_mapSubItems.values("Thesaurus");
     if (WarnDebugMessage)
         qDebug() << __FILE__ << QString::number(__LINE__) << " dataParent =" << dataParent ;
-    if (dataParent == "Thesaurus"|| valuesOfThesaurus.contains(dataParent)) {
+    if (dataParent .contains(trUtf8("Thesaurus"))|| valuesOfThesaurus.contains(dataParent)) {
         ret = true;
     }
     return ret;
