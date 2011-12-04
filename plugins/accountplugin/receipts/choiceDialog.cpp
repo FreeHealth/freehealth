@@ -42,9 +42,13 @@
 #include <QBrush>
 #include <QColor>
 #include <QMouseEvent>
-enum { WarnDebugMessage = true };
-static inline Core::IUser *user() { return Core::ICore::instance()->user(); }
+
+enum { WarnDebugMessage = false };
+
 using namespace ChoiceActions;
+
+static inline Core::IUser *user() { return Core::ICore::instance()->user(); }
+
 treeViewsActions::treeViewsActions(QWidget *parent):QTreeView(parent){
     m_deleteThesaurusValue = new QAction(trUtf8("Delete this value."),this);
     m_choosePreferedValue = new QAction(trUtf8("Choose this value like the preferred."),this);
