@@ -195,7 +195,8 @@ void ControlReceipts::print(){
 void ControlReceipts::coloringDoubles(){
     int rowCount = m_accountModel->rowCount();
     int columnCount = m_accountModel->columnCount();
-    qDebug() << __FILE__ << QString::number(__LINE__) << QString::number(rowCount) << " " << QString::number(columnCount);
+    if (WarnDebugMessage)
+        qDebug() << __FILE__ << QString::number(__LINE__) << QString::number(rowCount) << " " << QString::number(columnCount);
     QList<int> listRows;
     for (int i = 0; i < rowCount; i += 1)
     {
@@ -206,7 +207,8 @@ void ControlReceipts::coloringDoubles(){
     	        QModelIndex index = m_accountModel->index(i,c,QModelIndex());
     		dataRow << m_accountModel->data(index,Qt::DisplayRole);
     	}
-    	qDebug() << __FILE__ << QString::number(__LINE__) << " dataRow.size =" << QString::number(dataRow.size());
+        if (WarnDebugMessage)
+            qDebug() << __FILE__ << QString::number(__LINE__) << " dataRow.size =" << QString::number(dataRow.size());
     	for (int j = i; j < rowCount ; j += 1)
     	{
     	           if(j!=i){
@@ -217,12 +219,15 @@ void ControlReceipts::coloringDoubles(){
     		                dataAfterRow += m_accountModel->data(indexAfter,Qt::DisplayRole);
     	                }
     	                
-    	                qDebug() << __FILE__ << QString::number(__LINE__) << " dataAfterRow.size =" << QString::number(dataAfterRow.size());
+                        if (WarnDebugMessage)
+                            qDebug() << __FILE__ << QString::number(__LINE__) << " dataAfterRow.size =" << QString::number(dataAfterRow.size());
     	                if (dataAfterRow == dataRow)
     	                {
-    	                        qDebug() << __FILE__ << QString::number(__LINE__) << " dataAfterRow= "<< dataAfterRow;
+                            if (WarnDebugMessage) {
+                                qDebug() << __FILE__ << QString::number(__LINE__) << " dataAfterRow= "<< dataAfterRow;
     	                        qDebug() << __FILE__ << QString::number(__LINE__) << QString::number(i) << QString::number(j);
-    	                	listRows << i << j;
+                            }
+                            listRows << i << j;
     	                }
     	                else{}
     	           }
@@ -230,7 +235,8 @@ void ControlReceipts::coloringDoubles(){
 
     }
     m_accountModel->getDoublesRows = listRows;
-    qDebug() << __FILE__ << QString::number(__LINE__) << " listRows = " << QString::number(listRows.size());
+    if (WarnDebugMessage)
+        qDebug() << __FILE__ << QString::number(__LINE__) << " listRows = " << QString::number(listRows.size());
 
     m_accountModel->submit();
 }
@@ -238,10 +244,10 @@ void ControlReceipts::coloringDoubles(){
 void ControlReceipts::refresh(){
     delete m_accountModel;
     m_accountModel = new AccountModel(this);
-    if (!m_accountModel->setHeaderData(ACCOUNT_PATIENT_NAME,Qt::Horizontal ,trUtf8("Patient") , Qt::EditRole))
-    {
+    if (!m_accountModel->setHeaderData(ACCOUNT_PATIENT_NAME,Qt::Horizontal ,trUtf8("Patient") , Qt::EditRole)) {
+        if (WarnDebugMessage)
             qWarning() << __FILE__ << QString::number(__LINE__) << "Unable to set header data" ;
-        }
+    }
     m_accountModel->setHeaderData(ACCOUNT_DATE,Qt::Horizontal ,trUtf8("Date") , Qt::EditRole);
     m_accountModel->setHeaderData(ACCOUNT_MEDICALPROCEDURE_TEXT,Qt::Horizontal ,trUtf8("Acts") , Qt::EditRole);
     m_accountModel->setHeaderData(ACCOUNT_COMMENT,Qt::Horizontal ,trUtf8("Comment") , Qt::EditRole);
@@ -277,6 +283,7 @@ void ControlReceipts::refreshFilter(const QString & filter){
     m_accountModel->setFilter(filter);
     if (!m_accountModel->setHeaderData(ACCOUNT_PATIENT_NAME,Qt::Horizontal ,trUtf8("Patient") , Qt::EditRole))
     {
+        if (WarnDebugMessage)
             qWarning() << __FILE__ << QString::number(__LINE__) << "Unable to set header data" ;
         }
     m_accountModel->setHeaderData(ACCOUNT_DATE,Qt::Horizontal ,trUtf8("Date") , Qt::EditRole);
