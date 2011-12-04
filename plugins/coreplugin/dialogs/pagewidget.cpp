@@ -74,6 +74,8 @@ namespace {
         QString category;
         QString id;
     };
+
+    const char * const CSS = "text-indent:5px;padding:5px;font-weight:bold;background:qlineargradient(spread:pad, x1:0, y1:0, x2:1, y2:0, stop:0.464 rgba(255, 255, 176, 149), stop:1 rgba(255, 255, 255, 0))";
 }
 
 Q_DECLARE_METATYPE(::PageData)
@@ -238,9 +240,7 @@ QWidget *PageWidget::createPageWidget(IGenericPage *page)
     title->setSizePolicy(QSizePolicy::Expanding, QSizePolicy::Fixed);
     title->setFont(bold);
     title->setText(page->title());
-    title->setIndent(5);
-    title->setContentsMargins(5,5,5,5);
-    title->setStyleSheet("background:qlineargradient(spread:pad, x1:0, y1:0, x2:1, y2:0, stop:0.464 rgba(255, 255, 176, 149), stop:1 rgba(255, 255, 255, 0))");
+    title->setStyleSheet(::CSS);
     m_Labels.insert(page, title);
     QToolButton *button = new QToolButton(w);
     button->setIcon(theme()->icon(Core::Constants::ICONFULLSCREEN));
