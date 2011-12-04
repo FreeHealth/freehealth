@@ -151,7 +151,8 @@ namespace InternalAmount {
             
             QVariant data;
             if (!index.isValid()) {
-                qWarning() << __FILE__ << QString::number(__LINE__) << "index not valid" ;
+                if (WarnDebugMessage)
+                    qWarning() << __FILE__ << QString::number(__LINE__) << "index not valid" ;
                 return QVariant();
                 }
                 
@@ -167,8 +168,9 @@ namespace InternalAmount {
         bool setData(const QModelIndex &index, const QVariant &value, int role = Qt::EditRole)
         {
             bool ret = true;
-            if (!index.isValid()){
-                qWarning() << __FILE__ << QString::number(__LINE__) << "index not valid" ;
+            if (!index.isValid()) {
+                if (WarnDebugMessage)
+                    qWarning() << __FILE__ << QString::number(__LINE__) << "index not valid" ;
                 return false;
             }
 
@@ -486,9 +488,9 @@ bool treeViewsActions::fillActionTreeView()
 
 
     QStandardItem *parentItem = treeModel()->invisibleRootItem();
-    if (!parentItem->index().isValid())
-    {
-    	qWarning() << __FILE__ << QString::number(__LINE__) << "parentItem is not valid";
+    if (!parentItem->index().isValid()){
+        if (WarnDebugMessage)
+            qWarning() << __FILE__ << QString::number(__LINE__) << "parentItem is not valid";
     }
     QString strMainActions;
     /*QMap<int,QStandardItem*>*/ m_mapOfMainItems.clear();
@@ -521,9 +523,11 @@ bool treeViewsActions::fillActionTreeView()
             m_mapOfMainItems.insert(ROUND_TRIP,actionItem);
             row = 3;
         } else {
-            qWarning() << __FILE__ << QString::number(__LINE__) << "Error color treeViewsActions." ;
+            if (WarnDebugMessage)
+                qWarning() << __FILE__ << QString::number(__LINE__) << "Error color treeViewsActions." ;
         }
         
+        if (WarnDebugMessage)
             qDebug() << __FILE__ << QString::number(__LINE__) << QString::number(row);
         
         }//
@@ -535,7 +539,7 @@ bool treeViewsActions::fillActionTreeView()
                 QStringList listSubActions;
                 listSubActions = m_mapSubItems.values(actionItem->text());
                 if (WarnDebugMessage)
-                qDebug() << __FILE__ << QString::number(__LINE__) << "listSubActions" << QString::number(listSubActions.size())
+                    qDebug() << __FILE__ << QString::number(__LINE__) << "listSubActions" << QString::number(listSubActions.size())
                 << " " << actionItem->text();
                 QString strSubActions;
                 foreach(strSubActions,listSubActions){
@@ -544,12 +548,12 @@ bool treeViewsActions::fillActionTreeView()
                          strSubActions ;
                     QStandardItem *subActionItem = new QStandardItem(strSubActions);
                     actionItem->appendRow(subActionItem);
-                    if (!subActionItem->index().isValid())
-                    {    	
-                        qWarning() << __FILE__ << QString::number(__LINE__) << "subActionItem is not valid";
+                    if (!subActionItem->index().isValid()) {
+                        if (WarnDebugMessage)
+                            qWarning() << __FILE__ << QString::number(__LINE__) << "subActionItem is not valid";
                         b = false;
-                        }
                     }
+                }
         }//end of  actionItem
     if (WarnDebugMessage)
             qDebug() << __FILE__ << QString::number(__LINE__)  ;
@@ -581,10 +585,10 @@ void treeViewsActions::changeEvent(QEvent *e) {
     if (e->type()==QEvent::LanguageChange) {
         delete m_actionsTreeModel;
             if (WarnDebugMessage)
-            qDebug() << __FILE__ << QString::number(__LINE__) << " langage changed " ;
-        if (!fillActionTreeView())
-        {
-        	qWarning() << __FILE__ << QString::number(__LINE__) << "index is not valid";
+                qDebug() << __FILE__ << QString::number(__LINE__) << " langage changed " ;
+        if (!fillActionTreeView()) {
+            if (WarnDebugMessage)
+                qWarning() << __FILE__ << QString::number(__LINE__) << "index is not valid";
             }
         reset();
         }
@@ -662,9 +666,9 @@ ReceiptViewer::ReceiptViewer(QWidget *parent) :
     m_vbox = new QVBoxLayout;
     m_vbox->addWidget(m_actionTreeView);
     ui->actionsBox->setLayout(m_vbox);
-    if (!m_actionTreeView->fillActionTreeView())
-        {
-        	qWarning() << __FILE__ << QString::number(__LINE__) << "index is not valid";
+    if (!m_actionTreeView->fillActionTreeView()) {
+        if (WarnDebugMessage)
+                qWarning() << __FILE__ << QString::number(__LINE__) << "index is not valid";
         }
     
     //preferential choices in the tree view.
@@ -697,7 +701,8 @@ ReceiptViewer::ReceiptViewer(QWidget *parent) :
     connect(ui->displayRadioButton,SIGNAL(clicked(bool)),this,SLOT(showControlReceipts(bool)));
     if (!connect(m_actionTreeView,SIGNAL(clicked(const QModelIndex&)),this,SLOT(actionsOfTreeView(const QModelIndex&))))
     {
-    	qWarning() << __FILE__ << QString::number(__LINE__) << "unable to connect m_actionTreeView"; 
+        if (WarnDebugMessage)
+            qWarning() << __FILE__ << QString::number(__LINE__) << "unable to connect m_actionTreeView";
     }
     
     connect(m_clear,SIGNAL(triggered(bool)),this,SLOT(clearAll(bool)));
@@ -720,19 +725,19 @@ void ReceiptViewer::changeEvent(QEvent *e)
         delete m_actionTreeView;
         delete m_vbox;
         if (WarnDebugMessage)
-        qDebug() << __FILE__ << QString::number(__LINE__) << " in  ReceiptViewer::changeEvent(QEvent *e)"  ;
+            qDebug() << __FILE__ << QString::number(__LINE__) << " in  ReceiptViewer::changeEvent(QEvent *e)"  ;
         //treeViewsActions
         m_actionTreeView = new treeViewsActions(this);
         m_vbox = new QVBoxLayout;
         m_vbox->addWidget(m_actionTreeView);
         ui->actionsBox->setLayout(m_vbox);
-        if (!m_actionTreeView->fillActionTreeView())
-        {
-        	qWarning()  << __FILE__ << QString::number(__LINE__) << "index is not valid";
+        if (!m_actionTreeView->fillActionTreeView()) {
+            if (WarnDebugMessage)
+                qWarning()  << __FILE__ << QString::number(__LINE__) << "index is not valid";
         }
-        if (!connect(m_actionTreeView,SIGNAL(clicked(const QModelIndex&)),this,SLOT(actionsOfTreeView(const QModelIndex&))))
-        {
-    	qWarning() << __FILE__ << QString::number(__LINE__) << "unable to connect m_actionTreeView"; 
+        if (!connect(m_actionTreeView,SIGNAL(clicked(const QModelIndex&)),this,SLOT(actionsOfTreeView(const QModelIndex&)))) {
+            if (WarnDebugMessage)
+                qWarning() << __FILE__ << QString::number(__LINE__) << "unable to connect m_actionTreeView";
         }
         //amountsView
         m_model->setHeaderData(int(Cash),Qt::Horizontal,tr("Cash"));
