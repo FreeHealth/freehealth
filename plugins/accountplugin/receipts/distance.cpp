@@ -34,9 +34,13 @@
 #include "receiptsmanager.h"
 #include "receiptsIO.h"
 #include "ui_ChoiceDialog.h"
+
 #include <QDebug>
-enum { WarnDebugMessage = true };
+
+enum { WarnDebugMessage = false };
+
 using namespace ReceiptsConstants;
+
 distance::distance(QWidget * parent):QDialog(parent),ui(new Ui::ChoiceDialog){
     ui->setupUi(this);
     setWindowTitle("Round trip.");
