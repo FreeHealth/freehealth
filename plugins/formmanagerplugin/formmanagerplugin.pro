@@ -22,6 +22,7 @@ HEADERS = formmanagerplugin.h \
     episodemodel.h \
     episodebase.h \
     constants_db.h \
+    constants_settings.h \
     formfilesselectorwidget.h \
     formmanagerpreferencespage.h \
     formcontextualwidget.h \
@@ -57,4 +58,6 @@ TRANSLATIONS += $${SOURCES_TRANSLATIONS_PATH}/formmanagerplugin_fr.ts \
 
 FORMS += formfilesselectorwidget.ui \
     formeditordialog.ui \
-    formmanagerpreferenceswidget.ui
+    formmanagerpreferenceswidget.ui \
+    formpreferenceswidget.ui
+

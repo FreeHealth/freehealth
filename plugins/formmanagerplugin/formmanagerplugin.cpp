@@ -76,8 +76,10 @@ FormManagerPlugin::FormManagerPlugin() :
     m_FirstRun = new Internal::FirstRunFormManagerConfigPage(this);
     addObject(m_FirstRun);
 
-    m_PrefPage = new Internal::FormManagerPreferencesPage(this);
+    m_PrefPageSelector = new Internal::FormPreferencesFileSelectorPage(this);
+    m_PrefPage = new Internal::FormPreferencesPage(this);
     addAutoReleasedObject(m_PrefPage);
+    addAutoReleasedObject(m_PrefPageSelector);
 }
 
 FormManagerPlugin::~FormManagerPlugin()

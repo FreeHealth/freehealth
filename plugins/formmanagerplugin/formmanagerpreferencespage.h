@@ -35,8 +35,8 @@
 /**
  * \file formmanagerpreferencespage.h
  * \author Eric MAEKER <eric.maeker@gmail.com>
- * \version 0.4.0
- * \date 09 June 2010
+ * \version 0.6.2
+ * \date 04 Dec 2011
 */
 
 
@@ -49,17 +49,17 @@ class FormFilesSelectorWidget;
 
 namespace Internal {
 namespace Ui {
-class FormManagerPreferencesWidget;
+class FormPreferencesFileSelectorWidget;
 }
 
-class FormManagerPreferencesWidget : public QWidget
+class FormPreferencesFileSelectorWidget : public QWidget
 {
     Q_OBJECT
-    Q_DISABLE_COPY(FormManagerPreferencesWidget)
+    Q_DISABLE_COPY(FormPreferencesFileSelectorWidget)
 
 public:
-    explicit FormManagerPreferencesWidget(QWidget *parent = 0);
-    ~FormManagerPreferencesWidget();
+    explicit FormPreferencesFileSelectorWidget(QWidget *parent = 0);
+    ~FormPreferencesFileSelectorWidget();
 
     static void writeDefaultSettings(Core::ISettings *) {}
 
@@ -71,16 +71,16 @@ protected:
     virtual void changeEvent(QEvent *e);
 
 private:
-    Ui::FormManagerPreferencesWidget *ui;
+    Ui::FormPreferencesFileSelectorWidget *ui;
 };
 
 
-class FormManagerPreferencesPage : public Core::IOptionsPage
+class FormPreferencesFileSelectorPage : public Core::IOptionsPage
 {
     Q_OBJECT
 public:
-    FormManagerPreferencesPage(QObject *parent = 0);
-    ~FormManagerPreferencesPage();
+    FormPreferencesFileSelectorPage(QObject *parent = 0);
+    ~FormPreferencesFileSelectorPage();
 
     QString id() const;
     QString name() const;
@@ -94,16 +94,75 @@ public:
 
     QString helpPage() {return "parametrer.html";}
 
-    static void writeDefaultSettings(Core::ISettings *s) {FormManagerPreferencesWidget::writeDefaultSettings(s);}
+    static void writeDefaultSettings(Core::ISettings *s) {FormPreferencesFileSelectorWidget::writeDefaultSettings(s);}
 
     QWidget *createPage(QWidget *parent = 0);
 private:
-    QPointer<FormManagerPreferencesWidget> m_Widget;
+    QPointer<FormPreferencesFileSelectorWidget> m_Widget;
 };
 
 
 }  // End Internal
 }  // End Form
 
+
+namespace Form {
+namespace Internal {
+namespace Ui {
+class FormPreferencesWidget;
+}
+
+class FormPreferencesWidget : public QWidget
+{
+    Q_OBJECT
+    Q_DISABLE_COPY(FormPreferencesWidget)
+
+public:
+    explicit FormPreferencesWidget(QWidget *parent = 0);
+    ~FormPreferencesWidget();
+
+    static void writeDefaultSettings(Core::ISettings *) {}
+    void setupUiData();
+
+public Q_SLOTS:
+    void saveToSettings(Core::ISettings *);
+
+protected:
+    virtual void changeEvent(QEvent *e);
+
+private:
+    Ui::FormPreferencesWidget *ui;
+};
+
+
+class FormPreferencesPage : public Core::IOptionsPage
+{
+    Q_OBJECT
+public:
+    FormPreferencesPage(QObject *parent = 0);
+    ~FormPreferencesPage();
+
+    QString id() const;
+    QString name() const;
+    QString category() const;
+    QString title() const;
+
+    void resetToDefaults();
+    void checkSettingsValidity();
+    void applyChanges();
+    void finish();
+
+    QString helpPage() {return "parametrer.html";}
+
+    static void writeDefaultSettings(Core::ISettings *s) {FormPreferencesWidget::writeDefaultSettings(s);}
+
+    QWidget *createPage(QWidget *parent = 0);
+private:
+    QPointer<FormPreferencesWidget> m_Widget;
+};
+
+
+}  // End Internal
+}  // End Form
 
 #endif // FORMMANAGERPREFERENCESPAGE_H

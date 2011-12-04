@@ -44,12 +44,24 @@
 namespace Form {
 namespace Constants {
 
+    // Settings
     const char * const  S_EPISODEMODEL_FORM_FOREGROUND    = "EpisodeModel/FormForeGround";
     const char * const  S_EPISODEMODEL_EPISODE_FOREGROUND = "EpisodeModel/EpisodeForeGround";
-    const char * const  S_EPISODEMODEL_DATEFORMAT         = "EpisodeModel/OutputDateFormat";
+    const char * const  S_EPISODEMODEL_LONGDATEFORMAT         = "EpisodeModel/LongDateFormat";
+    const char * const  S_EPISODEMODEL_SHORTDATEFORMAT         = "EpisodeModel/ShortDateFormat";
     const char * const  S_PLACEHOLDERSPLITTER_SIZES       = "Splitters/PlaceHolderSizes";
 
+    const char * const S_USEALTERNATEROWCOLOR = "EpisodeModel/useAltRowCol";
+    const char * const S_USESPECIFICCOLORFORROOTS= "EpisodeModel/useSpeColorForRoot";
+    const char * const S_EPISODELABELCONTENT = "EpisodeModel/episodeLabel";
+    const char * const S_FOREGROUNDCOLORFORROOTS = "EpisodeModel/foregroundRoot";
+
     const char * const XML_FORM_GENERAL_TAG = "FormXmlContent";
+
+    // Tokens
+    const char * const T_LABEL = "LABEL";
+    const char * const T_SMALLDATE = "SMALL_DATE";
+    const char * const T_FULLDATE = "FULL_DATE";
 
 }  // End namespace Form::Constants
 }  // End namespace Form

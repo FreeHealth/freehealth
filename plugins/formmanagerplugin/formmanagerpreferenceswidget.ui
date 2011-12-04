@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <ui version="4.0">
- <class>Form::Internal::FormManagerPreferencesWidget</class>
- <widget class="QWidget" name="Form::Internal::FormManagerPreferencesWidget">
+ <class>Form::Internal::FormPreferencesFileSelectorWidget</class>
+ <widget class="QWidget" name="Form::Internal::FormPreferencesFileSelectorWidget">
   <property name="geometry">
    <rect>
     <x>0</x>

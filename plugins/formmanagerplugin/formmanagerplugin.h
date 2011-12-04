@@ -42,7 +42,8 @@ namespace Form {
 namespace Internal {
 class FormManagerMode;
 class FirstRunFormManagerConfigPage;
-class FormManagerPreferencesPage;
+class FormPreferencesPage;
+class FormPreferencesFileSelectorPage;
 
 class FormManagerPlugin : public ExtensionSystem::IPlugin
 {
@@ -56,7 +57,8 @@ public:
 private:
     FormManagerMode *mode;
     Internal::FirstRunFormManagerConfigPage *m_FirstRun;
-    Internal::FormManagerPreferencesPage *m_PrefPage;
+    Internal::FormPreferencesFileSelectorPage *m_PrefPageSelector;
+    Internal::FormPreferencesPage *m_PrefPage;
 };
 
 }

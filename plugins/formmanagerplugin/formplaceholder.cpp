@@ -99,7 +99,8 @@ const char * const TREEVIEW_SHEET =
         "}"
 
         "QTreeView::item {"
-        "    border: 0px solid #d9d9d9;"
+//        "    border: 0px;"
+        "    background: base;"
 //        "    border-top-color: transparent;"
 //        "    border-bottom-color: transparent;"
         "}"
@@ -109,10 +110,10 @@ const char * const TREEVIEW_SHEET =
 //        "    border: 0px solid #bfcde4;"
         "}"
 
-        "QTreeView::branch:hover {"
-        "    background: qlineargradient(x1: 0, y1: 0, x2: 0, y2: 1, stop: 0 #e7effd, stop: 1 #cbdaf1);"
-        "    border: 0px solid #bfcde4;"
-        "}"
+//        "QTreeView::branch:hover {"
+//        "    background: qlineargradient(x1: 0, y1: 0, x2: 0, y2: 1, stop: 0 #e7effd, stop: 1 #cbdaf1);"
+//        "    border: 0px solid #bfcde4;"
+//        "}"
 
 //        "QTreeView::item:selected {"
 //        "    border: 0px solid #567dbc;"
@@ -256,9 +257,21 @@ void FormItemDelegate::setEpisodeModel(EpisodeModel *model)
     m_EpisodeModel = model;
 }
 
+QSize FormItemDelegate::sizeHint(const QStyleOptionViewItem &option,const QModelIndex &index) const
+{
+    const bool topLevel = !index.parent().isValid();
+    if (topLevel) {
+        return QStyledItemDelegate::sizeHint(option, index) + QSize(10,10);
+    }
+    return QStyledItemDelegate::sizeHint(option, index);
+}
+
 void FormItemDelegate::paint(QPainter *painter, const QStyleOptionViewItem &option,
            const QModelIndex &index) const
 {
+    const bool topLevel = !index.parent().isValid();
+
+    // Add the fancy button
     if (option.state & QStyle::State_MouseOver) {
         if ((QApplication::mouseButtons() & Qt::LeftButton) == 0)
             pressedIndex = QModelIndex();
@@ -270,6 +283,7 @@ void FormItemDelegate::paint(QPainter *painter, const QStyleOptionViewItem &opti
 
     QStyledItemDelegate::paint(painter, option, index);
 
+    // Draw fancy button
     if (index.column()==EpisodeModel::EmptyColumn1 && option.state & QStyle::State_MouseOver) {
         QIcon icon;
         if (option.state & QStyle::State_Selected) {
@@ -337,12 +351,20 @@ FormPlaceHolder::FormPlaceHolder(QWidget *parent) :
     d->m_FileTree->setObjectName("FormTree");
 //    d->m_FileTree->setIndentation(10);
     d->m_FileTree->viewport()->setAttribute(Qt::WA_Hover);
-    d->m_FileTree->setItemDelegate((d->m_Delegate = new Internal::FormItemDelegate(this)));
+    d->m_FileTree->setItemDelegate((d->m_Delegate = new Internal::FormItemDelegate(d->m_FileTree)));
     d->m_FileTree->setFrameStyle(QFrame::NoFrame);
     d->m_FileTree->setAttribute(Qt::WA_MacShowFocusRect, false);
     d->m_FileTree->setSelectionMode(QAbstractItemView::SingleSelection);
     d->m_FileTree->setSelectionBehavior(QAbstractItemView::SelectRows);
-    d->m_FileTree->setStyleSheet(::TREEVIEW_SHEET);
+    d->m_FileTree->setAlternatingRowColors(settings()->value(Constants::S_USEALTERNATEROWCOLOR).toBool());
+//    d->m_FileTree->setRootIsDecorated(false);
+    QString css = ::TREEVIEW_SHEET;
+//    if (settings()->value(Constants::S_USESPECIFICCOLORFORROOTS).toBool()) {
+//        css += QString("QTreeView:item:top {background:%1;}")
+////                       "QTreeView::branch:top {background:%1;}")
+//                .arg(settings()->value(Constants::S_FOREGROUNDCOLORFORROOTS).toString());
+//    }
+    d->m_FileTree->setStyleSheet(css);
 
     connect(d->m_FileTree, SIGNAL(clicked(QModelIndex)), this, SLOT(handleClicked(QModelIndex)));
     connect(d->m_FileTree, SIGNAL(pressed(QModelIndex)), this, SLOT(handlePressed(QModelIndex)));

@@ -916,6 +916,8 @@ QVariant EpisodeModel::data(const QModelIndex &item, int role) const
         }
         case Qt::DecorationRole:
             return theme()->icon(Core::Constants::ICONPATIENTSYNTHESIS);
+        case Qt::ForegroundRole:
+            return QColor(settings()->value(Constants::S_EPISODEMODEL_FORM_FOREGROUND).toString());
         }
         return QVariant();
     }
@@ -930,8 +932,15 @@ QVariant EpisodeModel::data(const QModelIndex &item, int role) const
     {
         switch (item.column()) {
         case Label:
-            if (episode)
-                return episode->data(EpisodeData::Label);
+            if (episode) {
+                QHash<QString, QString> tokens;
+                tokens.insert(Constants::T_LABEL, episode->data(EpisodeData::Label).toString());
+                tokens.insert(Constants::T_SMALLDATE, episode->data(EpisodeData::UserDate).toDate().toString(settings()->value(Constants::S_EPISODEMODEL_SHORTDATEFORMAT, "dd MM yyyy").toString()));
+                tokens.insert(Constants::T_FULLDATE, episode->data(EpisodeData::UserDate).toDateTime().toString(settings()->value(Constants::S_EPISODEMODEL_LONGDATEFORMAT, "dd MM yyyy").toString()));
+                QString s = settings()->value(Constants::S_EPISODELABELCONTENT).toString();
+                Utils::replaceTokens(s, tokens);
+                return s;
+            }
             if (form)
                 return form->spec()->label();
             break;
@@ -963,6 +972,7 @@ QVariant EpisodeModel::data(const QModelIndex &item, int role) const
             }
             break;
         }
+        break;
     }
     case Qt::ToolTipRole :
     {
@@ -970,30 +980,30 @@ QVariant EpisodeModel::data(const QModelIndex &item, int role) const
         case Label:
             if (episode)
                 return QString("<p align=\"right\">%1&nbsp;-&nbsp;%2<br /><span style=\"color:gray;font-size:9pt\">%3</span></p>")
-                        .arg(episode->data(EpisodeData::UserDate).toDate().toString(settings()->value(Constants::S_EPISODEMODEL_DATEFORMAT, "dd MMM yyyy").toString()).replace(" ", "&nbsp;"))
+                        .arg(episode->data(EpisodeData::UserDate).toDate().toString(settings()->value(Constants::S_EPISODEMODEL_LONGDATEFORMAT, "dd MMM yyyy").toString()).replace(" ", "&nbsp;"))
                         .arg(episode->data(EpisodeData::Label).toString().replace(" ", "&nbsp;"))
                         .arg(user()->value(Core::IUser::FullName).toString() + "<br/>" +
-                             tr("Created: ") +  episode->data(EpisodeData::CreationDate).toDateTime().toString(QLocale().dateTimeFormat(QLocale::ShortFormat)));
+                             tr("Created: ") +  episode->data(EpisodeData::CreationDate).toDateTime().toString(settings()->value(Constants::S_EPISODEMODEL_LONGDATEFORMAT, "dd MMM yyyy").toString()));
             if (form)
                 return form->spec()->label();
             break;
         }
+        break;
     }
     case Qt::ForegroundRole :
     {
         if (episode) {
             return QColor(settings()->value(Constants::S_EPISODEMODEL_EPISODE_FOREGROUND, "darkblue").toString());
-        } else {
-            /** \todo remove this */
-            Form::FormMain *form = d->m_FormItems.key(it, 0);
-            if (form) {
-                if (form->episodePossibilities()==FormMain::UniqueEpisode)
-                    return QColor("red");
+        } else if (form) {
+            if (it->parent() == d->m_RootItem) {
+                if (settings()->value(Constants::S_USESPECIFICCOLORFORROOTS).toBool()) {
+                    return QColor(settings()->value(Constants::S_FOREGROUNDCOLORFORROOTS, "darkblue").toString());
+                }
             }
-            // End remove
             return QColor(settings()->value(Constants::S_EPISODEMODEL_FORM_FOREGROUND, "#000").toString());
         }
-    }
+        break;
+    }        
     case Qt::FontRole :
     {
         if (form) {
@@ -1012,6 +1022,7 @@ QVariant EpisodeModel::data(const QModelIndex &item, int role) const
                 icon.append(qApp->applicationDirPath());
             return QIcon(icon);
         }
+        break;
     }
     }
     return QVariant();
