@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <!DOCTYPE FreeMedForms>
 
-<DataPackServer>
+<DataPack_Pack>
 
   <PackDescription>
     <!-- Non translatable values -->
@@ -11,7 +11,7 @@
     <fdv>0.6.4</fdv>
     <cdate>2011-11-26</cdate>
     <lmdate>2011-11-26</lmdate>
-    <icon>__theme__/freeicd.png</icon>
+    <icon>__theme__/freediams.png</icon>
     <weblink></weblink>
     <bibliography/>
     <file>master.zip</file>
@@ -34,4 +34,8 @@
 
   </PackDescription>
 
-</DataPackServer>
+  <PackDependencies>
+    <Dependency t="depends" n="icd10" v="0.6.2" u="icd10" />
+  </PackDependencies>
+
+</DataPack_Pack>

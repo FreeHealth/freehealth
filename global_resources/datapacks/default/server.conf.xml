@@ -17,6 +17,8 @@
 
     <!-- Translatable values -->
     <licence>GPLv3</licence>
+    <label lang="fr">Serveur du projet FreeMedForms</label>
+    <label lang="xx">FreeMedForms project server</label>
     <description lang="fr">Données par défaut pour FreeMedForms</description>
     <description lang="xx">Default data for FreeMedForms</description>
     <updateinfo>
@@ -29,8 +31,8 @@
   </ServerDescription>
 
   <ServerContents>
-    <Pack afn="" m="" s="" df="" as=""/>
-    <Pack afn="" m="" s="" df="" as=""/>
+    <Pack serverFileName="./icd10/icd10.xml"/>
+    <Pack serverFileName="./drugs/drugs.xml"/>
   </ServerContents>
 
 </DataPackServer>
