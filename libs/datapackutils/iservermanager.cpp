@@ -121,8 +121,14 @@
 
 /**
  * \fn virtual QList<PackDescription> DataPack::IServerManager::getPackDescription(const Server &server)
- * Assuming that server is connected and its description files were downloaded, return the pack description list.
+ * Assuming that server is connected and its description files were downloaded, return the pack description list related to the \e server.
 */
+
+/**
+ * \fn virtual QList<Pack> DataPack::IServerManager::getPackForServer(const Server &server);
+ * Assuming that server is connected and all description files were downloaded, return the pack list related to the \e server.
+*/
+
 
 
 /**

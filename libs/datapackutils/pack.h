@@ -28,6 +28,8 @@
 #define DATAPACK_PACK_H
 
 #include <datapackutils/datapack_exporter.h>
+#include <datapackutils/packdescription.h>
+
 #include <QString>
 
 namespace DataPack {
@@ -37,6 +39,9 @@ class DATAPACK_EXPORT Pack
 public:
     Pack();
     virtual ~Pack();
+
+    const PackDescription &description() const {return m_descr;}
+    const PackDependencies &dependencies() const {return m_depends;}
 
     QString serverFileName() const {return m_ServerFileName;}
     QString serverLicenceFileName() const {return m_ServerLicenceFileName;}
@@ -54,9 +59,15 @@ public:
 
     void setDownloadedFileName(const QString &f) {m_DownFileName=f;}
 
+    void fromXmlFile(const QString &absFileName);
+    void fromXml(const QString &fullPackConfigXml);
+
+
 private:
     QString m_ServerFileName, m_ServerLicenceFileName, m_Md5, m_Sha1, m_DownFileName;
     bool m_Sha1Checked, m_Md5Checked;
+    PackDescription m_descr;
+    PackDependencies m_depends;
 };
 
 }  // End namespace DataPack

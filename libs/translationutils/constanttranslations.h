@@ -402,6 +402,12 @@ enum TitleInterpret {
         const char* const SELECTOR                           = QT_TRANSLATE_NOOP("tkConstants", "Selector");
         const char* const FORMS                              = QT_TRANSLATE_NOOP("tkConstants", "Forms");
         const char* const VIEWER                             = QT_TRANSLATE_NOOP("tkConstants", "Viewer");
+        const char* const SERVER                             = QT_TRANSLATE_NOOP("tkConstants", "Server");
+        const char* const PACKAGE                            = QT_TRANSLATE_NOOP("tkConstants", "Package");
+        const char* const SERVERS                            = QT_TRANSLATE_NOOP("tkConstants", "Servers");
+        const char* const PACKAGES                           = QT_TRANSLATE_NOOP("tkConstants", "Packages");
+        const char* const SERVER_S                            = QT_TRANSLATE_NOOP("tkConstants", "Server(s)");
+        const char* const PACKAGE_S                           = QT_TRANSLATE_NOOP("tkConstants", "Package(s)");
 
         // Settings related messages
         const char* const SETTINGS_RECOVERED                = QT_TRANSLATE_NOOP("tkConstants", "Settings recovered" );

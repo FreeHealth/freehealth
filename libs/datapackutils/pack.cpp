@@ -26,7 +26,19 @@
  ***************************************************************************/
 #include "pack.h"
 
+#include <utils/log.h>
+#include <utils/global.h>
+
+#include <QDomDocument>
+#include <QDomElement>
+
 using namespace DataPack;
+
+namespace {
+const char *const TAG_ROOT = "DataPack_Pack";
+const char *const TAG_PACKDESCRIPTION = "PackDescription";
+const char *const TAG_PACKDEPENDENCIES = "PackDependencies";
+}
 
 Pack::Pack() :
     m_Sha1Checked(false), m_Md5Checked(false)
@@ -50,3 +62,31 @@ bool Pack::isMd5Checked() const
 
 }
 
+/**
+ * Reads the XML configuration file of the pack and
+ * create the DataPack::PackDescription and the DataPack::PackDependencies
+ * related to this pack.
+*/
+void Pack::fromXmlFile(const QString &absFileName)
+{
+    fromXml(Utils::readTextFile(absFileName, Utils::DontWarnUser));
+}
+
+/**
+ * Reads the XML configuration content of the pack and
+ * create the DataPack::PackDescription and the DataPack::PackDependencies
+ * related to this pack.
+*/
+void Pack::fromXml(const QString &fullPackConfigXml)
+{
+    QDomDocument doc;
+    if (!doc.setContent(fullPackConfigXml)) {
+        LOG_ERROR_FOR("DataPack::Pack", "Wrong XML");
+        return;
+    }
+    QDomElement root = doc.firstChildElement(::TAG_ROOT);
+    QDomElement descr = root.firstChildElement(::TAG_PACKDESCRIPTION);
+    QDomElement dep = root.firstChildElement(::TAG_PACKDEPENDENCIES);
+    m_descr.fromDomElement(descr);
+    m_depends.fromDomElement(dep);
+}

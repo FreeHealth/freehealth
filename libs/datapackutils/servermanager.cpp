@@ -246,26 +246,54 @@ void ServerManager::checkServerUpdates()
 QList<PackDescription> ServerManager::getPackDescription(const Server &server)
 {
     WARN_FUNC;
-    // If PackDescription list already known return it
-    const QStringList keys = m_PackDescriptions.uniqueKeys();
+    // If Pack list already known return it
+//    const QStringList keys = m_PackDescriptions.uniqueKeys();
+//    if (keys.contains(server.url(), Qt::CaseInsensitive)) {
+//        return m_PackDescriptions.values(server.url());
+//    }
+
+    QList<PackDescription> toReturn;
+    const QStringList keys = m_Packs.uniqueKeys();
     if (keys.contains(server.url(), Qt::CaseInsensitive)) {
-        return m_PackDescriptions.values(server.url());
+        QList<Pack> packs = m_Packs.values(server.url());
+        for(int i = 0; i < packs.count(); ++i) {
+            toReturn << packs.at(i).description();
+        }
+        return toReturn;
     }
 
+    createServerPackList(server);
+
+    QList<Pack> packs = m_Packs.values(server.url());
+    for(int i = 0; i < packs.count(); ++i) {
+        toReturn << packs.at(i).description();
+    }
+    return toReturn;
+}
+
+QList<Pack> ServerManager::getPackForServer(const Server &server)
+{
+    createServerPackList(server);
+    return m_Packs.values(server.url());
+}
+
+void ServerManager::createServerPackList(const Server &server)
+{
+    if (!m_Packs.values(server.url()).isEmpty()) {
+        return;
+    }
     // Get the server config
     foreach(const QString &file, server.content().packDescriptionFileNames()) {
-        qWarning() << "PackageDescription @" << file;
+        qWarning() << "    * PackageDescription @" << file;
         QString path = server.url();
         path = path.replace("file:/", "") + QDir::separator() + file;
         QFileInfo f(path); // relative path
-        PackDescription desc;
+        Pack pack;
         // Read the packDescription
-        desc.fromXmlFile(f.absoluteFilePath());
+        pack.fromXmlFile(f.absoluteFilePath());
         // Store in the cache
-        m_PackDescriptions.insertMulti(server.url(), desc);
+        m_Packs.insertMulti(server.url(), pack);
     }
-
-    return m_PackDescriptions.values(server.url());
 }
 
 void ServerManager::checkServerUpdatesAfterDownload()

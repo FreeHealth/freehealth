@@ -31,6 +31,7 @@
 
 #include "servereditor.h"
 
+#include <utils/global.h>
 #include <translationutils/constanttranslations.h>
 
 #include <datapackutils/core.h>
@@ -55,6 +56,7 @@ const char *const ICON_SERVER_ASKING_CONNECTION = "connect_creating.png";
 const char *const ICON_PACKAGE = "package.png";
 
 const int IS_SERVER = 1;
+const int IS_PACK = 2;
 
 const char * const TITLE_CSS = "text-indent:5px;padding:5px;font-weight:bold;background:qlineargradient(spread:pad, x1:0, y1:0, x2:1, y2:0, stop:0.464 rgba(255, 255, 176, 149), stop:1 rgba(255, 255, 255, 0))";
 
@@ -75,7 +77,6 @@ protected:
     void paint(QPainter *painter, const QStyleOptionViewItem &option, const QModelIndex &index) const;
     QSize sizeHint(const QStyleOptionViewItem &option, const QModelIndex &index) const;
 };
-
 
 void Delegate::paint(QPainter *painter, const QStyleOptionViewItem &option, const QModelIndex &index) const
 {
@@ -128,9 +129,9 @@ QSize Delegate::sizeHint(const QStyleOptionViewItem &option, const QModelIndex &
 
 static inline DataPack::Core *core() {return DataPack::Core::instance();}
 static inline ServerManager *serverManager() {return qobject_cast<ServerManager*>(core()->serverManager());}
-static inline QIcon icon(const QString &name) { qWarning() << DataPack::Core::instance()->icon(name, DataPack::Core::BigPixmaps); return QIcon(DataPack::Core::instance()->icon(name, DataPack::Core::BigPixmaps));}
+static inline QIcon icon(const QString &name) { qWarning() << DataPack::Core::instance()->icon(name, DataPack::Core::MediumPixmaps); return QIcon(DataPack::Core::instance()->icon(name, DataPack::Core::MediumPixmaps));}
 
-static void managerToModel(QStandardItemModel *model)
+static void createServerModel(QStandardItemModel *model)
 {
     ServerManager *manager = serverManager();
     QFont bold;
@@ -141,6 +142,7 @@ static void managerToModel(QStandardItemModel *model)
         const Server &s = manager->getServerAt(i);
         QString label = QString("<span style=\"color:black;font-weight:bold\">%1</span>")
                 .arg(s.description().data(ServerDescription::Label).toString());
+
         if (s.isConnected()) {
             label += QString("<br /><span style=\"color:gray; font-size:small\">%2 (%3: %4)</span>")
                     .arg(tkTr(Trans::Constants::CONNECTED))
@@ -151,6 +153,10 @@ static void managerToModel(QStandardItemModel *model)
                     .arg(tkTr(Trans::Constants::NOT_CONNECTED));
         }
 
+        label += QString("<br /><span style=\"color:gray; font-size:small\">%1 %2</span>")
+                .arg(serverManager()->getPackForServer(s).count())
+                .arg(tkTr(Trans::Constants::PACKAGES));
+
         QStandardItem *server = new QStandardItem(label);
         server->setData(::IS_SERVER);
         root->appendRow(server);
@@ -158,19 +164,33 @@ static void managerToModel(QStandardItemModel *model)
         if (s.isConnected()) {
             server->setIcon(icon(::ICON_SERVER_CONNECTED));
             // Add packdescriptions
-            const QList<PackDescription> &packs = manager->getPackDescription(s);
-            for(int i=0; i < packs.count(); ++i) {
-                QString pack = QString("<span style=\"color:black;font-weight:bold\">%1</span><br />"
-                                       "<span style=\"color:gray; font-size:small\">%2: %3</span>")
-                        .arg(packs.at(i).data(PackDescription::Label).toString())
-                        .arg(tkTr(Trans::Constants::VERSION))
-                        .arg(packs.at(i).data(PackDescription::Version).toString());
-                QStandardItem *packItem = new QStandardItem(icon(::ICON_PACKAGE), pack);
-                server->appendRow(packItem);
-            }
         } else {
             server->setIcon(icon(::ICON_SERVER_NOT_CONNECTED));
         }
+    }
+}
+
+
+static void createPackModel(const Server &server, QStandardItemModel *model)
+{
+    const QList<Pack> &packs = serverManager()->getPackForServer(server);
+    model->clear();
+    for(int i=0; i < packs.count(); ++i) {
+        QString pack = QString("<span style=\"color:black;font-weight:bold\">%1</span><br />"
+                               "<span style=\"color:gray; font-size:small\">%2: %3</span>")
+                .arg(packs.at(i).description().data(PackDescription::Label).toString())
+                .arg(tkTr(Trans::Constants::VERSION))
+                .arg(packs.at(i).description().data(PackDescription::Version).toString());
+        QStandardItem *packItem = new QStandardItem(pack);
+        QString f = packs.at(i).description().data(PackDescription::GeneralIcon).toString();
+        if (f.isEmpty()) {
+            packItem->setIcon(icon(::ICON_PACKAGE));
+        } else {
+            f = f.remove("__theme__/");
+            packItem->setIcon(icon(f));
+        }
+        packItem->setData(::IS_PACK);
+        model->appendRow(packItem);
     }
 }
 
@@ -180,17 +200,35 @@ ServerEditor::ServerEditor(QWidget *parent) :
     ui(new Ui::ServerEditor)
 {
     ui->setupUi(this);
-    m_Model = new QStandardItemModel(this);
-    m_Model->setColumnCount(1);
-    managerToModel(m_Model);
-    ui->treeView->setModel(m_Model);
+    if (layout()) {
+        layout()->setMargin(0);
+        layout()->setSpacing(0);
+    }
+
+    m_ServerModel = new QStandardItemModel(this);
+    m_ServerModel->setColumnCount(1);
+    createServerModel(m_ServerModel);
+    ui->treeView->setModel(m_ServerModel);
     ui->treeView->header()->hide();
     Delegate *delegate = new Delegate;
     ui->treeView->setItemDelegate(delegate);
     ui->treeView->setStyleSheet(::CSS);
     ui->treeView->expandAll();
     ui->treeView->setAlternatingRowColors(true);
+    ui->treeView->setRootIsDecorated(false);
     ui->treeView->setEditTriggers(QTreeView::NoEditTriggers);
+
+    m_PackModel = new QStandardItemModel(this);
+    m_PackModel->setColumnCount(1);
+    ui->packView->setModel(m_PackModel);
+    ui->packView->header()->hide();
+//    Delegate *delegate = new Delegate;
+    ui->packView->setItemDelegate(delegate);
+    ui->packView->setStyleSheet(::CSS);
+    ui->packView->expandAll();
+    ui->packView->setRootIsDecorated(false);
+    ui->packView->setAlternatingRowColors(true);
+    ui->packView->setEditTriggers(QTreeView::NoEditTriggers);
 
     ui->stackedWidget->setCurrentIndex(0);
     QFont bold;
@@ -201,7 +239,8 @@ ServerEditor::ServerEditor(QWidget *parent) :
     ui->serverName->setStyleSheet(::TITLE_CSS);
     ui->packName->setStyleSheet(::TITLE_CSS);
 
-    connect(ui->treeView->selectionModel(), SIGNAL(currentChanged(QModelIndex,QModelIndex)), this, SLOT(onIndexActivated(QModelIndex,QModelIndex)));
+    connect(ui->treeView->selectionModel(), SIGNAL(currentChanged(QModelIndex,QModelIndex)), this, SLOT(onServerIndexActivated(QModelIndex,QModelIndex)));
+    connect(ui->packView->selectionModel(), SIGNAL(currentChanged(QModelIndex,QModelIndex)), this, SLOT(onPackIndexActivated(QModelIndex,QModelIndex)));
 }
 
 ServerEditor::~ServerEditor()
@@ -218,6 +257,7 @@ void ServerEditor::populateServerView(const int serverId)
 {
     const QString &format = QLocale().dateTimeFormat(QLocale::LongFormat);
     const Server &server = serverManager()->getServerAt(serverId);
+    createPackModel(server, m_PackModel);
     ui->serverName->setText(server.description().data(ServerDescription::Label).toString());
     ui->shortServerDescription->setText(server.description().data(ServerDescription::ShortDescription).toString());
     ui->serverVersion->setText(server.description().data(ServerDescription::Version).toString());
@@ -232,19 +272,82 @@ void ServerEditor::populateServerView(const int serverId)
     }
 }
 
-void ServerEditor::populatePackView()
+void ServerEditor::populatePackView(const int serverId, const int packId)
 {
+    const Server &server = serverManager()->getServerAt(serverId);
+    const QList<Pack> &list = serverManager()->getPackForServer(server);
+    const Pack &pack = list.at(packId);
+    const PackDescription &descr = pack.description();
+    // Vendor ?
+    QString vendor = descr.data(PackDescription::Vendor).toString();
+    if (!vendor.isEmpty()) {
+        vendor = QString("<br /><span style=\"font-size:small;color:gray\">%1</span>").arg(vendor);
+    }
+    QString summary;
+
+    // short description, version date and author
+    summary = QString("<span style=\"font-weight:bold;font-size:large;\">%1</span><br />"
+                       "<span style=\"font-size:small;color:gray\">"
+                      "%2 (%3 - %4) from %5</span>"
+                       "%6")
+            .arg(descr.data(PackDescription::ShortDescription).toString())
+            .arg(tkTr(Trans::Constants::VERSION))
+            .arg(descr.data(PackDescription::Version).toString())
+            .arg(descr.data(PackDescription::LastModificationDate).toDate().toString("dd MM yyyy"))
+            .arg(descr.data(PackDescription::Author).toString())
+            .arg(vendor)
+            ;
+
+    // Add description
+    summary += QString("<br /><br />%1").arg(descr.data(PackDescription::HtmlDescription).toString());
+
+    // Add dependencies
+    QString dep;
+    for(int i= 0; i < pack.dependencies().dependenciesCount(); ++i) {
+        const PackDependencyData &data = pack.dependencies().dependenciesAt(i);
+        dep += QString("<p style=\"margin-left:10px;\">%1<br />"
+                       "&nbsp;&nbsp;&nbsp;&nbsp;%2 (%3)</p>")
+                .arg(PackDependencyData::typeName(data.type()))
+                .arg(data.name())
+                .arg(data.version())
+                ;
+    }
+    if (!dep.isEmpty()) {
+        dep.prepend(QString("<span style=\"font-weight:bold;margin:0px;\">%1</span>").arg(tr("Dependencies")));
+        summary += dep + "<br />";
+    }
+
+    // Add file specifications
+    QString file = QString("<span style=\"font-weight:bold\">%1</span><br />"
+                           "<table border=1 cellpadding=0 cellspacing=0 width=100%>"
+                           "<tr><td>%2</td><td>%3</td></tr>"
+                           "<tr><td>MD5</td><td>%4</td></tr>"
+                           "<tr><td>SHA1</td><td>%5</td></tr>"
+                           "</table>")
+            .arg(tr("File specification"))
+            .arg(tr("File name or URL:"))
+            .arg(descr.data(PackDescription::AbsFileName).toString())
+            .arg(descr.data(PackDescription::Md5).toString())
+            .arg(descr.data(PackDescription::Sha1).toString())
+            ;
+
+    summary += file;
+
+    ui->packName->setText(descr.data(PackDescription::Label).toString());
+    ui->packSummary->setText(summary);
 }
 
-void ServerEditor::onIndexActivated(const QModelIndex &index, const QModelIndex &previous)
+void ServerEditor::onServerIndexActivated(const QModelIndex &index, const QModelIndex &previous)
 {
-    if (m_Model->itemFromIndex(index)->data().toInt()==::IS_SERVER) {
-        // Activate the Server Page
-        ui->stackedWidget->setCurrentWidget(ui->serverPage);
-        populateServerView(index.row());
-    } else {
-        // Activate the Pack Page
-        ui->stackedWidget->setCurrentWidget(ui->packPage);
-        populateServerView(index.row());
-    }
+    // Activate the Server Page
+    ui->stackedWidget->setCurrentWidget(ui->serverPage);
+    populateServerView(index.row());
+}
+
+void ServerEditor::onPackIndexActivated(const QModelIndex &index, const QModelIndex &previous)
+{
+    // Activate the Server Page
+    ui->stackedWidget->setCurrentWidget(ui->packPage);
+    int serverId = ui->treeView->selectionModel()->currentIndex().row();
+    populatePackView(serverId, index.row());
 }

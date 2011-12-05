@@ -42,8 +42,66 @@ QT_END_NAMESPACE
 */
 
 namespace DataPack {
-namespace Internal {
-}
+
+class DATAPACK_EXPORT PackDependencyData
+{
+public:
+    enum DataRepresentation {
+        Type = 0,
+        Uuid,
+        PackName,
+        PackVersion
+    };
+
+    enum TypeRepresentation {
+        Depends = 0,
+        Recommends,
+        Suggests,
+        Requires,
+        Conflicts,
+        Breaks,
+        Provides
+    };
+
+    PackDependencyData();
+    ~PackDependencyData();
+
+    void setType(int type) {m_type=type;}
+    void setName(const QString &name) {m_name=name;}
+    void setVersion(const QString &version) {m_version=version;}
+    void setUuid(const QString &uuid) {m_uid=uuid;}
+
+    int type() const {return m_type;}
+    const QString &name() const {return m_name;}
+    const QString &version() const {return m_version;}
+    const QString &uuid() const {return m_uid;}
+
+    bool operator<(const PackDependencyData &to);
+
+    static QString typeName(int typeReference);
+    static int typeFromName(const QString &name);
+
+private:
+    int m_type;
+    QString m_version, m_name, m_uid;
+};
+
+class DATAPACK_EXPORT PackDependencies
+{
+public:
+    PackDependencies();
+    ~PackDependencies();
+
+    int dependenciesCount() const {return dependencies.count();}
+    const PackDependencyData &dependenciesAt(const int index) const;
+
+    bool fromDomElement(const QDomElement &root);
+    bool toDomElement(QDomElement *root, QDomDocument *doc);
+
+public:
+    QList<PackDependencyData> dependencies;
+    PackDependencyData null;
+};
 
 class DATAPACK_EXPORT PackDescription : public Utils::GenericDescription
 {

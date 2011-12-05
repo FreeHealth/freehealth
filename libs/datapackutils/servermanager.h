@@ -67,6 +67,7 @@ public:
     void checkServerUpdates();
 
     QList<PackDescription> getPackDescription(const Server &server);
+    QList<Pack> getPackForServer(const Server &server);
 
     ServerDescription downloadServerDescription(const Server &server);
     QList<PackDescription> downloadPackDescription(const Server &server, const Pack &pack);
@@ -77,6 +78,7 @@ public:
     // Private part
     QNetworkAccessManager *networkAccessManager() const {return m_NetworkAccessManager;}
     const QVector<Server> &servers() const {return m_Servers;}
+    void createServerPackList(const Server &server);
 
 protected:
     QString cachePath() const;
@@ -93,6 +95,7 @@ private:
     QString filesCachePath;
     QVector<Server> m_Servers;
     QMultiHash<QString, PackDescription> m_PackDescriptions;
+    QMultiHash<QString, Pack> m_Packs;
 };
 
 }  // End namespace DataPack

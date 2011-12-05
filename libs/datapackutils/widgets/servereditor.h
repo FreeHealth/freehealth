@@ -28,6 +28,7 @@
 #define DATAPACK_SERVEREDITOR_H
 
 #include <datapackutils/datapack_exporter.h>
+
 #include <QWidget>
 class QStandardItemModel;
 class QModelIndex;
@@ -40,6 +41,9 @@ class QModelIndex;
 */
 
 namespace DataPack {
+class PackDescription;
+class Pack;
+
 namespace Ui {
     class ServerEditor;
 }
@@ -54,14 +58,18 @@ public:
 public Q_SLOTS:
     bool submitChanges();
 
-private Q_SLOTS:
+private:
     void populateServerView(const int serverId);
-    void populatePackView();
-    void onIndexActivated(const QModelIndex &index, const QModelIndex &previous);
+    void populatePackView(const int serverId, const int packId);
+
+private Q_SLOTS:
+    void onServerIndexActivated(const QModelIndex &index, const QModelIndex &previous);
+    void onPackIndexActivated(const QModelIndex &index, const QModelIndex &previous);
 
 private:
     Ui::ServerEditor *ui;
-    QStandardItemModel *m_Model;
+    QStandardItemModel *m_ServerModel;
+    QStandardItemModel *m_PackModel;
 };
 
 }  // End namespace DataPack

@@ -26,9 +26,142 @@
  ***************************************************************************/
 #include "packdescription.h"
 
+#include <utils/log.h>
+
+#include <QDomElement>
+#include <QDomDocument>
+
 using namespace DataPack;
 
+namespace {
+const char * const TAG_DEPENDENCIES_ROOT_TAG = "PackDependencies";
+const char * const TAG_DEPENCENCY_TAG = "Dependency";
 
+const char * const ATTRIB_TYPE = "t";
+const char * const ATTRIB_NAME = "n";
+const char * const ATTRIB_UUID = "u";
+const char * const ATTRIB_VERSION = "v";
+
+const char * const TYPE_DEPENDS = "depends";
+const char * const TYPE_RECOMMENDS = "recommends";
+const char * const TYPE_SUGGESTS = "suggests";
+const char * const TYPE_REQUIRES = "requires";
+const char * const TYPE_CONFLICTS = "conflicts";
+const char * const TYPE_BREAKS = "breaks";
+const char * const TYPE_PROVIDES = "provides";
+
+}
+
+///////////////////////////////////////////////////////////////////////////////////////////////////
+/////////////////////////////////////   PackDependencyData   //////////////////////////////////////
+///////////////////////////////////////////////////////////////////////////////////////////////////
+PackDependencyData::PackDependencyData()
+{}
+
+PackDependencyData::~PackDependencyData()
+{}
+
+
+bool PackDependencyData::operator<(const PackDependencyData &to)
+{
+    return type() < to.type();
+}
+
+QString PackDependencyData::typeName(int typeReference)
+{
+    switch (typeReference) {
+    case Depends: return ::TYPE_DEPENDS;
+    case Recommends: return ::TYPE_RECOMMENDS;
+    case Suggests: return ::TYPE_SUGGESTS;
+    case Requires: return ::TYPE_REQUIRES;
+    case Conflicts: return ::TYPE_CONFLICTS;
+    case Breaks: return ::TYPE_BREAKS;
+    case Provides: return ::TYPE_PROVIDES;
+    default: return QString::null;
+    }
+}
+
+int PackDependencyData::typeFromName(const QString &name)
+{
+    if (name.compare(::TYPE_BREAKS, Qt::CaseInsensitive)==0)
+        return Breaks;
+    if (name.compare(::TYPE_CONFLICTS, Qt::CaseInsensitive)==0)
+        return Breaks;
+    if (name.compare(::TYPE_DEPENDS, Qt::CaseInsensitive)==0)
+        return Breaks;
+    if (name.compare(::TYPE_PROVIDES, Qt::CaseInsensitive)==0)
+        return Breaks;
+    if (name.compare(::TYPE_RECOMMENDS, Qt::CaseInsensitive)==0)
+        return Recommends;
+    if (name.compare(::TYPE_REQUIRES, Qt::CaseInsensitive)==0)
+        return Requires;
+    if (name.compare(::TYPE_SUGGESTS, Qt::CaseInsensitive)==0)
+        return Suggests;
+    return -1;
+}
+
+
+
+///////////////////////////////////////////////////////////////////////////////////////////////////
+//////////////////////////////////////   PackDependencies   ///////////////////////////////////////
+///////////////////////////////////////////////////////////////////////////////////////////////////
+PackDependencies::PackDependencies()
+{}
+
+PackDependencies::~PackDependencies()
+{}
+
+const PackDependencyData &PackDependencies::dependenciesAt(const int index) const
+{
+    if (index>=0 && index<dependencies.count())
+        return dependencies.at(index);
+    return null;
+}
+
+bool PackDependencies::fromDomElement(const QDomElement &root)
+{
+    dependencies.clear();
+    if (root.tagName().compare(::TAG_DEPENDENCIES_ROOT_TAG, Qt::CaseInsensitive)!=0) {
+        LOG_ERROR_FOR("DataPack::PackDependencies", "Wrong root tag: " + QString(::TAG_DEPENDENCIES_ROOT_TAG));
+        return false;
+    }
+    QDomElement dep = root.firstChildElement(::TAG_DEPENCENCY_TAG);
+    while (!dep.isNull()) {
+        PackDependencyData data;
+        data.setType(PackDependencyData::typeFromName(dep.attribute(::ATTRIB_TYPE)));
+        data.setName(dep.attribute(::ATTRIB_NAME));
+        data.setVersion(dep.attribute(::ATTRIB_VERSION));
+        data.setUuid(dep.attribute(::ATTRIB_UUID));
+        dependencies << data;
+        dep = dep.nextSiblingElement(::TAG_DEPENCENCY_TAG);
+    }
+    return true;
+}
+
+bool PackDependencies::toDomElement(QDomElement *root, QDomDocument *doc)
+{
+    Q_ASSERT(root);
+    Q_ASSERT(doc);
+    if (!root || !doc)
+        return false;
+    QDomElement depRoot = doc->createElement(::TAG_DEPENDENCIES_ROOT_TAG);
+    root->appendChild(depRoot);
+    for(int i = 0; i < dependencies.count(); ++i) {
+        QDomElement dep = doc->createElement(::TAG_DEPENCENCY_TAG);
+        const PackDependencyData &data = dependencies.at(i);
+        dep.setAttribute(::ATTRIB_TYPE, PackDependencyData::typeName(data.type()));
+        dep.setAttribute(::ATTRIB_NAME, data.name());
+        dep.setAttribute(::ATTRIB_UUID, data.uuid());
+        dep.setAttribute(::ATTRIB_VERSION, data.version());
+        depRoot.appendChild(dep);
+    }
+    return true;
+}
+
+
+///////////////////////////////////////////////////////////////////////////////////////////////////
+///////////////////////////////////////   PackDescription   ///////////////////////////////////////
+///////////////////////////////////////////////////////////////////////////////////////////////////
 PackDescription::PackDescription() :
     Utils::GenericDescription("PackDescription")
 {

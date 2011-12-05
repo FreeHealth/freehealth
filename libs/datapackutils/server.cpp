@@ -84,7 +84,7 @@ void Server::fromXml(const QString &fullServerConfigXml)
 {
     QDomDocument doc;
     if (!doc.setContent(fullServerConfigXml)) {
-        LOG_ERROR_FOR("Server", "Wrong XML");
+        LOG_ERROR_FOR("DataPack::Server", "Wrong XML");
         return;
     }
     QDomElement root = doc.firstChildElement(::TAG_ROOT);
