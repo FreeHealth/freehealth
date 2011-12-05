@@ -25,6 +25,31 @@
     <label lang="xx">Pharmaceutical drug database</label>
     <description lang="fr">Données par défaut pour FreeMedForms (base de données thérapeutique)</description>
     <description lang="xx">Default data for FreeMedForms (pharmaceutical drug database)</description>
+
+    <htmldescription lang="fr">&lt;p>
+      FreeMedForms est proposé avec un set complet de bases de données thérapeutiques. Grâce à
+      ses bases thérapeutiques, vous pouvez éditer des ordonnances complexes, noter les allergies et
+      intolérances médicamenteuses dans les dossier médicaux. L'installation de ses bases thérapeutiques
+      vous permettra aussi de rechercher des interactions médicamenteuses au sein de vos prescriptions.&lt;br />
+      &lt;br />
+      Les bases thérapeutiques par défaut sont contenues dans ce paquet.&lt;br />
+      &lt;br />
+      Les bases pour les pays suivants sont présentes dans leur intégralité :&lt;br />
+      &nbsp;* France (source AFSSAPS)&lt;br />
+      &nbsp;* USA (source FDA)&lt;br />
+      &nbsp;* Canada (source www.sc-hc.gc.ca)&lt;br />
+      &nbsp;* Belgique (source AFMPS)&lt;br />
+      &lt;br />
+      Les bases pour les pays suivants sont lacunaires :&lt;br />
+      &nbsp;*&nbsp;&nbsp;Afrique du Sud (source SAEPI)&lt;br />
+      &lt;br />
+      &lt;br />
+      Les données permettant le &lt;b>calcul des interactions médicamenteuses&lt;/b> sont
+      elles aussi inclues et sont soumises à des restrictions de license.
+      &lt;br />
+      &lt;br />&lt;/p></htmldescription>
+
+
     <updateinfo>
       <updateversion from="0.6.0">
         <text lang="fr">Première mise à disposition.</text>
