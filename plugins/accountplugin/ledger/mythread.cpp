@@ -527,7 +527,14 @@ void ProduceDoc::fillTable(QList<QVector<QString> > & tableau,
         if (WarnDebugMessage)
     	      qDebug() << __FILE__ << QString::number(__LINE__) << "nberLines  =" <<  QString::number(nberLines);
         tableRecap                = cursortrieinfunction->insertTable(nberLines,2,tableFormatDone);
+        if (WarnDebugMessage)
+    	      qDebug() << __FILE__ << QString::number(__LINE__) << "totalSumsList.size = " << QString::number(totalSumsList.size());
         for(int i = 0 ; i < nberLines ; i++){
+            if (WarnDebugMessage)
+    	      qDebug() << __FILE__ << QString::number(__LINE__) << "i = " << QString::number(i);
+    	    if(!i < totalSumsList.size()){break;}
+            if (WarnDebugMessage)
+    	      qDebug() << __FILE__ << QString::number(__LINE__) << "totalSumsList[i] = " << totalSumsList[i];
             QStringList paireDepenseMontant = totalSumsList[i].split("=");
             if (WarnDebugMessage)
     	      qDebug() << __FILE__ << QString::number(__LINE__) << "paireDepenseMontant[1]  =" << paireDepenseMontant[1] ;
@@ -540,16 +547,23 @@ void ProduceDoc::fillTable(QList<QVector<QString> > & tableau,
     	      qDebug() << __FILE__ << QString::number(__LINE__) << "paireDepenseMontantLeft  =" << paireDepenseMontantLeft ;
              if (paireDepenseMontantLeft == trUtf8("Total"))
              {
+             	  
+             	  if (WarnDebugMessage)
+    	          qDebug() << __FILE__ << QString::number(__LINE__) << "in total";
              	  QString totalInHtml = QString("<html><font size = 4 color = #FF0000><bold>%1<bold></font></html>")
                                        .arg(paireDepenseMontantLeft);
-             	  cellCursorDep                  . insertHtml(totalInHtml);
+             	  cellCursorDep.insertHtml(totalInHtml);
                  }
              else{
-                 cellCursorDep . insertText(paireDepenseMontantLeft);
+                  if (WarnDebugMessage)
+    	          qDebug() << __FILE__ << QString::number(__LINE__) << "in else";
+                  cellCursorDep.insertText(paireDepenseMontantLeft);
                  }
             QTextTableCell cellDep1         = tableRecap->cellAt(i,1);
              QTextCursor cellCursorDep1     = cellDep1.firstCursorPosition();
              cellCursorDep1                 . insertText(paireDepenseMontant[1]);
+             if (WarnDebugMessage)
+    	      qDebug() << __FILE__ << QString::number(__LINE__) << "end of for";
         }
     }
     if (WarnDebugMessage)
@@ -566,8 +580,8 @@ void ProduceDoc::recupSlot(const QString & text){
 }
 
 QTextDocument *ProduceDoc::getTextDocument(){
-    if (WarnDebugMessage)
-    	      qDebug() << __FILE__ << QString::number(__LINE__) << " m_textDocument =" << m_textDocument->toPlainText() ;
+    //if (WarnDebugMessage)
+    	      //qDebug() << __FILE__ << QString::number(__LINE__) << " m_textDocument =" << m_textDocument->toPlainText() ;
     return m_textDocument;
 }
 

@@ -123,7 +123,7 @@ BankDetailsWidget::BankDetailsWidget(QWidget *parent) :
     if (m_user_fullName.isEmpty()) {
         m_user_fullName = "Admin_Test";
     }
-//    uidLabel->setText(m_user_uid);
+    uidLabel->setText(m_user_uid);
     defaultCombo->addItem(tkTr(Trans::Constants::NO));
     defaultCombo->addItem(tkTr(Trans::Constants::YES));
     addButton->setIcon(theme()->icon(Core::Constants::ICONADD));
@@ -139,7 +139,7 @@ BankDetailsWidget::BankDetailsWidget(QWidget *parent) :
     m_Mapper->setSubmitPolicy(QDataWidgetMapper::AutoSubmit);
     m_Mapper->setModel(m_Model);
     m_Mapper->setCurrentModelIndex(QModelIndex());
-//    m_Mapper->addMapping(uidLabel,AccountDB::Constants::BANKDETAILS_USER_UID,"text");
+    m_Mapper->addMapping(uidLabel,AccountDB::Constants::BANKDETAILS_USER_UID,"text");
     m_Mapper->addMapping(currentLabel, AccountDB::Constants::BANKDETAILS_LABEL, "text");
     m_Mapper->addMapping(owner, AccountDB::Constants::BANKDETAILS_OWNER, "text");
     m_Mapper->addMapping(ownerAdress, AccountDB::Constants::BANKDETAILS_OWNERADRESS, "text");
@@ -189,8 +189,8 @@ void BankDetailsWidget::on_addButton_clicked()
 {
     m_Model->insertRow(m_Model->rowCount());
     accountComboBox->setCurrentIndex(m_Model->rowCount() - 1);
-//    uidLabel->setFocus();
-//    uidLabel->setText(m_user_uid);
+    uidLabel->setFocus();
+    uidLabel->setText(m_user_uid);
     owner->setFocus();
     owner->setText(m_user_fullName);
 }

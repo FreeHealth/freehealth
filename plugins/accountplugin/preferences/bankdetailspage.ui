@@ -14,7 +14,7 @@
    <string>Form</string>
   </property>
   <layout class="QGridLayout" name="gridLayout_2">
-   <item row="0" column="1">
+   <item row="0" column="1" rowspan="2">
     <widget class="QGroupBox" name="groupBox">
      <property name="title">
       <string>Bank details</string>
@@ -166,10 +166,24 @@
       <item row="7" column="1" colspan="2">
        <widget class="QComboBox" name="defaultCombo"/>
       </item>
+      <item row="8" column="0">
+       <widget class="QLabel" name="uid">
+        <property name="text">
+         <string>uid</string>
+        </property>
+       </widget>
+      </item>
+      <item row="8" column="1" colspan="2">
+       <widget class="QLabel" name="uidLabel">
+        <property name="text">
+         <string/>
+        </property>
+       </widget>
+      </item>
      </layout>
     </widget>
    </item>
-   <item row="1" column="1">
+   <item row="2" column="1">
     <spacer name="verticalSpacer">
      <property name="orientation">
       <enum>Qt::Vertical</enum>
