@@ -178,6 +178,24 @@ bool ServerManager::installDataPack(const Server &server, const Pack &pack, QPro
     return false;
 }
 
+bool ServerManager::removeDataPack(const Server &server, const Pack &pack, QProgressBar *progressBar)
+{
+    // TODO
+    Q_UNUSED(server);
+    Q_UNUSED(pack);
+    Q_UNUSED(progressBar);
+    return false;
+}
+
+bool ServerManager::updateDataPack(const Server &server, const Pack &pack, QProgressBar *progressBar)
+{
+    // TODO
+    Q_UNUSED(server);
+    Q_UNUSED(pack);
+    Q_UNUSED(progressBar);
+    return false;
+}
+
 void ServerManager::setCachePath(const QString &absPath)
 {
     filesCachePath = absPath;

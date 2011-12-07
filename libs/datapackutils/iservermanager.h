@@ -85,6 +85,8 @@ public:
     virtual Pack downloadAndUnzipPack(const Server &server, const Pack &pack) = 0;
 
     virtual bool installDataPack(const Server &server, const Pack &pack, QProgressBar *progressBar = 0) = 0;
+    virtual bool removeDataPack(const Server &server, const Pack &pack, QProgressBar *progressBar = 0) = 0;
+    virtual bool updateDataPack(const Server &server, const Pack &pack, QProgressBar *progressBar = 0) = 0;
 
     virtual void setInstallPath(const QString &absPath) = 0;
     virtual QString installPath() const = 0;
@@ -94,7 +96,10 @@ protected:
 Q_SIGNALS:
     void serverConnected(const Server &server, const ServerIdentification &ident);
     void serverInfosUpdated(int serverId); // emitted when a server infos have been updated
+
     void packInstalled(const Server &server, const Pack &pack);
+    void packRemoved(const Server &server, const Pack &pack);
+    void packUpdated(const Server &server, const Pack &pack);
 
     // In use
     void serverUpdateChecked();

@@ -74,6 +74,8 @@ public:
     Pack downloadAndUnzipPack(const Server &server, const Pack &pack);
 
     bool installDataPack(const Server &server, const Pack &pack, QProgressBar *progressBar = 0);
+    bool removeDataPack(const Server &server, const Pack &pack, QProgressBar *progressBar = 0);
+    bool updateDataPack(const Server &server, const Pack &pack, QProgressBar *progressBar = 0);
 
     void setInstallPath(const QString &absPath);
     QString installPath() const;

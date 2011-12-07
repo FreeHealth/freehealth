@@ -128,14 +128,22 @@
 /**
  * \fn virtual QList<Pack> DataPack::IServerManager::getPackForServer(const Server &server);
  * Assuming that server is connected and all description files were downloaded, return the pack list related to the \e server.
-*/
+ */
 
 
 /**
  * \fn bool DataPack::IServerManager::installDataPack(const Server &server, const Pack &pack, QProgressBar *progressBar = 0);
  * Install the \e pack located on the \e server, alerting the user with \e progressBar.
-*/
+ */
 
+/**
+ * \fn bool DataPack::IServerManager::removeDataPack(const Server &server, const Pack &pack, QProgressBar *progressBar = 0);
+ * Remove the \e pack located on the \e server, alerting the user with \e progressBar.
+ */
+/**
+ * \fn bool DataPack::IServerManager::updateDataPack(const Server &server, const Pack &pack, QProgressBar *progressBar = 0);
+ * Update the \e pack located on the \e server, alerting the user with \e progressBar.
+ */
 
 /**
  * \fn virtual void DataPack::IServerManager::setInstallPath(const QString &absPath)
