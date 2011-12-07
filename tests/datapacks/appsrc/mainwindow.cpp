@@ -4,12 +4,17 @@
 #include <datapackutils/core.h>
 #include <datapackutils/iservermanager.h>
 #include <datapackutils/serverdescription.h>
+#include <datapackutils/widgets/servereditor.h>
 
 #include <utils/widgets/genericdescriptioneditor.h>
 #include <utils/widgets/genericinformationeditordialog.h>
 #include <utils/global.h>
 
 #include <QDir>
+#include <QDesktopWidget>
+#include <QNetworkAccessManager>
+#include <QNetworkRequest>
+#include <QNetworkReply>
 
 #include <QDebug>
 
@@ -85,25 +90,51 @@ MainWindow::MainWindow(QWidget *parent) :
 
     DataPack::Core *core = DataPack::Core::instance();
     core->serverManager()->setGlobalConfiguration(Utils::readTextFile(QDir::homePath() + "/servers.conf.xml"));
-    qWarning() << core->serverManager()->xmlConfiguration();
 
     core->isInternetConnexionAvailable();
 
 #ifdef Q_OS_MAC
+    core->setThemePath(DataPack::Core::SmallPixmaps, "/Users/eric/Desktop/Programmation/freemedforms/global_resources/pixmap/16x16");
+    core->setThemePath(DataPack::Core::MediumPixmaps, "/Users/eric/Desktop/Programmation/freemedforms/global_resources/pixmap/32x32");
+    core->setThemePath(DataPack::Core::BigPixmaps, "/Users/eric/Desktop/Programmation/freemedforms/global_resources/pixmap/64x64");
     core->serverManager()->addServer("file://Users/eric/Desktop/Programmation/freemedforms/global_resources/datapacks/default/");
 #else
+    core->setThemePath(DataPack::Core::SmallPixmaps, "/Users/eric/Desktop/Programmation/freemedforms/global_resources/pixmap/16x16");
+    core->setThemePath(DataPack::Core::MediumPixmaps, "/Users/eric/Desktop/Programmation/freemedforms/global_resources/pixmap/32x32");
+    core->setThemePath(DataPack::Core::BigPixmaps, "/Users/eric/Desktop/Programmation/freemedforms/global_resources/pixmap/64x64");
     core->serverManager()->addServer("ftp://localhost/");
 #endif
     core->serverManager()->checkServerUpdates();
 
     testServerDescription();
     serverDescr = getDescription();
-    Utils::GenericDescriptionEditor *editor = new Utils::GenericDescriptionEditor(this);
-    editor->setDescription(serverDescr);
-    setCentralWidget(editor);
+
+//    Utils::GenericDescriptionEditor *editor = new Utils::GenericDescriptionEditor(this);
+//    editor->setDescription(serverDescr);
+//    setCentralWidget(editor);
+
+    // Try to download redirected
+    QNetworkAccessManager *manager = new QNetworkAccessManager(this);
+    QNetworkRequest request;
+    request.setUrl(QUrl("http://test.freemedforms.com/get-serverconf")); // Download the server configuration
+    request.setRawHeader("User-Agent", "FreeMedForms");
+
+    QNetworkReply *reply = manager->get(request);
+    connect(reply, SIGNAL(finished()), this, SLOT(slotReadyRead()));
+    connect(reply, SIGNAL(error(QNetworkReply::NetworkError)),
+            this, SLOT(slotError(QNetworkReply::NetworkError)));
+
+    DataPack::ServerEditor *serverEditor = new DataPack::ServerEditor(this);
+    setCentralWidget(serverEditor);
+
 //    Utils::GenericInformationEditorDialog dlg(this);
 //    dlg.setDescription(serverDescr);
 //    dlg.exec();
+
+//    Utils::resizeAndCenter(this, qApp->desktop());
+    show();
+    resize(900,600);
+    Utils::centerWidget(this, qApp->desktop());
 }
 
 MainWindow::~MainWindow()
@@ -111,4 +142,21 @@ MainWindow::~MainWindow()
     DataPack::Core *core = DataPack::Core::instance();
     Utils::saveStringToFile(core->serverManager()->xmlConfiguration(), QDir::homePath() + "/servers.conf.xml", Utils::Overwrite, Utils::DontWarnUser);
     delete ui;
+}
+
+void MainWindow::slotReadyRead()
+{
+    QNetworkReply *reply = qobject_cast<QNetworkReply*>(sender());
+    qWarning() << "Finished" << reply->isFinished() << "Error" << reply->error();
+    qWarning() << "Redirect" << reply->request().attribute(QNetworkRequest::RedirectionTargetAttribute);
+
+    QFile f(QDir::homePath() + "/test.zip");
+    f.open(QFile::ReadWrite);
+    f.write(reply->readAll());
+}
+
+void MainWindow::slotError(QNetworkReply::NetworkError error)
+{
+    QNetworkReply *reply = qobject_cast<QNetworkReply*>(sender());
+    qWarning() << "ERROR" << error << reply->error();
 }

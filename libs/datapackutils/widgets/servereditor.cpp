@@ -41,6 +41,7 @@
 #include <QStyledItemDelegate>
 #include <QPainter>
 #include <QTextDocument>
+#include <QToolBar>
 
 #include <QDebug>
 
@@ -50,6 +51,9 @@ using namespace DataPack;
 using namespace Trans::ConstantTranslations;
 
 namespace {
+const char *const ICON_SERVER_ADD = "server-add.png";
+const char *const ICON_SERVER_REMOVE = "server-remove.png";
+const char *const ICON_SERVER_INFO = "server-info.png";
 const char *const ICON_SERVER_CONNECTED = "connect_established.png";
 const char *const ICON_SERVER_NOT_CONNECTED = "connect_no.png";
 const char *const ICON_SERVER_ASKING_CONNECTION = "connect_creating.png";
@@ -200,12 +204,15 @@ static void createPackModel(const Server &server, QStandardItemModel *model)
 ServerEditor::ServerEditor(QWidget *parent) :
     QWidget(parent),
     ui(new Ui::ServerEditor),
+    aServerRemove(0), aServerAdd(0),aServerInfo(0),
     aInstall(0), aRemove(0), aUpdate(0)
 {
     ui->setupUi(this);
     if (layout()) {
         layout()->setMargin(0);
         layout()->setSpacing(0);
+        ui->toolbarLayout->setMargin(0);
+        ui->toolbarLayout->setSpacing(0);
     }
 
     // Manage server view
@@ -245,8 +252,41 @@ ServerEditor::ServerEditor(QWidget *parent) :
     ui->serverName->setStyleSheet(::TITLE_CSS);
     ui->packName->setStyleSheet(::TITLE_CSS);
 
-    // Create actions
-    QAction *a = aInstall = new QAction(this);
+    createActions();
+    createToolbar();
+
+    connect(ui->treeView->selectionModel(), SIGNAL(currentChanged(QModelIndex,QModelIndex)), this, SLOT(onServerIndexActivated(QModelIndex,QModelIndex)));
+    connect(ui->packView->selectionModel(), SIGNAL(currentChanged(QModelIndex,QModelIndex)), this, SLOT(onPackIndexActivated(QModelIndex,QModelIndex)));
+
+    // Select first row of servers
+    ui->treeView->selectionModel()->select(m_ServerModel->index(0,0), QItemSelectionModel::SelectCurrent);
+}
+
+ServerEditor::~ServerEditor()
+{
+    delete ui;
+}
+
+bool ServerEditor::submitChanges()
+{
+    return true;
+}
+
+void ServerEditor::createActions()
+{
+    // Create server actions
+    QAction *a = aServerAdd = new QAction(this);
+    a->setObjectName("aInstall");
+    a->setIcon(icon(::ICON_SERVER_ADD, DataPack::Core::MediumPixmaps));
+    a = aServerRemove = new QAction(this);
+    a->setObjectName("aServerRemove");
+    a->setIcon(icon(::ICON_SERVER_REMOVE, DataPack::Core::MediumPixmaps));
+    a = aServerInfo = new QAction(this);
+    a->setObjectName("aServerInfo");
+    a->setIcon(icon(::ICON_SERVER_INFO, DataPack::Core::MediumPixmaps));
+
+    // Create pack actions
+    a = aInstall = new QAction(this);
     a->setObjectName("aInstall");
     a->setIcon(icon(::ICON_INSTALL, DataPack::Core::SmallPixmaps));
     a = aUpdate = new QAction(this);
@@ -260,24 +300,27 @@ ServerEditor::ServerEditor(QWidget *parent) :
     ui->installToolButton->addAction(aRemove);
     ui->installToolButton->setDefaultAction(aInstall);
     retranslate();
-
-    connect(ui->treeView->selectionModel(), SIGNAL(currentChanged(QModelIndex,QModelIndex)), this, SLOT(onServerIndexActivated(QModelIndex,QModelIndex)));
-    connect(ui->packView->selectionModel(), SIGNAL(currentChanged(QModelIndex,QModelIndex)), this, SLOT(onPackIndexActivated(QModelIndex,QModelIndex)));
-    connect(ui->installToolButton, SIGNAL(triggered(QAction*)), this, SLOT(installButtonTriggered(QAction *)));
+    connect(ui->installToolButton, SIGNAL(triggered(QAction*)), this, SLOT(packActionTriggered(QAction *)));
 }
 
-ServerEditor::~ServerEditor()
+void ServerEditor::createToolbar()
 {
-    delete ui;
-}
+    m_ToolBar = new QToolBar(this);
+    m_ToolBar->addAction(aServerAdd);
+    m_ToolBar->addAction(aServerRemove);
+    m_ToolBar->addAction(aServerInfo);
+    m_ToolBar->addSeparator();
+    connect(m_ToolBar, SIGNAL(actionTriggered(QAction*)), this, SLOT(serverActionTriggered(QAction*)));
 
-bool ServerEditor::submitChanges()
-{
-    return true;
+    ui->toolbarLayout->addWidget(m_ToolBar);
 }
 
 void ServerEditor::populateServerView(const int serverId)
 {
+    // Clear pack selection
+    ui->packView->selectionModel()->clearSelection();
+
+    // Update server view
     const QString &format = QLocale().dateTimeFormat(QLocale::LongFormat);
     const Server &server = serverManager()->getServerAt(serverId);
     createPackModel(server, m_PackModel);
@@ -375,10 +418,27 @@ void ServerEditor::onPackIndexActivated(const QModelIndex &index, const QModelIn
     populatePackView(serverId, index.row());
 }
 
-void ServerEditor::installButtonTriggered(QAction *a)
+void ServerEditor::serverActionTriggered(QAction *a)
 {
-    if (a==aInstall) {
+    if (a==aServerAdd) {
+    } else if (a==aServerRemove) {
+    } else if (a==aServerInfo) {
+        // Clear pack selection
+        ui->packView->selectionModel()->clearSelection();
+        ui->stackedWidget->setCurrentWidget(ui->serverPage);
+    }
+}
 
+void ServerEditor::packActionTriggered(QAction *a)
+{
+    int serverId = ui->treeView->selectionModel()->currentIndex().row();
+    int packId = ui->packView->selectionModel()->currentIndex().row();
+    const Server &server = serverManager()->getServerAt(serverId);
+    const QList<Pack> &list = serverManager()->getPackForServer(server);
+    const Pack &pack = list.at(packId);
+
+    if (a==aInstall) {
+        serverManager()->installDataPack(server, pack, ui->processProgressBar);
     } else if (a==aRemove) {
 
     } else if (a==aUpdate) {
@@ -388,6 +448,9 @@ void ServerEditor::installButtonTriggered(QAction *a)
 
 void ServerEditor::retranslate()
 {
+    aServerAdd->setText(tr("Add a server"));
+    aServerRemove->setText(tr("Remove a server"));
+    aServerInfo->setText(tr("Server information"));
     aInstall->setText(tkTr(Trans::Constants::INSTALL));
     aRemove->setText(tkTr(Trans::Constants::REMOVE_TEXT));
     aUpdate->setText(tkTr(Trans::Constants::UPDATE));

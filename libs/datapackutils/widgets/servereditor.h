@@ -32,12 +32,13 @@
 #include <QWidget>
 class QStandardItemModel;
 class QModelIndex;
+class QToolBar;
 
 /**
  * \file servereditor.h
  * \author Eric MAEKER <eric.maeker@gmail.com>
  * \version 0.6.2
- * \date 02 Dec 2011
+ * \date 07 Dec 2011
 */
 
 namespace DataPack {
@@ -59,13 +60,16 @@ public Q_SLOTS:
     bool submitChanges();
 
 private:
+    void createActions();
+    void createToolbar();
     void populateServerView(const int serverId);
     void populatePackView(const int serverId, const int packId);
 
 private Q_SLOTS:
     void onServerIndexActivated(const QModelIndex &index, const QModelIndex &previous);
     void onPackIndexActivated(const QModelIndex &index, const QModelIndex &previous);
-    void installButtonTriggered(QAction *a);
+    void serverActionTriggered(QAction *a);
+    void packActionTriggered(QAction *a);
 
 private:
     void retranslate();
@@ -75,7 +79,8 @@ private:
     Ui::ServerEditor *ui;
     QStandardItemModel *m_ServerModel;
     QStandardItemModel *m_PackModel;
-    QAction *aInstall, *aRemove, *aUpdate;
+    QAction *aServerRemove, *aServerAdd, *aServerInfo, *aInstall, *aRemove, *aUpdate;
+    QToolBar *m_ToolBar;
 };
 
 }  // End namespace DataPack
