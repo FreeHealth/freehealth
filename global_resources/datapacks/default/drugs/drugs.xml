@@ -47,8 +47,33 @@
       Les données permettant le &lt;b>calcul des interactions médicamenteuses&lt;/b> sont
       elles aussi inclues et sont soumises à des restrictions de license.
       &lt;br />
-      &lt;br />&lt;/p></htmldescription>
+      &lt;br />&lt;/p>
+    </htmldescription>
 
+
+    <htmldescription lang="xx">&lt;p>
+      FreeMedForms can use a complete set of pharmaceutical drug database.
+      Using this, FreeMedForms can edit complex prescription, manage drug allergies and intolerances in the
+      medical record.  The installation of base will also allow you to search for drug interactions
+      among your prescriptions.&lt;br />
+      &lt;br />
+      All default drug database are included in this package.&lt;br />
+      &lt;br />
+      The drug database are included for the following countries in their entirety:&lt;br />
+      &nbsp;* France (source AFSSAPS)&lt;br />
+      &nbsp;* USA (source FDA)&lt;br />
+      &nbsp;* Canada (source www.sc-hc.gc.ca)&lt;br />
+      &nbsp;* Belgium (source AFMPS)&lt;br />
+      &lt;br />
+      The following are not complete: &lt;br />
+      &nbsp;*&nbsp;&nbsp;South Africa (source SAEPI)&lt;br />
+      &lt;br />
+      &lt;br />
+      The data used for the drug interactions computation of are also included and are subject
+      to licensing restrictions.
+      &lt;br />
+      &lt;br />&lt;/p>
+    </htmldescription>
 
     <updateinfo>
       <updateversion from="0.6.0">
