@@ -166,6 +166,15 @@ bool ServerManager::installDataPack(const Server &server, const Pack &pack, QPro
     Q_UNUSED(server);
     Q_UNUSED(pack);
     Q_UNUSED(progressBar);
+    // Algo
+    // 1. check if pack is already installed
+    // 1.1 ? yes -> call upgradePackage and return
+    // Connect progressBar
+    // Download the package file
+    // Check MD5 of the file
+    // Unzip file
+    // Copy files to the install path
+    // Emit pack installed
     return false;
 }
 
