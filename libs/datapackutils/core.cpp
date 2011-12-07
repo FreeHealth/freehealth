@@ -27,7 +27,7 @@
 #include "core.h"
 #include "servermanager.h"
 
-#include <QNetworkAccessManager>
+#include <QDir>
 
 using namespace DataPack;
 
@@ -53,6 +53,7 @@ public:
 public:
     ServerManager *m_ServerManager;
     QHash<int, QString> m_ThemePath;
+    QString m_InstallPath, m_CachePath;
 };
 }  // End namespace Internal
 }  // End namespace DataPack
@@ -76,6 +77,18 @@ bool Core::isInternetConnexionAvailable()
 IServerManager *Core::serverManager() const
 {
     return d->m_ServerManager;
+}
+
+void Core::setPackInstallPath(const QString &absPath)
+{
+    d->m_InstallPath = QDir::cleanPath(absPath);
+    d->m_ServerManager->setInstallPath(d->m_InstallPath);
+}
+
+void Core::setServerCachePath(const QString &absPath)
+{
+    d->m_CachePath = QDir::cleanPath(absPath);
+    d->m_ServerManager->setCachePath(d->m_InstallPath);
 }
 
 void Core::setThemePath(ThemePath path, const QString &absPath)

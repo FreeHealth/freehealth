@@ -73,15 +73,20 @@ public:
     QList<PackDescription> downloadPackDescription(const Server &server, const Pack &pack);
     Pack downloadAndUnzipPack(const Server &server, const Pack &pack);
 
-    bool installDataPack(const Server &server, const Pack &pack);
+    bool installDataPack(const Server &server, const Pack &pack, QProgressBar *progressBar = 0);
 
-    // Private part
-    QNetworkAccessManager *networkAccessManager() const {return m_NetworkAccessManager;}
-    const QVector<Server> &servers() const {return m_Servers;}
-    void createServerPackList(const Server &server);
+    void setInstallPath(const QString &absPath);
+    QString installPath() const;
 
 protected:
     QString cachePath() const;
+
+public:
+    // Hidden Private part
+    QNetworkAccessManager *networkAccessManager() const {return m_NetworkAccessManager;}
+    const QVector<Server> &servers() const {return m_Servers;}
+    void createServerPackList(const Server &server);
+    void setCachePath(const QString &absPath);
 
 private:
     void checkServerUpdatesAfterDownload();
@@ -92,7 +97,7 @@ Q_SIGNALS:
 
 private:
     QNetworkAccessManager *m_NetworkAccessManager;
-    QString filesCachePath;
+    QString filesCachePath, m_installPath;
     QVector<Server> m_Servers;
     QMultiHash<QString, PackDescription> m_PackDescriptions;
     QMultiHash<QString, Pack> m_Packs;

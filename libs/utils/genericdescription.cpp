@@ -71,6 +71,7 @@ const char* const TAG_HTMLDESCRIPTION  = "htmldescription";
 const char* const TAG_HTMLSYNTHESIS    = "htmlsynthesis";
 const char* const TAG_LABEL            = "label";
 const char* const TAG_PLUGINNAME       = "type";
+const char* const TAG_ABSFILENAME      = "file";
 
 }
 
@@ -322,6 +323,7 @@ QHash<int, QString> GenericDescription::nonTranslatableTagsDataReference() const
 {
     QHash<int, QString> elements;
     // get non translatable items
+    elements.insert(GenericDescription::AbsFileName, TAG_ABSFILENAME);
     elements.insert(GenericDescription::Version, TAG_VERSION);
     elements.insert(GenericDescription::Author, TAG_AUTHORS);
     elements.insert(GenericDescription::Vendor, TAG_VENDOR);

@@ -160,17 +160,33 @@ Pack ServerManager::downloadAndUnzipPack(const Server &server, const Pack &pack)
     return pack;
 }
 
-bool ServerManager::installDataPack(const Server &server, const Pack &pack)
+bool ServerManager::installDataPack(const Server &server, const Pack &pack, QProgressBar *progressBar)
 {
     // TODO
     Q_UNUSED(server);
     Q_UNUSED(pack);
+    Q_UNUSED(progressBar);
     return false;
+}
+
+void ServerManager::setCachePath(const QString &absPath)
+{
+    filesCachePath = absPath;
 }
 
 QString ServerManager::cachePath() const
 {
     return filesCachePath;
+}
+
+void ServerManager::setInstallPath(const QString &absPath)
+{
+    m_installPath=QDir::cleanPath(absPath);
+}
+
+QString ServerManager::installPath() const
+{
+    return m_installPath;
 }
 
 bool ServerManager::addServer(const QString &url)
@@ -247,11 +263,6 @@ QList<PackDescription> ServerManager::getPackDescription(const Server &server)
 {
     WARN_FUNC;
     // If Pack list already known return it
-//    const QStringList keys = m_PackDescriptions.uniqueKeys();
-//    if (keys.contains(server.url(), Qt::CaseInsensitive)) {
-//        return m_PackDescriptions.values(server.url());
-//    }
-
     QList<PackDescription> toReturn;
     const QStringList keys = m_Packs.uniqueKeys();
     if (keys.contains(server.url(), Qt::CaseInsensitive)) {
@@ -284,7 +295,6 @@ void ServerManager::createServerPackList(const Server &server)
     }
     // Get the server config
     foreach(const QString &file, server.content().packDescriptionFileNames()) {
-        qWarning() << "    * PackageDescription @" << file;
         QString path = server.url();
         path = path.replace("file:/", "") + QDir::separator() + file;
         QFileInfo f(path); // relative path

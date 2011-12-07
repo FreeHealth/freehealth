@@ -65,11 +65,17 @@ private:
 private Q_SLOTS:
     void onServerIndexActivated(const QModelIndex &index, const QModelIndex &previous);
     void onPackIndexActivated(const QModelIndex &index, const QModelIndex &previous);
+    void installButtonTriggered(QAction *a);
+
+private:
+    void retranslate();
+    void changeEvent(QEvent *e);
 
 private:
     Ui::ServerEditor *ui;
     QStandardItemModel *m_ServerModel;
     QStandardItemModel *m_PackModel;
+    QAction *aInstall, *aRemove, *aUpdate;
 };
 
 }  // End namespace DataPack

@@ -15,11 +15,11 @@
   </property>
   <layout class="QGridLayout" name="gridLayout_6">
    <item row="0" column="0">
-    <widget class="QSplitter" name="splitter_2">
+    <widget class="Utils::MiniSplitter" name="splitter_2">
      <property name="orientation">
       <enum>Qt::Horizontal</enum>
      </property>
-     <widget class="QWidget" name="">
+     <widget class="QWidget" name="layoutWidget">
       <layout class="QGridLayout" name="gridLayout_2">
        <property name="horizontalSpacing">
         <number>0</number>
@@ -32,7 +32,7 @@
        </item>
       </layout>
      </widget>
-     <widget class="QSplitter" name="splitter">
+     <widget class="Utils::MiniSplitter" name="splitter">
       <property name="orientation">
        <enum>Qt::Vertical</enum>
       </property>
@@ -42,7 +42,7 @@
         <enum>QFrame::Box</enum>
        </property>
        <property name="currentIndex">
-        <number>0</number>
+        <number>1</number>
        </property>
        <widget class="QWidget" name="serverPage">
         <layout class="QGridLayout" name="gridLayout_5">
@@ -228,6 +228,18 @@
            <property name="text">
             <string/>
            </property>
+           <property name="popupMode">
+            <enum>QToolButton::MenuButtonPopup</enum>
+           </property>
+           <property name="toolButtonStyle">
+            <enum>Qt::ToolButtonTextBesideIcon</enum>
+           </property>
+           <property name="autoRaise">
+            <bool>false</bool>
+           </property>
+           <property name="arrowType">
+            <enum>Qt::NoArrow</enum>
+           </property>
           </widget>
          </item>
          <item row="4" column="0" colspan="3">
@@ -264,6 +276,14 @@
    </item>
   </layout>
  </widget>
+ <customwidgets>
+  <customwidget>
+   <class>Utils::MiniSplitter</class>
+   <extends>QSplitter</extends>
+   <header location="global">utils/widgets/minisplitter.h</header>
+   <container>1</container>
+  </customwidget>
+ </customwidgets>
  <resources/>
  <connections/>
 </ui>

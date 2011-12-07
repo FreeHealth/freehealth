@@ -64,6 +64,10 @@ public:
     bool isInternetConnexionAvailable();
     IServerManager *serverManager() const;
 
+    // Install path
+    void setPackInstallPath(const QString &absPath);
+    void setServerCachePath(const QString &absPath);
+
     // Theme path
     void setThemePath(ThemePath path, const QString &absPath);
     QString icon(const QString &name, ThemePath path = SmallPixmaps);

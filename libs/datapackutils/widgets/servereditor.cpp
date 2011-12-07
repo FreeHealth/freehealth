@@ -54,6 +54,9 @@ const char *const ICON_SERVER_CONNECTED = "connect_established.png";
 const char *const ICON_SERVER_NOT_CONNECTED = "connect_no.png";
 const char *const ICON_SERVER_ASKING_CONNECTION = "connect_creating.png";
 const char *const ICON_PACKAGE = "package.png";
+const char *const ICON_UPDATE = "updateavailable.png";
+const char *const ICON_INSTALL = "ok.png";
+const char *const ICON_REMOVE = "remove.png";
 
 const int IS_SERVER = 1;
 const int IS_PACK = 2;
@@ -129,7 +132,7 @@ QSize Delegate::sizeHint(const QStyleOptionViewItem &option, const QModelIndex &
 
 static inline DataPack::Core *core() {return DataPack::Core::instance();}
 static inline ServerManager *serverManager() {return qobject_cast<ServerManager*>(core()->serverManager());}
-static inline QIcon icon(const QString &name) { qWarning() << DataPack::Core::instance()->icon(name, DataPack::Core::MediumPixmaps); return QIcon(DataPack::Core::instance()->icon(name, DataPack::Core::MediumPixmaps));}
+static inline QIcon icon(const QString &name, DataPack::Core::ThemePath path = DataPack::Core::MediumPixmaps) {qWarning()<<DataPack::Core::instance()->icon(name, path);return QIcon(DataPack::Core::instance()->icon(name, path));}
 
 static void createServerModel(QStandardItemModel *model)
 {
@@ -170,7 +173,6 @@ static void createServerModel(QStandardItemModel *model)
     }
 }
 
-
 static void createPackModel(const Server &server, QStandardItemModel *model)
 {
     const QList<Pack> &packs = serverManager()->getPackForServer(server);
@@ -197,7 +199,8 @@ static void createPackModel(const Server &server, QStandardItemModel *model)
 
 ServerEditor::ServerEditor(QWidget *parent) :
     QWidget(parent),
-    ui(new Ui::ServerEditor)
+    ui(new Ui::ServerEditor),
+    aInstall(0), aRemove(0), aUpdate(0)
 {
     ui->setupUi(this);
     if (layout()) {
@@ -205,6 +208,7 @@ ServerEditor::ServerEditor(QWidget *parent) :
         layout()->setSpacing(0);
     }
 
+    // Manage server view
     m_ServerModel = new QStandardItemModel(this);
     m_ServerModel->setColumnCount(1);
     createServerModel(m_ServerModel);
@@ -218,6 +222,7 @@ ServerEditor::ServerEditor(QWidget *parent) :
     ui->treeView->setRootIsDecorated(false);
     ui->treeView->setEditTriggers(QTreeView::NoEditTriggers);
 
+    // Manage pack view
     m_PackModel = new QStandardItemModel(this);
     m_PackModel->setColumnCount(1);
     ui->packView->setModel(m_PackModel);
@@ -230,6 +235,7 @@ ServerEditor::ServerEditor(QWidget *parent) :
     ui->packView->setAlternatingRowColors(true);
     ui->packView->setEditTriggers(QTreeView::NoEditTriggers);
 
+    // Manage central view
     ui->stackedWidget->setCurrentIndex(0);
     QFont bold;
     bold.setBold(true);
@@ -239,8 +245,25 @@ ServerEditor::ServerEditor(QWidget *parent) :
     ui->serverName->setStyleSheet(::TITLE_CSS);
     ui->packName->setStyleSheet(::TITLE_CSS);
 
+    // Create actions
+    QAction *a = aInstall = new QAction(this);
+    a->setObjectName("aInstall");
+    a->setIcon(icon(::ICON_INSTALL, DataPack::Core::SmallPixmaps));
+    a = aUpdate = new QAction(this);
+    a->setObjectName("aUpdate");
+    a->setIcon(icon(::ICON_UPDATE, DataPack::Core::SmallPixmaps));
+    a = aRemove = new QAction(this);
+    a->setObjectName("aRemove");
+    a->setIcon(icon(::ICON_REMOVE, DataPack::Core::SmallPixmaps));
+    ui->installToolButton->addAction(aInstall);
+    ui->installToolButton->addAction(aUpdate);
+    ui->installToolButton->addAction(aRemove);
+    ui->installToolButton->setDefaultAction(aInstall);
+    retranslate();
+
     connect(ui->treeView->selectionModel(), SIGNAL(currentChanged(QModelIndex,QModelIndex)), this, SLOT(onServerIndexActivated(QModelIndex,QModelIndex)));
     connect(ui->packView->selectionModel(), SIGNAL(currentChanged(QModelIndex,QModelIndex)), this, SLOT(onPackIndexActivated(QModelIndex,QModelIndex)));
+    connect(ui->installToolButton, SIGNAL(triggered(QAction*)), this, SLOT(installButtonTriggered(QAction *)));
 }
 
 ServerEditor::~ServerEditor()
@@ -350,4 +373,29 @@ void ServerEditor::onPackIndexActivated(const QModelIndex &index, const QModelIn
     ui->stackedWidget->setCurrentWidget(ui->packPage);
     int serverId = ui->treeView->selectionModel()->currentIndex().row();
     populatePackView(serverId, index.row());
+}
+
+void ServerEditor::installButtonTriggered(QAction *a)
+{
+    if (a==aInstall) {
+
+    } else if (a==aRemove) {
+
+    } else if (a==aUpdate) {
+
+    }
+}
+
+void ServerEditor::retranslate()
+{
+    aInstall->setText(tkTr(Trans::Constants::INSTALL));
+    aRemove->setText(tkTr(Trans::Constants::REMOVE_TEXT));
+    aUpdate->setText(tkTr(Trans::Constants::UPDATE));
+}
+void ServerEditor::changeEvent(QEvent *e)
+{
+    if (e->type()==QEvent::LanguageChange) {
+        ui->retranslateUi(this);
+        retranslate();
+    }
 }

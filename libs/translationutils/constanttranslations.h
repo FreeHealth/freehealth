@@ -520,6 +520,8 @@ enum TitleInterpret {
         const char* const CURRENT_VERSION                    = QT_TRANSLATE_NOOP("tkConstants", "Current version :");
         const char* const LATEST_VERSION                     = QT_TRANSLATE_NOOP("tkConstants", "Lastest version :");
         const char* const UPDATE_AVAILABLE                   = QT_TRANSLATE_NOOP("tkConstants", "Update Available");
+        const char* const UPDATE                             = QT_TRANSLATE_NOOP("tkConstants", "Update");
+        const char* const INSTALL                            = QT_TRANSLATE_NOOP("tkConstants", "Install");
 
         // Team functions
         const char* const TEAM_CREATOR = QT_TRANSLATE_NOOP("tkConstants", "Creator and Main Developper");

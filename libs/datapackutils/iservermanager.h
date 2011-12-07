@@ -37,6 +37,7 @@
 #include <datapackutils/packdescription.h>
 
 #include <QObject>
+class QProgressBar;
 
 /**
  * \file iservermanager.h
@@ -83,14 +84,17 @@ public:
     virtual QList<PackDescription> downloadPackDescription(const Server &server, const Pack &pack) = 0;
     virtual Pack downloadAndUnzipPack(const Server &server, const Pack &pack) = 0;
 
-    virtual bool installDataPack(const Server &server, const Pack &pack) = 0;
+    virtual bool installDataPack(const Server &server, const Pack &pack, QProgressBar *progressBar = 0) = 0;
 
+    virtual void setInstallPath(const QString &absPath) = 0;
+    virtual QString installPath() const = 0;
 protected:
     virtual QString cachePath() const = 0;
 
 Q_SIGNALS:
     void serverConnected(const Server &server, const ServerIdentification &ident);
     void serverInfosUpdated(int serverId); // emitted when a server infos have been updated
+    void packInstalled(const Server &server, const Pack &pack);
 
     // In use
     void serverUpdateChecked();
