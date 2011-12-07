@@ -30,7 +30,10 @@
 #include <datapackutils/iservermanager.h>
 QT_BEGIN_NAMESPACE
 class QNetworkAccessManager;
+class QSignalMapper;
 QT_END_NAMESPACE
+
+#include <QNetworkReply>
 
 /**
  * \file servermanager.h
@@ -103,6 +106,13 @@ private:
     QVector<Server> m_Servers;
     QMultiHash<QString, PackDescription> m_PackDescriptions;
     QMultiHash<QString, Pack> m_Packs;
+    QHash<QNetworkReply*,Server*> m_replyToServer;
+    QHash<QNetworkReply*,QString> m_replyToBuffer;
+
+private Q_SLOTS:
+    void serverReadyRead();
+    void serverError(QNetworkReply::NetworkError error);
+    void serverFinished();
 };
 
 }  // End namespace DataPack

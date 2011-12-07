@@ -37,6 +37,7 @@
 #include <QDir>
 #include <QDomDocument>
 #include <QDomElement>
+#include <QSignalMapper>
 
 #include <QDebug>
 
@@ -139,6 +140,7 @@ void ServerManager::connectServer(const Server &server, const ServerIdentificati
 ServerDescription ServerManager::downloadServerDescription(const Server &server)
 {
     // TODO
+    Q_UNUSED(server);
     ServerDescription desc;
     return desc;
 }
@@ -255,6 +257,7 @@ void ServerManager::removeServerAt(int index)
 
 void ServerManager::connectAndUpdate(int index)
 {
+    Q_UNUSED(index);
 //    if (index < m_Servers.count() && index >= 0)
 //        m_Servers.at(index).connectAndUpdate();
 }
@@ -264,6 +267,7 @@ void ServerManager::checkServerUpdates()
     WARN_FUNC;
     for(int i=0; i < m_Servers.count(); ++i) {
         Server &s = m_Servers[i];
+        qDebug("%d: %s", i, qPrintable(s.url()));
         if (s.isLocalServer()) {
             // check directly
             QString t = s.url();
@@ -274,6 +278,15 @@ void ServerManager::checkServerUpdates()
         } else {
             // FTP | HTTP
             // Download server.conf.xml
+            QNetworkRequest request;
+            request.setUrl(QUrl(s.url() + "/" + ::SERVER_CONFIG_FILENAME));
+            request.setRawHeader("User-Agent", "FMF"); // TODO: add a version number or something else if needed
+
+            QNetworkReply *reply = m_NetworkAccessManager->get(request);
+            m_replyToServer.insert(reply, &s);
+            m_replyToBuffer.insert(reply, "");
+            connect(reply, SIGNAL(readyRead()), this, SLOT(serverReadyRead()));
+            connect(reply, SIGNAL(finished()), this, SLOT(serverFinished()));
 
             // When done
             // add server XML description to the server
@@ -344,4 +357,32 @@ void ServerManager::checkServerUpdatesAfterDownload()
 //        s.setLocalVersion();
     }
     Q_EMIT serverUpdateChecked();
+}
+
+void ServerManager::serverReadyRead()
+{
+    QNetworkReply *reply = qobject_cast<QNetworkReply*>(sender());
+
+    QString &str = m_replyToBuffer[reply];
+    str.append(reply->readAll());
+}
+
+void ServerManager::serverError(QNetworkReply::NetworkError error)
+{
+    Q_UNUSED(error);
+
+    // TODO manage errors
+}
+
+void ServerManager::serverFinished()
+{
+    QNetworkReply *reply = qobject_cast<QNetworkReply*>(sender());
+    Server *server = m_replyToServer[reply];
+
+    Q_ASSERT_X(server, "ServerManager::serverFinished()", "there is not Server associated with the QNetworkReply pointer!");
+
+    server->fromXml(m_replyToBuffer[reply]);
+
+    checkServerUpdatesAfterDownload();
+    reply->deleteLater();
 }

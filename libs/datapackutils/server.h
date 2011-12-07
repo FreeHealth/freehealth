@@ -82,10 +82,6 @@ public:
     void addErrorMessage(const QString &error) {m_Errors.append(error);}
     QStringList errors() const {return m_Errors;}
 
-
-    // OBSOLETE
-    void connectAndUpdate() {}
-
 //private:
 //    void setXmlDescription(const QString &xml);
 //    void setXmlContent(const QString &xml);
