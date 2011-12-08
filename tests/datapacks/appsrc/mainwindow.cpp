@@ -90,6 +90,7 @@ MainWindow::MainWindow(QWidget *parent) :
 
     DataPack::Core *core = DataPack::Core::instance();
     core->serverManager()->setGlobalConfiguration(Utils::readTextFile(QDir::homePath() + "/servers.conf.xml"));
+    core->serverManager()->setInstallPath(QDir::homePath());
 
     core->isInternetConnexionAvailable();
 
@@ -97,13 +98,25 @@ MainWindow::MainWindow(QWidget *parent) :
     core->setThemePath(DataPack::Core::SmallPixmaps, "/Users/eric/Desktop/Programmation/freemedforms/global_resources/pixmap/16x16");
     core->setThemePath(DataPack::Core::MediumPixmaps, "/Users/eric/Desktop/Programmation/freemedforms/global_resources/pixmap/32x32");
     core->setThemePath(DataPack::Core::BigPixmaps, "/Users/eric/Desktop/Programmation/freemedforms/global_resources/pixmap/64x64");
+    // Test 1: local
     core->serverManager()->addServer("file://Users/eric/Desktop/Programmation/freemedforms/global_resources/datapacks/default/");
 #else
     core->setThemePath(DataPack::Core::SmallPixmaps, "/Users/eric/Desktop/Programmation/freemedforms/global_resources/pixmap/16x16");
     core->setThemePath(DataPack::Core::MediumPixmaps, "/Users/eric/Desktop/Programmation/freemedforms/global_resources/pixmap/32x32");
     core->setThemePath(DataPack::Core::BigPixmaps, "/Users/eric/Desktop/Programmation/freemedforms/global_resources/pixmap/64x64");
-    core->serverManager()->addServer("ftp://localhost/");
+    // Test 1: local
+    core->serverManager()->addServer("file://Users/eric/Desktop/Programmation/freemedforms/global_resources/datapacks/default/");
 #endif
+    // Test 2: HttpPseudoSecuredZipped
+    DataPack::Server http("http://test.freemedforms.com");
+    http.setUrlStyle(DataPack::Server::HttpPseudoSecuredAndZipped);
+    core->serverManager()->addServer(http);
+
+    // Test 3: HttpPseudoSecuredZipped
+    DataPack::Server ftp("ftp://localhost/");
+    ftp.setUrlStyle(DataPack::Server::Ftp);
+    core->serverManager()->addServer(ftp);
+
     core->serverManager()->checkServerUpdates();
 
     testServerDescription();
