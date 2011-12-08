@@ -520,10 +520,11 @@ void ProduceDoc::fillTable(QList<QVector<QString> > & tableau,
     
     	      qDebug() << __FILE__ << QString::number(__LINE__) << " thread 13 "   ;
     if(choice == MOVEMENTS_TYPE){
-        nbreLignesTableau = m_typesMovements.size();
+        //nbreLignesTableau = m_typesMovements.size();
         if (WarnDebugMessage)
     	      qDebug() << __FILE__ << QString::number(__LINE__) << " m_typesMovements.size() =" << QString::number(m_typesMovements.size())  ;
-        int nberLines = nbreLignesTableau +1 ;
+        //int nberLines = nbreLignesTableau +1 ;
+        int nberLines = totalSumsList.size();
         if (WarnDebugMessage)
     	      qDebug() << __FILE__ << QString::number(__LINE__) << "nberLines  =" <<  QString::number(nberLines);
         tableRecap                = cursortrieinfunction->insertTable(nberLines,2,tableFormatDone);
@@ -532,7 +533,7 @@ void ProduceDoc::fillTable(QList<QVector<QString> > & tableau,
         for(int i = 0 ; i < nberLines ; i++){
             if (WarnDebugMessage)
     	      qDebug() << __FILE__ << QString::number(__LINE__) << "i = " << QString::number(i);
-    	    if(!i < totalSumsList.size()){break;}
+    	    //if(!i < totalSumsList.size()){break;}
             if (WarnDebugMessage)
     	      qDebug() << __FILE__ << QString::number(__LINE__) << "totalSumsList[i] = " << totalSumsList[i];
             QStringList paireDepenseMontant = totalSumsList[i].split("=");
