@@ -136,7 +136,7 @@ QSize Delegate::sizeHint(const QStyleOptionViewItem &option, const QModelIndex &
 
 static inline DataPack::Core *core() {return DataPack::Core::instance();}
 static inline ServerManager *serverManager() {return qobject_cast<ServerManager*>(core()->serverManager());}
-static inline QIcon icon(const QString &name, DataPack::Core::ThemePath path = DataPack::Core::MediumPixmaps) {qWarning()<<DataPack::Core::instance()->icon(name, path);return QIcon(DataPack::Core::instance()->icon(name, path));}
+static inline QIcon icon(const QString &name, DataPack::Core::ThemePath path = DataPack::Core::MediumPixmaps) {return QIcon(DataPack::Core::instance()->icon(name, path));}
 
 static void createServerModel(QStandardItemModel *model)
 {

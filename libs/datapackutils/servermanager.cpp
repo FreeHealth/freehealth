@@ -31,6 +31,8 @@
 #include <utils/global.h>
 #include <translationutils/constanttranslations.h>
 
+#include <quazip/global.h>
+
 #include <QNetworkAccessManager>
 #include <QNetworkConfigurationManager>
 #include <QNetworkRequest>
@@ -38,6 +40,7 @@
 #include <QDomDocument>
 #include <QDomElement>
 #include <QSignalMapper>
+#include <QUuid>
 
 #include <QDebug>
 
@@ -98,7 +101,7 @@ bool ServerManager::setGlobalConfiguration(const QString &xmlContent, QString *e
     QDomElement server = root.firstChildElement(::TAG_SERVER);
     while (!server.isNull()) {
         Server s;
-        s.setUrl(server.attribute(::ATTRIB_URL));
+        s.fromSerializedString(server.attribute(::ATTRIB_URL));
         s.setLastChecked(QDateTime::fromString(server.attribute(::ATTRIB_LASTCHECK), Qt::ISODate));
         s.setLocalVersion(server.attribute(::ATTRIB_RECORDEDVERSION));
         m_Servers.append(s);
@@ -123,7 +126,7 @@ QString ServerManager::xmlConfiguration() const
         const Server &s = m_Servers.at(i);
         QDomElement e = doc.createElement(::TAG_SERVER);
         root.appendChild(e);
-        e.setAttribute(::ATTRIB_URL, s.url());
+        e.setAttribute(::ATTRIB_URL, s.serialize());
         e.setAttribute(::ATTRIB_RECORDEDVERSION, s.localVersion());
         e.setAttribute(::ATTRIB_LASTCHECK, s.lastChecked().toString(Qt::ISODate));
     }
@@ -220,12 +223,17 @@ QString ServerManager::installPath() const
 
 bool ServerManager::addServer(const QString &url)
 {
-    // check if a server already exists with the same URL
-    foreach (Server child, m_Servers)
-        if (child.url() == url)
-            return false;
-
     Server server(url);
+    return addServer(server);
+}
+
+bool ServerManager::addServer(const Server &server)
+{
+    // check if a server already exists with the same URL
+    foreach (Server child, m_Servers) {
+        if (child == server)
+            return false;
+    }
     m_Servers.append(server);
     return true;
 }
@@ -264,27 +272,26 @@ void ServerManager::connectAndUpdate(int index)
 
 void ServerManager::checkServerUpdates()
 {
-    WARN_FUNC;
+    WARN_FUNC << m_Servers.count();
     for(int i=0; i < m_Servers.count(); ++i) {
         Server &s = m_Servers[i];
         qDebug("%d: %s", i, qPrintable(s.url()));
         if (s.isLocalServer()) {
             // check directly
-            QString t = s.url();
-            t = QDir::cleanPath(t.replace("file:/", "")) + "/";
-            t += ::SERVER_CONFIG_FILENAME;
-            s.fromXml(Utils::readTextFile(t, Utils::DontWarnUser));
+            s.fromXml(Utils::readTextFile(s.url(Server::ServerConfigurationFile), Utils::DontWarnUser));
             // move a copy of the description in the working path of server manager
         } else {
             // FTP | HTTP
             // Download server.conf.xml
             QNetworkRequest request;
-            request.setUrl(QUrl(s.url() + "/" + ::SERVER_CONFIG_FILENAME));
-            request.setRawHeader("User-Agent", "FMF"); // TODO: add a version number or something else if needed
+            request.setUrl(s.url(Server::ServerConfigurationFile));
+            request.setRawHeader("User-Agent", QString("FreeMedForms:%1;%2")
+                                 .arg(qApp->applicationName())
+                                 .arg(qApp->applicationVersion()).toAscii());
 
             QNetworkReply *reply = m_NetworkAccessManager->get(request);
             m_replyToServer.insert(reply, &s);
-            m_replyToBuffer.insert(reply, "");
+            m_replyToBuffer.insert(reply, QByteArray());
             connect(reply, SIGNAL(readyRead()), this, SLOT(serverReadyRead()));
             connect(reply, SIGNAL(finished()), this, SLOT(serverFinished()));
 
@@ -363,8 +370,8 @@ void ServerManager::serverReadyRead()
 {
     QNetworkReply *reply = qobject_cast<QNetworkReply*>(sender());
 
-    QString &str = m_replyToBuffer[reply];
-    str.append(reply->readAll());
+    QByteArray &ba = m_replyToBuffer[reply];
+    ba.append(reply->readAll());
 }
 
 void ServerManager::serverError(QNetworkReply::NetworkError error)
@@ -377,11 +384,50 @@ void ServerManager::serverError(QNetworkReply::NetworkError error)
 void ServerManager::serverFinished()
 {
     QNetworkReply *reply = qobject_cast<QNetworkReply*>(sender());
+    if (reply->error() != QNetworkReply::NoError)
+        return;
     Server *server = m_replyToServer[reply];
 
     Q_ASSERT_X(server, "ServerManager::serverFinished()", "there is not Server associated with the QNetworkReply pointer!");
 
-    server->fromXml(m_replyToBuffer[reply]);
+    switch (server->urlStyle()) {
+    case Server::NoStyle:
+    case Server::Ftp:
+    case Server::Http:
+    case Server::HttpPseudoSecuredNotZipped:
+    {
+        // Read the XML from the buffer
+        server->fromXml(m_replyToBuffer[reply]);
+        break;
+    }
+    case Server::FtpZipped:
+    case Server::HttpPseudoSecuredAndZipped:
+    {
+        // save buffer to tmp zip file
+        QString zipName = m_installPath + QDir::separator() + "datapacktmp" + QDir::separator() + QUuid::createUuid().toString().remove("-").remove("{").remove("}") + QDir::separator() + "serverconf.zip";
+        QDir().mkpath(QFileInfo(zipName).absolutePath());
+        QFile zip(zipName);
+        if (!zip.open(QFile::WriteOnly | QFile::Text)) {
+            LOG_ERROR(tkTr(Trans::Constants::FILE_1_ISNOT_READABLE).arg(zip.fileName()));
+            reply->deleteLater();
+            return;
+        }
+        zip.write(m_replyToBuffer[reply]);
+        zip.close();
+
+        // unzip file
+        if (!QuaZipTools::unzipFile(zipName)) {
+            LOG_ERROR("Unable to unzip file: " + zipName);
+            reply->deleteLater();
+            return;
+        }
+
+        // read server configuration file
+        QString serverConfFile = QFileInfo(zipName).absolutePath() + QDir::separator() + Server::serverConfigurationFileName();
+        server->fromXml(Utils::readTextFile(serverConfFile, Utils::DontWarnUser));
+        break;
+    }
+    }
 
     checkServerUpdatesAfterDownload();
     reply->deleteLater();

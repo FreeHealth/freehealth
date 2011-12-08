@@ -68,6 +68,7 @@ public:
     virtual void connectServer(const Server &server, const ServerIdentification &ident = ServerIdentification()) = 0;
 
     virtual bool addServer(const QString &url) = 0;
+    virtual bool addServer(const Server &server) = 0;
     virtual int serverCount() const = 0;
     virtual Server getServerAt(int index) const = 0;
     virtual int getServerIndex(const QString &url) const = 0;

@@ -68,11 +68,18 @@
 
 /**
  * \fn virtual bool DataPack::IServerManager::addServer(const QString &url)
- * Add a new server
+ * Add a new server created with the default values and the specified \e url.
+ * \sa DataPack::Server
  * \param url the URL of the target server
  * \return false if a server with the same URL already exists
  */
 
+/**
+ * \fn virtual bool DataPack::IServerManager::addServer(const DataPack::Server &server)
+ * Add a fully configurated \e server.
+ * \param url the URL of the target server
+ * \return false if a server with the same URL already exists
+ */
 
 /**
  * \fn virtual int DataPack::IServerManager::serverCount() const

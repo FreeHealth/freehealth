@@ -52,12 +52,28 @@ public:
         UpToDate,
         UpdateInfoNotAvailable
     };
+    enum UrlStyle {
+        NoStyle = 0,                     // used for local file server (default)
+        HttpPseudoSecuredAndZipped,      // eg: http://url/get-[serverconf]
+        HttpPseudoSecuredNotZipped,      // eg: http://url/get-[server.conf.xml]
+        Http,                            // eg: http://url/[server.conf.xml]
+        FtpZipped,                       // eg: ftp://user@pass:url/[serverconf.zip]
+        Ftp                              // eg: ftp://user@pass:url/[server.conf.xml]
+    };
+    enum FileRequested {
+        NoFile = 0,                      // Computed URL of the server without any request
+        ServerConfigurationFile          // File URL on the server
+    };
 
     Server(const QString &url = QString::null);
     virtual ~Server() {}
 
+    void setUrlStyle(const UrlStyle &style) {m_UrlStyle=style;}
+    UrlStyle urlStyle() const {return m_UrlStyle;}
+
     void setUrl(const QString &url);
-    const QString &url() const {return m_Url;}
+    const QString &nativeUrl() const {return m_Url;}
+    QString url(const FileRequested &file = NoFile) const;
 
     void setLocalVersion(const QString &version) {m_LocalVersion=version;}
     const QString &localVersion() const {return m_LocalVersion;}
@@ -82,9 +98,12 @@ public:
     void addErrorMessage(const QString &error) {m_Errors.append(error);}
     QStringList errors() const {return m_Errors;}
 
-//private:
-//    void setXmlDescription(const QString &xml);
-//    void setXmlContent(const QString &xml);
+    bool operator==(const Server &s);
+
+    static QString serverConfigurationFileName();
+
+    QString serialize() const;
+    void fromSerializedString(const QString &string);
 
 private:
     QString m_Url, m_LocalVersion;
@@ -93,6 +112,7 @@ private:
     ServerDescription m_Desc;
     ServerContent m_Content;
     QStringList m_Errors;
+    UrlStyle m_UrlStyle;
 };
 
 }  // End namespace DataPack

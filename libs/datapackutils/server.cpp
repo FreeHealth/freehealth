@@ -33,6 +33,7 @@
 #include <QFileInfo>
 #include <QDomDocument>
 #include <QDomElement>
+#include <QDir>
 
 #include <QDebug>
 
@@ -43,12 +44,16 @@ namespace {
 const char *const TAG_ROOT = "DataPackServer";
 const char *const TAG_SERVERDESCRIPTION = "ServerDescription";
 const char *const TAG_SERVERCONTENT = "ServerContents";
+
+const char * const SERVER_CONF_XML = "server.conf.xml";
+const char * const SERVER_CONF_ZIP = "serverconf.zip";
 }
 
 /** Create a server pointing to the URL \e url. The URL must be unique in the server's pool. */
 Server::Server(const QString &url) :
     m_Connected(false),
-    m_IsLocal(false)
+    m_IsLocal(false),
+    m_UrlStyle(NoStyle)
 {
     setUrl(url);
 }
@@ -76,6 +81,33 @@ void Server::setUrl(const QString &url)
 }
 
 /**
+ * Return the server Url according to the \e UrlStyle and the \e native \e url params for the requested \e file.
+ * \todo code here and test
+ */
+QString Server::url(const FileRequested &file) const
+{
+    switch (file) {
+    case NoFile : return m_Url;
+    case ServerConfigurationFile:
+    {
+        switch (m_UrlStyle) {
+        case NoStyle:
+        {
+            QString t = m_Url;
+            return QDir::cleanPath(t.replace("file:/", "")) + "/" + "/" + ::SERVER_CONF_XML;
+        }
+        case HttpPseudoSecuredAndZipped: return m_Url + "/get-" + ::SERVER_CONF_ZIP;
+        case HttpPseudoSecuredNotZipped: return m_Url + "/" + ::SERVER_CONF_XML;
+        case Http: return m_Url + "/" + ::SERVER_CONF_XML;
+        case FtpZipped: return m_Url + "/" + ::SERVER_CONF_ZIP;
+        case Ftp: return m_Url + "/" + ::SERVER_CONF_XML;
+        }
+    }
+    }
+    return nativeUrl();
+}
+
+/**
  * Reads the XML configuration content of the server and
  * create the DataPack::ServerDescription and the DataPack::ServerContent
  * related to this server.
@@ -94,22 +126,6 @@ void Server::fromXml(const QString &fullServerConfigXml)
     m_Content.fromDomElement(content);
 }
 
-//void Server::setXmlDescription(const QString &xml)
-//{
-//    if (!m_Desc.fromXmlContent(xml)) {
-//        LOG_ERROR_FOR("DataPackServer", "Wrong XML description");
-//        m_Desc.clear();
-//    }
-//}
-
-//void Server::setXmlContent(const QString &xml)
-//{
-//    if (!m_Content.fromXml(xml)) {
-//        LOG_ERROR_FOR("DataPackServer", "Wrong XML content");
-//        m_Content.clear();
-//    }
-//}
-
 /**
  * Return the DataPack::Server::UpdateState of the server according to
  * its description and the serverManager's data.
@@ -126,4 +142,32 @@ Server::UpdateState Server::updateState() const
     if (local < remote)
         return Server::UpdateAvailable;
     return Server::UpToDate;
+}
+
+/** Test DataPack::Server equality. */
+bool Server::operator==(const Server &s)
+{
+    return ((m_Url == s.url()) && (m_UrlStyle==s.urlStyle()));
+}
+
+/** Return the file name used for the server configuration file */
+QString Server::serverConfigurationFileName()
+{
+    return ::SERVER_CONF_XML;
+}
+
+QString Server::serialize() const
+{
+    return m_Url + "|||" + m_UrlStyle;
+}
+
+void Server::fromSerializedString(const QString &string)
+{
+    if (string.contains("|||")) {
+        QStringList v = string.split("|||");
+        if (v.count() == 2) {
+            m_Url=v.at(0);
+            m_UrlStyle=UrlStyle(v.at(1).toInt());
+        }
+    }
 }

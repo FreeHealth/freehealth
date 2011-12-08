@@ -61,6 +61,7 @@ public:
     void connectServer(const Server &server, const ServerIdentification &ident = ServerIdentification()); // will be deprecated regarding the connectAndUpdate function
 
     bool addServer(const QString &url);
+    bool addServer(const Server &server);
     int serverCount() const;
     Server getServerAt(int index) const;
     int getServerIndex(const QString &url) const;
@@ -107,7 +108,7 @@ private:
     QMultiHash<QString, PackDescription> m_PackDescriptions;
     QMultiHash<QString, Pack> m_Packs;
     QHash<QNetworkReply*,Server*> m_replyToServer;
-    QHash<QNetworkReply*,QString> m_replyToBuffer;
+    QHash<QNetworkReply*, QByteArray> m_replyToBuffer;
 
 private Q_SLOTS:
     void serverReadyRead();
