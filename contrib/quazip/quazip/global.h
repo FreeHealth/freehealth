@@ -27,15 +27,15 @@
 #define QUAZIP_GLOBAL_H
 
 #include <quazip/exporter.h>
+#include <QString>
 
 QT_BEGIN_NAMESPACE
-class QString;
 class QStringList;
 QT_END_NAMESPACE
 
 namespace QuaZipTools {
 
-    ZIP_EXPORT const bool unzipFile(const QString &fileName, const QString &pathToUnZippedFiles);
+    ZIP_EXPORT const bool unzipFile(const QString &fileName, const QString &pathToUnZippedFiles = QString::null);
 
     ZIP_EXPORT const bool unzipAllFilesIntoDirs(const QStringList &paths);
 
