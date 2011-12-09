@@ -25,6 +25,7 @@
  *       NAME <MAIL@ADRESS>                                                *
  ***************************************************************************/
 #include "server.h"
+#include "core.h"
 
 #include <utils/log.h>
 #include <utils/versionnumber.h>
@@ -48,6 +49,8 @@ const char *const TAG_SERVERCONTENT = "ServerContents";
 const char * const SERVER_CONF_XML = "server.conf.xml";
 const char * const SERVER_CONF_ZIP = "serverconf.zip";
 }
+
+static inline DataPack::Core *core() {return DataPack::Core::instance();}
 
 /** Create a server pointing to the URL \e url. The URL must be unique in the server's pool. */
 Server::Server(const QString &url) :
@@ -113,8 +116,7 @@ QString Server::url(const FileRequested &file, const QString &fileName) const
         switch (m_UrlStyle) {
         case NoStyle:
         {
-            QString t = m_Url;
-            return QDir::cleanPath(t.replace("file:/", "")) + "/" + fileName;
+            return fileName;
         }
         case HttpPseudoSecuredAndZipped: return m_Url + "/get-" + fileName;
         case HttpPseudoSecuredNotZipped: return m_Url + "/" + fileName;
@@ -179,16 +181,17 @@ QString Server::serverConfigurationFileName()
 
 QString Server::serialize() const
 {
-    return m_Url + "|||" + m_UrlStyle;
+    return m_Url + "|||" + QString::number(m_UrlStyle);
 }
 
 void Server::fromSerializedString(const QString &string)
 {
+    qWarning() << string;
     if (string.contains("|||")) {
         QStringList v = string.split("|||");
         if (v.count() == 2) {
-            m_Url=v.at(0);
-            m_UrlStyle=UrlStyle(v.at(1).toInt());
+            setUrl(v.at(0));
+            setUrlStyle(m_UrlStyle=UrlStyle(v.at(1).toInt()));
         }
     }
 }
