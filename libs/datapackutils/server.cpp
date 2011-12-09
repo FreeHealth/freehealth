@@ -84,7 +84,7 @@ void Server::setUrl(const QString &url)
  * Return the server Url according to the \e UrlStyle and the \e native \e url params for the requested \e file.
  * \todo code here and test
  */
-QString Server::url(const FileRequested &file) const
+QString Server::url(const FileRequested &file, const QString &fileName) const
 {
     switch (file) {
     case NoFile : return m_Url;
@@ -94,7 +94,7 @@ QString Server::url(const FileRequested &file) const
         case NoStyle:
         {
             QString t = m_Url;
-            return QDir::cleanPath(t.replace("file:/", "")) + "/" + "/" + ::SERVER_CONF_XML;
+            return QDir::cleanPath(t.replace("file:/", "")) + "/" + ::SERVER_CONF_XML;
         }
         case HttpPseudoSecuredAndZipped: return m_Url + "/get-" + ::SERVER_CONF_ZIP;
         case HttpPseudoSecuredNotZipped: return m_Url + "/" + ::SERVER_CONF_XML;
@@ -102,6 +102,27 @@ QString Server::url(const FileRequested &file) const
         case FtpZipped: return m_Url + "/" + ::SERVER_CONF_ZIP;
         case Ftp: return m_Url + "/" + ::SERVER_CONF_XML;
         }
+        break;
+    }
+    case PackDescriptionFile:
+    {
+        Q_ASSERT(fileName.isEmpty());
+        if (fileName.isEmpty())
+            break;
+
+        switch (m_UrlStyle) {
+        case NoStyle:
+        {
+            QString t = m_Url;
+            return QDir::cleanPath(t.replace("file:/", "")) + "/" + fileName;
+        }
+        case HttpPseudoSecuredAndZipped: return m_Url + "/get-" + fileName;
+        case HttpPseudoSecuredNotZipped: return m_Url + "/" + fileName;
+        case Http: return m_Url + "/" + fileName;
+        case FtpZipped: return m_Url + "/" + fileName;
+        case Ftp: return m_Url + "/" + fileName;
+        }
+        break;
     }
     }
     return nativeUrl();

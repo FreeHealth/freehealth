@@ -294,12 +294,6 @@ void ServerManager::checkServerUpdates()
             m_replyToBuffer.insert(reply, QByteArray());
             connect(reply, SIGNAL(readyRead()), this, SLOT(serverReadyRead()));
             connect(reply, SIGNAL(finished()), this, SLOT(serverFinished()));
-
-            // When done
-            // add server XML description to the server
-            // s.fromXml(xml);
-            // Download all linked packagedescription -> see ServerContent --> server.content().packDescriptionFileNames()
-            // When all descriptions are downloaded call -> checkServerUpdatesAfterDownload()
         }
     }
     // TODO THIS LINE IS ONLY FOR TESTING PURPOSE
@@ -390,14 +384,21 @@ void ServerManager::serverFinished()
 
     Q_ASSERT_X(server, "ServerManager::serverFinished()", "there is not Server associated with the QNetworkReply pointer!");
 
+    bool downloadPackDescriptionNeeded = false;
     switch (server->urlStyle()) {
     case Server::NoStyle:
+    {
+        // Read the XML from the buffer
+        server->fromXml(m_replyToBuffer[reply]);
+        break;
+    }
     case Server::Ftp:
     case Server::Http:
     case Server::HttpPseudoSecuredNotZipped:
     {
         // Read the XML from the buffer
         server->fromXml(m_replyToBuffer[reply]);
+        downloadPackDescriptionNeeded = true;
         break;
     }
     case Server::FtpZipped:
@@ -425,10 +426,43 @@ void ServerManager::serverFinished()
         // read server configuration file
         QString serverConfFile = QFileInfo(zipName).absolutePath() + QDir::separator() + Server::serverConfigurationFileName();
         server->fromXml(Utils::readTextFile(serverConfFile, Utils::DontWarnUser));
+
+        // test downloaded zip files for all pack description
+        foreach(const QString &file, server->content().packDescriptionFileNames()) {
+            QFileInfo info(file);
+            if (info.isRelative()) { // This must be always the case...
+                info.setFile(QFileInfo(zipName).absolutePath() + QDir::separator() + info.fileName());
+            }
+            if (!info.exists()) {
+                downloadPackDescriptionNeeded = true;
+            }
+        }
         break;
     }
     }
 
-    checkServerUpdatesAfterDownload();
+    // Download all linked packagedescription -> see ServerContent --> server.content().packDescriptionFileNames()
+    if (downloadPackDescriptionNeeded) {
+        foreach(const QString &file, server->content().packDescriptionFileNames()) {
+            // TODO DOWNLOAD ME: file
+            // We should move the request contruction in the Server class to be sure to always have the same headers !!
+            // somthing like
+            // server->constructRequest(...);
+//            QNetworkRequest request;
+//            request.setUrl(s.url(Server::PackDescriptionFile, file));
+//            request.setRawHeader("User-Agent", QString("FreeMedForms:%1;%2")
+//                                 .arg(qApp->applicationName())
+//                                 .arg(qApp->applicationVersion()).toAscii());
+
+//            QNetworkReply *reply = m_NetworkAccessManager->get(request);
+//            m_replyToServer.insert(reply, &s);
+//            m_replyToBuffer.insert(reply, QByteArray());
+//            connect(reply, SIGNAL(readyRead()), this, SLOT(serverReadyRead()));
+//            connect(reply, SIGNAL(finished()), this, SLOT(serverFinished()));
+        }
+    }
     reply->deleteLater();
+
+    // When all descriptions are downloaded call -> checkServerUpdatesAfterDownload()
+    checkServerUpdatesAfterDownload();
 }

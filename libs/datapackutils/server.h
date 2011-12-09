@@ -62,7 +62,8 @@ public:
     };
     enum FileRequested {
         NoFile = 0,                      // Computed URL of the server without any request
-        ServerConfigurationFile          // File URL on the server
+        ServerConfigurationFile,         // File URL on the server
+        PackDescriptionFile
     };
 
     Server(const QString &url = QString::null);
@@ -73,7 +74,7 @@ public:
 
     void setUrl(const QString &url);
     const QString &nativeUrl() const {return m_Url;}
-    QString url(const FileRequested &file = NoFile) const;
+    QString url(const FileRequested &file = NoFile, const QString &fileName = QString::null) const;
 
     void setLocalVersion(const QString &version) {m_LocalVersion=version;}
     const QString &localVersion() const {return m_LocalVersion;}
