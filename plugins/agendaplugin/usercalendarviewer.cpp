@@ -49,7 +49,9 @@
 
 #include <calendar/basic_item_edition_dialog.h>
 #include <utils/log.h>
-#include <translationutils/constanttranslations.h>
+#include <translationutils/constants.h>
+#include <translationutils/trans_agenda.h>
+#include <translationutils/trans_datetime.h>
 
 #include "ui_usercalendarviewer.h"
 

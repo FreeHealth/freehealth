@@ -29,7 +29,8 @@
 
 #include <utils/log.h>
 #include <utils/versionnumber.h>
-#include <translationutils/constanttranslations.h>
+#include <translationutils/constants.h>
+#include <translationutils/trans_filepathxml.h>
 
 #include <QFileInfo>
 #include <QDomDocument>
@@ -129,6 +130,24 @@ QString Server::url(const FileRequested &file, const QString &fileName) const
     }
     }
     return nativeUrl();
+}
+
+QString Server::urlStyleName(int index)
+{
+    switch (index) {
+    case Server::NoStyle: return QApplication::translate("Server", "Local file");
+    case Server::HttpPseudoSecuredAndZipped: return QApplication::translate("Server", "Protected HTTP with zipped content");
+    case Server::HttpPseudoSecuredNotZipped: return QApplication::translate("Server", "Protected HTTP non-zipped");
+    case Server::Http: return QApplication::translate("Server", "HTTP (standard mode)");
+    case Server::FtpZipped: return QApplication::translate("Server", "FTP with zipped content");
+    case Server::Ftp: return QApplication::translate("Server", "FTP (standard mode)");
+    }
+    return QString();
+}
+
+QString Server::urlStyleName() const
+{
+    return urlStyleName(m_UrlStyle);
 }
 
 /**

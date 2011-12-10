@@ -35,7 +35,8 @@
 #include <coreplugin/icore.h>
 #include <coreplugin/ipatient.h>
 
-#include <translationutils/constanttranslations.h>
+#include <translationutils/constants.h>
+#include <translationutils/trans_datetime.h>
 
 using namespace BaseWidgets;
 using namespace Trans::ConstantTranslations;

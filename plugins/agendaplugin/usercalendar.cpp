@@ -26,7 +26,8 @@
  ***************************************************************************/
 #include "usercalendar.h"
 
-#include <translationutils/constanttranslations.h>
+#include <translationutils/constants.h>
+#include <translationutils/trans_agenda.h>
 
 #include <QDate>
 #include <QStandardItem>

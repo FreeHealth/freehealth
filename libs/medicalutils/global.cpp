@@ -31,7 +31,8 @@
 
 #include "global.h"
 
-#include <translationutils/constanttranslations.h>
+#include <translationutils/constants.h>
+#include <translationutils/trans_datetime.h>
 
 #include <QDateTime>
 #include <QDate>

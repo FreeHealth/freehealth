@@ -28,7 +28,8 @@
 #include "common.h"
 #include "calendar_item.h"
 
-#include <translationutils/constanttranslations.h>
+#include <translationutils/constants.h>
+#include <translationutils/trans_agenda.h>
 
 #include <QDate>
 

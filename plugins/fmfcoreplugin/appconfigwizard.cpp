@@ -44,6 +44,9 @@
 #include <utils/database.h>
 #include <utils/databaseconnector.h>
 
+#include <translationutils/constants.h>
+#include <translationutils/trans_database.h>
+
 #include <extensionsystem/pluginmanager.h>
 
 #include <QComboBox>

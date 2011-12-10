@@ -38,7 +38,8 @@
 #include "icalendaritemdatawidget.h"
 #include "common.h"
 
-#include <translationutils/constanttranslations.h>
+#include <translationutils/constants.h>
+#include <translationutils/trans_datetime.h>
 #include <utils/log.h>
 
 #include "ui_item_editor_widget.h"

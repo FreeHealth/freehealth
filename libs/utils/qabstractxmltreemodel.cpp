@@ -2,7 +2,7 @@
 
 #include <utils/global.h>
 #include <utils/log.h>
-#include <translationutils/constanttranslations.h>
+#include <translationutils/constants.h>
 
 #include <QDomNode>
 #include <QDomElement>

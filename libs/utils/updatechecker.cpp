@@ -41,7 +41,8 @@
 #include "updatechecker_p.h"
 #include <utils/log.h>
 
-#include <translationutils/constanttranslations.h>
+#include <translationutils/constants.h>
+#include <translationutils/trans_spashandupdate.h>
 
 #include <QApplication>
 #include <QDialog>

@@ -34,7 +34,8 @@
 #include <coreplugin/constants_icons.h>
 
 #include <calendar/calendar_people.h>
-#include <translationutils/constanttranslations.h>
+#include <translationutils/constants.h>
+#include <translationutils/trans_agenda.h>
 
 #include "ui_usercalendardelegatesmapper.h"
 

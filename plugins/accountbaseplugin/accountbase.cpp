@@ -36,6 +36,9 @@
 #include <utils/global.h>
 #include <utils/log.h>
 #include <utils/databaseconnector.h>
+#include <translationutils/constants.h>
+#include <translationutils/trans_database.h>
+#include <translationutils/trans_msgerror.h>
 
 #include <coreplugin/isettings.h>
 #include <coreplugin/icore.h>

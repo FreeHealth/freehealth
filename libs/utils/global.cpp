@@ -20,7 +20,8 @@
  ***************************************************************************/
 #include "global.h"
 
-#include <translationutils/constanttranslations.h>
+#include <translationutils/constants.h>
+#include <translationutils/trans_filepathxml.h>
 #include <utils/log.h>
 
 #include <QApplication>

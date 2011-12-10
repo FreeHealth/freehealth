@@ -29,7 +29,7 @@
  ***************************************************************************/
 #include "languagecombobox.h"
 
-#include <translationutils/constanttranslations.h>
+#include <translationutils/constants.h>
 
 #include <QDir>
 #include <QApplication>

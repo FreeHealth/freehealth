@@ -28,7 +28,8 @@
 #include "constants.h"
 
 #include <utils/log.h>
-#include <translationutils/constanttranslations.h>
+#include <translationutils/constants.h>
+#include <translationutils/trans_agenda.h>
 
 #include <coreplugin/icore.h>
 #include <coreplugin/isettings.h>

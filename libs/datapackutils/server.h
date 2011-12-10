@@ -75,6 +75,8 @@ public:
     QString url(const FileRequested &file = NoFile, const QString &fileName = QString::null) const;
     void setUrlStyle(const UrlStyle &style) {m_UrlStyle=style;}
     UrlStyle urlStyle() const {return m_UrlStyle;}
+    static QString urlStyleName(int index);
+    QString urlStyleName() const;
     void setIsLocalServer(bool isLocal) {m_IsLocal=isLocal;}
     bool isLocalServer() const {return m_IsLocal;}
 

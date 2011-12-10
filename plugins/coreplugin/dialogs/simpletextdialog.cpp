@@ -32,6 +32,9 @@
 #include "simpletextdialog.h"
 #include "ui_simpletextdialog.h"
 
+#include <translationutils/constants.h>
+#include <translationutils/trans_menu.h>
+
 #include <coreplugin/ipatient.h>
 #include <coreplugin/icore.h>
 #include <coreplugin/iuser.h>

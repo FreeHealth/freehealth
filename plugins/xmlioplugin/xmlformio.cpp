@@ -34,7 +34,8 @@
 #include <utils/global.h>
 #include <utils/versionnumber.h>
 #include <utils/genericupdateinformation.h>
-#include <translationutils/constanttranslations.h>
+#include <translationutils/constants.h>
+#include <translationutils/trans_filepathxml.h>
 
 #include <coreplugin/icore.h>
 #include <coreplugin/ipatient.h>
@@ -50,8 +51,6 @@
 
 #include <pmhplugin/pmhcore.h>
 #include <pmhplugin/pmhcategorymodel.h>
-
-#include <translationutils/constanttranslations.h>
 
 #include <QApplication>
 #include <QDir>

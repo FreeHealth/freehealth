@@ -56,6 +56,9 @@
 #include <usermanagerplugin/usermodel.h>
 #include <usermanagerplugin/widgets/userwizard.h>
 
+#include <translationutils/constants.h>
+#include <translationutils/trans_menu.h>
+
 #include <QModelIndex>
 #include <QTableView>
 #include <QSqlTableModel>

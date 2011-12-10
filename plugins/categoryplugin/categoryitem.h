@@ -28,7 +28,6 @@
 #define CATEGORYPLUGIN_CATEGORYITEM_H
 
 #include <categoryplugin/category_exporter.h>
-#include <translationutils/constanttranslations.h>
 
 #include <QVariant>
 

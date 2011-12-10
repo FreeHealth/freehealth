@@ -24,10 +24,13 @@
   It can send message over the web with the tkSendMessage class (part of freemedforms).
 */
 #include "debugdialog.h"
-#include "ui_debugdialog.h"
 
 #include <utils/log.h>
 #include <utils/global.h>
+#include <translationutils/constants.h>
+#include <translationutils/trans_spashandupdate.h>
+#include <translationutils/trans_msgerror.h>
+#include <translationutils/trans_filepathxml.h>
 #include <extensionsystem/pluginmanager.h>
 
 #include <coreplugin/idebugpage.h>
@@ -39,6 +42,8 @@
 #include <QStackedLayout>
 #include <QHeaderView>
 #include <QMainWindow>
+
+#include "ui_debugdialog.h"
 
 using namespace Core;
 using namespace Core::Internal;

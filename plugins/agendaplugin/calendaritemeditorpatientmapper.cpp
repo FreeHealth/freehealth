@@ -42,7 +42,8 @@
 #include <calendar/calendar_item.h>
 #include <calendar/calendar_people.h>
 #include <calendar/abstract_calendar_model.h>
-#include <translationutils/constanttranslations.h>
+#include <translationutils/constants.h>
+#include <translationutils/trans_agenda.h>
 
 #include "ui_calendaritemeditorpatientmapper.h"
 

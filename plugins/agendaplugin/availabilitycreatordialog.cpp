@@ -27,7 +27,9 @@
 #include "availabilitycreatordialog.h"
 #include "ui_availabilitycreatordialog.h"
 
-#include <translationutils/constanttranslations.h>
+#include <translationutils/constants.h>
+#include <translationutils/trans_agenda.h>
+#include <translationutils/trans_drugs.h>
 
 #include <QDate>
 

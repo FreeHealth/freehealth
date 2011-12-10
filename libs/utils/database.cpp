@@ -65,7 +65,9 @@
 #include "global.h"
 #include "databaseconnector.h"
 
-#include <translationutils/constanttranslations.h>
+#include <translationutils/constants.h>
+#include <translationutils/trans_database.h>
+#include <translationutils/trans_filepathxml.h>
 
 #include <QDir>
 #include <QSqlRecord>

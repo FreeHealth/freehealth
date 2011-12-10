@@ -69,6 +69,8 @@
 #include <utils/log.h>
 #include <utils/serializer.h>
 
+#include <translationutils/constants.h>
+
 #include <printerplugin/textdocumentextra.h>
 
 #include <QApplication>

@@ -41,7 +41,9 @@
 #include <calendar/calendar_item.h>
 
 #include <utils/log.h>
-#include <translationutils/constanttranslations.h>
+#include <translationutils/constants.h>
+#include <translationutils/trans_agenda.h>
+#include <translationutils/trans_drugs.h>
 
 #include <QStandardItemModel>
 #include <QStandardItem>

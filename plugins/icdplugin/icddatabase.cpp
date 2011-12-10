@@ -46,6 +46,10 @@
 #    include <coreplugin/ftb_constants.h>
 #endif
 
+#include <translationutils/constants.h>
+#include <translationutils/trans_database.h>
+#include <translationutils/trans_msgerror.h>
+
 #include <QCoreApplication>
 #include <QSqlDatabase>
 #include <QSqlError>

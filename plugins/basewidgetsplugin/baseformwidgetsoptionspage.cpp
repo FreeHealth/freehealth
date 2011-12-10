@@ -28,7 +28,8 @@
 
 #include <coreplugin/icore.h>
 #include <coreplugin/isettings.h>
-#include <translationutils/constanttranslations.h>
+#include <translationutils/constants.h>
+#include <translationutils/trans_menu.h>
 
 static inline Core::ISettings *settings() {return Core::ICore::instance()->settings();}
 

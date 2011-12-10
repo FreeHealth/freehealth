@@ -45,7 +45,8 @@
 
 #include "log.h"
 
-#include <translationutils/constanttranslations.h>
+#include <translationutils/constants.h>
+#include <translationutils/trans_msgerror.h>
 
 #include <QFile>
 #include <QDir>

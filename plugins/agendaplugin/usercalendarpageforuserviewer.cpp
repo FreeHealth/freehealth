@@ -42,7 +42,8 @@
 #include <usermanagerplugin/usermodel.h>
 
 #include <utils/global.h>
-#include <translationutils/constanttranslations.h>
+#include <translationutils/constants.h>
+#include <translationutils/trans_agenda.h>
 
 #include <QDataWidgetMapper>
 #include <QHBoxLayout>

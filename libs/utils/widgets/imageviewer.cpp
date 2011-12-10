@@ -29,7 +29,8 @@
 #include "imageviewer.h"
 
 #include <utils/global.h>
-#include <translationutils/constanttranslations.h>
+#include <translationutils/constants.h>
+#include <translationutils/trans_menu.h>
 
 #include <QLabel>
 #include <QScrollBar>

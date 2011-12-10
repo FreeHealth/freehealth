@@ -60,7 +60,8 @@
 #include "abstract_calendar_model.h"
 
 #include <extensionsystem/pluginmanager.h>
-#include <translationutils/constanttranslations.h>
+#include <translationutils/constants.h>
+#include <translationutils/trans_current.h>
 #include <utils/global.h>
 
 #include "ui_basic_item_edition_dialog.h"

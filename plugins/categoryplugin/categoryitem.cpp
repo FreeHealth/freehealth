@@ -42,6 +42,9 @@
 #include <coreplugin/iuser.h>
 #include <coreplugin/constants_tokensandsettings.h>
 
+#include <translationutils/constants.h>
+#include <translationutils/trans_database.h>
+
 #include <QHash>
 
 #include <QDebug>

@@ -26,8 +26,6 @@
 #ifndef LICENSETERMS_H
 #define LICENSETERMS_H
 
-#include <translationutils/constanttranslations.h>
-
 #include <utils/global_exporter.h>
 
 #include <QString>
@@ -35,8 +33,8 @@
 /**
  * \file licenseterms.h
  * \author Eric MAEKER <eric.maeker@gmail.com>
- * \version 0.0.2
- * \date 10 Aug 2009
+ * \version 0.6.0
+ * \date 10 Dec 2011
 */
 
 
