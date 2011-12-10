@@ -33,7 +33,11 @@
 #include "addserverdialog.h"
 
 #include <utils/global.h>
-#include <translationutils/constanttranslations.h>
+#include <translationutils/constants.h>
+#include <translationutils/trans_current.h>
+#include <translationutils/trans_msgerror.h>
+#include <translationutils/trans_menu.h>
+#include <translationutils/trans_spashandupdate.h>
 
 #include <datapackutils/core.h>
 #include <datapackutils/servermanager.h>
@@ -68,7 +72,7 @@ const char *const ICON_SERVER_ASKING_CONNECTION = "connect_creating.png";
 
 const char *const ICON_PACKAGE = "package.png";
 const char *const ICON_UPDATE = "updateavailable.png";
-const char *const ICON_INSTALL = "ok.png";
+const char *const ICON_INSTALL = "install-package.png";
 const char *const ICON_REMOVE = "remove.png";
 
 const int IS_SERVER = 1;
@@ -155,7 +159,6 @@ static void createServerModel(QStandardItemModel *model)
         QString label = QString("<span style=\"color:black;font-weight:bold\">%1</span>")
                 .arg(s.description().data(ServerDescription::Label).toString());
 
-
         if (s.isConnected()) {
             label += QString("<br /><span style=\"color:gray; font-size:small\">%2 (%3: %4)</span>")
                     .arg(tkTr(Trans::Constants::CONNECTED))
@@ -170,8 +173,18 @@ static void createServerModel(QStandardItemModel *model)
                 .arg(serverManager()->getPackForServer(s).count())
                 .arg(tkTr(Trans::Constants::PACKAGES));
 
+        QString tooltip = QString("<b>%1</b>:&nbsp;%2<br /><b>%3</b>:&nbsp;%4<br /><b>%5</b>:&nbsp;%6")
+                .arg(QApplication::translate("Server", "Native Url").replace(" ", "&nbsp;"))
+                .arg(s.nativeUrl())
+                .arg(QApplication::translate("Server", "Recommended update checking"))
+                .arg(Trans::ConstantTranslations::checkUpdateLabel(s.recommendedUpdateFrequency()))
+                .arg(QApplication::translate("Server", "Url Style"))
+                .arg(s.urlStyleName())
+                ;
         QStandardItem *server = new QStandardItem(label);
         server->setData(::IS_SERVER);
+        server->setToolTip(tooltip);
+
         root->appendRow(server);
 
         if (s.isLocalServer()) {
@@ -212,7 +225,7 @@ ServerEditor::ServerEditor(QWidget *parent) :
     QWidget(parent),
     ui(new Ui::ServerEditor),
     aServerRemove(0), aServerAdd(0),aServerInfo(0),
-    aInstall(0), aRemove(0), aUpdate(0)
+    aInstall(0), aInstallAllPack(0), aRemove(0), aUpdate(0)
 {
     ui->setupUi(this);
     if (layout()) {
@@ -298,6 +311,9 @@ void ServerEditor::createActions()
     a = aInstall = new QAction(this);
     a->setObjectName("aInstall");
     a->setIcon(icon(::ICON_INSTALL, DataPack::Core::SmallPixmaps));
+    a = aInstallAllPack = new QAction(this);
+    a->setObjectName("aInstallAllPack");
+    a->setIcon(icon(::ICON_INSTALL, DataPack::Core::MediumPixmaps));
     a = aUpdate = new QAction(this);
     a->setObjectName("aUpdate");
     a->setIcon(icon(::ICON_UPDATE, DataPack::Core::SmallPixmaps));
@@ -319,8 +335,8 @@ void ServerEditor::createToolbar()
     m_ToolBar->addAction(aServerRemove);
     m_ToolBar->addAction(aServerInfo);
     m_ToolBar->addSeparator();
+    m_ToolBar->addAction(aInstallAllPack);
     connect(m_ToolBar, SIGNAL(actionTriggered(QAction*)), this, SLOT(serverActionTriggered(QAction*)));
-
     ui->toolbarLayout->addWidget(m_ToolBar);
 }
 
@@ -482,6 +498,7 @@ void ServerEditor::retranslate()
     aServerRemove->setText(tr("Remove a server"));
     aServerInfo->setText(tr("Server information"));
     aInstall->setText(tkTr(Trans::Constants::INSTALL));
+    aInstallAllPack->setText(tr("Install all pack"));
     aRemove->setText(tkTr(Trans::Constants::REMOVE_TEXT));
     aUpdate->setText(tkTr(Trans::Constants::UPDATE));
 }
