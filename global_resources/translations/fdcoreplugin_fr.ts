@@ -128,42 +128,17 @@
         <translation>Vérification des mises à jour</translation>
     </message>
     <message>
-        <location filename="../../plugins/coreplugin/dialogs/applicationgeneralpreferences.ui" line="40"/>
-        <source>At startup</source>
-        <translation>Au démarrage</translation>
-    </message>
-    <message>
-        <location filename="../../plugins/coreplugin/dialogs/applicationgeneralpreferences.ui" line="45"/>
-        <source>Each weeks</source>
-        <translation>Toutes les semaines</translation>
-    </message>
-    <message>
-        <location filename="../../plugins/coreplugin/dialogs/applicationgeneralpreferences.ui" line="50"/>
-        <source>Each months</source>
-        <translation>Tous les mois</translation>
-    </message>
-    <message>
-        <location filename="../../plugins/coreplugin/dialogs/applicationgeneralpreferences.ui" line="55"/>
-        <source>Each quarters</source>
-        <translation>Tous les trimestres</translation>
-    </message>
-    <message>
-        <location filename="../../plugins/coreplugin/dialogs/applicationgeneralpreferences.ui" line="60"/>
-        <source>Never (on user&apos;s demand)</source>
-        <translation>Jamais (à la demande)</translation>
-    </message>
-    <message>
-        <location filename="../../plugins/coreplugin/dialogs/applicationgeneralpreferences.ui" line="84"/>
+        <location filename="../../plugins/coreplugin/dialogs/applicationgeneralpreferences.ui" line="58"/>
         <source>Database Management</source>
         <translation>Pilotage des bases de données</translation>
     </message>
     <message>
-        <location filename="../../plugins/coreplugin/dialogs/applicationgeneralpreferences.ui" line="109"/>
+        <location filename="../../plugins/coreplugin/dialogs/applicationgeneralpreferences.ui" line="83"/>
         <source>Allow and use virtual data</source>
         <translation>Autoriser et utiliser les données virtuelles</translation>
     </message>
     <message>
-        <location filename="../../plugins/coreplugin/dialogs/applicationgeneralpreferences.ui" line="102"/>
+        <location filename="../../plugins/coreplugin/dialogs/applicationgeneralpreferences.ui" line="76"/>
         <source>Automatically save data without prompting users</source>
         <translation>Toujours sauvegarder automatiquement les données</translation>
     </message>
@@ -227,12 +202,12 @@
         <translation></translation>
     </message>
     <message>
-        <location filename="../../plugins/coreplugin/dialogs/debugdialog.cpp" line="114"/>
+        <location filename="../../plugins/coreplugin/dialogs/debugdialog.cpp" line="119"/>
         <source>Sending debugging information to dev team</source>
         <translation>Envoi des informations de déboggage à l&apos;équipe de développement</translation>
     </message>
     <message>
-        <location filename="../../plugins/coreplugin/dialogs/debugdialog.cpp" line="115"/>
+        <location filename="../../plugins/coreplugin/dialogs/debugdialog.cpp" line="120"/>
         <source>Trying to send information to dev team.
 Using Url : %1 
 Please wait...</source>
@@ -241,12 +216,12 @@ En utilisant l&apos;URL : %1
 Veuillez patienter...</translation>
     </message>
     <message>
-        <location filename="../../plugins/coreplugin/dialogs/debugdialog.cpp" line="136"/>
+        <location filename="../../plugins/coreplugin/dialogs/debugdialog.cpp" line="141"/>
         <source>Debugging information correctly sent.</source>
         <translation>Les informations de déboggage ont correctement été envoyées.</translation>
     </message>
     <message>
-        <location filename="../../plugins/coreplugin/dialogs/debugdialog.cpp" line="138"/>
+        <location filename="../../plugins/coreplugin/dialogs/debugdialog.cpp" line="143"/>
         <source>Debugging information correctly send to dev team.
 Using Url : %1 
 %2</source>

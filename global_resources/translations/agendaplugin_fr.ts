@@ -48,7 +48,7 @@
 <context>
     <name>Agenda::CalendarItemModel</name>
     <message>
-        <location filename="../../plugins/agendaplugin/calendaritemmodel.cpp" line="319"/>
+        <location filename="../../plugins/agendaplugin/calendaritemmodel.cpp" line="321"/>
         <source>Empty</source>
         <translation>Vide</translation>
     </message>
@@ -65,7 +65,7 @@
 <context>
     <name>Agenda::Internal::AgendaPreferencesPage</name>
     <message>
-        <location filename="../../plugins/agendaplugin/agendapreferencespage.cpp" line="74"/>
+        <location filename="../../plugins/agendaplugin/agendapreferencespage.cpp" line="75"/>
         <source>Agenda preferences</source>
         <translation>Préférences de l&apos;agenda</translation>
     </message>
@@ -99,10 +99,10 @@
 <context>
     <name>Agenda::Internal::CalendarItemEditorPatientMapperWidget</name>
     <message>
-        <location filename="../../plugins/agendaplugin/calendaritemeditorpatientmapper.cpp" line="153"/>
         <location filename="../../plugins/agendaplugin/calendaritemeditorpatientmapper.cpp" line="154"/>
-        <location filename="../../plugins/agendaplugin/calendaritemeditorpatientmapper.cpp" line="284"/>
+        <location filename="../../plugins/agendaplugin/calendaritemeditorpatientmapper.cpp" line="155"/>
         <location filename="../../plugins/agendaplugin/calendaritemeditorpatientmapper.cpp" line="285"/>
+        <location filename="../../plugins/agendaplugin/calendaritemeditorpatientmapper.cpp" line="286"/>
         <source>Add current patient</source>
         <translation>Ajouter le patient en cours</translation>
     </message>
@@ -136,7 +136,7 @@
 <context>
     <name>Agenda::Internal::UserCalendarPageForUserViewer</name>
     <message>
-        <location filename="../../plugins/agendaplugin/usercalendarpageforuserviewer.cpp" line="138"/>
+        <location filename="../../plugins/agendaplugin/usercalendarpageforuserviewer.cpp" line="139"/>
         <source>User agendas</source>
         <translation>Agenda(s) de l&apos;utilisateur</translation>
     </message>
@@ -389,7 +389,7 @@
 <context>
     <name>Agenda::UserCalendarModel</name>
     <message>
-        <location filename="../../plugins/agendaplugin/usercalendarmodel.cpp" line="195"/>
+        <location filename="../../plugins/agendaplugin/usercalendarmodel.cpp" line="197"/>
         <source>New calendar</source>
         <translation>Nouvel agenda</translation>
     </message>
@@ -402,8 +402,8 @@
         <translation></translation>
     </message>
     <message>
-        <location filename="../../plugins/agendaplugin/usercalendarmodelfulleditorwidget.cpp" line="70"/>
-        <location filename="../../plugins/agendaplugin/usercalendarmodelfulleditorwidget.cpp" line="127"/>
+        <location filename="../../plugins/agendaplugin/usercalendarmodelfulleditorwidget.cpp" line="71"/>
+        <location filename="../../plugins/agendaplugin/usercalendarmodelfulleditorwidget.cpp" line="128"/>
         <source>Create a new calendar</source>
         <translation>Créer un agenda</translation>
     </message>
@@ -411,7 +411,7 @@
 <context>
     <name>AgendaBase</name>
     <message>
-        <location filename="../../plugins/agendaplugin/agendabase.cpp" line="406"/>
+        <location filename="../../plugins/agendaplugin/agendabase.cpp" line="409"/>
         <source>Trying to create empty database. 
        Location : %1 
        FileName: %2

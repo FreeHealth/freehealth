@@ -57,9 +57,9 @@
 <context>
     <name>AccountDB::AccountBase</name>
     <message>
-        <location filename="../../plugins/accountbaseplugin/accountbase.cpp" line="639"/>
-        <location filename="../../plugins/accountbaseplugin/accountbase.cpp" line="647"/>
-        <location filename="../../plugins/accountbaseplugin/accountbase.cpp" line="653"/>
+        <location filename="../../plugins/accountbaseplugin/accountbase.cpp" line="642"/>
+        <location filename="../../plugins/accountbaseplugin/accountbase.cpp" line="650"/>
+        <location filename="../../plugins/accountbaseplugin/accountbase.cpp" line="656"/>
         <source>Please contact dev team.</source>
         <translation type="unfinished"></translation>
     </message>

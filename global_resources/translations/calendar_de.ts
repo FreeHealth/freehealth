@@ -4,25 +4,25 @@
 <context>
     <name>Calendar::CalendarNavbar</name>
     <message>
-        <location filename="../../libs/calendar/calendar_navbar.cpp" line="155"/>
-        <location filename="../../libs/calendar/calendar_navbar.cpp" line="419"/>
+        <location filename="../../libs/calendar/calendar_navbar.cpp" line="157"/>
+        <location filename="../../libs/calendar/calendar_navbar.cpp" line="421"/>
         <source>View range</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../../libs/calendar/calendar_navbar.cpp" line="384"/>
         <location filename="../../libs/calendar/calendar_navbar.cpp" line="386"/>
         <location filename="../../libs/calendar/calendar_navbar.cpp" line="388"/>
+        <location filename="../../libs/calendar/calendar_navbar.cpp" line="390"/>
         <source>d MMM yyyy</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../../libs/calendar/calendar_navbar.cpp" line="386"/>
+        <location filename="../../libs/calendar/calendar_navbar.cpp" line="388"/>
         <source>d MMM</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../../libs/calendar/calendar_navbar.cpp" line="388"/>
+        <location filename="../../libs/calendar/calendar_navbar.cpp" line="390"/>
         <source>d</source>
         <translation type="unfinished"></translation>
     </message>

@@ -527,6 +527,11 @@ Voulez vous les sauvegarder ?</translation>
         <translation>au</translation>
     </message>
     <message>
+        <location filename="../../plugins/accountplugin/preferences/bankdetailspage.ui" line="172"/>
+        <source>uid</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
         <location filename="../../plugins/accountplugin/preferences/bankdetailspage.ui" line="78"/>
         <source>Label</source>
         <translation>Dénomination</translation>
@@ -2397,7 +2402,7 @@ rapide</translation>
         <translation>recettes</translation>
     </message>
     <message>
-        <location filename="../../plugins/accountplugin/ledger/mythread.cpp" line="541"/>
+        <location filename="../../plugins/accountplugin/ledger/mythread.cpp" line="549"/>
         <source>Total</source>
         <translation>Total</translation>
     </message>

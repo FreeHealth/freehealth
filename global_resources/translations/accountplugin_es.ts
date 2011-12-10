@@ -511,6 +511,11 @@ Do you want to save them ?</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
+        <location filename="../../plugins/accountplugin/preferences/bankdetailspage.ui" line="172"/>
+        <source>uid</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
         <location filename="../../plugins/accountplugin/preferences/bankdetailspage.ui" line="78"/>
         <source>Label</source>
         <translation type="unfinished"></translation>
@@ -2357,7 +2362,7 @@ if you don&apos;t have one, save the next value in thesaurus and chose it in the
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../../plugins/accountplugin/ledger/mythread.cpp" line="541"/>
+        <location filename="../../plugins/accountplugin/ledger/mythread.cpp" line="549"/>
         <source>Total</source>
         <translation type="unfinished"></translation>
     </message>
