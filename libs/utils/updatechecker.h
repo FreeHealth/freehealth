@@ -70,14 +70,6 @@ class UTILS_EXPORT UpdateChecker : public QObject
     friend class Internal::UpdateCheckerPrivate;
 
 public:
-    enum {  // Don't change the ordre of this enum
-        Check_AtStartup = 0,
-        Check_EachWeeks,
-        Check_EachMonth,
-        Check_EachQuarters,
-        Check_Never
-    };
-
      UpdateChecker(QObject *parent = 0);
     ~UpdateChecker();
 

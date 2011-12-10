@@ -104,9 +104,9 @@ void UpdateCheckerPrivate::httpDone(bool error)
 {
     Q_EMIT static_cast<UpdateChecker*>(parent())->done(error);
     if (error) {
-        Log::addError( this, tr( "Error %1 while retreiving update file %2" )
+        LOG_ERROR(tr( "Error %1 while retreiving update file %2" )
                          .arg(m_Http->errorString())
-                         .arg(m_Url.toString()), __FILE__, __LINE__);
+                         .arg(m_Url.toString()));
         return;
     }
 
@@ -137,12 +137,12 @@ void UpdateCheckerPrivate::httpDone(bool error)
     }
 
     if ( m_UpdateText.isEmpty() ) {
-        Log::addMessage( this, tkTr(Trans::Constants::VERSION_UPTODATE) );
+        LOG(tkTr(Trans::Constants::VERSION_UPTODATE));
         return;
     }
 
     forLog.chop(2);
-    Log::addMessage( this, tkTr(Trans::Constants::UPDATE_AVAILABLE) + ": " + forLog);
+    LOG(tkTr(Trans::Constants::UPDATE_AVAILABLE) + ": " + forLog);
     m_UpdateText = m_UpdateText.replace( "\t", "  " );
     static_cast<UpdateChecker*>(parent())->emitSignals();
 }
@@ -177,12 +177,12 @@ UpdateChecker::~UpdateChecker()
 
 bool UpdateChecker::needsUpdateChecking(QSettings *settings) const
 {
-    int chk = settings->value(Constants::S_CHECKUPDATE, Check_AtStartup).toInt();
+    int chk = settings->value(Constants::S_CHECKUPDATE, Trans::Constants::CheckUpdate_AtStartup).toInt();
     QDate last = settings->value(Constants::S_LAST_CHECKUPDATE, QDate::currentDate()).toDate();
-    if ((chk == Check_AtStartup)
-        || ((chk == Check_EachWeeks) && (last.addDays(7) < QDate::currentDate()))
-        || ((chk == Check_EachMonth) && (last.addMonths(1) < QDate::currentDate()))
-        || ((chk == Check_EachQuarters) && (last.addMonths(3) < QDate::currentDate())) ) {
+    if ((chk == Trans::Constants::CheckUpdate_AtStartup)
+        || ((chk == Trans::Constants::CheckUpdate_EachWeeks) && (last.addDays(7) < QDate::currentDate()))
+        || ((chk == Trans::Constants::CheckUpdate_EachMonth) && (last.addMonths(1) < QDate::currentDate()))
+        || ((chk == Trans::Constants::CheckUpdate_EachQuarters) && (last.addMonths(3) < QDate::currentDate())) ) {
         return true;
     }
     return false;
@@ -201,7 +201,7 @@ bool UpdateChecker::isChecking() const
 */
 void UpdateChecker::check(const QString &url)
 {
-    Log::addMessage(this, tkTr(Trans::Constants::CHECKING_UPDATE_FROM_1).arg(url));
+    LOG(tkTr(Trans::Constants::CHECKING_UPDATE_FROM_1).arg(url));
     d->getFile(QUrl(url));
 }
 
@@ -211,7 +211,7 @@ void UpdateChecker::check(const QString &url)
 */
 void UpdateChecker::check(const QUrl &url)
 {
-    Log::addMessage( this, tkTr(Trans::Constants::CHECKING_UPDATE_FROM_1).arg(url.toString()));
+    LOG(tkTr(Trans::Constants::CHECKING_UPDATE_FROM_1).arg(url.toString()));
     d->getFile(url);
 }
 

@@ -118,17 +118,23 @@ namespace Time {
 //Q_DECLARE_OPERATORS_FOR_FLAGS(Time::DailySchemes)
 
 
-enum TitleInterpret {
-    NoTitle = 0,
-    Mister,
-    Miss,
-    Madam,
-    Doctor,
-    Professor,
-    Captain
-};
+    enum TitleInterpret {
+        NoTitle = 0,
+        Mister,
+        Miss,
+        Madam,
+        Doctor,
+        Professor,
+        Captain
+    };
 
-
+    enum {  // Never change the order of this enum
+        CheckUpdate_AtStartup = 0,
+        CheckUpdate_EachWeeks,
+        CheckUpdate_EachMonth,
+        CheckUpdate_EachQuarters,
+        CheckUpdate_Never
+    };
 
 
 	// Used for the language menu
@@ -386,9 +392,17 @@ enum TitleInterpret {
         const char* const FIRST_TIME_RUNNING                = QT_TRANSLATE_NOOP("tkConstants", "First time running");
         const char* const FEATURE_NOT_IMPLEMENTED           = QT_TRANSLATE_NOOP("tkConstants", "This feature is not yet implemented.");
         const char* const RAISING_APPLICATION               = QT_TRANSLATE_NOOP("tkConstants", "Raising Application...");
+        const char* const INITIALIZATING_DATABASES          = QT_TRANSLATE_NOOP("tkConstants", "Initializing databases...");
+
+        // Update
         const char* const CHECKUPDATE                       = QT_TRANSLATE_NOOP("tkConstants", "Check for update");
         const char* const CHECKING_UPDATES                  = QT_TRANSLATE_NOOP("tkConstants", "Checking for updates...");
-        const char* const INITIALIZATING_DATABASES          = QT_TRANSLATE_NOOP("tkConstants", "Initializing databases...");
+        const char* const AT_STARTUP                        = QT_TRANSLATE_NOOP("tkConstants", "At startup");
+        const char* const EACH_DAYS                         = QT_TRANSLATE_NOOP("tkConstants", "Each days");
+        const char* const EACH_WEEKS                        = QT_TRANSLATE_NOOP("tkConstants", "Each weeks");
+        const char* const EACH_MONTHS                       = QT_TRANSLATE_NOOP("tkConstants", "Each months");
+        const char* const EACH_QUARTERS                     = QT_TRANSLATE_NOOP("tkConstants", "Each quarters");
+        const char* const NEVER_AUTOMATICALLY               = QT_TRANSLATE_NOOP("tkConstants", "Never automatically");
 
         // Widely used words
         const char* const TYPE                               = QT_TRANSLATE_NOOP("tkConstants", "Type");
@@ -685,6 +699,10 @@ const char* const ALL_OTHER_LANGUAGES_TEXT = QT_TRANSLATE_NOOP("tkConstants", "A
 namespace ConstantTranslations {
 
 TRUTILS_EXPORT QString tkTr(const char* toTr, const int plurials=1);
+
+TRUTILS_EXPORT QString checkUpdateLabel(const int index);
+TRUTILS_EXPORT QStringList checkUpdateLabels();
+
 TRUTILS_EXPORT QStringList periods();
 TRUTILS_EXPORT QString period(int id);
 TRUTILS_EXPORT QString periodPlurialForm(int id, int nb = 1, const QString &defaultValue = QString::null);

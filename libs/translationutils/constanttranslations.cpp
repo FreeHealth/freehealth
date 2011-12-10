@@ -74,6 +74,29 @@ QString tkTr(const char* toTr, const int plurials)
     return QCoreApplication::translate(Constants::CONSTANTS_TR_CONTEXT, toTr);
 }
 
+QString checkUpdateLabel(const int index)
+{
+    switch (index) {
+    case Constants::CheckUpdate_AtStartup: return tkTr(Constants::AT_STARTUP);
+//    case Constants::CheckUpdate_EachDays: return tkTr(Constants::EACH_DAYS);
+    case Constants::CheckUpdate_EachWeeks:return tkTr(Constants::EACH_WEEKS);
+    case Constants::CheckUpdate_EachMonth:return tkTr(Constants::EACH_MONTHS);
+    case Constants::CheckUpdate_EachQuarters:return tkTr(Constants::EACH_QUARTERS);
+    case Constants::CheckUpdate_Never:return tkTr(Constants::NEVER_AUTOMATICALLY);
+    }
+    return QString();
+}
+
+QStringList checkUpdateLabels()
+{
+    // Always keep this sync with the Trans::Constants::CheckUpdate enum
+    return QStringList() << tkTr(Constants::AT_STARTUP)
+                         << tkTr(Constants::EACH_WEEKS)
+                         << tkTr(Constants::EACH_MONTHS)
+                         << tkTr(Constants::EACH_QUARTERS)
+                         << tkTr(Constants::NEVER_AUTOMATICALLY);
+}
+
 /** \brief predetermined Periods stringlist */
 QStringList periods()
 {

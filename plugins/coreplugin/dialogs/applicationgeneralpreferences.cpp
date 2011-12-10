@@ -51,6 +51,7 @@ ApplicationGeneralPreferencesWidget::ApplicationGeneralPreferencesWidget(QWidget
 {
     setObjectName("ApplicationGeneralPreferencesWidget");
     ui->setupUi(this);
+    ui->updateCheckingCombo->addItems(Trans::ConstantTranslations::checkUpdateLabels());
     setDatasToUi();
 }
 
@@ -79,7 +80,7 @@ void ApplicationGeneralPreferencesWidget::writeDefaultSettings(Core::ISettings *
     //    qWarning() << "---------> writedefaults";
     Utils::Log::addMessage("ApplicationGeneralPreferencesWidget", tkTr(Trans::Constants::CREATING_DEFAULT_SETTINGS_FOR_1).arg("FreeDiamsMainWindow"));
     s->setValue(Core::Constants::S_ALWAYS_SAVE_WITHOUT_PROMPTING, true);
-    s->setValue(Utils::Constants::S_CHECKUPDATE, Utils::UpdateChecker::Check_AtStartup);
+    s->setValue(Utils::Constants::S_CHECKUPDATE, Trans::Constants::CheckUpdate_AtStartup);
     s->setValue(Core::Constants::S_ALLOW_VIRTUAL_DATA, true);
 
     s->sync();
@@ -134,7 +135,7 @@ void ApplicationGeneralPreferencesPage::checkSettingsValidity()
 {
     QHash<QString, QVariant> defaultvalues;
     defaultvalues.insert(Core::Constants::S_ALWAYS_SAVE_WITHOUT_PROMPTING, true);
-    defaultvalues.insert(Utils::Constants::S_CHECKUPDATE, Utils::UpdateChecker::Check_AtStartup);
+    defaultvalues.insert(Utils::Constants::S_CHECKUPDATE, Trans::Constants::CheckUpdate_AtStartup);
     defaultvalues.insert(Core::Constants::S_ALLOW_VIRTUAL_DATA, true);
     defaultvalues.insert("Dialogs/Settings/LastPage", id());
     defaultvalues.insert("Dialogs/Settings/LastCategory", category());
