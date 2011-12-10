@@ -26,7 +26,7 @@
 #ifndef MULTILINGUALCLASSTEMPLATE_H
 #define MULTILINGUALCLASSTEMPLATE_H
 
-#include <translationutils/constanttranslations.h>
+#include <translationutils/constants.h>
 
 #include <QString>
 #include <QTreeWidgetItem>

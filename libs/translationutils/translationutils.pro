@@ -1,7 +1,6 @@
 # toolkit library project file
 TEMPLATE        = lib
 TARGET          = TranslationUtils
-PACKAGE_VERSION = 0.4.0
 
 DEFINES *= TRANSLATIONUTILS_LIBRARY
 
@@ -14,7 +13,23 @@ HEADERS += \
     translationutils_exporter.h \
     constanttranslations.h \
     multilingualclasstemplate.h \
-    googletranslator.h
+    googletranslator.h \
+    trans_account.h \
+    trans_agenda.h \
+    trans_countries.h \
+    trans_current.h \
+    trans_database.h \
+    trans_datetime.h \
+    trans_drugs.h \
+    trans_editor.h \
+    trans_filepathxml.h \
+    trans_menu.h \
+    trans_msgerror.h \
+    trans_patient.h \
+    trans_spashandupdate.h \
+    trans_team.h \
+    trans_titles.h \
+    trans_user.h
 
 SOURCES += constanttranslations.cpp \
     googletranslator.cpp
