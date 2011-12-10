@@ -69,42 +69,45 @@ public:
     Server(const QString &url = QString::null);
     virtual ~Server() {}
 
-    void setUrlStyle(const UrlStyle &style) {m_UrlStyle=style;}
-    UrlStyle urlStyle() const {return m_UrlStyle;}
-
+    // URL Management
     void setUrl(const QString &url);
     const QString &nativeUrl() const {return m_Url;}
     QString url(const FileRequested &file = NoFile, const QString &fileName = QString::null) const;
-
-    void setLocalVersion(const QString &version) {m_LocalVersion=version;}
-    const QString &localVersion() const {return m_LocalVersion;}
-
-    void setLastChecked(const QDateTime &dt) {m_LastCheck=dt;}
-    const QDateTime &lastChecked() const {return m_LastCheck;}
-
-    void setConnected(bool connected) {m_Connected=connected;}
-    bool isConnected() const {return m_Connected;}
-
+    void setUrlStyle(const UrlStyle &style) {m_UrlStyle=style;}
+    UrlStyle urlStyle() const {return m_UrlStyle;}
     void setIsLocalServer(bool isLocal) {m_IsLocal=isLocal;}
     bool isLocalServer() const {return m_IsLocal;}
 
+    // Version and update checking
+    void setLocalVersion(const QString &version) {m_LocalVersion=version;}
+    const QString &localVersion() const {return m_LocalVersion;}
+    void setLastChecked(const QDateTime &dt) {m_LastCheck=dt;}
+    const QDateTime &lastChecked() const {return m_LastCheck;}
+
+    // Connection state
+    void setConnected(bool connected) {m_Connected=connected;}
+    bool isConnected() const {return m_Connected;}
+
+    // XML Management, Description and Content
     void fromXml(const QString &fullServerConfigXml);
-
+    QString serialize() const;
+    void fromSerializedString(const QString &string);
     ServerDescription description() const {return m_Desc;}
-
     ServerContent content() const {return m_Content;}
 
+    // Update management
     UpdateState updateState() const;
+    int recommendedUpdateFrequency() const;
+    void setUserUpdateFrequency(const int index) {m_UpFreq = index;}
+    int userUpdateFrequency() const {return m_UpFreq;}
 
+    // Message management
     void addErrorMessage(const QString &error) {m_Errors.append(error);}
     QStringList errors() const {return m_Errors;}
 
+    // Some helpers
     bool operator==(const Server &s);
-
     static QString serverConfigurationFileName();
-
-    QString serialize() const;
-    void fromSerializedString(const QString &string);
 
 private:
     QString m_Url, m_LocalVersion;
@@ -114,6 +117,7 @@ private:
     ServerContent m_Content;
     QStringList m_Errors;
     UrlStyle m_UrlStyle;
+    int m_UpFreq;
 };
 
 }  // End namespace DataPack

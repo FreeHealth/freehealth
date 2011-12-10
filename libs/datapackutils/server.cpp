@@ -56,7 +56,8 @@ static inline DataPack::Core *core() {return DataPack::Core::instance();}
 Server::Server(const QString &url) :
     m_Connected(false),
     m_IsLocal(false),
-    m_UrlStyle(NoStyle)
+    m_UrlStyle(NoStyle),
+    m_UpFreq(-1)
 {
     setUrl(url);
 }
@@ -147,6 +148,7 @@ void Server::fromXml(const QString &fullServerConfigXml)
     QDomElement content = root.firstChildElement(::TAG_SERVERCONTENT);
     m_Desc.fromDomElement(descr);
     m_Content.fromDomElement(content);
+    m_UpFreq = m_Desc.data(ServerDescription::RecommendedUpdateFrequency).toInt();
 }
 
 /**
@@ -165,6 +167,12 @@ Server::UpdateState Server::updateState() const
     if (local < remote)
         return Server::UpdateAvailable;
     return Server::UpToDate;
+}
+
+/** Return the recommended update frequency of the server. The index refers to Trans::Constants::CheckUpdateRepresentation */
+int Server::recommendedUpdateFrequency() const
+{
+    return m_Desc.data(ServerDescription::RecommendedUpdateFrequency).toInt();
 }
 
 /** Test DataPack::Server equality. */
@@ -186,7 +194,6 @@ QString Server::serialize() const
 
 void Server::fromSerializedString(const QString &string)
 {
-    qWarning() << string;
     if (string.contains("|||")) {
         QStringList v = string.split("|||");
         if (v.count() == 2) {

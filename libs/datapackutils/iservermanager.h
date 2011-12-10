@@ -95,6 +95,12 @@ protected:
     virtual QString cachePath() const = 0;
 
 Q_SIGNALS:
+    void serverAdded(const int index);
+    void serverAboutToBeRemoved(const Server &server);
+    void serverAboutToBeRemoved(const int index);
+    void serverRemoved(const Server &server);
+    void serverRemoved(const int index);
+
     void serverConnected(const Server &server, const ServerIdentification &ident);
     void serverInfosUpdated(int serverId); // emitted when a server infos have been updated
 

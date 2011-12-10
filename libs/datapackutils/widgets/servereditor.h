@@ -70,6 +70,8 @@ private Q_SLOTS:
     void onPackIndexActivated(const QModelIndex &index, const QModelIndex &previous);
     void serverActionTriggered(QAction *a);
     void packActionTriggered(QAction *a);
+    void serverAdded(int);
+    void serverRemoved(int);
 
 private:
     void retranslate();

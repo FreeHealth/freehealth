@@ -33,6 +33,7 @@ using namespace DataPack;
 ServerDescription::ServerDescription() :
     Utils::GenericDescription("ServerDescription")
 {
+    addNonTranslatableExtraData(RecommendedUpdateFrequency, "RecomUpFreq");
 }
 
 ServerDescription::~ServerDescription()

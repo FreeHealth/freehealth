@@ -19,7 +19,8 @@ HEADERS += datapack_exporter.h \
     servercontent.h \
     core.h \
     iservermanager.h \
-    widgets/servereditor.h
+    widgets/servereditor.h \
+    widgets/addserverdialog.h
 
 SOURCES += \
     servermanager.cpp \
@@ -31,10 +32,15 @@ SOURCES += \
     servercontent.cpp \
     core.cpp \
     iservermanager.cpp \
-    widgets/servereditor.cpp
+    widgets/servereditor.cpp \
+    widgets/addserverdialog.cpp
 
 FORMS += \
-    widgets/servereditor.ui
+    widgets/servereditor.ui \
+    widgets/addserverdialog.ui
+
+
+
 
 
 

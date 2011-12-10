@@ -30,6 +30,7 @@
 */
 
 #include "servereditor.h"
+#include "addserverdialog.h"
 
 #include <utils/global.h>
 #include <translationutils/constanttranslations.h>
@@ -50,13 +51,21 @@
 using namespace DataPack;
 using namespace Trans::ConstantTranslations;
 
+static inline DataPack::Core *core() {return DataPack::Core::instance();}
+static inline ServerManager *serverManager() {return qobject_cast<ServerManager*>(core()->serverManager());}
+static inline QIcon icon(const QString &name, DataPack::Core::ThemePath path = DataPack::Core::MediumPixmaps) {return QIcon(DataPack::Core::instance()->icon(name, path));}
+
 namespace {
+
 const char *const ICON_SERVER_ADD = "server-add.png";
 const char *const ICON_SERVER_REMOVE = "server-remove.png";
 const char *const ICON_SERVER_INFO = "server-info.png";
+const char *const ICON_SERVER_LOCAL = "server-local.png";
+
 const char *const ICON_SERVER_CONNECTED = "connect_established.png";
 const char *const ICON_SERVER_NOT_CONNECTED = "connect_no.png";
 const char *const ICON_SERVER_ASKING_CONNECTION = "connect_creating.png";
+
 const char *const ICON_PACKAGE = "package.png";
 const char *const ICON_UPDATE = "updateavailable.png";
 const char *const ICON_INSTALL = "ok.png";
@@ -134,10 +143,6 @@ QSize Delegate::sizeHint(const QStyleOptionViewItem &option, const QModelIndex &
 
 }  // End anonymous namespace
 
-static inline DataPack::Core *core() {return DataPack::Core::instance();}
-static inline ServerManager *serverManager() {return qobject_cast<ServerManager*>(core()->serverManager());}
-static inline QIcon icon(const QString &name, DataPack::Core::ThemePath path = DataPack::Core::MediumPixmaps) {return QIcon(DataPack::Core::instance()->icon(name, path));}
-
 static void createServerModel(QStandardItemModel *model)
 {
     ServerManager *manager = serverManager();
@@ -149,6 +154,7 @@ static void createServerModel(QStandardItemModel *model)
         const Server &s = manager->getServerAt(i);
         QString label = QString("<span style=\"color:black;font-weight:bold\">%1</span>")
                 .arg(s.description().data(ServerDescription::Label).toString());
+
 
         if (s.isConnected()) {
             label += QString("<br /><span style=\"color:gray; font-size:small\">%2 (%3: %4)</span>")
@@ -168,7 +174,9 @@ static void createServerModel(QStandardItemModel *model)
         server->setData(::IS_SERVER);
         root->appendRow(server);
 
-        if (s.isConnected()) {
+        if (s.isLocalServer()) {
+            server->setIcon(icon(::ICON_SERVER_LOCAL));
+        } else if (s.isConnected()) {
             server->setIcon(icon(::ICON_SERVER_CONNECTED));
             // Add packdescriptions
         } else {
@@ -199,7 +207,6 @@ static void createPackModel(const Server &server, QStandardItemModel *model)
         model->appendRow(packItem);
     }
 }
-
 
 ServerEditor::ServerEditor(QWidget *parent) :
     QWidget(parent),
@@ -257,6 +264,8 @@ ServerEditor::ServerEditor(QWidget *parent) :
 
     connect(ui->treeView->selectionModel(), SIGNAL(currentChanged(QModelIndex,QModelIndex)), this, SLOT(onServerIndexActivated(QModelIndex,QModelIndex)));
     connect(ui->packView->selectionModel(), SIGNAL(currentChanged(QModelIndex,QModelIndex)), this, SLOT(onPackIndexActivated(QModelIndex,QModelIndex)));
+    connect(serverManager(), SIGNAL(serverAdded(int)), this, SLOT(serverAdded(int)));
+    connect(serverManager(), SIGNAL(serverRemoved(int)), this, SLOT(serverRemoved(int)));
 
     // Select first row of servers
     ui->treeView->selectionModel()->select(m_ServerModel->index(0,0), QItemSelectionModel::SelectCurrent);
@@ -421,6 +430,13 @@ void ServerEditor::onPackIndexActivated(const QModelIndex &index, const QModelIn
 void ServerEditor::serverActionTriggered(QAction *a)
 {
     if (a==aServerAdd) {
+        AddServerDialog dlg(this);
+        Server server;
+        dlg.setServer(server);
+        if (dlg.exec()==QDialog::Accepted) {
+            dlg.submitTo(&server);
+            serverManager()->addServer(server);
+        }
     } else if (a==aServerRemove) {
     } else if (a==aServerInfo) {
         // Clear pack selection
@@ -444,6 +460,20 @@ void ServerEditor::packActionTriggered(QAction *a)
     } else if (a==aUpdate) {
 
     }
+}
+
+void ServerEditor::serverAdded(int i)
+{
+    Q_UNUSED(i);
+    // Refresh the model
+    createServerModel(m_ServerModel);
+}
+
+void ServerEditor::serverRemoved(int i)
+{
+    Q_UNUSED(i);
+    // Refresh the model
+    createServerModel(m_ServerModel);
 }
 
 void ServerEditor::retranslate()

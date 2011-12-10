@@ -54,9 +54,10 @@ const char * const TAG_SERVER               = "Server";
 const char * const TAG_PACK                 = "Pack";
 
 // Server attribs
-const char * const ATTRIB_URL               = "url";
-const char * const ATTRIB_LASTCHECK         = "lastChk";
-const char * const ATTRIB_RECORDEDVERSION   = "recVer";
+const char * const ATTRIB_URL                 = "url";
+const char * const ATTRIB_LASTCHECK           = "lastChk";
+const char * const ATTRIB_RECORDEDVERSION     = "recVer";
+const char * const ATTRIB_USERUPDATEFREQUENCY = "uUpFq";
 
 // Pack specific attribs
 const char * const ATTRIB_INSTALLED         = "inst";
@@ -104,6 +105,7 @@ bool ServerManager::setGlobalConfiguration(const QString &xmlContent, QString *e
         s.fromSerializedString(server.attribute(::ATTRIB_URL));
         s.setLastChecked(QDateTime::fromString(server.attribute(::ATTRIB_LASTCHECK), Qt::ISODate));
         s.setLocalVersion(server.attribute(::ATTRIB_RECORDEDVERSION));
+        s.setUserUpdateFrequency(server.attribute(::ATTRIB_USERUPDATEFREQUENCY).toInt());
         m_Servers.append(s);
         server = server.nextSiblingElement(::TAG_SERVER);
     }
@@ -129,6 +131,7 @@ QString ServerManager::xmlConfiguration() const
         e.setAttribute(::ATTRIB_URL, s.serialize());
         e.setAttribute(::ATTRIB_RECORDEDVERSION, s.localVersion());
         e.setAttribute(::ATTRIB_LASTCHECK, s.lastChecked().toString(Qt::ISODate));
+        e.setAttribute(::ATTRIB_USERUPDATEFREQUENCY, s.userUpdateFrequency());
     }
     return doc.toString(2);
 }
@@ -235,6 +238,7 @@ bool ServerManager::addServer(const Server &server)
             return false;
     }
     m_Servers.append(server);
+    Q_EMIT serverAdded(m_Servers.count() - 1);
     return true;
 }
 
@@ -260,7 +264,14 @@ int ServerManager::getServerIndex(const QString &url) const
 
 void ServerManager::removeServerAt(int index)
 {
-    m_Servers.remove(index);
+    if (index >= 0 && index < m_Servers.count()) {
+        Server removed = m_Servers.at(index);
+        Q_EMIT serverAboutToBeRemoved(removed);
+        Q_EMIT serverAboutToBeRemoved(index);
+        m_Servers.remove(index);
+        Q_EMIT serverRemoved(removed);
+        Q_EMIT serverRemoved(index);
+    }
 }
 
 void ServerManager::connectAndUpdate(int index)

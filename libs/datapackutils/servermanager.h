@@ -97,10 +97,6 @@ public:
 private:
     void checkServerUpdatesAfterDownload();
 
-Q_SIGNALS:
-    void serverConnected(const Server &server, const ServerIdentification &ident);
-    void serverInfosUpdated(int serverId); // emitted when a server infos have been updated
-
 private:
     QNetworkAccessManager *m_NetworkAccessManager;
     QString filesCachePath, m_installPath;

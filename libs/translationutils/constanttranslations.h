@@ -128,7 +128,7 @@ namespace Time {
         Captain
     };
 
-    enum {  // Never change the order of this enum
+    enum CheckUpdateRepresentation {  // Never change the order of this enum
         CheckUpdate_AtStartup = 0,
         CheckUpdate_EachWeeks,
         CheckUpdate_EachMonth,

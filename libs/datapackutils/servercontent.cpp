@@ -24,6 +24,12 @@
  *   Contributors :                                                        *
  *       NAME <MAIL@ADRESS>                                                *
  ***************************************************************************/
+/**
+  \class DataPack::ServerContent
+  Content of a datapack server including:
+  - pack filenames
+*/
+
 #include "servercontent.h"
 
 #include <utils/log.h>

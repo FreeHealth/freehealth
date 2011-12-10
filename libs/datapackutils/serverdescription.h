@@ -50,6 +50,10 @@ namespace Internal {
 class DATAPACK_EXPORT ServerDescription : public Utils::GenericDescription
 {
 public:
+    enum ExtraNonTranslatedData {
+        RecommendedUpdateFrequency = Utils::GenericDescription::NonTranslatableExtraData + 1
+    };
+
     ServerDescription();
     ~ServerDescription();
 
