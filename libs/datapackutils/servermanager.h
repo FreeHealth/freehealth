@@ -94,6 +94,14 @@ public:
     void createServerPackList(const Server &server);
     void setCachePath(const QString &absPath);
 
+private Q_SLOTS:
+    bool downloadDataPack(const Server &server, const Pack &pack, QProgressBar *progressBar);
+    void checkAndInstallPack(const Server &server, const Pack &pack, QProgressBar *progBar);
+
+// Private signals
+Q_SIGNALS:
+    void packDownloaded(const Server &server, const Pack &pack, QProgressBar *progBar);
+
 private:
     void checkServerUpdatesAfterDownload();
 

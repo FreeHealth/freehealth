@@ -169,22 +169,36 @@ Pack ServerManager::downloadAndUnzipPack(const Server &server, const Pack &pack)
     return pack;
 }
 
+bool ServerManager::downloadDataPack(const Server &server, const Pack &pack, QProgressBar *progressBar)
+{
+    Q_ASSERT(progressBar);
+    // TODO pour guillaume
+    // Juste télécharger rien de plus dans le rép m_InstallPath
+//    QString url = server.url(Server::PackFile, pack.serverFileName());
+    return true;
+}
+
+void ServerManager::checkAndInstallPack(const Server &server, const Pack &pack, QProgressBar *progressBar)
+{
+    Q_ASSERT(progressBar);
+}
+
 bool ServerManager::installDataPack(const Server &server, const Pack &pack, QProgressBar *progressBar)
 {
-    // TODO
-    Q_UNUSED(server);
-    Q_UNUSED(pack);
-    Q_UNUSED(progressBar);
-    // Algo
-    // 1. check if pack is already installed
-    // 1.1 ? yes -> call upgradePackage and return
-    // Connect progressBar
-    // Download the package file
-    // Check MD5 of the file
-    // Unzip file
-    // Copy files to the install path
-    // Emit pack installed
-    return false;
+    Q_ASSERT(progressBar);
+    connect(this, SIGNAL(packDownloaded(Server,Pack,QProgressBar*)), this, SLOT(checkAndInstallPack(Server,Pack,QProgressBar*)));
+    if (!server.isLocalServer()) {
+        downloadDataPack(server, pack, progressBar);
+    } else {
+        // copy file to install path
+//        QFileInfo info(pack.serverFileName());
+//        QString to = m_installPath + QDir::separator() + pack.serverFileName();
+//        QFile f(server.url(pack.serverFileName()));
+        Q_EMIT packDownloaded(server, pack, progressBar);
+    }
+    disconnect(this, SIGNAL(packDownloaded(Server,Pack,QProgressBar*)), this, SLOT(checkAndInstallPack(Server,Pack,QProgressBar*)));
+
+    return true;
 }
 
 bool ServerManager::removeDataPack(const Server &server, const Pack &pack, QProgressBar *progressBar)

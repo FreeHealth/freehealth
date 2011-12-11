@@ -49,6 +49,27 @@ Pack::~Pack()
 {
 }
 
+QString Pack::serverFileName() const
+{
+    return m_descr.data(PackDescription::AbsFileName).toString();
+}
+
+QString Pack::serverLicenceFileName() const
+{
+//    return m_descr.data(PackDescription::LicenceFileName).toString();
+    return QString();
+}
+
+QString Pack::md5ControlChecksum() const
+{
+    return m_descr.data(PackDescription::Md5).toString();
+}
+
+QString Pack::sha1ControlChecksum() const
+{
+    return m_descr.data(PackDescription::Sha1).toString();
+}
+
 bool Pack::isSha1Checked() const
 {
     // TODO

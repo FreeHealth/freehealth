@@ -43,28 +43,23 @@ public:
     const PackDescription &description() const {return m_descr;}
     const PackDependencies &dependencies() const {return m_depends;}
 
-    QString serverFileName() const {return m_ServerFileName;}
-    QString serverLicenceFileName() const {return m_ServerLicenceFileName;}
-    QString md5ControlChecksum() const {return m_Md5;}
-    QString sha1ControlChecksum() const {return m_Sha1;}
+    QString serverFileName() const;
+    QString serverLicenceFileName() const;
+    QString md5ControlChecksum() const;
+    QString sha1ControlChecksum() const;
 
     QString downloadedFileName() const {return m_DownFileName;}
 
     bool isSha1Checked() const;
     bool isMd5Checked() const;
 
-    void setServerFileName(const QString &sfn) {m_ServerFileName = sfn;}
-    void setMd5ControlChecksum(const QString &md5) {m_Md5=md5;}
-    void setSha1ControlChecksum(const QString &sha1) {m_Sha1=sha1;}
-
     void setDownloadedFileName(const QString &f) {m_DownFileName=f;}
 
     void fromXmlFile(const QString &absFileName);
     void fromXml(const QString &fullPackConfigXml);
 
-
 private:
-    QString m_ServerFileName, m_ServerLicenceFileName, m_Md5, m_Sha1, m_DownFileName;
+    QString m_DownFileName;
     bool m_Sha1Checked, m_Md5Checked;
     PackDescription m_descr;
     PackDependencies m_depends;

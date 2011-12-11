@@ -63,7 +63,8 @@ public:
     enum FileRequested {
         NoFile = 0,                      // Computed URL of the server without any request
         ServerConfigurationFile,         // File URL on the server
-        PackDescriptionFile
+        PackDescriptionFile,
+        PackFile
     };
 
     Server(const QString &url = QString::null);
