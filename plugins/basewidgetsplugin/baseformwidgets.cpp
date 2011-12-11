@@ -104,6 +104,7 @@ namespace {
     const char * const  DATE_NOW                = "now";
     const char * const  DATE_PATIENTLIMITS      = "patientLimits";
     const char * const  SUM_EXTRA_KEY           = "sumof";
+    const char * const  SUM_REGEXP_EXTRA_KEY    = "sumof_regexp";
 
     const char * const  SPIN_EXTRAS_KEY_MIN         = "min";
     const char * const  SPIN_EXTRAS_KEY_MAX         = "max";
@@ -1868,24 +1869,35 @@ void SumWidget::retranslate()
 
 void SumWidget::connectFormItems()
 {
-//    qWarning() << "SUM requiered" << formItem()->extraDatas().value(::SUM_EXTRA_KEY);
+//    qWarning() << "SUM requiered" << formItem()->extraDatas().value(::SUM_EXTRA_KEY) << formItem()->extraDatas().value(::SUM_REGEXP_EXTRA_KEY);
+    Form::FormMain *p = formItem()->parentFormMain();
+    if (!p) {
+        LOG_ERROR("No FormMain parent");
+        return;
+    }
+    //        qWarning() << "Parent = " << p->uuid();
     if (!formItem()->extraDatas().value(::SUM_EXTRA_KEY).isEmpty()) {
         QStringList uuids = formItem()->extraDatas().value(::SUM_EXTRA_KEY).split(";");
         // get all formitems and connect to the dataChanged signal
-        Form::FormMain *p = formItem()->parentFormMain();
-        if (!p) {
-            LOG_ERROR("No FormMain parent");
-            return;
-        }
-//        qWarning() << "Parent = " << p->uuid();
         QList<Form::FormItem *> items = p->flattenFormItemChildren();
-        foreach(const QString &uid, uuids) {
+        foreach(QString uid, uuids) {
+            uid = uid.simplified();
             for(int i = 0; i < items.count(); ++i) {
                 Form::FormItem *item = items.at(i);
                 if (item->uuid().compare(uid, Qt::CaseInsensitive)==0) {
 //                    qWarning() << "  connecting" << item->uuid();
                     connect(item->itemDatas(), SIGNAL(dataChanged(int)), this, SLOT(recalculate(int)));
                 }
+            }
+        }
+    } else if (!formItem()->extraDatas().value(::SUM_REGEXP_EXTRA_KEY).isEmpty()) {
+        QRegExp reg(formItem()->extraDatas().value(::SUM_REGEXP_EXTRA_KEY), Qt::CaseInsensitive, QRegExp::Wildcard);
+        QList<Form::FormItem *> items = p->flattenFormItemChildren();
+        for(int i = 0; i < items.count(); ++i) {
+            Form::FormItem *item = items.at(i);
+            if (item->uuid().contains(reg) && item->itemDatas()) {
+//                qWarning() << "  connecting (regexp)" << item->uuid();
+                connect(item->itemDatas(), SIGNAL(dataChanged(int)), this, SLOT(recalculate(int)));
             }
         }
     }
@@ -1895,15 +1907,15 @@ void SumWidget::recalculate(const int modifiedRef)
 {
     Q_UNUSED(modifiedRef);
 //    qWarning() << "SUM recalculate" << formItem()->extraDatas().value(::SUM_EXTRA_KEY);
-    double sum = 0;
     Form::FormMain *p = formItem()->parentFormMain();
+    if (!p) {
+        LOG_ERROR("No FormMain parent");
+        return;
+    }
+    double sum = 0;
     if (!formItem()->extraDatas().value(::SUM_EXTRA_KEY).isEmpty()) {
         QStringList uuids = formItem()->extraDatas().value(::SUM_EXTRA_KEY).split(";");
         // get all formitems and connect to the dataChanged signal
-        if (!p) {
-            LOG_ERROR("No FormMain parent");
-            return;
-        }
         QList<Form::FormItem *> items = p->flattenFormItemChildren();
         foreach(const QString &uid, uuids) {
             for(int i = 0; i < items.count(); ++i) {
@@ -1914,7 +1926,16 @@ void SumWidget::recalculate(const int modifiedRef)
                 }
             }
         }
-
+    } else if (!formItem()->extraDatas().value(::SUM_REGEXP_EXTRA_KEY).isEmpty()) {
+        QRegExp reg(formItem()->extraDatas().value(::SUM_REGEXP_EXTRA_KEY), Qt::CaseInsensitive, QRegExp::Wildcard);
+        QList<Form::FormItem *> items = p->flattenFormItemChildren();
+        for(int i = 0; i < items.count(); ++i) {
+            Form::FormItem *item = items.at(i);
+            if (item->uuid().contains(reg) && item->itemDatas()) {
+                QVariant val = item->itemDatas()->data(0, Form::IFormItemData::ID_ForCalculations);
+                sum += val.toDouble();
+            }
+        }
     }
     line->setText(QString::number(sum));
     if (formItem()->getOptions().contains(::CHANGE_EPISODE_LABEL, Qt::CaseInsensitive)) {
