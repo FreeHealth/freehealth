@@ -349,6 +349,7 @@ void ServerEditor::populateServerView(const int serverId)
     const QString &format = QLocale().dateTimeFormat(QLocale::LongFormat);
     const Server &server = serverManager()->getServerAt(serverId);
     createPackModel(server, m_PackModel);
+    ui->serverUuid->setText(server.uuid());
     ui->serverName->setText(server.description().data(ServerDescription::Label).toString());
     ui->shortServerDescription->setText(server.description().data(ServerDescription::ShortDescription).toString());
     ui->serverVersion->setText(server.description().data(ServerDescription::Version).toString());

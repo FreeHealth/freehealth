@@ -5,6 +5,7 @@
 
   <ServerDescription>
     <!-- Non translatable values -->
+    <uuid>freemedforms_be79aa858c0f4d188b62c3b17f408da6</uuid>
     <authors>Eric Maeker, MD</authors>
     <version>0.6.0</version>
     <fmfv>0.6.2</fmfv>
@@ -12,6 +13,7 @@
     <cdate>2011-11-26</cdate>
     <lmdate>2011-11-26</lmdate>
     <icon>__theme__/freemedforms.png</icon>
+    <RecomUpFreq nonParsed="EachMonth">2</RecomUpFreq>
     <weblink></weblink>
     <bibliography/>
 

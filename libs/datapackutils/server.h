@@ -70,6 +70,8 @@ public:
     Server(const QString &url = QString::null);
     virtual ~Server() {}
 
+    QString uuid() const;
+
     // URL Management
     void setUrl(const QString &url);
     const QString &nativeUrl() const {return m_Url;}

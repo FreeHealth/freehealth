@@ -63,6 +63,12 @@ Server::Server(const QString &url) :
     setUrl(url);
 }
 
+/** Return the recorded UUID extracted for the server description. \sa Server::fromXml(), ServerDescription */
+QString Server::uuid() const
+{
+    return m_Desc.data(ServerDescription::Uuid).toString();
+}
+
 /** Define the URL of the server. All URL must be unique (url is used as uuid). */
 void Server::setUrl(const QString &url)
 {
