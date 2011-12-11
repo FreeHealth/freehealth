@@ -85,6 +85,7 @@ public:
     virtual QList<PackDescription> downloadPackDescription(const Server &server, const Pack &pack) = 0;
     virtual Pack downloadAndUnzipPack(const Server &server, const Pack &pack) = 0;
 
+    virtual bool isDataPackInstalled(const Server &server, const Pack &pack) = 0;
     virtual bool installDataPack(const Server &server, const Pack &pack, QProgressBar *progressBar = 0) = 0;
     virtual bool removeDataPack(const Server &server, const Pack &pack, QProgressBar *progressBar = 0) = 0;
     virtual bool updateDataPack(const Server &server, const Pack &pack, QProgressBar *progressBar = 0) = 0;

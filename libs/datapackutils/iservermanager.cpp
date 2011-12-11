@@ -137,6 +137,10 @@
  * Assuming that server is connected and all description files were downloaded, return the pack list related to the \e server.
  */
 
+/**
+ * \fn bool DataPack::IServerManager::isDataPackInstalled(const Server &server, const Pack &pack)
+ * Return true if the \e pack from the \e server is actually installed.
+ */
 
 /**
  * \fn bool DataPack::IServerManager::installDataPack(const Server &server, const Pack &pack, QProgressBar *progressBar = 0);

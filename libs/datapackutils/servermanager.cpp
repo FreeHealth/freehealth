@@ -183,6 +183,12 @@ void ServerManager::checkAndInstallPack(const Server &server, const Pack &pack, 
     Q_ASSERT(progressBar);
 }
 
+bool ServerManager::isDataPackInstalled(const Server &server, const Pack &pack)
+{
+    // TODO
+    return false;
+}
+
 bool ServerManager::installDataPack(const Server &server, const Pack &pack, QProgressBar *progressBar)
 {
     Q_ASSERT(progressBar);
