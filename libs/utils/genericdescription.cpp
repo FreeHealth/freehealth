@@ -52,6 +52,7 @@ const char* const TAG_FMF_COMPAT_VERSION   = "fmfv";
 const char* const TAG_FD_COMPAT_VERSION   = "fdv";
 const char* const TAG_FA_COMPAT_VERSION   = "fav";
 
+const char* const TAG_UUID             = "uuid";
 const char* const TAG_VERSION          = "version";
 const char* const TAG_WEBLINK          = "weblink";
 const char* const TAG_ICON             = "icon";
@@ -323,8 +324,9 @@ QHash<int, QString> GenericDescription::nonTranslatableTagsDataReference() const
 {
     QHash<int, QString> elements;
     // get non translatable items
-    elements.insert(GenericDescription::AbsFileName, TAG_ABSFILENAME);
+    elements.insert(GenericDescription::Uuid, TAG_UUID);
     elements.insert(GenericDescription::Version, TAG_VERSION);
+    elements.insert(GenericDescription::AbsFileName, TAG_ABSFILENAME);
     elements.insert(GenericDescription::Author, TAG_AUTHORS);
     elements.insert(GenericDescription::Vendor, TAG_VENDOR);
     elements.insert(GenericDescription::Validity, TAG_VALIDITY);
