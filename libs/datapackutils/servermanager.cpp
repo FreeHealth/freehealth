@@ -171,6 +171,9 @@ Pack ServerManager::downloadAndUnzipPack(const Server &server, const Pack &pack)
 
 bool ServerManager::downloadDataPack(const Server &server, const Pack &pack, QProgressBar *progressBar)
 {
+	Q_UNUSED(server);
+	Q_UNUSED(pack);
+	Q_UNUSED(progressBar);
     Q_ASSERT(progressBar);
     // TODO pour guillaume
     // Juste télécharger rien de plus dans le rép m_InstallPath
@@ -180,11 +183,16 @@ bool ServerManager::downloadDataPack(const Server &server, const Pack &pack, QPr
 
 void ServerManager::checkAndInstallPack(const Server &server, const Pack &pack, QProgressBar *progressBar)
 {
+	Q_UNUSED(server);
+	Q_UNUSED(pack);
+	Q_UNUSED(progressBar);
     Q_ASSERT(progressBar);
 }
 
 bool ServerManager::isDataPackInstalled(const Server &server, const Pack &pack)
 {
+	Q_UNUSED(server);
+	Q_UNUSED(pack);
     // TODO
     return false;
 }
@@ -315,17 +323,12 @@ void ServerManager::checkServerUpdates()
         } else {
             // FTP | HTTP
             // Download server.conf.xml
-            QNetworkRequest request;
-            request.setUrl(s.url(Server::ServerConfigurationFile));
-            request.setRawHeader("User-Agent", QString("FreeMedForms:%1;%2")
-                                 .arg(qApp->applicationName())
-                                 .arg(qApp->applicationVersion()).toAscii());
-
+            QNetworkRequest request = createRequest(s.url(Server::ServerConfigurationFile));
             QNetworkReply *reply = m_NetworkAccessManager->get(request);
-            m_replyToServer.insert(reply, &s);
-            m_replyToBuffer.insert(reply, QByteArray());
+            m_replyToData.insert(reply, ReplyData(&s, Server::ServerConfigurationFile));
             connect(reply, SIGNAL(readyRead()), this, SLOT(serverReadyRead()));
             connect(reply, SIGNAL(finished()), this, SLOT(serverFinished()));
+			// TODO manage errors
         }
     }
     // TODO THIS LINE IS ONLY FOR TESTING PURPOSE
@@ -395,9 +398,8 @@ void ServerManager::checkServerUpdatesAfterDownload()
 void ServerManager::serverReadyRead()
 {
     QNetworkReply *reply = qobject_cast<QNetworkReply*>(sender());
-
-    QByteArray &ba = m_replyToBuffer[reply];
-    ba.append(reply->readAll());
+	ReplyData &data = m_replyToData[reply];
+	data.response.append(reply->readAll());
 }
 
 void ServerManager::serverError(QNetworkReply::NetworkError error)
@@ -412,16 +414,35 @@ void ServerManager::serverFinished()
     QNetworkReply *reply = qobject_cast<QNetworkReply*>(sender());
     if (reply->error() != QNetworkReply::NoError)
         return;
-    Server *server = m_replyToServer[reply];
+	ReplyData &data = m_replyToData[reply];
+	reply->deleteLater(); // we don't need reply anymore
 
-    Q_ASSERT_X(server, "ServerManager::serverFinished()", "there is not Server associated with the QNetworkReply pointer!");
+	switch (data.fileType) {
+	case Server::ServerConfigurationFile:
+		afterServerConfigurationDownload(data);
+		break;
+	case Server::PackDescriptionFile:
+		afterPackDescriptionFileDownload(data);
+		break;
+	case Server::PackFile:
+		afterPackFileDownload(data);
+		break;
+	default:;
+	}
 
+	// we can remove the associated data
+	m_replyToData.remove(reply);
+}
+
+void ServerManager::afterServerConfigurationDownload(const ReplyData &data) {
     bool downloadPackDescriptionNeeded = false;
+    Server *server = data.server;
+
     switch (server->urlStyle()) {
     case Server::NoStyle:
     {
         // Read the XML from the buffer
-        server->fromXml(m_replyToBuffer[reply]);
+        server->fromXml(data.response);
         break;
     }
     case Server::Ftp:
@@ -429,7 +450,7 @@ void ServerManager::serverFinished()
     case Server::HttpPseudoSecuredNotZipped:
     {
         // Read the XML from the buffer
-        server->fromXml(m_replyToBuffer[reply]);
+        server->fromXml(data.response);
         downloadPackDescriptionNeeded = true;
         break;
     }
@@ -442,16 +463,14 @@ void ServerManager::serverFinished()
         QFile zip(zipName);
         if (!zip.open(QFile::WriteOnly | QFile::Text)) {
             LOG_ERROR(tkTr(Trans::Constants::FILE_1_ISNOT_READABLE).arg(zip.fileName()));
-            reply->deleteLater();
             return;
         }
-        zip.write(m_replyToBuffer[reply]);
+        zip.write(data.response);
         zip.close();
 
         // unzip file
         if (!QuaZipTools::unzipFile(zipName)) {
             LOG_ERROR("Unable to unzip file: " + zipName);
-            reply->deleteLater();
             return;
         }
 
@@ -476,25 +495,39 @@ void ServerManager::serverFinished()
     // Download all linked packagedescription -> see ServerContent --> server.content().packDescriptionFileNames()
     if (downloadPackDescriptionNeeded) {
         foreach(const QString &file, server->content().packDescriptionFileNames()) {
-            // TODO DOWNLOAD ME: file
-            // We should move the request contruction in the Server class to be sure to always have the same headers !!
-            // somthing like
-            // server->constructRequest(...);
-//            QNetworkRequest request;
-//            request.setUrl(s.url(Server::PackDescriptionFile, file));
-//            request.setRawHeader("User-Agent", QString("FreeMedForms:%1;%2")
-//                                 .arg(qApp->applicationName())
-//                                 .arg(qApp->applicationVersion()).toAscii());
-
-//            QNetworkReply *reply = m_NetworkAccessManager->get(request);
-//            m_replyToServer.insert(reply, &s);
-//            m_replyToBuffer.insert(reply, QByteArray());
-//            connect(reply, SIGNAL(readyRead()), this, SLOT(serverReadyRead()));
-//            connect(reply, SIGNAL(finished()), this, SLOT(serverFinished()));
+            QNetworkRequest request = createRequest(server->url(Server::PackDescriptionFile, file));
+            QNetworkReply *reply = m_NetworkAccessManager->get(request);
+			m_replyToData.insert(reply, ReplyData(server, Server::PackDescriptionFile));
+            connect(reply, SIGNAL(readyRead()), this, SLOT(serverReadyRead()));
+            connect(reply, SIGNAL(finished()), this, SLOT(serverFinished()));
+			// TODO manage errors
         }
     }
-    reply->deleteLater();
+
 
     // When all descriptions are downloaded call -> checkServerUpdatesAfterDownload()
     checkServerUpdatesAfterDownload();
+}
+
+QNetworkRequest ServerManager::createRequest(const QString &url) {
+    QNetworkRequest request(url);
+    request.setRawHeader("User-Agent", QString("FreeMedForms:%1;%2")
+                         .arg(qApp->applicationName())
+                         .arg(qApp->applicationVersion()).toAscii());
+	return request;
+}
+
+void ServerManager::afterPackDescriptionFileDownload(const ReplyData &data) {
+	// TODO
+	Q_UNUSED(data);
+}
+
+void ServerManager::afterPackFileDownload(const ReplyData &data) {
+	// TODO
+	Q_UNUSED(data);
+}
+
+ServerManager::ReplyData::ReplyData(Server *server, Server::FileRequested fileType) {
+	this->server = server;
+	this->fileType = fileType;
 }

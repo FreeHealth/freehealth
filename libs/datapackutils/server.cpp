@@ -117,7 +117,7 @@ QString Server::url(const FileRequested &file, const QString &fileName) const
     }
     case PackDescriptionFile:
     {
-        Q_ASSERT(fileName.isEmpty());
+        Q_ASSERT(!fileName.isEmpty());
         if (fileName.isEmpty())
             break;
 
