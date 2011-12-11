@@ -296,7 +296,7 @@ bool IcdDatabase::init()
 
      // log the path of the database
      QString pathToDb = fullDatabasePath();
-     LOG(tr("Searching databases into dir %1").arg(pathToDb));
+     LOG(tkTr(Trans::Constants::SEARCHING_DATABASE_1_IN_PATH_2).arg(Constants::DB_ICD10).arg(pathToDb));
 
      // Removing existing old connections
      if (QSqlDatabase::contains(Constants::DB_ICD10)) {

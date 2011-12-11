@@ -28,7 +28,9 @@
 #include "constants.h"
 
 #include <utils/log.h>
-#include <translationutils/constanttranslations.h>
+#include <translationutils/constants.h>
+#include <translationutils/trans_current.h>
+#include <translationutils/trans_menu.h>
 
 #include <coreplugin/icore.h>
 #include <coreplugin/isettings.h>

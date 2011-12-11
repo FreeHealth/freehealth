@@ -35,7 +35,8 @@
 
 #include <utils/log.h>
 #include <utils/database.h>
-#include <translationutils/constanttranslations.h>
+#include <translationutils/constants.h>
+#include <translationutils/trans_menu.h>
 
 #include <extensionsystem/pluginmanager.h>
 

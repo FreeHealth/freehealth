@@ -25,7 +25,9 @@
 #include "printerpreviewer_p.h"
 #include "textdocumentextra.h"
 
-#include <translationutils/constanttranslations.h>
+#include <translationutils/constants.h>
+#include <translationutils/trans_current.h>
+
 #include <utils/log.h>
 
 #include <QGridLayout>

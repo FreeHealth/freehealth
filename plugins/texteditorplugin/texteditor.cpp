@@ -40,7 +40,10 @@
 
 #include <utils/log.h>
 #include <utils/global.h>
-#include <translationutils/constanttranslations.h>
+#include <translationutils/constants.h>
+#include <translationutils/trans_editor.h>
+#include <translationutils/trans_menu.h>
+#include <translationutils/trans_filepathxml.h>
 
 #include <coreplugin/contextmanager/contextmanager.h>
 #include <coreplugin/actionmanager/actionmanager.h>

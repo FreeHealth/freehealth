@@ -27,7 +27,9 @@
 #include "editoractionhandler.h"
 #include "texteditor.h"
 
-#include <translationutils/constanttranslations.h>
+#include <translationutils/constants.h>
+#include <translationutils/trans_menu.h>
+#include <translationutils/trans_editor.h>
 
 #include <coreplugin/icore.h>
 #include <coreplugin/itheme.h>
