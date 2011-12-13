@@ -39,6 +39,7 @@
 #include <utils/database.h>
 #include <utils/httpdownloader.h>
 #include <extensionsystem/pluginmanager.h>
+#include <quazip/global.h>
 
 #include <QDir>
 #include <QProgressDialog>
@@ -57,7 +58,7 @@ static inline Core::ISettings *settings()  { return Core::ICore::instance()->set
 static inline ExtensionSystem::PluginManager *pluginManager() {return ExtensionSystem::PluginManager::instance();}
 
 static inline QString workingPath()     {return QDir::cleanPath(settings()->value(Core::Constants::S_TMP_PATH).toString() + "/CanadianRawSources")  + QDir::separator();}
-static inline QString databaseAbsPath() {return QDir::cleanPath(settings()->value(Core::Constants::S_DBOUTPUT_PATH).toString() + Core::Constants::MASTER_DATABASE_FILENAME);}
+static inline QString databaseAbsPath()  {return Core::Tools::drugsDatabaseAbsFileName();}
 
 static inline QString databaseFinalizationScript() {return QDir::cleanPath(settings()->value(Core::Constants::S_SVNFILES_PATH).toString() + "/global_resources/sql/drugdb/ca/canadian_db_finalize.sql");}
 
@@ -150,7 +151,7 @@ bool CaDrugDatatabaseStep::unzipFiles()
     LOG(QString("Starting unzipping Canadian file %1").arg(fileName));
 
     // unzip downloaded using QProcess
-    if (!Core::Tools::unzipFile(fileName, workingPath()))
+    if (!QuaZipTools::unzipFile(fileName, workingPath()))
         return false;
 
     // unzip all files in the working path
@@ -162,7 +163,7 @@ bool CaDrugDatatabaseStep::unzipFiles()
         Q_EMIT progress(progr);
         ++progr;
         if (info.fileName()!="allfiles.zip") {
-            if (!Core::Tools::unzipFile(info.absoluteFilePath(), workingPath())) {
+            if (!QuaZipTools::unzipFile(info.absoluteFilePath(), workingPath())) {
                 LOG_ERROR("Unable to unzip " + info.absoluteFilePath());
                 return false;
             }

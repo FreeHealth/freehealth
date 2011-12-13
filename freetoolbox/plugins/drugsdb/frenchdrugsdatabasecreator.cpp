@@ -34,13 +34,14 @@
 #include <coreplugin/globaltools.h>
 #include <coreplugin/isettings.h>
 #include <coreplugin/ftb_constants.h>
+#include <coreplugin/drugdatabasedescription.h>
 
 #include <utils/log.h>
 #include <utils/global.h>
 #include <utils/database.h>
 #include <utils/httpdownloader.h>
 #include <extensionsystem/pluginmanager.h>
-
+#include <quazip/global.h>
 
 #include <QFile>
 #include <QMap>
@@ -71,9 +72,10 @@ static inline Core::ISettings *settings()  { return Core::ICore::instance()->set
 static inline ExtensionSystem::PluginManager *pluginManager() {return ExtensionSystem::PluginManager::instance();}
 
 static inline QString workingPath()     {return QDir::cleanPath(settings()->value(Core::Constants::S_TMP_PATH).toString() + "/FrenchRawSources/") + QDir::separator();}
-static inline QString databaseAbsPath() {return QDir::cleanPath(settings()->value(Core::Constants::S_DBOUTPUT_PATH).toString() + Core::Constants::MASTER_DATABASE_FILENAME);}
+static inline QString databaseAbsPath()  {return Core::Tools::drugsDatabaseAbsFileName();}
 
 static inline QString databaseFinalizationScript() {return QDir::cleanPath(settings()->value(Core::Constants::S_SVNFILES_PATH).toString() + "/global_resources/sql/drugdb/fr/fr_db_finalize.sql");}
+static inline QString databaseDescriptionFile() {return QDir::cleanPath(settings()->value(Core::Constants::S_SVNFILES_PATH).toString() + "/global_resources/sql/drugdb/fr/description.xml");}
 
 
 FrenchDrugsDatabasePage::FrenchDrugsDatabasePage(QObject *parent) :
@@ -160,7 +162,7 @@ bool FrDrugDatatabaseStep::unzipFiles()
     // unzip files using QProcess
     LOG(QString("Starting unzipping afssaps file %1").arg(fileName));
 
-    return Core::Tools::unzipFile(fileName, workingPath());
+    return QuaZipTools::unzipFile(fileName, workingPath());
 }
 
 bool FrDrugDatatabaseStep::prepareDatas()
@@ -313,10 +315,12 @@ bool FrDrugDatatabaseStep::populateDatabase()
 
     // Run SQL commands one by one
     Q_EMIT progressLabelChanged(tr("Running database finalization script"));
-    if (!Core::Tools::executeSqlFile(Core::Constants::MASTER_DATABASE_NAME, databaseFinalizationScript())) {
-        LOG_ERROR("Can create French DB.");
-        return false;
-    }
+//    if (!Core::Tools::executeSqlFile(Core::Constants::MASTER_DATABASE_NAME, databaseFinalizationScript())) {
+//        LOG_ERROR("Can create French DB.");
+//        return false;
+//    }
+
+    Core::Tools::saveDrugDatabaseDescription(databaseDescriptionFile(), 50);
 
     // delete pointers
     qDeleteAll(drugs);
@@ -328,6 +332,17 @@ bool FrDrugDatatabaseStep::populateDatabase()
 
 bool FrDrugDatatabaseStep::linkMolecules()
 {
+    // 13 Dec 2011: using all length of ATC codes
+    //    NUMBER OF MOLECULES 5230
+    //    CORRECTED BY NAME 0
+    //    CORRECTED BY ATC 0
+    //    FOUNDED 3216 "
+    //    LINKERMODEL (WithATC:550;WithoutATC:829) 1379"
+    //    LINKERNATURE 403
+    //    LEFT 1184
+    //    CONFIDENCE INDICE 77
+
+
     // 18 Oct 2011
     //    NUMBER OF MOLECULES 5211
     //    CORRECTED BY NAME 0
@@ -457,9 +472,6 @@ bool FrDrugDatatabaseStep::linkMolecules()
     qWarning() << "unfound" << unfound.count();
 
     Q_EMIT progress(1);
-    // Clear existing links
-    QString req = QString("DELETE FROM LK_MOL_ATC WHERE SID=%1;").arg(sid);
-    Core::Tools::executeSqlQuery(req, Core::Constants::MASTER_DATABASE_NAME, __FILE__, __LINE__);
 
     Q_EMIT progressLabelChanged(tr("Saving components to ATC links to database"));
     Q_EMIT progressRangeChanged(0, 1);

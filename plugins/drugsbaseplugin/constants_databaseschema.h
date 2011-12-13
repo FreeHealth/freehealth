@@ -31,8 +31,8 @@
 /**
  * \file constants_databaseschema.h
  * \author Eric MAEKER <eric.maeker@gmail.com>
- * \version 0.6.0
- * \date 24 Apr 2011
+ * \version 0.6.4
+ * \date 12 Dec 2011
 */
 
 namespace DrugsDB {
@@ -47,16 +47,15 @@ namespace Constants {
     //------------------------------------ Enums for Database Management -------------------------------------
     //--------------------------------------------------------------------------------------------------------
     /** \brief Represents the tables index of drugs database */
-    enum Tables
+    enum Tables  // ORDER OF THIS ENUM MUST NEVER CHANGE
     {
-        Table_MASTER = 0, Table_SOURCES, Table_LABELS,
-        Table_LABELSLINK, Table_BIB, Table_BIB_LINK, Table_DRUGS,
-        Table_MOLS, Table_COMPO, Table_UNITS, Table_LK_MOL_ATC, Table_PACKAGING,
-        Table_DRUG_ROUTES, Table_DRUG_FORMS, Table_ROUTES, Table_SEARCHENGINES,
-        Table_VERSION, Table_ATC, Table_INTERACTIONS, Table_IAKNOWLEDGE,
-        Table_IA_IAK, Table_ATC_LABELS, Table_IAM_TREE,
-        Table_PIM_SOURCES, Table_PIM_TYPES, Table_PIMS, Table_PIMS_RELATED_ATC,
-        Table_PIMS_RELATED_ICD,
+        Table_MASTER = 0, Table_SOURCES, Table_LABELS, Table_LABELSLINK,
+        Table_BIB, Table_BIB_LINK, Table_DRUGS, Table_MOLS, Table_COMPO, Table_UNITS, Table_LK_MOL_ATC,
+        Table_PACKAGING, Table_DRUG_ROUTES, Table_DRUG_FORMS, Table_ROUTES, Table_SEARCHENGINES,
+        Table_VERSION, Table_ATC,  Table_INTERACTIONS, Table_IAKNOWLEDGE,
+        Table_IA_IAK, Table_ATC_LABELS, Table_IAM_TREE, Table_PIM_SOURCES,
+        Table_PIM_TYPES, Table_PIMS, Table_PIMS_RELATED_ATC,
+        Table_PIMS_RELATED_ICD, Table_CURRENTVERSION,
         Table_MaxParam
     };
 
@@ -68,7 +67,7 @@ namespace Constants {
     };
 
     enum MASTERFields {
-        MASTER_DID, MASTER_UID1, MASTER_UID2, MASTER_UID3, MASTER_OLDUID,  MASTER_SID,
+        MASTER_DID = 0, MASTER_UID1, MASTER_UID2, MASTER_UID3, MASTER_OLDUID,  MASTER_SID,
         MASTER_MaxParam
     };
 
@@ -111,12 +110,12 @@ namespace Constants {
     };
 
     enum MOLSFields {
-        MOLS_MID, MOLS_SID, MOLS_NAME, MOLS_WWW,
+        MOLS_MID = 0, MOLS_SID, MOLS_NAME, MOLS_WWW,
         MOLS_MaxParam
     };
 
     enum COMPOFields {
-        COMPO_DID = 0, COMPO_MID, COMPO_STRENGTH, COMPO_STRENGTH_NID,
+        COMPO_ID = 0, COMPO_DID, COMPO_MID, COMPO_STRENGTH, COMPO_STRENGTH_NID,
         COMPO_DOSE_REF, COMPO_REF_NID, COMPO_NATURE, COMPO_LK_NATURE,
         COMPO_MaxParam
     };
@@ -218,6 +217,11 @@ namespace Constants {
     enum PIMS_RELATED_ICDFields {
         PIMS_RELICD_RMID = 0, PIMS_RELICD_PIM_ID, PIMS_RELICD_ICD_SID,
         PIMS_RELICD_MaxParam
+    };
+
+    enum CURRENTVERSIONFields {
+        CURRENTVERSION_ID = 0, CURRENTVERSION_NUMBER,
+        CURRENTVERSION_MaxParam
     };
 
 }  // End namespace Constants

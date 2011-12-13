@@ -36,6 +36,7 @@ class QFile;
 class QProgressDialog;
 class QNetworkReply;
 class QMainWindow;
+//class QProgressBar;
 
 namespace Utils {
 
@@ -49,6 +50,7 @@ public:
     void setUrl(const QUrl &url);
     void setOutputPath(const QString &absolutePath);
     void setLabelText(const QString &text) {m_LabelText = text;}
+//    void setProgressBar(QProgressBar *bar);
 
     void startDownload();
 
@@ -76,6 +78,7 @@ private:
     QNetworkReply *reply;
     QFile *file;
     QProgressDialog *progressDialog;
+//    QProgressBar *progressBar;
     int httpGetId;
     bool httpRequestAborted;
 };

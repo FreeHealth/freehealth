@@ -596,8 +596,7 @@ bool Database::createConnection(const QString &connectionName, const QString &no
                         return false;
                     }
                 } else { // Warn Only
-                    if (WarnLogMessages)
-                        LOG_ERROR_FOR("Database", tkTr(Trans::Constants::DATABASE_1_CANNOT_BE_CREATED_ERROR_2).arg(dbName + "@" + fileName).arg(""));
+                    LOG_ERROR_FOR("Database", tkTr(Trans::Constants::DATABASE_1_CANNOT_BE_CREATED_ERROR_2).arg(dbName + "@" + fileName).arg(""));
                     return false;
                 }
             }
@@ -1233,7 +1232,16 @@ QString Database::select(const int &tableref) const
    Return a SELECT DISTINCT SQL command.
   \sa select()
 */
-QString Database::selectDistinct(const int & tableref, const int & fieldref, const QHash<int, QString> & conditions) const
+QString Database::selectDistinct(const int &tableref, const QList<int> &fields, const QHash<int, QString> &conditions) const
+{
+    return select(tableref, fields, conditions).replace("SELECT", "SELECT DISTINCT");
+}
+
+/**
+   Return a SELECT DISTINCT SQL command.
+  \sa select()
+*/
+QString Database::selectDistinct(const int &tableref, const int &fieldref, const QHash<int, QString> &conditions) const
 {
     return select(tableref, fieldref, conditions).replace("SELECT", "SELECT DISTINCT");
 }
@@ -1673,12 +1681,23 @@ QString Database::prepareUpdateQuery(const int tableref)
 }
 
 /** Return a SQL command usable for DELETE command. Fields are ordered. */
-QString Database::prepareDeleteQuery(const int tableref, const QHash<int,QString> & conditions)
+QString Database::prepareDeleteQuery(const int tableref)
+{
+    return prepareDeleteQuery(tableref, QHash<int,QString>());
+}
+
+/** Return a SQL command usable for DELETE command. Fields are ordered. */
+QString Database::prepareDeleteQuery(const int tableref, const QHash<int,QString> &conditions)
 {
     QString toReturn;
-    toReturn = QString("DELETE FROM `%1` \n WHERE %2")
-               .arg(table(tableref))
-               .arg(getWhereClause(tableref, conditions));
+    if (!conditions.isEmpty()) {
+        toReturn = QString("DELETE FROM `%1` \n WHERE %2")
+                .arg(table(tableref))
+                .arg(getWhereClause(tableref, conditions));
+    } else {
+        toReturn = QString("DELETE FROM `%1`")
+                .arg(table(tableref));
+    }
     if (WarnSqlCommands)
         qWarning() << toReturn;
     return toReturn;
@@ -1712,11 +1731,12 @@ bool Database::createTables() const
     bool toReturn = true;
     QList<int> list = d->m_Tables.keys();
     qSort(list);
-    foreach(const int & i, list)
+    foreach(const int & i, list) {
         if(!createTable(i)) {
             toReturn = false;
             LOG_ERROR_FOR("Database", QCoreApplication::translate("Database", "Can not create table %1").arg(table(i)));
         }
+    }
     return toReturn;
 }
 

@@ -34,12 +34,18 @@
 #include "moleculelinkerwidget.h"
 
 #include <coreplugin/dialogs/pluginaboutpage.h>
+#include <coreplugin/globaltools.h>
 
 #include <extensionsystem/pluginmanager.h>
 #include <utils/log.h>
 
 #include <QtCore/QtPlugin>
+
 #include <QDebug>
+
+// TEST
+#include <drugsbaseplugin/drugbasecore.h>
+// END
 
 using namespace DrugsDbCreator::Internal;
 
@@ -61,16 +67,16 @@ bool DrugsDbPlugin::initialize(const QStringList &arguments, QString *errorMessa
 
     //    Core::ICore::instance()->translators()->addNewTranslator("freeicd-drugsdbplugin");
 
-    addAutoReleasedObject(new CanadianDrugsDatabasePage(this));
-    addAutoReleasedObject(new FdaDrugsDatabasePage(this));
+//    addAutoReleasedObject(new CanadianDrugsDatabasePage(this));
+//    addAutoReleasedObject(new FdaDrugsDatabasePage(this));
     addAutoReleasedObject(new FrenchDrugsDatabasePage(this));
-    addAutoReleasedObject(new SouthAfricanDrugsDatabasePage(this));
-    addAutoReleasedObject(new BeDrugsDatabasePage(this));
-    addAutoReleasedObject(new PtDrugsDatabasePage(this));
+//    addAutoReleasedObject(new SouthAfricanDrugsDatabasePage(this));
+//    addAutoReleasedObject(new BeDrugsDatabasePage(this));
+//    addAutoReleasedObject(new PtDrugsDatabasePage(this));
 
-    addAutoReleasedObject(new MoleculeLinkerPage(this));
+//    addAutoReleasedObject(new MoleculeLinkerPage(this));
 
-    addAutoReleasedObject(new AtcPage(this));
+//    addAutoReleasedObject(new AtcPage(this));
 
     // add plugin info page
     addAutoReleasedObject(new Core::PluginAboutPage(pluginSpec(), this));
@@ -82,6 +88,9 @@ void DrugsDbPlugin::extensionsInitialized()
 {
     if (Utils::Log::warnPluginsCreation())
         qWarning() << "DrugsDbPlugin::extensionsInitialized";
+
+//    DrugsDB::Internal::DrugBaseCore c;
+//    c.initialize(Core::Tools::drugsDatabaseAbsFileName(), true);
 }
 
 

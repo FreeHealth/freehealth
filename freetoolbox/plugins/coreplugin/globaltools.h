@@ -45,14 +45,17 @@ class Drug;
  * \date 11 Jan 2011
 */
 
+namespace DrugsDB {
+namespace Internal {
+class DrugBaseCore;
+}
+}
 
 namespace Core {
+class DrugDatabaseDescription;
 
 namespace Tools
 {
-
-CORE_EXPORT const void unzipAllFilesIntoDirs( const QStringList & paths );
-CORE_EXPORT const bool unzipFile( const QString & fileName, const QString & pathToUnZippedFiles );
 
 CORE_EXPORT QString noAccent(const QString & s);
 
@@ -62,6 +65,10 @@ CORE_EXPORT QString getBlock(const QString &content, const int posStart, int &po
 CORE_EXPORT bool executeProcess(const QString &proc);
 CORE_EXPORT bool executeSqlFile(const QString &connectionName, const QString &fileName, QProgressDialog *dlg = 0);
 CORE_EXPORT bool executeSqlQuery(const QString &sql, const QString &dbName, const QString &file = QString::null, int line = -1);
+
+CORE_EXPORT DrugsDB::Internal::DrugBaseCore *baseCore();
+CORE_EXPORT QString drugsDatabaseAbsFileName();
+CORE_EXPORT QString databaseOutputPath();
 
 CORE_EXPORT bool connectDatabase(const QString &connection, const QString &fileName);
 CORE_EXPORT bool createMasterDrugInteractionDatabase();
@@ -76,11 +83,13 @@ CORE_EXPORT QHash<int, QString> generateMids(const QStringList &molnames, const 
 
 CORE_EXPORT bool createAtc(const QString &connection, const QString &code, const QMultiHash<QString, QVariant> &trLabels, const int forceAtcId = -1, const bool warnDuplicates = true);
 CORE_EXPORT bool addInteraction(const QString &connection, const QStringList &atc1, const QStringList &atc2, const QString &type, const QMultiHash<QString, QVariant> &risk, const QMultiHash<QString, QVariant> &management);
-CORE_EXPORT int addBibliography(const QString &connection, const QString &type, const QString &link, const QString &reference, const QString &abstract, const QString &explain = QString::null);
+CORE_EXPORT int addBibliography(const QString &connection, const QString &type, const QString &link, const QString &reference, const QString &abstract, const QString &explain = QString::null, const QString &xml = QString::null);
 CORE_EXPORT bool addComponentAtcLinks(const QString &connection, const QMultiHash<int, int> &mol_atc, const int sid);
 
 CORE_EXPORT QVector<int> getAtcIdsFromLabel(const QString &connection, const QString &label);
 CORE_EXPORT QVector<int> getAtcIdsFromCode(const QString &connection, const QString &code);
+
+CORE_EXPORT bool saveDrugDatabaseDescription(const QString &fileName, const int completion);
 
 }  // End namespace Tools
 

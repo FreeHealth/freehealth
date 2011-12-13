@@ -23,7 +23,9 @@ HEADERS += coreimpl.h \
     pathpreferences.h \
     ifullreleasestep.h \
     fullreleasepage.h \
-    routesmodel.h
+    routesmodel.h \
+    $${SOURCES_PLUGINS_PATH}/drugsbaseplugin/drugbasecore.h \
+    drugdatabasedescription.h
 
 SOURCES += coreimpl.cpp \
     appaboutpage.cpp \
@@ -33,7 +35,9 @@ SOURCES += coreimpl.cpp \
     pathpreferences.cpp \
     ifullreleasestep.cpp \
     fullreleasepage.cpp \
-    routesmodel.cpp
+    routesmodel.cpp \
+    $${SOURCES_PLUGINS_PATH}/drugsbaseplugin/drugbasecore.cpp \
+    drugdatabasedescription.cpp
 
 FORMS += mainwindow.ui \
     pathpreferences.ui \

@@ -360,207 +360,11 @@ DrugsBase *DrugsBase::instance()
     return m_Instance;
 }
 
-DrugsBase::DrugsBase(QObject *parent)
-    : QObject(parent), Utils::Database(), d(0)
+DrugsBase::DrugsBase(QObject *parent) :
+    QObject(parent), DrugBaseCore(), d(0)
 {
     d = new DrugsBasePrivate(this);
     setObjectName("DrugsBase");
-
-    using namespace Constants;
-    // New schema
-    addTable(Table_MASTER,          "MASTER");
-    addTable(Table_SOURCES,         "SOURCES");
-    addTable(Table_LABELS,          "LABELS");
-    addTable(Table_LABELSLINK,      "LABELS_LINK");
-    addTable(Table_BIB,             "BIBLIOGRAPHY");
-    addTable(Table_BIB_LINK,        "BIBLIOGRAPHY_LINKS");
-    addTable(Table_DRUGS,           "DRUGS");
-    addTable(Table_MOLS,            "MOLS");
-    addTable(Table_COMPO,           "COMPOSITION");
-    addTable(Table_UNITS,           "UNITS");
-    addTable(Table_LK_MOL_ATC,      "LK_MOL_ATC");
-    addTable(Table_PACKAGING,       "PACKAGING");
-    addTable(Table_DRUG_ROUTES,     "DRUG_ROUTES");
-    addTable(Table_DRUG_FORMS,      "DRUG_FORMS");
-    addTable(Table_ROUTES,          "ROUTES");
-    addTable(Table_SEARCHENGINES,   "SEARCH_ENGINES");
-    addTable(Table_VERSION,         "DB_SCHEMA_VERSION");
-    addTable(Table_ATC,             "ATC");
-    addTable(Table_INTERACTIONS,    "INTERACTIONS");
-    addTable(Table_IAKNOWLEDGE,     "IAKNOWLEDGE");
-    addTable(Table_IA_IAK,          "IA_IAK");
-    addTable(Table_ATC_LABELS,      "ATC_LABELS");
-    addTable(Table_IAM_TREE,        "IAM_TREE");
-
-    addField(Table_MASTER, MASTER_DID, "DID");
-    addField(Table_MASTER, MASTER_UID1, "UID1");
-    addField(Table_MASTER, MASTER_UID2, "UID2");
-    addField(Table_MASTER, MASTER_UID3, "UID3");
-    addField(Table_MASTER, MASTER_OLDUID, "OLD_UID");
-    addField(Table_MASTER, MASTER_SID, "SID");
-
-    addField(Table_SOURCES, SOURCES_SID, "SID");
-    addField(Table_SOURCES, SOURCES_DBUID, "DATABASE_UID");
-    addField(Table_SOURCES, SOURCES_MASTERLID, "MASTER_LID");
-    addField(Table_SOURCES, SOURCES_LANG, "LANG");
-    addField(Table_SOURCES, SOURCES_WEB, "WEB");
-    addField(Table_SOURCES, SOURCES_COPYRIGHT, "COPYRIGHT");
-    addField(Table_SOURCES, SOURCES_DATE, "DATE");
-    addField(Table_SOURCES, SOURCES_DRUGS_VERSION, "DRUGS_VERSION");
-    addField(Table_SOURCES, SOURCES_AUTHORS, "AUTHORS");
-    addField(Table_SOURCES, SOURCES_VERSION, "VERSION");
-    addField(Table_SOURCES, SOURCES_PROVIDER, "PROVIDER");
-    addField(Table_SOURCES, SOURCES_WEBLINK, "WEBLINK");
-    addField(Table_SOURCES, SOURCES_DRUGUID_NAME, "DRUG_UID_NAME");
-    addField(Table_SOURCES, SOURCES_ATC, "ATC");
-    addField(Table_SOURCES, SOURCES_INTERACTIONS, "INTERACTIONS");
-    addField(Table_SOURCES, SOURCES_COMPL_WEBSITE, "COMPLEMENTARY_WEBSITE");
-    addField(Table_SOURCES, SOURCES_PACKUID_NAME, "PACK_MAIN_CODE_NAME");
-    addField(Table_SOURCES, SOURCES_COMPLETION, "MOL_LINK_COMPLETION");
-    addField(Table_SOURCES, SOURCES_AUTHOR_COMMENTS, "AUTHOR_COMMENTS");
-    addField(Table_SOURCES, SOURCES_DRUGNAMECONSTRUCTOR, "DRUGS_NAME_CONSTRUCTOR");
-    addField(Table_SOURCES, SOURCES_FMFCOMPAT, "FREEMEDFORMS_COMPTA_VERSION");
-    addField(Table_SOURCES, SOURCES_OPENREACT_COMPAT, "WEBPORTAL_COMPTA_VERSION");
-
-    addField(Table_LABELS, LABELS_LID, "LID");
-    addField(Table_LABELS, LABELS_LANG, "LANG");
-    addField(Table_LABELS, LABELS_LABEL, "LABEL");
-
-    addField(Table_LABELSLINK, LABELSLINK_MASTERLID, "MASTER_LID");
-    addField(Table_LABELSLINK, LABELSLINK_LID, "LID");
-
-    addField(Table_BIB, BIB_BIBID, "BIB_ID");
-    addField(Table_BIB, BIB_TYPE, "TYPE");
-    addField(Table_BIB, BIB_LINK, "LINK");
-    addField(Table_BIB, BIB_TEXTREF, "TEXTUAL_REFERENCE");
-    addField(Table_BIB, BIB_ABSTRACT, "ABSTRACT");
-    addField(Table_BIB, BIB_EXPLAIN, "EXPLANATION");
-    addField(Table_BIB, BIB_XML, "XML");
-
-    addField(Table_BIB_LINK, BIB_LINK_MASTERID, "BIB_MASTER_ID");
-    addField(Table_BIB_LINK, BIB_LINK_BIBID, "BIB_ID");
-
-    addField(Table_DRUGS, DRUGS_ID ,            "ID");
-    addField(Table_DRUGS, DRUGS_DID ,          "DID");
-    addField(Table_DRUGS, DRUGS_SID,           "SID");
-    addField(Table_DRUGS, DRUGS_NAME,          "NAME");
-    addField(Table_DRUGS, DRUGS_ATC_ID,            "ATC_ID");
-    addField(Table_DRUGS, DRUGS_STRENGTH,       "STRENGTH");
-    addField(Table_DRUGS, DRUGS_VALID,        "VALID");
-    addField(Table_DRUGS, DRUGS_MARKET,         "MARKETED");
-    addField(Table_DRUGS, DRUGS_AID_MASTER_LID,        "AID_MASTER_LID");
-    addField(Table_DRUGS, DRUGS_LINK_SPC,       "LINK_SPC");
-    addField(Table_DRUGS, DRUGS_EXTRA_XML,  "EXTRA_XML");
-
-    addField(Table_MOLS, MOLS_MID,  "MID");
-    addField(Table_MOLS, MOLS_SID,  "SID");
-    addField(Table_MOLS, MOLS_NAME,  "NAME");
-    addField(Table_MOLS, MOLS_WWW,  "WWW");
-
-    addField(Table_COMPO, COMPO_DID,          "DID");
-    addField(Table_COMPO, COMPO_MID,     "MID");
-    addField(Table_COMPO, COMPO_STRENGTH,     "STRENGTH");
-    addField(Table_COMPO, COMPO_STRENGTH_NID,     "STRENGTH_NID");
-    addField(Table_COMPO, COMPO_DOSE_REF,      "DOSE_REF");
-    addField(Table_COMPO, COMPO_REF_NID,       "DOSE_REF_NID");
-    addField(Table_COMPO, COMPO_NATURE,       "NATURE");
-    addField(Table_COMPO, COMPO_LK_NATURE,    "LK_NATURE");
-
-    addField(Table_UNITS, UNITS_NID,    "NID");
-    addField(Table_UNITS, UNITS_VALUE,  "VALUE");
-
-    addField(Table_LK_MOL_ATC, LK_MID,  "MID");
-    addField(Table_LK_MOL_ATC, LK_ATC_ID, "ATC_ID");
-    addField(Table_LK_MOL_ATC, LK_ATC_SID, "SID");
-
-    addField(Table_PACKAGING, PACK_DID,    "DID");
-    addField(Table_PACKAGING, PACK_SID,    "SID");
-    addField(Table_PACKAGING, PACK_PACK_UID,    "PACKAGE_UID");
-    addField(Table_PACKAGING, PACK_LABEL,       "LABEL");
-    addField(Table_PACKAGING, PACK_STATUS,      "STATUS");
-    addField(Table_PACKAGING, PACK_MARKET,      "MARKETING");
-    addField(Table_PACKAGING, PACK_DATE,        "DATE");
-    addField(Table_PACKAGING, PACK_OPTION_CODE, "OPTIONAL_CODE");
-
-    addField(Table_DRUG_ROUTES, DRUG_ROUTES_DID, "DID");
-    addField(Table_DRUG_ROUTES, DRUG_ROUTES_RID, "RID");
-
-    addField(Table_DRUG_FORMS, DRUG_FORMS_DID, "DID");
-    addField(Table_DRUG_FORMS, DRUG_FORMS_MASTERLID, "MASTER_LID");
-
-    addField(Table_ROUTES, ROUTES_RID, "RID");
-    addField(Table_ROUTES, ROUTES_MASTERLID, "MASTER_LID");
-    addField(Table_ROUTES, ROUTES_SYSTEMIC, "SYSTEMIC_STATUS");
-
-    addField(Table_SEARCHENGINES, SEARCHENGINE_ID, "ID");
-    addField(Table_SEARCHENGINES, SEARCHENGINE_LABEL, "LABEL");
-    addField(Table_SEARCHENGINES, SEARCHENGINE_URL, "URL");
-
-    addField(Table_VERSION, VERSION_ID, "ID");
-    addField(Table_VERSION, VERSION_VERSION, "VERSION");
-    addField(Table_VERSION, VERSION_DATE, "DATE");
-    addField(Table_VERSION, VERSION_COMMENT, "COMMENT");
-
-    // DDI tables and fields
-    addField(Table_ATC, ATC_ID, "ATC_ID");
-    addField(Table_ATC, ATC_CODE, "CODE");
-    addField(Table_ATC, ATC_WARNDUPLICATES, "WARNDUPLICATES");
-
-    addField(Table_INTERACTIONS, INTERACTIONS_IAID, "IAID");
-    addField(Table_INTERACTIONS, INTERACTIONS_ATC_ID1, "ATC_ID1");
-    addField(Table_INTERACTIONS, INTERACTIONS_ATC_ID2, "ATC_ID2");
-
-    addField(Table_IAKNOWLEDGE, IAKNOWLEDGE_IAKID, "IAKID");
-    addField(Table_IAKNOWLEDGE, IAKNOWLEDGE_TYPE, "TYPE");
-    addField(Table_IAKNOWLEDGE, IAKNOWLEDGE_RISK_MASTERLID, "RISK_MASTER_LID");
-    addField(Table_IAKNOWLEDGE, IAKNOWLEDGE_MANAGEMENT_MASTERLID, "MAN_MASTER_LID");
-    addField(Table_IAKNOWLEDGE, IAKNOWLEDGE_BIB_MASTERID, "BIB_MASTER_ID");
-    addField(Table_IAKNOWLEDGE, IAKNOWLEDGE_WWW, "WWW");
-
-    addField(Table_IA_IAK, IA_IAK_IAID, "IAID");
-    addField(Table_IA_IAK, IA_IAK_IAKID, "IAKID");
-
-    addField(Table_ATC_LABELS, ATC_LABELS_ATCID, "ATC_ID");
-    addField(Table_ATC_LABELS, ATC_LABELS_MASTERLID, "MASTER_LID");
-
-    addField(Table_IAM_TREE, IAM_TREE_ID, "ID_TREE");
-    addField(Table_IAM_TREE, IAM_TREE_ID_CLASS, "ID_CLASS");
-    addField(Table_IAM_TREE, IAM_TREE_ID_ATC, "ID_ATC");
-    addField(Table_IAM_TREE, IAM_TREE_BIBMASTERID, "BIB_MASTER_ID");
-
-    // Add PIMS
-    addTable(Table_PIM_SOURCES,      "PIM_SOURCES");
-    addTable(Table_PIM_TYPES,        "PIM_TYPES");
-    addTable(Table_PIMS,             "PIMS");
-    addTable(Table_PIMS_RELATED_ATC, "PIMS_RELATED_ATC");
-    addTable(Table_PIMS_RELATED_ICD, "PIMS_RELATED_ICD");
-
-    addField(Table_PIM_SOURCES, PIM_SOURCES_SID, "PIM_SID");
-    addField(Table_PIM_SOURCES, PIM_SOURCES_UID, "UID");
-    addField(Table_PIM_SOURCES, PIM_SOURCES_NAME, "NAME");
-    addField(Table_PIM_SOURCES, PIM_SOURCES_PMID, "PMID");
-    addField(Table_PIM_SOURCES, PIM_SOURCES_COUNTRY, "COUNTRY");
-    addField(Table_PIM_SOURCES, PIM_SOURCES_WWW, "WWW");
-
-    addField(Table_PIM_TYPES, PIM_TYPES_TID, "PIM_TID");
-    addField(Table_PIM_TYPES, PIM_TYPES_UID, "UID");
-    addField(Table_PIM_TYPES, PIM_TYPES_MASTER_LID, "MASTER_LID");
-
-    addField(Table_PIMS, PIMS_ID, "PIM_ID");
-    addField(Table_PIMS, PIMS_SID, "PIM_SID");
-    addField(Table_PIMS, PIMS_TID, "PIM_TID");
-    addField(Table_PIMS, PIMS_LEVEL, "LEVEL");
-    addField(Table_PIMS, PIMS_RISK_MASTER_LID, "RISK_MASTER_LID");
-
-    addField(Table_PIMS_RELATED_ATC, PIMS_RELATC_RMID, "PIM_RMID");
-    addField(Table_PIMS_RELATED_ATC, PIMS_RELATC_PIM_ID, "PIM_ID");
-    addField(Table_PIMS_RELATED_ATC, PIMS_RELATC_ATC_ID, "ATC_ID");
-    addField(Table_PIMS_RELATED_ATC, PIMS_RELATC_MAXDAYDOSE, "MAXDAYDOSE");
-    addField(Table_PIMS_RELATED_ATC, PIMS_RELATC_MAXDAYDOSEUNIT, "MAXDAYDOSEUNIT");
-
-    addField(Table_PIMS_RELATED_ICD, PIMS_RELICD_RMID, "PIM_RMID");
-    addField(Table_PIMS_RELATED_ICD, PIMS_RELICD_PIM_ID, "PIM_ID");
-    addField(Table_PIMS_RELATED_ICD, PIMS_RELICD_ICD_SID, "ICD10_ID");
 
     connect(Core::ICore::instance(), SIGNAL(databaseServerChanged()), this, SLOT(onCoreDatabaseServerChanged()));
 }
@@ -578,72 +382,12 @@ bool DrugsBase::init()
     if (m_initialized)
         return true;
 
-    // remove drugs database connection if exists
-    if (d->m_RefreshDrugsBase) {
-        if (QSqlDatabase::connectionNames().contains(Constants::DB_DRUGS_NAME)) {
-            QSqlDatabase::database(Constants::DB_DRUGS_NAME).close();
-            QSqlDatabase::removeDatabase(Constants::DB_DRUGS_NAME);
-        }
-        d->m_RefreshDrugsBase = false;
-    }
-
     // create drugs database connection
     if (!QSqlDatabase::connectionNames().contains(Constants::DB_DRUGS_NAME)) {
-        // test driver
-        if (!QSqlDatabase::isDriverAvailable("QSQLITE")) {
-            LOG_ERROR(tkTr(Trans::Constants::DATABASE_DRIVER_1_NOT_AVAILABLE).arg("SQLite"));
-            Utils::warningMessageBox(tkTr(Trans::Constants::APPLICATION_FAILURE),
-                                     tkTr(Trans::Constants::DATABASE_DRIVER_1_NOT_AVAILABLE_DETAIL).arg("SQLite"),
-                                     "", qApp->applicationName());
-            return false;
-        }
-
-//        QString dbFileName = settings()->value(Constants::S_SELECTED_DATABASE_FILENAME).toString();
-//        if (dbFileName.startsWith(Core::Constants::TAG_APPLICATION_RESOURCES_PATH)) {
-//            dbFileName.replace(Core::Constants::TAG_APPLICATION_RESOURCES_PATH, settings()->path(Core::ISettings::ReadOnlyDatabasesPath));
-//        }
-
-        QString dbFileName = databaseFileName();
-        QString drugSource = settings()->value(Constants::S_SELECTED_DATABASE_FILENAME).toString();
-
-        // define is default drug sources (fr_FR)
-        if (drugSource == DrugsDB::Constants::DB_DEFAULT_IDENTIFIANT || drugSource.isEmpty()) {
-            m_IsDefaultDB = true;
-            drugSource = DrugsDB::Constants::DB_DEFAULT_IDENTIFIANT;
-        } else {
-            m_IsDefaultDB = false;
-        }
-
-        // log the path of the database
-        QString pathToDb = QFileInfo(dbFileName).absolutePath();
-        LOG(tr("Searching databases into dir %1").arg(pathToDb));
-
-        // Connect Drugs Database
-        Utils::DatabaseConnector drugConnector;
-        drugConnector.setAbsPathToReadOnlySqliteDatabase(settings()->path(Core::ISettings::ReadOnlyDatabasesPath));
-        drugConnector.setHost(QFileInfo(dbFileName).fileName());
-        drugConnector.setAccessMode(Utils::DatabaseConnector::ReadOnly);
-        drugConnector.setDriver(Utils::Database::SQLite);
-
-        if (createConnection(Constants::DB_DRUGS_NAME, QFileInfo(dbFileName).fileName(), drugConnector)) {
-            LOG(tkTr(Trans::Constants::CONNECTED_TO_DATABASE_1_DRIVER_2).arg(QString("%1(%2)").arg(Constants::DB_DRUGS_NAME).arg(dbFileName)).arg("SQLite"));
-            d->m_ActualDBInfos = getDrugSourceInformations(drugSource);
-        } else {
-            LOG_ERROR(tr("No drugs database found."));
-            return false;
-        }
-
-        // Use routes ?
-        //        d->m_UseRoutes = (count(Table_DRUG_ROUTES, DRUG_ROUTES_UID) > 0);
-
-        /** \todo refresh IDrugEngines cache */
-    }
-
-    if (!d->m_ActualDBInfos) {
-        Utils::warningMessageBox(tr("Drug database source does not exists."),
-                                 tr("Switching to the default drugs database source."));
-        d->m_ActualDBInfos = getDrugSourceInformations(DrugsDB::Constants::DB_DEFAULT_IDENTIFIANT);
-        m_IsDefaultDB = true;
+        const QString &pathToDb = QFileInfo(databaseFileName()).absolutePath();
+        if (!DrugBaseCore::initialize(settings()->databasePath()))
+            LOG_ERROR("Unable to initialize DrugBaseCore");
+        refreshDrugsBase();
     }
 
     // Connect and check Dosage Database
@@ -758,14 +502,12 @@ bool DrugsBase::isRoutesAvailable() const
 bool DrugsBase::refreshAllDatabases()
 {
     m_initialized = false;
-    d->m_RefreshDrugsBase = true;
+    refreshDrugsBase();
     d->m_RefreshDosageBase = true;
-    Q_EMIT drugsBaseIsAboutToChange();
     Q_EMIT dosageBaseIsAboutToChange();
     bool r = init();
     if (r) {
         Q_EMIT drugsBaseHasChanged();
-        Q_EMIT dosageBaseHasChanged();
     }
     return r;
 }
@@ -773,12 +515,27 @@ bool DrugsBase::refreshAllDatabases()
 bool DrugsBase::refreshDrugsBase()
 {
     m_initialized = false;
-    d->m_RefreshDrugsBase = true;
     Q_EMIT drugsBaseIsAboutToChange();
-    bool r = init();
-    if (r)
-        Q_EMIT drugsBaseHasChanged();
-    return r;
+
+    // define is default drug sources (FR_AFSSAPS)
+    QString drugSource = settings()->value(Constants::S_SELECTED_DATABASE_FILENAME).toString();
+    if (drugSource == DrugsDB::Constants::DB_DEFAULT_IDENTIFIANT || drugSource.isEmpty()) {
+        m_IsDefaultDB = true;
+        drugSource = DrugsDB::Constants::DB_DEFAULT_IDENTIFIANT;
+    } else {
+        m_IsDefaultDB = false;
+    }
+
+    d->m_ActualDBInfos = getDrugSourceInformations(drugSource);
+    if (!d->m_ActualDBInfos) {
+        Utils::warningMessageBox(tr("Drug database source does not exists."),
+                                 tr("Switching to the default drugs database source."));
+        d->m_ActualDBInfos = getDrugSourceInformations(DrugsDB::Constants::DB_DEFAULT_IDENTIFIANT);
+        m_IsDefaultDB = true;
+    }
+
+    Q_EMIT drugsBaseHasChanged();
+    return true;
 }
 
 bool DrugsBase::changeCurrentDrugSourceUid(const QVariant &uid)
@@ -964,8 +721,7 @@ bool DrugsBase::createDatabase(const QString &connectionName , const QString &db
     if (connectionName != Dosages::Constants::DB_DOSAGES_NAME)
         return false;
 
-    Utils::Log::addMessage(this, tkTr(Trans::Constants::TRYING_TO_CREATE_1_PLACE_2)
-                           .arg(dbName).arg(pathOrHostName));
+    LOG(tkTr(Trans::Constants::TRYING_TO_CREATE_1_PLACE_2).arg(dbName).arg(pathOrHostName));
 
     // create an empty database and connect
     QSqlDatabase DB;

@@ -24,7 +24,7 @@ static const char *S_LANGUAGE = "SearchAtcDialogLanguage";
 
 static inline Core::ISettings *settings()  { return Core::ICore::instance()->settings(); }
 
-static inline QString databaseAbsPath()  {return QDir::cleanPath(settings()->value(Core::Constants::S_DBOUTPUT_PATH).toString() + Core::Constants::MASTER_DATABASE_FILENAME);}
+static inline QString databaseAbsPath()  {return Core::Tools::drugsDatabaseAbsFileName();}
 
 namespace DrugsDbCreator {
     class SearchAtcInDatabaseDialogPrivate

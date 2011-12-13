@@ -281,6 +281,7 @@ public:
     virtual QString select(const int &tableref) const;
     virtual QString select(const int &tableref, const int &fieldref) const;
     virtual QString selectDistinct(const int &tableref, const int &fieldref, const QHash<int, QString> &conditions) const;
+    virtual QString selectDistinct(const int &tableref, const QList<int> &fields, const QHash<int, QString> &conditions) const;
     virtual QString selectDistinct(const int &tableref, const int &fieldref) const;
 
     virtual QString select(const FieldList &select, const JoinList &joins) const;
@@ -310,6 +311,7 @@ public:
     virtual QString prepareUpdateQuery(const int tableref, const QList<int> &fieldref, const QHash<int, QString> &conditions);
     virtual QString prepareUpdateQuery(const int tableref);
 
+    virtual QString prepareDeleteQuery(const int tableref);
     virtual QString prepareDeleteQuery(const int tableref, const QHash<int,QString> &conditions);
 
     virtual bool createTable(const int &tableref) const;

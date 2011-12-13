@@ -29,6 +29,7 @@
 
 #include <drugsbaseplugin/drugsbase_exporter.h>
 #include <drugsbaseplugin/constants.h>
+#include <drugsbaseplugin/drugbasecore.h>
 
 #include <utils/database.h>
 
@@ -36,12 +37,13 @@
 #include <QStringList>
 #include <QMap>
 #include <QMultiHash>
+#include <QVector>
 
 /**
  * \file drugsbase.h
  * \author Eric MAEKER <eric.maeker@gmail.com>
- * \version 0.6.0
- * \date 26 Feb 2011
+ * \version 0.6.4
+ * \date 13 Dec 2011
 */
 
 namespace MedicalUtils {
@@ -57,7 +59,7 @@ namespace Internal {
 class DrugInfo;
 class DrugsBasePrivate;
 
-class DRUGSBASE_EXPORT DrugsBase : public QObject, public Utils::Database
+class DRUGSBASE_EXPORT DrugsBase : public QObject, public DrugBaseCore
 {
     Q_OBJECT
     DrugsBase(QObject *parent = 0);
@@ -81,7 +83,9 @@ public:
     QVector<DatabaseInfos *> getAllDrugSourceInformations();
     DatabaseInfos *getDrugSourceInformations(const QString &drugSourceUid);
 
+    // OBSOLETE
     bool refreshAllDatabases();
+    // END OBSOLETE
     bool refreshDrugsBase();
     bool changeCurrentDrugSourceUid(const QVariant &uid);
     bool refreshDosageBase();

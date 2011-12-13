@@ -1,6 +1,5 @@
 TEMPLATE = lib
 TARGET = InteractionDB
-PACKAGE_VERSION = 0.0.2
 
 DEFINES += FREETOOLBOX
 FREETOOLBOX = 1
@@ -23,7 +22,9 @@ HEADERS += interactionplugin.h \
     interactioneditorpage.h \
     formalizeditemmodel.h \
     druginteractor.h \
-    interactoreditorpage.h
+    interactoreditorpage.h \
+    $${SOURCES_PLUGINS_PATH}/drugsbaseplugin/drugbasecore.h
+
 #    cytochromep450interactionspage.h \
 
 SOURCES += interactionplugin.cpp \
@@ -34,7 +35,8 @@ SOURCES += interactionplugin.cpp \
     interactioneditorpage.cpp \
     formalizeditemmodel.cpp \
     druginteractor.cpp \
-    interactoreditorpage.cpp
+    interactoreditorpage.cpp \
+    $${SOURCES_PLUGINS_PATH}/drugsbaseplugin/drugbasecore.cpp
 #    cytochromep450interactionspage.cpp \
 
 SOURCES += \

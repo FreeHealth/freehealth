@@ -38,7 +38,7 @@
 #include <utils/global.h>
 #include <utils/log.h>
 #include <utils/database.h>
-
+#include <quazip/global.h>
 #include <extensionsystem/pluginmanager.h>
 
 #include <QDir>
@@ -62,7 +62,7 @@ static inline Core::ISettings *settings()  { return Core::ICore::instance()->set
 static inline ExtensionSystem::PluginManager *pluginManager() {return ExtensionSystem::PluginManager::instance();}
 
 static inline QString workingPath()     {return QDir::cleanPath(settings()->value(Core::Constants::S_TMP_PATH).toString() + "/BeRawSources/");}
-static inline QString databaseAbsPath() {return QDir::cleanPath(settings()->value(Core::Constants::S_DBOUTPUT_PATH).toString() + Core::Constants::MASTER_DATABASE_FILENAME);}
+static inline QString databaseAbsPath()  {return Core::Tools::drugsDatabaseAbsFileName();}
 static inline QString tmpDatabaseAbsPath() {return QDir::cleanPath(workingPath() + "/drugs-be.db");}
 
 static inline QString dumpFileAbsPath()     {return QDir::cleanPath(settings()->value(Core::Constants::S_SVNFILES_PATH).toString() + "/global_resources/sql/drugdb/be/dump.zip");}
@@ -210,7 +210,7 @@ bool BeDrugDatatabaseStep::unzipFiles()
     LOG(QString("Starting unzipping Belguish dump file %1").arg(fileName));
 
     // unzip downloaded using QProcess
-    if (!Core::Tools::unzipFile(fileName, workingPath()))
+    if (!QuaZipTools::unzipFile(fileName, workingPath()))
         return false;
 
     Q_EMIT progress(1);
@@ -506,9 +506,6 @@ bool BeDrugDatatabaseStep::linkMolecules()
     qWarning() << "unfound" << unfound.count();
 
     Q_EMIT progress(1);
-    // Clear existing links
-    QString req = QString("DELETE FROM LK_MOL_ATC WHERE SID=%1;").arg(sid);
-    Core::Tools::executeSqlQuery(req, Core::Constants::MASTER_DATABASE_NAME, __FILE__, __LINE__);
 
     Q_EMIT progressLabelChanged(tr("Saving components to ATC links to database"));
     Q_EMIT progressRangeChanged(0, 1);

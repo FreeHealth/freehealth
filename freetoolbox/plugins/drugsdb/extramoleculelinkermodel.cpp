@@ -48,6 +48,9 @@
 #include <coreplugin/isettings.h>
 #include <coreplugin/ftb_constants.h>
 
+#include <drugsbaseplugin/drugbasecore.h>
+#include <drugsbaseplugin/constants_databaseschema.h>
+
 #include <utils/log.h>
 
 #include <QDomNode>
@@ -575,19 +578,37 @@ QMultiHash<int, int> ExtraMoleculeLinkerModel::moleculeLinker
     QString req;
     QSqlQuery query(req, iam);
 
+    Core::Tools::getAtcIdsFromLabel(Core::Constants::MASTER_DATABASE_NAME, "omeprazole");
+
     // Get all ATC Code and Label
     LOG("Getting ATC Informations from the interactions database");
-    req = QString("SELECT ATC.ATC_ID, ATC.CODE, LABELS.LABEL "
-                  "FROM ATC "
-                  "JOIN ATC_LABELS ON ATC_LABELS.ATC_ID=ATC.ATC_ID "
-                  "JOIN LABELS_LINK ON LABELS_LINK.MASTER_LID=ATC_LABELS.MASTER_LID "
-                  "JOIN LABELS ON LABELS_LINK.LID=LABELS.LID "
-                  "WHERE LABELS.LANG='%1' AND length(ATC.CODE)=7;").arg(lang);
-    if (query.exec(req)) {
+//    req = QString("SELECT ATC.ATC_ID, ATC.CODE, LABELS.LABEL "
+//                  "FROM ATC "
+//                  "JOIN ATC_LABELS ON ATC_LABELS.ATC_ID=ATC.ATC_ID "
+//                  "JOIN LABELS_LINK ON LABELS_LINK.MASTER_LID=ATC_LABELS.MASTER_LID "
+//                  "JOIN LABELS ON LABELS_LINK.LID=LABELS.LID "
+//                  "WHERE LABELS.LANG='%1' AND length(ATC.CODE)=7;").arg(lang);
+    Utils::FieldList get;
+    get << Utils::Field(DrugsDB::Constants::Table_ATC, DrugsDB::Constants::ATC_ID);
+    get << Utils::Field(DrugsDB::Constants::Table_ATC, DrugsDB::Constants::ATC_CODE);
+    get << Utils::Field(DrugsDB::Constants::Table_LABELS, DrugsDB::Constants::LABELS_LABEL);
+    Utils::JoinList joins;
+    joins << Utils::Join(DrugsDB::Constants::Table_ATC_LABELS, DrugsDB::Constants::ATC_LABELS_ATCID, DrugsDB::Constants::Table_ATC, DrugsDB::Constants::ATC_ID)
+          << Utils::Join(DrugsDB::Constants::Table_LABELSLINK, DrugsDB::Constants::LABELSLINK_MASTERLID, DrugsDB::Constants::Table_ATC_LABELS, DrugsDB::Constants::ATC_LABELS_MASTERLID)
+          << Utils::Join(DrugsDB::Constants::Table_LABELS, DrugsDB::Constants::LABELS_LID, DrugsDB::Constants::Table_LABELSLINK, DrugsDB::Constants::LABELSLINK_LID);
+    Utils::FieldList cond;
+    cond << Utils::Field(DrugsDB::Constants::Table_LABELS, DrugsDB::Constants::LABELS_LANG, QString("='%1'").arg(lang));
+//    QSqlQuery query(db);
+
+    if (query.exec(Core::Tools::baseCore()->select(get,joins,cond))) {
+
+//    if (query.exec(req)) {
         while (query.next()) {
             atc_id.insert(query.value(1).toString(), query.value(0).toInt());
             atcName_id.insertMulti(query.value(2).toString().toUpper(), query.value(0).toInt());
         }
+    } else {
+        LOG_QUERY_ERROR(query);
     }
     query.finish();
     qWarning() << "ATC" << atc_id.count();
@@ -600,9 +621,14 @@ QMultiHash<int, int> ExtraMoleculeLinkerModel::moleculeLinker
     }
 
     // Get all MOLS.MID and Label
-   LOG("Getting Drugs Composition from " + drugsDbUid);
+    LOG("Getting Drugs Composition from " + drugsDbUid);
     QMultiHash<QString, int> mols;
-    req = QString("SELECT DISTINCT MID, NAME FROM MOLS WHERE SID=%1;").arg(sid);
+//    req = QString("SELECT DISTINCT MID, NAME FROM MOLS WHERE SID=%1;").arg(sid);
+    QHash<int, QString> w;
+    w.insert(DrugsDB::Constants::MOLS_SID, QString("=%1").arg(sid));
+    req = Core::Tools::baseCore()->selectDistinct(DrugsDB::Constants::Table_MOLS, QList<int>()
+                                                  << DrugsDB::Constants::MOLS_MID
+                                                  << DrugsDB::Constants::MOLS_NAME, w);
     if (query.exec(req)) {
         while (query.next()) {
             mols.insertMulti(query.value(1).toString(), query.value(0).toInt());
@@ -611,7 +637,6 @@ QMultiHash<int, int> ExtraMoleculeLinkerModel::moleculeLinker
     query.finish();
     qWarning() << "Number of distinct molecules" << mols.uniqueKeys().count();
     const QStringList &knownMoleculeNames = mols.uniqueKeys();
-
 
     // manage corrected molecules
     {
@@ -787,8 +812,13 @@ QMultiHash<int, int> ExtraMoleculeLinkerModel::moleculeLinker
         QMap<int, QMultiHash<int, int> > cis_codeMol_lk;
         QMap<int, QVector<MolLink> > cis_compo;
         {
-//            QString req = "SELECT `UID`, `MOLECULE_CODE`, `LK_NATURE`, `MOLECULE_FORM` FROM `COMPOSITION` ORDER BY `UID`";
-            QString req = "SELECT `DID`, `MID`, `LK_NATURE` FROM `COMPOSITION` ORDER BY `DID`";
+//            QString req = "SELECT `DID`, `MID`, `LK_NATURE` FROM `COMPOSITION` ORDER BY `DID`";
+            QString req = Core::Tools::baseCore()->select(DrugsDB::Constants::Table_COMPO, QList<int>()
+                                            << DrugsDB::Constants::COMPO_DID
+                                            << DrugsDB::Constants::COMPO_MID
+                                            << DrugsDB::Constants::COMPO_LK_NATURE
+                                            );
+            req += QString(" ORDER BY `%1`").arg(Core::Tools::baseCore()->fieldName(DrugsDB::Constants::Table_COMPO, DrugsDB::Constants::COMPO_DID));
             if (query.exec(req)) {
                 while (query.next()) {
                     QVector<MolLink> &receiver = cis_compo[query.value(0).toInt()];
@@ -882,9 +912,17 @@ QMultiHash<int, int> ExtraMoleculeLinkerModel::moleculeLinker
     // Save completion percent in drugs database INFORMATION table
     int completion = ((double) (1.0 - ((double)(unfoundOutput->count() - reviewedWithoutAtcLink) / (double)knownMoleculeNames.count())) * 100.00);
     LOG(QString("Molecule links completion: %1").arg(completion));
-    Core::Tools::executeSqlQuery(QString("UPDATE SOURCES SET MOL_LINK_COMPLETION=%1 WHERE SID=%2")
-                                 .arg(completion).arg(sid),
-                                 Core::Constants::MASTER_DATABASE_NAME, __FILE__, __LINE__);
+//    Core::Tools::executeSqlQuery(QString("UPDATE SOURCES SET MOL_LINK_COMPLETION=%1 WHERE SID=%2")
+//                                 .arg(completion).arg(sid),
+//                                 Core::Constants::MASTER_DATABASE_NAME, __FILE__, __LINE__);
+    QHash<int, QString> where;
+    where.insert(DrugsDB::Constants::SOURCES_SID, QString("='%1'").arg(sid));
+    query.prepare(Core::Tools::baseCore()->prepareUpdateQuery(DrugsDB::Constants::Table_SOURCES, DrugsDB::Constants::SOURCES_COMPLETION, where));
+    query.bindValue(0, completion);
+    if (!query.exec()) {
+        LOG_QUERY_ERROR_FOR("Tools", query);
+        return mol_atc;
+    }
 
     // Inform model of founded links
     ExtraMoleculeLinkerModel::instance()->addAutoFoundMolecules(mol_atc_forModel, true);

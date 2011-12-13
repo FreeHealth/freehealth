@@ -37,6 +37,7 @@
 #include <utils/log.h>
 #include <utils/database.h>
 #include <utils/httpdownloader.h>
+#include <quazip/global.h>
 
 #include <extensionsystem/pluginmanager.h>
 
@@ -152,7 +153,7 @@ bool FrenchZipCodesStep::unzipFiles()
     LOG(QString("Starting unzipping French Zip Codes file %1").arg(fileName));
 
     // unzip downloaded using QProcess
-    if (!Core::Tools::unzipFile(fileName, workingPath()))
+    if (!QuaZipTools::unzipFile(fileName, workingPath()))
         return false;
 
     return true;

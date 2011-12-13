@@ -65,7 +65,7 @@ namespace Constants {
     const char * const  CREATEFULLRELEASE_TEXT = QT_TRANSLATE_NOOP("FreeTools", "Create full release data set");
 
     const char * const  MASTER_DATABASE_FILENAME                 =  "/drugs/master.db";
-    const char * const  MASTER_DATABASE_NAME                     =  "master";
+    const char * const  MASTER_DATABASE_NAME                     =  "drugs";
 
     const char * const  FILE_MASTER_DATABASE_SCHEME              = "/global_resources/sql/drugdb/newdbschema.sql";
     const char * const  FILE_DRUGINFOS_DATABASE_SCHEME           = "/global_resources/sql/druginfodb/biam2/druginfos_schema.sql";
