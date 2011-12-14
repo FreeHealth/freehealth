@@ -171,9 +171,9 @@ Pack ServerManager::downloadAndUnzipPack(const Server &server, const Pack &pack)
 
 bool ServerManager::downloadDataPack(const Server &server, const Pack &pack, QProgressBar *progressBar)
 {
-	Q_UNUSED(server);
-	Q_UNUSED(pack);
-	Q_UNUSED(progressBar);
+    Q_UNUSED(server);
+    Q_UNUSED(pack);
+    Q_UNUSED(progressBar);
     Q_ASSERT(progressBar);
     // TODO pour guillaume
     // Juste télécharger rien de plus dans le rép m_InstallPath
@@ -183,17 +183,30 @@ bool ServerManager::downloadDataPack(const Server &server, const Pack &pack, QPr
 
 void ServerManager::checkAndInstallPack(const Server &server, const Pack &pack, QProgressBar *progressBar)
 {
-	Q_UNUSED(server);
-	Q_UNUSED(pack);
-	Q_UNUSED(progressBar);
+    Q_UNUSED(server);
+    Q_UNUSED(pack);
+    Q_UNUSED(progressBar);
     Q_ASSERT(progressBar);
+    disconnect(this, SIGNAL(packDownloaded(Server,Pack,QProgressBar*)), this, SLOT(checkAndInstallPack(Server,Pack,QProgressBar*)));
+    if (pack.localFileName().isEmpty()) {
+        // Add a log error
+        return;
+    }
+
 }
 
 bool ServerManager::isDataPackInstalled(const Server &server, const Pack &pack)
 {
-	Q_UNUSED(server);
-	Q_UNUSED(pack);
+    Q_UNUSED(server);
+    Q_UNUSED(pack);
     // TODO
+    return false;
+}
+
+bool ServerManager::isDataPackInstalled(const QString &packUid, const QString &packVersion)
+{
+    Q_UNUSED(packUid);
+    Q_UNUSED(packVersion);
     return false;
 }
 
@@ -201,6 +214,12 @@ bool ServerManager::installDataPack(const Server &server, const Pack &pack, QPro
 {
     Q_ASSERT(progressBar);
     connect(this, SIGNAL(packDownloaded(Server,Pack,QProgressBar*)), this, SLOT(checkAndInstallPack(Server,Pack,QProgressBar*)));
+    // check dependencies
+    QList<Pack> installMe;
+    installMe << pack;
+    // dialog with things to install/update
+//    installDialog(pack, packs);
+
     if (!server.isLocalServer()) {
         downloadDataPack(server, pack, progressBar);
     } else {
@@ -210,7 +229,6 @@ bool ServerManager::installDataPack(const Server &server, const Pack &pack, QPro
 //        QFile f(server.url(pack.serverFileName()));
         Q_EMIT packDownloaded(server, pack, progressBar);
     }
-    disconnect(this, SIGNAL(packDownloaded(Server,Pack,QProgressBar*)), this, SLOT(checkAndInstallPack(Server,Pack,QProgressBar*)));
 
     return true;
 }
@@ -231,6 +249,30 @@ bool ServerManager::updateDataPack(const Server &server, const Pack &pack, QProg
     Q_UNUSED(pack);
     Q_UNUSED(progressBar);
     return false;
+}
+
+QList<Pack> ServerManager::packDependencies(const Pack &pack, const PackDependencyData::TypeOfDependence &dependence)
+{
+    QList<Pack> toReturn;
+    for(int i = 0; i < pack.dependencies().dependenciesCount(); ++i) {
+        if (pack.dependencies().dependenciesAt(i).type()!=dependence)
+            continue;
+        const QString &uid = pack.dependencies().dependenciesAt(i).uuid();
+        const QString &version = pack.dependencies().dependenciesAt(i).version();
+//        if (!isDataPackInstalled(uid, version)) {
+            // Do we have this pack in our servers ?
+            for(int j=0; j < m_Servers.count(); ++j) {
+                const QList<Pack> &packs = getPackForServer(m_Servers.at(i));
+                for(int z=0; z < packs.count(); ++z) {
+                    if (packs.at(z).uuid().compare(uid,Qt::CaseInsensitive)==0 &&
+                            packs.at(z).version().compare(version,Qt::CaseInsensitive)==0) {
+                        toReturn << packs.at(z);
+                    }
+                }
+            }
+//        }
+    }
+    return toReturn;
 }
 
 void ServerManager::setCachePath(const QString &absPath)
@@ -398,8 +440,8 @@ void ServerManager::checkServerUpdatesAfterDownload()
 void ServerManager::serverReadyRead()
 {
     QNetworkReply *reply = qobject_cast<QNetworkReply*>(sender());
-	ReplyData &data = m_replyToData[reply];
-	data.response.append(reply->readAll());
+    ReplyData &data = m_replyToData[reply];
+    data.response.append(reply->readAll());
 }
 
 void ServerManager::serverError(QNetworkReply::NetworkError error)
@@ -414,27 +456,28 @@ void ServerManager::serverFinished()
     QNetworkReply *reply = qobject_cast<QNetworkReply*>(sender());
     if (reply->error() != QNetworkReply::NoError)
         return;
-	ReplyData &data = m_replyToData[reply];
-	reply->deleteLater(); // we don't need reply anymore
+    ReplyData &data = m_replyToData[reply];
+    reply->deleteLater(); // we don't need reply anymore
 
-	switch (data.fileType) {
-	case Server::ServerConfigurationFile:
-		afterServerConfigurationDownload(data);
-		break;
-	case Server::PackDescriptionFile:
-		afterPackDescriptionFileDownload(data);
-		break;
-	case Server::PackFile:
-		afterPackFileDownload(data);
-		break;
-	default:;
-	}
+    switch (data.fileType) {
+    case Server::ServerConfigurationFile:
+        afterServerConfigurationDownload(data);
+        break;
+    case Server::PackDescriptionFile:
+        afterPackDescriptionFileDownload(data);
+        break;
+    case Server::PackFile:
+        afterPackFileDownload(data);
+        break;
+    default:;
+    }
 
-	// we can remove the associated data
-	m_replyToData.remove(reply);
+    // we can remove the associated data
+    m_replyToData.remove(reply);
 }
 
-void ServerManager::afterServerConfigurationDownload(const ReplyData &data) {
+void ServerManager::afterServerConfigurationDownload(const ReplyData &data)
+{
     bool downloadPackDescriptionNeeded = false;
     Server *server = data.server;
 
@@ -504,27 +547,29 @@ void ServerManager::afterServerConfigurationDownload(const ReplyData &data) {
         }
     }
 
-
     // When all descriptions are downloaded call -> checkServerUpdatesAfterDownload()
     checkServerUpdatesAfterDownload();
 }
 
-QNetworkRequest ServerManager::createRequest(const QString &url) {
+QNetworkRequest ServerManager::createRequest(const QString &url)
+{
     QNetworkRequest request(url);
     request.setRawHeader("User-Agent", QString("FreeMedForms:%1;%2")
                          .arg(qApp->applicationName())
                          .arg(qApp->applicationVersion()).toAscii());
-	return request;
+    return request;
 }
 
-void ServerManager::afterPackDescriptionFileDownload(const ReplyData &data) {
-	// TODO
-	Q_UNUSED(data);
+void ServerManager::afterPackDescriptionFileDownload(const ReplyData &data)
+{
+    // TODO
+    Q_UNUSED(data);
 }
 
-void ServerManager::afterPackFileDownload(const ReplyData &data) {
-	// TODO
-	Q_UNUSED(data);
+void ServerManager::afterPackFileDownload(const ReplyData &data)
+{
+    // TODO
+    Q_UNUSED(data);
 }
 
 ServerManager::ReplyData::ReplyData(Server *server, Server::FileRequested fileType) {

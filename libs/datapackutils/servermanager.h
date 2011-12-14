@@ -78,9 +78,12 @@ public:
     Pack downloadAndUnzipPack(const Server &server, const Pack &pack);
 
     virtual bool isDataPackInstalled(const Server &server, const Pack &pack);
+    virtual bool isDataPackInstalled(const QString &packUid, const QString &packVersion);
     bool installDataPack(const Server &server, const Pack &pack, QProgressBar *progressBar = 0);
     bool removeDataPack(const Server &server, const Pack &pack, QProgressBar *progressBar = 0);
     bool updateDataPack(const Server &server, const Pack &pack, QProgressBar *progressBar = 0);
+
+    QList<Pack> packDependencies(const Pack &pack, const PackDependencyData::TypeOfDependence &dependence);
 
     void setInstallPath(const QString &absPath);
     QString installPath() const;
