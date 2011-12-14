@@ -50,7 +50,8 @@ HEADERS += global_exporter.h \
     genericdescription.h \
     widgets/genericdescriptioneditor.h \
     widgets/genericupdateinformationeditor.h \
-    widgets/genericinformationeditordialog.h
+    widgets/genericinformationeditordialog.h \
+    widgets/htmldelegate.h
 #    widgets/dialogbuttonbox.h
 
 SOURCES += global.cpp \
@@ -90,7 +91,8 @@ SOURCES += global.cpp \
     genericdescription.cpp \
     widgets/genericdescriptioneditor.cpp \
     widgets/genericupdateinformationeditor.cpp \
-    widgets/genericinformationeditordialog.cpp
+    widgets/genericinformationeditordialog.cpp \
+    widgets/htmldelegate.cpp
 #    widgets/dialogbuttonbox.cpp
 
 macx {
@@ -112,6 +114,8 @@ FORMS += \
     widgets/genericdescriptioneditor.ui \
     widgets/genericupdateinformationeditor.ui \
     widgets/genericinformationeditordialog.ui
+
+
 
 
 
