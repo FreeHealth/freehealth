@@ -367,7 +367,7 @@ void ServerManager::checkServerUpdates()
             // Download server.conf.xml
             QNetworkRequest request = createRequest(s.url(Server::ServerConfigurationFile));
             QNetworkReply *reply = m_NetworkAccessManager->get(request);
-            m_replyToData.insert(reply, ReplyData(&s, Server::ServerConfigurationFile));
+            m_replyToData.insert(reply, ReplyData(reply, &s, Server::ServerConfigurationFile));
             connect(reply, SIGNAL(readyRead()), this, SLOT(serverReadyRead()));
             connect(reply, SIGNAL(finished()), this, SLOT(serverFinished()));
 			// TODO manage errors
@@ -540,10 +540,10 @@ void ServerManager::afterServerConfigurationDownload(const ReplyData &data)
         foreach(const QString &file, server->content().packDescriptionFileNames()) {
             QNetworkRequest request = createRequest(server->url(Server::PackDescriptionFile, file));
             QNetworkReply *reply = m_NetworkAccessManager->get(request);
-			m_replyToData.insert(reply, ReplyData(server, Server::PackDescriptionFile));
+            m_replyToData.insert(reply, ReplyData(reply, server, Server::PackDescriptionFile));
             connect(reply, SIGNAL(readyRead()), this, SLOT(serverReadyRead()));
             connect(reply, SIGNAL(finished()), this, SLOT(serverFinished()));
-			// TODO manage errors
+            // TODO manage errors
         }
     }
 
@@ -562,8 +562,9 @@ QNetworkRequest ServerManager::createRequest(const QString &url)
 
 void ServerManager::afterPackDescriptionFileDownload(const ReplyData &data)
 {
-    // TODO
-    Q_UNUSED(data);
+    PackDescription desc;
+    desc.fromXmlContent(data.response);
+    m_PackDescriptions.insert(data.reply->request().url().toString(), desc);
 }
 
 void ServerManager::afterPackFileDownload(const ReplyData &data)
@@ -572,7 +573,8 @@ void ServerManager::afterPackFileDownload(const ReplyData &data)
     Q_UNUSED(data);
 }
 
-ServerManager::ReplyData::ReplyData(Server *server, Server::FileRequested fileType) {
-	this->server = server;
-	this->fileType = fileType;
+ServerManager::ReplyData::ReplyData(QNetworkReply *reply, Server *server, Server::FileRequested fileType) {
+    this->reply = reply;
+    this->server = server;
+    this->fileType = fileType;
 }

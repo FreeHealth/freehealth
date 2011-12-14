@@ -106,6 +106,7 @@ MainWindow::MainWindow(QWidget *parent) :
     core->setThemePath(DataPack::Core::BigPixmaps, "/Users/eric/Desktop/Programmation/freemedforms/global_resources/pixmap/64x64");
     // Test 1: local
     core->serverManager()->addServer("file://Users/eric/Desktop/Programmation/freemedforms/global_resources/datapacks/default/");
+    core->serverManager()->addServer("http://localhost/");
 #endif
     // Test 2: HttpPseudoSecuredZipped
     DataPack::Server http("http://test.freemedforms.com");

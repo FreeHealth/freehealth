@@ -108,17 +108,18 @@ Q_SIGNALS:
 
 private:
     void checkServerUpdatesAfterDownload();
-	QNetworkRequest createRequest(const QString &url); // create a request with good headers
+    QNetworkRequest createRequest(const QString &url); // create a request with good headers
 
 private:
-	// this private struct contains all data associated with a QNetworkReply. It will be set as a user attribute in the QNetworkReply at its creation (see QNetworkReply::setAttribute()).
-	struct ReplyData {
+    // this private struct contains all data associated with a QNetworkReply. It will be set as a user attribute in the QNetworkReply at its creation (see QNetworkReply::setAttribute()).
+    struct ReplyData {
         ReplyData(){}
-        ReplyData(Server *server, Server::FileRequested fileType);
+        ReplyData(QNetworkReply *reply, Server *server, Server::FileRequested fileType);
+        QNetworkReply *reply;
         Server *server;
         QByteArray response;
         Server::FileRequested fileType; // a configuration file? a pack file? etc
-	};
+    };
 
     QNetworkAccessManager *m_NetworkAccessManager;
     QString filesCachePath, m_installPath;
@@ -127,9 +128,9 @@ private:
     QMultiHash<QString, Pack> m_Packs;
     QHash<QNetworkReply*,ReplyData> m_replyToData;
 
-	void afterServerConfigurationDownload(const ReplyData &data); // called after a server configuration file download
+    void afterServerConfigurationDownload(const ReplyData &data); // called after a server configuration file download
     void afterPackDescriptionFileDownload(const ReplyData &data); // called after a pack description file download
-	void afterPackFileDownload(const ReplyData &data); // called after a pack file download
+    void afterPackFileDownload(const ReplyData &data); // called after a pack file download
 
 private Q_SLOTS:
     void serverReadyRead();

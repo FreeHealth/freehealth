@@ -431,6 +431,7 @@ void ServerEditor::populatePackView(const int serverId, const int packId)
 
 void ServerEditor::onServerIndexActivated(const QModelIndex &index, const QModelIndex &previous)
 {
+    Q_UNUSED(previous);
     // Activate the Server Page
     ui->stackedWidget->setCurrentWidget(ui->serverPage);
     populateServerView(index.row());
