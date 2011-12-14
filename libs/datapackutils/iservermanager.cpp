@@ -143,6 +143,12 @@
  */
 
 /**
+ * \fn bool DataPack::IServerManager::isDataPackInstalled(const QString &packUid, const QString &packVersion)
+ * Return true if the pack identified by the uuid \e packUid and the version \e packVersion is actually installed.
+ */
+
+
+/**
  * \fn bool DataPack::IServerManager::installDataPack(const Server &server, const Pack &pack, QProgressBar *progressBar = 0);
  * Install the \e pack located on the \e server, alerting the user with \e progressBar.
  */
@@ -154,6 +160,11 @@
 /**
  * \fn bool DataPack::IServerManager::updateDataPack(const Server &server, const Pack &pack, QProgressBar *progressBar = 0);
  * Update the \e pack located on the \e server, alerting the user with \e progressBar.
+ */
+
+/**
+ * \fn QList<Pack> DataPack::IServerManager::packDependencies(const Pack &pack, const PackDependencyData::TypeOfDependence &dependence);
+ * \todo doc
  */
 
 /**

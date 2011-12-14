@@ -49,6 +49,16 @@ Pack::~Pack()
 {
 }
 
+QString Pack::uuid() const
+{
+    return m_descr.data(PackDescription::Uuid).toString();
+}
+
+QString Pack::version() const
+{
+    return m_descr.data(PackDescription::Version).toString();
+}
+
 QString Pack::serverFileName() const
 {
     return m_descr.data(PackDescription::AbsFileName).toString();

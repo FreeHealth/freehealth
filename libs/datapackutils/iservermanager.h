@@ -86,9 +86,12 @@ public:
     virtual Pack downloadAndUnzipPack(const Server &server, const Pack &pack) = 0;
 
     virtual bool isDataPackInstalled(const Server &server, const Pack &pack) = 0;
+    virtual bool isDataPackInstalled(const QString &packUid, const QString &packVersion) = 0;
     virtual bool installDataPack(const Server &server, const Pack &pack, QProgressBar *progressBar = 0) = 0;
     virtual bool removeDataPack(const Server &server, const Pack &pack, QProgressBar *progressBar = 0) = 0;
     virtual bool updateDataPack(const Server &server, const Pack &pack, QProgressBar *progressBar = 0) = 0;
+
+    virtual QList<Pack> packDependencies(const Pack &pack, const PackDependencyData::TypeOfDependence &dependence) = 0;
 
     virtual void setInstallPath(const QString &absPath) = 0;
     virtual QString installPath() const = 0;

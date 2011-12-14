@@ -53,7 +53,7 @@ public:
         PackVersion
     };
 
-    enum TypeRepresentation {
+    enum TypeOfDependence {
         Depends = 0,
         Recommends,
         Suggests,
