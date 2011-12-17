@@ -49,19 +49,12 @@
 #    include <coreplugin/commandlineparser.h>
 #endif
 
-#include <QCoreApplication>
 #include <QSqlDatabase>
-#include <QSqlError>
 #include <QSqlQuery>
-#include <QSqlRecord>
-#include <QSqlField>
 #include <QFile>
 #include <QDir>
 #include <QMultiHash>
-#include <QMap>
-#include <QMultiMap>
 #include <QList>
-#include <QSet>
 
 using namespace AccountDB;
 using namespace AccountDB::Internal;
@@ -728,3 +721,15 @@ void AccountBase::onCoreDatabaseServerChanged()
     }
     init();
 }
+
+/** Return the sum of the movement amounts for the period starting from \e start, ending \e ending for the user \e userUid. */
+double AccountBase::getMovementAmountSum(const QDateTime &start, const QDateTime &end, const QString &userUid)
+{
+    QHash<int, QString> where;
+    where.insert(Constants::MOV_DATEOFVALUE, QString("BETWEEN '%1' AND %2")
+                 .arg(start.toString(Qt::ISODate))
+                 .arg(end.toString(Qt::ISODate)));
+    where.insert(Constants::MOV_USER_UID, QString("='%1'").arg(userUid));
+    return sum(Constants::Table_Movement, Constants::MOV_AMOUNT, where);
+}
+

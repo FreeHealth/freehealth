@@ -1,13 +1,13 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <ui version="4.0">
- <class>AccountViewWidget</class>
- <widget class="QWidget" name="AccountViewWidget">
+ <class>Account::Internal::AccountViewWidget</class>
+ <widget class="QWidget" name="Account::Internal::AccountViewWidget">
   <property name="geometry">
    <rect>
     <x>0</x>
     <y>0</y>
     <width>541</width>
-    <height>414</height>
+    <height>415</height>
    </rect>
   </property>
   <property name="windowTitle">

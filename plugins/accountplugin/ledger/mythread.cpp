@@ -31,8 +31,13 @@
  ***************************************************************************/
 #include "mythread.h"
 #include "ledgerIO.h"
+
 #include <QDebug>
+
 enum { WarnDebugMessage = true };
+
+using namespace Account;
+
 ProduceDoc::ProduceDoc(){
     m_fieldsToJoin     = 0;
     m_tableFormatParameters = "200,200,150,250,170";//the last is not used in fact
@@ -233,7 +238,7 @@ QStringList ProduceDoc::calculateMovements(QString & dateBegin, QString & dateEn
     typeAndSumsList = lio.getListOfSumsMonthlyMovementsIO(0,beginningOfMonth , endOfMonth);
     if (WarnDebugMessage)
     	      qDebug() << __FILE__ << QString::number(__LINE__) << " typeAndSumsList.size() =" << QString::number(typeAndSumsList.size()) ;
-    for (int i = 0; i < typeAndSumsList.size(); i += 1)
+    for (int i = 0; i < typeAndSumsList.size(); ++i)
     {
     	if (WarnDebugMessage)
     	      qDebug() << __FILE__ << QString::number(__LINE__) << "typeAndSumsList[i]  =" << typeAndSumsList[i] ;
@@ -363,7 +368,7 @@ void ProduceDoc::fillTable(QList<QVector<QString> > & tableau,
         QString          type                      = "";
         QStringList      totalSumsList             = listSums;
         QString total;
-        /*for (int i = 0; i < totalSumsList.size(); i += 1)
+        /*for (int i = 0; i < totalSumsList.size(); ++i)
         {
         	if (WarnDebugMessage)
     

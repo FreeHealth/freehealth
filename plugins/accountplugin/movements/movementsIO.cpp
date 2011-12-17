@@ -30,27 +30,37 @@
  *      NAME <MAIL@ADRESS>                                                 *
  ***************************************************************************/
 #include "movementsIO.h"
+
 #include <accountbaseplugin/constants.h>
 #include <accountbaseplugin/availablemovementmodel.h>
 #include <accountbaseplugin/movementmodel.h>
 #include <accountbaseplugin/bankaccountmodel.h>
+#include <accountbaseplugin/accountbasecore.h>
+
 #include <coreplugin/icore.h>
 #include <coreplugin/itheme.h>
 #include <coreplugin/iuser.h>
 #include <coreplugin/constants_icons.h>
 
-#include <QMessageBox>
-#include <QDebug>
+#include <utils/global.h>
+
 #include <QDate>
+
+#include <QDebug>
+
 enum { WarnDebugMessage = false };
+
 using namespace AccountDB;
 using namespace Constants;
 
 static inline Core::ITheme *theme()  { return Core::ICore::instance()->theme(); }
 static inline Core::IUser *user() { return  Core::ICore::instance()->user(); }
+static inline AccountDB::AccountBaseCore *core() {return AccountDB::AccountBaseCore::instance();}
 
-MovementsIODb::MovementsIODb(QObject *parent) : QObject(parent){
-    m_modelMovements = new MovementModel(parent);
+MovementsIODb::MovementsIODb(QObject *parent) :
+    QObject(parent)
+{
+    m_modelMovements = core()->movementModel();
     m_user_uid = user()->uuid();
 }
 
@@ -58,43 +68,47 @@ MovementsIODb::~MovementsIODb()
 {
 }
 
-MovementModel *MovementsIODb::getModelMovements(QString &year)
-{if (WarnDebugMessage)
-    	      qDebug() << __FILE__ << QString::number(__LINE__) << " year =" << year ;
-    QString filter = QString("DATEVALUE between '%1' AND '%2'").arg(year+"-01-01",year+"-12-31");
-    if (WarnDebugMessage)
-    	      qDebug() << __FILE__ << QString::number(__LINE__) << " filter =" << filter ;
-    QString filterUid = m_modelMovements->filter();
-    QString dateAndUidFilter = filterUid+" AND "+filter;
-    m_modelMovements->setFilter(dateAndUidFilter);
-    if (WarnDebugMessage)
-    	      qDebug() << __FILE__ << QString::number(__LINE__) << " filter =" << m_modelMovements->filter() ;
-    if (WarnDebugMessage)
-    	      qDebug() << __FILE__ << QString::number(__LINE__) << " rowCount =" << QString::number(m_modelMovements->rowCount()) ;
-    return m_modelMovements;
+//MovementModel *MovementsIODb::getModelMovements(QString &year)
+//{
+//    if (WarnDebugMessage)
+//        qDebug() << __FILE__ << QString::number(__LINE__) << " year =" << year ;
+//    QString filter = QString("DATEVALUE between '%1' AND '%2'").arg(year+"-01-01", year+"-12-31");
+//    if (WarnDebugMessage)
+//        qDebug() << __FILE__ << QString::number(__LINE__) << " filter =" << filter ;
+//    QString filterUid = m_modelMovements->filter();
+//    QString dateAndUidFilter = filterUid+" AND "+filter;
+//    m_modelMovements->setFilter(dateAndUidFilter);
+//    if (WarnDebugMessage)
+//        qDebug() << __FILE__ << QString::number(__LINE__) << " filter =" << m_modelMovements->filter() ;
+//    if (WarnDebugMessage)
+//        qDebug() << __FILE__ << QString::number(__LINE__) << " rowCount =" << QString::number(m_modelMovements->rowCount()) ;
+//    return m_modelMovements;
+//}
+
+QString MovementsIODb::getUserUid()
+{
+    /** \todo code here */
+//    return m_modelMovements->currentUserUid();
+    return user()->uuid();
 }
 
-QString MovementsIODb::getUserUid(){
-    return m_modelMovements->m_UserUid;
-}
-
-QStringList MovementsIODb::listOfParents(){
+QStringList MovementsIODb::listOfParents()
+{
     QStringList list;
     AvailableMovementModel availablemodel(this);
-    for (int i = 0; i < availablemodel.rowCount(); i += 1)
-    {
+    for (int i = 0; i < availablemodel.rowCount(); ++i) {
     	QString parent = availablemodel.data(availablemodel.index(i,AVAILMOV_PARENT),Qt::DisplayRole).toString();
     	list << parent;
         }
     return list;
 }
 
-QHash<QString,QString> MovementsIODb::hashChildrenAndParentsAvailableMovements(){
+QHash<QString,QString> MovementsIODb::hashChildrenAndParentsAvailableMovements()
+{
     QHash<QString,QString> hash;
     AvailableMovementModel availablemodel(this);
     int rows = availablemodel.rowCount();
-    for (int i = 0; i < rows; i += 1)
-    {
+    for (int i = 0; i < rows; ++i) {
     	QString child =  availablemodel.data(availablemodel.index(i,AVAILMOV_LABEL),Qt::DisplayRole).toString();   	
     	QString parent = availablemodel.data(availablemodel.index(i,AVAILMOV_PARENT),Qt::DisplayRole).toString();
     	hash.insertMulti(child,parent);
@@ -109,36 +123,34 @@ QStandardItemModel  *MovementsIODb::getMovementsComboBoxModel(QObject *parent)
     QStringList listOfAvModelParents;
     listOfAvModelParents = listOfParents();
     int avMovRows = availablemodel.rowCount();
-    if (avMovRows < 1)
-    {
-    	  qWarning() << __FILE__ << QString::number(__LINE__) << "no availableMovement available" ;
-    	  const QString information = trUtf8("No available movement available.\n"
-    	                             "Please create defaults in Configuration > Preferences.");
-    	  QMessageBox::warning(0,trUtf8("Warning"),information,QMessageBox::Ok);
-        }
-    for (int i = 0; i < avMovRows ; i += 1) {
+    if (avMovRows < 1) {
+        qWarning() << __FILE__ << QString::number(__LINE__) << "no availableMovement available" ;
+        const QString information = trUtf8("No available movement available.\n"
+                                           "Please create defaults in Configuration > Preferences.");
+        QMessageBox::warning(0,trUtf8("Warning"),information,QMessageBox::Ok);
+    }
+    for (int i = 0; i < avMovRows ; ++i) {
         int type = availablemodel.data(availablemodel.index(i,AVAILMOV_TYPE),Qt::DisplayRole).toInt();
-    	QIcon icon;
+        QIcon icon;
         if (type == 1) {
             icon = QIcon(theme()->icon(Core::Constants::ICONADD));
         } else {
             icon = QIcon(theme()->icon(Core::Constants::ICONREMOVE));
-    	}
-    	QString label = availablemodel.data(availablemodel.index(i,AVAILMOV_LABEL),Qt::DisplayRole).toString();
-    	QStandardItem *item = new QStandardItem(icon,label);
-    	if (!listOfAvModelParents.contains(label))
-    	{
-    		  model->appendRow(item);// no parents in the list of items
-    	    }
-    	
         }
+        QString label = availablemodel.data(availablemodel.index(i,AVAILMOV_LABEL),Qt::DisplayRole).toString();
+        QStandardItem *item = new QStandardItem(icon,label);
+        if (!listOfAvModelParents.contains(label)) {
+            model->appendRow(item);// no parents in the list of items
+        }
+
+    }
     return model;
 }
 
 QStringList MovementsIODb::getYearComboBoxModel()
 {
     QStringList listOfYears;
-    for (int i = 0; i < m_modelMovements->rowCount(); i += 1) {
+    for (int i = 0; i < m_modelMovements->rowCount(); ++i) {
     	QString dateStr = m_modelMovements->data(m_modelMovements->index(i,MOV_DATE),Qt::DisplayRole).toString();
     	QString dateOfValueStr = m_modelMovements->data(m_modelMovements->index(i,MOV_DATE),Qt::DisplayRole).toString();
     	QString yearDate = QString::number(QDate::fromString(dateStr,"yyyy-MM-dd").year());
@@ -155,7 +167,7 @@ QStandardItemModel * MovementsIODb::getBankComboBoxModel(QObject * parent){
     QString filterUserAndPrefered = QString("BD_USER_UID = '%1' AND BD_ISDEFAULT = '%2'").arg(m_user_uid,1);
     QString filterUser = QString("BD_USER_UID = '%1'").arg(m_user_uid);
     int rows = bankmodel.rowCount();
-    for (int i = 0; i < rows; i += 1)
+    for (int i = 0; i < rows; ++i)
     {
     	QString bankLabel = bankmodel.data(bankmodel.index(i,BANKDETAILS_LABEL),Qt::DisplayRole).toString();
     	QString bankDefault = bankmodel.data(bankmodel.index(i,BANKDETAILS_DEFAULT),Qt::DisplayRole).toString();
@@ -169,7 +181,7 @@ QStandardItemModel * MovementsIODb::getBankComboBoxModel(QObject * parent){
             model->appendRow(item);
             } 
         }
-    for (int i = 0; i < rows; i += 1)
+    for (int i = 0; i < rows; ++i)
     {
     	QString bankLabel = bankmodel.data(bankmodel.index(i,BANKDETAILS_LABEL),Qt::DisplayRole).toString();
     	QString bankDefault = bankmodel.data(bankmodel.index(i,BANKDETAILS_DEFAULT),Qt::DisplayRole).toString();
@@ -193,71 +205,66 @@ bool MovementsIODb::insertIntoMovements(QHash<int,QVariant> &hashValues)
     double value = 0.00;
     int type = 2;
     QString bank;
-    int rowBefore = m_modelMovements->rowCount(QModelIndex());
+    int rowBefore = m_modelMovements->rowCount();
     if (WarnDebugMessage)
-    	      qDebug() << __FILE__ << QString::number(__LINE__) << " rowBefore = " << QString::number(rowBefore);
-    if (m_modelMovements->insertRows(rowBefore,1,QModelIndex())) {
-        qWarning() << __FILE__ << QString::number(__LINE__) << "Row inserted !" ;
+        qDebug() << __FILE__ << QString::number(__LINE__) << " rowBefore = " << QString::number(rowBefore);
+    if (m_modelMovements->insertRow(rowBefore)) {
+        qWarning() << __FILE__ << QString::number(__LINE__) << "Row inserted at" << rowBefore;
     }
     QVariant data;
-    for(int i = 1 ; i < MOV_MaxParam ; i ++) {
+    for(int i = 0; i < m_modelMovements->columnCount(); ++i) {
         data = hashValues.value(i);
-        if (i == MOV_AMOUNT)
-        {
-        	 value = data.toDouble(); 
-            }
-        if (i == MOV_TYPE)
-        {
-        	  type = data.toInt();
-            }
-        if (i == MOV_ACCOUNT_ID)
-        {
-        	  int bankId = data.toInt();
-        	  bank = getBankNameFromId(bankId);
-        	  if (WarnDebugMessage)
-    	      qDebug() << __FILE__ << QString::number(__LINE__) << " bank =" << bank ;
-            }
+        if (i == MovementModel::Amount) {
+            value = data.toDouble();
+        }
+        if (i == MovementModel::Type) {
+            type = data.toInt();
+        }
+        if (i == MovementModel::AccountId) {
+            int bankId = data.toInt();
+            bank = getBankNameFromId(bankId);
+            if (WarnDebugMessage)
+                qDebug() << __FILE__ << QString::number(__LINE__) << " bank =" << bank ;
+        }
         if (WarnDebugMessage)
-    	      qDebug() << __FILE__ << QString::number(__LINE__) << " data + i =" << data.toString()+" "+QString::number(i);
-        if (!m_modelMovements-> setData(m_modelMovements->index(rowBefore,i), data ,Qt::EditRole)) {
-            qWarning() << __FILE__ << QString::number(__LINE__) << " model account error = "
-                    << m_modelMovements->lastError().text() ;
+            qDebug() << __FILE__ << QString::number(__LINE__) << " data + i =" << data.toString()+" "+QString::number(i);
+        if (!m_modelMovements-> setData(m_modelMovements->index(rowBefore,i), data)) {
+            qWarning() << __FILE__ << QString::number(__LINE__) << "Unable to setData. Model account error = " << m_modelMovements->lastError().text() ;
         }
     }
     m_modelMovements->submit();
-    if (m_modelMovements->rowCount(QModelIndex()) == rowBefore) {
-        QMessageBox::warning(0,trUtf8("Warning"),__FILE__+QString::number(__LINE__)
-                             + trUtf8("\nError = ") 
-                             + m_modelMovements->lastError().text(),
-                             QMessageBox::Ok);
+    if (m_modelMovements->rowCount() == rowBefore) {
+        Utils::warningMessageBox(tr("An error occured"),
+                                 m_modelMovements->lastError().text(),
+                                 QString("File: %1, Line: %2").arg(__FILE__).arg(__LINE__));
         ret = false;
     }
-    if (type < 1)
-    {
-    	  value = 0.00 - value;
-    	  if (WarnDebugMessage)
-    	      qDebug() << __FILE__ << QString::number(__LINE__) << " value neg =" << QString::number(value) ;
-    	  
-        }
-    if (!debitOrCreditInBankBalance(bank,value)){
-    	  	  qWarning() << __FILE__ << QString::number(__LINE__) << "Unable to debit or credit balance !" ;
-    	}
+    if (type < 1) {
+        value = 0.00 - value;
+        if (WarnDebugMessage)
+            qDebug() << __FILE__ << QString::number(__LINE__) << " value neg =" << QString::number(value) ;
+
+    }
+    if (!debitOrCreditInBankBalance(bank,value)) {
+        qWarning() << __FILE__ << QString::number(__LINE__) << "Unable to debit or credit balance !" ;
+    }
     return ret;
 }
 
 bool MovementsIODb::deleteMovement(int row)
-{if (WarnDebugMessage)
-    	      qDebug() << __FILE__ << QString::number(__LINE__) << " row =" << QString::number(row) ;
+{
+    if (WarnDebugMessage)
+        qDebug() << __FILE__ << QString::number(__LINE__) << " row =" << QString::number(row) ;
     bool b = false;
-    double value = m_modelMovements->data(m_modelMovements->index(row,MOV_AMOUNT),Qt::DisplayRole).toDouble();
-    int bankId = m_modelMovements->data(m_modelMovements->index(row,MOV_ACCOUNT_ID),Qt::DisplayRole).toInt();
+    double value = m_modelMovements->data(m_modelMovements->index(row,MovementModel::Amount),Qt::DisplayRole).toDouble();
+    int bankId = m_modelMovements->data(m_modelMovements->index(row,MovementModel::AccountId),Qt::DisplayRole).toInt();
     value = -value;
     QString bank;
     bank = getBankNameFromId(bankId);
     b = m_modelMovements->removeRows(row,1,QModelIndex());
     if (!debitOrCreditInBankBalance(bank,value)){
-    	  	  qWarning() << __FILE__ << QString::number(__LINE__) << "Unable to debit or credit balance !" ;
-    	}
+        qWarning() << __FILE__ << QString::number(__LINE__) << "Unable to debit or credit balance !" ;
+    }
     return b;
 }
 
@@ -308,17 +315,12 @@ int MovementsIODb::getTypeOfMovement(QString & movementsComboBoxText){
     return type;
 }
 
-bool MovementsIODb::validMovement(int row)
-{
-    return m_modelMovements->setData(m_modelMovements->index(row, MOV_ISVALID), 1, Qt::EditRole);
-}
-
 bool MovementsIODb::debitOrCreditInBankBalance(const QString & bank, double & value){
     bool ret = true;
     BankAccountModel model(this);
     int row = 0;
     QList<int> rowsTestList;
-    for (int i = 0; i < model.rowCount(); i += 1)
+    for (int i = 0; i < model.rowCount(); ++i)
     {
     	QString bankLabel = model.data(model.index(i,BANKDETAILS_LABEL),Qt::DisplayRole).toString();
     	if (bankLabel == bank)
@@ -353,10 +355,9 @@ bool MovementsIODb::debitOrCreditInBankBalance(const QString & bank, double & va
 bool MovementsIODb::containsFixAsset(int & row){
     bool ret = false;
     QString assetStr = m_modelMovements->data(m_modelMovements->index(row,MOV_LABEL),Qt::DisplayRole).toString();
-    if (assetStr == trUtf8("Fixed Asset"))
-    {
-    	  qWarning() << __FILE__ << QString::number(__LINE__) << "You try to delete an asset in movements !" ;
-    	  ret = true;
-        }
+    if (assetStr == trUtf8("Fixed Asset")) {
+        qWarning() << __FILE__ << QString::number(__LINE__) << "You try to delete an asset in movements !" ;
+        ret = true;
+    }
     return ret;
 }

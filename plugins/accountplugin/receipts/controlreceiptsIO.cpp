@@ -198,7 +198,7 @@ void ControlReceipts::coloringDoubles(){
     if (WarnDebugMessage)
         qDebug() << __FILE__ << QString::number(__LINE__) << QString::number(rowCount) << " " << QString::number(columnCount);
     QList<int> listRows;
-    for (int i = 0; i < rowCount; i += 1)
+    for (int i = 0; i < rowCount; ++i)
     {
     	QList<QVariant> dataRow ;
 

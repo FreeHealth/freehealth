@@ -144,7 +144,7 @@ MedicalProcedureWidget::MedicalProcedureWidget(QWidget *parent) :
     QStringList listOfAlphabet;
     //QString alphabet = trUtf8("abcdefghijklmnopqrstuvwxyz");
     QString alphabet = trUtf8("ABCDEFGHIJKLMNOPQRSTUVWXYZ");
-    for (int i = 0; i < alphabet.size(); i += 1)
+    for (int i = 0; i < alphabet.size(); ++i)
     {
     	QString letter = alphabet.mid(i,1);
     	listOfAlphabet << letter;
@@ -581,7 +581,7 @@ QHash<int,QString> MedicalProcedureWidget::fillHashOfInsurances(){
 //            QList<QStandardItem*> listOfItemsData;
 //            QStringList listOfItems;
 //            listOfItems = line.split(separator);
-//            for (int i = 0; i < AccountDB::Constants::MP_MaxParam ; i += 1){
+//            for (int i = 0; i < AccountDB::Constants::MP_MaxParam ; ++i){
 //                //model->setData(model->index(row,i),listOfItems[i],Qt::EditRole);
 //        	QStandardItem * item = new QStandardItem;
 //        	//if (WarnDebugMessage)
@@ -609,7 +609,7 @@ QHash<int,QString> MedicalProcedureWidget::fillHashOfInsurances(){
 //    if (WarnDebugMessage)
 //    	      qDebug() << __FILE__ << QString::number(__LINE__) << " availModelRows = " << QString::number(availModelRows) ;
 //    QString strList;
-//    for (int i = 0; i < availModelRows; i += 1){
+//    for (int i = 0; i < availModelRows; ++i){
 //        m_progressDialog->setValue(i);
 //        //if (WarnDebugMessage)
 //    	      qDebug() << __FILE__ << QString::number(__LINE__) << " i =" << QString::number(i) ;

@@ -35,6 +35,8 @@
 
 #include <QWidget>
 
+namespace Account {
+
 namespace Ui{
     class LedgerEditWidget;
 }
@@ -65,6 +67,8 @@ class LedgerEdit : public QWidget {
         QDate m_date;
         void changeEvent(QEvent * e);
 };
+
+}  // End namespace Account
 
 #endif
 

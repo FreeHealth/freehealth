@@ -33,11 +33,18 @@
 #include "ui_ledgerviewer.h"
 #include "ledgerIO.h"
 
-#include <QDebug>
 #include <QRect>
 #include <QMessageBox>
+#include <QDebug>
+
 enum { WarnDebugMessage = false };
-LedgerViewer::LedgerViewer(QWidget * parent): QWidget(parent),ui(new Ui::LedgerViewerWidget){
+
+using namespace Account;
+
+LedgerViewer::LedgerViewer(QWidget * parent):
+    QWidget(parent),
+    ui(new Ui::LedgerViewerWidget)
+{
     ui->setupUi(this);
     m_currency = tr("euro");
     m_lm = new LedgerManager(this);
@@ -55,10 +62,10 @@ LedgerViewer::LedgerViewer(QWidget * parent): QWidget(parent),ui(new Ui::LedgerV
     listOfYears.removeDuplicates();
     ui->yearsComboBox->addItems(listOfYears);
     ui->tableView->setShowGrid(false);
-    if(createActions()){
+    if(createActions()) {
         createMenus();
         fillMenuBar();
-        }
+    }
     connect(ui->monthsComboBox,SIGNAL(activated(const QString&)),this,
                                SLOT(monthsComboBoxcurrentIndexChanged(const QString&)));
     
@@ -173,7 +180,7 @@ void LedgerViewer::monthlyReceiptsAnalysis(){
             << ACCOUNT_PATIENT_UID 
             << ACCOUNT_MEDICALPROCEDURE_XML 
             << ACCOUNT_TRACE;
-    for (int i = 0; i < listOff.size(); i += 1)
+    for (int i = 0; i < listOff.size(); ++i)
     {
     	ui->tableView->setColumnHidden(listOff[i],true);
         }
@@ -221,7 +228,7 @@ void LedgerViewer::monthlyMovementsAnalysis(){
             << ACCOUNT_USER_UID 
             << MOV_ACCOUNT_ID
             << MOV_TRACE;
-    for (int i = 0; i < listOff.size(); i += 1)
+    for (int i = 0; i < listOff.size(); ++i)
     {
     	ui->tableView->setColumnHidden(listOff[i],true);
         }
@@ -231,6 +238,9 @@ void LedgerViewer::monthlyMovementsAnalysis(){
 }
 void LedgerViewer::monthlyAndTypeMovementsAnalysis(){
     m_actionText = m_monthlyAndTypeMovementsAnalysis->text();
+
+    /** \todo Account: everywhere in the code try to catch year and month in integer not in strings */
+
     QString month = ui->monthsComboBox->currentText();
     QString year = ui->yearsComboBox->currentText();
     QStandardItemModel * model = m_lm->getModelMonthlyAndTypeMovementAnalysis(this,

@@ -44,17 +44,14 @@
  * \version 0.1.0
  * \date 13 Apr 2011
 */
-namespace Ui{
-    class AccountViewWidget;
-}
 
-using namespace AccountDB;
 namespace Account {
 namespace Internal {
 class AccountViewPrivate;
-}
-
-
+namespace Ui{
+class AccountViewWidget;
+}  // End namespace Ui
+}  // End namespace Internal
 
 class ACCOUNT_EXPORT AccountView : public QWidget
 {
@@ -78,8 +75,8 @@ private Q_SLOTS:
 
 private:
     //Internal::AccountViewPrivate *d;
-    AccountModel *m_Model;
-    Ui::AccountViewWidget *m_ui ;
+    AccountDB::AccountModel *m_Model;
+    Internal::Ui::AccountViewWidget *m_ui ;
     QString m_userUuid;
 };
 

@@ -244,7 +244,7 @@ void AssetsViewer::yearDateChanged(const QDate & year){
     model = manager.getYearlyValues(year);
     if (WarnDebugMessage)
         qDebug() << __FILE__ << QString::number(__LINE__)<< "model in viewer = "<< model->rowCount();
-    for (int i = 0; i < model->rowCount(); i += 1)
+    for (int i = 0; i < model->rowCount(); ++i)
     {
     	double yearlyValue = model->data(model->index(i,YEARLY_VALUE),Qt::DisplayRole).toDouble();
     	if (WarnDebugMessage)

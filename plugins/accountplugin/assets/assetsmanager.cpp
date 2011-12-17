@@ -251,7 +251,7 @@ bool AssetsManager::setRefreshedResidualValue(){
     QStandardItemModel * model = assetIO.getListsOfValuesForRefresh(this);//QString beginDate,int mode, double value, double duration,int yearsToRun
     if (WarnDebugMessage)
         qDebug() << __FILE__ << QString::number(__LINE__) << " model rowCount =" << QString::number(model->rowCount()) ;
-    for (int i = 0; i < model->rowCount(); i += 1)
+    for (int i = 0; i < model->rowCount(); ++i)
     {   
     	double residualValue = 0.00;
     	double yearlyValue = 0.00;
@@ -341,7 +341,7 @@ QStandardItemModel * AssetsManager::getYearlyValues(const QDate &year){
     QDate refDate = QDate::fromString(dateEnd,"yyyy-MM-dd");
     AssetsIO assetIO(this);
     model = assetIO.getYearlyValues(year,this);
-    for (int i = 0; i < model->rowCount(); i += 1)
+    for (int i = 0; i < model->rowCount(); ++i)
     {
     	QString label = model->data(model->index(i,LABEL),Qt::DisplayRole).toString();
     	double value = model->data(model->index(i,VALUE),Qt::DisplayRole).toDouble();

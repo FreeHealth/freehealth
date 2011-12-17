@@ -47,6 +47,23 @@ class ACCOUNTBASE_EXPORT MovementModel : public QAbstractTableModel
     Q_OBJECT
 public:
     /** \todo define a DataRepresentation enum for MovementModel */
+    enum DataRepresentation {
+        Label = 0,
+        Date,
+        DateOfValue,
+        Amount,
+        Validity,
+        IsValid,
+        Details,
+        // for private use
+        Id,
+        AvailableMovementId,
+        UserUid,
+        AccountId,
+        Type,
+        Trace,
+        Comment
+    };
 
     MovementModel(QObject *parent);
     ~MovementModel();
@@ -66,16 +83,17 @@ public:
     bool insertRows(int row, int count, const QModelIndex &parent = QModelIndex());
     bool removeRows(int row, int count, const QModelIndex &parent = QModelIndex());
 
-    bool insertRow(int arow, const QModelIndex &aparent = QModelIndex())        { return insertRows(arow, 1, aparent); }
-    bool insertColumn(int acolumn, const QModelIndex &aparent = QModelIndex())  { return insertColumns(acolumn, 1, aparent); }
-    bool removeRow(int arow, const QModelIndex &aparent = QModelIndex())        { return removeRows(arow, 1, aparent); }
-    bool removeColumn(int acolumn, const QModelIndex &aparent = QModelIndex())  { return removeColumns(acolumn, 1, aparent); }
-    void setFilter(const QString & filter);
-    QString filter();
+    // Manage some filters
+    void clearAllFilters();
+    bool setMovementFilter(const QString &id);
+    void setYearFilter(const int year);
+    void setDateFilter(const QDateTime &start, const QDateTime &end);
+
     void setUserUuid(const QString &uuid);
+    QString currentUserUuid() const;
+
     bool isDirty() const;
     QSqlError lastError();
-    QString m_UserUid;
 
 public Q_SLOTS:
     bool submit();

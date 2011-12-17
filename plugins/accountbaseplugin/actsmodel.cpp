@@ -242,12 +242,12 @@ void ActsModel::setEndDate(const QDate &date)
 double ActsModel::sum(const int &fieldRef)
 {
     // construct query == SELECT total(FIELD) FROM TABLE WHERE...
-    QSqlQuery query(accountBase()->total(Constants::Table_Acts, fieldRef) + " WHERE " + d->m_SqlTable->filter(), d->m_SqlTable->database());
+    QSqlQuery query(accountBase()->totalSqlCommand(Constants::Table_Acts, fieldRef) + " WHERE " + d->m_SqlTable->filter(), d->m_SqlTable->database());
     if (query.isActive()) {
         if (query.next())
             return query.value(0).toDouble();
     } else {
-        Utils::Log::addQueryError(this, query);
+        LOG_QUERY_ERROR(query);
     }
     return 0.0;
 }

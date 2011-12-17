@@ -81,7 +81,7 @@ void PreferedReceipts::insertPreferedValuesIntoAccount(){
     QString preferedAct;
     QStringList listOfValues;
     QString listOfValuesStr;
-    for (int i = 0; i < listOfPercentages.size(); i += 1)
+    for (int i = 0; i < listOfPercentages.size(); ++i)
     {
     	int typeOfChoice = m_choiceAndPercentagesHash.key(listOfPercentages[i]);
     	QHash <int,QVariant> hashOfPrefValues = receiptsIO.getListOfPreferedValues(userUuid,
@@ -140,7 +140,7 @@ void PreferedReceipts::showChoiceDialog(){
     	  m_typeOfChoice = choice->returnChoiceDialog();
     	  //m_percentagesList = choice->listOfPercentValues();
     	  QStandardItemModel * model = choice->getChoicePercentageDebtorSiteDistruleModel();
-    	  for (int i = 0; i < model->rowCount(); i += 1)
+          for (int i = 0; i < model->rowCount(); ++i)
     	  {
     	  	int TYPE = choice->TYPE_OF_CHOICE;
     	  	int PERCENTAGE = choice->PERCENTAGE;

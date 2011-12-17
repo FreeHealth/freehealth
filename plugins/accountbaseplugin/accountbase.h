@@ -65,6 +65,8 @@ public:
     static bool isInitialized() { return m_initialized; }
     void logChronos(bool state);
 
+    double getMovementAmountSum(const QDateTime &start, const QDateTime &end, const QString &userUid);
+
 private:
     bool init();
     bool createDatabase(const QString &connectionName , const QString &dbName,
