@@ -1537,9 +1537,9 @@ double Database::max(const int &tableref, const int &fieldref, const int &groupB
 
 /**
    Return a TOTAL SQL command on the table \e tableref, field \e fieldref with the filter \e filter.
-  Filter whould be not contains the "WHERE" word.
+   Filter whould be not contains the "WHERE" word.
 */
-QString Database::total(const int tableRef, const int fieldRef, const QHash<int, QString> &where) const
+QString Database::totalSqlCommand(const int tableRef, const int fieldRef, const QHash<int, QString> &where) const
 {
     QString toReturn;
     if (where.count()) {
@@ -1556,13 +1556,43 @@ QString Database::total(const int tableRef, const int fieldRef, const QHash<int,
 }
 
 /** Return a TOTAL SQL command on the table \e tableref, field \e fieldref. */
-QString Database::total(const int tableRef, const int fieldRef) const
+QString Database::totalSqlCommand(const int tableRef, const int fieldRef) const
 {
     QString toReturn;
     toReturn = QString("SELECT SUM(`%1`) FROM `%2`")
                .arg(d->m_Fields.value(fieldRef + tableRef * 1000))
                .arg(d->m_Tables.value(tableRef));
     return toReturn;
+}
+
+double Database::sum(const int tableRef, const int fieldRef, const QHash<int, QString> &where) const
+{
+    QSqlQuery q(totalSqlCommand(tableRef, fieldRef, where), database());
+    if (q.isActive()) {
+        if (q.next()) {
+            return q.value(0).toDouble();
+        } else {
+            LOG_QUERY_ERROR_FOR("Database", q);
+        }
+    } else {
+        LOG_QUERY_ERROR_FOR("Database", q);
+    }
+    return 0.0;
+}
+
+double Database::sum(const int tableRef, const int fieldRef) const
+{
+    QSqlQuery q(totalSqlCommand(tableRef, fieldRef), database());
+    if (q.isActive()) {
+        if (q.next()) {
+            return q.value(0).toDouble();
+        } else {
+            LOG_QUERY_ERROR_FOR("Database", q);
+        }
+    } else {
+        LOG_QUERY_ERROR_FOR("Database", q);
+    }
+    return 0.0;
 }
 
 /** Return a SQL command usable for QSqlQuery::prepareInsertQuery(). Fields are ordered. */
