@@ -302,6 +302,8 @@ public:
     virtual double max(const int &tableref, const int &fieldref, const int &groupBy, const QString &filter = QString()) const;
     virtual QString total(const int tableRef, const int fieldRef, const QHash<int, QString> &where) const;
     virtual QString total(const int tableRef, const int fieldRef) const;
+    QString sum(const int tableRef, const int fieldRef, const QHash<int, QString> &where) const {return total(tableRef, fieldRef, where);}
+    QString sum(const int tableRef, const int fieldRef) const {return total(tableRef, fieldRef);}
 
     virtual QString prepareInsertQuery(const int tableref) const;
 
