@@ -1,0 +1,26 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE FreeMedForms>
+
+<DrugDbDescriptor>
+
+  <description>
+    <lang>fr_FR</lang>
+    <version>0.6.4<version>
+    <authors>Eric Maeker, MD (Fr)</authors>
+    <fmfv>0.6.2</fmfv>
+    <fdv>0.6.4</fdv>
+    <vendor>AFMPS : Agence Fédérale des Médicaments et des Produits de Santé</vendor>
+    <cdate>2010-01-01</cdate>
+    <lmdate>2011-12-12</lmdate>
+    <weblink>http://www.fagg-afmps.be/fr/items-HOME/Bases_de_donnees/index.jsp</weblink>
+    <copyright>(c) AFMPS</copyright>
+    <druguidbname>CIS</druguidbname>
+    <atcvalid>true</atcvalid>
+    <interactionvalid>true</interactionvalid>
+    <complementweblink></complementweblink>
+    <packuidname>CIP</packuidname>
+    <drugnameconstructor>NAME (FORM, STRENGTH)</drugnameconstructor>
+    <uuid>FAGG_AFMPS_BE</uuid>
+  </description>
+
+</DrugDbDescriptor>
