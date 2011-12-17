@@ -2175,7 +2175,7 @@ Faites le dans Immobilisations.</translation>
     <message>
         <location filename="../../plugins/accountplugin/movements/movementsviewer.ui" line="37"/>
         <source>Percentage professionnal</source>
-        <translation type="unfinished"></translation>
+        <translation>Pourcentage professionnel</translation>
     </message>
     <message>
         <location filename="../../plugins/accountplugin/movements/movementsviewer.ui" line="73"/>
@@ -2581,7 +2581,7 @@ Vous devriez en créer une dans Préférences.</translation>
     <message>
         <location filename="../../plugins/accountplugin/receipts/receiptviewer.cpp" line="1122"/>
         <source> has been saved in thesaurus !</source>
-        <translation type="unfinished"></translation>
+        <translation> a été sauvegardé dans le thésaurus !</translation>
     </message>
     <message>
         <location filename="../../plugins/accountplugin/receipts/receiptviewer.cpp" line="945"/>
