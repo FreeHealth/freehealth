@@ -1543,12 +1543,12 @@ QString Database::total(const int tableRef, const int fieldRef, const QHash<int,
 {
     QString toReturn;
     if (where.count()) {
-        toReturn = QString("SELECT total(`%1`) FROM `%2` WHERE %3")
+        toReturn = QString("SELECT SUM(`%1`) FROM `%2` WHERE %3")
                    .arg(d->m_Fields.value(fieldRef + tableRef * 1000))
                    .arg(d->m_Tables.value(tableRef))
                    .arg(getWhereClause(tableRef, where));
     } else  {
-        toReturn = QString("SELECT total(`%1`) FROM `%2`")
+        toReturn = QString("SELECT SUM(`%1`) FROM `%2`")
                    .arg(d->m_Fields.value(fieldRef + tableRef * 1000))
                    .arg(d->m_Tables.value(tableRef));
     }
@@ -1559,7 +1559,7 @@ QString Database::total(const int tableRef, const int fieldRef, const QHash<int,
 QString Database::total(const int tableRef, const int fieldRef) const
 {
     QString toReturn;
-    toReturn = QString("SELECT total(`%1`) FROM `%2`")
+    toReturn = QString("SELECT SUM(`%1`) FROM `%2`")
                .arg(d->m_Fields.value(fieldRef + tableRef * 1000))
                .arg(d->m_Tables.value(tableRef));
     return toReturn;
