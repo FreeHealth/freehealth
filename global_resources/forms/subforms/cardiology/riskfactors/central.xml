@@ -1,0 +1,107 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE FreeMedForms>
+
+<FreeMedForms>
+  <formdescription>
+    <!-- Non translatable values -->
+    <authors>Eric Maeker, MD</authors>
+    <version>0.6.01</version>
+    <compatversion>0.6.0</compatversion>
+    <cdate>2011-09-15</cdate>
+    <icon>cardiology.png</icon>
+    <weblink></weblink>
+    <bibliography/>
+
+    <!-- Translatable values -->
+    <licence>GPLv3</licence>
+    <description lang="fr">Facteurs de risque cardio-vasculaires</description>
+    <description lang="xx">Cardiovascular risk factors</description>
+    <category lang="xx">Cardiology</category>
+    <category lang="fr">Cardiologie</category>
+    <tooltip lang="fr"></tooltip>
+    <tooltip lang="xx"></tooltip>
+    <htmldescription lang="fr"></htmldescription>
+    <htmldescription lang="xx"></htmldescription>
+    <specialties lang="fr">Cardiologie</specialties>
+    <specialties lang="xx">Cardiology</specialties>
+
+  </formdescription>
+
+  <MedForm name="Subs::Cardiology::RiskFactors">
+    <label lang="fr">Facteurs de risque cardio-vasculaire</label>
+    <label lang="xx">Cardiovascular risk factors</label>
+    <options>compact;UseFormNameAsNameSpace</options>
+
+<!--
+    <Item name="NonModifiable" type="group">
+      <label lang="fr">Non-modifiables</label>
+      <label lang="xx">Non modifiable</label>
+    </Item>
+
+    <Item name="Modifiable" type="group">
+      <label lang="fr">Modifiables</label>
+      <label lang="xx">Modifiable</label>
+      <column>1</column>
+-->
+
+      <Item name="Modifiable::PhysicalInactivity" type="check">
+        <label lang="fr">Sédentarité</label>
+        <label lang="xx">Physical inactivity</label>
+        <options>PrintOnlyChecked</options>
+      </Item>
+
+      <Item name="Modifiable::FamilyHistory" type="check">
+        <label lang="fr">Antécédents familiaux d'accident cardio-vasculaires précoces</label>
+        <label lang="xx">Family history</label>
+        <options>PrintOnlyChecked</options>
+      </Item>
+
+      <Item name="Modifiable::Stress" type="check">
+        <label lang="fr">Vie stressante, dépression et/ou anxiété</label>
+        <label lang="xx">Chronically stressful life, social isolation, anxiety and/or depression</label>
+        <options>PrintOnlyChecked</options>
+      </Item>
+
+      <Item name="Modifiable::Obesity" type="check">
+        <label lang="fr">Obésité</label>
+        <label lang="xx">Obesity</label>
+        <options>PrintOnlyChecked</options>
+      </Item>
+
+      <Item name="Modifiable::Smoking" type="check">
+        <label lang="fr">Tabac</label>
+        <label lang="xx">Tabacco use</label>
+        <options>PrintOnlyChecked</options>
+      </Item>
+
+      <Item name="Modifiable::Diet" type="check">
+        <label lang="fr">Régime riche en graisses saturées</label>
+        <label lang="xx">Diet high in saturated fat</label>
+        <options>PrintOnlyChecked</options>
+      </Item>
+
+      <Item name="Modifiable::Cholesterol" type="check">
+        <label lang="fr">Cholestérol total élevé, triglycérides élevés, LDL élevé ou faible niveau d'HDL</label>
+        <label lang="xx">High total cholesterol, high levels of triglycerides, high levels of low-density lipoprotein or low levels of high-density lipoprotein (HDL) cholesterol</label>
+        <options>PrintOnlyChecked</options>
+      </Item>
+
+      <Item name="Modifiable::Hypertension" type="check">
+        <label lang="fr">Hypertension</label>
+        <label lang="xx">Hypertension</label>
+        <options>PrintOnlyChecked</options>
+      </Item>
+
+      <Item name="Modifiable::Diabetes" type="check">
+        <label lang="fr">Diabète de type 2</label>
+        <label lang="xx">Type 2 diabetes</label>
+        <options>PrintOnlyChecked</options>
+      </Item>
+
+<!--
+    </Item>
+-->
+
+  </MedForm>
+
+</FreeMedForms>
