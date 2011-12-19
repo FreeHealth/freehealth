@@ -6,7 +6,7 @@
   <formdescription>
     <!-- Non translatable values -->
     <authors>Eric Maeker, MD</authors>
-    <version>0.6.01</version>
+    <version>0.6.02</version>
     <compatversion>0.6.0</compatversion>
     <cdate>2011-03-15</cdate>
     <lmdate>2011-11-01</lmdate>
@@ -35,9 +35,9 @@
   <MedForm name="Subs::Geriatrics::Autonomy::IADL">
     <label lang="xx">Instrumental Activities of Daily Living</label>
     <label lang="fr">Activités instrumentales de la vie quotidienne (IADL)</label>
-    <options>col=2;DontPrintEmptyValues</options>
+    <options>col=2;DontPrintEmptyValues;UseFormNameAsNameSpace</options>
 
-    <Item name="Subs::Geriatrics::Autonomy::IADL::Phone" type="radio">
+    <Item name="Phone" type="radio">
       <label lang="xx">&lt;b&gt;Téléphone&lt;/b&gt;</label>
       <options>vertical;labelontop;DontPrintEmptyValues</options>
       <value>
@@ -63,7 +63,7 @@
       </value>
     </Item>
 
-    <Item name="Subs::Geriatrics::Autonomy::IADL::Shopping" type="radio">
+    <Item name="Shopping" type="radio">
       <label lang="xx">&lt;b&gt;Shopping&lt;/b&gt;</label>
       <label lang="fr">&lt;b&gt;Courses&lt;/b&gt;</label>
       <options>vertical;labelontop;DontPrintEmptyValues</options>
@@ -90,7 +90,7 @@
       </value>
     </Item>
 
-    <Item name="Subs::Geriatrics::Autonomy::IADL::Food" type="radio">
+    <Item name="Food" type="radio">
       <label lang="xx">&lt;b&gt;Preparing food&lt;/b&gt;</label>
       <label lang="fr">&lt;b&gt;Préparer les repas&lt;/b&gt;</label>
       <options>vertical;labelontop;DontPrintEmptyValues</options>
@@ -117,7 +117,7 @@
       </value>
     </Item>
 
-    <Item name="Subs::Geriatrics::Autonomy::IADL::HouseKeeping" type="radio">
+    <Item name="HouseKeeping" type="radio">
       <label lang="xx">&lt;b&gt;Housekeeping&lt;/b&gt;</label>
       <label lang="fr">&lt;b&gt;Préparer les repas&lt;/b&gt;</label>
       <options>vertical;labelontop;DontPrintEmptyValues</options>
@@ -148,7 +148,7 @@
       </value>
     </Item>
 
-    <Item name="Subs::Geriatrics::Autonomy::IADL::Laundry" type="radio">
+    <Item name="Laundry" type="radio">
       <label lang="xx">&lt;b&gt;Doing laundry&lt;/b&gt;</label>
       <label lang="fr">&lt;b&gt;Faire la lessive&lt;/b&gt;</label>
       <options>vertical;labelontop;DontPrintEmptyValues</options>
@@ -171,7 +171,7 @@
       </value>
     </Item>
 
-    <Item name="Subs::Geriatrics::Autonomy::IADL::Transportation" type="radio">
+    <Item name="Transportation" type="radio">
       <label lang="xx">&lt;b&gt;Using transportation&lt;/b&gt;</label>
       <label lang="fr">&lt;b&gt;Utilisation des transports&lt;/b&gt;</label>
       <options>vertical;labelontop;DontPrintEmptyValues</options>
@@ -202,7 +202,7 @@
       </value>
     </Item>
 
-    <Item name="Subs::Geriatrics::Autonomy::IADL::Medication" type="radio">
+    <Item name="Medication" type="radio">
       <label lang="xx">&lt;b&gt;Taking own medications&lt;/b&gt;</label>
       <label lang="fr">&lt;b&gt;Prendre ses médicaments&lt;/b&gt;</label>
       <options>vertical;labelontop;DontPrintEmptyValues</options>
@@ -225,7 +225,7 @@
       </value>
     </Item>
 
-    <Item name="Subs::Geriatrics::Autonomy::IADL::Finances" type="radio">
+    <Item name="Finances" type="radio">
       <label lang="xx">&lt;b&gt;Handling own finances&lt;/b&gt;</label>
       <label lang="fr">&lt;b&gt;Gérer son budget&lt;/b&gt;</label>
       <options>vertical;labelontop;DontPrintEmptyValues</options>
@@ -248,11 +248,11 @@
       </value>
     </Item>
 
-    <Item name="Subs::Geriatrics::Autonomy::IADL::Total" type="sum">
+    <Item name="Total" type="sum">
       <label lang="fr">&lt;b&gt;Résultat&lt;/b&gt;</label>
       <label lang="xx">&lt;b&gt;Total&lt;/b&gt;</label>
       <options>vertical;labelontop;changeepisodelabel;DontPrintEmptyValues</options>
-      <sumof>Subs::Geriatrics::Autonomy::IADL::Phone;Subs::Geriatrics::Autonomy::IADL::Shopping;Subs::Geriatrics::Autonomy::IADL::Food;Subs::Geriatrics::Autonomy::IADL::HouseKeeping;Subs::Geriatrics::Autonomy::IADL::Laundry;Subs::Geriatrics::Autonomy::IADL::Transportation;Subs::Geriatrics::Autonomy::IADL::Medication;Subs::Geriatrics::Autonomy::IADL::Finances</sumof>
+      <sumof_regexp>Subs::Geriatrics::Autonomy::IADL::*</sumof_regexp>
     </Item>
 
  </MedForm>
