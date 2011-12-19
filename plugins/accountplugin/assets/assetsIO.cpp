@@ -114,7 +114,7 @@ bool AssetsIO::insertIntoMovements(const QHash<int,QVariant> &hashValues)
          qWarning() << __FILE__ << QString::number(__LINE__) << "Row inserted !" ;
     }
     QVariant data;
-    for(int i = 1 ; i < MovementModel::columnCount() ; i ++) {
+    for(int i = 1 ; i < modelMovements.columnCount() ; i ++) {
         data = hashValues.value(i);
         if (i == MovementModel::Amount)
         {
