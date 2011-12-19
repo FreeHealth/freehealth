@@ -1870,12 +1870,16 @@ void SumWidget::retranslate()
 void SumWidget::connectFormItems()
 {
 //    qWarning() << "SUM requiered" << formItem()->extraDatas().value(::SUM_EXTRA_KEY) << formItem()->extraDatas().value(::SUM_REGEXP_EXTRA_KEY);
+    if (formItem()->extraDatas().value(::SUM_EXTRA_KEY).isEmpty() && formItem()->extraDatas().value(::SUM_REGEXP_EXTRA_KEY).isEmpty()) {
+        LOG_ERROR("Sum widget: No sumof tag <sumof> or <sumof_regexp>.");
+        return;
+    }
     Form::FormMain *p = formItem()->parentFormMain();
     if (!p) {
         LOG_ERROR("No FormMain parent");
         return;
     }
-    //        qWarning() << "Parent = " << p->uuid();
+//            qWarning() << "Parent = " << p->uuid();
     if (!formItem()->extraDatas().value(::SUM_EXTRA_KEY).isEmpty()) {
         QStringList uuids = formItem()->extraDatas().value(::SUM_EXTRA_KEY).split(";");
         // get all formitems and connect to the dataChanged signal

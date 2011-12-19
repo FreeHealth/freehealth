@@ -197,6 +197,9 @@ public:
     void setModeUniqueName(const QString &modeUid) {m_ModeName = modeUid;}
     QString modeUniqueName() const {return m_ModeName;}
 
+    void setUseNameAsNSForSubItems(const bool b) {m_UseNameAsNSForSubItems=b;}
+    bool useNameAsNSForSubItems() const {return m_UseNameAsNSForSubItems;}
+
     FormMain *createChildForm(const QString &uuid = QString::null);
     FormPage *createPage(const QString &uuid = QString::null);
 
@@ -229,6 +232,7 @@ private:
     int m_Episode;
     QString m_ModeName;
     QList<QPixmap> m_Shots;
+    bool m_UseNameAsNSForSubItems;
 };
 inline QList<Form::FormMain *> Form::FormMain::flattenFormMainChildren() const
 {

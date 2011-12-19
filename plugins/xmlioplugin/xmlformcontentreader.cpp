@@ -408,9 +408,13 @@ bool XmlFormContentReader::loadElement(Form::FormItem *item, QDomElement &rootEl
             continue;
         }
 
-        // Name ?
-        if (element.tagName().compare("name", Qt::CaseInsensitive)==0) {
-            item->setUuid(element.text());
+        // Name/UUID ?
+        if ((element.tagName().compare(Constants::ATTRIB_NAME, Qt::CaseInsensitive)==0) ||
+            (element.tagName().compare(Constants::ATTRIB_UUID, Qt::CaseInsensitive)==0)) {
+            QString uidNS;
+            if (m_ActualForm->useNameAsNSForSubItems())
+                uidNS = m_ActualForm->uuid() + "::";
+            item->setUuid(uidNS + element.text());
             element = element.nextSiblingElement();
             continue;
         }
@@ -458,6 +462,9 @@ bool XmlFormContentReader::loadElement(Form::FormItem *item, QDomElement &rootEl
             } else if (element.text().contains(Constants::TAG_OPTIONS_NO_EPISODE, Qt::CaseInsensitive)) {
                 if (item==m_ActualForm)
                     m_ActualForm->setEpisodePossibilities(Form::FormMain::NoEpisode);
+            } else if (element.text().contains(Constants::OPTION_USEFORMNAMEASNS, Qt::CaseInsensitive)) {
+                if (item==m_ActualForm)
+                    m_ActualForm->setUseNameAsNSForSubItems(true);
             } else {
                 item->addExtraData(element.tagName(), element.text());
             }
@@ -476,17 +483,22 @@ bool XmlFormContentReader::loadElement(Form::FormItem *item, QDomElement &rootEl
 
 bool XmlFormContentReader::createElement(Form::FormItem *item, QDomElement &element, const XmlFormName &form)
 {
-//    qWarning() << "XmlFormIO create element" << element.text();
+//    qWarning() << "XmlFormIO create element" << m_ActualForm->useNameAsNSForSubItems() << m_ActualForm->uuid();
+    QString uidNS;
+    if (m_ActualForm->useNameAsNSForSubItems())
+        uidNS = m_ActualForm->uuid() + "::";
     // new item
     if (element.tagName().compare(Constants::TAG_NEW_ITEM, Qt::CaseInsensitive)==0) {
         if (item) {
             Form::FormItem *child = item->createChildItem();
             // read attributes (type, uid/name, patient representation...)
             if (element.hasAttribute(Constants::ATTRIB_UUID))
-                child->setUuid(element.attribute(Constants::ATTRIB_UUID));
+                child->setUuid(uidNS + element.attribute(Constants::ATTRIB_UUID));
 
             if (element.hasAttribute(Constants::ATTRIB_NAME))
-                child->setUuid(element.attribute(Constants::ATTRIB_NAME));
+                child->setUuid(uidNS + element.attribute(Constants::ATTRIB_NAME));
+
+//            qWarning() << "CHILD UUID" << child->uuid();
 
             if (element.hasAttribute(Constants::ATTRIB_TYPE))
                 child->spec()->setValue(Form::FormItemSpec::Spec_Plugin, element.attribute(Constants::ATTRIB_TYPE), Trans::Constants::ALL_LANGUAGE);
@@ -514,10 +526,10 @@ bool XmlFormContentReader::createElement(Form::FormItem *item, QDomElement &elem
             item->spec()->setValue(Form::FormItemSpec::Spec_Plugin, "form", Trans::Constants::ALL_LANGUAGE);
             // read attributes (type, uid/name, patient representation...)
             if (element.hasAttribute(Constants::ATTRIB_UUID))
-                item->setUuid(element.attribute(Constants::ATTRIB_UUID));
+                item->setUuid(uidNS + element.attribute(Constants::ATTRIB_UUID));
 
             if (element.hasAttribute(Constants::ATTRIB_NAME))
-                item->setUuid(element.attribute(Constants::ATTRIB_NAME));
+                item->setUuid(uidNS + element.attribute(Constants::ATTRIB_NAME));
 
             if (element.hasAttribute(Constants::ATTRIB_TYPE))
                 item->spec()->setValue(Form::FormItemSpec::Spec_Plugin, element.attribute(Constants::ATTRIB_TYPE), Trans::Constants::ALL_LANGUAGE);
@@ -538,10 +550,10 @@ bool XmlFormContentReader::createElement(Form::FormItem *item, QDomElement &elem
         if (item) {
             // read attributes (type, uid/name, patient representation...)
             if (element.hasAttribute(Constants::ATTRIB_UUID))
-                item->setUuid(element.attribute(Constants::ATTRIB_UUID));
+                item->setUuid(uidNS + element.attribute(Constants::ATTRIB_UUID));
 
             if (element.hasAttribute(Constants::ATTRIB_NAME))
-                item->setUuid(element.attribute(Constants::ATTRIB_NAME));
+                item->setUuid(uidNS + element.attribute(Constants::ATTRIB_NAME));
 
             if (element.hasAttribute(Constants::ATTRIB_TYPE))
                 item->spec()->setValue(Form::FormItemSpec::Spec_Plugin, element.attribute(Constants::ATTRIB_TYPE), Trans::Constants::ALL_LANGUAGE);

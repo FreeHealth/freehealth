@@ -159,6 +159,7 @@ const char* const ATTRIB_LANGUAGE     = "lang";
 const char* const ATTRIB_FILE         = "file";
 
 const char* const OPTION_PLUGIN_NAME  = "type";
+const char* const OPTION_USEFORMNAMEASNS  = "UseFormNameAsNameSpace";
 
 enum creationTagsEnum {
     CreateForm = 0,
