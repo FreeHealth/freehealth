@@ -223,11 +223,11 @@ void LedgerViewer::monthlyMovementsAnalysis(){
     MovementModel * model = m_lm->getModelMonthlyMovementsAnalysis(this,month,year);
     ui->tableView->setModel(model);
     QList<int> listOff ;
-    listOff << MOV_ID 
-            << MOV_AV_MOVEMENT_ID
-            << ACCOUNT_USER_UID 
-            << MOV_ACCOUNT_ID
-            << MOV_TRACE;
+    listOff << MovementModel::Id
+            << MovementModel::AvailableMovementId
+            << MovementModel::UserUid
+            << MovementModel::AccountId
+            << MovementModel::Trace;
     for (int i = 0; i < listOff.size(); ++i)
     {
     	ui->tableView->setColumnHidden(listOff[i],true);

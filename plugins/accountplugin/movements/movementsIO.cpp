@@ -151,8 +151,8 @@ QStringList MovementsIODb::getYearComboBoxModel()
 {
     QStringList listOfYears;
     for (int i = 0; i < m_modelMovements->rowCount(); ++i) {
-    	QString dateStr = m_modelMovements->data(m_modelMovements->index(i,MOV_DATE),Qt::DisplayRole).toString();
-    	QString dateOfValueStr = m_modelMovements->data(m_modelMovements->index(i,MOV_DATE),Qt::DisplayRole).toString();
+        QString dateStr = m_modelMovements->data(m_modelMovements->index(i,MovementModel::Date),Qt::DisplayRole).toString();
+        QString dateOfValueStr = m_modelMovements->data(m_modelMovements->index(i,MovementModel::Date),Qt::DisplayRole).toString();
     	QString yearDate = QString::number(QDate::fromString(dateStr,"yyyy-MM-dd").year());
     	QString yearDateOfValue = QString::number(QDate::fromString(dateOfValueStr,"yyyy-MM-dd").year());
     	listOfYears << yearDate << yearDateOfValue;

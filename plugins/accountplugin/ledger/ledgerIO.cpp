@@ -279,8 +279,8 @@ QStandardItemModel *LedgerIO::getModelMonthlyAndTypeMovementsIO(QObject *parent,
     rows = m_movementModel->rowCount();
 
     for (int i = 0; i < rows; ++i) {
-    	QString labelOfMovement = m_movementModel->data(m_movementModel->index(i,MOV_LABEL),Qt::DisplayRole).toString();
-    	double value = m_movementModel->data(m_movementModel->index(i,MOV_AMOUNT),Qt::DisplayRole).toDouble();
+        QString labelOfMovement = m_movementModel->data(m_movementModel->index(i,MovementModel::Label),Qt::DisplayRole).toString();
+        double value = m_movementModel->data(m_movementModel->index(i,MovementModel::Amount),Qt::DisplayRole).toDouble();
     	hash.insertMulti(labelOfMovement,value);
     }
     QStringList keysList = hash.uniqueKeys();
@@ -309,8 +309,8 @@ QStandardItemModel * LedgerIO::getModelYearlyAndTypeMovementsIO(QObject * parent
 
     rows = m_movementModel->rowCount();
     for (int i = 0; i < rows; ++i) {
-    	QString labelOfMovement = m_movementModel->data(m_movementModel->index(i,MOV_LABEL),Qt::DisplayRole).toString();
-    	double value = m_movementModel->data(m_movementModel->index(i,MOV_AMOUNT),Qt::DisplayRole).toDouble();
+        QString labelOfMovement = m_movementModel->data(m_movementModel->index(i,MovementModel::Label),Qt::DisplayRole).toString();
+        double value = m_movementModel->data(m_movementModel->index(i,MovementModel::Amount),Qt::DisplayRole).toDouble();
     	hash.insertMulti(labelOfMovement,value);    	
     }
     QStringList keysList = hash.uniqueKeys();
@@ -394,8 +394,8 @@ QStringList LedgerIO::getListOfSumsMonthlyMovementsIO(QObject * parent, const QS
 
     rows = m_movementModel->rowCount();
     for (int i = 0; i < rows; ++i) {
-    	QString labelOfMovement = m_movementModel->data(m_movementModel->index(i,MOV_LABEL),Qt::DisplayRole).toString();
-    	double value = m_movementModel->data(m_movementModel->index(i,MOV_AMOUNT),Qt::DisplayRole).toDouble();
+        QString labelOfMovement = m_movementModel->data(m_movementModel->index(i,MovementModel::Label),Qt::DisplayRole).toString();
+        double value = m_movementModel->data(m_movementModel->index(i,MovementModel::Amount),Qt::DisplayRole).toDouble();
     	hash.insertMulti(labelOfMovement,value);
     }
     QStringList keysList = hash.uniqueKeys();
@@ -508,11 +508,11 @@ QList<QVector<QString> > LedgerIO::getDatasMovementsInVector(const QString &date
 
     int rows = m_movementModel->rowCount();
     for (int i = 0; i < rows; ++i) {
-    	QString vectorDate = m_movementModel->data(m_movementModel->index(i,MOV_DATE),Qt::DisplayRole).toString();
-        QString vectorLabel = m_movementModel->data(m_movementModel->index(i,MOV_LABEL),Qt::DisplayRole).toString();
-        QString vectorAmount = m_movementModel->data(m_movementModel->index(i,MOV_AMOUNT),Qt::DisplayRole).toString();
-        QString vectorComment = m_movementModel->data(m_movementModel->index(i,MOV_COMMENT),Qt::DisplayRole).toString();
-        QString vectorDetails = m_movementModel->data(m_movementModel->index(i,MOV_DETAILS),Qt::DisplayRole).toString();
+        QString vectorDate = m_movementModel->data(m_movementModel->index(i,MovementModel::Date),Qt::DisplayRole).toString();
+        QString vectorLabel = m_movementModel->data(m_movementModel->index(i,MovementModel::Label),Qt::DisplayRole).toString();
+        QString vectorAmount = m_movementModel->data(m_movementModel->index(i,MovementModel::Amount),Qt::DisplayRole).toString();
+        QString vectorComment = m_movementModel->data(m_movementModel->index(i,MovementModel::Comment),Qt::DisplayRole).toString();
+        QString vectorDetails = m_movementModel->data(m_movementModel->index(i,MovementModel::Details),Qt::DisplayRole).toString();
         total += vectorAmount.toDouble();
         QVector<QString> vector;
         vector << vectorDate << vectorLabel << vectorAmount << vectorComment << vectorDetails;

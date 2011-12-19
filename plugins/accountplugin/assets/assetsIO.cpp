@@ -114,17 +114,17 @@ bool AssetsIO::insertIntoMovements(const QHash<int,QVariant> &hashValues)
          qWarning() << __FILE__ << QString::number(__LINE__) << "Row inserted !" ;
     }
     QVariant data;
-    for(int i = 1 ; i < MOV_MaxParam ; i ++) {
+    for(int i = 1 ; i < MovementModel::columnCount() ; i ++) {
         data = hashValues.value(i);
-        if (i == MOV_AMOUNT)
+        if (i == MovementModel::Amount)
         {
         	 value = data.toDouble(); 
             }
-        if (i == MOV_TYPE)
+        if (i == MovementModel::Type)
         {
         	  type = data.toInt();
             }
-        if (i == MOV_ACCOUNT_ID)
+        if (i == MovementModel::AccountId)
         {
         	  int bankId = data.toInt();
         	  bank = getBankNameFromId(bankId);
@@ -296,7 +296,7 @@ int AssetsIO::getLastMovementId()
 {
     int lastId = -1;
     MovementModel mov(this);
-    lastId = mov.data(mov.index(mov.rowCount()-1,MOV_ID),Qt::DisplayRole).toInt();
+    lastId = mov.data(mov.index(mov.rowCount()-1, MovementModel::Id),Qt::DisplayRole).toInt();
     return lastId;
 }
 
@@ -307,9 +307,9 @@ bool AssetsIO::deleteMovement(int idMovement,int idBank)
 //    if (WarnDebugMessage)
 //        qDebug() << __FILE__ << QString::number(__LINE__) << " idMovement =" << QString::number(idMovement) ;
 //    MovementModel movModel(this);
-//    QString filter = QString("%1 = '%2'").arg("MOV_ID",QString::number(idMovement));
+//    QString filter = QString("%1 = '%2'").arg("MovementModel::Id",QString::number(idMovement));
 //    movModel.setFilter(filter);
-//    double value = movModel.data(movModel.index(0,MOV_AMOUNT),Qt::DisplayRole).toDouble();
+//    double value = movModel.data(movModel.index(0,MovementModel::Amount),Qt::DisplayRole).toDouble();
 //    if (creditValueDeletedToBankAccount(value,idBank)) {
 //        QMessageBox::information(0,trUtf8("Information"),trUtf8("Value credited = ")+QString::number(value),
 //                                 QMessageBox::Ok);
