@@ -24,63 +24,67 @@
  *   Contributors :                                                        *
  *       NAME <MAIL@ADRESS>                                                *
  ***************************************************************************/
-#ifndef DATAPACK_CORE_H
-#define DATAPACK_CORE_H
+#ifndef DATAPACK_INTERNAL_HTTPSERVERENGINE_H
+#define DATAPACK_INTERNAL_HTTPSERVERENGINE_H
 
-#include <datapackutils/datapack_exporter.h>
-#include <QObject>
-class QNetworkAccessManager;
-
-
-/**
- * \file core.h
- * \author Eric MAEKER <eric.maeker@gmail.com>
- * \version 0.6.2
- * \date 30 Nov 2011
- * Needs Qt >= 4.7
-*/
+#include <datapackutils/iserverengine.h>
+#include <QNetworkAccessManager>
+#include <QNetworkReply>
+#include <QNetworkRequest>
 
 namespace DataPack {
-class IServerManager;
 namespace Internal {
-class CorePrivate;
-}
+class ServerManager;
 
-
-class DATAPACK_EXPORT Core : public QObject
-{
-    Q_OBJECT
-    explicit Core(QObject *parent = 0);
-
-public:
-    enum ThemePath {
-        SmallPixmaps = 0,
-        MediumPixmaps,
-        BigPixmaps
-    };
-
-    static Core *instance(QObject *parent = 0);
-
-    bool isInternetConnexionAvailable();
-    IServerManager *serverManager() const;
-
-    // Manage path
-    void setInstallPath(const QString &absPath);
-    QString installPath() const;
-
-    void setPersistentCachePath(const QString &absPath);
-    QString persistentCachePath() const;
-
-    void setTemporaryCachePath(const QString &absPath);
-    QString temporaryCachePath() const;
-
-    void setThemePath(ThemePath path, const QString &absPath);
-    QString icon(const QString &name, ThemePath path = SmallPixmaps);
-
-private:
-    Internal::CorePrivate *d;
+// this private struct contains all data associated with a QNetworkReply. It will be set as a user attribute in the QNetworkReply at its creation (see QNetworkReply::setAttribute()).
+struct ReplyData {
+    ReplyData(){}
+    ReplyData(QNetworkReply *reply, Server *server, Server::FileRequested fileType);
+    QNetworkReply *reply;
+    Server *server;
+    QByteArray response;
+    Server::FileRequested fileType; // a configuration file? a pack file? etc
 };
 
-}  // End namespace DataPack
+class HttpServerEngine : public IServerEngine
+{
+    Q_OBJECT
+public:
+    explicit HttpServerEngine(IServerManager *parent);
+    ~HttpServerEngine();
 
-#endif // DATAPACK_CORE_H
+    // IServerEngine interface
+    bool managesServer(const Server &server);
+    void addToDownloadQueue(const ServerEngineQuery &query);
+    int downloadQueueCount() const;
+    bool startDownloadQueue();
+
+private Q_SLOTS:
+    void serverReadyRead();
+    void serverError(QNetworkReply::NetworkError error);
+    void serverFinished();
+
+private:
+    ServerManager *serverManager();
+
+    void afterServerConfigurationDownload(const ReplyData &data); // called after a server configuration file download
+    void afterPackDescriptionFileDownload(const ReplyData &data); // called after a pack description file download
+    void afterPackFileDownload(const ReplyData &data); // called after a pack file download
+
+    void createPackAndRegisterToServerManager(const Server &server, const QString &pathToPackDescription);
+
+    QNetworkRequest createRequest(const QString &url); // create a request with good headers
+
+
+private:
+    QList<ServerEngineQuery> m_queue;
+    QNetworkAccessManager *m_NetworkAccessManager;
+    QHash<QNetworkReply*,ReplyData> m_replyToData;
+    int m_DownloadCount_Server;
+    int m_DownloadCount_PackDescription;
+};
+
+} // namespace Internal
+} // namespace DataPack
+
+#endif // DATAPACK_INTERNAL_HTTPSERVERENGINE_H

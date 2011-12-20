@@ -33,6 +33,7 @@
 #include "addserverdialog.h"
 
 #include <utils/global.h>
+#include <utils/widgets/htmldelegate.h>
 #include <translationutils/constants.h>
 #include <translationutils/trans_current.h>
 #include <translationutils/trans_msgerror.h>
@@ -41,11 +42,9 @@
 
 #include <datapackutils/core.h>
 #include <datapackutils/servermanager.h>
+#include <datapackutils/serverandpackmodel.h>
 
 #include <QStandardItemModel>
-#include <QStyledItemDelegate>
-#include <QPainter>
-#include <QTextDocument>
 #include <QToolBar>
 
 #include <QDebug>
@@ -56,7 +55,7 @@ using namespace DataPack;
 using namespace Trans::ConstantTranslations;
 
 static inline DataPack::Core *core() {return DataPack::Core::instance();}
-static inline ServerManager *serverManager() {return qobject_cast<ServerManager*>(core()->serverManager());}
+static inline Internal::ServerManager *serverManager() {return qobject_cast<Internal::ServerManager*>(core()->serverManager());}
 static inline QIcon icon(const QString &name, DataPack::Core::ThemePath path = DataPack::Core::MediumPixmaps) {return QIcon(DataPack::Core::instance()->icon(name, path));}
 
 namespace {
@@ -64,162 +63,25 @@ namespace {
 const char *const ICON_SERVER_ADD = "server-add.png";
 const char *const ICON_SERVER_REMOVE = "server-remove.png";
 const char *const ICON_SERVER_INFO = "server-info.png";
-const char *const ICON_SERVER_LOCAL = "server-local.png";
 
-const char *const ICON_SERVER_CONNECTED = "connect_established.png";
-const char *const ICON_SERVER_NOT_CONNECTED = "connect_no.png";
-const char *const ICON_SERVER_ASKING_CONNECTION = "connect_creating.png";
-
-const char *const ICON_PACKAGE = "package.png";
 const char *const ICON_UPDATE = "updateavailable.png";
 const char *const ICON_INSTALL = "install-package.png";
 const char *const ICON_REMOVE = "remove.png";
 
-const int IS_SERVER = 1;
-const int IS_PACK = 2;
-
 const char * const TITLE_CSS = "text-indent:5px;padding:5px;font-weight:bold;background:qlineargradient(spread:pad, x1:0, y1:0, x2:1, y2:0, stop:0.464 rgba(255, 255, 176, 149), stop:1 rgba(255, 255, 255, 0))";
 
 const char * const CSS =
-        "QTreeView::item:hover {"
+        "QserverView::item:hover {"
         "background: qlineargradient(x1: 0, y1: 0, x2: 0, y2: 1, stop: 0 #e7effd, stop: 1 #cbdaf1);"
         "}"
-        "QTreeView::item:selected:active{"
+        "QserverView::item:selected:active{"
         "background: qlineargradient(x1: 0, y1: 0, x2: 0, y2: 1, stop: 0 #6ea1f1, stop: 1 #567dbc);"
         "}"
-        "QTreeView::item:selected:!active {"
+        "QserverView::item:selected:!active {"
         "background: qlineargradient(x1: 0, y1: 0, x2: 0, y2: 1, stop: 0 #6b9be8, stop: 1 #577fbf);"
         "}";
 
-class Delegate : public QStyledItemDelegate
-{
-protected:
-    void paint(QPainter *painter, const QStyleOptionViewItem &option, const QModelIndex &index) const;
-    QSize sizeHint(const QStyleOptionViewItem &option, const QModelIndex &index) const;
-};
-
-void Delegate::paint(QPainter *painter, const QStyleOptionViewItem &option, const QModelIndex &index) const
-{
-    QStyleOptionViewItemV4 options = option;
-    initStyleOption(&options, index);
-
-    painter->save();
-
-    int leftIndent = 0;
-    QVariant decoration = index.data(Qt::DecorationRole);
-    if (!decoration.isNull()) {
-        QIcon icon = decoration.value<QIcon>();
-        if (!icon.isNull()) {
-            leftIndent = icon.actualSize(QSize(32,32)).width();
-        }
-    }
-
-    QTextDocument doc;
-    QString text = options.text;
-    if (option.state & QStyle::State_Selected) {
-        text.replace("color:gray", "color:lightgray");
-        text.replace("color:black", "color:white");
-    }
-    doc.setHtml(text);
-
-    /* Call this to get the focus rect and selection background. */
-    options.text = "";
-    options.widget->style()->drawControl(QStyle::CE_ItemViewItem, &options, painter, options.widget);
-
-    /* Draw using our rich text document. */
-    painter->translate(options.rect.left() + leftIndent, options.rect.top());
-    QRect clip(0, 0, options.rect.width(), options.rect.height());
-    doc.drawContents(painter, clip);
-
-    painter->restore();
-}
-
-QSize Delegate::sizeHint(const QStyleOptionViewItem &option, const QModelIndex &index) const
-{
-    QStyleOptionViewItemV4 options = option;
-    initStyleOption(&options, index);
-
-    QTextDocument doc;
-    doc.setHtml(options.text);
-    doc.setTextWidth(options.rect.width());
-    return QSize(doc.idealWidth(), doc.size().height());
-}
-
 }  // End anonymous namespace
-
-static void createServerModel(QStandardItemModel *model)
-{
-    ServerManager *manager = serverManager();
-    QFont bold;
-    bold.setBold(true);
-    model->clear();
-    QStandardItem *root = model->invisibleRootItem();
-    for(int i = 0; i < manager->serverCount(); ++i) {
-        const Server &s = manager->getServerAt(i);
-        QString label = QString("<span style=\"color:black;font-weight:bold\">%1</span>")
-                .arg(s.description().data(ServerDescription::Label).toString());
-
-        if (s.isConnected()) {
-            label += QString("<br /><span style=\"color:gray; font-size:small\">%2 (%3: %4)</span>")
-                    .arg(tkTr(Trans::Constants::CONNECTED))
-                    .arg(tkTr(Trans::Constants::LAST_CHECK))
-                    .arg(s.lastChecked().toString(QLocale().dateFormat(QLocale::LongFormat)));
-        } else {
-            label += QString("<br /><small>%2</small>")
-                    .arg(tkTr(Trans::Constants::NOT_CONNECTED));
-        }
-
-        label += QString("<br /><span style=\"color:gray; font-size:small\">%1 %2</span>")
-                .arg(serverManager()->getPackForServer(s).count())
-                .arg(tkTr(Trans::Constants::PACKAGES));
-
-        QString tooltip = QString("<b>%1</b>:&nbsp;%2<br /><b>%3</b>:&nbsp;%4<br /><b>%5</b>:&nbsp;%6")
-                .arg(QApplication::translate("Server", "Native Url").replace(" ", "&nbsp;"))
-                .arg(s.nativeUrl())
-                .arg(QApplication::translate("Server", "Recommended update checking"))
-                .arg(Trans::ConstantTranslations::checkUpdateLabel(s.recommendedUpdateFrequency()))
-                .arg(QApplication::translate("Server", "Url Style"))
-                .arg(s.urlStyleName())
-                ;
-        QStandardItem *server = new QStandardItem(label);
-        server->setData(::IS_SERVER);
-        server->setToolTip(tooltip);
-
-        root->appendRow(server);
-
-        if (s.isLocalServer()) {
-            server->setIcon(icon(::ICON_SERVER_LOCAL));
-        } else if (s.isConnected()) {
-            server->setIcon(icon(::ICON_SERVER_CONNECTED));
-            // Add packdescriptions
-        } else {
-            server->setIcon(icon(::ICON_SERVER_NOT_CONNECTED));
-        }
-    }
-}
-
-static void createPackModel(const Server &server, QStandardItemModel *model)
-{
-    const QList<Pack> &packs = serverManager()->getPackForServer(server);
-    model->clear();
-    for(int i=0; i < packs.count(); ++i) {
-        QString pack = QString("<span style=\"color:black;font-weight:bold\">%1</span><br />"
-                               "<span style=\"color:gray; font-size:small\">%2: %3</span>")
-                .arg(packs.at(i).description().data(PackDescription::Label).toString())
-                .arg(tkTr(Trans::Constants::VERSION))
-                .arg(packs.at(i).description().data(PackDescription::Version).toString());
-        QStandardItem *packItem = new QStandardItem(pack);
-        QString f = packs.at(i).description().data(PackDescription::GeneralIcon).toString();
-        if (f.isEmpty()) {
-            packItem->setIcon(icon(::ICON_PACKAGE));
-        } else {
-            f = f.remove("__theme__/");
-            packItem->setIcon(icon(f));
-        }
-        packItem->setData(::IS_PACK);
-        model->appendRow(packItem);
-    }
-}
 
 ServerEditor::ServerEditor(QWidget *parent) :
     QWidget(parent),
@@ -236,30 +98,28 @@ ServerEditor::ServerEditor(QWidget *parent) :
     }
 
     // Manage server view
-    m_ServerModel = new QStandardItemModel(this);
+    m_ServerModel = new ServerAndPackModel(this);
+    m_ServerModel->setPackCheckable(true);
+    m_ServerModel->setInstallChecker(true);
     m_ServerModel->setColumnCount(1);
-    createServerModel(m_ServerModel);
-    ui->treeView->setModel(m_ServerModel);
-    ui->treeView->header()->hide();
-    Delegate *delegate = new Delegate;
-    ui->treeView->setItemDelegate(delegate);
-    ui->treeView->setStyleSheet(::CSS);
-    ui->treeView->expandAll();
-    ui->treeView->setAlternatingRowColors(true);
-    ui->treeView->setRootIsDecorated(false);
-    ui->treeView->setEditTriggers(QTreeView::NoEditTriggers);
+    ui->serverView->setModel(m_ServerModel);
+//    ui->serverView->
+    Utils::HtmlDelegate *delegate = new Utils::HtmlDelegate;
+    ui->serverView->setItemDelegate(delegate);
+    ui->serverView->setStyleSheet(::CSS);
+//    ui->serverView->expandAll();
+    ui->serverView->setAlternatingRowColors(true);
+//    ui->serverView->setRootIsDecorated(false);
+    ui->serverView->setEditTriggers(QTreeView::NoEditTriggers);
 
     // Manage pack view
-    m_PackModel = new QStandardItemModel(this);
-    m_PackModel->setColumnCount(1);
-    ui->packView->setModel(m_PackModel);
-    ui->packView->header()->hide();
-//    Delegate *delegate = new Delegate;
+    ui->packView->setModel(m_ServerModel);
+//    ui->packView->header()->hide();
     ui->packView->setItemDelegate(delegate);
     ui->packView->setStyleSheet(::CSS);
-    ui->packView->expandAll();
-    ui->packView->setRootIsDecorated(false);
-    ui->packView->setAlternatingRowColors(true);
+//    ui->packView->expandAll();
+//    ui->packView->setRootIsDecorated(false);
+//    ui->packView->setAlternatingRowColors(true);
     ui->packView->setEditTriggers(QTreeView::NoEditTriggers);
 
     // Manage central view
@@ -275,13 +135,15 @@ ServerEditor::ServerEditor(QWidget *parent) :
     createActions();
     createToolbar();
 
-    connect(ui->treeView->selectionModel(), SIGNAL(currentChanged(QModelIndex,QModelIndex)), this, SLOT(onServerIndexActivated(QModelIndex,QModelIndex)));
+    connect(ui->serverView->selectionModel(), SIGNAL(currentChanged(QModelIndex,QModelIndex)), this, SLOT(onServerIndexActivated(QModelIndex,QModelIndex)));
     connect(ui->packView->selectionModel(), SIGNAL(currentChanged(QModelIndex,QModelIndex)), this, SLOT(onPackIndexActivated(QModelIndex,QModelIndex)));
     connect(serverManager(), SIGNAL(serverAdded(int)), this, SLOT(serverAdded(int)));
     connect(serverManager(), SIGNAL(serverRemoved(int)), this, SLOT(serverRemoved(int)));
 
+    serverManager()->getAllDescriptionFile();
+
     // Select first row of servers
-    ui->treeView->selectionModel()->select(m_ServerModel->index(0,0), QItemSelectionModel::SelectCurrent);
+    ui->serverView->selectionModel()->select(m_ServerModel->index(0,0), QItemSelectionModel::SelectCurrent);
 }
 
 ServerEditor::~ServerEditor()
@@ -340,16 +202,33 @@ void ServerEditor::createToolbar()
     ui->toolbarLayout->addWidget(m_ToolBar);
 }
 
+static void elideTextToLabel(QLabel *label, const QString &text)
+{
+    if (text.size() > 30) {
+        label->setText(text.left(27)+"...");
+        QString u = text;
+        int i = 30;
+        while (i < text.size()) {
+            u.insert(i, "\n");
+            i += 32;
+        }
+        label->setToolTip(u);
+    } else {
+        label->setText(text);
+        label->setToolTip(text);
+    }
+}
+
 void ServerEditor::populateServerView(const int serverId)
 {
     // Clear pack selection
     ui->packView->selectionModel()->clearSelection();
+    ui->packView->setRootIndex(m_ServerModel->index(serverId, 0));
 
     // Update server view
     const QString &format = QLocale().dateTimeFormat(QLocale::LongFormat);
     const Server &server = serverManager()->getServerAt(serverId);
-    createPackModel(server, m_PackModel);
-    ui->serverUuid->setText(server.uuid());
+    const QString &uuid = server.uuid();
     ui->serverName->setText(server.description().data(ServerDescription::Label).toString());
     ui->shortServerDescription->setText(server.description().data(ServerDescription::ShortDescription).toString());
     ui->serverVersion->setText(server.description().data(ServerDescription::Version).toString());
@@ -357,6 +236,8 @@ void ServerEditor::populateServerView(const int serverId)
     ui->serverDescription->setText(server.description().data(ServerDescription::ShortDescription).toString());
     ui->lastCheck->setText(server.lastChecked().toString(format));
     ui->serverVendor->setText(server.description().data(ServerDescription::Vendor).toString());
+    elideTextToLabel(ui->serverUuid, server.uuid());
+    elideTextToLabel(ui->serverNativeUrl, server.nativeUrl());
     if (server.isConnected() || server.isLocalServer()) {
         ui->serverState->setText(tkTr(Trans::Constants::CONNECTED));
     } else {
@@ -441,7 +322,7 @@ void ServerEditor::onPackIndexActivated(const QModelIndex &index, const QModelIn
 {
     // Activate the Server Page
     ui->stackedWidget->setCurrentWidget(ui->packPage);
-    int serverId = ui->treeView->selectionModel()->currentIndex().row();
+    int serverId = ui->serverView->selectionModel()->currentIndex().row();
     populatePackView(serverId, index.row());
 }
 
@@ -456,6 +337,7 @@ void ServerEditor::serverActionTriggered(QAction *a)
             serverManager()->addServer(server);
         }
     } else if (a==aServerRemove) {
+        /** \todo code here */
     } else if (a==aServerInfo) {
         // Clear pack selection
         ui->packView->selectionModel()->clearSelection();
@@ -465,10 +347,10 @@ void ServerEditor::serverActionTriggered(QAction *a)
 
 void ServerEditor::packActionTriggered(QAction *a)
 {
-    int serverId = ui->treeView->selectionModel()->currentIndex().row();
+    int serverId = ui->serverView->selectionModel()->currentIndex().row();
     int packId = ui->packView->selectionModel()->currentIndex().row();
     const Server &server = serverManager()->getServerAt(serverId);
-    const QList<Pack> &list = serverManager()->getPackForServer(server);
+    QList<Pack> list = serverManager()->getPackForServer(server);
     const Pack &pack = list.at(packId);
 
     if (a==aInstall) {
@@ -484,14 +366,14 @@ void ServerEditor::serverAdded(int i)
 {
     Q_UNUSED(i);
     // Refresh the model
-    createServerModel(m_ServerModel);
+//    createServerModel(m_ServerModel);
 }
 
 void ServerEditor::serverRemoved(int i)
 {
     Q_UNUSED(i);
     // Refresh the model
-    createServerModel(m_ServerModel);
+//    createServerModel(m_ServerModel);
 }
 
 void ServerEditor::retranslate()

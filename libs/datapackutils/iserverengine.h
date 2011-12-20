@@ -24,68 +24,49 @@
  *   Contributors :                                                        *
  *       NAME <MAIL@ADRESS>                                                *
  ***************************************************************************/
-#include "htmldelegate.h"
+#ifndef DATAPACK_ISERVERENGINE_H
+#define DATAPACK_ISERVERENGINE_H
 
-#include <QPainter>
-#include <QStyleOptionViewItemV4>
-#include <QVariant>
-#include <QModelIndex>
-#include <QString>
-#include <QIcon>
-#include <QTextDocument>
-#include <QApplication>
-#include <QAbstractTextDocumentLayout>
+#include <datapackutils/iservermanager.h>
+#include <datapackutils/server.h>
+#include <datapackutils/pack.h>
+#include <datapackutils/serveridentification.h>
+#include <QObject>
 
-#include <QDebug>
+namespace DataPack {
+namespace Internal {
 
-namespace Utils {
+struct ServerEngineQuery {
+    ServerEngineQuery() :
+        forceDescriptionFromLocalCache(false),
+        downloadDescriptionFiles(true),
+        downloadPackFile(false)
+    {}
 
-static QString changeColors(const QStyleOptionViewItem &option, QString text)
+    Server *server;
+    ServerIdentification *ident;
+    bool forceDescriptionFromLocalCache;
+    bool downloadDescriptionFiles;
+    bool downloadPackFile;
+    Pack *pack;
+};
+
+class IServerEngine : public QObject
 {
-    if (option.state & QStyle::State_Selected) {
-        text.replace("color:gray", "color:lightgray");
-        text.replace("color:black", "color:white");
-    }
-    return text;
-}
+    Q_OBJECT
+public:
+    explicit IServerEngine(IServerManager *parent = 0);
 
-void HtmlDelegate::paint(QPainter *painter, const QStyleOptionViewItem &option, const QModelIndex &index) const
-{
-    QStyleOptionViewItemV4 optionV4 = option;
-    initStyleOption(&optionV4, index);
+    virtual bool managesServer(const Server &server) = 0;
+    virtual void addToDownloadQueue(const ServerEngineQuery &query) = 0;
+    virtual int downloadQueueCount() const = 0;
+    virtual bool startDownloadQueue() = 0;
 
-    QStyle *style = optionV4.widget? optionV4.widget->style() : QApplication::style();
+Q_SIGNALS:
+    void queueDowloaded();
+};
 
-    QTextDocument doc;
-    doc.setHtml(changeColors(option, optionV4.text));
+} // namespace Internal
+} // namespace DataPack
 
-    /// Painting item without text
-    optionV4.text = QString();
-    style->drawControl(QStyle::CE_ItemViewItem, &optionV4, painter);
-
-    QAbstractTextDocumentLayout::PaintContext ctx;
-
-    // Highlighting text if item is selected
-    if (optionV4.state & QStyle::State_Selected)
-        ctx.palette.setColor(QPalette::Text, optionV4.palette.color(QPalette::Active, QPalette::HighlightedText));
-
-    QRect textRect = style->subElementRect(QStyle::SE_ItemViewItemText, &optionV4);
-    painter->save();
-    painter->translate(textRect.topLeft());
-    painter->setClipRect(textRect.translated(-textRect.topLeft()));
-    doc.documentLayout()->draw(painter, ctx);
-    painter->restore();
-}
-
-QSize HtmlDelegate::sizeHint(const QStyleOptionViewItem &option, const QModelIndex &index) const
-{
-    QStyleOptionViewItemV4 options = option;
-    initStyleOption(&options, index);
-
-    QTextDocument doc;
-    doc.setHtml(options.text);
-    doc.setTextWidth(options.rect.width());
-    return QSize(doc.idealWidth(), doc.size().height());
-}
-
-} // namespace Utils
+#endif // DATAPACK_ISERVERENGINE_H

@@ -45,6 +45,7 @@ public:
 
     QString uuid() const;
     QString version() const;
+    QString name() const;
     QString serverFileName() const;
     QString serverLicenceFileName() const;
     QString md5ControlChecksum() const;

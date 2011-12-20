@@ -24,68 +24,53 @@
  *   Contributors :                                                        *
  *       NAME <MAIL@ADRESS>                                                *
  ***************************************************************************/
-#include "htmldelegate.h"
+#include "localserverengine.h"
+#include "servermanager.h"
 
-#include <QPainter>
-#include <QStyleOptionViewItemV4>
-#include <QVariant>
-#include <QModelIndex>
-#include <QString>
-#include <QIcon>
-#include <QTextDocument>
-#include <QApplication>
-#include <QAbstractTextDocumentLayout>
+#include <utils/global.h>
 
-#include <QDebug>
+using namespace DataPack;
+using namespace Internal;
 
-namespace Utils {
-
-static QString changeColors(const QStyleOptionViewItem &option, QString text)
+LocalServerEngine::LocalServerEngine(IServerManager *parent) :
+    IServerEngine(parent)
 {
-    if (option.state & QStyle::State_Selected) {
-        text.replace("color:gray", "color:lightgray");
-        text.replace("color:black", "color:white");
+}
+
+ServerManager *LocalServerEngine::serverManager()
+{
+    return qobject_cast<ServerManager*>(parent());
+}
+
+bool LocalServerEngine::managesServer(const Server &server)
+{
+    return server.nativeUrl().startsWith("file://");
+}
+
+void LocalServerEngine::addToDownloadQueue(const ServerEngineQuery &query)
+{
+    m_queue.append(query);
+}
+
+int LocalServerEngine::downloadQueueCount() const
+{
+    return m_queue.count();
+}
+
+bool LocalServerEngine::startDownloadQueue()
+{
+    for(int i = 0; i < m_queue.count(); ++i) {
+        const ServerEngineQuery &query = m_queue.at(i);
+        Server *server = query.server;
+        // Read the local server config
+        server->fromXml(Utils::readTextFile(server->url(Server::ServerConfigurationFile), Utils::DontWarnUser));
+        // Read the local pack config
+        for(int j = 0; j < server->content().packDescriptionFileNames().count(); ++j) {
+            Pack p;
+            p.fromXmlFile(server->url(Server::PackDescriptionFile, server->content().packDescriptionFileNames().at(j)));
+            serverManager()->registerPack(*server, p);
+        }
     }
-    return text;
+    m_queue.clear();
+    return true;
 }
-
-void HtmlDelegate::paint(QPainter *painter, const QStyleOptionViewItem &option, const QModelIndex &index) const
-{
-    QStyleOptionViewItemV4 optionV4 = option;
-    initStyleOption(&optionV4, index);
-
-    QStyle *style = optionV4.widget? optionV4.widget->style() : QApplication::style();
-
-    QTextDocument doc;
-    doc.setHtml(changeColors(option, optionV4.text));
-
-    /// Painting item without text
-    optionV4.text = QString();
-    style->drawControl(QStyle::CE_ItemViewItem, &optionV4, painter);
-
-    QAbstractTextDocumentLayout::PaintContext ctx;
-
-    // Highlighting text if item is selected
-    if (optionV4.state & QStyle::State_Selected)
-        ctx.palette.setColor(QPalette::Text, optionV4.palette.color(QPalette::Active, QPalette::HighlightedText));
-
-    QRect textRect = style->subElementRect(QStyle::SE_ItemViewItemText, &optionV4);
-    painter->save();
-    painter->translate(textRect.topLeft());
-    painter->setClipRect(textRect.translated(-textRect.topLeft()));
-    doc.documentLayout()->draw(painter, ctx);
-    painter->restore();
-}
-
-QSize HtmlDelegate::sizeHint(const QStyleOptionViewItem &option, const QModelIndex &index) const
-{
-    QStyleOptionViewItemV4 options = option;
-    initStyleOption(&options, index);
-
-    QTextDocument doc;
-    doc.setHtml(options.text);
-    doc.setTextWidth(options.rect.width());
-    return QSize(doc.idealWidth(), doc.size().height());
-}
-
-} // namespace Utils

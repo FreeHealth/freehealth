@@ -66,6 +66,9 @@ Server::Server(const QString &url) :
 /** Return the recorded UUID extracted for the server description. \sa Server::fromXml(), ServerDescription */
 QString Server::uuid() const
 {
+    if (m_Desc.data(ServerDescription::Uuid).toString().isEmpty()) {
+        return m_Url.toAscii().toBase64();
+    }
     return m_Desc.data(ServerDescription::Uuid).toString();
 }
 
@@ -124,7 +127,12 @@ QString Server::url(const FileRequested &file, const QString &fileName) const
         switch (m_UrlStyle) {
         case NoStyle:
         {
-            return fileName;
+            QFileInfo info(fileName);
+            if (info.isRelative()) {
+                QString t = m_Url;
+                info.setFile(t.replace("file:/", "") + fileName);
+            }
+            return info.absoluteFilePath();
         }
         case HttpPseudoSecuredAndZipped: return m_Url + "/get-" + fileName;
         case HttpPseudoSecuredNotZipped: return m_Url + "/" + fileName;

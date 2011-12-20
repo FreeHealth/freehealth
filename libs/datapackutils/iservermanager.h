@@ -65,8 +65,7 @@ public:
     virtual bool setGlobalConfiguration(const QString &xmlContent, QString *errorMsg = 0) = 0;
     virtual QString xmlConfiguration() const = 0;
 
-    virtual void connectServer(const Server &server, const ServerIdentification &ident = ServerIdentification()) = 0;
-
+    // Server list
     virtual bool addServer(const QString &url) = 0;
     virtual bool addServer(const Server &server) = 0;
     virtual int serverCount() const = 0;
@@ -74,8 +73,13 @@ public:
     virtual int getServerIndex(const QString &url) const = 0;
     virtual void removeServerAt(int index) = 0;
 
-    virtual void connectAndUpdate(int index) = 0;
+    // Downloads
+    virtual void getAllDescriptionFile() = 0;
     virtual void checkServerUpdates() = 0;
+
+
+    virtual void connectServer(const Server &server, const ServerIdentification &ident = ServerIdentification()) = 0;
+    virtual void connectAndUpdate(int index) = 0;
 
     virtual QList<PackDescription> getPackDescription(const Server &server) = 0;
     virtual QList<Pack> getPackForServer(const Server &server) = 0;
@@ -93,12 +97,9 @@ public:
 
     virtual QList<Pack> packDependencies(const Pack &pack, const PackDependencyData::TypeOfDependence &dependence) = 0;
 
-    virtual void setInstallPath(const QString &absPath) = 0;
-    virtual QString installPath() const = 0;
-protected:
-    virtual QString cachePath() const = 0;
-
 Q_SIGNALS:
+    void allServerDescriptionAvailable();
+
     void serverAdded(const int index);
     void serverAboutToBeRemoved(const Server &server);
     void serverAboutToBeRemoved(const int index);

@@ -44,6 +44,7 @@ class QToolBar;
 namespace DataPack {
 class PackDescription;
 class Pack;
+class ServerAndPackModel;
 
 namespace Ui {
     class ServerEditor;
@@ -79,8 +80,7 @@ private:
 
 private:
     Ui::ServerEditor *ui;
-    QStandardItemModel *m_ServerModel;
-    QStandardItemModel *m_PackModel;
+    ServerAndPackModel *m_ServerModel;
     QAction *aServerRemove, *aServerAdd, *aServerInfo, *aInstall, *aInstallAllPack, *aRemove, *aUpdate;
     QToolBar *m_ToolBar;
 };

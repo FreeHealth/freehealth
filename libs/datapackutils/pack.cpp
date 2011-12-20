@@ -59,6 +59,11 @@ QString Pack::version() const
     return m_descr.data(PackDescription::Version).toString();
 }
 
+QString Pack::name() const
+{
+    return m_descr.data(PackDescription::Label).toString();
+}
+
 QString Pack::serverFileName() const
 {
     return m_descr.data(PackDescription::AbsFileName).toString();

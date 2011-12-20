@@ -44,8 +44,11 @@ QT_END_NAMESPACE
 */
 
 namespace DataPack {
-
+namespace Internal {
 class ServerManagerPrivate;
+class IServerEngine;
+class LocalServerEngine;
+class HttpServerEngine;
 
 class ServerManager : public IServerManager
 {
@@ -54,21 +57,46 @@ public:
     explicit ServerManager(QObject *parent = 0);
     ~ServerManager();
 
+    // IServerManager interface
+    // Manage path
     bool setGlobalConfiguration(const QString &xmlContent, QString *errorMsg = 0);
     QString xmlConfiguration() const;
 
-    // IServerManager interface
-    void connectServer(const Server &server, const ServerIdentification &ident = ServerIdentification()); // will be deprecated regarding the connectAndUpdate function
+    void setInstallPath(const QString &absPath);
+    QString installPath() const;
 
+    void setPersistentCachePath(const QString &absPath);
+    QString persistentCachePath() const;
+
+    void setTemporaryCachePath(const QString &absPath);
+    QString temporaryCachePath() const;
+
+    // Server list
     bool addServer(const QString &url);
     bool addServer(const Server &server);
     int serverCount() const;
     Server getServerAt(int index) const;
     int getServerIndex(const QString &url) const;
     void removeServerAt(int index);
+
+    // Downloads
+    void getAllDescriptionFile();
+    void checkServerUpdates();
+
+private Q_SLOTS:
+    void engineDescriptionDownloadDone();
+
+
+    ////////////////////////////////////////////////
+public:
+    // In use
+    void registerPack(const Server &server, const Pack &pack);
+    // End
+
+    ////////////////////////////////////////////////
+    void connectServer(const Server &server, const ServerIdentification &ident = ServerIdentification()); // will be deprecated regarding the connectAndUpdate function
     void connectAndUpdate(int index);
 
-    void checkServerUpdates();
 
     QList<PackDescription> getPackDescription(const Server &server);
     QList<Pack> getPackForServer(const Server &server);
@@ -85,18 +113,14 @@ public:
 
     QList<Pack> packDependencies(const Pack &pack, const PackDependencyData::TypeOfDependence &dependence);
 
-    void setInstallPath(const QString &absPath);
-    QString installPath() const;
 
 protected:
     QString cachePath() const;
 
 public:
     // Hidden Private part
-    QNetworkAccessManager *networkAccessManager() const {return m_NetworkAccessManager;}
     const QVector<Server> &servers() const {return m_Servers;}
     void createServerPackList(const Server &server);
-    void setCachePath(const QString &absPath);
 
 private Q_SLOTS:
     bool downloadDataPack(const Server &server, const Pack &pack, QProgressBar *progressBar);
@@ -108,36 +132,21 @@ Q_SIGNALS:
 
 private:
     void checkServerUpdatesAfterDownload();
-    QNetworkRequest createRequest(const QString &url); // create a request with good headers
 
 private:
-    // this private struct contains all data associated with a QNetworkReply. It will be set as a user attribute in the QNetworkReply at its creation (see QNetworkReply::setAttribute()).
-    struct ReplyData {
-        ReplyData(){}
-        ReplyData(QNetworkReply *reply, Server *server, Server::FileRequested fileType);
-        QNetworkReply *reply;
-        Server *server;
-        QByteArray response;
-        Server::FileRequested fileType; // a configuration file? a pack file? etc
-    };
-
-    QNetworkAccessManager *m_NetworkAccessManager;
-    QString filesCachePath, m_installPath;
+    QString m_installPath, m_tmpCachePath, m_persistentCachePath;
     QVector<Server> m_Servers;
     QMultiHash<QString, PackDescription> m_PackDescriptions;
     QMultiHash<QString, Pack> m_Packs;
-    QHash<QNetworkReply*,ReplyData> m_replyToData;
 
-    void afterServerConfigurationDownload(const ReplyData &data); // called after a server configuration file download
-    void afterPackDescriptionFileDownload(const ReplyData &data); // called after a pack description file download
-    void afterPackFileDownload(const ReplyData &data); // called after a pack file download
+    LocalServerEngine *m_LocalEngine;
+    HttpServerEngine *m_HttpEngine;
+    QVector<IServerEngine *> m_WorkingEngines;
+//    FtpServerEngine *m_FtpEngine;
 
-private Q_SLOTS:
-    void serverReadyRead();
-    void serverError(QNetworkReply::NetworkError error);
-    void serverFinished();
 };
 
+}  // End namespace Internal
 }  // End namespace DataPack
 
 #endif // DATAPACK_SERVERMANAGER_H

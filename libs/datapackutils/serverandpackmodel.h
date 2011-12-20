@@ -24,68 +24,48 @@
  *   Contributors :                                                        *
  *       NAME <MAIL@ADRESS>                                                *
  ***************************************************************************/
-#include "htmldelegate.h"
+#ifndef DATAPACK_SERVERANDPACKMODEL_H
+#define DATAPACK_SERVERANDPACKMODEL_H
 
-#include <QPainter>
-#include <QStyleOptionViewItemV4>
-#include <QVariant>
-#include <QModelIndex>
-#include <QString>
-#include <QIcon>
-#include <QTextDocument>
-#include <QApplication>
-#include <QAbstractTextDocumentLayout>
+#include <QStandardItemModel>
 
-#include <QDebug>
+/**
+ * \file serverandpackmodel.h
+ * \author Eric MAEKER <eric.maeker@gmail.com>
+ * \version 0.6.2
+ * \date 15 Dec 2011
+*/
 
-namespace Utils {
+namespace DataPack {
 
-static QString changeColors(const QStyleOptionViewItem &option, QString text)
+class ServerAndPackModel : public QStandardItemModel
 {
-    if (option.state & QStyle::State_Selected) {
-        text.replace("color:gray", "color:lightgray");
-        text.replace("color:black", "color:white");
-    }
-    return text;
-}
+    Q_OBJECT
+public:
+    enum DataRepresentation {
+        Label = 0,
+        Request
+    };
 
-void HtmlDelegate::paint(QPainter *painter, const QStyleOptionViewItem &option, const QModelIndex &index) const
-{
-    QStyleOptionViewItemV4 optionV4 = option;
-    initStyleOption(&optionV4, index);
+    explicit ServerAndPackModel(QObject *parent = 0);
 
-    QStyle *style = optionV4.widget? optionV4.widget->style() : QApplication::style();
+    void setInstallChecker(const bool onOff);
+    void setPackCheckable(const bool checkable);
 
-    QTextDocument doc;
-    doc.setHtml(changeColors(option, optionV4.text));
+    QVariant data(const QModelIndex &index, int role = Qt::DisplayRole) const;
+    bool setData(const QModelIndex &index, const QVariant &value, int role = Qt::EditRole);
 
-    /// Painting item without text
-    optionV4.text = QString();
-    style->drawControl(QStyle::CE_ItemViewItem, &optionV4, painter);
+    Qt::ItemFlags flags(const QModelIndex &index) const;
 
-    QAbstractTextDocumentLayout::PaintContext ctx;
+signals:
 
-    // Highlighting text if item is selected
-    if (optionV4.state & QStyle::State_Selected)
-        ctx.palette.setColor(QPalette::Text, optionV4.palette.color(QPalette::Active, QPalette::HighlightedText));
+private Q_SLOTS:
+    void updateModel();
 
-    QRect textRect = style->subElementRect(QStyle::SE_ItemViewItemText, &optionV4);
-    painter->save();
-    painter->translate(textRect.topLeft());
-    painter->setClipRect(textRect.translated(-textRect.topLeft()));
-    doc.documentLayout()->draw(painter, ctx);
-    painter->restore();
-}
+private:
+    bool m_InstallChecking, m_PackCheckable;
+};
 
-QSize HtmlDelegate::sizeHint(const QStyleOptionViewItem &option, const QModelIndex &index) const
-{
-    QStyleOptionViewItemV4 options = option;
-    initStyleOption(&options, index);
+}  // End namespace DataPack
 
-    QTextDocument doc;
-    doc.setHtml(options.text);
-    doc.setTextWidth(options.rect.width());
-    return QSize(doc.idealWidth(), doc.size().height());
-}
-
-} // namespace Utils
+#endif // DATAPACK_SERVERANDPACKMODEL_H

@@ -24,68 +24,15 @@
  *   Contributors :                                                        *
  *       NAME <MAIL@ADRESS>                                                *
  ***************************************************************************/
-#include "htmldelegate.h"
+#include "iserverengine.h"
+#include "iservermanager.h""
 
-#include <QPainter>
-#include <QStyleOptionViewItemV4>
-#include <QVariant>
-#include <QModelIndex>
-#include <QString>
-#include <QIcon>
-#include <QTextDocument>
-#include <QApplication>
-#include <QAbstractTextDocumentLayout>
+using namespace DataPack;
+using namespace Internal;
 
-#include <QDebug>
-
-namespace Utils {
-
-static QString changeColors(const QStyleOptionViewItem &option, QString text)
+IServerEngine::IServerEngine(IServerManager *parent) :
+    QObject(parent)
 {
-    if (option.state & QStyle::State_Selected) {
-        text.replace("color:gray", "color:lightgray");
-        text.replace("color:black", "color:white");
-    }
-    return text;
 }
 
-void HtmlDelegate::paint(QPainter *painter, const QStyleOptionViewItem &option, const QModelIndex &index) const
-{
-    QStyleOptionViewItemV4 optionV4 = option;
-    initStyleOption(&optionV4, index);
 
-    QStyle *style = optionV4.widget? optionV4.widget->style() : QApplication::style();
-
-    QTextDocument doc;
-    doc.setHtml(changeColors(option, optionV4.text));
-
-    /// Painting item without text
-    optionV4.text = QString();
-    style->drawControl(QStyle::CE_ItemViewItem, &optionV4, painter);
-
-    QAbstractTextDocumentLayout::PaintContext ctx;
-
-    // Highlighting text if item is selected
-    if (optionV4.state & QStyle::State_Selected)
-        ctx.palette.setColor(QPalette::Text, optionV4.palette.color(QPalette::Active, QPalette::HighlightedText));
-
-    QRect textRect = style->subElementRect(QStyle::SE_ItemViewItemText, &optionV4);
-    painter->save();
-    painter->translate(textRect.topLeft());
-    painter->setClipRect(textRect.translated(-textRect.topLeft()));
-    doc.documentLayout()->draw(painter, ctx);
-    painter->restore();
-}
-
-QSize HtmlDelegate::sizeHint(const QStyleOptionViewItem &option, const QModelIndex &index) const
-{
-    QStyleOptionViewItemV4 options = option;
-    initStyleOption(&options, index);
-
-    QTextDocument doc;
-    doc.setHtml(options.text);
-    doc.setTextWidth(options.rect.width());
-    return QSize(doc.idealWidth(), doc.size().height());
-}
-
-} // namespace Utils

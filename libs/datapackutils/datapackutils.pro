@@ -15,12 +15,16 @@ HEADERS += datapack_exporter.h \
     packdescription.h \
     pack.h \
     serveridentification.h \
-    constants.h \
     servercontent.h \
     core.h \
     iservermanager.h \
     widgets/servereditor.h \
-    widgets/addserverdialog.h
+    widgets/addserverdialog.h \
+    widgets/installpackdialog.h \
+    serverandpackmodel.h \
+    iserverengine.h \
+    localserverengine.h \
+    httpserverengine.h
 
 SOURCES += \
     servermanager.cpp \
@@ -33,11 +37,28 @@ SOURCES += \
     core.cpp \
     iservermanager.cpp \
     widgets/servereditor.cpp \
-    widgets/addserverdialog.cpp
+    widgets/addserverdialog.cpp \
+    widgets/installpackdialog.cpp \
+    serverandpackmodel.cpp \
+    iserverengine.cpp \
+    localserverengine.cpp \
+    httpserverengine.cpp
 
 FORMS += \
     widgets/servereditor.ui \
-    widgets/addserverdialog.ui
+    widgets/addserverdialog.ui \
+    widgets/installpackdialog.ui
+
+
+
+
+
+
+
+
+
+
+
 
 
 

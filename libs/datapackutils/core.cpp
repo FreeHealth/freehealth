@@ -42,7 +42,6 @@ DataPack::Core* DataPack::Core::instance(QObject *parent)
     return m_instance;
 }
 
-
 namespace DataPack {
 namespace Internal {
 class CorePrivate
@@ -53,7 +52,7 @@ public:
 public:
     ServerManager *m_ServerManager;
     QHash<int, QString> m_ThemePath;
-    QString m_InstallPath, m_CachePath;
+    QString m_InstallPath, m_TmpCachePath, m_PersistentCachePath;
 };
 }  // End namespace Internal
 }  // End namespace DataPack
@@ -62,7 +61,7 @@ Core::Core(QObject *parent) :
     QObject(parent),
     d(new Internal::CorePrivate)
 {
-    d->m_ServerManager = new ServerManager(this);
+    d->m_ServerManager = new Internal::ServerManager(this);
 }
 
 bool Core::isInternetConnexionAvailable()
@@ -79,21 +78,42 @@ IServerManager *Core::serverManager() const
     return d->m_ServerManager;
 }
 
-void Core::setPackInstallPath(const QString &absPath)
+void Core::setInstallPath(const QString &absPath)
 {
     d->m_InstallPath = QDir::cleanPath(absPath);
     d->m_ServerManager->setInstallPath(d->m_InstallPath);
 }
 
-void Core::setServerCachePath(const QString &absPath)
+QString Core::installPath() const
 {
-    d->m_CachePath = QDir::cleanPath(absPath);
-    d->m_ServerManager->setCachePath(d->m_InstallPath);
+    return d->m_InstallPath;
+}
+
+void Core::setPersistentCachePath(const QString &absPath)
+{
+    d->m_PersistentCachePath = QDir::cleanPath(absPath);
+    d->m_ServerManager->setPersistentCachePath(d->m_PersistentCachePath);
+}
+
+QString Core::persistentCachePath() const
+{
+    return d->m_PersistentCachePath;
+}
+
+void Core::setTemporaryCachePath(const QString &absPath)
+{
+    d->m_TmpCachePath = QDir::cleanPath(absPath);
+    d->m_ServerManager->setTemporaryCachePath(d->m_TmpCachePath);
+}
+
+QString Core::temporaryCachePath() const
+{
+    return d->m_TmpCachePath;
 }
 
 void Core::setThemePath(ThemePath path, const QString &absPath)
 {
-    d->m_ThemePath.insert(path, absPath);
+    d->m_ThemePath.insert(path, QDir::cleanPath(absPath));
 }
 
 QString Core::icon(const QString &name, ThemePath path)

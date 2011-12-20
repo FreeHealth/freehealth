@@ -79,6 +79,7 @@ QString PackDependencyData::typeName(int typeReference)
     case Provides: return ::TYPE_PROVIDES;
     default: return QString::null;
     }
+    return QString::null;
 }
 
 int PackDependencyData::typeFromName(const QString &name)
@@ -86,11 +87,11 @@ int PackDependencyData::typeFromName(const QString &name)
     if (name.compare(::TYPE_BREAKS, Qt::CaseInsensitive)==0)
         return Breaks;
     if (name.compare(::TYPE_CONFLICTS, Qt::CaseInsensitive)==0)
-        return Breaks;
+        return Conflicts;
     if (name.compare(::TYPE_DEPENDS, Qt::CaseInsensitive)==0)
-        return Breaks;
+        return Depends;
     if (name.compare(::TYPE_PROVIDES, Qt::CaseInsensitive)==0)
-        return Breaks;
+        return Provides;
     if (name.compare(::TYPE_RECOMMENDS, Qt::CaseInsensitive)==0)
         return Recommends;
     if (name.compare(::TYPE_REQUIRES, Qt::CaseInsensitive)==0)

@@ -24,8 +24,10 @@
  *   Contributors :                                                        *
  *       NAME <MAIL@ADRESS>                                                *
  ***************************************************************************/
-//#include "servermanager_p.h"
 #include "servermanager.h"
+#include "widgets/installpackdialog.h"
+#include "localserverengine.h"
+#include "httpserverengine.h"
 
 #include <utils/log.h>
 #include <utils/global.h>
@@ -34,18 +36,14 @@
 
 #include <quazip/global.h>
 
-#include <QNetworkAccessManager>
-#include <QNetworkConfigurationManager>
-#include <QNetworkRequest>
 #include <QDir>
 #include <QDomDocument>
 #include <QDomElement>
-#include <QSignalMapper>
-#include <QUuid>
 
 #include <QDebug>
 
 using namespace DataPack;
+using namespace DataPack::Internal;
 using namespace Trans::ConstantTranslations;
 
 namespace {
@@ -70,22 +68,23 @@ const char * const SERVER_CONFIG_FILENAME   = "server.conf.xml";
 
 
 ServerManager::ServerManager(QObject *parent) :
-    IServerManager(parent),
-    m_NetworkAccessManager(new QNetworkAccessManager(this))
+    IServerManager(parent)
 {
     setObjectName("ServerManager");
-//    if (!QDir(filesCachePath).exists()) {
-//        LOG_ERROR(tkTr(Trans::Constants::PATH_1_DOESNOT_EXISTS).arg(filesCachePath));
-//    }
-//    m_d->filesCachePath = QDir::cleanPath(filesCachePath);
+
+    // Create engines
+    m_LocalEngine = new LocalServerEngine(this);
+    m_HttpEngine = new HttpServerEngine(this);
+    m_WorkingEngines << m_LocalEngine << m_HttpEngine;
 }
 
 ServerManager::~ServerManager()
 {
-    delete m_NetworkAccessManager;
-    // Servers are delete by the QObject inheritance
 }
 
+/////////////////////////////////////////////////////////////////////////////////////////
+////////////////////////////// Config and path //////////////////////////////////////////
+/////////////////////////////////////////////////////////////////////////////////////////
 bool ServerManager::setGlobalConfiguration(const QString &xmlContent, QString *errorMsg)
 {
     QDomDocument doc;
@@ -136,6 +135,167 @@ QString ServerManager::xmlConfiguration() const
     }
     return doc.toString(2);
 }
+
+void ServerManager::setInstallPath(const QString &absPath)
+{
+    m_installPath = QDir::cleanPath(absPath);
+}
+
+QString ServerManager::installPath() const
+{
+    return m_installPath;
+}
+
+void ServerManager::setPersistentCachePath(const QString &absPath)
+{
+    m_persistentCachePath = QDir::cleanPath(absPath);
+}
+
+QString ServerManager::persistentCachePath() const
+{
+    return m_persistentCachePath;
+}
+
+void ServerManager::setTemporaryCachePath(const QString &absPath)
+{
+    m_tmpCachePath = QDir::cleanPath(absPath);
+}
+
+QString ServerManager::temporaryCachePath() const
+{
+    return m_tmpCachePath;
+}
+
+/////////////////////////////////////////////////////////////////////////////////////////
+/////////////////////////////// Server list /////////////////////////////////////////////
+/////////////////////////////////////////////////////////////////////////////////////////
+bool ServerManager::addServer(const QString &url)
+{
+    Server server(url);
+    return addServer(server);
+}
+
+bool ServerManager::addServer(const Server &server)
+{
+    // check if a server already exists with the same URL
+    foreach (Server child, m_Servers) {
+        if (child == server)
+            return false;
+    }
+    m_Servers.append(server);
+    Q_EMIT serverAdded(m_Servers.count() - 1);
+    return true;
+}
+
+int ServerManager::serverCount() const
+{
+    return m_Servers.count();
+}
+
+Server ServerManager::getServerAt(int index) const
+{
+    if (index < m_Servers.count() && index >= 0)
+        return m_Servers.at(index);
+    return Server();
+}
+
+int ServerManager::getServerIndex(const QString &url) const
+{
+    for (int i = 0; i < m_Servers.count(); i++)
+        if (m_Servers.at(i).url() == url)
+            return i;
+    return -1;
+}
+
+void ServerManager::removeServerAt(int index)
+{
+    if (index >= 0 && index < m_Servers.count()) {
+        Server removed = m_Servers.at(index);
+        Q_EMIT serverAboutToBeRemoved(removed);
+        Q_EMIT serverAboutToBeRemoved(index);
+        m_Servers.remove(index);
+        Q_EMIT serverRemoved(removed);
+        Q_EMIT serverRemoved(index);
+    }
+}
+
+/////////////////////////////////////////////////////////////////////////////////////////
+/////////////////////////// Updates and installs ////////////////////////////////////////
+/////////////////////////////////////////////////////////////////////////////////////////
+void ServerManager::getAllDescriptionFile()
+{
+    for(int i=0; i < m_Servers.count(); ++i) {
+        Server *s = &m_Servers[i];
+        qWarning() << "getAllDescription" << i << s->nativeUrl();
+        for(int j = 0; j < m_WorkingEngines.count(); ++j) {
+            IServerEngine *engine = m_WorkingEngines.at(j);
+            if (engine->managesServer(*s)) {
+                ServerEngineQuery query;
+                query.server = s;
+                query.forceDescriptionFromLocalCache = false;
+                query.downloadDescriptionFiles = true;
+                query.downloadPackFile = false;
+                engine->addToDownloadQueue(query);
+            }
+        }
+    }
+    for(int j = 0; j < m_WorkingEngines.count(); ++j) {
+        IServerEngine *engine = m_WorkingEngines.at(j);
+        if (engine->downloadQueueCount() > 0) {
+            connect(engine, SIGNAL(queueDowloaded()), this, SLOT(engineDescriptionDownloadDone()));
+            engine->startDownloadQueue();
+        }
+    }
+}
+
+void ServerManager::checkServerUpdates()
+{
+    WARN_FUNC << m_Servers.count();
+//    for(int i=0; i < m_Servers.count(); ++i) {
+//        Server &s = m_Servers[i];
+//        qDebug("%d: %s", i, qPrintable(s.url()));
+//        if (s.isLocalServer()) {
+//            // check directly
+//            s.fromXml(Utils::readTextFile(s.url(Server::ServerConfigurationFile), Utils::DontWarnUser));
+//            // move a copy of the description in the working path of server manager
+//        } else {
+//            // FTP | HTTP
+//            // Download server.conf.xml
+//            QNetworkRequest request = createRequest(s.url(Server::ServerConfigurationFile));
+//            QNetworkReply *reply = m_NetworkAccessManager->get(request);
+//            m_replyToData.insert(reply, ReplyData(reply, &s, Server::ServerConfigurationFile));
+//            connect(reply, SIGNAL(readyRead()), this, SLOT(serverReadyRead()));
+//            connect(reply, SIGNAL(finished()), this, SLOT(serverFinished()));
+//                        // TODO manage errors
+//        }
+//    }
+//    // TODO THIS LINE IS ONLY FOR TESTING PURPOSE
+//    checkServerUpdatesAfterDownload();
+}
+
+void ServerManager::engineDescriptionDownloadDone()
+{
+    WARN_FUNC;
+    // if all engines download done -> emit signal
+    bool __emit = true;
+    for(int i = 0; i < m_WorkingEngines.count(); ++i) {
+        if (m_WorkingEngines.at(i)->downloadQueueCount()>0) {
+            qWarning() << m_WorkingEngines.at(i)->objectName() << m_WorkingEngines.at(i)->downloadQueueCount();
+            __emit = false;
+        }
+    }
+    if (__emit)
+        Q_EMIT allServerDescriptionAvailable();
+}
+
+void ServerManager::registerPack(const Server &server, const Pack &pack)
+{
+    m_Packs.insertMulti(server.uuid(), pack);
+}
+
+
+
+/////////////////////////////////////////////////////////////////////////////////////////
 
 void ServerManager::connectServer(const Server &server, const ServerIdentification &ident)
 {
@@ -214,11 +374,10 @@ bool ServerManager::installDataPack(const Server &server, const Pack &pack, QPro
 {
     Q_ASSERT(progressBar);
     connect(this, SIGNAL(packDownloaded(Server,Pack,QProgressBar*)), this, SLOT(checkAndInstallPack(Server,Pack,QProgressBar*)));
-    // check dependencies
-    QList<Pack> installMe;
-    installMe << pack;
     // dialog with things to install/update
-//    installDialog(pack, packs);
+    InstallPackDialog dlg;
+    dlg.setPackToInstall(pack);
+    dlg.exec();
 
     if (!server.isLocalServer()) {
         downloadDataPack(server, pack, progressBar);
@@ -275,76 +434,6 @@ QList<Pack> ServerManager::packDependencies(const Pack &pack, const PackDependen
     return toReturn;
 }
 
-void ServerManager::setCachePath(const QString &absPath)
-{
-    filesCachePath = absPath;
-}
-
-QString ServerManager::cachePath() const
-{
-    return filesCachePath;
-}
-
-void ServerManager::setInstallPath(const QString &absPath)
-{
-    m_installPath=QDir::cleanPath(absPath);
-}
-
-QString ServerManager::installPath() const
-{
-    return m_installPath;
-}
-
-bool ServerManager::addServer(const QString &url)
-{
-    Server server(url);
-    return addServer(server);
-}
-
-bool ServerManager::addServer(const Server &server)
-{
-    // check if a server already exists with the same URL
-    foreach (Server child, m_Servers) {
-        if (child == server)
-            return false;
-    }
-    m_Servers.append(server);
-    Q_EMIT serverAdded(m_Servers.count() - 1);
-    return true;
-}
-
-int ServerManager::serverCount() const
-{
-    return m_Servers.count();
-}
-
-Server ServerManager::getServerAt(int index) const
-{
-    if (index < m_Servers.count() && index >= 0)
-        return m_Servers.at(index);
-    return Server();
-}
-
-int ServerManager::getServerIndex(const QString &url) const
-{
-    for (int i = 0; i < m_Servers.count(); i++)
-        if (m_Servers.at(i).url() == url)
-            return i;
-    return -1;
-}
-
-void ServerManager::removeServerAt(int index)
-{
-    if (index >= 0 && index < m_Servers.count()) {
-        Server removed = m_Servers.at(index);
-        Q_EMIT serverAboutToBeRemoved(removed);
-        Q_EMIT serverAboutToBeRemoved(index);
-        m_Servers.remove(index);
-        Q_EMIT serverRemoved(removed);
-        Q_EMIT serverRemoved(index);
-    }
-}
-
 void ServerManager::connectAndUpdate(int index)
 {
     Q_UNUSED(index);
@@ -352,30 +441,6 @@ void ServerManager::connectAndUpdate(int index)
 //        m_Servers.at(index).connectAndUpdate();
 }
 
-void ServerManager::checkServerUpdates()
-{
-    WARN_FUNC << m_Servers.count();
-    for(int i=0; i < m_Servers.count(); ++i) {
-        Server &s = m_Servers[i];
-        qDebug("%d: %s", i, qPrintable(s.url()));
-        if (s.isLocalServer()) {
-            // check directly
-            s.fromXml(Utils::readTextFile(s.url(Server::ServerConfigurationFile), Utils::DontWarnUser));
-            // move a copy of the description in the working path of server manager
-        } else {
-            // FTP | HTTP
-            // Download server.conf.xml
-            QNetworkRequest request = createRequest(s.url(Server::ServerConfigurationFile));
-            QNetworkReply *reply = m_NetworkAccessManager->get(request);
-            m_replyToData.insert(reply, ReplyData(reply, &s, Server::ServerConfigurationFile));
-            connect(reply, SIGNAL(readyRead()), this, SLOT(serverReadyRead()));
-            connect(reply, SIGNAL(finished()), this, SLOT(serverFinished()));
-			// TODO manage errors
-        }
-    }
-    // TODO THIS LINE IS ONLY FOR TESTING PURPOSE
-    checkServerUpdatesAfterDownload();
-}
 
 QList<PackDescription> ServerManager::getPackDescription(const Server &server)
 {
@@ -383,8 +448,8 @@ QList<PackDescription> ServerManager::getPackDescription(const Server &server)
     // If Pack list already known return it
     QList<PackDescription> toReturn;
     const QStringList keys = m_Packs.uniqueKeys();
-    if (keys.contains(server.url(), Qt::CaseInsensitive)) {
-        QList<Pack> packs = m_Packs.values(server.url());
+    if (keys.contains(server.uuid(), Qt::CaseInsensitive)) {
+        QList<Pack> packs = m_Packs.values(server.uuid());
         for(int i = 0; i < packs.count(); ++i) {
             toReturn << packs.at(i).description();
         }
@@ -403,12 +468,12 @@ QList<PackDescription> ServerManager::getPackDescription(const Server &server)
 QList<Pack> ServerManager::getPackForServer(const Server &server)
 {
     createServerPackList(server);
-    return m_Packs.values(server.url());
+    return m_Packs.values(server.uuid());
 }
 
 void ServerManager::createServerPackList(const Server &server)
 {
-    if (!m_Packs.values(server.url()).isEmpty()) {
+    if (!m_Packs.values(server.uuid()).isEmpty()) {
         return;
     }
     // Get the server config
@@ -420,7 +485,7 @@ void ServerManager::createServerPackList(const Server &server)
         // Read the packDescription
         pack.fromXmlFile(f.absoluteFilePath());
         // Store in the cache
-        m_Packs.insertMulti(server.url(), pack);
+        m_Packs.insertMulti(server.uuid(), pack);
     }
 }
 
@@ -432,149 +497,11 @@ void ServerManager::checkServerUpdatesAfterDownload()
             qWarning() << "UPDATE" << s.url() << s.localVersion() << s.description().data(ServerDescription::Version).toString();
         }
         s.setLastChecked(QDateTime::currentDateTime());
+//        if (s.isConnected())
+//           Q_EMIT serverConnected(s, ServerIdentification());
 //        s.setLocalVersion();
     }
     Q_EMIT serverUpdateChecked();
 }
 
-void ServerManager::serverReadyRead()
-{
-    QNetworkReply *reply = qobject_cast<QNetworkReply*>(sender());
-    ReplyData &data = m_replyToData[reply];
-    data.response.append(reply->readAll());
-}
 
-void ServerManager::serverError(QNetworkReply::NetworkError error)
-{
-    Q_UNUSED(error);
-
-    // TODO manage errors
-}
-
-void ServerManager::serverFinished()
-{
-    QNetworkReply *reply = qobject_cast<QNetworkReply*>(sender());
-    if (reply->error() != QNetworkReply::NoError)
-        return;
-    ReplyData &data = m_replyToData[reply];
-    reply->deleteLater(); // we don't need reply anymore
-
-    switch (data.fileType) {
-    case Server::ServerConfigurationFile:
-        afterServerConfigurationDownload(data);
-        break;
-    case Server::PackDescriptionFile:
-        afterPackDescriptionFileDownload(data);
-        break;
-    case Server::PackFile:
-        afterPackFileDownload(data);
-        break;
-    default:;
-    }
-
-    // we can remove the associated data
-    m_replyToData.remove(reply);
-}
-
-void ServerManager::afterServerConfigurationDownload(const ReplyData &data)
-{
-    bool downloadPackDescriptionNeeded = false;
-    Server *server = data.server;
-
-    switch (server->urlStyle()) {
-    case Server::NoStyle:
-    {
-        // Read the XML from the buffer
-        server->fromXml(data.response);
-        break;
-    }
-    case Server::Ftp:
-    case Server::Http:
-    case Server::HttpPseudoSecuredNotZipped:
-    {
-        // Read the XML from the buffer
-        server->fromXml(data.response);
-        downloadPackDescriptionNeeded = true;
-        break;
-    }
-    case Server::FtpZipped:
-    case Server::HttpPseudoSecuredAndZipped:
-    {
-        // save buffer to tmp zip file
-        QString zipName = m_installPath + QDir::separator() + "datapacktmp" + QDir::separator() + QUuid::createUuid().toString().remove("-").remove("{").remove("}") + QDir::separator() + "serverconf.zip";
-        QDir().mkpath(QFileInfo(zipName).absolutePath());
-        QFile zip(zipName);
-        if (!zip.open(QFile::WriteOnly | QFile::Text)) {
-            LOG_ERROR(tkTr(Trans::Constants::FILE_1_ISNOT_READABLE).arg(zip.fileName()));
-            return;
-        }
-        zip.write(data.response);
-        zip.close();
-
-        // unzip file
-        if (!QuaZipTools::unzipFile(zipName)) {
-            LOG_ERROR("Unable to unzip file: " + zipName);
-            return;
-        }
-
-        // read server configuration file
-        QString serverConfFile = QFileInfo(zipName).absolutePath() + QDir::separator() + Server::serverConfigurationFileName();
-        server->fromXml(Utils::readTextFile(serverConfFile, Utils::DontWarnUser));
-
-        // test downloaded zip files for all pack description
-        foreach(const QString &file, server->content().packDescriptionFileNames()) {
-            QFileInfo info(file);
-            if (info.isRelative()) { // This must be always the case...
-                info.setFile(QFileInfo(zipName).absolutePath() + QDir::separator() + info.fileName());
-            }
-            if (!info.exists()) {
-                downloadPackDescriptionNeeded = true;
-            }
-        }
-        break;
-    }
-    }
-
-    // Download all linked packagedescription -> see ServerContent --> server.content().packDescriptionFileNames()
-    if (downloadPackDescriptionNeeded) {
-        foreach(const QString &file, server->content().packDescriptionFileNames()) {
-            QNetworkRequest request = createRequest(server->url(Server::PackDescriptionFile, file));
-            QNetworkReply *reply = m_NetworkAccessManager->get(request);
-            m_replyToData.insert(reply, ReplyData(reply, server, Server::PackDescriptionFile));
-            connect(reply, SIGNAL(readyRead()), this, SLOT(serverReadyRead()));
-            connect(reply, SIGNAL(finished()), this, SLOT(serverFinished()));
-            // TODO manage errors
-        }
-    }
-
-    // When all descriptions are downloaded call -> checkServerUpdatesAfterDownload()
-    checkServerUpdatesAfterDownload();
-}
-
-QNetworkRequest ServerManager::createRequest(const QString &url)
-{
-    QNetworkRequest request(url);
-    request.setRawHeader("User-Agent", QString("FreeMedForms:%1;%2")
-                         .arg(qApp->applicationName())
-                         .arg(qApp->applicationVersion()).toAscii());
-    return request;
-}
-
-void ServerManager::afterPackDescriptionFileDownload(const ReplyData &data)
-{
-    PackDescription desc;
-    desc.fromXmlContent(data.response);
-    m_PackDescriptions.insert(data.reply->request().url().toString(), desc);
-}
-
-void ServerManager::afterPackFileDownload(const ReplyData &data)
-{
-    // TODO
-    Q_UNUSED(data);
-}
-
-ServerManager::ReplyData::ReplyData(QNetworkReply *reply, Server *server, Server::FileRequested fileType) {
-    this->reply = reply;
-    this->server = server;
-    this->fileType = fileType;
-}
