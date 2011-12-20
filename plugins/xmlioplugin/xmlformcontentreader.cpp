@@ -97,6 +97,7 @@ XmlFormContentReader::XmlFormContentReader()
    m_ValuesTypes.insert(Constants::TAG_VALUE_POSSIBLE, Form::FormItemValues::Value_Possible);
    m_ValuesTypes.insert(Constants::TAG_VALUE_DEPENDENCIES, Form::FormItemValues::Value_Dependency);
    m_ValuesTypes.insert(Constants::TAG_VALUE_PRINT, Form::FormItemValues::Value_Printing);
+   m_ValuesTypes.insert(Constants::TAG_VALUE_DEFAULT, Form::FormItemValues::Value_Default);
 
    m_SpecsTypes.clear();
    m_SpecsTypes.insert(Constants::TAG_SPEC_PLUGINNAME, Form::FormItemSpec::Spec_Plugin);
@@ -439,6 +440,8 @@ bool XmlFormContentReader::loadElement(Form::FormItem *item, QDomElement &rootEl
         // Add a form file ?
         if (element.tagName().compare(Constants::TAG_ADDFILE, Qt::CaseInsensitive)==0) {
             QString fileName = element.text();
+            fileName = fileName.replace(Core::Constants::TAG_APPLICATION_COMPLETEFORMS_PATH, settings()->path(Core::ISettings::CompleteFormsPath), Qt::CaseInsensitive);
+            fileName = fileName.replace(Core::Constants::TAG_APPLICATION_SUBFORMS_PATH, settings()->path(Core::ISettings::SubFormsPath), Qt::CaseInsensitive);
             if (QFileInfo(fileName).isRelative())
                 fileName.prepend(QFileInfo(form.absFileName).absolutePath() + QDir::separator());
             fileName = QDir::cleanPath(fileName);
