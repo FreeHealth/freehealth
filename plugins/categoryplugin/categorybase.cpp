@@ -435,7 +435,7 @@ bool CategoryBase::saveCategoryLabels(CategoryItem *category)
     int labelId = -1;
     if (category->data(CategoryItem::DbOnly_LabelId).isNull() ||
         category->data(CategoryItem::DbOnly_LabelId).toInt()==-1) {
-        labelId = max(Constants::Table_CATEGORY_LABEL, Constants::CATEGORYLABEL_LABEL_ID) ;
+        labelId = max(Constants::Table_CATEGORY_LABEL, Constants::CATEGORYLABEL_LABEL_ID).toInt();
         ++labelId;
         category->setData(CategoryItem::DbOnly_LabelId, labelId);
         // create an empty label using this LabelId

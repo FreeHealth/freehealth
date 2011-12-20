@@ -1486,7 +1486,7 @@ int Database::count(const int & tableref, const int & fieldref, const QString &f
    Return a MAX SQL command on the table \e tableref, field \e fieldref with the filter \e filter.
   Filter whould be not contains the "WHERE" word.
 */
-double Database::max(const int &tableref, const int &fieldref, const QString &filter) const
+QVariant Database::max(const int &tableref, const int &fieldref, const QString &filter) const
 {
     QString req = QString("SELECT max(%1) FROM %2")
                   .arg(d->m_Fields.value(1000 * tableref + fieldref))
@@ -1498,21 +1498,21 @@ double Database::max(const int &tableref, const int &fieldref, const QString &fi
     QSqlQuery q(req, database());
     if (q.isActive()) {
         if (q.next()) {
-            return q.value(0).toDouble();
+            return q.value(0);
         } else {
             LOG_QUERY_ERROR_FOR("Database", q);
         }
     } else {
         LOG_QUERY_ERROR_FOR("Database", q);
     }
-    return 0;
+    return QVariant();
 }
 
 /**
    Return a MAX SQL command with grouping on the table \e tableref, field \e fieldref, grouped by field \e groupBy with the filter \e filter.
   Filter whould be not contains the "WHERE" word.
 */
-double Database::max(const int &tableref, const int &fieldref, const int &groupBy, const QString &filter) const
+QVariant Database::max(const int &tableref, const int &fieldref, const int &groupBy, const QString &filter) const
 {
     QString req = QString("SELECT max(%1) FROM %2 GROUP BY %3")
                   .arg(d->m_Fields.value(1000 * tableref + fieldref))
@@ -1525,14 +1525,40 @@ double Database::max(const int &tableref, const int &fieldref, const int &groupB
     QSqlQuery q(req, database());
     if (q.isActive()) {
         if (q.next()) {
-            return q.value(0).toDouble();
+            return q.value(0);
         } else {
             LOG_QUERY_ERROR_FOR("Database", q);
         }
     } else {
         LOG_QUERY_ERROR_FOR("Database", q);
     }
-    return 0;
+    return QVariant();
+}
+
+/**
+   Return a MIN SQL command with grouping on the table \e tableref, field \e fieldref, grouped by field \e groupBy with the filter \e filter.
+  Filter whould be not contains the "WHERE" word.
+*/
+QVariant Database::min(const int &tableref, const int &fieldref, const QString &filter) const
+{
+    QString req = QString("SELECT MIN(%1) FROM %2")
+                  .arg(d->m_Fields.value(1000 * tableref + fieldref))
+                  .arg(d->m_Tables[tableref]);
+    if (!filter.isEmpty())
+        req += " WHERE " + filter;
+    if (WarnSqlCommands)
+        qWarning() << req;
+    QSqlQuery q(req, database());
+    if (q.isActive()) {
+        if (q.next()) {
+            return q.value(0);
+        } else {
+            LOG_QUERY_ERROR_FOR("Database", q);
+        }
+    } else {
+        LOG_QUERY_ERROR_FOR("Database", q);
+    }
+    return QVariant();
 }
 
 /**

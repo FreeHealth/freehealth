@@ -298,8 +298,10 @@ public:
     virtual QString fieldEquality(const int tableRef1, const int fieldRef1, const int tableRef2, const int fieldRef2) const;
 
     virtual int count(const int &tableref, const int &fieldref, const QString &filter = QString()) const;
-    virtual double max(const int &tableref, const int &fieldref, const QString &filter = QString()) const;
-    virtual double max(const int &tableref, const int &fieldref, const int &groupBy, const QString &filter = QString()) const;
+    virtual QVariant max(const int &tableref, const int &fieldref, const QString &filter = QString()) const;
+    virtual QVariant max(const int &tableref, const int &fieldref, const int &groupBy, const QString &filter = QString()) const;
+    virtual QVariant min(const int &tableref, const int &fieldref, const QString &filter) const;
+
     virtual QString totalSqlCommand(const int tableRef, const int fieldRef, const QHash<int, QString> &where) const;
     virtual QString totalSqlCommand(const int tableRef, const int fieldRef) const;
     double sum(const int tableRef, const int fieldRef, const QHash<int, QString> &where) const;
