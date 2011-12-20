@@ -10,10 +10,3 @@ include(shared_sources.pri)
 
 OTHER_FILES = AccountBase.pluginspec
 
-HEADERS += \
-    accountbasecore.h
-
-SOURCES += \
-    accountbasecore.cpp
-
-

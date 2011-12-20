@@ -41,6 +41,9 @@ TextEditorPlugin::TextEditorPlugin()
 {
     if (Utils::Log::warnPluginsCreation())
         qWarning() << "creating TextEditorPlugin";
+
+    // Add Translator to the Application
+    Core::ICore::instance()->translators()->addNewTranslator("texteditorplugin");
 }
 
 TextEditorPlugin::~TextEditorPlugin()
@@ -54,10 +57,6 @@ bool TextEditorPlugin::initialize(const QStringList &arguments, QString *errorSt
         qWarning() << "TextEditorPlugin::initialize";
     Q_UNUSED(arguments);
     Q_UNUSED(errorString);
-
-    // Add Translator to the Application
-    Core::ICore::instance()->translators()->addNewTranslator("texteditorplugin");
-
     return true;
 }
 

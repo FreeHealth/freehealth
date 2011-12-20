@@ -52,6 +52,9 @@ AccountBasePlugin::AccountBasePlugin()
 {
     if (Utils::Log::warnPluginsCreation())
         qWarning() << "creating AccountBasePlugin";
+
+    // Add Translator to the Application
+    Core::ICore::instance()->translators()->addNewTranslator("accountbaseplugin");
 }
 
 AccountBasePlugin::~AccountBasePlugin()
@@ -74,8 +77,6 @@ void AccountBasePlugin::extensionsInitialized()
     if (Utils::Log::warnPluginsCreation())
         qWarning() << "AccountBasePlugin::extensionsInitialized";
 
-    // Add Translator to the Application
-    Core::ICore::instance()->translators()->addNewTranslator("accountbaseplugin");
     messageSplash(tr("Initializing accountancy plugin..."));
 
     // Initialize Account Database && Core

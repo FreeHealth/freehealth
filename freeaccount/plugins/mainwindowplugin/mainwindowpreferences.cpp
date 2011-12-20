@@ -43,7 +43,10 @@
 #include <utils/log.h>
 #include <utils/updatechecker.h>
 
-#include <translationutils/constanttranslations.h>
+#include <translationutils/constants.h>
+#include <translationutils/trans_spashandupdate.h>
+#include <translationutils/trans_msgerror.h>
+#include <translationutils/trans_current.h>
 
 #include <coreplugin/icore.h>
 #include <coreplugin/isettings.h>
@@ -51,7 +54,6 @@
 
 using namespace MainWin::Internal;
 using namespace Trans::ConstantTranslations;
-
 
 static inline Core::ISettings *settings() { return Core::ICore::instance()->settings(); }
 
@@ -91,7 +93,7 @@ void MainWindowPreferencesPage::finish() { delete m_Widget; }
 void MainWindowPreferencesPage::checkSettingsValidity()
 {
     QHash<QString, QVariant> defaultvalues;
-    defaultvalues.insert(Utils::Constants::S_CHECKUPDATE, Utils::UpdateChecker::Check_AtStartup);
+    defaultvalues.insert(Utils::Constants::S_CHECKUPDATE, Trans::Constants::CheckUpdate_AtStartup);
 
     foreach(const QString &k, defaultvalues.keys()) {
         if (settings()->value(k) == QVariant())
@@ -138,7 +140,7 @@ void MainWindowPreferencesWidget::writeDefaultSettings(Core::ISettings *s)
 {
 //    qWarning() << "---------> writedefaults";
     Utils::Log::addMessage("MainWindowPreferencesWidget", tkTr(Trans::Constants::CREATING_DEFAULT_SETTINGS_FOR_1).arg("FreeDiamsMainWindow"));
-    s->setValue(Utils::Constants::S_CHECKUPDATE, Utils::UpdateChecker::Check_AtStartup);
+    s->setValue(Utils::Constants::S_CHECKUPDATE, Trans::Constants::CheckUpdate_AtStartup);
     s->sync();
 }
 

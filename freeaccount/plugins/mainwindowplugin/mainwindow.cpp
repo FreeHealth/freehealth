@@ -123,6 +123,8 @@ bool MainWindow::initialize(const QStringList &arguments, QString *errorString)
     createFileMenu();
     Core::ActionContainer *fmenu = actionManager()->createMenu(Core::Constants::M_FILE_RECENTFILES);
     connect(fmenu->menu(), SIGNAL(aboutToShow()),this, SLOT(aboutToShowRecentFiles()));
+    createEditMenu();
+    createFormatMenu();
     createConfigurationMenu();
     createHelpMenu();
 
