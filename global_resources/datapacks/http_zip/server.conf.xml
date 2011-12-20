@@ -1,0 +1,40 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE FreeMedForms>
+
+<DataPackServer>
+
+  <ServerDescription>
+    <!-- Non translatable values -->
+    <uuid>freemedforms_be79aa858c0f4d188b62c3b17f408da6_httpzipped</uuid>
+    <authors>Eric Maeker, MD</authors>
+    <version>0.6.0</version>
+    <fmfv>0.6.2</fmfv>
+    <fdv>0.6.4</fdv>
+    <cdate>2011-11-26</cdate>
+    <lmdate>2011-11-26</lmdate>
+    <icon>__theme__/freemedforms.png</icon>
+    <RecomUpFreq nonParsed="EachMonth">2</RecomUpFreq>
+    <weblink></weblink>
+    <bibliography/>
+
+    <!-- Translatable values -->
+    <licence>GPLv3</licence>
+    <label lang="fr">Serveur du projet FreeMedForms</label>
+    <label lang="xx">FreeMedForms project server</label>
+    <description lang="fr">Données par défaut pour FreeMedForms</description>
+    <description lang="xx">Default data for FreeMedForms</description>
+    <updateinfo>
+      <updateversion from="0.6.0">
+        <text lang="fr">Première mise à disposition.</text>
+        <text lang="en">First release.</text>
+      </updateversion>
+    </updateinfo>
+
+  </ServerDescription>
+
+  <ServerContents>
+    <Pack serverFileName="./icd10/icd10.xml"/>
+    <Pack serverFileName="./drugs/drugs.xml"/>
+  </ServerContents>
+
+</DataPackServer>
