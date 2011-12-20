@@ -71,6 +71,7 @@ public:
         }
         where.insert(Constants::MOV_USER_UID, QString("='%1'").arg(user()->uuid()));
         m_SqlTable->setFilter(base()->getWhereClause(Constants::Table_Movement, where));
+        m_SqlTable->select();
         if (WarnDebugMessage)
             qDebug() << __FILE__ << QString::number(__LINE__) << " filter =" << m_SqlTable->filter();
     }
@@ -96,6 +97,7 @@ MovementModel::MovementModel(QObject *parent) :
 {
 //    d->m_SqlTable->setEditStrategy(QSqlTableModel::OnManualSubmit);
     d->m_SqlTable->setEditStrategy(QSqlTableModel::OnFieldChange);
+    d->m_SqlTable->setSort(Constants::MOV_DATEOFVALUE, Qt::AscendingOrder);
     setUserUuid(user()->uuid());
 }
 
@@ -316,6 +318,7 @@ void MovementModel::clearAllFilters()
 /** Set the filter for all movements of the specified \e year. */
 void MovementModel::setYearFilter(const int year)
 {
+    WARN_FUNC << year;
     d->m_DateStart = QDateTime(QDate(year, 01, 01), QTime(00,00));
     d->m_DateEnd = QDateTime(QDate(year, 12, 31), QTime(23,59,59));
     d->applySqlFilter();
@@ -327,6 +330,15 @@ void MovementModel::setDateFilter(const QDateTime &start, const QDateTime &end)
 {
     d->m_DateStart = start;
     d->m_DateEnd = end;
+    d->applySqlFilter();
+    reset();
+}
+
+/** Set the filter for all movements recorded from \e start to \e end. */
+void MovementModel::setDateFilter(const QDate &start, const QDate &end)
+{
+    d->m_DateStart = QDateTime(start, QTime(0,0));
+    d->m_DateEnd = QDateTime(end, QTime(23,59,59));
     d->applySqlFilter();
     reset();
 }

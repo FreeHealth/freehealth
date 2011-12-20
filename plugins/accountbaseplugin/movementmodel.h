@@ -88,6 +88,7 @@ public:
     bool setMovementFilter(const QString &id);
     void setYearFilter(const int year);
     void setDateFilter(const QDateTime &start, const QDateTime &end);
+    void setDateFilter(const QDate &start, const QDate &end);
 
     void setUserUuid(const QString &uuid);
     QString currentUserUuid() const;

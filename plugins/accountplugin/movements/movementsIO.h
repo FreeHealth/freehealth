@@ -51,6 +51,7 @@ public:
 //    AccountDB::MovementModel *getModelMovements(QString &year);
     QStandardItemModel *getMovementsComboBoxModel(QObject *parent);
 
+    void filterModelToDatabaseDateRange(AccountDB::MovementModel *model);
     QStringList getYearComboBoxModel();
     QStandardItemModel *getBankComboBoxModel(QObject * parent);
 

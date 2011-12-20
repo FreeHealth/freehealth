@@ -101,7 +101,7 @@ void MovementsViewer::showMovements()
     MovementsIODb mov(this) ;
     QString year = ui->yearComboBox->currentText();
     MovementModel *model = core()->movementModel();  //->.mov.getModelMovements(year);
-    model->setYearFilter(year.toInt());
+    mov.filterModelToDatabaseDateRange(model);
     ui->tableView->setModel(model);
     ui->tableView->setSelectionBehavior(QAbstractItemView::SelectRows);
     ui->tableView->setSelectionMode(QAbstractItemView::SingleSelection);

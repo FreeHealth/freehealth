@@ -66,6 +66,7 @@ public:
     void logChronos(bool state);
 
     double getMovementAmountSum(const QDateTime &start, const QDateTime &end, const QString &userUid);
+    QPair<QDate, QDate> movementDateRange(const QString &userUid);
 
 private:
     bool init();

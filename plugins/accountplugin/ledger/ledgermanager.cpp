@@ -163,7 +163,7 @@ QStandardItemModel *LedgerManager::getModelYearlyAndTypeMovementAnalysis(QObject
     Q_UNUSED(parent);
     m_sums = 0.00;
     LedgerIO lio(this);
-    QStandardItemModel * model = lio.getModelYearlyAndTypeMovementsIO(this,year);
+    QStandardItemModel * model = lio.getModelYearlyAndTypeMovementsIO(this, year);
     int rows = model->rowCount();
     for (int i = 0; i < rows; ++i)
     {

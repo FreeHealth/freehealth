@@ -733,3 +733,18 @@ double AccountBase::getMovementAmountSum(const QDateTime &start, const QDateTime
     return sum(Constants::Table_Movement, Constants::MOV_AMOUNT, where);
 }
 
+/** Return the date range of recorded movement for the specified \e userUid. */
+QPair<QDate, QDate> AccountBase::movementDateRange(const QString &userUid)
+{
+    QPair<QDate, QDate> p;
+    // get min
+    QSqlDatabase DB = QSqlDatabase::database(Constants::DB_ACCOUNTANCY);
+    if (!connectDatabase(DB, __FILE__, __LINE__))
+        return p;
+    QHash<int, QString> where;
+    where.insert(Constants::MOV_USER_UID, QString("='%1'").arg(userUid));
+    QString userWhere = getWhereClause(Constants::Table_Movement, where);
+    p.first = min(Constants::Table_Movement, Constants::MOV_DATE, userWhere).toDate();
+    p.second = max(Constants::Table_Movement, Constants::MOV_DATE, userWhere).toDate();
+    return p;
+}

@@ -32,6 +32,7 @@
 #include "movementsIO.h"
 
 #include <accountbaseplugin/constants.h>
+#include <accountbaseplugin/accountbase.h>
 #include <accountbaseplugin/availablemovementmodel.h>
 #include <accountbaseplugin/movementmodel.h>
 #include <accountbaseplugin/bankaccountmodel.h>
@@ -56,6 +57,7 @@ using namespace Constants;
 static inline Core::ITheme *theme()  { return Core::ICore::instance()->theme(); }
 static inline Core::IUser *user() { return  Core::ICore::instance()->user(); }
 static inline AccountDB::AccountBaseCore *core() {return AccountDB::AccountBaseCore::instance();}
+static inline AccountDB::AccountBase *base() {return AccountDB::AccountBase::instance();}
 
 MovementsIODb::MovementsIODb(QObject *parent) :
     QObject(parent)
@@ -147,17 +149,31 @@ QStandardItemModel  *MovementsIODb::getMovementsComboBoxModel(QObject *parent)
     return model;
 }
 
+void MovementsIODb::filterModelToDatabaseDateRange(AccountDB::MovementModel *model)
+{
+    QPair<QDate, QDate> p = base()->movementDateRange(user()->uuid());
+    model->setDateFilter(p.first.addDays(-1), p.second.addDays(1));
+}
+
 QStringList MovementsIODb::getYearComboBoxModel()
 {
     QStringList listOfYears;
-    for (int i = 0; i < m_modelMovements->rowCount(); ++i) {
-        QString dateStr = m_modelMovements->data(m_modelMovements->index(i,MovementModel::Date),Qt::DisplayRole).toString();
-        QString dateOfValueStr = m_modelMovements->data(m_modelMovements->index(i,MovementModel::Date),Qt::DisplayRole).toString();
-    	QString yearDate = QString::number(QDate::fromString(dateStr,"yyyy-MM-dd").year());
-    	QString yearDateOfValue = QString::number(QDate::fromString(dateOfValueStr,"yyyy-MM-dd").year());
-    	listOfYears << yearDate << yearDateOfValue;
+    QPair<QDate, QDate> p = base()->movementDateRange(user()->uuid());
+    if (p.second < QDate::currentDate())
+        p.second = QDate::currentDate();
+    for(int i = p.first.year(); i < p.second.year(); ++i) {
+        listOfYears << QString::number(i);
     }
+    const QString &actual = QString::number(QDate::currentDate().year());
+    if (!listOfYears.contains(actual)) {
+        listOfYears << actual;
+    }
+//    for (int i = 0; i < m_modelMovements->rowCount(); ++i) {
+//        int yearDate = m_modelMovements->data(m_modelMovements->index(i,MovementModel::Date),Qt::DisplayRole).toDate().year();
+//        int yearDateOfValue = m_modelMovements->data(m_modelMovements->index(i,MovementModel::DateOfValue),Qt::DisplayRole).toDate().year();
+//    }
     listOfYears.removeDuplicates();
+    listOfYears.sort();
     return listOfYears;
 }
 

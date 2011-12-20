@@ -596,6 +596,6 @@ void ProduceDoc::dateChosen(QDate & date){
     m_date = date;
     QString s = m_date.toString("yyyy");
     if (WarnDebugMessage)
-    	      qDebug() << __FILE__ << QString::number(__LINE__) << " date SSS =" << s ;
+        qDebug() << __FILE__ << QString::number(__LINE__) << " date SSS =" << s ;
     m_mutex.unlock();
 }
