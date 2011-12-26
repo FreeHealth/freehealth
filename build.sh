@@ -6,7 +6,7 @@
 # This script helps on the compilation of the Linux projects
 #
 
-
+BUNDLE_NAME=""
 SCRIPT_NAME=`basename $0`
 if [ "`echo $0 | cut -c1`" = "/" ]; then
   SCRIPT_PATH=`dirname $0`
@@ -20,21 +20,21 @@ SPEC=""
 showHelp()
 {
 echo $SCRIPT_NAME" builds the *debug* Linux versions of the FreeMedForms applications project."
-echo "Usage : $SCRIPT_NAME -txch -s <qt.spec> -b <applicationlowcase>"
+echo "Usage : $SCRIPT_NAME -txch -s <qt.spec> -b <AppToBuild>"
 echo
 echo "Options :"
-echo "          -b  Application name (freemedforms, freediams, freeaccount, freeicd, freetoolbox...)"
-echo "          -t  Create translations"
-echo "          -x  Create a test project (in the test path)"
-echo "          -c  Make clear before compiling"
-echo "          -s  Use the specified spec file"
-echo "          -h  Show this help"
+echo "  -b  Application name (freemedforms, freediams, freeaccount, freeicd, freetoolbox...)"
+echo "  -t  Create translations"
+echo "  -x  Create a test project (in the test path)"
+echo "  -c  Make clear before compiling"
+echo "  -s  Use the specified spec file"
+echo "  -h  Show this help"
 echo
 }
 
 createTranslations()
 {
-  release global_resources/translations/*.ts
+  lrelease global_resources/translations/*.ts
 }
 
 # $1 = lowered case bundle name
@@ -77,7 +77,8 @@ do
     ;;
     t) createTranslations
     ;;
-    b) doCompilation $OPTARG
+    b) BUNDLE_NAME=`echo "$OPTARG" | sed y/ABCDEFGHIJKLMNOPQRSTUVWXYZ/abcdefghijklmnopqrstuvwxyz/`
+       doCompilation $BUNDLE_NAME
   esac
 done
 
