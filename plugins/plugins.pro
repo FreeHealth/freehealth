@@ -23,6 +23,7 @@ SUBDIRS = \
     account \
     agenda \
     zipcodes \
+    script \
 #    saverestore \
 #    alerts \
 
@@ -144,3 +145,7 @@ account.depends += listview
 
 zipcodes.subdir = zipcodesplugin
 zipcodes.depends += core
+
+script.subdir = scriptplugin
+script.depends += core
+script.depends += formmanager

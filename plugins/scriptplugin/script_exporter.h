@@ -22,56 +22,16 @@
  *   Main Developper : Eric MAEKER, <eric.maeker@gmail.com>                *
  *   Contributors :                                                        *
  *       NAME <MAIL@ADRESS>                                                *
- *       NAME <MAIL@ADRESS>                                                *
  ***************************************************************************/
-#ifndef IFORMITEMDATA_H
-#define IFORMITEMDATA_H
+#ifndef SCRIPT_EXPORTER_H
+#define SCRIPT_EXPORTER_H
 
-#include <formmanagerplugin/formmanager_exporter.h>
+#include <qglobal.h>
 
-#include <QtCore/QVariant>
+#if defined(SCRIPT_LIBRARY)
+#define SCRIPT_EXPORT Q_DECL_EXPORT
+#else
+#define SCRIPT_EXPORT Q_DECL_IMPORT
+#endif
 
-namespace Form {
-class FormItem;
-
-class FORM_EXPORT IFormItemData : public QObject
-{
-    Q_OBJECT
-public:
-    enum ReferenceRepresentation {
-        ID_EpisodeDate = 0, // used by BaseFormData to set episode date
-        ID_EpisodeLabel,        // used by BaseFormData to set episode label
-        ID_UserName,            // used by BaseFormData to set episode label
-        ID_CurrentUuid
-    };
-
-    enum RoleRepresentation {
-        PrintRole = Qt::UserRole + 1,
-        PatientModelRole,
-        CalculationsRole
-    };
-
-    IFormItemData() {}
-    virtual ~IFormItemData() {}
-
-    virtual void clear() = 0;
-
-    virtual Form::FormItem *parentItem() const = 0;
-    virtual bool isModified() const = 0;
-
-    // ref makes references to patient's data -> Core::IPatient
-    virtual bool setData(const int ref, const QVariant &data, const int role = Qt::EditRole) = 0;
-    virtual QVariant data(const int ref, const int role = Qt::DisplayRole) const = 0;
-
-    virtual void setStorableData(const QVariant &data) = 0;
-    virtual QVariant storableData() const = 0;
-
-Q_SIGNALS:
-    void dataChanged(const int ref);
-
-};
-} // namespace Form
-
-//Q_DECLARE_METATYPE(Form::IFormItemData*);
-
-#endif // IFORMITEMDATA_H
+#endif

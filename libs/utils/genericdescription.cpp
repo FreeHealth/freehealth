@@ -317,6 +317,14 @@ void GenericDescription::addTranslatableExtraData(const int ref, const QString &
     }
 }
 
+///** Use inheritance to access to unknown QDomElement. This member is called each time a tagName element is unknown to the engine. */
+//void GenericDescription::readUnknownElement(const QDomElement &element)
+//{
+//    // just add a warning
+//    qWarning() << Q_FUNC_INFO << "trying to access to an unknown element: tag" << element.tagName();
+//    qWarning() << "Use the Utils::GenericDescription inheritance to access to these data";
+//}
+
 void GenericDescription::toTreeWidget(QTreeWidget *tree) const
 {}
 

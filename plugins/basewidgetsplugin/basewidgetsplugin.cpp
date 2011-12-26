@@ -33,6 +33,7 @@
 #include "baseformwidgetsoptionspage.h"
 #include "texteditorfactory.h"
 #include "identitywidgetfactory.h"
+#include "calculationwidgets.h"
 
 #include <coreplugin/dialogs/pluginaboutpage.h>
 
@@ -42,6 +43,7 @@
 #include <QDebug>
 
 using namespace BaseWidgets;
+using namespace Internal;
 
 BaseWidgetsPlugin::BaseWidgetsPlugin() :
         m_Factory(0),
@@ -57,6 +59,11 @@ BaseWidgetsPlugin::~BaseWidgetsPlugin()
         removeObject(m_Factory);
         delete m_Factory;
         m_Factory = 0;
+    }
+    if (m_CalcFactory) {
+        removeObject(m_CalcFactory);
+        delete m_CalcFactory;
+        m_CalcFactory = 0;
     }
     if (m_OptionsPage) {
 //        removeObject(m_OptionsPage);
@@ -74,6 +81,8 @@ bool BaseWidgetsPlugin::initialize(const QStringList &arguments, QString *errorS
     Q_UNUSED(errorString);
     m_Factory = new BaseWidgetsFactory(this);
     m_Factory->initialize(arguments,errorString);
+    m_CalcFactory = new CalculationWidgetsFactory(this);
+    m_CalcFactory->initialize(arguments,errorString);
     return true;
 }
 
@@ -87,6 +96,7 @@ void BaseWidgetsPlugin::extensionsInitialized()
 
     addAutoReleasedObject(new Core::PluginAboutPage(pluginSpec(), this));
     addObject(m_Factory);
+    addObject(m_CalcFactory);
     addAutoReleasedObject(new TextEditorFactory(this));
     addAutoReleasedObject(new IdentityWidgetFactory(this));
 

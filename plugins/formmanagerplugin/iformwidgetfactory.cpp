@@ -39,9 +39,8 @@
 
 using namespace Form;
 
-
-IFormWidget::IFormWidget(Form::FormItem *formItem, QWidget *parent)
-        : QWidget(parent), m_FormItem(formItem)
+IFormWidget::IFormWidget(Form::FormItem *formItem, QWidget *parent) :
+    QWidget(parent), m_FormItem(formItem)
 {
 }
 
@@ -79,7 +78,6 @@ QBoxLayout *IFormWidget::getBoxLayout(const int labelOption, const QString &text
     return hb;
 }
 
-
 void IFormWidget::changeEvent(QEvent * event)
 {
     QString loc = QLocale().name().left(2);
@@ -92,3 +90,4 @@ void IFormWidget::changeEvent(QEvent * event)
         QWidget::changeEvent(event);
     }
 }
+

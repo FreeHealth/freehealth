@@ -60,6 +60,7 @@ class QStringListModel;
 QT_END_NAMESPACE
 
 namespace BaseWidgets {
+namespace Internal {
 namespace Ui {
 class BaseFormWidget;
 }
@@ -124,8 +125,8 @@ public:
     bool isModified() const;
 
     // Use setData/Data for episode datas
-    bool setData(const int ref, const QVariant &data, const int role);
-    QVariant data(const int ref, const int role) const;
+    bool setData(const int ref, const QVariant &data, const int role = Qt::EditRole);
+    QVariant data(const int ref, const int role = Qt::DisplayRole) const;
 
     // No storable datas for forms
     void setStorableData(const QVariant &) {}
@@ -188,6 +189,7 @@ private:
 
 class BaseCheckData : public Form::IFormItemData
 {
+    Q_OBJECT
 public:
     BaseCheckData(Form::FormItem *item);
     ~BaseCheckData();
@@ -199,11 +201,14 @@ public:
     Form::FormItem *parentItem() const {return m_FormItem;}
     bool isModified() const;
 
-    bool setData(const int ref, const QVariant &data, const int role);
-    QVariant data(const int ref, const int role) const;
+    bool setData(const int ref, const QVariant &data, const int role = Qt::EditRole);
+    QVariant data(const int ref, const int role = Qt::DisplayRole) const;
 
     void setStorableData(const QVariant &data);
     QVariant storableData() const;
+
+private Q_SLOTS:
+    void onValueChanged();
 
 private:
     Form::FormItem *m_FormItem;
@@ -235,6 +240,7 @@ public:
 
 class BaseRadioData : public Form::IFormItemData
 {
+    Q_OBJECT
 public:
     BaseRadioData(Form::FormItem *item);
     ~BaseRadioData();
@@ -246,11 +252,14 @@ public:
     Form::FormItem *parentItem() const {return m_FormItem;}
     bool isModified() const;
 
-    bool setData(const int ref, const QVariant &data, const int role);
-    QVariant data(const int ref, const int role) const;
+    bool setData(const int ref, const QVariant &data, const int role = Qt::EditRole);
+    QVariant data(const int ref, const int role = Qt::DisplayRole) const;
 
     void setStorableData(const QVariant &data);
     QVariant storableData() const;
+
+private Q_SLOTS:
+    void onValueChanged();
 
 private:
     Form::FormItem *m_FormItem;
@@ -280,6 +289,7 @@ public:
 
 class BaseSimpleTextData : public Form::IFormItemData
 {
+    Q_OBJECT
 public:
     BaseSimpleTextData(Form::FormItem *item);
     ~BaseSimpleTextData();
@@ -291,11 +301,14 @@ public:
     Form::FormItem *parentItem() const {return m_FormItem;}
     bool isModified() const;
 
-    bool setData(const int ref, const QVariant &data, const int role);
-    QVariant data(const int ref, const int role) const;
+    bool setData(const int ref, const QVariant &data, const int role = Qt::EditRole);
+    QVariant data(const int ref, const int role = Qt::DisplayRole) const;
 
     void setStorableData(const QVariant &data);
     QVariant storableData() const;
+
+private Q_SLOTS:
+    void onValueChanged();
 
 private:
     Form::FormItem *m_FormItem;
@@ -341,6 +354,7 @@ public:
 
 class BaseListData : public Form::IFormItemData
 {
+    Q_OBJECT
 public:
     BaseListData(Form::FormItem *item);
     ~BaseListData();
@@ -353,11 +367,14 @@ public:
     Form::FormItem *parentItem() const {return m_FormItem;}
     bool isModified() const;
 
-    bool setData(const int ref, const QVariant &data, const int role);
-    QVariant data(const int ref, const int role) const;
+    bool setData(const int ref, const QVariant &data, const int role = Qt::EditRole);
+    QVariant data(const int ref, const int role = Qt::DisplayRole) const;
 
     void setStorableData(const QVariant &data);
     QVariant storableData() const;
+
+private Q_SLOTS:
+    void onValueChanged();
 
 private:
     Form::FormItem *m_FormItem;
@@ -386,6 +403,7 @@ public:
 
 class BaseComboData : public Form::IFormItemData
 {
+    Q_OBJECT
 public:
     BaseComboData(Form::FormItem *item);
     ~BaseComboData();
@@ -398,11 +416,14 @@ public:
     Form::FormItem *parentItem() const {return m_FormItem;}
     bool isModified() const;
 
-    bool setData(const int ref, const QVariant &data, const int role);
-    QVariant data(const int ref, const int role) const;
+    bool setData(const int ref, const QVariant &data, const int role = Qt::EditRole);
+    QVariant data(const int ref, const int role = Qt::DisplayRole) const;
 
     void setStorableData(const QVariant &data);
     QVariant storableData() const;
+
+private Q_SLOTS:
+    void onValueChanged();
 
 private:
     Form::FormItem *m_FormItem;
@@ -434,6 +455,7 @@ public:
 
 class BaseDateData : public Form::IFormItemData
 {
+    Q_OBJECT
 public:
     BaseDateData(Form::FormItem *item);
     ~BaseDateData();
@@ -446,11 +468,14 @@ public:
     Form::FormItem *parentItem() const {return m_FormItem;}
     bool isModified() const;
 
-    bool setData(const int ref, const QVariant &data, const int role);
-    QVariant data(const int ref, const int role) const;
+    bool setData(const int ref, const QVariant &data, const int role = Qt::EditRole);
+    QVariant data(const int ref, const int role = Qt::DisplayRole) const;
 
     void setStorableData(const QVariant &data);
     QVariant storableData() const;
+
+private Q_SLOTS:
+    void onValueChanged();
 
 private:
     Form::FormItem *m_FormItem;
@@ -479,6 +504,7 @@ public:
 
 class BaseSpinData : public Form::IFormItemData
 {
+    Q_OBJECT
 public:
     BaseSpinData(Form::FormItem *item);
     ~BaseSpinData();
@@ -490,11 +516,14 @@ public:
     Form::FormItem *parentItem() const {return m_FormItem;}
     bool isModified() const;
 
-    bool setData(const int ref, const QVariant &data, const int role);
-    QVariant data(const int ref, const int role) const;
+    bool setData(const int ref, const QVariant &data, const int role = Qt::EditRole);
+    QVariant data(const int ref, const int role = Qt::DisplayRole) const;
 
     void setStorableData(const QVariant &data);
     QVariant storableData() const;
+
+private Q_SLOTS:
+    void onValueChanged();
 
 private:
     Form::FormItem *m_FormItem;
@@ -521,55 +550,7 @@ private:
      QPushButton *m_Button;
 };
 
-//--------------------------------------------------------------------------------------------------------
-//-------------------------------------- SumWidget implementation ----------------------------------------
-//--------------------------------------------------------------------------------------------------------
-//class SumWidgetData;
-class SumWidget : public Form::IFormWidget
-{
-    Q_OBJECT
-public:
-    SumWidget(Form::FormItem *formItem, QWidget *parent = 0);
-    ~SumWidget();
-
-    QString printableHtml(bool withValues = true) const;
-
-private Q_SLOTS:
-    void retranslate();
-    void connectFormItems();
-    void recalculate(const int modifiedRef);
-
-private:
-    QLineEdit *line;
-//    SumWidgetData *m_ItemData;
-};
-
-//class SumWidgetData : public Form::IFormItemData
-//{
-//public:
-//    BaseCheckData(Form::FormItem *item);
-//    ~BaseCheckData();
-
-//    void setCheckBox(QCheckBox *chk);
-
-//    void clear();
-
-//    Form::FormItem *parentItem() const {return m_FormItem;}
-//    bool isModified() const;
-
-//    bool setData(const int ref, const QVariant &data, const int role);
-//    QVariant data(const int ref, const int role) const;
-
-//    void setStorableData(const QVariant &data);
-//    QVariant storableData() const;
-
-//private:
-//    Form::FormItem *m_FormItem;
-//    QCheckBox *m_Check;
-//    Qt::CheckState m_OriginalValue;
-//};
-
-
-} // End BaseWidgets
+}  // End namespace Internal
+}  // End namespace BaseWidgets
 
 #endif

@@ -60,6 +60,7 @@ public:
         FullContent = 0,
         Description,
         ScreenShot,
+        ScriptFile,
 //        Forms,
 //        PmhCategories,
         ExtraFiles

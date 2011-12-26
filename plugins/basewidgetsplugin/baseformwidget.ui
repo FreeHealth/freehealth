@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <ui version="4.0">
- <class>BaseWidgets::BaseFormWidget</class>
- <widget class="QWidget" name="BaseWidgets::BaseFormWidget">
+ <class>BaseWidgets::Internal::BaseFormWidget</class>
+ <widget class="QWidget" name="BaseWidgets::Internal::BaseFormWidget">
   <property name="geometry">
    <rect>
     <x>0</x>

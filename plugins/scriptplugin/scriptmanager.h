@@ -22,56 +22,37 @@
  *   Main Developper : Eric MAEKER, <eric.maeker@gmail.com>                *
  *   Contributors :                                                        *
  *       NAME <MAIL@ADRESS>                                                *
- *       NAME <MAIL@ADRESS>                                                *
  ***************************************************************************/
-#ifndef IFORMITEMDATA_H
-#define IFORMITEMDATA_H
+#ifndef SCRIPT_SCRIPTMANAGER_H
+#define SCRIPT_SCRIPTMANAGER_H
 
-#include <formmanagerplugin/formmanager_exporter.h>
+#include <scriptplugin/script_exporter.h>
+#include <coreplugin/iscriptmanager.h>
 
-#include <QtCore/QVariant>
+#include <QScriptEngine>
 
-namespace Form {
-class FormItem;
+namespace Script {
 
-class FORM_EXPORT IFormItemData : public QObject
+class SCRIPT_EXPORT ScriptManager : public Core::IScriptManager
 {
     Q_OBJECT
+
 public:
-    enum ReferenceRepresentation {
-        ID_EpisodeDate = 0, // used by BaseFormData to set episode date
-        ID_EpisodeLabel,        // used by BaseFormData to set episode label
-        ID_UserName,            // used by BaseFormData to set episode label
-        ID_CurrentUuid
-    };
+    ScriptManager(QObject *parent);
 
-    enum RoleRepresentation {
-        PrintRole = Qt::UserRole + 1,
-        PatientModelRole,
-        CalculationsRole
-    };
+    bool evaluate(const QString &script);
+    QScriptValue addScriptObject(const QObject *object);
 
-    IFormItemData() {}
-    virtual ~IFormItemData() {}
+    QScriptEngine *engine() {return m_Engine;}
 
-    virtual void clear() = 0;
+private Q_SLOTS:
+    void onAllFormsLoaded();
 
-    virtual Form::FormItem *parentItem() const = 0;
-    virtual bool isModified() const = 0;
-
-    // ref makes references to patient's data -> Core::IPatient
-    virtual bool setData(const int ref, const QVariant &data, const int role = Qt::EditRole) = 0;
-    virtual QVariant data(const int ref, const int role = Qt::DisplayRole) const = 0;
-
-    virtual void setStorableData(const QVariant &data) = 0;
-    virtual QVariant storableData() const = 0;
-
-Q_SIGNALS:
-    void dataChanged(const int ref);
-
+private:
+    static ScriptManager *m_Instance;
+    QScriptEngine *m_Engine;
 };
-} // namespace Form
 
-//Q_DECLARE_METATYPE(Form::IFormItemData*);
+} // namespace Script
 
-#endif // IFORMITEMDATA_H
+#endif // SCRIPT_SCRIPTMANAGER_H

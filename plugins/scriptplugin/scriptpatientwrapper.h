@@ -22,56 +22,61 @@
  *   Main Developper : Eric MAEKER, <eric.maeker@gmail.com>                *
  *   Contributors :                                                        *
  *       NAME <MAIL@ADRESS>                                                *
- *       NAME <MAIL@ADRESS>                                                *
  ***************************************************************************/
-#ifndef IFORMITEMDATA_H
-#define IFORMITEMDATA_H
+#ifndef SCRIPTPATIENTWRAPPER_H
+#define SCRIPTPATIENTWRAPPER_H
 
-#include <formmanagerplugin/formmanager_exporter.h>
+#include <QObject>
+#include <QDate>
+#include <QVariant>
+#include <QString>
 
-#include <QtCore/QVariant>
+namespace Script {
 
-namespace Form {
-class FormItem;
-
-class FORM_EXPORT IFormItemData : public QObject
+class ScriptPatientWrapper : public QObject  //, public QScriptClass
 {
     Q_OBJECT
+    Q_PROPERTY(bool     isActive    READ isActive())
+    Q_PROPERTY(QString  fullName    READ fullName())
+    Q_PROPERTY(QDate    dateOfBirth READ dateOfBirth())
+    Q_PROPERTY(int      yearsOld    READ yearsOld())
+    Q_PROPERTY(bool     isMale      READ isMale())
+    Q_PROPERTY(bool     isFemale    READ isFemale())
+    Q_PROPERTY(double   weight      READ weight())
+    Q_PROPERTY(QString  weightUnit  READ weightUnit())
+    Q_PROPERTY(double   height      READ height())
+    Q_PROPERTY(QString  heightUnit  READ heightUnit())
+
+    Q_PROPERTY(double   creatinine              READ creatinine())
+    Q_PROPERTY(QString  creatinineUnit          READ creatinineUnit())
+    Q_PROPERTY(double   clearanceCreatinine     READ clearanceCreatinine())
+    Q_PROPERTY(QString  clearanceCreatinineUnit READ clearanceCreatinineUnit())
+
 public:
-    enum ReferenceRepresentation {
-        ID_EpisodeDate = 0, // used by BaseFormData to set episode date
-        ID_EpisodeLabel,        // used by BaseFormData to set episode label
-        ID_UserName,            // used by BaseFormData to set episode label
-        ID_CurrentUuid
-    };
+    ScriptPatientWrapper(QObject *parent);
 
-    enum RoleRepresentation {
-        PrintRole = Qt::UserRole + 1,
-        PatientModelRole,
-        CalculationsRole
-    };
-
-    IFormItemData() {}
-    virtual ~IFormItemData() {}
-
-    virtual void clear() = 0;
-
-    virtual Form::FormItem *parentItem() const = 0;
-    virtual bool isModified() const = 0;
-
-    // ref makes references to patient's data -> Core::IPatient
-    virtual bool setData(const int ref, const QVariant &data, const int role = Qt::EditRole) = 0;
-    virtual QVariant data(const int ref, const int role = Qt::DisplayRole) const = 0;
-
-    virtual void setStorableData(const QVariant &data) = 0;
-    virtual QVariant storableData() const = 0;
-
-Q_SIGNALS:
-    void dataChanged(const int ref);
+public Q_SLOTS:
+    bool isActive() const;
+    QString fullName() const;
+    QDate dateOfBirth() const;
+    int yearsOld() const;
+    bool isMale() const;
+    bool isFemale() const;
+    double weight() const;
+    QString weightUnit() const;
+    double height() const;
+    QString heightUnit() const;
+    double bmi() const;
+    double imc() const {return bmi();}
+    double creatinine() const;
+    QString creatinineUnit() const;
+    double clearanceCreatinine() const;
+    QString clearanceCreatinineUnit() const;
 
 };
-} // namespace Form
 
-//Q_DECLARE_METATYPE(Form::IFormItemData*);
 
-#endif // IFORMITEMDATA_H
+
+}  //  End namespace Script
+
+#endif // SCRIPTPATIENTWRAPPER_H

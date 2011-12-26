@@ -95,7 +95,7 @@ public:
         WeightUnit,
         Height,
         HeightUnit,
-        IMC,
+        BMI,
         Creatinine,
         CreatinineUnit,
         CreatinClearance,

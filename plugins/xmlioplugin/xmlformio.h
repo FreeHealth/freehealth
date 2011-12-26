@@ -70,6 +70,7 @@ public:
 
     bool canReadForms(const QString &uuidOrAbsPath) const;
     bool canReadForms(const Form::FormIOQuery &query) const;
+    bool canReadScripts(const Form::FormIOQuery &query) const;
 
     Form::FormIODescription *readFileInformations(const QString &uuidOrAbsPath) const;
     QList<Form::FormIODescription *> getFormFileDescriptions(const Form::FormIOQuery &query) const;
@@ -98,6 +99,7 @@ private:
 
      // Caching some data for speed improvements
      mutable QHash<QString, bool> m_ReadableForms;
+     mutable QHash<QString, bool> m_ReadableScripts;
 };
 
 }  // End namespace Internal

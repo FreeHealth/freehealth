@@ -90,6 +90,8 @@ public:
     IUser *user() const {return m_User;}
     void setUser(IUser *user) {m_User = user;}
 
+    virtual void setScriptManager(IScriptManager *);
+    virtual IScriptManager *scriptManager() const {return 0;}
 
 private:
     IMainWindow *m_MainWindow;

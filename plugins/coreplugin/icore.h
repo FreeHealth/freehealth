@@ -38,8 +38,8 @@ class QWidget;
 /**
  * \file icore.h
  * \author Eric MAEKER <eric.maeker@gmail.com>
- * \version 0.6.0
- * \date 28 Apr 2011
+ * \version 0.6.4
+ * \date 22 Dec 2011
 */
 
 
@@ -61,6 +61,7 @@ class IPatient;
 class IUser;
 class FileManager;
 class IPadTools;
+class IScriptManager;
 }
 
 namespace Core {
@@ -108,7 +109,8 @@ public:
     virtual IUser *user() const = 0;
     virtual void setUser(IUser *user) = 0;
 
-//    virtual IFormManager *formManager() const = 0;
+    virtual void setScriptManager(IScriptManager *) = 0;
+    virtual IScriptManager *scriptManager() const = 0;
 
 
 

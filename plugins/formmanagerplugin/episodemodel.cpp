@@ -557,8 +557,8 @@ public:
         if (episode && form) {
             episode->setData(EpisodeData::XmlContent, createXmlEpisode(formUid));
             episode->setData(EpisodeData::IsXmlContentPopulated, true);
-            episode->setData(EpisodeData::Label, form->itemDatas()->data(0, IFormItemData::ID_EpisodeLabel));
-            episode->setData(EpisodeData::UserDate, form->itemDatas()->data(0, IFormItemData::ID_EpisodeDate));
+            episode->setData(EpisodeData::Label, form->itemDatas()->data(IFormItemData::ID_EpisodeLabel));
+            episode->setData(EpisodeData::UserDate, form->itemDatas()->data(IFormItemData::ID_EpisodeDate));
             LOG_FOR("EpisodeModel", "Save episode: " + episode->data(EpisodeData::Label).toString());
             if (!settings()->value(Core::Constants::S_ALWAYS_SAVE_WITHOUT_PROMPTING, true).toBool()) {
                 bool yes = Utils::yesNoMessageBox(QCoreApplication::translate("EpisodeModel", "Save episode ?"),
@@ -574,8 +574,8 @@ public:
             foreach(FormItem *it, form->flattenFormItemChildren()) {
                 if (!it->itemDatas())
                     continue;
-//                qWarning() << "Feeding patientModel data with" << it->patientDataRepresentation() << it->itemDatas()->data(it->patientDataRepresentation(), IFormItemData::ID_ForPatientModel);
-                patient()->setValue(it->patientDataRepresentation(), it->itemDatas()->data(it->patientDataRepresentation(), IFormItemData::ID_ForPatientModel));
+//                qWarning() << "Feeding patientModel data with" << it->patientDataRepresentation() << it->itemDatas()->data(it->patientDataRepresentation(), IFormItemData::PatientModelRole);
+                patient()->setValue(it->patientDataRepresentation(), it->itemDatas()->data(it->patientDataRepresentation(), IFormItemData::PatientModelRole));
             }
 
             // save episode to database
@@ -619,13 +619,13 @@ public:
 
 //        qWarning() << Q_FUNC_INFO << feedPatientModel << form->uuid();
         form->clear();
-        form->itemDatas()->setData(0, episode->data(EpisodeData::UserDate), IFormItemData::ID_EpisodeDate);
-        form->itemDatas()->setData(0, episode->data(EpisodeData::Label), IFormItemData::ID_EpisodeLabel);
+        form->itemDatas()->setData(IFormItemData::ID_EpisodeDate, episode->data(EpisodeData::UserDate));
+        form->itemDatas()->setData(IFormItemData::ID_EpisodeLabel, episode->data(EpisodeData::Label));
         const QString &username = user()->fullNameOfUser(episode->data(EpisodeData::UserCreatorUuid)); //value(Core::IUser::FullName).toString();
         if (username.isEmpty())
-            form->itemDatas()->setData(0, "No user", IFormItemData::ID_UserName);
+            form->itemDatas()->setData(IFormItemData::ID_UserName, "No user");
         else
-            form->itemDatas()->setData(0, username, IFormItemData::ID_UserName);
+            form->itemDatas()->setData(IFormItemData::ID_UserName, username);
 
         // feed the formitemdatas for this form and get the data for the patientmodel
         foreach(FormItem *it, items.values()) {
@@ -642,7 +642,7 @@ public:
                 if (it->patientDataRepresentation() >= 0) {
                     if (WarnLogChronos)
                         Utils::Log::logTimeElapsed(chrono, q->objectName(), "feedFormWithEpisodeContent: feed patient model: " + it->uuid());
-                    patient()->setValue(it->patientDataRepresentation(), it->itemDatas()->data(it->patientDataRepresentation(), IFormItemData::ID_ForPatientModel));
+                    patient()->setValue(it->patientDataRepresentation(), it->itemDatas()->data(it->patientDataRepresentation(), IFormItemData::PatientModelRole));
                 }
             }
         }
@@ -1297,13 +1297,13 @@ bool EpisodeModel::activateEpisode(const QModelIndex &index, const QString &form
     if (!form)
         return false;
     form->clear();
-    form->itemDatas()->setData(0, episode->data(EpisodeData::UserDate), IFormItemData::ID_EpisodeDate);
-    form->itemDatas()->setData(0, episode->data(EpisodeData::Label), IFormItemData::ID_EpisodeLabel);
+    form->itemDatas()->setData(IFormItemData::ID_EpisodeDate, episode->data(EpisodeData::UserDate));
+    form->itemDatas()->setData(IFormItemData::ID_EpisodeLabel, episode->data(EpisodeData::Label));
     const QString &username = user()->fullNameOfUser(episode->data(EpisodeData::UserCreatorUuid)); //value(Core::IUser::FullName).toString();
     if (username.isEmpty())
-        form->itemDatas()->setData(0, tr("No user"), IFormItemData::ID_UserName);
+        form->itemDatas()->setData(IFormItemData::ID_UserName, tr("No user"));
     else
-        form->itemDatas()->setData(0, username, IFormItemData::ID_UserName);
+        form->itemDatas()->setData(IFormItemData::ID_UserName, username);
 
     qWarning() << "EpisodeModel::activateEpisode" << formUid;
 

@@ -1,0 +1,67 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE FreeMedForms>
+
+<FreeMedForms>
+
+  <formdescription>
+    <!-- Non translatable values -->
+    <authors>Eric Maeker, MD</authors>
+    <version>test</version>
+    <fmfversion>0.6.2</fmfversion>
+    <cdate>2011-12-21</cdate>
+    <lmdate>2011-12-21</lmdate>
+    <icon>geriatrics.png</icon>
+    <weblink></weblink>
+    <bibliography pmid=""></bibliography>
+
+    <!-- Translatable values -->
+    <licence>GPLv3</licence>
+    <description lang="xx">Test script: onValueChanged</description>
+    <category lang="xx">Test</category>
+    <category lang="fr">Test</category>
+    <specialties lang="fr">Test</specialties>
+    <specialties lang="xx">Test</specialties>
+
+  </formdescription>
+
+  <file type="script" name="onload">./scripts/xx/frenchscript.js</file>
+
+  <MedForm name="Test::Script::OnValueChanged">
+    <label lang="xx">Test Calcul (sum)</label>
+    <label lang="fr">Test Calcul (sum)</label>
+    <options>col=2;DontPrintEmptyValues;UseFormNameAsNameSpace</options>
+
+    <Item name="TestingCombo" type="combo">
+      <label lang="xx">Test me</label>
+      <options>vertical;labelontop;DontPrintEmptyValues</options>
+      <value>
+        <uuid id="0">P0</uuid>
+        <uuid id="1">P1</uuid>
+        <uuid id="2">P2</uuid>
+        <uuid id="3">P3</uuid>
+
+        <possible id="0" lang="xx">Show: gla-gla</possible>
+        <possible id="1" lang="xx">Show: bli-bli</possible>
+        <possible id="2" lang="xx">Show: Wahouh</possible>
+        <possible id="3" lang="xx">Show: glou-glou</possible>
+
+        <numerical id="0">1</numerical>
+        <numerical id="1">1</numerical>
+        <numerical id="2">1</numerical>
+        <numerical id="3">0</numerical>
+
+      </value>
+
+      <script>
+        <onvaluechanged>onComboValueChanged();</onvaluechanged>
+      </script>
+    </Item>
+
+    <Item name="Result" type="shorttext">
+      <label lang="xx">Result</label>
+      <options>vertical;labelontop;DontPrintEmptyValues</options>
+    </Item>
+
+ </MedForm>
+
+</FreeMedForms>

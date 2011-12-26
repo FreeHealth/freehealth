@@ -132,6 +132,22 @@ void FormItemIdentifiants::setUuid(const QString &uuid)
 {
     id = uuidManager()->uniqueIdentifier(uuid);
     m_Uuid=uuid;
+
+    /** \todo Define the objectName according to the parent to simplify the scripting */
+//    QString objName = uuid;
+//    if (parent()) {
+//        qWarning() << "xxxxxx" << parent()->objectName() << uuid;
+//        if (uuid.startsWith(parent()->objectName())) {
+//            objName = objName.mid(parent()->objectName().length());
+//            while (objName.startsWith(".")) {
+//                objName = objName.mid(1);
+//            }
+//            while (objName.startsWith(":")) {
+//                objName = objName.mid(1);
+//            }
+//        }
+//    }
+//    setObjectName(objName);
 }
 
 QString FormItemIdentifiants::uuid() const
@@ -209,10 +225,15 @@ void FormItemScripts::setScript(const int type, const QString &script, const QSt
 
 QString FormItemScripts::script(const int type, const QString &lang) const
 {
-    /** \todo use languages */
     ScriptsBook *s = d->getLanguage(lang);
-    if (!s)
-        return QString::null;
+    if (!s) {
+        s = d->getLanguage(Trans::Constants::ALL_LANGUAGE);
+        if (!s) {
+            s = d->getLanguage("en");
+            if (!s)
+                return QString::null;
+        }
+    }
     return s->m_Scripts.value(type);
 }
 

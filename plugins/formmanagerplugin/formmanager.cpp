@@ -109,7 +109,7 @@ public:
     /** \todo create a EpisodeData class */
     int m_ActualEpisode;
     QString m_ActualEpisode_FormUid;
-    QList<Form::FormMain *> m_RootForms;
+    QList<Form::FormMain *> m_RootForms, m_SubFormsEmptyRoot;
 
 
 private:
@@ -158,6 +158,12 @@ void FormManager::activateMode()
 QList<FormMain *> FormManager::forms() const
 {
     return d->m_RootForms;
+}
+
+/**  Return all available empty root sub-forms for the current patient. \sa Form::FormMain */
+QList<FormMain *> FormManager::subFormsEmptyRoot() const
+{
+    return d->m_SubFormsEmptyRoot;
 }
 
 /**
@@ -247,13 +253,14 @@ bool FormManager::loadSubForms()
 
 bool FormManager::insertSubForm(const SubFormInsertionPoint &insertionPoint)
 {
+    d->m_SubFormsEmptyRoot.clear();
     // read all sub-forms
-    QList<Form::FormMain *> subFormsRoot = loadFormFile(insertionPoint.subFormUid());
+    d->m_SubFormsEmptyRoot = loadFormFile(insertionPoint.subFormUid());
 
     // insert sub-forms
     const QString &insertIntoUuid = insertionPoint.receiverUid();
-    for(int i=0; i < subFormsRoot.count(); ++i) {
-        FormMain *sub = subFormsRoot.at(i);
+    for(int i=0; i < d->m_SubFormsEmptyRoot.count(); ++i) {
+        FormMain *sub = d->m_SubFormsEmptyRoot.at(i);
 //        qWarning() << "insert" << sub->uuid() << "to" << insertIntoUuid;
         if (insertIntoUuid == Constants::ROOT_FORM_TAG) {
             // insert into its mode root form

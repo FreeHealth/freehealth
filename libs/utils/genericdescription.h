@@ -53,6 +53,10 @@ class VersionNumber;
 
 namespace Utils {
 
+struct DATAPACK_EXPORT Files {
+
+};
+
 class DATAPACK_EXPORT GenericDescription
 {
 public:
@@ -97,7 +101,7 @@ public:
 
     void setRootTag(const QString &rootTag);
 
-    void clear();
+    virtual void clear();
 
     virtual QVariant data(const int ref, const QString &lang = QString::null) const;
     virtual bool setData(const int ref, const QVariant &value, const QString &lang = QString::null);
@@ -119,6 +123,9 @@ public:
     // Manage extra data
     void addNonTranslatableExtraData(const int ref, const QString &tagName);
     void addTranslatableExtraData(const int ref, const QString &tagName);
+
+//    // Manage unknown tags (not in nontransatable, not in translatable)
+//    virtual void readUnknownElement(const QDomElement &element);
 
     virtual void toTreeWidget(QTreeWidget *tree) const;
 

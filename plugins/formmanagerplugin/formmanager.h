@@ -91,6 +91,7 @@ public:
     void activateMode();
 
     QList<FormMain *> forms() const;
+    QList<FormMain *> subFormsEmptyRoot() const;
     Form::FormMain *rootForm(const char *modeUniqueName);
 
     template <class T> T* getParent(FormItem *item)

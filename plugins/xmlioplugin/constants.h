@@ -151,6 +151,8 @@ const char* const ATTRIB_ID           = "id";
 const char* const ATTRIB_UUID         = "uuid";
 const char* const ATTRIB_NAME         = "name";
 const char* const ATTRIB_TYPE         = "type";
+const char* const FILETYPE_SCRIPT     = "script";
+const char* const FILETYPE_FORM       = "form";
 const char* const ATTRIB_PATIENTREPRESENTATION  = "patient";
 const char* const ATTRIB_COMPLETION   = "completion";
 const char* const ATTRIB_ICON         = "icon";
@@ -159,7 +161,7 @@ const char* const ATTRIB_LANGUAGE     = "lang";
 const char* const ATTRIB_FILE         = "file";
 
 const char* const OPTION_PLUGIN_NAME  = "type";
-const char* const OPTION_USEFORMNAMEASNS  = "UseFormNameAsNameSpace";
+const char* const OPTION_USEFORMNAMEASNS  = "useformnameasnamespace";
 
 enum creationTagsEnum {
     CreateForm = 0,

@@ -36,15 +36,16 @@
 /**
  * \file baseformplugin.h
  * \author Eric MAEKER <eric.maeker@gmail.com>
- * \version 0.0.4
- * \date 11 Aug 2009
+ * \version 0.6.2
+ * \date 21 Dec 2011
 */
 
 namespace BaseWidgets {
 namespace Internal {
 class BaseFormWidgetsOptionsPage;
-}
+class CalculationWidgetsFactory;
 class BaseWidgetsFactory;
+}
 
 class BaseWidgetsPlugin : public ExtensionSystem::IPlugin
 {
@@ -56,7 +57,8 @@ public:
     bool initialize(const QStringList &arguments, QString *errorString);
     void extensionsInitialized();
 private:
-    QPointer<BaseWidgetsFactory> m_Factory;
+    QPointer<Internal::BaseWidgetsFactory> m_Factory;
+    QPointer<Internal::CalculationWidgetsFactory> m_CalcFactory;
     QPointer<Internal::BaseFormWidgetsOptionsPage> m_OptionsPage;
 };
 

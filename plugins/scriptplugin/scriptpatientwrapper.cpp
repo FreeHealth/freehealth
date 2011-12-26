@@ -23,94 +23,78 @@
  *   Contributors :                                                        *
  *       NAME <MAIL@ADRESS>                                                *
  ***************************************************************************/
-#ifndef COREIMPL_H
-#define COREIMPL_H
+#include "scriptpatientwrapper.h"
 
 #include <coreplugin/icore.h>
 #include <coreplugin/ipatient.h>
 
-/**
- * \file coreimpl.h
- * \author Eric MAEKER <eric.maeker@gmail.com>
- * \version 0.4.0
- * \date 10 Oct 2010
-*/
+using namespace Script;
 
+static inline Core::IPatient *patient() {return Core::ICore::instance()->patient();}
 
-namespace Core {
-    class Patient;
-    class ICommandLine;
-
-namespace Internal {
-    class ThemePrivate;
-    class ActionManagerPrivate;
-    class ContextManagerPrivate;
-    class SettingsPrivate;
-}  // End Internal
-}  // End Core
-
-
-namespace Core {
-namespace Internal {
-
-class CoreImpl : public Core::ICore
+ScriptPatientWrapper::ScriptPatientWrapper(QObject *parent) :
+    QObject(parent)
 {
-    Q_OBJECT
-public:
-    CoreImpl(QObject *parent);
-    ~CoreImpl();
+}
 
-    static CoreImpl *instance() { return static_cast<CoreImpl *>(ICore::instance()); }
+bool ScriptPatientWrapper::isActive() const
+{
+    return (!patient()->uuid().isEmpty());
+}
+QString ScriptPatientWrapper::fullName() const
+{
+    return patient()->data(Core::IPatient::FullName).toString();
+}
+QDate ScriptPatientWrapper::dateOfBirth() const
+{
+    return patient()->data(Core::IPatient::DateOfBirth).toDate();
+}
+int ScriptPatientWrapper::yearsOld() const
+{
+    return patient()->data(Core::IPatient::YearsOld).toInt();
+}
+bool ScriptPatientWrapper::isMale() const
+{
+    return (patient()->data(Core::IPatient::GenderIndex).toInt()==0);
+}
+bool ScriptPatientWrapper::isFemale() const
+{
+    return patient()->data(Core::IPatient::GenderIndex).toInt()==1;
+}
+double ScriptPatientWrapper::weight() const
+{
+    return patient()->data(Core::IPatient::Weight).toDouble();
+}
+QString ScriptPatientWrapper::weightUnit() const
+{
+    return patient()->data(Core::IPatient::WeightUnit).toString();
+}
+double ScriptPatientWrapper::height() const
+{
+    return patient()->data(Core::IPatient::Height).toDouble();
+}
+QString ScriptPatientWrapper::heightUnit() const
+{
+    return patient()->data(Core::IPatient::HeightUnit).toString();
+}
+double ScriptPatientWrapper::bmi() const
+{
+    return patient()->data(Core::IPatient::BMI).toDouble();
+}
+double ScriptPatientWrapper::creatinine() const
+{
+    return patient()->data(Core::IPatient::Creatinine).toDouble();
+}
+QString ScriptPatientWrapper::creatinineUnit() const
+{
+    return patient()->data(Core::IPatient::CreatinineUnit).toString();
+}
+double ScriptPatientWrapper::clearanceCreatinine() const
+{
+    return patient()->data(Core::IPatient::CreatinClearance).toDouble();
+}
+QString ScriptPatientWrapper::clearanceCreatinineUnit() const
+{
+    return patient()->data(Core::IPatient::CreatinClearanceUnit).toString();
+}
 
-    ActionManager *actionManager() const;
-    ContextManager *contextManager() const;
-    UniqueIDManager *uniqueIDManager() const;
-
-    ITheme *theme() const;
-    Translators *translators() const;
-
-    ISettings *settings() const;
-
-    IMainWindow *mainWindow() const;
-    void setMainWindow(IMainWindow *) {}
-
-    FileManager *fileManager() const;
-
-    // initialization
-    bool initialize(const QStringList &arguments, QString *errorString);
-    void extensionsInitialized();
-
-    ICommandLine *commandLine() const;
-
-    Utils::UpdateChecker *updateChecker() const;
-
-    // Patient's datas wrapper
-    IPatient *patient() const {return 0;}
-    void setPatient(IPatient *) {}
-
-    IUser *user() const {return 0;}
-    void setUser(IUser *user) {Q_UNUSED(user);}
-
-    virtual void setScriptManager(IScriptManager *);
-    virtual IScriptManager *scriptManager() const {return 0;}
-
-
-private:
-    IMainWindow *m_MainWindow;
-    ActionManagerPrivate *m_ActionManager;
-    ContextManagerPrivate *m_ContextManager;
-    UniqueIDManager *m_UID;
-    ThemePrivate *m_Theme;
-    Translators *m_Translators;
-    SettingsPrivate *m_Settings;
-//    ICommandLine *m_CommandLine;
-//    Patient *m_Patient;
-    IUser *m_User;
-    Utils::UpdateChecker *m_UpdateChecker;
-    Core::FileManager *m_FileManager;
-};
-
-} // namespace Internal
-} // namespace Core
-
-#endif // COREIMPL_H

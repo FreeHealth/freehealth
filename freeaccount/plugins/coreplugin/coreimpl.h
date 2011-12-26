@@ -87,6 +87,9 @@ public:
     virtual IUser *user() const {return m_User;}
     virtual void setUser(IUser *user) {m_User=user;}
 
+    virtual void setScriptManager(IScriptManager *);
+    virtual IScriptManager *scriptManager() const {return 0;}
+
 private:
     IMainWindow *m_MainWindow;
     ActionManagerPrivate *m_ActionManager;

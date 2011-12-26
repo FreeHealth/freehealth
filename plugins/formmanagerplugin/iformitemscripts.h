@@ -64,7 +64,7 @@ class FormItemScriptsPrivate;
 class FORM_EXPORT FormItemScripts
 {
 public:
-    enum {
+    enum TypeOfScript {
         Script_OnLoad = 0,
         Script_PostLoad,
         Script_OnDemand,

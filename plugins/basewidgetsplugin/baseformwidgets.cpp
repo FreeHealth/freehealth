@@ -28,6 +28,7 @@
 #include "frenchsocialnumber.h"
 
 #include <coreplugin/icore.h>
+#include <coreplugin/iscriptmanager.h>
 #include <coreplugin/ipatient.h>
 
 #include <formmanagerplugin/iformitem.h>
@@ -53,8 +54,10 @@
 #include "ui_baseformwidget.h"
 
 using namespace BaseWidgets;
+using namespace Internal;
 
 static inline Core::IPatient *patient() {return Core::ICore::instance()->patient();}
+static inline Core::IScriptManager *scriptManager() {return Core::ICore::instance()->scriptManager();}
 
 namespace {
     // TypeEnum must be sync with the widgetsName QStringList
@@ -76,7 +79,6 @@ namespace {
         Type_Group,
         Type_Date,
         Type_Button,
-        Type_Sum,
         Type_FrenchNSS,
         Type_MaxType
     };
@@ -86,7 +88,7 @@ namespace {
             QStringList() << "undef" << "form" << "radio" << "check" << "combo"
             << "multicheck" << "uniquelist" << "multilist" << "spin" << "doublespin"
             << "shorttext" << "longtext" << "helptext" << "file" << "group"
-            << "date" << "button" << "sum" << "frenchnss";
+            << "date" << "button" << "frenchnss";
 
     const char * const  EXTRAS_COUNTRY          = "country";
     const char * const  EXTRAS_KEY              = "option";
@@ -97,14 +99,11 @@ namespace {
     const char * const  EXTRAS_GROUP_CHECKED    = "checked";
     const char * const  EXTRAS_ALIGN_VERTICAL   = "vertical";
     const char * const  EXTRAS_ALIGN_HORIZONTAL = "horizontal";
-    const char * const  CHANGE_EPISODE_LABEL    = "changeepisodelabel";
 
     // Date options
     const char * const  DATE_EXTRAS_KEY         = "dateformat";
     const char * const  DATE_NOW                = "now";
     const char * const  DATE_PATIENTLIMITS      = "patientLimits";
-    const char * const  SUM_EXTRA_KEY           = "sumof";
-    const char * const  SUM_REGEXP_EXTRA_KEY    = "sumof_regexp";
 
     const char * const  SPIN_EXTRAS_KEY_MIN         = "min";
     const char * const  SPIN_EXTRAS_KEY_MAX         = "max";
@@ -183,6 +182,12 @@ inline static bool dontPrintEmptyValues(Form::FormItem *item)
     return item->getOptions().contains(::DONTPRINTEMPTYVALUES, Qt::CaseInsensitive);
 }
 
+inline static void executeOnValueChangedScript(Form::FormItem *item)
+{
+    if (!item->scripts()->onValueChangedScript().isEmpty())
+        scriptManager()->evaluate(item->scripts()->onValueChangedScript());
+}
+
 BaseWidgetsFactory::BaseWidgetsFactory(QObject *parent) :
         IFormWidgetFactory(parent)
 {
@@ -240,7 +245,6 @@ Form::IFormWidget *BaseWidgetsFactory::createWidget(const QString &name, Form::F
     case ::Type_Spin : return new BaseSpin(formItem,parent);
     case ::Type_DoubleSpin : return new BaseSpin(formItem,parent,true);
     case ::Type_Button : return new BaseButton(formItem,parent);
-    case ::Type_Sum : return new SumWidget(formItem,parent);
     case ::Type_FrenchNSS : return new FrenchSocialNumberFormWidget(formItem,parent);
     default: return 0;
     }
@@ -425,14 +429,18 @@ bool BaseFormData::isModified() const
 
 bool BaseFormData::setData(const int ref, const QVariant &data, const int role)
 {
-    m_Data.insert(role, data);
-    switch (role) {
+//    qWarning() << "Form::setData" << ref << data << role;
+    if (role!=Qt::EditRole)
+        return false;
+
+    m_Data.insert(ref, data);
+    switch (ref) {
     case ID_EpisodeDate:
-        m_Form->m_EpisodeDate->setDate(m_Data.value(role).toDate());
+        m_Form->m_EpisodeDate->setDate(m_Data.value(ref).toDate());
         m_Form->m_EpisodeDate->setEnabled(true);
         break;
     case ID_EpisodeLabel:
-        m_Form->m_EpisodeLabel->setText(m_Data.value(role).toString());
+        m_Form->m_EpisodeLabel->setText(m_Data.value(ref).toString());
         m_Form->m_EpisodeLabel->setEnabled(true);
         break;
     }
@@ -449,18 +457,20 @@ bool BaseFormData::setData(const int ref, const QVariant &data, const int role)
 
 QVariant BaseFormData::data(const int ref, const int role) const
 {
-    Q_UNUSED(ref);
     /** \todo code here : IFormItemData should have a submit method */
-    switch (role) {
+    if (role!=Qt::DisplayRole)
+        return false;
+    switch (ref) {
     case ID_EpisodeDate: return m_Form->m_EpisodeDate->date();
     case ID_EpisodeLabel: return m_Form->m_EpisodeLabel->text();
+    case ID_UserName: return m_Data.value(ID_UserName);
     }
     return QVariant();
 }
 
 
 //--------------------------------------------------------------------------------------------------------
-//-------------------------------------- BaseGroup implementation --------------------------------------
+//--------------------------------------- BaseGroup implementation ---------------------------------------
 //--------------------------------------------------------------------------------------------------------
 BaseGroup::BaseGroup(Form::FormItem *formItem, QWidget *parent) :
     Form::IFormWidget(formItem,parent), m_Group(0), m_ContainerLayout(0)
@@ -507,7 +517,7 @@ BaseGroup::BaseGroup(Form::FormItem *formItem, QWidget *parent) :
         m_Group->setChecked(isGroupChecked(m_FormItem,false));
         //          connect(m_Group, SIGNAL(clicked(bool)),
         //                   this,    SLOT  (updateObject(bool)));
-        //          connect(mfo(m_FormItem), SIGNAL(valueChanged()),
+        //          connect(mfo(m_FormItem), SIGNAL(onValueChanged()),
         //                   this,     SLOT  (updateWidget()));
     }
     m_Group->setLayout(m_ContainerLayout);
@@ -631,6 +641,7 @@ BaseCheck::BaseCheck(Form::FormItem *formItem, QWidget *parent) :
     m_ItemData = new BaseCheckData(formItem);
     m_ItemData->setCheckBox(m_Check);
     formItem->setItemDatas(m_ItemData);
+    connect(m_Check, SIGNAL(clicked()), m_ItemData, SLOT(onValueChanged()));
 }
 
 BaseCheck::~BaseCheck()
@@ -694,9 +705,10 @@ bool BaseCheckData::isModified() const
 bool BaseCheckData::setData(const int ref, const QVariant &data, const int role)
 {
 //    qWarning() << "BaseCheckData::setData" << data << role;
-    if (role==Qt::EditRole || role==Qt::DisplayRole) {
+    if (role==Qt::EditRole || role==Qt::CheckStateRole) {
         if (data.canConvert(QVariant::Int))  { // Tristate
             m_Check->setCheckState(Qt::CheckState(data.toInt()));
+            onValueChanged();
         }
     }
     return true;
@@ -704,7 +716,9 @@ bool BaseCheckData::setData(const int ref, const QVariant &data, const int role)
 
 QVariant BaseCheckData::data(const int ref, const int role) const
 {
-    return m_Check->checkState();
+    if (role==Qt::CheckStateRole)
+        return m_Check->checkState();
+    return Qt::Unchecked;
 }
 
 void BaseCheckData::setStorableData(const QVariant &data)
@@ -714,11 +728,17 @@ void BaseCheckData::setStorableData(const QVariant &data)
     Qt::CheckState state = Qt::CheckState(data.toInt());
     m_Check->setCheckState(state);
     m_OriginalValue = state;
+//    onValueChanged();
 }
 
 QVariant BaseCheckData::storableData() const
 {
     return m_Check->checkState();
+}
+
+void BaseCheckData::onValueChanged()
+{
+    executeOnValueChangedScript(m_FormItem);
 }
 
 //--------------------------------------------------------------------------------------------------------
@@ -776,12 +796,13 @@ BaseRadio::BaseRadio(Form::FormItem *formItem, QWidget *parent) :
     }
     hb->addWidget(gb);
 
-    connect(m_ButGroup,SIGNAL(buttonClicked(QAbstractButton*)), this, SLOT(buttonClicked(QAbstractButton*)));
-
     // create the FormItemData
     BaseRadioData *data = new BaseRadioData(m_FormItem);
     data->setBaseRadio(this);
     m_FormItem->setItemDatas(data);
+
+    connect(m_ButGroup,SIGNAL(buttonClicked(QAbstractButton*)), this, SLOT(buttonClicked(QAbstractButton*)));
+    connect(m_ButGroup, SIGNAL(buttonClicked(QAbstractButton*)), data, SLOT(onValueChanged()));
 }
 
 BaseRadio::~BaseRadio()
@@ -879,7 +900,7 @@ void BaseRadio::retranslate()
 
 void BaseRadio::buttonClicked(QAbstractButton *radio)
 {
-    formItem()->itemDatas()->setData(0, radio->property("id"), Form::IFormItemData::ID_ForCalculations);
+    formItem()->itemDatas()->setData(0, radio->property("id"), Form::IFormItemData::CalculationsRole);
 }
 
 ////////////////////////////////////////// ItemData /////////////////////////////////////////////
@@ -923,15 +944,16 @@ bool BaseRadioData::setData(const int ref, const QVariant &data, const int role)
 {
     // receive ref=0; data=uid of activated radio; role=IFormItemData::RoleRepresentation
 //    qWarning() << "BaseRadioData::setData" << data << role;
-    if (role==Form::IFormItemData::ID_ForCalculations) {
+    if (role==Form::IFormItemData::CalculationsRole) {
         Q_EMIT dataChanged(ref); // just emit the dataChanged signal
+        onValueChanged();
     }
     return true;
 }
 
 QVariant BaseRadioData::data(const int ref, const int role) const
 {
-    if (role==Form::IFormItemData::ID_ForCalculations) {
+    if (role==Form::IFormItemData::CalculationsRole) {
         // return selected value::numerical (if exists)
         QString selectedUid;
         foreach(QRadioButton *but, m_Radio->m_RadioList) {
@@ -945,6 +967,12 @@ QVariant BaseRadioData::data(const int ref, const int role) const
 //        qWarning() << "Radio -> DATA" << selectedUid << id << vals;
         if (id < vals.count() && id >= 0)
             return vals.at(id);
+    } else if (role==Qt::DisplayRole) {
+        foreach(QRadioButton *but, m_Radio->m_RadioList) {
+            if (but->isChecked()) {
+                return but->text();
+            }
+        }
     }
     return QVariant();
 }
@@ -964,6 +992,7 @@ void BaseRadioData::setStorableData(const QVariant &data)
     m_OriginalValue = id;
     Q_EMIT dataChanged(0); // just emit the dataChanged signal
 //    qWarning() << "Radio orig" << id;
+//    onValueChanged(); ?
 }
 
 QVariant BaseRadioData::storableData() const
@@ -976,7 +1005,10 @@ QVariant BaseRadioData::storableData() const
     return QVariant();
 }
 
-
+void BaseRadioData::onValueChanged()
+{
+    executeOnValueChangedScript(m_FormItem);
+}
 
 //--------------------------------------------------------------------------------------------------------
 //------------------------------------------- BaseSimpleText -------------------------------------------
@@ -987,6 +1019,9 @@ BaseSimpleText::BaseSimpleText(Form::FormItem *formItem, QWidget *parent, bool s
     // Prepare Widget Layout and label
     QBoxLayout * hb = getBoxLayout(Label_OnLeft, m_FormItem->spec()->label(), this);
     hb->addWidget(m_Label);
+
+    // Create the FormItemData
+    BaseSimpleTextData *data = new BaseSimpleTextData(m_FormItem);
 
     // Add List and manage size
     if (shortText) {
@@ -1004,15 +1039,17 @@ BaseSimpleText::BaseSimpleText(Form::FormItem *formItem, QWidget *parent, bool s
         //          m_Line->setInputMask(mfo(m_FormItem)->mask());
         //          m_Line->setCursorPosition(0);
         hb->addWidget(m_Line);
+
+        connect(m_Line, SIGNAL(textChanged(QString)), data, SLOT(onValueChanged()));
     } else {
         m_Text = new QTextEdit(this);
         m_Text->setObjectName("Text_" + m_FormItem->uuid());
         m_Text->setSizePolicy(QSizePolicy::Expanding , QSizePolicy::Expanding);
         hb->addWidget(m_Text);
+
+        connect(m_Text, SIGNAL(textChanged()), data, SLOT(onValueChanged()));
     }
 
-    // Create the FormItemData
-    BaseSimpleTextData *data = new BaseSimpleTextData(m_FormItem);
     data->setBaseSimpleText(this);
     m_FormItem->setItemDatas(data);
 }
@@ -1030,6 +1067,11 @@ QString BaseSimpleText::printableHtml(bool withValues) const
             else if (m_Text && m_Text->toPlainText().isEmpty())
                 return QString();
         }
+        QString text;
+        if (m_Line)
+            text = m_Line->text();
+        if (m_Text)
+            text = m_Text->toHtml();
         return QString("<table width=100% border=1 cellpadding=0 cellspacing=0  style=\"margin: 5px 0px 0px 0px\">"
                        "<thead>"
                        "<tr>"
@@ -1046,7 +1088,7 @@ QString BaseSimpleText::printableHtml(bool withValues) const
                        "</tr>"
                        "</tbody>"
                        "</table>")
-                .arg(m_FormItem->spec()->label()).arg(m_Text->toHtml().remove("</body>").remove("</html>"));
+                .arg(m_FormItem->spec()->label()).arg(text.remove("</body>").remove("</html>"));
     } else {
         return QString("<table width=100% border=1 cellpadding=0 cellspacing=0  style=\"margin: 5px 0px 0px 0px\">"
                        "<thead>"
@@ -1105,11 +1147,27 @@ bool BaseSimpleTextData::isModified() const
 
 bool BaseSimpleTextData::setData(const int ref, const QVariant &data, const int role)
 {
+    WARN_FUNC << ref << role << data;
+    if (role==Qt::EditRole) {
+        if (m_Text->m_Line) {
+            m_Text->m_Line->setText(data.toString());
+            onValueChanged();
+        } else if (m_Text->m_Text) {
+            m_Text->m_Text->setText(data.toString());
+            onValueChanged();
+        }
+    }
     return true;
 }
 
 QVariant BaseSimpleTextData::data(const int ref, const int role) const
 {
+    if (role==Qt::DisplayRole) {
+        if (m_Text->m_Line)
+            return m_Text->m_Line->text();
+        else if (m_Text->m_Text)
+            return m_Text->m_Text->toPlainText();
+    }
     return QVariant();
 }
 
@@ -1131,7 +1189,10 @@ QVariant BaseSimpleTextData::storableData() const
     return QVariant();
 }
 
-
+void BaseSimpleTextData::onValueChanged()
+{
+    executeOnValueChangedScript(m_FormItem);
+}
 //--------------------------------------------------------------------------------------------------------
 //----------------------------------------- BaseHelpText -----------------------------------------------
 //--------------------------------------------------------------------------------------------------------
@@ -1204,6 +1265,8 @@ BaseList::BaseList(Form::FormItem *formItem, QWidget *parent, bool uniqueList) :
     BaseListData *data = new BaseListData(m_FormItem);
     data->setBaseList(this);
     m_FormItem->setItemDatas(data);
+
+    connect(m_List->selectionModel(), SIGNAL(selectionChanged(QItemSelection,QItemSelection)), data, SLOT(onValueChanged()));
 }
 
 BaseList::~BaseList()
@@ -1286,6 +1349,7 @@ void BaseListData::setSelectedItems(const QString &s)
         QModelIndex idx = m_List->m_Model->index(row, 0);
         selModel->select(idx, QItemSelectionModel::Select);
     }
+    onValueChanged();
 }
 
 /** \brief Set the widget to the default value \sa FormItem::FormItemValue*/
@@ -1302,11 +1366,45 @@ bool BaseListData::isModified() const
 
 bool BaseListData::setData(const int ref, const QVariant &data, const int role)
 {
+    if (role!=Qt::EditRole) {
+        setSelectedItems(data.toStringList().join("`@`"));
+    }
     return true;
 }
 
 QVariant BaseListData::data(const int ref, const int role) const
 {
+//    if (role==Form::IFormItemData::CalculationsRole) {
+//        // return selected value::numerical (if exists)
+//        QString selectedUid;
+//        foreach(QRadioButton *but, m_Radio->m_RadioList) {
+//            if (but->isChecked()) {
+//                selectedUid = but->property("id").toString();
+//                break;
+//            }
+//        }
+//        int id = parentItem()->valueReferences()->values(Form::FormItemValues::Value_Uuid).indexOf(selectedUid);
+//        const QStringList &vals = parentItem()->valueReferences()->values(Form::FormItemValues::Value_Numerical);
+//        if (id < vals.count() && id >= 0)
+//            return vals.at(id);
+//    } else
+    if (role==Qt::DisplayRole) {
+        QStringList selected;
+        QItemSelectionModel *selModel = m_List->m_List->selectionModel();
+        if (!selModel->hasSelection())
+            return QVariant();
+        if (ref==Form::IFormItemData::ID_CurrentUuid) {
+            const QStringList &uuids = m_FormItem->valueReferences()->values(Form::FormItemValues::Value_Uuid);
+            foreach(const QModelIndex &idx, selModel->selectedIndexes()) {
+                selected.append(uuids.at(idx.row()));
+            }
+        } else {
+            foreach(const QModelIndex &idx, selModel->selectedIndexes()) {
+                selected.append(idx.data().toString());
+            }
+        }
+        return selected;
+    }
     return QVariant();
 }
 
@@ -1334,12 +1432,15 @@ QVariant BaseListData::storableData() const
     return selected.join("`@`");
 }
 
-
+void BaseListData::onValueChanged()
+{
+    executeOnValueChangedScript(m_FormItem);
+}
 //--------------------------------------------------------------------------------------------------------
 //----------------------------------------- BaseCombo --------------------------------------------------
 //--------------------------------------------------------------------------------------------------------
-BaseCombo::BaseCombo(Form::FormItem *formItem, QWidget *parent)
-        : Form::IFormWidget(formItem,parent), m_Combo(0)
+BaseCombo::BaseCombo(Form::FormItem *formItem, QWidget *parent) :
+    Form::IFormWidget(formItem,parent), m_Combo(0)
 {
     // Prepare Widget Layout and label
     QBoxLayout *hb = getBoxLayout(Label_OnLeft, m_FormItem->spec()->label(), this);
@@ -1355,6 +1456,8 @@ BaseCombo::BaseCombo(Form::FormItem *formItem, QWidget *parent)
     BaseComboData *data = new BaseComboData(m_FormItem);
     data->setBaseCombo(this);
     m_FormItem->setItemDatas(data);
+
+    connect(m_Combo, SIGNAL(currentIndexChanged(int)), data, SLOT(onValueChanged()));
 }
 
 BaseCombo::~BaseCombo()
@@ -1437,11 +1540,32 @@ bool BaseComboData::isModified() const
 
 bool BaseComboData::setData(const int ref, const QVariant &data, const int role)
 {
+    if (role!=Qt::EditRole)
+        return false;
+    if (ref==Form::IFormItemData::ID_CurrentUuid) {
+        int id = parentItem()->valueReferences()->values(Form::FormItemValues::Value_Uuid).indexOf(data.toString());
+        m_Combo->m_Combo->setCurrentIndex(id);
+        onValueChanged();
+    }
     return true;
 }
 
 QVariant BaseComboData::data(const int ref, const int role) const
 {
+    int id = m_Combo->m_Combo->currentIndex();
+    if (ref==Form::IFormItemData::ID_CurrentUuid) {
+        if (id>=0)
+            return parentItem()->valueReferences()->values(Form::FormItemValues::Value_Uuid).at(id);
+
+    }
+    if (role==Qt::DisplayRole) {
+        return m_Combo->m_Combo->currentText();
+    }
+    if (role==Form::IFormItemData::CalculationsRole) {
+        const QStringList &vals = parentItem()->valueReferences()->values(Form::FormItemValues::Value_Numerical);
+        if (id < vals.count() && id >= 0)
+            return vals.at(id);
+    }
     return QVariant();
 }
 
@@ -1458,7 +1582,11 @@ QVariant BaseComboData::storableData() const
     return m_FormItem->valueReferences()->values(Form::FormItemValues::Value_Uuid).at(row);
 }
 
-
+void BaseComboData::onValueChanged()
+{
+    WARN_FUNC;
+    executeOnValueChangedScript(m_FormItem);
+}
 //--------------------------------------------------------------------------------------------------------
 //----------------------------------------- BaseDate ---------------------------------------------------
 //--------------------------------------------------------------------------------------------------------
@@ -1490,6 +1618,8 @@ BaseDate::BaseDate(Form::FormItem *formItem, QWidget *parent) :
     BaseDateData *data = new BaseDateData(m_FormItem);
     data->setBaseDate(this);
     m_FormItem->setItemDatas(data);
+
+    connect(m_Date, SIGNAL(dateChanged(QDate)), data, SLOT(onValueChanged()));
 }
 
 BaseDate::~BaseDate()
@@ -1566,6 +1696,7 @@ void BaseDateData::setDate(const QString &s)
 {
     m_Date->m_Date->clear();
     m_Date->m_Date->setDateTime(QDateTime::fromString(s, Qt::ISODate));
+    onValueChanged();
 }
 
 /** \brief Set the widget to the default value \sa FormItem::FormItemValue*/
@@ -1582,12 +1713,21 @@ bool BaseDateData::isModified() const
 
 bool BaseDateData::setData(const int ref, const QVariant &data, const int role)
 {
+    if (role==Qt::EditRole) {
+        if (data.canConvert<QDate>()) {
+            m_Date->m_Date->setDate(data.toDate());
+            onValueChanged();
+        } else if (data.canConvert<QDateTime>()) {
+            m_Date->m_Date->setDateTime(data.toDateTime());
+            onValueChanged();
+        }
+    }
     return true;
 }
 
 QVariant BaseDateData::data(const int ref, const int role) const
 {
-    return QVariant();
+    return m_Date->m_Date->dateTime();
 }
 
 void BaseDateData::setStorableData(const QVariant &data)
@@ -1601,7 +1741,10 @@ QVariant BaseDateData::storableData() const
     return m_Date->m_Date->dateTime().toString(Qt::ISODate);
 }
 
-
+void BaseDateData::onValueChanged()
+{
+    executeOnValueChangedScript(m_FormItem);
+}
 //--------------------------------------------------------------------------------------------------------
 //------------------------------------------ BaseSpin --------------------------------------------------
 //--------------------------------------------------------------------------------------------------------
@@ -1644,6 +1787,8 @@ BaseSpin::BaseSpin(Form::FormItem *formItem, QWidget *parent, bool doubleSpin) :
     BaseSpinData *data = new BaseSpinData(m_FormItem);
     data->setBaseSpin(this);
     m_FormItem->setItemDatas(data);
+
+    connect(m_Spin, SIGNAL(editingFinished()), data, SLOT(onValueChanged()));
 }
 
 BaseSpin::~BaseSpin()
@@ -1731,11 +1876,33 @@ bool BaseSpinData::isModified() const
 
 bool BaseSpinData::setData(const int ref, const QVariant &data, const int role)
 {
-    return true;
+    if (role==Qt::EditRole) {
+        QSpinBox *spin = qobject_cast<QSpinBox*>(m_Spin->m_Spin);
+        if (spin) {
+            spin->setValue(data.toInt());
+            onValueChanged();
+            return true;
+        }
+        QDoubleSpinBox *dspin = qobject_cast<QDoubleSpinBox*>(m_Spin->m_Spin);
+        if (dspin) {
+            dspin->setValue(data.toDouble());
+            onValueChanged();
+            return true;
+        }
+    }
+    return false;
 }
 
 QVariant BaseSpinData::data(const int ref, const int role) const
 {
+    QSpinBox *spin = qobject_cast<QSpinBox*>(m_Spin->m_Spin);
+    if (spin) {
+        return spin->value();
+    }
+    QDoubleSpinBox *dspin = qobject_cast<QDoubleSpinBox*>(m_Spin->m_Spin);
+    if (dspin) {
+        return dspin->value();
+    }
     return QVariant();
 }
 
@@ -1766,6 +1933,10 @@ QVariant BaseSpinData::storableData() const
     return QVariant();
 }
 
+void BaseSpinData::onValueChanged()
+{
+    executeOnValueChangedScript(m_FormItem);
+}
 //--------------------------------------------------------------------------------------------------------
 //------------------------------------------ BaseButton ------------------------------------------------
 //--------------------------------------------------------------------------------------------------------
@@ -1795,168 +1966,4 @@ void BaseButton::buttonClicked()
 void BaseButton::retranslate()
 {
     m_Button->setText(m_FormItem->spec()->label());
-}
-
-
-//--------------------------------------------------------------------------------------------------------
-//------------------------------------------ SumWidget ---------------------------------------------------
-//--------------------------------------------------------------------------------------------------------
-SumWidget::SumWidget(Form::FormItem *formItem, QWidget *parent) :
-    Form::IFormWidget(formItem, parent), line(0)
-{
-    setObjectName("SumWidget_"+formItem->uuid());
-    // Prepare Widget Layout and label
-    QBoxLayout * hb = getBoxLayout(Label_OnLeft, m_FormItem->spec()->label(), this);
-    hb->addWidget(m_Label);
-
-    // Add LineEdit for the result
-    line = new QLineEdit(this);
-    line->setObjectName("SumWidgetLineEdit_" + m_FormItem->uuid());
-    line->setSizePolicy(QSizePolicy::Expanding , QSizePolicy::Fixed);
-    hb->addWidget(line);
-
-    // connect to parent FormMain
-    Form::FormMain *p = formItem->parentFormMain();
-    if (p) {
-//        qWarning() << "parent" << p->uuid();
-        connect(p, SIGNAL(formLoaded()), this, SLOT(connectFormItems()));
-    }
-}
-
-SumWidget::~SumWidget()
-{
-}
-
-QString SumWidget::printableHtml(bool withValues) const
-{
-    if (!withValues) {
-        return QString("<table width=100% border=1 cellpadding=0 cellspacing=0  style=\"margin: 5px 0px 0px 0px\">"
-                       "<tbody>"
-                       "<tr>"
-                       "<td style=\"vertical-align: top; font-weight: 600; padding: 5px\">"
-                       "%1"
-                       "</td>"
-                       "<td style=\"vertical-align: top; padding-left:2em; padding-top:5px; padding-bottom: 5px; padding-right:2em\">"
-                       "&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;"
-                       "</td>"
-                       "</tr>"
-                       "</tbody>"
-                       "</table>")
-                .arg(m_FormItem->spec()->label());
-    } else {
-        if (dontPrintEmptyValues(m_FormItem) && line->text().isEmpty())
-            return QString();
-        return QString("<table width=100% border=1 cellpadding=0 cellspacing=0  style=\"margin: 5px 0px 0px 0px\">"
-                       "<tbody>"
-                       "<tr>"
-                       "<td style=\"vertical-align: top; font-weight: 600; padding: 5px\">"
-                       "%1"
-                       "</td>"
-                       "<td style=\"vertical-align: top; padding-left:2em; padding-top:5px; padding-bottom: 5px; padding-right:2em\">"
-                       "%2"
-                       "</td>"
-                       "</tr>"
-                       "</tbody>"
-                       "</table>")
-                .arg(m_FormItem->spec()->label()).arg(line->text());
-    }
-}
-
-void SumWidget::retranslate()
-{
-    m_Label->setText(m_FormItem->spec()->label());
-}
-
-void SumWidget::connectFormItems()
-{
-//    qWarning() << "SUM requiered" << formItem()->extraDatas().value(::SUM_EXTRA_KEY) << formItem()->extraDatas().value(::SUM_REGEXP_EXTRA_KEY);
-    if (formItem()->extraDatas().value(::SUM_EXTRA_KEY).isEmpty() && formItem()->extraDatas().value(::SUM_REGEXP_EXTRA_KEY).isEmpty()) {
-        LOG_ERROR("Sum widget: No sumof tag <sumof> or <sumof_regexp>.");
-        return;
-    }
-    Form::FormMain *p = formItem()->parentFormMain();
-    if (!p) {
-        LOG_ERROR("No FormMain parent");
-        return;
-    }
-//            qWarning() << "Parent = " << p->uuid();
-    if (!formItem()->extraDatas().value(::SUM_EXTRA_KEY).isEmpty()) {
-        QStringList uuids = formItem()->extraDatas().value(::SUM_EXTRA_KEY).split(";");
-        // get all formitems and connect to the dataChanged signal
-        QList<Form::FormItem *> items = p->flattenFormItemChildren();
-        foreach(QString uid, uuids) {
-            uid = uid.simplified();
-            for(int i = 0; i < items.count(); ++i) {
-                Form::FormItem *item = items.at(i);
-                if (item->uuid().compare(uid, Qt::CaseInsensitive)==0) {
-//                    qWarning() << "  connecting" << item->uuid();
-                    connect(item->itemDatas(), SIGNAL(dataChanged(int)), this, SLOT(recalculate(int)));
-                }
-            }
-        }
-    } else if (!formItem()->extraDatas().value(::SUM_REGEXP_EXTRA_KEY).isEmpty()) {
-        QRegExp reg(formItem()->extraDatas().value(::SUM_REGEXP_EXTRA_KEY), Qt::CaseInsensitive, QRegExp::Wildcard);
-        QList<Form::FormItem *> items = p->flattenFormItemChildren();
-        for(int i = 0; i < items.count(); ++i) {
-            Form::FormItem *item = items.at(i);
-            if (item->uuid().contains(reg) && item->itemDatas()) {
-//                qWarning() << "  connecting (regexp)" << item->uuid();
-                connect(item->itemDatas(), SIGNAL(dataChanged(int)), this, SLOT(recalculate(int)));
-            }
-        }
-    }
-}
-
-void SumWidget::recalculate(const int modifiedRef)
-{
-    Q_UNUSED(modifiedRef);
-//    qWarning() << "SUM recalculate" << formItem()->extraDatas().value(::SUM_EXTRA_KEY);
-    Form::FormMain *p = formItem()->parentFormMain();
-    if (!p) {
-        LOG_ERROR("No FormMain parent");
-        return;
-    }
-    double sum = 0;
-    if (!formItem()->extraDatas().value(::SUM_EXTRA_KEY).isEmpty()) {
-        QStringList uuids = formItem()->extraDatas().value(::SUM_EXTRA_KEY).split(";");
-        // get all formitems and connect to the dataChanged signal
-        QList<Form::FormItem *> items = p->flattenFormItemChildren();
-        foreach(const QString &uid, uuids) {
-            for(int i = 0; i < items.count(); ++i) {
-                Form::FormItem *item = items.at(i);
-                if (item->uuid().compare(uid, Qt::CaseInsensitive)==0) {
-                    QVariant val = item->itemDatas()->data(0, Form::IFormItemData::ID_ForCalculations);
-                    sum += val.toDouble();
-                }
-            }
-        }
-    } else if (!formItem()->extraDatas().value(::SUM_REGEXP_EXTRA_KEY).isEmpty()) {
-        QRegExp reg(formItem()->extraDatas().value(::SUM_REGEXP_EXTRA_KEY), Qt::CaseInsensitive, QRegExp::Wildcard);
-        QList<Form::FormItem *> items = p->flattenFormItemChildren();
-        for(int i = 0; i < items.count(); ++i) {
-            Form::FormItem *item = items.at(i);
-            if (item->uuid().contains(reg) && item->itemDatas()) {
-                QVariant val = item->itemDatas()->data(0, Form::IFormItemData::ID_ForCalculations);
-                sum += val.toDouble();
-            }
-        }
-    }
-    line->setText(QString::number(sum));
-    if (formItem()->getOptions().contains(::CHANGE_EPISODE_LABEL, Qt::CaseInsensitive)) {
-        QString episodeLabel = p->itemDatas()->data(0, Form::IFormItemData::ID_EpisodeLabel).toString();
-        QTextDocument doc(this);
-        doc.setHtml(m_Label->text());
-        QString add = QString("[[%1 %2]]").arg(doc.toPlainText()).arg(sum);
-        if (episodeLabel.contains("[[") && episodeLabel.contains("]]")) {
-            // remove this part
-            int begin = episodeLabel.indexOf("[[");
-            int end = episodeLabel.indexOf("]]") + 2;
-            episodeLabel.remove(begin, end-begin);
-            // add the new value
-            episodeLabel.insert(begin, add);
-            p->itemDatas()->setData(0, episodeLabel, Form::IFormItemData::ID_EpisodeLabel);
-        } else {
-            p->itemDatas()->setData(0, episodeLabel + "; " + add, Form::IFormItemData::ID_EpisodeLabel);
-        }
-    }
 }

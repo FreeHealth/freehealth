@@ -101,6 +101,9 @@ public:
     virtual IUser *user() const {return m_User;}
     virtual void setUser(IUser *user) {m_User = user;}
 
+    virtual void setScriptManager(IScriptManager *script) {m_Script=script;}
+    virtual IScriptManager *scriptManager() const {return m_Script;}
+
     // initialization
     bool initialize(const QStringList &arguments, QString *errorString);
     void extensionsInitialized();
@@ -120,6 +123,7 @@ private:
     ModeManager *m_ModeManager;
     IPatient *m_Patient;
     IUser *m_User;
+    IScriptManager *m_Script;
 };
 
 } // namespace Internal

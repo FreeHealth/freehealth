@@ -78,6 +78,7 @@ public:
     QString lastError() const {return m_Error.join("\n");}
 
     bool checkFormFileContent(const QString &formUidOrFullAbsPath, const QString &contents) const;
+    bool checkScriptFileContent(const QString &fileName, const QString &content);
 
     Form::FormIODescription *readXmlDescription(const QDomElement &xmlDescr, const QString &formUid);
     Form::FormIODescription *readFileInformations(const QString &formUidOrFullAbsPath, const Form::FormIOQuery &query = Form::FormIOQuery());
@@ -91,6 +92,7 @@ public:
 
     bool populateValues(Form::FormItem *item, const QDomElement &root, const XmlFormName &form);
     bool populateScripts(Form::FormItem *item, const QDomElement &root, const XmlFormName &form);
+    bool addFile(const QDomElement &element, const XmlFormName &form);
 
     bool createItemWidget(Form::FormItem *item, QWidget *parent = 0);
     bool createFormWidget(Form::FormMain *form);
@@ -102,6 +104,8 @@ public:
 
     // Some database
     QString saveFormToDatabase(const XmlFormName &form, const int type, const QString &content = QString::null, const QString &modeName = QString::null);
+    void saveScriptFiles(const QString &absPathDir, const QString &formUid);
+    void saveScreenShots(const QString &absPathDir, const QString &formUid);
     QString getFileContentFromDatabase(const XmlFormName &form, const int type, const QString &fileNameOrModeName);
     QString readExtraFile(const XmlFormName &form, const QString &fileName);
 

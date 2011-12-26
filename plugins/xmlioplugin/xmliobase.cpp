@@ -477,7 +477,6 @@ QString XmlIOBase::getFormContent(const QString &formUid, const int type, const 
 /** Save the content of an XML form content \e xmlContent into the database using the Form Uuid \e formUid, XmlIOBase::TypeOfForm \e type, Mode name \e modeName and \e date */
 bool XmlIOBase::saveContent(const QString &formUid, const QString &xmlContent, const int type, const QString &modeName, const QDateTime &date)
 {
-    /** \todo add date of forms for the future update process*/
     QSqlDatabase DB = database();
     if (!DB.isOpen()) {
         if (!DB.open()) {

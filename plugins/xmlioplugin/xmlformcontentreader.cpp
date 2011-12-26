@@ -213,20 +213,18 @@ bool XmlFormContentReader::checkFormFileContent(const QString &formUidOrFullAbsP
         warnXmlReadError(m_Mute, formUidOrFullAbsPath, error);
         ok = false;
     }
-
-    /** \todo check version of the file */
-//    if (!contents.contains(QString("<%1>").arg(Constants::TAG_SPEC_VERSION), Qt::CaseInsensitive)) {
-//        const QString &error = tr("No version number defined");
-//        warnXmlReadError(m_Mute, file, error);
-//        return false;
-//    } else {
-//        int beg = contents.indexOf(QString("<%1>").arg(Constants::TAG_SPEC_VERSION)) + QString("<%1>").arg(Constants::TAG_SPEC_VERSION).length();
-//        int end = contents.indexOf(QString("</%1>").arg(Constants::TAG_SPEC_VERSION));
-//        QString version = contents.mid(beg, end-beg).simplified();
-//    }
     if (ok)
         m_DomDocFormCache.insert(formUidOrFullAbsPath, doc);
     return ok;
+}
+
+bool XmlFormContentReader::checkScriptFileContent(const QString &fileName, const QString &content)
+{
+    if (content.isEmpty()) {
+        m_Error.append(tkTr(Trans::Constants::FILE_1_ISEMPTY).arg(fileName));
+        return false;
+    }
+    return true;
 }
 
 static void setPathToDescription(QString path, Form::FormIODescription *desc)
@@ -439,20 +437,7 @@ bool XmlFormContentReader::loadElement(Form::FormItem *item, QDomElement &rootEl
 
         // Add a form file ?
         if (element.tagName().compare(Constants::TAG_ADDFILE, Qt::CaseInsensitive)==0) {
-            QString fileName = element.text();
-            fileName = fileName.replace(Core::Constants::TAG_APPLICATION_COMPLETEFORMS_PATH, settings()->path(Core::ISettings::CompleteFormsPath), Qt::CaseInsensitive);
-            fileName = fileName.replace(Core::Constants::TAG_APPLICATION_SUBFORMS_PATH, settings()->path(Core::ISettings::SubFormsPath), Qt::CaseInsensitive);
-            if (QFileInfo(fileName).isRelative())
-                fileName.prepend(QFileInfo(form.absFileName).absolutePath() + QDir::separator());
-            fileName = QDir::cleanPath(fileName);
-            QString content = Utils::readTextFile(fileName, Utils::DontWarnUser);
-            if (checkFormFileContent(fileName, content)) {
-                if (!loadForm(fileName, m_ActualForm)) {
-                    LOG_ERROR_FOR("XmlReader", "Unable to add form file " + element.text());
-                } else {
-                    saveFormToDatabase(fileName, XmlIOBase::FullContent, content);
-                }
-            }
+            addFile(element, form);
             element = element.nextSiblingElement();
             continue;
         }
@@ -606,9 +591,61 @@ bool XmlFormContentReader::populateScripts(Form::FormItem *item, const QDomEleme
     QString lang = root.attribute(Constants::ATTRIB_LANGUAGE, Trans::Constants::ALL_LANGUAGE).left(2);
     while (!element.isNull()) {
         QString script = element.text();
-        int type = m_ScriptsTypes.value(element.tagName(), Form::FormItemScripts::Script_OnDemand);
+        QString file = root.attribute(Constants::ATTRIB_FILE);
+        /** \todo HERE */
+        int type = m_ScriptsTypes.value(element.tagName().toLower(), Form::FormItemScripts::Script_OnDemand);
         item->scripts()->setScript(type, script, lang);
         element = element.nextSiblingElement();
+    }
+    return true;
+}
+
+/** Read a new file. Called when matched XML tag \e file. */
+bool XmlFormContentReader::addFile(const QDomElement &element, const XmlFormName &form)
+{
+    // Read file content
+    QString fileName = element.text();
+    fileName = fileName.replace(Core::Constants::TAG_APPLICATION_COMPLETEFORMS_PATH, settings()->path(Core::ISettings::CompleteFormsPath), Qt::CaseInsensitive);
+    fileName = fileName.replace(Core::Constants::TAG_APPLICATION_SUBFORMS_PATH, settings()->path(Core::ISettings::SubFormsPath), Qt::CaseInsensitive);
+    if (QFileInfo(fileName).isRelative())
+        fileName.prepend(QFileInfo(form.absFileName).absolutePath() + QDir::separator());
+    fileName = QDir::cleanPath(fileName);
+    QString content = Utils::readTextFile(fileName, Utils::DontWarnUser);
+
+    // Check file content for script addition
+    const QString &type = element.attribute(Constants::ATTRIB_TYPE);
+    if (type.compare(Constants::FILETYPE_SCRIPT, Qt::CaseInsensitive)==0) {
+        if (checkScriptFileContent(fileName, content)) {
+            // Save to database
+            reader()->saveScriptFiles(fileName, form.uid);
+            // Add script to the empty root FormMain
+            Form::FormMain *parent = m_ActualForm;
+            while (m_ActualForm->parentFormMain()) {
+                parent = m_ActualForm->parentFormMain();
+            }
+            const QString &lang = element.attribute(Constants::ATTRIB_LANGUAGE, Trans::Constants::ALL_LANGUAGE);
+            const QString &scriptType = element.attribute(Constants::ATTRIB_NAME, Trans::Constants::ALL_LANGUAGE);
+
+//            qWarning()<< "\n\n" << lang << type << scriptType << parent->uuid();
+
+            if (scriptType.compare(Constants::TAG_SCRIPT_ONLOAD, Qt::CaseInsensitive)==0)
+                parent->scripts()->setScript(Form::FormItemScripts::Script_OnLoad, content, lang);
+            else if (scriptType.compare(Constants::TAG_SCRIPT_POSTLOAD, Qt::CaseInsensitive)==0)
+                parent->scripts()->setScript(Form::FormItemScripts::Script_PostLoad, content, lang);
+            return true;
+        }
+    }
+
+    // Check file content (for forms file)
+    if (checkFormFileContent(fileName, content)) {
+        if (!loadForm(fileName, m_ActualForm)) {
+            LOG_ERROR_FOR("XmlReader", "Unable to add form file " + element.text());
+            return false;
+        } else {
+            saveFormToDatabase(fileName, XmlIOBase::FullContent, content);
+            return true;
+
+        }
     }
     return true;
 }
@@ -750,6 +787,49 @@ QString XmlFormContentReader::saveFormToDatabase(const XmlFormName &form, const 
         base()->saveContent(form.uid, content, type, modeName);
     }
     return form.uid;
+}
+
+/** Save script files associated with the forms. */
+void XmlFormContentReader::saveScriptFiles(const QString &absPathDir, const QString &formUid)
+{
+    WARN_FUNC << absPathDir << formUid;
+    QDir shotPath(absPathDir + QDir::separator() + "scripts");
+    if (!shotPath.exists())
+        shotPath.cdUp();
+    if (shotPath.exists()) {
+        LOG_FOR("XmlFormIO","Saving attached script files to database " + formUid);
+        QFileInfoList files = Utils::getFiles(shotPath, "*.js");
+        foreach(const QFileInfo &f, files) {
+            QString fp = f.absoluteFilePath();
+            QFile file(fp);
+            // mode = last dir (lang) + fileName.extension
+            int end = fp.lastIndexOf("/");
+            int begin = fp.lastIndexOf("/", end - 1) + 1;
+            QString mode = fp.mid(begin, end-begin) + "/" + f.fileName();
+            saveFormToDatabase(formUid, XmlIOBase::ScriptFile, Utils::readTextFile(fp), mode);
+        }
+    }
+}
+
+void XmlFormContentReader::saveScreenShots(const QString &absPathDir, const QString &formUid)
+{
+    QDir shotPath(absPathDir + QDir::separator() + "shots");
+    if (shotPath.exists()) {
+        LOG_FOR("XmlFormIO","Saving attached screenshots to database " + formUid);
+        QFileInfoList files = Utils::getFiles(shotPath, "*.png");
+        foreach(const QFileInfo &f, files) {
+            QString fp = f.absoluteFilePath();
+            QFile file(fp);
+            // mode = last dir (lang) + fileName.extension
+            int end = fp.lastIndexOf("/");
+            int begin = fp.lastIndexOf("/", end - 1) + 1;
+            QString mode = fp.mid(begin, end-begin) + "/" + f.fileName();
+            if (file.open(QFile::ReadOnly)) {
+                QByteArray ba = file.readAll();
+                saveFormToDatabase(formUid, XmlIOBase::ScreenShot, ba.toBase64(), mode);
+            }
+        }
+    }
 }
 
 /** Get the content of a file from the database only */

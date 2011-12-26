@@ -23,96 +23,42 @@
  *   Contributors :                                                        *
  *       NAME <MAIL@ADRESS>                                                *
  ***************************************************************************/
-#ifndef COREIMPL_H
-#define COREIMPL_H
+#ifndef SCRIPT_PLUGIN_H
+#define SCRIPT_PLUGIN_H
 
-#include <coreplugin/icore.h>
-#include <coreplugin/ipatient.h>
-#include <coreplugin/ipadtools.h>
+#include <extensionsystem/iplugin.h>
+
+#include <QtCore/QObject>
 
 /**
- * \file coreimpl.h
+ * \file scriptplugin.h
  * \author Eric MAEKER <eric.maeker@gmail.com>
- * \version 0.5.0
- * \date 03 Dec 2010
+ * \version 0.6.2
+ * \date 21 Dec 2011
 */
 
+namespace Script {
+class ScriptManager;
 
-namespace Core {
-    class Patient;
-
-namespace Internal {
-    class ThemePrivate;
-    class ActionManagerPrivate;
-    class ContextManagerPrivate;
-    class SettingsPrivate;
-}  // End Internal
-}  // End Core
-
-
-namespace Core {
-namespace Internal {
-
-class CoreImpl : public Core::ICore
+class ScriptPlugin : public ExtensionSystem::IPlugin
 {
     Q_OBJECT
 public:
-    CoreImpl(QObject *parent);
-    ~CoreImpl();
+    ScriptPlugin();
+    ~ScriptPlugin();
 
-    static CoreImpl *instance() { return static_cast<CoreImpl *>(ICore::instance()); }
-
-    ActionManager *actionManager() const;
-    ContextManager *contextManager() const;
-    UniqueIDManager *uniqueIDManager() const;
-
-    ITheme *theme() const;
-    Translators *translators() const;
-
-    ISettings *settings() const;
-
-    IMainWindow *mainWindow() const;
-    void setMainWindow(IMainWindow *);
-
-    FileManager *fileManager() const;
-
-    // initialization
     bool initialize(const QStringList &arguments, QString *errorString);
     void extensionsInitialized();
 
-    ICommandLine *commandLine() const;
-
-    Utils::UpdateChecker *updateChecker() const;
-
-	IPadTools *padTools() const { return m_padTools; }
-
-    // Patient's datas wrapper
-    IPatient *patient() const {return 0;}
-    void setPatient(IPatient *) {}
-
-    IUser *user() const {return m_User;}
-    void setUser(IUser *user) {m_User = user;}
-
-    virtual void setScriptManager(IScriptManager *);
-    virtual IScriptManager *scriptManager() const {return 0;}
+private Q_SLOTS:
+    void postCoreInitialization();
+    void patientSelected();
 
 private:
-    IMainWindow *m_MainWindow;
-    ActionManagerPrivate *m_ActionManager;
-    ContextManagerPrivate *m_ContextManager;
-    UniqueIDManager *m_UID;
-    ThemePrivate *m_Theme;
-    Translators *m_Translators;
-    SettingsPrivate *m_Settings;
-//    CommandLine *m_CommandLine;
-    Patient *m_Patient;
-    IUser *m_User;
-	IPadTools *m_padTools;
-    Utils::UpdateChecker *m_UpdateChecker;
-    Core::FileManager *m_FileManager;
+    ScriptManager *m_Manager;
 };
 
-} // namespace Internal
-} // namespace Core
 
-#endif // COREIMPL_H
+}  // End namespace Script
+
+#endif  // End SCRIPT_PLUGIN_H
