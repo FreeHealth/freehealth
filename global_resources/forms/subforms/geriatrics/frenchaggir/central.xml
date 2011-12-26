@@ -6,7 +6,7 @@
     <!-- Non translatable values -->
     <authors>Eric Maeker, MD</authors>
     <version>0.6.0</version>
-    <compatversion>0.6.0</compatversion>
+    <fmfversion>0.6.0</fmfversion>
     <cdate>2011-03-15</cdate>
     <icon>geriatrics.png</icon>
     <weblink></weblink>

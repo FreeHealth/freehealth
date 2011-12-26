@@ -5,7 +5,7 @@
   <formdescription>
     <!-- Non translatable values -->
     <authors>Fredman, MD; Eric Maeker, MD</authors>
-    <version>0.6.03</version>
+    <version>0.6.04</version>
     <compatversion>0.6.0</compatversion>
     <cdate>2011-12-17</cdate>
     <icon>rhumatology.png</icon>
@@ -28,7 +28,7 @@
     <label lang="fr">Indice algo-fonctionnel de Lequesne pour le genou</label>
     <label lang="de"> Lequesne-Index (Knie)</label>
     <label lang="xx">Algofunctional index of Lequesne for knee osteoarthritis</label>
-    <options>col=2;DontPrintEmptyValues</options>
+    <options>col=2;DontPrintEmptyValues;UseFormNameAsNameSpace</options>
 
     <Item name="pain" type="group">
       <label lang="fr">Douleur ou Gêne</label>
