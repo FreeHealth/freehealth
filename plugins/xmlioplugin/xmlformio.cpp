@@ -164,7 +164,7 @@ bool XmlFormIO::canReadForms(const Form::FormIOQuery &query) const
 bool XmlFormIO::canReadScripts(const Form::FormIOQuery &query) const
 {
     XmlFormName form(query.formUuid());
-    qWarning() << Q_FUNC_INFO << query.formUuid() << form.uid << form.absFileName << form.modeName;
+//    qWarning() << Q_FUNC_INFO << query.formUuid() << form.uid << form.absFileName << form.modeName;
 
     if (m_ReadableForms.keys().contains(form.absFileName)) {
         return m_ReadableForms.value(form.absFileName);
@@ -176,10 +176,10 @@ bool XmlFormIO::canReadScripts(const Form::FormIOQuery &query) const
     // Try to get from database
     if (!query.forceFileReading()) {
         if (base()->isFormExists(form.uid, XmlIOBase::ScriptFile, form.modeName)) {
-            qWarning() << "READ FROM DATABASE";
+//            qWarning() << "READ FROM DATABASE";
             // check form content
             if (reader()->checkScriptFileContent(scriptFile.filePath(), base()->getFormContent(form.uid, XmlIOBase::ScriptFile, form.modeName))) {
-                qWarning() << "check " << scriptFile.path();
+//                qWarning() << "check " << scriptFile.path();
                 m_ReadableScripts.insert(form.absFileName, true);
                 return true;
             } else {
@@ -195,7 +195,7 @@ bool XmlFormIO::canReadScripts(const Form::FormIOQuery &query) const
     }
 
     // Get from local files
-    qWarning() << "READ FROM FILE" << scriptFile.absoluteFilePath();
+//    qWarning() << "READ FROM FILE" << scriptFile.absoluteFilePath();
     QString fileName = form.absFileName;
     if (!QFileInfo(scriptFile).exists()) {
         LOG_ERROR(tkTr(Trans::Constants::FILE_1_DOESNOT_EXISTS).arg(fileName));

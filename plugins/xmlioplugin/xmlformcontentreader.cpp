@@ -792,7 +792,7 @@ QString XmlFormContentReader::saveFormToDatabase(const XmlFormName &form, const 
 /** Save script files associated with the forms. */
 void XmlFormContentReader::saveScriptFiles(const QString &absPathDir, const QString &formUid)
 {
-    WARN_FUNC << absPathDir << formUid;
+//    WARN_FUNC << absPathDir << formUid;
     QDir shotPath(absPathDir + QDir::separator() + "scripts");
     if (!shotPath.exists())
         shotPath.cdUp();
@@ -811,6 +811,7 @@ void XmlFormContentReader::saveScriptFiles(const QString &absPathDir, const QStr
     }
 }
 
+/** Save screenshots files associated with the forms. */
 void XmlFormContentReader::saveScreenShots(const QString &absPathDir, const QString &formUid)
 {
     QDir shotPath(absPathDir + QDir::separator() + "shots");
