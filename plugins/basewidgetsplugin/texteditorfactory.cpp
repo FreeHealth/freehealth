@@ -26,17 +26,19 @@
 #include "texteditorfactory.h"
 
 #include <formmanagerplugin/iformitem.h>
+#include <coreplugin/icore.h>
+#include <coreplugin/iscriptmanager.h>
 
 #include <utils/log.h>
 
 using namespace BaseWidgets;
 
-inline static QStringList getOptions(Form::FormItem *item)
+static inline Core::IScriptManager *scriptManager() {return Core::ICore::instance()->scriptManager();}
+
+inline static void executeOnValueChangedScript(Form::FormItem *item)
 {
-    QStringList l;
-    l = item->extraDatas().value("options").split(";", QString::SkipEmptyParts);
-    l += item->extraDatas().value("option").split(";", QString::SkipEmptyParts);
-    return l;
+    if (!item->scripts()->onValueChangedScript().isEmpty())
+        scriptManager()->evaluate(item->scripts()->onValueChangedScript());
 }
 
 TextEditorFactory::TextEditorFactory(QObject *parent) :
@@ -87,7 +89,7 @@ TextEditorForm::TextEditorForm(Form::FormItem *formItem, QWidget *parent) :
     hb->addWidget(m_Label);
     hb->setMargin(0);
     hb->setSpacing(0);
-    const QStringList &options = getOptions(formItem);
+    const QStringList &options = formItem->getOptions();
     Editor::TextEditor::Types t = Editor::TextEditor::Simple | Editor::TextEditor::WithTextCompleter;
     if (options.contains("FullEditor", Qt::CaseInsensitive)) {
         t = Editor::TextEditor::Full;
@@ -113,6 +115,7 @@ TextEditorForm::TextEditorForm(Form::FormItem *formItem, QWidget *parent) :
     data->setEditor(m_Text);
     formItem->setItemDatas(data);
 
+    connect(m_Text->textEdit(), SIGNAL(textChanged()), data, SLOT(onValueChanged()));
     retranslate();
 }
 
@@ -126,7 +129,7 @@ QString TextEditorForm::printableHtml(bool withValues) const
         return QString();
 
     if (withValues) {
-        if (getOptions(m_FormItem).contains("DontPrintEmptyValues")) {
+        if (m_FormItem->getOptions().contains("DontPrintEmptyValues")) {
             if (m_Text->textEdit()->toPlainText().isEmpty())
                 return QString();
         }
@@ -197,6 +200,10 @@ bool TextEditorData::isModified() const
 bool TextEditorData::setData(const int ref, const QVariant &data, const int role)
 {
 //    qWarning() << "TextEditorData::setData" << data << role;
+    if (role==Qt::EditRole) {
+        m_Editor->textEdit()->setHtml(data.toString());
+        onValueChanged();
+    }
     return true;
 }
 
@@ -222,3 +229,7 @@ QVariant TextEditorData::storableData() const
     return m_Editor->textEdit()->toHtml();
 }
 
+void TextEditorData::onValueChanged()
+{
+    executeOnValueChangedScript(m_FormItem);
+}

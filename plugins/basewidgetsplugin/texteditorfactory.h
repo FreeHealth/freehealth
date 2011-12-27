@@ -79,6 +79,7 @@ private:
 
 class TextEditorData : public Form::IFormItemData
 {
+    Q_OBJECT
 public:
     TextEditorData(Form::FormItem *item);
     ~TextEditorData();
@@ -95,6 +96,9 @@ public:
 
     void setStorableData(const QVariant &data);
     QVariant storableData() const;
+
+public Q_SLOTS:
+    void onValueChanged();
 
 private:
     Form::FormItem *m_FormItem;
