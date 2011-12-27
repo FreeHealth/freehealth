@@ -110,7 +110,8 @@ QScriptValue FormManagerScriptWrapper::item(const QString &uuid)
         const QScriptValue &val = m_Items.at(i);
         const QString &uuid = val.property("uuid").toString();
         if (uuid.compare(fullUuid, Qt::CaseInsensitive)==0) {
-            qWarning() << "FOUND ITEM" << fullUuid << uuid;
+            if (m_LogItemSearch)
+                qWarning() << "FOUND ITEM" << fullUuid << uuid;
             return val;
         }
     }
