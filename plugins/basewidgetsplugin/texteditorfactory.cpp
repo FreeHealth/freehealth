@@ -122,6 +122,9 @@ TextEditorForm::~TextEditorForm()
 
 QString TextEditorForm::printableHtml(bool withValues) const
 {
+    if (m_FormItem->getOptions().contains("notprintable"))
+        return QString();
+
     if (withValues) {
         if (getOptions(m_FormItem).contains("DontPrintEmptyValues")) {
             if (m_Text->textEdit()->toPlainText().isEmpty())

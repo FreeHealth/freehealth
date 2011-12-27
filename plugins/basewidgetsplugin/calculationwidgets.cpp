@@ -120,6 +120,7 @@ const char * const  SUM_REGEXP_EXTRA_KEY    = "sumof_regexp";
 const char * const  DONTPRINTEMPTYVALUES    = "DontPrintEmptyValues";
 const char * const  SCRIPT_EXTRA_KEY        = "calcScript";
 const char * const  SCRIPT_NS_EXTRA_KEY     = "calcUseNS";
+const char * const  NOT_PRINTABLE           = "notprintable";
 
 enum ProvidedWidget {
     Type_Sum = 0,
@@ -246,6 +247,9 @@ SumWidget::~SumWidget()
 
 QString SumWidget::printableHtml(bool withValues) const
 {
+    if (m_FormItem->getOptions().contains(::NOT_PRINTABLE))
+        return QString();
+
     if (!withValues) {
         return QString("<table width=100% border=1 cellpadding=0 cellspacing=0  style=\"margin: 5px 0px 0px 0px\">"
                        "<tbody>"
@@ -396,6 +400,9 @@ ScriptWidget::~ScriptWidget()
 
 QString ScriptWidget::printableHtml(bool withValues) const
 {
+    if (m_FormItem->getOptions().contains(::NOT_PRINTABLE))
+        return QString();
+
     if (!withValues) {
         return QString("<table width=100% border=1 cellpadding=0 cellspacing=0  style=\"margin: 5px 0px 0px 0px\">"
                        "<tbody>"

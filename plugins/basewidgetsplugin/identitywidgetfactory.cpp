@@ -183,6 +183,9 @@ void IdentityFormWidget::retranslate()
 
 QString IdentityFormWidget::printableHtml(bool withValues) const
 {
+    if (m_FormItem->getOptions().contains("notprintable"))
+        return QString();
+
     if (withValues) {
         QString n = patient()->data(Core::IPatient::FullName).toString();
         n = n.simplified();

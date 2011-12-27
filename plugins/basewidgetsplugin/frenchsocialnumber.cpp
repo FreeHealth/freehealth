@@ -483,6 +483,9 @@ FrenchSocialNumberFormWidget::~FrenchSocialNumberFormWidget()
 
 QString FrenchSocialNumberFormWidget::printableHtml(bool withValues) const
 {
+    if (m_FormItem->getOptions().contains("notprintable"))
+        return QString();
+
     QString content;
     if (!withValues) {
         content += QString("%1&nbsp;:&nbsp;%2")

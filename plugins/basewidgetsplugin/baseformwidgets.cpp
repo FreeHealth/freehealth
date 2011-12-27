@@ -105,13 +105,16 @@ namespace {
     const char * const  DATE_NOW                = "now";
     const char * const  DATE_PATIENTLIMITS      = "patientLimits";
 
+    // Spins
     const char * const  SPIN_EXTRAS_KEY_MIN         = "min";
     const char * const  SPIN_EXTRAS_KEY_MAX         = "max";
     const char * const  SPIN_EXTRAS_KEY_STEP        = "step";
 
-    const char * const  LABEL_ALIGN_TOP   = "labelontop";
-    const char * const  LABEL_ALIGN_LEFT  = "labelonleft";
+    // General options
+    const char * const  LABEL_ALIGN_TOP      = "labelontop";
+    const char * const  LABEL_ALIGN_LEFT     = "labelonleft";
     const char * const  DONTPRINTEMPTYVALUES = "DontPrintEmptyValues";
+    const char * const  NOT_PRINTABLE        = "notprintable";
 }
 
 inline static Form::IFormWidget::LabelOptions labelAlignement(Form::FormItem *item, Form::IFormWidget::LabelOptions defaultValue = Form::IFormWidget::Label_OnLeft)
@@ -339,6 +342,9 @@ void BaseForm::addWidgetToContainer(IFormWidget * widget)
 
 QString BaseForm::printableHtml(bool withValues) const
 {
+    if (m_FormItem->getOptions().contains(::NOT_PRINTABLE))
+        return QString();
+
     QStringList html;
     QList<Form::FormItem*> items = m_FormItem->formItemChildren();
     for(int i = 0; i < items.count(); ++i) {
@@ -544,6 +550,9 @@ void BaseGroup::addWidgetToContainer(IFormWidget * widget)
 
 QString BaseGroup::printableHtml(bool withValues) const
 {
+    if (m_FormItem->getOptions().contains(::NOT_PRINTABLE))
+        return QString();
+
     // Check country specific options
     const QStringList &countries = getCountries(m_FormItem);
     if (!countries.isEmpty()) {
@@ -653,6 +662,9 @@ BaseCheck::~BaseCheck()
 
 QString BaseCheck::printableHtml(bool withValues) const
 {
+    if (m_FormItem->getOptions().contains(::NOT_PRINTABLE))
+        return QString();
+
     // ⍌⎕☒☑
     if (withValues) {
         if (m_Check->isChecked())
@@ -813,6 +825,9 @@ BaseRadio::~BaseRadio()
 
 QString BaseRadio::printableHtml(bool withValues) const
 {
+    if (m_FormItem->getOptions().contains(::NOT_PRINTABLE))
+        return QString();
+
     if (dontPrintEmptyValues(m_FormItem) && m_ButGroup->checkedButton()==0)
         return QString();
 
@@ -1063,6 +1078,9 @@ BaseSimpleText::~BaseSimpleText()
 
 QString BaseSimpleText::printableHtml(bool withValues) const
 {
+    if (m_FormItem->getOptions().contains(::NOT_PRINTABLE))
+        return QString();
+
     if (withValues) {
         if (dontPrintEmptyValues(m_FormItem)) {
             if (m_Line && m_Line->text().isEmpty())
@@ -1217,19 +1235,18 @@ BaseHelpText::~BaseHelpText()
 QString BaseHelpText::printableHtml(bool withValues) const
 {
     Q_UNUSED(withValues);
-    if (!m_FormItem->getOptions().contains("notprintable", Qt::CaseInsensitive)) {
-        return QString("<table width=100% border=0 cellpadding=0 cellspacing=0  style=\"margin: 0px\">"
-                       "<tbody>"
-                       "<tr>"
-                       "<td style=\"vertical-align: top; padding-left:2em; padding-top:5px; padding-bottom: 5px; padding-right:2em\">"
-                       "%2"
-                       "</td>"
-                       "</tr>"
-                       "</tbody>"
-                       "</table>")
-                .arg(m_FormItem->spec()->label());
-    }
-    return QString();
+    if (m_FormItem->getOptions().contains(::NOT_PRINTABLE))
+        return QString();
+    return QString("<table width=100% border=0 cellpadding=0 cellspacing=0  style=\"margin: 0px\">"
+                   "<tbody>"
+                   "<tr>"
+                   "<td style=\"vertical-align: top; padding-left:2em; padding-top:5px; padding-bottom: 5px; padding-right:2em\">"
+                   "%2"
+                   "</td>"
+                   "</tr>"
+                   "</tbody>"
+                   "</table>")
+            .arg(m_FormItem->spec()->label());
 }
 
 void BaseHelpText::retranslate()
@@ -1278,6 +1295,9 @@ BaseList::~BaseList()
 
 QString BaseList::printableHtml(bool withValues) const
 {
+    if (m_FormItem->getOptions().contains(::NOT_PRINTABLE))
+        return QString();
+
     QString content;
     if (!withValues) {
         foreach(const QString &v, m_Model->stringList()) {
@@ -1469,6 +1489,9 @@ BaseCombo::~BaseCombo()
 
 QString BaseCombo::printableHtml(bool withValues) const
 {
+    if (m_FormItem->getOptions().contains(::NOT_PRINTABLE))
+        return QString();
+
     QString content;
     if (!withValues) {
         for(int i = 0; i < m_Combo->count(); ++i) {
@@ -1645,6 +1668,9 @@ void BaseDate::onPatientChanged()
 
 QString BaseDate::printableHtml(bool withValues) const
 {
+    if (m_FormItem->getOptions().contains(::NOT_PRINTABLE))
+        return QString();
+
     QString content;
     if (!withValues) {
         return QString("<table width=100% border=1 cellpadding=0 cellspacing=0  style=\"margin: 0px\">"
@@ -1799,6 +1825,9 @@ BaseSpin::~BaseSpin()
 
 QString BaseSpin::printableHtml(bool withValues) const
 {
+    if (m_FormItem->getOptions().contains(::NOT_PRINTABLE))
+        return QString();
+
     QString content;
     if (!withValues) {
         return QString("<table width=100% border=1 cellpadding=0 cellspacing=0  style=\"margin: 0px\">"
