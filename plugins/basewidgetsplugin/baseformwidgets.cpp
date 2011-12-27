@@ -562,11 +562,9 @@ QString BaseGroup::printableHtml(bool withValues) const
 
     // group is empty ?
     if (withValues) {
-        if (html.isEmpty())
+        if (html.isEmpty() && dontPrintEmptyValues(m_FormItem))
             return QString();
     }
-    if (html.isEmpty() && dontPrintEmptyValues(m_FormItem))
-        return QString();
 
     // recreate the grid as an html table
     int i = 0;
@@ -591,22 +589,28 @@ QString BaseGroup::printableHtml(bool withValues) const
                                "</td>").arg(s);
         }
     }
+    QString title = QString("<thead>"
+                            "<tr>"
+                            "<td style=\"vertical-align: top; font-weight: 600; padding: 5px\" colspan=%1>"
+                            "%2"
+                            "</td>"
+                            "</tr>"
+                            "</thead>")
+            .arg(numberColumns)
+            .arg(m_FormItem->spec()->label());
+    if (m_FormItem->getOptions().contains("DontPrintTitle", Qt::CaseInsensitive)) {
+        title.clear();
+    }
 
     return QString("<table width=100% border=1 cellpadding=0 cellspacing=0 style=\"margin: 5px 0px 0px 0px\">"
-                   "<thead>"
-                   "<tr>"
-                   "<td style=\"vertical-align: top; font-weight: 600; padding: 5px\" colspan=%1>"
-                    "%2"
-                   "</td>"
-                   "</tr>"
-                   "</thead>"
+                   "%1"
                    "<tbody>"
                    "<tr>"
                    "<td>"
                    "<table width=100% border=0 cellpadding=0 cellspacing=0 style=\"margin: 0px\">"
                    "<tbody>"
                    "<tr>"
-                   "%3"
+                   "%2"
                    "</tr>"
                    "</tbody>"
                    "</table>"
@@ -614,8 +618,7 @@ QString BaseGroup::printableHtml(bool withValues) const
                    "</tr>"
                    "</tbody>"
                    "</table>")
-            .arg(numberColumns)
-            .arg(m_FormItem->spec()->label())
+            .arg(title)
             .arg(content);
 }
 
@@ -1147,7 +1150,7 @@ bool BaseSimpleTextData::isModified() const
 
 bool BaseSimpleTextData::setData(const int ref, const QVariant &data, const int role)
 {
-    WARN_FUNC << ref << role << data;
+//    WARN_FUNC << ref << role << data;
     if (role==Qt::EditRole) {
         if (m_Text->m_Line) {
             m_Text->m_Line->setText(data.toString());
@@ -1584,7 +1587,7 @@ QVariant BaseComboData::storableData() const
 
 void BaseComboData::onValueChanged()
 {
-    WARN_FUNC;
+//    WARN_FUNC;
     executeOnValueChangedScript(m_FormItem);
 }
 //--------------------------------------------------------------------------------------------------------
