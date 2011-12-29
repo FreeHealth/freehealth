@@ -28,6 +28,7 @@
 #define XMLIOBASE_H
 
 #include <utils/database.h>
+#include <xmlioplugin/xmlformname.h>
 
 #include <QObject>
 #include <QDateTime>
@@ -35,8 +36,8 @@
 /**
  * \file xmliobase.h
  * \author Eric MAEKER <eric.maeker@gmail.com>
- * \version 0.6.0
- * \date 10 Nov 2011
+ * \version 0.6.2
+ * \date 29 Dec 2011
 */
 
 namespace Form {
@@ -61,6 +62,8 @@ public:
         Description,
         ScreenShot,
         ScriptFile,
+        UiFile,
+        HtmlFile,
 //        Forms,
 //        PmhCategories,
         ExtraFiles
@@ -82,7 +85,9 @@ public:
     QString getFormContent(const QString &formUid, const int type, const QString &modeName = QString::null);
 
     // Setters
-    bool saveContent(const QString &formUid, const QString &xmlContent, const int type, const QString &modeName = QString::null, const QDateTime &date = QDateTime::currentDateTime());
+    bool saveForm(const XmlFormName &form);
+    void saveScreenShots(const XmlFormName &form);
+    void saveFiles(const XmlFormName &form, const QString &subDir, const QString &fileExtension, XmlIOBase::TypeOfContent type);
 
 private:
     bool createDatabase(const QString &connectionName, const QString &dbName,
@@ -93,6 +98,8 @@ private:
                         CreationOption createOption
                        );
     bool checkDatabaseVersion();
+
+    bool saveContent(const QString &formUid, const QString &xmlContent, const int type, const QString &modeName = QString::null, const QDateTime &date = QDateTime::currentDateTime());
 
 private Q_SLOTS:
     void onCoreDatabaseServerChanged();

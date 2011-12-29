@@ -60,8 +60,11 @@ XmlFormName::XmlFormName(const QString &_uid) :
     uid.replace(settings()->path(Core::ISettings::BundleResourcesPath), Core::Constants::TAG_APPLICATION_RESOURCES_PATH);
     absFileName = QDir::cleanPath(absFileName);
     QFileInfo info(absFileName);
-    if (info.isDir()) {
-        absFileName += "/central.xml";
+    if (info.isDir() || info.suffix().compare("xml", Qt::CaseInsensitive)!=0) {
+        if (modeName.isEmpty())
+            absFileName += "/central.xml";
+        else
+            absFileName += "/" + modeName + ".xml";
     }
     absPath = info.absolutePath();
     isValid = info.exists();

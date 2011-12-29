@@ -474,6 +474,95 @@ QString XmlIOBase::getFormContent(const QString &formUid, const int type, const 
     return QString();
 }
 
+/** Save the \e content of the form \e form to the database and return the used formUid. If the \e content is empty the form file is accessed */
+bool XmlIOBase::saveForm(const XmlFormName &form)
+{
+//    qWarning() << Q_FUNC_INFO << form.uid;
+    LOG("Saving forms to database: " + form.uid);
+
+    // save all XML files from the form
+    QDir dir(form.absPath);
+    foreach(const QFileInfo &f, dir.entryInfoList(QStringList() << "*.xml", QDir::Files | QDir::Readable)) {
+        QString modeName = f.baseName();
+        QString content = Utils::readTextFile(f.absoluteFilePath(), Utils::DontWarnUser);
+        if (!saveContent(form.uid, content, XmlIOBase::FullContent, modeName)) {
+            LOG_ERROR("Can not save form to database");
+        }
+        // Try to catch file addition
+        // File addition is done using the tag ‘file’ or an attrib of the same name
+        QDomDocument doc;
+        if (!doc.setContent(content)) {
+            LOG_ERROR("XML Error");
+            continue;
+        }
+        QDomNodeList list = doc.elementsByTagName("file");
+
+        for(int i=0; i < list.count(); ++i) {
+            const QDomNode &node = list.at(i);
+            const QString &include = node.toElement().text();
+            if (include.endsWith(".xml", Qt::CaseInsensitive)) {
+                XmlFormName includeForm(include);
+                if (!saveForm(includeForm))
+                    LOG_ERROR("unable to save included form: " + includeForm.uid);
+            }
+        }
+    }
+
+    // Save scripts
+    saveFiles(form, "scripts", "js", XmlIOBase::ScriptFile);
+    // Save uis
+    saveFiles(form, "ui", "ui", XmlIOBase::UiFile);
+    // Save qml
+//    saveFiles(form, "qml", "qml", XmlIOBase::QmlFile);
+    // Save html
+    saveFiles(form, "html", "html", XmlIOBase::HtmlFile);
+    // Save screenshots
+    saveScreenShots(form);
+
+    return true;
+}
+
+/** Save screenshots files associated with the forms. */
+void XmlIOBase::saveScreenShots(const XmlFormName &form)
+{
+    QDir shotPath(form.absPath + QDir::separator() + "shots");
+    if (shotPath.exists()) {
+        LOG_FOR("XmlFormIO","Saving attached screenshots to database " + form.uid);
+        QFileInfoList files = Utils::getFiles(shotPath, "*.png", Utils::Recursively);
+        foreach(const QFileInfo &f, files) {
+            QString fp = f.absoluteFilePath();
+            QFile file(fp);
+            // mode = last dir (lang) + fileName.extension
+            int end = fp.lastIndexOf("/");
+            int begin = fp.lastIndexOf("/", end - 1) + 1;
+            QString mode = fp.mid(begin, end-begin) + "/" + f.fileName();
+            if (file.open(QFile::ReadOnly)) {
+                QByteArray ba = file.readAll();
+                saveContent(form.uid, ba.toBase64(), XmlIOBase::ScreenShot, mode);
+            }
+        }
+    }
+}
+
+/** Save files associated with the forms. */
+void XmlIOBase::saveFiles(const XmlFormName &form, const QString &subDir, const QString &fileExtension, XmlIOBase::TypeOfContent type)
+{
+//    WARN_FUNC << absPathDir << form.uid;
+    QDir path(form.absPath + QDir::separator() + subDir);
+    if (!path.exists())
+        path.cdUp();
+    if (path.exists()) {
+        LOG_FOR("XmlFormIO","Saving attached script files to database " + form.uid);
+        QFileInfoList files = Utils::getFiles(path, "*." + fileExtension, Utils::Recursively);
+        foreach(const QFileInfo &f, files) {
+            QString fp = f.absoluteFilePath();
+            QString mode = fp;
+            mode = "." + mode.remove(form.absPath);
+            saveContent(form.uid, Utils::readTextFile(fp, Utils::DontWarnUser), type, mode);
+        }
+    }
+}
+
 /** Save the content of an XML form content \e xmlContent into the database using the Form Uuid \e formUid, XmlIOBase::TypeOfForm \e type, Mode name \e modeName and \e date */
 bool XmlIOBase::saveContent(const QString &formUid, const QString &xmlContent, const int type, const QString &modeName, const QDateTime &date)
 {

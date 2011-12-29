@@ -77,8 +77,7 @@ public:
 
     QString lastError() const {return m_Error.join("\n");}
 
-    bool checkFormFileContent(const QString &formUidOrFullAbsPath, const QString &contents) const;
-    bool checkScriptFileContent(const QString &fileName, const QString &content);
+    bool checkFileContent(const QString &formUidOrFullAbsPath, const QString &contents) const;
 
     Form::FormIODescription *readXmlDescription(const QDomElement &xmlDescr, const QString &formUid);
     Form::FormIODescription *readFileInformations(const QString &formUidOrFullAbsPath, const Form::FormIOQuery &query = Form::FormIOQuery());
@@ -101,13 +100,6 @@ public:
     // PMHx categories
     bool loadPmhCategories(const QString &uuidOrAbsPath);
     bool createCategory(const QDomElement &element, Category::CategoryItem *parent);
-
-    // Some database
-    QString saveFormToDatabase(const XmlFormName &form, const int type, const QString &content = QString::null, const QString &modeName = QString::null);
-    void saveScriptFiles(const QString &absPathDir, const QString &formUid);
-    void saveScreenShots(const QString &absPathDir, const QString &formUid);
-    QString getFileContentFromDatabase(const XmlFormName &form, const int type, const QString &fileNameOrModeName);
-    QString readExtraFile(const XmlFormName &form, const QString &fileName);
 
 private:
     static XmlFormContentReader *m_Instance;
