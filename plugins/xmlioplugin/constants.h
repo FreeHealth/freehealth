@@ -112,6 +112,10 @@ const char* const ATTRIB_UPDATEINFOVERSION_FROM  = "from";
 const char* const ATTRIB_UPDATEINFOVERSION_TO    = "to";
 const char* const TAG_SPEC_UPDATEINFOVERSIONTEXT  = "text";
 
+const char* const TAG_UI_UILINK         = "uilink";
+const char* const ATTRIB_UI_UILINK_LABEL   = "label";
+const char* const ATTRIB_UI_UILINK_WIDGET  = "widget";
+
 const char* const TAG_VALUE              = "value";
 const char* const TAG_VALUE_UUID         = "uuid";
 const char* const TAG_VALUE_NUMERICAL    = "numerical";
@@ -151,6 +155,7 @@ const char* const ATTRIB_ID           = "id";
 const char* const ATTRIB_UUID         = "uuid";
 const char* const ATTRIB_NAME         = "name";
 const char* const ATTRIB_TYPE         = "type";
+const char* const ATTRIB_UIFILE       = "uifilename";
 const char* const FILETYPE_SCRIPT     = "script";
 const char* const FILETYPE_FORM       = "form";
 const char* const ATTRIB_PATIENTREPRESENTATION  = "patient";

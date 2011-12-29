@@ -70,6 +70,11 @@ XmlFormName::XmlFormName(const QString &_uid) :
     isValid = info.exists();
 }
 
+bool XmlFormName::operator==(const XmlFormName &other) const
+{
+    return (uid==other.uid && isValid==isValid && absFileName==other.absFileName && absPath==other.absPath && modeName==other.modeName);
+}
+
 QDebug XmlForms::Internal::operator<<(QDebug dbg, const XmlFormName &c)
 {
     dbg.nospace() << "XmlFormName(Valid:" << c.isValid

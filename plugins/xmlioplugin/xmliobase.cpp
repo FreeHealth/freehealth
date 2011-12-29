@@ -552,7 +552,7 @@ void XmlIOBase::saveFiles(const XmlFormName &form, const QString &subDir, const 
     if (!path.exists())
         path.cdUp();
     if (path.exists()) {
-        LOG_FOR("XmlFormIO","Saving attached script files to database " + form.uid);
+        LOG_FOR("XmlFormIO","Saving attached *." + fileExtension + " files to database " + form.uid);
         QFileInfoList files = Utils::getFiles(path, "*." + fileExtension, Utils::Recursively);
         foreach(const QFileInfo &f, files) {
             QString fp = f.absoluteFilePath();

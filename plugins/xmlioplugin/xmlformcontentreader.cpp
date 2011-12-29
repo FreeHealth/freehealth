@@ -425,6 +425,14 @@ bool XmlFormContentReader::loadElement(Form::FormItem *item, QDomElement &rootEl
             continue;
         }
 
+        // UiLink ?
+        if ((element.tagName().compare(Constants::TAG_UI_UILINK, Qt::CaseInsensitive)==0)) {
+            item->spec()->setValue(Form::FormItemSpec::Spec_UiLabel, element.attribute(Constants::ATTRIB_UI_UILINK_LABEL));
+            item->spec()->setValue(Form::FormItemSpec::Spec_UiWidget, element.attribute(Constants::ATTRIB_UI_UILINK_WIDGET));
+            element = element.nextSiblingElement();
+            continue;
+        }
+
         // Name/UUID ?
         if ((element.tagName().compare(Constants::ATTRIB_NAME, Qt::CaseInsensitive)==0) ||
             (element.tagName().compare(Constants::ATTRIB_UUID, Qt::CaseInsensitive)==0)) {
@@ -538,9 +546,9 @@ bool XmlFormContentReader::createElement(Form::FormItem *item, QDomElement &elem
             if (element.hasAttribute(Constants::ATTRIB_TYPE))
                 item->spec()->setValue(Form::FormItemSpec::Spec_Plugin, element.attribute(Constants::ATTRIB_TYPE), Trans::Constants::ALL_LANGUAGE);
 
-//            if (element.hasAttribute(Constants::ATTRIB_UIFILE)) {
-//                base()->getFormContent(form.uid, XmlIOBase::UiFile);
-//                item->spec()->setValue(Form::FormItemSpec::Spec_UiFileContent, element.attribute(Constants::ATTRIB_TYPE), Trans::Constants::ALL_LANGUAGE);
+            if (element.hasAttribute(Constants::ATTRIB_UIFILE)) {
+                QString content = base()->getFormContent(form.uid, XmlIOBase::UiFile, element.attribute(Constants::ATTRIB_UIFILE));
+                item->spec()->setValue(Form::FormItemSpec::Spec_UiFileContent, content, Trans::Constants::ALL_LANGUAGE);
             }
 
             loadElement(item, element, form);

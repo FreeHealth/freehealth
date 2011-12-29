@@ -67,6 +67,7 @@ public:
     ~XmlFormContentReader();
 
     void clearCache();
+    QStringList cachedForms() {return m_DomDocFormCache.keys();}
 
     void refreshPluginFactories();
 
