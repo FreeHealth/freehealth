@@ -115,7 +115,7 @@ QHash<QString,QVariant> receiptsEngine::getNamesAndValuesFromMP(){//obsolete
     int rows = model.rowCount(QModelIndex());
     if (WarnDebugMessage)
         qDebug() << __FILE__ << QString::number(__LINE__) << " MP row count =" << QString::number(rows) ;
-    for (int i = 0; i < rows; ++i)
+    for (int i = 0; i < rows; i += 1)
     {
     	QString name = model.data(model.index(i,MP_NAME),Qt::DisplayRole).toString();
     	QVariant value = model.data(model.index(i,MP_AMOUNT),Qt::DisplayRole);
@@ -153,7 +153,7 @@ bool receiptsEngine::deleteFromThesaurus(const QString & data , const QString & 
     QString userFilter = QString("%1 = '%2'").arg("THESAURUS_USERUID",userUid);
     model.setFilter(userFilter);
     int row = 0;
-    for (int i = 0; i < model.rowCount(); ++i)
+    for (int i = 0; i < model.rowCount(); i += 1)
     {
     	QString dataReturned = model.data(model.index(i,THESAURUS_VALUES)).toString();
     	if (dataReturned == data)
@@ -172,7 +172,7 @@ bool receiptsEngine::addBoolTrue(QString & data){
     bool ret = true;
     ThesaurusModel model(this);
     int row = 0;
-    for (int i = 0; i < model.rowCount(); ++i)
+    for (int i = 0; i < model.rowCount(); i += 1)
     {
     	QString dataReturned = model.data(model.index(i,THESAURUS_VALUES)).toString();
     	int b = model.data(model.index(i,THESAURUS_PREF)).toInt();

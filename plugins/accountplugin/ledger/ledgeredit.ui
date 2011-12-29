@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <ui version="4.0">
- <class>Account::LedgerEditWidget</class>
- <widget class="QWidget" name="Account::LedgerEditWidget">
+ <class>LedgerEditWidget</class>
+ <widget class="QWidget" name="LedgerEditWidget">
   <property name="geometry">
    <rect>
     <x>0</x>

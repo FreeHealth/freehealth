@@ -307,7 +307,7 @@ void AvailableMovementWidget::showEvent(QShowEvent *event){
 //            QList<QStandardItem*> listOfItemsData;
 //            QStringList listOfItems;
 //            listOfItems = line.split(separator);
-//            for (int i = 0; i < AccountDB::Constants::AVAILMOV_MaxParam ; ++i){
+//            for (int i = 0; i < AccountDB::Constants::AVAILMOV_MaxParam ; i += 1){
 //                //model->setData(model->index(row,i),listOfItems[i],Qt::EditRole);
 //        	QStandardItem * item = new QStandardItem;
 //        	QString itemOfList = listOfItems[i];
@@ -328,7 +328,7 @@ void AvailableMovementWidget::showEvent(QShowEvent *event){
 //    QStandardItemModel * model = availableMovementModelByLocale();
 //    int availModelRows = model->rowCount();
 //    QString strList;
-//    for (int i = 0; i < availModelRows; ++i){
+//    for (int i = 0; i < availModelRows; i += 1){
 //        if (!m_Model->insertRows(m_Model->rowCount(),1,QModelIndex()))
 //    	  		{qWarning() << __FILE__ << QString::number(__LINE__) << QString::number(m_Model->rowCount()) ;
 //    	  			  /*QMessageBox::warning(0,trUtf8("Warning"),trUtf8("Unable to insert row \n")

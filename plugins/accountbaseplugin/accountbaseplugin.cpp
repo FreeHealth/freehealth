@@ -31,7 +31,6 @@
  ***************************************************************************/
 #include "accountbaseplugin.h"
 #include "accountbase.h"
-#include "accountbasecore.h"
 
 #include <utils/log.h>
 
@@ -79,9 +78,8 @@ void AccountBasePlugin::extensionsInitialized()
 
     messageSplash(tr("Initializing accountancy plugin..."));
 
-    // Initialize Account Database && Core
+    // Initialize Account Database
     AccountBase::instance();
-    AccountBaseCore::instance(this);
 
     addAutoReleasedObject(new Core::PluginAboutPage(pluginSpec(), this));
 }

@@ -47,23 +47,6 @@ class ACCOUNTBASE_EXPORT MovementModel : public QAbstractTableModel
     Q_OBJECT
 public:
     /** \todo define a DataRepresentation enum for MovementModel */
-    enum DataRepresentation {
-        Label = 0,
-        Date,
-        DateOfValue,
-        Amount,
-        Validity,
-        IsValid,
-        Details,
-        // for private use
-        Id,
-        AvailableMovementId,
-        UserUid,
-        AccountId,
-        Type,
-        Trace,
-        Comment
-    };
 
     MovementModel(QObject *parent);
     ~MovementModel();
@@ -83,18 +66,13 @@ public:
     bool insertRows(int row, int count, const QModelIndex &parent = QModelIndex());
     bool removeRows(int row, int count, const QModelIndex &parent = QModelIndex());
 
-    // Manage some filters
-    void clearAllFilters();
-    bool setMovementFilter(const QString &id);
-    void setYearFilter(const int year);
-    void setDateFilter(const QDateTime &start, const QDateTime &end);
-    void setDateFilter(const QDate &start, const QDate &end);
+    void setFilter(const QString & filter);
+    QString filter();
 
     void setUserUuid(const QString &uuid);
-    QString currentUserUuid() const;
-
     bool isDirty() const;
     QSqlError lastError();
+    QString m_UserUid;
 
 public Q_SLOTS:
     bool submit();

@@ -316,7 +316,7 @@ bool AssetsRatesWidget::insertYearsRange()
 //    QStandardItemModel * model = assetsRatesModelByLocale();
 //    int assetsratesModelRows = model->rowCount();
 //    QString strList;
-//    for (int i = 0; i < assetsratesModelRows; ++i) {
+//    for (int i = 0; i < assetsratesModelRows; i += 1) {
 //        if (!m_Model->insertRows(m_Model->rowCount(),1,QModelIndex())) {
 //    	    qWarning() << __FILE__ << QString::number(__LINE__) << QString::number(m_Model->rowCount()) ;
 //        }

@@ -36,12 +36,8 @@
 
 #include <accountbaseplugin/movementmodel.h>
 #include <accountbaseplugin/constants.h>
-#include <accountbaseplugin/accountbasecore.h>
-
 #include <coreplugin/icore.h>
 #include <coreplugin/iuser.h>
-
-#include <utils/global.h>
 
 #include "ui_movementsviewer.h"
 
@@ -55,13 +51,10 @@ enum { WarnDebugMessage = false };
 using namespace AccountDB;
 using namespace Account;
 using namespace Constants;
-
 static inline Core::IUser *user() { return  Core::ICore::instance()->user(); }
-static inline AccountDB::AccountBaseCore *core() {return AccountDB::AccountBaseCore::instance();}
 
 MovementsViewer::MovementsViewer(QWidget * parent) :
-    QWidget(parent),
-    ui(new Ui::MovementsViewerWidget)
+        QWidget(parent),ui(new Ui::MovementsViewerWidget)
 {
     ui->setupUi(this);
     //instanciate
@@ -90,36 +83,37 @@ MovementsViewer::~MovementsViewer()
 {
 }
 
-void MovementsViewer::userIsChanged()
-{
-    /** \todo move this into the model */
+void MovementsViewer::userIsChanged(){
     showMovements();
 }
 
 void MovementsViewer::showMovements()
 {
-    MovementsIODb mov(this) ;
+    MovementsIODb  mov(this) ;
     QString year = ui->yearComboBox->currentText();
-    MovementModel *model = core()->movementModel();  //->.mov.getModelMovements(year);
-    mov.filterModelToDatabaseDateRange(model);
+    MovementModel * model = mov.getModelMovements(year);
+    model->setHeaderData(MOV_LABEL,Qt::Horizontal,tr("Label"));
+    model->setHeaderData(MOV_DATE,Qt::Horizontal,tr("Date"));
+    model->setHeaderData(MOV_DATEOFVALUE,Qt::Horizontal,tr("Date of value"));
+    model->setHeaderData(MOV_AMOUNT,Qt::Horizontal,tr("Acts"));
+    model->setHeaderData(MOV_VALIDITY,Qt::Horizontal,tr("Validity"));
+    model->setHeaderData(MOV_ISVALID,Qt::Horizontal,tr("Valid"));
+    model->setHeaderData(MOV_DETAILS,Qt::Horizontal,tr("Details"));
     ui->tableView->setModel(model);
     ui->tableView->setSelectionBehavior(QAbstractItemView::SelectRows);
     ui->tableView->setSelectionMode(QAbstractItemView::SingleSelection);
     ui->tableView->setEditTriggers(QAbstractItemView::SelectedClicked);
     ui->tableView->setSortingEnabled(true);
-    ui->tableView->horizontalHeader()->setStretchLastSection(false);
     ui->tableView->horizontalHeader()->setResizeMode(QHeaderView::Interactive);
-    ui->tableView->horizontalHeader()->setResizeMode(MovementModel::Label, QHeaderView::ResizeToContents);
-    ui->tableView->horizontalHeader()->setResizeMode(MovementModel::Details, QHeaderView::Stretch);
-//    ui->tableView->verticalHeader()->setResizeMode(QHeaderView::Stretch);
-
-    ui->tableView->hideColumn(MovementModel::Id);
-    ui->tableView->hideColumn(MovementModel::AvailableMovementId);
-    ui->tableView->hideColumn(MovementModel::UserUid);
-    ui->tableView->hideColumn(MovementModel::AccountId);
-    ui->tableView->hideColumn(MovementModel::Type);
-    ui->tableView->hideColumn(MovementModel::Trace);
-    ui->tableView->hideColumn(MovementModel::Comment);
+    ui->tableView->horizontalHeader()->setStretchLastSection ( true );
+    ui->tableView->verticalHeader()  ->setResizeMode(QHeaderView::Stretch);
+    ui->tableView->setColumnHidden(MOV_ID,true);
+    ui->tableView->setColumnHidden(MOV_AV_MOVEMENT_ID,true);
+    ui->tableView->setColumnHidden(MOV_USER_UID,true);
+    ui->tableView->setColumnHidden(MOV_ACCOUNT_ID,true);
+    ui->tableView->setColumnHidden(MOV_TYPE,true);
+    ui->tableView->setColumnHidden(MOV_TRACE,true);
+    ui->tableView->setColumnHidden(MOV_COMMENT,true);
 }
 
 void MovementsViewer::recordMovement()
@@ -140,7 +134,7 @@ void MovementsViewer::recordMovement()
     valueCalculated = manager.getCalculatedValue(ui->valueDoubleSpinBox->value(),ui->percentDoubleSpinBox->value());    
     QString comment;//no comment
     int validity = 0;
-    QString trace;// Log all modifications done on this movement
+    QString trace;// ??
     int isValid = m_valid;
     QString details = ui->detailsEdit->text();
     hashValues = manager.getHashOfValues(acMovId ,
@@ -158,11 +152,9 @@ void MovementsViewer::recordMovement()
                                          details);
     
     if (!mov.insertIntoMovements(hashValues)) {
-        Utils::warningMessageBox(tr("Error, movement not saved"),
-                                 tr("An error occured, the movement was not saved into the database."));
+        QMessageBox::warning(0,trUtf8("Error"),trUtf8("Movement not inserted."),QMessageBox::Ok);
     } else {
-        Utils::informativeMessageBox(tr("Movement saved"),
-                                     tr("The movement was correctly saved into the database."));
+        QMessageBox::information(0,trUtf8("Information"),trUtf8("Movement is inserted."),QMessageBox::Ok);
     }
     showMovements();
 }
@@ -171,42 +163,38 @@ void MovementsViewer::deleteMovement()
 {
     QModelIndex index = ui->tableView->QAbstractItemView::currentIndex();
     if(!index.isValid()) {
-        Utils::warningMessageBox(tr("Can not delete movement."),
-                                 tr("You must select a movement first."));
+        QMessageBox::warning(0,trUtf8("Error"),trUtf8("You forgot to select a line."),QMessageBox::Ok);
     }
-    int row = index.row();
+    int row = index.row(); 
     if (WarnDebugMessage)
-        qDebug() << __FILE__ << QString::number(__LINE__) << " row =" << QString::number(row) ;
+    	      qDebug() << __FILE__ << QString::number(__LINE__) << " row =" << QString::number(row) ;
     MovementsIODb  mov(this) ;
-    if (mov.containsFixAsset(row)) {
-        Utils::warningMessageBox(tr("Can not delete asset."),
-                                 tr("You must use the specific view to edit assets."));
-        return;
-    }
+    if (mov.containsFixAsset(row))
+    {
+    	  QMessageBox::warning(0,trUtf8("Error"),trUtf8("This fixed asset cannot be deleted.\nDo it in assets."),
+    	                       QMessageBox::Ok);
+    	  return;
+        }
     if (!mov.deleteMovement(row)) {
-        Utils::warningMessageBox(tr("Movement not deleted."),
-                                 tr("The specified movement was not deleted."));
-    } else {
-        Utils::informativeMessageBox(tr("Movement deleted."),
-                                     tr("The movement was correctly deleted from the database."));
+    	QMessageBox::warning(0,trUtf8("Error"),trUtf8("Movement is not deleted."),QMessageBox::Ok);
+    }  else {
+        QMessageBox::information(0,trUtf8("Information"),trUtf8("Movement is deleted."),QMessageBox::Ok);
     }
     showMovements();
 }
 
 void MovementsViewer::validMovement()
 {
-    QModelIndex index = ui->tableView->currentIndex();
+    QModelIndex index = ui->tableView->QAbstractItemView::currentIndex();
     if (!index.isValid()) {
-        Utils::warningMessageBox(tr("Can not valid movement."),
-                                 tr("You must select a movement first."));
+        QMessageBox::warning(0,trUtf8("Error"),trUtf8("You forgot to select a line."),QMessageBox::Ok);
     }
-    index = core()->movementModel()->index(index.row(), MovementModel::IsValid);
-    if (!core()->movementModel()->setData(index, 1)) {
-        Utils::warningMessageBox(tr("Movement not validated."),
-                                 tr("The specified movement was not validated."));
+    int row = index.row(); 
+    MovementsIODb  mov(this) ;
+    if (!mov.validMovement(row)) {
+    	QMessageBox::warning(0,trUtf8("Error"),trUtf8("Movement is not validated."),QMessageBox::Ok);
     } else {
-        Utils::informativeMessageBox(tr("Movement validated."),
-                                     tr("The movement was correctly validated from the database."));
+        QMessageBox::information(0,trUtf8("Information"),trUtf8("Movement is validated."),QMessageBox::Ok);
     }
     showMovements();
 }
@@ -224,8 +212,7 @@ void MovementsViewer::fillMovementsComboBox()
     ui->movementsComboBox->setModel(mov.getMovementsComboBoxModel(this));
 }
 
-void MovementsViewer::setMovementsComboBoxToolTips(int row)
-{
+void MovementsViewer::setMovementsComboBoxToolTips(int row){
     QHash<QString,QString> hashChildrenAndParents;
     MovementsIODb mov(this);
     hashChildrenAndParents = mov.hashChildrenAndParentsAvailableMovements();
@@ -250,8 +237,7 @@ void MovementsViewer::fillYearComboBox()
     ui->yearComboBox->addItems(listOfYears);
 }
 
-void MovementsViewer::fillBankComboBox()
-{
+void MovementsViewer::fillBankComboBox(){
     MovementsIODb mov(this);
     ui->bankComboBox->setModel(mov.getBankComboBoxModel(this));
 }
@@ -263,5 +249,5 @@ void MovementsViewer::changeEvent(QEvent * e){
         if (WarnDebugMessage)
             qDebug() << __FILE__ << QString::number(__LINE__) << " langage changed " ;
         showMovements();
-    }
+        }
 }

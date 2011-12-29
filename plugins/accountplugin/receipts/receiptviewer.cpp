@@ -532,7 +532,7 @@ bool treeViewsActions::fillActionTreeView()
         
         }//
         
-        for (int i = 0; i < rows_MaxParam; ++i)
+        for (int i = 0; i < rows_MaxParam; i += 1)
         {
         	QStandardItem *actionItem = m_mapOfMainItems.value(i);
         	treeModel()->insertRow(i,actionItem);
@@ -870,7 +870,7 @@ void ReceiptViewer::actionsOfTreeView(const QModelIndex & index) {
     	  if (dist.exec()== QDialog::Accepted)
     	  {
               QStandardItemModel * model = dist.getChoicePercentageDebtorSiteDistruleModel();
-              for (int i = 0; i < model->rowCount(); ++i)
+              for (int i = 0; i < model->rowCount(); i += 1)
               {
     	          QHash<QString,QString> hashOfValues;
     	          m_kilometers = dist.getDistanceNumber(m_distanceRuleType);
@@ -923,7 +923,7 @@ void ReceiptViewer::actionsOfTreeView(const QModelIndex & index) {
         choiceDialog choice(this,false);
         if(choice.exec() == QDialog::Accepted){
             QStandardItemModel * model = choice.getChoicePercentageDebtorSiteDistruleModel();
-            for (int i = 0; i < model->rowCount(); ++i)
+            for (int i = 0; i < model->rowCount(); i += 1)
             {
                 QHash<QString,QString> hashOfValues;
                 if (WarnDebugMessage)

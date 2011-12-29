@@ -90,7 +90,7 @@ void findReceiptsValues::fillComboCategories(){
     int MPRows = model->rowCount(QModelIndex());
     if (WarnDebugMessage)
     	      qDebug() << __FILE__ << QString::number(__LINE__) << " rowCount =" << QString::number(MPRows) ;
-    for (int i = 0; i < MPRows; ++i)
+    for (int i = 0; i < MPRows; i += 1)
     {
         QString typeData = model->data(model->index(i,MP_TYPE)).toString();
         if(!choiceList.contains(typeData)){
@@ -124,7 +124,7 @@ void findReceiptsValues::fillComboCategories(){
     QVariant value = QVariant(trUtf8("Value"));
     model->setFilter(filter);
     int count =   model->rowCountWithFilter(QModelIndex(),filter);
-    for (int i = 0; i < count; ++i)
+    for (int i = 0; i < count; i += 1)
     {
     	QString name = model->dataWithFilter(model->index(i,MP_NAME),Qt::DisplayRole,filter).toString();
     	QString value = model->dataWithFilter(model->index(i,MP_AMOUNT),Qt::DisplayRole,filter).toString();
@@ -242,7 +242,7 @@ QHash<QString,QString> findReceiptsValues::getChoosenValues(){
     QVariant value = QVariant(trUtf8("Value"));
     model->setFilter(filter);
     int count =   model->rowCountWithFilter(QModelIndex(),filter);
-    for (int i = 0; i < count; ++i)
+    for (int i = 0; i < count; i += 1)
     {
     	QString name = model->dataWithFilter(model->index(i,MP_NAME),Qt::DisplayRole,filter).toString();
     	if (WarnDebugMessage)
@@ -359,7 +359,7 @@ void findReceiptsValues::enableShowNextTable(){
     QString afterSqlFilter = QString("%1 LIKE '%2' AND %3 >= '%4'").arg("TYPE",comboChoice,"NAME",lastData);
     model->setFilter(afterSqlFilter);
     int count =   model->rowCountWithFilter(QModelIndex(),afterSqlFilter);
-    for (int i = 0; i < count; ++i)
+    for (int i = 0; i < count; i += 1)
     {
     	QString name = model->dataWithFilter(model->index(i,MP_NAME),Qt::DisplayRole,afterSqlFilter).toString();
     	//if (WarnDebugMessage)

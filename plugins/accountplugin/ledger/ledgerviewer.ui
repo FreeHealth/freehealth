@@ -1,13 +1,13 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <ui version="4.0">
- <class>Account::LedgerViewerWidget</class>
- <widget class="QWidget" name="Account::LedgerViewerWidget">
+ <class>LedgerViewerWidget</class>
+ <widget class="QWidget" name="LedgerViewerWidget">
   <property name="geometry">
    <rect>
     <x>0</x>
     <y>0</y>
     <width>623</width>
-    <height>377</height>
+    <height>374</height>
    </rect>
   </property>
   <property name="windowTitle">

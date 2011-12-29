@@ -284,7 +284,7 @@ double AccountModel::sum(const int &fieldRef)
         if (query.next())
             return query.value(0).toDouble();
     } else {
-        LOG_QUERY_ERROR(query);
+        Utils::Log::addQueryError(this, query);
     }
     return 0.0;
 }

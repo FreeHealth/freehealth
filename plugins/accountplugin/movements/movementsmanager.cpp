@@ -30,16 +30,16 @@
  *      NAME <MAIL@ADRESS>                                                 *
  ***************************************************************************/
 #include "movementsmanager.h"
-
-#include <accountbaseplugin/movementmodel.h>
+#include <accountbaseplugin/constants.h>
 
 using namespace AccountDB;
+using namespace Constants;
 
 MovementsManager::MovementsManager(){}
 
 MovementsManager::~MovementsManager(){}
 
-QHash<int,QVariant> MovementsManager::getHashOfValues(int avMovId,
+QHash<int,QVariant> MovementsManager::getHashOfValues(int acMovId,
                                             QString &userUid,
                                             int bankId,
                                             int type,
@@ -53,19 +53,19 @@ QHash<int,QVariant> MovementsManager::getHashOfValues(int avMovId,
                                             int isValid,
                                             QString &details){
     QHash<int,QVariant> hash;
-    hash.insert(MovementModel::AvailableMovementId,avMovId);
-    hash.insert(MovementModel::UserUid,userUid);
-    hash.insert(MovementModel::AccountId,bankId);
-    hash.insert(MovementModel::Type,type);
-    hash.insert(MovementModel::Label,label);
-    hash.insert(MovementModel::Date,date);
-    hash.insert(MovementModel::DateOfValue,dateValue);
-    hash.insert(MovementModel::Amount,valueCalculated);
-    hash.insert(MovementModel::Comment,comment);
-    hash.insert(MovementModel::Validity,validity);
-    hash.insert(MovementModel::Trace,trace);
-    hash.insert(MovementModel::IsValid,isValid);
-    hash.insert(MovementModel::Details,details);
+    hash.insert(MOV_AV_MOVEMENT_ID,acMovId);
+    hash.insert(MOV_USER_UID,userUid);
+    hash.insert(MOV_ACCOUNT_ID,bankId);
+    hash.insert(MOV_TYPE,type);
+    hash.insert(MOV_LABEL,label);
+    hash.insert(MOV_DATE,date);
+    hash.insert(MOV_DATEOFVALUE,dateValue);
+    hash.insert(MOV_AMOUNT,valueCalculated);
+    hash.insert(MOV_COMMENT,comment);
+    hash.insert(MOV_VALIDITY,validity);
+    hash.insert(MOV_TRACE,trace);
+    hash.insert(MOV_ISVALID,isValid);
+    hash.insert(MOV_DETAILS,details);
     return hash;
 }
 

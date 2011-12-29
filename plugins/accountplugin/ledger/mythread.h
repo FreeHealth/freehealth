@@ -40,8 +40,6 @@
 #include <QTextCursor>
 #include <QTextTableCell>
 
-namespace Account {
-
 class ProduceDoc: public QThread {
     Q_OBJECT
     enum typesEnum {
@@ -125,7 +123,5 @@ class ProduceDoc: public QThread {
     private slots :
         void recupSlot(const QString & text);
 };
-
-}  // End namespace Account
 
 #endif

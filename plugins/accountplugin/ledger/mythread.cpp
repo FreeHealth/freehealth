@@ -31,13 +31,8 @@
  ***************************************************************************/
 #include "mythread.h"
 #include "ledgerIO.h"
-
 #include <QDebug>
-
 enum { WarnDebugMessage = true };
-
-using namespace Account;
-
 ProduceDoc::ProduceDoc(){
     m_fieldsToJoin     = 0;
     m_tableFormatParameters = "200,200,150,250,170";//the last is not used in fact
@@ -238,7 +233,7 @@ QStringList ProduceDoc::calculateMovements(QString & dateBegin, QString & dateEn
     typeAndSumsList = lio.getListOfSumsMonthlyMovementsIO(0,beginningOfMonth , endOfMonth);
     if (WarnDebugMessage)
     	      qDebug() << __FILE__ << QString::number(__LINE__) << " typeAndSumsList.size() =" << QString::number(typeAndSumsList.size()) ;
-    for (int i = 0; i < typeAndSumsList.size(); ++i)
+    for (int i = 0; i < typeAndSumsList.size(); i += 1)
     {
     	if (WarnDebugMessage)
     	      qDebug() << __FILE__ << QString::number(__LINE__) << "typeAndSumsList[i]  =" << typeAndSumsList[i] ;
@@ -368,7 +363,7 @@ void ProduceDoc::fillTable(QList<QVector<QString> > & tableau,
         QString          type                      = "";
         QStringList      totalSumsList             = listSums;
         QString total;
-        /*for (int i = 0; i < totalSumsList.size(); ++i)
+        /*for (int i = 0; i < totalSumsList.size(); i += 1)
         {
         	if (WarnDebugMessage)
     
@@ -596,6 +591,6 @@ void ProduceDoc::dateChosen(QDate & date){
     m_date = date;
     QString s = m_date.toString("yyyy");
     if (WarnDebugMessage)
-        qDebug() << __FILE__ << QString::number(__LINE__) << " date SSS =" << s ;
+    	      qDebug() << __FILE__ << QString::number(__LINE__) << " date SSS =" << s ;
     m_mutex.unlock();
 }

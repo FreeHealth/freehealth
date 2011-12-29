@@ -36,9 +36,7 @@
 #include <utils/global.h>
 #include <utils/log.h>
 #include <utils/databaseconnector.h>
-#include <translationutils/constants.h>
-#include <translationutils/trans_database.h>
-#include <translationutils/trans_msgerror.h>
+#include <translationutils/constanttranslations.h>
 
 #include <coreplugin/isettings.h>
 #include <coreplugin/icore.h>
@@ -49,12 +47,19 @@
 #    include <coreplugin/commandlineparser.h>
 #endif
 
+#include <QCoreApplication>
 #include <QSqlDatabase>
+#include <QSqlError>
 #include <QSqlQuery>
+#include <QSqlRecord>
+#include <QSqlField>
 #include <QFile>
 #include <QDir>
 #include <QMultiHash>
+#include <QMap>
+#include <QMultiMap>
 #include <QList>
+#include <QSet>
 
 using namespace AccountDB;
 using namespace AccountDB::Internal;
@@ -720,31 +725,4 @@ void AccountBase::onCoreDatabaseServerChanged()
         QSqlDatabase::removeDatabase(Constants::DB_ACCOUNTANCY);
     }
     init();
-}
-
-/** Return the sum of the movement amounts for the period starting from \e start, ending \e ending for the user \e userUid. */
-double AccountBase::getMovementAmountSum(const QDateTime &start, const QDateTime &end, const QString &userUid)
-{
-    QHash<int, QString> where;
-    where.insert(Constants::MOV_DATEOFVALUE, QString("BETWEEN '%1' AND %2")
-                 .arg(start.toString(Qt::ISODate))
-                 .arg(end.toString(Qt::ISODate)));
-    where.insert(Constants::MOV_USER_UID, QString("='%1'").arg(userUid));
-    return sum(Constants::Table_Movement, Constants::MOV_AMOUNT, where);
-}
-
-/** Return the date range of recorded movement for the specified \e userUid. */
-QPair<QDate, QDate> AccountBase::movementDateRange(const QString &userUid)
-{
-    QPair<QDate, QDate> p;
-    // get min
-    QSqlDatabase DB = QSqlDatabase::database(Constants::DB_ACCOUNTANCY);
-    if (!connectDatabase(DB, __FILE__, __LINE__))
-        return p;
-    QHash<int, QString> where;
-    where.insert(Constants::MOV_USER_UID, QString("='%1'").arg(userUid));
-    QString userWhere = getWhereClause(Constants::Table_Movement, where);
-    p.first = min(Constants::Table_Movement, Constants::MOV_DATE, userWhere).toDate();
-    p.second = max(Constants::Table_Movement, Constants::MOV_DATE, userWhere).toDate();
-    return p;
 }

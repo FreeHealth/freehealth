@@ -55,17 +55,18 @@ class LedgerIO : public QObject {
         int getNbrOfRowsByTypeAndYear(QObject * parent,QString & year,QString & type);
         double getYearlyReceiptsSum(QObject * parent,QString & year);
         
-        MovementModel * getModelMonthlyMovementsIO(QObject * parent, const QString &month, const QString &year);
-        QStandardItemModel * getModelMonthlyAndTypeMovementsIO(QObject * parent,const QString &month, const QString &year);
-        QStandardItemModel * getModelYearlyAndTypeMovementsIO(QObject * parent, const QString &year);
+        MovementModel * getModelMonthlyMovementsIO(QObject * parent,QString & month, QString & year);
+        QStandardItemModel * getModelMonthlyAndTypeMovementsIO(QObject * parent,QString & month, QString & year);
+        QStandardItemModel * getModelYearlyAndTypeMovementsIO(QObject * parent,QString & year);
         
+        double getMovementSum(QObject * parent,QString & month, QString & year);
         //ledger
         QStringList getListOfSumsMonthlyReceiptsIO(QObject * parent,QString & dateBegin , QString & dateEnd);
-        QStringList getListOfSumsMonthlyMovementsIO(QObject * parent, const QString & dateBegin, const QString &dateEnd);
+        QStringList getListOfSumsMonthlyMovementsIO(QObject * parent,QString & dateBegin , QString & dateEnd);
         QStringList listOfReceiptsTypes();
         QStringList listOfMovementsTypes();
         QList<QVector<QString> > getDatasReceiptsInVector(QString & dateBegin,QString & dateEnd);
-        QList<QVector<QString> > getDatasMovementsInVector(const QString &dateBegin, const QString &dateEnd);
+        QList<QVector<QString> > getDatasMovementsInVector(QString & dateBegin,QString & dateEnd);
     private :
         AccountModel * m_accountModel;
         MovementModel * m_movementModel;

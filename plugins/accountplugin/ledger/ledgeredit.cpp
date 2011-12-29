@@ -36,16 +36,11 @@
 #include <extensionsystem/pluginmanager.h>
 #include <coreplugin/constants_tokensandsettings.h>
 #include <utils/log.h>
-
 #include <QDebug>
-
-enum { WarnDebugMessage = false };
-
-using namespace Account;
+enum { WarnDebugMessage = true };
 using namespace ExtensionSystem;
 using namespace Core;
 using namespace Core::Constants;
-
 inline static Core::IDocumentPrinter *printer() {return ExtensionSystem::PluginManager::instance()
                                                  ->getObject<Core::IDocumentPrinter>();}
 
@@ -63,7 +58,7 @@ LedgerEdit::LedgerEdit(QWidget * parent):QWidget(parent),ui(new Ui::LedgerEditWi
     qDebug() << __FILE__ << QString::number(__LINE__) << " listOfYears.size() =" <<QString::number(listOfYears.size())  ;
     listOfYears.removeDuplicates();
     qDebug() << __FILE__ << QString::number(__LINE__) << " listOfYears.size() =" <<QString::number(listOfYears.size())  ;
-    for (int i = 0; i < listOfYears.size(); ++i)
+    for (int i = 0; i < listOfYears.size(); i += 1)
     {
     	if (WarnDebugMessage)
     	    	qDebug() << __FILE__ << QString::number(__LINE__) << " listOfYears[i] =" << listOfYears[i] ;

@@ -39,7 +39,6 @@
 #include <QMenu>
 #include <QAction>
 
-namespace Account {
 
 namespace Ui{
     class LedgerViewerWidget;
@@ -87,7 +86,6 @@ class LedgerViewer : public QWidget {
         Ui::LedgerViewerWidget * ui;
 
 };
-}  // End namespace Account
 
 #endif
 

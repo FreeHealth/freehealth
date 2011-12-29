@@ -71,9 +71,7 @@ using namespace AccountDB;
 using namespace Account;
 enum { WarnDebugMessage = false };
 AccountView::AccountView(QWidget *parent) :
-    QWidget(parent),
-    m_ui(new Internal::Ui::AccountViewWidget)
-  //, d(new Internal::AccountViewPrivate(this))
+        QWidget(parent), m_ui(new Ui::AccountViewWidget)//, d(new Internal::AccountViewPrivate(this))
 {
     setObjectName("AccountView");
     m_ui->setupUi(this);
@@ -89,10 +87,10 @@ AccountView::AccountView(QWidget *parent) :
 
 AccountView::~AccountView()
 {
-    if (m_ui) {
-        delete m_ui;
-        m_ui = 0;
-    }
+        if (m_ui) {
+            
+            delete m_ui;
+            m_ui = 0;}    
 }
 
 void AccountView::setHeadersOfTable(){

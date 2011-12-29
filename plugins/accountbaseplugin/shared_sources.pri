@@ -4,7 +4,6 @@ include(../fmf_plugins.pri)
 include(accountbaseplugin_dependencies.pri)
 
 HEADERS += $${PWD}/accountbaseplugin.h \
-    $${PWD}/accountbasecore.h \
     $${PWD}/accountbase_exporter.h \
     $${PWD}/accountbase.h \
     $${PWD}/constants.h \
@@ -27,7 +26,6 @@ HEADERS += $${PWD}/accountbaseplugin.h \
     $${PWD}/amountmodel.h
 
 SOURCES += $${PWD}/accountbaseplugin.cpp \
-    $${PWD}/accountbasecore.cpp \
     $${PWD}/accountbase.cpp \
     $${PWD}/bankaccountmodel.cpp \
     $${PWD}/availablemovementmodel.cpp \
