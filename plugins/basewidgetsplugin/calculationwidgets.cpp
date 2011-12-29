@@ -406,7 +406,7 @@ void ScriptWidget::retranslate()
 
 void ScriptWidget::connectFormItems()
 {
-    qWarning() << "CalculationScript" << formItem()->extraDatas().value(::CONNECT_EXTRA_KEY) << formItem()->extraDatas().value(::CONNECT_REGEXP_EXTRA_KEY);
+//    qWarning() << "CalculationScript" << formItem()->extraDatas().value(::CONNECT_EXTRA_KEY) << formItem()->extraDatas().value(::CONNECT_REGEXP_EXTRA_KEY);
     if (formItem()->extraDatas().value(::CONNECT_EXTRA_KEY).isEmpty() &&
             formItem()->extraDatas().value(::CONNECT_REGEXP_EXTRA_KEY).isEmpty()) {
         LOG_ERROR("Calculation script widget: No <connect> tag.");
@@ -432,7 +432,7 @@ void ScriptWidget::connectFormItems()
             QString uuid = item->uuid();
             if (items.contains(uuid, Qt::CaseInsensitive)) {
                 if (item->itemDatas()) {
-                    qWarning() << "  connecting" << item->uuid();
+//                    qWarning() << "  connecting" << item->uuid();
                     connect(item->itemDatas(), SIGNAL(dataChanged(int)), this, SLOT(recalculate(int)));
                 }
             }
@@ -446,7 +446,7 @@ void ScriptWidget::connectFormItems()
             QString uuid = item->uuid();
             if (uuid.contains(reg)) {
                 if (item->itemDatas()) {
-                    qWarning() << "  connecting (regexp)" << item->uuid();
+//                    qWarning() << "  connecting (regexp)" << item->uuid();
                     connect(item->itemDatas(), SIGNAL(dataChanged(int)), this, SLOT(recalculate(int)));
                 }
             }
@@ -457,7 +457,7 @@ void ScriptWidget::connectFormItems()
 void ScriptWidget::recalculate(const int modifiedRef)
 {
     Q_UNUSED(modifiedRef);
-    qWarning() << "CalculationScript recalculate" << formItem()->extraDatas().value(::SCRIPT_EXTRA_KEY);
+//    qWarning() << "CalculationScript recalculate" << formItem()->extraDatas().value(::SCRIPT_EXTRA_KEY);
     Form::FormMain *p = formItem()->parentFormMain();
     if (!p) {
         LOG_ERROR("No FormMain parent");
