@@ -654,24 +654,33 @@ bool XmlFormContentReader::createItemWidget(Form::FormItem *item, QWidget *paren
 {
 //    qWarning() << Q_FUNC_INFO;
 //    qWarning() << item << item->uuid() << item->spec()->pluginName();
+    QString askedWidget = item->spec()->pluginName().toLower();
+    Form::IFormWidgetFactory *factory = m_PlugsFactories.value(askedWidget);
+    Form::IFormWidget *w = 0;
+
     // does plugin was inform in the xml file ?
     if (item->spec()->pluginName().isEmpty()) {
         LOG_ERROR_FOR("XmlFormContentReader", "No plugin name for item: " + item->uuid());
-        item->setFormWidget(0);
+        factory = m_PlugsFactories.value("helptext");
+        w = factory->createWidget("helptext", item);
+        item->spec()->setValue(Form::FormItemSpec::Spec_Label, "XML FORM ERROR: Asked widget does not exists for item: " + item->uuid());
+        item->setFormWidget(w);
         return false;
     }
 
     // does asked widget exists in the plugins ?
-    QString askedWidget = item->spec()->pluginName().toLower();
+    factory = m_PlugsFactories.value(askedWidget);
     if (!m_PlugsFactories.keys().contains(askedWidget)) {
-        item->setFormWidget(0);
         LOG_ERROR_FOR("XmlFormContentReader", QString("Form error in item %1: Asked widget does not exists in plugins widgets list: %2").arg(item->uuid()).arg(askedWidget));
+        // Add a default widget for the error log
+        factory = m_PlugsFactories.value("helptext");
+        item->spec()->setValue(Form::FormItemSpec::Spec_Label, "XML FORM ERROR: Asked widget does not exists for item: " + item->uuid());
+        w = factory->createWidget("helptext", item);
+        item->setFormWidget(w);
         return false;
     }
 
     // get the widget
-    Form::IFormWidgetFactory *factory = m_PlugsFactories.value(askedWidget);
-    Form::IFormWidget *w = 0;
     w = factory->createWidget(askedWidget,item);
     if (w->isContainer()) {
         foreach(Form::FormItem *child, item->formItemChildren()) {
