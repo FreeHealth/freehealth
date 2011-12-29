@@ -754,6 +754,7 @@ QVariant BaseCheckData::storableData() const
 void BaseCheckData::onValueChanged()
 {
     executeOnValueChangedScript(m_FormItem);
+    Q_EMIT dataChanged(0);
 }
 
 //--------------------------------------------------------------------------------------------------------
@@ -1213,6 +1214,7 @@ QVariant BaseSimpleTextData::storableData() const
 void BaseSimpleTextData::onValueChanged()
 {
     executeOnValueChangedScript(m_FormItem);
+    Q_EMIT dataChanged(0);
 }
 //--------------------------------------------------------------------------------------------------------
 //----------------------------------------- BaseHelpText -----------------------------------------------
@@ -1458,6 +1460,7 @@ QVariant BaseListData::storableData() const
 void BaseListData::onValueChanged()
 {
     executeOnValueChangedScript(m_FormItem);
+    Q_EMIT dataChanged(0);
 }
 //--------------------------------------------------------------------------------------------------------
 //----------------------------------------- BaseCombo --------------------------------------------------
@@ -1612,6 +1615,7 @@ void BaseComboData::onValueChanged()
 {
 //    WARN_FUNC;
     executeOnValueChangedScript(m_FormItem);
+    Q_EMIT dataChanged(Form::IFormItemData::ID_CurrentUuid);
 }
 //--------------------------------------------------------------------------------------------------------
 //----------------------------------------- BaseDate ---------------------------------------------------
@@ -1773,6 +1777,7 @@ QVariant BaseDateData::storableData() const
 void BaseDateData::onValueChanged()
 {
     executeOnValueChangedScript(m_FormItem);
+    Q_EMIT dataChanged(0);
 }
 //--------------------------------------------------------------------------------------------------------
 //------------------------------------------ BaseSpin --------------------------------------------------
@@ -1968,6 +1973,7 @@ QVariant BaseSpinData::storableData() const
 void BaseSpinData::onValueChanged()
 {
     executeOnValueChangedScript(m_FormItem);
+    Q_EMIT dataChanged(0);
 }
 //--------------------------------------------------------------------------------------------------------
 //------------------------------------------ BaseButton ------------------------------------------------

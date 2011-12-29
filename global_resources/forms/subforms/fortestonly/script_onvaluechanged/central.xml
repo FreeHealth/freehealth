@@ -27,8 +27,7 @@
   <file type="script" name="onload">./scripts/xx/frenchscript.js</file>
 
  <MedForm name="Test::Script::OnValueChanged">
-   <label lang="xx">Test Calcul (sum)</label>
-   <label lang="fr">Test Calcul (sum)</label>
+   <label lang="xx">Test Scripting engine (interactions between items)</label>
    <column>1</column>
    <options>DontPrintEmptyValues;UseFormNameAsNameSpace</options>
 

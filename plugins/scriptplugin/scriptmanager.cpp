@@ -40,6 +40,63 @@ using namespace Script;
 
 static inline Form::FormManager *formManager() {return Form::FormManager::instance();}
 
+namespace {
+const char * const SCRIPT_NAMESPACE =
+        "/* Namespace.js - modular namespaces in JavaScript"
+        "   by Mike Koss - placed in the public domain"
+        "   https://github.com/mckoss/namespace"
+        "*/"
+        "(function(global) {"
+        "    var globalNamespace = global['namespace'];"
+        "    var VERSION = '3.0.1';"
+        "    function Module() {}"
+        "    function numeric(s) {"
+        "        if (!s) {"
+        "            return 0;"
+        "        }"
+        "        var a = s.split('.');"
+        "        return 10000 * parseInt(a[0]) + 100 * parseInt(a[1]) + parseInt(a[2]);"
+        "    }"
+        "    if (globalNamespace) {"
+        "        if (numeric(VERSION) <= numeric(globalNamespace['VERSION'])) {"
+        "            return;"
+        "        }"
+        "        Module = globalNamespace.constructor;"
+        "    } else {"
+        "        global['namespace'] = globalNamespace = new Module();"
+        "    }"
+        "    globalNamespace['VERSION'] = VERSION;"
+        "    function require(path) {"
+        "        path = path.replace(/-/g, '_');"
+        "        var parts = path.split('.');"
+        "        var ns = globalNamespace;"
+        "        for (var i = 0; i < parts.length; i++) {"
+        "            if (ns[parts[i]] === undefined) {"
+        "                ns[parts[i]] = new Module();"
+        "            }"
+        "            ns = ns[parts[i]];"
+        "        }"
+        "        return ns;"
+        "    }"
+        "    var proto = Module.prototype;"
+        "    proto['module'] = function(path, closure) {"
+        "        var exports = require(path);"
+        "        if (closure) {"
+        "            closure(exports, require);"
+        "        }"
+        "        return exports;"
+        "    };"
+        "    proto['extend'] = function(exports) {"
+        "        for (var sym in exports) {"
+        "            if (exports.hasOwnProperty(sym)) {"
+        "                this[sym] = exports[sym];"
+        "            }"
+        "        }"
+        "    };"
+        "}(this));";
+
+}
+
 QScriptValue FormItemScriptWrapperToScriptValue(QScriptEngine *engine, FormItemScriptWrapper* const &in)
 { return engine->newQObject(in); }
 
@@ -50,6 +107,9 @@ ScriptManager::ScriptManager(QObject *parent) :
     Core::IScriptManager(parent),
     m_Engine(new QScriptEngine(this))
 {
+    // Inject default scripts
+    evaluate(SCRIPT_NAMESPACE);
+
     // Add the patient
     ScriptPatientWrapper *patient = new ScriptPatientWrapper(this);
     QScriptValue patientValue = m_Engine->newQObject(patient, QScriptEngine::QtOwnership);
@@ -70,18 +130,18 @@ ScriptManager::ScriptManager(QObject *parent) :
     connect(formManager(), SIGNAL(patientFormsLoaded()), this, SLOT(onAllFormsLoaded()));
 }
 
-bool ScriptManager::evaluate(const QString &script)
+QScriptValue ScriptManager::evaluate(const QString &script)
 {
     if (script.isEmpty())
-        return false;
+        return QScriptValue();
 //    qWarning() << script;
     QScriptSyntaxCheckResult check = m_Engine->checkSyntax(script);
+    /** \todo improvement script debugging */
     if (check.state()!=QScriptSyntaxCheckResult::Valid) {
         LOG_ERROR(QString("Script error (%1;%2): ").arg(check.errorLineNumber()).arg(check.errorColumnNumber()) + check.errorMessage());
         return false;
     }
-    m_Engine->evaluate(script).toString();
-    return true;
+    return m_Engine->evaluate(script);
 }
 
 QScriptValue ScriptManager::addScriptObject(const QObject *object)

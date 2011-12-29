@@ -27,6 +27,7 @@
 
 #include <coreplugin/icore.h>
 #include <coreplugin/ipatient.h>
+#include <coreplugin/iscriptmanager.h>
 
 #include <formmanagerplugin/iformitem.h>
 
@@ -43,73 +44,9 @@ using namespace BaseWidgets;
 using namespace Internal;
 
 static inline Core::IPatient *patient() {return Core::ICore::instance()->patient();}
+static inline Core::IScriptManager *scriptManager() {return Core::ICore::instance()->scriptManager();}
 
 namespace {
-
-class PatientScriptWrapper : public QObject  //, public QScriptClass
-{
-    Q_OBJECT
-
-public:
-    PatientScriptWrapper(QObject *parent) : QObject(parent) {}
-
-public Q_SLOTS:
-    QDate dateOfBirth() const
-    {
-        return patient()->data(Core::IPatient::DateOfBirth).toDate();
-    }
-    int yearsOld() const
-    {
-        return patient()->data(Core::IPatient::YearsOld).toInt();
-    }
-    bool isMale() const
-    {
-        return patient()->data(Core::IPatient::GenderIndex).toInt()==0;
-    }
-    bool isFemale() const
-    {
-        return patient()->data(Core::IPatient::GenderIndex).toInt()==1;
-    }
-    double weight() const
-    {
-        return patient()->data(Core::IPatient::Weight).toDouble();
-    }
-    QString weightUnit() const
-    {
-        return patient()->data(Core::IPatient::WeightUnit).toString();
-    }
-    double height() const
-    {
-        return patient()->data(Core::IPatient::Height).toDouble();
-    }
-    QString heightUnit() const
-    {
-        return patient()->data(Core::IPatient::HeightUnit).toString();
-    }
-    double bmi() const
-    {
-        return patient()->data(Core::IPatient::BMI).toDouble();
-    }
-    double creatinine() const
-    {
-        return patient()->data(Core::IPatient::Creatinine).toDouble();
-    }
-    QString creatinineUnit() const
-    {
-        return patient()->data(Core::IPatient::CreatinineUnit).toString();
-    }
-    double clearanceCreatinine() const
-    {
-        return patient()->data(Core::IPatient::CreatinClearance).toDouble();
-    }
-    QString clearanceCreatinineUnit() const
-    {
-        return patient()->data(Core::IPatient::CreatinClearanceUnit).toString();
-    }
-
-
-};
-
 
 const char * const  LABEL_ALIGN_TOP   = "labelontop";
 const char * const  LABEL_ALIGN_LEFT  = "labelonleft";
@@ -119,7 +56,9 @@ const char * const  SUM_EXTRA_KEY           = "sumof";
 const char * const  SUM_REGEXP_EXTRA_KEY    = "sumof_regexp";
 const char * const  DONTPRINTEMPTYVALUES    = "DontPrintEmptyValues";
 const char * const  SCRIPT_EXTRA_KEY        = "calcScript";
-const char * const  SCRIPT_NS_EXTRA_KEY     = "calcUseNS";
+const char * const  CONNECT_EXTRA_KEY       = "connect";
+const char * const  CONNECT_REGEXP_EXTRA_KEY= "connect_regexp";
+//const char * const  SCRIPT_NS_EXTRA_KEY     = "calcUseNS";
 const char * const  NOT_PRINTABLE           = "notprintable";
 
 enum ProvidedWidget {
@@ -309,6 +248,8 @@ void SumWidget::connectFormItems()
             uid = uid.simplified();
             for(int i = 0; i < items.count(); ++i) {
                 Form::FormItem *item = items.at(i);
+                if (item==m_FormItem)
+                    continue;
                 if (item->uuid().compare(uid, Qt::CaseInsensitive)==0) {
 //                    qWarning() << "  connecting" << item->uuid();
                     connect(item->itemDatas(), SIGNAL(dataChanged(int)), this, SLOT(recalculate(int)));
@@ -320,6 +261,8 @@ void SumWidget::connectFormItems()
         QList<Form::FormItem *> items = p->flattenFormItemChildren();
         for(int i = 0; i < items.count(); ++i) {
             Form::FormItem *item = items.at(i);
+            if (item==m_FormItem)
+                continue;
             if (item->uuid().contains(reg) && item->itemDatas()) {
 //                qWarning() << "  connecting (regexp)" << item->uuid();
                 connect(item->itemDatas(), SIGNAL(dataChanged(int)), this, SLOT(recalculate(int)));
@@ -443,9 +386,10 @@ void ScriptWidget::retranslate()
 
 void ScriptWidget::connectFormItems()
 {
-//    qWarning() << "SCRIPT requiered" << formItem()->extraDatas().value(::SCRIPT_EXTRA_KEY);
-    if (formItem()->extraDatas().value(::SCRIPT_EXTRA_KEY).isEmpty()) {
-        LOG_ERROR("Script widget: No <calcScript> tag.");
+    qWarning() << "CalculationScript" << formItem()->extraDatas().value(::CONNECT_EXTRA_KEY) << formItem()->extraDatas().value(::CONNECT_REGEXP_EXTRA_KEY);
+    if (formItem()->extraDatas().value(::CONNECT_EXTRA_KEY).isEmpty() &&
+            formItem()->extraDatas().value(::CONNECT_REGEXP_EXTRA_KEY).isEmpty()) {
+        LOG_ERROR("Calculation script widget: No <connect> tag.");
         return;
     }
     Form::FormMain *p = formItem()->parentFormMain();
@@ -454,16 +398,34 @@ void ScriptWidget::connectFormItems()
         return;
     }
 //    qWarning() << "Parent = " << p->uuid();
-    QString ns = formItem()->extraDatas().value(::SCRIPT_NS_EXTRA_KEY);
-    QString script = formItem()->extraDatas().value(::SCRIPT_EXTRA_KEY);
+//    QString ns = formItem()->extraDatas().value(::SCRIPT_NS_EXTRA_KEY);
+    QString itemList = formItem()->extraDatas().value(::CONNECT_EXTRA_KEY);
+    QString regexp = formItem()->extraDatas().value(::CONNECT_REGEXP_EXTRA_KEY);
+    // Find all items to connect
     QList<Form::FormItem *> children = p->flattenFormItemChildren();
-    for(int i = 0; i < children.count(); ++i) {
-        Form::FormItem *item = children.at(i);
-        QString uuid = item->uuid().remove(ns);
-//        qWarning() << "testing uuid" << uuid << item->uuid() << ns;
-        if (script.contains(uuid, Qt::CaseInsensitive)) {
-//            qWarning() << "  connecting" << item->uuid();
-            connect(item->itemDatas(), SIGNAL(dataChanged(int)), this, SLOT(recalculate(int)));
+    if (!itemList.isEmpty()) {
+        QStringList items = itemList.split(";");
+        for(int i = 0; i < children.count(); ++i) {
+            Form::FormItem *item = children.at(i);
+            if (item==m_FormItem)
+                continue;
+            QString uuid = item->uuid();
+            if (items.contains(uuid, Qt::CaseInsensitive)) {
+                qWarning() << "  connecting" << item->uuid();
+                connect(item->itemDatas(), SIGNAL(dataChanged(int)), this, SLOT(recalculate(int)));
+            }
+        }
+    } else if (!regexp.isEmpty()) {
+        QRegExp reg(regexp, Qt::CaseInsensitive, QRegExp::Wildcard);
+        for(int i = 0; i < children.count(); ++i) {
+            Form::FormItem *item = children.at(i);
+            if (item==m_FormItem)
+                continue;
+            QString uuid = item->uuid();
+            if (uuid.contains(reg)) {
+                qWarning() << "  connecting (regexp)" << item->uuid();
+                connect(item->itemDatas(), SIGNAL(dataChanged(int)), this, SLOT(recalculate(int)));
+            }
         }
     }
 }
@@ -471,34 +433,19 @@ void ScriptWidget::connectFormItems()
 void ScriptWidget::recalculate(const int modifiedRef)
 {
     Q_UNUSED(modifiedRef);
-//    qWarning() << "SCRIPT recalculate" << formItem()->extraDatas().value(::SCRIPT_EXTRA_KEY);
+    qWarning() << "CalculationScript recalculate" << formItem()->extraDatas().value(::SCRIPT_EXTRA_KEY);
     Form::FormMain *p = formItem()->parentFormMain();
     if (!p) {
         LOG_ERROR("No FormMain parent");
         return;
     }
-    // replace uuids by numerical values
-    QString ns = formItem()->extraDatas().value(::SCRIPT_NS_EXTRA_KEY);
     QString script = formItem()->extraDatas().value(::SCRIPT_EXTRA_KEY);
-    QList<Form::FormItem *> children = p->flattenFormItemChildren();
-    for(int i = 0; i < children.count(); ++i) {
-        QString uuid = children.at(i)->uuid().remove(ns);
-        if (children.at(i)->itemDatas())
-            script.replace(uuid, children.at(i)->itemDatas()->data(0, Form::IFormItemData::CalculationsRole).toString(), Qt::CaseInsensitive);
-//        else
-//            script.replace(uuid, "0", Qt::CaseInsensitive);
-    }
 
-    // evaluate the script
-    QScriptEngine myEngine;
-    PatientScriptWrapper pwrap(this);
-    QScriptValue scriptPatient = myEngine.newQObject(&pwrap);
-    myEngine.globalObject().setProperty("patient", scriptPatient);
-
-    QScriptValue val = myEngine.evaluate(script);
+    // evaluate the script using the Core::IScriptEngine
+    QScriptValue val = scriptManager()->evaluate(script);
     QString result = val.toString();
 
-//    qWarning() << val.toVariant() << result;
+    qWarning() << val.toVariant() << result;
 
     line->setText(result);
     if (formItem()->getOptions().contains(::CHANGE_EPISODE_LABEL, Qt::CaseInsensitive)) {

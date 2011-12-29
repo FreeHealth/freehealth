@@ -3,7 +3,7 @@
 
 #include <coreplugin/core_exporter.h>
 #include <QObject>
-class QScriptValue;
+#include <QScriptValue>
 
 namespace Core {
 
@@ -13,7 +13,7 @@ class CORE_EXPORT IScriptManager : public QObject
 public:
     explicit IScriptManager(QObject *parent = 0) : QObject(parent) {}
 
-    virtual bool evaluate(const QString &script) = 0;
+    virtual QScriptValue evaluate(const QString &script) = 0;
     virtual QScriptValue addScriptObject(const QObject *object) = 0;
 
 };

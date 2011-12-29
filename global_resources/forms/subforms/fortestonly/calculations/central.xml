@@ -26,7 +26,7 @@
   </formdescription>
 
 
-  <MedForm name="Test::Calculation">
+  <MedForm name="Test::Calculation::Sum">
     <label lang="xx">Test Calcul (sum)</label>
     <label lang="fr">Test Calcul (sum)</label>
     <options>col=2;DontPrintEmptyValues;UseFormNameAsNameSpace</options>
@@ -88,64 +88,6 @@
       <label lang="fr">&lt;b&gt;Résultat&lt;/b&gt;</label>
       <label lang="xx">&lt;b&gt;Total&lt;/b&gt;</label>
       <options>vertical;labelontop;changeepisodelabel;DontPrintEmptyValues</options>
-      <sumof_regexp>Test::Calculation::*</sumof_regexp>
-    </Item>
-
- </MedForm>
-
-
-  <MedForm name="Test::Calculation::Sum">
-    <label lang="xx">Test Calcul (sum)</label>
-    <label lang="fr">Test Calcul (sum)</label>
-    <options>col=2;DontPrintEmptyValues;UseFormNameAsNameSpace</options>
-
-    <Item name="Phone" type="radio">
-      <label lang="xx">&lt;b&gt;Téléphone&lt;/b&gt;</label>
-      <options>vertical;labelontop;DontPrintEmptyValues</options>
-      <value>
-        <uuid id="0">P0</uuid>
-        <uuid id="1">P1</uuid>
-        <uuid id="2">P2</uuid>
-        <uuid id="3">P3</uuid>
-
-        <possible id="0" lang="xx">-1</possible>
-        <possible id="1" lang="xx">0</possible>
-        <possible id="2" lang="xx">+1</possible>
-        <possible id="3" lang="xx">+2</possible>
-
-        <numerical id="0">-1</numerical>
-        <numerical id="1">0</numerical>
-        <numerical id="2">1</numerical>
-        <numerical id="3">2</numerical>
-      </value>
-    </Item>
-
-    <Item name="Shopping" type="radio">
-      <label lang="xx">&lt;b&gt;Shopping&lt;/b&gt;</label>
-      <label lang="fr">&lt;b&gt;Courses&lt;/b&gt;</label>
-      <options>vertical;labelontop;DontPrintEmptyValues</options>
-      <value>
-        <uuid id="0">S0</uuid>
-        <uuid id="1">S1</uuid>
-        <uuid id="2">S2</uuid>
-        <uuid id="3">S3</uuid>
-
-        <possible id="0" lang="xx">-3</possible>
-        <possible id="1" lang="xx">-1</possible>
-        <possible id="2" lang="xx">1</possible>
-        <possible id="3" lang="xx">3</possible>
-
-        <numerical id="0">-3</numerical>
-        <numerical id="1">-1</numerical>
-        <numerical id="2">1</numerical>
-        <numerical id="3">3</numerical>
-      </value>
-    </Item>
-
-    <Item name="Total" type="sum">
-      <label lang="fr">&lt;b&gt;Résultat&lt;/b&gt;</label>
-      <label lang="xx">&lt;b&gt;Total&lt;/b&gt;</label>
-      <options>vertical;labelontop;changeepisodelabel;DontPrintEmptyValues</options>
       <sumof_regexp>Test::Calculation::Sum::*</sumof_regexp>
     </Item>
 
@@ -156,8 +98,8 @@
     <label lang="fr">Test Calcul (script)</label>
     <options>col=2;DontPrintEmptyValues;UseFormNameAsNameSpace</options>
 
-    <Item name="Phone" type="radio">
-      <label lang="xx">&lt;b&gt;Téléphone&lt;/b&gt;</label>
+    <Item name="First" type="radio">
+      <label lang="xx">First item</label>
       <options>vertical;labelontop;DontPrintEmptyValues</options>
       <value>
         <uuid id="0">P0</uuid>
@@ -177,42 +119,64 @@
       </value>
     </Item>
 
-    <Item name="Shopping" type="radio">
-      <label lang="xx">&lt;b&gt;Shopping&lt;/b&gt;</label>
-      <label lang="fr">&lt;b&gt;Courses&lt;/b&gt;</label>
+    <Item name="Second" type="combo">
+      <label lang="xx">Second Item</label>
       <options>vertical;labelontop;DontPrintEmptyValues</options>
       <value>
         <uuid id="0">S0</uuid>
         <uuid id="1">S1</uuid>
         <uuid id="2">S2</uuid>
         <uuid id="3">S3</uuid>
+        <uuid id="4">S4</uuid>
 
         <possible id="0" lang="xx">-3</possible>
         <possible id="1" lang="xx">-1</possible>
         <possible id="2" lang="xx">1</possible>
         <possible id="3" lang="xx">3</possible>
+        <possible id="4" lang="xx">5</possible>
 
         <numerical id="0">-3</numerical>
         <numerical id="1">-1</numerical>
         <numerical id="2">1</numerical>
         <numerical id="3">3</numerical>
+        <numerical id="4">5</numerical>
+      </value>
+    </Item>
+
+    <Item name="Formula" type="combo">
+      <label lang="xx">Select formula</label>
+      <options>vertical;labelontop;DontPrintEmptyValues</options>
+      <value>
+        <uuid id="0">S0</uuid>
+        <uuid id="1">S1</uuid>
+        <uuid id="2">S2</uuid>
+        <uuid id="3">S3</uuid>
+        <uuid id="4">S4</uuid>
+
+        <possible id="0" lang="xx">first*second</possible>
+        <possible id="1" lang="xx">((+first)+(+second))*(second-1)</possible>
+        <possible id="2" lang="xx">first/second</possible>
+        <possible id="3" lang="xx">(first*second)/(second*2.3)</possible>
+        <possible id="4" lang="xx">(+first)+(+second)</possible>
       </value>
     </Item>
 
     <Item name="Total" type="scriptcalculation">
-      <label lang="fr">&lt;b&gt;Résultat&lt;/b&gt;</label>
-      <label lang="xx">&lt;b&gt;Total&lt;/b&gt;</label>
+      <label lang="xx">Result</label>
       <options>vertical;labelontop;changeepisodelabel;DontPrintEmptyValues</options>
-      <calcUseNS>Test::Calculation::Script::</calcUseNS>
+      <connect_regexp>Test::Calculation::Script::*</connect_regexp>
       <calcScript>
-        var s="patient test:";
-        if (Shopping === -1) {
-            s += patient.yearsOld();
-            s += patient.dateOfBirth();
-        }
+        var s = "Script test: ";
+        forms.namespaceInUse = "Test::Calculation::Script";
+        var first = forms.item("First").currentValue;
+        var second = forms.item("Second").currentValue;
+        var calc = forms.item("Formula").currentText;
+        var tmp = calc;
+        tmp = tmp.replace(/first/g, first.toString());
+        tmp = tmp.replace(/second/g, second.toString());
+        s += "(Formula:"+calc+"="+tmp+") = " + eval(calc);
         s;
       </calcScript>
-<!--      if (Shopping === -1) "C bon"; else "C pas bon";-->
     </Item>
 
  </MedForm>

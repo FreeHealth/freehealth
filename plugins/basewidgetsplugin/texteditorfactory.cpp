@@ -232,4 +232,5 @@ QVariant TextEditorData::storableData() const
 void TextEditorData::onValueChanged()
 {
     executeOnValueChangedScript(m_FormItem);
+    Q_EMIT dataChanged(0);
 }

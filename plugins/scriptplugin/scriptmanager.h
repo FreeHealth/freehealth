@@ -40,7 +40,7 @@ class SCRIPT_EXPORT ScriptManager : public Core::IScriptManager
 public:
     ScriptManager(QObject *parent);
 
-    bool evaluate(const QString &script);
+    QScriptValue evaluate(const QString &script);
     QScriptValue addScriptObject(const QObject *object);
 
     QScriptEngine *engine() {return m_Engine;}
