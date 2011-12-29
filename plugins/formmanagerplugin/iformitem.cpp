@@ -562,11 +562,8 @@ void FormMain::clear()
 QString FormMain::printableHtml(bool withValues) const
 {
     /** \todo code here : print a form with/wo item content */
-    QString html;
-
     FormMain *f = (FormMain*)this;
     return f->formWidget()->printableHtml(withValues);
-    return html;
 }
 
 void FormMain::createDebugPage()

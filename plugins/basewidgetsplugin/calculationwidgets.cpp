@@ -59,7 +59,10 @@ const char * const  SCRIPT_EXTRA_KEY        = "calcScript";
 const char * const  CONNECT_EXTRA_KEY       = "connect";
 const char * const  CONNECT_REGEXP_EXTRA_KEY= "connect_regexp";
 //const char * const  SCRIPT_NS_EXTRA_KEY     = "calcUseNS";
+
+// Options
 const char * const  NOT_PRINTABLE           = "notprintable";
+const char * const  SHOW_IN_TEXTEDITOR      = "showintexteditor";
 
 enum ProvidedWidget {
     Type_Sum = 0,
@@ -159,7 +162,8 @@ static void addResultToEpisodeLabel(Form::FormMain *parent, QLabel *label, const
 //------------------------------------------ SumWidget ---------------------------------------------------
 //--------------------------------------------------------------------------------------------------------
 SumWidget::SumWidget(Form::FormItem *formItem, QWidget *parent) :
-    Form::IFormWidget(formItem, parent), line(0)
+    Form::IFormWidget(formItem, parent),
+    line(0)
 {
     setObjectName("SumWidget_"+formItem->uuid());
     // Prepare Widget Layout and label
@@ -251,8 +255,10 @@ void SumWidget::connectFormItems()
                 if (item==m_FormItem)
                     continue;
                 if (item->uuid().compare(uid, Qt::CaseInsensitive)==0) {
-//                    qWarning() << "  connecting" << item->uuid();
-                    connect(item->itemDatas(), SIGNAL(dataChanged(int)), this, SLOT(recalculate(int)));
+                    if (item->itemDatas()) {
+                        //                    qWarning() << "  connecting" << item->uuid();
+                        connect(item->itemDatas(), SIGNAL(dataChanged(int)), this, SLOT(recalculate(int)));
+                    }
                 }
             }
         }
@@ -316,7 +322,9 @@ void SumWidget::recalculate(const int modifiedRef)
 //---------------------------------------- ScriptWidget --------------------------------------------------
 //--------------------------------------------------------------------------------------------------------
 ScriptWidget::ScriptWidget(Form::FormItem *formItem, QWidget *parent) :
-    Form::IFormWidget(formItem, parent), line(0)
+    Form::IFormWidget(formItem, parent),
+    line(0),
+    m_Editor(0)
 {
     setObjectName("ScriptWidget_"+formItem->uuid());
     // Prepare Widget Layout and label
@@ -324,10 +332,17 @@ ScriptWidget::ScriptWidget(Form::FormItem *formItem, QWidget *parent) :
     hb->addWidget(m_Label);
 
     // Add LineEdit for the result
-    line = new QLineEdit(this);
-    line->setObjectName("ScriptWidgetLineEdit_" + m_FormItem->uuid());
-    line->setSizePolicy(QSizePolicy::Expanding , QSizePolicy::Fixed);
-    hb->addWidget(line);
+    if (formItem->getOptions().contains(::SHOW_IN_TEXTEDITOR, Qt::CaseInsensitive)) {
+        m_Editor = new Editor::TextEditor(this);
+        m_Editor->setObjectName("ScriptWidgetTextEditor_" + m_FormItem->uuid());
+        m_Editor->setSizePolicy(QSizePolicy::Expanding , QSizePolicy::Fixed);
+        hb->addWidget(m_Editor);
+    } else {
+        line = new QLineEdit(this);
+        line->setObjectName("ScriptWidgetLineEdit_" + m_FormItem->uuid());
+        line->setSizePolicy(QSizePolicy::Expanding , QSizePolicy::Fixed);
+        hb->addWidget(line);
+    }
 
     // connect to parent FormMain
     Form::FormMain *p = formItem->parentFormMain();
@@ -361,7 +376,12 @@ QString ScriptWidget::printableHtml(bool withValues) const
                        "</table>")
                 .arg(m_FormItem->spec()->label());
     } else {
-        if (dontPrintEmptyValues(m_FormItem) && line->text().isEmpty())
+        QString content;
+        if (line)
+            content = line->text();
+        else
+            content = m_Editor->getHtml();
+        if (dontPrintEmptyValues(m_FormItem) && content.isEmpty())
             return QString();
         return QString("<table width=100% border=1 cellpadding=0 cellspacing=0  style=\"margin: 5px 0px 0px 0px\">"
                        "<tbody>"
@@ -375,7 +395,7 @@ QString ScriptWidget::printableHtml(bool withValues) const
                        "</tr>"
                        "</tbody>"
                        "</table>")
-                .arg(m_FormItem->spec()->label()).arg(line->text());
+                .arg(m_FormItem->spec()->label()).arg(content);
     }
 }
 
@@ -411,8 +431,10 @@ void ScriptWidget::connectFormItems()
                 continue;
             QString uuid = item->uuid();
             if (items.contains(uuid, Qt::CaseInsensitive)) {
-                qWarning() << "  connecting" << item->uuid();
-                connect(item->itemDatas(), SIGNAL(dataChanged(int)), this, SLOT(recalculate(int)));
+                if (item->itemDatas()) {
+                    qWarning() << "  connecting" << item->uuid();
+                    connect(item->itemDatas(), SIGNAL(dataChanged(int)), this, SLOT(recalculate(int)));
+                }
             }
         }
     } else if (!regexp.isEmpty()) {
@@ -423,8 +445,10 @@ void ScriptWidget::connectFormItems()
                 continue;
             QString uuid = item->uuid();
             if (uuid.contains(reg)) {
-                qWarning() << "  connecting (regexp)" << item->uuid();
-                connect(item->itemDatas(), SIGNAL(dataChanged(int)), this, SLOT(recalculate(int)));
+                if (item->itemDatas()) {
+                    qWarning() << "  connecting (regexp)" << item->uuid();
+                    connect(item->itemDatas(), SIGNAL(dataChanged(int)), this, SLOT(recalculate(int)));
+                }
             }
         }
     }
@@ -445,9 +469,12 @@ void ScriptWidget::recalculate(const int modifiedRef)
     QScriptValue val = scriptManager()->evaluate(script);
     QString result = val.toString();
 
-    qWarning() << val.toVariant() << result;
+//    qWarning() << val.toVariant() << result;
 
-    line->setText(result);
+    if (line)
+        line->setText(result);
+    else
+        m_Editor->setHtml(result);
     if (formItem()->getOptions().contains(::CHANGE_EPISODE_LABEL, Qt::CaseInsensitive)) {
         addResultToEpisodeLabel(p, m_Label, result);
     }

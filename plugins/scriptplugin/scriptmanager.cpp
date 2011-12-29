@@ -134,7 +134,7 @@ QScriptValue ScriptManager::evaluate(const QString &script)
 {
     if (script.isEmpty())
         return QScriptValue();
-//    qWarning() << script;
+//    qWarning() << "xxxxxxxxxxxxxxxxxxxx \n\n"<<script<< "\n\n";
     QScriptSyntaxCheckResult check = m_Engine->checkSyntax(script);
     /** \todo improvement script debugging */
     if (check.state()!=QScriptSyntaxCheckResult::Valid) {

@@ -28,6 +28,7 @@
 
 #include <formmanagerplugin/iformwidgetfactory.h>
 #include <formmanagerplugin/iformitemdata.h>
+#include <texteditorplugin/texteditor.h>
 #include <QVariant>
 #include <QLineEdit>
 
@@ -35,7 +36,7 @@
  * \file calculationwidgets.h
  * \author Eric MAEKER <eric.maeker@gmail.com>
  * \version 0.6.2
- * \date 21 Dec 2011
+ * \date 29 Dec 2011
 */
 
 
@@ -81,30 +82,6 @@ private:
 //    SumWidgetData *m_ItemData;
 };
 
-//class SumWidgetData : public Form::IFormItemData
-//{
-//public:
-//    BaseCheckData(Form::FormItem *item);
-//    ~BaseCheckData();
-
-//    void setCheckBox(QCheckBox *chk);
-
-//    void clear();
-
-//    Form::FormItem *parentItem() const {return m_FormItem;}
-//    bool isModified() const;
-
-//    bool setData(const int ref, const QVariant &data, const int role);
-//    QVariant data(const int ref, const int role) const;
-
-//    void setStorableData(const QVariant &data);
-//    QVariant storableData() const;
-
-//private:
-//    Form::FormItem *m_FormItem;
-//    QCheckBox *m_Check;
-//    Qt::CheckState m_OriginalValue;
-//};
 
 class ScriptWidget : public Form::IFormWidget
 {
@@ -122,7 +99,7 @@ private Q_SLOTS:
 
 private:
     QLineEdit *line;
-//    SumWidgetData *m_ItemData;
+    Editor::TextEditor* m_Editor;
 };
 
 }  // End namespace Internal
