@@ -237,6 +237,7 @@ Form::FormMain *FormManager::rootForm(const char *modeUniqueName)
 
 bool FormManager::loadSubForms()
 {
+    d->m_SubFormsEmptyRoot.clear();
     // get sub-forms from database
     const QVector<SubFormInsertionPoint> &subs = episodeBase()->getSubFormFiles();
     if (subs.isEmpty()) {
@@ -253,14 +254,14 @@ bool FormManager::loadSubForms()
 
 bool FormManager::insertSubForm(const SubFormInsertionPoint &insertionPoint)
 {
-    d->m_SubFormsEmptyRoot.clear();
     // read all sub-forms
-    d->m_SubFormsEmptyRoot = loadFormFile(insertionPoint.subFormUid());
+    QList<Form::FormMain*> subs = loadFormFile(insertionPoint.subFormUid());
+    d->m_SubFormsEmptyRoot << subs;
 
     // insert sub-forms
     const QString &insertIntoUuid = insertionPoint.receiverUid();
-    for(int i=0; i < d->m_SubFormsEmptyRoot.count(); ++i) {
-        FormMain *sub = d->m_SubFormsEmptyRoot.at(i);
+    for(int i=0; i < subs.count(); ++i) {
+        FormMain *sub = subs.at(i);
 //        qWarning() << "insert" << sub->uuid() << "to" << insertIntoUuid;
         if (insertIntoUuid == Constants::ROOT_FORM_TAG) {
             // insert into its mode root form
