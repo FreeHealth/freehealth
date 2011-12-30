@@ -89,8 +89,10 @@ MainWindow::MainWindow(QWidget *parent) :
     qWarning();
 
     DataPack::Core *core = DataPack::Core::instance();
-    core->serverManager()->setGlobalConfiguration(Utils::readTextFile(QDir::homePath() + "/servers.conf.xml"));
-    core->serverManager()->setInstallPath(QDir::homePath());
+    core->serverManager()->setGlobalConfiguration(Utils::readTextFile(QDir::homePath() + "/datapacktmp/servers.conf.xml"));
+    core->setTemporaryCachePath(QDir::tempPath());
+    core->setPersistentCachePath(QDir::homePath() + "/datapacktmp/");
+    core->setInstallPath(QDir::homePath());
 
     core->isInternetConnexionAvailable();
 
@@ -118,25 +120,19 @@ MainWindow::MainWindow(QWidget *parent) :
     ftp.setUrlStyle(DataPack::Server::Ftp);
     core->serverManager()->addServer(ftp);
 
-    core->serverManager()->checkServerUpdates();
-
-    testServerDescription();
-    serverDescr = getDescription();
-
-//    Utils::GenericDescriptionEditor *editor = new Utils::GenericDescriptionEditor(this);
-//    editor->setDescription(serverDescr);
-//    setCentralWidget(editor);
+//    testServerDescription();
+//    serverDescr = getDescription();
 
     // Try to download redirected
-    QNetworkAccessManager *manager = new QNetworkAccessManager(this);
-    QNetworkRequest request;
-    request.setUrl(QUrl("http://test.freemedforms.com/get-serverconf")); // Download the server configuration
-    request.setRawHeader("User-Agent", "FreeMedForms");
+//    QNetworkAccessManager *manager = new QNetworkAccessManager(this);
+//    QNetworkRequest request;
+//    request.setUrl(QUrl("http://test.freemedforms.com/get-serverconf")); // Download the server configuration
+//    request.setRawHeader("User-Agent", "FreeMedForms");
 
-    QNetworkReply *reply = manager->get(request);
-    connect(reply, SIGNAL(finished()), this, SLOT(slotReadyRead()));
-    connect(reply, SIGNAL(error(QNetworkReply::NetworkError)),
-            this, SLOT(slotError(QNetworkReply::NetworkError)));
+//    QNetworkReply *reply = manager->get(request);
+//    connect(reply, SIGNAL(finished()), this, SLOT(slotReadyRead()));
+//    connect(reply, SIGNAL(error(QNetworkReply::NetworkError)),
+//            this, SLOT(slotError(QNetworkReply::NetworkError)));
 
     DataPack::ServerEditor *serverEditor = new DataPack::ServerEditor(this);
     setCentralWidget(serverEditor);
@@ -154,7 +150,7 @@ MainWindow::MainWindow(QWidget *parent) :
 MainWindow::~MainWindow()
 {
     DataPack::Core *core = DataPack::Core::instance();
-    Utils::saveStringToFile(core->serverManager()->xmlConfiguration(), QDir::homePath() + "/servers.conf.xml", Utils::Overwrite, Utils::DontWarnUser);
+    Utils::saveStringToFile(core->serverManager()->xmlConfiguration(), QDir::homePath() + "/datapacktmp/servers.conf.xml", Utils::Overwrite, Utils::DontWarnUser);
     delete ui;
 }
 

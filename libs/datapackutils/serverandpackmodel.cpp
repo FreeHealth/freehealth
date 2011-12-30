@@ -181,6 +181,14 @@ bool ServerAndPackModel::setData(const QModelIndex &index, const QVariant &value
 {
     if (m_PackCheckable && role==Qt::CheckStateRole && index.parent()!=QModelIndex()) {
         /** \todo check pack dependencies */
+//        const Server &server = serverManager()->getServerAt(index.parent().row());
+//        const Pack &pack = serverManager()->getPackForServer(server).at(index.row());
+//        const PackDependencies &dep = pack.dependencies();
+//        for(int i = 0; i < dep.dependenciesCount(); ++i) {
+//            if (dep.dependenciesAt(i).type()==PackDependencyData::Depends) {
+
+//            }
+//        }
         QStandardItemModel::setData(index, value, role);
     }
     return QStandardItemModel::setData(index, value, role);
