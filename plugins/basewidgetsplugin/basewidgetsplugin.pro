@@ -6,7 +6,8 @@ DEFINES += BASEFORMWIDGETS_LIBRARY
 BUILD_PATH_POSTFIXE = FreeMedForms
 
 include(../fmf_plugins.pri)
-include( basewidgetsplugin_dependencies.pri )
+include(basewidgetsplugin_dependencies.pri)
+
 HEADERS += basewidgetsplugin.h \
     baseformwidgets.h \
     baseformwidgetsoptionspage.h \

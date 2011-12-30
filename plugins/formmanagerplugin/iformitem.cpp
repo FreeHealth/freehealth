@@ -215,6 +215,7 @@ FormItemScripts::~FormItemScripts()
 
 void FormItemScripts::setScript(const int type, const QString &script, const QString &lang)
 {
+//    WARN_FUNC << type << script << lang;
     ScriptsBook *s = 0;
     if (d->hasLanguage(lang))
         s = d->getLanguage(lang);

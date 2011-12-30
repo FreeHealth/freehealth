@@ -462,8 +462,6 @@ QString XmlIOBase::getFormContent(const QString &formUid, const int type, const 
     }
     QString req = select(gets, joins, conds);
 
-//    qWarning() << req;
-
     if (query.exec(req)) {
         if (query.next()) {
             return query.value(0).toString();

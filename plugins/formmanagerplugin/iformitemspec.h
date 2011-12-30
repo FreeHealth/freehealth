@@ -90,6 +90,9 @@ public:
         Spec_Bibliography,
         Spec_Label,
         Spec_Plugin,
+        Spec_UiFileContent, // only used for FormMain (non empty roots)
+        Spec_UiLabel,
+        Spec_UiWidget,
         Spec_IconFileName
     };
     FormItemSpec();

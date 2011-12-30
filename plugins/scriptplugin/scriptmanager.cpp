@@ -134,7 +134,8 @@ QScriptValue ScriptManager::evaluate(const QString &script)
 {
     if (script.isEmpty())
         return QScriptValue();
-//    qWarning() << "xxxxxxxxxxxxxxxxxxxx \n\n"<<script<< "\n\n";
+//    qWarning() << "xxxxxxxxxxxxxxxxxxxx \n\n" << script << "\n\n";
+//    qWarning() << "xxxxxxxxxxxxxxxxxxxx \n\n" << script << m_Engine->evaluate(script).toVariant() << "\n\n";
     QScriptSyntaxCheckResult check = m_Engine->checkSyntax(script);
     /** \todo improvement script debugging */
     if (check.state()!=QScriptSyntaxCheckResult::Valid) {
@@ -151,8 +152,12 @@ QScriptValue ScriptManager::addScriptObject(const QObject *object)
 
 void ScriptManager::onAllFormsLoaded()
 {
+    WARN_FUNC;
     // Execute RootForm all OnLoad scripts
     foreach(Form::FormMain *main, formManager()->forms()) {
+
+//        qWarning() << main->uuid() << main->scripts()->onLoadScript();
+
         evaluate(main->scripts()->onLoadScript());
         QList<Form::FormMain *> children = main->flattenFormMainChildren();
         foreach(Form::FormMain *mainChild, children) {
@@ -164,6 +169,17 @@ void ScriptManager::onAllFormsLoaded()
     }
     // Execute empty root SubForms OnLoad scripts
     foreach(Form::FormMain *main, formManager()->subFormsEmptyRoot()) {
+
+        qWarning() << main->uuid() << main->scripts()->onLoadScript();
+
         evaluate(main->scripts()->onLoadScript());
+        QList<Form::FormMain *> children = main->flattenFormMainChildren();
+        foreach(Form::FormMain *mainChild, children) {
+            evaluate(mainChild->scripts()->onLoadScript());
+            foreach(Form::FormItem *item, mainChild->flattenFormItemChildren()) {
+                evaluate(item->scripts()->onLoadScript());
+            }
+        }
     }
+    qWarning() << "END";
 }

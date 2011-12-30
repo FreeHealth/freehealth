@@ -426,7 +426,7 @@ bool XmlFormContentReader::loadElement(Form::FormItem *item, QDomElement &rootEl
         }
 
         // UiLink ?
-        if ((element.tagName().compare(Constants::TAG_UI_UILINK, Qt::CaseInsensitive)==0)) {
+        if (element.tagName().compare(Constants::TAG_UI_UILINK, Qt::CaseInsensitive)==0) {
             item->spec()->setValue(Form::FormItemSpec::Spec_UiLabel, element.attribute(Constants::ATTRIB_UI_UILINK_LABEL));
             item->spec()->setValue(Form::FormItemSpec::Spec_UiWidget, element.attribute(Constants::ATTRIB_UI_UILINK_WIDGET));
             element = element.nextSiblingElement();
@@ -676,9 +676,6 @@ bool XmlFormContentReader::addFile(const QDomElement &element, const XmlFormName
     const QString &type = element.attribute(Constants::ATTRIB_TYPE);
     if (type.compare(Constants::FILETYPE_SCRIPT, Qt::CaseInsensitive)==0) {
         if (checkFileContent(fileName, content)) {
-            // Save to database
-            /** \todo ... */
-//            reader()->saveScriptFiles(fileName, form.uid);
             // Add script to the empty root FormMain
             Form::FormMain *parent = m_ActualForm;
             while (m_ActualForm->parentFormMain()) {
@@ -726,7 +723,6 @@ bool XmlFormContentReader::createItemWidget(Form::FormItem *item, QWidget *paren
         factory = m_PlugsFactories.value("helptext");
         w = factory->createWidget("helptext", item);
         item->spec()->setValue(Form::FormItemSpec::Spec_Label, "XML FORM ERROR: Asked widget does not exists for item: " + item->uuid());
-        item->setFormWidget(w);
         return false;
     }
 
@@ -738,21 +734,19 @@ bool XmlFormContentReader::createItemWidget(Form::FormItem *item, QWidget *paren
         factory = m_PlugsFactories.value("helptext");
         item->spec()->setValue(Form::FormItemSpec::Spec_Label, "XML FORM ERROR: Asked widget does not exists for item: " + item->uuid());
         w = factory->createWidget("helptext", item);
-        item->setFormWidget(w);
         return false;
     }
 
     // get the widget
-    w = factory->createWidget(askedWidget,item);
+    w = factory->createWidget(askedWidget, item);
     if (w->isContainer()) {
         foreach(Form::FormItem *child, item->formItemChildren()) {
 //            Form::IFormWidget *wchild = factory->createWidget(child->spec()->pluginName(),child,w);
 //            w->addWidgetToContainer(wchild);
 //            child->setFormWidget(wchild);
-            createItemWidget(child,w);
+            createItemWidget(child, w);
         }
     }
-    item->setFormWidget(w);
     Form::IFormWidget *p = qobject_cast<Form::IFormWidget*>(parent);
     if (p)
         p->addWidgetToContainer(w);
@@ -761,8 +755,6 @@ bool XmlFormContentReader::createItemWidget(Form::FormItem *item, QWidget *paren
 
 bool XmlFormContentReader::createFormWidget(Form::FormMain *form)
 {
-    // Create a new Widget with a vbox and put the label
-//    QWidget *w = new QWidget();
     if (!createItemWidget(form, 0))
         return false;
     return true;

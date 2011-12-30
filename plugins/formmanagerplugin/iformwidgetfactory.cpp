@@ -42,6 +42,7 @@ using namespace Form;
 IFormWidget::IFormWidget(Form::FormItem *formItem, QWidget *parent) :
     QWidget(parent), m_FormItem(formItem)
 {
+    m_FormItem->setFormWidget(this);
 }
 
 void IFormWidget::createLabel(const QString &text, Qt::Alignment horizAlign)

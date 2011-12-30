@@ -93,7 +93,7 @@ public:
     ~BaseForm();
 
     void addWidgetToContainer(Form::IFormWidget *widget);
-    bool isContainer() const {return true;}
+    bool isContainer() const {return true;}  // Always return true even if using QtUiFiles
 
     // Printing
     QString printableHtml(bool withValues = true) const;

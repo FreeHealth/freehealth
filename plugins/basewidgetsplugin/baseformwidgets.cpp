@@ -51,6 +51,9 @@
 #include <QPushButton>
 #include <QStringListModel>
 
+#include <QtUiTools/QUiLoader>
+#include <QBuffer>
+
 #include "ui_baseformwidget.h"
 
 using namespace BaseWidgets;
@@ -267,9 +270,8 @@ Form::IFormWidget *BaseWidgetsFactory::createWidget(const QString &name, Form::F
    Manages some Form::FormItem::extraDatas() (that is a QHash<QString, QString>) :
    - "col=" ; "numberOfColumns"
 */
-
 BaseForm::BaseForm(Form::FormItem *formItem, QWidget *parent) :
-        Form::IFormWidget(formItem,parent),
+        Form::IFormWidget(formItem, parent),
         m_ContainerLayout(0),
         m_Header(0)
 {
@@ -291,25 +293,36 @@ BaseForm::BaseForm(Form::FormItem *formItem, QWidget *parent) :
     m_Header->label->setText(m_FormItem->spec()->label());
 
     // create main widget
-    QWidget *mainWidget = new QWidget;
-    mainLayout->addWidget(mainWidget);
-    mainLayout->addStretch();
+    QWidget *mainWidget = 0;
+    const QString &uiContent = formItem->spec()->value(Form::FormItemSpec::Spec_UiFileContent).toString();
+    if (!uiContent.isEmpty()) {
+        // Create the Ui using the QtUi file
+        QUiLoader loader;
+        QBuffer buf;
+        buf.setData(uiContent.toAscii());
+        mainWidget = loader.load(&buf, this);
+        mainLayout->addWidget(header);
+    } else {
+        mainWidget = new QWidget(this);
+        // create container layout
+        m_ContainerLayout = new QGridLayout(mainWidget);
+        // Retrieve the number of columns for the gridlayout (lays in extraDatas() of linked FormItem)
+        numberColumns = getNumberOfColumns(m_FormItem);
+        if (isCompactView(m_FormItem)) {
+            mainLayout->setMargin(0);
+            mainLayout->setSpacing(2);
+            m_ContainerLayout->setMargin(0);
+            m_ContainerLayout->setSpacing(2);
+        }
 
-    // create container layout
-    m_ContainerLayout = new QGridLayout(mainWidget);
-    // Retrieve the number of columns for the gridlayout (lays in extraDatas() of linked FormItem)
-    numberColumns = getNumberOfColumns(m_FormItem);
-    if (isCompactView(m_FormItem)) {
-        mainLayout->setMargin(0);
-        mainLayout->setSpacing(2);
-        m_ContainerLayout->setMargin(0);
-        m_ContainerLayout->setSpacing(2);
+        m_ContainerLayout->addWidget(header, 0, 0, 1, numberColumns);
+        i = numberColumns * 2;
+        row = 0;
+        col = 0;
     }
 
-    m_ContainerLayout->addWidget(header, 0, 0, 1, numberColumns);
-    i = numberColumns * 2;
-    row = 0;
-    col = 0;
+    mainLayout->addWidget(mainWidget);
+    mainLayout->addStretch();
 
     // create itemdata
     BaseFormData *datas = new BaseFormData(formItem);
@@ -348,7 +361,9 @@ QString BaseForm::printableHtml(bool withValues) const
     QStringList html;
     QList<Form::FormItem*> items = m_FormItem->formItemChildren();
     for(int i = 0; i < items.count(); ++i) {
-        html << items.at(i)->formWidget()->printableHtml(withValues);
+        Form::IFormWidget *w = items.at(i)->formWidget();
+        if (w)
+            html << w->printableHtml(withValues);
     }
     html.removeAll("");
 
@@ -1785,44 +1800,75 @@ void BaseDateData::onValueChanged()
 BaseSpin::BaseSpin(Form::FormItem *formItem, QWidget *parent, bool doubleSpin) :
     Form::IFormWidget(formItem,parent), m_Spin(0)
 {
-    // Prepare Widget Layout and label
-    QBoxLayout * hb = getBoxLayout(Label_OnLeft, m_FormItem->spec()->label(), this);
-    hb->addWidget(m_Label);
-    //     if (!(mfo(m_FormItem)->options() & mfObjectFundamental::LabelOnTop))
-    //     {
-    //          Qt::Alignment alignment = m_Label->alignment();
-    //          alignment &= ~(Qt::AlignVertical_Mask);
-    //          alignment |= Qt::AlignVCenter;
-    //          m_Label->setAlignment(alignment);
-    //     }
-
-    // Add spin
-    if (doubleSpin) {
-        QDoubleSpinBox *spin = new QDoubleSpinBox(this);
-        spin->setObjectName("DoubleSpin_" + m_FormItem->uuid());
-        spin->setMinimum(formItem->extraDatas().value(::SPIN_EXTRAS_KEY_MIN, "0").toDouble());
-        spin->setMaximum(formItem->extraDatas().value(::SPIN_EXTRAS_KEY_MAX, "10000").toDouble());
-        spin->setSingleStep(formItem->extraDatas().value(::SPIN_EXTRAS_KEY_STEP, "0.1").toDouble());
-        m_Spin = spin;
-    } else {
-        QSpinBox *spin = new QSpinBox(this);
-        spin->setObjectName("Spin_" + m_FormItem->uuid());
-        spin->setMinimum(formItem->extraDatas().value(::SPIN_EXTRAS_KEY_MIN, "0").toInt());
-        spin->setMaximum(formItem->extraDatas().value(::SPIN_EXTRAS_KEY_MAX, "10000").toInt());
-        spin->setSingleStep(formItem->extraDatas().value(::SPIN_EXTRAS_KEY_STEP, "1").toInt());
-        m_Spin = spin;
-    }
-    m_Spin->setSizePolicy(QSizePolicy::Expanding , QSizePolicy::Fixed);
-    hb->addWidget(m_Spin);
-
-    // manage options
-
     // create FormItemData
     BaseSpinData *data = new BaseSpinData(m_FormItem);
+
+    // QtUi Loaded ?
+    const QString &widget = formItem->spec()->value(Form::FormItemSpec::Spec_UiWidget).toString();
+    if (!widget.isEmpty()) {
+        // Find widget
+        if (doubleSpin) {
+            QDoubleSpinBox *dbl = qFindChild<QDoubleSpinBox*>(formItem->parentFormMain()->formWidget(), widget);
+            if (dbl) {
+                m_Spin = dbl;
+                connect(dbl, SIGNAL(valueChanged(double)), data, SLOT(onValueChanged()));
+            } else {
+                LOG_ERROR("Using the QtUiLinkage, item not found in the ui: " + formItem->uuid());
+                // To avoid segfaulting create a fake spinbox
+                m_Spin = new QDoubleSpinBox(this);
+            }
+        } else {
+            QSpinBox *dbl = qFindChild<QSpinBox*>(formItem->parentFormMain()->formWidget(), widget);
+            if (dbl) {
+                m_Spin = dbl;
+                connect(dbl, SIGNAL(valueChanged(double)), data, SLOT(onValueChanged()));
+            } else {
+                LOG_ERROR("Using the QtUiLinkage, item not found in the ui: " + formItem->uuid());
+                // To avoid segfaulting create a fake spinbox
+                m_Spin = new QSpinBox(this);
+            }
+        }
+        m_Spin->setToolTip(m_FormItem->spec()->label());
+        // Find label
+        const QString &lbl = formItem->spec()->value(Form::FormItemSpec::Spec_UiLabel).toString();
+        if (!lbl.isEmpty()) {
+            QLabel *l = qFindChild<QLabel*>(formItem->parentFormMain()->formWidget(), lbl);
+            if (l) {
+                m_Label = l;
+                l->setText(m_FormItem->spec()->label());
+            }
+        }
+
+    } else {
+        // Prepare Widget Layout and label
+        QBoxLayout * hb = getBoxLayout(Label_OnLeft, m_FormItem->spec()->label(), this);
+        hb->addWidget(m_Label);
+
+        // Add spin
+        if (doubleSpin) {
+            QDoubleSpinBox *spin = new QDoubleSpinBox(this);
+            spin->setObjectName("DoubleSpin_" + m_FormItem->uuid());
+            spin->setMinimum(formItem->extraDatas().value(::SPIN_EXTRAS_KEY_MIN, "0").toDouble());
+            spin->setMaximum(formItem->extraDatas().value(::SPIN_EXTRAS_KEY_MAX, "10000").toDouble());
+            spin->setSingleStep(formItem->extraDatas().value(::SPIN_EXTRAS_KEY_STEP, "0.1").toDouble());
+            connect(spin, SIGNAL(valueChanged(double)), data, SLOT(onValueChanged()));
+            m_Spin = spin;
+        } else {
+            QSpinBox *spin = new QSpinBox(this);
+            spin->setObjectName("Spin_" + m_FormItem->uuid());
+            spin->setMinimum(formItem->extraDatas().value(::SPIN_EXTRAS_KEY_MIN, "0").toInt());
+            spin->setMaximum(formItem->extraDatas().value(::SPIN_EXTRAS_KEY_MAX, "10000").toInt());
+            spin->setSingleStep(formItem->extraDatas().value(::SPIN_EXTRAS_KEY_STEP, "1").toInt());
+            m_Spin = spin;
+            connect(spin, SIGNAL(valueChanged(int)), data, SLOT(onValueChanged()));
+        }
+        m_Spin->setSizePolicy(QSizePolicy::Expanding , QSizePolicy::Fixed);
+        hb->addWidget(m_Spin);
+    }
+
+    // manage options
     data->setBaseSpin(this);
     m_FormItem->setItemDatas(data);
-
-    connect(m_Spin, SIGNAL(editingFinished()), data, SLOT(onValueChanged()));
 }
 
 BaseSpin::~BaseSpin()
@@ -1878,6 +1924,7 @@ QString BaseSpin::printableHtml(bool withValues) const
 
 void BaseSpin::retranslate()
 {
+    m_Spin->setToolTip(m_FormItem->spec()->label());
     m_Label->setText(m_FormItem->spec()->label());
 }
 
