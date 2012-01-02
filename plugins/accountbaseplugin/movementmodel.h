@@ -68,8 +68,9 @@ public:
 
     void setFilter(const QString & filter);
     QString filter();
-
+    bool select();
     void setUserUuid(const QString &uuid);
+    void setDatesBeginEndAndUserFilter(QDateTime &start, QDateTime &end, const QString &uuid );
     bool isDirty() const;
     QSqlError lastError();
     QString m_UserUid;

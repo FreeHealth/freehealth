@@ -74,7 +74,7 @@ MovementModel::MovementModel(QObject *parent) :
         m_UserUid(user()->uuid()),
         d(new Internal::MovementModelPrivate(this))
 {
-//    d->m_SqlTable->setEditStrategy(QSqlTableModel::OnManualSubmit);
+    //d->m_SqlTable->setEditStrategy(QSqlTableModel::OnManualSubmit);
     d->m_SqlTable->setEditStrategy(QSqlTableModel::OnFieldChange);
     setUserUuid(m_UserUid);
 }
@@ -181,4 +181,16 @@ void MovementModel::setFilter(const QString & filter){
 
 QString MovementModel::filter(){
     return d->m_SqlTable->filter();
+}
+bool MovementModel::select(){
+    return d->m_SqlTable->select();
+}
+
+void MovementModel::setDatesBeginEndAndUserFilter(QDateTime &start, QDateTime &end, const QString &uuid ){
+    QString filter;
+    filter = QString("%1='%2'").arg("USER_UID",uuid);
+    filter += " AND ";
+    filter += QString("DATE BETWEEN '%1' AND '%2'").arg(start.toString(),end.toString());
+    setFilter(filter);
+    
 }
