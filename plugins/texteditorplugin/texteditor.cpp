@@ -346,7 +346,8 @@ QMenu *TextEditor::getContextMenu()
         m->setTitle(tkTr(Trans::Constants::M_FILE_TEXT));
         actions << Core::Constants::A_EDITOR_FILEOPEN
                 << Core::Constants::A_EDITOR_FILESAVE
-                << Core::Constants::A_EDITOR_FILEPRINT
+                << Core::Constants::A_FILE_PRINT
+                << Core::Constants::A_FILE_PRINTPREVIEW
                 ;
         foreach(const QString &a, actions) {
             cmd = am->command(a);
