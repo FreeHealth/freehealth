@@ -32,6 +32,7 @@
 #ifndef MOVEMENTSVIEWER_H
 #define MOVEMENTSVIEWER_H
 
+#include <accountbaseplugin/movementmodel.h>
 #include <accountplugin/account_exporter.h>
 
 #include <QWidget>
@@ -47,7 +48,6 @@ class ACCOUNT_EXPORT MovementsViewer : public QWidget
         MovementsViewer(QWidget * parent = 0);
         ~MovementsViewer();
     private Q_SLOTS:
-        void showMovements();
         void recordMovement();
         void deleteMovement();
         void validMovement();
@@ -55,12 +55,14 @@ class ACCOUNT_EXPORT MovementsViewer : public QWidget
         void setMovementsComboBoxToolTips(int);
         void userIsChanged();
     private:
+        bool showMovements();
         void fillMovementsComboBox();
         void fillYearComboBox();
         void fillBankComboBox();
         void changeEvent(QEvent * e);
         int m_valid ;
         Ui::MovementsViewerWidget * ui;
+        AccountDB::MovementModel * model;
 };
 
 #endif

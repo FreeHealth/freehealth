@@ -34,23 +34,24 @@
 #include "movementsmanager.h"
 #include "../accountwidgetmanager.h"
 
-#include <accountbaseplugin/movementmodel.h>
 #include <accountbaseplugin/constants.h>
 #include <coreplugin/icore.h>
 #include <coreplugin/iuser.h>
+#include <utils/global.h>
 
 #include "ui_movementsviewer.h"
 
 #include <QMessageBox>
 #include <QDebug>
-enum { WarnDebugMessage = false };
+enum { WarnDebugMessage = true };
 /*********************/
 //todo bank system et deposit
 /********************/
 
 using namespace AccountDB;
-using namespace Account;
+//using namespace Account;
 using namespace Constants;
+using namespace Utils;
 static inline Core::IUser *user() { return  Core::ICore::instance()->user(); }
 
 MovementsViewer::MovementsViewer(QWidget * parent) :
@@ -59,6 +60,7 @@ MovementsViewer::MovementsViewer(QWidget * parent) :
     ui->setupUi(this);
     //instanciate
     m_valid = 0; //bill not received
+    model = new MovementModel(parent);
     ui->valueDoubleSpinBox->setRange(0.00,999999999999999.00);
     ui->percentDoubleSpinBox->setRange(0.00,100.00);
     ui->percentDoubleSpinBox->setValue(100.00);
@@ -67,7 +69,9 @@ MovementsViewer::MovementsViewer(QWidget * parent) :
     fillYearComboBox();
     fillBankComboBox();
     ui->valAndRecButton->setShortcut(QKeySequence::InsertParagraphSeparator);
-    showMovements();
+    if(!showMovements())
+    warningMessageBox( tr("Enable to show movements correctly."), tr("Contact the development team."),
+    QString(), QString() );
     connect(ui->quitButton,SIGNAL(pressed()),this,SLOT(close()));
     connect(ui->recordButton,SIGNAL(pressed()),this,SLOT(recordMovement()));
     connect(ui->deleteButton,SIGNAL(pressed()),this,SLOT(deleteMovement()));
@@ -87,12 +91,18 @@ void MovementsViewer::userIsChanged(){
     showMovements();
 }
 
-void MovementsViewer::showMovements()
+bool MovementsViewer::showMovements()
 {
+    bool ret = true;
     MovementsIODb  mov(this) ;
     QString year = ui->yearComboBox->currentText();
-    MovementModel * model = mov.getModelMovements(year);
-    model->setHeaderData(MOV_LABEL,Qt::Horizontal,tr("Label"));
+    model = mov.getModelMovements(year);
+    if (WarnDebugMessage)
+    qDebug() << __FILE__ << QString::number(__LINE__) << " model rowCount =" << QString::number(model->rowCount()) ;
+    if (WarnDebugMessage)
+    qDebug() << __FILE__ << QString::number(__LINE__) << " model columnCount =" << QString::number(model->columnCount()) ;
+    if(!model->setHeaderData(MOV_LABEL,Qt::Horizontal,tr("Label")))
+    ret = false;
     model->setHeaderData(MOV_DATE,Qt::Horizontal,tr("Date"));
     model->setHeaderData(MOV_DATEOFVALUE,Qt::Horizontal,tr("Date of value"));
     model->setHeaderData(MOV_AMOUNT,Qt::Horizontal,tr("Acts"));
@@ -114,6 +124,7 @@ void MovementsViewer::showMovements()
     ui->tableView->setColumnHidden(MOV_TYPE,true);
     ui->tableView->setColumnHidden(MOV_TRACE,true);
     ui->tableView->setColumnHidden(MOV_COMMENT,true);
+    return ret;
 }
 
 void MovementsViewer::recordMovement()
@@ -244,10 +255,20 @@ void MovementsViewer::fillBankComboBox(){
 
 void MovementsViewer::changeEvent(QEvent * e){
     QWidget::changeEvent(e);
+    if (WarnDebugMessage)
+            qDebug() << __FILE__ << QString::number(__LINE__) << "before langage changed";
     if (e->type()==QEvent::LanguageChange) {
         ui->retranslateUi(this);
         if (WarnDebugMessage)
             qDebug() << __FILE__ << QString::number(__LINE__) << " langage changed " ;
         showMovements();
         }
+    else
+    {
+    	if (WarnDebugMessage)
+            qDebug() << __FILE__ << QString::number(__LINE__) << " langage not changed " ;
+    	showMovements();
+        }
+    if (WarnDebugMessage)
+            qDebug() << __FILE__ << QString::number(__LINE__) << "after langage changed";
 }
