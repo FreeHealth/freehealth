@@ -36,7 +36,7 @@
 
 #include <QDate>
 #include <QDebug>
-enum { WarnDebugMessage = true };
+enum { WarnDebugMessage = false };
 using namespace AccountDB;
 using namespace Constants;
 
@@ -201,6 +201,8 @@ QList<double> AssetsManager::decreasingCalc(int row, double value , double durat
     if (diffOfYears == 0)
     {
     	yearlyValue         = (value * decreasingRate) * (numberOfMonths/12) ;
+    	if (WarnDebugMessage)
+    	qDebug() << __FILE__ << QString::number(__LINE__) << " yearlyValue =" <<  QString::number(yearlyValue);
         residualValue          = value - yearlyValue;
         }
     //------------------other years--------------------------------------
