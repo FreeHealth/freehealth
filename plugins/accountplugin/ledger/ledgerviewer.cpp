@@ -36,7 +36,7 @@
 #include <QDebug>
 #include <QRect>
 #include <QMessageBox>
-enum { WarnDebugMessage = false };
+enum { WarnDebugMessage = true };
 LedgerViewer::LedgerViewer(QWidget * parent): QWidget(parent),ui(new Ui::LedgerViewerWidget){
     ui->setupUi(this);
     m_currency = tr("euro");

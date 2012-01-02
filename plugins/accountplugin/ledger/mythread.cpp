@@ -516,8 +516,7 @@ void ProduceDoc::fillTable(QList<QVector<QString> > & tableau,
 
         
 
-    if (WarnDebugMessage)
-    
+    if (WarnDebugMessage)    
     	      qDebug() << __FILE__ << QString::number(__LINE__) << " thread 13 "   ;
     if(choice == MOVEMENTS_TYPE){
         //nbreLignesTableau = m_typesMovements.size();
