@@ -1,256 +1,43 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <!DOCTYPE FreeMedForms>
 <FreeMedForms>
-	<formdescription>
-		<!-- Non translatable values -->
-		<authors>Eric Maeker, MD</authors>
-		<version>0.6.08</version>
-		<compatversion>0.6.0</compatversion>
-		<cdate>2011-12-19</cdate>
-		<icon>xray.png</icon>
-		<weblink>http://www.freemedforms.com</weblink>
-		<!-- Translatable values -->
-		<licence>GPLv3</licence>
-		<description lang="fr">Assistant à la prescription d'examens de radiologie</description>
-		<description lang="xx">Radiographs prescription assistant</description>
-		<category lang="xx">Radiology</category>
-		<category lang="fr">Radiologie</category>
-	</formdescription>
-	<MedForm type="form" name="Prescr::Helpers::Radiology::General">
-		<label lang="xx">Radiology exams</label>
-		<label lang="fr">Examens de radiologie</label>
-		<icon>__theme__/xray.png</icon>
-		<options>DontPrintEmptyValues</options>
-		<Item type="group" name="Prescr::Helpers::Radiology::SpineGroup">
-			<label lang="xx">Spine</label>
-			<label lang="fr">Rachis</label>
-			<Item type="check" name="Prescr::Helpers::Radiology::SpineAP">
-				<label lang="xx">AP</label>
-				<label lang="fr">Face</label>
-				<options>printonlychecked</options>
-			</Item>
-			<Item type="check" name="Prescr::Helpers::Radiology::SpineLateral">
-				<label lang="xx">Lateral</label>
-				<label lang="fr">Profil</label>
-				<options>printonlychecked</options>
-			</Item>
-			<Item type="check" name="Prescr::Helpers::Radiology::SpineOblique">
-				<label lang="xx">Oblique</label>
-				<label lang="fr">3/4</label>
-				<options>printonlychecked</options>
-			</Item>
-			<Item type="multilist" name="Prescr::Helpers::Radiology::Spine">
-				<label lang="xx">Spine</label>
-				<label lang="fr">Rachis</label>
-				<options>DontPrintEmptyValues</options>
-				<value>
-					<uuid id="0">Cervical</uuid>
-					<uuid id="1">Thoracic</uuid>
-					<uuid id="2">Lumbar</uuid>
-					<possible id="0" lang="xx">Cervical</possible>
-					<possible id="1" lang="xx">Thoracic</possible>
-					<possible id="2" lang="xx">Lumbar</possible>
-					<possible id="0" lang="fr">Cervical</possible>
-					<possible id="1" lang="fr">Thoracique</possible>
-					<possible id="2" lang="fr">Lombaire</possible>
-				</value>
-			</Item>
-		</Item>
-		<Item type="group" name="Prescr::Helpers::Radiology::ArmGroup">
-			<label lang="xx">Upper extremities</label>
-			<label lang="fr">Membres supérieurs</label>
-			<Item type="check" name="Prescr::Helpers::Radiology::ArmRight">
-				<label lang="xx">Left</label>
-				<label lang="fr">Gauche</label>
-				<options>printonlychecked</options>
-			</Item>
-			<Item type="check" name="Prescr::Helpers::Radiology::ArmLeft">
-				<label lang="xx">Right</label>
-				<label lang="fr">Droit</label>
-				<options>printonlychecked</options>
-			</Item>
-			<Item type="multilist" name="Prescr::Helpers::Radiology::Arm">
-				<label lang="xx">Arms</label>
-				<label lang="fr">Bras</label>
-				<options>DontPrintEmptyValues</options>
-				<value>
-					<uuid id="0">Shoulder</uuid>
-					<uuid id="1">ShoulderLateralRotation</uuid>
-					<uuid id="2">ShoulderMedialRotation</uuid>
-					<uuid id="3">Acromioclavicular</uuid>
-					<uuid id="4">Humerus</uuid>
-					<uuid id="5">Elbow</uuid>
-					<uuid id="6">Forearm</uuid>
-					<uuid id="7">Wrist</uuid>
-					<uuid id="8">Scaphoid</uuid>
-					<uuid id="9">Hand</uuid>
-					<uuid id="10">Thumb</uuid>
-					<uuid id="11">ForeFinger</uuid>
-					<uuid id="12">MiddleFinger</uuid>
-					<uuid id="13">Anular</uuid>
-					<uuid id="14">LittleFinger</uuid>
-					<possible id="0" lang="xx">Shoulder</possible>
-					<possible id="1" lang="xx">Shoulder - Lateral Rotation</possible>
-					<possible id="2" lang="xx">Shoulder - Medial Rotation</possible>
-					<possible id="3" lang="xx">Acromioclavicular -  AP</possible>
-					<possible id="4" lang="xx">Humerus</possible>
-					<possible id="5" lang="xx">Elbow</possible>
-					<possible id="6" lang="xx">Forearm</possible>
-					<possible id="7" lang="xx">Wrist</possible>
-					<possible id="8" lang="xx">Scaphoid</possible>
-					<possible id="9" lang="xx">Hand</possible>
-					<possible id="10" lang="xx">Thumb</possible>
-					<possible id="11" lang="xx">Forefinger</possible>
-					<possible id="12" lang="xx">MiddleFinger</possible>
-					<possible id="13" lang="xx">Anular</possible>
-					<possible id="14" lang="xx">LittleFinger</possible>
-					<possible id="0" lang="fr">Épaule</possible>
-					<possible id="1" lang="fr">Épaule - Rotation externe</possible>
-					<possible id="2" lang="fr">Épaule - Rotation interne</possible>
-					<possible id="3" lang="fr">Acromio-claviculaire</possible>
-					<possible id="4" lang="fr">Humérus</possible>
-					<possible id="5" lang="fr">Coude</possible>
-					<possible id="6" lang="fr">Avant-bras</possible>
-					<possible id="7" lang="fr">Poignet</possible>
-					<possible id="8" lang="fr">Scaphoïde</possible>
-					<possible id="9" lang="fr">Main</possible>
-					<possible id="10" lang="fr">Pouce</possible>
-					<possible id="11" lang="fr">Index</possible>
-					<possible id="12" lang="fr">Majeur</possible>
-					<possible id="13" lang="fr">Annulaire</possible>
-					<possible id="14" lang="fr">Auriculaire</possible>
-				</value>
-			</Item>
-		</Item>
-		<Item type="group" name="Prescr::Helpers::Radiology::LegGroup">
-			<label lang="xx">Lower extremities</label>
-			<label lang="fr">Membres inferieurs</label>
-			<options>DontPrintEmptyValues</options>
-			<Item type="check" name="Prescr::Helpers::Radiology::LegRight">
-				<label lang="xx">Left</label>
-				<label lang="fr">Gauche</label>
-				<options>printonlychecked</options>
-			</Item>
-			<Item type="check" name="Prescr::Helpers::Radiology::LegLeft">
-				<label lang="xx">Right</label>
-				<label lang="fr">Droit</label>
-				<options>printonlychecked</options>
-			</Item>
-			<Item type="multilist" name="Prescr::Helpers::Radiology::Leg">
-				<label lang="xx">Legs</label>
-				<label lang="fr">Jambes</label>
-				<options>DontPrintEmptyValues</options>
-				<value>
-					<uuid id="0">Pelv</uuid>
-					<uuid id="1">Hip</uuid>
-					<uuid id="2">Femur</uuid>
-					<uuid id="3">KneeAP</uuid>
-					<uuid id="4">KneeLateral</uuid>
-					<uuid id="5">Knee APBilateralWeightbearing</uuid>
-					<uuid id="6">SchussKnee</uuid>
-					<uuid id="7">PatellaPA </uuid>
-					<uuid id="8">Leg</uuid>
-					<uuid id="9">Ankle</uuid>
-					<uuid id="10">AnkleVarus</uuid>
-					<uuid id="11">Foot</uuid>
-					<uuid id="12">Calcaneus</uuid>
-					<possible id="0" lang="xx">Pelvis</possible>
-					<possible id="1" lang="xx">Hip</possible>
-					<possible id="2" lang="xx">Femur</possible>
-					<possible id="3" lang="xx">Knee AP</possible>
-					<possible id="4" lang="xx">Knee Lateral</possible>
-					<possible id="5" lang="xx">Knee AP Bilateral Weightbearing</possible>
-					<possible id="6" lang="xx">Patella PA</possible>
-					<possible id="7" lang="xx">Schuss knee</possible>
-					<possible id="8" lang="xx">Leg</possible>
-					<possible id="9" lang="xx">Ankle</possible>
-					<possible id="10" lang="xx">Forced varus ankle</possible>
-					<possible id="11" lang="xx">Foot</possible>
-					<possible id="12" lang="xx">Calcaneus</possible>
-					<possible id="0" lang="fr">Bassin</possible>
-					<possible id="1" lang="fr">Hanche</possible>
-					<possible id="2" lang="fr">Fémur</possible>
-					<possible id="3" lang="fr">Genou de Face</possible>
-					<possible id="4" lang="fr">Genou de Profil</possible>
-					<possible id="5" lang="fr">Genou de Face bilatéral en charge</possible>
-					<possible id="6" lang="fr">Genou en schuss</possible>
-					<possible id="7" lang="fr">incidence fémoropatellaire</possible>
-					<possible id="8" lang="fr">Jambe</possible>
-					<possible id="9" lang="fr">Cheville</possible>
-					<possible id="10" lang="fr">Cheville en varus forcé</possible>
-					<possible id="11" lang="fr">Pied</possible>
-					<possible id="12" lang="fr">Calcanéum</possible>
-				</value>
-			</Item>
-		</Item>
-		<Item type="group" name="Prescr::Helpers::Radiology::ChestGroup">
-			<label lang="xx">Chest</label>
-			<label lang="fr">Thorax</label>
-			<options>DontPrintEmptyValues</options>
-			<Item type="multilist" name="Prescr::Helpers::Radiology::Chest">
-				<label lang="xx">Chest</label>
-				<label lang="fr">Thorax</label>
-				<options>DontPrintEmptyValues</options>
-				<value>
-					<uuid id="0">AP projection</uuid>
-					<uuid id="1">Lateral projection</uuid>
-					<uuid id="2">in inpiration</uuid>
-					<uuid id="3">in expiration</uuid>
-					<possible id="0" lang="xx">AP projection</possible>
-					<possible id="1" lang="xx">Lateral projection</possible>
-					<possible id="2" lang="xx">in inpiration</possible>
-					<possible id="3" lang="xx">in expiration</possible>
-					<possible id="0" lang="fr">de Face</possible>
-					<possible id="1" lang="fr">de Profil</possible>
-					<possible id="2" lang="fr">en inspiration</possible>
-					<possible id="3" lang="fr">en expiration</possible>
-				</value>
-			</Item>
-		</Item>
-		<Item type="group" name="Prescr::Helpers::Radiology::AbdominalGroup">
-			<label lang="xx">Abdominal plain film</label>
-			<label lang="fr">ASP</label>
-			<options>DontPrintEmptyValues</options>
-			<Item type="multilist" name="Prescr::Helpers::Radiology::Abdominal">
-				<label lang="xx">Abdominal plain film</label>
-				<label lang="fr">ASP</label>
-				<options>DontPrintEmptyValues</options>
-				<value>
-					<uuid id="0">erect</uuid>
-					<uuid id="1">supine</uuid>
-					<uuid id="2">Lateral decubitus</uuid>
-					<possible id="0" lang="xx">erect</possible>
-					<possible id="1" lang="xx">supine</possible>
-					<possible id="2" lang="xx">Lateral decubitus</possible>
-					<possible id="0" lang="fr">debout</possible>
-					<possible id="1" lang="fr">couché</possible>
-					<possible id="2" lang="fr">Décubitus latéral</possible>
-				</value>
-			</Item>
-		</Item>
-		<Item type="group" name="Prescr::Helpers::Radiology::HeadGroup">
-			<label lang="xx">Head</label>
-			<label lang="fr">Tête</label>
-			<options>DontPrintEmptyValues</options>
-			<Item type="multilist" name="Prescr::Helpers::Radiology::Head">
-				<label lang="xx">Head</label>
-				<label lang="fr">Tête</label>
-				<options>DontPrintEmptyValues</options>
-				<value>
-					<uuid id="0">Orthopantomogram </uuid>
-					<uuid id="1">Sinuses</uuid>
-					<uuid id="2">TemporomandibularJoint </uuid>
-					<uuid id="3">Nasallateral</uuid>
-					<possible id="0" lang="xx">Orthopantomogram </possible>
-					<possible id="1" lang="xx">sinuses</possible>
-					<possible id="2" lang="xx">Temporomandibular Joint </possible>
-					<possible id="3" lang="xx">Nasal-Lateral</possible>
-					<possible id="0" lang="fr">Orthopantomogramme</possible>
-					<possible id="1" lang="fr">radio des sinus</possible>
-					<possible id="2" lang="fr">Articulation temporo-mandibulaire</possible>
-					<possible id="3" lang="fr">Os propres du nez</possible>
-				</value>
-			</Item>
-		</Item>
-	</MedForm>
+  <formdescription>
+    <!-- Non translatable values -->
+    <authors>Eric Maeker, MD</authors>
+    <version>test</version>
+    <fmfversion>0.6.3</fmfversion>
+    <cdate>2011-12-19</cdate>
+    <lmdate>2012-01-01</lmdate>
+    <icon>xray.png</icon>
+    <weblink>http://www.freemedforms.com</weblink>
+    <!-- Translatable values -->
+    <licence>GPLv3</licence>
+    <description lang="fr">Assistant à la prescription d'examens de radiologie</description>
+    <description lang="xx">Radiographs prescription assistant</description>
+    <category lang="xx">Radiology</category>
+    <category lang="fr">Radiologie</category>
+  </formdescription>
+
+  <file type="script" name="onload">./scripts/xx/onload.js</file>
+
+  <MedForm type="form" name="Subs::Radiology::PrescrHelper::XRays" uifilename="./ui/xx/xray.ui">
+    <label lang="xx">Radiology exams</label>
+    <label lang="fr">Examens de radiologie</label>
+    <icon>__theme__/xray.png</icon>
+    <options>DontPrintEmptyValues;UseFormNameAsNameSpace</options>
+
+      <Item type="button" name="AddToEditor">
+        <uilink label="" widget="addButton" layout=""/>
+        <label lang="xx">Add to prescription</label>
+        <label lang="fr">Ajouter à la prescription</label>
+        <icon>__theme__/pixmap/16x16/add.png</icon>
+        <options>DontPrintEmptyValues;fulleditor</options>
+      </Item>
+
+      <Item type="texteditor" name="Prescription">
+        <uilink label="" widget="" layout="prescrLayout"/>
+        <options>DontPrintEmptyValues;fulleditor</options>
+      </Item>
+
+  </MedForm>
 </FreeMedForms>
