@@ -168,7 +168,12 @@ QScriptValue ScriptManager::evaluate(const QString &script)
         LOG_ERROR(QString("Script error (%1;%2): ").arg(check.errorLineNumber()).arg(check.errorColumnNumber()) + check.errorMessage());
         return false;
     }
-    return m_Engine->evaluate(script);
+    QScriptValue val = m_Engine->evaluate(script);
+    if (m_Engine->hasUncaughtException()) {
+         int line = m_Engine->uncaughtExceptionLineNumber();
+         LOG_ERROR("uncaught exception at line" << line << ":" << result.toString());
+     }
+    return val;
 }
 
 QScriptValue ScriptManager::addScriptObject(const QObject *object)
