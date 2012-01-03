@@ -1,11 +1,11 @@
 function getClearance()
 {
-    forms.namespaceInUse = "Test::Script::ScriptCalculator::WithPatient::FakeClCrGroup";
-    var w = forms.item("Weight").currentValue;
-    var wUnit = forms.item("WeightUnit").currentText;
-    var cr = forms.item("Creatinine").currentValue;
-    var crUnit = forms.item("CreatinineUnit").currentText;
-    var ageYears = patient.yearsOld;
+    freemedforms.forms.namespaceInUse = "Test::Script::ScriptCalculator::WithPatient::FakeClCrGroup";
+    var w = freemedforms.forms.item("Weight").currentValue;
+    var wUnit = freemedforms.forms.item("WeightUnit").currentText;
+    var cr = freemedforms.forms.item("Creatinine").currentValue;
+    var crUnit = freemedforms.forms.item("CreatinineUnit").currentText;
+    var ageYears = freemedforms.patient.yearsOld;
 
     // Clairance créatinine (ml / min) = [(140 - âge (années)) x Poids (kg) x F] / [7,2 x créatininémie (mg/l)]
 
@@ -13,7 +13,7 @@ function getClearance()
     // for males == 1.04
     var genderMod = 1.04;
     // for females == 0.85
-    if (patient.isFemale)
+    if (freemedforms.patient.isFemale)
         genderMod = 0.85;
 
     // Ensure weight is in Kg
@@ -22,7 +22,7 @@ function getClearance()
     }
 
     // Ensure creatinine is in mg/L
-    if (crUnit.currentText=="µmol/L") {
+    if (crUnit.currentText!="mg/L") {
         // Creatinine	mg/L	* 8.85	 -> µmol/L
         cr /= 8.85;
     }
