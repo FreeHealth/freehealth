@@ -35,6 +35,7 @@
 #include <coreplugin/icore.h>
 #include <coreplugin/ipatient.h>
 
+#include <utils/log.h>
 #include <translationutils/constants.h>
 #include <translationutils/trans_datetime.h>
 
@@ -84,7 +85,7 @@ QStringList IdentityWidgetFactory::providedWidgets() const
 bool IdentityWidgetFactory::isContainer(const int idInStringList) const
 {
     Q_UNUSED(idInStringList);
-    return true;
+    return false;
 }
 
 Form::IFormWidget *IdentityWidgetFactory::createWidget(const QString &name, Form::FormItem *formItem, QWidget *parent)
@@ -101,51 +102,51 @@ inline static int getNumberOfColumns(Form::FormItem *item, int defaultValue = 1)
         return defaultValue;
 }
 
-IdentityFormWidget::IdentityFormWidget(Form::FormItem *formItem, QWidget *parent)
-        : Form::IFormWidget(formItem,parent), m_ContainerLayout(0)
+IdentityFormWidget::IdentityFormWidget(Form::FormItem *formItem, QWidget *parent) :
+    Form::IFormWidget(formItem,parent), m_ContainerLayout(0)
 {
     setObjectName("IdentityFormWidget");
-    QVBoxLayout *mainLayout = new QVBoxLayout(this);
+    // Create the central widget / layout
+    QGridLayout *mainLayout = new QGridLayout(this);
     mainLayout->setSpacing(0);
     mainLayout->setMargin(0);
-    QWidget *mainWidget = new QWidget;
-    mainLayout->addWidget(mainWidget);
-    mainLayout->addStretch();
+//    QWidget *mainWidget = new QWidget;
+//    mainLayout->addWidget(mainWidget);
+//    mainLayout->addStretch();
 
-    m_ContainerLayout = new QGridLayout(mainWidget);
-    m_ContainerLayout->setMargin(0);
-    m_ContainerLayout->setSpacing(0);
-//    IFormWidget::createLabel(tkTr(Trans::Constants::IDENTITY_TEXT), Qt::AlignCenter);
-//    m_Label->setFrameStyle(FormLabelFrame);
-//    QFont font = m_Label->font();
-//    font.setBold(true);
-//    m_Label->setFont(font);
-//    QSizePolicy sizePolicy = m_Label->sizePolicy();
-//    sizePolicy.setVerticalPolicy(QSizePolicy::Fixed);
-//    m_Label->setSizePolicy(sizePolicy);
-
-    // Retrieve the number of columns for the gridlayout (lays in extraDatas() of linked FormItem)
-    numberColumns = getNumberOfColumns(m_FormItem);
-//    if (isCompactView(m_FormItem)) {
-//        mainLayout->setMargin(0);
-//        mainLayout->setSpacing(2);
-//        m_ContainerLayout->setMargin(0);
-//        m_ContainerLayout->setSpacing(2);
-//    }
-//    m_ContainerLayout->addWidget(m_Label, 0, 0,  1, numberColumns);
-    if (getOptions(formItem).contains("readonly", Qt::CaseInsensitive))
-        m_Identity = new Patients::IdentityWidget(this);
+    // get options
+    const QStringList &options = formItem->getOptions();
+    Patients::IdentityWidget::EditMode mode;
+    if (options.contains("readonly", Qt::CaseInsensitive))
+        mode = Patients::IdentityWidget::ReadOnlyMode;
     else
-        m_Identity = new Patients::IdentityWidget(this, Patients::IdentityWidget::ReadWriteMode);
-    if (formItem->getOptions().contains("compact", Qt::CaseInsensitive)) {
-        m_Identity->layout()->setMargin(0);
-        m_Identity->layout()->setMargin(2);
-    }
+        mode = Patients::IdentityWidget::ReadWriteMode;
+
+    m_Identity = new Patients::IdentityWidget(this, mode);
     m_Identity->setCurrentPatientModel(Patients::PatientModel::activeModel());
-    m_ContainerLayout->addWidget(m_Identity, 1, 0,  1, numberColumns);
-    i = numberColumns;
-    row = 1;
-    col = 0;
+
+    // QtUi Loaded ?
+    const QString &layout = formItem->spec()->value(Form::FormItemSpec::Spec_UiInsertIntoLayout).toString();
+    if (!layout.isEmpty()) {
+        // Find layout
+        QLayout *lay = qFindChild<QLayout*>(formItem->parentFormMain()->formWidget(), layout);
+        if (lay) {
+            lay->addWidget(m_Identity);
+        } else {
+            LOG_ERROR("Using the QtUiLinkage, layout not found in the ui: " + formItem->uuid());
+        }
+    } else {
+//        m_ContainerLayout = new QGridLayout(mainWidget);
+//        m_ContainerLayout->setMargin(0);
+//        m_ContainerLayout->setSpacing(0);
+//        m_ContainerLayout->addWidget(m_Identity, 1, 0,  1, numberColumns);
+        mainLayout->addWidget(m_Identity, 1, 0);
+    }
+
+    if (options.contains("compact", Qt::CaseInsensitive)) {
+        m_Identity->layout()->setSpacing(0);
+        m_Identity->layout()->setMargin(0);
+    }
 
     connect(patient(), SIGNAL(currentPatientChanged()), this, SLOT(onCurrentPatientChanged()));
     onCurrentPatientChanged();
@@ -160,17 +161,17 @@ IdentityFormWidget::~IdentityFormWidget()
 {
 }
 
-void IdentityFormWidget::addWidgetToContainer(IFormWidget *widget)
-{
-    if (!widget)
-        return;
-    if (!m_ContainerLayout)
-        return;
-    col = (i % numberColumns);
-    row = (i / numberColumns);
-    m_ContainerLayout->addWidget(widget , row, col);
-    i++;
-}
+//void IdentityFormWidget::addWidgetToContainer(IFormWidget *widget)
+//{
+//    if (!widget)
+//        return;
+//    if (!m_ContainerLayout)
+//        return;
+//    col = (i % numberColumns);
+//    row = (i / numberColumns);
+//    m_ContainerLayout->addWidget(widget , row, col);
+//    i++;
+//}
 
 void IdentityFormWidget::onCurrentPatientChanged()
 {

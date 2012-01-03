@@ -93,6 +93,7 @@ public:
         Spec_UiFileContent, // only used for FormMain (non empty roots)
         Spec_UiLabel,
         Spec_UiWidget,
+        Spec_UiInsertIntoLayout,
         Spec_IconFileName
     };
     FormItemSpec();

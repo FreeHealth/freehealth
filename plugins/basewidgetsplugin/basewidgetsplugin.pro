@@ -13,11 +13,8 @@ HEADERS += basewidgetsplugin.h \
     baseformwidgetsoptionspage.h \
     texteditorfactory.h \
     identitywidgetfactory.h \
-#    qtuiformwidgets.h
-# baseformwidgetsaboutpage.h
-# basewigets_exporter.h \
+    calculationwidgets.h \
     frenchsocialnumber.h \
-    calculationwidgets.h
 
 
 SOURCES += basewidgetsplugin.cpp \
@@ -25,8 +22,6 @@ SOURCES += basewidgetsplugin.cpp \
     baseformwidgetsoptionspage.cpp \
     texteditorfactory.cpp \
     identitywidgetfactory.cpp \
-#    qtuiformwidgets.cpp
-# baseformwidgetsaboutpage.cpp
     frenchsocialnumber.cpp \
     calculationwidgets.cpp
 

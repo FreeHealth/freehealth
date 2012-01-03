@@ -41,6 +41,22 @@ inline static void executeOnValueChangedScript(Form::FormItem *item)
         scriptManager()->evaluate(item->scripts()->onValueChangedScript());
 }
 
+inline static QLabel *findLabel(Form::FormItem *item)
+{
+    QLabel *l = 0;
+    // Find label
+    const QString &lbl = item->spec()->value(Form::FormItemSpec::Spec_UiLabel).toString();
+    if (!lbl.isEmpty()) {
+        l = qFindChild<QLabel*>(item->parentFormMain()->formWidget(), lbl);
+        if (l) {
+            l->setText(item->spec()->label());
+        } else {
+            LOG_ERROR_FOR("TextEditorFactory", "Label not found");
+        }
+    }
+    return l;
+}
+
 TextEditorFactory::TextEditorFactory(QObject *parent) :
         IFormWidgetFactory(parent)
 {
@@ -85,10 +101,27 @@ Form::IFormWidget *TextEditorFactory::createWidget(const QString &name, Form::Fo
 TextEditorForm::TextEditorForm(Form::FormItem *formItem, QWidget *parent) :
         Form::IFormWidget(formItem,parent), m_Text(0)
 {
-    QBoxLayout *hb = getBoxLayout(Label_OnTop, m_FormItem->spec()->label(), this);
-    hb->addWidget(m_Label);
-    hb->setMargin(0);
-    hb->setSpacing(0);
+    QLayout *hb = 0;
+    // QtUi Loaded ?
+    const QString &layout = formItem->spec()->value(Form::FormItemSpec::Spec_UiInsertIntoLayout).toString();
+    if (!layout.isEmpty()) {
+        // Find layout
+        QLayout *lay = qFindChild<QLayout*>(formItem->parentFormMain()->formWidget(), layout);
+        if (lay) {
+            hb = lay;
+        } else {
+            LOG_ERROR("Using the QtUiLinkage, layout not found in the ui: " + formItem->uuid());
+            // To avoid segfaulting create a fake combo
+            hb = new QHBoxLayout(this);
+        }
+        // Find Label
+        m_Label = findLabel(formItem);
+    } else {
+        hb = getBoxLayout(Label_OnTop, m_FormItem->spec()->label(), this);
+        hb->addWidget(m_Label);
+        hb->setMargin(0);
+        hb->setSpacing(0);
+    }
     const QStringList &options = formItem->getOptions();
     Editor::TextEditor::Types t = Editor::TextEditor::Simple | Editor::TextEditor::WithTextCompleter;
     if (options.contains("FullEditor", Qt::CaseInsensitive)) {
@@ -175,7 +208,8 @@ QString TextEditorForm::printableHtml(bool withValues) const
 
 void TextEditorForm::retranslate()
 {
-    m_Label->setText( m_FormItem->spec()->label() );
+    if (m_Label)
+        m_Label->setText(m_FormItem->spec()->label());
 }
 
 ////////////////////////////////////////// ItemData /////////////////////////////////////////////

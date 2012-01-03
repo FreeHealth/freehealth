@@ -32,6 +32,8 @@
 #include <coreplugin/icore.h>
 #include <coreplugin/ipatient.h>
 
+#include <utils/log.h>
+
 #include <QEvent>
 #include <QKeyEvent>
 #include <QRegExpValidator>
@@ -53,6 +55,20 @@ const QString controlKey6 = "299082B234349";  // clé 29
 
 using namespace BaseWidgets;
 using namespace Internal;
+
+inline static QLabel *findLabel(Form::FormItem *item)
+{
+    QLabel *l = 0;
+    // Find label
+    const QString &lbl = item->spec()->value(Form::FormItemSpec::Spec_UiLabel).toString();
+    if (!lbl.isEmpty()) {
+        l = qFindChild<QLabel*>(item->parentFormMain()->formWidget(), lbl);
+        if (l) {
+            l->setText(item->spec()->label());
+        }
+    }
+    return l;
+}
 
 FrenchSocialNumber::FrenchSocialNumber(QWidget *parent) :
     QWidget(parent),
@@ -457,15 +473,29 @@ void FrenchSocialNumber::populateWithPatientData()
 FrenchSocialNumberFormWidget::FrenchSocialNumberFormWidget(Form::FormItem *formItem, QWidget *parent) :
     Form::IFormWidget(formItem,parent), m_NSS(0)
 {
-    QHBoxLayout *hb = new QHBoxLayout(this);
-    // Add QLabel
-    createLabel(m_FormItem->spec()->label(), Qt::AlignJustify);
-    hb->addWidget(m_Label);
-
-    // Add NSS widget
+    // Create NSS widget
     m_NSS = new FrenchSocialNumber(this);
     m_NSS->setObjectName("FrenchSocialNumber_" + m_FormItem->uuid());
-    hb->addWidget(m_NSS);
+
+    // QtUi Loaded ?
+    const QString &layout = formItem->spec()->value(Form::FormItemSpec::Spec_UiInsertIntoLayout).toString();
+    if (!layout.isEmpty()) {
+        // Find layout
+        QLayout *lay = qFindChild<QLayout*>(formItem->parentFormMain()->formWidget(), layout);
+        if (lay) {
+            lay->addWidget(m_NSS);
+        } else {
+            LOG_ERROR("Using the QtUiLinkage, layout not found in the ui: " + formItem->uuid());
+        }
+        m_Label = findLabel(formItem);
+    } else {
+        QHBoxLayout *hb = new QHBoxLayout(this);
+        // Add QLabel
+        createLabel(m_FormItem->spec()->label(), Qt::AlignJustify);
+        hb->addWidget(m_Label);
+
+        hb->addWidget(m_NSS);
+    }
     retranslate();
 
     connect(patient(), SIGNAL(currentPatientChanged()), m_NSS, SLOT(populateWithPatientData()));

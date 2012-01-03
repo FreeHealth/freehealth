@@ -27,11 +27,20 @@
 #define SCRIPT_SCRIPTWRAPPERS_H
 
 #include <QObject>
-#include <QScriptClass>
 #include <QDate>
 #include <QString>
 #include <QVariant>
 #include <QVector>
+#include <QtScript/QScriptable>
+#include <QtScript/QScriptValue>
+
+#include <QListWidgetItem>
+#include <QListWidget>
+#include <QComboBox>
+
+class QScriptValue;
+class QScriptEngine;
+class QScriptContext;
 
 namespace Form {
 class FormItem;
@@ -41,7 +50,6 @@ class FormMain;
 namespace Script {
 
 // FormItem
-
 class FormItemScriptWrapper : public QObject
 {
     Q_OBJECT
@@ -77,6 +85,8 @@ public Q_SLOTS:
     void setEnabled(const bool enable);
     bool isEnabled() const;
 
+    QWidget *ui() const;
+
 private:
     Form::FormItem *m_Item;
 };
@@ -88,18 +98,11 @@ public:
     FormMainScriptWrapper(Form::FormMain *formMain);
 };
 
-}
-
-Q_DECLARE_METATYPE(Script::FormItemScriptWrapper*)
-
-
-
-namespace Script {
-
 // FormManager
 class FormManagerScriptWrapper : public QObject
 {
     Q_OBJECT
+    Q_PROPERTY(QString  currentLanguage READ currentLanguage)
     Q_PROPERTY(bool     areLoaded       READ areLoaded)
     Q_PROPERTY(bool     logItemSearch   READ logItemSearch WRITE setLogItemSearch)
     Q_PROPERTY(QString  namespaceInUse  READ namespaceInUse WRITE usingNamespace RESET clearNamespace)
@@ -108,6 +111,7 @@ public:
     FormManagerScriptWrapper(QObject *parent = 0);
 
 public Q_SLOTS:
+    QString currentLanguage() const;
     bool areLoaded() const;
     bool logItemSearch() const {return m_LogItemSearch;}
     void setLogItemSearch(const bool state) {m_LogItemSearch=state;}
@@ -120,6 +124,9 @@ public Q_SLOTS:
     QScriptValue item(const QString &uuid);
 //    FormMainScriptWrapper form(const QString &uuid) const;
 
+Q_SIGNALS:
+    void languageChanged();
+
 private Q_SLOTS:
     void updateItemWrappers();
 
@@ -130,8 +137,37 @@ private:
     bool m_LogItemSearch;
 };
 
+// Qt Prototypes
+
+ class ListWidgetItemPrototype : public QObject, public QScriptable
+ {
+     Q_OBJECT
+     Q_PROPERTY(QString text READ text WRITE setText)
+
+ public:
+     ListWidgetItemPrototype(QObject *parent = 0);
+
+     QString text() const;
+     void setText(const QString &text);
+
+ public slots:
+     QString toString() const;
+ };
+
+ class ListWidgetPrototype : public QObject, public QScriptable
+ {
+     Q_OBJECT
+ public:
+     ListWidgetPrototype(QObject *parent = 0);
+
+ public slots:
+     void addItem(const QString &text);
+     void addItems(const QStringList &texts);
+     void setBackgroundColor(const QString &colorName);
+ };
 
 } // namespace Script
 
+Q_DECLARE_METATYPE(Script::FormItemScriptWrapper*)
 
 #endif // SCRIPT_SCRIPTWRAPPERS_H

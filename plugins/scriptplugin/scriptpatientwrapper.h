@@ -72,7 +72,6 @@ public Q_SLOTS:
     QString creatinineUnit() const;
     double clearanceCreatinine() const;
     QString clearanceCreatinineUnit() const;
-
 };
 
 

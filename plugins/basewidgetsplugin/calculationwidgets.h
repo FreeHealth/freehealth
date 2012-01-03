@@ -23,8 +23,8 @@
  *   Contributors :                                                        *
  *       NAME <MAIL@ADRESS>                                                *
  ***************************************************************************/
-#ifndef CALCULATIONWIDGETS_H
-#define CALCULATIONWIDGETS_H
+#ifndef __CALCULATIONWIDGETS_H
+#define __CALCULATIONWIDGETS_H
 
 #include <formmanagerplugin/iformwidgetfactory.h>
 #include <formmanagerplugin/iformitemdata.h>
@@ -105,4 +105,4 @@ private:
 }  // End namespace Internal
 }  // End namespace BaseWidgets
 
-#endif // CALCULATIONWIDGETS_H
+#endif // __CALCULATIONWIDGETS_H

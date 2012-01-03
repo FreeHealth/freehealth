@@ -26,10 +26,13 @@
    <string>Form</string>
   </property>
   <layout class="QGridLayout" name="gridLayout">
-   <property name="margin">
+   <property name="horizontalSpacing">
+    <number>10</number>
+   </property>
+   <property name="verticalSpacing">
     <number>0</number>
    </property>
-   <property name="spacing">
+   <property name="margin">
     <number>0</number>
    </property>
    <item row="0" column="0">

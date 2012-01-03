@@ -115,6 +115,7 @@ const char* const TAG_SPEC_UPDATEINFOVERSIONTEXT  = "text";
 const char* const TAG_UI_UILINK         = "uilink";
 const char* const ATTRIB_UI_UILINK_LABEL   = "label";
 const char* const ATTRIB_UI_UILINK_WIDGET  = "widget";
+const char* const ATTRIB_UI_UILINK_INSERTINTOLAYOUT  = "layout";
 
 const char* const TAG_VALUE              = "value";
 const char* const TAG_VALUE_UUID         = "uuid";

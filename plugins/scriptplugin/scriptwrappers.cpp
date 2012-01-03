@@ -29,6 +29,7 @@
 
 #include <coreplugin/icore.h>
 #include <coreplugin/iscriptmanager.h>
+#include <coreplugin/translators.h>
 
 #include <formmanagerplugin/formmanager.h>
 #include <formmanagerplugin/iformitem.h>
@@ -38,11 +39,19 @@
 #include <utils/global.h>
 #include <utils/log.h>
 
+#include <QListWidgetItem>
+#include <QListWidget>
+#include <QLocale>
+
+Q_DECLARE_METATYPE(QListWidgetItem*)
+Q_DECLARE_METATYPE(QListWidget*)
+
 using namespace Script;
 //using namespace Internal;
 
 static inline Form::FormManager *formManager() { return Form::FormManager::instance(); }
 static inline Core::IScriptManager *scriptManager() { return Core::ICore::instance()->scriptManager(); }
+static inline Core::Translators *translators() { return Core::ICore::instance()->translators(); }
 
 static Form::FormItem *getFormItem(const QString &ns, const QString &uuid)
 {
@@ -67,8 +76,14 @@ static Form::FormItem *getFormItem(const QString &ns, const QString &uuid)
 FormManagerScriptWrapper::FormManagerScriptWrapper(QObject *parent) :
     m_LogItemSearch(false)
 {
+    connect(translators(), SIGNAL(languageChanged()), this, SIGNAL(languageChanged()));
     connect(formManager(), SIGNAL(patientFormsLoaded()), this, SLOT(updateItemWrappers()));
     updateItemWrappers();
+}
+
+QString FormManagerScriptWrapper::currentLanguage() const
+{
+    return QLocale().name().left(2).toLower();
 }
 
 bool FormManagerScriptWrapper::areLoaded() const
@@ -234,3 +249,67 @@ bool FormItemScriptWrapper::isEnabled() const
     return false;
 }
 
+QWidget *FormItemScriptWrapper::ui() const
+{
+    return m_Item->formWidget();
+}
+
+
+
+/////////////////////////////////////////////////////////////////////////////////////////
+
+
+ ListWidgetItemPrototype::ListWidgetItemPrototype(QObject *parent)
+     : QObject(parent)
+ {
+ }
+
+ QString ListWidgetItemPrototype::text() const
+ {
+     QListWidgetItem *item = qscriptvalue_cast<QListWidgetItem*>(thisObject());
+     if (item)
+         return item->text();
+     return QString();
+ }
+
+ void ListWidgetItemPrototype::setText(const QString &text)
+ {
+     QListWidgetItem *item = qscriptvalue_cast<QListWidgetItem*>(thisObject());
+     if (item)
+         item->setText(text);
+ }
+
+ QString ListWidgetItemPrototype::toString() const
+ {
+     return QString("ListWidgetItem(text = %0)").arg(text());
+ }
+
+ ListWidgetPrototype::ListWidgetPrototype(QObject *parent)
+     : QObject(parent)
+ {
+ }
+
+ void ListWidgetPrototype::addItem(const QString &text)
+ {
+     QListWidget *widget = qscriptvalue_cast<QListWidget*>(thisObject());
+     if (widget)
+         widget->addItem(text);
+ }
+
+ void ListWidgetPrototype::addItems(const QStringList &texts)
+ {
+     QListWidget *widget = qscriptvalue_cast<QListWidget*>(thisObject());
+     if (widget)
+         widget->addItems(texts);
+ }
+
+ void ListWidgetPrototype::setBackgroundColor(const QString &colorName)
+ {
+     QListWidget *widget = qscriptvalue_cast<QListWidget*>(thisObject());
+     if (widget) {
+         QPalette palette = widget->palette();
+         QColor color(colorName);
+         palette.setBrush(QPalette::Base, color);
+         widget->setPalette(palette);
+     }
+ }

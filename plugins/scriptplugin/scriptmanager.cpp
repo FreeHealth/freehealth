@@ -26,6 +26,7 @@
 #include "scriptmanager.h"
 #include "scriptwrappers.h"
 #include "scriptpatientwrapper.h"
+#include "uitools.h"
 
 #include <coreplugin/icore.h>
 
@@ -35,6 +36,9 @@
 #include <utils/log.h>
 
 #include <QDebug>
+
+Q_DECLARE_METATYPE(QListWidgetItem*)
+Q_DECLARE_METATYPE(QListWidget*)
 
 using namespace Script;
 
@@ -95,6 +99,19 @@ const char * const SCRIPT_NAMESPACE =
         "    };"
         "}(this));";
 
+const char * const SCRIPT_FREEMEDFORMS_NAMESPACE_CREATION =
+        "namespace.module('com.freemedforms', function (exports, require) {"
+        "var forms;"
+        "var patient;"
+        "var uiTools;"
+        "  exports.extend({"
+        "    'forms': forms,"
+        "    'patient': patient,"
+        "    'uiTools': uiTools"
+        "  });"
+        "});"
+        "var freemedforms = namespace.com.freemedforms;";
+
 }
 
 QScriptValue FormItemScriptWrapperToScriptValue(QScriptEngine *engine, FormItemScriptWrapper* const &in)
@@ -109,19 +126,28 @@ ScriptManager::ScriptManager(QObject *parent) :
 {
     // Inject default scripts
     evaluate(SCRIPT_NAMESPACE);
+    evaluate(SCRIPT_FREEMEDFORMS_NAMESPACE_CREATION);
 
     // Add the patient
     ScriptPatientWrapper *patient = new ScriptPatientWrapper(this);
     QScriptValue patientValue = m_Engine->newQObject(patient, QScriptEngine::QtOwnership);
-    m_Engine->globalObject().setProperty("patient", patientValue);
+    m_Engine->evaluate("namespace.com.freemedforms").setProperty("patient", patientValue);
+//    m_Engine->globalObject().setProperty("patient", patientValue);
 
     // Add the form manager
     FormManagerScriptWrapper *forms = new FormManagerScriptWrapper(this);
     QScriptValue formsValue = m_Engine->newQObject(forms, QScriptEngine::QtOwnership);
-    m_Engine->globalObject().setProperty("forms", formsValue);
+    m_Engine->evaluate("namespace.com.freemedforms").setProperty("forms", formsValue);
+//    m_Engine->globalObject().setProperty("forms", formsValue);
 
     // Add meta types
     qScriptRegisterMetaType<Script::FormItemScriptWrapper*>(m_Engine, ::FormItemScriptWrapperToScriptValue, ::FormItemScriptWrapperFromScriptValue);
+
+    // Add UiTools
+    UiTools *tools = new UiTools(this);
+    QScriptValue toolsValue = m_Engine->newQObject(tools, QScriptEngine::QtOwnership);
+    m_Engine->evaluate("namespace.com.freemedforms").setProperty("uiTools", toolsValue);
+//    m_Engine->globalObject().setProperty("uiTools", toolsValue);
 
     // Register to Core::ICore
     Core::ICore::instance()->setScriptManager(this);
@@ -135,9 +161,9 @@ QScriptValue ScriptManager::evaluate(const QString &script)
     if (script.isEmpty())
         return QScriptValue();
 //    qWarning() << "xxxxxxxxxxxxxxxxxxxx \n\n" << script << "\n\n";
-//    qWarning() << "xxxxxxxxxxxxxxxxxxxx \n\n" << script << m_Engine->evaluate(script).toVariant() << "\n\n";
-    QScriptSyntaxCheckResult check = m_Engine->checkSyntax(script);
+    qWarning() << "xxxxxxxxxxxxxxxxxxxx \n\n" << script << m_Engine->evaluate(script).toVariant() << "\n\n";
     /** \todo improvement script debugging */
+    QScriptSyntaxCheckResult check = m_Engine->checkSyntax(script);
     if (check.state()!=QScriptSyntaxCheckResult::Valid) {
         LOG_ERROR(QString("Script error (%1;%2): ").arg(check.errorLineNumber()).arg(check.errorColumnNumber()) + check.errorMessage());
         return false;
@@ -152,12 +178,8 @@ QScriptValue ScriptManager::addScriptObject(const QObject *object)
 
 void ScriptManager::onAllFormsLoaded()
 {
-    WARN_FUNC;
     // Execute RootForm all OnLoad scripts
     foreach(Form::FormMain *main, formManager()->forms()) {
-
-//        qWarning() << main->uuid() << main->scripts()->onLoadScript();
-
         evaluate(main->scripts()->onLoadScript());
         QList<Form::FormMain *> children = main->flattenFormMainChildren();
         foreach(Form::FormMain *mainChild, children) {
@@ -169,9 +191,6 @@ void ScriptManager::onAllFormsLoaded()
     }
     // Execute empty root SubForms OnLoad scripts
     foreach(Form::FormMain *main, formManager()->subFormsEmptyRoot()) {
-
-        qWarning() << main->uuid() << main->scripts()->onLoadScript();
-
         evaluate(main->scripts()->onLoadScript());
         QList<Form::FormMain *> children = main->flattenFormMainChildren();
         foreach(Form::FormMain *mainChild, children) {
@@ -181,5 +200,4 @@ void ScriptManager::onAllFormsLoaded()
             }
         }
     }
-    qWarning() << "END";
 }

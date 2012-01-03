@@ -162,7 +162,7 @@ QDomDocument *XmlFormContentReader::fromCache(const QString &formUid) const
 {
     if (m_DomDocFormCache.contains(formUid))
         return m_DomDocFormCache[formUid];
-    qWarning() << "NOT IN CACHE" << formUid << m_DomDocFormCache.keys();
+//    qWarning() << "NOT IN CACHE" << formUid << m_DomDocFormCache.keys();
     return 0;
 }
 
@@ -429,6 +429,7 @@ bool XmlFormContentReader::loadElement(Form::FormItem *item, QDomElement &rootEl
         if (element.tagName().compare(Constants::TAG_UI_UILINK, Qt::CaseInsensitive)==0) {
             item->spec()->setValue(Form::FormItemSpec::Spec_UiLabel, element.attribute(Constants::ATTRIB_UI_UILINK_LABEL));
             item->spec()->setValue(Form::FormItemSpec::Spec_UiWidget, element.attribute(Constants::ATTRIB_UI_UILINK_WIDGET));
+            item->spec()->setValue(Form::FormItemSpec::Spec_UiInsertIntoLayout, element.attribute(Constants::ATTRIB_UI_UILINK_INSERTINTOLAYOUT));
             element = element.nextSiblingElement();
             continue;
         }

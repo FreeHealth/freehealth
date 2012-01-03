@@ -564,7 +564,11 @@ QString FormMain::printableHtml(bool withValues) const
 {
     /** \todo code here : print a form with/wo item content */
     FormMain *f = (FormMain*)this;
-    return f->formWidget()->printableHtml(withValues);
+    if (f->formWidget())
+        return f->formWidget()->printableHtml(withValues);
+    else
+        LOG_ERROR("No formWidget in form: " + uuid());
+    return QString();
 }
 
 void FormMain::createDebugPage()

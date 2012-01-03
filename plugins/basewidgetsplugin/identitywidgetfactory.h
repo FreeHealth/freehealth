@@ -71,7 +71,7 @@ public:
     IdentityFormWidget(Form::FormItem *formItem, QWidget *parent = 0);
     ~IdentityFormWidget();
 
-    void addWidgetToContainer(IFormWidget * widget);
+//    void addWidgetToContainer(IFormWidget * widget);
 
     QString printableHtml(bool withValues = true) const;
 
@@ -84,7 +84,6 @@ public:
 
 private:
     QGridLayout *m_ContainerLayout;
-    int i, row, col, numberColumns;
 };
 
 class IdentityWidgetData : public Form::IFormItemData

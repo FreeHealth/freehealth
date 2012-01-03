@@ -30,6 +30,8 @@
 #include <coreplugin/icore.h>
 #include <coreplugin/iscriptmanager.h>
 #include <coreplugin/ipatient.h>
+#include <coreplugin/constants_tokensandsettings.h>
+#include <coreplugin/isettings.h>
 
 #include <formmanagerplugin/iformitem.h>
 
@@ -60,6 +62,7 @@ using namespace BaseWidgets;
 using namespace Internal;
 
 static inline Core::IPatient *patient() {return Core::ICore::instance()->patient();}
+static inline Core::ISettings *settings() {return Core::ICore::instance()->settings();}
 static inline Core::IScriptManager *scriptManager() {return Core::ICore::instance()->scriptManager();}
 
 namespace {
@@ -194,6 +197,20 @@ inline static void executeOnValueChangedScript(Form::FormItem *item)
         scriptManager()->evaluate(item->scripts()->onValueChangedScript());
 }
 
+inline static QLabel *findLabel(Form::FormItem *item)
+{
+    QLabel *l = 0;
+    // Find label
+    const QString &lbl = item->spec()->value(Form::FormItemSpec::Spec_UiLabel).toString();
+    if (!lbl.isEmpty()) {
+        l = qFindChild<QLabel*>(item->parentFormMain()->formWidget(), lbl);
+        if (l) {
+            l->setText(item->spec()->label());
+        }
+    }
+    return l;
+}
+
 BaseWidgetsFactory::BaseWidgetsFactory(QObject *parent) :
         IFormWidgetFactory(parent)
 {
@@ -271,9 +288,10 @@ Form::IFormWidget *BaseWidgetsFactory::createWidget(const QString &name, Form::F
    - "col=" ; "numberOfColumns"
 */
 BaseForm::BaseForm(Form::FormItem *formItem, QWidget *parent) :
-        Form::IFormWidget(formItem, parent),
-        m_ContainerLayout(0),
-        m_Header(0)
+    Form::IFormWidget(formItem, parent),
+    m_ContainerLayout(0),
+    i(0), row(0), col(0), numberColumns(1),
+    m_Header(0)
 {
     QVBoxLayout *mainLayout = new QVBoxLayout(this);
     mainLayout->setSpacing(0);
@@ -309,10 +327,10 @@ BaseForm::BaseForm(Form::FormItem *formItem, QWidget *parent) :
         // Retrieve the number of columns for the gridlayout (lays in extraDatas() of linked FormItem)
         numberColumns = getNumberOfColumns(m_FormItem);
         if (isCompactView(m_FormItem)) {
-            mainLayout->setMargin(0);
-            mainLayout->setSpacing(2);
-            m_ContainerLayout->setMargin(0);
-            m_ContainerLayout->setSpacing(2);
+            mainLayout->setMargin(5);
+            mainLayout->setSpacing(5);
+            m_ContainerLayout->setMargin(5);
+            m_ContainerLayout->setSpacing(5);
         }
 
         m_ContainerLayout->addWidget(header, 0, 0, 1, numberColumns);
@@ -496,35 +514,50 @@ QVariant BaseFormData::data(const int ref, const int role) const
 BaseGroup::BaseGroup(Form::FormItem *formItem, QWidget *parent) :
     Form::IFormWidget(formItem,parent), m_Group(0), m_ContainerLayout(0)
 {
-//    bool useGrid = true;
-//    bool useFormGrid = false;
-//    if (formItem->getOptions().contains("form", Qt::CaseInsensitive)) {
-//        useGrid = false;
-//        useFormGrid = true;
-//    } else if (formItem->getOptions().contains("nogrid", Qt::CaseInsensitive)) {
-//        useGrid = false;
-//        useFormGrid = false;
-//    }
-    QVBoxLayout * vblayout = new QVBoxLayout(this);
-    m_Group = new QGroupBox(this);
-    m_Group->setTitle(m_FormItem->spec()->label());
-    vblayout->addWidget(m_Group);
-    this->setLayout(vblayout);
+    // QtUi Loaded ?
+    const QString &widget = formItem->spec()->value(Form::FormItemSpec::Spec_UiWidget).toString();
+    if (!widget.isEmpty()) {
+        // Find widget
+        QGroupBox *grp = qFindChild<QGroupBox*>(formItem->parentFormMain()->formWidget(), widget);
+        if (grp) {
+            m_Group = grp;
+        } else {
+            LOG_ERROR("Using the QtUiLinkage, item not found in the ui: " + formItem->uuid());
+            // To avoid segfaulting create a fake combo
+            m_Group = new QGroupBox(this);
+        }
+    } else {
+        //    bool useGrid = true;
+        //    bool useFormGrid = false;
+        //    if (formItem->getOptions().contains("form", Qt::CaseInsensitive)) {
+        //        useGrid = false;
+        //        useFormGrid = true;
+        //    } else if (formItem->getOptions().contains("nogrid", Qt::CaseInsensitive)) {
+        //        useGrid = false;
+        //        useFormGrid = false;
+        //    }
+        QVBoxLayout * vblayout = new QVBoxLayout(this);
+        m_Group = new QGroupBox(this);
+        vblayout->addWidget(m_Group);
+        this->setLayout(vblayout);
 
-    // Retrieve the number of columns for the gridlayout (lays in extraDatas() of linked FormItem)
-    numberColumns = getNumberOfColumns(m_FormItem, 2);
+        // Retrieve the number of columns for the gridlayout (lays in extraDatas() of linked FormItem)
+        numberColumns = getNumberOfColumns(m_FormItem, 2);
 
-    // Create the gridlayout with all the widgets
-    m_ContainerLayout = new QGridLayout(m_Group);
-    i = 0;
-    row = 0;
-    col = 0;
-    if (isCompactView(m_FormItem)) {
-        vblayout->setMargin(0);
-        vblayout->setSpacing(2);
-        m_ContainerLayout->setMargin(0);
-        m_ContainerLayout->setSpacing(2);
+        // Create the gridlayout with all the widgets
+        m_ContainerLayout = new QGridLayout(m_Group);
+        i = 0;
+        row = 0;
+        col = 0;
+        if (isCompactView(m_FormItem)) {
+            vblayout->setMargin(0);
+            vblayout->setSpacing(2);
+            m_ContainerLayout->setMargin(0);
+            m_ContainerLayout->setSpacing(2);
+        }
+        m_Group->setLayout(m_ContainerLayout);
     }
+    m_Group->setTitle(m_FormItem->spec()->label());
 
     // Check country specific options
     const QStringList &countries = getCountries(formItem);
@@ -541,7 +574,6 @@ BaseGroup::BaseGroup(Form::FormItem *formItem, QWidget *parent) :
         //          connect(mfo(m_FormItem), SIGNAL(onValueChanged()),
         //                   this,     SLOT  (updateWidget()));
     }
-    m_Group->setLayout(m_ContainerLayout);
 }
 
 BaseGroup::~BaseGroup()
@@ -658,11 +690,25 @@ void BaseGroup::retranslate()
 BaseCheck::BaseCheck(Form::FormItem *formItem, QWidget *parent) :
     Form::IFormWidget(formItem,parent), m_Check(0)
 {
-    QHBoxLayout * hb = new QHBoxLayout(this);
-    // Add Buttons
-    m_Check = new QCheckBox(this);
-    m_Check->setObjectName("Checkbox_" + m_FormItem->uuid());
-    hb->addWidget(m_Check);
+    // QtUi Loaded ?
+    const QString &widget = formItem->spec()->value(Form::FormItemSpec::Spec_UiWidget).toString();
+    if (!widget.isEmpty()) {
+        // Find widget
+        QCheckBox *chk = qFindChild<QCheckBox*>(formItem->parentFormMain()->formWidget(), widget);
+        if (chk) {
+            m_Check = chk;
+        } else {
+            LOG_ERROR("Using the QtUiLinkage, item not found in the ui: " + formItem->uuid());
+            // To avoid segfaulting create a fake combo
+            m_Check = new QCheckBox(this);
+        }
+    } else {
+        QHBoxLayout * hb = new QHBoxLayout(this);
+        // Add Buttons
+        m_Check = new QCheckBox(this);
+        m_Check->setObjectName("Checkbox_" + m_FormItem->uuid());
+        hb->addWidget(m_Check);
+    }
     retranslate();
     // create itemdata
     m_ItemData = new BaseCheckData(formItem);
@@ -694,7 +740,8 @@ QString BaseCheck::printableHtml(bool withValues) const
 
 void BaseCheck::retranslate()
 {
-    m_Check->setText(m_FormItem->spec()->label());
+    if (m_Check)
+        m_Check->setText(m_FormItem->spec()->label());
 }
 
 ////////////////////////////////////////// ItemData /////////////////////////////////////////////
@@ -911,7 +958,8 @@ QString BaseRadio::printableHtml(bool withValues) const
 
 void BaseRadio::retranslate()
 {
-    m_Label->setText(m_FormItem->spec()->label());
+    if (m_Label)
+        m_Label->setText(m_FormItem->spec()->label());
 
     if (m_RadioList.size()) {
         const QStringList &list = m_FormItem->valueReferences()->values(Form::FormItemValues::Value_Possible);
@@ -1050,42 +1098,60 @@ void BaseRadioData::onValueChanged()
 BaseSimpleText::BaseSimpleText(Form::FormItem *formItem, QWidget *parent, bool shortText) :
     Form::IFormWidget(formItem,parent), m_Line(0), m_Text(0)
 {
-    // Prepare Widget Layout and label
-    QBoxLayout * hb = getBoxLayout(Label_OnLeft, m_FormItem->spec()->label(), this);
-    hb->addWidget(m_Label);
+    // QtUi Loaded ?
+    const QString &widget = formItem->spec()->value(Form::FormItemSpec::Spec_UiWidget).toString();
+    if (!widget.isEmpty()) {
+        // Find widget
+        if (shortText) {
+            QLineEdit *le = qFindChild<QLineEdit*>(formItem->parentFormMain()->formWidget(), widget);
+            if (le) {
+                m_Line = le;
+            } else {
+                LOG_ERROR("Using the QtUiLinkage, item not found in the ui: " + formItem->uuid());
+                // To avoid segfaulting create a fake combo
+                m_Line = new QLineEdit(this);
+            }
+        } else {
+            QTextEdit *te = qFindChild<QTextEdit*>(formItem->parentFormMain()->formWidget(), widget);
+            if (te) {
+                m_Text = te;
+            } else {
+                LOG_ERROR("Using the QtUiLinkage, item not found in the ui: " + formItem->uuid());
+                // To avoid segfaulting create a fake combo
+                m_Text = new QTextEdit(this);
+            }
+        }
+        // Find Label
+        m_Label = findLabel(formItem);
+    } else {
+        // Prepare Widget Layout and label
+        QBoxLayout * hb = getBoxLayout(Label_OnLeft, m_FormItem->spec()->label(), this);
+        hb->addWidget(m_Label);
+
+        // Add List and manage size
+        if (shortText) {
+            m_Line = new QLineEdit(this);
+            m_Line->setObjectName("Line_" + m_FormItem->uuid());
+            m_Line->setSizePolicy(QSizePolicy::Expanding , QSizePolicy::Fixed);
+            //          m_Line->setInputMask(mfo(m_FormItem)->mask());
+            //          m_Line->setCursorPosition(0);
+            hb->addWidget(m_Line);
+        } else {
+            m_Text = new QTextEdit(this);
+            m_Text->setObjectName("Text_" + m_FormItem->uuid());
+            m_Text->setSizePolicy(QSizePolicy::Expanding , QSizePolicy::Expanding);
+            hb->addWidget(m_Text);
+        }
+    }
 
     // Create the FormItemData
     BaseSimpleTextData *data = new BaseSimpleTextData(m_FormItem);
-
-    // Add List and manage size
-    if (shortText) {
-        //          if (!(mfo(m_FormItem)->options() & mfObjectFundamental::LabelOnTop))
-        //          {
-        //               Qt::Alignment alignment = m_Label->alignment();
-        //               alignment &= ~(Qt::AlignVertical_Mask);
-        //               alignment |= Qt::AlignVCenter;
-        //               m_Label->setAlignment(alignment);
-        //          }
-
-        m_Line = new QLineEdit(this);
-        m_Line->setObjectName("Line_" + m_FormItem->uuid());
-        m_Line->setSizePolicy(QSizePolicy::Expanding , QSizePolicy::Fixed);
-        //          m_Line->setInputMask(mfo(m_FormItem)->mask());
-        //          m_Line->setCursorPosition(0);
-        hb->addWidget(m_Line);
-
-        connect(m_Line, SIGNAL(textChanged(QString)), data, SLOT(onValueChanged()));
-    } else {
-        m_Text = new QTextEdit(this);
-        m_Text->setObjectName("Text_" + m_FormItem->uuid());
-        m_Text->setSizePolicy(QSizePolicy::Expanding , QSizePolicy::Expanding);
-        hb->addWidget(m_Text);
-
-        connect(m_Text, SIGNAL(textChanged()), data, SLOT(onValueChanged()));
-    }
-
     data->setBaseSimpleText(this);
     m_FormItem->setItemDatas(data);
+    if (m_Line)
+        connect(m_Line, SIGNAL(textChanged(QString)), data, SLOT(onValueChanged()));
+    if (m_Text)
+        connect(m_Text, SIGNAL(textChanged()), data, SLOT(onValueChanged()));
 }
 
 BaseSimpleText::~BaseSimpleText()
@@ -1151,7 +1217,8 @@ QString BaseSimpleText::printableHtml(bool withValues) const
 
 void BaseSimpleText::retranslate()
 {
-    m_Label->setText(m_FormItem->spec()->label());
+    if (m_Label)
+        m_Label->setText(m_FormItem->spec()->label());
 }
 
 ////////////////////////////////////////// ItemData /////////////////////////////////////////////
@@ -1277,26 +1344,42 @@ void BaseHelpText::retranslate()
 BaseList::BaseList(Form::FormItem *formItem, QWidget *parent, bool uniqueList) :
     Form::IFormWidget(formItem,parent), m_List(0)
 {
-    // Prepare Widget Layout and label
-    QBoxLayout * hb = getBoxLayout(Label_OnLeft, m_FormItem->spec()->label(), this);
-    hb->addWidget(m_Label);
+    // QtUi Loaded ?
+    const QString &widget = formItem->spec()->value(Form::FormItemSpec::Spec_UiWidget).toString();
+    if (!widget.isEmpty()) {
+        // Find widget
+        QListView *le = qFindChild<QListView*>(formItem->parentFormMain()->formWidget(), widget);
+        if (le) {
+            m_List = le;
+        } else {
+            LOG_ERROR("Using the QtUiLinkage, item not found in the ui: " + formItem->uuid());
+            // To avoid segfaulting create a fake combo
+            m_List = new QListView(this);
+        }
+        // Find Label
+        m_Label = findLabel(formItem);
+    } else {
+        // Prepare Widget Layout and label
+        QBoxLayout * hb = getBoxLayout(Label_OnLeft, m_FormItem->spec()->label(), this);
+        hb->addWidget(m_Label);
 
-    // Add List and manage size
-    m_List = new QListView(this);
-    m_List->setObjectName("List_" + m_FormItem->uuid());
-    m_List->setUniformItemSizes(true);
-    m_List->setAlternatingRowColors(true);
-    m_List->setSizePolicy(QSizePolicy::Expanding , QSizePolicy::Expanding);
-    if (uniqueList)
-        m_List->setSelectionMode(QAbstractItemView::SingleSelection);
-    else
-        m_List->setSelectionMode(QAbstractItemView::MultiSelection);
+        // Add List and manage size
+        m_List = new QListView(this);
+        m_List->setObjectName("List_" + m_FormItem->uuid());
+        m_List->setUniformItemSizes(true);
+        m_List->setAlternatingRowColors(true);
+        m_List->setSizePolicy(QSizePolicy::Expanding , QSizePolicy::Expanding);
+        if (uniqueList)
+            m_List->setSelectionMode(QAbstractItemView::SingleSelection);
+        else
+            m_List->setSelectionMode(QAbstractItemView::MultiSelection);
 
-    const QStringList &possibles = m_FormItem->valueReferences()->values(Form::FormItemValues::Value_Possible);
-    m_Model = new QStringListModel(possibles, this);
-    m_List->setModel(m_Model);
+        const QStringList &possibles = m_FormItem->valueReferences()->values(Form::FormItemValues::Value_Possible);
+        m_Model = new QStringListModel(possibles, this);
+        m_List->setModel(m_Model);
 
-    hb->addWidget(m_List);
+        hb->addWidget(m_List);
+    }
 
     // create FormItemData
     BaseListData *data = new BaseListData(m_FormItem);
@@ -1338,7 +1421,8 @@ QString BaseList::printableHtml(bool withValues) const
 
 void BaseList::retranslate()
 {
-    m_Label->setText(m_FormItem->spec()->label());
+    if (m_Label)
+        m_Label->setText(m_FormItem->spec()->label());
     if (m_List) {
         const QStringList &list = m_FormItem->valueReferences()->values(Form::FormItemValues::Value_Possible);
         if (list.count() != m_Model->rowCount()) {
@@ -1483,15 +1567,31 @@ void BaseListData::onValueChanged()
 BaseCombo::BaseCombo(Form::FormItem *formItem, QWidget *parent) :
     Form::IFormWidget(formItem,parent), m_Combo(0)
 {
-    // Prepare Widget Layout and label
-    QBoxLayout *hb = getBoxLayout(Label_OnLeft, m_FormItem->spec()->label(), this);
-    hb->addWidget(m_Label);
+    // QtUi Loaded ?
+    const QString &widget = formItem->spec()->value(Form::FormItemSpec::Spec_UiWidget).toString();
+    if (!widget.isEmpty()) {
+        // Find widget
+        QComboBox *cbx = qFindChild<QComboBox*>(formItem->parentFormMain()->formWidget(), widget);
+        if (cbx) {
+            m_Combo = cbx;
+        } else {
+            LOG_ERROR("Using the QtUiLinkage, item not found in the ui: " + formItem->uuid());
+            // To avoid segfaulting create a fake combo
+            m_Combo = new QComboBox(this);
+        }
+        // Find label
+        m_Label = findLabel(formItem);
+    } else {
+        // Prepare Widget Layout and label
+        QBoxLayout *hb = getBoxLayout(Label_OnLeft, m_FormItem->spec()->label(), this);
+        hb->addWidget(m_Label);
 
-    // Add List and manage size
-    m_Combo = new QComboBox(this);
-    m_Combo->setObjectName("Combo_" + m_FormItem->uuid());
+        // Add List and manage size
+        m_Combo = new QComboBox(this);
+        m_Combo->setObjectName("Combo_" + m_FormItem->uuid());
+        hb->addWidget(m_Combo);
+    }
     m_Combo->addItems(m_FormItem->valueReferences()->values(Form::FormItemValues::Value_Possible));
-    hb->addWidget(m_Combo);
 
     // create FormItemData
     BaseComboData *data = new BaseComboData(m_FormItem);
@@ -1529,7 +1629,8 @@ QString BaseCombo::printableHtml(bool withValues) const
 
 void BaseCombo::retranslate()
 {
-    m_Label->setText(m_FormItem->spec()->label());
+    if (m_Label)
+        m_Label->setText(m_FormItem->spec()->label());
     if (m_Combo) {
         const QStringList &list = m_FormItem->valueReferences()->values(Form::FormItemValues::Value_Possible);
         if (list.count() != m_Combo->count()) {
@@ -1638,17 +1739,32 @@ void BaseComboData::onValueChanged()
 BaseDate::BaseDate(Form::FormItem *formItem, QWidget *parent) :
     Form::IFormWidget(formItem,parent), m_Date(0)
 {
-    // Prepare Widget Layout and label
-    QBoxLayout * hb = getBoxLayout(Label_OnLeft, m_FormItem->spec()->label(), this);
-    hb->addWidget(m_Label);
+    // QtUi Loaded ?
+    const QString &widget = formItem->spec()->value(Form::FormItemSpec::Spec_UiWidget).toString();
+    if (!widget.isEmpty()) {
+        // Find widget
+        QDateTimeEdit *le = qFindChild<QDateTimeEdit*>(formItem->parentFormMain()->formWidget(), widget);
+        if (le) {
+            m_Date = le;
+        } else {
+            LOG_ERROR("Using the QtUiLinkage, item not found in the ui: " + formItem->uuid());
+            // To avoid segfaulting create a fake combo
+            m_Date = new QDateTimeEdit(this);
+        }
+        // Find Label
+        m_Label = findLabel(formItem);
+    } else {    // Prepare Widget Layout and label
+        QBoxLayout * hb = getBoxLayout(Label_OnLeft, m_FormItem->spec()->label(), this);
+        hb->addWidget(m_Label);
 
-    // Add Date selector and manage date format
-    m_Date = new QDateTimeEdit(this);
-    m_Date->setObjectName("Date_" + m_FormItem->uuid());
-    m_Date->setSizePolicy(QSizePolicy::Expanding , QSizePolicy::Fixed);
+        // Add Date selector and manage date format
+        m_Date = new QDateTimeEdit(this);
+        m_Date->setObjectName("Date_" + m_FormItem->uuid());
+        m_Date->setSizePolicy(QSizePolicy::Expanding , QSizePolicy::Fixed);
+        m_Date->setCalendarPopup(true);
+        hb->addWidget(m_Date);
+    }
     m_Date->setDisplayFormat(getDateFormat(m_FormItem));
-    m_Date->setCalendarPopup(true);
-    hb->addWidget(m_Date);
 
     // Manage options
     const QStringList &options = formItem->getOptions();
@@ -1727,7 +1843,8 @@ QString BaseDate::printableHtml(bool withValues) const
 
 void BaseDate::retranslate()
 {
-    m_Label->setText(m_FormItem->spec()->label());
+    if (m_Label)
+        m_Label->setText(m_FormItem->spec()->label());
 }
 
 ////////////////////////////////////////// ItemData /////////////////////////////////////////////
@@ -1830,15 +1947,7 @@ BaseSpin::BaseSpin(Form::FormItem *formItem, QWidget *parent, bool doubleSpin) :
         }
         m_Spin->setToolTip(m_FormItem->spec()->label());
         // Find label
-        const QString &lbl = formItem->spec()->value(Form::FormItemSpec::Spec_UiLabel).toString();
-        if (!lbl.isEmpty()) {
-            QLabel *l = qFindChild<QLabel*>(formItem->parentFormMain()->formWidget(), lbl);
-            if (l) {
-                m_Label = l;
-                l->setText(m_FormItem->spec()->label());
-            }
-        }
-
+        m_Label = findLabel(formItem);
     } else {
         // Prepare Widget Layout and label
         QBoxLayout * hb = getBoxLayout(Label_OnLeft, m_FormItem->spec()->label(), this);
@@ -1924,8 +2033,10 @@ QString BaseSpin::printableHtml(bool withValues) const
 
 void BaseSpin::retranslate()
 {
-    m_Spin->setToolTip(m_FormItem->spec()->label());
-    m_Label->setText(m_FormItem->spec()->label());
+    if (m_Spin)
+        m_Spin->setToolTip(m_FormItem->spec()->label());
+    if (m_Label)
+        m_Label->setText(m_FormItem->spec()->label());
 }
 
 ////////////////////////////////////////// ItemData /////////////////////////////////////////////
@@ -2028,14 +2139,36 @@ void BaseSpinData::onValueChanged()
 BaseButton::BaseButton(Form::FormItem *formItem, QWidget *parent) :
     Form::IFormWidget(formItem,parent), m_Button(0)
 {
-    QHBoxLayout * hb = new QHBoxLayout(this);
-    hb->addStretch();
+    // QtUi Loaded ?
+    const QString &widget = formItem->spec()->value(Form::FormItemSpec::Spec_UiWidget).toString();
+    if (!widget.isEmpty()) {
+        // Find widget
+        QPushButton *le = qFindChild<QPushButton*>(formItem->parentFormMain()->formWidget(), widget);
+        if (le) {
+            m_Button = le;
+        } else {
+            LOG_ERROR("Using the QtUiLinkage, item not found in the ui: " + formItem->uuid());
+            // To avoid segfaulting create a fake combo
+            m_Button = new QPushButton(this);
+        }
+    } else {
+        QHBoxLayout * hb = new QHBoxLayout(this);
+        hb->addStretch();
 
-    m_Button = new QPushButton(this);
-    m_Button->setObjectName("Button_" + m_FormItem->uuid());
+        m_Button = new QPushButton(this);
+        m_Button->setObjectName("Button_" + m_FormItem->uuid());
+        m_Button->setSizePolicy(QSizePolicy::Expanding , QSizePolicy::Fixed);
+        hb->addWidget(m_Button);
+    }
+    QString icon = formItem->spec()->value(Form::FormItemSpec::Spec_IconFileName).toString();
+    if (!icon.isEmpty()) {
+        if (icon.startsWith(Core::Constants::TAG_APPLICATION_THEME_PATH, Qt::CaseInsensitive)) {
+            icon = icon.replace(Core::Constants::TAG_APPLICATION_THEME_PATH, settings()->path(Core::ISettings::ThemeRootPath));
+            qWarning() << icon;
+        }
+        m_Button->setIcon(QIcon(icon));
+    }
     m_Button->setText(m_FormItem->spec()->label());
-    m_Button->setSizePolicy(QSizePolicy::Expanding , QSizePolicy::Fixed);
-    hb->addWidget(m_Button);
     connect(m_Button, SIGNAL(clicked()) , this , SLOT(buttonClicked()));
 }
 
@@ -2044,11 +2177,11 @@ BaseButton::~BaseButton()
 
 void BaseButton::buttonClicked()
 {
-    /** \todo run script */
-//    m_FormItem->scripts()->runScript();
+    executeOnValueChangedScript(m_FormItem);
 }
 
 void BaseButton::retranslate()
 {
-    m_Button->setText(m_FormItem->spec()->label());
+    if (m_Button)
+        m_Button->setText(m_FormItem->spec()->label());
 }
