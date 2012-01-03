@@ -2,7 +2,7 @@
 isEmpty(TARGET) {
     error("config.pri: You must provide a TARGET")
 }
-# include the generic cofiguration file (define some paths)
+# include the generic configuration file (define some paths)
 SOURCES_ROOT_PATH        = $${PWD}
 include(buildspecs/config_paths.pri)
 include(buildspecs/svnversion.pri)

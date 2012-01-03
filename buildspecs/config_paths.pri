@@ -86,5 +86,5 @@ RCC_DIR	           = $${SOURCES_BUILD_PATH}/$${BINARY_TARGET}/.rcc
 QMAKE_TARGET_COMPANY       = "Eric MAEKER and the FreeMedForms Team"
 QMAKE_TARGET_PRODUCT       = $${BINARY_TARGET}
 QMAKE_TARGET_DESCRIPTION   = "Crossplatform Medical Forms Generator"
-QMAKE_TARGET_COPYRIGHT     = "Copyright (C) 2008-2010 Eric MAEKER, MD"
+QMAKE_TARGET_COPYRIGHT     = "Copyright (C) 2008-2012 Eric MAEKER, MD"
 PACKAGE_DOMAIN             = "http://www.freemedforms.com"
