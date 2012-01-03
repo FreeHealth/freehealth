@@ -34,11 +34,9 @@
 #include <accountbaseplugin/availablemovementmodel.h>
 #include <accountbaseplugin/movementmodel.h>
 #include <accountbaseplugin/bankaccountmodel.h>
-<<<<<<< .mine
+
 //#include <accountbaseplugin/accountbasecore.h>
 
-=======
->>>>>>> .r3148
 #include <coreplugin/icore.h>
 #include <coreplugin/itheme.h>
 #include <coreplugin/iuser.h>
@@ -53,20 +51,11 @@ using namespace Constants;
 
 static inline Core::ITheme *theme()  { return Core::ICore::instance()->theme(); }
 static inline Core::IUser *user() { return  Core::ICore::instance()->user(); }
-<<<<<<< .mine
-//static inline AccountDB::AccountBaseCore *core() {return AccountDB::AccountBaseCore::instance();}
-=======
->>>>>>> .r3148
 
-<<<<<<< .mine
-MovementsIODb::MovementsIODb(QObject *parent) :
-    QObject(parent)
-{
-    m_modelMovements = new MovementModel(parent);//core()->movementModel();
-=======
+//static inline AccountDB::AccountBaseCore *core() {return AccountDB::AccountBaseCore::instance();}
+
 MovementsIODb::MovementsIODb(QObject *parent) : QObject(parent){
     m_modelMovements = new MovementModel(parent);
->>>>>>> .r3148
     m_user_uid = user()->uuid();
 }
 
@@ -74,7 +63,6 @@ MovementsIODb::~MovementsIODb()
 {
 }
 
-<<<<<<< .mine
 MovementModel *MovementsIODb::getModelMovements(QString &year)
 {
     if (WarnDebugMessage)
@@ -93,8 +81,8 @@ MovementModel *MovementsIODb::getModelMovements(QString &year)
         qDebug() << __FILE__ << QString::number(__LINE__) << " rowCount =" << QString::number(m_modelMovements->rowCount()) ;
     return m_modelMovements;
 }
-=======
-MovementModel *MovementsIODb::getModelMovements(QString &year)
+
+/*MovementModel *MovementsIODb::getModelMovements(QString &year)
 {if (WarnDebugMessage)
     	      qDebug() << __FILE__ << QString::number(__LINE__) << " year =" << year ;
     QString filter = QString("DATEVALUE between '%1' AND '%2'").arg(year+"-01-01",year+"-12-31");
@@ -108,8 +96,8 @@ MovementModel *MovementsIODb::getModelMovements(QString &year)
     if (WarnDebugMessage)
     	      qDebug() << __FILE__ << QString::number(__LINE__) << " rowCount =" << QString::number(m_modelMovements->rowCount()) ;
     return m_modelMovements;
-}
->>>>>>> .r3148
+}*/
+
 
 QString MovementsIODb::getUserUid(){
     return m_modelMovements->m_UserUid;
@@ -175,7 +163,6 @@ QStandardItemModel  *MovementsIODb::getMovementsComboBoxModel(QObject *parent)
 QStringList MovementsIODb::getYearComboBoxModel()
 {
     QStringList listOfYears;
-<<<<<<< .mine
     if (WarnDebugMessage)
     qDebug() << __FILE__ << QString::number(__LINE__) << " m_modelMovements->rowCount() =" << QString::number(m_modelMovements->rowCount()) ;
     for (int i = 0; i < m_modelMovements->rowCount(); ++i) {
@@ -183,11 +170,6 @@ QStringList MovementsIODb::getYearComboBoxModel()
     	if (WarnDebugMessage)
     	qDebug() << __FILE__ << QString::number(__LINE__) << " dateStr =" << dateStr ;
     	QString dateOfValueStr = m_modelMovements->data(m_modelMovements->index(i,MOV_DATE),Qt::DisplayRole).toString();
-=======
-    for (int i = 0; i < m_modelMovements->rowCount(); i += 1) {
-    	QString dateStr = m_modelMovements->data(m_modelMovements->index(i,MOV_DATE),Qt::DisplayRole).toString();
-    	QString dateOfValueStr = m_modelMovements->data(m_modelMovements->index(i,MOV_DATE),Qt::DisplayRole).toString();
->>>>>>> .r3148
     	QString yearDate = QString::number(QDate::fromString(dateStr,"yyyy-MM-dd").year());
     	QString yearDateOfValue = QString::number(QDate::fromString(dateOfValueStr,"yyyy-MM-dd").year());
     	if (WarnDebugMessage)
@@ -253,7 +235,6 @@ bool MovementsIODb::insertIntoMovements(QHash<int,QVariant> &hashValues)
     QVariant data;
     for(int i = 1 ; i < MOV_MaxParam ; i ++) {
         data = hashValues.value(i);
-<<<<<<< .mine
         if (i == MOV_AMOUNT) {
             value = data.toDouble();
         }
@@ -266,23 +247,6 @@ bool MovementsIODb::insertIntoMovements(QHash<int,QVariant> &hashValues)
             if (WarnDebugMessage)
                 qDebug() << __FILE__ << QString::number(__LINE__) << " bank =" << bank ;
         }
-=======
-        if (i == MOV_AMOUNT)
-        {
-        	 value = data.toDouble(); 
-            }
-        if (i == MOV_TYPE)
-        {
-        	  type = data.toInt();
-            }
-        if (i == MOV_ACCOUNT_ID)
-        {
-        	  int bankId = data.toInt();
-        	  bank = getBankNameFromId(bankId);
-        	  if (WarnDebugMessage)
-    	      qDebug() << __FILE__ << QString::number(__LINE__) << " bank =" << bank ;
-            }
->>>>>>> .r3148
         if (WarnDebugMessage)
     	      qDebug() << __FILE__ << QString::number(__LINE__) << " data + i =" << data.toString()+" "+QString::number(i);
         if (!m_modelMovements-> setData(m_modelMovements->index(rowBefore,i), data ,Qt::EditRole)) {
