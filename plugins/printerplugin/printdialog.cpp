@@ -79,7 +79,9 @@ PrintDialog::PrintDialog(QWidget *parent) :
     // Fill printer combo
     m_AvailPrinterAtDialogOpens = QPrinterInfo::availablePrinters();
     foreach(const QPrinterInfo &info, m_AvailPrinterAtDialogOpens) {
+        ui->printerCombo->blockSignals(true);
         ui->printerCombo->addItem(info.printerName());
+        ui->printerCombo->blockSignals(false);
     }
 
     // Some preparation
