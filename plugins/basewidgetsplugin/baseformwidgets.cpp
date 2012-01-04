@@ -512,7 +512,8 @@ QVariant BaseFormData::data(const int ref, const int role) const
 //--------------------------------------- BaseGroup implementation ---------------------------------------
 //--------------------------------------------------------------------------------------------------------
 BaseGroup::BaseGroup(Form::FormItem *formItem, QWidget *parent) :
-    Form::IFormWidget(formItem,parent), m_Group(0), m_ContainerLayout(0)
+    Form::IFormWidget(formItem,parent), m_Group(0), m_ContainerLayout(0),
+    i(0), row(0), col(0), numberColumns(1)
 {
     // QtUi Loaded ?
     const QString &widget = formItem->spec()->value(Form::FormItemSpec::Spec_UiWidget).toString();
@@ -546,9 +547,6 @@ BaseGroup::BaseGroup(Form::FormItem *formItem, QWidget *parent) :
 
         // Create the gridlayout with all the widgets
         m_ContainerLayout = new QGridLayout(m_Group);
-        i = 0;
-        row = 0;
-        col = 0;
         if (isCompactView(m_FormItem)) {
             vblayout->setMargin(0);
             vblayout->setSpacing(2);
@@ -611,7 +609,9 @@ QString BaseGroup::printableHtml(bool withValues) const
     QString content;
     QList<Form::FormItem*> items = m_FormItem->formItemChildren();
     for(int i = 0; i < items.count(); ++i) {
-        html << items.at(i)->formWidget()->printableHtml(withValues);
+        if (items.at(i)->formWidget()) {
+            html << items.at(i)->formWidget()->printableHtml(withValues);
+        }
     }
     // remove empty values
     html.removeAll("");
