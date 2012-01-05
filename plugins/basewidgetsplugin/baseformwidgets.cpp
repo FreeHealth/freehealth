@@ -706,10 +706,17 @@ BaseCheck::BaseCheck(Form::FormItem *formItem, QWidget *parent) :
         QHBoxLayout * hb = new QHBoxLayout(this);
         // Add Buttons
         m_Check = new QCheckBox(this);
-        m_Check->setObjectName("Checkbox_" + m_FormItem->uuid());
         hb->addWidget(m_Check);
     }
+
+    // Check options
+    if (formItem->getOptions().contains("onright", Qt::CaseInsensitive)) {
+        m_Check->setLayoutDirection(Qt::RightToLeft);
+    }
+
+    m_Check->setObjectName("Checkbox_" + m_FormItem->uuid());
     retranslate();
+
     // create itemdata
     m_ItemData = new BaseCheckData(formItem);
     m_ItemData->setCheckBox(m_Check);
@@ -740,8 +747,13 @@ QString BaseCheck::printableHtml(bool withValues) const
 
 void BaseCheck::retranslate()
 {
-    if (m_Check)
+    if (m_Check) {
+        // Get tooltip
+        const QString &tip = m_FormItem->spec()->value(Form::FormItemSpec::Spec_Tooltip).toString();
+        m_Check->setToolTip(tip);
+        // Get label
         m_Check->setText(m_FormItem->spec()->label());
+    }
 }
 
 ////////////////////////////////////////// ItemData /////////////////////////////////////////////
@@ -793,8 +805,16 @@ bool BaseCheckData::setData(const int ref, const QVariant &data, const int role)
 
 QVariant BaseCheckData::data(const int ref, const int role) const
 {
+    Q_UNUSED(ref);
     if (role==Qt::CheckStateRole)
         return m_Check->checkState();
+    if (role==Form::IFormItemData::CalculationsRole) {
+        const QStringList &vals = m_FormItem->valueReferences()->values(Form::FormItemValues::Value_Numerical);
+        if (m_Check->isChecked() && vals.count() >= 1)
+            return vals.at(0);
+        if (vals.count()>=2)
+            return vals.at(1);
+    }
     return Qt::Unchecked;
 }
 
