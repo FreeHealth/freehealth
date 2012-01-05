@@ -1304,12 +1304,26 @@ void BaseSimpleTextData::onValueChanged()
 BaseHelpText::BaseHelpText(Form::FormItem *formItem, QWidget *parent) :
     Form::IFormWidget(formItem,parent)
 {
-    QHBoxLayout * hb = new QHBoxLayout(this);
-    // Add QLabel
-    createLabel(m_FormItem->spec()->label(), Qt::AlignJustify);
-    // Setting objectName to hide/show via a simple option button
-    m_Label->setObjectName("HelpText_" + m_FormItem->uuid());
-    hb->addWidget(m_Label);
+    // QtUi Loaded ?
+    const QString &widget = formItem->spec()->value(Form::FormItemSpec::Spec_UiWidget).toString();
+    const QString &label = formItem->spec()->value(Form::FormItemSpec::Spec_UiLabel).toString();
+    if (!widget.isEmpty()) {
+        // Find widget
+        QLabel *le = qFindChild<QLabel*>(formItem->parentFormMain()->formWidget(), widget);
+        if (le) {
+            m_Label = le;
+        }
+        m_Label->setText(m_FormItem->spec()->label());
+    } else if (!label.isEmpty()) {
+        m_Label = findLabel(formItem);
+    } else {
+        QHBoxLayout *hb = new QHBoxLayout(this);
+        // Add QLabel
+        createLabel(m_FormItem->spec()->label(), Qt::AlignJustify);
+        // Setting objectName to hide/show via a simple option button
+        m_Label->setObjectName("HelpText_" + m_FormItem->uuid());
+        hb->addWidget(m_Label);
+    }
 }
 
 BaseHelpText::~BaseHelpText()
