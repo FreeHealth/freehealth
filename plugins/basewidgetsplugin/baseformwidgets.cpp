@@ -749,8 +749,14 @@ void BaseCheck::retranslate()
 {
     if (m_Check) {
         // Get tooltip
-        const QString &tip = m_FormItem->spec()->value(Form::FormItemSpec::Spec_Tooltip).toString();
+        QString tip;
+        if (formItem->getOptions().contains("labelastooltip", Qt::CaseInsensitive)) {
+            tip = m_FormItem->spec()->label();
+        } else {
+            tip = m_FormItem->spec()->value(Form::FormItemSpec::Spec_Tooltip).toString();
+        }
         m_Check->setToolTip(tip);
+
         // Get label
         m_Check->setText(m_FormItem->spec()->label());
     }
