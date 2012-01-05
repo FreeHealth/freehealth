@@ -43,7 +43,7 @@
 
 #include <QMessageBox>
 #include <QDebug>
-enum { WarnDebugMessage = true };
+enum { WarnDebugMessage = false };
 /*********************/
 //todo bank system et deposit
 /********************/
@@ -60,7 +60,6 @@ MovementsViewer::MovementsViewer(QWidget * parent) :
     ui->setupUi(this);
     //instanciate
     m_valid = 0; //bill not received
-    model = new MovementModel(parent);
     ui->valueDoubleSpinBox->setRange(0.00,999999999999999.00);
     ui->percentDoubleSpinBox->setRange(0.00,100.00);
     ui->percentDoubleSpinBox->setValue(100.00);
@@ -79,6 +78,8 @@ MovementsViewer::MovementsViewer(QWidget * parent) :
     connect(ui->valAndRecButton,SIGNAL(pressed()),this,SLOT(validAndRecord()));
     connect(ui->movementsComboBox,SIGNAL(highlighted(int)),this,
                                   SLOT(setMovementsComboBoxToolTips(int)));
+    connect(ui->yearComboBox,SIGNAL(activated(int)),this,SLOT(setYearIsChanged(int)));
+    
     connect(user(), SIGNAL(userChanged()), this, SLOT(userIsChanged()));
     
 }
@@ -96,7 +97,7 @@ bool MovementsViewer::showMovements()
     bool ret = true;
     MovementsIODb  mov(this) ;
     QString year = ui->yearComboBox->currentText();
-    model = mov.getModelMovements(year);
+    AccountDB::MovementModel * model = mov.getModelMovements(year);
     if (WarnDebugMessage)
     qDebug() << __FILE__ << QString::number(__LINE__) << " model rowCount =" << QString::number(model->rowCount()) ;
     if (WarnDebugMessage)
@@ -173,6 +174,7 @@ void MovementsViewer::recordMovement()
 void MovementsViewer::deleteMovement()
 {
     QModelIndex index = ui->tableView->QAbstractItemView::currentIndex();
+    QString year = ui->yearComboBox->currentText();
     if(!index.isValid()) {
         QMessageBox::warning(0,trUtf8("Error"),trUtf8("You forgot to select a line."),QMessageBox::Ok);
     }
@@ -186,7 +188,7 @@ void MovementsViewer::deleteMovement()
     	                       QMessageBox::Ok);
     	  return;
         }
-    if (!mov.deleteMovement(row)) {
+    if (!mov.deleteMovement(row,year)) {
     	QMessageBox::warning(0,trUtf8("Error"),trUtf8("Movement is not deleted."),QMessageBox::Ok);
     }  else {
         QMessageBox::information(0,trUtf8("Information"),trUtf8("Movement is deleted."),QMessageBox::Ok);
@@ -241,11 +243,16 @@ void MovementsViewer::fillYearComboBox()
 {
     MovementsIODb mov(this);
     QStringList listOfYears;
+    QStringList listOfYearsInverted;
     listOfYears = mov.getYearComboBoxModel();
     if (listOfYears.isEmpty()) {
         listOfYears << QString::number(QDate::currentDate().year());
     }
-    ui->yearComboBox->addItems(listOfYears);
+    for (int i = listOfYears.size()-1; i > -1 ; i--)
+    {
+    	listOfYearsInverted << listOfYears[i];
+        }
+    ui->yearComboBox->addItems(listOfYearsInverted);
 }
 
 void MovementsViewer::fillBankComboBox(){
@@ -271,4 +278,13 @@ void MovementsViewer::changeEvent(QEvent * e){
         }
     if (WarnDebugMessage)
             qDebug() << __FILE__ << QString::number(__LINE__) << "after langage changed";
+}
+
+void MovementsViewer::setYearIsChanged(int row){
+    if (WarnDebugMessage)
+    qDebug() << __FILE__ << QString::number(__LINE__) << " in setYearIsChanged ";
+    if (!showMovements())
+    {
+    	  qWarning() << __FILE__ << QString::number(__LINE__) << "unable to show new movements" ;
+        }
 }

@@ -54,6 +54,7 @@ class ACCOUNT_EXPORT MovementsViewer : public QWidget
         void validAndRecord();
         void setMovementsComboBoxToolTips(int);
         void userIsChanged();
+        void setYearIsChanged(int);
     private:
         bool showMovements();
         void fillMovementsComboBox();
@@ -62,7 +63,7 @@ class ACCOUNT_EXPORT MovementsViewer : public QWidget
         void changeEvent(QEvent * e);
         int m_valid ;
         Ui::MovementsViewerWidget * ui;
-        AccountDB::MovementModel * model;
+        
 };
 
 #endif

@@ -38,7 +38,7 @@
 #include <utils/log.h>
 #include <QDebug>
 
-enum { WarnDebugMessage = true };
+enum { WarnDebugMessage = false };
 
 using namespace AccountDB;
 
@@ -123,7 +123,8 @@ void LedgerEdit::printLedger(){
     // Là tu ajoutes tes tokens pour l'impression (lire la doc de FreeDiams sur le gestionnaire d'étiquettes)
     tokens.insert(Core::Constants::TOKEN_DOCUMENTTITLE, this->windowTitle());
     p->addTokens(Core::IDocumentPrinter::Tokens_Global, tokens);
-    
+    if (WarnDebugMessage)
+    qDebug() << __FILE__ << QString::number(__LINE__) << " print "   ;
     // Ensuite on demande l'impression (avec les entêtes/pieds de page et duplicata ou non)
     p->print(m_doc, m_typeOfPaper, m_duplicata);    
 }

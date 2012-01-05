@@ -45,7 +45,7 @@
 #include <QMessageBox>
 #include <QDebug>
 #include <QDate>
-enum { WarnDebugMessage = true };
+enum { WarnDebugMessage = false };
 using namespace AccountDB;
 using namespace Constants;
 
@@ -275,10 +275,17 @@ bool MovementsIODb::insertIntoMovements(QHash<int,QVariant> &hashValues)
     return ret;
 }
 
-bool MovementsIODb::deleteMovement(int row)
-{if (WarnDebugMessage)
+bool MovementsIODb::deleteMovement(int row, const QString & year)
+{
+    if (WarnDebugMessage)
     	      qDebug() << __FILE__ << QString::number(__LINE__) << " row =" << QString::number(row) ;
     bool b = false;
+    m_modelMovements->clearFilters();
+    if (WarnDebugMessage)
+    qDebug() << __FILE__ << QString::number(__LINE__) << " filter =" << m_modelMovements->filter() ;
+    QDateTime start(QDate(year.toInt(), 1, 1), QTime(0,0));
+    QDateTime end(QDate(year.toInt(), 12, 31), QTime(23,59,59));
+    m_modelMovements->setDatesBeginEndAndUserFilter(start,end,m_user_uid);
     double value = m_modelMovements->data(m_modelMovements->index(row,MOV_AMOUNT),Qt::DisplayRole).toDouble();
     int bankId = m_modelMovements->data(m_modelMovements->index(row,MOV_ACCOUNT_ID),Qt::DisplayRole).toInt();
     value = -value;

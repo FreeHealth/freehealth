@@ -35,7 +35,7 @@
 #include <QDate>
 #include <QDebug>
 
-enum { WarnDebugMessage = true };
+enum { WarnDebugMessage = false };
 static inline Core::IUser *user() { return Core::ICore::instance()->user(); }
 LedgerIO::LedgerIO(QObject * parent){
     if (WarnDebugMessage)
@@ -86,12 +86,19 @@ AccountModel * LedgerIO::getModelMonthlyReceiptsIO(QObject * parent,QString & mo
     QString dateBeginStr = year+"-"+month+"-01";
     QDate dateBegin = QDate::fromString(dateBeginStr,"yyyy-MM-dd");
     QDate dateMonthAfter;
+    int numberOfDays = 0;
     if (month.toInt() < 12)
     {
     	   dateMonthAfter = dateBegin.addMonths(1);
+    	   numberOfDays = dateBegin.daysTo(dateMonthAfter);
         }
+    else{
+        numberOfDays = dateBegin.daysTo(QDate::fromString(year+"-12-31","yyyy-MM-dd"));
+        }
+    if (WarnDebugMessage)
+        qDebug() << __FILE__ << QString::number(__LINE__) << " numberOfDays =" << QString::number(numberOfDays); 
     AccountModel * accountModel = new AccountModel(parent);
-    QString dateEndStr = year+"-"+month+"-"+QString::number(dateBegin.daysTo(dateMonthAfter));
+    QString dateEndStr = year+"-"+month+"-"+QString::number(numberOfDays+1);
     QString filter = QString("%1='%2'").arg("USER_UID",m_userUuid);
     filter += " AND ";
     filter += QString("DATE BETWEEN '%1' AND '%2'").arg(dateBeginStr,dateEndStr);
@@ -276,6 +283,8 @@ QStandardItemModel *LedgerIO::getModelMonthlyAndTypeMovementsIO(QObject *parent,
     QDateTime start(QDate(year.toInt(), month.toInt(), 1), QTime(0,0));
     QDateTime end(QDate(year.toInt(), month.toInt(), start.date().daysInMonth()), QTime(23,59,59));
     m_movementModel->setDatesBeginEndAndUserFilter(start,end,m_userUuid);
+    if (WarnDebugMessage)
+    qDebug() << __FILE__ << QString::number(__LINE__) << " movementModel filter =" << m_movementModel->filter() ;
     rows = m_movementModel->rowCount();
     if (WarnDebugMessage)
     qDebug() << __FILE__ << QString::number(__LINE__) << " rows =" << QString::number(rows) ;
