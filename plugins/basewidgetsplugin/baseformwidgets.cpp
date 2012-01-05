@@ -826,28 +826,41 @@ BaseRadio::BaseRadio(Form::FormItem *formItem, QWidget *parent) :
     Form::IFormWidget(formItem,parent), m_ButGroup(0)
 {
     setObjectName("BaseRadio");
-    // Prepare Widget Layout and label
-    QBoxLayout *hb = getBoxLayout(labelAlignement(formItem, Label_OnTop), m_FormItem->spec()->label(), this);
-
-    // Add QLabel
-//    m_Label->setSizePolicy(QSizePolicy::Preferred , QSizePolicy::Preferred);
-    hb->addWidget(m_Label);
-
-    // Add Buttons
-    QGroupBox *gb = new QGroupBox(this);
-    m_ButGroup = new QButtonGroup(this);
-    //     gb->setFlat(true);
-    //     QSizePolicy sizePolicy = gb->sizePolicy();
-    //     sizePolicy.setHorizontalPolicy(QSizePolicy::Fixed);
-    //     gb->setSizePolicy(sizePolicy);
-    QBoxLayout *radioLayout = 0;
-    if (isRadioHorizontalAlign(m_FormItem)) {
-        radioLayout = new QBoxLayout(QBoxLayout::LeftToRight, gb);
+    QLayout *radioLayout = 0;
+    // QtUi Loaded ?
+    const QString &layout = formItem->spec()->value(Form::FormItemSpec::Spec_UiInsertIntoLayout).toString();
+    if (!layout.isEmpty()) {
+        // Find widget
+        radioLayout = qFindChild<QLayout*>(formItem->parentFormMain()->formWidget(), layout);
+        if (!radioLayout) {
+            radioLayout = new QHBoxLayout(this);
+        }
+        m_Label = findLabel(formItem);
     } else {
-        radioLayout = new QBoxLayout(QBoxLayout::TopToBottom, gb);
+        // Prepare Widget Layout and label
+        QBoxLayout *hb = getBoxLayout(labelAlignement(formItem, Label_OnTop), m_FormItem->spec()->label(), this);
+
+        // Add QLabel
+        //    m_Label->setSizePolicy(QSizePolicy::Preferred , QSizePolicy::Preferred);
+        hb->addWidget(m_Label);
+
+        // Add Buttons
+        QGroupBox *gb = new QGroupBox(this);
+        //     gb->setFlat(true);
+        //     QSizePolicy sizePolicy = gb->sizePolicy();
+        //     sizePolicy.setHorizontalPolicy(QSizePolicy::Fixed);
+        //     gb->setSizePolicy(sizePolicy);
+        if (isRadioHorizontalAlign(m_FormItem)) {
+            radioLayout = new QBoxLayout(QBoxLayout::LeftToRight, gb);
+        } else {
+            radioLayout = new QBoxLayout(QBoxLayout::TopToBottom, gb);
+        }
+    //    qWarning() << isRadioHorizontalAlign(m_FormItem);
+        radioLayout->setContentsMargins(1, 0, 1, 0);
+        hb->addWidget(gb);
     }
-//    qWarning() << isRadioHorizontalAlign(m_FormItem);
-    radioLayout->setContentsMargins(1, 0, 1, 0);
+
+    m_ButGroup = new QButtonGroup(this);
     QRadioButton *rb = 0;
     int i = 0;
 
@@ -872,7 +885,6 @@ BaseRadio::BaseRadio(Form::FormItem *formItem, QWidget *parent) :
         radioLayout->addWidget(rb);
         m_RadioList.append(rb);
     }
-    hb->addWidget(gb);
 
     // create the FormItemData
     BaseRadioData *data = new BaseRadioData(m_FormItem);
