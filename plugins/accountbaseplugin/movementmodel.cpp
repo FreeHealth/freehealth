@@ -146,7 +146,14 @@ bool MovementModel::removeRows(int row, int count, const QModelIndex &parent)
 {
     d->m_IsDirty = true;
     bool ret = d->m_SqlTable->removeRows(row, count, parent);
-    d->m_SqlTable->submitAll();
+    if (ret == true)
+    {
+    	  ret = d->m_SqlTable->submitAll();
+        }
+    else
+    {
+    	qWarning() << __FILE__ << QString::number(__LINE__) << "Unable to submit removeRows" ;
+        }
     return ret;
 }
 
@@ -182,6 +189,12 @@ void MovementModel::setFilter(const QString & filter){
 QString MovementModel::filter(){
     return d->m_SqlTable->filter();
 }
+
+void MovementModel::clearFilters(){
+    QString filter = QString();
+    d->m_SqlTable->setFilter(filter);
+    d->m_SqlTable->select();
+}
 bool MovementModel::select(){
     return d->m_SqlTable->select();
 }
@@ -190,7 +203,7 @@ void MovementModel::setDatesBeginEndAndUserFilter(QDateTime &start, QDateTime &e
     QString filter;
     filter = QString("%1='%2'").arg("USER_UID",uuid);
     filter += " AND ";
-    filter += QString("DATE BETWEEN '%1' AND '%2'").arg(start.toString(),end.toString());
+    filter += QString("DATE BETWEEN '%1' AND '%2'").arg(start.toString("yyyy-MM-dd"),end.toString("yyyy-MM-dd"));
     setFilter(filter);
     
 }
