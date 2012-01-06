@@ -149,13 +149,13 @@ void treeViewsActions::fillActionTreeView()
     m_actionsTreeModel = new QStandardItemModel;
     QStringList listOfMainActions;
     QMap<QString,QString> parametersMap;
-    parametersMap.insert("Debtor","insurance");
+    parametersMap.insert(trUtf8("Debtor"),"insurance");
     //parametersMap.insert("Thesaurus","thesaurus");
     //parametersMap.insert("Values","values");
-    parametersMap.insert("Sites","sites");
+    parametersMap.insert(trUtf8("Sites"),"sites");
     //parametersMap.insert("Preferred Value","Preferred Value");
     //parametersMap.insert("Round trip","Round trip");
-    parametersMap.insert("Distance rules","distance_rules");
+    parametersMap.insert(trUtf8("Distance rules"),"distance_rules");
     listOfMainActions = parametersMap.keys();
     //insert items from tables if available
     QMap<QString,QString> mapSubItems;
@@ -173,7 +173,7 @@ void treeViewsActions::fillActionTreeView()
         //default values if unavailables :
         if (listOfItemsOfTable.size()<1)
         {
-        	  if (strKeysParameters == "Debtor")
+        	  if (strKeysParameters.contains(trUtf8("Debtor")))
         	  {
         	       mapSubItems.insertMulti(strKeysParameters,"Patient");
                        mapSubItems.insertMulti(strKeysParameters,"CPAM28");  
@@ -183,12 +183,12 @@ void treeViewsActions::fillActionTreeView()
         	       mapSubItems.insertMulti("Thesaurus","CS");
                        mapSubItems.insertMulti("Thesaurus","V");  
         	      }*/
-        	  else if (strKeysParameters == "Sites")
+        	  else if (strKeysParameters.contains(trUtf8("Sites")))
         	  {
         	       mapSubItems.insertMulti("Sites","cabinet");
                        mapSubItems.insertMulti("Sites","clinique");  
         	      }
-        	  else if (strKeysParameters == "Distance rules")
+        	  else if (strKeysParameters.contains(trUtf8("Distance rules")))
         	  {
         	  	  mapSubItems.insertMulti("Distance rules","DistPrice");
         	      }
@@ -206,7 +206,7 @@ void treeViewsActions::fillActionTreeView()
     	      qDebug() << __FILE__ << QString::number(__LINE__) << " strMainActions =" << strMainActions ;
         QStandardItem *actionItem = new QStandardItem(strMainActions);
         //treeViewsActions colors
-        if (strMainActions == "Debtor")
+        if (strMainActions.contains(trUtf8("Debtor")))
         {
         	  QBrush green(Qt::darkGreen);
                   actionItem->setForeground(green);
@@ -223,7 +223,7 @@ void treeViewsActions::fillActionTreeView()
         	  QBrush red(Qt::red);
                   actionItem->setForeground(red);
             }*/
-        else if (strMainActions == "Sites")
+        else if (strMainActions.contains(trUtf8("Sites")))
         {
         	  QBrush green(Qt::darkGreen);
                   actionItem->setForeground(green);       	  
@@ -243,7 +243,7 @@ void treeViewsActions::fillActionTreeView()
         	  QBrush blue(Qt::blue);
                   actionItem->setForeground(blue);    
             }*/
-        else if (strMainActions == "Distance rules")
+        else if (strMainActions.contains(trUtf8("Distance rules")))
         {
         	  QBrush green(Qt::darkGreen);
                   actionItem->setForeground(green);
@@ -318,9 +318,9 @@ choiceDialog::choiceDialog(QWidget * parent,bool roundtrip):QDialog(parent),ui(n
     ui->paramsGroupBox->setLayout(vbox);
     m_actionTreeView->fillActionTreeView();
     //preferential choices in the tree view.
-    QString site = QString("Sites");
-    QString distRule = QString("Distance rules");
-    QString debtor = QString("Debtor");
+    QString site = trUtf8("Sites");
+    QString distRule = trUtf8("Distance rules");
+    QString debtor = trUtf8("Debtor");
     m_siteUid = firstItemChoosenAsPreferential(site);
     m_distanceRuleValue = firstItemChoosenAsPreferential(distRule).toDouble();
     m_distanceRuleType = manager.getPreferedDistanceRule().toString();

@@ -69,7 +69,7 @@ MovementsViewer::MovementsViewer(QWidget * parent) :
     fillBankComboBox();
     ui->valAndRecButton->setShortcut(QKeySequence::InsertParagraphSeparator);
     if(!showMovements())
-    warningMessageBox( tr("Enable to show movements correctly."), tr("Contact the development team."),
+    warningMessageBox( tr("Unable to show movements correctly."), tr("Contact the development team."),
     QString(), QString() );
     connect(ui->quitButton,SIGNAL(pressed()),this,SLOT(close()));
     connect(ui->recordButton,SIGNAL(pressed()),this,SLOT(recordMovement()));

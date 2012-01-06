@@ -171,7 +171,7 @@ QScriptValue ScriptManager::evaluate(const QString &script)
     QScriptValue val = m_Engine->evaluate(script);
     if (m_Engine->hasUncaughtException()) {
          int line = m_Engine->uncaughtExceptionLineNumber();
-         LOG_ERROR("uncaught exception at line" << line << ":" << result.toString());
+         //LOG_ERROR("uncaught exception at line" << line << ":" << result.toString());
      }
     return val;
 }

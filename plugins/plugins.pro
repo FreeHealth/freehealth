@@ -11,10 +11,10 @@ SUBDIRS = \
     mainwin \
     templates \
     xmlio \
-    basewidgets \
+#    basewidgets \
     aggir \
-    drugs \
-    drugsbase \
+#    drugs \
+#    drugsbase \
     icd \
     pmh \
     padtools \

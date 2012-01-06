@@ -529,7 +529,7 @@ Voulez vous les sauvegarder ?</translation>
     <message>
         <location filename="../../plugins/accountplugin/preferences/bankdetailspage.ui" line="172"/>
         <source>uid</source>
-        <translation type="unfinished"></translation>
+        <translation>uid</translation>
     </message>
     <message>
         <location filename="../../plugins/accountplugin/preferences/bankdetailspage.ui" line="78"/>
@@ -1511,6 +1511,27 @@ Autrement le résultat sera faux!</translation>
         <translation>Ne peut pas changer la valeur bool dans le thésaurus :</translation>
     </message>
     <message>
+        <location filename="../../plugins/accountplugin/receipts/choiceDialog.cpp" line="152"/>
+        <location filename="../../plugins/accountplugin/receipts/choiceDialog.cpp" line="176"/>
+        <location filename="../../plugins/accountplugin/receipts/choiceDialog.cpp" line="209"/>
+        <source>Debtor</source>
+        <translation>Débiteur</translation>
+    </message>
+    <message>
+        <location filename="../../plugins/accountplugin/receipts/choiceDialog.cpp" line="155"/>
+        <location filename="../../plugins/accountplugin/receipts/choiceDialog.cpp" line="186"/>
+        <location filename="../../plugins/accountplugin/receipts/choiceDialog.cpp" line="226"/>
+        <source>Sites</source>
+        <translation>Sites</translation>
+    </message>
+    <message>
+        <location filename="../../plugins/accountplugin/receipts/choiceDialog.cpp" line="158"/>
+        <location filename="../../plugins/accountplugin/receipts/choiceDialog.cpp" line="191"/>
+        <location filename="../../plugins/accountplugin/receipts/choiceDialog.cpp" line="246"/>
+        <source>Distance rules</source>
+        <translation>Règles de distance</translation>
+    </message>
+    <message>
         <location filename="../../plugins/accountplugin/receipts/choiceDialog.cpp" line="283"/>
         <source>Cannot delete in thesaurus :</source>
         <translation>Ne peut pas effacer dans le thésaurus : </translation>
@@ -1866,7 +1887,7 @@ Autrement le résultat sera faux!</translation>
 <context>
     <name>LedgerIO</name>
     <message>
-        <location filename="../../plugins/accountplugin/ledger/ledgerIO.cpp" line="462"/>
+        <location filename="../../plugins/accountplugin/ledger/ledgerIO.cpp" line="443"/>
         <source>Total</source>
         <translation></translation>
     </message>
@@ -2030,33 +2051,33 @@ Autrement le résultat sera faux!</translation>
 <context>
     <name>MovementsIODb</name>
     <message>
-        <location filename="../../plugins/accountplugin/movements/movementsIO.cpp" line="115"/>
+        <location filename="../../plugins/accountplugin/movements/movementsIO.cpp" line="140"/>
         <source>No available movement available.
 Please create defaults in Configuration &gt; Preferences.</source>
         <translation>Par de mouvement type disponible.
 Créez s&apos;ils vous plaît les mouvements par défaut dans Configuration &gt; Preferences.</translation>
     </message>
     <message>
-        <location filename="../../plugins/accountplugin/movements/movementsIO.cpp" line="117"/>
-        <location filename="../../plugins/accountplugin/movements/movementsIO.cpp" line="229"/>
-        <location filename="../../plugins/accountplugin/movements/movementsIO.cpp" line="332"/>
+        <location filename="../../plugins/accountplugin/movements/movementsIO.cpp" line="142"/>
+        <location filename="../../plugins/accountplugin/movements/movementsIO.cpp" line="259"/>
+        <location filename="../../plugins/accountplugin/movements/movementsIO.cpp" line="369"/>
         <source>Warning</source>
         <translation>Attention</translation>
     </message>
     <message>
-        <location filename="../../plugins/accountplugin/movements/movementsIO.cpp" line="230"/>
+        <location filename="../../plugins/accountplugin/movements/movementsIO.cpp" line="260"/>
         <source>
 Error = </source>
         <translation>
 Erreur = </translation>
     </message>
     <message>
-        <location filename="../../plugins/accountplugin/movements/movementsIO.cpp" line="333"/>
+        <location filename="../../plugins/accountplugin/movements/movementsIO.cpp" line="370"/>
         <source>You have two or more records with the same bank name ! Risk of errors!</source>
         <translation>Vous avez deux ou plus enregistrements avec le même nom de banque ! Risque d&apos;erreurs !</translation>
     </message>
     <message>
-        <location filename="../../plugins/accountplugin/movements/movementsIO.cpp" line="356"/>
+        <location filename="../../plugins/accountplugin/movements/movementsIO.cpp" line="393"/>
         <source>Fixed Asset</source>
         <translation>Immobilisation</translation>
     </message>
@@ -2064,97 +2085,107 @@ Erreur = </translation>
 <context>
     <name>MovementsViewer</name>
     <message>
-        <location filename="../../plugins/accountplugin/movements/movementsviewer.cpp" line="95"/>
+        <location filename="../../plugins/accountplugin/movements/movementsviewer.cpp" line="72"/>
+        <source>Contact the development team.</source>
+        <translation>Contacter l&apos;équipe de développement.</translation>
+    </message>
+    <message>
+        <location filename="../../plugins/accountplugin/movements/movementsviewer.cpp" line="72"/>
+        <source>Unable to show movements correctly.</source>
+        <translation>Incapable de montrer les mouvements correctement.</translation>
+    </message>
+    <message>
+        <location filename="../../plugins/accountplugin/movements/movementsviewer.cpp" line="105"/>
         <source>Label</source>
         <translation>Dénomination</translation>
     </message>
     <message>
-        <location filename="../../plugins/accountplugin/movements/movementsviewer.cpp" line="96"/>
+        <location filename="../../plugins/accountplugin/movements/movementsviewer.cpp" line="107"/>
         <source>Date</source>
         <translation>Date</translation>
     </message>
     <message>
-        <location filename="../../plugins/accountplugin/movements/movementsviewer.cpp" line="97"/>
+        <location filename="../../plugins/accountplugin/movements/movementsviewer.cpp" line="108"/>
         <source>Date of value</source>
         <translation>Date de valeur</translation>
     </message>
     <message>
-        <location filename="../../plugins/accountplugin/movements/movementsviewer.cpp" line="98"/>
+        <location filename="../../plugins/accountplugin/movements/movementsviewer.cpp" line="109"/>
         <source>Acts</source>
         <translation>Actes</translation>
     </message>
     <message>
-        <location filename="../../plugins/accountplugin/movements/movementsviewer.cpp" line="99"/>
+        <location filename="../../plugins/accountplugin/movements/movementsviewer.cpp" line="110"/>
         <source>Validity</source>
         <translation>Validité</translation>
     </message>
     <message>
-        <location filename="../../plugins/accountplugin/movements/movementsviewer.cpp" line="100"/>
+        <location filename="../../plugins/accountplugin/movements/movementsviewer.cpp" line="111"/>
         <source>Valid</source>
         <translation>Valider</translation>
     </message>
     <message>
-        <location filename="../../plugins/accountplugin/movements/movementsviewer.cpp" line="101"/>
+        <location filename="../../plugins/accountplugin/movements/movementsviewer.cpp" line="112"/>
         <source>Details</source>
         <translation>Détails</translation>
     </message>
     <message>
-        <location filename="../../plugins/accountplugin/movements/movementsviewer.cpp" line="155"/>
-        <location filename="../../plugins/accountplugin/movements/movementsviewer.cpp" line="166"/>
-        <location filename="../../plugins/accountplugin/movements/movementsviewer.cpp" line="174"/>
+        <location filename="../../plugins/accountplugin/movements/movementsviewer.cpp" line="167"/>
         <location filename="../../plugins/accountplugin/movements/movementsviewer.cpp" line="179"/>
-        <location filename="../../plugins/accountplugin/movements/movementsviewer.cpp" line="190"/>
-        <location filename="../../plugins/accountplugin/movements/movementsviewer.cpp" line="195"/>
+        <location filename="../../plugins/accountplugin/movements/movementsviewer.cpp" line="187"/>
+        <location filename="../../plugins/accountplugin/movements/movementsviewer.cpp" line="192"/>
+        <location filename="../../plugins/accountplugin/movements/movementsviewer.cpp" line="203"/>
+        <location filename="../../plugins/accountplugin/movements/movementsviewer.cpp" line="208"/>
         <source>Error</source>
         <translation>Erreur</translation>
     </message>
     <message>
-        <location filename="../../plugins/accountplugin/movements/movementsviewer.cpp" line="155"/>
+        <location filename="../../plugins/accountplugin/movements/movementsviewer.cpp" line="167"/>
         <source>Movement not inserted.</source>
         <translation>Mouvement à insérer.</translation>
     </message>
     <message>
-        <location filename="../../plugins/accountplugin/movements/movementsviewer.cpp" line="157"/>
-        <location filename="../../plugins/accountplugin/movements/movementsviewer.cpp" line="181"/>
-        <location filename="../../plugins/accountplugin/movements/movementsviewer.cpp" line="197"/>
+        <location filename="../../plugins/accountplugin/movements/movementsviewer.cpp" line="169"/>
+        <location filename="../../plugins/accountplugin/movements/movementsviewer.cpp" line="194"/>
+        <location filename="../../plugins/accountplugin/movements/movementsviewer.cpp" line="210"/>
         <source>Information</source>
         <translation>Information</translation>
     </message>
     <message>
-        <location filename="../../plugins/accountplugin/movements/movementsviewer.cpp" line="157"/>
+        <location filename="../../plugins/accountplugin/movements/movementsviewer.cpp" line="169"/>
         <source>Movement is inserted.</source>
         <translation>Le mouvement est inséré.</translation>
     </message>
     <message>
-        <location filename="../../plugins/accountplugin/movements/movementsviewer.cpp" line="166"/>
-        <location filename="../../plugins/accountplugin/movements/movementsviewer.cpp" line="190"/>
+        <location filename="../../plugins/accountplugin/movements/movementsviewer.cpp" line="179"/>
+        <location filename="../../plugins/accountplugin/movements/movementsviewer.cpp" line="203"/>
         <source>You forgot to select a line.</source>
         <translation>Vous avez oublié de sélectionner une ligne.</translation>
     </message>
     <message>
-        <location filename="../../plugins/accountplugin/movements/movementsviewer.cpp" line="174"/>
+        <location filename="../../plugins/accountplugin/movements/movementsviewer.cpp" line="187"/>
         <source>This fixed asset cannot be deleted.
 Do it in assets.</source>
         <translation>Cette immobilisation ne peut pas être effacée.
 Faites le dans Immobilisations.</translation>
     </message>
     <message>
-        <location filename="../../plugins/accountplugin/movements/movementsviewer.cpp" line="179"/>
+        <location filename="../../plugins/accountplugin/movements/movementsviewer.cpp" line="192"/>
         <source>Movement is not deleted.</source>
         <translation>Le mouvement n&apos;a pas été effacé.</translation>
     </message>
     <message>
-        <location filename="../../plugins/accountplugin/movements/movementsviewer.cpp" line="181"/>
+        <location filename="../../plugins/accountplugin/movements/movementsviewer.cpp" line="194"/>
         <source>Movement is deleted.</source>
         <translation>Le mouvement est effacé.</translation>
     </message>
     <message>
-        <location filename="../../plugins/accountplugin/movements/movementsviewer.cpp" line="195"/>
+        <location filename="../../plugins/accountplugin/movements/movementsviewer.cpp" line="208"/>
         <source>Movement is not validated.</source>
         <translation>Le mouvement n&apos;est pas validé.</translation>
     </message>
     <message>
-        <location filename="../../plugins/accountplugin/movements/movementsviewer.cpp" line="197"/>
+        <location filename="../../plugins/accountplugin/movements/movementsviewer.cpp" line="210"/>
         <source>Movement is validated.</source>
         <translation>Le mouvement est validé.</translation>
     </message>
@@ -2402,7 +2433,7 @@ rapide</translation>
         <translation>recettes</translation>
     </message>
     <message>
-        <location filename="../../plugins/accountplugin/ledger/mythread.cpp" line="549"/>
+        <location filename="../../plugins/accountplugin/ledger/mythread.cpp" line="548"/>
         <source>Total</source>
         <translation>Total</translation>
     </message>
@@ -2612,16 +2643,19 @@ Vous devriez en créer une dans Préférences.</translation>
         <translation>Voulez vous choisir un autre pourcentage ?</translation>
     </message>
     <message>
+        <location filename="../../plugins/accountplugin/receipts/choiceDialog.cpp" line="322"/>
         <location filename="../../plugins/accountplugin/receipts/choiceDialog.cpp" line="514"/>
         <source>Distance rules</source>
         <translation>Règles de distance</translation>
     </message>
     <message>
+        <location filename="../../plugins/accountplugin/receipts/choiceDialog.cpp" line="321"/>
         <location filename="../../plugins/accountplugin/receipts/choiceDialog.cpp" line="518"/>
         <source>Sites</source>
         <translation>Sites</translation>
     </message>
     <message>
+        <location filename="../../plugins/accountplugin/receipts/choiceDialog.cpp" line="323"/>
         <location filename="../../plugins/accountplugin/receipts/choiceDialog.cpp" line="522"/>
         <source>Debtor</source>
         <translation>Débiteur</translation>
