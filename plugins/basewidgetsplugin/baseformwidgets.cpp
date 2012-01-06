@@ -800,9 +800,21 @@ bool BaseCheckData::isModified() const
 bool BaseCheckData::setData(const int ref, const QVariant &data, const int role)
 {
 //    qWarning() << "BaseCheckData::setData" << data << role;
+    if (!m_Check)
+        return false;
     if (role==Qt::EditRole || role==Qt::CheckStateRole) {
-        if (data.canConvert(QVariant::Int))  { // Tristate
-            m_Check->setCheckState(Qt::CheckState(data.toInt()));
+        if (data.canConvert(QVariant::Int))  {
+            switch (data.toInt()) {
+            case 0:
+                m_Check->setCheckState(Qt::Unchecked);
+                break;
+            case 1:
+                m_Check->setCheckState(Qt::PartiallyChecked);
+                break;
+            case 2:
+                m_Check->setCheckState(Qt::Checked);
+                break;
+            }
             onValueChanged();
         }
     }
