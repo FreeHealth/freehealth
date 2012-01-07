@@ -26,6 +26,7 @@
 #ifndef IMAGEVIEWER_H
 #define IMAGEVIEWER_H
 
+#include <utils/global_exporter.h>
 #include <QDialog>
 #include <QPixmap>
 #include <QString>
@@ -40,7 +41,7 @@ QT_END_NAMESPACE
 
 namespace Utils {
 
-class ImageViewer : public QDialog
+class UTILS_EXPORT ImageViewer : public QDialog
 {
     Q_OBJECT
 public:
