@@ -27,7 +27,7 @@
 #ifndef DATAPACK_GENERICDESCRIPTION_H
 #define DATAPACK_GENERICDESCRIPTION_H
 
-#include <datapackutils/datapack_exporter.h>
+#include <utils/global_exporter.h>
 #include <utils/genericupdateinformation.h>
 #include <translationutils/multilingualclasstemplate.h>
 
@@ -53,11 +53,11 @@ class VersionNumber;
 
 namespace Utils {
 
-struct DATAPACK_EXPORT Files {
+struct UTILS_EXPORT Files {
 
 };
 
-class DATAPACK_EXPORT GenericDescription
+class UTILS_EXPORT GenericDescription
 {
 public:
     enum DataRepresentation {
