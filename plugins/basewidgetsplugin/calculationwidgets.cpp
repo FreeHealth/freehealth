@@ -86,6 +86,20 @@ inline static bool dontPrintEmptyValues(Form::FormItem *item)
     return item->getOptions().contains(::DONTPRINTEMPTYVALUES, Qt::CaseInsensitive);
 }
 
+inline static QLabel *findLabel(Form::FormItem *item)
+{
+    QLabel *l = 0;
+    // Find label
+    const QString &lbl = item->spec()->value(Form::FormItemSpec::Spec_UiLabel).toString();
+    if (!lbl.isEmpty()) {
+        l = qFindChild<QLabel*>(item->parentFormMain()->formWidget(), lbl);
+        if (l) {
+            l->setText(item->spec()->label());
+        }
+    }
+    return l;
+}
+
 CalculationWidgetsFactory::CalculationWidgetsFactory(QObject *parent) :
     IFormWidgetFactory(parent)
 {
@@ -166,15 +180,31 @@ SumWidget::SumWidget(Form::FormItem *formItem, QWidget *parent) :
     line(0)
 {
     setObjectName("SumWidget_"+formItem->uuid());
-    // Prepare Widget Layout and label
-    QBoxLayout *hb = getBoxLayout(Label_OnLeft, m_FormItem->spec()->label(), this);
-    hb->addWidget(m_Label);
+    // QtUi Loaded ?
+    const QString &widget = formItem->spec()->value(Form::FormItemSpec::Spec_UiWidget).toString();
+    if (!widget.isEmpty()) {
+        // Find widget
+        QLineEdit *le = qFindChild<QLineEdit*>(formItem->parentFormMain()->formWidget(), widget);
+        if (le) {
+            line = le;
+        } else {
+            LOG_ERROR("Using the QtUiLinkage, item not found in the ui: " + formItem->uuid());
+            // To avoid segfaulting create a fake combo
+            line = new QLineEdit(this);
+        }
+        m_Label = findLabel(formItem);
+    } else {
+        // Prepare Widget Layout and label
+        QBoxLayout *hb = getBoxLayout(Label_OnLeft, m_FormItem->spec()->label(), this);
+        hb->addWidget(m_Label);
 
-    // Add LineEdit for the result
-    line = new QLineEdit(this);
-    line->setObjectName("SumWidgetLineEdit_" + m_FormItem->uuid());
-    line->setSizePolicy(QSizePolicy::Expanding , QSizePolicy::Fixed);
-    hb->addWidget(line);
+        // Add LineEdit for the result
+        line = new QLineEdit(this);
+        line->setObjectName("SumWidgetLineEdit_" + m_FormItem->uuid());
+        line->setSizePolicy(QSizePolicy::Expanding , QSizePolicy::Fixed);
+        hb->addWidget(line);
+    }
+    retranslate();
 
     // connect to parent FormMain
     Form::FormMain *p = formItem->parentFormMain();
@@ -327,22 +357,54 @@ ScriptWidget::ScriptWidget(Form::FormItem *formItem, QWidget *parent) :
     m_Editor(0)
 {
     setObjectName("ScriptWidget_"+formItem->uuid());
-    // Prepare Widget Layout and label
-    QBoxLayout *hb = getBoxLayout(Label_OnLeft, m_FormItem->spec()->label(), this);
-    hb->addWidget(m_Label);
-
-    // Add LineEdit for the result
-    if (formItem->getOptions().contains(::SHOW_IN_TEXTEDITOR, Qt::CaseInsensitive)) {
-        m_Editor = new Editor::TextEditor(this);
-        m_Editor->setObjectName("ScriptWidgetTextEditor_" + m_FormItem->uuid());
-        m_Editor->setSizePolicy(QSizePolicy::Expanding , QSizePolicy::Fixed);
-        hb->addWidget(m_Editor);
+    // QtUi Loaded ?
+    const QString &widget = formItem->spec()->value(Form::FormItemSpec::Spec_UiWidget).toString();
+    if (!widget.isEmpty()) {
+        // Find widget
+        QLineEdit *le = qFindChild<QLineEdit*>(formItem->parentFormMain()->formWidget(), widget);
+        if (le) {
+            line = le;
+        } else {
+            LOG_ERROR("Using the QtUiLinkage, item not found in the ui: " + formItem->uuid());
+            // To avoid segfaulting create a fake combo
+            line = new QLineEdit(this);
+        }
+        m_Label = findLabel(formItem);
     } else {
-        line = new QLineEdit(this);
-        line->setObjectName("ScriptWidgetLineEdit_" + m_FormItem->uuid());
-        line->setSizePolicy(QSizePolicy::Expanding , QSizePolicy::Fixed);
-        hb->addWidget(line);
+        const QString &layout = formItem->spec()->value(Form::FormItemSpec::Spec_UiInsertIntoLayout).toString();
+        if (!layout.isEmpty()) {
+            m_Editor = new Editor::TextEditor(this);
+            m_Editor->setObjectName("ScriptWidgetTextEditor_" + m_FormItem->uuid());
+            m_Editor->setSizePolicy(QSizePolicy::Expanding , QSizePolicy::Fixed);
+            // Find widget
+            QLayout *lay = qFindChild<QLayout*>(formItem->parentFormMain()->formWidget(), layout);
+            if (lay) {
+                lay->addWidget(m_Editor);
+            } else {
+                LOG_ERROR("Using the QtUiLinkage, item not found in the ui: " + formItem->uuid());
+            }
+            m_Label = findLabel(formItem);
+        } else {
+            // Prepare Widget Layout and label
+            QBoxLayout *hb = getBoxLayout(Label_OnLeft, m_FormItem->spec()->label(), this);
+            hb->addWidget(m_Label);
+
+            // Add LineEdit for the result
+            if (formItem->getOptions().contains(::SHOW_IN_TEXTEDITOR, Qt::CaseInsensitive)) {
+                m_Editor = new Editor::TextEditor(this);
+                m_Editor->setObjectName("ScriptWidgetTextEditor_" + m_FormItem->uuid());
+                m_Editor->setSizePolicy(QSizePolicy::Expanding , QSizePolicy::Fixed);
+                hb->addWidget(m_Editor);
+            } else {
+                line = new QLineEdit(this);
+                line->setObjectName("ScriptWidgetLineEdit_" + m_FormItem->uuid());
+                line->setSizePolicy(QSizePolicy::Expanding , QSizePolicy::Fixed);
+                hb->addWidget(line);
+            }
+        }
     }
+
+    retranslate();
 
     // connect to parent FormMain
     Form::FormMain *p = formItem->parentFormMain();
