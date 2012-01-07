@@ -542,4 +542,3 @@ void ScriptWidget::recalculate(const int modifiedRef)
     }
 }
 
-#include "calculationwidgets.moc"
