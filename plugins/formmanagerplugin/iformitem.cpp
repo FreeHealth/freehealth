@@ -45,10 +45,7 @@
 
  \todo - Options d'affichage et d'impression ??
  \todo - Options de "droit" / utilisateurs autorisés
- \todo - Scripts (OnLoad, PostLoad, CallMe)
  \todo - Base de règles
- \todo - Plugin associé
- \todo - 1 QWidget vue (les widgets sont construits par les IFormIO selon leur spécificités)
  \todo - 1 QWidget historique
  \todo - checkValueIntegrity() qui se base sur les règles de l'item pour vérifier son exactitude
 */
@@ -128,10 +125,11 @@ enum {WarnFormCreation=false};
 ////////////////////////////////////////////////////////////////////////////////////////////////////////////
 //////////////////////////////////////  FormItemIdentifiants  //////////////////////////////////////////////
 ////////////////////////////////////////////////////////////////////////////////////////////////////////////
+/** Defines the FreeMedForms UUID of the item. */
 void FormItemIdentifiants::setUuid(const QString &uuid)
 {
     id = uuidManager()->uniqueIdentifier(uuid);
-    m_Uuid=uuid;
+    m_Uuid = uuid;
 
     /** \todo Define the objectName according to the parent to simplify the scripting */
 //    QString objName = uuid;
@@ -150,11 +148,25 @@ void FormItemIdentifiants::setUuid(const QString &uuid)
 //    setObjectName(objName);
 }
 
+/** Returns the FreeMedForms UUID of the item. This UUID is used for database accesses. */
 QString FormItemIdentifiants::uuid() const
 {
     return m_Uuid;
 }
 
+/** Defines the FreeMedForms equivalence in UUID for the item. Equivalence UUID is used to keep data correspondance when a form was updated and uuid of item changed. */
+void FormItemIdentifiants::setEquivalentUuid(const QStringList &list)
+{
+    m_EquivalentUuid = list;
+    m_EquivalentUuid.removeDuplicates();
+    m_EquivalentUuid.removeAll("");
+}
+
+/** Returns the FreeMedForms equivalence in UUID for the item. \sa FormItemIdentifiants::setEquivalentUuid */
+QStringList FormItemIdentifiants::equivalentUuid() const
+{
+    return m_EquivalentUuid;
+}
 ////////////////////////////////////////////////////////////////////////////////////////////////////////////
 /////////////////////////////////////////  FormItemScripts  ////////////////////////////////////////////////
 ////////////////////////////////////////////////////////////////////////////////////////////////////////////
@@ -340,6 +352,7 @@ void FormItemValues::setValue(int type, const int id, const QVariant &val, const
     }
 }
 
+/** Defines the default value content using \e val for a specific language \e lang. */
 void FormItemValues::setDefaultValue(const QVariant &val, const QString &lang)
 {
     QString l = lang;
@@ -349,6 +362,7 @@ void FormItemValues::setDefaultValue(const QVariant &val, const QString &lang)
     values->m_Default = val;
 }
 
+/** Returns the default value content for a specific language \e lang. */
 QVariant FormItemValues::defaultValue(const QString &lang) const
 {
     QString l = lang;
@@ -386,9 +400,7 @@ void FormItemValues::setOptionnal(bool state)
     d->m_Optionnal = state;
 }
 
-/**
-  \brief Returns a QStringList of values asked sorted by id number. \e typeOfValue represents the enumerator.
-*/
+/** \brief Returns a QStringList of values asked sorted by id number. \e typeOfValue represents the enumerator. */
 QStringList FormItemValues::values(const int typeOfValues) const
 {
     if (typeOfValues==Value_Uuid) {
@@ -437,7 +449,7 @@ QStringList FormItemValues::values(const int typeOfValues) const
     return list;
 }
 
-
+/** Used for debugging purpose */
 void FormItemValues::toTreeWidget(QTreeWidgetItem *tree) const
 {
     d->toTreeWidget(tree);
@@ -473,6 +485,7 @@ void FormItem::addExtraData(const QString &id, const QString &data)
     }
 }
 
+/** Returns all options defined for this item. */
 QStringList FormItem::getOptions() const
 {
     QStringList l;
@@ -481,6 +494,7 @@ QStringList FormItem::getOptions() const
     return l;
 }
 
+/** Creates a child Form::FormItem using the specified \e uuid. */
 FormItem *FormItem::createChildItem(const QString &uuid)
 {
     Form::FormItem *i = new Form::FormItem(this);
@@ -552,6 +566,7 @@ void FormMain::languageChanged()
     qWarning() << "FormMain language changed" << uuid();
 }
 
+/** Clear the form and all its items. This should set the items to their default value. */
 void FormMain::clear()
 {
     foreach(FormItem *it, this->flattenFormItemChildren()) {
@@ -560,6 +575,7 @@ void FormMain::clear()
     }
 }
 
+/** Returns the printable html for the form using all its items. */
 QString FormMain::printableHtml(bool withValues) const
 {
     /** \todo code here : print a form with/wo item content */
@@ -571,6 +587,7 @@ QString FormMain::printableHtml(bool withValues) const
     return QString();
 }
 
+/** For debugging purpose. */
 void FormMain::createDebugPage()
 {
     m_DebugPage = new FormMainDebugPage(this, this);
@@ -590,6 +607,7 @@ inline static void itemToTree(FormItem *item, QTreeWidgetItem *tree)
     }
 }
 
+/** For debugging purpose. */
 void FormMain::toTreeWidget(QTreeWidget *tree)
 {
     QTreeWidgetItem *i = new QTreeWidgetItem(tree, QStringList() << tr("Form : ") + spec()->label());
@@ -604,6 +622,7 @@ void FormMain::toTreeWidget(QTreeWidget *tree)
     }
 }
 
+/** Emit the signal Form::FormMain::formLoaded(). */
 void FormMain::emitFormLoaded()
 {
     Q_EMIT formLoaded();

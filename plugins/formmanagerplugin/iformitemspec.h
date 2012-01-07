@@ -65,10 +65,14 @@ public:
     void setUuid(const QString &uuid);
     QString uuid() const;
 
+    void setEquivalentUuid(const QStringList &list);
+    QStringList equivalentUuid() const;
+
     // define operator< or > or == for the sorting method of items
 private:
     QString m_Name;
     QString m_Uuid;
+    QStringList m_EquivalentUuid;
     int id;
 };
 
@@ -94,7 +98,8 @@ public:
         Spec_UiLabel,
         Spec_UiWidget,
         Spec_UiInsertIntoLayout,
-        Spec_IconFileName
+        Spec_IconFileName,
+        Spec_Tooltip
     };
     FormItemSpec();
     ~FormItemSpec();
