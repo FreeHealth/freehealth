@@ -43,7 +43,7 @@ QT_END_NAMESPACE
  * \file genericdescsription.h
  * \author Eric MAEKER <eric.maeker@gmail.com>
  * \version 0.6.2
- * \date 26 Nov 2011
+ * \date 06 Jan 2012
 */
 
 namespace Utils {
@@ -52,10 +52,6 @@ class VersionNumber;
 }
 
 namespace Utils {
-
-struct UTILS_EXPORT Files {
-
-};
 
 class UTILS_EXPORT GenericDescription
 {
