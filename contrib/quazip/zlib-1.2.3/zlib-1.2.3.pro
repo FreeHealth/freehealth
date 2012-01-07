@@ -3,9 +3,14 @@
 ######################################################################
 
 TEMPLATE = lib
+TARGET = z
+
+include( ../../../libs/libsworkbench.pri )
+
+# Change build destdir
+DESTDIR = $${SOURCES_CONTRIBS_PATH}/quazip
+
 CONFIG *= staticlib
-win32:TARGET = ../z
-else:TARGET = ../z
 
 # CONFIG += qt warn_on staticlib
 # QT -= gui

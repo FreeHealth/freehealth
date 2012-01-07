@@ -5,7 +5,7 @@ DEFINES += QUAZIP_LIBRARY
 
 include( ../../../libs/libsworkbench.pri )
 
-win32:LIBS *= -L../
+win32:LIBS *= -L$${SOURCES_CONTRIBS_PATH}/quazip
 #else:linux*:LIBS *= -L/lib
 
 LIBS *= -lz
