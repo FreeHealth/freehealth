@@ -167,10 +167,10 @@
       <connect_regexp>Test::Calculation::Script::*</connect_regexp>
       <calcScript>
         var s = "Script test: ";
-        forms.namespaceInUse = "Test::Calculation::Script";
-        var first = forms.item("First").currentValue;
-        var second = forms.item("Second").currentValue;
-        var calc = forms.item("Formula").currentText;
+        freemedforms.forms.namespaceInUse = "Test::Calculation::Script";
+        var first = freemedforms.forms.item("First").currentValue;
+        var second = freemedforms.forms.item("Second").currentValue;
+        var calc = freemedforms.forms.item("Formula").currentText;
         var tmp = calc;
         tmp = tmp.replace(/first/g, first.toString());
         tmp = tmp.replace(/second/g, second.toString());
