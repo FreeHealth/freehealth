@@ -100,6 +100,7 @@ public:
 
 public Q_SLOTS:
     void retranslate();
+    void triggered(QAction *action);
 
 public:
     QDateTimeEdit *m_EpisodeDate;
@@ -109,6 +110,7 @@ private:
     QGridLayout *m_ContainerLayout;
     int i, row, col, numberColumns;
     Ui::BaseFormWidget *m_Header;
+    QAction *aScreenshot;
 };
 
 // Used to pass episode date, label, user...

@@ -28,15 +28,21 @@
 #include "frenchsocialnumber.h"
 
 #include <coreplugin/icore.h>
+#include <coreplugin/itheme.h>
 #include <coreplugin/iscriptmanager.h>
 #include <coreplugin/ipatient.h>
 #include <coreplugin/constants_tokensandsettings.h>
+#include <coreplugin/constants_icons.h>
 #include <coreplugin/isettings.h>
 
 #include <formmanagerplugin/iformitem.h>
 
 #include <utils/global.h>
 #include <utils/log.h>
+
+#include <translationutils/constants.h>
+#include <translationutils/trans_menu.h>
+#include <translationutils/trans_filepathxml.h>
 
 #include <QStringList>
 #include <QMessageBox>
@@ -52,6 +58,7 @@
 #include <QSpinBox>
 #include <QPushButton>
 #include <QStringListModel>
+#include <QFileDialog>
 
 #include <QtUiTools/QUiLoader>
 #include <QBuffer>
@@ -60,10 +67,12 @@
 
 using namespace BaseWidgets;
 using namespace Internal;
+using namespace Trans::ConstantTranslations;
 
 static inline Core::IPatient *patient() {return Core::ICore::instance()->patient();}
 static inline Core::ISettings *settings() {return Core::ICore::instance()->settings();}
 static inline Core::IScriptManager *scriptManager() {return Core::ICore::instance()->scriptManager();}
+static inline Core::ITheme *theme() {return Core::ICore::instance()->theme();}
 
 namespace {
     // TypeEnum must be sync with the widgetsName QStringList
@@ -291,7 +300,8 @@ BaseForm::BaseForm(Form::FormItem *formItem, QWidget *parent) :
     Form::IFormWidget(formItem, parent),
     m_ContainerLayout(0),
     i(0), row(0), col(0), numberColumns(1),
-    m_Header(0)
+    m_Header(0),
+    aScreenshot(0)
 {
     setObjectName("BaseForm");
     QVBoxLayout *mainLayout = new QVBoxLayout(this);
@@ -310,6 +320,12 @@ BaseForm::BaseForm(Form::FormItem *formItem, QWidget *parent) :
     m_EpisodeLabel = m_Header->lineEdit;
     m_EpisodeLabel->setEnabled(false);
     m_Header->label->setText(m_FormItem->spec()->label());
+
+    aScreenshot = new QAction(this);
+    aScreenshot->setIcon(theme()->icon(Core::Constants::ICONTAKESCREENSHOT));
+    m_Header->toolButton->addAction(aScreenshot);
+    connect(m_Header->toolButton, SIGNAL(triggered(QAction*)), this, SLOT(triggered(QAction*)));
+    m_Header->toolButton->setDefaultAction(aScreenshot);
 
     // create main widget
     QWidget *mainWidget = 0;
@@ -347,6 +363,8 @@ BaseForm::BaseForm(Form::FormItem *formItem, QWidget *parent) :
     BaseFormData *datas = new BaseFormData(formItem);
     datas->setForm(this);
     formItem->setItemDatas(datas);
+
+    retranslate();
 }
 
 BaseForm::~BaseForm()
@@ -441,7 +459,25 @@ QString BaseForm::printableHtml(bool withValues) const
 
 void BaseForm::retranslate()
 {
-    m_Header->label->setText(m_FormItem->spec()->label());
+    if (m_Header)
+        m_Header->label->setText(m_FormItem->spec()->label());
+    if (aScreenshot) {
+        aScreenshot->setText(tkTr(Trans::Constants::TAKE_SCREENSHOT));
+        aScreenshot->setToolTip(tkTr(Trans::Constants::TAKE_SCREENSHOT));
+    }
+}
+
+void BaseForm::triggered(QAction *action)
+{
+    if (action==aScreenshot) {
+        QPixmap pix = QPixmap::grabWidget(this);
+        QString fileName = QFileDialog::getSaveFileName(this, tkTr(Trans::Constants::SAVE_FILE),
+                                                        settings()->path(Core::ISettings::UserDocumentsPath),
+                                                        tr("Images (*.png)"));
+        if (!fileName.isEmpty()) {
+            pix.save(fileName);
+        }
+    }
 }
 
 ////////////////////////////////////////// ItemData /////////////////////////////////////////////
