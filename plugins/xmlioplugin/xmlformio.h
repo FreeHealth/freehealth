@@ -78,6 +78,9 @@ public:
     QList<Form::FormMain *> loadAllRootForms(const QString &uuidOrAbsPath = QString::null) const;
     bool loadPmhCategories(const QString &uuidOrAbsPath) const;
 
+    QList<QPixmap> screenShots(const QString &uuidOrAbsPath) const;
+    QPixmap screenShot(const QString &uuidOrAbsPath, const QString &name) const;
+
     bool saveForm(QObject *treeRoot) { Q_UNUSED(treeRoot); return true; }
 
     QString lastError() const {return m_Error.join("\n");}

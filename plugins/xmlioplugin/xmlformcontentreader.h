@@ -80,6 +80,7 @@ public:
 
     bool checkFileContent(const QString &formUidOrFullAbsPath, const QString &contents) const;
 
+    QMultiHash<QString, QString> readUuidEquivalence(const QDomDocument *doc) const;
     Form::FormIODescription *readXmlDescription(const QDomElement &xmlDescr, const QString &formUid);
     Form::FormIODescription *readFileInformations(const QString &formUidOrFullAbsPath, const Form::FormIOQuery &query = Form::FormIOQuery());
 

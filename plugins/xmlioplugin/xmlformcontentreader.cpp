@@ -75,6 +75,20 @@ static inline PMH::PmhCore *pmhCore() {return PMH::PmhCore::instance();}
 static inline Internal::XmlFormContentReader *reader() {return Internal::XmlFormContentReader::instance();}
 static inline Internal::XmlIOBase *base() {return Internal::XmlIOBase::instance();}
 
+static QString getNamespace(const Form::FormItem *item)
+{
+    QStringList ns;
+    // Add all Form::FormMain Namespace
+    Form::FormMain *form = item->parentFormMain();
+    while (form) {
+        if (form->useNameAsNSForSubItems())
+            ns.prepend(form->uuid());
+        form = form->parentFormMain();
+    }
+    if (ns.isEmpty())
+        return QString::null;
+    return ns.join("::") + "::";
+}
 
 XmlFormContentReader *XmlFormContentReader::m_Instance = 0;
 XmlFormContentReader *XmlFormContentReader::instance()
@@ -115,6 +129,7 @@ XmlFormContentReader::XmlFormContentReader() :
    m_SpecsTypes.insert(Constants::TAG_SPEC_LABEL, Form::FormItemSpec::Spec_Label);
    m_SpecsTypes.insert(Constants::TAG_SPEC_VERSION, Form::FormItemSpec::Spec_Version);
    m_SpecsTypes.insert(Constants::TAG_SPEC_ICON, Form::FormItemSpec::Spec_IconFileName);
+   m_SpecsTypes.insert(Constants::TAG_SPEC_TOOLTIP, Form::FormItemSpec::Spec_Tooltip);
 
    m_PatientDatas.clear();
    m_PatientDatas.insert(Constants::TAG_DATAPATIENT_DRUGSALLERGIES, Core::IPatient::DrugsAtcAllergies);
@@ -128,6 +143,7 @@ XmlFormContentReader::XmlFormContentReader() :
 
    m_PatientDatas.insert(Constants::TAG_DATAPATIENT_EMAIL, Core::IPatient::Mails);
    m_PatientDatas.insert(Constants::TAG_DATAPATIENT_FAX, Core::IPatient::Faxes);
+   m_PatientDatas.insert(Constants::TAG_DATAPATIENT_TELS, Core::IPatient::Tels);
 }
 
 XmlFormContentReader::~XmlFormContentReader()
@@ -252,6 +268,24 @@ static void setPathToDescription(QString path, Form::FormIODescription *desc)
     desc->setData(Form::FormIODescription::UuidOrAbsPath, path);
 }
 
+QMultiHash<QString, QString> XmlFormContentReader::readUuidEquivalence(const QDomDocument *doc) const
+{
+    QMultiHash<QString, QString> oldToNew;
+    QDomElement item = doc->firstChildElement(Constants::TAG_MAINXMLTAG);
+    item = item.firstChildElement(Constants::TAG_UUID_EQUIVALENCE_MAIN);
+    item = item.firstChildElement(Constants::TAG_UUID_EQUIVALENCE_ITEM);
+    while (!item.isNull()) {
+        if (item.attribute(Constants::ATTRIB_OLD_UUID).isEmpty() || item.attribute(Constants::ATTRIB_NEW_UUID).isEmpty()) {
+            LOG_ERROR_FOR("XmlFormContentReader", "Field equivalence missing old/new attributes");
+            continue;
+            item = item.nextSiblingElement(Constants::TAG_UUID_EQUIVALENCE_ITEM);
+        }
+        oldToNew.insertMulti(item.attribute(Constants::ATTRIB_OLD_UUID), item.attribute(Constants::ATTRIB_NEW_UUID));
+        item = item.nextSiblingElement(Constants::TAG_UUID_EQUIVALENCE_ITEM);
+    }
+    return oldToNew;
+}
+
 /** Return the Form::FormIODescription according to the XML QDomElement \e xmlDescr. The \e xmlDescr must point to the first description tag of the document. */
 Form::FormIODescription *XmlFormContentReader::readXmlDescription(const QDomElement &xmlDescr, const QString &formUid)
 {
@@ -294,10 +328,10 @@ Form::FormIODescription *XmlFormContentReader::readFileInformations(const QStrin
         }
         if (found) {
             QDir dir(shotPath);
-            qWarning() << "Trying to read shots" << dir.absolutePath();
+//            qWarning() << "Trying to read shots" << dir.absolutePath();
             foreach(const QFileInfo &file, dir.entryInfoList(QStringList() << "*.png" << "*.jpg" << "*.jpeg" << "*.gif")) {
                 QPixmap pix(file.absoluteFilePath());
-                toReturn->addScreenShot(pix);
+                toReturn->addScreenShot(file.absoluteFilePath().remove(shotPath), pix);
             }
         }
     }
@@ -339,7 +373,7 @@ QList<Form::FormIODescription *> XmlFormContentReader::getFormFileDescriptions(c
 
 bool XmlFormContentReader::loadForm(const XmlFormName &form, Form::FormMain *rootForm)
 {
-//    qWarning() << Q_FUNC_INFO << form.uid << form.absFileName;
+//    qWarning() << Q_FUNC_INFO << form.uid << form.absFileName << m_ActualForm;
 
     QDomDocument *doc = 0;
     if (!m_DomDocFormCache.keys().contains(form.absFileName)) {
@@ -368,6 +402,24 @@ bool XmlFormContentReader::loadForm(const XmlFormName &form, Form::FormMain *roo
 
 //    rootForm->createDebugPage();
     createWidgets(rootForm);
+
+    // Manage uuid equivalence
+    QMultiHash<QString, QString> oldToNew = readUuidEquivalence(doc);
+    if (!oldToNew.isEmpty()) {
+        QStringList newUids = oldToNew.values();
+        newUids.removeDuplicates();
+        foreach(Form::FormMain *main, rootForm->flattenFormMainChildren()) {
+            if (newUids.contains(main->uuid(), Qt::CaseInsensitive)) {
+                main->setEquivalentUuid(oldToNew.keys(main->uuid()));
+            }
+            foreach(Form::FormItem *item, main->flattenFormItemChildren()) {
+                if (newUids.contains(item->uuid(), Qt::CaseInsensitive)) {
+                    item->setEquivalentUuid(oldToNew.keys(item->uuid()));
+                }
+            }
+        }
+    }
+
     return true;
 }
 
@@ -437,9 +489,7 @@ bool XmlFormContentReader::loadElement(Form::FormItem *item, QDomElement &rootEl
         // Name/UUID ?
         if ((element.tagName().compare(Constants::ATTRIB_NAME, Qt::CaseInsensitive)==0) ||
             (element.tagName().compare(Constants::ATTRIB_UUID, Qt::CaseInsensitive)==0)) {
-            QString uidNS;
-            if (m_ActualForm->useNameAsNSForSubItems())
-                uidNS = m_ActualForm->uuid() + "::";
+            QString uidNS = getNamespace(item);
             item->setUuid(uidNS + element.text());
             element = element.nextSiblingElement();
             continue;
@@ -470,19 +520,21 @@ bool XmlFormContentReader::loadElement(Form::FormItem *item, QDomElement &rootEl
         }
 
         // Options
-        if (element.tagName().compare(Constants::TAG_OPTIONS, Qt::CaseInsensitive)==0) {
-            if (element.text().contains(Constants::TAG_OPTIONS_UNIQUE_EPISODE, Qt::CaseInsensitive)) {
+        if (element.tagName().compare(Constants::TAG_OPTIONS, Qt::CaseInsensitive)==0 ||
+                element.tagName().compare(Constants::TAG_OPTION, Qt::CaseInsensitive)==0) {
+            const QString &options = element.text();
+            if (options.contains(Constants::TAG_OPTIONS_UNIQUE_EPISODE, Qt::CaseInsensitive)) {
                 if (item==m_ActualForm)
                     m_ActualForm->setEpisodePossibilities(Form::FormMain::UniqueEpisode);
-            } else if (element.text().contains(Constants::TAG_OPTIONS_NO_EPISODE, Qt::CaseInsensitive)) {
+            } else if (options.contains(Constants::TAG_OPTIONS_NO_EPISODE, Qt::CaseInsensitive)) {
                 if (item==m_ActualForm)
                     m_ActualForm->setEpisodePossibilities(Form::FormMain::NoEpisode);
-            } else if (element.text().contains(Constants::OPTION_USEFORMNAMEASNS, Qt::CaseInsensitive)) {
+            }
+            if (options.contains(Constants::OPTION_USEFORMNAMEASNS, Qt::CaseInsensitive)) {
                 if (item==m_ActualForm)
                     m_ActualForm->setUseNameAsNSForSubItems(true);
-            } else {
-                item->addExtraData(element.tagName(), element.text());
             }
+            item->addExtraData(element.tagName(), options);
             element = element.nextSiblingElement();
             continue;
         }
@@ -499,13 +551,11 @@ bool XmlFormContentReader::loadElement(Form::FormItem *item, QDomElement &rootEl
 bool XmlFormContentReader::createElement(Form::FormItem *item, QDomElement &element, const XmlFormName &form)
 {
 //    qWarning() << "XmlFormIO create element" << m_ActualForm->useNameAsNSForSubItems() << m_ActualForm->uuid();
-    QString uidNS;
-    if (m_ActualForm->useNameAsNSForSubItems())
-        uidNS = m_ActualForm->uuid() + "::";
     // new item
     if (element.tagName().compare(Constants::TAG_NEW_ITEM, Qt::CaseInsensitive)==0) {
         if (item) {
             Form::FormItem *child = item->createChildItem();
+            QString uidNS = getNamespace(child);
             // read attributes (type, uid/name, patient representation...)
             if (element.hasAttribute(Constants::ATTRIB_UUID))
                 child->setUuid(uidNS + element.attribute(Constants::ATTRIB_UUID));
@@ -536,6 +586,7 @@ bool XmlFormContentReader::createElement(Form::FormItem *item, QDomElement &elem
         m_ActualForm = m_ActualForm->createChildForm(element.firstChildElement(Constants::TAG_NAME).text());
         item = m_ActualForm;
         if (item) {
+            QString uidNS = getNamespace(m_ActualForm);
             item->spec()->setValue(Form::FormItemSpec::Spec_Plugin, "form", Trans::Constants::ALL_LANGUAGE);
             // read attributes (type, uid/name, patient representation...)
             if (element.hasAttribute(Constants::ATTRIB_UUID))
@@ -566,6 +617,7 @@ bool XmlFormContentReader::createElement(Form::FormItem *item, QDomElement &elem
         item = item->createPage(element.firstChildElement(Constants::TAG_NAME).text());
         /** \todo add page to a form */
         if (item) {
+            QString uidNS = getNamespace(item);
             // read attributes (type, uid/name, patient representation...)
             if (element.hasAttribute(Constants::ATTRIB_UUID))
                 item->setUuid(uidNS + element.attribute(Constants::ATTRIB_UUID));

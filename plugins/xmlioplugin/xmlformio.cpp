@@ -325,6 +325,7 @@ QList<Form::FormMain *> XmlFormIO::loadAllRootForms(const QString &uuidOrAbsPath
         Form::FormMain *root = m_ActualForm = new Form::FormMain;
         root->setModeUniqueName(it.key());
         root->setUuid(form.uid);
+        root->setIoFormReader((XmlFormIO*)this);
         QString fakeFileName;
         QFileInfo info(form.absFileName);
         if (formFile.isDir())
@@ -349,7 +350,6 @@ QList<Form::FormMain *> XmlFormIO::loadAllRootForms(const QString &uuidOrAbsPath
         for(int i=0; i < forms.count(); ++i) {
             forms.at(i)->emitFormLoaded();
         }
-
     }
     return toReturn;
 }
@@ -447,6 +447,17 @@ bool XmlFormIO::createCategory(const QDomElement &element, Category::CategoryIte
         child = child.nextSiblingElement(::Constants::TAG_CATEGORY);
     }
     return true;
+}
+
+QList<QPixmap> XmlFormIO::screenShots(const QString &uuidOrAbsPath) const
+{
+    QList<QPixmap> toReturn;
+    return toReturn;
+}
+
+QPixmap XmlFormIO::screenShot(const QString &uuidOrAbsPath, const QString &name) const
+{
+    return QPixmap();
 }
 
 /** Check the database form version and try to update them with the local files. */
