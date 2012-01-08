@@ -528,6 +528,7 @@ void FormPage::languageChanged()
 ////////////////////////////////////////////////////////////////////////////////////////////////////////////
 FormMain::FormMain(QObject *parent) :
     FormItem(parent),
+    m_Reader(0),
     m_DebugPage(0),
     m_Episode(MultiEpisode),
     m_UseNameAsNSForSubItems(false)
@@ -539,6 +540,25 @@ FormMain::~FormMain()
     /** \todo this is buggy */
 //    if (m_DebugPage)
 //        ExtensionSystem::PluginManager::instance()->removeObject(m_DebugPage);
+}
+
+/** Defines the Form::IFormIO reader of the Form::FormMain root. */
+void FormMain::setIoFormReader(IFormIO *reader)
+{
+    if (rootFormParent()==this) {
+        m_Reader=reader;
+    } else {
+        rootFormParent()->setIoFormReader(reader);
+    }
+}
+
+/** Returns the Form::IFormIO reader of the Form::FormMain root. */
+IFormIO *FormMain::reader() const
+{
+    if (rootFormParent()==(FormMain*)this) {
+        return m_Reader;
+    }
+    return rootFormParent()->reader();
 }
 
 /** \brief Create and return a new FormMain as children of this FormMain. */

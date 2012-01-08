@@ -52,8 +52,8 @@ QT_END_NAMESPACE
 /**
  * \file iformitem.h
  * \author Eric MAEKER <eric.maeker@gmail.com>
- * \version 0.5.0
- * \date 03 Apr 2011
+ * \version 0.6.2
+ * \date 06 Jan 2012
 */
 
 namespace Form {
@@ -62,6 +62,7 @@ class IFormItemData;
 class FormItemIdentifiants;
 class FormPage;
 class FormMain;
+class IFormIO;
 class FormMainDebugPage;
 
 class FORM_EXPORT FormItem : public Form::FormItemIdentifiants
@@ -197,6 +198,9 @@ public:
     FormMain(QObject *parent = 0);
     ~FormMain();
 
+    void setIoFormReader(IFormIO *reader);
+    IFormIO *reader() const;
+
     void setModeUniqueName(const QString &modeUid) {m_ModeName = modeUid;}
     QString modeUniqueName() const {return m_ModeName;}
 
@@ -209,8 +213,8 @@ public:
     virtual void languageChanged();
     void clear();
 
-    virtual FormMain *formParent();
-    virtual FormMain *rootFormParent();
+    virtual FormMain *formParent() const;
+    virtual FormMain *rootFormParent() const;
     virtual QList<FormMain *> flattenFormMainChildren() const;
     virtual QList<FormMain *> firstLevelFormMainChildren() const;
     virtual FormMain *formMainChild(const QString &uuid) const;
@@ -232,24 +236,26 @@ Q_SIGNALS:
 //    void subFormAdded(const QString &uuid);
 
 private:
+    Form::IFormIO *m_Reader;
     FormMainDebugPage *m_DebugPage;
     int m_Episode;
     QString m_ModeName;
     QList<QPixmap> m_Shots;
     bool m_UseNameAsNSForSubItems;
 };
-inline Form::FormMain *Form::FormMain::formParent()
+inline Form::FormMain *Form::FormMain::formParent() const
 {
     return qobject_cast<FormMain*>(parent());
 }
 /** Returns the Empty Root Form parent of the Form::FormMain. */
-inline Form::FormMain *Form::FormMain::rootFormParent()
+inline Form::FormMain *Form::FormMain::rootFormParent() const
 {
-    Form::FormMain *parent = this;
-    while (parent) {
-        parent = qobject_cast<FormMain*>(parent->parent());
+    Form::FormMain *parent = (Form::FormMain*)this;
+    Form::FormMain *newparent = 0;
+    while (newparent = formParent()) {
+        parent = newparent;
     }
-    return parent;
+    return (Form::FormMain*)parent;
 }
 /** Returns all Form::FormMain children of the Form::FormMain  (all level). */
 inline QList<Form::FormMain *> Form::FormMain::flattenFormMainChildren() const
