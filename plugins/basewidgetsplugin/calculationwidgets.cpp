@@ -158,6 +158,10 @@ Form::IFormWidget *CalculationWidgetsFactory::createWidget(const QString &name, 
 /////////////////////////////////////////////////////////////////////////////////////////
 static void addResultToEpisodeLabel(Form::FormMain *parent, QLabel *label, const QVariant &result)
 {
+    if (!label)
+        return;
+    if (!parent)
+        return;
     QString episodeLabel = parent->itemDatas()->data(0, Form::IFormItemData::ID_EpisodeLabel).toString();
     QTextDocument doc;
     doc.setHtml(label->text());
