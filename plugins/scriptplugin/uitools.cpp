@@ -24,19 +24,31 @@
  *       NAME <MAIL@ADRESS>                                                *
  ***************************************************************************/
 #include "uitools.h"
+#include "scriptwrappers.h"
+
+#include <formmanagerplugin/iformitem.h>
+#include <formmanagerplugin/iformio.h>
+#include <formmanagerplugin/formmanager.h>
+
+#include <utils/log.h>
+#include <utils/widgets/imageviewer.h>
 
 #include <QWidget>
 #include <QListWidget>
 #include <QComboBox>
 #include <QListView>
+#include <QtScript/QScriptValue>
+#include <QtScript/QScriptEngine>
 
 #include <QDebug>
 
 using namespace Script;
+static inline Form::FormManager *formManager() { return Form::FormManager::instance(); }
 
 UiTools::UiTools(QObject *parent) :
     QObject(parent)
 {
+    setObjectName("UiTools");
 }
 
 bool UiTools::addItem(QWidget *widget, const QString &item)
@@ -149,4 +161,12 @@ QStringList UiTools::selectedItems(QWidget *widget)
         return toReturn;
     }
     return toReturn;
+}
+
+void UiTools::showScreenshot(const QString &formUid, const QString &fileName) const
+{
+    QPixmap pix = formManager()->getScreenshot(formUid, fileName);
+    Utils::ImageViewer viewer;
+    viewer.setPixmap(pix);
+    viewer.exec();
 }

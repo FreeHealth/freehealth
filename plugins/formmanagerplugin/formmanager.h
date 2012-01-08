@@ -33,8 +33,8 @@
 /**
  * \file formmanager.h
  * \author Eric MAEKER <eric.maeker@gmail.com>
- * \version 0.5.0
- * \date 23 Mar 2011
+ * \version 0.6.2
+ * \date 06 Jan 2012
 */
 
 QT_BEGIN_NAMESPACE
@@ -43,6 +43,7 @@ class QTreeWidgetItem;
 class QWidget;
 class QStackedLayout;
 class QAction;
+class QPixmap;
 QT_END_NAMESPACE
 
 namespace Core {
@@ -110,6 +111,7 @@ public:
     }
 
     QList<Form::FormMain *> loadFormFile(const QString &formUid);
+    QPixmap getScreenshot(const QString &formUid, const QString &fileName);
 
 private:
     void cleanPluginManagerObjectPool();

@@ -52,6 +52,8 @@ inline static QLabel *findLabel(Form::FormItem *item)
             l->setText(item->spec()->label());
         } else {
             LOG_ERROR_FOR("TextEditorFactory", "Label not found");
+            l = new QLabel(item->formWidget());
+            l->setText(item->spec()->label());
         }
     }
     return l;

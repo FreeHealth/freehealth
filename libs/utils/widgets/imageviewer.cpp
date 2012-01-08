@@ -42,9 +42,12 @@
 using namespace Utils;
 using namespace Trans::ConstantTranslations;
 
+/** \todo add gesture for the resize mode and Alt(or Ctrl)+mousewheel to zoom in/out */
+
 ImageViewer::ImageViewer(QWidget *parent) :
     QDialog(parent), m_CurrentIndex(-1)
 {
+    setObjectName("ImageViewer");
     imageLabel = new QLabel;
     imageLabel->setBackgroundRole(QPalette::Base);
     imageLabel->setSizePolicy(QSizePolicy::Ignored, QSizePolicy::Ignored);
@@ -57,11 +60,12 @@ ImageViewer::ImageViewer(QWidget *parent) :
     scrollArea->setVerticalScrollBarPolicy(Qt::ScrollBarAsNeeded);
 
     m_ButBox = new QDialogButtonBox(this);
-//    QAbstractButton *zin = m_ButBox->addButton(tkTr(Trans::Constants::ZOOMIN_TEXT), QDialogButtonBox::ActionRole);
-//    QAbstractButton *zout = m_ButBox->addButton(tkTr(Trans::Constants::ZOOMOUT_TEXT), QDialogButtonBox::ActionRole);
+    //    QAbstractButton *zin = m_ButBox->addButton(tkTr(Trans::Constants::ZOOMIN_TEXT), QDialogButtonBox::ActionRole);
+    //    QAbstractButton *zout = m_ButBox->addButton(tkTr(Trans::Constants::ZOOMOUT_TEXT), QDialogButtonBox::ActionRole);
 
     QAbstractButton *previous = m_ButBox->addButton(tkTr(Trans::Constants::PREVIOUS_TEXT), QDialogButtonBox::ActionRole);
     QAbstractButton *next = m_ButBox->addButton(tkTr(Trans::Constants::NEXT_TEXT), QDialogButtonBox::ActionRole);
+//    QAbstractButton *full = m_ButBox->addButton(tkTr(Trans::Constants::FULLSCREEN_TEXT), QDialogButtonBox::ActionRole);
     QAbstractButton *close = m_ButBox->addButton(QDialogButtonBox::Close);
 
     QVBoxLayout *l = new QVBoxLayout(this);
@@ -69,12 +73,13 @@ ImageViewer::ImageViewer(QWidget *parent) :
     l->addWidget(scrollArea);
     l->addWidget(m_ButBox);
 
-//    connect(zin, SIGNAL(clicked()), this, SLOT(zoomIn()));
-//    connect(zout, SIGNAL(clicked()), this, SLOT(zoomOut()));
+    //    connect(zin, SIGNAL(clicked()), this, SLOT(zoomIn()));
+    //    connect(zout, SIGNAL(clicked()), this, SLOT(zoomOut()));
 
     connect(next, SIGNAL(clicked()), this, SLOT(next()));
     connect(previous, SIGNAL(clicked()), this, SLOT(previous()));
     connect(close, SIGNAL(clicked()), this, SLOT(accept()));
+//    connect(full, SIGNAL(clicked()), this, SLOT(toggleFullScreen()));
 
     Utils::resizeAndCenter(this);
 }
@@ -119,10 +124,10 @@ void ImageViewer::normalSize()
 
 void ImageViewer::fitToWindow()
 {
-//    bool fitToWindow = fitToWindowAct->isChecked();
-//    scrollArea->setWidgetResizable(true);
-//        normalSize();
-//    updateActions();
+    //    bool fitToWindow = fitToWindowAct->isChecked();
+    //    scrollArea->setWidgetResizable(true);
+    //        normalSize();
+    //    updateActions();
 }
 
 void ImageViewer::next()
@@ -146,20 +151,25 @@ void ImageViewer::previous()
 }
 
 void ImageViewer::scaleImage(double factor)
- {
-     Q_ASSERT(imageLabel->pixmap());
-     scaleFactor *= factor;
-     imageLabel->resize(scaleFactor * imageLabel->pixmap()->size());
+{
+    Q_ASSERT(imageLabel->pixmap());
+    scaleFactor *= factor;
+    imageLabel->resize(scaleFactor * imageLabel->pixmap()->size());
 
-     adjustScrollBar(scrollArea->horizontalScrollBar(), factor);
-     adjustScrollBar(scrollArea->verticalScrollBar(), factor);
+    adjustScrollBar(scrollArea->horizontalScrollBar(), factor);
+    adjustScrollBar(scrollArea->verticalScrollBar(), factor);
 
-//     zoomInAct->setEnabled(scaleFactor < 3.0);
-//     zoomOutAct->setEnabled(scaleFactor > 0.333);
- }
+    //     zoomInAct->setEnabled(scaleFactor < 3.0);
+    //     zoomOutAct->setEnabled(scaleFactor > 0.333);
+}
 
- void ImageViewer::adjustScrollBar(QScrollBar *scrollBar, double factor)
- {
-     scrollBar->setValue(int(factor * scrollBar->value()
-                             + ((factor - 1) * scrollBar->pageStep()/2)));
- }
+void ImageViewer::adjustScrollBar(QScrollBar *scrollBar, double factor)
+{
+    scrollBar->setValue(int(factor * scrollBar->value()
+                            + ((factor - 1) * scrollBar->pageStep()/2)));
+}
+
+void ImageViewer::toggleFullScreen()
+{
+    Utils::setFullScreen(this, true);
+}

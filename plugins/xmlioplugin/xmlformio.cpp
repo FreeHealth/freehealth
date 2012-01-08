@@ -457,7 +457,7 @@ QList<QPixmap> XmlFormIO::screenShots(const QString &uuidOrAbsPath) const
 
 QPixmap XmlFormIO::screenShot(const QString &uuidOrAbsPath, const QString &name) const
 {
-    return QPixmap();
+    return base()->getScreenShot(uuidOrAbsPath, name);
 }
 
 /** Check the database form version and try to update them with the local files. */

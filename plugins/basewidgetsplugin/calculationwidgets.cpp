@@ -95,6 +95,9 @@ inline static QLabel *findLabel(Form::FormItem *item)
         l = qFindChild<QLabel*>(item->parentFormMain()->formWidget(), lbl);
         if (l) {
             l->setText(item->spec()->label());
+        } else {
+            l = new QLabel(item->formWidget());
+            l->setText(item->spec()->label());
         }
     }
     return l;
@@ -258,7 +261,8 @@ QString SumWidget::printableHtml(bool withValues) const
 
 void SumWidget::retranslate()
 {
-    m_Label->setText(m_FormItem->spec()->label());
+    if (m_Label)
+        m_Label->setText(m_FormItem->spec()->label());
 }
 
 void SumWidget::connectFormItems()
@@ -463,7 +467,8 @@ QString ScriptWidget::printableHtml(bool withValues) const
 
 void ScriptWidget::retranslate()
 {
-    m_Label->setText(m_FormItem->spec()->label());
+    if (m_Label)
+        m_Label->setText(m_FormItem->spec()->label());
 }
 
 void ScriptWidget::connectFormItems()

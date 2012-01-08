@@ -29,8 +29,10 @@
 #include <QObject>
 #include <QStringList>
 class QWidget;
+class QScriptValue;
 
 namespace Script {
+class FormItemScriptWrapper;
 
 class UiTools : public QObject
 {
@@ -50,6 +52,9 @@ public Q_SLOTS:
     bool clear(QWidget *widget);
 
     QStringList selectedItems(QWidget *widget);
+
+    void showScreenshot(const QString &formUid, const QString &fileName) const;
+
 };
 
 } // namespace Script

@@ -58,6 +58,7 @@ private Q_SLOTS:
     void fitToWindow();
     void next();
     void previous();
+    void toggleFullScreen();
 
 private:
     void scaleImage(double factor);

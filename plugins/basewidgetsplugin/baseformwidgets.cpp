@@ -293,6 +293,7 @@ BaseForm::BaseForm(Form::FormItem *formItem, QWidget *parent) :
     i(0), row(0), col(0), numberColumns(1),
     m_Header(0)
 {
+    setObjectName("BaseForm");
     QVBoxLayout *mainLayout = new QVBoxLayout(this);
     mainLayout->setSpacing(0);
     mainLayout->setMargin(0);
@@ -515,6 +516,7 @@ BaseGroup::BaseGroup(Form::FormItem *formItem, QWidget *parent) :
     Form::IFormWidget(formItem,parent), m_Group(0), m_ContainerLayout(0),
     i(0), row(0), col(0), numberColumns(1)
 {
+    setObjectName("BaseGroup");
     // QtUi Loaded ?
     const QString &widget = formItem->spec()->value(Form::FormItemSpec::Spec_UiWidget).toString();
     if (!widget.isEmpty()) {
@@ -690,6 +692,7 @@ void BaseGroup::retranslate()
 BaseCheck::BaseCheck(Form::FormItem *formItem, QWidget *parent) :
     Form::IFormWidget(formItem,parent), m_Check(0)
 {
+    setObjectName("BaseCheck");
     // QtUi Loaded ?
     const QString &widget = formItem->spec()->value(Form::FormItemSpec::Spec_UiWidget).toString();
     if (!widget.isEmpty()) {
@@ -1148,6 +1151,7 @@ void BaseRadioData::onValueChanged()
 BaseSimpleText::BaseSimpleText(Form::FormItem *formItem, QWidget *parent, bool shortText) :
     Form::IFormWidget(formItem,parent), m_Line(0), m_Text(0)
 {
+    setObjectName("BaseSimpleText");
     // QtUi Loaded ?
     const QString &widget = formItem->spec()->value(Form::FormItemSpec::Spec_UiWidget).toString();
     if (!widget.isEmpty()) {
@@ -1354,6 +1358,7 @@ void BaseSimpleTextData::onValueChanged()
 BaseHelpText::BaseHelpText(Form::FormItem *formItem, QWidget *parent) :
     Form::IFormWidget(formItem,parent)
 {
+    setObjectName("BaseHelpText");
     // QtUi Loaded ?
     const QString &widget = formItem->spec()->value(Form::FormItemSpec::Spec_UiWidget).toString();
     const QString &label = formItem->spec()->value(Form::FormItemSpec::Spec_UiLabel).toString();
@@ -1408,6 +1413,7 @@ void BaseHelpText::retranslate()
 BaseList::BaseList(Form::FormItem *formItem, QWidget *parent, bool uniqueList) :
     Form::IFormWidget(formItem,parent), m_List(0)
 {
+    setObjectName("BaseList");
     // QtUi Loaded ?
     const QString &widget = formItem->spec()->value(Form::FormItemSpec::Spec_UiWidget).toString();
     if (!widget.isEmpty()) {
@@ -1631,6 +1637,7 @@ void BaseListData::onValueChanged()
 BaseCombo::BaseCombo(Form::FormItem *formItem, QWidget *parent) :
     Form::IFormWidget(formItem,parent), m_Combo(0)
 {
+    setObjectName("BaseCombo");
     // QtUi Loaded ?
     const QString &widget = formItem->spec()->value(Form::FormItemSpec::Spec_UiWidget).toString();
     if (!widget.isEmpty()) {
@@ -1803,6 +1810,7 @@ void BaseComboData::onValueChanged()
 BaseDate::BaseDate(Form::FormItem *formItem, QWidget *parent) :
     Form::IFormWidget(formItem,parent), m_Date(0)
 {
+    setObjectName("BaseDate");
     // QtUi Loaded ?
     const QString &widget = formItem->spec()->value(Form::FormItemSpec::Spec_UiWidget).toString();
     if (!widget.isEmpty()) {
@@ -1981,6 +1989,7 @@ void BaseDateData::onValueChanged()
 BaseSpin::BaseSpin(Form::FormItem *formItem, QWidget *parent, bool doubleSpin) :
     Form::IFormWidget(formItem,parent), m_Spin(0)
 {
+    setObjectName("BaseSpin");
     // create FormItemData
     BaseSpinData *data = new BaseSpinData(m_FormItem);
 
@@ -2203,6 +2212,7 @@ void BaseSpinData::onValueChanged()
 BaseButton::BaseButton(Form::FormItem *formItem, QWidget *parent) :
     Form::IFormWidget(formItem,parent), m_Button(0)
 {
+    setObjectName("BaseButton");
     // QtUi Loaded ?
     const QString &widget = formItem->spec()->value(Form::FormItemSpec::Spec_UiWidget).toString();
     if (!widget.isEmpty()) {

@@ -57,6 +57,7 @@ protected:
     XmlIOBase(QObject *parent = 0);
 
 public:
+    // DO NOT MODIFY ORDER (USED IN DATABASE)
     enum TypeOfContent {
         FullContent = 0,
         Description,
@@ -83,6 +84,8 @@ public:
     QList<Form::FormIODescription *> getFormDescription(const Form::FormIOQuery &query);
     QHash<QString, QString> getAllFormFullContent(const QString &formUid);
     QString getFormContent(const QString &formUid, const int type, const QString &modeName = QString::null);
+
+    QPixmap getScreenShot(const QString &formUid, const QString &shotName);
 
     // Setters
     bool saveForm(const XmlFormName &form);

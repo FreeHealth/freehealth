@@ -995,17 +995,18 @@ void centerWidget(QWidget *win, QWidget *reference)
 /** \brief Switch widget to fullscreen/non fullscreen. **/
 void setFullScreen(QWidget* win, bool on)
 {
-    if (bool(win->windowState() & Qt::WindowFullScreen) == on)
+    /** \todo code with Qt::WindowFullScreen is buggy under mac os 10.6.8 -> windows is not visible */
+    if (win->isFullScreen()==on)
         return;
 
     if (on) {
-        win->setWindowState(win->windowState() | Qt::WindowFullScreen);
-        LOG_FOR("mfGlobal", QCoreApplication::translate("Utils", "%1 is now in fullScreen Mode.").arg(win->objectName()));
+        win->setWindowState(win->windowState() | Qt::WindowMaximized);
+        LOG_FOR("Utils", QCoreApplication::translate("Utils", "%1 is now in fullScreen Mode.").arg(win->objectName()));
         //statusBar()->hide();
         //menuBar()->hide();
     } else {
-        win->setWindowState(win->windowState() & ~Qt::WindowFullScreen);
-        LOG_FOR("mfGlobal", QCoreApplication::translate("Utils", "%1 is now in non fullScreen Mode.").arg(win->objectName()));
+        win->setWindowState(win->windowState() & ~Qt::WindowMaximized);
+        LOG_FOR("Utils", QCoreApplication::translate("Utils", "%1 is now in non fullScreen Mode.").arg(win->objectName()));
         //menuBar()->show();
         //statusBar()->show();
     }

@@ -65,6 +65,7 @@ class FormItemScriptWrapper : public QObject
 public:
     FormItemScriptWrapper(QObject *parent = 0);
     void setFormItem(Form::FormItem *item);
+    Form::FormItem *item() const {return m_Item;}
 
 public Q_SLOTS:
     bool isValid() const {return (m_Item!=0);}
@@ -88,8 +89,6 @@ public Q_SLOTS:
     QWidget *ui() const;
 
     QStringList childrenUuid() const;
-
-    void showScreenshot(const QString &fileName) const;
 
 private:
     Form::FormItem *m_Item;

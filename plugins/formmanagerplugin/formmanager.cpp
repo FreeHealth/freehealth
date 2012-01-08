@@ -71,6 +71,7 @@
 #include <QPointer>
 #include <QMap>
 #include <QApplication>
+#include <QPixmap>
 
 enum { WarnFormCreation = false };
 
@@ -320,6 +321,32 @@ bool FormManager::readPmhxCategories(const QString &formUuidOrAbsPath)
     }
     return true;
 }
+
+/** Return one specific screenshot for the form \e formUid and nammed \e fileName. */
+QPixmap FormManager::getScreenshot(const QString &formUid, const QString &fileName)
+{
+    if (formUid.isEmpty()) {
+        LOG_ERROR("No formUid...");
+        return QPixmap();
+    }
+
+    // get all form readers (IFormIO)
+    QList<Form::IFormIO *> list = pluginManager()->getObjects<Form::IFormIO>();
+    if (list.isEmpty()) {
+        LOG_ERROR("No IFormIO loaded...");
+        return QPixmap();
+    }
+
+    // Load root forms
+    QPixmap pix;
+    foreach(Form::IFormIO *io, list) {
+        pix = io->screenShot(formUid, fileName);
+        if (!pix.isNull())
+            return pix;
+    }
+    return pix;
+}
+
 
 FormActionHandler::FormActionHandler(QObject *parent) :
     QObject(parent),

@@ -38,14 +38,8 @@
 
 #include <utils/global.h>
 #include <utils/log.h>
-#include <utils/widgets/imageviewer.h>
 
-#include <QListWidgetItem>
-#include <QListWidget>
 #include <QLocale>
-
-Q_DECLARE_METATYPE(QListWidgetItem*)
-Q_DECLARE_METATYPE(QListWidget*)
 
 using namespace Script;
 //using namespace Internal;
@@ -69,7 +63,6 @@ static Form::FormItem *getFormItem(const QString &ns, const QString &uuid)
     }
     return 0;
 }
-
 
 /////////////////////////////////////////////////////////////////////////////////////////
 /////////////////////////////    FORM MANAGER    ////////////////////////////////////////
@@ -127,7 +120,7 @@ QScriptValue FormManagerScriptWrapper::item(const QString &uuid)
         const QString &uuid = val.property("uuid").toString();
         if (uuid.compare(fullUuid, Qt::CaseInsensitive)==0) {
             if (m_LogItemSearch)
-                qWarning() << "FOUND ITEM" << fullUuid << uuid;
+                qWarning() << "ScriptWrapper::Item found" << fullUuid << uuid;
             return val;
         }
     }
@@ -267,19 +260,6 @@ QStringList FormItemScriptWrapper::childrenUuid() const
         uuids.append(item->uuid());
     }
     return uuids;
-}
-
-void FormItemScriptWrapper::showScreenshot(const QString &fileName) const
-{
-    /** \todo code here */
-    if (!m_Item)
-        return;
-    Form::FormMain *root = m_Item->parentFormMain()->rootFormParent();
-    if (!root)
-        return;
-    QPixmap shot;
-    Utils::ImageViewer viewer;
-    viewer.setPixmap(shot);
 }
 
 /////////////////////////////////////////////////////////////////////////////////////////

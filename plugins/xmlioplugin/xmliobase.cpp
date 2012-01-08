@@ -472,6 +472,18 @@ QString XmlIOBase::getFormContent(const QString &formUid, const int type, const 
     return QString();
 }
 
+QPixmap XmlIOBase::getScreenShot(const QString &formUid, const QString &shotName)
+{
+    // Get shot content
+    QString content = getFormContent(formUid, ScreenShot, shotName);
+    if (content.isEmpty())
+        return QPixmap();
+    // Create pixmap
+    QPixmap pix;
+    pix.loadFromData(QByteArray::fromBase64(content.toAscii()));
+    return pix;
+}
+
 /** Save the \e content of the form \e form to the database and return the used formUid. If the \e content is empty the form file is accessed */
 bool XmlIOBase::saveForm(const XmlFormName &form)
 {
