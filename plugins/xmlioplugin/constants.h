@@ -87,6 +87,12 @@ const char* const TAG_CATEGORY     = "Category";
 const char* const TAG_ADDFILE      = "file";
 const char* const TAG_NAME         = "name";
 
+const char* const TAG_UUID_EQUIVALENCE_MAIN = "fieldequivalence";
+const char* const TAG_UUID_EQUIVALENCE_ITEM = "equivalent";
+const char* const ATTRIB_OLD_UUID = "old";
+const char* const ATTRIB_NEW_UUID = "new";
+const char* const ATTRIB_UUID_EQUIVALENCE_VERSION = "setInVersion";
+
 const char* const TAG_SPEC_AUTHORS      = "authors";
 const char* const TAG_SPEC_CATEGORY     = "category";
 const char* const TAG_SPEC_LICENSE      = "licence";
@@ -141,6 +147,7 @@ const char* const TAG_DATAPATIENT_HEIGHT         = "patient::height";
 const char* const TAG_DATAPATIENT_HEIGHTUNIT     = "patient::heightunit";
 const char* const TAG_DATAPATIENT_EMAIL          = "patient::email";
 const char* const TAG_DATAPATIENT_FAX            = "patient::fax";
+const char* const TAG_DATAPATIENT_TELS           = "patient::tels";
 
 const char* const TAG_DATAPATIENT_CREAT          = "patient::creatinin";
 const char* const TAG_DATAPATIENT_CREATUNIT      = "patient::creatininunit";
@@ -149,6 +156,7 @@ const char* const TAG_DATAPATIENT_DRUGSALLERGIES = "drugs::allergies";
 const char* const TAG_DATAPATIENT_DRUGSCHRONIC   = "drugs::chronic";
 
 const char* const TAG_OPTIONS                   = "options";
+const char* const TAG_OPTION                    = "option";
 const char* const TAG_OPTIONS_UNIQUE_EPISODE    = "unique";
 const char* const TAG_OPTIONS_NO_EPISODE        = "noepisode";
 
