@@ -303,7 +303,6 @@ namespace.module('com.freemedforms.xray.prescription.helper', function (exports,
                          var formUi = freemedforms.forms.item("Subs::Radiology::PrescrHelper::XRays");
                          freemedforms.forms.namespaceInUse = "Subs::Radiology::PrescrHelper::XRays";
                          var ui = formUi.ui();
-                         print("FormUi" + ui);
                          siteCombo = ui.findChild("globalSites");
                          siteSelectorListWidget = ui.findChild("siteSelectorListWidget");
                          leftCheck = ui.findChild("left");
