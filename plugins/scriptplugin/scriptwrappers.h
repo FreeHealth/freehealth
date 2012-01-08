@@ -58,8 +58,8 @@ class FormItemScriptWrapper : public QObject
     Q_PROPERTY(QString  type            READ type)
     Q_PROPERTY(QVariant currentValue    READ currentValue)
     Q_PROPERTY(QVariant currentText     READ currentText        WRITE setCurrentText SCRIPTABLE true)
-    Q_PROPERTY(bool     enabled         READ isEnabled          WRITE setEnabled    SCRIPTABLE true)
-    Q_PROPERTY(bool     checked         READ isChecked          WRITE setChecked    SCRIPTABLE true)
+    Q_PROPERTY(bool     enabled         READ isEnabled          WRITE setEnabled     SCRIPTABLE true)
+    Q_PROPERTY(bool     checked         READ isChecked          WRITE setChecked     SCRIPTABLE true)
     Q_PROPERTY(QVariant currentUuid     READ currentUuid        WRITE setCurrentUuid SCRIPTABLE true)
 
 public:
@@ -86,6 +86,10 @@ public Q_SLOTS:
     bool isEnabled() const;
 
     QWidget *ui() const;
+
+    QStringList childrenUuid() const;
+
+    void showScreenshot(const QString &fileName) const;
 
 private:
     Form::FormItem *m_Item;
@@ -136,35 +140,6 @@ private:
     FormItemScriptWrapper m_Null;
     bool m_LogItemSearch;
 };
-
-// Qt Prototypes
-
- class ListWidgetItemPrototype : public QObject, public QScriptable
- {
-     Q_OBJECT
-     Q_PROPERTY(QString text READ text WRITE setText)
-
- public:
-     ListWidgetItemPrototype(QObject *parent = 0);
-
-     QString text() const;
-     void setText(const QString &text);
-
- public slots:
-     QString toString() const;
- };
-
- class ListWidgetPrototype : public QObject, public QScriptable
- {
-     Q_OBJECT
- public:
-     ListWidgetPrototype(QObject *parent = 0);
-
- public slots:
-     void addItem(const QString &text);
-     void addItems(const QStringList &texts);
-     void setBackgroundColor(const QString &colorName);
- };
 
 } // namespace Script
 

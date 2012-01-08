@@ -38,6 +38,7 @@
 
 #include <utils/global.h>
 #include <utils/log.h>
+#include <utils/widgets/imageviewer.h>
 
 #include <QListWidgetItem>
 #include <QListWidget>
@@ -206,9 +207,9 @@ void FormItemScriptWrapper::setChecked(const bool check)
     if (m_Item) {
         if (m_Item->itemDatas()) {
             if (check)
-                m_Item->itemDatas()->setData(0, Qt::Checked, Qt::CheckStateRole);
+                m_Item->itemDatas()->setData(0, 2, Qt::CheckStateRole);
             else
-                m_Item->itemDatas()->setData(0, Qt::Unchecked, Qt::CheckStateRole);
+                m_Item->itemDatas()->setData(0, 0, Qt::CheckStateRole);
         }
     }
 }
@@ -251,65 +252,35 @@ bool FormItemScriptWrapper::isEnabled() const
 
 QWidget *FormItemScriptWrapper::ui() const
 {
-    return m_Item->formWidget();
+    if (m_Item) {
+        return m_Item->formWidget();
+    }
+    return 0;
 }
 
+QStringList FormItemScriptWrapper::childrenUuid() const
+{
+    if (!m_Item)
+        return QStringList();
+    QStringList uuids;
+    foreach(Form::FormItem *item, m_Item->flattenFormItemChildren()) {
+        uuids.append(item->uuid());
+    }
+    return uuids;
+}
 
+void FormItemScriptWrapper::showScreenshot(const QString &fileName) const
+{
+    /** \todo code here */
+    if (!m_Item)
+        return;
+    Form::FormMain *root = m_Item->parentFormMain()->rootFormParent();
+    if (!root)
+        return;
+    QPixmap shot;
+    Utils::ImageViewer viewer;
+    viewer.setPixmap(shot);
+}
 
 /////////////////////////////////////////////////////////////////////////////////////////
 
-
- ListWidgetItemPrototype::ListWidgetItemPrototype(QObject *parent)
-     : QObject(parent)
- {
- }
-
- QString ListWidgetItemPrototype::text() const
- {
-     QListWidgetItem *item = qscriptvalue_cast<QListWidgetItem*>(thisObject());
-     if (item)
-         return item->text();
-     return QString();
- }
-
- void ListWidgetItemPrototype::setText(const QString &text)
- {
-     QListWidgetItem *item = qscriptvalue_cast<QListWidgetItem*>(thisObject());
-     if (item)
-         item->setText(text);
- }
-
- QString ListWidgetItemPrototype::toString() const
- {
-     return QString("ListWidgetItem(text = %0)").arg(text());
- }
-
- ListWidgetPrototype::ListWidgetPrototype(QObject *parent)
-     : QObject(parent)
- {
- }
-
- void ListWidgetPrototype::addItem(const QString &text)
- {
-     QListWidget *widget = qscriptvalue_cast<QListWidget*>(thisObject());
-     if (widget)
-         widget->addItem(text);
- }
-
- void ListWidgetPrototype::addItems(const QStringList &texts)
- {
-     QListWidget *widget = qscriptvalue_cast<QListWidget*>(thisObject());
-     if (widget)
-         widget->addItems(texts);
- }
-
- void ListWidgetPrototype::setBackgroundColor(const QString &colorName)
- {
-     QListWidget *widget = qscriptvalue_cast<QListWidget*>(thisObject());
-     if (widget) {
-         QPalette palette = widget->palette();
-         QColor color(colorName);
-         palette.setBrush(QPalette::Base, color);
-         widget->setPalette(palette);
-     }
- }
