@@ -57,6 +57,7 @@ const char* const FILE_1_ISEMPTY                     = QT_TRANSLATE_NOOP("tkCons
 const char* const OPEN_FILE                          = QT_TRANSLATE_NOOP("tkConstants", "Open file");
 const char* const OPENING_FILE_1                     = QT_TRANSLATE_NOOP("tkConstants", "Opening file %1");
 const char* const SAVING_FILE_1                      = QT_TRANSLATE_NOOP("tkConstants", "Saving file %1");
+const char* const SAVE_FILE                          = QT_TRANSLATE_NOOP("tkConstants", "Save file");
 
 const char* const XML_WRONG_NUMBER_OF_TAG_1          = QT_TRANSLATE_NOOP("tkConstants", "Wrong number of tags (%1)");
 const char* const XML_WRONG_ROOT_TAG_1_2             = QT_TRANSLATE_NOOP("tkConstants", "Wrong root tag %1 %2.");
