@@ -45,6 +45,8 @@ public Q_SLOTS:
     bool addItems(QWidget *widget, const QStringList &items);
     bool addJoinedItem(QWidget *widget, const QString &item, const QString &separator);
 
+    bool setItemText(QWidget *widget, const int row, const QString &item);
+
     bool clear(QWidget *widget);
 
     QStringList selectedItems(QWidget *widget);

@@ -79,6 +79,25 @@ bool UiTools::addJoinedItem(QWidget *widget, const QString &item, const QString 
     return addItems(widget, items);
 }
 
+bool UiTools::setItemText(QWidget *widget, const int row, const QString &item)
+{
+    QAbstractItemView *view = qobject_cast<QAbstractItemView*>(widget);
+    if (view) {
+        QAbstractItemModel *model = (QAbstractItemModel*)view->model();
+        if (model) {
+            QModelIndex idx = model->index(row, 0);
+            model->setData(idx, item, Qt::DisplayRole);
+            return true;
+        }
+    }
+    QComboBox *combo = qobject_cast<QComboBox*>(widget);
+    if (combo) {
+        combo->setItemText(row, item);
+        return true;
+    }
+    return false;
+}
+
 bool UiTools::clear(QWidget *widget)
 {
     // QListWidget
@@ -86,8 +105,8 @@ bool UiTools::clear(QWidget *widget)
     if (view) {
         if (view->model()) {
             view->model()->removeRows(0, view->model()->rowCount());
+            return true;
         }
-        return true;
     }
     // QComboBox
     QComboBox *combo = qobject_cast<QComboBox*>(widget);
@@ -113,7 +132,7 @@ QStringList UiTools::selectedItems(QWidget *widget)
 //        return toReturn;
 //    }
     // QListView
-    QListView *listView = qobject_cast<QListView*>(widget);
+    QAbstractItemView *listView = qobject_cast<QAbstractItemView*>(widget);
     if (listView) {
         if (listView->selectionModel()->hasSelection()) {
             QModelIndexList sel = listView->selectionModel()->selectedIndexes();
