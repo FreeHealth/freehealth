@@ -155,7 +155,7 @@ const char * const  TRANSLATORS_TEXT      = QT_TRANSLATE_NOOP("tkConstants", "Tr
 const char * const  FULLSCREEN_TEXT       = QT_TRANSLATE_NOOP("tkConstants", "Toggle full screen");
 const char * const  ZOOMIN_TEXT           = QT_TRANSLATE_NOOP("tkConstants", "Zoom in");
 const char * const  ZOOMOUT_TEXT          = QT_TRANSLATE_NOOP("tkConstants", "Zoom out");
-
+const char * const  TAKE_SCREENSHOT       = QT_TRANSLATE_NOOP("tkConstants", "Take screenshot");
 const char * const  NAVIGATION            = QT_TRANSLATE_NOOP("tkConstants", "Navigation");
 const char * const  DEFAULTS              = QT_TRANSLATE_NOOP("tkConstants", "Defaults");
 
