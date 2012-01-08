@@ -201,6 +201,8 @@ public:
     void setIoFormReader(IFormIO *reader);
     IFormIO *reader() const;
 
+    bool isEmptyRootForm() const {return (m_Reader!=0);}
+
     void setModeUniqueName(const QString &modeUid) {m_ModeName = modeUid;}
     QString modeUniqueName() const {return m_ModeName;}
 
@@ -251,8 +253,10 @@ inline Form::FormMain *Form::FormMain::formParent() const
 inline Form::FormMain *Form::FormMain::rootFormParent() const
 {
     Form::FormMain *parent = (Form::FormMain*)this;
+    if (parent->isEmptyRootForm())
+        return parent;
     Form::FormMain *newparent = 0;
-    while (newparent = formParent()) {
+    while ((newparent = formParent()) && !newparent->isEmptyRootForm()) {
         parent = newparent;
     }
     return (Form::FormMain*)parent;
