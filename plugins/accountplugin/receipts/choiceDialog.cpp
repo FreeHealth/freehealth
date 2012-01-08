@@ -289,7 +289,7 @@ bool treeViewsActions::deleteItemFromThesaurus(QModelIndex &index){
 
 
 using namespace ReceiptsConstants;
-choiceDialog::choiceDialog(QWidget * parent,bool roundtrip):QDialog(parent),ui(new Ui::ChoiceDialog){
+choiceDialog::choiceDialog(QWidget * parent,bool roundtrip, QString preferedValue):QDialog(parent),ui(new Ui::ChoiceDialog){
     ui->setupUi(this);
     ui->distanceDoubleSpinBox->hide();
     ui->distanceGroupBox->hide();
@@ -299,6 +299,13 @@ choiceDialog::choiceDialog(QWidget * parent,bool roundtrip):QDialog(parent),ui(n
     manager.getPreferedValues();
     m_hashPercentages = manager.getPercentages();
     m_quickInt = m_hashPercentages.keys().last();
+    QString textOfPrefValue = manager.getStringPerferedActAndValues(preferedValue);
+    QString labelText = "<html><body><font color = red  font size = 3>"+textOfPrefValue+"</font></body></html>";
+    if (preferedValue.isEmpty())
+    {
+    	  labelText = QString("");
+        }
+    ui->label->setText(labelText);
     ui->percentDoubleSpinBox->setRange(0.00,100.00);
     ui->percentDoubleSpinBox->setValue(100.00);
     ui->percentDoubleSpinBox->setSingleStep(0.10);

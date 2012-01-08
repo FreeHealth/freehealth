@@ -65,6 +65,7 @@ public:
     QString getStringFromInsuranceUid(const QVariant & insuranceUid);
     QVariant getSiteUidFromSite(const QString & site);
     QVariant getInsuranceUidFromInsurance(const QString & insurance);
+    QString getStringOfPreferedActAndHisValue(const QString & preferedAct);
 
 private:
     enum typeOfChoice {

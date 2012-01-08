@@ -536,4 +536,9 @@ QStringList receiptsManager::getChoiceFromCategories(QString & categoriesItem){
 QVariant receiptsManager::getPreferedDistanceRule(){
       return m_preferedDistanceRule;
   }
+  
+QString receiptsManager::getStringPerferedActAndValues(const QString & act){
+    receiptsEngine r;
+    return r.getStringOfPreferedActAndHisValue(act);
+}
 

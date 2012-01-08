@@ -58,6 +58,7 @@ class ACCOUNT_EXPORT receiptsManager : public QObject
   //QString createTablesAndFields();
   //bool writeAllDefaultsValues();
   QStringList getChoiceFromCategories(QString &);
+  QString getStringPerferedActAndValues(const QString & act);
   QVariant m_preferedInsurance;
   QVariant m_preferedSite;
   QVariant m_preferedDistanceRule;

@@ -30,6 +30,7 @@
  *      NAME <MAIL@ADRESS>                                                 *
  ***************************************************************************/
 #include "preferedreceipts.h"
+#include "receiptsmanager.h"
 #include "ui_preferedreceipts.h"
 #include "choiceDialog.h"
 #include "receiptsIO.h"
@@ -50,6 +51,19 @@ PreferedReceipts::PreferedReceipts(QWidget * parent):QWidget(parent),ui(new Ui::
     ui->setupUi(this);
     ui->resultLabel->setText("");
     m_typeOfChoice = 0;
+    QString userUuid = user()->uuid();
+    receiptsManager manager;
+    QStringList listOfActs;
+    listOfActs = manager.getPreferentialActFromThesaurus(userUuid).keys();
+    if (listOfActs.size()>0)
+    {
+    	  m_preferedAct = listOfActs[0];
+        }
+    else
+    {
+    	m_preferedAct = "";
+        }
+    
     QTimer::singleShot(100,this,SLOT(showChoiceDialog())) ;
     
 }
@@ -78,7 +92,6 @@ void PreferedReceipts::insertPreferedValuesIntoAccount(){
         }
     QList<double> listOfPercentages;
     listOfPercentages = m_choiceAndPercentagesHash.values();
-    QString preferedAct;
     QStringList listOfValues;
     QString listOfValuesStr;
     for (int i = 0; i < listOfPercentages.size(); i += 1)
@@ -88,7 +101,7 @@ void PreferedReceipts::insertPreferedValuesIntoAccount(){
     	                                                                           patientUid,
     	                                                                           patientName,
     	                                                                           typeOfChoice); 
-    	preferedAct = hashOfPrefValues.value(Constants::ACCOUNT_MEDICALPROCEDURE_TEXT).toString();
+    	
         double preferedValue = hashOfPrefValues.value(Constants::ACCOUNT_CHEQUEAMOUNT+typeOfChoice-1).toDouble();
         if (WarnDebugMessage)
     	      qDebug() << __FILE__ << QString::number(__LINE__) << " preferedValue =" << QString::number(preferedValue) ;
@@ -123,7 +136,7 @@ void PreferedReceipts::insertPreferedValuesIntoAccount(){
     listOfValuesStr = listOfValues.join("+") ;
         
     const QString resultText = trUtf8("The value ")
-                               +preferedAct
+                               +m_preferedAct
                                +" : "
                                +listOfValuesStr
                                +" "+currency
@@ -134,7 +147,7 @@ void PreferedReceipts::insertPreferedValuesIntoAccount(){
 }
 
 void PreferedReceipts::showChoiceDialog(){
-    choiceDialog * choice = new choiceDialog(this);
+    choiceDialog * choice = new choiceDialog(this,false,m_preferedAct);
     if (choice->exec() == QDialog::Accepted)
     {
     	  m_typeOfChoice = choice->returnChoiceDialog();
@@ -158,6 +171,8 @@ void PreferedReceipts::showChoiceDialog(){
     	  delete choice;
         }    
 }
+
+
 
 /*    TYPE_OF_CHOICE = 0,
       PERCENTAGE,

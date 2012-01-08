@@ -42,7 +42,7 @@
 
 #include <QDebug>
 
-enum { WarnDebugMessage = false };
+enum { WarnDebugMessage = true };
 
 using namespace AccountDB;
 using namespace Constants;
@@ -400,4 +400,28 @@ QVariant receiptsEngine::getInsuranceUidFromInsurance(const QString & insurance)
     if (WarnDebugMessage)
     	      qDebug() << __FILE__ << QString::number(__LINE__) << " uid insuranceUid =" << uid.toString() ;   
     return uid;
+}
+
+QString receiptsEngine::getStringOfPreferedActAndHisValue(const QString & preferedAct){
+    QString data = preferedAct;
+    if (WarnDebugMessage)
+    qDebug() << __FILE__ << QString::number(__LINE__) << " prefact=" << data ;
+    QStringList listOfActs;
+    if (data.contains("+"))
+    {
+    	  listOfActs = data.split("+");
+        }
+    else
+    {
+    	listOfActs << data;
+        }
+    QString act;
+    double totalValue = 0.00;
+    foreach(act,listOfActs){
+        QHash<QString,double> hashTypeAndValue = getFilteredValueFromMedicalProcedure(act,"NAME");
+        double val = hashTypeAndValue.value(act);
+        totalValue += val;
+        }
+    QString text = data+" = "+QString::number(totalValue);
+    return text;
 }

@@ -55,6 +55,7 @@ class ACCOUNT_EXPORT PreferedReceipts: public QWidget {
         double m_percent;
         QHash<int,double> m_choiceAndPercentagesHash;
         QHash<int,QVariant> m_choiceAndDebtorHash;
+        QString m_preferedAct;
     private Q_SLOTS :
         void showChoiceDialog();
 };

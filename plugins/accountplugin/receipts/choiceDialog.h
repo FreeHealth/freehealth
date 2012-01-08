@@ -91,7 +91,7 @@ public:
       DISTRULES,
       returningModel_MaxParam
       };
-  choiceDialog(QWidget *parent = 0,bool roundtrip = false);
+  choiceDialog(QWidget *parent = 0,bool roundtrip = false, QString preferedValue = QString());
   ~choiceDialog();
   double getDistanceNumber(const QString & data);
   int returnChoiceDialog();
