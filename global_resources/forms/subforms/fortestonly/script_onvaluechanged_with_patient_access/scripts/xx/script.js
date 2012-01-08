@@ -17,12 +17,12 @@ function getClearance()
         genderMod = 0.85;
 
     // Ensure weight is in Kg
-    if (wUnit.currentText=="lbl") {
+    if (wUnit=="lbl") {
         w *= 0.45359237;
     }
 
     // Ensure creatinine is in mg/L
-    if (crUnit.currentText!="mg/L") {
+    if (crUnit != "mg/L") {
         // Creatinine	mg/L	* 8.85	 -> µmol/L
         cr /= 8.85;
     }
