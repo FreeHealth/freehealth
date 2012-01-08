@@ -235,6 +235,7 @@ Form::FormMain *FormManager::rootForm(const char *modeUniqueName)
     return 0;
 }
 
+/** Load all requiered subforms and insert them according to data extracted from the episode database. */
 bool FormManager::loadSubForms()
 {
     d->m_SubFormsEmptyRoot.clear();
@@ -252,6 +253,7 @@ bool FormManager::loadSubForms()
     return true;
 }
 
+/** Insert a sub-form to a form to the specified \e insertionPoint */
 bool FormManager::insertSubForm(const SubFormInsertionPoint &insertionPoint)
 {
     // read all sub-forms
@@ -296,6 +298,7 @@ bool FormManager::insertSubForm(const SubFormInsertionPoint &insertionPoint)
     return true;
 }
 
+/** Read the PMHx categories associated the \e formUidOrAbsPath form. */
 bool FormManager::readPmhxCategories(const QString &formUuidOrAbsPath)
 {
 //    qWarning() << Q_FUNC_INFO;
