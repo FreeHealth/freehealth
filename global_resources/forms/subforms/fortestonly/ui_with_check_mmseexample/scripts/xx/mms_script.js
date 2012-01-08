@@ -20,8 +20,8 @@ namespace.module('com.freemedforms.subs.geriatrics.mmse', function (exports, req
 
                      function getUiElements() {
                          freemedforms.forms.namespaceInUse = "";
-                         mmsForm = freemedforms.forms.item("Subs::Geriatrics::MMSE");
-                         freemedforms.forms.namespaceInUse = "Subs::Geriatrics::MMSE";
+                         mmsForm = freemedforms.forms.item("Test::UiScriptSchots::MMSECheck");
+                         freemedforms.forms.namespaceInUse = "Test::UiScriptSchots::MMSECheck";
                          var ui = mmsForm.ui();
                          optionsCombo = ui.findChild("optionsCombo");
                          showDrawing = ui.findChild("showDrawing");

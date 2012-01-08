@@ -22,7 +22,7 @@
 
     <file type="script" name="onload">./scripts/xx/mms_script.js</file>
 
-    <MedForm name="Subs::Geriatrics::MMSE" uifilename="./ui/xx/mms.ui">
+    <MedForm name="Test::UiScriptSchots::MMSECheck" uifilename="./ui/xx/mms.ui">
         <uilink label="formLabel"/>
         <label lang="xx">Mini-Mental Score</label>
         <options>DontPrintEmptyValues;UseFormNameAsNameSpace</options>
