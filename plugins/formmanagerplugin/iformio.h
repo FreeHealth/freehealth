@@ -46,7 +46,7 @@
  * \file iformio.h
  * \author Eric MAEKER <eric.maeker@gmail.com>
  * \version 0.6.2
- * \date 25 Nov 2011
+ * \date 06 Jan 2012
 */
 
 namespace Utils {
@@ -152,15 +152,16 @@ public:
     bool setData(const int ref, const QVariant &value, const QString &lang = QString::null);
 
     // Manage screenshots
-    void addScreenShot(const QPixmap &shot) {m_Shots.append(shot);}
-    QList<QPixmap> screenShots() const {return m_Shots;}
+    void addScreenShot(const QString &name, const QPixmap &shot) {m_Shots.insert(name, shot);}
+    QList<QPixmap> screenShots() const {return m_Shots.values();}
+    QPixmap screenShot(const QString &name) const {return m_Shots.value(name);}
 
     void toTreeWidget(QTreeWidget *tree) const;
 
 private:
     QList<Utils::GenericUpdateInformation> m_UpdateInfos;
     IFormIO *m_reader;
-    QList<QPixmap> m_Shots;
+    QHash<QString, QPixmap> m_Shots;
 };
 
 class FORM_EXPORT IFormIO : public QObject
@@ -181,6 +182,9 @@ public:
 
     virtual QList<Form::FormMain *> loadAllRootForms(const QString &uuidOrAbsPath = QString::null) const = 0;
     virtual bool loadPmhCategories(const QString &uuidOrAbsPath) const = 0; // must invalidate all existing mime before insertion of new categories
+
+    virtual QList<QPixmap> screenShots(const QString &uuidOrAbsPath) const = 0;
+    virtual QPixmap screenShot(const QString &uuidOrAbsPath, const QString &name) const = 0;
 
     virtual bool saveForm(QObject *treeRoot) = 0;
 
