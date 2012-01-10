@@ -1442,7 +1442,8 @@ QString BaseHelpText::printableHtml(bool withValues) const
 
 void BaseHelpText::retranslate()
 {
-    m_Label->setText(m_FormItem->spec()->label());
+    if (m_Label)
+        m_Label->setText(m_FormItem->spec()->label());
 }
 
 //--------------------------------------------------------------------------------------------------------
