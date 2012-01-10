@@ -1403,6 +1403,8 @@ BaseHelpText::BaseHelpText(Form::FormItem *formItem, QWidget *parent) :
         QLabel *le = qFindChild<QLabel*>(formItem->parentFormMain()->formWidget(), widget);
         if (le) {
             m_Label = le;
+        } else {
+            m_Label = new QLabel(this);
         }
         m_Label->setText(m_FormItem->spec()->label());
     } else if (!label.isEmpty()) {
