@@ -1,10 +1,11 @@
 namespace.module('com.freemedforms.xray.prescription.helper', function (exports, require) {
 
   // Ui vars (retrieved from the ui)
-  var siteCombo, siteSelectorListWidget, leftCheck, rightCheck, addButton;
+  var siteCombo, siteSelectorListWidget, leftCheck, rightCheck, addButton, RaySelectorListWidget;
   var htmlItem;
   var mainSites = new Array();
   var siteSelector = new Array("xx", "fr");
+  var RaySelector = new Array("xx", "fr");
 
   exports.extend({
     'setupUi': setupUi
@@ -16,11 +17,13 @@ namespace.module('com.freemedforms.xray.prescription.helper', function (exports,
                          connectUiElements();
                          siteCombo.currentIndex = 0;
                          reTranslateUi();
+						 
                      }
-
+					
+					
                      function createVariableContent() {
-                         mainSites["xx"] = ["Upper Extremities",
-                                          "Lower Extremities",
+                         mainSites["xx"] = ["Upper Extremities", "Fingers and Toes",
+                                          "Lower Extremities", 
                                           "Shoulder",
                                           "Pelvis",
                                           "Thorax",
@@ -30,9 +33,9 @@ namespace.module('com.freemedforms.xray.prescription.helper', function (exports,
                                           "Facial Bones",
                                           "Mandible & TMJ"
                                          ];
-                         mainSites["fr"] = ["Membre supérieur",
-                                          "Membre inférieur",
-                                          "Épaule",
+                         mainSites["fr"] = ["Membre supérieur", "Doigts et Orteils",
+                                          "Membre inférieur", 
+                                          "\u00C9paule", 
                                           "Pelvis",
                                           "Thorax",
                                           "Abdomen",
@@ -44,15 +47,15 @@ namespace.module('com.freemedforms.xray.prescription.helper', function (exports,
 
                          siteSelector["xx"] = [];
                          siteSelector["fr"] = new Array();
+						 
+						 //RaySelector
+			 RaySelector["xx"] ;
+                         RaySelector["fr"] = new Array();
+						 RaySelector["xx"]= ["First", "Second", "Third", "Fourth", "Fifth"];
+						 RaySelector["fr"]= ["Premier", "Deuxième", "Troisième", "Quatrième", "Cinquième"];
 
                          // 0: Upper Extremities
-                         siteSelector["xx"][0] = ["Finger - PA / AP",
-                                                  "Finger - Oblique",
-                                                  "Finger - Lateral",
-                                                  "Thumb - PA/AP",
-                                                  "Thumb - Oblique",
-                                                  "Thumb - Lateral",
-                                                  "Hand - PA",
+                         siteSelector["xx"][0] = ["Hand - PA",
                                                   "Hand - Oblique",
                                                   "Hand - Lateral",
                                                   "Hand - Lateral (Fan)",
@@ -89,11 +92,62 @@ namespace.module('com.freemedforms.xray.prescription.helper', function (exports,
                                                   "Humerus - Lateral",
                                                   "Humerus - Transthoracic Lateral",
                                                   "Humerus - Intertubercular Groove"];
-
-                         // 1: Lower Extremities
-                         siteSelector["xx"][1] = ["Toes - DP",
-                                                  "Toes - Oblique (DPO)",
-                                                  "Toes - Lateral",
+						siteSelector["fr"][0] = [
+                                                  "Main - de face",
+                                                  "Main - de 3/4",
+                                                  "Main - de profil",
+                                                  "Main - de profil (Fan)",
+                                                  "Main - de 3/4 (Ballcatchers)",
+                                                  "Main - de face axial(Brewerton's)",
+                                                  "Poignet - Age osseux",
+                                                  "Poignet - de face",
+                                                  "Poignet - de 3/4 (Rotation Interne )",
+                                                  "Poignet - de 3/4 (Rotation Externe)",
+                                                  "Poignet - de profil",
+                                                  "Poignet - de profil (Flexion)",
+                                                  "Poignet - de profil (Extension)",
+                                                  "Poignet - Canal carpien",
+                                                  "Poignet - \"Carpal Bridge\"",
+                                                  "Poignet - de face (Déviation Ulnaire)",
+                                                  "Poignet - de face (Déviation Radiale)",
+                                                  "Poignet - de face (Point fermé)",
+                                                  "Scaphoïde - de face",
+                                                  "Scaphoïde - de face Axial",
+                                                  "Scaphoïde - de face (Déviation Ulnaire)",
+                                                  "Scaphoïde - de face (Déviation Radiale)",
+                                                  "Scaphoïde - de 3/4 (Déviation Ulnaire)",
+                                                  "Scaphoïde - de profil",
+                                                  "Avant-Bras - de face",
+                                                  "Avant-Bras - de profil",
+                                                  "Coude - de face",
+                                                  "Coude - oblique externe",
+                                                  "Coude - oblique interne",
+                                                  "Coude - de profil",
+                                                  "Coude - Tête radiale",
+                                                  "Coude - de face (Flexion partielle)",
+                                                  "Coude - en Flexion",
+												  "Coude - incidence rétro-olécrânienne",
+                                                  "Humérus - de face",
+                                                  "Humérus - de profil",
+                                                  "Humérus - Transthoracique de profil",
+                                                  "Humérus - sillon intertuberculaire"];
+						
+						// 1: Fingers and Toes
+						siteSelector["xx"][1] = [ "Finger - PA / AP",
+                                                  "Finger - Oblique",
+                                                  "Finger - Lateral",
+												  "Toe - DP",
+                                                  "Toe - Oblique (DPO)",
+                                                  "Toe - Lateral"];
+						siteSelector["fr"][1] = [ "Doigt - de face",
+                                                  "Doigt - de 3/4",
+                                                  "Doigt - de profil",
+												  "Orteil - de face",
+                                                  "Orteil - de 3/4",
+                                                  "Orteil - de profil"];
+                        
+						// 2: Lower Extremities
+                         siteSelector["xx"][2] = [
                                                   "Sesamoids - Axial",
                                                   "Sesamoids - Oblique",
                                                   "Foot - DP",
@@ -138,10 +192,71 @@ namespace.module('com.freemedforms.xray.prescription.helper', function (exports,
                                                   "Patella - Oblique (Lateral Rotation)",
                                                   "Femur - AP",
                                                   "Femur - Lateral",
+                                                  "Hip - AP",
+                                                  "Hip - Rolled Lateral Hip",
+                                                  "Hip - Horizontal Ray Lateral Hip",
+                                                  "Hip - Axiolateral (Clements-Nakayama)",
+                                                  "Hip - Axiolateral (Freidman)",
+                                                  "Hip - Acetabulum - Judet Method",
                                                   "Long Leg View"];
+												  
+						 siteSelector["fr"][2] = [
+                                                  "Sésamoïdes - Axial",
+                                                  "Sésamoïdes - de 3/4",
+                                                  "Pied - de face",
+                                                  "Pied - de 3/4 interne",
+                                                  "Pied - de 3/4 externe",
+                                                  "Pied - de profil",
+                                                  "Pied - de face en charge",
+                                                  "Pied - de profil en charge",
+                                                  "Pied - de profil en charge \"composite\"",
+                                                  "Calcanéum - Axial",
+                                                  "Calcanéum - de profil",
+                                                  "Calcanéum - Lateromedial de 3/4",
+                                                  "Cheville - de face",
+                                                  "Cheville - de 3/4 (Mortise)",
+                                                  "Cheville - de 3/4 (Rotation Interne)",
+                                                  "Cheville - de 3/4 (Rotation Externe)",
+                                                  "Cheville - de profil",
+                                                  "Cheville - clichés dynamiques en varus forcé",
+                                                  "Articulation sous-astragalienne - de face Axial de 3/4 (Anthosens)",
+                                                  "Articulation sous-astragalienne - de face Axial de 3/4 - Rotation interne",
+                                                  "Articulation sous-astragalienne - de face Axial de 3/4 - Rotation externe",
+                                                  "Articulation sous-astragalienne - Latéromédial de 3/4 (Isherwood)",
+                                                  "Articulation sous-astragalienne - de face Axial de 3/4 interne (Isherwood)",
+                                                  "Articulation sous-astragalienne - de face Axial de 3/4 externe (Isherwood)",
+                                                  "Tibia / Fibula - de face",
+                                                  "Tibia / Fibula - de profil",
+                                                  "Tibia / Fibula - de 3/4 (Rotation interne / externe )",
+                                                  "Genou - de face",
+                                                  "Genou - genou fléchi, de profil",
+                                                  "Genou - de profil",
+                                                  "Genou - Défilé fémoro-patellaire",
+                                                  "Genou - incidence du \"Schuss\"",
+                                                  "Genou - Intercondylaire (de face Axial) (Camp-Coventry)",
+                                                  "Genou - Intercondylaire (de face Axial) (Holmblad)",
+                                                  "Genou - de 3/4 (Rotation externe)",
+                                                  "Genou - de 3/4 (Rotation interne)",
+                                                  "Genou - 2 genoux de face en charge",
+                                                  "Genou - 2 genoux de profil en charge (Rosenbergs)",
+                                                  "Patella - de face",
+                                                  "Patella - de profil",
+                                                  "Patella - de 3/4 (Rotation interne)",
+                                                  "Patella - de 3/4 (Rotation externe)",
+                                                  "Fémur - de face",
+                                                  "Fémur - de profil",
+                                                  
+                                                  "Hanche - de face",
+                                                  "Hanche - de profil Hanche fléchie",
+                                                  "Hanche - de profil",
+                                                  "Hanche - Axiolatéral(Clements-Nakayama)",
+                                                  "Hanche - Axiolatéral (Freidman)",
+                                                  "Hanche - Acétabulum - Judet Méthode",
+                                                  "Membres inférieurs en entier"];										
 
-                         // 2: Shoulder
-                         siteSelector["xx"][2] = ["Shoulder - AP",
+                         // 3: Shoulder
+                         siteSelector["xx"][3] = [
+						"Shoulder - AP",
                                                   "Shoulder - AP Axial Oblique",
                                                   "Shoulder - Glenohumeral (GH)",
                                                   "Shoulder - Neers",
@@ -156,26 +271,46 @@ namespace.module('com.freemedforms.xray.prescription.helper', function (exports,
                                                   "Clavicle - AP shoulder",
                                                   "Clavicle - AP",
                                                   "Clavicle - AP Axial - 30° cephalad",
-                                                  "Acromioclavicular - (Single) AP",
-                                                  "Acromioclavicular - (Bilateral) AP",
+                                                  "Acromioclavicular - AP",
                                                   "Acromioclavicular - AP Axial",
                                                   "Acromioclavicular - PA Axial Oblique",
                                                   "Acromioclavicular - Weightbearing"];
+												  
+						siteSelector["fr"][3] = ["\u00C9paule - de face",
+                                                  "\u00C9paule - de face Axial de 3/4",
+                                                  "\u00C9paule - articulation glénohumérale",
+                                                  "\u00C9paule - Neers",
+                                                  "\u00C9paule - Supéroinférieur Axial (SI)",
+                                                  "\u00C9paule - Inférosupérior (IS) Axial (Lawrence Méthode)",
+                                                  "\u00C9paule - Inférosuperior (IS) Axial (West Point Méthode)",
+                                                  "\u00C9paule - Transthoracique de profil",
+                                                  "\u00C9paule - de profil (Scapular Y)",
+                                                  "Scapula - de face",
+                                                  "Scapula - de profil",
+                                                  "Scapula - de 3/4",
+                                                  "Clavicule - de face Epaule",
+                                                  "Clavicule - de face",
+                                                  "Clavicule - de face Axial - 30° cephalad",
+                                                  "Articulation acromio-claviculaire - de face",
+                                                  "Articulation acromio-claviculaire - de face axial",
+                                                  "Articulation acromio-claviculaire - de face Axial de 3/4",
+                                                  "Articulation acromio-claviculaire - en charge"];
 
-                         // 3: Pelvis
-                         siteSelector["xx"][3] = ["Pelvis - AP",
+                         // 4: Pelvis
+                         siteSelector["xx"][4] = ["Pelvis - AP",
                                                   "Pelvis - Lateral",
                                                   "Anterior Pelvic Bones - AP Axial \"Outlet View\" (Taylor)",
                                                   "Anterior Pelvic Bones - Superioinferior \"Inlet View\" (Lilienfield)",
-                                                  "Hip - AP",
-                                                  "Hip - Rolled Lateral Hip",
-                                                  "Hip - Horizontal Ray Lateral Hip",
-                                                  "Hip - Axiolateral (Clements-Nakayama)",
-                                                  "Hip - Axiolateral (Freidman)",
-                                                  "Hip - Acetabulum - Judet Method"];
+                                                     ];
+												  
+						siteSelector["fr"][4] = ["Bassin - de face",
+                                                  "Bassin - de profil",
+                                                  "Bassin - Oblique ascendant (\"Outlet View\") à 45 degré (Taylor)",
+                                                  "Bassin - Oblique descendant (\"Inlet View\") à 45 degré (Lilienfield)",
+                                                  ];
 
-                         // 4: Thorax
-                         siteSelector["xx"][4] = ["Chest - PA Erect",
+                         // 5: Thorax
+                         siteSelector["xx"][5] = ["Chest - PA Erect",
                                                   "Chest - Left Lateral (Erect)",
                                                   "Chest - AP Supine",
                                                   "Chest - Apical",
@@ -194,9 +329,28 @@ namespace.module('com.freemedforms.xray.prescription.helper', function (exports,
                                                   "Sternoclavicular - PA",
                                                   "Sternoclavicular - Oblique",
                                                   "Sternoclavicular - Axiolateral (Kurzbauer)"];
+						siteSelector["fr"][5] = ["Thorax - de face Debout",
+                                                  "Thorax - de profil Gauche (Debout)",
+                                                  "Thorax - de face, Décubitus Dorsal",
+                                                  "Thorax - Apical",
+                                                  "Thorax - incidence en lordose",
+                                                  "Thorax - incidence en lordose (Lobe moyen droit)",
+                                                  "Thorax - de profil Décubitus",
+                                                  "Thorax - Décubitus Dorsal ",
+                                                  "Thorax - Décubitus Ventral",
+                                                  "Thorax - de 3/4",
+                                                  "Côtes - de face (Côtes antérieures)",
+                                                  "Côtes - de face (Côtes postérieures supérieures de 1 à 8)",
+                                                  "Côtes - de face (Côtes postérieures inférieures de 9 à 12)",
+                                                  "Côtes - de 3/4 (Côtes axillaires)",
+                                                  "Sternum - oblique antérieur droit",
+                                                  "Sternum - de profil",
+                                                  "Articulation sterno-claviculaire - de face",
+                                                  "Articulation sterno-claviculaire - de 3/4",
+                                                  "Articulation sterno-claviculaire - Axiolatéral (Kurzbauer)"];
 
-                         // 5 : Abdomen
-                         siteSelector["xx"][5] = ["Abdomen - Supine",
+                         // 6 : Abdomen
+                         siteSelector["xx"][6] = ["Abdomen - Supine",
                                                   "Abdomen - Prone",
                                                   "Abdomen - Erect",
                                                   "Abdomen - Lateral Decubitus",
@@ -204,9 +358,17 @@ namespace.module('com.freemedforms.xray.prescription.helper', function (exports,
                                                   "Abdomen - Lateral",
                                                   "Renal - Supine Abdomen (Inspiration)",
                                                   "Renal - AP Renal Area (Expiration)"];
+						siteSelector["fr"][6] = ["ASP - Décubitus Dorsal",
+                                                  "ASP - Décubitus Ventral",
+                                                  "ASP - Debout",
+                                                  "ASP - de profil Decubitus",
+                                                  "ASP - Dorsal Decubitus",
+                                                  "ASP - de profil",
+                                                  "Rénal - Décubitus Dorsal ASP (Inspiration)",
+                                                  "Rénal - de face aire rénale (Expiration)"];
 
-                         // 6 : Vertebral Spine
-                         siteSelector["xx"][6] = ["Cervical - Lateral",
+                         // 7 : Vertebral Spine
+                         siteSelector["xx"][7] = ["Cervical - Lateral",
                                                   "Cervical - Lateral (Flexion)",
                                                   "Cervical - Lateral (Extension)",
                                                   "Cervical - Oblique",
@@ -236,9 +398,39 @@ namespace.module('com.freemedforms.xray.prescription.helper', function (exports,
                                                   "Coccyx - AP",
                                                   "Coccyx - Lateral",
                                                   "Chiropractic Spine"];
+						siteSelector["fr"][7] = ["Rachis cervical - de profil",
+                                                  "Rachis cervical - de profil (Flexion)",
+                                                  "Rachis cervical - de profil (Extension)",
+                                                  "Rachis cervical - de 3/4",
+                                                  "Rachis cervical - de 3/4 (Lodgemoore)",
+                                                  "Rachis cervical - de face",
+                                                  "Rachis cervical - de face, machoire mobile (\"Procédé de Pelissier\")",
+                                                  "Rachis cervical - de face arc vertébral",
+                                                  "Rachis cervical - de 3/4 arc vertébral",
+                                                  "Rachis cervical - processus odontoïde",
+                                                  "Rachis cervical - processus odontoïde (Fuch Méthode)",
+                                                  "Rachis cervical - Cervicothoracique (Swimmers) (Twining Method)",
+                                                  "Rachis cervical - Cervicothoracique (Swimmers) (Pawlow Method)",
+                                                  "Rachis thoracique - de face",
+                                                  "Rachis thoracique - de profil",
+                                                  "Rachis thoracique - de 3/4",
+                                                  "Rachis lombaire - de face",
+                                                  "Rachis lombaire - de profil",
+                                                  "Rachis lombaire - de profil (Flexion et Extension)",
+                                                  "Rachis lombaire - de profil (Décubitus Dorsal et Debout)",
+                                                  "Rachis lombaire - de 3/4",
+                                                  "Rachis lombaire - L5/S1 de face",
+                                                  "Rachis lombaire - L5/S1 de profil",
+                                                  "Sacrum - de face",
+                                                  "Sacrum - de profil",
+                                                  "Articulations sacro-iliaques - de face",
+                                                  "Articulations sacro-iliaques - de 3/4",
+                                                  "Coccyx - de face",
+                                                  "Coccyx - de profil",
+                                                  "\"Chiropractic Spine\""];
 
-                         // 7 : Skull
-                         siteSelector["xx"][7] = ["Skull - AP",
+                         // 8 : Skull
+                         siteSelector["xx"][8] = ["Skull - AP",
                                                   "Skull - PA (Caldwell) 0°",
                                                   "Skull - PA (Caldwelll) 15°",
                                                   "Skull - PA (Caldwell ) 25° - 30°",
@@ -254,9 +446,25 @@ namespace.module('com.freemedforms.xray.prescription.helper', function (exports,
                                                   "Petromastoid - Axiolateral (Modified Law)",
                                                   "Petromastoid - Axiolateral Oblique (Modified Law)",
                                                   "Petromastoid - Axiolateral (Henschen, Schuller, Lysholm)"];
+						 siteSelector["fr"][8] = ["Crâne - de face",
+                                                  "Crâne - de face (Caldwell) 0°",
+                                                  "Crâne - de face (Caldwelll) 15°",
+                                                  "Crâne - de face (Caldwell ) 25° - 30°",
+                                                  "Crâne - de face (Haas)",
+                                                  "Crâne - Townes",
+                                                  "Crâne - Townes (Trauma)",
+                                                  "Crâne - de profil",
+                                                  "Crâne - de profil rayon horizontal (Trauma)",
+                                                  "Crâne - SMV (Submentovertex) (Basal)",
+                                                  "Selle Turcique - de face Axial",
+                                                  "Selle Turcique - de profil",
+                                                  "Os temporal - Stenvers Vue",
+                                                  "Mastoïde - Axiolatéral (Modified Law)",
+                                                  "Mastoïde - Axiolatéral de 3/4 (Modified Law)",
+                                                  "Mastoïde - Axiolatéral (Henschen, Schuller, Lysholm)"];
 
-                         // 8 : Facial Bones
-                         siteSelector["xx"][8] = ["Facial - PA (Caldwell) 15°",
+                         // 9 : Facial Bones
+                         siteSelector["xx"][9] = ["Facial - PA (Caldwell) 15°",
                                                   "Facial - PA 30° (Modified Parietocanthial)",
                                                   "Facial - OM",
                                                   "Facial - OM 30°",
@@ -282,9 +490,35 @@ namespace.module('com.freemedforms.xray.prescription.helper', function (exports,
                                                   "Sinuses - OM (Waters) Open Mouth",
                                                   "Sinuses - Lateral",
                                                   "Sinuses - Submentovertical (SMV)"];
+						siteSelector["fr"][9] = ["Massif facial - de face (Caldwell) 15°",
+                                                  "Massif facial - de face 30° (Pariétocanthial Modifié)",
+                                                  "Massif facial - OM",
+                                                  "Massif facial - OM 30°",
+                                                  "Massif facial - de profil",
+                                                  "Massif facial - Slit Townes",
+                                                  "Massif facial - Slit (SMV) (Basal)",
+                                                  "OPN - OM",
+                                                  "OPN - de profil",
+                                                  "OPN - Tangentiel",
+                                                  "Orbite - Fissures orbitaires superieures - de face 25°",
+                                                  "Orbite - Fissures orbitaires inférieures",
+                                                  "Orbite - OM",
+                                                  "Orbite - OM 30°",
+                                                  "Orbite - OM Modifié",
+                                                  "Orbite - de profil",
+                                                  "Orbite - canal optique (Foramen) (Rhese Méthode)",
+                                                  "Zygomas - Arches Slit (SMV) (Basal)",
+                                                  "Zygomas - Arches (OM)",
+                                                  "Zygoma - Arch (Tangential)",
+                                                  "Zygomas - Slit Townes",
+                                                  "Radio des sinus - de face 15° (Caldwell)",
+                                                  "Radio des sinus - OM (Waters)",
+                                                  "Radio des sinus - OM (Waters) Bouche ouverte",
+                                                  "Radio des sinus - de profil",
+                                                  "Radio des sinus - Submentovertical (SMV)"];
 
-                         // 9 : Mandible
-                         siteSelector["xx"][9] = ["Mandible - PA (Rami)",
+                         // 10 : Mandible
+                         siteSelector["xx"][10] = ["Mandible - PA (Rami)",
                                                   "Mandible - PA (Body)",
                                                   "Mandible - Lateral",
                                                   "Mandible - Oblique",
@@ -295,6 +529,17 @@ namespace.module('com.freemedforms.xray.prescription.helper', function (exports,
                                                   "TMJ - Slit Townes (Open mouth)",
                                                   "TMJ - Lateral Oblique",
                                                   "TMJ - Orthopantomogram (OPG)"];
+			siteSelector["fr"][10] = ["Mandibule - de face (Rami)",
+                                                  "Mandibule - de face (Body)",
+                                                  "Mandibule - de profil",
+                                                  "Mandibule - de 3/4",
+                                                  "Mandibule - SMV",
+                                                  "Mandibule - (Towne method)",
+                                                  "Mandibule - Symphyse",
+                                                  "Mandibule - Orthopanthomogramme",
+                                                  "Articulation temporo-mandibulaire - Slit Townes (bouche ouverte)",
+                                                  "Articulation temporo-mandibulaire - de 3/4 latéral",
+                                                  "Articulation temporo-mandibulaire - Orthopanthomogramme"];
 
                      }
 
@@ -305,6 +550,7 @@ namespace.module('com.freemedforms.xray.prescription.helper', function (exports,
                          var ui = formUi.ui();
                          siteCombo = ui.findChild("globalSites");
                          siteSelectorListWidget = ui.findChild("siteSelectorListWidget");
+			 RaySelectorListWidget = ui.findChild("RaySelectorListWidget");
                          leftCheck = ui.findChild("left");
                          rightCheck = ui.findChild("right");
                          addButton = ui.findChild("addButton");
@@ -320,8 +566,11 @@ namespace.module('com.freemedforms.xray.prescription.helper', function (exports,
                          freemedforms.forms.languageChanged.connect(this, reTranslateUi);
                          siteCombo['activated(int)'].connect(this, populateSiteSelector);
                          addButton.clicked.connect(this, putSelectionToHtmlEditor);
-                     }
+	                 siteCombo['activated(int)'].connect(this, populateRaySelector);
+                         siteCombo['activated(int)'].connect(this, enabledRightLeft);
+                                   }
 
+                     
                      function reTranslateUi() {
                          if (freemedforms.forms.currentLanguage=="fr") {
                              leftCheck.text = "Gauche";
@@ -335,29 +584,64 @@ namespace.module('com.freemedforms.xray.prescription.helper', function (exports,
                              freemedforms.uiTools.addItems(siteCombo, mainSites["xx"]);
                          }
                          populateSiteSelector(siteCombo.currentIndex);
+                         populateRaySelector() ;
+                         enabledRightLeft();
                      }
 
                      function populateSiteSelector(row) {
                          freemedforms.uiTools.clear(siteSelectorListWidget);
                          if (freemedforms.forms.currentLanguage=="fr") {
-                             // TODO When the Fr trans will be added, remplace this "xx" with "fr"
-                             freemedforms.uiTools.addItems(siteSelectorListWidget, siteSelector["xx"][row]);
+                             freemedforms.uiTools.addItems(siteSelectorListWidget, siteSelector["fr"][row]);
                          } else {
                              freemedforms.uiTools.addItems(siteSelectorListWidget, siteSelector["xx"][row]);
                          }
+                       
                      }
-
+					
+                    function populateRaySelector() {
+			freemedforms.uiTools.clear(RaySelectorListWidget);
+                        if (siteCombo.currentIndex == 1)
+                                    { RaySelectorListWidget.enabled = true;
+                                       siteCombo['activated(int)'].connect(this, populateRaySelector);}
+                                 else RaySelectorListWidget.enabled = false;
+			if (freemedforms.forms.currentLanguage=="fr") {
+                             freemedforms.uiTools.addItems(RaySelectorListWidget, RaySelector["fr"]);
+                         } else {
+                             freemedforms.uiTools.addItems(RaySelectorListWidget, RaySelector["xx"]);
+                         }
+                     }	
+                     
+                     function enabledRightLeft() {
+                        if (siteCombo.currentIndex > 3) 
+                             {leftCheck.enabled = false;
+                             rightCheck.enabled = false;}
+                         else {leftCheck.enabled = true;
+                             rightCheck.enabled = true;} 
+                     }
+					
                      function putSelectionToHtmlEditor() {
                          // return html code
                          var html = "<span style=\"font-weight:bold;font-size:large;font-variant:small-caps;text-decoration:underline\">" + siteCombo.currentText + "</span><ul title=" + siteCombo.currentText + ">";
                          var selected = freemedforms.uiTools.selectedItems(siteSelectorListWidget);
+			var r_selected = freemedforms.uiTools.selectedItems(RaySelectorListWidget);
                          for(var i=0; i < selected.length; i++) {
-                             var lat;
-                             if (leftCheck.checked)
-                                 lat = leftCheck.text;
-                             else
-                                 lat = rightCheck.text;
-                             html += "<li><b>" + selected[i] + "</b> : " + lat + "</li>";
+                         var lat;
+                         if  ( (!leftCheck.checked && !rightCheck.checked) || !leftCheck.enabled )
+                                 lat = "";
+                        else if (rightCheck.checked && !leftCheck.checked)
+                                 lat =": "+ rightCheck.text;
+			else if
+				(leftCheck.text && !rightCheck.checked)
+				lat =": "+ leftCheck.text;
+			else lat=": "+ leftCheck.text+" + "+rightCheck.text;
+							
+			if ( siteCombo.currentIndex == 1 )
+                        {
+				var quantity = r_selected.join(" + ");
+				html += "<li><b>"+ quantity + " " + selected[i] + "</b> " + lat + "</li>";
+															}
+							else
+                             html += "<li><b>" + selected[i] + "</b> " + lat + "</li>";
                          }
                          html += "</ul>";
                          htmlItem.currentText = htmlItem.currentText + html;
