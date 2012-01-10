@@ -7,7 +7,7 @@
     <x>0</x>
     <y>0</y>
     <width>438</width>
-    <height>306</height>
+    <height>400</height>
    </rect>
   </property>
   <property name="windowTitle">
@@ -84,7 +84,7 @@
            <set>QAbstractItemView::NoEditTriggers</set>
           </property>
           <property name="selectionMode">
-           <enum>QAbstractItemView::ExtendedSelection</enum>
+           <enum>QAbstractItemView::MultiSelection</enum>
           </property>
           <property name="isWrapping" stdset="0">
            <bool>false</bool>

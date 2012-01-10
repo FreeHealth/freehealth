@@ -5,7 +5,7 @@
     <!-- Non translatable values -->
     <authors>Eric Maeker, MD</authors>
     <version>test</version>
-    <fmfversion>0.6.3</fmfversion>
+    <fmfversion>0.6.2</fmfversion>
     <cdate>2011-12-19</cdate>
     <lmdate>2012-01-01</lmdate>
     <icon>xray.png</icon>

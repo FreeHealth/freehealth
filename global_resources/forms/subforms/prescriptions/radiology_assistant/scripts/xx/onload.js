@@ -1,11 +1,11 @@
 namespace.module('com.freemedforms.xray.prescription.helper', function (exports, require) {
 
   // Ui vars (retrieved from the ui)
-  var siteCombo, siteSelectorListWidget, leftCheck, rightCheck, addButton, RaySelectorListWidget;
+  var siteCombo, siteSelectorListWidget, leftCheck, rightCheck, addButton, raySelectorListWidget;
   var htmlItem;
   var mainSites = new Array();
   var siteSelector = new Array("xx", "fr");
-  var RaySelector = new Array("xx", "fr");
+  var raySelector = new Array("xx", "fr");
 
   exports.extend({
     'setupUi': setupUi
@@ -19,8 +19,7 @@ namespace.module('com.freemedforms.xray.prescription.helper', function (exports,
                          reTranslateUi();
 						 
                      }
-					
-					
+
                      function createVariableContent() {
                          mainSites["xx"] = ["Upper Extremities", "Fingers and Toes",
                                           "Lower Extremities", 
@@ -35,7 +34,7 @@ namespace.module('com.freemedforms.xray.prescription.helper', function (exports,
                                          ];
                          mainSites["fr"] = ["Membre supérieur", "Doigts et Orteils",
                                           "Membre inférieur", 
-                                          "\u00C9paule", 
+                                          "Épaule",
                                           "Pelvis",
                                           "Thorax",
                                           "Abdomen",
@@ -45,14 +44,14 @@ namespace.module('com.freemedforms.xray.prescription.helper', function (exports,
                                           "Mandibule & ATM"
                                          ];
 
-                         siteSelector["xx"] = [];
+                         siteSelector["xx"] = new Array();
                          siteSelector["fr"] = new Array();
 						 
-						 //RaySelector
-			 RaySelector["xx"] ;
-                         RaySelector["fr"] = new Array();
-						 RaySelector["xx"]= ["First", "Second", "Third", "Fourth", "Fifth"];
-						 RaySelector["fr"]= ["Premier", "Deuxième", "Troisième", "Quatrième", "Cinquième"];
+                         //raySelector
+                         raySelector["xx"] = new Array();
+                         raySelector["fr"] = new Array();
+                         raySelector["xx"]= ["First", "Second", "Third", "Fourth", "Fifth"];
+                         raySelector["fr"]= ["Premier", "Deuxième", "Troisième", "Quatrième", "Cinquième"];
 
                          // 0: Upper Extremities
                          siteSelector["xx"][0] = ["Hand - PA",
@@ -92,7 +91,7 @@ namespace.module('com.freemedforms.xray.prescription.helper', function (exports,
                                                   "Humerus - Lateral",
                                                   "Humerus - Transthoracic Lateral",
                                                   "Humerus - Intertubercular Groove"];
-						siteSelector["fr"][0] = [
+                         siteSelector["fr"][0] = [
                                                   "Main - de face",
                                                   "Main - de 3/4",
                                                   "Main - de profil",
@@ -133,13 +132,13 @@ namespace.module('com.freemedforms.xray.prescription.helper', function (exports,
                                                   "Humérus - sillon intertuberculaire"];
 						
 						// 1: Fingers and Toes
-						siteSelector["xx"][1] = [ "Finger - PA / AP",
+                         siteSelector["xx"][1] = [ "Finger - PA / AP",
                                                   "Finger - Oblique",
                                                   "Finger - Lateral",
 												  "Toe - DP",
                                                   "Toe - Oblique (DPO)",
                                                   "Toe - Lateral"];
-						siteSelector["fr"][1] = [ "Doigt - de face",
+                         siteSelector["fr"][1] = [ "Doigt - de face",
                                                   "Doigt - de 3/4",
                                                   "Doigt - de profil",
 												  "Orteil - de face",
@@ -200,7 +199,7 @@ namespace.module('com.freemedforms.xray.prescription.helper', function (exports,
                                                   "Hip - Acetabulum - Judet Method",
                                                   "Long Leg View"];
 												  
-						 siteSelector["fr"][2] = [
+                         siteSelector["fr"][2] = [
                                                   "Sésamoïdes - Axial",
                                                   "Sésamoïdes - de 3/4",
                                                   "Pied - de face",
@@ -276,15 +275,15 @@ namespace.module('com.freemedforms.xray.prescription.helper', function (exports,
                                                   "Acromioclavicular - PA Axial Oblique",
                                                   "Acromioclavicular - Weightbearing"];
 												  
-						siteSelector["fr"][3] = ["\u00C9paule - de face",
-                                                  "\u00C9paule - de face Axial de 3/4",
-                                                  "\u00C9paule - articulation glénohumérale",
-                                                  "\u00C9paule - Neers",
-                                                  "\u00C9paule - Supéroinférieur Axial (SI)",
-                                                  "\u00C9paule - Inférosupérior (IS) Axial (Lawrence Méthode)",
-                                                  "\u00C9paule - Inférosuperior (IS) Axial (West Point Méthode)",
-                                                  "\u00C9paule - Transthoracique de profil",
-                                                  "\u00C9paule - de profil (Scapular Y)",
+                         siteSelector["fr"][3] = ["Épaule - de face",
+                                                  "Épaule - de face Axial de 3/4",
+                                                  "Épaule - articulation glénohumérale",
+                                                  "Épaule - Neers",
+                                                  "Épaule - Supéroinférieur Axial (SI)",
+                                                  "Épaule - Inférosupérior (IS) Axial (Lawrence Méthode)",
+                                                  "Épaule - Inférosuperior (IS) Axial (West Point Méthode)",
+                                                  "Épaule - Transthoracique de profil",
+                                                  "Épaule - de profil (Scapular Y)",
                                                   "Scapula - de face",
                                                   "Scapula - de profil",
                                                   "Scapula - de 3/4",
@@ -303,7 +302,7 @@ namespace.module('com.freemedforms.xray.prescription.helper', function (exports,
                                                   "Anterior Pelvic Bones - Superioinferior \"Inlet View\" (Lilienfield)",
                                                      ];
 												  
-						siteSelector["fr"][4] = ["Bassin - de face",
+                         siteSelector["fr"][4] = ["Bassin - de face",
                                                   "Bassin - de profil",
                                                   "Bassin - Oblique ascendant (\"Outlet View\") à 45 degré (Taylor)",
                                                   "Bassin - Oblique descendant (\"Inlet View\") à 45 degré (Lilienfield)",
@@ -329,7 +328,7 @@ namespace.module('com.freemedforms.xray.prescription.helper', function (exports,
                                                   "Sternoclavicular - PA",
                                                   "Sternoclavicular - Oblique",
                                                   "Sternoclavicular - Axiolateral (Kurzbauer)"];
-						siteSelector["fr"][5] = ["Thorax - de face Debout",
+                         siteSelector["fr"][5] = ["Thorax - de face Debout",
                                                   "Thorax - de profil Gauche (Debout)",
                                                   "Thorax - de face, Décubitus Dorsal",
                                                   "Thorax - Apical",
@@ -358,7 +357,7 @@ namespace.module('com.freemedforms.xray.prescription.helper', function (exports,
                                                   "Abdomen - Lateral",
                                                   "Renal - Supine Abdomen (Inspiration)",
                                                   "Renal - AP Renal Area (Expiration)"];
-						siteSelector["fr"][6] = ["ASP - Décubitus Dorsal",
+                         siteSelector["fr"][6] = ["ASP - Décubitus Dorsal",
                                                   "ASP - Décubitus Ventral",
                                                   "ASP - Debout",
                                                   "ASP - de profil Decubitus",
@@ -398,7 +397,7 @@ namespace.module('com.freemedforms.xray.prescription.helper', function (exports,
                                                   "Coccyx - AP",
                                                   "Coccyx - Lateral",
                                                   "Chiropractic Spine"];
-						siteSelector["fr"][7] = ["Rachis cervical - de profil",
+                         siteSelector["fr"][7] = ["Rachis cervical - de profil",
                                                   "Rachis cervical - de profil (Flexion)",
                                                   "Rachis cervical - de profil (Extension)",
                                                   "Rachis cervical - de 3/4",
@@ -446,7 +445,7 @@ namespace.module('com.freemedforms.xray.prescription.helper', function (exports,
                                                   "Petromastoid - Axiolateral (Modified Law)",
                                                   "Petromastoid - Axiolateral Oblique (Modified Law)",
                                                   "Petromastoid - Axiolateral (Henschen, Schuller, Lysholm)"];
-						 siteSelector["fr"][8] = ["Crâne - de face",
+                         siteSelector["fr"][8] = ["Crâne - de face",
                                                   "Crâne - de face (Caldwell) 0°",
                                                   "Crâne - de face (Caldwelll) 15°",
                                                   "Crâne - de face (Caldwell ) 25° - 30°",
@@ -490,7 +489,7 @@ namespace.module('com.freemedforms.xray.prescription.helper', function (exports,
                                                   "Sinuses - OM (Waters) Open Mouth",
                                                   "Sinuses - Lateral",
                                                   "Sinuses - Submentovertical (SMV)"];
-						siteSelector["fr"][9] = ["Massif facial - de face (Caldwell) 15°",
+                         siteSelector["fr"][9] = ["Massif facial - de face (Caldwell) 15°",
                                                   "Massif facial - de face 30° (Pariétocanthial Modifié)",
                                                   "Massif facial - OM",
                                                   "Massif facial - OM 30°",
@@ -550,7 +549,7 @@ namespace.module('com.freemedforms.xray.prescription.helper', function (exports,
                          var ui = formUi.ui();
                          siteCombo = ui.findChild("globalSites");
                          siteSelectorListWidget = ui.findChild("siteSelectorListWidget");
-			 RaySelectorListWidget = ui.findChild("RaySelectorListWidget");
+                         raySelectorListWidget = ui.findChild("RaySelectorListWidget");
                          leftCheck = ui.findChild("left");
                          rightCheck = ui.findChild("right");
                          addButton = ui.findChild("addButton");
@@ -566,9 +565,7 @@ namespace.module('com.freemedforms.xray.prescription.helper', function (exports,
                          freemedforms.forms.languageChanged.connect(this, reTranslateUi);
                          siteCombo['activated(int)'].connect(this, populateSiteSelector);
                          addButton.clicked.connect(this, putSelectionToHtmlEditor);
-	                 siteCombo['activated(int)'].connect(this, populateRaySelector);
-                         siteCombo['activated(int)'].connect(this, enabledRightLeft);
-                                   }
+                     }
 
                      
                      function reTranslateUi() {
@@ -595,19 +592,21 @@ namespace.module('com.freemedforms.xray.prescription.helper', function (exports,
                          } else {
                              freemedforms.uiTools.addItems(siteSelectorListWidget, siteSelector["xx"][row]);
                          }
-                       
+                         populateRaySelector();
+                         enabledRightLeft();
                      }
 					
                     function populateRaySelector() {
-			freemedforms.uiTools.clear(RaySelectorListWidget);
-                        if (siteCombo.currentIndex == 1)
-                                    { RaySelectorListWidget.enabled = true;
-                                       siteCombo['activated(int)'].connect(this, populateRaySelector);}
-                                 else RaySelectorListWidget.enabled = false;
-			if (freemedforms.forms.currentLanguage=="fr") {
-                             freemedforms.uiTools.addItems(RaySelectorListWidget, RaySelector["fr"]);
+                        freemedforms.uiTools.clear(raySelectorListWidget);
+                        if (siteCombo.currentIndex == 1) {
+                            raySelectorListWidget.enabled = true;
                          } else {
-                             freemedforms.uiTools.addItems(RaySelectorListWidget, RaySelector["xx"]);
+                            raySelectorListWidget.enabled = false;
+                        }
+			if (freemedforms.forms.currentLanguage=="fr") {
+                             freemedforms.uiTools.addItems(raySelectorListWidget, raySelector["fr"]);
+                         } else {
+                             freemedforms.uiTools.addItems(raySelectorListWidget, raySelector["xx"]);
                          }
                      }	
                      
@@ -623,25 +622,23 @@ namespace.module('com.freemedforms.xray.prescription.helper', function (exports,
                          // return html code
                          var html = "<span style=\"font-weight:bold;font-size:large;font-variant:small-caps;text-decoration:underline\">" + siteCombo.currentText + "</span><ul title=" + siteCombo.currentText + ">";
                          var selected = freemedforms.uiTools.selectedItems(siteSelectorListWidget);
-			var r_selected = freemedforms.uiTools.selectedItems(RaySelectorListWidget);
+                         var r_selected = freemedforms.uiTools.selectedItems(raySelectorListWidget);
                          for(var i=0; i < selected.length; i++) {
-                         var lat;
-                         if  ( (!leftCheck.checked && !rightCheck.checked) || !leftCheck.enabled )
+                             var lat;
+                             if  ( (!leftCheck.checked && !rightCheck.checked) || !leftCheck.enabled )
                                  lat = "";
-                        else if (rightCheck.checked && !leftCheck.checked)
+                             else if (rightCheck.checked && !leftCheck.checked)
                                  lat =": "+ rightCheck.text;
-			else if
-				(leftCheck.text && !rightCheck.checked)
-				lat =": "+ leftCheck.text;
-			else lat=": "+ leftCheck.text+" + "+rightCheck.text;
-							
-			if ( siteCombo.currentIndex == 1 )
-                        {
-				var quantity = r_selected.join(" + ");
-				html += "<li><b>"+ quantity + " " + selected[i] + "</b> " + lat + "</li>";
-															}
-							else
-                             html += "<li><b>" + selected[i] + "</b> " + lat + "</li>";
+                             else if (leftCheck.text && !rightCheck.checked)
+                                 lat =": "+ leftCheck.text;
+                             else lat=": "+ leftCheck.text+" + "+rightCheck.text;
+
+                             if (siteCombo.currentIndex == 1) {
+                                 var quantity = r_selected.join(" + ");
+                                 html += "<li><b>"+ quantity + " " + selected[i] + "</b> " + lat + "</li>";
+                             } else {
+                                 html += "<li><b>" + selected[i] + "</b> " + lat + "</li>";
+                             }
                          }
                          html += "</ul>";
                          htmlItem.currentText = htmlItem.currentText + html;
