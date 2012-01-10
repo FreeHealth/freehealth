@@ -215,6 +215,8 @@ inline static QLabel *findLabel(Form::FormItem *item)
         l = qFindChild<QLabel*>(item->parentFormMain()->formWidget(), lbl);
         if (l) {
             l->setText(item->spec()->label());
+        } else {
+            l = new QLabel(item->formWidget());
         }
     }
     return l;
@@ -1832,7 +1834,7 @@ void BaseComboData::setStorableData(const QVariant &data)
 QVariant BaseComboData::storableData() const
 {
     int row = m_Combo->m_Combo->currentIndex();
-    if (row < 0)
+    if (row < 0 || row >= m_FormItem->valueReferences()->values(Form::FormItemValues::Value_Uuid).count())
         return QVariant();
     return m_FormItem->valueReferences()->values(Form::FormItemValues::Value_Uuid).at(row);
 }
