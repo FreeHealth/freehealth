@@ -1,0 +1,107 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE FreeMedForms>
+
+<FreeMedForms>
+  <formdescription>
+    <!-- Non translatable values -->
+    <authors>Eric Maeker, MD; Fredman, MD</authors>
+    <version>0.6.01</version>
+    <compatversion>0.6.0</compatversion>
+    <cdate>2012-01-10</cdate>
+    <icon>cardiology.png</icon>
+    <weblink>http://en.wikipedia.org/wiki/Framingham_Risk_Score#cite_note-9</weblink>
+    <bibliography pmid=" 12485966">National Cholesterol Education Program (NCEP) Expert Panel on Detection, Evaluation, and Treatment of High Blood Cholesterol in Adults (Adult Treatment Panel III). Third Report of the National Cholesterol Education Program (NCEP) Expert Panel on Detection, Evaluation, and Treatment of High Blood Cholesterol in Adults (Adult Treatment Panel III) final report. Circulation. 2002 Dec 17;106(25):3143-421.</bibliography>
+
+    <!-- Translatable values -->
+    <licence>GPLv3</licence>
+    <description lang="fr">Score de risque cardio-vasculaire de Framingham</description>
+    <description lang="xx">Framingham Cardiovascular risk score</description>
+    <category lang="xx">Cardiology</category>
+    <category lang="fr">Cardiologie</category>
+    <tooltip lang="fr"></tooltip>
+    <tooltip lang="xx"></tooltip>
+    <htmldescription lang="fr"></htmldescription>
+    <htmldescription lang="xx"></htmldescription>
+    <specialties lang="fr">Cardiologie</specialties>
+    <specialties lang="xx">Cardiology</specialties>
+
+ </formdescription>
+
+  <file type="script" name="onload">./scripts/xx/script.js</file> 
+  
+  <MedForm name="Subs::Cardiology::FraminghamScore">
+    <label lang="fr">Score de risque cardio-vasculaire de Framingham</label>
+    <label lang="xx">Framingham Cardiovascular risk score</label>
+	<column>1</column>
+    <options>DontPrintEmptyValues;UseFormNameAsNameSpace</options>
+	
+	<Item name="FraminghamGroup" type="group">
+			<column>1</column>
+	
+	
+		<Item name="FraminghamGroup::Cholesterol" type="group">
+		<column>1</column>
+		<Item name="FraminghamGroup::Cholesterol::TotalCholesterol" type="doublespin">
+       <label lang="xx">Total cholesterol (in mg/dL)</label>
+	   <label lang="fr">Cholestérol total (en mg/dL)</label>
+       <options>vertical;labelontop;DontPrintEmptyValues</options>
+		</Item>
+
+		<Item name="FraminghamGroup::Cholesterol::HDLCholesterol" type="doublespin">
+       <label lang="xx">HDL cholesterol (in mg/dL)</label>
+	   <label lang="fr">HDL cholestérol (en mg/dL)</label>
+       <options>vertical;labelontop;DontPrintEmptyValues</options>
+		</Item>
+		</Item>
+	 
+	 
+		<Item name="FraminghamGroup::Tobacco" type="check">
+       <label lang="xx">Tobacco use ?</label>
+	   <label lang="fr">Tabagisme ?</label>
+       <options>vertical;labelontop;DontPrintEmptyValues</options>
+	   <value>
+	   <numerical id="0">0</numerical>
+            <numerical id="1">1</numerical>
+	   </value>
+		</Item>
+
+	
+		<Item name="FraminghamGroup::BloodPressure" type="group">
+			<column>1</column>
+			<Item name="FraminghamGroup::BloodPressure::SystolicBloodPressure" type="doublespin">
+			<label lang="xx">Systolic blood pressure (in mmHg)</label>
+			<label lang="fr">Pression artérielle systolique (en mmHg)</label>
+			<options>vertical;labelontop;DontPrintEmptyValues</options>
+			</Item>
+	 
+			<Item name="FraminghamGroup::BloodPressure::TreatedBloodPressure" type="check">
+			<label lang="xx">Current treatment for hypertension ?</label>
+			<label lang="fr">Traitement en cours pour hypertension ?</label>
+			<options>vertical;labelontop;DontPrintEmptyValues</options>
+			<value>
+			<numerical id="0">0</numerical>
+			<numerical id="1">1</numerical>
+			</value>
+		</Item>
+		
+		</Item>
+                </Item>
+	 
+
+	<Item name="ResultGroup" type="group">
+			<column>1</column>
+
+			<Item name="ResultGroup::Result" type="scriptcalculation">
+			<label lang="xx">The Framingham Risk Score estimating the 10-year cardiovascular risk is : </label>
+			<label lang="fr">Le score de Framingham évaluant le risque cardio-vasculaire à 10 ans est de : </label>
+			<options>vertical;labelontop;DontPrintEmptyValues</options>
+			<connect_regexp>Subs::Cardiology::FraminghamScore::FraminghamGroup::*</connect_regexp>
+			<calcScript>framinghamCalcul();</calcScript>
+			</Item>
+
+		</Item>
+
+		
+  </MedForm>
+
+</FreeMedForms>
