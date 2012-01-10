@@ -148,6 +148,7 @@ QStringList UiTools::selectedItems(QWidget *widget)
     if (listView) {
         if (listView->selectionModel()->hasSelection()) {
             QModelIndexList sel = listView->selectionModel()->selectedIndexes();
+            qSort(sel);
             foreach(const QModelIndex &index, sel) {
                 toReturn << index.data().toString();
             }
