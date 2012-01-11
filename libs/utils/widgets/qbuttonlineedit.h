@@ -48,10 +48,7 @@ class UTILS_EXPORT QButtonLineEdit : public QLineEdit
 {
     Q_OBJECT
 public:
-    // Pixmap should be 16x16
-    /** \brief constructor */
     QButtonLineEdit( QWidget * parent = 0 );
-    /** \brief destructor*/
     ~QButtonLineEdit();
 
     void setDelayedSignals(bool state);
@@ -66,18 +63,15 @@ public:
 protected:
     void keyPressEvent(QKeyEvent *event);
     void resizeEvent(QResizeEvent *);
-    void focusInEvent(QFocusEvent *event);
-    void focusOutEvent(QFocusEvent *event);
 
 private:
-    QString emptyTextWithExtraText() const;
+    void updatePlaceholderText();
     void setSpecificStyleSheet(const QString &css);
     void prepareConnections();
     void changeEvent(QEvent *e);
 
 private Q_SLOTS:
     void emitTextChangedSignal();
-
     void leftTrig(QAction *action);
 
 private:

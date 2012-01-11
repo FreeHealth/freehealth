@@ -31,7 +31,7 @@
     The tooltip of the leftButton is shown in gray inside the line edit when the user does not tape in.
     To retreive the text of the QLineEdit use the function : searchText().
     You can delay the textChanged() signal using setDelayedSignals().
-  \todo Use the QLineEdit::placeholderText() (introduced in Qt4.7)
+    All action pixmaps of the left and right buttons must be 16x16.
  */
 
 #include "qbuttonlineedit.h"
@@ -59,7 +59,6 @@ static inline QString cleanString(const QString &s)
     }
     return ret;
 }
-
 
 QButtonLineEdit::QButtonLineEdit(QWidget *parent) :
         QLineEdit(parent), m_leftButton(0), m_rightButton(0), m_Delayed(false)
@@ -110,9 +109,7 @@ void QButtonLineEdit::setLeftButton(QToolButton * button)
                    qMax(msz.height(), button->sizeHint().height() + frameWidth * 2 + 2));
 
     // set text to button toolTip
-//    setText(m_leftButton->toolTip());
-    m_emptyString = cleanString(m_leftButton->toolTip());
-    setSpecificStyleSheet("color:gray;");
+    setPlaceholderText(cleanString(m_leftButton->toolTip()));
     prepareConnections();
     clearFocus();
 }
@@ -174,25 +171,16 @@ void QButtonLineEdit::emitTextChangedSignal()
 void QButtonLineEdit::leftTrig(QAction *action)
 {
     m_leftButton->setDefaultAction(action);
-    m_emptyString = cleanString(action->text());
-    if (text().isEmpty() || (text() == m_emptyString)) {
-        setText(emptyTextWithExtraText());
-        setSpecificStyleSheet("color:gray;");
-    }
-//    QString t = ;
-//    t.replace(" ", "&nbsp;");
-//    t.append("<p style='white-space:pre'>");
-//    t.prepend("</p>");
-    setToolTip(emptyTextWithExtraText());
+    setPlaceholderText(cleanString(action->text()));
     clearFocus();
 }
 
-QString QButtonLineEdit::emptyTextWithExtraText() const
+void QButtonLineEdit::updatePlaceholderText()
 {
-    if (m_leftButton && m_leftButton->actions().count()>0)
-        return m_emptyString + " " + tr("(press Alt up/down cursor to cycle)");
-    else
-        return m_emptyString;
+    if (m_leftButton && m_leftButton->defaultAction()) {
+        setPlaceholderText(cleanString(m_leftButton->defaultAction()->text()) + " " + tr("(press Alt up/down cursor to cycle)"));
+        setToolTip(cleanString(m_leftButton->defaultAction()->text()) + " " + tr("(press Alt up/down cursor to cycle)"));
+    }
 }
 
 void QButtonLineEdit::keyPressEvent(QKeyEvent *event)
@@ -250,34 +238,9 @@ void QButtonLineEdit::keyPressEvent(QKeyEvent *event)
     QLineEdit::keyPressEvent(event);
 }
 
-void QButtonLineEdit::focusInEvent(QFocusEvent *event)
-{
-     if (text()==emptyTextWithExtraText()) {
-         clear();
-         setSpecificStyleSheet("color:black;");
-     }
-     QLineEdit::focusInEvent(event);
-}
-
-void QButtonLineEdit::focusOutEvent(QFocusEvent *event)
-{
-    if (text().isEmpty()) {
-        bool block = blockSignals(true);
-        setText(emptyTextWithExtraText());
-        setSpecificStyleSheet("color:gray;");
-        blockSignals(block);
-    }
-    QLineEdit::focusOutEvent(event);
-}
-
-/**
-\brief Get the text of the line edit. If the text is gray (text of selected action inside the left button), then
-an empty QString is returned.
-*/
+/** Returns the text of the line edit. */
 QString QButtonLineEdit::searchText() const
 {
-    if (text()==emptyTextWithExtraText()) //styleSheet().contains("color:gray"))
-        return QString::null;
     return text();
 }
 
@@ -299,24 +262,12 @@ void QButtonLineEdit::setSpecificStyleSheet(const QString &css)
     setStyleSheet(QString("QLineEdit#%1 { %2; %3 }").arg(objectName(), m_CSS, css));
 }
 
-//void QButtonLineEdit::retranslateUi()
-//{
-//}
-
 void QButtonLineEdit::changeEvent(QEvent *e)
 {
     QWidget::changeEvent(e);
     switch (e->type()) {
     case QEvent::LanguageChange:
-        if (styleSheet().contains("color:gray")) {
-            if (m_leftButton->defaultAction()) {
-                m_emptyString = m_leftButton->defaultAction()->text();
-            } else {
-                m_emptyString.clear();
-            }
-            setText(emptyTextWithExtraText());
-            setToolTip(emptyTextWithExtraText());
-        }
+        updatePlaceholderText();
         break;
     default:
         break;
