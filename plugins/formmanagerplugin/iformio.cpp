@@ -79,7 +79,9 @@
 
 #include <utils/versionnumber.h>
 #include <utils/genericupdateinformation.h>
-#include <translationutils/constanttranslations.h>
+#include <translationutils/constants.h>
+#include <translationutils/trans_menu.h>
+#include <translationutils/trans_msgerror.h>
 
 #include <QDate>
 #include <QDebug>
@@ -103,7 +105,9 @@ FormIOQuery::FormIOQuery() :
 FormIODescription::FormIODescription() :
     Utils::GenericDescription(),
     m_reader(0)
-{}
+{
+    setData(FromDatabase, false);
+}
 
 FormIODescription::~FormIODescription()
 {
@@ -143,6 +147,9 @@ void FormIODescription::toTreeWidget(QTreeWidget *tree) const
     new QTreeWidgetItem(general, QStringList() << tkTr(Trans::Constants::AUTHOR) << data(FormIODescription::Author).toString());
     new QTreeWidgetItem(general, QStringList() << QCoreApplication::translate("Forms", "License") << data(FormIODescription::GlobalLicense).toString());
     new QTreeWidgetItem(general, QStringList() << tkTr(Trans::Constants::DESCRIPTION) << data(FormIODescription::ShortDescription).toString());
+    const QStringList &keys = m_Shots.keys();
+    new QTreeWidgetItem(general, QStringList() << tkTr(Trans::Constants::SCREENSHOTS) << keys.join(";"));
+    new QTreeWidgetItem(general, QStringList() << QString("Extracted from database") << data(FormIODescription::FromDatabase).toString());
 
     QTreeWidgetItem *version = new QTreeWidgetItem(tree, QStringList() << tkTr(Trans::Constants::VERSION));
     version->setFont(0, bold);
@@ -156,6 +163,41 @@ void FormIODescription::toTreeWidget(QTreeWidget *tree) const
     tree->resizeColumnToContents(1);
 }
 
+QString FormIODescription::toHtml() const
+{
+    QString html;
+    // Informations
+    html += QString("<p style=\"font-weight:bold;font-size:large;\">%1</p>")
+            .arg(data(FormIODescription::ShortDescription).toString());
+    // Author and version
+    html += QString("<p style=\"margin-left:20px;font-size:small;color:darkgray\">"
+                    "%1: %2<br/>"
+                    "%3: %4<br/>"
+                    "%5: %6<br/>"
+                    "%7: %8</p>")
+            .arg(tkTr(Trans::Constants::AUTHOR))
+            .arg(data(FormIODescription::Author).toString())
+            .arg(tkTr(Trans::Constants::VERSION))
+            .arg(data(FormIODescription::Version).toString())
+            .arg(QCoreApplication::translate("Forms", "Creation date"))
+            .arg(data(FormIODescription::CreationDate).toDate().toString(QLocale().dateFormat(QLocale::ShortFormat)))
+            .arg(QCoreApplication::translate("Forms", "Last modification date"))
+            .arg(data(FormIODescription::LastModificationDate).toDate().toString(QLocale().dateFormat(QLocale::ShortFormat)))
+            .arg(QCoreApplication::translate("Forms", "License"))
+            .arg(data(FormIODescription::GlobalLicense).toString())
+            ;
+    // Long description
+    const QString &hmltDescr = data(FormIODescription::HtmlDescription).toString();
+    if (!hmltDescr.isEmpty())
+    html += QString("<p style=\"margin:0px;\">%1</p><br/><br/>").arg(hmltDescr);
+    if (hasScreenShots()) {
+        html += QString("<span style=\"margin-left:20px;font-size:small;color:darkgray\">%1</span><br/><br/>")
+                .arg(QCoreApplication::translate("Forms", "ScreenShots are available."));
+    }
+//    new QTreeWidgetItem(general, QStringList() << QString("Extracted from database") << data(FormIODescription::FromDatabase).toString());
+
+    return html;
+}
 
 QDebug operator<<(QDebug dbg, const Form::FormIODescription &c)
 {

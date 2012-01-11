@@ -217,6 +217,7 @@ QList<Form::FormIODescription *> XmlFormIO::getFormFileDescriptions(const Form::
 {
     QList<Form::FormIODescription *> toReturn;
     QString startPath;
+    QStringList includedUids;
     if (query.typeOfForms() & Form::FormIOQuery::UserForms) {
         /** \todo manage user forms path and default path */
     } else {
@@ -230,6 +231,9 @@ QList<Form::FormIODescription *> XmlFormIO::getFormFileDescriptions(const Form::
         toReturn = base()->getFormDescription(query);
         if (!toReturn.isEmpty() && !query.getAllAvailableFormDescriptions())
             return toReturn;
+        for(int i=0; i<toReturn.count(); ++i) {
+            includedUids << toReturn.at(i)->data(Form::FormIODescription::UuidOrAbsPath).toString();
+        }
     }
 
     // Get a specific form description
@@ -253,6 +257,10 @@ QList<Form::FormIODescription *> XmlFormIO::getFormFileDescriptions(const Form::
         // get all forms included in this path
         foreach(const QFileInfo &file, Utils::getFiles(start, "central.xml", Utils::Recursively)) {
             const QString &fileName = file.absoluteFilePath();
+            XmlFormName form(fileName);
+            if (includedUids.contains(form.uid)) {
+                continue;
+            }
             if (canReadForms(fileName)) {
                 Form::FormIODescription *desc = reader()->readFileInformations(fileName);
                 if (desc) {
@@ -267,6 +275,11 @@ QList<Form::FormIODescription *> XmlFormIO::getFormFileDescriptions(const Form::
         QDir start(startPath);
         foreach(const QFileInfo &file, Utils::getFiles(start, "central.xml", Utils::Recursively)) {
             const QString &fileName = file.absoluteFilePath();
+            XmlFormName form(fileName);
+            if (includedUids.contains(form.uid)) {
+                qWarning() << "xxxxxxxxxxxx formAlredayIncluded" << form.uid;
+                continue;
+            }
             if (canReadForms(fileName)) {
                 Form::FormIODescription *desc = reader()->readFileInformations(fileName);
                 if (desc) {

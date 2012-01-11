@@ -37,7 +37,7 @@
  * \file xmliobase.h
  * \author Eric MAEKER <eric.maeker@gmail.com>
  * \version 0.6.2
- * \date 29 Dec 2011
+ * \date 11 Jan 2012
 */
 
 namespace Form {
@@ -86,6 +86,7 @@ public:
     QString getFormContent(const QString &formUid, const int type, const QString &modeName = QString::null);
 
     QPixmap getScreenShot(const QString &formUid, const QString &shotName);
+    QHash<QString, QPixmap> getScreenShots(const QString &formUid, const QString &lang);
 
     // Setters
     bool saveForm(const XmlFormName &form);

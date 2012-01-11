@@ -346,28 +346,15 @@ QList<Form::FormIODescription *> XmlIOBase::getFormDescription(const Form::FormI
             doc.setContent(query.value(1).toString());
             Form::FormIODescription *descr = reader()->readXmlDescription(doc.firstChildElement(Constants::TAG_FORM_DESCRIPTION), query.value(0).toString());
             if (descr) {
-                descr->setData(Form::FormIODescription::Category, "db: " + descr->data(Form::FormIODescription::Category).toString(), QLocale().name().left(2));
+                descr->setData(Form::FormIODescription::Category, descr->data(Form::FormIODescription::Category).toString(), QLocale().name().left(2));
+                descr->setData(Form::FormIODescription::FromDatabase, true);
 
                 if (formQuery.getScreenShots()) {
-                    // Get the base64 content for the formUid
-                    QHash<int, QString> where;
-                    where.insert(Constants::FORMCONTENT_TYPE, QString("=%1").arg(ScreenShot));
-                    where.insert(Constants::FORMCONTENT_FORM_ID, QString("='%1'").arg(formQuery.formUuid()));
-                    req = select(Constants::Table_FORM_CONTENT, QList<int>()
-                                 << Constants::FORMCONTENT_MODENAME << Constants::FORMCONTENT_CONTENT, where);
-                    QSqlQuery shot(database());
-                    if (shot.exec(req)) {
-                        while (shot.next()) {
-                            QPixmap pix;
-                            pix.loadFromData(QByteArray::fromBase64(shot.value(1).toString().toUtf8()));
-
-                        }
-                    } else {
-                        LOG_QUERY_ERROR(shot);
+                    QHash<QString, QPixmap> pix = getScreenShots(query.value(0).toString(), QLocale().name().left(2).toLower());
+                    foreach(const QString &k, pix.keys()) {
+                        descr->addScreenShot(k, pix.value(k));
                     }
-                    shot.finish();
                 }
-
                 toReturn << descr;
             }
         }
@@ -472,6 +459,7 @@ QString XmlIOBase::getFormContent(const QString &formUid, const int type, const 
     return QString();
 }
 
+/** Returns the shot \e shotName associated to the form \e formUid */
 QPixmap XmlIOBase::getScreenShot(const QString &formUid, const QString &shotName)
 {
     // Get shot content
@@ -482,6 +470,43 @@ QPixmap XmlIOBase::getScreenShot(const QString &formUid, const QString &shotName
     QPixmap pix;
     pix.loadFromData(QByteArray::fromBase64(content.toAscii()));
     return pix;
+}
+
+/** Returns the shots for the language \e lang associated to the form \e formUid */
+QHash<QString, QPixmap> XmlIOBase::getScreenShots(const QString &formUid, const QString &lang)
+{
+    WARN_FUNC << formUid << lang;
+    QHash<QString, QPixmap> pixmaps;
+    QSqlDatabase DB = database();
+    if (!DB.isOpen()) {
+        if (!DB.open()) {
+            LOG_ERROR(tkTr(Trans::Constants::UNABLE_TO_OPEN_DATABASE_1_ERROR_2).arg(Constants::DB_NAME).arg(DB.lastError().text()));
+            return pixmaps;
+        }
+    }
+    QSqlQuery query(DB);
+    Utils::FieldList gets;
+    gets << Utils::Field(Constants::Table_FORM_CONTENT, Constants::FORMCONTENT_MODENAME);
+    gets << Utils::Field(Constants::Table_FORM_CONTENT, Constants::FORMCONTENT_CONTENT);
+    Utils::JoinList joins;
+    joins << Utils::Join(Constants::Table_FORMS, Constants::FORM_ID, Constants::Table_FORM_CONTENT, Constants::FORMCONTENT_FORM_ID);
+    Utils::FieldList conds;
+    conds << Utils::Field(Constants::Table_FORMS, Constants::FORM_UUID, QString("='%1'").arg(normalizedFormUid(formUid)));
+    conds << Utils::Field(Constants::Table_FORM_CONTENT, Constants::FORMCONTENT_TYPE, QString("=%1").arg(ScreenShot));
+    conds << Utils::Field(Constants::Table_FORM_CONTENT, Constants::FORMCONTENT_ISVALID, QString("=1"));
+    conds << Utils::Field(Constants::Table_FORM_CONTENT, Constants::FORMCONTENT_MODENAME, QString("LIKE '%1/%'").arg(lang));
+    QString req = select(gets, joins, conds);
+
+    if (query.exec(req)) {
+        while (query.next()) {
+            QPixmap pix;
+            pix.loadFromData(QByteArray::fromBase64(query.value(1).toByteArray()));
+            pixmaps.insert(query.value(0).toString() ,pix);
+        }
+    } else {
+        LOG_QUERY_ERROR(query);
+    }
+    return pixmaps;
 }
 
 /** Save the \e content of the form \e form to the database and return the used formUid. If the \e content is empty the form file is accessed */

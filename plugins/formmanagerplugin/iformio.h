@@ -139,6 +139,7 @@ public:
         IsSubForm,
         IsPage,
         ScreenShotsPath,
+        FromDatabase,
         MaxParam
     };
 
@@ -152,11 +153,13 @@ public:
     bool setData(const int ref, const QVariant &value, const QString &lang = QString::null);
 
     // Manage screenshots
+    bool hasScreenShots() const {return (!m_Shots.isEmpty());}
     void addScreenShot(const QString &name, const QPixmap &shot) {m_Shots.insert(name, shot);}
     QList<QPixmap> screenShots() const {return m_Shots.values();}
     QPixmap screenShot(const QString &name) const {return m_Shots.value(name);}
 
     void toTreeWidget(QTreeWidget *tree) const;
+    QString toHtml() const;
 
 private:
     QList<Utils::GenericUpdateInformation> m_UpdateInfos;

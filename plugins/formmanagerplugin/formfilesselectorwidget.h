@@ -76,7 +76,7 @@ public:
     QList<Form::FormIODescription *> selectedForms() const;
 
 private Q_SLOTS:
-    void on_treeView_activated(const QModelIndex &index);
+    void onDescriptionSelected(const QModelIndex &index, const QModelIndex &previous);
     void onFilterSelected();
     void showScreenShot();
 

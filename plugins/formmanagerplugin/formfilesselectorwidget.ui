@@ -74,19 +74,7 @@
        <set>QAbstractItemView::NoEditTriggers</set>
       </property>
      </widget>
-     <widget class="QTreeWidget" name="treeWidget">
-      <property name="editTriggers">
-       <set>QAbstractItemView::NoEditTriggers</set>
-      </property>
-      <attribute name="headerVisible">
-       <bool>false</bool>
-      </attribute>
-      <column>
-       <property name="text">
-        <string notr="true">1</string>
-       </property>
-      </column>
-     </widget>
+     <widget class="QTextBrowser" name="textBrowser"/>
     </widget>
    </item>
   </layout>

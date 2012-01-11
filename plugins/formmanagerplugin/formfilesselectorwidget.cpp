@@ -186,6 +186,8 @@ FormFilesSelectorWidget::FormFilesSelectorWidget(QWidget *parent, const FormType
     d->m_Type = type;
     d->m_SelType = selType;
     d->ui->setupUi(this);
+    layout()->setMargin(0);
+    layout()->setSpacing(5);
 
     // Create and connect actions
     d->createActions();
@@ -210,7 +212,7 @@ FormFilesSelectorWidget::FormFilesSelectorWidget(QWidget *parent, const FormType
 //    d->ui->treeView->setRootIndex(d->dirModel->index(settings()->path(Core::ISettings::CompleteFormsPath)));
 
     // connect actions, buttons...
-    connect(d->ui->treeView, SIGNAL(activated(QModelIndex)),this, SLOT(on_treeView_activated(QModelIndex)));
+    connect(d->ui->treeView->selectionModel(), SIGNAL(currentChanged(QModelIndex,QModelIndex)),this, SLOT(onDescriptionSelected(QModelIndex,QModelIndex)));
     connect(d->ui->screenshots, SIGNAL(clicked()), this, SLOT(showScreenShot()));
 }
 
@@ -257,17 +259,22 @@ QList<Form::FormIODescription *> FormFilesSelectorWidget::selectedForms() const
     return toReturn;
 }
 
-void FormFilesSelectorWidget::on_treeView_activated(const QModelIndex &index)
+void FormFilesSelectorWidget::onDescriptionSelected(const QModelIndex &index, const QModelIndex &previous)
 {
-    if (!index.isValid())
+    if (!index.isValid() || !index.parent().isValid()) {
+        d->ui->textBrowser->clear();
         return;
+    }
     // get the FormIODescription
     int id = d->ui->treeView->currentIndex().data(Qt::UserRole+1).toInt();
     if (id >= 0 && id < d->m_FormDescr.count()) {
         Form::FormIODescription *descr = d->m_FormDescr.at(id);
-        descr->toTreeWidget(d->ui->treeWidget);
+//        descr->toTreeWidget(d->ui->treeWidget);
+        d->ui->screenshots->setEnabled(descr->hasScreenShots());
+        d->ui->textBrowser->setHtml(descr->toHtml());
     } else {
-        d->ui->treeWidget->clear();
+        d->ui->textBrowser->clear();
+//        d->ui->treeWidget->clear();
     }
 }
 
@@ -294,13 +301,11 @@ void FormFilesSelectorWidget::showScreenShot()
     int id = d->ui->treeView->currentIndex().data(Qt::UserRole+1).toInt();
     if (id >= 0 && id < d->m_FormDescr.count()) {
         Form::FormIODescription *descr = d->m_FormDescr.at(id);
-
         // Create ImageViewer dialog
         Utils::ImageViewer dlg(this);
         dlg.setPixmaps(descr->screenShots());
         dlg.exec();
     }
-
 }
 
 void FormFilesSelectorWidget::changeEvent(QEvent *e)
