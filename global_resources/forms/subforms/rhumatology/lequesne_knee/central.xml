@@ -5,8 +5,8 @@
   <formdescription>
     <!-- Non translatable values -->
     <authors>Fredman, MD; Eric Maeker, MD</authors>
-    <version>0.6.04</version>
-    <compatversion>0.6.0</compatversion>
+    <version>0.6.05</version>
+    <fmfversion>0.6.2</fmfversion>
     <cdate>2011-12-17</cdate>
     <icon>rhumatology.png</icon>
     <weblink/>
@@ -14,14 +14,14 @@
     <!-- Translatable values -->
     <licence>GPLv3</licence>
     <description lang="fr">Indice algo-fonctionnel de Lequesne pour genou </description>
-    <description lang="en">Algofunctional index of Lequesne for knee osteoarthritis</description>
+    <description lang="xx">Algofunctional index of Lequesne for knee osteoarthritis</description>
     <description lang="de"> Lequesne-Index (Knie)</description>
-    <category lang="en">Rhumatology</category>
+    <category lang="xx">Rhumatology</category>
     <category lang="fr">Rhumatologie</category>
     <category lang="de">Rheumatologie</category>
-    <specialties lang="fr">Arthrose</specialties>
-    <specialties lang="xx">Osteoarthritis</specialties>
-    <specialties lang="de">Arthrose</specialties>
+    <specialties lang="fr">Rhumatologie</specialties>
+    <specialties lang="xx">Rhumatology</specialties>
+    <specialties lang="de">Rheumatologie</specialties>
   </formdescription>
 
   <MedForm name="Subs:Rhumatology::Osteoarthritis::Lequesne::Knee">
@@ -37,7 +37,7 @@
       <options>horizontal;labelontop;DontPrintEmptyValues</options>
       <Item type="radio" name="pain::nocturne">
         <label lang="fr">A. Douleur nocturne</label>
-        <label lang="en">A. pain or discomfort during nocturnal bedrest   </label>
+        <label lang="xx">A. pain or discomfort during nocturnal bedrest   </label>
         <options>vertical;DontPrintEmptyValues</options>
         <value>
           <uuid id="0">nocturne0</uuid>
@@ -46,9 +46,9 @@
           <possible id="0" lang="fr">Aucune</possible>
           <possible id="1" lang="fr">Seulement aux mouvements ou dans certaines postures</possible>
           <possible id="2" lang="fr">Même sans bouger</possible>
-          <possible id="0" lang="en">None </possible>
-          <possible id="1" lang="en">Only on movement or in certain positions </possible>
-          <possible id="2" lang="en">Without movement </possible>
+          <possible id="0" lang="xx">None </possible>
+          <possible id="1" lang="xx">Only on movement or in certain positions </possible>
+          <possible id="2" lang="xx">Without movement </possible>
           <numerical id="0">0</numerical>
           <numerical id="1">1</numerical>
           <numerical id="2">2</numerical>
@@ -56,7 +56,7 @@
       </Item>
       <Item type="radio" name="pain::stiff">
         <label lang="fr">B. Dérouillage matinal</label>
-        <label lang="en">B. duration of morning stiffness or pain after getting up </label>
+        <label lang="xx">B. duration of morning stiffness or pain after getting up </label>
         <options>vertical;DontPrintEmptyValues</options>
         <value>
           <uuid id="0">stiff0</uuid>
@@ -65,9 +65,9 @@
           <possible id="0" lang="fr">Aucun</possible>
           <possible id="1" lang="fr">moins de 15 minutes </possible>
           <possible id="2" lang="fr">supérieur ou égal à 15 minutes </possible>
-          <possible id="0" lang="en">None</possible>
-          <possible id="1" lang="en">less than 15 minutes </possible>
-          <possible id="2" lang="en">equal or more than  15 minutes </possible>
+          <possible id="0" lang="xx">None</possible>
+          <possible id="1" lang="xx">less than 15 minutes </possible>
+          <possible id="2" lang="xx">equal or more than  15 minutes </possible>
           <numerical id="0">0</numerical>
           <numerical id="1">1</numerical>
           <numerical id="2">2</numerical>
@@ -75,22 +75,22 @@
       </Item>
       <Item type="radio" name="pain::stand">
         <label lang="fr">C. Rester debout ou piétiner sur place une demi-heure augmente-t-il la douleur ?  </label>
-        <label lang="en">C. remaining standing for 30 minutes increases pain </label>
+        <label lang="xx">C. remaining standing for 30 minutes increases pain </label>
         <options>vertical;DontPrintEmptyValues</options>
         <value>
           <uuid id="0">stand0</uuid>
           <uuid id="1">stand1</uuid>
           <possible id="0" lang="fr">Non</possible>
           <possible id="1" lang="fr">Oui</possible>
-          <possible id="0" lang="en">No</possible>
-          <possible id="1" lang="en">Yes</possible>
+          <possible id="0" lang="xx">No</possible>
+          <possible id="1" lang="xx">Yes</possible>
           <numerical id="0">0</numerical>
           <numerical id="1">1</numerical>
         </value>
       </Item>
       <Item type="radio" name="pain::walk">
         <label lang="fr">D. Douleur à la marche </label>
-        <label lang="en">D. pain on walking </label>
+        <label lang="xx">D. pain on walking </label>
         <options>vertical;DontPrintEmptyValues</options>
         <value>
           <uuid id="0">stiff0</uuid>
@@ -99,9 +99,9 @@
           <possible id="0" lang="fr">Aucune</possible>
           <possible id="1" lang="fr">seulement après quelque distance </possible>
           <possible id="2" lang="fr">dès le début de la marche et de façon croissante </possible>
-          <possible id="0" lang="en">None</possible>
-          <possible id="1" lang="en">only after walking some distance</possible>
-          <possible id="2" lang="en">early after starting </possible>
+          <possible id="0" lang="xx">None</possible>
+          <possible id="1" lang="xx">only after walking some distance</possible>
+          <possible id="2" lang="xx">early after starting </possible>
           <numerical id="0">0</numerical>
           <numerical id="1">1</numerical>
           <numerical id="2">2</numerical>
@@ -109,7 +109,7 @@
       </Item>
       <Item type="radio" name="pain::getup">
         <label lang="fr">E. souffrez-vous en vous relevant sans l'aide des bras d'une station assise prolongée (2 heures) ?  </label>
-        <label lang="en">E. pain or discomfort after getting up from sitting without use of arms </label>
+        <label lang="xx">E. pain or discomfort after getting up from sitting without use of arms </label>
         <options>vertical;DontPrintEmptyValues</options>
         <value>
           <uuid id="0">getup0</uuid>
@@ -117,8 +117,8 @@
           <uuid id="2">getup2</uuid>
           <possible id="0" lang="fr">Non</possible>
           <possible id="1" lang="fr">Oui</possible>
-          <possible id="0" lang="en">No</possible>
-          <possible id="1" lang="en">Yes</possible>
+          <possible id="0" lang="xx">No</possible>
+          <possible id="1" lang="xx">Yes</possible>
           <numerical id="0">0</numerical>
           <numerical id="1">1</numerical>
         </value>
@@ -131,7 +131,7 @@
       <options>horizontal;labelontop;DontPrintEmptyValues</options>
       <Item type="radio" name="distance::maxdistance">
         <label lang="fr">A. Douleur nocturne</label>
-        <label lang="en">A. maximum distance walked   </label>
+        <label lang="xx">A. maximum distance walked   </label>
         <options>vertical;DontPrintEmptyValues</options>
         <value>
           <uuid id="0">maxdistance0</uuid>
@@ -148,13 +148,13 @@
           <possible id="4" lang="fr">300 à 500 mètres</possible>
           <possible id="5" lang="fr">100 à 300 mètres</possible>
           <possible id="6" lang="fr">moins de 100 mètres</possible>
-          <possible id="0" lang="en">unlimited </possible>
-          <possible id="1" lang="en">limited but more than 1 kilometer but  </possible>
-          <possible id="2" lang="en">about 1 kilometer (about 15 minutes) </possible>
-          <possible id="3" lang="en">about 500 - 900 meters (about 8-15 minutes)</possible>
-          <possible id="4" lang="en">from 300 - 500 meters </possible>
-          <possible id="5" lang="en">from 100 - 300 meters </possible>
-          <possible id="6" lang="en">less than 100 meters </possible>
+          <possible id="0" lang="xx">unlimited </possible>
+          <possible id="1" lang="xx">limited but more than 1 kilometer but  </possible>
+          <possible id="2" lang="xx">about 1 kilometer (about 15 minutes) </possible>
+          <possible id="3" lang="xx">about 500 - 900 meters (about 8-15 minutes)</possible>
+          <possible id="4" lang="xx">from 300 - 500 meters </possible>
+          <possible id="5" lang="xx">from 100 - 300 meters </possible>
+          <possible id="6" lang="xx">less than 100 meters </possible>
           <numerical id="0">0</numerical>
           <numerical id="1">1</numerical>
           <numerical id="2">2</numerical>
@@ -166,7 +166,7 @@
       </Item>
       <Item type="radio" name="distance::aids">
         <label lang="fr">B. Utilisation d'aide à la marche</label>
-        <label lang="en">B. walking aids required </label>
+        <label lang="xx">B. walking aids required </label>
         <options>vertical;DontPrintEmptyValues</options>
         <value>
           <uuid id="0">aids0</uuid>
@@ -175,9 +175,9 @@
           <possible id="0" lang="fr">Aucune</possible>
           <possible id="1" lang="fr">une canne ou une béquille est nécessaire</possible>
           <possible id="2" lang="fr">deux cannes ou deux béquilles sont nécessaires </possible>
-          <possible id="0" lang="en">None</possible>
-          <possible id="1" lang="en">1 walking stick or crutch </possible>
-          <possible id="2" lang="en">2 walking sticks or crutches </possible>
+          <possible id="0" lang="xx">None</possible>
+          <possible id="1" lang="xx">1 walking stick or crutch </possible>
+          <possible id="2" lang="xx">2 walking sticks or crutches </possible>
           <numerical id="0">0</numerical>
           <numerical id="1">1</numerical>
           <numerical id="2">2</numerical>
@@ -191,7 +191,7 @@
       <options>horizontal;labelontop;DontPrintEmptyValues</options>
       <Item type="radio" name="activities::activities1">
         <label lang="fr">A. Pouvez vous monter un étage ? </label>
-        <label lang="en">A. able to climb up a standard flight of stairs   </label>
+        <label lang="xx">A. able to climb up a standard flight of stairs   </label>
         <options>vertical;DontPrintEmptyValues</options>
         <value>
           <uuid id="0">activities10</uuid>
@@ -204,11 +204,11 @@
           <possible id="2" lang="fr">avec difficulté</possible>
           <possible id="3" lang="fr">avec beaucoup de difficulté </possible>
           <possible id="4" lang="fr">impossible</possible>
-          <possible id="0" lang="en">easily </possible>
-          <possible id="1" lang="en">with mild difficulty </possible>
-          <possible id="2" lang="en">with moderate difficulty</possible>
-          <possible id="3" lang="en">with marked difficulty </possible>
-          <possible id="4" lang="en">impossible</possible>
+          <possible id="0" lang="xx">easily </possible>
+          <possible id="1" lang="xx">with mild difficulty </possible>
+          <possible id="2" lang="xx">with moderate difficulty</possible>
+          <possible id="3" lang="xx">with marked difficulty </possible>
+          <possible id="4" lang="xx">impossible</possible>
           <numerical id="0">0</numerical>
           <numerical id="1">0.5</numerical>
           <numerical id="2">1</numerical>
@@ -218,7 +218,7 @@
       </Item>
       <Item type="radio" name="activities::activities2">
         <label lang="fr">B. Pouvez-vous descendre un étage ? </label>
-        <label lang="en">B. able to climb down a standard flight of stairs
+        <label lang="xx">B. able to climb down a standard flight of stairs
 stairs    </label>
         <options>vertical;DontPrintEmptyValues</options>
         <value>
@@ -232,11 +232,11 @@ stairs    </label>
           <possible id="2" lang="fr">avec difficulté</possible>
           <possible id="3" lang="fr">avec beaucoup de difficulté </possible>
           <possible id="4" lang="fr">impossible</possible>
-          <possible id="0" lang="en">easily </possible>
-          <possible id="1" lang="en">with mild difficulty </possible>
-          <possible id="2" lang="en">with moderate difficulty</possible>
-          <possible id="3" lang="en">with marked difficulty </possible>
-          <possible id="4" lang="en">impossible</possible>
+          <possible id="0" lang="xx">easily </possible>
+          <possible id="1" lang="xx">with mild difficulty </possible>
+          <possible id="2" lang="xx">with moderate difficulty</possible>
+          <possible id="3" lang="xx">with marked difficulty </possible>
+          <possible id="4" lang="xx">impossible</possible>
           <numerical id="0">0</numerical>
           <numerical id="1">0.5</numerical>
           <numerical id="2">1</numerical>
@@ -246,7 +246,7 @@ stairs    </label>
       </Item>
       <Item type="radio" name="activities::activities3">
         <label lang="fr">C. Pouvez-vous vous accroupir ou rester à genoux?  ?  </label>
-        <label lang="en">C. able to squat or bend at the knee.</label>
+        <label lang="xx">C. able to squat or bend at the knee.</label>
         <options>vertical;DontPrintEmptyValues</options>
         <value>
           <uuid id="0">activities30</uuid>
@@ -259,11 +259,11 @@ stairs    </label>
           <possible id="2" lang="fr">avec difficulté</possible>
           <possible id="3" lang="fr">avec beaucoup de difficulté </possible>
           <possible id="4" lang="fr">impossible</possible>
-          <possible id="0" lang="en">easily </possible>
-          <possible id="1" lang="en">with mild difficulty </possible>
-          <possible id="2" lang="en">with moderate difficulty</possible>
-          <possible id="3" lang="en">with marked difficulty </possible>
-          <possible id="4" lang="en">impossible</possible>
+          <possible id="0" lang="xx">easily </possible>
+          <possible id="1" lang="xx">with mild difficulty </possible>
+          <possible id="2" lang="xx">with moderate difficulty</possible>
+          <possible id="3" lang="xx">with marked difficulty </possible>
+          <possible id="4" lang="xx">impossible</possible>
           <numerical id="0">0</numerical>
           <numerical id="1">0.5</numerical>
           <numerical id="2">1</numerical>
@@ -273,7 +273,7 @@ stairs    </label>
       </Item>
       <Item type="radio" name="activities::activities4">
         <label lang="fr">D. Pouvez-vous marcher en terrain irrégulier? </label>
-        <label lang="en">D. able to walk on uneven ground  </label>
+        <label lang="xx">D. able to walk on uneven ground  </label>
         <options>vertical;DontPrintEmptyValues</options>
         <value>
           <uuid id="0">activities40</uuid>
@@ -286,11 +286,11 @@ stairs    </label>
           <possible id="2" lang="fr">avec difficulté</possible>
           <possible id="3" lang="fr">avec beaucoup de difficulté </possible>
           <possible id="4" lang="fr">impossible</possible>
-          <possible id="0" lang="en">easily </possible>
-          <possible id="1" lang="en">with mild difficulty </possible>
-          <possible id="2" lang="en">with moderate difficulty</possible>
-          <possible id="3" lang="en">with marked difficulty </possible>
-          <possible id="4" lang="en">impossible</possible>
+          <possible id="0" lang="xx">easily </possible>
+          <possible id="1" lang="xx">with mild difficulty </possible>
+          <possible id="2" lang="xx">with moderate difficulty</possible>
+          <possible id="3" lang="xx">with marked difficulty </possible>
+          <possible id="4" lang="xx">impossible</possible>
           <numerical id="0">0</numerical>
           <numerical id="1">0.5</numerical>
           <numerical id="2">1</numerical>
@@ -312,7 +312,7 @@ stairs    </label>
     </Item>
     <Item name="ScoreInterpretation2" type="helptext">
       <label lang="fr">Indication opératoire possible à partir de 10-12 points (à moduler en fonction de l’avis du patient sur son handicap, de son métier, de ses loisirs, de son âge)</label>
-      <label lang="en">A score above 10-12 can be an indication of surgery (but must be evaluated amongst other elements like self-assessment of patient's handicap, patient'sage)</label>
+      <label lang="xx">A score above 10-12 can be an indication of surgery (but must be evaluated amongst other elements like self-assessment of patient's handicap, patient'sage)</label>
     </Item>
   </MedForm>
 </FreeMedForms>
