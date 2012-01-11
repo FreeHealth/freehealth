@@ -22,8 +22,20 @@
     <specialties lang="xx">Cardiology</specialties>
     <tooltip lang="fr"></tooltip>
     <tooltip lang="xx"></tooltip>
-    <htmldescription lang="fr"></htmldescription>
-    <htmldescription lang="xx"></htmldescription>
+    <htmldescription lang="fr">
+        Ce score évalue le risque à 10 ans de maladie coronarienne basé sur le score de Framingham.
+        Le score est basé sur des données obtenues à partir des études de Framingham Heart Study,
+        et peut prédire le risque d'une personne d'avoir une crise cardiaque en les 10 prochaines
+        années. Le score est conçu pour les adultes, idem de pathologie cardiaque et de diabète,
+        âgés de 20 ans à 75 ans.
+    </htmldescription>
+    <htmldescription lang="xx">
+        The 10-years coronary heart disease Framingham risk score can estimate the 10-year
+        cardiovascular risk of an individual. The score is based on data obtained from the
+        Framingham Heart Study, and can predict a person's risk of having a heart attack in
+        the next 10 years. The score is designed for adults aged 20 and older who do not have
+        heart disease or diabetes.
+    </htmldescription>
 
  </formdescription>
 
