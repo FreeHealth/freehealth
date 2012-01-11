@@ -212,7 +212,7 @@ void HttpServerEngine::afterServerConfigurationDownload(const ReplyData &data)
         server->fromXml(Utils::readTextFile(serverConfFile, Utils::DontWarnUser));
 
         // test downloaded zip files for all pack description
-        foreach(const QString &file, server->content().packDescriptionFileNames()) {            
+        foreach(const QString &file, server->content().packDescriptionFileNames()) {
             QFileInfo info(file);
             if (info.isRelative()) { // This must be always the case...
                 info.setFile(QFileInfo(zipName).absolutePath() + QDir::separator() + file);

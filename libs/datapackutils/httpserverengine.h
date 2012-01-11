@@ -73,7 +73,7 @@ private:
 
     void createPackAndRegisterToServerManager(const Server &server, const QString &pathToPackDescription);
 
-    QNetworkRequest createRequest(const QString &url); // create a request with good headers
+    static QNetworkRequest createRequest(const QString &url); // create a request with good headers
 
 
 private:
