@@ -50,6 +50,9 @@ MainWinPlugin::MainWinPlugin() :
     if (Utils::Log::warnPluginsCreation())
         qWarning() << "creating FREEMEDFORMS::MainWinPlugin";
 
+    // Add Translator to the Application
+    Core::ICore::instance()->translators()->addNewTranslator("fmfmainwindowplugin");
+
     // Declare MainWindow to the Core
     m_MainWindow = new MainWindow;
     Core::ICore::instance()->setMainWindow(m_MainWindow);
@@ -77,8 +80,6 @@ bool MainWinPlugin::initialize(const QStringList &arguments, QString *errorStrin
     Q_UNUSED(arguments);
     Q_UNUSED(errorString);
 
-    // Add Translator to the Application
-    Core::ICore::instance()->translators()->addNewTranslator("fmfmainwindowplugin");
     messageSplash(tr("Initializing main window plugin..."));
 
     m_MainWindow->initialize(arguments, errorString);

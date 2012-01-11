@@ -92,7 +92,7 @@ public:
     void init();
 
     // IMainWindow Interface
-    bool initialize(const QStringList &arguments, QString *errorString);
+    bool initialize(const QStringList &, QString *) {return true;}
     void extensionsInitialized();
 
     void refreshPatient() const;

@@ -213,23 +213,17 @@ void MainWindow::init()
     actions.createEditActions(true);
     createActions(actions);
 
-    connectFileActions();
-    connectGeneralActions();
-    connectPatientActions();
-    connectConfigurationActions();
-    connectHelpActions();
-
     // Create Mode stack
     m_modeStack = new Utils::FancyTabWidget(this);
     modeManager()->init(m_modeStack);
 }
 
-bool MainWindow::initialize(const QStringList &arguments, QString *errorString)
-{
-    Q_UNUSED(arguments);
-    Q_UNUSED(errorString);
-    return true;
-}
+//bool MainWindow::initialize(const QStringList &arguments, QString *errorString)
+//{
+//    Q_UNUSED(arguments);
+//    Q_UNUSED(errorString);
+//    return true;
+//}
 
 void MainWindow::extensionsInitialized()
 {
@@ -239,6 +233,13 @@ void MainWindow::extensionsInitialized()
         return;
     }
     setWindowIcon(theme()->icon(Core::Constants::ICONFREEMEDFORMS));
+
+    // Connect actions
+    connectFileActions();
+    connectGeneralActions();
+    connectPatientActions();
+    connectConfigurationActions();
+    connectHelpActions();
 
     // Start the update checker
     if (updateChecker()->needsUpdateChecking(settings()->getQSettings())) {
