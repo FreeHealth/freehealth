@@ -73,6 +73,7 @@
 #include <QHBoxLayout>
 #include <QGroupBox>
 #include <QDialogButtonBox>
+#include <QCloseEvent>
 
 #include "ui_usermanagerwidget.h"
 

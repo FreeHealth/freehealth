@@ -39,6 +39,12 @@
 #include <QApplication>
 #include <QTextDocument>
 #include <QAction>
+#include <QPainter>
+#include <QPaintEvent>
+#include <QKeyEvent>
+#include <QStyle>
+#include <QToolButton>
+#include <QTimer>
 
 #include <QDebug>
 

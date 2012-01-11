@@ -29,20 +29,18 @@
 /**
  * \file qbuttonlineedit.h
  * \author Eric MAEKER <eric.maeker@gmail.com>
- * \version 0.6.0
- * \date 06 Jul 2010
+ * \version 0.6.2
+ * \date 10 Jan 2012
 */
 
 #include <utils/global_exporter.h>
 
+#include <QString>
 #include <QLineEdit>
-#include <QPainter>
-#include <QPaintEvent>
-#include <QKeyEvent>
-#include <QStyle>
-#include <QToolButton>
-#include <QAction>
-#include <QTimer>
+QT_BEGIN_NAMESPACE
+class QToolButton;
+class QTimer;
+QT_END_NAMESPACE
 
 namespace Utils {
 

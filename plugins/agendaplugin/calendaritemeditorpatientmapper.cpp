@@ -49,6 +49,9 @@
 
 #include <QStyledItemDelegate>
 #include <QAbstractTableModel>
+#include <QPainter>
+#include <QMouseEvent>
+
 #include <QDebug>
 
 using namespace Agenda;

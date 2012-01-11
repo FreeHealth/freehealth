@@ -41,6 +41,7 @@
 
 #include <QSqlTableModel>
 #include <QAbstractItemView>
+#include <QToolButton>
 
 using namespace Patients;
 using namespace Internal;
