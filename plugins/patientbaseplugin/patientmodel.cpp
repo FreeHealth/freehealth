@@ -150,7 +150,7 @@ public:
         if (!m_ExtraFilter.isEmpty())
             filter += QString(" AND (%1)").arg(m_ExtraFilter);
 
-        filter += QString(" ORDER BY `%1` ASC").arg(patientBase()->fieldName(Constants::Table_IDENT, Constants::IDENTITY_NAME));
+        filter += QString(" ORDER BY lower(`%1`) ASC").arg(patientBase()->fieldName(Constants::Table_IDENT, Constants::IDENTITY_NAME));
 
         if (WarnDatabaseFilter)
             LOG_FOR(q, "Filtering patient database with: " + filter);
