@@ -37,9 +37,6 @@
 
 #include <QDebug>
 
-Q_DECLARE_METATYPE(QListWidgetItem*)
-Q_DECLARE_METATYPE(QListWidget*)
-
 using namespace Script;
 
 static inline Form::FormManager *formManager() {return Form::FormManager::instance();}

@@ -261,6 +261,7 @@ QList<Form::FormIODescription *> FormFilesSelectorWidget::selectedForms() const
 
 void FormFilesSelectorWidget::onDescriptionSelected(const QModelIndex &index, const QModelIndex &previous)
 {
+    Q_UNUSED(previous);
     if (!index.isValid() || !index.parent().isValid()) {
         d->ui->textBrowser->clear();
         return;

@@ -95,21 +95,6 @@ public:
     QList<FormMain *> subFormsEmptyRoot() const;
     Form::FormMain *rootForm(const char *modeUniqueName);
 
-    template <class T> T* getParent(FormItem *item)
-    {
-        T* parent = 0;
-        QObject *p = item;
-        while (p) {
-            parent = qobject_cast<T*>(p);
-            if (!parent) {
-                p = p->parent();
-            } else {
-                break;
-            }
-        }
-        return parent;
-    }
-
     QList<Form::FormMain *> loadFormFile(const QString &formUid);
     QPixmap getScreenshot(const QString &formUid, const QString &fileName);
 
