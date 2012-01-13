@@ -475,7 +475,6 @@ QPixmap XmlIOBase::getScreenShot(const QString &formUid, const QString &shotName
 /** Returns the shots for the language \e lang associated to the form \e formUid */
 QHash<QString, QPixmap> XmlIOBase::getScreenShots(const QString &formUid, const QString &lang)
 {
-    WARN_FUNC << formUid << lang;
     QHash<QString, QPixmap> pixmaps;
     QSqlDatabase DB = database();
     if (!DB.isOpen()) {

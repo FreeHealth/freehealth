@@ -174,7 +174,8 @@ QString FormIODescription::toHtml() const
                     "%1: %2<br/>"
                     "%3: %4<br/>"
                     "%5: %6<br/>"
-                    "%7: %8</p>")
+                    "%7: %8<br/>"
+                    "%9: %10</p>")
             .arg(tkTr(Trans::Constants::AUTHOR))
             .arg(data(FormIODescription::Author).toString())
             .arg(tkTr(Trans::Constants::VERSION))
