@@ -9,13 +9,15 @@ include( ../../../libs/libsworkbench.pri )
 
 # Change build destdir
 DESTDIR = $${SOURCES_CONTRIBS_PATH}/quazip
+# redefine the target because included .pri modifies the target
+TARGET = z
 
 CONFIG *= staticlib
 
 # CONFIG += qt warn_on staticlib
 # QT -= gui
-DEPENDPATH += .
-INCLUDEPATH += .
+DEPENDPATH *= .
+INCLUDEPATH *= .
 
 # Input
 HEADERS += crc32.h \
@@ -29,8 +31,6 @@ HEADERS += crc32.h \
            zconf.in.h \
            zlib.h \
            zutil.h
-
-
 
 SOURCES += adler32.c  \
            crc32.c \
@@ -46,7 +46,4 @@ SOURCES += adler32.c  \
            inftrees.c \
            trees.c \
            zutil.c
-
-OBJECTS_DIR=.obj
-MOC_DIR=.moc
 
