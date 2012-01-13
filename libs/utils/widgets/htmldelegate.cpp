@@ -90,9 +90,4 @@ QSize HtmlDelegate::sizeHint(const QStyleOptionViewItem &option, const QModelInd
     return QSize(doc.idealWidth(), doc.size().height());
 }
 
-void HtmlDelegate::emitSizeHintChanged(const QModelIndex &index)
-{
-    Q_EMIT sizeHintChanged(index);
-}
-
 } // namespace Utils
