@@ -1,0 +1,106 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<ui version="4.0">
+ <class>BaseWidgets::Internal::BaseFormWidget</class>
+ <widget class="QWidget" name="BaseWidgets::Internal::BaseFormWidget">
+  <property name="geometry">
+   <rect>
+    <x>0</x>
+    <y>0</y>
+    <width>438</width>
+    <height>306</height>
+   </rect>
+  </property>
+  <property name="windowTitle">
+   <string/>
+  </property>
+  <layout class="QGridLayout" name="gridLayout_3">
+   <item row="0" column="0">
+    <layout class="QVBoxLayout" name="identityLayout"/>
+   </item>
+   <item row="1" column="0">
+    <widget class="QGroupBox" name="frenchGroup">
+     <property name="title">
+      <string>NSS</string>
+     </property>
+     <layout class="QGridLayout" name="gridLayout">
+      <item row="0" column="0">
+       <widget class="QLabel" name="nssLabel">
+        <property name="text">
+         <string>NSS</string>
+        </property>
+       </widget>
+      </item>
+      <item row="0" column="1" colspan="2">
+       <layout class="QHBoxLayout" name="nssLayout"/>
+      </item>
+      <item row="2" column="0">
+       <widget class="QLabel" name="ownerLabel">
+        <property name="text">
+         <string>Owner</string>
+        </property>
+       </widget>
+      </item>
+      <item row="2" column="1" colspan="2">
+       <widget class="QLineEdit" name="ownerEdit"/>
+      </item>
+      <item row="1" column="0" colspan="3">
+       <widget class="QCheckBox" name="isNssOwnerCheck">
+        <property name="text">
+         <string>isOwner</string>
+        </property>
+       </widget>
+      </item>
+     </layout>
+    </widget>
+   </item>
+   <item row="2" column="0">
+    <widget class="QGroupBox" name="contactGroup">
+     <property name="title">
+      <string>Contact</string>
+     </property>
+     <layout class="QGridLayout" name="gridLayout_2">
+      <item row="0" column="0">
+       <widget class="QLabel" name="telsLabel">
+        <property name="text">
+         <string>Tels</string>
+        </property>
+       </widget>
+      </item>
+      <item row="0" column="1" colspan="2">
+       <widget class="QLineEdit" name="telsEdit"/>
+      </item>
+      <item row="1" column="0">
+       <widget class="QLabel" name="faxLabel">
+        <property name="text">
+         <string>Fax</string>
+        </property>
+       </widget>
+      </item>
+      <item row="1" column="1" colspan="2">
+       <widget class="QLineEdit" name="faxEdit"/>
+      </item>
+      <item row="2" column="0">
+       <widget class="QLabel" name="emailLabel">
+        <property name="text">
+         <string>email</string>
+        </property>
+       </widget>
+      </item>
+      <item row="2" column="1">
+       <widget class="QLineEdit" name="emailEdit"/>
+      </item>
+      <item row="2" column="2">
+       <widget class="QPushButton" name="sendMailButton">
+        <property name="text">
+         <string>send mail</string>
+        </property>
+       </widget>
+      </item>
+     </layout>
+    </widget>
+   </item>
+  </layout>
+ </widget>
+ <resources/>
+ <connections/>
+</ui>
