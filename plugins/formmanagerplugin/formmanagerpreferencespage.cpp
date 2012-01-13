@@ -164,7 +164,7 @@ void FormPreferencesPage::resetToDefaults()
     QHash<QString, QVariant> defaultvalues;
     defaultvalues.insert(Constants::S_USEALTERNATEROWCOLOR, true);
     defaultvalues.insert(Constants::S_USESPECIFICCOLORFORROOTS, true);
-    defaultvalues.insert(Constants::S_FOREGROUNDCOLORFORROOTS, "marron");
+    defaultvalues.insert(Constants::S_FOREGROUNDCOLORFORROOTS, "maroon");
     defaultvalues.insert(Constants::S_EPISODELABELCONTENT, QString("[[%1]]").arg(Constants::T_LABEL));
     defaultvalues.insert(Constants::S_EPISODEMODEL_LONGDATEFORMAT, QLocale().dateTimeFormat(QLocale::ShortFormat));
     defaultvalues.insert(Constants::S_EPISODEMODEL_SHORTDATEFORMAT, QLocale().dateFormat(QLocale::ShortFormat));
@@ -193,7 +193,7 @@ void FormPreferencesPage::checkSettingsValidity()
     QHash<QString, QVariant> defaultvalues;
     defaultvalues.insert(Constants::S_USEALTERNATEROWCOLOR, true);
     defaultvalues.insert(Constants::S_USESPECIFICCOLORFORROOTS, true);
-    defaultvalues.insert(Constants::S_FOREGROUNDCOLORFORROOTS, "marron");
+    defaultvalues.insert(Constants::S_FOREGROUNDCOLORFORROOTS, "maroon");
     defaultvalues.insert(Constants::S_EPISODELABELCONTENT, QString("[[%1]]").arg(Constants::T_LABEL));
     defaultvalues.insert(Constants::S_EPISODEMODEL_LONGDATEFORMAT, QLocale().dateTimeFormat(QLocale::ShortFormat));
     defaultvalues.insert(Constants::S_EPISODEMODEL_SHORTDATEFORMAT, QLocale().dateFormat(QLocale::ShortFormat));
