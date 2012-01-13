@@ -59,7 +59,7 @@ void HtmlDelegate::paint(QPainter *painter, const QStyleOptionViewItem &option, 
     QTextDocument doc;
     doc.setHtml(changeColors(option, optionV4.text));
 
-    /// Painting item without text
+    // Painting item without text
     optionV4.text = QString();
     style->drawControl(QStyle::CE_ItemViewItem, &optionV4, painter);
 
@@ -73,7 +73,9 @@ void HtmlDelegate::paint(QPainter *painter, const QStyleOptionViewItem &option, 
     painter->save();
     painter->translate(textRect.topLeft());
     painter->setClipRect(textRect.translated(-textRect.topLeft()));
-    doc.documentLayout()->draw(painter, ctx);
+//    doc.documentLayout()->draw(painter, ctx);
+    doc.setTextWidth(textRect.width());
+    doc.drawContents(painter, textRect.translated(-textRect.topLeft()));
     painter->restore();
 }
 
@@ -86,6 +88,11 @@ QSize HtmlDelegate::sizeHint(const QStyleOptionViewItem &option, const QModelInd
     doc.setHtml(options.text);
     doc.setTextWidth(options.rect.width());
     return QSize(doc.idealWidth(), doc.size().height());
+}
+
+void HtmlDelegate::emitSizeHintChanged(const QModelIndex &index)
+{
+    Q_EMIT sizeHintChanged(index);
 }
 
 } // namespace Utils
