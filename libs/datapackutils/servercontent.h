@@ -51,7 +51,7 @@ public:
 
     void clear();
 
-    QStringList packDescriptionFileNames() const {return m_PackFileNames;}
+    const QStringList &packDescriptionFileNames() const {return m_PackFileNames;}
 
     bool fromXml(const QString &xml);
     bool fromDomElement(const QDomElement &root);
