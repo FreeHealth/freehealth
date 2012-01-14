@@ -48,6 +48,7 @@ class FormMain;
 }
 
 namespace Script {
+class ScriptManager;
 
 // FormItem
 class FormItemScriptWrapper : public QObject
@@ -64,6 +65,8 @@ class FormItemScriptWrapper : public QObject
 
 public:
     FormItemScriptWrapper(QObject *parent = 0);
+    ~FormItemScriptWrapper();
+
     void setFormItem(Form::FormItem *item);
     Form::FormItem *item() const {return m_Item;}
 
@@ -104,6 +107,7 @@ public:
 // FormManager
 class FormManagerScriptWrapper : public QObject
 {
+    friend class Script::ScriptManager;
     Q_OBJECT
     Q_PROPERTY(QString  currentLanguage READ currentLanguage)
     Q_PROPERTY(bool     areLoaded       READ areLoaded)
@@ -112,6 +116,10 @@ class FormManagerScriptWrapper : public QObject
 
 public:
     FormManagerScriptWrapper(QObject *parent = 0);
+
+protected:
+    void recreateItemWrappers();
+    void updateSubFormItemWrappers(const QString &uuid);
 
 public Q_SLOTS:
     QString currentLanguage() const;
@@ -130,12 +138,9 @@ public Q_SLOTS:
 Q_SIGNALS:
     void languageChanged();
 
-private Q_SLOTS:
-    void updateItemWrappers();
-
 private:
     mutable QString m_NS;
-    QVector<QScriptValue> m_Items;
+    QHash<QString, QScriptValue> m_Items;
     FormItemScriptWrapper m_Null;
     bool m_LogItemSearch;
 };

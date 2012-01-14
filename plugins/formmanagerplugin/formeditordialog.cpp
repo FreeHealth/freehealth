@@ -109,6 +109,7 @@ void FormEditorDialog::on_addForm_clicked()
         Form::FormIODescription *insert = selected.at(i);
 //        m_LastInsertedFormUid = ;
         SubFormInsertionPoint point(insertTo, insert->data(Form::FormIODescription::UuidOrAbsPath).toString());
+        point.setEmitInsertionSignal(true); // inform everyone of the newly added subform
         insertions << point;
         formManager()->insertSubForm(point);
     }

@@ -126,31 +126,29 @@ ScriptManager::ScriptManager(QObject *parent) :
     evaluate(SCRIPT_FREEMEDFORMS_NAMESPACE_CREATION);
 
     // Add the patient
-    ScriptPatientWrapper *patient = new ScriptPatientWrapper(this);
+    patient = new ScriptPatientWrapper(this);
     QScriptValue patientValue = m_Engine->newQObject(patient, QScriptEngine::QtOwnership);
     m_Engine->evaluate("namespace.com.freemedforms").setProperty("patient", patientValue);
-//    m_Engine->globalObject().setProperty("patient", patientValue);
 
     // Add the form manager
-    FormManagerScriptWrapper *forms = new FormManagerScriptWrapper(this);
+    forms = new FormManagerScriptWrapper(this);
     QScriptValue formsValue = m_Engine->newQObject(forms, QScriptEngine::QtOwnership);
     m_Engine->evaluate("namespace.com.freemedforms").setProperty("forms", formsValue);
-//    m_Engine->globalObject().setProperty("forms", formsValue);
 
     // Add meta types
     qScriptRegisterMetaType<Script::FormItemScriptWrapper*>(m_Engine, ::FormItemScriptWrapperToScriptValue, ::FormItemScriptWrapperFromScriptValue);
 
     // Add UiTools
-    UiTools *tools = new UiTools(this);
+    tools = new UiTools(this);
     QScriptValue toolsValue = m_Engine->newQObject(tools, QScriptEngine::QtOwnership);
     m_Engine->evaluate("namespace.com.freemedforms").setProperty("uiTools", toolsValue);
-//    m_Engine->globalObject().setProperty("uiTools", toolsValue);
 
     // Register to Core::ICore
     Core::ICore::instance()->setScriptManager(this);
 
     // Connect to formmanager
     connect(formManager(), SIGNAL(patientFormsLoaded()), this, SLOT(onAllFormsLoaded()));
+    connect(formManager(), SIGNAL(subFormLoaded(QString)), this, SLOT(onSubFormLoaded(QString)));
 }
 
 QScriptValue ScriptManager::evaluate(const QString &script)
@@ -180,6 +178,9 @@ QScriptValue ScriptManager::addScriptObject(const QObject *object)
 
 void ScriptManager::onAllFormsLoaded()
 {
+    // Is equivalent to onPatientChanged (because all forms are reloaded when patient changed)
+    forms->recreateItemWrappers();
+
     // Execute RootForm all OnLoad scripts
     foreach(Form::FormMain *main, formManager()->forms()) {
         evaluate(main->scripts()->onLoadScript());
@@ -193,6 +194,20 @@ void ScriptManager::onAllFormsLoaded()
     }
     // Execute empty root SubForms OnLoad scripts
     foreach(Form::FormMain *main, formManager()->subFormsEmptyRoot()) {
+        evaluate(main->scripts()->onLoadScript());
+    }
+}
+
+void ScriptManager::onSubFormLoaded(const QString &subFormUuid)
+{
+    // Update wrapper items
+    forms->updateSubFormItemWrappers(subFormUuid);
+
+    // Execute onload scripts of subform items only
+    foreach(Form::FormMain *main, formManager()->subFormsEmptyRoot()) {
+        if (main->uuid()!=subFormUuid)
+            continue;
+
         evaluate(main->scripts()->onLoadScript());
         QList<Form::FormMain *> children = main->flattenFormMainChildren();
         foreach(Form::FormMain *mainChild, children) {

@@ -45,6 +45,7 @@
 #include <coreplugin/itheme.h>
 #include <coreplugin/ipatient.h>
 #include <coreplugin/isettings.h>
+#include <coreplugin/iscriptmanager.h>
 #include <coreplugin/uniqueidmanager.h>
 #include <coreplugin/constants_menus.h>
 #include <coreplugin/constants_icons.h>
@@ -85,6 +86,7 @@ static inline Form::Internal::EpisodeBase *episodeBase() {return Form::Internal:
 static inline Core::IPatient *patient() {return Core::ICore::instance()->patient();}
 static inline Core::ContextManager *contextManager() { return Core::ICore::instance()->contextManager(); }
 inline static Core::ActionManager *actionManager() {return Core::ICore::instance()->actionManager();}
+inline static Core::IScriptManager *scriptManager() {return Core::ICore::instance()->scriptManager();}
 
 
 namespace Form {
@@ -155,7 +157,7 @@ void FormManager::activateMode()
     modeManager()->activateMode(Core::Constants::MODE_PATIENT_FILE);
 }
 
-/**  Return all available empty root forms for the current patient. \sa Form::FormMain */
+/**  Return all available empty root forms for the current patient. \sa Form::FormManager::subFormsEmptyRoot(), Form::FormMain */
 QList<FormMain *> FormManager::forms() const
 {
     return d->m_RootForms;
@@ -210,12 +212,15 @@ bool FormManager::loadPatientFile()
         /** \todo code here: manage no patient form file recorded in episodebase */
         return false;
     }
-
+    // load central root forms
     d->m_RootForms = loadFormFile(absDirPath);
 
+    // load subforms
     loadSubForms();
 
+    // emit signal
     Q_EMIT patientFormsLoaded();
+
     return true;
 }
 
@@ -246,22 +251,25 @@ bool FormManager::loadSubForms()
         return true;
     }
 
+    bool ok = true;
     for(int i = 0; i < subs.count(); ++i) {
         if (!insertSubForm(subs.at(i)))
-            return false;
+            ok = false;
     }
 
-    return true;
+    return ok;
 }
 
-/** Insert a sub-form to a form to the specified \e insertionPoint */
+/** Insert a sub-form to a form to the specified \e insertionPoint. A signal is emitted before Form::FormMain are getting reparented. */
 bool FormManager::insertSubForm(const SubFormInsertionPoint &insertionPoint)
 {
-    // read all sub-forms
+    // read all sub-forms and emit signal if requiered
     QList<Form::FormMain*> subs = loadFormFile(insertionPoint.subFormUid());
     d->m_SubFormsEmptyRoot << subs;
+    if (insertionPoint.emitInsertionSignal())
+        Q_EMIT subFormLoaded(insertionPoint.subFormUid());
 
-    // insert sub-forms
+    // insert sub-forms to the forms tree
     const QString &insertIntoUuid = insertionPoint.receiverUid();
     for(int i=0; i < subs.count(); ++i) {
         FormMain *sub = subs.at(i);
@@ -279,7 +287,6 @@ bool FormManager::insertSubForm(const SubFormInsertionPoint &insertionPoint)
 
         // find point of insertion
         QList<Form::FormMain *> allForms = forms();
-
         for(int j=0; j < allForms.count(); ++j) {
             FormMain *parent = allForms.at(j);
             // search inside flatten children
@@ -345,6 +352,19 @@ QPixmap FormManager::getScreenshot(const QString &formUid, const QString &fileNa
             return pix;
     }
     return pix;
+}
+
+/** Execute all OnLoad scripts of the \e emptyRootForm */
+void FormManager::executeOnloadScript(Form::FormMain *emptyRootForm)
+{
+    scriptManager()->evaluate(emptyRootForm->scripts()->onLoadScript());
+    QList<Form::FormMain *> children = emptyRootForm->flattenFormMainChildren();
+    foreach(Form::FormMain *mainChild, children) {
+        scriptManager()->evaluate(mainChild->scripts()->onLoadScript());
+        foreach(Form::FormItem *item, mainChild->flattenFormItemChildren()) {
+            scriptManager()->evaluate(item->scripts()->onLoadScript());
+        }
+    }
 }
 
 

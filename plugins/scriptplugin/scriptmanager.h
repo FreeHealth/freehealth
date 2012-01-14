@@ -32,6 +32,9 @@
 #include <QScriptEngine>
 
 namespace Script {
+class ScriptPatientWrapper;
+class FormManagerScriptWrapper;
+class UiTools;
 
 class SCRIPT_EXPORT ScriptManager : public Core::IScriptManager
 {
@@ -47,10 +50,15 @@ public:
 
 private Q_SLOTS:
     void onAllFormsLoaded();
+    void onSubFormLoaded(const QString &subFormUuid);
 
 private:
     static ScriptManager *m_Instance;
     QScriptEngine *m_Engine;
+    // wrappers
+    ScriptPatientWrapper *patient;
+    FormManagerScriptWrapper *forms;
+    UiTools *tools;
 };
 
 } // namespace Script

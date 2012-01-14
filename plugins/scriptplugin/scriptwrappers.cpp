@@ -71,8 +71,44 @@ FormManagerScriptWrapper::FormManagerScriptWrapper(QObject *parent) :
     m_LogItemSearch(false)
 {
     connect(translators(), SIGNAL(languageChanged()), this, SIGNAL(languageChanged()));
-    connect(formManager(), SIGNAL(patientFormsLoaded()), this, SLOT(updateItemWrappers()));
-    updateItemWrappers();
+    recreateItemWrappers();
+}
+
+void FormManagerScriptWrapper::recreateItemWrappers()
+{
+//    qDeleteAll(m_Items);
+    m_Items.clear();
+    foreach(Form::FormItem *main, formManager()->forms()) {
+        const QList<Form::FormItem*> items = main->flattenFormItemChildren();
+        for(int i=0; i < items.count(); ++i) {
+//            qWarning() << "LLLLLLL" << items.at(i)->uuid() << items.at(i)->objectName();
+            FormItemScriptWrapper *w = new FormItemScriptWrapper(this);
+            w->setFormItem(items.at(i));
+            m_Items.insert(items.at(i)->uuid(), scriptManager()->addScriptObject(w));
+        }
+    }
+}
+
+void FormManagerScriptWrapper::updateSubFormItemWrappers(const QString &uuid)
+{
+    const QList<Form::FormMain*> &list = formManager()->subFormsEmptyRoot();
+    const QStringList &uuids = m_Items.keys();
+    foreach(Form::FormItem *main, list) { // all subForms roots
+        if (main->uuid()!=uuid)
+            continue;
+
+        foreach(Form::FormItem *item, main->flattenFormItemChildren()) {
+            if (uuids.contains(item->uuid())) {
+                // Remove item
+//                delete m_Items[item->uuid()];
+                m_Items.remove(item->uuid());
+            }
+            // Create && insert item
+            FormItemScriptWrapper *w = new FormItemScriptWrapper(this);
+            w->setFormItem(item);
+            m_Items.insert(item->uuid(), scriptManager()->addScriptObject(w));
+        }
+    }
 }
 
 QString FormManagerScriptWrapper::currentLanguage() const
@@ -98,33 +134,10 @@ void FormManagerScriptWrapper::usingNamespace(const QString &ns) const
     }
 }
 
-void FormManagerScriptWrapper::updateItemWrappers()
-{
-    m_Items.clear();
-    foreach(Form::FormItem *main, formManager()->forms()) {
-        const QList<Form::FormItem*> items = main->flattenFormItemChildren();
-        for(int i=0; i < items.count();++i) {
-//            qWarning() << "LLLLLLL" << items.at(i)->uuid() << items.at(i)->objectName();
-            FormItemScriptWrapper *w = new FormItemScriptWrapper(this);
-            w->setFormItem(items.at(i));
-            m_Items << scriptManager()->addScriptObject(w);
-        }
-    }
-}
-
 QScriptValue FormManagerScriptWrapper::item(const QString &uuid)
 {
     QString fullUuid = m_NS + uuid;
-    for(int i=0;i<m_Items.count();++i) {
-        const QScriptValue &val = m_Items.at(i);
-        const QString &uuid = val.property("uuid").toString();
-        if (uuid.compare(fullUuid, Qt::CaseInsensitive)==0) {
-            if (m_LogItemSearch)
-                qWarning() << "ScriptWrapper::Item found" << fullUuid << uuid;
-            return val;
-        }
-    }
-    return QScriptValue(QString("No item found"));
+    return m_Items.value(fullUuid, QScriptValue(QString("No item found")));
 }
 
 
@@ -135,6 +148,11 @@ FormItemScriptWrapper::FormItemScriptWrapper(QObject *parent) :
     m_Item(0)
 {
     setObjectName("FormItemScriptWrapper");
+}
+
+FormItemScriptWrapper::~FormItemScriptWrapper()
+{
+    qWarning() << "~FormItemScriptWrapper" << m_Item->uuid();
 }
 
 void FormItemScriptWrapper::setFormItem(Form::FormItem *item)

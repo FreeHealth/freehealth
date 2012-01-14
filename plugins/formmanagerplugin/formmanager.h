@@ -99,7 +99,7 @@ public:
     QPixmap getScreenshot(const QString &formUid, const QString &fileName);
 
 private:
-    void cleanPluginManagerObjectPool();
+    void executeOnloadScript(Form::FormMain *emptyRootForm);
 
 public Q_SLOTS:
     bool loadPatientFile();
@@ -110,6 +110,7 @@ public Q_SLOTS:
 
 Q_SIGNALS:
     void patientFormsLoaded();
+    void subFormLoaded(const QString &uuid);
 
 //private Q_SLOTS:
 //    void coreAboutToClose();
