@@ -92,8 +92,8 @@ public:
     PackDependencies();
     ~PackDependencies();
 
-    int dependenciesCount() const {return dependencies.count();}
-    const PackDependencyData &dependenciesAt(const int index) const;
+    int count() const {return dependencies.count();}
+    const PackDependencyData &at(const int index) const;
 
     bool fromDomElement(const QDomElement &root);
     bool toDomElement(QDomElement *root, QDomDocument *doc);

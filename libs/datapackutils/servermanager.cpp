@@ -413,11 +413,11 @@ bool ServerManager::updateDataPack(const Server &server, const Pack &pack, QProg
 QList<Pack> ServerManager::packDependencies(const Pack &pack, const PackDependencyData::TypeOfDependence &dependence)
 {
     QList<Pack> toReturn;
-    for(int i = 0; i < pack.dependencies().dependenciesCount(); ++i) {
-        if (pack.dependencies().dependenciesAt(i).type()!=dependence)
+    for(int i = 0; i < pack.dependencies().count(); ++i) {
+        if (pack.dependencies().at(i).type()!=dependence)
             continue;
-        const QString &uid = pack.dependencies().dependenciesAt(i).uuid();
-        const QString &version = pack.dependencies().dependenciesAt(i).version();
+        const QString &uid = pack.dependencies().at(i).uuid();
+        const QString &version = pack.dependencies().at(i).version();
 //        if (!isDataPackInstalled(uid, version)) {
             // Do we have this pack in our servers ?
             for(int j=0; j < m_Servers.count(); ++j) {

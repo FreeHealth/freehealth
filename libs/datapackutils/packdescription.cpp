@@ -112,11 +112,9 @@ PackDependencies::PackDependencies()
 PackDependencies::~PackDependencies()
 {}
 
-const PackDependencyData &PackDependencies::dependenciesAt(const int index) const
+const PackDependencyData &PackDependencies::at(const int index) const
 {
-    if (index>=0 && index<dependencies.count())
-        return dependencies.at(index);
-    return null;
+    return dependencies[index];
 }
 
 bool PackDependencies::fromDomElement(const QDomElement &root)

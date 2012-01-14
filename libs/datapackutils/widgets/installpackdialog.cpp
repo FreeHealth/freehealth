@@ -90,29 +90,35 @@ void InstallPackDialog::setPackToInstall(const QList<Pack> &packs)
         // To install
         QStandardItem *toInstall = new QStandardItem(tr("Installation of"));
         toInstall->setFont(bold);
+        toInstall->setEditable(false);
         m_Model->appendRow(toInstall);
         QStandardItem *packToInstall = new QStandardItem(QString("%1 (%2)").arg(pack.name()).arg(pack.version()));
+        packToInstall->setEditable(false);
         toInstall->appendRow(packToInstall);
 
         // Dependencies
         QStandardItem *depends = new QStandardItem(tr("Depends on"));
         QStandardItem *recommends = new QStandardItem(tr("Recommends"));
+        depends->setEditable(false);
         depends->setFont(bold);
         recommends->setFont(bold);
+        recommends->setEditable(false);
+
         // check dependencies (depends && recommended)
-        for(int i = 0; i < pack.dependencies().dependenciesCount(); ++i) {
-            const PackDependencyData &dep = pack.dependencies().dependenciesAt(i);
-            if (dep.type()==PackDependencyData::Depends) {
-                QStandardItem *item = new QStandardItem(QString("%1 (%2)").arg(dep.name()).arg(dep.version()));
-                item->setData(i);
+        for(int i = 0; i < pack.dependencies().count(); ++i) {
+            const PackDependencyData &dep = pack.dependencies().at(i);
+            QStandardItem *item = new QStandardItem(QString("%1 (%2)").arg(dep.name()).arg(dep.version()));
+            item->setEditable(false);
+            item->setData(i);
+            switch (dep.type()) {
+            case PackDependencyData::Depends:
                 depends->appendRow(item);
-                continue;
-            }
-            if (dep.type()==PackDependencyData::Recommends) {
-                QStandardItem *item = new QStandardItem(QString("%1 (%2)").arg(dep.name()).arg(dep.version()));
+                break;
+            case PackDependencyData::Recommends:
                 recommends->appendRow(item);
-                item->setData(i);
-                continue;
+                break;
+            default:
+                delete item; // no really need this item
             }
         }
 

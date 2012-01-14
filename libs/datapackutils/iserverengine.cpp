@@ -25,7 +25,7 @@
  *       NAME <MAIL@ADRESS>                                                *
  ***************************************************************************/
 #include "iserverengine.h"
-#include "iservermanager.h""
+#include "iservermanager.h"
 
 using namespace DataPack;
 using namespace Internal;

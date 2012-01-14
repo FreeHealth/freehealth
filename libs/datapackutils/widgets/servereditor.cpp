@@ -276,8 +276,8 @@ void ServerEditor::populatePackView(const int serverId, const int packId)
 
     // Add dependencies
     QString dep;
-    for(int i= 0; i < pack.dependencies().dependenciesCount(); ++i) {
-        const PackDependencyData &data = pack.dependencies().dependenciesAt(i);
+    for(int i= 0; i < pack.dependencies().count(); ++i) {
+        const PackDependencyData &data = pack.dependencies().at(i);
         dep += QString("<p style=\"margin-left:10px;\">%1<br />"
                        "&nbsp;&nbsp;&nbsp;&nbsp;%2 (%3)</p>")
                 .arg(PackDependencyData::typeName(data.type()))
