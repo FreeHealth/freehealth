@@ -51,6 +51,22 @@ UiTools::UiTools(QObject *parent) :
     setObjectName("UiTools");
 }
 
+static void warnObject(QObject *o, const QString &indent)
+{
+    qWarning() << indent << o;
+    foreach(QObject *obj, o->children()) {
+        warnObject(obj, indent+"  ");
+    }
+}
+
+/** Provided only for debugging purpose. */
+void UiTools::printQObjectChildrenList(QObject *obj)
+{
+    foreach(QObject *o, obj->children()) {
+        warnObject(o, "");
+    }
+}
+
 bool UiTools::addItem(QWidget *widget, const QString &item)
 {
     // QListWidget

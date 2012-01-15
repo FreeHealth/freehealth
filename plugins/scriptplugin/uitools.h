@@ -43,6 +43,8 @@ public:
 Q_SIGNALS:
 
 public Q_SLOTS:
+    void printQObjectChildrenList(QObject *obj);
+
     bool addItem(QWidget *widget, const QString &item);
     bool addItems(QWidget *widget, const QStringList &items);
     bool addJoinedItem(QWidget *widget, const QString &item, const QString &separator);
