@@ -6,7 +6,7 @@ namespace.module('com.freemedforms.cardiology.framingham.score', function (expor
                      });
 
                      // Ui vars (retrieved from the ui)
-                     var formUi, cholCombo, hdlCombo, systCombo;
+                     var formUi, cholCombo, hdlCombo, systCombo, tobaccoCheckbox, bpSystTreatedCheckbox;
                      var totalCholRanges = [ "< 1,60" ,
                                             "1,60 - 1,99",
                                             "2,00 - 2,39",
@@ -28,9 +28,12 @@ namespace.module('com.freemedforms.cardiology.framingham.score', function (expor
                          cholCombo = formUi.findChild("cholTotalCombo");
                          hdlCombo = formUi.findChild("cholHDLCombo");
                          systCombo = formUi.findChild("bpSystCombo");
+						 tobaccoCheckbox = formUi.findChild("currentlySmoking");
+                         bpSystTreatedCheckbox = formUi.findChild("bpSystTreated");
                          populateCombos();
                          // Update patient datas
                          retranslateUi();
+						 enableDependAge();
                      }
 
                      function retranslateUi() {
@@ -78,7 +81,17 @@ namespace.module('com.freemedforms.cardiology.framingham.score', function (expor
                      function getSystolicInRange() {
                          return 115 + (systCombo.currentIndex * 10);
                      }
-
+					 
+					 function enableDependAge() {
+                         var age =  freemedforms.patient.yearsOld;
+                         if (age < 20 || age >= 80 ) {
+                         cholCombo.enabled = false;
+                         hdlCombo.enabled = false;
+                         systCombo.enabled = false;
+                         bpSystTreatedCheckbox.enabled = false;
+                         tobaccoCheckbox.enabled = false; }
+                     }
+					 
                      function computeScore() {
                          freemedforms.forms.namespaceInUse = "Subs::Cardiology::Scores::Framingham";
                          var chol = getTotalCholesterolInRange();
