@@ -747,6 +747,7 @@ BaseCheck::BaseCheck(Form::FormItem *formItem, QWidget *parent) :
         QHBoxLayout * hb = new QHBoxLayout(this);
         // Add Buttons
         m_Check = new QCheckBox(this);
+        m_Check->setObjectName("Checkbox_" + m_FormItem->uuid());
         hb->addWidget(m_Check);
     }
 
@@ -755,7 +756,6 @@ BaseCheck::BaseCheck(Form::FormItem *formItem, QWidget *parent) :
         m_Check->setLayoutDirection(Qt::RightToLeft);
     }
 
-    m_Check->setObjectName("Checkbox_" + m_FormItem->uuid());
     retranslate();
 
     // create itemdata
