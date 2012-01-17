@@ -143,6 +143,7 @@ private:
 //--------------------------------------------------------------------------------------------------------
 //-------------------------------------- BaseGroup implementation --------------------------------------
 //--------------------------------------------------------------------------------------------------------
+class BaseGroupData;
 class BaseGroup : public Form::IFormWidget
 {
     Q_OBJECT
@@ -156,16 +157,50 @@ public:
     // Printing
     QString printableHtml(bool withValues = true) const;
 
+    void getCheckAndCollapsibleState();
+
 public Q_SLOTS:
     void retranslate();
+    void expandGroup(bool expand);
+
+public:
+    QGroupBox *m_Group;
 
 private:
-    QGroupBox *m_Group;
+    BaseGroupData *m_ItemData;
     QGridLayout *m_ContainerLayout;
     int i, row, col, numberColumns;
 
 };
 
+class BaseGroupData : public Form::IFormItemData
+{
+    Q_OBJECT
+public:
+    BaseGroupData(Form::FormItem *item);
+    ~BaseGroupData();
+
+    void setBaseGroup(BaseGroup *gr);
+
+    void clear();
+
+    Form::FormItem *parentItem() const {return m_FormItem;}
+    bool isModified() const;
+
+    bool setData(const int ref, const QVariant &data, const int role = Qt::EditRole);
+    QVariant data(const int ref, const int role = Qt::DisplayRole) const;
+
+    void setStorableData(const QVariant &data);
+    QVariant storableData() const;
+
+private Q_SLOTS:
+    void onValueChanged();
+
+private:
+    Form::FormItem *m_FormItem;
+    BaseGroup *m_BaseGroup;
+    bool m_OriginalValue_isChecked;
+};
 
 //--------------------------------------------------------------------------------------------------------
 //-------------------------------------- BaseCheck implementation --------------------------------------

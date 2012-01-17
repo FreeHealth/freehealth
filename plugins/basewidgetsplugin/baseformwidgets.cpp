@@ -111,6 +111,8 @@ namespace {
     const char * const  EXTRAS_KEY_COLUMN       = "column";
     const char * const  EXTRAS_COMPACT_VIEW     = "compact";
     const char * const  EXTRAS_GROUP_CHECKABLE  = "checkable";
+    const char * const  EXTRAS_GROUP_COLLAPSIBLE  = "collapsible";
+    const char * const  EXTRAS_GROUP_EXPANDED  = "expanded";
     const char * const  EXTRAS_GROUP_CHECKED    = "checked";
     const char * const  EXTRAS_ALIGN_VERTICAL   = "vertical";
     const char * const  EXTRAS_ALIGN_HORIZONTAL = "horizontal";
@@ -167,6 +169,20 @@ inline static int isCompactView(Form::FormItem *item, bool defaultValue = false)
 inline static int isGroupCheckable(Form::FormItem *item, bool defaultValue = false)
 {
     if (item->getOptions().contains(::EXTRAS_GROUP_CHECKABLE, Qt::CaseInsensitive))
+        return true;
+    return defaultValue;
+}
+
+inline static int isGroupCollapsible(Form::FormItem *item, bool defaultValue = false)
+{
+    if (item->getOptions().contains(::EXTRAS_GROUP_COLLAPSIBLE, Qt::CaseInsensitive))
+        return true;
+    return defaultValue;
+}
+
+inline static int isGroupExpanded(Form::FormItem *item, bool defaultValue = false)
+{
+    if (item->getOptions().contains(::EXTRAS_GROUP_EXPANDED, Qt::CaseInsensitive))
         return true;
     return defaultValue;
 }
@@ -551,7 +567,10 @@ QVariant BaseFormData::data(const int ref, const int role) const
 //--------------------------------------- BaseGroup implementation ---------------------------------------
 //--------------------------------------------------------------------------------------------------------
 BaseGroup::BaseGroup(Form::FormItem *formItem, QWidget *parent) :
-    Form::IFormWidget(formItem,parent), m_Group(0), m_ContainerLayout(0),
+    Form::IFormWidget(formItem,parent),
+    m_Group(0),
+    m_ItemData(0),
+    m_ContainerLayout(0),
     i(0), row(0), col(0), numberColumns(1)
 {
     setObjectName("BaseGroup");
@@ -568,19 +587,11 @@ BaseGroup::BaseGroup(Form::FormItem *formItem, QWidget *parent) :
             m_Group = new QGroupBox(this);
         }
     } else {
-        //    bool useGrid = true;
-        //    bool useFormGrid = false;
-        //    if (formItem->getOptions().contains("form", Qt::CaseInsensitive)) {
-        //        useGrid = false;
-        //        useFormGrid = true;
-        //    } else if (formItem->getOptions().contains("nogrid", Qt::CaseInsensitive)) {
-        //        useGrid = false;
-        //        useFormGrid = false;
-        //    }
-        QVBoxLayout * vblayout = new QVBoxLayout(this);
+        QVBoxLayout *vblayout = new QVBoxLayout(this);
         m_Group = new QGroupBox(this);
         vblayout->addWidget(m_Group);
-        this->setLayout(vblayout);
+        setLayout(vblayout);
+        vblayout->setMargin(0);
 
         // Retrieve the number of columns for the gridlayout (lays in extraDatas() of linked FormItem)
         numberColumns = getNumberOfColumns(m_FormItem, 2);
@@ -588,8 +599,6 @@ BaseGroup::BaseGroup(Form::FormItem *formItem, QWidget *parent) :
         // Create the gridlayout with all the widgets
         m_ContainerLayout = new QGridLayout(m_Group);
         if (isCompactView(m_FormItem)) {
-            vblayout->setMargin(0);
-            vblayout->setSpacing(2);
             m_ContainerLayout->setMargin(0);
             m_ContainerLayout->setSpacing(2);
         }
@@ -604,14 +613,14 @@ BaseGroup::BaseGroup(Form::FormItem *formItem, QWidget *parent) :
             this->hide();
     }
 
-    if (isGroupCheckable(m_FormItem, false)) {
-        m_Group->setCheckable(true);
-        m_Group->setChecked(isGroupChecked(m_FormItem,false));
-        //          connect(m_Group, SIGNAL(clicked(bool)),
-        //                   this,    SLOT  (updateObject(bool)));
-        //          connect(mfo(m_FormItem), SIGNAL(onValueChanged()),
-        //                   this,     SLOT  (updateWidget()));
-    }
+    getCheckAndCollapsibleState();
+    if (isGroupCollapsible(m_FormItem, false))
+        connect(m_Group, SIGNAL(toggled(bool)), this, SLOT(expandGroup(bool)));
+
+    // create itemdata
+    m_ItemData = new BaseGroupData(formItem);
+    m_ItemData->setBaseGroup(this);
+    formItem->setItemDatas(m_ItemData);
 }
 
 BaseGroup::~BaseGroup()
@@ -723,6 +732,108 @@ void BaseGroup::retranslate()
     m_Group->setTitle(m_FormItem->spec()->label());
 }
 
+void BaseGroup::getCheckAndCollapsibleState()
+{
+    if (isGroupCheckable(m_FormItem, false)) {
+        m_Group->setCheckable(true);
+        m_Group->setChecked(isGroupChecked(m_FormItem,false));
+    }
+
+    if (isGroupCollapsible(m_FormItem, false)) {
+        m_Group->setCheckable(true);
+        if (isGroupExpanded(m_FormItem, false)) {
+            m_Group->setChecked(true);
+            expandGroup(true);
+        } else {
+            m_Group->setChecked(false);
+            expandGroup(false);
+        }
+    }
+}
+
+void BaseGroup::expandGroup(bool expanded)
+{
+    // show/hide direct children
+    foreach(QObject* child, m_Group->children()) {
+        if (child->isWidgetType())
+            static_cast<QWidget*>(child)->setVisible(expanded);
+    }
+    m_Group->setFlat(!expanded);
+}
+
+////////////////////////////////////////// ItemData /////////////////////////////////////////////
+BaseGroupData::BaseGroupData(Form::FormItem *item) :
+        m_FormItem(item), m_BaseGroup(0)
+{}
+
+BaseGroupData::~BaseGroupData()
+{}
+
+void BaseGroupData::setBaseGroup(BaseGroup *gr)
+{
+    m_BaseGroup = gr;
+    m_OriginalValue_isChecked = gr->m_Group->isChecked();
+    clear();
+}
+
+void BaseGroupData::clear()
+{
+    if (isGroupCollapsible(m_FormItem, false))
+        m_BaseGroup->getCheckAndCollapsibleState();
+}
+
+bool BaseGroupData::isModified() const
+{
+    if (isGroupCollapsible(m_FormItem, false) || isGroupCheckable(m_FormItem, false))
+        return m_OriginalValue_isChecked != m_BaseGroup->m_Group->isChecked();
+    return false;
+}
+
+bool BaseGroupData::setData(const int ref, const QVariant &data, const int role)
+{
+    if (!m_BaseGroup)
+        return false;
+    if (role==Qt::CheckStateRole) {
+        if (isGroupCollapsible(m_FormItem, false)) {
+            m_BaseGroup->m_Group->setChecked(data.toBool());
+            m_BaseGroup->expandGroup(data.toBool());
+            onValueChanged();
+        }
+        else if (isGroupCheckable(m_FormItem, false)) {
+            m_BaseGroup->m_Group->setChecked(data.toBool());
+            onValueChanged();
+        }
+    }
+    return true;
+}
+
+QVariant BaseGroupData::data(const int ref, const int role) const
+{
+    Q_UNUSED(ref);
+    if (role==Qt::CheckStateRole)
+        if (isGroupCollapsible(m_FormItem, false) || isGroupCheckable(m_FormItem, false))
+            return m_BaseGroup->m_Group->isChecked();
+    return QVariant();
+}
+
+void BaseGroupData::setStorableData(const QVariant &data)
+{
+    if (!data.isValid())
+        return;
+    m_OriginalValue_isChecked = data.toBool();
+    setData(0, m_OriginalValue_isChecked, Qt::CheckStateRole);
+}
+
+QVariant BaseGroupData::storableData() const
+{
+    return data(0, Qt::CheckStateRole);
+}
+
+void BaseGroupData::onValueChanged()
+{
+    executeOnValueChangedScript(m_FormItem);
+    Q_EMIT dataChanged(0);
+}
 
 //--------------------------------------------------------------------------------------------------------
 //--------------------------------------------- BaseCheck ----------------------------------------------
