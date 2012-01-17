@@ -14,10 +14,14 @@ INSTALL_QT_PLUGINS_PATH   = $${INSTALL_PLUGINS_PATH}/qt
 # some help for file copying
 LIB_EXTENSION             = so*
 
+# install Qt libs and plugins inside the bundle ; leave it empty if you don't want to install QT libs and plugs inside the bundle
+INSTALL_QT_INSIDE_BUNDLE = true
+
 # These inclusions modify the default path for the installation process
 macx:include(install_mac.pri)
 win32:include(install_win.pri)
 linux*:include(install_linux.pri)
+#freebsd*:include(install_freebsd.pri)
 
 # by default package is constructed inside the svn trunk under
 # packages/yourOs/Application
@@ -49,10 +53,20 @@ INSTALL_SVGPIX_PATH       = $${INSTALL_RESOURCES_PATH}/pixmap/svg
 INSTALL_SPLASHPIX_PATH    = $${INSTALL_RESOURCES_PATH}/pixmap/splashscreens
 INSTALL_DOCS_PATH         = $${INSTALL_RESOURCES_PATH}/doc/$${BINARY_TARGET}
 
-# install Qt libs and plugins inside the bundle ; leave it empty if you don't want to install QT libs and plugs inside the bundle
-INSTALL_QT_INSIDE_BUNDLE = true
-
 # message the configuration
+message( ******************************************************************************** )
+message( ***************************    Qt configuration   ****************************** )
+message( ******************************************************************************** )
+message( Qt version: $$[QT_VERSION])
+message( Qt is installed in $$[QT_INSTALL_PREFIX])
+message( Header files: $$[QT_INSTALL_HEADERS])
+message( Libraries: $$[QT_INSTALL_LIBS])
+message( Binary files (executables): $$[QT_INSTALL_BINS])
+message( Plugins: $$[QT_INSTALL_PLUGINS])
+message( Spec file in use: $${QMAKESPEC})
+message( ******************************************************************************** )
+message( **************************    FreeMedForms Config   **************************** )
+message( ******************************************************************************** )
 message( Binary : )
 message(    * From : $${BUILD_BINARY_PATH} )
 message(    * To : $${INSTALL_BINARY_PATH} )
@@ -67,6 +81,9 @@ message(    * To : $${INSTALL_PLUGINS_PATH} )
 message(    * Extension : $${LIB_EXTENSION})
 !isEmpty(INSTALL_QT_LIBS_PATH):message( Qt Libs : $${INSTALL_QT_LIBS_PATH} )
 !isEmpty(INSTALL_QT_PLUGINS_PATH):message( Qt Plugins : $${INSTALL_QT_PLUGINS_PATH} )
+message( ******************************************************************************** )
+message( *************************    FreeMedForms Resources   ************************** )
+message( ******************************************************************************** )
 message( Resources : $${INSTALL_RESOURCES_PATH} )
 message( Translations : $${INSTALL_TRANSLATIONS_PATH} )
 !isEmpty(INSTALL_DATABASES_PATH):message( Database : $${INSTALL_DATABASES_PATH} )
@@ -79,6 +96,9 @@ message( Pixmaps - splashscreens : $${INSTALL_SPLASHPIX_PATH} )
 !isEmpty(INSTALL_DOCS_PATH):message( Documentation : $${INSTALL_DOCS_PATH} )
 !isEmpty(INSTALL_DESKTOP_FILES_PATH):message( DesktopFile : $${INSTALL_DESKTOP_FILES_PATH} )
 !isEmpty(INSTALL_DESKTOP_ICON_PATH):message( DesktopIcon : $${INSTALL_DESKTOP_ICON_PATH} )
+message( ******************************************************************************** )
+message( *************************    FreeMedForms Databases   ************************** )
+message( ******************************************************************************** )
 eval(INSTALL_DRUGS=1):message( Installing drugs database )
 eval(INSTALL_PROFILES_FILES=1):message( Installing user default Profiles files)
 eval(INSTALL_ICD_DATABASE=1):message( Installing ICD10 database )
@@ -244,7 +264,8 @@ INSTALLS+=zipcodes_db
 
 # configuration for non-integrated solutions (everything is included inside the bundle)
 !isEmpty(INSTALL_QT_INSIDE_BUNDLE){
-   #macx:error(For MacOS use scripts instead of the installer for the Qt libs)
+   macx:message( Error detected: Trying to install Qt libs inside bundle: $${INSTALL_QT_INSIDE_BUNDLE} )
+   macx:error(For MacOS use scripts instead of the installer for the Qt libs)
    QTPLUGINS_PATH = $$[QT_INSTALL_PLUGINS]
    qt_libs.path  = $${INSTALL_QT_LIBS_PATH}
    linux {
