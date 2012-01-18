@@ -467,7 +467,7 @@ int addLabels(const QString &connection, const int masterLid, QMultiHash<QString
     if (mid == -1) {
         // get new master_lid
 //        req = "SELECT max(MASTER_LID) FROM `LABELS_LINK`;";
-        mid = baseCore()->max(DrugsDB::Constants::Table_LABELSLINK, DrugsDB::Constants::LABELSLINK_MASTERLID);
+        mid = baseCore()->max(DrugsDB::Constants::Table_LABELSLINK, DrugsDB::Constants::LABELSLINK_MASTERLID).toInt();
         ++mid;
 //        if (query.exec(req)) {
 //            if (query.next())

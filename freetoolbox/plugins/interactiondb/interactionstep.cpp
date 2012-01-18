@@ -176,7 +176,7 @@ static bool setClassTreeToDatabase(const QString &iclass,
         db.transaction();
         QSqlQuery query(db);
 //        req = QString("SELECT MAX(BIB_MASTER_ID) FROM BIBLIOGRAPHY_LINKS");
-        bibMasterId = Core::Tools::baseCore()->max(DrugsDB::Constants::Table_BIB_LINK, DrugsDB::Constants::BIB_LINK_MASTERID);
+        bibMasterId = Core::Tools::baseCore()->max(DrugsDB::Constants::Table_BIB_LINK, DrugsDB::Constants::BIB_LINK_MASTERID).toInt();
 //        if (query.exec(req)) {
 //            if (query.next()) {
 //                bibMasterId = query.value(0).toInt() + 1;

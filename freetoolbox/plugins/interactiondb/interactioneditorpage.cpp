@@ -45,6 +45,7 @@
 #include <QToolBar>
 #include <QDir>
 #include <QStringListModel>
+#include <QToolButton>
 
 #include "ui_interactioneditorwidget.h"
 

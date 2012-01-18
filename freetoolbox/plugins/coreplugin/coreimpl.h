@@ -91,7 +91,7 @@ public:
     IUser *user() const {return 0;}
     void setUser(IUser *user) {Q_UNUSED(user);}
 
-    virtual void setScriptManager(IScriptManager *);
+    virtual void setScriptManager(IScriptManager *) {}
     virtual IScriptManager *scriptManager() const {return 0;}
 
 
