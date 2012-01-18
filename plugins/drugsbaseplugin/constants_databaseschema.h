@@ -49,13 +49,16 @@ namespace Constants {
     /** \brief Represents the tables index of drugs database */
     enum Tables  // ORDER OF THIS ENUM MUST NEVER CHANGE
     {
-        Table_MASTER = 0, Table_SOURCES, Table_LABELS, Table_LABELSLINK,
-        Table_BIB, Table_BIB_LINK, Table_DRUGS, Table_MOLS, Table_COMPO, Table_UNITS, Table_LK_MOL_ATC,
-        Table_PACKAGING, Table_DRUG_ROUTES, Table_DRUG_FORMS, Table_ROUTES, Table_SEARCHENGINES,
-        Table_VERSION, Table_ATC,  Table_INTERACTIONS, Table_IAKNOWLEDGE,
-        Table_IA_IAK, Table_ATC_LABELS, Table_IAM_TREE, Table_PIM_SOURCES,
+        Table_MASTER = 0, Table_SOURCES, Table_DRUGS, Table_MOLS, Table_COMPO,
+        Table_DRUG_FORMS, Table_DRUG_ROUTES, Table_ROUTES, Table_SEARCHENGINES,
+        Table_LABELS, Table_LABELSLINK, Table_PACKAGING, Table_BIB, Table_BIB_LINK, Table_UNITS,
+
+        Table_ATC, Table_ATC_LABELS, Table_IAM_TREE, Table_LK_MOL_ATC,
+        Table_INTERACTIONS, Table_IAKNOWLEDGE, Table_IA_IAK, Table_PIM_SOURCES,
+
         Table_PIM_TYPES, Table_PIMS, Table_PIMS_RELATED_ATC,
-        Table_PIMS_RELATED_ICD, Table_CURRENTVERSION,
+        Table_PIMS_RELATED_ICD, Table_VERSION, Table_CURRENTVERSION,
+
         Table_MaxParam
     };
 

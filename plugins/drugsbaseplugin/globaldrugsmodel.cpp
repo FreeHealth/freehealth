@@ -34,7 +34,7 @@
 #include <drugsbaseplugin/drugsbase.h>
 #include <drugsbaseplugin/drugsdatabaseselector.h>
 #include <drugsbaseplugin/idrug.h>
-#include <drugsbaseplugin/engines/allergyengine.h>
+#include <drugsbaseplugin/idrugengine.h>
 
 #include <coreplugin/icore.h>
 #include <coreplugin/isettings.h>
@@ -255,7 +255,7 @@ public:
     QTimer *m_Timer;
     static int numberOfInstances;
 
-    DrugAllergyEngine *m_AllergyEngine;
+    IDrugAllergyEngine *m_AllergyEngine;
 
 private:
     static QList<QString> m_CachedAvailableDosageForUID;
@@ -282,7 +282,7 @@ GlobalDrugsModel::GlobalDrugsModel(const SearchMode searchMode, QObject *parent)
         d(0)
 {
     d = new Internal::GlobalDrugsModelPrivate(this);
-    d->m_AllergyEngine = pluginManager()->getObject<DrugAllergyEngine>();
+    d->m_AllergyEngine = pluginManager()->getObject<DrugsDB::IDrugAllergyEngine>();
     static int handle = 0;
     ++handle;
     setObjectName("GlobalDrugsModel_" + QString::number(handle) + "/" + QString::number(d->numberOfInstances));
@@ -296,8 +296,10 @@ GlobalDrugsModel::GlobalDrugsModel(const SearchMode searchMode, QObject *parent)
     connect(base(), SIGNAL(drugsBaseHasChanged()), this, SLOT(onDrugsDatabaseChanged()));
     connect(patient(), SIGNAL(dataChanged(QModelIndex,QModelIndex)), this, SLOT(refreshDrugsPrecautions(QModelIndex, QModelIndex)));
     connect(translators(), SIGNAL(languageChanged()), this, SLOT(onDrugsDatabaseChanged()));
-    connect(d->m_AllergyEngine, SIGNAL(allergiesUpdated()), this, SLOT(updateAllergies()));
-    connect(d->m_AllergyEngine, SIGNAL(intolerancesUpdated()), this, SLOT(updateAllergies()));
+    if (d->m_AllergyEngine) {
+        connect(d->m_AllergyEngine, SIGNAL(allergiesUpdated()), this, SLOT(updateAllergies()));
+        connect(d->m_AllergyEngine, SIGNAL(intolerancesUpdated()), this, SLOT(updateAllergies()));
+    }
 }
 
 GlobalDrugsModel::~GlobalDrugsModel()
@@ -363,15 +365,17 @@ QVariant GlobalDrugsModel::data(const QModelIndex &item, int role) const
         // test atc's patient allergies
         /** \todo add drug's atc */
 //        QSqlQueryModel::data(QSqlQueryModel::index(item.row(), GlobalDrugsModelPrivate::Priv_ATC_ID)).toString();
-        d->m_AllergyEngine->check(DrugAllergyEngine::Allergy, uid);
-        if (d->m_AllergyEngine->has(DrugAllergyEngine::Allergy, uid)) {
-            QColor c = QColor(settings()->value(DrugsDB::Constants::S_ALLERGYBACKGROUNDCOLOR).toString());
-            c.setAlpha(190);
-            return c;
-        } else if (d->m_AllergyEngine->has(DrugAllergyEngine::Intolerance, uid)) {
-            QColor c = QColor(settings()->value(DrugsDB::Constants::S_INTOLERANCEBACKGROUNDCOLOR).toString());
-            c.setAlpha(190);
-            return c;
+        if (d->m_AllergyEngine) {
+            d->m_AllergyEngine->check(IDrugAllergyEngine::Allergy, uid);
+            if (d->m_AllergyEngine->has(IDrugAllergyEngine::Allergy, uid)) {
+                QColor c = QColor(settings()->value(DrugsDB::Constants::S_ALLERGYBACKGROUNDCOLOR).toString());
+                c.setAlpha(190);
+                return c;
+            } else if (d->m_AllergyEngine->has(IDrugAllergyEngine::Intolerance, uid)) {
+                QColor c = QColor(settings()->value(DrugsDB::Constants::S_INTOLERANCEBACKGROUNDCOLOR).toString());
+                c.setAlpha(190);
+                return c;
+            }
         }
         if (settings()->value(DrugsDB::Constants::S_MARKDRUGSWITHAVAILABLEDOSAGES).toBool()) {
             if (d->UIDHasRecordedDosage(uid)) {
@@ -383,15 +387,17 @@ QVariant GlobalDrugsModel::data(const QModelIndex &item, int role) const
     } else if (role == Qt::ToolTipRole) {
         QString tmp = "<html><body>";
         // Allergy Intolerance ?
-        d->m_AllergyEngine->check(DrugAllergyEngine::Allergy, uid);
-        if (d->m_AllergyEngine->has(DrugAllergyEngine::Allergy, uid)) {
-            tmp += QString("<table width=100%><tr><td><img src=\"%1\"></td><td width=100% align=center><span style=\"color:red;font-weight:600\">%2</span></td><td><img src=\"%1\"></span></td></tr></table><br>")
-                   .arg(settings()->path(Core::ISettings::SmallPixmapPath) + QDir::separator() + QString(Core::Constants::ICONFORBIDDEN))
-                   .arg(tr("KNOWN ALLERGY"));
-        } else if (d->m_AllergyEngine->has(DrugAllergyEngine::Intolerance, uid)) {
-            tmp += QString("<table width=100%><tr><td><img src=\"%1\"></td><td width=100% align=center><span style=\"color:red;font-weight:600\">%2</span></td><td><img src=\"%1\"></span></td></tr></table><br>")
-                   .arg(settings()->path(Core::ISettings::SmallPixmapPath) + QDir::separator() + QString(Core::Constants::ICONWARNING))
-                   .arg(tr("KNOWN INTOLERANCE"));
+        if (d->m_AllergyEngine) {
+            d->m_AllergyEngine->check(IDrugAllergyEngine::Allergy, uid);
+            if (d->m_AllergyEngine->has(IDrugAllergyEngine::Allergy, uid)) {
+                tmp += QString("<table width=100%><tr><td><img src=\"%1\"></td><td width=100% align=center><span style=\"color:red;font-weight:600\">%2</span></td><td><img src=\"%1\"></span></td></tr></table><br>")
+                        .arg(settings()->path(Core::ISettings::SmallPixmapPath) + QDir::separator() + QString(Core::Constants::ICONFORBIDDEN))
+                        .arg(tr("KNOWN ALLERGY"));
+            } else if (d->m_AllergyEngine->has(IDrugAllergyEngine::Intolerance, uid)) {
+                tmp += QString("<table width=100%><tr><td><img src=\"%1\"></td><td width=100% align=center><span style=\"color:red;font-weight:600\">%2</span></td><td><img src=\"%1\"></span></td></tr></table><br>")
+                        .arg(settings()->path(Core::ISettings::SmallPixmapPath) + QDir::separator() + QString(Core::Constants::ICONWARNING))
+                        .arg(tr("KNOWN INTOLERANCE"));
+            }
         }
 
         // Name, ATC and UID
@@ -465,13 +471,15 @@ QVariant GlobalDrugsModel::data(const QModelIndex &item, int role) const
 
         return tmp;
     } else if (role == Qt::DecorationRole && item.column()==BrandName) {
-        d->m_AllergyEngine->check(DrugAllergyEngine::Allergy, uid);
-        if (d->m_AllergyEngine->has(DrugAllergyEngine::Allergy, uid)) {
-            return theme()->icon(Core::Constants::ICONFORBIDDEN);
-        } else {
-            d->m_AllergyEngine->check(DrugAllergyEngine::Intolerance, uid);
-            if (d->m_AllergyEngine->has(DrugAllergyEngine::Intolerance, uid)) {
-                return theme()->icon(Core::Constants::ICONWARNING);
+        if (d->m_AllergyEngine) {
+            d->m_AllergyEngine->check(IDrugAllergyEngine::Allergy, uid);
+            if (d->m_AllergyEngine->has(IDrugAllergyEngine::Allergy, uid)) {
+                return theme()->icon(Core::Constants::ICONFORBIDDEN);
+            } else {
+                d->m_AllergyEngine->check(IDrugAllergyEngine::Intolerance, uid);
+                if (d->m_AllergyEngine->has(IDrugAllergyEngine::Intolerance, uid)) {
+                    return theme()->icon(Core::Constants::ICONWARNING);
+                }
             }
         }
         return QVariant();

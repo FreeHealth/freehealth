@@ -31,7 +31,7 @@
 #include <drugsplugin/drugswidget/prescriptionviewer.h>
 #include <drugsplugin/drugswidget/drugselector.h>
 
-#include <drugsbaseplugin/engines/allergyengine.h>
+#include <drugsbaseplugin/idrugengine.h>
 
 #include <coreplugin/constants_icons.h>
 #include <coreplugin/constants_menus.h>
@@ -713,7 +713,7 @@ void DrugsActionHandler::resetPrescriptionSentenceToDefault()
 
 void DrugsActionHandler::showDrugPrecautions()
 {
-    DrugsDB::Internal::DrugAllergyEngine *engine = pluginManager()->getObject<DrugsDB::Internal::DrugAllergyEngine>();
+    DrugsDB::IDrugAllergyEngine *engine = pluginManager()->getObject<DrugsDB::IDrugAllergyEngine>();
     if (!engine) {
         LOG_ERROR("No allergy engine");
         return;

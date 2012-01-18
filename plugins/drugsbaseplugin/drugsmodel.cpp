@@ -46,7 +46,6 @@
 #include <drugsbaseplugin/globaldrugsmodel.h>
 #include <drugsbaseplugin/druginteractioninformationquery.h>
 #include <drugsbaseplugin/idrugengine.h>
-#include <drugsbaseplugin/engines/allergyengine.h>
 
 #include <coreplugin/icore.h>
 #include <coreplugin/isettings.h>
@@ -100,7 +99,7 @@ public:
     DrugsModelPrivate() :
         m_LastDrugRequiered(0), m_ShowTestingDrugs(true),
         m_SelectionOnlyMode(false), m_IsDirty(false),
-        m_InteractionResult(0), m_ComputeInteraction(true)
+        m_InteractionResult(0), m_AllergyEngine(0), m_ComputeInteraction(true)
     {
     }
 
@@ -363,7 +362,7 @@ public:
     bool m_ShowTestingDrugs, m_SelectionOnlyMode, m_IsDirty;
     DrugInteractionResult *m_InteractionResult;
     DrugInteractionQuery *m_InteractionQuery;
-    DrugAllergyEngine *m_AllergyEngine;
+    IDrugAllergyEngine *m_AllergyEngine;
     bool m_ComputeInteraction;
 };
 }  // End Internal
@@ -383,7 +382,7 @@ DrugsModel::DrugsModel(QObject * parent) :
         LOG_ERROR("Drugs database not intialized");
     d->m_DrugsList.clear();
     d->m_DosageModelList.clear();
-    d->m_AllergyEngine = pluginManager()->getObject<DrugsDB::Internal::DrugAllergyEngine>();
+    d->m_AllergyEngine = pluginManager()->getObject<DrugsDB::IDrugAllergyEngine>();
 
     // Make sure that the model always got a valid DrugInteractionResult and DrugInteractionQuery pointer
     d->m_InteractionQuery = new DrugInteractionQuery(this);
@@ -392,8 +391,10 @@ DrugsModel::DrugsModel(QObject * parent) :
 
     d->m_InteractionResult = interactionManager()->checkInteractions(d->m_InteractionQuery);
     connect(drugsBase(), SIGNAL(dosageBaseHasChanged()), this, SLOT(dosageDatabaseChanged()));
-    connect(d->m_AllergyEngine, SIGNAL(allergiesUpdated()), this, SLOT(resetModel()));
-    connect(d->m_AllergyEngine, SIGNAL(intolerancesUpdated()), this, SLOT(resetModel()));
+    if (d->m_AllergyEngine) {
+        connect(d->m_AllergyEngine, SIGNAL(allergiesUpdated()), this, SLOT(resetModel()));
+        connect(d->m_AllergyEngine, SIGNAL(intolerancesUpdated()), this, SLOT(resetModel()));
+    }
 }
 
 /** Destructor */
@@ -507,9 +508,9 @@ QVariant DrugsModel::data(const QModelIndex &index, int role) const
     }
     else if (role == Qt::ToolTipRole) {
         QString display;
-        if (d->m_ComputeInteraction) {
-            d->m_AllergyEngine->check(DrugsDB::Internal::DrugAllergyEngine::Allergy, drug->drugId().toString());
-            if (d->m_AllergyEngine->has(DrugsDB::Internal::DrugAllergyEngine::Allergy, drug->drugId().toString())) {
+        if (d->m_ComputeInteraction && d->m_AllergyEngine) {
+            d->m_AllergyEngine->check(DrugsDB::IDrugAllergyEngine::Allergy, drug->drugId().toString());
+            if (d->m_AllergyEngine->has(DrugsDB::IDrugAllergyEngine::Allergy, drug->drugId().toString())) {
                 display += QString("<table width=100%><tr><td><img src=\"%1\"></td><td width=100% align=center><span style=\"color:red;font-weight:600\">%2</span></td><td><img src=\"%1\"></span></td></tr></table><br>")
                         .arg(settings()->path(Core::ISettings::SmallPixmapPath) + QDir::separator() + QString(Core::Constants::ICONFORBIDDEN))
                         .arg(tr("KNOWN ALLERGY"));
@@ -541,13 +542,13 @@ QVariant DrugsModel::data(const QModelIndex &index, int role) const
         if (drug->prescriptionValue(Constants::Prescription::OnlyForTest).toBool())
             return QColor(FORTEST_BACKGROUND_COLOR);
         // Allergy / Intolerances
-        if (d->m_ComputeInteraction) {
-            d->m_AllergyEngine->check(DrugsDB::Internal::DrugAllergyEngine::Allergy, drug->drugId().toString());
-            if (d->m_AllergyEngine->has(DrugsDB::Internal::DrugAllergyEngine::Allergy, drug->drugId().toString())) {
+        if (d->m_ComputeInteraction && d->m_AllergyEngine) {
+            d->m_AllergyEngine->check(DrugsDB::IDrugAllergyEngine::Allergy, drug->drugId().toString());
+            if (d->m_AllergyEngine->has(DrugsDB::IDrugAllergyEngine::Allergy, drug->drugId().toString())) {
                 return QColor(settings()->value(DrugsDB::Constants::S_ALLERGYBACKGROUNDCOLOR).toString());
             }
-            d->m_AllergyEngine->check(DrugsDB::Internal::DrugAllergyEngine::Intolerance, drug->drugId().toString());
-            if (d->m_AllergyEngine->has(DrugsDB::Internal::DrugAllergyEngine::Intolerance, drug->drugId().toString())) {
+            d->m_AllergyEngine->check(DrugsDB::IDrugAllergyEngine::Intolerance, drug->drugId().toString());
+            if (d->m_AllergyEngine->has(DrugsDB::IDrugAllergyEngine::Intolerance, drug->drugId().toString())) {
                 return QColor(settings()->value(DrugsDB::Constants::S_INTOLERANCEBACKGROUNDCOLOR).toString());
             }
         }
@@ -733,9 +734,11 @@ DrugInteractionResult *DrugsModel::drugInteractionResult() const
 
 bool DrugsModel::prescriptionHasAllergies()
 {
+    if (!d->m_AllergyEngine)
+        return false;
     foreach(const IDrug *drug, d->m_DrugsList) {
-        d->m_AllergyEngine->check(DrugsDB::Internal::DrugAllergyEngine::Allergy, drug->drugId().toString());
-        if (d->m_AllergyEngine->has(DrugsDB::Internal::DrugAllergyEngine::Allergy, drug->drugId().toString())) {
+        d->m_AllergyEngine->check(DrugsDB::IDrugAllergyEngine::Allergy, drug->drugId().toString());
+        if (d->m_AllergyEngine->has(DrugsDB::IDrugAllergyEngine::Allergy, drug->drugId().toString())) {
             return true;
         }
     }

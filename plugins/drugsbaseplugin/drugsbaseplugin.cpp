@@ -35,10 +35,6 @@
 #include "drugsbase.h"
 #include "drugsdatabaseselector.h"
 
-#include "engines/drugdruginteractionengine.h"
-#include "engines/pimengine.h"
-#include "engines/allergyengine.h"
-
 #include <utils/log.h>
 
 #include <coreplugin/dialogs/pluginaboutpage.h>
@@ -54,10 +50,7 @@ static inline Core::ITheme *theme()  { return Core::ICore::instance()->theme(); 
 static inline void messageSplash(const QString &s) {theme()->messageSplashScreen(s); }
 
 DrugsBasePlugin::DrugsBasePlugin() :
-    IPlugin(),
-    m_DDIEngine(0),
-    m_PimEngine(0),
-    m_AllergyEngine(0)
+    IPlugin()
 {
     if (Utils::Log::warnPluginsCreation()) {
 #ifdef FREEDIAMS
@@ -69,32 +62,10 @@ DrugsBasePlugin::DrugsBasePlugin() :
 
     // Add Translator to the Application
     Core::ICore::instance()->translators()->addNewTranslator("drugsbaseplugin");
-
-    // Create the drugs engines
-    m_AllergyEngine = new DrugsDB::Internal::DrugAllergyEngine(this);
-    addObject(m_AllergyEngine);
-    m_DDIEngine = new DrugsDB::Internal::DrugDrugInteractionEngine(this);
-    addObject(m_DDIEngine);
-    m_PimEngine = new DrugsDB::Internal::PimEngine(this);
-    addObject(m_PimEngine);
 }
 
 DrugsBasePlugin::~DrugsBasePlugin()
 {
-    removeObject(m_DDIEngine);
-    if (m_DDIEngine)
-        delete m_DDIEngine;
-    m_DDIEngine = 0;
-
-    removeObject(m_PimEngine);
-    if (m_PimEngine)
-        delete m_PimEngine;
-    m_PimEngine = 0;
-
-    removeObject(m_AllergyEngine);
-    if (m_AllergyEngine)
-        delete m_AllergyEngine;
-    m_AllergyEngine = 0;
 }
 
 bool DrugsBasePlugin::initialize(const QStringList &arguments, QString *errorString)
@@ -119,11 +90,6 @@ void DrugsBasePlugin::extensionsInitialized()
 
     addAutoReleasedObject(new Core::PluginAboutPage(pluginSpec(), this));
     addAutoReleasedObject(new DrugsDB::Internal::DrugsTemplatePrinter(this));
-
-    // Initialize the drugs engines
-    m_DDIEngine->init();
-    m_PimEngine->init();
-    m_AllergyEngine->init();
 }
 
 

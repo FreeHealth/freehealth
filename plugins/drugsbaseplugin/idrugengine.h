@@ -31,12 +31,13 @@
 
 #include <QObject>
 #include <QIcon>
+#include <QStandardItemModel>
 
 /**
  * \file idrugengine.h
  * \author Eric MAEKER <eric.maeker@gmail.com>
- * \version 0.6.0
- * \date 20 Sept 2011
+ * \version 0.6.2
+ * \date 17 Jan 2012
 */
 
 namespace DrugsDB {
@@ -70,6 +71,8 @@ public:
     virtual bool isCalculatingDrugDrugInteractions() const = 0;
     /** Return true if the engine is computing patient-drug interactions. */
     virtual bool isCalculatingPatientDrugInteractions() const = 0;
+    /** Return true if the engine is computing drug allergies and intolerances. */
+    virtual bool isCalculatingPatientDrugAllergiesAndIntolerances() const = 0;
 
     /** Unique identifier of the engine. */
     virtual QString uid() const = 0;
@@ -104,6 +107,42 @@ public Q_SLOTS:
 protected:
     bool m_IsActive;
 };
+
+class DRUGSBASE_EXPORT IDrugAllergyEngine : public IDrugEngine
+{
+    Q_OBJECT
+
+public:
+    enum TypeOfInteraction {
+        NoInteraction = 0,
+        Intolerance,
+        SuspectedIntolerance,
+        Allergy,
+        SuspectedAllergy
+    };
+
+    enum TypeOfSubstrat {
+        InnCode = 0,
+        ClassInn,
+        Drug
+    };
+    /** Construct an active empty drug engine*/
+    IDrugAllergyEngine(QObject *parent) : IDrugEngine(parent) {}
+    virtual ~IDrugAllergyEngine() {}
+
+    bool isCalculatingPatientDrugAllergiesAndIntolerances() const {return true;}
+
+    virtual void check(const int typeOfInteraction, const QString &uid, const QString &drugGlobalAtcCode = QString::null, const int drugsDatabaseSourceId = -1) = 0;
+    virtual bool has(const int typeOfInteraction, const QString &uid, const int drugsDatabaseSourceId = -1) = 0;
+
+    virtual QStandardItemModel *drugPrecautionModel() const = 0;
+
+Q_SIGNALS:
+    void allergiesUpdated();
+    void intolerancesUpdated();
+
+};
+
 
 }  // End namespace DrugsDB
 

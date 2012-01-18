@@ -29,9 +29,4 @@
 #define CORE_EXPORT Q_DECL_IMPORT
 #endif
 
-
-#define Q_FMF_BEGIN_CONSTANTS namespace Constants {
-#define Q_FMF_END_CONSTANTS   }
-#define Q_FMF_USING_CONSTANTS using namespace Constants;
-
 #endif

@@ -39,9 +39,6 @@
 
 namespace DrugsDB {
 namespace Internal {
-class DrugDrugInteractionEngine;
-class PimEngine;
-class DrugAllergyEngine;
 }
 
 class DrugsBasePlugin : public ExtensionSystem::IPlugin
@@ -53,11 +50,6 @@ public:
 
     bool initialize(const QStringList &arguments, QString *errorString);
     void extensionsInitialized();
-
-private:
-    DrugsDB::Internal::DrugDrugInteractionEngine *m_DDIEngine;
-    DrugsDB::Internal::PimEngine *m_PimEngine;
-    DrugsDB::Internal::DrugAllergyEngine *m_AllergyEngine;
 };
 
 
