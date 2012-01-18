@@ -30,11 +30,15 @@
 #include <coreplugin/dialogs/pluginaboutpage.h>
 #include <coreplugin/icore.h>
 #include <coreplugin/translators.h>
+#include <coreplugin/itheme.h>
 
 #include <QtCore/QtPlugin>
 #include <QDebug>
 
 using namespace Empty;
+
+static inline Core::ITheme *theme()  { return Core::ICore::instance()->theme(); }
+static inline void messageSplash(const QString &s) {theme()->messageSplashScreen(s); }
 
 EmptyPlugin::EmptyPlugin()
 {
@@ -71,6 +75,8 @@ void EmptyPlugin::extensionsInitialized()
 {
     if (Utils::Log::warnPluginsCreation())
         qWarning() << "EmptyPlugin::extensionsInitialized";
+
+    messageSplash(tr("Initializing emptyplugin..."));
 
     // At this point, user is connected
 
