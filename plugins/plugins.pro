@@ -149,3 +149,8 @@ zipcodes.depends += core
 script.subdir = scriptplugin
 script.depends += core
 script.depends += formmanager
+
+# manage non free content
+include(../config.pri)
+!isEmpty(HAS_NONFREE):include($${NONFREE_SOURCES_PLUGINS_PATH}/plugins.pri)
+message($${HAS_NONFREE}  //  $${NONFREE_SOURCES_PLUGINS_PATH})

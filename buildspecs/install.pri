@@ -2,6 +2,7 @@
 mac:INSTALL_BASENAME_PATH          = mac
 else:linux*:INSTALL_BASENAME_PATH  = linux
 else:win32:INSTALL_BASENAME_PATH   = win
+else:freebsd*:INSTALL_BASENAME_PATH   = freebsd
 
 # binary wrapper (bw) installer --> leave empty == no bw installation, otherwise specify the filename
 # the bw should be located in SOURCES_RESOURCES_TEXTFILES
@@ -19,9 +20,9 @@ INSTALL_QT_INSIDE_BUNDLE = true
 
 # These inclusions modify the default path for the installation process
 macx:include(install_mac.pri)
-win32:include(install_win.pri)
-linux*:include(install_linux.pri)
-#freebsd*:include(install_freebsd.pri)
+else:linux*:include(install_linux.pri)
+else:win32:include(install_win.pri)
+else:freebsd*:include(install_freebsd.pri)
 
 # by default package is constructed inside the svn trunk under
 # packages/yourOs/Application
@@ -63,10 +64,12 @@ message( Header files: $$[QT_INSTALL_HEADERS])
 message( Libraries: $$[QT_INSTALL_LIBS])
 message( Binary files (executables): $$[QT_INSTALL_BINS])
 message( Plugins: $$[QT_INSTALL_PLUGINS])
-message( Spec file in use: $${QMAKESPEC})
+message( Spec file in use: env spec: $$QMAKESPEC)
+message( Spec file in use: qmake spec: $$QMAKE_MKSPECS)
 message( ******************************************************************************** )
 message( **************************    FreeMedForms Config   **************************** )
 message( ******************************************************************************** )
+CONFIG(LINUX_INTEGRATED):message( Building Linux Integrated version )
 message( Binary : )
 message(    * From : $${BUILD_BINARY_PATH} )
 message(    * To : $${INSTALL_BINARY_PATH} )

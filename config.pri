@@ -6,6 +6,7 @@ isEmpty(TARGET) {
 SOURCES_ROOT_PATH        = $${PWD}
 include(buildspecs/config_paths.pri)
 include(buildspecs/svnversion.pri)
+exists(__nonfree__):include(__nonfree__/config_nonfree.pri)
 
 macx:include(buildspecs/config_mac.pri)
 else:linux*:include(buildspecs/config_linux.pri)
