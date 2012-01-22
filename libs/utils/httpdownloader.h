@@ -32,11 +32,20 @@
 #include <QNetworkAccessManager>
 #include <QUrl>
 
+QT_BEGIN_NAMESPACE
 class QFile;
 class QProgressDialog;
 class QNetworkReply;
 class QMainWindow;
-//class QProgressBar;
+class QProgressBar;
+QT_END_NAMESPACE
+
+/**
+ * \file httpdownloader.h
+ * \author Eric MAEKER <eric.maeker@gmail.com>
+ * \version 0.6.2
+ * \date 20 Jan 2012
+*/
 
 namespace Utils {
 
@@ -46,11 +55,14 @@ class UTILS_EXPORT HttpDownloader : public QObject
 public:
     explicit HttpDownloader(QObject *parent = 0);
 
+    // OBSOLETE
     void setMainWindow(QMainWindow *win);
+    // REPLACED BY
+    void setProgressBar(QProgressBar *bar);
+
     void setUrl(const QUrl &url);
     void setOutputPath(const QString &absolutePath);
     void setLabelText(const QString &text) {m_LabelText = text;}
-//    void setProgressBar(QProgressBar *bar);
 
     void startDownload();
 
@@ -65,7 +77,7 @@ private Q_SLOTS:
     void cancelDownload();
     void httpFinished();
     void httpReadyRead();
-    void updateDataReadProgress(qint64 bytesRead, qint64 totalBytes);
+    void updateProgressBar(qint64 bytesRead, qint64 totalBytes);
 //    void slotAuthenticationRequired(QNetworkReply*,QAuthenticator *);
 //#ifndef QT_NO_OPENSSL
 //    void sslErrors(QNetworkReply*,const QList<QSslError> &errors);
@@ -78,7 +90,7 @@ private:
     QNetworkReply *reply;
     QFile *file;
     QProgressDialog *progressDialog;
-//    QProgressBar *progressBar;
+    QProgressBar *progressBar;
     int httpGetId;
     bool httpRequestAborted;
 };
