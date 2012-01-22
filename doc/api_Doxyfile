@@ -600,6 +600,7 @@ RECURSIVE              = YES
 # subdirectory from a directory tree whose root is specified with the INPUT tag.
 
 EXCLUDE                = ../_protected \
+                         ../__nonfree__ \
                          ../bin \
                          ../build \
                          ../doxygen \
