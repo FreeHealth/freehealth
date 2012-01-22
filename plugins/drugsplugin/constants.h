@@ -69,6 +69,7 @@ namespace Constants {
     const char* const   A_OPENDOSAGEPREFERENCES = "a.Drugs.OpenDosagePreferences";
     const char* const   A_RESETPRESCRIPTIONSENTENCE_TODEFAULT = "a.Drugs.ResetPrescriptionSentenceToDefault";
     const char* const   A_SHOWDRUGPRECAUTIONS = "a.Drugs.ShowPrecautions";
+    const char* const   A_COPYPRESCRIPTIONITEM = "a.Drugs.CopyPrescriptionItem";
 
 
     const char* const   DRUGSMENU_TEXT          = QT_TRANSLATE_NOOP("mfDrugsConstants", "Prescription");
@@ -86,6 +87,7 @@ namespace Constants {
     const char* const   RESETPRESCRIPTIONSENTENCETODEFAULT_TEXT = QT_TRANSLATE_NOOP("mfDrugsConstants", "Reset the prescription sentence to the default one");
     const char* const   SHOWDRUGPRECAUTIONS_TEXT = QT_TRANSLATE_NOOP("mfDrugsConstants", "Show drug precautions");
     const char* const   DRUGPRECAUTIONS_TEXT = QT_TRANSLATE_NOOP("mfDrugsConstants", "Drug precautions");
+    const char* const   COPYPRESCRIPTIONITEM_TEXT = QT_TRANSLATE_NOOP("mfDrugsConstants", "Copy prescription item to clipboard");
 
     const char * const  I_TOGGLETESTINGDRUGS       =  "pill_hidden.png";       /*!< \brief Themed icon name for Commercial search. */
     const char * const  I_TOGGLEDRUGSELECTOR       =  "drugselector.png";       /*!< \brief Themed icon name for Commercial search. */

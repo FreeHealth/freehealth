@@ -87,6 +87,7 @@ public Q_SLOTS:
     void changeDuration();
     void changeDurationTo();
     void openProtocolPreferencesDialog();
+    void copyPrescriptionItem();
 
 private Q_SLOTS:
     void on_listView_customContextMenuRequested(const QPoint &pos);

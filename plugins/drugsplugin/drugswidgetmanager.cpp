@@ -155,6 +155,7 @@ DrugsActionHandler::DrugsActionHandler(QObject *parent) :
         aOpenPrescriptionSentencePreferences(0),
         aResetPrescriptionSentenceToDefault(0),
         aShowDrugPrecautions(0),
+        aCopyPrescriptionItem(0),
         m_CurrentView(0),
         m_PrecautionDock(0)
 {
@@ -418,11 +419,21 @@ DrugsActionHandler::DrugsActionHandler(QObject *parent) :
 
     a = aShowDrugPrecautions = new QAction(this);
     a->setObjectName("aShowDrugPrecautions");
-        a->setIcon(th->icon(DrugsDB::Constants::I_ALLERGYENGINE));
+    a->setIcon(th->icon(DrugsDB::Constants::I_ALLERGYENGINE));
     cmd = actionManager()->registerAction(a, Constants::A_SHOWDRUGPRECAUTIONS, ctx);
     cmd->setTranslations(Constants::SHOWDRUGPRECAUTIONS_TEXT, Constants::SHOWDRUGPRECAUTIONS_TEXT, Constants::DRUGCONSTANTS_TR_CONTEXT);
     menu->addAction(cmd, DrugsWidget::Constants::G_PLUGINS_VIEWS);
     connect(aShowDrugPrecautions, SIGNAL(triggered()), this, SLOT(showDrugPrecautions()));
+
+    a = aCopyPrescriptionItem = new QAction(this);
+    a->setObjectName("aCopyPrescriptionItem");
+    a->setIcon(th->icon(Core::Constants::ICONCOPY));
+    cmd = actionManager()->registerAction(a, Constants::A_COPYPRESCRIPTIONITEM, ctx);
+    cmd->setTranslations(Constants::COPYPRESCRIPTIONITEM_TEXT, Constants::COPYPRESCRIPTIONITEM_TEXT, Constants::DRUGCONSTANTS_TR_CONTEXT);
+    menu->addAction(cmd, DrugsWidget::Constants::G_PLUGINS_VIEWS);
+    connect(aCopyPrescriptionItem, SIGNAL(triggered()), this, SLOT(copyPrescriptionItem()));
+
+
 
     contextManager()->updateContext();
     actionManager()->retranslateMenusAndActions();
@@ -730,4 +741,12 @@ void DrugsActionHandler::showDrugPrecautions()
         Core::ICore::instance()->mainWindow()->addDockWidget(Qt::RightDockWidgetArea, m_PrecautionDock);
     }
     m_PrecautionDock->show();
+}
+
+void DrugsActionHandler::copyPrescriptionItem()
+{
+    if (m_CurrentView) {
+        Q_ASSERT(m_CurrentView->prescriptionView());
+        m_CurrentView->prescriptionView()->copyPrescriptionItem();
+    }
 }

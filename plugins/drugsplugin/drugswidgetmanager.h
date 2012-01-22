@@ -112,6 +112,8 @@ private Q_SLOTS:
 
     void showDrugPrecautions();
 
+    void copyPrescriptionItem();
+
 private:
     bool canMoveUp();
     bool canMoveDown();
@@ -146,6 +148,7 @@ protected:
     QAction *aOpenPrescriptionSentencePreferences;
     QAction *aResetPrescriptionSentenceToDefault;
     QAction *aShowDrugPrecautions;
+    QAction *aCopyPrescriptionItem;
 
     QPointer<DrugsCentralWidget> m_CurrentView;
 

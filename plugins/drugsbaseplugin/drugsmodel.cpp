@@ -1033,6 +1033,8 @@ QString DrugsModel::getFullPrescription(const IDrug *drug, bool toHtml, const QS
     tokens_value["ROUTE"] = drug->prescriptionValue(Constants::Prescription::Route).toString();
 
     Utils::replaceTokens(tmp, tokens_value);
+    if (toHtml)
+        tmp = Utils::toHtmlAccent(tmp);
     return tmp;
 }
 

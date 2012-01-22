@@ -53,6 +53,10 @@
 #include <QPrintDialog>
 #include <QTextDocument>
 #include <QTreeWidget>
+#include <QClipboard>
+#include <QMimeData>
+
+#include <QDebug>
 
 using namespace DrugsWidget;
 using namespace DrugsWidget::Constants;
@@ -170,6 +174,7 @@ void PrescriptionViewer::on_listView_customContextMenuRequested(const QPoint &)
     QMenu *pop = new QMenu(this);
     QStringList actionsToAdd;
     actionsToAdd
+            << DrugsWidget::Constants::A_COPYPRESCRIPTIONITEM
             << DrugsWidget::Constants::A_OPENDOSAGEDIALOG
             << DrugsWidget::Constants::A_OPENDOSAGEPREFERENCES
             << DrugsWidget::Constants::A_RESETPRESCRIPTIONSENTENCE_TODEFAULT
@@ -370,6 +375,24 @@ void PrescriptionViewer::openProtocolPreferencesDialog()
 {
     Core::SettingsDialog dlg(this, tkTr(Trans::Constants::DRUGS), "DrugsPrintOptionsPage");
     dlg.exec();
+}
+
+void PrescriptionViewer::copyPrescriptionItem()
+{
+    if (!listView->selectionModel()->hasSelection())
+        return;
+    QModelIndexList list = listView->selectionModel()->selectedRows();
+    qSort(list);
+    QString html;
+    for(int i=0; i < list.count() ; ++i) {
+        int row = list.at(i).row();
+        QModelIndex idx = drugModel()->index(row, DrugsDB::Constants::Prescription::ToHtml);
+        html += idx.data().toString();
+    }
+    QMimeData *data = new QMimeData;
+    data->setHtml(html);
+    QClipboard *clipboard = QApplication::clipboard();
+    clipboard->setMimeData(data);
 }
 
 /** \brief Returns the listView in use for the prescription. */
