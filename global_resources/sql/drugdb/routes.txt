@@ -43,7 +43,7 @@
 39, "fr:intraséreuse","en:intraseral","de:intraseral","systemic:no"
 40, "fr:intrathécale","en:intrathecal","de:intrathekal","systemic:yes"
 41, "fr:intratumorale","en:intratumoral","de:intratumoral","systemic:yes"
-42, "fr:intraveineuse","en:intravenous","en:im-iv","en:iv-sc","en:im-iv-sc","de:intravenös","systemic:yes"
+42, "fr:intraveineuse","en:intravenous","en:im-iv","en:iv-sc","en:im-iv-sc","en:perfusion","de:intravenös","systemic:yes"
 43, "fr:intraventriculaire cérébrale","en:intraventricular (cerebral)","de:intraventrikulär (Gehirn)","systemic:yes"
 44, "fr:intravitréenne","en:intravitreal","de:intravitreal","systemic:partial"
 45, "fr:intravésicale","en:intravesical","de:intravesikal","systemic:no"
@@ -77,6 +77,8 @@
 73, "fr:urétérale","en:ureteral","de:harnleiter","systemic:unknown"
 74, "fr:irrigation","en:irrigation","de:bewässerung","systematic:no"
 75, "fr:trans-muqueux","en:transmucosal","de:transmukosale","systemic:partial"
+76, "fr:préparation radiologique","en:for rx compounding","systemic:yes"
+77, "fr:intra-rachidienne","en:spinal","en:intraspinal","systemic:partial"
 1000, "fr:Non assigné","en:0-unassigned","en:unassigned","en:n/a","en:miscellaneous","en:******","en:single-use","en:multidose","de:nicht zugeordnet","systemic:no"
 
 
@@ -93,7 +95,6 @@
 -- INTRACAUDAL
 -- INTRACRANIAL  //  intracranial
 -- INTRAINTESTINAL (UPPER)
--- INTRASPINAL  // spinal
 -- INTRASYNOVIAL
 -- INTRAVESICULAR
 -- LABORATORY TEST
@@ -106,7 +107,14 @@
 -- UDDER WASH
 -- REFER (SEE DOSAGE FORM)
 -- SOFT TISSUE INJECTION
+
+-- From FDA:
 -- iontophoresis
 -- biliary
--- for rx compounding
 -- intra-anal
+-- intracranial
+-- suspension
+-- intra-anal
+-- periodontal
+-- mac
+-- delayed release
