@@ -536,8 +536,7 @@ bool checkDir(const QString & absPath, bool createIfNotExist, const QString & lo
 bool saveStringToFile(const QString &toSave, const QString &toFile, IOMode iomode, const Warn warnUser, QWidget *parent)
 {
     if (toFile.isEmpty()) {
-        Utils::Log::addError("Utils", "saveStringToFile() : fileName is empty",
-                              __FILE__, __LINE__);
+        LOG_ERROR_FOR("Utils", "saveStringToFile() : fileName is empty");
         return false;
     }
     QWidget *wgt = parent;
@@ -561,20 +560,18 @@ bool saveStringToFile(const QString &toSave, const QString &toFile, IOMode iomod
                                    QMessageBox::Cancel | QMessageBox::Ok) == QMessageBox::Ok) {
             if (iomode == Overwrite) {
                 if (!file.open(QFile::WriteOnly | QIODevice::Text)) {
-                    Utils::Log::addError("Utils", QCoreApplication::translate("Utils", "Error %1 while trying to save file %2").arg(file.fileName(), file.errorString()),
-                                         __FILE__, __LINE__);
+                    LOG_ERROR_FOR("Utils", QCoreApplication::translate("Utils", "Error %1 while trying to save file %2").arg(file.fileName(), file.errorString()));
                     return false;
                 }
             } else if (iomode == AppendToFile) {
                 if (!file.open(QFile::Append | QIODevice::Text)) {
-                    Utils::Log::addError("Utils", QCoreApplication::translate("Utils", "Error %1 while trying to save file %2").arg(file.fileName(), file.errorString()),
-                                         __FILE__, __LINE__);
+                    LOG_ERROR_FOR("Utils", QCoreApplication::translate("Utils", "Error %1 while trying to save file %2").arg(file.fileName(), file.errorString()));
                     return false;
                 }
             } else {
                 return false;
             }
-            file.write(toSave.toAscii());
+            file.write(toSave.toUtf8());
             LOG_FOR("Utils", QCoreApplication::translate("Utils", "%1 correctly saved").arg(file.fileName()));
         } else {
             LOG_FOR("Utils", QCoreApplication::translate("Utils", "Save file aborted by user (file already exists) : ") + file.fileName());
@@ -583,11 +580,10 @@ bool saveStringToFile(const QString &toSave, const QString &toFile, IOMode iomod
     } else {
         // Create file
         if (!file.open(QFile::WriteOnly | QIODevice::Text)) {
-            Utils::Log::addError("Utils", QCoreApplication::translate("Utils", "Error %1 while trying to save file %2").arg(file.fileName(),file.errorString()),
-                                  __FILE__, __LINE__);
+            LOG_ERROR_FOR("Utils", QCoreApplication::translate("Utils", "Error %1 while trying to save file %2").arg(file.fileName(),file.errorString()));
             return false;
         }
-        file.write(toSave.toAscii());
+        file.write(toSave.toUtf8());
         LOG_FOR("Utils", QCoreApplication::translate("Utils", "%1 correctly saved").arg(file.fileName()));
     }
     return true;
