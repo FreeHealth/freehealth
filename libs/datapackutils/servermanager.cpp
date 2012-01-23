@@ -284,6 +284,7 @@ void ServerManager::engineDescriptionDownloadDone()
     bool __emit = true;
     for(int i = 0; i < m_WorkingEngines.count(); ++i) {
         if (m_WorkingEngines.at(i)->downloadQueueCount()>0) {
+            /** \todo disconnect engine signal */
             qWarning() << m_WorkingEngines.at(i)->objectName() << m_WorkingEngines.at(i)->downloadQueueCount();
             __emit = false;
         }

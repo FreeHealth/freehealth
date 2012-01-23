@@ -96,11 +96,10 @@ bool LocalServerEngine::startDownloadQueue()
                 // copy pack XML config
                 QString orig = pack->localFileName();
                 QFile::copy(orig, newPath +  QDir::separator() + "packconfig.xml");
-
-
             }
         }
     }
     m_queue.clear();
+    Q_EMIT queueDowloaded();
     return true;
 }

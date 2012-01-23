@@ -35,6 +35,7 @@ class ServerManager;
 
 class LocalServerEngine : public IServerEngine
 {
+    Q_OBJECT
 public:
     LocalServerEngine(IServerManager *parent);
 
