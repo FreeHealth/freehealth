@@ -275,7 +275,6 @@ void ServerManager::checkServerUpdates()
 
 void ServerManager::engineDescriptionDownloadDone()
 {
-    WARN_FUNC;
     // if all engines download done -> emit signal
     bool __emit = true;
     for(int i = 0; i < m_WorkingEngines.count(); ++i) {

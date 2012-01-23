@@ -36,7 +36,7 @@ class QNetworkAccessManager;
  * \file core.h
  * \author Eric MAEKER <eric.maeker@gmail.com>
  * \version 0.6.2
- * \date 30 Nov 2011
+ * \date 22 Jan 2012
  * Needs Qt >= 4.7
 */
 
@@ -60,6 +60,7 @@ public:
     };
 
     static Core *instance(QObject *parent = 0);
+    ~Core();
 
     bool isInternetConnexionAvailable();
     IServerManager *serverManager() const;

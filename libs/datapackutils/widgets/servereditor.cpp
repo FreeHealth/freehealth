@@ -60,6 +60,7 @@ static inline QIcon icon(const QString &name, DataPack::Core::ThemePath path = D
 
 namespace {
 
+const char *const ICON_SERVER_REFRESH = "datapack-server-refresh.png";
 const char *const ICON_SERVER_ADD = "server-add.png";
 const char *const ICON_SERVER_REMOVE = "server-remove.png";
 const char *const ICON_SERVER_INFO = "server-info.png";
@@ -86,7 +87,7 @@ const char * const CSS =
 ServerEditor::ServerEditor(QWidget *parent) :
     QWidget(parent),
     ui(new Ui::ServerEditor),
-    aServerRemove(0), aServerAdd(0),aServerInfo(0),
+    aServerRefresh(0), aServerRemove(0), aServerAdd(0),aServerInfo(0),
     aInstall(0), aInstallAllPack(0), aRemove(0), aUpdate(0)
 {
     ui->setupUi(this);
@@ -140,7 +141,10 @@ ServerEditor::ServerEditor(QWidget *parent) :
     connect(serverManager(), SIGNAL(serverAdded(int)), this, SLOT(serverAdded(int)));
     connect(serverManager(), SIGNAL(serverRemoved(int)), this, SLOT(serverRemoved(int)));
 
+    // FOR TEST
+    // This step should be done before the serverEditor in called
     serverManager()->getAllDescriptionFile();
+    // END TEST
 
     // Select first row of servers
     ui->serverView->selectionModel()->select(m_ServerModel->index(0,0), QItemSelectionModel::SelectCurrent);
@@ -159,7 +163,10 @@ bool ServerEditor::submitChanges()
 void ServerEditor::createActions()
 {
     // Create server actions
-    QAction *a = aServerAdd = new QAction(this);
+    QAction *a = aServerRefresh = new QAction(this);
+    a->setObjectName("aServerRefresh");
+    a->setIcon(icon(::ICON_SERVER_REFRESH, DataPack::Core::MediumPixmaps));
+    a = aServerAdd = new QAction(this);
     a->setObjectName("aInstall");
     a->setIcon(icon(::ICON_SERVER_ADD, DataPack::Core::MediumPixmaps));
     a = aServerRemove = new QAction(this);
@@ -193,6 +200,8 @@ void ServerEditor::createActions()
 void ServerEditor::createToolbar()
 {
     m_ToolBar = new QToolBar(this);
+    m_ToolBar->addAction(aServerRefresh);
+    m_ToolBar->addSeparator();
     m_ToolBar->addAction(aServerAdd);
     m_ToolBar->addAction(aServerRemove);
     m_ToolBar->addAction(aServerInfo);
@@ -328,7 +337,10 @@ void ServerEditor::onPackIndexActivated(const QModelIndex &index, const QModelIn
 
 void ServerEditor::serverActionTriggered(QAction *a)
 {
-    if (a==aServerAdd) {
+    if (a==aServerRefresh) {
+        /** \todo code here */
+//        serverManager()->getAllDescriptionFile();
+    } if (a==aServerAdd) {
         AddServerDialog dlg(this);
         Server server;
         dlg.setServer(server);
@@ -378,6 +390,7 @@ void ServerEditor::serverRemoved(int i)
 
 void ServerEditor::retranslate()
 {
+    aServerRefresh->setText(tr("Refresh datapack servers"));
     aServerAdd->setText(tr("Add a server"));
     aServerRemove->setText(tr("Remove a server"));
     aServerInfo->setText(tr("Server information"));

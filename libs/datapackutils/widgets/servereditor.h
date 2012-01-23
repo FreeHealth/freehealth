@@ -81,7 +81,7 @@ private:
 private:
     Ui::ServerEditor *ui;
     ServerAndPackModel *m_ServerModel;
-    QAction *aServerRemove, *aServerAdd, *aServerInfo, *aInstall, *aInstallAllPack, *aRemove, *aUpdate;
+    QAction *aServerRefresh, *aServerRemove, *aServerAdd, *aServerInfo, *aInstall, *aInstallAllPack, *aRemove, *aUpdate;
     QToolBar *m_ToolBar;
 };
 

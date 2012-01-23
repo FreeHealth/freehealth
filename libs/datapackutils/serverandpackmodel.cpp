@@ -155,12 +155,14 @@ ServerAndPackModel::ServerAndPackModel(QObject *parent) :
     connect(serverManager(), SIGNAL(allServerDescriptionAvailable()), this, SLOT(updateModel()));
 }
 
+/** When setting the installChecker feature to \e on, the model computes the packages dependencies. */
 void ServerAndPackModel::setInstallChecker(const bool onOff)
 {
     m_InstallChecking = onOff;
     reset();
 }
 
+/** Allow user to check package (for installation/desinstallation). */
 void ServerAndPackModel::setPackCheckable(const bool checkable)
 {
     m_PackCheckable = checkable;
@@ -202,6 +204,7 @@ Qt::ItemFlags ServerAndPackModel::flags(const QModelIndex &index) const
     return f;
 }
 
+/** Refresh the model using the ServerManager data. */
 void ServerAndPackModel::updateModel()
 {
     createModel(this);

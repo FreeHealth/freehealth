@@ -64,6 +64,14 @@ Core::Core(QObject *parent) :
     d->m_ServerManager = new Internal::ServerManager(this);
 }
 
+Core::~Core()
+{
+    if (d) {
+        delete d;
+        d = 0;
+    }
+}
+
 bool Core::isInternetConnexionAvailable()
 {
 //    foreach(const QNetworkConfiguration &conf, QNetworkConfigurationManager().allConfigurations()) {
