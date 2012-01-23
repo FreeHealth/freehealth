@@ -59,7 +59,7 @@ public:
         BigPixmaps
     };
 
-    static Core *instance(QObject *parent = 0);
+    static Core &instance(QObject *parent = 0);
     ~Core();
 
     bool isInternetConnexionAvailable();

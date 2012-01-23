@@ -88,52 +88,52 @@ MainWindow::MainWindow(QWidget *parent) :
     qWarning();
 
     // Create and configure DataPack lib
-    DataPack::Core *core = DataPack::Core::instance();
-    core->serverManager()->setGlobalConfiguration(Utils::readTextFile(QDir::homePath() + "/datapacktmp/servers.conf.xml"));
-    core->setTemporaryCachePath(QDir::tempPath());
-    core->setPersistentCachePath(QDir::homePath() + "/datapacktmp/");
-    core->setInstallPath(QDir::homePath());
+    DataPack::Core &core = DataPack::Core::instance();
+    core.serverManager()->setGlobalConfiguration(Utils::readTextFile(QDir::homePath() + "/datapacktmp/servers.conf.xml"));
+    core.setTemporaryCachePath(QDir::tempPath());
+    core.setPersistentCachePath(QDir::homePath() + "/datapacktmp/");
+    core.setInstallPath(QDir::homePath());
 
     // Check internet connection
-    core->isInternetConnexionAvailable();
+    core.isInternetConnexionAvailable();
 
 #ifdef Q_OS_MAC
-    core->setThemePath(DataPack::Core::SmallPixmaps, "/Users/eric/Desktop/Programmation/freemedforms/global_resources/pixmap/16x16");
-    core->setThemePath(DataPack::Core::MediumPixmaps, "/Users/eric/Desktop/Programmation/freemedforms/global_resources/pixmap/32x32");
-    core->setThemePath(DataPack::Core::BigPixmaps, "/Users/eric/Desktop/Programmation/freemedforms/global_resources/pixmap/64x64");
+    core.setThemePath(DataPack::Core::SmallPixmaps, "/Users/eric/Desktop/Programmation/freemedforms/global_resources/pixmap/16x16");
+    core.setThemePath(DataPack::Core::MediumPixmaps, "/Users/eric/Desktop/Programmation/freemedforms/global_resources/pixmap/32x32");
+    core.setThemePath(DataPack::Core::BigPixmaps, "/Users/eric/Desktop/Programmation/freemedforms/global_resources/pixmap/64x64");
     // Test 1: local
-    core->serverManager()->addServer("file://Users/eric/Desktop/Programmation/freemedforms/global_resources/datapacks/default/");
+    core.serverManager()->addServer("file://Users/eric/Desktop/Programmation/freemedforms/global_resources/datapacks/default/");
 #else
-    core->setThemePath(DataPack::Core::SmallPixmaps, "/Users/eric/Desktop/Programmation/freemedforms/global_resources/pixmap/16x16");
-    core->setThemePath(DataPack::Core::MediumPixmaps, "/Users/eric/Desktop/Programmation/freemedforms/global_resources/pixmap/32x32");
-    core->setThemePath(DataPack::Core::BigPixmaps, "/Users/eric/Desktop/Programmation/freemedforms/global_resources/pixmap/64x64");
+    core.setThemePath(DataPack::Core::SmallPixmaps, "/Users/eric/Desktop/Programmation/freemedforms/global_resources/pixmap/16x16");
+    core.setThemePath(DataPack::Core::MediumPixmaps, "/Users/eric/Desktop/Programmation/freemedforms/global_resources/pixmap/32x32");
+    core.setThemePath(DataPack::Core::BigPixmaps, "/Users/eric/Desktop/Programmation/freemedforms/global_resources/pixmap/64x64");
     // Test 1: local
-    core->serverManager()->addServer("file://Users/eric/Desktop/Programmation/freemedforms/global_resources/datapacks/default/");
-    core->serverManager()->addServer("http://localhost/");
+    core.serverManager()->addServer("file://Users/eric/Desktop/Programmation/freemedforms/global_resources/datapacks/default/");
+    core.serverManager()->addServer("http://localhost/");
 #endif
 
     // Add servers
 #ifdef Q_OS_MAC
     // Test 1: local
-    core->serverManager()->addServer("file://Users/eric/Desktop/Programmation/freemedforms/global_resources/datapacks/default/");
+    core.serverManager()->addServer("file://Users/eric/Desktop/Programmation/freemedforms/global_resources/datapacks/default/");
 #else
     // Test 1: local
-    core->serverManager()->addServer("file://Users/eric/Desktop/Programmation/freemedforms/global_resources/datapacks/default/");
-    core->serverManager()->addServer("http://localhost/");
+    core.serverManager()->addServer("file://Users/eric/Desktop/Programmation/freemedforms/global_resources/datapacks/default/");
+    core.serverManager()->addServer("http://localhost/");
 #endif
 
     // Test 2: HttpPseudoSecuredZipped
     DataPack::Server http("http://test.freemedforms.com");
     http.setUrlStyle(DataPack::Server::HttpPseudoSecuredAndZipped);
-    core->serverManager()->addServer(http);
+    core.serverManager()->addServer(http);
 
     // Test 3: HttpPseudoSecuredZipped
     DataPack::Server ftp("ftp://localhost/");
     ftp.setUrlStyle(DataPack::Server::Ftp);
-    core->serverManager()->addServer(ftp);
+    core.serverManager()->addServer(ftp);
 
     // Start the check server & pack version
-    // TODO: run the core->serverManager()->getAllDescriptionFile(); in a thread ?
+    // TODO: run the core.serverManager()->getAllDescriptionFile(); in a thread ?
     // TODO: Connect the serverManager -> allDescriptionFiles available -> checkForUpdates (in a thread too)
     // TODO: if a Pack update is available -> ask user for the installation
 
@@ -150,8 +150,7 @@ MainWindow::MainWindow(QWidget *parent) :
 
 MainWindow::~MainWindow()
 {
-    DataPack::Core *core = DataPack::Core::instance();
-    Utils::saveStringToFile(core->serverManager()->xmlConfiguration(), QDir::homePath() + "/datapacktmp/servers.conf.xml", Utils::Overwrite, Utils::DontWarnUser);
+    Utils::saveStringToFile(DataPack::Core::instance().serverManager()->xmlConfiguration(), QDir::homePath() + "/datapacktmp/servers.conf.xml", Utils::Overwrite, Utils::DontWarnUser);
     delete ui;
 }
 

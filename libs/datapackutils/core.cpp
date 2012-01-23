@@ -35,11 +35,11 @@ namespace  {
 static DataPack::Core *m_instance = 0;
 } // namespace anonymous
 
-DataPack::Core* DataPack::Core::instance(QObject *parent)
+DataPack::Core &DataPack::Core::instance(QObject *parent)
 {
     if (!m_instance)
         m_instance = new Core(parent);
-    return m_instance;
+    return *m_instance;
 }
 
 namespace DataPack {

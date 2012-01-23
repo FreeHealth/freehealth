@@ -44,7 +44,7 @@ using namespace DataPack;
 using namespace Internal;
 using namespace Trans::ConstantTranslations;
 
-static inline DataPack::Core *core() {return DataPack::Core::instance();}
+static inline DataPack::Core &core() { return DataPack::Core::instance(); }
 
 ReplyData::ReplyData(QNetworkReply *reply, Server *server, Server::FileRequested fileType) {
     this->reply = reply;
@@ -182,7 +182,7 @@ void HttpServerEngine::afterServerConfigurationDownload(const ReplyData &data)
     case Server::HttpPseudoSecuredNotZipped:
     {
         // Save to persistentCache path
-        Utils::saveStringToFile(data.response, core()->persistentCachePath() + QDir::separator() + server->uuid() + QDir::separator() + "server.conf.xml");
+        Utils::saveStringToFile(data.response, core().persistentCachePath() + QDir::separator() + server->uuid() + QDir::separator() + "server.conf.xml");
         // Read the XML from the buffer
         server->fromXml(data.response);
         downloadPackDescriptionNeeded = true;
@@ -191,7 +191,7 @@ void HttpServerEngine::afterServerConfigurationDownload(const ReplyData &data)
     case Server::HttpPseudoSecuredAndZipped:
     {
         // save buffer to tmp zip file
-        QString zipName = core()->persistentCachePath() + QDir::separator() + "datapacktmp" + QDir::separator() + server->uuid() + QDir::separator() + "serverconf.zip";
+        QString zipName = core().persistentCachePath() + QDir::separator() + "datapacktmp" + QDir::separator() + server->uuid() + QDir::separator() + "serverconf.zip";
         QDir().mkpath(QFileInfo(zipName).absolutePath());
         QFile zip(zipName);
         if (!zip.open(QFile::WriteOnly | QFile::Text)) {

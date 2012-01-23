@@ -24,7 +24,9 @@ HEADERS += datapack_exporter.h \
     serverandpackmodel.h \
     iserverengine.h \
     localserverengine.h \
-    httpserverengine.h
+    httpserverengine.h \
+    packmodel.h \
+    servermodel.h
 
 SOURCES += \
     servermanager.cpp \
@@ -42,7 +44,9 @@ SOURCES += \
     serverandpackmodel.cpp \
     iserverengine.cpp \
     localserverengine.cpp \
-    httpserverengine.cpp
+    httpserverengine.cpp \
+    packmodel.cpp \
+    servermodel.cpp
 
 FORMS += \
     widgets/servereditor.ui \

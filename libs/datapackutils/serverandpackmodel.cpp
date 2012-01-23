@@ -45,9 +45,9 @@
 using namespace DataPack;
 using namespace Trans::ConstantTranslations;
 
-static inline DataPack::Core *core() {return DataPack::Core::instance();}
-static inline Internal::ServerManager *serverManager() {return qobject_cast<Internal::ServerManager*>(core()->serverManager());}
-static inline QIcon icon(const QString &name, DataPack::Core::ThemePath path = DataPack::Core::MediumPixmaps) {return QIcon(DataPack::Core::instance()->icon(name, path));}
+static inline DataPack::Core &core() { return DataPack::Core::instance(); }
+static inline Internal::ServerManager *serverManager() { return qobject_cast<Internal::ServerManager*>(core().serverManager()); }
+static inline QIcon icon(const QString &name, DataPack::Core::ThemePath path = DataPack::Core::MediumPixmaps) { return QIcon(core().icon(name, path)); }
 
 namespace {
 

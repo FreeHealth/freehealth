@@ -60,8 +60,10 @@ void HtmlDelegate::paint(QPainter *painter, const QStyleOptionViewItem &option, 
     doc.setHtml(changeColors(option, optionV4.text));
 
     // Painting item without text
+    QString backupText = optionV4.text;
     optionV4.text = QString();
     style->drawControl(QStyle::CE_ItemViewItem, &optionV4, painter);
+    optionV4.text = backupText;
 
     QAbstractTextDocumentLayout::PaintContext ctx;
 
@@ -87,7 +89,8 @@ QSize HtmlDelegate::sizeHint(const QStyleOptionViewItem &option, const QModelInd
     QTextDocument doc;
     doc.setHtml(options.text);
     doc.setTextWidth(options.rect.width());
-    return QSize(doc.idealWidth(), doc.size().height());
+    return QSize(options.rect.width(), doc.size().height());
+    //return QSize(doc.idealWidth(), doc.size().height());
 }
 
 } // namespace Utils

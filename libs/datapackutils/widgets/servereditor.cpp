@@ -43,6 +43,7 @@
 #include <datapackutils/core.h>
 #include <datapackutils/servermanager.h>
 #include <datapackutils/serverandpackmodel.h>
+#include "servermodel.h"
 
 #include <QStandardItemModel>
 #include <QToolBar>
@@ -54,9 +55,9 @@
 using namespace DataPack;
 using namespace Trans::ConstantTranslations;
 
-static inline DataPack::Core *core() {return DataPack::Core::instance();}
-static inline Internal::ServerManager *serverManager() {return qobject_cast<Internal::ServerManager*>(core()->serverManager());}
-static inline QIcon icon(const QString &name, DataPack::Core::ThemePath path = DataPack::Core::MediumPixmaps) {return QIcon(DataPack::Core::instance()->icon(name, path));}
+static inline DataPack::Core &core() { return DataPack::Core::instance(); }
+static inline Internal::ServerManager *serverManager() { return qobject_cast<Internal::ServerManager*>(core().serverManager()); }
+static inline QIcon icon(const QString &name, DataPack::Core::ThemePath path = DataPack::Core::MediumPixmaps) { return QIcon(core().icon(name, path)); }
 
 namespace {
 
@@ -103,8 +104,10 @@ ServerEditor::ServerEditor(QWidget *parent) :
     m_ServerModel->setPackCheckable(true);
     m_ServerModel->setInstallChecker(true);
     m_ServerModel->setColumnCount(1);
-    ui->serverView->setModel(m_ServerModel);
-//    ui->serverView->
+
+    m_serverModel = new ServerModel(this);
+    ui->serverView->setModel(m_serverModel);
+//    ui->serverView->setModel(m_ServerModel);
     Utils::HtmlDelegate *delegate = new Utils::HtmlDelegate;
     ui->serverView->setItemDelegate(delegate);
     ui->serverView->setStyleSheet(::CSS);

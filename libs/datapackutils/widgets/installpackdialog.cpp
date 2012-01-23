@@ -36,8 +36,8 @@
 
 using namespace DataPack;
 
-static inline DataPack::Core *core() {return DataPack::Core::instance();}
-static inline DataPack::IServerManager *serverManager() {return DataPack::Core::instance()->serverManager();}
+static inline DataPack::Core &core() { return DataPack::Core::instance(); }
+static inline DataPack::IServerManager *serverManager() { return DataPack::Core::instance().serverManager(); }
 
 namespace {
 const char * const CSS =
