@@ -11,7 +11,6 @@
 #include <utils/global.h>
 
 #include <QDir>
-#include <QDesktopWidget>
 #include <QNetworkAccessManager>
 #include <QNetworkRequest>
 #include <QNetworkReply>
@@ -88,12 +87,14 @@ MainWindow::MainWindow(QWidget *parent) :
     ui->setupUi(this);
     qWarning();
 
+    // Create and configure DataPack lib
     DataPack::Core *core = DataPack::Core::instance();
     core->serverManager()->setGlobalConfiguration(Utils::readTextFile(QDir::homePath() + "/datapacktmp/servers.conf.xml"));
     core->setTemporaryCachePath(QDir::tempPath());
     core->setPersistentCachePath(QDir::homePath() + "/datapacktmp/");
     core->setInstallPath(QDir::homePath());
 
+    // Check internet connection
     core->isInternetConnexionAvailable();
 
 #ifdef Q_OS_MAC
@@ -110,6 +111,17 @@ MainWindow::MainWindow(QWidget *parent) :
     core->serverManager()->addServer("file://Users/eric/Desktop/Programmation/freemedforms/global_resources/datapacks/default/");
     core->serverManager()->addServer("http://localhost/");
 #endif
+
+    // Add servers
+#ifdef Q_OS_MAC
+    // Test 1: local
+    core->serverManager()->addServer("file://Users/eric/Desktop/Programmation/freemedforms/global_resources/datapacks/default/");
+#else
+    // Test 1: local
+    core->serverManager()->addServer("file://Users/eric/Desktop/Programmation/freemedforms/global_resources/datapacks/default/");
+    core->serverManager()->addServer("http://localhost/");
+#endif
+
     // Test 2: HttpPseudoSecuredZipped
     DataPack::Server http("http://test.freemedforms.com");
     http.setUrlStyle(DataPack::Server::HttpPseudoSecuredAndZipped);
@@ -120,20 +132,12 @@ MainWindow::MainWindow(QWidget *parent) :
     ftp.setUrlStyle(DataPack::Server::Ftp);
     core->serverManager()->addServer(ftp);
 
-//    testServerDescription();
-//    serverDescr = getDescription();
+    // Start the check server & pack version
+    // TODO: run the core->serverManager()->getAllDescriptionFile(); in a thread ?
+    // TODO: Connect the serverManager -> allDescriptionFiles available -> checkForUpdates (in a thread too)
+    // TODO: if a Pack update is available -> ask user for the installation
 
-    // Try to download redirected
-//    QNetworkAccessManager *manager = new QNetworkAccessManager(this);
-//    QNetworkRequest request;
-//    request.setUrl(QUrl("http://test.freemedforms.com/get-serverconf")); // Download the server configuration
-//    request.setRawHeader("User-Agent", "FreeMedForms");
-
-//    QNetworkReply *reply = manager->get(request);
-//    connect(reply, SIGNAL(finished()), this, SLOT(slotReadyRead()));
-//    connect(reply, SIGNAL(error(QNetworkReply::NetworkError)),
-//            this, SLOT(slotError(QNetworkReply::NetworkError)));
-
+    // Create the ServerEditor view for the test
     DataPack::ServerEditor *serverEditor = new DataPack::ServerEditor(this);
     setCentralWidget(serverEditor);
 
@@ -141,10 +145,7 @@ MainWindow::MainWindow(QWidget *parent) :
 //    dlg.setDescription(serverDescr);
 //    dlg.exec();
 
-//    Utils::resizeAndCenter(this, qApp->desktop());
-    show();
     resize(900,600);
-    Utils::centerWidget(this, qApp->desktop());
 }
 
 MainWindow::~MainWindow()
@@ -154,19 +155,3 @@ MainWindow::~MainWindow()
     delete ui;
 }
 
-void MainWindow::slotReadyRead()
-{
-    QNetworkReply *reply = qobject_cast<QNetworkReply*>(sender());
-    qWarning() << "Finished" << reply->isFinished() << "Error" << reply->error();
-    qWarning() << "Redirect" << reply->request().attribute(QNetworkRequest::RedirectionTargetAttribute);
-
-    QFile f(QDir::homePath() + "/test.zip");
-    f.open(QFile::ReadWrite);
-    f.write(reply->readAll());
-}
-
-void MainWindow::slotError(QNetworkReply::NetworkError error)
-{
-    QNetworkReply *reply = qobject_cast<QNetworkReply*>(sender());
-    qWarning() << "ERROR" << error << reply->error();
-}

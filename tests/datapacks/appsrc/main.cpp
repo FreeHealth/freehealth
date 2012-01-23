@@ -3,7 +3,11 @@
 #include <datapackutils/core.h>
 #include <datapackutils/iservermanager.h>
 
+#include <utils/global.h>
+
 #include <QtGui/QApplication>
+#include <QDesktopWidget>
+#include <QDebug>
 
 // Sur MacOsX : créé un compte FTP Anonyme
 // sudo dscl . -create /Users/ftp
@@ -18,6 +22,7 @@ int main(int argc, char *argv[])
 
     MainWindow w;
     w.show();
+    Utils::centerWidget(&w, qApp->desktop());
 
     return a.exec();
 }
