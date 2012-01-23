@@ -59,9 +59,11 @@ public:
     void setLocalFileName(const QString &f) {m_LocalFileName=f;}
 
     void fromXmlFile(const QString &absFileName);
-    void fromXml(const QString &fullPackConfigXml);
 
     bool operator==(const Pack &other) const;
+
+private:
+    void fromXml(const QString &fullPackConfigXml);
 
 private:
     QString m_LocalFileName;

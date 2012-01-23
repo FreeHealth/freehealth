@@ -38,7 +38,7 @@
 using namespace DataPack;
 using namespace Internal;
 
-static inline DataPack::Core *core() {return DataPack::Core::instance();}
+static inline DataPack::Core &core() {return DataPack::Core::instance();}
 
 LocalServerEngine::LocalServerEngine(IServerManager *parent) :
     IServerEngine(parent)
@@ -86,13 +86,17 @@ bool LocalServerEngine::startDownloadQueue()
             QFileInfo local(url);
             if (local.exists()) {
                 // copy pack to datapack core persistentCachePath
-                QString newPath = core()->persistentCachePath() + QDir::separator() + pack->uuid();
+                QString newPath = core().persistentCachePath() + QDir::separator() + pack->uuid();
                 QDir newDir(newPath);
                 if (!newDir.exists()) {
                     QDir().mkpath(newPath);
                 }
-                qWarning() << "    localserver downloadpack" << url << "to" << QString(newPath +  QDir::separator() + local.fileName());
                 QFile::copy(local.absoluteFilePath(), newPath +  QDir::separator() + local.fileName());
+
+                // copy pack XML config
+                QString orig = pack->localFileName();
+                QFile::copy(orig, newPath +  QDir::separator() + "packconfig.xml");
+
 
             }
         }

@@ -105,6 +105,7 @@ bool Pack::isMd5Checked() const
 */
 void Pack::fromXmlFile(const QString &absFileName)
 {
+    setLocalFileName(absFileName);
     fromXml(Utils::readTextFile(absFileName, Utils::DontWarnUser));
 }
 
