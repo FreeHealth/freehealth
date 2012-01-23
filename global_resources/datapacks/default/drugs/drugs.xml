@@ -5,6 +5,7 @@
 
   <PackDescription>
     <!-- Non translatable values -->
+    <uuid>freemedforms.certified.drugs.completebase.allcountries</uuid>
     <authors>Eric Maeker, MD</authors>
     <version>0.6.0</version>
     <fmfv>0.6.2</fmfv>
@@ -14,7 +15,8 @@
     <icon>__theme__/freediams.png</icon>
     <weblink></weblink>
     <bibliography/>
-    <file>master.zip</file>
+    <file>drugs/master.zip</file>
+    <unziptopath>drugs</unziptopath>
     <size>17038466</size>
     <md5>ccca9102017e991cd0ce12e5d20394b2</md5>
     <sha1></sha1>

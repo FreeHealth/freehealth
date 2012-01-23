@@ -61,6 +61,8 @@ public:
     void fromXmlFile(const QString &absFileName);
     void fromXml(const QString &fullPackConfigXml);
 
+    bool operator==(const Pack &other) const;
+
 private:
     QString m_LocalFileName;
     bool m_Sha1Checked, m_Md5Checked;
@@ -68,6 +70,9 @@ private:
     PackDependencies m_depends;
 };
 
+
 }  // End namespace DataPack
+
+DATAPACK_EXPORT QDebug operator<<(QDebug dbg, const DataPack::Pack &c);
 
 #endif // DATAPACK_PACK_H

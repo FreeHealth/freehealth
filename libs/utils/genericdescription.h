@@ -92,10 +92,11 @@ public:
     };
 
     GenericDescription(const QString &rootTag = QString::null);
-
     virtual ~GenericDescription();
 
     void setRootTag(const QString &rootTag);
+    void setSourceFileName(const QString &absFileName);
+    QString sourceFileName() const;
 
     virtual void clear();
 
@@ -131,7 +132,7 @@ private:
 
 private:
     QList<Utils::GenericUpdateInformation> m_UpdateInfos;
-    QString m_RootTag;
+    QString m_RootTag, m_SourceFileName;
     QHash<int, QString> m_TranslatableExtra, m_NonTranslatableExtra;
     QHash<QString, QHash<int, QVariant> > m_Data;
 };

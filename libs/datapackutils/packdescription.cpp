@@ -165,6 +165,7 @@ PackDescription::PackDescription() :
     Utils::GenericDescription("PackDescription")
 {
     addNonTranslatableExtraData(Size, "size");
+    addNonTranslatableExtraData(UnzipToPath, "unziptopath");
     addNonTranslatableExtraData(Md5, "md5");
     addNonTranslatableExtraData(Sha1, "sha1");
 }

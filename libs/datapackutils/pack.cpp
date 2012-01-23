@@ -126,3 +126,24 @@ void Pack::fromXml(const QString &fullPackConfigXml)
     m_descr.fromDomElement(descr);
     m_depends.fromDomElement(dep);
 }
+
+bool Pack::operator==(const Pack &other) const
+{
+    return (this->uuid()==other.uuid() &&
+            this->md5ControlChecksum()==other.md5ControlChecksum() &&
+            this->sha1ControlChecksum()==other.sha1ControlChecksum());
+}
+
+QDebug operator<<(QDebug dbg, const DataPack::Pack &p)
+{
+    dbg.nospace() << "Pack("
+                  << p.uuid()
+                  << ", "
+                  << p.version()
+                  << ", "
+                  << p.serverFileName()
+                  << ")";
+    return dbg.space();
+}
+
+

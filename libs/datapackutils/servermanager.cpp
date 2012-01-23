@@ -251,6 +251,11 @@ void ServerManager::getAllDescriptionFile()
 void ServerManager::checkServerUpdates()
 {
     WARN_FUNC << m_Servers.count();
+    // Get installed packs uuid && version
+
+    // Compare installed pack versions with server description
+
+
 //    for(int i=0; i < m_Servers.count(); ++i) {
 //        Server &s = m_Servers[i];
 //        qDebug("%d: %s", i, qPrintable(s.url()));
@@ -354,9 +359,8 @@ void ServerManager::checkAndInstallPack(const Server &server, const Pack &pack, 
 
 }
 
-bool ServerManager::isDataPackInstalled(const Server &server, const Pack &pack)
+bool ServerManager::isDataPackInstalled(const Pack &pack)
 {
-    Q_UNUSED(server);
     Q_UNUSED(pack);
     // TODO
     return false;
@@ -369,25 +373,41 @@ bool ServerManager::isDataPackInstalled(const QString &packUid, const QString &p
     return false;
 }
 
-bool ServerManager::installDataPack(const Server &server, const Pack &pack, QProgressBar *progressBar)
+bool ServerManager::installDataPack(const Pack &pack, QProgressBar *progressBar)
 {
     Q_ASSERT(progressBar);
-    connect(this, SIGNAL(packDownloaded(Server,Pack,QProgressBar*)), this, SLOT(checkAndInstallPack(Server,Pack,QProgressBar*)));
-    // dialog with things to install/update
+
+    // Dialog checks packs (dependencies...)
     InstallPackDialog dlg;
     dlg.setPackToInstall(pack);
-    dlg.exec();
-
-    if (!server.isLocalServer()) {
-        downloadDataPack(server, pack, progressBar);
-    } else {
-        // copy file to install path
-//        QFileInfo info(pack.serverFileName());
-//        QString to = m_installPath + QDir::separator() + pack.serverFileName();
-//        QFile f(server.url(pack.serverFileName()));
-        Q_EMIT packDownloaded(server, pack, progressBar);
+    if (dlg.exec()==QDialog::Rejected) {
+        return false;
     }
 
+    // TODO: Create a new view to show progressBars and infos
+
+    // Get the pack list to install
+    QList<Pack> packs = dlg.packsToInstall();
+
+    // Download all the packs
+    for(int i = 0; i<packs.count();++i) {
+        // get the server
+        Server server = getServerForPack(packs.at(i));
+        qWarning() << "TESTING Pack"<<packs.at(i).uuid() << "Server found" << server.uuid();
+        if (!server.isNull()) {
+            // Download the pack from this server
+            for(int j=0; j<m_WorkingEngines.count(); ++j) {
+                if (m_WorkingEngines.at(j)->managesServer(server)) {
+                    ServerEngineQuery query;
+                    query.downloadPackFile = true;
+                    query.pack = &packs[i];
+                    query.server = &server;
+                    m_WorkingEngines.at(j)->addToDownloadQueue(query);
+                    m_WorkingEngines.at(j)->startDownloadQueue();
+                }
+            }
+        }
+    }
     return true;
 }
 
@@ -440,7 +460,6 @@ void ServerManager::connectAndUpdate(int index)
 //        m_Servers.at(index).connectAndUpdate();
 }
 
-
 QList<PackDescription> ServerManager::getPackDescription(const Server &server)
 {
     WARN_FUNC;
@@ -468,6 +487,18 @@ QList<Pack> ServerManager::getPackForServer(const Server &server)
 {
     createServerPackList(server);
     return m_Packs.values(server.uuid());
+}
+
+Server ServerManager::getServerForPack(const Pack &pack)
+{
+    for(int i=0; i<m_Servers.count();++i) {
+        createServerPackList(m_Servers.at(i));
+        const QString &uuid = m_Servers.at(i).uuid();
+        if (m_Packs.values(uuid).contains(pack)) {
+            return m_Servers.at(i);
+        }
+    }
+    return Server();
 }
 
 void ServerManager::createServerPackList(const Server &server)

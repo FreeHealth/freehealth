@@ -63,13 +63,21 @@ Server::Server(const QString &url) :
     setUrl(url);
 }
 
+/** Return true if the server is null or invalid. */
+bool Server::isNull() const
+{
+    return m_Url.isEmpty() && uuid().isEmpty();
+}
+
 /** Return the recorded UUID extracted for the server description. \sa Server::fromXml(), ServerDescription */
 QString Server::uuid() const
 {
-    if (m_Desc.data(ServerDescription::Uuid).toString().isEmpty()) {
-        return m_Url.toAscii().toBase64();
+    const QString &uuid = m_Desc.data(ServerDescription::Uuid).toString();
+    if (uuid.isEmpty()) {
+        if (!m_Url.isEmpty())
+            return m_Url.toAscii().toBase64();
     }
-    return m_Desc.data(ServerDescription::Uuid).toString();
+    return uuid;
 }
 
 /** Define the URL of the server. All URL must be unique (url is used as uuid). */
@@ -133,6 +141,22 @@ QString Server::url(const FileRequested &file, const QString &fileName) const
                 info.setFile(t.replace("file:/", "") + fileName);
             }
             return info.absoluteFilePath();
+        }
+        case HttpPseudoSecuredAndZipped: return m_Url + "/get-" + fileName;
+        case HttpPseudoSecuredNotZipped: return m_Url + "/" + fileName;
+        case Http: return m_Url + "/" + fileName;
+        case FtpZipped: return m_Url + "/" + fileName;
+        case Ftp: return m_Url + "/" + fileName;
+        }
+        break;
+    }
+    case PackFile:
+    {
+        switch (m_UrlStyle) {
+        case NoStyle:
+        {
+            QString t = m_Url;
+            return QDir::cleanPath(t.replace("file:/", "")) + "/" + fileName;
         }
         case HttpPseudoSecuredAndZipped: return m_Url + "/get-" + fileName;
         case HttpPseudoSecuredNotZipped: return m_Url + "/" + fileName;

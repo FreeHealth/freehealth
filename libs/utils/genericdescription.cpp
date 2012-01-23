@@ -35,6 +35,7 @@
 #include <QDomElement>
 #include <QHash>
 #include <QString>
+#include <QDir>
 
 #include <QDebug>
 
@@ -94,6 +95,18 @@ void GenericDescription::setRootTag(const QString &rootTag)
     m_RootTag = rootTag;
     if (m_RootTag.isEmpty())
         m_RootTag = XML_ROOT_TAG;
+}
+
+/** Define the absolute path to the source file used to create this description. */
+void GenericDescription::setSourceFileName(const QString &absFileName)
+{
+    m_SourceFileName = QDir::cleanPath(absFileName);
+}
+
+/** Return the absolute path to the source file used to create this description. */
+QString GenericDescription::sourceFileName() const
+{
+    return m_SourceFileName;
 }
 
 /** Clear all data but rootTag */
@@ -161,9 +174,11 @@ bool GenericDescription::fromXmlContent(const QString &xmlContent)
 bool GenericDescription::fromXmlFile(const QString &absFileName)
 {
     // Read file content
+    m_SourceFileName.clear();
     QString xml = Utils::readTextFile(absFileName, Utils::DontWarnUser);
     if (xml.isEmpty())
         return false;
+    m_SourceFileName = QDir::cleanPath(absFileName);
     return fromXmlContent(xml);
 }
 

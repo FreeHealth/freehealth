@@ -108,6 +108,7 @@ class DATAPACK_EXPORT PackDescription : public Utils::GenericDescription
 public:
     enum ExtraNonTranslated {
         Size = NonTranslatableExtraData + 1,
+        UnzipToPath,
         Md5,
         Sha1
     };

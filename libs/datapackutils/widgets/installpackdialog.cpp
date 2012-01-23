@@ -57,13 +57,14 @@ InstallPackDialog::InstallPackDialog(QWidget *parent) :
     ui(new Ui::InstallPackDialog)
 {
     ui->setupUi(this);
+    setWindowTitle(ui->titleLabel->text());
     m_Model = new QStandardItemModel(this);
     ui->treeView->setModel(m_Model);
     ui->treeView->header()->hide();
     ui->treeView->setStyleSheet(::CSS);
     bInstallAll = ui->buttonBox->addButton(tr("Install all"), QDialogButtonBox::AcceptRole);
-    bInstallPackAndDepends = ui->buttonBox->addButton(tr("Install pack and depends"), QDialogButtonBox::AcceptRole);
-    bInstallPacksOnly = ui->buttonBox->addButton(tr("Install pack only"), QDialogButtonBox::AcceptRole);
+//    bInstallPackAndDepends = ui->buttonBox->addButton(tr("Install pack and depends"), QDialogButtonBox::AcceptRole);
+//    bInstallPacksOnly = ui->buttonBox->addButton(tr("Install pack only"), QDialogButtonBox::AcceptRole);
 }
 
 InstallPackDialog::~InstallPackDialog()
@@ -133,7 +134,7 @@ void InstallPackDialog::setPackToInstall(const QList<Pack> &packs)
         }
     }
     ui->treeView->expandAll();
-    bInstallPackAndDepends->setVisible(hasDepends);
+//    bInstallPackAndDepends->setVisible(hasDepends);
 //    bInstallPack->setVisible(hasDepends);
 }
 
@@ -142,5 +143,5 @@ QList<Pack> InstallPackDialog::packsToInstall() const
     if (result()==QDialog::Rejected) {
         return QList<Pack>();
     }
-    return QList<Pack>();
+    return m_Packs;
 }

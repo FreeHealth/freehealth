@@ -73,13 +73,13 @@ const char *const ICON_REMOVE = "remove.png";
 const char * const TITLE_CSS = "text-indent:5px;padding:5px;font-weight:bold;background:qlineargradient(spread:pad, x1:0, y1:0, x2:1, y2:0, stop:0.464 rgba(255, 255, 176, 149), stop:1 rgba(255, 255, 255, 0))";
 
 const char * const CSS =
-        "QserverView::item:hover {"
+        "serverView::item:hover {"
         "background: qlineargradient(x1: 0, y1: 0, x2: 0, y2: 1, stop: 0 #e7effd, stop: 1 #cbdaf1);"
         "}"
-        "QserverView::item:selected:active{"
+        "serverView::item:selected:active{"
         "background: qlineargradient(x1: 0, y1: 0, x2: 0, y2: 1, stop: 0 #6ea1f1, stop: 1 #567dbc);"
         "}"
-        "QserverView::item:selected:!active {"
+        "serverView::item:selected:!active {"
         "background: qlineargradient(x1: 0, y1: 0, x2: 0, y2: 1, stop: 0 #6b9be8, stop: 1 #577fbf);"
         "}";
 
@@ -123,7 +123,7 @@ ServerEditor::ServerEditor(QWidget *parent) :
     ui->packView->setStyleSheet(::CSS);
 //    ui->packView->expandAll();
 //    ui->packView->setRootIsDecorated(false);
-//    ui->packView->setAlternatingRowColors(true);
+    ui->packView->setAlternatingRowColors(true);
     ui->packView->setEditTriggers(QTreeView::NoEditTriggers);
 
     // Manage central view
@@ -150,7 +150,9 @@ ServerEditor::ServerEditor(QWidget *parent) :
     // END TEST
 
     // Select first row of servers
+    ui->serverView->setCurrentIndex(m_ServerModel->index(0,0));
     ui->serverView->selectionModel()->select(m_ServerModel->index(0,0), QItemSelectionModel::SelectCurrent);
+    populateServerView(0);
 }
 
 ServerEditor::~ServerEditor()
@@ -240,7 +242,7 @@ void ServerEditor::populateServerView(const int serverId)
     // Update server view
     const QString &format = QLocale().dateTimeFormat(QLocale::LongFormat);
     const Server &server = serverManager()->getServerAt(serverId);
-    const QString &uuid = server.uuid();
+//    const QString &uuid = server.uuid();
     ui->serverName->setText(server.description().data(ServerDescription::Label).toString());
     ui->shortServerDescription->setText(server.description().data(ServerDescription::ShortDescription).toString());
     ui->serverVersion->setText(server.description().data(ServerDescription::Version).toString());
@@ -271,15 +273,22 @@ void ServerEditor::populatePackView(const int serverId, const int packId)
     QString summary;
 
     // short description, version date and author
-    summary = QString("<span style=\"font-weight:bold;font-size:large;\">%1</span><br />"
-                       "<span style=\"font-size:small;color:gray\">"
-                      "%2 (%3 - %4) from %5</span>"
-                       "%6")
+    summary = QString("<p style=\"font-weight:bold;font-size:large;\">%1</p>"
+                      "<p style=\"font-size:small;margin-left:10px;color:gray\">"
+                      "%2: %3<br />"
+                      "%4: %5<br />"
+                      "%6: %7<br />"
+                      "%8: %9"
+                      "</p>"
+                       )
             .arg(descr.data(PackDescription::ShortDescription).toString())
             .arg(tkTr(Trans::Constants::VERSION))
             .arg(descr.data(PackDescription::Version).toString())
+            .arg(tr("Last modification"))
             .arg(descr.data(PackDescription::LastModificationDate).toDate().toString("dd MM yyyy"))
+            .arg(tkTr(Trans::Constants::AUTHOR))
             .arg(descr.data(PackDescription::Author).toString())
+            .arg(tkTr(Trans::Constants::VENDOR))
             .arg(vendor)
             ;
 
@@ -369,7 +378,7 @@ void ServerEditor::packActionTriggered(QAction *a)
     const Pack &pack = list.at(packId);
 
     if (a==aInstall) {
-        serverManager()->installDataPack(server, pack, ui->processProgressBar);
+        serverManager()->installDataPack(pack, ui->processProgressBar);
     } else if (a==aRemove) {
 
     } else if (a==aUpdate) {
@@ -402,6 +411,7 @@ void ServerEditor::retranslate()
     aRemove->setText(tkTr(Trans::Constants::REMOVE_TEXT));
     aUpdate->setText(tkTr(Trans::Constants::UPDATE));
 }
+
 void ServerEditor::changeEvent(QEvent *e)
 {
     if (e->type()==QEvent::LanguageChange) {

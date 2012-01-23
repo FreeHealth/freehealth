@@ -5,9 +5,9 @@
 
   <ServerDescription>
     <!-- Non translatable values -->
-    <uuid>freemedforms_be79aa858c0f4d188b62c3b17f408da6_httpzipped</uuid>
+    <uuid>freemedforms.certified.httpserver</uuid>
     <authors>Eric Maeker, MD</authors>
-    <version>0.6.0</version>
+    <version>0.6.2</version>
     <fmfv>0.6.2</fmfv>
     <fdv>0.6.4</fdv>
     <cdate>2011-11-26</cdate>

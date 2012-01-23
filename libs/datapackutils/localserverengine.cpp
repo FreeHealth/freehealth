@@ -26,11 +26,19 @@
  ***************************************************************************/
 #include "localserverengine.h"
 #include "servermanager.h"
+#include "core.h"
 
 #include <utils/global.h>
 
+#include <QDir>
+#include <QFile>
+#include <QFileInfo>
+#include <QDebug>
+
 using namespace DataPack;
 using namespace Internal;
+
+static inline DataPack::Core *core() {return DataPack::Core::instance();}
 
 LocalServerEngine::LocalServerEngine(IServerManager *parent) :
     IServerEngine(parent)
@@ -62,13 +70,31 @@ bool LocalServerEngine::startDownloadQueue()
     for(int i = 0; i < m_queue.count(); ++i) {
         const ServerEngineQuery &query = m_queue.at(i);
         Server *server = query.server;
-        // Read the local server config
-        server->fromXml(Utils::readTextFile(server->url(Server::ServerConfigurationFile), Utils::DontWarnUser));
-        // Read the local pack config
-        for(int j = 0; j < server->content().packDescriptionFileNames().count(); ++j) {
-            Pack p;
-            p.fromXmlFile(server->url(Server::PackDescriptionFile, server->content().packDescriptionFileNames().at(j)));
-            serverManager()->registerPack(*server, p);
+        if (query.downloadDescriptionFiles) {
+            // Read the local server config
+            server->fromXml(Utils::readTextFile(server->url(Server::ServerConfigurationFile), Utils::DontWarnUser));
+            // Read the local pack config
+            for(int j = 0; j < server->content().packDescriptionFileNames().count(); ++j) {
+                Pack p;
+                p.fromXmlFile(server->url(Server::PackDescriptionFile, server->content().packDescriptionFileNames().at(j)));
+                serverManager()->registerPack(*server, p);
+            }
+        }
+        if (query.downloadPackFile) {
+            Pack *pack = query.pack;
+            QString url = server->url(Server::PackFile, pack->serverFileName());
+            QFileInfo local(url);
+            if (local.exists()) {
+                // copy pack to datapack core persistentCachePath
+                QString newPath = core()->persistentCachePath() + QDir::separator() + pack->uuid();
+                QDir newDir(newPath);
+                if (!newDir.exists()) {
+                    QDir().mkpath(newPath);
+                }
+                qWarning() << "    localserver downloadpack" << url << "to" << QString(newPath +  QDir::separator() + local.fileName());
+                QFile::copy(local.absoluteFilePath(), newPath +  QDir::separator() + local.fileName());
+
+            }
         }
     }
     m_queue.clear();
