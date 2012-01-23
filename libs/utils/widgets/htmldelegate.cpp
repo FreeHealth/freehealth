@@ -71,7 +71,8 @@ void HtmlDelegate::paint(QPainter *painter, const QStyleOptionViewItem &option, 
     if (optionV4.state & QStyle::State_Selected)
         ctx.palette.setColor(QPalette::Text, optionV4.palette.color(QPalette::Active, QPalette::HighlightedText));
 
-    QRect textRect = style->subElementRect(QStyle::SE_ItemViewItemText, &optionV4);
+    //QRect textRect = style->subElementRect(QStyle::SE_ItemViewItemText, &optionV4);
+    QRect textRect = optionV4.rect;
     painter->save();
     painter->translate(textRect.topLeft());
     painter->setClipRect(textRect.translated(-textRect.topLeft()));
@@ -89,8 +90,7 @@ QSize HtmlDelegate::sizeHint(const QStyleOptionViewItem &option, const QModelInd
     QTextDocument doc;
     doc.setHtml(options.text);
     doc.setTextWidth(options.rect.width());
-    return QSize(options.rect.width(), doc.size().height());
-    //return QSize(doc.idealWidth(), doc.size().height());
+    return QSize(doc.idealWidth(), doc.size().height());
 }
 
 } // namespace Utils
