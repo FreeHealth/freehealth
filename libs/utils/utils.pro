@@ -51,7 +51,8 @@ HEADERS += global_exporter.h \
     widgets/genericdescriptioneditor.h \
     widgets/genericupdateinformationeditor.h \
     widgets/genericinformationeditordialog.h \
-    widgets/htmldelegate.h
+    widgets/htmldelegate.h \
+    widgets/uppercasevalidator.h
 #    widgets/dialogbuttonbox.h
 
 SOURCES += global.cpp \
@@ -114,6 +115,7 @@ FORMS += \
     widgets/genericdescriptioneditor.ui \
     widgets/genericupdateinformationeditor.ui \
     widgets/genericinformationeditordialog.ui
+
 
 
 
