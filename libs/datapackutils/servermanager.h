@@ -62,15 +62,6 @@ public:
     bool setGlobalConfiguration(const QString &xmlContent, QString *errorMsg = 0);
     QString xmlConfiguration() const;
 
-    void setInstallPath(const QString &absPath);
-    QString installPath() const;
-
-    void setPersistentCachePath(const QString &absPath);
-    QString persistentCachePath() const;
-
-    void setTemporaryCachePath(const QString &absPath);
-    QString temporaryCachePath() const;
-
     // Server list
     bool addServer(const QString &url);
     bool addServer(const Server &server);
@@ -85,6 +76,7 @@ public:
 
 private Q_SLOTS:
     void engineDescriptionDownloadDone();
+    void packDownloadDone();
 
 
     ////////////////////////////////////////////////
@@ -135,10 +127,10 @@ private:
     void checkServerUpdatesAfterDownload();
 
 private:
-    QString m_installPath, m_tmpCachePath, m_persistentCachePath;
     QVector<Server> m_Servers;
     QMultiHash<QString, PackDescription> m_PackDescriptions;
     QMultiHash<QString, Pack> m_Packs;
+    QList<Pack> m_PacksToInstall;
 
     LocalServerEngine *m_LocalEngine;
     HttpServerEngine *m_HttpEngine;

@@ -38,17 +38,18 @@ namespace Internal {
 
 struct ServerEngineQuery {
     ServerEngineQuery() :
+        server(0), ident(0), pack(0),
         forceDescriptionFromLocalCache(false),
-        downloadDescriptionFiles(true),
+        downloadDescriptionFiles(false),
         downloadPackFile(false)
     {}
 
     Server *server;
     ServerIdentification *ident;
+    Pack *pack;
     bool forceDescriptionFromLocalCache;
     bool downloadDescriptionFiles;
     bool downloadPackFile;
-    Pack *pack;
 };
 
 class IServerEngine : public QObject

@@ -53,7 +53,7 @@
         <enum>QFrame::Box</enum>
        </property>
        <property name="currentIndex">
-        <number>0</number>
+        <number>1</number>
        </property>
        <widget class="QWidget" name="serverPage">
         <layout class="QGridLayout" name="gridLayout_5">
@@ -282,29 +282,6 @@
            <property name="arrowType">
             <enum>Qt::NoArrow</enum>
            </property>
-          </widget>
-         </item>
-         <item row="4" column="0" colspan="3">
-          <widget class="QGroupBox" name="groupBox_7">
-           <property name="title">
-            <string>Process</string>
-           </property>
-           <layout class="QGridLayout" name="gridLayout_9">
-            <item row="0" column="0">
-             <widget class="QLabel" name="processLabel">
-              <property name="text">
-               <string/>
-              </property>
-             </widget>
-            </item>
-            <item row="0" column="1">
-             <widget class="QProgressBar" name="processProgressBar">
-              <property name="value">
-               <number>24</number>
-              </property>
-             </widget>
-            </item>
-           </layout>
           </widget>
          </item>
          <item row="2" column="0" colspan="3">

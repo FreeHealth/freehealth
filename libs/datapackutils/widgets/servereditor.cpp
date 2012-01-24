@@ -378,7 +378,7 @@ void ServerEditor::packActionTriggered(QAction *a)
     const Pack &pack = list.at(packId);
 
     if (a==aInstall) {
-        serverManager()->installDataPack(pack, ui->processProgressBar);
+        serverManager()->installDataPack(pack);
     } else if (a==aRemove) {
 
     } else if (a==aUpdate) {

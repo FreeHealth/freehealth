@@ -24,8 +24,17 @@
  *   Contributors :                                                        *
  *       NAME <MAIL@ADRESS>                                                *
  ***************************************************************************/
+
+/**
+  \class DataPack::Core
+  Central place for the management of DataPacks. This core mainly contains paths and single objects like
+  the unique DataPack::IServerManager to use.
+*/
+
 #include "core.h"
 #include "servermanager.h"
+
+#include <utils/log.h>
 
 #include <QDir>
 
@@ -35,6 +44,7 @@ namespace  {
 static DataPack::Core *m_instance = 0;
 } // namespace anonymous
 
+/** Creates and return the singleton of the core */
 DataPack::Core &DataPack::Core::instance(QObject *parent)
 {
     if (!m_instance)
@@ -57,6 +67,7 @@ public:
 }  // End namespace Internal
 }  // End namespace DataPack
 
+/** Constructor */
 Core::Core(QObject *parent) :
     QObject(parent),
     d(new Internal::CorePrivate)
@@ -64,6 +75,7 @@ Core::Core(QObject *parent) :
     d->m_ServerManager = new Internal::ServerManager(this);
 }
 
+/** Destructor */
 Core::~Core()
 {
     if (d) {
@@ -72,6 +84,7 @@ Core::~Core()
     }
 }
 
+/** Test the internet connection and return the state of availability of it. */
 bool Core::isInternetConnexionAvailable()
 {
 //    foreach(const QNetworkConfiguration &conf, QNetworkConfigurationManager().allConfigurations()) {
@@ -81,49 +94,73 @@ bool Core::isInternetConnexionAvailable()
     return true;
 }
 
+/** Return the single DataPack::IServerManager in use in the lib. */
 IServerManager *Core::serverManager() const
 {
     return d->m_ServerManager;
 }
 
+/** Define the path where to install datapacks. */
 void Core::setInstallPath(const QString &absPath)
 {
     d->m_InstallPath = QDir::cleanPath(absPath);
-    d->m_ServerManager->setInstallPath(d->m_InstallPath);
+    QDir test(d->m_InstallPath);
+    if (!test.exists()) {
+        if (!test.mkpath(test.absolutePath()))
+            LOG_ERROR(QString("Unable to create DataPack::InstallDir %1").arg(d->m_InstallPath));
+    }
 }
 
+/** Return the path where to install datapacks. */
 QString Core::installPath() const
 {
     return d->m_InstallPath;
 }
 
+/** Define the path where to cache datapacks. This path must not be cleaned and should contain all downloaded files. */
 void Core::setPersistentCachePath(const QString &absPath)
 {
     d->m_PersistentCachePath = QDir::cleanPath(absPath);
-    d->m_ServerManager->setPersistentCachePath(d->m_PersistentCachePath);
+    QDir test(d->m_PersistentCachePath);
+    if (!test.exists()) {
+        if (!test.mkpath(test.absolutePath()))
+            LOG_ERROR(QString("Unable to create DataPack::PersistentCache %1").arg(d->m_PersistentCachePath));
+    }
 }
 
+/** Return the path where to cache datapacks. This path must not be cleaned and should contain all downloaded files. */
 QString Core::persistentCachePath() const
 {
     return d->m_PersistentCachePath;
 }
 
+/** Define the path to use a volatile cache. */
 void Core::setTemporaryCachePath(const QString &absPath)
 {
     d->m_TmpCachePath = QDir::cleanPath(absPath);
-    d->m_ServerManager->setTemporaryCachePath(d->m_TmpCachePath);
+    QDir test(d->m_TmpCachePath);
+    if (!test.exists()) {
+        if (!test.mkpath(test.absolutePath()))
+            LOG_ERROR(QString("Unable to create DataPack::TempCache %1").arg(d->m_TmpCachePath));
+    }
 }
 
+/** Return the path to use a volatile cache. */
 QString Core::temporaryCachePath() const
 {
     return d->m_TmpCachePath;
 }
 
+/** Define the theme path. */
 void Core::setThemePath(ThemePath path, const QString &absPath)
 {
+    QDir test(absPath);
+    if (!test.exists())
+        LOG_ERROR(QString("Theme path does not exist %1").arg(test.absolutePath()));
     d->m_ThemePath.insert(path, QDir::cleanPath(absPath));
 }
 
+/** Return the theme path. */
 QString Core::icon(const QString &name, ThemePath path)
 {
     return QString("%1/%2").arg(d->m_ThemePath.value(path)).arg(name);

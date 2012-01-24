@@ -91,8 +91,8 @@ MainWindow::MainWindow(QWidget *parent) :
     DataPack::Core &core = DataPack::Core::instance();
     core.serverManager()->setGlobalConfiguration(Utils::readTextFile(QDir::homePath() + "/datapacktmp/servers.conf.xml"));
     core.setTemporaryCachePath(QDir::tempPath());
-    core.setPersistentCachePath(QDir::homePath() + "/datapacktmp/");
-    core.setInstallPath(QDir::homePath());
+    core.setPersistentCachePath(QDir::homePath() + "/datapack/tmp/");
+    core.setInstallPath(QDir::homePath() + "/datapack/install/");
 
     // Check internet connection
     core.isInternetConnexionAvailable();

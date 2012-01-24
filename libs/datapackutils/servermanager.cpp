@@ -28,6 +28,7 @@
 #include "widgets/installpackdialog.h"
 #include "localserverengine.h"
 #include "httpserverengine.h"
+#include "core.h"
 
 #include <utils/log.h>
 #include <utils/global.h>
@@ -66,6 +67,7 @@ const char * const SERVER_CONFIG_FILENAME   = "server.conf.xml";
 
 }  // End namespace Anonymous
 
+static inline DataPack::Core &core() {return DataPack::Core::instance();}
 
 ServerManager::ServerManager(QObject *parent) :
     IServerManager(parent)
@@ -134,36 +136,6 @@ QString ServerManager::xmlConfiguration() const
         e.setAttribute(::ATTRIB_USERUPDATEFREQUENCY, s.userUpdateFrequency());
     }
     return doc.toString(2);
-}
-
-void ServerManager::setInstallPath(const QString &absPath)
-{
-    m_installPath = QDir::cleanPath(absPath);
-}
-
-QString ServerManager::installPath() const
-{
-    return m_installPath;
-}
-
-void ServerManager::setPersistentCachePath(const QString &absPath)
-{
-    m_persistentCachePath = QDir::cleanPath(absPath);
-}
-
-QString ServerManager::persistentCachePath() const
-{
-    return m_persistentCachePath;
-}
-
-void ServerManager::setTemporaryCachePath(const QString &absPath)
-{
-    m_tmpCachePath = QDir::cleanPath(absPath);
-}
-
-QString ServerManager::temporaryCachePath() const
-{
-    return m_tmpCachePath;
 }
 
 /////////////////////////////////////////////////////////////////////////////////////////
@@ -376,7 +348,9 @@ bool ServerManager::isDataPackInstalled(const QString &packUid, const QString &p
 
 bool ServerManager::installDataPack(const Pack &pack, QProgressBar *progressBar)
 {
-    Q_ASSERT(progressBar);
+    Q_ASSERT(!core().persistentCachePath().isEmpty());
+    Q_ASSERT(!core().installPath().isEmpty());
+    m_PacksToInstall.clear();
 
     // Dialog checks packs (dependencies...)
     InstallPackDialog dlg;
@@ -388,28 +362,97 @@ bool ServerManager::installDataPack(const Pack &pack, QProgressBar *progressBar)
     // TODO: Create a new view to show progressBars and infos
 
     // Get the pack list to install
-    QList<Pack> packs = dlg.packsToInstall();
+    m_PacksToInstall = dlg.packsToInstall();
+    LOG(QString("Pack installation requested. %1 pack(s) to install").arg(m_PacksToInstall.count()));
 
     // Download all the packs
-    for(int i = 0; i<packs.count();++i) {
+    for(int i = 0; i<m_PacksToInstall.count(); ++i) {
         // get the server
-        Server server = getServerForPack(packs.at(i));
-        qWarning() << "TESTING Pack"<<packs.at(i).uuid() << "Server found" << server.uuid();
+        Pack &pack = m_PacksToInstall[i];
+        Server server = getServerForPack(pack);
+//        qWarning() << "TESTING Pack" << pack.uuid() << "Server found" << server.uuid();
         if (!server.isNull()) {
+            // Pack already downloaded ?
+            QFileInfo info(core().persistentCachePath() + QDir::separator() + pack.uuid() + QDir::separator() + QFileInfo(pack.serverFileName()).fileName());
+//            qWarning() << "   already downloaded ?" << info.exists();
+            if (info.exists()) {
+                // Test local version of the pack
+                Pack cached;
+                cached.fromXmlFile(core().persistentCachePath() + QDir::separator() + pack.uuid() + QDir::separator() + "packconfig.xml");
+                if (cached.version() == pack.version()) {
+//                    qWarning() << "   pack already downloaded" << pack.uuid() << pack.description().data(PackDescription::Version);
+                    continue;
+                } else {
+//                    qWarning() << "    Wrong version" << cached.version() << pack.version();
+                    // delete local data
+                    QFile::remove(info.absoluteFilePath());
+                    QFile::remove(core().persistentCachePath() + QDir::separator() + pack.uuid() + QDir::separator() + "packconfig.xml");
+                }
+            }
+
             // Download the pack from this server
             for(int j=0; j<m_WorkingEngines.count(); ++j) {
                 if (m_WorkingEngines.at(j)->managesServer(server)) {
                     ServerEngineQuery query;
                     query.downloadPackFile = true;
-                    query.pack = &packs[i];
+                    query.pack = &pack;
                     query.server = &server;
                     m_WorkingEngines.at(j)->addToDownloadQueue(query);
-                    m_WorkingEngines.at(j)->startDownloadQueue();
+                    LOG(QString("Adding %1 to %2 download queue").arg(pack.uuid()).arg(server.uuid()));
                 }
             }
         }
     }
+    // Start downloads
+    bool downloading = false;
+    for(int i=0; i<m_WorkingEngines.count(); ++i) {
+        if (m_WorkingEngines.at(i)->downloadQueueCount()>0) {
+            downloading = true;
+            m_WorkingEngines.at(i)->startDownloadQueue();
+            connect(m_WorkingEngines.at(i), SIGNAL(queueDowloaded()), this, SLOT(packDownloadDone()));
+        }
+    }
+    if (!downloading)
+        packDownloadDone();
     return true;
+}
+
+void ServerManager::packDownloadDone()
+{
+    Q_ASSERT(!core().persistentCachePath().isEmpty());
+    Q_ASSERT(!core().installPath().isEmpty());
+    // All engine finished ?
+    for(int i=0; i<m_WorkingEngines.count(); ++i) {
+        if (m_WorkingEngines.at(i)->downloadQueueCount()>0) {
+//            qWarning() << m_WorkingEngines.at(i) << "unfinished download";
+            return;
+        }
+    }
+
+    // Some log for debugging purpose
+    LOG(QString("Requested packs are downloaded in %1").arg(core().persistentCachePath()));
+    QStringList logPacks;
+    for(int i=0; i < m_PacksToInstall.count(); ++i) {
+        const Pack &p = m_PacksToInstall.at(i);
+        logPacks << QString("%1 (%2, %3)")
+                    .arg(p.description().data(PackDescription::Label).toString())
+                    .arg(p.uuid())
+                    .arg(p.version());
+    }
+    LOG(QString("Requested packs: %1").arg(logPacks.join("; ")));
+
+    // Copy/Unzip all packs to datapackInstallPath according to PackDescription::InstallToPath
+    for(int i=0; i < m_PacksToInstall.count(); ++i) {
+        const Pack &p = m_PacksToInstall.at(i);
+        QString pathTo = core().installPath() + QDir::separator() + p.description().data(PackDescription::UnzipToPath).toString();
+        QString packZipFileName = core().persistentCachePath() + QDir::separator() + p.uuid() + QDir::separator() + QFileInfo(p.serverFileName()).fileName();
+        QDir to(pathTo);
+        if (!to.exists()) {
+            to.mkpath(pathTo);
+        }
+        if (!QuaZipTools::unzipFile(packZipFileName, pathTo))
+            LOG_ERROR(QString("Unable to unzip pack file %1 to %2").arg(packZipFileName).arg(pathTo));
+    }
 }
 
 bool ServerManager::removeDataPack(const Server &server, const Pack &pack, QProgressBar *progressBar)
