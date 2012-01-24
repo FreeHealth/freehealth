@@ -450,9 +450,15 @@ void ServerManager::packDownloadDone()
         if (!to.exists()) {
             to.mkpath(pathTo);
         }
+        // Unzip pack to the install path
         if (!QuaZipTools::unzipFile(packZipFileName, pathTo))
             LOG_ERROR(QString("Unable to unzip pack file %1 to %2").arg(packZipFileName).arg(pathTo));
+        // Add the pack description for future analysis (update, remove...)
+        QString packDescriptionFromFileName = core().persistentCachePath() + QDir::separator() + p.uuid() + QDir::separator() + "packconfig.xml";
+        QString packDescriptionToFileName = pathTo + QDir::separator() + "packconfig.xml";
+        QFile::copy(packDescriptionFromFileName, packDescriptionToFileName);
     }
+    m_PacksToInstall.clear();
 }
 
 bool ServerManager::removeDataPack(const Server &server, const Pack &pack, QProgressBar *progressBar)
