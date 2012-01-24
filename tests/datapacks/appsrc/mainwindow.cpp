@@ -17,6 +17,8 @@
 
 #include <QDebug>
 
+static QString configurationFile() {return QDir::homePath() + "/datapack/servers.conf.xml";}
+
 static DataPack::ServerDescription getDescription()
 {
     DataPack::ServerDescription desc;
@@ -89,7 +91,7 @@ MainWindow::MainWindow(QWidget *parent) :
 
     // Create and configure DataPack lib
     DataPack::Core &core = DataPack::Core::instance();
-    core.serverManager()->setGlobalConfiguration(Utils::readTextFile(QDir::homePath() + "/datapacktmp/servers.conf.xml"));
+    core.serverManager()->setGlobalConfiguration(Utils::readTextFile(configurationFile()));
     core.setTemporaryCachePath(QDir::tempPath());
     core.setPersistentCachePath(QDir::homePath() + "/datapack/tmp/");
     core.setInstallPath(QDir::homePath() + "/datapack/install/");
@@ -132,6 +134,10 @@ MainWindow::MainWindow(QWidget *parent) :
     ftp.setUrlStyle(DataPack::Server::Ftp);
     core.serverManager()->addServer(ftp);
 
+    // TEST
+    qWarning() << "Drugs installed ?" << core.serverManager()->isDataPackInstalled("freemedforms.certified.drugs.completebase.allcountries","0.6.0");
+    // END
+
     // Start the check server & pack version
     // TODO: run the core.serverManager()->getAllDescriptionFile(); in a thread ?
     // TODO: Connect the serverManager -> allDescriptionFiles available -> checkForUpdates (in a thread too)
@@ -150,7 +156,7 @@ MainWindow::MainWindow(QWidget *parent) :
 
 MainWindow::~MainWindow()
 {
-    Utils::saveStringToFile(DataPack::Core::instance().serverManager()->xmlConfiguration(), QDir::homePath() + "/datapacktmp/servers.conf.xml", Utils::Overwrite, Utils::DontWarnUser);
+    Utils::saveStringToFile(DataPack::Core::instance().serverManager()->xmlConfiguration(), configurationFile(), Utils::Overwrite, Utils::DontWarnUser);
     delete ui;
 }
 

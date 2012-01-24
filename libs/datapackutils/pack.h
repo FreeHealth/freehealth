@@ -48,15 +48,21 @@ public:
     QString name() const;
     QString serverFileName() const;
     QString serverLicenceFileName() const;
+
+    // Path && file name
+    QString originalXmlConfigFileName() const;
+    QString persistentlyCachedXmlConfigFileName() const;
+    QString persistentlyCachedZipFileName() const;
+    QString unzipPackToPath() const;
+
+    QString installedXmlConfigFileName() const;
+    QString installedZipFileName() const;
+
+    // Checksums
     QString md5ControlChecksum() const;
     QString sha1ControlChecksum() const;
-
-    QString localFileName() const {return m_LocalFileName;}
-
     bool isSha1Checked() const;
     bool isMd5Checked() const;
-
-    void setLocalFileName(const QString &f) {m_LocalFileName=f;}
 
     void fromXmlFile(const QString &absFileName);
 
@@ -66,7 +72,7 @@ private:
     void fromXml(const QString &fullPackConfigXml);
 
 private:
-    QString m_LocalFileName;
+    QString m_OriginalFileName;
     bool m_Sha1Checked, m_Md5Checked;
     PackDescription m_descr;
     PackDependencies m_depends;

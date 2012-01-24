@@ -86,16 +86,16 @@ bool LocalServerEngine::startDownloadQueue()
             QFileInfo local(url);
             if (local.exists()) {
                 // copy pack to datapack core persistentCachePath
-                QString newPath = core().persistentCachePath() + QDir::separator() + pack->uuid();
+                /** \todo change the newPath construction, use Pack path */
+                QString newPath = QFileInfo(pack->persistentlyCachedZipFileName()).absolutePath();
                 QDir newDir(newPath);
                 if (!newDir.exists()) {
                     QDir().mkpath(newPath);
                 }
-                QFile::copy(local.absoluteFilePath(), newPath +  QDir::separator() + local.fileName());
+                QFile::copy(local.absoluteFilePath(), pack->persistentlyCachedZipFileName());
 
                 // copy pack XML config
-                QString orig = pack->localFileName();
-                QFile::copy(orig, newPath +  QDir::separator() + "packconfig.xml");
+                QFile::copy(pack->originalXmlConfigFileName(), pack->persistentlyCachedXmlConfigFileName());
             }
         }
     }

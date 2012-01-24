@@ -325,24 +325,36 @@ void ServerManager::checkAndInstallPack(const Server &server, const Pack &pack, 
     Q_UNUSED(progressBar);
     Q_ASSERT(progressBar);
     disconnect(this, SIGNAL(packDownloaded(Server,Pack,QProgressBar*)), this, SLOT(checkAndInstallPack(Server,Pack,QProgressBar*)));
-    if (pack.localFileName().isEmpty()) {
-        // Add a log error
-        return;
-    }
+}
 
+void ServerManager::checkInstalledPacks()
+{
+    if (!m_InstalledPacks.isEmpty())
+        return;
+    // Scan the install dir for packconfig.xml files and read them
+    foreach(const QFileInfo &info, Utils::getFiles(QDir(core().installPath()), "packconfig.xml")) {
+        Pack p;
+        p.fromXmlFile(info.absoluteFilePath());
+        m_InstalledPacks.append(p);
+    }
 }
 
 bool ServerManager::isDataPackInstalled(const Pack &pack)
 {
-    Q_UNUSED(pack);
-    // TODO
-    return false;
+    return isDataPackInstalled(pack.uuid(), pack.version());
 }
 
 bool ServerManager::isDataPackInstalled(const QString &packUid, const QString &packVersion)
 {
     Q_UNUSED(packUid);
     Q_UNUSED(packVersion);
+    checkInstalledPacks();
+    foreach(const Pack &p, m_InstalledPacks) {
+        if (p.uuid()==packUid && p.version()==packVersion) {
+            return true;
+        }
+    }
+
     return false;
 }
 
@@ -408,8 +420,8 @@ bool ServerManager::installDataPack(const Pack &pack, QProgressBar *progressBar)
     for(int i=0; i<m_WorkingEngines.count(); ++i) {
         if (m_WorkingEngines.at(i)->downloadQueueCount()>0) {
             downloading = true;
-            m_WorkingEngines.at(i)->startDownloadQueue();
             connect(m_WorkingEngines.at(i), SIGNAL(queueDowloaded()), this, SLOT(packDownloadDone()));
+            m_WorkingEngines.at(i)->startDownloadQueue();
         }
     }
     if (!downloading)
@@ -444,38 +456,41 @@ void ServerManager::packDownloadDone()
     // Copy/Unzip all packs to datapackInstallPath according to PackDescription::InstallToPath
     for(int i=0; i < m_PacksToInstall.count(); ++i) {
         const Pack &p = m_PacksToInstall.at(i);
-        QString pathTo = core().installPath() + QDir::separator() + p.description().data(PackDescription::UnzipToPath).toString();
-        QString packZipFileName = core().persistentCachePath() + QDir::separator() + p.uuid() + QDir::separator() + QFileInfo(p.serverFileName()).fileName();
+        const QString pathTo = p.unzipPackToPath();
         QDir to(pathTo);
         if (!to.exists()) {
             to.mkpath(pathTo);
         }
         // Unzip pack to the install path
-        if (!QuaZipTools::unzipFile(packZipFileName, pathTo))
-            LOG_ERROR(QString("Unable to unzip pack file %1 to %2").arg(packZipFileName).arg(pathTo));
+        if (!QuaZipTools::unzipFile(p.persistentlyCachedZipFileName(), pathTo))
+            LOG_ERROR(QString("Unable to unzip pack file %1 to %2").arg(p.persistentlyCachedZipFileName()).arg(pathTo));
         // Add the pack description for future analysis (update, remove...)
-        QString packDescriptionFromFileName = core().persistentCachePath() + QDir::separator() + p.uuid() + QDir::separator() + "packconfig.xml";
-        QString packDescriptionToFileName = pathTo + QDir::separator() + "packconfig.xml";
-        QFile::copy(packDescriptionFromFileName, packDescriptionToFileName);
+        qWarning() << "INSTALL XML" <<p.persistentlyCachedXmlConfigFileName() << p.installedXmlConfigFileName();
+        QFile::copy(p.persistentlyCachedXmlConfigFileName(), p.installedXmlConfigFileName());
     }
     m_PacksToInstall.clear();
+    m_InstalledPacks.clear();
+    checkInstalledPacks();
 }
 
-bool ServerManager::removeDataPack(const Server &server, const Pack &pack, QProgressBar *progressBar)
+bool ServerManager::removeDataPack(const Pack &pack, QProgressBar *progressBar)
 {
     // TODO
-    Q_UNUSED(server);
-    Q_UNUSED(pack);
     Q_UNUSED(progressBar);
+    // check if pack is installed
+    // if installed: remove install path && persistentCache path
+    m_InstalledPacks.clear();
+    checkInstalledPacks();
     return false;
 }
 
-bool ServerManager::updateDataPack(const Server &server, const Pack &pack, QProgressBar *progressBar)
+bool ServerManager::updateDataPack(const Pack &pack, QProgressBar *progressBar)
 {
     // TODO
-    Q_UNUSED(server);
-    Q_UNUSED(pack);
     Q_UNUSED(progressBar);
+    Q_UNUSED(pack);
+    m_InstalledPacks.clear();
+    checkInstalledPacks();
     return false;
 }
 
@@ -583,5 +598,4 @@ void ServerManager::checkServerUpdatesAfterDownload()
     }
     Q_EMIT serverUpdateChecked();
 }
-
 

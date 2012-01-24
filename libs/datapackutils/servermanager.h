@@ -89,7 +89,6 @@ public:
     void connectServer(const Server &server, const ServerIdentification &ident = ServerIdentification()); // will be deprecated regarding the connectAndUpdate function
     void connectAndUpdate(int index);
 
-
     QList<PackDescription> getPackDescription(const Server &server);
     QList<Pack> getPackForServer(const Server &server);
     Server getServerForPack(const Pack &pack);
@@ -98,11 +97,12 @@ public:
     QList<PackDescription> downloadPackDescription(const Server &server, const Pack &pack);
     Pack downloadAndUnzipPack(const Server &server, const Pack &pack);
 
-    virtual bool isDataPackInstalled(const Pack &pack);
-    virtual bool isDataPackInstalled(const QString &packUid, const QString &packVersion);
+    void checkInstalledPacks();
+    bool isDataPackInstalled(const Pack &pack);
+    bool isDataPackInstalled(const QString &packUid, const QString &packVersion);
     bool installDataPack(const Pack &pack, QProgressBar *progressBar = 0);
-    bool removeDataPack(const Server &server, const Pack &pack, QProgressBar *progressBar = 0);
-    bool updateDataPack(const Server &server, const Pack &pack, QProgressBar *progressBar = 0);
+    bool removeDataPack(const Pack &pack, QProgressBar *progressBar = 0);
+    bool updateDataPack(const Pack &pack, QProgressBar *progressBar = 0);
 
     QList<Pack> packDependencies(const Pack &pack, const PackDependencyData::TypeOfDependence &dependence);
 
@@ -131,6 +131,7 @@ private:
     QMultiHash<QString, PackDescription> m_PackDescriptions;
     QMultiHash<QString, Pack> m_Packs;
     QList<Pack> m_PacksToInstall;
+    QList<Pack> m_InstalledPacks;
 
     LocalServerEngine *m_LocalEngine;
     HttpServerEngine *m_HttpEngine;
