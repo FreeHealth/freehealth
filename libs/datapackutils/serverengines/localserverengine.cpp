@@ -25,8 +25,8 @@
  *       NAME <MAIL@ADRESS>                                                *
  ***************************************************************************/
 #include "localserverengine.h"
-#include "servermanager.h"
-#include "core.h"
+#include <datapackutils/core.h>
+#include <datapackutils/servermanager.h>
 
 #include <utils/global.h>
 

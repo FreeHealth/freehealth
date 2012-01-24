@@ -26,7 +26,8 @@
  ***************************************************************************/
 /**
   \class DataPack::ServerEditor
-  Widget used to modify the server list of the current DataPack::IServerManager
+  Widget used to modify the server list of the current DataPack::IServerManager,
+  and to manage package (installation, update, remove).
 */
 
 #include "servereditor.h"

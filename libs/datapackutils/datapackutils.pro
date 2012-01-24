@@ -23,8 +23,8 @@ HEADERS += datapack_exporter.h \
     widgets/installpackdialog.h \
     serverandpackmodel.h \
     iserverengine.h \
-    localserverengine.h \
-    httpserverengine.h \
+    serverengines/localserverengine.h \
+    serverengines/httpserverengine.h \
     packmodel.h \
     servermodel.h
 
@@ -43,8 +43,8 @@ SOURCES += \
     widgets/installpackdialog.cpp \
     serverandpackmodel.cpp \
     iserverengine.cpp \
-    localserverengine.cpp \
-    httpserverengine.cpp \
+    serverengines/localserverengine.cpp \
+    serverengines/httpserverengine.cpp \
     packmodel.cpp \
     servermodel.cpp
 

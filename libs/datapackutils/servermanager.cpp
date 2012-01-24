@@ -25,10 +25,10 @@
  *       NAME <MAIL@ADRESS>                                                *
  ***************************************************************************/
 #include "servermanager.h"
-#include "widgets/installpackdialog.h"
-#include "localserverengine.h"
-#include "httpserverengine.h"
 #include "core.h"
+#include "widgets/installpackdialog.h"
+#include "serverengines/localserverengine.h"
+#include "serverengines/httpserverengine.h"
 
 #include <utils/log.h>
 #include <utils/global.h>
