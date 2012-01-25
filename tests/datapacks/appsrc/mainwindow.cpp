@@ -89,6 +89,18 @@ MainWindow::MainWindow(QWidget *parent) :
     ui->setupUi(this);
     qWarning();
 
+    // get the global_resources directory from the command line argument
+    QDir resourcesDir(QCoreApplication::applicationDirPath());
+    QStringList list = QCoreApplication::arguments();
+    int index = list.indexOf(QRegExp("--config=*", Qt::CaseSensitive, QRegExp::Wildcard));
+    if (index >= 0) {
+        QString iniFileName = list[index];
+        iniFileName = iniFileName.mid(iniFileName.indexOf("=") + 1);
+
+        resourcesDir = QFileInfo(resourcesDir.filePath(iniFileName)).absolutePath();
+    } else // ugly shortcut only valid for eric when no --config parameter has been provided :)
+        resourcesDir = "/Users/eric/Desktop/Programmation/freemedforms/global_resources";
+
     // Create and configure DataPack lib
     DataPack::Core &core = DataPack::Core::instance();
     core.serverManager()->setGlobalConfiguration(Utils::readTextFile(configurationFile()));
@@ -100,27 +112,27 @@ MainWindow::MainWindow(QWidget *parent) :
     core.isInternetConnexionAvailable();
 
 #ifdef Q_OS_MAC
-    core.setThemePath(DataPack::Core::SmallPixmaps, "/Users/eric/Desktop/Programmation/freemedforms/global_resources/pixmap/16x16");
-    core.setThemePath(DataPack::Core::MediumPixmaps, "/Users/eric/Desktop/Programmation/freemedforms/global_resources/pixmap/32x32");
-    core.setThemePath(DataPack::Core::BigPixmaps, "/Users/eric/Desktop/Programmation/freemedforms/global_resources/pixmap/64x64");
+    core.setThemePath(DataPack::Core::SmallPixmaps, resourcesDir.absoluteFilePath("pixmap/16x16"));
+    core.setThemePath(DataPack::Core::MediumPixmaps, resourcesDir.absoluteFilePath("pixmap/32x32"));
+    core.setThemePath(DataPack::Core::BigPixmaps, resourcesDir.absoluteFilePath("pixmap/64x64"));
     // Test 1: local
-    core.serverManager()->addServer("file://Users/eric/Desktop/Programmation/freemedforms/global_resources/datapacks/default/");
+    core.serverManager()->addServer("file://" + resourcesDir.absoluteFilePath("datapacks/default/"));
 #else
-    core.setThemePath(DataPack::Core::SmallPixmaps, "/Users/eric/Desktop/Programmation/freemedforms/global_resources/pixmap/16x16");
-    core.setThemePath(DataPack::Core::MediumPixmaps, "/Users/eric/Desktop/Programmation/freemedforms/global_resources/pixmap/32x32");
-    core.setThemePath(DataPack::Core::BigPixmaps, "/Users/eric/Desktop/Programmation/freemedforms/global_resources/pixmap/64x64");
+    core.setThemePath(DataPack::Core::SmallPixmaps, resourcesDir.absoluteFilePath("pixmap/16x16"));
+    core.setThemePath(DataPack::Core::MediumPixmaps, resourcesDir.absoluteFilePath("pixmap/32x32"));
+    core.setThemePath(DataPack::Core::BigPixmaps, resourcesDir.absoluteFilePath("pixmap/64x64"));
     // Test 1: local
-    core.serverManager()->addServer("file://Users/eric/Desktop/Programmation/freemedforms/global_resources/datapacks/default/");
+    core.serverManager()->addServer("file://" + resourcesDir.absoluteFilePath("datapacks/default/"));
     core.serverManager()->addServer("http://localhost/");
 #endif
 
-    // Add servers
+// Add servers
 #ifdef Q_OS_MAC
     // Test 1: local
-    core.serverManager()->addServer("file://Users/eric/Desktop/Programmation/freemedforms/global_resources/datapacks/default/");
+    core.serverManager()->addServer("file://" + resourcesDir.absoluteFilePath("datapacks/default/"));
 #else
     // Test 1: local
-    core.serverManager()->addServer("file://Users/eric/Desktop/Programmation/freemedforms/global_resources/datapacks/default/");
+    core.serverManager()->addServer("file://" + resourcesDir.absoluteFilePath("datapacks/default/"));
     core.serverManager()->addServer("http://localhost/");
 #endif
 
