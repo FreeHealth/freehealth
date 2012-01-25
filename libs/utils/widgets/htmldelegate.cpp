@@ -61,9 +61,12 @@ void HtmlDelegate::paint(QPainter *painter, const QStyleOptionViewItem &option, 
 
     // Painting item without text
     QString backupText = optionV4.text;
-    optionV4.text = QString();
+    QIcon backupIcon = optionV4.icon;
+    optionV4.text = QString(); // inhibe text displaying
+    optionV4.icon = QIcon(); // inhibe icon displaying
     style->drawControl(QStyle::CE_ItemViewItem, &optionV4, painter);
     optionV4.text = backupText;
+    optionV4.icon = backupIcon;
 
     QAbstractTextDocumentLayout::PaintContext ctx;
 
@@ -71,14 +74,17 @@ void HtmlDelegate::paint(QPainter *painter, const QStyleOptionViewItem &option, 
     if (optionV4.state & QStyle::State_Selected)
         ctx.palette.setColor(QPalette::Text, optionV4.palette.color(QPalette::Active, QPalette::HighlightedText));
 
-    //QRect textRect = style->subElementRect(QStyle::SE_ItemViewItemText, &optionV4);
     QRect textRect = optionV4.rect;
     painter->save();
     painter->translate(textRect.topLeft());
     painter->setClipRect(textRect.translated(-textRect.topLeft()));
-//    doc.documentLayout()->draw(painter, ctx);
     doc.setTextWidth(textRect.width());
-    doc.drawContents(painter, textRect.translated(-textRect.topLeft()));
+    QRect htmlRect = textRect.translated(-textRect.topLeft());
+    painter->translate(optionV4.decorationSize.width(), 0);
+    doc.drawContents(painter, htmlRect);
+    painter->translate(-optionV4.decorationSize.width(), 0);
+    QPixmap pixmap = optionV4.icon.pixmap(optionV4.decorationSize);
+    painter->drawPixmap(QPoint(0, 0), pixmap);
     painter->restore();
 }
 
@@ -89,7 +95,7 @@ QSize HtmlDelegate::sizeHint(const QStyleOptionViewItem &option, const QModelInd
 
     QTextDocument doc;
     doc.setHtml(options.text);
-    doc.setTextWidth(options.rect.width());
+    //doc.setTextWidth(options.rect.width());
     return QSize(doc.idealWidth(), doc.size().height());
 }
 

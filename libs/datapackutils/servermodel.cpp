@@ -61,11 +61,11 @@ QVariant ServerModel::data(const QModelIndex &index, int role) const {
             QString label = s.description().data(ServerDescription::Label).toString();
             if (label.isEmpty())
                 label = tkTr(Trans::Constants::UNKNOWN_SERVER);
-            label = QString("<span style=\"color:black;font-weight:bold\">%1</span>")
+            label = QString("<span style=\"color:black;font-weight:bold;\">%1</span>")
                     .arg(label);
 
             if (s.isConnected()) {
-                label += QString("<br /><span style=\"color:gray; font-size:small\">%2 (%3: %4)</span>")
+                label += QString("<br /><span style=\"color:gray; font-size:small;\">%2 (%3: %4)</span>")
                          .arg(tkTr(Trans::Constants::CONNECTED))
                          .arg(tkTr(Trans::Constants::LAST_CHECK))
                          .arg(s.lastChecked().toString(QLocale().dateFormat(QLocale::LongFormat)));
@@ -74,7 +74,7 @@ QVariant ServerModel::data(const QModelIndex &index, int role) const {
                          .arg(tkTr(Trans::Constants::NOT_CONNECTED));
             }
 
-            label += QString("<br /><span style=\"color:gray; font-size:small\">%1 %2</span>")
+            label += QString("<br /><span style=\"color:gray; font-size:small;\">%1 %2</span>")
                      .arg(serverManager.getPackForServer(s).count())
                      .arg(tkTr(Trans::Constants::PACKAGES));
             return label;

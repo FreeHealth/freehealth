@@ -165,4 +165,3 @@ QString Core::icon(const QString &name, ThemePath path)
 {
     return QString("%1/%2").arg(d->m_ThemePath.value(path)).arg(name);
 }
-
