@@ -34,10 +34,14 @@
  * \file packmodel.h
  * \author Eric MAEKER <eric.maeker@gmail.com>
  * \version 0.6.2
- * \date 25 Jan 2012
+ * \date 27 Jan 2012
 */
 
 namespace DataPack {
+class Pack;
+namespace Internal {
+class PackModelPrivate;
+}
 
 class PackModel : public QAbstractTableModel
 {
@@ -49,6 +53,7 @@ public:
     };
 
     explicit PackModel(QObject *parent = 0);
+    ~PackModel();
 
     void setInstallChecker(const bool onOff);
     void setPackCheckable(const bool checkable);
@@ -61,7 +66,11 @@ public:
 
     Qt::ItemFlags flags(const QModelIndex &index) const;
 
-signals:
+    const Pack &packageAt(const int index) const;
+
+    QList<Pack> packageToInstall() const;
+    QList<Pack> packageToUpdate() const;
+    QList<Pack> packageToRemove() const;
 
 private Q_SLOTS:
     void updateModel();
@@ -69,14 +78,7 @@ private Q_SLOTS:
     void onServerRemoved(const int index);
 
 private:
-    void getAllAvailablePacks();
-    void checkInstalledPack();
-
-private:
-    bool m_InstallChecking, m_PackCheckable;
-    QList<Pack> m_AvailPacks, m_InstalledPack;
-    QHash<int, int> m_UserCheckModif;
-    QList<bool> m_IsInstalledCache;
+    Internal::PackModelPrivate *d;
 };
 
 }  // End namespace DataPack

@@ -138,13 +138,14 @@
  */
 
 /**
- * \fn bool DataPack::IServerManager::isDataPackInstalled(const Server &server, const Pack &pack)
- * Return true if the \e pack from the \e server is actually installed.
+ * \fn bool DataPack::IServerManager::isDataPackInstalled(const Pack &pack)
+ * Return true if the \e pack server is actually installed (the manager will check the version of the pack too).
  */
 
 /**
  * \fn bool DataPack::IServerManager::isDataPackInstalled(const QString &packUid, const QString &packVersion)
  * Return true if the pack identified by the uuid \e packUid and the version \e packVersion is actually installed.
+ * If \e packVersion is empty, the manager will not check the pack version.
  */
 
 

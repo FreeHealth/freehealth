@@ -25,12 +25,12 @@
  *       NAME <MAIL@ADRESS>                                                *
  ***************************************************************************/
 /**
-  \class DataPack::ServerEditor
+  \class DataPack::PackManager
   Widget used to modify the server list of the current DataPack::IServerManager,
   and to manage package (installation, update, remove).
 */
 
-#include "servereditor.h"
+#include "packmanager.h"
 #include "addserverdialog.h"
 
 #include <utils/global.h>
@@ -44,17 +44,13 @@
 #include <datapackutils/datapackcore.h>
 #include <datapackutils/servermanager.h>
 #include <datapackutils/packmodel.h>
-// OBSOLETE
-#include <datapackutils/serverandpackmodel.h>
-#include "servermodel.h"
-// END
 
-#include <QStandardItemModel>
 #include <QToolBar>
+#include <QProgressDialog>
 
 #include <QDebug>
 
-#include "ui_servereditor.h"
+#include "ui_packmanager.h"
 
 using namespace DataPack;
 using namespace Trans::ConstantTranslations;
@@ -89,12 +85,13 @@ const char * const CSS =
 
 }  // End anonymous namespace
 
-ServerEditor::ServerEditor(QWidget *parent) :
+PackManager::PackManager(QWidget *parent) :
     QWidget(parent),
-    ui(new Ui::ServerEditor),
+    ui(new Ui::PackManager),
     aServerRefresh(0), aServerRemove(0), aServerAdd(0),aServerInfo(0),
     aInstall(0), aInstallAllPack(0), aRemove(0), aUpdate(0)
 {
+    setObjectName("PackManager");
     ui->setupUi(this);
     if (layout()) {
         layout()->setMargin(0);
@@ -103,84 +100,50 @@ ServerEditor::ServerEditor(QWidget *parent) :
         ui->toolbarLayout->setSpacing(0);
     }
 
-    // Manage server view
-//    m_ServerModel = new ServerAndPackModel(this);
-//    m_ServerModel->setPackCheckable(true);
-//    m_ServerModel->setInstallChecker(true);
-//    m_ServerModel->setColumnCount(1);
-
-
+    // Manage pack model/view
     m_PackModel = new PackModel(this);
     m_PackModel->setPackCheckable(true);
     m_PackModel->setInstallChecker(true);
-    ui->serverView->setModel(m_PackModel);
-    ui->serverView->setModelColumn(PackModel::Label);
-
-//    m_serverModel = new ServerModel(this);
-//    ui->serverView->setModel(m_serverModel);
-
-
-    //    ui->serverView->setModel(m_ServerModel);
+    ui->packView->setModel(m_PackModel);
+    ui->packView->setModelColumn(PackModel::Label);
 
     Utils::HtmlDelegate *delegate = new Utils::HtmlDelegate;
-    ui->serverView->setItemDelegate(delegate);
-    ui->serverView->setStyleSheet(::CSS);
-//    ui->serverView->expandAll();
-    ui->serverView->setAlternatingRowColors(true);
-//    ui->serverView->setRootIsDecorated(false);
-    ui->serverView->setEditTriggers(QTreeView::NoEditTriggers);
-
-    // Manage pack view
-//    ui->packView->setModel(m_ServerModel);
-//    ui->packView->header()->hide();
-//    ui->packView->setItemDelegate(delegate);
-//    ui->packView->setStyleSheet(::CSS);
-//    ui->packView->expandAll();
-//    ui->packView->setRootIsDecorated(false);
-//    ui->packView->setAlternatingRowColors(true);
-//    ui->packView->setEditTriggers(QTreeView::NoEditTriggers);
-    ui->packView->hide();
+    ui->packView->setItemDelegate(delegate);
+    ui->packView->setStyleSheet(::CSS);
+    //    ui->packView->header()->hide();
+    ui->packView->setAlternatingRowColors(true);
 
     // Manage central view
-    ui->stackedWidget->setCurrentIndex(0);
     QFont bold;
     bold.setBold(true);
     bold.setPointSize(bold.pointSize()+1);
-    ui->serverName->setFont(bold);
     ui->packName->setFont(bold);
-    ui->serverName->setStyleSheet(::TITLE_CSS);
     ui->packName->setStyleSheet(::TITLE_CSS);
 
     createActions();
     createToolbar();
 
-    connect(ui->serverView->selectionModel(), SIGNAL(currentChanged(QModelIndex,QModelIndex)), this, SLOT(onServerIndexActivated(QModelIndex,QModelIndex)));
-//    connect(ui->packView->selectionModel(), SIGNAL(currentChanged(QModelIndex,QModelIndex)), this, SLOT(onPackIndexActivated(QModelIndex,QModelIndex)));
-    connect(serverManager(), SIGNAL(serverAdded(int)), this, SLOT(serverAdded(int)));
-    connect(serverManager(), SIGNAL(serverRemoved(int)), this, SLOT(serverRemoved(int)));
+    connect(ui->packView->selectionModel(), SIGNAL(currentChanged(QModelIndex,QModelIndex)), this, SLOT(onPackIndexActivated(QModelIndex,QModelIndex)));
 
     // FOR TEST
-    // This step should be done before the serverEditor in called
+    // This step should be done before the PackManager in called
     serverManager()->getAllDescriptionFile();
     // END TEST
 
-    // Select first row of servers
-//    ui->serverView->setCurrentIndex(m_ServerModel->index(0,0));
-//    ui->serverView->selectionModel()->select(m_ServerModel->index(0,0), QItemSelectionModel::SelectCurrent);
-//    populateServerView(0);
+    // file://Users/eric/Desktop/Programmation/freemedforms/global_resources/datapacks/default/
 }
 
-ServerEditor::~ServerEditor()
+PackManager::~PackManager()
 {
     delete ui;
 }
 
-bool ServerEditor::submitChanges()
+bool PackManager::submitChanges()
 {
     return true;
 }
 
-void ServerEditor::createActions()
+void PackManager::createActions()
 {
     // Create server actions
     QAction *a = aServerRefresh = new QAction(this);
@@ -217,7 +180,7 @@ void ServerEditor::createActions()
     connect(ui->installToolButton, SIGNAL(triggered(QAction*)), this, SLOT(packActionTriggered(QAction *)));
 }
 
-void ServerEditor::createToolbar()
+void PackManager::createToolbar()
 {
     m_ToolBar = new QToolBar(this);
     m_ToolBar->addAction(aServerRefresh);
@@ -248,37 +211,9 @@ static void elideTextToLabel(QLabel *label, const QString &text)
     }
 }
 
-void ServerEditor::populateServerView(const int serverId)
+void PackManager::populatePackView(const int packId)
 {
-    // Clear pack selection
-    ui->packView->selectionModel()->clearSelection();
-    ui->packView->setRootIndex(m_ServerModel->index(serverId, 0));
-
-    // Update server view
-    const QString &format = QLocale().dateTimeFormat(QLocale::LongFormat);
-    const Server &server = serverManager()->getServerAt(serverId);
-//    const QString &uuid = server.uuid();
-    ui->serverName->setText(server.description().data(ServerDescription::Label).toString());
-    ui->shortServerDescription->setText(server.description().data(ServerDescription::ShortDescription).toString());
-    ui->serverVersion->setText(server.description().data(ServerDescription::Version).toString());
-    ui->serverDate->setText(server.description().data(ServerDescription::LastModificationDate).toDateTime().toString(format));
-    ui->serverDescription->setText(server.description().data(ServerDescription::ShortDescription).toString());
-    ui->lastCheck->setText(server.lastChecked().toString(format));
-    ui->serverVendor->setText(server.description().data(ServerDescription::Vendor).toString());
-    elideTextToLabel(ui->serverUuid, server.uuid());
-    elideTextToLabel(ui->serverNativeUrl, server.nativeUrl());
-    if (server.isConnected() || server.isLocalServer()) {
-        ui->serverState->setText(tkTr(Trans::Constants::CONNECTED));
-    } else {
-        ui->serverState->setText(tkTr(Trans::Constants::NOT_CONNECTED));
-    }
-}
-
-void ServerEditor::populatePackView(const int serverId, const int packId)
-{
-    const Server &server = serverManager()->getServerAt(serverId);
-    const QList<Pack> &list = serverManager()->getPackForServer(server);
-    const Pack &pack = list.at(packId);
+    const Pack &pack = m_PackModel->packageAt(packId);
     const PackDescription &descr = pack.description();
     // Vendor ?
     QString vendor = descr.data(PackDescription::Vendor).toString();
@@ -346,23 +281,13 @@ void ServerEditor::populatePackView(const int serverId, const int packId)
     ui->packSummary->setText(summary);
 }
 
-void ServerEditor::onServerIndexActivated(const QModelIndex &index, const QModelIndex &previous)
+void PackManager::onPackIndexActivated(const QModelIndex &index, const QModelIndex &previous)
 {
     Q_UNUSED(previous);
-    // Activate the Server Page
-    ui->stackedWidget->setCurrentWidget(ui->serverPage);
-    populateServerView(index.row());
+    populatePackView(index.row());
 }
 
-void ServerEditor::onPackIndexActivated(const QModelIndex &index, const QModelIndex &previous)
-{
-    // Activate the Server Page
-    ui->stackedWidget->setCurrentWidget(ui->packPage);
-    int serverId = ui->serverView->selectionModel()->currentIndex().row();
-    populatePackView(serverId, index.row());
-}
-
-void ServerEditor::serverActionTriggered(QAction *a)
+void PackManager::serverActionTriggered(QAction *a)
 {
     if (a==aServerRefresh) {
         /** \todo code here */
@@ -374,23 +299,26 @@ void ServerEditor::serverActionTriggered(QAction *a)
         if (dlg.exec()==QDialog::Accepted) {
             dlg.submitTo(&server);
             serverManager()->addServer(server);
+            /** \todo manage progress dialog cancellation */
+            QProgressDialog *dlg = new QProgressDialog;
+            dlg->setLabelText(tr("Downloading server information"));
+            dlg->setModal(true);
+            connect(serverManager(), SIGNAL(allServerDescriptionAvailable()), dlg, SLOT(accept()));
+//            connect(serverManager(), SIGNAL(allServerDescriptionAvailable()), dlg, SLOT(close()));
+            serverManager()->getServerDescription(serverManager()->serverCount() - 1);
+            dlg->exec();
         }
     } else if (a==aServerRemove) {
         /** \todo code here */
     } else if (a==aServerInfo) {
-        // Clear pack selection
-        ui->packView->selectionModel()->clearSelection();
-        ui->stackedWidget->setCurrentWidget(ui->serverPage);
+        /** \todo code here */
     }
 }
 
-void ServerEditor::packActionTriggered(QAction *a)
+void PackManager::packActionTriggered(QAction *a)
 {
-    int serverId = ui->serverView->selectionModel()->currentIndex().row();
     int packId = ui->packView->selectionModel()->currentIndex().row();
-    const Server &server = serverManager()->getServerAt(serverId);
-    QList<Pack> list = serverManager()->getPackForServer(server);
-    const Pack &pack = list.at(packId);
+    const Pack &pack = m_PackModel->packageAt(packId);
 
     if (a==aInstall) {
         serverManager()->installDataPack(pack);
@@ -401,21 +329,7 @@ void ServerEditor::packActionTriggered(QAction *a)
     }
 }
 
-void ServerEditor::serverAdded(int i)
-{
-    Q_UNUSED(i);
-    // Refresh the model
-//    createServerModel(m_ServerModel);
-}
-
-void ServerEditor::serverRemoved(int i)
-{
-    Q_UNUSED(i);
-    // Refresh the model
-//    createServerModel(m_ServerModel);
-}
-
-void ServerEditor::retranslate()
+void PackManager::retranslate()
 {
     aServerRefresh->setText(tr("Refresh datapack servers"));
     aServerAdd->setText(tr("Add a server"));
@@ -427,7 +341,7 @@ void ServerEditor::retranslate()
     aUpdate->setText(tkTr(Trans::Constants::UPDATE));
 }
 
-void ServerEditor::changeEvent(QEvent *e)
+void PackManager::changeEvent(QEvent *e)
 {
     if (e->type()==QEvent::LanguageChange) {
         ui->retranslateUi(this);

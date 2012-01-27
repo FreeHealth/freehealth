@@ -40,6 +40,8 @@
 
 #include <QDebug>
 
+// Zip Command Line: zip serverconf.zip server.conf.xml icd10/icd10.xml drugs/drugs.xml
+
 using namespace DataPack;
 using namespace Internal;
 using namespace Trans::ConstantTranslations;

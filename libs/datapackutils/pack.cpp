@@ -53,6 +53,11 @@ Pack::~Pack()
 {
 }
 
+bool Pack::isValid() const
+{
+    return (!uuid().isEmpty() && !version().isEmpty() && !m_descr.data(PackDescription::Label).toString().isEmpty());
+}
+
 QString Pack::uuid() const
 {
     return m_descr.data(PackDescription::Uuid).toString();
@@ -93,13 +98,14 @@ bool Pack::isSha1Checked() const
 {
     // TODO
     // Une fois le fichier télécharger, vérifie la sha1 locale avec celle donnée par le serveur
+    return false;
 }
 
 bool Pack::isMd5Checked() const
 {
     // TODO
     // Une fois le fichier télécharger, vérifie la md5 locale avec celle donnée par le serveur
-
+    return false;
 }
 
 /** Return the original file name of the pack XML config file. This file name is only valid on local servers. */
@@ -171,9 +177,7 @@ void Pack::fromXml(const QString &fullPackConfigXml)
 
 bool Pack::operator==(const Pack &other) const
 {
-    return (this->uuid()==other.uuid() &&
-            this->md5ControlChecksum()==other.md5ControlChecksum() &&
-            this->sha1ControlChecksum()==other.sha1ControlChecksum());
+    return (this->uuid()==other.uuid() && this->version()==other.version());
 }
 
 QDebug operator<<(QDebug dbg, const DataPack::Pack &p)

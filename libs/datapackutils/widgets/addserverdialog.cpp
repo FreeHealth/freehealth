@@ -26,8 +26,10 @@
  ***************************************************************************/
 #include "addserverdialog.h"
 #include <datapackutils/server.h>
+#include <datapackutils/datapackcore.h>
 
 #include <translationutils/constants.h>
+#include <translationutils/trans_msgerror.h>
 
 #include "ui_addserverdialog.h"
 
@@ -35,11 +37,21 @@ using namespace DataPack;
 using namespace Internal;
 using namespace Trans::ConstantTranslations;
 
+static inline DataPack::DataPackCore &core() { return DataPack::DataPackCore::instance(); }
+static inline QIcon icon(const QString &name, DataPack::DataPackCore::ThemePath path = DataPack::DataPackCore::MediumPixmaps) { return QIcon(core().icon(name, path)); }
+
+namespace {
+const char *const   ICON_PACKAGE = "package.png";
+}
+
 AddServerDialog::AddServerDialog(QWidget *parent) :
     QDialog(parent),
     ui(new Internal::Ui::AddServerDialog)
 {
     ui->setupUi(this);
+    setWindowTitle(ui->titleLabel->text());
+    setWindowIcon(icon(ICON_PACKAGE));
+    ui->loginGroupBox->hide();
     ui->checkUpdate->addItems(checkUpdateLabels());
     // Do not change the order
     ui->serverType->addItem(tr("Default FreeMedForms server (mirror)")); // 0
@@ -49,6 +61,7 @@ AddServerDialog::AddServerDialog(QWidget *parent) :
     ui->serverType->addItem(tr("Protected HTTP with zipped content"));   // 4
     ui->serverType->addItem(tr("Protected HTTP non-zipped"));            // 5
     ui->serverType->addItem(tr("FTP with zipped content"));              // 6
+    adjustSize();
 }
 
 AddServerDialog::~AddServerDialog()
@@ -92,6 +105,11 @@ void AddServerDialog::setServer(const Server &server)
     ui->userLogin->setText("Not yet implemented");
     ui->userPassword->setText("Not yet implemented");
     ui->checkUpdate->setCurrentIndex(server.userUpdateFrequency());
+//    int id = server.recommendedUpdateFrequency();
+//    if (id > 0 && id < checkUpdateLabels().count())
+//        ui->updateServerReco->setText(checkUpdateLabels().at(id));
+//    else
+//        ui->updateServerReco->setText(tkTr(Trans::Constants::UNKNOWN));
 }
 
 void AddServerDialog::submitTo(Server *server)

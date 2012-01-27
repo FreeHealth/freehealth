@@ -73,6 +73,7 @@ public:
     bool isNull() const;
 
     QString uuid() const;
+    QString version() const;
 
     // URL Management
     void setUrl(const QString &url);

@@ -74,6 +74,7 @@ public:
     virtual void removeServerAt(int index) = 0;
 
     // Downloads
+    virtual void getServerDescription(const int index) = 0;
     virtual void getAllDescriptionFile() = 0;
     virtual void checkServerUpdates() = 0;
 
@@ -89,8 +90,9 @@ public:
     virtual QList<PackDescription> downloadPackDescription(const Server &server, const Pack &pack) = 0;
     virtual Pack downloadAndUnzipPack(const Server &server, const Pack &pack) = 0;
 
+    virtual QList<Pack> installedPack() = 0;
     virtual bool isDataPackInstalled(const Pack &pack) = 0;
-    virtual bool isDataPackInstalled(const QString &packUid, const QString &packVersion) = 0;
+    virtual bool isDataPackInstalled(const QString &packUid, const QString &packVersion = QString::null) = 0;
     virtual bool installDataPack(const Pack &pack, QProgressBar *progressBar = 0) = 0;
     virtual bool removeDataPack(const Pack &pack, QProgressBar *progressBar = 0) = 0;
     virtual bool updateDataPack(const Pack &pack, QProgressBar *progressBar = 0) = 0;

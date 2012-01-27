@@ -71,6 +71,7 @@ public:
     void removeServerAt(int index);
 
     // Downloads
+    void getServerDescription(const int index);
     void getAllDescriptionFile();
     void checkServerUpdates();
 
@@ -98,8 +99,9 @@ public:
     Pack downloadAndUnzipPack(const Server &server, const Pack &pack);
 
     void checkInstalledPacks();
+    QList<Pack> installedPack();
     bool isDataPackInstalled(const Pack &pack);
-    bool isDataPackInstalled(const QString &packUid, const QString &packVersion);
+    bool isDataPackInstalled(const QString &packUid, const QString &packVersion = QString::null);
     bool installDataPack(const Pack &pack, QProgressBar *progressBar = 0);
     bool removeDataPack(const Pack &pack, QProgressBar *progressBar = 0);
     bool updateDataPack(const Pack &pack, QProgressBar *progressBar = 0);

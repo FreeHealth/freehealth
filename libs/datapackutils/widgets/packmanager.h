@@ -24,8 +24,8 @@
  *   Contributors :                                                        *
  *       NAME <MAIL@ADRESS>                                                *
  ***************************************************************************/
-#ifndef DATAPACK_SERVEREDITOR_H
-#define DATAPACK_SERVEREDITOR_H
+#ifndef DATAPACK_PACKMANAGER_H
+#define DATAPACK_PACKMANAGER_H
 
 #include <datapackutils/datapack_exporter.h>
 
@@ -35,31 +35,27 @@ class QModelIndex;
 class QToolBar;
 
 /**
- * \file servereditor.h
+ * \file packmanager.h
  * \author Eric MAEKER <eric.maeker@gmail.com>
  * \version 0.6.2
- * \date 07 Dec 2011
+ * \date 27 Jan 2012
 */
 
 namespace DataPack {
 class PackDescription;
 class Pack;
 class PackModel;
-// OBSOLETE
-class ServerAndPackModel;
-class ServerModel;
-// END
 
 namespace Ui {
-    class ServerEditor;
+    class PackManager;
 }
 
-class DATAPACK_EXPORT ServerEditor : public QWidget
+class DATAPACK_EXPORT PackManager : public QWidget
 {
     Q_OBJECT
 public:
-    explicit ServerEditor(QWidget *parent = 0);
-    ~ServerEditor();
+    explicit PackManager(QWidget *parent = 0);
+    ~PackManager();
 
 public Q_SLOTS:
     bool submitChanges();
@@ -67,29 +63,21 @@ public Q_SLOTS:
 private:
     void createActions();
     void createToolbar();
-    void populateServerView(const int serverId);
-    void populatePackView(const int serverId, const int packId);
+//    void populateServerView(const int serverId);
+    void populatePackView(const int packId);
 
 private Q_SLOTS:
-    void onServerIndexActivated(const QModelIndex &index, const QModelIndex &previous);
+//    void onServerIndexActivated(const QModelIndex &index, const QModelIndex &previous);
     void onPackIndexActivated(const QModelIndex &index, const QModelIndex &previous);
     void serverActionTriggered(QAction *a);
     void packActionTriggered(QAction *a);
-    void serverAdded(int);
-    void serverRemoved(int);
 
 private:
     void retranslate();
     void changeEvent(QEvent *e);
 
 private:
-    Ui::ServerEditor *ui;
-
-    // OBSOLETE
-    ServerModel *m_serverModel;
-    ServerAndPackModel *m_ServerModel;
-    //END
-
+    Ui::PackManager *ui;
     PackModel *m_PackModel;
     QAction *aServerRefresh, *aServerRemove, *aServerAdd, *aServerInfo;
     QAction *aInstall, *aInstallAllPack, *aRemove, *aUpdate;
@@ -98,4 +86,4 @@ private:
 
 }  // End namespace DataPack
 
-#endif // DATAPACK_SERVEREDITOR_H
+#endif // DATAPACK_PACKMANAGER_H

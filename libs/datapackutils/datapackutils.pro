@@ -18,7 +18,7 @@ HEADERS += datapack_exporter.h \
     servercontent.h \
     datapackcore.h \
     iservermanager.h \
-    widgets/servereditor.h \
+    widgets/packmanager.h \
     widgets/addserverdialog.h \
     widgets/installpackdialog.h \
     serverandpackmodel.h \
@@ -38,7 +38,7 @@ SOURCES += \
     servercontent.cpp \
     datapackcore.cpp \
     iservermanager.cpp \
-    widgets/servereditor.cpp \
+    widgets/packmanager.cpp \
     widgets/addserverdialog.cpp \
     widgets/installpackdialog.cpp \
     serverandpackmodel.cpp \
@@ -49,7 +49,7 @@ SOURCES += \
     servermodel.cpp
 
 FORMS += \
-    widgets/servereditor.ui \
+    widgets/packmanager.ui \
     widgets/addserverdialog.ui \
     widgets/installpackdialog.ui
 

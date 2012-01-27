@@ -31,6 +31,8 @@
 #include <coreplugin/constants_tokensandsettings.h>
 
 #include <utils/log.h>
+#include <utils/versionnumber.h>
+
 #include <translationutils/constants.h>
 #include <translationutils/trans_current.h>
 #include <translationutils/trans_msgerror.h>
@@ -55,17 +57,51 @@ namespace {
 
 const char *const ICON_PACKAGE = "package.png";
 
-static QString packToHtml(const Pack &p, bool isInstalled)
+struct PackItem {
+    PackItem(const Pack &p) :
+        pack(p),
+        isInstalled(false), isAnUpdate(false),
+        fromServerId(-1),
+        userCheckState(Qt::Unchecked)
+    {}
+
+    bool isAvailableOnServer() const {return fromServerId>=0;}
+
+    Pack pack;
+    bool isInstalled, isAnUpdate;
+    int fromServerId;
+    Qt::CheckState userCheckState;
+};
+
+static QString packToHtml(const PackItem &item)
 {
-    QString inst;
-    if (isInstalled)
-        inst = tkTr(Trans::Constants::INSTALLED);
-    inst += "</span>";
+    QString inst, color;
+    color = "gray";
+    if (item.isInstalled) {
+        if (item.userCheckState!=Qt::Checked) {
+            inst = QCoreApplication::translate("Datapack::PackModel", "Deletion requested");
+            color = "red";
+        } else {
+            inst = tkTr(Trans::Constants::CURRENTLY_INSTALLED);
+        }
+    } else {
+        if (item.userCheckState==Qt::Checked) {
+            inst = QCoreApplication::translate("Datapack::PackModel", "Installation requested");
+            color = "red";
+        } else if (item.isAnUpdate) {
+            inst = tkTr(Trans::Constants::UPDATE_AVAILABLE);
+            color = "blue";
+        }
+    }
+    if (!inst.isEmpty()) {
+        inst.prepend(QString("<span style=\"color:%1; font-size:small\">&nbsp;").arg(color));
+        inst.append("</span>");
+    }
     return QString("<span style=\"color:black;font-weight:bold\">%1</span><br />"
-                           "<span style=\"color:gray; font-size:small\">%2: %3 %4")
-            .arg(p.description().data(PackDescription::Label).toString())
+                   "<span style=\"color:gray; font-size:small\">%2: %3</span>%4")
+            .arg(item.pack.description().data(PackDescription::Label).toString())
             .arg(tkTr(Trans::Constants::VERSION))
-            .arg(p.description().data(PackDescription::Version).toString())
+            .arg(item.pack.description().data(PackDescription::Version).toString())
             .arg(inst);
 }
 
@@ -81,37 +117,169 @@ static QIcon iconForPack(const Pack &p)
 
 }  //  End namespace anonymous
 
+namespace DataPack {
+namespace Internal {
+class PackModelPrivate
+{
+public:
+    PackModelPrivate() :
+        m_InstallChecking(false),
+        m_PackCheckable(false)
+    {}
+
+    // Get all packs available from a server (avoid duplicates) : populate m_AvailPacks list
+    void scanServerPack(const int index)
+    {
+        qWarning() << "Scanning server" << serverManager()->getServerAt(index).uuid();
+        foreach(const Pack &p, serverManager()->getPackForServer(serverManager()->getServerAt(index))) {
+            qWarning() << "   ?? " << p.uuid() << p.version();
+            // Add to the package list if not already included
+            if (!p.isValid())
+                continue;
+            qWarning() << "   valid " << p.uuid() << p.version();
+            if (m_AvailPacks.contains(p))
+                continue;
+            qWarning() << "   adding" << p.uuid() << p.version();
+            m_AvailPacks << p;
+        }
+    }
+
+    // Return the index of the highest version of the pack in the m_AvailPacks list
+    int highestVersionPack(const QString &packUuid)
+    {
+        Utils::VersionNumber highest("0.0.0");
+        int id = -1;
+        for(int i=0; i < m_AvailPacks.count(); ++i) {
+            const Pack &p = m_AvailPacks.at(i);
+            if (p.uuid() == packUuid) {
+                // keep only highest version
+                Utils::VersionNumber testing(p.version());
+                qWarning() << "testing version" << packUuid << testing << highest;
+                if (testing > highest) {
+                    highest = testing;
+                    id = i;
+                }
+            }
+        }
+        return id;
+    }
+
+    void createPackItem()
+    {
+        // Get all packages from servers
+        QList<Pack> installedPacks = serverManager()->installedPack();
+        for(int i=0; i < serverManager()->serverCount(); ++i) {
+            qWarning() << "scanning server" << i;
+            scanServerPack(i);
+        }
+
+        // Add installed package to the availPacks list
+        qWarning() << "Scanning installed";
+        foreach(const Pack &p, installedPacks) {
+            if (m_AvailPacks.contains(p))
+                continue;
+            m_AvailPacks << p;
+            qWarning() << "   adding" << p.uuid() << p.version();
+        }
+
+        // Keep only highest pack versions
+        QList<int> idInUse; // id of Pack to use (from m_AvailPacks)
+        QStringList processed;
+        for(int i=0; i < m_AvailPacks.count(); ++i) {
+            const Pack &p = m_AvailPacks.at(i);
+            if (processed.contains(p.uuid()))
+                continue;
+            idInUse << highestVersionPack(p.uuid());
+            processed << p.uuid();
+        }
+
+        qWarning() << idInUse;
+        qWarning() << m_AvailPacks;
+
+        // Create PackItem list
+        foreach(int id, idInUse) {
+            const Pack &p = m_AvailPacks.at(id);
+            PackItem item(p);
+            /** \todo keep trace of the server ID/UUID ? */
+            item.isInstalled = serverManager()->isDataPackInstalled(p);
+            if (!item.isInstalled) {
+                // Pack is installed with a lower version ?
+                bool installedWithLowerVersion = serverManager()->isDataPackInstalled(p.uuid());
+                if (installedWithLowerVersion) {
+                    item.isAnUpdate = true;
+                    item.userCheckState = Qt::PartiallyChecked;
+                }
+            } else {
+                item.userCheckState = Qt::Checked;
+            }
+            m_Items << item;
+        }
+    }
+
+    void serverAdded(const int index)
+    {
+        /** \todo improve this */
+        Q_UNUSED(index);
+        m_Items.clear();
+        m_AvailPacks.clear();
+        createPackItem();
+    }
+
+    void serverRemoved(const int index)
+    {
+        /** \todo improve this */
+        Q_UNUSED(index);
+        m_Items.clear();
+        m_AvailPacks.clear();
+        createPackItem();
+    }
+
+public:
+    bool m_InstallChecking, m_PackCheckable;
+    QList<PackItem> m_Items;
+    QList<Pack> m_AvailPacks;
+    Pack m_InvalidPack;
+};
+}
+}
+
 
 PackModel::PackModel(QObject *parent) :
     QAbstractTableModel(parent),
-    m_InstallChecking(false),
-    m_PackCheckable(false)
+    d(new Internal::PackModelPrivate)
 {
     setObjectName("DataPack::PackModel");
-    getAllAvailablePacks();
-    connect(serverManager(), SIGNAL(serverAdded(int)), this, SLOT(onServerAdded(int)));
+    d->createPackItem();
+//    connect(serverManager(), SIGNAL(serverAdded(int)), this, SLOT(onServerAdded(int)));
     connect(serverManager(), SIGNAL(serverAboutToBeRemoved(int)), this, SLOT(onServerRemoved(int)));
     connect(serverManager(), SIGNAL(allServerDescriptionAvailable()), this, SLOT(updateModel()));
+}
 
+PackModel::~PackModel()
+{
+    if (d) {
+        delete d;
+        d = 0;
+    }
 }
 
 /** When setting the installChecker feature to \e on, the model computes the packages dependencies. */
 void PackModel::setInstallChecker(const bool onOff)
 {
-    m_InstallChecking = onOff;
+    d->m_InstallChecking = onOff;
     reset();
 }
 
 /** Allow user to check package (for installation/desinstallation). */
 void PackModel::setPackCheckable(const bool checkable)
 {
-    m_PackCheckable = checkable;
+    d->m_PackCheckable = checkable;
     reset();
 }
 
 int PackModel::rowCount(const QModelIndex &) const
 {
-    return m_AvailPacks.count();
+    return d->m_Items.count();
 }
 
 QVariant PackModel::data(const QModelIndex &index, int role) const
@@ -121,23 +289,21 @@ QVariant PackModel::data(const QModelIndex &index, int role) const
 
     int row = index.row();
 
-    if (row < 0 || row > m_AvailPacks.count())
+    if (row < 0 || row >= d->m_Items.count())
         return QVariant();
 
+    // We actually only work on one column == Label
+    if (index.column()!=Label)
+        return QVariant();
 
-    if (role==Qt::DisplayRole && index.column()==Label) {
-        return packToHtml(m_AvailPacks.at(row), m_UserCheckModif.value(row, m_IsInstalledCache.at(row)));
-    } else if (m_PackCheckable && role==Qt::CheckStateRole && index.column()==Label) {
-        if (m_UserCheckModif.value(row, m_IsInstalledCache.at(row))) {
-            return Qt::Checked;
-        } else {
-            return Qt::Unchecked;
-        }
-    } else if (role==Qt::DecorationRole && index.column()==Label) {
-        QString iconFileName = m_AvailPacks.at(row).description().data(PackDescription::GeneralIcon).toString();
+    if (role==Qt::DisplayRole || role==Qt::ToolTipRole) {
+        return packToHtml(d->m_Items.at(row));
+    } else if (d->m_PackCheckable && role==Qt::CheckStateRole) {
+        return d->m_Items.at(row).userCheckState;
+    } else if (role==Qt::DecorationRole) {
+        QString iconFileName = d->m_Items.at(row).pack.description().data(PackDescription::GeneralIcon).toString();
         if (iconFileName.startsWith(Core::Constants::TAG_APPLICATION_THEME_PATH))
             iconFileName = iconFileName.remove(Core::Constants::TAG_APPLICATION_THEME_PATH);
-        qWarning() << iconFileName;
         if (!iconFileName.isEmpty())
             return icon(iconFileName);
     }
@@ -149,8 +315,8 @@ bool PackModel::setData(const QModelIndex &index, const QVariant &value, int rol
     if (!index.isValid())
         return false;
 
-    if (m_PackCheckable && role==Qt::CheckStateRole && index.column()==Label) {
-        m_UserCheckModif.insert(index.row(), value.toInt());
+    if (d->m_PackCheckable && role==Qt::CheckStateRole && index.column()==Label) {
+        d->m_Items[index.row()].userCheckState = Qt::CheckState(value.toInt());
         Q_EMIT dataChanged(index, index);
         return true;
     }
@@ -160,65 +326,73 @@ bool PackModel::setData(const QModelIndex &index, const QVariant &value, int rol
 Qt::ItemFlags PackModel::flags(const QModelIndex &index) const
 {
     Qt::ItemFlags f = QAbstractTableModel::flags(index);
-    if (m_PackCheckable && index.parent()!=QModelIndex() && index.column()==Label)
+    if (d->m_PackCheckable && index.column()==Label)
         f |= Qt::ItemIsUserCheckable;
     return f;
 }
 
-/** Refresh the model using the ServerManager data. */
-void PackModel::updateModel()
+/** Return the package at row \e index */
+const Pack &PackModel::packageAt(const int index) const
 {
-    getAllAvailablePacks();
-    checkInstalledPack();
+    if (index>=0 && index<d->m_Items.count())
+        return d->m_Items.at(index).pack;
+    return d->m_InvalidPack;
 }
 
-/** Prepare the model: get all available packs from server manager. */
-void PackModel::getAllAvailablePacks()
+/** Return the list of user selected packages for install. */
+QList<Pack> PackModel::packageToInstall() const
 {
-    for(int i=0; i < serverManager()->serverCount(); ++i) {
-        foreach(const Pack &p, serverManager()->getPackForServer(serverManager()->getServerAt(i))) {
-            if (m_AvailPacks.contains(p))
-                continue;
-            m_AvailPacks.append(p);
-        }
+    QList<Pack> toReturn;
+    foreach(const PackItem &it, d->m_Items) {
+        if (!it.isInstalled && it.userCheckState==Qt::Checked)
+            toReturn << it.pack;
     }
+    return toReturn;
+}
+
+/** Return the list of user selected packages for update. */
+QList<Pack> PackModel::packageToUpdate() const
+{
+    QList<Pack> toReturn;
+    foreach(const PackItem &it, d->m_Items) {
+        if (it.isAnUpdate && it.userCheckState==Qt::Checked)
+            toReturn << it.pack;
+    }
+    return toReturn;
+}
+
+/** Return the list of user selected packages for deletion. */
+QList<Pack> PackModel::packageToRemove() const
+{
+    QList<Pack> toReturn;
+    foreach(const PackItem &it, d->m_Items) {
+        if (it.isInstalled && it.userCheckState!=Qt::Checked)
+            toReturn << it.pack;
+    }
+    return toReturn;
+}
+
+/** Refresh the model. */
+void PackModel::updateModel()
+{
+    d->m_Items.clear();
+    d->m_AvailPacks.clear();
+    d->createPackItem();
     reset();
 }
 
 /** Manage model when a server is added to the server manager */
 void PackModel::onServerAdded(const int index)
 {
-    // Add packs from this server if not already included
-    foreach(const Pack &p, serverManager()->getPackForServer(serverManager()->getServerAt(index))) {
-        if (m_AvailPacks.contains(p))
-            continue;
-        m_AvailPacks.append(p);
-    }
+    d->serverAdded(index);
+    reset();
 }
 
 /** Manage model when a server is about to be removed from the server manager */
 void PackModel::onServerRemoved(const int index)
 {
-    // Reload all packages
-    m_AvailPacks.clear();
-    getAllAvailablePacks();
+    Q_UNUSED(index);
+    d->serverRemoved(index);
+    reset();
 }
 
-/** Check all installed packages. */
-void PackModel::checkInstalledPack()
-{
-    m_InstalledPack.clear();
-    m_IsInstalledCache.clear();
-    if (!m_PackCheckable)
-        return;
-    /** \todo add installed packages not available in the configured servers. */
-    for(int i=0; i< m_AvailPacks.count(); ++i) {
-        const Pack &p = m_AvailPacks.at(i);
-        if (serverManager()->isDataPackInstalled(p)) {
-            m_InstalledPack << p;
-            m_IsInstalledCache.append(true);
-        } else {
-            m_IsInstalledCache.append(false);
-        }
-    }
-}

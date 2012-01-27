@@ -30,7 +30,7 @@
 #include <datapackutils/datapackcore.h>
 #include <datapackutils/iservermanager.h>
 #include <datapackutils/serverdescription.h>
-#include <datapackutils/widgets/servereditor.h>
+#include <datapackutils/widgets/packmanager.h>
 
 #include <utils/widgets/genericdescriptioneditor.h>
 #include <utils/widgets/genericinformationeditordialog.h>
@@ -141,37 +141,32 @@ MainWindow::MainWindow(QWidget *parent) :
     core.setThemePath(DataPack::DataPackCore::SmallPixmaps, resourcesDir.absoluteFilePath("pixmap/16x16"));
     core.setThemePath(DataPack::DataPackCore::MediumPixmaps, resourcesDir.absoluteFilePath("pixmap/32x32"));
     core.setThemePath(DataPack::DataPackCore::BigPixmaps, resourcesDir.absoluteFilePath("pixmap/64x64"));
-    // Test 1: local
-    core.serverManager()->addServer("file://" + resourcesDir.absoluteFilePath("datapacks/default/"));
 #else
     core.setThemePath(DataPack::DataPackCore::SmallPixmaps, resourcesDir.absoluteFilePath("pixmap/16x16"));
     core.setThemePath(DataPack::DataPackCore::MediumPixmaps, resourcesDir.absoluteFilePath("pixmap/32x32"));
     core.setThemePath(DataPack::DataPackCore::BigPixmaps, resourcesDir.absoluteFilePath("pixmap/64x64"));
-    // Test 1: local
-    core.serverManager()->addServer("file://" + resourcesDir.absoluteFilePath("datapacks/default/"));
-    core.serverManager()->addServer("http://localhost/");
 #endif
 
 // Add servers
-#ifdef Q_OS_MAC
-    // Test 1: local
-    core.serverManager()->addServer("file://" + resourcesDir.absoluteFilePath("datapacks/default/"));
-#else
-    // @GUILLAUME --> Change les chemins vers ton SVN ici ::
-    // Test 1: local
-    core.serverManager()->addServer("file://" + resourcesDir.absoluteFilePath("datapacks/default/"));
-    core.serverManager()->addServer("http://localhost/");
-#endif
+//#ifdef Q_OS_MAC
+//    // Test 1: local
+//    core.serverManager()->addServer("file://" + resourcesDir.absoluteFilePath("datapacks/default/"));
+//#else
+//    // @GUILLAUME --> Change les chemins vers ton SVN ici ::
+//    // Test 1: local
+//    core.serverManager()->addServer("file://" + resourcesDir.absoluteFilePath("datapacks/default/"));
+//    core.serverManager()->addServer("http://localhost/");
+//#endif
 
-    // Test 2: HttpPseudoSecuredZipped
-    DataPack::Server http("http://test.freemedforms.com");
-    http.setUrlStyle(DataPack::Server::HttpPseudoSecuredAndZipped);
-    core.serverManager()->addServer(http);
+//    // Test 2: HttpPseudoSecuredZipped
+//    DataPack::Server http("http://test.freemedforms.com");
+//    http.setUrlStyle(DataPack::Server::HttpPseudoSecuredAndZipped);
+//    core.serverManager()->addServer(http);
 
-    // Test 3: HttpPseudoSecuredZipped
-    DataPack::Server ftp("ftp://localhost/");
-    ftp.setUrlStyle(DataPack::Server::Ftp);
-    core.serverManager()->addServer(ftp);
+//    // Test 3: HttpPseudoSecuredZipped
+//    DataPack::Server ftp("ftp://localhost/");
+//    ftp.setUrlStyle(DataPack::Server::Ftp);
+//    core.serverManager()->addServer(ftp);
 
     // TEST
     qWarning() << "Drugs installed ?" << core.serverManager()->isDataPackInstalled("freemedforms.certified.drugs.completebase.allcountries","0.6.0");
@@ -183,8 +178,8 @@ MainWindow::MainWindow(QWidget *parent) :
     // TODO: if a Pack update is available -> ask user for the installation
 
     // Create the ServerEditor view for the test
-    DataPack::ServerEditor *serverEditor = new DataPack::ServerEditor(this);
-    setCentralWidget(serverEditor);
+    DataPack::PackManager *packManager = new DataPack::PackManager(this);
+    setCentralWidget(packManager);
 
 //    Utils::GenericInformationEditorDialog dlg(this);
 //    dlg.setDescription(serverDescr);

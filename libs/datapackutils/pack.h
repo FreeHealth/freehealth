@@ -40,6 +40,8 @@ public:
     Pack();
     virtual ~Pack();
 
+    bool isValid() const;
+
     const PackDescription &description() const {return m_descr;}
     const PackDependencies &dependencies() const {return m_depends;}
 

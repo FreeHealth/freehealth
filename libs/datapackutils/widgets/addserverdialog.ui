@@ -6,8 +6,8 @@
    <rect>
     <x>0</x>
     <y>0</y>
-    <width>460</width>
-    <height>346</height>
+    <width>438</width>
+    <height>348</height>
    </rect>
   </property>
   <property name="windowTitle">
@@ -73,7 +73,7 @@
     </widget>
    </item>
    <item row="3" column="0">
-    <widget class="QGroupBox" name="groupBox_2">
+    <widget class="QGroupBox" name="loginGroupBox">
      <property name="title">
       <string>User params</string>
      </property>

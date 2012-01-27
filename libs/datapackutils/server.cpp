@@ -80,6 +80,12 @@ QString Server::uuid() const
     return uuid;
 }
 
+/** Return the version of the server */
+QString Server::version() const
+{
+    return m_Desc.data(ServerDescription::Version).toString();
+}
+
 /** Define the URL of the server. All URL must be unique (url is used as uuid). */
 void Server::setUrl(const QString &url)
 {
@@ -235,7 +241,7 @@ int Server::recommendedUpdateFrequency() const
 /** Test DataPack::Server equality. */
 bool Server::operator==(const Server &s)
 {
-    return ((m_Url == s.url()) && (m_UrlStyle==s.urlStyle()));
+    return ((m_Url == s.url()) && (m_UrlStyle==s.urlStyle()) && (version()==s.version()));
 }
 
 /** Return the file name used for the server configuration file */

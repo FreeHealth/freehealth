@@ -149,11 +149,8 @@ bool ServerManager::addServer(const QString &url)
 
 bool ServerManager::addServer(const Server &server)
 {
-    // check if a server already exists with the same URL
-    foreach (Server child, m_Servers) {
-        if (child == server)
-            return false;
-    }
+    if (m_Servers.contains(server))
+        return false;
     m_Servers.append(server);
     Q_EMIT serverAdded(m_Servers.count() - 1);
     return true;
@@ -194,8 +191,28 @@ void ServerManager::removeServerAt(int index)
 /////////////////////////////////////////////////////////////////////////////////////////
 /////////////////////////// Updates and installs ////////////////////////////////////////
 /////////////////////////////////////////////////////////////////////////////////////////
+void ServerManager::getServerDescription(const int index)
+{
+    Server *s = &m_Servers[index];
+    qWarning() << "getAllDescription" << index << s->nativeUrl();
+    for(int j = 0; j < m_WorkingEngines.count(); ++j) {
+        IServerEngine *engine = m_WorkingEngines.at(j);
+        if (engine->managesServer(*s)) {
+            ServerEngineQuery query;
+            query.server = s;
+            query.forceDescriptionFromLocalCache = false;
+            query.downloadDescriptionFiles = true;
+            query.downloadPackFile = false;
+            engine->addToDownloadQueue(query);
+            connect(engine, SIGNAL(queueDowloaded()), this, SLOT(engineDescriptionDownloadDone()));
+            engine->startDownloadQueue();
+        }
+    }
+}
+
 void ServerManager::getAllDescriptionFile()
 {
+    // Populate all server engine
     for(int i=0; i < m_Servers.count(); ++i) {
         Server *s = &m_Servers[i];
         qWarning() << "getAllDescription" << i << s->nativeUrl();
@@ -211,6 +228,7 @@ void ServerManager::getAllDescriptionFile()
             }
         }
     }
+    // Then start all server engine
     for(int j = 0; j < m_WorkingEngines.count(); ++j) {
         IServerEngine *engine = m_WorkingEngines.at(j);
         if (engine->downloadQueueCount() > 0) {
@@ -336,7 +354,8 @@ void ServerManager::checkInstalledPacks()
     foreach(const QFileInfo &info, Utils::getFiles(QDir(core().installPath()), "packconfig.xml")) {
         Pack p;
         p.fromXmlFile(info.absoluteFilePath());
-        m_InstalledPacks.append(p);
+        if (p.isValid())
+            m_InstalledPacks.append(p);
     }
 }
 
@@ -350,13 +369,22 @@ bool ServerManager::isDataPackInstalled(const QString &packUid, const QString &p
     Q_UNUSED(packUid);
     Q_UNUSED(packVersion);
     checkInstalledPacks();
+    bool checkVersion = !packVersion.isEmpty();
     foreach(const Pack &p, m_InstalledPacks) {
-        if (p.uuid()==packUid && p.version()==packVersion) {
+        if (p.uuid().compare(packUid, Qt::CaseInsensitive)==0) {
+            if (checkVersion) {
+                return (p.version()==packVersion);
+            }
             return true;
         }
     }
-
     return false;
+}
+
+QList<Pack> ServerManager::installedPack()
+{
+    checkInstalledPacks();
+    return m_InstalledPacks;
 }
 
 bool ServerManager::installDataPack(const Pack &pack, QProgressBar *progressBar)
@@ -466,7 +494,7 @@ void ServerManager::packDownloadDone()
         if (!QuaZipTools::unzipFile(p.persistentlyCachedZipFileName(), pathTo))
             LOG_ERROR(QString("Unable to unzip pack file %1 to %2").arg(p.persistentlyCachedZipFileName()).arg(pathTo));
         // Add the pack description for future analysis (update, remove...)
-        qWarning() << "INSTALL XML" <<p.persistentlyCachedXmlConfigFileName() << p.installedXmlConfigFileName();
+        qWarning() << "INSTALL XML" << p.persistentlyCachedXmlConfigFileName() << p.installedXmlConfigFileName();
         QFile::copy(p.persistentlyCachedXmlConfigFileName(), p.installedXmlConfigFileName());
     }
     m_PacksToInstall.clear();
