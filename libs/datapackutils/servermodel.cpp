@@ -33,7 +33,7 @@
 #include <translationutils/trans_menu.h>
 #include <translationutils/trans_spashandupdate.h>
 
-#include "core.h"
+#include "datapackcore.h"
 #include "iservermanager.h"
 #include "servermodel.h"
 
@@ -45,14 +45,14 @@ static const char *ICON_SERVER_NOT_CONNECTED = "connect_no.png";
 static const char *ICON_SERVER_ASKING_CONNECTION = "connect_creating.png";
 static const char *ICON_SERVER_LOCAL = "server-local.png";
 
-static inline QIcon icon(const QString &name, DataPack::Core::ThemePath path = DataPack::Core::MediumPixmaps) { return QIcon(Core::instance().icon(name, path)); }
+static inline QIcon icon(const QString &name, DataPack::DataPackCore::ThemePath path = DataPack::DataPackCore::MediumPixmaps) { return QIcon(DataPackCore::instance().icon(name, path)); }
 
 ServerModel::ServerModel(QObject *parent) : QAbstractListModel(parent) {
 
 }
 
 QVariant ServerModel::data(const QModelIndex &index, int role) const {
-    IServerManager &serverManager = *Core::instance().serverManager();
+    IServerManager &serverManager = *DataPackCore::instance().serverManager();
     const Server &s = serverManager.getServerAt(index.row());
 
     switch (role) {
@@ -103,6 +103,6 @@ QVariant ServerModel::data(const QModelIndex &index, int role) const {
 }
 
 int ServerModel::rowCount(const QModelIndex &parent) const {
-    return Core::instance().serverManager()->serverCount();
+    return DataPackCore::instance().serverManager()->serverCount();
 }
 

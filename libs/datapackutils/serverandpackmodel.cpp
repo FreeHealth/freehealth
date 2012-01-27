@@ -25,7 +25,7 @@
  *       NAME <MAIL@ADRESS>                                                *
  ***************************************************************************/
 #include "serverandpackmodel.h"
-#include <datapackutils/core.h>
+#include <datapackutils/datapackcore.h>
 #include <datapackutils/servermanager.h>
 
 #include <utils/log.h>
@@ -45,9 +45,9 @@
 using namespace DataPack;
 using namespace Trans::ConstantTranslations;
 
-static inline DataPack::Core &core() { return DataPack::Core::instance(); }
+static inline DataPack::DataPackCore &core() { return DataPack::DataPackCore::instance(); }
 static inline Internal::ServerManager *serverManager() { return qobject_cast<Internal::ServerManager*>(core().serverManager()); }
-static inline QIcon icon(const QString &name, DataPack::Core::ThemePath path = DataPack::Core::MediumPixmaps) { return QIcon(core().icon(name, path)); }
+static inline QIcon icon(const QString &name, DataPack::DataPackCore::ThemePath path = DataPack::DataPackCore::MediumPixmaps) { return QIcon(core().icon(name, path)); }
 
 namespace {
 

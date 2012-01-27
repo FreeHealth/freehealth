@@ -25,7 +25,7 @@
  *       NAME <MAIL@ADRESS>                                                *
  ***************************************************************************/
 #include "httpserverengine.h"
-#include <datapackutils/core.h>
+#include <datapackutils/datapackcore.h>
 #include <datapackutils/servermanager.h>
 
 #include <utils/log.h>
@@ -44,7 +44,7 @@ using namespace DataPack;
 using namespace Internal;
 using namespace Trans::ConstantTranslations;
 
-static inline DataPack::Core &core() { return DataPack::Core::instance(); }
+static inline DataPack::DataPackCore &core() { return DataPack::DataPackCore::instance(); }
 
 ReplyData::ReplyData(QNetworkReply *reply, Server *server, Server::FileRequested fileType) {
     this->reply = reply;

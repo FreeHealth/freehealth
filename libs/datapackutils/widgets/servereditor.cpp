@@ -41,10 +41,13 @@
 #include <translationutils/trans_menu.h>
 #include <translationutils/trans_spashandupdate.h>
 
-#include <datapackutils/core.h>
+#include <datapackutils/datapackcore.h>
 #include <datapackutils/servermanager.h>
+#include <datapackutils/packmodel.h>
+// OBSOLETE
 #include <datapackutils/serverandpackmodel.h>
 #include "servermodel.h"
+// END
 
 #include <QStandardItemModel>
 #include <QToolBar>
@@ -56,9 +59,9 @@
 using namespace DataPack;
 using namespace Trans::ConstantTranslations;
 
-static inline DataPack::Core &core() { return DataPack::Core::instance(); }
+static inline DataPack::DataPackCore &core() { return DataPack::DataPackCore::instance(); }
 static inline Internal::ServerManager *serverManager() { return qobject_cast<Internal::ServerManager*>(core().serverManager()); }
-static inline QIcon icon(const QString &name, DataPack::Core::ThemePath path = DataPack::Core::MediumPixmaps) { return QIcon(core().icon(name, path)); }
+static inline QIcon icon(const QString &name, DataPack::DataPackCore::ThemePath path = DataPack::DataPackCore::MediumPixmaps) { return QIcon(core().icon(name, path)); }
 
 namespace {
 
@@ -101,14 +104,24 @@ ServerEditor::ServerEditor(QWidget *parent) :
     }
 
     // Manage server view
-    m_ServerModel = new ServerAndPackModel(this);
-    m_ServerModel->setPackCheckable(true);
-    m_ServerModel->setInstallChecker(true);
-    m_ServerModel->setColumnCount(1);
+//    m_ServerModel = new ServerAndPackModel(this);
+//    m_ServerModel->setPackCheckable(true);
+//    m_ServerModel->setInstallChecker(true);
+//    m_ServerModel->setColumnCount(1);
 
-    m_serverModel = new ServerModel(this);
-    ui->serverView->setModel(m_serverModel);
-//    ui->serverView->setModel(m_ServerModel);
+
+    m_PackModel = new PackModel(this);
+    m_PackModel->setPackCheckable(true);
+    m_PackModel->setInstallChecker(true);
+    ui->serverView->setModel(m_PackModel);
+    ui->serverView->setModelColumn(PackModel::Label);
+
+//    m_serverModel = new ServerModel(this);
+//    ui->serverView->setModel(m_serverModel);
+
+
+    //    ui->serverView->setModel(m_ServerModel);
+
     Utils::HtmlDelegate *delegate = new Utils::HtmlDelegate;
     ui->serverView->setItemDelegate(delegate);
     ui->serverView->setStyleSheet(::CSS);
@@ -118,14 +131,15 @@ ServerEditor::ServerEditor(QWidget *parent) :
     ui->serverView->setEditTriggers(QTreeView::NoEditTriggers);
 
     // Manage pack view
-    ui->packView->setModel(m_ServerModel);
+//    ui->packView->setModel(m_ServerModel);
 //    ui->packView->header()->hide();
-    ui->packView->setItemDelegate(delegate);
-    ui->packView->setStyleSheet(::CSS);
+//    ui->packView->setItemDelegate(delegate);
+//    ui->packView->setStyleSheet(::CSS);
 //    ui->packView->expandAll();
 //    ui->packView->setRootIsDecorated(false);
-    ui->packView->setAlternatingRowColors(true);
-    ui->packView->setEditTriggers(QTreeView::NoEditTriggers);
+//    ui->packView->setAlternatingRowColors(true);
+//    ui->packView->setEditTriggers(QTreeView::NoEditTriggers);
+    ui->packView->hide();
 
     // Manage central view
     ui->stackedWidget->setCurrentIndex(0);
@@ -141,7 +155,7 @@ ServerEditor::ServerEditor(QWidget *parent) :
     createToolbar();
 
     connect(ui->serverView->selectionModel(), SIGNAL(currentChanged(QModelIndex,QModelIndex)), this, SLOT(onServerIndexActivated(QModelIndex,QModelIndex)));
-    connect(ui->packView->selectionModel(), SIGNAL(currentChanged(QModelIndex,QModelIndex)), this, SLOT(onPackIndexActivated(QModelIndex,QModelIndex)));
+//    connect(ui->packView->selectionModel(), SIGNAL(currentChanged(QModelIndex,QModelIndex)), this, SLOT(onPackIndexActivated(QModelIndex,QModelIndex)));
     connect(serverManager(), SIGNAL(serverAdded(int)), this, SLOT(serverAdded(int)));
     connect(serverManager(), SIGNAL(serverRemoved(int)), this, SLOT(serverRemoved(int)));
 
@@ -151,9 +165,9 @@ ServerEditor::ServerEditor(QWidget *parent) :
     // END TEST
 
     // Select first row of servers
-    ui->serverView->setCurrentIndex(m_ServerModel->index(0,0));
-    ui->serverView->selectionModel()->select(m_ServerModel->index(0,0), QItemSelectionModel::SelectCurrent);
-    populateServerView(0);
+//    ui->serverView->setCurrentIndex(m_ServerModel->index(0,0));
+//    ui->serverView->selectionModel()->select(m_ServerModel->index(0,0), QItemSelectionModel::SelectCurrent);
+//    populateServerView(0);
 }
 
 ServerEditor::~ServerEditor()
@@ -171,30 +185,30 @@ void ServerEditor::createActions()
     // Create server actions
     QAction *a = aServerRefresh = new QAction(this);
     a->setObjectName("aServerRefresh");
-    a->setIcon(icon(::ICON_SERVER_REFRESH, DataPack::Core::MediumPixmaps));
+    a->setIcon(icon(::ICON_SERVER_REFRESH, DataPack::DataPackCore::MediumPixmaps));
     a = aServerAdd = new QAction(this);
     a->setObjectName("aInstall");
-    a->setIcon(icon(::ICON_SERVER_ADD, DataPack::Core::MediumPixmaps));
+    a->setIcon(icon(::ICON_SERVER_ADD, DataPack::DataPackCore::MediumPixmaps));
     a = aServerRemove = new QAction(this);
     a->setObjectName("aServerRemove");
-    a->setIcon(icon(::ICON_SERVER_REMOVE, DataPack::Core::MediumPixmaps));
+    a->setIcon(icon(::ICON_SERVER_REMOVE, DataPack::DataPackCore::MediumPixmaps));
     a = aServerInfo = new QAction(this);
     a->setObjectName("aServerInfo");
-    a->setIcon(icon(::ICON_SERVER_INFO, DataPack::Core::MediumPixmaps));
+    a->setIcon(icon(::ICON_SERVER_INFO, DataPack::DataPackCore::MediumPixmaps));
 
     // Create pack actions
     a = aInstall = new QAction(this);
     a->setObjectName("aInstall");
-    a->setIcon(icon(::ICON_INSTALL, DataPack::Core::SmallPixmaps));
+    a->setIcon(icon(::ICON_INSTALL, DataPack::DataPackCore::SmallPixmaps));
     a = aInstallAllPack = new QAction(this);
     a->setObjectName("aInstallAllPack");
-    a->setIcon(icon(::ICON_INSTALL, DataPack::Core::MediumPixmaps));
+    a->setIcon(icon(::ICON_INSTALL, DataPack::DataPackCore::MediumPixmaps));
     a = aUpdate = new QAction(this);
     a->setObjectName("aUpdate");
-    a->setIcon(icon(::ICON_UPDATE, DataPack::Core::SmallPixmaps));
+    a->setIcon(icon(::ICON_UPDATE, DataPack::DataPackCore::SmallPixmaps));
     a = aRemove = new QAction(this);
     a->setObjectName("aRemove");
-    a->setIcon(icon(::ICON_REMOVE, DataPack::Core::SmallPixmaps));
+    a->setIcon(icon(::ICON_REMOVE, DataPack::DataPackCore::SmallPixmaps));
     ui->installToolButton->addAction(aInstall);
     ui->installToolButton->addAction(aUpdate);
     ui->installToolButton->addAction(aRemove);

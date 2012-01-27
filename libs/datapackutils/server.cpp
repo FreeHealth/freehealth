@@ -25,7 +25,7 @@
  *       NAME <MAIL@ADRESS>                                                *
  ***************************************************************************/
 #include "server.h"
-#include "core.h"
+#include "datapackcore.h"
 
 #include <utils/log.h>
 #include <utils/versionnumber.h>
@@ -51,7 +51,7 @@ const char * const SERVER_CONF_XML = "server.conf.xml";
 const char * const SERVER_CONF_ZIP = "serverconf.zip";
 }
 
-static inline DataPack::Core &core() { return DataPack::Core::instance(); }
+static inline DataPack::DataPackCore &core() { return DataPack::DataPackCore::instance(); }
 
 /** Create a server pointing to the URL \e url. The URL must be unique in the server's pool. */
 Server::Server(const QString &url) :

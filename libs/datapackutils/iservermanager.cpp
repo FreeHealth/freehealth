@@ -47,7 +47,7 @@
    save(manager->xmlConfiguration());  // This is important
 
  \endcode
- * \sa DataPack::Core, DataPack::Core::serverManager()
+ * \sa DataPack::DataPackCore, DataPack::DataPackCore::serverManager()
  */
 
 

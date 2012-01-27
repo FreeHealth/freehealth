@@ -25,7 +25,7 @@
  *       NAME <MAIL@ADRESS>                                                *
  ***************************************************************************/
 #include "servermanager.h"
-#include "core.h"
+#include "datapackcore.h"
 #include "widgets/installpackdialog.h"
 #include "serverengines/localserverengine.h"
 #include "serverengines/httpserverengine.h"
@@ -67,7 +67,7 @@ const char * const SERVER_CONFIG_FILENAME   = "server.conf.xml";
 
 }  // End namespace Anonymous
 
-static inline DataPack::Core &core() {return DataPack::Core::instance();}
+static inline DataPack::DataPackCore &core() {return DataPack::DataPackCore::instance();}
 
 ServerManager::ServerManager(QObject *parent) :
     IServerManager(parent)
@@ -256,9 +256,10 @@ void ServerManager::engineDescriptionDownloadDone()
     bool __emit = true;
     for(int i = 0; i < m_WorkingEngines.count(); ++i) {
         if (m_WorkingEngines.at(i)->downloadQueueCount()>0) {
-            /** \todo disconnect engine signal */
-            qWarning() << m_WorkingEngines.at(i)->objectName() << m_WorkingEngines.at(i)->downloadQueueCount();
+//            qWarning() << m_WorkingEngines.at(i)->objectName() << m_WorkingEngines.at(i)->downloadQueueCount();
             __emit = false;
+        } else {
+            disconnect(m_WorkingEngines.at(i), SIGNAL(queueDowloaded()), this, SLOT(engineDescriptionDownloadDone()));
         }
     }
     if (__emit)

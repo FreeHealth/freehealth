@@ -33,7 +33,7 @@ class QNetworkAccessManager;
 
 
 /**
- * \file core.h
+ * \file datapackcore.h
  * \author Eric MAEKER <eric.maeker@gmail.com>
  * \version 0.6.2
  * \date 22 Jan 2012
@@ -43,14 +43,14 @@ class QNetworkAccessManager;
 namespace DataPack {
 class IServerManager;
 namespace Internal {
-class CorePrivate;
+class DataPackCorePrivate;
 }
 
 
-class DATAPACK_EXPORT Core : public QObject
+class DATAPACK_EXPORT DataPackCore : public QObject
 {
     Q_OBJECT
-    explicit Core(QObject *parent = 0);
+    explicit DataPackCore(QObject *parent = 0);
 
 public:
     enum ThemePath {
@@ -59,8 +59,8 @@ public:
         BigPixmaps
     };
 
-    static Core &instance(QObject *parent = 0);
-    ~Core();
+    static DataPackCore &instance(QObject *parent = 0);
+    ~DataPackCore();
 
     bool isInternetConnexionAvailable();
     IServerManager *serverManager() const;
@@ -79,7 +79,7 @@ public:
     QString icon(const QString &name, ThemePath path = SmallPixmaps);
 
 private:
-    Internal::CorePrivate *d;
+    Internal::DataPackCorePrivate *d;
 };
 
 }  // End namespace DataPack

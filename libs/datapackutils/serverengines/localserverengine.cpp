@@ -25,7 +25,7 @@
  *       NAME <MAIL@ADRESS>                                                *
  ***************************************************************************/
 #include "localserverengine.h"
-#include <datapackutils/core.h>
+#include <datapackutils/datapackcore.h>
 #include <datapackutils/servermanager.h>
 
 #include <utils/global.h>
@@ -38,7 +38,7 @@
 using namespace DataPack;
 using namespace Internal;
 
-static inline DataPack::Core &core() {return DataPack::Core::instance();}
+static inline DataPack::DataPackCore &core() {return DataPack::DataPackCore::instance();}
 
 LocalServerEngine::LocalServerEngine(IServerManager *parent) :
     IServerEngine(parent)

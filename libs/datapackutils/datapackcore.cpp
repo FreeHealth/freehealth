@@ -26,12 +26,12 @@
  ***************************************************************************/
 
 /**
-  \class DataPack::Core
+  \class DataPack::DataPackCore
   Central place for the management of DataPacks. This core mainly contains paths and single objects like
   the unique DataPack::IServerManager to use.
 */
 
-#include "core.h"
+#include "datapackcore.h"
 #include "servermanager.h"
 
 #include <utils/log.h>
@@ -41,23 +41,23 @@
 using namespace DataPack;
 
 namespace  {
-static DataPack::Core *m_instance = 0;
+static DataPack::DataPackCore *m_instance = 0;
 } // namespace anonymous
 
 /** Creates and return the singleton of the core */
-DataPack::Core &DataPack::Core::instance(QObject *parent)
+DataPack::DataPackCore &DataPack::DataPackCore::instance(QObject *parent)
 {
     if (!m_instance)
-        m_instance = new Core(parent);
+        m_instance = new DataPackCore(parent);
     return *m_instance;
 }
 
 namespace DataPack {
 namespace Internal {
-class CorePrivate
+class DataPackCorePrivate
 {
 public:
-    CorePrivate() : m_ServerManager(0) {}
+    DataPackCorePrivate() : m_ServerManager(0) {}
 
 public:
     ServerManager *m_ServerManager;
@@ -68,15 +68,15 @@ public:
 }  // End namespace DataPack
 
 /** Constructor */
-Core::Core(QObject *parent) :
+DataPackCore::DataPackCore(QObject *parent) :
     QObject(parent),
-    d(new Internal::CorePrivate)
+    d(new Internal::DataPackCorePrivate)
 {
     d->m_ServerManager = new Internal::ServerManager(this);
 }
 
 /** Destructor */
-Core::~Core()
+DataPackCore::~DataPackCore()
 {
     if (d) {
         delete d;
@@ -85,7 +85,7 @@ Core::~Core()
 }
 
 /** Test the internet connection and return the state of availability of it. */
-bool Core::isInternetConnexionAvailable()
+bool DataPackCore::isInternetConnexionAvailable()
 {
 //    foreach(const QNetworkConfiguration &conf, QNetworkConfigurationManager().allConfigurations()) {
 //        qWarning() << conf.bearerName() << conf.bearerTypeName() << conf.state() << conf.identifier() << conf.name();
@@ -95,13 +95,13 @@ bool Core::isInternetConnexionAvailable()
 }
 
 /** Return the single DataPack::IServerManager in use in the lib. */
-IServerManager *Core::serverManager() const
+IServerManager *DataPackCore::serverManager() const
 {
     return d->m_ServerManager;
 }
 
 /** Define the path where to install datapacks. */
-void Core::setInstallPath(const QString &absPath)
+void DataPackCore::setInstallPath(const QString &absPath)
 {
     d->m_InstallPath = QDir::cleanPath(absPath);
     QDir test(d->m_InstallPath);
@@ -112,13 +112,13 @@ void Core::setInstallPath(const QString &absPath)
 }
 
 /** Return the path where to install datapacks. */
-QString Core::installPath() const
+QString DataPackCore::installPath() const
 {
     return d->m_InstallPath;
 }
 
 /** Define the path where to cache datapacks. This path must not be cleaned and should contain all downloaded files. */
-void Core::setPersistentCachePath(const QString &absPath)
+void DataPackCore::setPersistentCachePath(const QString &absPath)
 {
     d->m_PersistentCachePath = QDir::cleanPath(absPath);
     QDir test(d->m_PersistentCachePath);
@@ -129,13 +129,13 @@ void Core::setPersistentCachePath(const QString &absPath)
 }
 
 /** Return the path where to cache datapacks. This path must not be cleaned and should contain all downloaded files. */
-QString Core::persistentCachePath() const
+QString DataPackCore::persistentCachePath() const
 {
     return d->m_PersistentCachePath;
 }
 
 /** Define the path to use a volatile cache. */
-void Core::setTemporaryCachePath(const QString &absPath)
+void DataPackCore::setTemporaryCachePath(const QString &absPath)
 {
     d->m_TmpCachePath = QDir::cleanPath(absPath);
     QDir test(d->m_TmpCachePath);
@@ -146,13 +146,13 @@ void Core::setTemporaryCachePath(const QString &absPath)
 }
 
 /** Return the path to use a volatile cache. */
-QString Core::temporaryCachePath() const
+QString DataPackCore::temporaryCachePath() const
 {
     return d->m_TmpCachePath;
 }
 
 /** Define the theme path. */
-void Core::setThemePath(ThemePath path, const QString &absPath)
+void DataPackCore::setThemePath(ThemePath path, const QString &absPath)
 {
     QDir test(absPath);
     if (!test.exists())
@@ -161,7 +161,8 @@ void Core::setThemePath(ThemePath path, const QString &absPath)
 }
 
 /** Return the theme path. */
-QString Core::icon(const QString &name, ThemePath path)
+QString DataPackCore::icon(const QString &name, ThemePath path)
 {
     return QString("%1/%2").arg(d->m_ThemePath.value(path)).arg(name);
 }
+

@@ -52,6 +52,7 @@ const char* const PACKAGE_S                          = QT_TRANSLATE_NOOP("tkCons
 const char* const NAME                               = QT_TRANSLATE_NOOP("tkConstants", "Name");
 const char* const TITLE                              = QT_TRANSLATE_NOOP("tkConstants", "Title");
 const char* const UNKNOWN_SERVER                     = QT_TRANSLATE_NOOP("tkConstants", "Unknown server");
+const char* const INSTALLED                          = QT_TRANSLATE_NOOP("tkConstants", "Installed");
 
 // Settings related messages
 const char* const SETTINGS_RECOVERED                = QT_TRANSLATE_NOOP("tkConstants", "Settings recovered" );

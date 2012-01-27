@@ -45,13 +45,16 @@ class PackModel : public QAbstractTableModel
 public:
     enum DataRepresentation {
         Label = 0,
-        Request
+        ColumnCount
     };
 
     explicit PackModel(QObject *parent = 0);
 
     void setInstallChecker(const bool onOff);
     void setPackCheckable(const bool checkable);
+
+    int rowCount(const QModelIndex &parent = QModelIndex()) const;
+    int columnCount(const QModelIndex & = QModelIndex()) const {return ColumnCount;}
 
     QVariant data(const QModelIndex &index, int role = Qt::DisplayRole) const;
     bool setData(const QModelIndex &index, const QVariant &value, int role = Qt::EditRole);
@@ -62,13 +65,18 @@ signals:
 
 private Q_SLOTS:
     void updateModel();
+    void onServerAdded(const int index);
+    void onServerRemoved(const int index);
 
 private:
     void getAllAvailablePacks();
+    void checkInstalledPack();
 
 private:
     bool m_InstallChecking, m_PackCheckable;
-    QList<Pack> m_AvailPacks;
+    QList<Pack> m_AvailPacks, m_InstalledPack;
+    QHash<int, int> m_UserCheckModif;
+    QList<bool> m_IsInstalledCache;
 };
 
 }  // End namespace DataPack

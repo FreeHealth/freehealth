@@ -1,7 +1,33 @@
+/***************************************************************************
+ *  The FreeMedForms project is a set of free, open source medical         *
+ *  applications.                                                          *
+ *  (C) 2008-2011 by Eric MAEKER, MD (France) <eric.maeker@gmail.com>      *
+ *  All rights reserved.                                                   *
+ *                                                                         *
+ *  This program is free software: you can redistribute it and/or modify   *
+ *  it under the terms of the GNU General Public License as published by   *
+ *  the Free Software Foundation, either version 3 of the License, or      *
+ *  (at your option) any later version.                                    *
+ *                                                                         *
+ *  This program is distributed in the hope that it will be useful,        *
+ *  but WITHOUT ANY WARRANTY; without even the implied warranty of         *
+ *  MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the          *
+ *  GNU General Public License for more details.                           *
+ *                                                                         *
+ *  You should have received a copy of the GNU General Public License      *
+ *  along with this program (COPYING.FREEMEDFORMS file).                   *
+ *  If not, see <http://www.gnu.org/licenses/>.                            *
+ ***************************************************************************/
+/***************************************************************************
+ *   Main Developpers :                                                    *
+ *       Eric MAEKER, MD <eric.maeker@gmail.com>                           *
+ *   Contributors :                                                        *
+ *       NAME <MAIL@ADRESS>                                                *
+ ***************************************************************************/
 #include "mainwindow.h"
 #include "ui_mainwindow.h"
 
-#include <datapackutils/core.h>
+#include <datapackutils/datapackcore.h>
 #include <datapackutils/iservermanager.h>
 #include <datapackutils/serverdescription.h>
 #include <datapackutils/widgets/servereditor.h>
@@ -102,7 +128,7 @@ MainWindow::MainWindow(QWidget *parent) :
         resourcesDir = "/Users/eric/Desktop/Programmation/freemedforms/global_resources";
 
     // Create and configure DataPack lib
-    DataPack::Core &core = DataPack::Core::instance();
+    DataPack::DataPackCore &core = DataPack::DataPackCore::instance();
     core.serverManager()->setGlobalConfiguration(Utils::readTextFile(configurationFile()));
     core.setTemporaryCachePath(QDir::tempPath());
     core.setPersistentCachePath(QDir::homePath() + "/datapack/tmp/");
@@ -112,15 +138,15 @@ MainWindow::MainWindow(QWidget *parent) :
     core.isInternetConnexionAvailable();
 
 #ifdef Q_OS_MAC
-    core.setThemePath(DataPack::Core::SmallPixmaps, resourcesDir.absoluteFilePath("pixmap/16x16"));
-    core.setThemePath(DataPack::Core::MediumPixmaps, resourcesDir.absoluteFilePath("pixmap/32x32"));
-    core.setThemePath(DataPack::Core::BigPixmaps, resourcesDir.absoluteFilePath("pixmap/64x64"));
+    core.setThemePath(DataPack::DataPackCore::SmallPixmaps, resourcesDir.absoluteFilePath("pixmap/16x16"));
+    core.setThemePath(DataPack::DataPackCore::MediumPixmaps, resourcesDir.absoluteFilePath("pixmap/32x32"));
+    core.setThemePath(DataPack::DataPackCore::BigPixmaps, resourcesDir.absoluteFilePath("pixmap/64x64"));
     // Test 1: local
     core.serverManager()->addServer("file://" + resourcesDir.absoluteFilePath("datapacks/default/"));
 #else
-    core.setThemePath(DataPack::Core::SmallPixmaps, resourcesDir.absoluteFilePath("pixmap/16x16"));
-    core.setThemePath(DataPack::Core::MediumPixmaps, resourcesDir.absoluteFilePath("pixmap/32x32"));
-    core.setThemePath(DataPack::Core::BigPixmaps, resourcesDir.absoluteFilePath("pixmap/64x64"));
+    core.setThemePath(DataPack::DataPackCore::SmallPixmaps, resourcesDir.absoluteFilePath("pixmap/16x16"));
+    core.setThemePath(DataPack::DataPackCore::MediumPixmaps, resourcesDir.absoluteFilePath("pixmap/32x32"));
+    core.setThemePath(DataPack::DataPackCore::BigPixmaps, resourcesDir.absoluteFilePath("pixmap/64x64"));
     // Test 1: local
     core.serverManager()->addServer("file://" + resourcesDir.absoluteFilePath("datapacks/default/"));
     core.serverManager()->addServer("http://localhost/");
@@ -131,6 +157,7 @@ MainWindow::MainWindow(QWidget *parent) :
     // Test 1: local
     core.serverManager()->addServer("file://" + resourcesDir.absoluteFilePath("datapacks/default/"));
 #else
+    // @GUILLAUME --> Change les chemins vers ton SVN ici ::
     // Test 1: local
     core.serverManager()->addServer("file://" + resourcesDir.absoluteFilePath("datapacks/default/"));
     core.serverManager()->addServer("http://localhost/");
@@ -168,7 +195,7 @@ MainWindow::MainWindow(QWidget *parent) :
 
 MainWindow::~MainWindow()
 {
-    Utils::saveStringToFile(DataPack::Core::instance().serverManager()->xmlConfiguration(), configurationFile(), Utils::Overwrite, Utils::DontWarnUser);
+    Utils::saveStringToFile(DataPack::DataPackCore::instance().serverManager()->xmlConfiguration(), configurationFile(), Utils::Overwrite, Utils::DontWarnUser);
     delete ui;
 }
 

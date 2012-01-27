@@ -48,12 +48,12 @@ class QProgressBar;
 */
 
 namespace DataPack {
-class Core;
+class DataPackCore;
 
 class DATAPACK_EXPORT IServerManager : public QObject
 {
     Q_OBJECT
-    friend class DataPack::Core;
+    friend class DataPack::DataPackCore;
 
 protected:
     explicit IServerManager(QObject *parent = 0) : QObject(parent) {}

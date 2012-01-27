@@ -16,7 +16,7 @@ HEADERS += datapack_exporter.h \
     pack.h \
     serveridentification.h \
     servercontent.h \
-    core.h \
+    datapackcore.h \
     iservermanager.h \
     widgets/servereditor.h \
     widgets/addserverdialog.h \
@@ -36,7 +36,7 @@ SOURCES += \
     pack.cpp \
     serveridentification.cpp \
     servercontent.cpp \
-    core.cpp \
+    datapackcore.cpp \
     iservermanager.cpp \
     widgets/servereditor.cpp \
     widgets/addserverdialog.cpp \

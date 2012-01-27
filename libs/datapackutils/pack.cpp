@@ -25,7 +25,7 @@
  *       NAME <MAIL@ADRESS>                                                *
  ***************************************************************************/
 #include "pack.h"
-#include "core.h"
+#include "datapackcore.h"
 
 #include <utils/log.h>
 #include <utils/global.h>
@@ -36,7 +36,7 @@
 
 using namespace DataPack;
 
-static inline DataPack::Core &core() {return DataPack::Core::instance();}
+static inline DataPack::DataPackCore &core() {return DataPack::DataPackCore::instance();}
 
 namespace {
 const char *const TAG_ROOT = "DataPack_Pack";
@@ -108,31 +108,31 @@ QString Pack::originalXmlConfigFileName() const
     return m_OriginalFileName;
 }
 
-/** Return the persistentCached file name of the pack XML config file. This file name is computed using the DataPack::Core::persistentCachePath(). */
+/** Return the persistentCached file name of the pack XML config file. This file name is computed using the DataPack::DataPackCore::persistentCachePath(). */
 QString Pack::persistentlyCachedXmlConfigFileName() const
 {
     return core().persistentCachePath() + QDir::separator() + uuid() + QDir::separator() + "packconfig.xml";
 }
 
-/** Return the persistentCached file name of the zipped pack file. This file name is computed using the DataPack::Core::persistentCachePath(). */
+/** Return the persistentCached file name of the zipped pack file. This file name is computed using the DataPack::DataPackCore::persistentCachePath(). */
 QString Pack::persistentlyCachedZipFileName() const
 {
     return core().persistentCachePath() + QDir::separator() + uuid() + QDir::separator() + QFileInfo(serverFileName()).fileName();
 }
 
-/** Return the path where to unzip the pack zipped file. This path is computed using the DataPack::Core::installPath(). */
+/** Return the path where to unzip the pack zipped file. This path is computed using the DataPack::DataPackCore::installPath(). */
 QString Pack::unzipPackToPath() const
 {
     return core().installPath() + QDir::separator() + m_descr.data(PackDescription::UnzipToPath).toString();
 }
 
-/** Return the installed file name of the pack XML config file. This file name is computed using the DataPack::Core::installPath(). */
+/** Return the installed file name of the pack XML config file. This file name is computed using the DataPack::DataPackCore::installPath(). */
 QString Pack::installedXmlConfigFileName() const
 {
     return unzipPackToPath() + QDir::separator() + "packconfig.xml";
 }
 
-/** Return the installed file name of the zipped pack file. This file name is computed using the DataPack::Core::installPath(). */
+/** Return the installed file name of the zipped pack file. This file name is computed using the DataPack::DataPackCore::installPath(). */
 QString Pack::installedZipFileName() const
 {
     /** \todo code here : missing extracted zip file name. */

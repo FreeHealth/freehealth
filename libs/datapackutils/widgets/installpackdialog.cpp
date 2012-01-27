@@ -26,7 +26,7 @@
  ***************************************************************************/
 #include "installpackdialog.h"
 
-#include <datapackutils/core.h>
+#include <datapackutils/datapackcore.h>
 #include <datapackutils/iservermanager.h>
 
 #include <QStandardItemModel>
@@ -36,8 +36,8 @@
 
 using namespace DataPack;
 
-static inline DataPack::Core &core() { return DataPack::Core::instance(); }
-static inline DataPack::IServerManager *serverManager() { return DataPack::Core::instance().serverManager(); }
+static inline DataPack::DataPackCore &core() { return DataPack::DataPackCore::instance(); }
+static inline DataPack::IServerManager *serverManager() { return DataPack::DataPackCore::instance().serverManager(); }
 
 namespace {
 const char * const CSS =
