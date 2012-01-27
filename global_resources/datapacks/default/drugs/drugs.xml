@@ -7,7 +7,7 @@
     <!-- Non translatable values -->
     <uuid>freemedforms.certified.drugs.completebase.allcountries</uuid>
     <authors>Eric Maeker, MD</authors>
-    <version>0.6.0</version>
+    <version>0.6.3</version>
     <fmfv>0.6.2</fmfv>
     <fdv>0.6.4</fdv>
     <cdate>2011-11-26</cdate>
