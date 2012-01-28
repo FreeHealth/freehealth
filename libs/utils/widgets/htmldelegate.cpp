@@ -74,17 +74,18 @@ void HtmlDelegate::paint(QPainter *painter, const QStyleOptionViewItem &option, 
     if (optionV4.state & QStyle::State_Selected)
         ctx.palette.setColor(QPalette::Text, optionV4.palette.color(QPalette::Active, QPalette::HighlightedText));
 
+    QRect checkRect = style->subElementRect(QStyle::SE_ViewItemCheckIndicator, &optionV4);
     QRect textRect = optionV4.rect;
     painter->save();
     painter->translate(textRect.topLeft());
     painter->setClipRect(textRect.translated(-textRect.topLeft()));
     doc.setTextWidth(textRect.width());
     QRect htmlRect = textRect.translated(-textRect.topLeft());
-    painter->translate(optionV4.decorationSize.width(), 0);
+    painter->translate(optionV4.decorationSize.width() + checkRect.right(), 0);
     doc.drawContents(painter, htmlRect);
-    painter->translate(-optionV4.decorationSize.width(), 0);
+    painter->translate(-optionV4.decorationSize.width() - checkRect.right(), 0);
     QPixmap pixmap = optionV4.icon.pixmap(optionV4.decorationSize);
-    painter->drawPixmap(QPoint(0, 0), pixmap);
+    painter->drawPixmap(QPoint(checkRect.right(), optionV4.rect.height() / 2 - pixmap.height() / 2), pixmap);
     painter->restore();
 }
 
