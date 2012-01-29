@@ -61,12 +61,9 @@ void HtmlDelegate::paint(QPainter *painter, const QStyleOptionViewItem &option, 
 
     // Painting item without text
     QString backupText = optionV4.text;
-    QIcon backupIcon = optionV4.icon;
     optionV4.text = QString(); // inhibe text displaying
-    optionV4.icon = QIcon(); // inhibe icon displaying
     style->drawControl(QStyle::CE_ItemViewItem, &optionV4, painter);
     optionV4.text = backupText;
-    optionV4.icon = backupIcon;
 
     QAbstractTextDocumentLayout::PaintContext ctx;
 
@@ -74,18 +71,19 @@ void HtmlDelegate::paint(QPainter *painter, const QStyleOptionViewItem &option, 
     if (optionV4.state & QStyle::State_Selected)
         ctx.palette.setColor(QPalette::Text, optionV4.palette.color(QPalette::Active, QPalette::HighlightedText));
 
-    QRect checkRect = style->subElementRect(QStyle::SE_ViewItemCheckIndicator, &optionV4);
+    // we only need the left of the plain text rect and the vertical middle. All other data are irrelevant because of HTML.
+    QRect plainTextRect = style->subElementRect(QStyle::SE_ItemViewItemText, &optionV4);
     QRect textRect = optionV4.rect;
+    textRect.setTop(plainTextRect.center().y() - doc.size().height() / 2);
+    textRect.setHeight(doc.size().height());
     painter->save();
     painter->translate(textRect.topLeft());
     painter->setClipRect(textRect.translated(-textRect.topLeft()));
-    doc.setTextWidth(textRect.width());
+    //doc.setTextWidth(textRect.width());
     QRect htmlRect = textRect.translated(-textRect.topLeft());
-    painter->translate(optionV4.decorationSize.width() + checkRect.right(), 0);
+    painter->translate(plainTextRect.left(), 0);
     doc.drawContents(painter, htmlRect);
-    painter->translate(-optionV4.decorationSize.width() - checkRect.right(), 0);
-    QPixmap pixmap = optionV4.icon.pixmap(optionV4.decorationSize);
-    painter->drawPixmap(QPoint(checkRect.right(), optionV4.rect.height() / 2 - pixmap.height() / 2), pixmap);
+    painter->translate(-plainTextRect.left(), 0);
     painter->restore();
 }
 
@@ -96,7 +94,7 @@ QSize HtmlDelegate::sizeHint(const QStyleOptionViewItem &option, const QModelInd
 
     QTextDocument doc;
     doc.setHtml(options.text);
-    //doc.setTextWidth(options.rect.width());
+    doc.setTextWidth(options.rect.width());
     return QSize(doc.idealWidth(), doc.size().height());
 }
 
