@@ -44,6 +44,7 @@
 #include <datapackutils/datapackcore.h>
 #include <datapackutils/servermanager.h>
 #include <datapackutils/packmodel.h>
+#include <datapackutils/servermodel.h>
 
 #include <QToolBar>
 #include <QProgressDialog>
@@ -97,8 +98,8 @@ PackManager::PackManager(QWidget *parent) :
     if (layout()) {
         layout()->setMargin(0);
         layout()->setSpacing(0);
-        ui->toolbarLayout->setMargin(0);
-        ui->toolbarLayout->setSpacing(0);
+        ui->toolbarLayoutPacks->setMargin(0);
+        ui->toolbarLayoutPacks->setSpacing(0);
     }
 
     // Left menu items
@@ -121,6 +122,13 @@ PackManager::PackManager(QWidget *parent) :
     //    ui->packView->header()->hide();
     ui->packView->setAlternatingRowColors(true);
 
+    // server page
+    m_serverModel = new ServerModel(this);
+    ui->serverView->setModel(m_serverModel);
+    ui->serverView->setItemDelegate(delegate);
+    ui->serverView->setStyleSheet(::CSS);
+    ui->serverView->setAlternatingRowColors(true);
+
     // Manage central view
     QFont bold;
     bold.setBold(true);
@@ -132,6 +140,8 @@ PackManager::PackManager(QWidget *parent) :
     createToolbar();
 
     connect(ui->packView->selectionModel(), SIGNAL(currentChanged(QModelIndex,QModelIndex)), this, SLOT(onPackIndexActivated(QModelIndex,QModelIndex)));
+
+    ui->stackedWidget->setCurrentWidget(ui->pagePacks);
 
     // FOR TEST
     // This step should be done before the PackManager in called
@@ -190,16 +200,16 @@ void PackManager::createActions()
 
 void PackManager::createToolbar()
 {
-    m_ToolBar = new QToolBar(this);
-    m_ToolBar->addAction(aServerRefresh);
-    m_ToolBar->addSeparator();
-    m_ToolBar->addAction(aServerAdd);
-    m_ToolBar->addAction(aServerRemove);
-    m_ToolBar->addAction(aServerInfo);
-    m_ToolBar->addSeparator();
-    m_ToolBar->addAction(aInstallAllPack);
-    connect(m_ToolBar, SIGNAL(actionTriggered(QAction*)), this, SLOT(serverActionTriggered(QAction*)));
-    ui->toolbarLayout->addWidget(m_ToolBar);
+    m_ToolBarPacks = new QToolBar(this);
+    m_ToolBarPacks->addAction(aServerRefresh);
+    m_ToolBarPacks->addSeparator();
+    m_ToolBarPacks->addAction(aServerAdd);
+    m_ToolBarPacks->addAction(aServerRemove);
+    m_ToolBarPacks->addAction(aServerInfo);
+    m_ToolBarPacks->addSeparator();
+    m_ToolBarPacks->addAction(aInstallAllPack);
+    connect(m_ToolBarPacks, SIGNAL(actionTriggered(QAction*)), this, SLOT(serverActionTriggered(QAction*)));
+    ui->toolbarLayoutPacks->addWidget(m_ToolBarPacks);
 }
 
 static void elideTextToLabel(QLabel *label, const QString &text)

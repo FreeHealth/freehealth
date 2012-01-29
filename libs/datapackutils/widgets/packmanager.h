@@ -46,6 +46,7 @@ namespace DataPack {
 class PackDescription;
 class Pack;
 class PackModel;
+class ServerModel;
 
 namespace Ui {
     class PackManager;
@@ -81,9 +82,10 @@ private:
 private:
     Ui::PackManager *ui;
     PackModel *m_PackModel;
+    ServerModel *m_serverModel;
     QAction *aServerRefresh, *aServerRemove, *aServerAdd, *aServerInfo;
     QAction *aInstall, *aInstallAllPack, *aRemove, *aUpdate;
-    QToolBar *m_ToolBar;
+    QToolBar *m_ToolBarPacks;
     QListWidgetItem *m_datapacksItem;
     QListWidgetItem *m_serversItem;
 };
