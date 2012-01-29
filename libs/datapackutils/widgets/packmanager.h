@@ -33,6 +33,7 @@
 class QStandardItemModel;
 class QModelIndex;
 class QToolBar;
+class QListWidgetItem;
 
 /**
  * \file packmanager.h
@@ -71,6 +72,7 @@ private Q_SLOTS:
     void onPackIndexActivated(const QModelIndex &index, const QModelIndex &previous);
     void serverActionTriggered(QAction *a);
     void packActionTriggered(QAction *a);
+    void on_listWidgetMenu_currentRowChanged(int row);
 
 private:
     void retranslate();
@@ -82,6 +84,8 @@ private:
     QAction *aServerRefresh, *aServerRemove, *aServerAdd, *aServerInfo;
     QAction *aInstall, *aInstallAllPack, *aRemove, *aUpdate;
     QToolBar *m_ToolBar;
+    QListWidgetItem *m_datapacksItem;
+    QListWidgetItem *m_serversItem;
 };
 
 }  // End namespace DataPack

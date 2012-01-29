@@ -47,6 +47,7 @@
 
 #include <QToolBar>
 #include <QProgressDialog>
+#include <QListWidgetItem>
 
 #include <QDebug>
 
@@ -99,6 +100,13 @@ PackManager::PackManager(QWidget *parent) :
         ui->toolbarLayout->setMargin(0);
         ui->toolbarLayout->setSpacing(0);
     }
+
+    // Left menu items
+    m_datapacksItem = new QListWidgetItem(icon(::ICON_SERVER_ADD), tr("Datapacks"));
+    ui->listWidgetMenu->addItem(m_datapacksItem);
+    m_serversItem = new QListWidgetItem(icon(::ICON_SERVER_ADD), tr("Servers"));
+    ui->listWidgetMenu->addItem(m_serversItem);
+    ui->listWidgetMenu->setCurrentRow(0);
 
     // Manage pack model/view
     m_PackModel = new PackModel(this);
@@ -347,4 +355,8 @@ void PackManager::changeEvent(QEvent *e)
         ui->retranslateUi(this);
         retranslate();
     }
+}
+
+void PackManager::on_listWidgetMenu_currentRowChanged(int row) {
+    qDebug("Row: %d", row);
 }

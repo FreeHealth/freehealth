@@ -26,7 +26,8 @@ HEADERS += datapack_exporter.h \
     serverengines/localserverengine.h \
     serverengines/httpserverengine.h \
     packmodel.h \
-    servermodel.h
+    servermodel.h \
+    categorylistwidget.h
 
 SOURCES += \
     servermanager.cpp \
@@ -46,7 +47,8 @@ SOURCES += \
     serverengines/localserverengine.cpp \
     serverengines/httpserverengine.cpp \
     packmodel.cpp \
-    servermodel.cpp
+    servermodel.cpp \
+    categorylistwidget.cpp
 
 FORMS += \
     widgets/packmanager.ui \
