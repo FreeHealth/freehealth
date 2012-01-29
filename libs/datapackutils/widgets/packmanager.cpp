@@ -102,7 +102,7 @@ PackManager::PackManager(QWidget *parent) :
     }
 
     // Left menu items
-    m_datapacksItem = new QListWidgetItem(icon(::ICON_SERVER_ADD), tr("Datapacks"));
+    m_datapacksItem = new QListWidgetItem(icon(::ICON_INSTALL), tr("Datapacks"));
     ui->listWidgetMenu->addItem(m_datapacksItem);
     m_serversItem = new QListWidgetItem(icon(::ICON_SERVER_ADD), tr("Servers"));
     ui->listWidgetMenu->addItem(m_serversItem);
@@ -358,5 +358,8 @@ void PackManager::changeEvent(QEvent *e)
 }
 
 void PackManager::on_listWidgetMenu_currentRowChanged(int row) {
-    qDebug("Row: %d", row);
+    if (ui->listWidgetMenu->currentItem() == m_datapacksItem)
+        ui->stackedWidget->setCurrentWidget(ui->pagePacks);
+    else if (ui->listWidgetMenu->currentItem() == m_serversItem)
+        ui->stackedWidget->setCurrentWidget(ui->pageServers);
 }
