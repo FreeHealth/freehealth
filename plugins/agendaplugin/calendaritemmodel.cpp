@@ -43,7 +43,7 @@
 #include <utils/log.h>
 #include <translationutils/constants.h>
 #include <translationutils/trans_agenda.h>
-#include <translationutils/trans_drugs.h>
+#include <translationutils/trans_current.h>
 
 #include <QStandardItemModel>
 #include <QStandardItem>

@@ -55,6 +55,13 @@ const char* const UNKNOWN_SERVER                     = QT_TRANSLATE_NOOP("tkCons
 const char* const INSTALLED                          = QT_TRANSLATE_NOOP("tkConstants", "Installed");
 const char* const CURRENTLY_INSTALLED                = QT_TRANSLATE_NOOP("tkConstants", "Currently installed");
 
+const char* const FROM                          = QT_TRANSLATE_NOOP("tkConstants", "from");
+const char* const TO                            = QT_TRANSLATE_NOOP("tkConstants", "to");
+const char* const FROM_1_TO_2                   = QT_TRANSLATE_NOOP("tkConstants", "from %1 to %2");
+const char* const DURING                        = QT_TRANSLATE_NOOP("tkConstants", "during");
+const char* const EACH                          = QT_TRANSLATE_NOOP("tkConstants", "each");
+const char* const AND                           = QT_TRANSLATE_NOOP("tkConstants", "and");
+
 // Settings related messages
 const char* const SETTINGS_RECOVERED                = QT_TRANSLATE_NOOP("tkConstants", "Settings recovered" );
 const char* const LOADING_SETTINGS                  = QT_TRANSLATE_NOOP("tkConstants", "Reading settings file");
