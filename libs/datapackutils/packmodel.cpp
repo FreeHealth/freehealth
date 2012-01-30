@@ -89,7 +89,11 @@ static QString packToHtml(const PackItem &item)
             inst = QCoreApplication::translate("Datapack::PackModel", "Installation requested");
             color = "red";
         } else if (item.isAnUpdate) {
-            inst = tkTr(Trans::Constants::UPDATE_AVAILABLE);
+            if (item.userCheckState==Qt::Unchecked) {
+                inst = QCoreApplication::translate("Datapack::PackModel", "Deletion requested");
+            } else {
+                inst = tkTr(Trans::Constants::UPDATE_AVAILABLE);
+            }
             color = "blue";
         }
     }
@@ -99,7 +103,7 @@ static QString packToHtml(const PackItem &item)
     }
     return QString("<span style=\"color:black;font-weight:bold\">%1</span><br />"
                    "<span style=\"color:gray; font-size:small\">%2: %3</span>%4")
-            .arg(item.pack.description().data(PackDescription::Label).toString())
+            .arg(item.pack.name())
             .arg(tkTr(Trans::Constants::VERSION))
             .arg(item.pack.description().data(PackDescription::Version).toString())
             .arg(inst);
@@ -132,14 +136,14 @@ public:
     {
         qWarning() << "Scanning server" << serverManager()->getServerAt(index).uuid();
         foreach(const Pack &p, serverManager()->getPackForServer(serverManager()->getServerAt(index))) {
-            qWarning() << "   ?? " << p.uuid() << p.version();
+//            qWarning() << "   ?? " << p.uuid() << p.version();
             // Add to the package list if not already included
             if (!p.isValid())
                 continue;
-            qWarning() << "   valid " << p.uuid() << p.version();
+//            qWarning() << "   valid " << p.uuid() << p.version();
             if (m_AvailPacks.contains(p))
                 continue;
-            qWarning() << "   adding" << p.uuid() << p.version();
+//            qWarning() << "   adding" << p.uuid() << p.version();
             m_AvailPacks << p;
         }
     }
@@ -154,7 +158,7 @@ public:
             if (p.uuid() == packUuid) {
                 // keep only highest version
                 Utils::VersionNumber testing(p.version());
-                qWarning() << "testing version" << packUuid << testing << highest;
+//                qWarning() << "testing version" << packUuid << testing << highest;
                 if (testing > highest) {
                     highest = testing;
                     id = i;
@@ -169,17 +173,17 @@ public:
         // Get all packages from servers
         QList<Pack> installedPacks = serverManager()->installedPack();
         for(int i=0; i < serverManager()->serverCount(); ++i) {
-            qWarning() << "scanning server" << i;
+//            qWarning() << "scanning server" << i;
             scanServerPack(i);
         }
 
         // Add installed package to the availPacks list
-        qWarning() << "Scanning installed";
+//        qWarning() << "Scanning installed";
         foreach(const Pack &p, installedPacks) {
             if (m_AvailPacks.contains(p))
                 continue;
             m_AvailPacks << p;
-            qWarning() << "   adding" << p.uuid() << p.version();
+//            qWarning() << "   adding" << p.uuid() << p.version();
         }
 
         // Keep only highest pack versions
@@ -193,8 +197,8 @@ public:
             processed << p.uuid();
         }
 
-        qWarning() << idInUse;
-        qWarning() << m_AvailPacks;
+//        qWarning() << idInUse;
+//        qWarning() << m_AvailPacks;
 
         // Create PackItem list
         foreach(int id, idInUse) {
@@ -277,6 +281,22 @@ void PackModel::setPackCheckable(const bool checkable)
     reset();
 }
 
+/** Return true is the model contains user modifications. */
+bool PackModel::isDirty() const
+{
+    foreach(const PackItem &item, d->m_Items) {
+        // Installed packs asked for removal ?
+        if (item.isInstalled && item.userCheckState!=Qt::Checked)
+            return true;
+        // Update packs changes
+        if (item.isAnUpdate && item.userCheckState!=Qt::PartiallyChecked)
+            return true;
+        // Not installed packs
+        if (!item.isInstalled && item.userCheckState==Qt::Checked)
+            return true;
+    }
+}
+
 int PackModel::rowCount(const QModelIndex &) const
 {
     return d->m_Items.count();
@@ -292,11 +312,13 @@ QVariant PackModel::data(const QModelIndex &index, int role) const
     if (row < 0 || row >= d->m_Items.count())
         return QVariant();
 
-    // We actually only work on one column == Label
-    if (index.column()!=Label)
-        return QVariant();
-
-    if (role==Qt::DisplayRole || role==Qt::ToolTipRole) {
+    if (role==Qt::DisplayRole) {
+        switch (index.column()) {
+        case Label: return packToHtml(d->m_Items.at(row));
+        case IsInstalled: return d->m_Items.at(row).isInstalled;
+        case IsAnUpdate: return d->m_Items.at(row).isAnUpdate;
+        }
+    } else if (role==role==Qt::ToolTipRole && index.column()==Label) {
         return packToHtml(d->m_Items.at(row));
     } else if (d->m_PackCheckable && role==Qt::CheckStateRole) {
         return d->m_Items.at(row).userCheckState;
@@ -316,7 +338,16 @@ bool PackModel::setData(const QModelIndex &index, const QVariant &value, int rol
         return false;
 
     if (d->m_PackCheckable && role==Qt::CheckStateRole && index.column()==Label) {
-        d->m_Items[index.row()].userCheckState = Qt::CheckState(value.toInt());
+        Qt::CheckState save = d->m_Items[index.row()].userCheckState;
+        // Manage a tristate bug in model/view
+        if (flags(index) & Qt::ItemIsTristate) {
+            int v = (d->m_Items[index.row()].userCheckState + 1) % 3;
+            d->m_Items[index.row()].userCheckState = Qt::CheckState(v);
+        } else {
+            d->m_Items[index.row()].userCheckState = Qt::CheckState(value.toInt());
+        }
+
+//        Q_EMIT packStatusChanged(d->m_Items[index.row()].pack, save, d->m_Items[index.row()].userCheckState);
         Q_EMIT dataChanged(index, index);
         return true;
     }
@@ -326,8 +357,13 @@ bool PackModel::setData(const QModelIndex &index, const QVariant &value, int rol
 Qt::ItemFlags PackModel::flags(const QModelIndex &index) const
 {
     Qt::ItemFlags f = QAbstractTableModel::flags(index);
-    if (d->m_PackCheckable && index.column()==Label)
+    if (d->m_PackCheckable && index.column()==Label) {
         f |= Qt::ItemIsUserCheckable;
+        if (index.row()>=0 && index.row()<d->m_Items.count()) {
+            if (d->m_Items.at(index.row()).isAnUpdate)
+                f |= Qt::ItemIsTristate;
+        }
+    }
     return f;
 }
 

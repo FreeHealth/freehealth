@@ -1,7 +1,7 @@
 /***************************************************************************
  *  The FreeMedForms project is a set of free, open source medical         *
  *  applications.                                                          *
- *  (C) 2008-2012 by Eric MAEKER, MD (France) <eric.maeker@gmail.com>      *
+ *  (C) 2008-2011 by Eric MAEKER, MD (France) <eric.maeker@gmail.com>      *
  *  All rights reserved.                                                   *
  *                                                                         *
  *  This program is free software: you can redistribute it and/or modify   *
@@ -24,66 +24,36 @@
  *   Contributors :                                                        *
  *       NAME <MAIL@ADRESS>                                                *
  ***************************************************************************/
-#ifndef DATAPACK_PACKMODEL_H
-#define DATAPACK_PACKMODEL_H
+#include "packdependencychecker.h"
 
-#include <datapackutils/pack.h>
-#include <QAbstractTableModel>
+#include <datapackutils/datapackcore.h>
+#include <datapackutils/iservermanager.h>
 
-/**
- * \file packmodel.h
- * \author Eric MAEKER <eric.maeker@gmail.com>
- * \version 0.6.2
- * \date 27 Jan 2012
-*/
+using namespace DataPack;
 
-namespace DataPack {
-class Pack;
-namespace Internal {
-class PackModelPrivate;
+static inline DataPack::DataPackCore &core() { return DataPack::DataPackCore::instance(); }
+static inline DataPack::IServerManager *serverManager() { return DataPack::DataPackCore::instance().serverManager(); }
+
+PackDependencyChecker::PackDependencyChecker(QObject *parent) :
+    QObject(parent),
+    m_IsCorrect(false)
+{
 }
 
-class PackModel : public QAbstractTableModel
+void PackDependencyChecker::testCombination(const QList<Pack> &installPacks, const QList<Pack> &updatePacks, const QList<Pack> &removePacks)
 {
-    Q_OBJECT
-public:
-    enum DataRepresentation {
-        Label = 0,
-        IsInstalled,
-        IsAnUpdate,
-        ColumnCount
-    };
+}
 
-    explicit PackModel(QObject *parent = 0);
-    ~PackModel();
+bool PackDependencyChecker::isCombinationCorrect() const
+{
+    return true;
+}
 
-    void setInstallChecker(const bool onOff);
-    void setPackCheckable(const bool checkable);
-    bool isDirty() const;
+QList<Pack> PackDependencyChecker::neededToInstall() const
+{}
 
-    int rowCount(const QModelIndex &parent = QModelIndex()) const;
-    int columnCount(const QModelIndex & = QModelIndex()) const {return ColumnCount;}
+QList<Pack> PackDependencyChecker::neededToUpdate() const
+{}
 
-    QVariant data(const QModelIndex &index, int role = Qt::DisplayRole) const;
-    bool setData(const QModelIndex &index, const QVariant &value, int role = Qt::EditRole);
-
-    Qt::ItemFlags flags(const QModelIndex &index) const;
-
-    const Pack &packageAt(const int index) const;
-
-    QList<Pack> packageToInstall() const;
-    QList<Pack> packageToUpdate() const;
-    QList<Pack> packageToRemove() const;
-
-private Q_SLOTS:
-    void updateModel();
-    void onServerAdded(const int index);
-    void onServerRemoved(const int index);
-
-private:
-    Internal::PackModelPrivate *d;
-};
-
-}  // End namespace DataPack
-
-#endif // DATAPACK_PACKMODEL_H
+QList<Pack> PackDependencyChecker::neededToRemove() const
+{}

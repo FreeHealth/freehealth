@@ -72,7 +72,7 @@ private Q_SLOTS:
 //    void onServerIndexActivated(const QModelIndex &index, const QModelIndex &previous);
     void onPackIndexActivated(const QModelIndex &index, const QModelIndex &previous);
     void serverActionTriggered(QAction *a);
-    void packActionTriggered(QAction *a);
+    void processPacks();
     void on_listWidgetMenu_currentRowChanged(int row);
 
 private:
@@ -84,7 +84,7 @@ private:
     PackModel *m_PackModel;
     ServerModel *m_serverModel;
     QAction *aServerRefresh, *aServerRemove, *aServerAdd, *aServerInfo;
-    QAction *aInstall, *aInstallAllPack, *aRemove, *aUpdate;
+    QAction *aProcess;
     QToolBar *m_ToolBarPacks;
     QListWidgetItem *m_datapacksItem;
     QListWidgetItem *m_serversItem;

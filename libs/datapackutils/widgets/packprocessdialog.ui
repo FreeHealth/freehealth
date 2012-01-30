@@ -1,13 +1,13 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <ui version="4.0">
- <class>DataPack::InstallPackDialog</class>
- <widget class="QDialog" name="DataPack::InstallPackDialog">
+ <class>DataPack::PackProcessDialog</class>
+ <widget class="QDialog" name="DataPack::PackProcessDialog">
   <property name="geometry">
    <rect>
     <x>0</x>
     <y>0</y>
-    <width>339</width>
-    <height>269</height>
+    <width>520</width>
+    <height>292</height>
    </rect>
   </property>
   <property name="windowTitle">
@@ -38,7 +38,33 @@
     </widget>
    </item>
    <item row="2" column="0">
-    <widget class="QTreeView" name="treeView"/>
+    <widget class="Utils::MiniSplitter" name="splitter">
+     <property name="orientation">
+      <enum>Qt::Vertical</enum>
+     </property>
+     <widget class="QTreeWidget" name="treeWidget">
+      <column>
+       <property name="text">
+        <string notr="true">1</string>
+       </property>
+      </column>
+     </widget>
+     <widget class="QScrollArea" name="scrollArea">
+      <property name="widgetResizable">
+       <bool>true</bool>
+      </property>
+      <widget class="QWidget" name="scrollAreaWidgetContents">
+       <property name="geometry">
+        <rect>
+         <x>0</x>
+         <y>0</y>
+         <width>494</width>
+         <height>76</height>
+        </rect>
+       </property>
+      </widget>
+     </widget>
+    </widget>
    </item>
    <item row="3" column="0">
     <widget class="QDialogButtonBox" name="buttonBox">
@@ -46,18 +72,26 @@
       <enum>Qt::Horizontal</enum>
      </property>
      <property name="standardButtons">
-      <set>QDialogButtonBox::Cancel|QDialogButtonBox::Ok</set>
+      <set>QDialogButtonBox::Apply|QDialogButtonBox::Cancel</set>
      </property>
     </widget>
    </item>
   </layout>
  </widget>
+ <customwidgets>
+  <customwidget>
+   <class>Utils::MiniSplitter</class>
+   <extends>QSplitter</extends>
+   <header location="global">utils/widgets/minisplitter.h</header>
+   <container>1</container>
+  </customwidget>
+ </customwidgets>
  <resources/>
  <connections>
   <connection>
    <sender>buttonBox</sender>
    <signal>accepted()</signal>
-   <receiver>DataPack::InstallPackDialog</receiver>
+   <receiver>DataPack::PackProcessDialog</receiver>
    <slot>accept()</slot>
    <hints>
     <hint type="sourcelabel">
@@ -73,7 +107,7 @@
   <connection>
    <sender>buttonBox</sender>
    <signal>rejected()</signal>
-   <receiver>DataPack::InstallPackDialog</receiver>
+   <receiver>DataPack::PackProcessDialog</receiver>
    <slot>reject()</slot>
    <hints>
     <hint type="sourcelabel">

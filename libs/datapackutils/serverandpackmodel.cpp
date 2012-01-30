@@ -67,7 +67,7 @@ static void appendPackToModel(const Server &server, QStandardItem *rootItem)
     for(int i=0; i < packs.count(); ++i) {
         QString pack = QString("<span style=\"color:black;font-weight:bold\">%1</span><br />"
                                "<span style=\"color:gray; font-size:small\">%2: %3</span>")
-                .arg(packs.at(i).description().data(PackDescription::Label).toString())
+                .arg(packs.at(i).name())
                 .arg(tkTr(Trans::Constants::VERSION))
                 .arg(packs.at(i).description().data(PackDescription::Version).toString());
         QStandardItem *packItem = new QStandardItem(pack);

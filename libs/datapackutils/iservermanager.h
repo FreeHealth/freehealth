@@ -78,26 +78,30 @@ public:
     virtual void getAllDescriptionFile() = 0;
     virtual void checkServerUpdates() = 0;
 
-
-    virtual void connectServer(const Server &server, const ServerIdentification &ident = ServerIdentification()) = 0;
-    virtual void connectAndUpdate(int index) = 0;
-
     virtual QList<PackDescription> getPackDescription(const Server &server) = 0;
     virtual QList<Pack> getPackForServer(const Server &server) = 0;
-
-    // Not actually in use
-    virtual ServerDescription downloadServerDescription(const Server &server) = 0;
-    virtual QList<PackDescription> downloadPackDescription(const Server &server, const Pack &pack) = 0;
-    virtual Pack downloadAndUnzipPack(const Server &server, const Pack &pack) = 0;
+    virtual Server getServerForPack(const Pack &pack) = 0;
+    virtual bool isPackInPersistentCache(const Pack &pack) = 0;
 
     virtual QList<Pack> installedPack() = 0;
     virtual bool isDataPackInstalled(const Pack &pack) = 0;
     virtual bool isDataPackInstalled(const QString &packUid, const QString &packVersion = QString::null) = 0;
+
+    // this part should be own by the packProgressDialog
     virtual bool installDataPack(const Pack &pack, QProgressBar *progressBar = 0) = 0;
     virtual bool removeDataPack(const Pack &pack, QProgressBar *progressBar = 0) = 0;
     virtual bool updateDataPack(const Pack &pack, QProgressBar *progressBar = 0) = 0;
+    // end
 
     virtual QList<Pack> packDependencies(const Pack &pack, const PackDependencyData::TypeOfDependence &dependence) = 0;
+
+    // Not actually in use
+    virtual void connectServer(const Server &server, const ServerIdentification &ident = ServerIdentification()) = 0;
+    virtual void connectAndUpdate(int index) = 0;
+
+    virtual ServerDescription downloadServerDescription(const Server &server) = 0;
+    virtual QList<PackDescription> downloadPackDescription(const Server &server, const Pack &pack) = 0;
+    virtual Pack downloadAndUnzipPack(const Server &server, const Pack &pack) = 0;
 
 Q_SIGNALS:
     void allServerDescriptionAvailable();

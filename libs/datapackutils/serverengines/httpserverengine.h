@@ -38,10 +38,14 @@ class ServerManager;
 
 // this private struct contains all data associated with a QNetworkReply. It will be set as a user attribute in the QNetworkReply at its creation (see QNetworkReply::setAttribute()).
 struct ReplyData {
-    ReplyData(){}
-    ReplyData(QNetworkReply *reply, Server *server, Server::FileRequested fileType);
+    ReplyData() : reply(0), server(0), bar(0) {}
+    ReplyData(QNetworkReply *reply, Server *server, Server::FileRequested fileType, const Pack &pack, QProgressBar *progBar = 0);
+    ReplyData(QNetworkReply *reply, Server *server, Server::FileRequested fileType, QProgressBar *progBar = 0);
+
     QNetworkReply *reply;
     Server *server;
+    QProgressBar *bar;
+    Pack pack;
     QByteArray response;
     Server::FileRequested fileType; // a configuration file? a pack file? etc
 };
@@ -60,6 +64,7 @@ public:
     bool startDownloadQueue();
 
 private Q_SLOTS:
+    void downloadProgress(qint64 bytesRead, qint64 totalBytes);
     void serverReadyRead();
     void serverError(QNetworkReply::NetworkError error);
     void serverFinished();

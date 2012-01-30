@@ -24,47 +24,82 @@
  *   Contributors :                                                        *
  *       NAME <MAIL@ADRESS>                                                *
  ***************************************************************************/
-#ifndef DATAPACK_INSTALLPACKDIALOG_H
-#define DATAPACK_INSTALLPACKDIALOG_H
+#ifndef DATAPACK_PACKPROCESSDIALOG_H
+#define DATAPACK_PACKPROCESSDIALOG_H
 
 #include <QDialog>
 class QStandardItemModel;
+class QGridLayout;
 
 /**
- * \file servermanager.h
+ * \file packprocessdialog.h
  * \author Eric MAEKER <eric.maeker@gmail.com>
  * \version 0.6.2
- * \date 02 Dec 2011
+ * \date 30 Jan 2012
  * \warning Needs Qt >= 4.7
 */
 
 namespace DataPack {
 class Pack;
+class IServerManager;
 
-namespace Ui {
-    class InstallPackDialog;
+namespace Internal {
+class IServerEngine;
 }
 
-class InstallPackDialog : public QDialog
+namespace Ui {
+    class PackProcessDialog;
+}
+
+class PackProcessDialog : public QDialog
 {
     Q_OBJECT
+    friend class DataPack::IServerManager;
 
 public:
-    explicit InstallPackDialog(QWidget *parent = 0);
-    ~InstallPackDialog();
+    explicit PackProcessDialog(QWidget *parent = 0);
+    ~PackProcessDialog();
 
     void setPackToInstall(const Pack &pack);
     void setPackToInstall(const QList<Pack> &packs);
 
-    QList<Pack> packsToInstall() const;
+    void setPackToUpdate(const Pack &pack);
+    void setPackToUpdate(const QList<Pack> &packs);
+
+    void setPackToRemove(const Pack &pack);
+    void setPackToRemove(const QList<Pack> &packs);
+
+    void setPackToProcess(const QList<Pack> &installPacks, const QList<Pack> &updatePacks, const QList<Pack> &removePacks);
+
+//    void checkDependencies() const;
+//    bool isDependenciesAssumed() const;
+
+protected Q_SLOTS:
+    void done(int result);
+
+protected:
+    void setServerEngines(const QVector<Internal::IServerEngine*> &engines);
+
+private Q_SLOTS:
+    void processPacks();
+    void packDownloadDone();
 
 private:
-    Ui::InstallPackDialog *ui;
-    QStandardItemModel *m_Model;
-    QList<Pack> m_Packs;
-    QPushButton *bInstallAll, *bInstallPackAndDepends, *bInstallPacksOnly;
+    void startPackDownloads();
+    void installPacks();
+    void removePacks();
+    void clearTemporaries();
+
+private:
+    Ui::PackProcessDialog *ui;
+    QWidget *m_ScrollWidget;
+    QGridLayout *m_ScrollLayout;
+    QList<Pack> m_InstallPacks;
+    QList<Pack> m_UpdatePacks;
+    QList<Pack> m_RemovePacks;
+    QVector<Internal::IServerEngine*> m_Engines;
 };
 
 }  // End namespace DataPack
 
-#endif // DATAPACK_INSTALLPACKDIALOG_H
+#endif // DATAPACK_PackProcessDialog_H

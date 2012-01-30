@@ -37,6 +37,7 @@
 
 #include <QDir>
 #include <QFile>
+#include <QProgressBar>
 
 #include <QDebug>
 
@@ -48,11 +49,22 @@ using namespace Trans::ConstantTranslations;
 
 static inline DataPack::DataPackCore &core() { return DataPack::DataPackCore::instance(); }
 
-ReplyData::ReplyData(QNetworkReply *reply, Server *server, Server::FileRequested fileType) {
+ReplyData::ReplyData(QNetworkReply *reply, Server *server, Server::FileRequested fileType, const Pack &pack, QProgressBar *progBar) {
     this->reply = reply;
     this->server = server;
     this->fileType = fileType;
+    this->pack = pack;
+    this->bar = progBar;
 }
+
+ReplyData::ReplyData(QNetworkReply *reply, Server *server, Server::FileRequested fileType, QProgressBar *progBar)
+{
+    this->reply = reply;
+    this->server = server;
+    this->fileType = fileType;
+    this->bar = progBar;
+}
+
 
 /////////////////////////////////////////////////////////////////////////////////////////
 ////////////////////////////  IServerEngine code  ///////////////////////////////////////
@@ -91,20 +103,37 @@ int HttpServerEngine::downloadQueueCount() const
 
 bool HttpServerEngine::startDownloadQueue()
 {
-    for(int i=0; i < m_queue.count(); ++i) {
-        Server *s = m_queue.at(i).server;
+    for(int i = 0; i < m_queue.count(); ++i) {
+        const ServerEngineQuery &query = m_queue.at(i);
+        Server *s = query.server;
         if (!managesServer(*s))
             continue;
         qWarning() << "HTTP:startDownloadQueue; server #" << i << s->nativeUrl();
 
-        // Download server.conf.xml
-        QNetworkRequest request = createRequest(s->url(Server::ServerConfigurationFile));
-        QNetworkReply *reply = m_NetworkAccessManager->get(request);
-        m_replyToData.insert(reply, ReplyData(reply, s, Server::ServerConfigurationFile));
-        ++m_DownloadCount_Server;
+        QNetworkReply *reply = 0;
+
+        if (query.downloadDescriptionFiles) {
+            // Download server.conf.xml
+            QNetworkRequest request = createRequest(s->url(Server::ServerConfigurationFile));
+            reply = m_NetworkAccessManager->get(request);
+            m_replyToData.insert(reply, ReplyData(reply, s, Server::ServerConfigurationFile, query.progressBar));
+            ++m_DownloadCount_Server;
+        } else if (query.downloadPackFile) {
+            QNetworkRequest request = createRequest(s->url(Server::PackFile, query.pack->serverFileName()));
+            reply = m_NetworkAccessManager->get(request);
+            m_replyToData.insert(reply, ReplyData(reply, s, Server::PackFile, *query.pack, query.progressBar));
+        }
+
         connect(reply, SIGNAL(readyRead()), this, SLOT(serverReadyRead()));
         connect(reply, SIGNAL(finished()), this, SLOT(serverFinished()));
         connect(reply, SIGNAL(error(QNetworkReply::NetworkError)), this, SLOT(serverError(QNetworkReply::NetworkError)));
+
+        QProgressBar *bar = query.progressBar;
+        if (bar) {
+            bar->setRange(0, 100);
+            bar->setValue(0);
+            connect(reply, SIGNAL(downloadProgress(qint64,qint64)), this, SLOT(downloadProgress(qint64,qint64)));
+        }
     }
     return true;
 }
@@ -112,6 +141,22 @@ bool HttpServerEngine::startDownloadQueue()
 /////////////////////////////////////////////////////////////////////////////////////////
 ////////////////////////////  Specific Http code  ///////////////////////////////////////
 /////////////////////////////////////////////////////////////////////////////////////////
+void HttpServerEngine::downloadProgress(qint64 bytesRead, qint64 totalBytes)
+{
+    // Retreive progressBar
+    QNetworkReply *reply = qobject_cast<QNetworkReply*>(sender());
+    QProgressBar *bar = m_replyToData[reply].bar;
+    if (!bar) {
+        disconnect(reply, SIGNAL(downloadProgress(qint64,qint64)), this, SLOT(downloadProgress(qint64,qint64)));
+        return;
+    }
+    if (totalBytes>0) {
+        int v = bytesRead*100/totalBytes;
+        bar->setValue(v);
+    } else
+        bar->setValue(0);
+}
+
 /** Server configuration file read enable. */
 void HttpServerEngine::serverReadyRead()
 {
@@ -244,6 +289,7 @@ void HttpServerEngine::afterServerConfigurationDownload(const ReplyData &data)
         }
     }
 }
+
 void HttpServerEngine::afterPackDescriptionFileDownload(const ReplyData &data)
 {
     PackDescription desc;
@@ -254,8 +300,34 @@ void HttpServerEngine::afterPackDescriptionFileDownload(const ReplyData &data)
 
 void HttpServerEngine::afterPackFileDownload(const ReplyData &data)
 {
-    // TODO
-    Q_UNUSED(data);
+    // Save downladed content to persistently pack cache
+    const Pack &pack = data.pack;
+    QFileInfo toPersistentCache(pack.persistentlyCachedZipFileName());
+    if (toPersistentCache.exists()) {
+        // remove everything
+        QFile::remove(pack.persistentlyCachedZipFileName());
+        QFile::remove(pack.persistentlyCachedXmlConfigFileName());
+    }
+
+    // Copy pack to datapack core persistentCachePath
+    QString newPath = toPersistentCache.absolutePath();
+    QDir newDir(newPath);
+    if (!newDir.exists()) {
+        QDir().mkpath(newPath);
+    }
+
+    QFile out(toPersistentCache.absoluteFilePath());
+    if (!out.open(QFile::WriteOnly)) {
+        LOG_ERROR(tkTr(Trans::Constants::FILE_1_CAN_NOT_BE_CREATED).arg(toPersistentCache.absoluteFilePath()));
+        /** \todo a better management of error is requiered */
+        return;
+    }
+    LOG("Writing pack content to " + toPersistentCache.absoluteFilePath());
+    out.write(data.response);
+    out.close();
+
+    // copy pack XML config
+    QFile::copy(pack.originalXmlConfigFileName(), pack.persistentlyCachedXmlConfigFileName());
 }
 
 void HttpServerEngine::createPackAndRegisterToServerManager(const Server &server, const QString &pathToPackDescription)

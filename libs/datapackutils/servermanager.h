@@ -77,13 +77,15 @@ public:
 
 private Q_SLOTS:
     void engineDescriptionDownloadDone();
-    void packDownloadDone();
 
 
     ////////////////////////////////////////////////
 public:
     // In use
     void registerPack(const Server &server, const Pack &pack);
+
+    Server getServerForPack(const Pack &pack);
+    bool isPackInPersistentCache(const Pack &pack);
     // End
 
     ////////////////////////////////////////////////
@@ -92,7 +94,6 @@ public:
 
     QList<PackDescription> getPackDescription(const Server &server);
     QList<Pack> getPackForServer(const Server &server);
-    Server getServerForPack(const Pack &pack);
 
     ServerDescription downloadServerDescription(const Server &server);
     QList<PackDescription> downloadPackDescription(const Server &server, const Pack &pack);
@@ -116,14 +117,12 @@ public:
     // Hidden Private part
     const QVector<Server> &servers() const {return m_Servers;}
     void createServerPackList(const Server &server);
+    const QVector<IServerEngine*> &serverEngines() const {return m_WorkingEngines;}
 
 private Q_SLOTS:
     bool downloadDataPack(const Server &server, const Pack &pack, QProgressBar *progressBar);
     void checkAndInstallPack(const Server &server, const Pack &pack, QProgressBar *progBar);
 
-// Private signals
-Q_SIGNALS:
-    void packDownloaded(const Server &server, const Pack &pack, QProgressBar *progBar);
 
 private:
     void checkServerUpdatesAfterDownload();

@@ -33,12 +33,20 @@
 #include <datapackutils/serveridentification.h>
 #include <QObject>
 
+/**
+ * \file iserverengine.h
+ * \author Eric MAEKER <eric.maeker@gmail.com>
+ * \version 0.6.2
+ * \date 30 Jan 2012
+ * \warning Needs Qt >= 4.7
+*/
+
 namespace DataPack {
 namespace Internal {
 
 struct ServerEngineQuery {
     ServerEngineQuery() :
-        server(0), ident(0), pack(0),
+        server(0), ident(0), pack(0), progressBar(0),
         forceDescriptionFromLocalCache(false),
         downloadDescriptionFiles(false),
         downloadPackFile(false)
@@ -47,6 +55,7 @@ struct ServerEngineQuery {
     Server *server;
     ServerIdentification *ident;
     Pack *pack;
+    QProgressBar *progressBar;
     bool forceDescriptionFromLocalCache;
     bool downloadDescriptionFiles;
     bool downloadPackFile;

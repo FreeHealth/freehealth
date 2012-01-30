@@ -45,6 +45,7 @@
 #include <datapackutils/servermanager.h>
 #include <datapackutils/packmodel.h>
 #include <datapackutils/servermodel.h>
+#include <datapackutils/widgets/packprocessdialog.h>
 
 #include <QToolBar>
 #include <QProgressDialog>
@@ -91,7 +92,7 @@ PackManager::PackManager(QWidget *parent) :
     QWidget(parent),
     ui(new Ui::PackManager),
     aServerRefresh(0), aServerRemove(0), aServerAdd(0),aServerInfo(0),
-    aInstall(0), aInstallAllPack(0), aRemove(0), aUpdate(0)
+    aProcess(0)
 {
     setObjectName("PackManager");
     ui->setupUi(this);
@@ -108,7 +109,7 @@ PackManager::PackManager(QWidget *parent) :
     m_serversItem = new QListWidgetItem(icon(::ICON_SERVER_ADD), tr("Servers"));
     ui->listWidgetMenu->addItem(m_serversItem);
     ui->listWidgetMenu->setCurrentRow(0);
-
+    ui->listWidgetMenu->hide();
     // Manage pack model/view
     m_PackModel = new PackModel(this);
     m_PackModel->setPackCheckable(true);
@@ -164,6 +165,7 @@ bool PackManager::submitChanges()
 void PackManager::createActions()
 {
     // Create server actions
+    QActionGroup *srvgr = new QActionGroup(this);
     QAction *a = aServerRefresh = new QAction(this);
     a->setObjectName("aServerRefresh");
     a->setIcon(icon(::ICON_SERVER_REFRESH, DataPack::DataPackCore::MediumPixmaps));
@@ -176,26 +178,18 @@ void PackManager::createActions()
     a = aServerInfo = new QAction(this);
     a->setObjectName("aServerInfo");
     a->setIcon(icon(::ICON_SERVER_INFO, DataPack::DataPackCore::MediumPixmaps));
+    connect(srvgr, SIGNAL(triggered(QAction*)), this, SLOT(serverActionTriggered(QAction *)));
 
     // Create pack actions
-    a = aInstall = new QAction(this);
-    a->setObjectName("aInstall");
-    a->setIcon(icon(::ICON_INSTALL, DataPack::DataPackCore::SmallPixmaps));
-    a = aInstallAllPack = new QAction(this);
-    a->setObjectName("aInstallAllPack");
+    a = aProcess = new QAction(this);
+    a->setObjectName("aProcess");
     a->setIcon(icon(::ICON_INSTALL, DataPack::DataPackCore::MediumPixmaps));
-    a = aUpdate = new QAction(this);
-    a->setObjectName("aUpdate");
-    a->setIcon(icon(::ICON_UPDATE, DataPack::DataPackCore::SmallPixmaps));
-    a = aRemove = new QAction(this);
-    a->setObjectName("aRemove");
-    a->setIcon(icon(::ICON_REMOVE, DataPack::DataPackCore::SmallPixmaps));
-    ui->installToolButton->addAction(aInstall);
-    ui->installToolButton->addAction(aUpdate);
-    ui->installToolButton->addAction(aRemove);
-    ui->installToolButton->setDefaultAction(aInstall);
+//    ui->installToolButton->addAction(aInstall);
+//    ui->installToolButton->addAction(aUpdate);
+//    ui->installToolButton->addAction(aRemove);
+//    ui->installToolButton->setDefaultAction(aInstall);
     retranslate();
-    connect(ui->installToolButton, SIGNAL(triggered(QAction*)), this, SLOT(packActionTriggered(QAction *)));
+    connect(aProcess, SIGNAL(triggered()), this, SLOT(processPacks()));
 }
 
 void PackManager::createToolbar()
@@ -207,7 +201,7 @@ void PackManager::createToolbar()
     m_ToolBarPacks->addAction(aServerRemove);
     m_ToolBarPacks->addAction(aServerInfo);
     m_ToolBarPacks->addSeparator();
-    m_ToolBarPacks->addAction(aInstallAllPack);
+    m_ToolBarPacks->addAction(aProcess);
     connect(m_ToolBarPacks, SIGNAL(actionTriggered(QAction*)), this, SLOT(serverActionTriggered(QAction*)));
     ui->toolbarLayoutPacks->addWidget(m_ToolBarPacks);
 }
@@ -242,7 +236,7 @@ void PackManager::populatePackView(const int packId)
 
     // short description, version date and author
     summary = QString("<p style=\"font-weight:bold;font-size:large;\">%1</p>"
-                      "<p style=\"font-size:small;margin-left:10px;color:gray\">"
+                      "<p style=\"font-size:small;margin-left:20px;color:gray\">"
                       "%2: %3<br />"
                       "%4: %5<br />"
                       "%6: %7<br />"
@@ -261,7 +255,16 @@ void PackManager::populatePackView(const int packId)
             ;
 
     // Add description
-    summary += QString("<br /><br />%1").arg(descr.data(PackDescription::HtmlDescription).toString());
+    summary += descr.data(PackDescription::HtmlDescription).toString();
+
+    // Add update informations
+    bool isUpdate = m_PackModel->index(packId, PackModel::IsAnUpdate).data().toBool();
+    if (isUpdate) {
+        QString up = QString("<p style=\"font-size:normal;margin-left:10px;color:darkblue\">%1</p><br />")
+                     .arg(descr.htmlUpdateInformationForVersion("0.0.0"));
+        up.prepend(QString("<span style=\"font-weight:bold;margin:0px;\">%1</span>").arg(tr("Update information")));
+        summary += up;
+    }
 
     // Add dependencies
     QString dep;
@@ -333,17 +336,17 @@ void PackManager::serverActionTriggered(QAction *a)
     }
 }
 
-void PackManager::packActionTriggered(QAction *a)
+void PackManager::processPacks()
 {
-    int packId = ui->packView->selectionModel()->currentIndex().row();
-    const Pack &pack = m_PackModel->packageAt(packId);
-
-    if (a==aInstall) {
-        serverManager()->installDataPack(pack);
-    } else if (a==aRemove) {
-
-    } else if (a==aUpdate) {
-
+    qWarning() << Q_FUNC_INFO << m_PackModel->isDirty();
+    // Apply pack model changes
+    if (!m_PackModel->isDirty())
+        return;
+    // Run Pack Dialog
+    PackProcessDialog dlg;
+    dlg.setPackToProcess(m_PackModel->packageToInstall(), m_PackModel->packageToUpdate(), m_PackModel->packageToRemove());
+    if (dlg.exec()==QDialog::Rejected) {
+        return;
     }
 }
 
@@ -353,10 +356,7 @@ void PackManager::retranslate()
     aServerAdd->setText(tr("Add a server"));
     aServerRemove->setText(tr("Remove a server"));
     aServerInfo->setText(tr("Server information"));
-    aInstall->setText(tkTr(Trans::Constants::INSTALL));
-    aInstallAllPack->setText(tr("Install all pack"));
-    aRemove->setText(tkTr(Trans::Constants::REMOVE_TEXT));
-    aUpdate->setText(tkTr(Trans::Constants::UPDATE));
+    aProcess->setText(tr("Process changes"));
 }
 
 void PackManager::changeEvent(QEvent *e)
