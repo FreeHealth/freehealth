@@ -43,8 +43,11 @@ namespace Utils {
 static QString changeColors(const QStyleOptionViewItem &option, QString text)
 {
     if (option.state & QStyle::State_Selected) {
-        text.replace("color:gray", "color:lightgray");
-        text.replace("color:black", "color:white");
+        text.replace("color:gray", "color:lightgray", Qt::CaseInsensitive);
+        text.replace("color:black", "color:white", Qt::CaseInsensitive);
+        text.replace("color:blue", "color:lightcyan", Qt::CaseInsensitive);
+        text.replace("color:red", "color:bisque", Qt::CaseInsensitive);
+        text.replace("color:maroon", "color:#F2E6E6", Qt::CaseInsensitive);
     }
     return text;
 }
