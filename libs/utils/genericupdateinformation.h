@@ -77,6 +77,8 @@ public:
     static QString xmlTagName();
     bool toDomElement(QDomElement *root, QDomDocument *document) const;
 
+    QString toHtml() const;
+
 private:
     QString m_From, m_To, m_Date, m_Author;
     QHash<QString, QString> m_TrText;

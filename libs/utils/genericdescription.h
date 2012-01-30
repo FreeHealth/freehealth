@@ -117,6 +117,9 @@ public:
     QList<Utils::GenericUpdateInformation> updateInformationForVersion(const QString &version) const;
     QList<Utils::GenericUpdateInformation> updateInformationForVersion(const Utils::VersionNumber &version) const;
 
+    QString htmlUpdateInformationForVersion(const QString &version) const;
+    QString htmlUpdateInformationForVersion(const Utils::VersionNumber &version) const;
+
     // Manage extra data
     void addNonTranslatableExtraData(const int ref, const QString &tagName);
     void addTranslatableExtraData(const int ref, const QString &tagName);

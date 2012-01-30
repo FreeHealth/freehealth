@@ -28,8 +28,8 @@
 
 #include <utils/log.h>
 #include <utils/global.h>
+#include <utils/versionnumber.h>
 #include <utils/genericupdateinformation.h>
-#include <translationutils/multilingualclasstemplate.h>
 
 #include <QDomDocument>
 #include <QDomElement>
@@ -312,6 +312,21 @@ QList<Utils::GenericUpdateInformation> GenericDescription::updateInformationForV
 QList<Utils::GenericUpdateInformation> GenericDescription::updateInformationForVersion(const Utils::VersionNumber &version) const
 {
     return Utils::GenericUpdateInformation::updateInformationForVersion(m_UpdateInfos, version);
+}
+
+QString GenericDescription::htmlUpdateInformationForVersion(const QString &version) const
+{
+    Utils::VersionNumber v(version);
+    return htmlUpdateInformationForVersion(v);
+}
+
+QString GenericDescription::htmlUpdateInformationForVersion(const Utils::VersionNumber &version) const
+{
+    QString html;
+    foreach(const Utils::GenericUpdateInformation &info, updateInformationForVersion(version)) {
+        html += info.toHtml();
+    }
+    return html;
 }
 
 /** You can add untranslatable extra-data. \e ref must be greated than GenericDescription::NonTranslatableExtraData and lower than GenericDescription::TranslatableExtraData. */

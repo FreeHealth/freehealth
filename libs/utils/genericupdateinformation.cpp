@@ -34,12 +34,14 @@
 
 #include <utils/log.h>
 #include <translationutils/constants.h>
+#include <translationutils/trans_current.h>
 
 #include <QDomElement>
 #include <QLocale>
 #include <QDebug>
 
 using namespace Utils;
+using namespace Trans::ConstantTranslations;
 
 GenericUpdateInformation::GenericUpdateInformation()
 {
@@ -179,6 +181,13 @@ bool GenericUpdateInformation::toDomElement(QDomElement *root, QDomDocument *doc
         et.appendChild(t);
     }
     return true;
+}
+
+QString GenericUpdateInformation::toHtml() const
+{
+    return QString("%1 %2 %3 %4<br /><span style=\"margin-left:10px;\">%5</span><br />")
+            .arg(tkTr(Trans::Constants::FROM)).arg(m_From).arg(tkTr(Trans::Constants::TO)).arg(m_To)
+            .arg(text());
 }
 
 QDebug operator<<(QDebug dbg, const Utils::GenericUpdateInformation &c)

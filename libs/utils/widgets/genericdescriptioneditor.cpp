@@ -28,7 +28,7 @@
 
 #include <utils/genericdescription.h>
 #include <translationutils/constants.h>
-#include <translationutils/trans_drugs.h>
+#include <translationutils/trans_current.h>
 
 #include "ui_genericdescriptioneditor.h"
 
