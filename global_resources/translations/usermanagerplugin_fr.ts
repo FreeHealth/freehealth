@@ -169,7 +169,7 @@ Dernière connexion : %2</translation>
     <message>
         <location filename="../../plugins/usermanagerplugin/database/userbase.cpp" line="838"/>
         <source>Recorded User Last Login : %1 </source>
-        <translation>Enregistrement de l&apos;historique de connexion : %1.</translation>
+        <translation>Enregistrement de l&apos;historique de connexion : %1</translation>
     </message>
 </context>
 <context>
@@ -308,67 +308,67 @@ p, li { white-space: pre-wrap; }
 <context>
     <name>UserPlugin::Internal::UserManagerWidget</name>
     <message>
-        <location filename="../../plugins/usermanagerplugin/widgets/usermanager.cpp" line="351"/>
+        <location filename="../../plugins/usermanagerplugin/widgets/usermanager.cpp" line="352"/>
         <source>You&apos;ve modified the users&apos; list.</source>
         <translation>Vous avez modifier la liste des utilisateurs.</translation>
     </message>
     <message>
-        <location filename="../../plugins/usermanagerplugin/widgets/usermanager.cpp" line="351"/>
+        <location filename="../../plugins/usermanagerplugin/widgets/usermanager.cpp" line="352"/>
         <source>Do you want to save your changes ?</source>
         <translation>Voulez-vous sauvegarder les modifications ?</translation>
     </message>
     <message>
-        <location filename="../../plugins/usermanagerplugin/widgets/usermanager.cpp" line="359"/>
+        <location filename="../../plugins/usermanagerplugin/widgets/usermanager.cpp" line="360"/>
         <source>Changes have been correctly saved.</source>
         <translation>Les modifications ont été correctement sauvegardées.</translation>
     </message>
     <message>
-        <location filename="../../plugins/usermanagerplugin/widgets/usermanager.cpp" line="362"/>
+        <location filename="../../plugins/usermanagerplugin/widgets/usermanager.cpp" line="363"/>
         <source>Changes can not be correctly saved.</source>
         <translation>Les modifications n&apos;ont pas pu être sauvegardées.</translation>
     </message>
     <message>
-        <location filename="../../plugins/usermanagerplugin/widgets/usermanager.cpp" line="483"/>
+        <location filename="../../plugins/usermanagerplugin/widgets/usermanager.cpp" line="484"/>
         <source>User deleted</source>
         <translation>Utilisateur effacé</translation>
     </message>
     <message>
-        <location filename="../../plugins/usermanagerplugin/widgets/usermanager.cpp" line="485"/>
+        <location filename="../../plugins/usermanagerplugin/widgets/usermanager.cpp" line="486"/>
         <source>User can not be deleted</source>
         <translation>L&apos;utilisateur ne peut pas être effacé</translation>
     </message>
     <message>
-        <location filename="../../plugins/usermanagerplugin/widgets/usermanager.cpp" line="528"/>
+        <location filename="../../plugins/usermanagerplugin/widgets/usermanager.cpp" line="529"/>
         <source>Search user by name</source>
         <translation>Rechercher par le nom</translation>
     </message>
     <message>
-        <location filename="../../plugins/usermanagerplugin/widgets/usermanager.cpp" line="529"/>
+        <location filename="../../plugins/usermanagerplugin/widgets/usermanager.cpp" line="530"/>
         <source>Search user by firstname</source>
         <translation>Rechercher par le prénom</translation>
     </message>
     <message>
-        <location filename="../../plugins/usermanagerplugin/widgets/usermanager.cpp" line="530"/>
+        <location filename="../../plugins/usermanagerplugin/widgets/usermanager.cpp" line="531"/>
         <source>Search user by name and firstname</source>
         <translation>Rechercher par le nom et le prénom</translation>
     </message>
     <message>
-        <location filename="../../plugins/usermanagerplugin/widgets/usermanager.cpp" line="531"/>
+        <location filename="../../plugins/usermanagerplugin/widgets/usermanager.cpp" line="532"/>
         <source>Search user by city</source>
         <translation>Rechercher par ville</translation>
     </message>
     <message>
-        <location filename="../../plugins/usermanagerplugin/widgets/usermanager.cpp" line="545"/>
+        <location filename="../../plugins/usermanagerplugin/widgets/usermanager.cpp" line="546"/>
         <source>Clear modifications</source>
         <translation>Effacer les modifications</translation>
     </message>
     <message>
-        <location filename="../../plugins/usermanagerplugin/widgets/usermanager.cpp" line="549"/>
+        <location filename="../../plugins/usermanagerplugin/widgets/usermanager.cpp" line="550"/>
         <source>Quit User Manager</source>
         <translation>Quitter le gestionnaire des utilisateurs</translation>
     </message>
     <message>
-        <location filename="../../plugins/usermanagerplugin/widgets/usermanager.cpp" line="551"/>
+        <location filename="../../plugins/usermanagerplugin/widgets/usermanager.cpp" line="552"/>
         <source>Toggle search</source>
         <translation>Afficher/cacher la recherche</translation>
     </message>

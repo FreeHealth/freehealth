@@ -99,10 +99,10 @@
 <context>
     <name>Agenda::Internal::CalendarItemEditorPatientMapperWidget</name>
     <message>
-        <location filename="../../plugins/agendaplugin/calendaritemeditorpatientmapper.cpp" line="154"/>
-        <location filename="../../plugins/agendaplugin/calendaritemeditorpatientmapper.cpp" line="155"/>
-        <location filename="../../plugins/agendaplugin/calendaritemeditorpatientmapper.cpp" line="285"/>
-        <location filename="../../plugins/agendaplugin/calendaritemeditorpatientmapper.cpp" line="286"/>
+        <location filename="../../plugins/agendaplugin/calendaritemeditorpatientmapper.cpp" line="157"/>
+        <location filename="../../plugins/agendaplugin/calendaritemeditorpatientmapper.cpp" line="158"/>
+        <location filename="../../plugins/agendaplugin/calendaritemeditorpatientmapper.cpp" line="288"/>
+        <location filename="../../plugins/agendaplugin/calendaritemeditorpatientmapper.cpp" line="289"/>
         <source>Add current patient</source>
         <translation type="unfinished"></translation>
     </message>

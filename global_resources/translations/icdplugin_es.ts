@@ -120,10 +120,6 @@
 <context>
     <name>ICD::IcdDatabase</name>
     <message>
-        <source>Searching databases into dir %1</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
         <source>ICD10 database corrupted, please contact your administrator.</source>
         <translation type="unfinished"></translation>
     </message>

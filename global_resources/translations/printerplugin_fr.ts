@@ -102,12 +102,12 @@
         <translation>Crée une copie PDF dans le répertoire cache</translation>
     </message>
     <message>
-        <location filename="../../plugins/printerplugin/printdialog.cpp" line="259"/>
+        <location filename="../../plugins/printerplugin/printdialog.cpp" line="262"/>
         <source>Save File</source>
         <translation>Sauvegarder le fichier</translation>
     </message>
     <message>
-        <location filename="../../plugins/printerplugin/printdialog.cpp" line="261"/>
+        <location filename="../../plugins/printerplugin/printdialog.cpp" line="264"/>
         <source>PDF file (*.pdf)</source>
         <translation>Fichier PDF (*.pdf)</translation>
     </message>
@@ -183,7 +183,7 @@
 <context>
     <name>Print::Internal::PrinterPreferencesPage</name>
     <message>
-        <location filename="../../plugins/printerplugin/printerpreferences.cpp" line="60"/>
+        <location filename="../../plugins/printerplugin/printerpreferences.cpp" line="62"/>
         <source>Printer preferences</source>
         <translation>Préférences de l&apos;impression</translation>
     </message>
@@ -191,7 +191,7 @@
 <context>
     <name>Print::Internal::PrinterPreferencesWidget</name>
     <message>
-        <location filename="../../plugins/printerplugin/printerpreferences.cpp" line="121"/>
+        <location filename="../../plugins/printerplugin/printerpreferences.cpp" line="123"/>
         <source>WARNING !
 No configurated printer found on your system.
 Printing and print preview should not work at all.
@@ -205,17 +205,17 @@ Veuillez configurer une imprimante.
 Référez-vous à la documentation de votre système d&apos;exploitation.</translation>
     </message>
     <message>
-        <location filename="../../plugins/printerplugin/printerpreferences.cpp" line="149"/>
+        <location filename="../../plugins/printerplugin/printerpreferences.cpp" line="151"/>
         <source>Always use system&apos;s default printer</source>
         <translation>Toujours utiliser l&apos;imprimante système par défaut</translation>
     </message>
     <message>
-        <location filename="../../plugins/printerplugin/printerpreferences.cpp" line="153"/>
+        <location filename="../../plugins/printerplugin/printerpreferences.cpp" line="155"/>
         <source>Always ask user for the printer</source>
         <translation>Toujours demander à l&apos;utilisateur</translation>
     </message>
     <message>
-        <location filename="../../plugins/printerplugin/printerpreferences.cpp" line="224"/>
+        <location filename="../../plugins/printerplugin/printerpreferences.cpp" line="226"/>
         <source>Select a directory</source>
         <translation>Sélectionnez un répertoire</translation>
     </message>

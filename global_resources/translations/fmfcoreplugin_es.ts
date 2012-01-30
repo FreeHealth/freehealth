@@ -224,8 +224,8 @@
 <context>
     <name>Core::Internal::CoreImpl</name>
     <message>
-        <location filename="../../plugins/fmfcoreplugin/coreimpl.cpp" line="146"/>
-        <location filename="../../plugins/fmfcoreplugin/coreimpl.cpp" line="148"/>
+        <location filename="../../plugins/fmfcoreplugin/coreimpl.cpp" line="147"/>
+        <location filename="../../plugins/fmfcoreplugin/coreimpl.cpp" line="149"/>
         <source>Core intialization finished...</source>
         <translation type="unfinished"></translation>
     </message>

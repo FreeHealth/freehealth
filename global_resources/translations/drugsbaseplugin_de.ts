@@ -30,14 +30,6 @@ Please verify your daily scheme prescriptions and relations to meal.</source>
     </message>
 </context>
 <context>
-    <name>DrugsBase</name>
-    <message>
-        <location filename="../../plugins/drugsbaseplugin/engines/drugdruginteractionengine.cpp" line="977"/>
-        <source>FreeDiams Interactions Engine</source>
-        <translation type="unfinished"></translation>
-    </message>
-</context>
-<context>
     <name>DrugsDB::AtcTreeModel</name>
     <message>
         <location filename="../../plugins/drugsbaseplugin/atctreemodel.cpp" line="341"/>
@@ -53,7 +45,7 @@ Please verify your daily scheme prescriptions and relations to meal.</source>
 <context>
     <name>DrugsDB::DrugsBasePlugin</name>
     <message>
-        <location filename="../../plugins/drugsbaseplugin/drugsbaseplugin.cpp" line="115"/>
+        <location filename="../../plugins/drugsbaseplugin/drugsbaseplugin.cpp" line="86"/>
         <source>Initializing drugs database plugin...</source>
         <translation type="unfinished"></translation>
     </message>
@@ -139,7 +131,7 @@ Do you want to add them to the file ?</source>
 <context>
     <name>DrugsDB::DrugsModel</name>
     <message>
-        <location filename="../../plugins/drugsbaseplugin/drugsmodel.cpp" line="515"/>
+        <location filename="../../plugins/drugsbaseplugin/drugsmodel.cpp" line="516"/>
         <source>KNOWN ALLERGY</source>
         <translation type="unfinished"></translation>
     </message>
@@ -147,27 +139,27 @@ Do you want to add them to the file ?</source>
 <context>
     <name>DrugsDB::GlobalDrugsModel</name>
     <message>
-        <location filename="../../plugins/drugsbaseplugin/globaldrugsmodel.cpp" line="390"/>
+        <location filename="../../plugins/drugsbaseplugin/globaldrugsmodel.cpp" line="395"/>
         <source>KNOWN ALLERGY</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../../plugins/drugsbaseplugin/globaldrugsmodel.cpp" line="394"/>
+        <location filename="../../plugins/drugsbaseplugin/globaldrugsmodel.cpp" line="399"/>
         <source>KNOWN INTOLERANCE</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../../plugins/drugsbaseplugin/globaldrugsmodel.cpp" line="434"/>
+        <location filename="../../plugins/drugsbaseplugin/globaldrugsmodel.cpp" line="440"/>
         <source>Identifier(s): </source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../../plugins/drugsbaseplugin/globaldrugsmodel.cpp" line="432"/>
+        <location filename="../../plugins/drugsbaseplugin/globaldrugsmodel.cpp" line="438"/>
         <source>Form(s): </source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../../plugins/drugsbaseplugin/globaldrugsmodel.cpp" line="433"/>
+        <location filename="../../plugins/drugsbaseplugin/globaldrugsmodel.cpp" line="439"/>
         <source>Route(s): </source>
         <translation type="unfinished"></translation>
     </message>
@@ -281,79 +273,53 @@ Do you want to add them to the file ?</source>
     </message>
 </context>
 <context>
-    <name>DrugsDB::Internal::DrugAllergyEngine</name>
-    <message>
-        <location filename="../../plugins/drugsbaseplugin/engines/allergyengine.cpp" line="514"/>
-        <source>Detects allergies and intolerances to medications</source>
-        <translation type="unfinished"></translation>
-    </message>
-</context>
-<context>
-    <name>DrugsDB::Internal::DrugDrugInteractionEngine</name>
-    <message>
-        <location filename="../../plugins/drugsbaseplugin/engines/drugdruginteractionengine.cpp" line="826"/>
-        <source>Detects interaction between drugs</source>
-        <translation type="unfinished"></translation>
-    </message>
-</context>
-<context>
     <name>DrugsDB::Internal::DrugsBase</name>
     <message>
-        <location filename="../../plugins/drugsbaseplugin/drugsbase.cpp" line="619"/>
-        <source>Searching databases into dir %1</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <location filename="../../plugins/drugsbaseplugin/drugsbase.cpp" line="632"/>
-        <source>No drugs database found.</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <location filename="../../plugins/drugsbaseplugin/drugsbase.cpp" line="643"/>
+        <location filename="../../plugins/drugsbaseplugin/drugsbase.cpp" line="531"/>
         <source>Drug database source does not exists.</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../../plugins/drugsbaseplugin/drugsbase.cpp" line="644"/>
+        <location filename="../../plugins/drugsbaseplugin/drugsbase.cpp" line="532"/>
         <source>Switching to the default drugs database source.</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../../plugins/drugsbaseplugin/drugsbase.cpp" line="991"/>
-        <location filename="../../plugins/drugsbaseplugin/drugsbase.cpp" line="997"/>
-        <location filename="../../plugins/drugsbaseplugin/drugsbase.cpp" line="1002"/>
+        <location filename="../../plugins/drugsbaseplugin/drugsbase.cpp" line="747"/>
+        <location filename="../../plugins/drugsbaseplugin/drugsbase.cpp" line="753"/>
+        <location filename="../../plugins/drugsbaseplugin/drugsbase.cpp" line="758"/>
         <source>Unable to create the Protocol database.</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../../plugins/drugsbaseplugin/drugsbase.cpp" line="991"/>
-        <location filename="../../plugins/drugsbaseplugin/drugsbase.cpp" line="997"/>
-        <location filename="../../plugins/drugsbaseplugin/drugsbase.cpp" line="1002"/>
+        <location filename="../../plugins/drugsbaseplugin/drugsbase.cpp" line="747"/>
+        <location filename="../../plugins/drugsbaseplugin/drugsbase.cpp" line="753"/>
+        <location filename="../../plugins/drugsbaseplugin/drugsbase.cpp" line="758"/>
         <source>Please contact dev team.</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../../plugins/drugsbaseplugin/drugsbase.cpp" line="1115"/>
+        <location filename="../../plugins/drugsbaseplugin/drugsbase.cpp" line="871"/>
         <source>Unable to update the protocol&apos;s transmission date.</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../../plugins/drugsbaseplugin/drugsbase.cpp" line="1344"/>
+        <location filename="../../plugins/drugsbaseplugin/drugsbase.cpp" line="1101"/>
         <source>No drug database source selected</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../../plugins/drugsbaseplugin/drugsbase.cpp" line="1346"/>
+        <location filename="../../plugins/drugsbaseplugin/drugsbase.cpp" line="1103"/>
         <source>No drugs database loaded.</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../../plugins/drugsbaseplugin/drugsbase.cpp" line="1364"/>
+        <location filename="../../plugins/drugsbaseplugin/drugsbase.cpp" line="1121"/>
         <source>Asking for a drug without UID</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../../plugins/drugsbaseplugin/drugsbase.cpp" line="1500"/>
+        <location filename="../../plugins/drugsbaseplugin/drugsbase.cpp" line="1257"/>
         <source>Unable to find drug with DID %1</source>
         <translation type="unfinished"></translation>
     </message>
@@ -408,19 +374,6 @@ Do you want to add them to the file ?</source>
     </message>
 </context>
 <context>
-    <name>DrugsDB::Internal::PimEngine</name>
-    <message>
-        <location filename="../../plugins/drugsbaseplugin/engines/pimengine.cpp" line="767"/>
-        <source>(Experimental)</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <location filename="../../plugins/drugsbaseplugin/engines/pimengine.cpp" line="777"/>
-        <source>Detects interaction between drugs and patient in elderly</source>
-        <translation type="unfinished"></translation>
-    </message>
-</context>
-<context>
     <name>DrugsData</name>
     <message>
         <location filename="../../plugins/drugsbaseplugin/idrug.cpp" line="815"/>
@@ -451,12 +404,12 @@ Do you want to add them to the file ?</source>
 <context>
     <name>DrugsModel</name>
     <message>
-        <location filename="../../plugins/drugsbaseplugin/drugsmodel.cpp" line="245"/>
+        <location filename="../../plugins/drugsbaseplugin/drugsmodel.cpp" line="244"/>
         <source>x %1 of %2</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../../plugins/drugsbaseplugin/drugsmodel.cpp" line="254"/>
+        <location filename="../../plugins/drugsbaseplugin/drugsmodel.cpp" line="253"/>
         <source>Available Dosages</source>
         <translation type="unfinished"></translation>
     </message>

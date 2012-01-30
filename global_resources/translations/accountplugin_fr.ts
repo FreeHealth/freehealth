@@ -1624,6 +1624,11 @@ Autrement le résultat sera faux!</translation>
         <source>&amp;Quit</source>
         <translation>&amp;Quitter</translation>
     </message>
+    <message>
+        <location filename="../../plugins/accountplugin/receipts/ChoiceDialog.ui" line="170"/>
+        <source>TextLabel</source>
+        <translation type="unfinished"></translation>
+    </message>
 </context>
 <context>
     <name>ControlReceipts</name>
@@ -2257,18 +2262,18 @@ Faites le dans Immobilisations.</translation>
 <context>
     <name>PreferedReceipts</name>
     <message>
-        <location filename="../../plugins/accountplugin/receipts/preferedreceipts.cpp" line="60"/>
+        <location filename="../../plugins/accountplugin/receipts/preferedreceipts.cpp" line="74"/>
         <source>euros</source>
         <translation>euros</translation>
     </message>
     <message>
-        <location filename="../../plugins/accountplugin/receipts/preferedreceipts.cpp" line="99"/>
-        <location filename="../../plugins/accountplugin/receipts/preferedreceipts.cpp" line="116"/>
+        <location filename="../../plugins/accountplugin/receipts/preferedreceipts.cpp" line="112"/>
+        <location filename="../../plugins/accountplugin/receipts/preferedreceipts.cpp" line="129"/>
         <source>Warning</source>
         <translation>Attention</translation>
     </message>
     <message>
-        <location filename="../../plugins/accountplugin/receipts/preferedreceipts.cpp" line="99"/>
+        <location filename="../../plugins/accountplugin/receipts/preferedreceipts.cpp" line="112"/>
         <source>You should create a preferedValue like this:
 Take a value in thesaurus list with a RIGHT clic,
 if you don&apos;t have one, save the next value in thesaurus and chose it in the same way</source>
@@ -2277,17 +2282,17 @@ prenez une valeur dans le thésaurus avec un clic droit,
 si vous n&apos;en n&apos;avez pas, sauvegarder la valeur suivante dans le thésaurus et choisissez la de la même façon</translation>
     </message>
     <message>
-        <location filename="../../plugins/accountplugin/receipts/preferedreceipts.cpp" line="116"/>
+        <location filename="../../plugins/accountplugin/receipts/preferedreceipts.cpp" line="129"/>
         <source>Unable to insert datas into account</source>
         <translation>Impossible d&apos;insérer les données dans la comptabilité</translation>
     </message>
     <message>
-        <location filename="../../plugins/accountplugin/receipts/preferedreceipts.cpp" line="125"/>
+        <location filename="../../plugins/accountplugin/receipts/preferedreceipts.cpp" line="138"/>
         <source>The value </source>
         <translation>La valeur </translation>
     </message>
     <message>
-        <location filename="../../plugins/accountplugin/receipts/preferedreceipts.cpp" line="130"/>
+        <location filename="../../plugins/accountplugin/receipts/preferedreceipts.cpp" line="143"/>
         <source> has been inserted.</source>
         <translation> a été insérée.</translation>
     </message>
@@ -2633,30 +2638,30 @@ Vous devriez en créer une dans Préférences.</translation>
 <context>
     <name>choiceDialog</name>
     <message>
-        <location filename="../../plugins/accountplugin/receipts/choiceDialog.cpp" line="464"/>
+        <location filename="../../plugins/accountplugin/receipts/choiceDialog.cpp" line="471"/>
         <source>Choose another percentage value.</source>
         <translation>Choisissez une autre pourcentage.</translation>
     </message>
     <message>
-        <location filename="../../plugins/accountplugin/receipts/choiceDialog.cpp" line="465"/>
+        <location filename="../../plugins/accountplugin/receipts/choiceDialog.cpp" line="472"/>
         <source>Do you want to choose another percentage ?</source>
         <translation>Voulez vous choisir un autre pourcentage ?</translation>
     </message>
     <message>
-        <location filename="../../plugins/accountplugin/receipts/choiceDialog.cpp" line="322"/>
-        <location filename="../../plugins/accountplugin/receipts/choiceDialog.cpp" line="514"/>
+        <location filename="../../plugins/accountplugin/receipts/choiceDialog.cpp" line="329"/>
+        <location filename="../../plugins/accountplugin/receipts/choiceDialog.cpp" line="521"/>
         <source>Distance rules</source>
         <translation>Règles de distance</translation>
     </message>
     <message>
-        <location filename="../../plugins/accountplugin/receipts/choiceDialog.cpp" line="321"/>
-        <location filename="../../plugins/accountplugin/receipts/choiceDialog.cpp" line="518"/>
+        <location filename="../../plugins/accountplugin/receipts/choiceDialog.cpp" line="328"/>
+        <location filename="../../plugins/accountplugin/receipts/choiceDialog.cpp" line="525"/>
         <source>Sites</source>
         <translation>Sites</translation>
     </message>
     <message>
-        <location filename="../../plugins/accountplugin/receipts/choiceDialog.cpp" line="323"/>
-        <location filename="../../plugins/accountplugin/receipts/choiceDialog.cpp" line="522"/>
+        <location filename="../../plugins/accountplugin/receipts/choiceDialog.cpp" line="330"/>
+        <location filename="../../plugins/accountplugin/receipts/choiceDialog.cpp" line="529"/>
         <source>Debtor</source>
         <translation>Débiteur</translation>
     </message>

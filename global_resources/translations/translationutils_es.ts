@@ -71,7 +71,7 @@
     </message>
     <message>
         <location filename="../../libs/translationutils/trans_menu.h" line="51"/>
-        <location filename="../../libs/translationutils/trans_menu.h" line="164"/>
+        <location filename="../../libs/translationutils/trans_menu.h" line="165"/>
         <source>Plugins</source>
         <translation type="unfinished"></translation>
     </message>
@@ -491,12 +491,22 @@
         <translation type="unfinished"></translation>
     </message>
     <message>
+        <location filename="../../libs/translationutils/trans_menu.h" line="158"/>
+        <source>Take screenshot</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
         <location filename="../../libs/translationutils/trans_menu.h" line="159"/>
-        <source>Navigation</source>
+        <source>Screenshots</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
         <location filename="../../libs/translationutils/trans_menu.h" line="160"/>
+        <source>Navigation</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../../libs/translationutils/trans_menu.h" line="161"/>
         <source>Defaults</source>
         <translation type="unfinished"></translation>
     </message>
@@ -526,57 +536,57 @@
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../../libs/translationutils/trans_drugs.h" line="47"/>
+        <location filename="../../libs/translationutils/trans_current.h" line="58"/>
         <source>from</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../../libs/translationutils/trans_drugs.h" line="48"/>
+        <location filename="../../libs/translationutils/trans_current.h" line="59"/>
         <source>to</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../../libs/translationutils/trans_drugs.h" line="50"/>
+        <location filename="../../libs/translationutils/trans_current.h" line="61"/>
         <source>during</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../../libs/translationutils/trans_drugs.h" line="51"/>
+        <location filename="../../libs/translationutils/trans_current.h" line="62"/>
         <source>each</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../../libs/translationutils/trans_drugs.h" line="52"/>
+        <location filename="../../libs/translationutils/trans_current.h" line="63"/>
         <source>and</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../../libs/translationutils/trans_drugs.h" line="60"/>
+        <location filename="../../libs/translationutils/trans_drugs.h" line="54"/>
         <source>Interaction</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../../libs/translationutils/trans_drugs.h" line="61"/>
+        <location filename="../../libs/translationutils/trans_drugs.h" line="55"/>
         <source>Take into account</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../../libs/translationutils/trans_drugs.h" line="62"/>
+        <location filename="../../libs/translationutils/trans_drugs.h" line="56"/>
         <source>Discouraged</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../../libs/translationutils/trans_drugs.h" line="63"/>
+        <location filename="../../libs/translationutils/trans_drugs.h" line="57"/>
         <source>Contraindication</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../../libs/translationutils/trans_drugs.h" line="66"/>
+        <location filename="../../libs/translationutils/trans_drugs.h" line="60"/>
         <source>Precaution for use</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../../libs/translationutils/trans_drugs.h" line="67"/>
+        <location filename="../../libs/translationutils/trans_drugs.h" line="61"/>
         <location filename="../../libs/translationutils/trans_msgerror.h" line="35"/>
         <source>Information</source>
         <translation type="unfinished"></translation>
@@ -647,12 +657,12 @@
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../../libs/translationutils/trans_current.h" line="61"/>
+        <location filename="../../libs/translationutils/trans_current.h" line="71"/>
         <source>More information</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../../libs/translationutils/trans_current.h" line="62"/>
+        <location filename="../../libs/translationutils/trans_current.h" line="72"/>
         <source>Hide extra information</source>
         <translation type="unfinished"></translation>
     </message>
@@ -764,7 +774,7 @@
     </message>
     <message>
         <location filename="../../libs/translationutils/trans_menu.h" line="111"/>
-        <location filename="../../libs/translationutils/trans_menu.h" line="162"/>
+        <location filename="../../libs/translationutils/trans_menu.h" line="163"/>
         <source>Past medical history</source>
         <translation type="unfinished"></translation>
     </message>
@@ -794,52 +804,52 @@
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../../libs/translationutils/trans_drugs.h" line="49"/>
+        <location filename="../../libs/translationutils/trans_current.h" line="60"/>
         <source>from %1 to %2</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../../libs/translationutils/trans_drugs.h" line="53"/>
+        <location filename="../../libs/translationutils/trans_drugs.h" line="47"/>
         <source>Allergy to %1</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../../libs/translationutils/trans_drugs.h" line="54"/>
+        <location filename="../../libs/translationutils/trans_drugs.h" line="48"/>
         <source>Intolerance to %1</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../../libs/translationutils/trans_drugs.h" line="55"/>
+        <location filename="../../libs/translationutils/trans_drugs.h" line="49"/>
         <source>No known allergies / intolerances</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../../libs/translationutils/trans_drugs.h" line="56"/>
+        <location filename="../../libs/translationutils/trans_drugs.h" line="50"/>
         <source>Known allergies</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../../libs/translationutils/trans_drugs.h" line="57"/>
+        <location filename="../../libs/translationutils/trans_drugs.h" line="51"/>
         <source>Known intolerances</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../../libs/translationutils/trans_drugs.h" line="64"/>
+        <location filename="../../libs/translationutils/trans_drugs.h" line="58"/>
         <source>Cytochrome P450 interaction</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../../libs/translationutils/trans_drugs.h" line="65"/>
+        <location filename="../../libs/translationutils/trans_drugs.h" line="59"/>
         <source>Glycoprotein-P interaction</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../../libs/translationutils/trans_drugs.h" line="68"/>
+        <location filename="../../libs/translationutils/trans_drugs.h" line="62"/>
         <source>Molecule is duplicated</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../../libs/translationutils/trans_drugs.h" line="69"/>
+        <location filename="../../libs/translationutils/trans_drugs.h" line="63"/>
         <source>Class is duplicated</source>
         <translation type="unfinished"></translation>
     </message>
@@ -1229,23 +1239,38 @@
         <translation type="unfinished"></translation>
     </message>
     <message>
+        <location filename="../../libs/translationutils/trans_current.h" line="54"/>
+        <source>Unknown server</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../../libs/translationutils/trans_current.h" line="55"/>
+        <source>Installed</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
         <location filename="../../libs/translationutils/trans_current.h" line="56"/>
-        <location filename="../../libs/translationutils/trans_current.h" line="58"/>
+        <source>Currently installed</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../../libs/translationutils/trans_current.h" line="66"/>
+        <location filename="../../libs/translationutils/trans_current.h" line="68"/>
         <source>Settings recovered</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../../libs/translationutils/trans_current.h" line="57"/>
+        <location filename="../../libs/translationutils/trans_current.h" line="67"/>
         <source>Reading settings file</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../../libs/translationutils/trans_current.h" line="59"/>
+        <location filename="../../libs/translationutils/trans_current.h" line="69"/>
         <source>Creating default settings for %1</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../../libs/translationutils/trans_current.h" line="60"/>
+        <location filename="../../libs/translationutils/trans_current.h" line="70"/>
         <source>Show details</source>
         <translation type="unfinished"></translation>
     </message>
@@ -1406,46 +1431,56 @@
     </message>
     <message>
         <location filename="../../libs/translationutils/trans_filepathxml.h" line="53"/>
-        <source>File %1 can not be removed</source>
+        <source>File %1 can not be created</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
         <location filename="../../libs/translationutils/trans_filepathxml.h" line="54"/>
-        <source>File %1 loaded</source>
+        <source>File %1 can not be removed</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
         <location filename="../../libs/translationutils/trans_filepathxml.h" line="55"/>
+        <source>File %1 loaded</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../../libs/translationutils/trans_filepathxml.h" line="56"/>
         <source>File %1 is empty</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../../libs/translationutils/trans_filepathxml.h" line="57"/>
+        <location filename="../../libs/translationutils/trans_filepathxml.h" line="58"/>
         <source>Open file</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../../libs/translationutils/trans_filepathxml.h" line="58"/>
+        <location filename="../../libs/translationutils/trans_filepathxml.h" line="59"/>
         <source>Opening file %1</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../../libs/translationutils/trans_filepathxml.h" line="59"/>
+        <location filename="../../libs/translationutils/trans_filepathxml.h" line="60"/>
         <source>Saving file %1</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
         <location filename="../../libs/translationutils/trans_filepathxml.h" line="61"/>
-        <source>Wrong number of tags (%1)</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <location filename="../../libs/translationutils/trans_filepathxml.h" line="62"/>
-        <source>Wrong root tag %1 %2.</source>
+        <source>Save file</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
         <location filename="../../libs/translationutils/trans_filepathxml.h" line="63"/>
+        <source>Wrong number of tags (%1)</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../../libs/translationutils/trans_filepathxml.h" line="64"/>
+        <source>Wrong root tag %1 %2.</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../../libs/translationutils/trans_filepathxml.h" line="65"/>
         <source>Document type name mismatch.</source>
         <translation type="unfinished"></translation>
     </message>
@@ -1471,171 +1506,176 @@
     </message>
     <message>
         <location filename="../../libs/translationutils/trans_msgerror.h" line="41"/>
-        <source>Provider</source>
+        <source>Vendor</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
         <location filename="../../libs/translationutils/trans_msgerror.h" line="42"/>
-        <source>Unknown</source>
+        <source>Provider</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
         <location filename="../../libs/translationutils/trans_msgerror.h" line="43"/>
-        <source>Ready</source>
+        <source>Unknown</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
         <location filename="../../libs/translationutils/trans_msgerror.h" line="44"/>
-        <source>Available</source>
+        <source>Ready</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
         <location filename="../../libs/translationutils/trans_msgerror.h" line="45"/>
-        <source>Unavailable</source>
+        <source>Available</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
         <location filename="../../libs/translationutils/trans_msgerror.h" line="46"/>
-        <source>Messages</source>
+        <source>Unavailable</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
         <location filename="../../libs/translationutils/trans_msgerror.h" line="47"/>
-        <source>Logged Messages</source>
+        <source>Messages</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
         <location filename="../../libs/translationutils/trans_msgerror.h" line="48"/>
-        <source>Errors</source>
+        <source>Logged Messages</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
         <location filename="../../libs/translationutils/trans_msgerror.h" line="49"/>
-        <source>Logged Errors</source>
+        <source>Errors</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
         <location filename="../../libs/translationutils/trans_msgerror.h" line="50"/>
-        <source>Informative message : %1</source>
+        <source>Logged Errors</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
         <location filename="../../libs/translationutils/trans_msgerror.h" line="51"/>
-        <source>Starting task : %1</source>
+        <source>Informative message : %1</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
         <location filename="../../libs/translationutils/trans_msgerror.h" line="52"/>
-        <source>posting message to : %1</source>
+        <source>Starting task : %1</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
         <location filename="../../libs/translationutils/trans_msgerror.h" line="53"/>
-        <source>Error %1 occured while %2</source>
+        <source>posting message to : %1</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
         <location filename="../../libs/translationutils/trans_msgerror.h" line="54"/>
-        <source>Error %1 : line %2, column %3</source>
+        <source>Error %1 occured while %2</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
         <location filename="../../libs/translationutils/trans_msgerror.h" line="55"/>
-        <source>Can not create %1 : it already exists</source>
+        <source>Error %1 : line %2, column %3</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
         <location filename="../../libs/translationutils/trans_msgerror.h" line="56"/>
-        <source>Can not return %1 : it does not exists</source>
+        <source>Can not create %1 : it already exists</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
         <location filename="../../libs/translationutils/trans_msgerror.h" line="57"/>
-        <source>Can not create %1 : no parent founded</source>
+        <source>Can not return %1 : it does not exists</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
         <location filename="../../libs/translationutils/trans_msgerror.h" line="58"/>
-        <source>%1 is not avaible</source>
+        <source>Can not create %1 : no parent founded</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
         <location filename="../../libs/translationutils/trans_msgerror.h" line="59"/>
-        <source>%1 is not avaible and can not be created</source>
+        <source>%1 is not avaible</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
         <location filename="../../libs/translationutils/trans_msgerror.h" line="60"/>
-        <source>%1 are not avaible</source>
+        <source>%1 is not avaible and can not be created</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
         <location filename="../../libs/translationutils/trans_msgerror.h" line="61"/>
-        <source>Setting %1 path to %2</source>
+        <source>%1 are not avaible</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
         <location filename="../../libs/translationutils/trans_msgerror.h" line="62"/>
-        <source>Error %1 from database %2</source>
+        <source>Setting %1 path to %2</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
         <location filename="../../libs/translationutils/trans_msgerror.h" line="63"/>
-        <source>No object to translate</source>
+        <source>Error %1 from database %2</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
         <location filename="../../libs/translationutils/trans_msgerror.h" line="64"/>
-        <source>No %1 found.</source>
+        <source>No object to translate</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
         <location filename="../../libs/translationutils/trans_msgerror.h" line="65"/>
-        <source>Please describe your problem.</source>
+        <source>No %1 found.</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
         <location filename="../../libs/translationutils/trans_msgerror.h" line="66"/>
-        <source>Yes</source>
+        <source>Please describe your problem.</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
         <location filename="../../libs/translationutils/trans_msgerror.h" line="67"/>
-        <source>No</source>
+        <source>Yes</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
         <location filename="../../libs/translationutils/trans_msgerror.h" line="68"/>
-        <source>General</source>
+        <source>No</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
         <location filename="../../libs/translationutils/trans_msgerror.h" line="69"/>
-        <source>General preferences</source>
+        <source>General</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
         <location filename="../../libs/translationutils/trans_msgerror.h" line="70"/>
-        <source>User preferences</source>
+        <source>General preferences</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
         <location filename="../../libs/translationutils/trans_msgerror.h" line="71"/>
+        <source>User preferences</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../../libs/translationutils/trans_msgerror.h" line="72"/>
         <source>Fatal error : Application failure. Please restart application.</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../../libs/translationutils/trans_msgerror.h" line="73"/>
+        <location filename="../../libs/translationutils/trans_msgerror.h" line="74"/>
         <source>Last check</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../../libs/translationutils/trans_msgerror.h" line="74"/>
+        <location filename="../../libs/translationutils/trans_msgerror.h" line="75"/>
         <source>Connected</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../../libs/translationutils/trans_msgerror.h" line="75"/>
+        <location filename="../../libs/translationutils/trans_msgerror.h" line="76"/>
         <source>Not connected</source>
         <translation type="unfinished"></translation>
     </message>
@@ -1673,6 +1713,11 @@ Place : %2</source>
     <message>
         <location filename="../../libs/translationutils/trans_database.h" line="48"/>
         <source>Database %1 can not be created. Error: %2.</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../../libs/translationutils/trans_database.h" line="49"/>
+        <source>Searching database %1 in path %2</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
@@ -1796,22 +1841,22 @@ Place : %2</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../../libs/translationutils/trans_current.h" line="65"/>
+        <location filename="../../libs/translationutils/trans_current.h" line="75"/>
         <source>Header</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../../libs/translationutils/trans_current.h" line="66"/>
+        <location filename="../../libs/translationutils/trans_current.h" line="76"/>
         <source>Footer</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../../libs/translationutils/trans_current.h" line="67"/>
+        <location filename="../../libs/translationutils/trans_current.h" line="77"/>
         <source>Watermark</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../../libs/translationutils/trans_current.h" line="68"/>
+        <location filename="../../libs/translationutils/trans_current.h" line="78"/>
         <source>Printing</source>
         <translation type="unfinished"></translation>
     </message>

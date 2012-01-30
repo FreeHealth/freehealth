@@ -12,27 +12,27 @@
 <context>
     <name>CommandLine</name>
     <message>
-        <location filename="../../freediams/plugins/coreplugin/commandlineparser.cpp" line="185"/>
+        <location filename="../../freediams/plugins/coreplugin/commandlineparser.cpp" line="188"/>
         <source>Passing exchange in file : %1</source>
         <translation>Fichier d&apos;échange entrant spécifié : %1</translation>
     </message>
     <message>
-        <location filename="../../freediams/plugins/coreplugin/commandlineparser.cpp" line="193"/>
+        <location filename="../../freediams/plugins/coreplugin/commandlineparser.cpp" line="196"/>
         <source>Passing %1 as exchange in file, but file does not exists.</source>
         <translation>Fichier d&apos;échange spécifié %1 n&apos;existe pas.</translation>
     </message>
     <message>
-        <location filename="../../freediams/plugins/coreplugin/commandlineparser.cpp" line="200"/>
+        <location filename="../../freediams/plugins/coreplugin/commandlineparser.cpp" line="203"/>
         <source>Reading exchange in file : %1</source>
         <translation>Lecture du fichier d&apos;échange entrant : %1</translation>
     </message>
     <message>
-        <location filename="../../freediams/plugins/coreplugin/commandlineparser.cpp" line="205"/>
+        <location filename="../../freediams/plugins/coreplugin/commandlineparser.cpp" line="208"/>
         <source>In File %1 is empty.</source>
         <translation>Le fichier d&apos;entrée %1 est vide.</translation>
     </message>
     <message>
-        <location filename="../../freediams/plugins/coreplugin/commandlineparser.cpp" line="220"/>
+        <location filename="../../freediams/plugins/coreplugin/commandlineparser.cpp" line="223"/>
         <source>Wrong root tag %1 %2.</source>
         <translation>Mauvais marqueur principal %1 %2.</translation>
     </message>

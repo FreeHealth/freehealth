@@ -57,9 +57,9 @@
 <context>
     <name>AccountDB::AccountBase</name>
     <message>
-        <location filename="../../plugins/accountbaseplugin/accountbase.cpp" line="642"/>
-        <location filename="../../plugins/accountbaseplugin/accountbase.cpp" line="650"/>
-        <location filename="../../plugins/accountbaseplugin/accountbase.cpp" line="656"/>
+        <location filename="../../plugins/accountbaseplugin/accountbase.cpp" line="640"/>
+        <location filename="../../plugins/accountbaseplugin/accountbase.cpp" line="648"/>
+        <location filename="../../plugins/accountbaseplugin/accountbase.cpp" line="654"/>
         <source>Please contact dev team.</source>
         <translation>Veuillez contacter l&apos;équipe de développement.</translation>
     </message>
@@ -67,7 +67,7 @@
 <context>
     <name>AccountDB::AccountBasePlugin</name>
     <message>
-        <location filename="../../plugins/accountbaseplugin/accountbaseplugin.cpp" line="78"/>
+        <location filename="../../plugins/accountbaseplugin/accountbaseplugin.cpp" line="79"/>
         <source>Initializing accountancy plugin...</source>
         <translation>Initialisation du plugin de comptabilité (base de données)...</translation>
     </message>

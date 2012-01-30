@@ -92,7 +92,7 @@ Answering &apos;No&apos; will cause definitve data lose.</source>
 <context>
     <name>Form::FormMain</name>
     <message>
-        <location filename="../../plugins/formmanagerplugin/iformitem.cpp" line="569"/>
+        <location filename="../../plugins/formmanagerplugin/iformitem.cpp" line="639"/>
         <source>Form : </source>
         <translation type="unfinished"></translation>
     </message>
@@ -100,7 +100,7 @@ Answering &apos;No&apos; will cause definitve data lose.</source>
 <context>
     <name>Form::FormMainDebugPage</name>
     <message>
-        <location filename="../../plugins/formmanagerplugin/iformitem.cpp" line="694"/>
+        <location filename="../../plugins/formmanagerplugin/iformitem.cpp" line="765"/>
         <source>Forms : </source>
         <translation type="unfinished"></translation>
     </message>
@@ -314,17 +314,17 @@ Answering &apos;No&apos; will cause definitve data lose.</source>
 <context>
     <name>FormIODescription</name>
     <message>
-        <location filename="../../plugins/formmanagerplugin/iformio.cpp" line="116"/>
+        <location filename="../../plugins/formmanagerplugin/iformio.cpp" line="120"/>
         <source>Complete form</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../../plugins/formmanagerplugin/iformio.cpp" line="118"/>
+        <location filename="../../plugins/formmanagerplugin/iformio.cpp" line="122"/>
         <source>Sub-form</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../../plugins/formmanagerplugin/iformio.cpp" line="120"/>
+        <location filename="../../plugins/formmanagerplugin/iformio.cpp" line="124"/>
         <source>Page only</source>
         <translation type="unfinished"></translation>
     </message>
@@ -332,18 +332,26 @@ Answering &apos;No&apos; will cause definitve data lose.</source>
 <context>
     <name>Forms</name>
     <message>
-        <location filename="../../plugins/formmanagerplugin/iformio.cpp" line="144"/>
+        <location filename="../../plugins/formmanagerplugin/iformio.cpp" line="148"/>
+        <location filename="../../plugins/formmanagerplugin/iformio.cpp" line="187"/>
         <source>License</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../../plugins/formmanagerplugin/iformio.cpp" line="150"/>
+        <location filename="../../plugins/formmanagerplugin/iformio.cpp" line="157"/>
+        <location filename="../../plugins/formmanagerplugin/iformio.cpp" line="183"/>
         <source>Creation date</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../../plugins/formmanagerplugin/iformio.cpp" line="152"/>
+        <location filename="../../plugins/formmanagerplugin/iformio.cpp" line="159"/>
+        <location filename="../../plugins/formmanagerplugin/iformio.cpp" line="185"/>
         <source>Last modification date</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../../plugins/formmanagerplugin/iformio.cpp" line="196"/>
+        <source>ScreenShots are available.</source>
         <translation type="unfinished"></translation>
     </message>
     <message>

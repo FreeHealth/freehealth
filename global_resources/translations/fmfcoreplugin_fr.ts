@@ -224,8 +224,8 @@
 <context>
     <name>Core::Internal::CoreImpl</name>
     <message>
-        <location filename="../../plugins/fmfcoreplugin/coreimpl.cpp" line="146"/>
-        <location filename="../../plugins/fmfcoreplugin/coreimpl.cpp" line="148"/>
+        <location filename="../../plugins/fmfcoreplugin/coreimpl.cpp" line="147"/>
+        <location filename="../../plugins/fmfcoreplugin/coreimpl.cpp" line="149"/>
         <source>Core intialization finished...</source>
         <translation>Intialisation du Core terminée...</translation>
     </message>
@@ -587,59 +587,53 @@ Url: %1
     <message>
         <location filename="../../plugins/coreplugin/settings.cpp" line="1037"/>
         <source>Running version : %1</source>
-        <translation type="unfinished">Version en cours : %1
- {1?}</translation>
+        <translation>Version en cours : %1</translation>
     </message>
     <message>
         <location filename="../../plugins/coreplugin/settings.cpp" line="1038"/>
         <source>Build date | %1 %2</source>
-        <translation type="unfinished"></translation>
+        <translation>Date de compilation | %1 %2</translation>
     </message>
     <message>
         <location filename="../../plugins/coreplugin/settings.cpp" line="1039"/>
         <source>Qt Build version : %1</source>
-        <translation type="unfinished">Version de Qt à la compilation : %1
- {1?}</translation>
+        <translation>Version de Qt à la compilation : %1</translation>
     </message>
     <message>
         <location filename="../../plugins/coreplugin/settings.cpp" line="1040"/>
         <source>Qt running version : %1</source>
-        <translation type="unfinished">Version de Qt en cours : %1
- {1?}</translation>
+        <translation>Version de Qt en cours : %1</translation>
     </message>
     <message>
         <location filename="../../plugins/coreplugin/settings.cpp" line="1041"/>
         <source>Application Version : %1</source>
-        <translation type="unfinished">Version de l&apos;application : %1
- {1?}</translation>
+        <translation>Version de l&apos;application : %1</translation>
     </message>
     <message>
         <location filename="../../plugins/coreplugin/settings.cpp" line="1043"/>
         <source>Actual build : Debug</source>
-        <translation type="unfinished"></translation>
+        <translation>Compilation actuelle : Déboggage</translation>
     </message>
     <message>
         <location filename="../../plugins/coreplugin/settings.cpp" line="1045"/>
         <source>Actual build : Release</source>
-        <translation type="unfinished"></translation>
+        <translation>Compilation actuelle : Release</translation>
     </message>
     <message>
         <location filename="../../plugins/coreplugin/settings.cpp" line="1046"/>
         <source>SVN version : %1</source>
-        <translation type="unfinished">Version SVN: %1
- {1?}</translation>
+        <translation>Version SVN: %1</translation>
     </message>
     <message>
         <location filename="../../plugins/coreplugin/settings.cpp" line="1047"/>
         <source>Application path : %1</source>
-        <translation type="unfinished">Chemin de l&apos;application : %1
- {1?}</translation>
+        <translation>Chemin de l&apos;application : %1</translation>
     </message>
     <message>
         <location filename="../../plugins/coreplugin/settings.cpp" line="1052"/>
         <location filename="../../plugins/coreplugin/settings.cpp" line="1056"/>
         <source>uname returns : %1</source>
-        <translation type="unfinished"></translation>
+        <translation>Retour de &apos;uname&quot; : %1</translation>
     </message>
     <message>
         <location filename="../../plugins/coreplugin/settings.cpp" line="1081"/>

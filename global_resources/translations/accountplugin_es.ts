@@ -1590,6 +1590,11 @@ Otherwise result will be wrong !</source>
         <source>&amp;Quit</source>
         <translation type="unfinished"></translation>
     </message>
+    <message>
+        <location filename="../../plugins/accountplugin/receipts/ChoiceDialog.ui" line="170"/>
+        <source>TextLabel</source>
+        <translation type="unfinished"></translation>
+    </message>
 </context>
 <context>
     <name>ControlReceipts</name>
@@ -2220,35 +2225,35 @@ Do it in assets.</source>
 <context>
     <name>PreferedReceipts</name>
     <message>
-        <location filename="../../plugins/accountplugin/receipts/preferedreceipts.cpp" line="60"/>
+        <location filename="../../plugins/accountplugin/receipts/preferedreceipts.cpp" line="74"/>
         <source>euros</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../../plugins/accountplugin/receipts/preferedreceipts.cpp" line="99"/>
-        <location filename="../../plugins/accountplugin/receipts/preferedreceipts.cpp" line="116"/>
+        <location filename="../../plugins/accountplugin/receipts/preferedreceipts.cpp" line="112"/>
+        <location filename="../../plugins/accountplugin/receipts/preferedreceipts.cpp" line="129"/>
         <source>Warning</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../../plugins/accountplugin/receipts/preferedreceipts.cpp" line="99"/>
+        <location filename="../../plugins/accountplugin/receipts/preferedreceipts.cpp" line="112"/>
         <source>You should create a preferedValue like this:
 Take a value in thesaurus list with a RIGHT clic,
 if you don&apos;t have one, save the next value in thesaurus and chose it in the same way</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../../plugins/accountplugin/receipts/preferedreceipts.cpp" line="116"/>
+        <location filename="../../plugins/accountplugin/receipts/preferedreceipts.cpp" line="129"/>
         <source>Unable to insert datas into account</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../../plugins/accountplugin/receipts/preferedreceipts.cpp" line="125"/>
+        <location filename="../../plugins/accountplugin/receipts/preferedreceipts.cpp" line="138"/>
         <source>The value </source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../../plugins/accountplugin/receipts/preferedreceipts.cpp" line="130"/>
+        <location filename="../../plugins/accountplugin/receipts/preferedreceipts.cpp" line="143"/>
         <source> has been inserted.</source>
         <translation type="unfinished"></translation>
     </message>
@@ -2590,30 +2595,30 @@ You should create one in Preferences.</source>
 <context>
     <name>choiceDialog</name>
     <message>
-        <location filename="../../plugins/accountplugin/receipts/choiceDialog.cpp" line="464"/>
+        <location filename="../../plugins/accountplugin/receipts/choiceDialog.cpp" line="471"/>
         <source>Choose another percentage value.</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../../plugins/accountplugin/receipts/choiceDialog.cpp" line="465"/>
+        <location filename="../../plugins/accountplugin/receipts/choiceDialog.cpp" line="472"/>
         <source>Do you want to choose another percentage ?</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../../plugins/accountplugin/receipts/choiceDialog.cpp" line="322"/>
-        <location filename="../../plugins/accountplugin/receipts/choiceDialog.cpp" line="514"/>
+        <location filename="../../plugins/accountplugin/receipts/choiceDialog.cpp" line="329"/>
+        <location filename="../../plugins/accountplugin/receipts/choiceDialog.cpp" line="521"/>
         <source>Distance rules</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../../plugins/accountplugin/receipts/choiceDialog.cpp" line="321"/>
-        <location filename="../../plugins/accountplugin/receipts/choiceDialog.cpp" line="518"/>
+        <location filename="../../plugins/accountplugin/receipts/choiceDialog.cpp" line="328"/>
+        <location filename="../../plugins/accountplugin/receipts/choiceDialog.cpp" line="525"/>
         <source>Sites</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../../plugins/accountplugin/receipts/choiceDialog.cpp" line="323"/>
-        <location filename="../../plugins/accountplugin/receipts/choiceDialog.cpp" line="522"/>
+        <location filename="../../plugins/accountplugin/receipts/choiceDialog.cpp" line="330"/>
+        <location filename="../../plugins/accountplugin/receipts/choiceDialog.cpp" line="529"/>
         <source>Debtor</source>
         <translation type="unfinished"></translation>
     </message>
