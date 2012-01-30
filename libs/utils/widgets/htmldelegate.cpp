@@ -97,8 +97,8 @@ QSize HtmlDelegate::sizeHint(const QStyleOptionViewItem &option, const QModelInd
 
     QTextDocument doc;
     doc.setHtml(options.text);
-    doc.setTextWidth(options.rect.width());
-    return QSize(doc.idealWidth(), doc.size().height());
+//   doc.setTextWidth(options.rect.width()); does not work (the rect width is way too small, I don't know why) but the idea is interesting, TODO: improve it later
+	return QSize(doc.idealWidth(), doc.size().height());
 }
 
 } // namespace Utils
