@@ -342,26 +342,17 @@ Pack ServerManager::downloadAndUnzipPack(const Server &server, const Pack &pack)
     return pack;
 }
 
-bool ServerManager::downloadDataPack(const Server &server, const Pack &pack, QProgressBar *progressBar)
-{
-    Q_UNUSED(server);
-    Q_UNUSED(pack);
-    Q_UNUSED(progressBar);
-    Q_ASSERT(progressBar);
-    // TODO pour guillaume
-    // Juste télécharger rien de plus dans le rép persistentCache
-//    QString url = server.url(Server::PackFile, pack.serverFileName());
-    return true;
-}
-
-void ServerManager::checkAndInstallPack(const Server &server, const Pack &pack, QProgressBar *progressBar)
-{
-    Q_UNUSED(server);
-    Q_UNUSED(pack);
-    Q_UNUSED(progressBar);
-    Q_ASSERT(progressBar);
-    disconnect(this, SIGNAL(packDownloaded(Server,Pack,QProgressBar*)), this, SLOT(checkAndInstallPack(Server,Pack,QProgressBar*)));
-}
+//bool ServerManager::downloadDataPack(const Server &server, const Pack &pack, QProgressBar *progressBar)
+//{
+//    Q_UNUSED(server);
+//    Q_UNUSED(pack);
+//    Q_UNUSED(progressBar);
+//    Q_ASSERT(progressBar);
+//    // TODO pour guillaume
+//    // Juste télécharger rien de plus dans le rép persistentCache
+////    QString url = server.url(Server::PackFile, pack.serverFileName());
+//    return true;
+//}
 
 void ServerManager::checkInstalledPacks()
 {
@@ -404,55 +395,6 @@ QList<Pack> ServerManager::installedPack(bool forceRefresh)
         m_InstalledPacks.clear();
     checkInstalledPacks();
     return m_InstalledPacks;
-}
-
-bool ServerManager::installDataPack(const Pack &pack, QProgressBar *progressBar)
-{
-}
-
-bool ServerManager::removeDataPack(const Pack &pack, QProgressBar *progressBar)
-{
-    // TODO
-    Q_UNUSED(progressBar);
-    // check if pack is installed
-    // if installed: remove install path && persistentCache path
-    m_InstalledPacks.clear();
-    checkInstalledPacks();
-    return false;
-}
-
-bool ServerManager::updateDataPack(const Pack &pack, QProgressBar *progressBar)
-{
-    // TODO
-    Q_UNUSED(progressBar);
-    Q_UNUSED(pack);
-    m_InstalledPacks.clear();
-    checkInstalledPacks();
-    return false;
-}
-
-QList<Pack> ServerManager::packDependencies(const Pack &pack, const PackDependencyData::TypeOfDependence &dependence)
-{
-    QList<Pack> toReturn;
-    for(int i = 0; i < pack.dependencies().count(); ++i) {
-        if (pack.dependencies().at(i).type()!=dependence)
-            continue;
-        const QString &uid = pack.dependencies().at(i).uuid();
-        const QString &version = pack.dependencies().at(i).version();
-//        if (!isDataPackInstalled(uid, version)) {
-            // Do we have this pack in our servers ?
-            for(int j=0; j < m_Servers.count(); ++j) {
-                const QList<Pack> &packs = getPackForServer(m_Servers.at(i));
-                for(int z=0; z < packs.count(); ++z) {
-                    if (packs.at(z).uuid().compare(uid,Qt::CaseInsensitive)==0 &&
-                            packs.at(z).version().compare(version,Qt::CaseInsensitive)==0) {
-                        toReturn << packs.at(z);
-                    }
-                }
-            }
-//        }
-    }
-    return toReturn;
 }
 
 void ServerManager::connectAndUpdate(int index)

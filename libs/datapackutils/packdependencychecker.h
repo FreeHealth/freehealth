@@ -46,6 +46,8 @@ class PackDependencyChecker : public QObject
 public:
     explicit PackDependencyChecker(QObject *parent = 0);
 
+    QList<Pack> packDependencies(const Pack &pack, const PackDependencyData::TypeOfDependence &dependence);
+
     void testCombination(const QList<Pack> &installPacks, const QList<Pack> &updatePacks, const QList<Pack> &removePacks);
     bool isCombinationCorrect() const;
 

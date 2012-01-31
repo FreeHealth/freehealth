@@ -87,14 +87,6 @@ public:
     virtual bool isDataPackInstalled(const Pack &pack) = 0;
     virtual bool isDataPackInstalled(const QString &packUid, const QString &packVersion = QString::null) = 0;
 
-    // this part should be own by the packProgressDialog
-    virtual bool installDataPack(const Pack &pack, QProgressBar *progressBar = 0) = 0;
-    virtual bool removeDataPack(const Pack &pack, QProgressBar *progressBar = 0) = 0;
-    virtual bool updateDataPack(const Pack &pack, QProgressBar *progressBar = 0) = 0;
-    // end
-
-    virtual QList<Pack> packDependencies(const Pack &pack, const PackDependencyData::TypeOfDependence &dependence) = 0;
-
     // Not actually in use
     virtual void connectServer(const Server &server, const ServerIdentification &ident = ServerIdentification()) = 0;
     virtual void connectAndUpdate(int index) = 0;
@@ -114,12 +106,6 @@ Q_SIGNALS:
 
     void serverConnected(const Server &server, const ServerIdentification &ident);
     void serverInfosUpdated(int serverId); // emitted when a server infos have been updated
-
-    // Obsolete
-    void packInstalled(const Server &server, const Pack &pack);
-    void packRemoved(const Server &server, const Pack &pack);
-    void packUpdated(const Server &server, const Pack &pack);
-    // end
 
     // In use
     void serverUpdateChecked();

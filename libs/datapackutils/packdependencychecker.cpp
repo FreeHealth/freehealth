@@ -40,6 +40,30 @@ PackDependencyChecker::PackDependencyChecker(QObject *parent) :
 {
 }
 
+QList<Pack> PackDependencyChecker::packDependencies(const Pack &pack, const PackDependencyData::TypeOfDependence &dependence)
+{
+    QList<Pack> toReturn;
+    for(int i = 0; i < pack.dependencies().count(); ++i) {
+        if (pack.dependencies().at(i).type()!=dependence)
+            continue;
+        const QString &uid = pack.dependencies().at(i).uuid();
+        const QString &version = pack.dependencies().at(i).version();
+//        if (!isDataPackInstalled(uid, version)) {
+            // Do we have this pack in our servers ?
+            for(int j=0; j < serverManager()->serverCount(); ++j) {
+                const QList<Pack> &packs = serverManager()->getPackForServer(serverManager()->getServerAt(i));
+                for(int z=0; z < packs.count(); ++z) {
+                    if (packs.at(z).uuid().compare(uid,Qt::CaseInsensitive)==0 &&
+                            packs.at(z).version().compare(version,Qt::CaseInsensitive)==0) {
+                        toReturn << packs.at(z);
+                    }
+                }
+            }
+//        }
+    }
+    return toReturn;
+}
+
 void PackDependencyChecker::testCombination(const QList<Pack> &installPacks, const QList<Pack> &updatePacks, const QList<Pack> &removePacks)
 {
 }

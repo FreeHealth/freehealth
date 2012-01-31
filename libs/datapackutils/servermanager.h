@@ -103,12 +103,6 @@ public:
     QList<Pack> installedPack(bool forceRefresh = false);
     bool isDataPackInstalled(const Pack &pack);
     bool isDataPackInstalled(const QString &packUid, const QString &packVersion = QString::null);
-    bool installDataPack(const Pack &pack, QProgressBar *progressBar = 0);
-    bool removeDataPack(const Pack &pack, QProgressBar *progressBar = 0);
-    bool updateDataPack(const Pack &pack, QProgressBar *progressBar = 0);
-
-    QList<Pack> packDependencies(const Pack &pack, const PackDependencyData::TypeOfDependence &dependence);
-
 
 protected:
     QString cachePath() const;
@@ -120,8 +114,8 @@ public:
     const QVector<IServerEngine*> &serverEngines() const {return m_WorkingEngines;}
 
 private Q_SLOTS:
-    bool downloadDataPack(const Server &server, const Pack &pack, QProgressBar *progressBar);
-    void checkAndInstallPack(const Server &server, const Pack &pack, QProgressBar *progBar);
+//    bool downloadDataPack(const Server &server, const Pack &pack, QProgressBar *progressBar);
+//    void checkAndInstallPack(const Server &server, const Pack &pack, QProgressBar *progBar);
 
 
 private:
