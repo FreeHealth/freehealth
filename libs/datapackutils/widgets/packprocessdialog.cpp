@@ -27,6 +27,7 @@
 #include "packprocessdialog.h"
 
 #include <utils/log.h>
+#include <utils/global.h>
 #include <datapackutils/datapackcore.h>
 #include <datapackutils/servermanager.h>
 #include <datapackutils/iserverengine.h>
@@ -153,6 +154,7 @@ void PackProcessDialog::done(int result)
 {
     if (result==QDialog::Rejected) {
         LOG(QString("Pack installation aborded."));
+        /** \todo manage cancellation */
         QDialog::done(result);
         return;
     }
@@ -282,6 +284,38 @@ void PackProcessDialog::packDownloadDone()
 
 void PackProcessDialog::removePacks()
 {
+//    m_RemovalLabels.clear();
+    // Nothing ? go next step
+    if (m_RemovePacks.isEmpty()) {
+        clearTemporaries();
+        return;
+    }
+    // Remove packs
+    // Add a start download label in the scroll widget
+    QLabel *label = new QLabel(tr("Deleting packs"), m_ScrollWidget);
+    QFont bold;
+    bold.setBold(true);
+    bold.setPointSize(bold.pointSize() + 2);
+    label->setFont(bold);
+    int r = m_ScrollLayout->rowCount();
+    m_ScrollLayout->addWidget(label, r, 0, 0, 10);
+    foreach(const Pack &p, m_RemovePacks) {
+        // Create a label
+        QLabel *label = new QLabel(tr("Deleting packs"), m_ScrollWidget);
+        m_ScrollLayout->addWidget(label, ++r, 0, 0, 10);
+
+        // Remove the zipPath used for the pack
+        QFileInfo zipPath(p.unzipPackToPath());
+        if (!zipPath.exists()) {
+            LOG_ERROR(QString("Unable to remove pack %1, unzip path does not exists (%2)").arg(p.name().arg(p.unzipPackToPath())));
+            continue;
+        }
+        QString error;
+        Utils::removeDirRecursively(p.unzipPackToPath(), &error);
+        if (!error.isEmpty()) {
+            LOG_ERROR(QString("Unable to remove pack %1, error: %2").arg(p.name().arg(error)));
+        }
+    }
     clearTemporaries();
 }
 

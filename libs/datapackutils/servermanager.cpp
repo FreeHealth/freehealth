@@ -88,6 +88,7 @@ ServerManager::~ServerManager()
 /////////////////////////////////////////////////////////////////////////////////////////
 bool ServerManager::setGlobalConfiguration(const QString &xmlContent, QString *errorMsg)
 {
+    m_Servers.clear();
     QDomDocument doc;
     QString msg;
     int col, line;
@@ -98,25 +99,25 @@ bool ServerManager::setGlobalConfiguration(const QString &xmlContent, QString *e
         return false;
     }
 
-    QDomElement root = doc.firstChildElement(::TAG_ROOT);
     // Read servers
+    QDomElement root = doc.firstChildElement(::TAG_ROOT);
     QDomElement server = root.firstChildElement(::TAG_SERVER);
+    QStringList savedServer;    // Avoid duplicates
     while (!server.isNull()) {
         Server s;
-        s.fromSerializedString(server.attribute(::ATTRIB_URL));
+        const QString &serialized = server.attribute(::ATTRIB_URL);
+        if (savedServer.contains(serialized)) {
+            server = server.nextSiblingElement(::TAG_SERVER);
+            continue;
+        }
+        savedServer << serialized;
+        s.fromSerializedString(serialized);
         s.setLastChecked(QDateTime::fromString(server.attribute(::ATTRIB_LASTCHECK), Qt::ISODate));
         s.setLocalVersion(server.attribute(::ATTRIB_RECORDEDVERSION));
         s.setUserUpdateFrequency(server.attribute(::ATTRIB_USERUPDATEFREQUENCY).toInt());
         m_Servers.append(s);
         server = server.nextSiblingElement(::TAG_SERVER);
     }
-    // Read packs
-//    QDomElement pack = root.firstChildElement(::TAG_PACK);
-//    while (!server.isNull()) {
-//        Pack p;
-//        /** \todo here */
-//        pack = pack.nextSiblingElement(::TAG_PACK);
-//    }
     return true;
 }
 
@@ -125,8 +126,12 @@ QString ServerManager::xmlConfiguration() const
     QDomDocument doc;
     QDomElement root = doc.createElement(::TAG_ROOT);
     doc.appendChild(root);
+    QStringList savedServerUuid;  // Avoid duplicates
     for(int i = 0; i < m_Servers.count(); ++i) {
         const Server &s = m_Servers.at(i);
+        if (savedServerUuid.contains(s.uuid()))
+            continue;
+        savedServerUuid << s.uuid();
         QDomElement e = doc.createElement(::TAG_SERVER);
         root.appendChild(e);
         e.setAttribute(::ATTRIB_URL, s.serialize());
@@ -393,8 +398,10 @@ bool ServerManager::isDataPackInstalled(const QString &packUid, const QString &p
     return false;
 }
 
-QList<Pack> ServerManager::installedPack()
+QList<Pack> ServerManager::installedPack(bool forceRefresh)
 {
+    if (forceRefresh)
+        m_InstalledPacks.clear();
     checkInstalledPacks();
     return m_InstalledPacks;
 }

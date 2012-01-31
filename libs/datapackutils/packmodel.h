@@ -75,8 +75,10 @@ public:
     QList<Pack> packageToUpdate() const;
     QList<Pack> packageToRemove() const;
 
-private Q_SLOTS:
+public Q_SLOTS:
     void updateModel();
+
+private Q_SLOTS:
     void onServerAdded(const int index);
     void onServerRemoved(const int index);
 

@@ -343,9 +343,9 @@ void PackManager::serverActionTriggered(QAction *a)
     }
 }
 
+/** Start to process the user pack modification. */
 void PackManager::processPacks()
 {
-    qWarning() << Q_FUNC_INFO << m_PackModel->isDirty();
     // Apply pack model changes
     if (!m_PackModel->isDirty())
         return;
@@ -355,6 +355,8 @@ void PackManager::processPacks()
     if (dlg.exec()==QDialog::Rejected) {
         return;
     }
+    serverManager()->installedPack(true);
+    m_PackModel->updateModel();
 }
 
 void PackManager::retranslate()

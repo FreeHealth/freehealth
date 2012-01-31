@@ -100,7 +100,7 @@ public:
     Pack downloadAndUnzipPack(const Server &server, const Pack &pack);
 
     void checkInstalledPacks();
-    QList<Pack> installedPack();
+    QList<Pack> installedPack(bool forceRefresh = false);
     bool isDataPackInstalled(const Pack &pack);
     bool isDataPackInstalled(const QString &packUid, const QString &packVersion = QString::null);
     bool installDataPack(const Pack &pack, QProgressBar *progressBar = 0);

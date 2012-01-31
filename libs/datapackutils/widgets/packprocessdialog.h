@@ -98,6 +98,8 @@ private:
     QList<Pack> m_UpdatePacks;
     QList<Pack> m_RemovePacks;
     QVector<Internal::IServerEngine*> m_Engines;
+
+//    QHash<QString, QLabel*> m_RemovalLabels;
 };
 
 }  // End namespace DataPack

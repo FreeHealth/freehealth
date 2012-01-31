@@ -83,7 +83,7 @@ public:
     virtual Server getServerForPack(const Pack &pack) = 0;
     virtual bool isPackInPersistentCache(const Pack &pack) = 0;
 
-    virtual QList<Pack> installedPack() = 0;
+    virtual QList<Pack> installedPack(bool forceRefresh = false) = 0;
     virtual bool isDataPackInstalled(const Pack &pack) = 0;
     virtual bool isDataPackInstalled(const QString &packUid, const QString &packVersion = QString::null) = 0;
 
