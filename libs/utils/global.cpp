@@ -665,6 +665,17 @@ QString isFileExists(const QString &absPath)
     return QString();
 }
 
+QByteArray md5(const QString &fileName)
+{
+    QFile file(fileName);
+    if (file.open(QIODevice::ReadOnly)) {
+        QByteArray fileData = file.readAll();
+        QByteArray hashData = QCryptographicHash::hash(fileData, QCryptographicHash::Md5);
+        return hashData.toHex();
+    }
+    return QByteArray();
+}
+
 //////////////////////////////////////////////////////////////////////////////////////////////////////////////
 ////////////////////////////////////   MESSAGEBOXES FUNCTIONS   //////////////////////////////////////////////
 //////////////////////////////////////////////////////////////////////////////////////////////////////////////

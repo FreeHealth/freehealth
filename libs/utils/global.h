@@ -130,6 +130,7 @@ UTILS_EXPORT QString readTextFile( const QString &toRead, const QString &encoder
 UTILS_EXPORT QString readTextFile( const QString &toRead, const Warn warnUser = WarnUser, QWidget *parent = 0 );
 UTILS_EXPORT QString isDirExists(const QString &absPath);
 UTILS_EXPORT QString isFileExists(const QString &absPath);
+UTILS_EXPORT QByteArray md5(const QString &fileName);
 
 // Some usefull widgets specific functions
 /** \brief Toggle the echomode of a QLineEdit. */
