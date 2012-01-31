@@ -169,6 +169,8 @@ void PackProcessDialog::processPacks()
 void PackProcessDialog::startPackDownloads()
 {
     Q_ASSERT(!m_Engines.isEmpty());
+    m_Msg.clear();
+
     // Download all the packs : install && update packs
     QList<Pack> dld, toDld;
     dld << m_InstallPacks;
@@ -217,7 +219,8 @@ void PackProcessDialog::startPackDownloads()
                 query.server = &server;
                 query.progressBar = bar;
                 engine->addToDownloadQueue(query);
-                LOG(QString("Adding %1 to %2 download queue").arg(pack.uuid()).arg(server.uuid()));
+                LOG(tr("Adding %1 to %2 download queue").arg(pack.uuid()).arg(server.uuid()));
+                m_Msg << tr("Adding %1 to %2 download queue.").arg(pack.uuid()).arg(server.uuid());
             }
         }
     }
@@ -244,15 +247,24 @@ void PackProcessDialog::packDownloadDone()
         }
     }
 
-    // Some log for debugging purpose
-    QList<Pack> dld;
+    // Check MD5 of downloaded files
+    QList<Pack> dld, toInstall;
     dld << m_InstallPacks;
     dld << m_UpdatePacks;
+    for(int i=0; i < dld.count(); ++i) {
+        const Pack &p = dld.at(i);
+        QByteArray downloadedMd5 = Utils::md5(p.persistentlyCachedZipFileName());
+        if (downloadedMd5 != p.md5ControlChecksum()) {
+            m_Msg << tr("Downloaded file is corrupted. Please retry to download the pack: %1.").arg(p.name());
+        } else {
+            toInstall << p;
+        }
+    }
 
     LOG(QString("Requested packs are downloaded in %1").arg(core().persistentCachePath()));
     QStringList logPacks;
-    for(int i=0; i < dld.count(); ++i) {
-        const Pack &p = dld.at(i);
+    for(int i=0; i < toInstall.count(); ++i) {
+        const Pack &p = toInstall.at(i);
         logPacks << QString("%1 (%2, %3)")
                     .arg(p.name())
                     .arg(p.uuid())
@@ -261,8 +273,8 @@ void PackProcessDialog::packDownloadDone()
     LOG(QString("Requested packs: %1").arg(logPacks.join("; ")));
 
     // Copy/Unzip all packs to datapackInstallPath according to PackDescription::InstallToPath
-    for(int i=0; i < dld.count(); ++i) {
-        const Pack &p = dld.at(i);
+    for(int i=0; i < toInstall.count(); ++i) {
+        const Pack &p = toInstall.at(i);
         const QString pathTo = p.unzipPackToPath();
         QDir to(pathTo);
         if (!to.exists()) {
@@ -272,10 +284,23 @@ void PackProcessDialog::packDownloadDone()
         /** \todo manage updating packs */
 
         // Unzip pack to the install path
-        if (!QuaZipTools::unzipFile(p.persistentlyCachedZipFileName(), pathTo))
-            LOG_ERROR(QString("Unable to unzip pack file %1 to %2").arg(p.persistentlyCachedZipFileName()).arg(pathTo));
+        bool error = false;
+        if (!QuaZipTools::unzipFile(p.persistentlyCachedZipFileName(), pathTo)) {
+            LOG_ERROR(tr("Unable to unzip pack file %1 to %2").arg(p.persistentlyCachedZipFileName()).arg(pathTo));
+            m_Msg << tr("Unable to unzip pack file %1 to %2").arg(p.persistentlyCachedZipFileName()).arg(pathTo);
+            error = true;
+        }
         // Add the pack description for future analysis (update, remove...)
-        QFile::copy(p.persistentlyCachedXmlConfigFileName(), p.installedXmlConfigFileName());
+        if (!QFile::copy(p.persistentlyCachedXmlConfigFileName(), p.installedXmlConfigFileName())) {
+            LOG_ERROR(tr("Unable to copy pack description file"));
+            m_Msg << tr("Unable to copy pack description file");
+            error = true;
+        }
+        if (error) {
+            m_Msg << tr("An error was detected during installation of %1.").arg(p.name());
+        } else {
+            m_Msg << tr("Pack %1 was correctly installed.").arg(p.name());
+        }
     }
 
     // process the removals
@@ -307,13 +332,17 @@ void PackProcessDialog::removePacks()
         // Remove the zipPath used for the pack
         QFileInfo zipPath(p.unzipPackToPath());
         if (!zipPath.exists()) {
-            LOG_ERROR(QString("Unable to remove pack %1, unzip path does not exists (%2)").arg(p.name().arg(p.unzipPackToPath())));
+            LOG_ERROR(tr("Unable to remove pack %1, unzip path does not exists (%2)").arg(p.name().arg(p.unzipPackToPath())));
+            m_Msg << tr("Unable to remove pack %1, unzip path does not exists (%2)").arg(p.name().arg(p.unzipPackToPath()));
             continue;
         }
         QString error;
         Utils::removeDirRecursively(p.unzipPackToPath(), &error);
         if (!error.isEmpty()) {
-            LOG_ERROR(QString("Unable to remove pack %1, error: %2").arg(p.name().arg(error)));
+            LOG_ERROR(tr("Unable to remove pack %1, error: %2").arg(p.name().arg(error)));
+            m_Msg << tr("Unable to remove pack %1, error: %2").arg(p.name().arg(error));
+        } else {
+            m_Msg << tr("Pack %1 correctly removed.").arg(p.name());
         }
     }
     clearTemporaries();
@@ -322,6 +351,10 @@ void PackProcessDialog::removePacks()
 void PackProcessDialog::clearTemporaries()
 {
     // Draft
-    accept();
+    showLogMessage();
 }
 
+void PackProcessDialog::showLogMessage()
+{
+    ui->textBrowser->setHtml(m_Msg.join("<br />"));
+}

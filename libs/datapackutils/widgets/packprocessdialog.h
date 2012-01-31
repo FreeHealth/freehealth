@@ -89,6 +89,7 @@ private:
     void installPacks();
     void removePacks();
     void clearTemporaries();
+    void showLogMessage();
 
 private:
     Ui::PackProcessDialog *ui;
@@ -98,6 +99,7 @@ private:
     QList<Pack> m_UpdatePacks;
     QList<Pack> m_RemovePacks;
     QVector<Internal::IServerEngine*> m_Engines;
+    QStringList m_Msg;
 
 //    QHash<QString, QLabel*> m_RemovalLabels;
 };

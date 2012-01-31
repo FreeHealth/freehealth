@@ -59,11 +59,12 @@
          <x>0</x>
          <y>0</y>
          <width>494</width>
-         <height>76</height>
+         <height>56</height>
         </rect>
        </property>
       </widget>
      </widget>
+     <widget class="QTextBrowser" name="textBrowser"/>
     </widget>
    </item>
    <item row="3" column="0">
