@@ -315,6 +315,7 @@ void PackManager::serverActionTriggered(QAction *a)
         QProgressDialog dlg(this);
         QProgressBar *bar = new QProgressBar;
         dlg.setLabelText(tr("Updating server information"));
+        dlg.setModal(true);
         dlg.setBar(bar);
         dlg.show();
         /** \todo Connect the cancel button */
@@ -327,13 +328,13 @@ void PackManager::serverActionTriggered(QAction *a)
             dlg.submitTo(&server);
             serverManager()->addServer(server);
             /** \todo manage progress dialog cancellation */
-            QProgressDialog *dlg = new QProgressDialog;
-            dlg->setLabelText(tr("Downloading server information"));
-            dlg->setModal(true);
-            connect(serverManager(), SIGNAL(allServerDescriptionAvailable()), dlg, SLOT(accept()));
+            QProgressDialog dlg(this);
+            dlg.setLabelText(tr("Downloading server information"));
+            dlg.setModal(true);
+            connect(serverManager(), SIGNAL(allServerDescriptionAvailable()), &dlg, SLOT(accept()));
 //            connect(serverManager(), SIGNAL(allServerDescriptionAvailable()), dlg, SLOT(close()));
             serverManager()->getServerDescription(serverManager()->serverCount() - 1);
-            dlg->exec();
+            dlg.exec();
         }
     } else if (a==aServerRemove) {
         /** \todo code here */
