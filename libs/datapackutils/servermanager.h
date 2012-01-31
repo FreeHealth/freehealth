@@ -72,7 +72,7 @@ public:
 
     // Downloads
     void getServerDescription(const int index);
-    void getAllDescriptionFile();
+    void getAllDescriptionFile(QProgressBar *bar = 0);
     void checkServerUpdates();
 
 private Q_SLOTS:
@@ -139,6 +139,7 @@ private:
     QVector<IServerEngine *> m_WorkingEngines;
 //    FtpServerEngine *m_FtpEngine;
 
+    QProgressBar *m_ProgressBar;
 };
 
 }  // End namespace Internal

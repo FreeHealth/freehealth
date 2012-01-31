@@ -50,6 +50,7 @@ const char* const PATH_1_CANNOT_BE_CREATED           = QT_TRANSLATE_NOOP("tkCons
 const char* const CREATE_DIR_1                       = QT_TRANSLATE_NOOP("tkConstants", "Creating dir %1");
 const char* const FILE_1_DOESNOT_EXISTS              = QT_TRANSLATE_NOOP("tkConstants", "File %1 does not exist");
 const char* const FILE_1_ISNOT_READABLE              = QT_TRANSLATE_NOOP("tkConstants", "File %1 is not readable");
+const char* const FILE_1_CAN_NOT_BE_CREATED          = QT_TRANSLATE_NOOP("tkConstants", "File %1 can not be created");
 const char* const FILE_1_CANNOT_BE_REMOVED           = QT_TRANSLATE_NOOP("tkConstants", "File %1 can not be removed");
 const char* const FILE_1_LOADED                      = QT_TRANSLATE_NOOP("tkConstants", "File %1 loaded");
 const char* const FILE_1_ISEMPTY                     = QT_TRANSLATE_NOOP("tkConstants", "File %1 is empty");

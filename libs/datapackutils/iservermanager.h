@@ -75,7 +75,7 @@ public:
 
     // Downloads
     virtual void getServerDescription(const int index) = 0;
-    virtual void getAllDescriptionFile() = 0;
+    virtual void getAllDescriptionFile(QProgressBar *bar = 0) = 0;
     virtual void checkServerUpdates() = 0;
 
     virtual QList<PackDescription> getPackDescription(const Server &server) = 0;
@@ -115,9 +115,11 @@ Q_SIGNALS:
     void serverConnected(const Server &server, const ServerIdentification &ident);
     void serverInfosUpdated(int serverId); // emitted when a server infos have been updated
 
+    // Obsolete
     void packInstalled(const Server &server, const Pack &pack);
     void packRemoved(const Server &server, const Pack &pack);
     void packUpdated(const Server &server, const Pack &pack);
+    // end
 
     // In use
     void serverUpdateChecked();

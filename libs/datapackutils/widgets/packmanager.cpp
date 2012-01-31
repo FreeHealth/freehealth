@@ -49,6 +49,7 @@
 
 #include <QToolBar>
 #include <QProgressDialog>
+#include <QProgressBar>
 #include <QListWidgetItem>
 
 #include <QDebug>
@@ -311,8 +312,13 @@ void PackManager::onPackIndexActivated(const QModelIndex &index, const QModelInd
 void PackManager::serverActionTriggered(QAction *a)
 {
     if (a==aServerRefresh) {
-        /** \todo code here */
-//        serverManager()->getAllDescriptionFile();
+        QProgressDialog dlg(this);
+        QProgressBar *bar = new QProgressBar;
+        dlg.setLabelText(tr("Updating server information"));
+        dlg.setBar(bar);
+        dlg.show();
+        /** \todo Connect the cancel button */
+        serverManager()->getAllDescriptionFile(bar);
     } if (a==aServerAdd) {
         AddServerDialog dlg(this);
         Server server;

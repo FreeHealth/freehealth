@@ -38,6 +38,7 @@
 #include <QDir>
 #include <QDomDocument>
 #include <QDomElement>
+#include <QProgressBar>
 
 #include <QDebug>
 
@@ -68,7 +69,7 @@ const char * const SERVER_CONFIG_FILENAME   = "server.conf.xml";
 static inline DataPack::DataPackCore &core() {return DataPack::DataPackCore::instance();}
 
 ServerManager::ServerManager(QObject *parent) :
-    IServerManager(parent)
+    IServerManager(parent), m_ProgressBar(0)
 {
     setObjectName("ServerManager");
 
@@ -208,9 +209,11 @@ void ServerManager::getServerDescription(const int index)
     }
 }
 
-void ServerManager::getAllDescriptionFile()
+void ServerManager::getAllDescriptionFile(QProgressBar *bar)
 {
+    WARN_FUNC << bar;
     // Populate all server engine
+    int workingTasks = 0;
     for(int i=0; i < m_Servers.count(); ++i) {
         Server *s = &m_Servers[i];
         qWarning() << "getAllDescription" << i << s->nativeUrl();
@@ -222,9 +225,17 @@ void ServerManager::getAllDescriptionFile()
                 query.forceDescriptionFromLocalCache = false;
                 query.downloadDescriptionFiles = true;
                 query.downloadPackFile = false;
+                ++workingTasks;
                 engine->addToDownloadQueue(query);
             }
         }
+    }
+    // Populate progressBar
+    if (bar) {
+        qWarning() << bar << workingTasks;
+        bar->setRange(0, workingTasks);
+        bar->setValue(0);
+        m_ProgressBar = bar;
     }
     // Then start all server engine
     for(int j = 0; j < m_WorkingEngines.count(); ++j) {
@@ -271,22 +282,25 @@ void ServerManager::engineDescriptionDownloadDone()
     // if all engines download done -> emit signal
     bool __emit = true;
     for(int i = 0; i < m_WorkingEngines.count(); ++i) {
-        if (m_WorkingEngines.at(i)->downloadQueueCount()>0) {
+        if (m_WorkingEngines.at(i)->downloadQueueCount() > 0) {
 //            qWarning() << m_WorkingEngines.at(i)->objectName() << m_WorkingEngines.at(i)->downloadQueueCount();
             __emit = false;
         } else {
             disconnect(m_WorkingEngines.at(i), SIGNAL(queueDowloaded()), this, SLOT(engineDescriptionDownloadDone()));
         }
     }
-    if (__emit)
+    if (m_ProgressBar)
+        m_ProgressBar->setValue(m_ProgressBar->value() + 1);
+    if (__emit) {
         Q_EMIT allServerDescriptionAvailable();
+        m_ProgressBar = 0;
+    }
 }
 
 void ServerManager::registerPack(const Server &server, const Pack &pack)
 {
     m_Packs.insertMulti(server.uuid(), pack);
 }
-
 
 
 /////////////////////////////////////////////////////////////////////////////////////////
