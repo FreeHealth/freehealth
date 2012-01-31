@@ -380,7 +380,7 @@ QList<Pack> PackModel::packageToInstall() const
 {
     QList<Pack> toReturn;
     foreach(const PackItem &it, d->m_Items) {
-        if (!it.isInstalled && it.userCheckState==Qt::Checked)
+        if (!it.isInstalled && !it.isAnUpdate && it.userCheckState==Qt::Checked)
             toReturn << it.pack;
     }
     return toReturn;
