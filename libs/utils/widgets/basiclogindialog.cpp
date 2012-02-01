@@ -9,11 +9,19 @@ BasicLoginDialog::BasicLoginDialog(QWidget *parent) :
 {
     ui->setupUi(this);
     ui->loginWidget->focusLogin();
+    ui->loginWidget->togglePasswordEcho(false);
+    adjustSize();
 }
 
 BasicLoginDialog::~BasicLoginDialog()
 {
     delete ui;
+}
+
+void BasicLoginDialog::setTitle(const QString &title)
+{
+    ui->title->setText(title);
+    this->setWindowTitle(title);
 }
 
 void BasicLoginDialog::setToggleViewIcon(const QString &fullAbsPath)

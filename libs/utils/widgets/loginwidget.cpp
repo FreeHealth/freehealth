@@ -39,7 +39,7 @@ LoginWidget::LoginWidget(QWidget *parent) :
     ui(new Ui::LoginWidget)
 {
     ui->setupUi(this);
-    layout()->setMargin(0);
+    layout()->setMargin(2);
     ui->loginLabel->setText(tkTr(Trans::Constants::LOGIN));
     ui->passwordLabel->setText(tkTr(Trans::Constants::PASSWORD));
 }

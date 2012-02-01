@@ -17,6 +17,8 @@ public:
     explicit BasicLoginDialog(QWidget *parent = 0);
     ~BasicLoginDialog();
 
+    void setTitle(const QString &title);
+
     void setToggleViewIcon(const QString &fullAbsPath);
 
     QString login() const;
