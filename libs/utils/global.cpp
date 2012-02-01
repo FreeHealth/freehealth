@@ -1562,7 +1562,7 @@ int replaceTokens(QString &textToAnalyse, const QHash<QString, QString> &tokens_
 QString testInternetConnexion()
 {
     QNetworkConfigurationManager mgr;
-    QList<QNetworkConfiguration> activeConfigs = mgr.allConfigurations(QNetworkConfiguration::Active | QNetworkConfiguration::Defined);
+    QList<QNetworkConfiguration> activeConfigs = mgr.allConfigurations(QNetworkConfiguration::Active);
     foreach(const QNetworkConfiguration &config, activeConfigs) {
         if (config.isValid() && config.type()==QNetworkConfiguration::InternetAccessPoint) {
             if (mgr.isOnline())
