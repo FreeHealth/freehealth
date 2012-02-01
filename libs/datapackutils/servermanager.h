@@ -56,6 +56,7 @@ class ServerManager : public IServerManager
 public:
     explicit ServerManager(QObject *parent = 0);
     ~ServerManager();
+    void init();
 
     // IServerManager interface
     // Manage path

@@ -72,15 +72,19 @@ ServerManager::ServerManager(QObject *parent) :
     IServerManager(parent), m_ProgressBar(0)
 {
     setObjectName("ServerManager");
-
-    // Create engines
-    m_LocalEngine = new LocalServerEngine(this);
-    m_HttpEngine = new HttpServerEngine(this);
-    m_WorkingEngines << m_LocalEngine << m_HttpEngine;
 }
 
 ServerManager::~ServerManager()
 {
+}
+
+void ServerManager::init()
+{
+    // Avoid infinite looping when using core::instance in serverengine constructors
+    // Create engines
+    m_LocalEngine = new LocalServerEngine(this);
+    m_HttpEngine = new HttpServerEngine(this);
+    m_WorkingEngines << m_LocalEngine << m_HttpEngine;
 }
 
 /////////////////////////////////////////////////////////////////////////////////////////

@@ -30,6 +30,7 @@
 
 #include <utils/log.h>
 #include <utils/global.h>
+#include <utils/widgets/basiclogindialog.h>
 #include <translationutils/constants.h>
 #include <translationutils/trans_filepathxml.h>
 #include <translationutils/trans_msgerror.h>
@@ -38,6 +39,8 @@
 #include <QDir>
 #include <QFile>
 #include <QProgressBar>
+#include <QNetworkProxyQuery>
+#include <QAuthenticator>
 
 #include <QDebug>
 
@@ -48,6 +51,12 @@ using namespace Internal;
 using namespace Trans::ConstantTranslations;
 
 static inline DataPack::DataPackCore &core() { return DataPack::DataPackCore::instance(); }
+
+namespace {
+    const int MAX_AUTHENTIFICATION_TRIES = 3;
+    const char * const  ICONEYES = "eyes.png";
+
+}
 
 ReplyData::ReplyData(QNetworkReply *reply, Server *server, Server::FileRequested fileType, const Pack &pack, QProgressBar *progBar) {
     this->reply = reply;
@@ -76,6 +85,27 @@ HttpServerEngine::HttpServerEngine(IServerManager *parent)  :
 {
     setObjectName("HttpServerEngine");
     m_NetworkAccessManager = new QNetworkAccessManager(this);
+    const QString &id = Utils::testInternetConnexion();
+    if (!id.isEmpty()) {
+        LOG("Internet connection is enabled");
+//        if (core().networkProxy() != QNetworkProxy()) {
+//            m_NetworkAccessManager->setProxy(core().networkProxy());
+//        }
+//        // Check for system http proxys  -> [[useless code]]
+//        QNetworkProxyQuery npq(QUrl("http://www.google.com"));
+//        QList<QNetworkProxy> listOfProxies = QNetworkProxyFactory::systemProxyForQuery(npq);
+//        foreach(const QNetworkProxy &p, listOfProxies) {
+//            qWarning() << p.hostName() << p.user() << p.password() << p.;
+//            if (p.type()==QNetworkProxy::HttpProxy && !p.hostName().isEmpty()) {
+//                LOG("Using proxy " + p.hostName());
+//                /** \todo ask for user identification */
+//                m_NetworkAccessManager->setProxy(p);
+//                break;
+//            }
+//        }
+    } else {
+        LOG_ERROR("No internet connection available");
+    }
 }
 
 HttpServerEngine::~HttpServerEngine()
@@ -88,7 +118,9 @@ ServerManager *HttpServerEngine::serverManager()
 
 bool HttpServerEngine::managesServer(const Server &server)
 {
-    return server.nativeUrl().startsWith("http");
+    if (core().isInternetConnexionAvailable())
+        return server.nativeUrl().startsWith("http");
+    return false;
 }
 
 void HttpServerEngine::addToDownloadQueue(const ServerEngineQuery &query)
@@ -103,6 +135,16 @@ int HttpServerEngine::downloadQueueCount() const
 
 bool HttpServerEngine::startDownloadQueue()
 {
+    // Internet connection available ?
+    if (!core().isInternetConnexionAvailable()) {
+        LOG_ERROR("No internet connexion available.");
+        return false;
+    }
+    // Use a proxy ?
+    if (!core().networkProxy().hostName().isEmpty()) {
+        m_NetworkAccessManager->setProxy(core().networkProxy());
+        LOG("Using proxy: " + m_NetworkAccessManager->proxy().hostName());
+    }
     for(int i = 0; i < m_queue.count(); ++i) {
         const ServerEngineQuery &query = m_queue.at(i);
         Server *s = query.server;
@@ -123,10 +165,11 @@ bool HttpServerEngine::startDownloadQueue()
             reply = m_NetworkAccessManager->get(request);
             m_replyToData.insert(reply, ReplyData(reply, s, Server::PackFile, *query.pack, query.progressBar));
         }
-
         connect(reply, SIGNAL(readyRead()), this, SLOT(serverReadyRead()));
         connect(reply, SIGNAL(finished()), this, SLOT(serverFinished()));
         connect(reply, SIGNAL(error(QNetworkReply::NetworkError)), this, SLOT(serverError(QNetworkReply::NetworkError)));
+        connect(m_NetworkAccessManager, SIGNAL(authenticationRequired(QNetworkReply*,QAuthenticator*)), this, SLOT(authenticationRequired(QNetworkReply*,QAuthenticator*)));
+        connect(m_NetworkAccessManager, SIGNAL(proxyAuthenticationRequired(QNetworkProxy,QAuthenticator*)), this, SLOT(proxyAuthenticationRequired(QNetworkProxy,QAuthenticator*)));
 
         QProgressBar *bar = query.progressBar;
         if (bar) {
@@ -157,9 +200,42 @@ void HttpServerEngine::downloadProgress(qint64 bytesRead, qint64 totalBytes)
         bar->setValue(0);
 }
 
+void HttpServerEngine::authenticationRequired(QNetworkReply *reply, QAuthenticator *authenticator)
+{
+    LOG("Server authentification requiered: " +  reply->url().toString());
+    Utils::BasicLoginDialog dlg;
+    dlg.setModal(true);
+    dlg.setTitle(tr("Server authentification requiered"));
+    dlg.setToggleViewIcon(core().icon(ICONEYES));
+    if (dlg.exec()==QDialog::Accepted) {
+        authenticator->setUser(dlg.login());
+        authenticator->setPassword(dlg.password());
+    }
+}
+
+void HttpServerEngine::proxyAuthenticationRequired(const QNetworkProxy &proxy, QAuthenticator *authenticator)
+{
+    LOG("Proxy authentification requiered: " +  proxy.hostName());
+    if (!proxy.user().isEmpty() && !proxy.password().isEmpty()) {
+        authenticator->setUser(proxy.user());
+        authenticator->setPassword(proxy.password());
+    } else {
+        // Ask user for identification
+        Utils::BasicLoginDialog dlg;
+        dlg.setModal(true);
+        dlg.setTitle(tr("Proxy authentification requiered"));
+        dlg.setToggleViewIcon(core().icon(ICONEYES));
+        if (dlg.exec()==QDialog::Accepted) {
+            authenticator->setUser(dlg.login());
+            authenticator->setPassword(dlg.password());
+        }
+    }
+}
+
 /** Server configuration file read enable. */
 void HttpServerEngine::serverReadyRead()
 {
+    qWarning() << "ready";
     QNetworkReply *reply = qobject_cast<QNetworkReply*>(sender());
     ReplyData &data = m_replyToData[reply];
     data.response.append(reply->readAll());
@@ -168,6 +244,7 @@ void HttpServerEngine::serverReadyRead()
 /** An error occured during the network access. */
 void HttpServerEngine::serverError(QNetworkReply::NetworkError error)
 {
+    qWarning() << "error" << error;
     Q_UNUSED(error);
     /** \todo code here */
     --m_DownloadCount_Server;
@@ -177,10 +254,12 @@ void HttpServerEngine::serverError(QNetworkReply::NetworkError error)
 void HttpServerEngine::serverFinished()
 {
     QNetworkReply *reply = qobject_cast<QNetworkReply*>(sender());
+
+    qWarning() << "HTTP : serverFinished" << reply->request().url() << reply->error();
+
     if (reply->error() != QNetworkReply::NoError)
         return;
 
-    qWarning() << "HTTP : serverFinished" << reply->request().url();
 
     ReplyData &data = m_replyToData[reply];
     data.server->setConnected(true);

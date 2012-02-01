@@ -29,8 +29,10 @@
 
 #include <datapackutils/datapack_exporter.h>
 #include <QObject>
+QT_BEGIN_NAMESPACE
 class QNetworkAccessManager;
-
+class QNetworkProxy;
+QT_END_NAMESPACE
 
 /**
  * \file datapackcore.h
@@ -61,9 +63,7 @@ public:
 
     static DataPackCore &instance(QObject *parent = 0);
     ~DataPackCore();
-
-    bool isInternetConnexionAvailable();
-    IServerManager *serverManager() const;
+    void init();
 
     // Manage path
     void setInstallPath(const QString &absPath);
@@ -77,6 +77,14 @@ public:
 
     void setThemePath(ThemePath path, const QString &absPath);
     QString icon(const QString &name, ThemePath path = SmallPixmaps);
+
+    // Configuration of internet connection
+    bool isInternetConnexionAvailable();
+    void setNetworkProxy(const QNetworkProxy &proxy);
+    const QNetworkProxy &networkProxy() const;
+
+    // Server manager
+    IServerManager *serverManager() const;
 
 private:
     Internal::DataPackCorePrivate *d;

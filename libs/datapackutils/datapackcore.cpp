@@ -35,8 +35,10 @@
 #include "servermanager.h"
 
 #include <utils/log.h>
+#include <utils/global.h>
 
 #include <QDir>
+#include <QNetworkProxy>
 
 using namespace DataPack;
 
@@ -63,6 +65,7 @@ public:
     ServerManager *m_ServerManager;
     QHash<int, QString> m_ThemePath;
     QString m_InstallPath, m_TmpCachePath, m_PersistentCachePath;
+    QNetworkProxy m_Proxy;
 };
 }  // End namespace Internal
 }  // End namespace DataPack
@@ -84,14 +87,28 @@ DataPackCore::~DataPackCore()
     }
 }
 
-/** Test the internet connection and return the state of availability of it. */
+void DataPackCore::init()
+{
+    // Avoid infinite looping when using core::instance in servermanager/serverengine constructors
+    d->m_ServerManager->init();
+}
+
+/** Test the internet connection and return the state of availability of it. This is just a wrapper of the Utils::testInternetConnexion(). */
 bool DataPackCore::isInternetConnexionAvailable()
 {
-//    foreach(const QNetworkConfiguration &conf, QNetworkConfigurationManager().allConfigurations()) {
-//        qWarning() << conf.bearerName() << conf.bearerTypeName() << conf.state() << conf.identifier() << conf.name();
-//    }
-    // TODO
-    return true;
+    return !Utils::testInternetConnexion().isEmpty();
+}
+
+/** Untill application can not fully detect the system proxy, you have to define the proxy to use in all the internet access done by the DataPack lib. */
+void DataPackCore::setNetworkProxy(const QNetworkProxy &proxy)
+{
+    d->m_Proxy = proxy;
+}
+
+/** Return the proxy to use in all the internet access done by the DataPack lib. */
+const QNetworkProxy &DataPackCore::networkProxy() const
+{
+    return d->m_Proxy;
 }
 
 /** Return the single DataPack::IServerManager in use in the lib. */
