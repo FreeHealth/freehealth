@@ -52,7 +52,7 @@
 #include <coreplugin/itheme.h>
 #include <coreplugin/constants_icons.h>
 
-#include <utils/widgets/lineeditechoswitcher.h>
+#include <utils/widgets/loginwidget.h>
 
 #include <usermanagerplugin/usermodel.h>
 #include <usermanagerplugin/database/userbase.h>
@@ -77,8 +77,8 @@ UserIdentifier::UserIdentifier(QWidget *parent) :
         theme()->splashScreen()->hide();
     m_ui = new Ui::UserIdentifier();
     m_ui->setupUi(this);
-    m_ui->login->setIcon(theme()->icon(Core::Constants::ICONEYES));
-    m_ui->password->setIcon(theme()->icon(Core::Constants::ICONEYES));
+    m_ui->loginWidget->setToggleViewIcon(theme()->iconFullPath(Core::Constants::ICONEYES));
+
     QPixmap splash = theme()->splashScreenPixmap(settings()->path(Core::ISettings::Splashscreen));
     if (splash.size().width() > 400 || splash.size().height() >200) {
         splash = splash.scaled(QSize(400,200),Qt::KeepAspectRatio);
@@ -92,8 +92,7 @@ UserIdentifier::UserIdentifier(QWidget *parent) :
     } else {
         m_ui->newlyMessage->hide();
     }
-    m_ui->password->toogleEchoMode();
-    m_ui->login->lineEdit()->setFocus();
+    m_ui->loginWidget->focusLogin();
 
     // Server or local
     if (settings()->databaseConnector().driver()==Utils::Database::MySQL) {
@@ -138,24 +137,24 @@ void UserIdentifier::done(int result)
 /** Uncrypted login. */
 QString UserIdentifier::login() const
 {
-    return m_ui->login->lineEdit()->text();
+    return m_ui->loginWidget->login();
 }
 
 /** FreeMedForms crypted login. */
 QString UserIdentifier::login64crypt() const
 {
-    return Utils::loginForSQL(m_ui->login->lineEdit()->text());
+    return Utils::loginForSQL(m_ui->loginWidget->login());
 }
 
 /** Uncrypted password. */
 QString UserIdentifier::password() const
 {
-    return m_ui->password->lineEdit()->text();
+    return m_ui->loginWidget->password();
 }
 
 /** FreeMedForms crypted password (the crypt algorythm is destructive). */
 QString UserIdentifier::cryptedPassword() const
 {
-    return Utils::cryptPassword(m_ui->password->lineEdit()->text());
+    return Utils::cryptPassword(m_ui->loginWidget->password());
 }
 

@@ -19,57 +19,46 @@
  *  If not, see <http://www.gnu.org/licenses/>.                            *
  ***************************************************************************/
 /***************************************************************************
- *   Main Developper : Eric MAEKER, <eric.maeker@gmail.com>                *
+ *   Main Developpers :                                                    *
+ *       Eric MAEKER, MD <eric.maeker@gmail.com>                           *
  *   Contributors :                                                        *
  *       NAME <MAIL@ADRESS>                                                *
  ***************************************************************************/
-#ifndef LINEEDITECHOSWITCHER_H
-#define LINEEDITECHOSWITCHER_H
-
-#include <utils/global_exporter.h>
-
-/**
- * \file lineeditechoswitcher.h
- * \author Eric MAEKER <eric.maeker@gmail.com>
- * \version 0.0.7
- * \date 24 April 2009
-*/
+#ifndef UTILS_LOGINWIDGET_H
+#define UTILS_LOGINWIDGET_H
 
 #include <QWidget>
-#include <QLineEdit>
-#include <QEvent>
-#include <QIcon>
 
 namespace Utils {
-namespace Internal {
-class LineEditEchoSwitcherPrivate;
+
+namespace Ui {
+    class LoginWidget;
 }
 
-class UTILS_EXPORT LineEditEchoSwitcher : public QWidget
+class LoginWidget : public QWidget
 {
     Q_OBJECT
-    Q_PROPERTY( QString text READ text WRITE setText USER true)
-
 public:
-    LineEditEchoSwitcher( QWidget *parent = 0 );
-    ~LineEditEchoSwitcher() {}
+    explicit LoginWidget(QWidget *parent = 0);
+    ~LoginWidget();
 
-    QLineEdit *lineEdit();
-    void setText( const QString & text );
-    QString text();
-    void setIcon(const QIcon &icon);
+    void setToggleViewIcon(const QString &fullAbsPath);
+    void focusLogin();
 
-public Q_SLOTS:
-    void toogleEchoMode();
-    void setEchoMode(QLineEdit::EchoMode mode);
+    void toggleLoginEcho(bool visible);
+    void togglePasswordEcho(bool visible);
 
-protected:
-    void changeEvent( QEvent *e );
+    QString login() const;
+    QString password() const;
+
 
 private:
-    Internal::LineEditEchoSwitcherPrivate *d;
+    void changeEvent(QEvent *e);
+
+private:
+    Ui::LoginWidget *ui;
 };
 
-}  // End Utils
 
-#endif // LINEEDITECHOSWITCHER_H
+} // namespace Utils
+#endif // UTILS_LOGINWIDGET_H

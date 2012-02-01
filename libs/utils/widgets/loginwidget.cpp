@@ -19,57 +19,79 @@
  *  If not, see <http://www.gnu.org/licenses/>.                            *
  ***************************************************************************/
 /***************************************************************************
- *   Main Developper : Eric MAEKER, <eric.maeker@gmail.com>                *
+ *   Main Developpers :                                                    *
+ *       Eric MAEKER, MD <eric.maeker@gmail.com>                           *
  *   Contributors :                                                        *
  *       NAME <MAIL@ADRESS>                                                *
  ***************************************************************************/
-#ifndef LINEEDITECHOSWITCHER_H
-#define LINEEDITECHOSWITCHER_H
+#include "loginwidget.h"
 
-#include <utils/global_exporter.h>
+#include <translationutils/constants.h>
+#include <translationutils/trans_database.h>
 
-/**
- * \file lineeditechoswitcher.h
- * \author Eric MAEKER <eric.maeker@gmail.com>
- * \version 0.0.7
- * \date 24 April 2009
-*/
+#include "ui_loginwidget.h"
 
-#include <QWidget>
-#include <QLineEdit>
-#include <QEvent>
-#include <QIcon>
+using namespace Utils;
+using namespace Trans::ConstantTranslations;
 
-namespace Utils {
-namespace Internal {
-class LineEditEchoSwitcherPrivate;
+LoginWidget::LoginWidget(QWidget *parent) :
+    QWidget(parent),
+    ui(new Ui::LoginWidget)
+{
+    ui->setupUi(this);
+    layout()->setMargin(0);
+    ui->loginLabel->setText(tkTr(Trans::Constants::LOGIN));
+    ui->passwordLabel->setText(tkTr(Trans::Constants::PASSWORD));
 }
 
-class UTILS_EXPORT LineEditEchoSwitcher : public QWidget
+LoginWidget::~LoginWidget()
 {
-    Q_OBJECT
-    Q_PROPERTY( QString text READ text WRITE setText USER true)
+    delete ui;
+}
 
-public:
-    LineEditEchoSwitcher( QWidget *parent = 0 );
-    ~LineEditEchoSwitcher() {}
+void LoginWidget::setToggleViewIcon(const QString &fullAbsPath)
+{
+    ui->login->setIcon(QIcon(fullAbsPath));
+    ui->password->setIcon(QIcon(fullAbsPath));
+}
 
-    QLineEdit *lineEdit();
-    void setText( const QString & text );
-    QString text();
-    void setIcon(const QIcon &icon);
+void LoginWidget::focusLogin()
+{
+    this->setFocus();
+    ui->login->setFocus();
+}
 
-public Q_SLOTS:
-    void toogleEchoMode();
-    void setEchoMode(QLineEdit::EchoMode mode);
+void LoginWidget::toggleLoginEcho(bool visible)
+{
+    if (visible)
+        ui->login->setEchoMode(QLineEdit::Normal);
+    else
+        ui->login->setEchoMode(QLineEdit::Password);
+}
 
-protected:
-    void changeEvent( QEvent *e );
+void LoginWidget::togglePasswordEcho(bool visible)
+{
+    if (visible)
+        ui->password->setEchoMode(QLineEdit::Normal);
+    else
+        ui->password->setEchoMode(QLineEdit::Password);
+}
 
-private:
-    Internal::LineEditEchoSwitcherPrivate *d;
-};
+QString LoginWidget::login() const
+{
+    return ui->login->text();
+}
 
-}  // End Utils
+QString LoginWidget::password() const
+{
+    return ui->password->text();
+}
 
-#endif // LINEEDITECHOSWITCHER_H
+void LoginWidget::changeEvent(QEvent *e)
+{
+    if (e->type()==QEvent::LanguageChange) {
+        // Retranslate
+        ui->loginLabel->setText(tkTr(Trans::Constants::LOGIN));
+        ui->passwordLabel->setText(tkTr(Trans::Constants::PASSWORD));
+    }
+}

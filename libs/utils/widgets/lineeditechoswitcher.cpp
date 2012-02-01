@@ -107,7 +107,12 @@ QString LineEditEchoSwitcher::text()
 /** \brief Toogle the echo mode of the line edit. */
 void LineEditEchoSwitcher::toogleEchoMode()
 {
-    d->switchEchoMode( d->lineEdit );
+    d->switchEchoMode(d->lineEdit);
+}
+
+void LineEditEchoSwitcher::setEchoMode(QLineEdit::EchoMode mode)
+{
+    d->lineEdit->setEchoMode(mode);
 }
 
 void LineEditEchoSwitcher::setIcon(const QIcon &icon)

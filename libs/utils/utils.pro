@@ -52,7 +52,9 @@ HEADERS += global_exporter.h \
     widgets/genericupdateinformationeditor.h \
     widgets/genericinformationeditordialog.h \
     widgets/htmldelegate.h \
-    widgets/uppercasevalidator.h
+    widgets/uppercasevalidator.h \
+    widgets/loginwidget.h \
+    widgets/basiclogindialog.h
 #    widgets/dialogbuttonbox.h
 
 SOURCES += global.cpp \
@@ -93,7 +95,9 @@ SOURCES += global.cpp \
     widgets/genericdescriptioneditor.cpp \
     widgets/genericupdateinformationeditor.cpp \
     widgets/genericinformationeditordialog.cpp \
-    widgets/htmldelegate.cpp
+    widgets/htmldelegate.cpp \
+    widgets/loginwidget.cpp \
+    widgets/basiclogindialog.cpp
 #    widgets/dialogbuttonbox.cpp
 
 macx {
@@ -114,7 +118,15 @@ TRANSLATIONS += $${SOURCES_TRANSLATIONS_PATH}/utils_fr.ts \
 FORMS += \
     widgets/genericdescriptioneditor.ui \
     widgets/genericupdateinformationeditor.ui \
-    widgets/genericinformationeditordialog.ui
+    widgets/genericinformationeditordialog.ui \
+    widgets/loginwidget.ui \
+    widgets/basiclogindialog.ui
+
+
+
+
+
+
 
 
 
