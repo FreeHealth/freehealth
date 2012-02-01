@@ -170,15 +170,16 @@ UTILS_EXPORT void    xmlWrite(QDomElement &father, const QString &name, bool val
 UTILS_EXPORT int replaceToken( QString &textToAnalyse, const QString &token, const QString &value );
 UTILS_EXPORT int replaceTokens(QString &textToAnalyse, const QHash<QString, QString> &tokens_values);
 
+// Some network helpers
+UTILS_EXPORT QString testInternetConnexion();
+
 // Some database identifiers helpers
-// Login and password transformations
 UTILS_EXPORT QString cryptPassword(const QString &toCrypt);
 UTILS_EXPORT QString loginForSQL(const QString &log);
 UTILS_EXPORT QString loginFromSQL(const QVariant &sql);
 UTILS_EXPORT QString loginFromSQL(const QString &sql);
-
-UTILS_EXPORT QByteArray crypt(const QString &texte);
-UTILS_EXPORT QString decrypt(const QByteArray &texte);
+UTILS_EXPORT QByteArray crypt(const QString &text);
+UTILS_EXPORT QString decrypt(const QByteArray &text);
 
 }  // end Utils
 

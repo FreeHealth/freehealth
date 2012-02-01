@@ -51,6 +51,7 @@
 #include <QCryptographicHash>
 #include <QMainWindow>
 #include <QModelIndex>
+#include <QNetworkConfigurationManager>
 
 /**
   \namespace Utils
@@ -1557,6 +1558,20 @@ int replaceTokens(QString &textToAnalyse, const QHash<QString, QString> &tokens_
     return i;
 }
 
+/** Test the internet connection capability, and return the first available configuration identifier. \sa QNetworkConfigurationManager::configurationFromIdentifier(const QString &identifier) const*/
+QString testInternetConnexion()
+{
+    QNetworkConfigurationManager mgr;
+    QList<QNetworkConfiguration> activeConfigs = mgr.allConfigurations(QNetworkConfiguration::Active | QNetworkConfiguration::Defined);
+    foreach(const QNetworkConfiguration &config, activeConfigs) {
+        if (config.isValid() && config.type()==QNetworkConfiguration::InternetAccessPoint) {
+            if (mgr.isOnline())
+                return config.name();
+        }
+    }
+    return QString();
+}
+
 /** First crypt string using SHA1 logarythm then transform crypted result to base64 (so it can be added into database without problem - no special characters). */
 QString cryptPassword(const QString &toCrypt)
 {
@@ -1578,9 +1593,9 @@ QString loginFromSQL(const QString &sql)
 { return QByteArray::fromBase64(sql.toAscii()); }
 
 
-QByteArray crypt(const QString &texte)
+QByteArray crypt(const QString &text)
 {
-    QByteArray texteEnBytes = texte.toAscii();
+    QByteArray texteEnBytes = text.toAscii();
     QString k = QCryptographicHash::hash(qApp->applicationName().left(qApp->applicationName().indexOf("_d")).toAscii(), QCryptographicHash::Sha1);
     QByteArray cle = k.toAscii().toBase64();
     QByteArray codeFinal;
