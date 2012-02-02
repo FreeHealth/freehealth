@@ -40,10 +40,21 @@
 #include <QNetworkAccessManager>
 #include <QNetworkRequest>
 #include <QNetworkReply>
+#include <QNetworkProxyQuery>
 
 #include <QDebug>
 
 static QString configurationFile() {return QDir::homePath() + "/datapack/servers.conf.xml";}
+
+void testInternet()
+{
+    QNetworkProxyQuery npq(QUrl("http://www.google.com"));
+    QList<QNetworkProxy> listOfProxies = QNetworkProxyFactory::systemProxyForQuery(npq);
+    foreach(const QNetworkProxy &p, listOfProxies) {
+        qWarning() << p.capabilities() << p.hostName() << p.port() << p.password() << p.type() << p.user();
+    }
+}
+
 
 static DataPack::ServerDescription getDescription()
 {
@@ -115,6 +126,8 @@ MainWindow::MainWindow(QWidget *parent) :
     ui->setupUi(this);
     qWarning();
 
+    testInternet();
+
     // get the global_resources directory from the command line argument
     QDir resourcesDir(QCoreApplication::applicationDirPath());
     QStringList list = QCoreApplication::arguments();
@@ -129,13 +142,23 @@ MainWindow::MainWindow(QWidget *parent) :
 
     // Create and configure DataPack lib
     DataPack::DataPackCore &core = DataPack::DataPackCore::instance();
+//    QNetworkProxy proxy;
+//     proxy.setType(QNetworkProxy::HttpProxy);
+//     proxy.setHostName("chaisa1");
+//     proxy.setPort(1080);
+//     proxy.setUser("urg");
+//     proxy.setPassword("debut1");
+//     core.setNetworkProxy(proxy);
+
+    core.init();
     core.serverManager()->setGlobalConfiguration(Utils::readTextFile(configurationFile()));
     core.setTemporaryCachePath(QDir::tempPath());
     core.setPersistentCachePath(QDir::homePath() + "/datapack/tmp/");
     core.setInstallPath(QDir::homePath() + "/datapack/install/");
 
     // Check internet connection
-    core.isInternetConnexionAvailable();
+    if (!core.isInternetConnexionAvailable())
+        qWarning() << "********* NO INTERNET CONNECTION FOUND *********";
 
 #ifdef Q_OS_MAC
     core.setThemePath(DataPack::DataPackCore::SmallPixmaps, resourcesDir.absoluteFilePath("pixmap/16x16"));
@@ -147,30 +170,26 @@ MainWindow::MainWindow(QWidget *parent) :
     core.setThemePath(DataPack::DataPackCore::BigPixmaps, resourcesDir.absoluteFilePath("pixmap/64x64"));
 #endif
 
-// Add servers
-//#ifdef Q_OS_MAC
-//    // Test 1: local
-//    core.serverManager()->addServer("file://" + resourcesDir.absoluteFilePath("datapacks/default/"));
-//#else
-//    // @GUILLAUME --> Change les chemins vers ton SVN ici ::
-//    // Test 1: local
-//    core.serverManager()->addServer("file://" + resourcesDir.absoluteFilePath("datapacks/default/"));
-//    core.serverManager()->addServer("http://localhost/");
-//#endif
+    // Add servers
+#ifdef Q_OS_MAC
+    // Test 1: local
+    core.serverManager()->addServer("file://" + resourcesDir.absoluteFilePath("datapacks/default/"));
+#else
+    // @GUILLAUME --> Change les chemins vers ton SVN ici ::
+    // Test 1: local
+    core.serverManager()->addServer("file://" + resourcesDir.absoluteFilePath("datapacks/default/"));
+    core.serverManager()->addServer("http://localhost/");
+#endif
 
 //    // Test 2: HttpPseudoSecuredZipped
-//    DataPack::Server http("http://test.freemedforms.com");
-//    http.setUrlStyle(DataPack::Server::HttpPseudoSecuredAndZipped);
-//    core.serverManager()->addServer(http);
+    DataPack::Server http("http://test.freemedforms.com");
+    http.setUrlStyle(DataPack::Server::HttpPseudoSecuredAndZipped);
+    core.serverManager()->addServer(http);
 
 //    // Test 3: HttpPseudoSecuredZipped
 //    DataPack::Server ftp("ftp://localhost/");
 //    ftp.setUrlStyle(DataPack::Server::Ftp);
 //    core.serverManager()->addServer(ftp);
-
-    // TEST
-    qWarning() << "Drugs installed ?" << core.serverManager()->isDataPackInstalled("freemedforms.certified.drugs.completebase.allcountries","0.6.0");
-    // END
 
     // Start the check server & pack version
     // TODO: run the core.serverManager()->getAllDescriptionFile(); in a thread ?
