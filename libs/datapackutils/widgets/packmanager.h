@@ -34,6 +34,7 @@ class QStandardItemModel;
 class QModelIndex;
 class QToolBar;
 class QListWidgetItem;
+class QDataWidgetMapper;
 
 /**
  * \file packmanager.h
@@ -65,6 +66,7 @@ public Q_SLOTS:
 private:
     void createActions();
     void createToolbar();
+    void createServerDataWidgetMapper();
 //    void populateServerView(const int serverId);
     void populatePackView(const int packId);
 
@@ -74,6 +76,7 @@ private Q_SLOTS:
     void serverActionTriggered(QAction *a);
     void processPacks();
     void on_listWidgetMenu_currentRowChanged(int row);
+    void serverCurrentChanged(const QModelIndex &c, const QModelIndex &p);
 
 private:
     void retranslate();
@@ -83,11 +86,12 @@ private:
     Ui::PackManager *ui;
     PackModel *m_PackModel;
     ServerModel *m_serverModel;
-    QAction *aServerRefresh, *aServerRemove, *aServerAdd, *aServerInfo;
-    QAction *aProcess;
+    QAction *aServerRefresh, *aServerEdit, *aServerRemove, *aServerAdd, *aServerInfo;
+    QAction *aPackManager, *aProcess;
     QToolBar *m_ToolBarPacks;
     QListWidgetItem *m_datapacksItem;
     QListWidgetItem *m_serversItem;
+    QDataWidgetMapper *m_ServerMapper;
 };
 
 }  // End namespace DataPack

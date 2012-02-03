@@ -86,6 +86,12 @@ QString Server::version() const
     return m_Desc.data(ServerDescription::Version).toString();
 }
 
+/** Return the label/name of the server */
+QString Server::name() const
+{
+    return m_Desc.data(ServerDescription::Label).toString();
+}
+
 /** Define the URL of the server. All URL must be unique (url is used as uuid). */
 void Server::setUrl(const QString &url)
 {

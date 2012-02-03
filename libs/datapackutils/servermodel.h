@@ -27,19 +27,39 @@
 #ifndef DATAPACK_SERVERMODEL_H
 #define DATAPACK_SERVERMODEL_H
 
-#include <QAbstractListModel>
+#include <QAbstractTableModel>
 
 namespace DataPack {
-    /**
-     * Represents a model which contains some servers. Based on the ServerManager instance.
-     */
-    class ServerModel : public QAbstractListModel {
+    class ServerModel : public QAbstractTableModel {
         Q_OBJECT
     public:
+        enum DataRepresentation {
+            PlainTextLabel = 0,
+            HtmlLabel,
+            Uuid,
+            Version,
+            Authors,
+            Vendor,
+            NativeUrl,
+            CreationDate,
+            LastUpdateDate,
+            RecommendedUpdateFrequencyIndex,
+            HtmlDescription,
+            ColumnCount
+        };
+
         ServerModel(QObject *parent = 0);
 
-        QVariant data(const QModelIndex &index, int role = Qt::DisplayRole) const;
         int rowCount(const QModelIndex &parent = QModelIndex()) const;
+        int columnCount(const QModelIndex &parent = QModelIndex()) const {return ColumnCount;}
+
+        QVariant data(const QModelIndex &index, int role = Qt::DisplayRole) const;
+
+    private Q_SLOTS:
+        void serverAdded(int row);
+        void serverRemoved(int row);
+        void allServerDescriptionAvailable();
+
     };
 }
 

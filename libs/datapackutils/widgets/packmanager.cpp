@@ -51,6 +51,7 @@
 #include <QProgressDialog>
 #include <QProgressBar>
 #include <QListWidgetItem>
+#include <QDataWidgetMapper>
 
 #include <QDebug>
 
@@ -66,6 +67,7 @@ static inline QIcon icon(const QString &name, DataPack::DataPackCore::ThemePath 
 namespace {
 
 const char *const ICON_SERVER_REFRESH = "datapack-server-refresh.png";
+const char *const ICON_SERVER_EDIT = "datapack-server-edit.png";
 const char *const ICON_SERVER_ADD = "server-add.png";
 const char *const ICON_SERVER_REMOVE = "server-remove.png";
 const char *const ICON_SERVER_INFO = "server-info.png";
@@ -73,6 +75,8 @@ const char *const ICON_SERVER_INFO = "server-info.png";
 const char *const ICON_UPDATE = "updateavailable.png";
 const char *const ICON_INSTALL = "install-package.png";
 const char *const ICON_REMOVE = "remove.png";
+
+const char *const ICON_PACKAGE = "package.png";
 
 const char * const TITLE_CSS = "text-indent:5px;padding:5px;font-weight:bold;background:qlineargradient(spread:pad, x1:0, y1:0, x2:1, y2:0, stop:0.464 rgba(255, 255, 176, 149), stop:1 rgba(255, 255, 255, 0))";
 
@@ -92,16 +96,22 @@ const char * const CSS =
 PackManager::PackManager(QWidget *parent) :
     QWidget(parent),
     ui(new Ui::PackManager),
-    aServerRefresh(0), aServerRemove(0), aServerAdd(0),aServerInfo(0),
+    aServerRefresh(0), aServerRemove(0), aServerAdd(0), aServerInfo(0),
     aProcess(0)
 {
     setObjectName("PackManager");
     ui->setupUi(this);
+
     if (layout()) {
         layout()->setMargin(0);
         layout()->setSpacing(0);
-        ui->toolbarLayoutPacks->setMargin(0);
-        ui->toolbarLayoutPacks->setSpacing(0);
+        ui->toolbarLayout->setMargin(0);
+        ui->toolbarLayout->setSpacing(0);
+        for(int i=0; i<ui->stackedWidget->count(); ++i) {
+            QWidget *w = ui->stackedWidget->widget(i);
+            if (w->layout())
+                w->layout()->setMargin(0);
+        }
     }
 
     // Left menu items
@@ -111,6 +121,7 @@ PackManager::PackManager(QWidget *parent) :
     ui->listWidgetMenu->addItem(m_serversItem);
     ui->listWidgetMenu->setCurrentRow(0);
     ui->listWidgetMenu->hide();
+
     // Manage pack model/view
     m_PackModel = new PackModel(this);
     m_PackModel->setPackCheckable(true);
@@ -127,6 +138,7 @@ PackManager::PackManager(QWidget *parent) :
     // server page
     m_serverModel = new ServerModel(this);
     ui->serverView->setModel(m_serverModel);
+    ui->serverView->setModelColumn(ServerModel::HtmlLabel);
     ui->serverView->setItemDelegate(delegate);
     ui->serverView->setStyleSheet(::CSS);
     ui->serverView->setAlternatingRowColors(true);
@@ -137,11 +149,14 @@ PackManager::PackManager(QWidget *parent) :
     bold.setPointSize(bold.pointSize()+1);
     ui->packName->setFont(bold);
     ui->packName->setStyleSheet(::TITLE_CSS);
+    ui->serverLabel->setStyleSheet(::TITLE_CSS);
 
     createActions();
     createToolbar();
+    createServerDataWidgetMapper();
 
     connect(ui->packView->selectionModel(), SIGNAL(currentChanged(QModelIndex,QModelIndex)), this, SLOT(onPackIndexActivated(QModelIndex,QModelIndex)));
+    connect(ui->serverView->selectionModel(), SIGNAL(currentChanged(QModelIndex,QModelIndex)), this, SLOT(serverCurrentChanged(QModelIndex,QModelIndex)));
 
     ui->stackedWidget->setCurrentWidget(ui->pagePacks);
 
@@ -170,6 +185,9 @@ void PackManager::createActions()
     QAction *a = aServerRefresh = new QAction(this);
     a->setObjectName("aServerRefresh");
     a->setIcon(icon(::ICON_SERVER_REFRESH, DataPack::DataPackCore::MediumPixmaps));
+    a = aServerEdit = new QAction(this);
+    a->setObjectName("aServerEdit");
+    a->setIcon(icon(::ICON_SERVER_EDIT, DataPack::DataPackCore::MediumPixmaps));
     a = aServerAdd = new QAction(this);
     a->setObjectName("aInstall");
     a->setIcon(icon(::ICON_SERVER_ADD, DataPack::DataPackCore::MediumPixmaps));
@@ -182,6 +200,9 @@ void PackManager::createActions()
     connect(srvgr, SIGNAL(triggered(QAction*)), this, SLOT(serverActionTriggered(QAction *)));
 
     // Create pack actions
+    a = aPackManager = new QAction(this);
+    a->setObjectName("aPackManager");
+    a->setIcon(icon(::ICON_PACKAGE, DataPack::DataPackCore::MediumPixmaps));
     a = aProcess = new QAction(this);
     a->setObjectName("aProcess");
     a->setIcon(icon(::ICON_INSTALL, DataPack::DataPackCore::MediumPixmaps));
@@ -198,13 +219,28 @@ void PackManager::createToolbar()
     m_ToolBarPacks = new QToolBar(this);
     m_ToolBarPacks->addAction(aServerRefresh);
     m_ToolBarPacks->addSeparator();
+    m_ToolBarPacks->addAction(aServerEdit);
     m_ToolBarPacks->addAction(aServerAdd);
     m_ToolBarPacks->addAction(aServerRemove);
     m_ToolBarPacks->addAction(aServerInfo);
     m_ToolBarPacks->addSeparator();
+    m_ToolBarPacks->addAction(aPackManager);
     m_ToolBarPacks->addAction(aProcess);
     connect(m_ToolBarPacks, SIGNAL(actionTriggered(QAction*)), this, SLOT(serverActionTriggered(QAction*)));
-    ui->toolbarLayoutPacks->addWidget(m_ToolBarPacks);
+    ui->toolbarLayout->addWidget(m_ToolBarPacks);
+}
+
+void PackManager::createServerDataWidgetMapper()
+{
+    m_ServerMapper = new QDataWidgetMapper(this);
+    m_ServerMapper->setModel(m_serverModel);
+    m_ServerMapper->addMapping(ui->serverLabel, ServerModel::PlainTextLabel, "text");
+    m_ServerMapper->addMapping(ui->serverVersion, ServerModel::Version, "text");
+    m_ServerMapper->addMapping(ui->serverAuthors, ServerModel::Authors, "text");
+    m_ServerMapper->addMapping(ui->serverCreationDate, ServerModel::CreationDate, "text");
+    m_ServerMapper->addMapping(ui->serverVendor, ServerModel::Vendor, "text");
+    m_ServerMapper->addMapping(ui->serverDescription, ServerModel::HtmlDescription, "html");
+    m_ServerMapper->setCurrentIndex(1);
 }
 
 static void elideTextToLabel(QLabel *label, const QString &text)
@@ -340,6 +376,14 @@ void PackManager::serverActionTriggered(QAction *a)
         /** \todo code here */
     } else if (a==aServerInfo) {
         /** \todo code here */
+    } else if (a==aServerEdit) {
+        ui->stackedWidget->setCurrentWidget(ui->pageServers);
+        // hide aProcess
+        m_ToolBarPacks->widgetForAction(aProcess)->hide();
+    } else if (a==aPackManager) {
+        ui->stackedWidget->setCurrentWidget(ui->pagePacks);
+        // show aProcess
+//        m_ToolBarPacks->widgetForAction(aProcess)->show();
     }
 }
 
@@ -362,9 +406,11 @@ void PackManager::processPacks()
 void PackManager::retranslate()
 {
     aServerRefresh->setText(tr("Refresh datapack servers"));
+    aServerEdit->setText(tr("Server editor"));
     aServerAdd->setText(tr("Add a server"));
     aServerRemove->setText(tr("Remove a server"));
     aServerInfo->setText(tr("Server information"));
+    aPackManager->setText(tr("Pack manager"));
     aProcess->setText(tr("Process changes"));
 }
 
@@ -376,9 +422,15 @@ void PackManager::changeEvent(QEvent *e)
     }
 }
 
-void PackManager::on_listWidgetMenu_currentRowChanged(int row) {
+void PackManager::on_listWidgetMenu_currentRowChanged(int row)
+{
     if (ui->listWidgetMenu->currentItem() == m_datapacksItem)
         ui->stackedWidget->setCurrentWidget(ui->pagePacks);
     else if (ui->listWidgetMenu->currentItem() == m_serversItem)
         ui->stackedWidget->setCurrentWidget(ui->pageServers);
+}
+
+void PackManager::serverCurrentChanged(const QModelIndex &c, const QModelIndex &p)
+{
+    m_ServerMapper->setCurrentIndex(c.row());
 }

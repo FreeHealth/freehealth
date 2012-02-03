@@ -74,6 +74,8 @@ public:
 
     QString uuid() const;
     QString version() const;
+    QString name() const;
+    QString label() const {return name();}
 
     // URL Management
     void setUrl(const QString &url);
