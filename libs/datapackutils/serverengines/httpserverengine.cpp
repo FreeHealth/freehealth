@@ -88,21 +88,20 @@ HttpServerEngine::HttpServerEngine(IServerManager *parent)  :
     const QString &id = Utils::testInternetConnexion();
     if (!id.isEmpty()) {
         LOG("Internet connection is enabled");
-//        if (core().networkProxy() != QNetworkProxy()) {
-//            m_NetworkAccessManager->setProxy(core().networkProxy());
-//        }
-//        // Check for system http proxys  -> [[useless code]]
-//        QNetworkProxyQuery npq(QUrl("http://www.google.com"));
-//        QList<QNetworkProxy> listOfProxies = QNetworkProxyFactory::systemProxyForQuery(npq);
-//        foreach(const QNetworkProxy &p, listOfProxies) {
-//            qWarning() << p.hostName() << p.user() << p.password() << p.;
-//            if (p.type()==QNetworkProxy::HttpProxy && !p.hostName().isEmpty()) {
-//                LOG("Using proxy " + p.hostName());
-//                /** \todo ask for user identification */
-//                m_NetworkAccessManager->setProxy(p);
-//                break;
-//            }
-//        }
+        if (!core().networkProxy().hostName().isEmpty()) {
+            m_NetworkAccessManager->setProxy(core().networkProxy());
+        } else {
+            // Auto-check for system proxys
+            QNetworkProxyQuery npq(QUrl("http://www.google.com"));
+            QList<QNetworkProxy> listOfProxies = QNetworkProxyFactory::systemProxyForQuery(npq);
+            foreach(const QNetworkProxy &p, listOfProxies) {
+                if (p.type()==QNetworkProxy::HttpProxy && !p.hostName().isEmpty()) {
+                    LOG("Using proxy " + p.hostName());
+                    m_NetworkAccessManager->setProxy(p);
+                    break;
+                }
+            }
+        }
     } else {
         LOG_ERROR("No internet connection available");
     }
@@ -235,7 +234,6 @@ void HttpServerEngine::proxyAuthenticationRequired(const QNetworkProxy &proxy, Q
 /** Server configuration file read enable. */
 void HttpServerEngine::serverReadyRead()
 {
-    qWarning() << "ready";
     QNetworkReply *reply = qobject_cast<QNetworkReply*>(sender());
     ReplyData &data = m_replyToData[reply];
     data.response.append(reply->readAll());
@@ -244,7 +242,6 @@ void HttpServerEngine::serverReadyRead()
 /** An error occured during the network access. */
 void HttpServerEngine::serverError(QNetworkReply::NetworkError error)
 {
-    qWarning() << "error" << error;
     Q_UNUSED(error);
     /** \todo code here */
     --m_DownloadCount_Server;
