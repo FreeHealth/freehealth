@@ -40,7 +40,7 @@ class QDataWidgetMapper;
  * \file packmanager.h
  * \author Eric MAEKER <eric.maeker@gmail.com>
  * \version 0.6.2
- * \date 27 Jan 2012
+ * \date 03 Feb 2012
 */
 
 namespace DataPack {
@@ -81,12 +81,13 @@ private Q_SLOTS:
 private:
     void retranslate();
     void changeEvent(QEvent *e);
+    void processToolBar(int mode);
 
 private:
     Ui::PackManager *ui;
     PackModel *m_PackModel;
     ServerModel *m_serverModel;
-    QAction *aServerRefresh, *aServerEdit, *aServerRemove, *aServerAdd, *aServerInfo;
+    QAction *aServerRefresh, *aServerEdit, *aServerRemove, *aServerAdd;
     QAction *aPackManager, *aProcess;
     QToolBar *m_ToolBarPacks;
     QListWidgetItem *m_datapacksItem;

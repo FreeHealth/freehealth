@@ -91,12 +91,15 @@ const char * const CSS =
         "background: qlineargradient(x1: 0, y1: 0, x2: 0, y2: 1, stop: 0 #6b9be8, stop: 1 #577fbf);"
         "}";
 
+const int SERVER_MODE = 0;
+const int PACK_MODE = 1;
+
 }  // End anonymous namespace
 
 PackManager::PackManager(QWidget *parent) :
     QWidget(parent),
     ui(new Ui::PackManager),
-    aServerRefresh(0), aServerRemove(0), aServerAdd(0), aServerInfo(0),
+    aServerRefresh(0), aServerRemove(0), aServerAdd(0),
     aProcess(0)
 {
     setObjectName("PackManager");
@@ -153,6 +156,7 @@ PackManager::PackManager(QWidget *parent) :
 
     createActions();
     createToolbar();
+    processToolBar(::PACK_MODE);
     createServerDataWidgetMapper();
 
     connect(ui->packView->selectionModel(), SIGNAL(currentChanged(QModelIndex,QModelIndex)), this, SLOT(onPackIndexActivated(QModelIndex,QModelIndex)));
@@ -194,9 +198,6 @@ void PackManager::createActions()
     a = aServerRemove = new QAction(this);
     a->setObjectName("aServerRemove");
     a->setIcon(icon(::ICON_SERVER_REMOVE, DataPack::DataPackCore::MediumPixmaps));
-    a = aServerInfo = new QAction(this);
-    a->setObjectName("aServerInfo");
-    a->setIcon(icon(::ICON_SERVER_INFO, DataPack::DataPackCore::MediumPixmaps));
     connect(srvgr, SIGNAL(triggered(QAction*)), this, SLOT(serverActionTriggered(QAction *)));
 
     // Create pack actions
@@ -217,15 +218,12 @@ void PackManager::createActions()
 void PackManager::createToolbar()
 {
     m_ToolBarPacks = new QToolBar(this);
+    // Insert action in the same order as the enum ToolBarActions
+    m_ToolBarPacks->addAction(aServerEdit);
+    m_ToolBarPacks->addAction(aPackManager);
+    m_ToolBarPacks->addSeparator();
     m_ToolBarPacks->addAction(aServerRefresh);
     m_ToolBarPacks->addSeparator();
-    m_ToolBarPacks->addAction(aServerEdit);
-    m_ToolBarPacks->addAction(aServerAdd);
-    m_ToolBarPacks->addAction(aServerRemove);
-    m_ToolBarPacks->addAction(aServerInfo);
-    m_ToolBarPacks->addSeparator();
-    m_ToolBarPacks->addAction(aPackManager);
-    m_ToolBarPacks->addAction(aProcess);
     connect(m_ToolBarPacks, SIGNAL(actionTriggered(QAction*)), this, SLOT(serverActionTriggered(QAction*)));
     ui->toolbarLayout->addWidget(m_ToolBarPacks);
 }
@@ -345,6 +343,19 @@ void PackManager::onPackIndexActivated(const QModelIndex &index, const QModelInd
     populatePackView(index.row());
 }
 
+void PackManager::processToolBar(int mode)
+{
+    if (mode==::SERVER_MODE) {
+        m_ToolBarPacks->removeAction(aProcess);
+        m_ToolBarPacks->addAction(aServerAdd);
+        m_ToolBarPacks->addAction(aServerRemove);
+    } else if (mode==::PACK_MODE) {
+        m_ToolBarPacks->removeAction(aServerAdd);
+        m_ToolBarPacks->removeAction(aServerRemove);
+        m_ToolBarPacks->addAction(aProcess);
+    }
+}
+
 void PackManager::serverActionTriggered(QAction *a)
 {
     if (a==aServerRefresh) {
@@ -374,16 +385,12 @@ void PackManager::serverActionTriggered(QAction *a)
         }
     } else if (a==aServerRemove) {
         /** \todo code here */
-    } else if (a==aServerInfo) {
-        /** \todo code here */
     } else if (a==aServerEdit) {
         ui->stackedWidget->setCurrentWidget(ui->pageServers);
-        // hide aProcess
-        m_ToolBarPacks->widgetForAction(aProcess)->hide();
+        processToolBar(::SERVER_MODE);
     } else if (a==aPackManager) {
         ui->stackedWidget->setCurrentWidget(ui->pagePacks);
-        // show aProcess
-//        m_ToolBarPacks->widgetForAction(aProcess)->show();
+        processToolBar(::PACK_MODE);
     }
 }
 
@@ -409,7 +416,6 @@ void PackManager::retranslate()
     aServerEdit->setText(tr("Server editor"));
     aServerAdd->setText(tr("Add a server"));
     aServerRemove->setText(tr("Remove a server"));
-    aServerInfo->setText(tr("Server information"));
     aPackManager->setText(tr("Pack manager"));
     aProcess->setText(tr("Process changes"));
 }
