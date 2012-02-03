@@ -384,7 +384,10 @@ void PackManager::serverActionTriggered(QAction *a)
             dlg.exec();
         }
     } else if (a==aServerRemove) {
-        /** \todo code here */
+        if (!ui->serverView->selectionModel()->hasSelection())
+            return;
+        int row = ui->serverView->selectionModel()->currentIndex().row();
+        serverManager()->removeServerAt(row);
     } else if (a==aServerEdit) {
         ui->stackedWidget->setCurrentWidget(ui->pageServers);
         processToolBar(::SERVER_MODE);
