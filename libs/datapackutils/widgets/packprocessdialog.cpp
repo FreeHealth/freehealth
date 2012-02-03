@@ -62,7 +62,8 @@ const char * const CSS =
 
 PackProcessDialog::PackProcessDialog(QWidget *parent) :
     QDialog(parent),
-    ui(new Ui::PackProcessDialog)
+    ui(new Ui::PackProcessDialog),
+    m_Error(false)
 {
     ui->setupUi(this);
 
@@ -163,6 +164,8 @@ void PackProcessDialog::done(int result)
 
 void PackProcessDialog::processPacks()
 {
+    m_Error = false;
+    ui->buttonBox->setEnabled(false);
     startPackDownloads();
 }
 
@@ -191,10 +194,9 @@ void PackProcessDialog::startPackDownloads()
         Pack &pack = dld[i];
         Server server = serverManager()->getServerForPack(pack);
 
-        qWarning() << "TESTING Pack" << pack.uuid() << "Server found" << server.uuid();
-
         if (server.isNull()) {
             LOG_ERROR("No server found for pack " + pack.uuid() + pack.version());
+            m_Error = true;
             continue;
         }
 
@@ -255,6 +257,7 @@ void PackProcessDialog::packDownloadDone()
         const Pack &p = dld.at(i);
         QByteArray downloadedMd5 = Utils::md5(p.persistentlyCachedZipFileName());
         if (downloadedMd5 != p.md5ControlChecksum()) {
+            m_Error = true;
             m_Msg << tr("Downloaded file is corrupted. Please retry to download the pack: %1.").arg(p.name());
         } else {
             toInstall << p;
@@ -287,12 +290,14 @@ void PackProcessDialog::packDownloadDone()
         bool error = false;
         if (!QuaZipTools::unzipFile(p.persistentlyCachedZipFileName(), pathTo)) {
             LOG_ERROR(tr("Unable to unzip pack file %1 to %2").arg(p.persistentlyCachedZipFileName()).arg(pathTo));
+            m_Error = true;
             m_Msg << tr("Unable to unzip pack file %1 to %2").arg(p.persistentlyCachedZipFileName()).arg(pathTo);
             error = true;
         }
         // Add the pack description for future analysis (update, remove...)
         if (!QFile::copy(p.persistentlyCachedXmlConfigFileName(), p.installedXmlConfigFileName())) {
             LOG_ERROR(tr("Unable to copy pack description file"));
+            m_Error = true;
             m_Msg << tr("Unable to copy pack description file");
             error = true;
         }
@@ -333,6 +338,7 @@ void PackProcessDialog::removePacks()
         QFileInfo zipPath(p.unzipPackToPath());
         if (!zipPath.exists()) {
             LOG_ERROR(tr("Unable to remove pack %1, unzip path does not exists (%2)").arg(p.name().arg(p.unzipPackToPath())));
+            m_Error = true;
             m_Msg << tr("Unable to remove pack %1, unzip path does not exists (%2)").arg(p.name().arg(p.unzipPackToPath()));
             continue;
         }
@@ -340,6 +346,7 @@ void PackProcessDialog::removePacks()
         Utils::removeDirRecursively(p.unzipPackToPath(), &error);
         if (!error.isEmpty()) {
             LOG_ERROR(tr("Unable to remove pack %1, error: %2").arg(p.name().arg(error)));
+            m_Error = true;
             m_Msg << tr("Unable to remove pack %1, error: %2").arg(p.name().arg(error));
         } else {
             m_Msg << tr("Pack %1 correctly removed.").arg(p.name());
@@ -350,11 +357,11 @@ void PackProcessDialog::removePacks()
 
 void PackProcessDialog::clearTemporaries()
 {
-    // Draft
     showLogMessage();
 }
 
 void PackProcessDialog::showLogMessage()
 {
+    ui->buttonBox->setEnabled(true);
     ui->textBrowser->setHtml(m_Msg.join("<br />"));
 }
