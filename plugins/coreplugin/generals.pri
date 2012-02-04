@@ -1,6 +1,7 @@
 # SOURCES and HEADERS needed by context manager
 HEADERS += $${PWD}/core_exporter.h \
     $${PWD}/constants.h \
+#    $${PWD}/constants_datapack.h \
     $${PWD}/constants_icons.h \
     $${PWD}/constants_menus.h \
     $${PWD}/constants_tokensandsettings.h \
@@ -26,7 +27,8 @@ HEADERS += $${PWD}/core_exporter.h \
     $${PWD}/icalendar.h \
     $${PWD}/ifirstconfigurationpage.h \
     $${PWD}/ipatientlistener.h \
-    $${PWD}/igenericpage.h
+    $${PWD}/igenericpage.h \
+    $${PWD}/iscriptmanager.h
 
 SOURCES += $${PWD}/uniqueidmanager.cpp \
     $${PWD}/icore.cpp \

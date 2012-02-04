@@ -22,6 +22,3 @@ include(generals.pri)
 
 OTHER_FILES += $${_PRO_FILE_PWD_}/Core.pluginspec
 
-HEADERS += \
-    ../coreplugin/iscriptmanager.h
-
