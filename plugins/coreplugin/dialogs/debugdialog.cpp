@@ -78,14 +78,6 @@ DebugDialog::~DebugDialog()
     delete m_ui;
 }
 
-void DebugDialog::on_fullScreenButton_clicked()
-{
-    static bool fullscreen = false;
-    fullscreen = !fullscreen;
-//    Utils::setFullScreen(this,fullscreen);
-//    this->show();
-}
-
 void DebugDialog::on_butSend_clicked()
 {
     if (!Utils::isDebugCompilation()) {
