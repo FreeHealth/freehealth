@@ -1,7 +1,7 @@
 /***************************************************************************
  *  The FreeMedForms project is a set of free, open source medical         *
  *  applications.                                                          *
- *  (C) 2008-2011 by Eric MAEKER, MD (France) <eric.maeker@gmail.com>      *
+ *  (C) 2008-2012 by Eric MAEKER, MD (France) <eric.maeker@gmail.com>      *
  *  All rights reserved.                                                   *
  *                                                                         *
  *  This program is free software: you can redistribute it and/or modify   *
@@ -39,6 +39,13 @@ MainWinPlugin::MainWinPlugin() :
 {
     if (Utils::Log::warnPluginsCreation())
         qWarning() << "creating FREEICD::MainWinPlugin";
+
+    // Add Translator to the Application
+    Core::ICore::instance()->translators()->addNewTranslator("freeicd-mainwindow");
+
+    m_MainWindow = new MainWindow();
+    Core::ICore::instance()->setMainWindow(m_MainWindow);
+    m_MainWindow->initialize(QStringList(), 0);
 }
 
 MainWinPlugin::~MainWinPlugin()
@@ -55,9 +62,6 @@ bool MainWinPlugin::initialize(const QStringList &arguments, QString *errorStrin
         qWarning() << "MainWinPlugin::initialize";
     Q_UNUSED(arguments);
     Q_UNUSED(errorString);
-    m_MainWindow = new MainWindow();
-    Core::ICore::instance()->setMainWindow(m_MainWindow);
-    m_MainWindow->initialize(QStringList(),0);
     return true;
 }
 
@@ -65,9 +69,6 @@ void MainWinPlugin::extensionsInitialized()
 {
     if (Utils::Log::warnPluginsCreation())
         qWarning() << "MainWinPlugin::extensionsInitialized";
-
-    // Add Translator to the Application
-    Core::ICore::instance()->translators()->addNewTranslator("freeicd-mainwindow");
 
     addAutoReleasedObject(new Core::PluginAboutPage(pluginSpec(), this));
 //    addAutoReleasedObject(new ICD::IcdUserOptionsPage(this));

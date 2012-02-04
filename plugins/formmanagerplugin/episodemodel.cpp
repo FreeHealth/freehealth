@@ -1,7 +1,7 @@
 /***************************************************************************
  *  The FreeMedForms project is a set of free, open source medical         *
  *  applications.                                                          *
- *  (C) 2008-2011 by Eric MAEKER, MD (France) <eric.maeker@gmail.com>      *
+ *  (C) 2008-2012 by Eric MAEKER, MD (France) <eric.maeker@gmail.com>      *
  *  All rights reserved.                                                   *
  *                                                                         *
  *  This program is free software: you can redistribute it and/or modify   *
@@ -1266,7 +1266,7 @@ bool EpisodeModel::submit()
 
 bool EpisodeModel::activateEpisode(const QModelIndex &index, const QString &formUid) //, const QString &xmlcontent)
 {
-    qWarning() << "activateEpisode";
+    qWarning() << "activateEpisode" << formUid;
     // submit actual episode
     if (!d->saveEpisode(d->m_ActualEpisode, d->m_ActualEpisode_FormUid)) {
         LOG_ERROR("Unable to save actual episode before editing a new one");
@@ -1305,9 +1305,6 @@ bool EpisodeModel::activateEpisode(const QModelIndex &index, const QString &form
     else
         form->itemDatas()->setData(IFormItemData::ID_UserName, username);
 
-    qWarning() << "EpisodeModel::activateEpisode" << formUid;
-
-
     /** \todo move this part into a specific member of the private part */
     d->getEpisodeContent(episode);
     const QString &xml = episode->data(EpisodeData::XmlContent).toString();
@@ -1326,9 +1323,14 @@ bool EpisodeModel::activateEpisode(const QModelIndex &index, const QString &form
     // <formitemuid>value</formitemuid>
     QHash<QString, FormItem *> items;
     foreach(FormItem *it, form->flattenFormItemChildren()) {
-        /** \todo check nested items */
         items.insert(it->uuid(), it);
+        // Add fieldEquivalence
+//        foreach(const QString &uuid, it->equivalentUuid()) {
+//            items.insert(uuid, it);
+//        }
     }
+
+//    qWarning() << "ITEMS" << items;
 
     foreach(const QString &s, datas.keys()) {
         FormItem *it = items.value(s, 0);
