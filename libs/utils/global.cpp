@@ -510,7 +510,7 @@ QFileInfoList getDirs(QDir fromDir, const QStringList &filters, DirSearchType re
    \brief Test a dir, try to create it if it does not exist.
    \param absPath : AbsolutePath of the directory to test
    \param createIfNotExist : try to create the dir if true
-   \param logDirName : logical name to use for warning (eg : "Application path")
+   \param logDirName : logical name to use for warning (eg : "Application path") for the debug login
 **/
 bool checkDir(const QString & absPath, bool createIfNotExist, const QString & logDirName)
 {
