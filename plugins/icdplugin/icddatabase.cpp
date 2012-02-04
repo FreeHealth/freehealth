@@ -60,6 +60,8 @@
 #include <QDir>
 #include <QCache>
 #include <QVariant>
+#include <QFileInfo>
+#include <QMultiHash>
 
 using namespace ICD;
 using namespace ICD::Internal;
@@ -73,7 +75,14 @@ static inline QString fullDatabasePath() {
 #ifdef FREETOOLBOX
     return QDir::cleanPath(settings()->value(Core::Constants::S_DBOUTPUT_PATH).toString() + "/icd10/");
 #else
-    return settings()->path(Core::ISettings::ReadOnlyDatabasesPath) + QDir::separator() + QString(ICD::Constants::DB_ICD10);
+//    return settings()->path(Core::ISettings::ReadOnlyDatabasesPath) + QDir::separator() + QString(ICD::Constants::DB_ICD10);
+    QString dbRelPath = QString("/%1").arg(Constants::DB_ICD10);
+    QString tmp;
+    tmp = settings()->dataPackInstallPath() + dbRelPath;
+    if (QFileInfo(tmp).exists())
+        return settings()->dataPackInstallPath();
+    tmp = settings()->dataPackApplicationInstalledPath() + dbRelPath;
+    return settings()->dataPackApplicationInstalledPath();
 #endif
 }
 
@@ -306,7 +315,8 @@ bool IcdDatabase::init()
      // Connect normal Account Database
      // Connect Drugs Database
      Utils::DatabaseConnector connector;
-     connector.setAbsPathToReadOnlySqliteDatabase(settings()->path(Core::ISettings::ReadOnlyDatabasesPath));
+//     connector.setAbsPathToReadOnlySqliteDatabase(settings()->path(Core::ISettings::ReadOnlyDatabasesPath));
+     connector.setAbsPathToReadOnlySqliteDatabase(fullDatabasePath());
      connector.setHost(QString(Constants::DB_ICD10) + ".db");
      connector.setAccessMode(Utils::DatabaseConnector::ReadOnly);
      connector.setDriver(Utils::Database::SQLite);
