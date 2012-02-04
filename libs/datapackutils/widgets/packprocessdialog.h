@@ -100,6 +100,7 @@ private:
     QList<Pack> m_RemovePacks;
     QVector<Internal::IServerEngine*> m_Engines;
     QStringList m_Msg;
+    bool m_Error;
 
 //    QHash<QString, QLabel*> m_RemovalLabels;
 };

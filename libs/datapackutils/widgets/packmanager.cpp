@@ -264,8 +264,8 @@ void PackManager::populatePackView(const int packId)
     const PackDescription &descr = pack.description();
     // Vendor ?
     QString vendor = descr.data(PackDescription::Vendor).toString();
-    if (!vendor.isEmpty()) {
-        vendor = QString("<br /><span style=\"font-size:small;color:gray\">%1</span>").arg(vendor);
+    if (vendor.isEmpty()) {
+        vendor = tr("The FreeMedForms community");
     }
     QString summary;
 

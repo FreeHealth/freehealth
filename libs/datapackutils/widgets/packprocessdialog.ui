@@ -7,7 +7,7 @@
     <x>0</x>
     <y>0</y>
     <width>520</width>
-    <height>292</height>
+    <height>353</height>
    </rect>
   </property>
   <property name="windowTitle">
@@ -59,7 +59,7 @@
          <x>0</x>
          <y>0</y>
          <width>494</width>
-         <height>56</height>
+         <height>76</height>
         </rect>
        </property>
       </widget>
@@ -73,7 +73,7 @@
       <enum>Qt::Horizontal</enum>
      </property>
      <property name="standardButtons">
-      <set>QDialogButtonBox::Apply|QDialogButtonBox::Cancel</set>
+      <set>QDialogButtonBox::Apply|QDialogButtonBox::Ok</set>
      </property>
     </widget>
    </item>
