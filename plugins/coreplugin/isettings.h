@@ -82,6 +82,9 @@ public:
         CompleteFormsPath,
         SubFormsPath,
         DocumentationPath,
+        DataPackPersistentTempPath,
+        DataPackInstallPath,
+        DataPackApplicationPath,
         WebSiteUrl,
         UpdateUrl,
         Splashscreen

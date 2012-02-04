@@ -191,6 +191,18 @@
  * Otherwise it is setted inside the Bundle.
 */
 
+/*! \var Core::ISettings::Paths Core::ISettings::DataPackPersistentTempPath
+ * The datapack persistent cache path is the place where pack and config files are downloaded by the DataPack lib.
+*/
+
+/*! \var Core::ISettings::Paths Core::ISettings::DataPackInstallPath
+ * Datapack user specific install path.
+*/
+
+/*! \var Core::ISettings::Paths Core::ISettings::DataPackApplicationPath
+ * Datapack provided by default with the application are stored in this path.
+*/
+
 /*! \var Core::ISettings::Paths Core::ISettings::WebSiteUrl
  * Defines the application main web site.
 */
@@ -275,6 +287,7 @@ namespace {
     const char* const READONLYDATABASE     = "/databases";
     const char* const TRANSLATIONS_PATH    = "/translations";
     const char* const DEFAULTFORMS         = "/forms";
+    const char* const DEFAULTDATAPACK      = "/datapacks";
     const char* const DEFAULTTHEME_PATH    = "";
     const char* const DEFAULTTHEME_PIXMAP  = "/pixmap";
     const char* const DEFAULTTHEME_SPLASH  = "/pixmap/splashscreens";
@@ -506,11 +519,17 @@ void SettingsPrivate::setPath(const int type, const QString & absPath)
         {
             QString resourcesPath = QDir::cleanPath(absPath);
             m_Enum_Path.insert(ResourcesPath, resourcesPath);
-            resourcesPath += "/databases";
-            m_Enum_Path.insert(ReadWriteDatabasesPath, resourcesPath);
-            if (!QDir(resourcesPath).exists())
-                if (!QDir().mkpath(resourcesPath))
-                    LOG_ERROR_FOR("Settings", Trans::ConstantTranslations::tkTr(Trans::Constants::_1_ISNOT_AVAILABLE_CANNOTBE_CREATED).arg(resourcesPath));
+            // Read Write user databases
+            QString dbPath = resourcesPath + "/databases";
+            Utils::checkDir(dbPath, true, "Settings::ReadWriteDatabasesPath");
+            m_Enum_Path.insert(ReadWriteDatabasesPath, dbPath);
+            // User datapack config
+            QString packtmp = resourcesPath + "/datapacks/tmp";
+            Utils::checkDir(packtmp, true, "Settings::DataPackPersistentTempPath");
+            m_Enum_Path.insert(DataPackPersistentTempPath, packtmp);
+            QString packinst = resourcesPath + "/datapacks/install";
+            Utils::checkDir(packinst, true, "Settings::DataPackPersistentTempPath");
+            m_Enum_Path.insert(DataPackInstallPath, packinst);
             break;
         }
         case BundleResourcesPath :
@@ -528,6 +547,7 @@ void SettingsPrivate::setPath(const int type, const QString & absPath)
             m_Enum_Path.insert(SvgPixmapPath, bundlePath + DEFAULTTHEME_PIXMAP + "/svg/");
             m_Enum_Path.insert(SubFormsPath, bundlePath + DEFAULTFORMS + "/subforms");
             m_Enum_Path.insert(CompleteFormsPath, bundlePath + DEFAULTFORMS + "/completeforms");
+            m_Enum_Path.insert(DataPackApplicationPath, bundlePath + DEFAULTDATAPACK + "/appinstalled");
             QString appname = qApp->applicationName().toLower();
             if (qApp->applicationName().contains(" ")) {
                 appname = appname.left(appname.indexOf(" "));
@@ -953,6 +973,9 @@ QTreeWidget* SettingsPrivate::getTreeWidget(QWidget *parent) const
     paths.insert(tr("ApplicationTempPath"), path(ApplicationTempPath));
     paths.insert(tr("CompleteFormsPath"), path(CompleteFormsPath));
     paths.insert(tr("SubFormsPath"), path(SubFormsPath));
+    paths.insert(tr("DataPackApplicationPath"), path(DataPackApplicationPath));
+    paths.insert(tr("DataPackPersistentTempPath"), path(DataPackPersistentTempPath));
+    paths.insert(tr("DataPackInstallPath"), path(DataPackInstallPath));
     paths.insert(tr("DocumentationPath"), path(DocumentationPath));
 
     QTreeWidgetItem * absPathsItem = new QTreeWidgetItem(tree, QStringList() << tr("Absolute Paths"));
@@ -1080,6 +1103,9 @@ QString SettingsPrivate::toString() const
     paths.insert(tr("ApplicationTempPath"), path(ApplicationTempPath));
     paths.insert(tr("FormsPath"), path(CompleteFormsPath));
     paths.insert(tr("SampleFormsPath"), path(SubFormsPath));
+    paths.insert(tr("Default installed datapack path"), path(DataPackApplicationPath));
+    paths.insert(tr("Datapack persistent temporary path"), path(DataPackPersistentTempPath));
+    paths.insert(tr("Datapack installation path"), path(DataPackInstallPath));
     paths.insert(tr("DocumentationPath"), path(DocumentationPath));
     paths.insert(tr("WebSiteUrl"), path(WebSiteUrl));
     tmp += "^ Resource ^ Path ^\n";
