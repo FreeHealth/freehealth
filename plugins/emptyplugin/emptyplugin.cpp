@@ -45,6 +45,9 @@ EmptyPlugin::EmptyPlugin()
     if (Utils::Log::warnPluginsCreation())
         qWarning() << "creating EmptyPlugin";
 
+    // Add Translator to the Application
+    Core::ICore::instance()->translators()->addNewTranslator("emptyplugin");
+
     // Add here the Core::IFirstConfigurationPage objects to the pluginmanager object pool
 }
 
@@ -60,9 +63,6 @@ bool EmptyPlugin::initialize(const QStringList &arguments, QString *errorString)
     Q_UNUSED(errorString);
 
     // No user connected here
-
-    // Add Translator to the Application
-    Core::ICore::instance()->translators()->addNewTranslator("emptyplugin");
 
     // Initialize database here
     // Initialize the drugs engines
