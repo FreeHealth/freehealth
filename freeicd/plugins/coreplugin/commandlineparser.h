@@ -23,93 +23,44 @@
  *   Contributors :                                                        *
  *       NAME <MAIL@ADRESS>                                                *
  ***************************************************************************/
-#ifndef COREIMPL_H
-#define COREIMPL_H
+#ifndef FREEICD_COMMANDLINEPARSER_H
+#define FREEICD_COMMANDLINEPARSER_H
 
-#include <coreplugin/icore.h>
-#include <coreplugin/ipatient.h>
+#include <coreplugin/icommandline.h>
+
+#include <QString>
+#include <QVariant>
 
 /**
- * \file coreimpl.h
+ * \file commandlineparser.h
  * \author Eric MAEKER <eric.maeker@gmail.com>
- * \version 0.5.0
- * \date 03 Dec 2010
+ * \version 0.6.0
+ * \date 06 Aug 2011
 */
 
-
 namespace Core {
+    class IPatient;
     class Patient;
 
 namespace Internal {
-    class CommandLine;
-    class ThemePrivate;
-    class ActionManagerPrivate;
-    class ContextManagerPrivate;
-    class SettingsPrivate;
-}  // End Internal
-}  // End Core
+class CommandLinePrivate;
 
-
-namespace Core {
-namespace Internal {
-
-class CoreImpl : public Core::ICore
+class CommandLine  : public Core::ICommandLine
 {
-    Q_OBJECT
 public:
-    CoreImpl(QObject *parent);
-    ~CoreImpl();
+    CommandLine();
+    ~CommandLine();
 
-    static CoreImpl *instance() { return static_cast<CoreImpl *>(ICore::instance()); }
+    QVariant value(int param, const QVariant &def = QVariant()) const;
+    QString paramName(int param) const;
 
-    ActionManager *actionManager() const;
-    ContextManager *contextManager() const;
-    UniqueIDManager *uniqueIDManager() const;
-
-    ITheme *theme() const;
-    Translators *translators() const;
-
-    ISettings *settings() const;
-
-    IMainWindow *mainWindow() const;
-    void setMainWindow(IMainWindow *);
-
-    FileManager *fileManager() const;
-
-    // initialization
-    bool initialize(const QStringList &arguments, QString *errorString);
-    void extensionsInitialized();
-
-    ICommandLine *commandLine() const;
-
-    Utils::UpdateChecker *updateChecker() const;
-
-    // Patient's datas wrapper
-    IPatient *patient() const {return 0;}
-    void setPatient(IPatient *) {}
-
-    IUser *user() const {return m_User;}
-    void setUser(IUser *user) {m_User = user;}
-
-    virtual void setScriptManager(IScriptManager *) {}
-    virtual IScriptManager *scriptManager() const {return 0;}
+    void feedPatientDatas(Core::IPatient *patient);
 
 private:
-    IMainWindow *m_MainWindow;
-    ActionManagerPrivate *m_ActionManager;
-    ContextManagerPrivate *m_ContextManager;
-    UniqueIDManager *m_UID;
-    ThemePrivate *m_Theme;
-    Translators *m_Translators;
-    SettingsPrivate *m_Settings;
-    CommandLine *m_CommandLine;
-    Patient *m_Patient;
-    IUser *m_User;
-    Utils::UpdateChecker *m_UpdateChecker;
-    Core::FileManager *m_FileManager;
+    CommandLinePrivate *d;
 };
 
-} // namespace Internal
-} // namespace Core
+}  // End namespace Internal
+}  // End namespace Core
 
-#endif // COREIMPL_H
+#endif // FREEICD_COMMANDLINEPARSER_H

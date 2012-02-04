@@ -7,7 +7,8 @@ SUBDIRS = \
     printer \
     texteditor \
     user \
-    views
+    views \
+    zipcodes
 
 core.subdir = coreplugin
 
@@ -32,6 +33,10 @@ user.depends += core
 user.depends += views
 user.depends += printer
 user.depends += texteditor
+user.depends += zipcodes
 
 views.subdir   = listviewplugin
 views.depends += core
+
+zipcodes.subdir = zipcodesplugin
+zipcodes.depends += core

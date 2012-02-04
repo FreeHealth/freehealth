@@ -15,10 +15,12 @@ DEPENDPATH += ../
 
 HEADERS += coreimpl.h \
     appaboutpage.h \
-    coreplugin.h
+    coreplugin.h \
+    commandlineparser.h
 
 SOURCES += coreimpl.cpp \
     appaboutpage.cpp \
-    coreplugin.cpp
+    coreplugin.cpp \
+    commandlineparser.cpp
 
 OTHER_FILES += Core.pluginspec

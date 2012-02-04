@@ -39,6 +39,7 @@
 #include <coreplugin/ipatient.h>
 #include <coreplugin/iuser.h>
 #include <coreplugin/constants_icons.h>
+#include <coreplugin/commandlineparser.h>
 
 #include <translationutils/constanttranslations.h>
 #include <utils/log.h>
@@ -83,7 +84,7 @@ CoreImpl::CoreImpl(QObject *parent) :
     m_Theme = new ThemePrivate(this);
     m_Theme->setThemeRootPath(m_Settings->path(ISettings::ThemeRootPath));
 
-//    m_CommandLine = new CommandLine();
+    m_CommandLine = new CommandLine;
 //    m_CommandLine->feedPatientDatas(m_Patient);
 
     QTime chrono;
@@ -154,7 +155,7 @@ CoreImpl::CoreImpl(QObject *parent) :
 CoreImpl::~CoreImpl()
 {
     delete m_UID;
-//    delete m_CommandLine;
+    delete m_CommandLine;
 }
 
 ActionManager *CoreImpl::actionManager() const { return m_ActionManager; }
@@ -179,7 +180,7 @@ void CoreImpl::setMainWindow(IMainWindow *win)
 //FormManager *CoreImpl::formManager() const { return m_FormManager; }
 FileManager *CoreImpl::fileManager() const { return m_FileManager; }
 
-ICommandLine *CoreImpl::commandLine() const { return 0; }
+ICommandLine *CoreImpl::commandLine() const { return m_CommandLine; }
 Utils::UpdateChecker *CoreImpl::updateChecker() const { return m_UpdateChecker; }
 
 bool CoreImpl::initialize(const QStringList &arguments, QString *errorString)

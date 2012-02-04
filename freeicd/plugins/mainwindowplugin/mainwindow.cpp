@@ -249,7 +249,6 @@ void MainWindow::extensionsInitialized()
     }
 
 //    createDockWindows();
-    finishSplash(this);
     readSettings();
     show();
     raise();
@@ -266,6 +265,8 @@ MainWindow::~MainWindow()
 
 void MainWindow::postCoreInitialization()
 {
+    finishSplash(this);
+
     contextManager()->updateContext();
     actionManager()->retranslateMenusAndActions();
 
