@@ -125,6 +125,9 @@ public:
     virtual QString path(const int type) const = 0;
     virtual QString resourcesPath() const { return path(ResourcesPath); }
     virtual QString databasePath() const  { return path(ReadOnlyDatabasesPath); }
+    virtual QString dataPackApplicationInstalledPath() const  { return path(DataPackApplicationPath); }
+    virtual QString dataPackPersitentTempPath() const  { return path(DataPackPersistentTempPath); }
+    virtual QString dataPackInstallPath() const  { return path(DataPackInstallPath); }
 
     // Network datas
     virtual Utils::DatabaseConnector databaseConnector() const = 0;
