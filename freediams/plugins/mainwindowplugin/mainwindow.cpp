@@ -1,7 +1,7 @@
 /***************************************************************************
  *  The FreeMedForms project is a set of free, open source medical         *
  *  applications.                                                          *
- *  (C) 2008-2011 by Eric MAEKER, MD (France) <eric.maeker@gmail.com>      *
+ *  (C) 2008-2012 by Eric MAEKER, MD (France) <eric.maeker@gmail.com>      *
  *  All rights reserved.                                                   *
  *                                                                         *
  *  This program is free software: you can redistribute it and/or modify   *
@@ -49,7 +49,7 @@
 #include <drugsbaseplugin/globaldrugsmodel.h>
 #include <drugsbaseplugin/drugsmodel.h>
 #include <drugsbaseplugin/interactionmanager.h>
-#include <drugsbaseplugin/engines/allergyengine.h>
+//#include <drugsbaseplugin/engines/allergyengine.h>
 
 #include <templatesplugin/templatesview.h>
 
@@ -186,23 +186,23 @@ public:
 
     void createPrecautionsModelAndView(QTreeView *treeview, QComboBox *combo)
     {
-        DrugsDB::Internal::DrugAllergyEngine *engine = pluginManager()->getObject<DrugsDB::Internal::DrugAllergyEngine>();
-        if (!engine) {
-            LOG_ERROR_FOR("MainWindow", "No allergy engine");
-            return;
-        }
-        QAbstractItemModel *model = engine->drugPrecautionModel();
-        if (!treeview) {
-            treeview = new QTreeView(q);
-            combo->setModel(model);
-            combo->setView(treeview);
-            treeview->header()->hide();
-            treeview->expandAll();
-            treeview->resizeColumnToContents(0);
-            treeview->setIndentation(10);
-            treeview->setFrameStyle(QFrame::NoFrame);
-            treeview->setAlternatingRowColors(true);
-        }
+//        DrugsDB::Internal::DrugAllergyEngine *engine = pluginManager()->getObject<DrugsDB::Internal::DrugAllergyEngine>();
+//        if (!engine) {
+//            LOG_ERROR_FOR("MainWindow", "No allergy engine");
+//            return;
+//        }
+//        QAbstractItemModel *model = engine->drugPrecautionModel();
+//        if (!treeview) {
+//            treeview = new QTreeView(q);
+//            combo->setModel(model);
+//            combo->setView(treeview);
+//            treeview->header()->hide();
+//            treeview->expandAll();
+//            treeview->resizeColumnToContents(0);
+//            treeview->setIndentation(10);
+//            treeview->setFrameStyle(QFrame::NoFrame);
+//            treeview->setAlternatingRowColors(true);
+//        }
     }
 
 public:

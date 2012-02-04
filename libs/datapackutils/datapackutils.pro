@@ -4,7 +4,7 @@ TARGET          = DataPack
 
 # include config file
 include(../libsworkbench.pri)
-include(../datapackutils_dependencies.pri)
+include(../datapack_dependencies.pri)
 
 DEFINES *= DATAPACKUTILS_LIBRARY
 
