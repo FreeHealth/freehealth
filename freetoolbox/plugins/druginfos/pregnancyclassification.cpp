@@ -35,6 +35,8 @@
 #include <utils/log.h>
 #include <translationutils/constanttranslations.h>
 
+#include <QScriptEngine>
+
 using namespace DrugInfos;
 
 QString PregnancyClassificationPage::id() const {return "PregnancyClassificationPage";}
@@ -125,22 +127,20 @@ PregnancyClassificationWidget::~PregnancyClassificationWidget()
 
 void PregnancyClassificationWidget::computeJavascriptFile()
 {
-    QList<QHash<PregnancyImporter::FieldType, QString> > pregnancyList;
+    QList<QHash<FieldType, QString> > pregnancyList;
     QString errorMsg;
     // NOTE POUR ERIC: change le chemin du fichier par le tien
     QString jsFile = "/home/guillaume/projects/freemedforms/global_resources/sql/medicinesInPregnancyData.js";
-    if (PregnancyImporter::load(jsFile, pregnancyList, &errorMsg)) {
+    if (load(jsFile, pregnancyList, &errorMsg)) {
         qDebug("SUCCESS");
-        foreach (const PregnancyImporter::PregnancyRecord &rec, pregnancyList) {
-            qDebug("%s, %s, %s, %s, %s, %s", qPrintable(rec[PregnancyImporter::Field_Name]),
-                   qPrintable(rec[PregnancyImporter::Field_Category]),
-                   qPrintable(rec[PregnancyImporter::Field_Safety]),
-                   qPrintable(rec[PregnancyImporter::Field_Class1]),
-                   qPrintable(rec[PregnancyImporter::Field_Class2]),
-                   qPrintable(rec[PregnancyImporter::Field_Class3]));
+        foreach (const PregnancyRecord &rec, pregnancyList) {
+            qDebug("%s, %s, %s, %s, %s, %s", qPrintable(rec[Field_Name]),
+                   qPrintable(rec[Field_Category]),
+                   qPrintable(rec[Field_Safety]),
+                   qPrintable(rec[Field_Class1]),
+                   qPrintable(rec[Field_Class2]),
+                   qPrintable(rec[Field_Class3]));
         }
     } else
         qDebug("FAILURE: %s", qPrintable(errorMsg));
-
-    return 0;
 }
