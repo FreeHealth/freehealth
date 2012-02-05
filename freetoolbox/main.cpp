@@ -1,7 +1,7 @@
 /***************************************************************************
  *  The FreeMedForms project is a set of free, open source medical         *
  *  applications.                                                          *
- *  (C) 2008-2011 by Eric MAEKER, MD (France) <eric.maeker@gmail.com>      *
+ *  (C) 2008-2012 by Eric MAEKER, MD (France) <eric.maeker@gmail.com>      *
  *  All rights reserved.                                                   *
  *                                                                         *
  *  This program is free software: you can redistribute it and/or modify   *
@@ -38,8 +38,6 @@
 #include <utils/database.h>
 
 #include <iostream>
-
-#include "pregnancy_importer.h"
 
 enum { WarnAllPluginSpecs = false};
 
@@ -126,25 +124,6 @@ inline static void defineLibraryPaths()
 int main( int argc, char *argv[] )
 {
     QApplication app(argc, argv);
-
-    QList<QHash<PregnancyImporter::FieldType, QString> > pregnancyList;
-    QString errorMsg;
-    // NOTE POUR ERIC: change le chemin du fichier par le tien
-    QString jsFile = "/home/guillaume/projects/freemedforms/global_resources/sql/medicinesInPregnancyData.js";
-    if (PregnancyImporter::load(jsFile, pregnancyList, &errorMsg)) {
-        qDebug("SUCCESS");
-        foreach (const PregnancyImporter::PregnancyRecord &rec, pregnancyList) {
-            qDebug("%s, %s, %s, %s, %s, %s", qPrintable(rec[PregnancyImporter::Field_Name]),
-                   qPrintable(rec[PregnancyImporter::Field_Category]),
-                   qPrintable(rec[PregnancyImporter::Field_Safety]),
-                   qPrintable(rec[PregnancyImporter::Field_Class1]),
-                   qPrintable(rec[PregnancyImporter::Field_Class2]),
-                   qPrintable(rec[PregnancyImporter::Field_Class3]));
-        }
-    } else
-        qDebug("FAILURE: %s", qPrintable(errorMsg));
-
-    return 0;
 
     QTextCodec::setCodecForTr( QTextCodec::codecForName( "UTF-8" ) );
     QTextCodec::setCodecForCStrings( QTextCodec::codecForName( "UTF-8" ) );
