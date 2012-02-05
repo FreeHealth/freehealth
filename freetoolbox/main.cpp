@@ -39,6 +39,8 @@
 
 #include <iostream>
 
+#include "pregnancy_importer.h"
+
 enum { WarnAllPluginSpecs = false};
 
 typedef QList<ExtensionSystem::PluginSpec *> PluginSpecSet;
@@ -124,6 +126,25 @@ inline static void defineLibraryPaths()
 int main( int argc, char *argv[] )
 {
     QApplication app(argc, argv);
+
+    QList<QHash<PregnancyImporter::FieldType, QString> > pregnancyList;
+    QString errorMsg;
+    // NOTE POUR ERIC: change le chemin du fichier par le tien
+    QString jsFile = "/home/guillaume/projects/freemedforms/global_resources/sql/medicinesInPregnancyData.js";
+    if (PregnancyImporter::load(jsFile, pregnancyList, &errorMsg)) {
+        qDebug("SUCCESS");
+        foreach (const PregnancyImporter::PregnancyRecord &rec, pregnancyList) {
+            qDebug("%s, %s, %s, %s, %s, %s", qPrintable(rec[PregnancyImporter::Field_Name]),
+                   qPrintable(rec[PregnancyImporter::Field_Category]),
+                   qPrintable(rec[PregnancyImporter::Field_Safety]),
+                   qPrintable(rec[PregnancyImporter::Field_Class1]),
+                   qPrintable(rec[PregnancyImporter::Field_Class2]),
+                   qPrintable(rec[PregnancyImporter::Field_Class3]));
+        }
+    } else
+        qDebug("FAILURE: %s", qPrintable(errorMsg));
+
+    return 0;
 
     QTextCodec::setCodecForTr( QTextCodec::codecForName( "UTF-8" ) );
     QTextCodec::setCodecForCStrings( QTextCodec::codecForName( "UTF-8" ) );

@@ -24,7 +24,8 @@ include( $${SOURCES_LIBS_PATH}/rpath.pri )
 
 QT *= sql \
     network \
-    xml
+    xml \
+    script
 
 DEFINES *= FREETOOLBOX
 
@@ -35,7 +36,11 @@ macx {
 win32:RC_FILE=freetoolbox_win32_icon.rc
 
 # sources
+HEADERS += \
+    pregnancy_importer.h
+
 SOURCES += \
     main.cpp \
+    pregnancy_importer.cpp
 
 OTHER_FILES += freetoolbox_win32_icon.rc
