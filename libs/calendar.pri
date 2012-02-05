@@ -1,4 +1,3 @@
-# include path for Aggregation
 INCLUDEPATH *= $${PWD}
 CONFIG( debug, debug|release ) {
     unix:LIBS    *= -lCalendar_debug
