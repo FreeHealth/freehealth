@@ -49,6 +49,9 @@ EmptyPlugin::EmptyPlugin()
     Core::ICore::instance()->translators()->addNewTranslator("emptyplugin");
 
     // Add here the Core::IFirstConfigurationPage objects to the pluginmanager object pool
+
+    // All preferences pages must be created in this part (before user connection)
+    // And included in the QObject pool
 }
 
 EmptyPlugin::~EmptyPlugin()
@@ -79,8 +82,6 @@ void EmptyPlugin::extensionsInitialized()
     messageSplash(tr("Initializing emptyplugin..."));
 
     // At this point, user is connected
-
-    // All preferences pages must be created in this part (after user connection)
 
     addAutoReleasedObject(new Core::PluginAboutPage(pluginSpec(), this));
     connect(Core::ICore::instance(), SIGNAL(coreOpened()), this, SLOT(postCoreInitialization()));
