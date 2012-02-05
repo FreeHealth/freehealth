@@ -20,6 +20,7 @@ drugsdb.depends += core
 interactiondb.subdir = interactiondb
 interactiondb.depends += core
 interactiondb.depends += biblio
+interactiondb.depends += listview
 
 druginfos.subdir = druginfos
 druginfos.depends += core
