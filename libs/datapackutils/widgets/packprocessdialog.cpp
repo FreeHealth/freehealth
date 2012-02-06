@@ -30,6 +30,7 @@
 #include <utils/global.h>
 #include <datapackutils/datapackcore.h>
 #include <datapackutils/servermanager.h>
+#include <datapackutils/packmanager.h>
 #include <datapackutils/iserverengine.h>
 
 #include <quazip/global.h>
@@ -46,6 +47,7 @@ using namespace DataPack;
 
 static inline DataPack::DataPackCore &core() { return DataPack::DataPackCore::instance(); }
 static inline DataPack::Internal::ServerManager *serverManager() { return qobject_cast<DataPack::Internal::ServerManager*>(DataPack::DataPackCore::instance().serverManager()); }
+static inline DataPack::Internal::PackManager *packManager() { return qobject_cast<Internal::PackManager*>(core().packManager()); }
 
 namespace {
 const char * const CSS =
@@ -201,7 +203,7 @@ void PackProcessDialog::startPackDownloads()
         }
 
         // Pack not already downloaded ?
-        if (!serverManager()->isPackInPersistentCache(pack)) {
+        if (!packManager()->isPackInPersistentCache(pack)) {
             toDld << pack;
         }
 

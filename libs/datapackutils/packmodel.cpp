@@ -27,6 +27,7 @@
 #include "packmodel.h"
 #include <datapackutils/datapackcore.h>
 #include <datapackutils/servermanager.h>
+#include <datapackutils/packmanager.h>
 
 #include <coreplugin/constants_tokensandsettings.h>
 
@@ -51,6 +52,7 @@ using namespace Trans::ConstantTranslations;
 
 static inline DataPack::DataPackCore &core() { return DataPack::DataPackCore::instance(); }
 static inline Internal::ServerManager *serverManager() { return qobject_cast<Internal::ServerManager*>(core().serverManager()); }
+static inline Internal::PackManager *packManager() { return qobject_cast<Internal::PackManager*>(core().packManager()); }
 static inline QIcon icon(const QString &name, DataPack::DataPackCore::ThemePath path = DataPack::DataPackCore::MediumPixmaps) { return QIcon(core().icon(name, path)); }
 
 namespace {
@@ -171,7 +173,7 @@ public:
     void createPackItem()
     {
         // Get all packages from servers
-        QList<Pack> installedPacks = serverManager()->installedPack();
+        QList<Pack> installedPacks = packManager()->installedPack();
         for(int i=0; i < serverManager()->serverCount(); ++i) {
 //            qWarning() << "scanning server" << i;
             scanServerPack(i);
@@ -205,10 +207,10 @@ public:
             const Pack &p = m_AvailPacks.at(id);
             PackItem item(p);
             /** \todo keep trace of the server ID/UUID ? */
-            item.isInstalled = serverManager()->isDataPackInstalled(p);
+            item.isInstalled = packManager()->isDataPackInstalled(p);
             if (!item.isInstalled) {
                 // Pack is installed with a lower version ?
-                bool installedWithLowerVersion = serverManager()->isDataPackInstalled(p.uuid());
+                bool installedWithLowerVersion = packManager()->isDataPackInstalled(p.uuid());
                 if (installedWithLowerVersion) {
                     item.isAnUpdate = true;
                     item.userCheckState = Qt::PartiallyChecked;
@@ -295,6 +297,7 @@ bool PackModel::isDirty() const
         if (!item.isInstalled && item.userCheckState==Qt::Checked)
             return true;
     }
+    return false;
 }
 
 int PackModel::rowCount(const QModelIndex &) const

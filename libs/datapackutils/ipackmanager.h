@@ -24,48 +24,40 @@
  *   Contributors :                                                        *
  *       NAME <MAIL@ADRESS>                                                *
  ***************************************************************************/
-#ifndef DATAPACK_SERVERANDPACKMODEL_H
-#define DATAPACK_SERVERANDPACKMODEL_H
+#ifndef DATAPACK_IPACKMANAGER_H
+#define DATAPACK_IPACKMANAGER_H
 
-#include <QStandardItemModel>
+#include <datapackutils/pack.h>
+#include <QObject>
 
 /**
- * \file serverandpackmodel.h
+ * \file ipackmanager.h
  * \author Eric MAEKER <eric.maeker@gmail.com>
  * \version 0.6.2
- * \date 15 Dec 2011
+ * \date 06 Feb 2012
 */
 
 namespace DataPack {
 
-class ServerAndPackModel : public QStandardItemModel
+class DATAPACK_EXPORT IPackManager : public QObject
 {
     Q_OBJECT
 public:
-    enum DataRepresentation {
-        Label = 0,
-        Request
-    };
+    IPackManager(QObject *parent = 0) : QObject(parent) {}
+    virtual ~IPackManager() {}
 
-    explicit ServerAndPackModel(QObject *parent = 0);
+    virtual QList<Pack> installedPack(bool forceRefresh = false) = 0;
+    virtual bool isDataPackInstalled(const Pack &pack) = 0;
+    virtual bool isDataPackInstalled(const QString &packUid, const QString &packVersion = QString::null) = 0;
 
-    void setInstallChecker(const bool onOff);
-    void setPackCheckable(const bool checkable);
+    virtual bool isPackInPersistentCache(const Pack &pack) = 0;
 
-    QVariant data(const QModelIndex &index, int role = Qt::DisplayRole) const;
-    bool setData(const QModelIndex &index, const QVariant &value, int role = Qt::EditRole);
+    virtual bool downloadPack(const Pack &pack) = 0;
+    virtual bool installDownloadedPack(const Pack &pack) = 0;
+    virtual bool removePack(const Pack &pack) = 0;
 
-    Qt::ItemFlags flags(const QModelIndex &index) const;
-
-signals:
-
-private Q_SLOTS:
-    void updateModel();
-
-private:
-    bool m_InstallChecking, m_PackCheckable;
 };
 
 }  // End namespace DataPack
 
-#endif // DATAPACK_SERVERANDPACKMODEL_H
+#endif // DATAPACK_IPACKMANAGER_H

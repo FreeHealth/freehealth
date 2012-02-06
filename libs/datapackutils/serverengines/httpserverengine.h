@@ -54,7 +54,7 @@ class HttpServerEngine : public IServerEngine
 {
     Q_OBJECT
 public:
-    explicit HttpServerEngine(IServerManager *parent);
+    explicit HttpServerEngine(QObject *parent);
     ~HttpServerEngine();
 
     // IServerEngine interface
@@ -72,8 +72,6 @@ private Q_SLOTS:
     void serverFinished();
 
 private:
-    ServerManager *serverManager();
-
     void afterServerConfigurationDownload(const ReplyData &data); // called after a server configuration file download
     void afterPackDescriptionFileDownload(const ReplyData &data); // called after a pack description file download
     void afterPackFileDownload(const ReplyData &data); // called after a pack file download

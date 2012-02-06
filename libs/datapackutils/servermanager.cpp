@@ -26,9 +26,8 @@
  ***************************************************************************/
 #include "servermanager.h"
 #include "datapackcore.h"
+#include "iserverengine.h"
 #include "widgets/packprocessdialog.h"
-#include "serverengines/localserverengine.h"
-#include "serverengines/httpserverengine.h"
 
 #include <utils/log.h>
 #include <utils/global.h>
@@ -78,13 +77,11 @@ ServerManager::~ServerManager()
 {
 }
 
-void ServerManager::init()
+void ServerManager::init(const QVector<IServerEngine*> &engines)
 {
     // Avoid infinite looping when using core::instance in serverengine constructors
     // Create engines
-    m_LocalEngine = new LocalServerEngine(this);
-    m_HttpEngine = new HttpServerEngine(this);
-    m_WorkingEngines << m_LocalEngine << m_HttpEngine;
+    m_WorkingEngines = engines;
 }
 
 /////////////////////////////////////////////////////////////////////////////////////////
@@ -220,12 +217,17 @@ void ServerManager::getServerDescription(const int index)
 
 void ServerManager::getAllDescriptionFile(QProgressBar *bar)
 {
-    WARN_FUNC << bar;
+//    WARN_FUNC << bar;
+    if (m_WorkingEngines.count()==0) {
+        LOG_ERROR("No ServerEngine recorded.");
+        return;
+    }
+
     // Populate all server engine
     int workingTasks = 0;
     for(int i=0; i < m_Servers.count(); ++i) {
         Server *s = &m_Servers[i];
-        qWarning() << "getAllDescription" << i << s->nativeUrl();
+        qWarning() << "ServerManager::getAllDescription" << i << s->nativeUrl();
         for(int j = 0; j < m_WorkingEngines.count(); ++j) {
             IServerEngine *engine = m_WorkingEngines.at(j);
             if (engine->managesServer(*s)) {
@@ -321,86 +323,6 @@ void ServerManager::connectServer(const Server &server, const ServerIdentificati
     Q_UNUSED(ident);
 }
 
-ServerDescription ServerManager::downloadServerDescription(const Server &server)
-{
-    // TODO
-    Q_UNUSED(server);
-    ServerDescription desc;
-    return desc;
-}
-
-QList<PackDescription> ServerManager::downloadPackDescription(const Server &server, const Pack &pack)
-{
-    // TODO
-    Q_UNUSED(server);
-    Q_UNUSED(pack);
-    QList<PackDescription> list;
-    return list;
-}
-
-Pack ServerManager::downloadAndUnzipPack(const Server &server, const Pack &pack)
-{
-    // TODO
-    Q_UNUSED(server);
-    Q_UNUSED(pack);
-    return pack;
-}
-
-//bool ServerManager::downloadDataPack(const Server &server, const Pack &pack, QProgressBar *progressBar)
-//{
-//    Q_UNUSED(server);
-//    Q_UNUSED(pack);
-//    Q_UNUSED(progressBar);
-//    Q_ASSERT(progressBar);
-//    // TODO pour guillaume
-//    // Juste télécharger rien de plus dans le rép persistentCache
-////    QString url = server.url(Server::PackFile, pack.serverFileName());
-//    return true;
-//}
-
-void ServerManager::checkInstalledPacks()
-{
-    if (!m_InstalledPacks.isEmpty())
-        return;
-    // Scan the install dir for packconfig.xml files and read them
-    foreach(const QFileInfo &info, Utils::getFiles(QDir(core().installPath()), "packconfig.xml")) {
-        Pack p;
-        p.fromXmlFile(info.absoluteFilePath());
-        if (p.isValid())
-            m_InstalledPacks.append(p);
-    }
-}
-
-bool ServerManager::isDataPackInstalled(const Pack &pack)
-{
-    return isDataPackInstalled(pack.uuid(), pack.version());
-}
-
-bool ServerManager::isDataPackInstalled(const QString &packUid, const QString &packVersion)
-{
-    Q_UNUSED(packUid);
-    Q_UNUSED(packVersion);
-    checkInstalledPacks();
-    bool checkVersion = !packVersion.isEmpty();
-    foreach(const Pack &p, m_InstalledPacks) {
-        if (p.uuid().compare(packUid, Qt::CaseInsensitive)==0) {
-            if (checkVersion) {
-                return (p.version()==packVersion);
-            }
-            return true;
-        }
-    }
-    return false;
-}
-
-QList<Pack> ServerManager::installedPack(bool forceRefresh)
-{
-    if (forceRefresh)
-        m_InstalledPacks.clear();
-    checkInstalledPacks();
-    return m_InstalledPacks;
-}
-
 void ServerManager::connectAndUpdate(int index)
 {
     Q_UNUSED(index);
@@ -449,19 +371,6 @@ Server ServerManager::getServerForPack(const Pack &pack)
     }
     return Server();
 }
-
-bool ServerManager::isPackInPersistentCache(const Pack &pack)
-{
-    QFileInfo info(core().persistentCachePath() + QDir::separator() + pack.uuid() + QDir::separator() + QFileInfo(pack.serverFileName()).fileName());
-    if (info.exists()) {
-        // Test local version of the pack
-        Pack cached;
-        cached.fromXmlFile(core().persistentCachePath() + QDir::separator() + pack.uuid() + QDir::separator() + "packconfig.xml");
-        return (cached.version() == pack.version());
-    }
-    return false;
-}
-
 
 void ServerManager::createServerPackList(const Server &server)
 {

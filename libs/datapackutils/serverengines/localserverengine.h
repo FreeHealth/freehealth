@@ -37,15 +37,12 @@ class LocalServerEngine : public IServerEngine
 {
     Q_OBJECT
 public:
-    LocalServerEngine(IServerManager *parent);
+    LocalServerEngine(QObject *parent);
 
     bool managesServer(const Server &server);
     void addToDownloadQueue(const ServerEngineQuery &query);
     int downloadQueueCount() const;
     bool startDownloadQueue();
-
-private:
-    ServerManager *serverManager();
 
 private:
     QList<ServerEngineQuery> m_queue;

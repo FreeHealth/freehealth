@@ -24,74 +24,48 @@
  *   Contributors :                                                        *
  *       NAME <MAIL@ADRESS>                                                *
  ***************************************************************************/
-#ifndef DATAPACK_CORE_H
-#define DATAPACK_CORE_H
+#ifndef DATAPACK_PACKMANAGER_H
+#define DATAPACK_PACKMANAGER_H
 
-#include <datapackutils/datapack_exporter.h>
-#include <QObject>
-QT_BEGIN_NAMESPACE
-class QNetworkAccessManager;
-class QNetworkProxy;
-QT_END_NAMESPACE
+#include <datapackutils/ipackmanager.h>
 
 /**
- * \file datapackcore.h
+ * \file packmanager.h
  * \author Eric MAEKER <eric.maeker@gmail.com>
  * \version 0.6.2
  * \date 06 Feb 2012
- * Needs Qt >= 4.7
 */
 
 namespace DataPack {
-class IServerManager;
-class IPackManager;
 namespace Internal {
-class DataPackCorePrivate;
-}
+class IServerEngine;
 
-
-class DATAPACK_EXPORT DataPackCore : public QObject
+class PackManager : public IPackManager
 {
     Q_OBJECT
-    explicit DataPackCore(QObject *parent = 0);
-
 public:
-    enum ThemePath {
-        SmallPixmaps = 0,
-        MediumPixmaps,
-        BigPixmaps
-    };
+    explicit PackManager(QObject *parent = 0);
+    ~PackManager();
 
-    static DataPackCore &instance(QObject *parent = 0);
-    ~DataPackCore();
-    void init();
+    bool init(const QVector<IServerEngine*> &engines);
+    void checkInstalledPacks();
 
-    // Manage path
-    void setInstallPath(const QString &absPath);
-    QString installPath() const;
+    QList<Pack> installedPack(bool forceRefresh = false);
+    bool isDataPackInstalled(const Pack &pack);
+    bool isDataPackInstalled(const QString &packUid, const QString &packVersion = QString::null);
 
-    void setPersistentCachePath(const QString &absPath);
-    QString persistentCachePath() const;
+    bool isPackInPersistentCache(const Pack &pack);
 
-    void setTemporaryCachePath(const QString &absPath);
-    QString temporaryCachePath() const;
-
-    void setThemePath(ThemePath path, const QString &absPath);
-    QString icon(const QString &name, ThemePath path = SmallPixmaps);
-
-    // Configuration of internet connection
-    bool isInternetConnexionAvailable();
-    void setNetworkProxy(const QNetworkProxy &proxy);
-    const QNetworkProxy &networkProxy() const;
-
-    // Managers
-    IServerManager *serverManager() const;
-    IPackManager *packManager() const;
+    bool downloadPack(const Pack &pack);
+    bool installDownloadedPack(const Pack &pack);
+    bool removePack(const Pack &pack);
 
 private:
-    Internal::DataPackCorePrivate *d;
+    QList<Pack> m_InstalledPacks;
+    QVector<IServerEngine*> m_Engines;
 };
 
-}  // End namespace DataPack
+} // namespace Internal
+} // namespace DataPack
 
-#endif // DATAPACK_CORE_H
+#endif // DATAPACK_PACKMANAGER_H

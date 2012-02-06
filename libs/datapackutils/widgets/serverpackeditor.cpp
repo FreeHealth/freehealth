@@ -25,12 +25,11 @@
  *       NAME <MAIL@ADRESS>                                                *
  ***************************************************************************/
 /**
-  \class DataPack::PackManager
-  Widget used to modify the server list of the current DataPack::IServerManager,
-  and to manage package (installation, update, remove).
+  \class DataPack::ServerPackEditor
+  Widget used to modify the server list and the installed packs.
 */
 
-#include "packmanager.h"
+#include "serverpackeditor.h"
 #include "addserverdialog.h"
 
 #include <utils/global.h>
@@ -43,6 +42,7 @@
 
 #include <datapackutils/datapackcore.h>
 #include <datapackutils/servermanager.h>
+#include <datapackutils/packmanager.h>
 #include <datapackutils/packmodel.h>
 #include <datapackutils/servermodel.h>
 #include <datapackutils/widgets/packprocessdialog.h>
@@ -55,13 +55,14 @@
 
 #include <QDebug>
 
-#include "ui_packmanager.h"
+#include "ui_serverpackeditor.h"
 
 using namespace DataPack;
 using namespace Trans::ConstantTranslations;
 
 static inline DataPack::DataPackCore &core() { return DataPack::DataPackCore::instance(); }
 static inline Internal::ServerManager *serverManager() { return qobject_cast<Internal::ServerManager*>(core().serverManager()); }
+static inline Internal::PackManager *packManager() { return qobject_cast<Internal::PackManager*>(core().packManager()); }
 static inline QIcon icon(const QString &name, DataPack::DataPackCore::ThemePath path = DataPack::DataPackCore::MediumPixmaps) { return QIcon(core().icon(name, path)); }
 
 namespace {
@@ -96,13 +97,13 @@ const int PACK_MODE = 1;
 
 }  // End anonymous namespace
 
-PackManager::PackManager(QWidget *parent) :
+ServerPackEditor::ServerPackEditor(QWidget *parent) :
     QWidget(parent),
-    ui(new Ui::PackManager),
+    ui(new Ui::ServerPackEditor),
     aServerRefresh(0), aServerRemove(0), aServerAdd(0),
     aProcess(0)
 {
-    setObjectName("PackManager");
+    setObjectName("ServerPackEditor");
     ui->setupUi(this);
 
     if (layout()) {
@@ -165,24 +166,24 @@ PackManager::PackManager(QWidget *parent) :
     ui->stackedWidget->setCurrentWidget(ui->pagePacks);
 
     // FOR TEST
-    // This step should be done before the PackManager in called
+    // This step should be done before the ServerPackEditor in called
     serverManager()->getAllDescriptionFile();
     // END TEST
 
     // file://Users/eric/Desktop/Programmation/freemedforms/global_resources/datapacks/default/
 }
 
-PackManager::~PackManager()
+ServerPackEditor::~ServerPackEditor()
 {
     delete ui;
 }
 
-bool PackManager::submitChanges()
+bool ServerPackEditor::submitChanges()
 {
     return true;
 }
 
-void PackManager::createActions()
+void ServerPackEditor::createActions()
 {
     // Create server actions
     QActionGroup *srvgr = new QActionGroup(this);
@@ -201,8 +202,8 @@ void PackManager::createActions()
     connect(srvgr, SIGNAL(triggered(QAction*)), this, SLOT(serverActionTriggered(QAction *)));
 
     // Create pack actions
-    a = aPackManager = new QAction(this);
-    a->setObjectName("aPackManager");
+    a = aServerPackEditor = new QAction(this);
+    a->setObjectName("aServerPackEditor");
     a->setIcon(icon(::ICON_PACKAGE, DataPack::DataPackCore::MediumPixmaps));
     a = aProcess = new QAction(this);
     a->setObjectName("aProcess");
@@ -215,12 +216,12 @@ void PackManager::createActions()
     connect(aProcess, SIGNAL(triggered()), this, SLOT(processPacks()));
 }
 
-void PackManager::createToolbar()
+void ServerPackEditor::createToolbar()
 {
     m_ToolBarPacks = new QToolBar(this);
     // Insert action in the same order as the enum ToolBarActions
     m_ToolBarPacks->addAction(aServerEdit);
-    m_ToolBarPacks->addAction(aPackManager);
+    m_ToolBarPacks->addAction(aServerPackEditor);
     m_ToolBarPacks->addSeparator();
     m_ToolBarPacks->addAction(aServerRefresh);
     m_ToolBarPacks->addSeparator();
@@ -228,7 +229,7 @@ void PackManager::createToolbar()
     ui->toolbarLayout->addWidget(m_ToolBarPacks);
 }
 
-void PackManager::createServerDataWidgetMapper()
+void ServerPackEditor::createServerDataWidgetMapper()
 {
     m_ServerMapper = new QDataWidgetMapper(this);
     m_ServerMapper->setModel(m_serverModel);
@@ -258,7 +259,7 @@ static void elideTextToLabel(QLabel *label, const QString &text)
     }
 }
 
-void PackManager::populatePackView(const int packId)
+void ServerPackEditor::populatePackView(const int packId)
 {
     const Pack &pack = m_PackModel->packageAt(packId);
     const PackDescription &descr = pack.description();
@@ -337,13 +338,13 @@ void PackManager::populatePackView(const int packId)
     ui->packSummary->setText(summary);
 }
 
-void PackManager::onPackIndexActivated(const QModelIndex &index, const QModelIndex &previous)
+void ServerPackEditor::onPackIndexActivated(const QModelIndex &index, const QModelIndex &previous)
 {
     Q_UNUSED(previous);
     populatePackView(index.row());
 }
 
-void PackManager::processToolBar(int mode)
+void ServerPackEditor::processToolBar(int mode)
 {
     if (mode==::SERVER_MODE) {
         m_ToolBarPacks->removeAction(aProcess);
@@ -356,7 +357,7 @@ void PackManager::processToolBar(int mode)
     }
 }
 
-void PackManager::serverActionTriggered(QAction *a)
+void ServerPackEditor::serverActionTriggered(QAction *a)
 {
     if (a==aServerRefresh) {
         QProgressDialog dlg(this);
@@ -391,14 +392,14 @@ void PackManager::serverActionTriggered(QAction *a)
     } else if (a==aServerEdit) {
         ui->stackedWidget->setCurrentWidget(ui->pageServers);
         processToolBar(::SERVER_MODE);
-    } else if (a==aPackManager) {
+    } else if (a==aServerPackEditor) {
         ui->stackedWidget->setCurrentWidget(ui->pagePacks);
         processToolBar(::PACK_MODE);
     }
 }
 
 /** Start to process the user pack modification. */
-void PackManager::processPacks()
+void ServerPackEditor::processPacks()
 {
     // Apply pack model changes
     if (!m_PackModel->isDirty())
@@ -409,21 +410,21 @@ void PackManager::processPacks()
     if (dlg.exec()==QDialog::Rejected) {
         return;
     }
-    serverManager()->installedPack(true);
+    packManager()->installedPack(true);
     m_PackModel->updateModel();
 }
 
-void PackManager::retranslate()
+void ServerPackEditor::retranslate()
 {
     aServerRefresh->setText(tr("Refresh datapack servers"));
     aServerEdit->setText(tr("Server editor"));
     aServerAdd->setText(tr("Add a server"));
     aServerRemove->setText(tr("Remove a server"));
-    aPackManager->setText(tr("Pack manager"));
+    aServerPackEditor->setText(tr("Server and pack editor"));
     aProcess->setText(tr("Process changes"));
 }
 
-void PackManager::changeEvent(QEvent *e)
+void ServerPackEditor::changeEvent(QEvent *e)
 {
     if (e->type()==QEvent::LanguageChange) {
         ui->retranslateUi(this);
@@ -431,7 +432,7 @@ void PackManager::changeEvent(QEvent *e)
     }
 }
 
-void PackManager::on_listWidgetMenu_currentRowChanged(int row)
+void ServerPackEditor::on_listWidgetMenu_currentRowChanged(int row)
 {
     if (ui->listWidgetMenu->currentItem() == m_datapacksItem)
         ui->stackedWidget->setCurrentWidget(ui->pagePacks);
@@ -439,7 +440,7 @@ void PackManager::on_listWidgetMenu_currentRowChanged(int row)
         ui->stackedWidget->setCurrentWidget(ui->pageServers);
 }
 
-void PackManager::serverCurrentChanged(const QModelIndex &c, const QModelIndex &p)
+void ServerPackEditor::serverCurrentChanged(const QModelIndex &c, const QModelIndex &p)
 {
     m_ServerMapper->setCurrentIndex(c.row());
 }

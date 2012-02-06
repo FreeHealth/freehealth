@@ -30,7 +30,7 @@
 using namespace DataPack;
 using namespace Internal;
 
-IServerEngine::IServerEngine(IServerManager *parent) :
+IServerEngine::IServerEngine(QObject *parent) :
     QObject(parent)
 {
 }

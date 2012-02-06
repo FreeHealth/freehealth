@@ -33,6 +33,9 @@
 
 #include "datapackcore.h"
 #include "servermanager.h"
+#include "packmanager.h"
+#include "serverengines/localserverengine.h"
+#include "serverengines/httpserverengine.h"
 
 #include <utils/log.h>
 #include <utils/global.h>
@@ -59,10 +62,20 @@ namespace Internal {
 class DataPackCorePrivate
 {
 public:
-    DataPackCorePrivate() : m_ServerManager(0) {}
+    DataPackCorePrivate() :
+        m_ServerManager(0),
+        m_PackManager(0),
+        m_LocalEngine(0),
+        m_HttpEngine(0)
+    {}
 
 public:
     ServerManager *m_ServerManager;
+    PackManager *m_PackManager;
+    LocalServerEngine *m_LocalEngine;
+    HttpServerEngine *m_HttpEngine;
+    QVector<IServerEngine *> m_Engines;
+
     QHash<int, QString> m_ThemePath;
     QString m_InstallPath, m_TmpCachePath, m_PersistentCachePath;
     QNetworkProxy m_Proxy;
@@ -76,6 +89,7 @@ DataPackCore::DataPackCore(QObject *parent) :
     d(new Internal::DataPackCorePrivate)
 {
     d->m_ServerManager = new Internal::ServerManager(this);
+    d->m_PackManager = new Internal::PackManager(this);
 }
 
 /** Destructor */
@@ -90,7 +104,11 @@ DataPackCore::~DataPackCore()
 void DataPackCore::init()
 {
     // Avoid infinite looping when using core::instance in servermanager/serverengine constructors
-    d->m_ServerManager->init();
+    d->m_LocalEngine = new Internal::LocalServerEngine(this);
+    d->m_HttpEngine = new Internal::HttpServerEngine(this);
+    d->m_Engines << d->m_LocalEngine << d->m_HttpEngine;
+    d->m_ServerManager->init(d->m_Engines);
+    d->m_PackManager->init(d->m_Engines);
 }
 
 /** Test the internet connection and return the state of availability of it. This is just a wrapper of the Utils::testInternetConnexion(). */
@@ -115,6 +133,11 @@ const QNetworkProxy &DataPackCore::networkProxy() const
 IServerManager *DataPackCore::serverManager() const
 {
     return d->m_ServerManager;
+}
+
+IPackManager *DataPackCore::packManager() const
+{
+    return d->m_PackManager;
 }
 
 /** Define the path where to install datapacks. */

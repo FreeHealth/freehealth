@@ -24,8 +24,8 @@
  *   Contributors :                                                        *
  *       NAME <MAIL@ADRESS>                                                *
  ***************************************************************************/
-#ifndef DATAPACK_PACKMANAGER_H
-#define DATAPACK_PACKMANAGER_H
+#ifndef DATAPACK_SERVERPACKEDITOR_H
+#define DATAPACK_SERVERPACKEDITOR_H
 
 #include <datapackutils/datapack_exporter.h>
 
@@ -37,10 +37,10 @@ class QListWidgetItem;
 class QDataWidgetMapper;
 
 /**
- * \file packmanager.h
+ * \file serverpackeditor.h
  * \author Eric MAEKER <eric.maeker@gmail.com>
  * \version 0.6.2
- * \date 03 Feb 2012
+ * \date 06 Feb 2012
 */
 
 namespace DataPack {
@@ -50,15 +50,15 @@ class PackModel;
 class ServerModel;
 
 namespace Ui {
-    class PackManager;
+    class ServerPackEditor;
 }
 
-class DATAPACK_EXPORT PackManager : public QWidget
+class DATAPACK_EXPORT ServerPackEditor : public QWidget
 {
     Q_OBJECT
 public:
-    explicit PackManager(QWidget *parent = 0);
-    ~PackManager();
+    explicit ServerPackEditor(QWidget *parent = 0);
+    ~ServerPackEditor();
 
 public Q_SLOTS:
     bool submitChanges();
@@ -84,11 +84,11 @@ private:
     void processToolBar(int mode);
 
 private:
-    Ui::PackManager *ui;
+    Ui::ServerPackEditor *ui;
     PackModel *m_PackModel;
     ServerModel *m_serverModel;
     QAction *aServerRefresh, *aServerEdit, *aServerRemove, *aServerAdd;
-    QAction *aPackManager, *aProcess;
+    QAction *aServerPackEditor, *aProcess;
     QToolBar *m_ToolBarPacks;
     QListWidgetItem *m_datapacksItem;
     QListWidgetItem *m_serversItem;
@@ -97,4 +97,4 @@ private:
 
 }  // End namespace DataPack
 
-#endif // DATAPACK_PACKMANAGER_H
+#endif // DATAPACK_SERVERPACKEDITOR_H

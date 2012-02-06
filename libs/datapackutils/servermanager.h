@@ -56,7 +56,7 @@ class ServerManager : public IServerManager
 public:
     explicit ServerManager(QObject *parent = 0);
     ~ServerManager();
-    void init();
+    void init(const QVector<IServerEngine*> &engines);
 
     // IServerManager interface
     // Manage path
@@ -86,7 +86,6 @@ public:
     void registerPack(const Server &server, const Pack &pack);
 
     Server getServerForPack(const Pack &pack);
-    bool isPackInPersistentCache(const Pack &pack);
     // End
 
     ////////////////////////////////////////////////
@@ -96,14 +95,10 @@ public:
     QList<PackDescription> getPackDescription(const Server &server);
     QList<Pack> getPackForServer(const Server &server);
 
-    ServerDescription downloadServerDescription(const Server &server);
-    QList<PackDescription> downloadPackDescription(const Server &server, const Pack &pack);
-    Pack downloadAndUnzipPack(const Server &server, const Pack &pack);
-
-    void checkInstalledPacks();
-    QList<Pack> installedPack(bool forceRefresh = false);
-    bool isDataPackInstalled(const Pack &pack);
-    bool isDataPackInstalled(const QString &packUid, const QString &packVersion = QString::null);
+//    void checkInstalledPacks();
+//    QList<Pack> installedPack(bool forceRefresh = false);
+//    bool isDataPackInstalled(const Pack &pack);
+//    bool isDataPackInstalled(const QString &packUid, const QString &packVersion = QString::null);
 
 protected:
     QString cachePath() const;
@@ -129,8 +124,6 @@ private:
     QList<Pack> m_PacksToInstall;
     QList<Pack> m_InstalledPacks;
 
-    LocalServerEngine *m_LocalEngine;
-    HttpServerEngine *m_HttpEngine;
     QVector<IServerEngine *> m_WorkingEngines;
 //    FtpServerEngine *m_FtpEngine;
 

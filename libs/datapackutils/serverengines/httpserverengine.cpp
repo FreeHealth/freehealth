@@ -51,6 +51,7 @@ using namespace Internal;
 using namespace Trans::ConstantTranslations;
 
 static inline DataPack::DataPackCore &core() { return DataPack::DataPackCore::instance(); }
+static inline DataPack::Internal::ServerManager *serverManager() {return qobject_cast<ServerManager*>(core().serverManager());}
 
 namespace {
     const int MAX_AUTHENTIFICATION_TRIES = 3;
@@ -78,7 +79,7 @@ ReplyData::ReplyData(QNetworkReply *reply, Server *server, Server::FileRequested
 /////////////////////////////////////////////////////////////////////////////////////////
 ////////////////////////////  IServerEngine code  ///////////////////////////////////////
 /////////////////////////////////////////////////////////////////////////////////////////
-HttpServerEngine::HttpServerEngine(IServerManager *parent)  :
+HttpServerEngine::HttpServerEngine(QObject *parent)  :
     IServerEngine(parent),
     m_DownloadCount_Server(0),
     m_DownloadCount_PackDescription(0)
@@ -87,9 +88,12 @@ HttpServerEngine::HttpServerEngine(IServerManager *parent)  :
     m_NetworkAccessManager = new QNetworkAccessManager(this);
     const QString &id = Utils::testInternetConnexion();
     if (!id.isEmpty()) {
-        LOG("Internet connection is enabled");
+        LOG("Internet connection is enabled.");
+        bool proxy = false;
         if (!core().networkProxy().hostName().isEmpty()) {
+            LOG("Using proxy " + core().networkProxy().hostName());
             m_NetworkAccessManager->setProxy(core().networkProxy());
+            proxy = true;
         } else {
             // Auto-check for system proxys
             QNetworkProxyQuery npq(QUrl("http://www.google.com"));
@@ -98,22 +102,20 @@ HttpServerEngine::HttpServerEngine(IServerManager *parent)  :
                 if (p.type()==QNetworkProxy::HttpProxy && !p.hostName().isEmpty()) {
                     LOG("Using proxy " + p.hostName());
                     m_NetworkAccessManager->setProxy(p);
+                    proxy = true;
                     break;
                 }
             }
         }
+        if (!proxy)
+            LOG("No proxy in use.");
     } else {
-        LOG_ERROR("No internet connection available");
+        LOG_ERROR("No internet connection available.");
     }
 }
 
 HttpServerEngine::~HttpServerEngine()
 {}
-
-ServerManager *HttpServerEngine::serverManager()
-{
-    return qobject_cast<ServerManager*>(parent());
-}
 
 bool HttpServerEngine::managesServer(const Server &server)
 {
@@ -314,7 +316,7 @@ void HttpServerEngine::afterServerConfigurationDownload(const ReplyData &data)
     case Server::HttpPseudoSecuredAndZipped:
     {
         // save buffer to tmp zip file
-        QString zipName = core().persistentCachePath() + QDir::separator() + "datapacktmp" + QDir::separator() + server->uuid() + QDir::separator() + "serverconf.zip";
+        QString zipName = core().persistentCachePath() + QDir::separator() + server->uuid() + QDir::separator() + "serverconf.zip";
         QDir().mkpath(QFileInfo(zipName).absolutePath());
         QFile zip(zipName);
         if (!zip.open(QFile::WriteOnly | QFile::Text)) {

@@ -39,15 +39,11 @@ using namespace DataPack;
 using namespace Internal;
 
 static inline DataPack::DataPackCore &core() {return DataPack::DataPackCore::instance();}
+static inline DataPack::Internal::ServerManager *serverManager() {return qobject_cast<ServerManager*>(core().serverManager());}
 
-LocalServerEngine::LocalServerEngine(IServerManager *parent) :
+LocalServerEngine::LocalServerEngine(QObject *parent) :
     IServerEngine(parent)
 {
-}
-
-ServerManager *LocalServerEngine::serverManager()
-{
-    return qobject_cast<ServerManager*>(parent());
 }
 
 bool LocalServerEngine::managesServer(const Server &server)

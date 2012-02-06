@@ -77,6 +77,11 @@ const char* const FOOTER                            = QT_TRANSLATE_NOOP("tkConst
 const char* const WATERMARK                         = QT_TRANSLATE_NOOP("tkConstants", "Watermark");
 const char* const PRINTING                          = QT_TRANSLATE_NOOP("tkConstants", "Printing");
 
+// DataPack related
+const char* const DATAPACK                          = QT_TRANSLATE_NOOP("tkConstants", "Data pack");
+const char* const DATAPACK_MANAGER                  = QT_TRANSLATE_NOOP("tkConstants", "Data pack manager");
+
+
 } // end Constants
 } // end TranslationUtils
 

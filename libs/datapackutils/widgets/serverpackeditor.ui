@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <ui version="4.0">
- <class>DataPack::PackManager</class>
- <widget class="QWidget" name="DataPack::PackManager">
+ <class>DataPack::ServerPackEditor</class>
+ <widget class="QWidget" name="DataPack::ServerPackEditor">
   <property name="geometry">
    <rect>
     <x>0</x>

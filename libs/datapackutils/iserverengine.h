@@ -65,7 +65,7 @@ class IServerEngine : public QObject
 {
     Q_OBJECT
 public:
-    explicit IServerEngine(IServerManager *parent = 0);
+    explicit IServerEngine(QObject *parent = 0);
 
     virtual bool managesServer(const Server &server) = 0;
     virtual void addToDownloadQueue(const ServerEngineQuery &query) = 0;
