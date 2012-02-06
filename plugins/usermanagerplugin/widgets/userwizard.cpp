@@ -70,6 +70,7 @@
 #include <utils/log.h>
 #include <utils/global.h>
 #include <utils/widgets/lineeditechoswitcher.h>
+#include <utils/widgets/uppercasevalidator.h>
 #include <translationutils/constanttranslations.h>
 #include <extensionsystem/pluginmanager.h>
 
@@ -321,6 +322,10 @@ UserIdentityAndLoginPage::UserIdentityAndLoginPage(QWidget *parent) :
     leFirstName = new QLineEdit(this);
     leSecondName = new QLineEdit(this);
     cbGender = new QComboBox(this);
+
+    Utils::UpperCaseValidator *val = new Utils::UpperCaseValidator(this);
+    leName->setValidator(val);
+    leSecondName->setValidator(val);
 
     connect(cbLanguage, SIGNAL(currentLanguageChanged(QLocale::Language)), Core::Translators::instance(), SLOT(changeLanguage(QLocale::Language)));
 

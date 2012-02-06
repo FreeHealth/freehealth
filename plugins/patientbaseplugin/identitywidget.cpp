@@ -46,6 +46,7 @@
 #include <zipcodesplugin/zipcodescompleters.h>
 
 #include <utils/global.h>
+#include <utils/widgets/uppercasevalidator.h>
 #include <translationutils/constanttranslations.h>
 
 #include <QDataWidgetMapper>
@@ -83,6 +84,9 @@ public:
             editUi->setupUi(q);
             editUi->genderCombo->addItems(genders());
             editUi->titleCombo->addItems(titles());
+            Utils::UpperCaseValidator *val = new Utils::UpperCaseValidator(q);
+            editUi->birthName->setValidator(val);
+            editUi->secondName->setValidator(val);
 
             zipCompleter = new ZipCodes::ZipCountryCompleters(q);
             zipCompleter->setCityLineEdit(editUi->city);
