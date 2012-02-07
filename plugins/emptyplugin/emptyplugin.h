@@ -51,6 +51,7 @@ public:
 
 private Q_SLOTS:
     void postCoreInitialization();
+    void coreAboutToClose();
 };
 
 

@@ -52,6 +52,9 @@ EmptyPlugin::EmptyPlugin()
 
     // All preferences pages must be created in this part (before user connection)
     // And included in the QObject pool
+
+    connect(Core::ICore::instance(), SIGNAL(coreOpened()), this, SLOT(postCoreInitialization()));
+    connect(Core::ICore::instance(), SIGNAL(coreAboutToClose()), this, SLOT(coreAboutToClose()));
 }
 
 EmptyPlugin::~EmptyPlugin()
@@ -92,5 +95,10 @@ void EmptyPlugin::postCoreInitialization()
     // Core is fully intialized as well as all plugins
 }
 
+void EmptyPlugin::coreAboutToClose()
+{
+    // Core is about to close
+    // Core::user() is still available
+}
 
 Q_EXPORT_PLUGIN(EmptyPlugin)
