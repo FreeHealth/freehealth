@@ -6,7 +6,7 @@ QT += xml network core gui
 include(../../../config.pri)
 include(../../../libs/utils.pri)
 include(../../../libs/translationutils.pri)
-include(../../../libs/datapackutils.pri)
+include(../../../libs/datapack.pri)
 include(../../../libs/rpath.pri)
 
 HEADERS = mainwindow.h

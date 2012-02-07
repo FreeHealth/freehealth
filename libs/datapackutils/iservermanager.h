@@ -30,6 +30,7 @@
 #include <datapackutils/datapack_exporter.h>
 
 // IMPROVE THIS
+#include <datapackutils/serverenginestatus.h>
 #include <datapackutils/server.h>
 #include <datapackutils/pack.h>
 #include <datapackutils/serveridentification.h>
@@ -102,6 +103,8 @@ Q_SIGNALS:
 
     void serverConnected(const Server &server, const ServerIdentification &ident);
     void serverInfosUpdated(int serverId); // emitted when a server infos have been updated
+
+    /** \todo add signal including the ServerEngineStatus */
 
     // In use
     void serverUpdateChecked();

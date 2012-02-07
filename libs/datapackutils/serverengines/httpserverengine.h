@@ -34,7 +34,6 @@
 
 namespace DataPack {
 namespace Internal {
-class ServerManager;
 
 // this private struct contains all data associated with a QNetworkReply. It will be set as a user attribute in the QNetworkReply at its creation (see QNetworkReply::setAttribute()).
 struct ReplyData {
@@ -63,6 +62,9 @@ public:
     int downloadQueueCount() const;
     bool startDownloadQueue();
 
+    const ServerEngineStatus &lastStatus(const Pack &pack);
+    const ServerEngineStatus &lastStatus(const Server &server);
+
 private Q_SLOTS:
     void downloadProgress(qint64 bytesRead, qint64 totalBytes);
     void authenticationRequired(QNetworkReply *reply, QAuthenticator *authenticator);
@@ -72,6 +74,7 @@ private Q_SLOTS:
     void serverFinished();
 
 private:
+    ServerEngineStatus *getStatus(const ReplyData &data);
     void afterServerConfigurationDownload(const ReplyData &data); // called after a server configuration file download
     void afterPackDescriptionFileDownload(const ReplyData &data); // called after a pack description file download
     void afterPackFileDownload(const ReplyData &data); // called after a pack file download
@@ -85,6 +88,7 @@ private:
     QList<ServerEngineQuery> m_queue;
     QNetworkAccessManager *m_NetworkAccessManager;
     QHash<QNetworkReply*,ReplyData> m_replyToData;
+    QHash<QString, ServerEngineStatus> m_ServerStatus, m_PackStatus;
     int m_DownloadCount_Server;
     int m_DownloadCount_PackDescription;
 };

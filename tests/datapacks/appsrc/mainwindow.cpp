@@ -30,7 +30,7 @@
 #include <datapackutils/datapackcore.h>
 #include <datapackutils/iservermanager.h>
 #include <datapackutils/serverdescription.h>
-#include <datapackutils/widgets/packmanager.h>
+#include <datapackutils/widgets/serverpackeditor.h>
 
 #include <utils/widgets/genericdescriptioneditor.h>
 #include <utils/widgets/genericinformationeditordialog.h>
@@ -197,7 +197,7 @@ MainWindow::MainWindow(QWidget *parent) :
     // TODO: if a Pack update is available -> ask user for the installation
 
     // Create the ServerEditor view for the test
-    DataPack::PackManager *packManager = new DataPack::PackManager(this);
+    DataPack::ServerPackEditor *packManager = new DataPack::ServerPackEditor(this);
     setCentralWidget(packManager);
 
 //    Utils::GenericInformationEditorDialog dlg(this);

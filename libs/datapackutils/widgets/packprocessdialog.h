@@ -42,10 +42,7 @@ class QGridLayout;
 namespace DataPack {
 class Pack;
 class IServerManager;
-
-namespace Internal {
 class IServerEngine;
-}
 
 namespace Ui {
     class PackProcessDialog;
@@ -78,7 +75,7 @@ protected Q_SLOTS:
     void done(int result);
 
 protected:
-    void setServerEngines(const QVector<Internal::IServerEngine*> &engines);
+    void setServerEngines(const QVector<DataPack::IServerEngine*> &engines);
 
 private Q_SLOTS:
     void processPacks();
@@ -98,7 +95,7 @@ private:
     QList<Pack> m_InstallPacks;
     QList<Pack> m_UpdatePacks;
     QList<Pack> m_RemovePacks;
-    QVector<Internal::IServerEngine*> m_Engines;
+    QVector<DataPack::IServerEngine*> m_Engines;
     QStringList m_Msg;
     bool m_Error;
 

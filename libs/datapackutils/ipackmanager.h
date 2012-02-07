@@ -27,8 +27,13 @@
 #ifndef DATAPACK_IPACKMANAGER_H
 #define DATAPACK_IPACKMANAGER_H
 
+#include <datapackutils/datapack_exporter.h>
+#include <datapackutils/serverenginestatus.h>
 #include <datapackutils/pack.h>
 #include <QObject>
+QT_BEGIN_NAMESPACE
+class QProgressBar;
+QT_END_NAMESPACE
 
 /**
  * \file ipackmanager.h
@@ -52,9 +57,11 @@ public:
 
     virtual bool isPackInPersistentCache(const Pack &pack) = 0;
 
-    virtual bool downloadPack(const Pack &pack) = 0;
+    virtual bool downloadPack(const Pack &pack, QProgressBar *bar) = 0;
     virtual bool installDownloadedPack(const Pack &pack) = 0;
     virtual bool removePack(const Pack &pack) = 0;
+
+    /** \todo add signal including the ServerEngineStatus */
 
 };
 

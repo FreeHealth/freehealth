@@ -44,8 +44,12 @@ public:
     int downloadQueueCount() const;
     bool startDownloadQueue();
 
+    const ServerEngineStatus &lastStatus(const Pack &pack);
+    const ServerEngineStatus &lastStatus(const Server &server);
+
 private:
     QList<ServerEngineQuery> m_queue;
+    QHash<QString, ServerEngineStatus> m_ServerStatus, m_PackStatus;
 };
 
 } // namespace Internal

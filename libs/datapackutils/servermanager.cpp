@@ -77,7 +77,7 @@ ServerManager::~ServerManager()
 {
 }
 
-void ServerManager::init(const QVector<IServerEngine*> &engines)
+void ServerManager::init(const QVector<DataPack::IServerEngine*> &engines)
 {
     // Avoid infinite looping when using core::instance in serverengine constructors
     // Create engines
@@ -201,7 +201,7 @@ void ServerManager::getServerDescription(const int index)
     Server *s = &m_Servers[index];
     qWarning() << "getAllDescription" << index << s->nativeUrl();
     for(int j = 0; j < m_WorkingEngines.count(); ++j) {
-        IServerEngine *engine = m_WorkingEngines.at(j);
+        DataPack::IServerEngine *engine = m_WorkingEngines.at(j);
         if (engine->managesServer(*s)) {
             ServerEngineQuery query;
             query.server = s;
@@ -229,7 +229,7 @@ void ServerManager::getAllDescriptionFile(QProgressBar *bar)
         Server *s = &m_Servers[i];
         qWarning() << "ServerManager::getAllDescription" << i << s->nativeUrl();
         for(int j = 0; j < m_WorkingEngines.count(); ++j) {
-            IServerEngine *engine = m_WorkingEngines.at(j);
+            DataPack::IServerEngine *engine = m_WorkingEngines.at(j);
             if (engine->managesServer(*s)) {
                 ServerEngineQuery query;
                 query.server = s;
@@ -250,7 +250,7 @@ void ServerManager::getAllDescriptionFile(QProgressBar *bar)
     }
     // Then start all server engine
     for(int j = 0; j < m_WorkingEngines.count(); ++j) {
-        IServerEngine *engine = m_WorkingEngines.at(j);
+        DataPack::IServerEngine *engine = m_WorkingEngines.at(j);
         if (engine->downloadQueueCount() > 0) {
             connect(engine, SIGNAL(queueDowloaded()), this, SLOT(engineDescriptionDownloadDone()));
             engine->startDownloadQueue();

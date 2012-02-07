@@ -41,6 +41,14 @@ using namespace Internal;
 static inline DataPack::DataPackCore &core() {return DataPack::DataPackCore::instance();}
 static inline DataPack::Internal::ServerManager *serverManager() {return qobject_cast<ServerManager*>(core().serverManager());}
 
+static QString statusKey(const Pack &pack) {
+    return pack.uuid()+pack.version();
+}
+
+static QString statusKey(const Server &server) {
+    return server.uuid()+server.version();
+}
+
 LocalServerEngine::LocalServerEngine(QObject *parent) :
     IServerEngine(parent)
 {
@@ -75,9 +83,19 @@ bool LocalServerEngine::startDownloadQueue()
                 p.fromXmlFile(server->url(Server::PackDescriptionFile, server->content().packDescriptionFileNames().at(j)));
                 serverManager()->registerPack(*server, p);
             }
+
+            // Create the status of the server
+            ServerEngineStatus status;
+            status.downloadCorrectlyFinished = true;
+            status.engineMessages << tr("Server configuration correctly downloaded.");
+            status.hasError = false;
+            status.isSuccessful = true;
+            status.proxyIdentificationError = false;
+            status.serverIdentificationError = false;
+            m_ServerStatus.insert(statusKey(*server), status);
         }
         if (query.downloadPackFile) {
-            Pack *pack = query.pack;
+            const Pack *pack = query.pack;
             QString url = server->url(Server::PackFile, pack->serverFileName());
             QFileInfo local(url);
             if (local.exists()) {
@@ -92,10 +110,44 @@ bool LocalServerEngine::startDownloadQueue()
 
                 // copy pack XML config
                 QFile::copy(pack->originalXmlConfigFileName(), pack->persistentlyCachedXmlConfigFileName());
+
+                // Create the status of the server
+                ServerEngineStatus status;
+                status.downloadCorrectlyFinished = true;
+                status.engineMessages << tr("Pack correctly downloaded.");
+                status.hasError = false;
+                status.isSuccessful = true;
+                status.proxyIdentificationError = false;
+                status.serverIdentificationError = false;
+                m_PackStatus.insert(statusKey(*pack), status);
+                Q_EMIT packDownloaded(*pack, status);
+            } else {
+                // Create the status of the server
+                ServerEngineStatus status;
+                status.downloadCorrectlyFinished = false;
+                status.engineMessages << tr("Pack file does not exists.");
+                status.hasError = true;
+                status.isSuccessful = false;
+                status.proxyIdentificationError = false;
+                status.serverIdentificationError = false;
+                m_PackStatus.insert(statusKey(*pack), status);
+                Q_EMIT packDownloaded(*pack, status);
             }
         }
     }
     m_queue.clear();
     Q_EMIT queueDowloaded();
     return true;
+}
+
+const ServerEngineStatus &LocalServerEngine::lastStatus(const Pack &pack)
+{
+    const QString &key = statusKey(pack);
+    return m_PackStatus[key];
+}
+
+const ServerEngineStatus &LocalServerEngine::lastStatus(const Server &server)
+{
+    const QString &key = statusKey(server);
+    return m_ServerStatus[key];
 }

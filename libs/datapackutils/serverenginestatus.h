@@ -24,36 +24,30 @@
  *   Contributors :                                                        *
  *       NAME <MAIL@ADRESS>                                                *
  ***************************************************************************/
-#include "iserverengine.h"
-#include "iservermanager.h"
+#ifndef DATAPACK_SERVERENGINESTATUS_H
+#define DATAPACK_SERVERENGINESTATUS_H
 
-#include <QDebug>
+#include <datapackutils/datapack_exporter.h>
 
-using namespace DataPack;
+#include <QStringList>
 
-IServerEngine::IServerEngine(QObject *parent) :
-    QObject(parent)
-{
-}
+namespace DataPack {
 
-QDebug operator<<(QDebug dbg, const DataPack::ServerEngineStatus &status)
-{
-    dbg.nospace() << "DataPack::ServerEngineStatus("
-                  << "hasError:" << status.hasError
-                  << "; dldCorrect:" << status.downloadCorrectlyFinished
-                  << "; proxyErr:" << status.proxyIdentificationError
-                  << "; identErr:" << status.serverIdentificationError
-                  << "; errors:" << status.errorMessages.join("/")
-                  << ")";
-    return dbg.space();
-}
+struct DATAPACK_EXPORT ServerEngineStatus {
+    ServerEngineStatus() :
+        hasError(false),
+        isSuccessful(false),
+        downloadCorrectlyFinished(false),
+        proxyIdentificationError(false),
+        serverIdentificationError(false)
+    {}
 
-QDebug operator<<(QDebug dbg, const DataPack::ServerEngineStatus *status)
-{
-    if (!status) {
-        dbg.nospace() << "DataPack::ServerEngineStatus(0x0)";
-        return dbg.space();
-    }
-    return operator<<(dbg, *status);
-}
+    bool hasError, isSuccessful;
+    bool downloadCorrectlyFinished;
+    bool proxyIdentificationError, serverIdentificationError;
+    QStringList errorMessages, engineMessages;
+};
 
+} // End namespace DataPack
+
+#endif // DATAPACK_SERVERENGINESTATUS_H

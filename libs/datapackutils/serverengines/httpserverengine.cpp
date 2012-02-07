@@ -57,6 +57,14 @@ namespace {
     const int MAX_AUTHENTIFICATION_TRIES = 3;
     const char * const  ICONEYES = "eyes.png";
 
+    static QString statusKey(const Pack &pack) {
+        return pack.uuid()+pack.version();
+    }
+
+    static QString statusKey(const Server &server) {
+        return server.uuid()+server.version();
+    }
+
 }
 
 ReplyData::ReplyData(QNetworkReply *reply, Server *server, Server::FileRequested fileType, const Pack &pack, QProgressBar *progBar) {
@@ -156,15 +164,24 @@ bool HttpServerEngine::startDownloadQueue()
         QNetworkReply *reply = 0;
 
         if (query.downloadDescriptionFiles) {
-            // Download server.conf.xml
+            // Create a network request for the server config
             QNetworkRequest request = createRequest(s->url(Server::ServerConfigurationFile));
             reply = m_NetworkAccessManager->get(request);
             m_replyToData.insert(reply, ReplyData(reply, s, Server::ServerConfigurationFile, query.progressBar));
             ++m_DownloadCount_Server;
+
+            // Create a status for the server
+            ServerEngineStatus status;
+            m_ServerStatus.insert(statusKey(*s), status);
         } else if (query.downloadPackFile) {
+            // Create a network request for the pack file
             QNetworkRequest request = createRequest(s->url(Server::PackFile, query.pack->serverFileName()));
             reply = m_NetworkAccessManager->get(request);
             m_replyToData.insert(reply, ReplyData(reply, s, Server::PackFile, *query.pack, query.progressBar));
+
+            // Create a status for the pack
+            ServerEngineStatus status;
+            m_PackStatus.insert(statusKey(*s), status);
         }
         connect(reply, SIGNAL(readyRead()), this, SLOT(serverReadyRead()));
         connect(reply, SIGNAL(finished()), this, SLOT(serverFinished()));
@@ -212,6 +229,7 @@ void HttpServerEngine::authenticationRequired(QNetworkReply *reply, QAuthenticat
         authenticator->setUser(dlg.login());
         authenticator->setPassword(dlg.password());
     }
+    /** \todo manage ServerEngineStatus here */
 }
 
 void HttpServerEngine::proxyAuthenticationRequired(const QNetworkProxy &proxy, QAuthenticator *authenticator)
@@ -231,6 +249,7 @@ void HttpServerEngine::proxyAuthenticationRequired(const QNetworkProxy &proxy, Q
             authenticator->setPassword(dlg.password());
         }
     }
+    /** \todo manage ServerEngineStatus here */
 }
 
 /** Server configuration file read enable. */
@@ -245,8 +264,9 @@ void HttpServerEngine::serverReadyRead()
 void HttpServerEngine::serverError(QNetworkReply::NetworkError error)
 {
     Q_UNUSED(error);
-    /** \todo code here */
+    /** \todo code network error management */
     --m_DownloadCount_Server;
+    /** \todo Add NetworkError to status ? */
 }
 
 /** Server or Pack description fully read. */
@@ -263,6 +283,11 @@ void HttpServerEngine::serverFinished()
     ReplyData &data = m_replyToData[reply];
     data.server->setConnected(true);
     reply->deleteLater(); // we don't need reply anymore
+    ServerEngineStatus *status = getStatus(data);
+    Q_ASSERT(status);
+    status->downloadCorrectlyFinished = true;
+    status->serverIdentificationError = false;
+    status->proxyIdentificationError = false;
 
     switch (data.fileType) {
     case Server::ServerConfigurationFile:
@@ -296,11 +321,21 @@ void HttpServerEngine::serverFinished()
     }
 }
 
+ServerEngineStatus *HttpServerEngine::getStatus(const ReplyData &data)
+{
+    if (data.server) {
+        return &m_ServerStatus[statusKey(*data.server)];
+    }
+    return &m_PackStatus[statusKey(data.pack)];
+}
+
 /** Reads Server description XML file and start the dowloading of pack description if needed. */
 void HttpServerEngine::afterServerConfigurationDownload(const ReplyData &data)
 {
     bool downloadPackDescriptionNeeded = false;
     Server *server = data.server;
+    ServerEngineStatus *status = getStatus(data);
+    Q_ASSERT(status);
 
     switch (server->urlStyle()) {
     case Server::Http:
@@ -311,6 +346,7 @@ void HttpServerEngine::afterServerConfigurationDownload(const ReplyData &data)
         // Read the XML from the buffer
         server->fromXml(data.response);
         downloadPackDescriptionNeeded = true;
+        status->engineMessages << tr("Server description file correctly downloaded.");
         break;
     }
     case Server::HttpPseudoSecuredAndZipped:
@@ -321,6 +357,9 @@ void HttpServerEngine::afterServerConfigurationDownload(const ReplyData &data)
         QFile zip(zipName);
         if (!zip.open(QFile::WriteOnly | QFile::Text)) {
             LOG_ERROR(tkTr(Trans::Constants::FILE_1_ISNOT_READABLE).arg(zip.fileName()));
+            status->errorMessages << tr("Server description file is not readable.");
+            status->hasError = true;
+            status->isSuccessful = false;
             return;
         }
         zip.write(data.response);
@@ -329,6 +368,9 @@ void HttpServerEngine::afterServerConfigurationDownload(const ReplyData &data)
         // unzip file
         if (!QuaZipTools::unzipFile(zipName)) {
             LOG_ERROR("Unable to unzip file: " + zipName);
+            status->errorMessages << tr("Server description file can not be unzipped.");
+            status->hasError = true;
+            status->isSuccessful = false;
             return;
         }
 
@@ -356,6 +398,7 @@ void HttpServerEngine::afterServerConfigurationDownload(const ReplyData &data)
 
     // Download all linked packagedescription -> see ServerContent --> server.content().packDescriptionFileNames()
     if (downloadPackDescriptionNeeded) {
+        status->engineMessages << tr("Adding pack description file to the download queue.");
         foreach(const QString &file, server->content().packDescriptionFileNames()) {
             QNetworkRequest request = createRequest(server->url(Server::PackDescriptionFile, file));
             QNetworkReply *reply = m_NetworkAccessManager->get(request);
@@ -372,12 +415,17 @@ void HttpServerEngine::afterPackDescriptionFileDownload(const ReplyData &data)
 {
     PackDescription desc;
     desc.fromXmlContent(data.response);
-    /** \todo add description to server manager */
-//    m_PackDescriptions.insert(data.reply->request().url().toString(), desc);
+    ServerEngineStatus *status = getStatus(data);
+    Q_ASSERT(status);
+    status->engineMessages.append(tr("Pack description correctly downloaded."));
 }
 
 void HttpServerEngine::afterPackFileDownload(const ReplyData &data)
 {
+    ServerEngineStatus *status = getStatus(data);
+    Q_ASSERT(status);
+    status->engineMessages.append(tr("Pack correctly downloaded."));
+
     // Save downladed content to persistently pack cache
     const Pack &pack = data.pack;
     QFileInfo toPersistentCache(pack.persistentlyCachedZipFileName());
@@ -397,6 +445,9 @@ void HttpServerEngine::afterPackFileDownload(const ReplyData &data)
     QFile out(toPersistentCache.absoluteFilePath());
     if (!out.open(QFile::WriteOnly)) {
         LOG_ERROR(tkTr(Trans::Constants::FILE_1_CAN_NOT_BE_CREATED).arg(toPersistentCache.absoluteFilePath()));
+        status->engineMessages.append(tr("Pack file can not be created in the persistent cache."));
+        status->hasError = true;
+        status->isSuccessful = false;
         /** \todo a better management of error is requiered */
         return;
     }
@@ -406,6 +457,8 @@ void HttpServerEngine::afterPackFileDownload(const ReplyData &data)
 
     // copy pack XML config
     QFile::copy(pack.originalXmlConfigFileName(), pack.persistentlyCachedXmlConfigFileName());
+
+    Q_EMIT packDownloaded(pack, *status);
 }
 
 void HttpServerEngine::createPackAndRegisterToServerManager(const Server &server, const QString &pathToPackDescription)
@@ -422,4 +475,16 @@ QNetworkRequest HttpServerEngine::createRequest(const QString &url)
                          .arg(qApp->applicationName())
                          .arg(qApp->applicationVersion()).toAscii());
     return request;
+}
+
+const ServerEngineStatus &HttpServerEngine::lastStatus(const Pack &pack)
+{
+    const QString &key = statusKey(pack);
+    return m_PackStatus[key];
+}
+
+const ServerEngineStatus &HttpServerEngine::lastStatus(const Server &server)
+{
+    const QString &key = statusKey(server);
+    return m_ServerStatus[key];
 }

@@ -37,8 +37,9 @@
 */
 
 namespace DataPack {
-namespace Internal {
 class IServerEngine;
+
+namespace Internal {
 
 class PackManager : public IPackManager
 {
@@ -47,7 +48,7 @@ public:
     explicit PackManager(QObject *parent = 0);
     ~PackManager();
 
-    bool init(const QVector<IServerEngine*> &engines);
+    bool init(const QVector<DataPack::IServerEngine*> &engines);
     void checkInstalledPacks();
 
     QList<Pack> installedPack(bool forceRefresh = false);
@@ -56,13 +57,17 @@ public:
 
     bool isPackInPersistentCache(const Pack &pack);
 
-    bool downloadPack(const Pack &pack);
+    bool downloadPack(const Pack &pack, QProgressBar *bar);
     bool installDownloadedPack(const Pack &pack);
     bool removePack(const Pack &pack);
 
 private:
+    void packDownloadDone();
+
+private:
     QList<Pack> m_InstalledPacks;
-    QVector<IServerEngine*> m_Engines;
+    QVector<DataPack::IServerEngine*> m_Engines;
+    QStringList m_Msg, m_Errors;
 };
 
 } // namespace Internal

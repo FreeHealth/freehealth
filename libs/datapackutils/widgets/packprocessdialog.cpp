@@ -148,7 +148,7 @@ void PackProcessDialog::setPackToProcess(const QList<Pack> &installPacks, const 
 //bool PackProcessDialog::isDependenciesAssumed() const
 //{}
 
-void PackProcessDialog::setServerEngines(const QVector<Internal::IServerEngine*> &engines)
+void PackProcessDialog::setServerEngines(const QVector<DataPack::IServerEngine*> &engines)
 {
     m_Engines = engines;
 }
@@ -209,7 +209,7 @@ void PackProcessDialog::startPackDownloads()
 
         // Download the pack from this server
         for(int j=0; j < m_Engines.count(); ++j) {
-            Internal::IServerEngine *engine = m_Engines.at(j);
+            DataPack::IServerEngine *engine = m_Engines.at(j);
             if (engine->managesServer(server)) {
                 // Create the label/progress for the pack
                 QLabel *packLabel = new QLabel(pack.name(), m_ScrollWidget);
@@ -217,7 +217,7 @@ void PackProcessDialog::startPackDownloads()
                 m_ScrollLayout->addWidget(packLabel, i + 1, 0);
                 m_ScrollLayout->addWidget(bar, i + 1, 1);
 
-                Internal::ServerEngineQuery query;
+                DataPack::ServerEngineQuery query;
                 query.downloadPackFile = true;
                 query.pack = &pack;
                 query.server = &server;
@@ -231,7 +231,7 @@ void PackProcessDialog::startPackDownloads()
     // Start downloads
     bool downloading = false;
     for(int i = 0; i < m_Engines.count(); ++i) {
-        Internal::IServerEngine *engine = m_Engines.at(i);
+        DataPack::IServerEngine *engine = m_Engines.at(i);
         if (engine->downloadQueueCount() > 0) {
             downloading = true;
             connect(engine, SIGNAL(queueDowloaded()), this, SLOT(packDownloadDone()));

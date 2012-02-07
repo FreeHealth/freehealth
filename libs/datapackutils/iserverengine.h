@@ -27,7 +27,9 @@
 #ifndef DATAPACK_ISERVERENGINE_H
 #define DATAPACK_ISERVERENGINE_H
 
+#include <datapackutils/datapack_exporter.h>
 #include <datapackutils/iservermanager.h>
+#include <datapackutils/serverenginestatus.h>
 #include <datapackutils/server.h>
 #include <datapackutils/pack.h>
 #include <datapackutils/serveridentification.h>
@@ -42,9 +44,8 @@
 */
 
 namespace DataPack {
-namespace Internal {
 
-struct ServerEngineQuery {
+struct DATAPACK_EXPORT ServerEngineQuery {
     ServerEngineQuery() :
         server(0), ident(0), pack(0), progressBar(0),
         forceDescriptionFromLocalCache(false),
@@ -54,14 +55,14 @@ struct ServerEngineQuery {
 
     Server *server;
     ServerIdentification *ident;
-    Pack *pack;
+    const Pack *pack;
     QProgressBar *progressBar;
     bool forceDescriptionFromLocalCache;
     bool downloadDescriptionFiles;
     bool downloadPackFile;
 };
 
-class IServerEngine : public QObject
+class DATAPACK_EXPORT IServerEngine : public QObject
 {
     Q_OBJECT
 public:
@@ -72,11 +73,17 @@ public:
     virtual int downloadQueueCount() const = 0;
     virtual bool startDownloadQueue() = 0;
 
+    virtual const ServerEngineStatus &lastStatus(const Pack &pack) = 0;
+    virtual const ServerEngineStatus &lastStatus(const Server &server) = 0;
+
 Q_SIGNALS:
     void queueDowloaded();
+    void packDownloaded(const Pack &pack, const ServerEngineStatus &status);
 };
 
-} // namespace Internal
 } // namespace DataPack
+
+DATAPACK_EXPORT QDebug operator<<(QDebug dbg, const DataPack::ServerEngineStatus &status);
+DATAPACK_EXPORT QDebug operator<<(QDebug dbg, const DataPack::ServerEngineStatus *status);
 
 #endif // DATAPACK_ISERVERENGINE_H

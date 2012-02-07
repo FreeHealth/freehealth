@@ -30,7 +30,8 @@ HEADERS += datapack_exporter.h \
     categorylistwidget.h \
     packdependencychecker.h \
     ipackmanager.h \
-    packmanager.h
+    packmanager.h \
+    serverenginestatus.h
 
 SOURCES += \
     servermanager.cpp \
@@ -59,6 +60,7 @@ FORMS += \
     widgets/serverpackeditor.ui \
     widgets/addserverdialog.ui \
     widgets/packprocessdialog.ui
+
 
 
 

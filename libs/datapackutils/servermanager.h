@@ -44,9 +44,10 @@ QT_END_NAMESPACE
 */
 
 namespace DataPack {
+class IServerEngine;
+
 namespace Internal {
 class ServerManagerPrivate;
-class IServerEngine;
 class LocalServerEngine;
 class HttpServerEngine;
 
@@ -56,7 +57,7 @@ class ServerManager : public IServerManager
 public:
     explicit ServerManager(QObject *parent = 0);
     ~ServerManager();
-    void init(const QVector<IServerEngine*> &engines);
+    void init(const QVector<DataPack::IServerEngine*> &engines);
 
     // IServerManager interface
     // Manage path
@@ -107,7 +108,7 @@ public:
     // Hidden Private part
     const QVector<Server> &servers() const {return m_Servers;}
     void createServerPackList(const Server &server);
-    const QVector<IServerEngine*> &serverEngines() const {return m_WorkingEngines;}
+    const QVector<DataPack::IServerEngine*> &serverEngines() const {return m_WorkingEngines;}
 
 private Q_SLOTS:
 //    bool downloadDataPack(const Server &server, const Pack &pack, QProgressBar *progressBar);
@@ -124,7 +125,7 @@ private:
     QList<Pack> m_PacksToInstall;
     QList<Pack> m_InstalledPacks;
 
-    QVector<IServerEngine *> m_WorkingEngines;
+    QVector<DataPack::IServerEngine *> m_WorkingEngines;
 //    FtpServerEngine *m_FtpEngine;
 
     QProgressBar *m_ProgressBar;
