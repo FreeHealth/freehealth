@@ -58,10 +58,13 @@ public:
     virtual bool isPackInPersistentCache(const Pack &pack) = 0;
 
     virtual bool downloadPack(const Pack &pack, QProgressBar *bar) = 0;
+    virtual bool checkCachedPackFileIntegrity(const Pack &pack) = 0;
     virtual bool installDownloadedPack(const Pack &pack) = 0;
     virtual bool removePack(const Pack &pack) = 0;
 
     /** \todo add signal including the ServerEngineStatus */
+Q_SIGNALS:
+    void packDownloaded(const Pack &pack, const ServerEngineStatus &status);
 
 };
 

@@ -58,11 +58,12 @@ public:
     bool isPackInPersistentCache(const Pack &pack);
 
     bool downloadPack(const Pack &pack, QProgressBar *bar);
+    bool checkCachedPackFileIntegrity(const Pack &pack);
     bool installDownloadedPack(const Pack &pack);
     bool removePack(const Pack &pack);
 
-private:
-    void packDownloadDone();
+private Q_SLOTS:
+    void packDownloadDone(const Pack &pack, const ServerEngineStatus &status);
 
 private:
     QList<Pack> m_InstalledPacks;

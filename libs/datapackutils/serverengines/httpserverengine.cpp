@@ -263,10 +263,18 @@ void HttpServerEngine::serverReadyRead()
 /** An error occured during the network access. */
 void HttpServerEngine::serverError(QNetworkReply::NetworkError error)
 {
-    Q_UNUSED(error);
-    /** \todo code network error management */
+    WARN_FUNC << error;
+    QNetworkReply *reply = qobject_cast<QNetworkReply*>(sender());
+    ReplyData &data = m_replyToData[reply];
+    reply->deleteLater(); // we don't need reply anymore
+    ServerEngineStatus *status = getStatus(data);
+    Q_ASSERT(status);
+    status->hasError = true;
+    status->isSuccessful = false;
+    status->errorMessages << tr("Server error: %1").arg(reply->errorString());
+    LOG_ERROR(tr("Server error: %1").arg(reply->errorString()));
+    Q_EMIT packDownloaded(data.pack, *status);
     --m_DownloadCount_Server;
-    /** \todo Add NetworkError to status ? */
 }
 
 /** Server or Pack description fully read. */

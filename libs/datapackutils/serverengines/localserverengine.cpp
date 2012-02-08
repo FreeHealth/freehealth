@@ -29,6 +29,7 @@
 #include <datapackutils/servermanager.h>
 
 #include <utils/global.h>
+#include <utils/log.h>
 
 #include <QDir>
 #include <QFile>
@@ -52,6 +53,7 @@ static QString statusKey(const Server &server) {
 LocalServerEngine::LocalServerEngine(QObject *parent) :
     IServerEngine(parent)
 {
+    setObjectName("LocalServerEngine");
 }
 
 bool LocalServerEngine::managesServer(const Server &server)
@@ -102,13 +104,11 @@ bool LocalServerEngine::startDownloadQueue()
                 // copy pack to datapack core persistentCachePath
                 /** \todo change the newPath construction, use Pack path */
                 QString newPath = QFileInfo(pack->persistentlyCachedZipFileName()).absolutePath();
-                QDir newDir(newPath);
-                if (!newDir.exists()) {
-                    QDir().mkpath(newPath);
-                }
+                QString error;
+                Utils::removeDirRecursively(newPath, &error);
+                QDir().mkpath(newPath);
+                // copy pack File and XML config
                 QFile::copy(local.absoluteFilePath(), pack->persistentlyCachedZipFileName());
-
-                // copy pack XML config
                 QFile::copy(pack->originalXmlConfigFileName(), pack->persistentlyCachedXmlConfigFileName());
 
                 // Create the status of the server
@@ -122,6 +122,7 @@ bool LocalServerEngine::startDownloadQueue()
                 m_PackStatus.insert(statusKey(*pack), status);
                 Q_EMIT packDownloaded(*pack, status);
             } else {
+                LOG_ERROR("Pack file does not exists.");
                 // Create the status of the server
                 ServerEngineStatus status;
                 status.downloadCorrectlyFinished = false;

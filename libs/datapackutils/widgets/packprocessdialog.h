@@ -35,14 +35,14 @@ class QGridLayout;
  * \file packprocessdialog.h
  * \author Eric MAEKER <eric.maeker@gmail.com>
  * \version 0.6.2
- * \date 30 Jan 2012
- * \warning Needs Qt >= 4.7
+ * \date 07 Feb 2012
 */
 
 namespace DataPack {
 class Pack;
 class IServerManager;
 class IServerEngine;
+class ServerEngineStatus;
 
 namespace Ui {
     class PackProcessDialog;
@@ -79,7 +79,7 @@ protected:
 
 private Q_SLOTS:
     void processPacks();
-    void packDownloadDone();
+    void packDownloadDone(const Pack &pack, const ServerEngineStatus &status);
 
 private:
     void startPackDownloads();

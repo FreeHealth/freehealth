@@ -31,12 +31,16 @@
 
 #include <utils/global.h>
 #include <utils/log.h>
+#include <translationutils/constants.h>
+#include <translationutils/trans_filepathxml.h>
+#include <quazip/global.h>
 
 #include <QDir>
 #include <QProgressBar>
 
 using namespace DataPack;
 using namespace DataPack::Internal;
+using namespace Trans::ConstantTranslations;
 
 static inline DataPack::DataPackCore &core() {return DataPack::DataPackCore::instance();}
 static inline DataPack::Internal::ServerManager *serverManager() {return qobject_cast<DataPack::Internal::ServerManager *>(DataPack::DataPackCore::instance().serverManager());}
@@ -44,6 +48,7 @@ static inline DataPack::Internal::ServerManager *serverManager() {return qobject
 PackManager::PackManager(QObject *parent) :
     IPackManager(parent)
 {
+    setObjectName("PackManager");
 }
 
 PackManager::~PackManager()
@@ -128,13 +133,25 @@ bool PackManager::downloadPack(const Pack &pack, QProgressBar *bar)
         return false;
     }
 
-    // Pack not already downloaded ?
-    if (!isPackInPersistentCache(pack)) {
-        if (bar) {
-            bar->setRange(0,1);
-            bar->setValue(1);
+    // Pack already downloaded ?
+    if (isPackInPersistentCache(pack)) {
+        qWarning() << "IN CACHE" << pack.name() << pack.version();
+        if (checkCachedPackFileIntegrity(pack)) {
+            qWarning() << "PACK ALREDAY DOWNLOADED" << pack.persistentlyCachedZipFileName();
+            if (bar) {
+                bar->setRange(0,1);
+                bar->setValue(1);
+            }
+            ServerEngineStatus status;
+            status.downloadCorrectlyFinished = true;
+            status.hasError = false;
+            status.isSuccessful = true;
+            Q_EMIT packDownloaded(pack, status);
+            return true;
+        } else {
+            QString error;
+            Utils::removeDirRecursively(pack.persistentlyCachedZipFileName(), &error);
         }
-        return true;
     }
 
     // Download the pack from this server
@@ -159,7 +176,7 @@ bool PackManager::downloadPack(const Pack &pack, QProgressBar *bar)
         DataPack::IServerEngine *engine = m_Engines.at(i);
         if (engine->downloadQueueCount() > 0) {
             downloading = true;
-            connect(engine, SIGNAL(queueDowloaded()), this, SLOT(packDownloadDone()));
+            connect(engine, SIGNAL(packDownloaded(Pack,ServerEngineStatus)), this, SLOT(packDownloadDone(Pack, ServerEngineStatus)));
             engine->startDownloadQueue();
         }
     }
@@ -169,77 +186,101 @@ bool PackManager::downloadPack(const Pack &pack, QProgressBar *bar)
     }
 }
 
-void PackManager::packDownloadDone()
+void PackManager::packDownloadDone(const Pack &pack, const ServerEngineStatus &status)
 {
-    // All engine finished ?
-    for(int i=0; i<m_Engines.count(); ++i) {
-        if (m_Engines.at(i)->downloadQueueCount()>0) {
-            return;
-        }
+    qWarning() << "PACKDOWNLOAD DONE" << pack.uuid() << status;
+
+    ServerEngineStatus s = status;
+    // Check status
+
+    // Check file
+    if (!checkCachedPackFileIntegrity(pack)) {
+        LOG_ERROR(tr("Pack file corrupted (%1)").arg(pack.persistentlyCachedZipFileName()));
+        m_Errors << tr("Pack file corrupted (%1)").arg(pack.persistentlyCachedZipFileName());
+        s.hasError = true;
+        s.isSuccessful = false;
+        s.errorMessages << tr("Pack file corrupted (%1)").arg(pack.persistentlyCachedZipFileName());
+        Q_EMIT packDownloaded(pack, s);
+        return;
     }
 
-    // Check MD5 of downloaded files
-//    QList<Pack> dld, toInstall;
-//    dld << m_InstallPacks;
-//    dld << m_UpdatePacks;
-//    for(int i=0; i < dld.count(); ++i) {
-//        const Pack &p = dld.at(i);
-//        QByteArray downloadedMd5 = Utils::md5(p.persistentlyCachedZipFileName());
-//        if (downloadedMd5 != p.md5ControlChecksum()) {
-//            m_Error = true;
-//            m_Msg << tr("Downloaded file is corrupted. Please retry to download the pack: %1.").arg(p.name());
-//        } else {
-//            toInstall << p;
-//        }
-//    }
+    LOG(QString("Requested pack is downloaded: %1").arg(pack.persistentlyCachedZipFileName()));
+    Q_EMIT packDownloaded(pack, status);
+}
 
-//    LOG(QString("Requested packs are downloaded in %1").arg(core().persistentCachePath()));
-//    QStringList logPacks;
-//    for(int i=0; i < toInstall.count(); ++i) {
-//        const Pack &p = toInstall.at(i);
-//        logPacks << QString("%1 (%2, %3)")
-//                    .arg(p.name())
-//                    .arg(p.uuid())
-//                    .arg(p.version());
-//    }
-//    LOG(QString("Requested packs: %1").arg(logPacks.join("; ")));
-
-//    // Copy/Unzip all packs to datapackInstallPath according to PackDescription::InstallToPath
-//    for(int i=0; i < toInstall.count(); ++i) {
-//        const Pack &p = toInstall.at(i);
-//        const QString pathTo = p.unzipPackToPath();
-//        QDir to(pathTo);
-//        if (!to.exists()) {
-//            to.mkpath(pathTo);
-//        }
-
-//        /** \todo manage updating packs */
-
-//        // Unzip pack to the install path
-//        bool error = false;
-//        if (!QuaZipTools::unzipFile(p.persistentlyCachedZipFileName(), pathTo)) {
-//            LOG_ERROR(tr("Unable to unzip pack file %1 to %2").arg(p.persistentlyCachedZipFileName()).arg(pathTo));
-//            m_Error = true;
-//            m_Msg << tr("Unable to unzip pack file %1 to %2").arg(p.persistentlyCachedZipFileName()).arg(pathTo);
-//            error = true;
-//        }
-//        // Add the pack description for future analysis (update, remove...)
-//        if (!QFile::copy(p.persistentlyCachedXmlConfigFileName(), p.installedXmlConfigFileName())) {
-//            LOG_ERROR(tr("Unable to copy pack description file"));
-//            m_Error = true;
-//            m_Msg << tr("Unable to copy pack description file");
-//            error = true;
-//        }
-//        if (error) {
-//            m_Msg << tr("An error was detected during installation of %1.").arg(p.name());
-//        } else {
-//            m_Msg << tr("Pack %1 was correctly installed.").arg(p.name());
-//        }
-//    }
+bool PackManager::checkCachedPackFileIntegrity(const Pack &pack)
+{
+    QByteArray downloadedMd5 = Utils::md5(pack.persistentlyCachedZipFileName());
+    return (downloadedMd5 == pack.md5ControlChecksum());
 }
 
 bool PackManager::installDownloadedPack(const Pack &pack)
-{}
+{
+    WARN_FUNC << pack.uuid();
+    const QString &pathTo = pack.unzipPackToPath();
+    QDir to(pathTo);
+    if (!to.exists()) {
+        if (!to.mkpath(pathTo)) {
+            LOG_ERROR(tkTr(Trans::Constants::PATH_1_CANNOT_BE_CREATED).arg(pathTo));
+            m_Errors << tkTr(Trans::Constants::PATH_1_CANNOT_BE_CREATED).arg(pathTo);
+            return false;
+        }
+    }
+
+    /** \todo manage updating packs */
+
+    // Unzip pack to the install path
+    bool error = false;
+    if (!QuaZipTools::unzipFile(pack.persistentlyCachedZipFileName(), pathTo)) {
+        LOG_ERROR(tr("Unable to unzip pack file %1 to %2").arg(pack.persistentlyCachedZipFileName()).arg(pathTo));
+        m_Errors << tr("Unable to unzip pack file %1 to %2").arg(pack.persistentlyCachedZipFileName()).arg(pathTo);
+        error = true;
+    }
+
+    // Add the pack description for future analysis (update, remove...)
+    QFile testExisting(pack.installedXmlConfigFileName());
+    if (testExisting.exists()) {
+        if (!testExisting.remove()) {
+            LOG_ERROR(QString("Unable to remove old pack configuration file: %1").arg(pack.installedXmlConfigFileName()));
+            return false;
+        }
+    }
+    if (!QFile::copy(pack.persistentlyCachedXmlConfigFileName(), pack.installedXmlConfigFileName())) {
+        LOG_ERROR(tr("Unable to copy pack description file. Source: %1. Dest: %2")
+                  .arg(pack.persistentlyCachedXmlConfigFileName())
+                  .arg(pack.installedXmlConfigFileName()));
+        m_Errors << tr("Unable to copy pack description file");
+        error = true;
+    }
+
+    if (error)
+        m_Errors << tr("An error was detected during installation of %1.").arg(pack.name());
+    else
+        m_Msg << tr("Pack %1 was correctly installed.").arg(pack.name());
+
+    // Recheck installed packs
+    m_InstalledPacks.clear();
+    checkInstalledPacks();
+    return error;
+}
+
 bool PackManager::removePack(const Pack &pack)
-{}
+{
+    // Remove the zipPath used for the pack
+    QFileInfo zipPath(pack.unzipPackToPath());
+    if (!zipPath.exists()) {
+        LOG_ERROR(tr("Unable to remove pack %1, unzip path does not exists (%2)").arg(pack.name().arg(pack.unzipPackToPath())));
+        m_Errors << tr("Unable to remove pack %1, unzip path does not exists (%2)").arg(pack.name().arg(pack.unzipPackToPath()));
+        return false;
+    }
+    QString error;
+    Utils::removeDirRecursively(pack.unzipPackToPath(), &error);
+    if (!error.isEmpty()) {
+        LOG_ERROR(tr("Unable to remove pack %1, error: %2").arg(pack.name().arg(error)));
+        m_Errors << tr("Unable to remove pack %1, error: %2").arg(pack.name().arg(error));
+        return false;
+    }
+    m_Msg << tr("Pack %1 correctly removed.").arg(pack.name());
+    return true;
+}
 
