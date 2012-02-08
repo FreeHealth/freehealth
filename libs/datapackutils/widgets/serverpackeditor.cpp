@@ -266,7 +266,7 @@ void ServerPackEditor::populatePackView(const int packId)
     // Vendor ?
     QString vendor = descr.data(PackDescription::Vendor).toString();
     if (vendor.isEmpty()) {
-        vendor = tr("The FreeMedForms community");
+        vendor = tkTr(Trans::Constants::THE_FREEMEDFORMS_COMMUNITY);
     }
     QString summary;
 
@@ -282,7 +282,7 @@ void ServerPackEditor::populatePackView(const int packId)
             .arg(descr.data(PackDescription::ShortDescription).toString())
             .arg(tkTr(Trans::Constants::VERSION))
             .arg(descr.data(PackDescription::Version).toString())
-            .arg(tr("Last modification"))
+            .arg(tkTr(Trans::Constants::LAST_MODIFICATION))
             .arg(descr.data(PackDescription::LastModificationDate).toDate().toString("dd MM yyyy"))
             .arg(tkTr(Trans::Constants::AUTHOR))
             .arg(descr.data(PackDescription::Author).toString())

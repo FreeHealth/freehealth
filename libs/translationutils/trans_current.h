@@ -32,6 +32,7 @@ namespace Trans {
 namespace Constants {
 
 // Widely used words
+const char* const THE_FREEMEDFORMS_COMMUNITY         = QT_TRANSLATE_NOOP("tkConstants", "The FreeMedForms community");
 const char* const TYPE                               = QT_TRANSLATE_NOOP("tkConstants", "Type");
 const char* const STATUS                             = QT_TRANSLATE_NOOP("tkConstants", "Status");
 const char* const ICD10                              = QT_TRANSLATE_NOOP("tkConstants", "ICD10");
@@ -80,7 +81,7 @@ const char* const PRINTING                          = QT_TRANSLATE_NOOP("tkConst
 // DataPack related
 const char* const DATAPACK                          = QT_TRANSLATE_NOOP("tkConstants", "Data pack");
 const char* const DATAPACK_MANAGER                  = QT_TRANSLATE_NOOP("tkConstants", "Data pack manager");
-
+const char* const LAST_MODIFICATION                 = QT_TRANSLATE_NOOP("tkConstants", "Last modification");
 
 } // end Constants
 } // end TranslationUtils

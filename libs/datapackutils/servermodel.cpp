@@ -115,7 +115,7 @@ QVariant ServerModel::data(const QModelIndex &index, int role) const
             case CreationDate: return s.description().data(ServerDescription::CreationDate).toDate().toString(QLocale().dateFormat());
             case Vendor:
                 if (s.description().data(ServerDescription::Vendor).toString().isEmpty())
-                    return tr("The FreeMedForms community");
+                    return tkTr(Trans::Constants::THE_FREEMEDFORMS_COMMUNITY);
                 else
                     return s.description().data(ServerDescription::Vendor);
             case RecommendedUpdateFrequencyIndex: return s.recommendedUpdateFrequency();

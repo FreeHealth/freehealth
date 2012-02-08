@@ -111,6 +111,33 @@ static QString packToHtml(const PackItem &item)
             .arg(inst);
 }
 
+static QString packTooltip(const PackItem &item)
+{
+    const PackDescription &descr = item.pack.description();
+    QString vendor = descr.data(PackDescription::Vendor).toString();
+    if (vendor.isEmpty()) {
+        vendor = tkTr(Trans::Constants::THE_FREEMEDFORMS_COMMUNITY);
+    }
+    return QString("<p style=\"font-weight:bold;font-size:large;\">%1</p>"
+                      "<p style=\"font-size:small;margin-left:20px;color:gray\">"
+                      "%2: %3<br />"
+                      "%4: %5<br />"
+                      "%6: %7<br />"
+                      "%8: %9"
+                      "</p>"
+                       )
+            .arg(descr.data(PackDescription::Label).toString().replace(" ","&nbsp;"))
+            .arg(tkTr(Trans::Constants::VERSION))
+            .arg(descr.data(PackDescription::Version).toString())
+            .arg(tkTr(Trans::Constants::LAST_MODIFICATION))
+            .arg(descr.data(PackDescription::LastModificationDate).toDate().toString("dd MM yyyy"))
+            .arg(tkTr(Trans::Constants::AUTHOR))
+            .arg(descr.data(PackDescription::Author).toString())
+            .arg(tkTr(Trans::Constants::VENDOR))
+            .arg(vendor)
+            ;
+}
+
 static QIcon iconForPack(const Pack &p)
 {
     QString f = p.description().data(PackDescription::GeneralIcon).toString();
@@ -321,8 +348,8 @@ QVariant PackModel::data(const QModelIndex &index, int role) const
         case IsInstalled: return d->m_Items.at(row).isInstalled;
         case IsAnUpdate: return d->m_Items.at(row).isAnUpdate;
         }
-    } else if (role==role==Qt::ToolTipRole && index.column()==Label) {
-        return packToHtml(d->m_Items.at(row));
+    } else if (role==Qt::ToolTipRole && index.column()==Label) {
+        return packTooltip(d->m_Items.at(row));
     } else if (d->m_PackCheckable && role==Qt::CheckStateRole) {
         return d->m_Items.at(row).userCheckState;
     } else if (role==Qt::DecorationRole) {
