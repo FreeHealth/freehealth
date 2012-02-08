@@ -29,12 +29,29 @@
         <text lang="en">First release.</text>
       </updateversion>
     </updateinfo>
+    <htmldescription lang="fr">
+        &lt;p>&lt;b>Le serveur de données par défaut du projet FreeMedForms&lt;/b> est disponible en version
+        internet ou en version locale.&lt;br />
+        &lt;br />
+        Il donne accès aux différentes bases de données libres ou distribuées à but non commercial telles que&nbsp;:&lt;br />
+        • La base de données thérapeutique 100% libre (FDA uniquement, sans les interactions médicamenteuses)&nbsp;&nbsp;;&lt;br />
+        • Les bases de données thérapeutique distribuables sans but commercial pour différents pays (comme
+        la France, le Canada, la Belgique...). Les données des moteurs d'interaction sont aussi disponibles&nbsp;&nbsp;;&lt;br />
+        • Une base de données de formulaires patients destinés à différents corps de métiers et/ou
+        différentes spécialités médicales et/ou chirurgicales.&lt;br />
+        &lt;br />
+        &lt;br />
+        Il est impératif de mettre à jour régulièrement vos paquets de données par le biais de ce
+        serveur ou de ses mirroirs sur l'Internet.
+        &lt;/p>
+    </htmldescription>
 
   </ServerDescription>
 
   <ServerContents>
     <Pack serverFileName="./icd10/icd10.xml"/>
-    <Pack serverFileName="./drugs/drugs.xml"/>
+    <Pack serverFileName="./drugs/all/drugs.xml"/>
+    <Pack serverFileName="./drugs/fr-only/drugs.xml"/>
   </ServerContents>
 
 </DataPackServer>

@@ -34,7 +34,8 @@
 
   <ServerContents>
     <Pack serverFileName="./icd10/icd10.xml"/>
-    <Pack serverFileName="./drugs/drugs.xml"/>
+    <Pack serverFileName="./drugs/all/drugs.xml"/>
+    <Pack serverFileName="./drugs/fr-only/drugs.xml"/>
   </ServerContents>
 
 </DataPackServer>
