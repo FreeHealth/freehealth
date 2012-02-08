@@ -209,9 +209,6 @@ void PackProcessDialog::packDownloadDone(const Pack &pack, const ServerEngineSta
     if (status.isSuccessful && !status.hasError) {
         packManager()->installDownloadedPack(pack);
     }
-
-    // process the removals
-    removePacks();
 }
 
 void PackProcessDialog::removePacks()
@@ -235,24 +232,7 @@ void PackProcessDialog::removePacks()
         // Create a label
         QLabel *label = new QLabel(tr("Deleting packs"), m_ScrollWidget);
         m_ScrollLayout->addWidget(label, ++r, 0, 0, 10);
-
-        // Remove the zipPath used for the pack
-        QFileInfo zipPath(p.unzipPackToPath());
-        if (!zipPath.exists()) {
-            LOG_ERROR(tr("Unable to remove pack %1, unzip path does not exists (%2)").arg(p.name().arg(p.unzipPackToPath())));
-            m_Error = true;
-            m_Msg << tr("Unable to remove pack %1, unzip path does not exists (%2)").arg(p.name().arg(p.unzipPackToPath()));
-            continue;
-        }
-        QString error;
-        Utils::removeDirRecursively(p.unzipPackToPath(), &error);
-        if (!error.isEmpty()) {
-            LOG_ERROR(tr("Unable to remove pack %1, error: %2").arg(p.name().arg(error)));
-            m_Error = true;
-            m_Msg << tr("Unable to remove pack %1, error: %2").arg(p.name().arg(error));
-        } else {
-            m_Msg << tr("Pack %1 correctly removed.").arg(p.name());
-        }
+        packManager()->removePack(p);
     }
     clearTemporaries();
 }
