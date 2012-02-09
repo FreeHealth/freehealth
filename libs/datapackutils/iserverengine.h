@@ -78,7 +78,7 @@ public:
 
 Q_SIGNALS:
     void queueDowloaded();
-    void packDownloaded(const Pack &pack, const ServerEngineStatus &status);
+    void packDownloaded(const DataPack::Pack &pack, const DataPack::ServerEngineStatus &status);
 };
 
 } // namespace DataPack

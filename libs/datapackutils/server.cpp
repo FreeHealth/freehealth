@@ -150,7 +150,7 @@ QString Server::url(const FileRequested &file, const QString &fileName) const
             QFileInfo info(fileName);
             if (info.isRelative()) {
                 QString t = m_Url;
-                info.setFile(t.replace("file:/", "") + fileName);
+                info.setFile(t.replace("file:/", "") + "/" + fileName);
             }
             return info.absoluteFilePath();
         }

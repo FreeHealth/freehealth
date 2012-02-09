@@ -64,8 +64,9 @@ public:
 
     /** \todo add signal including the ServerEngineStatus */
 Q_SIGNALS:
-    void packDownloaded(const Pack &pack, const ServerEngineStatus &status);
-
+    void packDownloaded(const DataPack::Pack &pack, const DataPack::ServerEngineStatus &status);
+    void packInstalled(const DataPack::Pack &pack);
+    void packRemoved(const DataPack::Pack &pack);
 };
 
 }  // End namespace DataPack

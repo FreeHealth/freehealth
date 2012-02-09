@@ -83,7 +83,7 @@ PackProcessDialog::PackProcessDialog(QWidget *parent) :
     setServerEngines(serverManager()->serverEngines());
 
     connect(ui->buttonBox->button(QDialogButtonBox::Apply), SIGNAL(pressed()), this, SLOT(processPacks()));
-    connect(packManager(), SIGNAL(packDownloaded(Pack,ServerEngineStatus)), this, SLOT(packDownloadDone(Pack, ServerEngineStatus)));
+    connect(packManager(), SIGNAL(packDownloaded(DataPack::Pack, DataPack::ServerEngineStatus)), this, SLOT(packDownloadDone(DataPack::Pack, DataPack::ServerEngineStatus)));
 }
 
 PackProcessDialog::~PackProcessDialog()
@@ -208,7 +208,7 @@ void PackProcessDialog::startPackDownloads()
 }
 
 
-void PackProcessDialog::packDownloadDone(const Pack &pack, const ServerEngineStatus &status)
+void PackProcessDialog::packDownloadDone(const DataPack::Pack &pack, const DataPack::ServerEngineStatus &status)
 {
     if (status.isSuccessful && !status.hasError) {
         packManager()->installDownloadedPack(pack);

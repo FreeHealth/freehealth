@@ -63,7 +63,7 @@ public:
     bool removePack(const Pack &pack);
 
 private Q_SLOTS:
-    void packDownloadDone(const Pack &pack, const ServerEngineStatus &status);
+    void packDownloadDone(const DataPack::Pack &pack, const DataPack::ServerEngineStatus &status);
 
 private:
     QList<Pack> m_InstalledPacks;

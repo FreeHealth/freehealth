@@ -79,7 +79,7 @@ protected:
 
 private Q_SLOTS:
     void processPacks();
-    void packDownloadDone(const Pack &pack, const ServerEngineStatus &status);
+    void packDownloadDone(const DataPack::Pack &pack, const DataPack::ServerEngineStatus &status);
 
 private:
     void startPackDownloads();

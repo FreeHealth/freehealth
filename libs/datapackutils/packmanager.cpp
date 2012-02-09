@@ -37,6 +37,7 @@
 
 #include <QDir>
 #include <QProgressBar>
+#include <QFile>
 
 using namespace DataPack;
 using namespace DataPack::Internal;
@@ -176,7 +177,7 @@ bool PackManager::downloadPack(const Pack &pack, QProgressBar *bar)
         DataPack::IServerEngine *engine = m_Engines.at(i);
         if (engine->downloadQueueCount() > 0) {
             downloading = true;
-            connect(engine, SIGNAL(packDownloaded(Pack,ServerEngineStatus)), this, SLOT(packDownloadDone(Pack, ServerEngineStatus)));
+            connect(engine, SIGNAL(packDownloaded(DataPack::Pack, DataPack::ServerEngineStatus)), this, SLOT(packDownloadDone(DataPack::Pack, DataPack::ServerEngineStatus)));
             engine->startDownloadQueue();
         }
     }
@@ -186,7 +187,7 @@ bool PackManager::downloadPack(const Pack &pack, QProgressBar *bar)
     }
 }
 
-void PackManager::packDownloadDone(const Pack &pack, const ServerEngineStatus &status)
+void PackManager::packDownloadDone(const DataPack::Pack &pack, const DataPack::ServerEngineStatus &status)
 {
     qWarning() << "PACKDOWNLOAD DONE" << pack.uuid() << status;
 
@@ -258,6 +259,8 @@ bool PackManager::installDownloadedPack(const Pack &pack)
     else
         m_Msg << tr("Pack %1 was correctly installed.").arg(pack.name());
 
+    Q_EMIT packInstalled(pack);
+
     // Recheck installed packs
     m_InstalledPacks.clear();
     checkInstalledPacks();
@@ -281,6 +284,9 @@ bool PackManager::removePack(const Pack &pack)
         return false;
     }
     m_Msg << tr("Pack %1 correctly removed.").arg(pack.name());
+
+    Q_EMIT packRemoved(pack);
+
     return true;
 }
 
