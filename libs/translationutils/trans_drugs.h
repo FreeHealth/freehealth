@@ -62,6 +62,10 @@ const char* const INFORMATION                   = QT_TRANSLATE_NOOP("tkConstants
 const char* const INN_DUPLICATION               = QT_TRANSLATE_NOOP("tkConstants", "Molecule is duplicated");
 const char* const CLASS_DUPLICATION             = QT_TRANSLATE_NOOP("tkConstants", "Class is duplicated");
 
+// For datapack types
+const char* const DRUGS_WITH_INTERACTIONS       = QT_TRANSLATE_NOOP("tkConstants", "Drug database with interaction database");
+const char* const DRUGS_WITHOUT_INTERACTIONS    = QT_TRANSLATE_NOOP("tkConstants", "Drug database without interaction database");
+
 } // end Constants
 } // end TranslationUtils
 

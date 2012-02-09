@@ -82,6 +82,7 @@ const char* const PRINTING                          = QT_TRANSLATE_NOOP("tkConst
 const char* const DATAPACK                          = QT_TRANSLATE_NOOP("tkConstants", "Data pack");
 const char* const DATAPACK_MANAGER                  = QT_TRANSLATE_NOOP("tkConstants", "Data pack manager");
 const char* const LAST_MODIFICATION                 = QT_TRANSLATE_NOOP("tkConstants", "Last modification");
+const char* const DATA_TYPE                         = QT_TRANSLATE_NOOP("tkConstants", "Data type");
 
 } // end Constants
 } // end TranslationUtils
