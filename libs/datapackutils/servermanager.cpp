@@ -217,12 +217,12 @@ void ServerManager::getServerDescription(const int index)
 
 void ServerManager::getAllDescriptionFile(QProgressBar *bar)
 {
-//    WARN_FUNC << bar;
     if (m_WorkingEngines.count()==0) {
         LOG_ERROR("No ServerEngine recorded.");
         return;
     }
 
+    m_Packs.clear();
     // Populate all server engine
     int workingTasks = 0;
     for(int i=0; i < m_Servers.count(); ++i) {
@@ -243,7 +243,6 @@ void ServerManager::getAllDescriptionFile(QProgressBar *bar)
     }
     // Populate progressBar
     if (bar) {
-        qWarning() << bar << workingTasks;
         bar->setRange(0, workingTasks);
         bar->setValue(0);
         m_ProgressBar = bar;
@@ -294,7 +293,7 @@ void ServerManager::engineDescriptionDownloadDone()
     bool __emit = true;
     for(int i = 0; i < m_WorkingEngines.count(); ++i) {
         if (m_WorkingEngines.at(i)->downloadQueueCount() > 0) {
-//            qWarning() << m_WorkingEngines.at(i)->objectName() << m_WorkingEngines.at(i)->downloadQueueCount();
+            qWarning() << m_WorkingEngines.at(i)->objectName() << m_WorkingEngines.at(i)->downloadQueueCount();
             __emit = false;
         } else {
             disconnect(m_WorkingEngines.at(i), SIGNAL(queueDowloaded()), this, SLOT(engineDescriptionDownloadDone()));
@@ -310,7 +309,8 @@ void ServerManager::engineDescriptionDownloadDone()
 
 void ServerManager::registerPack(const Server &server, const Pack &pack)
 {
-    m_Packs.insertMulti(server.uuid(), pack);
+    if (!m_Packs.values(server.uuid()).contains(pack))
+        m_Packs.insertMulti(server.uuid(), pack);
 }
 
 
@@ -374,7 +374,7 @@ Server ServerManager::getServerForPack(const Pack &pack)
 
 void ServerManager::createServerPackList(const Server &server)
 {
-    if (!m_Packs.values(server.uuid()).isEmpty()) {
+    if (m_Packs.values(server.uuid()).count() > 0) {
         return;
     }
     // Get the server config

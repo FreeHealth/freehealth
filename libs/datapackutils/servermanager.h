@@ -120,7 +120,6 @@ private:
 
 private:
     QVector<Server> m_Servers;
-    QMultiHash<QString, PackDescription> m_PackDescriptions;
     QMultiHash<QString, Pack> m_Packs;
     QList<Pack> m_PacksToInstall;
     QList<Pack> m_InstalledPacks;
