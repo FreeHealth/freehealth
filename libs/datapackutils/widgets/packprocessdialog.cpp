@@ -195,7 +195,7 @@ void PackProcessDialog::startPackDownloads()
     bold.setBold(true);
     bold.setPointSize(bold.pointSize() + 2);
     label->setFont(bold);
-    m_ScrollLayout->addWidget(label, 0, 0, 0, 10);
+    m_ScrollLayout->addWidget(label, 0, 0, 1, 2);
 
     for(int i = 0; i< dld.count(); ++i) {
         // Create UI widget for the pack
