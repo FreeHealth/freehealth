@@ -6,7 +6,7 @@
     <!-- Non translatable values -->
     <authors>Eric Maeker, MD; Fredman, MD</authors>
     <version>test</version>
-    <fmfversion>0.6.2</fmfversion>
+    <fmfv>0.6.2</fmfv>
     <cdate>2012-01-10</cdate>
     <icon>cardiology.png</icon>
     <weblink>http://en.wikipedia.org/wiki/Framingham_Risk_Score#cite_note-9</weblink>
