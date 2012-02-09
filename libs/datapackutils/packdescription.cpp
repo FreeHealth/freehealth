@@ -168,5 +168,6 @@ PackDescription::PackDescription() :
     addNonTranslatableExtraData(UnzipToPath, "unziptopath");
     addNonTranslatableExtraData(Md5, "md5");
     addNonTranslatableExtraData(Sha1, "sha1");
+    addNonTranslatableExtraData(DataType, "datatype");
 }
 

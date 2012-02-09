@@ -29,12 +29,16 @@
 
 #include <utils/log.h>
 #include <utils/global.h>
+#include <translationutils/trans_current.h>
+#include <translationutils/trans_drugs.h>
+#include <translationutils/trans_msgerror.h>
 
 #include <QDomDocument>
 #include <QDomElement>
 #include <QDir>
 
 using namespace DataPack;
+using namespace Trans::ConstantTranslations;
 
 static inline DataPack::DataPackCore &core() {return DataPack::DataPackCore::instance();}
 
@@ -143,6 +147,34 @@ QString Pack::installedZipFileName() const
 {
     /** \todo code here : missing extracted zip file name. */
     return unzipPackToPath();
+}
+
+/** Return the DataPack::Pack::DataType of the package according to its description. */
+Pack::DataType Pack::dataType() const
+{
+    const QString &type = m_descr.data(PackDescription::DataType).toString();
+    if (type.compare("forms", Qt::CaseInsensitive)==0)
+        return Pack::Forms;
+    else if (type.compare("drugswithinteractions", Qt::CaseInsensitive)==0)
+        return Pack::DrugsWithInteractions;
+    else if (type.compare("drugswithoutinteractions", Qt::CaseInsensitive)==0)
+        return Pack::DrugsWithoutInteractions;
+    else if (type.compare("icd", Qt::CaseInsensitive)==0)
+        return Pack::ICD;
+    return Pack::UnknownType;
+}
+
+/** Return the DataPack::Pack::DataType name of the package according to its description. */
+QString Pack::dataTypeName() const
+{
+    Pack::DataType type = dataType();
+    switch (type) {
+    case Pack::Forms: return tkTr(Trans::Constants::FORMS);
+    case Pack::DrugsWithInteractions: tkTr(Trans::Constants::DRUGS_WITH_INTERACTIONS);
+    case Pack::DrugsWithoutInteractions: tkTr(Trans::Constants::DRUGS_WITHOUT_INTERACTIONS);
+    case Pack::ICD: return tkTr(Trans::Constants::ICD10);
+    }
+    return tkTr(Trans::Constants::UNKNOWN);
 }
 
 /**

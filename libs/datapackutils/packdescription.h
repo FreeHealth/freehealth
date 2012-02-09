@@ -110,7 +110,8 @@ public:
         Size = NonTranslatableExtraData + 1,
         UnzipToPath,
         Md5,
-        Sha1
+        Sha1,
+        DataType
     };
 
     PackDescription();

@@ -123,7 +123,8 @@ static QString packTooltip(const PackItem &item)
                       "%2: %3<br />"
                       "%4: %5<br />"
                       "%6: %7<br />"
-                      "%8: %9"
+                      "%8: %9<br />"
+                      "%10: %11"
                       "</p>"
                        )
             .arg(descr.data(PackDescription::Label).toString().replace(" ","&nbsp;"))
@@ -135,6 +136,8 @@ static QString packTooltip(const PackItem &item)
             .arg(descr.data(PackDescription::Author).toString())
             .arg(tkTr(Trans::Constants::VENDOR))
             .arg(vendor)
+            .arg(tkTr(Trans::Constants::DATA_TYPE))
+            .arg(item.pack.dataTypeName())
             ;
 }
 

@@ -80,9 +80,9 @@ PackProcessDialog::PackProcessDialog(QWidget *parent) :
     ui->treeWidget->header()->hide();
     ui->treeWidget->setStyleSheet(::CSS);
 
-    connect(ui->buttonBox->button(QDialogButtonBox::Apply), SIGNAL(pressed()), this, SLOT(processPacks()));
-
     setServerEngines(serverManager()->serverEngines());
+
+    connect(ui->buttonBox->button(QDialogButtonBox::Apply), SIGNAL(pressed()), this, SLOT(processPacks()));
     connect(packManager(), SIGNAL(packDownloaded(Pack,ServerEngineStatus)), this, SLOT(packDownloadDone(Pack, ServerEngineStatus)));
 }
 
@@ -120,7 +120,9 @@ void PackProcessDialog::setPackToUpdate(const Pack &pack)
 }
 
 void PackProcessDialog::setPackToUpdate(const QList<Pack> &packs)
-{}
+{
+    m_UpdatePacks = packs;
+}
 
 void PackProcessDialog::setPackToRemove(const Pack &pack)
 {
@@ -128,7 +130,9 @@ void PackProcessDialog::setPackToRemove(const Pack &pack)
 }
 
 void PackProcessDialog::setPackToRemove(const QList<Pack> &packs)
-{}
+{
+    m_RemovePacks = packs;
+}
 
 void PackProcessDialog::setPackToProcess(const QList<Pack> &installPacks, const QList<Pack> &updatePacks, const QList<Pack> &removePacks)
 {

@@ -276,7 +276,8 @@ void ServerPackEditor::populatePackView(const int packId)
                       "%2: %3<br />"
                       "%4: %5<br />"
                       "%6: %7<br />"
-                      "%8: %9"
+                      "%8: %9<br />"
+                      "%10: %11"
                       "</p>"
                        )
             .arg(descr.data(PackDescription::ShortDescription).toString())
@@ -288,6 +289,8 @@ void ServerPackEditor::populatePackView(const int packId)
             .arg(descr.data(PackDescription::Author).toString())
             .arg(tkTr(Trans::Constants::VENDOR))
             .arg(vendor)
+            .arg(tkTr(Trans::Constants::DATA_TYPE))
+            .arg(pack.dataTypeName())
             ;
 
     // Add description

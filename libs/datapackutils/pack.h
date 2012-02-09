@@ -37,6 +37,14 @@ namespace DataPack {
 class DATAPACK_EXPORT Pack
 {
 public:
+    enum DataType {
+        Forms = 0,
+        DrugsWithoutInteractions,
+        DrugsWithInteractions,
+        ICD,
+        UnknownType
+    };
+
     Pack();
     virtual ~Pack();
 
@@ -59,6 +67,9 @@ public:
 
     QString installedXmlConfigFileName() const;
     QString installedZipFileName() const;
+
+    DataType dataType() const;
+    QString dataTypeName() const;
 
     // Checksums
     QString md5ControlChecksum() const;
