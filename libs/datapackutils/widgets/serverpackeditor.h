@@ -48,10 +48,12 @@ class PackDescription;
 class Pack;
 class PackModel;
 class ServerModel;
-
+namespace Internal {
+class ServerPackEditorPrivate;
 namespace Ui {
     class ServerPackEditor;
-}
+} // Ui
+} // Internal
 
 class DATAPACK_EXPORT ServerPackEditor : public QWidget
 {
@@ -71,7 +73,6 @@ private:
     void populatePackView(const int packId);
 
 private Q_SLOTS:
-//    void onServerIndexActivated(const QModelIndex &index, const QModelIndex &previous);
     void onPackIndexActivated(const QModelIndex &index, const QModelIndex &previous);
     void serverActionTriggered(QAction *a);
     void processPacks();
@@ -81,18 +82,9 @@ private Q_SLOTS:
 private:
     void retranslate();
     void changeEvent(QEvent *e);
-    void processToolBar(int mode);
 
 private:
-    Ui::ServerPackEditor *ui;
-    PackModel *m_PackModel;
-    ServerModel *m_serverModel;
-    QAction *aServerRefresh, *aServerEdit, *aServerRemove, *aServerAdd;
-    QAction *aServerPackEditor, *aProcess;
-    QToolBar *m_ToolBarPacks;
-    QListWidgetItem *m_datapacksItem;
-    QListWidgetItem *m_serversItem;
-    QDataWidgetMapper *m_ServerMapper;
+    Internal::ServerPackEditorPrivate *d;
 };
 
 }  // End namespace DataPack

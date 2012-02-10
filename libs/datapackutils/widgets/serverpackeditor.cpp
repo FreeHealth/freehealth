@@ -97,73 +97,116 @@ const int PACK_MODE = 1;
 
 }  // End anonymous namespace
 
+
+namespace DataPack {
+namespace Internal {
+class ServerPackEditorPrivate
+{
+public:
+    ServerPackEditorPrivate() :
+        ui(new Ui::ServerPackEditor),
+        m_PackModel(0),
+        m_serverModel(0),
+        aServerRefresh(0), aServerEdit(0), aServerRemove(0), aServerAdd(0),
+        aServerPackEditor(0), aProcess(0),
+        m_ToolBarPacks(0),
+        m_datapacksItem(0),
+        m_serversItem(0),
+        m_ServerMapper(0)
+    {}
+
+    void processToolBar(int mode)
+    {
+        if (mode==::SERVER_MODE) {
+            m_ToolBarPacks->removeAction(aProcess);
+            m_ToolBarPacks->addAction(aServerAdd);
+            m_ToolBarPacks->addAction(aServerRemove);
+        } else if (mode==::PACK_MODE) {
+            m_ToolBarPacks->removeAction(aServerAdd);
+            m_ToolBarPacks->removeAction(aServerRemove);
+            m_ToolBarPacks->addAction(aProcess);
+        }
+    }
+
+public:
+    Ui::ServerPackEditor *ui;
+    PackModel *m_PackModel;
+    ServerModel *m_serverModel;
+    QAction *aServerRefresh, *aServerEdit, *aServerRemove, *aServerAdd;
+    QAction *aServerPackEditor, *aProcess;
+    QToolBar *m_ToolBarPacks;
+    QListWidgetItem *m_datapacksItem;
+    QListWidgetItem *m_serversItem;
+    QDataWidgetMapper *m_ServerMapper;
+};
+} // Internal
+} // DataPack
+
 ServerPackEditor::ServerPackEditor(QWidget *parent) :
     QWidget(parent),
-    ui(new Ui::ServerPackEditor),
-    aServerRefresh(0), aServerRemove(0), aServerAdd(0),
-    aProcess(0)
+    d(new Internal::ServerPackEditorPrivate)
 {
     setObjectName("ServerPackEditor");
-    ui->setupUi(this);
+    d->ui->setupUi(this);
 
     if (layout()) {
         layout()->setMargin(0);
         layout()->setSpacing(0);
-        ui->toolbarLayout->setMargin(0);
-        ui->toolbarLayout->setSpacing(0);
-        for(int i=0; i<ui->stackedWidget->count(); ++i) {
-            QWidget *w = ui->stackedWidget->widget(i);
+        d->ui->toolbarLayout->setMargin(0);
+        d->ui->toolbarLayout->setSpacing(0);
+        for(int i=0; i<d->ui->stackedWidget->count(); ++i) {
+            QWidget *w = d->ui->stackedWidget->widget(i);
             if (w->layout())
                 w->layout()->setMargin(0);
         }
     }
 
     // Left menu items
-    m_datapacksItem = new QListWidgetItem(icon(::ICON_INSTALL), tr("Datapacks"));
-    ui->listWidgetMenu->addItem(m_datapacksItem);
-    m_serversItem = new QListWidgetItem(icon(::ICON_SERVER_ADD), tr("Servers"));
-    ui->listWidgetMenu->addItem(m_serversItem);
-    ui->listWidgetMenu->setCurrentRow(0);
-    ui->listWidgetMenu->hide();
+    d->m_datapacksItem = new QListWidgetItem(icon(::ICON_INSTALL), tr("Datapacks"));
+    d->ui->listWidgetMenu->addItem(d->m_datapacksItem);
+    d->m_serversItem = new QListWidgetItem(icon(::ICON_SERVER_ADD), tr("Servers"));
+    d->ui->listWidgetMenu->addItem(d->m_serversItem);
+    d->ui->listWidgetMenu->setCurrentRow(0);
+    d->ui->listWidgetMenu->hide();
 
     // Manage pack model/view
-    m_PackModel = new PackModel(this);
-    m_PackModel->setPackCheckable(true);
-    m_PackModel->setInstallChecker(true);
-    ui->packView->setModel(m_PackModel);
-    ui->packView->setModelColumn(PackModel::Label);
+    d->m_PackModel = new PackModel(this);
+    d->m_PackModel->setPackCheckable(true);
+    d->m_PackModel->setInstallChecker(true);
+    d->ui->packView->setModel(d->m_PackModel);
+    d->ui->packView->setModelColumn(PackModel::Label);
 
     Utils::HtmlDelegate *delegate = new Utils::HtmlDelegate;
-    ui->packView->setItemDelegate(delegate);
-    ui->packView->setStyleSheet(::CSS);
-    //    ui->packView->header()->hide();
-    ui->packView->setAlternatingRowColors(true);
+    d->ui->packView->setItemDelegate(delegate);
+    d->ui->packView->setStyleSheet(::CSS);
+    //    d->ui->packView->header()->hide();
+    d->ui->packView->setAlternatingRowColors(true);
 
     // server page
-    m_serverModel = new ServerModel(this);
-    ui->serverView->setModel(m_serverModel);
-    ui->serverView->setModelColumn(ServerModel::HtmlLabel);
-    ui->serverView->setItemDelegate(delegate);
-    ui->serverView->setStyleSheet(::CSS);
-    ui->serverView->setAlternatingRowColors(true);
+    d->m_serverModel = new ServerModel(this);
+    d->ui->serverView->setModel(d->m_serverModel);
+    d->ui->serverView->setModelColumn(ServerModel::HtmlLabel);
+    d->ui->serverView->setItemDelegate(delegate);
+    d->ui->serverView->setStyleSheet(::CSS);
+    d->ui->serverView->setAlternatingRowColors(true);
 
     // Manage central view
     QFont bold;
     bold.setBold(true);
     bold.setPointSize(bold.pointSize()+1);
-    ui->packName->setFont(bold);
-    ui->packName->setStyleSheet(::TITLE_CSS);
-    ui->serverLabel->setStyleSheet(::TITLE_CSS);
+    d->ui->packName->setFont(bold);
+    d->ui->packName->setStyleSheet(::TITLE_CSS);
+    d->ui->serverLabel->setStyleSheet(::TITLE_CSS);
 
     createActions();
     createToolbar();
-    processToolBar(::PACK_MODE);
+    d->processToolBar(::PACK_MODE);
     createServerDataWidgetMapper();
 
-    connect(ui->packView->selectionModel(), SIGNAL(currentChanged(QModelIndex,QModelIndex)), this, SLOT(onPackIndexActivated(QModelIndex,QModelIndex)));
-    connect(ui->serverView->selectionModel(), SIGNAL(currentChanged(QModelIndex,QModelIndex)), this, SLOT(serverCurrentChanged(QModelIndex,QModelIndex)));
+    connect(d->ui->packView->selectionModel(), SIGNAL(currentChanged(QModelIndex,QModelIndex)), this, SLOT(onPackIndexActivated(QModelIndex,QModelIndex)));
+    connect(d->ui->serverView->selectionModel(), SIGNAL(currentChanged(QModelIndex,QModelIndex)), this, SLOT(serverCurrentChanged(QModelIndex,QModelIndex)));
 
-    ui->stackedWidget->setCurrentWidget(ui->pagePacks);
+    d->ui->stackedWidget->setCurrentWidget(d->ui->pagePacks);
 
     // FOR TEST
     // This step should be done before the ServerPackEditor in called
@@ -175,7 +218,10 @@ ServerPackEditor::ServerPackEditor(QWidget *parent) :
 
 ServerPackEditor::~ServerPackEditor()
 {
-    delete ui;
+    if (d) {
+        delete d;
+        d=0;
+    }
 }
 
 bool ServerPackEditor::submitChanges()
@@ -187,59 +233,59 @@ void ServerPackEditor::createActions()
 {
     // Create server actions
     QActionGroup *srvgr = new QActionGroup(this);
-    QAction *a = aServerRefresh = new QAction(this);
+    QAction *a = d->aServerRefresh = new QAction(this);
     a->setObjectName("aServerRefresh");
     a->setIcon(icon(::ICON_SERVER_REFRESH, DataPack::DataPackCore::MediumPixmaps));
-    a = aServerEdit = new QAction(this);
+    a = d->aServerEdit = new QAction(this);
     a->setObjectName("aServerEdit");
     a->setIcon(icon(::ICON_SERVER_EDIT, DataPack::DataPackCore::MediumPixmaps));
-    a = aServerAdd = new QAction(this);
+    a = d->aServerAdd = new QAction(this);
     a->setObjectName("aInstall");
     a->setIcon(icon(::ICON_SERVER_ADD, DataPack::DataPackCore::MediumPixmaps));
-    a = aServerRemove = new QAction(this);
+    a = d->aServerRemove = new QAction(this);
     a->setObjectName("aServerRemove");
     a->setIcon(icon(::ICON_SERVER_REMOVE, DataPack::DataPackCore::MediumPixmaps));
     connect(srvgr, SIGNAL(triggered(QAction*)), this, SLOT(serverActionTriggered(QAction *)));
 
     // Create pack actions
-    a = aServerPackEditor = new QAction(this);
+    a = d->aServerPackEditor = new QAction(this);
     a->setObjectName("aServerPackEditor");
     a->setIcon(icon(::ICON_PACKAGE, DataPack::DataPackCore::MediumPixmaps));
-    a = aProcess = new QAction(this);
+    a = d->aProcess = new QAction(this);
     a->setObjectName("aProcess");
     a->setIcon(icon(::ICON_INSTALL, DataPack::DataPackCore::MediumPixmaps));
-//    ui->installToolButton->addAction(aInstall);
-//    ui->installToolButton->addAction(aUpdate);
-//    ui->installToolButton->addAction(aRemove);
-//    ui->installToolButton->setDefaultAction(aInstall);
+//    d->ui->installToolButton->addAction(aInstall);
+//    d->ui->installToolButton->addAction(aUpdate);
+//    d->ui->installToolButton->addAction(aRemove);
+//    d->ui->installToolButton->setDefaultAction(aInstall);
     retranslate();
-    connect(aProcess, SIGNAL(triggered()), this, SLOT(processPacks()));
+    connect(d->aProcess, SIGNAL(triggered()), this, SLOT(processPacks()));
 }
 
 void ServerPackEditor::createToolbar()
 {
-    m_ToolBarPacks = new QToolBar(this);
+    d->m_ToolBarPacks = new QToolBar(this);
     // Insert action in the same order as the enum ToolBarActions
-    m_ToolBarPacks->addAction(aServerEdit);
-    m_ToolBarPacks->addAction(aServerPackEditor);
-    m_ToolBarPacks->addSeparator();
-    m_ToolBarPacks->addAction(aServerRefresh);
-    m_ToolBarPacks->addSeparator();
-    connect(m_ToolBarPacks, SIGNAL(actionTriggered(QAction*)), this, SLOT(serverActionTriggered(QAction*)));
-    ui->toolbarLayout->addWidget(m_ToolBarPacks);
+    d->m_ToolBarPacks->addAction(d->aServerEdit);
+    d->m_ToolBarPacks->addAction(d->aServerPackEditor);
+    d->m_ToolBarPacks->addSeparator();
+    d->m_ToolBarPacks->addAction(d->aServerRefresh);
+    d->m_ToolBarPacks->addSeparator();
+    connect(d->m_ToolBarPacks, SIGNAL(actionTriggered(QAction*)), this, SLOT(serverActionTriggered(QAction*)));
+    d->ui->toolbarLayout->addWidget(d->m_ToolBarPacks);
 }
 
 void ServerPackEditor::createServerDataWidgetMapper()
 {
-    m_ServerMapper = new QDataWidgetMapper(this);
-    m_ServerMapper->setModel(m_serverModel);
-    m_ServerMapper->addMapping(ui->serverLabel, ServerModel::PlainTextLabel, "text");
-    m_ServerMapper->addMapping(ui->serverVersion, ServerModel::Version, "text");
-    m_ServerMapper->addMapping(ui->serverAuthors, ServerModel::Authors, "text");
-    m_ServerMapper->addMapping(ui->serverCreationDate, ServerModel::CreationDate, "text");
-    m_ServerMapper->addMapping(ui->serverVendor, ServerModel::Vendor, "text");
-    m_ServerMapper->addMapping(ui->serverDescription, ServerModel::HtmlDescription, "html");
-    m_ServerMapper->setCurrentIndex(1);
+    d->m_ServerMapper = new QDataWidgetMapper(this);
+    d->m_ServerMapper->setModel(d->m_serverModel);
+    d->m_ServerMapper->addMapping(d->ui->serverLabel, ServerModel::PlainTextLabel, "text");
+    d->m_ServerMapper->addMapping(d->ui->serverVersion, ServerModel::Version, "text");
+    d->m_ServerMapper->addMapping(d->ui->serverAuthors, ServerModel::Authors, "text");
+    d->m_ServerMapper->addMapping(d->ui->serverCreationDate, ServerModel::CreationDate, "text");
+    d->m_ServerMapper->addMapping(d->ui->serverVendor, ServerModel::Vendor, "text");
+    d->m_ServerMapper->addMapping(d->ui->serverDescription, ServerModel::HtmlDescription, "html");
+    d->m_ServerMapper->setCurrentIndex(1);
 }
 
 static void elideTextToLabel(QLabel *label, const QString &text)
@@ -261,7 +307,7 @@ static void elideTextToLabel(QLabel *label, const QString &text)
 
 void ServerPackEditor::populatePackView(const int packId)
 {
-    const Pack &pack = m_PackModel->packageAt(packId);
+    const Pack &pack = d->m_PackModel->packageAt(packId);
     const PackDescription &descr = pack.description();
     // Vendor ?
     QString vendor = descr.data(PackDescription::Vendor).toString();
@@ -297,7 +343,7 @@ void ServerPackEditor::populatePackView(const int packId)
     summary += descr.data(PackDescription::HtmlDescription).toString();
 
     // Add update informations
-    bool isUpdate = m_PackModel->index(packId, PackModel::IsAnUpdate).data().toBool();
+    bool isUpdate = d->m_PackModel->index(packId, PackModel::IsAnUpdate).data().toBool();
     if (isUpdate) {
         QString up = QString("<p style=\"font-size:normal;margin-left:10px;color:darkblue\">%1</p><br />")
                      .arg(descr.htmlUpdateInformationForVersion("0.0.0"));
@@ -337,8 +383,8 @@ void ServerPackEditor::populatePackView(const int packId)
 
     summary += file;
 
-    ui->packName->setText(descr.data(PackDescription::Label).toString());
-    ui->packSummary->setText(summary);
+    d->ui->packName->setText(descr.data(PackDescription::Label).toString());
+    d->ui->packSummary->setText(summary);
 }
 
 void ServerPackEditor::onPackIndexActivated(const QModelIndex &index, const QModelIndex &previous)
@@ -347,22 +393,9 @@ void ServerPackEditor::onPackIndexActivated(const QModelIndex &index, const QMod
     populatePackView(index.row());
 }
 
-void ServerPackEditor::processToolBar(int mode)
-{
-    if (mode==::SERVER_MODE) {
-        m_ToolBarPacks->removeAction(aProcess);
-        m_ToolBarPacks->addAction(aServerAdd);
-        m_ToolBarPacks->addAction(aServerRemove);
-    } else if (mode==::PACK_MODE) {
-        m_ToolBarPacks->removeAction(aServerAdd);
-        m_ToolBarPacks->removeAction(aServerRemove);
-        m_ToolBarPacks->addAction(aProcess);
-    }
-}
-
 void ServerPackEditor::serverActionTriggered(QAction *a)
 {
-    if (a==aServerRefresh) {
+    if (a==d->aServerRefresh) {
         QProgressDialog dlg(this);
         QProgressBar *bar = new QProgressBar;
         dlg.setLabelText(tr("Updating server information"));
@@ -373,7 +406,7 @@ void ServerPackEditor::serverActionTriggered(QAction *a)
         connect(serverManager(), SIGNAL(allServerDescriptionAvailable()), &dlg, SLOT(accept()));
         serverManager()->getAllDescriptionFile(bar);
         dlg.exec();
-    } if (a==aServerAdd) {
+    } if (a==d->aServerAdd) {
         AddServerDialog dlg(this);
         Server server;
         dlg.setServer(server);
@@ -389,17 +422,17 @@ void ServerPackEditor::serverActionTriggered(QAction *a)
             serverManager()->getServerDescription(serverManager()->serverCount() - 1);
             dlg.exec();
         }
-    } else if (a==aServerRemove) {
-        if (!ui->serverView->selectionModel()->hasSelection())
+    } else if (a==d->aServerRemove) {
+        if (!d->ui->serverView->selectionModel()->hasSelection())
             return;
-        int row = ui->serverView->selectionModel()->currentIndex().row();
+        int row = d->ui->serverView->selectionModel()->currentIndex().row();
         serverManager()->removeServerAt(row);
-    } else if (a==aServerEdit) {
-        ui->stackedWidget->setCurrentWidget(ui->pageServers);
-        processToolBar(::SERVER_MODE);
-    } else if (a==aServerPackEditor) {
-        ui->stackedWidget->setCurrentWidget(ui->pagePacks);
-        processToolBar(::PACK_MODE);
+    } else if (a==d->aServerEdit) {
+        d->ui->stackedWidget->setCurrentWidget(d->ui->pageServers);
+        d->processToolBar(::SERVER_MODE);
+    } else if (a==d->aServerPackEditor) {
+        d->ui->stackedWidget->setCurrentWidget(d->ui->pagePacks);
+        d->processToolBar(::PACK_MODE);
     }
 }
 
@@ -407,45 +440,45 @@ void ServerPackEditor::serverActionTriggered(QAction *a)
 void ServerPackEditor::processPacks()
 {
     // Apply pack model changes
-    if (!m_PackModel->isDirty())
+    if (!d->m_PackModel->isDirty())
         return;
     // Run Pack Dialog
     PackProcessDialog dlg;
-    dlg.setPackToProcess(m_PackModel->packageToInstall(), m_PackModel->packageToUpdate(), m_PackModel->packageToRemove());
+    dlg.setPackToProcess(d->m_PackModel->packageToInstall(), d->m_PackModel->packageToUpdate(), d->m_PackModel->packageToRemove());
     if (dlg.exec()==QDialog::Rejected) {
         return;
     }
     packManager()->installedPack(true);
-    m_PackModel->updateModel();
+    d->m_PackModel->updateModel();
 }
 
 void ServerPackEditor::retranslate()
 {
-    aServerRefresh->setText(tr("Refresh datapack servers"));
-    aServerEdit->setText(tr("Server editor"));
-    aServerAdd->setText(tr("Add a server"));
-    aServerRemove->setText(tr("Remove a server"));
-    aServerPackEditor->setText(tr("Server and pack editor"));
-    aProcess->setText(tr("Process changes"));
+    d->aServerRefresh->setText(tr("Refresh datapack servers"));
+    d->aServerEdit->setText(tr("Server editor"));
+    d->aServerAdd->setText(tr("Add a server"));
+    d->aServerRemove->setText(tr("Remove a server"));
+    d->aServerPackEditor->setText(tr("Server and pack editor"));
+    d->aProcess->setText(tr("Process changes"));
 }
 
 void ServerPackEditor::changeEvent(QEvent *e)
 {
     if (e->type()==QEvent::LanguageChange) {
-        ui->retranslateUi(this);
+        d->ui->retranslateUi(this);
         retranslate();
     }
 }
 
 void ServerPackEditor::on_listWidgetMenu_currentRowChanged(int row)
 {
-    if (ui->listWidgetMenu->currentItem() == m_datapacksItem)
-        ui->stackedWidget->setCurrentWidget(ui->pagePacks);
-    else if (ui->listWidgetMenu->currentItem() == m_serversItem)
-        ui->stackedWidget->setCurrentWidget(ui->pageServers);
+    if (d->ui->listWidgetMenu->currentItem() == d->m_datapacksItem)
+        d->ui->stackedWidget->setCurrentWidget(d->ui->pagePacks);
+    else if (d->ui->listWidgetMenu->currentItem() == d->m_serversItem)
+        d->ui->stackedWidget->setCurrentWidget(d->ui->pageServers);
 }
 
 void ServerPackEditor::serverCurrentChanged(const QModelIndex &c, const QModelIndex &p)
 {
-    m_ServerMapper->setCurrentIndex(c.row());
+    d->m_ServerMapper->setCurrentIndex(c.row());
 }
