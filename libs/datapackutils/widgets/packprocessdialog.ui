@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <ui version="4.0">
- <class>DataPack::PackProcessDialog</class>
- <widget class="QDialog" name="DataPack::PackProcessDialog">
+ <class>DataPack::Internal::PackProcessDialog</class>
+ <widget class="QDialog" name="DataPack::Internal::PackProcessDialog">
   <property name="geometry">
    <rect>
     <x>0</x>
@@ -99,7 +99,7 @@
   <connection>
    <sender>buttonBox</sender>
    <signal>accepted()</signal>
-   <receiver>DataPack::PackProcessDialog</receiver>
+   <receiver>DataPack::Internal::PackProcessDialog</receiver>
    <slot>accept()</slot>
    <hints>
     <hint type="sourcelabel">
@@ -115,7 +115,7 @@
   <connection>
    <sender>buttonBox</sender>
    <signal>rejected()</signal>
-   <receiver>DataPack::PackProcessDialog</receiver>
+   <receiver>DataPack::Internal::PackProcessDialog</receiver>
    <slot>reject()</slot>
    <hints>
     <hint type="sourcelabel">

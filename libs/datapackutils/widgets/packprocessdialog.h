@@ -44,8 +44,11 @@ class IServerManager;
 class IServerEngine;
 class ServerEngineStatus;
 
+namespace Internal {
+class PackProcessDialogPrivate;
 namespace Ui {
     class PackProcessDialog;
+}
 }
 
 class PackProcessDialog : public QDialog
@@ -89,17 +92,7 @@ private:
     void showLogMessage();
 
 private:
-    Ui::PackProcessDialog *ui;
-    QWidget *m_ScrollWidget;
-    QGridLayout *m_ScrollLayout;
-    QList<Pack> m_InstallPacks;
-    QList<Pack> m_UpdatePacks;
-    QList<Pack> m_RemovePacks;
-    QVector<DataPack::IServerEngine*> m_Engines;
-    QStringList m_Msg;
-    bool m_Error;
-
-//    QHash<QString, QLabel*> m_RemovalLabels;
+    Internal::PackProcessDialogPrivate *d;
 };
 
 }  // End namespace DataPack
