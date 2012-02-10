@@ -173,6 +173,7 @@ QString Pack::dataTypeName() const
     case Pack::DrugsWithInteractions: tkTr(Trans::Constants::DRUGS_WITH_INTERACTIONS);
     case Pack::DrugsWithoutInteractions: tkTr(Trans::Constants::DRUGS_WITHOUT_INTERACTIONS);
     case Pack::ICD: return tkTr(Trans::Constants::ICD10);
+    default: return tkTr(Trans::Constants::UNKNOWN);
     }
     return tkTr(Trans::Constants::UNKNOWN);
 }
@@ -185,6 +186,7 @@ QString Pack::dataTypeName() const
 void Pack::fromXmlFile(const QString &absFileName)
 {
     m_OriginalFileName = absFileName;
+    qWarning() << "PackFromXml" << absFileName;
     fromXml(Utils::readTextFile(absFileName, Utils::DontWarnUser));
 }
 
@@ -209,7 +211,9 @@ void Pack::fromXml(const QString &fullPackConfigXml)
 
 bool Pack::operator==(const Pack &other) const
 {
-    return (this->uuid()==other.uuid() && this->version()==other.version());
+    return (this->uuid()==other.uuid() &&
+            this->version()==other.version() &&
+            this->name()==other.name());
 }
 
 QDebug operator<<(QDebug dbg, const DataPack::Pack &p)

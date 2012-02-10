@@ -79,7 +79,6 @@ public:
     virtual void getAllDescriptionFile(QProgressBar *bar = 0) = 0;
     virtual void checkServerUpdates() = 0;
 
-    virtual QList<PackDescription> getPackDescription(const Server &server) = 0;
     virtual QList<Pack> getPackForServer(const Server &server) = 0;
     virtual Server getServerForPack(const Pack &pack) = 0;
 //    virtual bool isPackInPersistentCache(const Pack &pack) = 0;

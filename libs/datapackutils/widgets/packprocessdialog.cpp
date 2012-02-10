@@ -68,13 +68,16 @@ PackProcessDialog::PackProcessDialog(QWidget *parent) :
     m_Error(false)
 {
     ui->setupUi(this);
+    ui->treeViewPage->layout()->setMargin(0);
+    ui->processPage->layout()->setMargin(0);
+    ui->stackedWidget->setCurrentWidget(ui->treeViewPage);
 
     // Manage ScrollArea
-    m_ScrollWidget = new QWidget(this);
-    m_ScrollLayout = new QGridLayout(m_ScrollWidget);
-    m_ScrollWidget->setLayout(m_ScrollLayout);
-    ui->scrollArea->setWidget(m_ScrollWidget);
-    ui->scrollArea->hide();
+//    m_ScrollWidget = new QWidget(this);
+//    m_ScrollLayout = new QGridLayout(m_ScrollWidget);
+//    m_ScrollWidget->setLayout(m_ScrollLayout);
+//    ui->scrollArea->setWidget(m_ScrollWidget);
+//    ui->scrollArea->hide();
 
     setWindowTitle(ui->titleLabel->text());
     ui->treeWidget->header()->hide();
@@ -187,7 +190,7 @@ void PackProcessDialog::startPackDownloads()
     dld << m_InstallPacks;
     dld << m_UpdatePacks;
 
-    ui->scrollArea->show();
+//    ui->scrollArea->show();
 
     // Add a start download label in the scroll widget
     QLabel *label = new QLabel(tr("Starting downloads"), m_ScrollWidget);
@@ -231,11 +234,11 @@ void PackProcessDialog::removePacks()
     bold.setPointSize(bold.pointSize() + 2);
     label->setFont(bold);
     int r = m_ScrollLayout->rowCount();
-    m_ScrollLayout->addWidget(label, r, 0, 0, 10);
+    m_ScrollLayout->addWidget(label, r, 0, 1, 2);
     foreach(const Pack &p, m_RemovePacks) {
         // Create a label
-        QLabel *label = new QLabel(tr("Deleting packs"), m_ScrollWidget);
-        m_ScrollLayout->addWidget(label, ++r, 0, 0, 10);
+        QLabel *label = new QLabel(p.name(), m_ScrollWidget);
+        m_ScrollLayout->addWidget(label, ++r, 0);
         packManager()->removePack(p);
     }
     clearTemporaries();
@@ -249,5 +252,5 @@ void PackProcessDialog::clearTemporaries()
 void PackProcessDialog::showLogMessage()
 {
     ui->buttonBox->setEnabled(true);
-    ui->textBrowser->setHtml(m_Msg.join("<br />"));
+//    ui->textBrowser->setHtml(m_Msg.join("<br />"));
 }

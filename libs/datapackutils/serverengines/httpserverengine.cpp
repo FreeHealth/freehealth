@@ -120,6 +120,10 @@ HttpServerEngine::HttpServerEngine(QObject *parent)  :
     } else {
         LOG_ERROR("No internet connection available.");
     }
+
+    // Connect authentification request
+    connect(m_NetworkAccessManager, SIGNAL(authenticationRequired(QNetworkReply*,QAuthenticator*)), this, SLOT(authenticationRequired(QNetworkReply*,QAuthenticator*)));
+    connect(m_NetworkAccessManager, SIGNAL(proxyAuthenticationRequired(QNetworkProxy,QAuthenticator*)), this, SLOT(proxyAuthenticationRequired(QNetworkProxy,QAuthenticator*)));
 }
 
 HttpServerEngine::~HttpServerEngine()
@@ -166,28 +170,30 @@ bool HttpServerEngine::startDownloadQueue()
         if (query.downloadDescriptionFiles) {
             // Create a network request for the server config
             QNetworkRequest request = createRequest(s->url(Server::ServerConfigurationFile));
-            reply = m_NetworkAccessManager->get(request);
-            m_replyToData.insert(reply, ReplyData(reply, s, Server::ServerConfigurationFile, query.progressBar));
             ++m_DownloadCount_Server;
 
             // Create a status for the server
             ServerEngineStatus status;
             m_ServerStatus.insert(statusKey(*s), status);
+
+            // Create reply and store it
+            reply = m_NetworkAccessManager->get(request);
+            m_replyToData.insert(reply, ReplyData(reply, s, Server::ServerConfigurationFile, query.progressBar));
         } else if (query.downloadPackFile) {
             // Create a network request for the pack file
             QNetworkRequest request = createRequest(s->url(Server::PackFile, query.pack->serverFileName()));
-            reply = m_NetworkAccessManager->get(request);
-            m_replyToData.insert(reply, ReplyData(reply, s, Server::PackFile, *query.pack, query.progressBar));
 
             // Create a status for the pack
             ServerEngineStatus status;
             m_PackStatus.insert(statusKey(*s), status);
+
+            // Create reply and store it
+            reply = m_NetworkAccessManager->get(request);
+            m_replyToData.insert(reply, ReplyData(reply, s, Server::PackFile, *query.pack, query.progressBar));
         }
         connect(reply, SIGNAL(readyRead()), this, SLOT(serverReadyRead()));
         connect(reply, SIGNAL(finished()), this, SLOT(serverFinished()));
         connect(reply, SIGNAL(error(QNetworkReply::NetworkError)), this, SLOT(serverError(QNetworkReply::NetworkError)));
-        connect(m_NetworkAccessManager, SIGNAL(authenticationRequired(QNetworkReply*,QAuthenticator*)), this, SLOT(authenticationRequired(QNetworkReply*,QAuthenticator*)));
-        connect(m_NetworkAccessManager, SIGNAL(proxyAuthenticationRequired(QNetworkProxy,QAuthenticator*)), this, SLOT(proxyAuthenticationRequired(QNetworkProxy,QAuthenticator*)));
 
         QProgressBar *bar = query.progressBar;
         if (bar) {
@@ -273,7 +279,8 @@ void HttpServerEngine::serverError(QNetworkReply::NetworkError error)
     status->isSuccessful = false;
     status->errorMessages << tr("Server error: %1").arg(reply->errorString());
     LOG_ERROR(tr("Server error: %1").arg(reply->errorString()));
-    Q_EMIT packDownloaded(data.pack, *status);
+    if (data.pack.isValid())
+        Q_EMIT packDownloaded(data.pack, *status);
     --m_DownloadCount_Server;
 }
 
@@ -283,10 +290,8 @@ void HttpServerEngine::serverFinished()
     QNetworkReply *reply = qobject_cast<QNetworkReply*>(sender());
 
     qWarning() << "HTTP : serverFinished" << reply->request().url() << reply->error();
-
     if (reply->error() != QNetworkReply::NoError)
         return;
-
 
     ReplyData &data = m_replyToData[reply];
     data.server->setConnected(true);
@@ -315,7 +320,7 @@ void HttpServerEngine::serverFinished()
         afterPackFileDownload(data);
         break;
     }
-    default:;
+    default: break;
     }
 
     // we can remove the associated data
@@ -340,6 +345,8 @@ ServerEngineStatus *HttpServerEngine::getStatus(const ReplyData &data)
 /** Reads Server description XML file and start the dowloading of pack description if needed. */
 void HttpServerEngine::afterServerConfigurationDownload(const ReplyData &data)
 {
+//    qWarning() << "ServerConfigDone" << data.server->uuid();
+
     bool downloadPackDescriptionNeeded = false;
     Server *server = data.server;
     ServerEngineStatus *status = getStatus(data);

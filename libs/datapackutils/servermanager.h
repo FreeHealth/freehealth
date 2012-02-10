@@ -93,7 +93,6 @@ public:
     void connectServer(const Server &server, const ServerIdentification &ident = ServerIdentification()); // will be deprecated regarding the connectAndUpdate function
     void connectAndUpdate(int index);
 
-    QList<PackDescription> getPackDescription(const Server &server);
     QList<Pack> getPackForServer(const Server &server);
 
 //    void checkInstalledPacks();

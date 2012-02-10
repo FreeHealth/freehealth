@@ -370,7 +370,9 @@ void ServerPackEditor::serverActionTriggered(QAction *a)
         dlg.setBar(bar);
         dlg.show();
         /** \todo Connect the cancel button */
+        connect(serverManager(), SIGNAL(allServerDescriptionAvailable()), &dlg, SLOT(accept()));
         serverManager()->getAllDescriptionFile(bar);
+        dlg.exec();
     } if (a==aServerAdd) {
         AddServerDialog dlg(this);
         Server server;

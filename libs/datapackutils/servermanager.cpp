@@ -330,32 +330,8 @@ void ServerManager::connectAndUpdate(int index)
 //        m_Servers.at(index).connectAndUpdate();
 }
 
-QList<PackDescription> ServerManager::getPackDescription(const Server &server)
-{
-    WARN_FUNC;
-    // If Pack list already known return it
-    QList<PackDescription> toReturn;
-    const QStringList keys = m_Packs.uniqueKeys();
-    if (keys.contains(server.uuid(), Qt::CaseInsensitive)) {
-        QList<Pack> packs = m_Packs.values(server.uuid());
-        for(int i = 0; i < packs.count(); ++i) {
-            toReturn << packs.at(i).description();
-        }
-        return toReturn;
-    }
-
-    createServerPackList(server);
-
-    QList<Pack> packs = m_Packs.values(server.url());
-    for(int i = 0; i < packs.count(); ++i) {
-        toReturn << packs.at(i).description();
-    }
-    return toReturn;
-}
-
 QList<Pack> ServerManager::getPackForServer(const Server &server)
 {
-    createServerPackList(server);
     return m_Packs.values(server.uuid());
 }
 
@@ -363,7 +339,7 @@ Server ServerManager::getServerForPack(const Pack &pack)
 {
     /** \todo priorize servers : local > http > ftp */
     for(int i=0; i<m_Servers.count();++i) {
-        createServerPackList(m_Servers.at(i));
+//        createServerPackList(m_Servers.at(i));
         const QString &uuid = m_Servers.at(i).uuid();
         if (m_Packs.values(uuid).contains(pack)) {
             return m_Servers.at(i);
@@ -372,9 +348,11 @@ Server ServerManager::getServerForPack(const Pack &pack)
     return Server();
 }
 
+// OBSOLETE : ISERVERENGINE MUST REGISTER THEIR DOWNLOADED PACK FILES
 void ServerManager::createServerPackList(const Server &server)
 {
     if (m_Packs.values(server.uuid()).count() > 0) {
+        qWarning() << "ALREADY DONE" << server.uuid() << m_Packs.values(server.uuid()).count();
         return;
     }
     // Get the server config
