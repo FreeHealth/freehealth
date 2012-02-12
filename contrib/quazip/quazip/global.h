@@ -31,14 +31,15 @@
 
 QT_BEGIN_NAMESPACE
 class QStringList;
+class QProgressBar;
 QT_END_NAMESPACE
 
 namespace QuaZipTools {
 
-    ZIP_EXPORT bool unzipFile(const QString &fileName, const QString &pathToUnZippedFiles = QString::null);
+    ZIP_EXPORT bool unzipFile(const QString &fileName, const QString &pathToUnZippedFiles = QString::null, QProgressBar *bar = 0);
 
     ZIP_EXPORT bool unzipAllFilesIntoDirs(const QStringList &paths);
 
-};  //  End namespace QuaZipTools
+}  //  End namespace QuaZipTools
 
 #endif // QUAZIP_GLOBAL_H

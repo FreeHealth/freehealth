@@ -31,6 +31,8 @@
 #include <QFile>
 #include <QFileInfo>
 #include <QStringList>
+#include <QProgressBar>
+#include <QApplication>
 
 #include <QDebug>
 
@@ -42,7 +44,7 @@ namespace QuaZipTools {
 
 
 /** Unzip the specified file named \e fileName to the specified path \e pathToUnZippedFiles. If the output path is empty, unzip in the same dir as the zip file. */
-bool unzipFile(const QString &fileName, const QString &pathToUnZippedFiles)
+bool unzipFile(const QString &fileName, const QString &pathToUnZippedFiles, QProgressBar *bar)
 {
     Q_ASSERT_X(QFile(fileName).exists() , "Function unzipFile()",
                qPrintable(QString("File %1 does not exists").arg(fileName)));
@@ -97,7 +99,32 @@ bool unzipFile(const QString &fileName, const QString &pathToUnZippedFiles)
             qWarning() << __FILE__ << __LINE__;
             return false;
         }
-        while (file.getChar(&c)) out.putChar(c);
+        if (bar) {
+            // With QProgressBar
+            bar->setRange(0, 100);
+            bar->setValue(0);
+            ulong size = 0;
+            ulong fileSize = file.usize();
+            if (!fileSize)
+                ++fileSize; // Avoid zero division
+            int percent = 0;
+            while (file.getChar(&c)) {
+                out.putChar(c);
+                ++size;
+                if (size % 1024) {
+                    int v = (size*100)/fileSize;
+                    if (v>percent) {
+                        percent = v;
+                        bar->setValue(v);
+                        qApp->processEvents(QEventLoop::ExcludeUserInputEvents);
+                    }
+                }
+            }
+            bar->setValue(100);
+        } else {
+            // Fast extraction
+            while (file.getChar(&c)) out.putChar(c);
+        }
         out.close();
 
         if (file.getZipError() != UNZ_OK) {
