@@ -86,6 +86,8 @@ void EmptyPlugin::extensionsInitialized()
 
     // At this point, user is connected
 
+    // Add here the DataPackPlugin::IDataPackListener objects to the pluginmanager object pool
+
     addAutoReleasedObject(new Core::PluginAboutPage(pluginSpec(), this));
     connect(Core::ICore::instance(), SIGNAL(coreOpened()), this, SLOT(postCoreInitialization()));
 }
@@ -93,6 +95,7 @@ void EmptyPlugin::extensionsInitialized()
 void EmptyPlugin::postCoreInitialization()
 {
     // Core is fully intialized as well as all plugins
+    // DataPacks are checked
 }
 
 void EmptyPlugin::coreAboutToClose()
