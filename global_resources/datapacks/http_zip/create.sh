@@ -8,7 +8,7 @@
 for xmlfile in `find . -type f \( -iname "*.xml" ! -iname "server.conf.xml" \)`
 do
     zipdir=`dirname $xmlfile`
-    zipfile=`ls $zipdir/*.zip | head -1`
+    zipfile=`ls $zipdir/*.zip | head -1` # we assume that the first zip file in the directory is the good one
 
     # Compute data to insert
     zipmd5=$(md5sum $zipfile | cut -d ' ' -f 1)
