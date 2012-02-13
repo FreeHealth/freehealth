@@ -9,7 +9,8 @@ SUBDIRS = \
     drugsbase \
     templates \
     listview \
-    saverestore
+    saverestore \
+    datapack
 
 
 core.subdir = coreplugin
@@ -48,3 +49,11 @@ texteditor.depends += core
 templates.subdir = templatesplugin
 templates.depends += core
 #templates.depends += mainwindow
+
+datapack.subdir   = datapackplugin
+datapack.depends += core
+
+# manage non free content
+include(../../config.pri)
+!isEmpty(HAS_NONFREE):include($${NONFREE_SOURCES_PLUGINS_PATH}/plugins.pri)
+message($${HAS_NONFREE}  //  $${NONFREE_SOURCES_PLUGINS_PATH})

@@ -43,12 +43,15 @@
 #include <drugsplugin/constants.h>
 #include <drugsplugin/drugswidgetmanager.h>
 
+#include <drugsbaseplugin/drugbasecore.h>
+#include <drugsbaseplugin/drugsbase.h>
 #include <drugsbaseplugin/constants.h>
 #include <drugsbaseplugin/drugsio.h>
-#include <drugsbaseplugin/drugsbase.h>
 #include <drugsbaseplugin/globaldrugsmodel.h>
 #include <drugsbaseplugin/drugsmodel.h>
-#include <drugsbaseplugin/interactionmanager.h>
+#include <drugsbaseplugin/idrugengine.h>
+
+//#include <drugsbaseplugin/interactionmanager.h>
 //#include <drugsbaseplugin/engines/allergyengine.h>
 
 #include <templatesplugin/templatesview.h>
@@ -97,8 +100,8 @@ static inline Core::IPatient *patient() { return Core::Internal::CoreImpl::insta
 static inline Core::FileManager *fileManager() { return Core::ICore::instance()->fileManager(); }
 inline static DrugsDB::DrugsModel *drugModel() { return DrugsWidget::DrugsWidgetManager::instance()->currentDrugsModel(); }
 static inline Core::IDocumentPrinter *printer() {return ExtensionSystem::PluginManager::instance()->getObject<Core::IDocumentPrinter>();}
-static inline DrugsDB::Internal::DrugsBase *drugsBase() {return DrugsDB::Internal::DrugsBase::instance();}
 static inline ExtensionSystem::PluginManager *pluginManager() {return ExtensionSystem::PluginManager::instance();}
+static inline DrugsDB::DrugsBase &drugsBase() {return DrugsDB::DrugBaseCore::instance().drugsBase();}
 
 // SplashScreen Messagers
 static inline void messageSplash(const QString &s) {theme()->messageSplashScreen(s); }
@@ -186,23 +189,38 @@ public:
 
     void createPrecautionsModelAndView(QTreeView *treeview, QComboBox *combo)
     {
-//        DrugsDB::Internal::DrugAllergyEngine *engine = pluginManager()->getObject<DrugsDB::Internal::DrugAllergyEngine>();
-//        if (!engine) {
-//            LOG_ERROR_FOR("MainWindow", "No allergy engine");
-//            return;
-//        }
-//        QAbstractItemModel *model = engine->drugPrecautionModel();
-//        if (!treeview) {
-//            treeview = new QTreeView(q);
-//            combo->setModel(model);
-//            combo->setView(treeview);
-//            treeview->header()->hide();
-//            treeview->expandAll();
-//            treeview->resizeColumnToContents(0);
-//            treeview->setIndentation(10);
-//            treeview->setFrameStyle(QFrame::NoFrame);
-//            treeview->setAlternatingRowColors(true);
-//        }
+        QList<DrugsDB::IDrugEngine*> engines = pluginManager()->getObjects<DrugsDB::IDrugEngine>();
+        if (engines.isEmpty()) {
+            LOG_ERROR_FOR("MainWindow", "No allergy engine");
+            return;
+        }
+        DrugsDB::IDrugEngine *engine = 0;
+        foreach(DrugsDB::IDrugEngine *e, engines) {
+            if (e->isCalculatingPatientDrugAllergiesAndIntolerances()) {
+                engine = e;
+                break;
+            }
+        }
+        if (!engine) {
+            combo->hide();
+            return;
+        }
+        QAbstractItemModel *model = engine->precautionModel();
+        if (!model) {
+            combo->hide();
+            return;
+        }
+        if (!treeview) {
+            treeview = new QTreeView(q);
+            combo->setModel(model);
+            combo->setView(treeview);
+            treeview->header()->hide();
+            treeview->expandAll();
+            treeview->resizeColumnToContents(0);
+            treeview->setIndentation(10);
+            treeview->setFrameStyle(QFrame::NoFrame);
+            treeview->setAlternatingRowColors(true);
+        }
     }
 
 public:
@@ -429,14 +447,12 @@ void MainWindow::extensionsInitialized()
         m_ui->clearPatient->setEnabled(false);
     }
 
-    createDockWindows();
-    readSettings();
     show();
     raise();
 
     // Connect post core initialization
     connect(Core::ICore::instance(), SIGNAL(coreOpened()), this, SLOT(postCoreInitialization()));
-    connect(drugsBase(), SIGNAL(drugsBaseHasChanged()), this, SLOT(refreshPatient()));
+    connect(&drugsBase(), SIGNAL(drugsBaseHasChanged()), this, SLOT(refreshPatient()));
     connect(drugModel(), SIGNAL(numberOfRowsChanged()), this, SLOT(updateIconBadgeOnMacOs()));
 }
 
@@ -459,6 +475,9 @@ MainWindow::~MainWindow()
 
 void MainWindow::postCoreInitialization()
 {
+    createDockWindows();
+    readSettings();
+
     contextManager()->updateContext();
     actionManager()->retranslateMenusAndActions();
     refreshPatient();
