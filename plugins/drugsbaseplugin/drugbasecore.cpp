@@ -138,11 +138,8 @@ void DrugBaseCore::onCoreDatabaseServerChanged()
 
 void DrugBaseCore::packChanged(const DataPack::Pack &pack)
 {
-    WARN_FUNC << pack.uuid() << pack.version() << pack.dataType();
     if (pack.dataType() == DataPack::Pack::DrugsWithInteractions ||
             pack.dataType() == DataPack::Pack::DrugsWithoutInteractions) {
-        // Refresh drugsbase
-        qWarning() << "XXXXXXXXXXXXXX REFRESH DRUG DATABASE" << pack.uuid() << pack.version();
         d->m_DrugsBase->datapackChanged();
     }
 }
