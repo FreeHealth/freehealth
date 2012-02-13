@@ -213,9 +213,6 @@ void HttpServerEngine::downloadProgress(qint64 bytesRead, qint64 totalBytes)
 {
     // Retreive progressBar
     QNetworkReply *reply = qobject_cast<QNetworkReply*>(sender());
-
-    qWarning() << "SERVER" << m_replyToData[reply].server->uuid();
-
     QProgressBar *bar = m_replyToData[reply].bar;
     if (!bar) {
         disconnect(reply, SIGNAL(downloadProgress(qint64,qint64)), this, SLOT(downloadProgress(qint64,qint64)));
@@ -301,9 +298,6 @@ void HttpServerEngine::serverFinished()
     Q_ASSERT(data.server);
     data.server->setConnected(true);
     reply->deleteLater(); // we don't need reply anymore
-
-    qWarning() << "SERVER" << data.server->uuid();
-    qWarning() << "SERVER" << data.server->version();
 
     ServerEngineStatus *status = getStatus(data);
     Q_ASSERT(status);
