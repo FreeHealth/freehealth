@@ -7,4 +7,5 @@ SUBDIRS  = \
            ../../libs/extensionsystem \
            ../../libs/translationutils \
            ../../libs/utils \
-           ../../contrib/quazip
+           ../../contrib/quazip \
+           ../../libs/datapackutils \

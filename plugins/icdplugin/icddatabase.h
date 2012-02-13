@@ -33,10 +33,13 @@
 /**
  * \file icddatabase.h
  * \author Eric MAEKER <eric.maeker@gmail.com>
- * \version 0.5.0
- * \date 18 Nov 2010
+ * \version 0.6.4
+ * \date 13 Feb 2012
 */
 
+namespace DataPack {
+class Pack;
+}
 
 namespace ICD {
 class IcdPlugin;
@@ -90,10 +93,12 @@ public:
 Q_SIGNALS:
     void databaseInitialized();
 
-protected Q_SLOTS:
+protected:
     bool init();
+    bool refreshDatabase();
 
 private Q_SLOTS:
+    void packChanged(const DataPack::Pack &pack);
     void refreshLanguageDependCache();
 
 private:

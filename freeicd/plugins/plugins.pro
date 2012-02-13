@@ -8,7 +8,8 @@ SUBDIRS = \
     texteditor \
     user \
     views \
-    zipcodes
+    zipcodes \
+    datapack
 
 core.subdir = coreplugin
 
@@ -40,3 +41,6 @@ views.depends += core
 
 zipcodes.subdir = zipcodesplugin
 zipcodes.depends += core
+
+datapack.subdir   = datapackplugin
+datapack.depends += core

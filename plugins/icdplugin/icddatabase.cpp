@@ -49,6 +49,9 @@
 #include <translationutils/constants.h>
 #include <translationutils/trans_database.h>
 #include <translationutils/trans_msgerror.h>
+#include <datapackutils/datapackcore.h>
+#include <datapackutils/ipackmanager.h>
+#include <datapackutils/pack.h>
 
 #include <QCoreApplication>
 #include <QSqlDatabase>
@@ -67,8 +70,9 @@ using namespace ICD;
 using namespace ICD::Internal;
 using namespace Trans::ConstantTranslations;
 
-
 static inline Core::ISettings *settings()  { return Core::ICore::instance()->settings(); }
+static inline DataPack::DataPackCore &dataPackCore() { return DataPack::DataPackCore::instance(); }
+static inline DataPack::IPackManager *packManager() { return dataPackCore().packManager(); }
 
 // Database fullPath
 static inline QString fullDatabasePath() {
@@ -278,7 +282,9 @@ IcdDatabase::IcdDatabase(QObject *parent) :
     addField(Table_Version,  VERSION_DATE, "date");
     addField(Table_Version,  VERSION_COMMENT, "expl");
 
-    init();
+    connect(packManager(), SIGNAL(packInstalled(DataPack::Pack)), this, SLOT(packChanged(DataPack::Pack)));
+    connect(packManager(), SIGNAL(packRemoved(DataPack::Pack)), this, SLOT(packChanged(DataPack::Pack)));
+//    connect(packManager(), SIGNAL(packUpdated(DataPack::Pack)), this, SLOT(packChanged(DataPack::Pack)));
 }
 
 /** \brief Destructor. */
@@ -349,6 +355,24 @@ bool IcdDatabase::init()
      }
 
      return true;
+}
+
+bool IcdDatabase::refreshDatabase()
+{
+    m_initialized = false;
+    QSqlDatabase::removeDatabase(Constants::DB_ICD10);
+    return init();
+}
+
+void IcdDatabase::packChanged(const DataPack::Pack &pack)
+{
+    WARN_FUNC << pack.uuid() << pack.version() << pack.dataType();
+    if (pack.dataType() == DataPack::Pack::DrugsWithInteractions ||
+            pack.dataType() == DataPack::Pack::DrugsWithoutInteractions) {
+        // Refresh drugsbase
+        qWarning() << "XXXXXXXXXXXXXX REFRESH ICD DATABASE" << pack.uuid() << pack.version();
+        refreshDatabase();
+    }
 }
 
 void IcdDatabase::refreshLanguageDependCache()
