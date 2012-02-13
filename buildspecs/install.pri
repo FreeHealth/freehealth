@@ -42,8 +42,9 @@ DEFINES *= "INSTALL_BINARY_PATH=\"\\\"$$INSTALL_BINARY_PATH\\\"\"" \
 	   "INSTALL_QT_PLUGINS_PATH=\"\\\"$$INSTALL_QT_PLUGINS_PATH\\\"\""
 
 # resources paths
-INSTALL_TRANSLATIONS_PATH = $${INSTALL_RESOURCES_PATH}/translations
 INSTALL_DATABASES_PATH    = $${INSTALL_RESOURCES_PATH}/databases
+INSTALL_TRANSLATIONS_PATH = $${INSTALL_RESOURCES_PATH}/translations
+INSTALL_FREEDATAPACK_PATH = $${INSTALL_RESOURCES_PATH}/datapacks/appinstalled
 INSTALL_FORMS_PATH        = $${INSTALL_RESOURCES_PATH}
 INSTALL_PROFILES_PATH     = $${INSTALL_RESOURCES_PATH}
 INSTALL_TEXTFILES_PATH    = $${INSTALL_RESOURCES_PATH}/textfiles
@@ -89,7 +90,7 @@ message( *************************    FreeMedForms Resources   *****************
 message( ******************************************************************************** )
 message( Resources : $${INSTALL_RESOURCES_PATH} )
 message( Translations : $${INSTALL_TRANSLATIONS_PATH} )
-!isEmpty(INSTALL_DATABASES_PATH):message( Database : $${INSTALL_DATABASES_PATH} )
+!isEmpty(INSTALL_FREEDATAPACK_PATH):message( Free datapack path : $${INSTALL_FREEDATAPACK_PATH} )
 !isEmpty(INSTALL_FORMS_PATH):message( Forms : $${INSTALL_FORMS_PATH} )
 message( Pixmaps - small : $${INSTALL_SMALLPIX_PATH} )
 message( Pixmaps - medium : $${INSTALL_MEDIUMPIX_PATH} )
@@ -102,11 +103,11 @@ message( Pixmaps - splashscreens : $${INSTALL_SPLASHPIX_PATH} )
 message( ******************************************************************************** )
 message( *************************    FreeMedForms Databases   ************************** )
 message( ******************************************************************************** )
-eval(INSTALL_DRUGS=1):message( Installing drugs database )
-eval(INSTALL_PROFILES_FILES=1):message( Installing user default Profiles files)
-eval(INSTALL_ICD_DATABASE=1):message( Installing ICD10 database )
-eval(INSTALL_ACCOUNT_FILES=1):message( Installing Account files )
-eval(INSTALL_ZIPCODES=1):message( Installing ZipCodes database )
+contains(INSTALL_DRUGS,1):message( Installing drugs database )
+contains(INSTALL_PROFILES_FILES,1):message( Installing user default Profiles files)
+contains(INSTALL_ICD_DATABASE,1):message( Installing ICD10 database )
+contains(INSTALL_ACCOUNT_FILES,1):message( Installing Account files )
+contains(INSTALL_ZIPCODES,1):message( Installing ZipCodes database )
 
 
 # Install target
@@ -175,20 +176,20 @@ INSTALLS += forms
 }
 
 # Install drugs databases
-eval(INSTALL_DRUGS=1):!isEmpty(INSTALL_DATABASES_PATH):!isEmpty(SOURCES_DATABASES){
-drugsdb.path = $${INSTALL_DATABASES_PATH}/drugs
-drugsdb.files = $${SOURCES_DATABASES}/drugs/master.db
+contains(INSTALL_DRUGS,1):!isEmpty(INSTALL_FREEDATAPACK_PATH):!isEmpty(SOURCES_FREEDATAPACK_PATH){
+drugsdb.path = $${INSTALL_FREEDATAPACK_PATH}/drugs
+drugsdb.files = $${SOURCES_FREEDATAPACK_PATH}/drugs/*
 INSTALLS += drugsdb
 }
 
-!isEmpty(INSTALL_DATABASES_PATH):!isEmpty(SOURCES_DATABASES){
-usersdb.path = $${INSTALL_DATABASES_PATH}/users
-usersdb.files = $${SOURCES_GLOBAL_RESOURCES}/databases/users/*txt
-INSTALLS += usersdb
-}
+#!isEmpty(INSTALL_DATABASES_PATH):!isEmpty(SOURCES_DATABASES){
+#usersdb.path = $${INSTALL_DATABASES_PATH}/users
+#usersdb.files = $${SOURCES_GLOBAL_RESOURCES}/databases/users/*txt
+#INSTALLS += usersdb
+#}
 
 # Install profiles
-eval(INSTALL_PROFILES_FILES=1):!isEmpty(INSTALL_PROFILES_PATH){
+contains(INSTALL_PROFILES_FILES,1):!isEmpty(INSTALL_PROFILES_PATH){
 profiles_resources.path = $${INSTALL_PROFILES_PATH}
 profiles_resources.files = $${SOURCES_PROFILES}
 INSTALLS += profiles_resources
@@ -243,23 +244,24 @@ INSTALLS+=packageHelpers
 }
 
 # Install some specific files
-eval(INSTALL_ICD_DATABASE=1){
+contains(INSTALL_ICD_DATABASE,1){
 freeicd_sqlfile.path=$${INSTALL_RESOURCES_PATH}/sql/icd10
 freeicd_sqlfile.files=$${SOURCES_GLOBAL_RESOURCES}/sql/icd10/icd10.sql
-freeicd_db.path=$${INSTALL_DATABASES_PATH}/icd10
-freeicd_db.files=$${SOURCES_DATABASES}/icd10/icd10.db
-INSTALLS+=freeicd_sqlfile freeicd_db
+#freeicd_db.path=$${INSTALL_FREEDATAPACK_PATH}/icd10
+#freeicd_db.files=$${SOURCES_FREEDATAPACK_PATH}/icd10/icd10.db
+#INSTALLS+=freeicd_sqlfile freeicd_db
+INSTALLS+=freeicd_sqlfile
 }
 
 # Install FreeAccount SQL files
-eval(INSTALL_ACCOUNT_FILES=1){
+contains(INSTALL_ACCOUNT_FILES,1){
 account_sqlfile.path=$${INSTALL_RESOURCES_PATH}/sql/account
 account_sqlfile.files=$${SOURCES_GLOBAL_RESOURCES}/sql/account/*
 INSTALLS+=account_sqlfile
 }
 
-# Install Zipcodes db
-eval(INSTALL_ZIPCODES=1){
+# Install Zipcodes db  TODO MOVE THIS IN DATAPACKS
+contains(INSTALL_ZIPCODES,1){
 zipcodes_db.path=$${INSTALL_DATABASES_PATH}/zipcodes
 zipcodes_db.files=$${SOURCES_DATABASES}/zipcodes/zipcodes.db
 INSTALLS+=zipcodes_db
