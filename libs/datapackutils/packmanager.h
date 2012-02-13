@@ -29,6 +29,9 @@
 
 #include <datapackutils/ipackmanager.h>
 
+#include <QVector>
+#include <QList>
+
 /**
  * \file packmanager.h
  * \author Eric MAEKER <eric.maeker@gmail.com>

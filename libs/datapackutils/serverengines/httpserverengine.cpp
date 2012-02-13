@@ -190,6 +190,7 @@ bool HttpServerEngine::startDownloadQueue()
             // Create reply and store it
             reply = m_NetworkAccessManager->get(request);
             m_replyToData.insert(reply, ReplyData(reply, s, Server::PackFile, *query.pack, query.progressBar));
+
         }
         connect(reply, SIGNAL(readyRead()), this, SLOT(serverReadyRead()));
         connect(reply, SIGNAL(finished()), this, SLOT(serverFinished()));

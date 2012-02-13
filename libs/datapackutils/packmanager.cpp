@@ -185,6 +185,7 @@ bool PackManager::downloadPack(const Pack &pack, QProgressBar *bar)
         m_Errors << tr("Nothing to download");
         return false;
     }
+    return true;
 }
 
 void PackManager::packDownloadDone(const DataPack::Pack &pack, const DataPack::ServerEngineStatus &status)

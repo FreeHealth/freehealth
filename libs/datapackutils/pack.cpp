@@ -29,6 +29,7 @@
 
 #include <utils/log.h>
 #include <utils/global.h>
+#include <translationutils/constants.h>
 #include <translationutils/trans_current.h>
 #include <translationutils/trans_drugs.h>
 #include <translationutils/trans_msgerror.h>

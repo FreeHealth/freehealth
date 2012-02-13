@@ -43,6 +43,7 @@
 #include <QApplication>
 #include <QFont>
 #include <QString>
+#include <QIcon>
 
 #include <QDebug>
 

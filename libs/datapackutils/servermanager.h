@@ -28,12 +28,16 @@
 #define DATAPACK_SERVERMANAGER_H
 
 #include <datapackutils/iservermanager.h>
+#include <datapackutils/server.h>
 QT_BEGIN_NAMESPACE
 class QNetworkAccessManager;
 class QSignalMapper;
 QT_END_NAMESPACE
 
 #include <QNetworkReply>
+#include <QVector>
+#include <QMultiHash>
+#include <QString>
 
 /**
  * \file servermanager.h

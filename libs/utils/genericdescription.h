@@ -29,7 +29,6 @@
 
 #include <utils/global_exporter.h>
 #include <utils/genericupdateinformation.h>
-#include <translationutils/multilingualclasstemplate.h>
 
 #include <QVariant>
 #include <QHash>

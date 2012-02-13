@@ -45,7 +45,6 @@
 #include <datapackutils/packmanager.h>
 #include <datapackutils/packmodel.h>
 #include <datapackutils/servermodel.h>
-#include <datapackutils/widgets/packprocessdialog.h>
 #include <datapackutils/widgets/packwizard.h>
 
 #include <QToolBar>

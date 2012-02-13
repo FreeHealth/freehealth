@@ -30,6 +30,7 @@
 #include <utils/global.h>
 #include <utils/versionnumber.h>
 #include <utils/genericupdateinformation.h>
+#include <translationutils/constants.h>
 
 #include <QDomDocument>
 #include <QDomElement>
@@ -41,7 +42,7 @@
 
 using namespace Utils;
 //using namespace Internal;
-using namespace Trans::ConstantTranslations;
+//using namespace Trans::ConstantTranslations;
 
 namespace {
 

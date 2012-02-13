@@ -41,6 +41,8 @@
 #include <translationutils/trans_menu.h>
 #include <translationutils/trans_spashandupdate.h>
 
+#include <QIcon>
+
 #include <QDebug>
 
 using namespace DataPack;
