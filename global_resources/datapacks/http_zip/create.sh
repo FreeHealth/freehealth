@@ -10,7 +10,7 @@ if [ "$sys" == "Linux" ] ; then
     statarg="-c%s"
     sedbak=""
 elif [ "$sys" == "Darwin" ] ; then
-    md5="md5"
+    md5="md5 -q"
     statarg="-s"
     sedbak=".bak"
 fi
