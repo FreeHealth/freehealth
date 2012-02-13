@@ -27,7 +27,6 @@
 #include "servermanager.h"
 #include "datapackcore.h"
 #include "iserverengine.h"
-#include "widgets/packprocessdialog.h"
 
 #include <utils/log.h>
 #include <utils/global.h>
