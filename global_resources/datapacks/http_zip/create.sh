@@ -25,7 +25,11 @@ do
 
     # Compute data to insert
     zipmd5=$($md5 $zipfile | cut -d ' ' -f 1)
-    zipsize=$(stat $statarg "$zipfile")
+    if [ "$sys" == "Linux" ] ; then
+        zipsize=$(stat $statarg "$zipfile")
+    elif [ "$sys" == "Darwin" ] ; then
+        zipsize=`du -k $zipfile | awk '{print $1}'`
+    fi
 
     echo "For $zipfile, md5=$zipmd5 and size=$zipsize"
 
