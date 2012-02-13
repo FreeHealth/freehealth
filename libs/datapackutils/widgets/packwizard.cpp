@@ -529,6 +529,7 @@ void PackRemovePage::startRemoval()
         const Pack &pack = packWizard()->removePacks().at(i);
         packManager()->removePack(pack);
     }
+    packWizard()->next();
 }
 
 void PackRemovePage::cleanupPage()
