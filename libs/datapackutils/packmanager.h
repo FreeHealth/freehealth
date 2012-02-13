@@ -59,7 +59,7 @@ public:
 
     bool downloadPack(const Pack &pack, QProgressBar *bar);
     bool checkCachedPackFileIntegrity(const Pack &pack);
-    bool installDownloadedPack(const Pack &pack);
+    bool installDownloadedPack(const Pack &pack, QProgressBar *bar = 0);
     bool removePack(const Pack &pack);
 
 private Q_SLOTS:

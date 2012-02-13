@@ -20,8 +20,6 @@ HEADERS += datapack_exporter.h \
     iservermanager.h \
     widgets/serverpackeditor.h \
     widgets/addserverdialog.h \
-    widgets/packprocessdialog.h \
-#    serverandpackmodel.h \
     iserverengine.h \
     serverengines/localserverengine.h \
     serverengines/httpserverengine.h \
@@ -31,7 +29,8 @@ HEADERS += datapack_exporter.h \
     packdependencychecker.h \
     ipackmanager.h \
     packmanager.h \
-    serverenginestatus.h
+    serverenginestatus.h \
+    widgets/packwizard.h
 
 SOURCES += \
     servermanager.cpp \
@@ -45,8 +44,6 @@ SOURCES += \
     iservermanager.cpp \
     widgets/serverpackeditor.cpp \
     widgets/addserverdialog.cpp \
-    widgets/packprocessdialog.cpp \
-#    serverandpackmodel.cpp \
     iserverengine.cpp \
     serverengines/localserverengine.cpp \
     serverengines/httpserverengine.cpp \
@@ -54,12 +51,12 @@ SOURCES += \
     servermodel.cpp \
     categorylistwidget.cpp \
     packdependencychecker.cpp \
-    packmanager.cpp
+    packmanager.cpp \
+    widgets/packwizard.cpp
 
 FORMS += \
     widgets/serverpackeditor.ui \
-    widgets/addserverdialog.ui \
-    widgets/packprocessdialog.ui
+    widgets/addserverdialog.ui
 
 
 

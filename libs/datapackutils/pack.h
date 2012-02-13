@@ -56,6 +56,7 @@ public:
     QString uuid() const;
     QString version() const;
     QString name() const;
+    QString vendor() const;
     QString serverFileName() const;
     QString serverLicenceFileName() const;
 

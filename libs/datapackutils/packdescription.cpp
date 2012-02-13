@@ -120,6 +120,8 @@ const PackDependencyData &PackDependencies::at(const int index) const
 bool PackDependencies::fromDomElement(const QDomElement &root)
 {
     dependencies.clear();
+    if (root.isNull())
+        return true;
     if (root.tagName().compare(::TAG_DEPENDENCIES_ROOT_TAG, Qt::CaseInsensitive)!=0) {
         LOG_ERROR_FOR("DataPack::PackDependencies", "Wrong root tag: " + QString(::TAG_DEPENDENCIES_ROOT_TAG));
         return false;

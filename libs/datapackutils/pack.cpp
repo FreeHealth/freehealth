@@ -77,6 +77,13 @@ QString Pack::name() const
     return m_descr.data(PackDescription::Label).toString();
 }
 
+QString Pack::vendor() const
+{
+    const QString &v = m_descr.data(PackDescription::Vendor).toString();
+    if (v.isEmpty())
+        return tkTr(Trans::Constants::THE_FREEMEDFORMS_COMMUNITY);
+    return v;
+}
 QString Pack::serverFileName() const
 {
     return m_descr.data(PackDescription::AbsFileName).toString();
@@ -186,7 +193,7 @@ QString Pack::dataTypeName() const
 void Pack::fromXmlFile(const QString &absFileName)
 {
     m_OriginalFileName = absFileName;
-    qWarning() << "PackFromXml" << absFileName;
+//    qWarning() << "PackFromXml" << absFileName;
     fromXml(Utils::readTextFile(absFileName, Utils::DontWarnUser));
 }
 
@@ -213,6 +220,7 @@ bool Pack::operator==(const Pack &other) const
 {
     return (this->uuid()==other.uuid() &&
             this->version()==other.version() &&
+            this->vendor()==other.vendor() &&
             this->name()==other.name());
 }
 

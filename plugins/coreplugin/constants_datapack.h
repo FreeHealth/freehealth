@@ -19,82 +19,27 @@
  *  If not, see <http://www.gnu.org/licenses/>.                            *
  ***************************************************************************/
 /***************************************************************************
- *   Main Developpers :                                                    *
- *       Eric MAEKER, MD <eric.maeker@gmail.com>                           *
+ *   Main Developper : Eric MAEKER, <eric.maeker@gmail.com>                *
  *   Contributors :                                                        *
  *       NAME <MAIL@ADRESS>                                                *
  ***************************************************************************/
-#ifndef DATAPACK_PACKPROCESSDIALOG_H
-#define DATAPACK_PACKPROCESSDIALOG_H
-
-#include <QDialog>
-class QStandardItemModel;
-class QGridLayout;
+#ifndef CORE_CONSTANTS_DATAPACK_H
+#define CORE_CONSTANTS_DATAPACK_H
 
 /**
- * \file packprocessdialog.h
+ * \file constants_datapack.h
  * \author Eric MAEKER <eric.maeker@gmail.com>
  * \version 0.6.2
- * \date 07 Feb 2012
+ * \date 04 Feb 2012
 */
 
-namespace DataPack {
-class Pack;
-class IServerManager;
-class IServerEngine;
-class ServerEngineStatus;
+namespace Core {
+namespace Constants {
 
-namespace Internal {
-class PackProcessDialogPrivate;
-namespace Ui {
-    class PackProcessDialog;
-}
-}
+const char * const  FREEMEDFORMS_DEFAULT_DATAPACK_HTTPSERVER = "http://test.freemedforms.com/";
 
-class PackProcessDialog : public QDialog
-{
-    Q_OBJECT
-    friend class DataPack::IServerManager;
 
-public:
-    explicit PackProcessDialog(QWidget *parent = 0);
-    ~PackProcessDialog();
+}  // end Constants
+} // end Core
 
-    void setPackToInstall(const Pack &pack);
-    void setPackToInstall(const QList<Pack> &packs);
-
-    void setPackToUpdate(const Pack &pack);
-    void setPackToUpdate(const QList<Pack> &packs);
-
-    void setPackToRemove(const Pack &pack);
-    void setPackToRemove(const QList<Pack> &packs);
-
-    void setPackToProcess(const QList<Pack> &installPacks, const QList<Pack> &updatePacks, const QList<Pack> &removePacks);
-
-//    void checkDependencies() const;
-//    bool isDependenciesAssumed() const;
-
-protected Q_SLOTS:
-    void done(int result);
-
-protected:
-    void setServerEngines(const QVector<DataPack::IServerEngine*> &engines);
-
-private Q_SLOTS:
-    void processPacks();
-    void packDownloadDone(const DataPack::Pack &pack, const DataPack::ServerEngineStatus &status);
-
-private:
-    void startPackDownloads();
-    void installPacks();
-    void removePacks();
-    void clearTemporaries();
-    void showLogMessage();
-
-private:
-    Internal::PackProcessDialogPrivate *d;
-};
-
-}  // End namespace DataPack
-
-#endif // DATAPACK_PackProcessDialog_H
+#endif // CORE_CONSTANTS_DATAPACK_H

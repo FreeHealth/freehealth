@@ -215,7 +215,7 @@ bool PackManager::checkCachedPackFileIntegrity(const Pack &pack)
     return (downloadedMd5 == pack.md5ControlChecksum());
 }
 
-bool PackManager::installDownloadedPack(const Pack &pack)
+bool PackManager::installDownloadedPack(const Pack &pack, QProgressBar *bar)
 {
     WARN_FUNC << pack.uuid();
     const QString &pathTo = pack.unzipPackToPath();
@@ -232,7 +232,7 @@ bool PackManager::installDownloadedPack(const Pack &pack)
 
     // Unzip pack to the install path
     bool error = false;
-    if (!QuaZipTools::unzipFile(pack.persistentlyCachedZipFileName(), pathTo)) {
+    if (!QuaZipTools::unzipFile(pack.persistentlyCachedZipFileName(), pathTo, bar)) {
         LOG_ERROR(tr("Unable to unzip pack file %1 to %2").arg(pack.persistentlyCachedZipFileName()).arg(pathTo));
         m_Errors << tr("Unable to unzip pack file %1 to %2").arg(pack.persistentlyCachedZipFileName()).arg(pathTo);
         error = true;

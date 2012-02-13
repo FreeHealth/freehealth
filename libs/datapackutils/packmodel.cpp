@@ -114,10 +114,6 @@ static QString packToHtml(const PackItem &item)
 static QString packTooltip(const PackItem &item)
 {
     const PackDescription &descr = item.pack.description();
-    QString vendor = descr.data(PackDescription::Vendor).toString();
-    if (vendor.isEmpty()) {
-        vendor = tkTr(Trans::Constants::THE_FREEMEDFORMS_COMMUNITY);
-    }
     return QString("<p style=\"font-weight:bold;font-size:large;\">%1</p>"
                       "<p style=\"font-size:small;margin-left:20px;color:gray\">"
                       "%2: %3<br />"
@@ -135,7 +131,7 @@ static QString packTooltip(const PackItem &item)
             .arg(tkTr(Trans::Constants::AUTHOR))
             .arg(descr.data(PackDescription::Author).toString())
             .arg(tkTr(Trans::Constants::VENDOR))
-            .arg(vendor)
+            .arg(item.pack.vendor())
             .arg(tkTr(Trans::Constants::DATA_TYPE))
             .arg(item.pack.dataTypeName())
             ;
@@ -242,6 +238,7 @@ public:
                 // Pack is installed with a lower version ?
                 bool installedWithLowerVersion = packManager()->isDataPackInstalled(p.uuid());
                 if (installedWithLowerVersion) {
+                    item.isInstalled = false;
                     item.isAnUpdate = true;
                     item.userCheckState = Qt::PartiallyChecked;
                 }

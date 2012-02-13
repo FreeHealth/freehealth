@@ -46,6 +46,7 @@
 #include <datapackutils/packmodel.h>
 #include <datapackutils/servermodel.h>
 #include <datapackutils/widgets/packprocessdialog.h>
+#include <datapackutils/widgets/packwizard.h>
 
 #include <QToolBar>
 #include <QProgressDialog>
@@ -309,11 +310,6 @@ void ServerPackEditor::populatePackView(const int packId)
 {
     const Pack &pack = d->m_PackModel->packageAt(packId);
     const PackDescription &descr = pack.description();
-    // Vendor ?
-    QString vendor = descr.data(PackDescription::Vendor).toString();
-    if (vendor.isEmpty()) {
-        vendor = tkTr(Trans::Constants::THE_FREEMEDFORMS_COMMUNITY);
-    }
     QString summary;
 
     // short description, version date and author
@@ -334,7 +330,7 @@ void ServerPackEditor::populatePackView(const int packId)
             .arg(tkTr(Trans::Constants::AUTHOR))
             .arg(descr.data(PackDescription::Author).toString())
             .arg(tkTr(Trans::Constants::VENDOR))
-            .arg(vendor)
+            .arg(pack.vendor())
             .arg(tkTr(Trans::Constants::DATA_TYPE))
             .arg(pack.dataTypeName())
             ;
@@ -443,7 +439,8 @@ void ServerPackEditor::processPacks()
     if (!d->m_PackModel->isDirty())
         return;
     // Run Pack Dialog
-    PackProcessDialog dlg;
+//    PackProcessDialog dlg;
+    PackWizard dlg;
     dlg.setPackToProcess(d->m_PackModel->packageToInstall(), d->m_PackModel->packageToUpdate(), d->m_PackModel->packageToRemove());
     if (dlg.exec()==QDialog::Rejected) {
         return;

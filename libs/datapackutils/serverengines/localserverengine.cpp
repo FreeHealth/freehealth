@@ -102,11 +102,11 @@ bool LocalServerEngine::startDownloadQueue()
             QFileInfo local(url);
             if (local.exists()) {
                 // copy pack to datapack core persistentCachePath
-                /** \todo change the newPath construction, use Pack path */
                 QString newPath = QFileInfo(pack->persistentlyCachedZipFileName()).absolutePath();
                 QString error;
                 Utils::removeDirRecursively(newPath, &error);
                 QDir().mkpath(newPath);
+
                 // copy pack File and XML config
                 QFile::copy(local.absoluteFilePath(), pack->persistentlyCachedZipFileName());
                 QFile::copy(pack->originalXmlConfigFileName(), pack->persistentlyCachedXmlConfigFileName());
