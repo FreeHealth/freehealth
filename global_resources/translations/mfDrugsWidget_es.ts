@@ -4,17 +4,17 @@
 <context>
     <name>DatabaseSelectorWidget</name>
     <message>
-        <location filename="../../plugins/drugsplugin/drugspreferences/databaseselectorwidget.cpp" line="209"/>
+        <location filename="../../plugins/drugsplugin/drugspreferences/databaseselectorwidget.cpp" line="213"/>
         <source>Reset actual prescription</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../../plugins/drugsplugin/drugspreferences/databaseselectorwidget.cpp" line="210"/>
+        <location filename="../../plugins/drugsplugin/drugspreferences/databaseselectorwidget.cpp" line="214"/>
         <source>You have selected a different drugs database than the currently-opened one. Your actual prescription will be resetted. Do you want to continue ?</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../../plugins/drugsplugin/drugspreferences/databaseselectorwidget.cpp" line="212"/>
+        <location filename="../../plugins/drugsplugin/drugspreferences/databaseselectorwidget.cpp" line="216"/>
         <source>Drugs database selection</source>
         <translation type="unfinished"></translation>
     </message>
@@ -22,23 +22,23 @@
 <context>
     <name>DosageCreatorDialog</name>
     <message>
-        <location filename="../../plugins/drugsplugin/dosagedialog/mfDosageCreatorDialog.cpp" line="173"/>
+        <location filename="../../plugins/drugsplugin/dosagedialog/mfDosageCreatorDialog.cpp" line="174"/>
         <source>Dosage is not valid.</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../../plugins/drugsplugin/dosagedialog/mfDosageCreatorDialog.cpp" line="175"/>
-        <location filename="../../plugins/drugsplugin/dosagedialog/mfDosageCreatorDialog.cpp" line="197"/>
+        <location filename="../../plugins/drugsplugin/dosagedialog/mfDosageCreatorDialog.cpp" line="176"/>
+        <location filename="../../plugins/drugsplugin/dosagedialog/mfDosageCreatorDialog.cpp" line="198"/>
         <source>Drug Dosage Creator</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../../plugins/drugsplugin/dosagedialog/mfDosageCreatorDialog.cpp" line="191"/>
+        <location filename="../../plugins/drugsplugin/dosagedialog/mfDosageCreatorDialog.cpp" line="192"/>
         <source>Dosage correctly saved to base</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../../plugins/drugsplugin/dosagedialog/mfDosageCreatorDialog.cpp" line="193"/>
+        <location filename="../../plugins/drugsplugin/dosagedialog/mfDosageCreatorDialog.cpp" line="194"/>
         <source>SQL Error : Dosage can not be added to database : %1</source>
         <translation type="unfinished"></translation>
     </message>
@@ -46,18 +46,18 @@
 <context>
     <name>DrugsWidget::DrugsCentralWidget</name>
     <message>
-        <location filename="../../plugins/drugsplugin/drugswidget/drugscentralwidget.cpp" line="174"/>
+        <location filename="../../plugins/drugsplugin/drugswidget/drugscentralwidget.cpp" line="177"/>
         <source>Can not add this drug to your prescription.</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../../plugins/drugsplugin/drugswidget/drugscentralwidget.cpp" line="175"/>
+        <location filename="../../plugins/drugsplugin/drugswidget/drugscentralwidget.cpp" line="178"/>
         <source>Prescription can not contains twice the sample pharmaceutical drug.
 Drug %1 is already in your prescription</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../../plugins/drugsplugin/drugswidget/drugscentralwidget.cpp" line="178"/>
+        <location filename="../../plugins/drugsplugin/drugswidget/drugscentralwidget.cpp" line="181"/>
         <source>If you want to change the dosage of this drug please double-click on it in the prescription box.</source>
         <translation type="unfinished"></translation>
     </message>
@@ -242,37 +242,37 @@ Drug %1 is already in your prescription</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../../plugins/drugsplugin/dosagedialog/mfDosageCreatorDialog.cpp" line="242"/>
+        <location filename="../../plugins/drugsplugin/dosagedialog/mfDosageCreatorDialog.cpp" line="243"/>
         <source>Drug Dosage Creator</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../../plugins/drugsplugin/dosagedialog/mfDosageCreatorDialog.cpp" line="260"/>
+        <location filename="../../plugins/drugsplugin/dosagedialog/mfDosageCreatorDialog.cpp" line="261"/>
         <source>Current database website</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../../plugins/drugsplugin/dosagedialog/mfDosageCreatorDialog.cpp" line="260"/>
+        <location filename="../../plugins/drugsplugin/dosagedialog/mfDosageCreatorDialog.cpp" line="261"/>
         <source>Help and Info</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../../plugins/drugsplugin/dosagedialog/mfDosageCreatorDialog.cpp" line="261"/>
+        <location filename="../../plugins/drugsplugin/dosagedialog/mfDosageCreatorDialog.cpp" line="262"/>
         <source>Prescribe only</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../../plugins/drugsplugin/dosagedialog/mfDosageCreatorDialog.cpp" line="261"/>
+        <location filename="../../plugins/drugsplugin/dosagedialog/mfDosageCreatorDialog.cpp" line="262"/>
         <source>Save protocol and prescribe</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../../plugins/drugsplugin/dosagedialog/mfDosageCreatorDialog.cpp" line="261"/>
+        <location filename="../../plugins/drugsplugin/dosagedialog/mfDosageCreatorDialog.cpp" line="262"/>
         <source>Save protocol only</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../../plugins/drugsplugin/dosagedialog/mfDosageCreatorDialog.cpp" line="261"/>
+        <location filename="../../plugins/drugsplugin/dosagedialog/mfDosageCreatorDialog.cpp" line="262"/>
         <source>Test interactions only</source>
         <translation type="unfinished"></translation>
     </message>
@@ -707,18 +707,18 @@ p, li { white-space: pre-wrap; }
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../../plugins/drugsplugin/dosagedialog/mfDosageViewer.cpp" line="425"/>
+        <location filename="../../plugins/drugsplugin/dosagedialog/mfDosageViewer.cpp" line="426"/>
         <source>Drug Dosage Creator</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../../plugins/drugsplugin/dosagedialog/mfDosageViewer.cpp" line="607"/>
+        <location filename="../../plugins/drugsplugin/dosagedialog/mfDosageViewer.cpp" line="608"/>
         <source>Clear this list</source>
         <comment>Clear the user&apos;s intakes recorded forms</comment>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../../plugins/drugsplugin/dosagedialog/mfDosageViewer.cpp" line="646"/>
+        <location filename="../../plugins/drugsplugin/dosagedialog/mfDosageViewer.cpp" line="647"/>
         <source>Linking to : </source>
         <translation type="unfinished"></translation>
     </message>
@@ -844,76 +844,76 @@ p, li { white-space: pre-wrap; }
 <context>
     <name>DrugsWidget::Internal::DrugInfoPrivate</name>
     <message>
-        <location filename="../../plugins/drugsplugin/drugswidget/druginfo.cpp" line="110"/>
+        <location filename="../../plugins/drugsplugin/drugswidget/druginfo.cpp" line="112"/>
         <source>INN Information will be lost.
 Do you want to send them ?</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../../plugins/drugsplugin/drugswidget/druginfo.cpp" line="175"/>
+        <location filename="../../plugins/drugsplugin/drugswidget/druginfo.cpp" line="177"/>
         <source>Testing : </source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../../plugins/drugsplugin/drugswidget/druginfo.cpp" line="181"/>
+        <location filename="../../plugins/drugsplugin/drugswidget/druginfo.cpp" line="183"/>
         <source>All interactions found.
 </source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../../plugins/drugsplugin/drugswidget/druginfo.cpp" line="183"/>
+        <location filename="../../plugins/drugsplugin/drugswidget/druginfo.cpp" line="185"/>
         <source>*** Missing interactions.
 </source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../../plugins/drugsplugin/drugswidget/druginfo.cpp" line="187"/>
+        <location filename="../../plugins/drugsplugin/drugswidget/druginfo.cpp" line="189"/>
         <source>All interactions are OK.
 </source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../../plugins/drugsplugin/drugswidget/druginfo.cpp" line="189"/>
+        <location filename="../../plugins/drugsplugin/drugswidget/druginfo.cpp" line="191"/>
         <source>*** Wrong interactions.
 </source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../../plugins/drugsplugin/drugswidget/druginfo.cpp" line="193"/>
+        <location filename="../../plugins/drugsplugin/drugswidget/druginfo.cpp" line="195"/>
         <source>IAM Text is correct.
 </source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../../plugins/drugsplugin/drugswidget/druginfo.cpp" line="195"/>
+        <location filename="../../plugins/drugsplugin/drugswidget/druginfo.cpp" line="197"/>
         <source>*** IAM Text is incorrect.
 </source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../../plugins/drugsplugin/drugswidget/druginfo.cpp" line="199"/>
+        <location filename="../../plugins/drugsplugin/drugswidget/druginfo.cpp" line="201"/>
         <source>CAT Text is correct.
 </source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../../plugins/drugsplugin/drugswidget/druginfo.cpp" line="201"/>
+        <location filename="../../plugins/drugsplugin/drugswidget/druginfo.cpp" line="203"/>
         <source>*** CAT Text is incorrect.
 </source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../../plugins/drugsplugin/drugswidget/druginfo.cpp" line="204"/>
+        <location filename="../../plugins/drugsplugin/drugswidget/druginfo.cpp" line="206"/>
         <source>Message : </source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../../plugins/drugsplugin/drugswidget/druginfo.cpp" line="210"/>
+        <location filename="../../plugins/drugsplugin/drugswidget/druginfo.cpp" line="212"/>
         <source>Checked interactions : </source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../../plugins/drugsplugin/drugswidget/druginfo.cpp" line="236"/>
+        <location filename="../../plugins/drugsplugin/drugswidget/druginfo.cpp" line="238"/>
         <source>ERROR : %1
 </source>
         <translation type="unfinished"></translation>
@@ -927,7 +927,7 @@ Do you want to send them ?</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../../plugins/drugsplugin/drugswidget/drugselector.cpp" line="195"/>
+        <location filename="../../plugins/drugsplugin/drugswidget/drugselector.cpp" line="196"/>
         <source>Selected drugs historic.</source>
         <translation type="unfinished"></translation>
     </message>
@@ -957,12 +957,12 @@ Do you really want to change the editing mode ?</source>
 <context>
     <name>DrugsWidget::Internal::DrugsDatabaseSelectorPage</name>
     <message>
-        <location filename="../../plugins/drugsplugin/drugspreferences/databaseselectorwidget.cpp" line="73"/>
+        <location filename="../../plugins/drugsplugin/drugspreferences/databaseselectorwidget.cpp" line="76"/>
         <source>Database selector</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../../plugins/drugsplugin/drugspreferences/databaseselectorwidget.cpp" line="75"/>
+        <location filename="../../plugins/drugsplugin/drugspreferences/databaseselectorwidget.cpp" line="78"/>
         <source>Drug database selector</source>
         <translation type="unfinished"></translation>
     </message>
@@ -970,12 +970,12 @@ Do you really want to change the editing mode ?</source>
 <context>
     <name>DrugsWidget::Internal::DrugsExtraOptionsPage</name>
     <message>
-        <location filename="../../plugins/drugsplugin/drugspreferences/mfDrugsPreferences.cpp" line="370"/>
+        <location filename="../../plugins/drugsplugin/drugspreferences/mfDrugsPreferences.cpp" line="371"/>
         <source>Extras</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../../plugins/drugsplugin/drugspreferences/mfDrugsPreferences.cpp" line="372"/>
+        <location filename="../../plugins/drugsplugin/drugspreferences/mfDrugsPreferences.cpp" line="373"/>
         <source>Drug&apos;s extra preferences</source>
         <translation type="unfinished"></translation>
     </message>
@@ -1006,8 +1006,8 @@ Do you really want to change the editing mode ?</source>
 <context>
     <name>DrugsWidget::Internal::DrugsPlugin</name>
     <message>
-        <location filename="../../plugins/drugsplugin/drugsplugin.cpp" line="157"/>
-        <location filename="../../plugins/drugsplugin/drugsplugin.cpp" line="176"/>
+        <location filename="../../plugins/drugsplugin/drugsplugin.cpp" line="158"/>
+        <location filename="../../plugins/drugsplugin/drugsplugin.cpp" line="177"/>
         <source>Initializing drugs plugin...</source>
         <translation type="unfinished"></translation>
     </message>
@@ -1015,17 +1015,17 @@ Do you really want to change the editing mode ?</source>
 <context>
     <name>DrugsWidget::Internal::DrugsPrintOptionsPage</name>
     <message>
-        <location filename="../../plugins/drugsplugin/drugspreferences/mfDrugsPreferences.cpp" line="214"/>
+        <location filename="../../plugins/drugsplugin/drugspreferences/mfDrugsPreferences.cpp" line="215"/>
         <source>Printing</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../../plugins/drugsplugin/drugspreferences/mfDrugsPreferences.cpp" line="216"/>
+        <location filename="../../plugins/drugsplugin/drugspreferences/mfDrugsPreferences.cpp" line="217"/>
         <source>Drug&apos;s printing preferences</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../../plugins/drugsplugin/drugspreferences/mfDrugsPreferences.cpp" line="250"/>
+        <location filename="../../plugins/drugsplugin/drugspreferences/mfDrugsPreferences.cpp" line="251"/>
         <source>Updating posologic sentence.</source>
         <translation type="unfinished"></translation>
     </message>
@@ -1078,7 +1078,7 @@ Do you really want to change the editing mode ?</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../../plugins/drugsplugin/drugspreferences/mfDrugsPreferences.cpp" line="640"/>
+        <location filename="../../plugins/drugsplugin/drugspreferences/mfDrugsPreferences.cpp" line="642"/>
         <source>This a note to take into account&lt;br /&gt;written in two lines...</source>
         <translation type="unfinished"></translation>
     </message>
@@ -1086,12 +1086,12 @@ Do you really want to change the editing mode ?</source>
 <context>
     <name>DrugsWidget::Internal::DrugsSelectorOptionsPage</name>
     <message>
-        <location filename="../../plugins/drugsplugin/drugspreferences/mfDrugsPreferences.cpp" line="145"/>
+        <location filename="../../plugins/drugsplugin/drugspreferences/mfDrugsPreferences.cpp" line="146"/>
         <source>Selector</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../../plugins/drugsplugin/drugspreferences/mfDrugsPreferences.cpp" line="147"/>
+        <location filename="../../plugins/drugsplugin/drugspreferences/mfDrugsPreferences.cpp" line="148"/>
         <source>Drug&apos;s selector preferences</source>
         <translation type="unfinished"></translation>
     </message>
@@ -1158,12 +1158,12 @@ Do you really want to change the editing mode ?</source>
 <context>
     <name>DrugsWidget::Internal::DrugsUserOptionsPage</name>
     <message>
-        <location filename="../../plugins/drugsplugin/drugspreferences/mfDrugsPreferences.cpp" line="305"/>
+        <location filename="../../plugins/drugsplugin/drugspreferences/mfDrugsPreferences.cpp" line="306"/>
         <source>User&apos;s documents</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../../plugins/drugsplugin/drugspreferences/mfDrugsPreferences.cpp" line="307"/>
+        <location filename="../../plugins/drugsplugin/drugspreferences/mfDrugsPreferences.cpp" line="308"/>
         <source>User preferences</source>
         <translation type="unfinished"></translation>
     </message>
@@ -1179,12 +1179,12 @@ Do you really want to change the editing mode ?</source>
 <context>
     <name>DrugsWidget::Internal::DrugsViewOptionsPage</name>
     <message>
-        <location filename="../../plugins/drugsplugin/drugspreferences/mfDrugsPreferences.cpp" line="72"/>
+        <location filename="../../plugins/drugsplugin/drugspreferences/mfDrugsPreferences.cpp" line="73"/>
         <source>View</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../../plugins/drugsplugin/drugspreferences/mfDrugsPreferences.cpp" line="74"/>
+        <location filename="../../plugins/drugsplugin/drugspreferences/mfDrugsPreferences.cpp" line="75"/>
         <source>Drug&apos;s view preferences</source>
         <translation type="unfinished"></translation>
     </message>
