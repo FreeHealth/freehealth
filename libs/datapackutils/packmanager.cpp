@@ -122,7 +122,7 @@ bool PackManager::downloadPack(const Pack &pack, QProgressBar *bar)
     m_Msg.clear();
     m_Errors.clear();
 
-    Server server = serverManager()->getServerForPack(pack);
+    Server &server = serverManager()->getServerForPack(pack);
 
     if (server.isNull()) {
         LOG_ERROR(tr("No server found for pack %1 (%2)").arg(pack.uuid()).arg(pack.version()));
@@ -177,7 +177,8 @@ bool PackManager::downloadPack(const Pack &pack, QProgressBar *bar)
         DataPack::IServerEngine *engine = m_Engines.at(i);
         if (engine->downloadQueueCount() > 0) {
             downloading = true;
-            connect(engine, SIGNAL(packDownloaded(DataPack::Pack, DataPack::ServerEngineStatus)), this, SLOT(packDownloadDone(DataPack::Pack, DataPack::ServerEngineStatus)));
+            connect(engine, SIGNAL(packDownloaded(DataPack::Pack, DataPack::ServerEngineStatus)),
+                    this, SLOT(packDownloadDone(DataPack::Pack, DataPack::ServerEngineStatus)));
             engine->startDownloadQueue();
         }
     }
@@ -190,8 +191,6 @@ bool PackManager::downloadPack(const Pack &pack, QProgressBar *bar)
 
 void PackManager::packDownloadDone(const DataPack::Pack &pack, const DataPack::ServerEngineStatus &status)
 {
-    qWarning() << "PACKDOWNLOAD DONE" << pack.uuid() << status;
-
     ServerEngineStatus s = status;
     // Check status
 

@@ -334,17 +334,17 @@ QList<Pack> ServerManager::getPackForServer(const Server &server)
     return m_Packs.values(server.uuid());
 }
 
-Server ServerManager::getServerForPack(const Pack &pack)
+Server &ServerManager::getServerForPack(const Pack &pack)
 {
     /** \todo priorize servers : local > http > ftp */
     for(int i=0; i<m_Servers.count();++i) {
 //        createServerPackList(m_Servers.at(i));
         const QString &uuid = m_Servers.at(i).uuid();
         if (m_Packs.values(uuid).contains(pack)) {
-            return m_Servers.at(i);
+            return m_Servers[i];
         }
     }
-    return Server();
+    return m_NullServer;
 }
 
 // OBSOLETE : ISERVERENGINE MUST REGISTER THEIR DOWNLOADED PACK FILES

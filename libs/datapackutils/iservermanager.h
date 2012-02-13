@@ -80,7 +80,7 @@ public:
     virtual void checkServerUpdates() = 0;
 
     virtual QList<Pack> getPackForServer(const Server &server) = 0;
-    virtual Server getServerForPack(const Pack &pack) = 0;
+    virtual Server &getServerForPack(const Pack &pack) = 0;
 //    virtual bool isPackInPersistentCache(const Pack &pack) = 0;
 
 //    virtual QList<Pack> installedPack(bool forceRefresh = false) = 0;

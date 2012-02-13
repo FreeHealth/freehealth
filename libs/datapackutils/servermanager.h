@@ -90,7 +90,7 @@ public:
     // In use
     void registerPack(const Server &server, const Pack &pack);
 
-    Server getServerForPack(const Pack &pack);
+    Server &getServerForPack(const Pack &pack);
     // End
 
     ////////////////////////////////////////////////
@@ -126,6 +126,7 @@ private:
     QMultiHash<QString, Pack> m_Packs;
     QList<Pack> m_PacksToInstall;
     QList<Pack> m_InstalledPacks;
+    Server m_NullServer;
 
     QVector<DataPack::IServerEngine *> m_WorkingEngines;
 //    FtpServerEngine *m_FtpEngine;
