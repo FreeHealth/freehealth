@@ -58,7 +58,6 @@ public:
     IcdSearchModelPrivate(IcdSearchModel *parent) :
             m_IcdMaster(0), m_SearchMode(IcdSearchModel::SearchByLabel), q(parent)
     {
-        m_IcdMaster = new QSqlQueryModel(q);
         // Master -> valid=1, level=4, code like '%search%'
         // Libelle -> XX_OMS like 'search', valid=1
         // †  -->  &#134;
@@ -130,6 +129,22 @@ IcdSearchModel::IcdSearchModel(QObject *parent) :
         QAbstractTableModel(parent), d(new Internal::IcdSearchModelPrivate(this))
 {
     languageChanged();
+    init();
+    connect(Core::ICore::instance()->translators(), SIGNAL(languageChanged()), this, SLOT(languageChanged()));
+    connect(icdBase(), SIGNAL(databaseChanged()), this, SLOT(refreshDatabase()));
+}
+
+IcdSearchModel::~IcdSearchModel()
+{
+    if (d) {
+        delete d;
+        d = 0;
+    }
+}
+
+void IcdSearchModel::init()
+{
+    d->m_IcdMaster = new QSqlQueryModel(this);
     d->m_IcdMaster->setQuery(d->searchQuery(), icdBase()->database());
 
     connect(d->m_IcdMaster,SIGNAL(layoutChanged()), this, SIGNAL(layoutChanged()));
@@ -140,16 +155,6 @@ IcdSearchModel::IcdSearchModel(QObject *parent) :
     connect(d->m_IcdMaster,SIGNAL(rowsRemoved(QModelIndex, int, int)), this, SIGNAL(rowsRemoved(QModelIndex, int, int)));
     connect(d->m_IcdMaster,SIGNAL(modelAboutToBeReset()), this, SIGNAL(modelAboutToBeReset()));
     connect(d->m_IcdMaster,SIGNAL(modelReset()), this, SIGNAL(modelReset()));
-
-    connect(Core::ICore::instance()->translators(), SIGNAL(languageChanged()), this, SLOT(languageChanged()));
-}
-
-IcdSearchModel::~IcdSearchModel()
-{
-    if (d) {
-        delete d;
-        d = 0;
-    }
 }
 
 void IcdSearchModel::setSearchMethod(SearchModes mode)
@@ -236,6 +241,14 @@ void IcdSearchModel::setFilter(const QString &searchLabel)
 
     d->m_IcdMaster->setQuery(req, icdBase()->database());
 
+    reset();
+}
+
+void IcdSearchModel::refreshDatabase()
+{
+    delete d->m_IcdMaster;
+    d->m_IcdMaster = 0;
+    init();
     reset();
 }
 

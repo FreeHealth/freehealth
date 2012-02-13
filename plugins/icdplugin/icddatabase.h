@@ -101,6 +101,9 @@ private Q_SLOTS:
     void packChanged(const DataPack::Pack &pack);
     void refreshLanguageDependCache();
 
+Q_SIGNALS:
+    void databaseChanged();
+
 private:
     // intialization state
     static IcdDatabase *m_Instance;

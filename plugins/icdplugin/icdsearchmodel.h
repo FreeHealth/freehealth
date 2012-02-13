@@ -78,7 +78,11 @@ public Q_SLOTS:
     void setFilter(const QString &searchLabel);
 
 private Q_SLOTS:
+    void refreshDatabase();
     void languageChanged();
+
+private:
+    void init();
 
 private:
     Internal::IcdSearchModelPrivate *d;

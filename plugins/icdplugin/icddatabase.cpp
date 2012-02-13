@@ -366,12 +366,9 @@ bool IcdDatabase::refreshDatabase()
 
 void IcdDatabase::packChanged(const DataPack::Pack &pack)
 {
-    WARN_FUNC << pack.uuid() << pack.version() << pack.dataType();
-    if (pack.dataType() == DataPack::Pack::DrugsWithInteractions ||
-            pack.dataType() == DataPack::Pack::DrugsWithoutInteractions) {
-        // Refresh drugsbase
-        qWarning() << "XXXXXXXXXXXXXX REFRESH ICD DATABASE" << pack.uuid() << pack.version();
+    if (pack.dataType() == DataPack::Pack::ICD) {
         refreshDatabase();
+        Q_EMIT databaseChanged();
     }
 }
 
