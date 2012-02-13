@@ -25,8 +25,8 @@
 */
 
 #include "templatesplugin.h"
+#include "templatescore.h"
 #include "templatesmodel.h"
-#include "templatebase.h"
 #include "templatesview.h"
 #include "templatesview_p.h"
 #include "templatespreferencespages.h"
@@ -42,6 +42,7 @@
 #include <QDebug>
 
 using namespace Templates;
+using namespace Internal;
 
 static inline Core::ISettings *settings() { return Core::ICore::instance()->settings(); }
 
@@ -49,6 +50,9 @@ TemplatesPlugin::TemplatesPlugin()
 {
     if (Utils::Log::warnPluginsCreation())
         qWarning() << "creating TemplatesPlugin";
+
+    // Add Translator to the Application
+    Core::ICore::instance()->translators()->addNewTranslator("templatesplugin");
 
     prefPage = new Internal::TemplatesPreferencesPage(this);
     addObject(prefPage);
@@ -70,9 +74,6 @@ bool TemplatesPlugin::initialize(const QStringList &arguments, QString *errorStr
     Q_UNUSED(arguments);
     Q_UNUSED(errorString);
 
-    // Add Translator to the Application
-    Core::ICore::instance()->translators()->addNewTranslator("templatesplugin");
-
     return true;
 }
 
@@ -81,16 +82,14 @@ void TemplatesPlugin::extensionsInitialized()
     if (Utils::Log::warnPluginsCreation())
         qWarning() << "TemplatesPlugin::extensionsInitialized";
 
-    // Initialize template database
-    Templates::TemplateBase::instance();
+    // Initialize templateCore
+    Templates::TemplatesCore *core = new Templates::TemplatesCore(this);
+    core->init();
 
     // add plugin info page
     addAutoReleasedObject(new Core::PluginAboutPage(pluginSpec(), this));
 
     prefPage->checkSettingsValidity();
-
-    // Initialize TemplatesViewManager
-    Templates::Internal::TemplatesViewManager::instance(this);
 }
 
 

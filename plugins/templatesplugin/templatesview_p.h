@@ -37,7 +37,9 @@
 #include <QDebug>
 
 namespace Templates {
+class TemplatesCore;
 namespace Internal {
+
 class TemplatesViewContext : public Core::IContext
 {
 public:
@@ -60,8 +62,6 @@ private:
     Templates::TemplatesView *w;
     QList<int> m_Context;
 };
-
-
 
 class TemplatesViewActionHandler : public QObject
 {
@@ -100,21 +100,19 @@ protected:
     bool m_IsLocked;
 };
 
-
-
 class TemplatesViewManager : public TemplatesViewActionHandler
 {
     Q_OBJECT
+    friend class Templates::TemplatesCore;
+
+protected:
+    TemplatesViewManager(QObject *parent = 0);
+
 public:
-    static TemplatesViewManager *instance(QObject *parent);
     ~TemplatesViewManager() {}
 
 private Q_SLOTS:
     void updateContext(Core::IContext *object);
-
-private:
-    TemplatesViewManager(QObject *parent = 0);
-    static TemplatesViewManager *m_Instance;
 };
 
 }  // End namespace Internal

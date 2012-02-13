@@ -38,9 +38,8 @@
 */
 
 namespace Templates {
-    namespace Internal {
-        class TemplatesPreferencesPage;
-    }
+namespace Internal {
+class TemplatesPreferencesPage;
 
 class TemplatesPlugin : public ExtensionSystem::IPlugin
 {
@@ -57,6 +56,7 @@ private:
 };
 
 
-} // End Templates
+}  // End Internal
+}  // End Templates
 
 #endif

@@ -68,7 +68,7 @@ public:
         Print      = 0x80,
         Defaults   = Add | Remove | Edit | Drag | Drop | LockUnlock | Save | Print
     };
-    Q_DECLARE_FLAGS(EditModes, EditMode);
+    Q_DECLARE_FLAGS(EditModes, EditMode)
 
     TemplatesView(QWidget *parent = 0, int viewContent = TemplatesAndCategories, EditModes editModes = Defaults);
     ~TemplatesView();

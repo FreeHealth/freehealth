@@ -47,7 +47,7 @@
 #include <QDir>
 
 using namespace Templates;
-//using namespace Templates::Internal;
+using namespace Internal;
 using namespace Trans::ConstantTranslations;
 
 static inline Core::ISettings *settings()  { return Core::ICore::instance()->settings(); }
@@ -62,7 +62,10 @@ namespace Internal {
 class TemplateBasePrivate
 {
 public:
-    TemplateBasePrivate(TemplateBase *base) : q(base) {}
+    TemplateBasePrivate(TemplateBase *base) :
+        m_initialized(false),
+        m_LogChrono(false),
+        q(base) {}
     ~TemplateBasePrivate()
     {
     }
@@ -152,32 +155,19 @@ public:
     }
 
 public:
-    TemplateBase *q;
+    bool m_initialized;
     bool m_LogChrono;
+
+private:
+    TemplateBase *q;
 };
 }  // End Internal
 }  // End Templates
 
 
 //--------------------------------------------------------------------------------------------------------
-//--------------------------------- Initialization of static members -------------------------------------
-//--------------------------------------------------------------------------------------------------------
-TemplateBase *TemplateBase::m_Instance = 0;
-bool TemplateBase::m_initialized = false;
-
-//--------------------------------------------------------------------------------------------------------
 //-------------------------------------- Initializing Database -------------------------------------------
 //--------------------------------------------------------------------------------------------------------
-/** \brief Returns the unique instance of DrugsBase. If it does not exists, it is created */
-TemplateBase *TemplateBase::instance()
-{
-    if (!m_Instance) {
-        m_Instance = new TemplateBase(qApp);
-        m_Instance->init();
-    }
-    return m_Instance;
-}
-
 /**
    \brief Constructor.
    \private
@@ -226,8 +216,6 @@ TemplateBase::TemplateBase(QObject *parent)
     addField(Table_Version, VERSION_ACTUAL, "ACTUAL", FieldIsShortText);
 
     connect(Core::ICore::instance(), SIGNAL(databaseServerChanged()), this, SLOT(onCoreDatabaseServerChanged()));
-
-    init();
 }
 
 /** \brief Destructor. */
@@ -240,7 +228,7 @@ TemplateBase::~TemplateBase()
 bool TemplateBase::init()
 {
     // only one base can be initialized
-    if (m_initialized)
+    if (d->m_initialized)
         return true;
 
     // connect
@@ -271,8 +259,13 @@ bool TemplateBase::init()
 
     d->checkDatabaseVersion();
 
-    m_initialized = true;
+    d->m_initialized = true;
     return true;
+}
+
+bool TemplateBase::isInitialized()
+{
+    return d->m_initialized;
 }
 
 void TemplateBase::logChronos(bool state)
@@ -385,7 +378,7 @@ bool TemplateBase::createDatabase(const QString &connectionName , const QString 
 
 void TemplateBase::onCoreDatabaseServerChanged()
 {
-    m_initialized = false;
+    d->m_initialized = false;
     if (QSqlDatabase::connectionNames().contains(Templates::Constants::DB_TEMPLATES_NAME)) {
         QSqlDatabase::removeDatabase(Templates::Constants::DB_TEMPLATES_NAME);
     }

@@ -27,6 +27,7 @@
 #include "templatesview.h"
 #include "templatesview_p.h"
 #include "ui_templatesview.h"
+#include "templatescore.h"
 #include "templatesmodel.h"
 #include "templatebase.h"
 #include "itemplates.h"
@@ -67,7 +68,11 @@ static inline Core::ITheme *theme()  { return Core::ICore::instance()->theme(); 
 static inline Core::ActionManager *actionManager() { return Core::ICore::instance()->actionManager(); }
 static inline Core::UniqueIDManager *uid() {return Core::ICore::instance()->uniqueIDManager();}
 static inline Core::ContextManager *contextManager() {return Core::ICore::instance()->contextManager();}
+static inline Templates::TemplatesCore &templateCore() {return Templates::TemplatesCore::instance();}
+static inline Templates::Internal::TemplateBase *templateBase() {return templateCore().templateBase();}
 
+namespace
+{
 static inline QAction *registerAction(const QString &objName, Core::ActionContainer *menu, const QString &iconName,
                                       const QString &actionName, const QString &group, const QString &tr,
                                       const QList<int> &context, QObject *parent)
@@ -81,33 +86,17 @@ static inline QAction *registerAction(const QString &objName, Core::ActionContai
     return toReturn;
 }
 
-
-namespace TemplatesViewConstants
-{
-    static const char* const C_BASIC_EDIT         = "context.TemplatesView.Edit";
-    static const char* const C_BASIC_ADD          = "context.TemplatesView.Add";
-    static const char* const C_BASIC_REMOVE       = "context.TemplatesView.Remove";
-    static const char* const C_BASIC_SAVE         = "context.TemplatesView.Save";
-    static const char* const C_BASIC_PRINT        = "context.TemplatesView.Print";
-    static const char* const C_BASIC_LOCK         = "context.TemplatesView.Lock";
+const char* const C_BASIC_EDIT         = "context.TemplatesView.Edit";
+const char* const C_BASIC_ADD          = "context.TemplatesView.Add";
+const char* const C_BASIC_REMOVE       = "context.TemplatesView.Remove";
+const char* const C_BASIC_SAVE         = "context.TemplatesView.Save";
+const char* const C_BASIC_PRINT        = "context.TemplatesView.Print";
+const char* const C_BASIC_LOCK         = "context.TemplatesView.Lock";
 }
 
 /////////////////////////////////////////////////////////////////////////// List View Manager
-TemplatesViewManager *TemplatesViewManager::m_Instance = 0;
-
-TemplatesViewManager *TemplatesViewManager::instance(QObject *parent)
-{
-    if (!m_Instance) {
-        if (!parent) {
-            m_Instance = new TemplatesViewManager(qApp);
-        } else {
-            m_Instance = new TemplatesViewManager(parent);
-        }
-    }
-    return m_Instance;
-}
-
-TemplatesViewManager::TemplatesViewManager(QObject *parent) : TemplatesViewActionHandler(parent)
+TemplatesViewManager::TemplatesViewManager(QObject *parent) :
+    TemplatesViewActionHandler(parent)
 {
     if (contextManager())
         connect(contextManager(), SIGNAL(contextChanged(Core::IContext*)),
@@ -165,12 +154,12 @@ TemplatesViewActionHandler::TemplatesViewActionHandler(QObject *parent) :
     if (!actionManager())
         return;
 
-    QList<int> editContext = QList<int>() << uid()->uniqueIdentifier(TemplatesViewConstants::C_BASIC_EDIT);
-    QList<int> lockContext = QList<int>() << uid()->uniqueIdentifier(TemplatesViewConstants::C_BASIC_LOCK);
-    QList<int> addContext = QList<int>() << uid()->uniqueIdentifier(TemplatesViewConstants::C_BASIC_ADD);
-    QList<int> removeContext = QList<int>() << uid()->uniqueIdentifier(TemplatesViewConstants::C_BASIC_REMOVE);
-    QList<int> saveContext = QList<int>() << uid()->uniqueIdentifier(TemplatesViewConstants::C_BASIC_SAVE);
-    QList<int> printContext = QList<int>() << uid()->uniqueIdentifier(TemplatesViewConstants::C_BASIC_PRINT);
+    QList<int> editContext = QList<int>() << uid()->uniqueIdentifier(::C_BASIC_EDIT);
+    QList<int> lockContext = QList<int>() << uid()->uniqueIdentifier(::C_BASIC_LOCK);
+    QList<int> addContext = QList<int>() << uid()->uniqueIdentifier(::C_BASIC_ADD);
+    QList<int> removeContext = QList<int>() << uid()->uniqueIdentifier(::C_BASIC_REMOVE);
+    QList<int> saveContext = QList<int>() << uid()->uniqueIdentifier(::C_BASIC_SAVE);
+    QList<int> printContext = QList<int>() << uid()->uniqueIdentifier(::C_BASIC_PRINT);
 
     // Edit Menu and Contextual Menu
     Core::ActionContainer *editMenu = actionManager()->actionContainer(Core::Constants::M_EDIT);
@@ -326,7 +315,7 @@ void TemplatesViewActionHandler::databaseInformations()
     QTreeWidget tree(&dlg);
     tree.setColumnCount(2);
     tree.header()->hide();
-    Templates::TemplateBase::instance()->toTreeWidget(&tree);
+    templateBase()->toTreeWidget(&tree);
     lay.addWidget(&tree);
     Utils::resizeAndCenter(&dlg);
     dlg.exec();
@@ -343,9 +332,6 @@ public:
             QObject(parent), q(parent), m_Model(0), m_ui(0), m_Context(0),
             m_ToolBar(0)
     {
-        // Verify that Manager is instanciated
-        Templates::Internal::TemplatesViewManager::instance(this);
-
         // Create Actions context
         m_Context = new Templates::Internal::TemplatesViewContext(q);
         contextManager()->addContextObject(m_Context);
@@ -410,21 +396,21 @@ public:
             return;
         }
         if (editModes & Templates::TemplatesView::Save)
-            m_Context->addContext(uid()->uniqueIdentifier(TemplatesViewConstants::C_BASIC_SAVE));
+            m_Context->addContext(uid()->uniqueIdentifier(::C_BASIC_SAVE));
         if (editModes & Templates::TemplatesView::Add)
-            m_Context->addContext(uid()->uniqueIdentifier(TemplatesViewConstants::C_BASIC_ADD));
+            m_Context->addContext(uid()->uniqueIdentifier(::C_BASIC_ADD));
         if (editModes & Templates::TemplatesView::Remove)
-            m_Context->addContext(uid()->uniqueIdentifier(TemplatesViewConstants::C_BASIC_REMOVE));
+            m_Context->addContext(uid()->uniqueIdentifier(::C_BASIC_REMOVE));
         if (editModes & Templates::TemplatesView::Edit) {
-            m_Context->addContext(uid()->uniqueIdentifier(TemplatesViewConstants::C_BASIC_EDIT));
+            m_Context->addContext(uid()->uniqueIdentifier(::C_BASIC_EDIT));
             m_ui->categoryTreeView->setEditTriggers(QAbstractItemView::DoubleClicked | QAbstractItemView::EditKeyPressed);
         } else {
             m_ui->categoryTreeView->setEditTriggers(QAbstractItemView::NoEditTriggers);
         }
         if (editModes & Templates::TemplatesView::Print)
-            m_Context->addContext(uid()->uniqueIdentifier(TemplatesViewConstants::C_BASIC_PRINT));
+            m_Context->addContext(uid()->uniqueIdentifier(::C_BASIC_PRINT));
         if (editModes & Templates::TemplatesView::LockUnlock)
-            m_Context->addContext(uid()->uniqueIdentifier(TemplatesViewConstants::C_BASIC_LOCK));
+            m_Context->addContext(uid()->uniqueIdentifier(::C_BASIC_LOCK));
     }
 
 public Q_SLOTS:

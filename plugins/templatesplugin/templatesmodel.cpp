@@ -32,6 +32,7 @@
 */
 
 #include "templatesmodel.h"
+#include "templatescore.h"
 #include "templatebase.h"
 #include "itemplates.h"
 #include "constants.h"
@@ -88,7 +89,8 @@ enum {
 #endif
 
 static inline Core::ISettings *settings() {return Core::ICore::instance()->settings();}
-static inline Templates::TemplateBase *templateBase() {return Templates::TemplateBase::instance();}
+static inline Templates::TemplatesCore &templateCore() {return Templates::TemplatesCore::instance();}
+static inline Templates::Internal::TemplateBase *templateBase() {return templateCore().templateBase();}
 
 namespace Templates {
 namespace Internal {
@@ -753,6 +755,7 @@ TemplatesModel::TemplatesModel(QObject *parent) :
         QAbstractItemModel(parent),
         d(new Internal::TemplatesModelPrivate(this))
 {
+    qWarning() << "xxxxxxxxxxxxxxxxxxxxxxxxxxxx INSTANCE";
     setObjectName("TemplatesModel");
     d->setupModelData();
     setSupportedDragActions(Qt::CopyAction | Qt::MoveAction);

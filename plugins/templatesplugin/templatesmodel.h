@@ -41,12 +41,10 @@
  * \date 10 Jan 2009
 */
 
-
 namespace Templates {
 namespace Internal {
 class TemplatesModelPrivate;
 }  // end namespace Internal
-
 
 class TEMPLATES_EXPORT TemplatesModel : public QAbstractItemModel
 {
@@ -71,9 +69,7 @@ public:
 
     bool insertTemplate(const Templates::ITemplate *t);
     bool insertRows(int row, int count, const QModelIndex &parent = QModelIndex());
-    bool insertRow(int row, const QModelIndex &parent = QModelIndex()) {return insertRows(row,1,parent);}
     bool removeRows(int row, int count, const QModelIndex &parent = QModelIndex());
-    bool removeRow(int row, const QModelIndex &parent = QModelIndex()) {return removeRows(row,1,parent);}
 
     QStringList mimeTypes() const;
     QMimeData *mimeData(const QModelIndexList &indexes) const;

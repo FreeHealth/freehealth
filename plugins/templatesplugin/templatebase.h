@@ -32,33 +32,34 @@
 /**
  * \file templatebase.h
  * \author Eric MAEKER <eric.maeker@gmail.com>
- * \version 0.4.0
- * \date 08 Apr 2010
+ * \version 0.6.4
+ * \date 13 Feb 2012
 */
 
 
 namespace Templates {
+class TemplatesCore;
+
 namespace Internal {
 class TemplateBasePrivate;
-} // End namespace Internal
 
 class TemplateBase : public QObject, public Utils::Database
 {
     Q_OBJECT
+    friend class Templates::TemplatesCore;
 
+protected:
     TemplateBase(QObject *parent = 0);
+    bool init();
 
 public:
-    static TemplateBase *instance();
     ~TemplateBase();
 
-
     // Initializer / Checkers
-    static bool isInitialized() { return m_initialized; }
+    bool isInitialized();
     void logChronos(bool state);
 
 private:
-    bool init();
     bool createDatabase(const QString & connectionName , const QString & dbName,
                         const QString & pathOrHostName,
                         TypeOfAccess access, AvailableDrivers driver,
@@ -71,13 +72,10 @@ private Q_SLOTS:
     void onCoreDatabaseServerChanged();
 
 private:
-    // intialization state
-    static TemplateBase *m_Instance;
-    static bool m_initialized;
-    Internal::TemplateBasePrivate *d;
+    TemplateBasePrivate *d;
 };
 
-
+} // End namespace Internal
 }  // End namespace Templates
 
 

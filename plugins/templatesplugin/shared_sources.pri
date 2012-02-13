@@ -16,7 +16,8 @@ HEADERS += $${PWD}/templatesplugin.h \
     $${PWD}/templatesview_p.h \
     $${PWD}/templateseditdialog.h \
     $${PWD}/templatespreferencespages.h \
-    $${PWD}/templatescreationdialog.h
+    $${PWD}/templatescreationdialog.h \
+    $${PWD}/templatescore.h
 
 SOURCES += $${PWD}/templatesplugin.cpp \
     $${PWD}/templatebase.cpp \
@@ -25,7 +26,8 @@ SOURCES += $${PWD}/templatesplugin.cpp \
     $${PWD}/templateseditdialog.cpp \
     $${PWD}/templatespreferencespages.cpp \
     $${PWD}/templatescreationdialog.cpp \
-    $${PWD}/itemplates.cpp
+    $${PWD}/itemplates.cpp \
+    $${PWD}/templatescore.cpp
 
 FORMS += $${PWD}/templatesview.ui \
     $${PWD}/templateseditdialog.ui \
