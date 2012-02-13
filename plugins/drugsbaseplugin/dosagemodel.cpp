@@ -48,9 +48,10 @@
 
 #include "dosagemodel.h"
 
+#include <drugsbaseplugin/drugbasecore.h>
+#include <drugsbaseplugin/drugsbase.h>
 #include <drugsbaseplugin/constants.h>
 #include <drugsbaseplugin/drugsmodel.h>
-#include <drugsbaseplugin/drugsbase.h>
 #include <drugsbaseplugin/drugsdatabaseselector.h>
 #include <drugsbaseplugin/idrug.h>
 
@@ -92,7 +93,7 @@ using namespace DrugsDB::Internal;
 using namespace Trans::ConstantTranslations;
 using namespace mfDosageModelConstants;
 
-static inline DrugsDB::Internal::DrugsBase *drugsBase() {return DrugsDB::Internal::DrugsBase::instance();}
+static inline DrugsDB::DrugsBase &drugsBase() {return DrugsDB::DrugBaseCore::instance().drugsBase();}
 static inline Core::ISettings *settings()  { return Core::ICore::instance()->settings(); }
 static inline Core::ITheme *theme() {return Core::ICore::instance()->theme();}
 
@@ -185,15 +186,15 @@ DosageModel::DosageModel(DrugsDB::DrugsModel *parent)
     QSqlTableModel::setTable(Dosages::Constants::DB_DOSAGES_TABLE_NAME);
     setEditStrategy(QSqlTableModel::OnManualSubmit);
     m_UID = -1;
-    if (drugsBase()->isDatabaseTheDefaultOne()) {
+    if (drugsBase().isDatabaseTheDefaultOne()) {
         setFilter(QString("%1 = \"%2\"")
                   .arg(database().record(Dosages::Constants::DB_DOSAGES_TABLE_NAME).fieldName(Dosages::Constants::DrugsDatabaseIdentifiant))
                   .arg(DrugsDB::Constants::DB_DEFAULT_IDENTIFIANT));
     } else {
-        if (drugsBase()->actualDatabaseInformations()) {
+        if (drugsBase().actualDatabaseInformations()) {
             setFilter(QString("%1 = \"%2\"")
                       .arg(database().record(Dosages::Constants::DB_DOSAGES_TABLE_NAME).fieldName(Dosages::Constants::DrugsDatabaseIdentifiant))
-                      .arg(drugsBase()->actualDatabaseInformations()->identifiant));
+                      .arg(drugsBase().actualDatabaseInformations()->identifiant));
         }
     }
 }
@@ -345,8 +346,8 @@ bool DosageModel::insertRows(int row, int count, const QModelIndex & parent)
             toReturn = false;
         } else {
             setData(index(createdRow, Dosages::Constants::Uuid), Utils::Database::createUid());
-            if (drugsBase()->actualDatabaseInformations())
-                setData(index(createdRow, Dosages::Constants::DrugsDatabaseIdentifiant), drugsBase()->actualDatabaseInformations()->identifiant);
+            if (drugsBase().actualDatabaseInformations())
+                setData(index(createdRow, Dosages::Constants::DrugsDatabaseIdentifiant), drugsBase().actualDatabaseInformations()->identifiant);
             setData(index(createdRow, Dosages::Constants::DrugUid_LK), m_UID);
             setData(index(createdRow, Dosages::Constants::INN_LK), -1);
             setData(index(createdRow, Dosages::Constants::InnLinkedDosage), "");

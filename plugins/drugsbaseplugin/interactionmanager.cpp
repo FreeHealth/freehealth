@@ -115,15 +115,6 @@ public:
 //--------------------------------------------------------------------------------------------------------
 //---------------------------------------- Managing drugs interactions -----------------------------------
 //--------------------------------------------------------------------------------------------------------
-InteractionManager *InteractionManager::m_Instance = 0;
-
-InteractionManager *InteractionManager::instance(QObject *parent)
-{
-    if (!m_Instance)
-        m_Instance = new InteractionManager(parent);
-    return m_Instance;
-}
-
 InteractionManager::InteractionManager(QObject *parent) :
         QObject(parent), d(0)
 {

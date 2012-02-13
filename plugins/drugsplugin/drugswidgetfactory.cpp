@@ -40,6 +40,7 @@
  ***************************************************************************/
 #include "drugswidgetfactory.h"
 
+#include <drugsbaseplugin/drugbasecore.h>
 #include <drugsbaseplugin/drugsbase.h>
 #include <drugsbaseplugin/drugsmodel.h>
 #include <drugsbaseplugin/drugsio.h>
@@ -81,7 +82,7 @@ namespace {
 using namespace DrugsWidget;
 using namespace Internal;
 
-static inline DrugsDB::Internal::DrugsBase *drugsBase() {return DrugsDB::Internal::DrugsBase::instance();}
+static inline DrugsDB::DrugsBase &drugsBase() {return DrugsDB::DrugBaseCore::instance().drugsBase();}
 static inline Core::ISettings *settings() {return Core::ICore::instance()->settings();}
 static inline Core::IPatient *patient() {return Core::ICore::instance()->patient();}
 

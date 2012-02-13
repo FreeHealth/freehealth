@@ -33,9 +33,10 @@
 
 #include "drugsio.h"
 
+#include <drugsbaseplugin/drugbasecore.h>
+#include <drugsbaseplugin/drugsbase.h>
 #include <drugsbaseplugin/constants.h>
 #include <drugsbaseplugin/idrug.h>
-#include <drugsbaseplugin/drugsbase.h>
 #include <drugsbaseplugin/drugsmodel.h>
 #include <drugsbaseplugin/versionupdater.h>
 #include <drugsbaseplugin/dailyschememodel.h>
@@ -63,8 +64,8 @@
 #include <QDir>
 #include <QDomDocument>
 
+static inline DrugsDB::DrugsBase &drugsBase() {return DrugsDB::DrugBaseCore::instance().drugsBase();}
 static inline Core::ISettings *settings() {return Core::ICore::instance()->settings();}
-static inline DrugsDB::Internal::DrugsBase *drugsBase() {return DrugsDB::Internal::DrugsBase::instance();}
 static inline DrugsDB::DrugsModel *drugModel() { return DrugsDB::DrugsModel::activeModel(); }
 static inline Core::IUser *user() {return Core::ICore::instance()->user();}
 static inline Core::IDocumentPrinter *printer() {return ExtensionSystem::PluginManager::instance()->getObject<Core::IDocumentPrinter>();}
@@ -370,22 +371,22 @@ public:
         // Add drugsBase informations
         QString dbName;
         QString dbInfoAttribs;
-        if (drugsBase()->actualDatabaseInformations()) {
-            dbName = drugsBase()->actualDatabaseInformations()->identifiant;
-            QString t = drugsBase()->actualDatabaseInformations()->version;
+        if (drugsBase().actualDatabaseInformations()) {
+            dbName = drugsBase().actualDatabaseInformations()->identifiant;
+            QString t = drugsBase().actualDatabaseInformations()->version;
             dbInfoAttribs += QString("version=\"%1\" ").arg(t.replace("\"","'"));
-            t = drugsBase()->actualDatabaseInformations()->compatVersion;
+            t = drugsBase().actualDatabaseInformations()->compatVersion;
             dbInfoAttribs += QString("compatWithFreeDiamsVersion=\"%1\" ").arg(t.replace("\"","'"));
-            t = drugsBase()->actualDatabaseInformations()->complementaryWebsite;
+            t = drugsBase().actualDatabaseInformations()->complementaryWebsite;
             dbInfoAttribs += QString("complementaryWebSite=\"%1\" ").arg(t.replace("\"","'"));
-            dbInfoAttribs += QString("date=\"%1\" ").arg(drugsBase()->actualDatabaseInformations()->date.toString(Qt::ISODate));
-            t = drugsBase()->actualDatabaseInformations()->provider;
+            dbInfoAttribs += QString("date=\"%1\" ").arg(drugsBase().actualDatabaseInformations()->date.toString(Qt::ISODate));
+            t = drugsBase().actualDatabaseInformations()->provider;
             dbInfoAttribs += QString("provider=\"%1\" ").arg(t.replace("\"","'"));
-            t = drugsBase()->actualDatabaseInformations()->weblink;
+            t = drugsBase().actualDatabaseInformations()->weblink;
             dbInfoAttribs += QString("webLink=\"%1\" ").arg(t.replace("\"","'"));
-            t = drugsBase()->actualDatabaseInformations()->packUidName;
+            t = drugsBase().actualDatabaseInformations()->packUidName;
             dbInfoAttribs += QString("packUidName=\"%1\" ").arg(t.replace("\"","'"));
-            t = drugsBase()->actualDatabaseInformations()->drugsUidName;
+            t = drugsBase().actualDatabaseInformations()->drugsUidName;
             dbInfoAttribs += QString("drugUidName=\"%1\" ").arg(t.replace("\"","'"));
         } else {
             dbName = Constants::DB_DEFAULT_IDENTIFIANT;
@@ -435,12 +436,12 @@ public:
             (uid2.isEmpty() || uid2 == "-1") &&
             (uid3.isEmpty() || uid3 == "-1") &&
             (!olduid.isEmpty() || olduid != "-1")) {
-            readingDrug = drugsBase()->getDrugByOldUid(olduid, db);
+            readingDrug = drugsBase().getDrugByOldUid(olduid, db);
             if (readingDrug)
                 return readingDrug;
         }
         // using all uids
-        readingDrug = drugsBase()->getDrugByUID(uid1, uid2, uid3, olduid, db);
+        readingDrug = drugsBase().getDrugByUID(uid1, uid2, uid3, olduid, db);
         if (readingDrug)
             return readingDrug;
 
@@ -515,7 +516,7 @@ DrugsIO::~DrugsIO()
 bool DrugsIO::startsDosageTransmission()
 {
     connect(&d->m_Sender, SIGNAL(sent()), this, SLOT(dosageTransmissionDone()));
-    d->m_Datas = Internal::DrugsBase::instance()->getDosageToTransmit();
+    d->m_Datas = drugsBase().getDosageToTransmit();
     if (d->m_Datas.count()==0) {
         return false;
     }
@@ -536,9 +537,10 @@ void DrugsIO::dosageTransmissionDone()
 {
     if (d->m_Sender.resultMessage().contains("OK")) {
         Utils::Log::addMessage(this, tr("Dosages transmitted."));
-	Internal::DrugsBase::instance()->markAllDosageTransmitted(d->m_Datas.keys());
-    } else
-        Utils::Log::addError(this, tr("Dosage not correctly transmitted"), __FILE__, __LINE__);
+        drugsBase().markAllDosageTransmitted(d->m_Datas.keys());
+    } else {
+        LOG_ERROR(tr("Dosage not correctly transmitted"));
+    }
     d->m_Datas.clear();
     Q_EMIT transmissionDone();
 }
@@ -998,22 +1000,22 @@ QString DrugsIO::prescriptionToXml(DrugsDB::DrugsModel *m, const QString &xmlExt
 //    // Add drugsBase informations
 //    QString dbName;
 //    QString dbInfoAttribs;
-//    if (drugsBase()->actualDatabaseInformations()) {
-//        dbName = drugsBase()->actualDatabaseInformations()->identifiant;
-//        QString t = drugsBase()->actualDatabaseInformations()->version;
+//    if (drugsBase().actualDatabaseInformations()) {
+//        dbName = drugsBase().actualDatabaseInformations()->identifiant;
+//        QString t = drugsBase().actualDatabaseInformations()->version;
 //        dbInfoAttribs += QString("version=\"%1\" ").arg(t.replace("\"","'"));
-//        t = drugsBase()->actualDatabaseInformations()->compatVersion;
+//        t = drugsBase().actualDatabaseInformations()->compatVersion;
 //        dbInfoAttribs += QString("compatWithFreeDiamsVersion=\"%1\" ").arg(t.replace("\"","'"));
-//        t = drugsBase()->actualDatabaseInformations()->complementaryWebsite;
+//        t = drugsBase().actualDatabaseInformations()->complementaryWebsite;
 //        dbInfoAttribs += QString("complementaryWebSite=\"%1\" ").arg(t.replace("\"","'"));
-//        dbInfoAttribs += QString("date=\"%1\" ").arg(drugsBase()->actualDatabaseInformations()->date.toString(Qt::ISODate));
-//        t = drugsBase()->actualDatabaseInformations()->provider;
+//        dbInfoAttribs += QString("date=\"%1\" ").arg(drugsBase().actualDatabaseInformations()->date.toString(Qt::ISODate));
+//        t = drugsBase().actualDatabaseInformations()->provider;
 //        dbInfoAttribs += QString("provider=\"%1\" ").arg(t.replace("\"","'"));
-//        t = drugsBase()->actualDatabaseInformations()->weblink;
+//        t = drugsBase().actualDatabaseInformations()->weblink;
 //        dbInfoAttribs += QString("webLink=\"%1\" ").arg(t.replace("\"","'"));
-//        t = drugsBase()->actualDatabaseInformations()->packUidName;
+//        t = drugsBase().actualDatabaseInformations()->packUidName;
 //        dbInfoAttribs += QString("packUidName=\"%1\" ").arg(t.replace("\"","'"));
-//        t = drugsBase()->actualDatabaseInformations()->drugsUidName;
+//        t = drugsBase().actualDatabaseInformations()->drugsUidName;
 //        dbInfoAttribs += QString("drugUidName=\"%1\" ").arg(t.replace("\"","'"));
 //    } else {
 //        dbName = Constants::DB_DEFAULT_IDENTIFIANT;

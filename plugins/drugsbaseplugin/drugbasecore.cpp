@@ -1,7 +1,7 @@
 /***************************************************************************
  *  The FreeMedForms project is a set of free, open source medical         *
  *  applications.                                                          *
- *  (C) 2008-2011 by Eric MAEKER, MD (France) <eric.maeker@gmail.com>      *
+ *  (C) 2008-2012 by Eric MAEKER, MD (France) <eric.maeker@gmail.com>      *
  *  All rights reserved.                                                   *
  *                                                                         *
  *  This program is free software: you can redistribute it and/or modify   *
@@ -26,437 +26,123 @@
  ***************************************************************************/
 #include "drugbasecore.h"
 #include <drugsbaseplugin/constants.h>
+#include <drugsbaseplugin/drugsbase.h>
+#include <drugsbaseplugin/interactionmanager.h>
+
+#include <coreplugin/icore.h>
 
 #include <utils/log.h>
 #include <utils/global.h>
-#include <utils/databaseconnector.h>
-#include <translationutils/constants.h>
-#include <translationutils/trans_database.h>
-#include <translationutils/trans_msgerror.h>
-
-#include <coreplugin/isettings.h>
-#include <coreplugin/icore.h>
-#include <coreplugin/constants_tokensandsettings.h>
-#include <coreplugin/dialogs/settingsdialog.h>
-
-#include <QCoreApplication>
-#include <QSqlDatabase>
-#include <QSqlQuery>
-#include <QDir>
+#include <datapackutils/datapackcore.h>
+#include <datapackutils/ipackmanager.h>
+#include <datapackutils/pack.h>
 
 using namespace DrugsDB;
-using namespace Internal;
-using namespace Trans::ConstantTranslations;
+using namespace DrugsDB::Internal;
+//using namespace Trans::ConstantTranslations;
 
-static inline Core::ISettings *settings()  { return Core::ICore::instance()->settings(); }
-static inline QString databaseFileName() {return settings()->databasePath() + QDir::separator() + QString(Constants::DB_DRUGS_NAME) + QDir::separator() + QString(Constants::DB_DRUGS_FILENAME);}
+static inline DataPack::DataPackCore &dataPackCore() { return DataPack::DataPackCore::instance(); }
+static inline DataPack::IPackManager *packManager() { return dataPackCore().packManager(); }
 
-namespace {
-const char * const CURRENTVERSION = "0.6.4";
+namespace DrugsDB {
+namespace Internal {
+class DrugBaseCorePrivate
+{
+public:
+    DrugBaseCorePrivate(DrugBaseCore *base) :
+        q(base),
+        m_DrugsBase(0),
+        m_ProtocolBase(0),
+        m_InteractionManager(0)
+    {
+    }
 
-struct ftype {
-    ftype(int _f, Utils::Database::TypeOfField _t) : f(_f), t(_t) {}
-    int f;
-    Utils::Database::TypeOfField t;
+    ~DrugBaseCorePrivate()
+    {
+    }
+
+private:
+    DrugBaseCore *q;
+
+public:
+    DrugsBase *m_DrugsBase;
+    ProtocolBase *m_ProtocolBase;
+    InteractionManager *m_InteractionManager;
 };
+}  // End Internal
+}  // End DrugsDB
 
+
+DrugBaseCore *DrugBaseCore::m_Instance = 0;
+
+/** \brief Returns the unique instance of DrugsDB::DrugBaseCore. If it does not exists, it is created */
+DrugBaseCore &DrugBaseCore::instance(QObject *parent)
+{
+    if (!m_Instance) {
+        m_Instance = new DrugBaseCore(parent);
+        m_Instance->init();
+    }
+    return *m_Instance;
 }
 
-static inline bool connectDatabase(QSqlDatabase &DB, const QString &file, const int line)
+DrugBaseCore::DrugBaseCore(QObject *parent) :
+    QObject(parent),
+    d(new Internal::DrugBaseCorePrivate(this))
 {
-    if (!DB.isOpen()) {
-        if (!DB.open()) {
-            Utils::Log::addError("DrugBaseCore", tkTr(Trans::Constants::UNABLE_TO_OPEN_DATABASE_1_ERROR_2)
-                                 .arg(DB.connectionName()).arg(DB.lastError().text()),
-                                 file, line);
-            return false;
-        }
-    }
-    return true;
+    connect(Core::ICore::instance(), SIGNAL(databaseServerChanged()), this, SLOT(onCoreDatabaseServerChanged()));
+    connect(packManager(), SIGNAL(packInstalled(DataPack::Pack)), this, SLOT(packChanged(DataPack::Pack)));
+    connect(packManager(), SIGNAL(packRemoved(DataPack::Pack)), this, SLOT(packChanged(DataPack::Pack)));
+//    connect(packManager(), SIGNAL(packUpdated(DataPack::Pack)), this, SLOT(packChanged(DataPack::Pack)));
 }
 
-DrugBaseCore::DrugBaseCore():
-    Utils::Database(), m_dbcore_initialized(false), m_isDefaultDb(false)
+DrugBaseCore::~DrugBaseCore()
 {
-    using namespace Constants;
-    QMultiHash<int, ftype> types;
-    int i = Table_MASTER;
-    types.insertMulti(i, ftype(MASTER_DID, FieldIsUniquePrimaryKey));
-    types.insertMulti(i, ftype(MASTER_UID1, FieldIsUUID));
-    types.insertMulti(i, ftype(MASTER_UID2, FieldIsUUID));
-    types.insertMulti(i, ftype(MASTER_UID3, FieldIsUUID));
-    types.insertMulti(i, ftype(MASTER_OLDUID,FieldIsUUID));
-    types.insertMulti(i, ftype(MASTER_SID, FieldIsInteger));
-    i = Table_SOURCES;
-    types.insertMulti(i, ftype(SOURCES_SID, FieldIsUniquePrimaryKey));
-    types.insertMulti(i, ftype(SOURCES_DBUID, FieldIsUUID));
-    types.insertMulti(i, ftype(SOURCES_MASTERLID, FieldIsInteger));
-    types.insertMulti(i, ftype(SOURCES_LANG, FieldIsLanguageText));
-    types.insertMulti(i, ftype(SOURCES_WEB, FieldIsShortText));
-    types.insertMulti(i, ftype(SOURCES_COPYRIGHT, FieldIsShortText));
-    types.insertMulti(i, ftype(SOURCES_DATE, FieldIsDateTime));
-    types.insertMulti(i, ftype(SOURCES_DRUGS_VERSION,FieldIsShortText));
-    types.insertMulti(i, ftype(SOURCES_AUTHORS, FieldIsShortText));
-    types.insertMulti(i, ftype(SOURCES_VERSION, FieldIsShortText));
-    types.insertMulti(i, ftype(SOURCES_PROVIDER, FieldIsShortText));
-    types.insertMulti(i, ftype(SOURCES_WEBLINK, FieldIsShortText));
-    types.insertMulti(i, ftype(SOURCES_DRUGUID_NAME, FieldIsShortText));
-    types.insertMulti(i, ftype(SOURCES_ATC, FieldIsBoolean));
-    types.insertMulti(i, ftype(SOURCES_INTERACTIONS, FieldIsBoolean));
-    types.insertMulti(i, ftype(SOURCES_COMPL_WEBSITE,FieldIsShortText));
-    types.insertMulti(i, ftype(SOURCES_PACKUID_NAME,FieldIsShortText));
-    types.insertMulti(i, ftype(SOURCES_COMPLETION, FieldIsShortText));
-    types.insertMulti(i, ftype(SOURCES_AUTHOR_COMMENTS, FieldIsLongText));
-    types.insertMulti(i, ftype(SOURCES_DRUGNAMECONSTRUCTOR, FieldIsShortText));
-    types.insertMulti(i, ftype(SOURCES_FMFCOMPAT, FieldIsShortText));
-    types.insertMulti(i, ftype(SOURCES_OPENREACT_COMPAT, FieldIsShortText));
-    i = Table_LABELS;
-    types.insertMulti(i, ftype(LABELS_LID, FieldIsUniquePrimaryKey));
-    types.insertMulti(i, ftype(LABELS_LANG, FieldIsLanguageText));
-    types.insertMulti(i, ftype(LABELS_LABEL, FieldIsShortText));
-    i = Table_LABELSLINK;
-    types.insertMulti(i, ftype(LABELSLINK_MASTERLID, FieldIsInteger));
-    types.insertMulti(i, ftype(LABELSLINK_LID, FieldIsInteger));
-    i= Table_BIB;
-    types.insertMulti(i, ftype(BIB_BIBID, FieldIsUniquePrimaryKey));
-    types.insertMulti(i, ftype(BIB_TYPE, FieldIsShortText));
-    types.insertMulti(i, ftype(BIB_LINK, FieldIsShortText));
-    types.insertMulti(i, ftype(BIB_TEXTREF, FieldIsShortText));
-    types.insertMulti(i, ftype(BIB_ABSTRACT, FieldIsLongText));
-    types.insertMulti(i, ftype(BIB_EXPLAIN, FieldIsLongText));
-    types.insertMulti(i, ftype(BIB_XML, FieldIsBlob));
-    i = Table_BIB_LINK;
-    types.insertMulti(i, ftype(BIB_LINK_MASTERID, FieldIsInteger));
-    types.insertMulti(i, ftype(BIB_LINK_BIBID, FieldIsInteger));
-    i = Table_DRUGS;
-    types.insertMulti(i, ftype(DRUGS_ID , FieldIsUniquePrimaryKey));
-    types.insertMulti(i, ftype(DRUGS_DID ,FieldIsInteger));
-    types.insertMulti(i, ftype(DRUGS_SID,  FieldIsInteger));
-    types.insertMulti(i, ftype(DRUGS_NAME, FieldIsShortText));
-    types.insertMulti(i, ftype(DRUGS_ATC_ID, FieldIsInteger));
-    types.insertMulti(i, ftype(DRUGS_STRENGTH,FieldIsShortText));
-    types.insertMulti(i, ftype(DRUGS_VALID, FieldIsBoolean));
-    types.insertMulti(i, ftype(DRUGS_MARKET, FieldIsBoolean));
-    types.insertMulti(i, ftype(DRUGS_AID_MASTER_LID, FieldIsInteger));
-    types.insertMulti(i, ftype(DRUGS_LINK_SPC, FieldIsShortText));
-    types.insertMulti(i, ftype(DRUGS_EXTRA_XML,FieldIsLongText));
-    i = Table_MOLS;
-    types.insertMulti(i, ftype(MOLS_MID,FieldIsUniquePrimaryKey));
-    types.insertMulti(i, ftype(MOLS_SID, FieldIsInteger));
-    types.insertMulti(i, ftype(MOLS_NAME,FieldIsShortText));
-    types.insertMulti(i, ftype(MOLS_WWW, FieldIsShortText));
-    i = Table_COMPO;
-    types.insertMulti(i, ftype(COMPO_ID,FieldIsUniquePrimaryKey));
-    types.insertMulti(i, ftype(COMPO_DID,FieldIsInteger));
-    types.insertMulti(i, ftype(COMPO_MID,FieldIsInteger));
-    types.insertMulti(i, ftype(COMPO_STRENGTH, FieldIsShortText));
-    types.insertMulti(i, ftype(COMPO_STRENGTH_NID, FieldIsInteger));
-    types.insertMulti(i, ftype(COMPO_DOSE_REF, FieldIsShortText));
-    types.insertMulti(i, ftype(COMPO_REF_NID, FieldIsInteger));
-    types.insertMulti(i, ftype(COMPO_NATURE, FieldIsInteger));
-    types.insertMulti(i, ftype(COMPO_LK_NATURE, FieldIsInteger));
-    i = Table_UNITS;
-    types.insertMulti(i, ftype(UNITS_NID, FieldIsUniquePrimaryKey));
-    types.insertMulti(i, ftype(UNITS_VALUE, FieldIsShortText));
-    i = Table_LK_MOL_ATC;
-    types.insertMulti(i, ftype(LK_MID,FieldIsInteger));
-    types.insertMulti(i, ftype(LK_ATC_ID, FieldIsInteger));
-    types.insertMulti(i, ftype(LK_ATC_SID,FieldIsInteger));
-    i = Table_PACKAGING;
-    types.insertMulti(i, ftype(PACK_DID, FieldIsUniquePrimaryKey));
-    types.insertMulti(i, ftype(PACK_SID,  FieldIsInteger));
-    types.insertMulti(i, ftype(PACK_PACK_UID,FieldIsUUID));
-    types.insertMulti(i, ftype(PACK_LABEL,  FieldIsShortText));
-    types.insertMulti(i, ftype(PACK_STATUS, FieldIsOneChar));
-    types.insertMulti(i, ftype(PACK_MARKET, FieldIsInteger));
-    types.insertMulti(i, ftype(PACK_DATE,   FieldIsDateTime));
-    types.insertMulti(i, ftype(PACK_OPTION_CODE, FieldIsShortText));
-    i = Table_DRUG_ROUTES;
-    types.insertMulti(i, ftype(DRUG_ROUTES_DID, FieldIsInteger));
-    types.insertMulti(i, ftype(DRUG_ROUTES_RID, FieldIsInteger));
-    i = Table_DRUG_FORMS;
-    types.insertMulti(i, ftype(DRUG_FORMS_DID,FieldIsInteger));
-    types.insertMulti(i, ftype(DRUG_FORMS_MASTERLID,FieldIsInteger));
-    i = Table_ROUTES;
-    types.insertMulti(i, ftype(ROUTES_RID, FieldIsUniquePrimaryKey));
-    types.insertMulti(i, ftype(ROUTES_MASTERLID, FieldIsInteger));
-    types.insertMulti(i, ftype(ROUTES_SYSTEMIC, FieldIsShortText));
-    i = Table_SEARCHENGINES;
-    types.insertMulti(i, ftype(SEARCHENGINE_ID, FieldIsUniquePrimaryKey));
-    types.insertMulti(i, ftype(SEARCHENGINE_LABEL, FieldIsShortText));
-    types.insertMulti(i, ftype(SEARCHENGINE_URL,FieldIsShortText));
-    i = Table_VERSION;
-    types.insertMulti(i, ftype(VERSION_ID, FieldIsUniquePrimaryKey));
-    types.insertMulti(i, ftype(VERSION_VERSION, FieldIsShortText));
-    types.insertMulti(i, ftype(VERSION_DATE, FieldIsDate));
-    types.insertMulti(i, ftype(VERSION_COMMENT, FieldIsLongText));
-    i = Table_ATC;
-    types.insertMulti(i, ftype(ATC_ID, FieldIsUniquePrimaryKey));
-    types.insertMulti(i, ftype(ATC_CODE, FieldIsShortText));
-    types.insertMulti(i, ftype(ATC_WARNDUPLICATES, FieldIsBoolean));
-    i = Table_INTERACTIONS;
-    types.insertMulti(i, ftype(INTERACTIONS_IAID, FieldIsUniquePrimaryKey));
-    types.insertMulti(i, ftype(INTERACTIONS_ATC_ID1, FieldIsInteger));
-    types.insertMulti(i, ftype(INTERACTIONS_ATC_ID2, FieldIsInteger));
-    i = Table_IAKNOWLEDGE;
-    types.insertMulti(i, ftype(IAKNOWLEDGE_IAKID, FieldIsUniquePrimaryKey));
-    types.insertMulti(i, ftype(IAKNOWLEDGE_TYPE, FieldIsShortText));
-    types.insertMulti(i, ftype(IAKNOWLEDGE_RISK_MASTERLID, FieldIsInteger));
-    types.insertMulti(i, ftype(IAKNOWLEDGE_MANAGEMENT_MASTERLID, FieldIsInteger));
-    types.insertMulti(i, ftype(IAKNOWLEDGE_BIB_MASTERID, FieldIsInteger));
-    types.insertMulti(i, ftype(IAKNOWLEDGE_WWW, FieldIsShortText));
-    i = Table_IA_IAK;
-    types.insertMulti(i, ftype(IA_IAK_IAID, FieldIsInteger));
-    types.insertMulti(i, ftype(IA_IAK_IAKID, FieldIsInteger));
-    i = Table_ATC_LABELS;
-    types.insertMulti(i, ftype(ATC_LABELS_ATCID, FieldIsInteger));
-    types.insertMulti(i, ftype(ATC_LABELS_MASTERLID, FieldIsInteger));
-    i = Table_IAM_TREE;
-    types.insertMulti(i, ftype(IAM_TREE_ID, FieldIsUniquePrimaryKey));
-    types.insertMulti(i, ftype(IAM_TREE_ID_CLASS, FieldIsInteger));
-    types.insertMulti(i, ftype(IAM_TREE_ID_ATC, FieldIsInteger));
-    types.insertMulti(i, ftype(IAM_TREE_BIBMASTERID,FieldIsInteger));
-    i = Table_PIM_SOURCES;
-    types.insertMulti(i, ftype(PIM_SOURCES_SID, FieldIsUniquePrimaryKey));
-    types.insertMulti(i, ftype(PIM_SOURCES_UID, FieldIsUUID));
-    types.insertMulti(i, ftype(PIM_SOURCES_NAME, FieldIsShortText));
-    types.insertMulti(i, ftype(PIM_SOURCES_PMID, FieldIsShortText));
-    types.insertMulti(i, ftype(PIM_SOURCES_COUNTRY,FieldIsShortText));
-    types.insertMulti(i, ftype(PIM_SOURCES_WWW, FieldIsShortText));
-    i = Table_PIM_TYPES;
-    types.insertMulti(i, ftype(PIM_TYPES_TID,FieldIsUniquePrimaryKey));
-    types.insertMulti(i, ftype(PIM_TYPES_UID,FieldIsUUID));
-    types.insertMulti(i, ftype(PIM_TYPES_MASTER_LID, FieldIsInteger));
-    i = Table_PIMS;
-    types.insertMulti(i, ftype(PIMS_ID, FieldIsUniquePrimaryKey));
-    types.insertMulti(i, ftype(PIMS_SID, FieldIsInteger));
-    types.insertMulti(i, ftype(PIMS_TID, FieldIsInteger));
-    types.insertMulti(i, ftype(PIMS_LEVEL, FieldIsInteger));
-    types.insertMulti(i, ftype(PIMS_RISK_MASTER_LID, FieldIsInteger));
-    i = Table_PIMS_RELATED_ATC;
-    types.insertMulti(i, ftype(PIMS_RELATC_RMID, FieldIsUniquePrimaryKey));
-    types.insertMulti(i, ftype(PIMS_RELATC_PIM_ID, FieldIsInteger));
-    types.insertMulti(i, ftype(PIMS_RELATC_ATC_ID, FieldIsInteger));
-    types.insertMulti(i, ftype(PIMS_RELATC_MAXDAYDOSE, FieldIsReal));
-    types.insertMulti(i, ftype(PIMS_RELATC_MAXDAYDOSEUNIT, FieldIsInteger));
-    i = Table_PIMS_RELATED_ICD;
-    types.insertMulti(i, ftype(PIMS_RELICD_RMID, FieldIsUniquePrimaryKey));
-    types.insertMulti(i, ftype(PIMS_RELICD_PIM_ID, FieldIsInteger));
-    types.insertMulti(i, ftype(PIMS_RELICD_ICD_SID, FieldIsInteger));
-    i = Table_CURRENTVERSION;
-    types.insertMulti(i, ftype(CURRENTVERSION_ID, FieldIsUniquePrimaryKey));
-    types.insertMulti(i, ftype(CURRENTVERSION_NUMBER, FieldIsShortText));
-
-    for(int i=0; i < Table_MaxParam; ++i) {
-        addTable(i, "t" + QString::number(i));
-        const QList<ftype> &tp = types.values(i);
-        for(int j=0; j < tp.count(); ++j) {
-            addField(i, tp.at(j).f, "f"+QString::number(tp.count()-j), tp.at(j).t);
-        }
-    }
-    addIndex(Table_SOURCES, SOURCES_SID);
-    addIndex(Table_MASTER, MASTER_DID);
-    addIndex(Table_LABELS, LABELS_LID);
-    addIndex(Table_LABELSLINK, LABELSLINK_LID);
-    addIndex(Table_LABELSLINK, LABELSLINK_MASTERLID);
-    addIndex(Table_BIB, BIB_BIBID);
-    addIndex(Table_BIB_LINK, BIB_LINK_BIBID);
-    addIndex(Table_BIB_LINK, BIB_LINK_MASTERID);
-    addIndex(Table_DRUGS, DRUGS_DID);
-    addIndex(Table_MOLS, MOLS_MID);
-    addIndex(Table_COMPO, COMPO_DID);
-    addIndex(Table_COMPO, COMPO_MID);
-    addIndex(Table_UNITS, UNITS_NID);
-    addIndex(Table_LK_MOL_ATC, LK_MID);
-    addIndex(Table_LK_MOL_ATC, LK_ATC_ID);
-    addIndex(Table_LK_MOL_ATC, LK_ATC_SID);
-    addIndex(Table_DRUG_ROUTES, DRUG_ROUTES_DID);
-    addIndex(Table_DRUG_ROUTES, DRUG_ROUTES_RID);
-    addIndex(Table_DRUG_FORMS, DRUG_FORMS_DID);
-    addIndex(Table_DRUG_FORMS, DRUG_FORMS_MASTERLID);
-    addIndex(Table_ROUTES, ROUTES_RID);
-    addIndex(Table_ROUTES, ROUTES_MASTERLID);
-    addIndex(Table_ATC, ATC_CODE);
-    addIndex(Table_ATC, ATC_ID);
-    addIndex(Table_INTERACTIONS, INTERACTIONS_IAID);
-    addIndex(Table_INTERACTIONS, INTERACTIONS_ATC_ID1);
-    addIndex(Table_INTERACTIONS, INTERACTIONS_ATC_ID2);
-
-    addIndex(Table_IAKNOWLEDGE, IAKNOWLEDGE_IAKID);
-    addIndex(Table_IAKNOWLEDGE, IAKNOWLEDGE_RISK_MASTERLID);
-    addIndex(Table_IAKNOWLEDGE, IAKNOWLEDGE_MANAGEMENT_MASTERLID);
-    addIndex(Table_IAKNOWLEDGE, IAKNOWLEDGE_BIB_MASTERID);
-    addIndex(Table_IA_IAK, IA_IAK_IAID);
-    addIndex(Table_IA_IAK, IA_IAK_IAKID);
-    addIndex(Table_ATC_LABELS, ATC_LABELS_ATCID);
-    addIndex(Table_ATC_LABELS, ATC_LABELS_MASTERLID);
-    addIndex(Table_IAM_TREE, IAM_TREE_ID_CLASS);
-    addIndex(Table_IAM_TREE, IAM_TREE_ID_ATC);
-    addIndex(Table_IAM_TREE, IAM_TREE_BIBMASTERID);
-    addIndex(Table_PIMS_RELATED_ATC, PIMS_RELATC_RMID);
-    addIndex(Table_PIMS_RELATED_ATC, PIMS_RELATC_PIM_ID);
-    addIndex(Table_PIMS_RELATED_ATC, PIMS_RELATC_ATC_ID);
-    addIndex(Table_PIMS_RELATED_ICD, PIMS_RELICD_RMID);
-    addIndex(Table_PIMS_RELATED_ICD, PIMS_RELICD_PIM_ID);
-    addIndex(Table_PIMS_RELATED_ICD, PIMS_RELICD_ICD_SID);
-    addIndex(Table_PIMS, PIMS_ID);
-    addIndex(Table_PIM_TYPES, PIM_TYPES_TID);
-    addIndex(Table_PIM_SOURCES, PIM_SOURCES_SID);
-}
-
-bool DrugBaseCore::initialize(const QString &pathToDb, bool createIfNotExists)
-{
-    if (m_dbcore_initialized)
-        return true;
-    setConnectionName(Constants::DB_DRUGS_NAME);
-    setDriver(Utils::Database::SQLite);
-
-    // test driver
-    if (!QSqlDatabase::isDriverAvailable("QSQLITE")) {
-        LOG_ERROR_FOR("DrugBaseCore", tkTr(Trans::Constants::DATABASE_DRIVER_1_NOT_AVAILABLE).arg("SQLite"));
-        Utils::warningMessageBox(tkTr(Trans::Constants::APPLICATION_FAILURE),
-                                 tkTr(Trans::Constants::DATABASE_DRIVER_1_NOT_AVAILABLE_DETAIL).arg("SQLite"),
-                                 "", qApp->applicationName());
-        return false;
-    }
-
-    // Connect Drugs Database
-    Utils::DatabaseConnector drugConnector;
-    QString path = pathToDb;
-    if (!QFileInfo(pathToDb).isDir())
-        path = QFileInfo(pathToDb).absolutePath();
-//    if (!path.endsWith(Constants::DB_DRUGS_NAME)) {
-//        path.append(QDir::separator() + QString(Constants::DB_DRUGS_NAME));
-//    }
-    drugConnector.setAbsPathToReadOnlySqliteDatabase(path);
-    drugConnector.setHost(QFileInfo(databaseFileName()).fileName());
-    drugConnector.setAccessMode(Utils::DatabaseConnector::ReadOnly);
-    drugConnector.setDriver(Utils::Database::SQLite);
-
-    LOG_FOR("DrugBaseCore", tkTr(Trans::Constants::SEARCHING_DATABASE_1_IN_PATH_2).arg(Constants::DB_DRUGS_NAME).arg(pathToDb));
-
-    if (createIfNotExists) {
-        createConnection(Constants::DB_DRUGS_NAME, Constants::DB_DRUGS_FILENAME,
-                         drugConnector,
-                         Utils::Database::CreateDatabase);
-    } else {
-        createConnection(Constants::DB_DRUGS_NAME, Constants::DB_DRUGS_FILENAME,
-                         drugConnector,
-                         Utils::Database::WarnOnly);
-    }
-
-    if (!database().isOpen()) {
-        if (!database().open()) {
-            LOG_ERROR_FOR("DrugBaseCore",tkTr(Trans::Constants::UNABLE_TO_OPEN_DATABASE_1_ERROR_2).arg(Constants::DB_DRUGS_NAME).arg(database().lastError().text()));
-        } else {
-            LOG_FOR("DrugBaseCore",tkTr(Trans::Constants::CONNECTED_TO_DATABASE_1_DRIVER_2).arg(database().connectionName()).arg(database().driverName()));
-        }
-    } else {
-        LOG_FOR("DrugBaseCore", tkTr(Trans::Constants::CONNECTED_TO_DATABASE_1_DRIVER_2).arg(database().connectionName()).arg(database().driverName()));
-    }
-
-    if (!checkDatabaseScheme()) {
-        LOG_ERROR_FOR("DrugBaseCore",tkTr(Trans::Constants::DATABASE_1_SCHEMA_ERROR).arg(Constants::DB_DRUGS_NAME));
-        return false;
-    }
-
-    if (!checkDatabaseVersion()) {
-        LOG_ERROR_FOR("DrugBaseCore", QString("Wrong database version. Db: %1; Current: %2").arg(version()).arg(::CURRENTVERSION));
-        return false;
-    } else {
-        LOG_FOR("DrugBaseCore", QString("Using drug database version " + version()));
-    }
-
-    setConnectionName(Constants::DB_DRUGS_NAME);
-
-    m_dbcore_initialized = true;
-    return true;
-}
-
-void DrugBaseCore::setVersion(const QString &version)
-{
-    QSqlDatabase DB = QSqlDatabase::database(Constants::DB_DRUGS_NAME);
-    if (!connectDatabase(DB, __FILE__, __LINE__))
-        return;
-    executeSQL(prepareDeleteQuery(Constants::Table_CURRENTVERSION, QHash<int,QString>()), DB);
-    QSqlQuery query(DB);
-    query.prepare(prepareInsertQuery(Constants::Table_CURRENTVERSION));
-    query.bindValue(Constants::CURRENTVERSION_ID, QVariant());
-    query.bindValue(Constants::CURRENTVERSION_NUMBER, version);
-    if (!query.exec()) {
-        LOG_QUERY_ERROR_FOR("DrugBaseCore", query);
+    if (d) {
+        delete d;
+        d = 0;
     }
 }
 
-QString DrugBaseCore::version() const
+bool DrugBaseCore::init()
 {
-    QSqlDatabase DB = QSqlDatabase::database(Constants::DB_DRUGS_NAME);
-    if (!connectDatabase(DB, __FILE__, __LINE__))
-        return QString();
-    QSqlQuery query(DB);
-    query.prepare(select(Constants::Table_CURRENTVERSION));
-    if (!query.exec()) {
-        LOG_QUERY_ERROR_FOR("DrugBaseCore", query);
-    } else {
-        if (query.next()) {
-            return query.value(Constants::CURRENTVERSION_NUMBER).toString();
-        }
-    }
-    return QString();
+    d->m_DrugsBase = new DrugsBase(this);
+    d->m_DrugsBase->init();
+//    d->m_ProtocolBase
+    d->m_InteractionManager = new InteractionManager(this);
+    /** \todo code here */
 }
 
-bool DrugBaseCore::checkDatabaseVersion() const
+DrugsBase &DrugBaseCore::drugsBase() const
 {
-    return (version()==::CURRENTVERSION);
+    Q_ASSERT(d->m_DrugsBase);
+    return *d->m_DrugsBase;
 }
 
-bool DrugBaseCore::createDatabase(const QString &connectionName , const QString &prefixedDbName,
-                                  const Utils::DatabaseConnector &connector,
-                                  CreationOption createOption
-                                  )
+ProtocolBase &DrugBaseCore::protocolBase() const
 {
-    WARN_FUNC << connectionName << prefixedDbName;
-    qWarning() << connector;
+    Q_ASSERT(d->m_ProtocolBase);
+    return *d->m_ProtocolBase;
+}
 
-    if (connectionName != Constants::DB_DRUGS_NAME)
-        return false;
-    if (connector.driver() != SQLite) {
-        return false;
+InteractionManager &DrugBaseCore::interactionManager() const
+{
+    Q_ASSERT(d->m_InteractionManager);
+    return *d->m_InteractionManager;
+}
+
+void DrugBaseCore::onCoreDatabaseServerChanged()
+{
+    Q_ASSERT(d->m_DrugsBase);
+    d->m_DrugsBase->onCoreDatabaseServerChanged();
+}
+
+void DrugBaseCore::packChanged(const DataPack::Pack &pack)
+{
+    WARN_FUNC << pack.uuid() << pack.version() << pack.dataType();
+    if (pack.dataType() == DataPack::Pack::DrugsWithInteractions ||
+            pack.dataType() == DataPack::Pack::DrugsWithoutInteractions) {
+        // Refresh drugsbase
+        qWarning() << "XXXXXXXXXXXXXX REFRESH DRUG DATABASE" << pack.uuid() << pack.version();
+        d->m_DrugsBase->datapackChanged();
     }
-    if (createOption!=Utils::Database::CreateDatabase)
-        return false;
-    QString pathOrHostName = connector.absPathToSqliteReadOnlyDatabase() + QDir::separator() + QString(Constants::DB_DRUGS_NAME);
-    LOG_FOR("DrugBaseCore", tkTr(Trans::Constants::TRYING_TO_CREATE_1_PLACE_2).arg(prefixedDbName).arg(pathOrHostName));
-
-    setConnectionName(connectionName);
-    setDriver(connector.driver());
-
-    // create an empty database and connect
-    if (QSqlDatabase::connectionNames().contains(connectionName)) {
-        QSqlDatabase::removeDatabase(connectionName);
-    }
-    QSqlDatabase DB;
-    DB = QSqlDatabase::addDatabase("QSQLITE", connectionName);
-    if (!QDir(pathOrHostName).exists())
-        if (!QDir().mkpath(pathOrHostName))
-            tkTr(Trans::Constants::_1_ISNOT_AVAILABLE_CANNOTBE_CREATED).arg(pathOrHostName);
-    DB.setDatabaseName(QDir::cleanPath(pathOrHostName + QDir::separator() + prefixedDbName));
-    if (!DB.open())
-        LOG_FOR("DrugBaseCore", tkTr(Trans::Constants::DATABASE_1_CANNOT_BE_CREATED_ERROR_2).arg(prefixedDbName).arg(DB.lastError().text()));
-    setDriver(Utils::Database::SQLite);
-
-    // create db structure
-    if (createTables()) {
-        LOG_FOR("DrugBaseCore", tkTr(Trans::Constants::DATABASE_1_CORRECTLY_CREATED).arg(prefixedDbName));
-    } else {
-        LOG_ERROR_FOR("DrugBaseCore", tkTr(Trans::Constants::DATABASE_1_CANNOT_BE_CREATED_ERROR_2)
-                      .arg(prefixedDbName, DB.lastError().text()));
-        return false;
-    }
-
-    setVersion(::CURRENTVERSION);
-
-    // database is readable/writable
-    LOG_FOR("DrugBaseCore", tkTr(Trans::Constants::DATABASE_1_CORRECTLY_CREATED).arg(pathOrHostName + QDir::separator() + prefixedDbName));
-    return true;
 }

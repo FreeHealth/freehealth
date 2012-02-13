@@ -25,7 +25,8 @@
  *       NAME <MAIL@ADRESS>                                                *
  ***************************************************************************/
 #include "drugsdatabaseselector.h"
-#include "drugsbase.h"
+#include <drugsbaseplugin/drugbasecore.h>
+#include <drugsbaseplugin/drugsbase.h>
 #include "constants.h"
 
 #include <coreplugin/icore.h>
@@ -47,9 +48,7 @@ using namespace DrugsDB;
 using namespace Trans::ConstantTranslations;
 
 static inline Core::ISettings *settings()  { return Core::ICore::instance()->settings(); }
-static inline DrugsDB::Internal::DrugsBase *base() {return DrugsDB::Internal::DrugsBase::instance();}
-
-
+static inline DrugsDB::DrugsBase &drugsBase() {return DrugsDB::DrugBaseCore::instance().drugsBase();}
 
 namespace DrugsDB {
 namespace Internal {
@@ -221,7 +220,7 @@ DrugsDatabaseSelector::~DrugsDatabaseSelector()
 void DrugsDatabaseSelector::getAllDatabaseInformations() const
 {
     d->m_Infos.clear();
-    d->m_Infos = base()->getAllDrugSourceInformations();
+    d->m_Infos = drugsBase().getAllDrugSourceInformations();
 }
 
 bool DrugsDatabaseSelector::setCurrentDatabase(const QString &dbUid)

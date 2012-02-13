@@ -41,12 +41,13 @@
 #include <drugsplugin/drugswidgetmanager.h>
 #include <drugsplugin/drugswidget/interactionsynthesisdialog.h>
 
+#include <drugsbaseplugin/drugbasecore.h>
+#include <drugsbaseplugin/drugsbase.h>
 #include <drugsbaseplugin/dosagemodel.h>
 #include <drugsbaseplugin/drugsmodel.h>
 #include <drugsbaseplugin/globaldrugsmodel.h>
 #include <drugsbaseplugin/drugsearchengine.h>
 #include <drugsbaseplugin/constants.h>
-#include <drugsbaseplugin/drugsbase.h>
 #include <drugsbaseplugin/drugsdatabaseselector.h>
 
 #include <utils/log.h>
@@ -75,8 +76,8 @@ using namespace Trans::ConstantTranslations;
 inline static DrugsDB::DrugsModel *drugModel() { return DrugsWidget::DrugsWidgetManager::instance()->currentDrugsModel(); }
 static inline DrugsDB::Internal::DrugSearchEngine *searchEngine()  { return DrugsDB::Internal::DrugSearchEngine::instance(); }
 static inline Core::ITheme *theme() {return Core::ICore::instance()->theme();}
-static inline DrugsDB::Internal::DrugsBase *drugsBase() {return DrugsDB::Internal::DrugsBase::instance();}
 static inline Core::ISettings *settings()  { return Core::ICore::instance()->settings(); }
+static inline DrugsDB::DrugsBase &drugsBase() {return DrugsDB::DrugBaseCore::instance().drugsBase();}
 
 namespace DrugsWidget {
 namespace Internal {
@@ -107,8 +108,8 @@ public:
         q->connect(help, SIGNAL(triggered()), q, SLOT(helpRequested()));
 
         // Show database COMPLEMENTARY_WEBSITE
-        if (drugsBase()->actualDatabaseInformations()) {
-            const QString &url = drugsBase()->actualDatabaseInformations()->complementaryWebsite;
+        if (drugsBase().actualDatabaseInformations()) {
+            const QString &url = drugsBase().actualDatabaseInformations()->complementaryWebsite;
             if (!url.isEmpty()) {
                 QAction *drugsDbWeb = new QAction(drugDBLabel, m_HelpMenu);
                 drugsDbWeb->setData(url);

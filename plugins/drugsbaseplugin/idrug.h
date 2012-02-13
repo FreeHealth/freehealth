@@ -36,22 +36,20 @@
 /**
  * \file idrug.h
  * \author Eric MAEKER <eric.maeker@gmail.com>
- * \version 0.6.0
- * \date 04 Mar 2011
+ * \version 0.6.4
+ * \date 04 Feb 2012
 */
 
 namespace DrugsDB {
-
 class IDrug;
 class IVirtualDrug;
 class DrugsIO;
-
+class DrugsBase;
 
 namespace Internal {
 class IComponentPrivate;
 class IDrugPrivate;
 class DrugRoutePrivate;
-class DrugsBase;
 class DrugsBasePrivate;
 class IPrescriptionPrivate;
 class DrugsIOPrivate;
@@ -59,7 +57,7 @@ class DrugsIOPrivate;
 
 class DRUGSBASE_EXPORT IComponent
 {
-    friend class DrugsDB::Internal::DrugsBase;
+    friend class DrugsDB::DrugsBase;
     friend class DrugsDB::Internal::DrugsBasePrivate;
 
 public:
@@ -147,7 +145,7 @@ public:
 
 class DRUGSBASE_EXPORT DrugRoute
 {
-    friend class DrugsDB::Internal::DrugsBase;
+    friend class DrugsDB::DrugsBase;
     friend class DrugsDB::Internal::DrugsBasePrivate;
 
 public:
@@ -203,7 +201,7 @@ class DRUGSBASE_EXPORT IDrug : public IPrescription
 {
     friend class DrugsDB::DrugRoute;
     friend class DrugsDB::IComponent;
-    friend class DrugsDB::Internal::DrugsBase;
+    friend class DrugsDB::DrugsBase;
     friend class DrugsDB::DrugsIO;
     friend class DrugsDB::Internal::DrugsIOPrivate;
 

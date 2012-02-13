@@ -26,15 +26,16 @@
  ***************************************************************************/
 #include "drugscentralwidget.h"
 
+#include <drugsbaseplugin/drugbasecore.h>
 #include <drugsbaseplugin/drugsbase.h>
 #include <drugsbaseplugin/drugsmodel.h>
-#include <drugsbaseplugin/interactionmanager.h>
 #include <drugsbaseplugin/globaldrugsmodel.h>
 #include <drugsbaseplugin/drugsio.h>
 #include <drugsbaseplugin/drugsdatabaseselector.h>
 #include <drugsbaseplugin/druginteractioninformationquery.h>
 #include <drugsbaseplugin/druginteractionresult.h>
 #include <drugsbaseplugin/idruginteractionalert.h>
+//#include <drugsbaseplugin/interactionmanager.h>
 
 #include <drugsplugin/drugswidget/drugselector.h>
 #include <drugsplugin/drugswidget/prescriptionviewer.h>
@@ -70,6 +71,8 @@ static inline Core::UniqueIDManager *uid() {return Core::ICore::instance()->uniq
 static inline Core::ContextManager *contextManager() {return Core::ICore::instance()->contextManager();}
 static inline Core::ActionManager *actionManager() {return Core::ICore::instance()->actionManager();}
 static inline Core::IUser *user() {return Core::ICore::instance()->user();}
+static inline DrugsDB::DrugsBase &drugsBase() {return DrugsDB::DrugBaseCore::instance().drugsBase();}
+//static inline DrugsDB::InteractionManager &interactionManager() {return DrugsDB::DrugBaseCore::instance().interactionManager();}
 
 /** \brief Constructor */
 DrugsCentralWidget::DrugsCentralWidget(QWidget *parent) :
@@ -249,7 +252,7 @@ bool DrugsCentralWidget::createTemplate()
 
 void DrugsCentralWidget::showDrugsDatabaseInformations()
 {
-    const DrugsDB::DatabaseInfos *info = DrugsDB::Internal::DrugsBase::instance()->actualDatabaseInformations();
+    const DrugsDB::DatabaseInfos *info = drugsBase().actualDatabaseInformations();
     if (!info)
         return;
     QDialog dlg(this, Qt::Window | Qt::CustomizeWindowHint | Qt::WindowSystemMenuHint | Qt::WindowCloseButtonHint | Qt::WindowMinMaxButtonsHint);
@@ -262,8 +265,8 @@ void DrugsCentralWidget::showDrugsDatabaseInformations()
     QTreeWidget tree(&dlg);
     tree.setColumnCount(2);
     tree.header()->hide();
-    DrugsDB::Internal::DrugsBase::instance()->setConnectionName(DrugsDB::Constants::DB_DRUGS_NAME);
-    DrugsDB::Internal::DrugsBase::instance()->toTreeWidget(&tree);
+    drugsBase().setConnectionName(DrugsDB::Constants::DB_DRUGS_NAME);
+    drugsBase().toTreeWidget(&tree);
 
     lay.addWidget(&tree);
     lay.addWidget(&tree2);
@@ -278,8 +281,8 @@ void DrugsCentralWidget::showDosagesDatabaseInformations()
     QTreeWidget tree(&dlg);
     tree.setColumnCount(2);
     tree.header()->hide();
-    DrugsDB::Internal::DrugsBase::instance()->setConnectionName(Dosages::Constants::DB_DOSAGES_NAME);
-    DrugsDB::Internal::DrugsBase::instance()->toTreeWidget(&tree);
+    drugsBase().setConnectionName(Dosages::Constants::DB_DOSAGES_NAME);
+    drugsBase().toTreeWidget(&tree);
     lay.addWidget(&tree);
     Utils::resizeAndCenter(&dlg);
     dlg.exec();

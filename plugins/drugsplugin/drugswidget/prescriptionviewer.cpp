@@ -35,7 +35,7 @@
 #include <drugsplugin/drugswidget/interactionsynthesisdialog.h>
 
 #include <drugsbaseplugin/drugsmodel.h>
-#include <drugsbaseplugin/interactionmanager.h>
+//#include <drugsbaseplugin/interactionmanager.h>
 
 #include <coreplugin/constants_menus.h>
 #include <coreplugin/icore.h>

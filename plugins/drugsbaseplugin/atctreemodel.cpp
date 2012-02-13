@@ -26,6 +26,7 @@
  ***************************************************************************/
 #include "atctreemodel.h"
 
+#include <drugsbaseplugin/drugbasecore.h>
 #include <drugsbaseplugin/drugsbase.h>
 #include <drugsbaseplugin/constants.h>
 
@@ -43,8 +44,8 @@
 
 using namespace DrugsDB;
 
-static inline DrugsDB::Internal::DrugsBase *drugsBase() {return DrugsDB::Internal::DrugsBase::instance();}
 static inline Core::Translators *translators() {return Core::ICore::instance()->translators();}
+static inline DrugsDB::DrugsBase &drugsBase() {return DrugsDB::DrugBaseCore::instance().drugsBase();}
 
 namespace DrugsDB {
 namespace Internal {
@@ -140,7 +141,7 @@ public:
         Utils::FieldList cond;
         cond    << Utils::Field(Constants::Table_LABELS, Constants::LABELS_LANG, QString("='%1'").arg(m_Language));
         cond    << Utils::Field(Constants::Table_ATC, Constants::ATC_ID, " < 100000");
-        QSqlQuery query(drugsBase()->select(get, joins, cond), QSqlDatabase::database(Constants::DB_DRUGS_NAME));
+        QSqlQuery query(drugsBase().select(get, joins, cond), QSqlDatabase::database(Constants::DB_DRUGS_NAME));
         QList<AtcItem *> list;
         if (query.isActive()) {
             while (query.next()) {

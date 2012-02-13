@@ -26,11 +26,12 @@
  ***************************************************************************/
 #include "interactionsynthesisdialog.h"
 
+#include <drugsbaseplugin/drugbasecore.h>
+#include <drugsbaseplugin/drugsbase.h>
 #include <drugsbaseplugin/drugsmodel.h>
 #include <drugsbaseplugin/constants.h>
 #include <drugsbaseplugin/interactionmanager.h>
 #include <drugsbaseplugin/idruginteraction.h>
-#include <drugsbaseplugin/drugsbase.h>
 #include <drugsbaseplugin/druginteractionresult.h>
 #include <drugsbaseplugin/druginteractionquery.h>
 
@@ -59,8 +60,7 @@ using namespace Trans::ConstantTranslations;
 
 static inline Core::ITheme *theme() {return Core::ICore::instance()->theme();}
 static inline Core::IDocumentPrinter *printer() {return ExtensionSystem::PluginManager::instance()->getObject<Core::IDocumentPrinter>();}
-static inline DrugsDB::Internal::DrugsBase *drugsBase() {return DrugsDB::Internal::DrugsBase::instance();}
-
+static inline DrugsDB::DrugsBase &drugsBase() {return DrugsDB::DrugBaseCore::instance().drugsBase();}
 
 namespace DrugsWidget {
 namespace Internal {
@@ -266,7 +266,7 @@ void InteractionSynthesisDialog::on_getBiblio_clicked()
     bool show = false;
     if (d->m_Biblio.values(interaction).count()==0) {
         foreach(const DrugsDB::IDrug *drug, interaction->drugs()) {
-            QVector<MedicalUtils::EbmData *> v = drugsBase()->getAllBibliographyFromTree(drug->allInnAndInteractingClassesIds().toList());
+            QVector<MedicalUtils::EbmData *> v = drugsBase().getAllBibliographyFromTree(drug->allInnAndInteractingClassesIds().toList());
             for(int i=0; i< v.count(); ++i) {
                 MedicalUtils::EbmData *data = v.at(i);
                 d->m_Biblio.insertMulti(interaction, data);

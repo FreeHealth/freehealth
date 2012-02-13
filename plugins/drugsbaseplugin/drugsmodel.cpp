@@ -34,6 +34,7 @@
 
 #include "drugsmodel.h"
 
+#include <drugsbaseplugin/drugbasecore.h>
 #include <drugsbaseplugin/drugsbase.h>
 #include <drugsbaseplugin/idruginteraction.h>
 #include <drugsbaseplugin/druginteractionquery.h>
@@ -85,8 +86,8 @@ using namespace Trans::ConstantTranslations;
 static inline ExtensionSystem::PluginManager *pluginManager() {return ExtensionSystem::PluginManager::instance();}
 static inline Core::ISettings *settings() {return Core::ICore::instance()->settings();}
 static inline Core::ITheme *theme()  { return Core::ICore::instance()->theme(); }
-static inline DrugsDB::Internal::DrugsBase *drugsBase() {return DrugsDB::Internal::DrugsBase::instance();}
-static inline DrugsDB::InteractionManager *interactionManager() {return DrugsDB::InteractionManager::instance();}
+static inline DrugsDB::InteractionManager &interactionManager() {return DrugsDB::DrugBaseCore::instance().interactionManager();}
+static inline DrugsDB::DrugsBase &drugsBase() {return DrugsDB::DrugBaseCore::instance().drugsBase();}
 
 DrugsDB::DrugsModel *DrugsDB::DrugsModel::m_ActiveModel = 0;
 
@@ -270,7 +271,7 @@ public:
         case Drug::OwnInteractionsSynthesis:
             {
                 QVector<IDrugInteraction *> list = m_InteractionResult->getInteractions(drug);
-                return interactionManager()->drugInteractionSynthesisToHtml(drug, list, false);
+                return interactionManager().drugInteractionSynthesisToHtml(drug, list, false);
             }
         }
         return QVariant();
@@ -307,7 +308,7 @@ public:
                     query.engineUid = Constants::DDI_ENGINE_UID;
                     query.messageType = DrugInteractionInformationQuery::ShortToolTip;
                     return m_InteractionResult->alertMessagesToHtml(drug, query);
-//                    display.append(interactionManager()->listToHtml(m_InteractionResult->getInteractions(drug), false));
+//                    display.append(interactionManager().listToHtml(m_InteractionResult->getInteractions(drug), false));
                 } else if (drug->data(IDrug::AllInnsKnown).toBool()) {
                     display = drug->listOfInnLabels().join("<br />") + "<br />" + drug->listOfInteractingClasses().join("<br />");
                 } else {
@@ -330,7 +331,7 @@ public:
                 }
                 display.append("</p><p>");
                 if (list.count() > 0) {
-                    display.append(interactionManager()->synthesisToHtml(list, true));
+                    display.append(interactionManager().synthesisToHtml(list, true));
                 } else
                     display = tkTr(Trans::Constants::NO_1_FOUND).arg(tkTr(Trans::Constants::INTERACTION));
                 display.append("</p>");
@@ -378,7 +379,7 @@ DrugsModel::DrugsModel(QObject * parent) :
     static int handler = 0;
     ++handler;
     setObjectName("DrugsModel_" + QString::number(handler));
-    if (!drugsBase()->isInitialized())
+    if (!drugsBase().isInitialized())
         LOG_ERROR("Drugs database not intialized");
     d->m_DrugsList.clear();
     d->m_DosageModelList.clear();
@@ -389,8 +390,8 @@ DrugsModel::DrugsModel(QObject * parent) :
     d->m_InteractionQuery->setTestDrugDrugInteractions(true);
     d->m_InteractionQuery->setTestPatientDrugInteractions(true);
 
-    d->m_InteractionResult = interactionManager()->checkInteractions(d->m_InteractionQuery);
-    connect(drugsBase(), SIGNAL(dosageBaseHasChanged()), this, SLOT(dosageDatabaseChanged()));
+    d->m_InteractionResult = interactionManager().checkInteractions(d->m_InteractionQuery);
+    connect(&drugsBase(), SIGNAL(dosageBaseHasChanged()), this, SLOT(dosageDatabaseChanged()));
     if (d->m_AllergyEngine) {
         connect(d->m_AllergyEngine, SIGNAL(allergiesUpdated()), this, SLOT(resetModel()));
         connect(d->m_AllergyEngine, SIGNAL(intolerancesUpdated()), this, SLOT(resetModel()));
@@ -647,7 +648,7 @@ int DrugsModel::addDrug(IDrug *drug, bool automaticInteractionChecking)
 */
 int DrugsModel::addDrug(const QVariant &drugId, bool automaticInteractionChecking)
 {
-    return addDrug(drugsBase()->getDrugByDrugId(drugId), automaticInteractionChecking);
+    return addDrug(drugsBase().getDrugByDrugId(drugId), automaticInteractionChecking);
 }
 
 /** Add multiple drugs to the prescription with or without checking interactions according to the \e automaticInteractionChecking boolean. */
@@ -904,7 +905,7 @@ void DrugsModel::checkInteractions()
     }
     if (d->m_InteractionResult)
         delete d->m_InteractionResult;
-    d->m_InteractionResult = interactionManager()->checkInteractions(*d->m_InteractionQuery);
+    d->m_InteractionResult = interactionManager().checkInteractions(*d->m_InteractionQuery);
     reset();
 }
 

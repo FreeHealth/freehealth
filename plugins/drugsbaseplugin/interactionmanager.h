@@ -38,11 +38,12 @@ class QTreeWidget;
 /**
  * \file interactionsmanager.h
  * \author Eric MAEKER <eric.maeker@gmail.com>
- * \version 0.6.0
- * \date 11 Mar 2011
+ * \version 0.6.4
+ * \date 05 Feb 2012
 */
 
 namespace DrugsDB {
+class DrugBaseCore;
 class IDrug;
 class IDrugInteraction;
 class DrugInteractionResult;
@@ -56,9 +57,12 @@ class InteractionManagerPrivate;
 class DRUGSBASE_EXPORT InteractionManager : public QObject
 {
     Q_OBJECT
+    friend class DrugsDB::DrugBaseCore;
+
+protected:
     InteractionManager(QObject *parent = 0);
+
 public:
-    static InteractionManager *instance(QObject *parent = 0);
     ~InteractionManager();
 
     DrugInteractionResult *checkInteractions(const DrugInteractionQuery &query);
@@ -74,9 +78,6 @@ private Q_SLOTS:
     void onNewObjectAddedToPluginManagerPool(QObject *object);
 
 private:
-    // intialization state
-    static InteractionManager *m_Instance;
-    static bool m_initialized;
     Internal::InteractionManagerPrivate *d;
 };
 

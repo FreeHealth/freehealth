@@ -39,6 +39,7 @@
 
 #include "mfDosageViewer.h"
 
+#include <drugsbaseplugin/drugbasecore.h>
 #include <drugsbaseplugin/drugsbase.h>
 #include <drugsbaseplugin/dosagemodel.h>
 #include <drugsbaseplugin/drugsmodel.h>
@@ -74,7 +75,7 @@ using namespace Trans::ConstantTranslations;
 inline static DrugsDB::DrugsModel *drugModel() { return DrugsWidget::DrugsWidgetManager::instance()->currentDrugsModel(); }
 inline static Core::ITheme *theme() {return Core::ICore::instance()->theme();}
 static inline Core::ISettings *settings() {return Core::ICore::instance()->settings();}
-static inline DrugsDB::Internal::DrugsBase *drugsBase() {return DrugsDB::Internal::DrugsBase::instance();}
+static inline DrugsDB::DrugsBase &drugsBase() {return DrugsDB::DrugBaseCore::instance().drugsBase();}
 
 
 namespace DrugsWidget {
@@ -115,7 +116,7 @@ public:
             m_Mapper->addMapping(q->intakesToSpin, Prescription::IntakesTo, "value");
             m_Mapper->addMapping(q->intakesCombo, Prescription::IntakesScheme, "currentText");
 
-            if (drugsBase()->isRoutesAvailable())
+            if (drugsBase().isRoutesAvailable())
                 m_Mapper->addMapping(q->routeCombo, Prescription::Route, "currentText");
 
             m_Mapper->addMapping(q->periodSchemeCombo, Prescription::PeriodScheme, "currentText");
@@ -156,7 +157,7 @@ public:
             m_Mapper->addMapping(q->intakesCombo, Dosages::Constants::IntakesScheme, "currentText");
             m_Mapper->addMapping(q->periodSchemeCombo, Dosages::Constants::PeriodScheme, "currentText");
             m_Mapper->addMapping(q->periodSpin, Dosages::Constants::Period, "value");
-            if (drugsBase()->isRoutesAvailable())
+            if (drugsBase().isRoutesAvailable())
                 m_Mapper->addMapping(q->routeCombo, Dosages::Constants::Route, "currentText");
 
             m_Mapper->addMapping(q->durationFromSpin, Dosages::Constants::DurationFrom);
@@ -315,7 +316,7 @@ public:
         q->intervalTimeSchemeCombo->setCurrentIndex(Trans::Constants::Time::Days);
 
         q->routeCombo->clear();
-        if (drugsBase()->isRoutesAvailable()) {
+        if (drugsBase().isRoutesAvailable()) {
             q->routeCombo->addItems(drugModel()->drugData(m_DrugId, Drug::AvailableRoutes).toStringList());
             q->routeCombo->setCurrentIndex(0);
         }
@@ -441,7 +442,7 @@ DosageViewer::DosageViewer(QWidget *parent)
     this->hourlyTableWidget->hide();
 
     // manage routes ?
-    if (!drugsBase()->isRoutesAvailable()) {
+    if (!drugsBase().isRoutesAvailable()) {
         routeCombo->hide();
         routeLabel->hide();
     }

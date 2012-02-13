@@ -5,6 +5,7 @@ include($${PWD}/drugsbaseplugin_dependencies.pri )
 
 HEADERS += $${PWD}/drugsbaseplugin.h \
     $${PWD}/drugsbase_exporter.h \
+    $${PWD}/drugbaseessentials.h \
     $${PWD}/drugsbase.h \
     $${PWD}/interactionmanager.h \
     $${PWD}/constants.h \
@@ -34,6 +35,7 @@ HEADERS += $${PWD}/drugsbaseplugin.h \
 
 
 SOURCES += $${PWD}/drugsbaseplugin.cpp \
+    $${PWD}/drugbaseessentials.cpp \
     $${PWD}/drugsbase.cpp \
     $${PWD}/interactionmanager.cpp \
     $${PWD}/drugsmodel.cpp \

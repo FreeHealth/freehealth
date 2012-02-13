@@ -54,6 +54,7 @@
 #include <coreplugin/isettings.h>
 #include <coreplugin/translators.h>
 
+#include <drugsbaseplugin/drugbasecore.h>
 #include <drugsbaseplugin/drugsbase.h>
 
 #include <QtCore/QtPlugin>
@@ -64,7 +65,7 @@ using namespace DrugsWidget::Internal;
 static inline Core::ITheme *theme()  { return Core::ICore::instance()->theme(); }
 static inline Core::ISettings *settings()  { return Core::ICore::instance()->settings(); }
 static inline void messageSplash(const QString &s) {theme()->messageSplashScreen(s); }
-static inline DrugsDB::Internal::DrugsBase *drugsBase() {return DrugsDB::Internal::DrugsBase::instance();}
+static inline DrugsDB::DrugsBase &drugsBase() {return DrugsDB::DrugBaseCore::instance().drugsBase();}
 
 DrugsPlugin::DrugsPlugin() :
     viewPage(0),

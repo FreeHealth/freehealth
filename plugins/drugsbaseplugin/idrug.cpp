@@ -88,11 +88,9 @@
 
 */
 
-
-
-
 #include "idrug.h"
 
+#include <drugsbaseplugin/drugbasecore.h>
 #include <drugsbaseplugin/drugsbase.h>
 #include <drugsbaseplugin/drugsbaseinfo.h>
 #include <drugsbaseplugin/constants.h>
@@ -114,9 +112,9 @@
 using namespace DrugsDB;
 using namespace Internal;
 
-static inline DrugsDB::Internal::DrugsBase *base() {return DrugsDB::Internal::DrugsBase::instance();}
-static const char* const FRENCH_RPC_LINK = "http://afssaps-prd.afssaps.fr/php/ecodex/rcp/R%1.htm"; // 2+2+3
+static inline DrugsDB::DrugsBase &drugsBase() {return DrugsDB::DrugBaseCore::instance().drugsBase();}
 static inline Core::ISettings *settings() {return Core::ICore::instance()->settings();}
+static const char* const FRENCH_RPC_LINK = "http://afssaps-prd.afssaps.fr/php/ecodex/rcp/R%1.htm"; // 2+2+3
 
 
 namespace DrugsDB {
@@ -275,19 +273,19 @@ QVariant IComponent::data(const int ref, const QString &lang) const
         {
             if (d_component->m_7CharAtcIds.isEmpty())
                 return QString();
-            return base()->getAtcLabel(d_component->m_7CharAtcIds.at(0));
+            return drugsBase().getAtcLabel(d_component->m_7CharAtcIds.at(0));
         }
     case AtcCode:
         {
             if (d_component->m_7CharAtcIds.isEmpty())
                 return QString();
-            return base()->getAtcCode(d_component->m_7CharAtcIds.at(0));
+            return drugsBase().getAtcCode(d_component->m_7CharAtcIds.at(0));
         }
     case InteractingClassNames:
         {
             QStringList names;
             for(int i=0; i < d_component->m_InteractingClassAtcIds.count(); ++i) {
-                names << base()->getAtcLabel(d_component->m_InteractingClassAtcIds.at(i));
+                names << drugsBase().getAtcLabel(d_component->m_InteractingClassAtcIds.at(i));
             }
             return names;
         }
@@ -594,7 +592,7 @@ QVariant IDrug::data(const int ref, const QString &lang) const
                 toReturn = d_drug->m_Content.value(Spc).value(lang).toString();
             }
             if (!toReturn.isEmpty()) {
-                if (base()->actualDatabaseInformations()->identifiant == Constants::DB_DEFAULT_IDENTIFIANT)
+                if (drugsBase().actualDatabaseInformations()->identifiant == Constants::DB_DEFAULT_IDENTIFIANT)
                     toReturn = QString(FRENCH_RPC_LINK).arg(toReturn.rightJustified(7,'0'));
             }
             return toReturn;
@@ -615,7 +613,7 @@ QVariant IDrug::data(const int ref, const QString &lang) const
             // for textual and virtual drugs, forms are setted using setDataFromDb()
             if (d_drug->m_Content.value(ref).value(lang).isNull()) {
                 if (d_drug->m_Content.value(ref).value(Trans::Constants::ALL_LANGUAGE).isNull())
-                    return base()->getFormLabels(d_drug->m_Content.value(DrugID).value(Trans::Constants::ALL_LANGUAGE));
+                    return drugsBase().getFormLabels(d_drug->m_Content.value(DrugID).value(Trans::Constants::ALL_LANGUAGE));
                 else
                     return d_drug->m_Content.value(ref).value(Trans::Constants::ALL_LANGUAGE);
             }
@@ -627,7 +625,7 @@ QVariant IDrug::data(const int ref, const QString &lang) const
             for(int i = 0; i < d_drug->m_Routes.count(); ++i) {
                 routes << d_drug->m_Routes.at(i)->label(lang);
             }
-//            qWarning() << "IDrug::data::Routes" << routes << base()->getRouteLabels(d_drug->m_Content.value(DrugID).value(Trans::Constants::ALL_LANGUAGE));
+//            qWarning() << "IDrug::data::Routes" << routes << drugsBase().getRouteLabels(d_drug->m_Content.value(DrugID).value(Trans::Constants::ALL_LANGUAGE));
             return routes;
         }
     case MainInnCode:
@@ -658,7 +656,7 @@ QVariant IDrug::data(const int ref, const QString &lang) const
     {
         QStringList toReturn;
         for(int i = 0; i < d_drug->m_7CharsAtc.count(); ++i) {
-            toReturn << base()->getAtcCode(d_drug->m_7CharsAtc.at(i));
+            toReturn << drugsBase().getAtcCode(d_drug->m_7CharsAtc.at(i));
         }
         toReturn.removeDuplicates();
         return toReturn;
@@ -668,7 +666,7 @@ QVariant IDrug::data(const int ref, const QString &lang) const
         {
             QStringList names;
             for(int i=0; i < d_drug->m_InteractingClasses.count(); ++i) {
-                names << base()->getAtcLabel(d_drug->m_InteractingClasses.at(i));
+                names << drugsBase().getAtcLabel(d_drug->m_InteractingClasses.at(i));
             }
             return names;
         }
@@ -683,7 +681,7 @@ QVariant IDrug::data(const int ref, const QString &lang) const
         {
             if (d_drug->m_AllAtcCodes.isEmpty()) {
                 for(int i=0; i < d_drug->m_AllIds.count(); ++i) {
-                    QString code = base()->getAtcCode(d_drug->m_AllIds.at(i));
+                    QString code = drugsBase().getAtcCode(d_drug->m_AllIds.at(i));
                     if (!d_drug->m_AllAtcCodes.contains(code))
                         d_drug->m_AllAtcCodes << code;
                 }
@@ -823,9 +821,9 @@ QString IDrug::toHtml() const
 
     /** \todo code here: UIDs not UID */
     QString uidName = "UID";
-    if (base()->actualDatabaseInformations()) {
-        if (!base()->actualDatabaseInformations()->drugsUidName.isEmpty())
-            uidName = base()->actualDatabaseInformations()->drugsUidName;
+    if (drugsBase().actualDatabaseInformations()) {
+        if (!drugsBase().actualDatabaseInformations()->drugsUidName.isEmpty())
+            uidName = drugsBase().actualDatabaseInformations()->drugsUidName;
     }
     QString atc = atcCode();
     if (!atc.isEmpty()) {

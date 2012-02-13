@@ -1,7 +1,7 @@
 /***************************************************************************
  *  The FreeMedForms project is a set of free, open source medical         *
  *  applications.                                                          *
- *  (C) 2008-2011 by Eric MAEKER, MD (France) <eric.maeker@gmail.com>      *
+ *  (C) 2008-2012 by Eric MAEKER, MD (France) <eric.maeker@gmail.com>      *
  *  All rights reserved.                                                   *
  *                                                                         *
  *  This program is free software: you can redistribute it and/or modify   *
@@ -26,7 +26,7 @@
  ***************************************************************************/
 
 /**
-  \class DrugsBase
+  \class DrugsDB::DrugsBase
   \brief This class owns the drugs and dosages database and interactions mechanism.
 
   0. Terminology\n
@@ -88,7 +88,6 @@
 #include <QSet>
 #include <QCache>
 
-
 enum { WarnExtractedDrugs=false };
 
 using namespace DrugsDB;
@@ -98,7 +97,6 @@ using namespace Trans::ConstantTranslations;
 
 static inline Core::ISettings *settings()  { return Core::ICore::instance()->settings(); }
 static inline DrugsDB::Internal::DrugSearchEngine *searchEngine()  { return DrugsDB::Internal::DrugSearchEngine::instance(); }
-static inline QString databaseFileName() {return settings()->databasePath() + QDir::separator() + QString(Constants::DB_DRUGS_NAME) + QDir::separator() + QString(Constants::DB_DRUGS_FILENAME);}
 
 static inline bool connectDatabase(QSqlDatabase &DB, const QString &file, const int line)
 {
@@ -126,13 +124,15 @@ namespace Internal {
 class DrugsBasePrivate
 {
 public:
-    DrugsBasePrivate(DrugsBase *base) :
+    DrugsBasePrivate(DrugsDB::DrugsBase *base) :
             q(base),
             m_ActualDBInfos(0),
+            m_initialized(false),
             m_LogChrono(false),
             m_RefreshDrugsBase(false),
             m_RefreshDosageBase(false),
-            m_UseRoutes(true)
+            m_UseRoutes(true),
+            m_IsDefaultDB(false)
     {
         m_AtcLabelCache.setMaxCost(200);
         m_AtcCodeCacheIdKeyed.setMaxCost(1000);
@@ -248,6 +248,7 @@ public:
             LOG_QUERY_ERROR_FOR(q, sids);
         }
     }
+
     void getDrugComponents(IDrug *drug)
     {
         Utils::FieldList get;
@@ -324,10 +325,12 @@ public:
         }
     }
 
+private:
+    DrugsDB::DrugsBase *q;
+
 public:
-    DrugsBase *q;
     DatabaseInfos *m_ActualDBInfos;
-    bool m_LogChrono, m_RefreshDrugsBase, m_RefreshDosageBase, m_UseRoutes;
+    bool m_initialized, m_LogChrono, m_RefreshDrugsBase, m_RefreshDosageBase, m_UseRoutes, m_IsDefaultDB;
 
     QMultiHash<int, int> m_AtcToMol;   /*!< Link Iam_Id to Code_Subst */
     QMultiHash<int, int> m_ClassToAtcs;   /*!< Link ClassIam_Id to Iam_Id */
@@ -342,51 +345,55 @@ public:
 
 
 //--------------------------------------------------------------------------------------------------------
-//--------------------------------- Initialization of static members -------------------------------------
-//--------------------------------------------------------------------------------------------------------
-DrugsBase * DrugsBase::m_Instance = 0;
-bool DrugsBase::m_initialized = false;
-
-//--------------------------------------------------------------------------------------------------------
 //-------------------------------------- Initializing Database -------------------------------------------
 //--------------------------------------------------------------------------------------------------------
-/** \brief Returns the unique instance of DrugsBase. If it does not exists, it is created */
-DrugsBase *DrugsBase::instance()
-{
-    if (!m_Instance) {
-        m_Instance = new DrugsBase(qApp);
-        m_Instance->init();
-    }
-    return m_Instance;
-}
-
 DrugsBase::DrugsBase(QObject *parent) :
-    QObject(parent), DrugBaseCore(), d(0)
+    QObject(parent),
+    DrugBaseEssentials(),
+    d(new Internal::DrugsBasePrivate(this))
 {
-    d = new DrugsBasePrivate(this);
     setObjectName("DrugsBase");
-
-    connect(Core::ICore::instance(), SIGNAL(databaseServerChanged()), this, SLOT(onCoreDatabaseServerChanged()));
 }
 
 DrugsBase::~DrugsBase()
 {
-    if (d) delete d;
-    d=0;
+    if (d) {
+        delete d;
+        d = 0;
+    }
+}
+
+// Find the drug database to use. In priority order:
+// - User datapack
+// - Application installed datapack
+static QString databasePath()
+{
+    QString dbRelPath = QString("/%1/%2").arg(Constants::DB_DRUGS_NAME).arg(Constants::DB_DRUGS_FILENAME);
+    QString tmp;
+    tmp = settings()->dataPackInstallPath() + dbRelPath;
+    if (QFileInfo(tmp).exists())
+        return settings()->dataPackInstallPath();
+    tmp = settings()->dataPackApplicationInstalledPath() + dbRelPath;
+    return settings()->dataPackApplicationInstalledPath();
+}
+
+static QString databaseFileName()
+{
+    return databasePath() + QDir::separator() + Constants::DB_DRUGS_FILENAME;
 }
 
 /** \brief Initializer for the database. Return the error state. */
 bool DrugsBase::init()
 {
     // only one base can be initialized
-    if (m_initialized)
+    if (d->m_initialized)
         return true;
 
     // create drugs database connection
     if (!QSqlDatabase::connectionNames().contains(Constants::DB_DRUGS_NAME)) {
-        const QString &pathToDb = QFileInfo(databaseFileName()).absolutePath();
-        if (!DrugBaseCore::initialize(settings()->databasePath()))
-            LOG_ERROR("Unable to initialize DrugBaseCore");
+        const QString &pathToDb = databasePath();
+        if (!DrugBaseEssentials::initialize(pathToDb))
+            LOG_ERROR("Unable to initialize DrugBaseCore. pathToDB: " + pathToDb);
         refreshDrugsBase();
     }
 
@@ -469,8 +476,13 @@ bool DrugsBase::init()
     d->getDrugsSources();
 
     // Initialize
-    m_initialized = true;
+    d->m_initialized = true;
     return true;
+}
+
+bool DrugsBase::isInitialized()
+{
+    return d->m_initialized;
 }
 
 /**
@@ -491,7 +503,7 @@ const DatabaseInfos *DrugsBase::actualDatabaseInformations() const
 
 bool DrugsBase::isDatabaseTheDefaultOne() const
 {
-    return m_IsDefaultDB;
+    return d->m_IsDefaultDB;
 }
 
 bool DrugsBase::isRoutesAvailable() const
@@ -501,7 +513,7 @@ bool DrugsBase::isRoutesAvailable() const
 
 bool DrugsBase::refreshAllDatabases()
 {
-    m_initialized = false;
+    d->m_initialized = false;
     refreshDrugsBase();
     d->m_RefreshDosageBase = true;
     Q_EMIT dosageBaseIsAboutToChange();
@@ -512,26 +524,44 @@ bool DrugsBase::refreshAllDatabases()
     return r;
 }
 
+bool DrugsBase::datapackChanged()
+{
+    forceFullDatabaseRefreshing();
+    d->m_initialized = false;
+    // Remove actual QSqlDatabase
+    QSqlDatabase::removeDatabase(Constants::DB_DRUGS_NAME);
+    // Re-init database
+    init();
+    return true;
+}
+
 bool DrugsBase::refreshDrugsBase()
 {
-    m_initialized = false;
+    d->m_initialized = false;
     Q_EMIT drugsBaseIsAboutToChange();
 
     // define is default drug sources (FR_AFSSAPS)
     QString drugSource = settings()->value(Constants::S_SELECTED_DATABASE_FILENAME).toString();
     if (drugSource == DrugsDB::Constants::DB_DEFAULT_IDENTIFIANT || drugSource.isEmpty()) {
-        m_IsDefaultDB = true;
+        d->m_IsDefaultDB = true;
         drugSource = DrugsDB::Constants::DB_DEFAULT_IDENTIFIANT;
     } else {
-        m_IsDefaultDB = false;
+        d->m_IsDefaultDB = false;
     }
 
     d->m_ActualDBInfos = getDrugSourceInformations(drugSource);
     if (!d->m_ActualDBInfos) {
-        Utils::warningMessageBox(tr("Drug database source does not exists."),
-                                 tr("Switching to the default drugs database source."));
+//        Utils::warningMessageBox(tr("Drug database source does not exists."),
+//                                 tr("Switching to the default drugs database source."));
         d->m_ActualDBInfos = getDrugSourceInformations(DrugsDB::Constants::DB_DEFAULT_IDENTIFIANT);
-        m_IsDefaultDB = true;
+        if (!d->m_ActualDBInfos) {
+            // get the first available from the database
+            d->m_ActualDBInfos = getDrugSourceInformations();
+            LOG(QString("%1 %2")
+                .arg(tr("Switching to the default drugs database source."))
+                .arg(d->m_ActualDBInfos->identifiant));
+        }
+        d->m_IsDefaultDB = true;
     }
 
     Q_EMIT drugsBaseHasChanged();
@@ -554,7 +584,7 @@ bool DrugsBase::changeCurrentDrugSourceUid(const QVariant &uid)
 
 bool DrugsBase::refreshDosageBase()
 {
-    m_initialized = false;
+    d->m_initialized = false;
     d->m_RefreshDosageBase = true;
     Q_EMIT dosageBaseIsAboutToChange();
     bool r = init();
@@ -607,23 +637,26 @@ DatabaseInfos *DrugsBase::getDrugSourceInformations(const QString &drugSourceUid
 {
     DatabaseInfos *info = 0;
     QHash<int, QString> where;
-    where.insert(Constants::SOURCES_DBUID, QString("='%1'").arg(drugSourceUid));
+    if (drugSourceUid.isEmpty())
+        where.insert(Constants::SOURCES_DBUID, "LIKE '%'");
+    else
+        where.insert(Constants::SOURCES_DBUID, QString("='%1'").arg(drugSourceUid));
     QString req = select(Constants::Table_SOURCES, where);
     QSqlQuery q(req, QSqlDatabase::database(Constants::DB_DRUGS_NAME));
     if (q.isActive()) {
         if (q.next()) {
-            LOG("Drugs database informations correctly read " + drugSourceUid);
+            LOG("Drugs database informations correctly read " + q.value(Constants::SOURCES_DBUID).toString());
             info = new DatabaseInfos;
             info->version = q.value(Constants::SOURCES_VERSION).toString();
             info->sid = q.value(Constants::SOURCES_SID).toInt();
             info->names = d->getAllLabels(q.value(Constants::SOURCES_MASTERLID).toInt());
-            info->identifiant = drugSourceUid;
+            info->identifiant = q.value(Constants::SOURCES_DBUID).toString();
             info->compatVersion = q.value(Constants::SOURCES_FMFCOMPAT).toString();
             info->provider = q.value(Constants::SOURCES_PROVIDER).toString();
             info->weblink = q.value(Constants::SOURCES_WEBLINK).toString();
             info->author = q.value(Constants::SOURCES_AUTHORS).toString();
-            info->license = q.value(Constants::SOURCES_COPYRIGHT).toString();
-//            info->licenseTerms = q.value(Constants::INFO_LICENSE_TERMS).toString();
+            info->copyright = q.value(Constants::SOURCES_COPYRIGHT).toString();
+            info->license = q.value(Constants::SOURCES_LICENCE).toString();
             info->date = q.value(Constants::SOURCES_DATE).toDate();
             info->drugsUidName = q.value(Constants::SOURCES_DRUGUID_NAME).toString();
             info->packUidName = q.value(Constants::SOURCES_PACKUID_NAME).toString();
@@ -779,12 +812,11 @@ bool DrugsBase::createDatabase(const QString &connectionName , const QString &db
            ");"
         << QString("INSERT INTO `VERSION` (`ACTUAL`) VALUES('%1');").arg(VersionUpdater::instance()->lastDosageDabaseVersion())
         , DB)) {
-        Utils::Log::addMessage(this, tkTr(Trans::Constants::DATABASE_1_CORRECTLY_CREATED).arg(dbName));
+        LOG(tkTr(Trans::Constants::DATABASE_1_CORRECTLY_CREATED).arg(dbName));
         return true;
     } else {
-        Utils::Log::addError(this, tkTr(Trans::Constants::DATABASE_1_CANNOT_BE_CREATED_ERROR_2)
-                         .arg(dbName, DB.lastError().text()),
-                         __FILE__, __LINE__);
+        LOG_ERROR(tkTr(Trans::Constants::DATABASE_1_CANNOT_BE_CREATED_ERROR_2)
+                         .arg(dbName, DB.lastError().text()));
     }
     return false;
 }
@@ -891,6 +923,7 @@ struct minimalCompo {
 QList<QVariant> DrugsBase::getAllUIDThatHaveRecordedDosages() const
 {
     QList<QVariant> toReturn;
+    /** \todo recode this */
 
 //    if (!actualDatabaseInformations())
 //        return toReturn;
@@ -900,7 +933,7 @@ QList<QVariant> DrugsBase::getAllUIDThatHaveRecordedDosages() const
 //        return toReturn;
 
 //    QString req;
-//    if (m_IsDefaultDB) {
+//    if (d->m_IsDefaultDB) {
 //        req = QString("SELECT DISTINCT `DRUG_UID_LK` FROM `DOSAGE` WHERE `DRUGS_DATABASE_IDENTIFIANT` = \"%1\";")
 //              .arg(Constants::DB_DEFAULT_IDENTIFIANT);
 //    } else {
@@ -1006,7 +1039,7 @@ QMultiHash<int,QString> DrugsBase::getAllINNThatHaveRecordedDosages() const
         return toReturn;
 
     QString req;
-    if (m_IsDefaultDB) {
+    if (d->m_IsDefaultDB) {
         req = QString("SELECT DISTINCT `INN_LK`, `INN_DOSAGE` FROM `DOSAGE` WHERE `DRUGS_DATABASE_IDENTIFIANT` = \"%1\";")
               .arg(Constants::DB_DEFAULT_IDENTIFIANT);
     } else {
@@ -1200,14 +1233,14 @@ IDrug *DrugsBase::getDrugByUID(const QVariant &uid1, const QVariant &uid2, const
         // manage drugs denomination according to the database informations
         QString tmp = d->m_ActualDBInfos->drugsNameConstructor;
         if (!tmp.isEmpty()) {
-            tmp.replace(fieldName(Constants::Table_DRUGS, Constants::DRUGS_NAME), toReturn->brandName());
+            tmp.replace("NAME", toReturn->brandName());
             tmp.replace("FORM", toReturn->forms().join(","));
             tmp.replace("ROUTE", toReturn->routes().join(","));
             // limit strength to three maximum --> if > 3 do not add strength
             if (toReturn->strength().count(";") > 3)
-                tmp.replace(fieldName(Constants::Table_DRUGS, Constants::DRUGS_STRENGTH), "");
+                tmp.replace("STRENGTH", "");
             else
-                tmp.replace(fieldName(Constants::Table_DRUGS, Constants::DRUGS_STRENGTH), toReturn->strength());
+                tmp.replace("STRENGTH", toReturn->strength());
             toReturn->setDataFromDb(IDrug::Name, tmp);
         }
     } else {

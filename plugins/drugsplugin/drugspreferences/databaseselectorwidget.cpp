@@ -28,9 +28,10 @@
 #include "ui_databaseselectorwidget.h"
 #include "constants.h"
 
+#include <drugsbaseplugin/drugbasecore.h>
+#include <drugsbaseplugin/drugsbase.h>
 #include <drugsbaseplugin/drugsdatabaseselector.h>
 #include <drugsbaseplugin/constants.h>
-#include <drugsbaseplugin/drugsbase.h>
 #include <drugsbaseplugin/drugsmodel.h>
 
 #include <coreplugin/icore.h>
@@ -41,7 +42,9 @@
 
 #include <utils/log.h>
 #include <utils/global.h>
-#include <translationutils/constanttranslations.h>
+#include <translationutils/constants.h>
+#include <translationutils/trans_drugs.h>
+#include <translationutils/trans_current.h>
 
 #include <QTreeWidgetItem>
 #include <QFileInfo>
@@ -55,7 +58,7 @@ using namespace Trans::ConstantTranslations;
 static inline Core::ITheme *theme()  { return Core::ICore::instance()->theme(); }
 static inline Core::ISettings *settings()  { return Core::ICore::instance()->settings(); }
 static inline DrugsDB::DrugsDatabaseSelector *selector() {return DrugsDB::DrugsDatabaseSelector::instance();}
-static inline DrugsDB::Internal::DrugsBase *base() {return DrugsDB::Internal::DrugsBase::instance();}
+static inline DrugsDB::DrugsBase &drugsBase() {return DrugsDB::DrugBaseCore::instance().drugsBase();}
 
 /////////////////////////////////////////////////////////////////////////////////////////////////////
 ///////////////////////////////  DrugsDatabaseSelectorPage  /////////////////////////////////////////
@@ -145,6 +148,7 @@ DatabaseSelectorWidget::DatabaseSelectorWidget(QWidget *parent) :
     ui(new Ui::DatabaseSelectorWidget),
     d(0)
 {
+    setObjectName("DatabaseSelectorWidget");
     d = new Internal::DatabaseSelectorWidgetPrivate;
     d->m_SelectedDatabaseUid = settings()->value(DrugsDB::Constants::S_SELECTED_DATABASE_FILENAME).toString();
 
@@ -165,8 +169,8 @@ DatabaseSelectorWidget::~DatabaseSelectorWidget()
 void DatabaseSelectorWidget::setDatasToUi()
 {
     ui->databaseList->clear();
-    d->m_Infos = base()->getAllDrugSourceInformations();
-    const DrugsDB::DatabaseInfos *actual = base()->actualDatabaseInformations();
+    d->m_Infos = drugsBase().getAllDrugSourceInformations();
+    const DrugsDB::DatabaseInfos *actual = drugsBase().actualDatabaseInformations();
     if (!actual)
         return;
     int row = 0;
@@ -199,7 +203,7 @@ static void changeDrugsDatabase(Core::ISettings *set, const QString &drugBaseUid
 {
     if (!DrugsDB::DrugsModel::activeModel()) {
         set->setValue(DrugsDB::Constants::S_SELECTED_DATABASE_FILENAME, drugBaseUid);
-        base()->refreshDrugsBase();
+        drugsBase().refreshDrugsBase();
         return;
     }
 
@@ -216,7 +220,7 @@ static void changeDrugsDatabase(Core::ISettings *set, const QString &drugBaseUid
             DrugsDB::DrugsModel::activeModel()->clearDrugsList();
         }
         set->setValue(DrugsDB::Constants::S_SELECTED_DATABASE_FILENAME, drugBaseUid);
-        base()->refreshDrugsBase();
+        drugsBase().refreshDrugsBase();
     }
 }
 
@@ -226,7 +230,7 @@ void DatabaseSelectorWidget::writeDefaultSettings(Core::ISettings *s)
     if (!set) {
         set = settings();
     }
-    Utils::Log::addMessage("DatabaseSelectorWidget", tkTr(Trans::Constants::CREATING_DEFAULT_SETTINGS_FOR_1).arg("DatabaseSelectorWidget"));
+    LOG_FOR("DatabaseSelectorWidget", tkTr(Trans::Constants::CREATING_DEFAULT_SETTINGS_FOR_1).arg("DatabaseSelectorWidget"));
     set->setValue(DrugsDB::Constants::S_DATABASE_PATHS, QVariant());
     changeDrugsDatabase(set, DrugsDB::Constants::DB_DEFAULT_IDENTIFIANT);
 }

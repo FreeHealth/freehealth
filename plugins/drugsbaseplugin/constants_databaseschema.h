@@ -1,7 +1,7 @@
 /***************************************************************************
  *  The FreeMedForms project is a set of free, open source medical         *
  *  applications.                                                          *
- *  (C) 2008-2011 by Eric MAEKER, MD (France) <eric.maeker@gmail.com>      *
+ *  (C) 2008-2012 by Eric MAEKER, MD (France) <eric.maeker@gmail.com>      *
  *  All rights reserved.                                                   *
  *                                                                         *
  *  This program is free software: you can redistribute it and/or modify   *
@@ -42,6 +42,7 @@ namespace Constants {
     const char * const DB_DRUGS_NAME     = "drugs";            /*!< \brief Drugs database connection name. */
     const char * const DB_DRUGS_FILENAME = "master.db";         /*!< \brief Drug database file name (for SQLite). */
     const char * const DB_DEFAULT_IDENTIFIANT  = "FR_AFSSAPS";
+    const char * const DB_FDA_IDENTIFIANT  = "FDA_US";
 
     //--------------------------------------------------------------------------------------------------------
     //------------------------------------ Enums for Database Management -------------------------------------
@@ -76,11 +77,13 @@ namespace Constants {
 
     enum SOURCESFields {
         SOURCES_SID = 0, SOURCES_DBUID, SOURCES_MASTERLID, SOURCES_LANG,
-        SOURCES_WEB, SOURCES_COPYRIGHT, SOURCES_DATE,
-        SOURCES_DRUGS_VERSION, SOURCES_AUTHORS, SOURCES_VERSION, SOURCES_PROVIDER,
+        SOURCES_WEB, SOURCES_COPYRIGHT, SOURCES_LICENCE, SOURCES_DATE,
+        SOURCES_DRUGS_VERSION, SOURCES_AUTHORS,  // 10
+        SOURCES_VERSION, SOURCES_PROVIDER,
         SOURCES_WEBLINK, SOURCES_DRUGUID_NAME, SOURCES_ATC, SOURCES_INTERACTIONS,
         SOURCES_COMPL_WEBSITE, SOURCES_PACKUID_NAME, SOURCES_COMPLETION,
-        SOURCES_AUTHOR_COMMENTS, SOURCES_DRUGNAMECONSTRUCTOR,  SOURCES_FMFCOMPAT,
+        SOURCES_AUTHOR_COMMENTS, //10
+        SOURCES_DRUGNAMECONSTRUCTOR,  SOURCES_FMFCOMPAT,
         SOURCES_OPENREACT_COMPAT,
         SOURCES_MaxParam
     };

@@ -29,9 +29,7 @@
 
 #include <drugsbaseplugin/drugsbase_exporter.h>
 #include <drugsbaseplugin/constants.h>
-#include <drugsbaseplugin/drugbasecore.h>
-
-#include <utils/database.h>
+#include <drugsbaseplugin/drugbaseessentials.h>
 
 #include <QVariant>
 #include <QStringList>
@@ -43,45 +41,46 @@
  * \file drugsbase.h
  * \author Eric MAEKER <eric.maeker@gmail.com>
  * \version 0.6.4
- * \date 13 Dec 2011
+ * \date 04 Feb 2012
 */
 
 namespace MedicalUtils {
 class EbmData;
 }
 
-
 namespace DrugsDB {
+class DrugBaseCore;
 class DatabaseInfos;
 class IDrug;
 
 namespace Internal {
 class DrugInfo;
 class DrugsBasePrivate;
+}
 
-class DRUGSBASE_EXPORT DrugsBase : public QObject, public DrugBaseCore
+class DRUGSBASE_EXPORT DrugsBase : public QObject, public Internal::DrugBaseEssentials
 {
     Q_OBJECT
+    friend class DrugBaseCore;
+
+protected:
     DrugsBase(QObject *parent = 0);
     bool init();
-
-    friend class DrugsModel;
-    friend class DrugsBasePrivate;
-    friend class DrugInfo;
+    void onCoreDatabaseServerChanged();
+    bool datapackChanged();
 
 public:
-    static DrugsBase *instance();
     ~DrugsBase();
 
     // Initializer / Checkers
-    static bool isInitialized() { return m_initialized; }
+    bool isInitialized();
     void logChronos(bool state);
     const DatabaseInfos *actualDatabaseInformations() const;
     bool isDatabaseTheDefaultOne() const;
     bool isRoutesAvailable() const;
 
     QVector<DatabaseInfos *> getAllDrugSourceInformations();
-    DatabaseInfos *getDrugSourceInformations(const QString &drugSourceUid);
+    DatabaseInfos *getDrugSourceInformations(const QString &drugSourceUid = QString::null);
 
     // OBSOLETE
     bool refreshAllDatabases();
@@ -159,18 +158,11 @@ private:
                         const int /*port*/,
                         CreationOption /*createOption*/
                        );
-private Q_SLOTS:
-    void onCoreDatabaseServerChanged();
 
 private:
-    // intialization state
-    static DrugsBase *m_Instance;
-    static bool m_initialized;
-    DrugsBasePrivate *d;
-    bool m_IsDefaultDB;
+    Internal::DrugsBasePrivate *d;
 };
 
-}  // End Internal
 }  // End DrugsDB
 
 #endif

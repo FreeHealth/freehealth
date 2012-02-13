@@ -31,6 +31,7 @@
 
 #include "globaldrugsmodel.h"
 
+#include <drugsbaseplugin/drugbasecore.h>
 #include <drugsbaseplugin/drugsbase.h>
 #include <drugsbaseplugin/drugsdatabaseselector.h>
 #include <drugsbaseplugin/idrug.h>
@@ -69,10 +70,10 @@ using namespace Internal;
 
 static inline Core::ISettings *settings() {return Core::ICore::instance()->settings();}
 static inline Core::ITheme *theme()  { return Core::ICore::instance()->theme(); }
-static inline DrugsDB::Internal::DrugsBase *base() {return DrugsDB::Internal::DrugsBase::instance();}
 static inline Core::IPatient *patient() {return Core::ICore::instance()->patient();}
 static inline Core::Translators *translators() {return Core::ICore::instance()->translators();}
 static inline ExtensionSystem::PluginManager *pluginManager() {return ExtensionSystem::PluginManager::instance();}
+static inline DrugsDB::DrugsBase &drugsBase() {return DrugsDB::DrugBaseCore::instance().drugsBase();}
 
 namespace DrugsDB {
 namespace Internal {
@@ -111,9 +112,9 @@ public:
     void getSourceFilter()
     {
         m_SourceFilter = QString(" `%1`.`%2`=%3 ")
-                         .arg(base()->table(Constants::Table_DRUGS))
-                         .arg(base()->fieldName(Constants::Table_DRUGS, Constants::DRUGS_SID))
-                         .arg(base()->actualDatabaseInformations()->sid);
+                         .arg(drugsBase().table(Constants::Table_DRUGS))
+                         .arg(drugsBase().fieldName(Constants::Table_DRUGS, Constants::DRUGS_SID))
+                         .arg(drugsBase().actualDatabaseInformations()->sid);
     }
 
     void setQueryModelSearchMode(const int searchMode)
@@ -124,7 +125,7 @@ public:
         {
         case GlobalDrugsModel::SearchByBrandName:
             {
-                m_SqlQueryWithoutWhere = base()->select(Constants::Table_DRUGS, QList<int>()
+                m_SqlQueryWithoutWhere = drugsBase().select(Constants::Table_DRUGS, QList<int>()
                                      << Constants::DRUGS_DID
                                      << Constants::DRUGS_NAME
                                      << Constants::DRUGS_STRENGTH
@@ -143,7 +144,7 @@ public:
                 Utils::JoinList joins;
                 joins << Utils::Join(Constants::Table_COMPO, Constants::COMPO_DID, Constants::Table_DRUGS, Constants::DRUGS_DID);
                 joins << Utils::Join(Constants::Table_MOLS, Constants::MOLS_MID, Constants::Table_COMPO, Constants::COMPO_MID);
-                m_SqlQueryWithoutWhere = base()->select(get, joins);
+                m_SqlQueryWithoutWhere = drugsBase().select(get, joins);
                 break;
             }
         case GlobalDrugsModel::SearchByInnName:
@@ -160,7 +161,7 @@ public:
                 joins << Utils::Join(Constants::Table_ATC_LABELS, Constants::ATC_LABELS_ATCID, Constants::Table_LK_MOL_ATC, Constants::LK_ATC_ID);
                 joins << Utils::Join(Constants::Table_LABELSLINK, Constants::LABELSLINK_MASTERLID, Constants::Table_ATC_LABELS, Constants::ATC_LABELS_MASTERLID);
                 joins << Utils::Join(Constants::Table_LABELS, Constants::LABELS_LID, Constants::Table_LABELSLINK, Constants::LABELSLINK_LID);
-                m_SqlQueryWithoutWhere = base()->select(get, joins);
+                m_SqlQueryWithoutWhere = drugsBase().select(get, joins);
                 break;
             }
         }
@@ -181,24 +182,24 @@ public:
         case GlobalDrugsModel::SearchByBrandName:
             {
                 m_Filter = QString("`%1`.`%2` LIKE '%3%'")
-                           .arg(base()->table(Constants::Table_DRUGS))
-                           .arg(base()->fieldName(Constants::Table_DRUGS, Constants::DRUGS_NAME))
+                           .arg(drugsBase().table(Constants::Table_DRUGS))
+                           .arg(drugsBase().fieldName(Constants::Table_DRUGS, Constants::DRUGS_NAME))
                            .arg(searchFor);
                 break;
             }
         case GlobalDrugsModel::SearchByMolecularName:
             {
                 m_Filter = QString("`%1`.`%2` LIKE '%3%'")
-                           .arg(base()->table(Constants::Table_MOLS))
-                           .arg(base()->fieldName(Constants::Table_MOLS, Constants::MOLS_NAME))
+                           .arg(drugsBase().table(Constants::Table_MOLS))
+                           .arg(drugsBase().fieldName(Constants::Table_MOLS, Constants::MOLS_NAME))
                            .arg(searchFor);
                 break;
             }
         case GlobalDrugsModel::SearchByInnName:
             {
                 m_Filter = QString("`%1`.`%2` LIKE '%3%'")
-                           .arg(base()->table(Constants::Table_LABELS))
-                           .arg(base()->fieldName(Constants::Table_LABELS, Constants::LABELS_LABEL))
+                           .arg(drugsBase().table(Constants::Table_LABELS))
+                           .arg(drugsBase().fieldName(Constants::Table_LABELS, Constants::LABELS_LABEL))
                            .arg(searchFor);
                 break;
             }
@@ -216,7 +217,7 @@ public:
     static void updateCachedAvailableDosage()
     {
         m_CachedAvailableDosageForUID.clear();
-        foreach(const QVariant &uid, base()->getAllUIDThatHaveRecordedDosages())
+        foreach(const QVariant &uid, drugsBase().getAllUIDThatHaveRecordedDosages())
             m_CachedAvailableDosageForUID.append(uid.toString());
     }
 
@@ -228,16 +229,16 @@ public:
     QString getConstructedDrugName(const int row)
     {
         const QString &drugName = q->QSqlQueryModel::data(q->index(row, Priv_BrandName)).toString();
-        if (base()->actualDatabaseInformations()) {
-            QString tmp = base()->actualDatabaseInformations()->drugsNameConstructor;
+        if (drugsBase().actualDatabaseInformations()) {
+            QString tmp = drugsBase().actualDatabaseInformations()->drugsNameConstructor;
             if (!tmp.isEmpty()) {
-                tmp.replace(base()->fieldName(Constants::Table_DRUGS, Constants::DRUGS_NAME), drugName);
+                tmp.replace("NAME", drugName);
                 tmp.replace("FORM", q->data(q->index(row, GlobalDrugsModel::Forms)).toString());
                 tmp.replace("ROUTE", q->data(q->index(row, GlobalDrugsModel::Routes)).toString());
                 QString s = q->QSqlQueryModel::data(q->index(row, Priv_Strength)).toString();
                 if (s.count(";") > 3)
                     s.clear();
-                tmp.replace(base()->fieldName(Constants::Table_DRUGS, Constants::DRUGS_STRENGTH), s);
+                tmp.replace("STRENGTH", s);
                 return tmp;
             }
         }
@@ -292,8 +293,8 @@ GlobalDrugsModel::GlobalDrugsModel(const SearchMode searchMode, QObject *parent)
 
     refreshDrugsPrecautions(patient()->index(0, Core::IPatient::DrugsAllergiesWithoutPrecision), patient()->index(0, Core::IPatient::DrugsAllergiesWithoutPrecision));
 
-    connect(base(), SIGNAL(dosageBaseHasChanged()), this, SLOT(updateCachedAvailableDosage()));
-    connect(base(), SIGNAL(drugsBaseHasChanged()), this, SLOT(onDrugsDatabaseChanged()));
+    connect(&drugsBase(), SIGNAL(dosageBaseHasChanged()), this, SLOT(updateCachedAvailableDosage()));
+    connect(&drugsBase(), SIGNAL(drugsBaseHasChanged()), this, SLOT(onDrugsDatabaseChanged()));
     connect(patient(), SIGNAL(dataChanged(QModelIndex,QModelIndex)), this, SLOT(refreshDrugsPrecautions(QModelIndex, QModelIndex)));
     connect(translators(), SIGNAL(languageChanged()), this, SLOT(onDrugsDatabaseChanged()));
     if (d->m_AllergyEngine) {
@@ -345,8 +346,8 @@ QVariant GlobalDrugsModel::data(const QModelIndex &item, int role) const
                     return QVariant();
                 return s;
             }
-        case Routes: return base()->getRouteLabels(uid.toInt()).join(", ");
-        case Forms: return base()->getFormLabels(uid.toInt()).join(", ");
+        case Routes: return drugsBase().getRouteLabels(uid.toInt()).join(", ");
+        case Forms: return drugsBase().getFormLabels(uid.toInt()).join(", ");
         }
         return QVariant();
     }
@@ -401,13 +402,13 @@ QVariant GlobalDrugsModel::data(const QModelIndex &item, int role) const
         }
 
         // Name, ATC and UID
-        QString atc = base()->getAtcCode(QSqlQueryModel::data(QSqlQueryModel::index(item.row(), GlobalDrugsModelPrivate::Priv_ATC_ID)).toInt());
+        QString atc = drugsBase().getAtcCode(QSqlQueryModel::data(QSqlQueryModel::index(item.row(), GlobalDrugsModelPrivate::Priv_ATC_ID)).toInt());
         if (!atc.isEmpty())
             atc.prepend(" ; ATC: ");
         QString uidName = "UID";
-        if (base()->actualDatabaseInformations()) {
-            if (!base()->actualDatabaseInformations()->drugsUidName.isEmpty())
-                uidName = base()->actualDatabaseInformations()->drugsUidName;
+        if (drugsBase().actualDatabaseInformations()) {
+            if (!drugsBase().actualDatabaseInformations()->drugsUidName.isEmpty())
+                uidName = drugsBase().actualDatabaseInformations()->drugsUidName;
         }
         // Marketed infos
         QString mark;
@@ -435,8 +436,8 @@ QVariant GlobalDrugsModel::data(const QModelIndex &item, int role) const
                         " </tr>")
                 .arg(d->getConstructedDrugName(item.row()))
                 .arg(mark)
-                .arg(tr("Form(s): ") + base()->getFormLabels(uid).join(", "))
-                .arg(tr("Route(s): ") + base()->getRouteLabels(uid).join(", "))
+                .arg(tr("Form(s): ") + drugsBase().getFormLabels(uid).join(", "))
+                .arg(tr("Route(s): ") + drugsBase().getRouteLabels(uid).join(", "))
                 .arg(tr("Identifier(s): ") + uidName + ":")
                 .arg(uid)
                 .arg(atc)
@@ -444,7 +445,7 @@ QVariant GlobalDrugsModel::data(const QModelIndex &item, int role) const
 
         // get composition
         if (settings()->value(Constants::S_SELECTOR_SHOWMOLECULES).toBool()) {
-            QHash<QString, QString> compo = base()->getDrugFullComposition(uid);
+            QHash<QString, QString> compo = drugsBase().getDrugFullComposition(uid);
             if (!compo.isEmpty()) {
                 QHashIterator<QString, QString> i(compo);
                 while (i.hasNext()) {
@@ -454,7 +455,7 @@ QVariant GlobalDrugsModel::data(const QModelIndex &item, int role) const
                            .arg(i.value());
                 }
             } else {
-                QStringList mols = base()->getDrugMolecularComposition(uid);
+                QStringList mols = drugsBase().getDrugMolecularComposition(uid);
                 foreach(const QString &s, mols) {
                     tmp += QString("<tr><td>%1</td><td>&nbsp;</td></tr>")
                            .arg(s);
@@ -463,9 +464,9 @@ QVariant GlobalDrugsModel::data(const QModelIndex &item, int role) const
             // END
 //            tmp += tr("ATC codes (for interaction engine):<br>");
 //            if (!atc.isEmpty())
-//                tmp += "&nbsp;&nbsp;&nbsp;" + base()->getDrugCompositionAtcCodes(uid).join(";") + ";" + atc + "<br>";
+//                tmp += "&nbsp;&nbsp;&nbsp;" + drugsBase().getDrugCompositionAtcCodes(uid).join(";") + ";" + atc + "<br>";
 //            else
-//                tmp += "&nbsp;&nbsp;&nbsp;" + base()->getDrugCompositionAtcCodes(uid).join(";") + "<br>";
+//                tmp += "&nbsp;&nbsp;&nbsp;" + drugsBase().getDrugCompositionAtcCodes(uid).join(";") + "<br>";
         }
         tmp += "</table></body></html>";
 

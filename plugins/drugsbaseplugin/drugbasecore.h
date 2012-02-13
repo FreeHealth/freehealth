@@ -33,36 +33,46 @@
 /**
  * \file drugsbasecore.h
  * \author Eric MAEKER <eric.maeker@gmail.com>
- * \version 0.6.2
- * \date 13 Dec 2011
+ * \version 0.6.4
+ * \date 13 Feb 2012
 */
+
+namespace DataPack {
+class Pack;
+}
+
 namespace DrugsDB {
+class DrugsBase;
+class ProtocolBase;
+class InteractionManager;
+
 namespace Internal {
+class DrugBaseCorePrivate;
+}
 
-class DRUGSBASE_EXPORT DrugBaseCore : public Utils::Database
+class DRUGSBASE_EXPORT DrugBaseCore : public QObject
 {
-public:
-    DrugBaseCore();
-    virtual ~DrugBaseCore() {}
-    bool initialize(const QString &pathToDb, bool createIfNotExists = false);
+    Q_OBJECT
+    DrugBaseCore(QObject *parent = 0);
+    bool init();
 
-    void setVersion(const QString &version);
-    QString version() const;
-    bool checkDatabaseVersion() const;
+public:
+    static DrugBaseCore &instance(QObject *parent = 0);
+    virtual ~DrugBaseCore();
+
+    DrugsBase &drugsBase() const;
+    ProtocolBase &protocolBase() const;
+    InteractionManager &interactionManager() const;
+
+private Q_SLOTS:
+    void onCoreDatabaseServerChanged();
+    void packChanged(const DataPack::Pack &pack);
 
 private:
-    bool createDatabase(const QString &connectionName , const QString &prefixedDbName,
-                        const Utils::DatabaseConnector &connector,
-                        CreationOption createOption
-                       );
-
-
-protected:
-    bool m_dbcore_initialized;
-    bool m_isDefaultDb;
+    static DrugBaseCore *m_Instance;
+    Internal::DrugBaseCorePrivate *d;
 };
 
-}  // End namespace Internal
 }  // End namespace DrugsDB
 
 #endif // DRUGBASECORE_H

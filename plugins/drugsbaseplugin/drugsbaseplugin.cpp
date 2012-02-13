@@ -32,7 +32,7 @@
 
 #include "drugsbaseplugin.h"
 #include "drugstemplateprinter.h"
-#include "drugsbase.h"
+#include "drugbasecore.h"
 #include "drugsdatabaseselector.h"
 
 #include <utils/log.h>
@@ -85,8 +85,8 @@ void DrugsBasePlugin::extensionsInitialized()
 
     messageSplash(tr("Initializing drugs database plugin..."));
 
-    // initialize DrugsBase
-    Internal::DrugsBase::instance();
+    // initialize DrugBaseCore
+    DrugBaseCore::instance(this);
 
     addAutoReleasedObject(new Core::PluginAboutPage(pluginSpec(), this));
     addAutoReleasedObject(new DrugsDB::Internal::DrugsTemplatePrinter(this));

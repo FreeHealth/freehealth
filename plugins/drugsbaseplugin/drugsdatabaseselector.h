@@ -1,7 +1,7 @@
 /***************************************************************************
  *  The FreeMedForms project is a set of free, open source medical         *
  *  applications.                                                          *
- *  (C) 2008-2011 by Eric MAEKER, MD (France) <eric.maeker@gmail.com>      *
+ *  (C) 2008-2012 by Eric MAEKER, MD (France) <eric.maeker@gmail.com>      *
  *  All rights reserved.                                                   *
  *                                                                         *
  *  This program is free software: you can redistribute it and/or modify   *
@@ -39,15 +39,16 @@ class QTreeWidget;
 QT_END_NAMESPACE
 
 namespace DrugsDB {
+class DrugsBase;
+
 namespace Internal {
 //class DatabaseInfosPrivate;
 class DrugsDatabaseSelectorPrivate;
-class DrugsBase;
 }
 
 class DRUGSBASE_EXPORT DatabaseInfos
 {
-    friend class DrugsDB::Internal::DrugsBase;
+    friend class DrugsDB::DrugsBase;
 
 public:
     DatabaseInfos();
@@ -59,7 +60,7 @@ public:
     void toTreeWidget(QTreeWidget *tree) const;
 
     QString identifiant, fileName, version, compatVersion, lang_country, connectionName;
-    QString provider, author, license, drugsUidName, packUidName;
+    QString provider, author, copyright, license, drugsUidName, packUidName;
     QString drugsNameConstructor,  drugsNameConstructorSearchFilter;
     QString weblink, complementaryWebsite, authorComments, licenseTerms;
     bool atcCompatible, iamCompatible;

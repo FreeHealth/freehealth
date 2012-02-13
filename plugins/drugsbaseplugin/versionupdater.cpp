@@ -41,6 +41,7 @@
 #include "versionupdater.h"
 #include "constants.h"
 
+#include <drugsbaseplugin/drugbasecore.h>
 #include <drugsbaseplugin/drugsbase.h>
 #include <drugsbaseplugin/drugsmodel.h>
 #include <drugsbaseplugin/dailyschememodel.h>
@@ -56,8 +57,10 @@
 #include <QMap>
 #include <QVariant>
 
-using namespace Trans::ConstantTranslations;
 using namespace DrugsDB;
+using namespace Trans::ConstantTranslations;
+
+static inline DrugsDB::DrugsBase &drugsBase() {return DrugsDB::DrugBaseCore::instance().drugsBase();}
 
 ///////////////////////////////////////////////////////////////////////
 //////////////////////////// UPDATE STEPS /////////////////////////////
@@ -101,7 +104,7 @@ public:
         QStringList req;
         if (db.driverName() == "QSQLITE") {
             req << "﻿ALTER TABLE `DOSAGE` RENAME TO `OLD_DOSAGE`;";
-            req << DrugsDB::Internal::DrugsBase::dosageCreateTableSqlQuery();
+            req << DrugsDB::DrugsBase::dosageCreateTableSqlQuery();
             req << QString("INSERT INTO `DOSAGE` (%1) SELECT %1 FROM `OLD_DOSAGE`;")
                     .arg("`POSO_ID`,"
                          "`POSO_UUID`,"
@@ -161,10 +164,10 @@ public:
             if (q.isActive()) {
                 q.finish();
             } else {
-                Utils::Log::addQueryError("VersionUpdater", q, __FILE__, __LINE__);
+                LOG_QUERY_ERROR_FOR("VersionUpdater", q);
             }
         }
-        Utils::Log::addMessage("VersionUpdater", QString("Dosage Database SQL update done from %1 to %2").arg("0.4.0", "0.5.0"));
+        LOG_FOR("VersionUpdater", QString("Dosage Database SQL update done from %1 to %2").arg("0.4.0", "0.5.0"));
         return true;
     }
 
@@ -202,16 +205,15 @@ public:
         QSqlDatabase db = QSqlDatabase::database(Dosages::Constants::DB_DOSAGES_NAME);
         if (!db.isOpen()) {
             if (!db.open()) {
-                Utils::Log::addError("VersionUpdater", tkTr(Trans::Constants::UNABLE_TO_OPEN_DATABASE_1_ERROR_2)
-                                     .arg(db.connectionName()).arg(db.lastError().text()),
-                                     __FILE__, __LINE__);
+                LOG_ERROR_FOR("VersionUpdater", tkTr(Trans::Constants::UNABLE_TO_OPEN_DATABASE_1_ERROR_2)
+                                     .arg(db.connectionName()).arg(db.lastError().text()));
                 return false;
             }
         }
         QStringList req;
         if (db.driverName() == "QSQLITE") {
             req << "﻿ALTER TABLE `DOSAGE` RENAME TO `OLD_DOSAGE`;";
-            req << DrugsDB::Internal::DrugsBase::dosageCreateTableSqlQuery();
+            req << drugsBase().dosageCreateTableSqlQuery();
             req << QString("INSERT INTO `DOSAGE` (%1, `DRUG_UID_LK`) SELECT %1, `CIS_LK` FROM `OLD_DOSAGE`;")
                     .arg("`POSO_ID`,"
                          "`POSO_UUID`,"
@@ -271,10 +273,10 @@ public:
             if (q.isActive()) {
                 q.finish();
             } else {
-                Utils::Log::addQueryError("VersionUpdater", q, __FILE__, __LINE__);
+                LOG_QUERY_ERROR_FOR("VersionUpdater", q);
             }
         }
-        Utils::Log::addMessage("VersionUpdater", QString("Dosage Database SQL update done from %1 to %2").arg("0.4.0", "0.5.0"));
+        LOG_FOR("VersionUpdater", QString("Dosage Database SQL update done from %1 to %2").arg("0.4.0", "0.5.0"));
         return true;
     }
 
@@ -315,7 +317,7 @@ public:
         }
         QStringList req;
         req << "﻿ALTER TABLE `DOSAGE` RENAME TO `OLD_DOSAGE`;";
-        req << DrugsDB::Internal::DrugsBase::dosageCreateTableSqlQuery();
+        req << DrugsDB::DrugsBase::dosageCreateTableSqlQuery();
         req << QString("INSERT INTO `DOSAGE` (%1) SELECT %1 FROM `OLD_DOSAGE`;")
                 .arg("`POSO_ID`,"
                      "`POSO_UUID`,"
@@ -452,7 +454,7 @@ public:
         }
         QStringList req;
         req << "﻿ALTER TABLE `DOSAGE` RENAME TO `OLD_DOSAGE`;";
-        req << DrugsDB::Internal::DrugsBase::dosageCreateTableSqlQuery();
+        req << drugsBase().dosageCreateTableSqlQuery();
         req << QString("INSERT INTO `DOSAGE` (%1) SELECT %1 FROM `OLD_DOSAGE`;")
                       .arg("`POSO_ID`,"
                            "`POSO_UUID`,"

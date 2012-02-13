@@ -25,8 +25,8 @@
  *       NAME <MAIL@ADRESS>                                                *
  ***************************************************************************/
 #include "drugsearchengine.h"
-#include "drugsbase.h"
-
+#include <drugsbaseplugin/drugbasecore.h>
+#include <drugsbaseplugin/drugsbase.h>
 #include <drugsbaseplugin/idrug.h>
 
 #include <utils/global.h>
@@ -36,7 +36,7 @@
 using namespace DrugsDB;
 using namespace Internal;
 
-static inline DrugsDB::Internal::DrugsBase *drugsBase() {return DrugsDB::Internal::DrugsBase::instance();}
+static inline DrugsDB::DrugsBase &drugsBase() {return DrugsDB::DrugBaseCore::instance().drugsBase();}
 
 namespace DrugsDB {
 namespace Internal {
@@ -121,10 +121,10 @@ void DrugSearchEngine::setDrug(const IDrug *drug)
     QHash<int, QString> atcLabels;
     for(int i = 0; i<atc_ids.count(); ++i) {
         int id = atc_ids.at(i);
-        const QString &lbl = drugsBase()->getAtcLabel(id);
+        const QString &lbl = drugsBase().getAtcLabel(id);
         if (atcLabels.values().contains(lbl))
             continue;
-        atcCodes.insert(id, drugsBase()->getAtcCode(id));
+        atcCodes.insert(id, drugsBase().getAtcCode(id));
         atcLabels.insert(id, lbl);
     }
 

@@ -31,8 +31,9 @@
 #include <drugsplugin/drugswidget/drugselector.h>
 #include <drugsbaseplugin/idrug.h>
 
-#include <drugsbaseplugin/drugsmodel.h>
+#include <drugsbaseplugin/drugbasecore.h>
 #include <drugsbaseplugin/drugsbase.h>
+#include <drugsbaseplugin/drugsmodel.h>
 
 #include <utils/log.h>
 #include <utils/global.h>
@@ -54,7 +55,7 @@ using namespace DrugsWidget::Constants;
 using namespace Trans::ConstantTranslations;
 
 static inline Core::ISettings *settings() { return Core::ICore::instance()->settings(); }
-
+static inline DrugsDB::DrugsBase &drugsBase() {return DrugsDB::DrugBaseCore::instance().drugsBase();}
 
 /////////////////////////////////////////////////////////////////////////////////////////////////////
 ///////////////////////////////////  DrugsViewOptionsPage  //////////////////////////////////////////
@@ -615,14 +616,15 @@ void DrugsSelectorWidget::changeEvent(QEvent *e)
 DrugsPrintWidget::DrugsPrintWidget(QWidget *parent) :
         QWidget(parent)
 {
+    setObjectName("DrugsPrintWidget");
     setupUi(this);
     oldGroupBox->hide();
 
     // Create a virtual drug and prescription
     using namespace DrugsDB::Constants;
-    drug = DrugsDB::Internal::DrugsBase::instance()->getDrugByUID("-1");
+    drug = drugsBase().getDrugByUID("-1");
     if (!drug) {
-        Utils::Log::addError(this, "Unable to retreive a drug from the database", __FILE__, __LINE__);
+        LOG_ERROR("Unable to retreive a drug from the database");
     } else {
         drug->setPrescriptionValue(Prescription::IntakesFrom, 1);
         drug->setPrescriptionValue(Prescription::IntakesTo, 3);
