@@ -323,8 +323,6 @@ BaseForm::BaseForm(Form::FormItem *formItem, QWidget *parent) :
 {
     setObjectName("BaseForm");
     QVBoxLayout *mainLayout = new QVBoxLayout(this);
-    mainLayout->setSpacing(0);
-    mainLayout->setMargin(0);
 
     QWidget *header = new QWidget(this);
     m_Header = new Ui::BaseFormWidget;
@@ -356,6 +354,8 @@ BaseForm::BaseForm(Form::FormItem *formItem, QWidget *parent) :
         mainWidget = loader.load(&buf, this);
         mainLayout->addWidget(header);
     } else {
+        mainLayout->setSpacing(0);
+        mainLayout->setMargin(0);
         mainWidget = new QWidget(this);
         // create container layout
         m_ContainerLayout = new QGridLayout(mainWidget);
