@@ -42,6 +42,7 @@ public:
         DrugsWithoutInteractions,
         DrugsWithInteractions,
         ICD,
+        ZipCodes,
         UnknownType
     };
 

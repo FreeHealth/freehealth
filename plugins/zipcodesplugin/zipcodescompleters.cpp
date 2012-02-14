@@ -33,6 +33,9 @@
 
 #include <utils/global.h>
 #include <utils/log.h>
+#include <datapackutils/datapackcore.h>
+#include <datapackutils/ipackmanager.h>
+#include <datapackutils/pack.h>
 
 #include <QLineEdit>
 #include <QSqlTableModel>
@@ -53,18 +56,24 @@ using namespace Internal;
 
 static inline Core::ISettings *settings() {return Core::ICore::instance()->settings();}
 static inline Core::ITheme *theme() {return Core::ICore::instance()->theme();}
+static inline DataPack::DataPackCore &dataPackCore() { return DataPack::DataPackCore::instance(); }
+static inline DataPack::IPackManager *packManager() { return dataPackCore().packManager(); }
 
 /**
   \class ZipCountryModel
   Private model used by the ZipCountryCompleters
 */
-ZipCountryModel::ZipCountryModel(QObject *parent, QSqlDatabase _db): QSqlQueryModel(parent)
+ZipCountryModel::ZipCountryModel(QObject *parent, QSqlDatabase _db, bool dbAvailable) :
+    QSqlQueryModel(parent),
+    m_DbAvailable(dbAvailable)
 {
     db = _db;
     m_Country = Utils::countryToIso(QLocale().country()).toLower();
-    setQuery("SELECT ZIP, CITY FROM ZIPS LIMIT 0, 1", _db);
-    if (!query().isActive()) {
-        LOG_QUERY_ERROR(query());
+    if (m_DbAvailable && db.isOpen()) {
+        setQuery("SELECT ZIP, CITY FROM ZIPS LIMIT 0, 1", _db);
+        if (!query().isActive()) {
+            LOG_QUERY_ERROR(query());
+        }
     }
 }
 
@@ -95,6 +104,9 @@ QVariant ZipCountryModel::data(const QModelIndex &index, int role) const
 
 bool ZipCountryModel::countryAvailable(const int country) const
 {
+    if (!m_DbAvailable || !db.isOpen()) {
+        return false;
+    }
     QString req = QString("SELECT DISTINCT COUNT(COUNTRY) FROM ZIPS WHERE `COUNTRY`='%1'")
             .arg(Utils::countryToIso(QLocale::Country(country)).toLower());
     QSqlQuery query(db);
@@ -109,6 +121,9 @@ bool ZipCountryModel::countryAvailable(const int country) const
 
 bool ZipCountryModel::coupleExists(const QString &zip, const QString &city) const
 {
+    if (!m_DbAvailable || !db.isOpen()) {
+        return false;
+    }
     QString req = QString("SELECT COUNT(ZIP) FROM ZIPS WHERE `COUNTRY`='%1' AND `CITY`='%2' AND ZIP='%3'")
             .arg(m_Country).arg(city).arg(zip);
     QSqlQuery query(db);
@@ -123,6 +138,9 @@ bool ZipCountryModel::coupleExists(const QString &zip, const QString &city) cons
 
 void ZipCountryModel::filterCity(const QString &name)
 {
+    if (!m_DbAvailable || !db.isOpen()) {
+        return;
+    }
     if (m_City==name)
         return;
     m_City=name;
@@ -136,6 +154,9 @@ void ZipCountryModel::filterCity(const QString &name)
 
 void ZipCountryModel::filterZipCode(const QString &zipCode)
 {
+    if (!m_DbAvailable || !db.isOpen()) {
+        return;
+    }
     if (m_Zip==zipCode)
         return;
     m_Zip=zipCode;
@@ -152,6 +173,24 @@ void ZipCountryModel::filterCountry(const QString &countryIso)
     m_Country = countryIso.toLower();
 }
 
+// Find the database to use. In priority order:
+// - User datapack
+// - Application installed datapack
+static QString databasePath()
+{
+    QString dbRelPath = "/zipcodes/zipcodes.db";
+    QString tmp;
+    tmp = settings()->dataPackInstallPath() + dbRelPath;
+    if (QFileInfo(tmp).exists())
+        return settings()->dataPackInstallPath();
+    tmp = settings()->dataPackApplicationInstalledPath() + dbRelPath;
+    return settings()->dataPackApplicationInstalledPath();
+}
+
+static QString databaseFileName()
+{
+    return databasePath() + QDir::separator() + "zipcodes.db";
+}
 
 /**
   \class ZipCountryCompleters
@@ -166,23 +205,37 @@ ZipCountryCompleters::ZipCountryCompleters(QObject *parent) :
     m_ZipButton(0), m_CityButton(0)
 {
     setObjectName("ZipCountryCompleters");
-    QSqlDatabase db;
-    if (QSqlDatabase::connectionNames().contains("ZIPS")) {
-        db = QSqlDatabase::database("ZIPS");
-    } else {
-        db = QSqlDatabase::addDatabase("QSQLITE", "ZIPS");
-        db.setDatabaseName(settings()->path(Core::ISettings::ReadOnlyDatabasesPath) + "/zipcodes/zipcodes.db");
-    }
-    if (!db.open())
-        LOG_ERROR("Unable to open Zip database");
+    createModel();
 
-    m_Model = new ZipCountryModel(this, db);
+    // Manage datapacks
+    connect(packManager(), SIGNAL(packInstalled(DataPack::Pack)), this, SLOT(packChanged(DataPack::Pack)));
+    connect(packManager(), SIGNAL(packRemoved(DataPack::Pack)), this, SLOT(packChanged(DataPack::Pack)));
+//    connect(packManager(), SIGNAL(packUpdated(DataPack::Pack)), this, SLOT(packChanged(DataPack::Pack)));
 }
 
 ZipCountryCompleters::~ZipCountryCompleters()
 {
 }
 
+void ZipCountryCompleters::createModel()
+{
+    QSqlDatabase db;
+    if (QSqlDatabase::connectionNames().contains("ZIPS")) {
+        db = QSqlDatabase::database("ZIPS");
+    } else {
+        db = QSqlDatabase::addDatabase("QSQLITE", "ZIPS");
+        if (QFileInfo(databaseFileName()).exists()) {
+            db.setDatabaseName(databaseFileName());
+            m_DbAvailable = true;
+        } else {
+            m_DbAvailable = false;
+        }
+    }
+    if (!db.open())
+        LOG_ERROR("Unable to open Zip database");
+
+    m_Model = new ZipCountryModel(this, db, m_DbAvailable);
+}
 /** Define the QComboBox to use as country selector. The combo will be automatically populated and its current index will be set to the current QLocale::Country */
 void ZipCountryCompleters::setCountryComboBox(Utils::CountryComboBox *box)
 {
@@ -333,6 +386,21 @@ void ZipCountryCompleters::checkData()
             m_ZipButton->setToolTip(tr("Wrong zip/city/country association"));
             m_CityButton->setToolTip(tr("Wrong zip/city/country association"));
         }
+    }
+}
+
+/** Refresh database if a Zip code data pack is installed/removed */
+void ZipCountryCompleters::packChanged(const DataPack::Pack &pack)
+{
+    if (pack.dataType() == DataPack::Pack::ZipCodes) {
+        delete m_Model;
+        m_Model = 0;
+        QSqlDatabase::removeDatabase("ZIPS");
+        createModel();
+        m_City->completer()->setModel(m_Model);
+        m_Zip->completer()->setModel(m_Model);
+        m_Model->filterCountry(m_Country->currentIsoCountry());
+        checkData();
     }
 }
 

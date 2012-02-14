@@ -169,6 +169,8 @@ Pack::DataType Pack::dataType() const
         return Pack::DrugsWithoutInteractions;
     else if (type.compare("icd", Qt::CaseInsensitive)==0)
         return Pack::ICD;
+    else if (type.compare("zipcodes", Qt::CaseInsensitive)==0)
+        return Pack::ZipCodes;
     return Pack::UnknownType;
 }
 
@@ -181,6 +183,7 @@ QString Pack::dataTypeName() const
     case Pack::DrugsWithInteractions: tkTr(Trans::Constants::DRUGS_WITH_INTERACTIONS);
     case Pack::DrugsWithoutInteractions: tkTr(Trans::Constants::DRUGS_WITHOUT_INTERACTIONS);
     case Pack::ICD: return tkTr(Trans::Constants::ICD10);
+    case Pack::ZipCodes: return tkTr(Trans::Constants::ZIP_CODES);
     default: return tkTr(Trans::Constants::UNKNOWN);
     }
     return tkTr(Trans::Constants::UNKNOWN);

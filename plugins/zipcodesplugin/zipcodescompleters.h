@@ -46,9 +46,13 @@ QT_END_NAMESPACE
 /**
  * \file zipcodescompleters.h
  * \author Eric MAEKER <eric.maeker@gmail.com>
- * \version 0.6.0
- * \date 01 Sept 2011
+ * \version 0.6.4
+ * \date 14 Feb 2012
 */
+
+namespace DataPack {
+class Pack;
+}
 
 namespace ZipCodes {
 namespace Internal {
@@ -65,7 +69,7 @@ public:
         ZipCity
     };
 
-    ZipCountryModel(QObject *parent, QSqlDatabase db);
+    ZipCountryModel(QObject *parent, QSqlDatabase db, bool dbAvailable = true);
 
     int columnCount(const QModelIndex &) const {return ZipCity+1;}
 
@@ -82,9 +86,9 @@ public Q_SLOTS:
 private:
     QSqlDatabase db;
     QString m_Zip,m_City, m_Country;
+    bool m_DbAvailable;
 };
 }  // End namespace Internal
-
 
 class ZIPCODES_EXPORT ZipCountryCompleters : public QObject
 {
@@ -104,8 +108,10 @@ private Q_SLOTS:
     void filterCountry(const int index);
     void zipTextChanged();
     void cityTextChanged();
+    void packChanged(const DataPack::Pack &pack);
 
 private:
+    void createModel();
     bool eventFilter(QObject *, QEvent *);
 
 private:
@@ -114,6 +120,7 @@ private:
     Internal::ZipCountryModel *m_Model;
     QAbstractItemView *m_View;
     QToolButton *m_ZipButton, *m_CityButton;
+    bool m_DbAvailable;
 };
 
 }  // End namespace ZipCodes
