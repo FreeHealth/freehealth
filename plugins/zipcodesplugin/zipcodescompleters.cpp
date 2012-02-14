@@ -189,7 +189,7 @@ static QString databasePath()
 
 static QString databaseFileName()
 {
-    return databasePath() + QDir::separator() + "zipcodes.db";
+    return databasePath() + QDir::separator() + "zipcodes" + QDir::separator() + "zipcodes.db";
 }
 
 /**
@@ -225,14 +225,17 @@ void ZipCountryCompleters::createModel()
     } else {
         db = QSqlDatabase::addDatabase("QSQLITE", "ZIPS");
         if (QFileInfo(databaseFileName()).exists()) {
+            LOG(QString("Trying to open ZipCode database from %1").arg(databaseFileName()));
             db.setDatabaseName(databaseFileName());
             m_DbAvailable = true;
         } else {
             m_DbAvailable = false;
         }
     }
-    if (!db.open())
+    if (!db.open()) {
         LOG_ERROR("Unable to open Zip database");
+        m_DbAvailable = false;
+    }
 
     m_Model = new ZipCountryModel(this, db, m_DbAvailable);
 }
