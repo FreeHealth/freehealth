@@ -755,7 +755,6 @@ TemplatesModel::TemplatesModel(QObject *parent) :
         QAbstractItemModel(parent),
         d(new Internal::TemplatesModelPrivate(this))
 {
-    qWarning() << "xxxxxxxxxxxxxxxxxxxxxxxxxxxx INSTANCE";
     setObjectName("TemplatesModel");
     d->setupModelData();
     setSupportedDragActions(Qt::CopyAction | Qt::MoveAction);
