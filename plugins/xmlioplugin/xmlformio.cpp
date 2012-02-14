@@ -277,7 +277,7 @@ QList<Form::FormIODescription *> XmlFormIO::getFormFileDescriptions(const Form::
             const QString &fileName = file.absoluteFilePath();
             XmlFormName form(fileName);
             if (includedUids.contains(form.uid)) {
-                qWarning() << "xxxxxxxxxxxx formAlredayIncluded" << form.uid;
+//                qWarning() << "xxxxxxxxxxxx formAlredayIncluded" << form.uid;
                 continue;
             }
             if (canReadForms(fileName)) {
