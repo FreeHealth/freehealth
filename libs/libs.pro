@@ -8,5 +8,6 @@ SUBDIRS += translationutils \
     utils \
     calendar \
     medicalutils \
-    ../contrib/quazip
+    ../contrib/quazip \
+    datapackutils
 
