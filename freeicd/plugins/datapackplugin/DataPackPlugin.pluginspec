@@ -5,6 +5,6 @@
     <description>The plugin is the datapack manager.</description>
     <url>http://www.freemedforms.com/</url>
     <dependencyList>
-       <dependency name="Core" version="0.6.0"/>
+       <dependency name="Core" version="0.4.0"/>
     </dependencyList>
 </plugin>
