@@ -122,8 +122,8 @@ void DatabaseInfos::toTreeWidget(QTreeWidget *tree) const
         } else {
             QDir dir;
             QFileInfo fi(fileName);
-            if (fi.absolutePath().startsWith(settings()->resourcesPath()))
-                dir.setPath(settings()->resourcesPath());
+            if (fi.absolutePath().startsWith(settings()->userResourcesPath()))
+                dir.setPath(settings()->userResourcesPath());
             else if (fi.absolutePath().startsWith(settings()->path(Core::ISettings::BundleResourcesPath)))
                 dir.setPath(settings()->path(Core::ISettings::BundleResourcesPath));
 //            new QTreeWidgetItem(file, QStringList() << "Absolute path" << QFileInfo(fileName).absolutePath());

@@ -28,7 +28,7 @@
          - try to find next to the binary a file called \e pathtoconfig.ini which contains the path to the
          ini file to use (this feature is used for the USB-Key multi-OS configuration)
 
-    m_ResourcesPath is protected and can be defined, retreive it using resourcesPath().\n
+    m_ResourcesPath is protected and can be defined, retreive it using userResourcesPath().\n
     m_DatabasePath is protected and can be defined, retreive it using databasePath().
 
     The debugging members are used by Core::DebugDialog :
@@ -92,10 +92,10 @@
  Some paths are calculated when setting the
  Core::ISettings::ApplicationPath,
  Core::ISettings::BundleRootPath and the
- Core::ISettings::ResourcesPath.
+ Core::ISettings::UserResourcesPath.
 */
 
-/*! \var Core::ISettings::Paths Core::ISettings::ResourcesPath
+/*! \var Core::ISettings::Paths Core::ISettings::UserResourcesPath
  * Defines the users' resources path. This path is readable and writable for the user.
  * When setting this path, the Core::ISettings::ReadWriteDatabasesPath is automatically calculated.
 */
@@ -288,11 +288,17 @@ namespace {
     const char* const TRANSLATIONS_PATH    = "/translations";
     const char* const DEFAULTFORMS         = "/forms";
     const char* const DEFAULTDATAPACK      = "/datapacks";
+    const char* const DEFAULTDATAPACK_APPINSTALLED               = "/datapacks/appinstalled";
+    const char* const DEFAULTDATAPACK_APPINSTALLED_SUBFORMS      = "/datapacks/appinstalled/forms/subforms";
+    const char* const DEFAULTDATAPACK_APPINSTALLED_COMPLETEFORMS = "/datapacks/appinstalled/forms/completeforms";
     const char* const DEFAULTTHEME_PATH    = "";
     const char* const DEFAULTTHEME_PIXMAP  = "/pixmap";
     const char* const DEFAULTTHEME_SPLASH  = "/pixmap/splashscreens";
     const char* const USERMANUAL_PATH      = "/doc/%1";
     const char* const LINUX_USERMANUAL_PATH  = "/usr/share/doc/%1-doc/html";
+    // User documents sub-paths
+    const char* const USER_SUBFORMSPATH       = "/forms/subforms";
+    const char* const USER_COMPLETEFORMSPATH  = "/forms/completeforms";
 
     // APPLICATIONS RESOURCES --> located next to the application binary
 #ifdef DEBUG
@@ -310,7 +316,7 @@ namespace {
     const char* const NUX_TOBUNDLEROOTPATH = "/..";
     const char* const BSD_TOBUNDLEROOTPATH = "/..";
 
-    // USER WRITABLE RESOURCES  --> located inside/outside the bundle. Location calculated from ResourcesPath (where stands the ini file)
+    // USER WRITABLE RESOURCES  --> located inside/outside the bundle. Location calculated from UserResourcesPath (where stands the ini file)
     const char* const WRITABLEDATABASE     = "/databases";
 
     // SETTINGS
@@ -362,10 +368,10 @@ SettingsPrivate::SettingsPrivate(QObject *parent, const QString &appName, const 
     setPath(WebSiteUrl, WEBSITE);
     setPath(UserDocumentsPath, QDir::homePath() + QDir::separator() + applicationName.remove("-alpha").remove("_alpha").remove("_debug").remove("-debug") + QDir::separator() + "Documents");
 
-    // Create UserDocumentsPath
-    if (!QDir(path(UserDocumentsPath)).exists()) {
-        QDir().mkpath(path(UserDocumentsPath));
-    }
+//    // Create UserDocumentsPath
+//    if (!QDir(path(UserDocumentsPath)).exists()) {
+//        QDir().mkpath(path(UserDocumentsPath));
+//    }
 
 //    if (Utils::isRunningOnLinux())
 //        setPath(FMFPluginsPath, LIBRARY_BASENAME);
@@ -380,7 +386,7 @@ SettingsPrivate::SettingsPrivate(QObject *parent, const QString &appName, const 
 
         res = QDir::cleanPath(res);
         resourcesPath = res + "/";
-        setPath(ResourcesPath, QFileInfo(file).absolutePath());
+        setPath(UserResourcesPath, QFileInfo(file).absolutePath());
 
         if (Utils::isRunningOnMac()) {
             setPath(BundleResourcesPath, resourcesPath);
@@ -399,7 +405,7 @@ SettingsPrivate::SettingsPrivate(QObject *parent, const QString &appName, const 
         }
 #endif
         m_FirstTime = value("FirstTimeRunning", true).toBool();
-        setPath(ResourcesPath, QFileInfo(file).absolutePath());//QDir::homePath() + "/." + applicationName);//resourcesPath);
+        setPath(UserResourcesPath, QFileInfo(file).absolutePath());//QDir::homePath() + "/." + applicationName);//resourcesPath);
     }
 
     readDatabaseConnector();
@@ -498,7 +504,7 @@ void SettingsPrivate::sync()
   \brief defines a path \e absPath with the index \e type refering to the enumarator \e Settings::Paths.
   When setting ApplicationPath, some paths are automatically recalculated : BundleRootPath, QtFrameWorksPath, FMFPlugInsPath, QtPlugInsPath.\n
   When setting BundleResourcesPath, some paths are automatically recalculated : ReadOnlyDatabasesPath, TranslationsPath, SmallPixmapPath, MediumPixmapPath, BigPixmapPath, CompleteFormsPath, SubFormsPath.\n
-  When setting ResourcesPath, some paths are automatically recalculated : ReadWriteDatabasesPath.\n
+  When setting UserResourcesPath, some paths are automatically recalculated : ReadWriteDatabasesPath.\n
 */
 void SettingsPrivate::setPath(const int type, const QString & absPath)
 {
@@ -515,10 +521,10 @@ void SettingsPrivate::setPath(const int type, const QString & absPath)
             m_Enum_Path.insert(type, absPath);
             break;
         }
-        case ResourcesPath :
+        case UserResourcesPath :
         {
             QString resourcesPath = QDir::cleanPath(absPath);
-            m_Enum_Path.insert(ResourcesPath, resourcesPath);
+            m_Enum_Path.insert(UserResourcesPath, resourcesPath);
             // Read Write user databases
             QString dbPath = resourcesPath + "/databases";
             Utils::checkDir(dbPath, true, "Settings::ReadWriteDatabasesPath");
@@ -527,9 +533,17 @@ void SettingsPrivate::setPath(const int type, const QString & absPath)
             QString packtmp = resourcesPath + "/datapacks/tmp";
             Utils::checkDir(packtmp, true, "Settings::DataPackPersistentTempPath");
             m_Enum_Path.insert(DataPackPersistentTempPath, packtmp);
+            // Datapack install path
             QString packinst = resourcesPath + "/datapacks/install";
             Utils::checkDir(packinst, true, "Settings::DataPackPersistentTempPath");
             m_Enum_Path.insert(DataPackInstallPath, packinst);
+            // Datapack user installed forms path
+            packinst = resourcesPath + "/datapacks/install/forms/completeforms";
+            Utils::checkDir(packinst, true, "Settings::DataPackCompleteFormsInstallPath");
+            m_Enum_Path.insert(DataPackCompleteFormsInstallPath, packinst);
+            packinst = resourcesPath + "/datapacks/install/forms/subforms";
+            Utils::checkDir(packinst, true, "Settings::DataPackSubFormsInstallPath");
+            m_Enum_Path.insert(DataPackSubFormsInstallPath, packinst);
             break;
         }
         case BundleResourcesPath :
@@ -547,7 +561,9 @@ void SettingsPrivate::setPath(const int type, const QString & absPath)
             m_Enum_Path.insert(SvgPixmapPath, bundlePath + DEFAULTTHEME_PIXMAP + "/svg/");
             m_Enum_Path.insert(SubFormsPath, bundlePath + DEFAULTFORMS + "/subforms");
             m_Enum_Path.insert(CompleteFormsPath, bundlePath + DEFAULTFORMS + "/completeforms");
-            m_Enum_Path.insert(DataPackApplicationPath, bundlePath + DEFAULTDATAPACK + "/appinstalled");
+            m_Enum_Path.insert(DataPackApplicationPath, bundlePath + DEFAULTDATAPACK_APPINSTALLED);
+            m_Enum_Path.insert(DataPackCompleteFormsPath, bundlePath + DEFAULTDATAPACK_APPINSTALLED_COMPLETEFORMS);
+            m_Enum_Path.insert(DataPackSubFormsPath, bundlePath + DEFAULTDATAPACK_APPINSTALLED_SUBFORMS);
             QString appname = qApp->applicationName().toLower();
             if (qApp->applicationName().contains(" ")) {
                 appname = appname.left(appname.indexOf(" "));
@@ -600,7 +616,18 @@ void SettingsPrivate::setPath(const int type, const QString & absPath)
             }
             break;
         }
-        default: m_Enum_Path.insert(type, QDir::cleanPath(absPath)); break;
+    case UserDocumentsPath:
+    {
+        const QString &cleanPath = QDir::cleanPath(absPath);
+        Utils::checkDir(cleanPath, true, "Settings::UserDocumentsPath");
+        Utils::checkDir(cleanPath + USER_SUBFORMSPATH, true, "Settings::UserSubFormsPath");
+        Utils::checkDir(cleanPath + USER_COMPLETEFORMSPATH, true, "Settings::UserCompleteFormsPath");
+        m_Enum_Path.insert(UserDocumentsPath, cleanPath);
+        m_Enum_Path.insert(UserSubFormsPath, cleanPath + USER_SUBFORMSPATH);
+        m_Enum_Path.insert(UserCompleteFormsPath, cleanPath + USER_COMPLETEFORMSPATH);
+        break;
+    }
+    default: m_Enum_Path.insert(type, QDir::cleanPath(absPath)); break;
     }
 }
 
@@ -957,7 +984,7 @@ QTreeWidget* SettingsPrivate::getTreeWidget(QWidget *parent) const
     QDir appDir(qApp->applicationDirPath());
     QMap<QString, QString> paths;
     paths.insert(tr("Binary"), path(ApplicationPath));
-    paths.insert(tr("Resources"), path(ResourcesPath));
+    paths.insert(tr("UserResourcesPath"), path(UserResourcesPath));
     paths.insert(tr("Read only Databases"), path(ReadOnlyDatabasesPath));
     paths.insert(tr("Writable databases"), path(ReadWriteDatabasesPath));
     paths.insert(tr("Bundle root path"), path(BundleRootPath));
@@ -973,10 +1000,13 @@ QTreeWidget* SettingsPrivate::getTreeWidget(QWidget *parent) const
     paths.insert(tr("ApplicationTempPath"), path(ApplicationTempPath));
     paths.insert(tr("CompleteFormsPath"), path(CompleteFormsPath));
     paths.insert(tr("SubFormsPath"), path(SubFormsPath));
-    paths.insert(tr("DataPackApplicationPath"), path(DataPackApplicationPath));
-    paths.insert(tr("DataPackPersistentTempPath"), path(DataPackPersistentTempPath));
-    paths.insert(tr("DataPackInstallPath"), path(DataPackInstallPath));
-    paths.insert(tr("DocumentationPath"), path(DocumentationPath));
+    paths.insert(tr("UserCompleteFormsPath"), path(UserCompleteFormsPath));
+    paths.insert(tr("UserSubFormsPath"), path(UserSubFormsPath));
+    paths.insert(tr("Default installed datapack path"), path(DataPackApplicationPath));
+    paths.insert(tr("Datapack persistent temporary path"), path(DataPackPersistentTempPath));
+    paths.insert(tr("Datapack installation path"), path(DataPackInstallPath));
+    paths.insert(tr("Datapack Complete Forms installation path"), path(DataPackCompleteFormsInstallPath));
+    paths.insert(tr("Datapack SubForms installation path"), path(DataPackSubFormsInstallPath));
 
     QTreeWidgetItem * absPathsItem = new QTreeWidgetItem(tree, QStringList() << tr("Absolute Paths"));
     absPathsItem->setFont(0,bold);
@@ -1087,7 +1117,7 @@ QString SettingsPrivate::toString() const
     tmp += "===== PATH =====\n\n";
     QMap<QString, QString> paths;
     paths.insert(tr("Binary"), path(ApplicationPath));
-    paths.insert(tr("Resources"), path(ResourcesPath));
+    paths.insert(tr("UserResourcesPath"), path(UserResourcesPath));
     paths.insert(tr("Read only Databases"), path(ReadOnlyDatabasesPath));
     paths.insert(tr("Writable databases"), path(ReadWriteDatabasesPath));
     paths.insert(tr("Bundle root path"), path(BundleRootPath));
@@ -1102,10 +1132,13 @@ QString SettingsPrivate::toString() const
     paths.insert(tr("SystemTempPath"), path(SystemTempPath));
     paths.insert(tr("ApplicationTempPath"), path(ApplicationTempPath));
     paths.insert(tr("FormsPath"), path(CompleteFormsPath));
-    paths.insert(tr("SampleFormsPath"), path(SubFormsPath));
+    paths.insert(tr("UserCompleteFormsPath"), path(UserCompleteFormsPath));
+    paths.insert(tr("UserSubFormsPath"), path(UserSubFormsPath));
     paths.insert(tr("Default installed datapack path"), path(DataPackApplicationPath));
     paths.insert(tr("Datapack persistent temporary path"), path(DataPackPersistentTempPath));
     paths.insert(tr("Datapack installation path"), path(DataPackInstallPath));
+    paths.insert(tr("Datapack Complete Forms installation path"), path(DataPackCompleteFormsInstallPath));
+    paths.insert(tr("Datapack SubForms installation path"), path(DataPackSubFormsInstallPath));
     paths.insert(tr("DocumentationPath"), path(DocumentationPath));
     paths.insert(tr("WebSiteUrl"), path(WebSiteUrl));
     tmp += "^ Resource ^ Path ^\n";

@@ -50,14 +50,23 @@ XmlFormName::XmlFormName(const QString &_uid) :
         if (modeName.endsWith(".xml"))
             modeName.chop(4);
     }
+    // Replace tags with full path
     if (uid.startsWith(QString(Core::Constants::TAG_APPLICATION_COMPLETEFORMS_PATH).left(2))) {
+        // Check if form exists in user path
+        // Check if form exists in datapack path
+        // Check if form exists in app bundle path
         absFileName.replace(Core::Constants::TAG_APPLICATION_COMPLETEFORMS_PATH, settings()->path(Core::ISettings::CompleteFormsPath));
         absFileName.replace(Core::Constants::TAG_APPLICATION_SUBFORMS_PATH, settings()->path(Core::ISettings::SubFormsPath));
         absFileName.replace(Core::Constants::TAG_APPLICATION_RESOURCES_PATH, settings()->path(Core::ISettings::BundleResourcesPath));
+    } else {
+        // uuid was a full abs path --> recreate the tags
+        uid.replace(settings()->path(Core::ISettings::CompleteFormsPath), Core::Constants::TAG_APPLICATION_COMPLETEFORMS_PATH);
+        uid.replace(settings()->path(Core::ISettings::SubFormsPath), Core::Constants::TAG_APPLICATION_SUBFORMS_PATH);
+        uid.replace(settings()->path(Core::ISettings::BundleResourcesPath), Core::Constants::TAG_APPLICATION_RESOURCES_PATH);
+
+        uid.replace(settings()->path(Core::ISettings::UserCompleteFormsPath), Core::Constants::TAG_APPLICATION_USER_COMPLETEFORMS_PATH);
+        uid.replace(settings()->path(Core::ISettings::SubFormsPath), Core::Constants::TAG_APPLICATION_USER_SUBFORMS_PATH);
     }
-    uid.replace(settings()->path(Core::ISettings::CompleteFormsPath), Core::Constants::TAG_APPLICATION_COMPLETEFORMS_PATH);
-    uid.replace(settings()->path(Core::ISettings::SubFormsPath), Core::Constants::TAG_APPLICATION_SUBFORMS_PATH);
-    uid.replace(settings()->path(Core::ISettings::BundleResourcesPath), Core::Constants::TAG_APPLICATION_RESOURCES_PATH);
     absFileName = QDir::cleanPath(absFileName);
     QFileInfo info(absFileName);
     if (info.isDir() || info.suffix().compare("xml", Qt::CaseInsensitive)!=0) {

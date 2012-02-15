@@ -61,7 +61,7 @@ public:
 
     enum Paths {
         /** \todo rename ResourcesPath to UserResourcesPath */
-        ResourcesPath = 0,
+        UserResourcesPath = 0,
         ApplicationPath,
         BundleRootPath,
         BundleResourcesPath,
@@ -71,7 +71,8 @@ public:
         QtPlugInsPath,
         QtFrameWorksPath,
         FMFPlugInsPath,
-        UserDocumentsPath,
+        DocumentationPath,
+        // Theme path
         ThemeRootPath,
         SmallPixmapPath,
         MediumPixmapPath,
@@ -79,12 +80,21 @@ public:
         SvgPixmapPath,
         SystemTempPath,
         ApplicationTempPath,
+        // User && Forms path
         CompleteFormsPath,
         SubFormsPath,
-        DocumentationPath,
+        UserDocumentsPath,
+        UserCompleteFormsPath,
+        UserSubFormsPath,
+        DataPackCompleteFormsPath,
+        DataPackSubFormsPath,
+        // DataPack path
         DataPackPersistentTempPath,
         DataPackInstallPath,
+        DataPackCompleteFormsInstallPath,
+        DataPackSubFormsInstallPath,
         DataPackApplicationPath,
+        // WWW
         WebSiteUrl,
         UpdateUrl,
         Splashscreen
@@ -123,11 +133,13 @@ public:
     // paths
     virtual void setPath(const int type, const QString &absPath) = 0;
     virtual QString path(const int type) const = 0;
-    virtual QString resourcesPath() const { return path(ResourcesPath); }
+    virtual QString userResourcesPath() const { return path(UserResourcesPath); }
     virtual QString databasePath() const  { return path(ReadOnlyDatabasesPath); }
     virtual QString dataPackApplicationInstalledPath() const  { return path(DataPackApplicationPath); }
     virtual QString dataPackPersitentTempPath() const  { return path(DataPackPersistentTempPath); }
     virtual QString dataPackInstallPath() const  { return path(DataPackInstallPath); }
+    virtual QString dataPackCompleteFormsInstallPath() const  { return path(DataPackCompleteFormsPath); }
+    virtual QString dataPackSubFormsInstallPath() const  { return path(DataPackSubFormsInstallPath); }
 
     // Network datas
     virtual Utils::DatabaseConnector databaseConnector() const = 0;

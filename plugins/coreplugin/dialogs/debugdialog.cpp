@@ -123,7 +123,7 @@ void DebugDialog::on_butSend_clicked()
 bool DebugDialog::on_butSave_clicked()
 {
     Core::ISettings *s = Core::ICore::instance()->settings();
-    QString fileName = s->path( Core::ISettings::ResourcesPath ) + "/logs.txt" ;
+    QString fileName = s->path( Core::ISettings::UserResourcesPath ) + "/logs.txt" ;
     Utils::Log::addMessage( this, tkTr(Trans::Constants::SAVING_FILE_1).arg(fileName));
     return Utils::saveStringToFile( Utils::Log::toString(), fileName );
 }
