@@ -1558,17 +1558,26 @@ int replaceTokens(QString &textToAnalyse, const QHash<QString, QString> &tokens_
     return i;
 }
 
-/** Test the internet connection capability, and return the first available configuration identifier. \sa QNetworkConfigurationManager::configurationFromIdentifier(const QString &identifier) const*/
+/**
+ * Test the internet connection capability, and return the first available configuration identifier.
+ * This code needs Qt 4.7+
+ * \sa QNetworkConfigurationManager::configurationFromIdentifier(const QString &identifier) const
+*/
 QString testInternetConnexion()
 {
     QNetworkConfigurationManager mgr;
+    LOG_FOR("Utils", QString("Testing internet connexion. ManagerIsOnline=%1").arg(mgr.isOnline()));
     QList<QNetworkConfiguration> activeConfigs = mgr.allConfigurations(QNetworkConfiguration::Active);
     foreach(const QNetworkConfiguration &config, activeConfigs) {
         if (config.isValid() && config.type()==QNetworkConfiguration::InternetAccessPoint) {
-            if (mgr.isOnline())
+            LOG_FOR("Utils", QString("%1 %2 (valid: %3)").arg(config.name()).arg(config.type()).arg(config.isValid()));
+            if (mgr.isOnline()) {
+                LOG_FOR("Utils", QString("Internet connexion found %1").arg(config.name()));
                 return config.name();
+            }
         }
     }
+    LOG_FOR("Utils", QString("No internet connexion"));
     return QString();
 }
 
