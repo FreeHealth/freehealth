@@ -232,9 +232,11 @@ void ZipCountryCompleters::createModel()
             m_DbAvailable = false;
         }
     }
-    if (!db.open()) {
-        LOG_ERROR("Unable to open Zip database");
-        m_DbAvailable = false;
+    if (m_DbAvailable) {
+        if (!db.open()) {
+            LOG_ERROR("Unable to open Zip database");
+            m_DbAvailable = false;
+        }
     }
 
     m_Model = new ZipCountryModel(this, db, m_DbAvailable);
