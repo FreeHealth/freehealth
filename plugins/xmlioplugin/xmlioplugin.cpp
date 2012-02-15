@@ -37,6 +37,7 @@
 
 #include <coreplugin/dialogs/pluginaboutpage.h>
 #include <coreplugin/icore.h>
+#include <coreplugin/iuser.h>
 #include <coreplugin/translators.h>
 
 #include <utils/log.h>
@@ -45,6 +46,8 @@
 #include <QDebug>
 
 using namespace XmlForms;
+
+static inline Core::IUser *user()  { return Core::ICore::instance()->user(); }
 
 XmlFormIOPlugin::XmlFormIOPlugin() :
     ExtensionSystem::IPlugin(),
@@ -88,6 +91,12 @@ void XmlFormIOPlugin::extensionsInitialized()
 {
     if (Utils::Log::warnPluginsCreation())
         qWarning() << "XmlIOPlugin::extensionsInitialized";
+
+    // no user -> end
+    if (!user())
+        return;
+    if (user()->uuid().isEmpty())
+        return;
 
     // initialize database
     Internal::XmlIOBase::instance();
