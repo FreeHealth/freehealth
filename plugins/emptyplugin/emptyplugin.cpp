@@ -29,8 +29,10 @@
 
 #include <coreplugin/dialogs/pluginaboutpage.h>
 #include <coreplugin/icore.h>
-#include <coreplugin/translators.h>
+#include <coreplugin/isettings.h>
 #include <coreplugin/itheme.h>
+#include <coreplugin/iuser.h>
+#include <coreplugin/translators.h>
 
 #include <QtCore/QtPlugin>
 #include <QDebug>
@@ -82,6 +84,14 @@ void EmptyPlugin::extensionsInitialized()
     if (Utils::Log::warnPluginsCreation())
         qWarning() << "EmptyPlugin::extensionsInitialized";
 
+    // If you want to stop the plugin initialization if there are no identified user
+    // Just uncomment the following code
+//    // no user -> end
+//    if (!user())
+//        return;
+//    if (user()->uuid().isEmpty())
+//        return;
+
     messageSplash(tr("Initializing emptyplugin..."));
 
     // At this point, user is connected
@@ -101,7 +111,7 @@ void EmptyPlugin::postCoreInitialization()
 void EmptyPlugin::coreAboutToClose()
 {
     // Core is about to close
-    // Core::user() is still available
+    // ICore::user() is still available
 }
 
 Q_EXPORT_PLUGIN(EmptyPlugin)
