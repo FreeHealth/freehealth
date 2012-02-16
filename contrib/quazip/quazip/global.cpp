@@ -130,7 +130,6 @@ bool unzipFile(const QString &fileName, const QString &pathToUnZippedFiles, QPro
                     }
                 }
             }
-            bar->setValue(100);
         } else {
             // Fast extraction
             while (file.getChar(&c)) out.putChar(c);
@@ -153,6 +152,10 @@ bool unzipFile(const QString &fileName, const QString &pathToUnZippedFiles, QPro
             return false;
         }
     }
+
+    if (bar)
+        bar->setValue(100);
+
     zip.close();
     if (zip.getZipError() != UNZ_OK) {
         LOG_ERROR_FOR("QuaZip", QString("Error: %1: %2").arg(fileName).arg(zip.getZipError()));
