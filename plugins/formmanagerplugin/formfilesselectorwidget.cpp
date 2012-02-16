@@ -24,6 +24,11 @@
  *       NAME <MAIL@ADRESS>                                                *
  *       NAME <MAIL@ADRESS>                                                *
  ***************************************************************************/
+/**
+ * \class Forms::FormFilesSelectorWidget
+ * A patient form file selector.
+ */
+
 #include "formfilesselectorwidget.h"
 #include "ui_formfilesselectorwidget.h"
 #include "iformio.h"
@@ -116,12 +121,16 @@ public:
         m_FormDescr.clear();
         ios = refreshIOPlugs();
         Form::FormIOQuery query;
-        query.setGetAllAvailableFormDescriptions(true);
+        query.setGetAllAvailableFormDescriptions((m_Type==FormFilesSelectorWidget::AllForms));
+        if (m_Type==FormFilesSelectorWidget::CompleteForms)
+            query.setTypeOfForms(Form::FormIOQuery::CompleteForms);
+        else if (m_Type==FormFilesSelectorWidget::SubForms)
+            query.setTypeOfForms(Form::FormIOQuery::SubForms);
         switch (m_Type) {
-        case FormFilesSelectorWidget::AllForms: query.setTypeOfForms(Form::FormIOQuery::CompleteForms | Form::FormIOQuery::SubForms | Form::FormIOQuery::Pages);break;
+        case FormFilesSelectorWidget::AllForms: query.setTypeOfForms(Form::FormIOQuery::CompleteForms | Form::FormIOQuery::SubForms);break;
         case FormFilesSelectorWidget::CompleteForms: query.setTypeOfForms(Form::FormIOQuery::CompleteForms); break;
         case FormFilesSelectorWidget::SubForms: query.setTypeOfForms(Form::FormIOQuery::SubForms); break;
-        case FormFilesSelectorWidget::Pages: query.setTypeOfForms(Form::FormIOQuery::Pages); break;
+//        case FormFilesSelectorWidget::Pages: query.setTypeOfForms(Form::FormIOQuery::SubForms); break;
         }
         foreach(Form::IFormIO *io, ios) {
             m_FormDescr = io->getFormFileDescriptions(query);
@@ -161,6 +170,12 @@ public:
             QStandardItem *item = new QStandardItem(descr->data(FormIODescription::ShortDescription).toString());
             item->setData(i, Qt::UserRole+1);
             catItem->appendRow(item);
+            // highlight ?
+            if (!m_HightlightUuid.isEmpty()) {
+                if (descr->data(FormIODescription::UuidOrAbsPath).toString()==m_HightlightUuid) {
+                    item->setFont(bold);
+                }
+            }
         }
     }
 
@@ -172,6 +187,7 @@ public:
     QList<Form::FormIODescription *> m_FormDescr;
     QStandardItemModel *m_TreeModel;
     int m_ActualTreeModelColumn, m_SelType;
+    QString m_HightlightUuid;
 };
 
 }  // End namespace Internal
@@ -196,20 +212,13 @@ FormFilesSelectorWidget::FormFilesSelectorWidget(QWidget *parent, const FormType
     connect(d->aBySpecialties, SIGNAL(triggered()), this, SLOT(onFilterSelected()));
     connect(d->aByType, SIGNAL(triggered()), this, SLOT(onFilterSelected()));
 
-    // Get current generic form file
-//    QString actual = episodeBase()->getGenericFormFile();
-//    actual = actual.mid(settings()->path(Core::ISettings::CompleteFormsPath).length() + 1);
-//    d->ui->actualFile->setText(actual);
-
     // get all Forms description
     d->getDescriptions();
 
     // prepare the first model = category tree model
     d->aByCategory->trigger();
-//    d->createTreeModel(Form::FormIODescription::Category);
     d->ui->treeView->setModel(d->m_TreeModel);
     d->ui->treeView->header()->hide();
-//    d->ui->treeView->setRootIndex(d->dirModel->index(settings()->path(Core::ISettings::CompleteFormsPath)));
 
     // connect actions, buttons...
     connect(d->ui->treeView->selectionModel(), SIGNAL(currentChanged(QModelIndex,QModelIndex)),this, SLOT(onDescriptionSelected(QModelIndex,QModelIndex)));
@@ -221,6 +230,7 @@ FormFilesSelectorWidget::~FormFilesSelectorWidget()
     delete d;
 }
 
+/** Define the type of form to use in the selector (complete forms, subforms, both...). */
 void FormFilesSelectorWidget::setFormType(FormType type)
 {
     if (d->m_Type==type)
@@ -230,6 +240,7 @@ void FormFilesSelectorWidget::setFormType(FormType type)
     d->createTreeModel(d->m_ActualTreeModelColumn, true);
 }
 
+/** Define the selection type to single item selection or multiple item selection. */
 void FormFilesSelectorWidget::setSelectionType(SelectionType type)
 {
     if (d->m_SelType==type)
@@ -238,11 +249,13 @@ void FormFilesSelectorWidget::setSelectionType(SelectionType type)
     d->ui->treeView->setSelectionMode(QAbstractItemView::SelectionMode(type));
 }
 
+/** Selector presents form in a tree view, you can expand all its item using this function. */
 void FormFilesSelectorWidget::expandAllItems() const
 {
     d->ui->treeView->expandAll();
 }
 
+/** Return the currently selected form descriptions */
 QList<Form::FormIODescription *> FormFilesSelectorWidget::selectedForms() const
 {
     QList<Form::FormIODescription *> toReturn;
@@ -257,6 +270,13 @@ QList<Form::FormIODescription *> FormFilesSelectorWidget::selectedForms() const
         }
     }
     return toReturn;
+}
+
+/** Highlight a specific form in the selector (using its \e uuidOrAbsPath) */
+void FormFilesSelectorWidget::highlighForm(const QString &uuidOrAbsPath)
+{
+    d->m_HightlightUuid = uuidOrAbsPath;
+    d->createTreeModel(d->m_ActualTreeModelColumn, true);
 }
 
 void FormFilesSelectorWidget::onDescriptionSelected(const QModelIndex &index, const QModelIndex &previous)

@@ -58,8 +58,8 @@ public:
     enum FormType {
         AllForms = 0,
         CompleteForms,
-        SubForms,
-        Pages
+        SubForms
+//        Pages
     };
     enum SelectionType {
         Single = QAbstractItemView::SingleSelection,
@@ -74,6 +74,8 @@ public:
     void expandAllItems() const;
 
     QList<Form::FormIODescription *> selectedForms() const;
+
+    void highlighForm(const QString &uuidOrAbsPath);
 
 private Q_SLOTS:
     void onDescriptionSelected(const QModelIndex &index, const QModelIndex &previous);

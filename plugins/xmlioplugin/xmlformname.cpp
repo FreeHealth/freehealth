@@ -40,6 +40,11 @@ using namespace Internal;
 
 static inline Core::ISettings *settings()  { return Core::ICore::instance()->settings(); }
 
+XmlFormName::XmlFormName() :
+    isValid(false)
+{
+}
+
 XmlFormName::XmlFormName(const QString &_uid) :
     isValid(false), uid(_uid), absFileName(_uid)
 {
@@ -50,33 +55,47 @@ XmlFormName::XmlFormName(const QString &_uid) :
         if (modeName.endsWith(".xml"))
             modeName.chop(4);
     }
+
     // Replace tags with full path
     if (uid.startsWith(QString(Core::Constants::TAG_APPLICATION_COMPLETEFORMS_PATH).left(2))) {
-        // Check if form exists in user path
-        // Check if form exists in datapack path
-        // Check if form exists in app bundle path
         absFileName.replace(Core::Constants::TAG_APPLICATION_COMPLETEFORMS_PATH, settings()->path(Core::ISettings::CompleteFormsPath));
         absFileName.replace(Core::Constants::TAG_APPLICATION_SUBFORMS_PATH, settings()->path(Core::ISettings::SubFormsPath));
         absFileName.replace(Core::Constants::TAG_APPLICATION_RESOURCES_PATH, settings()->path(Core::ISettings::BundleResourcesPath));
+
+        absFileName.replace(Core::Constants::TAG_APPLICATION_USER_COMPLETEFORMS_PATH, settings()->path(Core::ISettings::UserCompleteFormsPath));
+        absFileName.replace(Core::Constants::TAG_APPLICATION_USER_SUBFORMS_PATH, settings()->path(Core::ISettings::SubFormsPath));
+
+        absFileName.replace(Core::Constants::TAG_DATAPACK_COMPLETEFORMS_PATH, settings()->path(Core::ISettings::DataPackCompleteFormsInstallPath));
+        absFileName.replace(Core::Constants::TAG_DATAPACK_SUBFORMS_PATH, settings()->path(Core::ISettings::DataPackSubFormsInstallPath));
     } else {
         // uuid was a full abs path --> recreate the tags
+        uid.replace(settings()->path(Core::ISettings::DataPackCompleteFormsInstallPath), Core::Constants::TAG_DATAPACK_COMPLETEFORMS_PATH);
+        uid.replace(settings()->path(Core::ISettings::DataPackSubFormsInstallPath), Core::Constants::TAG_DATAPACK_SUBFORMS_PATH);
+
         uid.replace(settings()->path(Core::ISettings::CompleteFormsPath), Core::Constants::TAG_APPLICATION_COMPLETEFORMS_PATH);
         uid.replace(settings()->path(Core::ISettings::SubFormsPath), Core::Constants::TAG_APPLICATION_SUBFORMS_PATH);
-        uid.replace(settings()->path(Core::ISettings::BundleResourcesPath), Core::Constants::TAG_APPLICATION_RESOURCES_PATH);
 
         uid.replace(settings()->path(Core::ISettings::UserCompleteFormsPath), Core::Constants::TAG_APPLICATION_USER_COMPLETEFORMS_PATH);
         uid.replace(settings()->path(Core::ISettings::SubFormsPath), Core::Constants::TAG_APPLICATION_USER_SUBFORMS_PATH);
+
+        uid.replace(settings()->path(Core::ISettings::BundleResourcesPath), Core::Constants::TAG_APPLICATION_RESOURCES_PATH);
     }
+
     absFileName = QDir::cleanPath(absFileName);
     QFileInfo info(absFileName);
     if (info.isDir() || info.suffix().compare("xml", Qt::CaseInsensitive)!=0) {
+        absPath = absFileName;
         if (modeName.isEmpty())
             absFileName += "/central.xml";
         else
             absFileName += "/" + modeName + ".xml";
+        info.setFile(absFileName);
+    } else {
+        absPath = info.absolutePath();
     }
-    absPath = info.absolutePath();
     isValid = info.exists();
+
+//    qWarning() << "\n\n" << absFileName << absPath << isValid << modeName << "\n\n";
 }
 
 bool XmlFormName::operator==(const XmlFormName &other) const
@@ -90,6 +109,7 @@ QDebug XmlForms::Internal::operator<<(QDebug dbg, const XmlFormName &c)
                   << "Uid: " << c.uid
                   << "; Mode: " << c.modeName
                   << "; File: " << c.absFileName
-                     ;
+                  << "; AbsPath: " << c.absPath
+                  << ")";
     return dbg.space();
 }

@@ -54,6 +54,7 @@ namespace Constants {
     const char * const USER_DATAS_SPECIALTY         = "identity.specialty";
     const char * const USER_DATAS_QUALIFICATION     = "identity.qualification";
     const char * const USER_DATAS_PREFERENCES       = "pref";
+    const char * const USER_DATAS_DATAPACK_CONFIG   = "config.datapack";
     const char * const USER_DATAS_LOGINHISTORY      = "loginHistory";
 
 

@@ -28,6 +28,7 @@
 #include "constants.h"
 
 #include <coreplugin/icore.h>
+#include <coreplugin/iuser.h>
 #include <coreplugin/itheme.h>
 #include <coreplugin/isettings.h>
 #include <coreplugin/translators.h>
@@ -51,9 +52,10 @@
 using namespace DataPackPlugin;
 using namespace DataPackPlugin::Internal;
 
+static inline Core::IUser *user() {return Core::ICore::instance()->user();}
 static inline Core::ITheme *theme()  { return Core::ICore::instance()->theme(); }
 static inline Core::ISettings *settings()  { return Core::ICore::instance()->settings(); }
-inline static Core::ActionManager *actionManager() {return Core::ICore::instance()->actionManager();}
+static inline Core::ActionManager *actionManager() {return Core::ICore::instance()->actionManager();}
 static inline Core::ContextManager *contextManager() { return Core::ICore::instance()->contextManager(); }
 static inline void messageSplash(const QString &s) {theme()->messageSplashScreen(s); }
 
@@ -78,11 +80,25 @@ DataPackPluginIPlugin::DataPackPluginIPlugin()
 
 DataPackPluginIPlugin::~DataPackPluginIPlugin()
 {    
+    qWarning() << "DataPackPluginIPlugin::~DataPackPluginIPlugin";
+
     if (m_prefPage) {
         removeObject(m_prefPage);
         delete m_prefPage;
         m_prefPage = 0;
     }
+
+    // Core is about to close
+    // Core::user() is still available
+    DataPack::DataPackCore &core = DataPack::DataPackCore::instance(this);
+#ifdef FREEMEDFORMS
+    user()->setValue(Core::IUser::DataPackConfig, core.serverManager()->xmlConfiguration());
+#else
+#  ifdef FREEDIAMS
+    QByteArray s = QByteArray(core.serverManager()->xmlConfiguration().toUtf8()).toBase64();
+    settings()->setValue("datapack/server/config", s);
+#  endif
+#endif
 }
 
 bool DataPackPluginIPlugin::initialize(const QStringList &arguments, QString *errorString)
@@ -106,6 +122,12 @@ void DataPackPluginIPlugin::extensionsInitialized()
     if (Utils::Log::warnPluginsCreation())
         qWarning() << "DataPackPluginIPlugin::extensionsInitialized";
 
+    if (!user())
+        return;
+    if (!user()->hasCurrentUser())
+        return;
+
+
     messageSplash(tr("Initializing DataPackPlugin..."));
 
     // At this point, user is connected
@@ -122,7 +144,7 @@ void DataPackPluginIPlugin::extensionsInitialized()
     // Send the server manager configuration from the settings of the user/application
     QString xmlConfig;
 #ifdef FREEMEDFORMS
-    xmlConfig = "";
+    xmlConfig = user()->value(Core::IUser::DataPackConfig).toString();
 #else
 #  ifdef FREEDIAMS
     xmlConfig = QString(QByteArray::fromBase64(settings()->value("datapack/server/config").toByteArray()));
@@ -131,9 +153,12 @@ void DataPackPluginIPlugin::extensionsInitialized()
     if (!core.serverManager()->setGlobalConfiguration(xmlConfig))
         LOG_ERROR("Unable to set the datapack server manager configuration");
 
+    // Always unsure that the freemedforms datapack server is available
+    DataPack::Server http("http://packs.freemedforms.com");
+    http.setUrlStyle(DataPack::Server::HttpPseudoSecuredAndZipped);
+    core.serverManager()->addServer(http);
 
     /** \todo Check for package update -> thread this */
-
 
     addAutoReleasedObject(new Core::PluginAboutPage(pluginSpec(), this));
     connect(Core::ICore::instance(), SIGNAL(coreOpened()), this, SLOT(postCoreInitialization()));
@@ -143,8 +168,6 @@ void DataPackPluginIPlugin::postCoreInitialization()
 {
     // Core is fully intialized as well as all plugins
     // Add a pack manager action
-    Core::UniqueIDManager *uid = Core::ICore::instance()->uniqueIDManager();
-
     QAction *a = 0;
     Core::Command *cmd = 0;
 
@@ -169,13 +192,16 @@ void DataPackPluginIPlugin::postCoreInitialization()
 
 void DataPackPluginIPlugin::coreAboutToClose()
 {
+    if (Utils::Log::warnPluginsCreation())
+        qWarning() << "DataPackPluginIPlugin::coreAboutToClose";
     // Core is about to close
     // Core::user() is still available
+    DataPack::DataPackCore &core = DataPack::DataPackCore::instance(this);
 #ifdef FREEMEDFORMS
-    ;
+    user()->setValue(Core::IUser::DataPackConfig, core.serverManager()->xmlConfiguration());
 #else
 #  ifdef FREEDIAMS
-    QByteArray s = QByteArray(DataPack::DataPackCore::instance().serverManager()->xmlConfiguration().toUtf8()).toBase64();
+    QByteArray s = QByteArray(core.serverManager()->xmlConfiguration().toUtf8()).toBase64();
     settings()->setValue("datapack/server/config", s);
 #  endif
 #endif

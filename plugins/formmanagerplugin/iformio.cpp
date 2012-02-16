@@ -89,9 +89,9 @@
 using namespace Form;
 using namespace Trans::ConstantTranslations;
 
-
+/** Construct a default query: complete forms, from database, get screenshots */
 FormIOQuery::FormIOQuery() :
-    m_type(DefaultForms | CompleteForms),
+    m_type(CompleteForms),
     m_ForceFile(false),
     m_AllForms(false),
     m_AllDescr(false),

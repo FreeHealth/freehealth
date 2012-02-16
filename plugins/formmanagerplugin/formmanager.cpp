@@ -59,6 +59,9 @@
 
 #include <utils/global.h>
 #include <utils/log.h>
+#include <datapackutils/datapackcore.h>
+#include <datapackutils/ipackmanager.h>
+#include <datapackutils/pack.h>
 
 #include <extensionsystem/pluginmanager.h>
 
@@ -85,9 +88,10 @@ static inline Core::ISettings *settings()  { return Core::ICore::instance()->set
 static inline Form::Internal::EpisodeBase *episodeBase() {return Form::Internal::EpisodeBase::instance();}
 static inline Core::IPatient *patient() {return Core::ICore::instance()->patient();}
 static inline Core::ContextManager *contextManager() { return Core::ICore::instance()->contextManager(); }
-inline static Core::ActionManager *actionManager() {return Core::ICore::instance()->actionManager();}
-inline static Core::IScriptManager *scriptManager() {return Core::ICore::instance()->scriptManager();}
-
+static inline Core::ActionManager *actionManager() {return Core::ICore::instance()->actionManager();}
+static inline Core::IScriptManager *scriptManager() {return Core::ICore::instance()->scriptManager();}
+static inline DataPack::DataPackCore &dataPackCore() { return DataPack::DataPackCore::instance(); }
+static inline DataPack::IPackManager *packManager() { return dataPackCore().packManager(); }
 
 namespace Form {
 namespace Constants {
@@ -141,6 +145,10 @@ FormManager::FormManager(QObject *parent) :
 
 //    connect(Core::ICore::instance(), SIGNAL(coreAboutToClose()), this, SLOT(coreAboutToClose()));
     connect(patient(), SIGNAL(currentPatientChanged()), this, SLOT(loadPatientFile()));
+
+    connect(packManager(), SIGNAL(packInstalled(DataPack::Pack)), this, SLOT(packChanged(DataPack::Pack)));
+    connect(packManager(), SIGNAL(packRemoved(DataPack::Pack)), this, SLOT(packChanged(DataPack::Pack)));
+//    connect(packManager(), SIGNAL(packUpdated(DataPack::Pack)), this, SLOT(packChanged(DataPack::Pack)));
 }
 
 FormManager::~FormManager()
@@ -367,6 +375,27 @@ void FormManager::executeOnloadScript(Form::FormMain *emptyRootForm)
     }
 }
 
+void FormManager::packChanged(const DataPack::Pack &pack)
+{
+    if (pack.dataType() != DataPack::Pack::Forms)
+        return;
+
+    // get all form readers (IFormIO)
+    QList<Form::IFormIO *> list = pluginManager()->getObjects<Form::IFormIO>();
+    if (list.isEmpty()) {
+        LOG_ERROR("No IFormIO loaded...");
+        return;
+    }
+
+    // Check form update
+    foreach(Form::IFormIO *io, list) {
+        io->checkForUpdates();
+    }
+
+    // Force patient files reloading
+    if (!patient()->uuid().isEmpty())
+        loadPatientFile();
+}
 
 FormActionHandler::FormActionHandler(QObject *parent) :
     QObject(parent),

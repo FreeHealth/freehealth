@@ -35,8 +35,8 @@
 /**
  * \file iuser.h
  * \author Eric MAEKER <eric.maeker@gmail.com>
- * \version 0.4.0
- * \date 13 June 2010
+ * \version 0.6.4
+ * \date 17 Feb 2012
 */
 
 namespace Core {
@@ -102,6 +102,8 @@ public:
         PrescriptionFooterPresence,
         PrescriptionWatermarkPresence,
         PrescriptionWatermarkAlignement,
+
+        DataPackConfig,
 
         ManagerRights,
         DrugsRights,

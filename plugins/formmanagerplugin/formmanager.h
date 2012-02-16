@@ -29,14 +29,6 @@
 
 #include <formmanagerplugin/formmanager_exporter.h>
 #include <QObject>
-
-/**
- * \file formmanager.h
- * \author Eric MAEKER <eric.maeker@gmail.com>
- * \version 0.6.2
- * \date 06 Jan 2012
-*/
-
 QT_BEGIN_NAMESPACE
 class QTreeWidget;
 class QTreeWidgetItem;
@@ -46,8 +38,19 @@ class QAction;
 class QPixmap;
 QT_END_NAMESPACE
 
+/**
+ * \file formmanager.h
+ * \author Eric MAEKER <eric.maeker@gmail.com>
+ * \version 0.6.4
+ * \date 15 Feb 2012
+*/
+
 namespace Core {
 class UniqueIDManager;
+}
+
+namespace DataPack {
+class Pack;
 }
 
 namespace Form {
@@ -112,8 +115,8 @@ Q_SIGNALS:
     void patientFormsLoaded();
     void subFormLoaded(const QString &uuid);
 
-//private Q_SLOTS:
-//    void coreAboutToClose();
+private Q_SLOTS:
+    void packChanged(const DataPack::Pack &pack);
 
 private:
     Internal::FormManagerPrivate *d;

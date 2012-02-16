@@ -24,6 +24,7 @@ SUBDIRS = \
     agenda \
     zipcodes \
     script \
+    datapack
 #    saverestore \
 #    alerts \
 
@@ -149,6 +150,9 @@ zipcodes.depends += core
 script.subdir = scriptplugin
 script.depends += core
 script.depends += formmanager
+
+datapack.subdir = datapackplugin
+datapack.depends += core
 
 # manage non free content
 include(../config.pri)

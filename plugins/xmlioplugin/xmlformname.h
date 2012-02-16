@@ -32,8 +32,8 @@
 /**
  * \file xmlformcontentreader.h
  * \author Eric MAEKER <eric.maeker@gmail.com>
- * \version 0.6.0
- * \date 05 Sept 2011
+ * \version 0.6.4
+ * \date 15 Feb 2012
 */
 
 
@@ -41,6 +41,7 @@ namespace XmlForms {
 namespace Internal {
 
 struct XmlFormName {
+    XmlFormName();
     XmlFormName(const QString &uid);
 
     bool operator==(const XmlFormName &other) const;

@@ -84,6 +84,8 @@ public:
     bool saveForm(QObject *treeRoot) { Q_UNUSED(treeRoot); return true; }
 
     QString lastError() const {return m_Error.join("\n");}
+
+    void checkForUpdates() const;
     // End Form::IForm interface
 
 private:
@@ -91,7 +93,7 @@ private:
     bool createCategory(const QDomElement &element, Category::CategoryItem *parent, const QString &readingAbsPathFile) const;
 
 public:
-    bool checkDatabaseFormFileForUpdates();
+    bool checkDatabaseFormFileForUpdates() const;
 
 private:
      mutable QString m_AbsFileName;
@@ -103,6 +105,9 @@ private:
      // Caching some data for speed improvements
      mutable QHash<QString, bool> m_ReadableForms;
      mutable QHash<QString, bool> m_ReadableScripts;
+
+     // Form UUID cache
+     mutable QHash<QString, XmlFormName> m_FormNames;
 };
 
 }  // End namespace Internal

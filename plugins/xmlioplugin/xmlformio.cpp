@@ -73,6 +73,14 @@ static inline PMH::PmhCore *pmhCore() {return PMH::PmhCore::instance();}
 static inline Internal::XmlFormContentReader *reader() {return Internal::XmlFormContentReader::instance();}
 static inline Internal::XmlIOBase *base() {return Internal::XmlIOBase::instance();}
 
+static inline XmlFormName &formName(const QString &uuid, QHash<QString, XmlFormName> &cache)
+{
+    if (!cache.contains(uuid)) {
+        cache.insert(uuid, XmlFormName(uuid));
+    }
+    return cache[uuid];
+}
+
 ////////////////////////////////////////////////////////////////////////////////////////////////////////////
 //////////////////////////////////////////////  XmlFormIO  /////////////////////////////////////////////////
 ////////////////////////////////////////////////////////////////////////////////////////////////////////////
@@ -100,8 +108,9 @@ bool XmlFormIO::canReadForms(const QString &uuidOrAbsPath) const
 
 bool XmlFormIO::canReadForms(const Form::FormIOQuery &query) const
 {
-    XmlFormName form(query.formUuid());
-//    qWarning() << "CanRead" << query.formUuid() << form.uid << form.absFileName;
+    //    qWarning() << "CanRead" << query.formUuid() << form.uid << form.absFileName;
+//    XmlFormName form(query.formUuid());
+    XmlFormName &form = formName(query.formUuid(), m_FormNames);
 
     if (m_ReadableForms.keys().contains(form.absFileName)) {
         return m_ReadableForms.value(form.absFileName);
@@ -165,7 +174,8 @@ bool XmlFormIO::canReadForms(const Form::FormIOQuery &query) const
 
 bool XmlFormIO::canReadScripts(const Form::FormIOQuery &query) const
 {
-    XmlFormName form(query.formUuid());
+//    XmlFormName form(query.formUuid());
+    XmlFormName &form = formName(query.formUuid(), m_FormNames);
 //    qWarning() << Q_FUNC_INFO << query.formUuid() << form.uid << form.absFileName << form.modeName;
 
     if (m_ReadableForms.keys().contains(form.absFileName)) {
@@ -216,14 +226,7 @@ Form::FormIODescription *XmlFormIO::readFileInformations(const QString &uuidOrAb
 QList<Form::FormIODescription *> XmlFormIO::getFormFileDescriptions(const Form::FormIOQuery &query) const
 {
     QList<Form::FormIODescription *> toReturn;
-    QString startPath;
     QStringList includedUids;
-    if (query.typeOfForms() & Form::FormIOQuery::UserForms) {
-        /** \todo manage user forms path and default path */
-    } else {
-        /** \todo manage user forms path and default path */
-    }
-
 //    qWarning() << query.formUuid() << query.forceFileReading();
 
     if (!query.forceFileReading()) {
@@ -238,7 +241,8 @@ QList<Form::FormIODescription *> XmlFormIO::getFormFileDescriptions(const Form::
 
     // Get a specific form description
     if (!query.formUuid().isEmpty()) {
-        XmlFormName form(query.formUuid());
+        XmlFormName &form = formName(query.formUuid(), m_FormNames);
+//        XmlFormName form(query.formUuid());
         if (canReadForms(query)) {
             Form::FormIODescription *desc = reader()->readFileInformations(form.absFileName, query);
             if (desc) {
@@ -252,44 +256,54 @@ QList<Form::FormIODescription *> XmlFormIO::getFormFileDescriptions(const Form::
 
     // Get all form files
     if (query.typeOfForms() & Form::FormIOQuery::CompleteForms) {
-        startPath = settings()->path(Core::ISettings::CompleteFormsPath);
-        QDir start(startPath);
-        // get all forms included in this path
-        foreach(const QFileInfo &file, Utils::getFiles(start, "central.xml", Utils::Recursively)) {
-            const QString &fileName = file.absoluteFilePath();
-            XmlFormName form(fileName);
-            if (includedUids.contains(form.uid)) {
-                continue;
-            }
-            if (canReadForms(fileName)) {
-                Form::FormIODescription *desc = reader()->readFileInformations(fileName);
-                if (desc) {
-                    desc->setData(Form::FormIODescription::IsCompleteForm, true);
-                    toReturn.append(desc);
+        QStringList path;
+        path << settings()->path(Core::ISettings::CompleteFormsPath);
+        path << settings()->path(Core::ISettings::UserCompleteFormsPath);
+        path << settings()->path(Core::ISettings::DataPackCompleteFormsInstallPath);
+        foreach(const QString &startPath, path) {
+            QDir start(startPath);
+            // get all forms included in this path
+            foreach(const QFileInfo &file, Utils::getFiles(start, "central.xml", Utils::Recursively)) {
+                const QString &fileName = file.absoluteFilePath();
+                XmlFormName &form = formName(fileName, m_FormNames);
+                if (includedUids.contains(form.uid))
+                    continue;
+
+                if (canReadForms(fileName)) {
+                    Form::FormIODescription *desc = reader()->readFileInformations(fileName);
+                    if (desc) {
+                        desc->setData(Form::FormIODescription::IsCompleteForm, true);
+                        toReturn.append(desc);
+                    }
                 }
             }
         }
     }
     if (query.typeOfForms() & Form::FormIOQuery::SubForms) {
-        startPath = settings()->path(Core::ISettings::SubFormsPath);
-        QDir start(startPath);
-        foreach(const QFileInfo &file, Utils::getFiles(start, "central.xml", Utils::Recursively)) {
-            const QString &fileName = file.absoluteFilePath();
-            XmlFormName form(fileName);
-            if (includedUids.contains(form.uid)) {
-//                qWarning() << "xxxxxxxxxxxx formAlredayIncluded" << form.uid;
-                continue;
-            }
-            if (canReadForms(fileName)) {
-                Form::FormIODescription *desc = reader()->readFileInformations(fileName);
-                if (desc) {
-                    desc->setData(Form::FormIODescription::IsSubForm, true);
-                    toReturn.append(desc);
+        QStringList path;
+        path << settings()->path(Core::ISettings::SubFormsPath);
+        path << settings()->path(Core::ISettings::UserSubFormsPath);
+        path << settings()->path(Core::ISettings::DataPackSubFormsInstallPath);
+        foreach(const QString &startPath, path) {
+            QDir start(startPath);
+            foreach(const QFileInfo &file, Utils::getFiles(start, "central.xml", Utils::Recursively)) {
+                const QString &fileName = file.absoluteFilePath();
+                XmlFormName &form = formName(fileName, m_FormNames);
+                if (includedUids.contains(form.uid))
+                    continue;
+
+                if (canReadForms(fileName)) {
+                    Form::FormIODescription *desc = reader()->readFileInformations(fileName);
+                    if (desc) {
+                        desc->setData(Form::FormIODescription::IsSubForm, true);
+                        toReturn.append(desc);
+                    }
                 }
             }
         }
     }
-    /** \todo Add IFormIO to descr && check all forms for params of Query */
+
+    /** \todo check all forms for params of Query, check forms versions, remove duplicates */
     for(int i = 0; i < toReturn.count(); ++i) {
         toReturn.at(i)->setIoFormReader((Form::IFormIO*)this);
     }
@@ -298,7 +312,8 @@ QList<Form::FormIODescription *> XmlFormIO::getFormFileDescriptions(const Form::
 
 QList<Form::FormMain *> XmlFormIO::loadAllRootForms(const QString &uuidOrAbsPath) const
 {
-    XmlFormName form(uuidOrAbsPath);
+    XmlFormName &form = formName(uuidOrAbsPath, m_FormNames);
+//    XmlFormName form(uuidOrAbsPath);
 //    qWarning() << Q_FUNC_INFO << uuidOrAbsPath << form.uid << form.absFileName;
 
     QList<Form::FormMain *> toReturn;
@@ -473,8 +488,14 @@ QPixmap XmlFormIO::screenShot(const QString &uuidOrAbsPath, const QString &name)
     return base()->getScreenShot(uuidOrAbsPath, name);
 }
 
+void XmlFormIO::checkForUpdates() const
+{
+    reader()->clearCache();
+    checkDatabaseFormFileForUpdates();
+}
+
 /** Check the database form version and try to update them with the local files. */
-bool XmlFormIO::checkDatabaseFormFileForUpdates()
+bool XmlFormIO::checkDatabaseFormFileForUpdates() const
 {
     QList<Form::FormIODescription *> fromFiles;
     QList<Form::FormIODescription *> fromDb;
@@ -503,9 +524,10 @@ bool XmlFormIO::checkDatabaseFormFileForUpdates()
             Utils::VersionNumber file(descFile->data(Form::FormIODescription::Version).toString());
             if (file.versionString()=="test" || file>db) {
                 // update database
-                XmlFormName form(descFile->data(Form::FormIODescription::UuidOrAbsPath).toString());
+                XmlFormName &form = formName(descFile->data(Form::FormIODescription::UuidOrAbsPath).toString(), m_FormNames);
+//                XmlFormName form(descFile->data(Form::FormIODescription::UuidOrAbsPath).toString());
 
-                qWarning() << "UpdateDB:" << form.uid << form.modeName << form.absFileName;
+//                qWarning() << "UpdateDB:" << form.uid << form.modeName << form.absFileName;
 
                 // Construct the detailled text of the user's question messagebox
                 msg << tr("Form: ") + descFile->data(Form::FormIODescription::ShortDescription).toString() + "<br />";

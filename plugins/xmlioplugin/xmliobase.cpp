@@ -511,7 +511,7 @@ QHash<QString, QPixmap> XmlIOBase::getScreenShots(const QString &formUid, const 
 /** Save the \e content of the form \e form to the database and return the used formUid. If the \e content is empty the form file is accessed */
 bool XmlIOBase::saveForm(const XmlFormName &form)
 {
-//    qWarning() << Q_FUNC_INFO << form.uid;
+//    qWarning() << Q_FUNC_INFO << form;
     LOG("Saving forms to database: " + form.uid);
 
     // save all XML files from the form
@@ -519,9 +519,11 @@ bool XmlIOBase::saveForm(const XmlFormName &form)
     foreach(const QFileInfo &f, dir.entryInfoList(QStringList() << "*.xml", QDir::Files | QDir::Readable)) {
         QString modeName = f.baseName();
         QString content = Utils::readTextFile(f.absoluteFilePath(), Utils::DontWarnUser);
-        if (!saveContent(form.uid, content, XmlIOBase::FullContent, modeName)) {
+        if (!saveContent(form.uid, content, XmlIOBase::FullContent, modeName))
             LOG_ERROR("Can not save form to database");
-        }
+        else
+            LOG("Saving attached *xml files to database " + f.absoluteFilePath());
+
         // Try to catch file addition
         // File addition is done using the tag ‘file’ or an attrib of the same name
         QDomDocument doc;

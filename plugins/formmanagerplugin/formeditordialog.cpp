@@ -26,7 +26,7 @@
  ***************************************************************************/
 /**
   \class Form::FormEditorDialog
-  Dialog that allows users to add sub-forms to the current patient file
+  Dialog that allows users to add <b>sub-forms</b> to the current patient file
 */
 
 
@@ -61,7 +61,7 @@ FormEditorDialog::FormEditorDialog(EpisodeModel *model, EditionModes mode, QWidg
     m_EpisodeModel(model)
 {
     ui->setupUi(this);
-    ui->formSelector->setFormType(Form::FormFilesSelectorWidget::AllForms);
+    ui->formSelector->setFormType(Form::FormFilesSelectorWidget::SubForms);
 
     proxyModel = new QSortFilterProxyModel(this);
     proxyModel->setSourceModel(model);

@@ -62,11 +62,7 @@ class FORM_EXPORT FormIOQuery
 public:
     enum TypeOfForm {
         CompleteForms  = 0x001,
-        SubForms       = 0x002,
-        Pages          = 0x004,
-        DefaultForms   = 0x040,
-        UserForms      = 0x080,
-        SpecifiedForm  = 0x100
+        SubForms       = 0x002
     };
     Q_DECLARE_FLAGS(TypesOfForm, TypeOfForm)
 
@@ -192,6 +188,8 @@ public:
     virtual bool saveForm(QObject *treeRoot) = 0;
 
     virtual QString lastError() const = 0;
+
+    virtual void checkForUpdates() const = 0;
 };
 
 } // end Form
