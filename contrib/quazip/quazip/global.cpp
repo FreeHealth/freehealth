@@ -72,7 +72,10 @@ bool unzipFile(const QString &fileName, const QString &pathToUnZippedFiles, QPro
     QString name;
     char c;
     ulong fullSize = 0;
+    ulong size = 0;
     if (bar) {
+        bar->setRange(0, 100);
+        bar->setValue(0);
         // Get all file size
         for (bool more = zip.goToFirstFile(); more; more = zip.goToNextFile()) {
             fullSize += file.usize();
@@ -114,10 +117,6 @@ bool unzipFile(const QString &fileName, const QString &pathToUnZippedFiles, QPro
             return false;
         }
         if (bar) {
-            // With QProgressBar
-            bar->setRange(0, 100);
-            bar->setValue(0);
-            ulong size = 0;
             int percent = 0;
             while (file.getChar(&c)) {
                 out.putChar(c);
