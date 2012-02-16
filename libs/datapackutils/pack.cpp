@@ -169,7 +169,6 @@ QStringList Pack::installedFiles() const
         s.prepend(unzipPackToPath() + QDir::separator());
         list << s;
     }
-    qWarning() << list;
     return list;
 }
 
