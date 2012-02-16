@@ -28,6 +28,7 @@
 #include "quazipfile.h"
 
 #include <utils/log.h>
+#include <utils/global.h>
 
 #include <QDir>
 #include <QFile>
@@ -70,15 +71,30 @@ bool unzipFile(const QString &fileName, const QString &pathToUnZippedFiles, QPro
     QFile out;
     QString name;
     char c;
+    ulong fullSize = 0;
+    if (bar) {
+        // Get all file size
+        for (bool more = zip.goToFirstFile(); more; more = zip.goToNextFile()) {
+            fullSize += file.usize();
+        }
+        if (!fullSize)
+            ++fullSize; // Avoid zero division
+    }
 
     for (bool more = zip.goToFirstFile(); more; more = zip.goToNextFile()) {
+        name = file.getActualFileName();
+        // if dir -> create and continue
+        if (name.endsWith("/")) {
+            if (!Utils::checkDir(name, true, "Quazip")) {
+                LOG_ERROR_FOR("QuaZip", QString("Error: %1: %2").arg(fileName).arg(name));
+                return false;
+            }
+            continue;
+        }
         if (!file.open(QIODevice::ReadOnly)) {
             LOG_ERROR_FOR("QuaZip", QString("Error: %1: %2").arg(fileName).arg(zip.getZipError()));
             return false;
         }
-
-        name = file.getActualFileName();
-
         if (file.getZipError() != UNZ_OK) {
             LOG_ERROR_FOR("QuaZip", QString("Error: %1: %2").arg(fileName).arg(zip.getZipError()));
             return false;
@@ -89,9 +105,8 @@ bool unzipFile(const QString &fileName, const QString &pathToUnZippedFiles, QPro
         qWarning() << QString("Zip : extracting : %1").arg(out.fileName());
 
         // create path if not exists
-        if (!QDir(QFileInfo(out).absolutePath()).exists()) {
+        if (!QDir(QFileInfo(out).absolutePath()).exists())
             QDir().mkpath(QFileInfo(out).absolutePath());
-        }
 
         // open the output file
         if (!out.open(QIODevice::WriteOnly | QIODevice::Text)) {
@@ -103,15 +118,12 @@ bool unzipFile(const QString &fileName, const QString &pathToUnZippedFiles, QPro
             bar->setRange(0, 100);
             bar->setValue(0);
             ulong size = 0;
-            ulong fileSize = file.usize();
-            if (!fileSize)
-                ++fileSize; // Avoid zero division
             int percent = 0;
             while (file.getChar(&c)) {
                 out.putChar(c);
                 ++size;
                 if (size % 1024) {
-                    int v = (size*100)/fileSize;
+                    int v = (size*100)/fullSize;
                     if (v>percent) {
                         percent = v;
                         bar->setValue(v);
