@@ -88,6 +88,7 @@ namespace Constants {
     const char* const   SHOWDRUGPRECAUTIONS_TEXT = QT_TRANSLATE_NOOP("mfDrugsConstants", "Show drug precautions");
     const char* const   DRUGPRECAUTIONS_TEXT = QT_TRANSLATE_NOOP("mfDrugsConstants", "Drug precautions");
     const char* const   COPYPRESCRIPTIONITEM_TEXT = QT_TRANSLATE_NOOP("mfDrugsConstants", "Copy prescription item to clipboard");
+    const char* const   ADDCHRONICTHERAPEUTICS_TEXT = QT_TRANSLATE_NOOP("mfDrugsConstants", "Add chronic therapeutics");
 
     const char * const  I_TOGGLETESTINGDRUGS       =  "pill_hidden.png";       /*!< \brief Themed icon name for Commercial search. */
     const char * const  I_TOGGLEDRUGSELECTOR       =  "drugselector.png";       /*!< \brief Themed icon name for Commercial search. */

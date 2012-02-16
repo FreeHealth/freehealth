@@ -34,12 +34,15 @@
 #include <coreplugin/constants_menus.h>
 #include <coreplugin/constants_icons.h>
 
+#include <translationutils/constants.h>
+#include <translationutils/trans_drugs.h>
 #include <extensionsystem/pluginmanager.h>
 
 #include <QDebug>
 
 using namespace DrugsWidget;
 using namespace Internal;
+using namespace Trans::ConstantTranslations;
 
 static inline ExtensionSystem::PluginManager *pluginManager() { return ExtensionSystem::PluginManager::instance(); }
 static inline Core::ITheme *theme()  { return Core::ICore::instance()->theme(); }
@@ -52,7 +55,7 @@ DrugsMode::DrugsMode(QObject *parent) :
 {
     m_Holder = new Form::FormPlaceHolder;
     m_Holder->setObjectName("DrugsFormPlaceHolder");
-    setName(tr("Drugs"));
+    setName(tkTr(Trans::Constants::DRUGS));
     setIcon(theme()->icon(Core::Constants::ICONDRUGMODE, Core::ITheme::BigIcon));
     setPriority(Core::Constants::P_MODE_PATIENT_DRUGS);
     setUniqueModeName(Core::Constants::MODE_PATIENT_DRUGS);
@@ -72,7 +75,7 @@ DrugsMode::~DrugsMode()
 
 QString DrugsMode::name() const
 {
-    return tr("Drugs");
+    return tkTr(Trans::Constants::DRUGS);
 }
 
 void DrugsMode::getPatientForm()
