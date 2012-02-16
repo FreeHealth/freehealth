@@ -18,7 +18,7 @@
     <layout class="QVBoxLayout" name="prescrLayout"/>
    </item>
    <item row="0" column="0" rowspan="2" colspan="2">
-    <widget class="QGroupBox" name="groupBox">
+    <widget class="QGroupBox" name="selectGroupBox">
      <property name="title">
       <string>Select</string>
      </property>

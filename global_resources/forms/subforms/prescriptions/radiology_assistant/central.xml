@@ -26,6 +26,12 @@
     <icon>__theme__/xray.png</icon>
     <options>DontPrintEmptyValues;UseFormNameAsNameSpace</options>
 
+      <Item type="group" name="SelectionGroup">
+        <uilink label="" widget="selectGroupBox" layout=""/>
+        <label lang="xx">Create your prescription</label>
+        <label lang="fr">Créer votre prescription</label>
+      </Item>
+
       <Item type="button" name="AddToEditor">
         <uilink label="" widget="addButton" layout=""/>
         <label lang="xx">Add to prescription</label>
