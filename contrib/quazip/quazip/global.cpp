@@ -27,6 +27,8 @@
 #include "quazip.h"
 #include "quazipfile.h"
 
+#include <utils/log.h>
+
 #include <QDir>
 #include <QFile>
 #include <QFileInfo>
@@ -60,7 +62,7 @@ bool unzipFile(const QString &fileName, const QString &pathToUnZippedFiles, QPro
 
     QuaZip zip(fileName);
     if (!zip.open(QuaZip::mdUnzip)) {
-        qWarning() << QString("QuaZip Error: %1: %2").arg(fileName).arg(zip.getZipError());
+        LOG_ERROR_FOR("QuaZip", QString("Error: %1: %2").arg(fileName).arg(zip.getZipError()));
         return false;
     }
 
@@ -71,16 +73,14 @@ bool unzipFile(const QString &fileName, const QString &pathToUnZippedFiles, QPro
 
     for (bool more = zip.goToFirstFile(); more; more = zip.goToNextFile()) {
         if (!file.open(QIODevice::ReadOnly)) {
-            qWarning() << QString("QuaZip Error: %1: %2").arg(fileName).arg(zip.getZipError());
-            qWarning() << __FILE__ << __LINE__;
+            LOG_ERROR_FOR("QuaZip", QString("Error: %1: %2").arg(fileName).arg(zip.getZipError()));
             return false;
         }
 
         name = file.getActualFileName();
 
         if (file.getZipError() != UNZ_OK) {
-            qWarning() << QString("QuaZip Error: %1: %2").arg(fileName).arg(zip.getZipError());
-            qWarning() << __FILE__ << __LINE__;
+            LOG_ERROR_FOR("QuaZip", QString("Error: %1: %2").arg(fileName).arg(zip.getZipError()));
             return false;
         }
         out.setFileName(outputPath + QDir::separator() + name);
@@ -95,8 +95,7 @@ bool unzipFile(const QString &fileName, const QString &pathToUnZippedFiles, QPro
 
         // open the output file
         if (!out.open(QIODevice::WriteOnly | QIODevice::Text)) {
-            qWarning() << QString("QuaZip Error: %1: %2").arg(out.fileName()).arg(out.error());
-            qWarning() << __FILE__ << __LINE__;
+            LOG_ERROR_FOR("QuaZip", QString("Error: %1: %2").arg(out.fileName()).arg(zip.getZipError()));
             return false;
         }
         if (bar) {
@@ -128,24 +127,24 @@ bool unzipFile(const QString &fileName, const QString &pathToUnZippedFiles, QPro
         out.close();
 
         if (file.getZipError() != UNZ_OK) {
-            qWarning() << QString("QuaZip Error: %1: %2").arg(fileName).arg(zip.getZipError());
+            LOG_ERROR_FOR("QuaZip", QString("Error: %1: %2").arg(fileName).arg(zip.getZipError()));
             return false;
         }
 
         if (!file.atEnd()) {
-            qWarning() << QString("Zip : read all but not EOF : ") + fileName;
+            LOG_ERROR_FOR("QuaZip", QString("Error: read all but not EOF: %1").arg(fileName));
             return false;
         }
         file.close();
 
         if (file.getZipError() != UNZ_OK) {
-            qWarning() << QString("QuaZip Error: %1: %2").arg(fileName).arg(zip.getZipError());
+            LOG_ERROR_FOR("QuaZip", QString("Error: %1: %2").arg(fileName).arg(zip.getZipError()));
             return false;
         }
     }
     zip.close();
     if (zip.getZipError() != UNZ_OK) {
-        qWarning() << QString("QuaZip Error: %1: %2").arg(fileName).arg(zip.getZipError());
+        LOG_ERROR_FOR("QuaZip", QString("Error: %1: %2").arg(fileName).arg(zip.getZipError()));
         return false;
     }
 
@@ -188,5 +187,24 @@ bool unzipAllFilesIntoDirs(const QStringList &paths)
     return true;
 }
 
+/** Return all filename content of the zip file. */
+QStringList zipFileNameContent(const QString &absFileName)
+{
+    QStringList toReturn;
+    if (absFileName.isEmpty())
+        return toReturn;
+    if (!QFileInfo(absFileName).exists())
+        return toReturn;
 
-};
+    QuaZip zip(absFileName);
+    if (!zip.open(QuaZip::mdUnzip)) {
+        LOG_ERROR_FOR("QuaZip", QString("Error: %1: %2").arg(absFileName).arg(zip.getZipError()));
+        return toReturn;
+    }
+    for (bool more = zip.goToFirstFile(); more; more = zip.goToNextFile()) {
+        toReturn << zip.getCurrentFileName();
+    }
+    return toReturn;
+}
+
+}

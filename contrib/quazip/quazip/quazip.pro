@@ -3,7 +3,8 @@ TARGET    = quazip
 
 DEFINES += QUAZIP_LIBRARY
 
-include( ../../../libs/libsworkbench.pri )
+include(../../../libs/libsworkbench.pri)
+include($${SOURCES_LIBS_PATH}/utils.pri)
 
 win32:LIBS *= -L$${SOURCES_CONTRIBS_PATH}/quazip
 #else:linux*:LIBS *= -L/lib

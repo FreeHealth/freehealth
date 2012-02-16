@@ -40,6 +40,8 @@ namespace QuaZipTools {
 
     ZIP_EXPORT bool unzipAllFilesIntoDirs(const QStringList &paths);
 
+    ZIP_EXPORT QStringList zipFileNameContent(const QString &absFileName);
+
 }  //  End namespace QuaZipTools
 
 #endif // QUAZIP_GLOBAL_H
