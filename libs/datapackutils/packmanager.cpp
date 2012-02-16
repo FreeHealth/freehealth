@@ -217,7 +217,7 @@ bool PackManager::checkCachedPackFileIntegrity(const Pack &pack)
 
 bool PackManager::installDownloadedPack(const Pack &pack, QProgressBar *bar)
 {
-    WARN_FUNC << pack.uuid();
+//    WARN_FUNC << pack.uuid();
     const QString &pathTo = pack.unzipPackToPath();
     if (!Utils::checkDir(pack.unzipPackToPath(), true, "PackManager::installDownloadedPack"))
         return false;
@@ -240,13 +240,6 @@ bool PackManager::installDownloadedPack(const Pack &pack, QProgressBar *bar)
             return false;
         }
     }
-//    if (!QFile::copy(pack.persistentlyCachedXmlConfigFileName(), pack.installedXmlConfigFileName())) {
-//        LOG_ERROR(tr("Unable to copy pack description file. Source: %1. Dest: %2")
-//                  .arg(pack.persistentlyCachedXmlConfigFileName())
-//                  .arg(pack.installedXmlConfigFileName()));
-//        m_Errors << tr("Unable to copy pack description file");
-//        error = true;
-//    }
 
     // Log installed files && save pack configuration
     QStringList instFiles = QuaZipTools::zipFileNameContent(pack.persistentlyCachedZipFileName());
@@ -283,18 +276,10 @@ bool PackManager::removePack(const Pack &pack)
     QStringList instFiles = instPackFile.installedFiles();
     instFiles << instPackFile.installedXmlConfigFileName();
     foreach(QString file, instFiles) {
-        qWarning() << "ssssssss" << file;
         if (!QFile::remove(file)) {
             LOG_ERROR(QString("Unable to remove file %1").arg(file));
         }
     }
-
-//    Utils::removeDirRecursively(pack.unzipPackToPath(), &error);
-//    if (!error.isEmpty()) {
-//        LOG_ERROR(tr("Unable to remove pack %1, error: %2").arg(pack.name()).arg(error));
-//        m_Errors << tr("Unable to remove pack %1, error: %2").arg(pack.name()).arg(error);
-//        return false;
-//    }
 
     m_Msg << tr("Pack %1 correctly removed.").arg(pack.name());
 
