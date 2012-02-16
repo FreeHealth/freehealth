@@ -53,6 +53,8 @@ class USER_EXPORT UserBase :  public QObject, public Utils::Database
     Q_OBJECT
     friend class UserPlugin::UserModel;
 
+    bool testConnexion() const;
+
 protected:
     UserBase(QObject *parent = 0);
     void onCoreDatabaseServerChanged();
