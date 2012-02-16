@@ -17,7 +17,7 @@
     <bibliography/>
     <file>drugs/fr-only/master.zip</file>
     <unziptopath>drugs</unziptopath>
-    <size>6207945</size>
+    <size>6064</size>
     <md5>caba959af9f14fc0c7868bde5da0df4b</md5>
     <sha1></sha1>
     <datatype>DrugsWithInteractions</datatype>
