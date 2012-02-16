@@ -144,17 +144,33 @@ QString Pack::unzipPackToPath() const
     return core().installPath() + QDir::separator() + m_descr.data(PackDescription::UnzipToPath).toString();
 }
 
-/** Return the installed file name of the pack XML config file. This file name is computed using the DataPack::DataPackCore::installPath(). */
+/**
+ * Return the installed file name of the pack XML config file.
+ * This file name is computed using the DataPack::DataPackCore::installPath().
+*/
 QString Pack::installedXmlConfigFileName() const
 {
-    return unzipPackToPath() + QDir::separator() + "packconfig.xml";
+    return core().installPath() + QDir::separator() + "packconfig" + QDir::separator() + uuid() + QDir::separator() + "packconfig.xml";
 }
 
-/** Return the installed file name of the zipped pack file. This file name is computed using the DataPack::DataPackCore::installPath(). */
-QString Pack::installedZipFileName() const
+/** Set installed files (usually after unzipping pack file). \sa DataPack::IPackManager::installDownloadedPack */
+void Pack::setInstalledFiles(const QStringList &list)
 {
-    /** \todo code here : missing extracted zip file name. */
-    return unzipPackToPath();
+    m_descr.setData(PackDescription::InstalledFiles, list.join("@@"));
+}
+
+/** Return installed files (set usually after unzipping pack file). \sa DataPack::IPackManager::installDownloadedPack */
+QStringList Pack::installedFiles() const
+{
+    QStringList draft = m_descr.data(PackDescription::InstalledFiles).toString().split("@@");
+    draft.removeAll("");
+    QStringList list;
+    foreach(QString s, list) {
+        s.prepend(unzipPackToPath() + QDir::separator());
+        list << s;
+    }
+    qWarning() << list;
+    return list;
 }
 
 /** Return the DataPack::Pack::DataType of the package according to its description. */
@@ -220,6 +236,22 @@ void Pack::fromXml(const QString &fullPackConfigXml)
     m_depends.fromDomElement(dep);
 }
 
+QString Pack::toXml() const
+{
+    QString xml;
+    // Header
+    xml = "<?xml version='1.0' encoding='UTF-8'?>\n";
+    xml += "<!DOCTYPE FreeMedForms>\n";
+    xml += QString("<%1>\n").arg(::TAG_ROOT);
+    xml += m_descr.toXml();
+    xml += m_depends.toXml();
+    xml += QString("</%1>\n").arg(::TAG_ROOT);
+    QDomDocument doc;
+    doc.setContent(xml);
+    return doc.toString(2);
+}
+
+/** Check equality between two Pack */
 bool Pack::operator==(const Pack &other) const
 {
     return (this->uuid()==other.uuid() &&

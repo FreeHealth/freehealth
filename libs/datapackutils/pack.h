@@ -68,7 +68,9 @@ public:
     QString unzipPackToPath() const;
 
     QString installedXmlConfigFileName() const;
-    QString installedZipFileName() const;
+
+    void setInstalledFiles(const QStringList &list);
+    QStringList installedFiles() const;
 
     DataType dataType() const;
     QString dataTypeName() const;
@@ -80,6 +82,7 @@ public:
     bool isMd5Checked() const;
 
     void fromXmlFile(const QString &absFileName);
+    QString toXml() const;
 
     bool operator==(const Pack &other) const;
 

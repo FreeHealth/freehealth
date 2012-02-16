@@ -390,17 +390,17 @@ void ServerPackEditor::onPackIndexActivated(const QModelIndex &index, const QMod
 
 void ServerPackEditor::serverActionTriggered(QAction *a)
 {
-    if (a==d->aServerRefresh) {
-        QProgressDialog dlg(this);
-        QProgressBar *bar = new QProgressBar;
-        dlg.setLabelText(tr("Updating server information"));
-        dlg.setModal(true);
-        dlg.setBar(bar);
-        dlg.show();
-        /** \todo Connect the cancel button */
-        connect(serverManager(), SIGNAL(allServerDescriptionAvailable()), &dlg, SLOT(accept()));
-        serverManager()->getAllDescriptionFile(bar);
-        dlg.exec();
+    if (a==d->aServerRefresh && serverManager()->serverCount()>0) {
+            QProgressDialog dlg(this);
+            connect(serverManager(), SIGNAL(allServerDescriptionAvailable()), &dlg, SLOT(close()));
+            QProgressBar *bar = new QProgressBar;
+            dlg.setLabelText(tr("Updating server information"));
+            dlg.setModal(true);
+            dlg.setBar(bar);
+            dlg.show();
+            /** \todo Connect the cancel button */
+            serverManager()->getAllDescriptionFile(bar);
+//            dlg.exec();
     } if (a==d->aServerAdd) {
         AddServerDialog dlg(this);
         Server server;

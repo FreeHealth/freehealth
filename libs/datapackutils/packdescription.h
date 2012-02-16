@@ -96,7 +96,8 @@ public:
     const PackDependencyData &at(const int index) const;
 
     bool fromDomElement(const QDomElement &root);
-    bool toDomElement(QDomElement *root, QDomDocument *doc);
+    bool toDomElement(QDomElement *root, QDomDocument *doc) const;
+    QString toXml() const;
 
 public:
     QList<PackDependencyData> dependencies;
@@ -111,7 +112,8 @@ public:
         UnzipToPath,
         Md5,
         Sha1,
-        DataType
+        DataType,
+        InstalledFiles
     };
 
     PackDescription();

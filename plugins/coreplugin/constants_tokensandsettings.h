@@ -83,7 +83,6 @@ const char * const  TOKEN_USERFAX            = "USERFAX";
 const char * const  TOKEN_USERFULLADRESS     = "USERFULLADRESS";
 const char * const  TOKEN_USERFULLCONTACT    = "USERFULLCONTACT";
 
-
 // Some path tags
 const char * const  TAG_APPLICATION_RESOURCES_PATH = "__appResources__";
 const char * const  TAG_APPLICATION_THEME_PATH     = "__theme__";
@@ -91,6 +90,8 @@ const char * const  TAG_APPLICATION_COMPLETEFORMS_PATH = "__completeForms__";
 const char * const  TAG_APPLICATION_SUBFORMS_PATH = "__subForms__";
 const char * const  TAG_APPLICATION_USER_COMPLETEFORMS_PATH = "__userCompleteForms__";
 const char * const  TAG_APPLICATION_USER_SUBFORMS_PATH = "__userSubForms__";
+const char * const  TAG_DATAPACK_COMPLETEFORMS_PATH = "__datapackCompleteForms__";
+const char * const  TAG_DATAPACK_SUBFORMS_PATH = "__datapackSubForms__";
 
 // Settings keys
 const char * const  S_RECENTFILES_GROUP = "RecentFiles";

@@ -138,15 +138,15 @@ static QString packTooltip(const PackItem &item)
             ;
 }
 
-static QIcon iconForPack(const Pack &p)
-{
-    QString f = p.description().data(PackDescription::GeneralIcon).toString();
-    if (f.isEmpty()) {
-        return icon(::ICON_PACKAGE);
-    }
-    f = f.remove("__theme__/");
-    return icon(f);
-}
+//static QIcon iconForPack(const Pack &p)
+//{
+//    QString f = p.description().data(PackDescription::GeneralIcon).toString();
+//    if (f.isEmpty()) {
+//        return icon(::ICON_PACKAGE);
+//    }
+//    f = f.remove("__theme__/");
+//    return icon(f);
+//}
 
 }  //  End namespace anonymous
 
@@ -163,7 +163,7 @@ public:
     // Get all packs available from a server (avoid duplicates) : populate m_AvailPacks list
     void scanServerPack(const int index)
     {
-        qWarning() << "Scanning server" << serverManager()->getServerAt(index).uuid();
+        qWarning() << "PackModel::Scanning server" << serverManager()->getServerAt(index).uuid();
         foreach(const Pack &p, serverManager()->getPackForServer(serverManager()->getServerAt(index))) {
 //            qWarning() << "   ?? " << p.uuid() << p.version();
             // Add to the package list if not already included

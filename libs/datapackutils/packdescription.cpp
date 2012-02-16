@@ -139,14 +139,20 @@ bool PackDependencies::fromDomElement(const QDomElement &root)
     return true;
 }
 
-bool PackDependencies::toDomElement(QDomElement *root, QDomDocument *doc)
+bool PackDependencies::toDomElement(QDomElement *root, QDomDocument *doc) const
 {
     Q_ASSERT(root);
     Q_ASSERT(doc);
     if (!root || !doc)
         return false;
-    QDomElement depRoot = doc->createElement(::TAG_DEPENDENCIES_ROOT_TAG);
-    root->appendChild(depRoot);
+    QDomElement depRoot;
+    bool includeToRoot = false;
+    if (root->tagName().compare(::TAG_DEPENDENCIES_ROOT_TAG)!=0) {
+        depRoot = doc->createElement(::TAG_DEPENDENCIES_ROOT_TAG);
+        root->appendChild(depRoot);
+    } else {
+        includeToRoot = true;
+    }
     for(int i = 0; i < dependencies.count(); ++i) {
         QDomElement dep = doc->createElement(::TAG_DEPENCENCY_TAG);
         const PackDependencyData &data = dependencies.at(i);
@@ -154,11 +160,23 @@ bool PackDependencies::toDomElement(QDomElement *root, QDomDocument *doc)
         dep.setAttribute(::ATTRIB_NAME, data.name());
         dep.setAttribute(::ATTRIB_UUID, data.uuid());
         dep.setAttribute(::ATTRIB_VERSION, data.version());
-        depRoot.appendChild(dep);
+        if (includeToRoot)
+            root->appendChild(dep);
+        else
+            depRoot.appendChild(dep);
     }
     return true;
 }
 
+QString PackDependencies::toXml() const
+{
+    QDomDocument doc;
+    // Create the main description tag
+    QDomElement root = doc.createElement(::TAG_DEPENDENCIES_ROOT_TAG);
+    doc.appendChild(root);
+    toDomElement(&root, &doc);
+    return doc.toString(2);
+}
 
 ///////////////////////////////////////////////////////////////////////////////////////////////////
 ///////////////////////////////////////   PackDescription   ///////////////////////////////////////
@@ -171,5 +189,6 @@ PackDescription::PackDescription() :
     addNonTranslatableExtraData(Md5, "md5");
     addNonTranslatableExtraData(Sha1, "sha1");
     addNonTranslatableExtraData(DataType, "datatype");
+    addNonTranslatableExtraData(InstalledFiles, "instfiles");
 }
 

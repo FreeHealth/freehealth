@@ -132,7 +132,7 @@ HttpServerEngine::~HttpServerEngine()
 bool HttpServerEngine::managesServer(const Server &server)
 {
     if (core().isInternetConnexionAvailable())
-        return server.nativeUrl().startsWith("http");
+        return server.nativeUrl().startsWith("http://");
     return false;
 }
 

@@ -219,14 +219,8 @@ bool PackManager::installDownloadedPack(const Pack &pack, QProgressBar *bar)
 {
     WARN_FUNC << pack.uuid();
     const QString &pathTo = pack.unzipPackToPath();
-    QDir to(pathTo);
-    if (!to.exists()) {
-        if (!to.mkpath(pathTo)) {
-            LOG_ERROR(tkTr(Trans::Constants::PATH_1_CANNOT_BE_CREATED).arg(pathTo));
-            m_Errors << tkTr(Trans::Constants::PATH_1_CANNOT_BE_CREATED).arg(pathTo);
-            return false;
-        }
-    }
+    if (!Utils::checkDir(pack.unzipPackToPath(), true, "PackManager::installDownloadedPack"))
+        return false;
 
     /** \todo manage updating packs */
 
@@ -246,13 +240,21 @@ bool PackManager::installDownloadedPack(const Pack &pack, QProgressBar *bar)
             return false;
         }
     }
-    if (!QFile::copy(pack.persistentlyCachedXmlConfigFileName(), pack.installedXmlConfigFileName())) {
-        LOG_ERROR(tr("Unable to copy pack description file. Source: %1. Dest: %2")
-                  .arg(pack.persistentlyCachedXmlConfigFileName())
-                  .arg(pack.installedXmlConfigFileName()));
-        m_Errors << tr("Unable to copy pack description file");
-        error = true;
-    }
+//    if (!QFile::copy(pack.persistentlyCachedXmlConfigFileName(), pack.installedXmlConfigFileName())) {
+//        LOG_ERROR(tr("Unable to copy pack description file. Source: %1. Dest: %2")
+//                  .arg(pack.persistentlyCachedXmlConfigFileName())
+//                  .arg(pack.installedXmlConfigFileName()));
+//        m_Errors << tr("Unable to copy pack description file");
+//        error = true;
+//    }
+
+    // Log installed files && save pack configuration
+    QStringList instFiles = QuaZipTools::zipFileNameContent(pack.persistentlyCachedZipFileName());
+    Pack p;
+    p.fromXmlFile(pack.persistentlyCachedXmlConfigFileName());
+    p.setInstalledFiles(instFiles);
+    Utils::checkDir(QFileInfo(p.installedXmlConfigFileName()).absolutePath(), true, "PackManager::installDownloadedPack");
+    Utils::saveStringToFile(p.toXml(), p.installedXmlConfigFileName());
 
     if (error)
         m_Errors << tr("An error was detected during installation of %1.").arg(pack.name());
@@ -272,17 +274,28 @@ bool PackManager::removePack(const Pack &pack)
     // Remove the zipPath used for the pack
     QFileInfo zipPath(pack.unzipPackToPath());
     if (!zipPath.exists()) {
-        LOG_ERROR(tr("Unable to remove pack %1, unzip path does not exists (%2)").arg(pack.name().arg(pack.unzipPackToPath())));
-        m_Errors << tr("Unable to remove pack %1, unzip path does not exists (%2)").arg(pack.name().arg(pack.unzipPackToPath()));
+        LOG_ERROR(tr("Unable to remove pack %1, unzip path does not exists (%2)").arg(pack.name()).arg(pack.unzipPackToPath()));
+        m_Errors << tr("Unable to remove pack %1, unzip path does not exists (%2)").arg(pack.name()).arg(pack.unzipPackToPath());
         return false;
     }
-    QString error;
-    Utils::removeDirRecursively(pack.unzipPackToPath(), &error);
-    if (!error.isEmpty()) {
-        LOG_ERROR(tr("Unable to remove pack %1, error: %2").arg(pack.name().arg(error)));
-        m_Errors << tr("Unable to remove pack %1, error: %2").arg(pack.name().arg(error));
-        return false;
+    Pack instPackFile;
+    instPackFile.fromXmlFile(pack.installedXmlConfigFileName());
+    QStringList instFiles = instPackFile.installedFiles();
+    instFiles << instPackFile.installedXmlConfigFileName();
+    foreach(QString file, instFiles) {
+        qWarning() << "ssssssss" << file;
+        if (!QFile::remove(file)) {
+            LOG_ERROR(QString("Unable to remove file %1").arg(file));
+        }
     }
+
+//    Utils::removeDirRecursively(pack.unzipPackToPath(), &error);
+//    if (!error.isEmpty()) {
+//        LOG_ERROR(tr("Unable to remove pack %1, error: %2").arg(pack.name()).arg(error));
+//        m_Errors << tr("Unable to remove pack %1, error: %2").arg(pack.name()).arg(error);
+//        return false;
+//    }
+
     m_Msg << tr("Pack %1 correctly removed.").arg(pack.name());
 
     Q_EMIT packRemoved(pack);

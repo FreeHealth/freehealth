@@ -34,6 +34,8 @@
 #include <QDir>
 #include <QFile>
 #include <QFileInfo>
+#include <QProgressBar>
+
 #include <QDebug>
 
 using namespace DataPack;
@@ -73,6 +75,7 @@ int LocalServerEngine::downloadQueueCount() const
 
 bool LocalServerEngine::startDownloadQueue()
 {
+    qWarning() << "LocalServerEngine::startDownloadQueue()";
     for(int i = 0; i < m_queue.count(); ++i) {
         const ServerEngineQuery &query = m_queue.at(i);
         Server *server = query.server;
@@ -134,6 +137,11 @@ bool LocalServerEngine::startDownloadQueue()
                 m_PackStatus.insert(statusKey(*pack), status);
                 Q_EMIT packDownloaded(*pack, status);
             }
+        }
+
+        if (query.progressBar) {
+            query.progressBar->setRange(0,1);
+            query.progressBar->setValue(1);
         }
     }
     m_queue.clear();
