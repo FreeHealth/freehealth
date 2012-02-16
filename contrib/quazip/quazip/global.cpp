@@ -187,7 +187,7 @@ bool unzipAllFilesIntoDirs(const QStringList &paths)
     return true;
 }
 
-/** Return all filename content of the zip file. */
+/** Return all filename content of the zip file. Does not return the created dirs. */
 QStringList zipFileNameContent(const QString &absFileName)
 {
     QStringList toReturn;
@@ -202,6 +202,9 @@ QStringList zipFileNameContent(const QString &absFileName)
         return toReturn;
     }
     for (bool more = zip.goToFirstFile(); more; more = zip.goToNextFile()) {
+        const QString &name = zip.getCurrentFileName();
+        if (name.endsWith("/"))
+            continue;
         toReturn << zip.getCurrentFileName();
     }
     return toReturn;
