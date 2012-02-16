@@ -90,6 +90,7 @@ public:
     QString getUuid(const QString &log64, const QString &cryptpass64);
     QString createNewUuid();
     QString getLogin64(const QString &uuid);
+    QString getUserDynamicData(const QString &userUid, const QString &dynDataUuid);
 
     // savers
     bool createUser(UserData *user);
@@ -98,6 +99,7 @@ public:
     bool saveUserPreferences(const QString &uid, const QString &content);
     bool savePapers(UserData *user);
     bool changeUserPassword(UserData *user, const QString &clearPassword);
+    bool saveUserDynamicData(const QString &userUid, const QString &dynDataUuid, const QVariant &value);
 
     // datas checkers
     bool checkLogin(const QString &clearLogin, const QString &clearPassword) const;

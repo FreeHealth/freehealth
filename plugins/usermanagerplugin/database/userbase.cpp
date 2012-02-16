@@ -523,6 +523,36 @@ QString UserBase::getLogin64(const QString &uuid)
     return QString();
 }
 
+/** Returns a specific dynamic data of a user. */
+QString UserBase::getUserDynamicData(const QString &userUid, const QString &dynDataUuid)
+{
+    QSqlDatabase DB = QSqlDatabase::database(USER_DB_CONNECTION);
+    if (!DB.isOpen()) {
+        if (!DB.open()) {
+            LOG_ERROR(tkTr(Trans::Constants::UNABLE_TO_OPEN_DATABASE_1_ERROR_2).arg(database().connectionName()).arg(database().lastError().text()));
+            return 0;
+        }
+    }
+    QSqlQuery query(DB);
+    QHash<int, QString> where;
+    where.insert(DATAS_USER_UUID, QString("='%1'").arg(userUid));
+    where.insert(DATAS_DATANAME, QString("='%1'").arg(dynDataUuid));
+    QString req = select(Table_DATAS, where);
+    if (query.exec(req)) {
+        if (query.next()) {
+            int i = 0;
+            UserDynamicData *data = new UserDynamicData();
+            for (i = 0; i < DATAS_MaxParam; ++i) {
+                data->feedFromSql(i, query.value(i));
+            }
+            return data->value().toString();
+        }
+    } else {
+        LOG_QUERY_ERROR(query);
+    }
+    query.finish();
+    return QString::null;
+}
 //--------------------------------------------------------------------------------------------------------
 //--------------------------------------------- Datas savers ---------------------------------------------
 //--------------------------------------------------------------------------------------------------------
@@ -1169,53 +1199,15 @@ bool UserBase::saveUserPreferences(const QString &uid, const QString &content)
         return false;
     }
 
-    // connect user database
-    QSqlDatabase DB = database();
-    if (!DB.isOpen()) {
-        if (!DB.open()) {
-            LOG_ERROR(tkTr(Trans::Constants::UNABLE_TO_OPEN_DATABASE_1_ERROR_2).arg(DB.connectionName()).arg(DB.lastError().text()));
-            if (WarnUserPreferences)
-                qWarning() << "    ****** Not saved";
-            return false;
-        }
-    }
-
-    // if user already exists ==> update   else ==> insert
-    QHash<int, QString> where;
-    where.insert(DATAS_USER_UUID, QString("='%1'").arg(uid));
-    where.insert(DATAS_DATANAME, QString("='%1'").arg(Constants::USER_DATAS_PREFERENCES));
-    if (count(Constants::Table_DATAS, Constants::DATAS_ID, getWhereClause(Constants::Table_DATAS, where))==0) {
-        // save
-        QSqlQuery query(DB);
-        query.prepare(prepareInsertQuery(Table_DATAS));
-        query.bindValue(DATAS_USER_UUID,  uid);
-        query.bindValue(DATAS_DATANAME ,  Constants::USER_DATAS_PREFERENCES);
-        query.bindValue(DATAS_STRING ,    QVariant());
-        query.bindValue(DATAS_LONGSTRING, QVariant());
-        query.bindValue(DATAS_FILE,       content);
-        query.bindValue(DATAS_NUMERIC,    QVariant());
-        query.bindValue(DATAS_DATE,       QVariant());
-        query.bindValue(DATAS_LANGUAGE,   QLocale().name().left(2));
-        query.bindValue(DATAS_LASTCHANGE, QDateTime::currentDateTime());
-        query.bindValue(DATAS_TRACE_ID,   QVariant());
-        if (!query.exec()) {
-            LOG_QUERY_ERROR(query);
-            return false;
-        }
-    } else {
-        // update
-        QSqlQuery query(DB);
-        query.prepare(prepareUpdateQuery(Table_DATAS, DATAS_FILE, where));
-        query.bindValue(0, content);
-        if (!query.exec()) {
-            LOG_QUERY_ERROR(query);
-            return false;
-        }
+    if (saveUserDynamicData(uid, Constants::USER_DATAS_PREFERENCES, content)) {
+        if (WarnUserPreferences)
+            qWarning() << "    Correctly saved";
+        return true;
     }
 
     if (WarnUserPreferences)
-        qWarning() << "    Correctly saved";
-    return true;
+        qWarning() << "    ****** Not saved";
+    return false;
 }
 
 bool UserBase::savePapers(UserData *user)
@@ -1313,6 +1305,52 @@ bool UserBase::changeUserPassword(UserData *user, const QString &newClearPasswor
     if (driver()==MySQL) {
         if (!changeMySQLUserPassword(user->clearLogin(), newClearPassword))
             return false;
+    }
+    return true;
+}
+
+/** Save a dynamic data for \e user using \e value. The data will be saved as a file field. */
+bool UserBase::saveUserDynamicData(const QString &userUid, const QString &dynDataUuid, const QVariant &value)
+{
+    // connect user database
+    QSqlDatabase DB = database();
+    if (!DB.isOpen()) {
+        if (!DB.open()) {
+            LOG_ERROR(tkTr(Trans::Constants::UNABLE_TO_OPEN_DATABASE_1_ERROR_2).arg(DB.connectionName()).arg(DB.lastError().text()));
+            return false;
+        }
+    }
+    QHash<int, QString> where;
+    where.insert(DATAS_USER_UUID, QString("='%1'").arg(userUid));
+    where.insert(DATAS_DATANAME, QString("='%1'").arg(dynDataUuid));
+    // save the dynamic data
+    if (count(Constants::Table_DATAS, Constants::DATAS_ID, getWhereClause(Constants::Table_DATAS, where))==0) {
+        // save
+        QSqlQuery query(DB);
+        query.prepare(prepareInsertQuery(Table_DATAS));
+        query.bindValue(DATAS_USER_UUID,  userUid);
+        query.bindValue(DATAS_DATANAME ,  Constants::USER_DATAS_PREFERENCES);
+        query.bindValue(DATAS_STRING ,    QVariant());
+        query.bindValue(DATAS_LONGSTRING, QVariant());
+        query.bindValue(DATAS_FILE,       value.toString());
+        query.bindValue(DATAS_NUMERIC,    QVariant());
+        query.bindValue(DATAS_DATE,       QVariant());
+        query.bindValue(DATAS_LANGUAGE,   QLocale().name().left(2));
+        query.bindValue(DATAS_LASTCHANGE, QDateTime::currentDateTime());
+        query.bindValue(DATAS_TRACE_ID,   QVariant());
+        if (!query.exec()) {
+            LOG_QUERY_ERROR(query);
+            return false;
+        }
+    } else {
+        // update
+        QSqlQuery query(DB);
+        query.prepare(prepareUpdateQuery(Table_DATAS, DATAS_FILE, where));
+        query.bindValue(0, value.toString());
+        if (!query.exec()) {
+            LOG_QUERY_ERROR(query);
+            return false;
+        }
     }
     return true;
 }
