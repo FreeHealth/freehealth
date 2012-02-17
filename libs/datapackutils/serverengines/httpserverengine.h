@@ -91,6 +91,7 @@ private:
     QHash<QString, ServerEngineStatus> m_ServerStatus, m_PackStatus;
     int m_DownloadCount_Server;
     int m_DownloadCount_PackDescription;
+    QHash<QString, int> m_AuthTimes;
 };
 
 } // namespace Internal
