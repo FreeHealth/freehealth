@@ -418,8 +418,7 @@ bool removeDir(const QString &name, QString *error)
     error->clear();
     QDir dir(name);
     if (!dir.exists()) {
-        error->append(Trans::ConstantTranslations::tkTr(Trans::Constants::PATH_1_DOESNOT_EXISTS).arg(name));
-        return false;
+        return true;
     }
     // is there is directory inside ? --> return false
     QStringList list = dir.entryList(QDir::Dirs | QDir::NoDotAndDotDot);
@@ -448,8 +447,7 @@ bool removeDirRecursively(const QString &absPath, QString *error)
     error->clear();
     QDir dir(absPath);
     if (!dir.exists()) {
-        error->append(Trans::ConstantTranslations::tkTr(Trans::Constants::PATH_1_DOESNOT_EXISTS).arg(absPath));
-        return false;
+        return true;
     }
 
     // remove all dirs inside this dir (recursively)
