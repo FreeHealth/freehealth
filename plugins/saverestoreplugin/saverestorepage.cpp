@@ -152,7 +152,7 @@ void SaveRestoreWidget::on_saveButton_clicked()
     char c;
     bool error = false;
     int i = 0;
-    QDir userPath = QDir(settings()->path(Core::ISettings::ResourcesPath));
+    QDir userPath = QDir(settings()->path(Core::ISettings::UserResourcesPath));
     QFileInfoList files = Utils::getFiles(userPath);
     QFile inFile;
     QuaZip zip(f);
@@ -295,7 +295,7 @@ bool SaveRestoreWidget::on_restoreButton_clicked()
         }
 
         //        out.setFileName("/Users/eric/Desktop/essai/out/"+name);
-        out.setFileName(settings()->path(Core::ISettings::ResourcesPath) + QDir::separator() + name);
+        out.setFileName(settings()->path(Core::ISettings::UserResourcesPath) + QDir::separator() + name);
 
         QString outFilePath = QFileInfo(out.fileName()).path();
         QDir outDir(outFilePath);
