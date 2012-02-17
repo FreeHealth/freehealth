@@ -512,16 +512,15 @@ QFileInfoList getDirs(QDir fromDir, const QStringList &filters, DirSearchType re
    \param createIfNotExist : try to create the dir if true
    \param logDirName : logical name to use for warning (eg : "Application path") for the debug login
 **/
-bool checkDir(const QString & absPath, bool createIfNotExist, const QString & logDirName)
+bool checkDir(const QString &absPath, bool createIfNotExist, const QString &logDirName)
 {
     if (!QFile::exists(absPath)) {
         if (createIfNotExist) {
             LOG_FOR("Utils", QCoreApplication::translate("Utils", "%1 : %2 does not exist. Trying to create it.")
                                .arg(logDirName, absPath));
             if (!QDir().mkpath(absPath)) {
-                Utils::Log::addError("Utils", QCoreApplication::translate("Utils", "Unable to create the %1 : %2.")
-                                 .arg(logDirName, absPath) ,
-                                 __FILE__, __LINE__);
+                LOG_ERROR_FOR("Utils", QCoreApplication::translate("Utils", "Unable to create the %1 : %2.")
+                              .arg(logDirName, absPath));
                 return false;
             }
         } else {
@@ -1562,23 +1561,24 @@ int replaceTokens(QString &textToAnalyse, const QHash<QString, QString> &tokens_
  * Test the internet connection capability, and return the first available configuration identifier.
  * This code needs Qt 4.7+
  * \sa QNetworkConfigurationManager::configurationFromIdentifier(const QString &identifier) const
+ * \todo this function is inhibited due to a Qt bug on MacOs X 10.6 & others
 */
 QString testInternetConnexion()
 {
-    QNetworkConfigurationManager mgr;
-    LOG_FOR("Utils", QString("Testing internet connexion. ManagerIsOnline=%1").arg(mgr.isOnline()));
-    QList<QNetworkConfiguration> activeConfigs = mgr.allConfigurations(QNetworkConfiguration::Active);
-    foreach(const QNetworkConfiguration &config, activeConfigs) {
-        if (config.isValid() && config.type()==QNetworkConfiguration::InternetAccessPoint) {
-            LOG_FOR("Utils", QString("%1 %2 (valid: %3)").arg(config.name()).arg(config.type()).arg(config.isValid()));
-            if (mgr.isOnline()) {
-                LOG_FOR("Utils", QString("Internet connexion found %1").arg(config.name()));
-                return config.name();
-            }
-        }
-    }
-    LOG_FOR("Utils", QString("No internet connexion"));
-    return QString();
+//    QNetworkConfigurationManager mgr;
+//    LOG_FOR("Utils", QString("Testing internet connexion. ManagerIsOnline=%1").arg(mgr.isOnline()));
+//    QList<QNetworkConfiguration> activeConfigs = mgr.allConfigurations(QNetworkConfiguration::Active);
+//    foreach(const QNetworkConfiguration &config, activeConfigs) {
+//        if (config.isValid() && config.type()==QNetworkConfiguration::InternetAccessPoint) {
+//            LOG_FOR("Utils", QString("%1 %2 (valid: %3)").arg(config.name()).arg(config.type()).arg(config.isValid()));
+//            if (mgr.isOnline()) {
+//                LOG_FOR("Utils", QString("Internet connexion found %1").arg(config.name()));
+//                return config.name();
+//            }
+//        }
+//    }
+//    LOG_FOR("Utils", QString("No internet connexion"));
+    return QString("yes");
 }
 
 /** First crypt string using SHA1 logarythm then transform crypted result to base64 (so it can be added into database without problem - no special characters). */
