@@ -1,0 +1,64 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE FreeMedForms>
+
+<DataPack_Pack>
+
+  <PackDescription>
+    <!-- Non translatable values -->
+    <uuid>freemedforms.certified.drugs.fr.noddi</uuid>
+    <authors>Eric Maeker, MD</authors>
+    <version>0.7.0</version>
+    <fmfv>0.6.2</fmfv>
+    <fdv>0.7.0</fdv>
+    <cdate>2011-11-26</cdate>
+    <lmdate>2012-02-17</lmdate>
+    <icon>__theme__/freediams.png</icon>
+    <weblink></weblink>
+    <bibliography/>
+    <file>drugs/fr_noddi/master.db.zip</file>
+    <unziptopath>drugs</unziptopath>
+    <size>4064</size>
+    <md5>c9f21414fa44b8829050d8b5ece93f18</md5>
+    <sha1></sha1>
+    <datatype>DrugsWithoutInteractions</datatype>
+
+    <!-- Translatable values -->
+    <licence>GPLv3</licence>
+    <label lang="fr">Base de données thérapeutique française (sans interactions)</label>
+    <label lang="xx">French pharmaceutical drug database (without interactions)</label>
+    <description lang="fr">Données thérapeutiques françaises pour FreeMedForms (sans interactions)</description>
+    <description lang="xx">French pharmaceutical data for FreeMedForms (without interactions)</description>
+
+    <htmldescription lang="fr">&lt;p>
+      La base de données thérapeutique française est construite sur la base
+      des données publiées par l'AFSSAPS. Vous y trouverez tous les médicaments
+      commercialisés en France.&lt;br />
+      &lt;br />
+      L'utilisation de cette base de données est soumise à une restriction de licence
+      par biais du copyright de l'AFSSAPS.&lt;br />
+      &lt;br />
+      Cette base de données ne permet pas le calcul des interactions médicamenteuses&lt;br />
+      &lt;/p>
+    </htmldescription>
+
+    <htmldescription lang="xx">&lt;p>
+      The french pharmaceutical drug database is build upon AFSSAPS' data.
+      You will find all available and marketed drugs for France.&lt;br />
+      &lt;br />
+      You can use the database according to the limiting license of the data which
+      are copyrighted by the AFSSAPS.&lt;br />
+      &lt;br />
+      Data for drug interaction engines are not included in this database.&lt;br />
+      &lt;/p>
+    </htmldescription>
+
+    <updateinfo>
+      <updateversion from="0.7.0">
+        <text lang="fr">Première mise à disposition.</text>
+        <text lang="en">First release.</text>
+      </updateversion>
+    </updateinfo>
+
+  </PackDescription>
+
+</DataPack_Pack>

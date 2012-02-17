@@ -7,11 +7,11 @@
     <!-- Non translatable values -->
     <uuid>freemedforms.certified.httpserver</uuid>
     <authors>Eric Maeker, MD</authors>
-    <version>0.6.2</version>
+    <version>0.7.0</version>
     <fmfv>0.6.2</fmfv>
-    <fdv>0.6.4</fdv>
+    <fdv>0.7.0</fdv>
     <cdate>2011-11-26</cdate>
-    <lmdate>2011-11-26</lmdate>
+    <lmdate>2012-02-17</lmdate>
     <icon>__theme__/freemedforms.png</icon>
     <RecomUpFreq nonParsed="EachMonth">2</RecomUpFreq>
     <weblink></weblink>
@@ -24,7 +24,7 @@
     <description lang="fr">Données par défaut pour FreeMedForms</description>
     <description lang="xx">Default data for FreeMedForms</description>
     <updateinfo>
-      <updateversion from="0.6.0">
+      <updateversion from="0.7.0">
         <text lang="fr">Première mise à disposition.</text>
         <text lang="en">First release.</text>
       </updateversion>
@@ -33,9 +33,10 @@
   </ServerDescription>
 
   <ServerContents>
-    <Pack serverFileName="./icd10/icd10.xml"/>
-    <Pack serverFileName="./drugs/all/drugs.xml"/>
-    <Pack serverFileName="./drugs/fr-only/drugs.xml"/>
+    <Pack serverFileName="./icd10/packdescription.xml"/>
+    <Pack serverFileName="./drugs/fr_noddi/packdescription.xml"/>
+    <Pack serverFileName="./drugs/fda_noddi/packdescription.xml"/>
+    <Pack serverFileName="./drugs/ca_noddi/packdescription.xml"/>
   </ServerContents>
 
 </DataPackServer>
