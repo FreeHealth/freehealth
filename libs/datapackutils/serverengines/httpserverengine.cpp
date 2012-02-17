@@ -228,6 +228,12 @@ void HttpServerEngine::downloadProgress(qint64 bytesRead, qint64 totalBytes)
 void HttpServerEngine::authenticationRequired(QNetworkReply *reply, QAuthenticator *authenticator)
 {
     LOG("Server authentification requiered: " +  reply->url().toString());
+    const QString &host = reply->url().host();
+    m_AuthTimes.insert(host, m_AuthTimes.value(host, 0) + 1);
+    if (m_AuthTimes.value(host) > MAX_AUTHENTIFICATION_TRIES) {
+        LOG_ERROR("Server authentification max tries achieved. " +  host);
+        return;
+    }
     Utils::BasicLoginDialog dlg;
     dlg.setModal(true);
     dlg.setTitle(tr("Server authentification requiered"));
@@ -242,6 +248,12 @@ void HttpServerEngine::authenticationRequired(QNetworkReply *reply, QAuthenticat
 void HttpServerEngine::proxyAuthenticationRequired(const QNetworkProxy &proxy, QAuthenticator *authenticator)
 {
     LOG("Proxy authentification requiered: " +  proxy.hostName());
+    const QString &host = proxy.hostName();
+    m_AuthTimes.insert(host, m_AuthTimes.value(host, 0) + 1);
+    if (m_AuthTimes.value(host) > MAX_AUTHENTIFICATION_TRIES) {
+        LOG_ERROR("Server authentification max tries achieved. " +  host);
+        return;
+    }
     if (!proxy.user().isEmpty() && !proxy.password().isEmpty()) {
         authenticator->setUser(proxy.user());
         authenticator->setPassword(proxy.password());
