@@ -228,7 +228,7 @@ void HttpServerEngine::downloadProgress(qint64 bytesRead, qint64 totalBytes)
 void HttpServerEngine::authenticationRequired(QNetworkReply *reply, QAuthenticator *authenticator)
 {
     LOG("Server authentification requiered: " +  reply->url().toString());
-    const QString &host = reply->url().host();
+    const QString &host = reply->url().toString();
     m_AuthTimes.insert(host, m_AuthTimes.value(host, 0) + 1);
     if (m_AuthTimes.value(host) > MAX_AUTHENTIFICATION_TRIES) {
         LOG_ERROR("Server authentification max tries achieved. " +  host);
@@ -365,6 +365,7 @@ void HttpServerEngine::afterServerConfigurationDownload(const ReplyData &data)
     Server *server = data.server;
     ServerEngineStatus *status = getStatus(data);
     Q_ASSERT(status);
+    QStringList packDescriptionToDownload;
 
     switch (server->urlStyle()) {
     case Server::Http:
@@ -381,8 +382,8 @@ void HttpServerEngine::afterServerConfigurationDownload(const ReplyData &data)
     case Server::HttpPseudoSecuredAndZipped:
     {
         // clean server tmp path
-        QString zipName = core().persistentCachePath() + QDir::separator() + server->uuid() + QDir::separator() + "serverconf.zip";
-        QString unzipPath = QFileInfo(zipName).absolutePath();
+        QString unzipPath = core().persistentCachePath() + QDir::separator() + server->uuid();
+        QString zipName = unzipPath + QDir::separator() + "serverconf.zip";
         QString error;
         if (!Utils::removeDirRecursively(unzipPath, &error))
             LOG_ERROR("Error while removing tmp dir: " + error);
@@ -419,7 +420,7 @@ void HttpServerEngine::afterServerConfigurationDownload(const ReplyData &data)
                 info.setFile(QFileInfo(zipName).absolutePath() + QDir::separator() + file);
             }
             if (!info.exists()) {
-                downloadPackDescriptionNeeded = true;
+                packDescriptionToDownload << file;
                 continue;
             }
             // create the pack and record it to server manager
@@ -431,9 +432,10 @@ void HttpServerEngine::afterServerConfigurationDownload(const ReplyData &data)
     }
 
     // Download all linked packagedescription -> see ServerContent --> server.content().packDescriptionFileNames()
-    if (downloadPackDescriptionNeeded) {
+    if (!packDescriptionToDownload.isEmpty()) {
+        LOG(tr("Adding pack description file to the download queue."));
         status->engineMessages << tr("Adding pack description file to the download queue.");
-        foreach(const QString &file, server->content().packDescriptionFileNames()) {
+        foreach(const QString &file, packDescriptionToDownload) {
             QNetworkRequest request = createRequest(server->url(Server::PackDescriptionFile, file));
             QNetworkReply *reply = m_NetworkAccessManager->get(request);
             m_replyToData.insert(reply, ReplyData(reply, server, Server::PackDescriptionFile));
