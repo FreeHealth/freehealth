@@ -380,9 +380,14 @@ void HttpServerEngine::afterServerConfigurationDownload(const ReplyData &data)
     }
     case Server::HttpPseudoSecuredAndZipped:
     {
-        // save buffer to tmp zip file
+        // clean server tmp path
         QString zipName = core().persistentCachePath() + QDir::separator() + server->uuid() + QDir::separator() + "serverconf.zip";
-        QDir().mkpath(QFileInfo(zipName).absolutePath());
+        QString unzipPath = QFileInfo(zipName).absolutePath();
+        QString error;
+        if (!Utils::removeDirRecursively(unzipPath, &error))
+            LOG_ERROR("Error while removing tmp dir: " + error);
+        QDir().mkpath(unzipPath);
+        // save buffer to tmp zip file
         QFile zip(zipName);
         if (!zip.open(QFile::WriteOnly | QFile::Text)) {
             LOG_ERROR(tkTr(Trans::Constants::FILE_1_ISNOT_READABLE).arg(zip.fileName()));
