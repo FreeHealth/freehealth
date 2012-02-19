@@ -14,7 +14,7 @@ VersionInfoProductName=FreeDiams
 OutputDir=FreeDiams
 ;ShowLanguageDialog=no
 ;ShowUndisplayableLanguages=yes
-AppCopyright=Copyright (C) 2008-2011 Eric Maeker, MD, {cm:FreeMedFormsProject}
+AppCopyright=Copyright (C) 2008-2012 Eric Maeker, MD, {cm:FreeMedFormsProject}
 AppPublisher={cm:FreeMedFormsProject}
 AppPublisherURL=http://www.freemedforms.com/
 ChangesAssociations=yes
@@ -107,7 +107,7 @@ Name: "helpFr"; Description: {cm:CompHelpFr}; Types: full custom
 Source: "freediams.exe"; DestDir: "{app}"; Components: program
 Source: "*.dll"; DestDir: "{app}"; Components: program
 Source: "plugins/*"; DestDir: "{app}/plugins"; Components: program; Flags: recursesubdirs
-Source: "Resources/databases/drugs/master.db"; DestDir: "{app}/Resources/databases/drugs"; Components: dbFr
+Source: "Resources/datapacks/appinstalled/drugs/*"; DestDir: "{app}/Resources/datapacks/appinstalled/drugs"; Components: dbFr
 Source: "Resources/pixmap/*"; DestDir: "{app}/Resources/pixmap"; Components: program; Flags: recursesubdirs
 Source: "Resources/textfiles/*"; DestDir: "{app}/Resources/textfiles"; Components: program; Flags: recursesubdirs
 Source: "Resources/translations/*"; DestDir: "{app}/Resources/translations"; Components: program; Flags: recursesubdirs

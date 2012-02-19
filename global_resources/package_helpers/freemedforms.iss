@@ -90,7 +90,7 @@ Name: "helpFr"; Description: {cm:CompHelpFr}; Types: full custom
 Source: "freemedforms.exe"; DestDir: "{app}"; Components: program
 Source: "*.dll"; DestDir: "{app}"; Components: program
 Source: "plugins/*"; DestDir: "{app}/plugins"; Components: program; Flags: recursesubdirs
-Source: "Resources/databases/*"; DestDir: "{app}/Resources/databases/"; Components: program; Flags: recursesubdirs
+Source: "Resources/datapacks/appinstalled/*"; DestDir: "{app}/Resources/datapacks/appinstalled"; Components: dbFr
 Source: "Resources/forms/*"; DestDir: "{app}/Resources/forms/"; Components: program; Flags: recursesubdirs
 Source: "Resources/pixmap/*"; DestDir: "{app}/Resources/pixmap"; Components: program; Flags: recursesubdirs
 Source: "Resources/profiles/*"; DestDir: "{app}/Resources/profiles"; Components: program; Flags: recursesubdirs
