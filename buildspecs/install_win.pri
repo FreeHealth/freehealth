@@ -37,12 +37,15 @@ CONFIG(debug, debug|release) {
     message( Win32 Bundle : Binary Wrapper will be : $${INSTALL_BINARY_WRAPPER_NAME})
  }
 
- # Install descriptive files
+ # Install descriptive files, extralibs
  !isEmpty(INSTALL_BINARY_PATH){
- descrfiles.path = $${INSTALL_BINARY_PATH}
- descrfiles.files =  $${SOURCES_ROOT_PATH}/README.txt
- descrfiles.files += $${SOURCES_ROOT_PATH}/COPYING.txt
- INSTALLS += descrfiles
+   descrfiles.path = $${INSTALL_BINARY_PATH}
+   descrfiles.files =  $${SOURCES_ROOT_PATH}/README.txt
+   descrfiles.files += $${SOURCES_ROOT_PATH}/COPYING.txt
+   INSTALLS += descrfiles
+   extralibsWin.path = $${INSTALL_BINARY_PATH}
+   extralibsWin.files = $$[QT_INSTALL_BINS]/libgcc_s_dw2-1.dll $$[QT_INSTALL_BINS]/mingwm10.dll
+   INSTALLS += extralibsWin
  }
 
 
