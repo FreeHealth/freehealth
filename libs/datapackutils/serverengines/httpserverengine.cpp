@@ -161,7 +161,8 @@ bool HttpServerEngine::startDownloadQueue()
         m_NetworkAccessManager->setProxy(QNetworkProxy::applicationProxy());
         LOG("Using proxy: " + m_NetworkAccessManager->proxy().hostName());
     } else {
-//        m_NetworkAccessManager->setProxy(QNetworkProxy());
+        m_NetworkAccessManager->setProxy(QNetworkProxy::NoProxy);
+        LOG("Clearing proxy");
     }
     for(int i = 0; i < m_queue.count(); ++i) {
         const ServerEngineQuery &query = m_queue.at(i);

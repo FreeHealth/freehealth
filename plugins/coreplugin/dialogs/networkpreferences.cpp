@@ -90,13 +90,18 @@ void ProxyPreferencesWidget::saveToSettings(Core::ISettings *sets)
     else
         s = sets;
 
-    QNetworkProxy proxy;
-    proxy.setType(QNetworkProxy::HttpProxy);
-    proxy.setHostName(ui->proxyHostName->text());
-    proxy.setPort(ui->proxyPort->value());
-    proxy.setUser(ui->proxyUserName->text());
-    proxy.setPassword(ui->proxyUserPassword->text());
-    s->setValue(Core::Constants::S_PROXY, Utils::Serializer::serializeProxy(proxy));
+    if (ui->proxyHostName->text().isEmpty()) {
+        QNetworkProxy::setApplicationProxy(QNetworkProxy::NoProxy);
+    } else {
+        QNetworkProxy proxy;
+        proxy.setType(QNetworkProxy::HttpProxy);
+        proxy.setHostName(ui->proxyHostName->text());
+        proxy.setPort(ui->proxyPort->value());
+        proxy.setUser(ui->proxyUserName->text());
+        proxy.setPassword(ui->proxyUserPassword->text());
+        s->setValue(Core::Constants::S_PROXY, Utils::Serializer::serializeProxy(proxy));
+        QNetworkProxy::setApplicationProxy(proxy);
+    }
 }
 
 void ProxyPreferencesWidget::writeDefaultSettings(Core::ISettings *s)
@@ -178,6 +183,18 @@ void ProxyPreferencesPage::finish() { delete m_Widget; }
 
 void ProxyPreferencesPage::checkSettingsValidity()
 {
+    // Define the ApplicationProxy if needed
+    const QString &proxyString = settings()->value(Core::Constants::S_PROXY).toString();
+    if (!proxyString.isEmpty()) {
+        QNetworkProxy proxy;
+        if (!Utils::Serializer::deserializeProxy(proxyString, proxy)) {
+            LOG_ERROR("Proxy serialized string corrupted");
+            return;
+        }
+        QNetworkProxy::setApplicationProxy(proxy);
+    } else {
+        QNetworkProxy::setApplicationProxy(QNetworkProxy::NoProxy);
+    }
 //    QHash<QString, QVariant> defaultvalues;
 //    defaultvalues.insert(Core::Constants::S_ALWAYS_SAVE_WITHOUT_PROMPTING, true);
 //    defaultvalues.insert(Utils::Constants::S_CHECKUPDATE, Trans::Constants::CheckUpdate_AtStartup);
