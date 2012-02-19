@@ -216,8 +216,11 @@ void DataPackPluginIPlugin::togglePackManager()
     QHBoxLayout *lay = new QHBoxLayout(&dlg);
     dlg.setLayout(lay);
     lay->setMargin(0);
-    lay->addWidget(new DataPack::ServerPackEditor(&dlg));
+    DataPack::ServerPackEditor *editor = new DataPack::ServerPackEditor(&dlg);
+    lay->addWidget(editor);
     Utils::resizeAndCenter(&dlg);
+    dlg.show();
+    editor->refreshServerContent();
     dlg.exec();
 }
 
