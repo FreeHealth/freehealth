@@ -24,6 +24,14 @@
  *   Contributors :                                                        *
  *       NAME <MAIL@ADRESS>                                                *
  ***************************************************************************/
+/**
+  \class DataPack::PackWizard
+  Wizard used by the DataPack::ServerPackEditor for the pack processing:
+  install, remove, update.
+
+  \todo Crash when cancelling dialog if a download was started --> add core.stopJobsAndClearQueues()
+*/
+
 #include "packwizard.h"
 #include <datapackutils/datapackcore.h>
 #include <datapackutils/packmanager.h>
@@ -81,6 +89,12 @@ PackWizard::~PackWizard()
         delete d;
         d = 0;
     }
+}
+
+void PackWizard::done(int result)
+{
+    core().stopJobsAndClearQueues();
+    QWizard::done(result);
 }
 
 void PackWizard::setPackToInstall(const Pack &pack)

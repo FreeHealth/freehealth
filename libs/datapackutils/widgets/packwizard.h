@@ -89,6 +89,9 @@ public:
     const QList<Pack> &removePacks() const;
     const QList<Pack> &updatePacks() const;
 
+private Q_SLOTS:
+    void done(int result);
+
 private:
     Internal::PackWizardPrivate *d;
 };

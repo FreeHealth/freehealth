@@ -220,7 +220,6 @@ int HttpServerEngine::runningJobs() const
 bool HttpServerEngine::stopJobsAndClearQueue()
 {
     m_queue.clear();
-    qWarning() << m_replyToData.count();
     for(int i=0; i < m_replyToData.count(); ++i) {
         ReplyData &data = m_replyToData[m_replyToData.keys().at(i)];
         // Abort network reply
@@ -251,8 +250,10 @@ void HttpServerEngine::downloadProgress(qint64 bytesRead, qint64 totalBytes)
     if (totalBytes>0) {
         int v = bytesRead*100/totalBytes;
         bar->setValue(v);
-    } else
+    } else {
         bar->setValue(0);
+    }
+    qWarning() << reply->url().toString() << reply->header(QNetworkRequest::ContentLengthHeader) << bytesRead << totalBytes;
 }
 
 void HttpServerEngine::authenticationRequired(QNetworkReply *reply, QAuthenticator *authenticator)
