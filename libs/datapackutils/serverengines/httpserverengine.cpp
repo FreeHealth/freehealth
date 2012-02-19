@@ -95,34 +95,34 @@ HttpServerEngine::HttpServerEngine(QObject *parent)  :
 {
     setObjectName("HttpServerEngine");
     m_NetworkAccessManager = new QNetworkAccessManager(this);
-    const QString &id = Utils::testInternetConnexion();
-    if (!id.isEmpty()) {
-        LOG("Internet connection is enabled.");
-        bool proxy = false;
-        if (!core().networkProxy().hostName().isEmpty()) {
-            LOG("Using proxy " + core().networkProxy().hostName());
-            m_NetworkAccessManager->setProxy(core().networkProxy());
-            proxy = true;
-        } else {
-            LOG("No proxy defined in DataPackCore. Trying to find system proxy.");
-            // Auto-check for system proxys
-            QNetworkProxyFactory::setUseSystemConfiguration(true);
-            QNetworkProxyQuery npq(QUrl("http://www.google.com"));
-            QList<QNetworkProxy> listOfProxies = QNetworkProxyFactory::systemProxyForQuery(npq);
-            foreach(const QNetworkProxy &p, listOfProxies) {
-                if (p.type()==QNetworkProxy::HttpProxy && !p.hostName().isEmpty()) {
-                    LOG("Using proxy " + p.hostName());
-                    m_NetworkAccessManager->setProxy(p);
-                    proxy = true;
-                    break;
-                }
-            }
-        }
-        if (!proxy)
-            LOG("No proxy in use.");
-    } else {
-        LOG_ERROR("No internet connection available.");
-    }
+//    const QString &id = Utils::testInternetConnexion();
+//    if (!id.isEmpty()) {
+//        LOG("Internet connection is enabled.");
+//        bool proxy = false;
+//        if (!core().networkProxy().hostName().isEmpty()) {
+//            LOG("Using proxy " + core().networkProxy().hostName());
+//            m_NetworkAccessManager->setProxy(core().networkProxy());
+//            proxy = true;
+//        } else {
+//            LOG("No proxy defined in DataPackCore. Trying to find system proxy.");
+//            // Auto-check for system proxys
+//            QNetworkProxyFactory::setUseSystemConfiguration(true);
+//            QNetworkProxyQuery npq(QUrl("http://www.google.com"));
+//            QList<QNetworkProxy> listOfProxies = QNetworkProxyFactory::systemProxyForQuery(npq);
+//            foreach(const QNetworkProxy &p, listOfProxies) {
+//                if (p.type()==QNetworkProxy::HttpProxy && !p.hostName().isEmpty()) {
+//                    LOG("Using proxy " + p.hostName());
+//                    m_NetworkAccessManager->setProxy(p);
+//                    proxy = true;
+//                    break;
+//                }
+//            }
+//        }
+//        if (!proxy)
+//            LOG("No proxy in use.");
+//    } else {
+//        LOG_ERROR("No internet connection available.");
+//    }
 
     // Connect authentification request
     connect(m_NetworkAccessManager, SIGNAL(authenticationRequired(QNetworkReply*,QAuthenticator*)), this, SLOT(authenticationRequired(QNetworkReply*,QAuthenticator*)));
@@ -157,9 +157,11 @@ bool HttpServerEngine::startDownloadQueue()
         return false;
     }
     // Use a proxy ?
-    if (!core().networkProxy().hostName().isEmpty()) {
-        m_NetworkAccessManager->setProxy(core().networkProxy());
+    if (!QNetworkProxy::applicationProxy().hostName().isEmpty()) {
+        m_NetworkAccessManager->setProxy(QNetworkProxy::applicationProxy());
         LOG("Using proxy: " + m_NetworkAccessManager->proxy().hostName());
+    } else {
+//        m_NetworkAccessManager->setProxy(QNetworkProxy());
     }
     for(int i = 0; i < m_queue.count(); ++i) {
         const ServerEngineQuery &query = m_queue.at(i);
@@ -217,9 +219,11 @@ int HttpServerEngine::runningJobs() const
 bool HttpServerEngine::stopJobsAndClearQueue()
 {
     m_queue.clear();
+    qWarning() << m_replyToData.count();
     for(int i=0; i < m_replyToData.count(); ++i) {
         ReplyData &data = m_replyToData[m_replyToData.keys().at(i)];
         // Abort network reply
+        qWarning() << i; // << data.reply;// << data.reply->url().toString();
         data.reply->abort();
         if (data.bar) {
             data.bar->setValue(100);
@@ -328,8 +332,11 @@ void HttpServerEngine::serverFinished()
     QNetworkReply *reply = qobject_cast<QNetworkReply*>(sender());
 
     qWarning() << "HTTP : serverFinished" << reply->request().url() << reply->error();
-    if (reply->error() != QNetworkReply::NoError)
+    if (reply->error() != QNetworkReply::NoError) {
+        reply->deleteLater(); // we don't need reply anymore
+        m_replyToData.remove(reply);
         return;
+    }
 
     ReplyData &data = m_replyToData[reply];
     Q_ASSERT(data.server);
