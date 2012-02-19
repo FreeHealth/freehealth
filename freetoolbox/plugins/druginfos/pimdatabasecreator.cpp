@@ -34,7 +34,7 @@ static inline Core::ITheme *theme()  { return Core::ICore::instance()->theme(); 
 static inline ExtensionSystem::PluginManager *pluginManager() {return ExtensionSystem::PluginManager::instance();}
 
 static inline QString workingPath()         {return QDir::cleanPath(settings()->value(Core::Constants::S_TMP_PATH).toString() + "/PIMs/") + QDir::separator();}
-static inline QString databaseAbsPath()  {return QDir::cleanPath(settings()->value(Core::Constants::S_DBOUTPUT_PATH).toString() + Core::Constants::MASTER_DATABASE_FILENAME);}
+static inline QString databaseAbsPath()  {return Core::Tools::drugsDatabaseAbsFileName();}
 
 static inline QString treeXmlFile() {return QDir::cleanPath(settings()->value(Core::Constants::S_SVNFILES_PATH).toString() + Core::Constants::PIMS_FILENAME);}
 
@@ -68,7 +68,7 @@ bool PimStep::cleanFiles()
     return true;
 }
 
-bool PimStep::downloadFiles()
+bool PimStep::downloadFiles(QProgressBar *bar)
 {
     Q_EMIT downloadFinished();
     return true;

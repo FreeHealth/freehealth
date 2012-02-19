@@ -3,7 +3,7 @@
 #include <coreplugin/globaltools.h>
 #include <coreplugin/ftb_constants.h>
 
-#include <drugsbaseplugin/drugbasecore.h>
+#include <drugsbaseplugin/drugbaseessentials.h>
 #include <drugsbaseplugin/constants_databaseschema.h>
 
 #include <utils/log.h>
@@ -107,9 +107,9 @@ bool Drug::setData(const int ref, const QVariant &value, const QString &lang)
             Utils::FieldList cond;
             cond << Utils::Field(DrugsDB::Constants::Table_LABELS, DrugsDB::Constants::LABELS_LABEL, QString("='%1'").arg(route));
 
-//            qWarning() << Core::Tools::baseCore()->select(get,joins,cond);
+//            qWarning() << Core::Tools::drugBase()->select(get,joins,cond);
 
-            if (query.exec(Core::Tools::baseCore()->select(get,joins,cond))) {
+            if (query.exec(Core::Tools::drugBase()->select(get,joins,cond))) {
                 if (query.next()) {
                     rids << query.value(0);
                 }
@@ -171,7 +171,7 @@ bool Drug::toDatabase(const QString &dbConnection,
 //            .arg(data(OldUid, lang).toString())
 //            .arg(data(SID, lang).toString())
 //            ;
-    query.prepare(Core::Tools::baseCore()->prepareInsertQuery(DrugsDB::Constants::Table_MASTER));
+    query.prepare(Core::Tools::drugBase()->prepareInsertQuery(DrugsDB::Constants::Table_MASTER));
     query.bindValue(DrugsDB::Constants::MASTER_DID, QVariant());
     query.bindValue(DrugsDB::Constants::MASTER_UID1, data(Uid1, lang).toString());
     query.bindValue(DrugsDB::Constants::MASTER_UID2, data(Uid2, lang).toString());
@@ -211,7 +211,7 @@ bool Drug::toDatabase(const QString &dbConnection,
 //    req.replace(",,", ", NULL ,");
 //    req.replace(", ,", ", NULL ,");
 //    req.replace(",,", ", NULL ,");
-    query.prepare(Core::Tools::baseCore()->prepareInsertQuery(DrugsDB::Constants::Table_DRUGS));
+    query.prepare(Core::Tools::drugBase()->prepareInsertQuery(DrugsDB::Constants::Table_DRUGS));
     query.bindValue(DrugsDB::Constants::DRUGS_ID, QVariant());
     query.bindValue(DrugsDB::Constants::DRUGS_DID, data(DID, lang).toString());
     query.bindValue(DrugsDB::Constants::DRUGS_SID, data(SID, lang).toString().replace("'","''"));
@@ -245,7 +245,7 @@ bool Drug::toDatabase(const QString &dbConnection,
 //                .arg(compo->data(Component::Nature).toString())
 //                .arg(compo->data(Component::NatureLink).toString())
 //                ;
-        query.prepare(Core::Tools::baseCore()->prepareInsertQuery(DrugsDB::Constants::Table_COMPO));
+        query.prepare(Core::Tools::drugBase()->prepareInsertQuery(DrugsDB::Constants::Table_COMPO));
         query.bindValue(DrugsDB::Constants::COMPO_ID, QVariant());
         query.bindValue(DrugsDB::Constants::COMPO_DID, data(DID).toString());
         query.bindValue(DrugsDB::Constants::COMPO_MID, mids.key(compo->data(Component::Name).toString().toUpper()));
@@ -271,7 +271,7 @@ bool Drug::toDatabase(const QString &dbConnection,
 //            req = QString("INSERT INTO DRUG_ROUTES (DID, RID) VALUES (%1, %2)")
 //                    .arg(data(Drug::DID).toInt())
 //                    .arg(rid.toString());
-            query.prepare(Core::Tools::baseCore()->prepareInsertQuery(DrugsDB::Constants::Table_DRUG_ROUTES));
+            query.prepare(Core::Tools::drugBase()->prepareInsertQuery(DrugsDB::Constants::Table_DRUG_ROUTES));
             query.bindValue(DrugsDB::Constants::DRUG_ROUTES_DID, data(Drug::DID).toInt());
             query.bindValue(DrugsDB::Constants::DRUG_ROUTES_RID, rid.toString());
             if (!query.exec()) {
@@ -292,7 +292,7 @@ bool Drug::toDatabase(const QString &dbConnection,
         // Add formsMasterId to DRUGS record
 //        req = QString("INSERT INTO DRUG_FORMS (DID,MASTER_LID) VALUES (%1,%2)")
 //                .arg(data(DID).toString()).arg(formsMasterId);
-        query.prepare(Core::Tools::baseCore()->prepareInsertQuery(DrugsDB::Constants::Table_DRUG_FORMS));
+        query.prepare(Core::Tools::drugBase()->prepareInsertQuery(DrugsDB::Constants::Table_DRUG_FORMS));
         query.bindValue(DrugsDB::Constants::DRUG_FORMS_DID, data(DID).toString());
         query.bindValue(DrugsDB::Constants::DRUG_FORMS_MASTERLID, formsMasterId);
         if (!query.exec()) {
@@ -323,14 +323,14 @@ bool Drug::saveDrugsIntoDatabase(const QString &connection, QVector<Drug *> drug
 
     // Clear database
     QHash<int, QString> w;
-    Core::Tools::executeSqlQuery(Core::Tools::baseCore()->prepareDeleteQuery(DrugsDB::Constants::Table_MASTER, w), connection);
-    Core::Tools::executeSqlQuery(Core::Tools::baseCore()->prepareDeleteQuery(DrugsDB::Constants::Table_DRUGS, w), connection);
-    Core::Tools::executeSqlQuery(Core::Tools::baseCore()->prepareDeleteQuery(DrugsDB::Constants::Table_COMPO, w), connection);
-    Core::Tools::executeSqlQuery(Core::Tools::baseCore()->prepareDeleteQuery(DrugsDB::Constants::Table_DRUG_ROUTES, w), connection);
-    Core::Tools::executeSqlQuery(Core::Tools::baseCore()->prepareDeleteQuery(DrugsDB::Constants::Table_DRUG_FORMS, w), connection);
-    Core::Tools::executeSqlQuery(Core::Tools::baseCore()->prepareDeleteQuery(DrugsDB::Constants::Table_MOLS, w), connection);
-    Core::Tools::executeSqlQuery(Core::Tools::baseCore()->prepareDeleteQuery(DrugsDB::Constants::Table_LK_MOL_ATC, w), connection);
-    Core::Tools::executeSqlQuery(Core::Tools::baseCore()->prepareDeleteQuery(DrugsDB::Constants::Table_PACKAGING, w), connection);
+    Core::Tools::executeSqlQuery(Core::Tools::drugBase()->prepareDeleteQuery(DrugsDB::Constants::Table_MASTER, w), connection);
+    Core::Tools::executeSqlQuery(Core::Tools::drugBase()->prepareDeleteQuery(DrugsDB::Constants::Table_DRUGS, w), connection);
+    Core::Tools::executeSqlQuery(Core::Tools::drugBase()->prepareDeleteQuery(DrugsDB::Constants::Table_COMPO, w), connection);
+    Core::Tools::executeSqlQuery(Core::Tools::drugBase()->prepareDeleteQuery(DrugsDB::Constants::Table_DRUG_ROUTES, w), connection);
+    Core::Tools::executeSqlQuery(Core::Tools::drugBase()->prepareDeleteQuery(DrugsDB::Constants::Table_DRUG_FORMS, w), connection);
+    Core::Tools::executeSqlQuery(Core::Tools::drugBase()->prepareDeleteQuery(DrugsDB::Constants::Table_MOLS, w), connection);
+    Core::Tools::executeSqlQuery(Core::Tools::drugBase()->prepareDeleteQuery(DrugsDB::Constants::Table_LK_MOL_ATC, w), connection);
+    Core::Tools::executeSqlQuery(Core::Tools::drugBase()->prepareDeleteQuery(DrugsDB::Constants::Table_PACKAGING, w), connection);
 //    Core::Tools::executeSqlQuery(QString("DELETE FROM MASTER WHERE SID=%1;").arg(sid), connection);
 //    Core::Tools::executeSqlQuery(QString("DELETE FROM DRUGS WHERE SID=%1;").arg(sid), connection);
 //    //    Core::Tools::executeSqlQuery(QString("DELETE FROM COMPOSITION WHERE SID=%1;").arg(sid), connection);

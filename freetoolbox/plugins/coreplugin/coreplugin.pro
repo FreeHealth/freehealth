@@ -24,7 +24,7 @@ HEADERS += coreimpl.h \
     ifullreleasestep.h \
     fullreleasepage.h \
     routesmodel.h \
-    $${SOURCES_PLUGINS_PATH}/drugsbaseplugin/drugbasecore.h \
+    $${SOURCES_PLUGINS_PATH}/drugsbaseplugin/drugbaseessentials.h \
     drugdatabasedescription.h
 
 SOURCES += coreimpl.cpp \
@@ -36,7 +36,7 @@ SOURCES += coreimpl.cpp \
     ifullreleasestep.cpp \
     fullreleasepage.cpp \
     routesmodel.cpp \
-    $${SOURCES_PLUGINS_PATH}/drugsbaseplugin/drugbasecore.cpp \
+    $${SOURCES_PLUGINS_PATH}/drugsbaseplugin/drugbaseessentials.cpp \
     drugdatabasedescription.cpp
 
 FORMS += mainwindow.ui \

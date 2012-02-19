@@ -1,7 +1,7 @@
 /***************************************************************************
  *  The FreeMedForms project is a set of free, open source medical         *
  *  applications.                                                          *
- *  (C) 2008-2011 by Eric MAEKER, MD (France) <eric.maeker@gmail.com>      *
+ *  (C) 2008-2012 by Eric MAEKER, MD (France) <eric.maeker@gmail.com>      *
  *  All rights reserved.                                                   *
  *                                                                         *
  *  This program is free software: you can redistribute it and/or modify   *
@@ -126,9 +126,10 @@ bool FrDrugDatatabaseStep::cleanFiles()
     return true;
 }
 
-bool FrDrugDatatabaseStep::downloadFiles()
+bool FrDrugDatatabaseStep::downloadFiles(QProgressBar *bar)
 {
     Utils::HttpDownloader *dld = new Utils::HttpDownloader;
+    dld->setProgressBar(bar);
 //    dld->setMainWindow(mainwindow());
     dld->setOutputPath(workingPath());
     dld->setUrl(QUrl(FRENCH_URL));
@@ -200,7 +201,7 @@ bool FrDrugDatatabaseStep::createDatabase()
         LOG_ERROR("Unable to create the French drugs sources");
         return false;
     }
-
+    Core::Tools::saveDrugDatabaseDescription(databaseDescriptionFile(), 0);
     LOG(QString("Database schema created"));
     return true;
 }
@@ -332,6 +333,16 @@ bool FrDrugDatatabaseStep::populateDatabase()
 
 bool FrDrugDatatabaseStep::linkMolecules()
 {
+    // 17 Feb 2012
+    //    NUMBER OF MOLECULES 5340
+    //    CORRECTED BY NAME 0
+    //    CORRECTED BY ATC 0
+    //    FOUNDED 3228 "
+    //    LINKERMODEL (WithATC:548;WithoutATC:829) 1377"
+    //    LINKERNATURE 405
+    //    LEFT 1282
+    //    CONFIDENCE INDICE 75
+
     // 13 Dec 2011: using all length of ATC codes
     //    NUMBER OF MOLECULES 5230
     //    CORRECTED BY NAME 0
@@ -500,6 +511,7 @@ FrenchDrugsDatabaseWidget::FrenchDrugsDatabaseWidget(QWidget *parent) :
 {
     setObjectName("FrenchDrugsDatabaseWidget");
     ui->setupUi(this);
+    ui->progressBar->hide();
     m_Step = new FrDrugDatatabaseStep(this);
     m_Step->createDir();
     pluginManager()->addObject(m_Step);
@@ -550,13 +562,15 @@ void FrenchDrugsDatabaseWidget::on_startJobs_clicked()
 bool FrenchDrugsDatabaseWidget::on_download_clicked()
 {
     ui->download->setEnabled(false);
-    m_Step->downloadFiles();
+    ui->progressBar->show();
+    m_Step->downloadFiles(ui->progressBar);
     connect(m_Step, SIGNAL(downloadFinished()), this, SLOT(downloadFinished()));
     return true;
 }
 
 void FrenchDrugsDatabaseWidget::downloadFinished()
 {
+    ui->progressBar->hide();
     ui->download->setEnabled(true);
 }
 

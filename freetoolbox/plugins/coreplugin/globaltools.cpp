@@ -1,7 +1,7 @@
 /***************************************************************************
  *  The FreeMedForms project is a set of free, open source medical         *
  *  applications.                                                          *
- *  (C) 2008-2011 by Eric MAEKER, MD (France) <eric.maeker@gmail.com>      *
+ *  (C) 2008-2012 by Eric MAEKER, MD (France) <eric.maeker@gmail.com>      *
  *  All rights reserved.                                                   *
  *                                                                         *
  *  This program is free software: you can redistribute it and/or modify   *
@@ -31,7 +31,7 @@
 #include <coreplugin/ftb_constants.h>
 #include <coreplugin/drugdatabasedescription.h>
 
-#include <drugsbaseplugin/drugbasecore.h>
+#include <drugsbaseplugin/drugbaseessentials.h>
 #include <drugsbaseplugin/constants_databaseschema.h>
 
 #include <utils/global.h>
@@ -258,16 +258,24 @@ bool executeSqlQuery(const QString &sql, const QString &dbName, const QString &f
     return true;
 }
 
-DrugsDB::Internal::DrugBaseCore *baseCore()
+DrugsDB::Internal::DrugBaseEssentials *drugBase()
 {
-    static DrugsDB::Internal::DrugBaseCore *core = 0;
+    static DrugsDB::Internal::DrugBaseEssentials *core = 0;
     if (!core)
-        core = new DrugsDB::Internal::DrugBaseCore;
+        core = new DrugsDB::Internal::DrugBaseEssentials;
     return core;
 }
 
-QString drugsDatabaseAbsFileName()
+/** Return the drugs database full path, for a specific country or for all countries if no \e country is specified. */
+QString drugsDatabaseAbsFileName(const QString &country)
 {
+//    QString path = QString("%1/%2/%3")
+//            .arg(settings()->value(Core::Constants::S_DBOUTPUT_PATH).toString())
+//            .arg(Core::Constants::MASTER_DATABASE_NAME)
+//            .arg(country)
+//            .arg(Core::Constants::MASTER_DATABASE_FILENAME);
+//    return QDir::cleanPath(path);
+//    }
     return QDir::cleanPath(settings()->value(Core::Constants::S_DBOUTPUT_PATH).toString() + Core::Constants::MASTER_DATABASE_FILENAME);
 }
 
@@ -278,15 +286,11 @@ QString databaseOutputPath()
 
 bool connectDatabase(const QString &connection, const QString &fileName)
 {
-    // create empty sqlite database
-    // test driver
     if (!QSqlDatabase::isDriverAvailable("QSQLITE")) {
         LOG_ERROR_FOR("Tools", QString("ERROR : SQLite driver is not available"));
         return false;
     }
-
     QSqlDatabase DB;
-
     // test drugs connection
     if (QSqlDatabase::contains(connection)) {
         DB = QSqlDatabase::database(connection);
@@ -305,7 +309,7 @@ bool connectDatabase(const QString &connection, const QString &fileName)
                     .arg(DB.connectionName(), DB.databaseName()));
         }
         if (connection==Constants::MASTER_DATABASE_NAME)
-            baseCore()->initialize(databaseOutputPath());
+            drugBase()->initialize(databaseOutputPath());
     }
     return true;
 }
@@ -313,15 +317,34 @@ bool connectDatabase(const QString &connection, const QString &fileName)
 bool createMasterDrugInteractionDatabase()
 {
     QSqlDatabase db = QSqlDatabase::database(Core::Constants::MASTER_DATABASE_NAME);
-    if (!db.isOpen()) {
+    if (!db.isOpen() && db.isValid()) {
         if (!connectDatabase(Core::Constants::MASTER_DATABASE_NAME, drugsDatabaseAbsFileName())) {
             LOG_ERROR_FOR("Tools", "Unable to create master database");
             return false;
         }
     }
-    if (db.tables().count() < DrugsDB::Constants::Table_MaxParam) {
+
+    if (!db.isValid() || db.tables().count() < DrugsDB::Constants::Table_MaxParam) {
 //        executeSqlFile(Core::Constants::MASTER_DATABASE_NAME, masterDatabaseSqlSchema());
-        baseCore()->initialize(databaseOutputPath(), true);
+        drugBase()->initialize(databaseOutputPath(), true);
+        addRoutesToDatabase(Core::Constants::MASTER_DATABASE_NAME, routesCsvAbsFile());
+    }
+    return true;
+}
+
+bool createDrugDatabase(const QString &absPath)
+{
+    QSqlDatabase db = QSqlDatabase::database(Core::Constants::MASTER_DATABASE_NAME);
+    if (!db.isOpen() && db.isValid()) {
+        if (!connectDatabase(Core::Constants::MASTER_DATABASE_NAME, absPath)) {
+            LOG_ERROR_FOR("Tools", "Unable to create master database");
+            return false;
+        }
+    }
+
+    if (!db.isValid() || db.tables().count() < DrugsDB::Constants::Table_MaxParam) {
+//        executeSqlFile(Core::Constants::MASTER_DATABASE_NAME, masterDatabaseSqlSchema());
+        drugBase()->initialize(absPath, true);
         addRoutesToDatabase(Core::Constants::MASTER_DATABASE_NAME, routesCsvAbsFile());
     }
     return true;
@@ -392,7 +415,7 @@ int getSourceId(const QString &connection, const QString &dbUid)
 //    req = QString("SELECT SID FROM SOURCES WHERE (DATABASE_UID='%1')").arg(dbUid);
     QHash<int, QString> w;
     w.insert(DrugsDB::Constants::SOURCES_DBUID, QString("='%1'").arg(dbUid));
-    req = baseCore()->select(DrugsDB::Constants::Table_SOURCES, DrugsDB::Constants::SOURCES_SID, w);
+    req = drugBase()->select(DrugsDB::Constants::Table_SOURCES, DrugsDB::Constants::SOURCES_SID, w);
     if (query.exec(req)) {
         if (query.next()) {
             return query.value(0).toInt();;
@@ -436,8 +459,8 @@ int createNewDrugsSource(const QString &connection, const QString &uid, QMultiHa
 //          .arg(masterLid)
 //          .arg(uid)
 //          ;
-    query.prepare(baseCore()->prepareInsertQuery(DrugsDB::Constants::Table_SOURCES));
-    for(int i =0; i < DrugsDB::Constants::SOURCES_MaxParam; ++i) {
+    query.prepare(drugBase()->prepareInsertQuery(DrugsDB::Constants::Table_SOURCES));
+    for(int i = 0; i < (DrugsDB::Constants::SOURCES_MaxParam); ++i) {
         query.bindValue(i, QVariant());
     }
     query.bindValue(DrugsDB::Constants::SOURCES_MASTERLID, masterLid);
@@ -467,7 +490,7 @@ int addLabels(const QString &connection, const int masterLid, QMultiHash<QString
     if (mid == -1) {
         // get new master_lid
 //        req = "SELECT max(MASTER_LID) FROM `LABELS_LINK`;";
-        mid = baseCore()->max(DrugsDB::Constants::Table_LABELSLINK, DrugsDB::Constants::LABELSLINK_MASTERLID).toInt();
+        mid = drugBase()->max(DrugsDB::Constants::Table_LABELSLINK, DrugsDB::Constants::LABELSLINK_MASTERLID).toInt();
         ++mid;
 //        if (query.exec(req)) {
 //            if (query.next())
@@ -514,7 +537,7 @@ int addLabels(const QString &connection, const int masterLid, QMultiHash<QString
 
 //            req = QString("INSERT INTO `LABELS` (LID,LANG,LABEL) VALUES (NULL,'%1','%2')")
 //                    .arg(lang).arg(t.replace("'","''"));
-            query.prepare(Core::Tools::baseCore()->prepareInsertQuery(DrugsDB::Constants::Table_LABELS));
+            query.prepare(Core::Tools::drugBase()->prepareInsertQuery(DrugsDB::Constants::Table_LABELS));
             query.bindValue(DrugsDB::Constants::LABELS_LID, QVariant());
             query.bindValue(DrugsDB::Constants::LABELS_LANG, lang);
             query.bindValue(DrugsDB::Constants::LABELS_LABEL, t.replace("'","''"));
@@ -530,7 +553,7 @@ int addLabels(const QString &connection, const int masterLid, QMultiHash<QString
 //                    .arg(mid)
 //                    .arg(id)
 //                    ;
-            query.prepare(Core::Tools::baseCore()->prepareInsertQuery(DrugsDB::Constants::Table_LABELSLINK));
+            query.prepare(Core::Tools::drugBase()->prepareInsertQuery(DrugsDB::Constants::Table_LABELSLINK));
             query.bindValue(DrugsDB::Constants::LABELSLINK_LID, id);
             query.bindValue(DrugsDB::Constants::LABELSLINK_MASTERLID, mid);
             if (!query.exec()) {
@@ -550,7 +573,7 @@ bool recreateRoutes()
         return false;
     }
     QSqlDatabase db = QSqlDatabase::database(Core::Constants::MASTER_DATABASE_NAME);
-    Tools::executeSqlQuery(baseCore()->prepareDeleteQuery(DrugsDB::Constants::Table_ROUTES), Core::Constants::MASTER_DATABASE_NAME);
+    Tools::executeSqlQuery(drugBase()->prepareDeleteQuery(DrugsDB::Constants::Table_ROUTES), Core::Constants::MASTER_DATABASE_NAME);
     return addRoutesToDatabase(Core::Constants::MASTER_DATABASE_NAME, routesCsvAbsFile());
 }
 
@@ -608,7 +631,7 @@ bool addRoutesToDatabase(const QString &connection, const QString &absFileName)
 //                .arg(masterLid)
 //                .arg(systemic)
 //                ;
-        query.prepare(Core::Tools::baseCore()->prepareInsertQuery(DrugsDB::Constants::Table_ROUTES));
+        query.prepare(Core::Tools::drugBase()->prepareInsertQuery(DrugsDB::Constants::Table_ROUTES));
         query.bindValue(DrugsDB::Constants::ROUTES_RID, rid);
         query.bindValue(DrugsDB::Constants::ROUTES_MASTERLID, masterLid);
         query.bindValue(DrugsDB::Constants::ROUTES_SYSTEMIC, systemic);
@@ -639,7 +662,7 @@ QHash<int, QString> generateMids(const QStringList &molnames, const int sid, con
         QHash<int, QString> w;
         w.insert(DrugsDB::Constants::MOLS_NAME, QString("=\"%1\"").arg(name));
         w.insert(DrugsDB::Constants::MOLS_SID, QString("='%1'").arg(sid));
-        req = Core::Tools::baseCore()->select(DrugsDB::Constants::Table_MOLS, DrugsDB::Constants::MOLS_MID, w);
+        req = Core::Tools::drugBase()->select(DrugsDB::Constants::Table_MOLS, DrugsDB::Constants::MOLS_MID, w);
         if (query.exec(req)) {
             if (query.next()) {
                 // is already in the table MOLS
@@ -656,7 +679,7 @@ QHash<int, QString> generateMids(const QStringList &molnames, const int sid, con
 //        req = QString("INSERT INTO MOLS (MID, SID, NAME) VALUES (NULL,%1,\"%2\");")
 //              .arg(sid)
 //              .arg(name);
-        query.prepare(Core::Tools::baseCore()->prepareInsertQuery(DrugsDB::Constants::Table_MOLS));
+        query.prepare(Core::Tools::drugBase()->prepareInsertQuery(DrugsDB::Constants::Table_MOLS));
         query.bindValue(DrugsDB::Constants::MOLS_MID, QVariant());
         query.bindValue(DrugsDB::Constants::MOLS_NAME, name);
         query.bindValue(DrugsDB::Constants::MOLS_SID, sid);
@@ -683,7 +706,7 @@ bool createAtc(const QString &connection, const QString &code, const QMultiHash<
     QSqlQuery query(db);
     int id = 0;
     QString req;
-    query.prepare(Core::Tools::baseCore()->prepareInsertQuery(DrugsDB::Constants::Table_ATC));
+    query.prepare(Core::Tools::drugBase()->prepareInsertQuery(DrugsDB::Constants::Table_ATC));
     query.bindValue(DrugsDB::Constants::ATC_ID, QVariant());
     query.bindValue(DrugsDB::Constants::ATC_CODE, code);
     query.bindValue(DrugsDB::Constants::ATC_WARNDUPLICATES, warnDuplicates);
@@ -718,7 +741,7 @@ bool createAtc(const QString &connection, const QString &code, const QMultiHash<
 
     // Create ATC_LABELS link
 //    req = QString("INSERT INTO ATC_LABELS (ATC_ID, MASTER_LID) VALUES (%1, %2) ").arg(id).arg(masterLid);
-    query.prepare(Core::Tools::baseCore()->prepareInsertQuery(DrugsDB::Constants::Table_ATC_LABELS));
+    query.prepare(Core::Tools::drugBase()->prepareInsertQuery(DrugsDB::Constants::Table_ATC_LABELS));
     query.bindValue(DrugsDB::Constants::ATC_LABELS_ATCID, id);
     query.bindValue(DrugsDB::Constants::ATC_LABELS_MASTERLID, masterLid);
     if (!query.exec()) {
@@ -751,7 +774,7 @@ bool addInteraction(const QString &connection, const QStringList &atc1, const QS
             int atcId2 = -1;
             QHash<int, QString> w;
             w.insert(DrugsDB::Constants::ATC_CODE, QString("='%1'").arg(a1));
-            req = Core::Tools::baseCore()->select(DrugsDB::Constants::Table_ATC, DrugsDB::Constants::ATC_ID, w);
+            req = Core::Tools::drugBase()->select(DrugsDB::Constants::Table_ATC, DrugsDB::Constants::ATC_ID, w);
             if (query.exec(req)) {
                 atcId1 = query.lastInsertId().toInt();
             } else {
@@ -760,7 +783,7 @@ bool addInteraction(const QString &connection, const QStringList &atc1, const QS
             }
             w.clear();
             w.insert(DrugsDB::Constants::ATC_CODE, QString("='%1'").arg(a2));
-            req = Core::Tools::baseCore()->select(DrugsDB::Constants::Table_ATC, DrugsDB::Constants::ATC_ID, w);
+            req = Core::Tools::drugBase()->select(DrugsDB::Constants::Table_ATC, DrugsDB::Constants::ATC_ID, w);
             if (query.exec(req)) {
                 atcId2 = query.lastInsertId().toInt();
             } else {
@@ -768,7 +791,7 @@ bool addInteraction(const QString &connection, const QStringList &atc1, const QS
                 return false;
             }
 
-            query.prepare(Core::Tools::baseCore()->prepareInsertQuery(DrugsDB::Constants::Table_INTERACTIONS));
+            query.prepare(Core::Tools::drugBase()->prepareInsertQuery(DrugsDB::Constants::Table_INTERACTIONS));
             query.bindValue(DrugsDB::Constants::INTERACTIONS_IAID, QVariant());
             query.bindValue(DrugsDB::Constants::INTERACTIONS_ATC_ID1, atcId1);
             query.bindValue(DrugsDB::Constants::INTERACTIONS_ATC_ID2, atcId2);
@@ -799,7 +822,7 @@ bool addInteraction(const QString &connection, const QStringList &atc1, const QS
 //            .arg(type)
 //            .arg(riskMasterLid)
 //            .arg(manMasterLid);
-    query.prepare(Core::Tools::baseCore()->prepareInsertQuery(DrugsDB::Constants::Table_IAKNOWLEDGE));
+    query.prepare(Core::Tools::drugBase()->prepareInsertQuery(DrugsDB::Constants::Table_IAKNOWLEDGE));
     query.bindValue(DrugsDB::Constants::IAKNOWLEDGE_IAKID, QVariant());
     query.bindValue(DrugsDB::Constants::IAKNOWLEDGE_TYPE, type);
     query.bindValue(DrugsDB::Constants::IAKNOWLEDGE_RISK_MASTERLID, riskMasterLid);
@@ -822,7 +845,7 @@ bool addInteraction(const QString &connection, const QStringList &atc1, const QS
 //              .arg(ia)
 //              .arg(iak_id)
 //              ;
-        query.prepare(Core::Tools::baseCore()->prepareInsertQuery(DrugsDB::Constants::Table_IA_IAK));
+        query.prepare(Core::Tools::drugBase()->prepareInsertQuery(DrugsDB::Constants::Table_IA_IAK));
         query.bindValue(DrugsDB::Constants::IA_IAK_IAID, ia);
         query.bindValue(DrugsDB::Constants::IA_IAK_IAKID, iak_id);
         if (!query.exec()) {
@@ -852,7 +875,7 @@ int addBibliography(const QString &connection, const QString &type, const QStrin
 //    req = QString("SELECT BIB_ID FROM BIBLIOGRAPHY WHERE LINK=\"%1\"").arg(link);
     QHash<int, QString> w;
     w.insert(DrugsDB::Constants::BIB_LINK, QString("=%1'").arg(link));
-    req = baseCore()->select(DrugsDB::Constants::Table_BIB, DrugsDB::Constants::BIB_BIBID, w);
+    req = drugBase()->select(DrugsDB::Constants::Table_BIB, DrugsDB::Constants::BIB_BIBID, w);
     if (query.exec(req)) {
         if (query.next()) {
             bib_id = query.value(0).toInt();
@@ -873,7 +896,7 @@ int addBibliography(const QString &connection, const QString &type, const QStrin
 //                    .arg(e.replace("'","''"));
             query.finish();
             /** \todo add bibliography XML here ? */
-            query.prepare(Core::Tools::baseCore()->prepareInsertQuery(DrugsDB::Constants::Table_BIB));
+            query.prepare(Core::Tools::drugBase()->prepareInsertQuery(DrugsDB::Constants::Table_BIB));
             query.bindValue(DrugsDB::Constants::BIB_BIBID, QVariant());
             query.bindValue(DrugsDB::Constants::BIB_TYPE, type);
             query.bindValue(DrugsDB::Constants::BIB_LINK, link);
@@ -912,7 +935,7 @@ bool addComponentAtcLinks(const QString &connection, const QMultiHash<int, int> 
     // Clear existing links
     QHash<int, QString> w;
     w.insert(DrugsDB::Constants::LK_ATC_SID, QString("='%1'").arg(sid));
-    Core::Tools::executeSqlQuery(baseCore()->prepareDeleteQuery(DrugsDB::Constants::Table_LK_MOL_ATC, w), Core::Constants::MASTER_DATABASE_NAME, __FILE__, __LINE__);
+    Core::Tools::executeSqlQuery(drugBase()->prepareDeleteQuery(DrugsDB::Constants::Table_LK_MOL_ATC, w), Core::Constants::MASTER_DATABASE_NAME, __FILE__, __LINE__);
 
     // Save to links to drugs database
     db.transaction();
@@ -925,7 +948,7 @@ bool addComponentAtcLinks(const QString &connection, const QMultiHash<int, int> 
             atcCodesSaved.append(atc);
 //            QString req = QString("INSERT INTO LK_MOL_ATC (MID,ATC_ID,SID) VALUES (%1, %2, %3)")
 //                          .arg(mol).arg(atc).arg(sid);
-            query.prepare(Core::Tools::baseCore()->prepareInsertQuery(DrugsDB::Constants::Table_LK_MOL_ATC));
+            query.prepare(Core::Tools::drugBase()->prepareInsertQuery(DrugsDB::Constants::Table_LK_MOL_ATC));
             query.bindValue(DrugsDB::Constants::LK_MID, mol);
             query.bindValue(DrugsDB::Constants::LK_ATC_ID, atc);
             query.bindValue(DrugsDB::Constants::LK_ATC_SID, sid);
@@ -967,9 +990,9 @@ QVector<int> getAtcIdsFromLabel(const QString &connection, const QString &label)
     cond << Utils::Field(DrugsDB::Constants::Table_LABELS, DrugsDB::Constants::LABELS_LABEL, QString("='%1'").arg(label));
     QSqlQuery query(db);
 
-    qWarning() << "LKKLKLKLK\n" << baseCore()->select(get,joins,cond);
+//    qWarning() << "LKKLKLKLK\n" << drugBase()->select(get,joins,cond);
 
-    if (query.exec(baseCore()->select(get,joins,cond))) {
+    if (query.exec(drugBase()->select(get,joins,cond))) {
         while (query.next()) {
             ret << query.value(0).toInt();
         }
@@ -994,7 +1017,7 @@ QVector<int> getAtcIdsFromCode(const QString &connection, const QString &code)
 //                  "WHERE ATC.CODE like \"%1\";").arg(code);
     QHash<int, QString> w;
     w.insert(DrugsDB::Constants::ATC_CODE, QString("LIKE '%1'").arg(code));
-    req = Core::Tools::baseCore()->select(DrugsDB::Constants::Table_ATC, DrugsDB::Constants::ATC_ID, w);
+    req = Core::Tools::drugBase()->select(DrugsDB::Constants::Table_ATC, DrugsDB::Constants::ATC_ID, w);
     if (query.exec(req)) {
         while (query.next()) {
             ret << query.value(0).toInt();
@@ -1008,8 +1031,11 @@ QVector<int> getAtcIdsFromCode(const QString &connection, const QString &code)
 bool saveDrugDatabaseDescription(const QString &fileName, const int completion)
 {
     QDomDocument doc;
-    if (!doc.setContent(Utils::readTextFile(fileName), Utils::DontWarnUser)) {
-        LOG_ERROR_FOR("Tools", "Wring XML: " + fileName);
+    int line = 0;
+    int col = 0;
+    QString error;
+    if (!doc.setContent(Utils::readTextFile(fileName, Utils::DontWarnUser), &error, &line, &col)) {
+        LOG_ERROR_FOR("Tools", QString("Wrong XML: (%1;%2): %3 in file %4").arg(line).arg(col).arg(error).arg(fileName));
         return false;
     }
     Core::DrugDatabaseDescription descr;
@@ -1025,11 +1051,12 @@ bool saveDrugDatabaseDescription(const QString &fileName, const int completion)
     QSqlQuery query(db);
     QHash<int, QString> where;
     where.insert(DrugsDB::Constants::SOURCES_DBUID, QString("='%1'").arg(descr.data(Core::DrugDatabaseDescription::Uuid).toString()));
-    query.prepare(Core::Tools::baseCore()->prepareUpdateQuery(DrugsDB::Constants::Table_SOURCES,
+    query.prepare(Core::Tools::drugBase()->prepareUpdateQuery(DrugsDB::Constants::Table_SOURCES,
                                                               QList<int>()
                                                               << DrugsDB::Constants::SOURCES_LANG
                                                               << DrugsDB::Constants::SOURCES_WEB
                                                               << DrugsDB::Constants::SOURCES_COPYRIGHT
+                                                              << DrugsDB::Constants::SOURCES_LICENCE
                                                               << DrugsDB::Constants::SOURCES_DATE
                                                               << DrugsDB::Constants::SOURCES_DRUGS_VERSION
                                                               << DrugsDB::Constants::SOURCES_AUTHORS
@@ -1047,25 +1074,27 @@ bool saveDrugDatabaseDescription(const QString &fileName, const int completion)
                                                               << DrugsDB::Constants::SOURCES_FMFCOMPAT
                                                               << DrugsDB::Constants::SOURCES_OPENREACT_COMPAT // 18
                                                               , where));
-    query.bindValue(0, descr.data(Core::DrugDatabaseDescription::Language));
-    query.bindValue(1, descr.data(Core::DrugDatabaseDescription::WebLink));
-    query.bindValue(2, descr.data(Core::DrugDatabaseDescription::Copyright));
-    query.bindValue(3, QDateTime::currentDateTime().toString(Qt::ISODate));
-    query.bindValue(4, descr.data(Core::DrugDatabaseDescription::Version));
-    query.bindValue(5, descr.data(Core::DrugDatabaseDescription::Author));
-    query.bindValue(6, descr.data(Core::DrugDatabaseDescription::FreeMedFormsCompatVersion));
-    query.bindValue(7, descr.data(Core::DrugDatabaseDescription::Vendor));
-    query.bindValue(8, descr.data(Core::DrugDatabaseDescription::WebLink));
-    query.bindValue(9, descr.data(Core::DrugDatabaseDescription::DrugUidName));
-    query.bindValue(10, descr.data(Core::DrugDatabaseDescription::IsAtcValid));
-    query.bindValue(11, descr.data(Core::DrugDatabaseDescription::IsDDIValid));
-    query.bindValue(12, descr.data(Core::DrugDatabaseDescription::ComplementaryWebLink));
-    query.bindValue(13, descr.data(Core::DrugDatabaseDescription::PackUidName));
-    query.bindValue(14, completion);
-    query.bindValue(15, QVariant());
-    query.bindValue(16, descr.data(Core::DrugDatabaseDescription::DrugNameConstructor));
-    query.bindValue(17, descr.data(Core::DrugDatabaseDescription::FreeMedFormsCompatVersion));
-    query.bindValue(18, QVariant());
+    int i=0;
+    query.bindValue(i, descr.data(Core::DrugDatabaseDescription::Language));
+    query.bindValue(++i, descr.data(Core::DrugDatabaseDescription::WebLink));
+    query.bindValue(++i, descr.data(Core::DrugDatabaseDescription::Copyright));
+    query.bindValue(++i, descr.data(Core::DrugDatabaseDescription::GlobalLicense));
+    query.bindValue(++i, QDateTime::currentDateTime().toString(Qt::ISODate));
+    query.bindValue(++i, descr.data(Core::DrugDatabaseDescription::Version));
+    query.bindValue(++i, descr.data(Core::DrugDatabaseDescription::Author));
+    query.bindValue(++i, descr.data(Core::DrugDatabaseDescription::FreeMedFormsCompatVersion));
+    query.bindValue(++i, descr.data(Core::DrugDatabaseDescription::Vendor));
+    query.bindValue(++i, descr.data(Core::DrugDatabaseDescription::WebLink));
+    query.bindValue(++i, descr.data(Core::DrugDatabaseDescription::DrugUidName));
+    query.bindValue(++i, descr.data(Core::DrugDatabaseDescription::IsAtcValid));
+    query.bindValue(++i, descr.data(Core::DrugDatabaseDescription::IsDDIValid));
+    query.bindValue(++i, descr.data(Core::DrugDatabaseDescription::ComplementaryWebLink));
+    query.bindValue(++i, descr.data(Core::DrugDatabaseDescription::PackUidName));
+    query.bindValue(++i, completion);
+    query.bindValue(++i, QVariant());
+    query.bindValue(++i, descr.data(Core::DrugDatabaseDescription::DrugNameConstructor));
+    query.bindValue(++i, descr.data(Core::DrugDatabaseDescription::FreeMedFormsCompatVersion));
+    query.bindValue(++i, QVariant());
     if (!query.exec()) {
         LOG_QUERY_ERROR_FOR("Tools", query);
         return false;

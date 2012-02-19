@@ -1,7 +1,7 @@
 /***************************************************************************
  *  The FreeMedForms project is a set of free, open source medical         *
  *  applications.                                                          *
- *  (C) 2008-2011 by Eric MAEKER, MD (France) <eric.maeker@gmail.com>      *
+ *  (C) 2008-2012 by Eric MAEKER, MD (France) <eric.maeker@gmail.com>      *
  *  All rights reserved.                                                   *
  *                                                                         *
  *  This program is free software: you can redistribute it and/or modify   *
@@ -47,7 +47,7 @@ class Drug;
 
 namespace DrugsDB {
 namespace Internal {
-class DrugBaseCore;
+class DrugBaseEssentials;
 }
 }
 
@@ -66,12 +66,13 @@ CORE_EXPORT bool executeProcess(const QString &proc);
 CORE_EXPORT bool executeSqlFile(const QString &connectionName, const QString &fileName, QProgressDialog *dlg = 0);
 CORE_EXPORT bool executeSqlQuery(const QString &sql, const QString &dbName, const QString &file = QString::null, int line = -1);
 
-CORE_EXPORT DrugsDB::Internal::DrugBaseCore *baseCore();
-CORE_EXPORT QString drugsDatabaseAbsFileName();
+CORE_EXPORT DrugsDB::Internal::DrugBaseEssentials *drugBase();
+CORE_EXPORT QString drugsDatabaseAbsFileName(const QString &country = QString::null);
 CORE_EXPORT QString databaseOutputPath();
 
 CORE_EXPORT bool connectDatabase(const QString &connection, const QString &fileName);
 CORE_EXPORT bool createMasterDrugInteractionDatabase();
+CORE_EXPORT bool createDrugDatabase(const QString &absPath);
 CORE_EXPORT bool signDatabase(const QString &connectionName);
 
 CORE_EXPORT int getSourceId(const QString &connection, const QString &dbUid);

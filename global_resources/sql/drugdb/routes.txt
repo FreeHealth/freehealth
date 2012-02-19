@@ -111,7 +111,6 @@
 -- From FDA:
 -- iontophoresis
 -- biliary
--- intra-anal
 -- intracranial
 -- suspension
 -- intra-anal

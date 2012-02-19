@@ -52,7 +52,9 @@ public:
     explicit PregnancyClassificationWidget(QWidget *parent = 0);
     ~PregnancyClassificationWidget();
 
-//protected Q_SLOTS:
+protected Q_SLOTS:
+    void computeJavascriptFile();
+
 //    bool on_download_clicked();
 //    void indexPageDownloaded(QNetworkReply *reply);
 //    void substancePageDownloaded(QNetworkReply *reply);

@@ -1,7 +1,7 @@
 /***************************************************************************
  *  The FreeMedForms project is a set of free, open source medical         *
  *  applications.                                                          *
- *  (C) 2008-2011 by Eric MAEKER, MD (France) <eric.maeker@gmail.com>      *
+ *  (C) 2008-2012 by Eric MAEKER, MD (France) <eric.maeker@gmail.com>      *
  *  All rights reserved.                                                   *
  *                                                                         *
  *  This program is free software: you can redistribute it and/or modify   *
@@ -48,7 +48,8 @@
 #include "ui_canadiandrugsdatabasewidget.h"
 
 
-const char* const  CANADIAN_URL               = "http://www.hc-sc.gc.ca/dhp-mps/prodpharma/databasdon/txt/allfiles.zip";
+const char* const  CANADIAN_URL               = "http://www.hc-sc.gc.ca/dhp-mps/alt_formats/zip/prodpharma/databasdon/allfiles.zip";
+//const char* const  CANADIAN_URL               = "http://www.hc-sc.gc.ca/dhp-mps/prodpharma/databasdon/txt/allfiles.zip";
 const char* const  CA_DRUGS_DATABASE_NAME     = "CA_HCDPD";
 
 using namespace DrugsDbCreator;
@@ -60,9 +61,8 @@ static inline ExtensionSystem::PluginManager *pluginManager() {return ExtensionS
 static inline QString workingPath()     {return QDir::cleanPath(settings()->value(Core::Constants::S_TMP_PATH).toString() + "/CanadianRawSources")  + QDir::separator();}
 static inline QString databaseAbsPath()  {return Core::Tools::drugsDatabaseAbsFileName();}
 
+static inline QString databaseDescriptionFile() {return QDir::cleanPath(settings()->value(Core::Constants::S_SVNFILES_PATH).toString() + "/global_resources/sql/drugdb/ca/description.xml");}
 static inline QString databaseFinalizationScript() {return QDir::cleanPath(settings()->value(Core::Constants::S_SVNFILES_PATH).toString() + "/global_resources/sql/drugdb/ca/canadian_db_finalize.sql");}
-
-
 
 CanadianDrugsDatabasePage::CanadianDrugsDatabasePage(QObject *parent) :
         Core::IToolPage(parent)
@@ -111,10 +111,11 @@ bool CaDrugDatatabaseStep::cleanFiles()
     return true;
 }
 
-bool CaDrugDatatabaseStep::downloadFiles()
+bool CaDrugDatatabaseStep::downloadFiles(QProgressBar *bar)
 {
     Utils::HttpDownloader *dld = new Utils::HttpDownloader(this);
 //    dld->setMainWindow(mainwindow());
+    dld->setProgressBar(bar);
     dld->setOutputPath(workingPath());
     dld->setUrl(QUrl(CANADIAN_URL));
     dld->startDownload();
@@ -191,7 +192,7 @@ bool CaDrugDatatabaseStep::createDatabase()
         LOG_ERROR("Unable to create the Canadian drugs sources");
         return false;
     }
-
+    Core::Tools::saveDrugDatabaseDescription(databaseDescriptionFile(), 0);
     LOG(QString("Database schema created"));
     return true;
 }
@@ -419,12 +420,14 @@ bool CaDrugDatatabaseStep::populateDatabase()
     Drug::saveDrugsIntoDatabase(Core::Constants::MASTER_DATABASE_NAME, drugsVector, CA_DRUGS_DATABASE_NAME);
     Q_EMIT progress(2);
 
-    // Run SQL commands one by one
-    Q_EMIT progressLabelChanged(tr("Running database finalization script"));
-    if (!Core::Tools::executeSqlFile(Core::Constants::MASTER_DATABASE_NAME, databaseFinalizationScript())) {
-        LOG_ERROR("Can create Canadian DB.");
-        return false;
-    }
+    Core::Tools::saveDrugDatabaseDescription(databaseDescriptionFile(), 50);
+
+//    // Run SQL commands one by one
+//    Q_EMIT progressLabelChanged(tr("Running database finalization script"));
+//    if (!Core::Tools::executeSqlFile(Core::Constants::MASTER_DATABASE_NAME, databaseFinalizationScript())) {
+//        LOG_ERROR("Can create Canadian DB.");
+//        return false;
+//    }
     Q_EMIT progress(3);
 
     // delete pointers
@@ -541,11 +544,11 @@ bool CaDrugDatatabaseStep::linkMolecules()
     if (!Core::Tools::connectDatabase(Core::Constants::MASTER_DATABASE_NAME, databaseAbsPath()))
         return false;
 
-    QSqlDatabase ca = QSqlDatabase::database(Core::Constants::MASTER_DATABASE_NAME);
-    if (!ca.open()) {
-        LOG_ERROR("Can not connect to CA_DB db : dc_Canadian_DrugsDatabaseCreator::populateDatabase()");
-        return false;
-    }
+//    QSqlDatabase ca = QSqlDatabase::database(Core::Constants::MASTER_DATABASE_NAME);
+//    if (!ca.open()) {
+//        LOG_ERROR("Can not connect to CA_DB db : dc_Canadian_DrugsDatabaseCreator::populateDatabase()");
+//        return false;
+//    }
 
     // Associate molecule from Drugs == 1 molecule and Drug got 7-char length ATC code
     // add them to corrected
@@ -632,6 +635,7 @@ CanadianDrugsDatabaseWidget::CanadianDrugsDatabaseWidget(QWidget *parent) :
 {
     setObjectName("CanadianDrugsDatabaseCreator");
     ui->setupUi(this);
+    ui->progressBar->hide();
     m_Step = new CaDrugDatatabaseStep(this);
     m_Step->createDir();
     pluginManager()->addObject(m_Step);
@@ -654,7 +658,7 @@ void CanadianDrugsDatabaseWidget::on_startJobs_clicked()
     connect(m_Step, SIGNAL(progressRangeChanged(int,int)), &progressDialog, SLOT(setRange(int, int)));
     connect(m_Step, SIGNAL(progress(int)), &progressDialog, SLOT(setValue(int)));
     connect(m_Step, SIGNAL(progressLabelChanged(QString)), &progressDialog, SLOT(setLabelText(QString)));
-
+    m_Step->createDir();
     if (ui->unzip->isChecked()) {
         if (m_Step->unzipFiles())
             ui->unzip->setText(ui->unzip->text() + " CORRECTLY DONE");
@@ -681,13 +685,15 @@ void CanadianDrugsDatabaseWidget::on_startJobs_clicked()
 
 bool CanadianDrugsDatabaseWidget::on_download_clicked()
 {
-    m_Step->downloadFiles();
+    m_Step->downloadFiles(ui->progressBar);
+    ui->progressBar->show();
     connect(m_Step, SIGNAL(downloadFinished()), this, SLOT(downloadFinished()));
     return true;
 }
 
 void CanadianDrugsDatabaseWidget::downloadFinished()
 {
+    ui->progressBar->show();
     ui->download->setEnabled(true);
 }
 

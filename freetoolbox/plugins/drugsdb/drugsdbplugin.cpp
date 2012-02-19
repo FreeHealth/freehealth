@@ -1,7 +1,7 @@
 /***************************************************************************
  *  The FreeMedForms project is a set of free, open source medical         *
  *  applications.                                                          *
- *  (C) 2008-2011 by Eric MAEKER, MD (France) <eric.maeker@gmail.com>      *
+ *  (C) 2008-2012 by Eric MAEKER, MD (France) <eric.maeker@gmail.com>      *
  *  All rights reserved.                                                   *
  *                                                                         *
  *  This program is free software: you can redistribute it and/or modify   *
@@ -44,7 +44,7 @@
 #include <QDebug>
 
 // TEST
-#include <drugsbaseplugin/drugbasecore.h>
+#include <drugsbaseplugin/drugbaseessentials.h>
 // END
 
 using namespace DrugsDbCreator::Internal;
@@ -67,8 +67,8 @@ bool DrugsDbPlugin::initialize(const QStringList &arguments, QString *errorMessa
 
     //    Core::ICore::instance()->translators()->addNewTranslator("freeicd-drugsdbplugin");
 
-//    addAutoReleasedObject(new CanadianDrugsDatabasePage(this));
-//    addAutoReleasedObject(new FdaDrugsDatabasePage(this));
+    addAutoReleasedObject(new CanadianDrugsDatabasePage(this));
+    addAutoReleasedObject(new FdaDrugsDatabasePage(this));
     addAutoReleasedObject(new FrenchDrugsDatabasePage(this));
 //    addAutoReleasedObject(new SouthAfricanDrugsDatabasePage(this));
 //    addAutoReleasedObject(new BeDrugsDatabasePage(this));
@@ -89,7 +89,7 @@ void DrugsDbPlugin::extensionsInitialized()
     if (Utils::Log::warnPluginsCreation())
         qWarning() << "DrugsDbPlugin::extensionsInitialized";
 
-//    DrugsDB::Internal::DrugBaseCore c;
+//    DrugsDB::Internal::drugbaseessentials c;
 //    c.initialize(Core::Tools::drugsDatabaseAbsFileName(), true);
 }
 

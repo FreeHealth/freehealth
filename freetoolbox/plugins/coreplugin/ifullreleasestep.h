@@ -3,6 +3,16 @@
 
 #include <coreplugin/core_exporter.h>
 #include <QObject>
+QT_BEGIN_NAMESPACE
+class QProgressBar;
+QT_END_NAMESPACE
+
+/**
+ * \file ifullreleasestep.h
+ * \author Eric MAEKER <eric.maeker@gmail.com>
+ * \version 0.6.2
+ * \date 20 Jan 2012
+*/
 
 namespace Core {
 
@@ -26,7 +36,7 @@ public:
 
     virtual bool createDir() = 0;
     virtual bool cleanFiles() = 0;
-    virtual bool downloadFiles() = 0;
+    virtual bool downloadFiles(QProgressBar *bar = 0) = 0;
     virtual bool process() = 0;
     virtual QString processMessage() const = 0;
 
@@ -45,9 +55,6 @@ Q_SIGNALS:
     void progressLabelChanged(const QString &label);
     void progress(int done);
     void progressRangeChanged(int min, int max);
-
-public Q_SLOTS:
-
 };
 
 } //  End namespace Core

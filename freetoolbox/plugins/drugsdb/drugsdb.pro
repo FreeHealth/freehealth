@@ -28,7 +28,7 @@ SOURCES += \
     searchatcindatabasedialog.cpp \
     drug.cpp \
     portuguesedrugsdatabase.cpp \
-    $${SOURCES_PLUGINS_PATH}/drugsbaseplugin/drugbasecore.cpp \
+    $${SOURCES_PLUGINS_PATH}/drugsbaseplugin/drugbaseessentials.cpp \
 
 
 HEADERS  += \
@@ -45,7 +45,7 @@ HEADERS  += \
     searchatcindatabasedialog.h \
     drug.h \
     portuguesedrugsdatabase.h \
-    $${SOURCES_PLUGINS_PATH}/drugsbaseplugin/drugbasecore.h \
+    $${SOURCES_PLUGINS_PATH}/drugsbaseplugin/drugbaseessentials.h
 
 
 

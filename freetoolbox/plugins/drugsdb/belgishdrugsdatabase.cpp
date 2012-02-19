@@ -1,7 +1,7 @@
 /***************************************************************************
  *  The FreeMedForms project is a set of free, open source medical         *
  *  applications.                                                          *
- *  (C) 2008-2011 by Eric MAEKER, MD (France) <eric.maeker@gmail.com>      *
+ *  (C) 2008-2012 by Eric MAEKER, MD (France) <eric.maeker@gmail.com>      *
  *  All rights reserved.                                                   *
  *                                                                         *
  *  This program is free software: you can redistribute it and/or modify   *
@@ -174,7 +174,7 @@ bool BeDrugDatatabaseStep::cleanFiles()
     return true;
 }
 
-bool BeDrugDatatabaseStep::downloadFiles()
+bool BeDrugDatatabaseStep::downloadFiles(QProgressBar *bar)
 {
     Q_EMIT downloadFinished();
     return true;

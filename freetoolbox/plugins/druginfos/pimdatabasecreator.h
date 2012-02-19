@@ -53,7 +53,7 @@ public:
 
     bool createDir();
     bool cleanFiles();
-    bool downloadFiles();
+    bool downloadFiles(QProgressBar *bar = 0);
     bool process();
 
     QString processMessage() const {return tr("Potentially inappropriate medications database creation");}

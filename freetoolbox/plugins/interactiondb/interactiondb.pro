@@ -23,7 +23,7 @@ HEADERS += interactionplugin.h \
     formalizeditemmodel.h \
     druginteractor.h \
     interactoreditorpage.h \
-    $${SOURCES_PLUGINS_PATH}/drugsbaseplugin/drugbasecore.h
+    $${SOURCES_PLUGINS_PATH}/drugsbaseplugin/drugbaseessentials.h
 
 #    cytochromep450interactionspage.h \
 
@@ -36,7 +36,7 @@ SOURCES += interactionplugin.cpp \
     formalizeditemmodel.cpp \
     druginteractor.cpp \
     interactoreditorpage.cpp \
-    $${SOURCES_PLUGINS_PATH}/drugsbaseplugin/drugbasecore.cpp
+    $${SOURCES_PLUGINS_PATH}/drugsbaseplugin/drugbaseessentials.cpp
 #    cytochromep450interactionspage.cpp \
 
 SOURCES += \

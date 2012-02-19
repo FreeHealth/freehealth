@@ -1,7 +1,7 @@
 /***************************************************************************
  *  The FreeMedForms project is a set of free, open source medical         *
  *  applications.                                                          *
- *  (C) 2008-2011 by Eric MAEKER, MD (France) <eric.maeker@gmail.com>      *
+ *  (C) 2008-2012 by Eric MAEKER, MD (France) <eric.maeker@gmail.com>      *
  *  All rights reserved.                                                   *
  *                                                                         *
  *  This program is free software: you can redistribute it and/or modify   *
@@ -74,9 +74,10 @@ static inline ExtensionSystem::PluginManager *pluginManager() {return ExtensionS
 
 static inline QString workingPath()     {return QDir::cleanPath(settings()->value(Core::Constants::S_TMP_PATH).toString() + "/FdaRawSources/") + QDir::separator();}
 static inline QString databaseAbsPath()  {return Core::Tools::drugsDatabaseAbsFileName();}
+static inline QString freeDatabaseAbsPath()  {return Core::Tools::drugsDatabaseAbsFileName("free_fda");}
+static inline QString fullFdaDatabaseAbsPath()  {return Core::Tools::drugsDatabaseAbsFileName("full_fda");}
 
-static inline QString databaseFinalizationScript() {return QDir::cleanPath(settings()->value(Core::Constants::S_SVNFILES_PATH).toString() + "/global_resources/sql/drugdb/us/us_db_finalize.sql");}
-
+static inline QString databaseDescriptionFile() {return QDir::cleanPath(settings()->value(Core::Constants::S_SVNFILES_PATH).toString() + "/global_resources/sql/drugdb/us/description.xml");}
 
 
 FdaDrugsDatabasePage::FdaDrugsDatabasePage(QObject *parent) :
@@ -103,20 +104,10 @@ FdaDrugDatatabaseStep::~FdaDrugDatatabaseStep()
 
 bool FdaDrugDatatabaseStep::createDir()
 {
-    if (!QDir().mkpath(workingPath()))
-        LOG_ERROR("Unable to create FDA Working Path :" + workingPath());
-    else
-        LOG("Tmp dir created");
-    // Create database output dir
-    const QString &dbpath = QFileInfo(databaseAbsPath()).absolutePath();
-    if (!QDir().exists(dbpath)) {
-        if (!QDir().mkpath(dbpath)) {
-            LOG_ERROR("Unable to create FDA database output path :" + dbpath);
-            m_Errors << tr("Unable to create FDA database output path :") + dbpath;
-        } else {
-            LOG("Drugs database output dir created");
-        }
-    }
+    Utils::checkDir(workingPath(), true, "FdaDrugDatatabaseStep::createDir");
+    Utils::checkDir(QFileInfo(databaseAbsPath()).absolutePath(), true, "FdaDrugDatatabaseStep::createDir");
+    Utils::checkDir(QFileInfo(freeDatabaseAbsPath()).absolutePath(), true, "FdaDrugDatatabaseStep::createDir");
+    Utils::checkDir(QFileInfo(fullFdaDatabaseAbsPath()).absolutePath(), true, "FdaDrugDatatabaseStep::createDir");
     return true;
 }
 
@@ -126,10 +117,11 @@ bool FdaDrugDatatabaseStep::cleanFiles()
     return true;
 }
 
-bool FdaDrugDatatabaseStep::downloadFiles()
+bool FdaDrugDatatabaseStep::downloadFiles(QProgressBar *bar)
 {
     Utils::HttpDownloader *dld = new Utils::HttpDownloader(this);
 //    dld->setMainWindow(mainwindow());
+    dld->setProgressBar(bar);
     dld->setOutputPath(workingPath());
     dld->setUrl(QUrl(FDA_URL));
     dld->startDownload();
@@ -198,6 +190,12 @@ public:
 
         // Get strength
         globalStrength = vals.at(3);
+        if (globalStrength.contains("*")) {
+            int begin = globalStrength.indexOf("*");
+            if (begin!=-1) {
+                globalStrength = globalStrength.left(begin + 1);
+            }
+        }
 
         // Get composition
         if (globalStrength.contains(";")) {
@@ -303,7 +301,7 @@ bool FdaDrugDatatabaseStep::createDatabase()
         LOG_ERROR("Unable to create the FDA drugs sources");
         return false;
     }
-
+    Core::Tools::saveDrugDatabaseDescription(databaseDescriptionFile(), 0);
     LOG(QString("Database schema created"));
     return true;
 }
@@ -375,10 +373,13 @@ bool FdaDrugDatatabaseStep::populateDatabase()
     drugs.clear();
 
     // Run SQL commands one by one
-    if (!Core::Tools::executeSqlFile(Core::Constants::MASTER_DATABASE_NAME, databaseFinalizationScript())) {
-        LOG_ERROR("Can create FDA DB.");
-        return false;
-    }
+//    if (!Core::Tools::executeSqlFile(Core::Constants::MASTER_DATABASE_NAME, databaseFinalizationScript())) {
+//        LOG_ERROR("Can create FDA DB.");
+//        return false;
+//    }
+
+    Core::Tools::saveDrugDatabaseDescription(databaseDescriptionFile(), 50);
+
     LOG(QString("Database processed"));
     Q_EMIT progress(3);
 
@@ -387,6 +388,16 @@ bool FdaDrugDatatabaseStep::populateDatabase()
 
 bool FdaDrugDatatabaseStep::linkMolecules()
 {
+    // 17 Feb 2012
+    //    NUMBER OF MOLECULES 2033
+    //    CORRECTED BY NAME 11
+    //    CORRECTED BY ATC 0
+    //    FOUNDED 1574 "
+    //    LINKERMODEL (WithATC:250;WithoutATC:1) 251"
+    //    LINKERNATURE 0
+    //    LEFT 458
+    //    CONFIDENCE INDICE 77
+
     // 28 Sept 2011 (using EN translations of ATC labels + new ATC 2011 && 2012)
     //    NUMBER OF MOLECULES 2014
     //    CORRECTED BY NAME 11
@@ -496,6 +507,7 @@ FdaDrugsDatabaseWidget::FdaDrugsDatabaseWidget(QWidget *parent) :
 {
     setObjectName("FdaDrugsDatabaseWidget");
     ui->setupUi(this);
+    ui->progressBar->hide();
     m_Step = new FdaDrugDatatabaseStep(this);
     pluginManager()->addObject(m_Step);
 }
@@ -517,7 +529,7 @@ void FdaDrugsDatabaseWidget::on_startJobs_clicked()
     connect(m_Step, SIGNAL(progressRangeChanged(int,int)), &progressDialog, SLOT(setRange(int, int)));
     connect(m_Step, SIGNAL(progress(int)), &progressDialog, SLOT(setValue(int)));
     connect(m_Step, SIGNAL(progressLabelChanged(QString)), &progressDialog, SLOT(setLabelText(QString)));
-
+    m_Step->createDir();
     if (ui->unzip->isChecked()) {
         if (m_Step->unzipFiles())
             ui->unzip->setText(ui->unzip->text() + " CORRECTLY DONE");
@@ -544,13 +556,15 @@ void FdaDrugsDatabaseWidget::on_startJobs_clicked()
 
 bool FdaDrugsDatabaseWidget::on_download_clicked()
 {
-    m_Step->downloadFiles();
+    ui->progressBar->show();
+    m_Step->downloadFiles(ui->progressBar);
     connect(m_Step, SIGNAL(downloadFinished()), this, SLOT(downloadFinished()));
     return true;
 }
 
 void FdaDrugsDatabaseWidget::downloadFinished()
 {
+    ui->progressBar->hide();
     ui->download->setEnabled(true);
 }
 

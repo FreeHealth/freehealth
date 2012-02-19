@@ -7,7 +7,7 @@
     <x>0</x>
     <y>0</y>
     <width>400</width>
-    <height>313</height>
+    <height>328</height>
    </rect>
   </property>
   <property name="windowTitle">
@@ -152,6 +152,13 @@
     <widget class="QPushButton" name="download">
      <property name="text">
       <string>Download sources</string>
+     </property>
+    </widget>
+   </item>
+   <item row="2" column="1">
+    <widget class="QProgressBar" name="progressBar">
+     <property name="value">
+      <number>24</number>
      </property>
     </widget>
    </item>

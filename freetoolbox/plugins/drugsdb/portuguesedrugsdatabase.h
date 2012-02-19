@@ -1,7 +1,7 @@
 /***************************************************************************
  *  The FreeMedForms project is a set of free, open source medical         *
  *  applications.                                                          *
- *  (C) 2008-2011 by Eric MAEKER, MD (France) <eric.maeker@gmail.com>      *
+ *  (C) 2008-2012 by Eric MAEKER, MD (France) <eric.maeker@gmail.com>      *
  *  All rights reserved.                                                   *
  *                                                                         *
  *  This program is free software: you can redistribute it and/or modify   *
@@ -63,7 +63,7 @@ public:
 
     bool createDir();
     bool cleanFiles();
-    bool downloadFiles();
+    bool downloadFiles(QProgressBar *bar = 0);
     bool process();
     QString processMessage() const {return tr("Portuguese drugs database creation");}
 

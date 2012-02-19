@@ -10,7 +10,7 @@ BUILD_PATH_POSTFIXE = FreeToolBox
 include(../../../plugins/fmf_plugins.pri)
 include(druginfos_dependencies.pri)
 
-QT *= sql network xml
+QT *= sql network xml script
 
 INCLUDEPATH += ../
 DEPENDPATH += ../
@@ -19,7 +19,8 @@ SOURCES += \
     druginfosplugin.cpp \
     biamextractor.cpp \
     pimintegrator.cpp \
-    pimdatabasecreator.cpp
+    pimdatabasecreator.cpp \
+    pregnancyclassification.cpp
 
 
 HEADERS  += \
@@ -27,7 +28,8 @@ HEADERS  += \
     biamextractor.h \
     pimintegrator.h \
     pimdatabasecreator.h \
-    pim_constants.h
+    pim_constants.h \
+    pregnancyclassification.h
 
 
 FORMS += \
@@ -47,3 +49,5 @@ OTHER_FILES += \
 
 
 OTHER_FILES += DrugInfos.pluginspec
+
+

@@ -1,7 +1,7 @@
 /***************************************************************************
  *  The FreeMedForms project is a set of free, open source medical         *
  *  applications.                                                          *
- *  (C) 2008-2011 by Eric MAEKER, MD (France) <eric.maeker@gmail.com>      *
+ *  (C) 2008-2012 by Eric MAEKER, MD (France) <eric.maeker@gmail.com>      *
  *  All rights reserved.                                                   *
  *                                                                         *
  *  This program is free software: you can redistribute it and/or modify   *
@@ -48,7 +48,7 @@
 #include <coreplugin/isettings.h>
 #include <coreplugin/ftb_constants.h>
 
-#include <drugsbaseplugin/drugbasecore.h>
+#include <drugsbaseplugin/drugbaseessentials.h>
 #include <drugsbaseplugin/constants_databaseschema.h>
 
 #include <utils/log.h>
@@ -600,7 +600,7 @@ QMultiHash<int, int> ExtraMoleculeLinkerModel::moleculeLinker
     cond << Utils::Field(DrugsDB::Constants::Table_LABELS, DrugsDB::Constants::LABELS_LANG, QString("='%1'").arg(lang));
 //    QSqlQuery query(db);
 
-    if (query.exec(Core::Tools::baseCore()->select(get,joins,cond))) {
+    if (query.exec(Core::Tools::drugBase()->select(get,joins,cond))) {
 
 //    if (query.exec(req)) {
         while (query.next()) {
@@ -626,7 +626,7 @@ QMultiHash<int, int> ExtraMoleculeLinkerModel::moleculeLinker
 //    req = QString("SELECT DISTINCT MID, NAME FROM MOLS WHERE SID=%1;").arg(sid);
     QHash<int, QString> w;
     w.insert(DrugsDB::Constants::MOLS_SID, QString("=%1").arg(sid));
-    req = Core::Tools::baseCore()->selectDistinct(DrugsDB::Constants::Table_MOLS, QList<int>()
+    req = Core::Tools::drugBase()->selectDistinct(DrugsDB::Constants::Table_MOLS, QList<int>()
                                                   << DrugsDB::Constants::MOLS_MID
                                                   << DrugsDB::Constants::MOLS_NAME, w);
     if (query.exec(req)) {
@@ -813,12 +813,12 @@ QMultiHash<int, int> ExtraMoleculeLinkerModel::moleculeLinker
         QMap<int, QVector<MolLink> > cis_compo;
         {
 //            QString req = "SELECT `DID`, `MID`, `LK_NATURE` FROM `COMPOSITION` ORDER BY `DID`";
-            QString req = Core::Tools::baseCore()->select(DrugsDB::Constants::Table_COMPO, QList<int>()
+            QString req = Core::Tools::drugBase()->select(DrugsDB::Constants::Table_COMPO, QList<int>()
                                             << DrugsDB::Constants::COMPO_DID
                                             << DrugsDB::Constants::COMPO_MID
                                             << DrugsDB::Constants::COMPO_LK_NATURE
                                             );
-            req += QString(" ORDER BY `%1`").arg(Core::Tools::baseCore()->fieldName(DrugsDB::Constants::Table_COMPO, DrugsDB::Constants::COMPO_DID));
+            req += QString(" ORDER BY `%1`").arg(Core::Tools::drugBase()->fieldName(DrugsDB::Constants::Table_COMPO, DrugsDB::Constants::COMPO_DID));
             if (query.exec(req)) {
                 while (query.next()) {
                     QVector<MolLink> &receiver = cis_compo[query.value(0).toInt()];
@@ -917,7 +917,7 @@ QMultiHash<int, int> ExtraMoleculeLinkerModel::moleculeLinker
 //                                 Core::Constants::MASTER_DATABASE_NAME, __FILE__, __LINE__);
     QHash<int, QString> where;
     where.insert(DrugsDB::Constants::SOURCES_SID, QString("='%1'").arg(sid));
-    query.prepare(Core::Tools::baseCore()->prepareUpdateQuery(DrugsDB::Constants::Table_SOURCES, DrugsDB::Constants::SOURCES_COMPLETION, where));
+    query.prepare(Core::Tools::drugBase()->prepareUpdateQuery(DrugsDB::Constants::Table_SOURCES, DrugsDB::Constants::SOURCES_COMPLETION, where));
     query.bindValue(0, completion);
     if (!query.exec()) {
         LOG_QUERY_ERROR_FOR("Tools", query);
