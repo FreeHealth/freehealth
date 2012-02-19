@@ -1,7 +1,7 @@
 /***************************************************************************
  *   FreeMedicalForms                                                      *
  *   (C) 2008-2010 by Eric MAEKER, MD                                     **
- *   eric.maeker@free.fr                                                   *
+ *   eric.maeker@gmail.com                                                   *
  *   All rights reserved.                                                  *
  *                                                                         *
  *   This program is a free and open source software.                      *
@@ -45,7 +45,7 @@
 
 /**
   \brief This project is only a tester of the FreeMedForms' medintuxtoolkit lib
-  \author Eric MAEKER, MD <eric.maeker@free.fr>
+  \author Eric MAEKER, MD <eric.maeker@gmail.com>
 */
 
 

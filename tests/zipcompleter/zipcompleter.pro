@@ -6,9 +6,12 @@ TEMPLATE = app
 
 SOURCES += main.cpp\
         mainwindow.cpp \
-    zipcountrycompleters.cpp
+    zipcountrycompleters.cpp \
+    frenchsocialnumber.cpp
 
 HEADERS  += mainwindow.h \
-    zipcountrycompleters.h
+    zipcountrycompleters.h \
+    frenchsocialnumber.h
 
-FORMS    += mainwindow.ui
+FORMS    += mainwindow.ui \
+    frenchsocialnumber.ui

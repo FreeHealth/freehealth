@@ -1,5 +1,6 @@
 #include "mainwindow.h"
 #include "zipcountrycompleters.h"
+#include "frenchsocialnumber.h"
 
 #include "ui_mainwindow.h"
 
@@ -21,6 +22,9 @@ MainWindow::MainWindow(QWidget *parent) :
     completer->setZipLineEdit(ui->zipLineEdit);
     completer->setCityLineEdit(ui->cityLineEdit);
     completer->checkData();
+
+    // add NumSS
+    ui->gridLayout->addWidget(new FrenchSocialNumber(this), 10, 0, 1, 2);
 
 //    QSqlDatabase db = QSqlDatabase::addDatabase("QSQLITE", "ZIPS");
 //    db.setDatabaseName(QDir::cleanPath(qApp->applicationDirPath() + "/../../../../../global_resources/databases/zipcodes/zipcodes.db"));
