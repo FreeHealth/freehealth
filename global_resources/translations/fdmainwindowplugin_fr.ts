@@ -232,7 +232,7 @@ Merci de prendre connaissance de la documentation.</translation>
     <message>
         <location filename="../../freediams/plugins/mainwindowplugin/medintux.cpp" line="117"/>
         <source>Unable to find Manager binary path.</source>
-        <translation type="unfinished"></translation>
+        <translation>Impossible de trouver le binaire de manager.</translation>
     </message>
     <message>
         <location filename="../../freediams/plugins/mainwindowplugin/medintux.cpp" line="126"/>
@@ -255,54 +255,55 @@ Merci de prendre connaissance de la documentation.</translation>
         <location filename="../../freediams/plugins/mainwindowplugin/medintux.cpp" line="152"/>
         <location filename="../../freediams/plugins/mainwindowplugin/medintux.cpp" line="154"/>
         <source>Unable to configure MedinTux: FreeDiams menu does not exists and can not be created. Path to DrTux binary : %1</source>
-        <translation type="unfinished"></translation>
+        <translation>Impossible de configurer MedinTux : le menu de FreeDiams n&apos;existe pas et ne peut pas être créé. Répertoire pour DrTux : %1</translation>
     </message>
     <message>
         <location filename="../../freediams/plugins/mainwindowplugin/medintux.cpp" line="181"/>
         <source>Unable to configure MedinTux user menu.</source>
-        <translation type="unfinished"></translation>
+        <translation>Impossible de configurer le menu d&apos;utilisateur de MedinTux.</translation>
     </message>
     <message>
         <location filename="../../freediams/plugins/mainwindowplugin/medintux.cpp" line="184"/>
         <source>MedinTux user&apos;s menu correctly updated.</source>
-        <translation type="unfinished"></translation>
+        <translation>Le menu utilisateur de MedinTux a été correctement mis à jour.</translation>
     </message>
     <message>
         <location filename="../../freediams/plugins/mainwindowplugin/medintux.cpp" line="197"/>
         <source>Select path to the Prescription Menu.</source>
-        <translation type="unfinished"></translation>
+        <translation>Sélectionnez le répertoire pour le menu des prescriptions.</translation>
     </message>
     <message>
         <location filename="../../freediams/plugins/mainwindowplugin/medintux.cpp" line="199"/>
         <source>Can not find menu list directory. Asking user.</source>
-        <translation type="unfinished"></translation>
+        <translation>Impossible de trouver le répertoire des menus. Demande à l&apos;utilisateur.</translation>
     </message>
     <message>
         <location filename="../../freediams/plugins/mainwindowplugin/medintux.cpp" line="204"/>
         <source>Using %1 as prescription menu directory.</source>
-        <translation type="unfinished"></translation>
+        <translation>Utilise %1 comme répertoire du menu des prescriptions.</translation>
     </message>
     <message>
         <location filename="../../freediams/plugins/mainwindowplugin/medintux.cpp" line="219"/>
         <source>Prescription menu correctly updated.</source>
-        <translation type="unfinished"></translation>
+        <translation>Menu pour les prescriptions correctement mis à jour.</translation>
     </message>
     <message>
         <location filename="../../freediams/plugins/mainwindowplugin/medintux.cpp" line="228"/>
         <location filename="../../freediams/plugins/mainwindowplugin/medintux.cpp" line="230"/>
         <source>Unable to find the prescription list directory.</source>
-        <translation type="unfinished"></translation>
+        <translation>Impossible de trouver le répertoire des prescriptions.</translation>
     </message>
     <message>
         <location filename="../../freediams/plugins/mainwindowplugin/medintux.cpp" line="236"/>
         <source>MedinTux cache has been correctly cleared.</source>
-        <translation type="unfinished"></translation>
+        <translation>Cache de MedinTux correctement effacé.</translation>
     </message>
     <message>
         <location filename="../../freediams/plugins/mainwindowplugin/medintux.cpp" line="238"/>
         <source>Unable to clear the MedinTux cache.
 You have to do this by hand.</source>
-        <translation type="unfinished"></translation>
+        <translation>Impossible de nettoyer le cahce de MedinTux.
+Vous devrez le faire vous-même.</translation>
     </message>
     <message>
         <location filename="../../freediams/plugins/mainwindowplugin/medintux.cpp" line="243"/>

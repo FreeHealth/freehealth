@@ -326,37 +326,37 @@ Url: %1
     <message>
         <location filename="../../plugins/coreplugin/dialogs/proxypreferenceswidget.ui" line="14"/>
         <source>Form</source>
-        <translation type="unfinished"></translation>
+        <translation></translation>
     </message>
     <message>
         <location filename="../../plugins/coreplugin/dialogs/proxypreferenceswidget.ui" line="20"/>
         <source>Proxy settings</source>
-        <translation type="unfinished"></translation>
+        <translation>Paramètres du proxy</translation>
     </message>
     <message>
         <location filename="../../plugins/coreplugin/dialogs/proxypreferenceswidget.ui" line="29"/>
         <source>Host</source>
-        <translation type="unfinished"></translation>
+        <translation>Hôte</translation>
     </message>
     <message>
         <location filename="../../plugins/coreplugin/dialogs/proxypreferenceswidget.ui" line="39"/>
         <source>Port</source>
-        <translation type="unfinished">Port</translation>
+        <translation>Port</translation>
     </message>
     <message>
         <location filename="../../plugins/coreplugin/dialogs/proxypreferenceswidget.ui" line="53"/>
         <source>User name</source>
-        <translation type="unfinished"></translation>
+        <translation>Nom d&apos;utilisateur</translation>
     </message>
     <message>
         <location filename="../../plugins/coreplugin/dialogs/proxypreferenceswidget.ui" line="60"/>
         <source>User password</source>
-        <translation type="unfinished"></translation>
+        <translation>Mot de passe</translation>
     </message>
     <message>
         <location filename="../../plugins/coreplugin/dialogs/proxypreferenceswidget.ui" line="82"/>
         <source>Auto-detect</source>
-        <translation type="unfinished"></translation>
+        <translation>Détecter</translation>
     </message>
 </context>
 <context>
