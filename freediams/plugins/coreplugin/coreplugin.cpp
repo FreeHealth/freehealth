@@ -35,13 +35,17 @@
 #include <coreplugin/dialogs/pluginaboutpage.h>
 #include <coreplugin/translators.h>
 #include <coreplugin/dialogs/applicationgeneralpreferences.h>
+#include <coreplugin/dialogs/networkpreferences.h>
 
 #include <QtCore/QtPlugin>
 #include <QDebug>
 
 using namespace Core::Internal;
 
-CorePlugin::CorePlugin() : m_CoreImpl(new CoreImpl(this)), prefPage(0)
+CorePlugin::CorePlugin() :
+    m_CoreImpl(new CoreImpl(this)),
+    prefPage(0),
+    proxyPage(0)
 {
 }
 
@@ -51,6 +55,10 @@ CorePlugin::~CorePlugin()
     if (prefPage) {
         removeObject(prefPage);
         delete prefPage; prefPage=0;
+    }
+    if (proxyPage) {
+        removeObject(proxyPage);
+        delete proxyPage; proxyPage=0;
     }
 }
 
@@ -83,6 +91,9 @@ void CorePlugin::extensionsInitialized()
     prefPage = new ApplicationGeneralPreferencesPage(this);
     prefPage->checkSettingsValidity();
     addObject(prefPage);
+    proxyPage = new ProxyPreferencesPage(this);
+    proxyPage->checkSettingsValidity();
+    addObject(proxyPage);
 
     // Add Translator to the Application
     Core::ICore::instance()->translators()->addNewTranslator("utils");

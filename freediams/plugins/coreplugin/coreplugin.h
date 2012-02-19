@@ -31,20 +31,15 @@
 /**
  * \file coreplugin.h
  * \author Eric MAEKER <eric.maeker@gmail.com>
- * \version 0.4.0
- * \date 15 June 2010
+ * \version 0.6.4
+ * \date 17 Feb 2012
 */
 
 namespace Core {
-    class ApplicationGeneralPreferencesPage;
+class ApplicationGeneralPreferencesPage;
 namespace Internal {
-    class CoreImpl;
-}
-}
-
-
-namespace Core {
-namespace Internal {
+class CoreImpl;
+class ProxyPreferencesPage;
 
 class CorePlugin : public ExtensionSystem::IPlugin
 {
@@ -62,6 +57,7 @@ public Q_SLOTS:
 private:
     CoreImpl *m_CoreImpl;
     ApplicationGeneralPreferencesPage *prefPage;
+    ProxyPreferencesPage *proxyPage;
 };
 
 } // namespace Internal
