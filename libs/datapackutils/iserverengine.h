@@ -73,6 +73,9 @@ public:
     virtual int downloadQueueCount() const = 0;
     virtual bool startDownloadQueue() = 0;
 
+    virtual int runningJobs() const = 0;
+    virtual bool stopJobsAndClearQueue() = 0;
+
     virtual const ServerEngineStatus &lastStatus(const Pack &pack) = 0;
     virtual const ServerEngineStatus &lastStatus(const Server &server) = 0;
 

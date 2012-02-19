@@ -24,6 +24,60 @@
  *   Contributors :                                                        *
  *       NAME <MAIL@ADRESS>                                                *
  ***************************************************************************/
+/**
+  \class DataPack::IServerEngine
+  Default virtual interface of server engine. The server engine assumes
+  all data access. You can add them at in the DataPack::DataPackCore
+  constructor.
+*/
+
+/** \fn virtual bool DataPack::IServerEngine::managesServer(const Server &server) = 0;
+  Return true if the engine manages this \e server.
+*/
+
+/** \fn virtual void DataPack::IServerEngine::addToDownloadQueue(const ServerEngineQuery &query) = 0;
+  Add a DataPack::ServerEngineQuery to the download queue. The download will not start
+  untill you call the DataPack::IServerEngine::downloadQueue()
+*/
+
+/** \fn virtual int DataPack::IServerEngine::downloadQueueCount() const = 0;
+  Return the number of DataPack::ServerEngineQuery in the engine's queue.
+*/
+
+/** \fn virtual bool DataPack::IServerEngine::startDownloadQueue() = 0;
+  Starts all the download from the registered queue and return true if all
+  goes fine. The signal DataPack::IServerEngine::queueDowloaded() is emitted
+  when all jobs are completed. If a pack is downloaded the signal
+  DataPack::IServerEngine::packDownloaded(const DataPack::Pack &pack, const DataPack::ServerEngineStatus &status)
+  is emitted.
+  \sa void DataPack::IServerEngine::addToDownloadQueue()
+*/
+
+/** \fn virtual bool DataPack::IServerEngine::stopJobsAndClearQueue() = 0;
+  Stops any started jobs and clear the download queue.
+*/
+
+/** \fn virtual const ServerEngineStatus &DataPack::IServerEngine::lastStatus(const Pack &pack) = 0;
+  Return the lastest associated status for the \e pack processing (download, install, removal).
+*/
+
+/** \fn virtual const ServerEngineStatus &DataPack::IServerEngine::lastStatus(const Server &server) = 0;
+  Return the lastest associated status for the \e server processing.
+*/
+
+/** \fn void DataPack::IServerEngine::queueDowloaded();
+  Signal emitted by the engine when all download jobs are completed.
+  \sa void DataPack::IServerEngine::addToDownloadQueue()
+  \sa bool DataPack::IServerEngine::startDownloadQueue()
+*/
+
+/** \fn void DataPack::IServerEngine::packDownloaded(const DataPack::Pack &pack, const DataPack::ServerEngineStatus &status);
+  Signal emitted by the engine when a pack is fully downloaded.
+  \sa void DataPack::IServerEngine::addToDownloadQueue()
+  \sa bool DataPack::IServerEngine::startDownloadQueue()
+*/
+
+
 #include "iserverengine.h"
 #include "iservermanager.h"
 

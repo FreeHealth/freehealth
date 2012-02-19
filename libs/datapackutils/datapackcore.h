@@ -88,6 +88,9 @@ public:
     IServerManager *serverManager() const;
     IPackManager *packManager() const;
 
+public Q_SLOTS:
+    bool stopJobsAndClearQueues() const;
+
 private:
     Internal::DataPackCorePrivate *d;
 };

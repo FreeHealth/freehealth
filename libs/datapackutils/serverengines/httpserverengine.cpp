@@ -41,6 +41,7 @@
 #include <QProgressBar>
 #include <QNetworkProxyQuery>
 #include <QAuthenticator>
+#include <QHash>
 
 #include <QDebug>
 
@@ -103,7 +104,9 @@ HttpServerEngine::HttpServerEngine(QObject *parent)  :
             m_NetworkAccessManager->setProxy(core().networkProxy());
             proxy = true;
         } else {
+            LOG("No proxy defined in DataPackCore. Trying to find system proxy.");
             // Auto-check for system proxys
+            QNetworkProxyFactory::setUseSystemConfiguration(true);
             QNetworkProxyQuery npq(QUrl("http://www.google.com"));
             QList<QNetworkProxy> listOfProxies = QNetworkProxyFactory::systemProxyForQuery(npq);
             foreach(const QNetworkProxy &p, listOfProxies) {
@@ -203,6 +206,28 @@ bool HttpServerEngine::startDownloadQueue()
             connect(reply, SIGNAL(downloadProgress(qint64,qint64)), this, SLOT(downloadProgress(qint64,qint64)));
         }
     }
+    return true;
+}
+
+int HttpServerEngine::runningJobs() const
+{
+    return m_replyToData.count();
+}
+
+bool HttpServerEngine::stopJobsAndClearQueue()
+{
+    m_queue.clear();
+    for(int i=0; i < m_replyToData.count(); ++i) {
+        ReplyData &data = m_replyToData[m_replyToData.keys().at(i)];
+        // Abort network reply
+        data.reply->abort();
+        if (data.bar) {
+            data.bar->setValue(100);
+            data.bar->setToolTip(tr("Abort"));
+        }
+        data.reply->deleteLater();
+    }
+    m_replyToData.clear();
     return true;
 }
 

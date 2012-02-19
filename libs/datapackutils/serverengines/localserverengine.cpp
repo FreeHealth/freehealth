@@ -149,6 +149,17 @@ bool LocalServerEngine::startDownloadQueue()
     return true;
 }
 
+int LocalServerEngine::runningJobs() const
+{
+    // Not asynchrone
+    return 0;
+}
+
+bool LocalServerEngine::stopJobsAndClearQueue()
+{
+    return true;
+}
+
 const ServerEngineStatus &LocalServerEngine::lastStatus(const Pack &pack)
 {
     const QString &key = statusKey(pack);

@@ -208,11 +208,6 @@ ServerPackEditor::ServerPackEditor(QWidget *parent) :
 
     d->ui->stackedWidget->setCurrentWidget(d->ui->pagePacks);
 
-    // FOR TEST
-    // This step should be done before the ServerPackEditor in called
-    serverManager()->getAllDescriptionFile();
-    // END TEST
-
     // file://Users/eric/Desktop/Programmation/freemedforms/global_resources/datapacks/default/
 }
 
@@ -222,6 +217,24 @@ ServerPackEditor::~ServerPackEditor()
         delete d;
         d=0;
     }
+}
+
+bool ServerPackEditor::refreshServerContent()
+{
+    if (serverManager()->serverCount() == 0)
+        return true;
+    QProgressDialog dlg(this);
+    connect(serverManager(), SIGNAL(allServerDescriptionAvailable()), &dlg, SLOT(close()));
+    QProgressBar *bar = new QProgressBar;
+    dlg.setLabelText(tr("Updating server information"));
+    dlg.setModal(true);
+    dlg.setBar(bar);
+    dlg.show();
+    connect(&dlg, SIGNAL(canceled()), &core(), SLOT(stopJobsAndClearQueues()));
+    /** \todo Connect the cancel button */
+    serverManager()->getAllDescriptionFile(bar);
+    dlg.exec();
+    return true;
 }
 
 bool ServerPackEditor::submitChanges()
@@ -390,17 +403,8 @@ void ServerPackEditor::onPackIndexActivated(const QModelIndex &index, const QMod
 
 void ServerPackEditor::serverActionTriggered(QAction *a)
 {
-    if (a==d->aServerRefresh && serverManager()->serverCount()>0) {
-            QProgressDialog dlg(this);
-            connect(serverManager(), SIGNAL(allServerDescriptionAvailable()), &dlg, SLOT(close()));
-            QProgressBar *bar = new QProgressBar;
-            dlg.setLabelText(tr("Updating server information"));
-            dlg.setModal(true);
-            dlg.setBar(bar);
-            dlg.show();
-            /** \todo Connect the cancel button */
-            serverManager()->getAllDescriptionFile(bar);
-//            dlg.exec();
+    if (a==d->aServerRefresh) {
+        refreshServerContent();
     } if (a==d->aServerAdd) {
         AddServerDialog dlg(this);
         Server server;

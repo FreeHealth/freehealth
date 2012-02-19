@@ -63,6 +63,7 @@ public:
     ~ServerPackEditor();
 
 public Q_SLOTS:
+    bool refreshServerContent();
     bool submitChanges();
 
 private:

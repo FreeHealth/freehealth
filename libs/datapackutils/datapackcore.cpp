@@ -148,6 +148,19 @@ IPackManager *DataPackCore::packManager() const
     return d->m_PackManager;
 }
 
+bool DataPackCore::stopJobsAndClearQueues() const
+{
+    bool ok = true;
+    for(int i=0; i < d->m_Engines.count(); ++i) {
+        IServerEngine *e = d->m_Engines[i];
+        if (!e->stopJobsAndClearQueue()) {
+            LOG_ERROR("Unable to stop job && clear queue for engine: "+ e->objectName());
+            ok = false;
+        }
+    }
+    return ok;
+}
+
 /** Define the path where to install datapacks. */
 void DataPackCore::setInstallPath(const QString &absPath)
 {

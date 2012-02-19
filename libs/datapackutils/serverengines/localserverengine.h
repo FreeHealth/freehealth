@@ -44,6 +44,9 @@ public:
     int downloadQueueCount() const;
     bool startDownloadQueue();
 
+    int runningJobs() const;
+    bool stopJobsAndClearQueue();
+
     const ServerEngineStatus &lastStatus(const Pack &pack);
     const ServerEngineStatus &lastStatus(const Server &server);
 

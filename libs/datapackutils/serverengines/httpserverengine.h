@@ -62,6 +62,9 @@ public:
     int downloadQueueCount() const;
     bool startDownloadQueue();
 
+    int runningJobs() const;
+    bool stopJobsAndClearQueue();
+
     const ServerEngineStatus &lastStatus(const Pack &pack);
     const ServerEngineStatus &lastStatus(const Server &server);
 
@@ -87,7 +90,7 @@ private:
 private:
     QList<ServerEngineQuery> m_queue;
     QNetworkAccessManager *m_NetworkAccessManager;
-    QHash<QNetworkReply*,ReplyData> m_replyToData;
+    QHash<QNetworkReply*, ReplyData> m_replyToData;
     QHash<QString, ServerEngineStatus> m_ServerStatus, m_PackStatus;
     int m_DownloadCount_Server;
     int m_DownloadCount_PackDescription;
