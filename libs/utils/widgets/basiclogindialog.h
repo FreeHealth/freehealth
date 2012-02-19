@@ -18,8 +18,8 @@ public:
     ~BasicLoginDialog();
 
     void setTitle(const QString &title);
-
     void setToggleViewIcon(const QString &fullAbsPath);
+    void focusLogin();
 
     QString login() const;
     QString password() const;
