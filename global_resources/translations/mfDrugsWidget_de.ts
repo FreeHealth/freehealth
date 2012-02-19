@@ -1494,5 +1494,10 @@ Do you really want to change the editing mode ?</source>
         <source>Copy prescription item to clipboard</source>
         <translation type="unfinished"></translation>
     </message>
+    <message>
+        <location filename="../../plugins/drugsplugin/constants.h" line="91"/>
+        <source>Add chronic therapeutics</source>
+        <translation type="unfinished"></translation>
+    </message>
 </context>
 </TS>

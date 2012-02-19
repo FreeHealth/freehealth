@@ -182,7 +182,7 @@ Répondre &apos;non&apos; causera une perte de données irréversible.</translat
 <context>
     <name>Form::Internal::FormPreferencesPage</name>
     <message>
-        <location filename="../../plugins/formmanagerplugin/formmanagerpreferencespage.cpp" line="160"/>
+        <location filename="../../plugins/formmanagerplugin/formmanagerpreferencespage.cpp" line="161"/>
         <source>Form and episode tree viewer</source>
         <translation>Visualisateur des formulaires et épisodes</translation>
     </message>
@@ -245,37 +245,37 @@ Répondre &apos;non&apos; causera une perte de données irréversible.</translat
         <translation>Format de date court</translation>
     </message>
     <message>
-        <location filename="../../plugins/formmanagerplugin/formmanagerpreferencespage.cpp" line="222"/>
+        <location filename="../../plugins/formmanagerplugin/formmanagerpreferencespage.cpp" line="223"/>
         <source>Label</source>
         <translation>Libellé</translation>
     </message>
     <message>
-        <location filename="../../plugins/formmanagerplugin/formmanagerpreferencespage.cpp" line="223"/>
+        <location filename="../../plugins/formmanagerplugin/formmanagerpreferencespage.cpp" line="224"/>
         <source>Label - User date (small)</source>
         <translation>Libellé - Date (courte)</translation>
     </message>
     <message>
-        <location filename="../../plugins/formmanagerplugin/formmanagerpreferencespage.cpp" line="224"/>
+        <location filename="../../plugins/formmanagerplugin/formmanagerpreferencespage.cpp" line="225"/>
         <source>Label - User date (full)</source>
         <translation>Libellé - Date (longue)</translation>
     </message>
     <message>
-        <location filename="../../plugins/formmanagerplugin/formmanagerpreferencespage.cpp" line="225"/>
+        <location filename="../../plugins/formmanagerplugin/formmanagerpreferencespage.cpp" line="226"/>
         <source>User date (small)</source>
         <translation>Date (courte)</translation>
     </message>
     <message>
-        <location filename="../../plugins/formmanagerplugin/formmanagerpreferencespage.cpp" line="226"/>
+        <location filename="../../plugins/formmanagerplugin/formmanagerpreferencespage.cpp" line="227"/>
         <source>User date (full)</source>
         <translation>Date( longue)</translation>
     </message>
     <message>
-        <location filename="../../plugins/formmanagerplugin/formmanagerpreferencespage.cpp" line="227"/>
+        <location filename="../../plugins/formmanagerplugin/formmanagerpreferencespage.cpp" line="228"/>
         <source>User date (small) - Label</source>
         <translation>Date (courte) - Libellé</translation>
     </message>
     <message>
-        <location filename="../../plugins/formmanagerplugin/formmanagerpreferencespage.cpp" line="228"/>
+        <location filename="../../plugins/formmanagerplugin/formmanagerpreferencespage.cpp" line="229"/>
         <source>User date (full) - Label</source>
         <translation>Date (longue) - Libellé</translation>
     </message>
@@ -283,31 +283,31 @@ Répondre &apos;non&apos; causera une perte de données irréversible.</translat
 <context>
     <name>FormFilesSelectorWidget</name>
     <message>
-        <location filename="../../plugins/formmanagerplugin/formfilesselectorwidget.cpp" line="88"/>
-        <location filename="../../plugins/formmanagerplugin/formfilesselectorwidget.cpp" line="89"/>
+        <location filename="../../plugins/formmanagerplugin/formfilesselectorwidget.cpp" line="93"/>
+        <location filename="../../plugins/formmanagerplugin/formfilesselectorwidget.cpp" line="94"/>
         <source>by category</source>
         <translation>par catégory</translation>
     </message>
     <message>
-        <location filename="../../plugins/formmanagerplugin/formfilesselectorwidget.cpp" line="94"/>
-        <location filename="../../plugins/formmanagerplugin/formfilesselectorwidget.cpp" line="95"/>
+        <location filename="../../plugins/formmanagerplugin/formfilesselectorwidget.cpp" line="99"/>
+        <location filename="../../plugins/formmanagerplugin/formfilesselectorwidget.cpp" line="100"/>
         <source>by author</source>
         <translation>par auteur</translation>
     </message>
     <message>
-        <location filename="../../plugins/formmanagerplugin/formfilesselectorwidget.cpp" line="100"/>
-        <location filename="../../plugins/formmanagerplugin/formfilesselectorwidget.cpp" line="101"/>
+        <location filename="../../plugins/formmanagerplugin/formfilesselectorwidget.cpp" line="105"/>
+        <location filename="../../plugins/formmanagerplugin/formfilesselectorwidget.cpp" line="106"/>
         <source>by specialty</source>
         <translation>par spécialité</translation>
     </message>
     <message>
-        <location filename="../../plugins/formmanagerplugin/formfilesselectorwidget.cpp" line="106"/>
-        <location filename="../../plugins/formmanagerplugin/formfilesselectorwidget.cpp" line="107"/>
+        <location filename="../../plugins/formmanagerplugin/formfilesselectorwidget.cpp" line="111"/>
+        <location filename="../../plugins/formmanagerplugin/formfilesselectorwidget.cpp" line="112"/>
         <source>by type</source>
         <translation>par type</translation>
     </message>
     <message>
-        <location filename="../../plugins/formmanagerplugin/formfilesselectorwidget.cpp" line="152"/>
+        <location filename="../../plugins/formmanagerplugin/formfilesselectorwidget.cpp" line="161"/>
         <source>Default Forms</source>
         <translation>Formulaires par défaut</translation>
     </message>

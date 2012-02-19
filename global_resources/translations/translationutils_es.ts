@@ -1310,6 +1310,11 @@
         <translation type="unfinished"></translation>
     </message>
     <message>
+        <location filename="../../libs/translationutils/trans_current.h" line="86"/>
+        <source>Zip codes</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
         <location filename="../../libs/translationutils/trans_team.h" line="48"/>
         <source>Build information</source>
         <translation type="unfinished"></translation>
@@ -1700,17 +1705,22 @@
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../../libs/translationutils/trans_msgerror.h" line="74"/>
-        <source>Last check</source>
+        <location filename="../../libs/translationutils/trans_msgerror.h" line="73"/>
+        <source>Internet connection preferences</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
         <location filename="../../libs/translationutils/trans_msgerror.h" line="75"/>
-        <source>Connected</source>
+        <source>Last check</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
         <location filename="../../libs/translationutils/trans_msgerror.h" line="76"/>
+        <source>Connected</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../../libs/translationutils/trans_msgerror.h" line="77"/>
         <source>Not connected</source>
         <translation type="unfinished"></translation>
     </message>

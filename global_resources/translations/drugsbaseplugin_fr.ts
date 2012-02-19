@@ -52,46 +52,46 @@ Veuillez vérifier vos répartitions journalières et vos relations avec le repa
     <message>
         <location filename="../../plugins/drugsbaseplugin/drugsbase.cpp" line="561"/>
         <source>Switching to the default drugs database source.</source>
-        <translation type="unfinished">Revenir à la base de données par défaut.</translation>
+        <translation>Revenir à la base de données par défaut.</translation>
     </message>
     <message>
         <location filename="../../plugins/drugsbaseplugin/drugsbase.cpp" line="780"/>
         <location filename="../../plugins/drugsbaseplugin/drugsbase.cpp" line="786"/>
         <location filename="../../plugins/drugsbaseplugin/drugsbase.cpp" line="791"/>
         <source>Unable to create the Protocol database.</source>
-        <translation type="unfinished">Impossible de créer la base de données Protocoles.</translation>
+        <translation>Impossible de créer la base de données Protocoles.</translation>
     </message>
     <message>
         <location filename="../../plugins/drugsbaseplugin/drugsbase.cpp" line="780"/>
         <location filename="../../plugins/drugsbaseplugin/drugsbase.cpp" line="786"/>
         <location filename="../../plugins/drugsbaseplugin/drugsbase.cpp" line="791"/>
         <source>Please contact dev team.</source>
-        <translation type="unfinished">Veuillez contacter l&apos;équipe de développement.</translation>
+        <translation>Veuillez contacter l&apos;équipe de développement.</translation>
     </message>
     <message>
         <location filename="../../plugins/drugsbaseplugin/drugsbase.cpp" line="903"/>
         <source>Unable to update the protocol&apos;s transmission date.</source>
-        <translation type="unfinished">Impossible de mettre à jour la date de transmission des protocoles.</translation>
+        <translation>Impossible de mettre à jour la date de transmission des protocoles.</translation>
     </message>
     <message>
         <location filename="../../plugins/drugsbaseplugin/drugsbase.cpp" line="1133"/>
         <source>No drug database source selected</source>
-        <translation type="unfinished">Pas de source pour la base de données thérapeutique sélectionné</translation>
+        <translation>Pas de source pour la base de données thérapeutique sélectionné</translation>
     </message>
     <message>
         <location filename="../../plugins/drugsbaseplugin/drugsbase.cpp" line="1135"/>
         <source>No drugs database loaded.</source>
-        <translation type="unfinished">Pas de base de données thérapeutique chargée.</translation>
+        <translation>Pas de base de données thérapeutique chargée.</translation>
     </message>
     <message>
         <location filename="../../plugins/drugsbaseplugin/drugsbase.cpp" line="1153"/>
         <source>Asking for a drug without UID</source>
-        <translation type="unfinished">Requête d&apos;un médicament sant UID</translation>
+        <translation>Requête d&apos;un médicament sant UID</translation>
     </message>
     <message>
         <location filename="../../plugins/drugsbaseplugin/drugsbase.cpp" line="1289"/>
         <source>Unable to find drug with DID %1</source>
-        <translation type="unfinished">Impossible de trouver le médicament avec le DID %1</translation>
+        <translation>Impossible de trouver le médicament avec le DID %1</translation>
     </message>
 </context>
 <context>

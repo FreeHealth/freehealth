@@ -181,7 +181,7 @@ Answering &apos;No&apos; will cause definitve data lose.</source>
 <context>
     <name>Form::Internal::FormPreferencesPage</name>
     <message>
-        <location filename="../../plugins/formmanagerplugin/formmanagerpreferencespage.cpp" line="160"/>
+        <location filename="../../plugins/formmanagerplugin/formmanagerpreferencespage.cpp" line="161"/>
         <source>Form and episode tree viewer</source>
         <translation type="unfinished"></translation>
     </message>
@@ -244,37 +244,37 @@ Answering &apos;No&apos; will cause definitve data lose.</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../../plugins/formmanagerplugin/formmanagerpreferencespage.cpp" line="222"/>
+        <location filename="../../plugins/formmanagerplugin/formmanagerpreferencespage.cpp" line="223"/>
         <source>Label</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../../plugins/formmanagerplugin/formmanagerpreferencespage.cpp" line="223"/>
+        <location filename="../../plugins/formmanagerplugin/formmanagerpreferencespage.cpp" line="224"/>
         <source>Label - User date (small)</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../../plugins/formmanagerplugin/formmanagerpreferencespage.cpp" line="224"/>
+        <location filename="../../plugins/formmanagerplugin/formmanagerpreferencespage.cpp" line="225"/>
         <source>Label - User date (full)</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../../plugins/formmanagerplugin/formmanagerpreferencespage.cpp" line="225"/>
+        <location filename="../../plugins/formmanagerplugin/formmanagerpreferencespage.cpp" line="226"/>
         <source>User date (small)</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../../plugins/formmanagerplugin/formmanagerpreferencespage.cpp" line="226"/>
+        <location filename="../../plugins/formmanagerplugin/formmanagerpreferencespage.cpp" line="227"/>
         <source>User date (full)</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../../plugins/formmanagerplugin/formmanagerpreferencespage.cpp" line="227"/>
+        <location filename="../../plugins/formmanagerplugin/formmanagerpreferencespage.cpp" line="228"/>
         <source>User date (small) - Label</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../../plugins/formmanagerplugin/formmanagerpreferencespage.cpp" line="228"/>
+        <location filename="../../plugins/formmanagerplugin/formmanagerpreferencespage.cpp" line="229"/>
         <source>User date (full) - Label</source>
         <translation type="unfinished"></translation>
     </message>
@@ -282,31 +282,31 @@ Answering &apos;No&apos; will cause definitve data lose.</source>
 <context>
     <name>FormFilesSelectorWidget</name>
     <message>
-        <location filename="../../plugins/formmanagerplugin/formfilesselectorwidget.cpp" line="88"/>
-        <location filename="../../plugins/formmanagerplugin/formfilesselectorwidget.cpp" line="89"/>
+        <location filename="../../plugins/formmanagerplugin/formfilesselectorwidget.cpp" line="93"/>
+        <location filename="../../plugins/formmanagerplugin/formfilesselectorwidget.cpp" line="94"/>
         <source>by category</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../../plugins/formmanagerplugin/formfilesselectorwidget.cpp" line="94"/>
-        <location filename="../../plugins/formmanagerplugin/formfilesselectorwidget.cpp" line="95"/>
+        <location filename="../../plugins/formmanagerplugin/formfilesselectorwidget.cpp" line="99"/>
+        <location filename="../../plugins/formmanagerplugin/formfilesselectorwidget.cpp" line="100"/>
         <source>by author</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../../plugins/formmanagerplugin/formfilesselectorwidget.cpp" line="100"/>
-        <location filename="../../plugins/formmanagerplugin/formfilesselectorwidget.cpp" line="101"/>
+        <location filename="../../plugins/formmanagerplugin/formfilesselectorwidget.cpp" line="105"/>
+        <location filename="../../plugins/formmanagerplugin/formfilesselectorwidget.cpp" line="106"/>
         <source>by specialty</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../../plugins/formmanagerplugin/formfilesselectorwidget.cpp" line="106"/>
-        <location filename="../../plugins/formmanagerplugin/formfilesselectorwidget.cpp" line="107"/>
+        <location filename="../../plugins/formmanagerplugin/formfilesselectorwidget.cpp" line="111"/>
+        <location filename="../../plugins/formmanagerplugin/formfilesselectorwidget.cpp" line="112"/>
         <source>by type</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../../plugins/formmanagerplugin/formfilesselectorwidget.cpp" line="152"/>
+        <location filename="../../plugins/formmanagerplugin/formfilesselectorwidget.cpp" line="161"/>
         <source>Default Forms</source>
         <translation type="unfinished"></translation>
     </message>

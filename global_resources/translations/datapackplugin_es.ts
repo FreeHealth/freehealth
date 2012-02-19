@@ -12,7 +12,7 @@
 <context>
     <name>DataPackPlugin::Internal::DataPackPluginIPlugin</name>
     <message>
-        <location filename="../../plugins/datapackplugin/datapackplugin.cpp" line="109"/>
+        <location filename="../../plugins/datapackplugin/datapackplugin.cpp" line="131"/>
         <source>Initializing DataPackPlugin...</source>
         <translation type="unfinished"></translation>
     </message>

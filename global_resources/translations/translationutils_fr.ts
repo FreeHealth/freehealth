@@ -1224,6 +1224,11 @@
         <translation>Type de données</translation>
     </message>
     <message>
+        <location filename="../../libs/translationutils/trans_current.h" line="86"/>
+        <source>Zip codes</source>
+        <translation>Code postaux</translation>
+    </message>
+    <message>
         <location filename="../../libs/translationutils/trans_user.h" line="39"/>
         <source>Users</source>
         <translation>Utilisateurs</translation>
@@ -1309,17 +1314,22 @@
         <translation>Préférences de l&apos;utilisateur</translation>
     </message>
     <message>
-        <location filename="../../libs/translationutils/trans_msgerror.h" line="74"/>
+        <location filename="../../libs/translationutils/trans_msgerror.h" line="73"/>
+        <source>Internet connection preferences</source>
+        <translation>Préférences de la connexion internet</translation>
+    </message>
+    <message>
+        <location filename="../../libs/translationutils/trans_msgerror.h" line="75"/>
         <source>Last check</source>
         <translation>Dernière vérification</translation>
     </message>
     <message>
-        <location filename="../../libs/translationutils/trans_msgerror.h" line="75"/>
+        <location filename="../../libs/translationutils/trans_msgerror.h" line="76"/>
         <source>Connected</source>
         <translation>Connecté</translation>
     </message>
     <message>
-        <location filename="../../libs/translationutils/trans_msgerror.h" line="76"/>
+        <location filename="../../libs/translationutils/trans_msgerror.h" line="77"/>
         <source>Not connected</source>
         <translation>Non connecté</translation>
     </message>

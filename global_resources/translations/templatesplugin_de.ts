@@ -2,6 +2,17 @@
 <!DOCTYPE TS>
 <TS version="2.0" language="de_DE">
 <context>
+    <name>Templates::Internal::TemplateBase</name>
+    <message>
+        <location filename="../../plugins/templatesplugin/templatebase.cpp" line="314"/>
+        <location filename="../../plugins/templatesplugin/templatebase.cpp" line="322"/>
+        <location filename="../../plugins/templatesplugin/templatebase.cpp" line="328"/>
+        <location filename="../../plugins/templatesplugin/templatebase.cpp" line="338"/>
+        <source>Please contact dev team.</source>
+        <translation type="unfinished"></translation>
+    </message>
+</context>
+<context>
     <name>Templates::Internal::TemplatesContentEditor</name>
     <message>
         <location filename="../../plugins/templatesplugin/templatescontenteditor.ui" line="14"/>
@@ -13,12 +24,12 @@
 <context>
     <name>Templates::Internal::TemplatesCoreListener</name>
     <message>
-        <location filename="../../plugins/templatesplugin/templatesmodel.cpp" line="110"/>
+        <location filename="../../plugins/templatesplugin/templatesmodel.cpp" line="112"/>
         <source>Save templates .</source>
         <translation>Sauvegarder le modèle.</translation>
     </message>
     <message>
-        <location filename="../../plugins/templatesplugin/templatesmodel.cpp" line="111"/>
+        <location filename="../../plugins/templatesplugin/templatesmodel.cpp" line="113"/>
         <source>Some data are not actually saved into database.Do you want to save them ?
  Answering &apos;No&apos; will cause definitive data lose.</source>
         <translation type="unfinished"></translation>
@@ -176,20 +187,9 @@
     </message>
 </context>
 <context>
-    <name>Templates::TemplateBase</name>
-    <message>
-        <location filename="../../plugins/templatesplugin/templatebase.cpp" line="321"/>
-        <location filename="../../plugins/templatesplugin/templatebase.cpp" line="329"/>
-        <location filename="../../plugins/templatesplugin/templatebase.cpp" line="335"/>
-        <location filename="../../plugins/templatesplugin/templatebase.cpp" line="345"/>
-        <source>Please contact dev team.</source>
-        <translation type="unfinished"></translation>
-    </message>
-</context>
-<context>
     <name>Templates::TemplatesModel</name>
     <message>
-        <location filename="../../plugins/templatesplugin/templatesmodel.cpp" line="1025"/>
+        <location filename="../../plugins/templatesplugin/templatesmodel.cpp" line="1027"/>
         <source>New</source>
         <translation type="unfinished"></translation>
     </message>
@@ -197,17 +197,17 @@
 <context>
     <name>Templates::TemplatesView</name>
     <message>
-        <location filename="../../plugins/templatesplugin/templatesview.cpp" line="610"/>
+        <location filename="../../plugins/templatesplugin/templatesview.cpp" line="596"/>
         <source>About to delete %1.</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../../plugins/templatesplugin/templatesview.cpp" line="611"/>
+        <location filename="../../plugins/templatesplugin/templatesview.cpp" line="597"/>
         <source>Do you really want to remove %1 from your templates&apos; list ?</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../../plugins/templatesplugin/templatesview.cpp" line="612"/>
+        <location filename="../../plugins/templatesplugin/templatesview.cpp" line="598"/>
         <source>This action is definitive and all information will be lost. Children of this item will be deleted as well.</source>
         <translation type="unfinished"></translation>
     </message>

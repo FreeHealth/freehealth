@@ -95,53 +95,59 @@
 <context>
     <name>DataPack::Internal::HttpServerEngine</name>
     <message>
-        <location filename="../../libs/datapackutils/serverengines/httpserverengine.cpp" line="233"/>
+        <location filename="../../libs/datapackutils/serverengines/httpserverengine.cpp" line="226"/>
+        <source>Abort</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../../libs/datapackutils/serverengines/httpserverengine.cpp" line="264"/>
         <source>Server authentification requiered</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../../libs/datapackutils/serverengines/httpserverengine.cpp" line="252"/>
+        <location filename="../../libs/datapackutils/serverengines/httpserverengine.cpp" line="289"/>
         <source>Proxy authentification requiered</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../../libs/datapackutils/serverengines/httpserverengine.cpp" line="281"/>
-        <location filename="../../libs/datapackutils/serverengines/httpserverengine.cpp" line="282"/>
+        <location filename="../../libs/datapackutils/serverengines/httpserverengine.cpp" line="318"/>
+        <location filename="../../libs/datapackutils/serverengines/httpserverengine.cpp" line="319"/>
         <source>Server error: %1</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../../libs/datapackutils/serverengines/httpserverengine.cpp" line="366"/>
+        <location filename="../../libs/datapackutils/serverengines/httpserverengine.cpp" line="404"/>
         <source>Server description file correctly downloaded.</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../../libs/datapackutils/serverengines/httpserverengine.cpp" line="377"/>
+        <location filename="../../libs/datapackutils/serverengines/httpserverengine.cpp" line="420"/>
         <source>Server description file is not readable.</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../../libs/datapackutils/serverengines/httpserverengine.cpp" line="388"/>
+        <location filename="../../libs/datapackutils/serverengines/httpserverengine.cpp" line="431"/>
         <source>Server description file can not be unzipped.</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../../libs/datapackutils/serverengines/httpserverengine.cpp" line="418"/>
+        <location filename="../../libs/datapackutils/serverengines/httpserverengine.cpp" line="461"/>
+        <location filename="../../libs/datapackutils/serverengines/httpserverengine.cpp" line="462"/>
         <source>Adding pack description file to the download queue.</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../../libs/datapackutils/serverengines/httpserverengine.cpp" line="437"/>
+        <location filename="../../libs/datapackutils/serverengines/httpserverengine.cpp" line="481"/>
         <source>Pack description correctly downloaded.</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../../libs/datapackutils/serverengines/httpserverengine.cpp" line="444"/>
+        <location filename="../../libs/datapackutils/serverengines/httpserverengine.cpp" line="488"/>
         <source>Pack correctly downloaded.</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../../libs/datapackutils/serverengines/httpserverengine.cpp" line="465"/>
+        <location filename="../../libs/datapackutils/serverengines/httpserverengine.cpp" line="509"/>
         <source>Pack file can not be created in the persistent cache.</source>
         <translation type="unfinished"></translation>
     </message>
@@ -149,17 +155,17 @@
 <context>
     <name>DataPack::Internal::LocalServerEngine</name>
     <message>
-        <location filename="../../libs/datapackutils/serverengines/localserverengine.cpp" line="92"/>
+        <location filename="../../libs/datapackutils/serverengines/localserverengine.cpp" line="95"/>
         <source>Server configuration correctly downloaded.</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../../libs/datapackutils/serverengines/localserverengine.cpp" line="117"/>
+        <location filename="../../libs/datapackutils/serverengines/localserverengine.cpp" line="120"/>
         <source>Pack correctly downloaded.</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../../libs/datapackutils/serverengines/localserverengine.cpp" line="129"/>
+        <location filename="../../libs/datapackutils/serverengines/localserverengine.cpp" line="132"/>
         <source>Pack file does not exists.</source>
         <translation type="unfinished"></translation>
     </message>
@@ -180,7 +186,7 @@
 <context>
     <name>DataPack::Internal::PackEndPage</name>
     <message>
-        <location filename="../../libs/datapackutils/widgets/packwizard.cpp" line="562"/>
+        <location filename="../../libs/datapackutils/widgets/packwizard.cpp" line="563"/>
         <source>Pack(s) processed.</source>
         <translation type="unfinished"></translation>
     </message>
@@ -257,45 +263,29 @@
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../../libs/datapackutils/packmanager.cpp" line="236"/>
-        <location filename="../../libs/datapackutils/packmanager.cpp" line="237"/>
+        <location filename="../../libs/datapackutils/packmanager.cpp" line="230"/>
+        <location filename="../../libs/datapackutils/packmanager.cpp" line="231"/>
         <source>Unable to unzip pack file %1 to %2</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../../libs/datapackutils/packmanager.cpp" line="250"/>
-        <source>Unable to copy pack description file. Source: %1. Dest: %2</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
         <location filename="../../libs/datapackutils/packmanager.cpp" line="253"/>
-        <source>Unable to copy pack description file</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <location filename="../../libs/datapackutils/packmanager.cpp" line="258"/>
         <source>An error was detected during installation of %1.</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../../libs/datapackutils/packmanager.cpp" line="260"/>
+        <location filename="../../libs/datapackutils/packmanager.cpp" line="255"/>
         <source>Pack %1 was correctly installed.</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../../libs/datapackutils/packmanager.cpp" line="275"/>
-        <location filename="../../libs/datapackutils/packmanager.cpp" line="276"/>
+        <location filename="../../libs/datapackutils/packmanager.cpp" line="270"/>
+        <location filename="../../libs/datapackutils/packmanager.cpp" line="271"/>
         <source>Unable to remove pack %1, unzip path does not exists (%2)</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../../libs/datapackutils/packmanager.cpp" line="282"/>
-        <location filename="../../libs/datapackutils/packmanager.cpp" line="283"/>
-        <source>Unable to remove pack %1, error: %2</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <location filename="../../libs/datapackutils/packmanager.cpp" line="286"/>
+        <location filename="../../libs/datapackutils/packmanager.cpp" line="284"/>
         <source>Pack %1 correctly removed.</source>
         <translation type="unfinished"></translation>
     </message>
@@ -382,62 +372,62 @@
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../../libs/datapackutils/widgets/serverpackeditor.cpp" line="345"/>
+        <location filename="../../libs/datapackutils/widgets/serverpackeditor.cpp" line="358"/>
         <source>Update information</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../../libs/datapackutils/widgets/serverpackeditor.cpp" line="361"/>
+        <location filename="../../libs/datapackutils/widgets/serverpackeditor.cpp" line="374"/>
         <source>Dependencies</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../../libs/datapackutils/widgets/serverpackeditor.cpp" line="372"/>
+        <location filename="../../libs/datapackutils/widgets/serverpackeditor.cpp" line="385"/>
         <source>File specification</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../../libs/datapackutils/widgets/serverpackeditor.cpp" line="373"/>
+        <location filename="../../libs/datapackutils/widgets/serverpackeditor.cpp" line="386"/>
         <source>File name or URL:</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../../libs/datapackutils/widgets/serverpackeditor.cpp" line="396"/>
+        <location filename="../../libs/datapackutils/widgets/serverpackeditor.cpp" line="229"/>
         <source>Updating server information</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../../libs/datapackutils/widgets/serverpackeditor.cpp" line="413"/>
+        <location filename="../../libs/datapackutils/widgets/serverpackeditor.cpp" line="417"/>
         <source>Downloading server information</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../../libs/datapackutils/widgets/serverpackeditor.cpp" line="453"/>
+        <location filename="../../libs/datapackutils/widgets/serverpackeditor.cpp" line="457"/>
         <source>Refresh datapack servers</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../../libs/datapackutils/widgets/serverpackeditor.cpp" line="454"/>
+        <location filename="../../libs/datapackutils/widgets/serverpackeditor.cpp" line="458"/>
         <source>Server editor</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../../libs/datapackutils/widgets/serverpackeditor.cpp" line="455"/>
+        <location filename="../../libs/datapackutils/widgets/serverpackeditor.cpp" line="459"/>
         <source>Add a server</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../../libs/datapackutils/widgets/serverpackeditor.cpp" line="456"/>
+        <location filename="../../libs/datapackutils/widgets/serverpackeditor.cpp" line="460"/>
         <source>Remove a server</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../../libs/datapackutils/widgets/serverpackeditor.cpp" line="457"/>
+        <location filename="../../libs/datapackutils/widgets/serverpackeditor.cpp" line="461"/>
         <source>Server and pack editor</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../../libs/datapackutils/widgets/serverpackeditor.cpp" line="458"/>
+        <location filename="../../libs/datapackutils/widgets/serverpackeditor.cpp" line="462"/>
         <source>Process changes</source>
         <translation type="unfinished"></translation>
     </message>

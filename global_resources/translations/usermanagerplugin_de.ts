@@ -4,18 +4,18 @@
 <context>
     <name>UserBase</name>
     <message>
-        <location filename="../../plugins/usermanagerplugin/database/userbase.cpp" line="475"/>
-        <location filename="../../plugins/usermanagerplugin/database/userbase.cpp" line="497"/>
+        <location filename="../../plugins/usermanagerplugin/database/userbase.cpp" line="479"/>
+        <location filename="../../plugins/usermanagerplugin/database/userbase.cpp" line="503"/>
         <source>Can not create a new user&apos;s UUID, database access error</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../../plugins/usermanagerplugin/database/userbase.cpp" line="520"/>
+        <location filename="../../plugins/usermanagerplugin/database/userbase.cpp" line="528"/>
         <source>Can not retreive login from the uuid</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../../plugins/usermanagerplugin/database/userbase.cpp" line="590"/>
+        <location filename="../../plugins/usermanagerplugin/database/userbase.cpp" line="623"/>
         <source>Trying to create empty user database. 
        Location : %1 
        FileName: %2
@@ -23,7 +23,7 @@
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../../plugins/usermanagerplugin/database/userbase.cpp" line="1003"/>
+        <location filename="../../plugins/usermanagerplugin/database/userbase.cpp" line="1013"/>
         <source>User %1 correctly updated.</source>
         <translation type="unfinished"></translation>
     </message>
@@ -49,27 +49,27 @@
 <context>
     <name>UserPlugin</name>
     <message>
-        <location filename="../../plugins/usermanagerplugin/constants.h" line="192"/>
+        <location filename="../../plugins/usermanagerplugin/constants.h" line="193"/>
         <source>User creator wizard</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../../plugins/usermanagerplugin/constants.h" line="193"/>
+        <location filename="../../plugins/usermanagerplugin/constants.h" line="194"/>
         <source>Create user</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../../plugins/usermanagerplugin/constants.h" line="194"/>
+        <location filename="../../plugins/usermanagerplugin/constants.h" line="195"/>
         <source>Modify user</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../../plugins/usermanagerplugin/constants.h" line="195"/>
+        <location filename="../../plugins/usermanagerplugin/constants.h" line="196"/>
         <source>Delete user</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../../plugins/usermanagerplugin/constants.h" line="196"/>
+        <location filename="../../plugins/usermanagerplugin/constants.h" line="197"/>
         <source>Save user</source>
         <translation type="unfinished"></translation>
     </message>
@@ -166,7 +166,7 @@ Last connection : %2</source>
 <context>
     <name>UserPlugin::Internal::UserBase</name>
     <message>
-        <location filename="../../plugins/usermanagerplugin/database/userbase.cpp" line="838"/>
+        <location filename="../../plugins/usermanagerplugin/database/userbase.cpp" line="852"/>
         <source>Recorded User Last Login : %1 </source>
         <translation type="unfinished"></translation>
     </message>
@@ -878,11 +878,6 @@ You must specify a different login/password.</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../../plugins/usermanagerplugin/widgets/userwizard.cpp" line="686"/>
-        <source>Zip code</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
         <location filename="../../plugins/usermanagerplugin/widgets/userwizard.cpp" line="687"/>
         <source>City</source>
         <translation type="unfinished"></translation>
@@ -966,43 +961,43 @@ Application will stop.</source>
 <context>
     <name>UserPlugin::UserModel</name>
     <message>
-        <location filename="../../plugins/usermanagerplugin/usermodel.cpp" line="521"/>
+        <location filename="../../plugins/usermanagerplugin/usermodel.cpp" line="522"/>
         <source>Unable to retreive user into the model using login and password.</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../../plugins/usermanagerplugin/usermodel.cpp" line="652"/>
-        <location filename="../../plugins/usermanagerplugin/usermodel.cpp" line="679"/>
+        <location filename="../../plugins/usermanagerplugin/usermodel.cpp" line="653"/>
+        <location filename="../../plugins/usermanagerplugin/usermodel.cpp" line="680"/>
         <source>Database server administrator</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../../plugins/usermanagerplugin/usermodel.cpp" line="792"/>
+        <location filename="../../plugins/usermanagerplugin/usermodel.cpp" line="793"/>
         <source>You can not delete your own user.</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../../plugins/usermanagerplugin/usermodel.cpp" line="791"/>
+        <location filename="../../plugins/usermanagerplugin/usermodel.cpp" line="792"/>
         <source>User can not be deleted.</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../../plugins/usermanagerplugin/usermodel.cpp" line="532"/>
+        <location filename="../../plugins/usermanagerplugin/usermodel.cpp" line="533"/>
         <source>Setting current user uuid to 			 %1</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../../plugins/usermanagerplugin/usermodel.cpp" line="665"/>
+        <location filename="../../plugins/usermanagerplugin/usermodel.cpp" line="666"/>
         <source>Setting current user uuid to %1 (su)</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../../plugins/usermanagerplugin/usermodel.cpp" line="802"/>
+        <location filename="../../plugins/usermanagerplugin/usermodel.cpp" line="803"/>
         <source>You can not delete a modified user, save it before.</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../../plugins/usermanagerplugin/usermodel.cpp" line="814"/>
+        <location filename="../../plugins/usermanagerplugin/usermodel.cpp" line="815"/>
         <source>User can not be deleted from database.</source>
         <translation type="unfinished"></translation>
     </message>

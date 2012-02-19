@@ -4,41 +4,41 @@
 <context>
     <name>XmlForms::Internal::XmlFormIO</name>
     <message>
-        <location filename="../../plugins/xmlioplugin/xmlformio.cpp" line="133"/>
-        <location filename="../../plugins/xmlioplugin/xmlformio.cpp" line="197"/>
+        <location filename="../../plugins/xmlioplugin/xmlformio.cpp" line="142"/>
+        <location filename="../../plugins/xmlioplugin/xmlformio.cpp" line="207"/>
         <source>Invalid file detected.</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../../plugins/xmlioplugin/xmlformio.cpp" line="134"/>
-        <location filename="../../plugins/xmlioplugin/xmlformio.cpp" line="198"/>
+        <location filename="../../plugins/xmlioplugin/xmlformio.cpp" line="143"/>
+        <location filename="../../plugins/xmlioplugin/xmlformio.cpp" line="208"/>
         <source>An invalid file was found. Please contact your software administrator.
 Wrong file: %1
 Error: %2</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../../plugins/xmlioplugin/xmlformio.cpp" line="308"/>
+        <location filename="../../plugins/xmlioplugin/xmlformio.cpp" line="323"/>
         <source>No form file name</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../../plugins/xmlioplugin/xmlformio.cpp" line="511"/>
+        <location filename="../../plugins/xmlioplugin/xmlformio.cpp" line="533"/>
         <source>Form: </source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../../plugins/xmlioplugin/xmlformio.cpp" line="512"/>
+        <location filename="../../plugins/xmlioplugin/xmlformio.cpp" line="534"/>
         <source>Database version: %1</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../../plugins/xmlioplugin/xmlformio.cpp" line="524"/>
+        <location filename="../../plugins/xmlioplugin/xmlformio.cpp" line="546"/>
         <source>Form update detected.</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../../plugins/xmlioplugin/xmlformio.cpp" line="525"/>
+        <location filename="../../plugins/xmlioplugin/xmlformio.cpp" line="547"/>
         <source>A form update has been detected. Do you want to update the forms ?</source>
         <translation type="unfinished"></translation>
     </message>

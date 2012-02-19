@@ -1501,5 +1501,10 @@ Voulez-vous réellement changer de mode d&apos;édition ?</translation>
         <source>Copy prescription item to clipboard</source>
         <translation>Copier la prescription dans le presse-papier</translation>
     </message>
+    <message>
+        <location filename="../../plugins/drugsplugin/constants.h" line="91"/>
+        <source>Add chronic therapeutics</source>
+        <translation>Ajouter les traitements choniques</translation>
+    </message>
 </context>
 </TS>
