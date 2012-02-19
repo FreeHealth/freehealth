@@ -22,55 +22,89 @@
  *   Main Developper : Eric MAEKER, <eric.maeker@gmail.com>                *
  *   Contributors :                                                        *
  *       NAME <MAIL@ADRESS>                                                *
+ *       NAME <MAIL@ADRESS>                                                *
  ***************************************************************************/
-#ifndef LINEEDITECHOSWITCHER_H
-#define LINEEDITECHOSWITCHER_H
-
-#include <utils/global_exporter.h>
-
-/**
- * \file lineeditechoswitcher.h
- * \author Eric MAEKER <eric.maeker@gmail.com>
- * \version 0.6.4
- * \date 17 Feb 2012
-*/
+#ifndef CORE_INTERNAL_NETWORKPREFERENCES_H
+#define CORE_INTERNAL_NETWORKPREFERENCES_H
 
 #include <QWidget>
-#include <QLineEdit>
-#include <QEvent>
-#include <QIcon>
 
-namespace Utils {
+#include <coreplugin/core_exporter.h>
+#include <coreplugin/ioptionspage.h>
+
+#include <QWidget>
+
+#include <QPointer>
+#include <QObject>
+
+/**
+ * \file networkpreferences.h
+ * \author Eric MAEKER <eric.maeker@gmail.com>
+ * \version 0.6.4
+ * \date 19 Feb 2012
+*/
+
+namespace Core {
+class ISettings;
+
 namespace Internal {
-class LineEditEchoSwitcherPrivate;
+namespace Ui {
+class ProxyPreferencesWidget;
 }
 
-class UTILS_EXPORT LineEditEchoSwitcher : public QWidget
+class ProxyPreferencesWidget : public QWidget
 {
     Q_OBJECT
-    Q_PROPERTY( QString text READ text WRITE setText USER true)
+    Q_DISABLE_COPY(ProxyPreferencesWidget)
 
 public:
-    LineEditEchoSwitcher( QWidget *parent = 0 );
-    ~LineEditEchoSwitcher() {}
+    explicit ProxyPreferencesWidget(QWidget *parent = 0);
 
-    QLineEdit *lineEdit();
-    void setText( const QString & text );
-    QString text();
-    void setIcon(const QIcon &icon);
-    void clear() {lineEdit()->clear();}
+    static void writeDefaultSettings(Core::ISettings *s);
+    void setDatasToUi();
 
 public Q_SLOTS:
-    void toogleEchoMode();
-    void setEchoMode(QLineEdit::EchoMode mode);
+    void saveToSettings(Core::ISettings *s = 0);
+
+private Q_SLOTS:
+    void autoDetectProxy();
 
 protected:
-    void changeEvent( QEvent *e );
+    virtual void changeEvent(QEvent *e);
 
 private:
-    Internal::LineEditEchoSwitcherPrivate *d;
+    Ui::ProxyPreferencesWidget *ui;
 };
 
-}  // End Utils
+class CORE_EXPORT ProxyPreferencesPage : public Core::IOptionsPage
+{
+    Q_OBJECT
+public:
+    ProxyPreferencesPage(QObject *parent = 0);
+    ~ProxyPreferencesPage();
 
-#endif // LINEEDITECHOSWITCHER_H
+    QString id() const;
+    QString name() const;
+    QString category() const;
+    QString title() const;
+
+    void resetToDefaults();
+    void checkSettingsValidity();
+    void applyChanges();
+    void finish();
+
+    QString helpPage() {return "parametrer.html";}
+
+    static void writeDefaultSettings(Core::ISettings *s) {Internal::ProxyPreferencesWidget::writeDefaultSettings(s);}
+
+    QWidget *createPage(QWidget *parent = 0);
+private:
+    QPointer<Internal::ProxyPreferencesWidget> m_Widget;
+};
+
+
+} // namespace Internal
+} // namespace Core
+
+
+#endif // CORE_INTERNAL_NETWORKPREFERENCES_H

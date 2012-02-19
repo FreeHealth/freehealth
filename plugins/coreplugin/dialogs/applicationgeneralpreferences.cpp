@@ -30,7 +30,10 @@
 
 #include <utils/log.h>
 #include <utils/updatechecker.h>
-#include <translationutils/constanttranslations.h>
+#include <translationutils/constants.h>
+#include <translationutils/trans_spashandupdate.h>
+#include <translationutils/trans_current.h>
+#include <translationutils/trans_msgerror.h>
 
 #include <coreplugin/icore.h>
 #include <coreplugin/isettings.h>

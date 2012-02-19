@@ -116,6 +116,8 @@ const char * const  S_EXTERNAL_DATABASE_PORT = "ExternalDatabase/Port";
 const char * const  S_ALWAYS_SAVE_WITHOUT_PROMPTING = "Core/SaveInDatabaseWithoutPrompringUser";
 const char * const  S_ALLOW_VIRTUAL_DATA = "Core/AllowAndUseVirtuals";
 
+const char * const  S_PROXY = "Core/Proxy";
+
 }  // end Constants
 } // end Core
 

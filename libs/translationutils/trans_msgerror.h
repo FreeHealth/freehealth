@@ -70,6 +70,7 @@ const char* const GENERAL                            = QT_TRANSLATE_NOOP("tkCons
 const char* const GENERAL_PREFERENCES                = QT_TRANSLATE_NOOP("tkConstants", "General preferences");
 const char* const USER_PREFERENCES                   = QT_TRANSLATE_NOOP("tkConstants", "User preferences");
 const char* const APPLICATION_FAILURE                = QT_TRANSLATE_NOOP("tkConstants", "Fatal error : Application failure. Please restart application.");
+const char* const INTERNET_CONNECTION_PREFERENCES    = QT_TRANSLATE_NOOP("tkConstants", "Internet connection preferences");
 
 const char* const LAST_CHECK                         = QT_TRANSLATE_NOOP("tkConstants", "Last check");
 const char* const CONNECTED                          = QT_TRANSLATE_NOOP("tkConstants", "Connected");
