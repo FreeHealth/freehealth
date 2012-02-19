@@ -182,9 +182,9 @@ MainWindow::MainWindow(QWidget *parent) :
 #endif
 
 //    // Test 2: HttpPseudoSecuredZipped
-    DataPack::Server http("http://test.freemedforms.com");
-    http.setUrlStyle(DataPack::Server::HttpPseudoSecuredAndZipped);
-    core.serverManager()->addServer(http);
+//    DataPack::Server http("http://test.freemedforms.com");
+//    http.setUrlStyle(DataPack::Server::HttpPseudoSecuredAndZipped);
+//    core.serverManager()->addServer(http);
 
 //    // Test 3: HttpPseudoSecuredZipped
 //    DataPack::Server ftp("ftp://localhost/");
