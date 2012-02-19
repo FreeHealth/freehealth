@@ -253,7 +253,6 @@ void HttpServerEngine::downloadProgress(qint64 bytesRead, qint64 totalBytes)
     } else {
         bar->setValue(0);
     }
-    qWarning() << reply->url().toString() << reply->header(QNetworkRequest::ContentLengthHeader) << bytesRead << totalBytes;
 }
 
 void HttpServerEngine::authenticationRequired(QNetworkReply *reply, QAuthenticator *authenticator)
