@@ -53,6 +53,8 @@ DrugInteractionsPlugin::DrugInteractionsPlugin() :
 
 DrugInteractionsPlugin::~DrugInteractionsPlugin()
 {
+    if (Utils::Log::warnPluginsCreation())
+        qWarning() << "~DrugInteractionsPlugin";
     removeObject(m_DDIEngine);
     if (m_DDIEngine)
         delete m_DDIEngine;

@@ -800,6 +800,7 @@ bool DrugDrugInteractionEngine::init()
         LOG_QUERY_ERROR(query);
     }
     query.finish();
+    LOG(QString("Retrieve %1 DDI").arg(d->m_InteractionsIDs.count()));
 
     d->m_DoNotWarnAtcDuplicates.clear();
     QHash<int,QString> where;
