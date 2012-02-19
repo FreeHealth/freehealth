@@ -312,7 +312,7 @@
   <customwidget>
    <class>CategoryListWidget</class>
    <extends>QListWidget</extends>
-   <header>categorylistwidget.h</header>
+   <header location="global">datapackutils/categorylistwidget.h</header>
   </customwidget>
  </customwidgets>
  <resources/>
