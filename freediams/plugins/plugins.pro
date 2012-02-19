@@ -10,7 +10,8 @@ SUBDIRS = \
     templates \
     listview \
     saverestore \
-    datapack
+    datapack \
+    ddi
 
 
 core.subdir = coreplugin
@@ -53,7 +54,11 @@ templates.depends += core
 datapack.subdir   = datapackplugin
 datapack.depends += core
 
+ddi.subdir   = druginteractionsplugin
+ddi.depends += drugsbase
+ddi.depends += core
+
 # manage non free content
-include(../../config.pri)
-!isEmpty(HAS_NONFREE):include($${NONFREE_SOURCES_PLUGINS_PATH}/plugins.pri)
-message($${HAS_NONFREE}  //  $${NONFREE_SOURCES_PLUGINS_PATH})
+#include(../../config.pri)
+#!isEmpty(HAS_NONFREE):include($${NONFREE_SOURCES_PLUGINS_PATH}/plugins.pri)
+#message($${HAS_NONFREE}  //  $${NONFREE_SOURCES_PLUGINS_PATH})
