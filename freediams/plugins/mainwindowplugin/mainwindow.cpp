@@ -376,6 +376,7 @@ void MainWindow::extensionsInitialized()
     // Creating MainWindow interface
     m_ui = new Internal::Ui::MainWindow();
     m_ui->setupUi(this);
+    m_ui->centralLayout->setMargin(5);
     m_ui->sexCombo->addItems(genders());
 
     if (commandLine()->value(Core::CommandLine::CL_EMR_Name).isValid())
