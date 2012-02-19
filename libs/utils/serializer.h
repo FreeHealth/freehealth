@@ -18,37 +18,22 @@
  *  along with this program (COPYING.FREEMEDFORMS file).                   *
  *  If not, see <http://www.gnu.org/licenses/>.                            *
  ***************************************************************************/
-#ifndef TKSERIALIZER_H
-#define TKSERIALIZER_H
+#ifndef UTILS_SERIALIZER_H
+#define UTILS_SERIALIZER_H
 
 #include <utils/global_exporter.h>
 
 #include <QString>
 #include <QStringList>
-
-namespace Utils {
-namespace Constants {
-const char * const  HASH_PREFIX           = "@HASH@@";          /*!< Constant prefix for hash serialization
-                                                                     \ingroup constants_serializer
-                                                                     \sa tkSerializer */
-const char * const  STRINGLIST_PREFIX     = "@STRINGLIST@@";    /*!< Constant prefix for StringList serialization
-                                                                     \ingroup constants_serializer
-                                                                     \sa tkSerializer */
-const char * const  SERIALIZER_SEPARATOR  = "@||@";             /*!< Constant separator used by tkSerializer
-                                                                     \ingroup constants_serializer
-                                                                     \sa tkSerializer */
-
-}  // End Constants
-}  // End Utils
-
+QT_BEGIN_NAMESPACE
+class QNetworkProxy;
+QT_END_NAMESPACE
 
 /**
-  \namespace tkSerializer
-  \brief Serializer/deseroalizer for various Qt objects.
-  \ingroup toolkit
-  \ingroup object_toolkit
-  \sa constants_serializer
+  \namespace Utils::Serializer
+  \brief Serializer/deserializer for various Qt objects.
 */
+
 namespace Utils {
 namespace Serializer {
 
@@ -70,7 +55,10 @@ UTILS_EXPORT const QHash<int,QVariant> toVariantHash( const QString &serialized,
 UTILS_EXPORT const QString threeCharKeyHashToString( const QHash<QString,QString> & hash, bool base64Protection = false );
 UTILS_EXPORT const QHash<QString,QString> threeCharKeyHashToHash( const QString & serialized, bool base64Protection = false );
 
+UTILS_EXPORT QString serializeProxy(const QNetworkProxy &proxy);
+UTILS_EXPORT bool deserializeProxy(const QString &serializedString, QNetworkProxy &proxy);
+
 }  // End Serializer
 }  // End Utils
 
-#endif // TKSERIALIZER_H
+#endif // UTILS_SERIALIZER_H

@@ -178,8 +178,8 @@ UTILS_EXPORT QString cryptPassword(const QString &toCrypt);
 UTILS_EXPORT QString loginForSQL(const QString &log);
 UTILS_EXPORT QString loginFromSQL(const QVariant &sql);
 UTILS_EXPORT QString loginFromSQL(const QString &sql);
-UTILS_EXPORT QByteArray crypt(const QString &text);
-UTILS_EXPORT QString decrypt(const QByteArray &text);
+UTILS_EXPORT QByteArray crypt(const QString &text, const QString &key = QString::null);
+UTILS_EXPORT QString decrypt(const QByteArray &text, const QString &key = QString::null);
 
 }  // end Utils
 

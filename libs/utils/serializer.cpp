@@ -19,16 +19,32 @@
  *  If not, see <http://www.gnu.org/licenses/>.                            *
  ***************************************************************************/
 #include "serializer.h"
+
 #include <utils/log.h>
+#include <utils/global.h>
 
 #include <QApplication>
 #include <QLatin1Char>
 #include <QVariant>
 #include <QRect>
 #include <QPoint>
+#include <QNetworkProxy>
 
 using namespace Utils;
 using namespace Utils::Constants;
+
+namespace {
+const char * const  HASH_PREFIX           = "@HASH@@";          /*!< Constant prefix for hash serialization
+                                                                     \ingroup constants_serializer
+                                                                     \sa tkSerializer */
+const char * const  STRINGLIST_PREFIX     = "@STRINGLIST@@";    /*!< Constant prefix for StringList serialization
+                                                                     \ingroup constants_serializer
+                                                                     \sa tkSerializer */
+const char * const  SERIALIZER_SEPARATOR  = "@||@";             /*!< Constant separator used by tkSerializer
+                                                                     \ingroup constants_serializer
+                                                                     \sa tkSerializer */
+
+}  // End Anonymous
 
 namespace Utils {
 namespace Serializer {
@@ -413,6 +429,32 @@ const QHash<QString,QString> threeCharKeyHashToHash( const QString & serialized,
     return toReturn;
 }
 
+QString serializeProxy(const QNetworkProxy &proxy)
+{
+    QStringList s;
+    s << QString::number(proxy.type());
+    s << proxy.hostName();
+    s << QString::number(proxy.port());
+    s << proxy.user();
+    s << proxy.password();
+    QString t = s.join(::SERIALIZER_SEPARATOR);
+    t = Utils::crypt(t, "ProXySeTtInGs");
+    return t;
+}
+
+bool deserializeProxy(const QString &serializedString, QNetworkProxy &proxy)
+{
+    QString t = Utils::decrypt(serializedString.toAscii(), "ProXySeTtInGs");
+    QStringList l = t.split(::SERIALIZER_SEPARATOR);
+    if (l.count() != 5)
+        return false;
+    proxy.setType(QNetworkProxy::ProxyType(l.value(0).toInt()));
+    proxy.setHostName(l.value(1));
+    proxy.setPort(l.value(2).toInt());
+    proxy.setUser(l.value(3));
+    proxy.setPassword(l.value(4));
+    return true;
+}
 
 }  // End Serializer
 }  // End Utils
