@@ -127,6 +127,7 @@ inline static void defineLibraryPaths()
 int main( int argc, char *argv[] )
 {
     QApplication app(argc, argv);
+    qWarning();
 
     // --exchange-in=../../../../global_resources/textfiles/dataintest.xml --config=../../../../global_resources/config.ini
 
