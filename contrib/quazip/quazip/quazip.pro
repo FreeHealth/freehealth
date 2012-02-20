@@ -4,10 +4,11 @@ TARGET    = quazip
 # QuaZip version = 0.4.4
 
 include(../../../libs/libsworkbench.pri)
-include($${SOURCES_LIBS_PATH}/utils.pri)
+include(../quazip_dependencies.pri)
 
-win32:LIBS *= -L$${SOURCES_CONTRIBS_PATH}/quazip
-#else:linux*:LIBS *= -L/lib
+win32{
+  #LIBS *= -L$${SOURCES_CONTRIBS_PATH}/quazip
+}
 
 LIBS *= -lz
 
