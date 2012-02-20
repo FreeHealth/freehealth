@@ -423,7 +423,7 @@ void HttpServerEngine::afterServerConfigurationDownload(const ReplyData &data)
         QDir().mkpath(unzipPath);
         // save buffer to tmp zip file
         QFile zip(zipName);
-        if (!zip.open(QFile::WriteOnly | QFile::Text)) {
+        if (!zip.open(QFile::WriteOnly)) {
             LOG_ERROR(tkTr(Trans::Constants::FILE_1_ISNOT_READABLE).arg(zip.fileName()));
             status->errorMessages << tr("Server description file is not readable.");
             status->hasError = true;
