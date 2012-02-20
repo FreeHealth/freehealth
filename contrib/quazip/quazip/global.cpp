@@ -112,7 +112,7 @@ bool unzipFile(const QString &fileName, const QString &pathToUnZippedFiles, QPro
             QDir().mkpath(QFileInfo(out).absolutePath());
 
         // open the output file
-        if (!out.open(QIODevice::WriteOnly | QIODevice::Text)) {
+        if (!out.open(QIODevice::WriteOnly)) {
             LOG_ERROR_FOR("QuaZip", QString("Error: %1: %2").arg(out.fileName()).arg(zip.getZipError()));
             return false;
         }
