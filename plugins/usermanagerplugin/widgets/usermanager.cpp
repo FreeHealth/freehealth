@@ -113,7 +113,7 @@ private:
 
 /**
   Main user interface for User Manager.
-  User Model must have been instanciated BEFORE this interface, and a current user must have been setted.\n
+  User Model must have been instanciated BEFORE this interface, and a current user must have been set.\n
   You must instanciate this class as a pointer in order to avoid errors at deletion.
   \sa UserModel, UserModel::hasCurrentUser()
   \todo Search user by city, search by name & firstname,
@@ -161,7 +161,7 @@ UserManager::~UserManager()
 
 /**
   Main user interface for User Manager.
-  User Model must have been instanciated BEFORE this interface, and a current user must have been setted.\n
+  User Model must have been instanciated BEFORE this interface, and a current user must have been set.\n
   You must instanciate this class as a pointer in order to avoid errors at deletion.
   \sa UserModel, UserModel::hasCurrentUser()
   \todo Search user by city, search by name & firstname,

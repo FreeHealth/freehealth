@@ -610,7 +610,7 @@ QVariant IDrug::data(const int ref, const QString &lang) const
         }
     case Forms:
         {
-            // for textual and virtual drugs, forms are setted using setDataFromDb()
+            // for textual and virtual drugs, forms are set using setDataFromDb()
             if (d_drug->m_Content.value(ref).value(lang).isNull()) {
                 if (d_drug->m_Content.value(ref).value(Trans::Constants::ALL_LANGUAGE).isNull())
                     return drugsBase().getFormLabels(d_drug->m_Content.value(DrugID).value(Trans::Constants::ALL_LANGUAGE));

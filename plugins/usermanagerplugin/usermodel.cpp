@@ -36,7 +36,7 @@
 
   \todo write documentation+++
   \todo code LOCKER
-  \todo when QDataWidgetMapper (UserViewer) is setted, it calls ALL the datas of the user, even for the hidden widgets. This causes an important memory usage. This is to improve ++++
+  \todo when QDataWidgetMapper (UserViewer) is set, it calls ALL the datas of the user, even for the hidden widgets. This causes an important memory usage. This is to improve ++++
 */
 
 #include "usermodel.h"
@@ -210,7 +210,7 @@ public:
         return uuid;
     }
 
-    /** Create and empty user into the model. The uuid of the user is automatically setted and returned. */
+    /** Create and empty user into the model. The uuid of the user is automatically set and returned. */
     QString createNewEmptyUser(UserModel *model, const int createdRow)
     {
         // 1. create an empty user into the hash

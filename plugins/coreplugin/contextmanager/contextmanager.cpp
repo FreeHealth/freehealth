@@ -74,7 +74,7 @@ void ContextManagerPrivate::updateFocusWidget(QWidget *old, QWidget *now)
         if (now)
             qWarning() << "ContextManager focusChanged" << now;
         else
-            qWarning() << "ContextManager focusChanged to unsetted widget";
+            qWarning() << "ContextManager focusChanged to unset widget";
     }
 
     // Prevent changing the context object just because the menu is activated

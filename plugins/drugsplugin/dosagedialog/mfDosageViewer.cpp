@@ -187,7 +187,7 @@ public:
     {
         Q_ASSERT(q);
         if (m_DosageModel) {
-            // There is a bug with Editable QComboBoxes and the currentText property to be setted !!
+            // There is a bug with Editable QComboBoxes and the currentText property to be set !!
             // Need to be filled by hand the comboboxes...
             // Label
             q->labelLineEdit->setText(m_DosageModel->index(row, Dosages::Constants::Label).data().toString());

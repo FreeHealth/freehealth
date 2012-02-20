@@ -77,7 +77,7 @@ public:
     enum DynamicDataType {
         String = 0,        /*!< \brief Value that can be translated to string max length = 200. */
         LongString,        /*!< \brief Value that can be translated to string length from 200 to 2000. */
-        File,              /*!< \brief Value that can be translated to string length over 2000, or is setted as a QFile. */
+        File,              /*!< \brief Value that can be translated to string length over 2000, or is set as a QFile. */
         Numeric,           /*!< \brief Value that can be translated to integer or double. */
         Date,              /*!< \brief Value that can be translated to date. */
         ExtraDocument      /*!< \brief Value is a tkTextDocumentExtra. */

@@ -396,7 +396,7 @@ QVariant AfssapsLinkerModel::data(const QModelIndex &index, int role) const
             QDomNode node = item->node();
             QDomNamedNodeMap attributeMap = node.attributes();
             if (attributeMap.namedItem("category").nodeValue()!="class") {
-                return tr("Language can only be setted to CLASS, not to molecules");
+                return tr("Language can only be set to CLASS, not to molecules");
             }
         }
         //        QString tmp;

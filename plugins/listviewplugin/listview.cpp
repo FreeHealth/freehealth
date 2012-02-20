@@ -26,7 +26,7 @@
 /**
   * \class Views::ListView
   * \brief This widget shows a QListView with some buttons and a context menu.
-  * Actions inside the contextual menu and the toolbar can be setted using
+  * Actions inside the contextual menu and the toolbar can be set using
     AvailableActions param and setActions().\n
   * You can reimplement addItem(), removeItem() and on_edit_triggered()
     that are called by buttons and menu (add , remove). \n

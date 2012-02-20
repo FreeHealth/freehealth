@@ -187,8 +187,8 @@
 
 /*! \var Core::ISettings::Paths Core::ISettings::DocumentationPath
  * Defines the users' manual path.
- * When the application is build with the LINUX_INTEGRATED config flag, the DocumentationPath is setted to <em>/usr/share/doc/ApplicationName-doc/html/</em>.
- * Otherwise it is setted inside the Bundle.
+ * When the application is build with the LINUX_INTEGRATED config flag, the DocumentationPath is set to <em>/usr/share/doc/ApplicationName-doc/html/</em>.
+ * Otherwise it is set inside the Bundle.
 */
 
 /*! \var Core::ISettings::Paths Core::ISettings::DataPackPersistentTempPath

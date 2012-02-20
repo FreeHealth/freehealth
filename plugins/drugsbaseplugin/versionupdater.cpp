@@ -32,7 +32,7 @@
   These process are called in the same order each time :
   - First : tries to update the XML content (if updateFromXml() returns true)
   - Second : tries to update from the model (if updateFromModel() returns true)
-  - If one of these process updates the prescription, the version is setted to the toVersion().
+  - If one of these process updates the prescription, the version is set to the toVersion().
   - You can not update either from the XML content and from the Model.
   \sa DrugsDb::DrugsIO
   \ingroup freediams drugswidget

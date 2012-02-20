@@ -452,8 +452,8 @@ bool DrugsModel::setData(const QModelIndex &index, const QVariant &value, int ro
 
 /**
   Set data for the specified drug with the corresponding \e CIS.
-  Drug must be setted into the model otherwise, this function returns false.\n
-  If you want the model to be refreshed call resetModel() after all datas were setted.
+  Drug must be set into the model otherwise, this function returns false.\n
+  If you want the model to be refreshed call resetModel() after all datas were set.
 */
 bool DrugsModel::setDrugData(const QVariant &drugId, const int column, const QVariant &value)
 {
@@ -640,7 +640,7 @@ int DrugsModel::addDrug(IDrug *drug, bool automaticInteractionChecking)
 
 /**
   Add a drug to the prescription.
-  \e automaticInteractionChecking can be setted of if you want to add
+  \e automaticInteractionChecking can be set of if you want to add
      multiple drugs. You should call checkInteractions() after all in this case. \n
    Please take care, that the same drug can not be inserted more than once ! \n
    Return the index of the inserted drug into the list or -1 if no drug was inserted.

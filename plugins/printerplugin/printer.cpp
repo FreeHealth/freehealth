@@ -779,7 +779,7 @@ void Printer::clearWatermark()
     d->m_WatermarkPresence = Printer::EachPages;
 }
 
-/** \brief Get the printer as setted in application's settings */
+/** \brief Get the printer as set in application's settings */
 bool Printer::getUserPrinter()
 {
     delete d->m_Printer;

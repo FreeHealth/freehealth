@@ -32,8 +32,8 @@
  If there is not informations to show, the informations' groupBox is hidden.
 
  When the user is correctly identified on the server and/or the database:
-   - the dialog result() is setted to QDialog::Accepted,
-   - current user is setted into user's model with the current login and password,
+   - the dialog result() is set to QDialog::Accepted,
+   - current user is set into user's model with the current login and password,
    - the login history is completed,
    - the lastLogin information is saved into database.
 

@@ -10,7 +10,7 @@
     </message>
     <message>
         <location filename="../../plugins/drugsplugin/drugspreferences/databaseselectorwidget.cpp" line="214"/>
-        <source>You have selected a different drugs database than the currently-opened one. Your actual prescription will be resetted. Do you want to continue ?</source>
+        <source>You have selected a different drugs database than the currently-opened one. Your actual prescription will be reset. Do you want to continue ?</source>
         <translation>Vous avez sélectionné une base de données thérapeutique différente de celle en cours d&apos;utilisation. Votre prescription actuelle va être effacée. Voulez-vous poursuivre ?</translation>
     </message>
     <message>

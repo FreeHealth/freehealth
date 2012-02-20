@@ -127,7 +127,7 @@ public:
     int m_Id;             /*!< \brief Id of the UserDynamicData*/
     int m_Trace;          /*!< \brief Link to the 'trace' table of the data */
     QString m_UserUuid;   /*!< \brief User Uuid of the UserDynamicData*/
-    QVariant m_Value;     /*!< \brief Value stored into a QVariant. Setted to null for tkTextDocumentExtra. */
+    QVariant m_Value;     /*!< \brief Value stored into a QVariant. Set to null for tkTextDocumentExtra. */
     QString m_Language;   /*!< \brief Language compatible */
     QDateTime m_Lastchange;                     /*!< \brief Date of the last change. */
     UserDynamicData::DynamicDataType m_Type;    /*!< \brief Type of the UserDynamicData. \sa */
@@ -206,7 +206,7 @@ void UserDynamicData::setUserUuid(const QString &uuid)
 
 /**
   \brief Feed the class with datas without marking it as dirty. Only used by UserBase.
-  TextDocumentExtra values should be setted from complete xml encoded TextDocumentExtra.
+  TextDocumentExtra values should be set from complete xml encoded TextDocumentExtra.
 */
 void UserDynamicData::feedFromSql(const int field, const QVariant& value)
 {
@@ -492,10 +492,10 @@ QHash<QString, int> UserDataPrivate::m_Link_PaperName_ModelIndex;
   \brief Constructor
   Some default values are defined :
   \li automatic uuid setting to a fresh new one
-  \li rights for UserManager are setted to Core::IUser::ReadOwn and Core::IUser::WriteOwn
+  \li rights for UserManager are set to Core::IUser::ReadOwn and Core::IUser::WriteOwn
   \li no rights for Medical, paramedical, dosage management
-  \li empty password is setted encrypted
-  \li locker is unsetted
+  \li empty password is set encrypted
+  \li locker is unset
  */
 UserData::UserData()
     : d(0)
@@ -523,11 +523,11 @@ UserData::UserData()
 
 /**
   \brief Constructor with a determined uuid
-  Some default values are setted :
-  \li rights for UserManager are setted to Core::IUser::ReadOwn and Core::IUser::WriteOwn
+  Some default values are set :
+  \li rights for UserManager are set to Core::IUser::ReadOwn and Core::IUser::WriteOwn
   \li no rights for Medical, paramedical, dosage management
-  \li empty password is setted encrypted
-  \li locker is unsetted
+  \li empty password is set encrypted
+  \li locker is unset
  */
 UserData::UserData(const QString & uuid)
 {

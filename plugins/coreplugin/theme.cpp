@@ -28,7 +28,7 @@
   \class Core::ITheme
   \brief this is the theme manager. Actually manages only the icons of the app.
   You first need to instanciate it, inform it of path to use. Then ask the needed QIcon.\n
-  There is a cache of asked icons. Limit of the cache can be dynamycally setted using setCacheMaxCost().
+  There is a cache of asked icons. Limit of the cache can be dynamycally set using setCacheMaxCost().
 
   \sa constants_theme
   \todo write full documentation
@@ -102,7 +102,7 @@ void ThemePrivate::setThemeRelativeRootPath(const QString &relPathFromAppBinary)
     QString path = QDir::cleanPath(qApp->applicationDirPath() + QDir::separator() + relPathFromAppBinary);
     if (QDir(path).exists()) {
         m_AbsolutePath = path;
-        Utils::Log::addMessage(this, QString("INFO : theme path setted to : %1").arg(path));
+        Utils::Log::addMessage(this, QString("INFO : theme path set to : %1").arg(path));
     }
     else
         LOG_ERROR(Trans::ConstantTranslations::tkTr(Trans::Constants::PATH_1_DOESNOT_EXISTS).arg(relPathFromAppBinary));
@@ -149,7 +149,7 @@ void ThemePrivate::setBigIconPath(const QString &absPath)
 /** \brief Returns the icon corresponding to the themed file name \e fileName and the size \e size */
 QIcon ThemePrivate::icon(const QString &fileName, IconSize size)
 {
-    Q_ASSERT_X(!m_AbsolutePath.isEmpty(), "ThemePrivate::icon", "No path setted");
+    Q_ASSERT_X(!m_AbsolutePath.isEmpty(), "ThemePrivate::icon", "No path set");
     // retreive transformed FileName (manage size)
     QString transformedFileName = transformFileName(fileName, size);
 
@@ -157,7 +157,7 @@ QIcon ThemePrivate::icon(const QString &fileName, IconSize size)
     if (m_IconCache.contains(transformedFileName))
         return QIcon(*m_IconCache[transformedFileName]);
 
-    // 1. test size by size if a path was setted else use the absolutePath of the theme
+    // 1. test size by size if a path was set else use the absolutePath of the theme
     QIcon *i = 0;
 
     // 2. get icom from file

@@ -337,7 +337,7 @@ namespace Prescription
     enum Prescription
     {
         Id = 1200,
-        IsTextualOnly,    // Setted for textual drugs
+        IsTextualOnly,    // Set for textual drugs
         UsedDosage,
         Pack_UID,
         OnlyForTest,

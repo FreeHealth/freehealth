@@ -50,7 +50,7 @@ class DrugsModel;
 namespace DrugsWidget {
 
 /**
- \brief This widget is the prescription viewer. It deals data with mfDrugsModel. The model MUST BE SETTED using setModel() and setModelColumn().
+ \brief This widget is the prescription viewer. It deals data with mfDrugsModel. The model MUST BE SET using setModel() and setModelColumn().
  Signals are emitted when user ask for : save (saveTriggered()) and print (printTriggered()) prescription.
   */
 class DRUGS_EXPORT PrescriptionViewer : public QWidget, private Internal::Ui::PrescriptionViewer
