@@ -1,7 +1,8 @@
                   Welcome to FreeMeForms
-           Copyright (C) 2008-2011 by Eric MAEKER
+           Copyright (C) 2008-2012 by Eric MAEKER
+               http://www.freemedforms.com/
                    eric.maeker@gmail.com
-                  All rights reserved.
+                    All rights reserved.
 
 
 
