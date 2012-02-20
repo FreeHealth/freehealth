@@ -59,11 +59,11 @@ bool unzipFile(const QString &fileName, const QString &pathToUnZippedFiles, QPro
     Q_ASSERT_X(QDir(outputPath).exists() , "Function unzipFile()",
                qPrintable(QString("Dir %1 does not exists").arg(outputPath)));
 
-    qWarning() << "QuaZip try to unzip" << fileName << outputPath;
+    qWarning() << "QuaZip try to unzip" << QDir::cleanPath(fileName) << outputPath;
 
-    QuaZip zip(fileName);
+    QuaZip zip(QDir::cleanPath(fileName));
     if (!zip.open(QuaZip::mdUnzip)) {
-        LOG_ERROR_FOR("QuaZip", QString("Error: %1: %2").arg(fileName).arg(zip.getZipError()));
+        LOG_ERROR_FOR("QuaZip", QString("Error: %1: %2").arg(QDir::cleanPath(fileName)).arg(zip.getZipError()));
         return false;
     }
 
@@ -95,7 +95,7 @@ bool unzipFile(const QString &fileName, const QString &pathToUnZippedFiles, QPro
             continue;
         }
         if (!file.open(QIODevice::ReadOnly)) {
-            LOG_ERROR_FOR("QuaZip", QString("Error: %1: %2").arg(fileName).arg(zip.getZipError()));
+            LOG_ERROR_FOR("QuaZip", QString("Error: %1: %2").arg(fileName).arg(file.errorString()));
             return false;
         }
         if (file.getZipError() != UNZ_OK) {

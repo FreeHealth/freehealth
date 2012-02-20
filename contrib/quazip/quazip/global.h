@@ -23,10 +23,10 @@
  *   Contributors :                                                        *
  *       NAME <MAIL@ADRESS>                                                *
  ***************************************************************************/
-#ifndef QUAZIP_GLOBAL_H
-#define QUAZIP_GLOBAL_H
+#ifndef QUAZIP_GLOBAL_FREEMEDFORMS_H
+#define QUAZIP_GLOBAL_FREEMEDFORMS_H
 
-#include <quazip/exporter.h>
+#include <quazip/quazip_global.h>
 #include <QString>
 
 QT_BEGIN_NAMESPACE
@@ -36,12 +36,12 @@ QT_END_NAMESPACE
 
 namespace QuaZipTools {
 
-    ZIP_EXPORT bool unzipFile(const QString &fileName, const QString &pathToUnZippedFiles = QString::null, QProgressBar *bar = 0);
+    QUAZIP_EXPORT bool unzipFile(const QString &fileName, const QString &pathToUnZippedFiles = QString::null, QProgressBar *bar = 0);
 
-    ZIP_EXPORT bool unzipAllFilesIntoDirs(const QStringList &paths);
+    QUAZIP_EXPORT bool unzipAllFilesIntoDirs(const QStringList &paths);
 
-    ZIP_EXPORT QStringList zipFileNameContent(const QString &absFileName);
+    QUAZIP_EXPORT QStringList zipFileNameContent(const QString &absFileName);
 
 }  //  End namespace QuaZipTools
 
-#endif // QUAZIP_GLOBAL_H
+#endif // QUAZIP_GLOBAL_FREEMEDFORMS_H

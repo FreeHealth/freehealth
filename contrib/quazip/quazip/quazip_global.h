@@ -1,4 +1,4 @@
-/*
+/**
 Copyright (C) 2005-2011 Sergey A. Tachenov
 
 This program is free software; you can redistribute it and/or modify it
@@ -19,33 +19,37 @@ See COPYING file for the full LGPL text.
 
 Original ZIP package is copyrighted by Gilles Vollant, see
 quazip/(un)zip.h files for details, basically it's zlib license.
-*/
+ */
 
-#include <QFileInfo>
+#ifndef QUAZIP_GLOBAL_H
+#define QUAZIP_GLOBAL_H
 
-#include "quazipnewinfo.h"
+#include <QtCore/qglobal.h>
 
+/**
+  This is automatically defined when building a static library, but when
+  including QuaZip sources directly into a project, QUAZIP_STATIC should
+  be defined explicitly to avoid possible troubles with unnecessary
+  importing/exporting.
+  */
+#ifdef QUAZIP_STATIC
+#define QUAZIP_EXPORT
+#else
+/**
+ * When building a DLL with MSVC, QUAZIP_BUILD must be defined.
+ * qglobal.h takes care of defining Q_DECL_* correctly for msvc/gcc.
+ */
+#if defined(QUAZIP_BUILD)
+	#define QUAZIP_EXPORT Q_DECL_EXPORT
+#else
+	#define QUAZIP_EXPORT Q_DECL_IMPORT
+#endif
+#endif // QUAZIP_STATIC
 
-QuaZipNewInfo::QuaZipNewInfo(const QString& name):
-  name(name), dateTime(QDateTime::currentDateTime()), internalAttr(0), externalAttr(0)
-{
-}
+#ifdef __GNUC__
+#define UNUSED __attribute__((__unused__))
+#else
+#define UNUSED
+#endif
 
-QuaZipNewInfo::QuaZipNewInfo(const QString& name, const QString& file):
-  name(name), internalAttr(0), externalAttr(0)
-{
-  QFileInfo info(file);
-  QDateTime lm = info.lastModified();
-  if (!info.exists())
-    dateTime = QDateTime::currentDateTime();
-  else
-    dateTime = lm;
-}
-
-void QuaZipNewInfo::setFileDateTime(const QString& file)
-{
-  QFileInfo info(file);
-  QDateTime lm = info.lastModified();
-  if (info.exists())
-    dateTime = lm;
-}
+#endif // QUAZIP_GLOBAL_H
