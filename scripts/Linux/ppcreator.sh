@@ -17,6 +17,7 @@ UBUNTU_RELEASE_NAME=""
 PGP_KEY="0x3FA0BBEF"      # Eric's key by default, you have to know the phrase
 WGET_NOPROXY=""
 DEBUILD_SOURCE="-sa"
+PPA_VERSION="1"
 
 showHelp()
 {
@@ -24,12 +25,13 @@ showHelp()
   SCRIPT_NAME=`basename $0`
   echo $SCRIPT_NAME" "$SCRIPT_VERSION" creates and sends package to the FreeMedForms LaunchPad PPA"
   echo
-  echo "Usage: "$SCRIPT_NAME" -h -b application -v applicationVersion [-k pgpKeyToUse]"
+  echo "Usage: "$SCRIPT_NAME" -h -b application -v applicationVersion [-k pgpKeyToUse -p 2] "
   echo
   echo "   -h           show this help"
   echo "   -b app       Application name"
   echo "   -v version   Application version"
   echo "   -k pgpkey    Use this specific key to sign the package"
+  echo "   -p ppaver    PPA subversion (pack name -> app-appservsion-natty-ppaver)"
   echo "   -s           Do not include source to package for uploading"
   echo "   -n           Do not use proxy when downloading"
   echo
@@ -80,7 +82,7 @@ buildSourcePackage()
 {
   cd $SOURCEDIR
   echo "    * Building DSC file: debuild -k$PGP_KEY -S $DEBUILD_SOURCE --lintian-opts -i"
-  debuild -k$PGP_KEY -S $DEBUILD_SOURCE--lintian-opts -i
+  debuild -k$PGP_KEY -S $DEBUILD_SOURCE --lintian-opts -i
   # sudo pbuilder build *.dsc > log.txt
 }
 
@@ -91,7 +93,7 @@ uploadToPPA()
   echo "    * Uploading to PPA: "$UBUNTU_RELEASE_NAME
   cd $PACKDIR
   echo `pwd`
-  dput ppa:freemedforms/ppa $APP_NAME"_"$APP_VERSION"-"$UBUNTU_RELEASE_NAME"2_source.changes"
+  dput ppa:freemedforms/ppa $APP_NAME"_"$APP_VERSION"-"$UBUNTU_RELEASE_NAME$PPA_VERSION"_source.changes"
 }
 
 # patch changelog
@@ -102,7 +104,7 @@ patchChangelog()
   rm $SOURCEDIR"/debian/changelog"
   cp $PACKDIR"/changelog.bkup" $SOURCEDIR"/debian/changelog"
   
-  INSERT=$APP_NAME" ("$APP_VERSION"-"$UBUNTU_RELEASE_NAME"2) "$UBUNTU_RELEASE_NAME"; urgency=low"
+  INSERT=$APP_NAME" ("$APP_VERSION"-"$UBUNTU_RELEASE_NAME$PPA_VERSION") "$UBUNTU_RELEASE_NAME"; urgency=low"
 
   #sed -i "1s/.*/$REPLACE/" $SOURCEDIR"/debian/changelog"
 
@@ -116,7 +118,7 @@ patchChangelog()
 #########################################################################################
 ## Analyse options
 #########################################################################################
-while getopts "hb:v:k:ns" option
+while getopts "hb:v:k:p:ns" option
 do
   case $option in
     h) showHelp
@@ -131,6 +133,9 @@ do
     n) WGET_NOPROXY="--no-proxy"
     ;;
     s) DEBUILD_SOURCE=""
+    ;;
+    p) PPA_VERSION=$OPTARG
+    ;;
   esac
 done
 
