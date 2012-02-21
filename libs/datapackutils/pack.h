@@ -43,6 +43,7 @@ public:
         DrugsWithInteractions,
         ICD,
         ZipCodes,
+        UserDocuments,
         UnknownType
     };
 

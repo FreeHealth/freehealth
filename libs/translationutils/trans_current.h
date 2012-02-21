@@ -84,6 +84,8 @@ const char* const DATAPACK_MANAGER                  = QT_TRANSLATE_NOOP("tkConst
 const char* const LAST_MODIFICATION                 = QT_TRANSLATE_NOOP("tkConstants", "Last modification");
 const char* const DATA_TYPE                         = QT_TRANSLATE_NOOP("tkConstants", "Data type");
 const char* const ZIP_CODES                         = QT_TRANSLATE_NOOP("tkConstants", "Zip codes");
+const char* const USER_DOCUMENTS                    = QT_TRANSLATE_NOOP("tkConstants", "User documents");
+
 } // end Constants
 } // end TranslationUtils
 
