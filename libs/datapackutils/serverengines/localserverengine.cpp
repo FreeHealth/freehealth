@@ -84,8 +84,14 @@ bool LocalServerEngine::startDownloadQueue()
             server->fromXml(Utils::readTextFile(server->url(Server::ServerConfigurationFile), Utils::DontWarnUser));
             // Read the local pack config
             for(int j = 0; j < server->content().packDescriptionFileNames().count(); ++j) {
+                const QString &fileName = server->url(Server::PackDescriptionFile, server->content().packDescriptionFileNames().at(j));
+                QFileInfo packXml(fileName);
+                if (!packXml.exists()) {
+                    LOG_ERROR(QString("Missing pack description file: %1 in local server.").arg(fileName));
+                    continue;
+                }
                 Pack p;
-                p.fromXmlFile(server->url(Server::PackDescriptionFile, server->content().packDescriptionFileNames().at(j)));
+                p.fromXmlFile(fileName);
                 serverManager()->registerPack(*server, p);
             }
 
