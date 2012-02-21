@@ -8,7 +8,7 @@
     <uuid>freemedforms.certified.drugs.fr.noddi</uuid>
     <authors>Eric Maeker, MD</authors>
     <version>0.7.0</version>
-    <fmfv>0.6.2</fmfv>
+    <fmfv>0.7.0</fmfv>
     <fdv>0.7.0</fdv>
     <cdate>2011-11-26</cdate>
     <lmdate>2012-02-17</lmdate>
@@ -38,6 +38,7 @@
       par biais du copyright de l'AFSSAPS.&lt;br />
       &lt;br />
       Cette base de données ne permet pas le calcul des interactions médicamenteuses&lt;br />
+      &lt;br />
       &lt;/p>
     </htmldescription>
 
@@ -49,6 +50,7 @@
       are copyrighted by the AFSSAPS.&lt;br />
       &lt;br />
       Data for drug interaction engines are not included in this database.&lt;br />
+      &lt;br />
       &lt;/p>
     </htmldescription>
 
