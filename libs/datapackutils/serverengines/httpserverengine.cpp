@@ -336,6 +336,10 @@ void HttpServerEngine::serverFinished()
     if (reply->error() != QNetworkReply::NoError) {
         reply->deleteLater(); // we don't need reply anymore
         m_replyToData.remove(reply);
+        if (m_replyToData.isEmpty()) {
+            m_queue.clear();
+            Q_EMIT queueDowloaded();
+        }
         return;
     }
 
