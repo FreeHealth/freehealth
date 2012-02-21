@@ -202,17 +202,29 @@ public:
         // Get all packages from servers
         QList<Pack> installedPacks = packManager()->installedPack();
         for(int i=0; i < serverManager()->serverCount(); ++i) {
-//            qWarning() << "scanning server" << i;
             scanServerPack(i);
         }
 
         // Add installed package to the availPacks list
-//        qWarning() << "Scanning installed";
         foreach(const Pack &p, installedPacks) {
             if (m_AvailPacks.contains(p))
                 continue;
             m_AvailPacks << p;
-//            qWarning() << "   adding" << p.uuid() << p.version();
+        }
+
+        // Keep only application compatible Packs
+        int appId = PackDescription::FreeMedFormsCompatVersion;
+        if (qApp->applicationName().contains("freediams")) {
+            appId = PackDescription::FreeDiamsCompatVersion;
+        } else if (qApp->applicationName().contains("freeaccount")) {
+            appId = PackDescription::FreeAccountCompatVersion;
+        }
+        Utils::VersionNumber appVersion(qApp->applicationVersion());
+        for(int i = m_AvailPacks.count()-1; i >= 0; --i) {
+            const Pack &p = m_AvailPacks.at(i);
+            Utils::VersionNumber packCompatVersion(p.description().data(appId).toString());
+            if (appVersion < packCompatVersion)
+                m_AvailPacks.removeAt(i);
         }
 
         // Keep only highest pack versions
