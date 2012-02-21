@@ -291,11 +291,12 @@ void ServerManager::engineDescriptionDownloadDone()
     // if all engines download done -> emit signal
     bool __emit = true;
     for(int i = 0; i < m_WorkingEngines.count(); ++i) {
-        if (m_WorkingEngines.at(i)->downloadQueueCount() > 0) {
-            qWarning() << m_WorkingEngines.at(i)->objectName() << m_WorkingEngines.at(i)->downloadQueueCount();
+        IServerEngine *engine = m_WorkingEngines.at(i);
+        if (engine->downloadQueueCount() > 0) {
+            qWarning() << engine->objectName() << engine->downloadQueueCount();
             __emit = false;
         } else {
-            disconnect(m_WorkingEngines.at(i), SIGNAL(queueDowloaded()), this, SLOT(engineDescriptionDownloadDone()));
+            disconnect(engine, SIGNAL(queueDowloaded()), this, SLOT(engineDescriptionDownloadDone()));
         }
     }
     if (m_ProgressBar)
