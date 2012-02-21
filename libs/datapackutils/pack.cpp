@@ -179,9 +179,9 @@ Pack::DataType Pack::dataType() const
     const QString &type = m_descr.data(PackDescription::DataType).toString();
     if (type.compare("forms", Qt::CaseInsensitive)==0)
         return Pack::Forms;
-    else if (type.compare("drugswithinteractions", Qt::CaseInsensitive)==0)
+    else if (type.compare("DrugsWithInteractions", Qt::CaseInsensitive)==0)
         return Pack::DrugsWithInteractions;
-    else if (type.compare("drugswithoutinteractions", Qt::CaseInsensitive)==0)
+    else if (type.compare("DrugsWithoutInteractions", Qt::CaseInsensitive)==0)
         return Pack::DrugsWithoutInteractions;
     else if (type.compare("icd", Qt::CaseInsensitive)==0)
         return Pack::ICD;
@@ -196,8 +196,8 @@ QString Pack::dataTypeName() const
     Pack::DataType type = dataType();
     switch (type) {
     case Pack::Forms: return tkTr(Trans::Constants::FORMS);
-    case Pack::DrugsWithInteractions: tkTr(Trans::Constants::DRUGS_WITH_INTERACTIONS);
-    case Pack::DrugsWithoutInteractions: tkTr(Trans::Constants::DRUGS_WITHOUT_INTERACTIONS);
+    case Pack::DrugsWithInteractions: return tkTr(Trans::Constants::DRUGS_WITH_INTERACTIONS);
+    case Pack::DrugsWithoutInteractions: return tkTr(Trans::Constants::DRUGS_WITHOUT_INTERACTIONS);
     case Pack::ICD: return tkTr(Trans::Constants::ICD10);
     case Pack::ZipCodes: return tkTr(Trans::Constants::ZIP_CODES);
     default: return tkTr(Trans::Constants::UNKNOWN);
