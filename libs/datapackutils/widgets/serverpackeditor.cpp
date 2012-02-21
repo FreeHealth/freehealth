@@ -233,7 +233,7 @@ bool ServerPackEditor::refreshServerContent()
     connect(&dlg, SIGNAL(canceled()), &core(), SLOT(stopJobsAndClearQueues()));
     /** \todo Connect the cancel button */
     serverManager()->getAllDescriptionFile(bar);
-    dlg.exec();
+//    dlg.exec();
     return true;
 }
 
@@ -376,17 +376,23 @@ void ServerPackEditor::populatePackView(const int packId)
     }
 
     // Add file specifications
+    QString zipPath = descr.data(PackDescription::UnzipToPath).toString();
+    if (core().containsPathTag(zipPath))
+        zipPath = core().replacePathTag(zipPath);
     QString file = QString("<span style=\"font-weight:bold\">%1</span><br />"
                            "<table border=1 cellpadding=0 cellspacing=0 width=100%>"
                            "<tr><td>%2</td><td>%3</td></tr>"
                            "<tr><td>MD5</td><td>%4</td></tr>"
                            "<tr><td>SHA1</td><td>%5</td></tr>"
+                           "<tr><td>%6</td><td>%7</td></tr>"
                            "</table>")
             .arg(tr("File specification"))
             .arg(tr("File name or URL:"))
             .arg(descr.data(PackDescription::AbsFileName).toString())
             .arg(descr.data(PackDescription::Md5).toString())
             .arg(descr.data(PackDescription::Sha1).toString())
+            .arg(tr("Unzip pack to path"))
+            .arg(zipPath)
             ;
 
     summary += file;

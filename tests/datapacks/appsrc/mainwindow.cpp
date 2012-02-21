@@ -155,6 +155,7 @@ MainWindow::MainWindow(QWidget *parent) :
     core.setTemporaryCachePath(QDir::tempPath());
     core.setPersistentCachePath(QDir::homePath() + "/datapack/tmp/");
     core.setInstallPath(QDir::homePath() + "/datapack/install/");
+    core.registerPathTag("__userDocuments__", QDir::homePath() + "/datapacks/user/");
 
     // Check internet connection
     if (!core.isInternetConnexionAvailable())

@@ -138,10 +138,22 @@ QString Pack::persistentlyCachedZipFileName() const
     return core().persistentCachePath() + QDir::separator() + uuid() + QDir::separator() + QFileInfo(serverFileName()).fileName();
 }
 
-/** Return the path where to unzip the pack zipped file. This path is computed using the DataPack::DataPackCore::installPath(). */
+/**
+ * Return the path where to unzip the pack zipped file.
+ * This path is computed using the DataPack::DataPackCore::installPath().
+ * If the DataPack::Pack::PackDescription::UnzipToPath contains path tags, these are
+ * replaced using the DataPack::DataPackCore::replacePathTag().
+ * \sa DataPack::DataPackCore::replacePathTag(), DataPack::DataPackCore::registerPathTag()
+*/
 QString Pack::unzipPackToPath() const
 {
-    return core().installPath() + QDir::separator() + m_descr.data(PackDescription::UnzipToPath).toString();
+    QString zipPath = m_descr.data(PackDescription::UnzipToPath).toString();
+    // contains a registered tag ?
+    if (core().containsPathTag(zipPath))
+        zipPath = core().replacePathTag(zipPath);
+    else
+        zipPath.prepend(core().installPath() + QDir::separator());
+    return zipPath;
 }
 
 /**

@@ -79,6 +79,11 @@ public:
     void setThemePath(ThemePath path, const QString &absPath);
     QString icon(const QString &name, ThemePath path = SmallPixmaps);
 
+    // Manage path tags
+    void registerPathTag(const QString &tag, const QString &absPath);
+    bool containsPathTag(const QString &path);
+    QString replacePathTag(const QString &path);
+
     // Configuration of internet connection
     bool isInternetConnexionAvailable();
     void setNetworkProxy(const QNetworkProxy &proxy);

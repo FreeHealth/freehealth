@@ -81,6 +81,8 @@ public:
     QHash<int, QString> m_ThemePath;
     QString m_InstallPath, m_TmpCachePath, m_PersistentCachePath;
     QNetworkProxy m_Proxy;
+
+    QHash<QString, QString> m_Tag_Path;
 };
 }  // End namespace Internal
 }  // End namespace DataPack
@@ -227,3 +229,29 @@ QString DataPackCore::icon(const QString &name, ThemePath path)
     return QString("%1/%2").arg(d->m_ThemePath.value(path)).arg(name);
 }
 
+/** Register a path tag. It is preferable that the \e tag starts and ends with __. \e absPath must be an absolute path. */
+void DataPackCore::registerPathTag(const QString &tag, const QString &absPath)
+{
+    d->m_Tag_Path.insert(tag, QDir::cleanPath(absPath) + QDir::separator());
+}
+
+/** Test \e path for existing tag. */
+bool DataPackCore::containsPathTag(const QString &path)
+{
+    foreach(const QString &t, d->m_Tag_Path.keys()) {
+        if (path.contains(t, Qt::CaseInsensitive))
+            return true;
+    }
+    return false;
+}
+
+/** Replace tags in \e path and return the computed new path. */
+QString DataPackCore::replacePathTag(const QString &path)
+{
+    QString tmp = path;
+    foreach(const QString &t, d->m_Tag_Path.keys()) {
+        if (tmp.contains(t, Qt::CaseInsensitive))
+            tmp = tmp.replace(t, d->m_Tag_Path.value(t));
+    }
+    return QDir::cleanPath(tmp);
+}
