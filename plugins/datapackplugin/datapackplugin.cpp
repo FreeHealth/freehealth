@@ -33,6 +33,7 @@
 #include <coreplugin/isettings.h>
 #include <coreplugin/translators.h>
 #include <coreplugin/constants_menus.h>
+#include <coreplugin/constants_tokensandsettings.h>
 #include <coreplugin/actionmanager/command.h>
 #include <coreplugin/actionmanager/actioncontainer.h>
 #include <coreplugin/actionmanager/actionmanager.h>
@@ -139,6 +140,7 @@ void DataPackPluginIPlugin::extensionsInitialized()
     core.setThemePath(DataPack::DataPackCore::SmallPixmaps, settings()->path(Core::ISettings::SmallPixmapPath));
     core.setThemePath(DataPack::DataPackCore::MediumPixmaps, settings()->path(Core::ISettings::MediumPixmapPath));
     core.setThemePath(DataPack::DataPackCore::BigPixmaps, settings()->path(Core::ISettings::BigPixmapPath));
+    core.registerPathTag(Core::Constants::TAG_USER_DOCUMENT_PATH, settings()->path(Core::ISettings::UserDocumentsPath));
     core.init();
 
     // Send the server manager configuration from the settings of the user/application
