@@ -264,6 +264,7 @@ bool PackManager::installDownloadedPack(const Pack &pack, QProgressBar *bar)
 
 bool PackManager::removePack(const Pack &pack)
 {
+    LOG("Pack removal requested: " + pack.uuid());
     // Remove the zipPath used for the pack
     QFileInfo zipPath(pack.unzipPackToPath());
     if (!zipPath.exists()) {
@@ -282,9 +283,8 @@ bool PackManager::removePack(const Pack &pack)
     }
 
     m_Msg << tr("Pack %1 correctly removed.").arg(pack.name());
-
+    LOG(tr("Pack %1 correctly removed.").arg(pack.name()));
     Q_EMIT packRemoved(pack);
-
     return true;
 }
 
