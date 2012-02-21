@@ -162,10 +162,11 @@ void Pack::setInstalledFiles(const QStringList &list)
 /** Return installed files (set usually after unzipping pack file). \sa DataPack::IPackManager::installDownloadedPack */
 QStringList Pack::installedFiles() const
 {
-    QStringList draft = m_descr.data(PackDescription::InstalledFiles).toString().split("@@");
+    const QString &inst = m_descr.data(PackDescription::InstalledFiles).toString();
+    QStringList draft = inst.split("@@");
     draft.removeAll("");
     QStringList list;
-    foreach(QString s, list) {
+    foreach(QString s, draft) {
         s.prepend(unzipPackToPath() + QDir::separator());
         list << s;
     }
