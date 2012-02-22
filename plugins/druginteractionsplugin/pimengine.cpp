@@ -677,6 +677,7 @@ PimEngine::PimEngine(QObject *parent) :
 {
     setObjectName("PimEngine");
     m_IsActive = settings()->value(Constants::S_ACTIVATED_INTERACTION_ENGINES).toStringList().contains(Constants::PIM_ENGINE_UID);
+    connect(&drugsBase(), SIGNAL(drugsBaseHasChanged()), SLOT(drugsBaseChanged()));
 }
 
 PimEngine::~PimEngine()
@@ -684,6 +685,11 @@ PimEngine::~PimEngine()
     if (d)
         delete d;
     d = 0;
+}
+
+void DrugDrugInteractionEngine::drugsBaseChanged()
+{
+    init();
 }
 
 bool PimEngine::init()

@@ -88,6 +88,9 @@ public:
 public Q_SLOTS:
     void setActive(bool state);
 
+private Q_SLOTS:
+    void drugsBaseChanged();
+
 private:
     Internal::PimEnginePrivate *d;
 };
