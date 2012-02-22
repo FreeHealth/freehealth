@@ -776,6 +776,8 @@ DrugDrugInteractionEngine::DrugDrugInteractionEngine(QObject *parent) :
 //    } else {
         d->m_LogChrono = false;
 //    }
+
+    connect(&drugsBase(), SIGNAL(drugsBaseHasChanged()), this, SLOT(drugsBaseChanged()));
 }
 
 DrugDrugInteractionEngine::~DrugDrugInteractionEngine()
@@ -785,9 +787,15 @@ DrugDrugInteractionEngine::~DrugDrugInteractionEngine()
     d = 0;
 }
 
+void DrugDrugInteractionEngine::drugsBaseChanged()
+{
+    init();
+}
+
 bool DrugDrugInteractionEngine::init()
 {
     // get all interactions ids and mol <-> atc links
+    d->m_InteractionsIDs.clear();
     QList<int> fields;
     fields << Constants::INTERACTIONS_ATC_ID1 << Constants::INTERACTIONS_ATC_ID2;
     QString req = drugsBase().select(Constants::Table_INTERACTIONS, fields);
