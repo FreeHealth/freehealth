@@ -42,16 +42,18 @@
 
 #include <extensionsystem/iplugin.h>
 
-namespace Core {
-    class ApplicationGeneralPreferencesPage;
-namespace Internal {
-    class CoreImpl;
-}
-}
+/**
+ * \file coreplugin.h
+ * \author Eric MAEKER <eric.maeker@gmail.com>
+ * \version 0.6.4
+ * \date 22 Feb 2012
+*/
 
-
 namespace Core {
+class ApplicationGeneralPreferencesPage;
 namespace Internal {
+class CoreImpl;
+class ProxyPreferencesPage;
 
 class CorePlugin : public ExtensionSystem::IPlugin
 {
@@ -69,6 +71,7 @@ public Q_SLOTS:
 private:
     CoreImpl *m_CoreImpl;
     ApplicationGeneralPreferencesPage *prefPage;
+    ProxyPreferencesPage *proxyPage;
 };
 
 } // namespace Internal

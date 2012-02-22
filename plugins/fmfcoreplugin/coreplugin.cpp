@@ -39,6 +39,7 @@
 #include <coreplugin/dialogs/pluginaboutpage.h>
 #include <coreplugin/translators.h>
 #include <coreplugin/dialogs/applicationgeneralpreferences.h>
+#include <coreplugin/dialogs/networkpreferences.h>
 
 #include <QtCore/QtPlugin>
 
@@ -49,7 +50,10 @@ static inline Core::ITheme *theme()  { return Core::ICore::instance()->theme(); 
 static inline void messageSplash(const QString &s) {theme()->messageSplashScreen(s); }
 
 CorePlugin::CorePlugin() :
-        m_CoreImpl(0), prefPage(0)
+    m_CoreImpl(0),
+    prefPage(0),
+    proxyPage(0)
+
 {
     if (Utils::Log::warnPluginsCreation())
         qWarning() << "creating CorePlugin";
@@ -57,6 +61,8 @@ CorePlugin::CorePlugin() :
 
     prefPage = new ApplicationGeneralPreferencesPage(this);
     addObject(prefPage);
+    proxyPage = new ProxyPreferencesPage(this);
+    addObject(proxyPage);
 }
 
 CorePlugin::~CorePlugin()
@@ -65,6 +71,10 @@ CorePlugin::~CorePlugin()
     if (prefPage) {
         removeObject(prefPage);
         delete prefPage; prefPage=0;
+    }
+    if (proxyPage) {
+        removeObject(proxyPage);
+        delete proxyPage; proxyPage=0;
     }
 }
 
@@ -114,6 +124,7 @@ void CorePlugin::extensionsInitialized()
 
     // add preferences page
     prefPage->checkSettingsValidity();
+    proxyPage->checkSettingsValidity();
     m_CoreImpl->settings()->sync();
 }
 
