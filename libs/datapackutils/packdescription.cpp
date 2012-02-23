@@ -42,13 +42,13 @@ const char * const ATTRIB_NAME = "n";
 const char * const ATTRIB_UUID = "u";
 const char * const ATTRIB_VERSION = "v";
 
-const char * const TYPE_DEPENDS = "depends";
-const char * const TYPE_RECOMMENDS = "recommends";
-const char * const TYPE_SUGGESTS = "suggests";
-const char * const TYPE_REQUIRES = "requires";
-const char * const TYPE_CONFLICTS = "conflicts";
-const char * const TYPE_BREAKS = "breaks";
-const char * const TYPE_PROVIDES = "provides";
+const char * const TYPE_DEPENDS      = "depends";
+const char * const TYPE_RECOMMENDS   = "recommends";
+const char * const TYPE_SUGGESTS     = "suggests";
+const char * const TYPE_REQUIRES     = "requires";
+const char * const TYPE_CONFLICTS    = "conflicts";
+const char * const TYPE_BREAKS       = "breaks";
+const char * const TYPE_PROVIDES     = "provides";
 
 }
 

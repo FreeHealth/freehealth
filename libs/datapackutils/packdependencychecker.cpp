@@ -28,11 +28,15 @@
 
 #include <datapackutils/datapackcore.h>
 #include <datapackutils/iservermanager.h>
+#include <datapackutils/ipackmanager.h>
+
+#include <QVector>
 
 using namespace DataPack;
 
 static inline DataPack::DataPackCore &core() { return DataPack::DataPackCore::instance(); }
-static inline DataPack::IServerManager *serverManager() { return DataPack::DataPackCore::instance().serverManager(); }
+static inline DataPack::IServerManager *serverManager() { return core().serverManager(); }
+static inline DataPack::IPackManager *packManager() { return core().packManager(); }
 
 PackDependencyChecker::PackDependencyChecker(QObject *parent) :
     QObject(parent),
@@ -66,6 +70,43 @@ QList<Pack> PackDependencyChecker::packDependencies(const Pack &pack, const Pack
 
 void PackDependencyChecker::testCombination(const QList<Pack> &installPacks, const QList<Pack> &updatePacks, const QList<Pack> &removePacks)
 {
+    const QList<Pack> &current = packManager()->installedPack();
+    m_ToInstall = installPacks;
+    m_ToUpdate = updatePacks;
+    m_ToRemove = removePacks;
+
+    // Only one drug, ICD10 && ZipCodes database at time
+    foreach(const Pack &pack, installPacks) {
+        Pack::DataType type = pack.dataType();
+        if (!(type==Pack::DrugsWithInteractions ||
+                type==Pack::DrugsWithoutInteractions ||
+                type==Pack::ZipCodes ||
+                type==Pack::ICD))
+            continue;
+        QVector<Pack::DataType> types;
+        types << type;
+        if (type==Pack::DrugsWithInteractions)
+            types << Pack::DrugsWithoutInteractions;
+        else if (type==Pack::DrugsWithoutInteractions)
+            types << Pack::DrugsWithInteractions;
+        // Check if a same dataType pack is installed
+        for(int i=0; i<types.count(); ++i) {
+            foreach(const Pack &inst, current) {
+                if (inst.dataType()==types.at(i)) {
+                    if (!m_ToRemove.contains(inst))
+                        m_ToRemove << inst;
+                }
+            }
+        }
+
+    }
+    // Multiple forms packs == Ok
+    // Multiple user documents == Ok
+
+    // Check conflicts
+    // Check depends
+    // Check breaks
+    //
 }
 
 bool PackDependencyChecker::isCombinationCorrect() const
@@ -74,10 +115,16 @@ bool PackDependencyChecker::isCombinationCorrect() const
 }
 
 QList<Pack> PackDependencyChecker::neededToInstall() const
-{}
+{
+    return m_ToInstall;
+}
 
 QList<Pack> PackDependencyChecker::neededToUpdate() const
-{}
+{
+    return m_ToUpdate;
+}
 
 QList<Pack> PackDependencyChecker::neededToRemove() const
-{}
+{
+    return m_ToRemove;
+}
