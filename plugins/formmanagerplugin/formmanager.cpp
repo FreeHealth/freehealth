@@ -317,6 +317,7 @@ bool FormManager::insertSubForm(const SubFormInsertionPoint &insertionPoint)
 /** Read the PMHx categories associated the \e formUidOrAbsPath form. */
 bool FormManager::readPmhxCategories(const QString &formUuidOrAbsPath)
 {
+    Q_UNUSED(formUuidOrAbsPath);
 //    qWarning() << Q_FUNC_INFO;
     /** \todo code here why don't we use the \e formUuidOrAbsPath param ??? */
     // get all form readers (IFormIO)

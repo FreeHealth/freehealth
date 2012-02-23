@@ -269,7 +269,7 @@ QSize FormItemDelegate::sizeHint(const QStyleOptionViewItem &option,const QModel
 void FormItemDelegate::paint(QPainter *painter, const QStyleOptionViewItem &option,
            const QModelIndex &index) const
 {
-    const bool topLevel = !index.parent().isValid();
+//    const bool topLevel = !index.parent().isValid();
 
     // Add the fancy button
     if (option.state & QStyle::State_MouseOver) {

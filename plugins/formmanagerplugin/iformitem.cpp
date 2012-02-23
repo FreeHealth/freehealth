@@ -775,5 +775,6 @@ void FormMainDebugPage::refreshContents()
 
 QWidget *FormMainDebugPage::createPage(QWidget *parent)
 {
+    Q_UNUSED(parent);
     return m_Widget;
 }

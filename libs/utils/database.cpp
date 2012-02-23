@@ -107,6 +107,7 @@ public:
 
     static Database::Grants getGrants(const QString &connection, const QStringList &grants)
     {
+        Q_UNUSED(connection);
         QHash<QString, int> ref;
         ref.insert("ALL PRIVILEGES", Database::Grant_All);
         ref.insert("ALTER", Database::Grant_Alter);

@@ -234,6 +234,7 @@ bool EpisodeBase::createDatabase(const QString &connectionName , const QString &
                     CreationOption /*createOption*/
                    )
 {
+    Q_UNUSED(access);
     if (connectionName != DB_NAME)
         return false;
 

@@ -338,6 +338,7 @@ void ZipCountryCompleters::indexActivated(const QModelIndex &index)
 
 void ZipCountryCompleters::filterCountry(const int index)
 {
+    Q_UNUSED(index);
     if (!m_Country)
         return;
     if (!m_Model)

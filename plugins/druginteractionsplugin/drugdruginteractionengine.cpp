@@ -234,7 +234,11 @@ public:
         return r.replace("<br />", "<br>");
     }
 
-    QString referencesLink(const QString &lang = QString::null) const {return m_Infos.value(DI_ReferencesLink).toString();}
+    QString referencesLink(const QString &lang = QString::null) const
+    {
+        Q_UNUSED(lang);
+        return m_Infos.value(DI_ReferencesLink).toString();
+    }
 
     const IDrug *getInteractingDrug(const IDrug *drug)
     {
@@ -708,6 +712,7 @@ public:
 
     QString message(const DrugInteractionInformationQuery &query) const
     {
+        Q_UNUSED(query);
         if (!m_Result->testedDrugs().isEmpty())
             return QString();
         return QString();

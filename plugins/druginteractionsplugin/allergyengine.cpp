@@ -174,6 +174,7 @@ public:
     // static alert
     QIcon icon(const IDrug *drug, const DrugInteractionInformationQuery &query) const
     {
+        Q_UNUSED(drug);
 //        if (!m_Result->testedDrugs().contains((IDrug*)drug))
 //            return QIcon();
         if (!query.engineUid.isEmpty() && query.engineUid!=Constants::ALLERGY_ENGINE_UID) {
@@ -187,6 +188,7 @@ public:
 
     QString message(const IDrug *drug, const DrugInteractionInformationQuery &query) const
     {
+        Q_UNUSED(drug);
 //        QString toReturn;
 //        if (!m_Result->testedDrugs().contains((IDrug*)drug))
 //            return toReturn;
@@ -412,6 +414,7 @@ public:
 
     QString message(const DrugInteractionInformationQuery &query) const
     {
+        Q_UNUSED(query);
         qWarning() << Q_FUNC_INFO;
         if (!m_Result->testedDrugs().isEmpty())
             return QString();
@@ -421,6 +424,7 @@ public:
     // dynamic alert
     bool hasDynamicAlertWidget(const DrugInteractionInformationQuery &query) const
     {
+        Q_UNUSED(query);
         // No Result ?
 //        if (!query.result)
 //            return false;
@@ -439,6 +443,8 @@ public:
 
     QWidget *dynamicAlertWidget(const DrugInteractionInformationQuery &query, QWidget *parent = 0)
     {
+        Q_UNUSED(query);
+        Q_UNUSED(parent);
         return 0;
     }
 
@@ -533,6 +539,7 @@ QString DrugAllergyEngine::iconFullPath(const int size) const
 
 int DrugAllergyEngine::calculateInteractions(const QVector<IDrug *> &drugs)
 {
+    Q_UNUSED(drugs);
     m_Interactions.clear();
 //    for(int i = 0; i < drugs.count(); ++i) {
 //        IDrug *drug = drugs.at(i);
@@ -674,6 +681,7 @@ bool DrugAllergyEngine::test(const int typeOfInteraction, const int typeOfSubstr
 /** Return the state of interaction according to the params. You MUST call check() before. */
 bool DrugAllergyEngine::has(const int typeOfInteraction, const QString &uid, const int drugSource)
 {
+    Q_UNUSED(drugSource);
     if (m_ComputedInteractionCache.contains(uid)) {
         // return the most important value
         QList<int> types = m_ComputedInteractionCache.values(uid);
@@ -687,6 +695,7 @@ bool DrugAllergyEngine::has(const int typeOfInteraction, const QString &uid, con
 /** Check the drug interaction status according to the params. */
 void DrugAllergyEngine::check(const int typeOfInteraction, const QString &uid, const QString &drugGlobalAtcCode, const int drugSource)
 {
+    Q_UNUSED(drugSource);
     if (m_ComputedInteractionCache.contains(uid)) {
         return;
     }

@@ -791,6 +791,7 @@ bool BaseGroupData::isModified() const
 
 bool BaseGroupData::setData(const int ref, const QVariant &data, const int role)
 {
+    Q_UNUSED(ref);
     if (!m_BaseGroup)
         return false;
     if (role==Qt::CheckStateRole) {
@@ -951,6 +952,7 @@ bool BaseCheckData::isModified() const
 
 bool BaseCheckData::setData(const int ref, const QVariant &data, const int role)
 {
+    Q_UNUSED(ref);
 //    qWarning() << "BaseCheckData::setData" << data << role;
     if (!m_Check)
         return false;
@@ -1226,6 +1228,7 @@ bool BaseRadioData::isModified() const
 
 bool BaseRadioData::setData(const int ref, const QVariant &data, const int role)
 {
+    Q_UNUSED(ref);
     // receive ref=0; data=uid of activated radio; role=IFormItemData::RoleRepresentation
 //    qWarning() << "BaseRadioData::setData" << data << role;
     if (role==Form::IFormItemData::CalculationsRole) {
@@ -1237,6 +1240,7 @@ bool BaseRadioData::setData(const int ref, const QVariant &data, const int role)
 
 QVariant BaseRadioData::data(const int ref, const int role) const
 {
+    Q_UNUSED(ref);
     if (role==Form::IFormItemData::CalculationsRole) {
         // return selected value::numerical (if exists)
         QString selectedUid;
@@ -1454,6 +1458,7 @@ bool BaseSimpleTextData::isModified() const
 
 bool BaseSimpleTextData::setData(const int ref, const QVariant &data, const int role)
 {
+    Q_UNUSED(ref);
 //    WARN_FUNC << ref << role << data;
     if (role==Qt::EditRole) {
         if (m_Text->m_Line) {
@@ -1469,6 +1474,7 @@ bool BaseSimpleTextData::setData(const int ref, const QVariant &data, const int 
 
 QVariant BaseSimpleTextData::data(const int ref, const int role) const
 {
+    Q_UNUSED(ref);
     if (role==Qt::DisplayRole) {
         if (m_Text->m_Line)
             return m_Text->m_Line->text();
@@ -1712,6 +1718,7 @@ bool BaseListData::isModified() const
 
 bool BaseListData::setData(const int ref, const QVariant &data, const int role)
 {
+    Q_UNUSED(ref);
     if (role!=Qt::EditRole) {
         setSelectedItems(data.toStringList().join("`@`"));
     }
@@ -2102,6 +2109,7 @@ bool BaseDateData::isModified() const
 
 bool BaseDateData::setData(const int ref, const QVariant &data, const int role)
 {
+    Q_UNUSED(ref);
     if (role==Qt::EditRole) {
         if (data.canConvert<QDate>()) {
             m_Date->m_Date->setDate(data.toDate());
@@ -2116,6 +2124,8 @@ bool BaseDateData::setData(const int ref, const QVariant &data, const int role)
 
 QVariant BaseDateData::data(const int ref, const int role) const
 {
+    Q_UNUSED(ref);
+    Q_UNUSED(role);
     return m_Date->m_Date->dateTime();
 }
 
@@ -2296,6 +2306,7 @@ bool BaseSpinData::isModified() const
 
 bool BaseSpinData::setData(const int ref, const QVariant &data, const int role)
 {
+    Q_UNUSED(ref);
     if (role==Qt::EditRole) {
         QSpinBox *spin = qobject_cast<QSpinBox*>(m_Spin->m_Spin);
         if (spin) {
@@ -2315,6 +2326,8 @@ bool BaseSpinData::setData(const int ref, const QVariant &data, const int role)
 
 QVariant BaseSpinData::data(const int ref, const int role) const
 {
+    Q_UNUSED(ref);
+    Q_UNUSED(role);
     QSpinBox *spin = qobject_cast<QSpinBox*>(m_Spin->m_Spin);
     if (spin) {
         return spin->value();

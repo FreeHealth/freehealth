@@ -103,6 +103,7 @@ void ImageViewer::setPixmaps(const QList<QPixmap> &pixmaps)
 
 void ImageViewer::showPixmapFile(const QString &absFilePath)
 {
+    Q_UNUSED(absFilePath);
     /** \todo code here ImageViewer::showPixmapFile(const QString &absFilePath) */
 }
 

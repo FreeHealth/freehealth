@@ -136,6 +136,7 @@ public:
 
     QIcon icon(const int levelOfWarning, const int iconsize) const
     {
+        Q_UNUSED(levelOfWarning);
         return theme()->icon(Constants::I_PIMENGINE, Core::ITheme::IconSize(iconsize));
     }
 
@@ -162,6 +163,7 @@ public:
 
     QString management(const QString &lang = QString::null) const
     {
+        Q_UNUSED(lang);
 //        QString l = lang;
 //        if (l.isEmpty())
 //            l = QLocale().name().left(2);
@@ -176,11 +178,13 @@ public:
 
     QString referencesLink(const QString &lang = QString::null) const
     {
+        Q_UNUSED(lang);
         return m_Infos.value(PIM_ReferencesLink).toString();
     }
 
     QString toHtml(bool detailled = false) const
     {
+        Q_UNUSED(detailled);
 //        if (m_InteractingDrugs.count() != 2)
             return QString();
 //        // Link Atc_Ids with interacting drug
@@ -607,6 +611,7 @@ public:
 
     QString message(const DrugInteractionInformationQuery &query) const
     {
+        Q_UNUSED(query);
         qWarning() << Q_FUNC_INFO;
         if (!m_Result->testedDrugs().isEmpty())
             return QString();
@@ -633,6 +638,8 @@ public:
 
     QWidget *dynamicAlertWidget(const DrugInteractionInformationQuery &query, QWidget *parent = 0)
     {
+        Q_UNUSED(query);
+        Q_UNUSED(parent);
         return 0;
     }
 

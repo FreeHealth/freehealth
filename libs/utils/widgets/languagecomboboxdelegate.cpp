@@ -47,6 +47,7 @@ void LanguageComboBoxDelegate::setFlagsIconPath(const QString &absFullPath)
 QWidget *LanguageComboBoxDelegate::createEditor(QWidget *parent, const QStyleOptionViewItem &option,
                       const QModelIndex &index) const
 {
+    Q_UNUSED(option);
     LanguageComboBox *editor = new LanguageComboBox(parent);
     editor->setTranslationsPath(d->m_TrPath);
     editor->setFlagsIconPath(d->m_IconPath);
@@ -78,6 +79,7 @@ void LanguageComboBoxDelegate::setModelData(QWidget *editor, QAbstractItemModel 
 void LanguageComboBoxDelegate::updateEditorGeometry(QWidget *editor,
     const QStyleOptionViewItem &option, const QModelIndex &index) const
 {
+    Q_UNUSED(index);
     editor->setGeometry(option.rect);
 }
 

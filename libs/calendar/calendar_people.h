@@ -54,7 +54,7 @@ struct CALENDAR_EXPORT People {
 
     People(const int _type, const QString &_name, const QString &_uid) :
             uid(_uid), name(_name), type(_type) {}
-    People() {}
+    People() : type(PeopleAttendee) {}
 
     bool operator==(const People &other) const
     {

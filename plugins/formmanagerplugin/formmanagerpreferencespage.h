@@ -67,8 +67,8 @@ public Q_SLOTS:
     void saveFormToBase();
     void saveToSettings(Core::ISettings *);
 
-protected:
-    virtual void changeEvent(QEvent *e);
+//protected:
+//    virtual void changeEvent(QEvent *e);
 
 private:
     Ui::FormPreferencesFileSelectorWidget *ui;
@@ -127,8 +127,8 @@ public:
 public Q_SLOTS:
     void saveToSettings(Core::ISettings *);
 
-protected:
-    virtual void changeEvent(QEvent *e);
+//protected:
+//    virtual void changeEvent(QEvent *e);
 
 private:
     Ui::FormPreferencesWidget *ui;

@@ -106,6 +106,7 @@ void ProxyPreferencesWidget::saveToSettings(Core::ISettings *sets)
 
 void ProxyPreferencesWidget::writeDefaultSettings(Core::ISettings *s)
 {
+    Q_UNUSED(s);
     //    qWarning() << "---------> writedefaults";
     LOG_FOR("ApplicationGeneralPreferencesWidget", tkTr(Trans::Constants::CREATING_DEFAULT_SETTINGS_FOR_1).arg("FreeDiamsMainWindow"));
 }

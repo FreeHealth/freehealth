@@ -144,8 +144,9 @@ int StringListModel::rowCount( const QModelIndex & ) const
     return d->m_StringList.count();
 }
 
-Qt::ItemFlags StringListModel::flags( const QModelIndex & index ) const
+Qt::ItemFlags StringListModel::flags(const QModelIndex &index) const
 {
+    Q_UNUSED(index);
     Qt::ItemFlags f = Qt::ItemIsSelectable | Qt::ItemIsEnabled;
     if (d->m_Checkable)
         f |= Qt::ItemIsUserCheckable;

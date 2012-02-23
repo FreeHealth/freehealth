@@ -136,9 +136,9 @@ void FormPreferencesFileSelectorWidget::saveToSettings(Core::ISettings *)
 {
 }
 
-void FormPreferencesFileSelectorWidget::changeEvent(QEvent *e)
-{
-}
+//void FormPreferencesFileSelectorWidget::changeEvent(QEvent *e)
+//{
+//}
 
 
 ///////////////////////////////////////////////////////////////////////////////////////////////////
@@ -261,7 +261,7 @@ void FormPreferencesWidget::saveToSettings(Core::ISettings *)
     settings()->setValue(Constants::S_EPISODELABELCONTENT, ui->episodeLabelContent->itemData(ui->episodeLabelContent->currentIndex()));
 }
 
-void FormPreferencesWidget::changeEvent(QEvent *e)
-{
-}
+//void FormPreferencesWidget::changeEvent(QEvent *e)
+//{
+//}
 

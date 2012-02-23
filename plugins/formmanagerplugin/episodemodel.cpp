@@ -222,6 +222,7 @@ namespace {
         // For data management
         QVariant data(const int column) const
         {
+            Q_UNUSED(column);
 //            if (column==EpisodeModel::Label) {
 //                if (!m_IsEpisode) {
 //                    int nb = 0;
@@ -239,6 +240,7 @@ namespace {
 
         bool setData(int column, const QVariant &value)
         {
+            Q_UNUSED(column);
     //        qWarning()<< data(column) << value << (data(column)==value);
 //            if (data(column)==value)
 //                return true;
@@ -1067,6 +1069,9 @@ Qt::ItemFlags EpisodeModel::flags(const QModelIndex &index) const
 /** Not implemented */
 QVariant EpisodeModel::headerData(int section, Qt::Orientation orientation, int role) const
 {
+    Q_UNUSED(section);
+    Q_UNUSED(orientation);
+    Q_UNUSED(role);
     return QVariant();
 }
 
@@ -1117,6 +1122,9 @@ bool EpisodeModel::insertRows(int row, int count, const QModelIndex &parent)
 /** Not implemented */
 bool EpisodeModel::removeRows(int row, int count, const QModelIndex &parent)
 {
+    Q_UNUSED(row);
+    Q_UNUSED(count);
+    Q_UNUSED(parent);
     //    qWarning() << "removeRows" << row << count;
     if (d->m_ReadOnly)
         return false;

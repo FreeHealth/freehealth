@@ -40,6 +40,7 @@ using namespace Views;
 LanguageComboBoxDelegate::LanguageComboBoxDelegate(QObject *parent, DisplayMode mode) :
         Utils::LanguageComboBoxDelegate(parent)
 {
+    Q_UNUSED(mode);
     setFlagsIconPath(settings()->path(Core::ISettings::SmallPixmapPath) + "/flags/");
     setTranslationsPath(settings()->path(Core::ISettings::TranslationsPath));
 }
