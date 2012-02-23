@@ -1,7 +1,7 @@
 #!/bin/sh
 
 # This script is part of FreeMedForms project : http://www.freemedforms.com
-# (c) 2008 - 2011  Eric MAEKER, MD
+# (C) 2008-2012 by Eric MAEKER, MD (France) <eric.maeker@gmail.com>
 #
 # This script will prepare the source package for freediams only
 # Documentations must installed by hand before
@@ -23,16 +23,15 @@ fi
 showHelp()
 {
 echo $SCRIPT_NAME" builds FreeMedForms source package, svn braches and tags."
-echo "Usage : $SCRIPT_NAME -b applicationlowcase -r 123 -sct"
+echo "Usage : $SCRIPT_NAME -b ApplicationToBuild -r 123 -sct"
 echo
 echo "Options :"
-echo "          -b  Application name (freemedforms, freediams, freeaccount, freeicd, freetoolbox...)"
-echo "          -s  Build the source package"
-echo "          -s  Build the source package"
-echo "          -c  Create a branch. Specify the revision number using the -r option"
-echo "          -t  Create the tag. Specify the revision number using the -r option"
-echo "          -r  Specify the revision number to use for the branches or tags generation"
-echo "          -h  Show this help"
+echo "  -b  Application name (freemedforms, freediams, freeaccount, freeicd, freetoolbox...)"
+echo "  -s  Build the source package"
+echo "  -c  Create a branch. Specify the revision number using the -r option"
+echo "  -t  Create the tag. Specify the revision number using the -r option"
+echo "  -r  Specify the revision number to use for the branches or tags generation"
+echo "  -h  Show this help"
 echo
 }
 
@@ -54,18 +53,14 @@ echo "**** PREPARE SOURCES PACKAGE FOR $1 ****"
 # get version number of FreeDiams from the project file
 APP_VERSION=`cat ./$1/$1.pro | grep "PACKAGE_VERSION" -m 1 | cut -d = -s -f2 | tr -d ' '`
 
-FREEDIAMS_SOURCES="freediams.pro config.pri checkqtversion.pri \
-README.txt COPYING.txt INSTALL \
-updatetranslations.sh \
-buildspecs/*.pri \
-buildspecs/freediams_debian \
-doc \
-freediams \
-global_resources/databases/drugs/master.db \
-global_resources/databases/icd10/icd10.db \
-global_resources/doc/freediams \
-global_resources/package_helpers/freediams* \
-global_resources/package_helpers/freemedforms.url \
+SCRIPT_SOURCE="\
+scripts/mac*sh \
+scripts/release_dmg.sh \
+scripts/source.sh \
+scripts/win_release.bat \
+scripts/Linux"
+
+PIXMAPS_AND_TRANSLATIONS="\
 global_resources/pixmap/16x16 \
 global_resources/pixmap/32x32 \
 global_resources/pixmap/48x48 \
@@ -75,6 +70,26 @@ global_resources/pixmap/svg/*.svg \
 global_resources/pixmap/svg/*.icns \
 global_resources/pixmap/svg/*.ico \
 global_resources/pixmap/svg/*.bmp \
+global_resources/translations/*.ts \
+global_resources/translations/qt*.qm"
+
+PLUGIN_DRUGS="\
+global_resources/datapacks/appinstalled/drugs/master.db \
+global_resources/datapacks/appinstalled/drugs/readme.txt \
+plugins/druginteractionsplugin \
+plugins/drugsbaseplugin \
+plugins/drugsplugin "
+
+FREEDIAMS_SOURCES="freediams.pro config.pri checkqtversion.pri \
+README.txt COPYING.txt INSTALL \
+updatetranslations.sh \
+buildspecs/*.pri \
+buildspecs/freediams_debian \
+doc \
+freediams \
+global_resources/doc/freediams \
+global_resources/package_helpers/freediams* \
+global_resources/package_helpers/freemedforms.url \
 global_resources/textfiles/freediams.desktop \
 global_resources/textfiles/boys_surnames.csv \
 global_resources/textfiles/default_user_footer.htm \
@@ -82,27 +97,24 @@ global_resources/textfiles/default_user_header.htm \
 global_resources/textfiles/girls_surnames.csv \
 global_resources/textfiles/listemotsfr.txt \
 global_resources/textfiles/surnames.txt \
-global_resources/translations/*.ts \
-global_resources/translations/qt*.qm \
 libs/aggregation \
 libs/extensionsystem \
 libs/translationutils \
 libs/utils \
 libs/medintuxutils \
 libs/medicalutils \
+libs/datapackutils \
 libs/*.pri \
 contrib \
 plugins/fmf_plugins.pri \
 plugins/coreplugin \
-plugins/drugsbaseplugin \
-plugins/drugsplugin \
+plugins/datapackplugin \
 plugins/emptyplugin \
 plugins/listviewplugin \
 plugins/printerplugin \
 plugins/saverestoreplugin \
 plugins/templatesplugin \
 plugins/texteditorplugin \
-scripts \
 tests"
 
 FREEICD_SOURCES="freeicd.pro config.pri checkqtversion.pri \
@@ -115,20 +127,8 @@ global_resources/doc/freeicd \
 global_resources/textfiles/freeicd.desktop \
 global_resources/textfiles/default_user_header.htm \
 global_resources/textfiles/default_user_footer.htm \
-global_resources/pixmap/16x16 \
-global_resources/pixmap/32x32 \
-global_resources/pixmap/48x48 \
-global_resources/pixmap/64x64 \
-global_resources/pixmap/splashscreens \
-global_resources/pixmap/svg/*.svg \
-global_resources/pixmap/svg/*.icns \
-global_resources/pixmap/svg/*.ico \
-global_resources/pixmap/svg/*.bmp \
 global_resources/package_helpers/freeicd* \
 global_resources/package_helpers/freemedforms.url \
-global_resources/translations/*.ts \
-global_resources/translations/qt*.qm \
-global_resources/databases/icd10/icd10.db \
 global_resources/sql/icd10/icd10.sql \
 libs/aggregation \
 libs/extensionsystem \
@@ -144,8 +144,7 @@ plugins/icdplugin \
 plugins/printerplugin \
 plugins/texteditorplugin \
 plugins/listviewplugin \
-plugins/usermanagerplugin \
-scripts"
+plugins/usermanagerplugin"
 
 FREEPAD_SOURCES="freepad.pro config.pri checkqtversion.pri \
 README.txt COPYING.txt INSTALL \
@@ -155,27 +154,15 @@ doc \
 freepad \
 global_resources/doc/freepad \
 global_resources/textfiles/freepad.desktop \
-global_resources/pixmap/16x16 \
-global_resources/pixmap/32x32 \
-global_resources/pixmap/48x48 \
-global_resources/pixmap/64x64 \
-global_resources/pixmap/splashscreens \
-global_resources/pixmap/svg/*.svg \
-global_resources/pixmap/svg/*.icns \
-global_resources/pixmap/svg/*.ico \
-global_resources/pixmap/svg/*.bmp \
 global_resources/package_helpers/freepad* \
 global_resources/package_helpers/freemedforms.url \
-global_resources/translations/*.ts \
-global_resources/translations/qt*.qm \
 libs \
 contrib \
 plugins/fmf_plugins.pri \
 plugins/coreplugin \
 plugins/printerplugin \
 plugins/texteditorplugin \
-plugins/listviewplugin \
-scripts"
+plugins/listviewplugin"
 
 FREETOOLBOX_SOURCES="freetoolbox.pro config.pri checkqtversion.pri \
 README.txt COPYING.txt INSTALL \
@@ -196,28 +183,19 @@ freetoolbox/plugins/zipcodes \
 freetoolbox/plugins/*.pro \
 global_resources/doc/freetoolbox \
 global_resources/textfiles/freetoolbox.desktop \
-global_resources/pixmap/16x16 \
-global_resources/pixmap/32x32 \
-global_resources/pixmap/48x48 \
-global_resources/pixmap/64x64 \
-global_resources/pixmap/splashscreens \
-global_resources/pixmap/svg/*.svg \
-global_resources/pixmap/svg/*.icns \
-global_resources/pixmap/svg/*.ico \
-global_resources/pixmap/svg/*.bmp \
 global_resources/package_helpers/freetool* \
 global_resources/package_helpers/freemedforms.url \
-global_resources/translations/*.ts \
-global_resources/translations/qt*.qm \
 global_resources/sql \
 libs \
 contrib \
 plugins/fmf_plugins.pri \
 plugins/coreplugin \
+plugins/drugsbaseplugin/drugbasecore.h \
+plugins/drugsbaseplugin/drugbasecore.cpp \
+plugins/drugsbaseplugin/constants_databaseschema.h \
 plugins/icdplugin \
 plugins/listviewplugin \
 scripts"
-
 
 FREEACCOUNT_SOURCES="freeaccount.pro config.pri checkqtversion.pri \
 README.txt COPYING.txt INSTALL \
@@ -228,15 +206,6 @@ freeaccount \
 global_resources/databases/zipcodes/zipcodes.db \
 global_resources/doc/freeaccount \
 global_resources/textfiles/freeaccount.desktop \
-global_resources/pixmap/16x16 \
-global_resources/pixmap/32x32 \
-global_resources/pixmap/48x48 \
-global_resources/pixmap/64x64 \
-global_resources/pixmap/splashscreens \
-global_resources/pixmap/svg/*.svg \
-global_resources/pixmap/svg/*.icns \
-global_resources/pixmap/svg/*.ico \
-global_resources/pixmap/svg/*.bmp \
 global_resources/package_helpers/freeaccount* \
 global_resources/package_helpers/freemedforms.url \
 global_resources/profiles \
@@ -248,8 +217,6 @@ global_resources/textfiles/girls_surnames.csv \
 global_resources/textfiles/listemotsfr.txt \
 global_resources/textfiles/surnames.txt \
 global_resources/textfiles/pays.txt \
-global_resources/translations/*.ts \
-global_resources/translations/qt*.qm \
 libs/aggregation \
 libs/extensionsystem \
 libs/translationutils \
@@ -276,22 +243,9 @@ buildspecs/*.pri \
 buildspecs/freemedforms_debian \
 doc \
 freemedforms \
-global_resources/databases/drugs/master.db \
-global_resources/databases/icd10/icd10.db \
-global_resources/databases/zipcodes/zipcodes.db \
 global_resources/doc/freemedforms \
 global_resources/forms \
 global_resources/package_helpers \
-global_resources/pixmap/16x16 \
-global_resources/pixmap/32x32 \
-global_resources/pixmap/48x48 \
-global_resources/pixmap/64x64 \
-global_resources/pixmap/splashscreens \
-global_resources/pixmap/svg/*.svg \
-global_resources/pixmap/svg/*.icns \
-global_resources/pixmap/svg/*.ico \
-global_resources/pixmap/svg/*.bmp \
-global_resources/pixmap/svg/*.bmp \
 global_resources/profiles \
 global_resources/sql/account \
 global_resources/sql/server_config \
@@ -304,8 +258,6 @@ global_resources/textfiles/listemotsfr.txt \
 global_resources/textfiles/surnames.txt \
 global_resources/textfiles/pays.txt \
 global_resources/textfiles/zipcodes.csv \
-global_resources/translations/*.ts \
-global_resources/translations/qt*.qm \
 libs \
 contrib \
 plugins/plugins.pro \
@@ -317,8 +269,7 @@ plugins/agendaplugin \
 plugins/basewidgetsplugin \
 plugins/categoryplugin \
 plugins/coreplugin \
-plugins/drugsbaseplugin \
-plugins/drugsplugin \
+plugins/datapackplugin \
 plugins/emptyplugin \
 plugins/fmfcoreplugin \
 plugins/fmfmainwindowplugin \
@@ -330,6 +281,7 @@ plugins/patientbaseplugin
 plugins/pmhplugin \
 plugins/printerplugin \
 plugins/saverestoreplugin \
+plugins/scriptplugin \
 plugins/templatesplugin \
 plugins/texteditorplugin \
 plugins/usermanagerplugin \
@@ -341,7 +293,7 @@ tests"
 SELECTED_SOURCES="";
 EXCLUSIONS="";
 if [ $1 == "freediams" ] ; then
-    SELECTED_SOURCES=$FREEDIAMS_SOURCES
+    SELECTED_SOURCES=$FREEDIAMS_SOURCES" "$PLUGIN_DRUGS
     EXCLUSIONS="--exclude 'global_resources/forms' "
 fi
 if [ $1 == "freeicd" ] ; then
@@ -349,7 +301,7 @@ if [ $1 == "freeicd" ] ; then
     EXCLUSIONS="--exclude 'global_resources/forms' "
 fi
 if [ $1 == "freemedforms" ] ; then
-    SELECTED_SOURCES=$FREEMEDFORMS_SOURCES
+    SELECTED_SOURCES=$FREEMEDFORMS_SOURCES" "$PLUGIN_DRUGS
 fi
 if [ $1 == "freeaccount" ] ; then
     SELECTED_SOURCES=$FREEACCOUNT_SOURCES
@@ -362,6 +314,8 @@ if [ $1 == "freepad" ] ; then
     SELECTED_SOURCES=$FREEPAD_SOURCES
     EXCLUSIONS="--exclude 'global_resources/forms' "
 fi
+
+SELECTED_SOURCES=$SELECTED_SOURCES" "$SCRIPT_SOURCE" "$PIXMAPS_AND_TRANSLATIONS
 }
 
 
@@ -444,8 +398,9 @@ createBranch()
      SVN_FROM="-r "$SVN_REVISION
   fi
 
-  # go to trunk root path
-  cd $SCRIPT_PATH/../..
+  # create a tmp path
+  mkdir $SCRIPT_PATH/tmp/branches
+  cd $SCRIPT_PATH/tmp/branches
   # create branch
   if [ ! -e branches/$BRANCH_NAME ] ; then
     echo mkdir branches/$BRANCH_NAME
@@ -455,6 +410,11 @@ createBranch()
   for n in $SELECTED_SOURCES ; do
     echo svn copy $SVN_FROM https://freemedforms.googlecode.com/svn/trunk/$n branches/$BRANCH_NAME/$n
   done
+  echo "svn commit -m \"Creating branch for "$BRANCH_NAME"\""
+
+  # remove tmp path
+  cd ../..
+  echo rm -R $SCRIPT_PATH/tmp/branches
 }
 
 # params:
@@ -464,25 +424,49 @@ createTag()
 {
   echo "Create SVN tag not yet coded"
   # Manage Branch name
-  SVN_FROM=""
   BRANCH_NAME=$1"_"$APP_VERSION
   if [ ! -e $SVN_REVISION ] ; then
-     BRANCH_NAME=$BRANCH_NAME"-"$SVN_REVISION
+#     BRANCH_NAME=$BRANCH_NAME"-"$SVN_REVISION
      SVN_FROM="-r "$SVN_REVISION
   fi
 
-  # go to trunk root path
-  cd $SCRIPT_PATH/../..
-  # create branch
-  if [ ! -e tags/$BRANCH_NAME ] ; then
-    echo mkdir tags
-    echo svn add tags
-    echo mkdir tags/$BRANCH_NAME
-    # todo: else clear the branch ??
-  fi
-  for n in $SELECTED_SOURCES ; do
-    echo svn copy $SVN_FROM https://freemedforms.googlecode.com/svn/trunk/$n tags/$BRANCH_NAME/$n
-  done
+  echo "svn cp $SVN_FROM https://freemedforms.googlecode.com/svn/trunk \
+                         https://freemedforms.googlecode.com/svn/tags/$BRANCH_NAME \
+           -m \"Tag version: $BRANCH_NAME\""
+
+#  # create tag on the svn
+#  echo "svn mkdir https://freemedforms.googlecode.com/svn/tags/"$BRANCH_NAME" -m \"Creating tag for "$BRANCH_NAME"\""
+
+#  cd $SCRIPT_PATH
+
+#  # checkout in a tmp dir
+#  TMP_PATH=./tmp/tmp_tag_$BRANCH_NAME
+#  if [ ! -e $TMP_PATH ]; then
+#    mkdir $TMP_PATH
+#  fi
+#  svn co https://freemedforms.googlecode.com/svn/tags/$BRANCH_NAME ./$TMP_PATH
+#  cd $TMP_PATH
+
+#  for n in $SELECTED_SOURCES ; do
+#    for f in `svn ls -R $SCRIPT_PATH/../$n`; do
+#      FILE_PATH=`dirname $n`
+#      if [ -d $n ] ; then
+#        FILE_PATH=$n
+#      fi
+
+#      FULL_PATH=`dirname $FILE_PATH/$f`
+#      echo "----> $FULL_PATH"
+
+#      if [ ! -e $FULL_PATH ] && [ $FULL_PATH != "." ]; then
+#        echo "svn mkdir --parents "$FULL_PATH
+#        svn mkdir --parents $FULL_PATH
+#      fi
+
+#      echo "svn copy "$SVN_FROM" "$SCRIPT_PATH"/../"$FILE_PATH"/"$f" "$FILE_PATH"/"$f
+#      svn copy $SVN_FROM $SCRIPT_PATH/../$FILE_PATH/$f $FILE_PATH/$f
+#    done
+#  done
+#  echo "svn commit -m \"tag: "$BRANCH_NAME"\""
 }
 
 #########################################################################################
@@ -496,8 +480,8 @@ do
     ;;
     r) SVN_REVISION=$OPTARG
     ;;
-    b) BUNDLE_NAME=$OPTARG
-       prepareFileSelection $OPTARG
+    b) BUNDLE_NAME=`echo "$OPTARG" | sed y/ABCDEFGHIJKLMNOPQRSTUVWXYZ/abcdefghijklmnopqrstuvwxyz/`
+       prepareFileSelection $BUNDLE_NAME
     ;;
     s) createSource $BUNDLE_NAME
     ;;
