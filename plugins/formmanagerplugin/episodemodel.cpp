@@ -241,6 +241,7 @@ namespace {
         bool setData(int column, const QVariant &value)
         {
             Q_UNUSED(column);
+            Q_UNUSED(value);
     //        qWarning()<< data(column) << value << (data(column)==value);
 //            if (data(column)==value)
 //                return true;

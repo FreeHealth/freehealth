@@ -291,6 +291,7 @@ bool PatientBase::createDatabase(const QString &connectionName , const QString &
                     CreationOption /*createOption*/
                    )
 {
+    Q_UNUSED(access);
     if (connectionName != Constants::DB_NAME)
         return false;
 

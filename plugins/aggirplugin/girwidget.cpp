@@ -212,6 +212,8 @@ void GirWidget::clearModel()
 
 QString GirWidget::printableHtml(bool withValues) const
 {
+    Q_UNUSED(withValues);
+    /** \todo code here with values, print empty values */
     return m_ui->toHtml();
 }
 
@@ -230,11 +232,16 @@ void GirItemData::clear()
 
 bool GirItemData::setData(const int ref, const QVariant &data, const int role)
 {
+    Q_UNUSED(ref);
+    Q_UNUSED(data);
+    Q_UNUSED(role);
     return true;
 }
 
 QVariant GirItemData::data(const int ref, const int role) const
 {
+    Q_UNUSED(ref);
+    Q_UNUSED(role);
     return QVariant();
 }
 

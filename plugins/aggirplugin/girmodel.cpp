@@ -386,6 +386,7 @@ Qt::ItemFlags GirModel::flags(const QModelIndex &index) const
 
 QString GirModel::rowToHtml(int i, const QModelIndex &parent, bool discriminative) const
 {
+    Q_UNUSED(discriminative);
     QString nfp, s, t, c, h, ok, score, indent;
     if (data(index(i, 1, parent), Qt::CheckStateRole).toInt()==Qt::Checked) {
         nfp = "☑";

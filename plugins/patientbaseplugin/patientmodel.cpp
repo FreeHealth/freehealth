@@ -793,6 +793,9 @@ bool PatientModel::insertRows(int row, int count, const QModelIndex &parent)
 
 bool PatientModel::removeRows(int row, int count, const QModelIndex &parent)
 {
+    Q_UNUSED(row);
+    Q_UNUSED(count);
+    Q_UNUSED(parent);
 //    qWarning() << "PatientModel::removeRows" << row << count << parent;
     return true;
 }
