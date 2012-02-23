@@ -13,8 +13,9 @@ SUBDIRS = \
     xmlio \
     basewidgets \
     aggir \
-    drugs \
+    druginteractions \
     drugsbase \
+    drugs \
     icd \
     pmh \
     padtools \
@@ -79,17 +80,21 @@ aggir.subdir   = aggirplugin
 aggir.depends += core
 aggir.depends += formmanager
 
+drugsbase.subdir   = drugsbaseplugin
+drugsbase.depends += core
+drugsbase.depends += templates
+drugsbase.depends += printer
+
+druginteractions.subdir = druginteractionsplugin
+druginteractions.depends += core
+druginteractions.depends += drugsbase
+
 drugs.subdir   = drugsplugin
 drugs.depends += core
 drugs.depends += drugsbase
 drugs.depends += texteditor
 drugs.depends += templates
 drugs.depends += formmanager
-
-drugsbase.subdir   = drugsbaseplugin
-drugsbase.depends += core
-drugsbase.depends += templates
-drugsbase.depends += printer
 
 usermanager.subdir   = usermanagerplugin
 usermanager.depends += core
@@ -155,6 +160,6 @@ datapack.subdir = datapackplugin
 datapack.depends += core
 
 # manage non free content
-include(../config.pri)
-!isEmpty(HAS_NONFREE):include($${NONFREE_SOURCES_PLUGINS_PATH}/plugins.pri)
-message($${HAS_NONFREE}  //  $${NONFREE_SOURCES_PLUGINS_PATH})
+#include(../config.pri)
+#!isEmpty(HAS_NONFREE):include($${NONFREE_SOURCES_PLUGINS_PATH}/plugins.pri)
+#message($${HAS_NONFREE}  //  $${NONFREE_SOURCES_PLUGINS_PATH})
