@@ -50,6 +50,7 @@ void GenericInformationEditorDialog::setDescription(const Utils::GenericDescript
 Utils::GenericDescription GenericInformationEditorDialog::submit()
 {
     /** \todo code here */
+    return Utils::GenericDescription();
 }
 
 void GenericInformationEditorDialog::done(int r)

@@ -155,7 +155,8 @@ DataPack::PackWizard *PackPage::packWizard() const {return qobject_cast<DataPack
 /////////////////////////////////////////////////////////////////////////////////////////
 /////////////////////////////////  PackIntroPage  ///////////////////////////////////////
 /////////////////////////////////////////////////////////////////////////////////////////
-PackIntroPage::PackIntroPage(QWidget *parent)
+PackIntroPage::PackIntroPage(QWidget *parent) :
+    PackPage(parent)
 {
     setTitle(tr("Pack processing"));
     setSubTitle(tr("The following packs will be processed. Please verify all informations."));

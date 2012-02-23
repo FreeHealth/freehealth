@@ -357,7 +357,9 @@ void GenericDescription::addTranslatableExtraData(const int ref, const QString &
 //}
 
 void GenericDescription::toTreeWidget(QTreeWidget *tree) const
-{}
+{
+    Q_UNUSED(tree);
+}
 
 QHash<int, QString> GenericDescription::nonTranslatableTagsDataReference() const
 {

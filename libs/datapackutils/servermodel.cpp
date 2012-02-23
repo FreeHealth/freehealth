@@ -69,6 +69,7 @@ ServerModel::ServerModel(QObject *parent) :
 
 int ServerModel::rowCount(const QModelIndex &parent) const
 {
+    Q_UNUSED(parent);
     return DataPackCore::instance().serverManager()->serverCount();
 }
 

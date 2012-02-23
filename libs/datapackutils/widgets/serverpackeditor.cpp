@@ -301,22 +301,22 @@ void ServerPackEditor::createServerDataWidgetMapper()
     d->m_ServerMapper->setCurrentIndex(1);
 }
 
-static void elideTextToLabel(QLabel *label, const QString &text)
-{
-    if (text.size() > 30) {
-        label->setText(text.left(27)+"...");
-        QString u = text;
-        int i = 30;
-        while (i < text.size()) {
-            u.insert(i, "\n");
-            i += 32;
-        }
-        label->setToolTip(u);
-    } else {
-        label->setText(text);
-        label->setToolTip(text);
-    }
-}
+//static void elideTextToLabel(QLabel *label, const QString &text)
+//{
+//    if (text.size() > 30) {
+//        label->setText(text.left(27)+"...");
+//        QString u = text;
+//        int i = 30;
+//        while (i < text.size()) {
+//            u.insert(i, "\n");
+//            i += 32;
+//        }
+//        label->setToolTip(u);
+//    } else {
+//        label->setText(text);
+//        label->setToolTip(text);
+//    }
+//}
 
 void ServerPackEditor::populatePackView(const int packId)
 {
@@ -478,6 +478,7 @@ void ServerPackEditor::changeEvent(QEvent *e)
 
 void ServerPackEditor::on_listWidgetMenu_currentRowChanged(int row)
 {
+    Q_UNUSED(row);
     if (d->ui->listWidgetMenu->currentItem() == d->m_datapacksItem)
         d->ui->stackedWidget->setCurrentWidget(d->ui->pagePacks);
     else if (d->ui->listWidgetMenu->currentItem() == d->m_serversItem)
@@ -486,5 +487,6 @@ void ServerPackEditor::on_listWidgetMenu_currentRowChanged(int row)
 
 void ServerPackEditor::serverCurrentChanged(const QModelIndex &c, const QModelIndex &p)
 {
+    Q_UNUSED(p);
     d->m_ServerMapper->setCurrentIndex(c.row());
 }

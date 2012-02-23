@@ -381,7 +381,7 @@ bool PackModel::setData(const QModelIndex &index, const QVariant &value, int rol
         return false;
 
     if (d->m_PackCheckable && role==Qt::CheckStateRole && index.column()==Label) {
-        Qt::CheckState save = d->m_Items[index.row()].userCheckState;
+//        Qt::CheckState save = d->m_Items[index.row()].userCheckState;
         // Manage a tristate bug in model/view
         if (flags(index) & Qt::ItemIsTristate) {
             int v = (d->m_Items[index.row()].userCheckState + 1) % 3;

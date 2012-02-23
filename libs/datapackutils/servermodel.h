@@ -51,7 +51,7 @@ namespace DataPack {
         ServerModel(QObject *parent = 0);
 
         int rowCount(const QModelIndex &parent = QModelIndex()) const;
-        int columnCount(const QModelIndex &parent = QModelIndex()) const {return ColumnCount;}
+        int columnCount(const QModelIndex &parent = QModelIndex()) const {Q_UNUSED(parent); return ColumnCount;}
 
         QVariant data(const QModelIndex &index, int role = Qt::DisplayRole) const;
 
