@@ -7,11 +7,11 @@
     <!-- Non translatable values -->
     <uuid>freemedforms.certified.icd10.completebase</uuid>
     <authors>Eric Maeker, MD</authors>
-    <version>0.6.0</version>
-    <fmfv>0.6.2</fmfv>
-    <fdv>0.6.4</fdv>
+    <version>0.7.0</version>
+    <fmfv>0.7.0</fmfv>
+    <fdv>0.7.0</fdv>
     <cdate>2011-11-26</cdate>
-    <lmdate>2011-11-26</lmdate>
+    <lmdate>2012-02-21</lmdate>
     <icon>__theme__/freeicd.png</icon>
     <weblink></weblink>
     <bibliography/>

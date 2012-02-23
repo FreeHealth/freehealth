@@ -20,7 +20,7 @@
     <size>3400</size>
     <md5>aa1f2ce72b5262316683c9f511134e71</md5>
     <sha1></sha1>
-    <datatype>DrugsWithInteractions</datatype>
+    <datatype>DrugsWithoutInteractions</datatype>
 
     <!-- Translatable values -->
     <licence>GPLv3</licence>

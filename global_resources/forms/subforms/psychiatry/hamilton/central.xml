@@ -6,8 +6,8 @@
   <formdescription>
     <!-- Non translatable values -->
     <authors>Fredman, MD; Eric Maeker, MD</authors>
-    <version>0.6.13</version>
-    <compatversion>0.6.2</compatversion>
+    <version>0.7.0</version>
+    <fmfv>0.7.0</fmfv>
     <cdate>2011-12-11</cdate>
     <icon>psychiatry.png</icon>
     <weblink></weblink>

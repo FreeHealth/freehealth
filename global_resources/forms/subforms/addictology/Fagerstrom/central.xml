@@ -6,9 +6,10 @@
   <formdescription>
     <!-- Non translatable values -->
     <authors>Eric Maeker, MD</authors>
-    <version>0.6.03</version>
-    <compatversion>0.6.0</compatversion>
+    <version>0.7.0</version>
+    <fmfv>0.7.0</fmfv>
     <cdate>2011-03-15</cdate>
+    <lmdate>2012-02-26</lmdate>
     <icon>addictology.png</icon>
     <weblink></weblink>
     <bibliography pmid="1932883">Heatherton TF, Kozlowski LT, Frecker RC, Fagerstrom KO. The Fagerstrom Test for Nicotine Dependence : a revision of the Fagerstrom Tolerance Questionnaire. Br J Addict 1991;86(9):1119-27.</bibliography>

@@ -5,9 +5,10 @@
   <formdescription>
     <!-- Non translatable values -->
     <authors>Eric Maeker, MD; Fredman, MD</authors>
-    <version>test</version>
-    <fmfv>0.6.2</fmfv>
+    <version>0.7.0</version>
+    <fmfv>0.7.0</fmfv>
     <cdate>2012-01-10</cdate>
+    <lmdate>2012-02-26</lmdate>
     <icon>cardiology.png</icon>
     <weblink>http://en.wikipedia.org/wiki/Framingham_Risk_Score#cite_note-9</weblink>
     <bibliography pmid=" 12485966">National Cholesterol Education Program (NCEP) Expert Panel on Detection, Evaluation, and Treatment of High Blood Cholesterol in Adults (Adult Treatment Panel III). Third Report of the National Cholesterol Education Program (NCEP) Expert Panel on Detection, Evaluation, and Treatment of High Blood Cholesterol in Adults (Adult Treatment Panel III) final report. Circulation. 2002 Dec 17;106(25):3143-421.</bibliography>
