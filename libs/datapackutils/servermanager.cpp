@@ -218,6 +218,7 @@ void ServerManager::getAllDescriptionFile(QProgressBar *bar)
 {
     if (m_WorkingEngines.count()==0) {
         LOG_ERROR("No ServerEngine recorded.");
+        Q_EMIT allServerDescriptionAvailable();
         return;
     }
 

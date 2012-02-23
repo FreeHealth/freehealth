@@ -687,7 +687,7 @@ PimEngine::~PimEngine()
     d = 0;
 }
 
-void DrugDrugInteractionEngine::drugsBaseChanged()
+void PimEngine::drugsBaseChanged()
 {
     init();
 }
