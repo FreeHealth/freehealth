@@ -24,39 +24,20 @@
  *   Contributors :                                                        *
  *       NAME <MAIL@ADRESS>                                                *
  ***************************************************************************/
-#ifndef UPPERCASEVALIDATOR_H
-#define UPPERCASEVALIDATOR_H
+#include <utils/widgets/uppercasevalidator.h>
 
-#include <utils/global_exporter.h>
-#include <QValidator>
-QT_BEGIN_NAMESPACE
-class QString;
-QT_END_NAMESPACE
+#include <QString>
 
-/**
- * \file uppercasevalidator.h
- * \author Eric MAEKER <eric.maeker@gmail.com>
- * \version 0.6.2
- * \date 22 Feb 2012
-*/
+using namespace Utils;
 
-/**
-  \class Utils::UpperCaseValidator
-  Use this validator in QLineEdit when you want the user input to always be uppercase.
-*/
+UpperCaseValidator::UpperCaseValidator(QObject *parent) : QValidator(parent) {}  // nothing to do in constructor
 
-namespace Utils {
+UpperCaseValidator::~UpperCaseValidator() {}
 
-class UTILS_EXPORT UpperCaseValidator : public QValidator
+QValidator::State UpperCaseValidator::validate(QString &text, int &pos) const  // PS: no UpperCase for the first letter of variables, only for class names
 {
-public:
-    UpperCaseValidator(QObject *parent);
-    ~UpperCaseValidator();
-
-    QValidator::State validate(QString &text, int &pos) const;
-
-};
-
+    Q_UNUSED(pos); // pos is not needed
+    text = text.toUpper();  // Uppercase the text
+    return QValidator::Acceptable;  // return "ok text is like we want it to be"
 }
 
-#endif // UPPERCASEVALIDATOR_H

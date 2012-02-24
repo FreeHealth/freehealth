@@ -97,7 +97,8 @@ SOURCES += global.cpp \
     widgets/genericinformationeditordialog.cpp \
     widgets/htmldelegate.cpp \
     widgets/loginwidget.cpp \
-    widgets/basiclogindialog.cpp
+    widgets/basiclogindialog.cpp \
+    widgets/uppercasevalidator.cpp
 #    widgets/dialogbuttonbox.cpp
 
 macx {
