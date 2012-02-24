@@ -27,6 +27,7 @@
 #ifndef UTILS_LOGINWIDGET_H
 #define UTILS_LOGINWIDGET_H
 
+#include <utils/global_exporter.h>
 #include <QWidget>
 
 namespace Utils {
@@ -35,7 +36,7 @@ namespace Ui {
     class LoginWidget;
 }
 
-class LoginWidget : public QWidget
+class UTILS_EXPORT LoginWidget : public QWidget
 {
     Q_OBJECT
 public:
