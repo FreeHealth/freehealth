@@ -113,6 +113,7 @@ DailySchemeViewer::DailySchemeViewer(QWidget *parent) :
         d(new DailySchemeViewerPrivate(this))
 {
     d->m_SpinDelegate = new Utils::SpinBoxDelegate(this);
+    d->m_SpinDelegate->setDouble(true);
     d->m_ui->dailyTableView->setItemDelegateForColumn(DrugsDB::DailySchemeModel::Value, d->m_SpinDelegate);
 }
 
