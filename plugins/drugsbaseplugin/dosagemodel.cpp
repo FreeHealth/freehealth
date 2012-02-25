@@ -203,19 +203,18 @@ DosageModel::DosageModel(DrugsDB::DrugsModel *parent)
 bool DosageModel::setData(const QModelIndex &index, const QVariant &value, int role)
 {
     Q_ASSERT_X(!m_UID.isNull(), "DosageModel::setData", "before using the dosagemodel, you must specify the UID of the related drug");
-    if (! index.isValid())
+    if (!index.isValid())
         return false;
 
     if (role == Qt::EditRole || role == Qt::DisplayRole) {
-
         QVariant q = data(index);
         // verify the value is different as model
-        if (q==value) {
-            return true;
-        } else if (q.isNull()) {
-            if (value.toString().isEmpty())
-                return true;
-        }
+//        if (q==value) {
+//            return true;
+//        } else if (q.isNull()) {
+//            if (value.toString().isEmpty())
+//                return true;
+//        }
 
         // set only once modification date (infinite loop prevention)
         if (index.column() != Dosages::Constants::ModificationDate)
@@ -253,6 +252,7 @@ bool DosageModel::setData(const QModelIndex &index, const QVariant &value, int r
             } else {
                 LOG_ERROR("Route not found: " + value.toString());
             }
+            Q_EMIT dataChanged(index, index);
             return true;
         } else {
             if (!QSqlTableModel::setData(index, value, role)) {
@@ -261,9 +261,10 @@ bool DosageModel::setData(const QModelIndex &index, const QVariant &value, int r
                 return false;
             }
         }
+        Q_EMIT dataChanged(index, index);
 
         QModelIndex label = this->index(index.row(), Dosages::Constants::Label);
-        emit dataChanged(label, label);
+        Q_EMIT dataChanged(label, label);
     }
     return false;
 }
@@ -275,8 +276,7 @@ QVariant DosageModel::data(const QModelIndex & item, int role) const
     if (!item.isValid())
         return QVariant();
 
-    switch (role)
-    {
+    switch (role) {
     case Qt::FontRole:
         {
             QFont font;
