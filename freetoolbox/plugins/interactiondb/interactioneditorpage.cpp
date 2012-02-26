@@ -119,7 +119,6 @@ QWidget *InteractionEditorPage::createPage(QWidget *parent)
 }
 
 
-
 InteractionEditorWidget::InteractionEditorWidget(QWidget *parent) :
     QWidget(parent),
     ui(new Ui::InteractionEditorWidget),
@@ -133,31 +132,6 @@ InteractionEditorWidget::InteractionEditorWidget(QWidget *parent) :
     ui->treeLayout->setMargin(0);
     ui->treeLayout->setSpacing(0);
     ui->tabWidget->setCurrentIndex(0);
-
-    // Manage combos && views
-    setLevelNamesToCombo(ui->comboLevel);
-    ui->firstDoseFromUnits->addItems(DrugDrugInteractionModel::units());
-    ui->firstDoseFromRepart->addItems(DrugDrugInteractionModel::repartitions());
-    ui->firstDoseToUnits->addItems(DrugDrugInteractionModel::units());
-    ui->firstDoseToRepart->addItems(DrugDrugInteractionModel::repartitions());
-    ui->secondDoseFromUnits->addItems(DrugDrugInteractionModel::units());
-    ui->secondDoseFromRepart->addItems(DrugDrugInteractionModel::repartitions());
-    ui->secondDoseToUnits->addItems(DrugDrugInteractionModel::units());
-    ui->secondDoseToRepart->addItems(DrugDrugInteractionModel::repartitions());
-
-    d->firstInteractorRoutes = new Core::RoutesModel(this);
-    ui->listViewFirstInteractorRoute->setModel(d->firstInteractorRoutes);
-    ui->listViewFirstInteractorRoute->setModelColumn(Core::RoutesModel::FirstTranslatedName);
-    d->secondInteractorRoutes = new Core::RoutesModel(this);
-    ui->listViewSecondInteractorRoute->setModel(d->secondInteractorRoutes);
-    ui->listViewSecondInteractorRoute->setModelColumn(Core::RoutesModel::FirstTranslatedName);
-
-    d->biblioModel = new QStringListModel(this);
-    ui->bilbioTableView->setModel(d->biblioModel);
-    ui->bilbioTableView->horizontalHeader()->setResizeMode(0, QHeaderView::Stretch);
-    ui->bilbioTableView->alternatingRowColors();
-    ui->bilbioTableView->horizontalHeader()->hide();
-    ui->bilbioTableView->verticalHeader()->hide();
 
     // Create the toolbar and actions
     QToolBar *b = new QToolBar(this);
@@ -221,8 +195,33 @@ InteractionEditorWidget::InteractionEditorWidget(QWidget *parent) :
     right->addAction(d->aExpandAll);
     right->addAction(d->aCollapseAll);
     right->setDefaultAction(d->aExpandAll);
-    ui->searchLine->setRightButton(right);
 
+    // Manage combos && views
+    setLevelNamesToCombo(ui->comboLevel);
+    ui->firstDoseFromUnits->addItems(DrugDrugInteractionModel::units());
+    ui->firstDoseFromRepart->addItems(DrugDrugInteractionModel::repartitions());
+    ui->firstDoseToUnits->addItems(DrugDrugInteractionModel::units());
+    ui->firstDoseToRepart->addItems(DrugDrugInteractionModel::repartitions());
+    ui->secondDoseFromUnits->addItems(DrugDrugInteractionModel::units());
+    ui->secondDoseFromRepart->addItems(DrugDrugInteractionModel::repartitions());
+    ui->secondDoseToUnits->addItems(DrugDrugInteractionModel::units());
+    ui->secondDoseToRepart->addItems(DrugDrugInteractionModel::repartitions());
+
+    d->firstInteractorRoutes = new Core::RoutesModel(this);
+    ui->listViewFirstInteractorRoute->setModel(d->firstInteractorRoutes);
+    ui->listViewFirstInteractorRoute->setModelColumn(Core::RoutesModel::FirstTranslatedName);
+    d->secondInteractorRoutes = new Core::RoutesModel(this);
+    ui->listViewSecondInteractorRoute->setModel(d->secondInteractorRoutes);
+    ui->listViewSecondInteractorRoute->setModelColumn(Core::RoutesModel::FirstTranslatedName);
+
+    d->biblioModel = new QStringListModel(this);
+    ui->bilbioTableView->setModel(d->biblioModel);
+    ui->bilbioTableView->horizontalHeader()->setResizeMode(0, QHeaderView::Stretch);
+    ui->bilbioTableView->alternatingRowColors();
+    ui->bilbioTableView->horizontalHeader()->hide();
+    ui->bilbioTableView->verticalHeader()->hide();
+
+    ui->searchLine->setRightButton(right);
 
     // Create DDI Model && manage Mapper
     d->m_DDIModel = new DrugDrugInteractionModel(this);

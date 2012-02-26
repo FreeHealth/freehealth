@@ -35,7 +35,8 @@ HEADERS  += \
 FORMS += \
     biamextractor.ui \
     pimintegrator.ui \
-    pimdatabasecreator.ui
+    pimdatabasecreator.ui \
+    pregnancyclassification.ui
 
 
 OTHER_FILES += \

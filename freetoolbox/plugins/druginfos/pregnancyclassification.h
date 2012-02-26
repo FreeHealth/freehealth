@@ -44,6 +44,10 @@ public:
     virtual QWidget *createPage(QWidget *parent = 0);
 };
 
+namespace Ui {
+class PregnancyClassificationWidget;
+}
+
 class PregnancyClassificationWidget : public QWidget
 {
     Q_OBJECT
@@ -55,7 +59,9 @@ public:
 protected Q_SLOTS:
     void computeJavascriptFile();
 
-//    bool on_download_clicked();
+    void on_download_clicked();
+    void on_editClassification_clicked();
+
 //    void indexPageDownloaded(QNetworkReply *reply);
 //    void substancePageDownloaded(QNetworkReply *reply);
 //    void on_process_clicked();
@@ -65,7 +71,8 @@ protected Q_SLOTS:
 
 //Q_SIGNALS:
 //    void downloadFinished();
-
+private:
+    Ui::PregnancyClassificationWidget *ui;
 };
 
 } // namespace DrugInfos

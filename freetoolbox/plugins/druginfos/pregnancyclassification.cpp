@@ -33,11 +33,22 @@
 
 #include <utils/global.h>
 #include <utils/log.h>
+#include <extensionsystem/pluginmanager.h>
 #include <translationutils/constanttranslations.h>
 
 #include <QScriptEngine>
+#include <QDir>
+
+#include "ui_pregnancyclassification.h"
 
 using namespace DrugInfos;
+static inline Core::ISettings *settings()  { return Core::ICore::instance()->settings(); }
+static inline ExtensionSystem::PluginManager *pluginManager() {return ExtensionSystem::PluginManager::instance();}
+
+static inline QString workingPath()     {return QDir::cleanPath(settings()->value(Core::Constants::S_TMP_PATH).toString() + "/TgaPregDb/") + QDir::separator();}
+static inline QString databaseAbsPath()  {return Core::Tools::drugsDatabaseAbsFileName();}
+
+static inline QString databaseDescriptionFile() {return QDir::cleanPath(settings()->value(Core::Constants::S_SVNFILES_PATH).toString() + "/global_resources/sql/drugdb/tga_preg/description.xml");}
 
 QString PregnancyClassificationPage::id() const {return "PregnancyClassificationPage";}
 QString PregnancyClassificationPage::name() const {return "Pregnancy classification";}
@@ -45,6 +56,10 @@ QString PregnancyClassificationPage::category() const {return Core::Constants::C
 QIcon PregnancyClassificationPage::icon() const {return QIcon();}
 
 namespace {
+
+const char* const  PREGNANCY_TGA_URL            = "http://www.tga.gov.au/webfiles/medicinesInPregnancyData.js";
+const char* const  TGA_PREGNANCY_DATABASE_NAME  = "TGA_PREG";
+
 enum FieldType {
     Field_Name,
     Field_Category,
@@ -116,21 +131,29 @@ bool load(const QString &fileName, QList<PregnancyRecord> &records, QString *err
 
 // widget will be deleted after the show
 QWidget *PregnancyClassificationPage::createPage(QWidget *parent)
-{}
+{
+    return new PregnancyClassificationWidget(parent);
+}
 
 
-PregnancyClassificationWidget::PregnancyClassificationWidget(QWidget *parent)
-{}
+PregnancyClassificationWidget::PregnancyClassificationWidget(QWidget *parent) :
+    QWidget(parent),
+    ui(new Ui::PregnancyClassificationWidget)
+{
+    ui->setupUi(this);
+    computeJavascriptFile();
+}
 
 PregnancyClassificationWidget::~PregnancyClassificationWidget()
-{}
+{
+}
 
 void PregnancyClassificationWidget::computeJavascriptFile()
 {
     QList<QHash<FieldType, QString> > pregnancyList;
     QString errorMsg;
     // NOTE POUR ERIC: change le chemin du fichier par le tien
-    QString jsFile = "/home/guillaume/projects/freemedforms/global_resources/sql/medicinesInPregnancyData.js";
+    QString jsFile = "/Users/eric/Desktop/Programmation/freemedforms/__nonfree__/resources/drugs/pregnancy/medicinesInPregnancyData.js";
     if (load(jsFile, pregnancyList, &errorMsg)) {
         qDebug("SUCCESS");
         foreach (const PregnancyRecord &rec, pregnancyList) {
@@ -143,4 +166,12 @@ void PregnancyClassificationWidget::computeJavascriptFile()
         }
     } else
         qDebug("FAILURE: %s", qPrintable(errorMsg));
+}
+
+void PregnancyClassificationWidget::on_download_clicked()
+{
+}
+
+void PregnancyClassificationWidget::on_editClassification_clicked()
+{
 }
