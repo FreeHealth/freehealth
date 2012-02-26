@@ -125,6 +125,8 @@ public:
         if (ref == DI_TypeId) {
             QString t = value.toString();
             DrugDrugInteractionEngine::TypesOfIAM r = DrugDrugInteractionEngine::NoIAM;
+            if (t.contains("A"))
+                r |= DrugDrugInteractionEngine::DrugDuplication;
             if (t.contains("U"))
                 r |= DrugDrugInteractionEngine::InnDuplication;
             if (t.contains("Z"))
@@ -190,7 +192,8 @@ public:
         else if ((level & DrugDrugInteractionEngine::Information) && (levelOfWarning == Constants::MaximumLevelOfWarning))
             return th->icon(Constants::INTERACTION_ICONINFORMATION, size);
         else if (((level & DrugDrugInteractionEngine::InnDuplication) ||
-                  (level & DrugDrugInteractionEngine::ClassDuplication)) &&
+                  (level & DrugDrugInteractionEngine::ClassDuplication) ||
+                  (level & DrugDrugInteractionEngine::DrugDuplication)) &&
                  (levelOfWarning == Constants::MaximumLevelOfWarning))
             return th->icon(Constants::INTERACTION_ICONINFORMATION, size);
         else if (level & DrugDrugInteractionEngine::NoIAM)
@@ -249,6 +252,8 @@ public:
             const IDrug *dr = m_InteractingDrugs.at(i);
             if (dr==drug)
                 continue;
+            if (typeId()==DrugDrugInteractionEngine::DrugDuplication)
+                return dr;
             if (dr->allAtcIds().contains(testAtcId)) {
                 return dr;
             }
@@ -332,6 +337,8 @@ public:
               tmp << tkTr(Trans::Constants::TAKE_INTO_ACCOUNT);
          if (r & DrugDrugInteractionEngine::Precaution)
               tmp << tkTr(Trans::Constants::PRECAUTION_FOR_USE);
+         if (r & DrugDrugInteractionEngine::DrugDuplication)
+              tmp << tkTr(Trans::Constants::DRUG_DUPLICATION);
          if (r & DrugDrugInteractionEngine::InnDuplication)
               tmp << tkTr(Trans::Constants::INN_DUPLICATION);
          if (r & DrugDrugInteractionEngine::ClassDuplication)
@@ -415,8 +422,7 @@ public:
             }
         case Constants::MaximumLevelOfWarning:
             {
-                ret = (r != DrugDrugInteractionEngine::NoIAM &&
-                       r != DrugDrugInteractionEngine::Unknown);
+                ret = true;
                 break;
             }
         }
@@ -453,7 +459,8 @@ public:
         else if ((level & DrugDrugInteractionEngine::Information) && (levelOfWarning == Constants::MaximumLevelOfWarning))
             return th->icon(Constants::INTERACTION_ICONINFORMATION, size);
         else if (((level & DrugDrugInteractionEngine::InnDuplication) ||
-                  (level & DrugDrugInteractionEngine::ClassDuplication)) &&
+                  (level & DrugDrugInteractionEngine::ClassDuplication) ||
+                  (level & DrugDrugInteractionEngine::DrugDuplication)) &&
                  (levelOfWarning == Constants::MaximumLevelOfWarning))
             return th->icon(Constants::INTERACTION_ICONINFORMATION, size);
         else if (level & DrugDrugInteractionEngine::NoIAM)
@@ -504,7 +511,8 @@ public:
         else if ((level & DrugDrugInteractionEngine::Information))
             return th->iconFullPath(Constants::INTERACTION_ICONINFORMATION, size);
         else if ((level & DrugDrugInteractionEngine::InnDuplication) ||
-                  (level & DrugDrugInteractionEngine::ClassDuplication))
+                  (level & DrugDrugInteractionEngine::ClassDuplication) ||
+                  (level & DrugDrugInteractionEngine::DrugDuplication))
             return th->iconFullPath(Constants::INTERACTION_ICONINFORMATION, size);
         else if (level & DrugDrugInteractionEngine::NoIAM)
             return th->iconFullPath(Constants::INTERACTION_ICONOK, size);
@@ -575,6 +583,8 @@ public:
                 // Maximum alerts
                 else if ((r & DrugDrugInteractionEngine::Information) && (query.levelOfWarningStaticAlert == Constants::MaximumLevelOfWarning))
                     typeId = DrugDrugInteractionEngine::Information;
+                else if ((r & DrugDrugInteractionEngine::DrugDuplication) && (query.levelOfWarningStaticAlert == Constants::MaximumLevelOfWarning))
+                    typeId = DrugDrugInteractionEngine::DrugDuplication;
                 else if ((r & DrugDrugInteractionEngine::InnDuplication) && (query.levelOfWarningStaticAlert == Constants::MaximumLevelOfWarning))
                     typeId = DrugDrugInteractionEngine::InnDuplication;
                 else if ((r & DrugDrugInteractionEngine::ClassDuplication) && (query.levelOfWarningStaticAlert == Constants::MaximumLevelOfWarning))
@@ -586,16 +596,23 @@ public:
                 // construct line of the alert
                 QString line;
                 QString drug2;
-                if (ddi->drugs().at(0)->drugId()==drug->drugId()) {
-                    drug2 = ddi->drugs().at(1)->brandName();
+                if (ddi->typeId() == DrugDrugInteractionEngine::DrugDuplication) {
+                    line = QString("<tr>\n"
+                                   "  <td>* %1</td>\n"
+                                   "</tr>")
+                            .arg(ddi->getInteractingDrug(drug)->brandName());
                 } else {
-                    drug2 = ddi->drugs().at(0)->brandName();
+                    if (ddi->drugs().at(0)->drugId()==drug->drugId()) {
+                        drug2 = ddi->drugs().at(1)->brandName();
+                    } else {
+                        drug2 = ddi->drugs().at(0)->brandName();
+                    }
+                    line = QString("<tr>\n"
+                                   "  <td>* %1<br>&nbsp;&nbsp;&nbsp;&nbsp;%2</td>\n"
+                                   "</tr>")
+                            .arg(ddi->getInteractingDrug(drug)->brandName())
+                            .arg(di->header("//"));
                 }
-                line = QString("<tr>\n"
-                               "  <td>* %1<br>&nbsp;&nbsp;&nbsp;&nbsp;%2</td>\n"
-                               "</tr>")
-                        .arg(ddi->getInteractingDrug(drug)->brandName())
-                        .arg(di->header("//"));
                 QString &ditmp = lines[typeId];
 
                 // no double
@@ -666,6 +683,8 @@ public:
                     // Maximum alerts
                     else if ((level & DrugDrugInteractionEngine::Information) && (query.levelOfWarningStaticAlert == Constants::MaximumLevelOfWarning))
                         typeId = DrugDrugInteractionEngine::Information;
+                    else if ((level & DrugDrugInteractionEngine::DrugDuplication) && (query.levelOfWarningStaticAlert == Constants::MaximumLevelOfWarning))
+                        typeId = DrugDrugInteractionEngine::DrugDuplication;
                     else if ((level & DrugDrugInteractionEngine::InnDuplication) && (query.levelOfWarningStaticAlert == Constants::MaximumLevelOfWarning))
                         typeId = DrugDrugInteractionEngine::InnDuplication;
                     else if ((level & DrugDrugInteractionEngine::ClassDuplication) && (query.levelOfWarningStaticAlert == Constants::MaximumLevelOfWarning))
@@ -685,16 +704,25 @@ public:
                 --i;
                 while (true) {
                     if (!i.value().isEmpty()) {
-                        tmp += QString("<ul compact>"
-                                       "  <li><b>%1</b></li>\n"
-                                       "  <ul>\n"
-                                       "%2"
-                                       "  </ul>\n"
-                                       "</ul>\n"
-                                       )
-//                                .arg(QCoreApplication::translate(Constants::DRUGSBASE_TR_CONTEXT, Constants::DDI_TEXT))
-                                .arg(DrugsInteraction::typeToString(i.key()))
-                                .arg(i.value());
+                        // Manage drug duplication
+                        if (i.key() == DrugDrugInteractionEngine::DrugDuplication) {
+                            tmp += QString("<ul compact>"
+                                           "  <li><b>%1</b></li>\n"
+                                           "</ul>\n")
+                                    .arg(DrugsInteraction::typeToString(i.key()));
+                        } else {
+                            // Manage all other interaction type
+                            tmp += QString("<ul compact>"
+                                           "  <li><b>%1</b></li>\n"
+                                           "  <ul>\n"
+                                           "%2"
+                                           "  </ul>\n"
+                                           "</ul>\n"
+                                           )
+                                    //                                .arg(QCoreApplication::translate(Constants::DRUGSBASE_TR_CONTEXT, Constants::DDI_TEXT))
+                                    .arg(DrugsInteraction::typeToString(i.key()))
+                                    .arg(i.value());
+                        }
                     }
                     if (i==lines.constBegin())
                         break;
@@ -863,7 +891,6 @@ bool DrugDrugInteractionEngine::checkDrugInteraction(IDrug *drug, const QVector<
         return false;
 
     if (DrugRoute::maximumSystemicEffect(drug) == DrugRoute::NoSystemicEffect) {
-//        qWarning() << drug->brandName() << "NOT INCLUDED AS DRUG1";
         return false;
     }
 
@@ -874,8 +901,18 @@ bool DrugDrugInteractionEngine::checkDrugInteraction(IDrug *drug, const QVector<
         if (drug2 == drug)
             continue;
 
+        if (drug2->equals(drug)) {
+            // Add a drug duplication
+            DrugsInteraction *ddi = new DrugsInteraction(this);
+            ddi->setValue(DrugsInteraction::DI_ATC1, -1);
+            ddi->setValue(DrugsInteraction::DI_ATC2, -1);
+            ddi->addInteractingDrug(drug);
+            ddi->addInteractingDrug(drug2);
+            d->m_FirstPassInteractions.append(ddi);
+            continue;
+        }
+
         if (DrugRoute::maximumSystemicEffect(drug2) == DrugRoute::NoSystemicEffect) {
-            //            qWarning() << "  xxx" <<  drug2->brandName() << "NOT INCLUDED AS DRUG2";
             continue;
         }
 
@@ -910,7 +947,7 @@ bool DrugDrugInteractionEngine::checkDrugInteraction(IDrug *drug, const QVector<
                 //                 if ((!m_DDIFound.contains(s2, s)) && (!m_DDIFound.contains(s, s2)))
                 //                     m_DDIFound.insertMulti(s, s2);
 
-                // test same molecules
+                // test molecule duplication
                 if ((s > 999) && (s2 > 999) && (s == s2)) {
                     if (!d->m_DDIFound.contains(s, -1)) {
                         d->m_DDIFound.insertMulti(s, -1);
@@ -954,6 +991,7 @@ int DrugDrugInteractionEngine::calculateInteractions(const QVector<IDrug *> &dru
         Utils::Log::logTimeElapsed(t, "DrugDrugInteractionEngine", QString("interactions() : %1 drugs").arg(drugs.count()));
 
 //    qWarning() << "DDIEngine::foundATCtoATC DDI" << d->m_DDIFound;
+//    qWarning() << "DDIEngine::found" << d->m_FirstPassInteractions.count();
 
     return d->m_DDIFound.count();
 }
@@ -962,6 +1000,7 @@ QVector<IDrugInteraction *> DrugDrugInteractionEngine::getInteractionsFromDataba
 {
     QVector<IDrugInteraction *> toReturn;
     DrugsInteraction *fromddi = static_cast<DrugsInteraction *>(fromFirstPassInteraction);
+    Q_ASSERT(fromddi);
     if (!fromddi)
         return toReturn;
     int _id1 = fromddi->value(DrugsInteraction::DI_ATC1).toInt();
@@ -975,17 +1014,34 @@ QVector<IDrugInteraction *> DrugDrugInteractionEngine::getInteractionsFromDataba
     }
 
     // first test : is a duplication interaction ?
-    if ((id2 == -1)) {
-        if (!d->m_DoNotWarnAtcDuplicates.contains(_id1)) {
+    if (id2 == -1) {
+        // Drug duplication ?
+        if (_id1==-1) {
+            DrugsInteraction *ddi = 0;
+            ddi = new ::DrugsInteraction(this);
+            ddi->setValue(DrugsInteraction::DI_ATC1, _id1);
+            ddi->setValue(DrugsInteraction::DI_ATC2, _id1);
+            ddi->setValue(DrugsInteraction::DI_TypeId , "A");
+            ddi->setValue(DrugsInteraction::DI_RiskFr, tkTr(Trans::Constants::DRUG_DUPLICATION));
+            ddi->setValue(DrugsInteraction::DI_RiskEn, Trans::Constants::DRUG_DUPLICATION);
+            ddi->setValue(DrugsInteraction::DI_ReferencesLink, QCoreApplication::translate("DrugsBase", "FreeDiams Interactions Engine"));
+            foreach(IDrug *drug, fromddi->drugs()) {
+                ddi->addInteractingDrug(drug);
+            }
+            toReturn << ddi;
+            return toReturn;
+        } else if (!d->m_DoNotWarnAtcDuplicates.contains(_id1)) {
             DrugsInteraction *ddi = 0;
             ddi = new ::DrugsInteraction(this);
             ddi->setValue(DrugsInteraction::DI_ATC1, _id1);
             ddi->setValue(DrugsInteraction::DI_ATC2, _id1);
             if (_id1 >= 200000) {
+                // Inn duplication
                 ddi->setValue(DrugsInteraction::DI_TypeId , "Z");
                 ddi->setValue(DrugsInteraction::DI_RiskFr, tkTr(Trans::Constants::INN_DUPLICATION));
                 ddi->setValue(DrugsInteraction::DI_RiskEn, Trans::Constants::INN_DUPLICATION);
             } else {
+                // Inn Class duplication
                 ddi->setValue(DrugsInteraction::DI_TypeId , "U");
                 ddi->setValue(DrugsInteraction::DI_RiskFr, tkTr(Trans::Constants::CLASS_DUPLICATION));
                 ddi->setValue(DrugsInteraction::DI_RiskEn, Trans::Constants::CLASS_DUPLICATION);
@@ -1056,7 +1112,7 @@ QVector<IDrugInteraction *> DrugDrugInteractionEngine::getAllInteractionsFound()
 {
     // if no interactions were found : return empty list
     QVector<IDrugInteraction *> toReturn;
-    if (d->m_DDIFound.isEmpty())
+    if (d->m_DDIFound.isEmpty() && d->m_FirstPassInteractions.isEmpty())
         return toReturn;
 
     QTime t;

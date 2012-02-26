@@ -168,19 +168,20 @@ void DrugsCentralWidget::focusInEvent(QFocusEvent *event)
 /**
   \brief Slot called when is selected from the drugSelector.
   Verify that the drug isn't already prescribed (if it is warn user and stop). \n
-  Add the drug to the DrugsModel and open the DosageCreatorDialog\n
+  Add the drug to the DrugsModel, start the interactions checker (BeforePrescription),
+  then open the DosageCreatorDialog\n
 */
 void DrugsCentralWidget::onSelectorDrugSelected(const QVariant &drugId)
 {
     // If drug already in prescription --> Stop
-    if (m_CurrentDrugModel->containsDrug(drugId)) {
-        Utils::warningMessageBox(tr("Can not add this drug to your prescription."),
-                                 tr("Prescription can not contains twice the sample pharmaceutical drug.\n"
-                                    "Drug %1 is already in your prescription")
-                                 .arg(m_CurrentDrugModel->drugData(drugId, DrugsDB::Constants::Drug::Denomination).toString()),
-                                 tr("If you want to change the dosage of this drug please double-click on it in the prescription box."));
-        return;
-    }
+//    if (m_CurrentDrugModel->containsDrug(drugId)) {
+//        Utils::warningMessageBox(tr("Can not add this drug to your prescription."),
+//                                 tr("Prescription can not contains twice the sample pharmaceutical drug.\n"
+//                                    "Drug %1 is already in your prescription")
+//                                 .arg(m_CurrentDrugModel->drugData(drugId, DrugsDB::Constants::Drug::Denomination).toString()),
+//                                 tr("If you want to change the dosage of this drug please double-click on it in the prescription box."));
+//        return;
+//    }
 
     // Add drug to the model
     m_CurrentDrugModel->addDrug(drugId);

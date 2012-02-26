@@ -938,6 +938,13 @@ bool IDrug::lessThan(const IDrug *drug1, const IDrug *drug2)
     return drug1->brandName() < drug2->brandName();
 }
 
+/** Test aquality with another drug. */
+bool IDrug::equals(const IDrug *d)
+{
+    return (this->uids() == d->uids() &&
+            this->data(SourceID) == d->data(SourceID) &&
+            this->brandName() == d->brandName());
+}
 
 bool IDrug::setDataFromDb(const int ref, const QVariant &value, const QString &lang)
 {

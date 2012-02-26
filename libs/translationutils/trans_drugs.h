@@ -59,8 +59,9 @@ const char* const P450_IAM                      = QT_TRANSLATE_NOOP("tkConstants
 const char* const GPG_IAM                       = QT_TRANSLATE_NOOP("tkConstants", "Glycoprotein-P interaction");
 const char* const PRECAUTION_FOR_USE            = QT_TRANSLATE_NOOP("tkConstants", "Precaution for use");
 const char* const INFORMATION                   = QT_TRANSLATE_NOOP("tkConstants", "Information");
-const char* const INN_DUPLICATION               = QT_TRANSLATE_NOOP("tkConstants", "Molecule is duplicated");
-const char* const CLASS_DUPLICATION             = QT_TRANSLATE_NOOP("tkConstants", "Class is duplicated");
+const char* const DRUG_DUPLICATION              = QT_TRANSLATE_NOOP("tkConstants", "Drug duplication");
+const char* const INN_DUPLICATION               = QT_TRANSLATE_NOOP("tkConstants", "Molecule duplication");
+const char* const CLASS_DUPLICATION             = QT_TRANSLATE_NOOP("tkConstants", "Therapeutic class duplication");
 
 // For datapack types
 const char* const DRUGS_WITH_INTERACTIONS       = QT_TRANSLATE_NOOP("tkConstants", "Drug database with interaction database");
