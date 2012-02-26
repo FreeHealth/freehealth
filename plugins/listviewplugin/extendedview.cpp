@@ -29,6 +29,7 @@
 
 #include <translationutils/constanttranslations.h>
 #include <utils/log.h>
+#include <utils/global.h>
 
 #include <coreplugin/actionmanager/actionmanager.h>
 #include <coreplugin/contextmanager/contextmanager.h>
@@ -117,11 +118,17 @@ ExtendedView::ExtendedView(QAbstractItemView *parent, Constants::AvailableAction
     ViewManager::instance();
     parent->setHorizontalScrollBarPolicy(Qt::ScrollBarAlwaysOn);
     d->m_ToolBar = new QToolBar(parent);
+    d->m_ToolBar->setMinimumHeight(20);
     d->m_ToolBar->setIconSize(QSize(16,16));
     d->m_ToolBar->setFocusPolicy(Qt::ClickFocus);
-    d->m_ToolBar->setSizePolicy(QSizePolicy::Minimum, QSizePolicy::Minimum);
+    d->m_ToolBar->setSizePolicy(QSizePolicy::Fixed, QSizePolicy::Fixed);
     d->populateToolbar();
     parent->addScrollBarWidget(d->m_ToolBar, Qt::AlignLeft);
+    if (!Utils::isRunningOnMac()) {
+        QWidget *w = parent->scrollBarWidgets(Qt::AlignLeft).at(0);
+        w->layout()->setMargin(0);
+        w->layout()->setSpacing(0);
+    }
 
     // Manage context menu
     parent->setContextMenuPolicy(Qt::CustomContextMenu);
