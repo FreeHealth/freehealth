@@ -251,22 +251,16 @@ void PrescriptionViewer::showDosageDialog(const QModelIndex &item)
         return;
 
     int row;
-    if (!item.isValid()) {
+    if (!item.isValid())
         row = listView->currentIndex().row();
-    } else {
+    else
         row = item.row();
-    }
-
     if (row < 0)
         return;
 
     const QVariant &drugUid = drugModel()->index(row, DrugsDB::Constants::Drug::DrugId).data();
     bool isTextual = drugModel()->index(row, DrugsDB::Constants::Prescription::IsTextualOnly).data().toBool();
-    if (drugUid.toInt()!=-1) {
-        Internal::DosageDialog dlg(this);
-        dlg.changeRow(drugUid, row);
-        dlg.exec();
-    } else if (isTextual) {
+    if (isTextual) {
         TextualPrescriptionDialog dlg(this);
         dlg.setDrugLabel(drugModel()->index(row,DrugsDB::Constants::Drug::Denomination).data().toString());
         dlg.setDrugNote(drugModel()->index(row,DrugsDB::Constants::Prescription::Note).data().toString());
@@ -277,6 +271,10 @@ void PrescriptionViewer::showDosageDialog(const QModelIndex &item)
             drugModel()->setData(drugModel()->index(row, DrugsDB::Constants::Prescription::Note), dlg.drugNote());
             drugModel()->setData(drugModel()->index(row, DrugsDB::Constants::Prescription::IsALD), dlg.isALD());
         }
+    } else if (drugUid.toInt()!=-1 && !drugUid.isNull()) {
+        Internal::DosageDialog dlg(this);
+        dlg.changeRow(drugUid, row);
+        dlg.exec();
     }
     // This is used to force listView to redraw all rows with the good height is user changes note or whatever
     listView->setViewMode(QListView::ListMode);
