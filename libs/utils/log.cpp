@@ -219,9 +219,9 @@ QString Log::saveLog(const QString &fileName)
         f = QDir::homePath() + "/FMF_LOG.TXT";
 
     QFile file(f);
-    if (! file.open(QFile::WriteOnly)) {
+    if (!file.open(QFile::WriteOnly)) {
         Log::addError("Log", QCoreApplication::translate("Log", "Unable to save %1 : Error %2").arg(f , file.errorString()));
-        return false;
+        return QString::null;
     }
 
     QString tmp = toString();

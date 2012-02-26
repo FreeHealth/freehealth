@@ -134,7 +134,7 @@ void ImageViewer::fitToWindow()
 void ImageViewer::next()
 {
     if (m_CurrentIndex < (m_pixmaps.count() - 1)) {
-        m_CurrentIndex = ++m_CurrentIndex;
+        ++m_CurrentIndex;
         imageLabel->setPixmap(m_pixmaps.at(m_CurrentIndex));
         normalSize();
         fitToWindow();
@@ -144,7 +144,7 @@ void ImageViewer::next()
 void ImageViewer::previous()
 {
     if (m_CurrentIndex >= 1) {
-        m_CurrentIndex = --m_CurrentIndex;
+        --m_CurrentIndex;
         imageLabel->setPixmap(m_pixmaps.at(m_CurrentIndex));
         normalSize();
         fitToWindow();

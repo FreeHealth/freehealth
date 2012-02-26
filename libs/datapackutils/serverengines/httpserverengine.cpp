@@ -398,7 +398,7 @@ void HttpServerEngine::afterServerConfigurationDownload(const ReplyData &data)
 {
 //    qWarning() << "ServerConfigDone" << data.server->uuid();
 
-    bool downloadPackDescriptionNeeded = false;
+//    bool downloadPackDescriptionNeeded = false;
     Server *server = data.server;
     ServerEngineStatus *status = getStatus(data);
     Q_ASSERT(status);
@@ -412,7 +412,7 @@ void HttpServerEngine::afterServerConfigurationDownload(const ReplyData &data)
         Utils::saveStringToFile(data.response, core().persistentCachePath() + QDir::separator() + server->uuid() + QDir::separator() + "server.conf.xml");
         // Read the XML from the buffer
         server->fromXml(data.response);
-        downloadPackDescriptionNeeded = true;
+//        downloadPackDescriptionNeeded = true;
         status->engineMessages << tr("Server description file correctly downloaded.");
         break;
     }

@@ -799,7 +799,7 @@ Database::Grants Database::getConnectionGrants(const QString &connectionName) //
         if (!DB.open()) {
             LOG_ERROR_FOR("Database", tkTr(Trans::Constants::UNABLE_TO_OPEN_DATABASE_1_ERROR_2)
                           .arg(connectionName).arg(DB.lastError().text()));
-            return false;
+            return Database::Grant_NoGrant;
         }
     }
     if (DB.driverName()=="QSQLITE") {
