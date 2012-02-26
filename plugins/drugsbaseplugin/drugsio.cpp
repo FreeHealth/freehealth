@@ -35,6 +35,7 @@
 
 #include <drugsbaseplugin/drugbasecore.h>
 #include <drugsbaseplugin/drugsbase.h>
+#include <drugsbaseplugin/protocolsbase.h>
 #include <drugsbaseplugin/constants.h>
 #include <drugsbaseplugin/idrug.h>
 #include <drugsbaseplugin/drugsmodel.h>
@@ -64,7 +65,10 @@
 #include <QDir>
 #include <QDomDocument>
 
-static inline DrugsDB::DrugsBase &drugsBase() {return DrugsDB::DrugBaseCore::instance().drugsBase();}
+static inline DrugsDB::DrugBaseCore &core() {return DrugsDB::DrugBaseCore::instance();}
+static inline DrugsDB::DrugsBase &drugsBase() {return core().drugsBase();}
+static inline DrugsDB::ProtocolsBase &protocolsBase() {return core().protocolsBase();}
+static inline DrugsDB::VersionUpdater &versionUpdater() {return core().versionUpdater();}
 static inline Core::ISettings *settings() {return Core::ICore::instance()->settings();}
 static inline DrugsDB::DrugsModel *drugModel() { return DrugsDB::DrugsModel::activeModel(); }
 static inline Core::IUser *user() {return Core::ICore::instance()->user();}
@@ -516,7 +520,7 @@ DrugsIO::~DrugsIO()
 bool DrugsIO::startsDosageTransmission()
 {
     connect(&d->m_Sender, SIGNAL(sent()), this, SLOT(dosageTransmissionDone()));
-    d->m_Datas = drugsBase().getDosageToTransmit();
+    d->m_Datas = protocolsBase().getDosageToTransmit();
     if (d->m_Datas.count()==0) {
         return false;
     }
@@ -531,13 +535,13 @@ bool DrugsIO::startsDosageTransmission()
 /**
   \brief Slot called when the dosage transmission is done.
   Marks all dosage as transmitted into the database.
-  \sa mfDrugsBase::markAllDosageTransmitted()
+  \sa DrugsDB::ProtocolsBase::markAllDosageTransmitted()
 */
 void DrugsIO::dosageTransmissionDone()
 {
     if (d->m_Sender.resultMessage().contains("OK")) {
-        Utils::Log::addMessage(this, tr("Dosages transmitted."));
-        drugsBase().markAllDosageTransmitted(d->m_Datas.keys());
+        LOG(tr("Dosages transmitted."));
+        protocolsBase().markAllDosageTransmitted(d->m_Datas.keys());
     } else {
         LOG_ERROR(tr("Dosage not correctly transmitted"));
     }
@@ -566,12 +570,12 @@ bool DrugsIO::prescriptionFromXml(DrugsDB::DrugsModel *m, const QString &xmlCont
     time.start();
 
     // check prescription encoding version && update XML content if needed
-    bool needUpdate = (!DrugsDB::VersionUpdater::instance()->isXmlIOUpToDate(xmlContent));
+    bool needUpdate = (!versionUpdater().isXmlIOUpToDate(xmlContent));
     QString version;
     if (needUpdate) {
-        version = DrugsDB::VersionUpdater::instance()->xmlVersion(xmlContent);
+        version = versionUpdater().xmlVersion(xmlContent);
         LOG_FOR("DrugsIO::prescriptionFromXml", "Reading old prescription file : version " + version);
-        xml = DrugsDB::VersionUpdater::instance()->updateXmlIOContent(xmlContent);
+        xml = versionUpdater().updateXmlIOContent(xmlContent);
 //        Utils::Log::logTimeElapsed(time, "DrugsIO", "Updating XML prescription");
     }
 
@@ -648,7 +652,7 @@ bool DrugsIO::prescriptionFromXml(DrugsDB::DrugsModel *m, const QString &xmlCont
 //    Utils::Log::logTimeElapsed(time, "DrugsIO", "Adding drugs to model (no DDI checking)");
 
     if ((needUpdate) && (!version.isEmpty())){
-        DrugsDB::VersionUpdater::instance()->updateXmlIOModel(version, m, rowsToUpdate);
+        versionUpdater().updateXmlIOModel(version, m, rowsToUpdate);
     }
 
     if (!errorMsg.isEmpty()) {
@@ -890,7 +894,7 @@ QString DrugsIO::prescriptionToXml(DrugsDB::DrugsModel *m, const QString &xmlExt
 
     QDomElement fullPres = doc.createElement(::XML_FULLPRESCRIPTION_TAG);
     root.appendChild(fullPres);
-    fullPres.setAttribute(::XML_VERSION, VersionUpdater::instance()->lastXmlIOVersion());
+    fullPres.setAttribute(::XML_VERSION, versionUpdater().lastXmlIOVersion());
 
     const QList<IDrug *> &drugs = m->drugsList();
     for(int i=0; i < drugs.count(); ++i) {

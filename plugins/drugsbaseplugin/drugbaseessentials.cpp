@@ -441,11 +441,14 @@ bool DrugBaseEssentials::createDatabase(const QString &connectionName , const QS
     if (QSqlDatabase::connectionNames().contains(connectionName)) {
         QSqlDatabase::removeDatabase(connectionName);
     }
+
+    if (!Utils::checkDir(pathOrHostName, true, "DrugBaseEssentials")) {
+        LOG_ERROR_FOR("DrugBaseEssentials", tkTr(Trans::Constants::_1_ISNOT_AVAILABLE_CANNOTBE_CREATED).arg(pathOrHostName));
+        return false;
+    }
+
     QSqlDatabase DB;
     DB = QSqlDatabase::addDatabase("QSQLITE", connectionName);
-    if (!QDir(pathOrHostName).exists())
-        if (!QDir().mkpath(pathOrHostName))
-            tkTr(Trans::Constants::_1_ISNOT_AVAILABLE_CANNOTBE_CREATED).arg(pathOrHostName);
     DB.setDatabaseName(QDir::cleanPath(pathOrHostName + QDir::separator() + prefixedDbName));
     if (!DB.open())
         LOG_FOR("DrugBaseEssentials", tkTr(Trans::Constants::DATABASE_1_CANNOT_BE_CREATED_ERROR_2).arg(prefixedDbName).arg(DB.lastError().text()));

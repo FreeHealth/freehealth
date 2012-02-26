@@ -39,6 +39,7 @@
 */
 
 namespace DrugsDB {
+class DrugBaseCore;
 class DrugsModel;
 
 class GenericUpdateStep
@@ -83,8 +84,9 @@ public:
 class VersionUpdaterPrivate;
 class DRUGSBASE_EXPORT VersionUpdater
 {
+    friend class DrugsDB::DrugBaseCore;
+
 public:
-    static VersionUpdater *instance();
     ~VersionUpdater();
 
     bool isDosageDatabaseUpToDate() const;
@@ -101,7 +103,6 @@ protected:
     VersionUpdater();
 
 private:
-    static VersionUpdater *m_Instance;
     VersionUpdaterPrivate *d;
 };
 

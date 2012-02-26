@@ -36,6 +36,7 @@
 
 #include <drugsbaseplugin/drugbasecore.h>
 #include <drugsbaseplugin/drugsbase.h>
+#include <drugsbaseplugin/protocolsbase.h>
 #include <drugsbaseplugin/idruginteraction.h>
 #include <drugsbaseplugin/druginteractionquery.h>
 #include <drugsbaseplugin/druginteractionresult.h>
@@ -88,6 +89,7 @@ static inline Core::ISettings *settings() {return Core::ICore::instance()->setti
 static inline Core::ITheme *theme()  { return Core::ICore::instance()->theme(); }
 static inline DrugsDB::InteractionManager &interactionManager() {return DrugsDB::DrugBaseCore::instance().interactionManager();}
 static inline DrugsDB::DrugsBase &drugsBase() {return DrugsDB::DrugBaseCore::instance().drugsBase();}
+static inline DrugsDB::ProtocolsBase &protocolsBase() {return DrugsDB::DrugBaseCore::instance().protocolsBase();}
 
 DrugsDB::DrugsModel *DrugsDB::DrugsModel::m_ActiveModel = 0;
 
@@ -391,7 +393,7 @@ DrugsModel::DrugsModel(QObject * parent) :
     d->m_InteractionQuery->setTestPatientDrugInteractions(true);
 
     d->m_InteractionResult = interactionManager().checkInteractions(d->m_InteractionQuery);
-    connect(&drugsBase(), SIGNAL(dosageBaseHasChanged()), this, SLOT(dosageDatabaseChanged()));
+    connect(&protocolsBase(), SIGNAL(protocolsBaseHasChanged()), this, SLOT(dosageDatabaseChanged()));
     if (d->m_AllergyEngine) {
         connect(d->m_AllergyEngine, SIGNAL(allergiesUpdated()), this, SLOT(resetModel()));
         connect(d->m_AllergyEngine, SIGNAL(intolerancesUpdated()), this, SLOT(resetModel()));

@@ -43,6 +43,7 @@
 
 #include <drugsbaseplugin/drugbasecore.h>
 #include <drugsbaseplugin/drugsbase.h>
+#include <drugsbaseplugin/protocolsbase.h>
 #include <drugsbaseplugin/drugsmodel.h>
 #include <drugsbaseplugin/dailyschememodel.h>
 
@@ -60,7 +61,9 @@
 using namespace DrugsDB;
 using namespace Trans::ConstantTranslations;
 
-static inline DrugsDB::DrugsBase &drugsBase() {return DrugsDB::DrugBaseCore::instance().drugsBase();}
+static inline DrugsDB::DrugBaseCore &core() {return DrugsDB::DrugBaseCore::instance();}
+static inline DrugsDB::DrugsBase &drugsBase() {return core().drugsBase();}
+static inline DrugsDB::ProtocolsBase &protocolsBase() {return core().protocolsBase();}
 
 ///////////////////////////////////////////////////////////////////////
 //////////////////////////// UPDATE STEPS /////////////////////////////
@@ -104,7 +107,7 @@ public:
         QStringList req;
         if (db.driverName() == "QSQLITE") {
             req << "﻿ALTER TABLE `DOSAGE` RENAME TO `OLD_DOSAGE`;";
-            req << DrugsDB::DrugsBase::dosageCreateTableSqlQuery();
+            req << protocolsBase().dosageCreateTableSqlQuery();
             req << QString("INSERT INTO `DOSAGE` (%1) SELECT %1 FROM `OLD_DOSAGE`;")
                     .arg("`POSO_ID`,"
                          "`POSO_UUID`,"
@@ -213,7 +216,7 @@ public:
         QStringList req;
         if (db.driverName() == "QSQLITE") {
             req << "﻿ALTER TABLE `DOSAGE` RENAME TO `OLD_DOSAGE`;";
-            req << drugsBase().dosageCreateTableSqlQuery();
+            req << protocolsBase().dosageCreateTableSqlQuery();
             req << QString("INSERT INTO `DOSAGE` (%1, `DRUG_UID_LK`) SELECT %1, `CIS_LK` FROM `OLD_DOSAGE`;")
                     .arg("`POSO_ID`,"
                          "`POSO_UUID`,"
@@ -317,7 +320,7 @@ public:
         }
         QStringList req;
         req << "﻿ALTER TABLE `DOSAGE` RENAME TO `OLD_DOSAGE`;";
-        req << DrugsDB::DrugsBase::dosageCreateTableSqlQuery();
+        req << protocolsBase().dosageCreateTableSqlQuery();
         req << QString("INSERT INTO `DOSAGE` (%1) SELECT %1 FROM `OLD_DOSAGE`;")
                 .arg("`POSO_ID`,"
                      "`POSO_UUID`,"
@@ -454,7 +457,7 @@ public:
         }
         QStringList req;
         req << "﻿ALTER TABLE `DOSAGE` RENAME TO `OLD_DOSAGE`;";
-        req << drugsBase().dosageCreateTableSqlQuery();
+        req << protocolsBase().dosageCreateTableSqlQuery();
         req << QString("INSERT INTO `DOSAGE` (%1) SELECT %1 FROM `OLD_DOSAGE`;")
                       .arg("`POSO_ID`,"
                            "`POSO_UUID`,"
@@ -857,7 +860,6 @@ private:
 }  // End anonymous namespace
 
 namespace DrugsDB {
-VersionUpdater *VersionUpdater::m_Instance = 0;
 
 class VersionUpdaterPrivate
 {
@@ -919,16 +921,9 @@ public:
 
 }  //  end namespace DrugsDB
 
-VersionUpdater *VersionUpdater::instance()
+VersionUpdater::VersionUpdater() :
+    d(new VersionUpdaterPrivate)
 {
-    if (!m_Instance)
-        m_Instance = new VersionUpdater();
-    return m_Instance;
-}
-
-VersionUpdater::VersionUpdater() : d(0)
-{
-    d = new VersionUpdaterPrivate;
     // Here is the good place to create updaters objects
     d->m_Updaters.append(new ::Dosage_008_To_020);
     d->m_Updaters.append(new ::Dosage_030_To_040);

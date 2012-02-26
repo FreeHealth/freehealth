@@ -27,7 +27,9 @@
 #include "drugbasecore.h"
 #include <drugsbaseplugin/constants.h>
 #include <drugsbaseplugin/drugsbase.h>
+#include <drugsbaseplugin/protocolsbase.h>
 #include <drugsbaseplugin/interactionmanager.h>
+#include <drugsbaseplugin/versionupdater.h>
 
 #include <coreplugin/icore.h>
 
@@ -38,7 +40,7 @@
 #include <datapackutils/pack.h>
 
 using namespace DrugsDB;
-using namespace DrugsDB::Internal;
+using namespace Internal;
 //using namespace Trans::ConstantTranslations;
 
 static inline DataPack::DataPackCore &dataPackCore() { return DataPack::DataPackCore::instance(); }
@@ -52,13 +54,17 @@ public:
     DrugBaseCorePrivate(DrugBaseCore *base) :
         q(base),
         m_DrugsBase(0),
-        m_ProtocolBase(0),
-        m_InteractionManager(0)
+        m_ProtocolsBase(0),
+        m_InteractionManager(0),
+        m_VersionUpdater(0)
     {
     }
 
     ~DrugBaseCorePrivate()
     {
+        if (m_VersionUpdater)
+            delete m_VersionUpdater;
+        m_VersionUpdater = 0;
     }
 
 private:
@@ -66,8 +72,9 @@ private:
 
 public:
     DrugsBase *m_DrugsBase;
-    ProtocolBase *m_ProtocolBase;
+    ProtocolsBase *m_ProtocolsBase;
     InteractionManager *m_InteractionManager;
+    VersionUpdater *m_VersionUpdater;
 };
 }  // End Internal
 }  // End DrugsDB
@@ -105,9 +112,11 @@ DrugBaseCore::~DrugBaseCore()
 
 bool DrugBaseCore::init()
 {
+    d->m_VersionUpdater = new VersionUpdater;
     d->m_DrugsBase = new DrugsBase(this);
     d->m_DrugsBase->init();
-//    d->m_ProtocolBase
+    d->m_ProtocolsBase = new ProtocolsBase(this);
+    d->m_ProtocolsBase->init();
     d->m_InteractionManager = new InteractionManager(this);
     /** \todo code here */
 }
@@ -118,10 +127,10 @@ DrugsBase &DrugBaseCore::drugsBase() const
     return *d->m_DrugsBase;
 }
 
-ProtocolBase &DrugBaseCore::protocolBase() const
+ProtocolsBase &DrugBaseCore::protocolsBase() const
 {
-    Q_ASSERT(d->m_ProtocolBase);
-    return *d->m_ProtocolBase;
+    Q_ASSERT(d->m_ProtocolsBase);
+    return *d->m_ProtocolsBase;
 }
 
 InteractionManager &DrugBaseCore::interactionManager() const
@@ -130,10 +139,17 @@ InteractionManager &DrugBaseCore::interactionManager() const
     return *d->m_InteractionManager;
 }
 
+VersionUpdater &DrugBaseCore::versionUpdater() const
+{
+    Q_ASSERT(d->m_VersionUpdater);
+    return *d->m_VersionUpdater;
+}
+
 void DrugBaseCore::onCoreDatabaseServerChanged()
 {
     Q_ASSERT(d->m_DrugsBase);
     d->m_DrugsBase->onCoreDatabaseServerChanged();
+    d->m_ProtocolsBase->onCoreDatabaseServerChanged();
 }
 
 void DrugBaseCore::packChanged(const DataPack::Pack &pack)

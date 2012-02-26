@@ -43,8 +43,9 @@ class Pack;
 
 namespace DrugsDB {
 class DrugsBase;
-class ProtocolBase;
+class ProtocolsBase;
 class InteractionManager;
+class VersionUpdater;
 
 namespace Internal {
 class DrugBaseCorePrivate;
@@ -61,8 +62,9 @@ public:
     virtual ~DrugBaseCore();
 
     DrugsBase &drugsBase() const;
-    ProtocolBase &protocolBase() const;
+    ProtocolsBase &protocolsBase() const;
     InteractionManager &interactionManager() const;
+    VersionUpdater &versionUpdater() const;
 
 private Q_SLOTS:
     void onCoreDatabaseServerChanged();

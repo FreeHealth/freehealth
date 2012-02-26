@@ -87,9 +87,10 @@ public:
     // END OBSOLETE
     bool refreshDrugsBase();
     bool changeCurrentDrugSourceUid(const QVariant &uid);
-    bool refreshDosageBase();
+//    bool refreshDosageBase();
 
     // Manage drugs
+    QString getDrugNameByDrugId(const QVariant &drugId);
     QString getDrugName(const QString &uid1, const QString &uid2 = QString::null, const QString &uid3 = QString::null) const;
     IDrug *getDrugByUID(const QVariant &uid1, const QVariant &uid2 = QVariant(), const QVariant &uid3 = QVariant(), const QVariant &oldUid = QVariant(), const QString &sourceUid = QString::null);
     IDrug *getDrugByOldUid(const QVariant &oldUid, const QString &sourceUid = QString::null);
@@ -108,12 +109,12 @@ public:
     QStringList getDrugMolecularComposition(const QVariant &drugId, const QString &lang = QString::null);
 
     // Manage Dosages
-    void checkDosageDatabaseVersion();
-    static QString dosageCreateTableSqlQuery();
-    QHash<QString, QString> getDosageToTransmit();
-    bool markAllDosageTransmitted(const QStringList &dosageUuids);
-    QList<QVariant> getAllUIDThatHaveRecordedDosages() const;
-    QMultiHash<int,QString> getAllINNThatHaveRecordedDosages() const;
+//    void checkDosageDatabaseVersion();
+//    static QString dosageCreateTableSqlQuery();
+//    QHash<QString, QString> getDosageToTransmit();
+//    bool markAllDosageTransmitted(const QStringList &dosageUuids);
+//    QList<QVariant> getAllUIDThatHaveRecordedDosages() const;
+//    QMultiHash<int,QString> getAllINNThatHaveRecordedDosages() const;
 
     // Manage drug classification
     int getAtcCodeForMoleculeId(const int molId) const;
@@ -146,18 +147,15 @@ public:
 Q_SIGNALS:
     void drugsBaseIsAboutToChange();
     void drugsBaseHasChanged();
-    void dosageBaseIsAboutToChange();
-    void dosageBaseHasChanged();
-
 
 private:
-    bool createDatabase(const QString & connectionName , const QString & dbName,
-                        const QString & pathOrHostName,
-                        TypeOfAccess access, AvailableDrivers driver,
-                        const QString & /*login*/, const QString & /*pass*/,
-                        const int /*port*/,
-                        CreationOption /*createOption*/
-                       );
+//    bool createDatabase(const QString & connectionName , const QString & dbName,
+//                        const QString & pathOrHostName,
+//                        TypeOfAccess access, AvailableDrivers driver,
+//                        const QString & /*login*/, const QString & /*pass*/,
+//                        const int /*port*/,
+//                        CreationOption /*createOption*/
+//                       );
 
 private:
     Internal::DrugsBasePrivate *d;

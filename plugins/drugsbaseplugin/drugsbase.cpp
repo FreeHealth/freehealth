@@ -67,8 +67,8 @@
 
 #include <medicalutils/ebmdata.h>
 
-#include <coreplugin/isettings.h>
 #include <coreplugin/icore.h>
+#include <coreplugin/isettings.h>
 #include <coreplugin/constants_tokensandsettings.h>
 #include <coreplugin/dialogs/settingsdialog.h>
 
@@ -93,7 +93,6 @@ enum { WarnExtractedDrugs=false };
 using namespace DrugsDB;
 using namespace DrugsDB::Internal;
 using namespace Trans::ConstantTranslations;
-
 
 static inline Core::ISettings *settings()  { return Core::ICore::instance()->settings(); }
 static inline DrugsDB::Internal::DrugSearchEngine *searchEngine()  { return DrugsDB::Internal::DrugSearchEngine::instance(); }
@@ -397,77 +396,38 @@ bool DrugsBase::init()
         refreshDrugsBase();
     }
 
-    // Connect and check Dosage Database
-    // Check settings --> SQLite or MySQL ?
-    // remove drugs database connection if exists
-    if (d->m_RefreshDosageBase) {
-        if (QSqlDatabase::connectionNames().contains(Dosages::Constants::DB_DOSAGES_NAME)) {
-            QSqlDatabase::removeDatabase(Dosages::Constants::DB_DOSAGES_NAME);
-        }
-        d->m_RefreshDosageBase = false;
-    }
+//    // Connect and check Dosage Database
+//    // Check settings --> SQLite or MySQL ?
+//    // remove drugs database connection if exists
+//    if (d->m_RefreshDosageBase) {
+//        if (QSqlDatabase::connectionNames().contains(Dosages::Constants::DB_DOSAGES_NAME)) {
+//            QSqlDatabase::removeDatabase(Dosages::Constants::DB_DOSAGES_NAME);
+//        }
+//        d->m_RefreshDosageBase = false;
+//    }
 
-    // create dosage database connection
-    if (!QSqlDatabase::connectionNames().contains(Dosages::Constants::DB_DOSAGES_NAME)) {
+//    // create dosage database connection
+//    if (!QSqlDatabase::connectionNames().contains(Dosages::Constants::DB_DOSAGES_NAME)) {
 
-        // connect
-        createConnection(Dosages::Constants::DB_DOSAGES_NAME, Dosages::Constants::DB_DOSAGES_NAME,
-                         settings()->databaseConnector(),
-                         Utils::Database::CreateDatabase);
+//        // connect
+//        createConnection(Dosages::Constants::DB_DOSAGES_NAME, Dosages::Constants::DB_DOSAGES_NAME,
+//                         settings()->databaseConnector(),
+//                         Utils::Database::CreateDatabase);
 
-
-
-//        if (settings()->value(Core::Constants::S_USE_EXTERNAL_DATABASE, false).toBool()) {
-//            if (!QSqlDatabase::isDriverAvailable("QMYSQL")) {
-//                LOG_ERROR(tkTr(Trans::Constants::DATABASE_DRIVER_1_NOT_AVAILABLE).arg("MySQL"));
-//                Utils::warningMessageBox(tkTr(Trans::Constants::APPLICATION_FAILURE),
-//                                         tkTr(Trans::Constants::DATABASE_DRIVER_1_NOT_AVAILABLE_DETAIL).arg("MySQL"),
-//                                         "", qApp->applicationName());
-//                return false;
+//        QSqlDatabase dosageDb = QSqlDatabase::database(Dosages::Constants::DB_DOSAGES_NAME);
+//        if (!dosageDb.isOpen()) {
+//            if (!dosageDb.open()) {
+//                LOG_ERROR(tkTr(Trans::Constants::UNABLE_TO_OPEN_DATABASE_1_ERROR_2).arg(Dosages::Constants::DB_DOSAGES_NAME).arg(dosageDb.lastError().text()));
+//            } else {
+//                LOG(tkTr(Trans::Constants::CONNECTED_TO_DATABASE_1_DRIVER_2).arg(dosageDb.connectionName()).arg(dosageDb.driverName()));
 //            }
-//            createConnection(Dosages::Constants::DB_DOSAGES_NAME,
-//                             Dosages::Constants::DB_DOSAGES_NAME,
-//                             QString(QByteArray::fromBase64(settings()->value(Core::Constants::S_EXTERNAL_DATABASE_HOST, QByteArray("localhost").toBase64()).toByteArray())),
-//                             Utils::Database::ReadWrite,
-//                             Utils::Database::MySQL,
-//                             QString(QByteArray::fromBase64(settings()->value(Core::Constants::S_EXTERNAL_DATABASE_LOG, QByteArray("root").toBase64()).toByteArray())),
-//                             QString(QByteArray::fromBase64(settings()->value(Core::Constants::S_EXTERNAL_DATABASE_PASS, QByteArray("").toBase64()).toByteArray())),
-//                             QString(QByteArray::fromBase64(settings()->value(Core::Constants::S_EXTERNAL_DATABASE_PORT, QByteArray("").toBase64()).toByteArray())).toInt(),
-//                             Utils::Database::CreateDatabase);
 //        } else {
-//            if (!QSqlDatabase::isDriverAvailable("QSQLITE")) {
-//                LOG_ERROR(tkTr(Trans::Constants::DATABASE_DRIVER_1_NOT_AVAILABLE).arg("SQLite"));
-//                Utils::warningMessageBox(tkTr(Trans::Constants::APPLICATION_FAILURE),
-//                                         tkTr(Trans::Constants::DATABASE_DRIVER_1_NOT_AVAILABLE_DETAIL).arg("SQLite"),
-//                                         "", qApp->applicationName());
-//                return false;
-//            }
-//            createConnection(Dosages::Constants::DB_DOSAGES_NAME,
-//                             Dosages::Constants::DB_DOSAGES_FILENAME,
-//                             settings()->path(Core::ISettings::ReadWriteDatabasesPath) + QDir::separator() + QString(Constants::DB_DRUGS_NAME),
-//                             Utils::Database::ReadWrite, Utils::Database::SQLite,
-//                             "log", "pas", 0,
-//                             Utils::Database::CreateDatabase);
+//            LOG(tkTr(Trans::Constants::CONNECTED_TO_DATABASE_1_DRIVER_2).arg(dosageDb.connectionName()).arg(dosageDb.driverName()));
 //        }
 
-        QSqlDatabase dosageDb = QSqlDatabase::database(Dosages::Constants::DB_DOSAGES_NAME);
-        if (!dosageDb.isOpen()) {
-            if (!dosageDb.open()) {
-                LOG_ERROR(tkTr(Trans::Constants::UNABLE_TO_OPEN_DATABASE_1_ERROR_2).arg(Dosages::Constants::DB_DOSAGES_NAME).arg(dosageDb.lastError().text()));
-            } else {
-                LOG(tkTr(Trans::Constants::CONNECTED_TO_DATABASE_1_DRIVER_2).arg(dosageDb.connectionName()).arg(dosageDb.driverName()));
-            }
-        } else {
-            LOG(tkTr(Trans::Constants::CONNECTED_TO_DATABASE_1_DRIVER_2).arg(dosageDb.connectionName()).arg(dosageDb.driverName()));
-        }
+//        checkDosageDatabaseVersion();
 
-        checkDosageDatabaseVersion();
-
-//        if (!checkDosageDatabaseVersion()) {
-//            LOG_ERROR(tkTr(Trans::Constants::DATABASE_1_SCHEMA_ERROR).arg(Dosages::Constants::DB_DOSAGES_NAME));
-//            return false;
-//        }
-    }
+//    }
 
     setConnectionName(Constants::DB_DRUGS_NAME);
     d->retreiveLinkTables();
@@ -515,8 +475,8 @@ bool DrugsBase::refreshAllDatabases()
 {
     d->m_initialized = false;
     refreshDrugsBase();
-    d->m_RefreshDosageBase = true;
-    Q_EMIT dosageBaseIsAboutToChange();
+//    d->m_RefreshDosageBase = true;
+    Q_EMIT drugsBaseIsAboutToChange();
     bool r = init();
     if (r) {
         Q_EMIT drugsBaseHasChanged();
@@ -582,16 +542,16 @@ bool DrugsBase::changeCurrentDrugSourceUid(const QVariant &uid)
     return (d->m_ActualDBInfos);
 }
 
-bool DrugsBase::refreshDosageBase()
-{
-    d->m_initialized = false;
-    d->m_RefreshDosageBase = true;
-    Q_EMIT dosageBaseIsAboutToChange();
-    bool r = init();
-    if (r)
-        Q_EMIT dosageBaseHasChanged();
-    return r;
-}
+//bool DrugsBase::refreshDosageBase()
+//{
+//    d->m_initialized = false;
+//    d->m_RefreshDosageBase = true;
+//    Q_EMIT dosageBaseIsAboutToChange();
+//    bool r = init();
+//    if (r)
+//        Q_EMIT dosageBaseHasChanged();
+//    return r;
+//}
 
 QVector<DatabaseInfos *> DrugsBase::getAllDrugSourceInformations()
 {
@@ -680,250 +640,250 @@ DatabaseInfos *DrugsBase::getDrugSourceInformations(const QString &drugSourceUid
     return info;
 }
 
-QString DrugsBase::dosageCreateTableSqlQuery()
-{
-    /** \todo add UserUuid field or lkid */
-    return "CREATE TABLE IF NOT EXISTS `DOSAGE` ("
-           "`POSO_ID`               INTEGER        PRIMARY KEY AUTOINCREMENT,"
-           "`POSO_UUID`             varchar(40)    NULL,"    // put NOT NULL
-           "`DRUGS_DATABASE_IDENTIFIANT` varchar(200) NULL,   "
-           "`INN_LK`                int(11)        DEFAULT -1,"
-           "`INN_DOSAGE`            varchar(100)   NULL,"    // contains the dosage of the SA INN
-           "`DRUG_UID_LK`           varchar(20)    NULL,"
-           "`CIP_LK`                int(11)        DEFAULT -1,"
-           "`LABEL`                 varchar(300)   NULL,"    // put NOT NULL
+//QString DrugsBase::dosageCreateTableSqlQuery()
+//{
+//    /** \todo add UserUuid field or lkid */
+//    return "CREATE TABLE IF NOT EXISTS `DOSAGE` ("
+//           "`POSO_ID`               INTEGER        PRIMARY KEY AUTOINCREMENT,"
+//           "`POSO_UUID`             varchar(40)    NULL,"    // put NOT NULL
+//           "`DRUGS_DATABASE_IDENTIFIANT` varchar(200) NULL,   "
+//           "`INN_LK`                int(11)        DEFAULT -1,"
+//           "`INN_DOSAGE`            varchar(100)   NULL,"    // contains the dosage of the SA INN
+//           "`DRUG_UID_LK`           varchar(20)    NULL,"
+//           "`CIP_LK`                int(11)        DEFAULT -1,"
+//           "`LABEL`                 varchar(300)   NULL,"    // put NOT NULL
 
-           "`INTAKEFROM`            double         NULL,"    // put NOT NULL
-           "`INTAKETO`              double         NULL,"
-           "`INTAKEFROMTO`          bool           NULL,"
-           "`INTAKESCHEME`          varchar(200)   NULL,"    // put NOT NULL
-           "`INTAKESINTERVALOFTIME` int(10)        NULL,"
-           "`INTAKESINTERVALSCHEME` varchar(200)   NULL,"
-           "`ROUTE_ID`              integer        NULL,"
+//           "`INTAKEFROM`            double         NULL,"    // put NOT NULL
+//           "`INTAKETO`              double         NULL,"
+//           "`INTAKEFROMTO`          bool           NULL,"
+//           "`INTAKESCHEME`          varchar(200)   NULL,"    // put NOT NULL
+//           "`INTAKESINTERVALOFTIME` int(10)        NULL,"
+//           "`INTAKESINTERVALSCHEME` varchar(200)   NULL,"
+//           "`ROUTE_ID`              integer        NULL,"
 
-           "`DURATIONFROM`          double         NULL,"    // put NOT NULL
-           "`DURATIONTO`            double         NULL,"
-           "`DURATIONFROMTO`        bool           NULL,"
-           "`DURATIONSCHEME`        varchar(200)   NULL,"    // put NOT NULL
+//           "`DURATIONFROM`          double         NULL,"    // put NOT NULL
+//           "`DURATIONTO`            double         NULL,"
+//           "`DURATIONFROMTO`        bool           NULL,"
+//           "`DURATIONSCHEME`        varchar(200)   NULL,"    // put NOT NULL
 
-           "`PERIOD`                int(10)        NULL,"    // put NOT NULL
-           "`PERIODSCHEME`          varchar(200)   NULL,"    // put NOT NULL
-           "`ADMINCHEME`            varchar(100)   NULL,"    // put NOT NULL
-           "`DAILYSCHEME`           varchar(250)   NULL,"
-           "`MEALSCHEME`            int(10)        NULL,"
-           "`ISALD`                 bool           NULL,"
-           "`TYPEOFTREATEMENT`      int(10)        NULL,"
+//           "`PERIOD`                int(10)        NULL,"    // put NOT NULL
+//           "`PERIODSCHEME`          varchar(200)   NULL,"    // put NOT NULL
+//           "`ADMINCHEME`            varchar(100)   NULL,"    // put NOT NULL
+//           "`DAILYSCHEME`           varchar(250)   NULL,"
+//           "`MEALSCHEME`            int(10)        NULL,"
+//           "`ISALD`                 bool           NULL,"
+//           "`TYPEOFTREATEMENT`      int(10)        NULL,"
 
-           "`MINAGE`                int(10)        NULL,"
-           "`MAXAGE`                int(10)        NULL,"
-           "`MINAGEREFERENCE`       int(10)        NULL,"
-           "`MAXAGEREFERENCE`       int(10)        NULL,"
-           "`MINWEIGHT`             int(10)        NULL,"
-           "`SEXLIMIT`              int(10)        NULL,"
-           "`MINCLEARANCE`          int(10)        NULL,"
-           "`MAXCLEARANCE`          int(10)        NULL,"
-           "`PREGNANCYLIMITS`       int(10)        NULL,"
-           "`BREASTFEEDINGLIMITS`   int(10)        NULL,"
-           "`PHYSIOLOGICALLIMITS`   int(10)        NULL,"  // Is this really needed ?
+//           "`MINAGE`                int(10)        NULL,"
+//           "`MAXAGE`                int(10)        NULL,"
+//           "`MINAGEREFERENCE`       int(10)        NULL,"
+//           "`MAXAGEREFERENCE`       int(10)        NULL,"
+//           "`MINWEIGHT`             int(10)        NULL,"
+//           "`SEXLIMIT`              int(10)        NULL,"
+//           "`MINCLEARANCE`          int(10)        NULL,"
+//           "`MAXCLEARANCE`          int(10)        NULL,"
+//           "`PREGNANCYLIMITS`       int(10)        NULL,"
+//           "`BREASTFEEDINGLIMITS`   int(10)        NULL,"
+//           "`PHYSIOLOGICALLIMITS`   int(10)        NULL,"  // Is this really needed ?
 
-           "`NOTE`                  varchar(500)   NULL,"
+//           "`NOTE`                  varchar(500)   NULL,"
 
-           "`CIM10_LK`              varchar(150)   NULL,"
-           "`CIM10_LIMITS_LK`       varchar(150)   NULL,"
-           "`EDRC_LK`               varchar(150)   NULL,"
+//           "`CIM10_LK`              varchar(150)   NULL,"
+//           "`CIM10_LIMITS_LK`       varchar(150)   NULL,"
+//           "`EDRC_LK`               varchar(150)   NULL,"
 
-           "`EXTRAS`                blob           NULL,"
-           "`USERVALIDATOR`         varchar(200)   NULL,"
-           "`CREATIONDATE`          date           NULL,"    // put NOT NULL
-           "`MODIFICATIONDATE`      date           NULL,"
-           "`TRANSMITTED`           date           NULL,"
-           "`ORDER`                 int(10)        NULL"
-           ");";
-}
+//           "`EXTRAS`                blob           NULL,"
+//           "`USERVALIDATOR`         varchar(200)   NULL,"
+//           "`CREATIONDATE`          date           NULL,"    // put NOT NULL
+//           "`MODIFICATIONDATE`      date           NULL,"
+//           "`TRANSMITTED`           date           NULL,"
+//           "`ORDER`                 int(10)        NULL"
+//           ");";
+//}
 
-/** \brief Create the protocols database if it does not exists. */
-bool DrugsBase::createDatabase(const QString &connectionName , const QString &dbName,
-                               const QString &pathOrHostName,
-                               TypeOfAccess /*access*/, AvailableDrivers driver,
-                               const QString & login, const QString & pass,
-                               const int port,
-                               CreationOption /*createOption*/
-                              )
-{
-    /** \todo  ask user if he wants : 1. an empty dosage base ; 2. to retreive dosages from internet FMF website */
-    if (connectionName != Dosages::Constants::DB_DOSAGES_NAME)
-        return false;
+///** \brief Create the protocols database if it does not exists. */
+//bool DrugsBase::createDatabase(const QString &connectionName , const QString &dbName,
+//                               const QString &pathOrHostName,
+//                               TypeOfAccess /*access*/, AvailableDrivers driver,
+//                               const QString & login, const QString & pass,
+//                               const int port,
+//                               CreationOption /*createOption*/
+//                              )
+//{
+//    /** \todo  ask user if he wants : 1. an empty dosage base ; 2. to retreive dosages from internet FMF website */
+//    if (connectionName != Dosages::Constants::DB_DOSAGES_NAME)
+//        return false;
 
-    LOG(tkTr(Trans::Constants::TRYING_TO_CREATE_1_PLACE_2).arg(dbName).arg(pathOrHostName));
+//    LOG(tkTr(Trans::Constants::TRYING_TO_CREATE_1_PLACE_2).arg(dbName).arg(pathOrHostName));
 
-    // create an empty database and connect
-    QSqlDatabase DB;
-    if (driver == SQLite) {
-        DB = QSqlDatabase::addDatabase("QSQLITE" , connectionName);
-        if (!QDir(pathOrHostName).exists())
-            if (!QDir().mkpath(pathOrHostName))
-                tkTr(Trans::Constants::_1_ISNOT_AVAILABLE_CANNOTBE_CREATED).arg(pathOrHostName);
-        DB.setDatabaseName(QDir::cleanPath(pathOrHostName + QDir::separator() + dbName));
-        DB.open();
-        setDriver(Utils::Database::SQLite);
-    }
-    else if (driver == MySQL) {
-        DB = QSqlDatabase::database(connectionName);
-        if (!DB.open()) {
-            QSqlDatabase d = QSqlDatabase::addDatabase("QMYSQL", "CREATOR");
-            d.setHostName(pathOrHostName);
-            /** \todo retreive log/pass */
-            d.setUserName(login);
-            d.setPassword(pass);
-            d.setPort(port);
-            if (!d.open()) {
-                Utils::warningMessageBox(tr("Unable to create the Protocol database."),tr("Please contact dev team."));
-                return false;
-            }
-            QSqlQuery q(QString("CREATE DATABASE `%1`").arg(dbName), d);
-            if (!q.isActive()) {
-                LOG_QUERY_ERROR(q);
-                Utils::warningMessageBox(tr("Unable to create the Protocol database."),tr("Please contact dev team."));
-                return false;
-            }
-            DB.setDatabaseName(dbName);
-            if (!DB.open()) {
-                Utils::warningMessageBox(tr("Unable to create the Protocol database."),tr("Please contact dev team."));
-                return false;
-            }
-            DB.setDatabaseName(dbName);
-        }
-        if (QSqlDatabase::connectionNames().contains("CREATOR"))
-            QSqlDatabase::removeDatabase("CREATOR");
-        DB.open();
-        setDriver(Utils::Database::MySQL);
-    }
+//    // create an empty database and connect
+//    QSqlDatabase DB;
+//    if (driver == SQLite) {
+//        DB = QSqlDatabase::addDatabase("QSQLITE" , connectionName);
+//        if (!QDir(pathOrHostName).exists())
+//            if (!QDir().mkpath(pathOrHostName))
+//                tkTr(Trans::Constants::_1_ISNOT_AVAILABLE_CANNOTBE_CREATED).arg(pathOrHostName);
+//        DB.setDatabaseName(QDir::cleanPath(pathOrHostName + QDir::separator() + dbName));
+//        DB.open();
+//        setDriver(Utils::Database::SQLite);
+//    }
+//    else if (driver == MySQL) {
+//        DB = QSqlDatabase::database(connectionName);
+//        if (!DB.open()) {
+//            QSqlDatabase d = QSqlDatabase::addDatabase("QMYSQL", "CREATOR");
+//            d.setHostName(pathOrHostName);
+//            /** \todo retreive log/pass */
+//            d.setUserName(login);
+//            d.setPassword(pass);
+//            d.setPort(port);
+//            if (!d.open()) {
+//                Utils::warningMessageBox(tr("Unable to create the Protocol database."),tr("Please contact dev team."));
+//                return false;
+//            }
+//            QSqlQuery q(QString("CREATE DATABASE `%1`").arg(dbName), d);
+//            if (!q.isActive()) {
+//                LOG_QUERY_ERROR(q);
+//                Utils::warningMessageBox(tr("Unable to create the Protocol database."),tr("Please contact dev team."));
+//                return false;
+//            }
+//            DB.setDatabaseName(dbName);
+//            if (!DB.open()) {
+//                Utils::warningMessageBox(tr("Unable to create the Protocol database."),tr("Please contact dev team."));
+//                return false;
+//            }
+//            DB.setDatabaseName(dbName);
+//        }
+//        if (QSqlDatabase::connectionNames().contains("CREATOR"))
+//            QSqlDatabase::removeDatabase("CREATOR");
+//        DB.open();
+//        setDriver(Utils::Database::MySQL);
+//    }
 
-    // create db structure
-    // before we need to inform Utils::Database of the connectionName to use
-    setConnectionName(connectionName);
+//    // create db structure
+//    // before we need to inform Utils::Database of the connectionName to use
+//    setConnectionName(connectionName);
 
-    // The SQL scheme MUST BE synchronized with the Dosages::Constants Model Enumerator !!!
-    /** \todo code here */
-    if (executeSQL(QStringList()
-        << dosageCreateTableSqlQuery().remove("AUTOINCREMENT")
-        << "CREATE TABLE IF NOT EXISTS `VERSION` ("
-           "`ACTUAL`                varchar(10)    NULL"
-           ");"
-        << QString("INSERT INTO `VERSION` (`ACTUAL`) VALUES('%1');").arg(VersionUpdater::instance()->lastDosageDabaseVersion())
-        , DB)) {
-        LOG(tkTr(Trans::Constants::DATABASE_1_CORRECTLY_CREATED).arg(dbName));
-        return true;
-    } else {
-        LOG_ERROR(tkTr(Trans::Constants::DATABASE_1_CANNOT_BE_CREATED_ERROR_2)
-                         .arg(dbName, DB.lastError().text()));
-    }
-    return false;
-}
+//    // The SQL scheme MUST BE synchronized with the Dosages::Constants Model Enumerator !!!
+//    /** \todo code here */
+//    if (executeSQL(QStringList()
+//        << dosageCreateTableSqlQuery().remove("AUTOINCREMENT")
+//        << "CREATE TABLE IF NOT EXISTS `VERSION` ("
+//           "`ACTUAL`                varchar(10)    NULL"
+//           ");"
+//        << QString("INSERT INTO `VERSION` (`ACTUAL`) VALUES('%1');").arg(versionUpdater()->lastDosageDabaseVersion())
+//        , DB)) {
+//        LOG(tkTr(Trans::Constants::DATABASE_1_CORRECTLY_CREATED).arg(dbName));
+//        return true;
+//    } else {
+//        LOG_ERROR(tkTr(Trans::Constants::DATABASE_1_CANNOT_BE_CREATED_ERROR_2)
+//                         .arg(dbName, DB.lastError().text()));
+//    }
+//    return false;
+//}
 
 void DrugsBase::onCoreDatabaseServerChanged()
 {
-    refreshDosageBase();
+//    refreshDosageBase();
 }
 
 /**
   \brief Check the version of the doage database. Do the necessary updates for that database according to the application version number.
   Added from freediams version 0.0.8 stable
 */
-void DrugsBase::checkDosageDatabaseVersion()
-{
+//void DrugsBase::checkDosageDatabaseVersion()
+//{
 //    if (!DrugsDB::VersionUpdater::instance()->isDosageDatabaseUpToDate())
 //        if (!DrugsDB::VersionUpdater::instance()->updateDosageDatabase())
 //            Utils::Log::addError(this, "Dosage database can not be correctly updated",
 //                                 __FILE__, __LINE__);
-}
+//}
 
-/** \brief Returns hash that contains dosage uuid has key and the xml'd dosage to transmit as value */
-QHash<QString, QString> DrugsBase::getDosageToTransmit()
-{
-    QHash<QString, QString> toReturn;
-    QSqlDatabase DB = QSqlDatabase::database(Dosages::Constants::DB_DOSAGES_NAME);
-    if (!connectDatabase(DB, __FILE__, __LINE__))
-        return toReturn;
+///** \brief Returns hash that contains dosage uuid has key and the xml'd dosage to transmit as value */
+//QHash<QString, QString> DrugsBase::getDosageToTransmit()
+//{
+//    QHash<QString, QString> toReturn;
+//    QSqlDatabase DB = QSqlDatabase::database(Dosages::Constants::DB_DOSAGES_NAME);
+//    if (!connectDatabase(DB, __FILE__, __LINE__))
+//        return toReturn;
 
-    QString req = QString("SELECT * FROM `DOSAGE` WHERE (`TRANSMITTED` IS NULL);");
-    {
-        QSqlQuery query(req,DB);
-        if (query.isActive()) {
-            while (query.next()) {
-                QHash<QString,QString> toXml;
-                int i=0;
-                for (i=0;i<query.record().count();++i) {
-                    // create a XML of the dosage
-                    toXml.insert(query.record().field(i).name(), query.value(i).toString());
-                }
-                toReturn.insert(toXml.value("POSO_UUID"), Utils::createXml(Dosages::Constants::DB_DOSAGES_TABLE_NAME,toXml,4,false));
-            }
-        } else
-            LOG_QUERY_ERROR(query);
-    }
+//    QString req = QString("SELECT * FROM `DOSAGE` WHERE (`TRANSMITTED` IS NULL);");
+//    {
+//        QSqlQuery query(req,DB);
+//        if (query.isActive()) {
+//            while (query.next()) {
+//                QHash<QString,QString> toXml;
+//                int i=0;
+//                for (i=0;i<query.record().count();++i) {
+//                    // create a XML of the dosage
+//                    toXml.insert(query.record().field(i).name(), query.value(i).toString());
+//                }
+//                toReturn.insert(toXml.value("POSO_UUID"), Utils::createXml(Dosages::Constants::DB_DOSAGES_TABLE_NAME,toXml,4,false));
+//            }
+//        } else
+//            LOG_QUERY_ERROR(query);
+//    }
 
-    req = QString("SELECT * FROM `DOSAGE` WHERE (`TRANSMITTED`<`MODIFICATIONDATE`);");
-    {
-        QSqlQuery query(req,DB);
-        if (query.isActive()) {
-            while (query.next()) {
-                QHash<QString,QString> toXml;
-                int i=0;
-                for (i=0;i<query.record().count();++i) {
-                    // create a XML of the dosage
-                    toXml.insert(query.record().field(i).name(), query.value(i).toString());
-                }
-                toReturn.insert(toXml.value("POSO_UUID"), Utils::createXml(Dosages::Constants::DB_DOSAGES_TABLE_NAME,toXml,4,false));
-            }
-        } else {
-            LOG_QUERY_ERROR(query);
-        }
-    }
-    return toReturn;
-}
+//    req = QString("SELECT * FROM `DOSAGE` WHERE (`TRANSMITTED`<`MODIFICATIONDATE`);");
+//    {
+//        QSqlQuery query(req,DB);
+//        if (query.isActive()) {
+//            while (query.next()) {
+//                QHash<QString,QString> toXml;
+//                int i=0;
+//                for (i=0;i<query.record().count();++i) {
+//                    // create a XML of the dosage
+//                    toXml.insert(query.record().field(i).name(), query.value(i).toString());
+//                }
+//                toReturn.insert(toXml.value("POSO_UUID"), Utils::createXml(Dosages::Constants::DB_DOSAGES_TABLE_NAME,toXml,4,false));
+//            }
+//        } else {
+//            LOG_QUERY_ERROR(query);
+//        }
+//    }
+//    return toReturn;
+//}
 
-/** Marks all dosages as transmitted now. \e dosageUuids contains dosage uuid. */
-bool DrugsBase::markAllDosageTransmitted(const QStringList &dosageUuids)
-{
-    if (dosageUuids.count()==0)
-        return true;
-    QSqlDatabase DB = QSqlDatabase::database(Dosages::Constants::DB_DOSAGES_NAME);
-    if (!connectDatabase(DB, __FILE__, __LINE__))
-        return false;
+///** Marks all dosages as transmitted now. \e dosageUuids contains dosage uuid. */
+//bool DrugsBase::markAllDosageTransmitted(const QStringList &dosageUuids)
+//{
+//    if (dosageUuids.count()==0)
+//        return true;
+//    QSqlDatabase DB = QSqlDatabase::database(Dosages::Constants::DB_DOSAGES_NAME);
+//    if (!connectDatabase(DB, __FILE__, __LINE__))
+//        return false;
 
-    QStringList reqs;
-    foreach(const QString &s, dosageUuids) {
-        QString req = QString("UPDATE `DOSAGE` SET `TRANSMITTED`='%1' WHERE %2")
-                      .arg(QDateTime::currentDateTime().toString(Qt::ISODate))
-                      .arg(QString("`POSO_UUID`='%1'").arg(s));
-        reqs << req;
-    }
-    if (!executeSQL(reqs,DB)) {
-        Utils::Log::addError(this, tr("Unable to update the protocol's transmission date."),
-                             __FILE__, __LINE__);
-        return false;
-    }
-    return true;
-}
+//    QStringList reqs;
+//    foreach(const QString &s, dosageUuids) {
+//        QString req = QString("UPDATE `DOSAGE` SET `TRANSMITTED`='%1' WHERE %2")
+//                      .arg(QDateTime::currentDateTime().toString(Qt::ISODate))
+//                      .arg(QString("`POSO_UUID`='%1'").arg(s));
+//        reqs << req;
+//    }
+//    if (!executeSQL(reqs,DB)) {
+//        Utils::Log::addError(this, tr("Unable to update the protocol's transmission date."),
+//                             __FILE__, __LINE__);
+//        return false;
+//    }
+//    return true;
+//}
 
-struct minimalCompo {
-    bool isLike(const int _inn, const QString &_dosage) const {
-        return (inn == _inn) && (dosage == _dosage);
-    }
-    int inn;
-    QString dosage;
-};
+//struct minimalCompo {
+//    bool isLike(const int _inn, const QString &_dosage) const {
+//        return (inn == _inn) && (dosage == _dosage);
+//    }
+//    int inn;
+//    QString dosage;
+//};
 
 ///////////////////////////////////////////////////////////////////////////////////////////////
-/**
-  \brief Returns all CIS that have a recorded dosage. Manages INN dosage type.
-  \todo put this in a thread...
-*/
-QList<QVariant> DrugsBase::getAllUIDThatHaveRecordedDosages() const
-{
-    QList<QVariant> toReturn;
-    /** \todo recode this */
+///**
+//  \brief Returns all CIS that have a recorded dosage. Manages INN dosage type.
+//  \todo put this in a thread...
+//*/
+//QList<QVariant> DrugsBase::getAllUIDThatHaveRecordedDosages() const
+//{
+//    QList<QVariant> toReturn;
+//    /** \todo recode this */
 
 //    if (!actualDatabaseInformations())
 //        return toReturn;
@@ -1028,40 +988,48 @@ QList<QVariant> DrugsBase::getAllUIDThatHaveRecordedDosages() const
 //        if (innsOfThisDrug.count() > 1)
 //            toReturn.removeAll(uid);
 //    }
-    return toReturn;
-}
+//    return toReturn;
+//}
 
-QMultiHash<int,QString> DrugsBase::getAllINNThatHaveRecordedDosages() const
-{
-    QMultiHash<int,QString> toReturn;
-    QSqlDatabase DB = QSqlDatabase::database(Dosages::Constants::DB_DOSAGES_NAME);
-    if (!connectDatabase(DB, __FILE__, __LINE__))
-        return toReturn;
+//QMultiHash<int,QString> DrugsBase::getAllINNThatHaveRecordedDosages() const
+//{
+//    QMultiHash<int,QString> toReturn;
+//    QSqlDatabase DB = QSqlDatabase::database(Dosages::Constants::DB_DOSAGES_NAME);
+//    if (!connectDatabase(DB, __FILE__, __LINE__))
+//        return toReturn;
 
-    QString req;
-    if (d->m_IsDefaultDB) {
-        req = QString("SELECT DISTINCT `INN_LK`, `INN_DOSAGE` FROM `DOSAGE` WHERE `DRUGS_DATABASE_IDENTIFIANT` = \"%1\";")
-              .arg(Constants::DB_DEFAULT_IDENTIFIANT);
-    } else {
-        req = QString("SELECT DISTINCT `INN_LK`, `INN_DOSAGE` FROM `DOSAGE` WHERE `DRUGS_DATABASE_IDENTIFIANT` = \"%1\";")
-              .arg(actualDatabaseInformations()->identifiant);
-    }
-    QSqlQuery query(req,DB);
-    if (query.isActive()) {
-        while (query.next()) {
-            toReturn.insertMulti(query.value(0).toInt(), query.value(1).toString());
-        }
-    } else {
-        LOG_QUERY_ERROR(query);
-    }
-    return toReturn;
-}
+//    QString req;
+//    if (d->m_IsDefaultDB) {
+//        req = QString("SELECT DISTINCT `INN_LK`, `INN_DOSAGE` FROM `DOSAGE` WHERE `DRUGS_DATABASE_IDENTIFIANT` = \"%1\";")
+//              .arg(Constants::DB_DEFAULT_IDENTIFIANT);
+//    } else {
+//        req = QString("SELECT DISTINCT `INN_LK`, `INN_DOSAGE` FROM `DOSAGE` WHERE `DRUGS_DATABASE_IDENTIFIANT` = \"%1\";")
+//              .arg(actualDatabaseInformations()->identifiant);
+//    }
+//    QSqlQuery query(req,DB);
+//    if (query.isActive()) {
+//        while (query.next()) {
+//            toReturn.insertMulti(query.value(0).toInt(), query.value(1).toString());
+//        }
+//    } else {
+//        LOG_QUERY_ERROR(query);
+//    }
+//    return toReturn;
+//}
 
 ///////////////////////////////////////////////////////////////////////////////////////////////
 
 //--------------------------------------------------------------------------------------------------------
 //-------------------------------- Retreive drugs from database ------------------------------------------
 //--------------------------------------------------------------------------------------------------------
+/** Return the drug name according to the \e drugId */
+QString DrugsBase::getDrugNameByDrugId(const QVariant &drugId)
+{
+    const QVariantList &uids = getDrugUids(drugId);
+    return getDrugName(uids.at(0).toString(), uids.at(1).toString(), uids.at(2).toString());
+}
+
+/** Return the drug name according to the drug's uuids. */
 QString DrugsBase::getDrugName(const QString &uid1, const QString &uid2, const QString &uid3) const
 {
     QSqlDatabase DB = QSqlDatabase::database(Constants::DB_DRUGS_NAME);
@@ -1089,7 +1057,7 @@ QString DrugsBase::getDrugName(const QString &uid1, const QString &uid2, const Q
     return QString();
 }
 
-/** \brief Retrieve and return the drug designed by the UID code \e drug_UID. */
+/** \brief Retrieve and return the drug according to its uids. */
 IDrug *DrugsBase::getDrugByUID(const QVariant &uid1, const QVariant &uid2, const QVariant &uid3, const QVariant &oldUid, const QString &srcUid)
 {
     // Before SID caching
@@ -1272,6 +1240,7 @@ IDrug *DrugsBase::getDrugByOldUid(const QVariant &oldUid, const QString &sourceU
     return getDrugByUID(QVariant(), QVariant(), QVariant(), oldUid, sourceUid);
 }
 
+/** Return the three UUID related a drug acording to its \e drugId */
 QVariantList DrugsBase::getDrugUids(const QVariant &drugId)
 {
     QVariantList list;
@@ -1290,6 +1259,12 @@ QVariantList DrugsBase::getDrugUids(const QVariant &drugId)
         }
     } else {
         LOG_QUERY_ERROR(query);
+    }
+    // always ensure that list contains 3 items
+    if (list.count()!=3) {
+        int max = 3 - list.count();
+        for(int i=0; i < max; ++i)
+            list << QVariant();
     }
     return list;
 }

@@ -33,6 +33,7 @@
 
 #include <drugsbaseplugin/drugbasecore.h>
 #include <drugsbaseplugin/drugsbase.h>
+#include <drugsbaseplugin/protocolsbase.h>
 #include <drugsbaseplugin/drugsdatabaseselector.h>
 #include <drugsbaseplugin/idrug.h>
 #include <drugsbaseplugin/idrugengine.h>
@@ -74,6 +75,7 @@ static inline Core::IPatient *patient() {return Core::ICore::instance()->patient
 static inline Core::Translators *translators() {return Core::ICore::instance()->translators();}
 static inline ExtensionSystem::PluginManager *pluginManager() {return ExtensionSystem::PluginManager::instance();}
 static inline DrugsDB::DrugsBase &drugsBase() {return DrugsDB::DrugBaseCore::instance().drugsBase();}
+static inline DrugsDB::ProtocolsBase &protocolsBase() {return DrugsDB::DrugBaseCore::instance().protocolsBase();}
 
 namespace DrugsDB {
 namespace Internal {
@@ -217,7 +219,7 @@ public:
     static void updateCachedAvailableDosage()
     {
         m_CachedAvailableDosageForUID.clear();
-        foreach(const QVariant &uid, drugsBase().getAllUIDThatHaveRecordedDosages())
+        foreach(const QVariant &uid, protocolsBase().getAllUIDThatHaveRecordedDosages())
             m_CachedAvailableDosageForUID.append(uid.toString());
     }
 
@@ -293,7 +295,7 @@ GlobalDrugsModel::GlobalDrugsModel(const SearchMode searchMode, QObject *parent)
 
     refreshDrugsPrecautions(patient()->index(0, Core::IPatient::DrugsAllergiesWithoutPrecision), patient()->index(0, Core::IPatient::DrugsAllergiesWithoutPrecision));
 
-    connect(&drugsBase(), SIGNAL(dosageBaseHasChanged()), this, SLOT(updateCachedAvailableDosage()));
+    connect(&protocolsBase(), SIGNAL(protocolsBaseHasChanged()), this, SLOT(updateCachedAvailableDosage()));
     connect(&drugsBase(), SIGNAL(drugsBaseHasChanged()), this, SLOT(onDrugsDatabaseChanged()));
     connect(patient(), SIGNAL(dataChanged(QModelIndex,QModelIndex)), this, SLOT(refreshDrugsPrecautions(QModelIndex, QModelIndex)));
     connect(translators(), SIGNAL(languageChanged()), this, SLOT(onDrugsDatabaseChanged()));

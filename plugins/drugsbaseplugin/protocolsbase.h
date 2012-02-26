@@ -30,47 +30,65 @@
 #include <drugsbaseplugin/drugsbase_exporter.h>
 #include <utils/database.h>
 
+#include <QMultiHash>
+#include <QString>
+#include <QList>
+#include <QVariant>
+
+/**
+ * \file protocolscore.h
+ * \author Eric MAEKER <eric.maeker@gmail.com>
+ * \version 0.6.4
+ * \date 26 Feb 2012
+*/
+
 namespace DrugsDB {
+class DrugBaseCore;
+
 namespace Internal {
 class ProtocolsBasePrivate;
+}
 
 class DRUGSBASE_EXPORT ProtocolsBase : public QObject, public Utils::Database
 {
     Q_OBJECT
+    friend class DrugsDB::DrugBaseCore;
+
+protected:
     explicit ProtocolsBase(QObject *parent = 0);
     bool init();
 
 public:
-    static ProtocolsBase *instance(QObject *parent = 0);
     ~ProtocolsBase();
 
-//    bool refreshDosageBase();
+    QString dosageCreateTableSqlQuery();
+    void checkDosageDatabaseVersion();
 
-//    void checkDosageDatabaseVersion();
-//    static QString dosageCreateTableSqlQuery();
-//    QHash<QString, QString> getDosageToTransmit();
-//    bool markAllDosageTransmitted(const QStringList &dosageUuids);
-//    QList<QVariant> getAllUIDThatHaveRecordedDosages() const;
-//    QMultiHash<int,QString> getAllINNThatHaveRecordedDosages() const;
+    QHash<QString, QString> getDosageToTransmit();
+    bool markAllDosageTransmitted(const QStringList &dosageUuids);
+
+    QList<QVariant> getAllUIDThatHaveRecordedDosages() const;
+    QMultiHash<int,QString> getAllINNThatHaveRecordedDosages() const;
 
 
-//private:
-//    bool createDatabase(const QString & connectionName , const QString & dbName,
-//                        const QString & pathOrHostName,
-//                        TypeOfAccess access, AvailableDrivers driver,
-//                        const QString & /*login*/, const QString & /*pass*/,
-//                        const int /*port*/,
-//                        CreationOption /*createOption*/
-//                       );
-//private Q_SLOTS:
-//    void onCoreDatabaseServerChanged();
 private:
-    ProtocolsBasePrivate *d;
-    static ProtocolsBase *m_Instance;
+    bool createDatabase(const QString & connectionName , const QString & dbName,
+                        const QString & pathOrHostName,
+                        TypeOfAccess access, AvailableDrivers driver,
+                        const QString & /*login*/, const QString & /*pass*/,
+                        const int /*port*/,
+                        CreationOption /*createOption*/
+                       );
+    bool onCoreDatabaseServerChanged();
+
+Q_SIGNALS:
+    void protocolsBaseIsAboutToChange();
+    void protocolsBaseHasChanged();
+
+private:
+    Internal::ProtocolsBasePrivate *d;
 };
 
-
-}  // End namespace Internal
 }  // End namespace DrugsDB
 
 #endif // DRUGSBASE_PROTOCOLSBASE_H
