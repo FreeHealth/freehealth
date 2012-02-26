@@ -287,11 +287,10 @@ bool MainWindow::initialize(const QStringList &arguments, QString *errorString)
         pmenu->appendGroup(DrugsWidget::Constants::G_PLUGINS_SEARCH);
         pmenu->appendGroup(DrugsWidget::Constants::G_PLUGINS_DRUGS);
         pmenu->appendGroup(DrugsWidget::Constants::G_PLUGINS_INTERACTIONS);
-        pmenu->setTranslations(DrugsWidget::Constants::DRUGSMENU_TEXT);
+        pmenu->setTranslations(DrugsWidget::Constants::DRUGSMENU_TEXT, DrugsWidget::Constants::DRUGCONSTANTS_TR_CONTEXT);
     }
     Q_ASSERT(pmenu);
-    actionManager()->actionContainer(Core::Constants::MENUBAR)->addMenu(pmenu, DrugsWidget::Constants::G_PLUGINS_DRUGS);
-
+    actionManager()->actionContainer(Core::Constants::MENUBAR)->addMenu(pmenu, Core::Constants::G_PLUGINS);
 
     createTemplatesMenu();
     createConfigurationMenu();

@@ -179,13 +179,13 @@ DrugsActionHandler::DrugsActionHandler(QObject *parent) :
         menu->appendGroup(DrugsWidget::Constants::G_PLUGINS_DRUGS);
         menu->appendGroup(DrugsWidget::Constants::G_PLUGINS_INTERACTIONS);
         menu->setTranslations(DrugsWidget::Constants::DRUGSMENU_TEXT);
+#ifdef FREEDIAMS
+        actionManager()->actionContainer(Core::Constants::MENUBAR)->addMenu(menu, Core::Constants::G_PLUGINS);
+#else
+        actionManager()->actionContainer(Core::Constants::M_PLUGINS)->addMenu(menu, Core::Constants::G_PLUGINS_DRUGS);
+#endif
     }
     Q_ASSERT(menu);
-#ifdef FREEDIAMS
-    actionManager()->actionContainer(Core::Constants::MENUBAR)->addMenu(menu, Core::Constants::G_PLUGINS);
-#else
-    actionManager()->actionContainer(Core::Constants::M_PLUGINS)->addMenu(menu, Core::Constants::G_PLUGINS_DRUGS);
-#endif
 
     // Create local actions
     a = aToggleDrugSelector = new QAction(this);
