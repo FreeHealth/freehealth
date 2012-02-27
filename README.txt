@@ -6,46 +6,46 @@
 
 
 
-I. What is FreeMedForms ?
+I. What is FreeMedForms?
 
-FreeMedForms aims to be a open Electronic Medical Record Manager.
-FreeMedForms is also a lot of derivatives sub-project, which are
-just standalone compilation of FreeMedForms plugins.
+FreeMedForms aims to be an open Electronic Medical Record Manager.
+FreeMedForms is also a lot of derivative sub-projects, which are
+just standalone compilations of FreeMedForms plugins.
 
 This project is a free and open source project. A community grows up
-around it. FreeMedForms and derivatives is released under the terms
+around it. FreeMedForms and derivatives are released under the terms
 of the GPLv3. Some parts of the code are LGPL v2.1.
 
 FreeMedForms and Derivatives are coded in C++/Qt4.x.
-FreeMedForms and Derivatives are available for :
+FreeMedForms and Derivatives are available for:
 - MacOs X universal
 - Linux : Ubuntu, Debian, OpenSuse, standalone binary
 - FreeBSD : need compilation of SVN trunk (please contact author)
 - Windows
 
 
-II. When does this project started ?
+II. When did this project start?
 
-This project started from scratch on October 2008. It was conducted by
+This project started from scratch in October 2008. It was conducted by
 a few professionals. Eric Maeker, MD (France) is the Main Creator and
 Main Developper.
 
 
-III. Where can I find informations about FreeMedForms ?
+III. Where can I find informations about FreeMedForms?
 
-Descriptive informations on our main web site :
+Descriptive informations on our main web site:
 http://www.freemedforms.com/
 
-Sources, issues are located on GoogleCode server :
+Sources and issues are located on GoogleCode server:
 http://code.google.com/p/freemedforms/
 
-Build instructions and technical documentation are described here :
+Build instructions and technical documentation are described here:
 http://www.freemedforms.com/en/code_doc
 
 
-IV. I want to contribute this project
+IV. I want to contribute to this project
 
-Please feel free to present yourself to our mailing list :
+Please feel free to present yourself to our mailing list:
 freemedforms@googlegroups.com
 Describe your ambitions and your competences. We talk French and English.
 
