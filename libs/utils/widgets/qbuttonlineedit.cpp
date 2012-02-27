@@ -91,7 +91,7 @@ void QButtonLineEdit::setDelayedSignals(bool state)
 /**
  \brief Define the Left button for the line edit.
  QButtonLineEdit takes ownership of the button. \n
- Text of selected action is show in gray inside the line edit when nothing lies in. \n
+ Text of selected action is shown in gray inside the line edit when it is empty. \n
  For now pixmaps of QAction must be sized (16x16). \n
  */
 void QButtonLineEdit::setLeftButton(QToolButton * button)
