@@ -249,6 +249,8 @@ UserManagerWidget::UserManagerWidget(QWidget *parent) :
     aQuit = new QAction(this);
     aQuit->setObjectName(QString::fromUtf8("aQuit"));
     aToggleSearchView = new QAction(this);
+    aToggleSearchView->setCheckable(true);
+    aToggleSearchView->setChecked(true);
     aToggleSearchView->setObjectName(QString::fromUtf8("aToggleSearchView"));
 
     // prepare Search Line Edit
@@ -326,7 +328,7 @@ bool UserManagerWidget::initialize()
     connect(aRevert, SIGNAL(triggered()), this, SLOT(onClearModificationRequested()));
     connect(aDeleteUser,  SIGNAL(triggered()), this, SLOT(onDeleteUserRequested()));
     connect(aQuit,  SIGNAL(triggered()), this, SIGNAL(closeRequested()));
-    connect(aToggleSearchView, SIGNAL(triggered()), this, SLOT(toggleSearchView()));
+    connect(aToggleSearchView, SIGNAL(toggled(bool)), this, SLOT(toggleSearchView(bool)));
 
     // connect tableView selector
     connect(ui->userTableView, SIGNAL(activated(const QModelIndex &)),
@@ -488,14 +490,12 @@ void UserManagerWidget::onDeleteUserRequested()
     selectUserTableView(UserModel::instance()->currentUserIndex().row());
 }
 
-void UserManagerWidget::toggleSearchView()
+void UserManagerWidget::toggleSearchView(bool checked)
 {
-    QList<int> s = ui->splitter->sizes();
-    if (s.count()>=2) {
-        if (s.at(0)==0)
-            ui->splitter->setSizes(QList<int>() << 1 << 3);
-        else
-            ui->splitter->setSizes(QList<int>() << 0 << 1);
+    if (checked) {
+        ui->splitter->setSizes(QList<int>() << 1 << 3);
+    } else {
+        ui->splitter->setSizes(QList<int>() << 0 << 1);
     }
 }
 
@@ -549,7 +549,7 @@ void UserManagerWidget::retranslate()
     aDeleteUser->setToolTip(aDeleteUser->text());
     aQuit->setText(tr("Quit User Manager"));
     aQuit->setToolTip(aQuit->text());
-    aToggleSearchView->setText(tr("Toggle search"));
+    aToggleSearchView->setText(tr("Search"));
     aToggleSearchView->setToolTip(aToggleSearchView->text());
 
 //    m_Parent->setWindowTitle(tr("User Manager") + " - " + qApp->applicationName());

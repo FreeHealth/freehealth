@@ -66,7 +66,7 @@ private Q_SLOTS:
     void onCreateUserRequested();
     void onClearModificationRequested();
     void onDeleteUserRequested();
-    void toggleSearchView();
+    void toggleSearchView(bool checked);
 
     void showUserDebugDialog(const QModelIndex &id);
 
