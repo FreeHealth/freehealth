@@ -145,39 +145,39 @@ static const QList<Team> m_Team = QList<Team>()
                  Trans::ConstantTranslations::tkTr(Trans::Constants::TEAM_CREATOR)
                 )
 
-        << Team( Trans::ConstantTranslations::tkTr(Trans::Constants::TEAM_DEVELOPPERS_CONTRIBUTORS),
+        << Team( Trans::ConstantTranslations::tkTr(Trans::Constants::TEAM_DEVELOPERS_CONTRIBUTORS),
                  "Pierre-Marie Desombre, MD",
                  Trans::ConstantTranslations::tkTr(Trans::Constants::COUNTRY_FRANCE),
                  "pm.desombre@gmail.com",
-                 Trans::ConstantTranslations::tkTr(Trans::Constants::TEAM_DEVELOPPER_AND_DEBUGGER)
+                 Trans::ConstantTranslations::tkTr(Trans::Constants::TEAM_DEVELOPER_AND_DEBUGGER)
                 )
 
-        << Team( Trans::ConstantTranslations::tkTr(Trans::Constants::TEAM_DEVELOPPERS_CONTRIBUTORS),
+        << Team( Trans::ConstantTranslations::tkTr(Trans::Constants::TEAM_DEVELOPERS_CONTRIBUTORS),
                  "Guillaume Denry",
                  Trans::ConstantTranslations::tkTr(Trans::Constants::COUNTRY_FRANCE),
                  "guillaume.denry@gmail.com",
-                 Trans::ConstantTranslations::tkTr(Trans::Constants::TEAM_DEVELOPPER_AND_DEBUGGER)
+                 Trans::ConstantTranslations::tkTr(Trans::Constants::TEAM_DEVELOPER_AND_DEBUGGER)
                 )
 
-        << Team( Trans::ConstantTranslations::tkTr(Trans::Constants::TEAM_DEVELOPPERS_CONTRIBUTORS),
+        << Team( Trans::ConstantTranslations::tkTr(Trans::Constants::TEAM_DEVELOPERS_CONTRIBUTORS),
                  "Filipe Azevedo",
                  Trans::ConstantTranslations::tkTr(Trans::Constants::COUNTRY_FRANCE),
                  "pasnox@gmail.com",
                  Trans::ConstantTranslations::tkTr(Trans::Constants::TEAM_DEBUGGER_ADVISOR)
                 )
 
-        << Team( Trans::ConstantTranslations::tkTr(Trans::Constants::TEAM_DEVELOPPERS_CONTRIBUTORS),
+        << Team( Trans::ConstantTranslations::tkTr(Trans::Constants::TEAM_DEVELOPERS_CONTRIBUTORS),
                  "David Geldreich",
                  Trans::ConstantTranslations::tkTr(Trans::Constants::COUNTRY_FRANCE),
                  "david.geldreich@free.fr",
                  Trans::ConstantTranslations::tkTr(Trans::Constants::TEAM_DEBUGGER_ADVISOR)
                )
 
-        << Team( Trans::ConstantTranslations::tkTr(Trans::Constants::TEAM_DEVELOPPERS_CONTRIBUTORS),
+        << Team( Trans::ConstantTranslations::tkTr(Trans::Constants::TEAM_DEVELOPERS_CONTRIBUTORS),
                  "Jourdan Romain",
                  Trans::ConstantTranslations::tkTr(Trans::Constants::COUNTRY_FRANCE),
                  "No@Mail.com",
-                 Trans::ConstantTranslations::tkTr(Trans::Constants::TEAM_DEVELOPPERS_CONTRIBUTORS)
+                 Trans::ConstantTranslations::tkTr(Trans::Constants::TEAM_DEVELOPERS_CONTRIBUTORS)
                 )
 
         << Team( Trans::ConstantTranslations::tkTr(Trans::Constants::TEAM_DRUG_DATABASE_MANAGER),

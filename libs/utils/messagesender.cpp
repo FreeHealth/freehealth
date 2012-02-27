@@ -49,7 +49,7 @@ namespace {
 const char * const URL_DOSAGETRANSMISSION     = "http://www.freemedforms.com/appscripts/FMF_DosagesToStore.php";
 const char * const URL_DRUGSARECORRECT        = "http://www.freemedforms.com/appscripts/FMF_Correct.php";
 const char * const URL_DRUGSAREINCORRECT      = "http://www.freemedforms.com/appscripts/FMF_Uncorrect.php";
-const char * const URL_DEVELOPPERMAILSENDING  = "http://www.freemedforms.com/appscripts/FMF_Bug.php";
+const char * const URL_DEVELOPERMAILSENDING  = "http://www.freemedforms.com/appscripts/FMF_Bug.php";
 }  // End Constants
 
 
@@ -63,7 +63,7 @@ public:
         m_Buffer(0),
         m_ShowMsgBox(false),
         m_IsSending(false),
-        m_type(MessageSender::InformationToDevelopper)
+        m_type(MessageSender::InformationToDeveloper)
     {}
     ~MessageSenderPrivate() { delete m_Buffer; }
 
@@ -137,7 +137,7 @@ bool MessageSender::setTypeOfMessage(const TypeOfMessage &t)
     {
         case CorrectDrugsCoding   : d->url = QUrl(::URL_DRUGSARECORRECT); break;
         case UncorrectDrugsCoding : d->url = QUrl(::URL_DRUGSAREINCORRECT); break;
-        case InformationToDevelopper : d->url = QUrl(::URL_DEVELOPPERMAILSENDING); break;
+        case InformationToDeveloper : d->url = QUrl(::URL_DEVELOPERMAILSENDING); break;
         case DosageTransmission : d->url = QUrl(::URL_DOSAGETRANSMISSION); break;
         default : return false; break;
     }
@@ -169,7 +169,7 @@ bool MessageSender::postMessage()
         s.append("user=anomynous");
     else
         s.append("user=" + d->m_User);
-    if (d->m_type==InformationToDevelopper)
+    if (d->m_type==InformationToDeveloper)
         s.append("&msg=" + d->m_Msg.toUtf8().toBase64());
     else
         s.append("&msg=" + d->m_Msg);

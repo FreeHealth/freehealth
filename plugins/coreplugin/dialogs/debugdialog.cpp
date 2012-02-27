@@ -104,7 +104,7 @@ void DebugDialog::on_butSend_clicked()
 
     // send informations
     connect(&m_sender, SIGNAL(sent()), this, SLOT(onSendMessage_done()));
-    m_sender.setTypeOfMessage( Utils::MessageSender::InformationToDevelopper );
+    m_sender.setTypeOfMessage( Utils::MessageSender::InformationToDeveloper );
     m_sender.setMessage(msg);
     if (m_sender.postMessage()) {
         m_sending = true;

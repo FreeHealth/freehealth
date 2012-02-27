@@ -50,7 +50,7 @@ public:
     enum TypeOfMessage{
         CorrectDrugsCoding,
         UncorrectDrugsCoding,
-        InformationToDevelopper,
+        InformationToDeveloper,
         DosageTransmission
     };
 
