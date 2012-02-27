@@ -432,7 +432,7 @@ bool UserIdentityAndLoginPage::validatePage()
     if (field("Name").toString().isEmpty() || field("Firstname").toString().isEmpty()) {
         Utils::warningMessageBox(tr("Forbidden anonymous user."),
                                  tr("All users must have at least a name and a firstname.\n"
-                                    "You can not poursue with an anonymous user."), "",
+                                    "You can not proceed with an anonymous user."), "",
                                  tr("Forbidden anonymous user."));
         return false;
     }
