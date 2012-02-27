@@ -875,7 +875,7 @@ bool functionNotAvailableMessageBox(const QString &functionText)
 {
     informativeMessageBox(functionText,
                            QCoreApplication::translate("Utils","This function is not available in this version."),
-                           QCoreApplication::translate("Utils","You can send an email to developpers and explain your difficulties : freemedforms@googlegroups.com.")
+                           QCoreApplication::translate("Utils","You can send an email to developers and explain your difficulties : freemedforms@googlegroups.com.")
                         );
 //                           .arg(qApp->organizationDomain()));
 //                         .arg(tkSettings::instance()->path(tkSettings::WebSiteUrl)));
