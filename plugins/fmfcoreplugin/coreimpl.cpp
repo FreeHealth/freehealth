@@ -260,7 +260,7 @@ bool CoreImpl::initialize(const QStringList &arguments, QString *errorString)
 
 void CoreImpl::extensionsInitialized()
 {
-    LOG("Core Opened");
+    LOG("Core opened");
     Q_EMIT coreOpened();
 }
 
