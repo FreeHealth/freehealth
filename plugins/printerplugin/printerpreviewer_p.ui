@@ -69,7 +69,7 @@
       <item row="2" column="0" colspan="2">
        <widget class="QCheckBox" name="duplicataCheck">
         <property name="text">
-         <string>Show Duplicata</string>
+         <string>Show Duplicates</string>
         </property>
        </widget>
       </item>

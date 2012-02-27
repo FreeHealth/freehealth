@@ -713,7 +713,7 @@ bool PrinterPrivate::simpleDrawPreparePages(QRect &contentRect)
         if (m_WithDuplicata) {
             if (m_PrintingDuplicata) {
                 drawnedHeight += currentRect.height();
-                // duplicata is drawn --> translate the currentRect to the beginning of the next page
+                // duplicate is drawn --> translate the currentRect to the beginning of the next page
                 currentRect.translate(0, currentRect.height());
                 pageNumber++;
             }
