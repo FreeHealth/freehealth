@@ -519,7 +519,7 @@ bool DrugsBase::refreshDrugsBase()
             d->m_ActualDBInfos = getDrugSourceInformations();
             LOG(QString("%1 %2")
                 .arg(tr("Switching to the default drugs database source."))
-                .arg(d->m_ActualDBInfos->identifiant));
+                .arg(d->m_ActualDBInfos->identifier));
         }
         d->m_IsDefaultDB = true;
     }
@@ -564,7 +564,7 @@ QVector<DatabaseInfos *> DrugsBase::getAllDrugSourceInformations()
             info->sid = q.value(Constants::SOURCES_SID).toInt();
             info->version = q.value(Constants::SOURCES_VERSION).toString();
             info->names = d->getAllLabels(q.value(Constants::SOURCES_MASTERLID).toInt());
-            info->identifiant = q.value(Constants::SOURCES_DBUID).toString();
+            info->identifier = q.value(Constants::SOURCES_DBUID).toString();
             info->compatVersion = q.value(Constants::SOURCES_FMFCOMPAT).toString();
             info->provider = q.value(Constants::SOURCES_PROVIDER).toString();
             info->weblink = q.value(Constants::SOURCES_WEBLINK).toString();
@@ -610,7 +610,7 @@ DatabaseInfos *DrugsBase::getDrugSourceInformations(const QString &drugSourceUid
             info->version = q.value(Constants::SOURCES_VERSION).toString();
             info->sid = q.value(Constants::SOURCES_SID).toInt();
             info->names = d->getAllLabels(q.value(Constants::SOURCES_MASTERLID).toInt());
-            info->identifiant = q.value(Constants::SOURCES_DBUID).toString();
+            info->identifier = q.value(Constants::SOURCES_DBUID).toString();
             info->compatVersion = q.value(Constants::SOURCES_FMFCOMPAT).toString();
             info->provider = q.value(Constants::SOURCES_PROVIDER).toString();
             info->weblink = q.value(Constants::SOURCES_WEBLINK).toString();
@@ -1106,7 +1106,7 @@ IDrug *DrugsBase::getDrugByUID(const QVariant &uid1, const QVariant &uid2, const
     // get the source uid to use
     QString sourceUid = srcUid;
     if (srcUid.isEmpty()) {
-        sourceUid = d->m_ActualDBInfos->identifiant;
+        sourceUid = d->m_ActualDBInfos->identifier;
     }
     // Connect database
     QSqlDatabase DB = QSqlDatabase::database(Constants::DB_DRUGS_NAME);

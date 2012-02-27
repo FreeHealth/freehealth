@@ -104,12 +104,12 @@ void AccountMode::modeActivated(Core::IMode *mode)
     }
     if (settings()->firstTimeRunning(Core::Constants::MODE_ACCOUNT)) {
         QString firstExplanationText = trUtf8("Please read this explanation before using FreeAccount.\n"
-                                              "FreeAccount is composed of :\n"
+                                              "FreeAccount is composed of:\n"
                                               "Receipts to get your earnings,\n"
                                               "Movements in your accountancy,\n"
                                               "Asset for your assets,\n"
                                               "Ledger to analyse your accountancy and produce and print your ledger.\n"
-                                              "The shortcuts for those programs are :\n"
+                                              "The shortcuts for those programs are:\n"
                                               "for your rapid receipt, CTRL+R,\n"
                                               "for the receipts widget, Maj+R,\n"
                                               "for the movements widget, CTRL+M,\n"
@@ -119,12 +119,12 @@ void AccountMode::modeActivated(Core::IMode *mode)
                                               "and create defaults.\n"
                                               "Then parametrize your user, sites, bank and so on.");
 
-        QMessageBox mess ;
-        mess.setWindowTitle(trUtf8("Read me."));
+        QMessageBox mess;
+        mess.setWindowTitle(trUtf8("Read me"));
         mess.setInformativeText(firstExplanationText);
         mess.setStandardButtons(QMessageBox::Ok);
         mess.setDefaultButton(QMessageBox::Ok);
-        QPushButton * notAgain = mess.addButton(trUtf8("Do not show this message again."),QMessageBox::ActionRole);
+        QPushButton * notAgain = mess.addButton(trUtf8("Do not show this message again"),QMessageBox::ActionRole);
         mess.exec();
         if (mess.clickedButton() == notAgain ) {
             qDebug() << __FILE__ << QString::number(__LINE__) << " action " ;

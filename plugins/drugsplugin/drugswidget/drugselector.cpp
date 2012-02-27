@@ -219,10 +219,10 @@ void DrugSelector::refreshAvailableDrugsDatabaseButtons()
         QAction *a = new QAction(this);
         a->setText(info->translatedName());
         a->setToolTip(info->translatedName());
-        a->setData(info->identifiant);
+        a->setData(info->identifier);
         a->setIcon(theme()->icon("/flags/"+info->lang_country.mid(3)+".png"));
         drugsDatabaseSelectorButton->addAction(a);
-        if (info->identifiant==drugsBase().actualDatabaseInformations()->identifiant) {
+        if (info->identifier==drugsBase().actualDatabaseInformations()->identifier) {
             defaultAction = a;
         }
     }

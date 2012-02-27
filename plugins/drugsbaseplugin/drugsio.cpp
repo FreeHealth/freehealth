@@ -376,7 +376,7 @@ public:
         QString dbName;
         QString dbInfoAttribs;
         if (drugsBase().actualDatabaseInformations()) {
-            dbName = drugsBase().actualDatabaseInformations()->identifiant;
+            dbName = drugsBase().actualDatabaseInformations()->identifier;
             QString t = drugsBase().actualDatabaseInformations()->version;
             dbInfoAttribs += QString("version=\"%1\" ").arg(t.replace("\"","'"));
             t = drugsBase().actualDatabaseInformations()->compatVersion;

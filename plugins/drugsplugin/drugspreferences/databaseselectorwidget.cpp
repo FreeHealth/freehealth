@@ -178,7 +178,7 @@ void DatabaseSelectorWidget::setDatasToUi()
         if (!info)
             continue;
         ui->databaseList->addItem(info->translatedName());
-        if (info->identifiant == actual->identifiant) {
+        if (info->identifier == actual->identifier) {
             ui->databaseList->setCurrentRow(row, QItemSelectionModel::Select);
         }
         ++row;
@@ -196,7 +196,7 @@ void DatabaseSelectorWidget::updateDatabaseInfos(int row)
     if (row >= d->m_Infos.count())
         return;
     d->m_Infos.at(row)->toTreeWidget(ui->infoTree);
-    d->m_SelectedDatabaseUid = d->m_Infos.at(row)->identifiant;
+    d->m_SelectedDatabaseUid = d->m_Infos.at(row)->identifier;
 }
 
 static void changeDrugsDatabase(Core::ISettings *set, const QString &drugBaseUid)

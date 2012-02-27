@@ -59,7 +59,7 @@ public:
     void setDrugsNameConstructor(const QString &s);
     void toTreeWidget(QTreeWidget *tree) const;
 
-    QString identifiant, fileName, version, compatVersion, lang_country, connectionName;
+    QString identifier, fileName, version, compatVersion, lang_country, connectionName;
     QString provider, author, copyright, license, drugsUidName, packUidName;
     QString drugsNameConstructor,  drugsNameConstructorSearchFilter;
     QString weblink, complementaryWebsite, authorComments, licenseTerms;

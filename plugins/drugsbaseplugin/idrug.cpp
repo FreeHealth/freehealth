@@ -592,7 +592,7 @@ QVariant IDrug::data(const int ref, const QString &lang) const
                 toReturn = d_drug->m_Content.value(Spc).value(lang).toString();
             }
             if (!toReturn.isEmpty()) {
-                if (drugsBase().actualDatabaseInformations()->identifiant == Constants::DB_DEFAULT_IDENTIFIANT)
+                if (drugsBase().actualDatabaseInformations()->identifier == Constants::DB_DEFAULT_IDENTIFIANT)
                     toReturn = QString(FRENCH_RPC_LINK).arg(toReturn.rightJustified(7,'0'));
             }
             return toReturn;

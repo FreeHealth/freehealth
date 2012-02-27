@@ -90,7 +90,7 @@ DrugsDatabaseSelector *DrugsDatabaseSelector::instance()
 }
 
 DatabaseInfos::DatabaseInfos() :
-        identifiant(Constants::DB_DEFAULT_IDENTIFIANT)
+        identifier(Constants::DB_DEFAULT_IDENTIFIANT)
 {
     names.insert("xx", "No drug database available");
 }
@@ -130,7 +130,7 @@ void DatabaseInfos::toTreeWidget(QTreeWidget *tree) const
 //            new QTreeWidgetItem(file, QStringList() << "Application relative path" << dir.relativeFilePath(QFileInfo(fileName).absoluteFilePath()));
 //            new QTreeWidgetItem(file, QStringList() << "DrugBaseUid" << QFileInfo(fileName).fileName());
         }
-        new QTreeWidgetItem(file, QStringList() << "Identifiant" << identifiant);
+        new QTreeWidgetItem(file, QStringList() << "Identifiant" << identifier);
     }
 
     if (!connectionName.isEmpty()) {
@@ -257,7 +257,7 @@ QDebug DrugsDB::operator<<(QDebug dbg, const DrugsDB::DatabaseInfos &c)
     }
     tmp.chop(2);
     dbg.nospace() << "DatabaseInfos("
-                  << c.identifiant
+                  << c.identifier
                   << "; "  << c.translatedName()
                   << "; " << c.lang_country
                   << "\n  FileName: " << c.fileName
@@ -285,7 +285,7 @@ QDebug DrugsDB::operator<<(QDebug dbg, const DrugsDB::DatabaseInfos *c)
     }
     tmp.chop(2);
     dbg.nospace() << "DatabaseInfos("
-                  << c->identifiant
+                  << c->identifier
                   << "; "  << c->translatedName()
                   << "; " << c->lang_country
                   << "\n  FileName: " << c->fileName
