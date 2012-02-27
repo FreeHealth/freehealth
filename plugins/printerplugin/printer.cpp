@@ -681,7 +681,7 @@ bool PrinterPrivate::simpleDrawPreparePages(QRect &contentRect)
     QSizeF headerSize(_pageWidth, 0);
     QSizeF footerSize(_pageWidth, 0);
     int pageNumber = 1;
-    int drawnedHeight = 0;
+    int drawnHeight = 0;
     QRectF headRect = QRectF(QPoint(0,0), headerSize);
     QRect currentRect = contentRect;
     int fromPage = m_Printer->fromPage();
@@ -696,7 +696,7 @@ bool PrinterPrivate::simpleDrawPreparePages(QRect &contentRect)
             if (pageNumber>toPage)
                 break;
             if (pageNumber<fromPage) {
-                drawnedHeight += currentRect.height();
+                drawnHeight += currentRect.height();
                 pageNumber++;
                 continue;
             }
@@ -706,20 +706,20 @@ bool PrinterPrivate::simpleDrawPreparePages(QRect &contentRect)
         simpleDrawHeaderFooter(painter, headerSize, footerSize, pageNumber);
 
         // draw content for this page
-        simpleDrawContent(painter, headerSize, currentRect, drawnedHeight);
+        simpleDrawContent(painter, headerSize, currentRect, drawnHeight);
 
         // calculate new page
         // go to content next page
         if (m_WithDuplicata) {
             if (m_PrintingDuplicata) {
-                drawnedHeight += currentRect.height();
+                drawnHeight += currentRect.height();
                 // duplicate is drawn --> translate the currentRect to the beginning of the next page
                 currentRect.translate(0, currentRect.height());
                 pageNumber++;
             }
             m_PrintingDuplicata=!m_PrintingDuplicata;
         } else {
-            drawnedHeight += currentRect.height();
+            drawnHeight += currentRect.height();
             // translate the currentRect to the beginning of the next page
             currentRect.translate(0, currentRect.height());
             pageNumber++;
