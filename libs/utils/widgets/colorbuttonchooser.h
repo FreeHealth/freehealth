@@ -20,7 +20,7 @@
  ***************************************************************************/
 /***************************************************************************
  *   Code inspired of fresh/pColorButton : MonkeyStudio                    *
- *   Main Developper : Eric MAEKER, <eric.maeker@gmail.com>                *
+ *   Main Developer : Eric MAEKER, <eric.maeker@gmail.com>                *
  *   Contributors :                                                        *
  *       NAME <MAIL@ADRESS>                                                *
  ***************************************************************************/

@@ -33,7 +33,7 @@
  *   POSSIBILITY OF SUCH DAMAGE.                                           *
  ***************************************************************************/
 /***************************************************************************
- *   Main Developper : Eric MAEKER, <eric.maeker@gmail.com>                *
+ *   Main Developer : Eric MAEKER, <eric.maeker@gmail.com>                *
  *   Contributors :                                                        *
  *       Guillaume DENRY <guillaume.denry@gmail.com>                       *
  ***************************************************************************/
