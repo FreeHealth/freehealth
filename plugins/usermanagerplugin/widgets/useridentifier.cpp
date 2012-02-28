@@ -78,6 +78,7 @@ UserIdentifier::UserIdentifier(QWidget *parent) :
     m_ui = new Ui::UserIdentifier();
     m_ui->setupUi(this);
     m_ui->loginWidget->setToggleViewIcon(theme()->iconFullPath(Core::Constants::ICONEYES));
+    m_ui->loginWidget->togglePasswordEcho(false);
 
     QPixmap splash = theme()->splashScreenPixmap(settings()->path(Core::ISettings::Splashscreen));
     if (splash.size().width() > 400 || splash.size().height() >200) {
