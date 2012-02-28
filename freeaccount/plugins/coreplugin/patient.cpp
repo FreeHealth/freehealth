@@ -70,7 +70,7 @@ public:
         m_XmlTags.insert(IPatient::HeightUnit , "HeightUnit" );
         m_XmlTags.insert(IPatient::Creatinine,  "Creatinine" );
         m_XmlTags.insert(IPatient::CreatinineUnit,  "CreatinineUnit" );
-        m_XmlTags.insert(IPatient::IMC ,        "IMC");
+        m_XmlTags.insert(IPatient::BMI ,        "BMI");
         m_XmlTags.insert(IPatient::CreatinClearance , "CreatinClearance" );
         m_XmlTags.insert(IPatient::ICD10Diseases ,    "ICD10Diseases");
         m_XmlTags.insert(IPatient::DrugsAtcAllergies ,   "DrugsAtcAllergies" );
