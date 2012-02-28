@@ -1,5 +1,5 @@
 # include general workbench
-include(../config.pri)
+include(../buildspecs/config.pri)
 
 win32 {
     DLLDESTDIR = $${BUILD_BINARY_PATH}

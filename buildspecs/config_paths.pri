@@ -31,6 +31,7 @@ defineReplace(stripSrcDir) {
 
 # define some paths related to application sources
 #SOURCES_ROOT_PATH is defined in config.pri
+SOURCES_BUILDSPECS_PATH    = $${SOURCES_ROOT_PATH}/buildspecs
 SOURCES_LIBS_PATH          = $${SOURCES_ROOT_PATH}/libs
 SOURCES_PLUGINS_PATH       = $${SOURCES_ROOT_PATH}/plugins
 SOURCES_CONTRIBS_PATH      = $${SOURCES_ROOT_PATH}/contrib
@@ -69,6 +70,7 @@ CONFIG(debug, debug|release) {
  unix:BINARY_TARGET   = $$quote($$join(BINARY_TARGET,,,_debug))
  else:BINARY_TARGET  = $$quote($$join(BINARY_TARGET,,,_d))
 }
+include(../buildspecs/projectversion.pri)
 DEFINES	*= "BINARY_NAME=\"\\\"$${BINARY_TARGET}\\\"\"" \
            "BUILD_PATH_POSTFIXE=\"\\\"$${BUILD_PATH_POSTFIXE}\\\"\"" \
            "PACKAGE_VERSION=\"\\\"$${PACKAGE_VERSION}\\\"\""

@@ -1,15 +1,18 @@
 TEMPLATE         = app
 TARGET           = freetoolbox
 mac:TARGET       = $$quote(FreeToolBox)
-PACKAGE_VERSION  = 0.1.0~beta
 
 # Get the version number from command line in bash :
 # cat this.pro | grep "PACKAGE_VERSION" -m 1 | cut -d = -s -f2 | tr -d ' '
 
 # include general configuration
 INSTALL_DRUGS = 0
-include( ../config.pri )
-!CONFIG(debug, release|debug):include( ../buildspecs/install.pri )
+INSTALL_ICD_DATABASE = 0
+INSTALL_ACCOUNT_FILES = 0
+INSTALL_ZIPCODES = 0
+INSTALL_PROFILES_FILES = 0
+include(../buildspecs/config.pri)
+!CONFIG(debug, release|debug):include(../buildspecs/install.pri)
 
 # include SDKs
 include( $${SOURCES_LIBS_PATH}/extensionsystem.pri )

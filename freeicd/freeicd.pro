@@ -1,13 +1,16 @@
 TEMPLATE         = app
 TARGET           = freeicd
 mac:TARGET       = $$quote(FreeICD)
-PACKAGE_VERSION  = 0.1.0
 
 # include general configuration
-INSTALL_ICD_DATABASE = 1
 FREEICD = 1
+INSTALL_ICD_DATABASE = 1
+INSTALL_DRUGS = 0
+INSTALL_ACCOUNT_FILES = 0
+INSTALL_ZIPCODES = 0
+INSTALL_PROFILES_FILES = 0
 
-include( ../config.pri )
+include(../buildspecs/config.pri)
 !CONFIG(debug, release|debug):include(../buildspecs/install.pri)
 
 # include SDKs

@@ -59,6 +59,6 @@ ddi.depends += drugsbase
 ddi.depends += core
 
 # manage non free content
-#include(../../config.pri)
+#include(../../buildspecs/config.pri)
 #!isEmpty(HAS_NONFREE):include($${NONFREE_SOURCES_PLUGINS_PATH}/plugins.pri)
 #message($${HAS_NONFREE}  //  $${NONFREE_SOURCES_PLUGINS_PATH})

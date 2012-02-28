@@ -1,7 +1,6 @@
 TEMPLATE         = app
 TARGET           = freeaccount
 mac:TARGET       = $$quote(FreeAccount)
-PACKAGE_VERSION  = 0.1.0~alpha
 
 BUILD_PATH_POSTFIXE = FreeAccount
 
@@ -11,8 +10,8 @@ INSTALL_ACCOUNT_FILES = 1
 INSTALL_PROFILES_FILES = 1
 INSTALL_ZIPCODES = 1
 
-include( ../config.pri )
-!CONFIG(debug, release|debug):include( ../buildspecs/install.pri )
+include(../buildspecs/config.pri)
+!CONFIG(debug, release|debug):include(../buildspecs/install.pri)
 
 # include SDKs
 include( $${SOURCES_LIBS_PATH}/extensionsystem.pri )

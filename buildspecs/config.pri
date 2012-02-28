@@ -3,15 +3,15 @@ isEmpty(TARGET) {
     error("config.pri: You must provide a TARGET")
 }
 # include the generic configuration file (define some paths)
-SOURCES_ROOT_PATH        = $${PWD}
-include(buildspecs/config_paths.pri)
-include(buildspecs/svnversion.pri)
+SOURCES_ROOT_PATH        = $${PWD}/../
+include(config_paths.pri)
+include(svnversion.pri)
 exists(__nonfree__):include(__nonfree__/config_nonfree.pri)
 
-macx:include(buildspecs/config_mac.pri)
-else:linux*:include(buildspecs/config_linux.pri)
-else:freebsd*:include(buildspecs/config_freebsd.pri)
-else:win32:include(buildspecs/config_win.pri)
+macx:include(config_mac.pri)
+else:linux*:include(config_linux.pri)
+else:freebsd*:include(config_freebsd.pri)
+else:win32:include(config_win.pri)
 
 INCLUDEPATH += $${PWD}/plugins $${PWD}/libs $${PWD}/contrib $${PWD}/contrib/quazip
 DEPENDPATH += $${PWD}/plugins $${PWD}/libs $${PWD}/contrib $${PWD}/contrib/quazip

@@ -1,12 +1,11 @@
 TEMPLATE         = app
 TARGET           = freepad
 mac:TARGET       = $$quote(FreePad)
-PACKAGE_VERSION  = 0.1.0
 
 # include general configuration
 FREEPAD = 1
 
-include( ../config.pri )
+include(../buildspecs/config.pri)
 !CONFIG(debug, release|debug):include(../buildspecs/install.pri)
 
 message($${TARGET}  $${DESTDIR})

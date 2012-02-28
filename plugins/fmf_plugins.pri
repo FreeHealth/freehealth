@@ -6,7 +6,7 @@ isEmpty(TARGET):error(You must specify a target when including fmf_plugins.pri)
 PLUGINSPECS = $${_PRO_FILE_PWD_}/$${TARGET}.pluginspec
 
 # include config file
-include($${PWD}/../config.pri)
+include($${PWD}/../buildspecs/config.pri)
 DESTDIR =  $$BUILD_PLUGIN_PATH
 DEPENDPATH += $$SOURCES_ROOT_PATH/src/plugins
 

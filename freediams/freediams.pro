@@ -1,9 +1,6 @@
 TEMPLATE         = app
 TARGET           = freediams
 mac:TARGET       = $$quote(FreeDiams)
-PACKAGE_VERSION  = 0.7.0~beta1
-# Get the version number from command line in bash :
-# cat this.pro | grep "PACKAGE_VERSION" -m 1 | cut -d = -s -f2 | tr -d ' '
 
 # include general configuration
 FREEDIAMS = 1
@@ -13,7 +10,7 @@ INSTALL_ACCOUNT_FILES = 0
 INSTALL_ZIPCODES = 0
 INSTALL_PROFILES_FILES = 0
 
-include( ../config.pri )
+include(../buildspecs/config.pri)
 !CONFIG(debug, release|debug):include( ../buildspecs/install.pri )
 
 # include SDKs

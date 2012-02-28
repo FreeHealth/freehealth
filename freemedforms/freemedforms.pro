@@ -2,7 +2,6 @@
 TEMPLATE = app
 macx:win32:TARGET = $$quote(FreeMedForms)
 else:TARGET = $$quote(freemedforms)
-PACKAGE_VERSION = 0.7.0~beta1
 
 # Prepare installation
 FMF_BUILD = 1
@@ -13,8 +12,8 @@ INSTALL_ZIPCODES = 1
 INSTALL_PROFILES_FILES = 1
 
 # include general configuration
-include( ../config.pri )
-!CONFIG(debug, release|debug):include( ../buildspecs/install.pri )
+include(../buildspecs/config.pri)
+!CONFIG(debug, release|debug):include(../buildspecs/install.pri)
 
 # include libs
 include( $${SOURCES_LIBS_PATH}/extensionsystem.pri )
