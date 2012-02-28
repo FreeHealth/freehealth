@@ -1,0 +1,13 @@
+[Desktop Entry]
+Version=1.0
+Type=Application
+Categories=Education;Science;
+Name=FreeMedForms EMR
+GenericName=FreeMedForms EMR
+Comment=Open source EMR
+Comment[en]=Open source EMR
+Comment[fr]=Gestionnaire de dossiers patients open source
+TryExec=freemedforms
+Exec=freemedforms
+Icon=freemedforms
+

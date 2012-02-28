@@ -1,8 +1,0 @@
-[Desktop Entry]
-Version=1.0
-Type=Application
-Name=FreeMedForms
-Comment=Open source EMR
-TryExec=freemedforms
-Exec=freemedforms
-Icon=freemedforms.svg
