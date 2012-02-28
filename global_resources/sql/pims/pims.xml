@@ -236,7 +236,7 @@
   </PIM>
   <PIM level="low">
     <Molecules>
-      <Molecule name="Isoxsurpine" />
+      <Molecule name="ISOXSUPRINE" />
     </Molecules>
     <Risk lang="en" value="Lack of efficacy."/>
   </PIM>
@@ -350,7 +350,7 @@
   <PIM level="high">
     <Molecules>
       <Molecule name="NON-STEROIDAL ANTI-INFLAMMATORIES" />
-      <Molecule name="ACIDE ACETYLSALICYLIQUE" maxDailyDose="􏰂325" maxDailyDoseUnit="mg" />
+      <Molecule name="ACIDE ACETYLSALICYLIQUE" maxDailyDose="325" maxDailyDoseUnit="mg" />
     </Molecules>
     <Diseases>
       <Disease icd="GastroDuodenalUlcers" />
