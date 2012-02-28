@@ -32,7 +32,7 @@
  * \file coreimpl.h
  * \author Eric MAEKER <eric.maeker@gmail.com>
  * \version 0.1.0
- * \date 04 Dev 2010
+ * \date 28 Feb 2012
 */
 
 
@@ -87,7 +87,7 @@ public:
     virtual IUser *user() const {return m_User;}
     virtual void setUser(IUser *user) {m_User=user;}
 
-    virtual void setScriptManager(IScriptManager *);
+    virtual void setScriptManager(IScriptManager *) {}
     virtual IScriptManager *scriptManager() const {return 0;}
 
 private:
