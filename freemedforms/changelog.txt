@@ -1,5 +1,0 @@
-changelog :
-	- les paramètres des éléments de formulaires peuvent être encodés en HTML (libellé, interprétation...)
-	- nouveaux type : HelpText, ShortText (éditeur de texte sur une seule ligne), LongText (plusieurs lignes), combobox
-	- système rudimentaire d'alerte de mise à jour via internet
-
