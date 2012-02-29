@@ -7,7 +7,7 @@ else {
  else:message(Preparing installation for integrated Linux)
 
  QMAKE_INSTALL_FILE=cp -a
-# QMAKE_INSTALL_PROGRAM=cp -a
+ QMAKE_INSTALL_PROGRAM=cp -a
 
  CONFIG(LINUX_INTEGRATED){
    # Redefine the default install paths
