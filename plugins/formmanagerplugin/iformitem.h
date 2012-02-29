@@ -59,20 +59,20 @@ QT_END_NAMESPACE
 namespace Form {
 class IFormWidget;
 class IFormItemData;
-class FormItemIdentifiants;
+class FormItemIdentifier;
 class FormPage;
 class FormMain;
 class IFormIO;
 class FormMainDebugPage;
 
-class FORM_EXPORT FormItem : public Form::FormItemIdentifiants
+class FORM_EXPORT FormItem : public Form::FormItemIdentifier
 {
     Q_OBJECT
 //    Q_PROPERTY(QVariant value READ value WRITE setValue USER true)
 
 public:
     FormItem(QObject *parent=0) :
-            FormItemIdentifiants(parent),
+            FormItemIdentifier(parent),
             m_Spec(new FormItemSpec),
             m_Scripts(new FormItemScripts),
             m_Values(new FormItemValues(this)),

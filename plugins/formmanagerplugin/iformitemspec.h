@@ -56,11 +56,11 @@ QT_END_NAMESPACE
 namespace Form {
 class IFormWidget;
 
-class FORM_EXPORT FormItemIdentifiants : public QObject
+class FORM_EXPORT FormItemIdentifier : public QObject
 {
 public:
-    FormItemIdentifiants(QObject *parent =0) : QObject(parent) {}
-    ~FormItemIdentifiants() {}
+    FormItemIdentifier(QObject *parent =0) : QObject(parent) {}
+    ~FormItemIdentifier() {}
 
     void setUuid(const QString &uuid);
     QString uuid() const;

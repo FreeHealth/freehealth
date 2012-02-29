@@ -232,7 +232,7 @@ bool CoreImpl::initialize(const QStringList &arguments, QString *errorString)
         m_Settings->noMoreFirstTimeRunning();
         /** \todo code here: if alpha -> delete old configuration && databases */
         m_Settings->setLicenseApprovedApplicationNumber(qApp->applicationVersion());
-        // Clear identifiants
+        // Clear identifiers
         Utils::DatabaseConnector connector = settings()->databaseConnector();
         connector.setClearLog("_");
         connector.setClearPass("_");

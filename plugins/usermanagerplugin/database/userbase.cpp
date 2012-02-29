@@ -40,7 +40,7 @@
   You can regardless save or update users to database using the unique member : saveUser().
 
   4. Users datas checkers\n
-  You can check the identifiants of users with the checkLogin() member.
+  You can check the identifiers of users with the checkLogin() member.
 
   5. Users trace keeper\n
   The recaordLastLogin() update user's database with the actual login's date and time. It also update the login

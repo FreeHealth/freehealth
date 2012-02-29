@@ -46,7 +46,7 @@ void IUser::replaceTokens(QString &stringWillBeModified)
     Utils::replaceToken(stringWillBeModified, Constants::TOKEN_USERTITLE,      value(IUser::Title).toString() );
 //    Utils::replaceToken(stringWillBeModified, Constants::TOKEN_USERAGE,        value(IUser::Age).toString() );
     Utils::replaceToken(stringWillBeModified, Constants::TOKEN_USERSPECIALITIES, value(IUser::Specialities).toStringList().join("<br />") );
-    Utils::replaceToken(stringWillBeModified, Constants::TOKEN_USERIDENTIFIANTS, value(IUser::PractitionerId).toStringList().join("<br />") );
+    Utils::replaceToken(stringWillBeModified, Constants::TOKEN_USERIDENTIFIER, value(IUser::PractitionerId).toStringList().join("<br />") );
     Utils::replaceToken(stringWillBeModified, Constants::TOKEN_USERQUALIFICATIONS, value(IUser::Qualifications).toStringList().join("<br />") );
 
     Utils::replaceToken(stringWillBeModified, Constants::TOKEN_USERADRESS,   value(IUser::Adress).toString());

@@ -123,10 +123,10 @@ enum {WarnFormCreation=false};
 #endif
 
 ////////////////////////////////////////////////////////////////////////////////////////////////////////////
-//////////////////////////////////////  FormItemIdentifiants  //////////////////////////////////////////////
+//////////////////////////////////////  FormItemIdentifiers   //////////////////////////////////////////////
 ////////////////////////////////////////////////////////////////////////////////////////////////////////////
 /** Defines the FreeMedForms UUID of the item. */
-void FormItemIdentifiants::setUuid(const QString &uuid)
+void FormItemIdentifier::setUuid(const QString &uuid)
 {
     id = uuidManager()->uniqueIdentifier(uuid);
     m_Uuid = uuid;
@@ -149,21 +149,21 @@ void FormItemIdentifiants::setUuid(const QString &uuid)
 }
 
 /** Returns the FreeMedForms UUID of the item. This UUID is used for database accesses. */
-QString FormItemIdentifiants::uuid() const
+QString FormItemIdentifier::uuid() const
 {
     return m_Uuid;
 }
 
 /** Defines the FreeMedForms equivalence in UUID for the item. Equivalence UUID is used to keep data correspondance when a form was updated and uuid of item changed. */
-void FormItemIdentifiants::setEquivalentUuid(const QStringList &list)
+void FormItemIdentifier::setEquivalentUuid(const QStringList &list)
 {
     m_EquivalentUuid = list;
     m_EquivalentUuid.removeDuplicates();
     m_EquivalentUuid.removeAll("");
 }
 
-/** Returns the FreeMedForms equivalence in UUID for the item. \sa FormItemIdentifiants::setEquivalentUuid */
-QStringList FormItemIdentifiants::equivalentUuid() const
+/** Returns the FreeMedForms equivalence in UUID for the item. \sa FormItemIdentifier::setEquivalentUuid */
+QStringList FormItemIdentifier::equivalentUuid() const
 {
     return m_EquivalentUuid;
 }

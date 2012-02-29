@@ -355,7 +355,7 @@ QString DefaultUserProfessionalPage::id() const
 
 QString DefaultUserProfessionalPage::name() const
 {
-    return tr("Professional identifiants");
+    return tr("Professional identifiers");
 }
 
 QString DefaultUserProfessionalPage::category() const
@@ -365,7 +365,7 @@ QString DefaultUserProfessionalPage::category() const
 
 QString DefaultUserProfessionalPage::title() const
 {
-    return tr("Professional identifiants");
+    return tr("Professional identifiers");
 }
 
 QWidget *DefaultUserProfessionalPage::createPage(QWidget *parent)

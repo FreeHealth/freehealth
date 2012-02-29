@@ -598,7 +598,7 @@ UserSpecialiesQualificationsPage::UserSpecialiesQualificationsPage(QWidget *pare
 
     tab->addTab(speView, tr("Specialities"));
     tab->addTab(quaView, tr("Qualifications"));
-    tab->addTab(idsView, tr("Identifiants"));
+    tab->addTab(idsView, tr("Identifiers"));
 
     registerField("Specialities", speView, "stringList");
     registerField("Qualifications", quaView, "stringList");
@@ -706,7 +706,7 @@ void UserLastPage::initializePage()
         new QTreeWidgetItem(qual, QStringList() << s);
     }
 
-    QTreeWidgetItem *idents = new QTreeWidgetItem(tree, QStringList() << tr("Professionnal identifiants"));
+    QTreeWidgetItem *idents = new QTreeWidgetItem(tree, QStringList() << tr("Professionnal identifiers"));
     idents->setFont(0, bold);
     const QStringList &ids =  field("Identifiants").toStringList();
     foreach(const QString &s, ids) {
