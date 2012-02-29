@@ -2,6 +2,10 @@
 TEMPLATE        = lib
 TARGET          = DataPack
 
+# The version number is defined by the scripts/source.sh script, keep this line unchanged
+# NOT USED
+# VERSION=1.0.0
+
 # include config file
 include(../libsworkbench.pri)
 include(../datapack_dependencies.pri)

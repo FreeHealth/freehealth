@@ -2,8 +2,12 @@
 isEmpty(TARGET) {
     error("config.pri: You must provide a TARGET")
 }
+# lowered appname must be specified in the qmake command line
+isEmpty(LOWERED_APPNAME) {
+    error(Missing LOWERED_APPNAME in qmake command line. Eg: qmake -r freediams.pro LOWERED_APPNAME=freediams)
+}
 # include the generic configuration file (define some paths)
-SOURCES_ROOT_PATH        = $${PWD}/../
+SOURCES_ROOT_PATH        = $${PWD}/..
 include(config_paths.pri)
 include(svnversion.pri)
 exists(__nonfree__):include(__nonfree__/config_nonfree.pri)
@@ -13,8 +17,17 @@ else:linux*:include(config_linux.pri)
 else:freebsd*:include(config_freebsd.pri)
 else:win32:include(config_win.pri)
 
-INCLUDEPATH += $${PWD}/plugins $${PWD}/libs $${PWD}/contrib $${PWD}/contrib/quazip
-DEPENDPATH += $${PWD}/plugins $${PWD}/libs $${PWD}/contrib $${PWD}/contrib/quazip
+INCLUDEPATH += \
+    $${SOURCES_PLUGINS_PATH} \
+    $${SOURCES_LIBS_PATH} \
+    $${SOURCES_CONTRIBS_PATH} \
+    $${SOURCES_CONTRIBS_PATH}/quazip
+
+DEPENDPATH += \
+    $${SOURCES_PLUGINS_PATH} \
+    $${SOURCES_LIBS_PATH} \
+    $${SOURCES_CONTRIBS_PATH} \
+    $${SOURCES_CONTRIBS_PATH}/quazip
 
 LIBS *= -L$${BUILD_PLUGIN_PATH} -L$${BUILD_LIB_PATH}
 

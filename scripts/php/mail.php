@@ -8,11 +8,11 @@
     $userFileName = "FMF_" . $userName . "_log.txt"
     if ( ! file_exists( $fileName ) )
       {
-        touch( $userFileName );
+        touch( $userFileName );
         $fileCreate = fopen ( $userFileName , "r+" );  
         fwrite( $fileCreate, '0' );
         fclose( $fileCreate );
-      }
+      }
 
     // 2. Ouvre le fichier de log, incrémente la valeur et sauvegarde
     $fp = fopen ( $userFileName , "r+" );  

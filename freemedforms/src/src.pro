@@ -12,11 +12,12 @@ INSTALL_ZIPCODES = 1
 INSTALL_PROFILES_FILES = 1
 
 # include general configuration
-include(../buildspecs/config.pri)
-!CONFIG(debug, release|debug):include(../buildspecs/install.pri)
+include(../../buildspecs/config.pri)
+!CONFIG(debug, release|debug):include($${SOURCES_BUILDSPECS_PATH}/install.pri)
 
 # include libs
 include( $${SOURCES_LIBS_PATH}/extensionsystem.pri )
+include( $${SOURCES_LIBS_PATH}/translationutils.pri )
 include( $${SOURCES_LIBS_PATH}/utils.pri )
 include( $${SOURCES_LIBS_PATH}/rpath.pri )
 
@@ -36,3 +37,7 @@ win32:RC_FILE=freemedforms_win32_icon.rc
 
 # Compile project
 SOURCES += main.cpp
+
+OTHER_FILES += Info.plist freemedforms_win32_icon.rc
+
+

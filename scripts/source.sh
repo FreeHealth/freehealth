@@ -7,29 +7,34 @@
 # Documentations must installed by hand before
 #
 
-
 BUNDLE_NAME=""
 SVN_REVISION=""
-APP_VERSION=""
+PROJECT_VERSION=""
 PACKPATH=""
+SOURCES_ROOT_PATH=""
 
+# Some path definition
 SCRIPT_NAME=`basename $0`
 if [ "`echo $0 | cut -c1`" = "/" ]; then
   SCRIPT_PATH=`dirname $0`
 else
   SCRIPT_PATH=`pwd`/`echo $0 | sed -e s/$SCRIPT_NAME//`
 fi
+SOURCES_ROOT_PATH=$SCRIPT_PATH"/../"
+
+# get version number of FreeDiams from the project file
+PROJECT_VERSION=`cat $SOURCES_ROOT_PATH/buildspecs/projectversion.pri | grep "PACKAGE_VERSION" -m 1 | cut -d = -s -f2 | tr -d ' '`
 
 showHelp()
 {
 echo $SCRIPT_NAME" builds FreeMedForms source package, svn braches and tags."
-echo "Usage : $SCRIPT_NAME -b ApplicationToBuild -r 123 -sct"
+echo "Project version: "$PROJECT_VERSION
 echo
-echo "Options :"
-echo "  -b  Application name (freemedforms, freediams, freeaccount, freeicd, freetoolbox...)"
-echo "  -s  Build the source package"
-echo "  -c  Create a branch. Specify the revision number using the -r option"
-echo "  -t  Create the tag. Specify the revision number using the -r option"
+echo "Usage: $SCRIPT_NAME -r 123"
+echo "Options:"
+#echo "  -s  Build the source package"
+#echo "  -c  Create a branch. Specify the revision number using the -r option"
+#echo "  -t  Create the tag. Specify the revision number using the -r option"
 echo "  -r  Specify the revision number to use for the branches or tags generation"
 echo "  -h  Show this help"
 echo
@@ -46,21 +51,35 @@ cd $SCRIPT_PATH"/.."
 
 export COPYFILE_DISABLE=true
 
+# prepare the source tar.gz file
 prepareFileSelection()
 {
-echo "**** PREPARE SOURCES PACKAGE FOR $1 ****"
-
-# get version number of FreeDiams from the project file
-APP_VERSION=`cat ./$1/$1.pro | grep "PACKAGE_VERSION" -m 1 | cut -d = -s -f2 | tr -d ' '`
+echo "**** PREPARE SOURCES PACKAGE ****"
 
 SCRIPT_SOURCE="\
 scripts/mac*sh \
 scripts/release_dmg.sh \
 scripts/source.sh \
 scripts/win_release.bat \
-scripts/Linux"
+scripts/Linux \
+"
 
-PIXMAPS_AND_TRANSLATIONS="\
+RESOURCES="\
+global_resources/datapacks/appinstalled/drugs/master.db \
+global_resources/datapacks/appinstalled/drugs/readme.txt \
+global_resources/doc/freeaccount \
+global_resources/doc/freediams \
+global_resources/doc/freeicd \
+global_resources/doc/freemedforms \
+global_resources/doc/freepad \
+global_resources/doc/freetoolbox \
+global_resources/forms \
+global_resources/package_helpers/freeaccount* \
+global_resources/package_helpers/freediams* \
+global_resources/package_helpers/freeicd* \
+global_resources/package_helpers/freemedforms* \
+global_resources/package_helpers/freepad* \
+global_resources/package_helpers/freetool* \
 global_resources/pixmap/16x16 \
 global_resources/pixmap/32x32 \
 global_resources/pixmap/48x48 \
@@ -70,186 +89,13 @@ global_resources/pixmap/svg/*.svg \
 global_resources/pixmap/svg/*.icns \
 global_resources/pixmap/svg/*.ico \
 global_resources/pixmap/svg/*.bmp \
-global_resources/translations/*.ts \
-global_resources/translations/qt*.qm"
-
-PLUGIN_DRUGS="\
-global_resources/datapacks/appinstalled/drugs/master.db \
-global_resources/datapacks/appinstalled/drugs/readme.txt \
-plugins/druginteractionsplugin \
-plugins/drugsbaseplugin \
-plugins/drugsplugin "
-
-FREEDIAMS_SOURCES="freediams.pro config.pri checkqtversion.pri \
-README.txt COPYING.txt INSTALL \
-updatetranslations.sh \
-buildspecs/*.pri \
-buildspecs/freediams_debian \
-doc \
-freediams \
-global_resources/doc/freediams \
-global_resources/package_helpers/freediams* \
-global_resources/package_helpers/freemedforms.url \
-global_resources/textfiles/freediams.desktop \
-global_resources/textfiles/boys_surnames.csv \
-global_resources/textfiles/default_user_footer.htm \
-global_resources/textfiles/default_user_header.htm \
-global_resources/textfiles/girls_surnames.csv \
-global_resources/textfiles/listemotsfr.txt \
-global_resources/textfiles/surnames.txt \
-libs/aggregation \
-libs/extensionsystem \
-libs/translationutils \
-libs/utils \
-libs/medintuxutils \
-libs/medicalutils \
-libs/datapackutils \
-libs/*.pri \
-contrib \
-plugins/fmf_plugins.pri \
-plugins/coreplugin \
-plugins/datapackplugin \
-plugins/emptyplugin \
-plugins/listviewplugin \
-plugins/printerplugin \
-plugins/saverestoreplugin \
-plugins/templatesplugin \
-plugins/texteditorplugin \
-tests"
-
-FREEICD_SOURCES="freeicd.pro config.pri checkqtversion.pri \
-README.txt COPYING.txt INSTALL \
-updatetranslations.sh \
-buildspecs/*.pri \
-doc \
-freeicd \
-global_resources/doc/freeicd \
-global_resources/textfiles/freeicd.desktop \
-global_resources/textfiles/default_user_header.htm \
-global_resources/textfiles/default_user_footer.htm \
-global_resources/package_helpers/freeicd* \
-global_resources/package_helpers/freemedforms.url \
-global_resources/sql/icd10/icd10.sql \
-libs/aggregation \
-libs/extensionsystem \
-libs/translationutils \
-libs/utils \
-libs/medintuxutils \
-libs/medicalutils \
-libs/*.pri \
-contrib \
-plugins/fmf_plugins.pri \
-plugins/coreplugin \
-plugins/icdplugin \
-plugins/printerplugin \
-plugins/texteditorplugin \
-plugins/listviewplugin \
-plugins/usermanagerplugin"
-
-FREEPAD_SOURCES="freepad.pro config.pri checkqtversion.pri \
-README.txt COPYING.txt INSTALL \
-updatetranslations.sh \
-buildspecs/*.pri \
-doc \
-freepad \
-global_resources/doc/freepad \
-global_resources/textfiles/freepad.desktop \
-global_resources/package_helpers/freepad* \
-global_resources/package_helpers/freemedforms.url \
-libs \
-contrib \
-plugins/fmf_plugins.pri \
-plugins/coreplugin \
-plugins/printerplugin \
-plugins/texteditorplugin \
-plugins/listviewplugin"
-
-FREETOOLBOX_SOURCES="freetoolbox.pro config.pri checkqtversion.pri \
-README.txt COPYING.txt INSTALL \
-updatetranslations.sh \
-buildspecs/*.pri \
-doc \
-freetoolbox/free* \
-freetoolbox/main.cpp \
-freetoolbox/Info.plist \
-freetoolbox/libs \
-freetoolbox/plugins/coreplugin \
-freetoolbox/plugins/drugsdb \
-freetoolbox/plugins/icd10db \
-freetoolbox/plugins/icdplugin \
-freetoolbox/plugins/interactiondb \
-freetoolbox/plugins/listviewplugin \
-freetoolbox/plugins/zipcodes \
-freetoolbox/plugins/*.pro \
-global_resources/doc/freetoolbox \
-global_resources/textfiles/freetoolbox.desktop \
-global_resources/package_helpers/freetool* \
-global_resources/package_helpers/freemedforms.url \
-global_resources/sql \
-libs \
-contrib \
-plugins/fmf_plugins.pri \
-plugins/coreplugin \
-plugins/drugsbaseplugin/drugbasecore.h \
-plugins/drugsbaseplugin/drugbasecore.cpp \
-plugins/drugsbaseplugin/constants_databaseschema.h \
-plugins/icdplugin \
-plugins/listviewplugin \
-scripts"
-
-FREEACCOUNT_SOURCES="freeaccount.pro config.pri checkqtversion.pri \
-README.txt COPYING.txt INSTALL \
-updatetranslations.sh \
-buildspecs/*.pri \
-doc \
-freeaccount \
-global_resources/databases/zipcodes/zipcodes.db \
-global_resources/doc/freeaccount \
-global_resources/textfiles/freeaccount.desktop \
-global_resources/package_helpers/freeaccount* \
-global_resources/package_helpers/freemedforms.url \
 global_resources/profiles \
 global_resources/sql/account \
-global_resources/textfiles/boys_surnames.csv \
-global_resources/textfiles/default_user_footer.htm \
-global_resources/textfiles/default_user_header.htm \
-global_resources/textfiles/girls_surnames.csv \
-global_resources/textfiles/listemotsfr.txt \
-global_resources/textfiles/surnames.txt \
-global_resources/textfiles/pays.txt \
-libs/aggregation \
-libs/extensionsystem \
-libs/translationutils \
-libs/utils \
-libs/medintuxutils \
-libs/medicalutils \
-libs/*.pri \
-contrib \
-plugins/fmf_plugins.pri \
-plugins/coreplugin \
-plugins/accountbaseplugin \
-plugins/accountplugin \
-plugins/printerplugin \
-plugins/texteditorplugin \
-plugins/listviewplugin \
-plugins/usermanagerplugin \
-plugins/zipcodesplugin \
-scripts"
-
-FREEMEDFORMS_SOURCES="freemedforms.pro config.pri checkqtversion.pri \
-README.txt COPYING.txt INSTALL \
-updatetranslations.sh \
-buildspecs/*.pri \
-buildspecs/freemedforms_debian \
-doc \
-freemedforms \
-global_resources/doc/freemedforms \
-global_resources/forms \
-global_resources/package_helpers \
-global_resources/profiles \
-global_resources/sql/account \
+global_resources/sql/drugdb \
+global_resources/sql/druginfodb \
+global_resources/sql/icd10 \
 global_resources/sql/server_config \
-global_resources/textfiles/FreeMedForms.desktop \
+global_resources/sql/zipcodes \
 global_resources/textfiles/boys_surnames.csv \
 global_resources/textfiles/default_user_footer.htm \
 global_resources/textfiles/default_user_header.htm \
@@ -257,9 +103,46 @@ global_resources/textfiles/girls_surnames.csv \
 global_resources/textfiles/listemotsfr.txt \
 global_resources/textfiles/surnames.txt \
 global_resources/textfiles/pays.txt \
-global_resources/textfiles/zipcodes.csv \
-libs \
+global_resources/translations/*.ts \
+global_resources/translations/qt*.qm \
+"
+
+BUILDSPEC_SOURCES="\
+README.txt COPYING.txt INSTALL \
+updatetranslations.sh \
+buildspecs/*.pri \
+doc \
+"
+
+LIBS_SOURCES="\
+libs/aggregation \
+libs/calendar \
+libs/datapackutils \
+libs/extensionsystem \
+libs/medicalutils \
+libs/medintuxutils \
+libs/translationutils \
+libs/utils \
+libs/*.pri \
 contrib \
+"
+
+APP_SOURCES="\
+freeaccount.pro \
+freeaccount \
+freediams.pro \
+freediams \
+freeicd.pro \
+freeicd \
+freemedforms.pro \
+freemedforms \
+freepad.pro \
+freepad \
+freetoolbox.pro \
+freetoolbox \
+"
+
+PLUGINS_SOURCES="\
 plugins/plugins.pro \
 plugins/fmf_plugins.pri \
 plugins/accountbaseplugin \
@@ -287,51 +170,19 @@ plugins/texteditorplugin \
 plugins/usermanagerplugin \
 plugins/xmlioplugin \
 plugins/zipcodesplugin \
-scripts \
-tests"
+"
 
-SELECTED_SOURCES="";
-EXCLUSIONS="";
-if [ $1 == "freediams" ] ; then
-    SELECTED_SOURCES=$FREEDIAMS_SOURCES" "$PLUGIN_DRUGS
-    EXCLUSIONS="--exclude 'global_resources/forms' "
-fi
-if [ $1 == "freeicd" ] ; then
-    SELECTED_SOURCES=$FREEICD_SOURCES
-    EXCLUSIONS="--exclude 'global_resources/forms' "
-fi
-if [ $1 == "freemedforms" ] ; then
-    SELECTED_SOURCES=$FREEMEDFORMS_SOURCES" "$PLUGIN_DRUGS
-fi
-if [ $1 == "freeaccount" ] ; then
-    SELECTED_SOURCES=$FREEACCOUNT_SOURCES
-fi
-if [ $1 == "freetoolbox" ] ; then
-    SELECTED_SOURCES=$FREETOOLBOX_SOURCES
-    EXCLUSIONS="--exclude 'global_resources/forms' "
-fi
-if [ $1 == "freepad" ] ; then
-    SELECTED_SOURCES=$FREEPAD_SOURCES
-    EXCLUSIONS="--exclude 'global_resources/forms' "
-fi
+TEST_SOURCES="\
+tests \
+"
 
-SELECTED_SOURCES=$SELECTED_SOURCES" "$SCRIPT_SOURCE" "$PIXMAPS_AND_TRANSLATIONS
-}
-
-
-# $1 bundle name
-# $2 app version
-# $3 svn version
-changeVersionNumbering()
-{
-  # modify package helpers: .ISS windows files
-  echo "Not yet coded"
+SELECTED_SOURCES=$SCRIPT_SOURCE$RESOURCES$BUILDSPEC_SOURCES$LIBS_SOURCES$APP_SOURCES$PLUGINS_SOURCES$TEST_SOURCES
 }
 
 createSource()
 {
 # create sources tmp path
-PACKPATH=$SCRIPT_PATH/$1-$APP_VERSION
+PACKPATH=$SCRIPT_PATH/freemedforms-$PROJECT_VERSION
 if [ -e $PACKPATH ]; then
     rm -R $PACKPATH
 fi
@@ -339,16 +190,14 @@ mkdir $PACKPATH
 
 tar -cf $PACKPATH/sources.tar \
 --exclude '.svn' --exclude '.cvsignore' --exclude 'qtc-gdbmacros' \
---exclude '_protected' --exclude 'build' --exclude 'bin' --exclude 'packages' \
+--exclude '_protected' --exclude '__nonfree__' --exclude 'nonfree' \
+--exclude 'build' --exclude 'bin' --exclude 'packages' --exclude 'zlib-1.2.3' \
 --exclude 'rushes' --exclude 'doxygen' \
 --exclude 'Makefile*' --exclude '*.pro.user*' \
 --exclude 'dosages.db' --exclude 'users.db' --exclude '*.mdb' --exclude '.*' --exclude '._*' \
 --exclude '*.tgz' --exclude '*.app' --exclude '*.zip' --exclude '*.a' \
 --exclude '*.o' --exclude 'moc_*' --exclude 'ui_*.h' \
---exclude 'global_resources/databases/episodes' \
---exclude 'global_resources/databases/patients' \
---exclude 'global_resources/databases/templates' \
---exclude 'global_resources/databases/users' \
+--exclude 'global_resources/databases' \
 --exclude 'sources.tar' \
 $EXCLUSIONS \
 $SELECTED_SOURCES
@@ -360,8 +209,25 @@ find $PACKPATH -type f -exec chmod -R 666 {} \;
 
 echo "   * DEFINING *.ISS FILES APP VERSION"
 cd $PACKPATH/global_resources/package_helpers
-sed -i "bkup" 's#__version__#'$APP_VERSION'#' $1.iss
+FILES=`find ./ -type f -name '*.iss'`
+for f in $FILES; do
+  sed -i "bkup" 's#__version__#'$PROJECT_VERSION'#' $f
+done
 rm *.*bkup
+
+echo "   * DEFINING *.PLUGINSPEC FILES APP VERSION"
+cd $PACKPATH
+FILES=`find ./ -type f -name '*.pluginspec'`
+for f in $FILES; do
+  # compatVersion="0.6.0"
+  sed -i "bkup" 's#compatVersion=\".*\"#compatVersion=\"'$PROJECT_VERSION'\"#' $f
+  rm $f"bkup"
+  # version="0.6.0"
+  sed -i "bkup" 's#version=\".*\" #version=\"'$PROJECT_VERSION'\" #' $f
+  rm $f"bkup"
+  sed -i "bkup" 's#version=\".*\"/>#version=\"'$PROJECT_VERSION'\"/>#' $f
+  rm $f"bkup"
+done
 
 echo "   * ADDING SVN VERSION NUMBER"
 cd $PACKPATH/buildspecs
@@ -372,15 +238,14 @@ echo ""  >> svnversion.pri
 
 echo "**** REPACK SOURCES PACKAGE FROM CREATED DIR ****"
 cd $SCRIPT_PATH
-tar czf ../$1fullsources-$APP_VERSION.tgz  ./$1-$APP_VERSION
+tar czf ../freemedformsfullsources-$PROJECT_VERSION.tgz  ./freemedforms-$PROJECT_VERSION
 
 echo "**** CLEANING TMP SOURCES PATH ****"
 rm -R $PACKPATH
 
 PWD=`pwd`
 
-echo "*** Source package for $1 successfully created at"
-echo $PWD/$1-$APP_VERSION
+echo "*** Source package successfully created at"
 echo "SVN version: "$SVN
 }
 
@@ -392,7 +257,7 @@ createBranch()
   echo "Create SVN branch not yet coded"
   # Manage Branch name
   SVN_FROM=""
-  BRANCH_NAME=$1"_"$APP_VERSION
+  BRANCH_NAME=$1"_"$PROJECT_VERSION
   if [ ! -e $SVN_REVISION ] ; then
      BRANCH_NAME=$BRANCH_NAME"-"$SVN_REVISION
      SVN_FROM="-r "$SVN_REVISION
@@ -424,7 +289,7 @@ createTag()
 {
   echo "Create SVN tag not yet coded"
   # Manage Branch name
-  BRANCH_NAME=$1"_"$APP_VERSION
+  BRANCH_NAME=$1"_"$PROJECT_VERSION
   if [ ! -e $SVN_REVISION ] ; then
 #     BRANCH_NAME=$BRANCH_NAME"-"$SVN_REVISION
      SVN_FROM="-r "$SVN_REVISION
@@ -472,7 +337,10 @@ createTag()
 #########################################################################################
 ## Analyse options
 #########################################################################################
-while getopts "hb:r:sct" option
+
+prepareFileSelection
+
+while getopts "hr:sct" option
 do
   case $option in
     h) showHelp
@@ -480,17 +348,9 @@ do
     ;;
     r) SVN_REVISION=$OPTARG
     ;;
-    b) BUNDLE_NAME=`echo "$OPTARG" | sed y/ABCDEFGHIJKLMNOPQRSTUVWXYZ/abcdefghijklmnopqrstuvwxyz/`
-       prepareFileSelection $BUNDLE_NAME
-    ;;
-    s) createSource $BUNDLE_NAME
-    ;;
-    c) createBranch $BUNDLE_NAME
-    ;;
-    t) createTag $BUNDLE_NAME
   esac
 done
 
-
+createSource
 
 exit 0

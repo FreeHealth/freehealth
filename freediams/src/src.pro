@@ -10,11 +10,12 @@ INSTALL_ACCOUNT_FILES = 0
 INSTALL_ZIPCODES = 0
 INSTALL_PROFILES_FILES = 0
 
-include(../buildspecs/config.pri)
-!CONFIG(debug, release|debug):include( ../buildspecs/install.pri )
+include(../../buildspecs/config.pri)
+!CONFIG(debug, release|debug):include($${SOURCES_BUILDSPECS_PATH}/install.pri)
 
 # include SDKs
 include( $${SOURCES_LIBS_PATH}/extensionsystem.pri )
+include( $${SOURCES_LIBS_PATH}/translationutils.pri )
 include( $${SOURCES_LIBS_PATH}/utils.pri )
 include( $${SOURCES_LIBS_PATH}/rpath.pri )
 
@@ -34,4 +35,10 @@ win32:RC_FILE=freediams_win32_icon.rc
 SOURCES += \
     main.cpp \
 
-OTHER_FILES += freediams_win32_icon.rc
+OTHER_FILES += freediams_win32_icon.rc \
+               ../../update-di.txt \
+               ../../global_resources/textfiles/freediams.desktop \
+               #global_resources/textfiles/freediams_win32_icon.rc \
+               ../../global_resources/textfiles/dataintest.xml \
+               ../../global_resources/testexchangeout.xml \
+               Info.plist

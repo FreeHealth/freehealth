@@ -1,114 +1,117 @@
 TEMPLATE = subdirs
 
 SUBDIRS = \
-    listview \
-    printer \
+    # Depend to core only
     core \
-    patientbase \
-    formmanager \
+    listview \
     texteditor \
-    usermanager \
-    mainwin \
+    padtools \
     templates \
+    formmanager \
+    zipcodes \
+    datapack \
+#    saverestore \
+    # Depend to more than one plugin
+    printer \
+    category \
+    patientbase \
+    usermanager \
     xmlio \
-    basewidgets \
     aggir \
-    druginteractions \
+    basewidgets \
     drugsbase \
     drugs \
+    druginteractions \
     icd \
     pmh \
-    padtools \
-    category \
     accountbase \
     account \
     agenda \
-    zipcodes \
     script \
-    datapack
-#    saverestore \
+    mainwin \
 #    alerts \
 
 
 # root plugin
-core.subdir = fmfcoreplugin
+core.subdir = ../../plugins/fmfcoreplugin
 
 # simple plugins
-listview.subdir   = listviewplugin
+listview.subdir   = ../../plugins/listviewplugin
 listview.depends += core
 
-texteditor.subdir   = texteditorplugin
+texteditor.subdir   = ../../plugins/texteditorplugin
 texteditor.depends += core
 
-padtools.subdir = padtoolsplugin
+padtools.subdir = ../../plugins/padtoolsplugin
 padtools.depends += core
 
-calendar.subdir = calendarplugin
-calendar.depends += core
-
-saverestore.subdir   = saverestoreplugin
+saverestore.subdir   = ../../plugins/saverestoreplugin
 saverestore.depends += core
 
-templates.subdir   = templatesplugin
+templates.subdir   = ../../plugins/templatesplugin
 templates.depends += core
 
-printer.subdir   = printerplugin
+formmanager.subdir   = ../../plugins/formmanagerplugin
+formmanager.depends += core
+#formmanager.depends += usermanager
+
+printer.subdir   = ../../plugins/printerplugin
 printer.depends += core
 printer.depends += texteditor
 
 # complex plugins
-mainwin.subdir   = fmfmainwindowplugin
+mainwin.subdir   = ../../plugins/fmfmainwindowplugin
 mainwin.depends += core
 mainwin.depends += texteditor
 mainwin.depends += printer
 mainwin.depends += usermanager
 mainwin.depends += formmanager
 
-xmlio.subdir   = xmlioplugin
+xmlio.subdir   = ../../plugins/xmlioplugin
 xmlio.depends += core
 xmlio.depends += formmanager
 xmlio.depends += category
 xmlio.depends += pmh
 
-basewidgets.subdir   = basewidgetsplugin
+basewidgets.subdir   = ../../plugins/basewidgetsplugin
 basewidgets.depends += core
 basewidgets.depends += texteditor
 basewidgets.depends += formmanager
 basewidgets.depends += patientbase
 
-aggir.subdir   = aggirplugin
+aggir.subdir   = ../../plugins/aggirplugin
 aggir.depends += core
 aggir.depends += formmanager
 
-drugsbase.subdir   = drugsbaseplugin
+drugsbase.subdir   = ../../plugins/drugsbaseplugin
 drugsbase.depends += core
 drugsbase.depends += templates
 drugsbase.depends += printer
 
-druginteractions.subdir = druginteractionsplugin
+druginteractions.subdir = ../../plugins/druginteractionsplugin
 druginteractions.depends += core
 druginteractions.depends += drugsbase
 
-drugs.subdir   = drugsplugin
+drugs.subdir   = ../../plugins/drugsplugin
 drugs.depends += core
 drugs.depends += drugsbase
 drugs.depends += texteditor
 drugs.depends += templates
 drugs.depends += formmanager
 
-usermanager.subdir   = usermanagerplugin
+usermanager.subdir   = ../../plugins/usermanagerplugin
 usermanager.depends += core
 usermanager.depends += printer
 usermanager.depends += texteditor
 usermanager.depends += listview
 usermanager.depends += zipcodes
 
-patientbase.subdir   = patientbaseplugin
+patientbase.subdir   = ../../plugins/patientbaseplugin
 patientbase.depends += core
 patientbase.depends += listview
 patientbase.depends += zipcodes
 
-agenda.subdir = agendaplugin
+agenda.subdir = ../../plugins/agendaplugin
 agenda.depends += core
 agenda.depends += patientbase
 agenda.depends += usermanager
@@ -117,16 +120,12 @@ agenda.depends += listview
 #alerts.subdir = alertsplugin
 #alerts.depends += core
 
-formmanager.subdir   = formmanagerplugin
-formmanager.depends += core
-#formmanager.depends += usermanager
-
-icd.subdir = icdplugin
+icd.subdir = ../../plugins/icdplugin
 icd.depends += core
 icd.depends += formmanager
 icd.depends += listview
 
-pmh.subdir = pmhplugin
+pmh.subdir = ../../plugins/pmhplugin
 pmh.depends += core
 pmh.depends += icd
 pmh.depends += listview
@@ -134,14 +133,14 @@ pmh.depends += texteditor
 pmh.depends += category
 pmh.depends += formmanager
 
-category.subdir = categoryplugin
+category.subdir = ../../plugins/categoryplugin
 category.depends += core
 category.depends += listview
 
-accountbase.subdir = accountbaseplugin
+accountbase.subdir = ../../plugins/accountbaseplugin
 accountbase.depends += core
 
-account.subdir   = accountplugin
+account.subdir   = ../../plugins/accountplugin
 account.depends += core
 account.depends += texteditor
 account.depends += printer
@@ -149,14 +148,14 @@ account.depends += accountbase
 account.depends += zipcodes
 account.depends += listview
 
-zipcodes.subdir = zipcodesplugin
+zipcodes.subdir = ../../plugins/zipcodesplugin
 zipcodes.depends += core
 
-script.subdir = scriptplugin
+script.subdir = ../../plugins/scriptplugin
 script.depends += core
 script.depends += formmanager
 
-datapack.subdir = datapackplugin
+datapack.subdir = ../../plugins/datapackplugin
 datapack.depends += core
 
 # manage non free content

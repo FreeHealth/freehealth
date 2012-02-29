@@ -1,0 +1,12 @@
+<RCC>
+    <qresource prefix="/" >
+        <file alias="search.png" >../../global_resources/pixmap/16x16/search.png</file>
+        <file alias="fileprint.png" >../../global_resources/pixmap/16x16/fileprint.png</file>
+        <file alias="filesave.png" >../../global_resources/pixmap/16x16/filesave.png</file>
+        <file alias="editclear.png" >../../global_resources/pixmap/16x16/editclear.png</file>
+        <file alias="help.png" >../../global_resources/pixmap/16x16/help.png</file>
+        <file alias="configure.png" >../../global_resources/pixmap/16x16/configure.png</file>
+        <file alias="edit.png" >../../global_resources/pixmap/16x16/edit.png</file>
+        <file alias="info.png" >../../global_resources/pixmap/16x16/info.png</file>
+    </qresource>
+</RCC>

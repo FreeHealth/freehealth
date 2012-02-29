@@ -2,6 +2,7 @@ TEMPLATE  = lib
 TARGET    = quazip
 
 # QuaZip version = 0.4.4
+VERSION=0.4.4
 
 include(../../../libs/libsworkbench.pri)
 include(../quazip_dependencies.pri)

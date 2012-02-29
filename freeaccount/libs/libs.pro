@@ -9,5 +9,7 @@ SUBDIRS += \
            ../../libs/utils \
            ../../contrib/quazip \
            ../../libs/medicalutils \
+           ../../libs/datapackutils \
+
 #           ../../libs/medintuxutils \
 

@@ -1,6 +1,10 @@
 TEMPLATE = lib
 TARGET = Calendar
 
+# The version number is defined by the scripts/source.sh script, keep this line unchanged
+# NOT USED
+# VERSION=1.0.0
+
 DEFINES *= CALENDAR_LIBRARY
 
 # include config file

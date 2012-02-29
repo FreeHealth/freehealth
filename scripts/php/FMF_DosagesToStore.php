@@ -15,7 +15,7 @@
     fclose ( $fp );
 
     // 3. Envoie une information au developpeurs de FreeMedForms
-    if ( mail( 'eric.maeker@free.fr', '[FreeMedForms-FromApp]', $userName . ' -> send dosages' ) )
+    if ( mail( 'eric.maeker@gmail.com', '[FreeMedForms-FromApp]', $userName . ' -> send dosages' ) )
        echo 'OK';
     else
        echo 'An error occured.';

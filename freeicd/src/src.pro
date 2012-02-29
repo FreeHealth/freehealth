@@ -10,12 +10,13 @@ INSTALL_ACCOUNT_FILES = 0
 INSTALL_ZIPCODES = 0
 INSTALL_PROFILES_FILES = 0
 
-include(../buildspecs/config.pri)
-!CONFIG(debug, release|debug):include(../buildspecs/install.pri)
+include(../../buildspecs/config.pri)
+!CONFIG(debug, release|debug):include($${SOURCES_BUILDSPECS_PATH}/install.pri)
 
 # include SDKs
 include($${SOURCES_LIBS_PATH}/extensionsystem.pri)
-include($${SOURCES_LIBS_PATH}/utils.pri)
+include( $${SOURCES_LIBS_PATH}/translationutils.pri )
+include( $${SOURCES_LIBS_PATH}/utils.pri )
 include($${SOURCES_LIBS_PATH}/rpath.pri)
 
 QT *= sql \

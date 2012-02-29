@@ -1,6 +1,9 @@
-# toolkit library project file
 TEMPLATE        = lib
 TARGET          = TranslationUtils
+
+# The version number is defined by the scripts/source.sh script, keep this line unchanged
+# NOT USED
+# VERSION=1.0.0
 
 DEFINES *= TRANSLATIONUTILS_LIBRARY
 
