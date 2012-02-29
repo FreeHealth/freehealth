@@ -14,6 +14,7 @@ macx {
      QMAKE_RPATHDIR += \$\$ORIGIN
      # only the application binary needs to know where are the libs and plugs
      QMAKE_RPATHDIR += /usr/$${LIBRARY_BASENAME}/$${LOWERED_APPNAME}
+     QMAKE_RPATHDIR += /usr/$${LIBRARY_BASENAME}/freemedforms-common
 
    }else{
      # rpath for interdependant libs and plugs (everyone in the same dir)

@@ -137,7 +137,7 @@ INSTALLS += bw
 !isEmpty(INSTALL_LIBS_PATH):!isEmpty(BUILD_LIB_PATH){
 applibs.path = $${INSTALL_LIBS_PATH}
 mac:applibs.files = $${BUILD_LIB_PATH}/*.1.$${LIB_EXTENSION}
-else:unix:applibs.files = $${BUILD_LIB_PATH}/*$${LIB_EXTENSION}.1
+else:unix:applibs.files = $${BUILD_LIB_PATH}/*$${LIB_EXTENSION}*
 else:win32:applibs.files = $${BUILD_LIB_PATH}/../*$${LIB_EXTENSION}
 applibs.CONFIG += no_check_exist
 INSTALLS += applibs

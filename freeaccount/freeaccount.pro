@@ -1,3 +1,8 @@
 include(../buildspecs/checkqtversion.pri)
 TEMPLATE = subdirs
-SUBDIRS = libs plugins src
+
+# Do not include libs if compiling linux_integrated & qmake requiered "onepasslibs"
+# In this case libs are build by the freemedforms/freemedforms.pro project
+CONFIG(LINUX_INTEGRATED):!CONFIG(onepasslibs):SUBDIRS=libs
+
+SUBDIRS += plugins src

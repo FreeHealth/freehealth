@@ -125,27 +125,3 @@ FORMS += \
     widgets/genericinformationeditordialog.ui \
     widgets/loginwidget.ui \
     widgets/basiclogindialog.ui
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-

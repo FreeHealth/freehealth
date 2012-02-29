@@ -21,15 +21,18 @@ copy2build.name = COPY ${QMAKE_FILE_IN}
 copy2build.CONFIG += no_link
 QMAKE_EXTRA_COMPILERS += copy2build
 
-macx {
-    QMAKE_LFLAGS_SONAME = -Wl,-install_name,@executable_path/$${RPATH_LIBS_BIN}/
-} else:linux-* {
-    #do the rpath by hand since it's not possible to use ORIGIN in QMAKE_RPATHDIR
-    QMAKE_RPATHDIR += \$\$ORIGIN
-    QMAKE_RPATHDIR += \$\$ORIGIN/..
-#    QMAKE_RPATHDIR += \$\$ORIGIN/../..
-#    QMAKE_RPATHDIR += \$\$ORIGIN/$${RPATH_LIBS_BIN}/
-    IDE_PLUGIN_RPATH = $$join(QMAKE_RPATHDIR, ":")
-    QMAKE_LFLAGS += -Wl,-z,origin \'-Wl,-rpath,$${IDE_PLUGIN_RPATH}\'
-    QMAKE_RPATHDIR =
-}
+include(../libs/rpath.pri)
+
+#macx {
+#    QMAKE_LFLAGS_SONAME = -Wl,-install_name,@executable_path/$${RPATH_LIBS_BIN}/
+#} else:linux-* {
+#    #do the rpath by hand since it's not possible to use ORIGIN in QMAKE_RPATHDIR
+#    QMAKE_RPATHDIR += \$\$ORIGIN
+#    QMAKE_RPATHDIR += \$\$ORIGIN/..
+##    QMAKE_RPATHDIR += \$\$ORIGIN/../..
+##    QMAKE_RPATHDIR += \$\$ORIGIN/$${RPATH_LIBS_BIN}/
+#    IDE_PLUGIN_RPATH = $$join(QMAKE_RPATHDIR, ":")
+#    QMAKE_LFLAGS += -Wl,-z,origin \'-Wl,-rpath,$${IDE_PLUGIN_RPATH}\'
+#    QMAKE_RPATHDIR =
+#}
+

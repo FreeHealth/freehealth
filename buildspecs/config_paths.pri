@@ -50,7 +50,7 @@ SOURCES_TRANSLATIONS = $${SOURCES_TRANSLATIONS_PATH}
 !isEmpty(BUILD_PATH_POSTFIXE):SOURCES_BUILD_PATH = $${SOURCES_ROOT_PATH}/build/$${BUILD_PATH_POSTFIXE}
 else:SOURCES_BUILD_PATH = $${SOURCES_ROOT_PATH}/build
 
-message(Building into path $${SOURCES_BUILD_PATH})
+#message(Building into path $${SOURCES_BUILD_PATH})
 
 #exists( $${SOURCES_PROTECTED_PATH} ){
 #    message( *** BUILDING FULL APPLICATION *** )
@@ -59,8 +59,12 @@ message(Building into path $${SOURCES_BUILD_PATH})
 
 # define some paths related to application sources
 BUILD_BINARY_PATH         = $${SOURCES_ROOT_PATH}/bin/$${LOWERED_APPNAME}
-BUILD_LIB_PATH            = $${BUILD_BINARY_PATH}/plugins
-BUILD_PLUGIN_PATH         = $${BUILD_LIB_PATH}
+BUILD_PLUGIN_PATH         = $${BUILD_BINARY_PATH}/plugins
+CONFIG(LINUX_INTEGRATED) {
+  BUILD_LIB_PATH            = $${BUILD_BINARY_PATH}/../libs
+}else{
+  BUILD_LIB_PATH            = $${BUILD_BINARY_PATH}/libs
+}
 
 RELEASE_BINARY_PATH       = $${SOURCES_ROOT_PATH}/packages
 # redefine binary target in debug mode add _d or _debug
