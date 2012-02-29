@@ -27,13 +27,11 @@
 #ifndef TEMPLATES_CONSTANTS_H
 #define TEMPLATES_CONSTANTS_H
 
-#include <drugsbaseplugin/drugsbase_exporter.h>
-
 /**
  * \file constants.h
  * \author Eric MAEKER <eric.maeker@gmail.com>
- * \version 0.2.0
- * \date 30 Nov 2009
+ * \version 0.6.4
+ * \date 29 Feb 2012
 */
 
 namespace Templates {
