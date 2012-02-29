@@ -67,9 +67,12 @@ doCompilation()
   if [ ! -e $SPEC ]; then
     BUILD_SPEC="-spec "$SPEC
   fi
+  echo "    ** qmake $1/$1.pro -r \"CONFIG+=debug\" \"CONFIG-=release\" $BUILD_SPEC LOWERED_APPNAME=$1"
 
   qmake $1/$1.pro -r "CONFIG+=debug" "CONFIG-=release" $BUILD_SPEC LOWERED_APPNAME=$1
+  cd $1
   make
+  cd ..
   echo "On LINUX: Start application with: ./bin/"$1"/"$1"_debug --config=../global_resources/"$1"_config.ini"
   echo "On MACOS: Start application with: ./bin/"$1"/"$1"_debug.app/Contents/MacOs/"$1"_debug --config=../../../../../global_resources/"$1"_config.ini"
 }
