@@ -156,15 +156,15 @@ void UserRightsModel::retranslate()
     m_RightsName
             << tr("No Rights")
             << tr("All Rights")
-            << tr("Can read own datas")
-            << tr("Can read delegates datas")
-            << tr("Can read all datas")
-            << tr("Can write own datas")
-            << tr("Can write delegates datas")
-            << tr("Can write all datas")
+            << tr("Can read own data")
+            << tr("Can read delegate's data")
+            << tr("Can read all data")
+            << tr("Can write own data")
+            << tr("Can write delegate's data")
+            << tr("Can write all data")
             << tr("Can print")
-            << tr("Can create new datas")
-            << tr("Can delete datas");
+            << tr("Can create new data")
+            << tr("Can delete data");
 }
 
 
