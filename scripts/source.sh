@@ -143,16 +143,18 @@ freetoolbox \
 "
 
 PLUGINS_SOURCES="\
-plugins/plugins.pro \
 plugins/fmf_plugins.pri \
 plugins/accountbaseplugin \
 plugins/accountplugin \
-plugins/aggirplugin \
 plugins/agendaplugin \
+plugins/aggirplugin \
 plugins/basewidgetsplugin \
 plugins/categoryplugin \
 plugins/coreplugin \
 plugins/datapackplugin \
+plugins/druginteractionsplugin \
+plugins/drugsbaseplugin \
+plugins/drugsplugin \
 plugins/emptyplugin \
 plugins/fmfcoreplugin \
 plugins/fmfmainwindowplugin \
@@ -218,14 +220,15 @@ rm *.*bkup
 echo "   * DEFINING *.PLUGINSPEC FILES APP VERSION"
 cd $PACKPATH
 FILES=`find ./ -type f -name '*.pluginspec'`
+NON_ALPHABETA_PROJECT_VERSION=`echo $PROJECT_VERSION | tr '~' ':' | cut -d : -f 1`
 for f in $FILES; do
   # compatVersion="0.6.0"
-  sed -i "bkup" 's#compatVersion=\".*\"#compatVersion=\"'$PROJECT_VERSION'\"#' $f
+  sed -i "bkup" 's#compatVersion=\".*\"#compatVersion=\"'$NON_ALPHABETA_PROJECT_VERSION'\"#' $f
   rm $f"bkup"
   # version="0.6.0"
-  sed -i "bkup" 's#version=\".*\" #version=\"'$PROJECT_VERSION'\" #' $f
+  sed -i "bkup" 's#version=\".*\" #version=\"'$NON_ALPHABETA_PROJECT_VERSION'\" #' $f
   rm $f"bkup"
-  sed -i "bkup" 's#version=\".*\"/>#version=\"'$PROJECT_VERSION'\"/>#' $f
+  sed -i "bkup" 's#version=\".*\"/>#version=\"'$NON_ALPHABETA_PROJECT_VERSION'\"/>#' $f
   rm $f"bkup"
 done
 
