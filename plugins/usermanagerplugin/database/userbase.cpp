@@ -849,7 +849,7 @@ QDateTime UserBase::recordLastLogin(const QString &log, const QString &pass)
         return QDateTime();
     }
     // TODO add locker
-    LOG(tr("Recorded User Last Login : %1 ").arg(now.toString()));
+    LOG(tr("Last recorded user login: %1 ").arg(now.toString()));
     return now;
 }
 

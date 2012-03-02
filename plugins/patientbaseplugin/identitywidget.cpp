@@ -222,8 +222,8 @@ bool IdentityWidget::isIdentityValid() const
         return false;
     }
     if (d->editUi->firstname->text().isEmpty()) {
-        Utils::warningMessageBox(tr("You must specify a firstname."),
-                                 tr("You can not create a patient without a firstname"),
+        Utils::warningMessageBox(tr("You must specify a first name."),
+                                 tr("You can not create a patient without a first name"),
                                  "", tr("No firstname"));
         return false;
     }

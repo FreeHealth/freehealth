@@ -60,7 +60,7 @@ public:
         LastLogin,      /*!< \brief Date of the last correct login */
         Name,           /*!< \brief Name */
         SecondName,     /*!< \brief Second name */
-        Firstname,      /*!< \brief Firstname */
+        Firstname,      /*!< \brief First name */
         Mail,           /*!< \brief Mail address */
         LanguageISO,    /*!< \brief Language for interface */
         Locker,         /*!< \brief Locker */

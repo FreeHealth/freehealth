@@ -431,14 +431,14 @@ bool UserIdentityAndLoginPage::validatePage()
 {
     if (field("Name").toString().isEmpty() || field("Firstname").toString().isEmpty()) {
         Utils::warningMessageBox(tr("Forbidden anonymous user."),
-                                 tr("All users must have at least a name and a firstname.\n"
+                                 tr("All users must have at least a name and a first name.\n"
                                     "You can not proceed with an anonymous user."), "",
                                  tr("Forbidden anonymous user."));
         return false;
     }
     if (field("Password").toString() != field("ConfirmPassword")) {
         Utils::warningMessageBox(tr("Password confirmation error."),
-                                 tr("You must correctly confirm your password to go throw this page."),
+                                 tr("You must correctly confirm your password to go through this page."),
                                  "", tr("Wrong password"));
         return false;
     }
