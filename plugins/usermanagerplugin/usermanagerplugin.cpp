@@ -254,7 +254,7 @@ bool UserManagerPlugin::identifyUser()
             if (ask) {
                 int r = Utils::withButtonsMessageBox(tkTr(Trans::Constants::CONNECTED_AS_1)
                                                      .arg(userModel()->currentUserData(Core::IUser::FullName).toString()),
-                                                     QApplication::translate("UserManagerPlugin", "You can pursue with this user or connect with another one."),
+                                                     QApplication::translate("UserManagerPlugin", "You can proceed with this user or connect with another one."),
                                                      "", QStringList()
                                                      << QApplication::translate("UserManagerPlugin", "Stay connected")
                                                      << QApplication::translate("UserManagerPlugin", "Change the current user"));
