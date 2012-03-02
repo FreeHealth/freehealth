@@ -199,10 +199,10 @@ void UserWizard::done(int r)
     // dialog result == Rejected -> ask for a confirmation
     if (r == QDialog::Rejected) {
         m_Saved = false;
-        bool yes = Utils::yesNoMessageBox(tr("WARNING ! You don't save this user."),
-                               tr("If you continue changes will be lost.\n"
-                                  "Do you really want to close this dialog ?"),
-                               "", tr("Data losing"));
+        bool yes = Utils::yesNoMessageBox(tr("WARNING! You did not save this user. "
+                                             "If you continue without saving, all changes will be lost."),
+                               tr("Do you really want to close this dialog?"),
+                               "", tr("Data loss"));
         if (yes) {
             QDialog::done(r);
         }

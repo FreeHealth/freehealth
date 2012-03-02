@@ -140,9 +140,9 @@ void AppConfigWizard::done(int r)
 {
     if (r == QDialog::Rejected) {
         /** \todo code here */
-        //        bool yes = Utils::yesNoMessageBox(tr("WARNING ! You don't save this user."),
-        //                               tr("If you continue changes will be lost.\n"
-        //                                  "Do you really want to close this dialog ?"),
+        //        bool yes = Utils::yesNoMessageBox(tr("WARNING! You did not save this user."),
+        //                               tr("If you continue without saving, changes will be lost."
+        //                                  "Do you really want to close this dialog?"),
         //                               "", tr("Data losing"));
         //        if (yes)
         QDialog::done(r);

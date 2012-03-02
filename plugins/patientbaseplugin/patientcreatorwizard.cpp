@@ -70,9 +70,9 @@ void PatientCreatorWizard::done(int r)
 {
     if (r == QDialog::Rejected) {
         m_Saved = false;
-        bool yes = Utils::yesNoMessageBox(tr("WARNING ! You don't saved this patient."),
-                               tr("If you continue changes will be lost.\n"
-                                  "Do you really want to close this dialog ?"),
+        bool yes = Utils::yesNoMessageBox(tr("WARNING! You did not save this patient."),
+                               tr("If you continue without saving, all changes will be lost.\n"
+                                  "Do you really want to close this dialog?"),
                                "", tr("Patient not saved"));
         if (yes) {
             QDialog::done(r);
