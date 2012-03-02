@@ -202,7 +202,7 @@ void UserWizard::done(int r)
         bool yes = Utils::yesNoMessageBox(tr("WARNING! You did not save this user. "
                                              "If you continue without saving, all changes will be lost."),
                                tr("Do you really want to close this dialog?"),
-                               "", tr("Data loss"));
+                               "", tr("User not saved"));
         if (yes) {
             QDialog::done(r);
         }
