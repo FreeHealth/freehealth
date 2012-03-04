@@ -33,11 +33,13 @@
 
 #include <utils/global.h>
 #include <utils/log.h>
+#include <utils/httpdownloader.h>
 #include <extensionsystem/pluginmanager.h>
 #include <translationutils/constanttranslations.h>
 
 #include <QScriptEngine>
 #include <QDir>
+#include <QUrl>
 
 #include "ui_pregnancyclassification.h"
 
@@ -51,7 +53,7 @@ static inline QString databaseAbsPath()  {return Core::Tools::drugsDatabaseAbsFi
 static inline QString databaseDescriptionFile() {return QDir::cleanPath(settings()->value(Core::Constants::S_SVNFILES_PATH).toString() + "/global_resources/sql/drugdb/tga_preg/description.xml");}
 
 QString PregnancyClassificationPage::id() const {return "PregnancyClassificationPage";}
-QString PregnancyClassificationPage::name() const {return "Pregnancy classification";}
+QString PregnancyClassificationPage::name() const {return "Pregnancy & drugs";}
 QString PregnancyClassificationPage::category() const {return Core::Constants::CATEGORY_DRUGINFOSDATABASE;}
 QIcon PregnancyClassificationPage::icon() const {return QIcon();}
 
@@ -136,24 +138,88 @@ QWidget *PregnancyClassificationPage::createPage(QWidget *parent)
 }
 
 
-PregnancyClassificationWidget::PregnancyClassificationWidget(QWidget *parent) :
-    QWidget(parent),
-    ui(new Ui::PregnancyClassificationWidget)
+PregnancyDatatabaseStep::PregnancyDatatabaseStep(QObject *parent) :
+        m_WithProgress(false)
 {
-    ui->setupUi(this);
-    computeJavascriptFile();
+    setObjectName("PregnancyDatatabaseStep");
 }
 
-PregnancyClassificationWidget::~PregnancyClassificationWidget()
+PregnancyDatatabaseStep::~PregnancyDatatabaseStep()
 {
 }
 
-void PregnancyClassificationWidget::computeJavascriptFile()
+bool PregnancyDatatabaseStep::createDir()
 {
+    Utils::checkDir(workingPath(), true, "PregnancyDatatabaseStep::createDir");
+    Utils::checkDir(QFileInfo(databaseAbsPath()).absolutePath(), true, "PregnancyDatatabaseStep::createDir");
+    return true;
+}
+
+bool PregnancyDatatabaseStep::cleanFiles()
+{
+    QFile(databaseAbsPath()).remove();
+    return true;
+}
+
+bool PregnancyDatatabaseStep::downloadFiles(QProgressBar *bar)
+{
+    Utils::HttpDownloader *dld = new Utils::HttpDownloader(this);
+//    dld->setMainWindow(mainwindow());
+    dld->setProgressBar(bar);
+    dld->setOutputPath(workingPath());
+    dld->setUrl(QUrl(PREGNANCY_TGA_URL));
+    dld->startDownload();
+    connect(dld, SIGNAL(downloadFinished()), this, SIGNAL(downloadFinished()));
+    connect(dld, SIGNAL(downloadFinished()), dld, SLOT(deleteLater()));
+    connect(dld, SIGNAL(downloadProgressRange(qint64,qint64)), this, SIGNAL(progressRangeChanged(qint64,qint64)));
+//    connect(dld, SIGNAL(downloadProgressRead(qint64)), this, SIGNAL(progress(int)));
+    return true;
+}
+
+bool PregnancyDatatabaseStep::process()
+{
+    unzipFiles();
+    prepareDatas();
+    createDatabase();
+    populateDatabase();
+//    linkMolecules();
+    Q_EMIT processFinished();
+    return true;
+}
+
+bool PregnancyDatatabaseStep::unzipFiles()
+{
+    Q_EMIT progressLabelChanged(tr("Unzipping downloaded files"));
+    Q_EMIT progressRangeChanged(0, 1);
+    Q_EMIT progress(0);
+    return true;
+}
+
+bool PregnancyDatatabaseStep::prepareDatas()
+{
+    return true;
+}
+
+bool PregnancyDatatabaseStep::createDatabase()
+{
+    if (!Core::Tools::createMasterDrugInteractionDatabase())
+        return false;
+    return true;
+}
+
+bool PregnancyDatatabaseStep::populateDatabase()
+{
+//    if (!Core::Tools::connectDatabase(Core::Constants::MASTER_DATABASE_NAME, databaseAbsPath()))
+//        return false;
+
+    Q_EMIT progressLabelChanged(tr("Reading downloaded files"));
+    Q_EMIT progressRangeChanged(0, 1);
+    Q_EMIT progress(0);
+
     QList<QHash<FieldType, QString> > pregnancyList;
     QString errorMsg;
     // NOTE POUR ERIC: change le chemin du fichier par le tien
-    QString jsFile = "/Users/eric/Desktop/Programmation/freemedforms/__nonfree__/resources/drugs/pregnancy/medicinesInPregnancyData.js";
+    QString jsFile = workingPath() + QFileInfo(::PREGNANCY_TGA_URL).fileName();
     if (load(jsFile, pregnancyList, &errorMsg)) {
         qDebug("SUCCESS");
         foreach (const PregnancyRecord &rec, pregnancyList) {
@@ -164,14 +230,55 @@ void PregnancyClassificationWidget::computeJavascriptFile()
                    qPrintable(rec[Field_Class2]),
                    qPrintable(rec[Field_Class3]));
         }
-    } else
+    } else {
         qDebug("FAILURE: %s", qPrintable(errorMsg));
+        return false;
+    }
+    return true;
+}
+
+
+
+
+PregnancyClassificationWidget::PregnancyClassificationWidget(QWidget *parent) :
+    QWidget(parent),
+    ui(new Ui::PregnancyClassificationWidget)
+{
+    ui->setupUi(this);
+    ui->progressBar->setRange(0,1);
+    ui->progressBar->setValue(0);
+    m_Step = new PregnancyDatatabaseStep(this);
+    m_Step->createDir();
+//    computeJavascriptFile();
+}
+
+PregnancyClassificationWidget::~PregnancyClassificationWidget()
+{
+}
+
+void PregnancyClassificationWidget::computeJavascriptFile()
+{
+    m_Step->populateDatabase();
 }
 
 void PregnancyClassificationWidget::on_download_clicked()
 {
+    ui->progressBar->show();
+    m_Step->downloadFiles(ui->progressBar);
+    connect(m_Step, SIGNAL(downloadFinished()), this, SLOT(downloadFinished()));
+}
+
+void PregnancyClassificationWidget::downloadFinished()
+{
+    ui->progressBar->hide();
+    ui->download->setEnabled(true);
 }
 
 void PregnancyClassificationWidget::on_editClassification_clicked()
 {
+}
+
+void PregnancyClassificationWidget::on_startJobs_clicked()
+{
+    m_Step->populateDatabase();
 }

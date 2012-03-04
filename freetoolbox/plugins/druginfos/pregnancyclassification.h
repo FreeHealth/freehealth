@@ -27,6 +27,9 @@
 #define DRUGINFOS_PREGNANCYCLASSIFICATION_H
 
 #include <coreplugin/itoolpage.h>
+#include <coreplugin/ifullreleasestep.h>
+
+#include <QWidget>
 
 namespace DrugInfos {
 
@@ -48,6 +51,38 @@ namespace Ui {
 class PregnancyClassificationWidget;
 }
 
+class PregnancyDatatabaseStep : public Core::IFullReleaseStep
+{
+    Q_OBJECT
+public:
+    PregnancyDatatabaseStep(QObject *parent = 0);
+    ~PregnancyDatatabaseStep();
+
+    QString id() const {return "PregnancyDatatabaseStep";}
+    Steps stepNumber() const {return Core::IFullReleaseStep::PregnancyDatabase;}
+
+    bool createDir();
+    bool cleanFiles();
+    bool downloadFiles(QProgressBar *bar = 0);
+    bool process();
+    QString processMessage() const {return tr("Pregnancy && drugs database creation");}
+
+    bool unzipFiles();
+    bool prepareDatas();
+    bool createDatabase();
+    bool populateDatabase();
+//    bool linkDrugsRoutes();
+//    bool linkMolecules();
+
+    QStringList errors() const {return m_Errors;}
+
+private:
+    QStringList m_Errors;
+    bool m_WithProgress;
+
+};
+
+
 class PregnancyClassificationWidget : public QWidget
 {
     Q_OBJECT
@@ -60,7 +95,9 @@ protected Q_SLOTS:
     void computeJavascriptFile();
 
     void on_download_clicked();
+    void downloadFinished();
     void on_editClassification_clicked();
+    void on_startJobs_clicked();
 
 //    void indexPageDownloaded(QNetworkReply *reply);
 //    void substancePageDownloaded(QNetworkReply *reply);
@@ -73,6 +110,7 @@ protected Q_SLOTS:
 //    void downloadFinished();
 private:
     Ui::PregnancyClassificationWidget *ui;
+    PregnancyDatatabaseStep *m_Step;
 };
 
 } // namespace DrugInfos

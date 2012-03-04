@@ -5,5 +5,6 @@ SUBDIRS += \
            ../../libs/extensionsystem \
            ../../libs/translationutils \
            ../../libs/utils \
+           ../../libs/medicalutils \
            ../../contrib/quazip \
            ../../libs/datapackutils \

@@ -26,6 +26,7 @@ public:
         DrugsDatabase,
         IcdDatabase,
         PimDatabase,
+        PregnancyDatabase,
         ZipCodes,
         TmpCleaning
     };
@@ -54,7 +55,7 @@ Q_SIGNALS:
     // Progress dialog management when threaded
     void progressLabelChanged(const QString &label);
     void progress(int done);
-    void progressRangeChanged(int min, int max);
+    void progressRangeChanged(qint64 min, qint64 max);
 };
 
 } //  End namespace Core
