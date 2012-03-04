@@ -63,7 +63,7 @@ BUILD_PLUGIN_PATH         = $${BUILD_BINARY_PATH}/plugins
 CONFIG(LINUX_INTEGRATED) {
   BUILD_LIB_PATH            = $${BUILD_BINARY_PATH}/../libs
 }else{
-  BUILD_LIB_PATH            = $${BUILD_BINARY_PATH}/libs
+  BUILD_LIB_PATH            = $${BUILD_PLUGIN_PATH}
 }
 
 RELEASE_BINARY_PATH       = $${SOURCES_ROOT_PATH}/packages
