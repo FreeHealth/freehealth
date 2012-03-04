@@ -55,7 +55,7 @@ VersionNumber::VersionNumber(const QString &version) :
         m_IsBeta(false),
         m_IsRC(false)
 {
-    int tilde = version.indexOf("~");
+//    int tilde = version.indexOf("~");
     int dotCount = version.count(".");
     int dot = 0;
     int nextDot = 0;
@@ -76,17 +76,15 @@ VersionNumber::VersionNumber(const QString &version) :
             nextDot = dot;
         }
     }
-
-    if (tilde!=-1) {
-        ++nextDot;
-        const QString &endVersion = version.mid(nextDot, version.length() - nextDot);
-        if (endVersion.contains("alpha", Qt::CaseInsensitive)) {
-            m_IsAlpha = true;
-            m_Alpha = endVersion.mid(endVersion.indexOf("alpha") + 5).toInt();
-        } else if (endVersion.contains("beta", Qt::CaseInsensitive)) {
-            m_IsBeta = true;
-            m_Beta = endVersion.mid(endVersion.indexOf("beta") + 4).toInt();
-        }
+    if (version.contains("alpha", Qt::CaseInsensitive)) {
+        m_IsAlpha = true;
+        m_Alpha = version.mid(version.indexOf("alpha", Qt::CaseInsensitive) + 5).toInt();
+    } else if (version.contains("beta", Qt::CaseInsensitive)) {
+        m_IsBeta = true;
+        m_Beta = version.mid(version.indexOf("beta", Qt::CaseInsensitive) + 4).toInt();
+    } else if (version.contains("rc", Qt::CaseInsensitive)) {
+        m_IsRC = true;
+        m_RC = version.mid(version.indexOf("rc", Qt::CaseInsensitive) + 2).toInt();
     }
 }
 
