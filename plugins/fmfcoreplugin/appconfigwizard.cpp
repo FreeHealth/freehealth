@@ -272,7 +272,7 @@ ClientConfigPage::ClientConfigPage(QWidget *parent) :
     QGridLayout *layout = new QGridLayout(this);
     layout->setVerticalSpacing(30);
     serverWidget = new Core::ServerPreferencesWidget(this);
-    serverWidget->setUserLoginGroupTitle(tr("Personnal login and password"));
+    serverWidget->setUserLoginGroupTitle(tr("Personal login and password"));
     layout->addWidget(serverWidget, 0, 0);
     setLayout(layout);
 
