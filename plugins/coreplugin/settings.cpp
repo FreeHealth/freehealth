@@ -295,7 +295,7 @@ namespace {
     const char* const DEFAULTTHEME_PIXMAP  = "/pixmap";
     const char* const DEFAULTTHEME_SPLASH  = "/pixmap/splashscreens";
     const char* const USERMANUAL_PATH      = "/doc/%1";
-    const char* const LINUX_USERMANUAL_PATH  = "/usr/share/doc/%1-doc/html";
+    const char* const LINUX_USERMANUAL_PATH  = "/usr/share/doc/%1/html";
     // User documents sub-paths
     const char* const USER_SUBFORMSPATH       = "/forms/subforms";
     const char* const USER_COMPLETEFORMSPATH  = "/forms/completeforms";
@@ -573,7 +573,7 @@ void SettingsPrivate::setPath(const int type, const QString & absPath)
                     appname = appname.left(appname.indexOf("_d"));
             }
 #ifdef LINUX_INTEGRATED
-            if (QDir(LINUX_USERMANUAL_PATH).exists()) {
+            if (QDir(QString(LINUX_USERMANUAL_PATH).arg(appname)).exists()) {
                 m_Enum_Path.insert(DocumentationPath, QString(LINUX_USERMANUAL_PATH).arg(appname));
             } else {
                 m_Enum_Path.insert(DocumentationPath, bundlePath + QString(USERMANUAL_PATH).arg(appname));
