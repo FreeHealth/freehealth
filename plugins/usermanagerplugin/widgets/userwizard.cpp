@@ -421,7 +421,7 @@ void UserIdentityAndLoginPage::retranslate()
         cbGender->addItems(genders());
         lblL->setText(tkTr(Trans::Constants::LOGIN));
         lblP->setText(tkTr(Trans::Constants::PASSWORD));
-        lblCP->setText(tr("Confirm Password"));
+        lblCP->setText(tr("Confirm password"));
         identGroup->setTitle(tr("Identity"));
         logGroup->setTitle(tr("Database connection"));
     }
