@@ -350,7 +350,7 @@ UserIdentityAndLoginPage::UserIdentityAndLoginPage(QWidget *parent) :
     lblL->setStyleSheet("color:red");
     lblP = new QLabel(tr("Password"), this);
     lblP->setStyleSheet("color:red");
-    lblCP = new QLabel(tr("Confirm Password"), this);
+    lblCP = new QLabel(tr("Confirm password"), this);
     lblCP->setStyleSheet("color:red");
 
     leLogin = new Utils::LineEditEchoSwitcher(this);
