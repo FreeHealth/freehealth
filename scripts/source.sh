@@ -220,7 +220,7 @@ rm *.*bkup
 echo "   * DEFINING *.PLUGINSPEC FILES APP VERSION"
 cd $PACKPATH
 FILES=`find ./ -type f -name '*.pluginspec'`
-NON_ALPHABETA_PROJECT_VERSION=`echo $PROJECT_VERSION | tr '~' ':' | cut -d : -f 1`
+NON_ALPHABETA_PROJECT_VERSION=`echo $PROJECT_VERSION | tr '~' '.' | cut -d"." -f1,2,3`
 for f in $FILES; do
   # compatVersion="0.6.0"
   sed -i "bkup" 's#compatVersion=\".*\"#compatVersion=\"'$NON_ALPHABETA_PROJECT_VERSION'\"#' $f
