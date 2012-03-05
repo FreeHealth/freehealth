@@ -74,11 +74,13 @@ CONFIG(LINUX_INTEGRATED):message( Building Linux Integrated version )
 message( Binary : )
 message(    * From : $${BUILD_BINARY_PATH} )
 message(    * To : $${INSTALL_BINARY_PATH} )
+!CONFIG(dontinstalllibs) {
 message( Application libraries : )
 message(    * From : $${BUILD_LIB_PATH})
 message(    * To : $${INSTALL_LIBS_PATH})
 message(    * Extension : $${LIB_EXTENSION})
 message(    * RPath : $${RPATH_LIBS_BIN} )
+}
 message( Plugins : )
 message(    * From : $${BUILD_PLUGIN_PATH})
 message(    * To : $${INSTALL_PLUGINS_PATH} )
@@ -88,6 +90,7 @@ message(    * Extension : $${LIB_EXTENSION})
 message( ******************************************************************************** )
 message( *************************    FreeMedForms Resources   ************************** )
 message( ******************************************************************************** )
+!CONFIG(dontinstallcommonresource) {
 message( Resources : $${INSTALL_RESOURCES_PATH} )
 message( Translations : $${INSTALL_TRANSLATIONS_PATH} )
 !isEmpty(INSTALL_FREEDATAPACK_PATH):message( Free datapack path : $${INSTALL_FREEDATAPACK_PATH} )
@@ -97,6 +100,7 @@ message( Pixmaps - medium : $${INSTALL_MEDIUMPIX_PATH} )
 message( Pixmaps - big : $${INSTALL_BIGPIX_PATH} )
 message( Pixmaps - svg : $${INSTALL_SVGPIX_PATH} )
 message( Pixmaps - splashscreens : $${INSTALL_SPLASHPIX_PATH} )
+}
 !isEmpty(INSTALL_DOCS_PATH):message( Documentation : $${INSTALL_DOCS_PATH} )
 !isEmpty(INSTALL_DESKTOP_FILES_PATH):message( DesktopFile : $${INSTALL_DESKTOP_FILES_PATH} )
 !isEmpty(INSTALL_DESKTOP_ICON_PATH):message( DesktopIcon : $${INSTALL_DESKTOP_ICON_PATH} )
@@ -134,7 +138,7 @@ INSTALLS += bw
 }
 
 # Install libs (on Win32 copy from BUILD_LIB_PATH/../ (remove plugins path) )
-!isEmpty(INSTALL_LIBS_PATH):!isEmpty(BUILD_LIB_PATH){
+!CONFIG(dontinstalllibs):!isEmpty(INSTALL_LIBS_PATH):!isEmpty(BUILD_LIB_PATH){
 applibs.path = $${INSTALL_LIBS_PATH}
 mac:applibs.files = $${BUILD_LIB_PATH}/*.1.$${LIB_EXTENSION}
 else:unix:applibs.files = $${BUILD_LIB_PATH}/*$${LIB_EXTENSION}*
@@ -157,15 +161,34 @@ plugs_specs.CONFIG += no_check_exist
 INSTALLS += plugs_specs
 }
 
-# Install translations
-!isEmpty(INSTALL_TRANSLATIONS_PATH):!isEmpty(SOURCES_TRANSLATIONS){
-i18n.path = $${INSTALL_TRANSLATIONS_PATH}
-i18n.files = $${SOURCES_TRANSLATIONS_PATH}/*.qm
-qti18n.path = $${INSTALL_TRANSLATIONS_PATH}
-qti18n.files = $$[QT_INSTALL_TRANSLATIONS]/translations/*fr.qm \
-               $$[QT_INSTALL_TRANSLATIONS]/translations/*de.qm \
-               $$[QT_INSTALL_TRANSLATIONS]/translations/*es.qm
-INSTALLS +=  qti18n i18n
+# Install common resources : Theme && Translations
+!CONFIG(dontinstallcommonresource) {
+  # Install translations
+  !isEmpty(INSTALL_TRANSLATIONS_PATH):!isEmpty(SOURCES_TRANSLATIONS){
+  i18n.path = $${INSTALL_TRANSLATIONS_PATH}
+  i18n.files = $${SOURCES_TRANSLATIONS_PATH}/*.qm
+  qti18n.path = $${INSTALL_TRANSLATIONS_PATH}
+  qti18n.files = $$[QT_INSTALL_TRANSLATIONS]/translations/*fr.qm \
+                 $$[QT_INSTALL_TRANSLATIONS]/translations/*de.qm \
+                 $$[QT_INSTALL_TRANSLATIONS]/translations/*es.qm
+  INSTALLS +=  qti18n i18n
+  }
+  # Install theme
+  screens.path = $${INSTALL_SPLASHPIX_PATH}
+  screens.files = $${SOURCES_GLOBAL_RESOURCES}/pixmap/splashscreens/*.png
+  pix16.path = $${INSTALL_SMALLPIX_PATH}
+  pix16.files = $${SOURCES_GLOBAL_RESOURCES}/pixmap/16x16/*.png
+  pix16flags.path = $${INSTALL_SMALLPIX_PATH}/flags
+  pix16flags.files = $${SOURCES_GLOBAL_RESOURCES}/pixmap/16x16/flags/*.png
+  pix32.path = $${INSTALL_MEDIUMPIX_PATH}
+  pix32.files = $${SOURCES_GLOBAL_RESOURCES}/pixmap/32x32/*.png
+  pix64.path = $${INSTALL_BIGPIX_PATH}
+  pix64.files = $${SOURCES_GLOBAL_RESOURCES}/pixmap/64x64/*.png
+  pix64jpg.path = $${INSTALL_BIGPIX_PATH}
+  pix64jpg.files = $${SOURCES_GLOBAL_RESOURCES}/pixmap/64x64/*.jpg
+  pixsvg.path = $${INSTALL_SVGPIX_PATH}
+  pixsvg.files = $${SOURCES_GLOBAL_RESOURCES}/pixmap/svg/*.svg
+  INSTALLS+=screens pix16 pix16flags pix32 pix64 pix64jpg pixsvg
 }
 
 # Install forms && FreeMedForms Profiles
@@ -194,23 +217,6 @@ profiles_resources.path = $${INSTALL_PROFILES_PATH}
 profiles_resources.files = $${SOURCES_PROFILES}
 INSTALLS += profiles_resources
 }
-
-# Install theme
-screens.path = $${INSTALL_SPLASHPIX_PATH}
-screens.files = $${SOURCES_GLOBAL_RESOURCES}/pixmap/splashscreens/*.png
-pix16.path = $${INSTALL_SMALLPIX_PATH}
-pix16.files = $${SOURCES_GLOBAL_RESOURCES}/pixmap/16x16/*.png
-pix16flags.path = $${INSTALL_SMALLPIX_PATH}/flags
-pix16flags.files = $${SOURCES_GLOBAL_RESOURCES}/pixmap/16x16/flags/*.png
-pix32.path = $${INSTALL_MEDIUMPIX_PATH}
-pix32.files = $${SOURCES_GLOBAL_RESOURCES}/pixmap/32x32/*.png
-pix64.path = $${INSTALL_BIGPIX_PATH}
-pix64.files = $${SOURCES_GLOBAL_RESOURCES}/pixmap/64x64/*.png
-pix64jpg.path = $${INSTALL_BIGPIX_PATH}
-pix64jpg.files = $${SOURCES_GLOBAL_RESOURCES}/pixmap/64x64/*.jpg
-pixsvg.path = $${INSTALL_SVGPIX_PATH}
-pixsvg.files = $${SOURCES_GLOBAL_RESOURCES}/pixmap/svg/*.svg
-INSTALLS+=screens pix16 pix16flags pix32 pix64 pix64jpg pixsvg
 
 # Install desktop file
 !isEmpty(INSTALL_DESKTOP_FILES_PATH){
