@@ -37,7 +37,7 @@
  * \author Eric MAEKER <eric.maeker@gmail.com>
  * \version 0.6.0
  * \date 30 Jul 2011
-*/
+ */
 
 namespace UserPlugin {
 class UserModel;
@@ -53,7 +53,8 @@ public:
     /** Create the QWizardPage to include in the user creator QWizard. */
     virtual QWizardPage *createWizardPage(QWidget *parent) = 0;
 
-    /** When the user creator QWizard is validated, this member is called to allow extra page to submit their data to their own database. */
+    /** When the user creator QWizard is validated, this member is called to allow extra page
+     * to submit their data to their own database. */
     virtual void submit(const QString &userUid) = 0;
 };
 
