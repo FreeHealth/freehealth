@@ -90,7 +90,7 @@ message(    * Extension : $${LIB_EXTENSION})
 message( ******************************************************************************** )
 message( *************************    FreeMedForms Resources   ************************** )
 message( ******************************************************************************** )
-!CONFIG(dontinstallcommonresource) {
+!CONFIG(dontinstallresources) {
 message( Resources : $${INSTALL_RESOURCES_PATH} )
 message( Translations : $${INSTALL_TRANSLATIONS_PATH} )
 !isEmpty(INSTALL_FREEDATAPACK_PATH):message( Free datapack path : $${INSTALL_FREEDATAPACK_PATH} )
@@ -104,6 +104,7 @@ message( Pixmaps - splashscreens : $${INSTALL_SPLASHPIX_PATH} )
 !isEmpty(INSTALL_DOCS_PATH):message( Documentation : $${INSTALL_DOCS_PATH} )
 !isEmpty(INSTALL_DESKTOP_FILES_PATH):message( DesktopFile : $${INSTALL_DESKTOP_FILES_PATH} )
 !isEmpty(INSTALL_DESKTOP_ICON_PATH):message( DesktopIcon : $${INSTALL_DESKTOP_ICON_PATH} )
+!CONFIG(dontinstallresources) {
 message( ******************************************************************************** )
 message( *************************    FreeMedForms Databases   ************************** )
 message( ******************************************************************************** )
@@ -112,7 +113,7 @@ contains(INSTALL_PROFILES_FILES,1):message( Installing user default Profiles fil
 contains(INSTALL_ICD_DATABASE,1):message( Installing ICD10 database )
 contains(INSTALL_ACCOUNT_FILES,1):message( Installing Account files )
 contains(INSTALL_ZIPCODES,1):message( Installing ZipCodes database )
-
+}
 
 # Install target
 !isEmpty(INSTALL_BINARY_PATH):!isEmpty(BUILD_BINARY_PATH){
@@ -162,16 +163,16 @@ INSTALLS += plugs_specs
 }
 
 # Install common resources : Theme && Translations
-!CONFIG(dontinstallcommonresource) {
+!CONFIG(dontinstallresources) {
   # Install translations
   !isEmpty(INSTALL_TRANSLATIONS_PATH):!isEmpty(SOURCES_TRANSLATIONS){
-  i18n.path = $${INSTALL_TRANSLATIONS_PATH}
-  i18n.files = $${SOURCES_TRANSLATIONS_PATH}/*.qm
-  qti18n.path = $${INSTALL_TRANSLATIONS_PATH}
-  qti18n.files = $$[QT_INSTALL_TRANSLATIONS]/translations/*fr.qm \
-                 $$[QT_INSTALL_TRANSLATIONS]/translations/*de.qm \
-                 $$[QT_INSTALL_TRANSLATIONS]/translations/*es.qm
-  INSTALLS +=  qti18n i18n
+    i18n.path = $${INSTALL_TRANSLATIONS_PATH}
+    i18n.files = $${SOURCES_TRANSLATIONS_PATH}/*.qm
+    qti18n.path = $${INSTALL_TRANSLATIONS_PATH}
+    qti18n.files = $$[QT_INSTALL_TRANSLATIONS]/translations/*fr.qm \
+                   $$[QT_INSTALL_TRANSLATIONS]/translations/*de.qm \
+                   $$[QT_INSTALL_TRANSLATIONS]/translations/*es.qm
+    INSTALLS +=  qti18n i18n
   }
   # Install theme
   screens.path = $${INSTALL_SPLASHPIX_PATH}
@@ -189,34 +190,71 @@ INSTALLS += plugs_specs
   pixsvg.path = $${INSTALL_SVGPIX_PATH}
   pixsvg.files = $${SOURCES_GLOBAL_RESOURCES}/pixmap/svg/*.svg
   INSTALLS+=screens pix16 pix16flags pix32 pix64 pix64jpg pixsvg
+
+  # Install forms && FreeMedForms Profiles
+  !isEmpty(INSTALL_FORMS_PATH):!isEmpty(SOURCES_FORMS){
+    forms.path = $${INSTALL_FORMS_PATH}
+    forms.files = $${SOURCES_FORMS}
+    INSTALLS += forms
+  }
+
+  # Install profiles
+  contains(INSTALL_PROFILES_FILES,1):!isEmpty(INSTALL_PROFILES_PATH){
+    profiles_resources.path = $${INSTALL_PROFILES_PATH}
+    profiles_resources.files = $${SOURCES_PROFILES}
+    INSTALLS += profiles_resources
+  }
+
+  # Install textfiles (mostly used in debug mode)
+  !isEmpty(INSTALL_TEXTFILES_PATH){
+    textfiles.path=$${INSTALL_TEXTFILES_PATH}
+    textfiles.files=$${SOURCES_GLOBAL_RESOURCES}/textfiles/*
+    INSTALLS+= textfiles
+  }
+
+  # Package Helpers
+  !isEmpty(INSTALL_RESOURCES_PATH){
+    packageHelpers.path=$${INSTALL_RESOURCES_PATH}/package_helpers
+    packageHelpers.files=$${SOURCES_GLOBAL_RESOURCES}/package_helpers/*
+    INSTALLS+=packageHelpers
+  }
+  # Install drugs databases
+  contains(INSTALL_DRUGS,1):!isEmpty(INSTALL_FREEDATAPACK_PATH):!isEmpty(SOURCES_FREEDATAPACK_PATH){
+    drugsdb.path = $${INSTALL_FREEDATAPACK_PATH}/drugs
+    drugsdb.files = $${SOURCES_FREEDATAPACK_PATH}/drugs/*
+    INSTALLS += drugsdb
+  }
+  # Install some specific files
+  contains(INSTALL_ICD_DATABASE,1){
+    freeicd_sqlfile.path=$${INSTALL_RESOURCES_PATH}/sql/icd10
+    freeicd_sqlfile.files=$${SOURCES_GLOBAL_RESOURCES}/sql/icd10/icd10.sql
+    #freeicd_db.path=$${INSTALL_FREEDATAPACK_PATH}/icd10
+    #freeicd_db.files=$${SOURCES_FREEDATAPACK_PATH}/icd10/icd10.db
+    #INSTALLS+=freeicd_sqlfile freeicd_db
+    INSTALLS+=freeicd_sqlfile
+  }
+
+  # Install FreeAccount SQL files
+  contains(INSTALL_ACCOUNT_FILES,1){
+    account_sqlfile.path=$${INSTALL_RESOURCES_PATH}/sql/account
+    account_sqlfile.files=$${SOURCES_GLOBAL_RESOURCES}/sql/account/*
+    INSTALLS+=account_sqlfile
+  }
+
+  # Install Zipcodes db  TODO MOVE THIS IN DATAPACKS
+  contains(INSTALL_ZIPCODES,1){
+    zipcodes_db.path=$${INSTALL_DATABASES_PATH}/zipcodes
+    zipcodes_db.files=$${SOURCES_DATABASES}/zipcodes/zipcodes.db
+    INSTALLS+=zipcodes_db
+  }
 }
 
-# Install forms && FreeMedForms Profiles
-!isEmpty(INSTALL_FORMS_PATH):!isEmpty(SOURCES_FORMS){
-forms.path = $${INSTALL_FORMS_PATH}
-forms.files = $${SOURCES_FORMS}
-INSTALLS += forms
-}
-
-# Install drugs databases
-contains(INSTALL_DRUGS,1):!isEmpty(INSTALL_FREEDATAPACK_PATH):!isEmpty(SOURCES_FREEDATAPACK_PATH){
-drugsdb.path = $${INSTALL_FREEDATAPACK_PATH}/drugs
-drugsdb.files = $${SOURCES_FREEDATAPACK_PATH}/drugs/*
-INSTALLS += drugsdb
-}
 
 #!isEmpty(INSTALL_DATABASES_PATH):!isEmpty(SOURCES_DATABASES){
 #usersdb.path = $${INSTALL_DATABASES_PATH}/users
 #usersdb.files = $${SOURCES_GLOBAL_RESOURCES}/databases/users/*txt
 #INSTALLS += usersdb
 #}
-
-# Install profiles
-contains(INSTALL_PROFILES_FILES,1):!isEmpty(INSTALL_PROFILES_PATH){
-profiles_resources.path = $${INSTALL_PROFILES_PATH}
-profiles_resources.files = $${SOURCES_PROFILES}
-INSTALLS += profiles_resources
-}
 
 # Install desktop file
 !isEmpty(INSTALL_DESKTOP_FILES_PATH){
@@ -227,13 +265,6 @@ desk_icon.files=$${SOURCES_GLOBAL_RESOURCES}/pixmap/svg/$${LOWERED_APPNAME}.svg
 INSTALLS+= desk desk_icon
 }
 
-# Install textfiles (mostly used in debug mode)
-!isEmpty(INSTALL_TEXTFILES_PATH){
-textfiles.path=$${INSTALL_TEXTFILES_PATH}
-textfiles.files=$${SOURCES_GLOBAL_RESOURCES}/textfiles/*
-INSTALLS+= textfiles
-}
-
 # Documentation
 !isEmpty(INSTALL_DOCS_PATH){
 docs.path=$${INSTALL_DOCS_PATH}
@@ -242,36 +273,6 @@ docs.CONFIG += no_check_exist
 INSTALLS+=docs
 }
 
-# Package Helpers
-!isEmpty(INSTALL_RESOURCES_PATH){
-packageHelpers.path=$${INSTALL_RESOURCES_PATH}/package_helpers
-packageHelpers.files=$${SOURCES_GLOBAL_RESOURCES}/package_helpers/*
-INSTALLS+=packageHelpers
-}
-
-# Install some specific files
-contains(INSTALL_ICD_DATABASE,1){
-freeicd_sqlfile.path=$${INSTALL_RESOURCES_PATH}/sql/icd10
-freeicd_sqlfile.files=$${SOURCES_GLOBAL_RESOURCES}/sql/icd10/icd10.sql
-#freeicd_db.path=$${INSTALL_FREEDATAPACK_PATH}/icd10
-#freeicd_db.files=$${SOURCES_FREEDATAPACK_PATH}/icd10/icd10.db
-#INSTALLS+=freeicd_sqlfile freeicd_db
-INSTALLS+=freeicd_sqlfile
-}
-
-# Install FreeAccount SQL files
-contains(INSTALL_ACCOUNT_FILES,1){
-account_sqlfile.path=$${INSTALL_RESOURCES_PATH}/sql/account
-account_sqlfile.files=$${SOURCES_GLOBAL_RESOURCES}/sql/account/*
-INSTALLS+=account_sqlfile
-}
-
-# Install Zipcodes db  TODO MOVE THIS IN DATAPACKS
-contains(INSTALL_ZIPCODES,1){
-zipcodes_db.path=$${INSTALL_DATABASES_PATH}/zipcodes
-zipcodes_db.files=$${SOURCES_DATABASES}/zipcodes/zipcodes.db
-INSTALLS+=zipcodes_db
-}
 
 # configuration for non-integrated solutions (everything is included inside the bundle)
 !isEmpty(INSTALL_QT_INSIDE_BUNDLE){
