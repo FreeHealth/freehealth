@@ -295,7 +295,7 @@ namespace {
     const char* const DEFAULTTHEME_PIXMAP  = "/pixmap";
     const char* const DEFAULTTHEME_SPLASH  = "/pixmap/splashscreens";
     const char* const USERMANUAL_PATH      = "/doc/%1";
-    const char* const LINUX_USERMANUAL_PATH  = "/usr/share/doc/%1/html";
+    const char* const LINUX_USERMANUAL_PATH  = "/usr/share/freemedforms/doc/%1/html";
     // User documents sub-paths
     const char* const USER_SUBFORMSPATH       = "/forms/subforms";
     const char* const USER_COMPLETEFORMSPATH  = "/forms/completeforms";
