@@ -63,7 +63,6 @@ private:
     void retranslate();
     void changeEvent(QEvent *event);
 
-private:
     Ui::UserCalendarWizardCreatorWidget *ui;
 };
 
