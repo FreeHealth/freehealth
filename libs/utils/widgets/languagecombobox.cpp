@@ -248,8 +248,9 @@ LanguageComboBox::LanguageComboBox(QWidget* parent) :
 
 LanguageComboBox::~LanguageComboBox()
 {
-    if (d)
+    if (d) {
         delete d;
+    }
     d = 0;
 }
 
