@@ -48,8 +48,6 @@ struct CommandLocation
 };
 
 namespace Core {
-
-class MainWindow;
 class UniqueIDManager;
 
 namespace Internal {
