@@ -1,0 +1,37 @@
+TEMPLATE = lib
+TARGET = Prevention
+
+DEFINES += PREVENTION
+#PREVENTION = 1
+
+BUILD_PATH_POSTFIXE = Prevention
+
+include(../../../../plugins/fmf_plugins.pri)
+include(preventionplugin_dependencies.pri)
+
+QT += sql
+
+INCLUDEPATH += ../
+DEPENDPATH += ../
+
+# Input
+HEADERS += preventionplugin.h\
+           preventCore.h \
+           preventIHM.h \
+           preventIO.h \
+           treeviewdelegate.h \
+           moreIHM.h \
+           connexion.h
+
+SOURCES += preventionplugin.cpp \
+           preventCore.cpp \
+           preventIHM.cpp \
+           preventIO.cpp \
+           treeviewdelegate.cpp \
+           moreIHM.cpp \
+           connexion.cpp
+FORMS += prevent.ui \
+         moreIHM.ui
+
+OTHER_FILES += Core.pluginspec
+
