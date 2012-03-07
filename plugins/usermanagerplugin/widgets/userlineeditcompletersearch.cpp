@@ -216,7 +216,8 @@ public:
 }
 }
 
-/** \todo Find a way to filter the model before the completer starts its processing on the model. --> use a qvalidator ?? */
+/** \todo Find a way to filter the model before the completer starts its processing
+  * on the model. --> use a qvalidator ?? */
 UserCompleter::UserCompleter(QObject *parent) :
     QCompleter(parent),
     d(new Internal::UserCompleterPrivate)
