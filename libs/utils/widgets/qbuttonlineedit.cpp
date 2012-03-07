@@ -29,7 +29,7 @@
     QButtonLineEdit inherits QLineEdit
     After instanciating it, define the ToolButtons for the right and the left, or only one.
     The tooltip of the leftButton is shown in gray inside the LineEdit when the user has not typed
-    something in.
+    anything in.
     To retrieve the text of the QLineEdit use the function: searchText().
     You can delay the textChanged() signal using setDelayedSignals().
     All action pixmaps of the left and right buttons must be 16x16.
