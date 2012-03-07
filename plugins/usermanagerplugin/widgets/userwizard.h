@@ -96,7 +96,6 @@ public:
 
     UserWizard(QWidget *parent = 0);
     ~UserWizard();
-
     QString createdUuid() const;
 
     static void setUserPaper(const int ref, const QString &xml) {m_Papers.insert(ref, xml);}
@@ -109,7 +108,6 @@ protected Q_SLOTS:
 private:
     void showEvent(QShowEvent *event);
 
-private:
     Internal::UserData *m_User;
     int m_Row;
     bool m_Saved, m_CreateUser;
@@ -119,28 +117,6 @@ private:
     QList<IUserWizardPage*> m_ExtraPages;
 };
 
-
-class UserIdentityAndLoginPage: public QWizardPage
-{
-    Q_OBJECT
-public:
-    UserIdentityAndLoginPage(QWidget *parent = 0);
-
-    bool validatePage();
-
-private Q_SLOTS:
-    void checkLogin();
-    void checkControlPassword(const QString &text);
-
-private:
-    void changeEvent(QEvent *e);
-    void retranslate();
-    QLabel *langLbl, *lblTitle, *lblName, *lblFirstName, *lblSecondName, *lblGender, *lblL, *lblP, *lblCP;
-    QComboBox *cbTitle, *cbGender;
-    QLineEdit *leName, *leFirstName, *leSecondName;
-    QGroupBox *identGroup, *logGroup;
-    Utils::LineEditEchoSwitcher *leLogin, *lePassword, *lePasswordConfirm;
-};
 
 class UserContactPage: public QWizardPage
 {
@@ -197,7 +173,7 @@ private:
     QTreeWidget *tree;
 };
 
-}  // End UserPlugin
+}  // End namespace UserPlugin
 
 
 #endif // USERWIZARD_H

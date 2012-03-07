@@ -65,12 +65,11 @@
 #include <usermanagerplugin/widgets/userrightswidget.h>
 #include <usermanagerplugin/iuserwizardpage.h>
 
+#include <usermanagerplugin/widgets/useridentityandloginpage.h>
 #include <listviewplugin/languagecombobox.h>
 
 #include <utils/log.h>
 #include <utils/global.h>
-#include <utils/widgets/lineeditechoswitcher.h>
-#include <utils/widgets/uppercasevalidator.h>
 #include <translationutils/constanttranslations.h>
 #include <extensionsystem/pluginmanager.h>
 
@@ -164,6 +163,7 @@ UserWizard::UserWizard(QWidget *parent) :
     setPage(RightsPage, new UserRightsPage(this));
     setPage(SpecialiesQualificationsPage, new UserSpecialiesQualificationsPage(this));
 
+    // hook in all plugged in extrapages using the PluginManager
     m_ExtraPages = pluginManager()->getObjects<IUserWizardPage>();
     for(int i = 0; i < m_ExtraPages.count(); ++i) {
         setPage(ExtraPages + i, m_ExtraPages.at(i)->createWizardPage(this));
@@ -209,7 +209,7 @@ void UserWizard::done(int r)
         return;
     }
 
-    // Dialog is Accepted here, User not saved -> save it
+    // Dialog is accepted here, but user not saved -> save it
     if (true) {
 
         // Feed userData with the wizard values
@@ -300,175 +300,10 @@ QString UserWizard::createdUuid() const
     return QString();
 }
 
-UserIdentityAndLoginPage::UserIdentityAndLoginPage(QWidget *parent) :
-        QWizardPage(parent), langLbl(0)
-{
-    identGroup = new QGroupBox(this);
-    logGroup = new QGroupBox(this);
-
-    langLbl = new QLabel(tr("Language"), this);
-    lblTitle = new QLabel(tr("Title"), this);
-    lblName = new QLabel(tr("Name"), this);
-    lblFirstName = new QLabel(tr("Firstname"), this);
-    lblSecondName = new QLabel(tr("Second Name"), this);
-    lblGender = new QLabel(tr("Gender"), this);
-
-    Views::LanguageComboBox *cbLanguage = new Views::LanguageComboBox(this);
-    cbLanguage->setDisplayMode(Views::LanguageComboBox::AvailableTranslations);
-    cbLanguage->setCurrentLanguage(QLocale().language());
-
-    cbTitle = new QComboBox(this);
-    leName = new QLineEdit(this);
-    leFirstName = new QLineEdit(this);
-    leSecondName = new QLineEdit(this);
-    cbGender = new QComboBox(this);
-
-    Utils::UpperCaseValidator *val = new Utils::UpperCaseValidator(this);
-    leName->setValidator(val);
-    leSecondName->setValidator(val);
-
-    connect(cbLanguage, SIGNAL(currentLanguageChanged(QLocale::Language)), Core::Translators::instance(), SLOT(changeLanguage(QLocale::Language)));
-
-    QFormLayout *identLayout = new QFormLayout;
-    identLayout->addRow(langLbl, cbLanguage);
-    identLayout->addRow(lblTitle, cbTitle);
-    identLayout->addRow(lblName, leName);
-    identLayout->addRow(lblFirstName, leFirstName);
-    identLayout->addRow(lblSecondName, leSecondName);
-    identLayout->addRow(lblGender, cbGender);
-    identGroup->setLayout(identLayout);
-
-    registerField("Language", cbLanguage , "currentLanguage");
-    registerField("Name", leName, "text");
-    registerField("Firstname", leFirstName, "text");
-    registerField("SecondName", leSecondName, "text");
-    registerField("Title", cbTitle, "currentIndex");
-    registerField("Gender", cbGender, "currentIndex");
-
-    lblL = new QLabel(tr("Login"), this);
-    lblL->setToolTip(tr("Your login must be 5 chars length at least"));
-    lblL->setStyleSheet("color:red");
-    lblP = new QLabel(tr("Password"), this);
-    lblP->setStyleSheet("color:red");
-    lblCP = new QLabel(tr("Confirm password"), this);
-    lblCP->setStyleSheet("color:red");
-
-    leLogin = new Utils::LineEditEchoSwitcher(this);
-    lePassword = new Utils::LineEditEchoSwitcher(this);
-    lePasswordConfirm = new Utils::LineEditEchoSwitcher(this);
-    leLogin->toogleEchoMode();
-    lePassword->toogleEchoMode();
-    lePasswordConfirm->toogleEchoMode();
-    leLogin->setIcon(theme()->icon(Core::Constants::ICONEYES));
-    lePassword->setIcon(theme()->icon(Core::Constants::ICONEYES));
-    lePasswordConfirm->setIcon(theme()->icon(Core::Constants::ICONEYES));
-
-    registerField("Login", leLogin, "text");
-    registerField("Password", lePassword, "text");
-    registerField("ConfirmPassword", lePasswordConfirm, "text");
-
-    QFormLayout *loglayout = new QFormLayout;
-    loglayout->addRow(lblL, leLogin);
-    loglayout->addRow(lblP, lePassword);
-    loglayout->addRow(lblCP, lePasswordConfirm);
-    logGroup->setLayout(loglayout);
-
-    QGridLayout *lay = new QGridLayout(this);
-    setLayout(lay);
-    lay->addWidget(identGroup);
-    lay->addWidget(logGroup);
-
-    retranslate();
-
-    connect(leLogin->lineEdit(), SIGNAL(editingFinished()), this, SLOT(checkLogin()));
-    connect(lePasswordConfirm->lineEdit(), SIGNAL(textChanged(QString)), this, SLOT(checkControlPassword(QString)));
-}
-
-void UserIdentityAndLoginPage::checkLogin()
-{
-    /** \todo code here */
-    // user login must be unique in the FreeMedForms database
-    // user login must be unique on the server
-}
-
-void UserIdentityAndLoginPage::checkControlPassword(const QString &text)
-{
-    if (text==lePassword->text()) {
-        lblCP->setStyleSheet("color:black");
-    } else {
-        lblCP->setStyleSheet("color:red");
-    }
-}
-
-void UserIdentityAndLoginPage::changeEvent(QEvent *e)
-{
-    if (e->type() == QEvent::LanguageChange)
-        retranslate();
-}
-
-void UserIdentityAndLoginPage::retranslate()
-{
-    setTitle(tr("Create a new user."));
-    setSubTitle(tr("Enter your identity."));
-    if (langLbl) {
-        langLbl->setText(tr("Language"));
-        lblTitle->setText(tkTr(Trans::Constants::TITLE));
-        lblName->setText(tkTr(Trans::Constants::NAME));
-        lblFirstName->setText(tr("Firstname"));
-        lblSecondName->setText(tr("Second Name"));
-        lblGender->setText(tkTr(Trans::Constants::GENDER));
-        cbTitle->addItems(titles());
-        cbGender->addItems(genders());
-        lblL->setText(tkTr(Trans::Constants::LOGIN));
-        lblP->setText(tkTr(Trans::Constants::PASSWORD));
-        lblCP->setText(tr("Confirm password"));
-        identGroup->setTitle(tr("Identity"));
-        logGroup->setTitle(tr("Database connection"));
-    }
-}
-
-bool UserIdentityAndLoginPage::validatePage()
-{
-    if (field("Name").toString().isEmpty() || field("Firstname").toString().isEmpty()) {
-        Utils::warningMessageBox(tr("Forbidden anonymous user."),
-                                 tr("All users must have at least a name and a first name.\n"
-                                    "You can not proceed with an anonymous user."), "",
-                                 tr("Forbidden anonymous user."));
-        return false;
-    }
-    if (field("Password").toString() != field("ConfirmPassword")) {
-        Utils::warningMessageBox(tr("Password confirmation error."),
-                                 tr("You must correctly confirm your password to go through this page."),
-                                 "", tr("Wrong password"));
-        return false;
-    }
-    if (field("Login").toString().isEmpty()) {
-        Utils::warningMessageBox(tr("Login error."),
-                                 tr("You must specify a valid login. Empty login is forbidden."),
-                                 "", tr("Wrong login"));
-        return false;
-    }
-    if (field("Login").toString().size() <= 3) {
-        Utils::warningMessageBox(tr("Login error."),
-                                 tr("You must specify a valid login. Login must be more than 3 chars."),
-                                 "", tr("Wrong login"));
-        return false;
-    }
-    // log/pass already used ?
-    if (userModel()->isCorrectLogin(field("Login").toString(),
-                                    field("Password").toString())) {
-        Utils::warningMessageBox(tr("Login and password already used"),
-                                 tr("The users' database already contains the same login/password couple.\n"
-                                    "You must specify a different login/password."),
-                                 "", tr("Login/Password already used"));
-        return false;
-    }
-    return true;
-}
-
 
 UserContactPage::UserContactPage(QWidget *parent) :
-        QWizardPage(parent), ui(new Ui::UserWizardContactWidget)
+    QWizardPage(parent),
+    ui(new Ui::UserWizardContactWidget)
 {
     setTitle(tr("Please enter your complete address."));
     setSubTitle(tr("This represents your professional address."));
@@ -660,6 +495,7 @@ UserLastPage::UserLastPage(QWidget *parent) : QWizardPage(parent)
     setSubTitle(tr("The user will be created."));
     tree = new QTreeWidget(this);
     tree->header()->hide();
+    /** \todo hide password!! */
     QVBoxLayout *lay = new QVBoxLayout(this);
     this->setLayout(lay);
     lay->addWidget(tree);

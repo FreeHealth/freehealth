@@ -14,14 +14,17 @@ HEADERS += $${PWD}/usermanagerplugin.h \
     $${PWD}/usermanagermode.h \
     $${PWD}/widgets/iuserviewerpage.h \
     $${PWD}/widgets/defautuserviewerpages.h \
-    $${PWD}/iuserwizardpage.h
+    $${PWD}/iuserwizardpage.h \
+    $${PWD}/widgets/useridentityandloginpage.h
 
 SOURCES += $${PWD}/usermanagerplugin.cpp \
     $${PWD}/currentuserpreferencespage.cpp \
     $${PWD}/userfistrunpage.cpp \
     $${PWD}/usermanagermode.cpp \
     $${PWD}/widgets/iuserviewerpage.cpp \
-    $${PWD}/widgets/defautuserviewerpages.cpp
+    $${PWD}/widgets/defautuserviewerpages.cpp \
+    $${PWD}/widgets/useridentityandloginpage.cpp
+
 
 # Compile
 HEADERS += \
@@ -63,7 +66,8 @@ FORMS += $${PWD}/widgets/userviewer.ui \
     $${PWD}/widgets/userviewer_contact.ui \
     $${PWD}/widgets/userviewer_papers.ui \
     $${PWD}/widgets/userviewer_medicalrights.ui \
-    $${PWD}/widgets/userviewer_professional.ui
+    $${PWD}/widgets/userviewer_professional.ui \
+    $${PWD}/widgets/useridentityandloginpage.ui
 
 # translators
 TRANSLATIONS += $${SOURCES_TRANSLATIONS_PATH}/usermanagerplugin_fr.ts \
