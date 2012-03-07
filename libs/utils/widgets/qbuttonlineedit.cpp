@@ -103,7 +103,6 @@ void QButtonLineEdit::setLeftButton(QToolButton *button)
 
     int frameWidth = style()->pixelMetric(QStyle::PM_DefaultFrameWidth);
     m_CSS.append(QString("padding-left: %1px;").arg(button->sizeHint().width() + frameWidth));
-//    setStyleSheet(QString("QLineEdit { %1 }").arg(m_CSS));
 
     QSize msz = minimumSizeHint();
     setMinimumSize(qMax(msz.width(), button->sizeHint().height() + frameWidth * 2 + 2),
@@ -248,11 +247,11 @@ void QButtonLineEdit::keyPressEvent(QKeyEvent *event)
 */
 void QButtonLineEdit::setRoundedCorners()
 {
-    qApp->setStyleSheet(QString("QLineEdit#%1, QFrame#%1 {"
-                                  "border-style: groove;"
-                                  "border-width: 1px;"
-                                  "border-radius: 6px;"
-                                  "}").arg(objectName()));
+    setStyleSheet(QString("QLineEdit#%1, QFrame#%1 {"
+                          "border-style: groove;"
+                          "border-width: 1px;"
+                          "border-radius: 6px;"
+                          "}").arg(objectName()));
 }
 
 void QButtonLineEdit::setSpecificStyleSheet(const QString &css)
