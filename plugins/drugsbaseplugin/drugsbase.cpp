@@ -1456,6 +1456,7 @@ QHash<QString, QString> DrugsBase::getDrugFullComposition(const QVariant &drugId
 
 QStringList DrugsBase::getDrugMolecularComposition(const QVariant &drugId, const QString &lang)
 {
+    Q_UNUSED(lang);
     QStringList toReturn;
     QSqlDatabase DB = QSqlDatabase::database(Constants::DB_DRUGS_NAME);
     if (!connectDatabase(DB, __FILE__, __LINE__))

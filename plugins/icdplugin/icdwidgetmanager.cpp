@@ -394,6 +394,7 @@ void IcdActionHandler::showDatabaseInformations()
 
 void IcdActionHandler::searchActionChanged(QAction *a)
 {
+    Q_UNUSED(a);
 }
 
 void IcdActionHandler::modeActionChanged(QAction *a)

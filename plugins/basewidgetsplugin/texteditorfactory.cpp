@@ -96,6 +96,7 @@ bool TextEditorFactory::isContainer(const int) const
 
 Form::IFormWidget *TextEditorFactory::createWidget(const QString &name, Form::FormItem *formItem, QWidget *parent)
 {
+    Q_UNUSED(name);
     return new TextEditorForm(formItem, parent);
 }
 
@@ -235,6 +236,7 @@ bool TextEditorData::isModified() const
 
 bool TextEditorData::setData(const int ref, const QVariant &data, const int role)
 {
+    Q_UNUSED(ref);
 //    qWarning() << "TextEditorData::setData" << data << role;
     if (role==Qt::EditRole) {
         m_Editor->textEdit()->setHtml(data.toString());
@@ -245,6 +247,8 @@ bool TextEditorData::setData(const int ref, const QVariant &data, const int role
 
 QVariant TextEditorData::data(const int ref, const int role) const
 {
+    Q_UNUSED(ref);
+    Q_UNUSED(role);
     return m_Editor->textEdit()->toHtml();
 }
 

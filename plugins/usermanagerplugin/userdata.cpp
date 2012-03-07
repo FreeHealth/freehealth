@@ -755,6 +755,7 @@ int UserData::personalLinkId() const
 */
 void UserData::setDynamicDataValue(const char *name, const QVariant &val, UserDynamicData::DynamicDataType t)
 {
+    Q_UNUSED(t);
     // this member should not be used by database
     if (!val.isValid())
         return;

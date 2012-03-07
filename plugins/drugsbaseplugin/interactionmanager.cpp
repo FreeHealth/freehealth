@@ -227,6 +227,7 @@ QString InteractionManager::drugInteractionSynthesisToHtml(const IDrug *drug, co
 
 QString InteractionManager::synthesisToHtml(const QVector<IDrugInteraction *> &list, bool fullInfos) // static
 {
+    Q_UNUSED(fullInfos);
     QString display;
 
     // get all engines

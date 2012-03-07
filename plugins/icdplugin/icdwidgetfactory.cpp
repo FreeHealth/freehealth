@@ -44,6 +44,8 @@ IcdWidgetFactory::~IcdWidgetFactory()
 
 bool IcdWidgetFactory::initialize(const QStringList &arguments, QString *errorString)
 {
+    Q_UNUSED(arguments);
+    Q_UNUSED(errorString);
     return true;
 }
 
@@ -64,6 +66,7 @@ QStringList IcdWidgetFactory::providedWidgets() const
 
 Form::IFormWidget *IcdWidgetFactory::createWidget(const QString &name, Form::FormItem *object, QWidget *parent)
 {
+    Q_UNUSED(name);
     return new IcdFormWidget(object, parent);
 }
 
@@ -169,6 +172,10 @@ bool IcdFormData::isModified() const
 
 bool IcdFormData::setData(const int ref, const QVariant &data, const int role)
 {
+    Q_UNUSED(ref);
+    Q_UNUSED(role);
+    Q_UNUSED(data);
+    /** \todo code here */
 //    qWarning() << "BaseCheckData::setData" << data << role;
 //    if (role==Qt::EditRole || role==Qt::DisplayRole) {
 //        if (data.canConvert(QVariant::Int))  { // Tristate
@@ -180,6 +187,9 @@ bool IcdFormData::setData(const int ref, const QVariant &data, const int role)
 
 QVariant IcdFormData::data(const int ref, const int role) const
 {
+    Q_UNUSED(ref);
+    Q_UNUSED(role);
+    /** \todo code here */
     return QVariant();
 //    return m_Check->checkState();
 }

@@ -179,11 +179,13 @@ void SimpleIcdModel::setCheckable(bool state)
 
 int SimpleIcdModel::rowCount(const QModelIndex &parent) const
 {
+    Q_UNUSED(parent);
     return d->m_Codes.count();
 }
 
 int SimpleIcdModel::columnCount(const QModelIndex &parent) const
 {
+    Q_UNUSED(parent);
     return ColumnCount;
 }
 
@@ -330,11 +332,11 @@ int SimpleIcdModel::numberOfCheckedItems() const
     return toReturn;
 }
 
-QVariant SimpleIcdModel::headerData(int section, Qt::Orientation orientation,
-                            int role) const
-{
-    return QVariant();
-}
+//QVariant SimpleIcdModel::headerData(int section, Qt::Orientation orientation,
+//                            int role) const
+//{
+//    return QVariant();
+//}
 
  void SimpleIcdModel::updateTranslations()
  {

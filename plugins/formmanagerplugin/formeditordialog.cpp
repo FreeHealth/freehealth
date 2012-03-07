@@ -60,6 +60,8 @@ FormEditorDialog::FormEditorDialog(EpisodeModel *model, EditionModes mode, QWidg
     ui(new Ui::FormEditorDialog),
     m_EpisodeModel(model)
 {
+    Q_UNUSED(mode);
+
     ui->setupUi(this);
     ui->formSelector->setFormType(Form::FormFilesSelectorWidget::SubForms);
 

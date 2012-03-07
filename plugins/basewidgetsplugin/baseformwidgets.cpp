@@ -1229,6 +1229,7 @@ bool BaseRadioData::isModified() const
 bool BaseRadioData::setData(const int ref, const QVariant &data, const int role)
 {
     Q_UNUSED(ref);
+    Q_UNUSED(data);
     // receive ref=0; data=uid of activated radio; role=IFormItemData::RoleRepresentation
 //    qWarning() << "BaseRadioData::setData" << data << role;
     if (role==Form::IFormItemData::CalculationsRole) {

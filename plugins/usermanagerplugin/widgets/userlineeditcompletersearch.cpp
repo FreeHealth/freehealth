@@ -145,7 +145,7 @@ public:
     {
     }
 
-    QValidator::State validate(QString &string, int &pos) const
+    QValidator::State validate(QString &string, int &) const
     {
         // only one char difference for the sql filter
         if ((string.size() - m_LastString.size()) > 1) {

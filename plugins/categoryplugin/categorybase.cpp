@@ -168,6 +168,7 @@ bool CategoryBase::createDatabase(const QString &connectionName , const QString 
                     CreationOption /*createOption*/
                    )
 {
+    Q_UNUSED(access);
     if (connectionName != Constants::DB_NAME)
         return false;
     LOG(tkTr(Trans::Constants::TRYING_TO_CREATE_1_PLACE_2).arg(dbName).arg(pathOrHostName));

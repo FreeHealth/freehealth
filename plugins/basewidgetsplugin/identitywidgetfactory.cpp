@@ -90,6 +90,7 @@ bool IdentityWidgetFactory::isContainer(const int idInStringList) const
 
 Form::IFormWidget *IdentityWidgetFactory::createWidget(const QString &name, Form::FormItem *formItem, QWidget *parent)
 {
+    Q_UNUSED(name);
     return new IdentityFormWidget(formItem,parent);
 }
 

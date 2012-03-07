@@ -195,13 +195,13 @@ bool FullIcdCodeModel::isSelectionValid() const
     return false;
 }
 
-int FullIcdCodeModel::rowCount(const QModelIndex &parent) const
+int FullIcdCodeModel::rowCount(const QModelIndex &) const
 {
     /** \todo code here : check this */
     return 1;
 }
 
-int FullIcdCodeModel::columnCount(const QModelIndex &parent) const
+int FullIcdCodeModel::columnCount(const QModelIndex &) const
 {
     return ColumnCount;
 }
@@ -239,11 +239,11 @@ SimpleIcdModel *FullIcdCodeModel::dagStarModel()
     return d->m_DagStarModel;
 }
 
-QVariant FullIcdCodeModel::headerData(int section, Qt::Orientation orientation,
-                            int role) const
-{
-    return QVariant();
-}
+//QVariant FullIcdCodeModel::headerData(int section, Qt::Orientation orientation,
+//                            int role) const
+//{
+//    return QVariant();
+//}
 
 void FullIcdCodeModel::updateTranslations()
 {

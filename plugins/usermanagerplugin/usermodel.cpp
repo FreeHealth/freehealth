@@ -144,6 +144,7 @@ QString UserModelWrapper::fullNameOfUser(const QVariant &uid)
 
 void UserModelWrapper::newUserConnected(const QString &uid)
 {
+    Q_UNUSED(uid);
     Q_EMIT userChanged();
 }
 
@@ -213,6 +214,8 @@ public:
     /** Create and empty user into the model. The uuid of the user is automatically set and returned. */
     QString createNewEmptyUser(UserModel *model, const int createdRow)
     {
+        Q_UNUSED(model);
+        Q_UNUSED(createdRow);
         // 1. create an empty user into the hash
         QString uuid = userBase()->createNewUuid();
         if (WarnAllProcesses)

@@ -181,6 +181,9 @@ QModelIndex CategoryOnlyProxyModel::mapFromSource(const QModelIndex &sourceIndex
 
 bool CategoryOnlyProxyModel::removeRows(int row, int count, const QModelIndex &parent)
 {
+    Q_UNUSED(row);
+    Q_UNUSED(count);
+    Q_UNUSED(parent);
     return true;
 }
 
