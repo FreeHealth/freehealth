@@ -66,7 +66,7 @@ void CountryComboBox::initialize()
         QString flag = Utils::countryToIso(QLocale::Country(it.value()));
         addItem(QIcon(QString("%1/%2.png").arg(m_FlagPath).arg(flag)), it.key(), it.value());
     }
-    setCurrentIndex(QLocale().country()-1);
+    setCurrentIndex(QLocale().system().country()-1);
 }
 
 QLocale::Country CountryComboBox::currentCountry() const
