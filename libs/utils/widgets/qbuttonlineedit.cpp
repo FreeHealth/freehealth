@@ -113,6 +113,7 @@ void QButtonLineEdit::setLeftButton(QToolButton * button)
     setPlaceholderText(cleanString(m_leftButton->toolTip()));
     prepareConnections();
     clearFocus();
+    setSpecificStyleSheet();
 }
 
 /**
@@ -129,12 +130,12 @@ void QButtonLineEdit::setRightButton(QToolButton * button)
 
     int frameWidth = style()->pixelMetric(QStyle::PM_DefaultFrameWidth);
     m_CSS.append(QString("padding-right: %1px;").arg(button->sizeHint().width() + frameWidth + 1));
-    setSpecificStyleSheet("");
     QSize msz = minimumSizeHint();
     setMinimumSize(qMax(msz.width(), button->sizeHint().height() + frameWidth * 2 + 2),
                    qMax(msz.height(), button->sizeHint().height() + frameWidth * 2 + 2));
     prepareConnections();
     clearFocus();
+    setSpecificStyleSheet();
 }
 
 void QButtonLineEdit::resizeEvent(QResizeEvent *)
@@ -256,7 +257,10 @@ void QButtonLineEdit::setRoundedCorners()
 
 void QButtonLineEdit::setSpecificStyleSheet(const QString &css)
 {
-    setStyleSheet(QString("QLineEdit#%1 { %2; %3 }").arg(objectName(), m_CSS, css));
+    if (!css.isEmpty())
+        setStyleSheet(QString("QLineEdit#%1{%2;%3}").arg(objectName(), m_CSS, css));
+    else
+        setStyleSheet(QString("QLineEdit#%1{%2;}").arg(objectName(), m_CSS));
 }
 
 void QButtonLineEdit::changeEvent(QEvent *e)

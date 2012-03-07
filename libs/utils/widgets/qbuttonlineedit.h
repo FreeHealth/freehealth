@@ -64,7 +64,7 @@ protected:
 
 private:
     void updatePlaceholderText();
-    void setSpecificStyleSheet(const QString &css);
+    void setSpecificStyleSheet(const QString &css = QString::null);
     void prepareConnections();
     void changeEvent(QEvent *e);
 
