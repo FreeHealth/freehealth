@@ -119,9 +119,6 @@
         <property name="buttonSymbols">
          <enum>QAbstractSpinBox::NoButtons</enum>
         </property>
-        <property name="displayFormat">
-         <string>dd/MM/yyyy</string>
-        </property>
         <property name="calendarPopup">
          <bool>false</bool>
         </property>
