@@ -62,7 +62,7 @@
 #include <QBrush>
 #include <QColor>
 
-enum { WarnDebugMessage = false };
+enum { WarnDebugMessage = true };
 
 static inline Core::IUser *user() { return Core::ICore::instance()->user(); }
 static inline Core::IPatient *patient() { return Core::ICore::instance()->patient(); }
@@ -780,7 +780,7 @@ void ReceiptViewer::actionsOfTreeView(const QModelIndex & index) {
     if(index.row() == VALUES && index.parent() == QModelIndex() ){ //values
         findReceiptsValues *rv = new findReceiptsValues(this);
         if (WarnDebugMessage)
-    	      qDebug() << __FILE__ << QString::number(__LINE__) << " in findReceiptsValues "  ;
+    	      qDebug() << __FILE__ << QString::number(__LINE__) << " in findReceiptsValues AND VALUES "  ;
         if(rv->exec() == QDialog::Accepted) {
             hashOfValues = rv -> getChoosenValues();
             choiceDialog choice(rv,false);
@@ -986,7 +986,26 @@ void ReceiptViewer::fillModel(QHash<QString,QString> &hashOfValues,
     QHashIterator<QString,QString> it(hashOfValues);
     while(it.hasNext()){
         it.next();
-        value += it.value().toDouble();
+        if (WarnDebugMessage)
+            qDebug() << __FILE__ << QString::number(__LINE__) << " data =" << it.key() ;
+        if (WarnDebugMessage)
+            qDebug() << __FILE__ << QString::number(__LINE__) << " amount =" << it.value() ;
+        QString valueStr = it.value();
+        if (valueStr.toDouble() == 0.0)
+        {
+        	  qWarning() << __FILE__ << QString::number(__LINE__) << "value null" ;
+        	  if (valueStr.contains(","))
+        	  {
+        	  	  if (WarnDebugMessage)
+        	  	  qDebug() << __FILE__ << QString::number(__LINE__) << " in , "  ;
+        	  	  valueStr.replace(",",QLocale::c().decimalPoint ());
+        	      }
+        	  else if (valueStr.contains("."))
+        	  {
+        	  	  valueStr.replace(".",QLocale::c().decimalPoint ());
+        	      }
+            }
+        value += valueStr.toDouble();
         if (WarnDebugMessage)
     	      qDebug() << __FILE__ << QString::number(__LINE__) << QString::number(value);
     }

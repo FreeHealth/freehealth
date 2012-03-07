@@ -32,7 +32,7 @@
 #include "findReceiptsValues.h"
 #include <QSqlQuery>
 #include <QSqlTableModel>
-enum { WarnDebugMessage = false };
+enum { WarnDebugMessage = true };
 using namespace AccountDB;
 using namespace Constants;
 
@@ -214,6 +214,8 @@ void findReceiptsValues::chooseValue(const QModelIndex& index){
     QString amount = model->data(indexAmount,Qt::DisplayRole).toString();//AMOUNT
     if (WarnDebugMessage)
     	      qDebug() << __FILE__ << QString::number(__LINE__) << " data = " << data;
+    if (WarnDebugMessage)
+    	      qDebug() << __FILE__ << QString::number(__LINE__) << " amount = " << amount;
     ui->listChoosenWidget->addItem(data);
     m_hashValuesChoosen.insert(data,amount);
 }

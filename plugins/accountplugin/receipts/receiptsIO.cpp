@@ -329,7 +329,22 @@ QHash<QString,double> receiptsEngine::getFilteredValueFromMedicalProcedure(const
         }
     while (q.next())
     {
-    	double amount = q.value(0).toDouble();
+    	QString valueStr = q.value(0).toString();
+    	if (valueStr.toDouble() == 0.0)
+        {
+        	  qWarning() << __FILE__ << QString::number(__LINE__) << "value null" ;
+        	  if (valueStr.contains(","))
+        	  {
+        	  	  if (WarnDebugMessage)
+        	  	  qDebug() << __FILE__ << QString::number(__LINE__) << " in , "  ;
+        	  	  valueStr.replace(",",QLocale::c().decimalPoint ());
+        	      }
+        	  else if (valueStr.contains("."))
+        	  {
+        	  	  valueStr.replace(".",QLocale::c().decimalPoint ());
+        	      }
+            }
+    	double amount = valueStr.toDouble();
         hash.insertMulti(act,amount);
         } 
     if (hash.size()>1)
