@@ -26,11 +26,13 @@
  ***************************************************************************/
 #include "pad_string.h"
 
+#include <QDebug>
+
 void PadString::print(int indent) const
 {
 	QString str(indent, ' ');
 	str += _string;
-	qDebug(qPrintable(str));
+    qWarning() << str;
 }
 
 QString PadString::run(QMap<QString,QVariant> &) const

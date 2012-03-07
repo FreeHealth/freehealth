@@ -26,11 +26,13 @@
  ***************************************************************************/
 #include "pad_core.h"
 
+#include <QDebug>
+
 void PadCore::print(int indent) const
 {
 	QString str(indent, ' ');
 	str += "$" + _value + "$";
-	qDebug(qPrintable(str));
+    qWarning() << str;
 }
 
 QString PadCore::run(QMap<QString,QVariant> &tokens) const
