@@ -191,7 +191,7 @@ void MessageSender::httpDone(bool error)
 {
     QString ret = "";
     if (!error) {
-        ret = tkTr(Trans::Constants::MESSAGE_SENDED_OK);
+        ret = tkTr(Trans::Constants::MESSAGE_SENT_OK);
         LOG(ret);
         LOG(d->m_Buffer->data());
     } else {

@@ -159,7 +159,7 @@ UserWizard::UserWizard(QWidget *parent) :
 {
     setPage(IdentityAndLoginPage, new UserIdentityAndLoginPage(this));
     setPage(ContactPage, new UserContactPage(this));
-    setPage(ProfilPage, new UserProfilPage(this));
+    setPage(ProfilPage, new UserProfilePage(this));
     setPage(RightsPage, new UserRightsPage(this));
     setPage(SpecialiesQualificationsPage, new UserSpecialiesQualificationsPage(this));
 
@@ -336,7 +336,7 @@ UserContactPage::~UserContactPage()
 }
 
 
-UserProfilPage::UserProfilPage(QWidget *parent) :
+UserProfilePage::UserProfilePage(QWidget *parent) :
         QWizardPage(parent)
 {
     setTitle(tr("Select a profile"));
@@ -365,7 +365,7 @@ UserProfilPage::UserProfilPage(QWidget *parent) :
     layout->addWidget(box, 1, 0);
 }
 
-bool UserProfilPage::validatePage()
+bool UserProfilePage::validatePage()
 {
     UserWizard::setUserRights(Core::IUser::ManagerRights, Core::IUser::NoRights);
     UserWizard::setUserRights(Core::IUser::DrugsRights, Core::IUser::NoRights);

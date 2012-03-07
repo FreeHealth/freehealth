@@ -40,38 +40,38 @@ enum CheckUpdateRepresentation {  // Never change the order of this enum
 };
 
 // Splashscreen messages
-const char* const USING_LIBRARY_1                   = QT_TRANSLATE_NOOP("tkConstants", "Using library : %1");
+const char* const USING_LIBRARY_1                   = QT_TRANSLATE_NOOP("tkConstants", "Using library: %1");
 const char* const STARTING_APPLICATION_AT_1         = QT_TRANSLATE_NOOP("tkConstants", "Starting application at %1");
-const char* const INITIALIZING_TRANSLATIONS         = QT_TRANSLATE_NOOP("tkConstants", "Initializing Translations...");
+const char* const INITIALIZING_TRANSLATIONS         = QT_TRANSLATE_NOOP("tkConstants", "Initializing translations...");
 const char* const INITIALIZING_LIBRARIES            = QT_TRANSLATE_NOOP("tkConstants", "Initializing libraries..." );
-const char* const NEED_LICENSE_AGREEMENT            = QT_TRANSLATE_NOOP("tkConstants", "Needed Licence Agreement...");
+const char* const NEED_LICENSE_AGREEMENT            = QT_TRANSLATE_NOOP("tkConstants", "Needed licence agreement...");
 const char* const CHECKING_DIRECTORY_STRUCTURE      = QT_TRANSLATE_NOOP("tkConstants", "Checking directory structure...");
-const char* const INITIALIZING_DEFAULTS_PARAMS      = QT_TRANSLATE_NOOP("tkConstants", "Initializing Default Parameters..." );
-const char* const INITIALIZING_PLUGINS              = QT_TRANSLATE_NOOP("tkConstants", "Initializing Plugins...");
+const char* const INITIALIZING_DEFAULTS_PARAMS      = QT_TRANSLATE_NOOP("tkConstants", "Initializing default parameters..." );
+const char* const INITIALIZING_PLUGINS              = QT_TRANSLATE_NOOP("tkConstants", "Initializing plugins...");
 const char* const FIRST_TIME_RUNNING                = QT_TRANSLATE_NOOP("tkConstants", "First time running");
 const char* const FEATURE_NOT_IMPLEMENTED           = QT_TRANSLATE_NOOP("tkConstants", "This feature is not yet implemented.");
-const char* const RAISING_APPLICATION               = QT_TRANSLATE_NOOP("tkConstants", "Raising Application...");
+const char* const RAISING_APPLICATION               = QT_TRANSLATE_NOOP("tkConstants", "Raising application...");
 const char* const INITIALIZATING_DATABASES          = QT_TRANSLATE_NOOP("tkConstants", "Initializing databases...");
 
 // Update
 const char* const CHECKUPDATE                       = QT_TRANSLATE_NOOP("tkConstants", "Check for update");
 const char* const CHECKING_UPDATES                  = QT_TRANSLATE_NOOP("tkConstants", "Checking for updates...");
 const char* const AT_STARTUP                        = QT_TRANSLATE_NOOP("tkConstants", "At startup");
-const char* const EACH_DAYS                         = QT_TRANSLATE_NOOP("tkConstants", "Each days");
-const char* const EACH_WEEKS                        = QT_TRANSLATE_NOOP("tkConstants", "Each weeks");
-const char* const EACH_MONTHS                       = QT_TRANSLATE_NOOP("tkConstants", "Each months");
-const char* const EACH_QUARTERS                     = QT_TRANSLATE_NOOP("tkConstants", "Each quarters");
+const char* const EACH_DAY                          = QT_TRANSLATE_NOOP("tkConstants", "Each days");
+const char* const EACH_WEEK                         = QT_TRANSLATE_NOOP("tkConstants", "Each week");
+const char* const EACH_MONTH                        = QT_TRANSLATE_NOOP("tkConstants", "Each month");
+const char* const EACH_QUARTER                      = QT_TRANSLATE_NOOP("tkConstants", "Each quarter");
 const char* const NEVER_AUTOMATICALLY               = QT_TRANSLATE_NOOP("tkConstants", "Never automatically");
 
 // Sender and Updater
 const char* const START_MESSAGE_SENDING              = QT_TRANSLATE_NOOP("tkConstants", "Starting to send message.");
-const char* const MESSAGE_SENDED_OK                  = QT_TRANSLATE_NOOP("tkConstants", "Message sended without error.");
-const char* const MESSAGE_NOT_SENDED                 = QT_TRANSLATE_NOOP("tkConstants", "An error occured, message was not sended.");
+const char* const MESSAGE_SENT_OK                  = QT_TRANSLATE_NOOP("tkConstants", "Message sent without error.");
+const char* const MESSAGE_NOT_SENT                 = QT_TRANSLATE_NOOP("tkConstants", "An error occured, message was not sent.");
 const char* const CHECKING_UPDATE_FROM_1             = QT_TRANSLATE_NOOP("tkConstants", "Checking for updates from %1");
 const char* const VERSION_UPTODATE                   = QT_TRANSLATE_NOOP("tkConstants", "Version up to date");
-const char* const CURRENT_VERSION                    = QT_TRANSLATE_NOOP("tkConstants", "Current version :");
-const char* const LATEST_VERSION                     = QT_TRANSLATE_NOOP("tkConstants", "Lastest version :");
-const char* const UPDATE_AVAILABLE                   = QT_TRANSLATE_NOOP("tkConstants", "Update Available");
+const char* const CURRENT_VERSION                    = QT_TRANSLATE_NOOP("tkConstants", "Current version:");
+const char* const LATEST_VERSION                     = QT_TRANSLATE_NOOP("tkConstants", "Latest version:");
+const char* const UPDATE_AVAILABLE                   = QT_TRANSLATE_NOOP("tkConstants", "Update available");
 const char* const UPDATE                             = QT_TRANSLATE_NOOP("tkConstants", "Update");
 const char* const INSTALL                            = QT_TRANSLATE_NOOP("tkConstants", "Install");
 

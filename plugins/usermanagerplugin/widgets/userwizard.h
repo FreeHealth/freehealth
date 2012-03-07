@@ -129,11 +129,11 @@ private:
     Internal::Ui::UserWizardContactWidget *ui;
 };
 
-class UserProfilPage : public QWizardPage
+class UserProfilePage : public QWizardPage
 {
     Q_OBJECT
 public:
-    UserProfilPage(QWidget *parent = 0);
+    UserProfilePage(QWidget *parent = 0);
     bool validatePage();
 
     int nextId() const {return next;}
