@@ -156,12 +156,29 @@ QString ControlReceipts::textOfSums(AccountModel * model){
     	      qDebug() << __FILE__ << QString::number(__LINE__) << " modelRowCount = " << QString::number(modelRowCount);
    for(int i = 0; i < modelRowCount ; i ++){
        QSqlRecord rowRecord = model->record(i);//ligne d'enregistrement
-       cash  += rowRecord.value(ACCOUNT_CASHAMOUNT).toDouble();
-       chq  += rowRecord.value(ACCOUNT_CHEQUEAMOUNT).toDouble();
-       visa += rowRecord.value(ACCOUNT_VISAAMOUNT).toDouble();
-       banking += rowRecord.value(ACCOUNT_INSURANCEAMOUNT).toDouble();
-       other += rowRecord.value(ACCOUNT_OTHERAMOUNT).toDouble();
-       dues  += rowRecord.value(ACCOUNT_DUEAMOUNT).toDouble();
+       QString c  = rowRecord.value(ACCOUNT_CASHAMOUNT).toString();
+       QString ch = rowRecord.value(ACCOUNT_CHEQUEAMOUNT).toString();
+       QString v  = rowRecord.value(ACCOUNT_VISAAMOUNT).toString();
+       QString b  = rowRecord.value(ACCOUNT_INSURANCEAMOUNT).toString();
+       QString o  = rowRecord.value(ACCOUNT_OTHERAMOUNT).toString();
+       QString d  = rowRecord.value(ACCOUNT_DUEAMOUNT).toString();
+       QStringList list;
+       list << c << ch << v << b << o << d;
+       if (c.toDouble() == 0.0 || ch.toDouble() == 0.0 || v.toDouble() == 0.0 || b.toDouble() == 0.0
+           || o.toDouble() == 0.0 || d.toDouble() == 0.0)
+       {
+       	   foreach(QString s,list){
+       	       s.replace(",",QLocale::c().decimalPoint ());
+       	       s.replace(".",QLocale::c().decimalPoint ());
+       	       }
+       	   
+           }
+       cash  += list[ReceiptsConstants::Cash].toDouble();
+       chq  += list[ReceiptsConstants::Check].toDouble();
+       visa += list[ReceiptsConstants::Visa].toDouble();
+       banking += list[ReceiptsConstants::Banking].toDouble();
+       other += list[ReceiptsConstants::Other].toDouble();
+       dues  += list[ReceiptsConstants::Due].toDouble();
        }
     totals = cash + chq + visa + banking + other + dues;
     totalReceived = cash + chq + banking + other + visa;
