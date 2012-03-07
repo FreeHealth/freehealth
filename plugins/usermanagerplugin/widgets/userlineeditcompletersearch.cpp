@@ -282,7 +282,7 @@ void UserLineEditCompleterSearch::textChanged(const QString &newText)
 
 void UserLineEditCompleterSearch::cancelSearch()
 {
-    setText(m_LastSearch);
+    setText("");
     QRect cr = rect();
     m_Completer->complete(cr); // popup it up!
 }
