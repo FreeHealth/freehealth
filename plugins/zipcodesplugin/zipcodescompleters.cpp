@@ -241,6 +241,7 @@ void ZipCountryCompleters::createModel()
 
     m_Model = new ZipCountryModel(this, db, m_DbAvailable);
 }
+
 /** Define the QComboBox to use as country selector. The combo will be automatically populated and its current index will be set to the current QLocale::Country */
 void ZipCountryCompleters::setCountryComboBox(Utils::CountryComboBox *box)
 {
@@ -318,7 +319,7 @@ void ZipCountryCompleters::setZipLineEdit(QLineEdit *zip)
     m_Zip->installEventFilter(this);
 }
 
-/** When user select a zip or a city this private slot s activated. It causes the line edit
+/** When user select a zip or a city this private slot is activated. It causes the line edit
     to be populated with the selected values.
 */
 void ZipCountryCompleters::indexActivated(const QModelIndex &index)
