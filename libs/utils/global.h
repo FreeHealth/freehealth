@@ -74,13 +74,13 @@ enum DirSearchType {
 };
 
 // Libs and OS informations
-/** \brief Return true if the application was build in debug mode. */
+/** \brief Return true if the application was built in debug mode. */
 UTILS_EXPORT bool isDebugCompilation();
-/** \brief Return true if the application was build in release mode. */
+/** \brief Return true if the application was built in release mode. */
 UTILS_EXPORT bool isReleaseCompilation();
-/** \brief Return true if the application was build using the SVN. */
+/** \brief Return true if the application was built using the SVN. */
 UTILS_EXPORT bool isSvnBuild();
-/** \brief Return true if the application was build with all private parts. */
+/** \brief Return true if the application was built with all private parts. */
 UTILS_EXPORT bool isFullApplication();
 /** \brief Return true if the application is an alpha build (release or debug). */
 UTILS_EXPORT bool isAlpha();
