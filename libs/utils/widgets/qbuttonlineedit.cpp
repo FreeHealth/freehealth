@@ -89,7 +89,7 @@ void QButtonLineEdit::setDelayedSignals(bool state)
 }
 
 /**
- \brief Define the Left button for the line edit.
+ \brief Define the left button for the line edit.
  QButtonLineEdit takes ownership of the button. \n
  Text of selected action is shown in gray inside the line edit when it is empty. \n
  For now pixmaps of QAction must be sized (16x16). \n
@@ -99,6 +99,7 @@ void QButtonLineEdit::setLeftButton(QToolButton * button)
     button->setParent(this);
     m_leftButton = button;
     m_leftButton->setStyleSheet("QToolButton { border: none; padding: 0px; }");
+    m_leftButton->setCursor(Qt::ArrowCursor);
 
     int frameWidth = style()->pixelMetric(QStyle::PM_DefaultFrameWidth);
     m_CSS.append(QString("padding-left: %1px;").arg(button->sizeHint().width() + frameWidth));
@@ -124,6 +125,8 @@ void QButtonLineEdit::setRightButton(QToolButton * button)
     button->setParent(this);
     m_rightButton = button;
     m_rightButton->setStyleSheet("QToolButton { border: none; padding: 0px; }");
+    m_rightButton->setCursor(Qt::ArrowCursor);
+
     int frameWidth = style()->pixelMetric(QStyle::PM_DefaultFrameWidth);
     m_CSS.append(QString("padding-right: %1px;").arg(button->sizeHint().width() + frameWidth + 1));
     setSpecificStyleSheet("");
