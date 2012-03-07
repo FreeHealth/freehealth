@@ -301,7 +301,7 @@ void PatientSelector::refreshFilter(const QString &)
 {
     if (!d->m_Model)
         return;
-    QString text = d->ui->searchLine->searchText();
+    QString text = d->ui->searchLine->text();
     QString name, firstname;
     switch (d->m_SearchMethod) {
     case SearchByName: name = text; break;

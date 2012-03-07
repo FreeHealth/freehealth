@@ -58,8 +58,6 @@ public:
 
     void setRoundedCorners();
 
-    QString searchText() const;
-
 protected:
     void keyPressEvent(QKeyEvent *event);
     void resizeEvent(QResizeEvent *);

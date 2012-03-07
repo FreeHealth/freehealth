@@ -30,7 +30,6 @@
     After instanciating it, define the ToolButtons for the right and the left, or only one.
     The tooltip of the leftButton is shown in gray inside the LineEdit when the user has not typed
     anything in.
-    To retrieve the text of the QLineEdit use the function: searchText().
     You can delay the textChanged() signal using setDelayedSignals().
     All action pixmaps of the left and right buttons must be 16x16.
  */
@@ -160,7 +159,7 @@ void QButtonLineEdit::prepareConnections()
 void QButtonLineEdit::emitTextChangedSignal()
 {
     blockSignals(false);
-    Q_EMIT textChanged(searchText());
+    Q_EMIT textChanged(text());
 //    Q_EMIT cursorPositionChanged(int, int);
 //    Q_EMIT editingFinished();
     Q_EMIT returnPressed();
@@ -222,7 +221,7 @@ void QButtonLineEdit::keyPressEvent(QKeyEvent *event)
             Q_EMIT returnPressed();
             blockSignals(true);
         } else {
-            const QString &t = searchText();
+            const QString &t = text();
             if (t.isEmpty()) {
                 blockSignals(false);
                 Q_EMIT returnPressed();
@@ -237,12 +236,6 @@ void QButtonLineEdit::keyPressEvent(QKeyEvent *event)
         }
     }
     QLineEdit::keyPressEvent(event);
-}
-
-/** Returns the text of the line edit. */
-QString QButtonLineEdit::searchText() const
-{
-    return text();
 }
 
 /**

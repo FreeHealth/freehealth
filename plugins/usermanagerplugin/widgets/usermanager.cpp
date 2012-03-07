@@ -421,7 +421,7 @@ void UserManagerWidget::onCurrentUserChanged()
 void UserManagerWidget::onSearchRequested()
 {
     QHash<int, QString> where;
-    where.insert(m_SearchBy, QString("LIKE '%1%'").arg(ui->searchLineEdit->searchText()));
+    where.insert(m_SearchBy, QString("LIKE '%1%'").arg(ui->searchLineEdit->text()));
     UserModel::instance()->setFilter(where);
 }
 

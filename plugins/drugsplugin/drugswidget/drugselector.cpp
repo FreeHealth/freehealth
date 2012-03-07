@@ -380,7 +380,7 @@ void DrugSelector::setSearchMethod(int method)
 */
 void DrugSelector::updateModelFilter()
 {
-    if (searchLine->searchText().isEmpty()) {
+    if (searchLine->text().isEmpty()) {
         if (WarnSearchFilter)
             qWarning() << "No search filter";
         m_GlobalDrugsModel->setFilter("");
@@ -388,7 +388,7 @@ void DrugSelector::updateModelFilter()
         return;
     }
     QString tmp = m_filterModel;
-    QString search = searchLine->searchText().replace("*", "%");
+    QString search = searchLine->text().replace("*", "%");
     m_GlobalDrugsModel->setFilter(search);
     if (m_SearchMethod == Constants::SearchInn) {
         // Inform filter proxymodel
