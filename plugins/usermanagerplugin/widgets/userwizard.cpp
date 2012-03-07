@@ -339,8 +339,8 @@ UserContactPage::~UserContactPage()
 UserProfilPage::UserProfilPage(QWidget *parent) :
         QWizardPage(parent)
 {
-    setTitle(tr("Select a profil"));
-    setSubTitle(tr("FreeMedForms allows you to create users using predefined profils. Select your profil and options."));
+    setTitle(tr("Select a profile"));
+    setSubTitle(tr("FreeMedForms allows you to create users using predefined profiles. Select your profile and options."));
 
     /** \todo code here = add new profiles */
     Views::StringListModel *model = new Views::StringListModel(this);
@@ -358,7 +358,7 @@ UserProfilPage::UserProfilPage(QWidget *parent) :
     view->setModel(model);
     view->setActions(0);
 
-    box = new QCheckBox(tr("Define all rights"), this);
+    box = new QCheckBox(tr("Select advanced rights in the next step"), this);
 
     QGridLayout *layout = new QGridLayout(this);
     layout->addWidget(view, 0, 0);
