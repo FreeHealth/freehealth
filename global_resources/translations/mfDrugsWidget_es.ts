@@ -44,25 +44,6 @@
     </message>
 </context>
 <context>
-    <name>DrugsWidget::DrugsCentralWidget</name>
-    <message>
-        <location filename="../../plugins/drugsplugin/drugswidget/drugscentralwidget.cpp" line="177"/>
-        <source>Can not add this drug to your prescription.</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <location filename="../../plugins/drugsplugin/drugswidget/drugscentralwidget.cpp" line="178"/>
-        <source>Prescription can not contains twice the sample pharmaceutical drug.
-Drug %1 is already in your prescription</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <location filename="../../plugins/drugsplugin/drugswidget/drugscentralwidget.cpp" line="181"/>
-        <source>If you want to change the dosage of this drug please double-click on it in the prescription box.</source>
-        <translation type="unfinished"></translation>
-    </message>
-</context>
-<context>
     <name>DrugsWidget::DynamicAlert</name>
     <message>
         <location filename="../../plugins/drugsplugin/drugswidget/dynamicalert.ui" line="14"/>
@@ -1212,23 +1193,23 @@ Do you really want to change the editing mode ?</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../../plugins/drugsplugin/drugspreferences/drugsviewoptionspage.ui" line="102"/>
-        <source>Size of historic</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
         <location filename="../../plugins/drugsplugin/drugspreferences/drugsviewoptionspage.ui" line="122"/>
         <source>Patient&apos;s names order (needs restart)</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
+        <location filename="../../plugins/drugsplugin/drugspreferences/drugsviewoptionspage.ui" line="102"/>
+        <source>Size of history</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
         <location filename="../../plugins/drugsplugin/drugspreferences/drugsviewoptionspage.ui" line="130"/>
-        <source>Lastnames - Firstnames</source>
+        <source>Last names - First names</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
         <location filename="../../plugins/drugsplugin/drugspreferences/drugsviewoptionspage.ui" line="135"/>
-        <source>Firstnames - Lastnames</source>
+        <source>First names - Last names</source>
         <translation type="unfinished"></translation>
     </message>
     <message>

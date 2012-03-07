@@ -12,7 +12,7 @@
 <context>
     <name>DataPackPlugin::Internal::DataPackPluginIPlugin</name>
     <message>
-        <location filename="../../plugins/datapackplugin/datapackplugin.cpp" line="131"/>
+        <location filename="../../plugins/datapackplugin/datapackplugin.cpp" line="132"/>
         <source>Initializing DataPackPlugin...</source>
         <translation>Initialisation du gestionnaire des paquets de données...</translation>
     </message>

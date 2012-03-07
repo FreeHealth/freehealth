@@ -133,7 +133,7 @@
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../../freediams/plugins/mainwindowplugin/mainwindow.cpp" line="360"/>
+        <location filename="../../freediams/plugins/mainwindowplugin/mainwindow.cpp" line="359"/>
         <source>Transmitting posologies...</source>
         <translation type="unfinished"></translation>
     </message>

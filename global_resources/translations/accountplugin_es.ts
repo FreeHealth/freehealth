@@ -247,12 +247,12 @@
     <message>
         <location filename="../../plugins/accountplugin/accountmode.cpp" line="106"/>
         <source>Please read this explanation before using FreeAccount.
-FreeAccount is composed of :
+FreeAccount is composed of:
 Receipts to get your earnings,
 Movements in your accountancy,
 Asset for your assets,
 Ledger to analyse your accountancy and produce and print your ledger.
-The shortcuts for those programs are :
+The shortcuts for those programs are:
 for your rapid receipt, CTRL+R,
 for the receipts widget, Maj+R,
 for the movements widget, CTRL+M,
@@ -265,12 +265,12 @@ Then parametrize your user, sites, bank and so on.</source>
     </message>
     <message>
         <location filename="../../plugins/accountplugin/accountmode.cpp" line="123"/>
-        <source>Read me.</source>
+        <source>Read me</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
         <location filename="../../plugins/accountplugin/accountmode.cpp" line="127"/>
-        <source>Do not show this message again.</source>
+        <source>Do not show this message again</source>
         <translation type="unfinished"></translation>
     </message>
 </context>
@@ -1599,151 +1599,151 @@ Otherwise result will be wrong !</source>
 <context>
     <name>ControlReceipts</name>
     <message>
-        <location filename="../../plugins/accountplugin/receipts/controlreceiptsIO.cpp" line="247"/>
-        <location filename="../../plugins/accountplugin/receipts/controlreceiptsIO.cpp" line="263"/>
-        <location filename="../../plugins/accountplugin/receipts/controlreceiptsIO.cpp" line="273"/>
-        <location filename="../../plugins/accountplugin/receipts/controlreceiptsIO.cpp" line="277"/>
-        <location filename="../../plugins/accountplugin/receipts/controlreceiptsIO.cpp" line="284"/>
+        <location filename="../../plugins/accountplugin/receipts/controlreceiptsIO.cpp" line="265"/>
+        <location filename="../../plugins/accountplugin/receipts/controlreceiptsIO.cpp" line="281"/>
+        <location filename="../../plugins/accountplugin/receipts/controlreceiptsIO.cpp" line="291"/>
+        <location filename="../../plugins/accountplugin/receipts/controlreceiptsIO.cpp" line="295"/>
+        <location filename="../../plugins/accountplugin/receipts/controlreceiptsIO.cpp" line="302"/>
         <source>Patient</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../../plugins/accountplugin/receipts/controlreceiptsIO.cpp" line="251"/>
-        <location filename="../../plugins/accountplugin/receipts/controlreceiptsIO.cpp" line="289"/>
+        <location filename="../../plugins/accountplugin/receipts/controlreceiptsIO.cpp" line="269"/>
+        <location filename="../../plugins/accountplugin/receipts/controlreceiptsIO.cpp" line="307"/>
         <source>Date</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../../plugins/accountplugin/receipts/controlreceiptsIO.cpp" line="252"/>
-        <location filename="../../plugins/accountplugin/receipts/controlreceiptsIO.cpp" line="290"/>
+        <location filename="../../plugins/accountplugin/receipts/controlreceiptsIO.cpp" line="270"/>
+        <location filename="../../plugins/accountplugin/receipts/controlreceiptsIO.cpp" line="308"/>
         <source>Acts</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../../plugins/accountplugin/receipts/controlreceiptsIO.cpp" line="253"/>
-        <location filename="../../plugins/accountplugin/receipts/controlreceiptsIO.cpp" line="291"/>
+        <location filename="../../plugins/accountplugin/receipts/controlreceiptsIO.cpp" line="271"/>
+        <location filename="../../plugins/accountplugin/receipts/controlreceiptsIO.cpp" line="309"/>
         <source>Comment</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../../plugins/accountplugin/receipts/controlreceiptsIO.cpp" line="168"/>
-        <location filename="../../plugins/accountplugin/receipts/controlreceiptsIO.cpp" line="254"/>
-        <location filename="../../plugins/accountplugin/receipts/controlreceiptsIO.cpp" line="264"/>
-        <location filename="../../plugins/accountplugin/receipts/controlreceiptsIO.cpp" line="292"/>
+        <location filename="../../plugins/accountplugin/receipts/controlreceiptsIO.cpp" line="186"/>
+        <location filename="../../plugins/accountplugin/receipts/controlreceiptsIO.cpp" line="272"/>
+        <location filename="../../plugins/accountplugin/receipts/controlreceiptsIO.cpp" line="282"/>
+        <location filename="../../plugins/accountplugin/receipts/controlreceiptsIO.cpp" line="310"/>
         <source>Cash</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../../plugins/accountplugin/receipts/controlreceiptsIO.cpp" line="169"/>
+        <location filename="../../plugins/accountplugin/receipts/controlreceiptsIO.cpp" line="187"/>
         <source>Chq</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../../plugins/accountplugin/receipts/controlreceiptsIO.cpp" line="170"/>
+        <location filename="../../plugins/accountplugin/receipts/controlreceiptsIO.cpp" line="188"/>
         <source>CB</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../../plugins/accountplugin/receipts/controlreceiptsIO.cpp" line="172"/>
+        <location filename="../../plugins/accountplugin/receipts/controlreceiptsIO.cpp" line="190"/>
         <source>Others</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../../plugins/accountplugin/receipts/controlreceiptsIO.cpp" line="173"/>
+        <location filename="../../plugins/accountplugin/receipts/controlreceiptsIO.cpp" line="191"/>
         <source>Dues</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../../plugins/accountplugin/receipts/controlreceiptsIO.cpp" line="255"/>
-        <location filename="../../plugins/accountplugin/receipts/controlreceiptsIO.cpp" line="293"/>
+        <location filename="../../plugins/accountplugin/receipts/controlreceiptsIO.cpp" line="273"/>
+        <location filename="../../plugins/accountplugin/receipts/controlreceiptsIO.cpp" line="311"/>
         <source>Checks</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../../plugins/accountplugin/receipts/controlreceiptsIO.cpp" line="256"/>
-        <location filename="../../plugins/accountplugin/receipts/controlreceiptsIO.cpp" line="266"/>
-        <location filename="../../plugins/accountplugin/receipts/controlreceiptsIO.cpp" line="294"/>
+        <location filename="../../plugins/accountplugin/receipts/controlreceiptsIO.cpp" line="274"/>
+        <location filename="../../plugins/accountplugin/receipts/controlreceiptsIO.cpp" line="284"/>
+        <location filename="../../plugins/accountplugin/receipts/controlreceiptsIO.cpp" line="312"/>
         <source>Credit card</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../../plugins/accountplugin/receipts/controlreceiptsIO.cpp" line="257"/>
-        <location filename="../../plugins/accountplugin/receipts/controlreceiptsIO.cpp" line="295"/>
+        <location filename="../../plugins/accountplugin/receipts/controlreceiptsIO.cpp" line="275"/>
+        <location filename="../../plugins/accountplugin/receipts/controlreceiptsIO.cpp" line="313"/>
         <source>Insurance</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../../plugins/accountplugin/receipts/controlreceiptsIO.cpp" line="258"/>
-        <location filename="../../plugins/accountplugin/receipts/controlreceiptsIO.cpp" line="268"/>
-        <location filename="../../plugins/accountplugin/receipts/controlreceiptsIO.cpp" line="296"/>
+        <location filename="../../plugins/accountplugin/receipts/controlreceiptsIO.cpp" line="276"/>
+        <location filename="../../plugins/accountplugin/receipts/controlreceiptsIO.cpp" line="286"/>
+        <location filename="../../plugins/accountplugin/receipts/controlreceiptsIO.cpp" line="314"/>
         <source>Other</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../../plugins/accountplugin/receipts/controlreceiptsIO.cpp" line="259"/>
-        <location filename="../../plugins/accountplugin/receipts/controlreceiptsIO.cpp" line="269"/>
-        <location filename="../../plugins/accountplugin/receipts/controlreceiptsIO.cpp" line="297"/>
+        <location filename="../../plugins/accountplugin/receipts/controlreceiptsIO.cpp" line="277"/>
+        <location filename="../../plugins/accountplugin/receipts/controlreceiptsIO.cpp" line="287"/>
+        <location filename="../../plugins/accountplugin/receipts/controlreceiptsIO.cpp" line="315"/>
         <source>Due</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../../plugins/accountplugin/receipts/controlreceiptsIO.cpp" line="260"/>
-        <location filename="../../plugins/accountplugin/receipts/controlreceiptsIO.cpp" line="298"/>
+        <location filename="../../plugins/accountplugin/receipts/controlreceiptsIO.cpp" line="278"/>
+        <location filename="../../plugins/accountplugin/receipts/controlreceiptsIO.cpp" line="316"/>
         <source>by</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../../plugins/accountplugin/receipts/controlreceiptsIO.cpp" line="261"/>
-        <location filename="../../plugins/accountplugin/receipts/controlreceiptsIO.cpp" line="299"/>
+        <location filename="../../plugins/accountplugin/receipts/controlreceiptsIO.cpp" line="279"/>
+        <location filename="../../plugins/accountplugin/receipts/controlreceiptsIO.cpp" line="317"/>
         <source>Valid</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../../plugins/accountplugin/receipts/controlreceiptsIO.cpp" line="54"/>
+        <location filename="../../plugins/accountplugin/receipts/controlreceiptsIO.cpp" line="55"/>
         <source>Euros</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../../plugins/accountplugin/receipts/controlreceiptsIO.cpp" line="265"/>
+        <location filename="../../plugins/accountplugin/receipts/controlreceiptsIO.cpp" line="283"/>
         <source>Check</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../../plugins/accountplugin/receipts/controlreceiptsIO.cpp" line="171"/>
-        <location filename="../../plugins/accountplugin/receipts/controlreceiptsIO.cpp" line="267"/>
+        <location filename="../../plugins/accountplugin/receipts/controlreceiptsIO.cpp" line="189"/>
+        <location filename="../../plugins/accountplugin/receipts/controlreceiptsIO.cpp" line="285"/>
         <source>Banking</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../../plugins/accountplugin/receipts/controlreceiptsIO.cpp" line="270"/>
+        <location filename="../../plugins/accountplugin/receipts/controlreceiptsIO.cpp" line="288"/>
         <source>Due by</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../../plugins/accountplugin/receipts/controlreceiptsIO.cpp" line="118"/>
+        <location filename="../../plugins/accountplugin/receipts/controlreceiptsIO.cpp" line="119"/>
         <source>Error</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../../plugins/accountplugin/receipts/controlreceiptsIO.cpp" line="118"/>
+        <location filename="../../plugins/accountplugin/receipts/controlreceiptsIO.cpp" line="119"/>
         <source>Please select a line to delete.</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../../plugins/accountplugin/receipts/controlreceiptsIO.cpp" line="130"/>
-        <location filename="../../plugins/accountplugin/receipts/controlreceiptsIO.cpp" line="188"/>
-        <location filename="../../plugins/accountplugin/receipts/controlreceiptsIO.cpp" line="192"/>
+        <location filename="../../plugins/accountplugin/receipts/controlreceiptsIO.cpp" line="131"/>
+        <location filename="../../plugins/accountplugin/receipts/controlreceiptsIO.cpp" line="206"/>
+        <location filename="../../plugins/accountplugin/receipts/controlreceiptsIO.cpp" line="210"/>
         <source>Information</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../../plugins/accountplugin/receipts/controlreceiptsIO.cpp" line="130"/>
+        <location filename="../../plugins/accountplugin/receipts/controlreceiptsIO.cpp" line="131"/>
         <source>Line is deleted.</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../../plugins/accountplugin/receipts/controlreceiptsIO.cpp" line="188"/>
-        <location filename="../../plugins/accountplugin/receipts/controlreceiptsIO.cpp" line="192"/>
+        <location filename="../../plugins/accountplugin/receipts/controlreceiptsIO.cpp" line="206"/>
+        <location filename="../../plugins/accountplugin/receipts/controlreceiptsIO.cpp" line="210"/>
         <source>Not yet</source>
         <translation type="unfinished"></translation>
     </message>
@@ -2549,7 +2549,7 @@ if you don&apos;t have one, save the next value in thesaurus and chose it in the
     <message>
         <location filename="../../plugins/accountplugin/receipts/receiptviewer.cpp" line="842"/>
         <location filename="../../plugins/accountplugin/receipts/receiptviewer.cpp" line="885"/>
-        <location filename="../../plugins/accountplugin/receipts/receiptviewer.cpp" line="1094"/>
+        <location filename="../../plugins/accountplugin/receipts/receiptviewer.cpp" line="1113"/>
         <source>Warning</source>
         <translation type="unfinished"></translation>
     </message>
@@ -2577,17 +2577,17 @@ You should create one in Preferences.</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../../plugins/accountplugin/receipts/receiptviewer.cpp" line="1094"/>
+        <location filename="../../plugins/accountplugin/receipts/receiptviewer.cpp" line="1113"/>
         <source>Error inserting into AccountModel!</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../../plugins/accountplugin/receipts/receiptviewer.cpp" line="1122"/>
+        <location filename="../../plugins/accountplugin/receipts/receiptviewer.cpp" line="1141"/>
         <source>Information</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../../plugins/accountplugin/receipts/receiptviewer.cpp" line="1122"/>
+        <location filename="../../plugins/accountplugin/receipts/receiptviewer.cpp" line="1141"/>
         <source> has been saved in thesaurus !</source>
         <translation type="unfinished"></translation>
     </message>
@@ -2633,12 +2633,12 @@ You should create defaults in Configuration &gt; Preference &gt; Accountancy.</s
     </message>
     <message>
         <location filename="../../plugins/accountplugin/receipts/findReceiptsValues.cpp" line="193"/>
-        <location filename="../../plugins/accountplugin/receipts/findReceiptsValues.cpp" line="296"/>
+        <location filename="../../plugins/accountplugin/receipts/findReceiptsValues.cpp" line="298"/>
         <source>Warning</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../../plugins/accountplugin/receipts/findReceiptsValues.cpp" line="296"/>
+        <location filename="../../plugins/accountplugin/receipts/findReceiptsValues.cpp" line="298"/>
         <source>Check a radioButton.</source>
         <translation type="unfinished"></translation>
     </message>
@@ -2700,7 +2700,7 @@ You should create defaults in Configuration &gt; Preference &gt; Accountancy.</s
     </message>
     <message>
         <location filename="../../plugins/accountplugin/receipts/receiptsIO.cpp" line="260"/>
-        <location filename="../../plugins/accountplugin/receipts/receiptsIO.cpp" line="337"/>
+        <location filename="../../plugins/accountplugin/receipts/receiptsIO.cpp" line="352"/>
         <source>Warning</source>
         <translation type="unfinished"></translation>
     </message>
@@ -2717,7 +2717,7 @@ and choose it as preferred.</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../../plugins/accountplugin/receipts/receiptsIO.cpp" line="337"/>
+        <location filename="../../plugins/accountplugin/receipts/receiptsIO.cpp" line="352"/>
         <source>More than one value</source>
         <translation type="unfinished"></translation>
     </message>

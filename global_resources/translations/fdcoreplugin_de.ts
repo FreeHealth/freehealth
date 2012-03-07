@@ -46,22 +46,22 @@
         <translation>Kern Initialisierung beendet...</translation>
     </message>
     <message>
-        <location filename="../../freediams/plugins/coreplugin/coreimpl.cpp" line="215"/>
+        <location filename="../../freediams/plugins/coreplugin/coreimpl.cpp" line="214"/>
         <source>You are running FreeDiams for the first time. You need to approve the licence terms.</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../../freediams/plugins/coreplugin/coreimpl.cpp" line="219"/>
+        <location filename="../../freediams/plugins/coreplugin/coreimpl.cpp" line="217"/>
         <source>You are running a new version of FreeDiams, you need to renew the licence agreement.</source>
         <translation>Sie benutzen eine neue Version von FreeDiams, bitte bestätigen Sie die Lizentbestimmungen erneut.</translation>
     </message>
     <message>
-        <location filename="../../freediams/plugins/coreplugin/coreimpl.cpp" line="229"/>
+        <location filename="../../freediams/plugins/coreplugin/coreimpl.cpp" line="227"/>
         <source>You are updating FreeDiams, do you want to update your personnal preferences ?</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../../freediams/plugins/coreplugin/coreimpl.cpp" line="230"/>
+        <location filename="../../freediams/plugins/coreplugin/coreimpl.cpp" line="228"/>
         <source>With the new version some preferences should be outdated. Answering yes will allow FreeDiams to update your personnal preferences.</source>
         <translation type="unfinished"></translation>
     </message>
@@ -202,24 +202,24 @@
         <translation></translation>
     </message>
     <message>
-        <location filename="../../plugins/coreplugin/dialogs/debugdialog.cpp" line="111"/>
+        <location filename="../../plugins/coreplugin/dialogs/debugdialog.cpp" line="113"/>
         <source>Sending debugging information to dev team</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../../plugins/coreplugin/dialogs/debugdialog.cpp" line="112"/>
+        <location filename="../../plugins/coreplugin/dialogs/debugdialog.cpp" line="114"/>
         <source>Trying to send information to dev team.
 Using Url : %1 
 Please wait...</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../../plugins/coreplugin/dialogs/debugdialog.cpp" line="133"/>
+        <location filename="../../plugins/coreplugin/dialogs/debugdialog.cpp" line="135"/>
         <source>Debugging information correctly sent.</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../../plugins/coreplugin/dialogs/debugdialog.cpp" line="135"/>
+        <location filename="../../plugins/coreplugin/dialogs/debugdialog.cpp" line="137"/>
         <source>Debugging information correctly send to dev team.
 Using Url : %1 
 %2</source>

@@ -233,6 +233,11 @@ Refer to your operating system documentation.</source>
         <translation>Schaue Seite</translation>
     </message>
     <message>
+        <location filename="../../plugins/printerplugin/printerpreviewer_p.ui" line="72"/>
+        <source>Show Duplicates</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
         <location filename="../../plugins/printerplugin/printerpreviewer_p.ui" line="79"/>
         <source>If it&apos;s checked the preview will update at each changes of text.
  This can be heavy CPU consuming.</source>
@@ -253,11 +258,6 @@ Dies kann eine starke CPU Belastung sein.</translation>
         <location filename="../../plugins/printerplugin/printerpreviewer_p.ui" line="118"/>
         <source>Update preview</source>
         <translation>Updating der Vorschau</translation>
-    </message>
-    <message>
-        <location filename="../../plugins/printerplugin/printerpreviewer_p.ui" line="72"/>
-        <source>Show Duplicata</source>
-        <translation>Suche nach Duplikaten</translation>
     </message>
 </context>
 <context>

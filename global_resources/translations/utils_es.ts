@@ -4,47 +4,47 @@
 <context>
     <name>Database</name>
     <message>
-        <location filename="../../libs/utils/database.cpp" line="498"/>
+        <location filename="../../libs/utils/database.cpp" line="499"/>
         <source>WARNING : %1 database already in use</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../../libs/utils/database.cpp" line="658"/>
+        <location filename="../../libs/utils/database.cpp" line="659"/>
         <source>ERROR : Database %1 is not readable. Path : %2</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../../libs/utils/database.cpp" line="650"/>
+        <location filename="../../libs/utils/database.cpp" line="651"/>
         <source>ERROR : Database %1 is not readable. Host: %2</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../../libs/utils/database.cpp" line="640"/>
+        <location filename="../../libs/utils/database.cpp" line="641"/>
         <source>ERROR : Database `%1` is not readable. Path : %2</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../../libs/utils/database.cpp" line="685"/>
+        <location filename="../../libs/utils/database.cpp" line="686"/>
         <source>ERROR : Database %1 is not writable. Path : %2.</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../../libs/utils/database.cpp" line="726"/>
+        <location filename="../../libs/utils/database.cpp" line="727"/>
         <source>INFO : database %1 connection = %2</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../../libs/utils/database.cpp" line="916"/>
+        <location filename="../../libs/utils/database.cpp" line="917"/>
         <source>Database Scheme Error : wrong number of fields for table %1</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../../libs/utils/database.cpp" line="925"/>
+        <location filename="../../libs/utils/database.cpp" line="926"/>
         <source>Database Scheme Error : field number %1 differs : %2 instead of %3 in table %4</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../../libs/utils/database.cpp" line="1793"/>
+        <location filename="../../libs/utils/database.cpp" line="1794"/>
         <source>Can not create table %1</source>
         <translation type="unfinished"></translation>
     </message>
@@ -201,7 +201,7 @@
     </message>
     <message>
         <location filename="../../libs/utils/global.cpp" line="878"/>
-        <source>You can send an email to developpers and explain your difficulties : freemedforms@googlegroups.com.</source>
+        <source>You can send an email to developers and explain your difficulties : freemedforms@googlegroups.com.</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
@@ -628,8 +628,8 @@
 <context>
     <name>Utils::QButtonLineEdit</name>
     <message>
-        <location filename="../../libs/utils/widgets/qbuttonlineedit.cpp" line="181"/>
-        <location filename="../../libs/utils/widgets/qbuttonlineedit.cpp" line="182"/>
+        <location filename="../../libs/utils/widgets/qbuttonlineedit.cpp" line="184"/>
+        <location filename="../../libs/utils/widgets/qbuttonlineedit.cpp" line="185"/>
         <source>(press Alt up/down cursor to cycle)</source>
         <translation type="unfinished"></translation>
     </message>

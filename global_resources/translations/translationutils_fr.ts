@@ -679,21 +679,26 @@
     </message>
     <message>
         <location filename="../../libs/translationutils/trans_drugs.h" line="62"/>
-        <source>Molecule is duplicated</source>
-        <translation>La molécule est dupliquée</translation>
+        <source>Drug duplication</source>
+        <translation>Duplication de médicament</translation>
     </message>
     <message>
         <location filename="../../libs/translationutils/trans_drugs.h" line="63"/>
-        <source>Class is duplicated</source>
-        <translation>La classe thérapeutique est dupliquée</translation>
+        <source>Molecule duplication</source>
+        <translation>Duplication de molécule</translation>
     </message>
     <message>
-        <location filename="../../libs/translationutils/trans_drugs.h" line="66"/>
+        <location filename="../../libs/translationutils/trans_drugs.h" line="64"/>
+        <source>Therapeutic class duplication</source>
+        <translation>Duplication de classe thérapeutique</translation>
+    </message>
+    <message>
+        <location filename="../../libs/translationutils/trans_drugs.h" line="67"/>
         <source>Drug database with interaction database</source>
         <translation>Base de données thérapeutique avec gestion des interactions</translation>
     </message>
     <message>
-        <location filename="../../libs/translationutils/trans_drugs.h" line="67"/>
+        <location filename="../../libs/translationutils/trans_drugs.h" line="68"/>
         <source>Drug database without interaction database</source>
         <translation>Base de données thérapeutique sans gestion des interactions</translation>
     </message>
@@ -744,8 +749,8 @@
     </message>
     <message>
         <location filename="../../libs/translationutils/trans_database.h" line="36"/>
-        <source>The %1 database driver is not installed or can not be found. Please report this error to the developper.</source>
-        <translation>Le pilote de base de données %1 n&apos;est pas installé ou ne peut pas être trouvé. Veuillez rapporter l&apos;erreur à l&apos;équipe de développement.</translation>
+        <source>The %1 database driver is not installed or can not be found. Please report this error to the developer.</source>
+        <translation>Le pilote de la base de données %1 n&apos;est pas trouvé et ne peut pas être installé. Veuillez rapporter ce problème à l&apos;équipe de développement.</translation>
     </message>
     <message>
         <location filename="../../libs/translationutils/trans_database.h" line="37"/>
@@ -1229,6 +1234,11 @@
         <translation>Code postaux</translation>
     </message>
     <message>
+        <location filename="../../libs/translationutils/trans_current.h" line="87"/>
+        <source>User documents</source>
+        <translation>Documents utilisateur</translation>
+    </message>
+    <message>
         <location filename="../../libs/translationutils/trans_user.h" line="39"/>
         <source>Users</source>
         <translation>Utilisateurs</translation>
@@ -1304,32 +1314,37 @@
         <translation>Type de document discordant.</translation>
     </message>
     <message>
-        <location filename="../../libs/translationutils/trans_msgerror.h" line="70"/>
+        <location filename="../../libs/translationutils/trans_msgerror.h" line="71"/>
         <source>General preferences</source>
         <translation>Préférences générales</translation>
     </message>
     <message>
-        <location filename="../../libs/translationutils/trans_msgerror.h" line="71"/>
+        <location filename="../../libs/translationutils/trans_msgerror.h" line="72"/>
         <source>User preferences</source>
         <translation>Préférences de l&apos;utilisateur</translation>
     </message>
     <message>
-        <location filename="../../libs/translationutils/trans_msgerror.h" line="73"/>
+        <location filename="../../libs/translationutils/trans_msgerror.h" line="74"/>
         <source>Internet connection preferences</source>
         <translation>Préférences de la connexion internet</translation>
     </message>
     <message>
         <location filename="../../libs/translationutils/trans_msgerror.h" line="75"/>
+        <source>Proxy</source>
+        <translation></translation>
+    </message>
+    <message>
+        <location filename="../../libs/translationutils/trans_msgerror.h" line="77"/>
         <source>Last check</source>
         <translation>Dernière vérification</translation>
     </message>
     <message>
-        <location filename="../../libs/translationutils/trans_msgerror.h" line="76"/>
+        <location filename="../../libs/translationutils/trans_msgerror.h" line="78"/>
         <source>Connected</source>
         <translation>Connecté</translation>
     </message>
     <message>
-        <location filename="../../libs/translationutils/trans_msgerror.h" line="77"/>
+        <location filename="../../libs/translationutils/trans_msgerror.h" line="79"/>
         <source>Not connected</source>
         <translation>Non connecté</translation>
     </message>
@@ -1912,21 +1927,26 @@
     </message>
     <message>
         <location filename="../../libs/translationutils/trans_msgerror.h" line="67"/>
+        <source>Your email.</source>
+        <translation>Votre courriel</translation>
+    </message>
+    <message>
+        <location filename="../../libs/translationutils/trans_msgerror.h" line="68"/>
         <source>Yes</source>
         <translation>Oui</translation>
     </message>
     <message>
-        <location filename="../../libs/translationutils/trans_msgerror.h" line="68"/>
+        <location filename="../../libs/translationutils/trans_msgerror.h" line="69"/>
         <source>No</source>
         <translation>Non</translation>
     </message>
     <message>
-        <location filename="../../libs/translationutils/trans_msgerror.h" line="69"/>
+        <location filename="../../libs/translationutils/trans_msgerror.h" line="70"/>
         <source>General</source>
         <translation>Général</translation>
     </message>
     <message>
-        <location filename="../../libs/translationutils/trans_msgerror.h" line="72"/>
+        <location filename="../../libs/translationutils/trans_msgerror.h" line="73"/>
         <source>Fatal error : Application failure. Please restart application.</source>
         <translation>Erreur fatale. Veuillez redémarrer l&apos;application.</translation>
     </message>
@@ -1998,24 +2018,24 @@ Localisation : %2</translation>
         <translation>Mise à jour disponible</translation>
     </message>
     <message>
-        <location filename="../../libs/translationutils/trans_team.h" line="35"/>
-        <source>Creator and Main Developper</source>
-        <translation>Créateur et développeur principal</translation>
-    </message>
-    <message>
-        <location filename="../../libs/translationutils/trans_team.h" line="36"/>
-        <source>Developpers and Contributors</source>
-        <translation>Développeurs et contributeurs</translation>
-    </message>
-    <message>
         <location filename="../../libs/translationutils/trans_team.h" line="37"/>
         <source>Debugger advisor</source>
         <translation>Conseiller déboggage</translation>
     </message>
     <message>
+        <location filename="../../libs/translationutils/trans_team.h" line="35"/>
+        <source>Creator and Main Developer</source>
+        <translation>Créateur et développeur principal</translation>
+    </message>
+    <message>
+        <location filename="../../libs/translationutils/trans_team.h" line="36"/>
+        <source>Developers and Contributors</source>
+        <translation>Développeurs et contributeurs</translation>
+    </message>
+    <message>
         <location filename="../../libs/translationutils/trans_team.h" line="38"/>
-        <source>Developper and debugger advisor</source>
-        <translation>Conseiller de développement et de déboggage</translation>
+        <source>Developer and debugger advisor</source>
+        <translation>Développeurs et déboggueurs</translation>
     </message>
     <message>
         <location filename="../../libs/translationutils/trans_team.h" line="39"/>

@@ -21,7 +21,7 @@
     <name>Core::ClientConfigPage</name>
     <message>
         <location filename="../../plugins/fmfcoreplugin/appconfigwizard.cpp" line="275"/>
-        <source>Personnal login and password</source>
+        <source>Personal login and password</source>
         <translation>Identifiants personnels</translation>
     </message>
     <message>
@@ -233,8 +233,8 @@
 <context>
     <name>Core::Internal::CorePlugin</name>
     <message>
-        <location filename="../../plugins/fmfcoreplugin/coreplugin.cpp" line="76"/>
-        <location filename="../../plugins/fmfcoreplugin/coreplugin.cpp" line="97"/>
+        <location filename="../../plugins/fmfcoreplugin/coreplugin.cpp" line="86"/>
+        <location filename="../../plugins/fmfcoreplugin/coreplugin.cpp" line="107"/>
         <source>Initializing core plugin...</source>
         <translation>Initialisation du plugin central...</translation>
     </message>
@@ -267,12 +267,12 @@
         <translation></translation>
     </message>
     <message>
-        <location filename="../../plugins/coreplugin/dialogs/debugdialog.cpp" line="111"/>
+        <location filename="../../plugins/coreplugin/dialogs/debugdialog.cpp" line="113"/>
         <source>Sending debugging information to dev team</source>
         <translation>Envoyer les informations de déboggage à l&apos;équipe de développement</translation>
     </message>
     <message>
-        <location filename="../../plugins/coreplugin/dialogs/debugdialog.cpp" line="112"/>
+        <location filename="../../plugins/coreplugin/dialogs/debugdialog.cpp" line="114"/>
         <source>Trying to send information to dev team.
 Using Url : %1 
 Please wait...</source>
@@ -281,12 +281,12 @@ Url : %1
 Veuillez patienter...</translation>
     </message>
     <message>
-        <location filename="../../plugins/coreplugin/dialogs/debugdialog.cpp" line="133"/>
+        <location filename="../../plugins/coreplugin/dialogs/debugdialog.cpp" line="135"/>
         <source>Debugging information correctly sent.</source>
         <translation>Informations de déboggage correctement envoyées.</translation>
     </message>
     <message>
-        <location filename="../../plugins/coreplugin/dialogs/debugdialog.cpp" line="135"/>
+        <location filename="../../plugins/coreplugin/dialogs/debugdialog.cpp" line="137"/>
         <source>Debugging information correctly send to dev team.
 Using Url : %1 
 %2</source>
@@ -676,7 +676,7 @@ Url: %1
         <location filename="../../plugins/coreplugin/settings.cpp" line="1005"/>
         <location filename="../../plugins/coreplugin/settings.cpp" line="1137"/>
         <source>Default installed datapack path</source>
-        <translation type="unfinished"></translation>
+        <translation>Répertoire d&apos;installation des paquets de données distribués par défaut</translation>
     </message>
     <message>
         <location filename="../../plugins/coreplugin/settings.cpp" line="1006"/>

@@ -133,7 +133,7 @@
         <translation>Création de la fenêtre principale</translation>
     </message>
     <message>
-        <location filename="../../freediams/plugins/mainwindowplugin/mainwindow.cpp" line="360"/>
+        <location filename="../../freediams/plugins/mainwindowplugin/mainwindow.cpp" line="359"/>
         <source>Transmitting posologies...</source>
         <translation>Transmition des posologies...</translation>
     </message>

@@ -234,7 +234,7 @@ Refer to your operating system documentation.</source>
     </message>
     <message>
         <location filename="../../plugins/printerplugin/printerpreviewer_p.ui" line="72"/>
-        <source>Show Duplicata</source>
+        <source>Show Duplicates</source>
         <translation type="unfinished"></translation>
     </message>
     <message>

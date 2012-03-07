@@ -659,21 +659,26 @@
     </message>
     <message>
         <location filename="../../libs/translationutils/trans_drugs.h" line="62"/>
-        <source>Molecule is duplicated</source>
+        <source>Drug duplication</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
         <location filename="../../libs/translationutils/trans_drugs.h" line="63"/>
-        <source>Class is duplicated</source>
+        <source>Molecule duplication</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../../libs/translationutils/trans_drugs.h" line="66"/>
-        <source>Drug database with interaction database</source>
+        <location filename="../../libs/translationutils/trans_drugs.h" line="64"/>
+        <source>Therapeutic class duplication</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
         <location filename="../../libs/translationutils/trans_drugs.h" line="67"/>
+        <source>Drug database with interaction database</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../../libs/translationutils/trans_drugs.h" line="68"/>
         <source>Drug database without interaction database</source>
         <translation type="unfinished"></translation>
     </message>
@@ -724,7 +729,7 @@
     </message>
     <message>
         <location filename="../../libs/translationutils/trans_database.h" line="36"/>
-        <source>The %1 database driver is not installed or can not be found. Please report this error to the developper.</source>
+        <source>The %1 database driver is not installed or can not be found. Please report this error to the developer.</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
@@ -1199,6 +1204,11 @@
         <translation type="unfinished"></translation>
     </message>
     <message>
+        <location filename="../../libs/translationutils/trans_current.h" line="87"/>
+        <source>User documents</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
         <location filename="../../libs/translationutils/trans_user.h" line="39"/>
         <source>Users</source>
         <translation type="unfinished"></translation>
@@ -1274,32 +1284,37 @@
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../../libs/translationutils/trans_msgerror.h" line="70"/>
+        <location filename="../../libs/translationutils/trans_msgerror.h" line="71"/>
         <source>General preferences</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../../libs/translationutils/trans_msgerror.h" line="71"/>
+        <location filename="../../libs/translationutils/trans_msgerror.h" line="72"/>
         <source>User preferences</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../../libs/translationutils/trans_msgerror.h" line="73"/>
+        <location filename="../../libs/translationutils/trans_msgerror.h" line="74"/>
         <source>Internet connection preferences</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
         <location filename="../../libs/translationutils/trans_msgerror.h" line="75"/>
-        <source>Last check</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <location filename="../../libs/translationutils/trans_msgerror.h" line="76"/>
-        <source>Connected</source>
+        <source>Proxy</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
         <location filename="../../libs/translationutils/trans_msgerror.h" line="77"/>
+        <source>Last check</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../../libs/translationutils/trans_msgerror.h" line="78"/>
+        <source>Connected</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../../libs/translationutils/trans_msgerror.h" line="79"/>
         <source>Not connected</source>
         <translation type="unfinished"></translation>
     </message>
@@ -1921,21 +1936,26 @@
     </message>
     <message>
         <location filename="../../libs/translationutils/trans_msgerror.h" line="67"/>
-        <source>Yes</source>
+        <source>Your email.</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
         <location filename="../../libs/translationutils/trans_msgerror.h" line="68"/>
-        <source>No</source>
+        <source>Yes</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
         <location filename="../../libs/translationutils/trans_msgerror.h" line="69"/>
+        <source>No</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../../libs/translationutils/trans_msgerror.h" line="70"/>
         <source>General</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../../libs/translationutils/trans_msgerror.h" line="72"/>
+        <location filename="../../libs/translationutils/trans_msgerror.h" line="73"/>
         <source>Fatal error : Application failure. Please restart application.</source>
         <translation type="unfinished"></translation>
     </message>
@@ -2006,24 +2026,24 @@ Place : %2</source>
         <translation>Update verfügbar</translation>
     </message>
     <message>
-        <location filename="../../libs/translationutils/trans_team.h" line="35"/>
-        <source>Creator and Main Developper</source>
-        <translation></translation>
-    </message>
-    <message>
-        <location filename="../../libs/translationutils/trans_team.h" line="36"/>
-        <source>Developpers and Contributors</source>
-        <translation>Entwickler und Unterstützer</translation>
-    </message>
-    <message>
         <location filename="../../libs/translationutils/trans_team.h" line="37"/>
         <source>Debugger advisor</source>
         <translation></translation>
     </message>
     <message>
+        <location filename="../../libs/translationutils/trans_team.h" line="35"/>
+        <source>Creator and Main Developer</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../../libs/translationutils/trans_team.h" line="36"/>
+        <source>Developers and Contributors</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
         <location filename="../../libs/translationutils/trans_team.h" line="38"/>
-        <source>Developper and debugger advisor</source>
-        <translation>Entwickler und Debugger Advisor</translation>
+        <source>Developer and debugger advisor</source>
+        <translation type="unfinished"></translation>
     </message>
     <message>
         <location filename="../../libs/translationutils/trans_team.h" line="39"/>

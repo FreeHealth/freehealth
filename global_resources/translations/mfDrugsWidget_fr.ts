@@ -44,25 +44,6 @@
     </message>
 </context>
 <context>
-    <name>DrugsWidget::DrugsCentralWidget</name>
-    <message>
-        <location filename="../../plugins/drugsplugin/drugswidget/drugscentralwidget.cpp" line="177"/>
-        <source>Can not add this drug to your prescription.</source>
-        <translation>Impossible d&apos;ajouter ce médicament à votre prescription.</translation>
-    </message>
-    <message>
-        <location filename="../../plugins/drugsplugin/drugswidget/drugscentralwidget.cpp" line="178"/>
-        <source>Prescription can not contains twice the sample pharmaceutical drug.
-Drug %1 is already in your prescription</source>
-        <translation>Une prescription ne peut pas contenir deux fois le mêeme médicament. Le médicament %1 est déjà présent dans la prescription</translation>
-    </message>
-    <message>
-        <location filename="../../plugins/drugsplugin/drugswidget/drugscentralwidget.cpp" line="181"/>
-        <source>If you want to change the dosage of this drug please double-click on it in the prescription box.</source>
-        <translation>Si vous désirez modifier le dosage de ce médicament, double-cliquez dessus dans la zone de prescription.</translation>
-    </message>
-</context>
-<context>
     <name>DrugsWidget::DynamicAlert</name>
     <message>
         <location filename="../../plugins/drugsplugin/drugswidget/dynamicalert.ui" line="14"/>
@@ -1218,19 +1199,24 @@ Voulez-vous réellement changer de mode d&apos;édition ?</translation>
         <translation>Police de caractère</translation>
     </message>
     <message>
+        <location filename="../../plugins/drugsplugin/drugspreferences/drugsviewoptionspage.ui" line="102"/>
+        <source>Size of history</source>
+        <translation>Taille de l&apos;historique</translation>
+    </message>
+    <message>
         <location filename="../../plugins/drugsplugin/drugspreferences/drugsviewoptionspage.ui" line="122"/>
         <source>Patient&apos;s names order (needs restart)</source>
         <translation>Ordre d&apos;affichage (nécessite un redémarrage de l&apos;application)</translation>
     </message>
     <message>
         <location filename="../../plugins/drugsplugin/drugspreferences/drugsviewoptionspage.ui" line="130"/>
-        <source>Lastnames - Firstnames</source>
-        <translation>Noms - Prénoms</translation>
+        <source>Last names - First names</source>
+        <translation>Nom de famille - Prénoms</translation>
     </message>
     <message>
         <location filename="../../plugins/drugsplugin/drugspreferences/drugsviewoptionspage.ui" line="135"/>
-        <source>Firstnames - Lastnames</source>
-        <translation>Prénoms - Noms</translation>
+        <source>First names - Last names</source>
+        <translation>Prénoms - Nom de famille</translation>
     </message>
     <message>
         <location filename="../../plugins/drugsplugin/drugspreferences/drugsviewoptionspage.ui" line="210"/>
@@ -1279,11 +1265,6 @@ Voulez-vous réellement changer de mode d&apos;édition ?</translation>
         <location filename="../../plugins/drugsplugin/drugspreferences/drugsviewoptionspage.ui" line="95"/>
         <source>Font size</source>
         <translation>Taille de la police</translation>
-    </message>
-    <message>
-        <location filename="../../plugins/drugsplugin/drugspreferences/drugsviewoptionspage.ui" line="102"/>
-        <source>Size of historic</source>
-        <translation>Taille de l&apos;historique</translation>
     </message>
     <message>
         <location filename="../../plugins/drugsplugin/drugspreferences/drugsviewoptionspage.ui" line="146"/>
