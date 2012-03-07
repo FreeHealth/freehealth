@@ -219,7 +219,7 @@ UserManagerWidget::UserManagerWidget(QWidget *parent) :
     QWidget(parent),
     ui(new Ui::UserManagerWidget),
     m_ToolBar(0),
-    m_SearchToolBut(0),
+    m_SearchToolButton(0),
     aCreateUser(0),
     aModifyUser(0),
     aSave(0),
@@ -254,17 +254,17 @@ UserManagerWidget::UserManagerWidget(QWidget *parent) :
     aToggleSearchView->setObjectName(QString::fromUtf8("aToggleSearchView"));
 
     // prepare Search Line Edit
-    searchByNameAct = new QAction(m_SearchToolBut);
-    searchByFirstnameAct = new QAction(m_SearchToolBut);
-    searchByNameAndFirstnameAct = new QAction(m_SearchToolBut);
-    searchByCityAct = new QAction(m_SearchToolBut);
-    m_SearchToolBut = new QToolButton(ui->searchLineEdit);
-    ui->searchLineEdit->setLeftButton(m_SearchToolBut);
-    m_SearchToolBut->addAction(searchByNameAct);
-    m_SearchToolBut->addAction(searchByFirstnameAct);
+    m_SearchToolButton = new QToolButton();   // parent object will be redefined
+    ui->searchLineEdit->setLeftButton(m_SearchToolButton);
+    searchByNameAct = new QAction(m_SearchToolButton);
+    searchByFirstnameAct = new QAction(m_SearchToolButton);
+    searchByNameAndFirstnameAct = new QAction(m_SearchToolButton);
+    searchByCityAct = new QAction(m_SearchToolButton);
+    m_SearchToolButton->addAction(searchByNameAct);
+    m_SearchToolButton->addAction(searchByFirstnameAct);
     //    m_SearchToolBut->addAction(searchByNameAndFirstnameAct);
     //    m_SearchToolBut->addAction(searchByCityAct);
-    m_SearchToolBut->setPopupMode(QToolButton::InstantPopup);
+    m_SearchToolButton->setPopupMode(QToolButton::InstantPopup);
 
     // manage theme / icons
     Core::ITheme *th = theme();
@@ -276,7 +276,7 @@ UserManagerWidget::UserManagerWidget(QWidget *parent) :
     aQuit->setIcon(th->icon(Core::Constants::ICONEXIT, Core::ITheme::MediumIcon));
     aToggleSearchView->setIcon(th->icon(Core::Constants::ICONSEARCHUSER, Core::ITheme::MediumIcon));
 
-    m_SearchToolBut->setIcon(theme()->icon(Core::Constants::ICONSEARCH));
+    m_SearchToolButton->setIcon(theme()->icon(Core::Constants::ICONSEARCH));
     searchByNameAct->setIcon(th->icon(Core::Constants::ICONSEARCH));
     searchByFirstnameAct->setIcon(th->icon(Core::Constants::ICONSEARCH));
     searchByNameAndFirstnameAct->setIcon(th->icon(Core::Constants::ICONSEARCH));
@@ -336,7 +336,7 @@ bool UserManagerWidget::initialize()
 
     // connect search line edit
     connect(ui->searchLineEdit, SIGNAL(textChanged(const QString &)), this, SLOT(onSearchRequested()));
-    connect(m_SearchToolBut, SIGNAL(triggered(QAction*)), this, SLOT(onSearchToolButtonTriggered(QAction*)));
+    connect(m_SearchToolButton, SIGNAL(triggered(QAction*)), this, SLOT(onSearchToolButtonTriggered(QAction*)));
 
     connect(user(), SIGNAL(userChanged()), this, SLOT(onCurrentUserChanged()));
 
@@ -535,7 +535,7 @@ void UserManagerWidget::retranslate()
     searchByFirstnameAct->setToolTip(searchByFirstnameAct->text());
     searchByNameAndFirstnameAct->setToolTip(searchByNameAndFirstnameAct->text());
     searchByCityAct->setToolTip(searchByCityAct->text());
-    m_SearchToolBut->setToolTip(m_SearchToolBut->text());
+    m_SearchToolButton->setToolTip(m_SearchToolButton->text());
 
     aCreateUser->setText(QCoreApplication::translate(Constants::TR_CONTEXT_USERS, Constants::CREATE_USER));
     aCreateUser->setToolTip(aCreateUser->text());
