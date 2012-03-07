@@ -155,8 +155,8 @@ void UserIdentityAndLoginPage::changeEvent(QEvent *e)
 
 void UserIdentityAndLoginPage::retranslate()
 {
-    setTitle(tr("Create a new user."));
-    setSubTitle(tr("Enter your identity."));
+    setTitle(tr("Create a new user"));
+    setSubTitle(tr("Please enter your identity."));
 
     /* TODO: the following lines are not really needed
       as in the autocreated ui_ file the retranslate() method

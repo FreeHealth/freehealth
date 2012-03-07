@@ -35,7 +35,7 @@
   Usage :
   \code
     UserWizard wiz;
-    wiz.createUser(true);   // will create the user (optionnal)
+    wiz.createUser(true);   // will create the user (optional)
     wiz.show();
   \endcode
 
@@ -305,8 +305,8 @@ UserContactPage::UserContactPage(QWidget *parent) :
     QWizardPage(parent),
     ui(new Ui::UserWizardContactWidget)
 {
-    setTitle(tr("Please enter your complete address."));
-    setSubTitle(tr("This represents your professional address."));
+    setTitle(tr("Provide your address."));
+    setSubTitle(tr("Please enter your complete, professional address."));
 
     ui->setupUi(this);
     ui->tabWidget->setCurrentIndex(0);
@@ -316,10 +316,12 @@ UserContactPage::UserContactPage(QWidget *parent) :
     c->setZipLineEdit(ui->zipcode);
     c->setCityLineEdit(ui->city);
 
-    registerField("Address", ui->address , "plainText");
-    registerField("City", ui->city , "text");
-    registerField("Zipcode", ui->zipcode , "text");
-    registerField("Country", ui->comboBox , "currentIsoCountry");
+    ui->mail->setValidator(new QRegExpValidator(
+                               QRegExp("[A-Z0-9._%-]+@[A-Z0-9.-]+\.[A-Z]{2,4}", Qt::CaseInsensitive)));
+    registerField("Address", ui->address, "plainText");
+    registerField("City", ui->city, "text");
+    registerField("Zipcode", ui->zipcode, "text");
+    registerField("Country", ui->comboBox, "currentIsoCountry");
 
     registerField("Tel1", ui->tel1, "text");
     registerField("Tel2", ui->tel2, "text");
