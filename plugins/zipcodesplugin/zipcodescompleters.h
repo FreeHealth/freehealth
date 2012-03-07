@@ -29,6 +29,7 @@
 
 #include <zipcodesplugin/zipcodes_exporter.h>
 #include <utils/widgets/countrycombobox.h>
+#include <utils/widgets/qbuttonlineedit.h>
 
 #include <QObject>
 #include <QSqlQueryModel>
@@ -98,8 +99,8 @@ public:
     ~ZipCountryCompleters();
 
     void setCountryComboBox(Utils::CountryComboBox *box);
-    void setCityLineEdit(QLineEdit *country);
-    void setZipLineEdit(QLineEdit *zip);
+    void setCityLineEdit(Utils::QButtonLineEdit *country);
+    void setZipLineEdit(Utils::QButtonLineEdit *zip);
     void checkData();
     QAbstractItemModel *completionModel() const {return m_Model;}
 
@@ -115,7 +116,7 @@ private:
     bool eventFilter(QObject *, QEvent *);
 
 private:
-    QLineEdit *m_City, *m_Zip;
+    Utils::QButtonLineEdit *m_City, *m_Zip;
     Utils::CountryComboBox *m_Country;
     Internal::ZipCountryModel *m_Model;
     QAbstractItemView *m_View;

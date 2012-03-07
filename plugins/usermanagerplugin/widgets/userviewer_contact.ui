@@ -32,7 +32,7 @@
     </widget>
    </item>
    <item row="1" column="1">
-    <widget class="QLineEdit" name="zipcodeLineEdit"/>
+    <widget class="Utils::QButtonLineEdit" name="zipcodeLineEdit"/>
    </item>
    <item row="2" column="0">
     <widget class="QLabel" name="label_12">
@@ -42,7 +42,7 @@
     </widget>
    </item>
    <item row="2" column="1">
-    <widget class="QLineEdit" name="cityLineEdit"/>
+    <widget class="Utils::QButtonLineEdit" name="cityLineEdit"/>
    </item>
    <item row="3" column="0">
     <widget class="QLabel" name="label_9">
@@ -118,6 +118,11 @@
    <class>Views::CountryComboBox</class>
    <extends>QComboBox</extends>
    <header location="global">listviewplugin/countrycombobox.h</header>
+  </customwidget>
+  <customwidget>
+   <class>Utils::QButtonLineEdit</class>
+   <extends>QLineEdit</extends>
+   <header>utils/widgets/qbuttonlineedit.h</header>
   </customwidget>
  </customwidgets>
  <resources/>

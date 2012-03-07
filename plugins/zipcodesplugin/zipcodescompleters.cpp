@@ -251,7 +251,7 @@ void ZipCountryCompleters::setCountryComboBox(Utils::CountryComboBox *box)
 }
 
 /** Define the QLineEdit to use as city name editor */
-void ZipCountryCompleters::setCityLineEdit(QLineEdit *city)
+void ZipCountryCompleters::setCityLineEdit(Utils::QButtonLineEdit *city)
 {
     m_City = city;
     // Completer
@@ -268,25 +268,16 @@ void ZipCountryCompleters::setCityLineEdit(QLineEdit *city)
 
     // button
     m_CityButton = new QToolButton(m_City);
-    m_CityButton->setToolTip("City button");
-    m_CityButton->setToolButtonStyle(Qt::ToolButtonIconOnly);
-    m_CityButton->setIconSize(QSize(16,16));
     m_CityButton->setIcon(theme()->icon(Core::Constants::ICONOK));
-    m_CityButton->setMinimumSize(20,20);
-    m_CityButton->setMaximumSize(20,20);
-    m_CityButton->setStyleSheet("QToolButton { border: none; padding: 0px; }");
-    m_CityButton->show();
+    m_City->setLeftButton(m_CityButton);
+//    m_CityButton->setToolTip("City button");
 
-    int frameWidth = m_City->style()->pixelMetric(QStyle::PM_DefaultFrameWidth);
-    QSize msz = m_City->minimumSizeHint();
-    m_City->setMinimumSize(qMax(msz.width(), m_CityButton->maximumHeight() + frameWidth * 2 + 2),
-                          qMax(msz.height(), m_CityButton->maximumHeight() + frameWidth * 2 + 2));
-    m_City->setStyleSheet(QString("padding-left: %1px;").arg(m_CityButton->sizeHint().width() + frameWidth));
     m_City->installEventFilter(this);
 }
 
+
 /** Define the QLineEdit to use as zip code editor */
-void ZipCountryCompleters::setZipLineEdit(QLineEdit *zip)
+void ZipCountryCompleters::setZipLineEdit(Utils::QButtonLineEdit *zip)
 {
     m_Zip = zip;
     // Completer
@@ -302,20 +293,10 @@ void ZipCountryCompleters::setZipLineEdit(QLineEdit *zip)
 
     // button
     m_ZipButton = new QToolButton(m_Zip);
-    m_ZipButton->setToolTip("Zip button");
-    m_ZipButton->setToolButtonStyle(Qt::ToolButtonIconOnly);
-    m_ZipButton->setIconSize(QSize(16,16));
     m_ZipButton->setIcon(theme()->icon(Core::Constants::ICONOK));
-    m_ZipButton->setMinimumSize(20,20);
-    m_ZipButton->setMaximumSize(20,20);
-    m_ZipButton->setStyleSheet("QToolButton { border: none; padding: 0px; }");
-    m_ZipButton->show();
+    m_Zip->setLeftButton(m_ZipButton);
+    //    m_ZipButton->setToolTip("please enter ZIP"); // remove?
 
-    int frameWidth = m_Zip->style()->pixelMetric(QStyle::PM_DefaultFrameWidth);
-    QSize msz = m_Zip->minimumSizeHint();
-    m_Zip->setMinimumSize(qMax(msz.width(), m_ZipButton->maximumHeight() + frameWidth * 2 + 2),
-                          qMax(msz.height(), m_ZipButton->maximumHeight() + frameWidth * 2 + 2));
-    m_Zip->setStyleSheet(QString("padding-left: %1px;").arg(m_ZipButton->sizeHint().width() + frameWidth));
     m_Zip->installEventFilter(this);
 }
 
@@ -411,7 +392,7 @@ void ZipCountryCompleters::packChanged(const DataPack::Pack &pack)
     }
 }
 
-/** Event Filter is used to draw toolButtons inside the QLineEdit. */
+/** \deprecated Event Filter is used to draw toolButtons inside the QLineEdit. */
 bool ZipCountryCompleters::eventFilter(QObject *o, QEvent *e)
 {
     if (o==m_Zip) {
