@@ -47,9 +47,6 @@ public:
 
 	PadAnalyzer();
 
-	/**
-	 * Analyzes a mask text
-	 */
 	Pad *analyze(const QString &text);
 
 	const QList<Core::PadAnalyzerError> lastErrors() const { return _lastErrors; }
@@ -87,7 +84,6 @@ private:
 
 	static bool isSpecial(const QChar &c);
 
-	// returns the next lexem in the stream
 	Lexem nextLexem();
 };
 

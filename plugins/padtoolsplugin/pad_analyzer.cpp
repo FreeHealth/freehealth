@@ -24,6 +24,11 @@
  *  Contributors :                                                         *
  *      NAME <MAIL@ADRESS>                                                 *
  ***************************************************************************/
+/**
+  \class PadTools::PadAnalyzer
+  Analyze a string for tokens.
+*/
+
 #include "pad_analyzer.h"
 
 PadAnalyzer::PadAnalyzer()
@@ -32,6 +37,7 @@ PadAnalyzer::PadAnalyzer()
 	_lexemNull.type = Lexem_Null;
 }
 
+/** Analyzes a mask \e text. */
 Pad *PadAnalyzer::analyze(const QString &text)
 {
 	Lexem lex;
@@ -191,6 +197,7 @@ bool PadAnalyzer::isSpecial(const QChar &c)
 		c == coreDelimiter;
 }
 
+/** Returns the next lexem in the stream */
 PadAnalyzer::Lexem PadAnalyzer::nextLexem()
 {
 	if (atEnd()) // no more lexem to read

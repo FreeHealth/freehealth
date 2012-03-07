@@ -24,6 +24,11 @@
  *  Contributors :                                                         *
  *      NAME <MAIL@ADRESS>                                                 *
  ***************************************************************************/
+/**
+  \class PadTools::PadToolsImpl
+  Implementation of the virtual Core::IPadTools, start of everything.
+ */
+
 #include "padtoolsimpl.h"
 
 #include "pad_analyzer.h"
@@ -31,6 +36,7 @@
 
 using namespace PadTools;
 
+/** Analyse a string \e templ for \e tokens, manages a list of \e errors (output) and returns the parsed string.*/
 QString PadToolsImpl::parse(const QString &templ, QMap<QString,QVariant> &tokens, QList<Core::PadAnalyzerError> &errors)
 {
 	Q_UNUSED(tokens); //TMP
@@ -42,9 +48,9 @@ QString PadToolsImpl::parse(const QString &templ, QMap<QString,QVariant> &tokens
 	return pad->run(tokens);
 }
 
+/** Creates a syntax highlighter for the \e textEdit usng the \e tokens.*/
 QSyntaxHighlighter *PadToolsImpl::createSyntaxHighlighter(QTextEdit *textEdit, QMap<QString,QVariant> &tokens)
 {
 	Q_UNUSED(tokens); //TMP
-
 	return new PadHighlighter(textEdit);
 }
