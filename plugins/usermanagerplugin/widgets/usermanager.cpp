@@ -254,17 +254,10 @@ UserManagerWidget::UserManagerWidget(QWidget *parent) :
     aToggleSearchView->setObjectName(QString::fromUtf8("aToggleSearchView"));
 
     // prepare Search Line Edit
-    m_SearchToolButton = new QToolButton();   // parent object will be redefined
-    ui->searchLineEdit->setLeftButton(m_SearchToolButton);
-    searchByNameAct = new QAction(m_SearchToolButton);
-    searchByFirstnameAct = new QAction(m_SearchToolButton);
-    searchByNameAndFirstnameAct = new QAction(m_SearchToolButton);
-    searchByCityAct = new QAction(m_SearchToolButton);
-    m_SearchToolButton->addAction(searchByNameAct);
-    m_SearchToolButton->addAction(searchByFirstnameAct);
-    //    m_SearchToolBut->addAction(searchByNameAndFirstnameAct);
-    //    m_SearchToolBut->addAction(searchByCityAct);
-    m_SearchToolButton->setPopupMode(QToolButton::InstantPopup);
+    searchByNameAct = new QAction(this);
+    searchByFirstnameAct = new QAction(this);
+    searchByNameAndFirstnameAct = new QAction(this);
+    searchByCityAct = new QAction(this);
 
     // manage theme / icons
     Core::ITheme *th = theme();
@@ -276,7 +269,6 @@ UserManagerWidget::UserManagerWidget(QWidget *parent) :
     aQuit->setIcon(th->icon(Core::Constants::ICONEXIT, Core::ITheme::MediumIcon));
     aToggleSearchView->setIcon(th->icon(Core::Constants::ICONSEARCHUSER, Core::ITheme::MediumIcon));
 
-    m_SearchToolButton->setIcon(theme()->icon(Core::Constants::ICONSEARCH));
     searchByNameAct->setIcon(th->icon(Core::Constants::ICONSEARCH));
     searchByFirstnameAct->setIcon(th->icon(Core::Constants::ICONSEARCH));
     searchByNameAndFirstnameAct->setIcon(th->icon(Core::Constants::ICONSEARCH));
@@ -293,6 +285,15 @@ UserManagerWidget::UserManagerWidget(QWidget *parent) :
 //    m_ToolBar->addAction(aQuit);
     m_ToolBar->setSizePolicy(QSizePolicy::Preferred, QSizePolicy::Preferred);
     ui->toolbarLayout->addWidget(m_ToolBar);
+
+    m_SearchToolButton = new QToolButton(ui->searchLineEdit);
+    m_SearchToolButton->addAction(searchByNameAct);
+    m_SearchToolButton->addAction(searchByFirstnameAct);
+    //    m_SearchToolButton->addAction(searchByNameAndFirstnameAct);
+    //    m_SearchToolButton->addAction(searchByCityAct);
+    m_SearchToolButton->setPopupMode(QToolButton::InstantPopup);
+    m_SearchToolButton->setDefaultAction(searchByNameAct);
+    ui->searchLineEdit->setLeftButton(m_SearchToolButton);
 
     ui->userViewer->setEnabled(false);
 }
@@ -514,11 +515,11 @@ void UserManagerWidget::selectUserTableView(int row)
 void UserManagerWidget::changeEvent(QEvent *e)
 {
     if ((e->type() == QEvent::LanguageChange)) {
-        if (ui)
+        if (ui) {
             ui->retranslateUi(this);
-//        m_Parent->setWindowTitle(tr("User Manager") + " - " + qApp->applicationName());
+            retranslate();
+       }
     }
-    retranslate();
 }
 
 /** Retranslate the UI */
@@ -549,11 +550,8 @@ void UserManagerWidget::retranslate()
     aDeleteUser->setToolTip(aDeleteUser->text());
     aQuit->setText(tr("Quit User Manager"));
     aQuit->setToolTip(aQuit->text());
-    aToggleSearchView->setText(tr("Search"));
+    aToggleSearchView->setText(tr("Search user"));
     aToggleSearchView->setToolTip(aToggleSearchView->text());
-
-//    m_Parent->setWindowTitle(tr("User Manager") + " - " + qApp->applicationName());
-//    updateStatusBar();
 }
 
 /** For debugging purpose */
