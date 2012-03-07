@@ -98,7 +98,7 @@ void QButtonLineEdit::setLeftButton(QToolButton * button)
 {
     button->setParent(this);
     m_leftButton = button;
-    m_leftButton->setStyleSheet("QToolButton { border: none; padding: 0px; }");
+    m_leftButton->setStyleSheet("QToolButton { border: none; padding: 0 0 0 2px; }");
     m_leftButton->setCursor(Qt::ArrowCursor);
 
     int frameWidth = style()->pixelMetric(QStyle::PM_DefaultFrameWidth);

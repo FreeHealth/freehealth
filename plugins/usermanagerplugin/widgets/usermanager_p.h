@@ -85,7 +85,7 @@ private:
     int m_EditingRow;
     int m_SearchBy;
     QToolBar *m_ToolBar;
-    QToolButton *m_SearchToolBut;
+    QToolButton *m_SearchToolButton;
     QAction *aCreateUser;
     QAction *aModifyUser;
     QAction *aSave;

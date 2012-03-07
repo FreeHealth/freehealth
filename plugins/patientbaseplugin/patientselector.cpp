@@ -87,7 +87,7 @@ public:
 
     void createSearchToolButtons()
     {
-        m_SearchToolButton = new QToolButton(q);   // parent object will be redefined
+        m_SearchToolButton = new QToolButton();   // parent object will be redefined
         m_SearchToolButton->setPopupMode(QToolButton::InstantPopup);
         m_SearchToolButton->setIcon(theme()->icon(Core::Constants::ICONSEARCH));
 
@@ -99,18 +99,18 @@ public:
                 << Constants::A_SEARCH_PATIENTS_BY_NAMEFIRSTNAME
                 << Constants::A_SEARCH_PATIENTS_BY_DOB;
 
-        QList<QAction *> l;
+        QList<QAction *> actionList;
         foreach(const QString &a, actions) {
             cmd = actionManager()->command(a);
             m_SearchToolButton->addAction(cmd->action());
-            l << cmd->action();
+            actionList << cmd->action();
         }
 
         int id = settings()->value(Constants::S_SEARCHMETHOD, 0).toInt();
-        if (id < l.count() && id >= 0) {
-            l.at(id)->trigger();
-            l.at(id)->setChecked(true);
-            m_SearchToolButton->setDefaultAction(l.at(id));
+        if (id < actionList.count() && id >= 0) {
+            actionList.at(id)->trigger();
+            actionList.at(id)->setChecked(true);
+            m_SearchToolButton->setDefaultAction(actionList.at(id));
             m_SearchMethod = id;
         } else {
             m_SearchMethod = 0;
