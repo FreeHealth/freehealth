@@ -30,6 +30,7 @@
  *      NAME <MAIL@ADRESS>                                                 *
  ***************************************************************************/
 #include "controlreceiptsIO.h"
+#include "constants.h"
 #include "ui_controlreceipts.h"
 
 #include <QMessageBox>

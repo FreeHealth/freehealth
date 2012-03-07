@@ -317,7 +317,7 @@ UserContactPage::UserContactPage(QWidget *parent) :
     c->setCityLineEdit(ui->city);
 
     ui->mail->setValidator(new QRegExpValidator(
-                               QRegExp("[A-Z0-9._%-]+@[A-Z0-9.-]+\.[A-Z]{2,4}", Qt::CaseInsensitive)));
+                               QRegExp("[A-Z0-9._%-]+@[A-Z0-9.-]+\\.[A-Z]{2,4}", Qt::CaseInsensitive)));
     registerField("Address", ui->address, "plainText");
     registerField("City", ui->city, "text");
     registerField("Zipcode", ui->zipcode, "text");
