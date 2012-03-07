@@ -86,8 +86,8 @@ UserIdentityAndLoginPage::UserIdentityAndLoginPage(QWidget *parent) :
     ui->lePasswordConfirm->setIcon(theme()->icon(Core::Constants::ICONEYES));
 
     registerField("Login*", ui->leLogin);
-    registerField("Password*", ui->lePassword, "text");
-    registerField("ConfirmPassword*", ui->lePasswordConfirm, "text");
+    registerField("Password*", ui->lePassword->lineEdit());
+    registerField("ConfirmPassword*", ui->lePasswordConfirm->lineEdit());
 
     retranslate();
 
