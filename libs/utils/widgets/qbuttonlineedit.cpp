@@ -94,7 +94,7 @@ void QButtonLineEdit::setDelayedSignals(bool state)
  Text of selected action is shown in gray inside the line edit when it is empty. \n
  For now pixmaps of QAction must be sized (16x16). \n
  */
-void QButtonLineEdit::setLeftButton(QToolButton * button)
+void QButtonLineEdit::setLeftButton(QToolButton *button)
 {
     button->setParent(this);
     m_leftButton = button;
@@ -110,7 +110,7 @@ void QButtonLineEdit::setLeftButton(QToolButton * button)
                    qMax(msz.height(), button->sizeHint().height() + frameWidth * 2 + 2));
 
     // set text to button toolTip
-    setPlaceholderText(cleanString(m_leftButton->toolTip()));
+    updatePlaceholderText();
     prepareConnections();
     clearFocus();
     setSpecificStyleSheet();
@@ -175,7 +175,7 @@ void QButtonLineEdit::emitTextChangedSignal()
 void QButtonLineEdit::leftTrig(QAction *action)
 {
     m_leftButton->setDefaultAction(action);
-    setPlaceholderText(cleanString(action->text()));
+    updatePlaceholderText();
     clearFocus();
 }
 
