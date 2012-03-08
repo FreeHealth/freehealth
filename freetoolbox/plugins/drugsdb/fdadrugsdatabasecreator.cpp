@@ -295,7 +295,7 @@ bool FdaDrugDatatabaseStep::createDatabase()
     QMultiHash<QString, QVariant> labels;
     labels.insert("fr","Base de données thérapeutiques américaine");
     labels.insert("en","USA therapeutic database");
-    labels.insert("de","USA therapeutischen database");
+    labels.insert("de","Therapeutische Datenbank USA");
 
     if (Core::Tools::createNewDrugsSource(Core::Constants::MASTER_DATABASE_NAME, FDA_DRUGS_DATABASE_NAME, labels) == -1) {
         LOG_ERROR("Unable to create the FDA drugs sources");
@@ -333,7 +333,7 @@ bool FdaDrugDatatabaseStep::populateDatabase()
 
     QFile file(workingPath() + "Product.txt");
     if (!file.open(QIODevice::ReadOnly | QIODevice::Text)) {
-        LOG_ERROR(QString("ERROR : Enable to open Product.txt : %1.").arg(file.errorString()));
+        LOG_ERROR(QString("ERROR: Enable to open Product.txt: %1.").arg(file.errorString()));
         return false;
     }
     Q_EMIT progressLabelChanged(tr("Reading drugs raw source"));
