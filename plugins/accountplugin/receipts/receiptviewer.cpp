@@ -62,7 +62,9 @@
 #include <QBrush>
 #include <QColor>
 
-enum { WarnDebugMessage = false };
+
+enum{WarnDebugMessage = true};
+
 
 static inline Core::IUser *user() { return Core::ICore::instance()->user(); }
 static inline Core::IPatient *patient() { return Core::ICore::instance()->patient(); }
@@ -594,6 +596,31 @@ void treeViewsActions::changeEvent(QEvent *e) {
         }
 }
 
+ChoosenListView::ChoosenListView(QObject * parent){
+    m_deleteInReturnedList = new QAction(trUtf8("Delete this item"),this);
+    m_clear = new QAction(trUtf8("Clear all."),this);
+    connect(m_clear,SIGNAL(triggered(bool)),parent,SLOT(clearAll(bool)));
+    connect(m_deleteInReturnedList,SIGNAL(triggered(bool)),this,SLOT(deleteItem(bool)));
+}
+
+ChoosenListView::~ChoosenListView(){}
+
+void ChoosenListView::mousePressEvent(QMouseEvent *event){
+  if(event->button() == Qt::RightButton){
+    if (WarnDebugMessage)
+    	      qDebug() << "in right clic" << __FILE__ << QString::number(__LINE__) ;
+    m_menu  = new QMenu(this);
+    m_menu  -> addAction(m_clear);
+    m_menu  -> addAction (m_deleteInReturnedList);
+    m_menu  ->exec(event->globalPos());
+
+  }
+}
+
+void ChoosenListView::deleteItem(bool b)
+{
+    QMessageBox::information(0,"try","delete line",QMessageBox::Ok);
+}
 ////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 /////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 ////////////////RECEIPTS VIEWER/////////////////////////////////////////////////////////////////////////////////
@@ -656,12 +683,7 @@ ReceiptViewer::ReceiptViewer(QWidget *parent) :
     ui->saveButton->setShortcut(QKeySequence::InsertParagraphSeparator);
     ui->quitButton->setShortcut(QKeySequence("Ctrl+q"));
     ui->thesaurusButton->setShortcut(QKeySequence("Ctrl+t"));
-    ui->returnedListView->setStyleSheet("background-color: rgb(201, 201, 201)");
     
-    m_modelReturnedList = new QStringListModel;
-    ui->returnedListView->setModel(m_modelReturnedList);
-    ui->returnedListView->setEnabled(true);
-    ui->returnedListView->show();
     m_actionTreeView = new treeViewsActions(this);
     m_vbox = new QVBoxLayout;
     m_vbox->addWidget(m_actionTreeView);
@@ -670,7 +692,15 @@ ReceiptViewer::ReceiptViewer(QWidget *parent) :
         if (WarnDebugMessage)
                 qWarning() << __FILE__ << QString::number(__LINE__) << "index is not valid";
         }
-    
+    m_returnedListView = new ChoosenListView(this);
+    m_returnedListView->setStyleSheet("background-color: rgb(201, 201, 201)");
+    m_vboxForList = new QVBoxLayout;
+    m_vboxForList->addWidget(m_returnedListView);
+    ui->choosenValuesBox->setLayout(m_vboxForList);
+    m_modelReturnedList = new QStringListModel;
+    m_returnedListView->setModel(m_modelReturnedList);
+    m_returnedListView->setEnabled(true);
+    m_returnedListView->show();
     //preferential choices in the tree view.
     QString site = QString("Sites");
     QString distRule = QString("Distance rules");
@@ -686,7 +716,7 @@ ReceiptViewer::ReceiptViewer(QWidget *parent) :
                  << m_insuranceUid.toString() ;
     
     //right click
-    m_clear = new QAction(trUtf8("Clear all."),this);
+    
     //ui_controlreceipts
     m_control = new ControlReceipts(this);
     m_control->hide();
@@ -705,10 +735,11 @@ ReceiptViewer::ReceiptViewer(QWidget *parent) :
             qWarning() << __FILE__ << QString::number(__LINE__) << "unable to connect m_actionTreeView";
     }
     
-    connect(m_clear,SIGNAL(triggered(bool)),this,SLOT(clearAll(bool)));
+    
     connect(m_control,SIGNAL(isClosing()),this,SLOT(controlReceiptsDestroyed()));
     connect(user(), SIGNAL(userChanged()), this, SLOT(userUid()));
-    
+    //connect(m_returnedListView,SIGNAL(pressed(QModelIndex&)),this,SLOT(deleteItem(QModelIndex&)));
+        
 }
 
 ReceiptViewer::~ReceiptViewer()
@@ -757,12 +788,6 @@ void ReceiptViewer::setPosition(QWidget *parent){
     setGeometry(parent->x(),parent->y(),rect.width()-10,rect.height()-10);
 }
 
-void ReceiptViewer::deleteLine()
-{
-    QMessageBox::information(0,"try","delete line",QMessageBox::Ok);
-}
-
-
 
 void ReceiptViewer::actionsOfTreeView(const QModelIndex & index) {
     if (WarnDebugMessage)
@@ -794,7 +819,7 @@ void ReceiptViewer::actionsOfTreeView(const QModelIndex & index) {
                         site = model->data(model->index(i,choice.SITE),Qt::DisplayRole);
                         distrules = model->data(model->index(i,choice.DISTRULES),Qt::DisplayRole);
                        /*QStringList*/ m_listOfValues << hashOfValues.keys();
-                       m_listOfValues.removeDuplicates();
+                       //m_listOfValues.removeDuplicates();
                        m_modelReturnedList->setStringList(m_listOfValues);
                        fillModel(hashOfValues,typeOfPayment,percentage,debtor,site,distrules,i);
                      }
@@ -843,7 +868,7 @@ void ReceiptViewer::actionsOfTreeView(const QModelIndex & index) {
             	                 	  "value\nin thesaurus\nand choose it as preferred."),QMessageBox::Ok);
                     }           
                 m_listOfValues << hashOfValues.keys();
-                m_listOfValues.removeDuplicates();
+                //m_listOfValues.removeDuplicates();
                 m_modelReturnedList->setStringList(m_listOfValues);
                 fillModel(hashOfValues,typeOfPayment,percentage,debtor,site,distrules,i);
                 }
@@ -896,7 +921,7 @@ void ReceiptViewer::actionsOfTreeView(const QModelIndex & index) {
     	          if (WarnDebugMessage)
     	          qDebug() << __FILE__ << QString::number(__LINE__) << " value =" << QString::number(value) ;
     	          m_listOfValues << trUtf8("Kilometers");
-    	          m_listOfValues.removeDuplicates();
+    	          //m_listOfValues.removeDuplicates();
                   m_modelReturnedList->setStringList(m_listOfValues);
     	          fillModel(hashOfValues,typeOfPayment,percentage,debtor,site,distrules,i);
     	          }
@@ -904,18 +929,7 @@ void ReceiptViewer::actionsOfTreeView(const QModelIndex & index) {
     	      }
     	  
         }
-   /* if (manager.getHashOfSites().keys().contains(data))
-    {
-    	  m_siteUid = manager.getHashOfSites().value(data);
-    	  if (WarnDebugMessage)
-    	      qDebug() << __FILE__ << QString::number(__LINE__) << " m_siteUid =" << m_siteUid.toString() ;
-        }*/
-    /*if (manager.getHashOfInsurance().keys().contains(data))
-    {
-    	  m_insuranceUid = manager.getHashOfInsurance().value(data);
-    	  if (WarnDebugMessage)
-    	      qDebug() << __FILE__ << QString::number(__LINE__) << " m_insuranceUid =" << m_insuranceUid.toString() ;
-        }*/
+
     if (manager.getHashOfThesaurus().keys().contains(data))
     {
         if (WarnDebugMessage)
@@ -981,10 +995,12 @@ void ReceiptViewer::fillModel(QHash<QString,QString> &hashOfValues,
     int rowOfAmountModel = 0;
     rowOfAmountModel = m_model->rowCount(QModelIndex());
     if (WarnDebugMessage)
-    qDebug() << __FILE__ << QString::number(__LINE__) << "m_model->rowCount()  =" << QString::number(rowOfAmountModel) ;
+    qDebug() << __FILE__ << QString::number(__LINE__) << "m_model->rowCount()  =" 
+             << QString::number(rowOfAmountModel) ;
     double value = 0.00;
     QHashIterator<QString,QString> it(hashOfValues);
-    while(it.hasNext()){
+    while(it.hasNext())
+        {
         it.next();
         if (WarnDebugMessage)
             qDebug() << __FILE__ << QString::number(__LINE__) << " data =" << it.key() ;
@@ -1008,7 +1024,7 @@ void ReceiptViewer::fillModel(QHash<QString,QString> &hashOfValues,
         value += valueStr.toDouble();
         if (WarnDebugMessage)
     	      qDebug() << __FILE__ << QString::number(__LINE__) << QString::number(value);
-    }
+        }
     value = value*percentage/100.00;
     if (WarnDebugMessage)
     	      qDebug() << __FILE__ << QString::number(__LINE__) << " values =" << QString::number(value);
@@ -1122,17 +1138,7 @@ void ReceiptViewer::saveAndQuit()
     close();
 }
 
-void ReceiptViewer::mousePressEvent(QMouseEvent *event){
-  if(event->button() == Qt::RightButton){
-    if (WarnDebugMessage)
-    	      qDebug() << "in right clic" << __FILE__ << QString::number(__LINE__) ;
-    m_menu         = new QMenu(this);
-    m_menu        -> addAction(m_clear);
-    //m_menu        -> exec(QCursor::pos());
-    //m_menu->exec(ui->returnedListView->mapToGlobal(QPoint(0, 0)));
-    m_menu->exec(event->globalPos());
-  }
-}
+
   
 void ReceiptViewer::saveInThesaurus(){
     QString listOfValuesStr = m_listOfValues.join("+");

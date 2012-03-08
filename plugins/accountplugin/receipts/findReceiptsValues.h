@@ -59,13 +59,10 @@ public:
     QHash<QString,QString> getChoosenValues();
     void clear();
 private:
-    //QSqlTableModel * m_model; //  à modifier par m_mpmodel
     Ui::findValueDialog * ui;
-    //receiptsManager * m_rbm;
     xmlCategoriesParser * m_xmlParser;
     QSqlDatabase m_db;
-    //MedicalProcedureModel * model;
-    //QStandardItemModel * itemModel;
+    double m_modifier;
     QHash<QString,QString> m_hashValuesChoosen;
     void initialize();
     void fillComboCategories();
@@ -75,9 +72,13 @@ private:
 private slots:
     void fillListViewValues(const QString & comboItem);
     void chooseValue(const QModelIndex& index);
+    void chooseValue();
+    void deleteValue();
     void supprItemChoosen(QListWidgetItem * item);
     void on_lineEditFilter_textChanged(const QString & text);
     void showNext();
+    void setModifSpinBox(QWidget*,QWidget*);
+    void setModifier(double);
 };
 
 

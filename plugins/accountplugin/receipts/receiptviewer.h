@@ -44,6 +44,7 @@
 #include <QMenu>
 #include <QAction>
 #include <QStringListModel>
+#include <QListView>
 #include <QTreeView>
 #include <QFile>
 #include <QVBoxLayout>
@@ -108,6 +109,21 @@ private:
     QMap<int,QStandardItem*> m_mapOfMainItems;
 };
 
+class ChoosenListView: public QListView{
+    Q_OBJECT
+    public:
+        ChoosenListView(QObject *parent = 0);
+        ~ChoosenListView();
+    private Q_SLOTS:
+        void deleteItem(bool b);
+    private:
+        void mousePressEvent(QMouseEvent *event);
+        QAction *m_clear;
+        QAction * m_deleteInReturnedList;
+        QMenu *m_menu;
+        
+};
+
 
 class ACCOUNT_EXPORT ReceiptViewer : public QWidget
 {
@@ -120,6 +136,7 @@ public:
     
     QString m_userUuid;
     treeViewsActions *m_actionTreeView;
+    ChoosenListView *m_returnedListView;
 
 protected:
     void changeEvent(QEvent *e);
@@ -132,17 +149,16 @@ protected:
                    const int row);
 
     /** \todo remove this using the Core::ActionManager. */
-    QAction *m_clear;
-    QMenu *m_menu;
     QVBoxLayout *m_vbox;
+    QVBoxLayout *m_vboxForList;
 
 private:
-    void mousePressEvent(QMouseEvent *event);
+    
     QVariant firstItemChoosenAsPreferential(QString &item);
     void resizeEvent(QResizeEvent *event);
 
 private Q_SLOTS:
-    void deleteLine();
+    //void deleteLine();
     void save();
     void saveAndQuit();
     void actionsOfTreeView(const QModelIndex& );
@@ -151,6 +167,7 @@ private Q_SLOTS:
     void clearAll(bool b);
     void controlReceiptsDestroyed();
     void userUid();
+    
     //void createFirstTimeTxt();
 
 private:
@@ -165,6 +182,8 @@ private:
     double m_distanceRuleValue;
     QString m_distanceRuleType;
     QStringList m_listOfValues;
+    //QMenu * m_returnedListMenu;
+    
     //QFile m_fileFirstTime;
 };
 
