@@ -315,9 +315,9 @@ UserContactPage::UserContactPage(QWidget *parent) :
     c->setCountryComboBox(ui->comboBox);
     c->setZipLineEdit(ui->zipcode);
     c->setCityLineEdit(ui->city);
-
+    const QRegExp cityRegExp = QRegExp("[A-Z0-9._%-]+@[A-Z0-9.-]+\\.[A-Z]{2,4}", Qt::CaseInsensitive);
     ui->mail->setValidator(new QRegExpValidator(
-                               QRegExp("[A-Z0-9._%-]+@[A-Z0-9.-]+\\.[A-Z]{2,4}", Qt::CaseInsensitive)));
+                               cityRegExp,this));
     registerField("Address", ui->address, "plainText");
     registerField("City", ui->city, "text");
     registerField("Zipcode", ui->zipcode, "text");
