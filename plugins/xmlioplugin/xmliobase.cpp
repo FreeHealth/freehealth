@@ -173,7 +173,7 @@ bool XmlIOBase::checkDatabaseVersion()
     return true;
 }
 
-/** Create the default users database if it does not exists. */
+/** Create the default users database if it does not exist. */
 bool XmlIOBase::createDatabase(const QString &connectionName , const QString &dbName,
                     const QString &pathOrHostName,
                     TypeOfAccess access, AvailableDrivers driver,

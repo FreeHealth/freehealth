@@ -131,11 +131,11 @@ bool LocalServerEngine::startDownloadQueue()
                 m_PackStatus.insert(statusKey(*pack), status);
                 Q_EMIT packDownloaded(*pack, status);
             } else {
-                LOG_ERROR("Pack file does not exists.");
+                LOG_ERROR("Pack file does not exist.");
                 // Create the status of the server
                 ServerEngineStatus status;
                 status.downloadCorrectlyFinished = false;
-                status.engineMessages << tr("Pack file does not exists.");
+                status.engineMessages << tr("Pack file does not exist.");
                 status.hasError = true;
                 status.isSuccessful = false;
                 status.proxyIdentificationError = false;

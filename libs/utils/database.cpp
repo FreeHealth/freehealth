@@ -461,7 +461,7 @@ QSqlDatabase Database::database() const
 
 /**
    Create the connection to the database.
-  If database does not exists, according to the \e createOption, createDatabase() is called.
+  If database does not exist, according to the \e createOption, createDatabase() is called.
   An error is returned if :
   - Driver is not available
   - Can not connect to server (wrong host/log/pass)

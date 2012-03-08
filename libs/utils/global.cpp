@@ -628,7 +628,7 @@ QString readTextFile(const QString &toRead, const QString &encoder, const Warn w
     info.setFile(correctFileName);
 
     if (((!info.exists()) || (!info.isReadable())) && (warnUser == WarnUser)) {
-        Utils::warningMessageBox(QCoreApplication::translate("Utils" , "File %1 does not exists or is not readable.").arg(correctFileName),
+        Utils::warningMessageBox(QCoreApplication::translate("Utils" , "File %1 does not exist or is not readable.").arg(correctFileName),
                                  "","", qApp->applicationName());
         return QString::null;
     } else {

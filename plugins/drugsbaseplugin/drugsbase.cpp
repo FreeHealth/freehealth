@@ -511,7 +511,7 @@ bool DrugsBase::refreshDrugsBase()
 
     d->m_ActualDBInfos = getDrugSourceInformations(drugSource);
     if (!d->m_ActualDBInfos) {
-//        Utils::warningMessageBox(tr("Drug database source does not exists."),
+//        Utils::warningMessageBox(tr("Drug database source does not exist."),
 //                                 tr("Switching to the default drugs database source."));
         d->m_ActualDBInfos = getDrugSourceInformations(DrugsDB::Constants::DB_DEFAULT_IDENTIFIANT);
         if (!d->m_ActualDBInfos) {
@@ -701,7 +701,7 @@ DatabaseInfos *DrugsBase::getDrugSourceInformations(const QString &drugSourceUid
 //           ");";
 //}
 
-///** \brief Create the protocols database if it does not exists. */
+///** \brief Create the protocols database if it does not exist. */
 //bool DrugsBase::createDatabase(const QString &connectionName , const QString &dbName,
 //                               const QString &pathOrHostName,
 //                               TypeOfAccess /*access*/, AvailableDrivers driver,

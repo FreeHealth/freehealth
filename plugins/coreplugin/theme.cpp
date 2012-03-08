@@ -232,7 +232,7 @@ QPixmap ThemePrivate::splashScreenPixmap(const QString &fileName, const IconSize
     if (QFile(m_AbsolutePath + "/pixmap/splashscreens/" + file).exists())
         return QPixmap(m_AbsolutePath + "/pixmap/splashscreens/" + file);
     else
-        Utils::Log::addError("ThemePrivate", QString("SplashScreen file does not exists %1").arg(m_AbsolutePath + "/pixmap/splashscreens/" + fileName),
+        Utils::Log::addError("ThemePrivate", QString("SplashScreen file does not exist %1").arg(m_AbsolutePath + "/pixmap/splashscreens/" + fileName),
                               __FILE__, __LINE__);
     return QPixmap();
 }

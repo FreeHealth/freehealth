@@ -73,7 +73,7 @@ struct QUAZIP_EXPORT QuaZipNewInfo {
   QuaZipNewInfo(const QString& name);
   /// Constructs QuaZipNewInfo instance.
   /** Initializes name with \a name and dateTime with timestamp of the
-   * file named \a file. If the \a file does not exists or its timestamp
+   * file named \a file. If the \a file does not exist or its timestamp
    * is inaccessible (e. g. you do not have read permission for the
    * directory file in), uses current date and time. Attributes are
    * initialized with zeros, comment and extra field with null values.

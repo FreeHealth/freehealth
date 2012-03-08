@@ -268,8 +268,8 @@ bool PackManager::removePack(const Pack &pack)
     // Remove the zipPath used for the pack
     QFileInfo zipPath(pack.unzipPackToPath());
     if (!zipPath.exists()) {
-        LOG_ERROR(tr("Unable to remove pack %1, unzip path does not exists (%2)").arg(pack.name()).arg(pack.unzipPackToPath()));
-        m_Errors << tr("Unable to remove pack %1, unzip path does not exists (%2)").arg(pack.name()).arg(pack.unzipPackToPath());
+        LOG_ERROR(tr("Unable to remove pack %1, unzip path does not exist (%2)").arg(pack.name()).arg(pack.unzipPackToPath()));
+        m_Errors << tr("Unable to remove pack %1, unzip path does not exist (%2)").arg(pack.name()).arg(pack.unzipPackToPath());
         return false;
     }
     Pack instPackFile;

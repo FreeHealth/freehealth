@@ -113,7 +113,7 @@ bool AccountBase::m_initialized = false;
 //--------------------------------------------------------------------------------------------------------
 //-------------------------------------- Initializing Database -------------------------------------------
 //--------------------------------------------------------------------------------------------------------
-/** \brief Returns the unique instance of DrugsBase. If it does not exists, it is created */
+/** \brief Returns the unique instance of DrugsBase. If it does not exist, it is created */
 AccountBase *AccountBase::instance()
 {
     if (!m_Instance) {

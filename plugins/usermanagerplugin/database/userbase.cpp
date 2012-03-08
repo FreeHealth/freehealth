@@ -605,7 +605,7 @@ static inline QString defaultWatermark(const QString &profession, const QString 
     return defaultPaper(profession, "watermark", paperType);
 }
 
-/** Create the default users database if it does not exists. */
+/** Create the default users database if it does not exist. */
 bool UserBase::createDatabase(const QString &connectionName , const QString &dbName,
                     const QString &pathOrHostName,
                     TypeOfAccess access, AvailableDrivers driver,

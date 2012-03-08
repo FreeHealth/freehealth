@@ -82,7 +82,7 @@ public:
 
 DrugBaseCore *DrugBaseCore::m_Instance = 0;
 
-/** \brief Returns the unique instance of DrugsDB::DrugBaseCore. If it does not exists, it is created */
+/** \brief Returns the unique instance of DrugsDB::DrugBaseCore. If it does not exist, it is created */
 DrugBaseCore &DrugBaseCore::instance(QObject *parent)
 {
     if (!m_Instance) {

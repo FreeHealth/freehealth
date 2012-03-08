@@ -132,7 +132,7 @@ public:
     };
 
     /**
-       \brief Specifies what to do when database does not exists.
+       \brief Specifies what to do when database does not exist.
        \sa createConnection(), createDatabase
     */
     enum CreationOption  // if database doesnot exist :
@@ -218,7 +218,7 @@ public:
 
 
     /**
-        \brief This member is called by createConnection() if the asked database does not exists.
+        \brief This member is called by createConnection() if the asked database does not exist.
                By default it does nothing and return an error state (false).
     */
     virtual bool createDatabase(const QString &connectionName , const QString &prefixedDbName,

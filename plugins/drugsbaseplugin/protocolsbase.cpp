@@ -305,7 +305,7 @@ bool ProtocolsBase::init()
     return true;
 }
 
-/** \brief Create the protocols database if it does not exists. */
+/** \brief Create the protocols database if it does not exist. */
 bool ProtocolsBase::createDatabase(const QString &connectionName , const QString &dbName,
                                const QString &pathOrHostName,
                                TypeOfAccess /*access*/, AvailableDrivers driver,
