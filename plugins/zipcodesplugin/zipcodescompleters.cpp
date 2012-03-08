@@ -69,12 +69,18 @@ ZipCountryModel::ZipCountryModel(QObject *parent, QSqlDatabase _db, bool dbAvail
 {
     db = _db;
     m_Country = Utils::countryToIso(QLocale().country()).toLower();
-    if (m_DbAvailable && db.isOpen()) {
-        setQuery("SELECT ZIP, CITY FROM ZIPS LIMIT 0, 1", _db);
-        if (!query().isActive()) {
-            LOG_QUERY_ERROR(query());
+
+    if (m_DbAvailable) {  // BUG with if (m_DbAvailable && db.isOpen()) --> returning false with (true && true) ????
+        if (db.isOpen()) {
+            LOG("OK");
+            setQuery("SELECT ZIP, CITY FROM ZIPS LIMIT 0, 1", _db);
+            if (!query().isActive()) {
+                LOG_QUERY_ERROR(query());
+            }
         }
     }
+
+
 }
 
 QVariant ZipCountryModel::data(const QModelIndex &index, int role) const
@@ -104,8 +110,10 @@ QVariant ZipCountryModel::data(const QModelIndex &index, int role) const
 
 bool ZipCountryModel::countryAvailable(const int country) const
 {
-    if (!m_DbAvailable || !db.isOpen()) {
-        return false;
+    if (!m_DbAvailable) {  // BUG with if (m_DbAvailable && db.isOpen()) --> returning false with (true && true) ????
+        if (!db.isOpen()) {
+            return false;
+        }
     }
     QString req = QString("SELECT DISTINCT COUNT(COUNTRY) FROM ZIPS WHERE `COUNTRY`='%1'")
             .arg(Utils::countryToIso(QLocale::Country(country)).toLower());
@@ -121,8 +129,10 @@ bool ZipCountryModel::countryAvailable(const int country) const
 
 bool ZipCountryModel::coupleExists(const QString &zip, const QString &city) const
 {
-    if (!m_DbAvailable || !db.isOpen()) {
-        return false;
+    if (!m_DbAvailable) {  // BUG with if (m_DbAvailable && db.isOpen()) --> returning false with (true && true) ????
+        if (!db.isOpen()) {
+            return false;
+        }
     }
     QString req = QString("SELECT COUNT(ZIP) FROM ZIPS WHERE `COUNTRY`='%1' AND `CITY`='%2' AND ZIP='%3'")
             .arg(m_Country).arg(city).arg(zip);
@@ -138,8 +148,10 @@ bool ZipCountryModel::coupleExists(const QString &zip, const QString &city) cons
 
 void ZipCountryModel::filterCity(const QString &name)
 {
-    if (!m_DbAvailable || !db.isOpen()) {
-        return;
+    if (!m_DbAvailable) {  // BUG with if (m_DbAvailable && db.isOpen()) --> returning false with (true && true) ????
+        if (!db.isOpen()) {
+            return;
+        }
     }
     if (m_City==name)
         return;
@@ -154,8 +166,10 @@ void ZipCountryModel::filterCity(const QString &name)
 
 void ZipCountryModel::filterZipCode(const QString &zipCode)
 {
-    if (!m_DbAvailable || !db.isOpen()) {
-        return;
+    if (!m_DbAvailable) {  // BUG with if (m_DbAvailable && db.isOpen()) --> returning false with (true && true) ????
+        if (!db.isOpen()) {
+            return;
+        }
     }
     if (m_Zip==zipCode)
         return;
@@ -223,9 +237,9 @@ void ZipCountryCompleters::createModel()
     if (QSqlDatabase::connectionNames().contains("ZIPS")) {
         db = QSqlDatabase::database("ZIPS");
     } else {
+        LOG(QString("Trying to open ZipCode database from %1").arg(databaseFileName()));
         db = QSqlDatabase::addDatabase("QSQLITE", "ZIPS");
         if (QFileInfo(databaseFileName()).exists()) {
-            LOG(QString("Trying to open ZipCode database from %1").arg(databaseFileName()));
             db.setDatabaseName(databaseFileName());
             m_DbAvailable = true;
         } else {
