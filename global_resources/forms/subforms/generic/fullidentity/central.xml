@@ -6,7 +6,7 @@
   <formdescription>
     <!-- Non translatable values -->
     <authors>Eric Maeker, MD</authors>
-    <version>0.7.1</version>
+    <version>test</version>
     <fmfv>0.7.0</fmfv>
     <cdate>2012-01-01</cdate>
     <lmdate>2012-02-26</lmdate>
@@ -70,7 +70,7 @@
 
     <Item type="group" name="AtGroup">
       <uilink widget="austrianGroup"/>
-      <country>AT</country>
+      <country>FR</country>
       <label lang="xx">Extras2</label>
       <label lang="fr">Extras2</label>
       <label lang="de">Extras2</label>
@@ -78,7 +78,7 @@
       <options>DontPrintEmptyValues</options>
 
       <Item type="austriansvnr" name="AtGroup::SVNR">
-        <uilink label="svnrLabel" widget="svnrEdit"/>
+        <uilink label="svnrLabel" widget="" layout="svnrLayout"/>
         <label lang="xx">Social number</label>
         <label lang="fr">Numéro de sécurité sociale</label>
 	<label lang="de">Sozialversicherungsnummer</label>
