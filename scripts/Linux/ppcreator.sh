@@ -18,6 +18,7 @@ PGP_KEY="0x3FA0BBEF"      # Eric's key by default, you have to know the phrase
 WGET_NOPROXY=""
 DEBUILD_SOURCE="-sa"
 PPA_VERSION="1"
+SERIES="oneiric maverick natty"
 
 showHelp()
 {
@@ -25,7 +26,7 @@ showHelp()
   SCRIPT_NAME=`basename $0`
   echo $SCRIPT_NAME" "$SCRIPT_VERSION" creates and sends package to the FreeMedForms LaunchPad PPA"
   echo
-  echo "Usage: "$SCRIPT_NAME" -h -b application -v applicationVersion [-k pgpKeyToUse -p 2] "
+  echo "Usage: "$SCRIPT_NAME" -h -b application -v applicationVersion [-k pgpKeyToUse -p 2] -r \"oneiric maverick\" "
   echo
   echo "   -h           show this help"
   echo "   -b app       Application name"
@@ -34,6 +35,7 @@ showHelp()
   echo "   -p ppaver    PPA subversion (pack name -> app-appservsion-natty-ppaver)"
   echo "   -s           Do not include source to package for uploading"
   echo "   -n           Do not use proxy when downloading"
+  echo "   -r           Specify the Series to build (oneiric maverick natty lucid)"
   echo
 }
 
@@ -91,7 +93,7 @@ buildSourcePackage()
 uploadToPPA()
 {
   echo "    * Uploading to PPA: "$UBUNTU_RELEASE_NAME
-  cd $PACKDIR
+  cd $PACKDIR"/build-area"
   echo `pwd`
   dput ppa:freemedforms/ppa $APP_NAME"_"$APP_VERSION"-"$UBUNTU_RELEASE_NAME$PPA_VERSION"_source.changes"
 }
@@ -103,7 +105,7 @@ patchChangelog()
   echo "    * Patching changelog for: "$UBUNTU_RELEASE_NAME
   rm $SOURCEDIR"/debian/changelog"
   cp $PACKDIR"/changelog.bkup" $SOURCEDIR"/debian/changelog"
-  
+
   INSERT=$APP_NAME" ("$APP_VERSION"-"$UBUNTU_RELEASE_NAME$PPA_VERSION") "$UBUNTU_RELEASE_NAME"; urgency=low"
 
   #sed -i "1s/.*/$REPLACE/" $SOURCEDIR"/debian/changelog"
@@ -115,10 +117,23 @@ patchChangelog()
 
 }
 
+# prepare source package using svn-buildpackage
+svnBuildPackage()
+{
+  cd $PACKDIR
+  svn checkout svn://svn.debian.org/svn/debian-med/trunk/packages/$APP_NAME/ ./
+  cp "./trunk/debian/changelog" $PACKDIR"/changelog.bkup"
+  SOURCEDIR=$PACKDIR"/trunk"
+  patchChangelog
+  echo "    * Building DSC file: svn-buildpackage --svn-download-orig -k$PGP_KEY -S $DEBUILD_SOURCE --svn-ignore"
+  cd $PACKDIR"/trunk"
+  svn-buildpackage --svn-download-orig -k$PGP_KEY -S $DEBUILD_SOURCE --svn-ignore
+}
+
 #########################################################################################
 ## Analyse options
 #########################################################################################
-while getopts "hb:v:k:p:ns" option
+while getopts "hb:v:k:p:r:ns" option
 do
   case $option in
     h) showHelp
@@ -136,15 +151,17 @@ do
     ;;
     p) PPA_VERSION=$OPTARG
     ;;
+    r) SERIES=$OPTARG
+    ;;
   esac
 done
 
-if [ -e $APP_NAME ]; then
+if [ ! -n "$APP_NAME" ]; then
   echo "Error: you must specify an application name"
   exit 1
 fi
 
-if [ -e $APP_VERSION ]; then
+if [ ! -n "$APP_VERSION" ]; then
   echo "Error: you must specify an application version"
   exit 2
 fi
@@ -158,7 +175,7 @@ fi
 PACKDIR=`pwd`"/ppa_"$APP_NAME"_"$APP_VERSION
 SOURCEDIR=$PACKDIR"/"$APP_NAME"-"$APP_VERSION
 SOURCEPACK_FULLPATH=$PACKDIR"/"$APP_NAME"_"$APP_VERSION".orig.tar.gz"
-DOWNLOAD_URL="http://freemedforms.googlecode.com/files/"$APP_NAME"fullsources-"$APP_VERSION".tgz"
+DOWNLOAD_URL="http://freemedforms.googlecode.com/files/freemedformsfullsources-"$APP_VERSION".tgz"
 DOWNLOAD_FILENAME=$APP_NAME"fullsources-"$APP_VERSION".tgz"
 
 echo "*** Processing "$APP_NAME" "$APP_VERSION
@@ -166,20 +183,19 @@ echo "    * Source package: "$SOURCEPACK_FULLPATH
 echo "    * Source path: "$SOURCEDIR
 
 # build debhelper v8+ package
-UBUNTU_RELEASE_NAME="maverick natty oneiric" #precise
+# "maverick natty oneiric" #precise
 
 createWorkingDir
-downloadAndUnpackSource
-downloadDebianMedFiles
-UBUNTU="maverick natty oneiric"
-for u in $UBUNTU
+#downloadAndUnpackSource
+#downloadDebianMedFiles
+for u in $SERIES
 do
   UBUNTU_RELEASE_NAME=$u
-  patchChangelog  
-  buildSourcePackage
+  svnBuildPackage
+  #patchChangelog
+  #buildSourcePackage
   uploadToPPA
 done
 
 
 exit 0
-
