@@ -228,7 +228,7 @@ QDebug operator<<(QDebug dbg, const Form::FormIODescription &c)
     attribs << "shotpath: " + c.data(Form::FormIODescription::ScreenShotsPath).toString();
     attribs << c.data(Form::FormIODescription::ShortDescription).toString();
 
-    dbg.nospace() << tmp << attribs.join("; ");
+    dbg.nospace() << tmp + attribs.join("; ");
     return dbg.space();
 }
 
