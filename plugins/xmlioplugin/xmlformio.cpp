@@ -521,17 +521,9 @@ bool XmlFormIO::checkDatabaseFormFileForUpdates() const
         query.setForceFileReading(true);
         Utils::VersionNumber db(descDb->data(Form::FormIODescription::Version).toString());
         fromFiles = getFormFileDescriptions(query);
-
-        qWarning() << "xxxxxxxxxxxxx" << descDb->data(Form::FormIODescription::UuidOrAbsPath).toString()
-                   << fromFiles;
-
-
         foreach(Form::FormIODescription *descFile , fromFiles) {
             // check version number of forms
             Utils::VersionNumber file(descFile->data(Form::FormIODescription::Version).toString());
-
-        qWarning() << file << db << "\n\n";
-
             if (file.versionString()=="test" || file>db) {
                 // update database
                 XmlFormName &form = formName(descFile->data(Form::FormIODescription::UuidOrAbsPath).toString(), m_FormNames);
