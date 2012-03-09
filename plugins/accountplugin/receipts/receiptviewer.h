@@ -112,8 +112,9 @@ private:
 class ChoosenListView: public QListView{
     Q_OBJECT
     public:
-        ChoosenListView(QObject *parent = 0);
+        ChoosenListView(QObject *parent ,InternalAmount::AmountModel *amountModel);
         ~ChoosenListView();
+        InternalAmount::AmountModel * m_amountModel;
     private Q_SLOTS:
         void deleteItem(bool b);
     private:

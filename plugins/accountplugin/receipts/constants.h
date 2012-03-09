@@ -52,6 +52,7 @@ namespace ReceiptsConstants{
         HDDebtor,
         HDSite,
         HDDistRules,
+        HDAct,
         MaxOfHeaderDatas
     };
 

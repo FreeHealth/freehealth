@@ -88,6 +88,7 @@ namespace InternalAmount {
             Col_Debtor,
             Col_Site,
             Col_DistRule,
+            Col_Act,
             Col_Count
         };
 
@@ -212,6 +213,8 @@ namespace InternalAmount {
                 case Col_DistRule :
                     list.replace(Col_DistRule,value);
                     break;
+                case Col_Act :
+                    list.replace(Col_Act,value);
                 default :
                     break;
                 }
@@ -236,6 +239,7 @@ namespace InternalAmount {
                     case Col_Debtor : return m_headersColumns.value(Col_Debtor);//"debtor";
                     case Col_Site : return m_headersColumns.value(Col_Site);//"site";
                     case Col_DistRule : return m_headersColumns.value(Col_DistRule);//"distRule";
+                    case Col_Act : return m_headersColumns.value(Col_Act);//"act";
                      //return QVariant(m_headersColumns[section]);
                     }
                     }
@@ -282,7 +286,8 @@ namespace InternalAmount {
                 || index.column()==Col_Du
                 || index.column()==Col_Debtor
                 || index.column()==Col_Site
-                || index.column()==Col_DistRule ) {
+                || index.column()==Col_DistRule
+                || index.column()==Col_Act ) {
                 return Qt::ItemIsEnabled | Qt::ItemIsEditable | Qt::ItemIsSelectable;
             } else {
                 return Qt::ItemIsEnabled | Qt::ItemIsSelectable;
@@ -596,9 +601,14 @@ void treeViewsActions::changeEvent(QEvent *e) {
         }
 }
 
-ChoosenListView::ChoosenListView(QObject * parent){
+///////////////////////////////////////////////////////////////
+///LISTVIEW
+///////////////////////////////////////////////////////////////
+
+ChoosenListView::ChoosenListView(QObject * parent,InternalAmount::AmountModel *amountModel){
     m_deleteInReturnedList = new QAction(trUtf8("Delete this item"),this);
     m_clear = new QAction(trUtf8("Clear all."),this);
+    m_amountModel = amountModel;
     connect(m_clear,SIGNAL(triggered(bool)),parent,SLOT(clearAll(bool)));
     connect(m_deleteInReturnedList,SIGNAL(triggered(bool)),this,SLOT(deleteItem(bool)));
 }
@@ -613,13 +623,21 @@ void ChoosenListView::mousePressEvent(QMouseEvent *event){
     m_menu  -> addAction(m_clear);
     m_menu  -> addAction (m_deleteInReturnedList);
     m_menu  ->exec(event->globalPos());
-
   }
+  else
+  {
+  	QListView::mousePressEvent(event);
+      }
 }
 
 void ChoosenListView::deleteItem(bool b)
 {
-    QMessageBox::information(0,"try","delete line",QMessageBox::Ok);
+    Q_UNUSED(b);
+    QModelIndex index = currentIndex();
+    int row = index.row();
+    model()->removeRows(row,1,QModelIndex());
+    m_amountModel->removeRows(row,1,QModelIndex());
+    //QMessageBox::information(0,"try","delete line",QMessageBox::Ok);
 }
 ////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 /////////////////////////////////////////////////////////////////////////////////////////////////////////////////
@@ -651,12 +669,14 @@ ReceiptViewer::ReceiptViewer(QWidget *parent) :
     ui->amountsView->horizontalHeader()->setResizeMode(QHeaderView::Interactive);
     ui->amountsView->horizontalHeader()->setCascadingSectionResizes (true);
     //ui->amountsView->horizontalHeader()->setStretchLastSection ( true );
-    m_model->setHeaderData(int(Cash),Qt::Horizontal,tr("Cash"));
-    m_model->setHeaderData(Check,Qt::Horizontal,tr("Check"));
-    m_model->setHeaderData(Visa,Qt::Horizontal,tr("Visa"));
-    m_model->setHeaderData(Banking,Qt::Horizontal,tr("Banking"));
-    m_model->setHeaderData(Other,Qt::Horizontal,tr("Other"));
-    m_model->setHeaderData(Due,Qt::Horizontal,tr("Du"));
+    m_model->setHeaderData(int(HDCash),Qt::Horizontal,tr("Cash"));
+    m_model->setHeaderData(HDCheck,Qt::Horizontal,tr("Check"));
+    m_model->setHeaderData(HDVisa,Qt::Horizontal,tr("Visa"));
+    m_model->setHeaderData(HDBanking,Qt::Horizontal,tr("Banking"));
+    m_model->setHeaderData(HDOther,Qt::Horizontal,tr("Other"));
+    m_model->setHeaderData(HDDue,Qt::Horizontal,tr("Du"));
+    m_model->setHeaderData(HDAct,Qt::Horizontal,tr("Act"));
+    
 
     ui->amountsView->setModel(m_model);
     ui->amountsView->setItemDelegateForColumn(Cash, new Utils::SpinBoxDelegate(this,0.00,100.00,true));
@@ -692,7 +712,7 @@ ReceiptViewer::ReceiptViewer(QWidget *parent) :
         if (WarnDebugMessage)
                 qWarning() << __FILE__ << QString::number(__LINE__) << "index is not valid";
         }
-    m_returnedListView = new ChoosenListView(this);
+    m_returnedListView = new ChoosenListView(this,m_model);
     m_returnedListView->setStyleSheet("background-color: rgb(201, 201, 201)");
     m_vboxForList = new QVBoxLayout;
     m_vboxForList->addWidget(m_returnedListView);
@@ -771,12 +791,13 @@ void ReceiptViewer::changeEvent(QEvent *e)
                 qWarning() << __FILE__ << QString::number(__LINE__) << "unable to connect m_actionTreeView";
         }
         //amountsView
-        m_model->setHeaderData(int(Cash),Qt::Horizontal,tr("Cash"));
-        m_model->setHeaderData(Check,Qt::Horizontal,tr("Check"));
-        m_model->setHeaderData(Visa,Qt::Horizontal,tr("Visa"));
-        m_model->setHeaderData(Banking,Qt::Horizontal,tr("Banking"));
-        m_model->setHeaderData(Other,Qt::Horizontal,tr("Other"));
-        m_model->setHeaderData(Due,Qt::Horizontal,tr("Du"));
+        m_model->setHeaderData(int(HDCash),Qt::Horizontal,tr("Cash"));
+        m_model->setHeaderData(HDCheck,Qt::Horizontal,tr("Check"));
+        m_model->setHeaderData(HDVisa,Qt::Horizontal,tr("Visa"));
+        m_model->setHeaderData(HDBanking,Qt::Horizontal,tr("Banking"));
+        m_model->setHeaderData(HDOther,Qt::Horizontal,tr("Other"));
+        m_model->setHeaderData(HDDue,Qt::Horizontal,tr("Du"));
+        m_model->setHeaderData(HDAct,Qt::Horizontal,tr("Act"));
         break;
     default:
         break;
@@ -993,19 +1014,20 @@ void ReceiptViewer::fillModel(QHash<QString,QString> &hashOfValues,
                               const int row){
     Q_UNUSED(row);
     int rowOfAmountModel = 0;
-    rowOfAmountModel = m_model->rowCount(QModelIndex());
-    if (WarnDebugMessage)
-    qDebug() << __FILE__ << QString::number(__LINE__) << "m_model->rowCount()  =" 
-             << QString::number(rowOfAmountModel) ;
     double value = 0.00;
     QHashIterator<QString,QString> it(hashOfValues);
     while(it.hasNext())
         {
         it.next();
+        rowOfAmountModel = m_model->rowCount(QModelIndex());
+        if (WarnDebugMessage)
+        qDebug() << __FILE__ << QString::number(__LINE__) << "m_model->rowCount()  =" 
+                 << QString::number(rowOfAmountModel) ;
         if (WarnDebugMessage)
             qDebug() << __FILE__ << QString::number(__LINE__) << " data =" << it.key() ;
         if (WarnDebugMessage)
             qDebug() << __FILE__ << QString::number(__LINE__) << " amount =" << it.value() ;
+        QString act = it.key();
         QString valueStr = it.value();
         if (valueStr.toDouble() == 0.0)
         {
@@ -1021,48 +1043,45 @@ void ReceiptViewer::fillModel(QHash<QString,QString> &hashOfValues,
         	  	  valueStr.replace(".",QLocale::c().decimalPoint ());
         	      }
             }
-        value += valueStr.toDouble();
+        value = valueStr.toDouble();
         if (WarnDebugMessage)
-    	      qDebug() << __FILE__ << QString::number(__LINE__) << QString::number(value);
-        }
-    value = value*percentage/100.00;
-    if (WarnDebugMessage)
-    	      qDebug() << __FILE__ << QString::number(__LINE__) << " values =" << QString::number(value);
-    if (WarnDebugMessage)
-    	      qDebug() << __FILE__ << QString::number(__LINE__) << " row =" << QString::number(row)  ;
-    if (WarnDebugMessage)
-    	      qDebug() << __FILE__ << QString::number(__LINE__) << " column =" << QString::number(typeOfPayment) ;
-    if (WarnDebugMessage)
-    	      qDebug() << __FILE__ << QString::number(__LINE__) << " debtor =" << debtor.toString() ;
-    if (WarnDebugMessage)
-    	      qDebug() << __FILE__ << QString::number(__LINE__) << " value =" << QString::number(value) ;
-    if (!m_model->insertRows(row,1,QModelIndex()))
-    {
-    	  qWarning() << __FILE__ << QString::number(__LINE__) << "unable to insert row = "+QString::number(row) ;
-        }
-    QModelIndex indexValue = m_model->index(rowOfAmountModel, typeOfPayment);
-    QModelIndex indexDebtor = m_model->index(rowOfAmountModel, InternalAmount::AmountModel::Col_Debtor);
-    QModelIndex indexSite = m_model->index(rowOfAmountModel, InternalAmount::AmountModel::Col_Site);
-    QModelIndex indexDistrules = m_model->index(rowOfAmountModel, InternalAmount::AmountModel::Col_DistRule);
-    //header vertical is debtor
-    m_model->setHeaderData(rowOfAmountModel,Qt::Vertical,debtor,Qt::EditRole);
-    if (!m_model->setData(indexValue, value, Qt::EditRole))
-    {
-    	  qWarning() << __FILE__ << QString::number(__LINE__) << "unable to setData" ;
-        }
-    if (!m_model->setData(indexDebtor, debtor, Qt::EditRole))
-    {
-    	  qWarning() << __FILE__ << QString::number(__LINE__) << "unable to setData" ;
-        }
-    if (!m_model->setData(indexSite, site, Qt::EditRole))
-    {
-    	  qWarning() << __FILE__ << QString::number(__LINE__) << "unable to setData" ;
-        }
-    if (!m_model->setData(indexDistrules, distrules , Qt::EditRole))
-    {
-    	  qWarning() << __FILE__ << QString::number(__LINE__) << "unable to setData" ;
-        }
-    m_model->submit();
+        qDebug() << __FILE__ << QString::number(__LINE__) << " value =" << QString::number(value) ;
+        value = value*percentage/100.00;
+        if (!m_model->insertRows(row,1,QModelIndex()))
+        {
+    	        qWarning() << __FILE__ << QString::number(__LINE__) 
+    	        << "unable to insert row = "+QString::number(row) ;
+            }
+        QModelIndex indexValue = m_model->index(rowOfAmountModel, typeOfPayment);
+        QModelIndex indexDebtor = m_model->index(rowOfAmountModel, InternalAmount::AmountModel::Col_Debtor);
+        QModelIndex indexSite = m_model->index(rowOfAmountModel, InternalAmount::AmountModel::Col_Site);
+        QModelIndex indexDistrules = m_model->index(rowOfAmountModel, InternalAmount::AmountModel::Col_DistRule);
+        QModelIndex indexAct = m_model->index(rowOfAmountModel, InternalAmount::AmountModel::Col_Act);
+        //header vertical is debtor
+        m_model->setHeaderData(rowOfAmountModel,Qt::Vertical,debtor,Qt::EditRole);
+        if (!m_model->setData(indexValue, value, Qt::EditRole))
+        {
+    	    qWarning() << __FILE__ << QString::number(__LINE__) << "unable to setData" ;
+            }
+        if (!m_model->setData(indexDebtor, debtor, Qt::EditRole))
+        {
+    	    qWarning() << __FILE__ << QString::number(__LINE__) << "unable to setData" ;
+            }
+        if (!m_model->setData(indexSite, site, Qt::EditRole))
+        {
+    	    qWarning() << __FILE__ << QString::number(__LINE__) << "unable to setData" ;
+            }
+        if (!m_model->setData(indexDistrules, distrules , Qt::EditRole))
+        {
+    	    qWarning() << __FILE__ << QString::number(__LINE__) << "unable to setData" ;
+            }
+        if (!m_model->setData(indexAct, act , Qt::EditRole))
+        {
+    	    qWarning() << __FILE__ << QString::number(__LINE__) << "unable to setData" ;
+            }
+        m_model->submit();
+        }//while
+        m_model->submit();
 }
 
 void ReceiptViewer::save()
@@ -1083,6 +1102,7 @@ void ReceiptViewer::save()
         QVariant insuranceUid = rIO.getInsuranceUidFromInsurance(insurance.toString());
         QVariant site = m_model->data(m_model->index(row,InternalAmount::AmountModel::Col_Site));
         QVariant siteUid = rIO.getSiteUidFromSite(site.toString());
+        QVariant act = m_model->data(m_model->index(row,InternalAmount::AmountModel::Col_Act));
     
     if (WarnDebugMessage)
     	      qDebug() << __FILE__ << QString::number(__LINE__) << " values =" << QString::number(cash)+ " "
@@ -1092,7 +1112,9 @@ void ReceiptViewer::save()
                                                                      << QString::number(other)+ " "
                                                                      << QString::number(due) 
                                                                      << "site uid = "+siteUid.toString()
-                                                                     << "insurance uid = "+insuranceUid.toString();
+                                                                     << "insurance uid = "+insuranceUid.toString()
+                                                                     << "act = "+act.toString();
+                                                                     ;
     QString patientUid = patient()->uuid();
     if (patientUid.isEmpty())
     {
@@ -1113,7 +1135,7 @@ void ReceiptViewer::save()
     hash.insert(ACCOUNT_INSURANCE_ID,insuranceUid);
     hash.insert(ACCOUNT_DATE,ui->dateExecution->date()/*.toString("yyyy-MM-dd")*/);
     hash.insert(ACCOUNT_MEDICALPROCEDURE_XML, QVariant());
-    hash.insert(ACCOUNT_MEDICALPROCEDURE_TEXT,textOfListOfActs);
+    hash.insert(ACCOUNT_MEDICALPROCEDURE_TEXT,act);
     hash.insert(ACCOUNT_COMMENT, QVariant());
     hash.insert(ACCOUNT_CASHAMOUNT,cash);
     hash.insert(ACCOUNT_CHEQUEAMOUNT,cheque);
