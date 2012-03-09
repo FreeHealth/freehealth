@@ -70,8 +70,8 @@ private:
     void enableShowNextTable();
     
 private slots:
-//    void fillListViewValues(const QString & comboItem);
-    void chooseValue(const QModelIndex& index);
+    void fillListViewValues(const QString & comboItem);
+//    void chooseValue(const QModelIndex& index);
     void chooseValue();
     void deleteValue();
 //    void supprItemChoosen(QListWidgetItem * item);

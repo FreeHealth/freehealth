@@ -55,10 +55,31 @@ findReceiptsValues::findReceiptsValues(QWidget * parent):QDialog(parent){
   if (WarnDebugMessage)
     	      qDebug() << __FILE__ << QString::number(__LINE__)   ;
   QString comboValue = ui->comboBoxCategories->currentText().trimmed();
-  emit fillListViewValues(comboValue);
+
+
+
+  // *******************************************************************************
+  // *******************************************************************************
+  // Emit a slot is not possible !!!!
+//  Q_EMIT fillListViewValues(comboValue);
+  // *******************************************************************************
+  // *******************************************************************************
+
+
+
+
   if (WarnDebugMessage)
     	      qDebug() << __FILE__ << QString::number(__LINE__)   ;
+
+
+  // *******************************************************************************
+  // *******************************************************************************
+  // Connect a slot is Ok.
   connect(ui->comboBoxCategories,SIGNAL(activated(const QString&)),this,SLOT(fillListViewValues(const QString&)));
+  // *******************************************************************************
+  // *******************************************************************************
+
+
   //connect(ui->tableViewOfValues,SIGNAL(pressed(const QModelIndex&)),this,SLOT(chooseValue(const QModelIndex&)));
   connect(ui->plusButton,SIGNAL(pressed()),this,SLOT(chooseValue()));
   connect(ui->lessButton,SIGNAL(pressed()),this,SLOT(deleteValue()));
