@@ -6,4 +6,4 @@ include(../doc/api-doc.pri)
 
 CONFIG *= ordered
 
-SUBDIRS += libs plugins src
+SUBDIRS += libs plugins freemedforms-src
