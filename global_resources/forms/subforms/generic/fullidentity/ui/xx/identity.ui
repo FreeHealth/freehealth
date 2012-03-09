@@ -22,7 +22,7 @@
      <property name="title">
       <string>NSS</string>
      </property>
-     <layout class="QGridLayout" name="gridLayout">
+     <layout class="QFormLayout" name="formLayout">
       <item row="0" column="0">
        <widget class="QLabel" name="nssLabel">
         <property name="text">
@@ -30,7 +30,7 @@
         </property>
        </widget>
       </item>
-      <item row="0" column="1" colspan="2">
+      <item row="0" column="1">
        <layout class="QHBoxLayout" name="nssLayout"/>
       </item>
       <item row="2" column="0">
@@ -38,12 +38,15 @@
         <property name="text">
          <string>Owner</string>
         </property>
+        <property name="buddy">
+         <cstring>ownerEdit</cstring>
+        </property>
        </widget>
       </item>
-      <item row="2" column="1" colspan="2">
+      <item row="2" column="1">
        <widget class="QLineEdit" name="ownerEdit"/>
       </item>
-      <item row="1" column="0" colspan="3">
+      <item row="1" column="0" colspan="2">
        <widget class="QCheckBox" name="isNssOwnerCheck">
         <property name="text">
          <string>isOwner</string>
@@ -53,20 +56,20 @@
      </layout>
     </widget>
    </item>
-   <item row="2" column="0">
+   <item row="3" column="0">
     <widget class="QGroupBox" name="contactGroup">
      <property name="title">
       <string>Contact</string>
      </property>
-     <layout class="QGridLayout" name="gridLayout_2">
+     <layout class="QFormLayout" name="formLayout_2">
       <item row="0" column="0">
        <widget class="QLabel" name="telsLabel">
         <property name="text">
-         <string>Tels</string>
+         <string>Telephones</string>
         </property>
        </widget>
       </item>
-      <item row="0" column="1" colspan="2">
+      <item row="0" column="1">
        <widget class="QLineEdit" name="telsEdit"/>
       </item>
       <item row="1" column="0">
@@ -76,25 +79,48 @@
         </property>
        </widget>
       </item>
-      <item row="1" column="1" colspan="2">
+      <item row="1" column="1">
        <widget class="QLineEdit" name="faxEdit"/>
       </item>
       <item row="2" column="0">
        <widget class="QLabel" name="emailLabel">
         <property name="text">
-         <string>email</string>
+         <string>Email</string>
         </property>
        </widget>
       </item>
       <item row="2" column="1">
-       <widget class="QLineEdit" name="emailEdit"/>
+       <layout class="QHBoxLayout" name="horizontalLayout">
+        <item>
+         <widget class="QLineEdit" name="emailEdit"/>
+        </item>
+        <item>
+         <widget class="QPushButton" name="sendMailButton">
+          <property name="text">
+           <string>Send mail</string>
+          </property>
+         </widget>
+        </item>
+       </layout>
       </item>
-      <item row="2" column="2">
-       <widget class="QPushButton" name="sendMailButton">
+     </layout>
+    </widget>
+   </item>
+   <item row="2" column="0">
+    <widget class="QGroupBox" name="austrianGroup">
+     <property name="title">
+      <string>SVNR</string>
+     </property>
+     <layout class="QFormLayout" name="formLayout_3">
+      <item row="0" column="0">
+       <widget class="QLabel" name="svnrLabel">
         <property name="text">
-         <string>send mail</string>
+         <string>Österreichische SVNR</string>
         </property>
        </widget>
+      </item>
+      <item row="0" column="1">
+       <widget class="QWidget" name="svnrEdit" native="true"/>
       </item>
      </layout>
     </widget>
@@ -102,5 +128,22 @@
   </layout>
  </widget>
  <resources/>
- <connections/>
+ <connections>
+  <connection>
+   <sender>isNssOwnerCheck</sender>
+   <signal>toggled(bool)</signal>
+   <receiver>ownerEdit</receiver>
+   <slot>setEnabled(bool)</slot>
+   <hints>
+    <hint type="sourcelabel">
+     <x>73</x>
+     <y>84</y>
+    </hint>
+    <hint type="destinationlabel">
+     <x>193</x>
+     <y>113</y>
+    </hint>
+   </hints>
+  </connection>
+ </connections>
 </ui>
