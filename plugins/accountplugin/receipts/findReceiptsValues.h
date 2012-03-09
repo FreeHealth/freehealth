@@ -70,11 +70,11 @@ private:
     void enableShowNextTable();
     
 private slots:
-    void fillListViewValues(const QString & comboItem);
+//    void fillListViewValues(const QString & comboItem);
     void chooseValue(const QModelIndex& index);
     void chooseValue();
     void deleteValue();
-    void supprItemChoosen(QListWidgetItem * item);
+//    void supprItemChoosen(QListWidgetItem * item);
     void on_lineEditFilter_textChanged(const QString & text);
     void showNext();
     void setModifSpinBox(QWidget*,QWidget*);
