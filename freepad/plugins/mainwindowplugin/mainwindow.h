@@ -21,7 +21,7 @@
 /***************************************************************************
  *   Main Developper : Eric MAEKER, <eric.maeker@gmail.com>                *
  *   Contributors :                                                        *
- *       NAME <MAIL@ADRESS>                                                *
+ *       NAME <MAIL@ADDRESS.COM>                                           *
  ***************************************************************************/
 #ifndef FREEPAD_MAINWINDOW_H
 #define FREEPAD_MAINWINDOW_H
@@ -48,6 +48,11 @@ QT_END_NAMESPACE
  * \date 03 Jan 2011
 */
 
+namespace PadTools {
+class TokenModel;
+class PadWriter;
+}
+
 namespace MainWin {
 namespace Internal {
 class MainWinPrivate;
@@ -70,7 +75,6 @@ public:
     bool initialize(const QStringList &arguments, QString *errorString);
     void extensionsInitialized();
 
-    void createDockWindows();
     void readSettings();
     void writeSettings();
     void createStatusBar();
@@ -79,8 +83,6 @@ public:
 
 public Q_SLOTS:
     void postCoreInitialization();
-//    void refreshPatient();
-    void updateIconBadgeOnMacOs();
 
     // Interface of MainWidowActionHandler
     bool newFile();
@@ -98,6 +100,7 @@ public Q_SLOTS:
 
 private slots:
 	void padTextChanged();
+    void tokenChanged(const QString &token, const QString &value);
 	void tokenItemChanged(QTreeWidgetItem *item, int column);
 
 protected:
@@ -105,13 +108,13 @@ protected:
     void changeEvent(QEvent *event);
     bool eventFilter(QObject *obj, QEvent *event);
 
-public:
-    Internal::Ui::MainWindow *m_ui;
-    Internal::MainWinPrivate *d;
+//public:
+//    Internal::Ui::MainWindow *m_ui;
 
 private:
-	QMap<QString,QVariant> m_tokens;
 	Core::IPadTools *m_padTools;
+    PadTools::TokenModel *m_TokenModel;
+    PadTools::PadWriter *m_Writer;
 
 	void refreshTokens();
 };

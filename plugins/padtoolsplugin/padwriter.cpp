@@ -24,67 +24,88 @@
  *  Contributors :                                                         *
  *      NAME <MAIL@ADDRESS.COM>                                            *
  ***************************************************************************/
+
 /**
-  \namespace PadTools
-  \brief Namespace reserved for the PadTools plugin.
-  The PadTools namespace includes:
-  - Token engine
-  - Pad creator
+  \class PadTools::PadWriter
 */
 
-#include "padtoolsplugin.h"
-#include "padtoolsimpl.h"
-//#include "padwriter.h"
+#include "padwriter.h"
+#include "tokenmodel.h"
 
-#include <utils/log.h>
+#include "ui_padwriter.h"
 
-#include <coreplugin/dialogs/pluginaboutpage.h>
-#include <coreplugin/icore.h>
-#include <coreplugin/imainwindow.h>
-#include <coreplugin/translators.h>
-
-#include <QtCore/QtPlugin>
 #include <QDebug>
 
 using namespace PadTools;
+using namespace Internal;
 
-//static inline Core::IMainWindow *mainWindow() {return Core::ICore::instance()->mainWindow();}
-
-PadToolsPlugin::PadToolsPlugin()
+namespace PadTools {
+namespace Internal {
+class PadWriterPrivate
 {
-    if (Utils::Log::warnPluginsCreation())
-        qWarning() << "creating PadToolsPlugin";
-    // Add Translator to the Application
-    Core::ICore::instance()->translators()->addNewTranslator("padtoolsplugin");
+public:
+    PadWriterPrivate(PadWriter *parent) : q(parent) {}
+
+public:
+    Ui::PadWriter *ui;
+    TokenModel *m_TokenModel;
+
+private:
+    PadWriter *q;
+};
+}  // Internal
+}  // PadTools
+
+PadWriter::PadWriter(QWidget *parent) :
+    QWidget(parent),
+    d(new Internal::PadWriterPrivate(this))
+{
+    d->ui = new Ui::PadWriter;
+    d->ui->setupUi(this);
+
+    // create tokenmodel
+    d->m_TokenModel = new TokenModel(this);
+//    d->ui->treeView->header()->hide();
+    d->ui->treeView->setModel(d->m_TokenModel);
+
+//    ui->wysiwyg
+//    ui->rawSource
 }
 
-PadToolsPlugin::~PadToolsPlugin()
+PadWriter::~PadWriter()
 {
+    if (d) {
+        delete d;
+        d = 0;
+    }
 }
 
-bool PadToolsPlugin::initialize(const QStringList &arguments, QString *errorString)
+QString PadWriter::htmlResult() const
 {
-	qDebug("PadToolsPlugin::initialize");
-    if (Utils::Log::warnPluginsCreation())
-        qWarning() << "PadToolsPlugin::initialize";
-    Q_UNUSED(arguments);
-    Q_UNUSED(errorString);
-
-	addAutoReleasedObject(new PadToolsImpl());
-
-    return true;
+    return d->ui->wysiwyg->toHtml();
 }
 
-void PadToolsPlugin::extensionsInitialized()
+QString PadWriter::rawSource() const
 {
-	qDebug("PadToolsPlugin::extensionsInitialized");
-    if (Utils::Log::warnPluginsCreation())
-        qWarning() << "PadToolsPlugin::extensionsInitialized";
-
-    addAutoReleasedObject(new Core::PluginAboutPage(pluginSpec(), this));
-
-//    mainWindow()->setCentralWidget(new PadWriter);
+    return d->ui->rawSource->toPlainText();
 }
 
+//void PadWriter::rawSourceTextChanged()
+//{
+//    QList<Core::PadAnalyzerError> errors;
+//    // TODO : use a timer based on key strokes instead of realtime analysis
+////**    m_ui->previewTextEdit->setPlainText(m_padTools->parse(m_ui->padTextEdit->textEdit()->toPlainText(), m_TokenModel->tokens(), errors));
 
-Q_EXPORT_PLUGIN(PadToolsPlugin)
+////**	m_ui->listWidgetErrors->clear();
+//    foreach (const Core::PadAnalyzerError &error, errors) {
+//        switch (error.errorType()) {
+//        case Core::PadAnalyzerError::Error_UnexpectedChar:
+////**			m_ui->listWidgetErrors->addItem(tr("Unexpected '%1' found at line %2 and pos %3").arg(error.errorTokens()["char"].toString()).arg(error.line()).arg(error.pos()));
+//            break;
+//        case Core::PadAnalyzerError::Error_CoreDelimiterExpected:
+////**			m_ui->listWidgetErrors->addItem(tr("Expected '%1' at line %2 and pos %3").arg(error.errorTokens()["char"].toString()).arg(error.line()).arg(error.pos()));
+//            break;
+//        }
+//    }
+//}
+

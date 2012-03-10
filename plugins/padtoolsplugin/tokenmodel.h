@@ -24,67 +24,47 @@
  *  Contributors :                                                         *
  *      NAME <MAIL@ADDRESS.COM>                                            *
  ***************************************************************************/
-/**
-  \namespace PadTools
-  \brief Namespace reserved for the PadTools plugin.
-  The PadTools namespace includes:
-  - Token engine
-  - Pad creator
-*/
+#ifndef PADTOOLS_TOKENMODEL_H
+#define PADTOOLS_TOKENMODEL_H
 
-#include "padtoolsplugin.h"
-#include "padtoolsimpl.h"
-//#include "padwriter.h"
+#include <QStandardItemModel>
+#include <QMap>
 
-#include <utils/log.h>
-
-#include <coreplugin/dialogs/pluginaboutpage.h>
-#include <coreplugin/icore.h>
-#include <coreplugin/imainwindow.h>
-#include <coreplugin/translators.h>
-
-#include <QtCore/QtPlugin>
-#include <QDebug>
-
-using namespace PadTools;
-
-//static inline Core::IMainWindow *mainWindow() {return Core::ICore::instance()->mainWindow();}
-
-PadToolsPlugin::PadToolsPlugin()
-{
-    if (Utils::Log::warnPluginsCreation())
-        qWarning() << "creating PadToolsPlugin";
-    // Add Translator to the Application
-    Core::ICore::instance()->translators()->addNewTranslator("padtoolsplugin");
+namespace PadTools {
+namespace Internal {
+class TokenModelPrivate;
 }
 
-PadToolsPlugin::~PadToolsPlugin()
+class TokenModel : public QStandardItemModel
 {
-}
+    Q_OBJECT
+public:
+    enum DataRepresentation {
+        TokenName = 0,
+        TokenValue,
+        ColumnCount
+    };
 
-bool PadToolsPlugin::initialize(const QStringList &arguments, QString *errorString)
-{
-	qDebug("PadToolsPlugin::initialize");
-    if (Utils::Log::warnPluginsCreation())
-        qWarning() << "PadToolsPlugin::initialize";
-    Q_UNUSED(arguments);
-    Q_UNUSED(errorString);
+    explicit TokenModel(QObject *parent = 0);
 
-	addAutoReleasedObject(new PadToolsImpl());
+    void setTokens(const QMap<QString, QVariant> &tokens);
+    QMap<QString, QVariant> &tokens();
 
-    return true;
-}
+//    int rowCount(const QModelIndex &parent = QModelIndex()) const;
+    int columnCount(const QModelIndex &) const {return ColumnCount;}
 
-void PadToolsPlugin::extensionsInitialized()
-{
-	qDebug("PadToolsPlugin::extensionsInitialized");
-    if (Utils::Log::warnPluginsCreation())
-        qWarning() << "PadToolsPlugin::extensionsInitialized";
+    QVariant data(const QModelIndex &index, int role) const;
+    bool setData(const QModelIndex &index, const QVariant &value, int role);
+    
+    Qt::ItemFlags flags(const QModelIndex &index) const;
 
-    addAutoReleasedObject(new Core::PluginAboutPage(pluginSpec(), this));
+Q_SIGNALS:
+    void tokenChanged(const QString &token, const QString &value);
 
-//    mainWindow()->setCentralWidget(new PadWriter);
-}
+private:
+    Internal::TokenModelPrivate *d;
+};
 
+} // namespace PadTools
 
-Q_EXPORT_PLUGIN(PadToolsPlugin)
+#endif // PADTOOLS_TOKENMODEL_H

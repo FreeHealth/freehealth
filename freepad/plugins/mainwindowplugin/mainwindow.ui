@@ -32,37 +32,6 @@
           </property>
           <widget class="QWidget" name="layoutWidget">
            <layout class="QGridLayout" name="gridLayout_2">
-            <item row="0" column="0" colspan="2">
-             <widget class="QTreeWidget" name="treeWidgetTokens">
-              <property name="sizePolicy">
-               <sizepolicy hsizetype="Expanding" vsizetype="Expanding">
-                <horstretch>0</horstretch>
-                <verstretch>0</verstretch>
-               </sizepolicy>
-              </property>
-              <property name="rootIsDecorated">
-               <bool>false</bool>
-              </property>
-              <column>
-               <property name="text">
-                <string>Name</string>
-               </property>
-              </column>
-              <column>
-               <property name="text">
-                <string>Value</string>
-               </property>
-              </column>
-              <item>
-               <property name="text">
-                <string>DRUG</string>
-               </property>
-               <property name="text">
-                <string>drogue</string>
-               </property>
-              </item>
-             </widget>
-            </item>
             <item row="1" column="0">
              <widget class="QPushButton" name="pushButtonAddToken">
               <property name="text">
@@ -74,6 +43,16 @@
              <widget class="QPushButton" name="pushButtonRemoveToken">
               <property name="text">
                <string>Remove token</string>
+              </property>
+             </widget>
+            </item>
+            <item row="0" column="0" colspan="2">
+             <widget class="QTableView" name="tableViewTokens">
+              <property name="sizePolicy">
+               <sizepolicy hsizetype="Expanding" vsizetype="Expanding">
+                <horstretch>0</horstretch>
+                <verstretch>0</verstretch>
+               </sizepolicy>
               </property>
              </widget>
             </item>

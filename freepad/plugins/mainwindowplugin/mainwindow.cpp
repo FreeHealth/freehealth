@@ -21,7 +21,7 @@
 /***************************************************************************
  *   Main Developper : Eric MAEKER, <eric.maeker@gmail.com>                *
  *   Contributors :                                                        *
- *       NAME <MAIL@ADRESS>                                                *
+ *       NAME <MAIL@ADDRESS.COM>                                           *
  ***************************************************************************/
 #include "mainwindow.h"
 #include "constants.h"
@@ -44,6 +44,9 @@
 //#include <coreplugin/idocumentprinter.h>
 
 #include <texteditorplugin/texteditor.h>
+
+#include <padtoolsplugin/tokenmodel.h>
+#include <padtoolsplugin/padwriter.h>
 
 #include <extensionsystem/pluginerrorview.h>
 #include <extensionsystem/pluginview.h>
@@ -86,73 +89,14 @@ static inline void messageSplash(const QString &s) {theme()->messageSplashScreen
 static inline void finishSplash(QMainWindow *w) {theme()->finishSplashScreen(w); }
 
 
-namespace MainWin {
-namespace Internal {
-
-class MainWinPrivate {
-public:
-    MainWinPrivate(MainWindow *parent) :
-            q(parent)
-    {}
-
-    ~MainWinPrivate()
-    {
-    }
-
-//    bool readExchangeFile(const QString &msg)
-//    {
-//        QString exfile = commandLine()->value(Core::CommandLine::CL_ExchangeOutFile).toString();
-//        if (!exfile.isEmpty()) {
-//            messageSplash(msg);
-//            if (QFileInfo(exfile).isRelative())
-//                exfile.prepend(qApp->applicationDirPath() + QDir::separator());
-//            QString tmp;
-//            if (QFile(exfile).exists())
-//                tmp = Utils::readTextFile(exfile, Utils::DontWarnUser);
-//            //            Utils::Log::addMessage(this, "Content of the exchange file : " + tmp);
-//            if (tmp.contains(DrugsDB::Constants::ENCODEDHTML_FREEDIAMSTAG)) {
-//                int begin = tmp.indexOf(DrugsDB::Constants::ENCODEDHTML_FREEDIAMSTAG) + QString(DrugsDB::Constants::ENCODEDHTML_FREEDIAMSTAG).length();
-//                int end = tmp.indexOf("\"", begin);
-//                QString encoded = tmp.mid( begin, end - begin );
-//                DrugsDB::DrugsIO::instance()->prescriptionFromXml(drugModel(), QByteArray::fromBase64(encoded.toAscii()));
-//            } else if (tmp.contains("DrugsInteractionsEncodedPrescription:")) {
-//                /** \todo Manage wrong file encoding */
-//                int begin = tmp.indexOf("DrugsInteractionsEncodedPrescription:") + QString("DrugsInteractionsEncodedPrescription:").length();
-//                int end = tmp.indexOf("\"", begin);
-//                QString encoded = tmp.mid( begin, end - begin );
-//                DrugsDB::DrugsIO::instance()->prescriptionFromXml(drugModel(), QByteArray::fromBase64(encoded.toAscii()));
-//            } else if (tmp.startsWith("<?xml") && tmp.contains("<FreeDiams>", Qt::CaseInsensitive) && tmp.contains("</FreeDiams>", Qt::CaseInsensitive)) {
-//                /** \todo Read patients datas ? */
-//                DrugsDB::DrugsIO::instance()->prescriptionFromXml(drugModel(), tmp);
-//            } else {
-//                return false;
-//            }
-//        }
-//        return true;
-//    }
-
-public:
-
-private:
-    MainWindow *q;
-};
-
-
-} // namespace Internal
-} // namespace Core
-
-//--------------------------------------------------------------------------------------------------------
-//--------------------------------------- Constructor / Destructor ---------------------------------------
-//--------------------------------------------------------------------------------------------------------
 MainWindow::MainWindow( QWidget * parent ) :
-        Core::IMainWindow(parent),
-        d(new Internal::MainWinPrivate(this))
+    Core::IMainWindow(parent)
 {
     setObjectName("MainWindow");
     messageSplash(tr("Creating Main Window"));
 
     // Install the event filter
-    qApp->installEventFilter(this);
+//    qApp->installEventFilter(this);
 }
 
 /** \brief Create the menubar and the MainWindow actions. */
@@ -164,23 +108,7 @@ bool MainWindow::initialize(const QStringList &arguments, QString *errorString)
     createFileMenu();
     Core::ActionContainer *fmenu = actionManager()->actionContainer(Core::Constants::M_FILE);
     connect(fmenu->menu(), SIGNAL(aboutToShow()),this, SLOT(aboutToShowRecentFiles()));
-
     createEditMenu();
-
-    // Create prescription menu
-//    Core::ActionContainer *pmenu = actionManager()->actionContainer(DrugsWidget::Constants::M_PLUGINS_DRUGS);
-//    if (!pmenu) {
-//        pmenu = actionManager()->createMenu(DrugsWidget::Constants::M_PLUGINS_DRUGS);
-//        pmenu->appendGroup(DrugsWidget::Constants::G_PLUGINS_VIEWS);
-//        pmenu->appendGroup(DrugsWidget::Constants::G_PLUGINS_MODES);
-//        pmenu->appendGroup(DrugsWidget::Constants::G_PLUGINS_SEARCH);
-//        pmenu->appendGroup(DrugsWidget::Constants::G_PLUGINS_DRUGS);
-//        pmenu->appendGroup(DrugsWidget::Constants::G_PLUGINS_INTERACTIONS);
-//        pmenu->setTranslations(DrugsWidget::Constants::DRUGSMENU_TEXT);
-//    }
-//    Q_ASSERT(pmenu);
-//    actionManager()->actionContainer(Core::Constants::MENUBAR)->addMenu(pmenu, DrugsWidget::Constants::G_PLUGINS_DRUGS);
-
     createConfigurationMenu();
     createHelpMenu();
 
@@ -214,12 +142,16 @@ bool MainWindow::initialize(const QStringList &arguments, QString *errorString)
     connectHelpActions();
 
     // Creating MainWindow interface
-    m_ui = new Internal::Ui::MainWindow();
-    m_ui->setupUi(this);
-    m_ui->padTextEdit->toogleToolbar(true);
-    resize(1024, 768);
-    m_ui->splitterMain->setSizes(QList<int>() << 150);
-    m_ui->splitterErrors->setSizes(QList<int>() << 0 << 100);
+//    m_ui = new Internal::Ui::MainWindow();
+//    m_ui->setupUi(this);
+//    m_ui->padTextEdit->toogleToolbar(true);
+//    resize(1024, 768);
+//    m_ui->splitterMain->setSizes(QList<int>() << 150);
+//    m_ui->splitterErrors->setSizes(QList<int>() << 0 << 100);
+
+    m_Writer = new PadTools::PadWriter(this);
+    setCentralWidget(m_Writer);
+
     return true;
 }
 
@@ -227,28 +159,6 @@ bool MainWindow::initialize(const QStringList &arguments, QString *errorString)
 */
 void MainWindow::extensionsInitialized()
 {
-    messageSplash(tr("Initializing ICD10 database"));
-//    m_ui->m_CentralWidget->initialize();
-
-//    // If needed read exchange file
-//    if (!d->readExchangeFile(tr("Reading exchange file..."))) {
-//        Utils::Log::addError(this, tkTr(Trans::Constants::FILE_1_ISNOT_READABLE).arg(commandLine()->value(Core::CommandLine::CL_ExchangeOutFile).toString()),
-//                             __FILE__, __LINE__);
-//    }
-
-    // Start the update checker
-    if (updateChecker()->needsUpdateChecking(settings()->getQSettings())) {
-        messageSplash(tkTr(Trans::Constants::CHECKING_UPDATES));
-        Utils::Log::addMessage(this, tkTr(Trans::Constants::CHECKING_UPDATES));
-        statusBar()->addWidget(new QLabel(tkTr(Trans::Constants::CHECKING_UPDATES), this));
-        statusBar()->addWidget(updateChecker()->progressBar(this),1);
-        connect(updateChecker(), SIGNAL(updateFound()), this, SLOT(updateFound()));
-        connect(updateChecker(), SIGNAL(done(bool)), this, SLOT(updateCheckerEnd()));
-        updateChecker()->check(Utils::Constants::FREEPAD_UPDATE_URL);
-        settings()->setValue(Utils::Constants::S_LAST_CHECKUPDATE, QDate::currentDate());
-    }
-
-//    createDockWindows();
     finishSplash(this);
     readSettings();
     show();
@@ -258,58 +168,66 @@ void MainWindow::extensionsInitialized()
     connect(Core::ICore::instance(), SIGNAL(coreOpened()), this, SLOT(postCoreInitialization()));
 
 	m_padTools = ExtensionSystem::PluginManager::instance()->getObject<Core::IPadTools>();
-	m_padTools->createSyntaxHighlighter(m_ui->padTextEdit->textEdit(), m_tokens);
+//**    m_padTools->createSyntaxHighlighter(m_ui->padTextEdit->textEdit(), m_TokenModel->tokens());
 
-	QHBoxLayout *layout = new QHBoxLayout(m_ui->tabCalendar);
-        Calendar::CalendarWidget *calendarWidget = new Calendar::CalendarWidget(this);
-        calendarWidget->setModel(new Calendar::BasicCalendarModel(this));
-        layout->addWidget(calendarWidget);
+//	QHBoxLayout *layout = new QHBoxLayout(m_ui->tabCalendar);
+//        Calendar::CalendarWidget *calendarWidget = new Calendar::CalendarWidget(this);
+//        calendarWidget->setModel(new Calendar::BasicCalendarModel(this));
+//        layout->addWidget(calendarWidget);
 
-	// tmp: fill with dummy tokens
-	m_tokens.insert("DRUG", "drug");
-	m_tokens.insert("Q_FROM", "q_from");
-	m_tokens.insert("Q_TO", "q_to");
-	m_tokens.insert("Q_SCHEME", "q_scheme");
-	m_tokens.insert("REPEATED_DAILY_SCHEME", "repeated daily scheme");
-	m_tokens.insert("MEAL", "meal");
-	m_tokens.insert("PERIOD", "period");
-	m_tokens.insert("PERIOD_SCHEME", "period scheme");
-	m_tokens.insert("D_FROM", "d_from");
-	m_tokens.insert("D_TO", "d_to");
-	m_tokens.insert("D_SCHEME", "d_scheme");
-	m_tokens.insert("ROUTE", "route");
-	m_tokens.insert("DISTRIBUTED_DAILY_SCHEME", "distributed daily scheme");
-	m_tokens.insert("MIN_INTERVAL", "min interval");
-	m_tokens.insert("NOTE", "note");
+//	// tmp: fill with dummy tokens
+//	m_tokens.insert("DRUG", "drug");
+//	m_tokens.insert("Q_FROM", "q_from");
+//	m_tokens.insert("Q_TO", "q_to");
+//	m_tokens.insert("Q_SCHEME", "q_scheme");
+//	m_tokens.insert("REPEATED_DAILY_SCHEME", "repeated daily scheme");
+//	m_tokens.insert("MEAL", "meal");
+//	m_tokens.insert("PERIOD", "period");
+//	m_tokens.insert("PERIOD_SCHEME", "period scheme");
+//	m_tokens.insert("D_FROM", "d_from");
+//	m_tokens.insert("D_TO", "d_to");
+//	m_tokens.insert("D_SCHEME", "d_scheme");
+//	m_tokens.insert("ROUTE", "route");
+//	m_tokens.insert("DISTRIBUTED_DAILY_SCHEME", "distributed daily scheme");
+//	m_tokens.insert("MIN_INTERVAL", "min interval");
+//	m_tokens.insert("NOTE", "note");
 
-	m_ui->treeWidgetTokens->clear();
-	foreach (const QString &key, m_tokens.keys()) {
-		QTreeWidgetItem *item = new QTreeWidgetItem(QStringList() << key << m_tokens[key].toString());
-		item->setFlags(item->flags() | Qt::ItemIsEditable);
-		m_ui->treeWidgetTokens->addTopLevelItem(item);
-	}
+//    m_ui->tableViewTokens->clear();
+    m_TokenModel= new PadTools::TokenModel(this);
+//**    m_ui->tableViewTokens->setModel(m_TokenModel);
 
-	connect(m_ui->padTextEdit, SIGNAL(textChanged()), this, SLOT(padTextChanged()));
-	connect(m_ui->treeWidgetTokens, SIGNAL(itemChanged(QTreeWidgetItem *, int)), this, SLOT(tokenItemChanged(QTreeWidgetItem*,int)));
+//	foreach (const QString &key, m_tokens.keys()) {
+//		QTreeWidgetItem *item = new QTreeWidgetItem(QStringList() << key << m_tokens[key].toString());
+//		item->setFlags(item->flags() | Qt::ItemIsEditable);
+//		m_ui->treeWidgetTokens->addTopLevelItem(item);
+//	}
+
+//**	connect(m_ui->padTextEdit, SIGNAL(textChanged()), this, SLOT(padTextChanged()));
+    connect(m_TokenModel, SIGNAL(tokenChanged(QString,QString)), this, SLOT(tokenChanged(QString, QString)));
 }
 
 void MainWindow::padTextChanged()
 {
 	QList<Core::PadAnalyzerError> errors;
 	// TODO : use a timer based on key strokes instead of realtime analysis
-        m_ui->previewTextEdit->setPlainText(m_padTools->parse(m_ui->padTextEdit->textEdit()->toPlainText(), m_tokens, errors));
+//**    m_ui->previewTextEdit->setPlainText(m_padTools->parse(m_ui->padTextEdit->textEdit()->toPlainText(), m_TokenModel->tokens(), errors));
 
-	m_ui->listWidgetErrors->clear();
+//**	m_ui->listWidgetErrors->clear();
 	foreach (const Core::PadAnalyzerError &error, errors) {
 		switch (error.errorType()) {
 		case Core::PadAnalyzerError::Error_UnexpectedChar:
-			m_ui->listWidgetErrors->addItem(tr("Unexpected '%1' found at line %2 and pos %3").arg(error.errorTokens()["char"].toString()).arg(error.line()).arg(error.pos()));
+//**			m_ui->listWidgetErrors->addItem(tr("Unexpected '%1' found at line %2 and pos %3").arg(error.errorTokens()["char"].toString()).arg(error.line()).arg(error.pos()));
 			break;
 		case Core::PadAnalyzerError::Error_CoreDelimiterExpected:
-			m_ui->listWidgetErrors->addItem(tr("Expected '%1' at line %2 and pos %3").arg(error.errorTokens()["char"].toString()).arg(error.line()).arg(error.pos()));
+//**			m_ui->listWidgetErrors->addItem(tr("Expected '%1' at line %2 and pos %3").arg(error.errorTokens()["char"].toString()).arg(error.line()).arg(error.pos()));
 			break;
 		}
 	}
+}
+
+void MainWindow::tokenChanged(const QString &token, const QString &value)
+{
+    refreshTokens();
 }
 
 void MainWindow::tokenItemChanged(QTreeWidgetItem *, int) {
@@ -317,18 +235,13 @@ void MainWindow::tokenItemChanged(QTreeWidgetItem *, int) {
 }
 
 void MainWindow::refreshTokens() {
-	m_tokens.clear();
-	for (int i = 0; i < m_ui->treeWidgetTokens->topLevelItemCount(); ++i) {
-		QTreeWidgetItem *item = m_ui->treeWidgetTokens->topLevelItem(i);
-		m_tokens.insert(item->text(0), item->text(1));
-	}
 	padTextChanged();
 }
 
 MainWindow::~MainWindow()
 {
-    delete m_ui->padTextEdit;
-    delete m_ui;
+//**    delete m_ui->padTextEdit;
+//**    delete m_ui;
 }
 
 void MainWindow::postCoreInitialization()
@@ -338,22 +251,8 @@ void MainWindow::postCoreInitialization()
 
     setWindowTitle(qApp->applicationName() + " - " + qApp->applicationVersion());
     setWindowIcon(theme()->icon(Core::Constants::ICONFREEPAD));
-
-//    refreshPatient();
-//    updateIconBadgeOnMacOs();
-
 }
 
-/** \brief Slot specific to MacOs -> update the application icon badge to number of founded interactions. */
-void MainWindow::updateIconBadgeOnMacOs()
-{
-#ifdef Q_OS_MAC
-//    int n = drugModel()->interactionsManager()->getAllInteractionsFound().count();
-//    if (n > 0) {
-//        Utils::MacOs::setIconBadgeLabel(QString::number(n));
-//    }
-#endif
-}
 
 /**
   \brief Close the main window and the application
@@ -363,16 +262,6 @@ void MainWindow::closeEvent(QCloseEvent *event)
 {
     Utils::Log::addMessage(this, "Closing MainWindow");
     Core::ICore::instance()->requestSaveSettings();
-
-    //    const QList<ICoreListener *> listeners =
-    //        ExtensionSystem::PluginManager::instance()->getObjects<Core::ICoreListener>();
-    //    foreach (Core::ICoreListener *listener, listeners) {
-    //        if (!listener->coreAboutToClose()) {
-    //            event->ignore();
-    //            return;
-    //        }
-    //    }
-
     Core::ICore::instance()->coreIsAboutToClose();
     writeSettings();
     event->accept();
@@ -382,10 +271,9 @@ void MainWindow::closeEvent(QCloseEvent *event)
 void MainWindow::changeEvent(QEvent *event)
 {
     if (event->type()==QEvent::LanguageChange) {
-        if (m_ui)
-            m_ui->retranslateUi(this);
+//**        if (m_ui)
+//**            m_ui->retranslateUi(this);
         actionManager()->retranslateMenusAndActions();
-//        refreshPatient();
     }
 }
 
@@ -525,17 +413,5 @@ void MainWindow::readFile(const QString &file)
 //    m_ui->widget->openFile(file);
 //    patient()->fromXml(datas);
 //    refreshPatient();
-}
-
-void MainWindow::createDockWindows()
-{
-//    // Create template dock
-//    QDockWidget *tdock = new QDockWidget(tkTr(Trans::Constants::TEMPLATES), this);
-//    tdock->setObjectName("templatesDock");
-//    tdock->setAllowedAreas(Qt::LeftDockWidgetArea | Qt::RightDockWidgetArea);
-//    tdock->setWidget(new Templates::TemplatesView(tdock));
-//    addDockWidget(Qt::RightDockWidgetArea, tdock);
-//    QMenu *menu = actionManager()->actionContainer(Core::Constants::M_TEMPLATES)->menu();
-//    menu->addAction(tdock->toggleViewAction());
 }
 

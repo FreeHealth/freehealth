@@ -13,18 +13,22 @@ HEADERS +=  \
     $${PWD}/pad_fragment.h \
     $${PWD}/pad_string.h \
     $${PWD}/pad_core.h \
-    $${PWD}/pad_item.h
+    $${PWD}/pad_item.h \
+    $${PWD}/tokenmodel.h \
+    $${PWD}/padwriter.h
 
 SOURCES += \
     $${PWD}/padtoolsplugin.cpp \
     $${PWD}/pad_analyzer.cpp \
     $${PWD}/padtoolsimpl.cpp \
     $${PWD}/pad_highlighter.cpp \
-	$${PWD}/pad.cpp \
-	$${PWD}/pad_fragment.cpp \
-	$${PWD}/pad_string.cpp \
-	$${PWD}/pad_core.cpp \
-    $${PWD}/pad_item.cpp
+    $${PWD}/pad.cpp \
+    $${PWD}/pad_fragment.cpp \
+    $${PWD}/pad_string.cpp \
+    $${PWD}/pad_core.cpp \
+    $${PWD}/pad_item.cpp \
+    $${PWD}/tokenmodel.cpp \
+    $${PWD}/padwriter.cpp
 
 #    $${PWD}/editoractionhandler.cpp \
 #    $${PWD}/editormanager.cpp \
@@ -36,6 +40,10 @@ SOURCES += \
 #    $${PWD}/tablepropertieswidget.ui \
 #    $${PWD}/tablepropertiesdialog.ui
 
+FORMS += \
+    $${PWD}/padwriter.ui
+
 TRANSLATIONS += $${SOURCES_TRANSLATIONS_PATH}/padtoolsplugin_fr.ts \
                 $${SOURCES_TRANSLATIONS_PATH}/padtoolsplugin_de.ts \
                 $${SOURCES_TRANSLATIONS_PATH}/padtoolsplugin_es.ts
+

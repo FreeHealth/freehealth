@@ -24,67 +24,36 @@
  *  Contributors :                                                         *
  *      NAME <MAIL@ADDRESS.COM>                                            *
  ***************************************************************************/
-/**
-  \namespace PadTools
-  \brief Namespace reserved for the PadTools plugin.
-  The PadTools namespace includes:
-  - Token engine
-  - Pad creator
-*/
+#ifndef PADTOOLS_PADWRITER_H
+#define PADTOOLS_PADWRITER_H
 
-#include "padtoolsplugin.h"
-#include "padtoolsimpl.h"
-//#include "padwriter.h"
+#include <QWidget>
 
-#include <utils/log.h>
-
-#include <coreplugin/dialogs/pluginaboutpage.h>
-#include <coreplugin/icore.h>
-#include <coreplugin/imainwindow.h>
-#include <coreplugin/translators.h>
-
-#include <QtCore/QtPlugin>
-#include <QDebug>
-
-using namespace PadTools;
-
-//static inline Core::IMainWindow *mainWindow() {return Core::ICore::instance()->mainWindow();}
-
-PadToolsPlugin::PadToolsPlugin()
-{
-    if (Utils::Log::warnPluginsCreation())
-        qWarning() << "creating PadToolsPlugin";
-    // Add Translator to the Application
-    Core::ICore::instance()->translators()->addNewTranslator("padtoolsplugin");
+namespace PadTools {
+namespace Internal {
+class PadWriterPrivate;
+namespace Ui {
+class PadWriter;
+}
 }
 
-PadToolsPlugin::~PadToolsPlugin()
+class PadWriter : public QWidget
 {
-}
+    Q_OBJECT
+    
+public:
+    explicit PadWriter(QWidget *parent = 0);
+    ~PadWriter();
 
-bool PadToolsPlugin::initialize(const QStringList &arguments, QString *errorString)
-{
-	qDebug("PadToolsPlugin::initialize");
-    if (Utils::Log::warnPluginsCreation())
-        qWarning() << "PadToolsPlugin::initialize";
-    Q_UNUSED(arguments);
-    Q_UNUSED(errorString);
+    QString htmlResult() const;
+    QString rawSource() const;
 
-	addAutoReleasedObject(new PadToolsImpl());
+    
+private:
+    Internal::PadWriterPrivate *d;
 
-    return true;
-}
+};
 
-void PadToolsPlugin::extensionsInitialized()
-{
-	qDebug("PadToolsPlugin::extensionsInitialized");
-    if (Utils::Log::warnPluginsCreation())
-        qWarning() << "PadToolsPlugin::extensionsInitialized";
+} // namespace PadTools
 
-    addAutoReleasedObject(new Core::PluginAboutPage(pluginSpec(), this));
-
-//    mainWindow()->setCentralWidget(new PadWriter);
-}
-
-
-Q_EXPORT_PLUGIN(PadToolsPlugin)
+#endif // PADTOOLS_PADWRITER_H
