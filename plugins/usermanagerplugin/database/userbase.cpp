@@ -184,7 +184,7 @@ UserBase::UserBase(QObject *parent)
     addIndex(Table_USER_LK_ID, LK_GROUP_UUID);
     addIndex(Table_USER_LK_ID, LK_LKID);
 
-    // informations
+    // information
     addTable(Table_INFORMATIONS, "INFORMATIONS");
     addField(Table_INFORMATIONS, INFO_VERSION,  "VERSION", FieldIsShortText);
     addField(Table_INFORMATIONS, INFO_MAX_LKID, "MAX_LK_ID", FieldIsInteger);

@@ -350,7 +350,7 @@ void ServerPackEditor::populatePackView(const int packId)
     // Add description
     summary += descr.data(PackDescription::HtmlDescription).toString();
 
-    // Add update informations
+    // Add update information
     bool isUpdate = d->m_PackModel->index(packId, PackModel::IsAnUpdate).data().toBool();
     if (isUpdate) {
         QString up = QString("<p style=\"font-size:normal;margin-left:10px;color:darkblue\">%1</p><br />")

@@ -166,7 +166,7 @@ void FormIODescription::toTreeWidget(QTreeWidget *tree) const
 QString FormIODescription::toHtml() const
 {
     QString html;
-    // Informations
+    // Information
     html += QString("<p style=\"font-weight:bold;font-size:large;\">%1</p>")
             .arg(data(FormIODescription::ShortDescription).toString());
     // Author and version

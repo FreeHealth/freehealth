@@ -100,7 +100,7 @@ public:
     /** Return the alerts created during the calculateInteractions() process. */
     virtual QVector<IDrugInteractionAlert *> getAllAlerts(DrugInteractionResult *addToResult) = 0;
 
-    /** Return a model with all synthesis informations to use with a treeview/listview. */
+    /** Return a model with all synthesis information to use with a treeview/listview. */
     virtual QAbstractItemModel *precautionModel() const = 0;
 
 public Q_SLOTS:

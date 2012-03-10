@@ -183,7 +183,7 @@ int main(int argc, char *argv[])
     QString pluginPaths = getPluginPaths();
     pluginManager.setPluginPaths(QStringList() << pluginPaths);
 
-    // Add some debugging informations
+    // Add some debugging information
     LOG_FOR("Main","Command line : " + qApp->arguments().join(" "));
 #ifdef DEBUG
     LOG_FOR("Main", "Running debug version");

@@ -217,7 +217,7 @@ InteractionSynthesisDialog::~InteractionSynthesisDialog()
     d = 0;
 }
 
-/** \todo add class informations */
+/** \todo add class information */
 void InteractionSynthesisDialog::interactionActivated(const QModelIndex &current, const QModelIndex &previous)
 {
     Q_UNUSED(previous);

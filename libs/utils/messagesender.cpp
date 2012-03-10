@@ -202,7 +202,7 @@ void MessageSender::httpDone(bool error)
 
     d->m_LastResult = QString(d->m_Buffer->data());
 
-    // Show informations
+    // Show information
     if (d->m_ShowMsgBox) {
         Utils::informativeMessageBox(ret , tkTr(Trans::Constants::INFORMATIVE_MESSAGE_1).arg(d->m_LastResult), "");
     }

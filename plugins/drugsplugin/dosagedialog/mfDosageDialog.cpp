@@ -114,7 +114,7 @@ void DosageDialog::changeRow(const QVariant &drugUid, const int drugRow)
     dosageViewer->useDrugsModel(d->m_DrugUid, drugRow);
     innButton->setChecked(drugModel()->drugData(d->m_DrugUid, Prescription::IsINNPrescription).toBool());
 
-    // retreive drug informations before drugmodel changes
+    // retreive drug information before drugmodel changes
     QString name = drugModel()->drugData(d->m_DrugUid, Drug::Denomination).toString();
     if (drugModel()->drugData(d->m_DrugUid, Prescription::IsINNPrescription).toBool())
         drugNameButton->setText(drugModel()->drugData(d->m_DrugUid, Drug::InnCompositionString).toString());

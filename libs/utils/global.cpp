@@ -391,9 +391,9 @@ QString uname()
     QProcess uname;
     uname.start("uname", QStringList() << "-a");
     if (!uname.waitForStarted())
-        LOG_ERROR_FOR("Utils", QApplication::translate("Utils", "Error while retrieve informations of uname under %1").arg(system));
+        LOG_ERROR_FOR("Utils", QApplication::translate("Utils", "Error while retrieve information of uname under %1").arg(system));
     if (!uname.waitForFinished())
-        LOG_ERROR_FOR("Utils", QApplication::translate("Utils", "Error while retrieve informations of uname under %1").arg(system));
+        LOG_ERROR_FOR("Utils", QApplication::translate("Utils", "Error while retrieve information of uname under %1").arg(system));
     return uname.readAll();
 }
 QString osName()

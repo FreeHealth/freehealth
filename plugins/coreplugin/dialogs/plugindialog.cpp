@@ -21,7 +21,7 @@
 
 /**
   \class Core::PluginDialog
-  Shows informations about plugins.
+  Shows information about plugins.
 */
 
 #include "plugindialog.h"

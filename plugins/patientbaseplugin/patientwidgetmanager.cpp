@@ -120,7 +120,7 @@ PatientSelector *PatientWidgetManager::selector() const
 // Toggle search patient view
 // Search method ?
 // Limit database usage ?
-// View patients informations
+// View patients information
 // Patient selection history
 PatientActionHandler::PatientActionHandler(QObject *parent) :
         QObject(parent),
@@ -224,7 +224,7 @@ PatientActionHandler::PatientActionHandler(QObject *parent) :
 //    menu->addAction(cmd, Constants::G_PATIENTS_INFORMATIONS);
 ////    connect(a, SIGNAL(triggered()), this, SLOT(clear()));
 
-    // Databases informations
+    // Databases information
     Core::ActionContainer *hmenu = actionManager()->actionContainer(Core::Constants::M_HELP_DATABASES);
     if (!hmenu)
         return;

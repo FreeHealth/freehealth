@@ -28,8 +28,8 @@
 /**
  \class UserPlugin::Internal::UserIdentifier
  This class is a dialog that ask user for is login/password, with a limited number of tries.
- You can show some informations on the left using the first parameter of the constructor.
- If there is not informations to show, the informations' groupBox is hidden.
+ You can show some information on the left using the first parameter of the constructor.
+ If there is not information to show, the information's groupBox is hidden.
 
  When the user is correctly identified on the server and/or the database:
    - the dialog result() is set to QDialog::Accepted,
@@ -117,7 +117,7 @@ void UserIdentifier::done(int result)
             if (m_NumberOfTries == MaxNumberOfTries)
 		QDialog::done(QDialog::Rejected);
             else {
-                Utils::warningMessageBox(tr("Incorrect login/password informations."),
+                Utils::warningMessageBox(tr("Incorrect login/password information."),
                                          tr("You can try %1 more time(s).")
                                          .arg(MaxNumberOfTries - m_NumberOfTries),"",qApp->applicationName());
             }

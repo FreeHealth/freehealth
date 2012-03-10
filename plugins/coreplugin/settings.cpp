@@ -958,7 +958,7 @@ QTreeWidget* SettingsPrivate::getTreeWidget(QWidget *parent) const
     QFont bold;
     bold.setBold(true);
 
-    // add system informations
+    // add system information
     QTreeWidgetItem * sysItem = new QTreeWidgetItem(tree, QStringList() << tr("System information"));
     sysItem->setFont(0,bold);
     new QTreeWidgetItem(sysItem, QStringList() << tr("Operating System") << Utils::osName());
@@ -966,7 +966,7 @@ QTreeWidget* SettingsPrivate::getTreeWidget(QWidget *parent) const
     new QTreeWidgetItem(sysItem, QStringList() << tr("uname output") << Utils::uname());
 #endif
 
-    // add compilation informations
+    // add compilation information
     QTreeWidgetItem * compilItem = new QTreeWidgetItem(tree, QStringList() << Trans::ConstantTranslations::tkTr(Trans::Constants::BUILD_INFORMATIONS));
     compilItem->setFont(0,bold);
     new QTreeWidgetItem(compilItem, QStringList() << tr("Compilation Date") << Trans::ConstantTranslations::tkTr(Trans::Constants::BUILD_DATE_TIME_1_2).arg(__DATE__, __TIME__));
@@ -1024,7 +1024,7 @@ QTreeWidget* SettingsPrivate::getTreeWidget(QWidget *parent) const
     new QTreeWidgetItem(absPathsItem, QStringList() << tr("WebSiteUrl") << path(WebSiteUrl));
 
     //add library informations
-//    new QTreeWidgetItem(tree, QStringList() << tr("Libs") << Utils::getLibraryInformations());
+//    new QTreeWidgetItem(tree, QStringList() << tr("Libs") << Utils::getLibraryInformation());
 
     // add settings
     QTreeWidgetItem * settingsItem = new QTreeWidgetItem(tree, QStringList() << tr("Settings values"));
@@ -1065,16 +1065,16 @@ QTreeWidget* SettingsPrivate::getTreeWidget(QWidget *parent) const
 //    QProcess cups;
 //    cups.start("cups-config", QStringList() << "--version");
 //    if (!cups.waitForStarted())
-//        LOG_ERROR_FOR("Utils", QApplication::translate("Utils", "Error while retrieve informations of uname under %1").arg(system));
+//        LOG_ERROR_FOR("Utils", QApplication::translate("Utils", "Error while retrieve information of uname under %1").arg(system));
 //    if (!cups.waitForFinished())
-//        LOG_ERROR_FOR("Utils", QApplication::translate("Utils", "Error while retrieve informations of uname under %1").arg(system));
+//        LOG_ERROR_FOR("Utils", QApplication::translate("Utils", "Error while retrieve information of uname under %1").arg(system));
 //    tmp += "| Version | " + cups.readAll() + " |";
 
 //    cups.start("cups-config", QStringList() << "--datadir");
 //    if (!cups.waitForStarted())
-//        LOG_ERROR_FOR("Utils", QApplication::translate("Utils", "Error while retrieve informations of uname under %1").arg(system));
+//        LOG_ERROR_FOR("Utils", QApplication::translate("Utils", "Error while retrieve information of uname under %1").arg(system));
 //    if (!cups.waitForFinished())
-//        LOG_ERROR_FOR("Utils", QApplication::translate("Utils", "Error while retrieve informations of uname under %1").arg(system));
+//        LOG_ERROR_FOR("Utils", QApplication::translate("Utils", "Error while retrieve information of uname under %1").arg(system));
 //    tmp += "| DataDir | " + cups.readAll() + " |";
 //    return tmp;
 //}
@@ -1085,7 +1085,7 @@ QString SettingsPrivate::toString() const
     QString tmp;
     tmp += "===== SETTINGS =====\n";
 
-    // add building informations
+    // add building information
     tmp += "\n^ Object ^ Value ^";
     tmp += "\n| " + tr("Running version : %1").arg(qApp->applicationName()).replace(":", "|") + " |";
     tmp += "\n| " + tr("Build date | %1 %2").arg(__DATE__, __TIME__) + " |";

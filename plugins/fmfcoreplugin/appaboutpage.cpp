@@ -42,7 +42,7 @@ static const char *ABOUT_TEXT = QT_TRANSLATE_NOOP("AboutDialog",
 //        "This application is an early alpha release. This means that a lot of "
 //        "features are not yet implemented or may not work and that you may experiment bugs.<br />"
         "This software is release without any warranty and only for test purposal.<br />"
-        "Please refer to web site for more informations.<br />"
+        "Please refer to web site for more information.<br />"
         "<a href=\"%2\">Web site</a>"
         "</p>"
         );

@@ -84,7 +84,7 @@ public:
     void setFormUuid(const QString &uuidOrAbsPath) {m_uuid=uuidOrAbsPath;}
     QString formUuid() const {return m_uuid;}
 
-    /** Use this to force the reader to get the informations (description, form content) directly from the file even if the form is already stored in the database. */
+    /** Use this to force the reader to get the information (description, form content) directly from the file even if the form is already stored in the database. */
     void setForceFileReading(const bool force) {m_ForceFile = force;}
     bool forceFileReading() const {return m_ForceFile;}
 

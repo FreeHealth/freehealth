@@ -108,7 +108,7 @@ public:
     virtual QString toXml() const;
     virtual bool toDomElement(QDomElement *root, QDomDocument *doc) const;
 
-    // Manage update informations
+    // Manage update information
     void addUpdateInformation(const Utils::GenericUpdateInformation &updateInfo);
     void removeUpdateInformation(int index);
     void insertUpdateInformation(int index, const Utils::GenericUpdateInformation &updateInfo);

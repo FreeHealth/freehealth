@@ -203,7 +203,7 @@ PmhViewer::~PmhViewer()
     d = 0;
 }
 
-/** \brief Show or hide the patient informations (title, name, age) inside the dialog. */
+/** \brief Show or hide the patient information (title, name, age) inside the dialog. */
 void PmhViewer::setShowPatientInformations(bool show)
 {
     if (show) {

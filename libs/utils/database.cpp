@@ -2182,7 +2182,7 @@ void Database::warn() const
     }
 }
 
-/**  Used for debugging and informations purpose. */
+/**  Used for debugging and information purpose. */
 void Database::toTreeWidget(QTreeWidget *tree)
 {
     QFont bold;
@@ -2191,8 +2191,8 @@ void Database::toTreeWidget(QTreeWidget *tree)
 
     QSqlDatabase DB = QSqlDatabase::database(d->m_ConnectionName);
 
-    // General informations
-    QTreeWidgetItem *db = new QTreeWidgetItem(tree, QStringList() << "General informations");
+    // General information
+    QTreeWidgetItem *db = new QTreeWidgetItem(tree, QStringList() << "General information");
     db->setFont(0, bold);
     new QTreeWidgetItem(db, QStringList() << "Connection Name" << d->m_ConnectionName);
     new QTreeWidgetItem(db, QStringList() << "Database Name" << DB.databaseName());
@@ -2204,7 +2204,7 @@ void Database::toTreeWidget(QTreeWidget *tree)
     }
 
     // Driver / Connection // ConnectionError
-    QTreeWidgetItem *drv = new QTreeWidgetItem(tree, QStringList() << "Driver informations");
+    QTreeWidgetItem *drv = new QTreeWidgetItem(tree, QStringList() << "Driver information");
     drv->setFont(0, bold);
     new QTreeWidgetItem(drv, QStringList() << "Qt Driver" << DB.driverName());
     if (DB.driverName()=="QSQLITE") {

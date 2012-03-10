@@ -208,7 +208,7 @@ bool GenericDescription::fromDomElement(const QDomElement &root)
         }
     }
 
-    // read update informations
+    // read update information
     QDomElement update = root.firstChildElement(GenericUpdateInformation::xmlTagName());
     m_UpdateInfos.clear();
     m_UpdateInfos = Utils::GenericUpdateInformation::fromXml(update);
@@ -269,7 +269,7 @@ bool GenericDescription::toDomElement(QDomElement *root, QDomDocument *doc) cons
         }
     }
 
-    // Add update informations
+    // Add update information
     if (m_UpdateInfos.count() > 0) {
         comment = doc->createComment("Update information");
         root->appendChild(comment);

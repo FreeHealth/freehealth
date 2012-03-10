@@ -277,7 +277,7 @@ public:
             q->hourlyTableWidget->setColumnWidth(i, size);
     }
 
-    /** \brief Update the Ui with the drug informations */
+    /** \brief Update the Ui with the drug information */
     void fillDrugsData()
     {
         Q_ASSERT(q);

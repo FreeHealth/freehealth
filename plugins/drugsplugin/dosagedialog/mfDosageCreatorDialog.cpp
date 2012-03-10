@@ -244,7 +244,7 @@ DosageCreatorDialog::DosageCreatorDialog(QWidget *parent, DrugsDB::Internal::Dos
     setWindowFlags(Qt::Window | Qt::CustomizeWindowHint | Qt::WindowSystemMenuHint | Qt::WindowCloseButtonHint);
 
     d->m_InitialNumberOfRow = dosageModel->rowCount();
-    // Drug informations
+    // Drug information
     const QVariant &drugId = dosageModel->drugId();
     drugNameLabel->setText(drugModel()->drugData(drugId, Drug::Denomination).toString());
     QString toolTip = drugModel()->drugData(drugId, Interaction::ToolTip).toString();

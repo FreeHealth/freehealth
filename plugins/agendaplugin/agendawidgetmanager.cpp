@@ -237,7 +237,7 @@ AgendaActionHandler::AgendaActionHandler(QObject *parent) :
 //    connect(aPrintPreview,SIGNAL(triggered()), this, SLOT(printPreview()));
 
 
-    // Databases informations
+    // Databases information
     Core::ActionContainer *hmenu = actionManager()->actionContainer(Core::Constants::M_HELP_DATABASES);
     a = aAgendaDatabaseInformations = new QAction(this);
     a->setIcon(th->icon(Core::Constants::ICONHELP));

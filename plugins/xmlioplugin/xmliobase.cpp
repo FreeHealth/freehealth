@@ -112,7 +112,7 @@ XmlIOBase::XmlIOBase(QObject *parent) :
     addIndex(Table_FORM_CONTENT, FORMCONTENT_ID);
     addIndex(Table_FORM_CONTENT, FORMCONTENT_FORM_ID);
 
-    // informations
+    // information
     addTable(Table_VERSION, "VERSION");
     addField(Table_VERSION, VERSION_ACTUAL,  "ACTUAL", FieldIsShortText);
 

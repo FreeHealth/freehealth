@@ -33,7 +33,7 @@
   \li files and images (coded into database into base64)
   \li integer or double
   \li a tkTextDocumentExtra pointer or html contents
-  Get informations of the database structure in UserBase.
+  Get information of the database structure in UserBase.
   \sa UserBase
 */
 

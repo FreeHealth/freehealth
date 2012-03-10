@@ -372,7 +372,7 @@ public:
         // Close Full prescription
     //    xmldPrescription.append(QString("</%1>\n").arg(XML_FULLPRESCRIPTION_TAG));
 
-        // Add drugsBase informations
+        // Add drugsBase information
         QString dbName;
         QString dbInfoAttribs;
         if (drugsBase().actualDatabaseInformations()) {
@@ -1001,7 +1001,7 @@ QString DrugsIO::prescriptionToXml(DrugsDB::DrugsModel *m, const QString &xmlExt
 //    // Close Full prescription
 //    xmldPrescription.append(QString("</%1>\n").arg(XML_FULLPRESCRIPTION_TAG));
 
-//    // Add drugsBase informations
+//    // Add drugsBase information
 //    QString dbName;
 //    QString dbInfoAttribs;
 //    if (drugsBase().actualDatabaseInformations()) {

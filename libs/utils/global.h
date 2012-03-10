@@ -73,7 +73,7 @@ enum DirSearchType {
     NotRecursively
 };
 
-// Libs and OS informations
+// Libs and OS information
 /** \brief Return true if the application was built in debug mode. */
 UTILS_EXPORT bool isDebugCompilation();
 /** \brief Return true if the application was built in release mode. */
@@ -92,7 +92,7 @@ UTILS_EXPORT bool isRunningOnWin();
 UTILS_EXPORT bool isRunningOnLinux();
 /** \brief Return true if the application is running on FreeBsd. */
 UTILS_EXPORT bool isRunningOnFreebsd();
-/** \brief Returns informations of 'uname -a' command. Works on Linux, MacOs, FreeBSD */
+/** \brief Returns information of 'uname -a' command. Works on Linux, MacOs, FreeBSD */
 UTILS_EXPORT QString uname();
 UTILS_EXPORT QString osName();
 

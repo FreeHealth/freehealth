@@ -325,7 +325,7 @@ AgendaBase::AgendaBase(QObject *parent) :
 //    addIndex(Table_PEOPLE, PEOPLE_ID);
 //    addIndex(Table_PEOPLE, PEOPLE_ID);
 
-    // informations
+    // information
     addField(Table_VERSION, VERSION_ACTUAL,  "ACTUAL", FieldIsShortText);
 
     initialize();

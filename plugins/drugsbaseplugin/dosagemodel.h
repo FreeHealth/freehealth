@@ -120,7 +120,7 @@ public:
     // non static viewers for ui generation (need to be instanciate first)
     QStringList        forms();
 
-    // Debugging Informations
+    // Debugging Information
     void warn(const int row = -1);
 
 private Q_SLOTS:

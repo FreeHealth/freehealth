@@ -102,7 +102,7 @@ void DebugDialog::on_butSend_clicked()
     // get full log including settings and logs
     msg += "\n\n" + Utils::Log::toString( Core::ICore::instance()->settings()->toString() );
 
-    // send informations
+    // send information
     connect(&m_sender, SIGNAL(sent()), this, SLOT(onSendMessage_done()));
     m_sender.setTypeOfMessage( Utils::MessageSender::InformationToDeveloper );
     m_sender.setMessage(msg);

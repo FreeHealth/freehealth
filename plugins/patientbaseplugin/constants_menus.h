@@ -46,8 +46,8 @@ namespace Constants {
     const char * const  A_SEARCH_PATIENTS_BY_NAMEFIRSTNAME  = "Patients.SearchNameFirstname";
     const char * const  A_SEARCH_PATIENTS_BY_DOB          = "Patients.SearchByDOB";
 
-    const char * const  A_VIEWPATIENT_INFOS               = "Patient.Informations";
-    const char * const  A_VIEWPATIENTDATABASE_INFOS       = "Patient.DB.Informations";
+    const char * const  A_VIEWPATIENT_INFOS               = "Patient.Information";
+    const char * const  A_VIEWPATIENTDATABASE_INFOS       = "Patient.DB.Information";
 
 
     const char * const  C_PATIENTS             = "Patients.Context";

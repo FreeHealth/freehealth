@@ -147,7 +147,7 @@ int main( int argc, char *argv[] )
     QString pluginPaths = getPluginPaths();
     pluginManager.setPluginPaths(QStringList() << pluginPaths);
 
-    // Add some debugging informations
+    // Add some debugging information
     Utils::Log::addMessage("Main","Command line : " + qApp->arguments().join(" "));
     Utils::Database::logAvailableDrivers();
 

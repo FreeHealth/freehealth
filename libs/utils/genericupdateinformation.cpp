@@ -122,7 +122,7 @@ namespace {
 /** Read the update inforamtion xml block and return a list of items. */
 QList<GenericUpdateInformation> GenericUpdateInformation::fromXml(const QDomElement &xml)
 {
-    // read update informations
+    // read update information
     QList<GenericUpdateInformation> toReturn;
     if (!xml.isNull() && xml.tagName().compare(::TAG_SPEC_UPDATEINFO, Qt::CaseInsensitive)==0) {
         QDomElement update = xml.firstChildElement(::TAG_SPEC_UPDATEINFOVERSION);

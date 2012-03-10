@@ -193,7 +193,7 @@ PmhActionHandler::PmhActionHandler(QObject *parent) :
 
     Core::ActionContainer *hmenu = actionManager()->actionContainer(Core::Constants::M_HELP_DATABASES);
     a = aPmhDatabaseInformations = new QAction(this);
-    a->setObjectName("aPmhDatabaseInformations");
+    a->setObjectName("aPmhDatabaseInformation");
     a->setIcon(th->icon(Core::Constants::ICONHELP));
     cmd = actionManager()->registerAction(a, Constants::A_PMH_SHOWDBINFOS, globalcontext);
     cmd->setTranslations(Trans::Constants::PMH_DATABASE_INFORMATIONS);

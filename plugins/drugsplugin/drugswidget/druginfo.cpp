@@ -23,8 +23,8 @@
 
 /**
   \class DrugInfo
-  \brief Show a dialog with drugs informations and interactions founded.
-  This dialog allows user to send debugging datas.
+  \brief Show a dialog with drugs information and interactions founded.
+  This dialog allows user to send debugging data.
   \ingroup freediams drugswidget
 */
 
@@ -95,7 +95,7 @@ bool DrugInfoPrivate::checkSent()
     //               (!m_InteractSent))
     //     {
     //          if (QMessageBox::warning(this, qApp->applicationName(),
-    //                                     tr("Interactions Informations will be lost.\nDo you want to send them ?"),
+    //                                     tr("Interactions Information will be lost.\nDo you want to send them ?"),
     //                                     QMessageBox::No | QMessageBox::Yes) == QMessageBox::Yes)
     //          {
     //               on_butIAMSend_clicked();
@@ -137,13 +137,13 @@ void DrugInfo::setDrug(const QVariant &drugUid)
 {
     using namespace DrugsDB::Constants;
     d->m_DrugUid = drugUid;
-    // manage drugs informations
+    // manage drugs information
     d->drugName->setText(drugModel()->drugData(d->m_DrugUid, Drug::Denomination).toString());
     d->knownMols->addItems(drugModel()->drugData(d->m_DrugUid, Drug::Molecules).toStringList()); //drug->listOfMolecules());
     d->DCI->addItems(drugModel()->drugData(d->m_DrugUid, Drug::Inns).toStringList()); //drug->listOfInn());
     d->interactClass->addItems(drugModel()->drugData(d->m_DrugUid, Drug::InnClasses).toStringList()); //drug->listOfInnClasses());
 
-    // manage interactions informations
+    // manage interactions information
     d->m_InteractionsList.clear();
     d->CAT_textBrower->clear();
     d->Info_textBrowser->clear();

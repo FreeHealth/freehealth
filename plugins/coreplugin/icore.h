@@ -76,7 +76,7 @@ public:
 
     static ICore *instance();
 
-    // Some informations
+    // Some information
     virtual bool updatePreferences() const {return m_UpdatePreferences;}
 
     // Alpha dialog

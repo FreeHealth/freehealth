@@ -1198,7 +1198,7 @@ IDrug *DrugsBase::getDrugByUID(const QVariant &uid1, const QVariant &uid2, const
             return toReturn;
         }
 
-        // manage drugs denomination according to the database informations
+        // manage drugs denomination according to the database information
         QString tmp = d->m_ActualDBInfos->drugsNameConstructor;
         if (!tmp.isEmpty()) {
             tmp.replace("NAME", toReturn->brandName());

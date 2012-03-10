@@ -28,7 +28,7 @@
   \class Agenda::UserCalendarViewer
   Is a Agenda::UserCalendar widget viewer for FreeMedForms used in the Agenda mode.
   This widget presents:
-  - a left bar with some usercalendar informations, plus automated next availabilities calculation
+  - a left bar with some usercalendar information, plus automated next availabilities calculation
   - a central Calendar::CalendarViewer for users to edit appointements
 */
 
