@@ -55,7 +55,10 @@ findReceiptsValues::findReceiptsValues(QWidget * parent):QDialog(parent){
   if (WarnDebugMessage)
     	      qDebug() << __FILE__ << QString::number(__LINE__)   ;
   QString comboValue = ui->comboBoxCategories->currentText().trimmed();
-
+  ui->plusButton->setIcon(QIcon(qApp->applicationDirPath()+"/../../global_resources/pixmap/16x16/next.png"));
+  ui->lessButton->setIcon(QIcon(qApp->applicationDirPath()+"/../../global_resources/pixmap/16x16/previous.png"));
+  ui->plusButton->setShortcut(QKeySequence("CTRL+p"));
+  ui->lessButton->setShortcut(QKeySequence("CTRL+l"));
   fillListViewValues(comboValue);
 
   connect(ui->comboBoxCategories,SIGNAL(activated(const QString&)),this,SLOT(fillListViewValues(const QString&)));
