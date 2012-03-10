@@ -229,6 +229,11 @@ void HttpDownloader::httpReadyRead()
         file->write(reply->readAll());
 }
 
+//void HttpDownloader::onDownloadProgressRange(qint64 read, qint64 total)
+//{
+//    Q_EMIT downloadProgressRange(int(read), int(total));
+//}
+
 void HttpDownloader::updateProgressBar(qint64 bytesRead, qint64 totalBytes)
 {
     if (httpRequestAborted)

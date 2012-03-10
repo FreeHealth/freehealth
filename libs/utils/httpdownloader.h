@@ -77,6 +77,7 @@ private Q_SLOTS:
     void cancelDownload();
     void httpFinished();
     void httpReadyRead();
+//    void onDownloadProgressRange(qint64,qint64);
     void updateProgressBar(qint64 bytesRead, qint64 totalBytes);
 //    void slotAuthenticationRequired(QNetworkReply*,QAuthenticator *);
 //#ifndef QT_NO_OPENSSL
